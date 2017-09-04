@@ -11,15 +11,18 @@
 namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Controller;
 
 use Proximum\Vimeet\Application\Query\Agenda\AgendaViewQuery;
+use Proximum\Vimeet\Application\Query\Agenda\MeetingPropositionFromAvailableSheets\MeetingPropositionFromAvailableSheetsQuery;
 use Proximum\Vimeet\Application\Query\Tip\TipTranslationViewQuery;
 use Proximum\Vimeet\Application\Query\Tip\TipTranslationViewQueryHandler;
 use Proximum\Vimeet\Application\View\Agenda\AgendaView;
+use Proximum\Vimeet\Domain\Model\MeetingSlot;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Security\Voter\AgendaAccessVoter;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\ParamConverter\EventDomain;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Security\SheetVoter;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
@@ -101,5 +104,28 @@ class AgendaController extends Controller
             'sheet'               => $sheet,
             'tipTranslationViews' => $tipTranslationViews,
         ]);
+    }
+
+    /**
+     * @param EventDomain $eventDomain
+     * @param Sheet       $sheet
+     * @param MeetingSlot $slot
+     *
+     * @return JsonResponse
+     */
+    public function countMeetingPropositionBySlotAction(
+        EventDomain $eventDomain,
+        Sheet $sheet,
+        MeetingSlot $slot
+    ): JsonResponse {
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
+        $this->denyAccessUnlessGranted(SheetVoter::EDIT, $sheet);
+        $this->denyAccessUnlessGranted(AgendaAccessVoter::PERMISSION, $eventDomain->getEvent());
+
+        $countMeetingProposition = $this->get('tactician.commandbus.query')->handle(
+            new MeetingPropositionFromAvailableSheetsQuery($sheet, $slot)
+        );
+
+        return new JsonResponse(['countMeetingProposition' => $countMeetingProposition]);
     }
 }

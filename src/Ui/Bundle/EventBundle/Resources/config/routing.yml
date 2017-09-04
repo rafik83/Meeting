@@ -667,6 +667,14 @@ event_agenda_participant:
     methods: [GET]
     defaults: { _controller: EventBundle:Agenda:participant }
 
+event_agenda_count_meeting_proposition_by_slot:
+    path: /sheet/{sheet}/agenda/meeting-proposition-by-slot/{slot}
+    requirements:
+        sheet: \d+
+        slot: \d+
+    methods: [GET]
+    defaults: { _controller: EventBundle:Agenda:countMeetingPropositionBySlot }
+
 happening_program:
     path: /sheet/{sheet}/program
     requirements:

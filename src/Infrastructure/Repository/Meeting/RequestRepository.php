@@ -210,6 +210,17 @@ class RequestRepository implements RequestRepositoryInterface
     /**
      * {@inheritdoc}
      */
+    public function getPendingPropositionReceivedBySheet(Sheet $sheet)
+    {
+        $queryBuilder = new RequestQueryBuilder($this->entityManager);
+        $queryBuilder->receivedBy($sheet)->pending()->isEnabled()->isFromAttending();
+
+        return $queryBuilder->getQuery()->getResult();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function hasPendingPropositionReceivedBySheet(Sheet $sheet)
     {
         return $this->countPendingPropositionReceivedBySheet($sheet) > 0;

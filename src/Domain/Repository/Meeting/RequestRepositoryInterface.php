@@ -231,6 +231,13 @@ interface RequestRepositoryInterface
     /**
      * @param Sheet $sheet
      *
+     * @return Request[]
+     */
+    public function getPendingPropositionReceivedBySheet(Sheet $sheet);
+
+    /**
+     * @param Sheet $sheet
+     *
      * @return bool
      */
     public function hasPendingPropositionReceivedBySheet(Sheet $sheet);
