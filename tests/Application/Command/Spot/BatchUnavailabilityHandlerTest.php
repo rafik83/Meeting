@@ -28,10 +28,12 @@ class BatchUnavailabilityHandlerTest extends TestCase
         $begin   = new \DateTime();
         $end     = new \DateTime();
         $spotIds = [1, 2];
+        $spot1 = new Spot('SP1', $event, 20.0, 1, 1, true);
+        $spot2 = new Spot('SP1', $event, 20.0, 1, 1, true);
 
         $spots = [
-            new Spot('SP1', $event, 20.0, 1, 1, true),
-            new Spot('SP2', $event, 20.0, 1, 1, true),
+            $spot1,
+            $spot2,
         ];
 
         $meetingSlot = new MeetingSlot($event, $begin, $end);
@@ -47,13 +49,12 @@ class BatchUnavailabilityHandlerTest extends TestCase
 
         $spotRepository->findMany($event, $spotIds)->shouldBeCalled()->willReturn($spots);
 
-        foreach ($spots as $spot) {
-            $spotUnavailabilityRepository->remove($spot)->shouldBeCalled();
-            $meetingRepository->findBySpotAndSlot($spot, $meetingSlot)->shouldBeCalled()->willReturn([]);
-            $spotUnavailabilityRepository->add(Argument::that(function (SpotUnavailability $spotUnavailability) {
-                return $spotUnavailability;
-            }))->shouldBeCalled();
-        }
+        $spotUnavailabilityRepository->remove($spot1)->shouldBeCalled();
+        $meetingRepository->findBySpotAndSlot($spot1, $meetingSlot)->shouldBeCalled()->willReturn([]);
+
+        $spotUnavailabilityRepository->remove($spot2)->shouldBeCalled();
+        $meetingRepository->findBySpotAndSlot($spot2, $meetingSlot)->shouldBeCalled()->willReturn([]);
+        $spotUnavailabilityRepository->add(new SpotUnavailability($meetingSlot, $spot2))->shouldBeCalled();
 
         $handler = new UnavailabilityBatchHandler(
             $spotRepository->reveal(),
