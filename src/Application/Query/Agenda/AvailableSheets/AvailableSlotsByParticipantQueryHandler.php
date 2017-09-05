@@ -11,6 +11,7 @@
 namespace Proximum\Vimeet\Application\Query\Agenda\AvailableSheets;
 
 use Proximum\Vimeet\Application\View\Agenda\Slot\AvailableSlotView;
+use Proximum\Vimeet\Domain\Model\MeetingSlot;
 use Proximum\Vimeet\Domain\Repository\MeetingSlotRepositoryInterface;
 
 class AvailableSlotsByParticipantQueryHandler
@@ -40,7 +41,8 @@ class AvailableSlotsByParticipantQueryHandler
      */
     public function handle(AvailableSlotsByParticipantQuery $query): array
     {
-        $currentDate = $this->dateTime->setTimeZone(new \DateTimeZone($query->event->getTimeZone()));
+        $timeZone = new \DateTimeZone($query->event->getTimeZone());
+        $currentDate = $this->dateTime->setTimeZone($timeZone);
 
         foreach ($query->event->getDays() as $day) {
             $dayDate = $day->getDay()->setTimeZone(new \DateTimeZone($query->event->getTimeZone()));
@@ -54,8 +56,13 @@ class AvailableSlotsByParticipantQueryHandler
             $query->event, [$query->participant]
         );
 
-        // Todo ne garder que les slots du futur + 10mn
+        foreach ($availableSlots as $availableSlotKey => $availableSlot) {
+            $beginHourPlusTenMinutes = $availableSlot->getBegin()->add(new \DateInterval('PT10M'))->setTimeZone($timeZone);
 
+            if ($currentDate >= $beginHourPlusTenMinutes) {
+                unset($availableSlots[$availableSlotKey]);
+            }
+        }
 
         $availableSlotViews = [];
 
