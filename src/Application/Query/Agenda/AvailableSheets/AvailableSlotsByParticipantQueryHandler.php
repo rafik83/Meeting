@@ -40,11 +40,22 @@ class AvailableSlotsByParticipantQueryHandler
      */
     public function handle(AvailableSlotsByParticipantQuery $query): array
     {
+        $currentDate = $this->dateTime->setTimeZone(new \DateTimeZone($query->event->getTimeZone()));
+
+        foreach ($query->event->getDays() as $day) {
+            $dayDate = $day->getDay()->setTimeZone(new \DateTimeZone($query->event->getTimeZone()));
+
+            if ($dayDate->format('d/m/Y') !== $currentDate->format('d/m/Y')) {
+                return [];
+            }
+        }
+
         $availableSlots = $this->meetingSlotRepository->findAvailableSlotsByParticipants(
             $query->event, [$query->participant]
         );
 
         // Todo ne garder que les slots du futur + 10mn
+        
 
         $availableSlotViews = [];
 
