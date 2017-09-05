@@ -1,4 +1,7 @@
-<ul>
+<ul class="catalog-mobile-type-filter-list"
+    data-type-filter-all-content="{{ 'catalog.mobile.filters.allParticipants'|trans }}"
+>
+    {% if false %}
     <li
         class="filter_items catalog-mobile-filter btn btn-primary btn-inactive"
         data-filter-id="all"
@@ -19,4 +22,5 @@
             <span class="col-xs-2 filter-count text-right">({{ choices[child.vars.value].count }})</span>
         </li>
     {% endfor %}
+    {% endif %}
 </ul>

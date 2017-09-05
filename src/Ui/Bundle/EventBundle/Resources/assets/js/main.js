@@ -17,7 +17,7 @@ var $                     = require('jquery'),
     ShowMore              = require('./components/_ShowMore'),
     ShowMoreParticipants  = require('./components/_ShowMoreParticipants'),
     CatalogFilters        = require('./components/_CatalogFilters'),
-    CatalogMobileFilters  = require('./components/_CatalogMobileFilters'),
+    CatalogMobileFilters  = require('./components/catalog/_CatalogMobileFilters'),
     AnchorFocuser         = require('./components/_AnchorFocuser'),
     Happening             = require('./components/_Happening'),
     PreventMultipleSubmit = require('./components/_PreventMultipleSubmit'),
@@ -78,12 +78,13 @@ function init (target) {
         }
     });
 
-    $('.catalog-mobile-filter', target).on('click', function () {
+    [].forEach.call(target.querySelectorAll('.catalog-mobile-filters'), function (element) {
         new CatalogMobileFilters(
-            $(this),
-            $('.catalog form', target),
-            target.querySelector('.catalog'),
-            $('.catalog-mobile-button')
+            target,
+            element,
+            element.querySelector('.catalog-mobile-type-filter-list'),
+            target.querySelector('.catalog-mobile-button'),
+            target.querySelector('.catalog form')
         );
     });
 
