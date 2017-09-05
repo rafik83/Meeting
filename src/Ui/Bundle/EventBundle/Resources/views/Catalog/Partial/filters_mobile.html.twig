@@ -1,22 +1,22 @@
 <ul>
     <li
-            class="filter_items catalog-mobile-filter btn btn-primary"
-            data-filter-id="all"
-            data-count-participant="{{ totalParticipants }}"
-            data-content="{{ 'catalog.mobile.filters.allParticipants'|trans }}"
+        class="filter_items catalog-mobile-filter btn btn-primary btn-inactive"
+        data-filter-id="all"
+        data-count-participant="{{ totalParticipants }}"
+        data-content="{{ 'catalog.mobile.filters.allParticipants'|trans }}"
     >
         <span class="col-xs-10 filter-content">{{ 'catalog.mobile.filters.allParticipants'|trans }}</span>
-        <span class="col-xs-2 filter-count">({{ totalParticipants }})</span>
+        <span class="col-xs-2 filter-count text-right">({{ totalParticipants }})</span>
     </li>
     {% for child in form.children %}
         <li
-                class="catalog-mobile-filter btn btn-primary"
-                data-filter-id="{{ choices[child.vars.value].id }}"
-                data-count-participant="{{ choices[child.vars.value].count }}"
-                data-content="{{ child.vars.label|trans({}, child.vars.translation_domain) }}"
+            class="catalog-mobile-filter btn btn-primary btn-inactive"
+            data-filter-id="{{ choices[child.vars.value].id }}"
+            data-count-participant="{{ choices[child.vars.value].count }}"
+            data-content="{{ child.vars.label|trans({}, child.vars.translation_domain) }}"
         >
             <span class="col-xs-10 filter-content">{{ child.vars.label|trans({}, child.vars.translation_domain) }}</span>
-            <span class="col-xs-2 filter-count">({{ choices[child.vars.value].count }})</span>
+            <span class="col-xs-2 filter-count text-right">({{ choices[child.vars.value].count }})</span>
         </li>
     {% endfor %}
 </ul>

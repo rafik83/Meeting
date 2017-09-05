@@ -16,6 +16,14 @@
     max-height: 100px;
     max-width: 250px;
   }
+
+}
+@media screen and (max-width: 767px) {
+  .header {
+    &.hide-on-mobile {
+      display: none !important;
+    }
+  }
 }
 
 .header__info {

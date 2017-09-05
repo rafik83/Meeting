@@ -9,27 +9,29 @@
 {% form_theme searchForm '@Ui/default.html.twig' %}
 
 {% block header_mobile %}
-    <div class="open catalog-mobile col-xs-12">
-        <div class="catalog-mobile-filters visible-xs">
-            <div class="catalog-mobile-item open" data-anchor="filter-type">
-                <a href="#" class="catalog-mobile-button btn btn-primary btn-block">
-                    <span>{{ 'catalog.mobile.filters.allParticipants'|trans }}</span>
-                    <span class="button-count total-participants">
-                        ({{ paginatedResult.total }})
-                         <i class="glyphicon glyphicon-chevron-down"></i>
-                    </span>
-                </a>
-                <div id="filter-type" class="catalog-mobile-menu">
-                    <h3 class="catalog-mobile-title">{{ 'catalog.mobile.filters.title'|trans }}</h3>
-                    {{ include('EventBundle:Catalog:Partial/filters_mobile.html.twig', {
-                        form: searchForm.type,
-                        choices: typeViews,
-                        totalParticipants: paginatedResult.total
-                    }, false) }}
+    {% if searchForm.type is defined %}
+        <div class="open catalog-mobile col-xs-12">
+            <div class="catalog-mobile-filters visible-xs">
+                <div class="catalog-mobile-item open" data-anchor="filter-type">
+                    <a href="#" class="catalog-mobile-button btn btn-primary btn-block">
+                        <span>{{ 'catalog.mobile.filters.allParticipants'|trans }}</span>
+                        <span class="button-count total-participants">
+                            ({{ paginatedResult.total }})
+                             <i class="glyphicon glyphicon-chevron-down"></i>
+                        </span>
+                    </a>
+                    <div id="filter-type" class="catalog-mobile-menu">
+                        <h3 class="catalog-mobile-title">{{ 'catalog.mobile.filters.title'|trans }}</h3>
+                        {{ include('EventBundle:Catalog:Partial/filters_mobile.html.twig', {
+                            form: searchForm.type,
+                            choices: typeViews,
+                            totalParticipants: paginatedResult.total
+                        }, false) }}
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
+    {% endif %}
     <div class="catalog-mobile-menu">
         <div class="catalog-mobile-close">
             <button type="button" class="catalog-close">
@@ -41,7 +43,7 @@
 {% endblock %}
 
 {% block content %}
-    <div class="catalog catalog--advanced">
+    <div class="catalog catalog--advanced {% if searchForm.type is defined %}catalog-mobile-margin{% endif %}">
         {{ include('EventBundle:Tip:tip.html.twig', {tipTranslationViews: tipTranslationViews}) }}
         {{ include('EventBundle:Catalog:Partial/catalog.html.twig', {
             searchForm: searchForm,

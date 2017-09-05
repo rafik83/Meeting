@@ -1,4 +1,4 @@
-@media screen and (max-width: 425px) {
+@media screen and (max-width: 767px) {
   .catalog-mobile-filters {
     width: 100%;
   }
@@ -31,6 +31,7 @@
       align-self: auto;
 
       .catalog-mobile-button {
+        text-align: left;
 
         > span.button-count {
           float: right;
@@ -77,15 +78,12 @@
             }
 
             > span {
-              text-align: left;
-              float: left;
-              position: relative;
               min-height: 1px;
             }
 
             > span.filter-content {
-              width: 83.3333333333%;
               padding: 0;
+              text-align: left;
             }
 
             > span.filter-count {
@@ -133,12 +131,12 @@
     }
   }
 
-  .catalog {
+  .catalog-mobile-margin {
     margin-top: 128px !important;
   }
 }
 
-@media screen and (min-width: 426px) {
+@media screen and (min-width: 767px) {
   .catalog-mobile-menu {
     display: none;
   }
