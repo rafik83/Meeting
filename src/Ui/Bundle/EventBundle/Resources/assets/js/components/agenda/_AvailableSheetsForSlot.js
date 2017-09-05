@@ -1,18 +1,18 @@
 var axios = require('axios');
 
 /**
- * @param {Slot} slot
- * @param {int} sheetId
+ * @param {Element} slotAvailableElement
+ * @param {int}     slotId
  */
-function AvailableSheetsForSlot(slot, sheetId) {
-console.log(slot);
-    axios.get(document.location.pathname + '/sheet/' + sheetId + '/agenda/slot/' + slot.id )
+function AvailableSheetsForSlot(slotAvailableElement, slotId) {
+    axios.get(document.location.pathname + '/slot/' + slotId)
         .then(function (response) {
-            console.log(response);
+            if (parseInt(response.data.countAvailableSheets) > 0) {
+                slotAvailableElement.querySelector('.content').innerHTML = response.data.message;
+            }
         }).catch(function (error) {
             console.log(error);
-        }
-    );
+        });
 }
 
 module.exports = AvailableSheetsForSlot;

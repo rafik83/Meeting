@@ -20,23 +20,23 @@ class SheetsAvailableBySlotQuery
     public $event;
 
     /** @var Sheet */
-    public $excludedSheet;
+    public $sheet;
 
     /** @var MeetingSlot */
     public $slot;
 
     /**
      * @param Event       $event
-     * @param Sheet       $excludedSheet
+     * @param Sheet       $sheet
      * @param MeetingSlot $slot
      */
     public function __construct(
         Event $event,
-        Sheet $excludedSheet,
+        Sheet $sheet,
         MeetingSlot $slot
     ) {
         $this->event = $event;
-        $this->excludedSheet = $excludedSheet;
+        $this->sheet = $sheet;
         $this->slot = $slot;
     }
 }

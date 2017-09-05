@@ -3275,6 +3275,7 @@ services:
             - '@query.agenda.mass_unavailability_view_query_handler'
             - '@query.agenda.meeting_view_query_handler'
             - '@query.agenda.cancel_attendance_unavailability_view_query_handler'
+            - '@query.agenda.available_sheets.available_slots_by_participant_query_handler'
     query.agenda.participant_view_query_handler:
         class: Proximum\Vimeet\Application\Query\Agenda\ParticipantViewQueryHandler
         arguments:
@@ -3323,6 +3324,7 @@ services:
         class: Proximum\Vimeet\Application\Query\Agenda\AvailableSheets\AvailableSlotsByParticipantQueryHandler
         arguments:
             - '@vimeet_infrastructure.repository.meeting_slot_repository'
+            - '@datetime'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Agenda\AvailableSheets\AvailableSlotsByParticipantQuery }
     query.agenda.admin.indicator.sheet_indicators_lazy_load_view_query_handler:

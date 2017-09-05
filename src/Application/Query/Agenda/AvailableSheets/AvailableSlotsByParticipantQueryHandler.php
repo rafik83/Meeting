@@ -18,12 +18,19 @@ class AvailableSlotsByParticipantQueryHandler
     /** @var MeetingSlotRepositoryInterface */
     private $meetingSlotRepository;
 
+    /** @var \DateTimeInterface */
+    private $dateTime;
+
     /**
      * @param MeetingSlotRepositoryInterface $meetingSlotRepository
+     * @param \DateTimeInterface             $dateTime
      */
-    public function __construct(MeetingSlotRepositoryInterface $meetingSlotRepository)
-    {
+    public function __construct(
+        MeetingSlotRepositoryInterface $meetingSlotRepository,
+        \DateTimeInterface $dateTime
+    ) {
         $this->meetingSlotRepository = $meetingSlotRepository;
+        $this->dateTime = $dateTime;
     }
 
     /**
@@ -37,13 +44,15 @@ class AvailableSlotsByParticipantQueryHandler
             $query->event, [$query->participant]
         );
 
+        // Todo ne garder que les slots du futur + 10mn
+
         $availableSlotViews = [];
 
         foreach ($availableSlots as $availableSlot) {
             $availableSlotViews[] = new AvailableSlotView(
                 $availableSlot->getId(),
                 $availableSlot->getBegin(),
-                $availableSlot->duration()
+                $availableSlot->getEnd()
             );
         }
 

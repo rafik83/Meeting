@@ -1,10 +1,9 @@
-var Meet                         = require('./_Meet'),
-    Slot                         = require('./_Slot'),
-    Planner                      = require('./_Planner'),
-    ResizeHandler                = require('./_ResizeHandler'),
-    AvailableSlotsForParticipant = require('./_AvailableSlotsForParticipant'),
-    AvailableSheetForSlot        = require('./_AvailableSheetsForSlot'),
-    moment                       = require('moment');
+var Meet = require('./_Meet'),
+    Slot = require('./_Slot'),
+    Planner = require('./_Planner'),
+    ResizeHandler = require('./_ResizeHandler'),
+    AvailableSheetsForSlot = require('./_AvailableSheetsForSlot'),
+    moment = require('moment');
 
 /**
  * Agenda
@@ -22,7 +21,6 @@ function Agenda(element) {
     this.layout       = this.element.querySelector('.layout');
     this.planner      = new Planner();
     this.resize       = new ResizeHandler(window);
-    this.availableSlotForParticipant = new AvailableSlotsForParticipant(element);
     this.meets        = [];
     this.slots        = [];
     this.scale        = 0;
@@ -44,10 +42,9 @@ function Agenda(element) {
         [].forEach.call(this.slots, this.scrollOnSlot.bind(this));
     }
 
-    this.availableSlotForParticipant.on('available-slot-handled', function() {
-        console.log(this.availableSlotForParticipant.availableSlotForParticipant);
-        // Get available sheet for each slot and display it on slot
-    }.bind(this));
+    [].forEach.call(element.querySelectorAll('.meet.available'), function(slotAvailable) {
+        AvailableSheetsForSlot(slotAvailable, slotAvailable.getAttribute('data-slot-id'));
+    });
 
     this.resize.on('resized', this.onResize);
 }

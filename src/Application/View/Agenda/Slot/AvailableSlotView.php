@@ -18,18 +18,26 @@ class AvailableSlotView
     /** @var \DateTimeInterface */
     public $beginHour;
 
-    /** @var string */
-    public $duration;
+    /** @var \DateTimeInterface */
+    public $endHour;
 
     /**
      * @param int                $id
      * @param \DateTimeInterface $beginHour
-     * @param string             $duration
+     * @param \DateTimeInterface $endHour
      */
-    public function __construct(int $id, \DateTimeInterface $beginHour, string $duration)
+    public function __construct(int $id, \DateTimeInterface $beginHour, \DateTimeInterface $endHour)
     {
         $this->id = $id;
         $this->beginHour = $beginHour;
-        $this->duration = $duration;
+        $this->endHour = $endHour;
+    }
+
+    /**
+     * @return \DateInterval
+     */
+    public function getDuration(): \DateInterval
+    {
+        return $this->endHour->diff($this->beginHour);
     }
 }

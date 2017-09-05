@@ -87,6 +87,13 @@ interface SheetRepositoryInterface
     public function getSheetsInCatalogWithAtLeastOneAcceptedRequestByEvent(Event $event);
 
     /**
+     * @param Sheet $sheet
+     *
+     * @return Sheet[]
+     */
+    public function getSheetsMetBySheet(Sheet $sheet): array;
+
+    /**
      * @param Type $type
      *
      * @return bool
