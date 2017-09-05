@@ -24,24 +24,25 @@ class AvailableSlotsByParticipantQueryHandlerTest extends TestCase
 {
     public function testHandle()
     {
+        $begin = new \DateTime('11/12/2013 00:01:00');
         $event = EventFactory::createEvent();
         $sheet = SheetFactory::create($event);
         $participant = ParticipantFactory::create($sheet);
 
         $meetingSlotRepository = $this->prophesize(MeetingSlotRepositoryInterface::class);
 
-        $availableSlots = [
-            SlotFactory::createSlot(1),
-            SlotFactory::createSlot(2),
-        ];
+        $slot1 = SlotFactory::createSlot(1);
+        $slot2 = SlotFactory::createSlot(2);
+
+        $availableSlots = [$slot1, $slot2];
 
         $expected = [
-            new AvailableSlotView(1),
-            new AvailableSlotView(2),
+            new AvailableSlotView(1, $slot1->getBegin(), $slot1->getEnd()),
+            new AvailableSlotView(2, $slot2->getBegin(), $slot2->getEnd()),
         ];
 
         $query = new AvailableSlotsByParticipantQuery($event, $participant);
-        $handler = new AvailableSlotsByParticipantQueryHandler($meetingSlotRepository->reveal());
+        $handler = new AvailableSlotsByParticipantQueryHandler($meetingSlotRepository->reveal(), $begin);
 
         $meetingSlotRepository
             ->findAvailableSlotsByParticipants($event, [$participant])

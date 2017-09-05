@@ -99,6 +99,9 @@ class SheetsAvailableBySlotQueryHandlerTest extends TestCase
             ->shouldBeCalled()
             ->willReturn($requestForExcludedSheets);
 
+        $this->sheetRepository->getSheetsMetBySheet($fromSheet->reveal())
+            ->shouldBeCalled()
+            ->willReturn([]);
 
         $this->sheetRepository->getSheetsInCatalogByEvent($event, $excludedSheets)
             ->shouldBeCalled()

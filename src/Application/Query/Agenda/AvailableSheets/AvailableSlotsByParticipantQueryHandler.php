@@ -55,7 +55,7 @@ class AvailableSlotsByParticipantQueryHandler
         );
 
         // Todo ne garder que les slots du futur + 10mn
-        
+
 
         $availableSlotViews = [];
 

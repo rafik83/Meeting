@@ -67,12 +67,14 @@ class SheetsAvailableBySlotQueryHandler
             $excludedSheets[$sheetMet->getId()] = $sheetMet;
         }
 
-        foreach ($this->sheetRepository->getSheetsMetBySheet($query->sheet) as $sheetMet) {
+        $sheetMets = $this->sheetRepository->getSheetsMetBySheet($query->sheet);
+
+        foreach ($sheetMets as $sheetMet) {
             $excludedSheets[$sheetMet->getId()] = $sheetMet;
         };
 
         $sheets = $this->sheetRepository->getSheetsInCatalogByEvent($query->event, $excludedSheets);
-        $participants    = [];
+        $participants = [];
 
         foreach ($sheets as $sheet) {
             $allowedTypes = $this->visibleParticipationTypes->getAllowedTypesList($sheet);
