@@ -5,7 +5,7 @@ var axios = require('axios');
  * @param {int}     slotId
  */
 function AvailableSheetsForSlot(slotAvailableElement, slotId) {
-    axios.get(document.location.pathname + '/slot/' + slotId)
+    axios.get(document.location.pathname + '/sheets-available-by-slot/' + slotId)
         .then(function (response) {
             if (parseInt(response.data.countAvailableSheets) > 0) {
                 slotAvailableElement.querySelector('.content').innerHTML = response.data.message;

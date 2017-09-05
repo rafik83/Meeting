@@ -668,7 +668,7 @@ event_agenda_participant:
     defaults: { _controller: EventBundle:Agenda:participant }
 
 event_agenda_count_sheets_available_by_slot:
-    path: /sheet/{sheet}/agenda/participant/{participant}/slot/{slot}
+    path: /sheet/{sheet}/agenda/participant/{participant}/sheets-available-by-slot/{slot}
     requirements:
         sheet: \d+
         slot: \d+

@@ -11,7 +11,6 @@
 namespace Proximum\Vimeet\Application\Query\Agenda\AvailableSheets;
 
 use Proximum\Vimeet\Application\View\Agenda\Slot\AvailableSlotView;
-use Proximum\Vimeet\Domain\Model\MeetingSlot;
 use Proximum\Vimeet\Domain\Repository\MeetingSlotRepositoryInterface;
 
 class AvailableSlotsByParticipantQueryHandler
