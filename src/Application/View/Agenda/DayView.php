@@ -14,39 +14,25 @@ use Proximum\Vimeet\Application\View\Agenda\Slot\AvailableSlotView;
 
 class DayView
 {
-    /**
-     * @var \DateTimeInterface
-     */
+    /** @var \DateTimeInterface */
     public $begin;
 
-    /**
-     * @var \DateTimeInterface
-     */
+    /** @var \DateTimeInterface */
     public $end;
 
-    /**
-     * @var int
-     */
+    /** @var int */
     public $scale;
 
-    /**
-     * @var HappeningView[]
-     */
+    /** @var HappeningView[] */
     public $happenings;
 
-    /**
-     * @var UnavailabilityView[]
-     */
+    /** @var UnavailabilityView[] */
     public $unavailabilities;
 
-    /**
-     * @var MassUnavailabilityView[]
-     */
+    /** @var MassUnavailabilityView[] */
     public $masses;
 
-    /**
-     * @var MeetingView[]
-     */
+    /** @var MeetingView[] */
     public $meetings;
 
     /** @var CancelAttendanceUnavailabilityView|null */
@@ -93,7 +79,7 @@ class DayView
     /**
      * @return \DateTimeInterface
      */
-    public function getDay()
+    public function getDay(): \DateTimeInterface
     {
         return $this->begin;
     }
@@ -101,7 +87,7 @@ class DayView
     /**
      * @return string
      */
-    public function getScale()
+    public function getScale(): string
     {
         return gmdate('H:i', $this->scale * 60);
     }
@@ -109,7 +95,7 @@ class DayView
     /**
      * @return array
      */
-    public function getTimeEntities()
+    public function getTimeEntities(): array
     {
         return array_merge(
             $this->happenings,
@@ -122,7 +108,7 @@ class DayView
     /**
      * @return bool
      */
-    public function isSheetAttendingTheEvent()
+    public function isSheetAttendingTheEvent(): bool
     {
         return $this->cancelAttendanceUnavailabilityView === null;
     }

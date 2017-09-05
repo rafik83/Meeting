@@ -49,11 +49,7 @@ class AvailableSlotsByParticipantQueryHandlerTest extends TestCase
         $slot2 = SlotFactory::createSlot(2, $event, $slotBegin2, $slotEnd2);
 
         $availableSlots = [$slot1, $slot2];
-
-        $expected = [
-            //new AvailableSlotView(1, $slot1->getBegin(), $slot1->getEnd()),
-            new AvailableSlotView(2, $slot2->getBegin(), $slot2->getEnd()),
-        ];
+        $expected = [new AvailableSlotView(2, $slot2->getBegin(), $slot2->getEnd())];
 
         $query   = new AvailableSlotsByParticipantQuery($event, $participant);
         $handler = new AvailableSlotsByParticipantQueryHandler($meetingSlotRepository->reveal(), $currentTime);
@@ -62,6 +58,74 @@ class AvailableSlotsByParticipantQueryHandlerTest extends TestCase
             ->findAvailableSlotsByParticipants($event, [$participant])
             ->shouldBeCalled()
             ->willReturn($availableSlots);
+
+        $result = $handler->handle($query);
+
+        $this->assertEquals($expected, $result);
+    }
+
+    public function testHandleWithSlotPastTime()
+    {
+        $currentTime = new \DateTime('11/12/2013 18:00:00');
+        $begin       = new \DateTime('11/12/2013 00:01:00');
+        $end         = new \DateTime('11/12/2013 19:01:00');
+        $slotBegin1  = new \DateTime('11/12/2013 10:00:00');
+        $slotEnd1    = new \DateTime('11/12/2013 11:00:00');
+        $slotBegin2  = new \DateTime('11/12/2013 13:00:00');
+        $slotEnd2    = new \DateTime('11/12/2013 14:00:00');
+
+        $event = EventFactory::createEvent();
+        $event->setDays([new Day($event, $begin, $end)]);
+
+        $sheet       = SheetFactory::create($event);
+        $participant = ParticipantFactory::create($sheet);
+
+        $meetingSlotRepository = $this->prophesize(MeetingSlotRepositoryInterface::class);
+
+        $slot1 = SlotFactory::createSlot(1, $event, $slotBegin1, $slotEnd1);
+        $slot2 = SlotFactory::createSlot(2, $event, $slotBegin2, $slotEnd2);
+
+        $availableSlots = [$slot1, $slot2];
+        $expected = [];
+
+        $query   = new AvailableSlotsByParticipantQuery($event, $participant);
+        $handler = new AvailableSlotsByParticipantQueryHandler($meetingSlotRepository->reveal(), $currentTime);
+
+        $meetingSlotRepository
+            ->findAvailableSlotsByParticipants($event, [$participant])
+            ->shouldBeCalled()
+            ->willReturn($availableSlots);
+
+        $result = $handler->handle($query);
+
+        $this->assertEquals($expected, $result);
+    }
+
+    public function testHandleWithPastDay()
+    {
+        $currentTime = new \DateTime('11/12/2017 10:11:00');
+        $begin  = new \DateTime('11/12/2013 00:01:00');
+        $end    = new \DateTime('11/12/2013 19:01:00');
+        $begin2 = new \DateTime('12/12/2013 00:01:00');
+        $end2   = new \DateTime('12/12/2013 19:01:00');
+        $event  = EventFactory::createEvent();
+        $event->setDays([
+            new Day($event, $begin, $end),
+            new Day($event, $begin2, $end2),
+        ]);
+        $sheet = SheetFactory::create($event);
+        $participant = ParticipantFactory::create($sheet);
+
+        $meetingSlotRepository = $this->prophesize(MeetingSlotRepositoryInterface::class);
+
+        $expected = [];
+
+        $query   = new AvailableSlotsByParticipantQuery($event, $participant);
+        $handler = new AvailableSlotsByParticipantQueryHandler($meetingSlotRepository->reveal(), $currentTime);
+
+        $meetingSlotRepository
+            ->findAvailableSlotsByParticipants($event, [$participant])
+            ->shouldNotBeCalled();
 
         $result = $handler->handle($query);
 
