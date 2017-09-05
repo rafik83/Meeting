@@ -50,7 +50,10 @@ class AvailableSlotsByParticipantQueryHandlerTest extends TestCase
 
         $availableSlots = [$slot1, $slot2];
 
-        $expected = [new AvailableSlotView(1, $slot1->getBegin(), $slot1->getEnd())];
+        $expected = [
+            //new AvailableSlotView(1, $slot1->getBegin(), $slot1->getEnd()),
+            new AvailableSlotView(2, $slot2->getBegin(), $slot2->getEnd()),
+        ];
 
         $query   = new AvailableSlotsByParticipantQuery($event, $participant);
         $handler = new AvailableSlotsByParticipantQueryHandler($meetingSlotRepository->reveal(), $currentTime);

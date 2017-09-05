@@ -57,7 +57,7 @@ class AvailableSlotsByParticipantQueryHandler
             $beginHour = clone $availableSlot->getBegin();
             $beginHourPlusTenMinutes = $beginHour->add(new \DateInterval('PT10M'));
 
-            if ($this->dateTime >= $beginHourPlusTenMinutes) {
+            if ($beginHourPlusTenMinutes >= $this->dateTime) {
                 $availableSlotViews[] = new AvailableSlotView(
                     $availableSlot->getId(),
                     $availableSlot->getBegin(),
