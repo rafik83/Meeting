@@ -40,6 +40,7 @@ class AvailableSlotsByParticipantQueryHandlerTest extends TestCase
             new Day($event, $begin, $end),
             new Day($event, $begin2, $end2),
         ]);
+        $day = $event->getFirstDay();
         $sheet = SheetFactory::create($event);
         $participant = ParticipantFactory::create($sheet);
 
@@ -51,7 +52,7 @@ class AvailableSlotsByParticipantQueryHandlerTest extends TestCase
         $availableSlots = [$slot1, $slot2];
         $expected = [new AvailableSlotView(2, $slot2->getBegin(), $slot2->getEnd())];
 
-        $query   = new AvailableSlotsByParticipantQuery($event, $participant);
+        $query   = new AvailableSlotsByParticipantQuery($event, $participant, $day);
         $handler = new AvailableSlotsByParticipantQueryHandler($meetingSlotRepository->reveal(), $currentTime);
 
         $meetingSlotRepository
@@ -76,6 +77,8 @@ class AvailableSlotsByParticipantQueryHandlerTest extends TestCase
 
         $event = EventFactory::createEvent();
         $event->setDays([new Day($event, $begin, $end)]);
+        $day = $event->getFirstDay();
+
 
         $sheet       = SheetFactory::create($event);
         $participant = ParticipantFactory::create($sheet);
@@ -88,7 +91,7 @@ class AvailableSlotsByParticipantQueryHandlerTest extends TestCase
         $availableSlots = [$slot1, $slot2];
         $expected = [];
 
-        $query   = new AvailableSlotsByParticipantQuery($event, $participant);
+        $query   = new AvailableSlotsByParticipantQuery($event, $participant, $day);
         $handler = new AvailableSlotsByParticipantQueryHandler($meetingSlotRepository->reveal(), $currentTime);
 
         $meetingSlotRepository
@@ -113,6 +116,7 @@ class AvailableSlotsByParticipantQueryHandlerTest extends TestCase
             new Day($event, $begin, $end),
             new Day($event, $begin2, $end2),
         ]);
+        $day = $event->getFirstDay();
         $sheet = SheetFactory::create($event);
         $participant = ParticipantFactory::create($sheet);
 
@@ -120,7 +124,7 @@ class AvailableSlotsByParticipantQueryHandlerTest extends TestCase
 
         $expected = [];
 
-        $query   = new AvailableSlotsByParticipantQuery($event, $participant);
+        $query   = new AvailableSlotsByParticipantQuery($event, $participant, $day);
         $handler = new AvailableSlotsByParticipantQueryHandler($meetingSlotRepository->reveal(), $currentTime);
 
         $meetingSlotRepository

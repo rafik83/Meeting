@@ -78,13 +78,15 @@
                             {% endfor %}
 
                             {% for availableSlotView in day.availableSlotViews %}
-                                <div class="meet available"
-                                     data-beginHour="{{ availableSlotView.beginHour|date('H:i', event.timeZone) }}"
-                                     data-duration="{{ availableSlotView.duration.format('%H:%I') }}"
-                                     data-slot-id="{{ availableSlotView.id }}"
-                                >
-                                    <header><div class="content"></div></header>
-                                </div>
+                                {% if availableSlotView.beginHour|date('D/M/Y', event.timeZone) == day.day|date('D/M/Y', event.timeZone) %}
+                                    <div class="meet available"
+                                         data-beginHour="{{ availableSlotView.beginHour|date('H:i', event.timeZone) }}"
+                                         data-duration="{{ availableSlotView.duration.format('%H:%I') }}"
+                                         data-slot-id="{{ availableSlotView.id }}"
+                                    >
+                                        <header><div class="content"></div></header>
+                                    </div>
+                                {% endif %}
                             {% endfor %}
                         {% else %}
                             {{ include('EventBundle:Unavailability/CancelAttendance:cancelAttendanceUnavailability.html.twig', {'cancelAttendanceUnavailability': day.cancelAttendanceUnavailabilityView }) }}

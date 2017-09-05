@@ -134,7 +134,11 @@ class DayViewQueryHandler
             }
 
             if ($query->isParticipantUserViewing()) {
-                $availableSlotViewQuery = new AvailableSlotsByParticipantQuery($query->event, $query->participant);
+                $availableSlotViewQuery = new AvailableSlotsByParticipantQuery(
+                    $query->event,
+                    $query->participant,
+                    $query->day
+                );
                 $availableSlotViews = $this->availableSlotsByParticipantQueryHandler->handle($availableSlotViewQuery);
             }
         } else {

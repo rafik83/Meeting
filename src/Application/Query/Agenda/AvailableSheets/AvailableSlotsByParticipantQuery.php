@@ -21,13 +21,18 @@ class AvailableSlotsByParticipantQuery
     /** @var Participant */
     public $participant;
 
+    /** @var Event\Day */
+    public $day;
+
     /**
      * @param Event       $event
      * @param Participant $participant
+     * @param Event\Day   $day
      */
-    public function __construct(Event $event, Participant $participant)
+    public function __construct(Event $event, Participant $participant, Event\Day $day)
     {
         $this->event = $event;
         $this->participant = $participant;
+        $this->day = $day;
     }
 }

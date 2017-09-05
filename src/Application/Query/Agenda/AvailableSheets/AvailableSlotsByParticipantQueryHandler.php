@@ -40,8 +40,8 @@ class AvailableSlotsByParticipantQueryHandler
      */
     public function handle(AvailableSlotsByParticipantQuery $query): array
     {
-        if ($query->event->getFirstDay()->getStartTime() > $this->dateTime
-            || $query->event->getLastDay()->getEndTime() < $this->dateTime
+        if ($query->day->getStartTime() > $this->dateTime
+            || $query->day->getEndTime() < $this->dateTime
         ) {
             return [];
         }

@@ -220,7 +220,7 @@ class DayViewQueryHandlerTest extends TestCase
         $meetingHandler = $this->prophesize(MeetingViewQueryHandler::class);
         $meetingHandler->handle()->shouldNotBeCalled();
 
-        $availableSlotViewQuery = new AvailableSlotsByParticipantQuery($this->event, $this->participant);
+        $availableSlotViewQuery = new AvailableSlotsByParticipantQuery($this->event, $this->participant, $this->day);
         $availableSlotQueryHandler
             ->handle($availableSlotViewQuery)
             ->shouldBeCalled()
@@ -356,7 +356,7 @@ class DayViewQueryHandlerTest extends TestCase
             ->shouldBeCalled()
             ->willReturn($meetingView);
 
-        $availableSlotViewQuery = new AvailableSlotsByParticipantQuery($this->event, $this->participant);
+        $availableSlotViewQuery = new AvailableSlotsByParticipantQuery($this->event, $this->participant, $this->day);
         $availableSlotQueryHandler
             ->handle($availableSlotViewQuery)
             ->shouldBeCalled()
