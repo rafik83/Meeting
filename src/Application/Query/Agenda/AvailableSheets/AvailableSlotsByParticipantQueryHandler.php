@@ -41,37 +41,30 @@ class AvailableSlotsByParticipantQueryHandler
      */
     public function handle(AvailableSlotsByParticipantQuery $query): array
     {
-        $timeZone = new \DateTimeZone($query->event->getTimeZone());
-        $currentDate = $this->dateTime->setTimeZone($timeZone);
-
-        foreach ($query->event->getDays() as $day) {
-            $dayDate = $day->getDay()->setTimeZone(new \DateTimeZone($query->event->getTimeZone()));
-
-            if ($dayDate->format('d/m/Y') !== $currentDate->format('d/m/Y')) {
-                return [];
-            }
+        if ($query->event->getFirstDay()->getStartTime() > $this->dateTime
+            || $query->event->getLastDay()->getEndTime() < $this->dateTime
+        ) {
+            return [];
         }
 
         $availableSlots = $this->meetingSlotRepository->findAvailableSlotsByParticipants(
-            $query->event, [$query->participant]
+            $query->event,
+            [$query->participant]
         );
-
-        foreach ($availableSlots as $availableSlotKey => $availableSlot) {
-            $beginHourPlusTenMinutes = $availableSlot->getBegin()->add(new \DateInterval('PT10M'))->setTimeZone($timeZone);
-
-            if ($currentDate >= $beginHourPlusTenMinutes) {
-                unset($availableSlots[$availableSlotKey]);
-            }
-        }
 
         $availableSlotViews = [];
 
         foreach ($availableSlots as $availableSlot) {
-            $availableSlotViews[] = new AvailableSlotView(
-                $availableSlot->getId(),
-                $availableSlot->getBegin(),
-                $availableSlot->getEnd()
-            );
+            $beginHour = clone $availableSlot->getBegin();
+            $beginHourPlusTenMinutes = $beginHour->add(new \DateInterval('PT10M'));
+
+            if ($this->dateTime >= $beginHourPlusTenMinutes) {
+                $availableSlotViews[] = new AvailableSlotView(
+                    $availableSlot->getId(),
+                    $availableSlot->getBegin(),
+                    $availableSlot->getEnd()
+                );
+            }
         }
 
         return $availableSlotViews;
