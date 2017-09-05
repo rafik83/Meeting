@@ -12,6 +12,7 @@ namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Controller;
 
 use Proximum\Vimeet\Application\Query\Agenda\AgendaViewQuery;
 use Proximum\Vimeet\Application\Query\Agenda\AvailableSheets\SheetsAvailableBySlotQuery;
+use Proximum\Vimeet\Application\Query\Agenda\MeetingPropositionFromAvailableSheets\MeetingPropositionFromAvailableSheetsQuery;
 use Proximum\Vimeet\Application\Query\Tip\TipTranslationViewQuery;
 use Proximum\Vimeet\Application\Query\Tip\TipTranslationViewQueryHandler;
 use Proximum\Vimeet\Application\View\Agenda\AgendaView;
@@ -124,16 +125,33 @@ class AgendaController extends Controller
             return new JsonResponse(['message' => 'participant not found'], 404);
         }
 
-        $query = new SheetsAvailableBySlotQuery($eventDomain->getEvent(), $sheet, $slot);
+        $countAvailableSheetsWithProposition = $this
+            ->get('tactician.commandbus.query')
+            ->handle(new MeetingPropositionFromAvailableSheetsQuery($sheet, $slot))
+        ;
+
+        if ($countAvailableSheetsWithProposition > 0) {
+            return new JsonResponse(
+                [
+                    'message' => $this->get('translator')->transChoice(
+                        'agenda.availability.available_sheets_with_proposition',
+                        $countAvailableSheetsWithProposition,
+                        ['%availableSheets%' => $countAvailableSheetsWithProposition]
+                    ),
+                    'countAvailableSheets' => $countAvailableSheetsWithProposition,
+                ]
+            );
+        }
+
         $countAvailableSheets = $this
             ->get('tactician.commandbus.query')
-            ->handle($query)
+            ->handle(new SheetsAvailableBySlotQuery($eventDomain->getEvent(), $sheet, $slot))
         ;
 
         $message = $this->get('translator')->transChoice(
             'agenda.availability.available_sheets',
             $countAvailableSheets,
-            ['availableSheets' => $countAvailableSheets]
+            ['%availableSheets%' => $countAvailableSheets]
         );
 
         return new JsonResponse(['message' => $message, 'countAvailableSheets' => $countAvailableSheets]);
