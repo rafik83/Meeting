@@ -29,12 +29,6 @@ class MeetingView extends AbstractTimeEntityView
     /** @var MeetingParticipantView[] */
     public $participants;
 
-    /** @var \DateTimeInterface */
-    public $begin;
-
-    /** @var \DateTimeInterface */
-    public $end;
-
     /** @var string */
     public $sheetMetTitle;
 
