@@ -105,6 +105,16 @@
       .details { display: block; }
     }
 
+    &.available {
+      > header {
+        background: transparent;
+
+        .content {
+          color: black;
+        }
+      }
+    }
+
     > header {
       display: flex;
       flex-direction: row;

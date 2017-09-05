@@ -138,6 +138,7 @@ class AgendaViewQueryHandler
                     $sheet,
                     $query->event,
                     $participant,
+                    $query->userViewing,
                     $isUserParticipantMultipleSheet,
                     $query->locale,
                     $happeningParticipations,

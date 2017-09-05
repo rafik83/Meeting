@@ -64,14 +64,27 @@
                             {% for happening in day.happenings %}
                                 {{ include('EventBundle:Agenda:happening.html.twig', {'sheet': agenda.sheet, 'happening': happening, 'isUserAloneParticipant': agenda.isUserAloneParticipant }) }}
                             {% endfor %}
+
                             {% for unavailability in day.unavailabilities %}
                                 {{ include('EventBundle:Agenda:unavailability.html.twig', {'sheetId': agenda.sheet.id, 'unavailability': unavailability, 'participantId': agenda.participant.id }) }}
                             {% endfor %}
+
                             {% for mass in day.masses %}
                                 {{ include('EventBundle:Agenda:mass.html.twig', {'mass': mass }) }}
                             {% endfor %}
+
                             {% for meeting in day.meetings %}
                                 {{ include('EventBundle:Agenda:meeting.html.twig', {'sheetId': agenda.sheet.id, 'meeting': meeting }) }}
+                            {% endfor %}
+
+                            {% for availableSlotView in day.availableSlotViews %}
+                                <div class="meet available"
+                                     data-beginHour="{{ availableSlotView.beginHour|date('H:i', event.timeZone) }}"
+                                     data-duration="{{ availableSlotView.duration.format('%H:%I') }}"
+                                     data-slot-id="{{ availableSlotView.id }}"
+                                >
+                                    <header><div class="content"></div></header>
+                                </div>
                             {% endfor %}
                         {% else %}
                             {{ include('EventBundle:Unavailability/CancelAttendance:cancelAttendanceUnavailability.html.twig', {'cancelAttendanceUnavailability': day.cancelAttendanceUnavailabilityView }) }}
