@@ -135,7 +135,9 @@ class Preview
 
         if ($hasEmptyImage) {
             foreach ($previewObjects as $previewObjectKey => $previewObjectValue) {
-                if ($previewObjectValue->isPopulatedFromTagSheetOrganization()) {
+                if ($previewObjectValue->isPopulatedFromTagSheetOrganization()
+                    && $previewObjectValue->content === $sheet->getTitle()
+                ) {
                     unset($previewObjects[$previewObjectKey]);
                 }
             }
