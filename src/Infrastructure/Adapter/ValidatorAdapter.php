@@ -11,6 +11,7 @@ namespace Proximum\Vimeet\Infrastructure\Adapter;
 
 use Proximum\Vimeet\Application\Adapter\ValidatorInterface;
 use Symfony\Component\Validator\Constraints\Email;
+use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\Validator\Validator\ValidatorInterface as SymfonyValidatorInterface;
 
 class ValidatorAdapter implements ValidatorInterface
@@ -40,11 +41,7 @@ class ValidatorAdapter implements ValidatorInterface
     {
         switch ($constraintType) {
             case self::VALIDATOR_EMAIL_TYPE:
-                return $this->validator->validate($data, new Email(
-                    [
-                        'strict' => true,
-                    ]
-                ));
+                return $this->validator->validate($data, [new NotBlank(), new Email(['strict' => true])]);
             default:
                 break;
         }
