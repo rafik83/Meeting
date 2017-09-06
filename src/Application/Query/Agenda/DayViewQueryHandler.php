@@ -38,6 +38,9 @@ class DayViewQueryHandler
     /** @var AgendaCollisionManager */
     private $agendaCollisionManager;
 
+    /** @var \DateTimeInterface */
+    private $dateTime;
+
     /**
      * @param HappeningViewQueryHandler $happeningHandler
      * @param UnavailabilityViewQueryHandler $unavailabilityHandler
@@ -46,6 +49,7 @@ class DayViewQueryHandler
      * @param CancelAttendanceUnavailabilityViewQueryHandler $cancelAttendanceUnavailabilityViewQueryHandler
      * @param AvailableSlotsByParticipantQueryHandler $availableSlotsByParticipantQueryHandler
      * @param AgendaCollisionManager $agendaCollisionManager
+     * @param \DateTimeInterface $dateTime
      */
     public function __construct(
         HappeningViewQueryHandler $happeningHandler,
@@ -54,7 +58,8 @@ class DayViewQueryHandler
         MeetingViewQueryHandler $meetingHandler,
         CancelAttendanceUnavailabilityViewQueryHandler $cancelAttendanceUnavailabilityViewQueryHandler,
         AvailableSlotsByParticipantQueryHandler $availableSlotsByParticipantQueryHandler,
-        AgendaCollisionManager $agendaCollisionManager
+        AgendaCollisionManager $agendaCollisionManager,
+        \DateTimeInterface $dateTime
     ) {
         $this->happeningHandler                               = $happeningHandler;
         $this->unavailabilityHandler                          = $unavailabilityHandler;
@@ -63,6 +68,7 @@ class DayViewQueryHandler
         $this->cancelAttendanceUnavailabilityViewQueryHandler = $cancelAttendanceUnavailabilityViewQueryHandler;
         $this->availableSlotsByParticipantQueryHandler        = $availableSlotsByParticipantQueryHandler;
         $this->agendaCollisionManager                         = $agendaCollisionManager;
+        $this->dateTime                                       = $dateTime;
     }
 
     /**
@@ -133,7 +139,10 @@ class DayViewQueryHandler
                 }
             }
 
-            if ($query->isParticipantUserViewing()) {
+            if ($query->isParticipantUserViewing()
+                && $query->day->getStartTime() <= $this->dateTime
+                && $query->day->getEndTime() >= $this->dateTime
+            ) {
                 $availableSlotViewQuery = new AvailableSlotsByParticipantQuery(
                     $query->event,
                     $query->participant,

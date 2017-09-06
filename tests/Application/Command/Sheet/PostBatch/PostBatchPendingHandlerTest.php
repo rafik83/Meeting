@@ -12,6 +12,7 @@ namespace Application\Command\Sheet\PostBatch;
 
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
+use Proximum\Vimeet\Application\Adapter\SheetIndexerInterface;
 use Proximum\Vimeet\Application\Command\Sheet\PostBatch\PostBatchPending;
 use Proximum\Vimeet\Application\Command\Sheet\PostBatch\PostBatchPendingHandler;
 use Proximum\Vimeet\Application\Event\Events;
@@ -29,18 +30,21 @@ class PostBatchPendingHandlerTest extends TestCase
         $sheet3 = SheetFactory::create();
         $admin  = AdminFactory::create();
 
+        $sheetIndexer    = $this->prophesize(SheetIndexerInterface::class);
         $eventDispatcher = $this->prophesize(EventDispatcherInterface::class);
         $datetime        = new \DateTime();
 
-        $eventDispatcher->dispatch(
-            Events::SHEET_PENDING,
-            Argument::type(SheetPendingEvent::class)
-        )->shouldBeCalledTimes(3);
+        $eventDispatcher
+            ->dispatch(Events::SHEET_PENDING, Argument::type(SheetPendingEvent::class))
+            ->shouldBeCalledTimes(3);
 
         $handler = new PostBatchPendingHandler(
+            $sheetIndexer->reveal(),
             $eventDispatcher->reveal(),
             $datetime
         );
+
+        $sheetIndexer->updateSheets([$sheet1, $sheet2, $sheet3])->shouldBeCalled();
 
         $handler->handle(new PostBatchPending([$sheet1, $sheet2, $sheet3], $admin));
     }

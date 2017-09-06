@@ -38,9 +38,9 @@ class MeetingNormalizer implements NormalizerInterface
                     return ['@reference' => $sheet->reference];
                 }, $object->sheetList),
             ],
-            'participantList' => [
-                'Participant' => array_map(function (ParticipantView $participant) {
-                    return ['@reference' => $participant->reference];
+            'userList' => [
+                'User' => array_map(function (ParticipantView $participantView) {
+                    return ['@reference' => $participantView->reference];
                 }, $object->participantList),
             ],
         ];

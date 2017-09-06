@@ -87,6 +87,24 @@ class SheetRepository implements SheetRepositoryInterface
     /**
      * {@inheritdoc}
      */
+    public function getByEventWithParticipantsAndOwner(Event $event)
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('sheet, participant, owner')
+            ->from(Sheet::class, 'sheet')
+            ->join('sheet.owner', 'owner')
+            ->join('sheet.participants', 'participant')
+            ->where('sheet.event = :event')
+            ->setParameter('event', $event);
+
+        return $queryBuilder->getQuery()->getResult();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function getSheetsInCatalogByEvent(Event $event, array $excludedSheets = []): array
     {
         $queryBuilder = $this

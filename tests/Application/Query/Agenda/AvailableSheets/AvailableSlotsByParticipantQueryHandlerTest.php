@@ -102,36 +102,4 @@ class AvailableSlotsByParticipantQueryHandlerTest extends TestCase
 
         $this->assertEquals($expected, $result);
     }
-
-    public function testHandleWithPastDay()
-    {
-        $currentTime = new \DateTime('11/12/2017 10:11:00');
-        $begin  = new \DateTime('11/12/2013 00:01:00');
-        $end    = new \DateTime('11/12/2013 19:01:00');
-        $begin2 = new \DateTime('12/12/2013 00:01:00');
-        $end2   = new \DateTime('12/12/2013 19:01:00');
-        $event  = EventFactory::createEvent();
-        $event->setDays([
-            new Day($event, $begin, $end),
-            new Day($event, $begin2, $end2),
-        ]);
-        $day = $event->getFirstDay();
-        $sheet = SheetFactory::create($event);
-        $participant = ParticipantFactory::create($sheet);
-
-        $meetingSlotRepository = $this->prophesize(MeetingSlotRepositoryInterface::class);
-
-        $expected = [];
-
-        $query   = new AvailableSlotsByParticipantQuery($event, $participant, $day);
-        $handler = new AvailableSlotsByParticipantQueryHandler($meetingSlotRepository->reveal(), $currentTime);
-
-        $meetingSlotRepository
-            ->findAvailableSlotsByParticipants($event, [$participant])
-            ->shouldNotBeCalled();
-
-        $result = $handler->handle($query);
-
-        $this->assertEquals($expected, $result);
-    }
 }

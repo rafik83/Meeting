@@ -71,6 +71,9 @@ class DayViewQueryHandlerTest extends TestCase
     /** @var \DateTimeInterface */
     private $endTime;
 
+    /** @var \DateTimeInterface */
+    private $currentTime;
+
     /** @var Sheet */
     private $sheet;
 
@@ -131,8 +134,12 @@ class DayViewQueryHandlerTest extends TestCase
     /** @var AgendaCollisionManager */
     private $agendaCollisionManager;
 
+    /** @var AvailableSlotsByParticipantQueryHandler */
+    private $availableSlotsByParticipantQueryHandler;
+
     public function setUp()
     {
+        $this->currentTime = new \DateTime('2016-10-12 15:00:00');
         $this->event = EventFactory::createEvent();
         $this->category = null;
         $this->user = UserFactory::create();
@@ -175,6 +182,7 @@ class DayViewQueryHandlerTest extends TestCase
         );
 
         $this->agendaCollisionManager = $this->prophesize(AgendaCollisionManager::class);
+        $this->availableSlotsByParticipantQueryHandler = $this->prophesize(AvailableSlotsByParticipantQueryHandler::class);
     }
     
     public function testHandle()
@@ -235,8 +243,15 @@ class DayViewQueryHandlerTest extends TestCase
             $meetingHandler->reveal(),
             $cancelAttendanceUnavailabilityViewQueryHandler->reveal(),
             $availableSlotQueryHandler->reveal(),
-            $this->agendaCollisionManager->reveal()
+            $this->agendaCollisionManager->reveal(),
+            $this->currentTime
         );
+
+
+        $availableSlotViewQuery = new AvailableSlotsByParticipantQuery($this->event, $this->participant, $this->day);
+        $this->availableSlotsByParticipantQueryHandler
+            ->handle($availableSlotViewQuery)
+            ->shouldNotBeCalled();
 
         $this->agendaCollisionManager
             ->handleCollision(
@@ -371,8 +386,14 @@ class DayViewQueryHandlerTest extends TestCase
             $meetingHandler->reveal(),
             $cancelAttendanceUnavailabilityViewQueryHandler->reveal(),
             $availableSlotQueryHandler->reveal(),
-            $this->agendaCollisionManager->reveal()
+            $this->agendaCollisionManager->reveal(),
+            $this->currentTime
         );
+
+        $availableSlotViewQuery = new AvailableSlotsByParticipantQuery($this->event, $this->participant, $this->day);
+        $this->availableSlotsByParticipantQueryHandler
+            ->handle($availableSlotViewQuery)
+            ->shouldNotBeCalled();
 
         $this->agendaCollisionManager
             ->handleCollision(
@@ -493,8 +514,14 @@ class DayViewQueryHandlerTest extends TestCase
             $meetingHandler->reveal(),
             $cancelAttendanceUnavailabilityViewQueryHandler->reveal(),
             $availableSlotQueryHandler->reveal(),
-            $this->agendaCollisionManager->reveal()
+            $this->agendaCollisionManager->reveal(),
+            $this->currentTime
         );
+
+        $availableSlotViewQuery = new AvailableSlotsByParticipantQuery($this->event, $this->participant, $this->day);
+        $this->availableSlotsByParticipantQueryHandler
+            ->handle($availableSlotViewQuery)
+            ->shouldNotBeCalled();
 
         $this->agendaCollisionManager->handleCollision([], [], [], [])->shouldBeCalled();
         $this->agendaCollisionManager->getHappeningViews()->shouldBeCalled()->willReturn([]);

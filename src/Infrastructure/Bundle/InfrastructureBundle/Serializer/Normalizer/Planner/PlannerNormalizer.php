@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Serializer\Normalizer\Planner;
 
+use Proximum\Vimeet\Application\View\Planner\ParticipantView;
 use Proximum\Vimeet\Application\View\Planner\PlannerView;
 use Symfony\Component\Serializer\Normalizer\NormalizerAwareInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerAwareTrait;
@@ -30,7 +31,7 @@ class PlannerNormalizer implements NormalizerInterface, NormalizerAwareInterface
             'typeList'         => [],
             'typePriorityList' => [],
             'sheetList'        => [],
-            'participantList'  => [],
+            'userList'         => [],
             'spotList'         => [],
             'meetingList'      => [],
         ];
@@ -65,9 +66,18 @@ class PlannerNormalizer implements NormalizerInterface, NormalizerAwareInterface
             ];
         }
 
-        if (!empty($object->participantList)) {
-            $data['participantList'] = [
-                'Participant' => $this->normalizer->normalize($object->participantList, $format, $context),
+        if (!empty($object->userList)) {
+            /** @var ParticipantView[] $users */
+            $userList = [];
+            $users = $object->userList;
+
+            // Users deduplication
+            foreach ($users as $participantView) {
+                $userList[$participantView->userId] = $participantView;
+            }
+
+            $data['userList'] = [
+                'User' => $this->normalizer->normalize($userList, $format, $context),
             ];
         }
 
