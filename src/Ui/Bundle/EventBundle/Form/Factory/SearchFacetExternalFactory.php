@@ -12,6 +12,7 @@ namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Factory;
 
 use League\Tactician\CommandBus;
 use Proximum\Vimeet\Application\Adapter\RouterInterface;
+use Proximum\Vimeet\Application\Query\Catalog\CategoryViewQuery;
 use Proximum\Vimeet\Application\Query\Catalog\FilteredFieldsQuery;
 use Proximum\Vimeet\Application\Query\Catalog\OrganizationCategoryViewQuery;
 use Proximum\Vimeet\Application\Query\Catalog\PositionViewQuery;
@@ -20,6 +21,7 @@ use Proximum\Vimeet\Application\View\Catalog\FilteredFieldsView;
 use Proximum\Vimeet\Domain\Exception\Catalog\CatalogVisibilityNotFoundException;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Repository\CatalogVisibilityRepositoryInterface;
+use Proximum\Vimeet\Domain\View\Catalog\CategoryView;
 use Proximum\Vimeet\Domain\View\Catalog\TypeView;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Catalog\SearchExternalType;
 use Symfony\Component\Form\FormFactoryInterface;
@@ -41,6 +43,9 @@ class SearchFacetExternalFactory
 
     /** @var array of TypeView[] indexed by Event id */
     private $typeViewsByEvent;
+
+    /** @var CategoryView[] indexed by Event id */
+    private $categoryViewsByEvent;
 
     /**
      * SearchFacetExternalFactory constructor.
@@ -79,6 +84,7 @@ class SearchFacetExternalFactory
             $locale,
             $filters,
             $initialFieldsView->typeViews,
+            $initialFieldsView->categoryViews,
             $initialFieldsView->organizationCategoryViews,
             $initialFieldsView->positionViews
         );
@@ -108,6 +114,7 @@ class SearchFacetExternalFactory
                 $filters,
                 $currentAggregations,
                 $initialFieldsView->typeViews,
+                $initialFieldsView->categoryViews,
                 $initialFieldsView->organizationCategoryViews,
                 $initialFieldsView->positionViews,
                 $locale
@@ -119,6 +126,7 @@ class SearchFacetExternalFactory
             $locale,
             $filters,
             $filteredFieldsView->typeViews,
+            $filteredFieldsView->categoryViews,
             $filteredFieldsView->organizationCategoryViews,
             $filteredFieldsView->positionViews
         );
@@ -152,6 +160,30 @@ class SearchFacetExternalFactory
      * @param Event  $event
      * @param string $locale
      *
+     * @return CategoryView[]
+     * @throws CatalogVisibilityNotFoundException
+     */
+    public function getCategoryViews(Event $event, string $locale): array
+    {
+        if (!isset($this->categoryViewsByEvent[$event->getId()])) {
+            $catalogVisibility = $this->catalogVisibilityRepository->getByEvent($event);
+
+            if ($catalogVisibility === null) {
+                throw new CatalogVisibilityNotFoundException();
+            }
+
+            $this->categoryViewsByEvent[$event->getId()] = $this->commandBus->handle(
+                new CategoryViewQuery($event, $catalogVisibility->getTypes(), $locale)
+            );
+        }
+
+        return $this->categoryViewsByEvent[$event->getId()];
+    }
+
+    /**
+     * @param Event  $event
+     * @param string $locale
+     *
      * @return FilteredFieldsView
      * @throws CatalogVisibilityNotFoundException
      */
@@ -163,7 +195,8 @@ class SearchFacetExternalFactory
             throw new CatalogVisibilityNotFoundException();
         }
 
-        $typeViews = $this->getTypeViews($event, $locale);
+        $typeViews     = $this->getTypeViews($event, $locale);
+        $categoryViews = $this->getCategoryViews($event, $locale);
 
         $organizationCategoryViews = $this->commandBus->handle(
             new OrganizationCategoryViewQuery($event, $locale)
@@ -173,7 +206,12 @@ class SearchFacetExternalFactory
             new PositionViewQuery($event, $locale)
         );
 
-        return new FilteredFieldsView($typeViews, $organizationCategoryViews, $positionViews);
+        return new FilteredFieldsView(
+            $typeViews,
+            $organizationCategoryViews,
+            $positionViews,
+            $categoryViews
+        );
     }
 
     /**
@@ -181,6 +219,7 @@ class SearchFacetExternalFactory
      * @param string $locale
      * @param array  $filters
      * @param array  $typeViews
+     * @param array  $categoryViews
      * @param array  $organizationCategoryViews
      * @param array  $positionViews
      *
@@ -191,12 +230,14 @@ class SearchFacetExternalFactory
         string $locale,
         array $filters = [],
         array $typeViews,
+        array $categoryViews,
         array $organizationCategoryViews,
         array $positionViews
     ): FormInterface {
         return $this->formFactory->createNamed('', SearchExternalType::class, $filters, [
             'action'                    => $this->router->generate('event_catalog_external_index'),
             'typeViews'                 => $typeViews,
+            'categoryViews'             => $categoryViews,
             'organizationCategoryViews' => $organizationCategoryViews,
             'positionViews'             => $positionViews,
             'event'                     => $event,

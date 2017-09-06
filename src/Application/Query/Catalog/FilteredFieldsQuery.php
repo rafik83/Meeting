@@ -14,6 +14,7 @@ use Proximum\Vimeet\Application\View\Catalog\PositionView;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\View\Catalog\OrganizationCategoryView;
 use Proximum\Vimeet\Domain\View\Catalog\TypeView;
+use Proximum\Vimeet\Domain\View\Catalog\CategoryView;
 
 class FilteredFieldsQuery
 {
@@ -38,11 +39,15 @@ class FilteredFieldsQuery
     /** @var string */
     public $locale;
 
+    /** @var CategoryView[] */
+    public $categoryViews;
+
     /**
      * @param Event                      $event
      * @param array                      $filters
      * @param array                      $currentAggregations
      * @param TypeView[]                 $typeViews
+     * @param CategoryView[]             $categoryViews
      * @param OrganizationCategoryView[] $organizationCategoryViews
      * @param PositionView[]             $positionViews
      * @param string                     $locale
@@ -52,16 +57,18 @@ class FilteredFieldsQuery
         array $filters,
         array $currentAggregations,
         array $typeViews,
+        array $categoryViews,
         array $organizationCategoryViews,
         array $positionViews,
         string $locale
     ) {
-        $this->event = $event;
-        $this->filters = $filters;
-        $this->currentAggregations = $currentAggregations;
-        $this->typeViews = $typeViews;
+        $this->event                     = $event;
+        $this->filters                   = $filters;
+        $this->currentAggregations       = $currentAggregations;
+        $this->typeViews                 = $typeViews;
         $this->organizationCategoryViews = $organizationCategoryViews;
-        $this->positionViews = $positionViews;
-        $this->locale = $locale;
+        $this->positionViews             = $positionViews;
+        $this->locale                    = $locale;
+        $this->categoryViews             = $categoryViews;
     }
 }

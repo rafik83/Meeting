@@ -2857,6 +2857,12 @@ services:
             - '@vimeet_infrastructure.repository.type_repository'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Catalog\TypeViewQuery }
+    query.catalog.category_view_query_handler:
+        class: Proximum\Vimeet\Application\Query\Catalog\CategoryViewQueryHandler
+        arguments:
+            - '@vimeet_infrastructure.repository.category_repository'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Catalog\CategoryViewQuery }
     query.catalog.organization_category_view_query_handler:
         class: Proximum\Vimeet\Application\Query\Catalog\OrganizationCategoryViewQueryHandler
         arguments:
@@ -4150,6 +4156,10 @@ services:
     #
     catalog.visible_participation_types:
         class: Proximum\Vimeet\Domain\Catalog\VisibleParticipationTypes
+        arguments:
+            - '@repository.rule_repository'
+    catalog.visible_participation_categories:
+        class: Proximum\Vimeet\Domain\Catalog\VisibleParticipationCategories
         arguments:
             - '@repository.rule_repository'
 
