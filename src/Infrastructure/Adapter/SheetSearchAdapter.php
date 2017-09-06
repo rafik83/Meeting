@@ -74,7 +74,6 @@ class SheetSearchAdapter implements SheetSearchAdapterInterface
         if (Constant::ORDER_BY_DATE_ADDED_TO_CATALOG === $orderBy) {
             $query = new Query($builder->getQuery());
             $query->addSort(['inCatalogAt' => 'desc']);
-
         } elseif (Constant::ORDER_BY_RELEVANCE === $orderBy &&
             isset($nomenclatureItems[Nomenclature::OBJECTIVE_NONE])
         ) {
@@ -102,7 +101,12 @@ class SheetSearchAdapter implements SheetSearchAdapterInterface
         if (true === $getAggregations) {
             $query->addAggregation($this->getAggregation(self::ES_FIELD_TYPE));
             $query->addAggregation($this->getAggregation(self::ES_FIELD_ORGANIZATION_CATEGORY));
-            $query->addAggregation($this->getNestedAggregation(self::ES_FIELD_POSITION));
+            $query->addAggregation(
+                $this->getNestedAggregation(self::ES_FIELD_CATEGORIES, self::ES_PATH_CATEGORIES)
+            );
+            $query->addAggregation(
+                $this->getNestedAggregation(self::ES_FIELD_POSITION, self::ES_PATH_POSITION)
+            );
         }
 
         try {
@@ -122,7 +126,7 @@ class SheetSearchAdapter implements SheetSearchAdapterInterface
             true === $getAggregations ? $paginatorAdapter->getAggregations() : null
         );
     }
-    
+
     /**
      * {@inheritdoc}
      */
@@ -235,6 +239,18 @@ class SheetSearchAdapter implements SheetSearchAdapterInterface
         return $this->searchAggregations($event, $locale, $filters, $filterToRemove, self::ES_FIELD_TYPE);
     }
 
+    /**
+     * {@inheritdoc}
+     */
+    public function getCategoryAggregations(
+        Event $event,
+        string $locale,
+        array $filters,
+        string $filterToRemove
+    ): array {
+        return $this->searchAggregations($event, $locale, $filters, $filterToRemove, self::ES_FIELD_CATEGORIES);
+    }
+
     public function getOrganizationCategoryAggregations(
         Event $event,
         string $locale,
@@ -294,7 +310,9 @@ class SheetSearchAdapter implements SheetSearchAdapterInterface
         $query   = new Query($builder->getQuery());
 
         if ($elasticField === self::ES_FIELD_POSITION) {
-            $query->addAggregation($this->getNestedAggregation($elasticField));
+            $query->addAggregation($this->getNestedAggregation($elasticField, self::ES_PATH_POSITION));
+        } elseif ($elasticField === self::ES_FIELD_CATEGORIES) {
+            $query->addAggregation($this->getNestedAggregation($elasticField, self::ES_PATH_CATEGORIES));
         } else {
             $query->addAggregation($this->getAggregation($elasticField));
         }
@@ -314,9 +332,9 @@ class SheetSearchAdapter implements SheetSearchAdapterInterface
         return $aggregation;
     }
 
-    private function getNestedAggregation(string $field): Nested
+    private function getNestedAggregation(string $field, string $path): Nested
     {
-        $nested = new Nested($field, 'participants');
+        $nested = new Nested($field, $path);
         $nested->addAggregation($this->getAggregation($field));
 
         return $nested;

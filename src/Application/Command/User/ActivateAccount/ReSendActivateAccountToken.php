@@ -21,13 +21,18 @@ class ReSendActivateAccountToken
     /** @var User */
     public $user;
 
+    /** @var User */
+    public $fromUser;
+
     /**
      * @param Sheet $sheet
      * @param User  $user
+     * @param User  $fromUser
      */
-    public function __construct(Sheet $sheet, User $user)
+    public function __construct(Sheet $sheet, User $user, User $fromUser)
     {
-        $this->sheet = $sheet;
-        $this->user  = $user;
+        $this->sheet    = $sheet;
+        $this->user     = $user;
+        $this->fromUser = $fromUser;
     }
 }

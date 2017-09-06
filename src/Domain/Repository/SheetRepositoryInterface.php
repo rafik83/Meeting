@@ -76,6 +76,13 @@ interface SheetRepositoryInterface
      *
      * @return Sheet[]
      */
+    public function getByEventWithParticipantsAndOwner(Event $event);
+
+    /**
+     * @param Event $event
+     *
+     * @return Sheet[]
+     */
     public function getSheetsInCatalogByEvent(Event $event);
 
     /**

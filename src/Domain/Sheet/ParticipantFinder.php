@@ -48,4 +48,24 @@ final class ParticipantFinder
 
         return null;
     }
+
+    /**
+     * @param Sheet $sheet
+     * @param int   $userId
+     *
+     * @return null|Participant
+     */
+    public static function getParticipantWithUserId(Sheet $sheet, $userId)
+    {
+        $participants = $sheet->getParticipants()->toArray();
+
+        /** @var Participant $participant */
+        foreach ($participants as $participant) {
+            if ($userId === $participant->getUser()->getId()) {
+                return $participant;
+            }
+        }
+
+        return null;
+    }
 }
