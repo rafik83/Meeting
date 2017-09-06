@@ -40,6 +40,12 @@ class AvailableSlotsByParticipantQueryHandler
      */
     public function handle(AvailableSlotsByParticipantQuery $query): array
     {
+        if ($query->event->getFirstDay()->getStartTime() > $this->dateTime
+            || $query->event->getLastDay()->getEndTime() < $this->dateTime
+        ) {
+            return [];
+        }
+
         $availableSlots = $this->meetingSlotRepository->findAvailableSlotsByParticipants(
             $query->event,
             [$query->participant]

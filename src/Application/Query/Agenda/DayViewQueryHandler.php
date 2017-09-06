@@ -139,10 +139,7 @@ class DayViewQueryHandler
                 }
             }
 
-            if ($query->isParticipantUserViewing()
-                && $query->day->getStartTime() <= $this->dateTime
-                && $query->day->getEndTime() >= $this->dateTime
-            ) {
+            if ($query->isParticipantUserViewing()) {
                 $availableSlotViewQuery = new AvailableSlotsByParticipantQuery(
                     $query->event,
                     $query->participant,
