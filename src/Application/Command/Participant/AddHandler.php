@@ -185,6 +185,7 @@ class AddHandler
         $token = $this->activateAccountTokenGenerator->generate($user, $add->sheet);
         $event = new ActivateAccountEvent(
             $user,
+            $add->adder,
             $add->sheet->getEvent(),
             $token,
             $add->sheet

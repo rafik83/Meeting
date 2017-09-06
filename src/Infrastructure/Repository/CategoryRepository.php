@@ -174,4 +174,31 @@ class CategoryRepository implements CategoryRepositoryInterface
 
         return $queryBuilder->getQuery()->getOneOrNullResult();
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getCategoriesTitleByEventAndLocale(Event $event, string $locale, array $categories): array
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('category.id, translations.title')
+            ->from('Entity:Category', 'category', 'category.id')
+            ->join('category.translations', 'translations', 'WITH', 'category.event = :event AND translations.locale = :locale')
+            ->setParameter('event', $event)
+            ->setParameter('locale', $locale)
+        ;
+
+        if (!empty($categories)) {
+            $queryBuilder->andWhere('category IN (:categories)')->setParameter('categories', $categories);
+        }
+
+        return array_map(
+            function ($category) {
+                return $category['title'];
+            },
+            $queryBuilder->getQuery()->getResult()
+        );
+    }
 }

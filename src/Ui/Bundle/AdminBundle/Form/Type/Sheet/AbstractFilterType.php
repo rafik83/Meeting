@@ -197,7 +197,7 @@ abstract class AbstractFilterType extends AbstractType
         $categories = $this->categoryRepository->getCategoriesByEventAndLocale($event, $options['locale']);
 
         if (count($categories) > 0) {
-            $builder->add('category', CategoryChoiceType::class, [
+            $builder->add('categories', CategoryChoiceType::class, [
                 'label'    => 'form.sheet_filter.children.category.label',
                 'event'    => $event,
                 'locale'   => $options['locale'],

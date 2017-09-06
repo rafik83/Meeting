@@ -10,6 +10,6 @@
 
 namespace Proximum\Vimeet\Application\View\Planner\Result;
 
-class ParticipantResult extends IdResult
+class UserResult extends IdResult
 {
 }

@@ -13,6 +13,7 @@ namespace Proximum\Vimeet\Infrastructure\Repository\Meeting;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\QueryBuilder;
 use Proximum\Vimeet\Application\Components\Paginator\Paginator;
+use Proximum\Vimeet\Application\Query\MultipleSheets\Request\FilterRequestView;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Meeting;
 use Proximum\Vimeet\Domain\Model\Meeting\Request;
@@ -553,7 +554,7 @@ class RequestRepository implements RequestRepositoryInterface
         array $sheetsMet,
         $state = null,
         $type = null,
-        User $user = null
+        $user = null
     ) {
         $queryBuilder = $this->requestOfSheetsWithSheets($event, $sheets, $sheetsMet, $state, $type, $user);
 
@@ -571,7 +572,7 @@ class RequestRepository implements RequestRepositoryInterface
         array $sheetsMet,
         $state = null,
         $type = null,
-        User $user = null
+        $user = null
     ) {
         $queryBuilder = $this->requestOfSheetsWithSheets($event, $sheets, $sheetsMet, $state, $type, $user);
 
@@ -581,12 +582,12 @@ class RequestRepository implements RequestRepositoryInterface
     }
 
     /**
-     * @param Event       $event
-     * @param Sheet[]     $sheets
-     * @param Sheet[]     $sheetsMet
-     * @param string|null $state
-     * @param string|null $type
-     * @param User|null   $user
+     * @param Event            $event
+     * @param Sheet[]          $sheets
+     * @param Sheet[]          $sheetsMet
+     * @param string|null      $state
+     * @param string|null      $type
+     * @param User|string|null $user
      *
      * @return QueryBuilder
      */
@@ -596,7 +597,7 @@ class RequestRepository implements RequestRepositoryInterface
         array $sheetsMet,
         $state = null,
         $type = null,
-        User $user = null
+        $user = null
     ) {
         $typeCondition = '(
             (fromSheet.id IN (:sheets) AND toSheet.id IN (:sheetsMet))
@@ -616,30 +617,40 @@ class RequestRepository implements RequestRepositoryInterface
             }
         }
 
-        $queryBuilder = $this
-            ->entityManager
-            ->createQueryBuilder()
-            ->from(Request::class, 'request', 'request.id')
-            ->join(
-                'request.from',
-                'fromSheet',
-                'WITH',
-                'request.disabled = false AND fromSheet.event = :event AND fromSheet.enable = true'
-            )
-            ->join('request.to', 'toSheet', 'WITH', 'toSheet.event = :event AND toSheet.enable = true')
+        // filter meeting request with fromParticipants or toParticipants empty
+        if ($user === FilterRequestView::NO_PREFERENCE) {
+            $typeCondition = '(
+                (fromSheet.id IN (:sheets) AND toSheet.id IN (:sheetsMet)) AND fp.id IS NULL
+                OR
+                (toSheet.id IN (:sheets) AND fromSheet.id IN (:sheetsMet)) AND tp.id IS NULL
+            )';
+        }
+
+        $queryBuilder = new FilterQueryBuilder($this->entityManager, $event);
+
+        $queryBuilder
             ->leftJoin('request.meeting', 'meeting')
             ->where(sprintf('%s AND %s', $typeCondition, $stateCondition))
-            ->setParameter('event', $event)
             ->setParameter('sheets', $sheets)
             ->setParameter('sheetsMet', $sheetsMet);
 
-        if ($user !== null) {
+        if ($user instanceof User) {
             $queryBuilder
                 ->leftJoin('request.fromParticipants', 'fp')
                 ->leftJoin('request.toParticipants', 'tp')
                 ->andWhere('(tp.user = :user OR fp.user = :user)')
                 ->setParameter('user', $user)
             ;
+        }
+
+        if ($user === FilterRequestView::NO_PREFERENCE) {
+            $queryBuilder
+                ->leftJoin('request.fromParticipants', 'fp')
+                ->leftJoin('request.toParticipants', 'tp');
+        }
+
+        if ($state === Request::STATE_PLANNED) {
+            $queryBuilder->filterPlanned();
         }
 
         return $queryBuilder;

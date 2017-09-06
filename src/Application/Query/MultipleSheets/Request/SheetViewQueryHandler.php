@@ -24,7 +24,8 @@ class SheetViewQueryHandler
         return new SheetView(
             $query->sheet->getId(),
             $query->sheet->getTitle(),
-            $query->sheet
+            $query->sheet,
+            $query->sheet->getType()->getTitle($query->locale)
         );
     }
 }

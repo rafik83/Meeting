@@ -127,7 +127,7 @@ class CatalogExternalController extends Controller
     public function searchLocalizationAction(Request $request, EventDomain $eventDomain): JsonResponse
     {
         if (!$request->isXmlHttpRequest()) {
-            throw $this->createNotFoundException();
+            throw $this->createAccessDeniedException();
         }
 
         $localizationView = $this->get('tactician.commandbus.query')->handle(
@@ -151,7 +151,13 @@ class CatalogExternalController extends Controller
     public function searchKeywordsAction(Request $request, EventDomain $eventDomain): JsonResponse
     {
         if (!$request->isXmlHttpRequest()) {
-            throw $this->createNotFoundException();
+            throw $this->createAccessDeniedException();
+        }
+
+        $query = $request->get('query');
+
+        if (null === $query) {
+            return new JsonResponse([]);
         }
 
         $keywordView = $this->get('tactician.commandbus.query')->handle(

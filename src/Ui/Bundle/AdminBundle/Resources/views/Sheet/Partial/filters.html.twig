@@ -27,8 +27,8 @@
                     {{ form_row(form.hasSpot, {'inline': true}) }}
                     {{ form_row(form.type) }}
 
-                    {% if form.category is defined %}
-                        {{ form_row(form.category) }}
+                    {% if form.categories is defined %}
+                        {{ form_row(form.categories) }}
                     {% endif %}
 
                     {{ form_row(form.registeredAt, {'inline': true}) }}
