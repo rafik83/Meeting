@@ -40,8 +40,8 @@ class AvailableSlotsByParticipantQueryHandler
      */
     public function handle(AvailableSlotsByParticipantQuery $query): array
     {
-        if ($query->day->getStartTime() > $this->dateTime
-            || $query->day->getEndTime() < $this->dateTime
+        if ($query->event->getFirstDay()->getStartTime() > $this->dateTime
+            || $query->event->getLastDay()->getEndTime() < $this->dateTime
         ) {
             return [];
         }
@@ -57,7 +57,10 @@ class AvailableSlotsByParticipantQueryHandler
             $beginHour = clone $availableSlot->getBegin();
             $beginHourPlusTenMinutes = $beginHour->add(new \DateInterval('PT10M'));
 
-            if ($beginHourPlusTenMinutes >= $this->dateTime) {
+            if ($beginHourPlusTenMinutes >= $this->dateTime
+                && $this->dateTime->format('m/d/Y') === $query->day->getStartTime()->format('m/d/Y')
+                && $this->dateTime->format('m/d/Y') === $availableSlot->getBegin()->format('m/d/Y')
+            ) {
                 $availableSlotViews[] = new AvailableSlotView(
                     $availableSlot->getId(),
                     $availableSlot->getBegin(),

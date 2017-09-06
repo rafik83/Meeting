@@ -25,15 +25,15 @@ class AvailableSlotsByParticipantQueryHandlerTest extends TestCase
 {
     public function testHandle()
     {
-        $currentTime = new \DateTime('11/12/2013 10:11:00');
+        $currentTime = new \DateTime('11/12/2013 10:30:00');
         $begin  = new \DateTime('11/12/2013 00:01:00');
         $end    = new \DateTime('11/12/2013 19:01:00');
         $begin2 = new \DateTime('12/12/2013 00:01:00');
         $end2   = new \DateTime('12/12/2013 19:01:00');
         $slotBegin1 = new \DateTime('11/12/2013 10:00:00');
         $slotEnd1   = new \DateTime('11/12/2013 11:00:00');
-        $slotBegin2 = new \DateTime('12/12/2013 10:00:00');
-        $slotEnd2   = new \DateTime('12/12/2013 11:00:00');
+        $slotBegin2 = new \DateTime('11/12/2013 11:00:00');
+        $slotEnd2   = new \DateTime('11/12/2013 12:00:00');
 
         $event = EventFactory::createEvent();
         $event->setDays([
@@ -51,9 +51,8 @@ class AvailableSlotsByParticipantQueryHandlerTest extends TestCase
 
         $availableSlots = [$slot1, $slot2];
         $expected = [new AvailableSlotView(2, $slot2->getBegin(), $slot2->getEnd())];
-
-        $query   = new AvailableSlotsByParticipantQuery($event, $participant, $day);
-        $handler = new AvailableSlotsByParticipantQueryHandler($meetingSlotRepository->reveal(), $currentTime);
+        $query    = new AvailableSlotsByParticipantQuery($event, $participant, $day);
+        $handler  = new AvailableSlotsByParticipantQueryHandler($meetingSlotRepository->reveal(), $currentTime);
 
         $meetingSlotRepository
             ->findAvailableSlotsByParticipants($event, [$participant])
