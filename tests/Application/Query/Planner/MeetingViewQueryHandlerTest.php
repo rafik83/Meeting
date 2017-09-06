@@ -58,11 +58,12 @@ class MeetingViewQueryHandlerTest extends TestCase
         $participant3->setVisio(true);
         $participant4     = ParticipantFactory::create($sheet3);
         $participant5     = ParticipantFactory::create($sheet3);
-        $participantView  = new ParticipantView(1, 'fullName1', $sheetView, [$slotView], false);
-        $participantView2 = new ParticipantView(2, 'fullName2', $sheetView, [], true);
-        $participantView3 = new ParticipantView(3, 'fullName3', $sheetView2, [$slotView2], true);
-        $participantView4 = new ParticipantView(4, 'fullName4', $sheetView3, [], false);
-        $participantView5 = new ParticipantView(5, 'fullName5', $sheetView3, [$slotView, $slotView2, $slotView3], true);
+
+        $participantView  = new ParticipantView(1, 1, 'fullName1', $sheetView, [$slotView], false);
+        $participantView2 = new ParticipantView(2, 2, 'fullName2', $sheetView, [], true);
+        $participantView3 = new ParticipantView(3, 3, 'fullName3', $sheetView2, [$slotView2], true);
+        $participantView4 = new ParticipantView(4, 4, 'fullName4', $sheetView3, [], false);
+        $participantView5 = new ParticipantView(5, 5, 'fullName5', $sheetView3, [$slotView, $slotView2, $slotView3], true);
         $participants     = [
             $participantView,
             $participantView2,
