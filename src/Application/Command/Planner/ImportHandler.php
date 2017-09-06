@@ -238,9 +238,10 @@ class ImportHandler
     }
 
     /**
+     * @param Event         $event
      * @param MeetingResult $meetingResult
      *
-     * @return Meeting|null
+     * @return null|Meeting
      */
     private function handleMeeting(Event $event, MeetingResult $meetingResult)
     {
@@ -291,16 +292,10 @@ class ImportHandler
             $participantsTo,
             $this->dateTime,
             $spot,
-            $event
+            $event,
+            $meetingResult->isBlockedSpot,
+            $meetingResult->isBlockedSlot
         );
-
-        if ($meetingResult->isBlockedSlot) {
-            $meeting->blockSlot();
-        }
-
-        if ($meetingResult->isBlockedSpot) {
-            $meeting->blockSpot();
-        }
 
         $this->entityManagerAdapter->persist($meeting);
 
