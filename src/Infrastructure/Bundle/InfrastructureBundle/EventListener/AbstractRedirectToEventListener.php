@@ -101,13 +101,19 @@ abstract class AbstractRedirectToEventListener
      * @param string      $route
      * @param null|string $locale
      *
+     * @param array       $parameters
+     *
      * @return RedirectResponse
      */
-    protected function createRedirectResponse(Request $request, Event $event, $route, $locale = null)
+    protected function createRedirectResponse(Request $request, Event $event, $route, $locale = null, array $parameters = [])
     {
         $path = $this->router->generate(
             $route,
-            array_merge($request->attributes->get('_route_params', []), ['_locale' => $locale ?: $event->getFallback()])
+            array_merge(
+                $request->attributes->get('_route_params', []),
+                ['_locale' => $locale ?: $event->getFallback()],
+                $parameters
+            )
         );
 
         return new RedirectResponse($path);

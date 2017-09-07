@@ -22,7 +22,6 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 /**
  * Class CatalogExternalController
@@ -54,7 +53,7 @@ class CatalogExternalController extends Controller
 
             $filters[SearchFields::FILTER_TYPE] = $typeViews;
         } catch (CatalogVisibilityNotFoundException $exception) {
-            throw new NotFoundHttpException();
+            throw $this->createNotFoundException();
         }
 
         if ($searchForm->handleRequest($request)->isSubmitted() && $searchForm->isValid()) {
