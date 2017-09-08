@@ -100,8 +100,7 @@ abstract class AbstractRedirectToEventListener
      * @param Event       $event
      * @param string      $route
      * @param null|string $locale
-     *
-     * @param array       $parameters
+     * @param array       $parameters route parameters
      *
      * @return RedirectResponse
      */

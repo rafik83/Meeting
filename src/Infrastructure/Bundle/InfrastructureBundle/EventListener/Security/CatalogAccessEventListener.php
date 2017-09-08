@@ -136,7 +136,6 @@ class CatalogAccessEventListener extends AbstractRedirectToEventListener
         }
 
         $user = $this->tokenStorage->getToken()->getUser();
-        $sheet = null;
 
         if (!$user instanceof User) {
             return null;
