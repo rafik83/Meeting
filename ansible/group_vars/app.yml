@@ -37,7 +37,7 @@ app_patterns:
   ##########
 
   docker_applications:
-    - manala/openl10n-cli:1.0.0
+    - manala/openl10n-cli:1.1.0
 
   #######
   # Ssh #
