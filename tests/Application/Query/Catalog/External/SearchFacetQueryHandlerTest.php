@@ -83,7 +83,7 @@ class SearchFacetQueryHandlerTest extends TestCase
 
         $this->assertEquals($searchFacetsView, $expectedSearchFacetsView);
         $this->assertEquals($searchFacetsView->hasType(), false);
-        $this->assertEquals($searchFacetsView->hasCategory(), $searchFacetCategoryView);
-        $this->assertEquals($searchFacetsView->hasLocalization(), false);
+        $this->assertEquals($searchFacetsView->getCategory(), $searchFacetCategoryView);
+        $this->assertEquals($searchFacetsView->getLocalization(), null);
     }
 }
