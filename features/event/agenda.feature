@@ -24,7 +24,7 @@ Feature: Agenda
     And I should see "agenda.title"
     And I should see "Mercredi 12 octobre 2016"
     And I should see "Jeudi 13 octobre 2016"
-    And I should not see "cocktail"
+    And I should see "cocktail"
     Then I go to this page "/fr/sheet/2"
     And I should see "sheet.object.action.add"
     Then I follow "sheet.object.action.add"

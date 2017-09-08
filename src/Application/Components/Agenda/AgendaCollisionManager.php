@@ -54,17 +54,19 @@ class AgendaCollisionManager
         }
 
         foreach ($this->massViews as $massView) {
-            if ($massView->isBlocking) {
+            if (!$massView->isBlocking) {
                 $this->removeElementIfOverlapping($massView, $this->massViews);
             }
         }
 
         foreach ($this->happeningViews as $happeningView) {
             $this->removeElementIfOverlapping($happeningView, $this->massViews);
+            $this->removeElementIfOverlapping($happeningView, $this->unavailabilityViews);
         }
 
         foreach ($this->meetingViews as $meetingView) {
             $this->removeElementIfOverlapping($meetingView, $this->massViews);
+            $this->removeElementIfOverlapping($meetingView, $this->unavailabilityViews);
         }
 
         return [
