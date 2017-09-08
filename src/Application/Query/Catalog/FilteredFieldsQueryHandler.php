@@ -14,6 +14,7 @@ use Proximum\Vimeet\Application\Adapter\SheetSearchAdapterInterface;
 use Proximum\Vimeet\Application\View\Catalog\FilteredFieldsView;
 use Proximum\Vimeet\Domain\Catalog\SearchFields;
 use Proximum\Vimeet\Domain\Model\Event;
+use Proximum\Vimeet\Domain\View\Catalog\CategoryView;
 
 class FilteredFieldsQueryHandler
 {
@@ -36,13 +37,15 @@ class FilteredFieldsQueryHandler
     public function handle(FilteredFieldsQuery $filteredFieldsQuery): FilteredFieldsView
     {
         $this->filterTypeViews($filteredFieldsQuery);
+        $this->filterCategoryViews($filteredFieldsQuery);
         $this->filterOrganizationCategoryViews($filteredFieldsQuery);
         $this->filterPositionViews($filteredFieldsQuery);
 
         return new FilteredFieldsView(
             $filteredFieldsQuery->typeViews,
             $filteredFieldsQuery->organizationCategoryViews,
-            $filteredFieldsQuery->positionViews
+            $filteredFieldsQuery->positionViews,
+            $filteredFieldsQuery->categoryViews
         );
     }
 
@@ -68,6 +71,35 @@ class FilteredFieldsQueryHandler
             $locale,
             $filters,
             SearchFields::FILTER_TYPE
+        );
+    }
+
+    /**
+     * @param Event  $event
+     * @param string $locale
+     * @param array  $filters
+     * @param CategoryView[]  $categoryViews
+     *
+     * @return array|null
+     */
+    private function getCategoryAggregation(
+        Event $event,
+        string $locale,
+        array $filters,
+        array $categoryViews
+    ): ?array {
+        if (isset($filters[SearchFields::FILTER_CATEGORY])
+            && count($filters[SearchFields::FILTER_CATEGORY]) === count($categoryViews)
+        ) {
+            return null;
+        }
+
+        // if type filter is used, type aggs need to be done with a ES query without type filter
+        return $this->sheetSearchAdapter->getCategoryAggregations(
+            $event,
+            $locale,
+            $filters,
+            SearchFields::FILTER_CATEGORY
         );
     }
 
@@ -139,6 +171,35 @@ class FilteredFieldsQueryHandler
         foreach ($filteredFieldsQuery->typeViews as $typeView) {
             if (isset($aggregationsIndexedByKey[$typeView->id])) {
                 $typeView->count = $aggregationsIndexedByKey[$typeView->id];
+            }
+        }
+    }
+
+    /**
+     * @param FilteredFieldsQuery $filteredFieldsQuery
+     */
+    private function filterCategoryViews(FilteredFieldsQuery $filteredFieldsQuery)
+    {
+        $categoryAggregations = $this->getCategoryAggregation(
+            $filteredFieldsQuery->event,
+            $filteredFieldsQuery->locale,
+            $filteredFieldsQuery->filters,
+            $filteredFieldsQuery->categoryViews
+        );
+
+        $aggregations = null !== $categoryAggregations ?
+            $categoryAggregations
+            : $filteredFieldsQuery->currentAggregations;
+
+        $aggregationsIndexedByKey = $this->getAggregationsIndexedByKey(
+            $aggregations,
+            SheetSearchAdapterInterface::ES_FIELD_CATEGORIES,
+            true
+        );
+
+        foreach ($filteredFieldsQuery->categoryViews as $categoryView) {
+            if (isset($aggregationsIndexedByKey[$categoryView->id])) {
+                $categoryView->count = $aggregationsIndexedByKey[$categoryView->id];
             }
         }
     }

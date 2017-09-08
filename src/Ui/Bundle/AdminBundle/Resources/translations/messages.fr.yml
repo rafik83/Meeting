@@ -25,7 +25,6 @@ admin.agenda.countRequest: 'Nombre de demandes'
 admin.agenda.countSlots: 'Nombre de slots'
 admin.agenda.countValidatedRequest: 'Nombre de demandes et propositions acceptées'
 admin.agenda.dayPrefix: D
-admin.agenda.stopSMS: STOP SMS
 admin.agenda.event.configuration.isMeetingRequestLocked: 'Les demandes de rendez-vous sont verrouillées'
 admin.agenda.export.link: Export
 admin.agenda.export.omz: OMZ
@@ -112,6 +111,7 @@ admin.agenda.sort.scheduled_meeting.label: 'Nombre de RDV positionnés'
 admin.agenda.sort.submit.label: 'Trier les fiches'
 admin.agenda.sort.title.label: Trier
 admin.agenda.spot.loader: 'Chargement des lieux ...'
+admin.agenda.stopSMS: 'STOP SMS'
 admin.agenda.tab.sheet.title.label: Fiches
 admin.agenda.tab.spot.title.label: Lieux
 admin.agenda.title: 'Gestion des rendez-vous'
@@ -130,34 +130,35 @@ admin.common.export.no: Non
 admin.common.export.yes: Oui
 admin.create_admin.title: 'Créer un nouvel utilisateur du backoffice'
 admin.dashboard.link: 'Tableau de bord'
-admin.event.archive.link: 'Archivage'
+admin.event.archive.link: Archivage
 admin.event.archive.title: 'Archiver l''événement %eventTitle%'
 admin.event.billing.configuration.link: 'Information facturation'
 admin.event.billing.configuration.title: 'Configuration des informations de facturation'
+admin.event.catalog.external.configure: 'Configuration du catalogue public'
 admin.event.configuration.isMeetingRequestLocked: 'Verrouillage des demandes de rendez-vous'
 admin.event.configuration.key_dates.title: 'Date clé de l''événement'
 admin.event.configure_dates: 'Dates clés'
-admin.event.create.title: 'Créer un événement'
 admin.event.create.from.title: 'Créer un événement à partir de'
-admin.event.catalog.external.configure: 'Configuration du catalogue public'
+admin.event.create.title: 'Créer un événement'
 admin.event.dashboard.title: 'Tableau de bord'
 admin.event.days: 'Jours de l''événement'
 admin.event.duplicate.title: 'Créer un événement à partir de'
+admin.event.external_catalog_configure: 'Catalogue public'
 admin.event.fallback: 'Par défaut'
 admin.event.languages: Langues
+admin.event.list.archived.title: 'Événements archivés'
 admin.event.list.currents.title: 'Événements actuels'
 admin.event.list.pasts.title: 'Événements passés'
-admin.event.list.archived.title: 'Événements archivés'
+admin.event.page.invoice.link: Factures
 admin.event.page.invoice.title: 'Export des factures'
-admin.event.page.invoice.link: 'Factures'
 admin.event.page.list.title: 'Liste de mes événements'
 admin.event.page.orderFinder.explanation: 'Retrouver la fiche correspondante au numéro de la commande'
 admin.event.page.orderFinder.title: 'Recherche commande'
 admin.event.page.orderInvoiceFinder.explanation: 'Retrouver la fiche correspondante au numéro de la commande ou de la facture'
 admin.event.page.orderInvoiceFinder.multipleSheetFound.explanation: 'Plusieurs fiches ayant des factures avec le numéro %numero% ont été trouvées:'
 admin.event.page.orderInvoiceFinder.title: 'Recherche commande ou facture'
+admin.event.page.transactions.link: Transactions
 admin.event.page.transactions.title: 'Export des transactions'
-admin.event.page.transactions.link: 'Transactions'
 admin.event.paymentConditions.link: 'Conditions de paiement'
 admin.event.paymentConditions.update.title: 'Modifier les conditions de paiement'
 admin.event.practicalInfo.link: 'Informations Pratiques'
@@ -165,7 +166,6 @@ admin.event.practicalInfo.update.title: 'Modifier les informations pratiques'
 admin.event.search_facet.enabled.label: Activé
 admin.event.search_facet.title: 'Filtres du catalogue'
 admin.event.search_facets.link: 'Filtres catalogue'
-admin.event.external_catalog_configure: 'Catalogue public'
 admin.event.see_on_front.link: 'Voir le site'
 admin.event.see.link: Voir
 admin.event.settings.link: 'Paramétrages de l''évènement'
@@ -177,8 +177,8 @@ admin.event.title: Titre
 admin.event.trace.participant_imported: 'Participants importés le %at% par %by%'
 admin.event.unArchive.title: 'Désarchiver l''événement %eventTitle%'
 admin.event.update.link: Modifier
-admin.event.update.title: 'Modifier l''évènement'
 admin.event.update.origin: 'Événement créé à partir de : '
+admin.event.update.title: 'Modifier l''évènement'
 admin.event.vatMode.ati: TTC
 admin.event.vatMode.et: HT
 admin.events.link: 'Mes évènements'
@@ -305,9 +305,9 @@ admin.meeting_request.link: 'Demandes de rendez-vous'
 admin.meeting_request.set_a_meeting: 'Placer un RDV'
 admin.meeting_request.state.approved: Accepté
 admin.meeting_request.state.cancelled: Annulé
+admin.meeting_request.state.planned: Planifié
 admin.meeting_request.state.refused: Refusé
 admin.meeting_request.state.sent: Envoyé
-admin.meeting_request.state.planned: Planifié
 admin.meeting_request.stateUpdatedAt: 'Modification de l''état'
 admin.meeting_request.title: '{0} Aucune demande de rendez-vous|{1} 1 demande de rendez-vous|]1,Inf[ %count% demandes de rendez-vous'
 admin.meeting_request.to: À
@@ -393,6 +393,7 @@ admin.messaging.message.list.edit_link: Modifier
 admin.messaging.message.name: 'Nom emailing'
 admin.messaging.message.subject: Sujet
 admin.new.link: Ajouter
+admin.nomenclature.action.confirmDelete: 'Êtes vous sûr de vouloir supprimer cette nomenclature ?'
 admin.nomenclature.assign.modal.title: 'Assigner à un événement'
 admin.nomenclature.create.button: 'Nouvelle nomenclature'
 admin.nomenclature.create.modal.close: Fermer
@@ -405,13 +406,12 @@ admin.nomenclature.read.export.help: 'Le fichier exporter contient une clé pour
 admin.nomenclature.read.export.title: Export
 admin.nomenclature.read.import.button: Importer
 admin.nomenclature.read.import.title: Import
+admin.nomenclature.remove.link: Supprimer
+admin.nomenclature.removeUnAvailable.title: 'Impossible de supprimer cette nomenclature car elle est utilisée'
 admin.nomenclature.table.depth: '%depth% niveau|%depth% niveaux'
 admin.nomenclature.table.read: Voir
 admin.nomenclature.table.title: Titre
 admin.nomenclature.title: Nomenclatures
-admin.nomenclature.removeUnAvailable.title: 'Impossible de supprimer cette nomenclature car elle est utilisée'
-admin.nomenclature.remove.link: Supprimer
-admin.nomenclature.action.confirmDelete: 'Êtes vous sûr de vouloir supprimer cette nomenclature ?'
 admin.operator_list.action.create: 'Créer un nouveau collaborateur'
 admin.operator_list.action.create.partner: 'Créer un nouveau partenaire'
 admin.operator_list.filter.empty_filter: 'Vider les filtres'
@@ -491,9 +491,9 @@ admin.participant.export.fields.planning.meeting: '%spotRef% - %sheetMet%'
 admin.participant.export.fields.planning.unallocated_meetings: 'Liste des rendez-vous validés non organisés faute de disponibilités réciproques'
 admin.participant.export.fields.planning.unavailability: Indisponible
 admin.participant.export.fields.planning.warning: 'Vérifiez bien le n° de stand pour chaque rendez-vous.'
+admin.participant.export.fields.sheet_enable: 'Fiche Active'
 admin.participant.export.fields.sheet_id: 'ID Fiche'
 admin.participant.export.fields.sheet_name: 'Nom Fiche'
-admin.participant.export.fields.sheet_enable: 'Fiche Active'
 admin.participant.export.fields.user_id: 'ID User'
 admin.participant.export.happening.subscriber.no: Non
 admin.participant.export.happening.subscriber.yes: Oui
@@ -507,22 +507,22 @@ admin.plan.name: Nom
 admin.plan.productIncluded: 'Produits inclus'
 admin.plan.title: 'Catalogue de formules'
 admin.plan.unitPrice: 'Prix unitaire'
-admin.planner.analytics.slotFillingRate.graph.legend: 'Taux de remplissage des mutualisés par créneau en %'
-admin.planner.analytics.spot.title: Lieux
-admin.planner.analytics.spot.table.column.reference: 'Référence'
-admin.planner.analytics.spot.table.column.satisfaction: Satisfaction
-admin.planner.analytics.spot.table.column.shared: 'Mutualisé'
-admin.planner.analytics.spot.table.column.visio: 'Visio'
 admin.planner.analytics.sheet.table.column.satisfaction: Satisfaction
-admin.planner.analytics.sheet.title: Fiches
 admin.planner.analytics.sheet.table.column.sheet: Fiche
 admin.planner.analytics.sheet.table.column.type: Type
+admin.planner.analytics.sheet.title: Fiches
+admin.planner.analytics.slotFillingRate.graph.legend: 'Taux de remplissage des mutualisés par créneau en %'
+admin.planner.analytics.spot.table.column.reference: Référence
+admin.planner.analytics.spot.table.column.satisfaction: Satisfaction
+admin.planner.analytics.spot.table.column.shared: Mutualisé
+admin.planner.analytics.spot.table.column.visio: Visio
+admin.planner.analytics.spot.title: Lieux
 admin.planner.analytics.table.column.date: Date
-admin.planner.analytics.table.column.details: 'Détails'
+admin.planner.analytics.table.column.details: Détails
 admin.planner.analytics.table.column.fillingRate: 'Taux remplissage mutualisé'
-admin.planner.analytics.table.column.meetings: Nombre de RDVs
-admin.planner.analytics.table.column.requests: Nombre de demandes
-admin.planner.analytics.table.column.ratio: Ratio RDVs/Demandes
+admin.planner.analytics.table.column.meetings: 'Nombre de RDVs'
+admin.planner.analytics.table.column.ratio: 'Ratio RDVs/Demandes'
+admin.planner.analytics.table.column.requests: 'Nombre de demandes'
 admin.planner.export: Exporter
 admin.planner.export.heading: admin.planner.export.heading
 admin.planner.export.title: 'Export d''une solution pour la plannification des RDVs'
@@ -534,9 +534,6 @@ admin.planner.import.title: 'Importation d''une solution'
 admin.planner.index: Planification
 admin.planning.export.link: Exporter
 admin.planning.export.title: 'Export des plannings en pdf'
-admin.product.action.confirmDelete: 'Êtes vous sûr de vouloir supprimer ce produit?'
-admin.product.remove.link: 'Supprimer'
-admin.product.removeUnAvailable.title: 'Le produit ne peut pas être supprimé car il est utilisé dans une formule, un forfait ou une commande'
 admin.product_create.option.title: 'Ajouter un produit'
 admin.product_create.participant.title: 'Ajouter un produit participant'
 admin.product_create.plan.title: 'Ajouter une formule'
@@ -545,6 +542,7 @@ admin.product_update.option.title: 'Modifier un produit'
 admin.product_update.participant.title: 'Modifier un participant'
 admin.product_update.plan.title: 'Modifier une formule'
 admin.product_update.planning.title: 'Modifier un planning'
+admin.product.action.confirmDelete: 'Êtes vous sûr de vouloir supprimer ce produit?'
 admin.product.actions: Actions
 admin.product.availabilityCurrentMax: 'Disponibilité courante / max'
 admin.product.bought: 'Nombre achetés'
@@ -553,6 +551,8 @@ admin.product.deletableUntil: 'Supprimable jusqu''au'
 admin.product.link: 'Catalogue de produits'
 admin.product.name: Nom
 admin.product.quantityMax: 'Qté max'
+admin.product.remove.link: Supprimer
+admin.product.removeUnAvailable.title: 'Le produit ne peut pas être supprimé car il est utilisé dans une formule, un forfait ou une commande'
 admin.product.subjectedToValidation: 'Soumis à validation'
 admin.product.title: 'Catalogue de produits'
 admin.product.unitPrice: 'Prix unitaire'
@@ -656,12 +656,12 @@ admin.sheet.details.owner.email: Email
 admin.sheet.details.owner.mobile: Mobile
 admin.sheet.details.owner.phone: Téléphone
 admin.sheet.details.owner.title: Propriétaire
-admin.sheet.details.participant.title: Participant
-admin.sheet.details.participant.visio: Visio
+admin.sheet.details.participant.agenda_confirmation_not_send: 'Confirmation d''agenda non envoyée'
 admin.sheet.details.participant.agenda_confirmed: 'Agenda validé'
 admin.sheet.details.participant.agenda_not_confirmed: 'Agenda non-validé'
-admin.sheet.details.participant.agenda_confirmation_not_send: 'Confirmation d''agenda non envoyée'
-admin.sheet.details.participant.email: 'Email'
+admin.sheet.details.participant.email: Email
+admin.sheet.details.participant.title: Participant
+admin.sheet.details.participant.visio: Visio
 admin.sheet.details.participants: Participants
 admin.sheet.details.remainingToPay: 'Solde restant dû'
 admin.sheet.details.transactions: Transactions
@@ -681,9 +681,9 @@ admin.sheet.export.fields.owner_id: 'ID propriétaire'
 admin.sheet.export.fields.participants: 'Nombre de participants'
 admin.sheet.export.fields.registration_date: 'Date inscription'
 admin.sheet.export.fields.remaining_to_pay: 'Reste à payer TTC'
+admin.sheet.export.fields.sheet_enable: 'Fiche active'
 admin.sheet.export.fields.sheet_id: 'ID fiche'
 admin.sheet.export.fields.sheet_state: Etat
-admin.sheet.export.fields.sheet_enable: Fiche active
 admin.sheet.export.fields.status: 'Statut fiche'
 admin.sheet.export.fields.total_excluded_vat: 'Total HT'
 admin.sheet.export.fields.type: Type
@@ -728,8 +728,8 @@ admin.sheet.trace.disable: 'Désactivée le %at%'
 admin.sheet.trace.disable_catalog: 'Enlevée du catalogue le %at%'
 admin.sheet.trace.enable: 'Activée le %at%'
 admin.sheet.trace.enable_catalog: 'Ajoutée au catalogue le %at%'
-admin.sheet.trace.sheet_created_by_group_manager: 'Fiche dupliquée par le gestionnaire d''entité'
 admin.sheet.trace.pending: 'En attente le %at%'
+admin.sheet.trace.sheet_created_by_group_manager: 'Fiche dupliquée par le gestionnaire d''entité'
 admin.sheet.trace.validate: 'Validée le %at%'
 admin.sheet.trace.validation_draft: 'Au brouillon le %at%'
 admin.sheet.trace.validation_validate: 'Contenu validé le %at%'
@@ -741,10 +741,12 @@ admin.sheets_group.column.sheet_list: 'Liste des fiches'
 admin.sheets_group.column.title: Titre
 admin.sheets_group.create: 'Nouvelle entité multi-fiches'
 admin.sheets_group.create.title: 'Création d''une entité muti-fiches'
-admin.sheets_group.update.title: 'Modification d''une entité muti-fiches'
 admin.sheets_group.index: Multi-fiches
 admin.sheets_group.no_result: 'Aucuns résultats'
 admin.sheets_group.title: Multi-fiches
+admin.sheets_group.update: 'Modification de l''entité'
+admin.sheets_group.update.link: Modifier
+admin.sheets_group.update.title: 'Modification d''une entité muti-fiches'
 admin.spot.active.no: Non
 admin.spot.active.yes: Oui
 admin.spot.batch_create.title: 'Créer des lieux par lot'
@@ -1096,5 +1098,3 @@ user.agenda.version.meetingMoved: 'Le rendez-vous avec %sheetTitle% a été dép
 who.see_who_but_dont_see: '%seer% voit %seeable% et voit:'
 who.the.category: 'la catégorie'
 who.the.type: 'le type'
-admin.sheets_group.update.link: 'Modifier'
-admin.sheets_group.update: 'Modification de l''entité'

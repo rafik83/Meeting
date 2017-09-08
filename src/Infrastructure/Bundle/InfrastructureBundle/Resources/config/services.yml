@@ -1957,6 +1957,7 @@ services:
     command.sheet.post_batch.post_batch_pending_handler:
         class: Proximum\Vimeet\Application\Command\Sheet\PostBatch\PostBatchPendingHandler
         arguments:
+           - '@adapter.sheet_indexer'
            - '@event_dispatcher'
            - '@datetime'
     command.sheet.post_batch.post_batch_draft_handler:
@@ -2856,6 +2857,12 @@ services:
             - '@vimeet_infrastructure.repository.type_repository'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Catalog\TypeViewQuery }
+    query.catalog.category_view_query_handler:
+        class: Proximum\Vimeet\Application\Query\Catalog\CategoryViewQueryHandler
+        arguments:
+            - '@vimeet_infrastructure.repository.category_repository'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Catalog\CategoryViewQuery }
     query.catalog.organization_category_view_query_handler:
         class: Proximum\Vimeet\Application\Query\Catalog\OrganizationCategoryViewQueryHandler
         arguments:
@@ -4151,6 +4158,10 @@ services:
         class: Proximum\Vimeet\Domain\Catalog\VisibleParticipationTypes
         arguments:
             - '@repository.rule_repository'
+    catalog.visible_participation_categories:
+        class: Proximum\Vimeet\Domain\Catalog\VisibleParticipationCategories
+        arguments:
+            - '@repository.rule_repository'
 
     catalog.sheet_access_checker:
         class: Proximum\Vimeet\Domain\Catalog\SheetAccessChecker
@@ -4687,6 +4698,7 @@ services:
             - '@vimeet_infrastructure.repository.participant_repository'
             - '@vimeet_infrastructure.repository.user_repository'
             - '@vimeet_infrastructure.repository.sheet_repository'
+            - '@vimeet_infrastructure.repository.user_event_repository'
             - '@template.template_data_factory'
             - '@validator.email_validator'
             - '@account.synchronizer'

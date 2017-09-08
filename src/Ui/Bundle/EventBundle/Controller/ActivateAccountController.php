@@ -100,7 +100,7 @@ class ActivateAccountController extends Controller
             $this->get('adapter.authentication_manager')->disconnect();
         }
 
-        $command = new ReSendActivateAccountToken($sheet, $user);
+        $command = new ReSendActivateAccountToken($sheet, $user, $sheet->getOwner());
 
         if ($request->isMethod('POST')) {
             $this->get('tactician.commandbus')->handle($command);

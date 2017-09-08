@@ -40,7 +40,7 @@ class PlannerView
     /**
      * @var ParticipantView[]
      */
-    public $participantList;
+    public $userList;
 
     /**
      * @var MeetingView[]
@@ -58,7 +58,7 @@ class PlannerView
      * @param TypeView[]         $typeList
      * @param TypePriorityView[] $typePriorityList
      * @param SheetView[]        $sheetList
-     * @param ParticipantView[]  $participantList
+     * @param ParticipantView[]  $userList
      * @param MeetingView[]      $meetingList
      * @param SpotView[]         $spotList
      */
@@ -68,7 +68,7 @@ class PlannerView
         array $typeList = [],
         array $typePriorityList = [],
         array $sheetList = [],
-        array $participantList = [],
+        array $userList = [],
         array $meetingList = [],
         array $spotList = []
     ) {
@@ -77,7 +77,7 @@ class PlannerView
         $this->typeList         = $typeList;
         $this->typePriorityList = $typePriorityList;
         $this->sheetList        = $sheetList;
-        $this->participantList  = $participantList;
+        $this->userList         = $userList;
         $this->meetingList      = $meetingList;
         $this->spotList         = $spotList;
     }

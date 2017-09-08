@@ -14,6 +14,7 @@ agenda.title: 'My schedule'
 agenda.unavailability.add: 'Add an unavailability'
 agenda.unavailability.back: Back
 agenda.unavailability.confirmRemove: 'Confirm your absence'
+agenda.unavailability.remove: Remove
 'Bad credentials.': 'Bad credentials.'
 billing_info.title: 'Billing information'
 catalog.action.meeting.proposition.approved: 'Accepted proposal'
@@ -26,6 +27,7 @@ catalog.action.meeting.request.pending: 'Pending request'
 catalog.action.meeting.request.refuse: 'Received proposal'
 catalog.action.meeting.request.show.refuse: 'Refused request'
 catalog.complete_sheet: 'View sheet details'
+catalog.external.modal.content: 'To access the full profile, you need to register to the event.'
 catalog.meeting_request.approve: Approve
 catalog.meeting_request.create: 'Request a meeting'
 catalog.meeting_request.pending: 'Pending request'

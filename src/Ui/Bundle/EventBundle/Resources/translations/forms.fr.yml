@@ -45,9 +45,9 @@ form.multiple_sheet_request_filter_request_type.children.otherSheet.label: 'Autr
 form.multiple_sheet_request_filter_request_type.children.sheetConcerned.label: 'Fiche concernée'
 form.multiple_sheet_request_filter_request_type.children.state.filter.all: Tous
 form.multiple_sheet_request_filter_request_type.children.state.filter.approved: Accepté
+form.multiple_sheet_request_filter_request_type.children.state.filter.planned: Planifié
 form.multiple_sheet_request_filter_request_type.children.state.filter.refused: Refusé
 form.multiple_sheet_request_filter_request_type.children.state.filter.sent: 'En attente'
-form.multiple_sheet_request_filter_request_type.children.state.filter.planned: 'Planifié'
 form.multiple_sheet_request_filter_request_type.children.state.label: Statut
 form.multiple_sheet_request_filter_request_type.children.submit.label: Filtrer
 form.multiple_sheet_request_filter_request_type.children.type.filter.all: Tous
@@ -80,6 +80,7 @@ form.register.newUser.repeatedPassword.placeholder: 'Confirmer votre mot de pass
 form.search.autocomplete.atLeastThreeChars: 'Saisir au moins 3 caractères'
 form.search.autocomplete.atLeastTwoChars: 'Saisir au moins 2 caractères'
 form.search.autocomplete.searching: 'Recherche en cours...'
+form.search.categories.at_least_one_checked: 'Au moins une catégorie de participant doit être sélectionnée'
 form.search.content.label: 'Mots clés'
 form.search.keywords.search.placeholder: 'Sociétés, Compétences...'
 form.search.localization.label: 'Zones géographiques'
@@ -106,7 +107,7 @@ form.search.type.at_least_one_checked: 'Au moins un type de participant doit êt
 form.search.type.label: Participants
 form.send_code.children.accepted.label: 'J''accepte de recevoir des notifications pendant l''événement'
 form.send_code.children.phone.label: 'Mon numéro de téléphone mobile'
-form.send_code.children.submit.label: 'Enregistrer'
+form.send_code.children.submit.label: Enregistrer
 form.sheet_button_link_data.children.submit.label: Enregistrer
 form.sheet_button_link_data.children.url.label: URL
 form.sheet_editable_text_data.children.content.label: Texte
@@ -133,6 +134,6 @@ form.sheet_media_collection_data.children.submit.label: Enregistrer
 form.sheet_media_data.children.type.document: Document
 form.sheet_media_data.children.type.video: Vidéo
 form.user_event_phone_validate_code.children.code.label: 'Code de confirmation reçu'
-form.user_event_phone_validate_code.children.confirm.label: 'Confirmer'
+form.user_event_phone_validate_code.children.confirm.label: Confirmer
 gender.man: Monsieur
 gender.woman: Madame

@@ -103,6 +103,7 @@ class AddHandlerTest extends TestCase
 
         $activateAccountEvent = new ActivateAccountEvent(
             $expectedUser,
+            $user,
             $event,
             $expectedActivateAccountToken,
             $sheet

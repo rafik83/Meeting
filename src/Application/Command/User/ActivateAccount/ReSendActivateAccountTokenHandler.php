@@ -41,7 +41,13 @@ class ReSendActivateAccountTokenHandler
     public function handle(ReSendActivateAccountToken $command)
     {
         $token = $this->activateAccountTokenGenerator->generate($command->user, $command->sheet);
-        $event = new ActivateAccountEvent($command->user, $command->sheet->getEvent(), $token, $command->sheet);
+        $event = new ActivateAccountEvent(
+            $command->user,
+            $command->fromUser,
+            $command->sheet->getEvent(),
+            $token,
+            $command->sheet
+        );
 
         $this->eventDispatcher->dispatch(Events::USER_ACCOUNT_ACTIVATED, $event);
     }

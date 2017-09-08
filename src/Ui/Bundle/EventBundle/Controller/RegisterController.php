@@ -311,6 +311,7 @@ class RegisterController extends Controller
             'stepTitle'       => $participantBlock->getTitle($locale),
             'stepDescription' => $this->get('markdown')
                 ->toHtml($participantBlock->getDescription($locale)),
+            'participant'     => $participant,
             'participantCard' => $participantCard,
         ]);
     }

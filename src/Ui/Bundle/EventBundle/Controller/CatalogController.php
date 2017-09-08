@@ -10,9 +10,9 @@
 
 namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Controller;
 
-use Proximum\Vimeet\Application\Adapter\SheetSearchAdapterInterface;
 use Proximum\Vimeet\Application\Command\Sheet\SheetViewed\Add;
 use Proximum\Vimeet\Application\Exception\Paginator\UnavailableCurrentPageException;
+use Proximum\Vimeet\Application\Query\Catalog\CategoryViewQuery;
 use Proximum\Vimeet\Application\Query\Catalog\FilteredFieldsQuery;
 use Proximum\Vimeet\Application\Query\Catalog\KeywordViewQuery;
 use Proximum\Vimeet\Application\Query\Catalog\LocalizationViewQuery;
@@ -33,6 +33,7 @@ use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\View\Catalog\OrganizationCategoryView;
 use Proximum\Vimeet\Domain\View\Catalog\TypeView;
+use Proximum\Vimeet\Domain\View\Catalog\CategoryView;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\EventListener\Security\CatalogAccessEventListener;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Catalog\SearchType;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\ParamConverter\EventDomain;
@@ -88,7 +89,7 @@ class CatalogController extends Controller
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
         $this->denyAccessUnlessGranted(SheetVoter::EDIT, $sheet);
 
-        $event = $eventDomain->getEvent();
+        $event  = $eventDomain->getEvent();
         $locale = $request->getLocale();
 
         if (!$sheet->isInCatalog()) {
@@ -96,6 +97,9 @@ class CatalogController extends Controller
         }
 
         $visibleTypes = $this->get('catalog.visible_participation_types')->getAllowedTypesList($sheet);
+        $visibleCategories = $this
+            ->get('catalog.visible_participation_categories')
+            ->getAllowedCategoriesList($sheet);
 
         if (empty($visibleTypes)) {
             return $this->render(
@@ -108,6 +112,10 @@ class CatalogController extends Controller
             new TypeViewQuery($event, $visibleTypes, $locale)
         );
 
+        $categoryViews = $this->get('tactician.commandbus.query')->handle(
+            new CategoryViewQuery($event, $visibleCategories, $locale)
+        );
+
         $organizationCategoryViews = $this->get('tactician.commandbus.query')->handle(
             new OrganizationCategoryViewQuery($event, $locale)
         );
@@ -116,11 +124,12 @@ class CatalogController extends Controller
             new PositionViewQuery($event, $locale)
         );
 
-        $filters = $this->getDefaultFilters($typeViews);
+        $filters = $this->getDefaultFilters($typeViews, $categoryViews);
 
         $searchForm = $this->getSearchForm(
             $filters,
             $typeViews,
+            $categoryViews,
             $organizationCategoryViews,
             $positionViews,
             $event,
@@ -134,6 +143,9 @@ class CatalogController extends Controller
             // if type field is empty, set the default types
             if (empty($filters[SearchFields::FILTER_TYPE])) {
                 $filters[SearchFields::FILTER_TYPE] = $typeViews;
+            }
+            if (empty($filters[SearchFields::FILTER_CATEGORY])) {
+                $filters[SearchFields::FILTER_CATEGORY] = $categoryViews;
             }
         }
 
@@ -171,6 +183,7 @@ class CatalogController extends Controller
             $filters,
             $paginatedResult->aggregations,
             $typeViews,
+            $categoryViews,
             $organizationCategoryViews,
             $positionViews
         );
@@ -191,7 +204,6 @@ class CatalogController extends Controller
                     ]
                 );
             }
-
         } else {
             $template = 'EventBundle:Catalog:index.html.twig';
         }
@@ -209,6 +221,7 @@ class CatalogController extends Controller
             'page'                => 1,
             'isCatalog'           => true,
             'typeViews'           => $typeViews,
+            'categoryViews'       => $categoryViews,
             'paginatedResult'     => $paginatedResult,
             'seeMoreButton'       => $seeMoreButton,
             'searchForm'          => $searchForm->createView(),
@@ -262,10 +275,16 @@ class CatalogController extends Controller
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
         $this->denyAccessUnlessGranted(SheetVoter::EDIT, $sheet);
 
+        $query = $request->get('query');
+
+        if (null === $query) {
+            return new JsonResponse([]);
+        }
+
         $keywordView = $this->get('tactician.commandbus.query')->handle(
             new KeywordViewQuery(
                 $eventDomain->getEvent(),
-                $request->get('query'),
+                $query,
                 Catalog::DEFAULT_FILTERS,
                 $request->getLocale()
             )
@@ -360,7 +379,10 @@ class CatalogController extends Controller
                 ->allowedToAccess($event);
 
             $isMeetingRequestUpdateLocked = $event->getConfiguration()->isMeetingRequestUpdateLocked();
-            $isMeetingRequestClosed          = !$this->get('domain.key_dates.checker.meeting_request_access_checker')->allowedToAccess($event);
+            $isMeetingRequestClosed          = !$this
+                ->get('domain.key_dates.checker.meeting_request_access_checker')
+                ->allowedToAccess($event)
+            ;
             $isAnsweringMeetingRequestClosed = !$this
                 ->get('domain.key_dates.checker.answering_meeting_request_access_checker')
                 ->allowedToAccess($event)
@@ -415,15 +437,17 @@ class CatalogController extends Controller
     }
 
     /**
-     * @param TypeView[] $typeViews
+     * @param TypeView[]     $typeViews
+     * @param CategoryView[] $categoryViews
      *
      * @return array
      */
-    private function getDefaultFilters(array $typeViews)
+    private function getDefaultFilters(array $typeViews, array $categoryViews): array
     {
         $filters = [
-            SearchFields::ORDER_BY    => Sheet\Constant::ORDER_BY_RELEVANCE,
-            SearchFields::FILTER_TYPE => $typeViews,
+            SearchFields::ORDER_BY        => Sheet\Constant::ORDER_BY_RELEVANCE,
+            SearchFields::FILTER_TYPE     => $typeViews,
+            SearchFields::FILTER_CATEGORY => $categoryViews,
         ];
 
         return $filters;
@@ -432,6 +456,7 @@ class CatalogController extends Controller
     /**
      * @param array                      $filters
      * @param TypeView[]                 $typeViews
+     * @param CategoryView[]             $categoryViews
      * @param OrganizationCategoryView[] $organizationCategoryViews
      * @param PositionView[]             $positionViews
      * @param Event                      $event
@@ -443,6 +468,7 @@ class CatalogController extends Controller
     private function getSearchForm(
         array $filters,
         array $typeViews,
+        array $categoryViews,
         array $organizationCategoryViews,
         array $positionViews,
         Event $event,
@@ -452,6 +478,7 @@ class CatalogController extends Controller
         return $this->get('form.factory')->createNamed('', SearchType::class, $filters, [
             'action'                    => $this->generateUrl('event_catalog_index', ['sheet' => $sheet->getId()]),
             'typeViews'                 => $typeViews,
+            'categoryViews'             => $categoryViews,
             'organizationCategoryViews' => $organizationCategoryViews,
             'positionViews'             => $positionViews,
             'event'                     => $event,
@@ -466,6 +493,7 @@ class CatalogController extends Controller
      * @param array                      $filters
      * @param array                      $currentAggregations
      * @param TypeView[]                 $typeViews
+     * @param CategoryView[]                 $categoryViews
      * @param OrganizationCategoryView[] $organizationCategoryViews
      * @param PositionView[]             $positionViews
      *
@@ -478,6 +506,7 @@ class CatalogController extends Controller
         array $filters,
         array $currentAggregations,
         array $typeViews,
+        array $categoryViews,
         array $organizationCategoryViews,
         array $positionViews
     ) {
@@ -488,6 +517,7 @@ class CatalogController extends Controller
                 $filters,
                 $currentAggregations,
                 $typeViews,
+                $categoryViews,
                 $organizationCategoryViews,
                 $positionViews,
                 $locale
@@ -497,6 +527,7 @@ class CatalogController extends Controller
         return $this->getSearchForm(
             $filters,
             $filteredFieldsView->typeViews,
+            $filteredFieldsView->categoryViews,
             $filteredFieldsView->organizationCategoryViews,
             $filteredFieldsView->positionViews,
             $event,
