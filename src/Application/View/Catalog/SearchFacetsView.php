@@ -34,7 +34,8 @@ class SearchFacetsView
      */
     public function hasType()
     {
-        return $this->hasFilter(SearchFacet::TYPE_TYPE);
+        // if Category is activated, Type cannot be activated
+        return $this->hasFilter(SearchFacet::TYPE_TYPE) && !$this->hasFilter(SearchFacet::TYPE_CATEGORY);
     }
 
     /**

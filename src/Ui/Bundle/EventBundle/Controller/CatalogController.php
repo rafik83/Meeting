@@ -111,7 +111,7 @@ class CatalogController extends Controller
 
             if (empty($visibleCategories)) {
                 return $this->render(
-                    'EventBundle:Catalog:no-visible-type.html.twig',
+                    'EventBundle:Catalog:no-visible-category.html.twig',
                     ['event' => $event, 'sheet' => $sheet]
                 );
             }
