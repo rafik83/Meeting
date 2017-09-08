@@ -48,11 +48,13 @@ function CatalogMobileFilters(catalogFilterZone, catalogFilter, catalogForm) {
 
             this.typeFilterButtons.push(filterButton);
 
-            filterButton.element.addEventListener('click', function (event) {
-                event.preventDefault();
+            if (filterButton.count > 0) {
+                filterButton.element.addEventListener('click', function (event) {
+                    event.preventDefault();
 
-                this.onTypeFilterClick(filterButton);
-            }.bind(this));
+                    this.onTypeFilterClick(filterButton);
+                }.bind(this));
+            }
         }.bind(this))
     }
 }

@@ -2,7 +2,7 @@ function CatalogMobileTypeFilterElement(element, filterId, content, count) {
     this.element = element;
     this.filterId = filterId;
     this.content = content;
-    this.count = count;
+    this.count = parseInt(count);
 }
 
 CatalogMobileTypeFilterElement.prototype.inactive = function() {
