@@ -3,36 +3,13 @@
 /*
  * This file is part of the vimeet project.
  *
- * Copyright (C) 2016 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
 
 namespace Proximum\Vimeet\Application\Query\Catalog\SearchFacet;
 
-use Proximum\Vimeet\Domain\Model\Event;
-
-class SearchFacetViewQuery
+class SearchFacetViewQuery extends AbstractSearchFacetViewQuery
 {
-    /**
-     * @var Event
-     */
-    public $event;
-
-    /**
-     * @var string
-     */
-    public $locale;
-
-    /**
-     * SearchFacetViewQuery constructor.
-     *
-     * @param Event  $event
-     * @param string $locale
-     */
-    public function __construct(Event $event, $locale)
-    {
-        $this->event  = $event;
-        $this->locale = $locale;
-    }
 }
