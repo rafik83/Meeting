@@ -1,92 +1,79 @@
 var TypeFilterElement = require('./_CatalogMobileTypeFilterElement');
 
-function CatalogMobileFilters(document, element, typeFilterList, typeFilterButton, catalogForm) {
-    this.document = document;
-    this.element = element;
-    this.typeFilterList = typeFilterList;
-    this.typeFilterButton = typeFilterButton;
+/**
+ *
+ * @param {HTMLElement} catalogFilterZone the zone where the filters will be displayed
+ * @param {HTMLElement} catalogFilter the filter given by the response
+ * @param {HTMLElement} catalogForm
+ */
+function CatalogMobileFilters(catalogFilterZone, catalogFilter, catalogForm) {
+    this.catalogFilterZone = catalogFilterZone;
+    this.originalCatalogFilter = catalogFilter;
+    this.catalogFilter = this.originalCatalogFilter.cloneNode(true);
+    this.catalogFilter.classList.remove('hidden');
+    this.originalCatalogFilter.remove();
+    this.typeFilterList = this.catalogFilter.querySelector('.catalog-mobile-type-filter-list');
     this.catalogForm = catalogForm;
     this.typeFilterCheckboxes = this.catalogForm.querySelectorAll('input[name="type[]"]');
-    this.typeFilters = [];
-    this.typeFilterAll = null;
-    this.countTotal = 0;
+    this.typeFilterButtons = [];
 
-    if (this.typeFilterButton !== null && this.typeFilterCheckboxes !== null) {
-        var typeSelected = [];
-        [].forEach.call(this.typeFilterCheckboxes, function (checkboxType) {
-            if (checkboxType.checked) {
-                typeSelected.push(checkboxType);
-            }
+    if (this.typeFilterList !== null && this.typeFilterCheckboxes !== null) {
+        // Empty the catalogFilterZone of the placeholder and add the value from the catalogFilter twig
+        this.catalogFilterZone.innerHTML = '';
+        this.catalogFilterZone.appendChild(this.catalogFilter);
 
-            var filterId = checkboxType.value;
-            var content = checkboxType.nextSibling.nodeValue;
-            var count = parseInt(checkboxType.parentNode.nextElementSibling.innerText);
-            this.countTotal += count;
+        this.catalogFilterZone
+            .querySelector('[data-catalog-mobile-menu-button-action]')
+            .addEventListener('click', function (event) {
+                event.preventDefault();
 
-            var filterElement = new TypeFilterElement(
-                this.document,
-                checkboxType,
-                filterId,
-                content,
-                count
+                this.openMenu();
+        }.bind(this));
+
+        this.catalogFilterZone
+            .querySelector('.catalog-close')
+            .addEventListener('click', function (event) {
+                event.preventDefault();
+
+                this.closeMenu();
+        }.bind(this));
+
+        [].forEach.call(this.catalogFilterZone.querySelectorAll(".catalog-mobile-filter"), function (element) {
+            var filterButton = new TypeFilterElement(
+                element,
+                element.getAttribute('data-filter-id'),
+                element.getAttribute('data-content'),
+                element.getAttribute('data-count-participant')
             );
-            var listNode = filterElement.getListNode();
 
-            this.typeFilters.push(filterElement);
+            this.typeFilterButtons.push(filterButton);
 
-            this.typeFilterList.appendChild(listNode);
+            filterButton.element.addEventListener('click', function (event) {
+                event.preventDefault();
 
-            listNode.addEventListener('click', function (event) {
-                this.onTypeFilterClick(filterElement);
+                this.onTypeFilterClick(filterButton);
             }.bind(this));
-        }.bind(this));
-
-        // Build filter all button
-        this.typeFilterAll = new TypeFilterElement(
-            this.document,
-            null,
-            'all',
-            this.typeFilterList.getAttribute('data-type-filter-all-content'),
-            this.countTotal
-        );
-
-        if (typeSelected.length === this.typeFilterCheckboxes.length) {
-            this.typeFilterAll.active();
-            this.typeFilters.forEach(function (element) {
-                element.inactive();
-            });
-        }
-
-        this.typeFilters.push(this.typeFilterAll);
-        var listNodeAll = this.typeFilterAll.getListNode();
-        this.typeFilterList.insertBefore(listNodeAll, this.typeFilterList.firstChild);
-
-        listNodeAll.addEventListener('click', function (event) {
-            this.onTypeFilterClick(this.typeFilterAll);
-        }.bind(this));
-
-        // Change filter type button by the type selected
-        var filterSelected = [].filter.call(this.typeFilterCheckboxes, function (element) {
-            return element.checked === true;
-        });
-
-        if (filterSelected.length === this.typeFilterCheckboxes.length) {
-            this.fillTypeFilterButton(this.typeFilterAll.content, this.typeFilterAll.count);
-            this.typeFilterAll.active();
-        } else {
-            this.typeFilters.forEach(function (element) {
-                if (element.filterId === filterSelected[0].value) {
-                    this.fillTypeFilterButton(element.content, element.count);
-                    element.active();
-                }
-            }.bind(this))
-        }
+        }.bind(this))
     }
 }
 
+CatalogMobileFilters.prototype.openMenu = function () {
+    if (!this.catalogFilter.classList.contains('disabled')) {
+        document.body.classList.add('menu-mobile-opened');
+        this.catalogFilterZone.querySelector('.catalog-mobile-menu-summary').style.display = 'none';
+        this.catalogFilterZone.querySelector('.catalog-mobile-menu-filters').style.display = 'block';
+    }
+};
+
+CatalogMobileFilters.prototype.closeMenu = function (){
+    document.body.classList.remove('menu-mobile-opened');
+    this.catalogFilterZone.querySelector('.catalog-mobile-menu-summary').style.display = 'block';
+    this.catalogFilterZone.querySelector('.catalog-mobile-menu-filters').style.display = 'none';
+};
+
 CatalogMobileFilters.prototype.onTypeFilterClick = function(typeFilterElementClicked) {
     var buttonChecked = null;
-    this.typeFilters.forEach(function (typeFilterElement) {
+    this.typeFilterButtons.forEach(function (typeFilterElement) {
         typeFilterElement.inactive();
     });
 
@@ -106,27 +93,36 @@ CatalogMobileFilters.prototype.onTypeFilterClick = function(typeFilterElementCli
         }
     }
 
-    if (buttonChecked !== null) {
-        this.dispatchChange(buttonChecked);
-    } else {
-        this.dispatchChange(this.typeFilterCheckboxes[0]);
-    }
+    [].forEach.call(this.catalogFilter.querySelectorAll('[data-catalog-mobile-menu-button-action]'), function (button) {
+        if (button.getAttribute('data-catalog-mobile-menu-button-action') === 'catalog-mobile-menu-button-action-type-filter') {
+            this.rebuildActionButton(button, typeFilterElementClicked.content, typeFilterElementClicked.count);
+        }
+    }.bind(this));
 
-    this.fillTypeFilterButton(typeFilterElementClicked.content, typeFilterElementClicked.count);
+    if (buttonChecked !== null) {
+        this.dispatchChangeAndCloseMenu(buttonChecked);
+    } else {
+        this.dispatchChangeAndCloseMenu(this.typeFilterCheckboxes[0]);
+    }
 };
 
-CatalogMobileFilters.prototype.fillTypeFilterButton = function (content, count) {
-    this.typeFilterButton.innerHTML =
+CatalogMobileFilters.prototype.rebuildActionButton = function (button, content, count) {
+    button.innerHTML =
         '<span>' + content + ' </span><span class="button-count total-participants">(' + count + ')' +
         ' <i class="glyphicon glyphicon-chevron-down"></i></span>'
     ;
 };
 
-CatalogMobileFilters.prototype.dispatchChange = function(button) {
+CatalogMobileFilters.prototype.dispatchChangeAndCloseMenu = function(button) {
     var event = document.createEvent("HTMLEvents");
 
     event.initEvent("change", false, true);
     button.dispatchEvent(event);
+
+    this.closeMenu();
+    [].forEach.call(this.catalogFilter.getElementsByTagName('A'), function (aElement) {
+        aElement.classList.add('disabled');
+    });
 };
 
 module.exports = CatalogMobileFilters;

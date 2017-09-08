@@ -23,8 +23,7 @@ var $                     = require('jquery'),
     PreventMultipleSubmit = require('./components/_PreventMultipleSubmit'),
     FilterRequestByType   = require('./components/MeetingRequest/_FilterByType'),
     CatalogPagination     = require('./components/_CatalogPagination'),
-    VideoConference       = require('./components/VideoConference/VideoConference'),
-    HeaderMobile          = require ('./components/_HeaderMobile')
+    VideoConference       = require('./components/VideoConference/VideoConference')
 ;
 
 require('bootstrap');
@@ -78,12 +77,10 @@ function init (target) {
         }
     });
 
-    [].forEach.call(target.querySelectorAll('.catalog-mobile-filters'), function (element) {
+    [].forEach.call(target.querySelectorAll('[data-catalog-mobile-menu]'), function (element) {
         new CatalogMobileFilters(
-            target,
+            document.querySelector('.catalog-mobile-menu'),
             element,
-            element.querySelector('.catalog-mobile-type-filter-list'),
-            target.querySelector('.catalog-mobile-button'),
             target.querySelector('.catalog form')
         );
     });
@@ -219,10 +216,6 @@ function init (target) {
 
     [].forEach.call(target.querySelectorAll('.has-details.meet[data-isVisio]'), function (element) {
         new VideoConference(element);
-    });
-
-    [].forEach.call(target.querySelectorAll('.catalog-mobile-item'), function (element) {
-        new HeaderMobile(element);
     });
 }
 

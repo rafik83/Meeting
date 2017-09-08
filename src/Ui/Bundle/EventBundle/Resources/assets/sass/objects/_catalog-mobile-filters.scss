@@ -1,132 +1,104 @@
 @media screen and (max-width: 767px) {
-  .catalog-mobile-filters {
-    width: 100%;
-  }
+  .catalog-mobile-menu {
 
-  .catalog-mobile {
-    display: none;
-    position: fixed;
-    flex-direction: column;
-    justify-content: center;
-    align-content: stretch;
-    align-items: center;
-    background: $color-primary;
-    top: 0;
-    padding: 17px;
-    z-index: 10;
+    .disabled {
 
-    &.open {
-      display: flex;
     }
+    .catalog-mobile-menu-summary {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      padding: 17px;
 
-    &.shadow {
       box-shadow: 0 6px 5px rgba(0, 0, 0, 0.2);
     }
 
-    .catalog-mobile-item {
-
+    .catalog-mobile-menu-container {
+      width: 100%;
+      position: absolute;
+      top: 0;
+      left: 0;
       color: white;
-      order: 0;
-      flex: 0 1 auto;
-      align-self: auto;
+      background: $color-primary;
 
-      .catalog-mobile-button {
+      .catalog-mobile-menu-button {
+        cursor: pointer;
         text-align: left;
+        display: block;
 
         > span.button-count {
           float: right;
 
           > i.glyphicon {
-              top: 3px !important;
-              left: 5px !important;
+            top: 3px !important;
+            left: 5px !important;
           }
-        }
-      }
-
-      &.open {
-
-        .catalog-mobile-title {
-          display: none;
-        }
-
-        .catalog-mobile-button {
-          display: block
         }
       }
 
       .catalog-mobile-title {
         display: block;
-        margin-left:12px;
+        margin-left: 12px;
         font-size: 15px !important;
       }
 
-      .catalog-mobile-button {
-        display: none;
+      ul {
+        > li.catalog-mobile-filter {
+          margin-top: 8px;
+
+          > a {
+            color: white;
+          }
+
+          > span {
+            min-height: 1px;
+          }
+
+          > span.filter-content {
+            padding: 0;
+            text-align: left;
+          }
+
+          > span.filter-count {
+            margin-right: 10px;
+            width: 16.6666666667%;
+          }
+        }
       }
 
-      > div {
-        > ul {
-          > li.catalog-mobile-filter {
-            display: flex;
-            flex-direction: column;
-            flex-flow: row;
-            margin-top: 8px;
+      .catalog-mobile-menu-action {
+        background: $color-primary;
+        width: 100%;
+        position: fixed;
+        bottom: 0;
+        padding: 10px 0;
+        text-align: right;
 
-            > a {
-              color: white;
-            }
+        .catalog-close {
+          background: none;
+          border: none;
+          color: white;
+          text-transform: uppercase;
+          font-weight: bold;
+          font-size: 18px;
+          font-family: OpenSans, Helvetica, sans-serif;
 
-            > span {
-              min-height: 1px;
-            }
-
-            > span.filter-content {
-              padding: 0;
-              text-align: left;
-            }
-
-            > span.filter-count {
-              margin-right: 10px;
-              width: 16.6666666667%;
-            }
+          > i {
+            font-size: 35px;
+            float: right;
+            margin: -4px 0 0 10px;
           }
         }
       }
     }
 
-    .catalog-mobile-menu {
-      display: none;
-
-      &.open {
-        display: block !important;
-      }
+    .catalog-mobile-menu-filters-list {
+      padding: 17px 17px 60px 17px;
     }
-  }
 
-  .catalog-mobile-menu {
-    .catalog-mobile-close {
-      background: $color-primary;
-      position: fixed;
-      bottom: 0;
-      width: 100%;
-      padding: 10px 0;
-      text-align: right;
-
-      .catalog-close {
-        background: none;
-        border: none;
-        color: white;
-        text-transform: uppercase;
-        font-weight: bold;
-        font-size: 18px;
-        font-family: OpenSans, Helvetica, sans-serif;
-
-        > i {
-          font-size: 35px;
-          float: right;
-          margin: -4px 0 0 10px;
-        }
-      }
+    .catalog-mobile-menu-filters {
+      display: none;
     }
   }
 
