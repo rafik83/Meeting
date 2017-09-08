@@ -10,6 +10,7 @@
 
 {% block header_mobile %}
     <div class="catalog-mobile-menu">
+    {% if searchForm.type is defined %}
         <div class="catalog-mobile-menu-summary catalog-mobile-menu-container">
             <a href="#" class="catalog-mobile-menu-button btn btn-primary btn-block">
                     <span>...</span>
@@ -19,6 +20,7 @@
                 </span>
             </a>
         </div>
+    {% endif %}
     </div>
 {% endblock %}
 
