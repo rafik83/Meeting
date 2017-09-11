@@ -588,7 +588,7 @@ admin_spot_import:
     requirements:
         event: \d+
     methods: [GET, POST]
-    defaults: { _controller: AdminBundle:Spot:import }
+    defaults: { _controller: AdminBundle:Spot\Import:import }
 
 #
 # Meeting Request

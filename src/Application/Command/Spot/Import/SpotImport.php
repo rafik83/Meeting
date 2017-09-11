@@ -8,8 +8,7 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Proximum\Vimeet\Application\Command\Spot;
-
+namespace Proximum\Vimeet\Application\Command\Spot\Import;
 
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 

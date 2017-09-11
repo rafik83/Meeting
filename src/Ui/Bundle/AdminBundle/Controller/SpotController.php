@@ -332,28 +332,6 @@ class SpotController extends Controller
     }
 
     /**
-     * @param Request $request
-     * @param Event   $event
-     *
-     * @return Response
-     */
-    public function importAction(Request $request, Event $event): Response
-    {
-        $spotImport = new SpotImport();
-
-        $form = $this->createForm(SpotImportType::class, $spotImport, ['submit' => true]);
-
-        //if ($form->handleRequest($request)->isValid() && $form->isSubmitted()) {
-
-       //}
-
-        return $this->render('AdminBundle:Spot:spotImport.html.twig', [
-            'event' => $event,
-            'form' => $form->createView(),
-        ]);
-    }
-
-    /**
      * @param Event $event
      * @param Spot  $spot
      * @param mixed $command

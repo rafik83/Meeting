@@ -474,6 +474,15 @@ services:
             - '@vimeet_infrastructure.repository.meeting_repository'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Spot\UnavailabilityBatch }
+
+    command.spot.spot_import_handler:
+        class: Proximum\Vimeet\Application\Command\Spot\Import\SpotImportHandler
+        arguments:
+            - '@adapter.local_file_storage'
+            - '%kernel.root_dir%/../var/spot_imports'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Spot\Import\SpotImport }
+
     vimeet_infrastructure.vimeet.application.command.category.update_handler:
         class: Proximum\Vimeet\Application\Command\Category\UpdateHandler
         arguments:
