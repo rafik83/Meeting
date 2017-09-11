@@ -20,10 +20,10 @@ class ExtraParameter
     /** @var string */
     private $type;
 
-    /** @var null|string */
+    /** @var string */
     private $name;
 
-    /** @var null|string */
+    /** @var string */
     private $value;
 
     /** @var \DateTimeInterface */
@@ -42,8 +42,8 @@ class ExtraParameter
     public function __construct(
         Event $event,
         string $type,
-        string $name = null,
-        string $value = null,
+        ?string $name,
+        ?string $value,
         \DateTimeInterface $createdAt
     ) {
         $this->event     = $event;
@@ -73,7 +73,7 @@ class ExtraParameter
     /**
      * @return null|string
      */
-    public function getName()
+    public function getName(): ?string
     {
         return $this->name;
     }
@@ -81,7 +81,7 @@ class ExtraParameter
     /**
      * @return null|string
      */
-    public function getValue()
+    public function getValue(): ?string
     {
         return $this->value;
     }
@@ -107,7 +107,7 @@ class ExtraParameter
      * @param string|null        $value
      * @param \DateTimeInterface $updatedAt
      */
-    public function update(string $name = null, string $value = null, \DateTimeInterface $updatedAt)
+    public function update(?string $name, ?string $value, \DateTimeInterface $updatedAt)
     {
         $this->name = $name;
         $this->value = $value;
