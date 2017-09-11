@@ -27,6 +27,8 @@ class RemoveController extends Controller
      */
     public function removeAction(Request $request, Event $event, Event\ExtraParameter $extraParameter): RedirectResponse
     {
+        $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
+
         if ($event !== $extraParameter->getEvent()) {
             throw $this->createNotFoundException(
                 sprintf('the extra parameter %s is not on the event %s', $extraParameter->getId(), $event->getId())

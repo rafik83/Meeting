@@ -32,6 +32,8 @@ class UpdateController extends Controller
      */
     public function updateAction(Request $request, Event $event, ExtraParameter $extraParameter): Response
     {
+        $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
+
         if ($event !== $extraParameter->getEvent()) {
             throw $this->createNotFoundException(
                 sprintf('the extra parameter %s is not on the event %s', $extraParameter->getId(), $event->getId())

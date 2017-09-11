@@ -30,6 +30,8 @@ class CreateController extends Controller
      */
     public function createAction(Request $request, Event $event): Response
     {
+        $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
+
         $create = new Create($event);
         $form = $this->createForm(CreateType::class, $create, [
             'submit' => true,

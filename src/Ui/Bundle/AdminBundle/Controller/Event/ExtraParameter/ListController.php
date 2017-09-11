@@ -23,6 +23,8 @@ class ListController extends Controller
      */
     public function listAction(Event $event): Response
     {
+        $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
+
         $extraParameters = $this->get('repository.event.extra_parameter_repository')->findByEvent($event);
 
         return $this->render('AdminBundle:Event/ExtraParameter:list.html.twig', [
