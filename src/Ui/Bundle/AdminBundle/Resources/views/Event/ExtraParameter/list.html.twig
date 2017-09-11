@@ -28,10 +28,23 @@
         <tbody>
         {% for extraParameter in extraParameters %}
             <tr>
-                <td>{{ extraParameter.type }}</td>
+                <td>{{ ('admin.extraParameter.type.' ~ extraParameter.type)|trans }}</td>
                 <td>{{ extraParameter.name }}</td>
                 <td>{{ extraParameter.value }}</td>
-                <td></td>
+                <td class="pull-right">
+                    <div class="btn-group">
+                        <a class="btn btn-default btn-sm" href="{{ path('admin_event_extra_parameter_update', { 'event': event.id, 'extraParameter': extraParameter.id }) }}">
+                            {{ 'admin.extraParameter.list.action.update'|trans }}
+                        </a>
+                        <button type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <span class="caret"></span>
+                        </button>
+                        <ul class="dropdown-menu dropdown-menu-right">
+                            <li>
+                            </li>
+                        </ul>
+                    </div>
+                </td>
             </tr>
         {% endfor %}
         </tbody>

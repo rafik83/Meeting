@@ -252,6 +252,9 @@ form.extra_parameter_create.children.type.choices.leni_user: 'Code Utilisateur L
 form.extra_parameter_create.children.type.choices.leni_event: 'Code Event Leni'
 form.extra_parameter_create.children.type.label: 'type'
 form.extra_parameter_create.children.value.label: 'Valeur'
+form.extra_parameter_update.children.name.label: 'Nom'
+form.extra_parameter_update.children.value.label: 'Valeur'
+form.extra_parameter_update.children.submit.label: 'Enregistrer'
 form.field.private: 'Champ privé'
 form.filter_admin.children.submit.label: Filtrer
 form.filter_admin.event.all: 'Tous les événements'

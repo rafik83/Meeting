@@ -15,6 +15,7 @@ flash.admin.event.duplicate.success: 'Événement créé à partir de : %eventTi
 flash.admin.event.duplicate.warning: 'Veuillez compléter la description de l''événement'
 flash.admin.event.empty_list: 'Aucun évènement trouvé'
 flash.admin.event.extraParameter.create.success: 'Le paramètre externe a été créé avec succès'
+flash.admin.event.extraParameter.update.success: 'Le paramètre externe a été mis à jour avec succès'
 flash.admin.event.filter_facet.update.success: 'Vos filtres ont bien été mis à jour'
 flash.admin.event.paymentConditions.update.success: 'Les conditions de paiement ont été modifiées avec succès'
 flash.admin.event.practicalInfo.update.success: 'Les informations pratiques ont bien été mises à jour'

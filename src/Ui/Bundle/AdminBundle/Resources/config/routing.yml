@@ -1526,3 +1526,11 @@ admin_event_extra_parameter_create:
     requirements:
         event: \d+
     defaults: { _controller: AdminBundle:Event/ExtraParameter/Create:create }
+
+admin_event_extra_parameter_update:
+    path: /event/{event}/extra/parameter/{extraParameter}/update
+    methods: [GET, POST]
+    requirements:
+        event: \d+
+        extraParameter: \d+
+    defaults: { _controller: AdminBundle:Event/ExtraParameter/Update:update }

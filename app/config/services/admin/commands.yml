@@ -26,3 +26,11 @@ services:
             - '@datetime'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Event\ExtraParameter\Create }
+
+    command.event.extra_parameter.update_handler:
+        class: Proximum\Vimeet\Application\Command\Event\ExtraParameter\UpdateHandler
+        arguments:
+            - '@repository.event.extra_parameter_repository'
+            - '@datetime'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Event\ExtraParameter\Update }

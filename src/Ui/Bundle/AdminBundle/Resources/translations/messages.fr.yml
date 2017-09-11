@@ -195,6 +195,8 @@ admin.export.transaction.column.transaction_date: Date
 admin.export.transaction.column.transaction_reference: Référence
 admin.export.transaction.column.transaction_type: Type
 admin.extraParameter.create.title: 'Création d''un paramètre externe'
+admin.extraParameter.update.title: 'Modification du paramètre externe %type%'
+admin.extraParameter.list.action.update: Modifier
 admin.extraParameter.list.column.actions: 'Actions'
 admin.extraParameter.list.column.name: Nom
 admin.extraParameter.list.column.type: Type du paramètre
@@ -202,6 +204,8 @@ admin.extraParameter.list.column.value: Valeur
 admin.extraParameter.list.create: Ajouter
 admin.extraParameter.list.title: 'Liste des paramètres externes de l''événement'
 admin.extraParameter.list.empty: 'Aucun paramètre externe pour cet événement'
+admin.extraParameter.type.leni_user: 'Code Utilisateur Leni'
+admin.extraParameter.type.leni_event: 'Code Event Leni'
 admin.filter: Filtrer
 admin.filter_by: 'Filtrer par'
 admin.filters.all: Tous
