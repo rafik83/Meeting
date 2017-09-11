@@ -243,8 +243,7 @@ class DayViewQueryHandlerTest extends TestCase
             $meetingHandler->reveal(),
             $cancelAttendanceUnavailabilityViewQueryHandler->reveal(),
             $availableSlotQueryHandler->reveal(),
-            $this->agendaCollisionManager->reveal(),
-            $this->currentTime
+            $this->agendaCollisionManager->reveal()
         );
 
 
@@ -386,8 +385,7 @@ class DayViewQueryHandlerTest extends TestCase
             $meetingHandler->reveal(),
             $cancelAttendanceUnavailabilityViewQueryHandler->reveal(),
             $availableSlotQueryHandler->reveal(),
-            $this->agendaCollisionManager->reveal(),
-            $this->currentTime
+            $this->agendaCollisionManager->reveal()
         );
 
         $availableSlotViewQuery = new AvailableSlotsByParticipantQuery($this->event, $this->participant, $this->day);
@@ -514,8 +512,7 @@ class DayViewQueryHandlerTest extends TestCase
             $meetingHandler->reveal(),
             $cancelAttendanceUnavailabilityViewQueryHandler->reveal(),
             $availableSlotQueryHandler->reveal(),
-            $this->agendaCollisionManager->reveal(),
-            $this->currentTime
+            $this->agendaCollisionManager->reveal()
         );
 
         $availableSlotViewQuery = new AvailableSlotsByParticipantQuery($this->event, $this->participant, $this->day);
