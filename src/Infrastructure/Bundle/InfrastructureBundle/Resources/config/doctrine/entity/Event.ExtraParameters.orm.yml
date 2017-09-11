@@ -1,0 +1,31 @@
+Proximum\Vimeet\Domain\Model\Event\ExtraParameters:
+    type:  entity
+    table: event_extra_parameters
+    id:
+        event:
+            associationKey: true
+        type:
+            type: string
+    uniqueConstraints:
+        unique_event_extra_parameter:
+            columns:
+                - event_id
+                - type
+    fields:
+        value:
+            type: string
+            nullable: true
+        name:
+            type: string
+            nullable: true
+        createdAt:
+            type: datetime
+        updatedAt:
+            type: datetime
+    manyToOne:
+        event:
+            targetEntity: Proximum\Vimeet\Domain\Model\Event
+            cascade: ["persist"]
+            joinColumn:
+                nullable: false
+                onDelete: CASCADE
