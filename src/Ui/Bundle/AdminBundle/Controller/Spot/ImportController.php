@@ -27,6 +27,16 @@ class ImportController extends Controller
      */
     public function importAction(Request $request, Event $event): Response
     {
+        $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
+
+        $hasMeeting = $this->get('vimeet_infrastructure.repository.meeting_repository')->hasMeeting($event);
+
+        if ($hasMeeting) {
+            return $this->render('AdminBundle:Spot:spotImportNotAvailable.html.twig', [
+                'event' => $event,
+            ]);
+        }
+
         $spotImport = new SpotImport();
 
         $form = $this->createForm(SpotImportType::class, $spotImport, ['submit' => true]);
