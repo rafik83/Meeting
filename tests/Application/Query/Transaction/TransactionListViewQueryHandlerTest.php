@@ -33,8 +33,8 @@ class TransactionListViewQueryHandlerTest extends TestCase
         
         $serializer
             ->serialize($transactionListViewQuery, 'csv', [
-                'delimiters' => ';',
-                'charset'    => Charset::WINDOWS_1252,
+                'csv_delimiter' => ';',
+                'charset'       => Charset::WINDOWS_1252,
             ])
             ->shouldBeCalled()
             ->willReturn($data);

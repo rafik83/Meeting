@@ -424,8 +424,14 @@ class SheetController extends Controller
 
         $query = new ImportMappingViewQuery($type, $availableLocale);
 
-        /** @var ImportMappingView $importMappingView */
-        $importMappingView = $this->get('tactician.commandbus.query')->handle($query);
+        try {
+            /** @var ImportMappingView $importMappingView */
+            $importMappingView = $this->get('tactician.commandbus.query')->handle($query);
+        } catch(\Exception $exception) {
+            $this->addFlash('error', 'flash.admin.sheet.participant.import.error');
+
+            return $this->redirectToRoute('admin_sheet_import', ['event' => $event->getId()]);
+        }
 
         $command = new ImportMapping(
             $event,

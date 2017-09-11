@@ -12,11 +12,11 @@ namespace Proximum\Vimeet\Application\Command\Participant;
 
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
+use Proximum\Vimeet\Application\Adapter\SerializerAdapterInterface;
 use Proximum\Vimeet\Application\Adapter\SessionInterface;
 use Proximum\Vimeet\Application\Components\Import\ParticipantImportTag;
 use Proximum\Vimeet\Application\Event\Events;
 use Proximum\Vimeet\Application\Event\Participant\ParticipantImportedEvent;
-use Proximum\Vimeet\Application\Serializer\Decoder\CsvDecoder;
 use Proximum\Vimeet\Application\Serializer\Denormalizer\ParticipantDenormalizer;
 use Proximum\Vimeet\Application\Serializer\Denormalizer\ParticipantImportLogger;
 use Proximum\Vimeet\Domain\Model\Admin;
@@ -61,7 +61,7 @@ class ImportMappingHandlerTest extends TestCase
         $command->mappings = [];
 
         // Mock
-        $csvDecoder                  = $this->prophesize(CsvDecoder::class);
+        $serializerAdapter           = $this->prophesize(SerializerAdapterInterface::class);
         $session                     = $this->prophesize(SessionInterface::class);
         $denormalizer                = $this->prophesize(ParticipantDenormalizer::class);
         $eventDispatcher             = $this->prophesize(DelayedEventDispatcher::class);
@@ -70,7 +70,7 @@ class ImportMappingHandlerTest extends TestCase
 
         $session->get(ParticipantImportTag::PARTICIPANT_IMPORT_FILE)->shouldBeCalled()->willReturn($filename);
 
-        $csvDecoder->decode($filename, CsvDecoder::FORMAT)->shouldBeCalled()->willReturn($csvData);
+        $serializerAdapter->decode('', 'csv', ['csv_delimiter' => ';'])->shouldBeCalled()->willReturn($csvData);
 
         $denormalizer->denormalize($csvData, Participant::class, ParticipantDenormalizer::FORMAT, [
             'csvHeaders'          => [],
@@ -103,7 +103,7 @@ class ImportMappingHandlerTest extends TestCase
         $session->set(ParticipantImportLogger::PARTICIPANT_IMPORT_ID, $participantImport->getId())->shouldBeCalled();
 
         $handler = new ImportMappingHandler(
-            $csvDecoder->reveal(),
+            $serializerAdapter->reveal(),
             $session->reveal(),
             $denormalizer->reveal(),
             $eventDispatcher->reveal(),

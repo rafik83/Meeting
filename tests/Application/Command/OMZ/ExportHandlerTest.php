@@ -96,7 +96,7 @@ class ExportHandlerTest extends TestCase
         $groupNameResolver->resolve($event, $user, [$sheet])->shouldBeCalled()->willReturn('group name');
         $typeNameResolver->resolveWithPreloadedSheets([$sheet], 'fr')->shouldBeCalled()->willReturn('type name');
 
-        $serializer->serialize($omzUserListView, 'csv', ["charset" => "Windows-1252"])
+        $serializer->serialize($omzUserListView, 'csv', ['csv_delimiter' => ',', 'charset' => 'Windows-1252'])
             ->shouldBeCalled()
             ->willReturn($expectedNormalizedDatas);
 
@@ -138,6 +138,7 @@ class ExportHandlerTest extends TestCase
         $omzUserListView = new OmzUserListView([$omzUserView]);
 
         $result = $serializer->serialize($omzUserListView, 'csv', [
+            'csv_delimiter' => ',',
             'charset' => Charset::WINDOWS_1252,
         ]);
 
