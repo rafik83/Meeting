@@ -8,15 +8,15 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Proximum\Vimeet\Tests\Application\Command\Event\ExtraParameters;
+namespace Proximum\Vimeet\Tests\Application\Command\Event\ExtraParameter;
 
 use PHPUnit\Framework\TestCase;
-use Proximum\Vimeet\Application\Command\Event\ExtraParameters\Remove;
-use Proximum\Vimeet\Application\Command\Event\ExtraParameters\RemoveHandler;
-use Proximum\Vimeet\Domain\Event\ExtraParameters\Type;
+use Proximum\Vimeet\Application\Command\Event\ExtraParameter\Remove;
+use Proximum\Vimeet\Application\Command\Event\ExtraParameter\RemoveHandler;
+use Proximum\Vimeet\Domain\Event\ExtraParameter\Type;
 use Proximum\Vimeet\Domain\Model\Event;
-use Proximum\Vimeet\Domain\Model\Event\ExtraParameters;
-use Proximum\Vimeet\Domain\Repository\Event\ExtraParametersRepositoryInterface;
+use Proximum\Vimeet\Domain\Model\Event\ExtraParameter;
+use Proximum\Vimeet\Domain\Repository\Event\ExtraParameterRepositoryInterface;
 
 class RemoveHandlerTest extends TestCase
 {
@@ -25,10 +25,10 @@ class RemoveHandlerTest extends TestCase
         $dateTime = new \DateTime();
         $event = $this->prophesize(Event::class);
 
-        $extraParameter = new ExtraParameters($event->reveal(), Type::TYPE_LENI_USER, 'name', 'value', $dateTime);
+        $extraParameter = new ExtraParameter($event->reveal(), Type::TYPE_LENI_USER, 'name', 'value', $dateTime);
 
         // Mock
-        $extraParameterRepository = $this->prophesize(ExtraParametersRepositoryInterface::class);
+        $extraParameterRepository = $this->prophesize(ExtraParameterRepositoryInterface::class);
         $extraParameterRepository->remove($extraParameter)->shouldBeCalled();
 
         // Command

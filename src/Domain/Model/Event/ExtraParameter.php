@@ -12,7 +12,7 @@ namespace Proximum\Vimeet\Domain\Model\Event;
 
 use Proximum\Vimeet\Domain\Model\Event;
 
-class ExtraParameters
+class ExtraParameter
 {
     /** @var Event */
     private $event;

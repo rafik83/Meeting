@@ -12,35 +12,35 @@ namespace Proximum\Vimeet\Domain\Repository\Event;
 
 use Proximum\Vimeet\Domain\Model\Event;
 
-interface ExtraParametersRepositoryInterface
+interface ExtraParameterRepositoryInterface
 {
     /**
      * @param Event $event
      *
-     * @return Event\ExtraParameters[]
+     * @return Event\ExtraParameter[]
      */
     public function findByEvent(Event $event);
 
     /**
-     * @param Event\ExtraParameters $extraParameters
+     * @param Event\ExtraParameter $extraParameter
      */
-    public function set(Event\ExtraParameters $extraParameters);
+    public function set(Event\ExtraParameter $extraParameter);
 
     /**
-     * @param Event\ExtraParameters $extraParameters
+     * @param Event\ExtraParameter $extraParameter
      */
-    public function add(Event\ExtraParameters $extraParameters);
+    public function add(Event\ExtraParameter $extraParameter);
 
     /**
-     * @param Event\ExtraParameters $extraParameters
+     * @param Event\ExtraParameter $extraParameter
      */
-    public function remove(Event\ExtraParameters $extraParameters);
+    public function remove(Event\ExtraParameter $extraParameter);
 
     /**
      * @param Event  $event
      * @param string $type
      *
-     * @return null|Event\ExtraParameters
+     * @return null|Event\ExtraParameter
      */
     public function findByEventAndType(Event $event, string $type);
 }

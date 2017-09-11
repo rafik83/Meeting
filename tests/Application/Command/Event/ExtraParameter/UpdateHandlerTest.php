@@ -8,15 +8,15 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Proximum\Vimeet\Tests\Application\Command\Event\ExtraParameters;
+namespace Proximum\Vimeet\Tests\Application\Command\Event\ExtraParameter;
 
 use PHPUnit\Framework\TestCase;
-use Proximum\Vimeet\Application\Command\Event\ExtraParameters\Update;
-use Proximum\Vimeet\Application\Command\Event\ExtraParameters\UpdateHandler;
-use Proximum\Vimeet\Domain\Event\ExtraParameters\Type;
+use Proximum\Vimeet\Application\Command\Event\ExtraParameter\Update;
+use Proximum\Vimeet\Application\Command\Event\ExtraParameter\UpdateHandler;
+use Proximum\Vimeet\Domain\Event\ExtraParameter\Type;
 use Proximum\Vimeet\Domain\Model\Event;
-use Proximum\Vimeet\Domain\Model\Event\ExtraParameters;
-use Proximum\Vimeet\Domain\Repository\Event\ExtraParametersRepositoryInterface;
+use Proximum\Vimeet\Domain\Model\Event\ExtraParameter;
+use Proximum\Vimeet\Domain\Repository\Event\ExtraParameterRepositoryInterface;
 
 class UpdateHandlerTest extends TestCase
 {
@@ -25,12 +25,12 @@ class UpdateHandlerTest extends TestCase
         $event = $this->prophesize(Event::class);
         $dateTime = new \DateTime('2017-09-10 10:10:10.000');
         $updatedAt = new \DateTime();
-        $extraParameter = new ExtraParameters($event->reveal(), Type::TYPE_LENI_USER, 'name', 'value', $dateTime);
+        $extraParameter = new ExtraParameter($event->reveal(), Type::TYPE_LENI_USER, 'name', 'value', $dateTime);
 
-        $expected = new ExtraParameters($event->reveal(), Type::TYPE_LENI_USER, 'name', 'value', $dateTime);
+        $expected = new ExtraParameter($event->reveal(), Type::TYPE_LENI_USER, 'name', 'value', $dateTime);
         $expected->update('other-name', 'other-value', $updatedAt);
 
-        $extraParameterRepository = $this->prophesize(ExtraParametersRepositoryInterface::class);
+        $extraParameterRepository = $this->prophesize(ExtraParameterRepositoryInterface::class);
         $extraParameterRepository->set($expected)->shouldBeCalled();
 
         $update = new Update($extraParameter);

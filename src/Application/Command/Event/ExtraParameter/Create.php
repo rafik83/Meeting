@@ -8,7 +8,7 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Proximum\Vimeet\Application\Command\Event\ExtraParameters;
+namespace Proximum\Vimeet\Application\Command\Event\ExtraParameter;
 
 use Proximum\Vimeet\Domain\Model\Event;
 

@@ -8,13 +8,13 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Proximum\Vimeet\Domain\Event\ExtraParameters;
+namespace Proximum\Vimeet\Domain\Event\ExtraParameter;
 
 /**
  *
- * All the types used for the $type of Event\ExtraParameters
+ * All the types used for the $type of Event\ExtraParameter
  *
- * @see Proximum\Vimeet\Domain\Model\Event\ExtraParameters
+ * @see Proximum\Vimeet\Domain\Model\Event\ExtraParameter
  */
 class Type
 {

@@ -8,8 +8,8 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Proximum\Vimeet\Domain\Exception\Event\ExtraParameters;
+namespace Proximum\Vimeet\Domain\Exception\Event\ExtraParameter;
 
-class ExtraParametersException extends \DomainException
+class ExtraParameterException extends \DomainException
 {
 }

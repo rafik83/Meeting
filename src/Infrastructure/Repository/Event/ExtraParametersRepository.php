@@ -12,10 +12,10 @@ namespace Proximum\Vimeet\Infrastructure\Repository\Event;
 
 use Doctrine\ORM\EntityManager;
 use Proximum\Vimeet\Domain\Model\Event;
-use Proximum\Vimeet\Domain\Model\Event\ExtraParameters;
-use Proximum\Vimeet\Domain\Repository\Event\ExtraParametersRepositoryInterface;
+use Proximum\Vimeet\Domain\Model\Event\ExtraParameter;
+use Proximum\Vimeet\Domain\Repository\Event\ExtraParameterRepositoryInterface;
 
-class ExtraParametersRepository implements ExtraParametersRepositoryInterface
+class ExtraParametersRepository implements ExtraParameterRepositoryInterface
 {
     /**
      * @var EntityManager
@@ -33,27 +33,27 @@ class ExtraParametersRepository implements ExtraParametersRepositoryInterface
     /**
      * {@inheritdoc}
      */
-    public function add(ExtraParameters $extraParameters)
+    public function add(ExtraParameter $extraParameter)
     {
-        $this->entityManager->persist($extraParameters);
-        $this->entityManager->flush($extraParameters);
+        $this->entityManager->persist($extraParameter);
+        $this->entityManager->flush($extraParameter);
     }
 
     /**
      * {@inheritdoc}
      */
-    public function set(ExtraParameters $extraParameters)
+    public function set(ExtraParameter $extraParameter)
     {
-        $this->entityManager->flush($extraParameters);
+        $this->entityManager->flush($extraParameter);
     }
 
     /**
      * {@inheritdoc}
      */
-    public function remove(ExtraParameters $extraParameters)
+    public function remove(ExtraParameter $extraParameter)
     {
-        $this->entityManager->remove($extraParameters);
-        $this->entityManager->flush($extraParameters);
+        $this->entityManager->remove($extraParameter);
+        $this->entityManager->flush($extraParameter);
     }
 
     /**
@@ -63,10 +63,10 @@ class ExtraParametersRepository implements ExtraParametersRepositoryInterface
     {
         $queryBuilder = $this->entityManager
             ->createQueryBuilder()
-            ->select('extra_parameters')
-            ->from(ExtraParameters::class, 'extra_parameters')
-            ->where('extra_parameters.event = :event')
-            ->andWhere('extra_parameters.type = :type')
+            ->select('extra_parameter')
+            ->from(ExtraParameter::class, 'extra_parameter')
+            ->where('extra_parameter.event = :event')
+            ->andWhere('extra_parameter.type = :type')
             ->setParameter('event', $event)
             ->setParameter('type', $type)
             ->setMaxResults(1);
@@ -82,11 +82,11 @@ class ExtraParametersRepository implements ExtraParametersRepositoryInterface
     {
         $queryBuilder = $this->entityManager
             ->createQueryBuilder()
-            ->select('extra_parameters')
-            ->from(ExtraParameters::class, 'extra_parameters')
-            ->where('extra_parameters.event = :event')
+            ->select('extra_parameter')
+            ->from(ExtraParameter::class, 'extra_parameter')
+            ->where('extra_parameter.event = :event')
             ->setParameter('event', $event)
-            ->orderBy('extra_parameters.createdAt', 'DESC')
+            ->orderBy('extra_parameter.createdAt', 'DESC')
         ;
 
         return $queryBuilder->getQuery()->getResult();
