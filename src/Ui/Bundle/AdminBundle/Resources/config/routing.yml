@@ -1509,3 +1509,13 @@ admin_event_order_invoice_find:
     path: /event/order-invoice/find
     methods: [GET, POST]
     defaults: { _controller: AdminBundle:Event/OrderInvoiceFinder:find }
+
+#
+# Extra Parameter
+#
+admin_event_extra_parameter_list:
+    path: /event/{event}/extra/parameter/list
+    methods: [GET]
+    requirements:
+        event: \d+
+    defaults: { _controller: AdminBundle:Event/ExtraParameter/List:list }

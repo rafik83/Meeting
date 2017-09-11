@@ -1,0 +1,33 @@
+{% extends '@Admin/base.html.twig' %}
+
+{% from 'AdminBundle::macro.html.twig' import delete_button %}
+
+{% block content %}
+    <h1 class="page-header">{{ 'admin.extraParameter.list.title'|trans }}</h1>
+    {% if extraParameters is not empty %}
+    <table class="table table-hover">
+        <thead>
+            <tr>
+                <th>{{ 'admin.extraParameter.list.column.type'|trans }}</th>
+                <th>{{ 'admin.extraParameter.list.column.name'|trans }}</th>
+                <th>{{ 'admin.extraParameter.list.column.value'|trans }}</th>
+                <th>{{ 'admin.extraParameter.list.column.actions'|trans }}</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for extraParameter in extraParameters %}
+            <tr>
+                <td>{{ extraParameter.type }}</td>
+                <td>{{ extraParameter.name }}</td>
+                <td>{{ extraParameter.value }}</td>
+                <td></td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+    <div class="alert alert-info">
+        <p class="center">{{ 'admin.extraParameter.list.empty'|trans }}</p>
+    </div>
+    {% endif %}
+{% endblock %}

@@ -194,6 +194,12 @@ admin.export.transaction.column.transaction_amount: 'Montant de la transaction'
 admin.export.transaction.column.transaction_date: Date
 admin.export.transaction.column.transaction_reference: Référence
 admin.export.transaction.column.transaction_type: Type
+admin.extraParameter.list.column.actions: 'Actions'
+admin.extraParameter.list.column.name: Nom
+admin.extraParameter.list.column.type: Type du paramètre
+admin.extraParameter.list.column.value: Valeur
+admin.extraParameter.list.title: 'Liste des paramètres externes de l''événement'
+admin.extraParameter.list.empty: 'Aucun paramètre externe pour cet événement'
 admin.filter: Filtrer
 admin.filter_by: 'Filtrer par'
 admin.filters.all: Tous
