@@ -3,3 +3,7 @@ services:
         class: Proximum\Vimeet\Infrastructure\Repository\Analytic\MeetingSolutionRepository
         arguments:
             - '@doctrine.orm.entity_manager'
+    repository.event.extra_parameters_repository:
+        class: Proximum\Vimeet\Infrastructure\Repository\Event\ExtraParametersRepository
+        arguments:
+            - '@doctrine.orm.entity_manager'
