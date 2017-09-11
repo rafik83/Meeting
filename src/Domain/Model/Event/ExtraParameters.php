@@ -95,6 +95,14 @@ class ExtraParameters
     }
 
     /**
+     * @return \DateTimeInterface
+     */
+    public function getUpdatedAt(): \DateTimeInterface
+    {
+        return $this->updatedAt;
+    }
+
+    /**
      * @param string|null        $name
      * @param string|null        $value
      * @param \DateTimeInterface $updatedAt
