@@ -2,11 +2,18 @@ Proximum\Vimeet\Domain\Model\Event\ExtraParameter:
     type:  entity
     table: event_extra_parameter
     id:
-        event:
-            associationKey: true
+        id:
+            type: integer
+            generator:
+                strategy: AUTO
+    uniqueConstraints:
+        unique_event_extra_parameter:
+            columns:
+                - event_id
+                - type
+    fields:
         type:
             type: string
-    fields:
         value:
             type: string
         name:

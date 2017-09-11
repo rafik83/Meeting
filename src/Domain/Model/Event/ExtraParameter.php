@@ -14,6 +14,9 @@ use Proximum\Vimeet\Domain\Model\Event;
 
 class ExtraParameter
 {
+    /** @var int */
+    private $id;
+
     /** @var Event */
     private $event;
 
@@ -35,15 +38,15 @@ class ExtraParameter
     /**
      * @param Event              $event
      * @param string             $type
-     * @param string|null        $name
-     * @param string|null        $value
+     * @param string             $name
+     * @param string             $value
      * @param \DateTimeInterface $createdAt
      */
     public function __construct(
         Event $event,
         string $type,
-        ?string $name,
-        ?string $value,
+        string $name,
+        string $value,
         \DateTimeInterface $createdAt
     ) {
         $this->event     = $event;
@@ -52,6 +55,14 @@ class ExtraParameter
         $this->value     = $value;
         $this->createdAt = $createdAt;
         $this->updatedAt = $createdAt;
+    }
+
+    /**
+     * @return int
+     */
+    public function getId(): int
+    {
+        return $this->id;
     }
 
     /**
@@ -71,17 +82,17 @@ class ExtraParameter
     }
 
     /**
-     * @return null|string
+     * @return string
      */
-    public function getName(): ?string
+    public function getName(): string
     {
         return $this->name;
     }
 
     /**
-     * @return null|string
+     * @return string
      */
-    public function getValue(): ?string
+    public function getValue(): string
     {
         return $this->value;
     }
@@ -103,11 +114,11 @@ class ExtraParameter
     }
 
     /**
-     * @param string|null        $name
-     * @param string|null        $value
+     * @param string             $name
+     * @param string             $value
      * @param \DateTimeInterface $updatedAt
      */
-    public function update(?string $name, ?string $value, \DateTimeInterface $updatedAt)
+    public function update(string $name, string $value, \DateTimeInterface $updatedAt)
     {
         $this->name = $name;
         $this->value = $value;
