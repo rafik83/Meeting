@@ -15,7 +15,7 @@ use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Event\ExtraParameter;
 use Proximum\Vimeet\Domain\Repository\Event\ExtraParameterRepositoryInterface;
 
-class ExtraParametersRepository implements ExtraParameterRepositoryInterface
+class ExtraParameterRepository implements ExtraParameterRepositoryInterface
 {
     /**
      * @var EntityManager
