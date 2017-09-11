@@ -10,9 +10,34 @@
 
 namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Event\ExtraParameter;
 
+use Proximum\Vimeet\Application\Command\Event\ExtraParameter\Remove;
+use Proximum\Vimeet\Domain\Model\Event;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\Request;
 
 class RemoveController extends Controller
 {
+    /**
+     * @param Request              $request
+     * @param Event                $event
+     * @param Event\ExtraParameter $extraParameter
+     *
+     * @return RedirectResponse
+     */
+    public function removeAction(Request $request, Event $event, Event\ExtraParameter $extraParameter): RedirectResponse
+    {
+        if ($event !== $extraParameter->getEvent()) {
+            throw $this->createNotFoundException(
+                sprintf('the extra parameter %s is not on the event %s', $extraParameter->getId(), $event->getId())
+            );
+        }
 
+        $remove = new Remove($extraParameter);
+        $this->get('tactician.commandbus')->handle($remove);
+
+        return $this->redirectToRoute('admin_event_extra_parameter_list', [
+            'event' => $event->getId()
+        ]);
+    }
 }

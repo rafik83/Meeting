@@ -41,6 +41,10 @@
                         </button>
                         <ul class="dropdown-menu dropdown-menu-right">
                             <li>
+                                {{ delete_button(
+                                    path('admin_event_extra_parameter_remove', { 'event': event.id, 'extraParameter': extraParameter.id }),
+                                    'admin.extraParameter.list.action.remove'|trans,
+                                    { 'class': 'btn btn-default btn-sm', 'data-confirm': 'admin.extraParameter.list.action.removeConfirm'|trans }) }}
                             </li>
                         </ul>
                     </div>

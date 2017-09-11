@@ -34,3 +34,9 @@ services:
             - '@datetime'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Event\ExtraParameter\Update }
+    command.event.extra_parameter.remove_handler:
+        class: Proximum\Vimeet\Application\Command\Event\ExtraParameter\RemoveHandler
+        arguments:
+            - '@repository.event.extra_parameter_repository'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Event\ExtraParameter\Remove }

@@ -197,6 +197,8 @@ admin.export.transaction.column.transaction_type: Type
 admin.extraParameter.create.title: 'Création d''un paramètre externe'
 admin.extraParameter.update.title: 'Modification du paramètre externe %type%'
 admin.extraParameter.list.action.update: Modifier
+admin.extraParameter.list.action.remove: 'Supprimer'
+admin.extraParameter.list.action.removeConfirm: 'Êtes vous sûr de vouloir supprimer ce paramètre externe ?'
 admin.extraParameter.list.column.actions: 'Actions'
 admin.extraParameter.list.column.name: Nom
 admin.extraParameter.list.column.type: Type du paramètre
