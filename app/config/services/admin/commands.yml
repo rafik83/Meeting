@@ -15,3 +15,14 @@ services:
             - '@datetime'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Analytic\MeetingSolution\Create }
+
+    #
+    # Extra Parameter
+    #
+    command.event.extra_parameter.create_handler:
+        class: Proximum\Vimeet\Application\Command\Event\ExtraParameter\CreateHandler
+        arguments:
+            - '@repository.event.extra_parameter_repository'
+            - '@datetime'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Event\ExtraParameter\Create }

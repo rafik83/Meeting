@@ -32,5 +32,7 @@ class Create
     public function __construct(Event $event)
     {
         $this->event = $event;
+        $this->name  = '';
+        $this->value = '';
     }
 }

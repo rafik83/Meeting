@@ -2,16 +2,27 @@
 
 {% from 'AdminBundle::macro.html.twig' import delete_button %}
 
+{% block title %}
+    [{{ event.title }}] {{ 'admin.extraParameter.list.title'|trans }}
+{% endblock %}
+
 {% block content %}
-    <h1 class="page-header">{{ 'admin.extraParameter.list.title'|trans }}</h1>
+    <h1 class="page-header">
+        {{ 'admin.extraParameter.list.title'|trans }}
+        <div class="pull-right">
+            <a href="{{ path('admin_event_extra_parameter_create', {'event': event.id}) }}" class="btn btn-primary">
+                {{ 'admin.extraParameter.list.create'|trans }}
+            </a>
+        </div>
+    </h1>
     {% if extraParameters is not empty %}
     <table class="table table-hover">
         <thead>
             <tr>
-                <th>{{ 'admin.extraParameter.list.column.type'|trans }}</th>
-                <th>{{ 'admin.extraParameter.list.column.name'|trans }}</th>
-                <th>{{ 'admin.extraParameter.list.column.value'|trans }}</th>
-                <th>{{ 'admin.extraParameter.list.column.actions'|trans }}</th>
+                <th class="col-md-4">{{ 'admin.extraParameter.list.column.type'|trans }}</th>
+                <th class="col-md-3">{{ 'admin.extraParameter.list.column.name'|trans }}</th>
+                <th class="col-md-3">{{ 'admin.extraParameter.list.column.value'|trans }}</th>
+                <th class="col-md-2 text-right">{{ 'admin.extraParameter.list.column.actions'|trans }}</th>
             </tr>
         </thead>
         <tbody>
