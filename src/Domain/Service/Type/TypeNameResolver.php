@@ -61,11 +61,8 @@ class TypeNameResolver
 
         foreach ($sheets as $sheet) {
             $type = $sheet->getType();
-            $position = $type->getPosition();
-
-            if ($position !== null) {
-                $types[$position] = $type->getTitle($locale);
-            }
+            $position = $type->getPosition() ?? $type->getId();
+            $types[$position] = $type->getTitle($locale);
         }
 
         ksort($types);
