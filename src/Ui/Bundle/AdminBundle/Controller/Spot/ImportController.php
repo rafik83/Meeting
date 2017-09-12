@@ -11,7 +11,9 @@
 namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Spot;
 
 use Proximum\Vimeet\Application\Command\Spot\Import\SpotImport;
+use Proximum\Vimeet\Application\Query\Spot\Import\SpotImportPreviewQuery;
 use Proximum\Vimeet\Domain\Model\Event;
+use Proximum\Vimeet\Domain\Model\File;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Spot\SpotImportType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
@@ -32,7 +34,7 @@ class ImportController extends Controller
         $hasMeeting = $this->get('vimeet_infrastructure.repository.meeting_repository')->hasMeeting($event);
 
         if ($hasMeeting) {
-            return $this->render('AdminBundle:Spot:spotImportNotAvailable.html.twig', [
+            return $this->render('AdminBundle:Spot\Import:spotImportNotAvailable.html.twig', [
                 'event' => $event,
             ]);
         }
@@ -42,12 +44,48 @@ class ImportController extends Controller
         $form = $this->createForm(SpotImportType::class, $spotImport, ['submit' => true]);
 
         if ($form->handleRequest($request)->isValid() && $form->isSubmitted()) {
-            $this->get('tactician.commandbus')->handle($spotImport);
+            /** @var File $importedFile */
+            $importedFile = $this->get('tactician.commandbus')->handle($spotImport);
+
+            return $this->redirectToRoute('admin_spot_import_confirm', [
+                'event' => $event->getId(),
+                'importedFile' => $importedFile->getId(),
+            ]);
         }
 
-        return $this->render('AdminBundle:Spot:spotImport.html.twig', [
+        return $this->render('AdminBundle:Spot\Import:spotImport.html.twig', [
             'event' => $event,
             'form' => $form->createView(),
+        ]);
+    }
+
+    /**
+     * @param Request $request
+     * @param Event   $event
+     * @param File    $importedFile
+     *
+     * @return Response
+     */
+    public function confirmAction(Request $request, Event $event, File $importedFile): Response
+    {
+        $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
+
+        $hasMeeting = $this->get('vimeet_infrastructure.repository.meeting_repository')->hasMeeting($event);
+
+        if ($hasMeeting) {
+            return $this->render('AdminBundle:Spot\Import:spotImportNotAvailable.html.twig', [
+                'event' => $event,
+            ]);
+        }
+
+        $spotImportPreviewQuery = new SpotImportPreviewQuery($importedFile);
+
+        $spotImportPreview = $this->get('query.spot.import.spot_import_preview_query_handler')
+            ->handle($spotImportPreviewQuery);
+
+        return $this->render('AdminBundle:Spot\Import:spotImportPreview.html.twig', [
+            'event' => $event,
+            'spotImportPreview' => $spotImportPreview,
         ]);
     }
 }

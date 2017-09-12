@@ -478,8 +478,10 @@ services:
     command.spot.spot_import_handler:
         class: Proximum\Vimeet\Application\Command\Spot\Import\SpotImportHandler
         arguments:
+            - '@repository.file_repository'
             - '@adapter.local_file_storage'
-            - '%kernel.root_dir%/../var/spot_imports'
+            - '%infrastructure.import_spot_path%'
+            - '@datetime'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Spot\Import\SpotImport }
 
@@ -3741,6 +3743,14 @@ services:
             - '@query.spot.agenda.spot_view_query_handler'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Spot\Agenda\ListViewQuery }
+
+    query.spot.import.spot_import_preview_query_handler:
+        class: Proximum\Vimeet\Application\Query\Spot\Import\SpotImportPreviewQueryHandler
+        arguments:
+            - '@components.spot.spot_importer'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Spot\Import\SpotImportPreviewQuery }
+
     query.transaction.view_query_handler:
         class: Proximum\Vimeet\Application\Query\Transaction\TransactionViewQueryHandler
         arguments:

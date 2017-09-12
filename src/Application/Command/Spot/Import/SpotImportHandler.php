@@ -10,38 +10,62 @@
 
 namespace Proximum\Vimeet\Application\Command\Spot\Import;
 
-use Proximum\Vimeet\Application\Adapter\FileStorageInterface;
-use Proximum\Vimeet\Application\Serializer\Charset;
+use Proximum\Vimeet\Domain\Model\File;
+use Proximum\Vimeet\Domain\Repository\FileRepositoryInterface;
+use Proximum\Vimeet\Infrastructure\Adapter\LocalFileStorageAdapter;
 
 class SpotImportHandler
 {
-    /** @var FileStorageInterface */
+    /** @var FileRepositoryInterface */
+    private $fileRepository;
+
+    /** @var LocalFileStorageAdapter */
     private $fileStorage;
 
     /** @var string */
     private $importDir;
 
+    /** @var \DateTimeInterface */
+    private $dateTime;
+
     /**
-     * @param FileStorageInterface $fileStorage
-     * @param string               $importDir
+     * @param FileRepositoryInterface $fileRepository
+     * @param LocalFileStorageAdapter $fileStorage
+     * @param string                  $importDir
+     * @param \DateTimeInterface      $dateTime
      */
-    public function __construct(FileStorageInterface $fileStorage, string $importDir)
-    {
+    public function __construct(
+        FileRepositoryInterface $fileRepository,
+        LocalFileStorageAdapter $fileStorage,
+        string $importDir,
+        \DateTimeInterface $dateTime
+    ) {
+        $this->fileRepository = $fileRepository;
         $this->fileStorage = $fileStorage;
         $this->importDir = $importDir;
+        $this->dateTime = $dateTime;
     }
 
-    public function handle(SpotImport $spotImport)
+    /**
+     * @param SpotImport $spotImport
+     *
+     * @return File
+     */
+    public function handle(SpotImport $spotImport): File
     {
-        $filePath = $this->importDir . $this->fileStorage->upload($spotImport->file, $this->importDir);
+        $fileContent = file_get_contents($spotImport->file);
 
-        $filename = Charset::convert(
-            $filePath,
-            $spotImport->charset,
-            Charset::UTF_8,
-            $filePath
-        );
+        $filePath = $this
+            ->fileStorage
+            ->create(
+                $fileContent,
+                basename($spotImport->file),
+                $this->importDir
+            );
 
-        dump(file_get_contents($filename));
+        $file = new File($filePath, $this->dateTime);
+        $this->fileRepository->add($file);
+
+        return $file;
     }
 }

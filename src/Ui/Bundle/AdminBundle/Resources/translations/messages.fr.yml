@@ -754,6 +754,7 @@ admin.spot.batch_unavailability.title: 'Créer des indisponibilités de lieu'
 admin.spot.configure_dates: 'Dates clés'
 admin.spot.createSpot.title: 'Créer un lieu'
 admin.spot.import.title: 'Importer des lieux'
+admin.spot.import.preview: 'Aperçu de l''import des lieux'
 admin.spot.delete: Supprimer
 admin.spot.disable: Désactiver
 admin.spot.enable: Activer

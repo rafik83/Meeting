@@ -1,0 +1,10 @@
+services:
+
+    #
+    # Spot importer component
+    #
+    components.spot.spot_importer:
+        class: Proximum\Vimeet\Application\Components\Spot\SpotImporter
+        arguments:
+            - '%infrastructure.import_spot_path%'
+
