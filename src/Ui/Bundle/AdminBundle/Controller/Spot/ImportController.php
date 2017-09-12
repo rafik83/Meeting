@@ -18,6 +18,7 @@ use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Spot\SpotImportType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 class ImportController extends Controller
 {
@@ -78,7 +79,9 @@ class ImportController extends Controller
             ]);
         }
 
-        $spotImportPreviewQuery = new SpotImportPreviewQuery($event, $importedFile);
+        $locale = $event->getAvailableLocale($request->getLocale());
+
+        $spotImportPreviewQuery = new SpotImportPreviewQuery($event, $importedFile, $locale);
 
         $spotImportPreview = $this->get('query.spot.import.spot_import_preview_query_handler')
             ->handle($spotImportPreviewQuery);

@@ -32,7 +32,8 @@ class SpotImportPreviewQueryHandler
     {
         $this->spotImporter->import(
             $spotImportPreviewQuery->event,
-            $spotImportPreviewQuery->importedSpotFileName
+            $spotImportPreviewQuery->importedSpotFileName,
+            $spotImportPreviewQuery->locale
         );
     }
 }

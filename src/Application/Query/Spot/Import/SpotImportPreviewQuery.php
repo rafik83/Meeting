@@ -21,13 +21,18 @@ class SpotImportPreviewQuery
     /** @var File */
     public $importedSpotFileName;
 
+    /** @var string */
+    public $locale;
+
     /**
-     * @param Event $event
-     * @param File  $importedSpotFileName
+     * @param Event  $event
+     * @param File   $importedSpotFileName
+     * @param string $locale
      */
-    public function __construct(Event $event, File $importedSpotFileName)
+    public function __construct(Event $event, File $importedSpotFileName, string $locale)
     {
         $this->importedSpotFileName = $importedSpotFileName;
         $this->event = $event;
+        $this->locale = $locale;
     }
 }

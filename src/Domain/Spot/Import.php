@@ -10,33 +10,28 @@
 
 namespace Proximum\Vimeet\Domain\Spot;
 
-use Proximum\Vimeet\Domain\View\Spot\Import\SheetView;
-
 class Import
 {
     /** @var string */
-    private $reference;
+    public $reference;
 
     /** @var int */
-    private $size;
+    public $size;
 
     /** @var int */
-    private $meetingCapacity;
+    public $meetingCapacity;
 
     /** @var int */
-    private $seatCapacity;
+    public $seatCapacity;
 
     /** @var bool */
-    private $active;
+    public $active;
 
     /** @var int */
-    private $priority;
+    public $priority;
 
     /** @var bool */
-    private $visio;
-
-    /** @var SheetView[] */
-    private $sheets;
+    public $visio;
 
     /**
      * @param string      $reference
@@ -46,7 +41,6 @@ class Import
      * @param bool        $active
      * @param int         $priority
      * @param bool        $visio
-     * @param SheetView[] $sheets
      */
     public function __construct(
         string $reference,
@@ -55,8 +49,7 @@ class Import
         int $seatCapacity,
         bool $active,
         int $priority,
-        bool $visio,
-        array $sheets
+        bool $visio
     ) {
         $this->reference = $reference;
         $this->size = $size;
@@ -65,6 +58,5 @@ class Import
         $this->active = $active;
         $this->priority = $priority;
         $this->visio = $visio;
-        $this->sheets = $sheets;
     }
 }

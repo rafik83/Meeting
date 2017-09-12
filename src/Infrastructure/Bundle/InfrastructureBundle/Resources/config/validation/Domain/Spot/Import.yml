@@ -21,6 +21,3 @@ Proximum\Vimeet\Domain\Spot\Import:
         visio:
             - NotBlank: ~
             - Type: { type: bool }
-        sheets:
-            - NotBlank: ~
-            - Type: { type: array }
