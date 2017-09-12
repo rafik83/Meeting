@@ -117,6 +117,14 @@ interface SheetRepositoryInterface
     public function getSheetViewsByUserAndEvent($user, $event, $locale);
 
     /**
+     * @param Event  $event
+     * @param int    $sheetId
+     *
+     * @return SheetView[]
+     */
+    public function getSheetViewsById(Event $event, $sheetId):? array;
+
+    /**
      * Get only enabled sheet by user or user's participant
      *
      * @param User  $user

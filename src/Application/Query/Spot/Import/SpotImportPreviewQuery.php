@@ -10,18 +10,24 @@
 
 namespace Proximum\Vimeet\Application\Query\Spot\Import;
 
+use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\File;
 
 class SpotImportPreviewQuery
 {
+    /** @var Event */
+    public $event;
+
     /** @var File */
     public $importedSpotFileName;
 
     /**
-     * @param File $importedSpotFileName
+     * @param Event $event
+     * @param File  $importedSpotFileName
      */
-    public function __construct(File $importedSpotFileName)
+    public function __construct(Event $event, File $importedSpotFileName)
     {
         $this->importedSpotFileName = $importedSpotFileName;
+        $this->event = $event;
     }
 }

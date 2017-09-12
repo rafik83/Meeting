@@ -179,6 +179,23 @@ class SheetRepository implements SheetRepositoryInterface
     /**
      * {@inheritdoc}
      */
+    public function getSheetViewsById(Event $event, $sheetId): ?array
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('NEW Proximum\Vimeet\Domain\View\Spot\Import\SheetView(sheet.id, sheet.title)')
+            ->from('Entity:Sheet', 'sheet', 'sheet.id')
+            ->where('sheet.event = :event AND sheet.id = :sheetId')
+            ->setParameter('event', $event)
+            ->setParameter('sheetId', $sheetId);
+
+        return $queryBuilder->getQuery()->getResult();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function getSheetsByUserAndEvent(User $user, Event $event)
     {
         $queryBuilder = $this

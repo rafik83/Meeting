@@ -25,8 +25,14 @@ class SpotImportPreviewQueryHandler
         $this->spotImporter = $spotImporter;
     }
 
+    /**
+     * @param SpotImportPreviewQuery $spotImportPreviewQuery
+     */
     public function handle(SpotImportPreviewQuery $spotImportPreviewQuery)
     {
-        $this->spotImporter->import($spotImportPreviewQuery->importedSpotFileName);
+        $this->spotImporter->import(
+            $spotImportPreviewQuery->event,
+            $spotImportPreviewQuery->importedSpotFileName
+        );
     }
 }

@@ -78,7 +78,7 @@ class ImportController extends Controller
             ]);
         }
 
-        $spotImportPreviewQuery = new SpotImportPreviewQuery($importedFile);
+        $spotImportPreviewQuery = new SpotImportPreviewQuery($event, $importedFile);
 
         $spotImportPreview = $this->get('query.spot.import.spot_import_preview_query_handler')
             ->handle($spotImportPreviewQuery);
