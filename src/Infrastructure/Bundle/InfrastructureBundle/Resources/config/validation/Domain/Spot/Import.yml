@@ -1,8 +1,8 @@
 Proximum\Vimeet\Domain\Spot\Import:
     properties:
         reference:
-            - NotBlank: ~
-            - Type: { type: string }
+            - NotBlank: { message: 'validators.spot.reference.type'}
+            - Type: { type: string, message: 'validators.spot.reference.type' }
         size:
             - NotBlank: ~
             - Type: { type: int }

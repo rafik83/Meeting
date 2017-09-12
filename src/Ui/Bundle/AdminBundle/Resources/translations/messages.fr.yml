@@ -755,6 +755,15 @@ admin.spot.configure_dates: 'Dates clés'
 admin.spot.createSpot.title: 'Créer un lieu'
 admin.spot.import.title: 'Importer des lieux'
 admin.spot.import.preview: 'Aperçu de l''import des lieux'
+admin.spot.import.column.reference: 'Identifiant'
+admin.spot.import.column.size: 'Taille (en m²)'
+admin.spot.import.column.meetingCapacity: 'Nombre de rendez-vous en simultané'
+admin.spot.import.column.seatCapacity: 'Nombre de places assises'
+admin.spot.import.column.active: 'Actif'
+admin.spot.import.column.priority: 'Priorité'
+admin.spot.import.column.visio: 'Visio'
+admin.spot.import.column.sheets: 'Identifiants fiches affectées'
+admin.spot.import.column.errors: 'Erreurs'
 admin.spot.delete: Supprimer
 admin.spot.disable: Désactiver
 admin.spot.enable: Activer

@@ -31,14 +31,7 @@ class ImportController extends Controller
     public function importAction(Request $request, Event $event): Response
     {
         $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
-
-        $hasMeeting = $this->get('vimeet_infrastructure.repository.meeting_repository')->hasMeeting($event);
-
-        if ($hasMeeting) {
-            return $this->render('AdminBundle:Spot\Import:spotImportNotAvailable.html.twig', [
-                'event' => $event,
-            ]);
-        }
+        $this->ifEventHasMeetingInterrupImport($event);
 
         $spotImport = new SpotImport();
 
@@ -70,7 +63,28 @@ class ImportController extends Controller
     public function confirmAction(Request $request, Event $event, File $importedFile): Response
     {
         $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
+        $this->ifEventHasMeetingInterrupImport($event);
 
+        $locale = $event->getAvailableLocale($request->getLocale());
+
+        $spotImportPreviewQuery = new SpotImportPreviewQuery($event, $importedFile, $locale);
+
+        $spotImportViews = $this->get('query.spot.import.spot_import_preview_query_handler')
+            ->handle($spotImportPreviewQuery);
+
+        return $this->render('AdminBundle:Spot\Import:spotImportPreview.html.twig', [
+            'event' => $event,
+            'spotImportViews' => $spotImportViews,
+        ]);
+    }
+
+    /**
+     * @param Event $event
+     *
+     * @return null|Response
+     */
+    private function ifEventHasMeetingInterrupImport(Event $event): ?Response
+    {
         $hasMeeting = $this->get('vimeet_infrastructure.repository.meeting_repository')->hasMeeting($event);
 
         if ($hasMeeting) {
@@ -79,16 +93,6 @@ class ImportController extends Controller
             ]);
         }
 
-        $locale = $event->getAvailableLocale($request->getLocale());
-
-        $spotImportPreviewQuery = new SpotImportPreviewQuery($event, $importedFile, $locale);
-
-        $spotImportPreview = $this->get('query.spot.import.spot_import_preview_query_handler')
-            ->handle($spotImportPreviewQuery);
-
-        return $this->render('AdminBundle:Spot\Import:spotImportPreview.html.twig', [
-            'event' => $event,
-            'spotImportPreview' => $spotImportPreview,
-        ]);
+        return null;
     }
 }

@@ -23,15 +23,24 @@ use Proximum\Vimeet\Infrastructure\Adapter\ValidatorAdapter;
 
 class SpotImporter
 {
+    const KEY_REFERENCE = 'reference';
+    const KEY_SIZE = 'size';
+    const KEY_MEETING_CAPACITY = 'meetingCapacity';
+    const KEY_SEAT_CAPACITY = 'seatCapacity';
+    const KEY_ACTIVE = 'active';
+    const KEY_PRIORITY = 'priority';
+    const KEY_VISIO = 'visio';
+    const KEY_SHEETS = 'sheets';
+
     const ALLOWED_KEYS = [
-        "reference",
-        "size",
-        "meetingCapacity",
-        "seatCapacity",
-        "active",
-        "priority",
-        "visio",
-        "sheets",
+        self::KEY_REFERENCE,
+        self::KEY_SIZE,
+        self::KEY_MEETING_CAPACITY,
+        self::KEY_SEAT_CAPACITY,
+        self::KEY_ACTIVE,
+        self::KEY_PRIORITY,
+        self::KEY_VISIO,
+        self::KEY_SHEETS,
     ];
 
     /** @var SheetRepositoryInterface */
@@ -75,9 +84,10 @@ class SpotImporter
      * @param File   $spotImportedFile
      * @param string $locale
      *
+     * @return SpotImportView[]
      * @throws InvalidImportHeaderFileFormatException
      */
-    public function import(Event $event, File $spotImportedFile, string $locale)
+    public function import(Event $event, File $spotImportedFile, string $locale): array
     {
         $content = file_get_contents($this->importDir . $spotImportedFile->getPath());
 
@@ -85,7 +95,7 @@ class SpotImporter
         $columns = [
             ["reference", "size", "meetingCapacity","seatCapacity","active", "priority","visio", "sheets"],
             ['A1',"10","2","33",'zezrez', "4", "opa", "16938, 16931, 16919"],
-            ["A2","10","2","33","1", "4", "1", "16566, 12"],
+            [false, "10","2","33","1", "4", "1", "16566, 12"],
             ["A3","10","2","33","1", "4", "1", "16565"],
             ["A1","10","2","33","1", "4", "1", "16562"],
         ];
@@ -102,7 +112,9 @@ class SpotImporter
 
 
             if ($this->isSpotAlreadyAffected($row[0])) {
-                $errorMessage['reference'] = $this->translatorAdapter->trans('validators.spot.reference.affected', [], 'validators', $locale);
+                $errorMessage[self::KEY_REFERENCE] = $this
+                    ->translatorAdapter
+                    ->trans('validators.spot.reference.affected', [], 'validators', $locale);
             }
 
             $spot = new Import(
@@ -117,11 +129,16 @@ class SpotImporter
 
             $validations = $this->validatorAdapter->validate($spot, ValidatorInterface::VALIDATOR_SPOT_IMPORT_TYPE);
 
+            foreach ($validations as $validation) {
+                $errorMessage['validations'] = $validation;
+            }
+
             $sheetViews = $this->handleSheetViewsByIds($event, $sheetIds, $locale);
 
             $this->spotImportViews[] = new SpotImportView($spot, $sheetViews, $errorMessage);
         }
-        dump($this->spotImportViews);
+
+        return $this->spotImportViews;
     }
 
     /**
@@ -144,7 +161,7 @@ class SpotImporter
      *
      * @return SheetView[] indexed by Sheet id
      */
-    private function handleSheetViewsByIds(Event $event, array $sheetIds, string $locale):? array
+    private function handleSheetViewsByIds(Event $event, array $sheetIds, string $locale): array
     {
         $sheets = [];
 
@@ -153,22 +170,28 @@ class SpotImporter
 
             if ($sheetView !== null) {
                 if (isset($this->sheets[$sheetView->id])) {
-                    $sheets[$sheetView->id] = $this->translatorAdapter->trans(
-                        'validators.spot.sheet.already_imported',
-                        [],
-                        'validators',
-                        $locale
+                    $sheets[$sheetView->id] = new SheetView(
+                        $sheetId,
+                        $this->translatorAdapter->trans(
+                            'validators.spot.sheet.already_imported',
+                            [],
+                            'validators',
+                            $locale
+                        )
                     );
                 } else {
                     $sheets[$sheetView->id] = $sheetView;
                     $this->sheets[$sheetView->id] = $sheetView;
                 }
             } else {
-                $sheets[$sheetId] = $this->translatorAdapter->trans(
-                    'validators.spot.sheet.not_exist',
-                    [],
-                    'validators',
-                    $locale
+                $sheets[$sheetId] = new SheetView(
+                    $sheetId,
+                    $this->translatorAdapter->trans(
+                        'validators.spot.sheet.not_exist',
+                        [],
+                        'validators',
+                        $locale
+                    )
                 );
             }
         }

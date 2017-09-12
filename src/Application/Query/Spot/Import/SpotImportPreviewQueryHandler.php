@@ -11,6 +11,7 @@
 namespace Proximum\Vimeet\Application\Query\Spot\Import;
 
 use Proximum\Vimeet\Application\Components\Spot\SpotImporter;
+use Proximum\Vimeet\Domain\View\Spot\Import\SpotImportView;
 
 class SpotImportPreviewQueryHandler
 {
@@ -24,13 +25,15 @@ class SpotImportPreviewQueryHandler
     {
         $this->spotImporter = $spotImporter;
     }
-
+    
     /**
      * @param SpotImportPreviewQuery $spotImportPreviewQuery
+     *
+     * @return SpotImportView[]
      */
-    public function handle(SpotImportPreviewQuery $spotImportPreviewQuery)
+    public function handle(SpotImportPreviewQuery $spotImportPreviewQuery): array
     {
-        $this->spotImporter->import(
+        return $this->spotImporter->import(
             $spotImportPreviewQuery->event,
             $spotImportPreviewQuery->importedSpotFileName,
             $spotImportPreviewQuery->locale
