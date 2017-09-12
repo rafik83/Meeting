@@ -14,6 +14,7 @@ use PHPUnit\Framework\TestCase;
 use Prophecy\Prophecy\ObjectProphecy;
 use Proximum\Vimeet\Application\Adapter\ValidatorInterface;
 use Proximum\Vimeet\Application\Components\Spot\SpotImporter;
+use Proximum\Vimeet\Application\Exception\Spot\Import\InvalidImportHeaderFileFormatException;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\File;
 use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
@@ -189,5 +190,29 @@ class SpotImporterTest extends TestCase
         $result = $spotImporter->import($this->event, $this->importedFile->reveal(), $this->locale);
 
         $this->assertEquals($expectedResults, $result);
+    }
+
+    public function testInvalidCsvHeader()
+    {
+        // Mock of file content
+        $expectedSerialization = [0 => ['wrong headers']];
+
+        $this->expectException(InvalidImportHeaderFileFormatException::class);
+
+        $this
+            ->serializerAdapter
+            ->serialize($this->path, 'csv')
+            ->shouldBeCalled()
+            ->willReturn($expectedSerialization);
+
+        $spotImporter = new SpotImporter(
+            $this->sheetRepository->reveal(),
+            $this->validatorAdapter->reveal(),
+            $this->translatorAdapter->reveal(),
+            $this->serializerAdapter->reveal(),
+            $this->path
+        );
+
+        $result = $spotImporter->import($this->event, $this->importedFile->reveal(), $this->locale);
     }
 }

@@ -108,7 +108,7 @@ class SpotImporter
         unset($columns[0]);
 
         foreach ($columns as $row) {
-            $sheetIds = explode(',', str_replace(' ', '', $row[7]));
+            $sheetIds = $this->getSheetIdsToArrayFromString($row[7]);
             $errorMessage = [];
 
             if ($this->isSpotAlreadyAffected($row[0])) {
@@ -211,5 +211,15 @@ class SpotImporter
         }
 
         return false;
+    }
+
+    /**
+     * @param string $sheetIds
+     *
+     * @return array of sheet ids
+     */
+    private function getSheetIdsToArrayFromString(string $sheetIds): array
+    {
+        return explode(',', str_replace(' ', '', $sheetIds));
     }
 }
