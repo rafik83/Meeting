@@ -20,6 +20,7 @@ use Proximum\Vimeet\Domain\Spot\Import;
 use Proximum\Vimeet\Domain\View\Spot\Import\SpotImportView;
 use Proximum\Vimeet\Infrastructure\Adapter\TranslatorAdapter;
 use Proximum\Vimeet\Infrastructure\Adapter\ValidatorAdapter;
+use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Adapter\SerializerAdapter;
 
 class SpotImporter
 {
@@ -52,6 +53,9 @@ class SpotImporter
     /** @var TranslatorAdapter */
     private $translatorAdapter;
 
+    /*** @var SerializerAdapter */
+    private $serializerAdapter;
+
     /** @var string */
     private $importDir;
 
@@ -65,18 +69,21 @@ class SpotImporter
      * @param SheetRepositoryInterface $sheetRepository
      * @param ValidatorAdapter         $validatorAdapter
      * @param TranslatorAdapter        $translatorAdapter
+     * @param SerializerAdapter        $serializerAdapter
      * @param string                   $importDir
      */
     public function __construct(
         SheetRepositoryInterface $sheetRepository,
         ValidatorAdapter $validatorAdapter,
         TranslatorAdapter $translatorAdapter,
+        SerializerAdapter $serializerAdapter,
         string $importDir
     ) {
         $this->importDir = $importDir;
         $this->sheetRepository = $sheetRepository;
         $this->validatorAdapter = $validatorAdapter;
         $this->translatorAdapter = $translatorAdapter;
+        $this->serializerAdapter = $serializerAdapter;
     }
 
     /**
@@ -89,16 +96,10 @@ class SpotImporter
      */
     public function import(Event $event, File $spotImportedFile, string $locale): array
     {
-        $content = file_get_contents($this->importDir . $spotImportedFile->getPath());
-
-        // Mock of file content
-        $columns = [
-            ["reference", "size", "meetingCapacity","seatCapacity","active", "priority","visio", "sheets"],
-            ['A1',"10","2","33",'zezrez', "4", "opa", "16938, 16931, 16919"],
-            [false, "10","2","33","1", "4", "1", "16566, 12"],
-            ["A3","10","2","33","1", "4", "1", "16565"],
-            ["A1","10","2","33","1", "4", "1", "16562"],
-        ];
+        $columns = $this->serializerAdapter->serialize(
+            $this->importDir . $spotImportedFile->getPath(),
+            'csv'
+        );
 
         if (!$this->areGivenKeysAllowed($columns[0])) {
             throw new InvalidImportHeaderFileFormatException('Headers line of csv are invalid');
@@ -107,9 +108,8 @@ class SpotImporter
         unset($columns[0]);
 
         foreach ($columns as $row) {
-            $sheetIds = explode(',', $row[7]);
+            $sheetIds = explode(',', str_replace(' ', '', $row[7]));
             $errorMessage = [];
-
 
             if ($this->isSpotAlreadyAffected($row[0])) {
                 $errorMessage[self::KEY_REFERENCE] = $this
