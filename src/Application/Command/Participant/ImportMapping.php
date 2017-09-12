@@ -45,7 +45,9 @@ class ImportMapping
      */
     public $admin;
 
-    /** @var ImportMappingView */
+    /**
+     * @var ImportMappingView
+     */
     public $importMappingView;
 
     /**
@@ -101,7 +103,9 @@ class ImportMapping
         $mappingIndexedByFileHeader = [];
 
         foreach ($mappingIndexedByInt as $key => $field) {
-            $mappingIndexedByFileHeader[$this->importMappingView->fieldHeaders[$key]] = $field;
+            if (isset($this->importMappingView->fieldHeaders[$key])) {
+                $mappingIndexedByFileHeader[$this->importMappingView->fieldHeaders[$key]] = $field;
+            }
         }
 
         $this->mappings = $mappingIndexedByFileHeader;

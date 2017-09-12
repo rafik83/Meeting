@@ -85,6 +85,7 @@ class ImportMappingHandler
     {
         $filename = $this->session->get(ParticipantImportTag::PARTICIPANT_IMPORT_FILE);
 
+        /** @var ParticipantImportLogger $importLogger */
         $importLogger = $this->serializerAdapter->deserialize(
             file_get_contents($filename),
             Participant::class,
