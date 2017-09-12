@@ -7,5 +7,6 @@ services:
         class: Proximum\Vimeet\Application\Components\Spot\SpotImporter
         arguments:
             - '@vimeet_infrastructure.repository.sheet_repository'
+            - '@adapter.validator_adapter'
             - '%infrastructure.import_spot_path%'
 

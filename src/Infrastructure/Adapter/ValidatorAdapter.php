@@ -42,6 +42,8 @@ class ValidatorAdapter implements ValidatorInterface
         switch ($constraintType) {
             case self::VALIDATOR_EMAIL_TYPE:
                 return $this->validator->validate($data, [new NotBlank(), new Email(['strict' => true])]);
+            case self::VALIDATOR_SPOT_IMPORT_TYPE:
+                return $this->validator->validate($data);
             default:
                 break;
         }

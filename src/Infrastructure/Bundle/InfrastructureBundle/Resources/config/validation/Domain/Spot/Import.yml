@@ -1,0 +1,26 @@
+Proximum\Vimeet\Domain\Spot\Import:
+    properties:
+        reference:
+            - NotBlank: ~
+            - Type: { type: string }
+        size:
+            - NotBlank: ~
+            - Type: { type: int }
+        meetingCapacity:
+            - NotBlank: ~
+            - Type: { type: int }
+        seatCapacity:
+            - NotBlank: ~
+            - Type: { type: int }
+        active:
+            - NotBlank: ~
+            - Type: { type: bool }
+        priority:
+            - NotBlank: ~
+            - Type: { type: int }
+        visio:
+            - NotBlank: ~
+            - Type: { type: bool }
+        sheets:
+            - NotBlank: ~
+            - Type: { type: array }

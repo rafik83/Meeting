@@ -10,11 +10,14 @@
 
 namespace Proximum\Vimeet\Application\Components\Spot;
 
+use Proximum\Vimeet\Application\Adapter\ValidatorInterface;
 use Proximum\Vimeet\Application\Exception\Spot\Import\InvalidImportHeaderFileFormatException;
 use Proximum\Vimeet\Application\View\Spot\SheetView;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\File;
 use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
+use Proximum\Vimeet\Domain\Spot\Import;
+use Proximum\Vimeet\Infrastructure\Adapter\ValidatorAdapter;
 
 class SpotImporter
 {
@@ -32,25 +35,32 @@ class SpotImporter
     /** @var SheetRepositoryInterface */
     private $sheetRepository;
 
+    /** @var ValidatorInterface */
+    private $validatorAdapter;
+
     /** @var string */
     private $importDir;
 
     /**
      * @param SheetRepositoryInterface $sheetRepository
-     * @param string $importDir
+     * @param ValidatorAdapter         $validatorAdapter
+     * @param string                   $importDir
      */
     public function __construct(
         SheetRepositoryInterface $sheetRepository,
+        ValidatorAdapter $validatorAdapter,
         string $importDir
     ) {
         $this->importDir = $importDir;
         $this->sheetRepository = $sheetRepository;
+        $this->validatorAdapter = $validatorAdapter;
     }
 
     /**
-     * @param File $spotImportedFile
+     * @param Event $event
+     * @param File  $spotImportedFile
      *
-     * @throws \Exception
+     * @throws InvalidImportHeaderFileFormatException
      */
     public function import(Event $event, File $spotImportedFile)
     {
@@ -59,17 +69,39 @@ class SpotImporter
         // Mock of file content
         $columns = [
             ["reference", "size", "meetingCapacity","seatCapacity","active", "priority","visio", "sheets"],
-            "A1","10","2","33","1", "4", "1", "16938, 16931, 16919",
-            "A2","10","2","33","1", "4", "1", "16566",
-            "A3","10","2","33","1", "4", "1", "16565",
-            "A1","10","2","33","1", "4", "1", "16562",
+            [false,"10","2","33","1", "4", "1", "16938, 16931, 16919"],
+            ["A2","10","2","33","1", "4", "1", "16566"],
+            ["A3","10","2","33","1", "4", "1", "16565"],
+            ["A1","10","2","33","1", "4", "1", "16562"],
         ];
 
-        if (!$this->isGivenKeysAreAllowed($columns[0])) {
+        if (!$this->areGivenKeysAreAllowed($columns[0])) {
             throw new InvalidImportHeaderFileFormatException('Headers line of csv are invalid');
         }
 
-        dump($this->getSheetsViewsByEventByIds($event, [16938, 16931, 16919]));die;
+        unset($columns[0]);
+
+
+
+        foreach ($columns as $row) {
+            $sheetIds = explode(',', $row[7]);
+            $sheetViews = $this->getSheetsViewsByEventByIds($event, $sheetIds);
+
+            $spot = new Import(
+                $row[0],
+                $row[1],
+                $row[2],
+                $row[3],
+                $row[4],
+                $row[5],
+                $row[6],
+                $sheetViews
+            );
+
+            $validations = $this->validatorAdapter->validate($spot, ValidatorInterface::VALIDATOR_SPOT_IMPORT_TYPE);
+            // make an error spool indexed by key
+        };
+
 
     }
 
@@ -81,7 +113,7 @@ class SpotImporter
      *
      * @return bool
      */
-    private function isGivenKeysAreAllowed(array $keys): bool
+    private function areGivenKeysAreAllowed(array $keys): bool
     {
         return empty(array_diff($keys, self::ALLOWED_KEYS));
     }
