@@ -264,6 +264,7 @@ class ParticipantDenormalizer implements DenormalizerInterface
      *
      * @return array of sheetData, participantData and sheetTitle
      * @throws InvalidObjectContentException
+     * @throws \Exception
      */
     private function handleRow(
         array $row,

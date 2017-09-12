@@ -420,37 +420,35 @@ class SheetController extends Controller
         $this->checkAccess($event);
         $this->denyAccessUnlessGranted('PERMISSION_PARTICIPANT_IMPORT_ACCESS');
 
-        $availableLocale = $event->getAvailableLocale($request->getLocale());
+        $locale = $event->getAvailableLocale($request->getLocale());
 
-        $query = new ImportMappingViewQuery($type, $availableLocale);
+        $importMappingViewQuery = new ImportMappingViewQuery($type, $locale);
 
         try {
             /** @var ImportMappingView $importMappingView */
-            $importMappingView = $this->get('tactician.commandbus.query')->handle($query);
+            $importMappingView = $this->get('tactician.commandbus.query')->handle($importMappingViewQuery);
         } catch(\Exception $exception) {
             $this->addFlash('error', 'flash.admin.sheet.participant.import.error');
 
             return $this->redirectToRoute('admin_sheet_import', ['event' => $event->getId()]);
         }
 
-        $command = new ImportMapping(
+        $importMapping = new ImportMapping(
             $event,
             $type,
             $this->getUser(),
-            $availableLocale,
-            $importMappingView->fieldHeaders,
-            $importMappingView->registrationHeaders
+            $locale,
+            $importMappingView
         );
 
-        $form = $this->createForm(ImportMappingType::class, $command, [
-            'locale'              => $availableLocale,
-            'registrationHeaders' => $importMappingView->registrationHeaders,
-            'csvHeaders'          => $importMappingView->fieldHeaders,
-            'submit'              => true,
+        $form = $this->createForm(ImportMappingType::class, $importMapping, [
+            'locale'            => $locale,
+            'importMappingView' => $importMappingView,
+            'submit'            => true,
         ]);
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
-            $this->get('tactician.commandbus')->handle($command);
+            $this->get('tactician.commandbus')->handle($importMapping);
 
             return $this->redirectToRoute('admin_sheet_import_result', [
                 'event' => $event->getId(),

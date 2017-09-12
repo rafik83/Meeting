@@ -15,7 +15,6 @@ use Proximum\Vimeet\Application\Adapter\SessionInterface;
 use Proximum\Vimeet\Application\Components\Import\ParticipantImportTag;
 use Proximum\Vimeet\Application\Event\Events;
 use Proximum\Vimeet\Application\Event\Participant\ParticipantImportedEvent;
-use Proximum\Vimeet\Application\Serializer\Denormalizer\ParticipantDenormalizer;
 use Proximum\Vimeet\Application\Serializer\Denormalizer\ParticipantImportLogger;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\ParticipantImport;
@@ -86,19 +85,16 @@ class ImportMappingHandler
     {
         $filename = $this->session->get(ParticipantImportTag::PARTICIPANT_IMPORT_FILE);
 
-        $csvData = $this->serializerAdapter->decode(file_get_contents($filename), 'csv', ['csv_delimiter' => ';']);
-
-        $importLogger = $this->serializerAdapter->denormalize(
-            $csvData,
+        $importLogger = $this->serializerAdapter->deserialize(
+            file_get_contents($filename),
             Participant::class,
-            ParticipantDenormalizer::FORMAT,
+            'csv',
             [
-                'csvHeaders'          => $importMapping->csvHeaders,
-                'registrationHeaders' => $importMapping->registrationHeaders,
-                'mappings'            => $this->removeIgnoreFields($importMapping->mappings),
-                'event'               => $importMapping->event,
-                'type'                => $importMapping->type,
-                'locale'              => $importMapping->locale,
+                'csv_delimiter' => ';',
+                'mappings'      => $this->removeIgnoreFields($importMapping->getMappings()),
+                'event'         => $importMapping->event,
+                'type'          => $importMapping->type,
+                'locale'        => $importMapping->locale,
             ]
         );
 
