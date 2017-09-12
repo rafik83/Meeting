@@ -96,18 +96,15 @@ class SpotImporter
      */
     public function import(Event $event, File $spotImportedFile, string $locale): array
     {
-        $columns = $this->serializerAdapter->serialize(
-            $this->importDir . $spotImportedFile->getPath(),
-            'csv'
-        );
+        $content = $this->importDir . $spotImportedFile->getPath();
+        $rows = $this->serializerAdapter->serialize($content, 'csv');
 
-        if (!$this->areGivenKeysAllowed($columns[0])) {
-            throw new InvalidImportHeaderFileFormatException('Headers line of csv are invalid');
-        }
+        $this->checkCsvHeaders($rows[0]);
 
-        unset($columns[0]);
+        // Remove Csv header (first line of array)
+        unset($rows[0]);
 
-        foreach ($columns as $row) {
+        foreach ($rows as $row) {
             $sheetIds = $this->getSheetIdsToArrayFromString($row[7]);
             $errorMessage = [];
 
@@ -139,19 +136,6 @@ class SpotImporter
         }
 
         return $this->spotImportViews;
-    }
-
-    /**
-     * Return true if given keys are exactly the same than in array self::ALLOWED_KEYS
-     * Return false otherwise
-     *
-     * @param array $keys
-     *
-     * @return bool
-     */
-    private function areGivenKeysAllowed(array $keys): bool
-    {
-        return empty(array_diff($keys, self::ALLOWED_KEYS));
     }
 
     /**
@@ -221,5 +205,29 @@ class SpotImporter
     private function getSheetIdsToArrayFromString(string $sheetIds): array
     {
         return explode(',', str_replace(' ', '', $sheetIds));
+    }
+
+    /**
+     * @param array $keys
+     * @throws InvalidImportHeaderFileFormatException
+     */
+    private function checkCsvHeaders(array $keys)
+    {
+        if (!$this->areGivenKeysAllowed($keys)) {
+            throw new InvalidImportHeaderFileFormatException('Headers line of csv are invalid');
+        }
+    }
+
+    /**
+     * Return true if given keys are exactly the same than in array self::ALLOWED_KEYS
+     * Return false otherwise
+     *
+     * @param array $keys
+     *
+     * @return bool
+     */
+    private function areGivenKeysAllowed(array $keys): bool
+    {
+        return empty(array_diff($keys, self::ALLOWED_KEYS));
     }
 }
