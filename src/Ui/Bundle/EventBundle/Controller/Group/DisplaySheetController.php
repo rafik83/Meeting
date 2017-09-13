@@ -59,13 +59,15 @@ class DisplaySheetController extends Controller
         $templateData = $this->get('template.tagged_data_factory')
             ->buildTaggedDataView($sheetToDisplay, $locale, $rules);
 
-        list ($nomenclatures, $participants, $taggedData) = $this->sheetInfos(
-            $eventDomain->getEvent(),
-            $sheet,
-            $sheetToDisplay,
-            $user,
-            $locale
-        );
+        list ($nomenclatures, $participants, $taggedData) = $this
+            ->get('template.sheet.sheet_info_getter')
+            ->sheetInfos(
+                $eventDomain->getEvent(),
+                $sheet,
+                $sheetToDisplay,
+                $user,
+                $locale
+            );
 
         return $this->render('EventBundle:Sheet/Group/Sheet:display.html.twig', [
             'sheet'                           => $sheet,
@@ -83,38 +85,5 @@ class DisplaySheetController extends Controller
             'nomenclatures'                   => $nomenclatures,
             'participants'                    => $participants,
         ]);
-    }
-
-    /**
-     * @param Event  $event
-     * @param Sheet  $sheet
-     * @param Sheet  $sheetToDisplay
-     * @param User   $user
-     * @param string $locale
-     *
-     * @return array
-     */
-    private function sheetInfos(
-        Event $event,
-        Sheet $sheet,
-        Sheet $sheetToDisplay,
-        User $user,
-        string $locale
-    ): array {
-        if (!$this->get('catalog.sheet_access_checker')->checkAccess($sheet, $sheetToDisplay)) {
-            throw $this->createAccessDeniedException();
-        }
-
-        $nomenclatures     = $this->get('repository.nomenclature_repository')->findByEvent($event);
-        $cardListViewQuery = new CardListViewQuery($sheetToDisplay, $user, $locale);
-        $participants      = $this->get('tactician.commandbus.query')->handle($cardListViewQuery);
-
-        $registrationTemplateData = $this
-            ->get('template.template_data_factory')
-            ->createRegistrationFromSheet($sheetToDisplay, $locale);
-
-        $taggedData = $registrationTemplateData->getAllTaggedDatas();
-
-        return [$nomenclatures, $participants, $taggedData];
     }
 }
