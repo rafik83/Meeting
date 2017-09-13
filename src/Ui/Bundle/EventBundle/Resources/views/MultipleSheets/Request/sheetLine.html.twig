@@ -5,6 +5,16 @@
 
     {% for requestView in sheetView.requestViews %}
         <td>
+            <a href="{{ path('event_sheet_group_display_sheet', {
+                    sheetGroup:requestView.sheetMet.group.id,
+                    sheet: requestView.sheetMet.id,
+                    sheetToDisplay: sheetView.sheetId
+                }
+            ) }}">
+                <i class="icon-Voir_1"></i>
+            </a>
+        </td>
+        <td>
             <div class="buttons-zone">
                 {{ include('EventBundle:MeetingRequest:buttons.html.twig', {
                     'allowedToCreate': false,

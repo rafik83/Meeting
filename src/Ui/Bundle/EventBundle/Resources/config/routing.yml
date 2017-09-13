@@ -320,6 +320,15 @@ event_sheet_group_create_sheet:
     methods: [GET, POST]
     defaults: { _controller: EventBundle:Group/Sheet:create }
 
+event_sheet_group_display_sheet:
+    path: /sheets-group/{sheetGroup}/sheet/{sheet}/display/{sheetToDisplay}
+    requirements:
+        sheetGroup: \d+
+        sheet: \d+
+        sheetToDisplay: \d+
+    methods: [GET]
+    defaults: { _controller: EventBundle:Group/DisplaySheet:display }
+
 #
 # Sheets group meeting request management
 #
