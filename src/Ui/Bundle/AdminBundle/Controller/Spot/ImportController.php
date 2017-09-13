@@ -32,7 +32,14 @@ class ImportController extends Controller
     public function importAction(Request $request, Event $event): Response
     {
         $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
-        $this->ifEventHasMeetingInterrupImport($event);
+
+        $hasMeeting = $this->get('vimeet_infrastructure.repository.meeting_repository')->hasMeeting($event);
+
+        if ($hasMeeting) {
+            return $this->render('AdminBundle:Spot\Import:spotImportNotAvailable.html.twig', [
+                'event' => $event,
+            ]);
+        }
 
         $spotImport = new SpotImport();
 
@@ -64,7 +71,14 @@ class ImportController extends Controller
     public function confirmAction(Request $request, Event $event, File $importedFile): Response
     {
         $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
-        $this->ifEventHasMeetingInterrupImport($event);
+
+        $hasMeeting = $this->get('vimeet_infrastructure.repository.meeting_repository')->hasMeeting($event);
+
+        if ($hasMeeting) {
+            return $this->render('AdminBundle:Spot\Import:spotImportNotAvailable.html.twig', [
+                'event' => $event,
+            ]);
+        }
 
         $locale = $event->getAvailableLocale($request->getLocale());
 
@@ -88,23 +102,5 @@ class ImportController extends Controller
             'spotImportViews' => $spotImportViews,
             'form' => $form->createView(),
         ]);
-    }
-
-    /**
-     * @param Event $event
-     *
-     * @return null|Response
-     */
-    private function ifEventHasMeetingInterrupImport(Event $event): ?Response
-    {
-        $hasMeeting = $this->get('vimeet_infrastructure.repository.meeting_repository')->hasMeeting($event);
-
-        if ($hasMeeting) {
-            return $this->render('AdminBundle:Spot\Import:spotImportNotAvailable.html.twig', [
-                'event' => $event,
-            ]);
-        }
-
-        return null;
     }
 }
