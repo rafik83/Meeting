@@ -11,10 +11,12 @@
 namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Catalog;
 
 use Proximum\Vimeet\Domain\Catalog\SearchFields;
+use Proximum\Vimeet\Domain\Model\Catalog\Internal\CatalogConstant;
 use Proximum\Vimeet\Domain\Model\Sheet\Constant;
 use Proximum\Vimeet\Domain\Template\TemplateObject\Nomenclature;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class SearchType extends AbstractSearchType
 {
@@ -45,6 +47,34 @@ class SearchType extends AbstractSearchType
                 ],
             ])
         ;
+
+        if ($options['filterByAvailableSlotIds'] === false) {
+            $everyone = CatalogConstant::AVAILABLE_SLOT_IDS_FILTER_EVERYONE;
+            $available = CatalogConstant::AVAILABLE_SLOT_IDS_FILTER_AVAILABLE;
+            $builder
+                ->add(SearchFields::FILTER_AVAILABLE_SLOT_IDS, ChoiceType::class, [
+                    'choices' => [
+                        sprintf('form.search.availableSlot.choice.%s', $everyone) => $everyone,
+                        sprintf('form.search.availableSlot.choice.%s', $available) => $available,
+                    ],
+                    'expanded' => true,
+                    'multiple' => false,
+                    'label'    => 'form.search.availableSlot.label'
+                ])
+            ;
+        }
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function configureOptions(OptionsResolver $resolver)
+    {
+        parent::configureOptions($resolver);
+
+        $resolver->setDefaults([
+            'filterByAvailableSlotIds' => false
+        ]);
     }
 
     /**
