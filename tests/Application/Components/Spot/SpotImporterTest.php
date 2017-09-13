@@ -17,6 +17,7 @@ use Proximum\Vimeet\Application\Components\Spot\SpotImporter;
 use Proximum\Vimeet\Application\Exception\Spot\Import\InvalidImportHeaderFileFormatException;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\File;
+use Proximum\Vimeet\Domain\Model\Spot;
 use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
 use Proximum\Vimeet\Domain\Spot\Import;
 use Proximum\Vimeet\Domain\View\Spot\Import\SheetView;
@@ -118,7 +119,7 @@ class SpotImporterTest extends TestCase
 
         $this
             ->serializerAdapter
-            ->serialize($this->path, 'csv')
+            ->deserialize($this->path, Spot::class, 'csv')
             ->shouldBeCalled()
             ->willReturn($expectedSerialization);
 
@@ -201,7 +202,7 @@ class SpotImporterTest extends TestCase
 
         $this
             ->serializerAdapter
-            ->serialize($this->path, 'csv')
+            ->deserialize($this->path, Spot::class, 'csv')
             ->shouldBeCalled()
             ->willReturn($expectedSerialization);
 

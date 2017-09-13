@@ -1,14 +1,16 @@
 <?php
 
-/*
- * This file is part of the Proximum Vimeet project.
+/**
  *
- * Copyright (C) Proximum
+ *  * This file is part of the Proximum Vimeet project.
+ *  *
+ *  * Copyright (C) Proximum
+ *  *
+ *  * @author Elao <contact@elao.com>
  *
- * @author Elao <contact@elao.com>
  */
 
-namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Spot;
+namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Spot\Import;
 
 use Proximum\Vimeet\Application\Command\Spot\Import\SpotImport;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Nomenclature\CharsetChoiceType;

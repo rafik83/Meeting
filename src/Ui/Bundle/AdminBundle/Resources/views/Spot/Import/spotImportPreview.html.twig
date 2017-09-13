@@ -2,7 +2,7 @@
 
 {% block content %}
     <h1 class="page-header">{{ 'admin.spot.import.preview'|trans }}</h1>
-    
+
     <table class="table table-hover">
         <thead>
             <tr>
@@ -43,4 +43,6 @@
         {% endfor %}
         </tbody>
     </table>
+
+    {{ form(form) }}
 {% endblock %}

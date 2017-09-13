@@ -12,6 +12,7 @@ namespace Proximum\Vimeet\Application\Components\Spot;
 
 use Proximum\Vimeet\Application\Adapter\ValidatorInterface;
 use Proximum\Vimeet\Application\Exception\Spot\Import\InvalidImportHeaderFileFormatException;
+use Proximum\Vimeet\Domain\Model\Spot;
 use Proximum\Vimeet\Domain\View\Spot\Import\SheetView;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\File;
@@ -97,7 +98,16 @@ class SpotImporter
     public function import(Event $event, File $spotImportedFile, string $locale): array
     {
         $content = $this->importDir . $spotImportedFile->getPath();
-        $rows = $this->serializerAdapter->serialize($content, 'csv');
+        $rows = $this->serializerAdapter->deserialize($content, Spot::class, 'csv');
+
+        // Mock of file content
+        $rows = [
+            ['reference', 'size', 'meetingCapacity', 'seatCapacity', 'active', 'priority', 'visio', 'sheets'],
+            ['A1', '10', '2', '33', true, '4', false, '16938, 16931, 16919'],
+            ['A2', '10', '2', '33', '1', '4', '1', '16566, 12'],
+            ['A3', '10', '2', '33', '1', '4', '1', '16565'],
+            ['A1', '10', '2', '33', '1', '4', '1', '16562'],
+        ];
 
         $this->checkCsvHeaders($rows[0]);
 
@@ -108,7 +118,7 @@ class SpotImporter
             $sheetIds = $this->getSheetIdsToArrayFromString($row[7]);
             $errorMessage = [];
 
-            if ($this->isSpotAlreadyAffected($row[0])) {
+            if ($this->isSpotAlreadyImported($row[0])) {
                 $errorMessage[self::KEY_REFERENCE] = $this
                     ->translatorAdapter
                     ->trans('validators.spot.reference.affected', [], 'validators', $locale);
@@ -188,7 +198,7 @@ class SpotImporter
      *
      * @return bool
      */
-    private function isSpotAlreadyAffected(string $reference): bool
+    private function isSpotAlreadyImported(string $reference): bool
     {
         foreach ($this->spotImportViews as $importedSpot) {
             return $importedSpot->import->reference === $reference;

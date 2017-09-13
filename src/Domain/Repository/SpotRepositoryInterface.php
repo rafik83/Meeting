@@ -54,6 +54,13 @@ interface SpotRepositoryInterface
 
     /**
      * @param Event $event
+     *
+     * @return Spot[]
+     */
+    public function getAllByEvent(Event $event): array;
+
+    /**
+     * @param Event $event
      * @param array $filter
      *
      * @return Spot[]
