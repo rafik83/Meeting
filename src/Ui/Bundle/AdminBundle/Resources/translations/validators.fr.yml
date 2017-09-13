@@ -71,7 +71,7 @@ validators.sheet.messaging_campaign.create.sheetIds: 'Veuillez sélectionner au 
 validators.sheet.messaging_campaign.message: 'Veuillez sélectionner un message'
 validators.sheet.messaging_campaign.recipients: 'Veuillez sélectionner un destinataire au moins'
 validators.spot.reference.unique: 'Cet identifiant est déjà utilisé'
-validators.spot.sheet.not_exist: 'L''identifiant de la fiche semble incorrect'
+validators.spot.sheet.not_exist: 'L''identifiant de la fiche est incorrect'
 validators.spot.reference.affected: 'Cette référence existe déjà'
 validators.spot.sheet.already_affected_reference: 'Cette référence a déjà été affectée à une fiche'
 validators.spot.reference.type: 'Cette référence n''est pas valide'

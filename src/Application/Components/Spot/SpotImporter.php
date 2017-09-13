@@ -100,38 +100,26 @@ class SpotImporter
         $content = $this->importDir . $spotImportedFile->getPath();
         $rows = $this->serializerAdapter->deserialize($content, Spot::class, 'csv');
 
-        // Mock of file content
-        $rows = [
-            ['reference', 'size', 'meetingCapacity', 'seatCapacity', 'active', 'priority', 'visio', 'sheets'],
-            ['A1', '10', '2', '33', true, '4', false, '16938, 16931, 16919'],
-            ['A2', '10', '2', '33', '1', '4', '1', '16566, 12'],
-            ['A3', '10', '2', '33', '1', '4', '1', '16565'],
-            ['A1', '10', '2', '33', '1', '4', '1', '16562'],
-        ];
-
-        $this->checkCsvHeaders($rows[0]);
-
-        // Remove Csv header (first line of array)
-        unset($rows[0]);
+        $this->checkCsvHeaders(array_keys($rows[0]));
 
         foreach ($rows as $row) {
-            $sheetIds = $this->getSheetIdsToArrayFromString($row[7]);
+            $sheetIds = $this->getSheetIdsToArrayFromString($row[self::KEY_SHEETS]);
             $errorMessage = [];
 
-            if ($this->isSpotAlreadyImported($row[0])) {
+            if ($this->isSpotAlreadyImported($row[self::KEY_REFERENCE])) {
                 $errorMessage[self::KEY_REFERENCE] = $this
                     ->translatorAdapter
                     ->trans('validators.spot.reference.affected', [], 'validators', $locale);
             }
 
             $spot = new Import(
-                $row[0],
-                $row[1],
-                $row[2],
-                $row[3],
-                $row[4],
-                $row[5],
-                $row[6]
+                $row[self::KEY_REFERENCE],
+                $row[self::KEY_SIZE],
+                $row[self::KEY_MEETING_CAPACITY],
+                $row[self::KEY_SEAT_CAPACITY],
+                $row[self::KEY_ACTIVE],
+                $row[self::KEY_PRIORITY],
+                $row[self::KEY_VISIO]
             );
 
             $validations = $this->validatorAdapter->validate($spot, ValidatorInterface::VALIDATOR_SPOT_IMPORT_TYPE);

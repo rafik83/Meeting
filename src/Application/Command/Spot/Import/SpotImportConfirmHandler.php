@@ -56,7 +56,7 @@ class SpotImportConfirmHandler
             $command->locale
         );
 
-        $this->getExistentSpotAndDeleteAllByEvent($command->event);
+        $this->deleteSlotsByEvent($command->event);
 
         foreach ($spotImportViews as $spotImportView) {
             $this->removeInvalidSpotFromImport($spotImportView);
@@ -108,7 +108,7 @@ class SpotImportConfirmHandler
     /**
      * @param Event $event
      */
-    private function getExistentSpotAndDeleteAllByEvent(Event $event)
+    private function deleteSlotsByEvent(Event $event): void
     {
         $existentSpots = $this->spotRepository->getAllByEvent($event);
 

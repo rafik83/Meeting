@@ -77,14 +77,49 @@ class SpotImporterTest extends TestCase
 
         // Mock of file content
         $expectedSerialization = [
-            ['reference', 'size', 'meetingCapacity', 'seatCapacity', 'active', 'priority', 'visio', 'sheets'],
-            ['A1', '10', '2', '33', true, '4', false, '16938, 16931, 16919'],
-            ['A2', '10', '2', '33', '1', '4', '1', '16566, 12'],
-            ['A3', '10', '2', '33', '1', '4', '1', '16565'],
-            ['A1', '10', '2', '33', '1', '4', '1', '16562'],
+            [
+                'reference' => 'A1',
+                'size' => 10,
+                'meetingCapacity' => 10,
+                'seatCapacity' => 10,
+                'active' => 1,
+                'priority' => 1,
+                'visio' => 0,
+                'sheets' => '16938, 16931, 16919',
+            ],
+            [
+                'reference' => 'A2',
+                'size' => 10,
+                'meetingCapacity' => 2,
+                'seatCapacity' => 33,
+                'active' => 1,
+                'priority' => 4,
+                'visio' => 1,
+                'sheets' => '16566, 12',
+            ],
+            [
+                'reference' => 'A3',
+                'size' => 10,
+                'meetingCapacity' => 2,
+                'seatCapacity' => 33,
+                'active' => 1,
+                'priority' => 4,
+                'visio' => 1,
+                'sheets' => '16565',
+            ],
+            [
+                'reference' => 'A1',
+                'size' => 10,
+                'meetingCapacity' => 2,
+                'seatCapacity' => 33,
+                'active' => 1,
+                'priority' => 4,
+                'visio' => 1,
+                'sheets' => '16562',
+            ],
         ];
 
-        $expectedImportedSpot1 = new Import('A1', '10', '2', '33', true, '4', false);
+        $expectedImportedSpot1 = new Import('A1', 10, 10, 10, 1, 1, 0);
         $expectedImportedSpot2 = new Import('A2', '10', '2', '33', '1', '4', '1');
         $expectedImportedSpot3 = new Import('A3', '10', '2', '33', '1', '4', '1');
         $expectedImportedSpot4 = new Import('A1', '10', '2', '33', '1', '4', '1');
@@ -196,7 +231,18 @@ class SpotImporterTest extends TestCase
     public function testInvalidCsvHeader()
     {
         // Mock of file content
-        $expectedSerialization = [0 => ['wrong headers']];
+        $expectedSerialization = [
+            [
+                'wrong' => 'A1',
+                'size' => 10,
+                'meetingCpcity' => 10,
+                'seatCapacity' => 10,
+                'actif' => 1,
+                'priority' => 1,
+                'visio' => 0,
+                'sheeeeeets' => '16938',
+            ],
+        ];
 
         $this->expectException(InvalidImportHeaderFileFormatException::class);
 
@@ -206,6 +252,10 @@ class SpotImporterTest extends TestCase
             ->shouldBeCalled()
             ->willReturn($expectedSerialization);
 
+        $this->validatorAdapter
+            ->validate()
+            ->shouldNotBeCalled();
+
         $spotImporter = new SpotImporter(
             $this->sheetRepository->reveal(),
             $this->validatorAdapter->reveal(),
@@ -214,6 +264,6 @@ class SpotImporterTest extends TestCase
             $this->path
         );
 
-        $result = $spotImporter->import($this->event, $this->importedFile->reveal(), $this->locale);
+        $spotImporter->import($this->event, $this->importedFile->reveal(), $this->locale);
     }
 }
