@@ -1,8 +1,5 @@
-{% extends 'EventBundle::base.html.twig' %}
-
 {% block content %}
     {% set userSheet = sheet %}
     {% set sheet = sheetToDisplay %}
-
     {{ include('EventBundle:Sheet/Partial:sheet-content.html.twig') }}
 {% endblock %}
