@@ -24,6 +24,8 @@ class TransactionNormalizer extends AbstractNormalizer implements NormalizerInte
     
     /** @var array */
     private $timeFormatter = [];
+
+    /** @var string */
     private $toCharset = Charset::WINDOWS_1252;
 
     /**
