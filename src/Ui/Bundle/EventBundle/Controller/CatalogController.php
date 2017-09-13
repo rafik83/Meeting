@@ -358,7 +358,7 @@ class CatalogController extends Controller
                     $locale
                 );
         } catch (AccessDeniedException $exception) {
-            $this->createAccessDeniedException();
+            throw $this->createAccessDeniedException();
         }
 
         // Build sheet template data and attach tagged data view to template object with tags

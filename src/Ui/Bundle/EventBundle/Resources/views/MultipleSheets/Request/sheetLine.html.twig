@@ -5,16 +5,15 @@
 
     {% for requestView in sheetView.requestViews %}
         <td>
-            <a href="{{ path('event_sheet_group_display_sheet', {
-                    sheetGroup:requestView.sheetMet.group.id,
-                    sheet: requestView.sheetMet.id,
-                    sheetToDisplay: sheetView.sheetId
-                }) }}"
-               data-toggle="modal"
-               data-target="#sheet-display-modal"
-            >
-                <i class="icon-Voir_1"></i>
-            </a>
+            {% if isMultipleSheet %}
+                {{ include('EventBundle:MultipleSheets/Request:displayModalSheetLink.html.twig', {
+                    'displaySheetRoute': 'event_sheet_group_display_sheet_for_multisheet_user'}
+                ) }}
+            {% else %}
+                {{ include('EventBundle:MultipleSheets/Request:displayModalSheetLink.html.twig', {
+                    'displaySheetRoute': 'event_sheet_group_display_sheet_for_group_manager'}
+                ) }}
+            {% endif %}
         </td>
         <td>
             <div class="buttons-zone">

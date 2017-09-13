@@ -10,12 +10,9 @@
 
 namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Group;
 
-use Proximum\Vimeet\Application\Query\Participant\CardListViewQuery;
 use Proximum\Vimeet\Domain\Exception\Sheet\AccessDeniedException;
-use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\Sheet\Group;
-use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\ParamConverter\EventDomain;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Security\Sheet\GroupVoter;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -26,16 +23,16 @@ use Symfony\Component\Security\Core\User\UserInterface;
 class DisplaySheetController extends Controller
 {
     /**
-     * @param Request       $request
-     * @param EventDomain   $eventDomain
-     * @param Group         $group
-     * @param Sheet         $sheet
-     * @param Sheet         $sheetToDisplay
-     * @param UserInterface $user
+     * @param Request            $request
+     * @param EventDomain        $eventDomain
+     * @param Group              $group
+     * @param Sheet              $sheet
+     * @param Sheet              $sheetToDisplay
+     * @param UserInterface|null $user
      *
      * @return Response
      */
-    public function displayAction(
+    public function displayForGroupManagerAction(
         Request $request,
         EventDomain $eventDomain,
         Group $group,
@@ -50,6 +47,46 @@ class DisplaySheetController extends Controller
             throw $this->createNotFoundException('You do not have the right to see this sheet');
         }
 
+        return $this->displaySheet($request, $eventDomain, $sheet, $sheetToDisplay, $user);
+    }
+
+    /**
+     * @param Request            $request
+     * @param EventDomain        $eventDomain
+     * @param Sheet              $sheet
+     * @param Sheet              $sheetToDisplay
+     * @param UserInterface|null $user
+     *
+     * @return Response
+     */
+    public function displayForMultiSheetUserAction(
+        Request $request,
+        EventDomain $eventDomain,
+        Sheet $sheet,
+        Sheet $sheetToDisplay,
+        UserInterface $user = null
+    ): Response {
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
+
+        return $this->displaySheet($request, $eventDomain, $sheet, $sheetToDisplay, $user);
+    }
+
+    /**
+     * @param Request            $request
+     * @param EventDomain        $eventDomain
+     * @param Sheet              $sheet
+     * @param Sheet              $sheetToDisplay
+     * @param UserInterface|null $user
+     *
+     * @return Response
+     */
+    private function displaySheet(
+        Request $request,
+        EventDomain $eventDomain,
+        Sheet $sheet,
+        Sheet $sheetToDisplay,
+        UserInterface $user = null
+    ): Response {
         $rules = $this
             ->get('repository.rule_repository')
             ->getBySeerTypeAndSeeableType($sheet->getType(), $sheetToDisplay->getType());
@@ -74,7 +111,7 @@ class DisplaySheetController extends Controller
                     $locale
                 );
         } catch (AccessDeniedException $exception) {
-            $this->createAccessDeniedException();
+            throw $this->createAccessDeniedException();
         }
 
         return $this->render('EventBundle:Sheet/Group/Sheet:display.html.twig', [
