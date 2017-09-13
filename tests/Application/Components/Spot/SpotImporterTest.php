@@ -11,6 +11,7 @@
 namespace Proximum\Vimeet\Tests\Application\Components\Spot;
 
 use PHPUnit\Framework\TestCase;
+use Prophecy\Argument;
 use Prophecy\Prophecy\ObjectProphecy;
 use Proximum\Vimeet\Application\Adapter\ValidatorInterface;
 use Proximum\Vimeet\Application\Components\Spot\SpotImporter;
@@ -62,7 +63,7 @@ class SpotImporterTest extends TestCase
         $this->importedFile = $this->prophesize(File::class);
         $this->event = EventFactory::createEvent();
         $this->locale = 'fr';
-        $this->path = '/fake/path';
+        $this->path =  __DIR__ . '/import_spot.csv';
     }
 
     public function testImport()
@@ -154,7 +155,7 @@ class SpotImporterTest extends TestCase
 
         $this
             ->serializerAdapter
-            ->deserialize($this->path, Spot::class, 'csv')
+            ->deserialize(Argument::type('string'), Spot::class, 'csv')
             ->shouldBeCalled()
             ->willReturn($expectedSerialization);
 
@@ -248,7 +249,7 @@ class SpotImporterTest extends TestCase
 
         $this
             ->serializerAdapter
-            ->deserialize($this->path, Spot::class, 'csv')
+            ->deserialize(Argument::type('string'), Spot::class, 'csv')
             ->shouldBeCalled()
             ->willReturn($expectedSerialization);
 

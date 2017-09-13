@@ -97,8 +97,11 @@ class SpotImporter
      */
     public function import(Event $event, File $spotImportedFile, string $locale): array
     {
-        $content = $this->importDir . $spotImportedFile->getPath();
-        $rows = $this->serializerAdapter->deserialize($content, Spot::class, 'csv');
+        $rows = $this->serializerAdapter->deserialize(
+            file_get_contents($this->importDir . $spotImportedFile->getPath()),
+            Spot::class,
+            'csv'
+        );
 
         $this->checkCsvHeaders(array_keys($rows[0]));
 
