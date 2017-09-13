@@ -13,6 +13,7 @@ namespace Proximum\Vimeet\Domain\Sheet;
 use Proximum\Vimeet\Application\Query\Participant\CardListViewQuery;
 use Proximum\Vimeet\Application\Query\Participant\CardListViewQueryHandler;
 use Proximum\Vimeet\Domain\Catalog\SheetAccessChecker;
+use Proximum\Vimeet\Domain\Exception\Sheet\AccessDeniedException;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\User;
@@ -70,7 +71,7 @@ class SheetInfosGetter
     ): array {
 
         if (!$this->accessChecker->checkAccess($sheet, $sheetToDisplay)) {
-            throw new \Exception('Access Denied.', 403);
+            throw new AccessDeniedException();
         }
 
         $nomenclatures     = $this->nomenclatureRepository->findByEvent($event);

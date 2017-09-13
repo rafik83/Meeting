@@ -11,11 +11,13 @@
 namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Group;
 
 use Proximum\Vimeet\Application\Query\Participant\CardListViewQuery;
+use Proximum\Vimeet\Domain\Exception\Sheet\AccessDeniedException;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\Sheet\Group;
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\ParamConverter\EventDomain;
+use Proximum\Vimeet\Ui\Bundle\EventBundle\Security\Sheet\GroupVoter;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -39,8 +41,10 @@ class DisplaySheetController extends Controller
         Group $group,
         Sheet $sheet,
         Sheet $sheetToDisplay,
-        UserInterface $user
+        UserInterface $user = null
     ): Response {
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
+        $this->denyAccessUnlessGranted(GroupVoter::MANAGE, $group);
 
         if ($sheet->getGroup()->getId() !== $group->getId()) {
             throw $this->createNotFoundException('You do not have the right to see this sheet');
@@ -59,15 +63,19 @@ class DisplaySheetController extends Controller
         $templateData = $this->get('template.tagged_data_factory')
             ->buildTaggedDataView($sheetToDisplay, $locale, $rules);
 
-        list ($nomenclatures, $participants, $taggedData) = $this
-            ->get('template.sheet.sheet_info_getter')
-            ->sheetInfos(
-                $eventDomain->getEvent(),
-                $sheet,
-                $sheetToDisplay,
-                $user,
-                $locale
-            );
+        try {
+            list ($nomenclatures, $participants, $taggedData) = $this
+                ->get('template.sheet.sheet_info_getter')
+                ->sheetInfos(
+                    $eventDomain->getEvent(),
+                    $sheet,
+                    $sheetToDisplay,
+                    $user,
+                    $locale
+                );
+        } catch (AccessDeniedException $exception) {
+            $this->createAccessDeniedException();
+        }
 
         return $this->render('EventBundle:Sheet/Group/Sheet:display.html.twig', [
             'sheet'                           => $sheet,
