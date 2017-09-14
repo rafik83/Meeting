@@ -68,7 +68,7 @@ class DisplaySheetController extends Controller
     ): Response {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
 
-        if (null === $sheet->getUserParticipant($user)) {
+        if (!$sheet->hasUser($user)) {
             throw $this->createNotFoundException();
         }
 
