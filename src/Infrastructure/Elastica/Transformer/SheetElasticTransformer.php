@@ -203,6 +203,7 @@ class SheetElasticTransformer implements ModelToElasticaTransformerInterface
                 'attend'   => $sheet->attend(),
                 'hasGroup' => $sheet->hasGroup(),
                 'hasSpot'  => $sheet->getSpot() !== null,
+                'availableSlotIds' => [],
             ],
             $contentByLocale
         ));

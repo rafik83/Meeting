@@ -65,6 +65,7 @@ class SheetSearchAdapter implements SheetSearchAdapterInterface
         bool $getAggregations,
         array $nomenclatureItems = []
     ): PaginatedResult {
+        dump('passe');
         $nomenclatureBoost = (isset($nomenclatureItems[Nomenclature::OBJECTIVE_NONE]))
             ? count($nomenclatureItems[Nomenclature::OBJECTIVE_NONE])
             : 1;

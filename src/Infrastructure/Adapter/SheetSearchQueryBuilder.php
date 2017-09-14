@@ -23,6 +23,7 @@ use Proximum\Vimeet\Domain\Admin\Follower\FollowerConstant;
 use Proximum\Vimeet\Domain\Catalog\SearchFields;
 use Proximum\Vimeet\Domain\Exception\Nomenclature\NomenclatureNotFoundException;
 use Proximum\Vimeet\Domain\Model\Admin;
+use Proximum\Vimeet\Domain\Model\Catalog\Internal\CatalogConstant;
 use Proximum\Vimeet\Domain\Model\Category;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Sheet;
@@ -66,23 +67,29 @@ class SheetSearchQueryBuilder
      */
     private $nomenclatureItems;
 
+    /** @var array of available slot ids */
+    private $availableSlots;
+
     /**
      * @param Event  $event
      * @param array  $filters
      * @param string $locale
      * @param int    $initialBooster
      * @param array  $nomenclatureItems
+     * @param array  $availableSlots
      */
     public function __construct(
         Event $event,
         array $filters,
         $locale,
         $initialBooster = 1,
-        $nomenclatureItems = []
+        $nomenclatureItems = [],
+        $availableSlots = []
     ) {
         $this->locale            = $locale;
         $this->initialBooster    = $initialBooster > 0 ? $initialBooster : 1;
         $this->nomenclatureItems = $nomenclatureItems;
+        $this->availableSlots    = $availableSlots;
 
         $this->query = new BoolQuery();
         $this->matchEvent($event);
@@ -130,6 +137,7 @@ class SheetSearchQueryBuilder
         $this->filterByCompleted($filters);
         $this->filterByType($filters);
         $this->filterByCategory($filters);
+        $this->filterByAvailableSlotIds($filters);
         $this->filterByFollower($filters);
         $this->filterByPredefined($filters);
         $this->filterByRegisteredAt($filters);
@@ -407,6 +415,34 @@ class SheetSearchQueryBuilder
         }
 
         $nested->setQuery($matchId);
+        $this->query->addMust($nested);
+    }
+
+    /**
+     * @param array $filters
+     */
+    protected function filterByAvailableSlotIds(array &$filters)
+    {
+        if (!isset($filters[SearchFields::FILTER_AVAILABLE_SLOT_IDS])
+            || empty($filters[SearchFields::FILTER_AVAILABLE_SLOT_IDS])
+            || $filters[SearchFields::FILTER_AVAILABLE_SLOT_IDS] !== CatalogConstant::AVAILABLE_SLOT_IDS_FILTER_AVAILABLE
+        ) {
+            return;
+        }
+
+        $nested = new Nested();
+        $nested->setPath('availableSlotIds');
+
+        $matchSlot = new BoolQuery();
+
+        foreach ($this->availableSlots as $availableSlot) {
+            $matchSlot->addShould(
+                (new Term)->setTerm('availableSlotIds.id', $availableSlot)
+            );
+        }
+
+        $nested->setQuery($matchSlot);
+
         $this->query->addMust($nested);
     }
 
