@@ -2,9 +2,9 @@
     {% set displaySheetRoute = 'event_sheet_group_display_sheet_for_group_manager' %}
 {% endif %}
 <a href="{{ path(displaySheetRoute, {
-    sheetGroup:requestView.sheetMet.group.id,
+    sheetGroup: requestView.sheetMet.group.id,
     sheet: requestView.sheetMet.id,
-    sheetToDisplay: sheetView.sheetId
+    sheetToDisplayId: sheetView.sheetId
 }) }}"
    data-toggle="modal"
    data-target="#sheet-display-modal"

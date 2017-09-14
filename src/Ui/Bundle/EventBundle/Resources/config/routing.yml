@@ -321,19 +321,19 @@ event_sheet_group_create_sheet:
     defaults: { _controller: EventBundle:Group/Sheet:create }
 
 event_sheet_group_display_sheet_for_group_manager:
-    path: /sheets-group/{sheetGroup}/sheet/{sheet}/display/{sheetToDisplay}
+    path: /sheets-group/{sheetGroup}/sheet/{sheet}/display/{sheetToDisplayId}
     requirements:
         sheetGroup: \d+
         sheet: \d+
-        sheetToDisplay: \d+
+        sheetToDisplayId: \d+
     methods: [GET]
     defaults: { _controller: EventBundle:Group/DisplaySheet:displayForGroupManager }
 
 event_sheet_group_display_sheet_for_multisheet_user:
-    path: /sheet/{sheet}/display/{sheetToDisplay}
+    path: /sheet/{sheet}/display/{sheetToDisplayId}
     requirements:
         sheet: \d+
-        sheetToDisplay: \d+
+        sheetToDisplayId: \d+
     methods: [GET]
     defaults: { _controller: EventBundle:Group/DisplaySheet:displayForMultisheetUser }
 

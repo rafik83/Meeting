@@ -27,7 +27,7 @@ class DisplaySheetController extends Controller
      * @param EventDomain        $eventDomain
      * @param Group              $group
      * @param Sheet              $sheet
-     * @param Sheet              $sheetToDisplay
+     * @param int                $sheetToDisplayId
      * @param UserInterface|null $user
      *
      * @return Response
@@ -37,7 +37,7 @@ class DisplaySheetController extends Controller
         EventDomain $eventDomain,
         Group $group,
         Sheet $sheet,
-        Sheet $sheetToDisplay,
+        int $sheetToDisplayId,
         UserInterface $user = null
     ): Response {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
@@ -47,14 +47,14 @@ class DisplaySheetController extends Controller
             throw $this->createNotFoundException('You do not have the right to see this sheet');
         }
 
-        return $this->displaySheet($request, $eventDomain, $sheet, $sheetToDisplay, $user);
+        return $this->displaySheet($request, $eventDomain, $sheet, $sheetToDisplayId, $user);
     }
 
     /**
      * @param Request            $request
      * @param EventDomain        $eventDomain
      * @param Sheet              $sheet
-     * @param Sheet              $sheetToDisplay
+     * @param int                $sheetToDisplayId
      * @param UserInterface|null $user
      *
      * @return Response
@@ -63,7 +63,7 @@ class DisplaySheetController extends Controller
         Request $request,
         EventDomain $eventDomain,
         Sheet $sheet,
-        Sheet $sheetToDisplay,
+        int $sheetToDisplayId,
         UserInterface $user = null
     ): Response {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
@@ -72,14 +72,14 @@ class DisplaySheetController extends Controller
             throw $this->createNotFoundException();
         }
 
-        return $this->displaySheet($request, $eventDomain, $sheet, $sheetToDisplay, $user);
+        return $this->displaySheet($request, $eventDomain, $sheet, $sheetToDisplayId, $user);
     }
 
     /**
      * @param Request            $request
      * @param EventDomain        $eventDomain
      * @param Sheet              $sheet
-     * @param Sheet              $sheetToDisplay
+     * @param int                $sheetToDisplayId
      * @param UserInterface|null $user
      *
      * @return Response
@@ -88,9 +88,17 @@ class DisplaySheetController extends Controller
         Request $request,
         EventDomain $eventDomain,
         Sheet $sheet,
-        Sheet $sheetToDisplay,
+        int $sheetToDisplayId,
         UserInterface $user = null
     ): Response {
+        $sheetToDisplay = $this
+            ->get('vimeet_infrastructure.repository.sheet_repository')
+            ->getSheetById($sheetToDisplayId);
+
+        if (null === $sheetToDisplay || $eventDomain->getEvent() !== $sheetToDisplay->getEvent()) {
+            throw $this->createAccessDeniedException('Sheet not found');
+        }
+
         $rules = $this
             ->get('repository.rule_repository')
             ->getBySeerTypeAndSeeableType($sheet->getType(), $sheetToDisplay->getType());
@@ -126,7 +134,7 @@ class DisplaySheetController extends Controller
             'isMeetingRequestUpdateLocked'    => true,
             'isMeetingRequestClosed'          => true,
             'isAnsweringMeetingRequestClosed' => true,
-            'isRequestMeetingEnabled'         => $sheet !== $sheetToDisplay,
+            'isRequestMeetingEnabled'         => false,
             'isCatalog'                       => true,
             'locale'                          => $locale,
             'templateData'                    => $templateData,
