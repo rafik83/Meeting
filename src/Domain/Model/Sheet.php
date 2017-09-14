@@ -167,6 +167,9 @@ class Sheet implements TraceableInterface
     /** @var string */
     private $agendaConfirmedStatus = self::AGENDA_NOT_CONCERNED;
 
+    /** @var null|array of slot ids */
+    private $availableSlots = [];
+
     /**
      * Sheet constructor.
      *
@@ -196,6 +199,7 @@ class Sheet implements TraceableInterface
         $this->state        = self::STATE_PENDING;
         $this->completeness = 0;
         $this->group        = $group;
+        $this->availableSlots = [];
     }
 
     /**
@@ -987,5 +991,25 @@ class Sheet implements TraceableInterface
     public function setAgendaConfirmedStatus(string $agendaConfirmedStatus)
     {
         $this->agendaConfirmedStatus = $agendaConfirmedStatus;
+    }
+
+    /**
+     * @param array $availableSlots
+     */
+    public function setAvailableSlots(array $availableSlots)
+    {
+        $this->availableSlots = $availableSlots;
+    }
+
+    /**
+     * @return array
+     */
+    public function getAvailableSlots(): array
+    {
+        if ($this->availableSlots === null) {
+            return [];
+        }
+
+        return $this->availableSlots;
     }
 }

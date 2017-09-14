@@ -431,7 +431,6 @@ class SheetSearchQueryBuilder
             || empty($filters[SearchFields::FILTER_AVAILABLE_SLOT_IDS])
             || $filters[SearchFields::FILTER_AVAILABLE_SLOT_IDS] !== CatalogConstant::AVAILABLE_SLOT_IDS_FILTER_AVAILABLE
         ) {
-            dump('la');
             return;
         }
 
