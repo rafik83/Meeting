@@ -16,6 +16,7 @@ use Proximum\Vimeet\Application\Query\Participant\CardListViewQueryHandler;
 use Proximum\Vimeet\Application\View\Participant\CardListView;
 use Proximum\Vimeet\Application\View\Participant\CardView;
 use Proximum\Vimeet\Domain\Catalog\SheetAccessChecker;
+use Proximum\Vimeet\Domain\Exception\Sheet\AccessDeniedException;
 use Proximum\Vimeet\Domain\Model\Nomenclature;
 use Proximum\Vimeet\Domain\Repository\NomenclatureRepositoryInterface;
 use Proximum\Vimeet\Domain\Sheet\SheetInfosGetter;
@@ -81,5 +82,43 @@ class SheetInfoGetterTest extends TestCase
         $result = $sheetInfosGetter->sheetInfos($event, $sheet, $sheetToDisplay, $user, $locale);
 
         $this->assertEquals($result, $expectedResult);
+    }
+
+    public function testAccessDenied()
+    {
+        $accessChecker = $this->prophesize(SheetAccessChecker::class);
+        $nomenclatureRepository = $this->prophesize(NomenclatureRepositoryInterface::class);
+        $templateDataFactory = $this->prophesize(TemplateDataFactory::class);
+        $cardListViewQueryHandler = $this->prophesize(CardListViewQueryHandler::class);
+
+        $event = EventFactory::createEvent();
+        $user = UserFactory::create();
+        $sheet = SheetFactory::create($event, $user);
+        $sheetToDisplay = SheetFactory::create($event);
+        $locale = 'fr';
+
+        $sheetInfosGetter = new SheetInfosGetter(
+            $accessChecker->reveal(),
+            $nomenclatureRepository->reveal(),
+            $templateDataFactory->reveal(),
+            $cardListViewQueryHandler->reveal()
+        );
+
+        $accessChecker->checkAccess($sheet, $sheetToDisplay)
+            ->shouldBeCalled()
+            ->willReturn(false);
+
+        $this->expectException(AccessDeniedException::class);
+
+        $nomenclatureRepository->findByEvent()
+            ->shouldNotBeCalled();
+
+        $cardListViewQueryHandler->handle()
+            ->shouldNotBeCalled();
+
+        $templateDataFactory->createRegistrationFromSheet()
+            ->shouldNotBeCalled();
+
+        $sheetInfosGetter->sheetInfos($event, $sheet, $sheetToDisplay, $user, $locale);
     }
 }

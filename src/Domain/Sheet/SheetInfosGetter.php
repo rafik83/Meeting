@@ -71,7 +71,7 @@ class SheetInfosGetter
     ): array {
 
         if (!$this->accessChecker->checkAccess($sheet, $sheetToDisplay)) {
-            throw new AccessDeniedException();
+            throw new AccessDeniedException("Access Denied", 403);
         }
 
         $nomenclatures     = $this->nomenclatureRepository->findByEvent($event);

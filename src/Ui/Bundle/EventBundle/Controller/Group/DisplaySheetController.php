@@ -68,6 +68,10 @@ class DisplaySheetController extends Controller
     ): Response {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
 
+        if (null === $sheet->getUserParticipant($user)) {
+            throw $this->createNotFoundException();
+        }
+
         return $this->displaySheet($request, $eventDomain, $sheet, $sheetToDisplay, $user);
     }
 
