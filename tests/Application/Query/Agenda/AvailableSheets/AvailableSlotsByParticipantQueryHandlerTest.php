@@ -8,12 +8,13 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Proximum\Vimeet\Tests\Application\Query\Agenda;
+namespace Proximum\Vimeet\Tests\Application\Query\Agenda\AvailableSheets;
 
 use PHPUnit\Framework\TestCase;
 use Proximum\Vimeet\Application\Query\Agenda\AvailableSheets\AvailableSlotsByParticipantQuery;
 use Proximum\Vimeet\Application\Query\Agenda\AvailableSheets\AvailableSlotsByParticipantQueryHandler;
 use Proximum\Vimeet\Application\View\Agenda\Slot\AvailableSlotView;
+use Proximum\Vimeet\Domain\Event\Day\DDayGuesser;
 use Proximum\Vimeet\Domain\Model\Event\Day;
 use Proximum\Vimeet\Domain\Repository\MeetingSlotRepositoryInterface;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
@@ -23,6 +24,43 @@ use Proximum\Vimeet\Tests\Factory\SlotFactory;
 
 class AvailableSlotsByParticipantQueryHandlerTest extends TestCase
 {
+    public function testHandleNotDDay()
+    {
+        $currentTime = new \DateTime('11/12/2013 10:30:00');
+        $begin  = new \DateTime('11/12/2013 00:01:00');
+        $end    = new \DateTime('11/12/2013 19:01:00');
+
+        $event = EventFactory::createEvent();
+        $event->setDays([new Day($event, $begin, $end),]);
+        $day = $event->getFirstDay();
+        $sheet = SheetFactory::create($event);
+        $participant = ParticipantFactory::create($sheet);
+
+        $meetingSlotRepository = $this->prophesize(MeetingSlotRepositoryInterface::class);
+        $dDayGuesser = $this->prophesize(DDayGuesser::class);
+
+        $query   = new AvailableSlotsByParticipantQuery($event, $participant, $day);
+        $handler = new AvailableSlotsByParticipantQueryHandler(
+            $dDayGuesser->reveal(),
+            $meetingSlotRepository->reveal(),
+            $currentTime
+        );
+
+        $meetingSlotRepository
+            ->findAvailableSlotsByParticipants($event, [$participant])
+            ->shouldNotBeCalled()
+        ;
+        $dDayGuesser
+            ->isItDDay($event)
+            ->shouldBeCalled()
+            ->willReturn(false)
+        ;
+
+        $result = $handler->handle($query);
+
+        $this->assertEquals([], $result);
+    }
+
     public function testHandle()
     {
         $currentTime = new \DateTime('11/12/2013 10:30:00');
@@ -45,6 +83,7 @@ class AvailableSlotsByParticipantQueryHandlerTest extends TestCase
         $participant = ParticipantFactory::create($sheet);
 
         $meetingSlotRepository = $this->prophesize(MeetingSlotRepositoryInterface::class);
+        $dDayGuesser = $this->prophesize(DDayGuesser::class);
 
         $slot1 = SlotFactory::createSlot(1, $event, $slotBegin1, $slotEnd1);
         $slot2 = SlotFactory::createSlot(2, $event, $slotBegin2, $slotEnd2);
@@ -52,12 +91,20 @@ class AvailableSlotsByParticipantQueryHandlerTest extends TestCase
         $availableSlots = [$slot1, $slot2];
         $expected = [new AvailableSlotView(2, $slot2->getBegin(), $slot2->getEnd())];
         $query    = new AvailableSlotsByParticipantQuery($event, $participant, $day);
-        $handler  = new AvailableSlotsByParticipantQueryHandler($meetingSlotRepository->reveal(), $currentTime);
+        $handler  = new AvailableSlotsByParticipantQueryHandler(
+            $dDayGuesser->reveal(),
+            $meetingSlotRepository->reveal(),
+            $currentTime
+        );
 
         $meetingSlotRepository
             ->findAvailableSlotsByParticipants($event, [$participant])
             ->shouldBeCalled()
             ->willReturn($availableSlots);
+        $dDayGuesser
+            ->isItDDay($event)
+            ->shouldBeCalled()
+            ->willReturn(true);
 
         $result = $handler->handle($query);
 
@@ -83,6 +130,7 @@ class AvailableSlotsByParticipantQueryHandlerTest extends TestCase
         $participant = ParticipantFactory::create($sheet);
 
         $meetingSlotRepository = $this->prophesize(MeetingSlotRepositoryInterface::class);
+        $dDayGuesser = $this->prophesize(DDayGuesser::class);
 
         $slot1 = SlotFactory::createSlot(1, $event, $slotBegin1, $slotEnd1);
         $slot2 = SlotFactory::createSlot(2, $event, $slotBegin2, $slotEnd2);
@@ -91,12 +139,20 @@ class AvailableSlotsByParticipantQueryHandlerTest extends TestCase
         $expected = [];
 
         $query   = new AvailableSlotsByParticipantQuery($event, $participant, $day);
-        $handler = new AvailableSlotsByParticipantQueryHandler($meetingSlotRepository->reveal(), $currentTime);
+        $handler = new AvailableSlotsByParticipantQueryHandler(
+            $dDayGuesser->reveal(),
+            $meetingSlotRepository->reveal(),
+            $currentTime
+        );
 
         $meetingSlotRepository
             ->findAvailableSlotsByParticipants($event, [$participant])
             ->shouldBeCalled()
             ->willReturn($availableSlots);
+        $dDayGuesser
+            ->isItDDay($event)
+            ->shouldBeCalled()
+            ->willReturn(true);
 
         $result = $handler->handle($query);
 

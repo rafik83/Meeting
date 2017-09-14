@@ -3337,6 +3337,7 @@ services:
     query.agenda.available_sheets.available_slots_by_participant_query_handler:
         class: Proximum\Vimeet\Application\Query\Agenda\AvailableSheets\AvailableSlotsByParticipantQueryHandler
         arguments:
+            - '@domain.event.day.dday_guesser'
             - '@vimeet_infrastructure.repository.meeting_slot_repository'
             - '@datetime'
         tags:

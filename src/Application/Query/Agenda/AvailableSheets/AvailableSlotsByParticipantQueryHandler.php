@@ -11,6 +11,7 @@
 namespace Proximum\Vimeet\Application\Query\Agenda\AvailableSheets;
 
 use Proximum\Vimeet\Application\View\Agenda\Slot\AvailableSlotView;
+use Proximum\Vimeet\Domain\Event\Day\DDayGuesser;
 use Proximum\Vimeet\Domain\Repository\MeetingSlotRepositoryInterface;
 
 class AvailableSlotsByParticipantQueryHandler
@@ -21,14 +22,20 @@ class AvailableSlotsByParticipantQueryHandler
     /** @var \DateTimeInterface */
     private $dateTime;
 
+    /** @var DDayGuesser */
+    private $dDayGuesser;
+
     /**
+     * @param DDayGuesser                    $dDayGuesser
      * @param MeetingSlotRepositoryInterface $meetingSlotRepository
      * @param \DateTimeInterface             $dateTime
      */
     public function __construct(
+        DDayGuesser $dDayGuesser,
         MeetingSlotRepositoryInterface $meetingSlotRepository,
         \DateTimeInterface $dateTime
     ) {
+        $this->dDayGuesser = $dDayGuesser;
         $this->meetingSlotRepository = $meetingSlotRepository;
         $this->dateTime = $dateTime;
     }
@@ -40,9 +47,7 @@ class AvailableSlotsByParticipantQueryHandler
      */
     public function handle(AvailableSlotsByParticipantQuery $query): array
     {
-        if ($query->event->getFirstDay()->getStartTime() > $this->dateTime
-            || $query->event->getLastDay()->getEndTime() < $this->dateTime
-        ) {
+        if (!$this->dDayGuesser->isItDDay($query->event)) {
             return [];
         }
 
@@ -53,11 +58,11 @@ class AvailableSlotsByParticipantQueryHandler
 
         $availableSlotViews = [];
 
-        foreach ($availableSlots as $availableSlot) {
-            $beginHour = clone $availableSlot->getBegin();
-            $beginHourPlusTenMinutes = $beginHour->add(new \DateInterval('PT10M'));
+        $datePlus10Minutes = clone $this->dateTime;
+        $datePlus10Minutes->add(new \DateInterval('PT10M'));
 
-            if ($beginHourPlusTenMinutes >= $this->dateTime
+        foreach ($availableSlots as $availableSlot) {
+            if ($availableSlot->getBegin() >= $datePlus10Minutes
                 && $query->day->getStartTime() <= $availableSlot->getBegin()
                 && $query->day->getEndTime() >= $availableSlot->getEnd()
             ) {
