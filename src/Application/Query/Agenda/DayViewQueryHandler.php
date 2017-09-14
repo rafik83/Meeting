@@ -3,15 +3,15 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2016 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
 
 namespace Proximum\Vimeet\Application\Query\Agenda;
 
-use Proximum\Vimeet\Application\Query\Agenda\AvailableSheets\AvailableSlotsByParticipantQuery;
-use Proximum\Vimeet\Application\Query\Agenda\AvailableSheets\AvailableSlotsByParticipantQueryHandler;
+use Proximum\Vimeet\Application\Query\Agenda\AvailableSheets\AvailableSlotsByParticipantAndDayQuery;
+use Proximum\Vimeet\Application\Query\Agenda\AvailableSheets\AvailableSlotsByParticipantAndDayQueryHandler;
 use Proximum\Vimeet\Application\Components\Agenda\AgendaCollisionManager;
 use Proximum\Vimeet\Application\View\Agenda\DayView;
 
@@ -32,20 +32,20 @@ class DayViewQueryHandler
     /** @var CancelAttendanceUnavailabilityViewQueryHandler */
     private $cancelAttendanceUnavailabilityViewQueryHandler;
 
-    /** @var AvailableSlotsByParticipantQueryHandler */
-    private $availableSlotsByParticipantQueryHandler;
+    /** @var AvailableSlotsByParticipantAndDayQueryHandler */
+    private $availableSlotsByParticipantAndDayQueryHandler;
 
     /** @var AgendaCollisionManager */
     private $agendaCollisionManager;
 
     /**
-     * @param HappeningViewQueryHandler $happeningHandler
-     * @param UnavailabilityViewQueryHandler $unavailabilityHandler
-     * @param MassUnavailabilityViewQueryHandler $massHandler
-     * @param MeetingViewQueryHandler $meetingHandler
+     * @param HappeningViewQueryHandler                      $happeningHandler
+     * @param UnavailabilityViewQueryHandler                 $unavailabilityHandler
+     * @param MassUnavailabilityViewQueryHandler             $massHandler
+     * @param MeetingViewQueryHandler                        $meetingHandler
      * @param CancelAttendanceUnavailabilityViewQueryHandler $cancelAttendanceUnavailabilityViewQueryHandler
-     * @param AvailableSlotsByParticipantQueryHandler $availableSlotsByParticipantQueryHandler
-     * @param AgendaCollisionManager $agendaCollisionManager
+     * @param AvailableSlotsByParticipantAndDayQueryHandler  $availableSlotsByParticipantAndDayQueryHandler
+     * @param AgendaCollisionManager                         $agendaCollisionManager
      */
     public function __construct(
         HappeningViewQueryHandler $happeningHandler,
@@ -53,7 +53,7 @@ class DayViewQueryHandler
         MassUnavailabilityViewQueryHandler $massHandler,
         MeetingViewQueryHandler $meetingHandler,
         CancelAttendanceUnavailabilityViewQueryHandler $cancelAttendanceUnavailabilityViewQueryHandler,
-        AvailableSlotsByParticipantQueryHandler $availableSlotsByParticipantQueryHandler,
+        AvailableSlotsByParticipantAndDayQueryHandler $availableSlotsByParticipantAndDayQueryHandler,
         AgendaCollisionManager $agendaCollisionManager
     ) {
         $this->happeningHandler                               = $happeningHandler;
@@ -61,7 +61,7 @@ class DayViewQueryHandler
         $this->massHandler                                    = $massHandler;
         $this->meetingHandler                                 = $meetingHandler;
         $this->cancelAttendanceUnavailabilityViewQueryHandler = $cancelAttendanceUnavailabilityViewQueryHandler;
-        $this->availableSlotsByParticipantQueryHandler        = $availableSlotsByParticipantQueryHandler;
+        $this->availableSlotsByParticipantAndDayQueryHandler  = $availableSlotsByParticipantAndDayQueryHandler;
         $this->agendaCollisionManager                         = $agendaCollisionManager;
     }
 
@@ -134,12 +134,12 @@ class DayViewQueryHandler
             }
 
             if ($query->isParticipantUserViewing()) {
-                $availableSlotViewQuery = new AvailableSlotsByParticipantQuery(
+                $availableSlotViewQuery = new AvailableSlotsByParticipantAndDayQuery(
                     $query->event,
                     $query->participant,
                     $query->day
                 );
-                $availableSlotViews = $this->availableSlotsByParticipantQueryHandler->handle($availableSlotViewQuery);
+                $availableSlotViews = $this->availableSlotsByParticipantAndDayQueryHandler->handle($availableSlotViewQuery);
             }
         } else {
             $cancelAttendanceView = $this->cancelAttendanceUnavailabilityViewQueryHandler->handle(

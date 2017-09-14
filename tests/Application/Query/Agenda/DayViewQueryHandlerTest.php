@@ -10,8 +10,9 @@
 
 namespace Proximum\Vimeet\Tests\Application\Query\Agenda;
 
-use Proximum\Vimeet\Application\Query\Agenda\AvailableSheets\AvailableSlotsByParticipantQuery;
-use Proximum\Vimeet\Application\Query\Agenda\AvailableSheets\AvailableSlotsByParticipantQueryHandler;
+use Prophecy\Prophecy\ObjectProphecy;
+use Proximum\Vimeet\Application\Query\Agenda\AvailableSheets\AvailableSlotsByParticipantAndDayQuery;
+use Proximum\Vimeet\Application\Query\Agenda\AvailableSheets\AvailableSlotsByParticipantAndDayQueryHandler;
 use Proximum\Vimeet\Application\Components\Agenda\AgendaCollisionManager;
 use Proximum\Vimeet\Application\Query\Agenda\CancelAttendanceUnavailabilityViewQuery;
 use Proximum\Vimeet\Application\Query\Agenda\CancelAttendanceUnavailabilityViewQueryHandler;
@@ -134,8 +135,11 @@ class DayViewQueryHandlerTest extends TestCase
     /** @var AgendaCollisionManager */
     private $agendaCollisionManager;
 
-    /** @var AvailableSlotsByParticipantQueryHandler */
-    private $availableSlotsByParticipantQueryHandler;
+    /** @var AvailableSlotsByParticipantAndDayQueryHandler */
+    private $availableSlotsByParticipantAndDayQueryHandler;
+
+    /** @var ObjectProphecy */
+    private $cancelAttendanceUnavailabilityViewQueryHandler;
 
     public function setUp()
     {
@@ -182,14 +186,14 @@ class DayViewQueryHandlerTest extends TestCase
         );
 
         $this->agendaCollisionManager = $this->prophesize(AgendaCollisionManager::class);
-        $this->availableSlotsByParticipantQueryHandler = $this->prophesize(AvailableSlotsByParticipantQueryHandler::class);
+        $this->availableSlotsByParticipantAndDayQueryHandler = $this->prophesize(AvailableSlotsByParticipantAndDayQueryHandler::class);
+        $this->cancelAttendanceUnavailabilityViewQueryHandler = $this->prophesize(CancelAttendanceUnavailabilityViewQueryHandler::class);
     }
     
     public function testHandle()
     {
         // Mock
         $happeningViewQueryHandler = $this->prophesize(HappeningViewQueryHandler::class);
-        $availableSlotQueryHandler = $this->prophesize(AvailableSlotsByParticipantQueryHandler::class);
 
         $happeningViewQueryHandler
             ->handle(
@@ -228,29 +232,21 @@ class DayViewQueryHandlerTest extends TestCase
         $meetingHandler = $this->prophesize(MeetingViewQueryHandler::class);
         $meetingHandler->handle()->shouldNotBeCalled();
 
-        $availableSlotViewQuery = new AvailableSlotsByParticipantQuery($this->event, $this->participant, $this->day);
-        $availableSlotQueryHandler
+        $availableSlotViewQuery = new AvailableSlotsByParticipantAndDayQuery($this->event, $this->participant, $this->day);
+        $this->availableSlotsByParticipantAndDayQueryHandler
             ->handle($availableSlotViewQuery)
             ->shouldBeCalled()
             ->willReturn([]);
-
-        $cancelAttendanceUnavailabilityViewQueryHandler = $this->prophesize(CancelAttendanceUnavailabilityViewQueryHandler::class);
 
         $handler = new DayViewQueryHandler(
             $happeningViewQueryHandler->reveal(),
             $unavailabilityHandler->reveal(),
             $massHandler->reveal(),
             $meetingHandler->reveal(),
-            $cancelAttendanceUnavailabilityViewQueryHandler->reveal(),
-            $availableSlotQueryHandler->reveal(),
+            $this->cancelAttendanceUnavailabilityViewQueryHandler->reveal(),
+            $this->availableSlotsByParticipantAndDayQueryHandler->reveal(),
             $this->agendaCollisionManager->reveal()
         );
-
-
-        $availableSlotViewQuery = new AvailableSlotsByParticipantQuery($this->event, $this->participant, $this->day);
-        $this->availableSlotsByParticipantQueryHandler
-            ->handle($availableSlotViewQuery)
-            ->shouldNotBeCalled();
 
         $this->agendaCollisionManager
             ->handleCollision(
@@ -336,7 +332,6 @@ class DayViewQueryHandlerTest extends TestCase
 
         // Mock
         $happeningViewQueryHandler = $this->prophesize(HappeningViewQueryHandler::class);
-        $availableSlotQueryHandler = $this->prophesize(AvailableSlotsByParticipantQueryHandler::class);
         $happeningViewQueryHandler->handle(
             new HappeningViewQuery(
                 $this->happening1,
@@ -370,28 +365,21 @@ class DayViewQueryHandlerTest extends TestCase
             ->shouldBeCalled()
             ->willReturn($meetingView);
 
-        $availableSlotViewQuery = new AvailableSlotsByParticipantQuery($this->event, $this->participant, $this->day);
-        $availableSlotQueryHandler
+        $availableSlotViewQuery = new AvailableSlotsByParticipantAndDayQuery($this->event, $this->participant, $this->day);
+        $this->availableSlotsByParticipantAndDayQueryHandler
             ->handle($availableSlotViewQuery)
             ->shouldBeCalled()
             ->willReturn([$availableSlotViews]);
-
-        $cancelAttendanceUnavailabilityViewQueryHandler = $this->prophesize(CancelAttendanceUnavailabilityViewQueryHandler::class);
 
         $handler = new DayViewQueryHandler(
             $happeningViewQueryHandler->reveal(),
             $unavailabilityHandler->reveal(),
             $massHandler->reveal(),
             $meetingHandler->reveal(),
-            $cancelAttendanceUnavailabilityViewQueryHandler->reveal(),
-            $availableSlotQueryHandler->reveal(),
+            $this->cancelAttendanceUnavailabilityViewQueryHandler->reveal(),
+            $this->availableSlotsByParticipantAndDayQueryHandler->reveal(),
             $this->agendaCollisionManager->reveal()
         );
-
-        $availableSlotViewQuery = new AvailableSlotsByParticipantQuery($this->event, $this->participant, $this->day);
-        $this->availableSlotsByParticipantQueryHandler
-            ->handle($availableSlotViewQuery)
-            ->shouldNotBeCalled();
 
         $this->agendaCollisionManager
             ->handleCollision(
@@ -494,13 +482,11 @@ class DayViewQueryHandlerTest extends TestCase
 
         $massHandler           = $this->prophesize(MassUnavailabilityViewQueryHandler::class);
         $unavailabilityHandler = $this->prophesize(UnavailabilityViewQueryHandler::class);
-        $availableSlotQueryHandler = $this->prophesize(AvailableSlotsByParticipantQueryHandler::class);
         $massHandler->handle(new MassUnavailabilityViewQuery($mass, $event, $participant, 'fr'))->shouldNotBeCalled();
         $unavailabilityHandler->handle(new UnavailabilityViewQuery($unavailability, $event))->shouldNotBeCalled();
         $meetingHandler = $this->prophesize(MeetingViewQueryHandler::class);
         $meetingHandler->handle()->shouldNotBeCalled();
-        $cancelAttendanceUnavailabilityViewQueryHandler = $this->prophesize(CancelAttendanceUnavailabilityViewQueryHandler::class);
-        $cancelAttendanceUnavailabilityViewQueryHandler
+        $this->cancelAttendanceUnavailabilityViewQueryHandler
             ->handle(new CancelAttendanceUnavailabilityViewQuery($event, $eventDay))
             ->shouldBeCalled()
             ->willReturn(new CancelAttendanceUnavailabilityView($startTime, $endTime, 'Europe/Paris'));
@@ -510,13 +496,13 @@ class DayViewQueryHandlerTest extends TestCase
             $unavailabilityHandler->reveal(),
             $massHandler->reveal(),
             $meetingHandler->reveal(),
-            $cancelAttendanceUnavailabilityViewQueryHandler->reveal(),
-            $availableSlotQueryHandler->reveal(),
+            $this->cancelAttendanceUnavailabilityViewQueryHandler->reveal(),
+            $this->availableSlotsByParticipantAndDayQueryHandler->reveal(),
             $this->agendaCollisionManager->reveal()
         );
 
-        $availableSlotViewQuery = new AvailableSlotsByParticipantQuery($this->event, $this->participant, $this->day);
-        $this->availableSlotsByParticipantQueryHandler
+        $availableSlotViewQuery = new AvailableSlotsByParticipantAndDayQuery($this->event, $this->participant, $this->day);
+        $this->availableSlotsByParticipantAndDayQueryHandler
             ->handle($availableSlotViewQuery)
             ->shouldNotBeCalled();
 

@@ -14,7 +14,7 @@ use Proximum\Vimeet\Application\View\Agenda\Slot\AvailableSlotView;
 use Proximum\Vimeet\Domain\Event\Day\DDayGuesser;
 use Proximum\Vimeet\Domain\Repository\MeetingSlotRepositoryInterface;
 
-class AvailableSlotsByParticipantQueryHandler
+class AvailableSlotsByParticipantAndDayQueryHandler
 {
     /** @var MeetingSlotRepositoryInterface */
     private $meetingSlotRepository;
@@ -35,17 +35,17 @@ class AvailableSlotsByParticipantQueryHandler
         MeetingSlotRepositoryInterface $meetingSlotRepository,
         \DateTimeInterface $dateTime
     ) {
-        $this->dDayGuesser = $dDayGuesser;
+        $this->dDayGuesser           = $dDayGuesser;
         $this->meetingSlotRepository = $meetingSlotRepository;
-        $this->dateTime = $dateTime;
+        $this->dateTime              = $dateTime;
     }
 
     /**
-     * @param AvailableSlotsByParticipantQuery $query
+     * @param AvailableSlotsByParticipantAndDayQuery $query
      *
      * @return AvailableSlotView[]
      */
-    public function handle(AvailableSlotsByParticipantQuery $query): array
+    public function handle(AvailableSlotsByParticipantAndDayQuery $query): array
     {
         if (!$this->dDayGuesser->isItDDay($query->event)) {
             return [];

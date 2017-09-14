@@ -13,7 +13,7 @@ namespace Proximum\Vimeet\Application\Query\Agenda\AvailableSheets;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Participant;
 
-class AvailableSlotsByParticipantQuery
+class AvailableSlotsByParticipantAndDayQuery
 {
     /** @var Event */
     public $event;

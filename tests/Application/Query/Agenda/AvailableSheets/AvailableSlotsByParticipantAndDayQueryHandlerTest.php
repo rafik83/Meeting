@@ -11,8 +11,8 @@
 namespace Proximum\Vimeet\Tests\Application\Query\Agenda\AvailableSheets;
 
 use PHPUnit\Framework\TestCase;
-use Proximum\Vimeet\Application\Query\Agenda\AvailableSheets\AvailableSlotsByParticipantQuery;
-use Proximum\Vimeet\Application\Query\Agenda\AvailableSheets\AvailableSlotsByParticipantQueryHandler;
+use Proximum\Vimeet\Application\Query\Agenda\AvailableSheets\AvailableSlotsByParticipantAndDayQuery;
+use Proximum\Vimeet\Application\Query\Agenda\AvailableSheets\AvailableSlotsByParticipantAndDayQueryHandler;
 use Proximum\Vimeet\Application\View\Agenda\Slot\AvailableSlotView;
 use Proximum\Vimeet\Domain\Event\Day\DDayGuesser;
 use Proximum\Vimeet\Domain\Model\Event\Day;
@@ -22,7 +22,7 @@ use Proximum\Vimeet\Tests\Factory\ParticipantFactory;
 use Proximum\Vimeet\Tests\Factory\SheetFactory;
 use Proximum\Vimeet\Tests\Factory\SlotFactory;
 
-class AvailableSlotsByParticipantQueryHandlerTest extends TestCase
+class AvailableSlotsByParticipantAndDayQueryHandlerTest extends TestCase
 {
     public function testHandleNotDDay()
     {
@@ -39,8 +39,8 @@ class AvailableSlotsByParticipantQueryHandlerTest extends TestCase
         $meetingSlotRepository = $this->prophesize(MeetingSlotRepositoryInterface::class);
         $dDayGuesser = $this->prophesize(DDayGuesser::class);
 
-        $query   = new AvailableSlotsByParticipantQuery($event, $participant, $day);
-        $handler = new AvailableSlotsByParticipantQueryHandler(
+        $query   = new AvailableSlotsByParticipantAndDayQuery($event, $participant, $day);
+        $handler = new AvailableSlotsByParticipantAndDayQueryHandler(
             $dDayGuesser->reveal(),
             $meetingSlotRepository->reveal(),
             $currentTime
@@ -90,8 +90,8 @@ class AvailableSlotsByParticipantQueryHandlerTest extends TestCase
 
         $availableSlots = [$slot1, $slot2];
         $expected = [new AvailableSlotView(2, $slot2->getBegin(), $slot2->getEnd())];
-        $query    = new AvailableSlotsByParticipantQuery($event, $participant, $day);
-        $handler  = new AvailableSlotsByParticipantQueryHandler(
+        $query    = new AvailableSlotsByParticipantAndDayQuery($event, $participant, $day);
+        $handler  = new AvailableSlotsByParticipantAndDayQueryHandler(
             $dDayGuesser->reveal(),
             $meetingSlotRepository->reveal(),
             $currentTime
@@ -138,8 +138,8 @@ class AvailableSlotsByParticipantQueryHandlerTest extends TestCase
         $availableSlots = [$slot1, $slot2];
         $expected = [];
 
-        $query   = new AvailableSlotsByParticipantQuery($event, $participant, $day);
-        $handler = new AvailableSlotsByParticipantQueryHandler(
+        $query   = new AvailableSlotsByParticipantAndDayQuery($event, $participant, $day);
+        $handler = new AvailableSlotsByParticipantAndDayQueryHandler(
             $dDayGuesser->reveal(),
             $meetingSlotRepository->reveal(),
             $currentTime
