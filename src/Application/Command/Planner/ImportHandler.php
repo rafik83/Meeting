@@ -170,6 +170,7 @@ class ImportHandler
 
         $this->jobQueue->aggregateParticipantAssignedToRequest($import->event);
         $this->jobQueue->aggregateEventUsersFullUnavailability($import->event, true);
+        $this->jobQueue->aggregateAvailableSlot($import->event);
 
         $this->generateMeetingSolutionAnalytic($import->event);
     }

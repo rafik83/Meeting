@@ -80,4 +80,8 @@ final class Events
     const MASS_ASSIGNMENT_UPDATED                      = 'mass.assignment.updated';
     const USER_AGENDA_CONFIRMED                        = 'user.agenda.confirmed';
     const USER_EVENT_TOKEN_AGENDA_CONFIRMATION_CREATED = 'user_event_token.agenda_confirmation.created';
+    const MASS_UNAVAILABILITY_DISPATCHED               = 'mass.unavailability.dispatched';
+    const SLOT_GENERATED                               = 'slot.generated';
+    const SLOT_TOGGLE_LOCKED                           = 'slot.toggle.locked';
+    const SLOT_DELETED                                 = 'slot.deleted';
 }

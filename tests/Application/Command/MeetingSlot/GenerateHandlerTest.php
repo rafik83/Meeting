@@ -10,9 +10,12 @@
 
 namespace Proximum\Vimeet\Tests\Application\Command\MeetingSlot;
 
+use Proximum\Vimeet\Application\Adapter\DelayedEventDispatcherInterface;
 use Proximum\Vimeet\Application\Command\MeetingSlot\Generate;
 use Proximum\Vimeet\Application\Command\MeetingSlot\GenerateHandler;
 use Proximum\Vimeet\Application\Command\MeetingSlot\GenerateResult;
+use Proximum\Vimeet\Application\Event\Events;
+use Proximum\Vimeet\Application\Event\Slot\GeneratedEvent;
 use Proximum\Vimeet\Domain\Meeting\Slot\Recipe;
 use Proximum\Vimeet\Domain\Meeting\Slot\SlotGenerator;
 use Proximum\Vimeet\Domain\Model\MeetingSlot;
@@ -45,10 +48,17 @@ class GenerateHandlerTest extends TestCase
         $slotGenerator = $this->prophesize(SlotGenerator::class);
         $slotGenerator->generate($event, $recipes)->shouldBeCalled()->willReturn($slots);
 
+        $eventDispatcher = $this->prophesize(DelayedEventDispatcherInterface::class);
+        $eventDispatcher->dispatch(Events::SLOT_GENERATED, new GeneratedEvent($event))->shouldBeCalled();
+
         $command = new Generate($event);
         $command->recipes = $recipes;
 
-        $handler = new GenerateHandler($meetingSlotRepository->reveal(), $slotGenerator->reveal());
+        $handler = new GenerateHandler(
+            $meetingSlotRepository->reveal(),
+            $slotGenerator->reveal(),
+            $eventDispatcher->reveal()
+        );
 
         $this->assertEquals(new GenerateResult(4), $handler->handle($command));
     }

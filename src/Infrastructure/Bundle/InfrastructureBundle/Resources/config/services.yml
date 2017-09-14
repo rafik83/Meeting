@@ -1297,6 +1297,7 @@ services:
         arguments:
             - '@vimeet_infrastructure.repository.meeting_slot_repository'
             - '@domain.meeting.slot.slot_generator'
+            - '@vimeet_infrastructure.adapter.delayed_event_dispatcher'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\MeetingSlot\Generate }
     command.schedule.configure_handler:
@@ -1309,12 +1310,14 @@ services:
         class: Proximum\Vimeet\Application\Command\MeetingSlot\LockHandler
         arguments:
             - '@vimeet_infrastructure.repository.meeting_slot_repository'
+            - '@vimeet_infrastructure.adapter.delayed_event_dispatcher'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\MeetingSlot\Lock }
     command.meeting_slot.unlock_handler:
         class: Proximum\Vimeet\Application\Command\MeetingSlot\UnlockHandler
         arguments:
             - '@vimeet_infrastructure.repository.meeting_slot_repository'
+            - '@vimeet_infrastructure.adapter.delayed_event_dispatcher'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\MeetingSlot\Unlock }
     command.meeting_slot.remove_handler:
@@ -1322,6 +1325,7 @@ services:
         arguments:
             - '@vimeet_infrastructure.repository.meeting_slot_repository'
             - '@vimeet_infrastructure.repository.meeting_repository'
+            - '@vimeet_infrastructure.adapter.delayed_event_dispatcher'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\MeetingSlot\Remove }
     command.event.configure_dates_handler:
@@ -1743,6 +1747,7 @@ services:
         class: Proximum\Vimeet\Application\Command\Unavailability\Mass\DispatcherHandler
         arguments:
             - '@unavailability.time_slot_dispatcher'
+            - '@vimeet_infrastructure.adapter.delayed_event_dispatcher'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Unavailability\Mass\Dispatcher }
 

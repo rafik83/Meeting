@@ -23,6 +23,7 @@ use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\Aggregate\FullUnavailability\UsersFullUnavailabilityAggregateCommand;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\Aggregate\FullUnavailability\UsersFullUnavailabilityByEventAggregateCommand;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\Aggregate\Participant\ParticipantAssignedToRequestAggregateCommand;
+use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\Aggregate\Sheet\AvailableSlotCalculatorCommand;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\Analytic\MeetingSolution\GenerateMeetingSolutionCommand;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\Event\User\Agenda\Version\GenerateVersionsCommand;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\GenerateInvoiceCommand;
@@ -212,6 +213,17 @@ class JobQueueAdapter extends AbstractJobQueueAdapter implements JobQueueInterfa
     public function aggregateParticipantAssignedToRequest(Event $event)
     {
         $job = new Job(ParticipantAssignedToRequestAggregateCommand::NAME, [$event->getId()]);
+        $this->setJob($job);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function aggregateAvailableSlot(Event $event)
+    {
+        $job = new Job(AvailableSlotCalculatorCommand::NAME, [
+            sprintf('--event=%s', $event->getId())
+        ]);
         $this->setJob($job);
     }
 
