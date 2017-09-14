@@ -16,6 +16,7 @@ use Proximum\Vimeet\Application\View\Participant\ParticipantsSheetIdsView;
 use Proximum\Vimeet\Application\View\Sheet\SheetIdsView;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\PaginatedResult;
+use Proximum\Vimeet\Domain\Model\Sheet;
 
 interface SheetSearchAdapterInterface
 {
@@ -43,6 +44,7 @@ interface SheetSearchAdapterInterface
      * @param bool                $getAggregations
      * @param array               $nomenclatureItems
      * @param AvailableSlotView[] $availableSlotIds
+     * @param Sheet[]             $sheetsToExclude
      *
      * @return PaginatedResult
      */
@@ -55,7 +57,8 @@ interface SheetSearchAdapterInterface
         string $locale,
         bool $getAggregations,
         array $nomenclatureItems = [],
-        array $availableSlotIds = []
+        array $availableSlotIds = [],
+        array $sheetsToExclude = []
     ): PaginatedResult;
 
     /**

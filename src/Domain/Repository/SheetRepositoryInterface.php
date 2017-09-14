@@ -101,6 +101,13 @@ interface SheetRepositoryInterface
     public function getSheetsMetBySheet(Sheet $sheet): array;
 
     /**
+     * @param Sheet $sheet
+     *
+     * @return Sheet[]
+     */
+    public function getSheetsWithRequestWithSheet(Sheet $sheet): array;
+
+    /**
      * @param Type $type
      *
      * @return bool

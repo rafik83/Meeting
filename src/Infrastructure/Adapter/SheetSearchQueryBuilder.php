@@ -78,6 +78,7 @@ class SheetSearchQueryBuilder
      * @param int                 $initialBooster
      * @param array               $nomenclatureItems
      * @param AvailableSlotView[] $availableSlots
+     * @param array               $sheetsToExclude
      */
     public function __construct(
         Event $event,
@@ -85,7 +86,8 @@ class SheetSearchQueryBuilder
         $locale,
         $initialBooster = 1,
         array $nomenclatureItems = [],
-        array $availableSlots = []
+        array $availableSlots = [],
+        array $sheetsToExclude = []
     ) {
         $this->locale            = $locale;
         $this->initialBooster    = $initialBooster > 0 ? $initialBooster : 1;
@@ -95,6 +97,7 @@ class SheetSearchQueryBuilder
         $this->query = new BoolQuery();
         $this->matchEvent($event);
         $this->filter($filters);
+        $this->excludeSheets($sheetsToExclude);
     }
 
     /**
@@ -945,5 +948,25 @@ class SheetSearchQueryBuilder
         $matchAgendaConfirmedStatus->setTerm('agendaConfirmedStatus', $agendaConfirmedStatus);
 
         $this->query->addMust($matchAgendaConfirmedStatus);
+    }
+
+    /**
+     * @param Sheet[] $sheetsToExclude
+     */
+    private function excludeSheets(array $sheetsToExclude)
+    {
+        if (empty($sheetsToExclude)) {
+            return;
+        }
+
+        $excludeSheets = new BoolQuery();
+
+        foreach ($sheetsToExclude as $sheetToExclude) {
+            $excludeSheets->addShould(
+                (new Term)->setTerm('id', $sheetToExclude->getId())
+            );
+        }
+
+        $this->query->addMustNot($excludeSheets);
     }
 }

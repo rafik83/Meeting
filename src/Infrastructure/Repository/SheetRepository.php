@@ -166,6 +166,28 @@ class SheetRepository implements SheetRepositoryInterface
     /**
      * {@inheritdoc}
      */
+    public function getSheetsWithRequestWithSheet(Sheet $sheet): array
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('sheet')
+            ->from(Sheet::class, 'sheet')
+            ->where('sheet.event = :event AND sheet != :sheet AND EXISTS (
+                   SELECT request.id FROM Entity:Meeting\Request request WHERE (
+                        request.from = :sheet AND request.to = sheet
+                        OR request.to = :sheet AND request.from = sheet
+                   )
+            )')
+            ->setParameter('event', $sheet->getEvent())
+            ->setParameter('sheet', $sheet);
+
+        return $queryBuilder->getQuery()->getResult();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function getSheets(Event $event, $locale)
     {
         $queryBuilder = $this

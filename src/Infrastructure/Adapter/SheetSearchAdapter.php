@@ -64,7 +64,8 @@ class SheetSearchAdapter implements SheetSearchAdapterInterface
         string $locale,
         bool $getAggregations,
         array $nomenclatureItems = [],
-        array $availableSlotIds = []
+        array $availableSlotIds = [],
+        array $sheetsToExclude = []
     ): PaginatedResult {
         $nomenclatureBoost = (isset($nomenclatureItems[Nomenclature::OBJECTIVE_NONE]))
             ? count($nomenclatureItems[Nomenclature::OBJECTIVE_NONE])
@@ -76,7 +77,8 @@ class SheetSearchAdapter implements SheetSearchAdapterInterface
             $locale,
             $nomenclatureBoost,
             $nomenclatureItems,
-            $availableSlotIds
+            $availableSlotIds,
+            $sheetsToExclude
         );
 
         if (Constant::ORDER_BY_DATE_ADDED_TO_CATALOG === $orderBy) {

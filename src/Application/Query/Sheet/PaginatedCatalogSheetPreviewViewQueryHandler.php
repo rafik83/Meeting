@@ -23,6 +23,7 @@ use Proximum\Vimeet\Domain\KeyDates\Checker\MeetingRequestAccessChecker;
 use Proximum\Vimeet\Domain\Model\Catalog\Internal\CatalogConstant;
 use Proximum\Vimeet\Domain\Model\PaginatedResult;
 use Proximum\Vimeet\Domain\Model\Sheet;
+use Proximum\Vimeet\Domain\Repository\Meeting\RequestRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
 use Proximum\Vimeet\Domain\Template\TemplateDataFactory;
 
@@ -72,13 +73,13 @@ class PaginatedCatalogSheetPreviewViewQueryHandler
         AnsweringMeetingRequestAccessChecker $answeringMeetingRequestAccessChecker,
         AvailableSlotsByParticipantQueryHandler $availableSlotsByParticipantQueryHandler
     ) {
-        $this->sheetRepository                      = $sheetRepository;
-        $this->sheetSearchAdapter                   = $sheetSearchAdapter;
-        $this->sheetPreviewViewQueryHandler         = $sheetPreviewViewQueryHandler;
-        $this->viewedSheetListViewQueryHandler      = $viewedSheetListViewQueryHandler;
-        $this->templateDataFactory                  = $templateDataFactory;
-        $this->meetingRequestAccessChecker          = $meetingRequestAccessChecker;
-        $this->answeringMeetingRequestAccessChecker = $answeringMeetingRequestAccessChecker;
+        $this->sheetRepository                         = $sheetRepository;
+        $this->sheetSearchAdapter                      = $sheetSearchAdapter;
+        $this->sheetPreviewViewQueryHandler            = $sheetPreviewViewQueryHandler;
+        $this->viewedSheetListViewQueryHandler         = $viewedSheetListViewQueryHandler;
+        $this->templateDataFactory                     = $templateDataFactory;
+        $this->meetingRequestAccessChecker             = $meetingRequestAccessChecker;
+        $this->answeringMeetingRequestAccessChecker    = $answeringMeetingRequestAccessChecker;
         $this->availableSlotsByParticipantQueryHandler = $availableSlotsByParticipantQueryHandler;
     }
 
@@ -90,6 +91,7 @@ class PaginatedCatalogSheetPreviewViewQueryHandler
     public function handle(PaginatedCatalogSheetPreviewViewQuery $query)
     {
         $availableSlotIds = [];
+        $sheetsToExclude   = [];
 
         if ($query->viewer->hasUserParticipant($query->user)
             && isset($query->filters[SearchFields::FILTER_AVAILABLE_SLOT_IDS])
@@ -102,6 +104,10 @@ class PaginatedCatalogSheetPreviewViewQueryHandler
                     $query->viewer->getUserParticipant($query->user)
                 )
             );
+            $sheetsToExclude = $this->sheetRepository->getSheetsWithRequestWithSheet($query->viewer);
+
+            // Add the current Sheet to the list of sheet to exclude as it is not possible to ask yourself to meet
+            $sheetsToExclude[] = $query->viewer;
         }
 
         $paginatedResult = $this->sheetSearchAdapter->find(
@@ -113,7 +119,8 @@ class PaginatedCatalogSheetPreviewViewQueryHandler
             $query->locale,
             true,
             $this->getNomenclatureItems($query->viewer, $query->locale),
-            $availableSlotIds
+            $availableSlotIds,
+            $sheetsToExclude
         );
 
         $paginatedResult->results = $this->sheetRepository->findSheets($paginatedResult->results);
