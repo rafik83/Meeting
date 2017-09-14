@@ -5268,6 +5268,11 @@ services:
         arguments:
             - '@vimeet_infrastructure.repository.meeting_slot_repository'
             - '@vimeet_infrastructure.repository.participant_repository'
+    domain.sheet.aggregate.available_slot_calculator:
+        class: Proximum\Vimeet\Domain\Sheet\Aggregate\AvailableSlotCalculator
+        arguments:
+            - '@vimeet_infrastructure.repository.meeting_slot_repository'
+            - '@vimeet_infrastructure.repository.sheet_repository'
 
     #
     # Command Aggregator
@@ -5310,6 +5315,13 @@ services:
         arguments:
             - '@vimeet_infrastructure.repository.event_repository'
             - '@command.aggregate.participant.full_unavailability_for_given_participants_handler'
+        tags:
+            - { name: console.command }
+    symfony_command.aggregate.sheet.available_slot_calculator_command:
+        class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\Aggregate\Sheet\AvailableSlotCalculatorCommand
+        arguments:
+            - '@vimeet_infrastructure.repository.event_repository'
+            -  '@command.sheet.aggregate.available_slot_aggregator_handler'
         tags:
             - { name: console.command }
 
