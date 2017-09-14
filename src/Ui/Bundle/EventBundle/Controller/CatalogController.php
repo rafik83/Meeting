@@ -125,6 +125,8 @@ class CatalogController extends Controller
         );
 
         $filters = $this->getDefaultFilters($typeViews, $categoryViews);
+        $dDay = $this->get('domain.event.day.dday_guesser')->isItDDay($event);
+        $isUserParticipant = $sheet->hasUserParticipant($user);
 
         $searchForm = $this->getSearchForm(
             $filters,
@@ -134,7 +136,8 @@ class CatalogController extends Controller
             $positionViews,
             $event,
             $sheet,
-            $locale
+            $locale,
+            $dDay && $isUserParticipant
         );
 
         if ($searchForm->handleRequest($request)->isSubmitted() && $searchForm->isValid()) {
@@ -185,7 +188,8 @@ class CatalogController extends Controller
             $typeViews,
             $categoryViews,
             $organizationCategoryViews,
-            $positionViews
+            $positionViews,
+            $dDay && $isUserParticipant
         );
 
         if ($request->isXmlHttpRequest()) {
@@ -462,6 +466,7 @@ class CatalogController extends Controller
      * @param Event                      $event
      * @param Sheet                      $sheet
      * @param string                     $locale
+     * @param bool                       $filterAvailableSlotIds
      *
      * @return FormInterface
      */
@@ -473,7 +478,8 @@ class CatalogController extends Controller
         array $positionViews,
         Event $event,
         Sheet $sheet,
-        $locale
+        $locale,
+        bool $filterAvailableSlotIds = false
     ) {
         return $this->get('form.factory')->createNamed('', SearchType::class, $filters, [
             'action'                    => $this->generateUrl('event_catalog_index', ['sheet' => $sheet->getId()]),
@@ -483,6 +489,7 @@ class CatalogController extends Controller
             'positionViews'             => $positionViews,
             'event'                     => $event,
             'locale'                    => $locale,
+            'filterByAvailableSlotIds'  => $filterAvailableSlotIds,
         ]);
     }
 
@@ -493,9 +500,10 @@ class CatalogController extends Controller
      * @param array                      $filters
      * @param array                      $currentAggregations
      * @param TypeView[]                 $typeViews
-     * @param CategoryView[]                 $categoryViews
+     * @param CategoryView[]             $categoryViews
      * @param OrganizationCategoryView[] $organizationCategoryViews
      * @param PositionView[]             $positionViews
+     * @param bool                       $filterAvailableSlotIds
      *
      * @return FormInterface
      */
@@ -508,7 +516,8 @@ class CatalogController extends Controller
         array $typeViews,
         array $categoryViews,
         array $organizationCategoryViews,
-        array $positionViews
+        array $positionViews,
+        bool $filterAvailableSlotIds = false
     ) {
         /** @var FilteredFieldsView $filteredFieldsView */
         $filteredFieldsView = $this->get('tactician.commandbus.query')->handle(
@@ -532,7 +541,8 @@ class CatalogController extends Controller
             $filteredFieldsView->positionViews,
             $event,
             $sheet,
-            $locale
+            $locale,
+            $filterAvailableSlotIds
         );
     }
 }

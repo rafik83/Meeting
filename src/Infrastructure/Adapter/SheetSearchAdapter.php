@@ -63,14 +63,21 @@ class SheetSearchAdapter implements SheetSearchAdapterInterface
         int $limit,
         string $locale,
         bool $getAggregations,
-        array $nomenclatureItems = []
+        array $nomenclatureItems = [],
+        array $availableSlotIds = []
     ): PaginatedResult {
-        dump('passe');
         $nomenclatureBoost = (isset($nomenclatureItems[Nomenclature::OBJECTIVE_NONE]))
             ? count($nomenclatureItems[Nomenclature::OBJECTIVE_NONE])
             : 1;
 
-        $builder = new SheetSearchQueryBuilder($event, $filters, $locale, $nomenclatureBoost, $nomenclatureItems);
+        $builder = new SheetSearchQueryBuilder(
+            $event,
+            $filters,
+            $locale,
+            $nomenclatureBoost,
+            $nomenclatureItems,
+            $availableSlotIds
+        );
 
         if (Constant::ORDER_BY_DATE_ADDED_TO_CATALOG === $orderBy) {
             $query = new Query($builder->getQuery());

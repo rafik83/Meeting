@@ -48,7 +48,7 @@ class SearchType extends AbstractSearchType
             ])
         ;
 
-        if ($options['filterByAvailableSlotIds'] === false) {
+        if ($options['filterByAvailableSlotIds'] === true) {
             $everyone = CatalogConstant::AVAILABLE_SLOT_IDS_FILTER_EVERYONE;
             $available = CatalogConstant::AVAILABLE_SLOT_IDS_FILTER_AVAILABLE;
             $builder

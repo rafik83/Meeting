@@ -11,12 +11,16 @@
 namespace Proximum\Vimeet\Application\Query\Sheet;
 
 use Proximum\Vimeet\Application\Adapter\SheetSearchAdapterInterface;
+use Proximum\Vimeet\Application\Query\Agenda\AvailableSheets\AvailableSlotsByParticipantQuery;
+use Proximum\Vimeet\Application\Query\Agenda\AvailableSheets\AvailableSlotsByParticipantQueryHandler;
 use Proximum\Vimeet\Application\Query\Catalog\SheetPreviewViewQuery;
 use Proximum\Vimeet\Application\Query\Catalog\SheetPreviewViewQueryHandler;
 use Proximum\Vimeet\Application\Query\Sheet\Viewed\ViewedSheetListViewQuery;
 use Proximum\Vimeet\Application\Query\Sheet\Viewed\ViewedSheetListViewQueryHandler;
+use Proximum\Vimeet\Domain\Catalog\SearchFields;
 use Proximum\Vimeet\Domain\KeyDates\Checker\AnsweringMeetingRequestAccessChecker;
 use Proximum\Vimeet\Domain\KeyDates\Checker\MeetingRequestAccessChecker;
+use Proximum\Vimeet\Domain\Model\Catalog\Internal\CatalogConstant;
 use Proximum\Vimeet\Domain\Model\PaginatedResult;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
@@ -24,29 +28,19 @@ use Proximum\Vimeet\Domain\Template\TemplateDataFactory;
 
 class PaginatedCatalogSheetPreviewViewQueryHandler
 {
-    /**
-     * @var SheetRepositoryInterface
-     */
+    /** @var SheetRepositoryInterface */
     private $sheetRepository;
 
-    /**
-     * @var ViewedSheetListViewQueryHandler
-     */
+    /** @var ViewedSheetListViewQueryHandler */
     private $viewedSheetListViewQueryHandler;
 
-    /**
-     * @var SheetSearchAdapterInterface
-     */
+    /** @var SheetSearchAdapterInterface */
     private $sheetSearchAdapter;
 
-    /**
-     * @var SheetPreviewViewQueryHandler
-     */
+    /** @var SheetPreviewViewQueryHandler */
     private $sheetPreviewViewQueryHandler;
 
-    /**
-     * @var TemplateDataFactory
-     */
+    /** @var TemplateDataFactory */
     private $templateDataFactory;
 
     /** @var MeetingRequestAccessChecker */
@@ -55,14 +49,18 @@ class PaginatedCatalogSheetPreviewViewQueryHandler
     /** @var AnsweringMeetingRequestAccessChecker */
     private $answeringMeetingRequestAccessChecker;
 
+    /** @var AvailableSlotsByParticipantQueryHandler */
+    private $availableSlotsByParticipantQueryHandler;
+
     /**
-     * @param SheetRepositoryInterface             $sheetRepository
-     * @param SheetSearchAdapterInterface          $sheetSearchAdapter
-     * @param SheetPreviewViewQueryHandler         $sheetPreviewViewQueryHandler
-     * @param ViewedSheetListViewQueryHandler       $viewedSheetListViewQueryHandler
-     * @param TemplateDataFactory                  $templateDataFactory
-     * @param MeetingRequestAccessChecker          $meetingRequestAccessChecker
-     * @param AnsweringMeetingRequestAccessChecker $answeringMeetingRequestAccessChecker
+     * @param SheetRepositoryInterface                $sheetRepository
+     * @param SheetSearchAdapterInterface             $sheetSearchAdapter
+     * @param SheetPreviewViewQueryHandler            $sheetPreviewViewQueryHandler
+     * @param ViewedSheetListViewQueryHandler         $viewedSheetListViewQueryHandler
+     * @param TemplateDataFactory                     $templateDataFactory
+     * @param MeetingRequestAccessChecker             $meetingRequestAccessChecker
+     * @param AnsweringMeetingRequestAccessChecker    $answeringMeetingRequestAccessChecker
+     * @param AvailableSlotsByParticipantQueryHandler $availableSlotsByParticipantQueryHandler
      */
     public function __construct(
         SheetRepositoryInterface $sheetRepository,
@@ -71,7 +69,8 @@ class PaginatedCatalogSheetPreviewViewQueryHandler
         ViewedSheetListViewQueryHandler $viewedSheetListViewQueryHandler,
         TemplateDataFactory $templateDataFactory,
         MeetingRequestAccessChecker $meetingRequestAccessChecker,
-        AnsweringMeetingRequestAccessChecker $answeringMeetingRequestAccessChecker
+        AnsweringMeetingRequestAccessChecker $answeringMeetingRequestAccessChecker,
+        AvailableSlotsByParticipantQueryHandler $availableSlotsByParticipantQueryHandler
     ) {
         $this->sheetRepository                      = $sheetRepository;
         $this->sheetSearchAdapter                   = $sheetSearchAdapter;
@@ -80,6 +79,7 @@ class PaginatedCatalogSheetPreviewViewQueryHandler
         $this->templateDataFactory                  = $templateDataFactory;
         $this->meetingRequestAccessChecker          = $meetingRequestAccessChecker;
         $this->answeringMeetingRequestAccessChecker = $answeringMeetingRequestAccessChecker;
+        $this->availableSlotsByParticipantQueryHandler = $availableSlotsByParticipantQueryHandler;
     }
 
     /**
@@ -89,6 +89,21 @@ class PaginatedCatalogSheetPreviewViewQueryHandler
      */
     public function handle(PaginatedCatalogSheetPreviewViewQuery $query)
     {
+        $availableSlotIds = [];
+
+        if ($query->viewer->hasUserParticipant($query->user)
+            && isset($query->filters[SearchFields::FILTER_AVAILABLE_SLOT_IDS])
+            && !empty($query->filters[SearchFields::FILTER_AVAILABLE_SLOT_IDS])
+            && $query->filters[SearchFields::FILTER_AVAILABLE_SLOT_IDS] === CatalogConstant::AVAILABLE_SLOT_IDS_FILTER_AVAILABLE
+        ) {
+            $availableSlotIds = $this->availableSlotsByParticipantQueryHandler->handle(
+                new AvailableSlotsByParticipantQuery(
+                    $query->event,
+                    $query->viewer->getUserParticipant($query->user)
+                )
+            );
+        }
+
         $paginatedResult = $this->sheetSearchAdapter->find(
             $query->event,
             $query->filters,
@@ -97,7 +112,8 @@ class PaginatedCatalogSheetPreviewViewQueryHandler
             $query->limit,
             $query->locale,
             true,
-            $this->getNomenclatureItems($query->viewer, $query->locale)
+            $this->getNomenclatureItems($query->viewer, $query->locale),
+            $availableSlotIds
         );
 
         $paginatedResult->results = $this->sheetRepository->findSheets($paginatedResult->results);

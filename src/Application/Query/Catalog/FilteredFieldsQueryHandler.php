@@ -94,7 +94,7 @@ class FilteredFieldsQueryHandler
             return null;
         }
 
-        // if type filter is used, type aggs need to be done with a ES query without type filter
+        // if category filter is used, category aggs need to be done with a ES query category type filter
         return $this->sheetSearchAdapter->getCategoryAggregations(
             $event,
             $locale,

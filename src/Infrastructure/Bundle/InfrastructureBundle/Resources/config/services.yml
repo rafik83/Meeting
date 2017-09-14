@@ -2794,6 +2794,7 @@ services:
             - '@template.template_data_factory'
             - '@domain.key_dates.checker.meeting_request_access_checker'
             - '@domain.key_dates.checker.answering_meeting_request_access_checker'
+            - '@query.agenda.available_sheets.available_slots_by_participant_query_handler'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Sheet\PaginatedCatalogSheetPreviewViewQuery }
 
@@ -3342,6 +3343,14 @@ services:
             - '@datetime'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Agenda\AvailableSheets\AvailableSlotsByParticipantAndDayQuery }
+    query.agenda.available_sheets.available_slots_by_participant_query_handler:
+        class: Proximum\Vimeet\Application\Query\Agenda\AvailableSheets\AvailableSlotsByParticipantQueryHandler
+        arguments:
+            - '@domain.event.day.dday_guesser'
+            - '@vimeet_infrastructure.repository.meeting_slot_repository'
+            - '@datetime'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Agenda\AvailableSheets\AvailableSlotsByParticipantQuery }
     query.agenda.admin.indicator.sheet_indicators_lazy_load_view_query_handler:
         class: Proximum\Vimeet\Application\Query\Agenda\Admin\Indicator\SheetIndicatorsLazyLoadViewQueryHandler
         arguments:

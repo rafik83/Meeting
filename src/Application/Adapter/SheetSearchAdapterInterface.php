@@ -11,6 +11,7 @@
 namespace Proximum\Vimeet\Application\Adapter;
 
 use Proximum\Vimeet\Application\Query\Messaging\Campaign\SheetListView;
+use Proximum\Vimeet\Application\View\Agenda\Slot\AvailableSlotView;
 use Proximum\Vimeet\Application\View\Participant\ParticipantsSheetIdsView;
 use Proximum\Vimeet\Application\View\Sheet\SheetIdsView;
 use Proximum\Vimeet\Domain\Model\Event;
@@ -32,6 +33,19 @@ interface SheetSearchAdapterInterface
     const ES_PATH_POSITION   = 'participants';
     const ES_PATH_CATEGORIES = 'categories';
 
+    /**
+     * @param Event               $event
+     * @param array               $filters
+     * @param string|null         $orderBy
+     * @param int                 $page
+     * @param int                 $limit
+     * @param string              $locale
+     * @param bool                $getAggregations
+     * @param array               $nomenclatureItems
+     * @param AvailableSlotView[] $availableSlotIds
+     *
+     * @return PaginatedResult
+     */
     public function find(
         Event $event,
         array $filters,
@@ -40,7 +54,8 @@ interface SheetSearchAdapterInterface
         int $limit,
         string $locale,
         bool $getAggregations,
-        array $nomenclatureItems = []
+        array $nomenclatureItems = [],
+        array $availableSlotIds = []
     ): PaginatedResult;
 
     /**

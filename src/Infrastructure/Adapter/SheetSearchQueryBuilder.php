@@ -18,6 +18,7 @@ use Elastica\Query\MultiMatch;
 use Elastica\Query\Nested;
 use Elastica\Query\Range;
 use Elastica\Query\Term;
+use Proximum\Vimeet\Application\View\Agenda\Slot\AvailableSlotView;
 use Proximum\Vimeet\Application\View\Catalog\PositionView;
 use Proximum\Vimeet\Domain\Admin\Follower\FollowerConstant;
 use Proximum\Vimeet\Domain\Catalog\SearchFields;
@@ -71,20 +72,20 @@ class SheetSearchQueryBuilder
     private $availableSlots;
 
     /**
-     * @param Event  $event
-     * @param array  $filters
-     * @param string $locale
-     * @param int    $initialBooster
-     * @param array  $nomenclatureItems
-     * @param array  $availableSlots
+     * @param Event               $event
+     * @param array               $filters
+     * @param string              $locale
+     * @param int                 $initialBooster
+     * @param array               $nomenclatureItems
+     * @param AvailableSlotView[] $availableSlots
      */
     public function __construct(
         Event $event,
         array $filters,
         $locale,
         $initialBooster = 1,
-        $nomenclatureItems = [],
-        $availableSlots = []
+        array $nomenclatureItems = [],
+        array $availableSlots = []
     ) {
         $this->locale            = $locale;
         $this->initialBooster    = $initialBooster > 0 ? $initialBooster : 1;
@@ -427,6 +428,7 @@ class SheetSearchQueryBuilder
             || empty($filters[SearchFields::FILTER_AVAILABLE_SLOT_IDS])
             || $filters[SearchFields::FILTER_AVAILABLE_SLOT_IDS] !== CatalogConstant::AVAILABLE_SLOT_IDS_FILTER_AVAILABLE
         ) {
+            dump('la');
             return;
         }
 
@@ -435,9 +437,10 @@ class SheetSearchQueryBuilder
 
         $matchSlot = new BoolQuery();
 
+        /** @var AvailableSlotView $availableSlot */
         foreach ($this->availableSlots as $availableSlot) {
             $matchSlot->addShould(
-                (new Term)->setTerm('availableSlotIds.id', $availableSlot)
+                (new Term)->setTerm('availableSlotIds.id', $availableSlot->id)
             );
         }
 
