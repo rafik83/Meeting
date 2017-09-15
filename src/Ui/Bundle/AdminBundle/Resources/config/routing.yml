@@ -1321,11 +1321,12 @@ admin_planner:
     defaults: { _controller: AdminBundle:Planner/Planner:index }
 
 admin_export_planner_data:
-    path: /event/{event}/planner/export
+    path: /event/{event}/planner/export/{mode}
     requirements:
         event: \d+
+        mode: manual|auto
     methods: [GET, POST]
-    defaults: { _controller: AdminBundle:Planner/Export:export }
+    defaults: { _controller: AdminBundle:Planner/Export:export, mode: manual }
 
 admin_import_planner_data:
     path: /event/{event}/planner/import

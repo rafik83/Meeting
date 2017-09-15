@@ -60,10 +60,18 @@ interface JobQueueInterface
      * @param Event  $event
      * @param Admin  $admin
      * @param string $locale
-     * @param string $lockMeetingRequest
+     * @param bool   $lockMeetingRequest
      * @param string $solutionType
+     * @param bool   $isModeAuto
      */
-    public function exportPlannerForEvent(Event $event, Admin $admin, $locale, $lockMeetingRequest, $solutionType);
+    public function exportPlannerForEvent(
+        Event $event,
+        Admin $admin,
+        string $locale,
+        bool $lockMeetingRequest,
+        string $solutionType,
+        bool $isModeAuto
+    );
 
     /**
      * @param File   $file

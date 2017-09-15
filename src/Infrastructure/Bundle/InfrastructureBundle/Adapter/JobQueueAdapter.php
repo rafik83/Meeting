@@ -99,15 +99,29 @@ class JobQueueAdapter extends AbstractJobQueueAdapter implements JobQueueInterfa
     /**
      * {@inheritdoc}
      */
-    public function exportPlannerForEvent(Event $event, Admin $admin, $locale, $lockMeetingRequest, $solutionType)
-    {
-        $job = new Job(ExportPlannerCommand::NAME, [
-            $event->getId(),
-            $admin->getEmail(),
-            $locale,
-            $solutionType,
-            $lockMeetingRequest
-        ]);
+    public function exportPlannerForEvent(
+        Event $event,
+        Admin $admin,
+        string $locale,
+        bool $lockMeetingRequest,
+        string $solutionType,
+        bool $isModeAuto
+    ) {
+        $job = new Job(
+            ExportPlannerCommand::NAME,
+            [
+                $event->getId(),
+                $admin->getEmail(),
+                $locale,
+                $solutionType,
+                true === $lockMeetingRequest
+                    ? ExportPlannerCommand::LOCK_MEETING_REQUEST
+                    : ExportPlannerCommand::DONT_LOCK_MEETING_REQUEST,
+                true === $isModeAuto
+                    ? ExportPlannerCommand::MODE_AUTO
+                    : ExportPlannerCommand::MODE_MANUAL
+            ]
+        );
 
         $this->setJob($job);
     }

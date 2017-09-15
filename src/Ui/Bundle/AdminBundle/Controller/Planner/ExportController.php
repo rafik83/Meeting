@@ -18,7 +18,7 @@ use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\HttpFoundation\Re
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Planner\ExportType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 class ExportController extends Controller
@@ -27,10 +27,11 @@ class ExportController extends Controller
      * @param Request       $request
      * @param UserInterface $admin
      * @param Event         $event
+     * @param string        $mode
      *
-     * @return RedirectResponse
+     * @return Response
      */
-    public function exportAction(Request $request, UserInterface $admin, Event $event)
+    public function exportAction(Request $request, UserInterface $admin, Event $event, string $mode)
     {
         $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
 
@@ -38,7 +39,7 @@ class ExportController extends Controller
             throw $this->createNotFoundException('Admin not found');
         }
 
-        $exportJobCreator = new ExportJobCreator($event, $admin, $request->getLocale());
+        $exportJobCreator = new ExportJobCreator($event, $admin, $request->getLocale(), $mode);
 
         $form   = $this->createForm(ExportType::class, $exportJobCreator, [
             'submit' => true,
@@ -48,12 +49,13 @@ class ExportController extends Controller
             $this->get('tactician.commandbus')->handle($exportJobCreator);
             $this->addFlash('success', 'flash.admin.planner.export.success');
 
-            return $this->redirectToRoute('admin_export_planner_data', ['event' => $event->getId()]);
+            return $this->redirectToRoute('admin_planner', ['event' => $event->getId()]);
         }
 
         return $this->render('AdminBundle:Planner/Export:form.html.twig', [
-            'event' => $event,
-            'form'  => $form->createView(),
+            'event'      => $event,
+            'form'       => $form->createView(),
+            'isModeAuto' => $exportJobCreator->isModeAuto(),
         ]);
     }
 

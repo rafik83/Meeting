@@ -11,7 +11,6 @@
 namespace Proximum\Vimeet\Application\Command\Planner;
 
 use Proximum\Vimeet\Application\Adapter\JobQueueInterface;
-use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\Planner\ExportPlannerCommand;
 
 class ExportJobCreatorHandler
 {
@@ -33,18 +32,13 @@ class ExportJobCreatorHandler
      */
     public function handle(ExportJobCreator $exportJobCreator)
     {
-        $lockMeetingRequest = ExportPlannerCommand::DONT_LOCK_MEETING_REQUEST;
-
-        if ($exportJobCreator->lockMeetingRequest === true) {
-            $lockMeetingRequest = ExportPlannerCommand::LOCK_MEETING_REQUEST;
-        }
-
         $this->jobQueue->exportPlannerForEvent(
             $exportJobCreator->event,
             $exportJobCreator->admin,
             $exportJobCreator->locale,
-            $lockMeetingRequest,
-            $exportJobCreator->solutionType
+            $exportJobCreator->lockMeetingRequest,
+            $exportJobCreator->solutionType,
+            $exportJobCreator->isModeAuto()
         );
     }
 }

@@ -20,8 +20,12 @@ use Symfony\Component\Console\Output\OutputInterface;
 class ExportPlannerCommand extends Command
 {
     const NAME                      = 'vimeet:planner:export';
-    const LOCK_MEETING_REQUEST      = 'lock';
-    const DONT_LOCK_MEETING_REQUEST = 'not_lock';
+
+    const LOCK_MEETING_REQUEST      = 'lock-requests';
+    const DONT_LOCK_MEETING_REQUEST = 'not-lock-requests';
+
+    const MODE_AUTO   = 'auto';
+    const MODE_MANUAL = 'manual';
 
     /** @var ExportHandler */
     private $exportPlannerHandler;
@@ -52,10 +56,11 @@ class ExportPlannerCommand extends Command
             ->addArgument('solutionType', InputArgument::REQUIRED, 'Solution type to prepare for algorithm')
             ->addArgument(
                 'lockMeetingRequest',
-                InputArgument::OPTIONAL,
-                'Should meeting request be locked after export',
-                self::DONT_LOCK_MEETING_REQUEST
-            );
+                InputArgument::REQUIRED,
+                'Should meeting request be locked after export'
+            )
+            ->addArgument('mode', InputArgument::REQUIRED, 'Mode: auto or manual')
+        ;
     }
 
     /**
@@ -63,13 +68,20 @@ class ExportPlannerCommand extends Command
      */
     public function execute(InputInterface $input, OutputInterface $output)
     {
+        $mode = $input->getArgument('mode');
+
+        if (!in_array($mode, [self::MODE_AUTO, self::MODE_MANUAL], true)) {
+            throw new \InvalidArgumentException('Mode must be auto or manual');
+        }
+
         $this->exportPlannerHandler->handle(
             new Export(
                 $input->getArgument('event'),
                 $input->getArgument('locale'),
                 $input->getArgument('admin_email'),
-                $input->getArgument('lockMeetingRequest'),
-                $input->getArgument('solutionType')
+                $input->getArgument('lockMeetingRequest') === self::LOCK_MEETING_REQUEST,
+                $input->getArgument('solutionType'),
+                $mode === self::MODE_AUTO
             )
         );
     }
