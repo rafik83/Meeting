@@ -12,6 +12,7 @@ namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Controller;
 
 use Proximum\Vimeet\Application\Command\Sheet\SheetViewed\Add;
 use Proximum\Vimeet\Application\Exception\Paginator\UnavailableCurrentPageException;
+use Proximum\Vimeet\Application\Query\Agenda\AvailableSheets\AvailableSlotsByParticipantQuery;
 use Proximum\Vimeet\Application\Query\Catalog\CategoryViewQuery;
 use Proximum\Vimeet\Application\Query\Catalog\FilteredFieldsQuery;
 use Proximum\Vimeet\Application\Query\Catalog\KeywordViewQuery;
@@ -125,8 +126,18 @@ class CatalogController extends Controller
         );
 
         $filters = $this->getDefaultFilters($typeViews, $categoryViews);
+
         $dDay = $this->get('domain.event.day.dday_guesser')->isItDDay($event);
         $isUserParticipant = $sheet->hasUserParticipant($user);
+        $filterAvailableSlot = $dDay && $isUserParticipant;
+
+        if (true === $filterAvailableSlot) {
+            $availableSlots = $this->get('tactician.commandbus.query')->handle(
+                new AvailableSlotsByParticipantQuery($event, $sheet->getUserParticipant($user))
+            );
+
+            $filterAvailableSlot = !empty($availableSlots);
+        }
 
         $searchForm = $this->getSearchForm(
             $filters,
@@ -137,7 +148,7 @@ class CatalogController extends Controller
             $event,
             $sheet,
             $locale,
-            $dDay && $isUserParticipant
+            $filterAvailableSlot
         );
 
         if ($searchForm->handleRequest($request)->isSubmitted() && $searchForm->isValid()) {
@@ -189,7 +200,7 @@ class CatalogController extends Controller
             $categoryViews,
             $organizationCategoryViews,
             $positionViews,
-            $dDay && $isUserParticipant
+            $filterAvailableSlot
         );
 
         if ($request->isXmlHttpRequest()) {
