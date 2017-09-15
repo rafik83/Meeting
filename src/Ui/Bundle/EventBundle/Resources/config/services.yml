@@ -416,6 +416,15 @@ services:
         tags:
             - { name: kernel.event_subscriber }
 
+    event_listener_sheet_aggregate.sheet_aggregate_event_subscriber:
+        class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\EventListener\Sheet\Aggregate\SheetAggregateEventSubscriber
+        arguments:
+            - '@vimeet_infrastructure.repository.sheet_repository'
+            - '@domain.sheet.aggregate.available_slot_calculator'
+            - '@adapter.job_queue_adapter'
+        tags:
+            - { name: kernel.event_subscriber }
+
     #
     # Twig extension
     #
