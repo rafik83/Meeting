@@ -1,15 +1,16 @@
 <?php
 
 /*
- * This file is part of the vimeet project.
+ * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) vimeet
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
 
 namespace Proximum\Vimeet\Application\Command\Event;
 
+use Proximum\Vimeet\Domain\Model\Unavailability\Mass;
 use Proximum\Vimeet\Domain\Repository\Event\DayRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\EventRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\HappeningRepositoryInterface;
@@ -91,6 +92,7 @@ class UpdateEventDatesToCurrentDateHandler
         }
 
         $slots            = $this->meetingSlotRepository->findByEvent($command->event);
+        $masses           = $this->massRepository->findByEvent($command->event);
         $massAssignments  = $this->massAssignmentRepository->findByEvent($command->event);
         $unavailabilities = $this->unavailabilityRepository->getByEvent($command->event);
         $happenings       = $this->happeningRepository->findByEvent($command->event);
@@ -141,6 +143,18 @@ class UpdateEventDatesToCurrentDateHandler
             $day->setStartTime($this->update($day->getStartTime(), $dayNumber));
             $day->setEndTime($this->update($day->getEndTime(), $dayNumber));
             $this->dayRepository->set($day);
+        }
+
+        $massesSortPerDay = $this->formatPerDay($masses);
+        foreach ($massesSortPerDay as $dayNumber => $massesPerDay) {
+            /** @var Mass $mass */
+            foreach ($massesPerDay as $mass) {
+                $mass->setDates(
+                    $this->update($mass->getBegin(), $dayNumber),
+                    $this->update($mass->getEnd(), $dayNumber)
+                );
+                $this->massRepository->update($mass);
+            }
         }
 
         $command->event->getConfiguration()->setDates(
