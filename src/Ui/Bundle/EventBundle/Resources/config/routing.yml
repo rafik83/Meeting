@@ -671,8 +671,8 @@ event_agenda_count_sheets_available_by_slot:
     path: /sheet/{sheet}/agenda/participant/{participant}/sheets-available-by-slot/{slot}
     requirements:
         sheet: \d+
+        participant: \d+
         slot: \d+
-    methods: [GET]
     defaults: { _controller: EventBundle:Agenda:countSheetsAvailableBySlot }
 
 happening_program:
