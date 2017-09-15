@@ -95,7 +95,10 @@ class DisplaySheetController extends Controller
             ->get('vimeet_infrastructure.repository.sheet_repository')
             ->getSheetById($sheetToDisplayId);
 
-        if (null === $sheetToDisplay || $eventDomain->getEvent() !== $sheetToDisplay->getEvent()) {
+        if (null === $sheetToDisplay
+            || $eventDomain->getEvent() !== $sheetToDisplay->getEvent()
+            || !$sheetToDisplay->isInCatalog()
+        ) {
             throw $this->createAccessDeniedException('Sheet not found');
         }
 
