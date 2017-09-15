@@ -68,6 +68,8 @@ parameters:
     tokbox_api_key: ~
     tokbox_api_secret: ~
 
+    planner_command: "http://optaplanner:8080/job/OptaPlanner_PREPROD_run/build --user vimeet:ecfbaffaa67e252544bad999254d21f4 --data-urlencode json='{\"parameter\": [{\"name\":\"INPUT\", \"value\":\"%%filename%%\"}]}"
+
     # Features flag
     feature_video_conference_enabled: false
     feature_video_conference_date_security_enabled: false
