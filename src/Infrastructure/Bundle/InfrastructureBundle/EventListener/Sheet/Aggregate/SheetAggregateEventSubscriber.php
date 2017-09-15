@@ -15,6 +15,8 @@ use Proximum\Vimeet\Application\Event\Happening\ParticipateEvent;
 use Proximum\Vimeet\Application\Event\Mass\Assignment\AssignmentUpdatedEvent;
 use Proximum\Vimeet\Application\Event\Mass\Unavailability\DispatchedEvent;
 use Proximum\Vimeet\Application\Event\Meeting\AbstractParticipateEvent;
+use Proximum\Vimeet\Application\Event\Participant\ParticipantAddedEvent;
+use Proximum\Vimeet\Application\Event\Participant\ParticipantRemovedEvent;
 use Proximum\Vimeet\Application\Event\Slot\AbstractSlotEvent;
 use Proximum\Vimeet\Application\Event\Unavailability\AbstractUnavailabilityEvent;
 use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
@@ -81,6 +83,22 @@ class SheetAggregateEventSubscriber implements EventSubscriberInterface
     }
 
     /**
+     * @param ParticipantAddedEvent $participantAddedEvent
+     */
+    public function onParticipantAdded(ParticipantAddedEvent $participantAddedEvent)
+    {
+        $this->availableSlotCalculator->calculateAvailableSlotForSheet($participantAddedEvent->participant->getSheet());
+    }
+
+    /**
+     * @param ParticipantRemovedEvent $participantRemovedEvent
+     */
+    public function onParticipantRemoved(ParticipantRemovedEvent $participantRemovedEvent)
+    {
+        $this->availableSlotCalculator->calculateAvailableSlotForSheet($participantRemovedEvent->sheet);
+    }
+
+    /**
      * @param AbstractSlotEvent $abstractSlotEvent
      */
     public function onSlotModification(AbstractSlotEvent $abstractSlotEvent)
@@ -116,6 +134,8 @@ class SheetAggregateEventSubscriber implements EventSubscriberInterface
             Events::MASS_ASSIGNMENT_UPDATED        => 'onMassAssignmentChanged',
             Events::MEETING_PARTICIPATE            => 'onMeetingChanged',
             Events::MEETING_UN_PARTICIPATE         => 'onMeetingChanged',
+            Events::PARTICIPANT_ADDED              => 'onParticipantAdded',
+            Events::PARTICIPANT_REMOVED            => 'onParticipantRemoved',
         ];
     }
 }

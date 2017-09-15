@@ -58,11 +58,15 @@ class UpdateHandler
 
         $this->massRepository->update($update->mass);
 
-        if ($oldBegin->format('Y/m/d H:i') !== $update->begin->format('Y/m/d H:i')
-            || $oldEnd->format('Y/m/d H:i') !== $update->end->format('Y/m/d H:i')
-            || $oldBlocking !== $update->blocking
+        // If change in date for a blocking mass
+        // Or if change the blocking state
+        if ((($oldBegin->format('Y/m/d H:i') !== $update->begin->format('Y/m/d H:i')
+                || $oldEnd->format('Y/m/d H:i') !== $update->end->format('Y/m/d H:i'))
+                && $update->blocking
+            ) || $oldBlocking !== $update->blocking
         ) {
             $this->jobQueueAdapter->aggregateEventUsersFullUnavailability($update->mass->getEvent());
+            $this->jobQueueAdapter->aggregateAvailableSlot($update->mass->getEvent());
         }
     }
 }
