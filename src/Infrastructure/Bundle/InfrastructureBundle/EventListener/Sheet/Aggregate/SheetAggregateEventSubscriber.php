@@ -19,6 +19,7 @@ use Proximum\Vimeet\Application\Event\Participant\ParticipantAddedEvent;
 use Proximum\Vimeet\Application\Event\Participant\ParticipantRemovedEvent;
 use Proximum\Vimeet\Application\Event\Slot\AbstractSlotEvent;
 use Proximum\Vimeet\Application\Event\Unavailability\AbstractUnavailabilityEvent;
+use Proximum\Vimeet\Application\Event\User\RegistrationEvent;
 use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
 use Proximum\Vimeet\Domain\Sheet\Aggregate\AvailableSlotCalculator;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Adapter\JobQueueAdapter;
@@ -119,6 +120,18 @@ class SheetAggregateEventSubscriber implements EventSubscriberInterface
     }
 
     /**
+     * @param RegistrationEvent $registrationEvent
+     */
+    public function onUserRegistration(RegistrationEvent $registrationEvent)
+    {
+        $sheets = $this->sheetRepository->getSheetsByUserAndEvent($registrationEvent->user, $registrationEvent->event);
+
+        foreach ($sheets as $sheet) {
+            $this->availableSlotCalculator->calculateAvailableSlotForSheet($sheet);
+        }
+    }
+
+    /**
      * {@inheritdoc
      */
     public static function getSubscribedEvents()
@@ -136,6 +149,7 @@ class SheetAggregateEventSubscriber implements EventSubscriberInterface
             Events::MEETING_UN_PARTICIPATE         => 'onMeetingChanged',
             Events::PARTICIPANT_ADDED              => 'onParticipantAdded',
             Events::PARTICIPANT_REMOVED            => 'onParticipantRemoved',
+            Events::USER_REGISTRATION              => 'onUserRegistration',
         ];
     }
 }
