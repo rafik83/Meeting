@@ -122,7 +122,7 @@ class ExportHandler
         }
 
         try {
-            $this->dispatcherHandler->handle(new Dispatcher($event, true));
+            $this->dispatcherHandler->handle(new Dispatcher($event));
         } catch (UnableToDispatchException $exception) {
             $this->notifyError(sprintf('flash.%s', $exception->indication), $event, $export);
 

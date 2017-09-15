@@ -45,11 +45,9 @@ class DispatcherHandler
     {
         $this->timeSlotDispatcher->dispatchAll($dispatcher->event);
 
-        if (!$dispatcher->launchDuringExport) {
-            $this->delayedEventDispatcher->dispatch(
-                Events::MASS_UNAVAILABILITY_DISPATCHED,
-                new DispatchedEvent($dispatcher->event)
-            );
-        }
+        $this->delayedEventDispatcher->dispatch(
+            Events::MASS_UNAVAILABILITY_DISPATCHED,
+            new DispatchedEvent($dispatcher->event)
+        );
     }
 }

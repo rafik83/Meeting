@@ -17,16 +17,11 @@ class Dispatcher
     /** @var Event */
     public $event;
 
-    /** @var bool */
-    public $launchDuringExport;
-
     /**
      * @param Event $event
-     * @param bool  $launchDuringExport
      */
-    public function __construct(Event $event, bool $launchDuringExport = false)
+    public function __construct(Event $event)
     {
         $this->event = $event;
-        $this->launchDuringExport = $launchDuringExport;
     }
 }
