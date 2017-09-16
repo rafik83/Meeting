@@ -55,6 +55,7 @@ flash.admin.planner.export.slotNotConfigured: 'Les créneaux de rendez-vous ne s
 flash.admin.planner.export.success: 'L''export des planifications a été plannifié, vous allez recevoir un mail contenant le fichier'
 flash.admin.planner.import.pending: 'Importation des données programmée. Vous recevrez un e-mail lorsque le traitement sera terminé.'
 flash.admin.planner.import.success: 'Importation des données réalisée avec succès'
+flash.admin.planner.run.success: 'La planification des rdv a été lancée. Cela peut prendre plusieurs minutes. Vous recevrez un email lorsque les rdvs seront générés.'
 flash.admin.planning.export.success: 'Vous recevrez un email lorsque le fichier d''export des plannings est prêt.'
 flash.admin.product.create.success: 'Le produit a bien été créé'
 flash.admin.product.import.success: 'Le catalogue de produits et les forfaits ont été importés'

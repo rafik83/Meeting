@@ -52,6 +52,9 @@ class ExportHandler
     /** @var string */
     private $exportLocationDirectoryPath;
 
+    /** @var string */
+    private $plannerFilesPath;
+
     /** @var EventRepositoryInterface */
     private $eventRepository;
 
@@ -69,12 +72,14 @@ class ExportHandler
 
     /**
      * ExportHandler constructor.
+     *
      * @param LockMeetingRequestUpdateHandler $lockMeetingRequestHandler
      * @param DispatcherHandler               $dispatcherHandler
      * @param PlannerViewQueryHandler         $plannerHandler
      * @param SerializerAdapterInterface      $serializer
      * @param LocalFileStorageAdapter         $fileStorageAdapter
      * @param string                          $exportLocationDirectoryPath
+     * @param string                          $plannerFilesPath
      * @param EventRepositoryInterface        $eventRepository
      * @param FileRepositoryInterface         $fileRepository
      * @param MailerInterface                 $mailer
@@ -87,24 +92,26 @@ class ExportHandler
         PlannerViewQueryHandler $plannerHandler,
         SerializerAdapterInterface $serializer,
         LocalFileStorageAdapter $fileStorageAdapter,
-        $exportLocationDirectoryPath,
+        string $exportLocationDirectoryPath,
+        string $plannerFilesPath,
         EventRepositoryInterface $eventRepository,
         FileRepositoryInterface $fileRepository,
         MailerInterface $mailer,
         \DateTimeInterface $dateTime,
         $mailSender
     ) {
-        $this->lockMeetingRequestHandler    = $lockMeetingRequestHandler;
-        $this->dispatcherHandler            = $dispatcherHandler;
-        $this->plannerHandler               = $plannerHandler;
-        $this->serializer                   = $serializer;
-        $this->fileStorageAdapter           = $fileStorageAdapter;
-        $this->exportLocationDirectoryPath  = $exportLocationDirectoryPath;
-        $this->eventRepository              = $eventRepository;
-        $this->fileRepository               = $fileRepository;
-        $this->mailer                       = $mailer;
-        $this->dateTime                     = $dateTime;
-        $this->mailSender                   = $mailSender;
+        $this->lockMeetingRequestHandler   = $lockMeetingRequestHandler;
+        $this->dispatcherHandler           = $dispatcherHandler;
+        $this->plannerHandler              = $plannerHandler;
+        $this->serializer                  = $serializer;
+        $this->fileStorageAdapter          = $fileStorageAdapter;
+        $this->exportLocationDirectoryPath = $exportLocationDirectoryPath;
+        $this->plannerFilesPath            = $plannerFilesPath;
+        $this->eventRepository             = $eventRepository;
+        $this->fileRepository              = $fileRepository;
+        $this->mailer                      = $mailer;
+        $this->dateTime                    = $dateTime;
+        $this->mailSender                  = $mailSender;
     }
 
     /**
@@ -129,13 +136,13 @@ class ExportHandler
             return;
         }
 
-        if (true === $export->lockMeetingRequest) {
-            $this->lockMeetingRequestHandler->handle(new LockMeetingRequestUpdate($event, true));
-        }
-
         try {
             $planner = $this->plannerHandler->handle(new PlannerViewQuery($event, $export->locale, $export->solutionType));
             $content = $this->serializer->serialize($planner, 'xml', ['xml_root_node_name' => self::XML_ROOT_NODE]);
+
+            if (true === $export->lockMeetingRequest) {
+                $this->lockMeetingRequestHandler->handle(new LockMeetingRequestUpdate($event, true));
+            }
         } catch (SlotNotConfiguredException $exception) {
             $this->notifyError(sprintf('flash.%s', $exception->getMessage()), $event, $export);
 
@@ -146,23 +153,30 @@ class ExportHandler
             return;
         }
 
-        $file = $this->createFile($event, $content);
+        $file = $this->createFile(
+            $event,
+            $content,
+            $export->isModeAuto ? $this->plannerFilesPath : $this->exportLocationDirectoryPath
+        );
 
-        $this->notifyCreationOfFile($event, $export, $file);
+        if (!$export->isModeAuto) {
+            $this->notifyCreationOfFile($event, $export, $file);
+        }
     }
 
     /**
      * @param Event  $event
      * @param string $data
+     * @param string $path
      *
      * @return File
      */
-    private function createFile(Event $event, &$data)
+    private function createFile(Event $event, string &$data, string $path): File
     {
         $filePath = $this->fileStorageAdapter->create(
             $data,
             sprintf('planner_%s.xml', $event->getId()),
-            $this->exportLocationDirectoryPath
+            $path
         );
 
         $file = new File($filePath, $this->dateTime);

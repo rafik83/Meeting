@@ -4784,6 +4784,7 @@ services:
             - '@adapter.serializer_adapter'
             - '@adapter.local_file_storage'
             - '%infrastructure.export_planner_path%'
+            - '%planner_files_path%'
             - '@vimeet_infrastructure.repository.event_repository'
             - '@repository.file_repository'
             - '@adapter.mailer_adapter'
