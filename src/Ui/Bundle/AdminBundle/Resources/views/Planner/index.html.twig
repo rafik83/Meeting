@@ -1,7 +1,7 @@
 {% extends 'AdminBundle::base.html.twig' %}
 
 {% block title %}
-[{{ event.title }}] {{ 'admin.planner.index'|trans }}
+    [{{ event.title }}] {{ 'admin.planner.index'|trans }}
 {% endblock %}
 
 {% block content %}
@@ -25,6 +25,19 @@
     </div>
 
     <hr>
+
+    {% if pendingPlannerJobs is not empty %}
+        {% for pendingPlannerJob in pendingPlannerJobs %}
+            <div class="alert alert-warning">
+                {{ 'admin.planner.pendingPlannerJob.details'|trans({
+                    '%adminFirstname%': pendingPlannerJob.admin.firstname,
+                    '%adminLastname%': pendingPlannerJob.admin.lastname,
+                    '%solutionType%': ('form.planner_export.children.solutionType.option.' ~ pendingPlannerJob.solutionType)|trans({}, 'forms'),
+                    '%createdAt%': pendingPlannerJob.createdAt|localizeddate('long', 'short', app.request.locale, event.timeZone)
+                }) }}
+            </div>
+        {% endfor %}
+    {% endif %}
 
     {% if meetingSolutions is empty %}
         <div class="alert alert-info">{{ 'admin.zero-result'|trans }}</div>

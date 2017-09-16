@@ -11,6 +11,7 @@
 namespace Proximum\Vimeet\Infrastructure\Repository;
 
 use Doctrine\ORM\EntityManager;
+use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\PlannerJob;
 use Proximum\Vimeet\Domain\Repository\PlannerJobRepositoryInterface;
 
@@ -36,5 +37,23 @@ class PlannerJobRepository implements PlannerJobRepositoryInterface
     {
         $this->entityManager->persist($plannerJob);
         $this->entityManager->flush($plannerJob);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function findPendingByEvent(Event $event): array
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('plannerJob, admin')
+            ->from(PlannerJob::class, 'plannerJob')
+            ->join('plannerJob.admin', 'admin', 'WITH', 'plannerJob.event = :event AND plannerJob.status=:status')
+            ->setParameter('event', $event)
+            ->setParameter('status', PlannerJob::STATUS_PENDING)
+        ;
+
+        return $queryBuilder->getQuery()->getResult();
     }
 }
