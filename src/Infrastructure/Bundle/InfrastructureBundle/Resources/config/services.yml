@@ -304,6 +304,10 @@ services:
         class: Proximum\Vimeet\Infrastructure\Repository\VideoConferenceRepository
         arguments:
             - '@doctrine.orm.entity_manager'
+    vimeet_infrastructure.repository.planner_job_repository:
+        class: Proximum\Vimeet\Infrastructure\Repository\PlannerJobRepository
+        arguments:
+            - '@doctrine.orm.entity_manager'
 
     #
     # Fixture providers
@@ -4797,6 +4801,8 @@ services:
         class: Proximum\Vimeet\Application\Command\Planner\ExportJobCreatorHandler
         arguments:
             - '@adapter.job_queue_adapter'
+            - '@vimeet_infrastructure.repository.planner_job_repository'
+            - '@datetime'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Planner\ExportJobCreator }
 

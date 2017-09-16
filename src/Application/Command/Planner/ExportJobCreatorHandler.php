@@ -11,20 +11,33 @@
 namespace Proximum\Vimeet\Application\Command\Planner;
 
 use Proximum\Vimeet\Application\Adapter\JobQueueInterface;
+use Proximum\Vimeet\Domain\Model\PlannerJob;
+use Proximum\Vimeet\Domain\Repository\PlannerJobRepositoryInterface;
 
 class ExportJobCreatorHandler
 {
     /** @var JobQueueInterface */
     private $jobQueue;
 
+    /** @var PlannerJobRepositoryInterface */
+    private $plannerJobRepository;
+
+    /** @var \DateTimeInterface */
+    private $dateTime;
+
     /**
-     * ExportJobCreatorHandler constructor.
-     *
-     * @param JobQueueInterface $jobQueue
+     * @param JobQueueInterface             $jobQueue
+     * @param PlannerJobRepositoryInterface $plannerJobRepository
+     * @param \DateTimeInterface            $dateTime
      */
-    public function __construct(JobQueueInterface $jobQueue)
-    {
-        $this->jobQueue = $jobQueue;
+    public function __construct(
+        JobQueueInterface $jobQueue,
+        PlannerJobRepositoryInterface $plannerJobRepository,
+        \DateTimeInterface $dateTime
+    ) {
+        $this->jobQueue             = $jobQueue;
+        $this->plannerJobRepository = $plannerJobRepository;
+        $this->dateTime             = $dateTime;
     }
 
     /**
@@ -32,6 +45,17 @@ class ExportJobCreatorHandler
      */
     public function handle(ExportJobCreator $exportJobCreator)
     {
+        if ($exportJobCreator->isModeAuto()) {
+            $plannerJob = new PlannerJob(
+                $exportJobCreator->event,
+                $exportJobCreator->admin,
+                $exportJobCreator->solutionType,
+                $exportJobCreator->lockMeetingRequest,
+                $this->dateTime
+            );
+            $this->plannerJobRepository->add($plannerJob);
+        }
+
         $this->jobQueue->exportPlannerForEvent(
             $exportJobCreator->event,
             $exportJobCreator->admin,
