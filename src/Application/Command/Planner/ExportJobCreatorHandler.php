@@ -11,8 +11,11 @@
 namespace Proximum\Vimeet\Application\Command\Planner;
 
 use Proximum\Vimeet\Application\Adapter\JobQueueInterface;
+use Proximum\Vimeet\Application\Exception\Planner\DayNotConfiguredException;
+use Proximum\Vimeet\Application\Exception\Planner\NoSpotActiveException;
 use Proximum\Vimeet\Domain\Model\PlannerJob;
 use Proximum\Vimeet\Domain\Repository\PlannerJobRepositoryInterface;
+use Proximum\Vimeet\Domain\Repository\SpotRepositoryInterface;
 
 class ExportJobCreatorHandler
 {
@@ -22,29 +25,48 @@ class ExportJobCreatorHandler
     /** @var PlannerJobRepositoryInterface */
     private $plannerJobRepository;
 
+    /** @var SpotRepositoryInterface */
+    private $spotRepository;
+
     /** @var \DateTimeInterface */
     private $dateTime;
 
     /**
      * @param JobQueueInterface             $jobQueue
      * @param PlannerJobRepositoryInterface $plannerJobRepository
+     * @param SpotRepositoryInterface       $spotRepository
      * @param \DateTimeInterface            $dateTime
      */
     public function __construct(
         JobQueueInterface $jobQueue,
         PlannerJobRepositoryInterface $plannerJobRepository,
+        SpotRepositoryInterface $spotRepository,
         \DateTimeInterface $dateTime
     ) {
         $this->jobQueue             = $jobQueue;
         $this->plannerJobRepository = $plannerJobRepository;
         $this->dateTime             = $dateTime;
+        $this->spotRepository = $spotRepository;
     }
 
     /**
      * @param ExportJobCreator $exportJobCreator
+     *
+     * @throws NoSpotActiveException
+     * @throws DayNotConfiguredException
      */
     public function handle(ExportJobCreator $exportJobCreator)
     {
+        if (false === $this->spotRepository->hasActiveSpot($exportJobCreator->event)) {
+            throw new NoSpotActiveException();
+        }
+
+        if (0 === count($exportJobCreator->event->getDays())) {
+            throw new DayNotConfiguredException();
+        }
+
+        $plannerJob = null;
+
         if ($exportJobCreator->isModeAuto()) {
             $plannerJob = new PlannerJob(
                 $exportJobCreator->event,

@@ -11,12 +11,15 @@
 namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Planner;
 
 use Proximum\Vimeet\Application\Command\Planner\ExportJobCreator;
+use Proximum\Vimeet\Application\Exception\Planner\DayNotConfiguredException;
+use Proximum\Vimeet\Application\Exception\Planner\NoSpotActiveException;
 use Proximum\Vimeet\Domain\Model\Admin;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\File;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\HttpFoundation\Response\XmlFileResponse;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Planner\ExportType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\Form\FormError;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -46,15 +49,37 @@ class ExportController extends Controller
         ]);
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
-            $this->get('tactician.commandbus')->handle($exportJobCreator);
-            $this->addFlash(
-                'success',
-                $exportJobCreator->isModeAuto()
-                    ? 'flash.admin.planner.run.success'
-                    : 'flash.admin.planner.export.success'
-            );
+            try {
+                $this->get('tactician.commandbus')->handle($exportJobCreator);
+                $this->addFlash(
+                    'success',
+                    $exportJobCreator->isModeAuto()
+                        ? 'flash.admin.planner.run.success'
+                        : 'flash.admin.planner.export.success'
+                );
 
-            return $this->redirectToRoute('admin_planner', ['event' => $event->getId()]);
+                return $this->redirectToRoute('admin_planner', ['event' => $event->getId()]);
+            } catch (NoSpotActiveException $noSpotActiveException) {
+                $form->addError(
+                    new FormError(
+                        $this->get('translator')->trans(
+                            sprintf('flash.%s', $noSpotActiveException->getMessage()),
+                            [],
+                            'flashes'
+                        )
+                    )
+                );
+            } catch (DayNotConfiguredException $dayNotConfiguredException) {
+                $form->addError(
+                    new FormError(
+                        $this->get('translator')->trans(
+                            sprintf('flash.%s', $dayNotConfiguredException->getMessage()),
+                            [],
+                            'flashes'
+                        )
+                    )
+                );
+            }
         }
 
         return $this->render('AdminBundle:Planner/Export:form.html.twig', [
