@@ -4791,6 +4791,7 @@ services:
             - '%planner_files_path%'
             - '@vimeet_infrastructure.repository.event_repository'
             - '@repository.file_repository'
+            - '@vimeet_infrastructure.repository.planner_job_repository'
             - '@adapter.mailer_adapter'
             - '@datetime'
             - '%mailer_sender%'
@@ -4803,6 +4804,7 @@ services:
             - '@adapter.job_queue_adapter'
             - '@vimeet_infrastructure.repository.planner_job_repository'
             - '@vimeet_infrastructure.repository.spot_repository'
+            - '@vimeet_infrastructure.repository.meeting_slot_repository'
             - '@datetime'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Planner\ExportJobCreator }

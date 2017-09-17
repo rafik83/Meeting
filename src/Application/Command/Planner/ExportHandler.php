@@ -23,8 +23,10 @@ use Proximum\Vimeet\Application\Query\Planner\PlannerViewQuery;
 use Proximum\Vimeet\Application\Query\Planner\PlannerViewQueryHandler;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\File;
+use Proximum\Vimeet\Domain\Model\PlannerJob;
 use Proximum\Vimeet\Domain\Repository\EventRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\FileRepositoryInterface;
+use Proximum\Vimeet\Domain\Repository\PlannerJobRepositoryInterface;
 use Proximum\Vimeet\Domain\Unavailability\Exception\UnableToDispatchException;
 use Proximum\Vimeet\Infrastructure\Adapter\LocalFileStorageAdapter;
 use Proximum\Vimeet\Ui\Bundle\MailBundle\Mail\Command\Error\ExportPlannerMailError;
@@ -61,6 +63,9 @@ class ExportHandler
     /** @var FileRepositoryInterface */
     private $fileRepository;
 
+    /** @var PlannerJobRepositoryInterface */
+    private $plannerJobRepository;
+
     /** @var MailerInterface */
     private $mailer;
 
@@ -82,6 +87,7 @@ class ExportHandler
      * @param string                          $plannerFilesPath
      * @param EventRepositoryInterface        $eventRepository
      * @param FileRepositoryInterface         $fileRepository
+     * @param PlannerJobRepositoryInterface   $plannerJobRepository
      * @param MailerInterface                 $mailer
      * @param \DateTimeInterface              $dateTime
      * @param string                          $mailSender
@@ -96,6 +102,7 @@ class ExportHandler
         string $plannerFilesPath,
         EventRepositoryInterface $eventRepository,
         FileRepositoryInterface $fileRepository,
+        PlannerJobRepositoryInterface $plannerJobRepository,
         MailerInterface $mailer,
         \DateTimeInterface $dateTime,
         $mailSender
@@ -109,6 +116,7 @@ class ExportHandler
         $this->plannerFilesPath            = $plannerFilesPath;
         $this->eventRepository             = $eventRepository;
         $this->fileRepository              = $fileRepository;
+        $this->plannerJobRepository        = $plannerJobRepository;
         $this->mailer                      = $mailer;
         $this->dateTime                    = $dateTime;
         $this->mailSender                  = $mailSender;
@@ -121,17 +129,20 @@ class ExportHandler
      */
     public function handle(Export $export)
     {
-        $content = null;
-        $event   = $this->eventRepository->getById($export->eventId);
+        $event = $this->eventRepository->getById($export->eventId);
 
-        if ($event === null) {
+        if (null === $event) {
             throw new InvalidArgumentForExportException(sprintf('Event %s not found', $export->eventId));
         }
+
+        $plannerJob = $this->getPlannerJob($export->plannerJobId);
 
         try {
             $this->dispatcherHandler->handle(new Dispatcher($event));
         } catch (UnableToDispatchException $exception) {
-            $this->notifyError(sprintf('flash.%s', $exception->indication), $event, $export);
+            $errorKey = sprintf('flash.%s', $exception->getMessage());
+            $this->notifyError($errorKey, $event, $export);
+            $this->saveErrorInPlannerJob($plannerJob, $errorKey);
 
             return;
         }
@@ -144,11 +155,15 @@ class ExportHandler
                 $this->lockMeetingRequestHandler->handle(new LockMeetingRequestUpdate($event, true));
             }
         } catch (SlotNotConfiguredException $exception) {
-            $this->notifyError(sprintf('flash.%s', $exception->getMessage()), $event, $export);
+            $errorKey = sprintf('flash.%s', $exception->getMessage());
+            $this->saveErrorInPlannerJob($plannerJob, $errorKey);
+            $this->notifyError($errorKey, $event, $export, $plannerJob);
 
             return;
         } catch (DayNotConfiguredException $exception) {
-            $this->notifyError(sprintf('flash.%s', $exception->getMessage()), $event, $export);
+            $errorKey = sprintf('flash.%s', $exception->getMessage());
+            $this->saveErrorInPlannerJob($plannerJob, $errorKey);
+            $this->notifyError($errorKey, $event, $export, $plannerJob);
 
             return;
         }
@@ -162,6 +177,53 @@ class ExportHandler
         if (!$export->isModeAuto) {
             $this->notifyCreationOfFile($event, $export, $file);
         }
+
+        $this->saveFileInPlannerJob($plannerJob, $file);
+    }
+
+    /**
+     * @param null|PlannerJob $plannerJob
+     * @param File            $file
+     */
+    public function saveFileInPlannerJob(?PlannerJob $plannerJob, File $file): void
+    {
+        if ($plannerJob instanceof PlannerJob) {
+            $plannerJob->setFile($file);
+            $this->plannerJobRepository->set($plannerJob);
+        }
+    }
+
+    /**
+     * @param null|PlannerJob $plannerJob
+     * @param string          $errorKey
+     */
+    private function saveErrorInPlannerJob(?PlannerJob $plannerJob, string $errorKey): void
+    {
+        if ($plannerJob instanceof PlannerJob) {
+            $plannerJob->setError($errorKey);
+            $this->plannerJobRepository->set($plannerJob);
+        }
+    }
+
+    /**
+     * @param int|null $plannerJobId
+     *
+     * @return null|PlannerJob
+     * @throws InvalidArgumentForExportException
+     */
+    private function getPlannerJob(?int $plannerJobId): ?PlannerJob
+    {
+        if (null === $plannerJobId) {
+            return null;
+        }
+
+        $plannerJob = $this->plannerJobRepository->getById($plannerJobId);
+
+        if (null === $plannerJob) {
+            throw new InvalidArgumentForExportException(sprintf('PlannerJob %s not found', $plannerJobId));
+        }
+
+        return $plannerJob;
     }
 
     /**
@@ -207,9 +269,9 @@ class ExportHandler
     /**
      * Send a mail to the emailToNotify with the error message
      *
-     * @param string $message
-     * @param Event  $event
-     * @param Export $command
+     * @param string          $message
+     * @param Event           $event
+     * @param Export          $command
      */
     private function notifyError($message, Event $event, Export $command)
     {

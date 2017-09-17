@@ -21,9 +21,21 @@ interface PlannerJobRepositoryInterface
     public function add(PlannerJob $plannerJob): void;
 
     /**
+     * @param PlannerJob $plannerJob
+     */
+    public function set(PlannerJob $plannerJob): void;
+
+    /**
      * @param Event $event
      *
-     * @return PlannerJob[]
+     * @return null|PlannerJob
      */
-    public function findPendingByEvent(Event $event): array;
+    public function findLastByEvent(Event $event): ?PlannerJob;
+
+    /**
+     * @param int $id
+     *
+     * @return null|PlannerJob
+     */
+    public function getById(int $id): ?PlannerJob;
 }

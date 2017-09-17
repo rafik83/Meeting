@@ -13,6 +13,7 @@ namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Planner;
 use Proximum\Vimeet\Application\Command\Planner\ExportJobCreator;
 use Proximum\Vimeet\Application\Exception\Planner\DayNotConfiguredException;
 use Proximum\Vimeet\Application\Exception\Planner\NoSpotActiveException;
+use Proximum\Vimeet\Application\Exception\Planner\SlotNotConfiguredException;
 use Proximum\Vimeet\Domain\Model\Admin;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\File;
@@ -20,6 +21,7 @@ use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\HttpFoundation\Re
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Planner\ExportType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Form\FormError;
+use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -43,10 +45,7 @@ class ExportController extends Controller
         }
 
         $exportJobCreator = new ExportJobCreator($event, $admin, $request->getLocale(), $mode);
-
-        $form   = $this->createForm(ExportType::class, $exportJobCreator, [
-            'submit' => true,
-        ]);
+        $form = $this->createForm(ExportType::class, $exportJobCreator, ['submit' => true]);
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
             try {
@@ -60,25 +59,11 @@ class ExportController extends Controller
 
                 return $this->redirectToRoute('admin_planner', ['event' => $event->getId()]);
             } catch (NoSpotActiveException $noSpotActiveException) {
-                $form->addError(
-                    new FormError(
-                        $this->get('translator')->trans(
-                            sprintf('flash.%s', $noSpotActiveException->getMessage()),
-                            [],
-                            'flashes'
-                        )
-                    )
-                );
+                $this->exceptionToFormError($form, $noSpotActiveException);
             } catch (DayNotConfiguredException $dayNotConfiguredException) {
-                $form->addError(
-                    new FormError(
-                        $this->get('translator')->trans(
-                            sprintf('flash.%s', $dayNotConfiguredException->getMessage()),
-                            [],
-                            'flashes'
-                        )
-                    )
-                );
+                $this->exceptionToFormError($form, $dayNotConfiguredException);
+            } catch (SlotNotConfiguredException $slotNotConfiguredException) {
+                $this->exceptionToFormError($form, $slotNotConfiguredException);
             }
         }
 
@@ -88,6 +73,24 @@ class ExportController extends Controller
             'isModeAuto' => $exportJobCreator->isModeAuto(),
         ]);
     }
+
+    /**
+     * @param FormInterface $form
+     * @param \Exception    $exception
+     */
+    private function exceptionToFormError(FormInterface $form, \Exception $exception): void
+    {
+        $form->addError(
+            new FormError(
+                $this->get('translator')->trans(
+                    sprintf('flash.%s', $exception->getMessage()),
+                    [],
+                    'flashes'
+                )
+            )
+        );
+    }
+
 
     /**
      * @param Event  $event

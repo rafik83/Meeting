@@ -50,7 +50,7 @@ class ExportPlannerCommand extends Command
         $this
             ->setName(self::NAME)
             ->setDescription('Generate xml file for planner export')
-            ->addArgument('event', InputArgument::REQUIRED, 'Event id')
+            ->addArgument('eventId', InputArgument::REQUIRED, 'Event id')
             ->addArgument('admin_email', InputArgument::REQUIRED, 'Admin email to notify')
             ->addArgument('locale', InputArgument::REQUIRED, 'Locale for the email')
             ->addArgument('solutionType', InputArgument::REQUIRED, 'Solution type to prepare for algorithm')
@@ -60,6 +60,7 @@ class ExportPlannerCommand extends Command
                 'Should meeting request be locked after export'
             )
             ->addArgument('mode', InputArgument::REQUIRED, 'Mode: auto or manual')
+            ->addArgument('plannerJob', InputArgument::OPTIONAL, 'plannerJob id')
         ;
     }
 
@@ -74,14 +75,21 @@ class ExportPlannerCommand extends Command
             throw new \InvalidArgumentException('Mode must be auto or manual');
         }
 
+        $plannerJob = $input->getArgument('plannerJob');
+
+        if ('' === $plannerJob) {
+            $plannerJob = null;
+        }
+
         $this->exportPlannerHandler->handle(
             new Export(
-                $input->getArgument('event'),
+                $input->getArgument('eventId'),
                 $input->getArgument('locale'),
                 $input->getArgument('admin_email'),
                 $input->getArgument('lockMeetingRequest') === self::LOCK_MEETING_REQUEST,
                 $input->getArgument('solutionType'),
-                $mode === self::MODE_AUTO
+                $mode === self::MODE_AUTO,
+                $plannerJob
             )
         );
     }

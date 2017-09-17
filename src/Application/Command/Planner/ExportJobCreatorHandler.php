@@ -13,7 +13,9 @@ namespace Proximum\Vimeet\Application\Command\Planner;
 use Proximum\Vimeet\Application\Adapter\JobQueueInterface;
 use Proximum\Vimeet\Application\Exception\Planner\DayNotConfiguredException;
 use Proximum\Vimeet\Application\Exception\Planner\NoSpotActiveException;
+use Proximum\Vimeet\Application\Exception\Planner\SlotNotConfiguredException;
 use Proximum\Vimeet\Domain\Model\PlannerJob;
+use Proximum\Vimeet\Domain\Repository\MeetingSlotRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\PlannerJobRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\SpotRepositoryInterface;
 
@@ -28,25 +30,31 @@ class ExportJobCreatorHandler
     /** @var SpotRepositoryInterface */
     private $spotRepository;
 
+    /** @var MeetingSlotRepositoryInterface */
+    private $meetingSlotRepository;
+
     /** @var \DateTimeInterface */
     private $dateTime;
 
     /**
-     * @param JobQueueInterface             $jobQueue
-     * @param PlannerJobRepositoryInterface $plannerJobRepository
-     * @param SpotRepositoryInterface       $spotRepository
-     * @param \DateTimeInterface            $dateTime
+     * @param JobQueueInterface              $jobQueue
+     * @param PlannerJobRepositoryInterface  $plannerJobRepository
+     * @param SpotRepositoryInterface        $spotRepository
+     * @param MeetingSlotRepositoryInterface $meetingSlotRepository
+     * @param \DateTimeInterface             $dateTime
      */
     public function __construct(
         JobQueueInterface $jobQueue,
         PlannerJobRepositoryInterface $plannerJobRepository,
         SpotRepositoryInterface $spotRepository,
+        MeetingSlotRepositoryInterface $meetingSlotRepository,
         \DateTimeInterface $dateTime
     ) {
-        $this->jobQueue             = $jobQueue;
-        $this->plannerJobRepository = $plannerJobRepository;
-        $this->dateTime             = $dateTime;
-        $this->spotRepository = $spotRepository;
+        $this->jobQueue              = $jobQueue;
+        $this->plannerJobRepository  = $plannerJobRepository;
+        $this->spotRepository        = $spotRepository;
+        $this->meetingSlotRepository = $meetingSlotRepository;
+        $this->dateTime              = $dateTime;
     }
 
     /**
@@ -54,6 +62,7 @@ class ExportJobCreatorHandler
      *
      * @throws NoSpotActiveException
      * @throws DayNotConfiguredException
+     * @throws SlotNotConfiguredException
      */
     public function handle(ExportJobCreator $exportJobCreator)
     {
@@ -63,6 +72,10 @@ class ExportJobCreatorHandler
 
         if (0 === count($exportJobCreator->event->getDays())) {
             throw new DayNotConfiguredException();
+        }
+
+        if (false === $this->meetingSlotRepository->hasActiveSlot($exportJobCreator->event)) {
+            throw new SlotNotConfiguredException();
         }
 
         $plannerJob = null;
@@ -84,7 +97,8 @@ class ExportJobCreatorHandler
             $exportJobCreator->locale,
             $exportJobCreator->lockMeetingRequest,
             $exportJobCreator->solutionType,
-            $exportJobCreator->isModeAuto()
+            $exportJobCreator->isModeAuto(),
+            $plannerJob
         );
     }
 }

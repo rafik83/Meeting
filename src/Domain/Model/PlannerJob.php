@@ -16,6 +16,7 @@ class PlannerJob
 {
     const STATUS_PENDING = 'pending';
     const STATUS_COMPLETED = 'completed';
+    const STATUS_ERROR = 'error';
 
     /** @var int */
     private $id;
@@ -37,6 +38,9 @@ class PlannerJob
 
     /** @var null|File */
     private $file;
+
+    /** @var string */
+    private $errorMessage;
 
     /** @var \DateTimeInterface */
     private $createdAt;
@@ -119,7 +123,7 @@ class PlannerJob
     /**
      * @return null|File
      */
-    public function getFile()
+    public function getFile(): ?File
     {
         return $this->file;
     }
@@ -130,5 +134,46 @@ class PlannerJob
     public function getCreatedAt(): \DateTimeInterface
     {
         return $this->createdAt;
+    }
+
+    /**
+     * @param File $file
+     */
+    public function setFile($file): void
+    {
+        $this->file = $file;
+    }
+
+    /**
+     * @return bool
+     */
+    public function hasFile(): bool
+    {
+        return null !== $this->file;
+    }
+
+    /**
+     * @return null|string
+     */
+    public function getErrorMessage(): ?string
+    {
+        return $this->errorMessage;
+    }
+
+    /**
+     * @param string $errorMessage
+     */
+    public function setError(string $errorMessage): void
+    {
+        $this->status = self::STATUS_ERROR;
+        $this->errorMessage = $errorMessage;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isError(): bool
+    {
+        return self::STATUS_ERROR == $this->status;
     }
 }

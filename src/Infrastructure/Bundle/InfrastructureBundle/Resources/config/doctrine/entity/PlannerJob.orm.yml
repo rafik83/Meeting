@@ -13,6 +13,9 @@ Proximum\Vimeet\Domain\Model\PlannerJob:
             type: boolean
         status:
             type: string
+        errorMessage:
+            type: string
+            nullable: true
         createdAt:
             type: datetime
     manyToOne:

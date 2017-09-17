@@ -532,7 +532,8 @@ admin.planner.import.alert.meetingDelation: 'Attention, l''import d''une nouvell
 admin.planner.import.link: Importer
 admin.planner.import.title: 'Importation d''une solution'
 admin.planner.index: Planification
-admin.planner.pendingPlannerJob.details: 'Une planification des RDVs (%solutionType%) demandée par %adminFirstname% %adminLastname% le %createdAt% est en cours.'
+admin.planner.pendingPlannerJob.details: 'Une planification des RDVs (%solutionType%) a été demandée par %adminFirstname% %adminLastname% le %createdAt%.'
+admin.planner.pendingPlannerJob.status.fileExported: 'Fichier exporté vers le planner'
 admin.planner.run: Lancer la planification
 admin.planner.run.title: 'Lancer la planification de RDVs'
 admin.planning.export.link: Exporter

@@ -42,18 +42,44 @@ class PlannerJobRepository implements PlannerJobRepositoryInterface
     /**
      * {@inheritdoc}
      */
-    public function findPendingByEvent(Event $event): array
+    public function set(PlannerJob $plannerJob): void
+    {
+        $this->entityManager->flush($plannerJob);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function findLastByEvent(Event $event): ?PlannerJob
     {
         $queryBuilder = $this
             ->entityManager
             ->createQueryBuilder()
             ->select('plannerJob, admin')
             ->from(PlannerJob::class, 'plannerJob')
-            ->join('plannerJob.admin', 'admin', 'WITH', 'plannerJob.event = :event AND plannerJob.status=:status')
+            ->join('plannerJob.admin', 'admin', 'WITH', 'plannerJob.event = :event')
+            ->orderBy('plannerJob.createdAt', 'desc')
             ->setParameter('event', $event)
-            ->setParameter('status', PlannerJob::STATUS_PENDING)
+            ->setMaxResults(1)
         ;
 
-        return $queryBuilder->getQuery()->getResult();
+        return $queryBuilder->getQuery()->getOneOrNullResult();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getById(int $id): ?PlannerJob
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('plannerJob')
+            ->from(PlannerJob::class, 'plannerJob')
+            ->where('plannerJob.id = :id')
+            ->setParameter('id', $id)
+        ;
+
+        return $queryBuilder->getQuery()->getOneOrNullResult();
     }
 }

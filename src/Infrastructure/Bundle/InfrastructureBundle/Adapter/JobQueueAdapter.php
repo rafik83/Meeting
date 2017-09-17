@@ -16,6 +16,7 @@ use Proximum\Vimeet\Domain\Model\Admin;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\File;
 use Proximum\Vimeet\Domain\Model\Messaging\Campaign;
+use Proximum\Vimeet\Domain\Model\PlannerJob;
 use Proximum\Vimeet\Domain\Model\Template\RegistrationTemplate;
 use Proximum\Vimeet\Domain\Model\Template\SheetTemplate;
 use Proximum\Vimeet\Domain\Model\Type;
@@ -105,7 +106,8 @@ class JobQueueAdapter extends AbstractJobQueueAdapter implements JobQueueInterfa
         string $locale,
         bool $lockMeetingRequest,
         string $solutionType,
-        bool $isModeAuto
+        bool $isModeAuto,
+        ?PlannerJob $plannerJob
     ) {
         $job = new Job(
             ExportPlannerCommand::NAME,
@@ -119,7 +121,8 @@ class JobQueueAdapter extends AbstractJobQueueAdapter implements JobQueueInterfa
                     : ExportPlannerCommand::DONT_LOCK_MEETING_REQUEST,
                 true === $isModeAuto
                     ? ExportPlannerCommand::MODE_AUTO
-                    : ExportPlannerCommand::MODE_MANUAL
+                    : ExportPlannerCommand::MODE_MANUAL,
+                null !== $plannerJob ? $plannerJob->getId() : null
             ]
         );
 

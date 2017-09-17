@@ -24,20 +24,28 @@
         </div>
     </div>
 
-    <hr>
-
-    {% if pendingPlannerJobs is not empty %}
-        {% for pendingPlannerJob in pendingPlannerJobs %}
-            <div class="alert alert-warning">
+    {% if lastPlannerJob %}
+        <div class="alert alert-{{ lastPlannerJob.error ? 'danger' : 'warning' }}">
+            <p>
                 {{ 'admin.planner.pendingPlannerJob.details'|trans({
-                    '%adminFirstname%': pendingPlannerJob.admin.firstname,
-                    '%adminLastname%': pendingPlannerJob.admin.lastname,
-                    '%solutionType%': ('form.planner_export.children.solutionType.option.' ~ pendingPlannerJob.solutionType)|trans({}, 'forms'),
-                    '%createdAt%': pendingPlannerJob.createdAt|localizeddate('long', 'short', app.request.locale, event.timeZone)
+                    '%adminFirstname%': lastPlannerJob.admin.firstname,
+                    '%adminLastname%': lastPlannerJob.admin.lastname,
+                    '%solutionType%': ('form.planner_export.children.solutionType.option.' ~ lastPlannerJob.solutionType)|trans({}, 'forms'),
+                    '%createdAt%': lastPlannerJob.createdAt|localizeddate('long', 'short', app.request.locale, event.timeZone)
                 }) }}
-            </div>
-        {% endfor %}
+
+                {% if lastPlannerJob.hasFile %}
+                    <span class="label label-success">{{ 'admin.planner.pendingPlannerJob.status.fileExported'|trans }}</span>
+                {% endif %}
+            </p>
+
+            {% if lastPlannerJob.error %}
+                <p>⚠️ {{ lastPlannerJob.errorMessage|trans({}, 'flashes') }}</p>
+            {% endif %}
+        </div>
     {% endif %}
+
+    <hr>
 
     {% if meetingSolutions is empty %}
         <div class="alert alert-info">{{ 'admin.zero-result'|trans }}</div>

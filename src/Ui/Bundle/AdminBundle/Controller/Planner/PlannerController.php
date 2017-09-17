@@ -26,14 +26,17 @@ class PlannerController extends Controller
     {
         $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
 
-        $pendingPlannerJobs = $this->get('vimeet_infrastructure.repository.planner_job_repository')->findPendingByEvent($event);
+        $lastPlannerJob = $this
+            ->get('vimeet_infrastructure.repository.planner_job_repository')
+            ->findLastByEvent($event)
+        ;
 
         $meetingSolutions = $this->get('tactician.commandbus.query')->handle(new MeetingSolutionListQuery($event));
 
         return $this->render('AdminBundle:Planner:index.html.twig', [
-            'event'              => $event,
-            'meetingSolutions'   => $meetingSolutions,
-            'pendingPlannerJobs' => $pendingPlannerJobs,
+            'event'            => $event,
+            'meetingSolutions' => $meetingSolutions,
+            'lastPlannerJob'   => $lastPlannerJob,
         ]);
     }
 }
