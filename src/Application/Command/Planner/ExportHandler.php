@@ -168,24 +168,27 @@ class ExportHandler
             return;
         }
 
+        $path = $export->isModeAuto ? $this->plannerFilesPath : $this->exportLocationDirectoryPath;
+
         $file = $this->createFile(
             $event,
             $content,
-            $export->isModeAuto ? $this->plannerFilesPath : $this->exportLocationDirectoryPath
+            $path
         );
 
         if (!$export->isModeAuto) {
             $this->notifyCreationOfFile($event, $export, $file);
+        } else {
+            $this->saveFileInPlannerJob($plannerJob, $file);
+            $this->callPlanner($file, $path);
         }
-
-        $this->saveFileInPlannerJob($plannerJob, $file);
     }
 
     /**
      * @param null|PlannerJob $plannerJob
      * @param File            $file
      */
-    public function saveFileInPlannerJob(?PlannerJob $plannerJob, File $file): void
+    private function saveFileInPlannerJob(?PlannerJob $plannerJob, File $file): void
     {
         if ($plannerJob instanceof PlannerJob) {
             $plannerJob->setFile($file);
@@ -284,5 +287,28 @@ class ExportHandler
                 $message
             )
         );
+    }
+
+    private function callPlanner(File $file, string $path): void
+    {
+        $url = 'http://optaplanner:8080/job/OptaPlanner_PREPROD_run/build';
+        $user = 'vimeet:ecfbaffaa67e252544bad999254d21f4';
+
+        $fileFullPath = $path . $file->getPath();
+        $json = str_replace('%filename%', $fileFullPath, '{"parameter": [{"name": "INPUT", "value": "%filename%"}]}');
+        $urlEncoded = urlencode($url . '?json=' . $json);
+        var_dump("\n$urlEncoded\n");
+
+        $curl = curl_init();
+        curl_setopt($curl, CURLOPT_POST, 1);
+        curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
+        curl_setopt($curl, CURLOPT_HTTPAUTH, CURLAUTH_BASIC);
+        curl_setopt($curl, CURLOPT_USERPWD, $user);
+        curl_setopt($curl, CURLOPT_URL, $urlEncoded);
+
+        $result = curl_exec($curl);
+        var_dump($result);
+
+        curl_close($curl);
     }
 }
