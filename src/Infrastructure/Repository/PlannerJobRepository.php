@@ -82,4 +82,21 @@ class PlannerJobRepository implements PlannerJobRepositoryInterface
 
         return $queryBuilder->getQuery()->getOneOrNullResult();
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function findByFilename(string $filename): ?PlannerJob
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('plannerJob')
+            ->from(PlannerJob::class, 'plannerJob')
+            ->join('plannerJob.file', 'file', 'WITH', 'file.path = :filename')
+            ->setParameter('filename', $filename)
+        ;
+
+        return $queryBuilder->getQuery()->getOneOrNullResult();
+    }
 }

@@ -38,4 +38,11 @@ interface PlannerJobRepositoryInterface
      * @return null|PlannerJob
      */
     public function getById(int $id): ?PlannerJob;
+
+    /**
+     * @param string $filename
+     *
+     * @return null|PlannerJob
+     */
+    public function findByFilename(string $filename): ?PlannerJob;
 }

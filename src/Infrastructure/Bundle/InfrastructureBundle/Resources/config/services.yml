@@ -4866,6 +4866,14 @@ services:
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Planner\PlannerViewQuery }
 
+    command.planner.callback.set_status_handler:
+        class: Proximum\Vimeet\Application\Command\Planner\Callback\SetStatusHandler
+        arguments:
+            - '@vimeet_infrastructure.repository.planner_job_repository'
+            - '%planner_trusted_name%'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Planner\Callback\SetStatus }
+
     #
     # Planner normalizer
     #
