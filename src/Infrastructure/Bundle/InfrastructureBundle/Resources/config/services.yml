@@ -2788,9 +2788,7 @@ services:
             - '@template.template_data_factory'
             - '@domain.key_dates.checker.meeting_request_access_checker'
             - '@domain.key_dates.checker.answering_meeting_request_access_checker'
-            - '@security.validate_mobile_process_access_checker'
-            - '@domain.event.day.dday_guesser'
-            - '@repository.user.user_event_phone_repository'
+            - '@domain.user.phone.validation_required_checker'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Sheet\PaginatedCatalogSheetPreviewViewQuery }
 
@@ -3662,6 +3660,7 @@ services:
             - '@domain.key_dates.checker.meeting_published_access_checker'
             - '@domain.key_dates.checker.meeting_request_access_checker'
             - '@domain.key_dates.checker.answering_meeting_request_access_checker'
+            - '@domain.user.phone.validation_required_checker'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Meeting\MeetingRequestListViewQuery }
 
@@ -5416,6 +5415,12 @@ services:
     #
     domain.user.phone.phone_sanitizer:
         class: Proximum\Vimeet\Domain\User\Phone\PhoneSanitizer
+    domain.user.phone.validation_required_checker:
+        class: Proximum\Vimeet\Domain\User\Phone\ValidationRequiredChecker
+        arguments:
+            - '@domain.event.day.dday_guesser'
+            - '@query.tip.tip_translation_view_query_handler'
+            - '@repository.user.user_event_phone_repository'
 
     #
     # Agenda confirmation calculator

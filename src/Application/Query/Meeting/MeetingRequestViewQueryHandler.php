@@ -21,19 +21,13 @@ use Proximum\Vimeet\Domain\Rule\Composer;
 
 class MeetingRequestViewQueryHandler
 {
-    /**
-     * @var Preview
-     */
+    /** @var Preview */
     private $preview;
 
-    /**
-     * @var SheetInfoGuesser
-     */
+    /** @var SheetInfoGuesser */
     private $sheetInfoGuesser;
     
-    /**
-     * @var RuleRepositoryInterface
-     */
+    /** @var RuleRepositoryInterface */
     private $ruleRepository;
 
     /** @var Composer */
@@ -93,7 +87,8 @@ class MeetingRequestViewQueryHandler
             $query->isMeetingRequestClosed,
             $query->isAnsweringMeetingRequestClosed,
             $query->meetingRequest->hasMessage(),
-            $query->isSeenByUser
+            $query->isSeenByUser,
+            $query->isPhoneValidationRequired
         );
     }
 
