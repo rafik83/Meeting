@@ -62,8 +62,7 @@ class SpotImportConfirmHandler
             $this->removeInvalidSpotFromImport($spotImportView);
         }
 
-        foreach ($spotImportViews as $spotImportView)
-        {
+        foreach ($spotImportViews as $spotImportView) {
             $spot = $this->createSpot($spotImportView->import, $command->event);
 
             foreach ($spotImportView->sheetViews as $sheetView) {
