@@ -100,14 +100,22 @@ class SpotImporter
 
             foreach ($spotImport->sheetIds as $sheetId) {
                 if (isset($sheetsHasSpot[$sheetId])) {
-                    $spotImport->addError($this->translateError('validators.spot.sheet.already_imported', $locale));
+                    $spotImport->addError($this->translateError(
+                        'validators.spot.sheet.already_imported',
+                        $locale,
+                        ['%sheetId%' => $sheetId]
+                    ));
                     continue;
                 }
 
                 $sheetView = $this->sheetRepository->getSheetViewsByEventById($event, $sheetId);
 
                 if (null === $sheetView) {
-                    $spotImport->addError($this->translateError('validators.spot.sheet.not_exist', $locale));
+                    $spotImport->addError($this->translateError(
+                        'validators.spot.sheet.not_exist',
+                        $locale,
+                        ['%sheetId%' => $sheetId]
+                    ));
                     continue;
                 }
 

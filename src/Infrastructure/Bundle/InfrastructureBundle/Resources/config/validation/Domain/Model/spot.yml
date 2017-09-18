@@ -1,24 +1,23 @@
 Proximum\Vimeet\Domain\Model\Spot:
     properties:
         reference:
-            - NotBlank: { message: 'validators.spot.reference.type'}
-            - Type: { type: string, message: 'validators.spot.reference.type' }
+            - NotBlank:    { message: 'validators.spot.reference.type'}
+            - Type:        { type: string, message: 'validators.spot.reference.type' }
         size:
-            - NotBlank: ~
-            - Type: { type: float }
-            - GreaterThan: 0
+            - NotBlank:    { message: 'validators.spot.size.notBlank' }
+            - Type:        { type: float, message: 'validators.spot.size.type' }
+            - GreaterThan: { value: 0, message: 'validators.spot.size.invalid' }
         meetingCapacity:
-            - NotBlank: ~
-            - Type: { type: int }
-            - GreaterThan: 0
+            - NotBlank:    { message: 'validators.spot.meetingCapacity.notBlank' }
+            - Type:        { type: int, message: 'validators.spot.meetingCapacity.type' }
+            - GreaterThan: { value: 0, message: 'validators.spot.meetingCapacity.invalid' }
         seatCapacity:
-            - NotBlank: ~
-            - Type: { type: int }
-            - GreaterThan: 0
+            - NotBlank:    { message: 'validators.spot.seatCapacity.notBlank' }
+            - Type:        { type: int, message: 'validators.spot.seatCapacity.type' }
+            - GreaterThan: { value: 0, message: 'validators.spot.seatCapacity.invalid' }
         active:
-            - Type: { type: bool }
+            - Type:        { type: bool, message: 'validators.spot.active.type' }
         priority:
-            - NotBlank: ~
-            - Type: { type: int }
+            - Type:        { type: int, message: 'validators.spot.priority.type' }
         visio:
-            - Type: { type: bool }
+            - Type:        { type: bool, message: 'validators.spot.visio.type' }
