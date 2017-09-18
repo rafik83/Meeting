@@ -111,7 +111,8 @@ class SheetPreviewViewQueryHandler
             $catalogSheetPreviewViewQuery->isMeetingRequestClosed,
             $catalogSheetPreviewViewQuery->isAnsweringMeetingRequestClosed,
             $meetingRequest !== null ? $meetingRequest->hasMessage() : false,
-            $catalogSheetPreviewViewQuery->isSeenByCurrentUser
+            $catalogSheetPreviewViewQuery->isSeenByCurrentUser,
+            $catalogSheetPreviewViewQuery->isMobileValidationRequired
         );
     }
 }

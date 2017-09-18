@@ -15,38 +15,31 @@ use Proximum\Vimeet\Application\Query\Catalog\SheetPreviewViewQuery;
 use Proximum\Vimeet\Application\Query\Catalog\SheetPreviewViewQueryHandler;
 use Proximum\Vimeet\Application\Query\Sheet\Viewed\ViewedSheetListViewQuery;
 use Proximum\Vimeet\Application\Query\Sheet\Viewed\ViewedSheetListViewQueryHandler;
+use Proximum\Vimeet\Application\Security\ValidateMobileProcessAccessChecker;
+use Proximum\Vimeet\Domain\Event\Day\DDayGuesser;
 use Proximum\Vimeet\Domain\KeyDates\Checker\AnsweringMeetingRequestAccessChecker;
 use Proximum\Vimeet\Domain\KeyDates\Checker\MeetingRequestAccessChecker;
 use Proximum\Vimeet\Domain\Model\PaginatedResult;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
+use Proximum\Vimeet\Domain\Repository\User\UserEventPhoneRepositoryInterface;
 use Proximum\Vimeet\Domain\Template\TemplateDataFactory;
 
 class PaginatedCatalogSheetPreviewViewQueryHandler
 {
-    /**
-     * @var SheetRepositoryInterface
-     */
+    /** @var SheetRepositoryInterface */
     private $sheetRepository;
 
-    /**
-     * @var ViewedSheetListViewQueryHandler
-     */
+    /** @var ViewedSheetListViewQueryHandler */
     private $viewedSheetListViewQueryHandler;
 
-    /**
-     * @var SheetSearchAdapterInterface
-     */
+    /** @var SheetSearchAdapterInterface */
     private $sheetSearchAdapter;
 
-    /**
-     * @var SheetPreviewViewQueryHandler
-     */
+    /** @var SheetPreviewViewQueryHandler */
     private $sheetPreviewViewQueryHandler;
 
-    /**
-     * @var TemplateDataFactory
-     */
+    /** @var TemplateDataFactory */
     private $templateDataFactory;
 
     /** @var MeetingRequestAccessChecker */
@@ -55,14 +48,29 @@ class PaginatedCatalogSheetPreviewViewQueryHandler
     /** @var AnsweringMeetingRequestAccessChecker */
     private $answeringMeetingRequestAccessChecker;
 
+    /** @var ValidateMobileProcessAccessChecker */
+    private $validateMobileProcessAccessChecker;
+
+    /** @var DDayGuesser */
+    private $dDayGuesser;
+
+    /** @var UserEventPhoneRepositoryInterface */
+    private $userEventPhoneRepository;
+
+    /** @var bool */
+    private $isMobileValidationRequired = false;
+
     /**
      * @param SheetRepositoryInterface             $sheetRepository
      * @param SheetSearchAdapterInterface          $sheetSearchAdapter
      * @param SheetPreviewViewQueryHandler         $sheetPreviewViewQueryHandler
-     * @param ViewedSheetListViewQueryHandler       $viewedSheetListViewQueryHandler
+     * @param ViewedSheetListViewQueryHandler      $viewedSheetListViewQueryHandler
      * @param TemplateDataFactory                  $templateDataFactory
      * @param MeetingRequestAccessChecker          $meetingRequestAccessChecker
      * @param AnsweringMeetingRequestAccessChecker $answeringMeetingRequestAccessChecker
+     * @param ValidateMobileProcessAccessChecker   $validateMobileProcessAccessChecker
+     * @param DDayGuesser                          $dDayGuesser
+     * @param UserEventPhoneRepositoryInterface    $userEventPhoneRepository
      */
     public function __construct(
         SheetRepositoryInterface $sheetRepository,
@@ -71,7 +79,10 @@ class PaginatedCatalogSheetPreviewViewQueryHandler
         ViewedSheetListViewQueryHandler $viewedSheetListViewQueryHandler,
         TemplateDataFactory $templateDataFactory,
         MeetingRequestAccessChecker $meetingRequestAccessChecker,
-        AnsweringMeetingRequestAccessChecker $answeringMeetingRequestAccessChecker
+        AnsweringMeetingRequestAccessChecker $answeringMeetingRequestAccessChecker,
+        ValidateMobileProcessAccessChecker $validateMobileProcessAccessChecker,
+        DDayGuesser $dDayGuesser,
+        UserEventPhoneRepositoryInterface $userEventPhoneRepository
     ) {
         $this->sheetRepository                      = $sheetRepository;
         $this->sheetSearchAdapter                   = $sheetSearchAdapter;
@@ -80,6 +91,9 @@ class PaginatedCatalogSheetPreviewViewQueryHandler
         $this->templateDataFactory                  = $templateDataFactory;
         $this->meetingRequestAccessChecker          = $meetingRequestAccessChecker;
         $this->answeringMeetingRequestAccessChecker = $answeringMeetingRequestAccessChecker;
+        $this->validateMobileProcessAccessChecker   = $validateMobileProcessAccessChecker;
+        $this->dDayGuesser                          = $dDayGuesser;
+        $this->userEventPhoneRepository             = $userEventPhoneRepository;
     }
 
     /**
@@ -108,8 +122,15 @@ class PaginatedCatalogSheetPreviewViewQueryHandler
         $isMeetingRequestClosed          = !$this->meetingRequestAccessChecker->allowedToAccess($query->event);
         $isAnsweringMeetingRequestClosed = !$this->answeringMeetingRequestAccessChecker->allowedToAccess($query->event);
 
+        $this->isMobileValidationRequired = $this->isMobileValidationRequiredForUser($query);
+
         $paginatedResult->results = array_map(
-            function (Sheet $sheet) use ($query, $isMeetingRequestClosed, $isAnsweringMeetingRequestClosed, $seenSheetIndexed) {
+            function (Sheet $sheet) use (
+                $query,
+                $isMeetingRequestClosed,
+                $isAnsweringMeetingRequestClosed,
+                $seenSheetIndexed
+            ) {
                 return $this
                     ->sheetPreviewViewQueryHandler
                     ->handle(
@@ -120,7 +141,8 @@ class PaginatedCatalogSheetPreviewViewQueryHandler
                             $query->viewer,
                             $isMeetingRequestClosed,
                             $isAnsweringMeetingRequestClosed,
-                            isset($seenSheetIndexed[$sheet->getId()])
+                            isset($seenSheetIndexed[$sheet->getId()]),
+                            $this->isMobileValidationRequired
                         )
                     );
             },
@@ -158,5 +180,29 @@ class PaginatedCatalogSheetPreviewViewQueryHandler
         }
 
         return $nomenclatureItems;
+    }
+
+    /**
+     * @param PaginatedCatalogSheetPreviewViewQuery $query
+     *
+     * @return bool
+     */
+    private function isMobileValidationRequiredForUser(PaginatedCatalogSheetPreviewViewQuery $query): bool
+    {
+        if ($this->dDayGuesser->isItDDay($query->event)) {
+            $allowedToValidateMobile = $this->validateMobileProcessAccessChecker->allowToAccess(
+                $query->event,
+                $query->user,
+                $query->locale
+            );
+
+            if ($allowedToValidateMobile === true) {
+                $userEventPhone = $this->userEventPhoneRepository->findValidated($query->user, $query->event);
+
+                return $userEventPhone === null;
+            }
+        }
+
+        return false;
     }
 }
