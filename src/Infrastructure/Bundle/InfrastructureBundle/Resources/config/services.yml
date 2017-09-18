@@ -370,9 +370,8 @@ services:
     command.participant.import_mapping_handler:
         class: Proximum\Vimeet\Application\Command\Participant\ImportMappingHandler
         arguments:
-            - '@serializer.decoder.csv'
+            - '@adapter.serializer_adapter'
             - '@adapter.session'
-            - '@serializer.denormalizer.participant'
             - '@vimeet_infrastructure.adapter.delayed_event_dispatcher'
             - '@adapter.local_file_storage'
             - '@datetime'
@@ -2583,7 +2582,7 @@ services:
     query.participant.import.import_mapping_view_query_handler:
         class: Proximum\Vimeet\Application\Query\Participant\Import\ImportMappingViewQueryHandler
         arguments:
-            - '@serializer.decoder.csv'
+            - '@adapter.serializer_adapter'
             - '@adapter.session'
             - '@template.template_data_factory'
         tags:
@@ -4739,22 +4738,6 @@ services:
         class: Proximum\Vimeet\Application\Serializer\Denormalizer\ParticipantImportLogger
         arguments:
             - '@vimeet_infrastructure.adapter.translator_adapter'
-
-    serializer.encoder.csv:
-        class: Proximum\Vimeet\Application\Serializer\Encoder\CsvEncoder
-        arguments:
-            - ";" # delimiter
-        public: false
-        tags:
-            - { name: serializer.encoder }
-
-    serializer.decoder.csv:
-        class: Proximum\Vimeet\Application\Serializer\Decoder\CsvDecoder
-        arguments:
-            - ";" # delimiter
-        public: false
-        tags:
-            - { name: serializer.decoder }
 
     serializer.orders_export_normalizer:
         class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Serializer\Normalizer\Order\OrdersExportNormalizer

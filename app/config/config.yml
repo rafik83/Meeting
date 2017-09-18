@@ -15,7 +15,7 @@ framework:
         logging: false
     secret:          "%secret%"
     router:
-        resource: "%kernel.root_dir%/config/routing.yml"
+        resource: "%kernel.project_dir%/app/config/routing.yml"
         strict_requirements: ~
     form:            ~
     csrf_protection: ~
@@ -25,7 +25,7 @@ framework:
         engines: ['twig']
     default_locale:  "%locale%"
     trusted_hosts:   ~
-    trusted_proxies: "%trusted_proxies%"
+#    trusted_proxies: "%trusted_proxies%"
     session:
         handler_id:      session.handler.pdo
         name:            vimeet
@@ -48,7 +48,7 @@ twig:
     date:
         timezone: Europe/Paris
     paths:
-        "%kernel.root_dir%/../src/Ui/Resources/views": Ui
+        "%kernel.project_dir%/src/Ui/Resources/views": Ui
     globals:
         admin_menu_color: "%admin_menu_color%"
 
@@ -79,7 +79,7 @@ doctrine:
             entity:
                 type: yml
                 prefix: Proximum\Vimeet\Domain\Model
-                dir: "%kernel.root_dir%/../src/Infrastructure/Bundle/InfrastructureBundle/Resources/config/doctrine/entity"
+                dir: "%kernel.project_dir%/src/Infrastructure/Bundle/InfrastructureBundle/Resources/config/doctrine/entity"
                 alias: Entity
                 is_bundle: false
 
@@ -320,15 +320,15 @@ infrastructure:
     default_locales: ['fr', 'en']
     supported_currencies: ['EUR', 'GBP', 'USD']
     web_asset_event_guideline_path: 'css/event'
-    bundle_guideline_path: "%kernel.root_dir%/../src/Ui/Bundle/EventBundle/Resources/assets/sass"
+    bundle_guideline_path: "%kernel.project_dir%/src/Ui/Bundle/EventBundle/Resources/assets/sass"
     font_path: "/assets/fonts"
     image_path: "/assets/images"
-    print_planning_path: '%kernel.root_dir%/../web/uploads/print_planning'
-    export_transactions_path: '%kernel.root_dir%/../web/uploads/export_transactions'
-    export_order_path: '%kernel.root_dir%/../web/uploads/export_orders'
-    export_planner_path: '%kernel.root_dir%/../web/uploads/export_planner'
-    import_planner_path: '%kernel.root_dir%/../web/uploads/import_planner'
-    import_spot_path: '%kernel.root_dir%/../web/uploads/import_spots/'
+    print_planning_path: '%kernel.project_dir%/web/uploads/print_planning'
+    export_transactions_path: '%kernel.project_dir%/web/uploads/export_transactions'
+    export_order_path: '%kernel.project_dir%/web/uploads/export_orders'
+    export_planner_path: '%kernel.project_dir%/web/uploads/export_planner'
+    import_planner_path: '%kernel.project_dir%/web/uploads/import_planner'
+    import_spot_path: '%kernel.project_dir%/web/uploads/import_spots/'
     package:
         default_labels:
             plans:
@@ -384,7 +384,7 @@ liip_imagine:
 
 # Doctrine migrations configuration
 doctrine_migrations:
-    dir_name: "%kernel.root_dir%/../src/Infrastructure/Bundle/InfrastructureBundle/Migrations"
+    dir_name: "%kernel.project_dir%/src/Infrastructure/Bundle/InfrastructureBundle/Migrations"
     namespace: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Migrations
     table_name: migration_versions
     name: Application Migrations

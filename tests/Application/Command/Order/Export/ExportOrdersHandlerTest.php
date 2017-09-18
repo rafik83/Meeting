@@ -49,8 +49,8 @@ class ExportOrdersHandlerTest extends TestCase
         $eventRepository->getById(1234)->shouldBeCalled()->willReturn($event->reveal());
         $queryHandler->handle(new OrdersExportViewQuery($event->reveal(), 'fr'))->shouldBeCalled()->willReturn($view->reveal());
         $serializer->serialize($view->reveal(), 'csv', [
-            'delimiters' => ';',
-            'charset'    => Charset::WINDOWS_1252,
+            'csv_delimiter' => ';',
+            'charset' => Charset::WINDOWS_1252,
         ])->shouldBeCalled()->willReturn($data);
 
         $fileStorageAdapter->create(

@@ -63,12 +63,10 @@ class TransactionListViewQueryHandler
      */
     public function handle(TransactionListViewQuery $query)
     {
-        $data = $this->serializer->serialize(
-            $query,
-            'csv',
+        $data = $this->serializer->serialize($query, 'csv',
             [
-                'delimiters' => ';',
-                'charset'    => Charset::WINDOWS_1252,
+                'charset' => Charset::WINDOWS_1252,
+                'csv_delimiter' => ';',
             ]
         );
         

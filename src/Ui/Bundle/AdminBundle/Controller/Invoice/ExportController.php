@@ -39,8 +39,9 @@ class ExportController extends Controller
                 $invoicesNormaliserView = $this->get('tactician.commandbus')->handle($export);
 
                 $exportContent = $this->get('serializer')->serialize($invoicesNormaliserView, 'csv', [
-                    'locale'  => $request->getLocale(),
-                    'charset' => Charset::WINDOWS_1252,
+                    'locale'        => $request->getLocale(),
+                    'charset'       => Charset::WINDOWS_1252,
+                    'csv_delimiter' => ';',
                 ]);
 
                 return new CsvFileResponse($exportContent, "export_invoices_" . date("Y_m_d_His") . ".csv");
