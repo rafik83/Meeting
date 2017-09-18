@@ -20,13 +20,13 @@
         <tbody>
         {% for spotImportView in spotImportViews %}
             <tr class="{% if spotImportView.errorMessages is not empty %} danger {% endif %}">
-                <td>{{ spotImportView.import.reference }}</td>
-                <td>{{ spotImportView.import.size }}</td>
-                <td>{{ spotImportView.import.meetingCapacity }}</td>
-                <td>{{ spotImportView.import.seatCapacity }}</td>
-                <td>{{ spotImportView.import.priority }}</td>
-                <td>{{ spotImportView.import.active }}</td>
-                <td>{{ spotImportView.import.visio }}</td>
+                <td>{{ spotImportView.spot.reference }}</td>
+                <td>{{ spotImportView.spot.size }}</td>
+                <td>{{ spotImportView.spot.meetingCapacity }}</td>
+                <td>{{ spotImportView.spot.seatCapacity }}</td>
+                <td>{{ spotImportView.spot.priority }}</td>
+                <td>{{ spotImportView.spot.active }}</td>
+                <td>{{ spotImportView.spot.visio }}</td>
                 <td>
                     {% for sheetView in spotImportView.sheetViews %}
                         <span class="badge badge-info">

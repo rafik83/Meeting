@@ -4749,6 +4749,11 @@ services:
         tags:
             - { name: serializer.normalizer }
 
+    serializer.spot_import_denormalizer:
+        class: Proximum\Vimeet\Application\Components\Spot\Denormalizer\SpotDenormalizer
+        tags:
+            - { name: serializer.normalizer }
+
     #
     # Adapter
     #

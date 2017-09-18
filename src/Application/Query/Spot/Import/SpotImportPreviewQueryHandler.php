@@ -11,7 +11,7 @@
 namespace Proximum\Vimeet\Application\Query\Spot\Import;
 
 use Proximum\Vimeet\Application\Components\Spot\SpotImporter;
-use Proximum\Vimeet\Domain\View\Spot\Import\SpotImportView;
+use Proximum\Vimeet\Domain\Spot\Import;
 
 class SpotImportPreviewQueryHandler
 {
@@ -29,7 +29,7 @@ class SpotImportPreviewQueryHandler
     /**
      * @param SpotImportPreviewQuery $spotImportPreviewQuery
      *
-     * @return SpotImportView[]
+     * @return Import[]
      */
     public function handle(SpotImportPreviewQuery $spotImportPreviewQuery): array
     {

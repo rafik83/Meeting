@@ -1,11 +1,7 @@
 {% if errors is defined %}
     <ul>
-        {% if errors.validations is defined %}
-            <li>{{ errors.validations.message }}</li>
-        {% endif %}
-
-        {% if errors.reference is defined %}
-            <li>{{ errors.reference }}</li>
-        {% endif %}
+       {% for error in errors %}
+            <li>{{ error }}</li>
+        {% endfor %}
     </ul>
 {% endif %}

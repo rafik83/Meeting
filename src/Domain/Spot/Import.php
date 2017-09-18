@@ -10,53 +10,54 @@
 
 namespace Proximum\Vimeet\Domain\Spot;
 
+use Proximum\Vimeet\Domain\Model\Spot;
+use Proximum\Vimeet\Domain\View\Spot\Import\SheetView;
+
 class Import
 {
-    /** @var string */
-    public $reference;
+    /** @var array */
+    public $errorMessages;
 
-    /** @var int */
-    public $size;
+    /** @var null|Spot */
+    public $spot;
 
-    /** @var int */
-    public $meetingCapacity;
+    /** @var int[] */
+    public $sheetIds;
 
-    /** @var int */
-    public $seatCapacity;
-
-    /** @var bool */
-    public $active;
-
-    /** @var int */
-    public $priority;
-
-    /** @var bool */
-    public $visio;
+    /** @var SheetView[] */
+    public $sheetViews;
 
     /**
-     * @param string      $reference
-     * @param int         $size
-     * @param int         $meetingCapacity
-     * @param int         $seatCapacity
-     * @param bool        $active
-     * @param int         $priority
-     * @param bool        $visio
+     * @param Spot $spot
+     * @param int[] $sheetIds
      */
-    public function __construct(
-        string $reference,
-        int $size,
-        int $meetingCapacity,
-        int $seatCapacity,
-        bool $active,
-        int $priority,
-        bool $visio
-    ) {
-        $this->reference = $reference;
-        $this->size = $size;
-        $this->meetingCapacity = $meetingCapacity;
-        $this->seatCapacity = $seatCapacity;
-        $this->active = $active;
-        $this->priority = $priority;
-        $this->visio = $visio;
+    public function __construct(?Spot $spot, array $sheetIds = [])
+    {
+        $this->spot = $spot;
+        $this->sheetIds = $sheetIds;
+    }
+
+    /**
+     * @return bool
+     */
+    public function hasError(): bool
+    {
+        return !empty($this->errorMessages);
+    }
+
+    /**
+     * @param string $message
+     */
+    public function addError(string $message)
+    {
+        $this->errorMessages[] = $message;
+    }
+
+    /**
+     * @param SheetView $sheetView
+     */
+    public function addSheetView(SheetView $sheetView)
+    {
+        $this->sheetViews[] = $sheetView;
     }
 }

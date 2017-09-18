@@ -36,9 +36,7 @@ class ImportController extends Controller
         $hasMeeting = $this->get('vimeet_infrastructure.repository.meeting_repository')->hasMeeting($event);
 
         if ($hasMeeting) {
-            return $this->render('AdminBundle:Spot\Import:spotImportNotAvailable.html.twig', [
-                'event' => $event,
-            ]);
+            return $this->render('AdminBundle:Spot\Import:spotImportNotAvailable.html.twig', ['event' => $event]);
         }
 
         $spotImport = new SpotImport();
@@ -75,9 +73,7 @@ class ImportController extends Controller
         $hasMeeting = $this->get('vimeet_infrastructure.repository.meeting_repository')->hasMeeting($event);
 
         if ($hasMeeting) {
-            return $this->render('AdminBundle:Spot\Import:spotImportNotAvailable.html.twig', [
-                'event' => $event,
-            ]);
+            return $this->render('AdminBundle:Spot\Import:spotImportNotAvailable.html.twig', ['event' => $event]);
         }
 
         $locale = $event->getAvailableLocale($request->getLocale());

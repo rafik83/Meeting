@@ -1,23 +1,24 @@
-Proximum\Vimeet\Domain\Spot\Import:
+Proximum\Vimeet\Domain\Model\Spot:
     properties:
         reference:
             - NotBlank: { message: 'validators.spot.reference.type'}
             - Type: { type: string, message: 'validators.spot.reference.type' }
         size:
             - NotBlank: ~
-            - Type: { type: int }
+            - Type: { type: float }
+            - GreaterThan: 0
         meetingCapacity:
             - NotBlank: ~
             - Type: { type: int }
+            - GreaterThan: 0
         seatCapacity:
             - NotBlank: ~
             - Type: { type: int }
+            - GreaterThan: 0
         active:
-            - NotBlank: ~
             - Type: { type: bool }
         priority:
             - NotBlank: ~
             - Type: { type: int }
         visio:
-            - NotBlank: ~
             - Type: { type: bool }
