@@ -279,9 +279,9 @@ class ExportHandler
     /**
      * Send a mail to the emailToNotify with the error message
      *
-     * @param string          $message
-     * @param Event           $event
-     * @param Export          $command
+     * @param string $message
+     * @param Event  $event
+     * @param Export $command
      */
     private function notifyError($message, Event $event, Export $command)
     {

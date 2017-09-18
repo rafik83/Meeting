@@ -174,6 +174,6 @@ class PlannerJob
      */
     public function isError(): bool
     {
-        return self::STATUS_ERROR == $this->status;
+        return self::STATUS_ERROR === $this->status;
     }
 }

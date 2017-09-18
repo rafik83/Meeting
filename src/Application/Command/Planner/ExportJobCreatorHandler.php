@@ -70,7 +70,7 @@ class ExportJobCreatorHandler
             throw new NoSpotActiveException();
         }
 
-        if (0 === count($exportJobCreator->event->getDays())) {
+        if (false === $exportJobCreator->event->hasDay()) {
             throw new DayNotConfiguredException();
         }
 

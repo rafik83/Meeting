@@ -36,7 +36,7 @@ class ExportController extends Controller
      *
      * @return Response
      */
-    public function exportAction(Request $request, UserInterface $admin, Event $event, string $mode)
+    public function exportAction(Request $request, UserInterface $admin, Event $event, string $mode): Response
     {
         $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
 

@@ -41,6 +41,8 @@ class ExportJobCreator
      * @param Admin  $admin
      * @param string $locale
      * @param string $mode
+     *
+     * @throws \InvalidArgumentException
      */
     public function __construct(Event $event, Admin $admin, string $locale, string $mode)
     {
