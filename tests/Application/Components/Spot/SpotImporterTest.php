@@ -72,7 +72,6 @@ class SpotImporterTest extends TestCase
         $sheetView4 = new SheetView(16566, 'title4');
         $sheetView5 = new SheetView(16565, 'title6');
         $sheetView6 = new SheetView(16562, 'title7');
-        $sheetViewInexistent = new SheetView(12, 'validators.spot.sheet.not_exist');
 
         // Mock of file content
         $sheetIds1 = [16938, 16931, 16919];
