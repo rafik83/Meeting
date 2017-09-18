@@ -13,11 +13,9 @@ namespace Proximum\Vimeet\Application\Command\Spot\Import;
 
 use Proximum\Vimeet\Application\Components\Spot\SpotImporter;
 use Proximum\Vimeet\Domain\Model\Event;
-use Proximum\Vimeet\Domain\Model\Spot;
 use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\SpotRepositoryInterface;
 use Proximum\Vimeet\Domain\Spot\Import;
-use Proximum\Vimeet\Domain\View\Spot\Import\SpotImportView;
 
 class SpotImportConfirmHandler
 {
@@ -31,8 +29,8 @@ class SpotImportConfirmHandler
     private $sheetRepository;
 
     /**
-     * @param SpotImporter $spotImporter
-     * @param SpotRepositoryInterface $spotRepository
+     * @param SpotImporter             $spotImporter
+     * @param SpotRepositoryInterface  $spotRepository
      * @param SheetRepositoryInterface $sheetRepository
      */
     public function __construct(
@@ -59,48 +57,14 @@ class SpotImportConfirmHandler
         $this->deleteSlotsByEvent($command->event);
 
         foreach ($spotImportViews as $spotImportView) {
-            $this->removeInvalidSpotFromImport($spotImportView);
-        }
+            if (!$spotImportView->hasError()) {
+                foreach ($spotImportView->sheetViews as $sheetView) {
+                    $sheet = $this->sheetRepository->getSheetById($sheetView->id);
+                    $sheet->setSpot($spotImportView->spot);
+                }
 
-        foreach ($spotImportViews as $spotImportView) {
-            $spot = $this->createSpot($spotImportView->import, $command->event);
-
-            foreach ($spotImportView->sheetViews as $sheetView) {
-                $sheet = $this->sheetRepository->getSheetById($sheetView->id);
-                $sheet->setSpot($spot);
+                $this->spotRepository->add($spotImportView->spot);
             }
-
-            $this->spotRepository->add($spot);
-        }
-    }
-
-    /**
-     * @param Import $importedSpot
-     * @param Event $event
-     *
-     * @return Spot
-     */
-    private function createSpot(Import $importedSpot, Event $event): Spot
-    {
-        return new Spot(
-            $importedSpot->reference,
-            $event,
-            $importedSpot->size,
-            $importedSpot->meetingCapacity,
-            $importedSpot->seatCapacity,
-            $importedSpot->active,
-            $importedSpot->priority,
-            $importedSpot->visio
-        );
-    }
-
-    /**
-     * @param SpotImportView $spotImportView
-     */
-    private function removeInvalidSpotFromImport(SpotImportView $spotImportView)
-    {
-        if (!empty($spotImportView->errorMessages)) {
-            unset($spotImportView);
         }
     }
 

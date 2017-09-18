@@ -25,8 +25,8 @@
                 <td class="text-center">{{ spotImportView.spot.meetingCapacity }}</td>
                 <td class="text-center">{{ spotImportView.spot.seatCapacity }}</td>
                 <td class="text-center">{{ spotImportView.spot.priority }}</td>
-                <td class="text-center">{{ spotImportView.spot.active }}</td>
-                <td class="text-center">{{ spotImportView.spot.visio }}</td>
+                <td class="text-center">{{ spotImportView.spot.active ? 'admin.spot.active.yes'|trans : 'admin.spot.active.no'|trans }}</td>
+                <td class="text-center">{{ spotImportView.spot.visio ? 'admin.spot.visio.yes'|trans : 'admin.spot.visio.no'|trans }}</td>
                 <td>
                     <ul>
                     {% for sheetView in spotImportView.sheetViews %}
