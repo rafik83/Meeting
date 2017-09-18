@@ -1,3 +1,9 @@
-<div class="btn btn-gray reject" data-modal-load="{{ path('event_meeting_request_show_conversation_refuse', { 'sheet': sheet.id, 'meetingRequest': meetingRequest.id }) }}">
-    <i class="icon-Fermer_4"></i> {{ 'catalog.meeting_request.proposition.refused'|trans }}
-</div>
+{% if isPhoneValidationRequired and participant is not null %}
+    <a class="btn btn-gray reject" href="{{ path('event_user_phone_validate', { 'sheet': sheet.id, 'participant': participant.id }) }}">
+        <i class="icon-Fermer_4"></i> {{ 'catalog.meeting_request.proposition.refused'|trans }}
+    </a>
+{% else %}
+    <div class="btn btn-gray reject" data-modal-load="{{ path('event_meeting_request_show_conversation_refuse', { 'sheet': sheet.id, 'meetingRequest': meetingRequest.id }) }}">
+        <i class="icon-Fermer_4"></i> {{ 'catalog.meeting_request.proposition.refused'|trans }}
+    </div>
+{% endif %}

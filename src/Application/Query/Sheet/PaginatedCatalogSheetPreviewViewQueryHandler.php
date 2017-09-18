@@ -49,9 +49,6 @@ class PaginatedCatalogSheetPreviewViewQueryHandler
     /** @var ValidationRequiredChecker */
     private $validationRequiredChecker;
 
-    /** @var bool */
-    private $isMobileValidationRequired = false;
-
     /**
      * @param SheetRepositoryInterface             $sheetRepository
      * @param SheetSearchAdapterInterface          $sheetSearchAdapter
@@ -108,14 +105,15 @@ class PaginatedCatalogSheetPreviewViewQueryHandler
         $isMeetingRequestClosed          = !$this->meetingRequestAccessChecker->allowedToAccess($query->event);
         $isAnsweringMeetingRequestClosed = !$this->answeringMeetingRequestAccessChecker->allowedToAccess($query->event);
 
-        $this->isMobileValidationRequired = $this->isPhoneValidationRequiredForUser($query);
+        $isPhoneValidationRequired = $this->isPhoneValidationRequiredForUser($query);
 
         $paginatedResult->results = array_map(
             function (Sheet $sheet) use (
                 $query,
                 $isMeetingRequestClosed,
                 $isAnsweringMeetingRequestClosed,
-                $seenSheetIndexed
+                $seenSheetIndexed,
+                $isPhoneValidationRequired
             ) {
                 return $this
                     ->sheetPreviewViewQueryHandler
@@ -128,7 +126,7 @@ class PaginatedCatalogSheetPreviewViewQueryHandler
                             $isMeetingRequestClosed,
                             $isAnsweringMeetingRequestClosed,
                             isset($seenSheetIndexed[$sheet->getId()]),
-                            $this->isMobileValidationRequired
+                            $isPhoneValidationRequired
                         )
                     );
             },

@@ -1,6 +1,11 @@
 {% if allowedToCreate is defined and allowedToCreate == true %}
     {% if isMeetingRequestClosed is defined and isMeetingRequestClosed == false %}
-        {{ include('EventBundle:MeetingRequest/Button:createRequest.html.twig', {'sheet': viewer, 'toSheet': viewed}, false) }}
+        {{ include('EventBundle:MeetingRequest/Button:createRequest.html.twig', {
+            'sheet': viewer,
+            'toSheet': viewed,
+            'isPhoneValidationRequired': isPhoneValidationRequired,
+            'participant': participant
+        }, false) }}
     {% else %}
         {{ include('EventBundle:MeetingRequest/Button:closedMeetingRequest.html.twig', {}, false) }}
     {% endif %}
@@ -14,6 +19,8 @@
                     {{ include('EventBundle:MeetingRequest/Button:approveRefuseRequestButton.html.twig', {
                         'sheet': viewer,
                         'meetingRequest': meetingRequest,
+                        'isPhoneValidationRequired': isPhoneValidationRequired,
+                        'participant': participant
                     }, false) }}
                 {% elseif meetingRequest.isApproved %}
                     {% if not isMeetingRequestUpdateLocked %}
@@ -21,13 +28,17 @@
                             'sheet': viewer,
                             'meetingRequest': meetingRequest,
                             'isMeetingPublished': isMeetingPublished|default(false),
-                            'isMeetingRequestUpdateLocked': isMeetingRequestUpdateLocked
+                            'isMeetingRequestUpdateLocked': isMeetingRequestUpdateLocked,
+                            'isPhoneValidationRequired': isPhoneValidationRequired,
+                            'participant': participant
                         }, false) }}
                     {% endif %}
                 {% elseif meetingRequest.isRefused %}
                     {{ include('EventBundle:MeetingRequest/Button:refusedProposition.html.twig', {
                         'sheet': viewer,
                         'meetingRequest': meetingRequest,
+                        'isPhoneValidationRequired': isPhoneValidationRequired,
+                        'participant': participant
                     }, false) }}
                 {% endif %}
             {% else %}
@@ -35,6 +46,8 @@
                     {{ include('EventBundle:MeetingRequest/Button:pendingRequestButton.html.twig', {
                         'sheet': viewer,
                         'meetingRequest': meetingRequest,
+                        'isPhoneValidationRequired': isPhoneValidationRequired,
+                        'participant': participant
                     }, false) }}
                 {% elseif meetingRequest.isApproved %}
                     {% if not isMeetingRequestUpdateLocked %}
@@ -42,13 +55,16 @@
                             'sheet': viewer,
                             'meetingRequest': meetingRequest,
                             'isMeetingPublished': isMeetingPublished|default(false),
-                            'isMeetingRequestUpdateLocked': isMeetingRequestUpdateLocked
+                            'isMeetingRequestUpdateLocked': isMeetingRequestUpdateLocked,
+                            'isPhoneValidationRequired': isPhoneValidationRequired,
+                            'participant': participant
                         }, false) }}
                     {% endif %}
                 {% elseif meetingRequest.isRefused %}
                     {{ include('EventBundle:MeetingRequest/Button:refusedRequestButton.html.twig', {
                         'sheet': viewer,
                         'meetingRequest': meetingRequest,
+                        'isPhoneValidationRequired': isPhoneValidationRequired
                     }, false) }}
                 {% endif %}
             {% endif %}

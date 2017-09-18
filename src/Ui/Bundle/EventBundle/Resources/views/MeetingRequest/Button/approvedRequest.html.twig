@@ -2,6 +2,10 @@
     <div class="btn btn-gray accept">
         <i class="icon-Valider_4"></i> {{ 'catalog.meeting_request.request.placed'|trans }}
     </div>
+{% elseif isPhoneValidationRequired and participant is not null %}
+    <a class="btn btn-gray accept" href="{{ path('event_user_phone_validate', { 'sheet': sheet.id, 'participant': participant.id }) }}">
+        <i class="icon-Valider_4"></i> {{ 'catalog.meeting_request.request.approved'|trans }}
+    </a>
 {% else %}
     <div class="btn btn-gray accept" data-modal-load="{{ path('event_meeting_request_edit', { 'sheet': sheet.id, 'meetingRequest': meetingRequest.id }) }}">
         <i class="icon-Valider_4"></i> {{ 'catalog.meeting_request.request.approved'|trans }}

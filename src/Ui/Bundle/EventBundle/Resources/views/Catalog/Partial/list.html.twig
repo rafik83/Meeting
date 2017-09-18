@@ -4,7 +4,8 @@
             {{ include('EventBundle:Catalog:Partial/sheet-card.html.twig', {
                 catalogSheetPreviewView: catalogSheetPreviewView,
                 'viewer': viewer,
-                isCatalog: isCatalog
+                isCatalog: isCatalog,
+                'participant': participant
             }) }}
         {% if loop.index % 3 == 0 %}
     </div>
