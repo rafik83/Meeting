@@ -5537,3 +5537,11 @@ services:
             - '@components.home.home_dispatch'
             - '@components.home.home_dispatch_anonymous_user'
             - '@adapter.authorization_checker'
+
+    #
+    # Event Day service
+    #
+    domain.event.day.dday_guesser:
+        class: Proximum\Vimeet\Domain\Event\Day\DDayGuesser
+        arguments:
+            - '@datetime'
