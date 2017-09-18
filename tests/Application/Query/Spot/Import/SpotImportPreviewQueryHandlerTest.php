@@ -15,6 +15,7 @@ use Prophecy\Prophecy\ObjectProphecy;
 use Proximum\Vimeet\Application\Components\Spot\SpotImporter;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\File;
+use Proximum\Vimeet\Domain\Model\Spot;
 use Proximum\Vimeet\Domain\Spot\Import;
 use Proximum\Vimeet\Domain\View\Spot\Import\SheetView;
 use Proximum\Vimeet\Domain\View\Spot\Import\SpotImportView;
@@ -45,46 +46,14 @@ class SpotImportPreviewQueryHandlerTest extends TestCase
 
         $spotImportPreviewQuery = new SpotImportPreviewQuery($this->event, $file, 'fr');
 
-        $sheetView1 = new SheetView(16938, 'title1');
-        $sheetView2 = new SheetView(16931, 'title2');
-        $sheetView3 = new SheetView(16919, 'title3');
-        $sheetView4 = new SheetView(16566, 'title4');
-        $sheetView5 = new SheetView(16565, 'title6');
-        $sheetView6 = new SheetView(16562, 'title7');
-        $sheetViewInexistent = new SheetView(12, 'validators.spot.sheet.not_exist');
+        $expectedImportedSpot1 = new Import(new Spot('A1', $this->event, '10', '2', '33', true, '4', false), [1, 2]);
+        $expectedImportedSpot2 = new Import(new Spot('A2', $this->event, '10', '2', '33', '1', '4', '1'), [3 ,4]);
+        $expectedImportedSpot3 = new Import(new Spot('A3', $this->event, '10', '2', '33', '1', '4', '1'), [3]);
+        $expectedImportedSpot3->errorMessages = ['La fiche ayant l\'identifiant 3 a déjà été attribuée à un lieu'];
+        $expectedImportedSpot4 = new Import(new Spot('A1', $this->event, '10', '2', '33', '1', '4', '1'), [5, 6]);
+        $expectedImportedSpot1->errorMessages = ['Cette référence existe déjà'];
 
-        $expectedImportedSpot1 = new Import('A1', '10', '2', '33', true, '4', false);
-        $expectedImportedSpot2 = new Import('A2', '10', '2', '33', '1', '4', '1');
-        $expectedImportedSpot3 = new Import('A3', '10', '2', '33', '1', '4', '1');
-        $expectedImportedSpot4 = new Import('A1', '10', '2', '33', '1', '4', '1');
-
-        $sheetViews1 = [
-            16938 => $sheetView1,
-            16931 => $sheetView2,
-            16919 => $sheetView3,
-        ];
-        $sheetViews2 = [
-            16566 => $sheetView4,
-            12    => $sheetViewInexistent,
-        ];
-        $sheetViews3 = [
-            16565 => $sheetView5,
-        ];
-        $sheetViews4 = [
-            16562 => $sheetView6,
-        ];
-
-        $errorMessage1 = [];
-        $errorMessage2 = [];
-        $errorMessage3 = [];
-        $errorMessage4 = ['reference' => 'validators.spot.reference.affected'];
-
-        $expectedResults = [
-            new SpotImportView($expectedImportedSpot1, $sheetViews1, $errorMessage1),
-            new SpotImportView($expectedImportedSpot2, $sheetViews2, $errorMessage2),
-            new SpotImportView($expectedImportedSpot3, $sheetViews3, $errorMessage3),
-            new SpotImportView($expectedImportedSpot4, $sheetViews4, $errorMessage4),
-        ];
+        $expectedResults = [$expectedImportedSpot1, $expectedImportedSpot2, $expectedImportedSpot3, $expectedImportedSpot4];
 
         $this
             ->spotImporter
@@ -97,8 +66,8 @@ class SpotImportPreviewQueryHandlerTest extends TestCase
             ->willReturn($expectedResults);
 
         $handler = new SpotImportPreviewQueryHandler($this->spotImporter->reveal());
-        $resultViews = $handler->handle($spotImportPreviewQuery);
+        $result = $handler->handle($spotImportPreviewQuery);
 
-        $this->assertEquals($expectedResults, $resultViews);
+        $this->assertEquals($expectedResults, $result);
     }
 }
