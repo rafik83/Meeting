@@ -74,12 +74,12 @@ doctrine:
     orm:
         auto_generate_proxy_classes: "%kernel.debug%"
         naming_strategy: doctrine.orm.naming_strategy.underscore
-        auto_mapping: true
+        auto_mapping: false
         mappings:
             entity:
                 type: yml
                 prefix: Proximum\Vimeet\Domain\Model
-                dir: "%kernel.project_dir%/src/Infrastructure/Bundle/InfrastructureBundle/Resources/config/doctrine/entity"
+                dir: "%kernel.root_dir%/../src/Infrastructure/Bundle/InfrastructureBundle/Resources/config/doctrine/entity"
                 alias: Entity
                 is_bundle: false
 
