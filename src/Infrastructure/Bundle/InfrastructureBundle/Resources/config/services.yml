@@ -4789,6 +4789,7 @@ services:
             - '@adapter.local_file_storage'
             - '%infrastructure.export_planner_path%'
             - '%planner_files_path%'
+            - '%planner_command%'
             - '@vimeet_infrastructure.repository.event_repository'
             - '@repository.file_repository'
             - '@vimeet_infrastructure.repository.planner_job_repository'

@@ -57,6 +57,9 @@ class ExportHandler
     /** @var string */
     private $plannerFilesPath;
 
+    /** @var string */
+    private $plannerCommand;
+
     /** @var EventRepositoryInterface */
     private $eventRepository;
 
@@ -85,6 +88,7 @@ class ExportHandler
      * @param LocalFileStorageAdapter         $fileStorageAdapter
      * @param string                          $exportLocationDirectoryPath
      * @param string                          $plannerFilesPath
+     * @param string                          $plannerCommand
      * @param EventRepositoryInterface        $eventRepository
      * @param FileRepositoryInterface         $fileRepository
      * @param PlannerJobRepositoryInterface   $plannerJobRepository
@@ -100,6 +104,7 @@ class ExportHandler
         LocalFileStorageAdapter $fileStorageAdapter,
         string $exportLocationDirectoryPath,
         string $plannerFilesPath,
+        string $plannerCommand,
         EventRepositoryInterface $eventRepository,
         FileRepositoryInterface $fileRepository,
         PlannerJobRepositoryInterface $plannerJobRepository,
@@ -114,6 +119,7 @@ class ExportHandler
         $this->fileStorageAdapter          = $fileStorageAdapter;
         $this->exportLocationDirectoryPath = $exportLocationDirectoryPath;
         $this->plannerFilesPath            = $plannerFilesPath;
+        $this->plannerCommand              = $plannerCommand;
         $this->eventRepository             = $eventRepository;
         $this->fileRepository              = $fileRepository;
         $this->plannerJobRepository        = $plannerJobRepository;
@@ -125,9 +131,10 @@ class ExportHandler
     /**
      * @param Export $export
      *
+     * @return null|string
      * @throws InvalidArgumentForExportException
      */
-    public function handle(Export $export)
+    public function handle(Export $export): ?string
     {
         $event = $this->eventRepository->getById($export->eventId);
 
@@ -144,7 +151,7 @@ class ExportHandler
             $this->notifyError($errorKey, $event, $export);
             $this->saveErrorInPlannerJob($plannerJob, $errorKey);
 
-            return;
+            return null;
         }
 
         try {
@@ -159,13 +166,13 @@ class ExportHandler
             $this->saveErrorInPlannerJob($plannerJob, $errorKey);
             $this->notifyError($errorKey, $event, $export, $plannerJob);
 
-            return;
+            return null;
         } catch (DayNotConfiguredException $exception) {
             $errorKey = sprintf('flash.%s', $exception->getMessage());
             $this->saveErrorInPlannerJob($plannerJob, $errorKey);
             $this->notifyError($errorKey, $event, $export, $plannerJob);
 
-            return;
+            return null;
         }
 
         $path = $export->isModeAuto ? $this->plannerFilesPath : $this->exportLocationDirectoryPath;
@@ -180,7 +187,7 @@ class ExportHandler
             $this->notifyCreationOfFile($event, $export, $file);
         } else {
             $this->saveFileInPlannerJob($plannerJob, $file);
-            $this->callPlanner($file, $path);
+            return $this->callPlanner($file);
         }
     }
 
@@ -289,26 +296,19 @@ class ExportHandler
         );
     }
 
-    private function callPlanner(File $file, string $path): void
+    /**
+     * @param File $file
+     *
+     * @return null|string
+     */
+    private function callPlanner(File $file): ?string
     {
-        $url = 'http://optaplanner:8080/job/OptaPlanner_PREPROD_run/build';
-        $user = 'vimeet:ecfbaffaa67e252544bad999254d21f4';
+        if (null === $this->plannerCommand) {
+            return null;
+        }
 
-        $fileFullPath = $path . $file->getPath();
-        $json = str_replace('%filename%', $fileFullPath, '{"parameter": [{"name": "INPUT", "value": "%filename%"}]}');
-        $urlEncoded = urlencode($url . '?json=' . $json);
-        var_dump("\n$urlEncoded\n");
+        $fileFullPath = $file->getPath();
 
-        $curl = curl_init();
-        curl_setopt($curl, CURLOPT_POST, 1);
-        curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
-        curl_setopt($curl, CURLOPT_HTTPAUTH, CURLAUTH_BASIC);
-        curl_setopt($curl, CURLOPT_USERPWD, $user);
-        curl_setopt($curl, CURLOPT_URL, $urlEncoded);
-
-        $result = curl_exec($curl);
-        var_dump($result);
-
-        curl_close($curl);
+        return shell_exec(str_replace('%filename%', $fileFullPath, $this->plannerCommand));
     }
 }

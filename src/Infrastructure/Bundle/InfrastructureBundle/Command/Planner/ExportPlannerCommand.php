@@ -81,7 +81,7 @@ class ExportPlannerCommand extends Command
             $plannerJob = null;
         }
 
-        $this->exportPlannerHandler->handle(
+        $result = $this->exportPlannerHandler->handle(
             new Export(
                 $input->getArgument('eventId'),
                 $input->getArgument('locale'),
@@ -92,5 +92,7 @@ class ExportPlannerCommand extends Command
                 $plannerJob
             )
         );
+
+        $output->writeln($result);
     }
 }
