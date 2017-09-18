@@ -1,13 +1,18 @@
 @media screen and (max-width: 767px) {
   .catalog-mobile-menu {
     .catalog-mobile-menu-summary {
-      position: fixed;
+      position: fixed !important;
       top: 0;
       left: 0;
       width: 100%;
       padding: 17px;
+      z-index: 1;
 
       box-shadow: 0 6px 5px rgba(0, 0, 0, 0.2);
+
+      a:not(:last-child) {
+        margin-bottom: 10px;
+      }
     }
 
     .catalog-mobile-menu-container {
@@ -40,6 +45,8 @@
       }
 
       ul {
+        margin-bottom: 15px;
+
         > li.catalog-mobile-filter {
           margin-top: 8px;
 
@@ -98,12 +105,16 @@
     }
   }
 
-  .catalog-mobile-margin {
+  .catalog-mobile-margin-1 {
     margin-top: 60px !important;
+  }
+
+  .catalog-mobile-margin-2 {
+    margin-top: 110px !important;
   }
 }
 
-@media screen and (min-width: 767px) {
+@media screen and (min-width: 768px) {
   .catalog-mobile-menu {
     display: none;
   }

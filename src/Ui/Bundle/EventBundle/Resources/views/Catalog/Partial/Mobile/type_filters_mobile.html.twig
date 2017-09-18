@@ -1,6 +1,8 @@
+<h3 class="catalog-mobile-title">{{ 'catalog.mobile.filters.title'|trans }}</h3>
 <ul class="catalog-mobile-type-filter-list">
     <li
         class="catalog-mobile-filter"
+        data-catalog-mobile-type-filter="catalog-mobile-type-filter"
         data-filter-id="all"
         data-count-participant="{{ totalType }}"
         data-content="{{ 'catalog.mobile.filters.allParticipants'|trans }}"
@@ -14,6 +16,7 @@
     {% for child in form.children %}
         <li
             class="catalog-mobile-filter"
+            data-catalog-mobile-type-filter="catalog-mobile-type-filter"
             data-filter-id="{{ choices[child.vars.value].id }}"
             data-count-participant="{{ choices[child.vars.value].count }}"
             data-content="{{ child.vars.label|trans({}, child.vars.translation_domain) }}"

@@ -1,7 +1,7 @@
-var TypeFilterElement = require('./_CatalogMobileTypeFilterElement');
+var TypeFilterElement = require('./_CatalogMobileTypeFilterElement'),
+    AvailableSlotFilterElement = require('./_CatalogMobileAvailableSlotFilterElement');
 
 /**
- *
  * @param {HTMLElement} catalogFilterZone the zone where the filters will be displayed
  * @param {HTMLElement} catalogFilter the filter given by the response
  * @param {HTMLElement} catalogForm
@@ -13,21 +13,26 @@ function CatalogMobileFilters(catalogFilterZone, catalogFilter, catalogForm) {
     this.catalogFilter.classList.remove('hidden');
     this.originalCatalogFilter.remove();
     this.typeFilterList = this.catalogFilter.querySelector('.catalog-mobile-type-filter-list');
+    this.availableSlotFilterList = this.catalogFilter.querySelector('.catalog-mobile-available-slot-filter-list');
     this.catalogForm = catalogForm;
     this.typeFilterCheckboxes = this.catalogForm.querySelectorAll('input[name="type[]"]');
+    this.availableSlotRadio = this.catalogForm.querySelectorAll('input[name="availableSlot"]');
     this.typeFilterButtons = [];
+    this.availableSlotFilterButtons = [];
 
-    if (this.typeFilterList !== null && this.typeFilterCheckboxes !== null) {
+    if ((this.typeFilterList !== null && this.typeFilterCheckboxes !== null)
+        || (this.availableSlotFilterList !== null && this.availableSlotRadio !== null)
+    ) {
         // Empty the catalogFilterZone of the placeholder and add the value from the catalogFilter twig
         this.catalogFilterZone.innerHTML = '';
         this.catalogFilterZone.appendChild(this.catalogFilter);
 
-        this.catalogFilterZone
-            .querySelector('[data-catalog-mobile-menu-button-action]')
-            .addEventListener('click', function (event) {
+        [].forEach.call(this.catalogFilterZone.querySelectorAll('[data-catalog-mobile-menu-button-action]'), function (element) {
+            element.addEventListener('click', function (event) {
                 event.preventDefault();
 
                 this.openMenu();
+            }.bind(this));
         }.bind(this));
 
         this.catalogFilterZone
@@ -36,26 +41,46 @@ function CatalogMobileFilters(catalogFilterZone, catalogFilter, catalogForm) {
                 event.preventDefault();
 
                 this.closeMenu();
-        }.bind(this));
+            }.bind(this));
 
-        [].forEach.call(this.catalogFilterZone.querySelectorAll(".catalog-mobile-filter"), function (element) {
-            var filterButton = new TypeFilterElement(
-                element,
-                element.getAttribute('data-filter-id'),
-                element.getAttribute('data-content'),
-                element.getAttribute('data-count-participant')
-            );
+        if (this.typeFilterList !== null && this.typeFilterCheckboxes !== null) {
+            [].forEach.call(this.catalogFilterZone.querySelectorAll("[data-catalog-mobile-type-filter]"), function (element) {
+                var filterButton = new TypeFilterElement(
+                    element,
+                    element.getAttribute('data-filter-id'),
+                    element.getAttribute('data-content'),
+                    element.getAttribute('data-count-participant')
+                );
 
-            this.typeFilterButtons.push(filterButton);
+                this.typeFilterButtons.push(filterButton);
 
-            if (filterButton.count > 0) {
+                if (filterButton.count > 0) {
+                    filterButton.element.addEventListener('click', function (event) {
+                        event.preventDefault();
+
+                        this.onTypeFilterClick(filterButton);
+                    }.bind(this));
+                }
+            }.bind(this))
+        }
+
+        if (this.availableSlotFilterList !== null && this.availableSlotRadio !== null) {
+            [].forEach.call(this.catalogFilterZone.querySelectorAll("[data-catalog-mobile-available-slot-filter]"), function (element) {
+                var filterButton = new AvailableSlotFilterElement(
+                    element,
+                    element.getAttribute('data-filter-id'),
+                    element.getAttribute('data-content')
+                );
+
+                this.availableSlotFilterButtons.push(filterButton);
+
                 filterButton.element.addEventListener('click', function (event) {
                     event.preventDefault();
 
-                    this.onTypeFilterClick(filterButton);
+                    this.onAvailableSlotFilterClick(filterButton);
                 }.bind(this));
-            }
-        }.bind(this))
+            }.bind(this))
+        }
     }
 }
 
@@ -108,9 +133,35 @@ CatalogMobileFilters.prototype.onTypeFilterClick = function(typeFilterElementCli
     }
 };
 
+CatalogMobileFilters.prototype.onAvailableSlotFilterClick = function (availableSlotFilterElementClicked) {
+    this.availableSlotFilterButtons.forEach(function (availableSlotFilterElement) {
+        availableSlotFilterElement.inactive();
+    });
+
+    availableSlotFilterElementClicked.active();
+
+    for (var i = 0; i < this.availableSlotRadio.length; i++) {
+        this.availableSlotRadio[i].checked = this.availableSlotRadio[i].value === availableSlotFilterElementClicked.filterId;
+    }
+
+    [].forEach.call(this.catalogFilter.querySelectorAll('[data-catalog-mobile-menu-button-action]'), function (button) {
+        if (button.getAttribute('data-catalog-mobile-menu-button-action') === 'catalog-mobile-menu-button-action-available-slot-filter') {
+            this.rebuildActionButton(button, availableSlotFilterElementClicked.content);
+        }
+    }.bind(this));
+
+    this.dispatchChangeAndCloseMenu(this.availableSlotRadio[0]);
+};
+
 CatalogMobileFilters.prototype.rebuildActionButton = function (button, content, count) {
+    var countElement = '';
+
+    if (typeof count !== 'undefined') {
+        countElement = '(' + count + ')';
+    }
+
     button.innerHTML =
-        '<span>' + content + ' </span><span class="button-count total-participants">(' + count + ')' +
+        '<span>' + content + ' </span><span class="button-count total-participants">' + countElement +
         ' <i class="glyphicon glyphicon-chevron-down"></i></span>'
     ;
 };

@@ -28,6 +28,7 @@ use Proximum\Vimeet\Application\View\Catalog\FilteredFieldsView;
 use Proximum\Vimeet\Application\View\Catalog\PositionView;
 use Proximum\Vimeet\Domain\Catalog\Catalog;
 use Proximum\Vimeet\Domain\Catalog\SearchFields;
+use Proximum\Vimeet\Domain\Model\Catalog\Internal\CatalogConstant;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\PaginatedResult;
 use Proximum\Vimeet\Domain\Model\Sheet;
@@ -460,9 +461,10 @@ class CatalogController extends Controller
     private function getDefaultFilters(array $typeViews, array $categoryViews): array
     {
         $filters = [
-            SearchFields::ORDER_BY        => Sheet\Constant::ORDER_BY_RELEVANCE,
-            SearchFields::FILTER_TYPE     => $typeViews,
-            SearchFields::FILTER_CATEGORY => $categoryViews,
+            SearchFields::ORDER_BY                  => Sheet\Constant::ORDER_BY_RELEVANCE,
+            SearchFields::FILTER_TYPE               => $typeViews,
+            SearchFields::FILTER_CATEGORY           => $categoryViews,
+            SearchFields::FILTER_AVAILABLE_SLOT_IDS => CatalogConstant::AVAILABLE_SLOT_IDS_FILTER_EVERYONE,
         ];
 
         return $filters;
