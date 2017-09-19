@@ -38,4 +38,9 @@ interface DayRepositoryInterface
      * @return Day[]
      */
     public function findByEvent(Event $event);
+
+    /**
+     * @param Day $day
+     */
+    public function set(Day $day);
 }
