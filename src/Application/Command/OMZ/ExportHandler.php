@@ -148,29 +148,8 @@ class ExportHandler
             'mobile'    => '',
         ];
 
-        $gender = $user->getGender();
 
-        if (!empty($gender)) {
-            $gender = $this->translator->trans(sprintf('gender.%s', $gender));
-        }
-
-        $userInfo['gender']    = $gender;
-        $userInfo['firstName'] = $user->getFirstName();
-        $userInfo['lastName']  = $user->getLastName();
-        $userInfo['position']  = $user->getPosition();
-        $userInfo['phone']     = $user->getPhone();
-        $userInfo['mobile']    = $user->getMobile();
-
-        if (!empty($userSheets)
-            && (
-                empty($userInfo['gender']) ||
-                empty($userInfo['firstName']) ||
-                empty($userInfo['lastName']) ||
-                empty($userInfo['position']) ||
-                empty($userInfo['phone']) ||
-                empty($userInfo['mobile'])
-            )
-        ) {
+        if (!empty($userSheets)) {
             $participant = null;
 
             foreach ($userSheets as $sheet) {
@@ -184,29 +163,29 @@ class ExportHandler
             if ($participant !== null) {
                 $participantInfo = $this->participantInfoGuesser->guessParticipantInfos($participant, $locale);
 
-                if (empty($userInfo['gender']) && !empty($participantInfo[Tag::PARTICIPANT_GENDER])) {
+                if (!empty($participantInfo[Tag::PARTICIPANT_GENDER])) {
                     $userInfo['gender'] = $this->translator->trans(
                         sprintf('gender.%s', $participantInfo[Tag::PARTICIPANT_GENDER])
                     );
                 }
 
-                if (empty($userInfo['firstName']) && !empty($participantInfo[Tag::PARTICIPANT_FIRSTNAME])) {
+                if (!empty($participantInfo[Tag::PARTICIPANT_FIRSTNAME])) {
                     $userInfo['firstName'] = $participantInfo[Tag::PARTICIPANT_FIRSTNAME];
                 }
 
-                if (empty($userInfo['lastName']) && !empty($participantInfo[Tag::PARTICIPANT_LASTNAME])) {
+                if (!empty($participantInfo[Tag::PARTICIPANT_LASTNAME])) {
                     $userInfo['lastName'] = $participantInfo[Tag::PARTICIPANT_LASTNAME];
                 }
 
-                if (empty($userInfo['position']) && !empty($participantInfo[Tag::PARTICIPANT_POSITION])) {
+                if (!empty($participantInfo[Tag::PARTICIPANT_POSITION])) {
                     $userInfo['position'] = $participantInfo[Tag::PARTICIPANT_POSITION];
                 }
 
-                if (empty($userInfo['phone']) && !empty($participantInfo[Tag::PARTICIPANT_PHONE])) {
+                if (!empty($participantInfo[Tag::PARTICIPANT_PHONE])) {
                     $userInfo['phone'] = $participantInfo[Tag::PARTICIPANT_PHONE];
                 }
 
-                if (empty($userInfo['mobile']) && !empty($participantInfo[Tag::PARTICIPANT_MOBILE])) {
+                if (!empty($participantInfo[Tag::PARTICIPANT_MOBILE])) {
                     $userInfo['mobile'] = $participantInfo[Tag::PARTICIPANT_MOBILE];
                 }
             }
