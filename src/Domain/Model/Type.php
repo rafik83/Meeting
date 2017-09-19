@@ -26,7 +26,7 @@ class Type implements WhoInterface, TypeInterface
     private $id;
 
     /**
-     * @var int
+     * @var int|null
      */
     private $position = 0;
 
@@ -108,9 +108,9 @@ class Type implements WhoInterface, TypeInterface
     }
 
     /**
-     * @return int
+     * @return int|null
      */
-    public function getPosition()
+    public function getPosition(): ?int
     {
         return $this->position;
     }

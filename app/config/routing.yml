@@ -41,6 +41,17 @@ default_event:
     path: /
     methods: [GET]
 
+#
+# Trailing slash redirect to home event
+#
+default_redirect:
+    path: /{_locale}
+    defaults:
+        _controller: FrameworkBundle:Redirect:redirect
+        route: event
+        permanent: true
+    methods: [GET]
+
 vimeet_event:
     resource: '@EventBundle/Resources/config/routing.yml'
     prefix: /{_locale}

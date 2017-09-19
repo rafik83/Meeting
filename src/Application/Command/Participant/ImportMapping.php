@@ -11,6 +11,7 @@
 namespace Proximum\Vimeet\Application\Command\Participant;
 
 use Proximum\Vimeet\Application\Components\Import\ParticipantImportTag;
+use Proximum\Vimeet\Application\View\Participant\ImportMappingView;
 use Proximum\Vimeet\Domain\Model\Admin;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Type;
@@ -22,21 +23,7 @@ class ImportMapping
      *
      * @var array
      */
-    public $mappings;
-
-    /**
-     * Array of CSV headers column
-     *
-     * @var array
-     */
-    public $csvHeaders;
-
-    /**
-     * Array of template registration block keys
-     *
-     * @var array
-     */
-    public $registrationHeaders;
+    private $mappings = [];
 
     /**
      * @var Event
@@ -59,29 +46,31 @@ class ImportMapping
     public $admin;
 
     /**
+     * @var ImportMappingView
+     */
+    public $importMappingView;
+
+    /**
      * ImportMapping constructor.
      *
-     * @param Event  $event
-     * @param Type   $type
-     * @param Admin  $admin
-     * @param string $locale
-     * @param array  $csvHeaders
-     * @param array  $registrationHeaders
+     * @param Event             $event
+     * @param Type              $type
+     * @param Admin             $admin
+     * @param string            $locale
+     * @param ImportMappingView $importMappingView
      */
     public function __construct(
         Event $event,
         Type $type,
         Admin $admin,
         $locale,
-        array $csvHeaders,
-        array $registrationHeaders
+        ImportMappingView $importMappingView
     ) {
-        $this->csvHeaders          = $csvHeaders;
-        $this->registrationHeaders = $registrationHeaders;
-        $this->event               = $event;
-        $this->type                = $type;
-        $this->locale              = $locale;
-        $this->admin               = $admin;
+        $this->event             = $event;
+        $this->type              = $type;
+        $this->locale            = $locale;
+        $this->admin             = $admin;
+        $this->importMappingView = $importMappingView;
     }
 
     /**
@@ -104,5 +93,29 @@ class ImportMapping
         } else {
             return false;
         }
+    }
+
+    /**
+     * @param array $mappingIndexedByInt
+     */
+    public function setMappings(array $mappingIndexedByInt)
+    {
+        $mappingIndexedByFileHeader = [];
+
+        foreach ($mappingIndexedByInt as $key => $field) {
+            if (isset($this->importMappingView->fieldHeaders[$key])) {
+                $mappingIndexedByFileHeader[$this->importMappingView->fieldHeaders[$key]] = $field;
+            }
+        }
+
+        $this->mappings = $mappingIndexedByFileHeader;
+    }
+
+    /**
+     * @return array
+     */
+    public function getMappings(): array
+    {
+        return $this->mappings;
     }
 }
