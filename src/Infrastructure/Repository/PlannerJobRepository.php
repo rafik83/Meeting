@@ -78,6 +78,7 @@ class PlannerJobRepository implements PlannerJobRepositoryInterface
             ->from(PlannerJob::class, 'plannerJob')
             ->where('plannerJob.id = :id')
             ->setParameter('id', $id)
+            ->setMaxResults(1)
         ;
 
         return $queryBuilder->getQuery()->getOneOrNullResult();
@@ -95,6 +96,7 @@ class PlannerJobRepository implements PlannerJobRepositoryInterface
             ->from(PlannerJob::class, 'plannerJob')
             ->join('plannerJob.file', 'file', 'WITH', 'file.path = :filename')
             ->setParameter('filename', $filename)
+            ->setMaxResults(1)
         ;
 
         return $queryBuilder->getQuery()->getOneOrNullResult();
