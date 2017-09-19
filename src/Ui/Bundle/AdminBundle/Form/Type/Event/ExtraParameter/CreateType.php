@@ -19,6 +19,7 @@ use Symfony\Component\Form\FormBuilderInterface;
 class CreateType extends AbstractType
 {
     const TRANSLATION_TYPE = 'form.extra_parameter_create.children.type.choices';
+
     /**
      * {@inheritdoc}
      */

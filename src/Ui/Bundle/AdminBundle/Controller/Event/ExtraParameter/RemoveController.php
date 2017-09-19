@@ -39,7 +39,7 @@ class RemoveController extends Controller
         $this->get('tactician.commandbus')->handle($remove);
 
         return $this->redirectToRoute('admin_event_extra_parameter_list', [
-            'event' => $event->getId()
+            'event' => $event->getId(),
         ]);
     }
 }
