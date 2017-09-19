@@ -29,6 +29,9 @@ class PlannerJob
     /** Build is queued in Jenkins */
     const STATUS_QUEUED = 'build_queued';
 
+    /** Build is aborted in Jenkins */
+    const STATUS_ABORTED = 'build_aborted';
+
     /** Planner finished its task, the file *_solved.xml is created */
     const STATUS_SUCCESS = 'build_success';
 
@@ -213,6 +216,14 @@ class PlannerJob
     /**
      * @return bool
      */
+    public function isAborted(): bool
+    {
+        return self::STATUS_ABORTED === $this->status;
+    }
+
+    /**
+     * @return bool
+     */
     public function isSuccess(): bool
     {
         return self::STATUS_SUCCESS === $this->status;
@@ -247,6 +258,11 @@ class PlannerJob
     public function setQueued(): void
     {
         $this->status = self::STATUS_QUEUED;
+    }
+
+    public function setAborted(): void
+    {
+        $this->status = self::STATUS_ABORTED;
     }
 
     public function setSuccess(): void

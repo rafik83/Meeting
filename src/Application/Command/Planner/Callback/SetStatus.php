@@ -104,4 +104,39 @@ class SetStatus
             $this->status = $build['status'];
         }
     }
+
+    public function isPhaseFinalized(): bool
+    {
+        return self::PHASE_FINALIZED === $this->phase;
+    }
+
+    public function isPhaseCompleted(): bool
+    {
+        return self::PHASE_COMPLETED === $this->phase;
+    }
+
+    public function isPhaseStarted(): bool
+    {
+        return self::PHASE_STARTED === $this->phase;
+    }
+
+    public function isPhaseQueued(): bool
+    {
+        return self::PHASE_QUEUED === $this->phase;
+    }
+
+    public function isStatusSuccess(): bool
+    {
+        return self::STATUS_SUCCESS === $this->status;
+    }
+
+    public function isStatusAborted(): bool
+    {
+        return self::STATUS_ABORTED === $this->status;
+    }
+
+    public function isStatusFailure(): bool
+    {
+        return self::STATUS_FAILURE === $this->status;
+    }
 }

@@ -25,7 +25,7 @@
     </div>
 
     {% if lastPlannerJob %}
-        <div class="alert alert-{{ lastPlannerJob.completed ? 'success' : (lastPlannerJob.error ? 'danger' : 'warning') }}">
+        <div class="alert alert-{{ lastPlannerJob.completed ? 'success' : (lastPlannerJob.aborted or lastPlannerJob.error ? 'danger' : 'warning') }}">
             <p>
                 {% if lastPlannerJob.pending %}
                     <span class="label label-default">{{ 'admin.planner.pendingPlannerJob.status.pending'|trans }}</span>
@@ -35,6 +35,8 @@
                     <span class="label label-warning">{{ 'admin.planner.pendingPlannerJob.status.queued'|trans }}</span>
                 {% elseif lastPlannerJob.error %}
                     <span class="label label-danger">{{ 'admin.planner.pendingPlannerJob.status.error'|trans }}</span>
+                {% elseif lastPlannerJob.aborted %}
+                    <span class="label label-danger">{{ 'admin.planner.pendingPlannerJob.status.aborted'|trans }}</span>
                 {% elseif lastPlannerJob.success %}
                     <span class="label label-warning">{{ 'admin.planner.pendingPlannerJob.status.success'|trans }}</span>
                 {% elseif lastPlannerJob.completed %}
