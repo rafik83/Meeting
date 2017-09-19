@@ -97,7 +97,6 @@ class SpotImporter
             foreach ($validations as $validation) {
                 $spotImport->addError($validation->getMessage());
             }
-
             foreach ($spotImport->sheetIds as $sheetId) {
                 if (isset($sheetsHasSpot[$sheetId])) {
                     $spotImport->addError($this->translateError(

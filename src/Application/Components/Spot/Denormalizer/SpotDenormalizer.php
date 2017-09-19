@@ -123,7 +123,7 @@ class SpotDenormalizer implements DenormalizerInterface
     private function getSheetIdsToArrayFromString(string $sheetIds): array
     {
         if (!empty($sheetIds)) {
-            return explode(',', str_replace(' ', '', $sheetIds));
+            return array_filter(explode(',', $sheetIds), 'strlen');
         }
 
         return [];
