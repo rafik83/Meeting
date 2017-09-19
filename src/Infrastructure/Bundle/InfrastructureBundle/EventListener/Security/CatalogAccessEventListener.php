@@ -51,14 +51,16 @@ class CatalogAccessEventListener extends AbstractRedirectToEventListener
      * @param EventRepositoryInterface $eventRepository
      * @param TokenStorageInterface    $tokenStorage
      * @param RouterInterface          $router
+     * @param string                   $adminDomain
      */
     public function __construct(
         CatalogAccessChecker $catalogAccessChecker,
         EventRepositoryInterface $eventRepository,
         TokenStorageInterface $tokenStorage,
-        RouterInterface $router
+        RouterInterface $router,
+        string $adminDomain
     ) {
-        parent::__construct($router, $eventRepository);
+        parent::__construct($router, $eventRepository, $adminDomain);
 
         $this->catalogAccessChecker = $catalogAccessChecker;
         $this->tokenStorage         = $tokenStorage;
