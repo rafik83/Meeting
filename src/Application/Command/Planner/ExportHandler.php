@@ -16,7 +16,7 @@ use Proximum\Vimeet\Application\Command\MeetingRequest\Admin\LockMeetingRequestU
 use Proximum\Vimeet\Application\Command\MeetingRequest\Admin\LockMeetingRequestUpdateHandler;
 use Proximum\Vimeet\Application\Command\Unavailability\Mass\Dispatcher;
 use Proximum\Vimeet\Application\Command\Unavailability\Mass\DispatcherHandler;
-use Proximum\Vimeet\Application\Exception\Order\Export\InvalidArgumentForExportException;
+use Proximum\Vimeet\Application\Exception\Planner\CallPlannerException;
 use Proximum\Vimeet\Application\Exception\Planner\DayNotConfiguredException;
 use Proximum\Vimeet\Application\Exception\Planner\SlotNotConfiguredException;
 use Proximum\Vimeet\Application\Query\Planner\PlannerViewQuery;
@@ -132,14 +132,14 @@ class ExportHandler
      * @param Export $export
      *
      * @return null|string
-     * @throws InvalidArgumentForExportException
+     * @throws \InvalidArgumentException
      */
     public function handle(Export $export): ?string
     {
         $event = $this->eventRepository->getById($export->eventId);
 
         if (null === $event) {
-            throw new InvalidArgumentForExportException(sprintf('Event %s not found', $export->eventId));
+            throw new \InvalidArgumentException(sprintf('Event %s not found', $export->eventId));
         }
 
         $plannerJob = $this->getPlannerJob($export->plannerJobId);
@@ -161,14 +161,14 @@ class ExportHandler
             if (true === $export->lockMeetingRequest) {
                 $this->lockMeetingRequestHandler->handle(new LockMeetingRequestUpdate($event, true));
             }
-        } catch (SlotNotConfiguredException $exception) {
-            $errorKey = sprintf('flash.%s', $exception->getMessage());
+        } catch (SlotNotConfiguredException $slotNotConfiguredException) {
+            $errorKey = sprintf('flash.%s', $slotNotConfiguredException->getMessage());
             $this->saveErrorInPlannerJob($plannerJob, $errorKey);
             $this->notifyError($errorKey, $event, $export, $plannerJob);
 
             return null;
-        } catch (DayNotConfiguredException $exception) {
-            $errorKey = sprintf('flash.%s', $exception->getMessage());
+        } catch (DayNotConfiguredException $dayNotConfiguredException) {
+            $errorKey = sprintf('flash.%s', $dayNotConfiguredException->getMessage());
             $this->saveErrorInPlannerJob($plannerJob, $errorKey);
             $this->notifyError($errorKey, $event, $export, $plannerJob);
 
@@ -186,9 +186,19 @@ class ExportHandler
         if (!$export->isModeAuto) {
             $this->notifyCreationOfFile($event, $export, $file);
         } else {
-            $this->saveFileInPlannerJob($plannerJob, $file);
-            return $this->callPlanner($file);
+            try {
+                $output = $this->callPlanner($file);
+                $this->saveFileInPlannerJob($plannerJob, $file);
+
+                return $output;
+            } catch (CallPlannerException $callPlannerException) {
+                $errorKey = sprintf('flash.%s', $callPlannerException->getMessage());
+                $this->saveErrorInPlannerJob($plannerJob, $errorKey);
+                $this->notifyError($errorKey, $event, $export, $plannerJob);
+            }
         }
+
+        return null;
     }
 
     /**
@@ -199,6 +209,7 @@ class ExportHandler
     {
         if ($plannerJob instanceof PlannerJob) {
             $plannerJob->setFile($file);
+            $plannerJob->setStarted();
             $this->plannerJobRepository->set($plannerJob);
         }
     }
@@ -219,7 +230,7 @@ class ExportHandler
      * @param int|null $plannerJobId
      *
      * @return null|PlannerJob
-     * @throws InvalidArgumentForExportException
+     * @throws \InvalidArgumentException
      */
     private function getPlannerJob(?int $plannerJobId): ?PlannerJob
     {
@@ -230,7 +241,7 @@ class ExportHandler
         $plannerJob = $this->plannerJobRepository->getById($plannerJobId);
 
         if (null === $plannerJob) {
-            throw new InvalidArgumentForExportException(sprintf('PlannerJob %s not found', $plannerJobId));
+            throw new \InvalidArgumentException(sprintf('PlannerJob %s not found', $plannerJobId));
         }
 
         return $plannerJob;
@@ -300,6 +311,7 @@ class ExportHandler
      * @param File $file
      *
      * @return null|string
+     * @throws CallPlannerException
      */
     private function callPlanner(File $file): ?string
     {
@@ -309,6 +321,15 @@ class ExportHandler
 
         $fileFullPath = $file->getPath();
 
-        return shell_exec(str_replace('%filename%', $fileFullPath, $this->plannerCommand));
+        $output = [];
+        $result = '';
+
+        exec(str_replace('%filename%', $fileFullPath, $this->plannerCommand).' 2>&1', $output, $result);
+
+        if ($result > 0) {
+            throw new CallPlannerException();
+        }
+
+        return implode("\n", $output);
     }
 }

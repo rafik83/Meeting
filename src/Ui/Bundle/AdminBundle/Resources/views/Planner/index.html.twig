@@ -25,21 +25,37 @@
     </div>
 
     {% if lastPlannerJob %}
-        <div class="alert alert-{{ lastPlannerJob.error ? 'danger' : 'warning' }}">
+        <div class="alert alert-{{ lastPlannerJob.completed ? 'success' : (lastPlannerJob.error ? 'danger' : 'warning') }}">
             <p>
+                {% if lastPlannerJob.pending %}
+                    <span class="label label-default">{{ 'admin.planner.pendingPlannerJob.status.pending'|trans }}</span>
+                {% elseif lastPlannerJob.started %}
+                    <span class="label label-info">{{ 'admin.planner.pendingPlannerJob.status.started'|trans }}</span>
+                {% elseif lastPlannerJob.queued %}
+                    <span class="label label-warning">{{ 'admin.planner.pendingPlannerJob.status.queued'|trans }}</span>
+                {% elseif lastPlannerJob.error %}
+                    <span class="label label-danger">{{ 'admin.planner.pendingPlannerJob.status.error'|trans }}</span>
+                {% elseif lastPlannerJob.success %}
+                    <span class="label label-warning">{{ 'admin.planner.pendingPlannerJob.status.success'|trans }}</span>
+                {% elseif lastPlannerJob.completed %}
+                    <span class="label label-success">{{ 'admin.planner.pendingPlannerJob.status.completed'|trans }}</span>
+                {% endif %}
+
+                {% if lastPlannerJob.hasFile %}
+                    <span class="label label-success">{{ 'admin.planner.pendingPlannerJob.fileExported'|trans }}</span>
+                {% else %}
+                    <span class="label label-default">{{ 'admin.planner.pendingPlannerJob.fileNotExported'|trans }}</span>
+                {% endif %}
+
                 {{ 'admin.planner.pendingPlannerJob.details'|trans({
                     '%adminFirstname%': lastPlannerJob.admin.firstname,
                     '%adminLastname%': lastPlannerJob.admin.lastname,
                     '%solutionType%': ('form.planner_export.children.solutionType.option.' ~ lastPlannerJob.solutionType)|trans({}, 'forms'),
                     '%createdAt%': lastPlannerJob.createdAt|localizeddate('long', 'short', app.request.locale, event.timeZone)
                 }) }}
-
-                {% if lastPlannerJob.hasFile %}
-                    <span class="label label-success">{{ 'admin.planner.pendingPlannerJob.status.fileExported'|trans }}</span>
-                {% endif %}
             </p>
 
-            {% if lastPlannerJob.error %}
+            {% if lastPlannerJob.error and lastPlannerJob.errorMessage %}
                 <p>⚠️ {{ lastPlannerJob.errorMessage|trans({}, 'flashes') }}</p>
             {% endif %}
         </div>

@@ -189,6 +189,46 @@ class PlannerJob
     /**
      * @return bool
      */
+    public function isPending(): bool
+    {
+        return self::STATUS_PENDING === $this->status;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isStarted(): bool
+    {
+        return self::STATUS_STARTED === $this->status;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isQueued(): bool
+    {
+        return self::STATUS_QUEUED === $this->status;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isSuccess(): bool
+    {
+        return self::STATUS_SUCCESS === $this->status;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isCompleted(): bool
+    {
+        return self::STATUS_COMPLETED === $this->status;
+    }
+
+    /**
+     * @return bool
+     */
     public function isError(): bool
     {
         return self::STATUS_ERROR === $this->status;

@@ -533,7 +533,14 @@ admin.planner.import.link: Importer
 admin.planner.import.title: 'Importation d''une solution'
 admin.planner.index: Planification
 admin.planner.pendingPlannerJob.details: 'Une planification des RDVs (%solutionType%) a été demandée par %adminFirstname% %adminLastname% le %createdAt%.'
-admin.planner.pendingPlannerJob.status.fileExported: 'Fichier exporté vers le planner'
+admin.planner.pendingPlannerJob.fileExported: 'Fichier exporté vers le planner'
+admin.planner.pendingPlannerJob.fileNotExported: 'Fichier en attente d''export'
+admin.planner.pendingPlannerJob.status.pending: 'En attente'
+admin.planner.pendingPlannerJob.status.started: 'Planification démarrée'
+admin.planner.pendingPlannerJob.status.queued: 'Planification en fil d''attente'
+admin.planner.pendingPlannerJob.status.error: 'Erreur'
+admin.planner.pendingPlannerJob.status.success: 'Planification réalisée, création des RDV en cours'
+admin.planner.pendingPlannerJob.status.completed: 'Planification terminée'
 admin.planner.run: Lancer la planification
 admin.planner.run.title: 'Lancer la planification de RDVs'
 admin.planning.export.link: Exporter
