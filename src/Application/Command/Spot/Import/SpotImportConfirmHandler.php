@@ -62,8 +62,9 @@ class SpotImportConfirmHandler
                 foreach ($spotImportView->sheetIds as $sheetId) {
                     $sheetIds[] = $sheetId;
                     $spots[$sheetId] = $spotImportView->spot;
-                    $this->spotRepository->add($spotImportView->spot);
                 }
+
+                $this->spotRepository->add($spotImportView->spot);
             }
         }
 
