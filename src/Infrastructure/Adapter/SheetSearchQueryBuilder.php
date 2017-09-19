@@ -403,7 +403,7 @@ class SheetSearchQueryBuilder
         foreach ($filters['categories'] as $category) {
             $id = $category;
 
-            if ($category instanceof Category) {
+            if ($category instanceof Category || $category instanceof CategoryView) {
                 $id = $category->getId();
             }
 
