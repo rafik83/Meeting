@@ -71,6 +71,8 @@ class ValidationRequiredChecker
 
                 return $userEventPhone === null;
             }
+
+            return false;
         }
 
         return false;

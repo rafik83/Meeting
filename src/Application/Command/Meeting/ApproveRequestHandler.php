@@ -10,62 +10,75 @@
 
 namespace Proximum\Vimeet\Application\Command\Meeting;
 
+use Proximum\Vimeet\Application\Command\Meeting\Admin\TransformRequestIntoMeeting;
+use Proximum\Vimeet\Application\Command\Meeting\Admin\TransformRequestIntoMeetingHandler;
 use Proximum\Vimeet\Application\Components\Meeting\RequestPermissionManager;
 use Proximum\Vimeet\Application\Event\Events;
 use Proximum\Vimeet\Application\Event\MeetingRequest\ApprovedRequestEvent;
 use Proximum\Vimeet\Application\Event\MeetingRequest\ParticipateToRequestEvent;
 use Proximum\Vimeet\Application\Exception\MeetingRequest\IsNotAllowedToApproveMeetingRequestException;
 use Proximum\Vimeet\Domain\Model\Meeting\Message;
+use Proximum\Vimeet\Domain\Model\Meeting\Request;
 use Proximum\Vimeet\Domain\Repository\Meeting\MessageRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\Meeting\RequestRepositoryInterface;
+use Proximum\Vimeet\Domain\Repository\MeetingSlotRepositoryInterface;
+use Proximum\Vimeet\Domain\User\Phone\ValidationRequiredChecker;
 use Proximum\Vimeet\Infrastructure\Adapter\DelayedEventDispatcher;
 
 class ApproveRequestHandler
 {
-    /**
-     * @var RequestRepositoryInterface
-     */
+    /** @var RequestRepositoryInterface */
     private $requestRepository;
 
-    /**
-     * @var \DateTimeInterface
-     */
+    /** @var \DateTimeInterface */
     private $datetime;
 
-    /**
-     * @var MessageRepositoryInterface
-     */
+    /** @var MessageRepositoryInterface */
     private $messageRepository;
 
-    /**
-     * @var RequestPermissionManager
-     */
+    /** @var RequestPermissionManager */
     private $permissionManager;
 
-    /**
-     * @var DelayedEventDispatcher
-     */
+    /** @var DelayedEventDispatcher */
     private $eventDispatcher;
 
+    /** @var ValidationRequiredChecker */
+    private $validationRequiredChecker;
+
+    /** @var MeetingSlotRepositoryInterface */
+    private $slotRepository;
+
+    /** @var TransformRequestIntoMeetingHandler */
+    private $transformRequestIntoMeetingHandler;
+
     /**
-     * @param RequestRepositoryInterface $requestRepository
-     * @param MessageRepositoryInterface $messageRepository
-     * @param RequestPermissionManager   $permissionManager
-     * @param DelayedEventDispatcher     $eventDispatcher
-     * @param \DateTimeInterface         $datetime
+     * @param RequestRepositoryInterface         $requestRepository
+     * @param MessageRepositoryInterface         $messageRepository
+     * @param RequestPermissionManager           $permissionManager
+     * @param DelayedEventDispatcher             $eventDispatcher
+     * @param ValidationRequiredChecker          $validationRequiredChecker
+     * @param MeetingSlotRepositoryInterface     $slotRepository
+     * @param TransformRequestIntoMeetingHandler $transformRequestIntoMeetingHandler
+     * @param \DateTimeInterface                 $datetime
      */
     public function __construct(
         RequestRepositoryInterface $requestRepository,
         MessageRepositoryInterface $messageRepository,
         RequestPermissionManager $permissionManager,
         DelayedEventDispatcher $eventDispatcher,
+        ValidationRequiredChecker $validationRequiredChecker,
+        MeetingSlotRepositoryInterface $slotRepository,
+        TransformRequestIntoMeetingHandler $transformRequestIntoMeetingHandler,
         \DateTimeInterface $datetime
     ) {
         $this->requestRepository = $requestRepository;
         $this->permissionManager = $permissionManager;
         $this->messageRepository = $messageRepository;
-        $this->eventDispatcher   = $eventDispatcher;
-        $this->datetime          = $datetime;
+        $this->eventDispatcher = $eventDispatcher;
+        $this->datetime = $datetime;
+        $this->validationRequiredChecker = $validationRequiredChecker;
+        $this->slotRepository = $slotRepository;
+        $this->transformRequestIntoMeetingHandler = $transformRequestIntoMeetingHandler;
     }
 
     /**
@@ -115,5 +128,32 @@ class ApproveRequestHandler
             Events::MEETING_REQUEST_APPROVED,
             new ApprovedRequestEvent($approveRequest->request)
         );
+
+        if (false === $this->validationRequiredChecker->handle($approveRequest->sheet, $approveRequest->editor, $approveRequest->locale)) {
+            $this->transformRequestIntoMeetingOnDday($approveRequest->request);
+        }
+    }
+
+    private function transformRequestIntoMeetingOnDday(Request $request)
+    {
+        $slots = $this->slotRepository->findAvailableSlotsByParticipants($request->getEvent(), $request->getAllParticipants());
+        $isVisio = false;
+
+        foreach ($request->getAllParticipants() as $participant) {
+            if ($participant->isVisio() === true) {
+                $isVisio = true;
+                break;
+            }
+        }
+
+        foreach ($slots as $slot) {
+            try {
+                $this->transformRequestIntoMeetingHandler->handle(
+                    new TransformRequestIntoMeeting($request, $slot, $isVisio)
+                );
+            } catch (\Exception $exception) {
+                // TODO: throw exception for error
+            }
+        }
     }
 }
