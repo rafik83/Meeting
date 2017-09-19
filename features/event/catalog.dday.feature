@@ -13,7 +13,7 @@ Feature: Dday catalog
     And this sheet is in catalog
     And the user "user@elao.com" is created
     And there is a participant for this sheet and this user
-    And this event occurs today from "08:00" to "18:00"
+    And this event occurs today from "00:00" to "23:59"
     And the tip "Confirmation telephone" is created
     And a tip "Confirmation telephone" is enabled on confirmation phone context for this type
     And elastica is populate
