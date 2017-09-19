@@ -1,6 +1,6 @@
 {% set isMeetingRequestUpdateLocked = isMeetingRequestUpdateLocked|default(false) %}
 {% set redirectPath = path('event_catalog_index', { 'sheet': sheet.id }) %}
-
+{% set isPhoneValidationRequired = isPhoneValidationRequired is defined ? isPhoneValidationRequired : false %}
 {% if not isMeetingRequestUpdateLocked %}
     {% if isPhoneValidationRequired and participant is not null %}
         {% if isMeetingPublished is defined and isMeetingPublished and meetingRequest.hasMeeting %}

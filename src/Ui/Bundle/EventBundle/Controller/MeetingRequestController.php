@@ -298,7 +298,7 @@ class MeetingRequestController extends Controller
             ->get('tactician.commandbus.query')
             ->handle(new DiscussionMeetingRequestViewQuery($meetingRequest, $request->getLocale()));
 
-        $approveRequest = new ApproveRequest($this->getUser(), $meetingRequest, $sheet);
+        $approveRequest = new ApproveRequest($this->getUser(), $meetingRequest, $sheet, $request->getLocale());
         $form           = $this->createForm(MeetingRequestApproveType::class, $approveRequest, [
             'action' => $this->generateUrl('event_meeting_request_approve', [
                 'sheet'          => $sheet->getId(),
@@ -320,7 +320,7 @@ class MeetingRequestController extends Controller
                     'sheet'                        => $sheet,
                     'meetingRequest'               => $meetingRequest,
                     'isMeetingPublished'           => $this->get('domain.key_dates.checker.meeting_published_access_checker')->allowedToAccess($eventDomain->getEvent()),
-                    'isMeetingRequestUpdateLocked' =>$eventDomain->getEvent()->getConfiguration()->isMeetingRequestUpdateLocked()
+                    'isMeetingRequestUpdateLocked' => $eventDomain->getEvent()->getConfiguration()->isMeetingRequestUpdateLocked()
                 ]),
                 $this->getParticipantsHtml($approveRequest->participants, $request->getLocale())
             ));
