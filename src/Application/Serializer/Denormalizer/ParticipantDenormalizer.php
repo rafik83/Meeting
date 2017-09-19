@@ -202,7 +202,7 @@ class ParticipantDenormalizer implements DenormalizerInterface
      */
     public function supportsDenormalization($data, $type, $format = null)
     {
-        return $format === self::FORMAT;
+        return $type === Participant::class && $format === self::FORMAT;
     }
 
     /**
@@ -264,6 +264,7 @@ class ParticipantDenormalizer implements DenormalizerInterface
      *
      * @return array of sheetData, participantData and sheetTitle
      * @throws InvalidObjectContentException
+     * @throws \Exception
      */
     private function handleRow(
         array $row,
@@ -329,10 +330,12 @@ class ParticipantDenormalizer implements DenormalizerInterface
             }
 
             if ($templateObject->hasTag(Tag::SHEET_ORGANIZATION) && !empty($templateObject->getContentValue())) {
+
                 $sheetTitle = $column;
             }
 
-            if ('' === $sheetTitle && $templateObject->hasTag(Tag::SHEET_TITLE)
+            if ('' === $sheetTitle
+                && $templateObject->hasTag(Tag::SHEET_TITLE)
                 && !empty($templateObject->getContentValue())
             ) {
                 $sheetTitle = $column;
@@ -385,12 +388,11 @@ class ParticipantDenormalizer implements DenormalizerInterface
         $sheetTitle = !empty(trim($sheetTitle)) ? $sheetTitle : $user->getFullname();
         $sheetTitle = !empty(trim($sheetTitle)) ? $sheetTitle : $user->getEmail();
         $sheet->setTitle($sheetTitle);
+        $sheet->setRegistrationData($sheetData);
+        $this->sheetRepository->add($sheet);
 
         $participant = new Participant($sheet, $user, $participantData, false);
         $participant->setImported(true);
-
-        $sheet->setRegistrationData($sheetData);
-        $this->sheetRepository->add($sheet);
         $this->participantRepository->add($participant);
         $sheet->addParticipant($participant); // required to have participant in array sheet array collection
 

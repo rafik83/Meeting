@@ -8,11 +8,12 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Proximum\Vimeet\Application\Command\Participant;
+namespace Proximum\Vimeet\Tests\Application\Command\Participant\Import;
 
 use PHPUnit\Framework\TestCase;
 use Proximum\Vimeet\Application\Adapter\FileStorageInterface;
 use Proximum\Vimeet\Application\Adapter\SessionInterface;
+use Proximum\Vimeet\Application\Command\Participant\Import;
 use Proximum\Vimeet\Application\Components\Import\ParticipantImportTag;
 use Proximum\Vimeet\Application\Serializer\Charset;
 use Symfony\Component\HttpFoundation\File\Exception\FileNotFoundException;

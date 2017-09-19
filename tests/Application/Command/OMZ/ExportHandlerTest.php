@@ -96,7 +96,7 @@ class ExportHandlerTest extends TestCase
         $groupNameResolver->resolve($event, $user, [$sheet])->shouldBeCalled()->willReturn('group name');
         $typeNameResolver->resolveWithPreloadedSheets([$sheet], 'fr')->shouldBeCalled()->willReturn('type name');
 
-        $serializer->serialize($omzUserListView, 'csv', ["charset" => "Windows-1252"])
+        $serializer->serialize($omzUserListView, 'csv', ['csv_delimiter' => ';', 'charset' => 'Windows-1252'])
             ->shouldBeCalled()
             ->willReturn($expectedNormalizedDatas);
 
@@ -138,7 +138,8 @@ class ExportHandlerTest extends TestCase
         $omzUserListView = new OmzUserListView([$omzUserView]);
 
         $result = $serializer->serialize($omzUserListView, 'csv', [
-            'charset' => Charset::WINDOWS_1252,
+            'csv_delimiter' => ',',
+            'charset' => 'Windows-1252',
         ]);
 
         $expected = "participantId,companyName,description,type,title,firstName,lastName,position,phonePrefix,phoneNumber,email,mobilePhonePrefix,mobilePhone,planning\n1,\"group name\",,\"type name\",woman,\"first name\",\"last name\",position,,phone,normalizer@elao.com,,mobile,\"**Dimanche 1 janvier 2017**\n\n- 11:10 - 11:30 : mass title\n- 13:00 - 14:00 : unavailability title\n- 14:15 - 14:45 : assignment mass title\n- 17:00 - 18:00 : happening title\n- 18:30 - 18:45 : spot reference - user sheet title - sheet met title\n\n\n\n\n\n\nunallocated: sheet met 1\"\n";

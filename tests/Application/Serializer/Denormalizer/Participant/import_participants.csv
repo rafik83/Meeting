@@ -1,0 +1,7 @@
+Nom participant;Prénom participant;Société Acheteur;Fonction Pro Acheteur;E-mail Acheteur;Mobile;Tarif;Facture - Ville;Pays Acheteur;Facture - Code postal;Facture - Adresse
+AB;Nicolas;"Blue Consulting";CEO;nicolas@gmail.com;+33611223344;Entrepreneur Pass (2 days);;France;;
+KL;Julie;"User already exists in DB";créateur;julie@gmail.com;+33666667700;;;FR;;
+CD;Jean;"Ma Petite Tribu";créateur;jean@gmail.com;+33666667788;Entrepreneur Pass (2 days);;FR;;
+GH;Henry;NO Email;president;;;;;FR;;
+CD;Jean;"Ma Petite Tribu";créateur;jean@gmail.com;+33666667788;Entrepreneur Pass (2 days);;FR;;
+IJ;Martine;"Sheet already exists in DB";créateur;martine@gmail.com;+33666667799;;;FR;;

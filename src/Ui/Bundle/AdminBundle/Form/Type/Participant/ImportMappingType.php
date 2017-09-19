@@ -11,6 +11,7 @@
 namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Participant;
 
 use Proximum\Vimeet\Application\Command\Participant\ImportMapping;
+use Proximum\Vimeet\Application\View\Participant\ImportMappingView;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -22,10 +23,13 @@ class ImportMappingType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
+        /** @var ImportMappingView $importMappingView */
+        $importMappingView = $options['importMappingView'];
+
         $builder
             ->add('mappings', MappingType::class, [
-                'csvHeaders'          => $options['csvHeaders'],
-                'registrationHeaders' => $options['registrationHeaders'],
+                'csvHeaders'          => $importMappingView->fieldHeaders,
+                'registrationHeaders' => $importMappingView->registrationHeaders,
                 'label'               => false,
             ]);
     }
@@ -35,9 +39,8 @@ class ImportMappingType extends AbstractType
      */
     public function configureOptions(OptionsResolver $resolver)
     {
-        $resolver->setRequired(['locale', 'registrationHeaders', 'csvHeaders']);
-        $resolver->setDefaults([
-            'data_class' => ImportMapping::class,
-        ]);
+        $resolver->setRequired(['locale', 'importMappingView']);
+        $resolver->setAllowedTypes('importMappingView', ImportMappingView::class);
+        $resolver->setDefaults(['data_class' => ImportMapping::class]);
     }
 }
