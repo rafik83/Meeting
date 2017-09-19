@@ -180,7 +180,7 @@ class SheetRepository implements SheetRepositoryInterface
     /**
      * {@inheritdoc}
      */
-    public function getSheetViewsByEventById(Event $event, int $sheetId):? ImportSheetView
+    public function getSheetViewByEventAndId(Event $event, int $sheetId):? ImportSheetView
     {
         $queryBuilder = $this
             ->entityManager

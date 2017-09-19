@@ -108,7 +108,7 @@ class SpotImporter
                     continue;
                 }
 
-                $sheetView = $this->sheetRepository->getSheetViewsByEventById($event, $sheetId);
+                $sheetView = $this->sheetRepository->getSheetViewByEventAndId($event, $sheetId);
 
                 if (null === $sheetView) {
                     $spotImport->addError($this->translateError(

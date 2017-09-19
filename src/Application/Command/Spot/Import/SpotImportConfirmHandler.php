@@ -10,12 +10,10 @@
 
 namespace Proximum\Vimeet\Application\Command\Spot\Import;
 
-
 use Proximum\Vimeet\Application\Components\Spot\SpotImporter;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\SpotRepositoryInterface;
-use Proximum\Vimeet\Domain\Spot\Import;
 
 class SpotImportConfirmHandler
 {
@@ -56,14 +54,25 @@ class SpotImportConfirmHandler
 
         $this->deleteSlotsByEvent($command->event);
 
+        $sheetIds = [];
+        $spots = [];
+
         foreach ($spotImportViews as $spotImportView) {
             if (!$spotImportView->hasError()) {
-                foreach ($spotImportView->sheetViews as $sheetView) {
-                    $sheet = $this->sheetRepository->getSheetById($sheetView->id);
-                    $sheet->setSpot($spotImportView->spot);
+                foreach ($spotImportView->sheetIds as $sheetId) {
+                    $sheetIds[] = $sheetId;
+                    $spots[$sheetId] = $spotImportView->spot;
+                    $this->spotRepository->add($spotImportView->spot);
                 }
+            }
+        }
 
-                $this->spotRepository->add($spotImportView->spot);
+        $sheets = $this->sheetRepository->findByIds($sheetIds);
+
+        foreach ($sheets as $sheet) {
+            if (isset($spots[$sheet->getId()])) {
+                $sheet->setSpot($spots[$sheet->getId()]);
+                $this->sheetRepository->set($sheet);
             }
         }
     }

@@ -19,10 +19,10 @@ class SheetView
     public $title;
 
     /**
-     * @param int $id
+     * @param int    $id
      * @param string $title
      */
-    public function __construct($id, $title)
+    public function __construct(int $id, string $title)
     {
         $this->id = $id;
         $this->title = $title;

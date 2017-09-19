@@ -14,7 +14,6 @@ use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
 use Prophecy\Prophecy\ObjectProphecy;
 use Proximum\Vimeet\Application\Components\Spot\SpotImporter;
-use Proximum\Vimeet\Application\Exception\Spot\Import\InvalidImportHeaderFileFormatException;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\File;
 use Proximum\Vimeet\Domain\Model\Spot;
@@ -105,23 +104,23 @@ class SpotImporterTest extends TestCase
             ->shouldBeCalled()
             ->willReturn([]);
 
-        $this->sheetRepository->getSheetViewsByEventById($this->event, 16938)->shouldBeCalled()->willReturn($sheetView1);
-        $this->sheetRepository->getSheetViewsByEventById($this->event, 16931)->shouldBeCalled()->willReturn($sheetView2);
-        $this->sheetRepository->getSheetViewsByEventById($this->event, 16919)->shouldBeCalled()->willReturn($sheetView3);
+        $this->sheetRepository->getSheetViewByEventAndId($this->event, 16938)->shouldBeCalled()->willReturn($sheetView1);
+        $this->sheetRepository->getSheetViewByEventAndId($this->event, 16931)->shouldBeCalled()->willReturn($sheetView2);
+        $this->sheetRepository->getSheetViewByEventAndId($this->event, 16919)->shouldBeCalled()->willReturn($sheetView3);
 
         $this->validatorAdapter
             ->validate($expectedImportedDenormalizedSpot2->spot)
             ->shouldBeCalled()
             ->willReturn([]);
 
-        $this->sheetRepository->getSheetViewsByEventById($this->event, 16566)->shouldBeCalled()->willReturn($sheetView4);
+        $this->sheetRepository->getSheetViewByEventAndId($this->event, 16566)->shouldBeCalled()->willReturn($sheetView4);
 
         $this->translatorAdapter
             ->trans("validators.spot.reference.affected", [], "validators", "fr")
             ->shouldBeCalled()
             ->willReturn('validators.spot.reference.affected');
 
-        $this->sheetRepository->getSheetViewsByEventById($this->event, 12)->shouldBeCalled()->willReturn(null);
+        $this->sheetRepository->getSheetViewByEventAndId($this->event, 12)->shouldBeCalled()->willReturn(null);
 
         $this->translatorAdapter->trans(
             'validators.spot.sheet.not_exist',
@@ -136,14 +135,14 @@ class SpotImporterTest extends TestCase
             ->shouldBeCalled()
             ->willReturn([]);
 
-        $this->sheetRepository->getSheetViewsByEventById($this->event, 16565)->shouldBeCalled()->willReturn($sheetView5);
+        $this->sheetRepository->getSheetViewByEventAndId($this->event, 16565)->shouldBeCalled()->willReturn($sheetView5);
 
         $this->validatorAdapter
             ->validate($expectedImportedDenormalizedSpot4->spot)
             ->shouldBeCalled()
             ->willReturn([]);
 
-        $this->sheetRepository->getSheetViewsByEventById($this->event, 16562)->shouldBeCalled()->willReturn($sheetView6);
+        $this->sheetRepository->getSheetViewByEventAndId($this->event, 16562)->shouldBeCalled()->willReturn($sheetView6);
 
 
 

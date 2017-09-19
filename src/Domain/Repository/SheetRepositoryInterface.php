@@ -123,7 +123,7 @@ interface SheetRepositoryInterface
      *
      * @return null|ImportSheetView
      */
-    public function getSheetViewsByEventById(Event $event, int $sheetId):? ImportSheetView;
+    public function getSheetViewByEventAndId(Event $event, int $sheetId):? ImportSheetView;
 
     /**
      * Get only enabled sheet by user or user's participant
