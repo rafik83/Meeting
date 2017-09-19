@@ -195,7 +195,7 @@ test-phpunit@test:
 	stty cols 80; bin/phpunit --log-junit var/tests/junit.xml --coverage-clover var/tests/clover.xml --coverage-html var/tests/coverage
 
 test-behat:
-	bin/console ca:cl --env=test
+	bin/console ca:cl --env=test --no-warmup
 	bin/behat --format progress --no-interaction
 
 test-behat@test:

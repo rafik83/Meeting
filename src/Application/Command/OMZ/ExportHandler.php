@@ -120,6 +120,7 @@ class ExportHandler
 
        return $this->serializer->serialize(new OmzUserListView($usersViews), 'csv', [
            'charset' => Charset::WINDOWS_1252,
+           'csv_delimiter' => ';',
        ]);
     }
 }

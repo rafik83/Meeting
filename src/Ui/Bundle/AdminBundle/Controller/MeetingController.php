@@ -139,8 +139,9 @@ class MeetingController extends Controller
 
         $serializer    = $this->get('serializer');
         $exportContent = $serializer->serialize($normaliserView, 'csv', [
-            'locale'  => $event->getAvailableLocale($request->getLocale()),
-            'charset' => $charset,
+            'locale'        => $event->getAvailableLocale($request->getLocale()),
+            'charset'       => $charset,
+            'csv_delimiter' => ';',
         ]);
 
         $response    = new Response($exportContent);

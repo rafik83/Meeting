@@ -1,0 +1,267 @@
+<?php
+
+/*
+ * This file is part of the Proximum Vimeet project.
+ *
+ * Copyright (C) Proximum
+ *
+ * @author Elao <contact@elao.com>
+ */
+
+namespace Proximum\Vimeet\Tests\Application\Serializer\Denormalizer\Participant;
+
+use Doctrine\Common\Collections\ArrayCollection;
+use PHPUnit\Framework\TestCase;
+use Prophecy\Argument;
+use Proximum\Vimeet\Application\Adapter\TranslatorInterface;
+use Proximum\Vimeet\Application\Serializer\Denormalizer\ParticipantDenormalizer;
+use Proximum\Vimeet\Application\Serializer\Denormalizer\ParticipantImportLogger;
+use Proximum\Vimeet\Domain\Account\EmailValidator;
+use Proximum\Vimeet\Domain\Account\Synchronizer;
+use Proximum\Vimeet\Domain\Model\Event;
+use Proximum\Vimeet\Domain\Model\Participant;
+use Proximum\Vimeet\Domain\Model\Sheet;
+use Proximum\Vimeet\Domain\Model\Type;
+use Proximum\Vimeet\Domain\Model\User;
+use Proximum\Vimeet\Domain\Model\UserEvent;
+use Proximum\Vimeet\Domain\Repository\ParticipantRepositoryInterface;
+use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
+use Proximum\Vimeet\Domain\Repository\UserEventRepositoryInterface;
+use Proximum\Vimeet\Domain\Repository\UserRepositoryInterface;
+use Proximum\Vimeet\Domain\Template\Block;
+use Proximum\Vimeet\Domain\Template\TemplateData;
+use Proximum\Vimeet\Domain\Template\TemplateDataFactory;
+use Proximum\Vimeet\Domain\Template\TemplateObject\Country;
+use Proximum\Vimeet\Domain\Template\TemplateObject\EditableText;
+use Proximum\Vimeet\Domain\Template\TemplateObject\Telephone;
+use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Adapter\SerializerAdapter;
+use Symfony\Component\Serializer\Encoder\CsvEncoder;
+use Symfony\Component\Serializer\Serializer;
+
+class ParticipantDenormalizerTest extends TestCase
+{
+    public function testDenormalize()
+    {
+        $datetime = new \DateTime();
+        $event = $this->prophesize(Event::class);
+        $type = $this->prophesize(Type::class);
+        $locale = 'fr';
+        $filename = __DIR__ . '/import_participants.csv';
+
+        $ownerOfSheetAlreadyExists = $this->prophesize(User::class);
+        $ownerOfSheetAlreadyExists->getEmail()->willReturn('martine@gmail.com');
+        $sheetAlreadyExists = $this->prophesize(Sheet::class);
+        $sheetAlreadyExists->getParticipants()->willReturn(new ArrayCollection());
+        $sheetAlreadyExists->getOwner()->willReturn($ownerOfSheetAlreadyExists);
+
+        $userAlreadyExists = $this->prophesize(User::class);
+        $userAlreadyExists->getEmail()->willReturn('julie@gmail.com');
+
+        $participantRepository = $this->prophesize(ParticipantRepositoryInterface::class);
+        $userRepository = $this->prophesize(UserRepositoryInterface::class);
+        $sheetRepository = $this->prophesize(SheetRepositoryInterface::class);
+        $userEventRepository = $this->prophesize(UserEventRepositoryInterface::class);
+        $templateDataFactory = $this->prophesize(TemplateDataFactory::class);
+        $emailValidator = $this->prophesize(EmailValidator::class);
+        $synchronizer = $this->prophesize(Synchronizer::class);
+        $translatorAdapter = $this->prophesize(TranslatorInterface::class);
+
+        $errorMessages = [
+            'validators.admin.sheet.import_participant.error.country',
+            'validators.admin.sheet.participant_import.email.error',
+            'validators.admin.sheet.participant_import.email.exist.error',
+            'validators.admin.sheet.participant_import.gender.error',
+            'validators.admin.sheet.participant_import.nomenclature.error',
+            'validators.admin.sheet.participant_import.telephone.error',
+        ];
+
+        foreach ($errorMessages as $errorMessage) {
+            $translatorAdapter->trans($errorMessage, [], 'validators', $locale)->willReturn($errorMessage);
+        }
+
+        $participantLogger = new ParticipantImportLogger($translatorAdapter->reveal());
+
+        $sheetRepository->getByEventWithParticipantsAndOwner($event->reveal())->willReturn([$sheetAlreadyExists]);
+        $userRepository->all()->shouldBeCalled()->willReturn([$userAlreadyExists, $ownerOfSheetAlreadyExists]);
+
+        $templateData = new TemplateData('root', [], 'fr', 'fr');
+
+        $block = new Block('12', [], 'fr', 'fr');
+
+        $firstname = new EditableText(
+            'firstname',
+            'editable-text',
+            ['tags' => ['participant_firstname', 'participant_data']],
+            'fr',
+            'fr'
+        );
+
+        $lastname = new EditableText(
+            'lastname',
+            'editable-text',
+            ['tags' => ['participant_lastname', 'participant_data']],
+            'fr',
+            'fr'
+        );
+
+        $company = new EditableText(
+            'company',
+            'editable-text',
+            ['tags' => ['sheet_organization', 'sheet_data']],
+            'fr',
+            'fr'
+        );
+
+        $mobile = new Telephone(
+            'mobile',
+            'telephone',
+            ['tags' => ['participant_phone', 'participant_data']],
+            'fr',
+            'fr'
+        );
+
+        $country = new Country('country', 'country', ['tags' => ['sheet_country', 'sheet_data']], 'fr', 'fr');
+
+        $block->addChild(1, 'firstname', $firstname);
+        $block->addChild(1, 'lastname', $lastname);
+        $block->addChild(1, 'company', $company);
+        $block->addChild(1, 'mobile', $mobile);
+        $block->addChild(1, 'country', $country);
+        $templateData->addChild(0, 'block', $block);
+
+        $templateDataFactory->createRegistrationFromType($type, $locale)->willReturn($templateData);
+
+        $mapping = [
+            'Nom participant' => 'lastname',
+            'Prénom participant' => 'firstname',
+            'Société Acheteur' => 'company',
+            'E-mail Acheteur' => 'participant_import.field.mail',
+            'Mobile' => 'mobile',
+            'Pays Acheteur' => 'country',
+        ];
+
+        $emailValidator->validate('')->willReturn(false);
+        $emailValidator->validate('jean@gmail.com')->willReturn(true);
+        $emailValidator->validate('nicolas@gmail.com')->willReturn(true);
+        $emailValidator->validate('martine@gmail.com')->willReturn(true);
+        $emailValidator->validate('julie@gmail.com')->willReturn(true);
+
+        // Add sheet for "User already exists in DB" for julie@gmail.com
+        $sheet1 = new Sheet($event->reveal(), $type->reveal(), [], $userAlreadyExists->reveal(), $datetime);
+        $sheet1->setImported(true);
+        $sheet1->setTitle('User already exists in DB');
+
+        $participant1 = new Participant($sheet1, $userAlreadyExists->reveal(), [], false);
+        $participant1->setImported(true);
+
+        $sheet1->setRegistrationData(
+            ['company' => ['text' => 'User already exists in DB'], 'country' => ['country' => 'FR']]
+        );
+
+        $sheetRepository
+            ->add(
+                Argument::that(
+                    function (Sheet $sheet) use ($sheet1) {
+                        return $sheet->getTitle() === $sheet1->getTitle();
+                    }
+                )
+            )
+            ->shouldBeCalled()
+        ;
+
+        $participantRepository->add($participant1);
+
+        $userEventRepository->add(new UserEvent($userAlreadyExists->reveal(), $event->reveal(), $type->reveal()));
+        $taggedData1 = [
+            'participant_firstname' => 'Julie',
+            'participant_lastname' => 'KL',
+            'participant_phone' => '+33666667700',
+            'sheet_organization' => 'User already exists in DB',
+        ];
+        $synchronizer->set($templateData->setTaggedData($taggedData1), $userAlreadyExists->reveal())->shouldBeCalled();
+
+        // Add sheet for "Ma Petite Tribu" for jean@gmail.com
+        $user2 = new User(strtolower('jean@gmail.com'), '', '', 'fr');
+        $userRepository->add($user2)->shouldBeCalled();
+
+        $sheet2 = new Sheet($event->reveal(), $type->reveal(), [], $user2, $datetime);
+        $sheet2->setImported(true);
+        $sheet2->setTitle('Ma Petite Tribu');
+
+        $participant2 = new Participant($sheet2, $user2, [], false);
+        $participant2->setImported(true);
+
+        $sheet2->setRegistrationData(['company' => ['text' => 'Ma Petite Tribu'], 'country' => ['country' => 'FR']]);
+        $sheetRepository
+            ->add(
+                Argument::that(
+                    function (Sheet $sheet) use ($sheet2) {
+                        return $sheet->getTitle() === $sheet2->getTitle();
+                    }
+                )
+            )
+            ->shouldBeCalled()
+        ;
+
+        $participantRepository->add($participant2);
+
+        $userEventRepository->add(new UserEvent($user2, $event->reveal(), $type->reveal()));
+        $taggedData2 = [
+            'participant_firstname' => 'Jean',
+            'participant_lastname' => 'CD',
+            'participant_phone' => '+33666667788',
+            'sheet_organization' => 'Ma Petite Tribu',
+        ];
+        $synchronizer->set($templateData->setTaggedData($taggedData2), $user2)->shouldBeCalled();
+
+        // Configure Serializer
+        $serializer = new Serializer(
+            [
+                new ParticipantDenormalizer(
+                    $participantRepository->reveal(),
+                    $userRepository->reveal(),
+                    $sheetRepository->reveal(),
+                    $userEventRepository->reveal(),
+                    $templateDataFactory->reveal(),
+                    $emailValidator->reveal(),
+                    $synchronizer->reveal(),
+                    $participantLogger,
+                    $datetime
+                ),
+            ],
+            [
+                new CsvEncoder(),
+            ]
+        );
+
+        $serializerAdapter = new SerializerAdapter($serializer);
+
+        /** @var ParticipantImportLogger $importLogger */
+        $importLogger = $serializerAdapter->deserialize(
+            file_get_contents($filename),
+            Participant::class,
+            'csv',
+            [
+                'csv_delimiter' => ';',
+                'mappings'      => $mapping,
+                'event'         => $event->reveal(),
+                'type'          => $type->reveal(),
+                'locale'        => $locale,
+            ]
+        );
+
+        $expected = [
+            'existing_participations' => 1,
+            'file_participations' => 6,
+            'created_sheets' => 2,
+            'created_users' => 1,
+            'import_errors' => [
+                '2;validators.admin.sheet.import_participant.error.country;France',
+                '5;validators.admin.sheet.participant_import.email.error;',
+                '6;validators.admin.sheet.participant_import.email.exist.error;jean@gmail.com',
+            ],
+        ];
+
+        $this->assertEquals($expected, $importLogger->toArray());
+    }
+}
