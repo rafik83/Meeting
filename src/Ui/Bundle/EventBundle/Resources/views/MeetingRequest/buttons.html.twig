@@ -64,7 +64,8 @@
                     {{ include('EventBundle:MeetingRequest/Button:refusedRequestButton.html.twig', {
                         'sheet': viewer,
                         'meetingRequest': meetingRequest,
-                        'isPhoneValidationRequired': isPhoneValidationRequired
+                        'isPhoneValidationRequired': isPhoneValidationRequired,
+                        'participant': participant
                     }, false) }}
                 {% endif %}
             {% endif %}

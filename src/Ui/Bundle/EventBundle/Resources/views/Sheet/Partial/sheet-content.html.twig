@@ -1,6 +1,5 @@
 <section class="main {% if isRequestMeetingEnabled %}catalog__sheet{% endif %}">
     <header class="sheet-header">
-
         <h1>
             <i class="icon-Document_1"></i> {{ 'sheet.title'|trans }}
         </h1>
@@ -20,6 +19,8 @@
                         'isMeetingRequestUpdateLocked': isMeetingRequestUpdateLocked|default(false),
                         'isMeetingRequestClosed': isMeetingRequestClosed|default(false),
                         'isAnsweringMeetingRequestClosed': isAnsweringMeetingRequestClosed|default(false),
+                        'isPhoneValidationRequired': isPhoneValidationRequired,
+                        'participant': participant
                     }, false) }}
                 {% endif %}
             {% else %}
@@ -64,6 +65,8 @@
                 'isMeetingRequestUpdateLocked': isMeetingRequestUpdateLocked|default(false),
                 'isMeetingRequestClosed': isMeetingRequestClosed|default(false),
                 'isAnsweringMeetingRequestClosed': isAnsweringMeetingRequestClosed|default(false),
+                'isPhoneValidationRequired': isPhoneValidationRequired,
+                'participant': participant
             }, false) }}
         {% endfor %}
     </div>
