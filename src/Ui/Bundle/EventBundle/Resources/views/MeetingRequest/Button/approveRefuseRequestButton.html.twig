@@ -1,8 +1,10 @@
+{% set redirectPath = path('event_catalog_index', { 'sheet': sheet.id }) %}
+
 {% if isPhoneValidationRequired and participant is not null %}
-    <a class="btn btn-gray reject" href="{{ path('event_user_phone_validate', { 'sheet': sheet.id, 'participant': participant.id }) }}">
+    <a class="btn btn-gray reject" href="{{ path('event_user_phone_redirect_to_validation', { 'sheet': sheet.id, 'participant': participant.id, redirectTo: redirectPath }) }}">
         <i class="icon-Fermer_4"></i> {{ 'catalog.meeting_request.refuse'|trans }}
     </a>
-    <a class="btn btn-primary accept" href="{{ path('event_user_phone_validate', { 'sheet': sheet.id, 'participant': participant.id }) }}">
+    <a class="btn btn-primary accept" href="{{ path('event_user_phone_redirect_to_validation', { 'sheet': sheet.id, 'participant': participant.id, redirectTo: redirectPath }) }}">
         <i class="icon-Valider_4"></i> {{ 'catalog.meeting_request.approve'|trans }}
     </a>
 {% else %}

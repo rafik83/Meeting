@@ -1,5 +1,7 @@
+{% set redirectPath = path('event_catalog_index', { 'sheet': sheet.id }) %}
+
 {% if isPhoneValidationRequired and participant is not null %}
-    <a class="btn btn-primary" href="{{ path('event_user_phone_validate', { 'sheet': sheet.id, 'participant': participant.id }) }}">
+    <a class="btn btn-primary" href="{{ path('event_user_phone_redirect_to_validation', { 'sheet': sheet.id, 'participant': participant.id, redirectTo: redirectPath }) }}">
         <i class="icon-DemandeRDV"></i> {{ 'catalog.meeting_request.create'|trans }}
     </a>
 {% else %}

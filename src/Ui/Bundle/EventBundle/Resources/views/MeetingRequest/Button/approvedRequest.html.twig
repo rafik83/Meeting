@@ -1,9 +1,11 @@
+{% set redirectPath = path('event_catalog_index', { 'sheet': sheet.id }) %}
+
 {% if isMeetingPublished is defined and isMeetingPublished and meetingRequest.hasMeeting %}
     <div class="btn btn-gray accept">
         <i class="icon-Valider_4"></i> {{ 'catalog.meeting_request.request.placed'|trans }}
     </div>
 {% elseif isPhoneValidationRequired and participant is not null %}
-    <a class="btn btn-gray accept" href="{{ path('event_user_phone_validate', { 'sheet': sheet.id, 'participant': participant.id }) }}">
+    <a class="btn btn-gray accept" href="{{ path('event_user_phone_redirect_to_validation', { 'sheet': sheet.id, 'participant': participant.id, redirectTo: redirectPath }) }}">
         <i class="icon-Valider_4"></i> {{ 'catalog.meeting_request.request.approved'|trans }}
     </a>
 {% else %}

@@ -1,4 +1,5 @@
 {% set isMeetingRequestUpdateLocked = isMeetingRequestUpdateLocked|default(false) %}
+{% set redirectPath = path('event_catalog_index', { 'sheet': sheet.id }) %}
 
 {% if not isMeetingRequestUpdateLocked %}
     {% if isPhoneValidationRequired and participant is not null %}
@@ -7,7 +8,7 @@
                 <i class="icon-Valider_4"></i> {{ 'catalog.meeting_request.proposition.placed'|trans }}
             </div>
         {% else %}
-            <a class="btn btn-gray accept" href="{{ path('event_user_phone_validate', { 'sheet': sheet.id, 'participant': participant.id }) }}">
+            <a class="btn btn-gray accept" href="{{ path('event_user_phone_redirect_to_validation', { 'sheet': sheet.id, 'participant': participant.id, redirectTo: redirectPath }) }}">
                 <i class="icon-Valider_4"></i> {{ 'catalog.meeting_request.proposition.approved'|trans }}
             </a>
         {% endif %}
