@@ -8,8 +8,10 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Proximum\Vimeet\Application\Command\Partner;
+namespace Proximum\Vimeet\Tests\Application\Command\Partner;
 
+use Proximum\Vimeet\Application\Command\Partner\Update;
+use Proximum\Vimeet\Application\Command\Partner\UpdateHandler;
 use Proximum\Vimeet\Domain\Model\Admin;
 use Proximum\Vimeet\Domain\Model\Type;
 use Proximum\Vimeet\Domain\Repository\AdminRepositoryInterface;

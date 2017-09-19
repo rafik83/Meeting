@@ -233,8 +233,9 @@ class HappeningController extends Controller
 
         $serializer      = $this->get('serializer');
         $exportedContent = $serializer->serialize($happeningParticipantViews, 'csv', [
-            'locale'  => $event->getAvailableLocale($request->getLocale()),
-            'charset' => Charset::WINDOWS_1252,
+            'locale'        => $event->getAvailableLocale($request->getLocale()),
+            'charset'       => Charset::WINDOWS_1252,
+            'csv_delimiter' => ';',
         ]);
 
         $response    = new Response($exportedContent);

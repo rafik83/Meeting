@@ -100,8 +100,8 @@ class ExportOrdersHandler
 
         $view = $this->queryHandler->handle(new OrdersExportViewQuery($event, $command->locale));
         $data = $this->serializer->serialize($view, 'csv', [
-            'delimiters' => ';',
-            'charset'    => Charset::WINDOWS_1252,
+            'charset' => Charset::WINDOWS_1252,
+            'csv_delimiter' => ';',
         ]);
 
         // Remove first line of file which is composed of the key
