@@ -245,32 +245,32 @@ class PlannerJob
         return self::STATUS_ERROR === $this->status;
     }
 
-    public function setPending(): void
+    public function setPending()
     {
         $this->status = self::STATUS_PENDING;
     }
 
-    public function setStarted(): void
+    public function setStarted()
     {
         $this->status = self::STATUS_STARTED;
     }
 
-    public function setQueued(): void
+    public function setQueued()
     {
         $this->status = self::STATUS_QUEUED;
     }
 
-    public function setAborted(): void
+    public function setAborted()
     {
         $this->status = self::STATUS_ABORTED;
     }
 
-    public function setSuccess(): void
+    public function setSuccess()
     {
         $this->status = self::STATUS_SUCCESS;
     }
 
-    public function setCompleted(): void
+    public function setCompleted()
     {
         $this->status = self::STATUS_COMPLETED;
     }

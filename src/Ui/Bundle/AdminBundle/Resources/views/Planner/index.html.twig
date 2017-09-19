@@ -27,6 +27,12 @@
     {% if lastPlannerJob %}
         <div class="alert alert-{{ lastPlannerJob.completed ? 'success' : (lastPlannerJob.aborted or lastPlannerJob.error ? 'danger' : 'warning') }}">
             <p>
+                {% if lastPlannerJob.hasFile %}
+                    <span class="label label-success">{{ 'admin.planner.pendingPlannerJob.fileExported'|trans }}</span>
+                {% else %}
+                    <span class="label label-default">{{ 'admin.planner.pendingPlannerJob.fileNotExported'|trans }}</span>
+                {% endif %}
+
                 {% if lastPlannerJob.pending %}
                     <span class="label label-default">{{ 'admin.planner.pendingPlannerJob.status.pending'|trans }}</span>
                 {% elseif lastPlannerJob.started %}
@@ -41,12 +47,6 @@
                     <span class="label label-warning">{{ 'admin.planner.pendingPlannerJob.status.success'|trans }}</span>
                 {% elseif lastPlannerJob.completed %}
                     <span class="label label-success">{{ 'admin.planner.pendingPlannerJob.status.completed'|trans }}</span>
-                {% endif %}
-
-                {% if lastPlannerJob.hasFile %}
-                    <span class="label label-success">{{ 'admin.planner.pendingPlannerJob.fileExported'|trans }}</span>
-                {% else %}
-                    <span class="label label-default">{{ 'admin.planner.pendingPlannerJob.fileNotExported'|trans }}</span>
                 {% endif %}
 
                 {{ 'admin.planner.pendingPlannerJob.details'|trans({

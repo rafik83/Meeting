@@ -77,12 +77,19 @@ interface JobQueueInterface
     );
 
     /**
-     * @param File   $file
-     * @param Event  $event
-     * @param Admin  $admin
-     * @param string $locale
+     * @param File            $file
+     * @param Event           $event
+     * @param Admin           $admin
+     * @param string          $locale
+     * @param null|PlannerJob $plannerJob
      */
-    public function importPlannerForEvent(File $file, Event $event, Admin $admin, $locale);
+    public function importPlannerForEvent(
+        File $file,
+        Event $event,
+        Admin $admin,
+        $locale,
+        ?PlannerJob $plannerJob = null
+    );
 
     /**
      * @param SheetTemplate $sheetTemplate

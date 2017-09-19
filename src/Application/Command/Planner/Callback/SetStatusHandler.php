@@ -10,6 +10,11 @@
 
 namespace Proximum\Vimeet\Application\Command\Planner\Callback;
 
+use Proximum\Vimeet\Application\Adapter\JobQueueInterface;
+use Proximum\Vimeet\Application\Command\Planner\Import;
+use Proximum\Vimeet\Domain\Model\File;
+use Proximum\Vimeet\Domain\Model\PlannerJob;
+use Proximum\Vimeet\Domain\Repository\FileRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\PlannerJobRepositoryInterface;
 
 class SetStatusHandler
@@ -17,17 +22,43 @@ class SetStatusHandler
     /** @var PlannerJobRepositoryInterface */
     private $plannerJobRepository;
 
+    /** @var FileRepositoryInterface */
+    private $fileRepository;
+
     /** @var string */
     private $plannerTrustedName;
 
+    /** @var JobQueueInterface */
+    private $jobQueue;
+
+    /** @var string */
+    private $plannerFilesPath;
+
+    /** @var \DateTimeInterface */
+    private $dateTime;
+
     /**
      * @param PlannerJobRepositoryInterface $plannerJobRepository
+     * @param FileRepositoryInterface       $fileRepository
      * @param string                        $plannerTrustedName
+     * @param JobQueueInterface             $jobQueue
+     * @param string                        $plannerFilesPath
+     * @param \DateTimeInterface            $dateTime
      */
-    public function __construct(PlannerJobRepositoryInterface $plannerJobRepository, string $plannerTrustedName)
-    {
+    public function __construct(
+        PlannerJobRepositoryInterface $plannerJobRepository,
+        FileRepositoryInterface $fileRepository,
+        string $plannerTrustedName,
+        JobQueueInterface $jobQueue,
+        string $plannerFilesPath,
+        \DateTimeInterface $dateTime
+    ) {
         $this->plannerJobRepository = $plannerJobRepository;
+        $this->fileRepository = $fileRepository;
         $this->plannerTrustedName = $plannerTrustedName;
+        $this->jobQueue = $jobQueue;
+        $this->plannerFilesPath = $plannerFilesPath;
+        $this->dateTime = $dateTime;
     }
 
     /**
@@ -51,9 +82,7 @@ class SetStatusHandler
         }
 
         if ($setStatus->isPhaseFinalized() && $setStatus->isStatusSuccess()) {
-            $plannerJob->setSuccess();
-            // import meetings
-
+            $this->handleSuccess($plannerJob);
         } elseif ($setStatus->isPhaseQueued()) {
             $plannerJob->setQueued();
         } elseif ($setStatus->isPhaseStarted()) {
@@ -65,5 +94,36 @@ class SetStatusHandler
         }
 
         $this->plannerJobRepository->set($plannerJob);
+    }
+
+    /**
+     * @param PlannerJob $plannerJob
+     */
+    private function handleSuccess(PlannerJob $plannerJob)
+    {
+        $solvedFilePath = str_replace(
+            Import::UNSOLVED_SUFFIX,
+            Import::SOLVED_SUFFIX,
+            $plannerJob->getFile()->getPath()
+        );
+
+        if (!file_exists($this->plannerFilesPath . $solvedFilePath)) {
+            $plannerJob->setError('flash.admin.planner.export.solvedFileNotFound');
+
+            return;
+        }
+
+        $file = new File($solvedFilePath, $this->dateTime);
+        $this->fileRepository->add($file);
+
+        $this->jobQueue->importPlannerForEvent(
+            $file,
+            $plannerJob->getEvent(),
+            $plannerJob->getAdmin(),
+            $plannerJob->getAdmin()->getLocale(),
+            $plannerJob
+        );
+
+        $plannerJob->setSuccess();
     }
 }
