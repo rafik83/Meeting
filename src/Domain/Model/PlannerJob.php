@@ -14,9 +14,26 @@ use Proximum\Vimeet\Domain\Planner\ExportSolutionType;
 
 class PlannerJob
 {
+    /** PlannerJob is pending */
     const STATUS_PENDING = 'pending';
-    const STATUS_COMPLETED = 'completed';
+
+    /** Error before sending file to planner or error received by the Jenkins build (see $errorMessage) */
     const STATUS_ERROR = 'error';
+
+    /**
+     * File from Vimeet is generated and build call has been made to Jenkins
+     * or Build is started after been queued in Jenkins
+     */
+    const STATUS_STARTED = 'build_started';
+
+    /** Build is queued in Jenkins */
+    const STATUS_QUEUED = 'build_queued';
+
+    /** Planner finished its task, the file *_solved.xml is created */
+    const STATUS_SUCCESS = 'build_success';
+
+    /** File is imported, meetings are created */
+    const STATUS_COMPLETED = 'completed';
 
     /** @var int */
     private $id;
@@ -175,5 +192,30 @@ class PlannerJob
     public function isError(): bool
     {
         return self::STATUS_ERROR === $this->status;
+    }
+
+    public function setPending(): void
+    {
+        $this->status = self::STATUS_PENDING;
+    }
+
+    public function setStarted(): void
+    {
+        $this->status = self::STATUS_STARTED;
+    }
+
+    public function setQueued(): void
+    {
+        $this->status = self::STATUS_QUEUED;
+    }
+
+    public function setSuccess(): void
+    {
+        $this->status = self::STATUS_SUCCESS;
+    }
+
+    public function setCompleted(): void
+    {
+        $this->status = self::STATUS_COMPLETED;
     }
 }
