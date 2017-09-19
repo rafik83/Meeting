@@ -5138,6 +5138,7 @@ services:
             - '@vimeet_infrastructure.repository.sheet_repository'
             - '@domain.service.sheets_group.group_name_resolver'
             - '@domain.service.sheets_group.type_name_resolver'
+            - '@template.participant_info_guesser'
             - '@planning.formatter.participant_planning_formatter'
             - '@adapter.serializer_adapter'
             - '@vimeet_infrastructure.adapter.translator_adapter'

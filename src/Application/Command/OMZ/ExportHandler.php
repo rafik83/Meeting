@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of the vimeet project.
+ * This file is part of the Proximum Vimeet project.
  *
  * Copyright (C) Proximum
  *
@@ -13,13 +13,17 @@ namespace Proximum\Vimeet\Application\Command\OMZ;
 use Proximum\Vimeet\Application\Adapter\SerializerAdapterInterface;
 use Proximum\Vimeet\Application\Adapter\TranslatorInterface;
 use Proximum\Vimeet\Application\Components\Planning\Formatter\ParticipantPlanningFormatter;
+use Proximum\Vimeet\Application\Components\Sheet\Template\Tag;
 use Proximum\Vimeet\Application\Serializer\Charset;
 use Proximum\Vimeet\Application\View\OMZ\OmzUserListView;
 use Proximum\Vimeet\Application\View\OMZ\OmzUserView;
+use Proximum\Vimeet\Domain\Model\Sheet;
+use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\UserRepositoryInterface;
 use Proximum\Vimeet\Domain\Service\SheetsGroup\GroupNameResolver;
 use Proximum\Vimeet\Domain\Service\Type\TypeNameResolver;
+use Proximum\Vimeet\Domain\Template\ParticipantInfoGuesser;
 
 class ExportHandler
 {
@@ -44,6 +48,9 @@ class ExportHandler
     /** @var TranslatorInterface */
     private $translator;
 
+    /** @var ParticipantInfoGuesser */
+    private $participantInfoGuesser;
+
     /**
      * ExportHandler constructor.
      *
@@ -51,6 +58,7 @@ class ExportHandler
      * @param SheetRepositoryInterface     $sheetRepository
      * @param GroupNameResolver            $groupNameResolver
      * @param TypeNameResolver             $typeNameResolver
+     * @param ParticipantInfoGuesser       $participantInfoGuesser
      * @param ParticipantPlanningFormatter $participantPlanningFormatter
      * @param SerializerAdapterInterface   $serializer
      * @param TranslatorInterface          $translator
@@ -60,6 +68,7 @@ class ExportHandler
         SheetRepositoryInterface $sheetRepository,
         GroupNameResolver $groupNameResolver,
         TypeNameResolver $typeNameResolver,
+        ParticipantInfoGuesser $participantInfoGuesser,
         ParticipantPlanningFormatter $participantPlanningFormatter,
         SerializerAdapterInterface $serializer,
         TranslatorInterface $translator
@@ -68,6 +77,7 @@ class ExportHandler
         $this->sheetRepository              = $sheetRepository;
         $this->groupNameResolver            = $groupNameResolver;
         $this->typeNameResolver             = $typeNameResolver;
+        $this->participantInfoGuesser       = $participantInfoGuesser;
         $this->participantPlanningFormatter = $participantPlanningFormatter;
         $this->serializer                   = $serializer;
         $this->translator                   = $translator;
@@ -76,7 +86,7 @@ class ExportHandler
     /**
      * @param Export $export
      *
-     * @return string normalized datas destinated to the OMZ import
+     * @return string normalized data for the OMZ import
      */
     public function handle(Export $export)
     {
@@ -87,12 +97,7 @@ class ExportHandler
 
         foreach ($this->userRepository->findByEvent($event) as $user) {
             $userLocale = $event->getAvailableLocale($user->getLocale());
-            $gender     = $user->getGender();
             $userSheets = $this->sheetRepository->getSheetsByUserAndEvent($user, $event);
-
-            if (!empty($gender)) {
-                $gender = $this->translator->trans(sprintf('gender.%s', $gender));
-            }
 
             $planning = $this->participantPlanningFormatter->formatPlanningFromUserAndEventWithUnallocated(
                 $user,
@@ -100,20 +105,22 @@ class ExportHandler
                 $userLocale
             );
 
+            $userInfo = $this->getUserInfo($user, $userLocale, $userSheets);
+
             $usersViews[] = new OmzUserView(
                 $user->getId(),
                 $this->groupNameResolver->resolve($event, $user, $userSheets),
                 null,
                 $this->typeNameResolver->resolveWithPreloadedSheets($userSheets, $event->getFallback()),
-                $gender,
-                $user->getFirstName(),
-                $user->getLastName(),
-                $user->getPosition(),
+                $userInfo['gender'],
+                $userInfo['firstName'],
+                $userInfo['lastName'],
+                $userInfo['position'],
                 null,
-                $user->getPhone(),
+                $userInfo['phone'],
                 $user->getEmail(),
                 null,
-                $user->getMobile(),
+                $userInfo['mobile'],
                 $planning
             );
         }
@@ -121,5 +128,90 @@ class ExportHandler
        return $this->serializer->serialize(new OmzUserListView($usersViews), 'csv', [
            'charset' => Charset::WINDOWS_1252,
        ]);
+    }
+
+    /**
+     * @param User    $user
+     * @param string  $locale
+     * @param Sheet[] $userSheets
+     *
+     * @return array
+     */
+    private function getUserInfo(User $user, string $locale, array $userSheets): array
+    {
+        $userInfo = [
+            'gender'    => '',
+            'firstName' => '',
+            'lastName'  => '',
+            'position'  => '',
+            'phone'     => '',
+            'mobile'    => '',
+        ];
+
+        $gender = $user->getGender();
+
+        if (!empty($gender)) {
+            $gender = $this->translator->trans(sprintf('gender.%s', $gender));
+        }
+
+        $userInfo['gender']    = $gender;
+        $userInfo['firstName'] = $user->getFirstName();
+        $userInfo['lastName']  = $user->getLastName();
+        $userInfo['position']  = $user->getPosition();
+        $userInfo['phone']     = $user->getPhone();
+        $userInfo['mobile']    = $user->getMobile();
+
+        if (!empty($userSheets)
+            && (
+                empty($userInfo['gender']) ||
+                empty($userInfo['firstName']) ||
+                empty($userInfo['lastName']) ||
+                empty($userInfo['position']) ||
+                empty($userInfo['phone']) ||
+                empty($userInfo['mobile'])
+            )
+        ) {
+            $participant = null;
+
+            foreach ($userSheets as $sheet) {
+                $participant = $sheet->getUserParticipant($user);
+
+                if ($participant !== null) {
+                    break;
+                }
+            }
+
+            if ($participant !== null) {
+                $participantInfo = $this->participantInfoGuesser->guessParticipantInfos($participant, $locale);
+
+                if (empty($userInfo['gender']) && !empty($participantInfo[Tag::PARTICIPANT_GENDER])) {
+                    $userInfo['gender'] = $this->translator->trans(
+                        sprintf('gender.%s', $participantInfo[Tag::PARTICIPANT_GENDER])
+                    );
+                }
+
+                if (empty($userInfo['firstName']) && !empty($participantInfo[Tag::PARTICIPANT_FIRSTNAME])) {
+                    $userInfo['firstName'] = $participantInfo[Tag::PARTICIPANT_FIRSTNAME];
+                }
+
+                if (empty($userInfo['lastName']) && !empty($participantInfo[Tag::PARTICIPANT_LASTNAME])) {
+                    $userInfo['lastName'] = $participantInfo[Tag::PARTICIPANT_LASTNAME];
+                }
+
+                if (empty($userInfo['position']) && !empty($participantInfo[Tag::PARTICIPANT_POSITION])) {
+                    $userInfo['position'] = $participantInfo[Tag::PARTICIPANT_POSITION];
+                }
+
+                if (empty($userInfo['phone']) && !empty($participantInfo[Tag::PARTICIPANT_PHONE])) {
+                    $userInfo['phone'] = $participantInfo[Tag::PARTICIPANT_PHONE];
+                }
+
+                if (empty($userInfo['mobile']) && !empty($participantInfo[Tag::PARTICIPANT_MOBILE])) {
+                    $userInfo['mobile'] = $participantInfo[Tag::PARTICIPANT_MOBILE];
+                }
+            }
+        }
+
+        return $userInfo;
     }
 }
