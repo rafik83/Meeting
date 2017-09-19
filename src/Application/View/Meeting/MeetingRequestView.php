@@ -62,6 +62,11 @@ class MeetingRequestView
     public $isPhoneValidationRequired;
 
     /**
+     * @var string
+     */
+    public $validatePhoneLink;
+
+    /**
      * MeetingRequestView constructor.
      *
      * @param Sheet              $sheet
@@ -79,6 +84,7 @@ class MeetingRequestView
      * @param bool               $hasMessage
      * @param bool               $isSeenByCurrentUser
      * @param bool               $isPhoneValidationRequired
+     * @param string|null               $validatePhoneLink
      */
     public function __construct(
         Sheet $sheet,
@@ -95,7 +101,8 @@ class MeetingRequestView
         $isAnsweringMeetingRequestClosed = false,
         $hasMessage = false,
         $isSeenByCurrentUser = false,
-        $isPhoneValidationRequired = false
+        $isPhoneValidationRequired = false,
+        $validatePhoneLink = null
     ) {
         $this->sheet                           = $sheet;
         $this->sheetName                       = $sheetName;
@@ -112,6 +119,7 @@ class MeetingRequestView
         $this->hasMessage                      = $hasMessage;
         $this->isSeenByCurrentUser             = $isSeenByCurrentUser;
         $this->isPhoneValidationRequired       = $isPhoneValidationRequired;
+        $this->validatePhoneLink               = $validatePhoneLink;
     }
 
     /**

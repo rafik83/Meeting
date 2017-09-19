@@ -2769,6 +2769,7 @@ services:
             - '@repository.rule_repository'
             - '@vimeet_infrastructure.repository.meeting.request_repository'
             - '@domain.key_dates.checker.meeting_published_access_checker'
+            - '@adapter.router'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Catalog\SheetPreviewViewQuery }
 
@@ -3686,6 +3687,7 @@ services:
             - '@vimeet_infrastructure.application.components.sheet.sheet_info_guesser'
             - '@repository.rule_repository'
             - '@domain.rule.composer'
+            - '@adapter.router'
 
     query.meeting.meeting_sheet_view_query_handler:
         class: Proximum\Vimeet\Application\Query\Meeting\MeetingSheetViewQueryHandler

@@ -226,7 +226,6 @@ class CatalogController extends Controller
             'seeMoreButton'       => $seeMoreButton,
             'searchForm'          => $searchForm->createView(),
             'tipTranslationViews' => $tipTranslationViews,
-            'participant'         => $sheet->getUserParticipant($user)
         ]);
     }
 
