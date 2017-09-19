@@ -44,7 +44,8 @@ class ContactController extends Controller
 
         $charset       = Charset::WINDOWS_1252;
         $exportContent = $this->get('serializer')->serialize($meetingSheetListView, 'csv', [
-            'charset' => $charset,
+            'charset'       => $charset,
+            'csv_delimiter' => ';',
         ]);
 
         return new CsvFileResponse($exportContent, "export_contacts_" . date("Y_m_d_His") . ".csv");

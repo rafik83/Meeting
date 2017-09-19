@@ -42,6 +42,14 @@ class DayRepository implements DayRepositoryInterface
     /**
      * {@inheritdoc}
      */
+    public function set(Day $day)
+    {
+        $this->entityManager->flush($day);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function removeFromEvent(Event $event)
     {
         $this

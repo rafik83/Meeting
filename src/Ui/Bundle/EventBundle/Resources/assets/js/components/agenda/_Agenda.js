@@ -101,7 +101,7 @@ Agenda.prototype.scrollOnSlot = function(slot) {
         // If there is an element on slot open it
         if (slot.meets.length > 0) {
             if (slot.meets[0].element.classList.contains('has-details')) {
-                slot.meets[0].element.classList.add('open');
+                slot.meets[0].toggleOpen();
             }
         }
     }

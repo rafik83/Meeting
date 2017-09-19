@@ -365,6 +365,11 @@ class SheetController extends Controller
         $object->setBuyableProducts($products);
         $object->setSheet($sheet);
 
+        $templateObjectView = $this
+            ->get('tactician.commandbus')
+            ->handle(new TemplateObjectViewQuery($sheet, $locale, $key))
+        ;
+
         $form = $this->createObjectForm($object, $locale, $key);
 
         // Handle the form, update the object and redirect to the sheet if valid
@@ -432,6 +437,7 @@ class SheetController extends Controller
             'isRequestMeetingEnabled' => false,
             'isCatalog'               => false,
             'tipTranslationViews'     => $tipTranslationViews,
+            'templateObjectView'      => $templateObjectView,
         ]);
     }
 
