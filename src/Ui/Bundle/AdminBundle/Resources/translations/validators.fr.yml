@@ -76,6 +76,7 @@ validators.spot.sheet.not_exist: 'L''identifiant de fiche %sheetId% est incorrec
 validators.spot.reference.affected: 'Cette référence existe déjà'
 validators.spot.sheet.already_affected_reference: 'Cette référence a déjà été affectée à une fiche'
 validators.spot.sheet.already_imported: 'La fiche ayant l''identifiant %sheetId% a déjà été attribuée à un lieu'
+validatorS.spot.sheet.invalid_format: 'L''identifiant de la fiche n''est pas valide (%sheetId%)'
 validators.spot.reference.type: 'Cette référence n''est pas valide'
 validators.spot.seatCapacity.invalid: 'Le nombre de siège doit être supérieur à 0'
 validators.spot.seatCapacity.type: 'Le nombre de siège doit être un nombre'

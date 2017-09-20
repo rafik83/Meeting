@@ -766,6 +766,7 @@ admin.spot.import.column.priority: 'Priorité'
 admin.spot.import.column.visio: 'Visio'
 admin.spot.import.column.sheets: 'Identifiants fiches affectées'
 admin.spot.import.column.errors: 'Erreurs'
+admin.spot.import.notAvailable: 'L''import de lieu n''est oas disponible car des rdvs sont déjà positionnés'
 admin.spot.delete: Supprimer
 admin.spot.disable: Désactiver
 admin.spot.enable: Activer
