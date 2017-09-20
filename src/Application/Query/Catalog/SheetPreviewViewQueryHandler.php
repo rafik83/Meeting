@@ -115,6 +115,9 @@ class SheetPreviewViewQueryHandler
             $validatePhoneLink = $this->router->generate('event_user_phone_redirect_to_validation', [
                 'sheet'       => $catalogSheetPreviewViewQuery->viewer->getId(),
                 'participant' => $participant->getId(),
+                'redirectTo' => $this->router->generate('event_catalog_index', [
+                    'sheet' => $catalogSheetPreviewViewQuery->viewer->getId(),
+                ]),
             ]);
         }
 

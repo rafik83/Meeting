@@ -392,6 +392,21 @@ class CatalogController extends Controller
         $isPhoneValidationRequired = $this->get('domain.user.phone.validation_required_checker')
             ->handle($sheet, $user, $locale);
 
+        if ($isPhoneValidationRequired === true) {
+            $participant = $sheet->getUserParticipant($user);
+
+            if ($participant !== null) {
+                $phoneValidationLink = $this->generateUrl('event_user_phone_redirect_to_validation', [
+                    'sheet'       => $sheet->getId(),
+                    'participant' => $participant->getId(),
+                    'redirectTo'  => $this->generateUrl('event_catalog_complete_sheet', [
+                        'sheet'          => $sheet->getId(),
+                        'sheetToDisplay' => $sheetToDisplay,
+                    ]),
+                ]);
+            }
+        }
+
         return $this->render('EventBundle:Catalog:displaySheet.html.twig', [
             'event'                           => $event,
             'sheet'                           => $sheet,
@@ -408,6 +423,7 @@ class CatalogController extends Controller
             'isMeetingRequestClosed'          => $isMeetingRequestClosed,
             'isAnsweringMeetingRequestClosed' => $isAnsweringMeetingRequestClosed,
             'isPhoneValidationRequired'       => $isPhoneValidationRequired,
+            'phoneValidationLink'             => $phoneValidationLink ?? null,
             'isRequestMeetingEnabled'         => $sheet !== $sheetToDisplay,
             'isCatalog'                       => true,
         ]);

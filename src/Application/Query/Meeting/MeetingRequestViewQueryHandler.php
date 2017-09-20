@@ -88,6 +88,9 @@ class MeetingRequestViewQueryHandler
             $validatePhoneLink = $this->router->generate('event_user_phone_redirect_to_validation', [
                 'sheet'       => $query->sheet->getId(),
                 'participant' => $participant->getId(),
+                'redirectTo' => $this->router->generate('event_meeting_list_request', [
+                    'sheet' => $query->sheet->getId()
+                ])
             ]);
         }
 
