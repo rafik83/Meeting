@@ -42,6 +42,9 @@ class CatalogSheetPreviewView extends AbstractSheetPreviewView
     /** @var bool */
     public $isPhoneValidationRequired;
 
+    /** @var string|null */
+    public $validatePhoneLink;
+
     /**
      * @param int             $id
      * @param Sheet           $sheet
@@ -57,6 +60,7 @@ class CatalogSheetPreviewView extends AbstractSheetPreviewView
      * @param bool            $hasMessage
      * @param bool            $isSeenByCurrentUser
      * @param bool            $isPhoneValidationRequired
+     * @param null            $validatePhoneLink
      */
     public function __construct(
         int $id,
@@ -72,7 +76,8 @@ class CatalogSheetPreviewView extends AbstractSheetPreviewView
         $isAnsweringMeetingRequestClosed = false,
         $hasMessage = false,
         $isSeenByCurrentUser = false,
-        $isPhoneValidationRequired = false
+        $isPhoneValidationRequired = false,
+        $validatePhoneLink = null
     ) {
         parent::__construct($id, $title, $type, $preview, $sheet);
 
@@ -85,6 +90,7 @@ class CatalogSheetPreviewView extends AbstractSheetPreviewView
         $this->hasMessage                      = $hasMessage;
         $this->isSeenByCurrentUser             = $isSeenByCurrentUser;
         $this->isPhoneValidationRequired       = $isPhoneValidationRequired;
+        $this->validatePhoneLink = $validatePhoneLink;
     }
 
     /**

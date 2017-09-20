@@ -4,8 +4,8 @@
     <div class="btn btn-gray accept">
         <i class="icon-Valider_4"></i> {{ 'catalog.meeting_request.request.placed'|trans }}
     </div>
-{% elseif isPhoneValidationRequired and participant is not null %}
-    <a class="btn btn-gray accept" href="{{ path('event_user_phone_redirect_to_validation', { 'sheet': sheet.id, 'participant': participant.id, redirectTo: redirectPath }) }}">
+{% elseif isPhoneValidationRequired and phoneValidationLink is not null %}
+    <a class="btn btn-gray accept" href="{{ phoneValidationLink }}">
         <i class="icon-Valider_4"></i> {{ 'catalog.meeting_request.request.approved'|trans }}
     </a>
 {% else %}

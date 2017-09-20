@@ -123,6 +123,7 @@ class PaginatedCatalogSheetPreviewViewQueryHandler
                             $sheet,
                             $query->locale,
                             $query->viewer,
+                            $query->user,
                             $isMeetingRequestClosed,
                             $isAnsweringMeetingRequestClosed,
                             isset($seenSheetIndexed[$sheet->getId()]),

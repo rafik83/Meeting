@@ -12,6 +12,7 @@ namespace Proximum\Vimeet\Application\Query\Catalog;
 
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Sheet;
+use Proximum\Vimeet\Domain\Model\User;
 
 class SheetPreviewViewQuery
 {
@@ -47,11 +48,15 @@ class SheetPreviewViewQuery
     /** @var bool */
     public $isMobileValidationRequired;
 
+    /** @var User */
+    public $user;
+
     /**
      * @param Event  $event
      * @param Sheet  $sheet
      * @param string $locale
      * @param Sheet  $viewer
+     * @param User   $user
      * @param bool   $isMeetingRequestClosed
      * @param bool   $isAnsweringMeetingRequestClosed
      * @param bool   $isSeenByCurrentUser
@@ -62,6 +67,7 @@ class SheetPreviewViewQuery
         Sheet $sheet,
         $locale,
         Sheet $viewer,
+        User $user,
         $isMeetingRequestClosed = false,
         $isAnsweringMeetingRequestClosed = false,
         $isSeenByCurrentUser = false,
@@ -74,6 +80,7 @@ class SheetPreviewViewQuery
         $this->isMeetingRequestClosed          = $isMeetingRequestClosed;
         $this->isAnsweringMeetingRequestClosed = $isAnsweringMeetingRequestClosed;
         $this->isSeenByCurrentUser             = $isSeenByCurrentUser;
-        $this->isMobileValidationRequired = $isMobileValidationRequired;
+        $this->isMobileValidationRequired      = $isMobileValidationRequired;
+        $this->user                            = $user;
     }
 }
