@@ -121,6 +121,10 @@ class TransformRequestIntoMeetingHandler
             $transformRequestIntoMeeting->event
         );
 
+        if ($transformRequestIntoMeeting->isCreatedByParticipants) {
+            $meeting->setCreatedByParticipant();
+        }
+
         $this->meetingRepository->add($meeting);
 
         $this->eventDispatcher->dispatch(
