@@ -11,11 +11,13 @@
 namespace Proximum\Vimeet\Tests\Application\Components\Spot\Denormalizer;
 
 use PHPUnit\Framework\TestCase;
+use Prophecy\Prophecy\ObjectProphecy;
 use Proximum\Vimeet\Application\Components\Spot\Denormalizer\SpotDenormalizer;
 use Proximum\Vimeet\Application\Exception\Spot\Import\InvalidImportHeaderFileFormatException;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Spot;
 use Proximum\Vimeet\Domain\Spot\Import;
+use Proximum\Vimeet\Infrastructure\Adapter\TranslatorAdapter;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
 
 class SpotDenormalizerTest extends TestCase
@@ -26,10 +28,14 @@ class SpotDenormalizerTest extends TestCase
     /** @var SpotDenormalizer */
     private $spotDenormalizer;
 
+    /** @var ObjectProphecy */
+    private $translatorAdapter;
+
     public function setUp()
     {
         $this->event = EventFactory::createEvent();
-        $this->spotDenormalizer = new SpotDenormalizer();
+        $this->translatorAdapter = $this->prophesize(TranslatorAdapter::class);
+        $this->spotDenormalizer = new SpotDenormalizer($this->translatorAdapter->reveal());
     }
 
     public function testHandle()
@@ -110,36 +116,5 @@ class SpotDenormalizerTest extends TestCase
         ;
 
         $this->assertEquals($expectedResult, $result);
-    }
-
-    public function testHandleInvalidCsvHeaderException()
-    {
-        $inputDatas = [
-            [
-                'bad_ref' => 'A1',
-                'size' => 10,
-                'megCapacity' => 10,
-                'seatCapity' => 10,
-                'activ' => 1,
-                'prioriti' => 1,
-                'visioconference' => 0,
-                'sheets' => '16938, 16931',
-            ],
-        ];
-
-        $this->expectException(InvalidImportHeaderFileFormatException::class);
-
-        $this
-            ->spotDenormalizer
-            ->denormalize(
-                $inputDatas,
-                Import::class,
-                'csv',
-                [
-                    'csv_delimiter' => ';',
-                    'event' => $this->event,
-                ]
-            )
-        ;
     }
 }

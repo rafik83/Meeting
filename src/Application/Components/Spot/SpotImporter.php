@@ -85,6 +85,10 @@ class SpotImporter
 
         /** @var Import $spotImport */
         foreach ($spotImports as $spotImport) {
+            if (null === $spotImport->spot) {
+                continue;
+            }
+
             if (isset($referenceImported[$spotImport->spot->getReference()])) {
                 $spotImport->addError($this->translateError('validators.spot.reference.affected', $locale));
             }
@@ -97,6 +101,7 @@ class SpotImporter
             foreach ($validations as $validation) {
                 $spotImport->addError($validation->getMessage());
             }
+
             foreach ($spotImport->sheetIds as $sheetId) {
                 if (isset($sheetsHasSpot[$sheetId])) {
                     $spotImport->addError($this->translateError(

@@ -70,6 +70,7 @@ validators.sheet.messaging_campaign.create.name: 'Veuillez entrer un titre pour 
 validators.sheet.messaging_campaign.create.sheetIds: 'Veuillez sélectionner au moins une fiche'
 validators.sheet.messaging_campaign.message: 'Veuillez sélectionner un message'
 validators.sheet.messaging_campaign.recipients: 'Veuillez sélectionner un destinataire au moins'
+validators.spot.csv.invalid: 'La ligne contient des données non valides'
 validators.spot.reference.unique: 'Cet identifiant est déjà utilisé'
 validators.spot.sheet.not_exist: 'L''identifiant de fiche %sheetId% est incorrect'
 validators.spot.reference.affected: 'Cette référence existe déjà'

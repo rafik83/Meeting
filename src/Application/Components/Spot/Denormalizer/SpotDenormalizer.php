@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Application\Components\Spot\Denormalizer;
 
+use Proximum\Vimeet\Application\Adapter\TranslatorInterface;
 use Proximum\Vimeet\Application\Exception\Spot\Import\InvalidImportHeaderFileFormatException;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Spot;
@@ -38,6 +39,17 @@ class SpotDenormalizer implements DenormalizerInterface
         self::KEY_SHEETS,
     ];
 
+    /** @var TranslatorInterface */
+    private $translatorAdapter;
+
+    /**
+     * @param TranslatorInterface $translatorAdapter
+     */
+    public function __construct(TranslatorInterface $translatorAdapter)
+    {
+        $this->translatorAdapter = $translatorAdapter;
+    }
+
     /**
      * {@inheritdoc}
      */
@@ -48,14 +60,17 @@ class SpotDenormalizer implements DenormalizerInterface
         }
 
         $spots = [];
+
         foreach ($data as $row) {
             $row = $this->cleanRow($row);
 
-            if (!$this->areGivenKeysAllowed(array_keys($row))) {
-                throw new InvalidImportHeaderFileFormatException('Headers line of csv are invalid');
-            }
-
             try {
+                if (!$this->areGivenKeysAllowed(self::ALLOWED_KEYS, $row)) {
+                    throw new InvalidImportHeaderFileFormatException(
+                        $this->translatorAdapter->trans('validators.spot.csv.invalid', [], 'validators')
+                    );
+                }
+
                 $import = new Import(
                     new Spot(
                         $row[self::KEY_REFERENCE],
@@ -107,12 +122,19 @@ class SpotDenormalizer implements DenormalizerInterface
      * Return false otherwise
      *
      * @param array $keys
+     * @param array $row
      *
      * @return bool
      */
-    private function areGivenKeysAllowed(array $keys): bool
+    private function areGivenKeysAllowed(array $keys, array &$row): bool
     {
-        return empty(array_diff($keys, self::ALLOWED_KEYS));
+        foreach ($keys as $key) {
+            if (!array_key_exists($key, $row)) {
+                return false;
+            }
+        }
+
+        return true;
     }
 
     /**
