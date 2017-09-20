@@ -86,7 +86,6 @@ class UserInfoGuesser
                 }
 
                 if (!empty($participantInfo[Tag::PARTICIPANT_PHONE])) {
-                    var_dump($participantInfo[Tag::PARTICIPANT_PHONE]);
                     $userInfo['phone'] = $participantInfo[Tag::PARTICIPANT_PHONE];
                 }
 
