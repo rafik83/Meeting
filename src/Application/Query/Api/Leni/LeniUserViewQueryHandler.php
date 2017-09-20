@@ -10,25 +10,18 @@
 
 namespace Proximum\Vimeet\Application\Query\Api\Leni;
 
-use Proximum\Vimeet\Application\Adapter\TranslatorInterface;
 use Proximum\Vimeet\Application\Components\Planning\Formatter\ParticipantPlanningFormatter;
-use Proximum\Vimeet\Application\Components\Sheet\Template\Tag;
+use Proximum\Vimeet\Application\Components\User\UserInfoGuesser;
 use Proximum\Vimeet\Application\View\Api\Leni\LeniPlanningDayView;
 use Proximum\Vimeet\Application\View\Api\Leni\LeniPlanningView;
 use Proximum\Vimeet\Application\View\Api\Leni\LeniUserView;
-use Proximum\Vimeet\Domain\Model\Sheet;
-use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Service\SheetsGroup\GroupNameResolver;
 use Proximum\Vimeet\Domain\Service\Type\TypeNameResolver;
-use Proximum\Vimeet\Domain\Template\ParticipantInfoGuesser;
 
 class LeniUserViewQueryHandler
 {
     /** @var ParticipantPlanningFormatter */
     private $participantPlanningFormatter;
-
-    /** @var ParticipantInfoGuesser */
-    private $participantInfoGuesser;
 
     /** @var TypeNameResolver */
     private $typeNameResolver;
@@ -36,28 +29,25 @@ class LeniUserViewQueryHandler
     /** @var GroupNameResolver */
     private $groupNameResolver;
 
-    /** @var TranslatorInterface */
-    private $translator;
+    /** @var UserInfoGuesser */
+    private $userInfoGuesser;
 
     /**
-     * @param ParticipantInfoGuesser       $participantInfoGuesser
+     * @param UserInfoGuesser              $userInfoGuesser
      * @param ParticipantPlanningFormatter $participantPlanningFormatter
      * @param TypeNameResolver             $typeNameResolver
      * @param GroupNameResolver            $groupNameResolver
-     * @param TranslatorInterface          $translator
      */
     public function __construct(
-        ParticipantInfoGuesser $participantInfoGuesser,
+        UserInfoGuesser $userInfoGuesser,
         ParticipantPlanningFormatter $participantPlanningFormatter,
         TypeNameResolver $typeNameResolver,
-        GroupNameResolver $groupNameResolver,
-        TranslatorInterface $translator
+        GroupNameResolver $groupNameResolver
     ) {
-        $this->participantInfoGuesser = $participantInfoGuesser;
         $this->participantPlanningFormatter = $participantPlanningFormatter;
         $this->typeNameResolver = $typeNameResolver;
         $this->groupNameResolver = $groupNameResolver;
-        $this->translator = $translator;
+        $this->userInfoGuesser = $userInfoGuesser;
     }
 
     /**
@@ -75,7 +65,7 @@ class LeniUserViewQueryHandler
             $userLocale
         );
 
-        $userInfo = $this->getUserInfo($query->user, $userLocale, $query->sheets);
+        $userInfo = $this->userInfoGuesser->getUserInfoFromParticipant($query->user, $userLocale, $query->sheets);
 
         $days = [];
         foreach ($planning->days as $day) {
@@ -97,70 +87,5 @@ class LeniUserViewQueryHandler
             $userInfo['mobile'],
             $leniPlanning
         );
-    }
-
-
-    /**
-     * @param User    $user
-     * @param string  $locale
-     * @param Sheet[] $userSheets
-     *
-     * @return array
-     */
-    private function getUserInfo(User $user, string $locale, array $userSheets): array
-    {
-        $userInfo = [
-            'gender'    => '',
-            'firstName' => '',
-            'lastName'  => '',
-            'position'  => '',
-            'phone'     => '',
-            'mobile'    => '',
-        ];
-
-
-        if (!empty($userSheets)) {
-            $participant = null;
-
-            foreach ($userSheets as $sheet) {
-                $participant = $sheet->getUserParticipant($user);
-
-                if ($participant !== null) {
-                    break;
-                }
-            }
-
-            if ($participant !== null) {
-                $participantInfo = $this->participantInfoGuesser->guessParticipantInfos($participant, $locale);
-
-                if (!empty($participantInfo[Tag::PARTICIPANT_GENDER])) {
-                    $userInfo['gender'] = $this->translator->trans(
-                        sprintf('gender.%s', $participantInfo[Tag::PARTICIPANT_GENDER])
-                    );
-                }
-
-                if (!empty($participantInfo[Tag::PARTICIPANT_FIRSTNAME])) {
-                    $userInfo['firstName'] = $participantInfo[Tag::PARTICIPANT_FIRSTNAME];
-                }
-
-                if (!empty($participantInfo[Tag::PARTICIPANT_LASTNAME])) {
-                    $userInfo['lastName'] = $participantInfo[Tag::PARTICIPANT_LASTNAME];
-                }
-
-                if (!empty($participantInfo[Tag::PARTICIPANT_POSITION])) {
-                    $userInfo['position'] = $participantInfo[Tag::PARTICIPANT_POSITION];
-                }
-
-                if (!empty($participantInfo[Tag::PARTICIPANT_PHONE])) {
-                    $userInfo['phone'] = $participantInfo[Tag::PARTICIPANT_PHONE];
-                }
-
-                if (!empty($participantInfo[Tag::PARTICIPANT_MOBILE])) {
-                    $userInfo['mobile'] = $participantInfo[Tag::PARTICIPANT_MOBILE];
-                }
-            }
-        }
-
-        return $userInfo;
     }
 }

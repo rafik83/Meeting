@@ -2466,6 +2466,11 @@ services:
         arguments:
             - '@tagged_info_guesser'
             - '@template.template_data_factory'
+    components.user.user_info_guesser:
+        class: Proximum\Vimeet\Application\Components\User\UserInfoGuesser
+        arguments:
+            - '@template.participant_info_guesser'
+            - '@vimeet_infrastructure.adapter.translator_adapter'
 
     #
     # Setter
@@ -5137,10 +5142,9 @@ services:
             - '@vimeet_infrastructure.repository.sheet_repository'
             - '@domain.service.sheets_group.group_name_resolver'
             - '@domain.service.sheets_group.type_name_resolver'
-            - '@template.participant_info_guesser'
+            - '@components.user.user_info_guesser'
             - '@planning.formatter.participant_planning_formatter'
             - '@adapter.serializer_adapter'
-            - '@vimeet_infrastructure.adapter.translator_adapter'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\OMZ\Export }
 
