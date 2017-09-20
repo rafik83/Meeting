@@ -11,6 +11,7 @@
 namespace Proximum\Vimeet\Infrastructure\Repository;
 
 use Doctrine\ORM\EntityManager;
+use Proximum\Vimeet\Domain\Event\ExtraParameter\Type;
 use Proximum\Vimeet\Domain\Model\Admin;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Participant;
@@ -210,5 +211,24 @@ class EventRepository implements EventRepositoryInterface
             ->setMaxResults(1);
 
         return $queryBuilder->getQuery()->getOneOrNullResult();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function findEventWithLeniApiParameters(): array
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('event')
+            ->from(Event::class, 'event', 'event.id')
+            ->where('EXISTS(SELECT ep1.id FROM Entity:Event\ExtraParameter ep1 WHERE ep1.event = event.id AND ep1.type = :leniUser)')
+            ->andWhere('EXISTS(SELECT ep2.id FROM Entity:Event\ExtraParameter ep2 WHERE ep2.event = event.id AND ep2.type = :leniEvent)')
+            ->setParameter('leniUser', Type::TYPE_LENI_USER)
+            ->setParameter('leniEvent', Type::TYPE_LENI_EVENT)
+        ;
+
+        return $queryBuilder->getQuery()->getResult();
     }
 }

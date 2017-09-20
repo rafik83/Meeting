@@ -40,3 +40,18 @@ services:
             - '@repository.event.extra_parameter_repository'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Event\ExtraParameter\Remove }
+
+    #
+    # API
+    #
+    command.event.extra_parameter.api.leni_api_handler:
+        class: Proximum\Vimeet\Application\Command\Event\ExtraParameter\Api\LeniApiHandler
+        arguments:
+            - '@vimeet_infrastructure.repository.event_repository'
+            - '@repository.event.extra_parameter_repository'
+            - '@vimeet_infrastructure.repository.user_repository'
+            - '@vimeet_infrastructure.repository.sheet_repository'
+            - '@planning.formatter.participant_planning_formatter'
+            - '@query.api.leni.leni_user_view_query_handler'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Event\ExtraParameter\Api\LeniApi }

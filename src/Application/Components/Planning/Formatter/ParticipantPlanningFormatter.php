@@ -93,6 +93,41 @@ class ParticipantPlanningFormatter
     }
 
     /**
+     * @param User   $user
+     * @param Event  $event
+     * @param string $userLocale
+     *
+     * @return FormattedPlanningView
+     */
+    public function formatPlanningByDayFromUserAndEventWithUnallocated(
+        User $user,
+        Event $event,
+        $userLocale
+    ): FormattedPlanningView {
+        $planningView = $this->getPlanningFromUser($event, $user, $userLocale);
+
+        $plannings = [];
+
+        foreach ($planningView->days as $key => $day) {
+            $plannings[$key] = $this->format(
+                [$day],
+                $userLocale,
+                $planningView->eventTimeZone,
+                $planningView->isUserMultipleSheet
+            );
+        }
+
+        $unallocated = $this->unallocatedFormatter->formatForUser(
+            $event,
+            $user,
+            $userLocale,
+            $planningView->isUserMultipleSheet
+        );
+
+        return new FormattedPlanningView($plannings, $unallocated);
+    }
+
+    /**
      * @param Event $event
      */
     public function preloadPlanningHandlerForEvent(Event $event)

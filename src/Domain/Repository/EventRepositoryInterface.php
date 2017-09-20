@@ -82,4 +82,9 @@ interface EventRepositoryInterface
      * @return Event|null
      */
     public function getById($id);
+
+    /**
+     * @return Event[]
+     */
+    public function findEventWithLeniApiParameters(): array;
 }
