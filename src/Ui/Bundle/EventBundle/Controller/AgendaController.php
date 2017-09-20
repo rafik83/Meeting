@@ -148,11 +148,11 @@ class AgendaController extends Controller
             ->handle(new SheetsAvailableBySlotQuery($eventDomain->getEvent(), $sheet, $slot))
         ;
 
-        $message = $this->get('translator')->transChoice(
-            'agenda.availability.available_sheets',
-            $countAvailableSheets,
-            ['%availableSheets%' => $countAvailableSheets]
-        );
+        $message = $this->renderView('EventBundle:Agenda/AvailableSlot:availableSheetForSlot.html.twig', [
+            'event' => $eventDomain->getEvent(),
+            'sheet' => $sheet,
+            'countAvailableSheets' => $countAvailableSheets,
+        ]);
 
         return new JsonResponse(['message' => $message, 'countAvailableSheets' => $countAvailableSheets]);
     }
