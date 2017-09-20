@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2016 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -11,19 +11,14 @@
 namespace Proximum\Vimeet\Application\Query\Sheet;
 
 use Proximum\Vimeet\Application\Adapter\SheetSearchAdapterInterface;
-use Proximum\Vimeet\Application\Query\Agenda\AvailableSheets\AvailableSlotsByParticipantQuery;
-use Proximum\Vimeet\Application\Query\Agenda\AvailableSheets\AvailableSlotsByParticipantQueryHandler;
 use Proximum\Vimeet\Application\Query\Catalog\SheetPreviewViewQuery;
 use Proximum\Vimeet\Application\Query\Catalog\SheetPreviewViewQueryHandler;
 use Proximum\Vimeet\Application\Query\Sheet\Viewed\ViewedSheetListViewQuery;
 use Proximum\Vimeet\Application\Query\Sheet\Viewed\ViewedSheetListViewQueryHandler;
-use Proximum\Vimeet\Domain\Catalog\SearchFields;
 use Proximum\Vimeet\Domain\KeyDates\Checker\AnsweringMeetingRequestAccessChecker;
 use Proximum\Vimeet\Domain\KeyDates\Checker\MeetingRequestAccessChecker;
-use Proximum\Vimeet\Domain\Model\Catalog\Internal\CatalogConstant;
 use Proximum\Vimeet\Domain\Model\PaginatedResult;
 use Proximum\Vimeet\Domain\Model\Sheet;
-use Proximum\Vimeet\Domain\Repository\Meeting\RequestRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
 use Proximum\Vimeet\Domain\Template\TemplateDataFactory;
 
@@ -50,18 +45,14 @@ class PaginatedCatalogSheetPreviewViewQueryHandler
     /** @var AnsweringMeetingRequestAccessChecker */
     private $answeringMeetingRequestAccessChecker;
 
-    /** @var AvailableSlotsByParticipantQueryHandler */
-    private $availableSlotsByParticipantQueryHandler;
-
     /**
-     * @param SheetRepositoryInterface                $sheetRepository
-     * @param SheetSearchAdapterInterface             $sheetSearchAdapter
-     * @param SheetPreviewViewQueryHandler            $sheetPreviewViewQueryHandler
-     * @param ViewedSheetListViewQueryHandler         $viewedSheetListViewQueryHandler
-     * @param TemplateDataFactory                     $templateDataFactory
-     * @param MeetingRequestAccessChecker             $meetingRequestAccessChecker
-     * @param AnsweringMeetingRequestAccessChecker    $answeringMeetingRequestAccessChecker
-     * @param AvailableSlotsByParticipantQueryHandler $availableSlotsByParticipantQueryHandler
+     * @param SheetRepositoryInterface             $sheetRepository
+     * @param SheetSearchAdapterInterface          $sheetSearchAdapter
+     * @param SheetPreviewViewQueryHandler         $sheetPreviewViewQueryHandler
+     * @param ViewedSheetListViewQueryHandler      $viewedSheetListViewQueryHandler
+     * @param TemplateDataFactory                  $templateDataFactory
+     * @param MeetingRequestAccessChecker          $meetingRequestAccessChecker
+     * @param AnsweringMeetingRequestAccessChecker $answeringMeetingRequestAccessChecker
      */
     public function __construct(
         SheetRepositoryInterface $sheetRepository,
@@ -70,17 +61,15 @@ class PaginatedCatalogSheetPreviewViewQueryHandler
         ViewedSheetListViewQueryHandler $viewedSheetListViewQueryHandler,
         TemplateDataFactory $templateDataFactory,
         MeetingRequestAccessChecker $meetingRequestAccessChecker,
-        AnsweringMeetingRequestAccessChecker $answeringMeetingRequestAccessChecker,
-        AvailableSlotsByParticipantQueryHandler $availableSlotsByParticipantQueryHandler
+        AnsweringMeetingRequestAccessChecker $answeringMeetingRequestAccessChecker
     ) {
-        $this->sheetRepository                         = $sheetRepository;
-        $this->sheetSearchAdapter                      = $sheetSearchAdapter;
-        $this->sheetPreviewViewQueryHandler            = $sheetPreviewViewQueryHandler;
-        $this->viewedSheetListViewQueryHandler         = $viewedSheetListViewQueryHandler;
-        $this->templateDataFactory                     = $templateDataFactory;
-        $this->meetingRequestAccessChecker             = $meetingRequestAccessChecker;
-        $this->answeringMeetingRequestAccessChecker    = $answeringMeetingRequestAccessChecker;
-        $this->availableSlotsByParticipantQueryHandler = $availableSlotsByParticipantQueryHandler;
+        $this->sheetRepository                      = $sheetRepository;
+        $this->sheetSearchAdapter                   = $sheetSearchAdapter;
+        $this->sheetPreviewViewQueryHandler         = $sheetPreviewViewQueryHandler;
+        $this->viewedSheetListViewQueryHandler      = $viewedSheetListViewQueryHandler;
+        $this->templateDataFactory                  = $templateDataFactory;
+        $this->meetingRequestAccessChecker          = $meetingRequestAccessChecker;
+        $this->answeringMeetingRequestAccessChecker = $answeringMeetingRequestAccessChecker;
     }
 
     /**
@@ -90,26 +79,6 @@ class PaginatedCatalogSheetPreviewViewQueryHandler
      */
     public function handle(PaginatedCatalogSheetPreviewViewQuery $query)
     {
-        $availableSlotIds = [];
-        $sheetsToExclude   = [];
-
-        if ($query->viewer->hasUserParticipant($query->user)
-            && isset($query->filters[SearchFields::FILTER_AVAILABLE_SLOT_IDS])
-            && !empty($query->filters[SearchFields::FILTER_AVAILABLE_SLOT_IDS])
-            && $query->filters[SearchFields::FILTER_AVAILABLE_SLOT_IDS] === CatalogConstant::AVAILABLE_SLOT_IDS_FILTER_AVAILABLE
-        ) {
-            $availableSlotIds = $this->availableSlotsByParticipantQueryHandler->handle(
-                new AvailableSlotsByParticipantQuery(
-                    $query->event,
-                    $query->viewer->getUserParticipant($query->user)
-                )
-            );
-            $sheetsToExclude = $this->sheetRepository->getSheetsWithRequestWithSheet($query->viewer);
-
-            // Add the current Sheet to the list of sheet to exclude as it is not possible to ask yourself to meet
-            $sheetsToExclude[] = $query->viewer;
-        }
-
         $paginatedResult = $this->sheetSearchAdapter->find(
             $query->event,
             $query->filters,
@@ -119,8 +88,8 @@ class PaginatedCatalogSheetPreviewViewQueryHandler
             $query->locale,
             true,
             $this->getNomenclatureItems($query->viewer, $query->locale),
-            $availableSlotIds,
-            $sheetsToExclude
+            $query->availableSlotIds,
+            $query->sheetsToExclude
         );
 
         $paginatedResult->results = $this->sheetRepository->findSheets($paginatedResult->results);

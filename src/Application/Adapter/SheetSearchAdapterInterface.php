@@ -79,18 +79,94 @@ interface SheetSearchAdapterInterface
      */
     public function getSheetListView(Event $event, array $filters, string $locale): array;
 
+    /**
+     * @param Event  $event
+     * @param array  $filters
+     * @param string $locale
+     *
+     * @return SheetIdsView
+     */
     public function getSheetIdsView(Event $event, array $filters, string $locale): SheetIdsView;
 
+    /**
+     * @param Event  $event
+     * @param array  $filters
+     * @param string $locale
+     *
+     * @return ParticipantsSheetIdsView
+     */
     public function getParticipantsSheetIdsView(Event $event, array $filters, string $locale): ParticipantsSheetIdsView;
 
+    /**
+     * @param Event  $event
+     * @param string $filter
+     * @param array  $defaultFilters
+     * @param string $locale
+     *
+     * @return array
+     */
     public function findLocalization(Event $event, string $filter, array $defaultFilters, string $locale): array;
 
+    /**
+     * @param Event  $event
+     * @param string $filter
+     * @param array  $defaultFilters
+     * @param string $locale
+     *
+     * @return array
+     */
     public function findKeyword(Event $event, string $filter, array $defaultFilters, string $locale): array;
 
-    public function getTypeAggregations(Event $event, string $locale, array $filters, string $filterToRemove): array;
+    /**
+     * @param Event  $event
+     * @param string $locale
+     * @param array  $filters
+     * @param string $filterToRemove
+     * @param array  $nomenclatureItems
+     * @param array  $availableSlotIds
+     * @param array  $sheetsToExclude
+     *
+     * @return array
+     */
+    public function getTypeAggregations(
+        Event $event,
+        string $locale,
+        array $filters,
+        string $filterToRemove,
+        array $nomenclatureItems = [],
+        array $availableSlotIds = [],
+        array $sheetsToExclude = []
+    ): array;
 
-    public function getCategoryAggregations(Event $event, string $locale, array $filters, string $filterToRemove): array;
+    /**
+     * @param Event  $event
+     * @param string $locale
+     * @param array  $filters
+     * @param string $filterToRemove
+     * @param array  $nomenclatureItems
+     * @param array  $availableSlotIds
+     * @param array  $sheetsToExclude
+     *
+     * @return array
+     */
+    public function getCategoryAggregations(
+        Event $event,
+        string $locale,
+        array $filters,
+        string $filterToRemove,
+        array $nomenclatureItems = [],
+        array $availableSlotIds = [],
+        array $sheetsToExclude = []
+    ): array;
 
+    /**
+     * @param Event  $event
+     * @param string $locale
+     * @param array  $filters
+     * @param string $filterToRemove
+     *
+     * @return array
+     */
     public function getOrganizationCategoryAggregations(
         Event $event,
         string $locale,
@@ -98,6 +174,14 @@ interface SheetSearchAdapterInterface
         string $filterToRemove
     ): array;
 
+    /**
+     * @param Event  $event
+     * @param string $locale
+     * @param array  $filters
+     * @param string $filterToRemove
+     *
+     * @return array
+     */
     public function getPositionAggregations(
         Event $event,
         string $locale,

@@ -2814,9 +2814,16 @@ services:
             - '@template.template_data_factory'
             - '@domain.key_dates.checker.meeting_request_access_checker'
             - '@domain.key_dates.checker.answering_meeting_request_access_checker'
-            - '@query.agenda.available_sheets.available_slots_by_participant_query_handler'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Sheet\PaginatedCatalogSheetPreviewViewQuery }
+
+    query.catalog.catalog_available_slot_ids_view_query_handler:
+        class: Proximum\Vimeet\Application\Query\Catalog\CatalogAvailableSlotIdsViewQueryHandler
+        arguments:
+            - '@vimeet_infrastructure.repository.sheet_repository'
+            - '@query.agenda.available_sheets.available_slots_by_participant_query_handler'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Catalog\CatalogAvailableSlotIdsViewQuery }
 
     query.sheet.catalog.paginated_sheet_external_view_query_handler:
         class: Proximum\Vimeet\Application\Query\Sheet\Catalog\PaginatedSheetExternalViewQueryHandler

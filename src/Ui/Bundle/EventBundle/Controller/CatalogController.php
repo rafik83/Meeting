@@ -13,6 +13,7 @@ namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Controller;
 use Proximum\Vimeet\Application\Command\Sheet\SheetViewed\Add;
 use Proximum\Vimeet\Application\Exception\Paginator\UnavailableCurrentPageException;
 use Proximum\Vimeet\Application\Query\Agenda\AvailableSheets\AvailableSlotsByParticipantQuery;
+use Proximum\Vimeet\Application\Query\Catalog\CatalogAvailableSlotIdsViewQuery;
 use Proximum\Vimeet\Application\Query\Catalog\CategoryViewQuery;
 use Proximum\Vimeet\Application\Query\Catalog\FilteredFieldsQuery;
 use Proximum\Vimeet\Application\Query\Catalog\KeywordViewQuery;
@@ -132,6 +133,9 @@ class CatalogController extends Controller
         $isUserParticipant = $sheet->hasUserParticipant($user);
         $filterAvailableSlot = $dDay && $isUserParticipant;
 
+        $sheetsToExclude = [];
+        $availableSlotsIds = [];
+
         if (true === $filterAvailableSlot) {
             $availableSlots = $this->get('tactician.commandbus.query')->handle(
                 new AvailableSlotsByParticipantQuery($event, $sheet->getUserParticipant($user))
@@ -164,6 +168,16 @@ class CatalogController extends Controller
             }
         }
 
+        if ($filterAvailableSlot) {
+            $catalogAvailableSlotView = $this
+                ->get('tactician.commandbus.query')
+                ->handle(new CatalogAvailableSlotIdsViewQuery($event, $sheet, $user, $filters))
+            ;
+
+            $availableSlotsIds = $catalogAvailableSlotView->availableSlotIds;
+            $sheetsToExclude = $catalogAvailableSlotView->sheetsToExclude;
+        }
+
         $page = $request->query->getInt('page', 1);
 
         $filters = array_merge(Catalog::DEFAULT_FILTERS, $filters);
@@ -178,7 +192,9 @@ class CatalogController extends Controller
                     48,
                     $locale,
                     $sheet,
-                    $user
+                    $user,
+                    $availableSlotsIds,
+                    $sheetsToExclude
                 )
             );
         } catch (UnavailableCurrentPageException $exception) {
@@ -201,7 +217,9 @@ class CatalogController extends Controller
             $categoryViews,
             $organizationCategoryViews,
             $positionViews,
-            $filterAvailableSlot
+            $filterAvailableSlot,
+            $availableSlotsIds,
+            $sheetsToExclude
         );
 
         if ($request->isXmlHttpRequest()) {
@@ -517,6 +535,8 @@ class CatalogController extends Controller
      * @param OrganizationCategoryView[] $organizationCategoryViews
      * @param PositionView[]             $positionViews
      * @param bool                       $filterAvailableSlotIds
+     * @param array                      $availableSlotsIds
+     * @param array                      $sheetsToExclude
      *
      * @return FormInterface
      */
@@ -530,7 +550,9 @@ class CatalogController extends Controller
         array $categoryViews,
         array $organizationCategoryViews,
         array $positionViews,
-        bool $filterAvailableSlotIds = false
+        bool $filterAvailableSlotIds = false,
+        array $availableSlotsIds = [],
+        array $sheetsToExclude = []
     ) {
         /** @var FilteredFieldsView $filteredFieldsView */
         $filteredFieldsView = $this->get('tactician.commandbus.query')->handle(
@@ -542,7 +564,9 @@ class CatalogController extends Controller
                 $categoryViews,
                 $organizationCategoryViews,
                 $positionViews,
-                $locale
+                $locale,
+                $availableSlotsIds,
+                $sheetsToExclude
             )
         );
 
