@@ -34,4 +34,14 @@
 
 .modal-dialog.modal-display-sheet {
   width: 80%;
+
+  > .modal-content {
+      padding: 0 20px;
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .modal-dialog.modal-display-sheet {
+    width: auto;
+  }
 }
