@@ -64,11 +64,12 @@ class TransformRequestIntoMeetingHandler
     /**
      * @param TransformRequestIntoMeeting $transformRequestIntoMeeting
      *
+     * @return Meeting
      * @throws MeetingRequestCanNotBeMeetingException
      * @throws NoSpotsAvailableForThisSlotAndMeetingException
      * @throws SlotNotAvailableForThisMeetingException
      */
-    public function handle(TransformRequestIntoMeeting $transformRequestIntoMeeting)
+    public function handle(TransformRequestIntoMeeting $transformRequestIntoMeeting): Meeting
     {
         if (false === $transformRequestIntoMeeting->meetingRequest->isTransformableIntoMeeting()) {
             throw new MeetingRequestCanNotBeMeetingException();
@@ -130,5 +131,7 @@ class TransformRequestIntoMeetingHandler
         foreach ($meeting->getAllParticipants() as $participant) {
             $this->eventDispatcher->dispatch(Events::MEETING_PARTICIPATE, new MeetingParticipateEvent($participant));
         }
+
+        return $meeting;
     }
 }
