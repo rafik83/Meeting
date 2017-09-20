@@ -24,6 +24,7 @@ class ListController extends Controller
     public function listAction(Event $event): Response
     {
         $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
+        $this->denyAccessUnlessGranted('ROLE_SUPER_ADMIN');
 
         $extraParameters = $this->get('repository.event.extra_parameter_repository')->findByEvent($event);
 

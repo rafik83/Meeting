@@ -19,15 +19,15 @@ use Symfony\Component\HttpFoundation\Request;
 class RemoveController extends Controller
 {
     /**
-     * @param Request              $request
      * @param Event                $event
      * @param Event\ExtraParameter $extraParameter
      *
      * @return RedirectResponse
      */
-    public function removeAction(Request $request, Event $event, Event\ExtraParameter $extraParameter): RedirectResponse
+    public function removeAction(Event $event, Event\ExtraParameter $extraParameter): RedirectResponse
     {
         $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
+        $this->denyAccessUnlessGranted('ROLE_SUPER_ADMIN');
 
         if ($event !== $extraParameter->getEvent()) {
             throw $this->createNotFoundException(

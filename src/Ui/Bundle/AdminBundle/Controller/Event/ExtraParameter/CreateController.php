@@ -31,6 +31,7 @@ class CreateController extends Controller
     public function createAction(Request $request, Event $event): Response
     {
         $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
+        $this->denyAccessUnlessGranted('ROLE_SUPER_ADMIN');
 
         $create = new Create($event);
         $form = $this->createForm(CreateType::class, $create, [

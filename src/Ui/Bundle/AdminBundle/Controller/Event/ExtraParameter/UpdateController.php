@@ -33,6 +33,7 @@ class UpdateController extends Controller
     public function updateAction(Request $request, Event $event, ExtraParameter $extraParameter): Response
     {
         $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
+        $this->denyAccessUnlessGranted('ROLE_SUPER_ADMIN');
 
         if ($event !== $extraParameter->getEvent()) {
             throw $this->createNotFoundException(
