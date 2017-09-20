@@ -64,8 +64,13 @@ class MeetingRequestViewQueryHandlerTest extends TestCase
 
         $router->generate('event_user_phone_redirect_to_validation', [
             'sheet'       => 1,
-            'participant' => 1
+            'participant' => 1,
+            'redirectTo' => 'redirectLink'
         ])->shouldBeCalled()->willReturn('validatePhoneLink');
+
+        $router->generate('event_meeting_list_request', [
+            'sheet' => 1,
+        ])->shouldBeCalled()->willReturn('redirectLink');
 
         $handler = new MeetingRequestViewQueryHandler(
             $preview->reveal(),
