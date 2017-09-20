@@ -123,7 +123,7 @@ class MeetingRequestController extends Controller
 
         if ($searchForm->handleRequest($request)->isSubmitted() && $searchForm->isValid()) {
             $filters = array_merge($defaults, array_filter(
-                $searchForm->getData(), function ($data) {
+                    $searchForm->getData(), function ($data) {
                     return !empty($data);
                 })
             );
@@ -175,21 +175,21 @@ class MeetingRequestController extends Controller
             TipTranslationViewQueryHandler::CONTEXT_MEETING_MANAGEMENT,
             $request->getLocale()
         );
-        $tipTranslationViews = $this->get('tactician.commandbus.query')->handle($tipTranslationViewQuery);
+        $tipTranslationViews     = $this->get('tactician.commandbus.query')->handle($tipTranslationViewQuery);
 
         return $this->render($template, [
-            'event'               => $event,
-            'sheet'               => $sheet,
-            'meetingRequestView'  => $meetingRequestListView,
-            'stateListsView'      => $stateListsView,
-            'searchForm'          => $searchForm->createView(),
-            'isCatalog'           => true, // set menu link visible,
-            'isMeeting'           => true,
-            'isEventOpen'         => $isEventOpen,
+            'event'                    => $event,
+            'sheet'                    => $sheet,
+            'meetingRequestView'       => $meetingRequestListView,
+            'stateListsView'           => $stateListsView,
+            'searchForm'               => $searchForm->createView(),
+            'isCatalog'                => true, // set menu link visible,
+            'isMeeting'                => true,
+            'isEventOpen'              => $isEventOpen,
             'filterRequestProposition' => $this->isFilterRequestPropositionActive($searchForm->get('state')->getData()),
-            'resultsCount'        => count($meetingRequestListView->getMeetingRequestsView()),
-            'tipTranslationViews' => $tipTranslationViews,
-            'participant' => $sheet->getUserParticipant($user)
+            'resultsCount'             => count($meetingRequestListView->getMeetingRequestsView()),
+            'tipTranslationViews'      => $tipTranslationViews,
+            'participant'              => $sheet->getUserParticipant($user),
         ]);
     }
 
@@ -315,7 +315,8 @@ class MeetingRequestController extends Controller
         $createRequest = new CreateRequest($eventDomain->getEvent(), $sheet, $toSheet, $user);
         $form          = $this->createForm(MeetingRequestCreateType::class, $createRequest, [
             'action' => $this->generateUrl('event_catalog_sheet_meeting_request', [
-                'sheet' => $sheet->getId(), 'toSheet' => $toSheet->getId()
+                'sheet'   => $sheet->getId(),
+                'toSheet' => $toSheet->getId(),
             ]),
             'sheet'  => $sheet,
             'locale' => $request->getLocale(),
@@ -386,7 +387,7 @@ class MeetingRequestController extends Controller
         $form           = $this->createForm(MeetingRequestApproveType::class, $approveRequest, [
             'action' => $this->generateUrl('event_meeting_request_approve', [
                 'sheet'          => $sheet->getId(),
-                'meetingRequest' => $meetingRequest->getId()
+                'meetingRequest' => $meetingRequest->getId(),
             ]),
             'locale' => $request->getLocale(),
             'sheet'  => $sheet,
@@ -400,10 +401,8 @@ class MeetingRequestController extends Controller
                 $meetingDdayView = $this->get('tactician.commandbus')->handle($approveRequest);
 
                 if ($meetingDdayView !== null) {
-                    $flashMessage = $this->get('translator')->trans('event.meeting.request.transformIntoMeeting', [
-                        '%date%' => $meetingDdayView->getDate(),
-                        '%time%' => $meetingDdayView->getTime(),
-                        '%slot%' => $meetingDdayView->spotName,
+                    $flashMessageView = $this->renderView('EventBundle::MeetingRequest\Message\flashMessage.html.twig', [
+                        'meetingDdayView' => $meetingDdayView,
                     ]);
                 }
             } catch (CannotBeTransformIntoMeetingOnDdayException $exception) {
@@ -412,7 +411,7 @@ class MeetingRequestController extends Controller
 
             return new JsonResponse($this->createJsonResponseData(
                 true,
-                true,
+                !empty($flashMessageView) ? false : true,
                 $this->renderView('EventBundle:MeetingRequest\Button:approvedProposition.html.twig', [
                     'sheet'                        => $sheet,
                     'meetingRequest'               => $meetingRequest,
@@ -421,10 +420,10 @@ class MeetingRequestController extends Controller
                     'isMeetingRequestUpdateLocked' => $eventDomain
                         ->getEvent()
                         ->getConfiguration()
-                        ->isMeetingRequestUpdateLocked()
+                        ->isMeetingRequestUpdateLocked(),
                 ]),
                 $this->getParticipantsHtml($approveRequest->participants, $request->getLocale()),
-                $flashMessage ?? null
+                $flashMessageView ?? null
             ));
         } elseif ($isSubmitted && !$form->isValid()) {
             return new JsonResponse($this->createJsonResponseData(
@@ -477,7 +476,7 @@ class MeetingRequestController extends Controller
         $form          = $this->createForm(MeetingRequestRefuseType::class, $refuseRequest, [
             'action' => $this->generateUrl('event_meeting_request_refuse', [
                 'sheet'          => $sheet->getId(),
-                'meetingRequest' => $meetingRequest->getId()
+                'meetingRequest' => $meetingRequest->getId(),
             ]),
         ]);
 
@@ -549,7 +548,7 @@ class MeetingRequestController extends Controller
             $form     = $this->createForm(UnRefuseMeetingRequestType::class, $unRefuse, [
                 'action' => $this->generateUrl('event_meeting_request_show_conversation_refuse', [
                     'sheet'          => $sheet->getId(),
-                    'meetingRequest' => $meetingRequest->getId()
+                    'meetingRequest' => $meetingRequest->getId(),
                 ]),
             ]);
 
@@ -559,7 +558,8 @@ class MeetingRequestController extends Controller
                 $this->get('tactician.commandbus')->handle($unRefuse);
 
                 // If the meeting request are still answerable
-                if ($this->get('domain.key_dates.checker.answering_meeting_request_access_checker')->allowedToAccess($eventDomain->getEvent())) {
+                if ($this->get('domain.key_dates.checker.answering_meeting_request_access_checker')
+                    ->allowedToAccess($eventDomain->getEvent())) {
                     return new JsonResponse($this->createJsonResponseData(
                         true,
                         true,
@@ -657,12 +657,12 @@ class MeetingRequestController extends Controller
         &$cancelForm
     ) {
         if ($permissionManager->isAllowedToCancel($meetingRequest, $sheet)) {
-            $toSheet = $meetingRequest->getToSheet();
+            $toSheet       = $meetingRequest->getToSheet();
             $cancelRequest = new CancelRequest($meetingRequest, $this->getUser(), $sheet);
             $cancelForm    = $this->createForm(MeetingRequestCancelType::class, $cancelRequest, [
                 'action' => $this->generateUrl('event_meeting_request_edit', [
                     'sheet'          => $sheet->getId(),
-                    'meetingRequest' => $meetingRequest->getId()
+                    'meetingRequest' => $meetingRequest->getId(),
                 ]),
             ]);
 
@@ -670,7 +670,8 @@ class MeetingRequestController extends Controller
                 $this->get('tactician.commandbus')->handle($cancelRequest);
 
                 // If you are still allowed to request someone in meeting
-                if ($this->get('domain.key_dates.checker.meeting_request_access_checker')->allowedToAccess($sheet->getEvent())) {
+                if ($this->get('domain.key_dates.checker.meeting_request_access_checker')
+                    ->allowedToAccess($sheet->getEvent())) {
                     return new JsonResponse($this->createJsonResponseData(
                         true,
                         true,
@@ -710,7 +711,7 @@ class MeetingRequestController extends Controller
             $unApprovedForm    = $this->createForm(UnApproveMeetingRequestType::class, $unApprovedRequest, [
                 'action' => $this->generateUrl('event_meeting_request_edit', [
                     'sheet'          => $sheet->getId(),
-                    'meetingRequest' => $meetingRequest->getId()
+                    'meetingRequest' => $meetingRequest->getId(),
                 ]),
             ]);
 
@@ -722,7 +723,7 @@ class MeetingRequestController extends Controller
                     true,
                     $this->renderView('EventBundle:MeetingRequest/Button:approveRefuseRequestButton.html.twig', [
                         'meetingRequest' => $meetingRequest,
-                        'sheet'          => $sheet
+                        'sheet'          => $sheet,
                     ])
                 ));
             }
@@ -799,7 +800,7 @@ class MeetingRequestController extends Controller
                 'show_description' => !$discussion->hasMessageOfSheet($sheet),
                 'action'           => $this->generateUrl('event_meeting_request_edit', [
                     'sheet'          => $sheet->getId(),
-                    'meetingRequest' => $meetingRequest->getId()
+                    'meetingRequest' => $meetingRequest->getId(),
                 ]),
             ]);
 
@@ -910,15 +911,15 @@ class MeetingRequestController extends Controller
     private function getParticipantsHtml(array $participants, $locale)
     {
         $participants = array_map(function (Participant $participant) use ($locale) {
-                return $this
-                    ->get('template.participant_info_guesser')
-                    ->guessParticipantCompleteName($participant, $locale);
-            },
+            return $this
+                ->get('template.participant_info_guesser')
+                ->guessParticipantCompleteName($participant, $locale);
+        },
             $participants
         );
 
         return $this->renderView('EventBundle:MeetingRequest:participantsList.html.twig', [
-            'participants' => $participants
+            'participants' => $participants,
         ]);
     }
 }
