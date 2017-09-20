@@ -8,9 +8,6 @@
         >
             <a href="#" class="catalog-mobile-menu-button btn btn-primary btn-block {% if not child.vars.data %}btn-inactive{% endif %}" data-catalog-mobile-menu-button-action="catalog-mobile-menu-button-action-available-slot-filter">
                 <span>{{ child.vars.label|trans({}, child.vars.translation_domain) }}</span>
-                <span class="button-count">
-                    <i class="glyphicon glyphicon-chevron-down"></i>
-                </span>
             </a>
         </li>
     {% endfor %}
