@@ -399,14 +399,16 @@ class MeetingRequestController extends Controller
             try {
                 /** @var null|MeetingDdayView $meetingDdayView */
                 $meetingDdayView = $this->get('tactician.commandbus')->handle($approveRequest);
-
-                if ($meetingDdayView !== null) {
-                    $flashMessageView = $this->renderView('EventBundle::MeetingRequest\Message\flashMessage.html.twig', [
-                        'meetingDdayView' => $meetingDdayView,
-                    ]);
-                }
+                $transformRequestIntoMeetingError = false;
             } catch (CannotBeTransformIntoMeetingOnDdayException $exception) {
+                $transformRequestIntoMeetingError = true;
+            }
 
+            if ($meetingDdayView !== null) {
+                $flashMessageView = $this->renderView('EventBundle::MeetingRequest\Message\requestTransformedIntoMeeting.html.twig', [
+                    'meetingDdayView' => $meetingDdayView,
+                    'error' => $transformRequestIntoMeetingError
+                ]);
             }
 
             return new JsonResponse($this->createJsonResponseData(
