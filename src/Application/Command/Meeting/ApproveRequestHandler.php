@@ -14,6 +14,7 @@ use Proximum\Vimeet\Application\Command\Meeting\Admin\TransformRequestIntoMeetin
 use Proximum\Vimeet\Application\Command\Meeting\Admin\TransformRequestIntoMeetingHandler;
 use Proximum\Vimeet\Application\Components\Meeting\RequestPermissionManager;
 use Proximum\Vimeet\Application\Event\Events;
+use Proximum\Vimeet\Application\Event\Meeting\MeetingCreatedEvent;
 use Proximum\Vimeet\Application\Event\MeetingRequest\ApprovedRequestEvent;
 use Proximum\Vimeet\Application\Event\MeetingRequest\ParticipateToRequestEvent;
 use Proximum\Vimeet\Application\Exception\MeetingRequest\CannotBeTransformIntoMeetingOnDdayException;
@@ -166,7 +167,17 @@ class ApproveRequestHandler
         foreach ($slots as $slot) {
             try {
                 $meeting = $this->transformRequestIntoMeetingHandler->handle(
-                    new TransformRequestIntoMeeting($request, $slot, $isVisio)
+                    new TransformRequestIntoMeeting(
+                        $request,
+                        $slot,
+                        $isVisio,
+                        true
+                    )
+                );
+
+                $this->eventDispatcher->dispatch(
+                    Events::MEETING_CREATED,
+                    new MeetingCreatedEvent($meeting->getSheets())
                 );
 
                 return new MeetingDdayView(

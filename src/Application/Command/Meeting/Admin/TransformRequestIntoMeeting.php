@@ -28,16 +28,25 @@ class TransformRequestIntoMeeting
     /** @var bool */
     public $visio;
 
+    /** @var bool */
+    public $isCreatedByParticipants;
+
     /**
      * @param Meeting\Request $meetingRequest
      * @param MeetingSlot     $slot
      * @param bool            $visio
+     * @param bool            $isCreatedByParticipants
      */
-    public function __construct(Meeting\Request $meetingRequest, MeetingSlot $slot, $visio = false)
-    {
-        $this->meetingRequest = $meetingRequest;
-        $this->slot           = $slot;
-        $this->event          = $slot->getEvent();
-        $this->visio          = $visio;
+    public function __construct(
+        Meeting\Request $meetingRequest,
+        MeetingSlot $slot,
+        $visio = false,
+        $isCreatedByParticipants = false
+    ) {
+        $this->meetingRequest          = $meetingRequest;
+        $this->slot                    = $slot;
+        $this->event                   = $slot->getEvent();
+        $this->visio                   = $visio;
+        $this->isCreatedByParticipants = $isCreatedByParticipants;
     }
 }
