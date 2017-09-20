@@ -74,6 +74,9 @@ class SendCodeController extends Controller
         Sheet $sheet,
         Participant $participant
     ): RedirectResponse {
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
+        $this->denyAccessUnlessGranted(ValidateMobileAccessVoter::PERMISSION_NAME, $eventDomain->getEvent());
+
         $this->addFlash('success', 'flash.event.user_event_phone.confirmationNeeded');
 
         if ($redirectTo = $request->query->get('redirectTo')) {

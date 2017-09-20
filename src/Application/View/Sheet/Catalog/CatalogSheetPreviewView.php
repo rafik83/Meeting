@@ -90,7 +90,7 @@ class CatalogSheetPreviewView extends AbstractSheetPreviewView
         $this->hasMessage                      = $hasMessage;
         $this->isSeenByCurrentUser             = $isSeenByCurrentUser;
         $this->isPhoneValidationRequired       = $isPhoneValidationRequired;
-        $this->validatePhoneLink = $validatePhoneLink;
+        $this->validatePhoneLink               = $validatePhoneLink;
     }
 
     /**
