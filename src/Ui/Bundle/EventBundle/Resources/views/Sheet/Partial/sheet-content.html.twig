@@ -1,4 +1,4 @@
-{% set link = phoneValidationLink is defined and phoneValidationLink is not null ? phoneValidationLink ? null %}
+{% set link = phoneValidationLink is defined and phoneValidationLink is not null ? phoneValidationLink : null %}
 
 <section class="main {% if isRequestMeetingEnabled %}catalog__sheet{% endif %}">
     <header class="sheet-header">
