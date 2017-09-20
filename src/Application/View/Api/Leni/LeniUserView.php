@@ -13,37 +13,37 @@ namespace Proximum\Vimeet\Application\View\Api\Leni;
 class LeniUserView
 {
     /** @var int */
-    private $id;
+    public $id;
 
     /** @var string */
-    private $sheetName;
+    public $sheetName;
 
     /** @var string */
-    private $typeName;
+    public $typeName;
 
     /** @var string */
-    private $email;
+    public $email;
 
     /** @var string */
-    private $gender;
+    public $gender;
 
     /** @var string */
-    private $firstName;
+    public $firstName;
 
     /** @var string */
-    private $lastName;
+    public $lastName;
 
     /** @var string */
-    private $position;
+    public $position;
 
     /** @var string */
-    private $phone;
+    public $phone;
 
     /** @var string */
-    private $mobile;
+    public $mobile;
 
     /** @var LeniPlanningView */
-    private $planning;
+    public $planning;
 
     /**
      * @param int              $id
