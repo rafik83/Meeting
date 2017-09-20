@@ -18,6 +18,7 @@ use Proximum\Vimeet\Application\Command\Meeting\UnApproveMeetingRequest;
 use Proximum\Vimeet\Application\Command\Meeting\UnRefuseMeetingRequest;
 use Proximum\Vimeet\Application\Command\Meeting\UpdateMeetingRequest;
 use Proximum\Vimeet\Application\Components\Meeting\RequestPermissionManager;
+use Proximum\Vimeet\Application\Exception\MeetingRequest\CannotBeTransformIntoMeetingOnDdayException;
 use Proximum\Vimeet\Application\Query\Agenda\AvailableSheets\AvailableSlotsByParticipantQuery;
 use Proximum\Vimeet\Application\Query\Meeting\MeetingRequestListViewQuery;
 use Proximum\Vimeet\Application\Query\Meeting\Message\DiscussionMeetingRequestViewQuery;
@@ -26,6 +27,7 @@ use Proximum\Vimeet\Application\Query\Tip\TipTranslationViewQuery;
 use Proximum\Vimeet\Application\Query\Tip\TipTranslationViewQueryHandler;
 use Proximum\Vimeet\Application\Query\Type\MeetingTypeViewQuery;
 use Proximum\Vimeet\Application\View\Agenda\Slot\AvailableSlotView;
+use Proximum\Vimeet\Application\View\Meeting\MeetingDdayView;
 use Proximum\Vimeet\Application\View\Meeting\MeetingRequestListView;
 use Proximum\Vimeet\Application\View\Meeting\Message\DiscussionMeetingRequestView;
 use Proximum\Vimeet\Application\View\Meeting\StateListsView;
@@ -393,7 +395,20 @@ class MeetingRequestController extends Controller
         $isSubmitted = $form->handleRequest($request)->isSubmitted();
 
         if ($isSubmitted && $form->isValid()) {
-            $this->get('tactician.commandbus')->handle($approveRequest);
+            try {
+                /** @var null|MeetingDdayView $meetingDdayView */
+                $meetingDdayView = $this->get('tactician.commandbus')->handle($approveRequest);
+
+                if ($meetingDdayView !== null) {
+                    $flashMessage = $this->get('translator')->trans('event.meeting.request.transformIntoMeeting', [
+                        '%date%' => $meetingDdayView->getDate(),
+                        '%time%' => $meetingDdayView->getTime(),
+                        '%slot%' => $meetingDdayView->spotName,
+                    ]);
+                }
+            } catch (CannotBeTransformIntoMeetingOnDdayException $exception) {
+
+            }
 
             return new JsonResponse($this->createJsonResponseData(
                 true,
@@ -401,10 +416,15 @@ class MeetingRequestController extends Controller
                 $this->renderView('EventBundle:MeetingRequest\Button:approvedProposition.html.twig', [
                     'sheet'                        => $sheet,
                     'meetingRequest'               => $meetingRequest,
-                    'isMeetingPublished'           => $this->get('domain.key_dates.checker.meeting_published_access_checker')->allowedToAccess($eventDomain->getEvent()),
-                    'isMeetingRequestUpdateLocked' => $eventDomain->getEvent()->getConfiguration()->isMeetingRequestUpdateLocked()
+                    'isMeetingPublished'           => $this->get('domain.key_dates.checker.meeting_published_access_checker')
+                        ->allowedToAccess($eventDomain->getEvent()),
+                    'isMeetingRequestUpdateLocked' => $eventDomain
+                        ->getEvent()
+                        ->getConfiguration()
+                        ->isMeetingRequestUpdateLocked()
                 ]),
-                $this->getParticipantsHtml($approveRequest->participants, $request->getLocale())
+                $this->getParticipantsHtml($approveRequest->participants, $request->getLocale()),
+                $flashMessage ?? null
             ));
         } elseif ($isSubmitted && !$form->isValid()) {
             return new JsonResponse($this->createJsonResponseData(
@@ -572,21 +592,28 @@ class MeetingRequestController extends Controller
     }
 
     /**
-     * @param bool   $ok
-     * @param bool   $close
-     * @param string $html
-     * @param string $participantsHtml
+     * @param bool        $ok
+     * @param bool        $close
+     * @param string      $html
+     * @param string      $participantsHtml
+     * @param null|string $flashMessage
      *
      * @return array
      */
-    private function createJsonResponseData($ok, $close, $html, $participantsHtml = '')
+    private function createJsonResponseData($ok, $close, $html, $participantsHtml = '', $flashMessage = null)
     {
-        return [
+        $response = [
             'status'           => $ok === true ? 'ok' : 'error',
             'close'            => $close,
             'html'             => $html,
             'participantsHtml' => $participantsHtml,
         ];
+
+        if ($flashMessage !== null) {
+            $response['flashMessage'] = $flashMessage;
+        }
+
+        return $response;
     }
 
     /**
