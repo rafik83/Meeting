@@ -80,7 +80,7 @@ class ImportController extends Controller
 
         $spotImportPreviewQuery = new SpotImportPreviewQuery($event, $importedFile, $locale);
 
-        $spotImportViews = $this->get('query.spot.import.spot_import_preview_query_handler')
+        $spotImports = $this->get('query.spot.import.spot_import_preview_query_handler')
             ->handle($spotImportPreviewQuery);
 
         $spotImportConfirm = new SpotImportConfirm($event, $importedFile, $locale);
@@ -95,7 +95,7 @@ class ImportController extends Controller
 
         return $this->render('AdminBundle:Spot\Import:spotImportPreview.html.twig', [
             'event' => $event,
-            'spotImportViews' => $spotImportViews,
+            'spotImports' => $spotImports,
             'form' => $form->createView(),
         ]);
     }

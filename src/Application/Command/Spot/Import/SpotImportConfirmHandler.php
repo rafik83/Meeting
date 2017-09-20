@@ -46,7 +46,7 @@ class SpotImportConfirmHandler
      */
     public function handle(SpotImportConfirm $command)
     {
-        $spotImportViews = $this->spotImporter->import(
+        $spotImports = $this->spotImporter->import(
             $command->event,
             $command->importedSpotFileName,
             $command->locale
@@ -57,14 +57,14 @@ class SpotImportConfirmHandler
         $sheetIds = [];
         $spots = [];
 
-        foreach ($spotImportViews as $spotImportView) {
-            if (!$spotImportView->hasError()) {
-                foreach ($spotImportView->sheetIds as $sheetId) {
+        foreach ($spotImports as $spotImport) {
+            if (!$spotImport->hasError()) {
+                foreach ($spotImport->sheetIds as $sheetId) {
                     $sheetIds[] = $sheetId;
-                    $spots[$sheetId] = $spotImportView->spot;
+                    $spots[$sheetId] = $spotImport->spot;
                 }
 
-                $this->spotRepository->add($spotImportView->spot);
+                $this->spotRepository->add($spotImport->spot);
             }
         }
 
