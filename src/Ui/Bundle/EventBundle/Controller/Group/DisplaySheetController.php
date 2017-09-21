@@ -155,6 +155,7 @@ class DisplaySheetController extends Controller
             'isAnsweringMeetingRequestClosed' => $isAnsweringMeetingRequestClosed,
             'isRequestMeetingEnabled'         => false,
             'isCatalog'                       => true,
+            'hideMeetingRequest'              => true,
             'locale'                          => $locale,
             'templateData'                    => $templateData,
             'taggedData'                      => $taggedData,

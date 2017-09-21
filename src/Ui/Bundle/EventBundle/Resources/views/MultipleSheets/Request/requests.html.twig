@@ -19,7 +19,8 @@
             'isMeetingRequestUpdateLocked': sheetListView.isMeetingRequestUpdateLocked,
             'isMeetingRequestClosed': sheetListView.isMeetingRequestClosed,
             'isAnsweringMeetingRequestClosed': sheetListView.isAnsweringMeetingRequestClosed,
-            'isMultipleSheet': isMultipleSheet
+            'isMultipleSheet': isMultipleSheet,
+            'hideMeetingRequest': hideMeetingRequest|default(false),
         }) }}
     {% else %}
         <tr>
