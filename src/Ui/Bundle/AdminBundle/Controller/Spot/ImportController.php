@@ -85,7 +85,7 @@ class ImportController extends Controller
 
         $spotImportConfirm = new SpotImportConfirm($event, $importedFile, $locale);
 
-        $form = $this->createForm(SpotConfirmType::class, $spotImportConfirm);
+        $form = $this->createForm(SpotConfirmType::class, $spotImportConfirm, ['locale' => $locale]);
 
         if ($form->handleRequest($request)->isValid() && $form->isSubmitted()) {
             $this->get('tactician.commandbus')->handle($spotImportConfirm);
