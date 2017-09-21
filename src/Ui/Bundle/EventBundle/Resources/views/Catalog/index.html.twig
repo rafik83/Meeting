@@ -9,7 +9,6 @@
 {% form_theme searchForm '@Ui/default.html.twig' %}
 
 {% block content %}
-    {% set phoneValidationLink = eventUserPhoneLink is defined and eventUserPhoneLink is not null ? eventUserPhoneLink : null %}
     <div class="catalog catalog--advanced">
         {{ include('EventBundle:Tip:tip.html.twig', {tipTranslationViews: tipTranslationViews}) }}
         {{ include('EventBundle:Catalog:Partial/catalog.html.twig', {
