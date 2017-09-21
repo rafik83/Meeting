@@ -380,6 +380,7 @@ services:
     event_listener_security.catalog_access_event_listener:
         class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\EventListener\Security\CatalogAccessEventListener
         arguments:
+            - '@vimeet_infrastructure.repository.sheet_repository'
             - '@domain.key_dates.checker.catalog_access_checker'
             - '@vimeet_infrastructure.repository.event_repository'
             - '@security.token_storage'
