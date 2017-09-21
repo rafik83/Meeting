@@ -378,10 +378,8 @@ class SheetSearchQueryBuilder
 
                 if ($type instanceof TypeInterface) {
                     $typeId = $type->getId();
-                }
-
-                if (is_int($type)) {
-                    $typeId = $type;
+                } elseif (is_int($type) || is_string($type)) {
+                    $typeId = (int) $type;
                 }
 
                 if ($typeId !== null) {
@@ -411,10 +409,8 @@ class SheetSearchQueryBuilder
 
             if ($category instanceof Category || $category instanceof CategoryView) {
                 $id = $category->getId();
-            }
-
-            if (is_int($category)) {
-                $id = $category;
+            } elseif (is_int($category) || is_string($category)) {
+                $id = (int) $category;
             }
 
             if ($category !== null) {
