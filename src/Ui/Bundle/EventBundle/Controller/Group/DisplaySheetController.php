@@ -91,6 +91,8 @@ class DisplaySheetController extends Controller
         int $sheetToDisplayId,
         UserInterface $user = null
     ): Response {
+        $event = $eventDomain->getEvent();
+
         $sheetToDisplay = $this
             ->get('vimeet_infrastructure.repository.sheet_repository')
             ->getSheetById($sheetToDisplayId);
@@ -115,6 +117,20 @@ class DisplaySheetController extends Controller
         $templateData = $this->get('template.tagged_data_factory')
             ->buildTaggedDataView($sheetToDisplay, $locale, $rules);
 
+        $isMeetingPublished = $this
+            ->get('domain.key_dates.checker.meeting_published_access_checker')
+            ->allowedToAccess($event);
+
+        $isMeetingRequestUpdateLocked = $event->getConfiguration()->isMeetingRequestUpdateLocked();
+        $isMeetingRequestClosed          = !$this
+            ->get('domain.key_dates.checker.meeting_request_access_checker')
+            ->allowedToAccess($event)
+        ;
+        $isAnsweringMeetingRequestClosed = !$this
+            ->get('domain.key_dates.checker.answering_meeting_request_access_checker')
+            ->allowedToAccess($event)
+        ;
+
         try {
             list ($nomenclatures, $participants, $taggedData) = $this
                 ->get('template.sheet.sheet_info_getter')
@@ -133,10 +149,10 @@ class DisplaySheetController extends Controller
             'sheet'                           => $sheet,
             'sheetToDisplay'                  => $sheetToDisplay,
             'event'                           => $eventDomain->getEvent(),
-            'isMeetingPublished'              => false,
-            'isMeetingRequestUpdateLocked'    => true,
-            'isMeetingRequestClosed'          => true,
-            'isAnsweringMeetingRequestClosed' => true,
+            'isMeetingPublished'              => $isMeetingPublished,
+            'isMeetingRequestUpdateLocked'    => $isMeetingRequestUpdateLocked,
+            'isMeetingRequestClosed'          => $isMeetingRequestClosed,
+            'isAnsweringMeetingRequestClosed' => $isAnsweringMeetingRequestClosed,
             'isRequestMeetingEnabled'         => false,
             'isCatalog'                       => true,
             'locale'                          => $locale,
