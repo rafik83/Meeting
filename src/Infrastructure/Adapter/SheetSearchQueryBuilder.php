@@ -380,7 +380,13 @@ class SheetSearchQueryBuilder
                     $typeId = $type->getId();
                 }
 
-                $filterByTypes->addShould((new Term())->setTerm('type', $typeId));
+                if (is_int($type)) {
+                    $typeId = $type;
+                }
+
+                if ($typeId !== null) {
+                    $filterByTypes->addShould((new Term())->setTerm('type', $typeId));
+                }
             }
 
             $this->query->addMust($filterByTypes);
@@ -401,13 +407,19 @@ class SheetSearchQueryBuilder
 
         $matchId = new BoolQuery();
         foreach ($filters['categories'] as $category) {
-            $id = $category;
+            $id = null;
 
             if ($category instanceof Category || $category instanceof CategoryView) {
                 $id = $category->getId();
             }
 
-            $matchId->addShould((new Term)->setTerm('categories.id', $id));
+            if (is_int($category)) {
+                $id = $category;
+            }
+
+            if ($category !== null) {
+                $matchId->addShould((new Term)->setTerm('categories.id', $id));
+            }
         }
 
         $nested->setQuery($matchId);
