@@ -247,10 +247,16 @@ class CatalogController extends Controller
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
         $this->denyAccessUnlessGranted(SheetVoter::EDIT, $sheet);
 
+        $query = $request->get('query');
+
+        if (null === $query) {
+            return new JsonResponse([]);
+        }
+
         $localizationView = $this->get('tactician.commandbus.query')->handle(
             new LocalizationViewQuery(
                 $eventDomain->getEvent(),
-                $request->get('query'),
+                $query,
                 Catalog::DEFAULT_FILTERS,
                 $request->getLocale()
             )
