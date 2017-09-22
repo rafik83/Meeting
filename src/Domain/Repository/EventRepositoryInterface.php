@@ -12,7 +12,6 @@ namespace Proximum\Vimeet\Domain\Repository;
 
 use Proximum\Vimeet\Domain\Model\Admin;
 use Proximum\Vimeet\Domain\Model\Event;
-use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\View\EventListView;
 
 interface EventRepositoryInterface
@@ -82,4 +81,11 @@ interface EventRepositoryInterface
      * @return Event|null
      */
     public function getById($id);
+
+    /**
+     * @param \DateTimeInterface $dateTime
+     *
+     * @return Event[]
+     */
+    public function findByDay(\DateTimeInterface $dateTime);
 }
