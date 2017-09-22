@@ -102,7 +102,7 @@ class SpotRepository implements SpotRepositoryInterface
     /**
      * {@inheritdoc}
      */
-    public function getActiveByEvent(Event $event)
+    public function getActiveByEvent(Event $event): array
     {
         $queryBuilder = new FilteredQueryBuilder($this->entityManager);
         $queryBuilder->hasEvent($event)->filter(['active' => true]);
@@ -113,6 +113,7 @@ class SpotRepository implements SpotRepositoryInterface
     /**
      * {@inheritdoc}
      */
+
     public function getAllByEvent(Event $event): array
     {
         $queryBuilder = $this
@@ -124,6 +125,23 @@ class SpotRepository implements SpotRepositoryInterface
             ->setParameter('event', $event);
 
         return $queryBuilder->getQuery()->getResult();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function hasActiveSpot(Event $event): bool
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('spot.id')
+            ->from(Spot::class, 'spot')
+            ->where('spot.event = :event AND spot.active = true')
+            ->setParameter('event', $event)
+            ->setMaxResults(1);
+
+        return null !== $queryBuilder->getQuery()->getOneOrNullResult();
     }
 
     /**

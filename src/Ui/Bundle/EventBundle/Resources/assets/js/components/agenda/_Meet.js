@@ -70,7 +70,10 @@ Meet.prototype.display = function() {
  * @param {Event} event
  */
 Meet.prototype.toggleOpen = function(event) {
-    event.preventDefault();
+    if (typeof event !== 'undefined') {
+        event.preventDefault();
+    }
+
     this.open = !this.open;
     this.emit('change');
 };

@@ -15,7 +15,7 @@ parameters:
     mailer_user:       ~
     mailer_password:   ~
     mailer_port:       ~
-    mailer_sender:     ~
+    mailer_sender:     "vimeet@proximum.com"
     mailer_encryption: ~
     mailer_error_transport: smtp
     mailer_error_host:      127.0.0.1
@@ -68,6 +68,11 @@ parameters:
     tokbox_api_key: ~
     tokbox_api_secret: ~
 
+    planner_files_path: '%kernel.root_dir%/../var/planner'
+    planner_command: 'curl -v -X POST http://optaplanner:8080/job/NameOfTheBuildYouShouldChangeIt/build --user vimeet:PasswordYouShouldChangeIt --data-urlencode json=''{"parameter": [{"name":"INPUT", "value":"%%filename%%"}]}'''
+    planner_trusted_name: 'NameOfTheBuildYouShouldChangeIt'
+
     # Features flag
     feature_video_conference_enabled: false
     feature_video_conference_date_security_enabled: false
+    feature_event_dates_to_current_date_enabled: false

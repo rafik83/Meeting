@@ -79,7 +79,7 @@ doctrine:
             entity:
                 type: yml
                 prefix: Proximum\Vimeet\Domain\Model
-                dir: "%kernel.project_dir%/src/Infrastructure/Bundle/InfrastructureBundle/Resources/config/doctrine/entity"
+                dir: "%kernel.root_dir%/../src/Infrastructure/Bundle/InfrastructureBundle/Resources/config/doctrine/entity"
                 alias: Entity
                 is_bundle: false
 

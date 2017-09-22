@@ -30,7 +30,8 @@ class MassUnavailabilityViewQueryHandler
             $query->mass->getCategory()->getPicto(),
             $query->mass->getCategory()->getLeftColor(),
             $query->mass->getCategory()->getRightColor(),
-            $query->event->getTimeZone()
+            $query->event->getTimeZone(),
+            $query->mass->isBlocking()
         );
     }
 }

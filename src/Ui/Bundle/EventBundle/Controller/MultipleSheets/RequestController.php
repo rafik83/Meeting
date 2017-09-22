@@ -75,6 +75,7 @@ class RequestController extends Controller
             'event'         => $event,
             'filterForm'    => $form->createView(),
             'sheetListView' => $sheetListView,
+            'isMultipleSheet' => true,
         ]);
     }
 }

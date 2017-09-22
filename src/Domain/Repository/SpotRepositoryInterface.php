@@ -50,7 +50,14 @@ interface SpotRepositoryInterface
      *
      * @return Spot[]
      */
-    public function getActiveByEvent(Event $event);
+    public function getActiveByEvent(Event $event): array;
+
+    /**
+     * @param Event $event
+     *
+     * @return bool
+     */
+    public function hasActiveSpot(Event $event): bool;
 
     /**
      * @param Event $event
