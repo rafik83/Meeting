@@ -18,6 +18,7 @@ use Proximum\Vimeet\Application\Query\Catalog\KeywordViewQuery;
 use Proximum\Vimeet\Application\Query\Catalog\LocalizationViewQuery;
 use Proximum\Vimeet\Application\Query\Catalog\OrganizationCategoryViewQuery;
 use Proximum\Vimeet\Application\Query\Catalog\PositionViewQuery;
+use Proximum\Vimeet\Application\Query\Catalog\SearchFacet\SearchFacetViewQuery;
 use Proximum\Vimeet\Application\Query\Catalog\TypeViewQuery;
 use Proximum\Vimeet\Application\Query\Participant\CardListViewQuery;
 use Proximum\Vimeet\Application\Query\Sheet\PaginatedCatalogSheetPreviewViewQuery;
@@ -97,25 +98,42 @@ class CatalogController extends Controller
             throw $this->createAccessDeniedException('Sheet not in catalog');
         }
 
-        $visibleTypes = $this->get('catalog.visible_participation_types')->getAllowedTypesList($sheet);
-        $visibleCategories = $this
-            ->get('catalog.visible_participation_categories')
-            ->getAllowedCategoriesList($sheet);
+        $searchFacetsView = $this->get('query.catalog.search_facet_view_query_handler')->handle(
+            new SearchFacetViewQuery($event, $locale)
+        );
 
-        if (empty($visibleTypes)) {
-            return $this->render(
-                'EventBundle:Catalog:no-visible-type.html.twig',
-                ['event' => $event, 'sheet' => $sheet]
+        $categoryViews = [];
+        $typeViews = [];
+
+        if ($searchFacetsView->hasCategory()) {
+            $visibleCategories = $this
+                ->get('catalog.visible_participation_categories')
+                ->getAllowedCategoriesList($sheet);
+
+            if (empty($visibleCategories)) {
+                return $this->render(
+                    'EventBundle:Catalog:no-visible-category.html.twig',
+                    ['event' => $event, 'sheet' => $sheet]
+                );
+            }
+
+            $categoryViews = $this->get('tactician.commandbus.query')->handle(
+                new CategoryViewQuery($event, $visibleCategories, $locale)
+            );
+        } else {
+            $visibleTypes = $this->get('catalog.visible_participation_types')->getAllowedTypesList($sheet);
+
+            if (empty($visibleTypes)) {
+                return $this->render(
+                    'EventBundle:Catalog:no-visible-type.html.twig',
+                    ['event' => $event, 'sheet' => $sheet]
+                );
+            }
+
+            $typeViews = $this->get('tactician.commandbus.query')->handle(
+                new TypeViewQuery($event, $visibleTypes, $locale)
             );
         }
-
-        $typeViews = $this->get('tactician.commandbus.query')->handle(
-            new TypeViewQuery($event, $visibleTypes, $locale)
-        );
-
-        $categoryViews = $this->get('tactician.commandbus.query')->handle(
-            new CategoryViewQuery($event, $visibleCategories, $locale)
-        );
 
         $organizationCategoryViews = $this->get('tactician.commandbus.query')->handle(
             new OrganizationCategoryViewQuery($event, $locale)
@@ -145,6 +163,7 @@ class CatalogController extends Controller
             if (empty($filters[SearchFields::FILTER_TYPE])) {
                 $filters[SearchFields::FILTER_TYPE] = $typeViews;
             }
+
             if (empty($filters[SearchFields::FILTER_CATEGORY])) {
                 $filters[SearchFields::FILTER_CATEGORY] = $categoryViews;
             }
