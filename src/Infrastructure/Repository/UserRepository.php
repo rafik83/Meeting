@@ -291,7 +291,7 @@ class UserRepository implements UserRepositoryInterface
         $queryBuilder = $this
             ->entityManager
             ->createQueryBuilder()
-            ->select('user')
+            ->select('user, participant')
             ->from(User::class, 'user')
             ->join(Participant::class, 'participant', 'WITH', 'participant.user = user')
             ->join(
@@ -309,7 +309,7 @@ class UserRepository implements UserRepositoryInterface
             ->where('EXISTS(
                 SELECT request
                 FROM Entity:Meeting\Request request
-                LEFT JOIN Entity:Sheet sheetFrom WITH sheetFrom.attend = true
+                LEFT JOIN Entity:Sheet sheetFrom WITH sheetFrom = request.from AND sheetFrom.attend = true
                 WHERE request.to = sheet AND request.state = :pending AND request.disabled = false
             )')
             ->setParameter('events', $events)
