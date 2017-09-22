@@ -298,7 +298,8 @@ class UserRepository implements UserRepositoryInterface
                 'participant.sheet',
                 'sheet',
                 'WITH',
-                'sheet.event IN (:events) AND sheet.enable = true AND sheet.inCatalog = true'
+                'sheet.event IN (:events) AND sheet.enable = true 
+                AND sheet.inCatalog = true AND sheet.availableSlots IS NOT NULL'
             )
             ->join(
                 User\UserEventPhone::class,
