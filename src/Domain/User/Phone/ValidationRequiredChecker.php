@@ -55,7 +55,7 @@ class ValidationRequiredChecker
     public function handle(Sheet $sheet, User $user, string $locale): bool
     {
         if ($this->dDayGuesser->isItDDay($sheet->getEvent())) {
-            $tipTranslationView = $this->tipTranslationViewQueryHandler->handle(
+            $tipTranslationViews = $this->tipTranslationViewQueryHandler->handle(
                 new TipTranslationViewQuery(
                     $sheet->getType(),
                     TipTranslationViewQueryHandler::CONTEXT_CONFIRMATION_PHONE,
@@ -63,7 +63,7 @@ class ValidationRequiredChecker
                 )
             );
 
-            if (!empty($tipTranslationView)) {
+            if (!empty($tipTranslationViews)) {
                 $userEventPhone = $this->userEventPhoneRepository->findValidated(
                     $user,
                     $sheet->getEvent()
