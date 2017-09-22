@@ -55,5 +55,6 @@ services:
             - '@planning.formatter.participant_planning_formatter'
             - '@query.api.leni.leni_user_view_query_handler'
             - '@adapter.serializer_adapter'
+            - '@datetime'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Event\ExtraParameter\Api\LeniApi }

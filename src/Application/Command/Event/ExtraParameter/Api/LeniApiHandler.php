@@ -14,6 +14,7 @@ use Proximum\Vimeet\Application\Adapter\SerializerAdapterInterface;
 use Proximum\Vimeet\Application\Components\Planning\Formatter\ParticipantPlanningFormatter;
 use Proximum\Vimeet\Application\Query\Api\Leni\LeniUserViewQuery;
 use Proximum\Vimeet\Application\Query\Api\Leni\LeniUserViewQueryHandler;
+use Proximum\Vimeet\Application\View\Api\Leni\LeniUserView;
 use Proximum\Vimeet\Domain\Event\ExtraParameter\Type;
 use Proximum\Vimeet\Domain\Model\User\Event\ExtraData;
 use Proximum\Vimeet\Domain\Repository\Event\ExtraParameterRepositoryInterface;
@@ -49,6 +50,9 @@ class LeniApiHandler
     /** @var SerializerAdapterInterface */
     private $serializerAdapter;
 
+    /** @var \DateTimeInterface */
+    private $dateTime;
+
     /**
      * @param EventRepositoryInterface          $eventRepository
      * @param ExtraParameterRepositoryInterface $extraParameterRepository
@@ -58,6 +62,7 @@ class LeniApiHandler
      * @param ParticipantPlanningFormatter      $participantPlanningFormatter
      * @param LeniUserViewQueryHandler          $leniUserViewQueryHandler
      * @param SerializerAdapterInterface        $serializerAdapter
+     * @param \DateTimeInterface                $dateTime
      */
     public function __construct(
         EventRepositoryInterface $eventRepository,
@@ -67,7 +72,8 @@ class LeniApiHandler
         SheetRepositoryInterface $sheetRepository,
         ParticipantPlanningFormatter $participantPlanningFormatter,
         LeniUserViewQueryHandler $leniUserViewQueryHandler,
-        SerializerAdapterInterface $serializerAdapter
+        SerializerAdapterInterface $serializerAdapter,
+        \DateTimeInterface $dateTime
     ) {
         $this->eventRepository = $eventRepository;
         $this->extraParameterRepository = $extraParameterRepository;
@@ -77,6 +83,7 @@ class LeniApiHandler
         $this->participantPlanningFormatter = $participantPlanningFormatter;
         $this->leniUserViewQueryHandler = $leniUserViewQueryHandler;
         $this->serializerAdapter = $serializerAdapter;
+        $this->dateTime = $dateTime;
     }
 
     /**
@@ -106,16 +113,35 @@ class LeniApiHandler
 
                 $leniUser = $this->leniUserViewQueryHandler->handle(new LeniUserViewQuery($event, $user, $sheets));
                 $leniUserSerialize = $this->serializerAdapter->normalize($leniUser);
+                $leniUser->addSerializeContent($leniUserSerialize);
 
                 $fingerPrint = md5(implode(',', $leniUserSerialize));
 
-                if (isset($userFingerPrints[$user->getId()])
-                    && $fingerPrint !== $userFingerPrints[$user->getId()]->getValue()
-                ) {
-                }
+                if (isset($userFingerPrints[$user->getId()])) {
+                    // In case of a different fingerprint, update the fingerprint and add the user to the user to send
+                    if ($fingerPrint !== $userFingerPrints[$user->getId()]->getValue()) {
+                        $userFingerPrints[$user->getId()]->update($fingerPrint, $this->dateTime);
 
-                $leniUserViews[] = $leniUser;
+                        $this->extraDataRepository->set($userFingerPrints[$user->getId()]);
+
+                        $leniUserViews[] = $leniUser;
+                    }
+                } else {
+                    $userExtraData = new ExtraData(
+                        $user,
+                        $event,
+                        ExtraDataType::LENI_FINGERPRINT,
+                        $fingerPrint,
+                        $this->dateTime
+                    );
+
+                    $this->extraDataRepository->add($userExtraData);
+
+                    $leniUserViews[] = $leniUser;
+                }
             }
+
+            $this->notifyLeniWithUsers($leniUserParameter, $leniEventParameter, $leniUserViews);
         }
     }
 
@@ -133,5 +159,17 @@ class LeniApiHandler
         }
 
         return $userFingerPrints;
+    }
+
+    /**
+     * @param string         $leniUserParameter
+     * @param string         $leniEventParameter
+     * @param LeniUserView[] $leniUserViews
+     */
+    private function notifyLeniWithUsers(string $leniUserParameter, string $leniEventParameter, array $leniUserViews)
+    {
+        foreach ($leniUserViews as $leniUserView) {
+            // Notify leni
+        }
     }
 }

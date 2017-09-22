@@ -45,6 +45,9 @@ class LeniUserView
     /** @var LeniPlanningView */
     public $planning;
 
+    /** @var array */
+    public $serializeContent;
+
     /**
      * @param int              $id
      * @param string           $sheetName
@@ -82,5 +85,14 @@ class LeniUserView
         $this->phone = $phone;
         $this->mobile = $mobile;
         $this->planning = $planning;
+        $this->serializeContent = [];
+    }
+
+    /**
+     * @param array $serializeContent
+     */
+    public function addSerializeContent(array $serializeContent)
+    {
+        $this->serializeContent = $serializeContent;
     }
 }
