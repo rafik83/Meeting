@@ -133,7 +133,9 @@ class TransformRequestIntoMeetingHandler
         );
 
         foreach ($meeting->getAllParticipants() as $participant) {
-            $this->eventDispatcher->dispatch(Events::MEETING_PARTICIPATE, new MeetingParticipateEvent($participant));
+            $this->eventDispatcher->dispatch(Events::MEETING_PARTICIPATE,
+                new MeetingParticipateEvent($participant)
+            );
         }
 
         return $meeting;
