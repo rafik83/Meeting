@@ -12,21 +12,33 @@ namespace Proximum\Vimeet\Application\View\Agenda;
 
 abstract class AbstractTimeEntityView
 {
-    /**
-     * @var \DateTimeInterface
-     */
+    /** @var \DateTimeInterface */
     public $begin;
 
-    /**
-     * @var \DateTimeInterface
-     */
+    /** @var \DateTimeInterface */
     public $end;
 
     /**
      * @return \DateInterval
      */
-    public function getDuration()
+    public function getDuration(): \DateInterval
     {
         return $this->end->diff($this->begin);
+    }
+
+    /**
+     * @return \DateTimeInterface
+     */
+    public function getBegin(): \DateTimeInterface
+    {
+        return $this->begin;
+    }
+
+    /**
+     * @return \DateTimeInterface
+     */
+    public function getEnd(): \DateTimeInterface
+    {
+        return $this->end;
     }
 }
