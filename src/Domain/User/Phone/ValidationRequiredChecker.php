@@ -63,7 +63,7 @@ class ValidationRequiredChecker
                 )
             );
 
-            if ($tipTranslationView !== null) {
+            if (!empty($tipTranslationView)) {
                 $userEventPhone = $this->userEventPhoneRepository->findValidated(
                     $user,
                     $sheet->getEvent()
@@ -71,8 +71,6 @@ class ValidationRequiredChecker
 
                 return $userEventPhone === null;
             }
-
-            return false;
         }
 
         return false;
