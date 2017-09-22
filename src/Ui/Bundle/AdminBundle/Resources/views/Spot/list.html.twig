@@ -35,6 +35,9 @@
                         <a href="{{ path('admin_spot_batch_create', { 'event': event.id }) }}" class="btn btn-success">
                             {{ 'admin.spot.batch_create.title'|trans }}
                         </a>
+                        <a href="{{ path('admin_spot_import', {'event': event.id}) }}" class="btn btn-info">
+                            {{ 'admin.spot.import.title'|trans }}
+                        </a>
                     {% endblock new_actions %}
 
                     {% block actions %}

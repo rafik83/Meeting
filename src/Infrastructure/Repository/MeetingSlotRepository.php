@@ -293,4 +293,21 @@ class MeetingSlotRepository implements MeetingSlotRepositoryInterface
 
         return $queryBuilder->getQuery()->getResult();
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function hasActiveSlot(Event $event): bool
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('slot.id')
+            ->from(MeetingSlot::class, 'slot')
+            ->where('slot.event = :event AND slot.locked = false')
+            ->setParameter('event', $event)
+            ->setMaxResults(1);
+
+        return null !== $queryBuilder->getQuery()->getOneOrNullResult();
+    }
 }

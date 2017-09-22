@@ -15,9 +15,9 @@ use Proximum\Vimeet\Application\View\Catalog\SearchFacetsView;
 interface SearchFacetQueryHandlerInterface
 {
     /**
-     * @param mixed $query
+     * @param AbstractSearchFacetViewQuery $abstractSearchFacetViewQuery
      *
      * @return SearchFacetsView
      */
-    public function handle($query): SearchFacetsView;
+    public function handle(AbstractSearchFacetViewQuery $abstractSearchFacetViewQuery): SearchFacetsView;
 }

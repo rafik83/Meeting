@@ -18,7 +18,7 @@
             {{ include('EventBundle:MultipleSheets/Request:filterForm.html.twig', {'resetLink': path('event_sheet_group_requests_list', {'sheetGroup': sheetGroup.id})}) }}
         </div>
         <div class="main__container">
-            {{ include('EventBundle:MultipleSheets/Request:requests.html.twig') }}
+            {{ include('EventBundle:MultipleSheets/Request:requests.html.twig', {'isMultipleSheet': isMultipleSheet}) }}
         </div>
     </section>
 {% endblock %}

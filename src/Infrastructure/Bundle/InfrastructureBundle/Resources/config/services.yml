@@ -304,6 +304,10 @@ services:
         class: Proximum\Vimeet\Infrastructure\Repository\VideoConferenceRepository
         arguments:
             - '@doctrine.orm.entity_manager'
+    vimeet_infrastructure.repository.planner_job_repository:
+        class: Proximum\Vimeet\Infrastructure\Repository\PlannerJobRepository
+        arguments:
+            - '@doctrine.orm.entity_manager'
 
     #
     # Fixture providers
@@ -473,6 +477,26 @@ services:
             - '@vimeet_infrastructure.repository.meeting_repository'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Spot\UnavailabilityBatch }
+
+    command.spot.spot_import_handler:
+        class: Proximum\Vimeet\Application\Command\Spot\Import\SpotImportHandler
+        arguments:
+            - '@repository.file_repository'
+            - '@adapter.local_file_storage'
+            - '%infrastructure.import_spot_path%'
+            - '@datetime'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Spot\Import\SpotImport }
+
+    command.spot.spot_import_confirm_handler:
+        class: Proximum\Vimeet\Application\Command\Spot\Import\SpotImportConfirmHandler
+        arguments:
+            - '@components.spot.spot_importer'
+            - '@vimeet_infrastructure.repository.spot_repository'
+            - '@vimeet_infrastructure.repository.sheet_repository'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Spot\Import\SpotImportConfirm }
+
     vimeet_infrastructure.vimeet.application.command.category.update_handler:
         class: Proximum\Vimeet\Application\Command\Category\UpdateHandler
         arguments:
@@ -1674,12 +1698,14 @@ services:
             - '@vimeet_infrastructure.repository.meeting_slot_repository'
             - '@vimeet_infrastructure.repository.spot_repository'
             - '@command.meeting.admin.spot_reassign_handler'
+            - '@vimeet_infrastructure.repository.planner_job_repository'
             - '@adapter.entity_manager_adapter'
             - '@adapter.mailer_adapter'
             - '@adapter.local_file_storage'
             - '@adapter.job_queue_adapter'
             - '@datetime'
             - '%infrastructure.import_planner_path%'
+            - '%planner_files_path%'
             - '%mailer_sender%'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Planner\Import }
@@ -2477,6 +2503,17 @@ services:
         arguments:
             - '@tagged_info_guesser'
             - '@template.template_data_factory'
+
+    #
+    # Getter
+    #
+    template.sheet.sheet_info_getter:
+        class: Proximum\Vimeet\Domain\Sheet\SheetInfosGetter
+        arguments:
+            - '@catalog.sheet_access_checker'
+            - '@repository.nomenclature_repository'
+            - '@template.template_data_factory'
+            - '@query.participant.card_list_view_query_handler'
 
     #
     # Setter
@@ -3802,6 +3839,14 @@ services:
             - '@query.spot.agenda.spot_view_query_handler'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Spot\Agenda\ListViewQuery }
+
+    query.spot.import.spot_import_preview_query_handler:
+        class: Proximum\Vimeet\Application\Query\Spot\Import\SpotImportPreviewQueryHandler
+        arguments:
+            - '@components.spot.spot_importer'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Spot\Import\SpotImportPreviewQuery }
+
     query.transaction.view_query_handler:
         class: Proximum\Vimeet\Application\Query\Transaction\TransactionViewQueryHandler
         arguments:
@@ -4792,6 +4837,13 @@ services:
         tags:
             - { name: serializer.normalizer }
 
+    serializer.spot_import_denormalizer:
+        class: Proximum\Vimeet\Application\Components\Spot\Denormalizer\SpotDenormalizer
+        tags:
+            - { name: serializer.normalizer }
+        arguments:
+            - '@vimeet_infrastructure.adapter.translator_adapter'
+
     #
     # Adapter
     #
@@ -4838,8 +4890,11 @@ services:
             - '@adapter.serializer_adapter'
             - '@adapter.local_file_storage'
             - '%infrastructure.export_planner_path%'
+            - '%planner_files_path%'
+            - '%planner_command%'
             - '@vimeet_infrastructure.repository.event_repository'
             - '@repository.file_repository'
+            - '@vimeet_infrastructure.repository.planner_job_repository'
             - '@adapter.mailer_adapter'
             - '@datetime'
             - '%mailer_sender%'
@@ -4850,6 +4905,10 @@ services:
         class: Proximum\Vimeet\Application\Command\Planner\ExportJobCreatorHandler
         arguments:
             - '@adapter.job_queue_adapter'
+            - '@vimeet_infrastructure.repository.planner_job_repository'
+            - '@vimeet_infrastructure.repository.spot_repository'
+            - '@vimeet_infrastructure.repository.meeting_slot_repository'
+            - '@datetime'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Planner\ExportJobCreator }
 
@@ -4908,6 +4967,18 @@ services:
             - '@query.planner.spot_view_query_handler'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Planner\PlannerViewQuery }
+
+    command.planner.callback.set_status_handler:
+        class: Proximum\Vimeet\Application\Command\Planner\Callback\SetStatusHandler
+        arguments:
+            - '@vimeet_infrastructure.repository.planner_job_repository'
+            - '@repository.file_repository'
+            - '%planner_trusted_name%'
+            - '@adapter.job_queue_adapter'
+            - '%planner_files_path%'
+            - '@datetime'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Planner\Callback\SetStatus }
 
     #
     # Planner normalizer
@@ -5192,6 +5263,7 @@ services:
             - '@vimeet_infrastructure.repository.sheet_repository'
             - '@domain.service.sheets_group.group_name_resolver'
             - '@domain.service.sheets_group.type_name_resolver'
+            - '@template.participant_info_guesser'
             - '@planning.formatter.participant_planning_formatter'
             - '@adapter.serializer_adapter'
             - '@vimeet_infrastructure.adapter.translator_adapter'

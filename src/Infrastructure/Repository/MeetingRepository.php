@@ -661,6 +661,25 @@ class MeetingRepository implements MeetingRepositoryInterface
     /**
      * {@inheritdoc}
      */
+    public function hasMeeting(Event $event): bool
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('meeting.id')
+            ->from(Meeting::class, 'meeting')
+            ->where('meeting.event = :event')
+            ->andWhere('meeting.state = :state')
+            ->setMaxResults(1)
+            ->setParameter('event', $event)
+            ->setParameter('state', Meeting::STATE_SCHEDULED);
+
+        return null !== $queryBuilder->getQuery()->getOneOrNullResult();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function hasMeetingOnSlot(MeetingSlot $meetingSlot)
     {
         $queryBuilder = $this
