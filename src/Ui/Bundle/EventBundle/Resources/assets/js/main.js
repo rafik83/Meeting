@@ -17,6 +17,7 @@ var $                     = require('jquery'),
     ShowMore              = require('./components/_ShowMore'),
     ShowMoreParticipants  = require('./components/_ShowMoreParticipants'),
     CatalogFilters        = require('./components/_CatalogFilters'),
+    CatalogMobileFilters  = require('./components/catalog/_CatalogMobileFilters'),
     AnchorFocuser         = require('./components/_AnchorFocuser'),
     Happening             = require('./components/_Happening'),
     PreventMultipleSubmit = require('./components/_PreventMultipleSubmit'),
@@ -74,6 +75,14 @@ function init (target) {
         if ('checkbox' === $(this).attr('type')) {
             this.checked = result;
         }
+    });
+
+    [].forEach.call(target.querySelectorAll('[data-catalog-mobile-menu]'), function (element) {
+        new CatalogMobileFilters(
+            document.querySelector('.catalog-mobile-menu'),
+            element,
+            target.querySelector('.catalog form')
+        );
     });
 
     [].forEach.call(target.querySelectorAll('.catalog__item, .catalog__sheet'), function (element) {
