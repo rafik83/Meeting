@@ -31,6 +31,7 @@ use Proximum\Vimeet\Domain\Template\TemplateObject\EditableText;
 use Proximum\Vimeet\Domain\Template\TemplateObject\Participant as ParticipantObject;
 use Proximum\Vimeet\Domain\Template\TemplateObject\Tag;
 use Proximum\Vimeet\Domain\View\Template\TaggedDataView;
+use \Proximum\Vimeet\Application\Components\Sheet\Template\Tag as TemplateTag;
 use PHPUnit\Framework\TestCase;
 
 class PreviewTest extends TestCase
@@ -53,6 +54,7 @@ class PreviewTest extends TestCase
         $participantObject->getType()->willReturn(AbstractChild::TEMPLATE_OBJECT_TYPE_PARTICIPANT);
 
         $editableText = $this->prophesize(EditableText::class);
+        $editableText->getTag()->willReturn(TemplateTag::SHEET_ORGANIZATION);
         $editableText->getKey()->willReturn('key2');
         $editableText->getType()->willReturn(AbstractChild::TEMPLATE_OBJECT_TYPE_EDITABLE_TEXT);
         $editableText->isTitle()->willReturn(false);
@@ -97,7 +99,10 @@ class PreviewTest extends TestCase
         ;
         $cardViewQueryHandler = $this->prophesize(CardViewQueryHandler::class);
         $cardView = new CardView(1, false, 'firstName', 'lastName', 'position', 'avatar', false, 2);
-        $cardViewQueryHandler->handle(new CardViewQuery($participant->reveal(), $locale))->shouldBeCalled()->willReturn($cardView);
+        $cardViewQueryHandler
+            ->handle(new CardViewQuery($participant->reveal(), $locale))
+            ->shouldBeCalled()
+            ->willReturn($cardView);
         $applyer              = $this->prophesize(Applyer::class);
         $translator           = $this->prophesize(TranslatorInterface::class);
 
@@ -122,6 +127,8 @@ class PreviewTest extends TestCase
             AbstractChild::TEMPLATE_OBJECT_TYPE_EDITABLE_TEXT,
             [$cardView]
         );
+        $previewText->populatedFromTag = TemplateTag::SHEET_ORGANIZATION;
+
         $previewTag = new PreviewView(
             'key3',
             '',
@@ -134,6 +141,7 @@ class PreviewTest extends TestCase
         $previewTag->addTagView(
             new TagView(AbstractChild::TEMPLATE_OBJECT_TYPE_COUNTRY, 'Label', 'FR')
         );
+
 
         $this->assertEquals([
             $previewParticipant,
