@@ -2474,6 +2474,17 @@ services:
             - '@template.template_data_factory'
 
     #
+    # Getter
+    #
+    template.sheet.sheet_info_getter:
+        class: Proximum\Vimeet\Domain\Sheet\SheetInfosGetter
+        arguments:
+            - '@catalog.sheet_access_checker'
+            - '@repository.nomenclature_repository'
+            - '@template.template_data_factory'
+            - '@query.participant.card_list_view_query_handler'
+
+    #
     # Setter
     #
     template.sheet.sheet_info_setter:

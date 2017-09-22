@@ -27,6 +27,7 @@ use Proximum\Vimeet\Application\View\Catalog\FilteredFieldsView;
 use Proximum\Vimeet\Application\View\Catalog\PositionView;
 use Proximum\Vimeet\Domain\Catalog\Catalog;
 use Proximum\Vimeet\Domain\Catalog\SearchFields;
+use Proximum\Vimeet\Domain\Exception\Sheet\AccessDeniedException;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\PaginatedResult;
 use Proximum\Vimeet\Domain\Model\Sheet;
@@ -352,13 +353,19 @@ class CatalogController extends Controller
             throw $this->createNotFoundException('You do not have the right to see this sheet');
         }
 
-        list ($nomenclatures, $participants, $taggedData) = $this->sheetInfos(
-            $eventDomain->getEvent(),
-            $sheet,
-            $sheetToDisplay,
-            $user,
-            $locale
-        );
+        try {
+            list ($nomenclatures, $participants, $taggedData) = $this
+                ->get('template.sheet.sheet_info_getter')
+                ->sheetInfos(
+                    $eventDomain->getEvent(),
+                    $sheet,
+                    $sheetToDisplay,
+                    $user,
+                    $locale
+                );
+        } catch (AccessDeniedException $exception) {
+            throw $this->createAccessDeniedException();
+        }
 
         // Build sheet template data and attach tagged data view to template object with tags
         $templateData = $this->get('template.tagged_data_factory')
@@ -412,34 +419,6 @@ class CatalogController extends Controller
             'isRequestMeetingEnabled'         => $sheet !== $sheetToDisplay,
             'isCatalog'                       => true,
         ]);
-    }
-
-    /**
-     * @param Event  $event
-     * @param Sheet  $sheet
-     * @param Sheet  $sheetToDisplay
-     * @param User   $user
-     * @param string $locale
-     *
-     * @return array
-     */
-    private function sheetInfos(Event $event, Sheet $sheet, Sheet $sheetToDisplay, User $user, $locale)
-    {
-        if (!$this->get('catalog.sheet_access_checker')->checkAccess($sheet, $sheetToDisplay)) {
-            throw $this->createAccessDeniedException();
-        }
-
-        $nomenclatures     = $this->get('repository.nomenclature_repository')->findByEvent($event);
-        $cardListViewQuery = new CardListViewQuery($sheetToDisplay, $user, $locale);
-        $participants      = $this->get('tactician.commandbus.query')->handle($cardListViewQuery);
-
-        $registrationTemplateData = $this
-            ->get('template.template_data_factory')
-            ->createRegistrationFromSheet($sheetToDisplay, $locale);
-
-        $taggedData = $registrationTemplateData->getAllTaggedDatas();
-
-        return [$nomenclatures, $participants, $taggedData];
     }
 
     /**
