@@ -49,9 +49,11 @@ services:
         arguments:
             - '@vimeet_infrastructure.repository.event_repository'
             - '@repository.event.extra_parameter_repository'
+            - '@repository.user.event.extra_data_repository'
             - '@vimeet_infrastructure.repository.user_repository'
             - '@vimeet_infrastructure.repository.sheet_repository'
             - '@planning.formatter.participant_planning_formatter'
             - '@query.api.leni.leni_user_view_query_handler'
+            - '@adapter.serializer_adapter'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Event\ExtraParameter\Api\LeniApi }
