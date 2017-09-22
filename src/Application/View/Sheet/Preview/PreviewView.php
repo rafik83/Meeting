@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Application\View\Sheet\Preview;
 
+use Proximum\Vimeet\Application\Components\Sheet\Template\Tag;
 use Proximum\Vimeet\Application\View\Participant\CardView;
 use Proximum\Vimeet\Domain\Template\AbstractChild;
 
@@ -35,6 +36,9 @@ class PreviewView
 
     /** @var TagView[] */
     public $tagViews;
+
+    /** @var string */
+    public $populatedFromTag;
 
     /**
      * @return bool
@@ -66,6 +70,14 @@ class PreviewView
     public function isStrong()
     {
         return $this->strong !== false;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isPopulatedFromTagSheetOrganization(): bool
+    {
+        return $this->populatedFromTag === Tag::SHEET_ORGANIZATION;
     }
 
     /**

@@ -22,3 +22,58 @@
         <div class="btn btn-primary see-more" data-page="{{ paginatedResult.page }}">{{ 'catalog.seeMore'|trans }}</div>
     </div>
 {% endif %}
+
+<div class="hidden" data-catalog-mobile-menu="catalog-mobile-menu">
+{% if searchForm.type is defined %}
+    {% set totalType = 0 %}
+    {% for type in typeViews %}
+        {% set totalType = totalType + type.count %}
+    {% endfor %}
+    {% set numberOfDifferentType = searchForm.type.children|length %}
+    {% set numberOfTypeSelected = 0 %}
+    {% set typeSelected = null %}
+    {% for child in searchForm.type.children %}
+        {% if child.vars.data %}
+            {% set typeSelected = child %}
+            {% set numberOfTypeSelected = numberOfTypeSelected + 1 %}
+        {% endif %}
+    {% endfor %}
+
+    <div class="catalog-mobile-menu-summary catalog-mobile-menu-container">
+        <a href="#" class="catalog-mobile-menu-button btn btn-primary btn-block" data-catalog-mobile-menu-button-action="catalog-mobile-menu-button-action-type-filter">
+            {% if typeSelected != null and numberOfDifferentType != numberOfTypeSelected %}
+                <span>{{ typeSelected.vars.label|trans({}, typeSelected.vars.translation_domain) }}</span>
+                <span class="button-count">
+                    ({{ typeViews[typeSelected.vars.value].count }})
+                    <i class="glyphicon glyphicon-chevron-down"></i>
+                </span>
+            {% else %}
+                <span>{{ 'catalog.mobile.filters.allParticipants'|trans }}</span>
+                <span class="button-count">
+                    ({{ totalType }})
+                    <i class="glyphicon glyphicon-chevron-down"></i>
+                </span>
+            {% endif %}
+        </a>
+    </div>
+    <div class="catalog-mobile-menu-container catalog-mobile-menu-filters">
+        <div class="catalog-mobile-menu-filters-list">
+            <h3 class="catalog-mobile-title">{{ 'catalog.mobile.filters.title'|trans }}</h3>
+            {{ include('EventBundle:Catalog:Partial/filters_mobile.html.twig', {
+                form: searchForm.type,
+                choices: typeViews,
+                totalType: totalType,
+                numberOfDifferentType: numberOfDifferentType,
+                numberOfTypeSelected: numberOfTypeSelected,
+            }, false) }}
+        </div>
+
+        <div class="catalog-mobile-menu-action">
+            <button type="button" class="catalog-close">
+                <i class="icon-Fermer_4"></i> {{ 'navigation.close'|trans }}
+            </button>
+            <div class="clearfix"></div>
+        </div>
+    </div>
+{% endif %}
+</div>

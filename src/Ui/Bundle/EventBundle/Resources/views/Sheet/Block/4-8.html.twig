@@ -18,7 +18,8 @@
                 'isMeetingRequestClosed': isMeetingRequestClosed|default(false),
                 'isAnsweringMeetingRequestClosed': isAnsweringMeetingRequestClosed|default(false),
                 'isPhoneValidationRequired': isPhoneValidationRequired,
-                'phoneValidationLink': phoneValidationLink
+                'phoneValidationLink': phoneValidationLink,
+                'hideMeetingRequest': hideMeetingRequest|default(false),
             }, false) }}
         {% endfor %}
     </div>
@@ -41,7 +42,8 @@
                 'isMeetingRequestClosed': isMeetingRequestClosed|default(false),
                 'isAnsweringMeetingRequestClosed': isAnsweringMeetingRequestClosed|default(false),
                 'isPhoneValidationRequired': isPhoneValidationRequired,
-                'phoneValidationLink': phoneValidationLink
+                'phoneValidationLink': phoneValidationLink,
+                'hideMeetingRequest': hideMeetingRequest|default(false),
             }, false) }}
         {% endfor %}
     </div>

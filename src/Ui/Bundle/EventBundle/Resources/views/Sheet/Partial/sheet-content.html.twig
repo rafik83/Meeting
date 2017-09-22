@@ -22,7 +22,8 @@
                         'isMeetingRequestClosed': isMeetingRequestClosed|default(false),
                         'isAnsweringMeetingRequestClosed': isAnsweringMeetingRequestClosed|default(false),
                         'isPhoneValidationRequired': isPhoneValidationRequired,
-                        'phoneValidationLink': link
+                        'phoneValidationLink': link,
+                        'hideMeetingRequest': hideMeetingRequest|default(false),
                     }, false) }}
                 {% endif %}
             {% else %}
@@ -68,7 +69,8 @@
                 'isMeetingRequestClosed': isMeetingRequestClosed|default(false),
                 'isAnsweringMeetingRequestClosed': isAnsweringMeetingRequestClosed|default(false),
                 'isPhoneValidationRequired': isPhoneValidationRequired,
-                'phoneValidationLink': link
+                'phoneValidationLink': link,
+                'hideMeetingRequest': hideMeetingRequest|default(false),
             }, false) }}
         {% endfor %}
     </div>

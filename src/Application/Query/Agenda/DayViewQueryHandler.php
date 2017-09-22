@@ -10,7 +10,12 @@
 
 namespace Proximum\Vimeet\Application\Query\Agenda;
 
+use Proximum\Vimeet\Application\Components\Agenda\AgendaCollisionManager;
 use Proximum\Vimeet\Application\View\Agenda\DayView;
+use Proximum\Vimeet\Application\View\Agenda\HappeningView;
+use Proximum\Vimeet\Application\View\Agenda\MassUnavailabilityView;
+use Proximum\Vimeet\Application\View\Agenda\MeetingView;
+use Proximum\Vimeet\Application\View\Agenda\UnavailabilityView;
 
 class DayViewQueryHandler
 {
@@ -29,25 +34,31 @@ class DayViewQueryHandler
     /** @var CancelAttendanceUnavailabilityViewQueryHandler */
     private $cancelAttendanceUnavailabilityViewQueryHandler;
 
+    /** @var AgendaCollisionManager */
+    private $agendaCollisionManager;
+
     /**
      * @param HappeningViewQueryHandler                      $happeningHandler
      * @param UnavailabilityViewQueryHandler                 $unavailabilityHandler
      * @param MassUnavailabilityViewQueryHandler             $massHandler
      * @param MeetingViewQueryHandler                        $meetingHandler
      * @param CancelAttendanceUnavailabilityViewQueryHandler $cancelAttendanceUnavailabilityViewQueryHandler
+     * @param AgendaCollisionManager                         $agendaCollisionManager
      */
     public function __construct(
         HappeningViewQueryHandler $happeningHandler,
         UnavailabilityViewQueryHandler $unavailabilityHandler,
         MassUnavailabilityViewQueryHandler $massHandler,
         MeetingViewQueryHandler $meetingHandler,
-        CancelAttendanceUnavailabilityViewQueryHandler $cancelAttendanceUnavailabilityViewQueryHandler
+        CancelAttendanceUnavailabilityViewQueryHandler $cancelAttendanceUnavailabilityViewQueryHandler,
+        AgendaCollisionManager $agendaCollisionManager
     ) {
         $this->happeningHandler                               = $happeningHandler;
         $this->unavailabilityHandler                          = $unavailabilityHandler;
         $this->massHandler                                    = $massHandler;
         $this->meetingHandler                                 = $meetingHandler;
         $this->cancelAttendanceUnavailabilityViewQueryHandler = $cancelAttendanceUnavailabilityViewQueryHandler;
+        $this->agendaCollisionManager                         = $agendaCollisionManager;
     }
 
     /**
@@ -55,13 +66,13 @@ class DayViewQueryHandler
      *
      * @return DayView
      */
-    public function handle(DayViewQuery $query)
+    public function handle(DayViewQuery $query): DayView
     {
+        $cancelAttendanceView = null;
         $happeningViews       = [];
         $unavailabilities     = [];
         $masses               = [];
         $meetings             = [];
-        $cancelAttendanceView = null;
 
         if ($query->currentSheet->attend()) {
             foreach ($query->happenings as $happening) {
@@ -121,14 +132,21 @@ class DayViewQueryHandler
             );
         }
 
+        $this->agendaCollisionManager->handleCollision(
+            $meetings,
+            $happeningViews,
+            $unavailabilities,
+            $masses
+        );
+
         return new DayView(
             $query->day->getStartTime(),
             $query->day->getEndTime(),
             $query->day->getEvent()->getConfiguration()->getScheduleScale(),
-            $happeningViews,
-            $unavailabilities,
-            $masses,
-            $meetings,
+            $this->agendaCollisionManager->getHappeningViews(),
+            $this->agendaCollisionManager->getUnavailabilityViews(),
+            $this->agendaCollisionManager->getMassViews(),
+            $this->agendaCollisionManager->getMeetingViews(),
             $cancelAttendanceView
         );
     }

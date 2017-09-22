@@ -40,6 +40,7 @@ catalog.meeting_request.request.placed: 'Meeting planned'
 catalog.meeting_request.request.refused: 'Refused request'
 catalog.noResult: 'No result'
 catalog.noVisibleTypes: 'You can''t access to any participant''s type'
+catalog.noVisibleCategories: 'You can''t access to any participant''s category'
 catalog.search.no-filter-to-refine: 'No result'
 catalog.seeMore: 'See more'
 catalog.title: Catalogue

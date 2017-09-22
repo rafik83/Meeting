@@ -2127,6 +2127,12 @@ services:
         class: Proximum\Vimeet\Application\Components\Participant\ParticipantManager
 
     #
+    # Agenda Collision Manager
+    #
+    components:agenda.agenda_collision_manager:
+        class: Proximum\Vimeet\Application\Components\Agenda\AgendaCollisionManager
+
+    #
     # Registration Component
     #
     components.registration.step_manager:
@@ -2479,6 +2485,17 @@ services:
         arguments:
             - '@tagged_info_guesser'
             - '@template.template_data_factory'
+
+    #
+    # Getter
+    #
+    template.sheet.sheet_info_getter:
+        class: Proximum\Vimeet\Domain\Sheet\SheetInfosGetter
+        arguments:
+            - '@catalog.sheet_access_checker'
+            - '@repository.nomenclature_repository'
+            - '@template.template_data_factory'
+            - '@query.participant.card_list_view_query_handler'
 
     #
     # Setter
@@ -3312,6 +3329,7 @@ services:
             - '@query.agenda.mass_unavailability_view_query_handler'
             - '@query.agenda.meeting_view_query_handler'
             - '@query.agenda.cancel_attendance_unavailability_view_query_handler'
+            - '@components:agenda.agenda_collision_manager'
     query.agenda.participant_view_query_handler:
         class: Proximum\Vimeet\Application\Query\Agenda\ParticipantViewQueryHandler
         arguments:
@@ -5173,6 +5191,7 @@ services:
             - '@vimeet_infrastructure.repository.sheet_repository'
             - '@domain.service.sheets_group.group_name_resolver'
             - '@domain.service.sheets_group.type_name_resolver'
+            - '@template.participant_info_guesser'
             - '@planning.formatter.participant_planning_formatter'
             - '@adapter.serializer_adapter'
             - '@vimeet_infrastructure.adapter.translator_adapter'

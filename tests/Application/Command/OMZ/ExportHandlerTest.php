@@ -1,9 +1,9 @@
 <?php
 
 /*
- * This file is part of the vimeet project.
+ * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2017 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -16,14 +16,17 @@ use Proximum\Vimeet\Application\Adapter\TranslatorInterface;
 use Proximum\Vimeet\Application\Command\OMZ\Export;
 use Proximum\Vimeet\Application\Command\OMZ\ExportHandler;
 use Proximum\Vimeet\Application\Components\Planning\Formatter\ParticipantPlanningFormatter;
+use Proximum\Vimeet\Application\Components\Sheet\Template\Tag;
 use Proximum\Vimeet\Application\Serializer\Charset;
 use Proximum\Vimeet\Application\Serializer\Normalizer\OMZ\OmzUserNormalizer;
 use Proximum\Vimeet\Application\View\OMZ\OmzUserListView;
 use Proximum\Vimeet\Application\View\OMZ\OmzUserView;
+use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\UserRepositoryInterface;
 use Proximum\Vimeet\Domain\Service\SheetsGroup\GroupNameResolver;
 use Proximum\Vimeet\Domain\Service\Type\TypeNameResolver;
+use Proximum\Vimeet\Domain\Template\ParticipantInfoGuesser;
 use Proximum\Vimeet\Infrastructure\Adapter\TranslatorAdapter;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
 use Proximum\Vimeet\Tests\Factory\SheetFactory;
@@ -40,6 +43,9 @@ class ExportHandlerTest extends TestCase
         $event  = EventFactory::createEvent();
         $user   = UserFactory::create('normalizer@elao.com');
         $sheet  = SheetFactory::create($event);
+        $participant = $this->prophesize(Participant::class);
+        $participant->getUser()->willReturn($user);
+        $sheet->addParticipant($participant->reveal());
         $locale = 'fr';
 
         // Mock
@@ -50,6 +56,7 @@ class ExportHandlerTest extends TestCase
         $typeNameResolver             = $this->prophesize(TypeNameResolver::class);
         $serializer                   = $this->prophesize(SerializerAdapterInterface::class);
         $participantPlanningFormatter = $this->prophesize(ParticipantPlanningFormatter::class);
+        $participantInfoGuesser       = $this->prophesize(ParticipantInfoGuesser::class);
 
         $expectedPlanning = "normalizer@elao.com";
         $omzUserView = new OmzUserView(
@@ -57,15 +64,15 @@ class ExportHandlerTest extends TestCase
             'group name',
             null,
             'type name',
+            'Woman',
+            'first Name',
+            'last Name',
+            '',
             null,
-            null,
-            null,
-            null,
-            null,
-            null,
+            'phone',
             "normalizer@elao.com",
             null,
-            null,
+            'mobile',
             $expectedPlanning
         );
         $omzUserListView = new OmzUserListView([$omzUserView]);
@@ -78,12 +85,14 @@ class ExportHandlerTest extends TestCase
             $sheetRepository->reveal(),
             $groupNameResolver->reveal(),
             $typeNameResolver->reveal(),
+            $participantInfoGuesser->reveal(),
             $participantPlanningFormatter->reveal(),
             $serializer->reveal(),
             $translator->reveal()
         );
 
         $participantPlanningFormatter->preloadPlanningHandlerForEvent($event)->shouldBeCalled();
+        $translator->trans('gender.woman')->shouldBeCalled()->willReturn('Woman');
 
         $userRepository->findByEvent($event)->shouldBeCalled()->willReturn([$user]);
 
@@ -95,6 +104,19 @@ class ExportHandlerTest extends TestCase
 
         $groupNameResolver->resolve($event, $user, [$sheet])->shouldBeCalled()->willReturn('group name');
         $typeNameResolver->resolveWithPreloadedSheets([$sheet], 'fr')->shouldBeCalled()->willReturn('type name');
+
+        $participantInfoGuesser
+            ->guessParticipantInfos($participant->reveal(), $locale)
+            ->shouldBeCalled()
+            ->willReturn([
+                Tag::PARTICIPANT_GENDER => 'woman',
+                Tag::PARTICIPANT_FIRSTNAME => 'first Name',
+                Tag::PARTICIPANT_LASTNAME => 'last Name',
+                // The participant position is not set on purpose
+                Tag::PARTICIPANT_MOBILE => 'mobile',
+                Tag::PARTICIPANT_PHONE => 'phone',
+            ])
+        ;
 
         $serializer->serialize($omzUserListView, 'csv', ['csv_delimiter' => ';', 'charset' => 'Windows-1252'])
             ->shouldBeCalled()
