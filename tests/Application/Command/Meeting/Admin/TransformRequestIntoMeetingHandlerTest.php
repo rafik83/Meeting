@@ -98,8 +98,7 @@ class TransformRequestIntoMeetingHandlerTest extends TestCase
         $query = new TransformRequestIntoMeeting(
             $meetingRequest->reveal(),
             $slot->reveal(),
-            $isVisio,
-            false
+            $isVisio
         );
 
         $handler = new TransformRequestIntoMeetingHandler(
