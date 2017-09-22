@@ -113,7 +113,6 @@ class SpotRepository implements SpotRepositoryInterface
     /**
      * {@inheritdoc}
      */
-
     public function getAllByEvent(Event $event): array
     {
         $queryBuilder = $this
