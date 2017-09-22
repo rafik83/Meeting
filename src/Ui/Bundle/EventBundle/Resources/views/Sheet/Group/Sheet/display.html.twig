@@ -1,0 +1,12 @@
+{% block content %}
+    {% set userSheet = sheet %}
+    {% set sheet = sheetToDisplay %}
+
+    {{ include('EventBundle:Sheet/Partial:sheet-content.html.twig') }}
+
+    <div class="modal-footer">
+        <button type="button" class="btn btn-gray pull-left" data-dismiss="modal">
+            <i class="icon-Retour"></i>{{ 'multiple_sheets.modal.close'|trans }}
+        </button>
+    </div>
+{% endblock %}

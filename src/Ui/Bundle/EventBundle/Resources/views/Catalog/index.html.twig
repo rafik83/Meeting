@@ -8,8 +8,24 @@
 
 {% form_theme searchForm '@Ui/default.html.twig' %}
 
+{% block header_mobile %}
+    <div class="catalog-mobile-menu">
+    {% if searchForm.type is defined %}
+        <div class="catalog-mobile-menu-summary catalog-mobile-menu-container">
+            <a href="#" class="catalog-mobile-menu-button btn btn-primary btn-block">
+                    <span>...</span>
+                    <span class="button-count">
+                    (...)
+                    <i class="glyphicon glyphicon-chevron-down"></i>
+                </span>
+            </a>
+        </div>
+    {% endif %}
+    </div>
+{% endblock %}
+
 {% block content %}
-    <div class="catalog catalog--advanced">
+    <div class="catalog catalog--advanced {% if searchForm.type is defined %}catalog-mobile-margin{% endif %}">
         {{ include('EventBundle:Tip:tip.html.twig', {tipTranslationViews: tipTranslationViews}) }}
         {{ include('EventBundle:Catalog:Partial/catalog.html.twig', {
             searchForm: searchForm,

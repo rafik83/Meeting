@@ -1,5 +1,7 @@
 Proximum\Vimeet\Application\Command\Happening\Update:
     properties:
+        category:
+            - NotNull: ~
         translations:
             - All:
                 - Collection:

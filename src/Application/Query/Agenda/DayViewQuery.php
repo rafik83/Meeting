@@ -21,34 +21,22 @@ use Proximum\Vimeet\Domain\Model\Unavailability\Mass;
 
 class DayViewQuery
 {
-    /**
-     * @var Day
-     */
+    /** @var Day */
     public $day;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     public $locale;
 
-    /**
-     * @var HappeningParticipation[]
-     */
+    /** @var HappeningParticipation[] */
     public $happenings;
 
-    /**
-     * @var Participant
-     */
+    /** @var Participant */
     public $participant;
 
-    /**
-     * @var Unavailability[]
-     */
+    /** @var Unavailability[] */
     public $unavailabilities;
 
-    /**
-     * @var Mass[]
-     */
+    /** @var Mass[] */
     public $masses;
 
     /** @var Meeting[] */

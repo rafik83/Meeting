@@ -81,7 +81,9 @@ class Preview
 
                     // Create card view for each participant limited by the number of participant shown
                     for ($index = 0; $index < $numberParticipants && isset($participants[$index]); $index++) {
-                        $cardView = $this->cardViewQueryHandler->handle(new CardViewQuery($participants[$index], $locale));
+                        $cardView = $this->cardViewQueryHandler->handle(
+                            new CardViewQuery($participants[$index], $locale)
+                        );
 
                         if (null !== $composedRule && null !== $composedRule->rule) {
                             $this->applyer->applyRuleForParticipantCard($cardView, $rules);
@@ -98,6 +100,7 @@ class Preview
                         $previewView->strong = true;
                     }
 
+
                     if ($object->getContentValue() === '' && $object->getTag() !== null) {
                         // In EditableText there is only one tag therefore it is not useful to add a comma
                         foreach ($object->getTaggedDataViews() as $taggedDataView) {
@@ -106,6 +109,8 @@ class Preview
                     } else {
                         $previewView->content = $object->getContentValue();
                     }
+
+                    $previewView->populatedFromTag = $object->getTag();
                 } elseif ($object instanceof TemplateObject\Tag) {
                     foreach ($object->getTaggedDataViews() as $taggedDataView) {
                         $previewView->addTagView(
@@ -113,10 +118,28 @@ class Preview
                         );
                     }
                 }
-
                 $previewObjects[] = $previewView;
             } catch (ObjectNotFoundException $exception) {
                 continue;
+            }
+        }
+
+        $hasEmptyImage = false;
+
+        foreach ($previewObjects as $previewObject) {
+            if ($previewObject->isImage() && $previewObject->content === '') {
+                $hasEmptyImage = true;
+                break;
+            }
+        }
+
+        if ($hasEmptyImage) {
+            foreach ($previewObjects as $previewObjectKey => $previewObjectValue) {
+                if ($previewObjectValue->isPopulatedFromTagSheetOrganization()
+                    && $previewObjectValue->content === $sheet->getTitle()
+                ) {
+                    unset($previewObjects[$previewObjectKey]);
+                }
             }
         }
 

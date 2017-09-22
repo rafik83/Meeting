@@ -300,6 +300,7 @@ services:
         arguments:
             - '@router.default'
             - '@vimeet_infrastructure.repository.event_repository'
+            - '%admin_domain%'
     vimeet_app.domain_event_listener:
         parent: event_listener.abstract_redirect_to_event_listener
         class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\EventListener\DomainEventListener
@@ -379,10 +380,12 @@ services:
     event_listener_security.catalog_access_event_listener:
         class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\EventListener\Security\CatalogAccessEventListener
         arguments:
+            - '@vimeet_infrastructure.repository.sheet_repository'
             - '@domain.key_dates.checker.catalog_access_checker'
             - '@vimeet_infrastructure.repository.event_repository'
             - '@security.token_storage'
             - '@router.default'
+            - '%admin_domain%'
         tags:
             - { name: kernel.event_listener, event: kernel.request, method: accessChecker }
 

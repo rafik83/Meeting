@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2015 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -18,6 +18,7 @@ use Proximum\Vimeet\Application\Query\Catalog\KeywordViewQuery;
 use Proximum\Vimeet\Application\Query\Catalog\LocalizationViewQuery;
 use Proximum\Vimeet\Application\Query\Catalog\OrganizationCategoryViewQuery;
 use Proximum\Vimeet\Application\Query\Catalog\PositionViewQuery;
+use Proximum\Vimeet\Application\Query\Catalog\SearchFacet\SearchFacetViewQuery;
 use Proximum\Vimeet\Application\Query\Catalog\TypeViewQuery;
 use Proximum\Vimeet\Application\Query\Participant\CardListViewQuery;
 use Proximum\Vimeet\Application\Query\Sheet\PaginatedCatalogSheetPreviewViewQuery;
@@ -27,6 +28,7 @@ use Proximum\Vimeet\Application\View\Catalog\FilteredFieldsView;
 use Proximum\Vimeet\Application\View\Catalog\PositionView;
 use Proximum\Vimeet\Domain\Catalog\Catalog;
 use Proximum\Vimeet\Domain\Catalog\SearchFields;
+use Proximum\Vimeet\Domain\Exception\Sheet\AccessDeniedException;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\PaginatedResult;
 use Proximum\Vimeet\Domain\Model\Sheet;
@@ -96,25 +98,42 @@ class CatalogController extends Controller
             throw $this->createAccessDeniedException('Sheet not in catalog');
         }
 
-        $visibleTypes = $this->get('catalog.visible_participation_types')->getAllowedTypesList($sheet);
-        $visibleCategories = $this
-            ->get('catalog.visible_participation_categories')
-            ->getAllowedCategoriesList($sheet);
+        $searchFacetsView = $this->get('query.catalog.search_facet_view_query_handler')->handle(
+            new SearchFacetViewQuery($event, $locale)
+        );
 
-        if (empty($visibleTypes)) {
-            return $this->render(
-                'EventBundle:Catalog:no-visible-type.html.twig',
-                ['event' => $event, 'sheet' => $sheet]
+        $categoryViews = [];
+        $typeViews = [];
+
+        if ($searchFacetsView->hasCategory()) {
+            $visibleCategories = $this
+                ->get('catalog.visible_participation_categories')
+                ->getAllowedCategoriesList($sheet);
+
+            if (empty($visibleCategories)) {
+                return $this->render(
+                    'EventBundle:Catalog:no-visible-category.html.twig',
+                    ['event' => $event, 'sheet' => $sheet]
+                );
+            }
+
+            $categoryViews = $this->get('tactician.commandbus.query')->handle(
+                new CategoryViewQuery($event, $visibleCategories, $locale)
+            );
+        } else {
+            $visibleTypes = $this->get('catalog.visible_participation_types')->getAllowedTypesList($sheet);
+
+            if (empty($visibleTypes)) {
+                return $this->render(
+                    'EventBundle:Catalog:no-visible-type.html.twig',
+                    ['event' => $event, 'sheet' => $sheet]
+                );
+            }
+
+            $typeViews = $this->get('tactician.commandbus.query')->handle(
+                new TypeViewQuery($event, $visibleTypes, $locale)
             );
         }
-
-        $typeViews = $this->get('tactician.commandbus.query')->handle(
-            new TypeViewQuery($event, $visibleTypes, $locale)
-        );
-
-        $categoryViews = $this->get('tactician.commandbus.query')->handle(
-            new CategoryViewQuery($event, $visibleCategories, $locale)
-        );
 
         $organizationCategoryViews = $this->get('tactician.commandbus.query')->handle(
             new OrganizationCategoryViewQuery($event, $locale)
@@ -144,6 +163,7 @@ class CatalogController extends Controller
             if (empty($filters[SearchFields::FILTER_TYPE])) {
                 $filters[SearchFields::FILTER_TYPE] = $typeViews;
             }
+
             if (empty($filters[SearchFields::FILTER_CATEGORY])) {
                 $filters[SearchFields::FILTER_CATEGORY] = $categoryViews;
             }
@@ -247,10 +267,16 @@ class CatalogController extends Controller
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
         $this->denyAccessUnlessGranted(SheetVoter::EDIT, $sheet);
 
+        $query = $request->get('query');
+
+        if (null === $query) {
+            return new JsonResponse([]);
+        }
+
         $localizationView = $this->get('tactician.commandbus.query')->handle(
             new LocalizationViewQuery(
                 $eventDomain->getEvent(),
-                $request->get('query'),
+                $query,
                 Catalog::DEFAULT_FILTERS,
                 $request->getLocale()
             )
@@ -346,13 +372,19 @@ class CatalogController extends Controller
             throw $this->createNotFoundException('You do not have the right to see this sheet');
         }
 
-        list ($nomenclatures, $participants, $taggedData) = $this->sheetInfos(
-            $eventDomain->getEvent(),
-            $sheet,
-            $sheetToDisplay,
-            $user,
-            $locale
-        );
+        try {
+            list ($nomenclatures, $participants, $taggedData) = $this
+                ->get('template.sheet.sheet_info_getter')
+                ->sheetInfos(
+                    $eventDomain->getEvent(),
+                    $sheet,
+                    $sheetToDisplay,
+                    $user,
+                    $locale
+                );
+        } catch (AccessDeniedException $exception) {
+            throw $this->createAccessDeniedException();
+        }
 
         // Build sheet template data and attach tagged data view to template object with tags
         $templateData = $this->get('template.tagged_data_factory')
@@ -427,34 +459,6 @@ class CatalogController extends Controller
             'isRequestMeetingEnabled'         => $sheet !== $sheetToDisplay,
             'isCatalog'                       => true,
         ]);
-    }
-
-    /**
-     * @param Event  $event
-     * @param Sheet  $sheet
-     * @param Sheet  $sheetToDisplay
-     * @param User   $user
-     * @param string $locale
-     *
-     * @return array
-     */
-    private function sheetInfos(Event $event, Sheet $sheet, Sheet $sheetToDisplay, User $user, $locale)
-    {
-        if (!$this->get('catalog.sheet_access_checker')->checkAccess($sheet, $sheetToDisplay)) {
-            throw $this->createAccessDeniedException();
-        }
-
-        $nomenclatures     = $this->get('repository.nomenclature_repository')->findByEvent($event);
-        $cardListViewQuery = new CardListViewQuery($sheetToDisplay, $user, $locale);
-        $participants      = $this->get('tactician.commandbus.query')->handle($cardListViewQuery);
-
-        $registrationTemplateData = $this
-            ->get('template.template_data_factory')
-            ->createRegistrationFromSheet($sheetToDisplay, $locale);
-
-        $taggedData = $registrationTemplateData->getAllTaggedDatas();
-
-        return [$nomenclatures, $participants, $taggedData];
     }
 
     /**

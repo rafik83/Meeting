@@ -174,12 +174,12 @@ class SheetSearchQueryBuilder
             $this->filterByHasRemainingToPay($filters['hasRemainingToPay']);
         }
 
-        if (isset($filters['hasNoMeetingRequest']) && true === $filters['hasNoMeetingRequest']) {
-            $this->filterByNoMeetingRequest();
+        if (isset($filters['hasNoMeetingRequest']) && is_bool($filters['hasNoMeetingRequest'])) {
+            $this->filterByNoMeetingRequest($filters['hasNoMeetingRequest']);
         }
 
-        if (isset($filters['hasPendingMeetingPropositions']) && true === $filters['hasPendingMeetingPropositions']) {
-            $this->filterByHasPendingMeetingProposition();
+        if (isset($filters['hasPendingMeetingPropositions']) && is_bool($filters['hasPendingMeetingPropositions'])) {
+            $this->filterByHasPendingMeetingProposition($filters['hasPendingMeetingPropositions']);
         }
 
         if (isset($filters['agendaConfirmedStatus'])
@@ -378,9 +378,13 @@ class SheetSearchQueryBuilder
 
                 if ($type instanceof TypeInterface) {
                     $typeId = $type->getId();
+                } elseif (is_int($type) || is_string($type)) {
+                    $typeId = (int) $type;
                 }
 
-                $filterByTypes->addShould((new Term())->setTerm('type', $typeId));
+                if ($typeId !== null) {
+                    $filterByTypes->addShould((new Term())->setTerm('type', $typeId));
+                }
             }
 
             $this->query->addMust($filterByTypes);
@@ -401,9 +405,17 @@ class SheetSearchQueryBuilder
 
         $matchId = new BoolQuery();
         foreach ($filters['categories'] as $category) {
-            $matchId->addShould(
-                (new Term)->setTerm('categories.id', $category->getId())
-            );
+            $id = null;
+
+            if ($category instanceof Category || $category instanceof CategoryView) {
+                $id = $category->getId();
+            } elseif (is_int($category) || is_string($category)) {
+                $id = (int) $category;
+            }
+
+            if ($category !== null) {
+                $matchId->addShould((new Term)->setTerm('categories.id', $id));
+            }
         }
 
         $nested->setQuery($matchId);
@@ -825,14 +837,14 @@ class SheetSearchQueryBuilder
         $this->query->addMust($positiveRange);
     }
 
-    private function filterByNoMeetingRequest()
+    private function filterByNoMeetingRequest(bool $hasNoMeetingRequest)
     {
-        $this->query->addMust((new Term())->setTerm('hasMeetingRequest', false));
+        $this->query->addMust((new Term())->setTerm('hasMeetingRequest', !$hasNoMeetingRequest));
     }
 
-    private function filterByHasPendingMeetingProposition()
+    private function filterByHasPendingMeetingProposition(bool $hasPendingMeetingProposition)
     {
-        $this->query->addMust((new Term())->setTerm('hasPendingMeetingProposition', true));
+        $this->query->addMust((new Term())->setTerm('hasPendingMeetingProposition', $hasPendingMeetingProposition));
     }
 
     /**

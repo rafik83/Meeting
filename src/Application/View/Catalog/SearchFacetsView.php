@@ -30,59 +30,80 @@ class SearchFacetsView
     }
 
     /**
-     * @return SearchFacetView|false
+     * @return bool
      */
-    public function hasType()
+    public function hasType(): bool
     {
-        return $this->hasFilter(SearchFacet::TYPE_TYPE);
+        // if Category is activated, Type cannot be activated
+        return $this->hasFilter(SearchFacet::TYPE_TYPE) && !$this->hasFilter(SearchFacet::TYPE_CATEGORY);
+    }
+
+    /**
+     * @return bool
+     */
+    public function hasCategory(): bool
+    {
+        return null !== $this->getCategory();
+    }
+
+    /**
+     * @return SearchFacetView|null
+     */
+    public function getType(): ?SearchFacetView
+    {
+        if (!$this->hasType()) {
+            return null;
+        }
+
+        return $this->getFilter(SearchFacet::TYPE_TYPE);
     }
 
     /**
      * @return SearchFacetView|false
      */
-    public function hasPosition()
+    public function getPosition(): ?SearchFacetView
     {
-        return $this->hasFilter(SearchFacet::TYPE_POSITION);
+        return $this->getFilter(SearchFacet::TYPE_POSITION);
     }
 
     /**
-     * @return SearchFacetView|false
+     * @return SearchFacetView|null
      */
-    public function hasCategory()
+    public function getCategory(): ?SearchFacetView
     {
-        return $this->hasFilter(SearchFacet::TYPE_CATEGORY);
+        return $this->getFilter(SearchFacet::TYPE_CATEGORY);
     }
 
     /**
-     * @return SearchFacetView|false
+     * @return SearchFacetView|null
      */
-    public function hasKeywords()
+    public function getKeywords(): ?SearchFacetView
     {
-        return $this->hasFilter(SearchFacet::TYPE_KEYWORDS);
+        return $this->getFilter(SearchFacet::TYPE_KEYWORDS);
     }
 
     /**
-     * @return SearchFacetView|false
+     * @return SearchFacetView|null
      */
-    public function hasLocalization()
+    public function getLocalization(): ?SearchFacetView
     {
-        return $this->hasFilter(SearchFacet::TYPE_LOCALIZATION);
+        return $this->getFilter(SearchFacet::TYPE_LOCALIZATION);
     }
 
     /**
-     * @return SearchFacetView|false
+     * @return SearchFacetView|null
      */
-    public function hasOrganizationCategory()
+    public function getOrganizationCategory(): ?SearchFacetView
     {
-        return $this->hasFilter(SearchFacet::TYPE_ORGANIZATION_CATEGORY);
+        return $this->getFilter(SearchFacet::TYPE_ORGANIZATION_CATEGORY);
     }
 
     /**
      * @param string $filter
      *
-     * @return SearchFacetView|false
+     * @return SearchFacetView|null
      */
-    private function hasFilter($filter)
+    private function getFilter($filter): ?SearchFacetView
     {
         foreach ($this->searchFacets as $facetView) {
             if ($facetView->getType() === $filter && $facetView->isEnabled()) {
@@ -90,6 +111,16 @@ class SearchFacetsView
             }
         }
 
-        return false;
+        return null;
+    }
+
+    /**
+     * @param string $filter
+     *
+     * @return bool
+     */
+    private function hasFilter($filter): bool
+    {
+        return null !== $this->getFilter($filter);
     }
 }
