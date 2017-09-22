@@ -14,6 +14,7 @@ use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\QueryBuilder;
 use Proximum\Vimeet\Application\Components\Paginator\Paginator;
 use Proximum\Vimeet\Domain\Model\Event;
+use Proximum\Vimeet\Domain\Model\Meeting\Request;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Unavailability\Mass;
 use Proximum\Vimeet\Domain\Model\Unavailability\MassAssignment;
@@ -277,6 +278,42 @@ class UserRepository implements UserRepositoryInterface
             ->join(Participant::class, 'participant', 'WITH', 'participant.user = user AND participant.sheet IN (:sheets)')
             ->addOrderBy('user.account.lastName', 'ASC')
             ->setParameter('sheets', $sheets)
+        ;
+
+        return $queryBuilder->getQuery()->getResult();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getUsersByEventWithValidatedPhoneNumberAndPendingRequest(Event $event): array
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('user, participant')
+            ->from(User::class, 'user')
+            ->join(Participant::class, 'participant', 'WITH', 'participant.user = user')
+            ->join(
+                'participant.sheet',
+                'sheet',
+                'WITH',
+                'sheet.event = :event AND sheet.enable = true AND sheet.inCatalog = true'
+            )
+            ->join(
+                User\UserEventPhone::class,
+                'user_event_phone',
+                'WITH',
+                'user_event_phone.user = user AND user_event_phone.validated = true'
+            )
+            ->where('EXISTS(
+                SELECT request 
+                FROM request 
+                LEFT JOIN request.from sheetFrom WHERE sheetFrom.attend = true
+                WHERE request.to = sheet AND request.state = :pending AND request.disabled = false
+            )')
+            ->setParameter('event', $event)
+            ->setParameter('pending', Request::STATE_SENT)
         ;
 
         return $queryBuilder->getQuery()->getResult();
