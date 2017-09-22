@@ -25,6 +25,7 @@ use Proximum\Vimeet\Domain\Model\Template\SheetTemplate;
 use Proximum\Vimeet\Domain\Model\Type;
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
+use Proximum\Vimeet\Domain\View\Spot\Import\SheetView as ImportSheetView;
 
 class SheetRepository implements SheetRepositoryInterface
 {
@@ -174,6 +175,24 @@ class SheetRepository implements SheetRepositoryInterface
             ->setParameter('user', $user);
 
         return $queryBuilder->getQuery()->getResult();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getSheetViewByEventAndId(Event $event, int $sheetId):? ImportSheetView
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('NEW Proximum\Vimeet\Domain\View\Spot\Import\SheetView(sheet.id, sheet.title)')
+            ->from('Entity:Sheet', 'sheet', 'sheet.id')
+            ->where('sheet.event = :event AND sheet.id = :sheetId')
+            ->setParameter('event', $event)
+            ->setParameter('sheetId', $sheetId)
+            ->setMaxResults(1);
+
+        return $queryBuilder->getQuery()->getOneOrNullResult();
     }
 
     /**

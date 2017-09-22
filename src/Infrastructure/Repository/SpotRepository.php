@@ -113,6 +113,22 @@ class SpotRepository implements SpotRepositoryInterface
     /**
      * {@inheritdoc}
      */
+    public function getAllByEvent(Event $event): array
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('spot')
+            ->from(Spot::class, 'spot')
+            ->where('spot.event = :event')
+            ->setParameter('event', $event);
+
+        return $queryBuilder->getQuery()->getResult();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function hasActiveSpot(Event $event): bool
     {
         $queryBuilder = $this

@@ -21,6 +21,7 @@ use Proximum\Vimeet\Domain\Model\Template\SheetTemplate;
 use Proximum\Vimeet\Domain\Model\Type;
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\View\SheetView;
+use Proximum\Vimeet\Domain\View\Spot\Import\SheetView as ImportSheetView;
 
 interface SheetRepositoryInterface
 {
@@ -115,6 +116,14 @@ interface SheetRepositoryInterface
      * @return SheetView[]
      */
     public function getSheetViewsByUserAndEvent($user, $event, $locale);
+
+    /**
+     * @param Event $event
+     * @param int   $sheetId
+     *
+     * @return null|ImportSheetView
+     */
+    public function getSheetViewByEventAndId(Event $event, int $sheetId):? ImportSheetView;
 
     /**
      * Get only enabled sheet by user or user's participant

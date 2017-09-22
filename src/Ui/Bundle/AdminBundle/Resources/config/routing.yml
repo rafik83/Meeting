@@ -583,6 +583,21 @@ admin_spot_update_un_visio:
     methods: [GET, POST]
     defaults: { _controller: AdminBundle:Spot:unVisio }
 
+admin_spot_import:
+    path: /event/{event}/spot/import
+    requirements:
+        event: \d+
+    methods: [GET, POST]
+    defaults: { _controller: AdminBundle:Spot\Import:import }
+
+admin_spot_import_confirm:
+    path: /event/{event}/spot/{importedFile}/confirm
+    requirements:
+        event: \d+
+        importedFile: \d+
+    methods: [GET, POST]
+    defaults: { _controller: AdminBundle:Spot\Import:confirm }
+
 #
 # Meeting Request
 #
