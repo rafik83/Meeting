@@ -40,6 +40,11 @@ security:
             http_basic:
                 provider: phantomjs_provider
 
+        planner:
+            pattern: '^/planner/callback'
+            host: '%admin_domain%'
+            security: false
+
         admin:
             anonymous: ~
             host: '%admin_domain%'

@@ -44,11 +44,11 @@ class ImportPlannerCommand extends Command
     /**
      * ImportPlannerCommand constructor.
      *
-     * @param ImportHandler            $importPlannerHandler
-     * @param MailerInterface          $mailer
-     * @param EventRepositoryInterface $eventRepository
-     * @param FileRepositoryInterface  $fileRepository
-     * @param string                   $mailSender
+     * @param ImportHandler                 $importPlannerHandler
+     * @param MailerInterface               $mailer
+     * @param EventRepositoryInterface      $eventRepository
+     * @param FileRepositoryInterface       $fileRepository
+     * @param string                        $mailSender
      */
     public function __construct(
         ImportHandler $importPlannerHandler,
@@ -78,6 +78,7 @@ class ImportPlannerCommand extends Command
             ->addArgument('event', InputArgument::REQUIRED, 'Event id')
             ->addArgument('admin_email', InputArgument::REQUIRED, 'Admin email to notify')
             ->addArgument('locale', InputArgument::REQUIRED, 'Locale')
+            ->addArgument('plannerJobId', InputArgument::OPTIONAL, 'plannerJob id')
         ;
     }
 
@@ -98,14 +99,20 @@ class ImportPlannerCommand extends Command
 
         if ($event === null || $file === null) {
             $object = ($event === null) ? 'event' : 'file';
-            $this->notifyAdminAboutError(sprintf('%s %s not found',$object, $arguments[$object]), $errorMailOptions);
+            $this->notifyAdminAboutError(sprintf('%s %s not found', $object, $arguments[$object]), $errorMailOptions);
 
             return;
         }
 
         try {
             $this->importPlannerHandler->handle(
-                new Import($file, $event, $arguments['admin_email'], $arguments['locale'])
+                new Import(
+                    $file,
+                    $event,
+                    $arguments['admin_email'],
+                    $arguments['locale'],
+                    (int) $arguments['plannerJobId']
+                )
             );
         } catch (InvalidXmlException $exception) {
             $this->notifyAdminAboutError($exception->getMessage(), $errorMailOptions);

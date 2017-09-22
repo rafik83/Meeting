@@ -15,6 +15,9 @@ use Proximum\Vimeet\Domain\Model\Event;
 
 class ExportJobCreator
 {
+    const MODE_AUTO = 'auto';
+    const MODE_MANUAL = 'manual';
+
     /** @var Event */
     public $event;
 
@@ -30,17 +33,34 @@ class ExportJobCreator
     /** @var string one of SolutionType constants */
     public $solutionType;
 
+    /** @var string */
+    public $mode;
+
     /**
-     * ExportJobCreator constructor.
-     *
      * @param Event  $event
      * @param Admin  $admin
      * @param string $locale
+     * @param string $mode
+     *
+     * @throws \InvalidArgumentException
      */
-    public function __construct(Event $event, Admin $admin, $locale)
+    public function __construct(Event $event, Admin $admin, string $locale, string $mode)
     {
+        if (!in_array($mode, [self::MODE_AUTO, self::MODE_MANUAL], true)) {
+            throw new \InvalidArgumentException('The mode must be manual or auto');
+        }
+
         $this->event  = $event;
         $this->admin  = $admin;
         $this->locale = $locale;
+        $this->mode   = $mode;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isModeAuto(): bool
+    {
+        return self::MODE_AUTO === $this->mode;
     }
 }

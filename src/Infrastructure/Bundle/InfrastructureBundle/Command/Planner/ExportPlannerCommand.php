@@ -20,8 +20,12 @@ use Symfony\Component\Console\Output\OutputInterface;
 class ExportPlannerCommand extends Command
 {
     const NAME                      = 'vimeet:planner:export';
-    const LOCK_MEETING_REQUEST      = 'lock';
-    const DONT_LOCK_MEETING_REQUEST = 'not_lock';
+
+    const LOCK_MEETING_REQUEST      = 'lock-requests';
+    const DONT_LOCK_MEETING_REQUEST = 'not-lock-requests';
+
+    const MODE_AUTO   = 'auto';
+    const MODE_MANUAL = 'manual';
 
     /** @var ExportHandler */
     private $exportPlannerHandler;
@@ -46,16 +50,18 @@ class ExportPlannerCommand extends Command
         $this
             ->setName(self::NAME)
             ->setDescription('Generate xml file for planner export')
-            ->addArgument('event', InputArgument::REQUIRED, 'Event id')
+            ->addArgument('eventId', InputArgument::REQUIRED, 'Event id')
             ->addArgument('admin_email', InputArgument::REQUIRED, 'Admin email to notify')
             ->addArgument('locale', InputArgument::REQUIRED, 'Locale for the email')
             ->addArgument('solutionType', InputArgument::REQUIRED, 'Solution type to prepare for algorithm')
             ->addArgument(
                 'lockMeetingRequest',
-                InputArgument::OPTIONAL,
-                'Should meeting request be locked after export',
-                self::DONT_LOCK_MEETING_REQUEST
-            );
+                InputArgument::REQUIRED,
+                'Should meeting request be locked after export'
+            )
+            ->addArgument('mode', InputArgument::REQUIRED, 'Mode: auto or manual')
+            ->addArgument('plannerJob', InputArgument::OPTIONAL, 'plannerJob id')
+        ;
     }
 
     /**
@@ -63,14 +69,30 @@ class ExportPlannerCommand extends Command
      */
     public function execute(InputInterface $input, OutputInterface $output)
     {
-        $this->exportPlannerHandler->handle(
+        $mode = $input->getArgument('mode');
+
+        if (!in_array($mode, [self::MODE_AUTO, self::MODE_MANUAL], true)) {
+            throw new \InvalidArgumentException('Mode must be auto or manual');
+        }
+
+        $plannerJob = $input->getArgument('plannerJob');
+
+        if ('' === $plannerJob) {
+            $plannerJob = null;
+        }
+
+        $result = $this->exportPlannerHandler->handle(
             new Export(
-                $input->getArgument('event'),
+                $input->getArgument('eventId'),
                 $input->getArgument('locale'),
                 $input->getArgument('admin_email'),
-                $input->getArgument('lockMeetingRequest'),
-                $input->getArgument('solutionType')
+                $input->getArgument('lockMeetingRequest') === self::LOCK_MEETING_REQUEST,
+                $input->getArgument('solutionType'),
+                $mode === self::MODE_AUTO,
+                $plannerJob
             )
         );
+
+        $output->writeln($result);
     }
 }

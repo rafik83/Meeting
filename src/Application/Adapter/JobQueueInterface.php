@@ -14,6 +14,7 @@ use Proximum\Vimeet\Domain\Model\Admin;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\File;
 use Proximum\Vimeet\Domain\Model\Messaging\Campaign;
+use Proximum\Vimeet\Domain\Model\PlannerJob;
 use Proximum\Vimeet\Domain\Model\Template\RegistrationTemplate;
 use Proximum\Vimeet\Domain\Model\Template\SheetTemplate;
 use Proximum\Vimeet\Domain\Model\Type;
@@ -57,21 +58,38 @@ interface JobQueueInterface
     public function exportOrdersForEvent(Event $event, Admin $admin, $locale);
 
     /**
-     * @param Event  $event
-     * @param Admin  $admin
-     * @param string $locale
-     * @param string $lockMeetingRequest
-     * @param string $solutionType
+     * @param Event           $event
+     * @param Admin           $admin
+     * @param string          $locale
+     * @param bool            $lockMeetingRequest
+     * @param string          $solutionType
+     * @param bool            $isModeAuto
+     * @param null|PlannerJob $plannerJob
      */
-    public function exportPlannerForEvent(Event $event, Admin $admin, $locale, $lockMeetingRequest, $solutionType);
+    public function exportPlannerForEvent(
+        Event $event,
+        Admin $admin,
+        string $locale,
+        bool $lockMeetingRequest,
+        string $solutionType,
+        bool $isModeAuto,
+        ?PlannerJob $plannerJob
+    );
 
     /**
-     * @param File   $file
-     * @param Event  $event
-     * @param Admin  $admin
-     * @param string $locale
+     * @param File            $file
+     * @param Event           $event
+     * @param Admin           $admin
+     * @param string          $locale
+     * @param null|PlannerJob $plannerJob
      */
-    public function importPlannerForEvent(File $file, Event $event, Admin $admin, $locale);
+    public function importPlannerForEvent(
+        File $file,
+        Event $event,
+        Admin $admin,
+        $locale,
+        ?PlannerJob $plannerJob = null
+    );
 
     /**
      * @param SheetTemplate $sheetTemplate
