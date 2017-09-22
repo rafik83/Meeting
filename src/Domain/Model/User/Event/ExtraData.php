@@ -40,10 +40,10 @@ class ExtraData
      * @param User               $user
      * @param Event              $event
      * @param string             $name
-     * @param                    $value
+     * @param string|null        $value
      * @param \DateTimeInterface $createdAt
      */
-    public function __construct(User $user, Event $event, string $name, $value, \DateTimeInterface $createdAt)
+    public function __construct(User $user, Event $event, string $name, string $value = null, \DateTimeInterface $createdAt)
     {
         $this->user = $user;
         $this->event = $event;
@@ -107,5 +107,15 @@ class ExtraData
     public function getUpdatedAt(): \DateTimeInterface
     {
         return $this->updatedAt;
+    }
+
+    /**
+     * @param string|null        $value
+     * @param \DateTimeInterface $updatedAt
+     */
+    public function update(string $value = null, \DateTimeInterface $updatedAt)
+    {
+        $this->value = $value;
+        $this->updatedAt = $updatedAt;
     }
 }
