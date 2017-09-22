@@ -45,14 +45,13 @@ class ReminderHandler
     {
         $currentEvents = $this->eventRepository->findByDay($command->dateTime);
 
-        if (null === $currentEvents) {
+        if (empty($currentEvents)) {
             throw new NoEventOnCurrentDayException('There is no event today');
         }
 
         $usersWithValidatedPhoneAndPendingRequest = $this
             ->userRepository
-            ->getUsersByEventsWithValidatedPhoneNumberAndPendingRequest($currentEvents);
-
-        dump($usersWithValidatedPhoneAndPendingRequest);
+            ->getUsersByEventsWithValidatedPhoneNumberAndPendingRequest($currentEvents)
+        ;
     }
 }

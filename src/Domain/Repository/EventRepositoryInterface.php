@@ -85,7 +85,7 @@ interface EventRepositoryInterface
     /**
      * @param \DateTimeInterface $dateTime
      *
-     * @return Event[]
+     * @return null|Event[]
      */
     public function findByDay(\DateTimeInterface $dateTime);
 }
