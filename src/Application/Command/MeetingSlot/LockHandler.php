@@ -10,6 +10,9 @@
 
 namespace Proximum\Vimeet\Application\Command\MeetingSlot;
 
+use Proximum\Vimeet\Application\Adapter\DelayedEventDispatcherInterface;
+use Proximum\Vimeet\Application\Event\Events;
+use Proximum\Vimeet\Application\Event\Slot\ToggleLockedEvent;
 use Proximum\Vimeet\Application\Exception\Slot\IsNotAllowedToLockSlotException;
 use Proximum\Vimeet\Domain\Repository\MeetingSlotRepositoryInterface;
 
@@ -18,16 +21,23 @@ class LockHandler
     /**
      * @var MeetingSlotRepositoryInterface
      */
-    public $meetingSlotRepository;
+    private $meetingSlotRepository;
+
+    /** @var DelayedEventDispatcherInterface */
+    private $delayedEventDispatcher;
 
     /**
      * LockHandler constructor.
      *
-     * @param MeetingSlotRepositoryInterface $meetingSlotRepository
+     * @param MeetingSlotRepositoryInterface  $meetingSlotRepository
+     * @param DelayedEventDispatcherInterface $delayedEventDispatcher
      */
-    public function __construct(MeetingSlotRepositoryInterface $meetingSlotRepository)
-    {
+    public function __construct(
+        MeetingSlotRepositoryInterface $meetingSlotRepository,
+        DelayedEventDispatcherInterface $delayedEventDispatcher
+    ) {
         $this->meetingSlotRepository = $meetingSlotRepository;
+        $this->delayedEventDispatcher = $delayedEventDispatcher;
     }
 
     /**
@@ -46,5 +56,10 @@ class LockHandler
         }
 
         $this->meetingSlotRepository->set($command->meetingSlot->lock());
+
+        $this->delayedEventDispatcher->dispatch(
+            Events::SLOT_TOGGLE_LOCKED,
+            new ToggleLockedEvent($command->meetingSlot->getEvent())
+        );
     }
 }

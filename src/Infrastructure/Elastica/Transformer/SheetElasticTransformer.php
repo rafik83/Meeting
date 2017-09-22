@@ -200,9 +200,10 @@ class SheetElasticTransformer implements ModelToElasticaTransformerInterface
                 'hasPendingMeetingProposition' => $this->meetingRequestRepository->hasPendingPropositionReceivedBySheet($sheet),
                 'hasScheduledMeeting'          => $this->meetingRepository->hasScheduledMeeting($sheet),
                 'hasInvoice'                   => $this->invoiceRepository->hasInvoice($sheet),
-                'attend'   => $sheet->attend(),
-                'hasGroup' => $sheet->hasGroup(),
-                'hasSpot'  => $sheet->getSpot() !== null,
+                'attend'                       => $sheet->attend(),
+                'hasGroup'                     => $sheet->hasGroup(),
+                'hasSpot'                      => $sheet->getSpot() !== null,
+                'availableSlotIds'             => $this->buildAvailableSlots($sheet),
             ],
             $contentByLocale
         ));
@@ -414,5 +415,19 @@ class SheetElasticTransformer implements ModelToElasticaTransformerInterface
         }
 
         return $nomenclatureItems;
+    }
+
+    /**
+     * @param Sheet $sheet
+     *
+     * @return array
+     */
+    private function buildAvailableSlots(Sheet $sheet)
+    {
+        $ids = array_map(function ($id) {
+            return ['id' => $id];
+        }, $sheet->getAvailableSlots());
+
+        return $ids;
     }
 }

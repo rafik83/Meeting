@@ -17,6 +17,7 @@ use Proximum\Vimeet\Application\Command\Participant\AddHandler;
 use Proximum\Vimeet\Application\Command\Participant\AddResult;
 use Proximum\Vimeet\Application\Components\Token\User\ActivateAccountTokenGenerator;
 use Proximum\Vimeet\Application\Event\Events;
+use Proximum\Vimeet\Application\Event\Participant\ParticipantAddedEvent;
 use Proximum\Vimeet\Application\Event\Sheet\SheetAddParticipantEvent;
 use Proximum\Vimeet\Application\Event\Sheet\SheetUpdatedEvent;
 use Proximum\Vimeet\Application\Event\User\ActivateAccountEvent;
@@ -122,6 +123,10 @@ class AddHandlerTest extends TestCase
         $eventDispatcher->dispatch(
             Events::SHEET_ADD_PARTICIPANT_CONFIRMATION,
             $sheetAddConfirmationEvent
+        )->shouldBeCalled();
+        $eventDispatcher->dispatch(
+            Events::PARTICIPANT_ADDED,
+            new ParticipantAddedEvent($expectedParticipant)
         )->shouldBeCalled();
         $eventDispatcher->dispatch(Events::USER_ACCOUNT_ACTIVATED, $activateAccountEvent)->shouldBeCalled();
         $sheetUpdatedEvent = new SheetUpdatedEvent($sheet);

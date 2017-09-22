@@ -10,6 +10,9 @@
 
 namespace Proximum\Vimeet\Application\Command\MeetingSlot;
 
+use Proximum\Vimeet\Application\Adapter\DelayedEventDispatcherInterface;
+use Proximum\Vimeet\Application\Event\Events;
+use Proximum\Vimeet\Application\Event\Slot\DeletedEvent;
 use Proximum\Vimeet\Application\Exception\Slot\IsNotAllowedToRemoveSlotException;
 use Proximum\Vimeet\Domain\Repository\MeetingRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\MeetingSlotRepositoryInterface;
@@ -26,18 +29,24 @@ class RemoveHandler
      */
     private $meetingRepository;
 
+    /** @var DelayedEventDispatcherInterface */
+    private $delayedEventDispatcher;
+
     /**
      * RemoveHandler constructor.
      *
-     * @param MeetingSlotRepositoryInterface $meetingSlotRepository
-     * @param MeetingRepositoryInterface     $meetingRepository
+     * @param MeetingSlotRepositoryInterface  $meetingSlotRepository
+     * @param MeetingRepositoryInterface      $meetingRepository
+     * @param DelayedEventDispatcherInterface $delayedEventDispatcher
      */
     public function __construct(
         MeetingSlotRepositoryInterface $meetingSlotRepository,
-        MeetingRepositoryInterface $meetingRepository
+        MeetingRepositoryInterface $meetingRepository,
+        DelayedEventDispatcherInterface $delayedEventDispatcher
     ) {
         $this->meetingSlotRepository = $meetingSlotRepository;
         $this->meetingRepository     = $meetingRepository;
+        $this->delayedEventDispatcher = $delayedEventDispatcher;
     }
 
     /**
@@ -51,5 +60,10 @@ class RemoveHandler
             throw new IsNotAllowedToRemoveSlotException('Slot already used by scheduled meetings');
         }
         $this->meetingSlotRepository->remove($command->meetingSlot);
+
+        $this->delayedEventDispatcher->dispatch(
+            Events::SLOT_DELETED,
+            new DeletedEvent($command->meetingSlot->getEvent())
+        );
     }
 }

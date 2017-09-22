@@ -78,9 +78,9 @@ class AgendaViewQueryHandlerTest extends TestCase
         $massUnavailabilityRepository     = $this->prophesize(MassRepositoryInterface::class);
         $massUnavailabilityRepository->findByEvent($event, 'fr')->shouldBeCalled()->willReturn([$mass]);
         $dayViewQueryHandler              = $this->prophesize(DayViewQueryHandler::class);
-        $dayView = new DayView($begin, $end, $event->getConfiguration()->getScheduleScale(), [], [], [], []);
+        $dayView = new DayView($begin, $end, $event->getConfiguration()->getScheduleScale(), [], [], [], [], []);
         $dayViewQueryHandler
-            ->handle(new DayViewQuery($day, $sheet, $event, $participant, true, 'fr', [$happeningParticipation], [$unavailability], [$mass]))
+            ->handle(new DayViewQuery($day, $sheet, $event, $participant, $user, true, 'fr', [$happeningParticipation], [$unavailability], [$mass]))
             ->shouldBeCalled()
             ->willReturn($dayView)
         ;
@@ -165,9 +165,9 @@ class AgendaViewQueryHandlerTest extends TestCase
         $massUnavailabilityRepository     = $this->prophesize(MassRepositoryInterface::class);
         $massUnavailabilityRepository->findByEvent($event, 'fr')->shouldBeCalled()->willReturn([$mass]);
         $dayViewQueryHandler              = $this->prophesize(DayViewQueryHandler::class);
-        $dayView = new DayView($begin, $end, $event->getConfiguration()->getScheduleScale(), [], [], [], []);
+        $dayView = new DayView($begin, $end, $event->getConfiguration()->getScheduleScale(), [], [], [], [], []);
         $dayViewQueryHandler
-            ->handle(new DayViewQuery($day, $sheet, $event, $participant2, true, 'fr', [$happeningParticipation], [$unavailability], [$mass], []))
+            ->handle(new DayViewQuery($day, $sheet, $event, $participant2, $user, true, 'fr', [$happeningParticipation], [$unavailability], [$mass], []))
             ->shouldBeCalled()
             ->willReturn($dayView)
         ;
@@ -201,7 +201,7 @@ class AgendaViewQueryHandlerTest extends TestCase
             $meetingRepository->reveal(),
             $meetingPublishedAccessChecker->reveal()
         );
-        $result = $handler->handle(new AgendaViewQuery($event, $sheet, $participant2, 'fr', $user2));
+        $result = $handler->handle(new AgendaViewQuery($event, $sheet, $participant2, 'fr', $user));
 
         // Expected
         $expected = new AgendaView([$dayView], $sheet, $participant2, false, [new ParticipantView(1, 'fullName'), new ParticipantView(2, 'fullName2')]);

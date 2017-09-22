@@ -1,6 +1,14 @@
 {{ form_start(searchForm) }}
 
 <div class="catalog__research hidden-xs">
+    {% if searchForm.availableSlot is defined %}
+        <div class="filter">
+            <h3>{{ form_label(searchForm.availableSlot) }}</h3>
+            {{ form_errors(searchForm.availableSlot) }}
+            {{ form_widget(searchForm.availableSlot) }}
+        </div>
+    {% endif %}
+
     {% if searchForm.categories is defined %}
         {{ include('EventBundle:Catalog:Partial/checkboxes.html.twig', { form: searchForm.categories, choices: categoryViews }, false) }}
     {% endif %}

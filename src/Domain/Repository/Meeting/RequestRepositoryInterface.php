@@ -83,6 +83,13 @@ interface RequestRepositoryInterface
     public function getAllRequestBySheet(Sheet $sheet, array $filters = []);
 
     /**
+     * @param Sheet $sheet
+     *
+     * @return Request[]
+     */
+    public function getApprovedAndRefusedRequestBySheet(Sheet $sheet): array;
+
+    /**
      * @param Event $event
      *
      * @return int
@@ -227,6 +234,13 @@ interface RequestRepositoryInterface
      * @return int
      */
     public function countPendingPropositionReceivedBySheet(Sheet $sheet, $attending = true);
+
+    /**
+     * @param Sheet $sheet
+     *
+     * @return Request[]
+     */
+    public function getPendingPropositionReceivedBySheet(Sheet $sheet);
 
     /**
      * @param Sheet $sheet

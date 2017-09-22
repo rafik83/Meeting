@@ -48,6 +48,7 @@ class CreateHandlerTest extends TestCase
 
         $jobQueue = $this->prophesize(JobQueueInterface::class);
         $jobQueue->aggregateEventUsersFullUnavailability($event)->shouldBeCalled();
+        $jobQueue->aggregateAvailableSlot($event)->shouldBeCalled();
 
         // Create
         $create               = new Create($event, null);
@@ -100,6 +101,7 @@ class CreateHandlerTest extends TestCase
 
         $jobQueue = $this->prophesize(JobQueueInterface::class);
         $jobQueue->aggregateEventUsersFullUnavailability($event)->shouldNotBeCalled();
+        $jobQueue->aggregateAvailableSlot($event)->shouldNotBeCalled();
 
         // Create
         $create               = new Create($event, null);
@@ -157,6 +159,7 @@ class CreateHandlerTest extends TestCase
 
         $jobQueue = $this->prophesize(JobQueueInterface::class);
         $jobQueue->aggregateEventUsersFullUnavailability($event)->shouldBeCalled();
+        $jobQueue->aggregateAvailableSlot($event)->shouldBeCalled();
 
         // Create
         $create               = new Create($event, null);
@@ -232,6 +235,7 @@ class CreateHandlerTest extends TestCase
 
         $jobQueue = $this->prophesize(JobQueueInterface::class);
         $jobQueue->aggregateEventUsersFullUnavailability($event)->shouldNotBeCalled();
+        $jobQueue->aggregateAvailableSlot($event)->shouldNotBeCalled();
 
         // Create
         $create               = new Create($event, null);

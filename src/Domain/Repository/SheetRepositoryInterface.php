@@ -73,6 +73,14 @@ interface SheetRepositoryInterface
     public function getByEvent(Event $event);
 
     /**
+     * @param Event   $event
+     * @param Sheet[] $excludedSheets
+     *
+     * @return Sheet[]
+     */
+    public function getSheetsInCatalogByEvent(Event $event, array $excludedSheets = []): array;
+
+    /**
      * @param Event $event
      *
      * @return Sheet[]
@@ -84,14 +92,21 @@ interface SheetRepositoryInterface
      *
      * @return Sheet[]
      */
-    public function getSheetsInCatalogByEvent(Event $event);
+    public function getSheetsInCatalogWithAtLeastOneAcceptedRequestByEvent(Event $event);
 
     /**
-     * @param Event $event
+     * @param Sheet $sheet
      *
      * @return Sheet[]
      */
-    public function getSheetsInCatalogWithAtLeastOneAcceptedRequestByEvent(Event $event);
+    public function getSheetsMetBySheet(Sheet $sheet): array;
+
+    /**
+     * @param Sheet $sheet
+     *
+     * @return Sheet[]
+     */
+    public function getSheetsWithRequestWithSheet(Sheet $sheet): array;
 
     /**
      * @param Type $type

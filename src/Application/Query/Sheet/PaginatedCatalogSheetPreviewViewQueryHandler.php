@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2016 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -24,29 +24,19 @@ use Proximum\Vimeet\Domain\Template\TemplateDataFactory;
 
 class PaginatedCatalogSheetPreviewViewQueryHandler
 {
-    /**
-     * @var SheetRepositoryInterface
-     */
+    /** @var SheetRepositoryInterface */
     private $sheetRepository;
 
-    /**
-     * @var ViewedSheetListViewQueryHandler
-     */
+    /** @var ViewedSheetListViewQueryHandler */
     private $viewedSheetListViewQueryHandler;
 
-    /**
-     * @var SheetSearchAdapterInterface
-     */
+    /** @var SheetSearchAdapterInterface */
     private $sheetSearchAdapter;
 
-    /**
-     * @var SheetPreviewViewQueryHandler
-     */
+    /** @var SheetPreviewViewQueryHandler */
     private $sheetPreviewViewQueryHandler;
 
-    /**
-     * @var TemplateDataFactory
-     */
+    /** @var TemplateDataFactory */
     private $templateDataFactory;
 
     /** @var MeetingRequestAccessChecker */
@@ -59,7 +49,7 @@ class PaginatedCatalogSheetPreviewViewQueryHandler
      * @param SheetRepositoryInterface             $sheetRepository
      * @param SheetSearchAdapterInterface          $sheetSearchAdapter
      * @param SheetPreviewViewQueryHandler         $sheetPreviewViewQueryHandler
-     * @param ViewedSheetListViewQueryHandler       $viewedSheetListViewQueryHandler
+     * @param ViewedSheetListViewQueryHandler      $viewedSheetListViewQueryHandler
      * @param TemplateDataFactory                  $templateDataFactory
      * @param MeetingRequestAccessChecker          $meetingRequestAccessChecker
      * @param AnsweringMeetingRequestAccessChecker $answeringMeetingRequestAccessChecker
@@ -97,7 +87,9 @@ class PaginatedCatalogSheetPreviewViewQueryHandler
             $query->limit,
             $query->locale,
             true,
-            $this->getNomenclatureItems($query->viewer, $query->locale)
+            $this->getNomenclatureItems($query->viewer, $query->locale),
+            $query->availableSlotIds,
+            $query->sheetsToExclude
         );
 
         $paginatedResult->results = $this->sheetRepository->findSheets($paginatedResult->results);

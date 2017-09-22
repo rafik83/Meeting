@@ -12,6 +12,8 @@ namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Controller;
 
 use Proximum\Vimeet\Application\Command\Sheet\SheetViewed\Add;
 use Proximum\Vimeet\Application\Exception\Paginator\UnavailableCurrentPageException;
+use Proximum\Vimeet\Application\Query\Agenda\AvailableSheets\AvailableSlotsByParticipantQuery;
+use Proximum\Vimeet\Application\Query\Catalog\CatalogAvailableSlotIdsViewQuery;
 use Proximum\Vimeet\Application\Query\Catalog\CategoryViewQuery;
 use Proximum\Vimeet\Application\Query\Catalog\FilteredFieldsQuery;
 use Proximum\Vimeet\Application\Query\Catalog\KeywordViewQuery;
@@ -28,6 +30,7 @@ use Proximum\Vimeet\Application\View\Catalog\FilteredFieldsView;
 use Proximum\Vimeet\Application\View\Catalog\PositionView;
 use Proximum\Vimeet\Domain\Catalog\Catalog;
 use Proximum\Vimeet\Domain\Catalog\SearchFields;
+use Proximum\Vimeet\Domain\Model\Catalog\Internal\CatalogConstant;
 use Proximum\Vimeet\Domain\Exception\Sheet\AccessDeniedException;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\PaginatedResult;
@@ -145,6 +148,21 @@ class CatalogController extends Controller
 
         $filters = $this->getDefaultFilters($typeViews, $categoryViews);
 
+        $dDay = $this->get('domain.event.day.dday_guesser')->isItDDay($event);
+        $isUserParticipant = $sheet->hasUserParticipant($user);
+        $filterAvailableSlot = $dDay && $isUserParticipant;
+
+        $sheetsToExclude = [];
+        $availableSlotsIds = [];
+
+        if (true === $filterAvailableSlot) {
+            $availableSlots = $this->get('tactician.commandbus.query')->handle(
+                new AvailableSlotsByParticipantQuery($event, $sheet->getUserParticipant($user))
+            );
+
+            $filterAvailableSlot = !empty($availableSlots);
+        }
+
         $searchForm = $this->getSearchForm(
             $filters,
             $typeViews,
@@ -153,7 +171,8 @@ class CatalogController extends Controller
             $positionViews,
             $event,
             $sheet,
-            $locale
+            $locale,
+            $filterAvailableSlot
         );
 
         if ($searchForm->handleRequest($request)->isSubmitted() && $searchForm->isValid()) {
@@ -167,6 +186,16 @@ class CatalogController extends Controller
             if (empty($filters[SearchFields::FILTER_CATEGORY])) {
                 $filters[SearchFields::FILTER_CATEGORY] = $categoryViews;
             }
+        }
+
+        if ($filterAvailableSlot) {
+            $catalogAvailableSlotView = $this
+                ->get('tactician.commandbus.query')
+                ->handle(new CatalogAvailableSlotIdsViewQuery($event, $sheet, $user, $filters))
+            ;
+
+            $availableSlotsIds = $catalogAvailableSlotView->availableSlotIds;
+            $sheetsToExclude = $catalogAvailableSlotView->sheetsToExclude;
         }
 
         $page = $request->query->getInt('page', 1);
@@ -183,7 +212,9 @@ class CatalogController extends Controller
                     48,
                     $locale,
                     $sheet,
-                    $user
+                    $user,
+                    $availableSlotsIds,
+                    $sheetsToExclude
                 )
             );
         } catch (UnavailableCurrentPageException $exception) {
@@ -205,7 +236,10 @@ class CatalogController extends Controller
             $typeViews,
             $categoryViews,
             $organizationCategoryViews,
-            $positionViews
+            $positionViews,
+            $filterAvailableSlot,
+            $availableSlotsIds,
+            $sheetsToExclude
         );
 
         if ($request->isXmlHttpRequest()) {
@@ -449,9 +483,10 @@ class CatalogController extends Controller
     private function getDefaultFilters(array $typeViews, array $categoryViews): array
     {
         $filters = [
-            SearchFields::ORDER_BY        => Sheet\Constant::ORDER_BY_RELEVANCE,
-            SearchFields::FILTER_TYPE     => $typeViews,
-            SearchFields::FILTER_CATEGORY => $categoryViews,
+            SearchFields::ORDER_BY                  => Sheet\Constant::ORDER_BY_RELEVANCE,
+            SearchFields::FILTER_TYPE               => $typeViews,
+            SearchFields::FILTER_CATEGORY           => $categoryViews,
+            SearchFields::FILTER_AVAILABLE_SLOT_IDS => CatalogConstant::AVAILABLE_SLOT_IDS_FILTER_EVERYONE,
         ];
 
         return $filters;
@@ -466,6 +501,7 @@ class CatalogController extends Controller
      * @param Event                      $event
      * @param Sheet                      $sheet
      * @param string                     $locale
+     * @param bool                       $filterAvailableSlotIds
      *
      * @return FormInterface
      */
@@ -477,7 +513,8 @@ class CatalogController extends Controller
         array $positionViews,
         Event $event,
         Sheet $sheet,
-        $locale
+        $locale,
+        bool $filterAvailableSlotIds = false
     ) {
         return $this->get('form.factory')->createNamed('', SearchType::class, $filters, [
             'action'                    => $this->generateUrl('event_catalog_index', ['sheet' => $sheet->getId()]),
@@ -487,6 +524,7 @@ class CatalogController extends Controller
             'positionViews'             => $positionViews,
             'event'                     => $event,
             'locale'                    => $locale,
+            'filterByAvailableSlotIds'  => $filterAvailableSlotIds,
         ]);
     }
 
@@ -497,9 +535,12 @@ class CatalogController extends Controller
      * @param array                      $filters
      * @param array                      $currentAggregations
      * @param TypeView[]                 $typeViews
-     * @param CategoryView[]                 $categoryViews
+     * @param CategoryView[]             $categoryViews
      * @param OrganizationCategoryView[] $organizationCategoryViews
      * @param PositionView[]             $positionViews
+     * @param bool                       $filterAvailableSlotIds
+     * @param array                      $availableSlotsIds
+     * @param array                      $sheetsToExclude
      *
      * @return FormInterface
      */
@@ -512,7 +553,10 @@ class CatalogController extends Controller
         array $typeViews,
         array $categoryViews,
         array $organizationCategoryViews,
-        array $positionViews
+        array $positionViews,
+        bool $filterAvailableSlotIds = false,
+        array $availableSlotsIds = [],
+        array $sheetsToExclude = []
     ) {
         /** @var FilteredFieldsView $filteredFieldsView */
         $filteredFieldsView = $this->get('tactician.commandbus.query')->handle(
@@ -524,7 +568,9 @@ class CatalogController extends Controller
                 $categoryViews,
                 $organizationCategoryViews,
                 $positionViews,
-                $locale
+                $locale,
+                $availableSlotsIds,
+                $sheetsToExclude
             )
         );
 
@@ -536,7 +582,8 @@ class CatalogController extends Controller
             $filteredFieldsView->positionViews,
             $event,
             $sheet,
-            $locale
+            $locale,
+            $filterAvailableSlotIds
         );
     }
 }

@@ -210,6 +210,17 @@ class RequestRepository implements RequestRepositoryInterface
     /**
      * {@inheritdoc}
      */
+    public function getPendingPropositionReceivedBySheet(Sheet $sheet)
+    {
+        $queryBuilder = new RequestQueryBuilder($this->entityManager);
+        $queryBuilder->receivedBy($sheet)->pending()->isEnabled()->isFromAttending();
+
+        return $queryBuilder->getQuery()->getResult();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function hasPendingPropositionReceivedBySheet(Sheet $sheet)
     {
         return $this->countPendingPropositionReceivedBySheet($sheet) > 0;
@@ -288,6 +299,27 @@ class RequestRepository implements RequestRepositoryInterface
         }
 
         $this->filterQueryBuilder($queryBuilder, $sheet, $filters);
+
+        return $queryBuilder->getQuery()->getResult();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getApprovedAndRefusedRequestBySheet(Sheet $sheet): array
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('request')
+            ->from(Request::class, 'request')
+            ->where('
+                (request.from = :sheet OR request.to = :sheet) AND 
+                (request.state = :stateApproved OR request.state = :stateRefused)
+            ')
+            ->setParameter('sheet', $sheet)
+            ->setParameter('stateApproved', Request::STATE_APPROVED)
+            ->setParameter('stateRefused', Request::STATE_REFUSED);
 
         return $queryBuilder->getQuery()->getResult();
     }
