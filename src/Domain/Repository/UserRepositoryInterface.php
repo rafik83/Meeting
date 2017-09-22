@@ -73,11 +73,11 @@ interface UserRepositoryInterface
     public function getUsersParticipantOfSheets(array $sheets);
 
     /**
-     * @param Event $event
+     * @param Event[] $events
      *
      * @return User[]
      */
-    public function getUsersByEventWithValidatedPhoneNumberAndPendingRequest(Event $event);
+    public function getUsersByEventsWithValidatedPhoneNumberAndPendingRequest(array $event);
 
     /**
      * @param Event $event

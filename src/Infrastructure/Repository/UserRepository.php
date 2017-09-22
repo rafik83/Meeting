@@ -286,33 +286,33 @@ class UserRepository implements UserRepositoryInterface
     /**
      * {@inheritdoc}
      */
-    public function getUsersByEventWithValidatedPhoneNumberAndPendingRequest(Event $event): array
+    public function getUsersByEventsWithValidatedPhoneNumberAndPendingRequest(array $events): array
     {
         $queryBuilder = $this
             ->entityManager
             ->createQueryBuilder()
-            ->select('user, participant')
+            ->select('user')
             ->from(User::class, 'user')
             ->join(Participant::class, 'participant', 'WITH', 'participant.user = user')
             ->join(
                 'participant.sheet',
                 'sheet',
                 'WITH',
-                'sheet.event = :event AND sheet.enable = true AND sheet.inCatalog = true'
+                'sheet.event IN (:events) AND sheet.enable = true AND sheet.inCatalog = true'
             )
             ->join(
                 User\UserEventPhone::class,
                 'user_event_phone',
                 'WITH',
-                'user_event_phone.user = user AND user_event_phone.validated = true'
+                'user_event_phone.user = user AND user_event_phone.validated = false'
             )
             ->where('EXISTS(
-                SELECT request 
-                FROM request 
-                LEFT JOIN request.from sheetFrom WHERE sheetFrom.attend = true
+                SELECT request
+                FROM Entity:Meeting\Request request
+                LEFT JOIN Entity:Sheet sheetFrom WITH sheetFrom.attend = true
                 WHERE request.to = sheet AND request.state = :pending AND request.disabled = false
             )')
-            ->setParameter('event', $event)
+            ->setParameter('events', $events)
             ->setParameter('pending', Request::STATE_SENT)
         ;
 
