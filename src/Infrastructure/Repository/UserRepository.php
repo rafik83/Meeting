@@ -291,7 +291,7 @@ class UserRepository implements UserRepositoryInterface
         $queryBuilder = $this
             ->entityManager
             ->createQueryBuilder()
-            ->select('user, participant')
+            ->select('user')
             ->from(User::class, 'user')
             ->join(Participant::class, 'participant', 'WITH', 'participant.user = user')
             ->join(
@@ -304,7 +304,7 @@ class UserRepository implements UserRepositoryInterface
                 User\UserEventPhone::class,
                 'user_event_phone',
                 'WITH',
-                'user_event_phone.user = user AND user_event_phone.validated = false'
+                'user_event_phone.user = user AND user_event_phone.validated = true'
             )
             ->where('EXISTS(
                 SELECT request
