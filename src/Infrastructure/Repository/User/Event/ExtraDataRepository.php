@@ -29,6 +29,23 @@ class ExtraDataRepository implements ExtraDataRepositoryInterface
     }
 
     /**
+     * @param ExtraData $extraData
+     */
+    public function add(ExtraData $extraData)
+    {
+        $this->entityManager->persist($extraData);
+        $this->entityManager->flush($extraData);
+    }
+
+    /**
+     * @param ExtraData $extraData
+     */
+    public function set(ExtraData $extraData)
+    {
+        $this->entityManager->flush($extraData);
+    }
+
+    /**
      * @param Event  $event
      * @param string $name
      *

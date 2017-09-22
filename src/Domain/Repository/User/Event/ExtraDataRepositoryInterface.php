@@ -22,4 +22,14 @@ interface ExtraDataRepositoryInterface
      * @return ExtraData[]
      */
     public function getExtraDataForEventAndName(Event $event, string $name): array;
+
+    /**
+     * @param ExtraData $extraData
+     */
+    public function add(ExtraData $extraData);
+
+    /**
+     * @param ExtraData $extraData
+     */
+    public function set(ExtraData $extraData);
 }
