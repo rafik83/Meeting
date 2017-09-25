@@ -23,6 +23,7 @@ use Proximum\Vimeet\Domain\Model\Meeting\Request;
 use Proximum\Vimeet\Domain\Model\MeetingSlot;
 use Proximum\Vimeet\Domain\Repository\MeetingRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\SpotRepositoryInterface;
+use Proximum\Vimeet\Domain\Spot\AvailableSpots;
 use Proximum\Vimeet\Infrastructure\Adapter\DelayedEventDispatcher;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
 use Proximum\Vimeet\Tests\Factory\SheetFactory;
@@ -44,6 +45,7 @@ class TransformRequestIntoMeetingHandlerTest extends TestCase
         $meetingRepository           = $this->prophesize(MeetingRepositoryInterface::class);
         $spotRepository              = $this->prophesize(SpotRepositoryInterface::class);
         $requestSlotViewQueryHandler = $this->prophesize(RequestSlotViewQueryHandler::class);
+        $availableSpots              = $this->prophesize(AvailableSpots::class);
         $datetime                    = new \DateTime();
         $eventDispatcher             = $this->prophesize(DelayedEventDispatcher::class);
 
@@ -65,15 +67,13 @@ class TransformRequestIntoMeetingHandlerTest extends TestCase
         )->shouldBeCalled()
             ->willReturn(new MeetingUpdateSlotView([1]));
 
-        $spotRepository->getSpotsForSlotAndParticipantsQuantity(
+        $availableSpots->getBySlot(
             $slot->reveal(),
-            10,
-            null,
             $fromSheet,
             $toSheet,
+            10,
             $isVisio
-        )->shouldBeCalled()
-            ->willReturn([$spot]);
+        )->shouldBeCalled()->willReturn($spot);
 
         // Expected meeting
         $meeting = new Meeting(
@@ -105,6 +105,7 @@ class TransformRequestIntoMeetingHandlerTest extends TestCase
             $meetingRepository->reveal(),
             $spotRepository->reveal(),
             $requestSlotViewQueryHandler->reveal(),
+            $availableSpots->reveal(),
             $datetime,
             $eventDispatcher->reveal()
         );

@@ -21,6 +21,7 @@ use Proximum\Vimeet\Application\Query\Agenda\Admin\RequestSlotViewQueryHandler;
 use Proximum\Vimeet\Domain\Model\Meeting;
 use Proximum\Vimeet\Domain\Repository\MeetingRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\SpotRepositoryInterface;
+use Proximum\Vimeet\Domain\Spot\AvailableSpots;
 use Proximum\Vimeet\Infrastructure\Adapter\DelayedEventDispatcher;
 
 class TransformRequestIntoMeetingHandler
@@ -40,10 +41,14 @@ class TransformRequestIntoMeetingHandler
     /** @var DelayedEventDispatcher */
     private $eventDispatcher;
 
+    /** @var AvailableSpots */
+    private $availableSpots;
+
     /**
      * @param MeetingRepositoryInterface  $meetingRepository
      * @param SpotRepositoryInterface     $spotRepository
      * @param RequestSlotViewQueryHandler $requestSlotViewQueryHandler
+     * @param AvailableSpots              $availableSpots
      * @param \DateTimeInterface          $dateTime
      * @param DelayedEventDispatcher      $eventDispatcher
      */
@@ -51,6 +56,7 @@ class TransformRequestIntoMeetingHandler
         MeetingRepositoryInterface $meetingRepository,
         SpotRepositoryInterface $spotRepository,
         RequestSlotViewQueryHandler $requestSlotViewQueryHandler,
+        AvailableSpots $availableSpots,
         \DateTimeInterface $dateTime,
         DelayedEventDispatcher $eventDispatcher
     ) {
@@ -59,6 +65,7 @@ class TransformRequestIntoMeetingHandler
         $this->requestSlotViewQueryHandler = $requestSlotViewQueryHandler;
         $this->dateTime                    = $dateTime;
         $this->eventDispatcher             = $eventDispatcher;
+        $this->availableSpots              = $availableSpots;
     }
 
     /**
@@ -88,23 +95,14 @@ class TransformRequestIntoMeetingHandler
             throw new SlotNotAvailableForThisMeetingException();
         }
 
-        // Get available spots for this slot and meeting
-        $spots = $this->spotRepository->getSpotsForSlotAndParticipantsQuantity(
+        // Can throw NoSpotsAvailableForThisSlotAndMeetingException
+        $spot = $this->availableSpots->getBySlot(
             $transformRequestIntoMeeting->slot,
-            $transformRequestIntoMeeting->meetingRequest->countParticipants(),
-            null,
             $transformRequestIntoMeeting->meetingRequest->getFromSheet(),
             $transformRequestIntoMeeting->meetingRequest->getToSheet(),
+            $transformRequestIntoMeeting->meetingRequest->countParticipants(),
             $transformRequestIntoMeeting->visio
         );
-
-        // If no spot available
-        if (0 === count($spots)) {
-            throw new NoSpotsAvailableForThisSlotAndMeetingException();
-        }
-
-        // Get first spot
-        $spot = reset($spots);
 
         $fromSheet = $transformRequestIntoMeeting->meetingRequest->getFromSheet();
         $toSheet   = $transformRequestIntoMeeting->meetingRequest->getToSheet();
