@@ -5,5 +5,12 @@ services:
             - '@vimeet_infrastructure.repository.event_repository'
             - '@vimeet_infrastructure.repository.user_repository'
             - '@repository.user.event.extra_data_repository'
+            - '@vimeet_infrastructure.repository.sheet_repository'
+            - '@vimeet_infrastructure.repository.meeting.request_repository'
+            - '@vimeet_infrastructure.repository.meeting_slot_repository'
+            - '@adapter.smssender_adapter'
+            - '@vimeet_infrastructure.adapter.translator_adapter'
+            - '@adapter.router'
+            - '@vimeet_infrastructure.application.components.sheet.sheet_info_guesser'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\MeetingRequest\Reminder }
