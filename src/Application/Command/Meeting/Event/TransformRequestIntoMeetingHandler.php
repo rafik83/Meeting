@@ -108,7 +108,7 @@ class TransformRequestIntoMeetingHandler
         $this->toSheet   = new AvailableSlotsBySheetView($toSheet, $toParticipants, $toHasNoPreference);
 
         if ($fromHasNoPreference) {
-            $fromParticipants = $query->request->getFromSheet()->getParticipants()->toArray();
+            $fromParticipants = $query->request->getFromSheet()->getParticipantsArray();
 
             $this->fromSheet->availableSlotsByParticipant = $this->getAvailableSlotsByParticipants(
                 $query->event,
@@ -122,7 +122,7 @@ class TransformRequestIntoMeetingHandler
         }
 
         if ($toHasNoPreference) {
-            $toParticipants = $query->request->getToSheet()->getParticipants()->toArray();
+            $toParticipants = $query->request->getToSheet()->getParticipantsArray();
 
             $this->toSheet->availableSlotsByParticipant = $this->getAvailableSlotsByParticipants(
                 $query->event,
