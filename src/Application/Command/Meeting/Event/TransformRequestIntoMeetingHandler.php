@@ -135,7 +135,8 @@ class TransformRequestIntoMeetingHandler
             );
         }
 
-        $availableMeetings    = $this->buildAvailableMeetings();
+        $availableMeetings = $this->buildAvailableMeetings();
+
         $transformableMeeting = $this->getTransformableMeeting($query->event, $availableMeetings);
 
         // Can throw NoSpotsAvailableForThisSlotAndMeetingException
@@ -233,7 +234,7 @@ class TransformRequestIntoMeetingHandler
         if (!$this->fromSheet->hasNoPreference && !$this->toSheet->hasNoPreference) {
             foreach ($this->fromSheet->availableSlotsBySheet as $slot) {
                 if ($this->hasCommonSlot($this->toSheet, $slot)) {
-                    $availableMeetings = $this->createAvailableMeetingView(
+                    $availableMeetings[] = $this->createAvailableMeetingView(
                         $slot,
                         $this->fromSheet->participants,
                         $this->toSheet->participants
@@ -296,9 +297,11 @@ class TransformRequestIntoMeetingHandler
      */
     private function hasCommonSlot(AvailableSlotsBySheetView $sheetView, MeetingSlot $slot): bool
     {
-        if ($sheetView->hasPreference()) {
-            if (isset($sheetView->availableSlotsBySheet[$slot->getId()])) {
-                return true;
+        if (!$sheetView->hasNoPreference) {
+            foreach ($sheetView->availableSlotsBySheet as $otherSlot) {
+                if ($otherSlot->getId() === $slot->getId()) {
+                    return true;
+                }
             }
 
             return false;
