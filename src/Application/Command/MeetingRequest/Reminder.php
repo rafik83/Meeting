@@ -16,10 +16,20 @@ class Reminder
     public $dateTime;
 
     /**
+     * Current datetime + 2 hour to allow next notification
+     *
+     * @var \DateTimeInterface
+     */
+    public $nextNotificationDatetime;
+
+    /**
      * @param \DateTimeInterface $dateTime
      */
     public function __construct(\DateTimeInterface $dateTime)
     {
         $this->dateTime = $dateTime;
+
+        $tempDatetime = clone $dateTime;
+        $this->nextNotificationDatetime = $tempDatetime->modify('+2 hours');
     }
 }

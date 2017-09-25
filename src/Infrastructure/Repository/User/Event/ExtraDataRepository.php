@@ -12,8 +12,10 @@ namespace Proximum\Vimeet\Infrastructure\Repository\User\Event;
 
 use Doctrine\ORM\EntityManager;
 use Proximum\Vimeet\Domain\Model\Event;
+use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Model\User\Event\ExtraData;
 use Proximum\Vimeet\Domain\Repository\User\Event\ExtraDataRepositoryInterface;
+use Proximum\Vimeet\Domain\User\Event\ExtraData\Type;
 
 class ExtraDataRepository implements ExtraDataRepositoryInterface
 {
@@ -21,7 +23,7 @@ class ExtraDataRepository implements ExtraDataRepositoryInterface
     private $entityManager;
 
     /**
-     * @param EntityManager $entityManager
+     * {@inheritdoc}
      */
     public function __construct(EntityManager $entityManager)
     {
@@ -29,7 +31,7 @@ class ExtraDataRepository implements ExtraDataRepositoryInterface
     }
 
     /**
-     * @param ExtraData $extraData
+     * {@inheritdoc}
      */
     public function add(ExtraData $extraData)
     {
@@ -38,7 +40,7 @@ class ExtraDataRepository implements ExtraDataRepositoryInterface
     }
 
     /**
-     * @param ExtraData $extraData
+     * {@inheritdoc}
      */
     public function set(ExtraData $extraData)
     {
@@ -46,10 +48,7 @@ class ExtraDataRepository implements ExtraDataRepositoryInterface
     }
 
     /**
-     * @param Event  $event
-     * @param string $name
-     *
-     * @return ExtraData[]
+     * {@inheritdoc}
      */
     public function getExtraDataForEventAndName(Event $event, string $name): array
     {
@@ -60,6 +59,27 @@ class ExtraDataRepository implements ExtraDataRepositoryInterface
             ->andWhere('extraData.name = :name')
             ->setParameter('event', $event)
             ->setParameter('name', $name)
+        ;
+
+        return $queryBuilder->getQuery()->getResult();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getLastNotificationReminderByUserAndDate(
+        Event $event,
+        array $users
+    ): array {
+        $queryBuilder = $this->entityManager->createQueryBuilder()
+            ->select('extraData')
+            ->from(ExtraData::class, 'extraData')
+            ->where('extraData.event = :event')
+            ->andWhere('extraData.user IN (:users)')
+            ->andWhere('extraData.name = :name')
+            ->setParameter('event', $event)
+            ->setParameter('users', $users)
+            ->setParameter('name', Type::MEETING_REQUEST_DATE_LAST_NOTIFICATION_REMINDER)
         ;
 
         return $queryBuilder->getQuery()->getResult();
