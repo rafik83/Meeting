@@ -286,7 +286,7 @@ class UserRepository implements UserRepositoryInterface
     /**
      * {@inheritdoc}
      */
-    public function getUsersByEventsWithValidatedPhoneNumberAndPendingRequest(array $events): array
+    public function getUsersByEventWithValidatedPhoneNumberAndPendingRequest(Event $event): array
     {
         $queryBuilder = $this
             ->entityManager
@@ -298,7 +298,7 @@ class UserRepository implements UserRepositoryInterface
                 'participant.sheet',
                 'sheet',
                 'WITH',
-                'sheet.event IN (:events) AND sheet.enable = true 
+                'sheet.event = :event AND sheet.enable = true 
                 AND sheet.inCatalog = true AND sheet.availableSlots IS NOT NULL'
             )
             ->join(
@@ -313,7 +313,7 @@ class UserRepository implements UserRepositoryInterface
                 LEFT JOIN Entity:Sheet sheetFrom WITH sheetFrom = request.from AND sheetFrom.attend = true
                 WHERE request.to = sheet AND request.state = :pending AND request.disabled = false
             )')
-            ->setParameter('events', $events)
+            ->setParameter('event', $event)
             ->setParameter('pending', Request::STATE_SENT)
         ;
 
