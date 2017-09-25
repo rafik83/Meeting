@@ -12,5 +12,7 @@ template.object.image: Image
 template.object.media: Media
 template.object.nomenclature: Nomenclature
 template.object.participant: Participant
+template.participant.display: 'Number of participants showed on profile'
 template.required.title: Required
 template.tag.participant_gender: 'Participant gender'
+template.type.title: Type
