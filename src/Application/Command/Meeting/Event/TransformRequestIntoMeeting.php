@@ -26,13 +26,20 @@ class TransformRequestIntoMeeting
     public $event;
 
     /**
+     * @var bool
+     */
+    public $visio;
+
+    /**
      * TransformRequestIntoMeeting constructor.
      *
      * @param Request $request
+     * @param bool    $visio
      */
-    public function __construct(Request $request)
+    public function __construct(Request $request, bool $visio = false)
     {
         $this->request = $request;
         $this->event   = $request->getEvent();
+        $this->visio   = $visio;
     }
 }

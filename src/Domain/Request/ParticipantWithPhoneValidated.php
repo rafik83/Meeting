@@ -57,7 +57,7 @@ class ParticipantWithPhoneValidated
      * @return null|Participant
      * @throws \Exception
      */
-    private function getParticipant(Event $event, Sheet $sheet, array $participants): ?Participant
+    public function getParticipant(Event $event, Sheet $sheet, array $participants): ?Participant
     {
         if (!$this->confirmationPhoneTipChecker->isEnabled($event, $sheet->getType())) {
             throw new \Exception(); //TODO: changer l'exception
