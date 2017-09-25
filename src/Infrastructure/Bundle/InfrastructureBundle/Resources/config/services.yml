@@ -4015,6 +4015,14 @@ services:
         tags:
             - { name: console.command }
 
+    command.send_sms_reminder_command:
+        class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\SendSMSReminderCommand
+        arguments:
+            - '@command.meeting_request.reminder_handler'
+            - '@datetime'
+        tags:
+            - { name: console.command }
+
     command_planning.generate_planning_command:
         class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\Planning\GeneratePlanningCommand
         arguments:

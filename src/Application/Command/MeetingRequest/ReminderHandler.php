@@ -11,6 +11,7 @@
 namespace Proximum\Vimeet\Application\Command\MeetingRequest;
 
 use Proximum\Vimeet\Application\Adapter\RouterInterface;
+use Proximum\Vimeet\Application\Adapter\SMSSenderInterface;
 use Proximum\Vimeet\Application\Adapter\TranslatorInterface;
 use Proximum\Vimeet\Application\Components\Sheet\SheetInfoGuesser;
 use Proximum\Vimeet\Application\Exception\Event\NoEventOnCurrentDayException;
@@ -28,7 +29,6 @@ use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\User\Event\ExtraDataRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\UserRepositoryInterface;
 use Proximum\Vimeet\Domain\User\Event\ExtraData\Type;
-use Proximum\Vimeet\Infrastructure\Adapter\SMSSenderAdapter;
 
 class ReminderHandler
 {
@@ -50,7 +50,7 @@ class ReminderHandler
     /** @var MeetingSlotRepositoryInterface */
     private $meetingSlotRepository;
 
-    /** @var SMSSenderAdapter */
+    /** @var SMSSenderInterface */
     private $SMSSenderAdapter;
 
     /** @var TranslatorInterface */
@@ -69,7 +69,7 @@ class ReminderHandler
      * @param SheetRepositoryInterface       $sheetRepository
      * @param RequestRepositoryInterface     $requestRepository
      * @param MeetingSlotRepositoryInterface $meetingSlotRepository
-     * @param SMSSenderAdapter               $SMSSenderAdapter
+     * @param SMSSenderInterface             $SMSSenderAdapter
      * @param TranslatorInterface            $translator
      * @param RouterInterface                $router
      * @param SheetInfoGuesser               $sheetInfoGuesser
@@ -81,7 +81,7 @@ class ReminderHandler
         SheetRepositoryInterface $sheetRepository,
         RequestRepositoryInterface $requestRepository,
         MeetingSlotRepositoryInterface $meetingSlotRepository,
-        SMSSenderAdapter $SMSSenderAdapter,
+        SMSSenderInterface $SMSSenderAdapter,
         TranslatorInterface $translator,
         RouterInterface $router,
         SheetInfoGuesser $sheetInfoGuesser
@@ -216,7 +216,7 @@ class ReminderHandler
      *
      * @return ExtraData[]
      */
-    public function getNotificationRemindersIndexedByUserId(Event $event, array $users): array
+    private function getNotificationRemindersIndexedByUserId(Event $event, array $users): array
     {
         $notificationReminders = $this->extraDataRepository->getLastNotificationReminderByUsersByEvent($event, $users);
         $notificationRemindersIndexedById = [];
@@ -232,7 +232,7 @@ class ReminderHandler
      * @param ExtraData $extraData
      * @param string    $value
      */
-    public function setExtraData(ExtraData $extraData, string $value)
+    private function setExtraData(ExtraData $extraData, string $value)
     {
         $this->extraDataRepository->set($extraData->setValue($value));
     }
@@ -293,10 +293,11 @@ class ReminderHandler
     ): string {
         $meetingRequestManagementUrl = $this->router->generate(
                 'event_meeting_list_request',
-                [
-                    'sheet' => $sheet->getId(),
-                    'state' => 'receive',
-                ]
+                array_merge(
+                    ['sheet' => $sheet->getId()],
+                    ['state' => 'receive'],
+                    ['_locale' => $locale]
+                )
             );
 
         return $this
@@ -305,7 +306,6 @@ class ReminderHandler
                 'sms.reminder.pending_meeting_request',
                 [
                     '%eventTitle%'                  => $event->getTitle(),
-                    '%sheetTitle%'                  => $this->sheetInfoGuesser->guessSheetTitle($sheet, $locale),
                     '%countPendingMeetingRequest%'  => $countPendingMeetingRequest,
                     '%meetingRequestManagementUrl%' => $meetingRequestManagementUrl,
                 ],
