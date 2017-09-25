@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Application\View\Meeting\RequestTransformIntoMeeting;
 
+use Proximum\Vimeet\Domain\Model\MeetingSlot;
 use Proximum\Vimeet\Domain\Model\Participant;
 
 class AvailableSlotsParticipantView
@@ -20,13 +21,13 @@ class AvailableSlotsParticipantView
     public $participant;
 
     /**
-     * @var AvailableSlotView[]
+     * @var MeetingSlot[]
      */
     public $slots = [];
 
     /**
-     * @param Participant $participant
-     * @param array       $slots
+     * @param Participant   $participant
+     * @param MeetingSlot[] $slots
      */
     public function __construct(Participant $participant, array $slots)
     {
