@@ -17,7 +17,7 @@ use Proximum\Vimeet\Domain\Model\User\Event\ExtraData;
 interface ExtraDataRepositoryInterface
 {
     /**
-     * @param Event  $event
+     * @param Event $event
      * @param string $name
      *
      * @return ExtraData[]
@@ -35,10 +35,10 @@ interface ExtraDataRepositoryInterface
     public function set(ExtraData $extraData);
 
     /**
-     * @param Event              $event
-     * @param User[]             $users
+     * @param Event $event
+     * @param User[] $users
      *
      * @return ExtraData[]
      */
-    public function getLastNotificationReminderByUserAndDate(Event $event, array $users);
+    public function getLastNotificationReminderByUsersByEvent(Event $event, array $users);
 }

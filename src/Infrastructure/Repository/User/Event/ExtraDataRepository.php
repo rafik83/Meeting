@@ -67,7 +67,7 @@ class ExtraDataRepository implements ExtraDataRepositoryInterface
     /**
      * {@inheritdoc}
      */
-    public function getLastNotificationReminderByUserAndDate(
+    public function getLastNotificationReminderByUsersByEvent(
         Event $event,
         array $users
     ): array {

@@ -23,6 +23,13 @@ class Reminder
     public $nextNotificationDatetime;
 
     /**
+     * Current datetime + 10 minutes to get margin
+     *
+     * @var \DateTimeInterface
+     */
+    public $currentDateTimePlus10Minutes;
+
+    /**
      * @param \DateTimeInterface $dateTime
      */
     public function __construct(\DateTimeInterface $dateTime)
@@ -31,5 +38,8 @@ class Reminder
 
         $tempDatetime = clone $dateTime;
         $this->nextNotificationDatetime = $tempDatetime->modify('+2 hours');
+
+        $tempDatetime = clone $dateTime;
+        $this->currentDateTimePlus10Minutes = $tempDatetime->modify('+10 minutes');
     }
 }
