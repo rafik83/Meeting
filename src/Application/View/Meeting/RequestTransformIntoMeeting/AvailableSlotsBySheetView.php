@@ -52,12 +52,4 @@ class AvailableSlotsBySheetView
         $this->hasNoPreference = $hasNoPreference;
         $this->participants    = $participants;
     }
-
-    /**
-     * @return bool
-     */
-    public function hasPreference(): bool
-    {
-        return $this->hasNoPreference === false;
-    }
 }
