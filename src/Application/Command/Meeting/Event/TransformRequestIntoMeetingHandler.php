@@ -17,7 +17,6 @@ use Proximum\Vimeet\Application\View\Meeting\RequestTransformIntoMeeting\Availab
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\MeetingSlot;
 use Proximum\Vimeet\Domain\Model\Participant;
-use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Repository\MeetingSlotRepositoryInterface;
 
 class TransformRequestIntoMeetingHandler
@@ -32,14 +31,14 @@ class TransformRequestIntoMeetingHandler
      *
      * @var AvailableSlotsBySheetView
      */
-    private $fromSheetAvailableSlots;
+    private $fromSheet;
 
     /**
      * Array of available slots by sheet and by participant
      *
      * @var AvailableSlotsBySheetView
      */
-    private $toSheetAvailableSlots;
+    private $toSheet;
 
     /**
      * TransformRequestIntoMeetingHandler constructor.
@@ -58,24 +57,29 @@ class TransformRequestIntoMeetingHandler
     {
         $fromSheet           = $query->request->getFromSheet();
         $toSheet             = $query->request->getToSheet();
-        $fromParticipants    = $query->request->getFromParticipants();
-        $toParticipants      = $query->request->getToParticipants();
+        $fromParticipants    = $query->request->getFromParticipantsArray();
+        $toParticipants      = $query->request->getToParticipantsArray();
         $fromHasNoPreference = $query->request->hasNoPreference($fromSheet);
         $toHasNoPreference   = $query->request->hasNoPreference($toSheet);
 
+        $this->fromSheet = new AvailableSlotsBySheetView($fromSheet, $fromParticipants, $fromHasNoPreference);
+        $this->toSheet   = new AvailableSlotsBySheetView($toSheet, $toParticipants, $toHasNoPreference);
+
         if ($fromHasNoPreference) {
             $fromParticipants = $query->request->getFromSheet()->getParticipants()->toArray();
+
+            $this->fromSheet->availableSlotsByParticipant = $this->getAvailableSlots($query->event, $fromParticipants);
+        } else {
+            $this->fromSheet->availableSlotsBySheet = $this->getAvailableSlotsBySheet($query->event, $fromParticipants);
         }
 
         if ($toHasNoPreference) {
             $toParticipants = $query->request->getToSheet()->getParticipants()->toArray();
+
+            $this->toSheet->availableSlotsByParticipant = $this->getAvailableSlots($query->event, $toParticipants);
+        } else {
+            $this->toSheet->availableSlotsBySheet = $this->getAvailableSlotsBySheet($query->event, $toParticipants);
         }
-
-        $this->fromSheetAvailableSlots = new AvailableSlotsBySheetView($fromSheet, $fromHasNoPreference);
-        $this->toSheetAvailableSlots   = new AvailableSlotsBySheetView($toSheet, $toHasNoPreference);
-
-        $this->fromSheetAvailableSlots->participants = $this->getAvailableSlots($query->event, $fromParticipants);
-        $this->toSheetAvailableSlots->participants   = $this->getAvailableSlots($query->event, $toParticipants);
     }
 
     /**
@@ -86,7 +90,7 @@ class TransformRequestIntoMeetingHandler
      */
     private function getAvailableSlots(Event $event, array $participants): array
     {
-        $availableSlotViews = [];
+        $availableSlotParticipantViews = [];
 
         foreach ($participants as $participant) {
             $slots = $this->meetingSlotRepository->findAvailableSlotsByParticipants(
@@ -97,59 +101,149 @@ class TransformRequestIntoMeetingHandler
             $availableSlotViews = [];
 
             foreach ($slots as $slot) {
-                $availableSlotViews[$slot->getId()] = new AvailableSlotView($slot);
+                $availableSlotViews[$slot->getId()] = $slot;
             }
 
-            $availableSlotViews[$participant->getId()] = new AvailableSlotsParticipantView(
+            $availableSlotParticipantViews[$participant->getId()] = new AvailableSlotsParticipantView(
                 $participant,
                 $availableSlotViews
             );
         }
 
-        return $availableSlotViews;
+        return $availableSlotParticipantViews;
     }
 
     /**
-     * @param Sheet $fromSheet
-     * @param Sheet $toSheet
+     * @param Event $event
+     * @param array $participants
      *
-     * @return AvailableMeetingView[]
+     * @return array
      */
-    private function getAvailableMeeting(Sheet $fromSheet, Sheet $toSheet): array
+    private function getAvailableSlotsBySheet(Event $event, array $participants): array
     {
-        $availableMeetingViews = [];
+        $slots = $this->meetingSlotRepository->findAvailableSlotsByParticipants(
+            $event,
+            $participants
+        );
 
-        foreach ($this->fromSheetAvailableSlots->participants as $participantView) {
-            foreach ($participantView->slots as $slotView) {
+        return $slots;
+    }
 
-                if ($this->hasToSheetCommonSlot($slotView->slot)) {
-                    $availableMeetingViews[] = new AvailableMeetingView(
-                        $slotView->slot,
-                        $fromSheet,
-                        $toSheet,
-                        [],
-                        []
+    private function generateAvailableMeeting()
+    {
+        $availableMeetings = [];
+        $fromParticipants = [];
+        $toParticipants = [];
+
+        if ($this->fromSheet->hasPreference() && $this->toSheet->hasPreference()) {
+            foreach ($this->fromSheet->availableSlotsBySheet as $slot) {
+                if ($this->hasCommonSlot($this->toSheet, $slot)) {
+                    $availableMeetings[] = new AvailableMeetingView(
+                        $slot,
+                        $this->fromSheet->sheet,
+                        $this->toSheet->sheet,
+                        $this->fromSheet->participants,
+                        $this->toSheet->participants
                     );
                 }
             }
         }
 
-        return $availableMeetingViews;
+        if ($this->fromSheet->hasPreference()) {
+            if ($this->toSheet->hasNoPreference) {
+                foreach ($this->toSheet->availableSlotsByParticipant as $availableSlotsParticipantView) {
+                    foreach ($availableSlotsParticipantView->slots as $slot) {
+                        if ($this->hasCommonSlot($this->fromSheet, $slot)) {
+                            $availableMeetings[] = new AvailableMeetingView(
+                                $slot,
+                                $this->fromSheet->sheet,
+                                $this->toSheet->sheet,
+                                $this->fromSheet->participants,
+                                [$availableSlotsParticipantView->participant]
+                            );
+                        }
+                    }
+                }
+            }
+        }
+
+        if ($this->toSheet->hasPreference()) {
+            if ($this->fromSheet->hasNoPreference) {
+                foreach ($this->fromSheet->availableSlotsByParticipant as $availableSlotsParticipantView) {
+                    foreach ($availableSlotsParticipantView->slots as $slot) {
+                        if ($this->hasCommonSlot($this->toSheet, $slot)) {
+                            $availableMeetings[] = new AvailableMeetingView(
+                                $slot,
+                                $this->fromSheet->sheet,
+                                $this->toSheet->sheet,
+                                [$availableSlotsParticipantView->participant],
+                                $this->toSheet->participants
+                            );
+                        }
+                    }
+                }
+            }
+        }
+
+        if ($this->fromSheet->hasNoPreference && $this->toSheet->hasNoPreference) {
+            foreach ($this->fromSheet->availableSlotsByParticipant as $availableSlotsParticipantView) {
+                foreach ($availableSlotsParticipantView->slots as $slot) {
+                    if ($this->hasCommonSlot($this->toSheet, $slot)) {
+                        $availableMeetings[] = new AvailableMeetingView(
+                            $slot,
+                            $this->fromSheet->sheet,
+                            $this->toSheet->sheet,
+                            [$availableSlotsParticipantView->participant],
+                            [$this->getParticipantOnAvailableSlot($this->toSheet, $slot)]
+                        );
+                    }
+                }
+            }
+        }
     }
 
     /**
-     * @param MeetingSlot $slot
+     * @param AvailableSlotsBySheetView $sheetView
+     * @param MeetingSlot               $slot
      *
      * @return bool
      */
-    private function hasToSheetCommonSlot(MeetingSlot $slot): bool
+    private function hasCommonSlot(AvailableSlotsBySheetView $sheetView, MeetingSlot $slot): bool
     {
-        foreach ($this->toSheetAvailableSlots->participants as $participant) {
-            if (isset($participant->slots[$slot->getId()])) {
+        if ($sheetView->hasPreference()) {
+            if (isset($sheetView->availableSlotsBySheet[$slot->getId()])) {
+                return true;
+            }
+
+            return false;
+        }
+
+        foreach ($sheetView->availableSlotsByParticipant as $availableSlotsParticipantView) {
+            if (isset($availableSlotsParticipantView->slots[$slot->getId()])) {
                 return true;
             }
         }
 
         return false;
+    }
+
+    /**
+     * @param AvailableSlotsBySheetView $sheetView
+     * @param MeetingSlot               $slot
+     *
+     * @return null|Participant
+     */
+    private function getParticipantOnAvailableSlot(
+        AvailableSlotsBySheetView $sheetView,
+        MeetingSlot $slot
+    ): ?Participant
+    {
+        foreach ($sheetView->availableSlotsByParticipant as $availableSlotsParticipantView) {
+            if (isset($availableSlotsParticipantView->slots[$slot->getId()])) {
+                return $availableSlotsParticipantView->participant;
+            }
+        }
+
+        return null;
     }
 }

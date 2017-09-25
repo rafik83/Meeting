@@ -10,6 +10,8 @@
 
 namespace Proximum\Vimeet\Application\View\Meeting\RequestTransformIntoMeeting;
 
+use Proximum\Vimeet\Domain\Model\MeetingSlot;
+use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Sheet;
 
 class AvailableSlotsBySheetView
@@ -27,15 +29,35 @@ class AvailableSlotsBySheetView
     /**
      * @var AvailableSlotsParticipantView[]
      */
-    public $participants = [];
+    public $availableSlotsByParticipant = [];
+
+    /**
+     * @var MeetingSlot[]
+     */
+    public $availableSlotsBySheet = [];
+
+    /**
+     * @var Participant[]
+     */
+    public $participants;
 
     /**
      * @param Sheet $sheet
+     * @param array $participants
      * @param bool  $hasNoPreference
      */
-    public function __construct(Sheet $sheet, bool $hasNoPreference)
+    public function __construct(Sheet $sheet, array $participants, bool $hasNoPreference)
     {
         $this->sheet           = $sheet;
         $this->hasNoPreference = $hasNoPreference;
+        $this->participants    = $participants;
+    }
+
+    /**
+     * @return bool
+     */
+    public function hasPreference(): bool
+    {
+        return $this->hasNoPreference === false;
     }
 }
