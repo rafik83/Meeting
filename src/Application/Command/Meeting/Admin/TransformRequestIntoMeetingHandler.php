@@ -95,7 +95,6 @@ class TransformRequestIntoMeetingHandler
             throw new SlotNotAvailableForThisMeetingException();
         }
 
-        // Can throw NoSpotsAvailableForThisSlotAndMeetingException
         $spot = $this->availableSpots->getBySlot(
             $transformRequestIntoMeeting->slot,
             $transformRequestIntoMeeting->meetingRequest->getFromSheet(),
