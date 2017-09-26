@@ -25,6 +25,7 @@ use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Repository\MeetingRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\MeetingSlotRepositoryInterface;
 use Proximum\Vimeet\Domain\Request\ParticipantWithPhoneValidated;
+use Proximum\Vimeet\Domain\Slot\SlotPlus10minutes;
 use Proximum\Vimeet\Domain\Spot\AvailableSpots;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
@@ -45,6 +46,12 @@ class TransformRequestIntoMeetingHandler
     /** @var AvailableSpots */
     private $availableSpots;
 
+    /** @var \DateTimeInterface */
+    private $dateTime;
+
+    /** @var SlotPlus10minutes */
+    private $slotPlus10minutes;
+
     /**
      * Array of available slots by sheet and by participant
      *
@@ -60,26 +67,22 @@ class TransformRequestIntoMeetingHandler
     private $toSheet;
 
     /**
-     * @var \DateTimeInterface
-     */
-    private $dateTime;
-
-    /**
      * TransformRequestIntoMeetingHandler constructor.
      *
      * @param MeetingSlotRepositoryInterface $meetingSlotRepository
      * @param ParticipantWithPhoneValidated  $participantWithPhoneValidated
      * @param AvailableSpots                 $availableSpots
      * @param MeetingRepositoryInterface     $meetingRepository
+     * @param SlotPlus10minutes              $slotPlus10minutes
      * @param EventDispatcherInterface       $eventDispatcher
      * @param \DateTimeInterface             $dateTime
-     *
      */
     public function __construct(
         MeetingSlotRepositoryInterface $meetingSlotRepository,
         ParticipantWithPhoneValidated $participantWithPhoneValidated,
         AvailableSpots $availableSpots,
         MeetingRepositoryInterface $meetingRepository,
+        SlotPlus10minutes $slotPlus10minutes,
         EventDispatcherInterface $eventDispatcher,
         \DateTimeInterface $dateTime
     ) {
@@ -89,6 +92,7 @@ class TransformRequestIntoMeetingHandler
         $this->dateTime                      = $dateTime;
         $this->meetingRepository             = $meetingRepository;
         $this->eventDispatcher               = $eventDispatcher;
+        $this->slotPlus10minutes = $slotPlus10minutes;
     }
 
     /**
@@ -201,6 +205,8 @@ class TransformRequestIntoMeetingHandler
                 [$participant]
             );
 
+            $slots = $this->slotPlus10minutes->getFilteredSlots($slots);
+
             $availableSlotViews = [];
 
             foreach ($slots as $slot) {
@@ -228,6 +234,8 @@ class TransformRequestIntoMeetingHandler
             $event,
             $participants
         );
+
+        $slots = $this->slotPlus10minutes->getFilteredSlots($slots);
 
         return $slots;
     }
