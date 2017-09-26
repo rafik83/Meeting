@@ -5483,8 +5483,8 @@ services:
         class: Proximum\Vimeet\Domain\User\Phone\ValidationRequiredChecker
         arguments:
             - '@domain.event.day.dday_guesser'
-            - '@query.tip.tip_translation_view_query_handler'
-            - '@repository.user.user_event_phone_repository'
+            - '@domain.tip.confirmation_phone_tip_checker'
+            - '@domain.user_event.user_event_phone_checker'
     domain.request.participant_with_phone_validated:
         class: Proximum\Vimeet\Domain\Request\ParticipantWithPhoneValidated
         arguments:
