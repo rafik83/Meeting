@@ -59,7 +59,7 @@ class ValidationRequiredChecker
             );
 
             if ($isTipConfirmationPhoneEnabled) {
-                return $this->userEventPhoneChecker->isValidated(
+                return !$this->userEventPhoneChecker->isValidated(
                     $user,
                     $sheet->getEvent()
                 );
