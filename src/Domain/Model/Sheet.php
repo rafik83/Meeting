@@ -311,6 +311,7 @@ class Sheet implements TraceableInterface
     }
 
     /**
+     * @deprecated use countParticipants()
      * @return int
      */
     public function countParticipant()

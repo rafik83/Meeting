@@ -43,13 +43,19 @@ class AvailableSlotsBySheetView
 
     /**
      * @param Sheet $sheet
-     * @param array $participants
      * @param bool  $hasNoPreference
      */
-    public function __construct(Sheet $sheet, array $participants, bool $hasNoPreference)
+    public function __construct(Sheet $sheet, bool $hasNoPreference)
     {
         $this->sheet           = $sheet;
         $this->hasNoPreference = $hasNoPreference;
-        $this->participants    = $participants;
+    }
+
+    /**
+     * @param array $participants
+     */
+    public function setParticipants(array $participants)
+    {
+        $this->participants = $participants;
     }
 }
