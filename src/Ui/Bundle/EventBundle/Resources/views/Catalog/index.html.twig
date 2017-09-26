@@ -6,8 +6,6 @@
 
 {% block body_attributes 'class="grey"' %}
 
-{% form_theme searchForm '@Ui/default.html.twig' %}
-
 {% block header_mobile %}
     <div class="catalog-mobile-menu">
     {% if searchForm.type is defined or searchForm.availableSlot is defined %}
@@ -22,7 +20,7 @@
             {% endif %}
             {% if searchForm.type is defined %}
             <a href="#" class="catalog-mobile-menu-button btn btn-primary btn-block">
-                <span>...</span>
+                <span>...</span>p
                 <span class="button-count">
                     (...)
                     <i class="glyphicon glyphicon-chevron-down"></i>
