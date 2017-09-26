@@ -90,7 +90,7 @@ class MeetingRequestListViewQueryHandlerTest extends TestCase
         $meetingPublishedAccessChecker->allowedToAccess($event)->shouldBeCalled()->willReturn(false);
         $meetingRequestAccessChecker->allowedToAccess($event)->shouldBeCalled()->willReturn(true);
         $answeringMeetingRequestAccessChecker->allowedToAccess($event)->shouldBeCalled()->willReturn(true);
-        $validationRequiredChecker->handle($sheet, $user, $locale)->shouldBeCalled()->willReturn(false);
+        $validationRequiredChecker->handle($sheet, $user)->shouldBeCalled()->willReturn(false);
 
         $handler = new MeetingRequestListViewQueryHandler(
             $meetingRequestRepository->reveal(),

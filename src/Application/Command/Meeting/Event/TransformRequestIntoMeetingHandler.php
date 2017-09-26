@@ -139,6 +139,10 @@ class TransformRequestIntoMeetingHandler
 
         $availableMeetings = $this->buildAvailableMeetings();
 
+        if (count($availableMeetings) === 0) {
+            throw new CannotBeTransformIntoMeetingOnDdayException();
+        }
+
         $transformableMeeting = $this->getTransformableMeeting($query->event, $availableMeetings);
 
         try {
@@ -246,6 +250,8 @@ class TransformRequestIntoMeetingHandler
                     );
                 }
             }
+
+            return $availableMeetings;
         }
 
         // fromSheet has participants preference and toSheet has no preference
@@ -261,6 +267,8 @@ class TransformRequestIntoMeetingHandler
                     }
                 }
             }
+
+            return $availableMeetings;
         }
 
         if (!$this->toSheet->hasNoPreference && $this->fromSheet->hasNoPreference) {
@@ -275,6 +283,8 @@ class TransformRequestIntoMeetingHandler
                     }
                 }
             }
+
+            return $availableMeetings;
         }
 
         if ($this->fromSheet->hasNoPreference && $this->toSheet->hasNoPreference) {
@@ -289,6 +299,8 @@ class TransformRequestIntoMeetingHandler
                     }
                 }
             }
+
+            return $availableMeetings;
         }
 
         return $availableMeetings;
