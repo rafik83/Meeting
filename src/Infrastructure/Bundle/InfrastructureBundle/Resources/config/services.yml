@@ -3404,7 +3404,6 @@ services:
         arguments:
             - '@vimeet_infrastructure.repository.sheet_repository'
             - '@vimeet_infrastructure.repository.participant_repository'
-            - '@vimeet_infrastructure.repository.meeting.request_repository'
             - '@catalog.visible_participation_types'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Agenda\AvailableSheets\SheetsAvailableBySlotQuery }
