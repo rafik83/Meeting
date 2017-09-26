@@ -641,7 +641,7 @@ services:
             - '@vimeet_infrastructure.adapter.delayed_event_dispatcher'
             - '@domain.user.phone.validation_required_checker'
             - '@vimeet_infrastructure.repository.meeting_slot_repository'
-            - '@vimeet_infrastructure.vimeet.application.command.request.transform_request_into_meeting'
+            - '@command.meeting.event.transform_request_into_meeting_handler'
             - '@datetime'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Meeting\ApproveRequest }
@@ -5580,8 +5580,8 @@ services:
         class: Proximum\Vimeet\Domain\User\Phone\ValidationRequiredChecker
         arguments:
             - '@domain.event.day.dday_guesser'
-            - '@query.tip.tip_translation_view_query_handler'
-            - '@repository.user.user_event_phone_repository'
+            - '@domain.tip.confirmation_phone_tip_checker'
+            - '@domain.user_event.user_event_phone_checker'
     domain.request.participant_with_phone_validated:
         class: Proximum\Vimeet\Domain\Request\ParticipantWithPhoneValidated
         arguments:
