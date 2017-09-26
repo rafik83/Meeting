@@ -400,15 +400,15 @@ class MeetingRequestController extends Controller
             try {
                 /** @var null|MeetingDdayView $meetingDdayView */
                 $meetingDdayView = $this->get('tactician.commandbus')->handle($approveRequest);
-                $transformRequestIntoMeetingError = false;
+                if (!empty($meetingDdayView)) {
+                    $flashMessageView = $this->renderView('EventBundle::MeetingRequest\Message\requestTransformedIntoMeeting.html.twig', [
+                        'meetingDdayView' => $meetingDdayView,
+                        'error'           => false,
+                    ]);
+                }
             } catch (CannotBeTransformIntoMeetingOnDdayException $exception) {
-                $transformRequestIntoMeetingError = true;
-            }
-
-            if ($meetingDdayView !== null) {
                 $flashMessageView = $this->renderView('EventBundle::MeetingRequest\Message\requestTransformedIntoMeeting.html.twig', [
-                    'meetingDdayView' => $meetingDdayView,
-                    'error' => $transformRequestIntoMeetingError
+                    'error' => true,
                 ]);
             }
 
