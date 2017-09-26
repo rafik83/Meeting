@@ -19,6 +19,7 @@ use Proximum\Vimeet\Application\Event\MeetingRequest\ParticipateToRequestEvent;
 use Proximum\Vimeet\Application\Exception\MeetingRequest\CannotBeTransformIntoMeetingOnDdayException;
 use Proximum\Vimeet\Application\Exception\MeetingRequest\IsNotAllowedToApproveMeetingRequestException;
 use Proximum\Vimeet\Application\View\Meeting\MeetingDdayView;
+use Proximum\Vimeet\Domain\Event\Day\DDayGuesser;
 use Proximum\Vimeet\Domain\Model\Meeting\Message;
 use Proximum\Vimeet\Domain\Model\Meeting\Request;
 use Proximum\Vimeet\Domain\Repository\Meeting\MessageRepositoryInterface;
@@ -53,6 +54,9 @@ class ApproveRequestHandler
     /** @var TransformRequestIntoMeetingHandler */
     private $transformRequestIntoMeetingHandler;
 
+    /** @var DDayGuesser */
+    private $ddayGuesser;
+
     /**
      * @param RequestRepositoryInterface         $requestRepository
      * @param MessageRepositoryInterface         $messageRepository
@@ -61,6 +65,7 @@ class ApproveRequestHandler
      * @param ValidationRequiredChecker          $validationRequiredChecker
      * @param MeetingSlotRepositoryInterface     $slotRepository
      * @param TransformRequestIntoMeetingHandler $transformRequestIntoMeetingHandler
+     * @param DDayGuesser                        $ddayGuesser
      * @param \DateTimeInterface                 $datetime
      */
     public function __construct(
@@ -71,6 +76,7 @@ class ApproveRequestHandler
         ValidationRequiredChecker $validationRequiredChecker,
         MeetingSlotRepositoryInterface $slotRepository,
         TransformRequestIntoMeetingHandler $transformRequestIntoMeetingHandler,
+        DDayGuesser $ddayGuesser,
         \DateTimeInterface $datetime
     ) {
         $this->requestRepository                  = $requestRepository;
@@ -81,6 +87,7 @@ class ApproveRequestHandler
         $this->validationRequiredChecker          = $validationRequiredChecker;
         $this->slotRepository                     = $slotRepository;
         $this->transformRequestIntoMeetingHandler = $transformRequestIntoMeetingHandler;
+        $this->ddayGuesser                        = $ddayGuesser;
     }
 
     /**
@@ -139,7 +146,9 @@ class ApproveRequestHandler
             $approveRequest->editor
         );
 
-        if (false === $validationRequired) {
+        $isDday = $this->ddayGuesser->isItDDay($approveRequest->request->getEvent());
+
+        if (false === $validationRequired && $isDday === true) {
             return $this->transformRequestIntoMeetingOnDday($approveRequest->request, $approveRequest->locale);
         }
 

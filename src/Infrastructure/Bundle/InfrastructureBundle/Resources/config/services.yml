@@ -642,6 +642,7 @@ services:
             - '@domain.user.phone.validation_required_checker'
             - '@vimeet_infrastructure.repository.meeting_slot_repository'
             - '@command.meeting.event.transform_request_into_meeting_handler'
+            - '@domain.event.day.dday_guesser'
             - '@datetime'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Meeting\ApproveRequest }

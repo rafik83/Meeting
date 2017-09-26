@@ -17,6 +17,7 @@ use Proximum\Vimeet\Application\Command\Meeting\ApproveRequest;
 use Proximum\Vimeet\Application\Command\Meeting\ApproveRequestHandler;
 use Proximum\Vimeet\Application\Components\Meeting\RequestPermissionManager;
 use Proximum\Vimeet\Application\Exception\MeetingRequest\IsNotAllowedToApproveMeetingRequestException;
+use Proximum\Vimeet\Domain\Event\Day\DDayGuesser;
 use Proximum\Vimeet\Domain\Model\Meeting\Message;
 use Proximum\Vimeet\Domain\Model\Meeting\Request;
 use Proximum\Vimeet\Domain\Model\Participant;
@@ -78,12 +79,15 @@ class ApproveRequestHandlerTest extends TestCase
         $validationRequiredChecker = $this->prophesize(ValidationRequiredChecker::class);
         $slotRepository = $this->prophesize(MeetingSlotRepositoryInterface::class);
         $transformMeetingIntoRequestHandler = $this->prophesize(TransformRequestIntoMeetingHandler::class);
+        $ddayGuesser = $this->prophesize(DDayGuesser::class);
 
         $validationRequiredChecker
             ->handle(Argument::type(Sheet::class), Argument::type(User::class))
             ->shouldBeCalled()
             ->willReturn(true)
         ;
+
+        $ddayGuesser->isItDDay($event)->shouldBeCalled()->willReturn(false);
 
         $handler = new ApproveRequestHandler(
             $requestRepository->reveal(),
@@ -93,6 +97,7 @@ class ApproveRequestHandlerTest extends TestCase
             $validationRequiredChecker->reveal(),
             $slotRepository->reveal(),
             $transformMeetingIntoRequestHandler->reveal(),
+            $ddayGuesser->reveal(),
             $dateTime
         );
         $handler->handle($approveRequest);
@@ -145,6 +150,13 @@ class ApproveRequestHandlerTest extends TestCase
         $validationRequiredChecker = $this->prophesize(ValidationRequiredChecker::class);
         $slotRepository = $this->prophesize(MeetingSlotRepositoryInterface::class);
         $transformMeetingIntoRequestHandler = $this->prophesize(TransformRequestIntoMeetingHandler::class);
+        $ddayGuesser = $this->prophesize(DDayGuesser::class);
+
+        $validationRequiredChecker
+            ->handle(Argument::type(Sheet::class), Argument::type(User::class))
+            ->shouldNotBeCalled();
+
+        $ddayGuesser->isItDDay($event)->shouldNotBeCalled();
 
         $handler = new ApproveRequestHandler(
             $requestRepository->reveal(),
@@ -154,6 +166,7 @@ class ApproveRequestHandlerTest extends TestCase
             $validationRequiredChecker->reveal(),
             $slotRepository->reveal(),
             $transformMeetingIntoRequestHandler->reveal(),
+            $ddayGuesser->reveal(),
             $dateTime
         );
         $handler->handle($approveRequest);
