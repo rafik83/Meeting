@@ -332,6 +332,7 @@ class MeetingRequestController extends Controller
                 $this->renderView('EventBundle:MeetingRequest\Button:pendingRequestButton.html.twig', [
                     'sheet'          => $sheet,
                     'meetingRequest' => $result->meetingRequest,
+                    'isPhoneValidationRequired' => false
                 ]),
                 $this->getParticipantsHtml($createRequest->participants, $request->getLocale())
             ));
@@ -423,6 +424,7 @@ class MeetingRequestController extends Controller
                         ->getEvent()
                         ->getConfiguration()
                         ->isMeetingRequestUpdateLocked(),
+                    'isPhoneValidationRequired' => false
                 ]),
                 $this->getParticipantsHtml($approveRequest->participants, $request->getLocale()),
                 $flashMessageView ?? null
@@ -493,6 +495,7 @@ class MeetingRequestController extends Controller
                 $this->renderView('EventBundle:MeetingRequest\Button:refusedProposition.html.twig', [
                     'sheet'          => $sheet,
                     'meetingRequest' => $meetingRequest,
+                    'isPhoneValidationRequired' => false
                 ])
             ));
         } elseif ($isSubmitted && !$form->isValid()) {
@@ -568,6 +571,7 @@ class MeetingRequestController extends Controller
                         $this->renderView('EventBundle:MeetingRequest\Button:approveRefuseRequestButton.html.twig', [
                             'meetingRequest' => $meetingRequest,
                             'sheet'          => $meetingRequest->getToSheet(),
+                            'isPhoneValidationRequired' => false
                         ])
                     ));
                 } else {
@@ -680,6 +684,7 @@ class MeetingRequestController extends Controller
                         $this->renderView('EventBundle:MeetingRequest/Button:createRequest.html.twig', [
                             'sheet'   => $sheet,
                             'toSheet' => $toSheet,
+                            'isPhoneValidationRequired' => false
                         ])
                     ));
                 } else {
@@ -726,6 +731,7 @@ class MeetingRequestController extends Controller
                     $this->renderView('EventBundle:MeetingRequest/Button:approveRefuseRequestButton.html.twig', [
                         'meetingRequest' => $meetingRequest,
                         'sheet'          => $sheet,
+                        'isPhoneValidationRequired' => false
                     ])
                 ));
             }
