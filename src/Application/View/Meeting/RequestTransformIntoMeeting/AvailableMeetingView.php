@@ -42,24 +42,40 @@ class AvailableMeetingView
     public $toParticipants = [];
 
     /**
+     * @var bool
+     */
+    public $fromSheetHasNoPreference;
+
+    /**
+     * @var bool
+     */
+    public $toSheetHasNoPreference;
+
+    /**
      *
      * @param MeetingSlot   $slot
      * @param Sheet         $fromSheet
      * @param Sheet         $toSheet
      * @param Participant[] $fromParticipants
      * @param Participant[] $toParticipants
+     * @param bool          $fromSheetHasNoPreference
+     * @param bool          $toSheetHasNoPreference
      */
     public function __construct(
         MeetingSlot $slot,
         Sheet $fromSheet,
         Sheet $toSheet,
         array $fromParticipants,
-        array $toParticipants
+        array $toParticipants,
+        bool $fromSheetHasNoPreference,
+        bool $toSheetHasNoPreference
     ) {
-        $this->slot             = $slot;
-        $this->fromSheet        = $fromSheet;
-        $this->toSheet          = $toSheet;
-        $this->fromParticipants = $fromParticipants;
-        $this->toParticipants   = $toParticipants;
+        $this->slot                     = $slot;
+        $this->fromSheet                = $fromSheet;
+        $this->toSheet                  = $toSheet;
+        $this->fromParticipants         = $fromParticipants;
+        $this->toParticipants           = $toParticipants;
+        $this->fromSheetHasNoPreference = $fromSheetHasNoPreference;
+        $this->toSheetHasNoPreference   = $toSheetHasNoPreference;
     }
 }

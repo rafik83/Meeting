@@ -81,13 +81,11 @@ class ApproveRequestHandlerTest extends TestCase
         $transformMeetingIntoRequestHandler = $this->prophesize(TransformRequestIntoMeetingHandler::class);
         $ddayGuesser = $this->prophesize(DDayGuesser::class);
 
+        $ddayGuesser->isItDDay($event)->shouldBeCalled()->willReturn(false);
+
         $validationRequiredChecker
             ->handle(Argument::type(Sheet::class), Argument::type(User::class))
-            ->shouldBeCalled()
-            ->willReturn(true)
-        ;
-
-        $ddayGuesser->isItDDay($event)->shouldBeCalled()->willReturn(false);
+            ->shouldNotBeCalled();
 
         $handler = new ApproveRequestHandler(
             $requestRepository->reveal(),

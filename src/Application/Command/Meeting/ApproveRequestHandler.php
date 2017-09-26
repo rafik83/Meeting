@@ -140,16 +140,16 @@ class ApproveRequestHandler
             new ApprovedRequestEvent($approveRequest->request)
         );
 
-        // transform request into meeting on dday if tip validate phone enabled
-        $validationRequired = $this->validationRequiredChecker->handle(
-            $approveRequest->sheet,
-            $approveRequest->editor
-        );
+        if ($this->ddayGuesser->isItDDay($approveRequest->request->getEvent())) {
+            // transform request into meeting on dday if tip validate phone enabled
+            $validationRequired = $this->validationRequiredChecker->handle(
+                $approveRequest->sheet,
+                $approveRequest->editor
+            );
 
-        $isDday = $this->ddayGuesser->isItDDay($approveRequest->request->getEvent());
-
-        if (false === $validationRequired && $isDday === true) {
-            $meetingView = $this->transformRequestIntoMeetingOnDday($approveRequest->request, $approveRequest->locale);
+            if (!$validationRequired) {
+                $meetingView = $this->transformRequestIntoMeetingOnDday($approveRequest->request, $approveRequest->locale);
+            }
         }
 
         return new TransformRequestIntoMeetingView($meetingView ?? null, isset($meetingView) && $meetingView === null);

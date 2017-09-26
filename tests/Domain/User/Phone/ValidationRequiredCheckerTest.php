@@ -56,6 +56,6 @@ class ValidationRequiredCheckerTest extends TestCase
 
         $validationRequired = $validationRequiredChecker->handle($sheet->reveal(), $user->reveal());
 
-        $this->assertEquals(true, $validationRequired);
+        $this->assertEquals(false, $validationRequired);
     }
 }
