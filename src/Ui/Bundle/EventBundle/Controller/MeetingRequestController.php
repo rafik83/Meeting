@@ -18,7 +18,6 @@ use Proximum\Vimeet\Application\Command\Meeting\UnApproveMeetingRequest;
 use Proximum\Vimeet\Application\Command\Meeting\UnRefuseMeetingRequest;
 use Proximum\Vimeet\Application\Command\Meeting\UpdateMeetingRequest;
 use Proximum\Vimeet\Application\Components\Meeting\RequestPermissionManager;
-use Proximum\Vimeet\Application\Exception\MeetingRequest\CannotBeTransformIntoMeetingOnDdayException;
 use Proximum\Vimeet\Application\Query\Agenda\AvailableSheets\AvailableSlotsByParticipantQuery;
 use Proximum\Vimeet\Application\Query\Meeting\MeetingRequestListViewQuery;
 use Proximum\Vimeet\Application\Query\Meeting\Message\DiscussionMeetingRequestViewQuery;
@@ -27,10 +26,10 @@ use Proximum\Vimeet\Application\Query\Tip\TipTranslationViewQuery;
 use Proximum\Vimeet\Application\Query\Tip\TipTranslationViewQueryHandler;
 use Proximum\Vimeet\Application\Query\Type\MeetingTypeViewQuery;
 use Proximum\Vimeet\Application\View\Agenda\Slot\AvailableSlotView;
-use Proximum\Vimeet\Application\View\Meeting\MeetingDdayView;
 use Proximum\Vimeet\Application\View\Meeting\MeetingRequestListView;
 use Proximum\Vimeet\Application\View\Meeting\Message\DiscussionMeetingRequestView;
 use Proximum\Vimeet\Application\View\Meeting\StateListsView;
+use Proximum\Vimeet\Application\View\Meeting\TransformRequestIntoMeetingView;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Meeting\Constant;
 use Proximum\Vimeet\Domain\Model\Meeting\Request as MeetingRequest;
@@ -397,18 +396,13 @@ class MeetingRequestController extends Controller
         $isSubmitted = $form->handleRequest($request)->isSubmitted();
 
         if ($isSubmitted && $form->isValid()) {
-            try {
-                /** @var null|MeetingDdayView $meetingDdayView */
-                $meetingDdayView = $this->get('tactician.commandbus')->handle($approveRequest);
-                if (!empty($meetingDdayView)) {
-                    $flashMessageView = $this->renderView('EventBundle::MeetingRequest\Message\requestTransformedIntoMeeting.html.twig', [
-                        'meetingDdayView' => $meetingDdayView,
-                        'error'           => false,
-                    ]);
-                }
-            } catch (CannotBeTransformIntoMeetingOnDdayException $exception) {
+            /** @var TransformRequestIntoMeetingView $transformRequestIntoMeetingView */
+            $transformRequestIntoMeetingView = $this->get('tactician.commandbus')->handle($approveRequest);
+
+            if ($transformRequestIntoMeetingView->meetingView !== null) {
                 $flashMessageView = $this->renderView('EventBundle::MeetingRequest\Message\requestTransformedIntoMeeting.html.twig', [
-                    'error' => true,
+                    'meetingDdayView' => $transformRequestIntoMeetingView->meetingView,
+                    'error'           => $transformRequestIntoMeetingView->hasError,
                 ]);
             }
 

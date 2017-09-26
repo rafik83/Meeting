@@ -19,6 +19,7 @@ use Proximum\Vimeet\Application\Event\MeetingRequest\ParticipateToRequestEvent;
 use Proximum\Vimeet\Application\Exception\MeetingRequest\CannotBeTransformIntoMeetingOnDdayException;
 use Proximum\Vimeet\Application\Exception\MeetingRequest\IsNotAllowedToApproveMeetingRequestException;
 use Proximum\Vimeet\Application\View\Meeting\MeetingDdayView;
+use Proximum\Vimeet\Application\View\Meeting\TransformRequestIntoMeetingView;
 use Proximum\Vimeet\Domain\Event\Day\DDayGuesser;
 use Proximum\Vimeet\Domain\Model\Meeting\Message;
 use Proximum\Vimeet\Domain\Model\Meeting\Request;
@@ -93,11 +94,10 @@ class ApproveRequestHandler
     /**
      * @param ApproveRequest $approveRequest
      *
-     * @return null|MeetingDdayView
+     * @return TransformRequestIntoMeetingView
      * @throws IsNotAllowedToApproveMeetingRequestException
-     * @throws CannotBeTransformIntoMeetingOnDdayException
      */
-    public function handle(ApproveRequest $approveRequest): ?MeetingDdayView
+    public function handle(ApproveRequest $approveRequest): TransformRequestIntoMeetingView
     {
         if (!$this->permissionManager->isAllowedToApprove(
             $approveRequest->request,
@@ -149,10 +149,10 @@ class ApproveRequestHandler
         $isDday = $this->ddayGuesser->isItDDay($approveRequest->request->getEvent());
 
         if (false === $validationRequired && $isDday === true) {
-            return $this->transformRequestIntoMeetingOnDday($approveRequest->request, $approveRequest->locale);
+            $meetingView = $this->transformRequestIntoMeetingOnDday($approveRequest->request, $approveRequest->locale);
         }
 
-        return null;
+        return new TransformRequestIntoMeetingView($meetingView ?? null, isset($meetingView) && $meetingView === null);
     }
 
     /**
@@ -165,19 +165,23 @@ class ApproveRequestHandler
     {
         $isVisio = $this->isVisioMeeting($request);
 
-        $meeting = $this->transformRequestIntoMeetingHandler->handle(
-            new TransformRequestIntoMeeting(
-                $request,
-                $isVisio
-            )
-        );
+        try {
+            $meeting = $this->transformRequestIntoMeetingHandler->handle(
+                new TransformRequestIntoMeeting(
+                    $request,
+                    $isVisio
+                )
+            );
 
-        return new MeetingDdayView(
-            $meeting->getSlot()->getBegin(),
-            $meeting->getSpot()->getReference(),
-            $meeting->getEvent()->getTimeZone(),
-            $locale
-        );
+            return new MeetingDdayView(
+                $meeting->getSlot()->getBegin(),
+                $meeting->getSpot()->getReference(),
+                $meeting->getEvent()->getTimeZone(),
+                $locale
+            );
+        } catch (CannotBeTransformIntoMeetingOnDdayException $exception) {
+            return null;
+        }
     }
 
     /**
