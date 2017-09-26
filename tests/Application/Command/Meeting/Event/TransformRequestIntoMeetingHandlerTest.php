@@ -17,6 +17,7 @@ use Proximum\Vimeet\Application\Command\Meeting\Event\TransformRequestIntoMeetin
 use Proximum\Vimeet\Application\Event\Events;
 use Proximum\Vimeet\Application\Event\Meeting\MeetingCreatedEvent;
 use Proximum\Vimeet\Application\Event\Meeting\MeetingParticipateEvent;
+use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Meeting;
 use Proximum\Vimeet\Domain\Model\Meeting\Request;
 use Proximum\Vimeet\Domain\Model\MeetingSlot;
@@ -32,6 +33,33 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 class TransformRequestIntoMeetingHandlerTest extends TestCase
 {
+    /** @var Event */
+    public $event;
+
+    /** @var \DateTime */
+    public $datetime;
+
+    /** @var Sheet */
+    public $fromSheet;
+
+    /** @var Sheet */
+    public $toSheet;
+
+    /** @var Participant */
+    public $fromParticipant;
+
+    /** @var Participant */
+    public $toParticipant;
+
+    /** @var Request */
+    public $request;
+
+    /** @var MeetingSlot */
+    public $slot;
+
+    /** @var Spot */
+    public $spot;
+
     public function setUp()
     {
         $this->event    = EventFactory::createEvent();
@@ -146,11 +174,18 @@ class TransformRequestIntoMeetingHandlerTest extends TestCase
 
         $query = new TransformRequestIntoMeeting($request->reveal(), false);
 
-        $transformRequestIntoMeetingHandler->handle($query);
+        $meeting = $transformRequestIntoMeetingHandler->handle($query);
+
+        $this->assertEquals($expectedMeeting, $meeting);
     }
 
     public function testHandleWithFromSheetHasNoPreference()
     {
+        $slotTwo = $this->prophesize(MeetingSlot::class);
+        $slotTwo->getId()->willReturn(2);
+        $fromParticipantTwo = $this->prophesize(Participant::class);
+        $fromParticipantTwo->getId()->willReturn(3);
+
         $this->request->getEvent()->willReturn($this->event);
         $this->request->getFromParticipantsArray()->willReturn([$this->fromParticipant->reveal()]);
         $this->request->getToParticipantsArray()->willReturn([$this->toParticipant->reveal()]);
@@ -164,7 +199,10 @@ class TransformRequestIntoMeetingHandlerTest extends TestCase
         $this->toParticipant->getId()->willReturn(2);
 
         $this->fromSheet->getParticipantsArray()
-            ->willReturn([$this->fromParticipant->reveal()]);
+            ->willReturn([
+                $this->fromParticipant->reveal(),
+                $fromParticipantTwo->reveal()
+            ]);
 
         $meetingSlotRepository         = $this->prophesize(MeetingSlotRepositoryInterface::class);
         $participantWithPhoneValidated = $this->prophesize(ParticipantWithPhoneValidated::class);
@@ -188,11 +226,18 @@ class TransformRequestIntoMeetingHandlerTest extends TestCase
 
         // Mock
 
+        // from sheet slot by participant
         $meetingSlotRepository->findAvailableSlotsByParticipants(
             $this->event,
             [$this->fromParticipant->reveal()]
-        )->shouldBeCalledTimes(1)->willReturn([$this->slot->reveal()]);
+        )->shouldBeCalled()->willReturn([$this->slot->reveal()]);
 
+        $meetingSlotRepository->findAvailableSlotsByParticipants(
+            $this->event,
+            [$fromParticipantTwo->reveal()]
+        )->shouldBeCalled()->willReturn([$slotTwo->reveal()]);
+
+        // to sheet slot for all selected participants
         $meetingSlotRepository->findAvailableSlotsByParticipants(
             $this->event,
             [$this->toParticipant->reveal()]
@@ -241,6 +286,8 @@ class TransformRequestIntoMeetingHandlerTest extends TestCase
 
         $query = new TransformRequestIntoMeeting($this->request->reveal(), false);
 
-        $transformRequestIntoMeetingHandler->handle($query);
+        $meeting = $transformRequestIntoMeetingHandler->handle($query);
+
+        $this->assertEquals($expectedMeeting, $meeting);
     }
 }
