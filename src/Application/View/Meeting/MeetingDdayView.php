@@ -10,28 +10,36 @@
 
 namespace Proximum\Vimeet\Application\View\Meeting;
 
+use IntlDateFormatter;
+
 class MeetingDdayView
 {
-    /**
-     * @var \DateTimeInterface
-     */
+    /** @var \DateTimeInterface */
     private $datetime;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     public $spotName;
+
+    /** @var string */
+    public $locale;
+
+    /** @var string */
+    private $timezone;
 
     /**
      * MeetingDdayView constructor.
      *
      * @param \DateTimeInterface $datetime
      * @param string             $spotName
+     * @param string             $timezone
+     * @param string             $locale
      */
-    public function __construct(\DateTimeInterface $datetime, string $spotName)
+    public function __construct(\DateTimeInterface $datetime, string $spotName, string $timezone, string $locale)
     {
         $this->datetime = $datetime;
         $this->spotName = $spotName;
+        $this->locale   = $locale;
+        $this->timezone = $timezone;
     }
 
     /**
@@ -39,7 +47,14 @@ class MeetingDdayView
      */
     public function getDate(): string
     {
-        return $this->datetime->format('d/m/y');
+        $dayFormatter = new \IntlDateFormatter(
+            $this->locale,
+            \IntlDateFormatter::FULL,
+            \IntlDateFormatter::NONE,
+            $this->timezone
+        );
+
+        return $dayFormatter->format($this->datetime);
     }
 
     /**
@@ -47,6 +62,13 @@ class MeetingDdayView
      */
     public function getTime(): string
     {
-        return $this->datetime->format('h:i');
+        $timeFormatter = new IntlDateFormatter(
+            $this->locale,
+            IntlDateFormatter::NONE,
+            IntlDateFormatter::SHORT,
+            $this->timezone
+        );
+
+        return $timeFormatter->format($this->datetime);
     }
 }

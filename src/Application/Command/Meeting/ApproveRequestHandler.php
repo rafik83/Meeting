@@ -140,7 +140,7 @@ class ApproveRequestHandler
         );
 
         if (false === $validationRequired) {
-            return $this->transformRequestIntoMeetingOnDday($approveRequest->request);
+            return $this->transformRequestIntoMeetingOnDday($approveRequest->request, $approveRequest->locale);
         }
 
         return null;
@@ -148,11 +148,11 @@ class ApproveRequestHandler
 
     /**
      * @param Request $request
+     * @param string  $locale
      *
      * @return null|MeetingDdayView
-     * @throws CannotBeTransformIntoMeetingOnDdayException
      */
-    private function transformRequestIntoMeetingOnDday(Request $request): ?MeetingDdayView
+    private function transformRequestIntoMeetingOnDday(Request $request, string $locale): ?MeetingDdayView
     {
         $isVisio = $this->isVisioMeeting($request);
 
@@ -165,7 +165,9 @@ class ApproveRequestHandler
 
         return new MeetingDdayView(
             $meeting->getSlot()->getBegin(),
-            $meeting->getSpot()->getReference()
+            $meeting->getSpot()->getReference(),
+            $meeting->getEvent()->getTimeZone(),
+            $locale
         );
     }
 

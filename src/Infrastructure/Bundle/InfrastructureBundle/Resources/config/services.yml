@@ -5488,7 +5488,6 @@ services:
     domain.request.participant_with_phone_validated:
         class: Proximum\Vimeet\Domain\Request\ParticipantWithPhoneValidated
         arguments:
-            - '@domain.tip.confirmation_phone_tip_checker'
             - '@domain.user_event.user_event_phone_checker'
     domain.tip.confirmation_phone_tip_checker:
         class: Proximum\Vimeet\Domain\Tip\ConfirmationPhoneTipChecker

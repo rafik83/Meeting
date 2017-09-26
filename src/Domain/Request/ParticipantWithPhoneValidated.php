@@ -20,16 +20,10 @@ use Proximum\Vimeet\Domain\UserEvent\UserEventPhoneChecker;
 /**
  * Get participant with tip confirmation phone enabled and phone validated from meeting request
  *
- * @see ConfirmationPhoneTipChecker Check if Tip Confirmation Phone is enabled for sheet type
  * @see UserEventPhoneChecker Check if participant user has phone validated
  */
 class ParticipantWithPhoneValidated
 {
-    /**
-     * @var ConfirmationPhoneTipChecker
-     */
-    private $confirmationPhoneTipChecker;
-
     /**
      * @var UserEventPhoneChecker
      */
@@ -38,15 +32,11 @@ class ParticipantWithPhoneValidated
     /**
      * ParticipantWithPhoneValidated constructor.
      *
-     * @param ConfirmationPhoneTipChecker $confirmationPhoneTipChecker
-     * @param UserEventPhoneChecker       $userEventPhoneChecker
+     * @param UserEventPhoneChecker $userEventPhoneChecker
      */
-    public function __construct(
-        ConfirmationPhoneTipChecker $confirmationPhoneTipChecker,
-        UserEventPhoneChecker $userEventPhoneChecker
-    ) {
-        $this->confirmationPhoneTipChecker = $confirmationPhoneTipChecker;
-        $this->userEventPhoneChecker       = $userEventPhoneChecker;
+    public function __construct(UserEventPhoneChecker $userEventPhoneChecker)
+    {
+        $this->userEventPhoneChecker = $userEventPhoneChecker;
     }
 
     /**
@@ -55,14 +45,9 @@ class ParticipantWithPhoneValidated
      * @param array $participants
      *
      * @return null|Participant
-     * @throws \Exception
      */
     public function getParticipant(Event $event, Sheet $sheet, array $participants): ?Participant
     {
-        if (!$this->confirmationPhoneTipChecker->isEnabled($event, $sheet->getType())) {
-            throw new \Exception(); //TODO: changer l'exception
-        }
-
         foreach ($participants as $participant) {
             if ($this->userEventPhoneChecker->isValidated($participant->getUser(), $event)) {
                 return $participant;
