@@ -232,6 +232,7 @@ services:
         class: Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Catalog\SearchType
         arguments:
             - '@query.catalog.search_facet_view_query_handler'
+            - '@vimeet_infrastructure.adapter.translator_adapter'
         tags:
             - { name: form.type }
 
@@ -239,6 +240,7 @@ services:
         class: Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Catalog\SearchExternalType
         arguments:
             - '@query.catalog.search_facet_external_view_query_handler'
+            - '@vimeet_infrastructure.adapter.translator_adapter'
         tags:
             - { name: form.type }
 

@@ -20,5 +20,6 @@ final class SearchFields
     const FILTER_CONTENT               = 'content';
     const FILTER_OBJECTIVE             = 'objective';
     const FILTER_AVAILABLE_SLOT_IDS    = 'availableSlot';
+    const FILTER_BY_SPECIFIC_SLOT      = 'slot_id';
     const ORDER_BY                     = 'orderBy';
 }

@@ -22,10 +22,10 @@ use Proximum\Vimeet\Application\Query\Catalog\OrganizationCategoryViewQuery;
 use Proximum\Vimeet\Application\Query\Catalog\PositionViewQuery;
 use Proximum\Vimeet\Application\Query\Catalog\SearchFacet\SearchFacetViewQuery;
 use Proximum\Vimeet\Application\Query\Catalog\TypeViewQuery;
-use Proximum\Vimeet\Application\Query\Participant\CardListViewQuery;
 use Proximum\Vimeet\Application\Query\Sheet\PaginatedCatalogSheetPreviewViewQuery;
 use Proximum\Vimeet\Application\Query\Tip\TipTranslationViewQuery;
 use Proximum\Vimeet\Application\Query\Tip\TipTranslationViewQueryHandler;
+use Proximum\Vimeet\Application\View\Agenda\Slot\AvailableSlotView;
 use Proximum\Vimeet\Application\View\Catalog\FilteredFieldsView;
 use Proximum\Vimeet\Application\View\Catalog\PositionView;
 use Proximum\Vimeet\Domain\Catalog\Catalog;
@@ -33,9 +33,9 @@ use Proximum\Vimeet\Domain\Catalog\SearchFields;
 use Proximum\Vimeet\Domain\Model\Catalog\Internal\CatalogConstant;
 use Proximum\Vimeet\Domain\Exception\Sheet\AccessDeniedException;
 use Proximum\Vimeet\Domain\Model\Event;
+use Proximum\Vimeet\Domain\Model\MeetingSlot;
 use Proximum\Vimeet\Domain\Model\PaginatedResult;
 use Proximum\Vimeet\Domain\Model\Sheet;
-use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\View\Catalog\OrganizationCategoryView;
 use Proximum\Vimeet\Domain\View\Catalog\TypeView;
 use Proximum\Vimeet\Domain\View\Catalog\CategoryView;
@@ -151,16 +151,32 @@ class CatalogController extends Controller
         $dDay = $this->get('domain.event.day.dday_guesser')->isItDDay($event);
         $isUserParticipant = $sheet->hasUserParticipant($user);
         $filterAvailableSlot = $dDay && $isUserParticipant;
+        $specificSlot = null;
 
         $sheetsToExclude = [];
         $availableSlotsIds = [];
 
         if (true === $filterAvailableSlot) {
+            /** @var AvailableSlotView[] $availableSlots */
             $availableSlots = $this->get('tactician.commandbus.query')->handle(
                 new AvailableSlotsByParticipantQuery($event, $sheet->getUserParticipant($user))
             );
 
             $filterAvailableSlot = !empty($availableSlots);
+
+            $slotId = $request->query->get('slot_id');
+
+            if ($slotId !== null) {
+                $slot = $this->get('vimeet_infrastructure.repository.meeting_slot_repository')->findById((int) $slotId);
+
+                if ($slot !== null) {
+                    foreach ($availableSlots as $availableSlot) {
+                        if ($availableSlot->id === $slot->getId()) {
+                            $specificSlot = $slot;
+                        }
+                    }
+                }
+            }
         }
 
         $searchForm = $this->getSearchForm(
@@ -172,7 +188,8 @@ class CatalogController extends Controller
             $event,
             $sheet,
             $locale,
-            $filterAvailableSlot
+            $filterAvailableSlot,
+            $specificSlot
         );
 
         if ($searchForm->handleRequest($request)->isSubmitted() && $searchForm->isValid()) {
@@ -238,6 +255,7 @@ class CatalogController extends Controller
             $organizationCategoryViews,
             $positionViews,
             $filterAvailableSlot,
+            $specificSlot,
             $availableSlotsIds,
             $sheetsToExclude
         );
@@ -502,8 +520,10 @@ class CatalogController extends Controller
      * @param Sheet                      $sheet
      * @param string                     $locale
      * @param bool                       $filterAvailableSlotIds
+     * @param MeetingSlot|null           $specificSlot
      *
      * @return FormInterface
+     *
      */
     private function getSearchForm(
         array $filters,
@@ -514,7 +534,8 @@ class CatalogController extends Controller
         Event $event,
         Sheet $sheet,
         $locale,
-        bool $filterAvailableSlotIds = false
+        bool $filterAvailableSlotIds = false,
+        MeetingSlot $specificSlot = null
     ) {
         return $this->get('form.factory')->createNamed('', SearchType::class, $filters, [
             'action'                    => $this->generateUrl('event_catalog_index', ['sheet' => $sheet->getId()]),
@@ -525,6 +546,8 @@ class CatalogController extends Controller
             'event'                     => $event,
             'locale'                    => $locale,
             'filterByAvailableSlotIds'  => $filterAvailableSlotIds,
+            'filterBySpecificSlot'      => $specificSlot !== null,
+            'specificSlot'              => $specificSlot,
         ]);
     }
 
@@ -539,6 +562,7 @@ class CatalogController extends Controller
      * @param OrganizationCategoryView[] $organizationCategoryViews
      * @param PositionView[]             $positionViews
      * @param bool                       $filterAvailableSlotIds
+     * @param MeetingSlot|null           $specificSlot
      * @param array                      $availableSlotsIds
      * @param array                      $sheetsToExclude
      *
@@ -555,6 +579,7 @@ class CatalogController extends Controller
         array $organizationCategoryViews,
         array $positionViews,
         bool $filterAvailableSlotIds = false,
+        MeetingSlot $specificSlot = null,
         array $availableSlotsIds = [],
         array $sheetsToExclude = []
     ) {
@@ -583,7 +608,8 @@ class CatalogController extends Controller
             $event,
             $sheet,
             $locale,
-            $filterAvailableSlotIds
+            $filterAvailableSlotIds,
+            $specificSlot
         );
     }
 }

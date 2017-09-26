@@ -149,9 +149,10 @@ class AgendaController extends Controller
         ;
 
         $message = $this->renderView('EventBundle:Agenda/AvailableSlot:availableSheetForSlot.html.twig', [
-            'event' => $eventDomain->getEvent(),
-            'sheet' => $sheet,
             'countAvailableSheets' => $countAvailableSheets,
+            'event'                => $eventDomain->getEvent(),
+            'sheet'                => $sheet,
+            'slot'                 => $slot,
         ]);
 
         return new JsonResponse(['message' => $message, 'countAvailableSheets' => $countAvailableSheets]);
