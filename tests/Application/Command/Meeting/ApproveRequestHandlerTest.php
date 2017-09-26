@@ -12,7 +12,7 @@ namespace Proximum\Vimeet\Tests\Application\Command\Meeting;
 
 use DateTime;
 use Prophecy\Argument;
-use Proximum\Vimeet\Application\Command\Meeting\Admin\TransformRequestIntoMeetingHandler;
+use Proximum\Vimeet\Application\Command\Meeting\Event\TransformRequestIntoMeetingHandler;
 use Proximum\Vimeet\Application\Command\Meeting\ApproveRequest;
 use Proximum\Vimeet\Application\Command\Meeting\ApproveRequestHandler;
 use Proximum\Vimeet\Application\Components\Meeting\RequestPermissionManager;
@@ -80,7 +80,7 @@ class ApproveRequestHandlerTest extends TestCase
         $transformMeetingIntoRequestHandler = $this->prophesize(TransformRequestIntoMeetingHandler::class);
 
         $validationRequiredChecker
-            ->handle(Argument::type(Sheet::class), Argument::type(User::class), 'fr')
+            ->handle(Argument::type(Sheet::class), Argument::type(User::class))
             ->shouldBeCalled()
             ->willReturn(true)
         ;

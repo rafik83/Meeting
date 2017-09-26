@@ -13,6 +13,8 @@ namespace Proximum\Vimeet\Application\Command\Meeting\Event;
 use Proximum\Vimeet\Application\Event\Events;
 use Proximum\Vimeet\Application\Event\Meeting\MeetingCreatedEvent;
 use Proximum\Vimeet\Application\Event\Meeting\MeetingParticipateEvent;
+use Proximum\Vimeet\Application\Exception\Meeting\NoSpotsAvailableForThisSlotAndMeetingException;
+use Proximum\Vimeet\Application\Exception\MeetingRequest\CannotBeTransformIntoMeetingOnDdayException;
 use Proximum\Vimeet\Application\View\Meeting\RequestTransformIntoMeeting\AvailableMeetingView;
 use Proximum\Vimeet\Application\View\Meeting\RequestTransformIntoMeeting\AvailableSlotsBySheetView;
 use Proximum\Vimeet\Application\View\Meeting\RequestTransformIntoMeeting\AvailableSlotsParticipantView;
@@ -92,8 +94,8 @@ class TransformRequestIntoMeetingHandler
     /**
      * @param TransformRequestIntoMeeting $query
      *
-     * @throw NoSpotsAvailableForThisSlotAndMeetingException
      * @return Meeting
+     * @throws CannotBeTransformIntoMeetingOnDdayException
      */
     public function handle(TransformRequestIntoMeeting $query): Meeting
     {
@@ -139,14 +141,17 @@ class TransformRequestIntoMeetingHandler
 
         $transformableMeeting = $this->getTransformableMeeting($query->event, $availableMeetings);
 
-        // Can throw NoSpotsAvailableForThisSlotAndMeetingException
-        $spot = $this->availableSpots->getBySlot(
-            $transformableMeeting->slot,
-            $transformableMeeting->fromSheet,
-            $transformableMeeting->toSheet,
-            count($transformableMeeting->toParticipants) + count($transformableMeeting->fromParticipants),
-            $query->visio
-        );
+        try {
+            $spot = $this->availableSpots->getBySlot(
+                $transformableMeeting->slot,
+                $transformableMeeting->fromSheet,
+                $transformableMeeting->toSheet,
+                count($transformableMeeting->toParticipants) + count($transformableMeeting->fromParticipants),
+                $query->visio
+            );
+        } catch (NoSpotsAvailableForThisSlotAndMeetingException $exception) {
+            throw new CannotBeTransformIntoMeetingOnDdayException();
+        }
 
         $meeting = new Meeting(
             $query->request,

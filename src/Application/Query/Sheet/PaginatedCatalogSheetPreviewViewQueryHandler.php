@@ -174,6 +174,6 @@ class PaginatedCatalogSheetPreviewViewQueryHandler
      */
     private function isPhoneValidationRequiredForUser(PaginatedCatalogSheetPreviewViewQuery $query): bool
     {
-        return $this->validationRequiredChecker->handle($query->viewer, $query->user, $query->locale);
+        return $this->validationRequiredChecker->handle($query->viewer, $query->user);
     }
 }

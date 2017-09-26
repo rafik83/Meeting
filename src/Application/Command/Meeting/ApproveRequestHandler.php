@@ -10,11 +10,10 @@
 
 namespace Proximum\Vimeet\Application\Command\Meeting;
 
-use Proximum\Vimeet\Application\Command\Meeting\Admin\TransformRequestIntoMeeting;
-use Proximum\Vimeet\Application\Command\Meeting\Admin\TransformRequestIntoMeetingHandler;
+use Proximum\Vimeet\Application\Command\Meeting\Event\TransformRequestIntoMeeting;
+use Proximum\Vimeet\Application\Command\Meeting\Event\TransformRequestIntoMeetingHandler;
 use Proximum\Vimeet\Application\Components\Meeting\RequestPermissionManager;
 use Proximum\Vimeet\Application\Event\Events;
-use Proximum\Vimeet\Application\Event\Meeting\MeetingCreatedEvent;
 use Proximum\Vimeet\Application\Event\MeetingRequest\ApprovedRequestEvent;
 use Proximum\Vimeet\Application\Event\MeetingRequest\ParticipateToRequestEvent;
 use Proximum\Vimeet\Application\Exception\MeetingRequest\CannotBeTransformIntoMeetingOnDdayException;
@@ -22,7 +21,6 @@ use Proximum\Vimeet\Application\Exception\MeetingRequest\IsNotAllowedToApproveMe
 use Proximum\Vimeet\Application\View\Meeting\MeetingDdayView;
 use Proximum\Vimeet\Domain\Model\Meeting\Message;
 use Proximum\Vimeet\Domain\Model\Meeting\Request;
-use Proximum\Vimeet\Domain\Model\MeetingSlot;
 use Proximum\Vimeet\Domain\Repository\Meeting\MessageRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\Meeting\RequestRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\MeetingSlotRepositoryInterface;
@@ -136,7 +134,12 @@ class ApproveRequestHandler
         );
 
         // transform request into meeting on dday if tip validate phone enabled
-        if (false === $this->validationRequiredChecker->handle($approveRequest->sheet, $approveRequest->editor, $approveRequest->locale)) {
+        $validationRequired = $this->validationRequiredChecker->handle(
+            $approveRequest->sheet,
+            $approveRequest->editor
+        );
+
+        if (false === $validationRequired) {
             return $this->transformRequestIntoMeetingOnDday($approveRequest->request);
         }
 
@@ -151,45 +154,19 @@ class ApproveRequestHandler
      */
     private function transformRequestIntoMeetingOnDday(Request $request): ?MeetingDdayView
     {
-        $slots = $this->slotRepository->findAvailableSlotsByParticipants($request->getEvent(), $request->getAllParticipants());
-
-        $dateTimePlus10Minutes = (clone $this->datetime)->modify('+10 min');
-
-        // filter only next slots and removed past ones
-        $slots = array_filter($slots,
-            function (MeetingSlot $slot) use ($dateTimePlus10Minutes) {
-                return $slot->getBegin() >= $dateTimePlus10Minutes;
-            }
-        );
-
         $isVisio = $this->isVisioMeeting($request);
 
-        foreach ($slots as $slot) {
-            try {
-                $meeting = $this->transformRequestIntoMeetingHandler->handle(
-                    new TransformRequestIntoMeeting(
-                        $request,
-                        $slot,
-                        $isVisio,
-                        true
-                    )
-                );
+        $meeting = $this->transformRequestIntoMeetingHandler->handle(
+            new TransformRequestIntoMeeting(
+                $request,
+                $isVisio
+            )
+        );
 
-                $this->eventDispatcher->dispatch(
-                    Events::MEETING_CREATED,
-                    new MeetingCreatedEvent($meeting->getSheets())
-                );
-
-                return new MeetingDdayView(
-                    $meeting->getSlot()->getBegin(),
-                    $meeting->getSpot()->getReference()
-                );
-            } catch (\Exception $exception) {
-                throw new CannotBeTransformIntoMeetingOnDdayException();
-            }
-        }
-
-        return null;
+        return new MeetingDdayView(
+            $meeting->getSlot()->getBegin(),
+            $meeting->getSpot()->getReference()
+        );
     }
 
     /**
