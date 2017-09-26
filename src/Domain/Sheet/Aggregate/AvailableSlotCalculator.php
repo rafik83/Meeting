@@ -39,10 +39,18 @@ class AvailableSlotCalculator
      */
     public function calculateAvailableSlotForSheet(Sheet $sheet)
     {
-        $slots = $this->slotRepository->findAvailableSlotsByParticipants(
-            $sheet->getEvent(),
-            $sheet->getParticipants()->toArray()
-        );
+        $slots = [];
+
+        foreach ($sheet->getParticipants()->toArray() as $participant) {
+            $slotsOfParticipant = $this->slotRepository->findAvailableSlotsByParticipants(
+                $sheet->getEvent(),
+                [$participant]
+            );
+
+            foreach ($slotsOfParticipant as $slot) {
+                $slots[$slot->getId()] = $slot;
+            }
+        }
 
         $availableSlots = [];
 

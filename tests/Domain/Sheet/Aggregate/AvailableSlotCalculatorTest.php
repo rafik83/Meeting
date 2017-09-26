@@ -52,14 +52,19 @@ class AvailableSlotCalculatorTest extends TestCase
 
         // Expected
         $slotRepository
-            ->findAvailableSlotsByParticipants($event->reveal(), $participants)
+            ->findAvailableSlotsByParticipants($event->reveal(), [$participant1->reveal()])
             ->shouldBeCalled()
-            ->willReturn([
-                $slot1,
-                $slot2,
-                $slot3,
-                $slot4,
-            ])
+            ->willReturn([$slot1, $slot2,])
+        ;
+        $slotRepository
+            ->findAvailableSlotsByParticipants($event->reveal(), [$participant2->reveal()])
+            ->shouldBeCalled()
+            ->willReturn([$slot1, $slot3, $slot4,])
+        ;
+        $slotRepository
+            ->findAvailableSlotsByParticipants($event->reveal(), [$participant3->reveal()])
+            ->shouldBeCalled()
+            ->willReturn([$slot2])
         ;
 
         $sheet->setAvailableSlots([1, 2, 3, 4])->shouldBeCalled();
