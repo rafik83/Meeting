@@ -310,7 +310,7 @@ class TransformRequestIntoMeetingHandlerTest extends TestCase
         $this->assertEquals($expectedMeeting, $meeting);
     }
 
-    public function testWithNoSpotAvailable()
+    public function testNoSpotAvailable()
     {
         $this->expectException(CannotBeTransformIntoMeetingOnDdayException::class);
 
@@ -375,6 +375,103 @@ class TransformRequestIntoMeetingHandlerTest extends TestCase
             false
         )->shouldBeCalled()
             ->willThrow(NoSpotsAvailableForThisSlotAndMeetingException::class);
+
+        $meetingRepository->add(Argument::type(Meeting::class))->shouldNotBeCalled();
+
+        $eventDispatcher->dispatch(
+            Events::MEETING_CREATED,
+            new MeetingCreatedEvent([$fromSheet->reveal(), $toSheet->reveal()])
+        )->shouldNotBeCalled();
+
+        $eventDispatcher->dispatch(
+            Events::MEETING_PARTICIPATE,
+            Argument::type(MeetingParticipateEvent::class)
+        )->shouldNotBeCalled();
+
+        $transformRequestIntoMeetingHandler = new TransformRequestIntoMeetingHandler(
+            $meetingSlotRepository->reveal(),
+            $participantWithPhoneValidated->reveal(),
+            $availableSpots->reveal(),
+            $meetingRepository->reveal(),
+            $slotPlus10Minutes->reveal(),
+            $eventDispatcher->reveal(),
+            $this->datetime
+        );
+
+        $query = new TransformRequestIntoMeeting($request->reveal(), false);
+
+        $transformRequestIntoMeetingHandler->handle($query);
+    }
+
+    public function testNoSlotInCommon()
+    {
+        $this->expectException(CannotBeTransformIntoMeetingOnDdayException::class);
+
+        $event = EventFactory::createEvent();
+
+        $fromSheet       = $this->prophesize(Sheet::class);
+        $toSheet         = $this->prophesize(Sheet::class);
+        $fromParticipant = $this->prophesize(Participant::class);
+        $toParticipant   = $this->prophesize(Participant::class);
+        $request         = $this->prophesize(Request::class);
+        $slot            = $this->prophesize(MeetingSlot::class);
+        $otherSlot            = $this->prophesize(MeetingSlot::class);
+
+        $request->getEvent()->willReturn($event);
+        $request->getFromSheet()->willReturn($fromSheet);
+        $request->getToSheet()->willReturn($toSheet);
+        $request->getFromParticipantsArray()->willReturn([$fromParticipant->reveal()]);
+        $request->getToParticipantsArray()->willReturn([$toParticipant->reveal()]);
+        $request->hasNoPreference($fromSheet->reveal())->willReturn(false);
+        $request->hasNoPreference($toSheet->reveal())->willReturn(false);
+
+        $slot->getId()->willReturn(1);
+        $otherSlot->getId()->willReturn(9);
+        $fromParticipant->getId()->willReturn(1);
+        $toParticipant->getId()->willReturn(2);
+
+        $meetingSlotRepository         = $this->prophesize(MeetingSlotRepositoryInterface::class);
+        $participantWithPhoneValidated = $this->prophesize(ParticipantWithPhoneValidated::class);
+        $availableSpots                = $this->prophesize(AvailableSpots::class);
+        $meetingRepository             = $this->prophesize(MeetingRepositoryInterface::class);
+        $eventDispatcher               = $this->prophesize(EventDispatcherInterface::class);
+        $slotPlus10Minutes             = $this->prophesize(SlotPlus10minutes::class);
+
+        $meetingSlotRepository->findAvailableSlotsByParticipants(
+            $event,
+            [$fromParticipant->reveal()]
+        )->shouldBeCalled()->willReturn([$slot->reveal()]);
+
+        $slotPlus10Minutes->getFilteredSlots([$slot->reveal()])
+            ->shouldBeCalled()->willReturn([$slot->reveal()]);
+
+        $meetingSlotRepository->findAvailableSlotsByParticipants(
+            $event,
+            [$toParticipant->reveal()]
+        )->shouldBeCalled()->willReturn([$otherSlot->reveal()]);
+
+        $slotPlus10Minutes->getFilteredSlots([$otherSlot->reveal()])
+            ->shouldBeCalled()->willReturn([$otherSlot->reveal()]);
+
+        $participantWithPhoneValidated->getParticipant(
+            $event,
+            $fromSheet->reveal(),
+            [$fromParticipant->reveal()]
+        )->shouldNotBeCalled();
+
+        $participantWithPhoneValidated->getParticipant(
+            $event,
+            $toSheet->reveal(),
+            [$toParticipant->reveal()]
+        )->shouldNotBeCalled();
+
+        $availableSpots->getBySlot(
+            $slot->reveal(),
+            $fromSheet->reveal(),
+            $toSheet->reveal(),
+            2,
+            false
+        )->shouldNotBeCalled();
 
         $meetingRepository->add(Argument::type(Meeting::class))->shouldNotBeCalled();
 
