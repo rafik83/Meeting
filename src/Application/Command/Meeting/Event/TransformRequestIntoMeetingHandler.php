@@ -169,6 +169,8 @@ class TransformRequestIntoMeetingHandler
             $query->event
         );
 
+        $meeting->setCreatedByParticipant();
+
         $this->meetingRepository->add($meeting);
 
         $this->eventDispatcher->dispatch(

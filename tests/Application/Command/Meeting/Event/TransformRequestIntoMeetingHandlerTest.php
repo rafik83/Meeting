@@ -84,6 +84,8 @@ class TransformRequestIntoMeetingHandlerTest extends TestCase
             $event
         );
 
+        $expectedMeeting->setCreatedByParticipant();
+
         // Mock
 
         $meetingSlotRepository->findAvailableSlotsByParticipants(
@@ -269,6 +271,8 @@ class TransformRequestIntoMeetingHandlerTest extends TestCase
             $spot->reveal(),
             $event
         );
+
+        $expectedMeeting->setCreatedByParticipant();
 
         $meetingRepository->add($expectedMeeting)->shouldBeCalled();
 
@@ -461,6 +465,8 @@ class TransformRequestIntoMeetingHandlerTest extends TestCase
             $spot->reveal(),
             $event
         );
+
+        $expectedMeeting->setCreatedByParticipant();
 
         $this->assertEquals($expectedMeeting, $meeting);
     }
