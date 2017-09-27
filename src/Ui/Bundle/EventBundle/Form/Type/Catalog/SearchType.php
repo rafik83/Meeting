@@ -10,7 +10,6 @@
 
 namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Catalog;
 
-use Elastica\Search;
 use Proximum\Vimeet\Domain\Catalog\SearchFields;
 use Proximum\Vimeet\Domain\Model\Catalog\Internal\CatalogConstant;
 use Proximum\Vimeet\Domain\Model\MeetingSlot;
@@ -72,7 +71,7 @@ class SearchType extends AbstractSearchType
                 $locale
             );
 
-            $choices = [
+            $filterAvailableChoices = [
                 $everyoneTranslation => $everyone,
                 $availableTranslation => $available,
             ];
@@ -103,7 +102,7 @@ class SearchType extends AbstractSearchType
                     $locale
                 );
 
-                $choices[$slotTranslation] = $slotFilter;
+                $filterAvailableChoices[$slotTranslation] = $slotFilter;
 
                 $builder->add(SearchFields::FILTER_BY_SPECIFIC_SLOT, HiddenType::class, [
                     'data' => $slot->getId(),
@@ -112,7 +111,7 @@ class SearchType extends AbstractSearchType
 
             $builder
                 ->add(SearchFields::FILTER_AVAILABLE_SLOT_IDS, ChoiceType::class, [
-                    'choices'  => $choices,
+                    'choices'  => $filterAvailableChoices,
                     'expanded' => true,
                     'multiple' => false,
                     'label'    => 'form.search.availableSlot.label'
