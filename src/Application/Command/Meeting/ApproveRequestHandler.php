@@ -147,12 +147,16 @@ class ApproveRequestHandler
                 $approveRequest->editor
             );
 
-            if (!$validationRequired) {
+            if ($validationRequired === false) {
                 $meetingView = $this->transformRequestIntoMeetingOnDday($approveRequest->request, $approveRequest->locale);
+                $transformIntoMeetingProcessed = true;
             }
         }
 
-        return new TransformRequestIntoMeetingView($meetingView ?? null, isset($meetingView) && $meetingView === null);
+        return new TransformRequestIntoMeetingView(
+            $meetingView ?? null,
+            isset($transformIntoMeetingProcessed) && !isset($meetingView)
+        );
     }
 
     /**

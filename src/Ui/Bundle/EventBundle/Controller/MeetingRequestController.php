@@ -399,7 +399,9 @@ class MeetingRequestController extends Controller
             /** @var TransformRequestIntoMeetingView $transformRequestIntoMeetingView */
             $transformRequestIntoMeetingView = $this->get('tactician.commandbus')->handle($approveRequest);
 
-            if ($transformRequestIntoMeetingView->meetingView !== null) {
+            if ($transformRequestIntoMeetingView->meetingView !== null
+                || $transformRequestIntoMeetingView->hasError) {
+
                 $flashMessageView = $this->renderView('EventBundle::MeetingRequest\Message\requestTransformedIntoMeeting.html.twig', [
                     'meetingDdayView' => $transformRequestIntoMeetingView->meetingView,
                     'error'           => $transformRequestIntoMeetingView->hasError,
