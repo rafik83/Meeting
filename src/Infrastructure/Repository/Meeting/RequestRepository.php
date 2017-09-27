@@ -530,7 +530,7 @@ class RequestRepository implements RequestRepositoryInterface
         $queryBuilder = $this
             ->entityManager
             ->createQueryBuilder()
-            ->select('request')
+            ->select('COUNT(request)')
             ->from(Request::class, 'request');
 
         if (!empty($filters)) {
@@ -550,7 +550,7 @@ class RequestRepository implements RequestRepositoryInterface
 
         $this->filterQueryBuilder($queryBuilder, $sheet, $filters);
 
-        return count($queryBuilder->getQuery()->getResult());
+        return (int) $queryBuilder->getQuery()->getSingleScalarResult();
     }
 
     /**

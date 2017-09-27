@@ -3,7 +3,7 @@
 /*
  * This file is part of the vimeet project.
  *
- * Copyright (C) 2016 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -20,24 +20,16 @@ use Proximum\Vimeet\Domain\Repository\Meeting\RequestRepositoryInterface;
 
 class MeetingRequestListViewQueryHandler
 {
-    /**
-     * @var RequestRepositoryInterface
-     */
+    /** @var RequestRepositoryInterface */
     private $meetingRequestRepository;
 
-    /**
-     * @var MeetingRequestViewQueryHandler
-     */
+    /** @var MeetingRequestViewQueryHandler */
     private $meetingRequestViewQueryHandler;
 
-    /**
-     * @var ViewedSheetListViewQueryHandler
-     */
+    /** @var ViewedSheetListViewQueryHandler */
     private $viewedSheetListViewQueryHandler;
 
-    /**
-     * @var MeetingPublishedAccessChecker
-     */
+    /** @var MeetingPublishedAccessChecker*/
     private $meetingPublishedAccessChecker;
 
     /** @var MeetingRequestAccessChecker */
@@ -84,7 +76,7 @@ class MeetingRequestListViewQueryHandler
 
         $sheets = [];
         foreach ($meetingRequests as $meetingRequest) {
-            $sheets[] = $meetingRequest->getToSheet();
+            $sheets[] = $meetingRequest->getSheetMet($query->sheet);
         }
 
         $viewedSheetListView = $this->viewedSheetListViewQueryHandler->handle(
@@ -109,7 +101,7 @@ class MeetingRequestListViewQueryHandler
                     $isMeetingRequestUpdateLocked,
                     $isMeetingrequestClosed,
                     $isAnsweringMeetingRequestClosed,
-                    isset($viewedSheetListView[$meetingRequest->getToSheet()->getId()])
+                    isset($viewedSheetListView[$meetingRequest->getSheetMet($query->sheet)->getId()])
                 )
             );
 

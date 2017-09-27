@@ -282,6 +282,12 @@ services:
              - '@vimeet_infrastructure.repository.user_repository'
         tags:
             - { name: form.type }
+    form_type.meeting_request.search_type:
+        class: Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Meeting\Request\SearchType
+        arguments:
+            - '@vimeet_infrastructure.adapter.translator_adapter'
+        tags:
+            - { name: form.type }
 
     #
     # Form Factory

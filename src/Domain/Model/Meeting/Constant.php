@@ -18,6 +18,10 @@ final class Constant
     const FILTER_STATE_RECEIVE  = 'receive';
     const FILTER_STATE_ALL      = 'all';
 
+    const FILTER_AVAILABLE_SLOT_IDS_EVERYONE  = 'everyone';
+    const FILTER_AVAILABLE_SLOT_IDS_AVAILABLE = 'available';
+    const FILTER_AVAILABLE_SLOT_IDS_SLOT      = 'slot';
+
     /**
      * @return array
      */

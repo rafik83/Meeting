@@ -85,6 +85,10 @@ form.search.content.label: 'Mots clés'
 form.search.keywords.search.placeholder: 'Sociétés, Compétences...'
 form.search.localization.label: 'Zones géographiques'
 form.search.localization.search.placeholder: '69, Lyon, France'
+form.search.meeting.availableSlot.label: 'Qui est disponbile ?'
+form.search.meeting.availableSlot.choice.everyone: Tous
+form.search.meeting.availableSlot.choice.available: 'Ayant des disponibilités'
+form.search.meeting.availableSlot.choice.slot: 'Disponible le %day% à %time%'
 form.search.meeting.state.all: 'Tous les statuts'
 form.search.meeting.state.approved: Acceptées
 form.search.meeting.state.cancelled: Annulées

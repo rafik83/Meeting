@@ -44,6 +44,13 @@ class MeetingRequestListViewQueryHandlerTest extends TestCase
         $sheet    = new Sheet($event, $type, [], $user, $now);
         $sheetTwo = new Sheet($eventTwo, new Type($eventTwo), [], $userTwo, $now);
 
+        $reflection  = new \ReflectionClass(Sheet::class);
+        $property = $reflection->getProperty('id');
+        $property->setAccessible(true);
+        $property->setValue($sheet, 1);
+        $property->setValue($sheetTwo, 2);
+        $property->setAccessible(false);
+
         $meetingRequest = new Request($sheet, [], $sheetTwo, [], $now, $user, $event);
 
         $query = new MeetingRequestListViewQuery($event, $sheet, $user, 'fr');
@@ -68,7 +75,8 @@ class MeetingRequestListViewQueryHandlerTest extends TestCase
 
         $viewedSheetListViewQueryHandler
             ->handle(new ViewedSheetListViewQuery($user, [$meetingRequest->getToSheet()]))
-            ->shouldBeCalled();
+            ->shouldBeCalled()
+            ->willReturn([2 => $sheetTwo]);
 
         $meetingRequestViewQueryHandler
             ->handle(new MeetingRequestViewQuery(
@@ -79,7 +87,7 @@ class MeetingRequestListViewQueryHandlerTest extends TestCase
                 false,
                 false,
                 false,
-                false
+                true
             ))
             ->shouldBeCalled()
             ->willReturn($meetingRequestView);
@@ -112,6 +120,12 @@ class MeetingRequestListViewQueryHandlerTest extends TestCase
 
         $sheet    = new Sheet($event, $type, [], $user, $now);
         $sheetTwo = new Sheet($eventTwo, new Type($eventTwo), [], $userTwo, $now);
+        $reflection  = new \ReflectionClass(Sheet::class);
+        $property = $reflection->getProperty('id');
+        $property->setAccessible(true);
+        $property->setValue($sheet, 1);
+        $property->setValue($sheetTwo, 2);
+        $property->setAccessible(false);
 
         $meetingRequest = new Request($sheet, [], $sheetTwo, [], $now, $user, $event);
 
@@ -137,7 +151,8 @@ class MeetingRequestListViewQueryHandlerTest extends TestCase
 
         $viewedSheetListViewQueryHandler
             ->handle(new ViewedSheetListViewQuery($user, [$meetingRequest->getToSheet()]))
-            ->shouldBeCalled();
+            ->shouldBeCalled()
+            ->willReturn([]);
 
         $meetingRequestViewQueryHandler
             ->handle(new MeetingRequestViewQuery(
@@ -148,7 +163,7 @@ class MeetingRequestListViewQueryHandlerTest extends TestCase
                 false,
                 false,
                 true,
-                true
+                false
             ))
             ->shouldBeCalled()
             ->willReturn($meetingRequestView);
