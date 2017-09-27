@@ -141,7 +141,10 @@ class ApproveRequestHandler
             );
 
             if ($validationRequired === false) {
-                $meetingDdayView = $this->transformRequestIntoMeetingOnDday($approveRequest->request, $approveRequest->locale);
+                $meetingDdayView = $this->transformRequestIntoMeetingOnDday(
+                    $approveRequest->request,
+                    $approveRequest->locale
+                );
 
                 if ($meetingDdayView instanceOf MeetingDdayView) {
                     return new ApproveRequestResult($meetingDdayView);
@@ -162,14 +165,9 @@ class ApproveRequestHandler
      */
     private function transformRequestIntoMeetingOnDday(Request $request, string $locale): ?MeetingDdayView
     {
-        $isVisio = $this->isVisioMeeting($request);
-
         try {
             $meeting = $this->transformRequestIntoMeetingHandler->handle(
-                new TransformRequestIntoMeeting(
-                    $request,
-                    $isVisio
-                )
+                new TransformRequestIntoMeeting($request)
             );
 
             return new MeetingDdayView(
@@ -181,21 +179,5 @@ class ApproveRequestHandler
         } catch (CannotBeTransformIntoMeetingOnDdayException $exception) {
             return null;
         }
-    }
-
-    /**
-     * @param Request $request
-     *
-     * @return bool
-     */
-    private function isVisioMeeting(Request $request): bool
-    {
-        foreach ($request->getAllParticipants() as $participant) {
-            if ($participant->isVisio() === true) {
-                return true;
-            }
-        }
-
-        return false;
     }
 }

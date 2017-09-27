@@ -617,10 +617,11 @@ services:
         class: Proximum\Vimeet\Application\Command\Meeting\Event\TransformRequestIntoMeetingHandler
         arguments:
             - '@vimeet_infrastructure.repository.meeting_slot_repository'
-            - '@domain.request.participant_with_phone_validated'
+            - '@domain.user_event.user_event_phone_checker'
             - '@domain.spot.available_spots'
             - '@vimeet_infrastructure.repository.meeting_repository'
             - '@domain.slot.slot_filter'
+            - '@domain.meeting.visio_guesser'
             - '@vimeet_infrastructure.adapter.delayed_event_dispatcher'
             - '@datetime'
 
@@ -5584,10 +5585,6 @@ services:
         arguments:
             - '@domain.event.day.dday_guesser'
             - '@domain.tip.confirmation_phone_tip_checker'
-            - '@domain.user_event.user_event_phone_checker'
-    domain.request.participant_with_phone_validated:
-        class: Proximum\Vimeet\Domain\Request\ParticipantWithPhoneValidated
-        arguments:
             - '@domain.user_event.user_event_phone_checker'
     domain.tip.confirmation_phone_tip_checker:
         class: Proximum\Vimeet\Domain\Tip\ConfirmationPhoneTipChecker

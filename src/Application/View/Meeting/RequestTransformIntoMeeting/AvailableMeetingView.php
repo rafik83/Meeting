@@ -13,6 +13,7 @@ namespace Proximum\Vimeet\Application\View\Meeting\RequestTransformIntoMeeting;
 use Proximum\Vimeet\Domain\Model\MeetingSlot;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Sheet;
+use Proximum\Vimeet\Domain\Model\Spot;
 
 class AvailableMeetingView
 {
@@ -52,6 +53,21 @@ class AvailableMeetingView
     public $toSheetHasNoPreference;
 
     /**
+     * @var null|Spot
+     */
+    public $spot;
+
+    /**
+     * @var bool
+     */
+    public $fromParticipantIsPhoneValidated = false;
+
+    /**
+     * @var bool
+     */
+    public $toParticipantIsPhoneValidated = false;
+
+    /**
      *
      * @param MeetingSlot   $slot
      * @param Sheet         $fromSheet
@@ -85,5 +101,40 @@ class AvailableMeetingView
     public function getTotalParticipants(): int
     {
         return count($this->fromParticipants) + count($this->toParticipants);
+    }
+
+    /**
+     * @return Participant
+     * @throws \LogicException
+     */
+    public function getFromParticipant()
+    {
+        return $this->getParticipant($this->fromParticipants);
+    }
+
+    /**
+     * @return Participant
+     * @throws \LogicException
+     */
+    public function getToParticipant()
+    {
+        return $this->getParticipant($this->toParticipants);
+    }
+
+    /**
+     * @param array $participants
+     *
+     * @return Participant
+     * @throws \LogicException
+     */
+    private function getParticipant(array $participants)
+    {
+        $participant = reset($participants);
+
+        if ($participant === false || count($participants) !== 1) {
+            throw new \LogicException('This method can be used only if only one participant');
+        }
+
+        return $participant;
     }
 }
