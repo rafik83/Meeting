@@ -5373,6 +5373,7 @@ services:
         arguments:
             - '@vimeet_infrastructure.repository.meeting_slot_repository'
             - '@vimeet_infrastructure.repository.sheet_repository'
+            - '@adapter.sheet_indexer'
 
     #
     # Command Aggregator
