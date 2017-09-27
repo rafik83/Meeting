@@ -12,7 +12,7 @@ namespace Proximum\Vimeet\Tests\Domain\Slot;
 
 use PHPUnit\Framework\TestCase;
 use Proximum\Vimeet\Domain\Model\MeetingSlot;
-use Proximum\Vimeet\Domain\Slot\SlotPlus10minutes;
+use Proximum\Vimeet\Domain\Slot\SlotFilter;
 
 class SlotPlus10minutesTest extends TestCase
 {
@@ -37,7 +37,7 @@ class SlotPlus10minutesTest extends TestCase
         // Expected slots
         $expectedFilteredSlots = [1 => 2, 2 => 3, 3 => 4];
 
-        $slotPlus10minutes = new SlotPlus10minutes($datetime);
+        $slotPlus10minutes = new SlotFilter($datetime);
 
         $filteredSlots = $slotPlus10minutes->getFilteredSlots([
             $slot1->reveal(),

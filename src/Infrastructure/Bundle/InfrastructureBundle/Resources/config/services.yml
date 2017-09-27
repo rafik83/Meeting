@@ -600,7 +600,7 @@ services:
             - '@domain.request.participant_with_phone_validated'
             - '@domain.spot.available_spots'
             - '@vimeet_infrastructure.repository.meeting_repository'
-            - '@domain.slot.slot_plus10minutes'
+            - '@domain.slot.slot_filter'
             - '@vimeet_infrastructure.adapter.delayed_event_dispatcher'
             - '@datetime'
 
@@ -5505,8 +5505,8 @@ services:
         arguments:
             - '@vimeet_infrastructure.repository.spot_repository'
 
-    domain.slot.slot_plus10minutes:
-        class: Proximum\Vimeet\Domain\Slot\SlotPlus10minutes
+    domain.slot.slot_filter:
+        class: Proximum\Vimeet\Domain\Slot\SlotFilter
         arguments:
             - '@datetime'
 

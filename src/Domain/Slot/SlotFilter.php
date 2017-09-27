@@ -12,8 +12,10 @@ namespace Proximum\Vimeet\Domain\Slot;
 
 use Proximum\Vimeet\Domain\Model\MeetingSlot;
 
-class SlotPlus10minutes
+class SlotFilter
 {
+    const DELAY_IN_MINUTES = 10;
+
     /**
      * @var \DateTimeInterface
      */
@@ -34,7 +36,7 @@ class SlotPlus10minutes
      */
     public function getFilteredSlots(array $slots): array
     {
-        $dateTimePlus10Minutes = (clone $this->datetime)->modify('+10 min');
+        $dateTimePlus10Minutes = (clone $this->datetime)->modify('+' . self::DELAY_IN_MINUTES . 'min');
 
         $slots = array_filter($slots,
             function (MeetingSlot $slot) use ($dateTimePlus10Minutes) {

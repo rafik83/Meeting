@@ -29,7 +29,7 @@ use Proximum\Vimeet\Domain\Model\Spot;
 use Proximum\Vimeet\Domain\Repository\MeetingRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\MeetingSlotRepositoryInterface;
 use Proximum\Vimeet\Domain\Request\ParticipantWithPhoneValidated;
-use Proximum\Vimeet\Domain\Slot\SlotPlus10minutes;
+use Proximum\Vimeet\Domain\Slot\SlotFilter;
 use Proximum\Vimeet\Domain\Spot\AvailableSpots;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
 
@@ -65,7 +65,7 @@ class TransformRequestIntoMeetingHandlerTest extends TestCase
         $availableSpots                = $this->prophesize(AvailableSpots::class);
         $meetingRepository             = $this->prophesize(MeetingRepositoryInterface::class);
         $eventDispatcher               = $this->prophesize(DelayedEventDispatcherInterface::class);
-        $slotPlus10Minutes             = $this->prophesize(SlotPlus10minutes::class);
+        $slotFilter             = $this->prophesize(SlotFilter::class);
 
         // Expected
 
@@ -88,7 +88,7 @@ class TransformRequestIntoMeetingHandlerTest extends TestCase
             [$fromParticipant->reveal()]
         )->shouldBeCalled()->willReturn([$slot->reveal()]);
 
-        $slotPlus10Minutes->getFilteredSlots([$slot->reveal()])
+        $slotFilter->getFilteredSlots([$slot->reveal()])
             ->shouldBeCalled()->willReturn([$slot->reveal()]);
 
         $meetingSlotRepository->findAvailableSlotsByParticipants(
@@ -131,7 +131,7 @@ class TransformRequestIntoMeetingHandlerTest extends TestCase
             $participantWithPhoneValidated->reveal(),
             $availableSpots->reveal(),
             $meetingRepository->reveal(),
-            $slotPlus10Minutes->reveal(),
+            $slotFilter->reveal(),
             $eventDispatcher->reveal(),
             $datetime
         );
@@ -187,7 +187,7 @@ class TransformRequestIntoMeetingHandlerTest extends TestCase
         $availableSpots                = $this->prophesize(AvailableSpots::class);
         $meetingRepository             = $this->prophesize(MeetingRepositoryInterface::class);
         $eventDispatcher               = $this->prophesize(DelayedEventDispatcherInterface::class);
-        $slotPlus10Minutes             = $this->prophesize(SlotPlus10minutes::class);
+        $slotFilter             = $this->prophesize(SlotFilter::class);
 
         // Expected
 
@@ -222,10 +222,10 @@ class TransformRequestIntoMeetingHandlerTest extends TestCase
             [$toParticipant->reveal()]
         )->shouldBeCalled()->willReturn([$slot->reveal()]);
 
-        $slotPlus10Minutes->getFilteredSlots([$slot->reveal()])
+        $slotFilter->getFilteredSlots([$slot->reveal()])
             ->shouldBeCalled()->willReturn([$slot->reveal()]);
 
-        $slotPlus10Minutes->getFilteredSlots([$slotTwo->reveal()])
+        $slotFilter->getFilteredSlots([$slotTwo->reveal()])
             ->shouldBeCalled()->willReturn([$slotTwo->reveal()]);
 
         $participantWithPhoneValidated->getParticipant(
@@ -263,7 +263,7 @@ class TransformRequestIntoMeetingHandlerTest extends TestCase
             $participantWithPhoneValidated->reveal(),
             $availableSpots->reveal(),
             $meetingRepository->reveal(),
-            $slotPlus10Minutes->reveal(),
+            $slotFilter->reveal(),
             $eventDispatcher->reveal(),
             $datetime
         );
@@ -306,14 +306,14 @@ class TransformRequestIntoMeetingHandlerTest extends TestCase
         $availableSpots                = $this->prophesize(AvailableSpots::class);
         $meetingRepository             = $this->prophesize(MeetingRepositoryInterface::class);
         $eventDispatcher               = $this->prophesize(DelayedEventDispatcherInterface::class);
-        $slotPlus10Minutes             = $this->prophesize(SlotPlus10minutes::class);
+        $slotFilter             = $this->prophesize(SlotFilter::class);
 
         $meetingSlotRepository->findAvailableSlotsByParticipants(
             $event,
             [$fromParticipant->reveal()]
         )->shouldBeCalled()->willReturn([$slot->reveal()]);
 
-        $slotPlus10Minutes->getFilteredSlots([$slot->reveal()])
+        $slotFilter->getFilteredSlots([$slot->reveal()])
             ->shouldBeCalled()->willReturn([$slot->reveal()]);
 
         $meetingSlotRepository->findAvailableSlotsByParticipants(
@@ -357,7 +357,7 @@ class TransformRequestIntoMeetingHandlerTest extends TestCase
             $participantWithPhoneValidated->reveal(),
             $availableSpots->reveal(),
             $meetingRepository->reveal(),
-            $slotPlus10Minutes->reveal(),
+            $slotFilter->reveal(),
             $eventDispatcher->reveal(),
             $datetime
         );
@@ -400,14 +400,14 @@ class TransformRequestIntoMeetingHandlerTest extends TestCase
         $availableSpots                = $this->prophesize(AvailableSpots::class);
         $meetingRepository             = $this->prophesize(MeetingRepositoryInterface::class);
         $eventDispatcher               = $this->prophesize(DelayedEventDispatcherInterface::class);
-        $slotPlus10Minutes             = $this->prophesize(SlotPlus10minutes::class);
+        $slotFilter             = $this->prophesize(SlotFilter::class);
 
         $meetingSlotRepository->findAvailableSlotsByParticipants(
             $event,
             [$fromParticipant->reveal()]
         )->shouldBeCalled()->willReturn([$slot->reveal()]);
 
-        $slotPlus10Minutes->getFilteredSlots([$slot->reveal()])
+        $slotFilter->getFilteredSlots([$slot->reveal()])
             ->shouldBeCalled()->willReturn([$slot->reveal()]);
 
         $meetingSlotRepository->findAvailableSlotsByParticipants(
@@ -415,7 +415,7 @@ class TransformRequestIntoMeetingHandlerTest extends TestCase
             [$toParticipant->reveal()]
         )->shouldBeCalled()->willReturn([$otherSlot->reveal()]);
 
-        $slotPlus10Minutes->getFilteredSlots([$otherSlot->reveal()])
+        $slotFilter->getFilteredSlots([$otherSlot->reveal()])
             ->shouldBeCalled()->willReturn([$otherSlot->reveal()]);
 
         $participantWithPhoneValidated->getParticipant(
@@ -453,7 +453,7 @@ class TransformRequestIntoMeetingHandlerTest extends TestCase
             $participantWithPhoneValidated->reveal(),
             $availableSpots->reveal(),
             $meetingRepository->reveal(),
-            $slotPlus10Minutes->reveal(),
+            $slotFilter->reveal(),
             $eventDispatcher->reveal(),
             $datetime
         );
@@ -505,7 +505,7 @@ class TransformRequestIntoMeetingHandlerTest extends TestCase
         $availableSpots                = $this->prophesize(AvailableSpots::class);
         $meetingRepository             = $this->prophesize(MeetingRepositoryInterface::class);
         $eventDispatcher               = $this->prophesize(DelayedEventDispatcherInterface::class);
-        $slotPlus10Minutes             = $this->prophesize(SlotPlus10minutes::class);
+        $slotFilter             = $this->prophesize(SlotFilter::class);
 
         // Expected
 
@@ -545,7 +545,7 @@ class TransformRequestIntoMeetingHandlerTest extends TestCase
             [$toParticipantTwo->reveal()]
         )->shouldBeCalled()->willReturn([$slot->reveal()]);
 
-        $slotPlus10Minutes->getFilteredSlots([$slot->reveal()])
+        $slotFilter->getFilteredSlots([$slot->reveal()])
             ->shouldBeCalledTimes(4)->willReturn([$slot->reveal()]);
 
         $participantWithPhoneValidated->getParticipant(
@@ -588,7 +588,7 @@ class TransformRequestIntoMeetingHandlerTest extends TestCase
             $participantWithPhoneValidated->reveal(),
             $availableSpots->reveal(),
             $meetingRepository->reveal(),
-            $slotPlus10Minutes->reveal(),
+            $slotFilter->reveal(),
             $eventDispatcher->reveal(),
             $datetime
         );

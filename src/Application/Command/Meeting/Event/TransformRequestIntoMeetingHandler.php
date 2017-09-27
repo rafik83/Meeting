@@ -26,7 +26,7 @@ use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Repository\MeetingRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\MeetingSlotRepositoryInterface;
 use Proximum\Vimeet\Domain\Request\ParticipantWithPhoneValidated;
-use Proximum\Vimeet\Domain\Slot\SlotPlus10minutes;
+use Proximum\Vimeet\Domain\Slot\SlotFilter;
 use Proximum\Vimeet\Domain\Spot\AvailableSpots;
 
 class TransformRequestIntoMeetingHandler
@@ -49,8 +49,8 @@ class TransformRequestIntoMeetingHandler
     /** @var \DateTimeInterface */
     private $dateTime;
 
-    /** @var SlotPlus10minutes */
-    private $slotPlus10minutes;
+    /** @var SlotFilter */
+    private $slotFilter;
 
     /**
      * Array of available slots by sheet and by participant
@@ -73,7 +73,7 @@ class TransformRequestIntoMeetingHandler
      * @param ParticipantWithPhoneValidated   $participantWithPhoneValidated
      * @param AvailableSpots                  $availableSpots
      * @param MeetingRepositoryInterface      $meetingRepository
-     * @param SlotPlus10minutes               $slotPlus10minutes
+     * @param SlotFilter                      $slotFilter
      * @param DelayedEventDispatcherInterface $eventDispatcher
      * @param \DateTimeInterface              $dateTime
      */
@@ -82,7 +82,7 @@ class TransformRequestIntoMeetingHandler
         ParticipantWithPhoneValidated $participantWithPhoneValidated,
         AvailableSpots $availableSpots,
         MeetingRepositoryInterface $meetingRepository,
-        SlotPlus10minutes $slotPlus10minutes,
+        SlotFilter $slotFilter,
         DelayedEventDispatcherInterface $eventDispatcher,
         \DateTimeInterface $dateTime
     ) {
@@ -92,7 +92,7 @@ class TransformRequestIntoMeetingHandler
         $this->dateTime                      = $dateTime;
         $this->meetingRepository             = $meetingRepository;
         $this->eventDispatcher               = $eventDispatcher;
-        $this->slotPlus10minutes             = $slotPlus10minutes;
+        $this->slotFilter                    = $slotFilter;
     }
 
     /**
@@ -218,7 +218,7 @@ class TransformRequestIntoMeetingHandler
                 [$participant]
             );
 
-            $slots = $this->slotPlus10minutes->getFilteredSlots($slots);
+            $slots = $this->slotFilter->getFilteredSlots($slots);
 
             $availableSlotViews = [];
 
@@ -248,7 +248,7 @@ class TransformRequestIntoMeetingHandler
             $participants
         );
 
-        $slots = $this->slotPlus10minutes->getFilteredSlots($slots);
+        $slots = $this->slotFilter->getFilteredSlots($slots);
 
         return $slots;
     }
