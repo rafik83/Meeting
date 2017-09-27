@@ -121,10 +121,12 @@ class MeetingRequestController extends Controller
         );
 
         if ($searchForm->handleRequest($request)->isSubmitted() && $searchForm->isValid()) {
-            $filters = array_merge($defaults, array_filter(
+            $filters = array_merge($defaults,
+                array_filter(
                     $searchForm->getData(), function ($data) {
-                    return !empty($data);
-                })
+                        return !empty($data);
+                    }
+                )
             );
 
             $searchForm = $this->createSearchForm(
@@ -400,7 +402,8 @@ class MeetingRequestController extends Controller
             $transformRequestIntoMeetingView = $this->get('tactician.commandbus')->handle($approveRequest);
 
             if ($transformRequestIntoMeetingView->meetingView !== null
-                || $transformRequestIntoMeetingView->hasError) {
+                || $transformRequestIntoMeetingView->hasError)
+            {
 
                 $flashMessageView = $this->renderView('EventBundle::MeetingRequest\Message\requestTransformedIntoMeeting.html.twig', [
                     'meetingDdayView' => $transformRequestIntoMeetingView->meetingView,
@@ -410,7 +413,7 @@ class MeetingRequestController extends Controller
 
             return new JsonResponse($this->createJsonResponseData(
                 true,
-                !empty($flashMessageView) ? false : true,
+                !empty($flashMessageView),
                 $this->renderView('EventBundle:MeetingRequest\Button:approvedProposition.html.twig', [
                     'sheet'                        => $sheet,
                     'meetingRequest'               => $meetingRequest,
@@ -560,7 +563,8 @@ class MeetingRequestController extends Controller
 
                 // If the meeting request are still answerable
                 if ($this->get('domain.key_dates.checker.answering_meeting_request_access_checker')
-                    ->allowedToAccess($eventDomain->getEvent())) {
+                    ->allowedToAccess($eventDomain->getEvent())
+                ) {
                     return new JsonResponse($this->createJsonResponseData(
                         true,
                         true,
@@ -673,7 +677,8 @@ class MeetingRequestController extends Controller
 
                 // If you are still allowed to request someone in meeting
                 if ($this->get('domain.key_dates.checker.meeting_request_access_checker')
-                    ->allowedToAccess($sheet->getEvent())) {
+                    ->allowedToAccess($sheet->getEvent())
+                ) {
                     return new JsonResponse($this->createJsonResponseData(
                         true,
                         true,

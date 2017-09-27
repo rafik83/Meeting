@@ -12,6 +12,7 @@ namespace Proximum\Vimeet\Tests\Application\Command\Meeting\Event;
 
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
+use Proximum\Vimeet\Application\Adapter\DelayedEventDispatcherInterface;
 use Proximum\Vimeet\Application\Command\Meeting\Event\TransformRequestIntoMeeting;
 use Proximum\Vimeet\Application\Command\Meeting\Event\TransformRequestIntoMeetingHandler;
 use Proximum\Vimeet\Application\Event\Events;
@@ -31,7 +32,6 @@ use Proximum\Vimeet\Domain\Request\ParticipantWithPhoneValidated;
 use Proximum\Vimeet\Domain\Slot\SlotPlus10minutes;
 use Proximum\Vimeet\Domain\Spot\AvailableSpots;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 class TransformRequestIntoMeetingHandlerTest extends TestCase
 {
@@ -64,7 +64,7 @@ class TransformRequestIntoMeetingHandlerTest extends TestCase
         $participantWithPhoneValidated = $this->prophesize(ParticipantWithPhoneValidated::class);
         $availableSpots                = $this->prophesize(AvailableSpots::class);
         $meetingRepository             = $this->prophesize(MeetingRepositoryInterface::class);
-        $eventDispatcher               = $this->prophesize(EventDispatcherInterface::class);
+        $eventDispatcher               = $this->prophesize(DelayedEventDispatcherInterface::class);
         $slotPlus10Minutes             = $this->prophesize(SlotPlus10minutes::class);
 
         // Expected
@@ -186,7 +186,7 @@ class TransformRequestIntoMeetingHandlerTest extends TestCase
         $participantWithPhoneValidated = $this->prophesize(ParticipantWithPhoneValidated::class);
         $availableSpots                = $this->prophesize(AvailableSpots::class);
         $meetingRepository             = $this->prophesize(MeetingRepositoryInterface::class);
-        $eventDispatcher               = $this->prophesize(EventDispatcherInterface::class);
+        $eventDispatcher               = $this->prophesize(DelayedEventDispatcherInterface::class);
         $slotPlus10Minutes             = $this->prophesize(SlotPlus10minutes::class);
 
         // Expected
@@ -305,7 +305,7 @@ class TransformRequestIntoMeetingHandlerTest extends TestCase
         $participantWithPhoneValidated = $this->prophesize(ParticipantWithPhoneValidated::class);
         $availableSpots                = $this->prophesize(AvailableSpots::class);
         $meetingRepository             = $this->prophesize(MeetingRepositoryInterface::class);
-        $eventDispatcher               = $this->prophesize(EventDispatcherInterface::class);
+        $eventDispatcher               = $this->prophesize(DelayedEventDispatcherInterface::class);
         $slotPlus10Minutes             = $this->prophesize(SlotPlus10minutes::class);
 
         $meetingSlotRepository->findAvailableSlotsByParticipants(
@@ -399,7 +399,7 @@ class TransformRequestIntoMeetingHandlerTest extends TestCase
         $participantWithPhoneValidated = $this->prophesize(ParticipantWithPhoneValidated::class);
         $availableSpots                = $this->prophesize(AvailableSpots::class);
         $meetingRepository             = $this->prophesize(MeetingRepositoryInterface::class);
-        $eventDispatcher               = $this->prophesize(EventDispatcherInterface::class);
+        $eventDispatcher               = $this->prophesize(DelayedEventDispatcherInterface::class);
         $slotPlus10Minutes             = $this->prophesize(SlotPlus10minutes::class);
 
         $meetingSlotRepository->findAvailableSlotsByParticipants(
@@ -504,7 +504,7 @@ class TransformRequestIntoMeetingHandlerTest extends TestCase
         $participantWithPhoneValidated = $this->prophesize(ParticipantWithPhoneValidated::class);
         $availableSpots                = $this->prophesize(AvailableSpots::class);
         $meetingRepository             = $this->prophesize(MeetingRepositoryInterface::class);
-        $eventDispatcher               = $this->prophesize(EventDispatcherInterface::class);
+        $eventDispatcher               = $this->prophesize(DelayedEventDispatcherInterface::class);
         $slotPlus10Minutes             = $this->prophesize(SlotPlus10minutes::class);
 
         // Expected

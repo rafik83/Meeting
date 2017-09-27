@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Application\Command\Meeting\Event;
 
+use Proximum\Vimeet\Application\Adapter\DelayedEventDispatcherInterface;
 use Proximum\Vimeet\Application\Event\Events;
 use Proximum\Vimeet\Application\Event\Meeting\MeetingCreatedEvent;
 use Proximum\Vimeet\Application\Event\Meeting\MeetingParticipateEvent;
@@ -27,14 +28,13 @@ use Proximum\Vimeet\Domain\Repository\MeetingSlotRepositoryInterface;
 use Proximum\Vimeet\Domain\Request\ParticipantWithPhoneValidated;
 use Proximum\Vimeet\Domain\Slot\SlotPlus10minutes;
 use Proximum\Vimeet\Domain\Spot\AvailableSpots;
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 class TransformRequestIntoMeetingHandler
 {
     /** @var MeetingRepositoryInterface */
     public $meetingRepository;
 
-    /** @var EventDispatcherInterface */
+    /** @var DelayedEventDispatcherInterface */
     public $eventDispatcher;
 
     /** @var MeetingSlotRepositoryInterface */
@@ -69,13 +69,13 @@ class TransformRequestIntoMeetingHandler
     /**
      * TransformRequestIntoMeetingHandler constructor.
      *
-     * @param MeetingSlotRepositoryInterface $meetingSlotRepository
-     * @param ParticipantWithPhoneValidated  $participantWithPhoneValidated
-     * @param AvailableSpots                 $availableSpots
-     * @param MeetingRepositoryInterface     $meetingRepository
-     * @param SlotPlus10minutes              $slotPlus10minutes
-     * @param EventDispatcherInterface       $eventDispatcher
-     * @param \DateTimeInterface             $dateTime
+     * @param MeetingSlotRepositoryInterface  $meetingSlotRepository
+     * @param ParticipantWithPhoneValidated   $participantWithPhoneValidated
+     * @param AvailableSpots                  $availableSpots
+     * @param MeetingRepositoryInterface      $meetingRepository
+     * @param SlotPlus10minutes               $slotPlus10minutes
+     * @param DelayedEventDispatcherInterface $eventDispatcher
+     * @param \DateTimeInterface              $dateTime
      */
     public function __construct(
         MeetingSlotRepositoryInterface $meetingSlotRepository,
@@ -83,7 +83,7 @@ class TransformRequestIntoMeetingHandler
         AvailableSpots $availableSpots,
         MeetingRepositoryInterface $meetingRepository,
         SlotPlus10minutes $slotPlus10minutes,
-        EventDispatcherInterface $eventDispatcher,
+        DelayedEventDispatcherInterface $eventDispatcher,
         \DateTimeInterface $dateTime
     ) {
         $this->meetingSlotRepository         = $meetingSlotRepository;
@@ -121,7 +121,7 @@ class TransformRequestIntoMeetingHandler
         }
 
         $this->fromSheet = new AvailableSlotsBySheetView($fromSheet, $fromHasNoPreference);
-        $this->toSheet   = new AvailableSlotsBySheetView($toSheet,  $toHasNoPreference);
+        $this->toSheet   = new AvailableSlotsBySheetView($toSheet, $toHasNoPreference);
 
         if ($fromHasNoPreference) {
             $fromParticipants = $query->request->getFromSheet()->getParticipantsArray();
