@@ -22,7 +22,6 @@ use Proximum\Vimeet\Domain\Model\Meeting;
 use Proximum\Vimeet\Domain\Model\Meeting\Request;
 use Proximum\Vimeet\Domain\Model\MeetingSlot;
 use Proximum\Vimeet\Domain\Repository\MeetingRepositoryInterface;
-use Proximum\Vimeet\Domain\Repository\SpotRepositoryInterface;
 use Proximum\Vimeet\Domain\Spot\AvailableSpots;
 use Proximum\Vimeet\Infrastructure\Adapter\DelayedEventDispatcher;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
@@ -43,7 +42,6 @@ class TransformRequestIntoMeetingHandlerTest extends TestCase
 
         // Mock
         $meetingRepository           = $this->prophesize(MeetingRepositoryInterface::class);
-        $spotRepository              = $this->prophesize(SpotRepositoryInterface::class);
         $requestSlotViewQueryHandler = $this->prophesize(RequestSlotViewQueryHandler::class);
         $availableSpots              = $this->prophesize(AvailableSpots::class);
         $datetime                    = new \DateTime();
@@ -103,7 +101,6 @@ class TransformRequestIntoMeetingHandlerTest extends TestCase
 
         $handler = new TransformRequestIntoMeetingHandler(
             $meetingRepository->reveal(),
-            $spotRepository->reveal(),
             $requestSlotViewQueryHandler->reveal(),
             $availableSpots->reveal(),
             $datetime,

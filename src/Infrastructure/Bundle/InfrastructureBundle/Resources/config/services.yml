@@ -606,7 +606,6 @@ services:
         class: Proximum\Vimeet\Application\Command\Meeting\Admin\TransformRequestIntoMeetingHandler
         arguments:
             - '@vimeet_infrastructure.repository.meeting_repository'
-            - '@vimeet_infrastructure.repository.spot_repository'
             - '@query.agenda.admin.request_slot_view_query_handler'
             - '@domain.spot.available_spots'
             - '@datetime'
@@ -641,7 +640,6 @@ services:
             - '@meeting.request_permission_manager'
             - '@vimeet_infrastructure.adapter.delayed_event_dispatcher'
             - '@domain.user.phone.validation_required_checker'
-            - '@vimeet_infrastructure.repository.meeting_slot_repository'
             - '@command.meeting.event.transform_request_into_meeting_handler'
             - '@domain.event.day.dday_guesser'
             - '@datetime'

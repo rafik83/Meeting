@@ -26,7 +26,6 @@ use Proximum\Vimeet\Domain\Model\Type;
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Repository\Meeting\MessageRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\Meeting\RequestRepositoryInterface;
-use Proximum\Vimeet\Domain\Repository\MeetingSlotRepositoryInterface;
 use Proximum\Vimeet\Domain\User\Phone\ValidationRequiredChecker;
 use Proximum\Vimeet\Infrastructure\Adapter\DelayedEventDispatcher;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
@@ -77,7 +76,6 @@ class ApproveRequestHandlerTest extends TestCase
 
         $eventDispatcher = $this->prophesize(DelayedEventDispatcher::class);
         $validationRequiredChecker = $this->prophesize(ValidationRequiredChecker::class);
-        $slotRepository = $this->prophesize(MeetingSlotRepositoryInterface::class);
         $transformMeetingIntoRequestHandler = $this->prophesize(TransformRequestIntoMeetingHandler::class);
         $ddayGuesser = $this->prophesize(DDayGuesser::class);
 
@@ -93,7 +91,6 @@ class ApproveRequestHandlerTest extends TestCase
             $permissionManager->reveal(),
             $eventDispatcher->reveal(),
             $validationRequiredChecker->reveal(),
-            $slotRepository->reveal(),
             $transformMeetingIntoRequestHandler->reveal(),
             $ddayGuesser->reveal(),
             $dateTime
@@ -146,7 +143,6 @@ class ApproveRequestHandlerTest extends TestCase
 
         $eventDispatcher = $this->prophesize(DelayedEventDispatcher::class);
         $validationRequiredChecker = $this->prophesize(ValidationRequiredChecker::class);
-        $slotRepository = $this->prophesize(MeetingSlotRepositoryInterface::class);
         $transformMeetingIntoRequestHandler = $this->prophesize(TransformRequestIntoMeetingHandler::class);
         $ddayGuesser = $this->prophesize(DDayGuesser::class);
 
@@ -162,7 +158,6 @@ class ApproveRequestHandlerTest extends TestCase
             $permissionManager->reveal(),
             $eventDispatcher->reveal(),
             $validationRequiredChecker->reveal(),
-            $slotRepository->reveal(),
             $transformMeetingIntoRequestHandler->reveal(),
             $ddayGuesser->reveal(),
             $dateTime
