@@ -14,7 +14,6 @@ use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Meeting\Request;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Sheet;
-use Proximum\Vimeet\Domain\Tip\ConfirmationPhoneTipChecker;
 use Proximum\Vimeet\Domain\UserEvent\UserEventPhoneChecker;
 
 /**
@@ -41,12 +40,11 @@ class ParticipantWithPhoneValidated
 
     /**
      * @param Event $event
-     * @param Sheet $sheet
      * @param array $participants
      *
      * @return null|Participant
      */
-    public function getParticipant(Event $event, Sheet $sheet, array $participants): ?Participant
+    public function getParticipant(Event $event, array $participants): ?Participant
     {
         foreach ($participants as $participant) {
             if ($this->userEventPhoneChecker->isValidated($participant->getUser(), $event)) {
@@ -55,42 +53,5 @@ class ParticipantWithPhoneValidated
         }
 
         return null;
-    }
-
-    /**
-     * @param Request $request
-     *
-     * @return null|Participant
-     * @throws \Exception
-     *
-     */
-    public function getFromParticipant(Request $request): ?Participant
-    {
-        $event = $request->getEvent();
-        $sheet = $request->getFromSheet();
-
-        return $this->getParticipant(
-            $event,
-            $sheet,
-            $request->getFromParticipantsArray()
-        );
-    }
-
-    /**
-     * @param Request $request
-     *
-     * @return null|Participant
-     * @throws \Exception
-     */
-    public function getToParticipant(Request $request)
-    {
-        $event = $request->getEvent();
-        $sheet = $request->getToSheet();
-
-        return $this->getParticipant(
-            $event,
-            $sheet,
-            $request->getToParticipantsArray()
-        );
     }
 }
