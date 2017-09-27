@@ -10,7 +10,7 @@
 
 namespace Proximum\Vimeet\Application\View\Meeting;
 
-class TransformRequestIntoMeetingView
+class ApproveRequestResult
 {
     /**
      * @var MeetingDdayView

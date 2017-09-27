@@ -18,8 +18,8 @@ use Proximum\Vimeet\Application\Event\MeetingRequest\ApprovedRequestEvent;
 use Proximum\Vimeet\Application\Event\MeetingRequest\ParticipateToRequestEvent;
 use Proximum\Vimeet\Application\Exception\MeetingRequest\CannotBeTransformIntoMeetingOnDdayException;
 use Proximum\Vimeet\Application\Exception\MeetingRequest\IsNotAllowedToApproveMeetingRequestException;
+use Proximum\Vimeet\Application\View\Meeting\ApproveRequestResult;
 use Proximum\Vimeet\Application\View\Meeting\MeetingDdayView;
-use Proximum\Vimeet\Application\View\Meeting\TransformRequestIntoMeetingView;
 use Proximum\Vimeet\Domain\Event\Day\DDayGuesser;
 use Proximum\Vimeet\Domain\Model\Meeting\Message;
 use Proximum\Vimeet\Domain\Model\Meeting\Request;
@@ -87,10 +87,10 @@ class ApproveRequestHandler
     /**
      * @param ApproveRequest $approveRequest
      *
-     * @return TransformRequestIntoMeetingView
+     * @return null|ApproveRequestResult
      * @throws IsNotAllowedToApproveMeetingRequestException
      */
-    public function handle(ApproveRequest $approveRequest): TransformRequestIntoMeetingView
+    public function handle(ApproveRequest $approveRequest): ?ApproveRequestResult
     {
         if (!$this->permissionManager->isAllowedToApprove(
             $approveRequest->request,
@@ -141,15 +141,17 @@ class ApproveRequestHandler
             );
 
             if ($validationRequired === false) {
-                $meetingView = $this->transformRequestIntoMeetingOnDday($approveRequest->request, $approveRequest->locale);
-                $transformIntoMeetingProcessed = true;
+                $meetingDdayView = $this->transformRequestIntoMeetingOnDday($approveRequest->request, $approveRequest->locale);
+
+                if ($meetingDdayView instanceOf MeetingDdayView) {
+                    return new ApproveRequestResult($meetingDdayView);
+                } else {
+                    return new ApproveRequestResult(null, true);
+                }
             }
         }
 
-        return new TransformRequestIntoMeetingView(
-            $meetingView ?? null,
-            isset($transformIntoMeetingProcessed) && !isset($meetingView)
-        );
+        return null;
     }
 
     /**

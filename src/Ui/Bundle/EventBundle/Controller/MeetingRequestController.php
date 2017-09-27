@@ -29,7 +29,7 @@ use Proximum\Vimeet\Application\View\Agenda\Slot\AvailableSlotView;
 use Proximum\Vimeet\Application\View\Meeting\MeetingRequestListView;
 use Proximum\Vimeet\Application\View\Meeting\Message\DiscussionMeetingRequestView;
 use Proximum\Vimeet\Application\View\Meeting\StateListsView;
-use Proximum\Vimeet\Application\View\Meeting\TransformRequestIntoMeetingView;
+use Proximum\Vimeet\Application\View\Meeting\ApproveRequestResult;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Meeting\Constant;
 use Proximum\Vimeet\Domain\Model\Meeting\Request as MeetingRequest;
@@ -398,22 +398,19 @@ class MeetingRequestController extends Controller
         $isSubmitted = $form->handleRequest($request)->isSubmitted();
 
         if ($isSubmitted && $form->isValid()) {
-            /** @var TransformRequestIntoMeetingView $transformRequestIntoMeetingView */
-            $transformRequestIntoMeetingView = $this->get('tactician.commandbus')->handle($approveRequest);
+            /** @var ApproveRequestResult $approveRequestResult */
+            $approveRequestResult = $this->get('tactician.commandbus')->handle($approveRequest);
 
-            if ($transformRequestIntoMeetingView->meetingView !== null
-                || $transformRequestIntoMeetingView->hasError)
-            {
-
+            if ($approveRequestResult !== null) {
                 $flashMessageView = $this->renderView('EventBundle::MeetingRequest\Message\requestTransformedIntoMeeting.html.twig', [
-                    'meetingDdayView' => $transformRequestIntoMeetingView->meetingView,
-                    'error'           => $transformRequestIntoMeetingView->hasError,
+                    'meetingDdayView' => $approveRequestResult->meetingView,
+                    'error'           => $approveRequestResult->hasError,
                 ]);
             }
 
             return new JsonResponse($this->createJsonResponseData(
                 true,
-                !empty($flashMessageView),
+                empty($flashMessageView),
                 $this->renderView('EventBundle:MeetingRequest\Button:approvedProposition.html.twig', [
                     'sheet'                        => $sheet,
                     'meetingRequest'               => $meetingRequest,
