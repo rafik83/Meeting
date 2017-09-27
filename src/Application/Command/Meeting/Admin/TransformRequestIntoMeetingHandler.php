@@ -20,7 +20,6 @@ use Proximum\Vimeet\Application\Query\Agenda\Admin\RequestSlotViewQuery;
 use Proximum\Vimeet\Application\Query\Agenda\Admin\RequestSlotViewQueryHandler;
 use Proximum\Vimeet\Domain\Model\Meeting;
 use Proximum\Vimeet\Domain\Repository\MeetingRepositoryInterface;
-use Proximum\Vimeet\Domain\Repository\SpotRepositoryInterface;
 use Proximum\Vimeet\Domain\Spot\AvailableSpots;
 use Proximum\Vimeet\Infrastructure\Adapter\DelayedEventDispatcher;
 
@@ -28,9 +27,6 @@ class TransformRequestIntoMeetingHandler
 {
     /** @var MeetingRepositoryInterface */
     private $meetingRepository;
-
-    /** @var SpotRepositoryInterface */
-    private $spotRepository;
 
     /** @var RequestSlotViewQueryHandler */
     private $requestSlotViewQueryHandler;
@@ -46,7 +42,6 @@ class TransformRequestIntoMeetingHandler
 
     /**
      * @param MeetingRepositoryInterface  $meetingRepository
-     * @param SpotRepositoryInterface     $spotRepository
      * @param RequestSlotViewQueryHandler $requestSlotViewQueryHandler
      * @param AvailableSpots              $availableSpots
      * @param \DateTimeInterface          $dateTime
@@ -54,14 +49,12 @@ class TransformRequestIntoMeetingHandler
      */
     public function __construct(
         MeetingRepositoryInterface $meetingRepository,
-        SpotRepositoryInterface $spotRepository,
         RequestSlotViewQueryHandler $requestSlotViewQueryHandler,
         AvailableSpots $availableSpots,
         \DateTimeInterface $dateTime,
         DelayedEventDispatcher $eventDispatcher
     ) {
         $this->meetingRepository           = $meetingRepository;
-        $this->spotRepository              = $spotRepository;
         $this->requestSlotViewQueryHandler = $requestSlotViewQueryHandler;
         $this->dateTime                    = $dateTime;
         $this->eventDispatcher             = $eventDispatcher;
@@ -71,12 +64,11 @@ class TransformRequestIntoMeetingHandler
     /**
      * @param TransformRequestIntoMeeting $transformRequestIntoMeeting
      *
-     * @return Meeting
      * @throws MeetingRequestCanNotBeMeetingException
      * @throws NoSpotsAvailableForThisSlotAndMeetingException
      * @throws SlotNotAvailableForThisMeetingException
      */
-    public function handle(TransformRequestIntoMeeting $transformRequestIntoMeeting): Meeting
+    public function handle(TransformRequestIntoMeeting $transformRequestIntoMeeting)
     {
         if (false === $transformRequestIntoMeeting->meetingRequest->isTransformableIntoMeeting()) {
             throw new MeetingRequestCanNotBeMeetingException();
@@ -130,7 +122,5 @@ class TransformRequestIntoMeetingHandler
                 new MeetingParticipateEvent($participant)
             );
         }
-
-        return $meeting;
     }
 }

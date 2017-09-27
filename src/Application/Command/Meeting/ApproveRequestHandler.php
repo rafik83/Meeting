@@ -25,7 +25,6 @@ use Proximum\Vimeet\Domain\Model\Meeting\Message;
 use Proximum\Vimeet\Domain\Model\Meeting\Request;
 use Proximum\Vimeet\Domain\Repository\Meeting\MessageRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\Meeting\RequestRepositoryInterface;
-use Proximum\Vimeet\Domain\Repository\MeetingSlotRepositoryInterface;
 use Proximum\Vimeet\Domain\User\Phone\ValidationRequiredChecker;
 use Proximum\Vimeet\Infrastructure\Adapter\DelayedEventDispatcher;
 
@@ -49,9 +48,6 @@ class ApproveRequestHandler
     /** @var ValidationRequiredChecker */
     private $validationRequiredChecker;
 
-    /** @var MeetingSlotRepositoryInterface */
-    private $slotRepository;
-
     /** @var TransformRequestIntoMeetingHandler */
     private $transformRequestIntoMeetingHandler;
 
@@ -64,7 +60,6 @@ class ApproveRequestHandler
      * @param RequestPermissionManager           $permissionManager
      * @param DelayedEventDispatcher             $eventDispatcher
      * @param ValidationRequiredChecker          $validationRequiredChecker
-     * @param MeetingSlotRepositoryInterface     $slotRepository
      * @param TransformRequestIntoMeetingHandler $transformRequestIntoMeetingHandler
      * @param DDayGuesser                        $ddayGuesser
      * @param \DateTimeInterface                 $datetime
@@ -75,7 +70,6 @@ class ApproveRequestHandler
         RequestPermissionManager $permissionManager,
         DelayedEventDispatcher $eventDispatcher,
         ValidationRequiredChecker $validationRequiredChecker,
-        MeetingSlotRepositoryInterface $slotRepository,
         TransformRequestIntoMeetingHandler $transformRequestIntoMeetingHandler,
         DDayGuesser $ddayGuesser,
         \DateTimeInterface $datetime
@@ -86,7 +80,6 @@ class ApproveRequestHandler
         $this->eventDispatcher                    = $eventDispatcher;
         $this->datetime                           = $datetime;
         $this->validationRequiredChecker          = $validationRequiredChecker;
-        $this->slotRepository                     = $slotRepository;
         $this->transformRequestIntoMeetingHandler = $transformRequestIntoMeetingHandler;
         $this->ddayGuesser                        = $ddayGuesser;
     }
