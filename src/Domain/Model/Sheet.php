@@ -13,6 +13,7 @@ namespace Proximum\Vimeet\Domain\Model;
 use DateTimeInterface;
 use Doctrine\Common\Collections\ArrayCollection;
 use Proximum\Vimeet\Domain\Exception\Sheet\SheetException;
+use Proximum\Vimeet\Domain\Model\Sheet\AvailableSlot;
 use Proximum\Vimeet\Domain\Model\Sheet\Group;
 use Proximum\Vimeet\Domain\Model\Template\SheetTemplate;
 use Proximum\Vimeet\Domain\Trace\TraceableName;
@@ -167,8 +168,8 @@ class Sheet implements TraceableInterface
     /** @var string */
     private $agendaConfirmedStatus = self::AGENDA_NOT_CONCERNED;
 
-    /** @var null|array of slot ids */
-    private $availableSlots = [];
+    /** @var ArrayCollection */
+    private $availableSlots;
 
     /**
      * Sheet constructor.
@@ -199,7 +200,7 @@ class Sheet implements TraceableInterface
         $this->state        = self::STATE_PENDING;
         $this->completeness = 0;
         $this->group        = $group;
-        $this->availableSlots = [];
+        $this->availableSlots = new ArrayCollection();
     }
 
     /**
@@ -994,11 +995,41 @@ class Sheet implements TraceableInterface
     }
 
     /**
-     * @param array $availableSlots
+     * @param AvailableSlot[] $availableSlots
      */
     public function setAvailableSlots(array $availableSlots)
     {
-        $this->availableSlots = $availableSlots;
+        foreach ($availableSlots as $newAvailableSlot) {
+            $found = false;
+
+            foreach ($this->availableSlots as $oldAvailableSlot) {
+                if ($newAvailableSlot->getSlot()->getId() === $oldAvailableSlot->getSlot()->getId()) {
+                    $found = true;
+
+                    break;
+                }
+            }
+
+            if ($found === false) {
+                $this->availableSlots->add($newAvailableSlot);
+            }
+        }
+
+        foreach ($this->availableSlots as $key => $oldAvailableSlot) {
+            $found = false;
+
+            foreach ($availableSlots as $newAvailableSlot) {
+                if ($newAvailableSlot->getSlot()->getId() === $oldAvailableSlot->getSlot()->getId()) {
+                    $found = true;
+
+                    break;
+                }
+            }
+
+            if ($found === false) {
+                $this->availableSlots->remove($key);
+            }
+        }
     }
 
     /**
@@ -1006,10 +1037,6 @@ class Sheet implements TraceableInterface
      */
     public function getAvailableSlots(): array
     {
-        if ($this->availableSlots === null) {
-            return [];
-        }
-
-        return $this->availableSlots;
+        return $this->availableSlots->toArray();
     }
 }

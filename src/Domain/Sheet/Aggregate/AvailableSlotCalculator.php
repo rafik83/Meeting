@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Domain\Sheet\Aggregate;
 
+use Proximum\Vimeet\Application\Adapter\SheetIndexerInterface;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Repository\MeetingSlotRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
@@ -22,16 +23,22 @@ class AvailableSlotCalculator
     /** @var SheetRepositoryInterface */
     private $sheetRepository;
 
+    /** @var SheetIndexerInterface */
+    private $sheetIndexer;
+
     /**
      * @param MeetingSlotRepositoryInterface $slotRepository
      * @param SheetRepositoryInterface       $sheetRepository
+     * @param SheetIndexerInterface          $sheetIndexer
      */
     public function __construct(
         MeetingSlotRepositoryInterface $slotRepository,
-        SheetRepositoryInterface $sheetRepository
+        SheetRepositoryInterface $sheetRepository,
+        SheetIndexerInterface $sheetIndexer
     ) {
         $this->slotRepository = $slotRepository;
         $this->sheetRepository = $sheetRepository;
+        $this->sheetIndexer = $sheetIndexer;
     }
 
     /**
@@ -55,11 +62,12 @@ class AvailableSlotCalculator
         $availableSlots = [];
 
         foreach ($slots as $slot) {
-            $availableSlots[] = $slot->getId();
+            $availableSlots[] = new Sheet\AvailableSlot($sheet, $slot);
         }
 
         $sheet->setAvailableSlots($availableSlots);
 
         $this->sheetRepository->set($sheet);
+        $this->sheetIndexer->updateSheets([$sheet]);
     }
 }

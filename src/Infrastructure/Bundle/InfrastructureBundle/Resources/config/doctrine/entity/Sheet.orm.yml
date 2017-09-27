@@ -46,9 +46,6 @@ Proximum\Vimeet\Domain\Model\Sheet:
             type: string
             options:
                 default: 'agenda_not_concerned'
-        availableSlots:
-            type: array
-            nullable: true
     manyToOne:
         event:
             targetEntity: Proximum\Vimeet\Domain\Model\Event
@@ -83,3 +80,8 @@ Proximum\Vimeet\Domain\Model\Sheet:
         orders:
             targetEntity: Proximum\Vimeet\Domain\Model\Order
             mappedBy: sheet
+        availableSlots:
+            targetEntity: Proximum\Vimeet\Domain\Model\Sheet\AvailableSlot
+            cascade: ['persist', 'remove']
+            mappedBy: sheet
+            orphanRemoval: true

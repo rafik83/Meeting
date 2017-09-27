@@ -424,8 +424,8 @@ class SheetElasticTransformer implements ModelToElasticaTransformerInterface
      */
     private function buildAvailableSlots(Sheet $sheet)
     {
-        $ids = array_map(function ($id) {
-            return ['id' => $id];
+        $ids = array_map(function (Sheet\AvailableSlot $availableSlot) {
+            return ['id' => $availableSlot->getSlot()->getId()];
         }, $sheet->getAvailableSlots());
 
         return $ids;
