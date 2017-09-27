@@ -19,16 +19,18 @@ use Proximum\Vimeet\Application\Exception\MeetingRequest\CannotBeTransformIntoMe
 use Proximum\Vimeet\Application\View\Meeting\RequestTransformIntoMeeting\AvailableMeetingView;
 use Proximum\Vimeet\Application\View\Meeting\RequestTransformIntoMeeting\AvailableSlotsBySheetView;
 use Proximum\Vimeet\Application\View\Meeting\RequestTransformIntoMeeting\AvailableSlotsParticipantView;
+use Proximum\Vimeet\Domain\Meeting\VisioGuesser;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Meeting;
 use Proximum\Vimeet\Domain\Model\MeetingSlot;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Sheet;
+use Proximum\Vimeet\Domain\Model\Spot;
 use Proximum\Vimeet\Domain\Repository\MeetingRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\MeetingSlotRepositoryInterface;
-use Proximum\Vimeet\Domain\Request\ParticipantWithPhoneValidated;
 use Proximum\Vimeet\Domain\Slot\SlotFilter;
 use Proximum\Vimeet\Domain\Spot\AvailableSpots;
+use Proximum\Vimeet\Domain\UserEvent\UserEventPhoneChecker;
 
 class TransformRequestIntoMeetingHandler
 {
@@ -41,9 +43,6 @@ class TransformRequestIntoMeetingHandler
     /** @var MeetingSlotRepositoryInterface */
     private $meetingSlotRepository;
 
-    /** @var ParticipantWithPhoneValidated */
-    private $participantWithPhoneValidated;
-
     /** @var AvailableSpots */
     private $availableSpots;
 
@@ -53,33 +52,42 @@ class TransformRequestIntoMeetingHandler
     /** @var SlotFilter */
     private $slotFilter;
 
+    /** @var VisioGuesser */
+    private $visioGuesser;
+
+    /** @var UserEventPhoneChecker */
+    private $userEventPhoneChecker;
+
     /**
      * TransformRequestIntoMeetingHandler constructor.
      *
      * @param MeetingSlotRepositoryInterface  $meetingSlotRepository
-     * @param ParticipantWithPhoneValidated   $participantWithPhoneValidated
+     * @param UserEventPhoneChecker           $userEventPhoneChecker
      * @param AvailableSpots                  $availableSpots
      * @param MeetingRepositoryInterface      $meetingRepository
      * @param SlotFilter                      $slotFilter
+     * @param VisioGuesser                    $visioGuesser
      * @param DelayedEventDispatcherInterface $eventDispatcher
      * @param \DateTimeInterface              $dateTime
      */
     public function __construct(
         MeetingSlotRepositoryInterface $meetingSlotRepository,
-        ParticipantWithPhoneValidated $participantWithPhoneValidated,
+        UserEventPhoneChecker $userEventPhoneChecker,
         AvailableSpots $availableSpots,
         MeetingRepositoryInterface $meetingRepository,
         SlotFilter $slotFilter,
+        VisioGuesser $visioGuesser,
         DelayedEventDispatcherInterface $eventDispatcher,
         \DateTimeInterface $dateTime
     ) {
-        $this->meetingSlotRepository         = $meetingSlotRepository;
-        $this->participantWithPhoneValidated = $participantWithPhoneValidated;
-        $this->availableSpots                = $availableSpots;
-        $this->dateTime                      = $dateTime;
-        $this->meetingRepository             = $meetingRepository;
-        $this->eventDispatcher               = $eventDispatcher;
-        $this->slotFilter                    = $slotFilter;
+        $this->meetingSlotRepository = $meetingSlotRepository;
+        $this->userEventPhoneChecker = $userEventPhoneChecker;
+        $this->availableSpots        = $availableSpots;
+        $this->dateTime              = $dateTime;
+        $this->meetingRepository     = $meetingRepository;
+        $this->eventDispatcher       = $eventDispatcher;
+        $this->slotFilter            = $slotFilter;
+        $this->visioGuesser          = $visioGuesser;
     }
 
     /**
@@ -90,21 +98,21 @@ class TransformRequestIntoMeetingHandler
      */
     public function handle(TransformRequestIntoMeeting $query): Meeting
     {
-        $fromSheet           = $query->request->getFromSheet();
-        $toSheet             = $query->request->getToSheet();
-        $fromParticipants    = $query->request->getFromParticipantsArray();
-        $toParticipants      = $query->request->getToParticipantsArray();
+        $fromSheet          = $query->request->getFromSheet();
+        $toSheet            = $query->request->getToSheet();
+        $fromParticipants   = $query->request->getFromParticipantsArray();
+        $toParticipants     = $query->request->getToParticipantsArray();
         $fromIsNoPreference = $query->request->hasNoPreference($fromSheet);
         $toIsNoPreference   = $query->request->hasNoPreference($toSheet);
 
         if ($fromIsNoPreference && 1 === $fromSheet->countParticipants()) {
             $fromIsNoPreference = false;
-            $fromParticipants    = $fromSheet->getParticipantsArray();
+            $fromParticipants   = $fromSheet->getParticipantsArray();
         }
 
         if ($toIsNoPreference && 1 === $toSheet->countParticipants()) {
             $toIsNoPreference = false;
-            $toParticipants    = $fromSheet->getParticipantsArray();
+            $toParticipants   = $fromSheet->getParticipantsArray();
         }
 
         $fromSheet = new AvailableSlotsBySheetView($fromSheet, $fromIsNoPreference);
@@ -149,18 +157,6 @@ class TransformRequestIntoMeetingHandler
 
         $transformableMeeting = $this->getTransformableMeeting($query->event, $availableMeetings);
 
-        try {
-            $spot = $this->availableSpots->getBySlot(
-                $transformableMeeting->slot,
-                $transformableMeeting->fromSheet,
-                $transformableMeeting->toSheet,
-                $transformableMeeting->getTotalParticipants(),
-                $query->visio
-            );
-        } catch (NoSpotsAvailableForThisSlotAndMeetingException $exception) {
-            throw new CannotBeTransformIntoMeetingOnDdayException();
-        }
-
         $meeting = new Meeting(
             $query->request,
             $transformableMeeting->slot,
@@ -169,7 +165,7 @@ class TransformRequestIntoMeetingHandler
             $transformableMeeting->toSheet,
             $transformableMeeting->toParticipants,
             $this->dateTime,
-            $spot,
+            $transformableMeeting->spot,
             $query->event
         );
 
@@ -235,9 +231,7 @@ class TransformRequestIntoMeetingHandler
             $participants
         );
 
-        $slots = $this->slotFilter->getFilteredSlots($slots);
-
-        return $slots;
+        return $this->slotFilter->getFilteredSlots($slots);
     }
 
     /**
@@ -313,18 +307,20 @@ class TransformRequestIntoMeetingHandler
         }
 
         if ($fromSheet->hasNoPreference && $toSheet->hasNoPreference) {
-            foreach ($fromSheet->availableSlotsByParticipant as $availableSlotsParticipantView) {
-                foreach ($availableSlotsParticipantView->slots as $slot) {
-                    if ($this->hasCommonSlot($toSheet, $slot)) {
-                        $availableMeetings[] = $this->createAvailableMeetingView(
-                            $slot,
-                            $fromSheet->sheet,
-                            $toSheet->sheet,
-                            [$availableSlotsParticipantView->participant],
-                            [$this->getParticipantOnAvailableSlot($toSheet, $slot)],
-                            $fromSheet->hasNoPreference,
-                            $toSheet->hasNoPreference
-                        );
+            foreach ($fromSheet->availableSlotsByParticipant as $fromAvailableSlotsParticipantView) {
+                foreach ($toSheet->availableSlotsByParticipant as $toAvailableSlotsParticipantView) {
+                    foreach ($fromAvailableSlotsParticipantView->slots as $fromSlot) {
+                        if (in_array($fromSlot, $toAvailableSlotsParticipantView->slots, true)) {
+                            $availableMeetings[] = $this->createAvailableMeetingView(
+                                $fromSlot,
+                                $fromSheet->sheet,
+                                $toSheet->sheet,
+                                [$fromAvailableSlotsParticipantView->participant],
+                                [$toAvailableSlotsParticipantView->participant],
+                                $fromSheet->hasNoPreference,
+                                $toSheet->hasNoPreference
+                            );
+                        }
                     }
                 }
             }
@@ -332,7 +328,7 @@ class TransformRequestIntoMeetingHandler
             return $availableMeetings;
         }
 
-        return $availableMeetings;
+        return [];
     }
 
     /**
@@ -360,26 +356,6 @@ class TransformRequestIntoMeetingHandler
         }
 
         return false;
-    }
-
-    /**
-     * @param AvailableSlotsBySheetView $sheetView
-     * @param MeetingSlot               $slot
-     *
-     * @return null|Participant
-     */
-    private function getParticipantOnAvailableSlot(
-        AvailableSlotsBySheetView $sheetView,
-        MeetingSlot $slot
-    ): ?Participant
-    {
-        foreach ($sheetView->availableSlotsByParticipant as $availableSlotsParticipantView) {
-            if (isset($availableSlotsParticipantView->slots[$slot->getId()])) {
-                return $availableSlotsParticipantView->participant;
-            }
-        }
-
-        return null;
     }
 
     /**
@@ -419,29 +395,85 @@ class TransformRequestIntoMeetingHandler
      * @param AvailableMeetingView[] $availableMeetings
      *
      * @return AvailableMeetingView
+     * @throws CannotBeTransformIntoMeetingOnDdayException
      */
     private function getTransformableMeeting(Event $event, array $availableMeetings): AvailableMeetingView
     {
-        foreach ($availableMeetings as $availableMeeting) {
+        foreach ($availableMeetings as $index => $availableMeeting) {
             if ($availableMeeting->fromSheetHasNoPreference) {
-                $fromParticipant = $this->participantWithPhoneValidated->getParticipant(
-                    $event,
-                    $availableMeeting->fromParticipants
+                $availableMeeting->fromParticipantIsPhoneValidated = $this->userEventPhoneChecker->isValidated(
+                    $availableMeeting->getFromParticipant()->getUser(),
+                    $event
                 );
             }
 
             if ($availableMeeting->toSheetHasNoPreference) {
-                $toParticipant = $this->participantWithPhoneValidated->getParticipant(
-                    $event,
-                    $availableMeeting->toParticipants
+                $availableMeeting->toParticipantIsPhoneValidated = $this->userEventPhoneChecker->isValidated(
+                    $availableMeeting->getToParticipant()->getUser(),
+                    $event
                 );
             }
 
-            if (!empty($fromParticipant) || !empty($toParticipant)) {
+            $spot = $this->getSpotForAvailableMeeting($availableMeeting);
+            $availableMeeting->spot = $spot;
+
+            if (!$availableMeeting->spot instanceof Spot) {
+                // this meeting can not have a spot, remove it
+                unset($availableMeetings[$index]);
+            }
+
+            // The both side have a phone validated
+            if (true === $availableMeeting->fromParticipantIsPhoneValidated
+                && true === $availableMeeting->toParticipantIsPhoneValidated
+            ) {
                 return $availableMeeting;
             }
         }
 
-        return reset($availableMeetings);
+        // I accept the proposition (I'm am the "to" participant)
+        // if the "from" participant has a phone validated, the meeting is created
+        foreach ($availableMeetings as $availableMeeting) {
+            if (true === $availableMeeting->fromParticipantIsPhoneValidated) {
+                return $availableMeeting;
+            }
+        }
+
+        // Create meeting if to participant has validated phone
+        foreach ($availableMeetings as $availableMeeting) {
+            if (true === $availableMeeting->toParticipantIsPhoneValidated) {
+                return $availableMeeting;
+            }
+        }
+
+        // default meeting, the first one with a spot
+        $availableMeeting = reset($availableMeetings);
+
+        if (false === $availableMeeting) {
+            throw new CannotBeTransformIntoMeetingOnDdayException();
+        }
+
+        return $availableMeeting;
+    }
+
+    /**
+     * @param AvailableMeetingView $availableMeetingView
+     *
+     * @return null|Spot
+     */
+    private function getSpotForAvailableMeeting(AvailableMeetingView $availableMeetingView)
+    {
+        try {
+            return $this->availableSpots->getBySlot(
+                $availableMeetingView->slot,
+                $availableMeetingView->fromSheet,
+                $availableMeetingView->toSheet,
+                $availableMeetingView->getTotalParticipants(),
+                $this->visioGuesser->isParticipantVisio(
+                    array_merge($availableMeetingView->fromParticipants, $availableMeetingView->toParticipants)
+                )
+            );
+        } catch (NoSpotsAvailableForThisSlotAndMeetingException $exception) {
+            return null;
+        }
     }
 }
