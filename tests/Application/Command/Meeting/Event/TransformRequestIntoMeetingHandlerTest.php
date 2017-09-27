@@ -98,13 +98,11 @@ class TransformRequestIntoMeetingHandlerTest extends TestCase
 
         $participantWithPhoneValidated->getParticipant(
             $event,
-            $fromSheet->reveal(),
             [$fromParticipant->reveal()]
         )->shouldNotBeCalled();
 
         $participantWithPhoneValidated->getParticipant(
             $event,
-            $toSheet->reveal(),
             [$toParticipant->reveal()]
         )->shouldNotBeCalled();
 
@@ -232,13 +230,11 @@ class TransformRequestIntoMeetingHandlerTest extends TestCase
 
         $participantWithPhoneValidated->getParticipant(
             $event,
-            $fromSheet->reveal(),
             [$fromParticipant->reveal()]
         )->shouldBeCalled()->willReturn($fromParticipant->reveal());
 
         $participantWithPhoneValidated->getParticipant(
             $event,
-            $toSheet->reveal(),
             [$toParticipant->reveal()]
         )->shouldNotBeCalled();
 
@@ -327,13 +323,11 @@ class TransformRequestIntoMeetingHandlerTest extends TestCase
 
         $participantWithPhoneValidated->getParticipant(
             $event,
-            $fromSheet->reveal(),
             [$fromParticipant->reveal()]
         )->shouldNotBeCalled();
 
         $participantWithPhoneValidated->getParticipant(
             $event,
-            $toSheet->reveal(),
             [$toParticipant->reveal()]
         )->shouldNotBeCalled();
 
@@ -426,13 +420,11 @@ class TransformRequestIntoMeetingHandlerTest extends TestCase
 
         $participantWithPhoneValidated->getParticipant(
             $event,
-            $fromSheet->reveal(),
             [$fromParticipant->reveal()]
         )->shouldNotBeCalled();
 
         $participantWithPhoneValidated->getParticipant(
             $event,
-            $toSheet->reveal(),
             [$toParticipant->reveal()]
         )->shouldNotBeCalled();
 
@@ -558,19 +550,16 @@ class TransformRequestIntoMeetingHandlerTest extends TestCase
 
         $participantWithPhoneValidated->getParticipant(
             $event,
-            $fromSheet->reveal(),
             [$fromParticipant->reveal()]
         )->shouldBeCalled()->willReturn(null);
 
         $participantWithPhoneValidated->getParticipant(
             $event,
-            $fromSheet->reveal(),
             [$fromParticipantTwo->reveal()]
         )->shouldBeCalled()->willReturn($fromParticipantTwo->reveal());
 
         $participantWithPhoneValidated->getParticipant(
             $event,
-            $toSheet->reveal(),
             [$toParticipant->reveal()]
         )->shouldBeCalled()->willReturn(null);
 

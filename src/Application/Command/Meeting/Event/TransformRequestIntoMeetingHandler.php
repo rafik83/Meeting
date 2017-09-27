@@ -422,7 +422,6 @@ class TransformRequestIntoMeetingHandler
             if ($availableMeeting->fromSheetHasNoPreference) {
                 $fromParticipant = $this->participantWithPhoneValidated->getParticipant(
                     $event,
-                    $availableMeeting->fromSheet,
                     $availableMeeting->fromParticipants
                 );
             }
@@ -430,7 +429,6 @@ class TransformRequestIntoMeetingHandler
             if ($availableMeeting->toSheetHasNoPreference) {
                 $toParticipant = $this->participantWithPhoneValidated->getParticipant(
                     $event,
-                    $availableMeeting->toSheet,
                     $availableMeeting->toParticipants
                 );
             }
