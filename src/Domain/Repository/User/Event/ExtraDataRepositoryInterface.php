@@ -35,10 +35,11 @@ interface ExtraDataRepositoryInterface
     public function set(ExtraData $extraData);
 
     /**
-     * @param Event $event
-     * @param User[] $users
+     * @param Event  $event
+     * @param string $name
+     * @param array  $users
      *
      * @return ExtraData[]
      */
-    public function getLastNotificationReminderByUsersByEvent(Event $event, array $users);
+    public function getLastByNameEventAndUsers(Event $event, string $name, array $users);
 }

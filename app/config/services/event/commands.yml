@@ -6,11 +6,22 @@ services:
             - '@vimeet_infrastructure.repository.user_repository'
             - '@repository.user.event.extra_data_repository'
             - '@vimeet_infrastructure.repository.sheet_repository'
-            - '@vimeet_infrastructure.repository.meeting.request_repository'
-            - '@vimeet_infrastructure.repository.meeting_slot_repository'
+            - '@vimeet_infrastructure.application.components.sheet.sheet_info_guesser'
+            - '@datetime'
+            - '@command.meeting_request.sms_notification'
+            - '@command.meeting_request.counter'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\MeetingRequest\Remind }
+
+    command.meeting_request.sms_notification:
+        class: Proximum\Vimeet\Application\Command\MeetingRequest\SmsNotification
+        arguments:
             - '@adapter.smssender_alias'
             - '@vimeet_infrastructure.adapter.translator_adapter'
             - '@adapter.router'
-            - '@vimeet_infrastructure.application.components.sheet.sheet_info_guesser'
-        tags:
-            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\MeetingRequest\Reminder }
+
+    command.meeting_request.counter:
+        class: Proximum\Vimeet\Application\Command\MeetingRequest\Counter
+        arguments:
+            - '@vimeet_infrastructure.repository.meeting_slot_repository'
+            - '@vimeet_infrastructure.repository.meeting.request_repository'

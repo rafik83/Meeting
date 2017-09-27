@@ -310,7 +310,7 @@ class UserRepository implements UserRepositoryInterface
             ->where('EXISTS(
                 SELECT request
                 FROM Entity:Meeting\Request request
-                LEFT JOIN Entity:Sheet sheetFrom WITH sheetFrom = request.from AND sheetFrom.attend = true
+                JOIN Entity:Sheet sheetFrom WITH sheetFrom = request.from AND sheetFrom.attend = true
                 WHERE request.to = sheet AND request.state = :pending AND request.disabled = false
             )')
             ->setParameter('event', $event)

@@ -12,7 +12,7 @@ namespace Proximum\Vimeet\Tests\Application\Command\MeetingRequest;
 
 use PHPUnit\Framework\TestCase;
 use Prophecy\Prophecy\ObjectProphecy;
-use Proximum\Vimeet\Application\Command\MeetingRequest\Reminder;
+use Proximum\Vimeet\Application\Command\MeetingRequest\Remind;
 use Proximum\Vimeet\Application\Command\MeetingRequest\ReminderHandler;
 use Proximum\Vimeet\Application\Exception\Event\NoEventOnCurrentDayException;
 use Proximum\Vimeet\Domain\Repository\EventRepositoryInterface;
@@ -45,13 +45,13 @@ class ReminderHandlerTest extends TestCase
     public function testHandle()
     {
         $expectedCurrentEvents = [
-            EventFactory::createEvent('Michel Drucker fait son show'),      
-            EventFactory::createEvent('Les estivales de John Snow')      
+            EventFactory::createEvent('Michel Drucker fait son show'),
+            EventFactory::createEvent('Les estivales de John Snow')
         ];
-        
+
         $expectedUsers = [];
-        
-        $command = new Reminder($this->dateTime);
+
+        $command = new Remind($this->dateTime);
 
         $this
             ->eventRepository
@@ -59,7 +59,7 @@ class ReminderHandlerTest extends TestCase
             ->shouldBeCalled()
             ->willReturn($expectedCurrentEvents);
         ;
-        
+
         $this
             ->userRepository
             ->getUsersByEventsWithValidatedPhoneNumberAndPendingRequest($expectedCurrentEvents)
@@ -78,7 +78,7 @@ class ReminderHandlerTest extends TestCase
 
     public function testNoEventOnThisDayException()
     {
-        $command = new Reminder($this->dateTime);
+        $command = new Remind($this->dateTime);
 
         $this
             ->eventRepository
@@ -86,7 +86,7 @@ class ReminderHandlerTest extends TestCase
             ->shouldBeCalled()
             ->willReturn([]);
         ;
-        
+
         $this->expectException(NoEventOnCurrentDayException::class);
 
         $this
@@ -100,7 +100,7 @@ class ReminderHandlerTest extends TestCase
             $this->userRepository->reveal(),
             $this->extraDataRepository->reveal()
         );
-        
+
         $handler->handle($command);
     }
 }

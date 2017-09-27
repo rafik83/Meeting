@@ -10,7 +10,7 @@
 
 namespace Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command;
 
-use Proximum\Vimeet\Application\Command\MeetingRequest\Reminder;
+use Proximum\Vimeet\Application\Command\MeetingRequest\Remind;
 use Proximum\Vimeet\Application\Command\MeetingRequest\ReminderHandler;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
@@ -57,7 +57,7 @@ class SendSMSReminderCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $this->reminderHandler->handle(
-            new Reminder($this->dateTime)
+            new Remind($this->dateTime)
         );
     }
 }

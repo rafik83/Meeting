@@ -12,10 +12,8 @@ namespace Proximum\Vimeet\Infrastructure\Repository\User\Event;
 
 use Doctrine\ORM\EntityManager;
 use Proximum\Vimeet\Domain\Model\Event;
-use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Model\User\Event\ExtraData;
 use Proximum\Vimeet\Domain\Repository\User\Event\ExtraDataRepositoryInterface;
-use Proximum\Vimeet\Domain\User\Event\ExtraData\Type;
 
 class ExtraDataRepository implements ExtraDataRepositoryInterface
 {
@@ -67,8 +65,9 @@ class ExtraDataRepository implements ExtraDataRepositoryInterface
     /**
      * {@inheritdoc}
      */
-    public function getLastNotificationReminderByUsersByEvent(
+    public function getLastByNameEventAndUsers(
         Event $event,
+        string $name,
         array $users
     ): array {
         $queryBuilder = $this->entityManager->createQueryBuilder()
@@ -79,7 +78,7 @@ class ExtraDataRepository implements ExtraDataRepositoryInterface
             ->andWhere('extraData.name = :name')
             ->setParameter('event', $event)
             ->setParameter('users', $users)
-            ->setParameter('name', Type::MEETING_REQUEST_DATE_LAST_NOTIFICATION_REMINDER)
+            ->setParameter('name', $name)
         ;
 
         return $queryBuilder->getQuery()->getResult();
