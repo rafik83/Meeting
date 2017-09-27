@@ -78,4 +78,12 @@ class AvailableMeetingView
         $this->fromSheetHasNoPreference = $fromSheetHasNoPreference;
         $this->toSheetHasNoPreference   = $toSheetHasNoPreference;
     }
+
+    /**
+     * @return int
+     */
+    public function getTotalParticipants(): int
+    {
+        return count($this->fromParticipants) + count($this->toParticipants);
+    }
 }

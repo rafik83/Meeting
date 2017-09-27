@@ -128,7 +128,7 @@ class TipRepository implements TipRepositoryInterface
             ->select('tip')
             ->from(Tip::class, 'tip')
             ->join('tip.types', 'type', 'WITH', 'type.event = :event AND type = :type')
-            ->where('tip.onConfirmationPhone = 1')
+            ->where('tip.onConfirmationPhone = true')
             ->setMaxResults(1)
             ->setParameter('event', $event)
             ->setParameter('type', $type)

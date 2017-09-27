@@ -94,23 +94,23 @@ class TransformRequestIntoMeetingHandler
         $toSheet             = $query->request->getToSheet();
         $fromParticipants    = $query->request->getFromParticipantsArray();
         $toParticipants      = $query->request->getToParticipantsArray();
-        $fromHasNoPreference = $query->request->hasNoPreference($fromSheet);
-        $toHasNoPreference   = $query->request->hasNoPreference($toSheet);
+        $fromIsNoPreference = $query->request->hasNoPreference($fromSheet);
+        $toIsNoPreference   = $query->request->hasNoPreference($toSheet);
 
-        if ($fromHasNoPreference && 1 === $fromSheet->countParticipants()) {
-            $fromHasNoPreference = false;
+        if ($fromIsNoPreference && 1 === $fromSheet->countParticipants()) {
+            $fromIsNoPreference = false;
             $fromParticipants    = $fromSheet->getParticipantsArray();
         }
 
-        if ($toHasNoPreference && 1 === $toSheet->countParticipants()) {
-            $toHasNoPreference = false;
+        if ($toIsNoPreference && 1 === $toSheet->countParticipants()) {
+            $toIsNoPreference = false;
             $toParticipants    = $fromSheet->getParticipantsArray();
         }
 
-        $fromSheet = new AvailableSlotsBySheetView($fromSheet, $fromHasNoPreference);
-        $toSheet   = new AvailableSlotsBySheetView($toSheet, $toHasNoPreference);
+        $fromSheet = new AvailableSlotsBySheetView($fromSheet, $fromIsNoPreference);
+        $toSheet   = new AvailableSlotsBySheetView($toSheet, $toIsNoPreference);
 
-        if ($fromHasNoPreference) {
+        if ($fromIsNoPreference) {
             $fromParticipants = $query->request->getFromSheet()->getParticipantsArray();
 
             $fromSheet->availableSlotsByParticipant = $this->getAvailableSlotsByParticipants(
@@ -124,7 +124,7 @@ class TransformRequestIntoMeetingHandler
             );
         }
 
-        if ($toHasNoPreference) {
+        if ($toIsNoPreference) {
             $toParticipants = $query->request->getToSheet()->getParticipantsArray();
 
             $toSheet->availableSlotsByParticipant = $this->getAvailableSlotsByParticipants(
@@ -154,7 +154,7 @@ class TransformRequestIntoMeetingHandler
                 $transformableMeeting->slot,
                 $transformableMeeting->fromSheet,
                 $transformableMeeting->toSheet,
-                count($transformableMeeting->toParticipants) + count($transformableMeeting->fromParticipants),
+                $transformableMeeting->getTotalParticipants(),
                 $query->visio
             );
         } catch (NoSpotsAvailableForThisSlotAndMeetingException $exception) {
