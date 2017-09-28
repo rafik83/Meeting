@@ -433,7 +433,7 @@ class CatalogController extends Controller
                     'participant' => $participant->getId(),
                     'redirectTo'  => $this->generateUrl('event_catalog_complete_sheet', [
                         'sheet'          => $sheet->getId(),
-                        'sheetToDisplay' => $sheetToDisplay,
+                        'sheetToDisplay' => $sheetToDisplay->getId(),
                     ]),
                 ]);
             }
