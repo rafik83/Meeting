@@ -102,7 +102,7 @@ class SMSNotifierSubscriber implements EventSubscriberInterface
         }
 
         /** @var Participant $participant */
-        foreach ($event->getRequest()->getToSheet()->getParticipants() as $participant) {
+        foreach ($event->getRequest()->getToParticipants() as $participant) {
             $extraData = $this->extraDataRepository->getExtraDataForEventNameAndUser(
                 $eventModel,
                 Type::MEETING_REQUEST_DATE_LAST_NOTIFICATION_REMINDER,
@@ -120,7 +120,7 @@ class SMSNotifierSubscriber implements EventSubscriberInterface
 
             if ($userEventPhone !== null) {
                 $sheet = $event->getRequest()->getToSheet();
-             
+
                 $this->SMSSender->send($this->SMSFactory->createMeetingRequestReceive(
                     $userEventPhone->getPhone(),
                     $sheet,
