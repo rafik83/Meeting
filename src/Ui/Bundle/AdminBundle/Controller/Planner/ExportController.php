@@ -40,6 +40,12 @@ class ExportController extends Controller
     {
         $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
 
+        $isEventOpened = $this->get('domain.key_dates.checker.event_open_access_checker')->allowedToAccess($event);
+
+        if ($mode === ExportJobCreator::MODE_AUTO && $isEventOpened) {
+            throw $this->createAccessDeniedException('Planner is not authorized when event is opened');
+        }
+
         if (!$admin instanceof Admin) {
             throw $this->createNotFoundException('Admin not found');
         }

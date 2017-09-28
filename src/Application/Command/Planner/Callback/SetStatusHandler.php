@@ -10,8 +10,10 @@
 
 namespace Proximum\Vimeet\Application\Command\Planner\Callback;
 
+use Proximum\Vimeet\Application\Adapter\FileSystemAdapterInterface;
 use Proximum\Vimeet\Application\Adapter\JobQueueInterface;
 use Proximum\Vimeet\Application\Command\Planner\Import;
+use Proximum\Vimeet\Domain\KeyDates\Checker\EventOpenAccessChecker;
 use Proximum\Vimeet\Domain\Model\File;
 use Proximum\Vimeet\Domain\Model\PlannerJob;
 use Proximum\Vimeet\Domain\Repository\FileRepositoryInterface;
@@ -34,6 +36,12 @@ class SetStatusHandler
     /** @var string */
     private $plannerFilesPath;
 
+    /** @var EventOpenAccessChecker */
+    private $eventOpenAccessChecker;
+
+    /** @var FileSystemAdapterInterface */
+    private $fileSystemAdapter;
+
     /** @var \DateTimeInterface */
     private $dateTime;
 
@@ -43,6 +51,8 @@ class SetStatusHandler
      * @param string                        $plannerTrustedName
      * @param JobQueueInterface             $jobQueue
      * @param string                        $plannerFilesPath
+     * @param EventOpenAccessChecker        $eventOpenAccessChecker
+     * @param FileSystemAdapterInterface    $fileSystemAdapter
      * @param \DateTimeInterface            $dateTime
      */
     public function __construct(
@@ -51,6 +61,8 @@ class SetStatusHandler
         string $plannerTrustedName,
         JobQueueInterface $jobQueue,
         string $plannerFilesPath,
+        EventOpenAccessChecker $eventOpenAccessChecker,
+        FileSystemAdapterInterface $fileSystemAdapter,
         \DateTimeInterface $dateTime
     ) {
         $this->plannerJobRepository = $plannerJobRepository;
@@ -58,6 +70,8 @@ class SetStatusHandler
         $this->plannerTrustedName = $plannerTrustedName;
         $this->jobQueue = $jobQueue;
         $this->plannerFilesPath = $plannerFilesPath;
+        $this->eventOpenAccessChecker = $eventOpenAccessChecker;
+        $this->fileSystemAdapter = $fileSystemAdapter;
         $this->dateTime = $dateTime;
     }
 
@@ -101,13 +115,21 @@ class SetStatusHandler
      */
     private function handleSuccess(PlannerJob $plannerJob)
     {
+        $isEventOpened = $this->eventOpenAccessChecker->allowedToAccess($plannerJob->getEvent());
+
+        if (true === $isEventOpened) {
+            $plannerJob->setError('flash.admin.planner.export.eventIsAlreadyOpened');
+
+            return;
+        }
+
         $solvedFilePath = str_replace(
             Import::UNSOLVED_SUFFIX,
             Import::SOLVED_SUFFIX,
             $plannerJob->getFile()->getPath()
         );
 
-        if (!file_exists($this->plannerFilesPath . $solvedFilePath)) {
+        if (!$this->fileSystemAdapter->exists($this->plannerFilesPath . $solvedFilePath)) {
             $plannerJob->setError('flash.admin.planner.export.solvedFileNotFound');
 
             return;
