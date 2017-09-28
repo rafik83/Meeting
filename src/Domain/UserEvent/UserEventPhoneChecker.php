@@ -41,4 +41,15 @@ class UserEventPhoneChecker
     {
         return null !== $this->userEventPhoneRepository->findValidated($user, $event);
     }
+
+    /**
+     * @param User  $user
+     * @param Event $event
+     *
+     * @return null|User\UserEventPhone
+     */
+    public function getValidatedUserEventPhone(User $user, Event $event): ?User\UserEventPhone
+    {
+        return $this->userEventPhoneRepository->findValidated($user, $event);
+    }
 }
