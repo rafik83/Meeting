@@ -43,12 +43,16 @@ class TransformRequestIntoMeetingHandlerTest extends TestCase
         $datetime = new \DateTime();
 
         $fromSheet       = $this->prophesize(Sheet::class);
-        $toSheet         = $this->prophesize(Sheet::class);
         $fromParticipant = $this->prophesize(Participant::class);
-        $toParticipant   = $this->prophesize(Participant::class);
-        $request         = $this->prophesize(Request::class);
-        $slot            = $this->prophesize(MeetingSlot::class);
-        $spot            = $this->prophesize(Spot::class);
+        $fromSheet->getParticipantsArray()->willReturn([$fromParticipant->reveal()]);
+
+        $toSheet       = $this->prophesize(Sheet::class);
+        $toParticipant = $this->prophesize(Participant::class);
+        $toSheet->getParticipantsArray()->willReturn([$toParticipant->reveal()]);
+
+        $request = $this->prophesize(Request::class);
+        $slot    = $this->prophesize(MeetingSlot::class);
+        $spot    = $this->prophesize(Spot::class);
 
         $request->getEvent()->willReturn($event);
         $request->getFromParticipantsArray()->willReturn([$fromParticipant->reveal()]);
@@ -151,14 +155,18 @@ class TransformRequestIntoMeetingHandlerTest extends TestCase
         $datetime = new \DateTime();
 
         $fromSheet       = $this->prophesize(Sheet::class);
-        $toSheet         = $this->prophesize(Sheet::class);
         $fromUser        = $this->prophesize(User::class);
         $fromParticipant = $this->prophesize(Participant::class);
-        $toUser          = $this->prophesize(User::class);
-        $toParticipant   = $this->prophesize(Participant::class);
-        $request         = $this->prophesize(Request::class);
-        $slot            = $this->prophesize(MeetingSlot::class);
-        $spot            = $this->prophesize(Spot::class);
+        $fromSheet->getParticipantsArray()->willReturn([$fromParticipant->reveal()]);
+
+        $toSheet       = $this->prophesize(Sheet::class);
+        $toUser        = $this->prophesize(User::class);
+        $toParticipant = $this->prophesize(Participant::class);
+        $toSheet->getParticipantsArray()->willReturn([$toParticipant->reveal()]);
+
+        $request = $this->prophesize(Request::class);
+        $slot    = $this->prophesize(MeetingSlot::class);
+        $spot    = $this->prophesize(Spot::class);
 
         $slotTwo = $this->prophesize(MeetingSlot::class);
         $slotTwo->getId()->willReturn(2);
