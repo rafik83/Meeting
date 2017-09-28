@@ -10,7 +10,6 @@
 
 namespace Proximum\Vimeet\Application\Command\MeetingRequest;
 
-use Proximum\Vimeet\Application\Components\Sheet\SheetInfoGuesser;
 use Proximum\Vimeet\Application\Exception\Event\NoEventOnCurrentDayException;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\User;
@@ -23,6 +22,8 @@ use Proximum\Vimeet\Domain\User\Event\ExtraData\Type;
 
 class ReminderHandler
 {
+    const DELAY_BETWEEN_REMIND_NOTIFICATION_IN_MINUTES = 120;
+
     /** @var EventRepositoryInterface */
     private $eventRepository;
 
@@ -34,9 +35,6 @@ class ReminderHandler
 
     /** @var SheetRepositoryInterface */
     private $sheetRepository;
-
-    /** @var SheetInfoGuesser */
-    private $sheetInfoGuesser;
 
     /** @var \DateTimeInterface */
     private $dateTime;
@@ -58,7 +56,6 @@ class ReminderHandler
      * @param UserRepositoryInterface        $userRepository
      * @param ExtraDataRepositoryInterface   $extraDataRepository
      * @param SheetRepositoryInterface       $sheetRepository
-     * @param SheetInfoGuesser               $sheetInfoGuesser
      * @param \DateTimeInterface             $dateTime
      * @param SmsNotification                $smsNotification
      * @param Counter                        $counter
@@ -68,7 +65,6 @@ class ReminderHandler
         UserRepositoryInterface $userRepository,
         ExtraDataRepositoryInterface $extraDataRepository,
         SheetRepositoryInterface $sheetRepository,
-        SheetInfoGuesser $sheetInfoGuesser,
         \DateTimeInterface $dateTime,
         SmsNotification $smsNotification,
         Counter $counter
@@ -77,7 +73,6 @@ class ReminderHandler
         $this->userRepository      = $userRepository;
         $this->extraDataRepository = $extraDataRepository;
         $this->sheetRepository     = $sheetRepository;
-        $this->sheetInfoGuesser    = $sheetInfoGuesser;
         $this->dateTime            = $dateTime;
         $this->smsNotification     = $smsNotification;
         $this->counter             = $counter;
@@ -117,16 +112,16 @@ class ReminderHandler
             );
 
             foreach ($usersWithValidatedPhoneAndPendingRequest as $user) {
-                $diffLastNotificationInHour = null;
+                $diffLastNotificationInMinutes = null;
 
                 if (isset($lastNotificationReminder[$user->getId()])) {
-                    $diffLastNotificationInHour = $this->getDiffLastNotificationDateTimeInHour(
+                    $diffLastNotificationInMinutes = $this->getDiffLastNotificationDateTimeInHour(
                         $lastNotificationByUser[$user->getId()],
                         $this->nextNotificationDatetime
                     );
                 }
 
-                if (null === $diffLastNotificationInHour || $diffLastNotificationInHour >= 2) {
+                if ($diffLastNotificationInMinutes >= self::DELAY_BETWEEN_REMIND_NOTIFICATION_IN_MINUTES) {
                     $userSheets = $this->sheetRepository->getSheetsByUserAndEvent($user, $currentEvent);
 
                     // Get the first sheet for current user
@@ -139,15 +134,11 @@ class ReminderHandler
 
                     if ($countAvailablePendingProposition > 0) {
                         // First time notification case
-                        if (null === $diffLastNotificationInHour) {
-                            $this->createExtraData($currentEvent, $user);
-                        } else {
-                            $this->extraDataRepository->set(
-                                $lastNotificationByUser[$user->getId()]->setValue(
-                                    $this->nextNotificationDatetime->format('Y-m-d H:i:s')
-                                )
-                            );
-                        }
+                        $this->extraDataRepository->set(
+                            $lastNotificationByUser[$user->getId()]->setValue(
+                                $this->nextNotificationDatetime->format('Y-m-d H:i:s')
+                            )
+                        );
                     }
                    $this->smsNotification->sendSms($sheet, $currentEvent, $user, $countAvailablePendingProposition);
                 }
@@ -167,7 +158,7 @@ class ReminderHandler
     ): int {
         $dateTime = new \DateTime($lastNotificationReminder->getValue());
 
-        return $dateTime->diff($nextNotificationDateTime)->h;
+        return $dateTime->diff($nextNotificationDateTime)->i;
     }
 
     /**
