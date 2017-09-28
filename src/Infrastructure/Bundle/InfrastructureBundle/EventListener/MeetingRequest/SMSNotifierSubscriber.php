@@ -28,7 +28,7 @@ class SMSNotifierSubscriber implements EventSubscriberInterface
     /**
      * @var DDayGuesser
      */
-    private $dayGuesser;
+    private $ddayGuesser;
 
     /**
      * @var UserEventPhoneChecker
@@ -58,7 +58,7 @@ class SMSNotifierSubscriber implements EventSubscriberInterface
     /**
      * SMSNotifierSubscriber constructor.
      *
-     * @param DDayGuesser                  $dayGuesser
+     * @param DDayGuesser                  $ddayGuesser
      * @param UserEventPhoneChecker        $userEventPhoneChecker
      * @param SMSSenderInterface           $SMSSender
      * @param ExtraDataRepositoryInterface $extraDataRepository
@@ -66,14 +66,14 @@ class SMSNotifierSubscriber implements EventSubscriberInterface
      * @param \DateTimeInterface           $dateTime
      */
     public function __construct(
-        DDayGuesser $dayGuesser,
+        DDayGuesser $ddayGuesser,
         UserEventPhoneChecker $userEventPhoneChecker,
         SMSSenderInterface $SMSSender,
         ExtraDataRepositoryInterface $extraDataRepository,
         SMSFactory $SMSFactory,
         \DateTimeInterface $dateTime
     ) {
-        $this->dayGuesser            = $dayGuesser;
+        $this->ddayGuesser           = $ddayGuesser;
         $this->userEventPhoneChecker = $userEventPhoneChecker;
         $this->SMSSender             = $SMSSender;
         $this->extraDataRepository   = $extraDataRepository;
@@ -98,12 +98,12 @@ class SMSNotifierSubscriber implements EventSubscriberInterface
     {
         $eventModel = $event->getRequest()->getEvent();
 
-        if ($this->dayGuesser->isItDDay($eventModel)) {
+        if (!$this->ddayGuesser->isItDDay($eventModel)) {
             return;
         }
 
         /** @var Participant $participant */
-        foreach ($event->getRequest()->getToParticipants() as $participant) {
+        foreach ($event->getRequest()->getToParticipantsArray() as $participant) {
             $extraData = $this->extraDataRepository->getExtraDataForEventNameAndUser(
                 $eventModel,
                 Type::MEETING_REQUEST_DATE_LAST_NOTIFICATION_REMINDER,
@@ -136,7 +136,7 @@ class SMSNotifierSubscriber implements EventSubscriberInterface
                         $participant->getUser(),
                         $eventModel,
                         Type::MEETING_REQUEST_DATE_LAST_NOTIFICATION_REMINDER,
-                        $this->dateTime,
+                        $this->dateTime->format('Y-m-d H:i:s'),
                         $this->dateTime
                     )
                 );
