@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of the vimeet project.
+ * This file is part of the Proximum Vimeet project.
  *
  * Copyright (C) Proximum
  *
@@ -72,7 +72,7 @@ class MeetingRequestListViewQueryHandler
     public function handle(MeetingRequestListViewQuery $query)
     {
         $meetingRequests = $this->meetingRequestRepository
-            ->getAllRequestBySheet($query->sheet, $query->filters);
+            ->getAllRequestBySheet($query->sheet, $query->filters, $query->slotsToFilter);
 
         $sheets = [];
         foreach ($meetingRequests as $meetingRequest) {
@@ -87,7 +87,7 @@ class MeetingRequestListViewQueryHandler
         $isMeetingPublished     = $this->meetingPublishedAccessChecker->allowedToAccess($query->event);
 
         $isMeetingRequestUpdateLocked    = $query->event->getConfiguration()->isMeetingRequestUpdateLocked();
-        $isMeetingrequestClosed          = !$this->meetingRequestAccessChecker->allowedToAccess($query->event);
+        $isMeetingRequestClosed          = !$this->meetingRequestAccessChecker->allowedToAccess($query->event);
         $isAnsweringMeetingRequestClosed = !$this->answeringMeetingRequestAccessChecker->allowedToAccess($query->event);
 
         foreach ($meetingRequests as $meetingRequest) {
@@ -99,7 +99,7 @@ class MeetingRequestListViewQueryHandler
                     $query->locale,
                     $isMeetingPublished,
                     $isMeetingRequestUpdateLocked,
-                    $isMeetingrequestClosed,
+                    $isMeetingRequestClosed,
                     $isAnsweringMeetingRequestClosed,
                     isset($viewedSheetListView[$meetingRequest->getSheetMet($query->sheet)->getId()])
                 )

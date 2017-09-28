@@ -1,0 +1,8 @@
+<a href="{{ path('event_meeting_list_request', {
+    'sheet': sheet.id,
+    'availableSlot': 'slot',
+    'slot_id': slot.id,
+    'state': 'receive',
+}) }}">
+    {{ 'agenda.availability.available_sheets_with_proposition'|transchoice(countAvailableSheetsWithProposition, {'%availableSheets%': countAvailableSheetsWithProposition}) }}
+</a>

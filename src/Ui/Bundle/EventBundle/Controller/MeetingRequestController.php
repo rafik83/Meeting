@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2015 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -82,6 +82,7 @@ class MeetingRequestController extends Controller
         $dDay = $this->get('domain.event.day.dday_guesser')->isItDDay($event);
         $isUserParticipant   = $sheet->hasUserParticipant($user);
         $filterAvailableSlot = $dDay && $isUserParticipant;
+        $availableSlots      = [];
         $specificSlot        = null;
 
         if (true === $filterAvailableSlot) {
@@ -138,9 +139,20 @@ class MeetingRequestController extends Controller
             $filters = $defaults;
         }
 
-        $event       = $eventDomain->getEvent();
-        $query       = new MeetingRequestListViewQuery($event, $sheet, $user, $locale, $filters);
-        $statusQuery = new StateListViewQuery($sheet, $filters);
+        $event = $eventDomain->getEvent();
+        $query = new MeetingRequestListViewQuery(
+            $event,
+            $sheet,
+            $user,
+            $locale,
+            $filters,
+            $specificSlot instanceof MeetingSlot ? [$specificSlot] : $availableSlots
+        );
+        $statusQuery = new StateListViewQuery(
+            $sheet,
+            $filters,
+            $specificSlot instanceof MeetingSlot ? [$specificSlot] : $availableSlots
+        );
 
         /** @var MeetingRequestListView $meetingRequestListView */
         $meetingRequestListView = $this->get('tactician.commandbus.query')->handle($query);

@@ -178,9 +178,10 @@ class SearchType extends AbstractType
     public static function getDefaultFilters($typeViews = [])
     {
         $defaultFilters = [
-            'orderBy'  => Sheet\Constant::ORDER_BY_ALPHABETICAL,
-            'state'    => Meeting\Constant::FILTER_STATE_ALL,
-            'disabled' => false
+            'availableSlot' => Meeting\Constant::FILTER_AVAILABLE_SLOT_IDS_EVERYONE,
+            'disabled'      => false,
+            'orderBy'       => Sheet\Constant::ORDER_BY_ALPHABETICAL,
+            'state'         => Meeting\Constant::FILTER_STATE_ALL,
         ];
 
         // Allow to filters by type if there are more than 1
