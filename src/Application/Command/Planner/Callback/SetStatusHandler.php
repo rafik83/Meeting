@@ -12,6 +12,7 @@ namespace Proximum\Vimeet\Application\Command\Planner\Callback;
 
 use Proximum\Vimeet\Application\Adapter\JobQueueInterface;
 use Proximum\Vimeet\Application\Command\Planner\Import;
+use Proximum\Vimeet\Domain\KeyDates\Checker\EventOpenAccessChecker;
 use Proximum\Vimeet\Domain\Model\File;
 use Proximum\Vimeet\Domain\Model\PlannerJob;
 use Proximum\Vimeet\Domain\Repository\FileRepositoryInterface;
@@ -34,6 +35,9 @@ class SetStatusHandler
     /** @var string */
     private $plannerFilesPath;
 
+    /** @var EventOpenAccessChecker */
+    private $eventOpenAccessChecker;
+
     /** @var \DateTimeInterface */
     private $dateTime;
 
@@ -43,6 +47,7 @@ class SetStatusHandler
      * @param string                        $plannerTrustedName
      * @param JobQueueInterface             $jobQueue
      * @param string                        $plannerFilesPath
+     * @param EventOpenAccessChecker        $eventOpenAccessChecker
      * @param \DateTimeInterface            $dateTime
      */
     public function __construct(
@@ -51,6 +56,7 @@ class SetStatusHandler
         string $plannerTrustedName,
         JobQueueInterface $jobQueue,
         string $plannerFilesPath,
+        EventOpenAccessChecker $eventOpenAccessChecker,
         \DateTimeInterface $dateTime
     ) {
         $this->plannerJobRepository = $plannerJobRepository;
@@ -58,6 +64,7 @@ class SetStatusHandler
         $this->plannerTrustedName = $plannerTrustedName;
         $this->jobQueue = $jobQueue;
         $this->plannerFilesPath = $plannerFilesPath;
+        $this->eventOpenAccessChecker = $eventOpenAccessChecker;
         $this->dateTime = $dateTime;
     }
 
@@ -101,6 +108,14 @@ class SetStatusHandler
      */
     private function handleSuccess(PlannerJob $plannerJob)
     {
+        $eventIsOpened = $this->eventOpenAccessChecker->allowedToAccess($plannerJob->getEvent());
+
+        if (true === $eventIsOpened) {
+            $plannerJob->setError('flash.admin.planner.export.eventIsAlreadyOpened');
+
+            return;
+        }
+
         $solvedFilePath = str_replace(
             Import::UNSOLVED_SUFFIX,
             Import::SOLVED_SUFFIX,
