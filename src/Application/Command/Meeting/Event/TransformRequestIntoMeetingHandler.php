@@ -157,6 +157,18 @@ class TransformRequestIntoMeetingHandler
 
         $transformableMeeting = $this->getTransformableMeeting($query->event, $availableMeetings);
 
+        foreach ($transformableMeeting->fromParticipants as $fromParticipant) {
+            if (!in_array($fromParticipant, $transformableMeeting->fromSheet->getParticipantsArray(), true)) {
+                throw new \LogicException('Chosen From participant is invalid for this meeting');
+            }
+        }
+
+        foreach ($transformableMeeting->toParticipants as $toParticipant) {
+            if (!in_array($toParticipant, $transformableMeeting->toSheet->getParticipantsArray(), true)) {
+                throw new \LogicException('Chosen To participant is invalid for this meeting');
+            }
+        }
+
         $meeting = new Meeting(
             $query->request,
             $transformableMeeting->slot,
