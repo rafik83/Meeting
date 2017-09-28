@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Tests\Infrastructure\Bundle\InfrastructureBundle\EventListener;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use PHPUnit\Framework\TestCase;
 use Proximum\Vimeet\Application\Adapter\SMSSenderInterface;
 use Proximum\Vimeet\Application\Event\MeetingRequest\CreateRequestEvent;
@@ -44,9 +45,10 @@ class SMSNotifierSubscriberTest extends TestCase
         $participant->getUser()->willReturn($user->reveal());
         $event->getRequest()->willReturn($request);
         $request->getEvent()->willReturn($eventModel);
-        $request->getToParticipantsArray()->willReturn([$participant->reveal()]);
-        $request->getSheetOfUser($user->reveal())->willReturn($sheet->reveal());
+        $request->getToSheet()->willReturn($sheet->reveal());
+        $sheet->getParticipants()->willReturn(new ArrayCollection([$participant->reveal()]));
         $userEventPhone->getPhone()->willReturn('+33600000000');
+        $user->getLocale()->willReturn('fr');
 
         $ddayGuesser           = $this->prophesize(DDayGuesser::class);
         $userEventPhoneChecker = $this->prophesize(UserEventPhoneChecker::class);
@@ -69,7 +71,8 @@ class SMSNotifierSubscriberTest extends TestCase
 
         $smsFactory->createMeetingRequestReceive(
             '+33600000000',
-            $sheet->reveal()
+            $sheet->reveal(),
+            'fr'
         )->shouldBeCalled()->willReturn($sms->reveal());
 
         $smsSender->send($sms->reveal())->shouldBeCalled();
