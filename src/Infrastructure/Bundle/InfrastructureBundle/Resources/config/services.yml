@@ -4929,6 +4929,7 @@ services:
             - '@adapter.job_queue_adapter'
             - '%planner_files_path%'
             - '@domain.key_dates.checker.event_open_access_checker'
+            - '@adapter.file_system_adapter'
             - '@datetime'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Planner\Callback\SetStatus }
