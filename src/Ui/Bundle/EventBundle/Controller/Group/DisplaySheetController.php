@@ -114,6 +114,20 @@ class DisplaySheetController extends Controller
 
         $locale = $request->getLocale();
 
+        try {
+            list ($nomenclatures, $participants, $taggedData) = $this
+                ->get('template.sheet.sheet_info_getter')
+                ->sheetInfos(
+                    $eventDomain->getEvent(),
+                    $sheet,
+                    $sheetToDisplay,
+                    $user,
+                    $locale
+                );
+        } catch (AccessDeniedException $exception) {
+            throw $this->createAccessDeniedException();
+        }
+
         $templateData = $this->get('template.tagged_data_factory')
             ->buildTaggedDataView($sheetToDisplay, $locale, $rules);
 
@@ -131,19 +145,9 @@ class DisplaySheetController extends Controller
             ->allowedToAccess($event)
         ;
 
-        try {
-            list ($nomenclatures, $participants, $taggedData) = $this
-                ->get('template.sheet.sheet_info_getter')
-                ->sheetInfos(
-                    $eventDomain->getEvent(),
-                    $sheet,
-                    $sheetToDisplay,
-                    $user,
-                    $locale
-                );
-        } catch (AccessDeniedException $exception) {
-            throw $this->createAccessDeniedException();
-        }
+        $ruleApplyer = $this->get('domain.rule.applyer');
+        $ruleApplyer->applyRuleForTemplate($templateData, $rules);
+        $ruleApplyer->applyRuleForCardList($participants, $rules);
 
         return $this->render('EventBundle:Sheet/Group/Sheet:display.html.twig', [
             'sheet'                           => $sheet,
