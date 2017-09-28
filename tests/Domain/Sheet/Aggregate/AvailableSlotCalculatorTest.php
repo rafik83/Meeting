@@ -12,6 +12,7 @@ namespace Proximum\Vimeet\Tests\Domain\Sheet\Aggregate;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use PHPUnit\Framework\TestCase;
+use Proximum\Vimeet\Application\Adapter\SheetIndexerInterface;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\MeetingSlot;
 use Proximum\Vimeet\Domain\Model\Participant;
@@ -49,28 +50,39 @@ class AvailableSlotCalculatorTest extends TestCase
         // Mock
         $sheetRepository = $this->prophesize(SheetRepositoryInterface::class);
         $slotRepository = $this->prophesize(MeetingSlotRepositoryInterface::class);
+        $sheetIndexer = $this->prophesize(SheetIndexerInterface::class);
 
         // Expected
         $slotRepository
             ->findAvailableSlotsByParticipants($event->reveal(), [$participant1->reveal()])
             ->shouldBeCalled()
-            ->willReturn([$slot1, $slot2,])
+            ->willReturn([$slot1->reveal(), $slot2->reveal(),])
         ;
         $slotRepository
             ->findAvailableSlotsByParticipants($event->reveal(), [$participant2->reveal()])
             ->shouldBeCalled()
-            ->willReturn([$slot1, $slot3, $slot4,])
+            ->willReturn([$slot1->reveal(), $slot3->reveal(), $slot4->reveal(),])
         ;
         $slotRepository
             ->findAvailableSlotsByParticipants($event->reveal(), [$participant3->reveal()])
             ->shouldBeCalled()
-            ->willReturn([$slot2])
+            ->willReturn([$slot2->reveal()])
         ;
+        $sheetIndexer->updateSheets([$sheet->reveal()])->shouldBeCalled();
 
-        $sheet->setAvailableSlots([1, 2, 3, 4])->shouldBeCalled();
-        $sheetRepository->set($sheet)->shouldBeCalled();
+        $sheet->setAvailableSlots([
+            new Sheet\AvailableSlot($sheet->reveal(), $slot1->reveal()),
+            new Sheet\AvailableSlot($sheet->reveal(), $slot2->reveal()),
+            new Sheet\AvailableSlot($sheet->reveal(), $slot3->reveal()),
+            new Sheet\AvailableSlot($sheet->reveal(), $slot4->reveal()),
+        ])->shouldBeCalled();
+        $sheetRepository->set($sheet->reveal())->shouldBeCalled();
 
-        $calculator = new AvailableSlotCalculator($slotRepository->reveal(), $sheetRepository->reveal());
+        $calculator = new AvailableSlotCalculator(
+            $slotRepository->reveal(),
+            $sheetRepository->reveal(),
+            $sheetIndexer->reveal()
+        );
         $calculator->calculateAvailableSlotForSheet($sheet->reveal());
     }
 
