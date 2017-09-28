@@ -11,9 +11,6 @@
 namespace Proximum\Vimeet\Application\Command\MeetingRequest;
 
 use Proximum\Vimeet\Application\Exception\Event\NoEventOnCurrentDayException;
-use Proximum\Vimeet\Domain\Model\Event;
-use Proximum\Vimeet\Domain\Model\User;
-use Proximum\Vimeet\Domain\Model\User\Event\ExtraData;
 use Proximum\Vimeet\Domain\Repository\EventRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\User\Event\ExtraDataRepositoryInterface;
@@ -41,9 +38,6 @@ class ReminderHandler
 
     /** @var \DateTimeInterface */
     private $maximumPastDateToBeNotified;
-
-    /** @var \DateTimeInterface */
-    private $currentDateTimePlus10Minutes;
 
     /** @var SmsNotification */
     private $smsNotification;
@@ -79,9 +73,6 @@ class ReminderHandler
 
         $tempDatetime = clone $dateTime;
         $this->maximumPastDateToBeNotified = $tempDatetime->modify('-' . self::DELAY_BETWEEN_REMIND_NOTIFICATION_IN_MINUTES . ' minutes');
-
-        $tempDatetime = clone $dateTime;
-        $this->currentDateTimePlus10Minutes = $tempDatetime->modify('+10 minutes');
     }
 
     /**
@@ -106,28 +97,42 @@ class ReminderHandler
                 continue;
             }
 
-            $lastNotificationByUser = $this->getNotificationRemindersIndexedByUserId(
-                $currentEvent,
-                $usersWithValidatedPhoneAndPendingRequest
-            );
+            $lastNotificationsByUser = $this
+                ->extraDataRepository
+                ->getForEventNameAndUsersOlderThanDate(
+                    $currentEvent,
+                    Type::MEETING_REQUEST_DATE_LAST_NOTIFICATION_REMINDER,
+                    $usersWithValidatedPhoneAndPendingRequest,
+                    $this->maximumPastDateToBeNotified
+                )
+            ;
 
-            foreach ($usersWithValidatedPhoneAndPendingRequest as $user) {
+            foreach ($lastNotificationsByUser as $extraData) {
+                $user = $extraData->getUser();
                 $userSheets = $this->sheetRepository->getSheetsByUserAndEvent($user, $currentEvent);
 
-                // Get the first sheet for current user
-                $sheet = reset($userSheets);
+                $sheet       = null;
+                $participant = null;
+                foreach ($userSheets as $userSheet) {
+                    $sheet = $userSheet;
 
-                if ($sheet === false) {
+                    if ($userSheet->hasUserParticipant($user)) {
+                        $participant = $userSheet->getUserParticipant($user);
+
+                        break;
+                    }
+                }
+
+                if ($sheet === null || $participant === null) {
                     continue;
                 }
 
                 $countAvailablePendingProposition = $this->counter->getCountAvailablePendingMeetingRequests(
                     $sheet,
-                    $this->currentDateTimePlus10Minutes
+                    $participant
                 );
 
                 if ($countAvailablePendingProposition > 0) {
-                    $extraData = $lastNotificationByUser[$user->getId()];
                     $extraData->update(
                         $this->maximumPastDateToBeNotified->format('Y-m-d H:i:s'),
                         $this->dateTime
@@ -138,49 +143,5 @@ class ReminderHandler
                 }
             }
         }
-    }
-
-    /**
-     * @param Event $event
-     * @param array $users
-     *
-     * @return ExtraData[]
-     */
-    private function getNotificationRemindersIndexedByUserId(Event $event, array $users): array
-    {
-        $notificationReminders = $this
-            ->extraDataRepository
-            ->getForEventNameAndUsersOlderThanDate(
-                $event,
-                Type::MEETING_REQUEST_DATE_LAST_NOTIFICATION_REMINDER,
-                $users,
-                $this->maximumPastDateToBeNotified
-            )
-        ;
-
-        $notificationRemindersIndexedById = [];
-
-        foreach ($notificationReminders as $notificationReminder) {
-            $notificationRemindersIndexedById[$notificationReminder->getUser()->getId()] = $notificationReminder;
-        }
-
-        return $notificationRemindersIndexedById;
-    }
-
-    /**
-     * @param Event              $event
-     * @param User               $user
-     */
-    private function createExtraData(
-        Event $event,
-        User $user
-    ): void {
-        $this->extraDataRepository->add(new ExtraData(
-            $user,
-            $event,
-            Type::MEETING_REQUEST_DATE_LAST_NOTIFICATION_REMINDER,
-            $this->dateTime->format('Y-m-d H:i:s'),
-            $this->dateTime
-        ));
     }
 }

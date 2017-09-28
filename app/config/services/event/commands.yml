@@ -17,7 +17,7 @@ services:
         arguments:
             - '@adapter.smssender_alias'
             - '@vimeet_infrastructure.adapter.translator_adapter'
-            - '@adapter.router'
+            - '@adapter.event_url_generator'
 
     command.meeting_request.counter:
         class: Proximum\Vimeet\Application\Command\MeetingRequest\Counter
