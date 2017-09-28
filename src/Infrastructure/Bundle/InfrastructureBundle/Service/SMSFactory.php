@@ -14,7 +14,6 @@ use Proximum\Vimeet\Application\Adapter\TranslatorInterface;
 use Proximum\Vimeet\Domain\Messaging\SMS\SMS;
 use Proximum\Vimeet\Domain\Model\Event\EventUrlGeneratorInterface;
 use Proximum\Vimeet\Domain\Model\Meeting;
-use Proximum\Vimeet\Domain\Model\Meeting\Request;
 use Proximum\Vimeet\Domain\Model\Sheet;
 
 class SMSFactory
@@ -40,12 +39,13 @@ class SMSFactory
     }
 
     /**
-     * @param string  $phone
-     * @param Sheet   $sheet
+     * @param string $phone
+     * @param Sheet  $sheet
+     * @param string $locale
      *
      * @return SMS
      */
-    public function createMeetingRequestReceive(string $phone, Sheet $sheet): SMS
+    public function createMeetingRequestReceive(string $phone, Sheet $sheet, string $locale): SMS
     {
         $link = $this->eventUrlGenerator->generateEventAbsoluteUrl(
             $sheet->getEvent(),
@@ -59,7 +59,7 @@ class SMSFactory
         $message = $this->translator->trans('event.sms.meeting_request.receive', [
             '%event%' => $sheet->getEvent()->getTitle(),
             '%link%'  => $link,
-        ]);
+        ], 'messages', $locale);
 
         return new SMS($phone, $message);
     }
