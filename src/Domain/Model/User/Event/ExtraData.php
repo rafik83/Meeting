@@ -118,16 +118,4 @@ class ExtraData
         $this->value = $value;
         $this->updatedAt = $updatedAt;
     }
-
-    /**
-     * @param string $value
-
-     * @return ExtraData
-     */
-    public function setValue(string $value): ExtraData
-    {
-        $this->value = $value;
-
-        return $this;
-    }
 }

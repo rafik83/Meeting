@@ -40,7 +40,7 @@ class ReminderHandler
     private $dateTime;
 
     /** @var \DateTimeInterface */
-    private $nextNotificationDatetime;
+    private $maximumPastDateToBeNotified;
 
     /** @var \DateTimeInterface */
     private $currentDateTimePlus10Minutes;
@@ -78,7 +78,7 @@ class ReminderHandler
         $this->counter             = $counter;
 
         $tempDatetime = clone $dateTime;
-        $this->nextNotificationDatetime = $tempDatetime->modify('+2 hours');
+        $this->maximumPastDateToBeNotified = $tempDatetime->modify('-' . self::DELAY_BETWEEN_REMIND_NOTIFICATION_IN_MINUTES . ' minutes');
 
         $tempDatetime = clone $dateTime;
         $this->currentDateTimePlus10Minutes = $tempDatetime->modify('+10 minutes');
@@ -112,53 +112,32 @@ class ReminderHandler
             );
 
             foreach ($usersWithValidatedPhoneAndPendingRequest as $user) {
-                $diffLastNotificationInMinutes = null;
+                $userSheets = $this->sheetRepository->getSheetsByUserAndEvent($user, $currentEvent);
 
-                if (isset($lastNotificationReminder[$user->getId()])) {
-                    $diffLastNotificationInMinutes = $this->getDiffLastNotificationDateTimeInHour(
-                        $lastNotificationByUser[$user->getId()],
-                        $this->nextNotificationDatetime
-                    );
+                // Get the first sheet for current user
+                $sheet = reset($userSheets);
+
+                if ($sheet === false) {
+                    continue;
                 }
 
-                if ($diffLastNotificationInMinutes >= self::DELAY_BETWEEN_REMIND_NOTIFICATION_IN_MINUTES) {
-                    $userSheets = $this->sheetRepository->getSheetsByUserAndEvent($user, $currentEvent);
+                $countAvailablePendingProposition = $this->counter->getCountAvailablePendingMeetingRequests(
+                    $sheet,
+                    $this->currentDateTimePlus10Minutes
+                );
 
-                    // Get the first sheet for current user
-                    $sheet = reset($userSheets);
-
-                    $countAvailablePendingProposition = $this->counter->getCountAvailablePendingMeetingRequests(
-                        $sheet,
-                        $this->currentDateTimePlus10Minutes
+                if ($countAvailablePendingProposition > 0) {
+                    $extraData = $lastNotificationByUser[$user->getId()];
+                    $extraData->update(
+                        $this->maximumPastDateToBeNotified->format('Y-m-d H:i:s'),
+                        $this->dateTime
                     );
 
-                    if ($countAvailablePendingProposition > 0) {
-                        // First time notification case
-                        $this->extraDataRepository->set(
-                            $lastNotificationByUser[$user->getId()]->setValue(
-                                $this->nextNotificationDatetime->format('Y-m-d H:i:s')
-                            )
-                        );
-                    }
-                   $this->smsNotification->sendSms($sheet, $currentEvent, $user, $countAvailablePendingProposition);
+                    $this->extraDataRepository->set($extraData);
+                    $this->smsNotification->sendSms($sheet, $currentEvent, $user, $countAvailablePendingProposition);
                 }
             }
         }
-    }
-
-    /**
-     * @param ExtraData          $lastNotificationReminder
-     * @param \DateTimeInterface $nextNotificationDateTime
-     *
-     * @return int
-     */
-    private function getDiffLastNotificationDateTimeInHour(
-        ExtraData $lastNotificationReminder,
-        \DateTimeInterface $nextNotificationDateTime
-    ): int {
-        $dateTime = new \DateTime($lastNotificationReminder->getValue());
-
-        return $dateTime->diff($nextNotificationDateTime)->i;
     }
 
     /**
@@ -171,10 +150,11 @@ class ReminderHandler
     {
         $notificationReminders = $this
             ->extraDataRepository
-            ->getLastByNameEventAndUsers(
+            ->getForEventNameAndUsersOlderThanDate(
                 $event,
                 Type::MEETING_REQUEST_DATE_LAST_NOTIFICATION_REMINDER,
-                $users
+                $users,
+                $this->maximumPastDateToBeNotified
             )
         ;
 
