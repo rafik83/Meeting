@@ -32,21 +32,34 @@ class SMSNotifierSubscriberTest extends TestCase
 {
     public function testOnMeetingRequestCreated()
     {
-        $event          = $this->prophesize(CreateRequestEvent::class);
-        $eventModel     = $this->prophesize(Event::class);
-        $request        = $this->prophesize(Request::class);
-        $participant    = $this->prophesize(Participant::class);
-        $user           = $this->prophesize(User::class);
-        $sheet          = $this->prophesize(Sheet::class);
-        $userEventPhone = $this->prophesize(User\UserEventPhone::class);
-        $sms            = $this->prophesize(SMS::class);
-        $datetime       = new \DateTime();
+        $event                            = $this->prophesize(CreateRequestEvent::class);
+        $eventModel                       = $this->prophesize(Event::class);
+        $request                          = $this->prophesize(Request::class);
+        $participant                      = $this->prophesize(Participant::class);
+        $participantWithoutPhoneValidated = $this->prophesize(Participant::class);
+        $participantAlreadyNotified       = $this->prophesize(Participant::class);
+        $user                             = $this->prophesize(User::class);
+        $userWithoutPhoneValidated        = $this->prophesize(User::class);
+        $userAlreadyNotified              = $this->prophesize(User::class);
+        $sheet                            = $this->prophesize(Sheet::class);
+        $userEventPhone                   = $this->prophesize(User\UserEventPhone::class);
+        $sms                              = $this->prophesize(SMS::class);
+        $extraData                        = $this->prophesize(ExtraData::class);
+        $datetime                         = new \DateTime();
 
         $participant->getUser()->willReturn($user->reveal());
+        $participantAlreadyNotified->getUser()->willReturn($userAlreadyNotified->reveal());
+        $participantWithoutPhoneValidated->getUser()->willReturn($userWithoutPhoneValidated->reveal());
+
         $event->getRequest()->willReturn($request);
         $request->getEvent()->willReturn($eventModel);
         $request->getToSheet()->willReturn($sheet->reveal());
-        $sheet->getParticipants()->willReturn(new ArrayCollection([$participant->reveal()]));
+        $sheet->getParticipants()->willReturn(new ArrayCollection([
+            $participant->reveal(),
+            $participantWithoutPhoneValidated->reveal(),
+            $participantAlreadyNotified->reveal(),
+        ]));
+
         $userEventPhone->getPhone()->willReturn('+33600000000');
         $user->getLocale()->willReturn('fr');
 
@@ -64,10 +77,32 @@ class SMSNotifierSubscriberTest extends TestCase
             $user->reveal()
         )->shouldBeCalled()->willReturn(null);
 
+        $extraDataRepository->getExtraDataForEventNameAndUser(
+            $eventModel->reveal(),
+            Type::MEETING_REQUEST_DATE_LAST_NOTIFICATION_REMINDER,
+            $userWithoutPhoneValidated->reveal()
+        )->shouldBeCalled()->willReturn(null);
+
+        $extraDataRepository->getExtraDataForEventNameAndUser(
+            $eventModel->reveal(),
+            Type::MEETING_REQUEST_DATE_LAST_NOTIFICATION_REMINDER,
+            $userAlreadyNotified->reveal()
+        )->shouldBeCalled()->willReturn($extraData->reveal());
+
         $userEventPhoneChecker->getValidatedUserEventPhone(
             $user->reveal(),
             $eventModel->reveal()
         )->shouldBeCalled()->willReturn($userEventPhone->reveal());
+
+        $userEventPhoneChecker->getValidatedUserEventPhone(
+            $userWithoutPhoneValidated->reveal(),
+            $eventModel->reveal()
+        )->shouldBeCalled()->willReturn(null);
+
+        $userEventPhoneChecker->getValidatedUserEventPhone(
+            $userAlreadyNotified->reveal(),
+            $eventModel->reveal()
+        )->shouldNotBeCalled();
 
         $smsFactory->createMeetingRequestReceive(
             '+33600000000',
