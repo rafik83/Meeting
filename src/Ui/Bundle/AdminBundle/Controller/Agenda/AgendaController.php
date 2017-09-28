@@ -116,14 +116,4 @@ class AgendaController extends Controller
 
         return new JsonResponse($agendaSpotView);
     }
-
-    /**
-     * @param string $key
-     *
-     * @return JsonResponse
-     */
-    private function createErrorJsonResponse($key)
-    {
-        return new JsonResponse($this->get('translator')->trans($key), Response::HTTP_UNPROCESSABLE_ENTITY);
-    }
 }
