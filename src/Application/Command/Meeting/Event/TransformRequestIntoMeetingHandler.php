@@ -112,7 +112,7 @@ class TransformRequestIntoMeetingHandler
 
         if ($toIsNoPreference && 1 === $toSheet->countParticipants()) {
             $toIsNoPreference = false;
-            $toParticipants   = $fromSheet->getParticipantsArray();
+            $toParticipants   = $toSheet->getParticipantsArray();
         }
 
         $fromSheet = new AvailableSlotsBySheetView($fromSheet, $fromIsNoPreference);
