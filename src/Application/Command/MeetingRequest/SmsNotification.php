@@ -10,11 +10,11 @@
 
 namespace Proximum\Vimeet\Application\Command\MeetingRequest;
 
-use Proximum\Vimeet\Application\Adapter\RouterInterface;
 use Proximum\Vimeet\Application\Adapter\SMSSenderInterface;
 use Proximum\Vimeet\Application\Adapter\TranslatorInterface;
 use Proximum\Vimeet\Domain\Messaging\SMS\SMS;
 use Proximum\Vimeet\Domain\Model\Event;
+use Proximum\Vimeet\Domain\Model\Event\EventUrlGeneratorInterface;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\User;
 
@@ -26,22 +26,22 @@ class SmsNotification
     /** @var TranslatorInterface */
     private $translator;
 
-    /** @var RouterInterface */
-    private $router;
+    /** @var EventUrlGeneratorInterface */
+    private $eventUrlGenerator;
 
     /**
-     * @param SMSSenderInterface  $SMSSender
-     * @param TranslatorInterface $translator
-     * @param RouterInterface     $router
+     * @param SMSSenderInterface         $SMSSender
+     * @param TranslatorInterface        $translator
+     * @param EventUrlGeneratorInterface $eventUrlGenerator
      */
     public function __construct(
         SMSSenderInterface $SMSSender,
         TranslatorInterface $translator,
-        RouterInterface $router
+        EventUrlGeneratorInterface $eventUrlGenerator
     ) {
-        $this->SMSSender  = $SMSSender;
-        $this->translator = $translator;
-        $this->router     = $router;
+        $this->SMSSender    = $SMSSender;
+        $this->translator   = $translator;
+        $this->eventUrlGenerator = $eventUrlGenerator;
     }
 
     /**
@@ -79,7 +79,8 @@ class SmsNotification
         int $countPendingMeetingRequest,
         string $locale
     ): string {
-        $meetingRequestManagementUrl = $this->router->generate(
+        $meetingRequestManagementUrl = $this->eventUrlGenerator->generateEventAbsoluteUrl(
+            $event,
             'event_meeting_list_request',
             array_merge(
                 ['sheet' => $sheet->getId()],
