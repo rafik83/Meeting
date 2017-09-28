@@ -120,7 +120,7 @@ class SMSNotifierSubscriber implements EventSubscriberInterface
 
             if ($userEventPhone !== null) {
                 $sheet = $event->getRequest()->getToSheet();
-
+                
                 $this->SMSSender->send($this->SMSFactory->createMeetingRequestReceive(
                     $userEventPhone->getPhone(),
                     $sheet,
