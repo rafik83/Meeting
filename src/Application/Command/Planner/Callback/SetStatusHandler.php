@@ -115,9 +115,9 @@ class SetStatusHandler
      */
     private function handleSuccess(PlannerJob $plannerJob)
     {
-        $eventIsOpened = $this->eventOpenAccessChecker->allowedToAccess($plannerJob->getEvent());
+        $isEventOpened = $this->eventOpenAccessChecker->allowedToAccess($plannerJob->getEvent());
 
-        if (true === $eventIsOpened) {
+        if (true === $isEventOpened) {
             $plannerJob->setError('flash.admin.planner.export.eventIsAlreadyOpened');
 
             return;

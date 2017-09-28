@@ -31,7 +31,7 @@ class PlannerController extends Controller
             ->findLastByEvent($event)
         ;
 
-        $eventIsOpened = $this->get('domain.key_dates.checker.event_open_access_checker')->allowedToAccess($event);
+        $isEventOpened = $this->get('domain.key_dates.checker.event_open_access_checker')->allowedToAccess($event);
 
         $meetingSolutions = $this->get('tactician.commandbus.query')->handle(new MeetingSolutionListQuery($event));
 
@@ -39,7 +39,7 @@ class PlannerController extends Controller
             'event'            => $event,
             'meetingSolutions' => $meetingSolutions,
             'lastPlannerJob'   => $lastPlannerJob,
-            'eventIsOpened'    => $eventIsOpened,
+            'isEventOpened'    => $isEventOpened,
         ]);
     }
 }

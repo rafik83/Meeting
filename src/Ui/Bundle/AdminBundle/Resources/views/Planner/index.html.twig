@@ -8,9 +8,10 @@
     <div class="row">
         <div class="col-md-6">
             <h1>{{ 'admin.planner.index'|trans }}</h1>
+
         </div>
         <div class="col-md-6 text-right">
-            <a href="{{ path('admin_export_planner_data', {'event': event.id, 'mode': 'auto'}) }}" class="btn btn-primary {{ eventIsOpened ? 'disabled' : '' }}">
+            <a href="{{ path('admin_export_planner_data', {'event': event.id, 'mode': 'auto'}) }}" class="btn btn-primary {{ isEventOpened ? 'disabled' : '' }}">
                 {{ 'admin.planner.run'|trans }}
             </a>
 
@@ -23,6 +24,10 @@
             </a>
         </div>
     </div>
+
+    {% if isEventOpened %}
+        <div class="alert alert-warning">{{ 'admin.planner.notAvailable'|trans }}</div>
+    {% endif %}
 
     {% if lastPlannerJob %}
         <div class="alert alert-{{ lastPlannerJob.completed ? 'success' : (lastPlannerJob.aborted or lastPlannerJob.error ? 'danger' : 'warning') }}">

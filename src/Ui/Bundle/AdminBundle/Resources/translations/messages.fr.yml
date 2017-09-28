@@ -543,6 +543,7 @@ admin.planner.pendingPlannerJob.status.queued: 'Planification en fil d''attente'
 admin.planner.pendingPlannerJob.status.started: 'Planification démarrée'
 admin.planner.pendingPlannerJob.status.success: 'Planification réalisée, création des RDV en cours'
 admin.planner.run: 'Lancer la planification'
+admin.planner.notAvailable: 'La planification n''est plus disponible car l''évènement a commencé'
 admin.planner.run.title: 'Lancer la planification de RDVs'
 admin.planning.export.link: Exporter
 admin.planning.export.title: 'Export des plannings en pdf'
