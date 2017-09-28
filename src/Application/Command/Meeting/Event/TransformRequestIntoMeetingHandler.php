@@ -270,8 +270,8 @@ class TransformRequestIntoMeetingHandler
                         $toSheet->sheet,
                         $fromSheet->participants,
                         $toSheet->participants,
-                        $fromSheet->hasNoPreference,
-                        $toSheet->hasNoPreference
+                        false,
+                        false
                     );
                 }
             }
@@ -290,8 +290,8 @@ class TransformRequestIntoMeetingHandler
                             $toSheet->sheet,
                             $fromSheet->participants,
                             [$availableSlotsParticipantView->participant],
-                            $fromSheet->hasNoPreference,
-                            $toSheet->hasNoPreference
+                            false,
+                            true
                         );
                     }
                 }
@@ -300,7 +300,8 @@ class TransformRequestIntoMeetingHandler
             return $availableMeetings;
         }
 
-        if (!$toSheet->hasNoPreference && $fromSheet->hasNoPreference) {
+        // fromSheet has no preference and toSheet has participants preference
+        if ($fromSheet->hasNoPreference && !$toSheet->hasNoPreference) {
             foreach ($fromSheet->availableSlotsByParticipant as $availableSlotsParticipantView) {
                 foreach ($availableSlotsParticipantView->slots as $slot) {
                     if ($this->hasCommonSlot($toSheet, $slot)) {
@@ -310,8 +311,8 @@ class TransformRequestIntoMeetingHandler
                             $toSheet->sheet,
                             [$availableSlotsParticipantView->participant],
                             $toSheet->participants,
-                            $fromSheet->hasNoPreference,
-                            $toSheet->hasNoPreference
+                            true,
+                            false
                         );
                     }
                 }
@@ -320,6 +321,7 @@ class TransformRequestIntoMeetingHandler
             return $availableMeetings;
         }
 
+        // No preference on both side
         if ($fromSheet->hasNoPreference && $toSheet->hasNoPreference) {
             foreach ($fromSheet->availableSlotsByParticipant as $fromAvailableSlotsParticipantView) {
                 foreach ($toSheet->availableSlotsByParticipant as $toAvailableSlotsParticipantView) {
@@ -331,8 +333,8 @@ class TransformRequestIntoMeetingHandler
                                 $toSheet->sheet,
                                 [$fromAvailableSlotsParticipantView->participant],
                                 [$toAvailableSlotsParticipantView->participant],
-                                $fromSheet->hasNoPreference,
-                                $toSheet->hasNoPreference
+                                true,
+                                true
                             );
                         }
                     }
