@@ -10,7 +10,7 @@
             <h1>{{ 'admin.planner.index'|trans }}</h1>
         </div>
         <div class="col-md-6 text-right">
-            <a href="{{ path('admin_export_planner_data', {'event': event.id, 'mode': 'auto'}) }}" class="btn btn-primary">
+            <a href="{{ path('admin_export_planner_data', {'event': event.id, 'mode': 'auto'}) }}" class="btn btn-primary {{ eventIsOpened ? 'disabled' : '' }}">
                 {{ 'admin.planner.run'|trans }}
             </a>
 
