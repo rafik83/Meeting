@@ -10,12 +10,14 @@
 
 namespace Proximum\Vimeet\Application\Command\MeetingRequest;
 
+use Proximum\Vimeet\Application\Adapter\SMSSenderInterface;
 use Proximum\Vimeet\Application\Exception\Event\NoEventOnCurrentDayException;
 use Proximum\Vimeet\Domain\Repository\EventRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\User\Event\ExtraDataRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\UserRepositoryInterface;
 use Proximum\Vimeet\Domain\User\Event\ExtraData\Type;
+use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Service\SMSFactory;
 
 class ReminderHandler
 {
@@ -39,20 +41,24 @@ class ReminderHandler
     /** @var \DateTimeInterface */
     private $maximumPastDateToBeNotified;
 
-    /** @var SmsNotification */
-    private $smsNotification;
-
     /** @var Counter */
     private $counter;
 
+    /** @var SMSSenderInterface */
+    private $SMSSender;
+
+    /** @var SMSFactory */
+    private $SMSFactory;
+
     /**
-     * @param EventRepositoryInterface       $eventRepository
-     * @param UserRepositoryInterface        $userRepository
-     * @param ExtraDataRepositoryInterface   $extraDataRepository
-     * @param SheetRepositoryInterface       $sheetRepository
-     * @param \DateTimeInterface             $dateTime
-     * @param SmsNotification                $smsNotification
-     * @param Counter                        $counter
+     * @param EventRepositoryInterface     $eventRepository
+     * @param UserRepositoryInterface      $userRepository
+     * @param ExtraDataRepositoryInterface $extraDataRepository
+     * @param SheetRepositoryInterface     $sheetRepository
+     * @param \DateTimeInterface           $dateTime
+     * @param SMSSenderInterface           $SMSSender
+     * @param SMSFactory                   $SMSFactory
+     * @param Counter                      $counter
      */
     public function __construct(
         EventRepositoryInterface $eventRepository,
@@ -60,7 +66,8 @@ class ReminderHandler
         ExtraDataRepositoryInterface $extraDataRepository,
         SheetRepositoryInterface $sheetRepository,
         \DateTimeInterface $dateTime,
-        SmsNotification $smsNotification,
+        SMSSenderInterface $SMSSender,
+        SMSFactory $SMSFactory,
         Counter $counter
     ) {
         $this->eventRepository     = $eventRepository;
@@ -68,11 +75,13 @@ class ReminderHandler
         $this->extraDataRepository = $extraDataRepository;
         $this->sheetRepository     = $sheetRepository;
         $this->dateTime            = $dateTime;
-        $this->smsNotification     = $smsNotification;
         $this->counter             = $counter;
+        $this->SMSSender           = $SMSSender;
 
         $tempDatetime = clone $dateTime;
+
         $this->maximumPastDateToBeNotified = $tempDatetime->modify('-' . self::DELAY_BETWEEN_REMIND_NOTIFICATION_IN_MINUTES . ' minutes');
+        $this->SMSFactory                  = $SMSFactory;
     }
 
     /**
@@ -104,11 +113,10 @@ class ReminderHandler
                     Type::MEETING_REQUEST_DATE_LAST_NOTIFICATION_REMINDER,
                     $usersWithValidatedPhoneAndPendingRequest,
                     $this->maximumPastDateToBeNotified
-                )
-            ;
+                );
 
             foreach ($lastNotificationsByUser as $extraData) {
-                $user = $extraData->getUser();
+                $user       = $extraData->getUser();
                 $userSheets = $this->sheetRepository->getSheetsByUserAndEvent($user, $currentEvent);
 
                 $sheet       = null;
@@ -139,7 +147,15 @@ class ReminderHandler
                     );
 
                     $this->extraDataRepository->set($extraData);
-                    $this->smsNotification->sendSms($sheet, $currentEvent, $user, $countAvailablePendingProposition);
+
+                    $this->SMSSender->send(
+                        $this->SMSFactory->createPendingProposition(
+                            '',
+                            $sheet,
+                            $user->getLocale(),
+                            $countAvailablePendingProposition
+                        )
+                    );
                 }
             }
         }

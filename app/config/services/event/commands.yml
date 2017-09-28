@@ -7,7 +7,8 @@ services:
             - '@repository.user.event.extra_data_repository'
             - '@vimeet_infrastructure.repository.sheet_repository'
             - '@datetime'
-            - '@command.meeting_request.sms_notification'
+            - '@adapter.smssender_alias'
+            - '@service.smsfactory'
             - '@command.meeting_request.counter'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\MeetingRequest\Remind }
@@ -22,5 +23,5 @@ services:
     command.meeting_request.counter:
         class: Proximum\Vimeet\Application\Command\MeetingRequest\Counter
         arguments:
-            - '@vimeet_infrastructure.repository.meeting_slot_repository'
+            - '@query.agenda.available_sheets.available_slots_by_participant_query_handler'
             - '@vimeet_infrastructure.repository.meeting.request_repository'

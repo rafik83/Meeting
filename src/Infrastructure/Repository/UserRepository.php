@@ -288,6 +288,7 @@ class UserRepository implements UserRepositoryInterface
      */
     public function getUsersByEventWithValidatedPhoneNumberAndPendingRequest(Event $event): array
     {
+        // TODO: refactoring request ?
         $queryBuilder = $this
             ->entityManager
             ->createQueryBuilder()
