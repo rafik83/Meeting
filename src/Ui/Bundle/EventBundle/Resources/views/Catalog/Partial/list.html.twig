@@ -5,6 +5,11 @@
             'viewer': viewer,
             isCatalog: isCatalog
         }) }}
+        {% if loop.last and (loop.index % 3 != 0) %}
+            {% for i in (loop.index % 3)..3 %}
+                    <div class="col-md-4"></div>
+            {% endfor %}
+        {% endif %}
     {% else %}
         <div class="col-md-12 important fail text-center">
             {{ 'catalog.noResult'|trans }}
