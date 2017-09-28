@@ -39,8 +39,8 @@ class FileSystemAdapter implements FileSystemAdapterInterface
     /**
      * {@inheritdoc}
      */
-    public function exists($files)
+    public function exists($files): bool
     {
-        $this->fileSystem->exists($files);
+        return $this->fileSystem->exists($files);
     }
 }

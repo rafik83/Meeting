@@ -29,5 +29,5 @@ interface FileSystemAdapterInterface
      *
      * @return bool true if the file exists, false otherwise
      */
-    public function exists($files);
+    public function exists($files): bool;
 }
