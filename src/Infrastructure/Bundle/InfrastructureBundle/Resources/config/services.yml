@@ -2240,6 +2240,10 @@ services:
         class: Proximum\Vimeet\Domain\Rule\Applyer
         arguments:
             - '@domain.rule.composer'
+    domain.user_event.user_event_phone_checker:
+        class: Proximum\Vimeet\Domain\UserEvent\UserEventPhoneChecker
+        arguments:
+            - '@repository.user.user_event_phone_repository'
 
     #
     # User component
