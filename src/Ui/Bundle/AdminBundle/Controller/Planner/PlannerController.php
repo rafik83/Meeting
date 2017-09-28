@@ -39,7 +39,7 @@ class PlannerController extends Controller
             'event'            => $event,
             'meetingSolutions' => $meetingSolutions,
             'lastPlannerJob'   => $lastPlannerJob,
-            'eventIsOpened'    => $eventIsOpened
+            'eventIsOpened'    => $eventIsOpened,
         ]);
     }
 }
