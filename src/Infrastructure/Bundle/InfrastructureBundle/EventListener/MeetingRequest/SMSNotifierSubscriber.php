@@ -14,7 +14,6 @@ use Proximum\Vimeet\Application\Adapter\SMSSenderInterface;
 use Proximum\Vimeet\Application\Event\Events;
 use Proximum\Vimeet\Application\Event\MeetingRequest\CreateRequestEvent;
 use Proximum\Vimeet\Domain\Event\Day\DDayGuesser;
-use Proximum\Vimeet\Domain\Exception\Meeting\NoSheetForUserException;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\User\Event\ExtraData;
 use Proximum\Vimeet\Domain\Repository\User\Event\ExtraDataRepositoryInterface;
@@ -120,12 +119,8 @@ class SMSNotifierSubscriber implements EventSubscriberInterface
             );
 
             if ($userEventPhone !== null) {
-                try {
-                    $sheet = $event->getRequest()->getToSheet();
-                } catch (NoSheetForUserException $exception) {
-                    continue;
-                }
-
+                $sheet = $event->getRequest()->getToSheet();
+             
                 $this->SMSSender->send($this->SMSFactory->createMeetingRequestReceive(
                     $userEventPhone->getPhone(),
                     $sheet,
