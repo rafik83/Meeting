@@ -77,13 +77,6 @@ interface UserRepositoryInterface
      *
      * @return User[]
      */
-    public function getUsersByEventWithValidatedPhoneNumberAndPendingRequest(Event $event);
-
-    /**
-     * @param Event $event
-     *
-     * @return User[]
-     */
     public function findByEvent(Event $event);
 
     /**
