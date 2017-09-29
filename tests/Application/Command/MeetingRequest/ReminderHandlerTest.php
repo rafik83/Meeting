@@ -80,14 +80,7 @@ class ReminderHandlerTest extends TestCase
             $this->counter->reveal()
         );
     }
-
-    /*
-     * Use case to test :
-     *
-     * User qui dois être notifié (+2h)
-     * User qui ne dois pas (-2h)
-     * User sans proposition
-     */
+    
     public function testNoEventOnCurrentDay()
     {
         $this->expectException(NoEventOnCurrentDayException::class);
