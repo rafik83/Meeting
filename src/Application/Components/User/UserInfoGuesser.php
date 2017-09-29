@@ -38,11 +38,16 @@ class UserInfoGuesser
      * @param User    $user
      * @param string  $locale
      * @param Sheet[] $userSheets
+     * @param bool    $translateInfo
      *
      * @return array
      */
-    public function getUserInfoFromParticipant(User $user, string $locale, array $userSheets): array
-    {
+    public function getUserInfoFromParticipant(
+        User $user,
+        string $locale,
+        array $userSheets,
+        bool $translateInfo = true
+    ): array {
         $userInfo = [
             'gender'    => '',
             'firstName' => '',
@@ -68,9 +73,13 @@ class UserInfoGuesser
                 $participantInfo = $this->participantInfoGuesser->guessParticipantInfos($participant, $locale);
 
                 if (!empty($participantInfo[Tag::PARTICIPANT_GENDER])) {
-                    $userInfo['gender'] = $this->translator->trans(
-                        sprintf('gender.%s', $participantInfo[Tag::PARTICIPANT_GENDER])
-                    );
+                    if ($translateInfo) {
+                        $userInfo['gender'] = $this->translator->trans(
+                            sprintf('gender.%s', $participantInfo[Tag::PARTICIPANT_GENDER])
+                        );
+                    } else {
+                        $userInfo['gender'] = $participantInfo[Tag::PARTICIPANT_GENDER];
+                    }
                 }
 
                 if (!empty($participantInfo[Tag::PARTICIPANT_FIRSTNAME])) {

@@ -64,7 +64,50 @@ class UserInfoGuesserTest extends TestCase
         $result = $userInfoGuesser->getUserInfoFromParticipant(
             $user->reveal(),
             $locale,
-            [$sheet1->reveal(), $sheet2->reveal()]
+            [$sheet1->reveal(), $sheet2->reveal()],
+            true
+        );
+
+        $this->assertEquals($expected, $result);
+    }
+
+    public function testGetUserInfoOfParticipantsWithoutTranslation()
+    {
+        $locale = 'fr';
+        $user = $this->prophesize(User::class);
+        $sheet1 = $this->prophesize(Sheet::class);
+        $participant1 = $this->prophesize(Participant::class);
+
+        $sheet1->getUserParticipant($user->reveal())->willReturn($participant1->reveal());
+
+        $participantInfoGuesser = $this->prophesize(ParticipantInfoGuesser::class);
+        $translator = $this->prophesize(TranslatorInterface::class);
+
+        $participantInfoGuesser
+            ->guessParticipantInfos($participant1->reveal(), $locale)
+            ->shouldBeCalled()
+            ->willReturn([
+                Tag::PARTICIPANT_GENDER => 'woman',
+            ])
+        ;
+
+        $translator->trans('gender.woman')->shouldNotBeCalled();
+
+        $expected = [
+            'gender' => 'woman',
+            'firstName' => '',
+            'lastName' => '',
+            'position' => '',
+            'phone' => '',
+            'mobile' => ''
+        ];
+
+        $userInfoGuesser = new UserInfoGuesser($participantInfoGuesser->reveal(), $translator->reveal());
+        $result = $userInfoGuesser->getUserInfoFromParticipant(
+            $user->reveal(),
+            $locale,
+            [$sheet1->reveal()],
+            false
         );
 
         $this->assertEquals($expected, $result);
