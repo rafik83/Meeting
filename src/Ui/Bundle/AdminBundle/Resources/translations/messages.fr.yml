@@ -781,6 +781,7 @@ admin.spot.import.column.visio: Visio
 admin.spot.import.notAvailable: 'L''import de lieu n''est oas disponible car des rdvs sont déjà positionnés'
 admin.spot.import.preview: 'Aperçu de l''import des lieux'
 admin.spot.import.title: 'Importer des lieux'
+admin.spot.import.sample: 'Exemple de fichier'
 admin.spot.link: Lieux
 admin.spot.list.checkbox: 'Case à cocher'
 admin.spot.listSpot.active: Actif
