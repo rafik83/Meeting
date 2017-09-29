@@ -221,9 +221,9 @@ class EventRepository implements EventRepositoryInterface
             ->from(Event::class, 'event')
             ->join(
                 'event.days',
-                'days',
+                'day',
                 'WITH',
-                'days.startTime <= :currentTime AND days.endTime >= :currentTime'
+                'day.startTime <= :currentTime AND day.endTime >= :currentTime'
             )
             ->setParameter('currentTime', $dateTime)
         ;
