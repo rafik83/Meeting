@@ -64,21 +64,20 @@ class ExtraDataRepository implements ExtraDataRepositoryInterface
     /**
      * {@inheritdoc}
      */
-    public function getForEventNameAndUsersOlderThanDate(
+    public function getForEventNameOlderThanDate(
         Event $event,
         string $name,
-        array $users,
         \DateTimeInterface $dateTime
     ): array {
         $queryBuilder = $this->entityManager->createQueryBuilder()
-            ->select('extraData')
+            ->select('extraData', 'user')
             ->from(ExtraData::class, 'extraData')
+            ->join('extraData.user', 'user')
             ->where('extraData.event = :event')
             ->andWhere('extraData.user IN (:users)')
             ->andWhere('extraData.name = :name')
             ->andWhere('extraData.updatedAt < :date')
             ->setParameter('event', $event)
-            ->setParameter('users', $users)
             ->setParameter('name', $name)
             ->setParameter('date', $dateTime);
 

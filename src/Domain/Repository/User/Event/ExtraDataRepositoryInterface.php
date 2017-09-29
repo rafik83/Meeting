@@ -46,10 +46,9 @@ interface ExtraDataRepositoryInterface
     /**
      * @param Event              $event
      * @param string             $name
-     * @param array              $users
      * @param \DateTimeInterface $dateTime
      *
      * @return ExtraData[]
      */
-    public function getForEventNameAndUsersOlderThanDate(Event $event, string $name, array $users, \DateTimeInterface $dateTime);
+    public function getForEventNameOlderThanDate(Event $event, string $name, \DateTimeInterface $dateTime): array;
 }

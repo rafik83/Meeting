@@ -144,4 +144,22 @@ class UserEventPhoneRepository implements UserEventPhoneRepositoryInterface
             ->execute()
         ;
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function findValidatedByEventAndUsers(Event $event, User $usersId): array
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->from(User\UserEventPhone::class, 'user_event_phone')
+            ->where('user_event_phone.event = :event')
+            ->andWhere('user_event_phone IN (:users)')
+            ->andWhere('user_event_phone.validated = true')
+            ->setParameter('event', $event)
+            ->setParameter('users', $usersId);
+
+        return $queryBuilder->getQuery()->getResult();
+    }
 }

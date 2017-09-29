@@ -12,10 +12,12 @@ namespace Proximum\Vimeet\Application\Command\MeetingRequest;
 
 use Proximum\Vimeet\Application\Adapter\SMSSenderInterface;
 use Proximum\Vimeet\Application\Exception\Event\NoEventOnCurrentDayException;
+use Proximum\Vimeet\Domain\Model\Event;
+use Proximum\Vimeet\Domain\Model\User\Event\ExtraData;
 use Proximum\Vimeet\Domain\Repository\EventRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\User\Event\ExtraDataRepositoryInterface;
-use Proximum\Vimeet\Domain\Repository\UserRepositoryInterface;
+use Proximum\Vimeet\Domain\Repository\User\UserEventPhoneRepositoryInterface;
 use Proximum\Vimeet\Domain\User\Event\ExtraData\Type;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Service\SMSFactory;
 
@@ -25,9 +27,6 @@ class ReminderHandler
 
     /** @var EventRepositoryInterface */
     private $eventRepository;
-
-    /** @var UserRepositoryInterface */
-    private $userRepository;
 
     /** @var ExtraDataRepositoryInterface */
     private $extraDataRepository;
@@ -50,20 +49,23 @@ class ReminderHandler
     /** @var SMSFactory */
     private $SMSFactory;
 
+    /** @var UserEventPhoneRepositoryInterface */
+    private $userEventPhoneRepository;
+
     /**
-     * @param EventRepositoryInterface     $eventRepository
-     * @param UserRepositoryInterface      $userRepository
-     * @param ExtraDataRepositoryInterface $extraDataRepository
-     * @param SheetRepositoryInterface     $sheetRepository
-     * @param \DateTimeInterface           $dateTime
-     * @param SMSSenderInterface           $SMSSender
-     * @param SMSFactory                   $SMSFactory
-     * @param Counter                      $counter
+     * @param EventRepositoryInterface          $eventRepository
+     * @param ExtraDataRepositoryInterface      $extraDataRepository
+     * @param UserEventPhoneRepositoryInterface $userEventPhoneRepository
+     * @param SheetRepositoryInterface          $sheetRepository
+     * @param \DateTimeInterface                $dateTime
+     * @param SMSSenderInterface                $SMSSender
+     * @param SMSFactory                        $SMSFactory
+     * @param Counter                           $counter
      */
     public function __construct(
         EventRepositoryInterface $eventRepository,
-        UserRepositoryInterface $userRepository,
         ExtraDataRepositoryInterface $extraDataRepository,
+        UserEventPhoneRepositoryInterface $userEventPhoneRepository,
         SheetRepositoryInterface $sheetRepository,
         \DateTimeInterface $dateTime,
         SMSSenderInterface $SMSSender,
@@ -71,7 +73,6 @@ class ReminderHandler
         Counter $counter
     ) {
         $this->eventRepository     = $eventRepository;
-        $this->userRepository      = $userRepository;
         $this->extraDataRepository = $extraDataRepository;
         $this->sheetRepository     = $sheetRepository;
         $this->dateTime            = $dateTime;
@@ -82,6 +83,7 @@ class ReminderHandler
 
         $this->maximumPastDateToBeNotified = $tempDatetime->modify('-' . self::DELAY_BETWEEN_REMIND_NOTIFICATION_IN_MINUTES . ' minutes');
         $this->SMSFactory                  = $SMSFactory;
+        $this->userEventPhoneRepository    = $userEventPhoneRepository;
     }
 
     /**
@@ -98,25 +100,21 @@ class ReminderHandler
         }
 
         foreach ($currentEvents as $currentEvent) {
-            $usersWithValidatedPhoneAndPendingRequest = $this
-                ->userRepository
-                ->getUsersByEventWithValidatedPhoneNumberAndPendingRequest($currentEvent);
+            $extraDataIndexedByUserId = $this->getExtraDataIndexedByUserId($currentEvent);
 
-            if (empty($usersWithValidatedPhoneAndPendingRequest)) {
+            if (empty($extraDataIndexedByUserId)) {
                 continue;
             }
 
-            $lastNotificationsByUser = $this
-                ->extraDataRepository
-                ->getForEventNameAndUsersOlderThanDate(
-                    $currentEvent,
-                    Type::MEETING_REQUEST_DATE_LAST_NOTIFICATION_REMINDER,
-                    $usersWithValidatedPhoneAndPendingRequest,
-                    $this->maximumPastDateToBeNotified
-                );
+            $usersId = array_keys($extraDataIndexedByUserId);
 
-            foreach ($lastNotificationsByUser as $extraData) {
-                $user       = $extraData->getUser();
+            $usersEventPhone = $this->userEventPhoneRepository->findValidatedByEventAndUsers(
+                $currentEvent,
+                $usersId
+            );
+
+            foreach ($usersEventPhone as $userEventPhone) {
+                $user       = $userEventPhone->getUser();
                 $userSheets = $this->sheetRepository->getSheetsByUserAndEvent($user, $currentEvent);
 
                 $sheet       = null;
@@ -135,12 +133,18 @@ class ReminderHandler
                     continue;
                 }
 
+                if (!isset($extraDataIndexedByUserId[$user->getId()])) {
+                    continue;
+                }
+
                 $countAvailablePendingProposition = $this->counter->getCountAvailablePendingMeetingRequests(
                     $sheet,
                     $participant
                 );
 
                 if ($countAvailablePendingProposition > 0) {
+                    $extraData = $extraDataIndexedByUserId[$user->getId()];
+
                     $extraData->update(
                         $this->maximumPastDateToBeNotified->format('Y-m-d H:i:s'),
                         $this->dateTime
@@ -150,7 +154,7 @@ class ReminderHandler
 
                     $this->SMSSender->send(
                         $this->SMSFactory->createPendingProposition(
-                            '',
+                            $userEventPhone->getPhone(),
                             $sheet,
                             $user->getLocale(),
                             $countAvailablePendingProposition
@@ -159,5 +163,29 @@ class ReminderHandler
                 }
             }
         }
+    }
+
+    /**
+     * @param Event $event
+     *
+     * @return ExtraData[]
+     */
+    private function getExtraDataIndexedByUserId(Event $event): array
+    {
+        $lastExtraDataForEvent = $this
+            ->extraDataRepository
+            ->getForEventNameOlderThanDate(
+                $event,
+                Type::MEETING_REQUEST_DATE_LAST_NOTIFICATION_REMINDER,
+                $this->maximumPastDateToBeNotified
+            );
+
+        $extraDataIndexedByUserId = [];
+
+        foreach ($lastExtraDataForEvent as $extraData) {
+            $extraDataIndexedByUserId[$extraData->getUser()->getId()] = $extraData;
+        }
+
+        return $extraDataIndexedByUserId;
     }
 }

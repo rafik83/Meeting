@@ -3,8 +3,8 @@ services:
         class: Proximum\Vimeet\Application\Command\MeetingRequest\ReminderHandler
         arguments:
             - '@vimeet_infrastructure.repository.event_repository'
-            - '@vimeet_infrastructure.repository.user_repository'
             - '@repository.user.event.extra_data_repository'
+            - '@repository.user.user_event_phone_repository'
             - '@vimeet_infrastructure.repository.sheet_repository'
             - '@datetime'
             - '@adapter.smssender_alias'
