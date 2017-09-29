@@ -13,13 +13,6 @@ services:
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\MeetingRequest\Remind }
 
-    command.meeting_request.sms_notification:
-        class: Proximum\Vimeet\Application\Command\MeetingRequest\SmsNotification
-        arguments:
-            - '@adapter.smssender_alias'
-            - '@vimeet_infrastructure.adapter.translator_adapter'
-            - '@adapter.event_url_generator'
-
     command.meeting_request.counter:
         class: Proximum\Vimeet\Application\Command\MeetingRequest\Counter
         arguments:

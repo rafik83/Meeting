@@ -41,10 +41,11 @@ class SMSFactory
     /**
      * @param string $phone
      * @param Sheet  $sheet
+     * @param string $locale
      *
      * @return SMS
      */
-    public function createMeetingRequestReceive(string $phone, Sheet $sheet): SMS
+    public function createMeetingRequestReceive(string $phone, Sheet $sheet, string $locale): SMS
     {
         $link = $this->eventUrlGenerator->generateEventAbsoluteUrl(
             $sheet->getEvent(),
@@ -58,7 +59,7 @@ class SMSFactory
         $message = $this->translator->trans('event.sms.meeting_request.receive', [
             '%event%' => $sheet->getEvent()->getTitle(),
             '%link%'  => $link,
-        ]);
+        ], 'messages', $locale);
 
         return new SMS($phone, $message);
     }
@@ -90,13 +91,13 @@ class SMSFactory
         $message = $this
             ->translator
             ->trans(
-                'sms.reminder.pending_meeting_request',
+                'event.sms.reminder.pending_meeting_request',
                 [
                     '%eventTitle%'                  => $sheet->getEvent()->getTitle(),
                     '%countPendingMeetingRequest%'  => $countPendingMeetingRequest,
                     '%meetingRequestManagementUrl%' => $meetingRequestManagementUrl,
                 ],
-                null,
+                'messages',
                 $locale
             );
 
