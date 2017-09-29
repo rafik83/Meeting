@@ -49,5 +49,5 @@ services:
             - '@template.participant_info_guesser'
             - '@planning.formatter.participant_planning_formatter'
             - '@domain.service.sheets_group.type_name_resolver'
+            - '@domain.service.category.category_name_resolver'
             - '@domain.service.sheets_group.group_name_resolver'
-            - '@vimeet_infrastructure.adapter.translator_adapter'

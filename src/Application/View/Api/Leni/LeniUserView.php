@@ -22,6 +22,9 @@ class LeniUserView
     public $typeName;
 
     /** @var string */
+    public $categoryName;
+
+    /** @var string */
     public $email;
 
     /** @var string */
@@ -52,6 +55,7 @@ class LeniUserView
      * @param int              $id
      * @param string           $sheetName
      * @param string           $typeName
+     * @param string           $categoryName
      * @param string           $email
      * @param string           $gender
      * @param string           $firstName
@@ -65,6 +69,7 @@ class LeniUserView
         int $id,
         string $sheetName,
         string $typeName,
+        string $categoryName,
         string $email,
         $gender,
         $firstName,
@@ -74,17 +79,18 @@ class LeniUserView
         $mobile,
         LeniPlanningView $planning
     ) {
-        $this->id = $id;
-        $this->sheetName = $sheetName;
-        $this->typeName = $typeName;
-        $this->email = $email;
-        $this->gender = $gender;
-        $this->firstName = $firstName;
-        $this->lastName = $lastName;
-        $this->position = $position;
-        $this->phone = $phone;
-        $this->mobile = $mobile;
-        $this->planning = $planning;
+        $this->id               = $id;
+        $this->sheetName        = $sheetName;
+        $this->typeName         = $typeName;
+        $this->categoryName     = $categoryName;
+        $this->email            = $email;
+        $this->gender           = $gender;
+        $this->firstName        = $firstName;
+        $this->lastName         = $lastName;
+        $this->position         = $position;
+        $this->phone            = $phone;
+        $this->mobile           = $mobile;
+        $this->planning         = $planning;
         $this->serializeContent = [];
     }
 
