@@ -10,7 +10,6 @@
 
 namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Controller;
 
-use Proximum\Vimeet\Application\Command\MeetingRequest\Remind;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Type\TypeChoiceType;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\ParamConverter\EventDomain;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -69,12 +68,5 @@ class HomeController extends Controller
             'event' => $event,
             'form'  => $form->createView(),
         ]);
-    }
-
-    public function testRemindAction()
-    {
-        $this->get('tactician.commandbus')->handle(new Remind());
-
-        return new Response();
     }
 }

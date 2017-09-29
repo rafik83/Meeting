@@ -7,11 +7,6 @@ event:
     methods:  [GET, POST]
     defaults: { _controller: EventBundle:Home:index }
 
-event_test_remind:
-    path: /remind/test
-    methods: [GET]
-    defaults: { _controller: EventBundle:Home:testRemind }
-
 event_select_sheet:
     path: /select-sheet
     methods:  [GET]
