@@ -94,6 +94,10 @@ class LeniApiHandler
         $events = $this->eventRepository->findEventWithLeniApiParameters();
 
         foreach ($events as $event) {
+            if (!$event->hasDay() || $event->getLastDay()->getEndTime() < $this->dateTime) {
+                continue;
+            }
+
             $leniUserParameter  = $this->extraParameterRepository->findByEventAndType($event, Type::TYPE_LENI_USER);
             $leniEventParameter = $this->extraParameterRepository->findByEventAndType($event, Type::TYPE_LENI_EVENT);
 
