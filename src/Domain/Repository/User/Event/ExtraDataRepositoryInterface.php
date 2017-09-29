@@ -11,13 +11,12 @@
 namespace Proximum\Vimeet\Domain\Repository\User\Event;
 
 use Proximum\Vimeet\Domain\Model\Event;
-use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Model\User\Event\ExtraData;
 
 interface ExtraDataRepositoryInterface
 {
     /**
-     * @param Event $event
+     * @param Event  $event
      * @param string $name
      *
      * @return ExtraData[]

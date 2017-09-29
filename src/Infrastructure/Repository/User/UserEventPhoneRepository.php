@@ -148,7 +148,7 @@ class UserEventPhoneRepository implements UserEventPhoneRepositoryInterface
     /**
      * {@inheritdoc}
      */
-    public function findValidatedByEventAndUsers(Event $event, User $usersId): array
+    public function findValidatedByEventAndUsers(Event $event, array $usersId): array
     {
         $queryBuilder = $this
             ->entityManager
