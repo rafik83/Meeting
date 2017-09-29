@@ -153,9 +153,10 @@ class UserEventPhoneRepository implements UserEventPhoneRepositoryInterface
         $queryBuilder = $this
             ->entityManager
             ->createQueryBuilder()
+            ->select('user_event_phone')
             ->from(User\UserEventPhone::class, 'user_event_phone')
             ->where('user_event_phone.event = :event')
-            ->andWhere('user_event_phone IN (:users)')
+            ->andWhere('user_event_phone.user IN (:users)')
             ->andWhere('user_event_phone.validated = true')
             ->setParameter('event', $event)
             ->setParameter('users', $usersId);
