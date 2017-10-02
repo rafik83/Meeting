@@ -5605,3 +5605,4 @@ services:
         class: Proximum\Vimeet\Domain\Event\Day\DDayGuesser
         arguments:
             - '@datetime'
+            - '%feature_dday_enabled%'

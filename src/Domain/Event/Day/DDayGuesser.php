@@ -17,12 +17,17 @@ class DDayGuesser
     /** @var \DateTimeInterface */
     private $dateTime;
 
+    /** @var bool */
+    private $featureDdayEnabled;
+
     /**
      * @param \DateTimeInterface $dateTime
+     * @param bool               $featureDdayEnabled
      */
-    public function __construct(\DateTimeInterface $dateTime)
+    public function __construct(\DateTimeInterface $dateTime, bool $featureDdayEnabled = false)
     {
-        $this->dateTime = $dateTime;
+        $this->dateTime           = $dateTime;
+        $this->featureDdayEnabled = $featureDdayEnabled;
     }
 
     /**
@@ -43,5 +48,15 @@ class DDayGuesser
         }
 
         return false;
+    }
+
+    /**
+     * @param Event $event
+     *
+     * @return bool
+     */
+    public function isItDDayAndFeatureEnabled(Event $event): bool
+    {
+        return $this->isItDDay($event) && $this->featureDdayEnabled;
     }
 }
