@@ -12,6 +12,7 @@ namespace Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Service;
 
 use Proximum\Vimeet\Application\Adapter\TranslatorInterface;
 use Proximum\Vimeet\Domain\Messaging\SMS\SMS;
+use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Event\EventUrlGeneratorInterface;
 use Proximum\Vimeet\Domain\Model\Meeting;
 use Proximum\Vimeet\Domain\Model\Participant;
@@ -92,9 +93,9 @@ class SMSFactory
             ]
         );
 
-        $dayFormatter = $this->getDayFormatter($meeting, $locale);
+        $dayFormatter = $this->getDayFormatter($meeting->getEvent(), $locale);
 
-        $timeFormatter = $this->getTimeFormatter($meeting, $locale);
+        $timeFormatter = $this->getTimeFormatter($meeting->getEvent(), $locale);
 
         $message = $this->translator->trans('event.sms.receive_meeting_request.approved', [
             '%event%' => $meeting->getEvent()->getTitle(),
@@ -121,8 +122,8 @@ class SMSFactory
     public function createReceiveMeetingRequestApproved(
         string $phone,
         Meeting $meeting,
-        Sheet $mySheet, // sheet from
-        Sheet $sheetMet, //Sheet met
+        Sheet $mySheet,
+        Sheet $sheetMet,
         Participant $participant,
         string $locale
     ): SMS {
@@ -135,9 +136,9 @@ class SMSFactory
             ]
         );
 
-        $dayFormatter = $this->getDayFormatter($meeting, $locale);
+        $dayFormatter = $this->getDayFormatter($meeting->getEvent(), $locale);
 
-        $timeFormatter = $this->getTimeFormatter($meeting, $locale);
+        $timeFormatter = $this->getTimeFormatter($meeting->getEvent(), $locale);
 
         $message = $this->translator->trans('event.sms.sent_meeting_request.approved', [
             '%event%' => $meeting->getEvent()->getTitle(),
@@ -152,36 +153,36 @@ class SMSFactory
     }
 
     /**
-     * @param Meeting $meeting
-     * @param string  $locale
+     * @param Event  $event
+     * @param string $locale
      *
      * @return \IntlDateFormatter
      */
-    private function getDayFormatter(Meeting $meeting, string $locale): \IntlDateFormatter
+    private function getDayFormatter(Event $event, string $locale): \IntlDateFormatter
     {
         $dayFormatter = new \IntlDateFormatter(
             $locale,
             \IntlDateFormatter::SHORT,
             \IntlDateFormatter::NONE,
-            $meeting->getEvent()->getTimeZone()
+            $event->getTimeZone()
         );
 
         return $dayFormatter;
     }
 
     /**
-     * @param Meeting $meeting
+     * @param Event $event
      * @param string  $locale
      *
      * @return \IntlDateFormatter
      */
-    private function getTimeFormatter(Meeting $meeting, string $locale): \IntlDateFormatter
+    private function getTimeFormatter(Event $event, string $locale): \IntlDateFormatter
     {
         $timeFormatter = new \IntlDateFormatter(
             $locale,
             \IntlDateFormatter::NONE,
             \IntlDateFormatter::SHORT,
-            $meeting->getEvent()->getTimeZone()
+            $event->getTimeZone()
         );
 
         return $timeFormatter;
