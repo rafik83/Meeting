@@ -42,7 +42,7 @@ class PlanningViewQueryHandlerTest extends TestCase
     {
         $event     = EventFactory::createEvent();
         $user      = $this->prophesize(User::class);
-        $locale    = 'fr';
+        $locale    = 'de';
         $beginDay1 = new \DateTime('2016-10-12 10:00');
         $endDay1   = new \DateTime('2016-10-12 18:00');
         $beginDay2 = new \DateTime('2016-10-13 10:00');
@@ -111,7 +111,7 @@ class PlanningViewQueryHandlerTest extends TestCase
                 new DayViewQuery(
                     $user->reveal(),
                     $day1,
-                    $locale,
+                    'fr',
                     [$unavailability1->reveal(), $unavailability2->reveal()],
                     [$happening->reveal()],
                     [$mass1, $mass2],
@@ -127,7 +127,7 @@ class PlanningViewQueryHandlerTest extends TestCase
                 new DayViewQuery(
                     $user->reveal(),
                     $day2,
-                    $locale,
+                    'fr',
                     [$unavailability1->reveal(), $unavailability2->reveal()],
                     [$happening->reveal()],
                     [$mass1, $mass2],

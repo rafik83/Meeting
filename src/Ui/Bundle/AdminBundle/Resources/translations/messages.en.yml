@@ -364,4 +364,8 @@ planning.participant.unallocated_meetings: 'List of validated meeting requests w
 planning.participant.unavailability: Unavailable
 register.email_already_exists: 'An account with this email address already exists'
 reset_password.title: 'Request new password'
+user.agenda.version.agendaModified: 'Your schedule has been changed:'
+user.agenda.version.meetingAdded: 'You have a new meeting with %sheetTitle% on %day% at %hour% at %spotRef%.'
+user.agenda.version.meetingDeleted: 'The meeting with %sheetTitle% has been cancelled.'
+user.agenda.version.meetingMoved: 'The meeting with %sheetTitle% was moved to %day% at %hour% at %spotRef%.'
 who.the.type: 'the type'

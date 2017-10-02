@@ -532,6 +532,7 @@ admin.planner.import.alert.meetingDelation: 'Attention, l''import d''une nouvell
 admin.planner.import.link: Importer
 admin.planner.import.title: 'Importation d''une solution'
 admin.planner.index: Planification
+admin.planner.notAvailable: 'La planification n''est plus disponible car l''évènement a commencé'
 admin.planner.pendingPlannerJob.details: 'Une planification des RDVs (%solutionType%) a été demandée par %adminFirstname% %adminLastname% le %createdAt%.'
 admin.planner.pendingPlannerJob.fileExported: 'Fichier exporté vers le planner'
 admin.planner.pendingPlannerJob.fileNotExported: 'Fichier en attente d''export'
@@ -543,7 +544,6 @@ admin.planner.pendingPlannerJob.status.queued: 'Planification en fil d''attente'
 admin.planner.pendingPlannerJob.status.started: 'Planification démarrée'
 admin.planner.pendingPlannerJob.status.success: 'Planification réalisée, création des RDV en cours'
 admin.planner.run: 'Lancer la planification'
-admin.planner.notAvailable: 'La planification n''est plus disponible car l''évènement a commencé'
 admin.planner.run.title: 'Lancer la planification de RDVs'
 admin.planning.export.link: Exporter
 admin.planning.export.title: 'Export des plannings en pdf'
@@ -778,10 +778,10 @@ admin.spot.import.column.seatCapacity: 'Nombre de places assises'
 admin.spot.import.column.sheets: 'Identifiants fiches affectées'
 admin.spot.import.column.size: 'Taille (en m²)'
 admin.spot.import.column.visio: Visio
-admin.spot.import.notAvailable: 'L''import de lieu n''est oas disponible car des rdvs sont déjà positionnés'
+admin.spot.import.notAvailable: 'L''import de lieu n''est pas disponible car des rdvs sont déjà positionnés'
 admin.spot.import.preview: 'Aperçu de l''import des lieux'
-admin.spot.import.title: 'Importer des lieux'
 admin.spot.import.sample: 'Exemple de fichier'
+admin.spot.import.title: 'Importer des lieux'
 admin.spot.link: Lieux
 admin.spot.list.checkbox: 'Case à cocher'
 admin.spot.listSpot.active: Actif

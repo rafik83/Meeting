@@ -37,9 +37,9 @@ class HomeController extends Controller
         $locale = $request->getLocale();
         $event = $eventDomain->getEvent();
 
-       $response = $this
-           ->get('infrastructure.route.home_dispatch.home_user_dispatcher')
-           ->attemptDispatchUser($event, $user);
+        $response = $this
+            ->get('infrastructure.route.home_dispatch.home_user_dispatcher')
+            ->attemptDispatchUser($event, $user);
 
         if ($response instanceof RedirectResponse) {
             return $response;
