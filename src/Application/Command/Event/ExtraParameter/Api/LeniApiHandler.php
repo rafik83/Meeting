@@ -16,6 +16,7 @@ use Proximum\Vimeet\Application\Query\Api\Leni\LeniUserViewQuery;
 use Proximum\Vimeet\Application\Query\Api\Leni\LeniUserViewQueryHandler;
 use Proximum\Vimeet\Application\View\Api\Leni\LeniUserView;
 use Proximum\Vimeet\Domain\Event\ExtraParameter\Type;
+use Proximum\Vimeet\Domain\Model\Event\ExtraParameter;
 use Proximum\Vimeet\Domain\Model\User\Event\ExtraData;
 use Proximum\Vimeet\Domain\Repository\Event\ExtraParameterRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\EventRepositoryInterface;
@@ -53,6 +54,9 @@ class LeniApiHandler
     /** @var \DateTimeInterface */
     private $dateTime;
 
+    /** @var LeniApiCallHandler */
+    private $leniApiCallHandler;
+
     /**
      * @param EventRepositoryInterface          $eventRepository
      * @param ExtraParameterRepositoryInterface $extraParameterRepository
@@ -61,6 +65,7 @@ class LeniApiHandler
      * @param SheetRepositoryInterface          $sheetRepository
      * @param ParticipantPlanningFormatter      $participantPlanningFormatter
      * @param LeniUserViewQueryHandler          $leniUserViewQueryHandler
+     * @param LeniApiCallHandler                $leniApiCallHandler
      * @param SerializerAdapterInterface        $serializerAdapter
      * @param \DateTimeInterface                $dateTime
      */
@@ -72,6 +77,7 @@ class LeniApiHandler
         SheetRepositoryInterface $sheetRepository,
         ParticipantPlanningFormatter $participantPlanningFormatter,
         LeniUserViewQueryHandler $leniUserViewQueryHandler,
+        LeniApiCallHandler $leniApiCallHandler,
         SerializerAdapterInterface $serializerAdapter,
         \DateTimeInterface $dateTime
     ) {
@@ -82,6 +88,7 @@ class LeniApiHandler
         $this->sheetRepository = $sheetRepository;
         $this->participantPlanningFormatter = $participantPlanningFormatter;
         $this->leniUserViewQueryHandler = $leniUserViewQueryHandler;
+        $this->leniApiCallHandler = $leniApiCallHandler;
         $this->serializerAdapter = $serializerAdapter;
         $this->dateTime = $dateTime;
     }
@@ -159,21 +166,24 @@ class LeniApiHandler
         $userFingerPrints = [];
 
         foreach ($usersExtraData as $userExtraData) {
-            $userExtraData[$userExtraData->getUser()->getId()] = $userExtraData;
+            $userFingerPrints[$userExtraData->getUser()->getId()] = $userExtraData;
         }
 
         return $userFingerPrints;
     }
 
     /**
-     * @param string         $leniUserParameter
-     * @param string         $leniEventParameter
+     * @param ExtraParameter $leniUserParameter
+     * @param ExtraParameter $leniEventParameter
      * @param LeniUserView[] $leniUserViews
      */
-    private function notifyLeniWithUsers(string $leniUserParameter, string $leniEventParameter, array $leniUserViews)
-    {
+    private function notifyLeniWithUsers(
+        ExtraParameter $leniUserParameter,
+        ExtraParameter $leniEventParameter,
+        array $leniUserViews
+    ) {
         foreach ($leniUserViews as $leniUserView) {
-            // Notify leni
+            $this->leniApiCallHandler->handle(new LeniApiCall($leniUserView, $leniUserParameter, $leniEventParameter));
         }
     }
 }

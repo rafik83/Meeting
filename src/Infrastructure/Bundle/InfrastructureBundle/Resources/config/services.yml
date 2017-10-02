@@ -4742,6 +4742,11 @@ services:
         tags:
             - { name: serializer.normalizer }
 
+    serializer.normalizer.api.leni.leni_user_view_normalizer:
+        class: Proximum\Vimeet\Application\Serializer\Normalizer\Api\Leni\LeniUserViewNormalizer
+        tags:
+            - { name: serializer.normalizer }
+
     #
     # Adapter
     #

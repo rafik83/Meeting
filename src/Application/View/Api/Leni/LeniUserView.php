@@ -53,9 +53,9 @@ class LeniUserView
 
     /**
      * @param int              $id
-     * @param string           $sheetName
-     * @param string           $typeName
-     * @param string           $categoryName
+     * @param string|null      $sheetName
+     * @param string|null      $typeName
+     * @param string|null      $categoryName
      * @param string           $email
      * @param string           $gender
      * @param string           $firstName
@@ -67,9 +67,9 @@ class LeniUserView
      */
     public function __construct(
         int $id,
-        string $sheetName,
-        string $typeName,
-        string $categoryName,
+        string $sheetName = null,
+        string $typeName = null,
+        string $categoryName = null,
         string $email,
         $gender,
         $firstName,
