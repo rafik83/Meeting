@@ -18,16 +18,16 @@ class DDayGuesser
     private $dateTime;
 
     /** @var bool */
-    private $featureDdayEnabled;
+    private $featureDDayEnabled;
 
     /**
      * @param \DateTimeInterface $dateTime
-     * @param bool               $featureDdayEnabled
+     * @param bool               $featureDDayEnabled
      */
-    public function __construct(\DateTimeInterface $dateTime, bool $featureDdayEnabled = false)
+    public function __construct(\DateTimeInterface $dateTime, bool $featureDDayEnabled = false)
     {
         $this->dateTime           = $dateTime;
-        $this->featureDdayEnabled = $featureDdayEnabled;
+        $this->featureDDayEnabled = $featureDDayEnabled;
     }
 
     /**
@@ -57,6 +57,6 @@ class DDayGuesser
      */
     public function isItDDayAndFeatureEnabled(Event $event): bool
     {
-        return $this->isItDDay($event) && $this->featureDdayEnabled;
+        return $this->isItDDay($event) && $this->featureDDayEnabled;
     }
 }

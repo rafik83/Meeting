@@ -39,7 +39,7 @@ class DDayGuesserTest extends TestCase
         $day1Begin = new \DateTime('2017-08-08 10:00:00.000');
         $day1End   = new \DateTime('2017-08-08 18:00:00.000');
 
-        $date  = new \DateTime('2017-08-08 14:00:00.000');
+        $date = new \DateTime('2017-08-08 14:00:00.000');
         $day1 = new Day($event, $day1Begin, $day1End);
 
         $event->setDays([$day1]);
