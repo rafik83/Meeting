@@ -24,7 +24,7 @@ class MeetingDdayView
     public $locale;
 
     /** @var string[] */
-    public $participantsFullname = [];
+    private $participantsFullname = [];
 
     /** @var string */
     private $timezone;
@@ -80,5 +80,13 @@ class MeetingDdayView
         );
 
         return $timeFormatter->format($this->datetime);
+    }
+
+    /**
+     * @return string
+     */
+    public function getParticipants(): string
+    {
+        return implode(', ', $this->participantsFullname);
     }
 }

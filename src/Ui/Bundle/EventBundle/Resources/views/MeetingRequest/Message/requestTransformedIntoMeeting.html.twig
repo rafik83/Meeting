@@ -10,7 +10,8 @@
             {{ 'event.meeting.request.transformIntoMeeting.success'|trans({
                 '%date%': meetingDdayView.date,
                 '%time%': meetingDdayView.time,
-                '%spot%': meetingDdayView.spotName
+                '%spot%': meetingDdayView.spotName,
+                '%participants%': meetingDdayView.participants
             }) }}
         </div>
     {% else %}
