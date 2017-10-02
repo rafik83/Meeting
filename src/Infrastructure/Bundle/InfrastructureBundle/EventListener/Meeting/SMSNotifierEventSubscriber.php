@@ -82,7 +82,7 @@ class SMSNotifierEventSubscriber implements EventSubscriberInterface
                 continue;
             }
 
-            $sms = $this->SMSFactory->createReceiveMeetingRequestApproved(
+            $sms = $this->SMSFactory->createSentMeetingRequestApproved(
                 $userEventPhone->getPhone(),
                 $meeting,
                 $meeting->getFromSheet(),
@@ -96,7 +96,7 @@ class SMSNotifierEventSubscriber implements EventSubscriberInterface
 
         foreach ($meeting->getToParticipants() as $toParticipant) {
             $userEventPhone = $this->userEventPhoneChecker->getValidatedUserEventPhone(
-                $fromParticipant->getUser(),
+                $toParticipant->getUser(),
                 $meeting->getEvent()
             );
 
@@ -104,11 +104,11 @@ class SMSNotifierEventSubscriber implements EventSubscriberInterface
                 continue;
             }
 
-            $sms = $this->SMSFactory->createSentMeetingRequestApproved(
+            $sms = $this->SMSFactory->createReceiveMeetingRequestApproved(
                 $userEventPhone->getPhone(),
                 $meeting,
-                $meeting->getFromSheet(),
                 $meeting->getToSheet(),
+                $meeting->getFromSheet(),
                 $toParticipant,
                 $toParticipant->getLocale()
             );

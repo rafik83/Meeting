@@ -68,18 +68,18 @@ class SMSFactory
     /**
      * @param string      $phone
      * @param Meeting     $meeting
-     * @param Sheet       $fromSheet
-     * @param Sheet       $toSheet
+     * @param Sheet       $mySheet
+     * @param Sheet       $sheetMet
      * @param Participant $participant
      * @param string      $locale
      *
      * @return SMS
      */
-    public function createReceiveMeetingRequestApproved(
+    public function createSentMeetingRequestApproved(
         string $phone,
         Meeting $meeting,
-        Sheet $fromSheet,
-        Sheet $toSheet,
+        Sheet $mySheet,
+        Sheet $sheetMet,
         Participant $participant,
         string $locale
     ): SMS {
@@ -87,7 +87,7 @@ class SMSFactory
             $meeting->getEvent(),
             'event_agenda_participant',
             [
-                'sheet'       => $fromSheet->getId(),
+                'sheet'       => $mySheet->getId(),
                 'participant' => $participant->getId(),
             ]
         );
@@ -108,7 +108,7 @@ class SMSFactory
 
         $message = $this->translator->trans('event.sms.receive_meeting_request.approved', [
             '%event%' => $meeting->getEvent()->getTitle(),
-            '%sheet%' => $toSheet->getTitle(),
+            '%sheet%' => $sheetMet->getTitle(),
             '%date%'  => $dayFormatter->format($meeting->getSlot()->getBegin()),
             '%time%'  => $timeFormatter->format($meeting->getSlot()->getBegin()),
             '%spot%'  => $meeting->getSpot()->getReference(),
@@ -121,18 +121,18 @@ class SMSFactory
     /**
      * @param string      $phone
      * @param Meeting     $meeting
-     * @param Sheet       $fromSheet
-     * @param Sheet       $toSheet
+     * @param Sheet       $mySheet
+     * @param Sheet       $sheetMet
      * @param Participant $participant
      * @param string      $locale
      *
      * @return SMS
      */
-    public function createSentMeetingRequestApproved(
+    public function createReceiveMeetingRequestApproved(
         string $phone,
         Meeting $meeting,
-        Sheet $fromSheet,
-        Sheet $toSheet,
+        Sheet $mySheet, // sheet from
+        Sheet $sheetMet, //Sheet met
         Participant $participant,
         string $locale
     ): SMS {
@@ -140,7 +140,7 @@ class SMSFactory
             $meeting->getEvent(),
             'event_agenda_participant',
             [
-                'sheet'       => $toSheet->getId(),
+                'sheet'       => $mySheet->getId(),
                 'participant' => $participant->getId(),
             ]
         );
@@ -161,7 +161,7 @@ class SMSFactory
 
         $message = $this->translator->trans('event.sms.sent_meeting_request.approved', [
             '%event%' => $meeting->getEvent()->getTitle(),
-            '%sheet%' => $fromSheet->getTitle(),
+            '%sheet%' => $sheetMet->getTitle(),
             '%date%'  => $dayFormatter->format($meeting->getSlot()->getBegin()),
             '%time%'  => $timeFormatter->format($meeting->getSlot()->getBegin()),
             '%spot%'  => $meeting->getSpot()->getReference(),

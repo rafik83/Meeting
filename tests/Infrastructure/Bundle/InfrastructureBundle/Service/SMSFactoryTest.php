@@ -65,7 +65,7 @@ class SMSFactoryTest extends TestCase
         $this->assertEquals($expectedSms, $sms);
     }
 
-    public function testCreateReceiveMeetingRequestApproved()
+    public function testCreateSentMeetingRequestApproved()
     {
         $meeting     = $this->prophesize(Meeting::class);
         $event       = $this->prophesize(Event::class);
@@ -119,7 +119,7 @@ class SMSFactoryTest extends TestCase
         // Expected
         $expectedSMS = new SMS('+3306000000','translatedMessage');
 
-        $sms = $smsFactory->createReceiveMeetingRequestApproved(
+        $sms = $smsFactory->createSentMeetingRequestApproved(
             $phone,
             $meeting->reveal(),
             $fromSheet->reveal(),
@@ -131,7 +131,7 @@ class SMSFactoryTest extends TestCase
         $this->assertEquals($expectedSMS, $sms);
     }
 
-    public function testCreateSentMeetingRequestApproved()
+    public function testCreateReceiveMeetingRequestApproved()
     {
         $meeting     = $this->prophesize(Meeting::class);
         $event       = $this->prophesize(Event::class);
@@ -185,11 +185,11 @@ class SMSFactoryTest extends TestCase
         // Expected
         $expectedSMS = new SMS('+3306000000','translatedMessage');
 
-        $sms = $smsFactory->createSentMeetingRequestApproved(
+        $sms = $smsFactory->createReceiveMeetingRequestApproved(
             $phone,
             $meeting->reveal(),
-            $fromSheet->reveal(),
             $toSheet->reveal(),
+            $fromSheet->reveal(),
             $participant->reveal(),
             $locale
         );
