@@ -79,7 +79,7 @@ class MeetingRequestController extends Controller
             $sheet, $request->getLocale()
         ));
 
-        $dDay = $this->get('domain.event.day.dday_guesser')->isItDDay($event);
+        $dDay = $this->get('domain.event.day.dday_guesser')->isItDDayAndFeatureEnabled($event);
         $isUserParticipant   = $sheet->hasUserParticipant($user);
         $filterAvailableSlot = $dDay && $isUserParticipant;
         $availableSlots      = [];
@@ -187,6 +187,7 @@ class MeetingRequestController extends Controller
             'filterRequestProposition' => $this->isFilterRequestPropositionActive($searchForm->get('state')->getData()),
             'resultsCount'        => count($meetingRequestListView->getMeetingRequestsView()),
             'tipTranslationViews' => $tipTranslationViews,
+            'participant' => $sheet->getUserParticipant($user)
         ]);
     }
 

@@ -15,6 +15,7 @@ use Proximum\Vimeet\Application\Command\Spot\Import\SpotImportConfirm;
 use Proximum\Vimeet\Application\Query\Spot\Import\SpotImportPreviewQuery;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\File;
+use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\HttpFoundation\Response\CsvFileResponse;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Spot\Import\SpotConfirmType;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Spot\Import\SpotImportType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -98,5 +99,24 @@ class ImportController extends Controller
             'spotImports' => $spotImports,
             'form' => $form->createView(),
         ]);
+    }
+
+    /**
+     * @param Event $event
+     *
+     * @return CsvFileResponse
+     */
+    public function getSampleAction(Event $event)
+    {
+        $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
+
+        $sample = "reference;size;meetingCapacity;seatCapacity;sheets;priority;active;visio
+A1;10;2;4;;1;1;0
+A2;4;3;10;;2;1;1
+A3;3;1;4;;2;0;0
+A4;20;2;4;1371;2;1;1
+A5;10;3;5;2114,7392;2;1;1";
+
+        return new CsvFileResponse($sample, 'spot-import-sample.csv');
     }
 }

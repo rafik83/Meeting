@@ -49,7 +49,7 @@ class AvailableSlotsByParticipantQueryHandlerTest extends TestCase
 
         $expected = [];
 
-        $this->dDayGuesser->isItDDay($this->event->reveal())->shouldBeCalled()->willReturn(false);
+        $this->dDayGuesser->isItDDayAndFeatureEnabled($this->event->reveal())->shouldBeCalled()->willReturn(false);
 
         $query = new AvailableSlotsByParticipantQuery($this->event->reveal(), $this->participant->reveal());
         $handler = new AvailableSlotsByParticipantQueryHandler(
@@ -99,7 +99,7 @@ class AvailableSlotsByParticipantQueryHandlerTest extends TestCase
         $usedIdProperty->setValue($slot4, 4);
         $usedIdProperty->setValue($slot5, 5);
 
-        $this->dDayGuesser->isItDDay($this->event->reveal())->shouldBeCalled()->willReturn(true);
+        $this->dDayGuesser->isItDDayAndFeatureEnabled($this->event->reveal())->shouldBeCalled()->willReturn(true);
         $this->meetingSlotRepository
             ->findAvailableSlotsByParticipants($this->event->reveal(), [$this->participant->reveal()])
             ->shouldBeCalled()

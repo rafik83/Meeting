@@ -11,7 +11,7 @@
         {% for meetingView in meetingRequestView.meetingRequestsView %}
             {{ include('EventBundle:MeetingRequest/Partials:sheet-card.html.twig', {
                 'meetingRequestView': meetingView,
-                'sheet': sheet
+                'sheet': sheet,
             }) }}
             {% if loop.last and (loop.index % 3 != 0) %}
                 {% for i in (loop.index % 3)..3 %}

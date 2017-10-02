@@ -16,54 +16,34 @@ use Proximum\Vimeet\Domain\Model\Sheet;
 
 class MeetingRequestView
 {
-    /**
-     * @var Sheet
-     */
+    /** @var Sheet */
     public $sheet;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     public $state;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     public $type;
 
-    /**
-     * @var \DateTimeInterface
-     */
+    /** @var \DateTimeInterface */
     public $createdAt;
 
-    /**
-     * @var MeetingRequest
-     */
+    /** @var MeetingRequest */
     public $meetingRequest;
 
-    /**
-     * @var PreviewView[]
-     */
+    /** @var PreviewView[] */
     public $previewViews;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     public $sheetName;
 
-    /**
-     * @var bool
-     */
+    /** @var bool */
     public $isMeetingPublished;
 
-    /**
-     * @var bool
-     */
+    /** @var bool */
     public $isMeetingRequestUpdateLocked;
-    
-    /**
-     * @var bool
-     */
+
+    /** @var bool */
     public $isSheetSeeable;
 
     /** @var bool */
@@ -77,6 +57,14 @@ class MeetingRequestView
 
     /** @var bool */
     public $isSeenByCurrentUser;
+
+    /** @var bool */
+    public $isPhoneValidationRequired;
+
+    /**
+     * @var string
+     */
+    public $validatePhoneLink;
 
     /**
      * MeetingRequestView constructor.
@@ -95,6 +83,8 @@ class MeetingRequestView
      * @param bool               $isAnsweringMeetingRequestClosed
      * @param bool               $hasMessage
      * @param bool               $isSeenByCurrentUser
+     * @param bool               $isPhoneValidationRequired
+     * @param string|null               $validatePhoneLink
      */
     public function __construct(
         Sheet $sheet,
@@ -110,7 +100,9 @@ class MeetingRequestView
         $isMeetingRequestClosed = false,
         $isAnsweringMeetingRequestClosed = false,
         $hasMessage = false,
-        $isSeenByCurrentUser = false
+        $isSeenByCurrentUser = false,
+        $isPhoneValidationRequired = false,
+        $validatePhoneLink = null
     ) {
         $this->sheet                           = $sheet;
         $this->sheetName                       = $sheetName;
@@ -126,6 +118,8 @@ class MeetingRequestView
         $this->isAnsweringMeetingRequestClosed = $isAnsweringMeetingRequestClosed;
         $this->hasMessage                      = $hasMessage;
         $this->isSeenByCurrentUser             = $isSeenByCurrentUser;
+        $this->isPhoneValidationRequired       = $isPhoneValidationRequired;
+        $this->validatePhoneLink               = $validatePhoneLink;
     }
 
     /**

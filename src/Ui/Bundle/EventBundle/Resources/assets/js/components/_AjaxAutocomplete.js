@@ -4,7 +4,7 @@ require('select2');
 
 function AjaxAutocomplete(element) {
     this.element = element;
-    this.parentInput = document.getElementById(element.dataset.parentInput);
+    this.parentInput = document.getElementById(element.getAttribute('data-parent-input'));
 
     this.initSelect(function (select2) {
         this.autocompleteElement = select2;
@@ -23,8 +23,8 @@ AjaxAutocomplete.prototype.initSelect = function (callback) {
         multiple: true,
         data: [],
         delay: 250,
-        minimumInputLength: this.element.dataset.minimumInputLength,
-        placeholder: this.parentInput.dataset.placeholder,
+        minimumInputLength: this.element.getAttribute('data-minimum-input-length'),
+        placeholder: this.parentInput.getAttribute('data-placeholder'),
         tokenSeparators: [','],
         language: {
             noResults: function () {
@@ -34,15 +34,15 @@ AjaxAutocomplete.prototype.initSelect = function (callback) {
                 return ''
             },
             inputTooShort: function () {
-                return this.element.dataset.labelInputTooShort;
+                return this.element.getAttribute('data-label-input-too-short');
             }.bind(this),
             searching: function () {
-                return this.element.dataset.labelSearching;
+                return this.element.getAttribute('data-label-searching');
             }.bind(this)
         },
         ajax: {
-            url: this.element.dataset.action,
-            type: this.element.dataset.method,
+            url: this.element.getAttribute('data-action'),
+            type: this.element.getAttribute('data-method'),
             delay: 250,
             data: function (query) {
                 return {

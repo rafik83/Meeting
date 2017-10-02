@@ -28,12 +28,14 @@ use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\Type;
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Repository\Meeting\RequestRepositoryInterface;
+use Proximum\Vimeet\Domain\User\Phone\ValidationRequiredChecker;
 use PHPUnit\Framework\TestCase;
 
 class MeetingRequestListViewQueryHandlerTest extends TestCase
 {
     public function testHandle()
     {
+        $locale   = 'fr';
         $now      = new \DateTime();
         $configuration = $this->prophesize(Event\Configuration::class);
         $event = $this->prophesize(Event::class);
@@ -70,6 +72,7 @@ class MeetingRequestListViewQueryHandlerTest extends TestCase
         $meetingRequestAccessChecker          = $this->prophesize(MeetingRequestAccessChecker::class);
         $answeringMeetingRequestAccessChecker = $this->prophesize(AnsweringMeetingRequestAccessChecker::class);
         $viewedSheetListViewQueryHandler      = $this->prophesize(ViewedSheetListViewQueryHandler::class);
+        $validationRequiredChecker = $this->prophesize(ValidationRequiredChecker::class);
 
         $meetingRequestRepository
             ->getAllRequestBySheet($sheet, [], [])
@@ -99,6 +102,7 @@ class MeetingRequestListViewQueryHandlerTest extends TestCase
         $meetingPublishedAccessChecker->allowedToAccess($event)->shouldBeCalled()->willReturn(false);
         $meetingRequestAccessChecker->allowedToAccess($event)->shouldBeCalled()->willReturn(true);
         $answeringMeetingRequestAccessChecker->allowedToAccess($event)->shouldBeCalled()->willReturn(true);
+        $validationRequiredChecker->handle($sheet, $user, $locale)->shouldBeCalled()->willReturn(false);
 
         $handler = new MeetingRequestListViewQueryHandler(
             $meetingRequestRepository->reveal(),
@@ -106,7 +110,8 @@ class MeetingRequestListViewQueryHandlerTest extends TestCase
             $viewedSheetListViewQueryHandler->reveal(),
             $meetingPublishedAccessChecker->reveal(),
             $meetingRequestAccessChecker->reveal(),
-            $answeringMeetingRequestAccessChecker->reveal()
+            $answeringMeetingRequestAccessChecker->reveal(),
+            $validationRequiredChecker->reveal()
         );
 
         $handler->handle($query);
@@ -115,6 +120,7 @@ class MeetingRequestListViewQueryHandlerTest extends TestCase
     public function testHandleWithClosedMeetingRequest()
     {
         $now      = new \DateTime();
+        $locale   = 'fr';
         $configuration = $this->prophesize(Event\Configuration::class);
         $event = $this->prophesize(Event::class);
         $event->getConfiguration()->willReturn($configuration->reveal());
@@ -151,6 +157,7 @@ class MeetingRequestListViewQueryHandlerTest extends TestCase
         $meetingRequestAccessChecker          = $this->prophesize(MeetingRequestAccessChecker::class);
         $answeringMeetingRequestAccessChecker = $this->prophesize(AnsweringMeetingRequestAccessChecker::class);
         $viewedSheetListViewQueryHandler      = $this->prophesize(ViewedSheetListViewQueryHandler::class);
+        $validationRequiredChecker = $this->prophesize(ValidationRequiredChecker::class);
 
         $meetingRequestRepository
             ->getAllRequestBySheet($sheet, [], [$meetingSlot])
@@ -180,6 +187,7 @@ class MeetingRequestListViewQueryHandlerTest extends TestCase
         $meetingPublishedAccessChecker->allowedToAccess($event->reveal())->shouldBeCalled()->willReturn(false);
         $meetingRequestAccessChecker->allowedToAccess($event->reveal())->shouldBeCalled()->willReturn(false);
         $answeringMeetingRequestAccessChecker->allowedToAccess($event->reveal())->shouldBeCalled()->willReturn(false);
+        $validationRequiredChecker->handle($sheet, $user, $locale)->shouldBeCalled()->willReturn(false);
 
         $handler = new MeetingRequestListViewQueryHandler(
             $meetingRequestRepository->reveal(),
@@ -187,7 +195,8 @@ class MeetingRequestListViewQueryHandlerTest extends TestCase
             $viewedSheetListViewQueryHandler->reveal(),
             $meetingPublishedAccessChecker->reveal(),
             $meetingRequestAccessChecker->reveal(),
-            $answeringMeetingRequestAccessChecker->reveal()
+            $answeringMeetingRequestAccessChecker->reveal(),
+            $validationRequiredChecker->reveal()
         );
 
         $handler->handle($query);
