@@ -3724,6 +3724,11 @@ services:
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Meeting\MeetingRequestListViewQuery }
 
+    query.meeting.meeting_dday_view_query_handler:
+        class: Proximum\Vimeet\Application\Query\Meeting\MeetingDDayViewQueryHandler
+        arguments:
+            - '@template.participant_info_guesser'
+
     query.meeting_request.meeting_request_view_query_handler:
         class: Proximum\Vimeet\Application\Query\Meeting\MeetingRequestViewQueryHandler
         arguments:
