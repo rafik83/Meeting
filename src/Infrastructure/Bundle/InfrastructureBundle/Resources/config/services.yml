@@ -623,6 +623,7 @@ services:
             - '@domain.user.phone.validation_required_checker'
             - '@command.meeting.event.transform_request_into_meeting_handler'
             - '@domain.event.day.dday_guesser'
+            - '@query.meeting.meeting_dday_view_query_handler'
             - '@datetime'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Meeting\ApproveRequest }

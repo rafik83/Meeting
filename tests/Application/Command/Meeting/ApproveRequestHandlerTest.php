@@ -17,6 +17,7 @@ use Proximum\Vimeet\Application\Command\Meeting\ApproveRequest;
 use Proximum\Vimeet\Application\Command\Meeting\ApproveRequestHandler;
 use Proximum\Vimeet\Application\Components\Meeting\RequestPermissionManager;
 use Proximum\Vimeet\Application\Exception\MeetingRequest\IsNotAllowedToApproveMeetingRequestException;
+use Proximum\Vimeet\Application\Query\Meeting\MeetingDDayViewQueryHandler;
 use Proximum\Vimeet\Domain\Event\Day\DDayGuesser;
 use Proximum\Vimeet\Domain\Model\Meeting\Message;
 use Proximum\Vimeet\Domain\Model\Meeting\Request;
@@ -78,6 +79,7 @@ class ApproveRequestHandlerTest extends TestCase
         $validationRequiredChecker = $this->prophesize(ValidationRequiredChecker::class);
         $transformMeetingIntoRequestHandler = $this->prophesize(TransformRequestIntoMeetingHandler::class);
         $ddayGuesser = $this->prophesize(DDayGuesser::class);
+        $meetingDDayViewQueryHandler = $this->prophesize(MeetingDDayViewQueryHandler::class);
 
         $ddayGuesser->isItDDay($event)->shouldBeCalled()->willReturn(false);
 
@@ -93,6 +95,7 @@ class ApproveRequestHandlerTest extends TestCase
             $validationRequiredChecker->reveal(),
             $transformMeetingIntoRequestHandler->reveal(),
             $ddayGuesser->reveal(),
+            $meetingDDayViewQueryHandler->reveal(),
             $dateTime
         );
         $handler->handle($approveRequest);
@@ -145,6 +148,7 @@ class ApproveRequestHandlerTest extends TestCase
         $validationRequiredChecker = $this->prophesize(ValidationRequiredChecker::class);
         $transformMeetingIntoRequestHandler = $this->prophesize(TransformRequestIntoMeetingHandler::class);
         $ddayGuesser = $this->prophesize(DDayGuesser::class);
+        $meetingDDayViewQueryHandler = $this->prophesize(MeetingDDayViewQueryHandler::class);
 
         $validationRequiredChecker
             ->handle(Argument::type(Sheet::class), Argument::type(User::class))
@@ -160,6 +164,7 @@ class ApproveRequestHandlerTest extends TestCase
             $validationRequiredChecker->reveal(),
             $transformMeetingIntoRequestHandler->reveal(),
             $ddayGuesser->reveal(),
+            $meetingDDayViewQueryHandler->reveal(),
             $dateTime
         );
         $handler->handle($approveRequest);
