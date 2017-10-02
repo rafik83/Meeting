@@ -94,7 +94,7 @@ class SMSFactory
 
         $dayFormatter = new \IntlDateFormatter(
             $locale,
-            \IntlDateFormatter::FULL,
+            \IntlDateFormatter::SHORT,
             \IntlDateFormatter::NONE,
             $meeting->getEvent()->getTimeZone()
         );
@@ -147,7 +147,7 @@ class SMSFactory
 
         $dayFormatter = new \IntlDateFormatter(
             $locale,
-            \IntlDateFormatter::FULL,
+            \IntlDateFormatter::SHORT,
             \IntlDateFormatter::NONE,
             $meeting->getEvent()->getTimeZone()
         );
