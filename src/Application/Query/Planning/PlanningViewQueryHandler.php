@@ -124,13 +124,14 @@ class PlanningViewQueryHandler
         $this->loadData($query->event, $query->user);
 
         $days = [];
+        $userAvailableLocale = $query->event->getAvailableLocale($query->locale);
 
         foreach ($this->eventDays as $day) {
             $days[] = $this->dayViewQueryHandler->handle(
                 new DayViewQuery(
                     $query->user,
                     $day,
-                    $query->locale,
+                    $userAvailableLocale,
                     $this->unavailabilities[$query->user->getId()],
                     $this->happeningParticipations[$query->user->getId()],
                     $this->masses,
