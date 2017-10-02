@@ -49,6 +49,23 @@ class EventContext implements Context
     }
 
     /**
+     * @Given /^the catalog is open since "(?P<date>[^"]+)"$/
+     * @param string $date
+     */
+    public function theCatalogIsOpen(string $date)
+    {
+        $event = $this->eventContextProxy->getStorage()->get('event');
+
+        $openDate = new \DateTime($date);
+
+        if (null === $event) {
+            throw new \InvalidArgumentException('Missing Event');
+        }
+
+        $this->eventContextProxy->getAccessManager()->openCatalog($event, $openDate);
+    }
+
+    /**
      * @Given /^the external catalog is open$/
      */
     public function theExternalCatalogIsOpen()

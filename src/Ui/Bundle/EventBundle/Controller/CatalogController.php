@@ -33,9 +33,9 @@ use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\PaginatedResult;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\User;
+use Proximum\Vimeet\Domain\View\Catalog\CategoryView;
 use Proximum\Vimeet\Domain\View\Catalog\OrganizationCategoryView;
 use Proximum\Vimeet\Domain\View\Catalog\TypeView;
-use Proximum\Vimeet\Domain\View\Catalog\CategoryView;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\EventListener\Security\CatalogAccessEventListener;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Catalog\SearchType;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\ParamConverter\EventDomain;
@@ -421,9 +421,28 @@ class CatalogController extends Controller
             ;
         }
 
+        $isPhoneValidationRequired = $this->get('domain.user.phone.validation_required_checker')
+            ->handle($sheet, $user, $locale);
+
+        if ($isPhoneValidationRequired === true) {
+            $participant = $sheet->getUserParticipant($user);
+
+            if ($participant !== null) {
+                $phoneValidationLink = $this->generateUrl('event_user_phone_redirect_to_validation', [
+                    'sheet'       => $sheet->getId(),
+                    'participant' => $participant->getId(),
+                    'redirectTo'  => $this->generateUrl('event_catalog_complete_sheet', [
+                        'sheet'          => $sheet->getId(),
+                        'sheetToDisplay' => $sheetToDisplay->getId(),
+                    ]),
+                ]);
+            }
+        }
+
         return $this->render('EventBundle:Catalog:displaySheet.html.twig', [
             'event'                           => $event,
             'sheet'                           => $sheet,
+            'participant'                     => $sheet->getUserParticipant($user),
             'sheetToDisplay'                  => $sheetToDisplay,
             'taggedData'                      => $taggedData,
             'locale'                          => $locale,
@@ -435,6 +454,8 @@ class CatalogController extends Controller
             'isMeetingRequestUpdateLocked'    => $isMeetingRequestUpdateLocked,
             'isMeetingRequestClosed'          => $isMeetingRequestClosed,
             'isAnsweringMeetingRequestClosed' => $isAnsweringMeetingRequestClosed,
+            'isPhoneValidationRequired'       => $isPhoneValidationRequired,
+            'phoneValidationLink'             => $phoneValidationLink ?? null,
             'isRequestMeetingEnabled'         => $sheet !== $sheetToDisplay,
             'isCatalog'                       => true,
         ]);

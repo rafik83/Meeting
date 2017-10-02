@@ -10,70 +10,87 @@
 
 namespace Proximum\Vimeet\Application\Command\Meeting;
 
+use Proximum\Vimeet\Application\Command\Meeting\Event\TransformRequestIntoMeeting;
+use Proximum\Vimeet\Application\Command\Meeting\Event\TransformRequestIntoMeetingHandler;
 use Proximum\Vimeet\Application\Components\Meeting\RequestPermissionManager;
 use Proximum\Vimeet\Application\Event\Events;
 use Proximum\Vimeet\Application\Event\MeetingRequest\ApprovedRequestEvent;
 use Proximum\Vimeet\Application\Event\MeetingRequest\ParticipateToRequestEvent;
+use Proximum\Vimeet\Application\Exception\MeetingRequest\CannotBeTransformIntoMeetingOnDdayException;
 use Proximum\Vimeet\Application\Exception\MeetingRequest\IsNotAllowedToApproveMeetingRequestException;
+use Proximum\Vimeet\Application\View\Meeting\ApproveRequestResult;
+use Proximum\Vimeet\Application\View\Meeting\MeetingDdayView;
+use Proximum\Vimeet\Domain\Event\Day\DDayGuesser;
 use Proximum\Vimeet\Domain\Model\Meeting\Message;
+use Proximum\Vimeet\Domain\Model\Meeting\Request;
 use Proximum\Vimeet\Domain\Repository\Meeting\MessageRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\Meeting\RequestRepositoryInterface;
+use Proximum\Vimeet\Domain\User\Phone\ValidationRequiredChecker;
 use Proximum\Vimeet\Infrastructure\Adapter\DelayedEventDispatcher;
 
 class ApproveRequestHandler
 {
-    /**
-     * @var RequestRepositoryInterface
-     */
+    /** @var RequestRepositoryInterface */
     private $requestRepository;
 
-    /**
-     * @var \DateTimeInterface
-     */
+    /** @var \DateTimeInterface */
     private $datetime;
 
-    /**
-     * @var MessageRepositoryInterface
-     */
+    /** @var MessageRepositoryInterface */
     private $messageRepository;
 
-    /**
-     * @var RequestPermissionManager
-     */
+    /** @var RequestPermissionManager */
     private $permissionManager;
 
-    /**
-     * @var DelayedEventDispatcher
-     */
+    /** @var DelayedEventDispatcher */
     private $eventDispatcher;
 
+    /** @var ValidationRequiredChecker */
+    private $validationRequiredChecker;
+
+    /** @var TransformRequestIntoMeetingHandler */
+    private $transformRequestIntoMeetingHandler;
+
+    /** @var DDayGuesser */
+    private $ddayGuesser;
+
     /**
-     * @param RequestRepositoryInterface $requestRepository
-     * @param MessageRepositoryInterface $messageRepository
-     * @param RequestPermissionManager   $permissionManager
-     * @param DelayedEventDispatcher     $eventDispatcher
-     * @param \DateTimeInterface         $datetime
+     * @param RequestRepositoryInterface         $requestRepository
+     * @param MessageRepositoryInterface         $messageRepository
+     * @param RequestPermissionManager           $permissionManager
+     * @param DelayedEventDispatcher             $eventDispatcher
+     * @param ValidationRequiredChecker          $validationRequiredChecker
+     * @param TransformRequestIntoMeetingHandler $transformRequestIntoMeetingHandler
+     * @param DDayGuesser                        $ddayGuesser
+     * @param \DateTimeInterface                 $datetime
      */
     public function __construct(
         RequestRepositoryInterface $requestRepository,
         MessageRepositoryInterface $messageRepository,
         RequestPermissionManager $permissionManager,
         DelayedEventDispatcher $eventDispatcher,
+        ValidationRequiredChecker $validationRequiredChecker,
+        TransformRequestIntoMeetingHandler $transformRequestIntoMeetingHandler,
+        DDayGuesser $ddayGuesser,
         \DateTimeInterface $datetime
     ) {
-        $this->requestRepository = $requestRepository;
-        $this->permissionManager = $permissionManager;
-        $this->messageRepository = $messageRepository;
-        $this->eventDispatcher   = $eventDispatcher;
-        $this->datetime          = $datetime;
+        $this->requestRepository                  = $requestRepository;
+        $this->permissionManager                  = $permissionManager;
+        $this->messageRepository                  = $messageRepository;
+        $this->eventDispatcher                    = $eventDispatcher;
+        $this->datetime                           = $datetime;
+        $this->validationRequiredChecker          = $validationRequiredChecker;
+        $this->transformRequestIntoMeetingHandler = $transformRequestIntoMeetingHandler;
+        $this->ddayGuesser                        = $ddayGuesser;
     }
 
     /**
      * @param ApproveRequest $approveRequest
      *
+     * @return null|ApproveRequestResult
      * @throws IsNotAllowedToApproveMeetingRequestException
      */
-    public function handle(ApproveRequest $approveRequest)
+    public function handle(ApproveRequest $approveRequest): ?ApproveRequestResult
     {
         if (!$this->permissionManager->isAllowedToApprove(
             $approveRequest->request,
@@ -115,5 +132,52 @@ class ApproveRequestHandler
             Events::MEETING_REQUEST_APPROVED,
             new ApprovedRequestEvent($approveRequest->request)
         );
+
+        if ($this->ddayGuesser->isItDDay($approveRequest->request->getEvent())) {
+            // transform request into meeting on dday if tip validate phone enabled
+            $validationRequired = $this->validationRequiredChecker->handle(
+                $approveRequest->sheet,
+                $approveRequest->editor
+            );
+
+            if ($validationRequired === false) {
+                $meetingDdayView = $this->transformRequestIntoMeetingOnDday(
+                    $approveRequest->request,
+                    $approveRequest->locale
+                );
+
+                if ($meetingDdayView instanceOf MeetingDdayView) {
+                    return new ApproveRequestResult($meetingDdayView);
+                } else {
+                    return new ApproveRequestResult(null, true);
+                }
+            }
+        }
+
+        return null;
+    }
+
+    /**
+     * @param Request $request
+     * @param string  $locale
+     *
+     * @return null|MeetingDdayView
+     */
+    private function transformRequestIntoMeetingOnDday(Request $request, string $locale): ?MeetingDdayView
+    {
+        try {
+            $meeting = $this->transformRequestIntoMeetingHandler->handle(
+                new TransformRequestIntoMeeting($request)
+            );
+
+            return new MeetingDdayView(
+                $meeting->getSlot()->getBegin(),
+                $meeting->getSpot()->getReference(),
+                $meeting->getEvent()->getTimeZone(),
+                $locale
+            );
+        } catch (CannotBeTransformIntoMeetingOnDdayException $exception) {
+            return null;
+        }
     }
 }

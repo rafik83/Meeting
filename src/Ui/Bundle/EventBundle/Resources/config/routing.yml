@@ -741,6 +741,14 @@ event_user_phone_validate:
         participant: \d+
     defaults: { _controller: EventBundle:User/Phone/SendCode:sendCode }
 
+event_user_phone_redirect_to_validation:
+    path: /account/sheet/{sheet}/participant/{participant}/validate/phone/redirect
+    methods: [GET]
+    requirements:
+        sheet: \d+
+        participant: \d+
+    defaults: { _controller: EventBundle:User/Phone/SendCode:redirectToSendCodeWithFlash }
+
 #
 # UserEventPhone
 #

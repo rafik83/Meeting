@@ -45,7 +45,7 @@ class VisioGuesser
      *
      * @return bool
      */
-    private function isParticipantVisio(array $participants)
+    public function isParticipantVisio(array $participants)
     {
         foreach($participants as $participant) {
             if ($participant->isVisio()) {
