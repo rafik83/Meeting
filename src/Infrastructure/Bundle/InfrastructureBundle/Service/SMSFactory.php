@@ -92,19 +92,9 @@ class SMSFactory
             ]
         );
 
-        $dayFormatter = new \IntlDateFormatter(
-            $locale,
-            \IntlDateFormatter::SHORT,
-            \IntlDateFormatter::NONE,
-            $meeting->getEvent()->getTimeZone()
-        );
+        $dayFormatter = $this->getDayFormatter($meeting, $locale);
 
-        $timeFormatter = new \IntlDateFormatter(
-            $locale,
-            \IntlDateFormatter::NONE,
-            \IntlDateFormatter::SHORT,
-            $meeting->getEvent()->getTimeZone()
-        );
+        $timeFormatter = $this->getTimeFormatter($meeting, $locale);
 
         $message = $this->translator->trans('event.sms.receive_meeting_request.approved', [
             '%event%' => $meeting->getEvent()->getTitle(),
@@ -145,19 +135,9 @@ class SMSFactory
             ]
         );
 
-        $dayFormatter = new \IntlDateFormatter(
-            $locale,
-            \IntlDateFormatter::SHORT,
-            \IntlDateFormatter::NONE,
-            $meeting->getEvent()->getTimeZone()
-        );
+        $dayFormatter = $this->getDayFormatter($meeting, $locale);
 
-        $timeFormatter = new \IntlDateFormatter(
-            $locale,
-            \IntlDateFormatter::NONE,
-            \IntlDateFormatter::SHORT,
-            $meeting->getEvent()->getTimeZone()
-        );
+        $timeFormatter = $this->getTimeFormatter($meeting, $locale);
 
         $message = $this->translator->trans('event.sms.sent_meeting_request.approved', [
             '%event%' => $meeting->getEvent()->getTitle(),
@@ -169,5 +149,41 @@ class SMSFactory
         ], 'messages', $locale);
 
         return new SMS($phone, $message);
+    }
+
+    /**
+     * @param Meeting $meeting
+     * @param string  $locale
+     *
+     * @return \IntlDateFormatter
+     */
+    private function getDayFormatter(Meeting $meeting, string $locale): \IntlDateFormatter
+    {
+        $dayFormatter = new \IntlDateFormatter(
+            $locale,
+            \IntlDateFormatter::SHORT,
+            \IntlDateFormatter::NONE,
+            $meeting->getEvent()->getTimeZone()
+        );
+
+        return $dayFormatter;
+    }
+
+    /**
+     * @param Meeting $meeting
+     * @param string  $locale
+     *
+     * @return \IntlDateFormatter
+     */
+    private function getTimeFormatter(Meeting $meeting, string $locale): \IntlDateFormatter
+    {
+        $timeFormatter = new \IntlDateFormatter(
+            $locale,
+            \IntlDateFormatter::NONE,
+            \IntlDateFormatter::SHORT,
+            $meeting->getEvent()->getTimeZone()
+        );
+
+        return $timeFormatter;
     }
 }
