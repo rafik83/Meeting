@@ -54,7 +54,7 @@ class ValidationRequiredChecker
      */
     public function handle(Sheet $sheet, User $user, string $locale): bool
     {
-        if ($this->dDayGuesser->isItDDay($sheet->getEvent())) {
+        if ($this->dDayGuesser->isItDDayAndFeatureEnabled($sheet->getEvent())) {
             $tipTranslationViews = $this->tipTranslationViewQueryHandler->handle(
                 new TipTranslationViewQuery(
                     $sheet->getType(),

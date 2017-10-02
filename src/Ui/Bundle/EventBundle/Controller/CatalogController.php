@@ -148,7 +148,7 @@ class CatalogController extends Controller
 
         $filters = $this->getDefaultFilters($typeViews, $categoryViews);
 
-        $dDay = $this->get('domain.event.day.dday_guesser')->isItDDay($event);
+        $dDay = $this->get('domain.event.day.dday_guesser')->isItDDayAndFeatureEnabled($event);
         $isUserParticipant = $sheet->hasUserParticipant($user);
         $filterAvailableSlot = $dDay && $isUserParticipant;
         $specificSlot = null;

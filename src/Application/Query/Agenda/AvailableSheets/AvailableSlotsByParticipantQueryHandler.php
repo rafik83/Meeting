@@ -47,7 +47,7 @@ class AvailableSlotsByParticipantQueryHandler
      */
     public function handle(AvailableSlotsByParticipantQuery $query): array
     {
-        if (!$this->dDayGuesser->isItDDay($query->event)) {
+        if (!$this->dDayGuesser->isItDDayAndFeatureEnabled($query->event)) {
             return [];
         }
 

@@ -79,7 +79,7 @@ class MeetingRequestController extends Controller
             $sheet, $request->getLocale()
         ));
 
-        $dDay = $this->get('domain.event.day.dday_guesser')->isItDDay($event);
+        $dDay = $this->get('domain.event.day.dday_guesser')->isItDDayAndFeatureEnabled($event);
         $isUserParticipant   = $sheet->hasUserParticipant($user);
         $filterAvailableSlot = $dDay && $isUserParticipant;
         $availableSlots      = [];
