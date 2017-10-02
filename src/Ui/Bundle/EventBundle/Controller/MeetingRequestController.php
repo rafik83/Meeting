@@ -146,12 +146,12 @@ class MeetingRequestController extends Controller
             $user,
             $locale,
             $filters,
-            $specificSlot instanceof MeetingSlot ? [$specificSlot] : $availableSlots
+            $this->getSpecificSlot($filters, $specificSlot, $availableSlots)
         );
         $statusQuery = new StateListViewQuery(
             $sheet,
             $filters,
-            $specificSlot instanceof MeetingSlot ? [$specificSlot] : $availableSlots
+            $this->getSpecificSlot($filters, $specificSlot, $availableSlots)
         );
 
         /** @var MeetingRequestListView $meetingRequestListView */
@@ -188,6 +188,26 @@ class MeetingRequestController extends Controller
             'resultsCount'        => count($meetingRequestListView->getMeetingRequestsView()),
             'tipTranslationViews' => $tipTranslationViews,
         ]);
+    }
+
+    /**
+     * @param array            $filters
+     * @param MeetingSlot|null $specificSlot
+     * @param array            $availableSlots
+     *
+     * @return array
+     */
+    private function getSpecificSlot(array $filters, MeetingSlot $specificSlot = null, array $availableSlots)
+    {
+        if (empty($filters['availableSlot'])) {
+            return [];
+        }
+
+        if ($specificSlot instanceof MeetingSlot && $filters['availableSlot'] === Constant::FILTER_AVAILABLE_SLOT_IDS_SLOT) {
+            return [$specificSlot];
+        }
+
+        return $availableSlots;
     }
 
     /**
