@@ -86,6 +86,7 @@ form.search.orderBy.relevance: Relevance
 form.search.position.label: 'Job title'
 form.search.type.label: Participants
 form.send_code.children.accepted.label: 'I agree to receive notifications during the event'
+form.send_code.children.phone.label: 'My mobile number'
 form.send_code.children.submit.label: Save
 form.sheet_button_link_data.children.submit.label: Save
 form.sheet_button_link_data.children.url.label: URL
