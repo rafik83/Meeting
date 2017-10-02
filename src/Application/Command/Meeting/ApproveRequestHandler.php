@@ -18,6 +18,8 @@ use Proximum\Vimeet\Application\Event\MeetingRequest\ApprovedRequestEvent;
 use Proximum\Vimeet\Application\Event\MeetingRequest\ParticipateToRequestEvent;
 use Proximum\Vimeet\Application\Exception\MeetingRequest\CannotBeTransformIntoMeetingOnDdayException;
 use Proximum\Vimeet\Application\Exception\MeetingRequest\IsNotAllowedToApproveMeetingRequestException;
+use Proximum\Vimeet\Application\Query\Meeting\MeetingDDayViewQuery;
+use Proximum\Vimeet\Application\Query\Meeting\MeetingDDayViewQueryHandler;
 use Proximum\Vimeet\Application\View\Meeting\ApproveRequestResult;
 use Proximum\Vimeet\Application\View\Meeting\MeetingDdayView;
 use Proximum\Vimeet\Domain\Event\Day\DDayGuesser;
@@ -54,6 +56,9 @@ class ApproveRequestHandler
     /** @var DDayGuesser */
     private $ddayGuesser;
 
+    /** @var MeetingDDayViewQueryHandler */
+    private $meetingDDayViewQueryHandler;
+
     /**
      * @param RequestRepositoryInterface         $requestRepository
      * @param MessageRepositoryInterface         $messageRepository
@@ -62,6 +67,7 @@ class ApproveRequestHandler
      * @param ValidationRequiredChecker          $validationRequiredChecker
      * @param TransformRequestIntoMeetingHandler $transformRequestIntoMeetingHandler
      * @param DDayGuesser                        $ddayGuesser
+     * @param MeetingDDayViewQueryHandler        $meetingDDayViewQueryHandler
      * @param \DateTimeInterface                 $datetime
      */
     public function __construct(
@@ -72,6 +78,7 @@ class ApproveRequestHandler
         ValidationRequiredChecker $validationRequiredChecker,
         TransformRequestIntoMeetingHandler $transformRequestIntoMeetingHandler,
         DDayGuesser $ddayGuesser,
+        MeetingDDayViewQueryHandler $meetingDDayViewQueryHandler,
         \DateTimeInterface $datetime
     ) {
         $this->requestRepository                  = $requestRepository;
@@ -82,6 +89,7 @@ class ApproveRequestHandler
         $this->validationRequiredChecker          = $validationRequiredChecker;
         $this->transformRequestIntoMeetingHandler = $transformRequestIntoMeetingHandler;
         $this->ddayGuesser                        = $ddayGuesser;
+        $this->meetingDDayViewQueryHandler = $meetingDDayViewQueryHandler;
     }
 
     /**
@@ -170,12 +178,11 @@ class ApproveRequestHandler
                 new TransformRequestIntoMeeting($request)
             );
 
-            return new MeetingDdayView(
-                $meeting->getSlot()->getBegin(),
-                $meeting->getSpot()->getReference(),
-                $meeting->getEvent()->getTimeZone(),
-                $locale
+            $meetingDDayView = $this->meetingDDayViewQueryHandler->handle(
+                new MeetingDDayViewQuery($meeting, $locale)
             );
+
+            return $meetingDDayView;
         } catch (CannotBeTransformIntoMeetingOnDdayException $exception) {
             return null;
         }
