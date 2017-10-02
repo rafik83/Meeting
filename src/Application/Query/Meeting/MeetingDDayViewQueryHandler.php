@@ -37,7 +37,7 @@ class MeetingDDayViewQueryHandler
     {
         $participantsFullname = [];
 
-        foreach ($query->meeting->getFromParticipants() as $participant) {
+        foreach ($query->meeting->getToParticipants() as $participant) {
             $participantsFullname[] = $this->participantInfoGuesser
                 ->guessParticipantCompleteName($participant, $query->locale);
         }
