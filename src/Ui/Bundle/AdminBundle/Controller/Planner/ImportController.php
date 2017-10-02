@@ -25,8 +25,9 @@ use Symfony\Component\Security\Core\User\UserInterface;
 class ImportController extends Controller
 {
     /**
-     * @param Request $request
-     * @param Event   $event
+     * @param Request       $request
+     * @param Event         $event
+     * @param UserInterface $admin
      *
      * @return Response|RedirectResponse
      */

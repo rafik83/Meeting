@@ -11,7 +11,7 @@ function CatalogMobileFilters(catalogFilterZone, catalogFilter, catalogForm) {
     this.originalCatalogFilter = catalogFilter;
     this.catalogFilter = this.originalCatalogFilter.cloneNode(true);
     this.catalogFilter.classList.remove('hidden');
-    this.originalCatalogFilter.remove();
+    this.originalCatalogFilter.parentNode.removeChild(this.originalCatalogFilter);
     this.typeFilterList = this.catalogFilter.querySelector('.catalog-mobile-type-filter-list');
     this.availableSlotFilterList = this.catalogFilter.querySelector('.catalog-mobile-available-slot-filter-list');
     this.catalogForm = catalogForm;

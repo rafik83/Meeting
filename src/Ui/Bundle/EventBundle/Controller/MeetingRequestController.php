@@ -187,6 +187,7 @@ class MeetingRequestController extends Controller
             'filterRequestProposition' => $this->isFilterRequestPropositionActive($searchForm->get('state')->getData()),
             'resultsCount'        => count($meetingRequestListView->getMeetingRequestsView()),
             'tipTranslationViews' => $tipTranslationViews,
+            'participant' => $sheet->getUserParticipant($user)
         ]);
     }
 

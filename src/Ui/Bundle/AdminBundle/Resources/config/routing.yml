@@ -590,6 +590,13 @@ admin_spot_import:
     methods: [GET, POST]
     defaults: { _controller: AdminBundle:Spot\Import:import }
 
+admin_spot_import_sample:
+    path: /event/{event}/spot/sample
+    requirements:
+        event: \d+
+    methods: [GET]
+    defaults: { _controller: AdminBundle:Spot\Import:getSample }
+
 admin_spot_import_confirm:
     path: /event/{event}/spot/{importedFile}/confirm
     requirements:

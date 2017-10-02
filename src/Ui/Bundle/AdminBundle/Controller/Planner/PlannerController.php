@@ -31,12 +31,15 @@ class PlannerController extends Controller
             ->findLastByEvent($event)
         ;
 
+        $isEventOpened = $this->get('domain.key_dates.checker.event_open_access_checker')->allowedToAccess($event);
+
         $meetingSolutions = $this->get('tactician.commandbus.query')->handle(new MeetingSolutionListQuery($event));
 
         return $this->render('AdminBundle:Planner:index.html.twig', [
             'event'            => $event,
             'meetingSolutions' => $meetingSolutions,
             'lastPlannerJob'   => $lastPlannerJob,
+            'isEventOpened'    => $isEventOpened,
         ]);
     }
 }

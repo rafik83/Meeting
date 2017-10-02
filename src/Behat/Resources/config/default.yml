@@ -66,6 +66,8 @@ default:
                     - '@behat_proxy.invoice.prefix_context'
                 - Proximum\Vimeet\Behat\Context\Domain\Event\ContentContext:
                     - '@behat_proxy.event.content_context'
+                - Proximum\Vimeet\Behat\Context\Domain\RuleContext:
+                    - '@behat.proxy.rule_context'
                 - behatch:json
                 - behatch:rest
 #                - behatch:browser

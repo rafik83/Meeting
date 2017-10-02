@@ -52,8 +52,9 @@ class DDayGuesserTest extends TestCase
 
     public function getData()
     {
-        $date1  = new \DateTime('2017-08-08 14:00:00.000');
-        $date2  = new \DateTime('2017-08-10 14:00:00.000');
+        $date1 = new \DateTime('2017-08-08 14:00:00.000');
+        $date2 = new \DateTime('2017-08-10 14:00:00.000');
+
         $event  = EventFactory::createEvent();
         $event1 = EventFactory::createEvent();
         $event2 = EventFactory::createEvent();
@@ -61,7 +62,8 @@ class DDayGuesserTest extends TestCase
         $event4 = EventFactory::createEvent();
 
         $day1Begin = new \DateTime('2017-08-08 10:00:00.000');
-        $day1End   = new \DateTime('2017-08-08 18:00:00.000');
+
+        $day1End = new \DateTime('2017-08-08 18:00:00.000');
 
         $day2Begin = new \DateTime('2017-08-09 10:00:00.000');
         $day2End   = new \DateTime('2017-08-09 18:00:00.000');
