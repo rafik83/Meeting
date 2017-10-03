@@ -73,7 +73,6 @@ class ExtraDataRepository implements ExtraDataRepositoryInterface
             ->select('extraData', 'user')
             ->from(ExtraData::class, 'extraData')
             ->join('extraData.user', 'user', 'WITH', 'extraData.event = :event AND extraData.name = :name AND extraData.updatedAt < :date')
-            ->where('extraData.event = :event')
             ->setParameter('event', $event)
             ->setParameter('name', $name)
             ->setParameter('date', $dateTime);
