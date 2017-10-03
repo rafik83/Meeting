@@ -17,7 +17,7 @@ app_patterns:
   # Timezone #
   ############
 
-  timezone_default: Etc/UTC
+  timezone_default: Europe/Paris
 
   ###############
   # Environment #
