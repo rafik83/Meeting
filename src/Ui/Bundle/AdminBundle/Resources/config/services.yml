@@ -326,3 +326,12 @@ services:
             - '@datetime'
         tags:
             - { name: kernel.event_subscriber }
+
+    event_listener_meeting.smsnotifier_event_subscriber:
+        class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\EventListener\Meeting\SMSNotifierEventSubscriber
+        arguments:
+            - '@adapter.smssender_alias'
+            - '@service.smsfactory'
+            - '@domain.user_event.user_event_phone_checker'
+        tags:
+            - { name: kernel.event_subscriber }

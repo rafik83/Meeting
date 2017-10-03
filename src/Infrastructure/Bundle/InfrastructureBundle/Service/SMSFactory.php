@@ -12,8 +12,10 @@ namespace Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Service;
 
 use Proximum\Vimeet\Application\Adapter\TranslatorInterface;
 use Proximum\Vimeet\Domain\Messaging\SMS\SMS;
+use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Event\EventUrlGeneratorInterface;
 use Proximum\Vimeet\Domain\Model\Meeting;
+use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Sheet;
 
 class SMSFactory
@@ -62,5 +64,127 @@ class SMSFactory
         ], 'messages', $locale);
 
         return new SMS($phone, $message);
+    }
+
+    /**
+     * @param string      $phone
+     * @param Meeting     $meeting
+     * @param Sheet       $mySheet
+     * @param Sheet       $sheetMet
+     * @param Participant $participant
+     * @param string      $locale
+     *
+     * @return SMS
+     */
+    public function createSentMeetingRequestApproved(
+        string $phone,
+        Meeting $meeting,
+        Sheet $mySheet,
+        Sheet $sheetMet,
+        Participant $participant,
+        string $locale
+    ): SMS {
+        $link = $this->eventUrlGenerator->generateEventAbsoluteUrl(
+            $meeting->getEvent(),
+            'event_agenda_participant',
+            [
+                'sheet'       => $mySheet->getId(),
+                'participant' => $participant->getId(),
+            ]
+        );
+
+        $dayFormatter = $this->getDayFormatter($meeting->getEvent(), $locale);
+
+        $timeFormatter = $this->getTimeFormatter($meeting->getEvent(), $locale);
+
+        $message = $this->translator->trans('event.sms.receive_meeting_request.approved', [
+            '%event%' => $meeting->getEvent()->getTitle(),
+            '%sheet%' => $sheetMet->getTitle(),
+            '%date%'  => $dayFormatter->format($meeting->getSlot()->getBegin()),
+            '%time%'  => $timeFormatter->format($meeting->getSlot()->getBegin()),
+            '%spot%'  => $meeting->getSpot()->getReference(),
+            '%link%'  => $link,
+        ], 'messages', $locale);
+
+        return new SMS($phone, $message);
+    }
+
+    /**
+     * @param string      $phone
+     * @param Meeting     $meeting
+     * @param Sheet       $mySheet
+     * @param Sheet       $sheetMet
+     * @param Participant $participant
+     * @param string      $locale
+     *
+     * @return SMS
+     */
+    public function createReceiveMeetingRequestApproved(
+        string $phone,
+        Meeting $meeting,
+        Sheet $mySheet,
+        Sheet $sheetMet,
+        Participant $participant,
+        string $locale
+    ): SMS {
+        $link = $this->eventUrlGenerator->generateEventAbsoluteUrl(
+            $meeting->getEvent(),
+            'event_agenda_participant',
+            [
+                'sheet'       => $mySheet->getId(),
+                'participant' => $participant->getId(),
+            ]
+        );
+
+        $dayFormatter = $this->getDayFormatter($meeting->getEvent(), $locale);
+
+        $timeFormatter = $this->getTimeFormatter($meeting->getEvent(), $locale);
+
+        $message = $this->translator->trans('event.sms.sent_meeting_request.approved', [
+            '%event%' => $meeting->getEvent()->getTitle(),
+            '%sheet%' => $sheetMet->getTitle(),
+            '%date%'  => $dayFormatter->format($meeting->getSlot()->getBegin()),
+            '%time%'  => $timeFormatter->format($meeting->getSlot()->getBegin()),
+            '%spot%'  => $meeting->getSpot()->getReference(),
+            '%link%'  => $link,
+        ], 'messages', $locale);
+
+        return new SMS($phone, $message);
+    }
+
+    /**
+     * @param Event  $event
+     * @param string $locale
+     *
+     * @return \IntlDateFormatter
+     */
+    private function getDayFormatter(Event $event, string $locale): \IntlDateFormatter
+    {
+        $dayFormatter = new \IntlDateFormatter(
+            $locale,
+            \IntlDateFormatter::SHORT,
+            \IntlDateFormatter::NONE,
+            $event->getTimeZone()
+        );
+
+        return $dayFormatter;
+    }
+
+    /**
+     * @param Event $event
+     * @param string  $locale
+     *
+     * @return \IntlDateFormatter
+     */
+    private function getTimeFormatter(Event $event, string $locale): \IntlDateFormatter
+    {
+        $timeFormatter = new \IntlDateFormatter(
+            $locale,
+            \IntlDateFormatter::NONE,
+            \IntlDateFormatter::SHORT,
+            $event->getTimeZone()
+        );
+
+        return $timeFormatter;
     }
 }

@@ -215,7 +215,7 @@ class SheetPopulateEventSubscriber implements EventSubscriberInterface
      */
     public function onMeetingCreated(MeetingCreatedEvent $event)
     {
-        $this->updateSheetIndexation($event->getSheets());
+        $this->updateSheetIndexation($event->getMeeting()->getSheets());
     }
 
     /**
