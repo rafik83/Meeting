@@ -97,7 +97,7 @@ class SMSNotifierSubscriber implements EventSubscriberInterface
     {
         $eventModel = $event->getRequest()->getEvent();
 
-        if (!$this->ddayGuesser->isItDDay($eventModel)) {
+        if (!$this->ddayGuesser->isItDDayAndFeatureEnabled($eventModel)) {
             return;
         }
 
@@ -120,7 +120,7 @@ class SMSNotifierSubscriber implements EventSubscriberInterface
 
             if ($userEventPhone !== null) {
                 $sheet = $event->getRequest()->getToSheet();
-             
+
                 $this->SMSSender->send($this->SMSFactory->createMeetingRequestReceive(
                     $userEventPhone->getPhone(),
                     $sheet,
