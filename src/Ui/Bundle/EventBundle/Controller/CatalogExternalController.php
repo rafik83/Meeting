@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Controller;
 
+use Proximum\Vimeet\Application\Exception\Paginator\UnavailableCurrentPageException;
 use Proximum\Vimeet\Application\Query\Catalog\External\CatalogVisibilityMessageQuery;
 use Proximum\Vimeet\Application\Query\Catalog\KeywordViewQuery;
 use Proximum\Vimeet\Application\Query\Catalog\LocalizationViewQuery;
@@ -86,15 +87,19 @@ class CatalogExternalController extends Controller
 
         $filters = array_merge($filters, ExternalCatalog::DEFAULT_FILTERS);
 
-        $paginatedResult = $this->get('tactician.commandbus.query')->handle(
-            new PaginatedSheetExternalViewQuery(
-                $event,
-                $filters,
-                $page,
-                48,
-                $request->getLocale()
-            )
-        );
+        try {
+            $paginatedResult = $this->get('tactician.commandbus.query')->handle(
+                new PaginatedSheetExternalViewQuery(
+                    $event,
+                    $filters,
+                    $page,
+                    48,
+                    $request->getLocale()
+                )
+            );
+        } catch (UnavailableCurrentPageException $exception) {
+            throw $this->createNotFoundException($exception->getMessage());
+        }
 
         $searchForm = $this->get('form_factory.search_facet_external_factory')
             ->createFiltered($event, $locale, $filters, $paginatedResult->aggregations);
