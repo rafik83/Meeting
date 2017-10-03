@@ -415,6 +415,7 @@ class SheetSearchAdapter implements SheetSearchAdapterInterface
     {
         $aggregation = new Terms($field);
         $aggregation->setField($field);
+        $aggregation->setSize(0);
 
         return $aggregation;
     }
