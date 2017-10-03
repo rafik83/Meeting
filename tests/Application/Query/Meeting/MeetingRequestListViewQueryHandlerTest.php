@@ -35,7 +35,6 @@ class MeetingRequestListViewQueryHandlerTest extends TestCase
 {
     public function testHandle()
     {
-        $locale   = 'fr';
         $now      = new \DateTime();
         $configuration = $this->prophesize(Event\Configuration::class);
         $event = $this->prophesize(Event::class);
@@ -102,7 +101,7 @@ class MeetingRequestListViewQueryHandlerTest extends TestCase
         $meetingPublishedAccessChecker->allowedToAccess($event)->shouldBeCalled()->willReturn(false);
         $meetingRequestAccessChecker->allowedToAccess($event)->shouldBeCalled()->willReturn(true);
         $answeringMeetingRequestAccessChecker->allowedToAccess($event)->shouldBeCalled()->willReturn(true);
-        $validationRequiredChecker->handle($sheet, $user, $locale)->shouldBeCalled()->willReturn(false);
+        $validationRequiredChecker->handle($sheet, $user)->shouldBeCalled()->willReturn(false);
 
         $handler = new MeetingRequestListViewQueryHandler(
             $meetingRequestRepository->reveal(),
@@ -120,7 +119,6 @@ class MeetingRequestListViewQueryHandlerTest extends TestCase
     public function testHandleWithClosedMeetingRequest()
     {
         $now      = new \DateTime();
-        $locale   = 'fr';
         $configuration = $this->prophesize(Event\Configuration::class);
         $event = $this->prophesize(Event::class);
         $event->getConfiguration()->willReturn($configuration->reveal());
@@ -184,10 +182,10 @@ class MeetingRequestListViewQueryHandlerTest extends TestCase
             ->shouldBeCalled()
             ->willReturn($meetingRequestView);
 
-        $meetingPublishedAccessChecker->allowedToAccess($event->reveal())->shouldBeCalled()->willReturn(false);
-        $meetingRequestAccessChecker->allowedToAccess($event->reveal())->shouldBeCalled()->willReturn(false);
-        $answeringMeetingRequestAccessChecker->allowedToAccess($event->reveal())->shouldBeCalled()->willReturn(false);
-        $validationRequiredChecker->handle($sheet, $user, $locale)->shouldBeCalled()->willReturn(false);
+        $meetingPublishedAccessChecker->allowedToAccess($event)->shouldBeCalled()->willReturn(false);
+        $meetingRequestAccessChecker->allowedToAccess($event)->shouldBeCalled()->willReturn(false);
+        $answeringMeetingRequestAccessChecker->allowedToAccess($event)->shouldBeCalled()->willReturn(false);
+        $validationRequiredChecker->handle($sheet, $user)->shouldBeCalled()->willReturn(false);
 
         $handler = new MeetingRequestListViewQueryHandler(
             $meetingRequestRepository->reveal(),

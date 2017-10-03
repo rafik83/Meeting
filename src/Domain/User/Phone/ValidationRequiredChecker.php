@@ -10,67 +10,62 @@
 
 namespace Proximum\Vimeet\Domain\User\Phone;
 
-use Proximum\Vimeet\Application\Query\Tip\TipTranslationViewQuery;
-use Proximum\Vimeet\Application\Query\Tip\TipTranslationViewQueryHandler;
 use Proximum\Vimeet\Domain\Event\Day\DDayGuesser;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\User;
-use Proximum\Vimeet\Domain\Repository\User\UserEventPhoneRepositoryInterface;
+use Proximum\Vimeet\Domain\Tip\ConfirmationPhoneTipChecker;
+use Proximum\Vimeet\Domain\UserEvent\UserEventPhoneChecker;
 
 class ValidationRequiredChecker
 {
     /** @var DDayGuesser */
     private $dDayGuesser;
 
-    /** @var TipTranslationViewQueryHandler */
-    private $tipTranslationViewQueryHandler;
+    /** @var ConfirmationPhoneTipChecker */
+    private $confirmationPhoneTipChecker;
 
-    /** @var UserEventPhoneRepositoryInterface */
-    private $userEventPhoneRepository;
+    /** @var UserEventPhoneChecker */
+    private $userEventPhoneChecker;
 
     /**
      * ValidationRequiredChecker constructor.
      *
-     * @param DDayGuesser                       $dDayGuesser
-     * @param TipTranslationViewQueryHandler    $tipTranslationViewQueryHandler
-     * @param UserEventPhoneRepositoryInterface $userEventPhoneRepository
+     * @param DDayGuesser                 $dDayGuesser
+     * @param ConfirmationPhoneTipChecker $confirmationPhoneTipChecker
+     * @param UserEventPhoneChecker       $userEventPhoneChecker
      */
     public function __construct(
         DDayGuesser $dDayGuesser,
-        TipTranslationViewQueryHandler $tipTranslationViewQueryHandler,
-        UserEventPhoneRepositoryInterface $userEventPhoneRepository
+        ConfirmationPhoneTipChecker $confirmationPhoneTipChecker,
+        UserEventPhoneChecker $userEventPhoneChecker
     ) {
-        $this->dDayGuesser                    = $dDayGuesser;
-        $this->tipTranslationViewQueryHandler = $tipTranslationViewQueryHandler;
-        $this->userEventPhoneRepository       = $userEventPhoneRepository;
+        $this->dDayGuesser                 = $dDayGuesser;
+        $this->confirmationPhoneTipChecker = $confirmationPhoneTipChecker;
+        $this->userEventPhoneChecker       = $userEventPhoneChecker;
     }
 
     /**
-     * @param Sheet  $sheet
-     * @param User   $user
-     * @param string $locale
+     * @param Sheet $sheet
+     * @param User  $user
      *
      * @return bool
      */
-    public function handle(Sheet $sheet, User $user, string $locale): bool
+    public function handle(Sheet $sheet, User $user): bool
     {
         if ($this->dDayGuesser->isItDDayAndFeatureEnabled($sheet->getEvent())) {
-            $tipTranslationViews = $this->tipTranslationViewQueryHandler->handle(
-                new TipTranslationViewQuery(
-                    $sheet->getType(),
-                    TipTranslationViewQueryHandler::CONTEXT_CONFIRMATION_PHONE,
-                    $locale
-                )
+            $isTipConfirmationPhoneEnabled = $this->confirmationPhoneTipChecker->isEnabled(
+                $sheet->getEvent(),
+                $sheet->getType()
             );
 
-            if (!empty($tipTranslationViews)) {
-                $userEventPhone = $this->userEventPhoneRepository->findValidated(
+            if ($isTipConfirmationPhoneEnabled) {
+                return !$this->userEventPhoneChecker->isValidated(
                     $user,
                     $sheet->getEvent()
                 );
-
-                return $userEventPhone === null;
             }
+
+            return false;
         }
 
         return false;

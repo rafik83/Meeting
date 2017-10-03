@@ -118,6 +118,25 @@ class TipRepository implements TipRepositoryInterface
         return $queryBuilder->getQuery()->getResult();
     }
 
+    /**
+     * {@inheritdoc}
+     */
+    public function isConfirmationPhoneEnabled(Event $event, Type $type): bool
+    {
+        $queryBuilder = $this->entityManager
+            ->createQueryBuilder()
+            ->select('tip')
+            ->from(Tip::class, 'tip')
+            ->join('tip.types', 'type', 'WITH', 'type.event = :event AND type = :type')
+            ->where('tip.onConfirmationPhone = true')
+            ->setMaxResults(1)
+            ->setParameter('event', $event)
+            ->setParameter('type', $type)
+        ;
+
+        return $queryBuilder->getQuery()->getOneOrNullResult() !== null;
+    }
+
     /** {@inheritdoc} */
     public function getByEventAndTip(Event $event, Tip $tip)
     {

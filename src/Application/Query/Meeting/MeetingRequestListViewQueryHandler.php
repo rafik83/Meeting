@@ -133,6 +133,6 @@ class MeetingRequestListViewQueryHandler
      */
     private function isPhoneValidationRequiredForUser(MeetingRequestListViewQuery $query): bool
     {
-        return $this->validationRequiredChecker->handle($query->sheet, $query->user, $query->locale);
+        return $this->validationRequiredChecker->handle($query->sheet, $query->user);
     }
 }
