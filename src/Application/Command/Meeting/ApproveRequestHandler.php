@@ -141,7 +141,7 @@ class ApproveRequestHandler
             new ApprovedRequestEvent($approveRequest->request)
         );
 
-        if ($this->ddayGuesser->isItDDay($approveRequest->request->getEvent())) {
+        if ($this->ddayGuesser->isItDDayAndFeatureEnabled($approveRequest->request->getEvent())) {
             // transform request into meeting on dday if tip validate phone enabled
             $validationRequired = $this->validationRequiredChecker->handle(
                 $approveRequest->sheet,

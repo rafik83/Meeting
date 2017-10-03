@@ -81,7 +81,7 @@ class ApproveRequestHandlerTest extends TestCase
         $ddayGuesser = $this->prophesize(DDayGuesser::class);
         $meetingDDayViewQueryHandler = $this->prophesize(MeetingDDayViewQueryHandler::class);
 
-        $ddayGuesser->isItDDay($event)->shouldBeCalled()->willReturn(false);
+        $ddayGuesser->isItDDayAndFeatureEnabled($event)->shouldBeCalled()->willReturn(false);
 
         $validationRequiredChecker
             ->handle(Argument::type(Sheet::class), Argument::type(User::class))
