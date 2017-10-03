@@ -72,10 +72,8 @@ class ExtraDataRepository implements ExtraDataRepositoryInterface
         $queryBuilder = $this->entityManager->createQueryBuilder()
             ->select('extraData', 'user')
             ->from(ExtraData::class, 'extraData')
-            ->join('extraData.user', 'user')
+            ->join('extraData.user', 'user', 'WITH', 'extraData.event = :event AND extraData.name = :name AND extraData.updatedAt < :date')
             ->where('extraData.event = :event')
-            ->andWhere('extraData.name = :name')
-            ->andWhere('extraData.updatedAt < :date')
             ->setParameter('event', $event)
             ->setParameter('name', $name)
             ->setParameter('date', $dateTime);
