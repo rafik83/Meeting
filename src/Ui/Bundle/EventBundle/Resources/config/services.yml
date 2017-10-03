@@ -513,6 +513,12 @@ services:
     #
     # Services
     #
+    service.smsfactory:
+        class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Service\SMSFactory
+        arguments:
+            - '@adapter.event_url_generator'
+            - '@vimeet_infrastructure.adapter.translator_adapter'
+
     error_factory:
         class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Service\ErrorFactory
         arguments:
