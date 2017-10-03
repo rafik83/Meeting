@@ -34,7 +34,7 @@ class MeetingDDayViewQueryHandlerTest extends TestCase
         $spot           = $this->prophesize(Spot::class);
         $event          = $this->prophesize(Event::class);
 
-        $meeting->getFromParticipants()->willReturn([$participantOne->reveal(), $participantTwo->reveal()]);
+        $meeting->getToParticipants()->willReturn([$participantOne->reveal(), $participantTwo->reveal()]);
         $meeting->getSlot()->willReturn($slot->reveal());
         $meeting->getSpot()->willReturn($spot->reveal());
         $meeting->getEvent()->willReturn($event->reveal());

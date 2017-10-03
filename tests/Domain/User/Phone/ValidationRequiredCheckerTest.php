@@ -42,7 +42,7 @@ class ValidationRequiredCheckerTest extends TestCase
             $userEventPhoneChecker->reveal()
         );
 
-        $ddayGuesser->isItDDay($event->reveal())->shouldBeCalled()->willReturn(true);
+        $ddayGuesser->isItDDayAndFeatureEnabled($event->reveal())->shouldBeCalled()->willReturn(true);
 
         $confirmationPhoneTipChecker->isEnabled(
             $event->reveal(),
