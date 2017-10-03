@@ -122,7 +122,10 @@ admin.batch_actions.plural: 'Actions batch sur %count% éléments'
 admin.batch_actions.single: 'Actions batch sur un élément'
 admin.cancel: Annuler
 admin.category.add: Ajouter
+admin.category.column.id: Id
+admin.category.column.title: Titre
 admin.category.link: 'Catégories de participation'
+admin.category.title: 'Catégories de types de participation'
 admin.category.update: Modifier
 admin.check-all: 'Tout cocher'
 admin.common.close: Fermer
@@ -870,6 +873,7 @@ admin.type.already_exists: 'Un type de participation au titre identique existe d
 admin.type.create.link: Ajouter
 admin.type.create.title: 'Ajouter un type de participation'
 admin.type.hidden: Caché
+admin.type.id: Id
 admin.type.link: 'Types de participation'
 admin.type.list.title: 'Types de participation'
 admin.type.package: Forfait
