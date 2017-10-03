@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2016 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -94,7 +94,9 @@ class PaginatedCatalogSheetPreviewViewQueryHandler
             $query->limit,
             $query->locale,
             true,
-            $this->getNomenclatureItems($query->viewer, $query->locale)
+            $this->getNomenclatureItems($query->viewer, $query->locale),
+            $query->availableSlotIds,
+            $query->sheetsToExclude
         );
 
         $paginatedResult->results = $this->sheetRepository->findSheets($paginatedResult->results);

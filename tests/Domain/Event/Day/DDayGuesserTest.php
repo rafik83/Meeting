@@ -25,18 +25,36 @@ class DDayGuesserTest extends TestCase
      * @param Event              $event
      * @param bool               $expected
      */
-    public function testIsItDDay(\DateTimeInterface$date, Event $event, bool $expected)
+    public function testIsItDDay(\DateTimeInterface $date, Event $event, bool $expected)
     {
         $dDayGuesser = new DDayGuesser($date);
-        $result = $dDayGuesser->isItDDay($event);
+        $result      = $dDayGuesser->isItDDay($event);
 
         $this->assertEquals($expected, $result);
+    }
+
+    public function testIsItDDayAndFeatureDisabled()
+    {
+        $event     = EventFactory::createEvent();
+        $day1Begin = new \DateTime('2017-08-08 10:00:00.000');
+        $day1End   = new \DateTime('2017-08-08 18:00:00.000');
+
+        $date = new \DateTime('2017-08-08 14:00:00.000');
+        $day1 = new Day($event, $day1Begin, $day1End);
+
+        $event->setDays([$day1]);
+
+        $dDayGuesser = new DDayGuesser($date, false);
+        $result      = $dDayGuesser->isItDDayAndFeatureEnabled($event);
+
+        $this->assertEquals(false, $result);
     }
 
     public function getData()
     {
         $date1 = new \DateTime('2017-08-08 14:00:00.000');
         $date2 = new \DateTime('2017-08-10 14:00:00.000');
+
         $event  = EventFactory::createEvent();
         $event1 = EventFactory::createEvent();
         $event2 = EventFactory::createEvent();
@@ -44,10 +62,11 @@ class DDayGuesserTest extends TestCase
         $event4 = EventFactory::createEvent();
 
         $day1Begin = new \DateTime('2017-08-08 10:00:00.000');
+
         $day1End = new \DateTime('2017-08-08 18:00:00.000');
 
         $day2Begin = new \DateTime('2017-08-09 10:00:00.000');
-        $day2End = new \DateTime('2017-08-09 18:00:00.000');
+        $day2End   = new \DateTime('2017-08-09 18:00:00.000');
 
         $day1 = new Day($event1, $day1Begin, $day1End);
         $day2 = new Day($event2, $day1Begin, $day1End);

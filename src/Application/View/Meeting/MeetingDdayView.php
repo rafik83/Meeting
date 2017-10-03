@@ -23,6 +23,9 @@ class MeetingDdayView
     /** @var string */
     public $locale;
 
+    /** @var string[] */
+    private $participantsFullname = [];
+
     /** @var string */
     private $timezone;
 
@@ -33,13 +36,20 @@ class MeetingDdayView
      * @param string             $spotName
      * @param string             $timezone
      * @param string             $locale
+     * @param array              $participantsFullname
      */
-    public function __construct(\DateTimeInterface $datetime, string $spotName, string $timezone, string $locale)
-    {
-        $this->datetime = $datetime;
-        $this->spotName = $spotName;
-        $this->locale   = $locale;
-        $this->timezone = $timezone;
+    public function __construct(
+        \DateTimeInterface $datetime,
+        string $spotName,
+        string $timezone,
+        string $locale,
+        array $participantsFullname
+    ) {
+        $this->datetime             = $datetime;
+        $this->spotName             = $spotName;
+        $this->locale               = $locale;
+        $this->timezone             = $timezone;
+        $this->participantsFullname = $participantsFullname;
     }
 
     /**
@@ -70,5 +80,13 @@ class MeetingDdayView
         );
 
         return $timeFormatter->format($this->datetime);
+    }
+
+    /**
+     * @return string
+     */
+    public function getParticipants(): string
+    {
+        return implode(', ', $this->participantsFullname);
     }
 }

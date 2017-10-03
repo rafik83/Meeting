@@ -45,14 +45,14 @@ class ValidationRequiredChecker
     }
 
     /**
-     * @param Sheet  $sheet
-     * @param User   $user
+     * @param Sheet $sheet
+     * @param User  $user
      *
      * @return bool
      */
     public function handle(Sheet $sheet, User $user): bool
     {
-        if ($this->dDayGuesser->isItDDay($sheet->getEvent())) {
+        if ($this->dDayGuesser->isItDDayAndFeatureEnabled($sheet->getEvent())) {
             $isTipConfirmationPhoneEnabled = $this->confirmationPhoneTipChecker->isEnabled(
                 $sheet->getEvent(),
                 $sheet->getType()
@@ -64,6 +64,8 @@ class ValidationRequiredChecker
                     $sheet->getEvent()
                 );
             }
+
+            return false;
         }
 
         return false;

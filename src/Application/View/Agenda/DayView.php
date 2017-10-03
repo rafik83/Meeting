@@ -10,6 +10,8 @@
 
 namespace Proximum\Vimeet\Application\View\Agenda;
 
+use Proximum\Vimeet\Application\View\Agenda\Slot\AvailableSlotView;
+
 class DayView
 {
     /** @var \DateTimeInterface */
@@ -37,13 +39,19 @@ class DayView
     public $cancelAttendanceUnavailabilityView;
 
     /**
-     * @param \DateTimeInterface                      $begin
-     * @param \DateTimeInterface                      $end
-     * @param int                                     $scale
-     * @param HappeningView[]                         $happenings
-     * @param UnavailabilityView[]                    $unavailabilities
-     * @param MassUnavailabilityView[]                $masses
-     * @param MeetingView[]                           $meetings
+     * @var AvailableSlotView[]
+     */
+    public $availableSlotViews;
+
+    /**
+     * @param \DateTimeInterface $begin
+     * @param \DateTimeInterface $end
+     * @param int $scale
+     * @param HappeningView[] $happenings
+     * @param UnavailabilityView[] $unavailabilities
+     * @param MassUnavailabilityView[] $masses
+     * @param MeetingView[] $meetings
+     * @param array $availableSlotViews
      * @param CancelAttendanceUnavailabilityView|null $cancelAttendanceUnavailabilityView
      */
     public function __construct(
@@ -54,6 +62,7 @@ class DayView
         array $unavailabilities,
         array $masses,
         array $meetings,
+        array $availableSlotViews,
         CancelAttendanceUnavailabilityView $cancelAttendanceUnavailabilityView = null
     ) {
         $this->begin                              = $begin;
@@ -64,6 +73,7 @@ class DayView
         $this->masses                             = $masses;
         $this->meetings                           = $meetings;
         $this->cancelAttendanceUnavailabilityView = $cancelAttendanceUnavailabilityView;
+        $this->availableSlotViews = $availableSlotViews;
     }
 
     /**

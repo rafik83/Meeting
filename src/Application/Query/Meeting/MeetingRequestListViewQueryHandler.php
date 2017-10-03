@@ -1,9 +1,9 @@
 <?php
 
 /*
- * This file is part of the vimeet project.
+ * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2016 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -21,24 +21,16 @@ use Proximum\Vimeet\Domain\User\Phone\ValidationRequiredChecker;
 
 class MeetingRequestListViewQueryHandler
 {
-    /**
-     * @var RequestRepositoryInterface
-     */
+    /** @var RequestRepositoryInterface */
     private $meetingRequestRepository;
 
-    /**
-     * @var MeetingRequestViewQueryHandler
-     */
+    /** @var MeetingRequestViewQueryHandler */
     private $meetingRequestViewQueryHandler;
 
-    /**
-     * @var ViewedSheetListViewQueryHandler
-     */
+    /** @var ViewedSheetListViewQueryHandler */
     private $viewedSheetListViewQueryHandler;
 
-    /**
-     * @var MeetingPublishedAccessChecker
-     */
+    /** @var MeetingPublishedAccessChecker*/
     private $meetingPublishedAccessChecker;
 
     /** @var MeetingRequestAccessChecker */
@@ -87,11 +79,11 @@ class MeetingRequestListViewQueryHandler
     public function handle(MeetingRequestListViewQuery $query)
     {
         $meetingRequests = $this->meetingRequestRepository
-            ->getAllRequestBySheet($query->sheet, $query->filters);
+            ->getAllRequestBySheet($query->sheet, $query->filters, $query->slotsToFilter);
 
         $sheets = [];
         foreach ($meetingRequests as $meetingRequest) {
-            $sheets[] = $meetingRequest->getToSheet();
+            $sheets[] = $meetingRequest->getSheetMet($query->sheet);
         }
 
         $viewedSheetListView = $this->viewedSheetListViewQueryHandler->handle(
@@ -102,7 +94,7 @@ class MeetingRequestListViewQueryHandler
         $isMeetingPublished     = $this->meetingPublishedAccessChecker->allowedToAccess($query->event);
 
         $isMeetingRequestUpdateLocked    = $query->event->getConfiguration()->isMeetingRequestUpdateLocked();
-        $isMeetingrequestClosed          = !$this->meetingRequestAccessChecker->allowedToAccess($query->event);
+        $isMeetingRequestClosed          = !$this->meetingRequestAccessChecker->allowedToAccess($query->event);
         $isAnsweringMeetingRequestClosed = !$this->answeringMeetingRequestAccessChecker->allowedToAccess($query->event);
 
         $isPhoneValidationRequired = $this->isPhoneValidationRequiredForUser($query);
@@ -116,9 +108,9 @@ class MeetingRequestListViewQueryHandler
                     $query->locale,
                     $isMeetingPublished,
                     $isMeetingRequestUpdateLocked,
-                    $isMeetingrequestClosed,
+                    $isMeetingRequestClosed,
                     $isAnsweringMeetingRequestClosed,
-                    isset($viewedSheetListView[$meetingRequest->getToSheet()->getId()]),
+                    isset($viewedSheetListView[$meetingRequest->getSheetMet($query->sheet)->getId()]),
                     $isPhoneValidationRequired
                 )
             );

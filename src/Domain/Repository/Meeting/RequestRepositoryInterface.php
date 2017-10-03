@@ -12,6 +12,7 @@ namespace Proximum\Vimeet\Domain\Repository\Meeting;
 
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Meeting\Request;
+use Proximum\Vimeet\Domain\Model\MeetingSlot;
 use Proximum\Vimeet\Domain\Model\PaginatedResult;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Sheet;
@@ -77,10 +78,18 @@ interface RequestRepositoryInterface
     /**
      * @param Sheet $sheet
      * @param array $filters
+     * @param array $slotsToFilter
      *
      * @return Request[]
      */
-    public function getAllRequestBySheet(Sheet $sheet, array $filters = []);
+    public function getAllRequestBySheet(Sheet $sheet, array $filters = [], array $slotsToFilter = []): array;
+
+    /**
+     * @param Sheet $sheet
+     *
+     * @return Request[]
+     */
+    public function getApprovedAndRefusedRequestBySheet(Sheet $sheet): array;
 
     /**
      * @param Event $event
@@ -180,10 +189,11 @@ interface RequestRepositoryInterface
     /**
      * @param Sheet $sheet
      * @param array $filters
+     * @param array $slotsToFilter
      *
      * @return int
      */
-    public function countSheetState(Sheet $sheet, array $filters = []);
+    public function countSheetState(Sheet $sheet, array $filters = [], array $slotsToFilter = []);
 
     /**
      * @param Sheet $sheet
@@ -227,6 +237,13 @@ interface RequestRepositoryInterface
      * @return int
      */
     public function countPendingPropositionReceivedBySheet(Sheet $sheet, $attending = true);
+
+    /**
+     * @param Sheet $sheet
+     *
+     * @return Request[]
+     */
+    public function getPendingPropositionReceivedBySheet(Sheet $sheet);
 
     /**
      * @param Sheet $sheet
