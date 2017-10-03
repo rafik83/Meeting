@@ -69,7 +69,7 @@ class SMSNotifierSubscriberTest extends TestCase
         $extraDataRepository   = $this->prophesize(ExtraDataRepositoryInterface::class);
         $smsFactory            = $this->prophesize(SMSFactory::class);
 
-        $ddayGuesser->isItDDay($eventModel)->shouldBeCalled()->willReturn(true);
+        $ddayGuesser->isItDDayAndFeatureEnabled($eventModel)->shouldBeCalled()->willReturn(true);
 
         $extraDataRepository->getExtraDataForEventNameAndUser(
             $eventModel->reveal(),
