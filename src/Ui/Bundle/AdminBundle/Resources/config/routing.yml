@@ -329,13 +329,6 @@ admin_agenda_spot_detail:
     methods: [GET]
     defaults: { _controller: AdminBundle:Agenda/Agenda:spotDetail }
 
-admin_agenda_sheets_indicators:
-    path: /event/{event}/agenda/sheets/indicators
-    requirements:
-        event: \d+
-    methods: [GET]
-    defaults: { _controller: AdminBundle:Agenda/Agenda:indicators }
-
 admin_agenda_sheet:
     path: /event/{event}/agenda/sheet/{sheet}
     requirements:
@@ -582,6 +575,28 @@ admin_spot_update_un_visio:
         spot: \d+
     methods: [GET, POST]
     defaults: { _controller: AdminBundle:Spot:unVisio }
+
+admin_spot_import:
+    path: /event/{event}/spot/import
+    requirements:
+        event: \d+
+    methods: [GET, POST]
+    defaults: { _controller: AdminBundle:Spot\Import:import }
+
+admin_spot_import_sample:
+    path: /event/{event}/spot/sample
+    requirements:
+        event: \d+
+    methods: [GET]
+    defaults: { _controller: AdminBundle:Spot\Import:getSample }
+
+admin_spot_import_confirm:
+    path: /event/{event}/spot/{importedFile}/confirm
+    requirements:
+        event: \d+
+        importedFile: \d+
+    methods: [GET, POST]
+    defaults: { _controller: AdminBundle:Spot\Import:confirm }
 
 #
 # Meeting Request
@@ -1328,11 +1343,12 @@ admin_planner:
     defaults: { _controller: AdminBundle:Planner/Planner:index }
 
 admin_export_planner_data:
-    path: /event/{event}/planner/export
+    path: /event/{event}/planner/export/{mode}
     requirements:
         event: \d+
+        mode: manual|auto
     methods: [GET, POST]
-    defaults: { _controller: AdminBundle:Planner/Export:export }
+    defaults: { _controller: AdminBundle:Planner/Export:export, mode: manual }
 
 admin_import_planner_data:
     path: /event/{event}/planner/import

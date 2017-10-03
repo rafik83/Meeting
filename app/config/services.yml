@@ -48,4 +48,5 @@ imports:
     - { resource: services/adapters.yml }
     - { resource: services/admin/queries.yml }
     - { resource: services/admin/commands.yml }
+    - { resource: services/admin/components.yml }
     - { resource: services/admin/serializers.yml }

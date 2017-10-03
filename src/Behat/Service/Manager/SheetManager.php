@@ -97,4 +97,15 @@ class SheetManager
     {
         return $this->sheetRepository->getSheetByEventAndTitle($event, $sheetTitle);
     }
+
+    /**
+     * @param Sheet $sheet
+     */
+    public function setInCatalog(Sheet $sheet)
+    {
+        $sheet->setInCatalog(true);
+        $sheet->setInCatalogAt(new \DateTime());
+
+        $this->sheetRepository->set($sheet);
+    }
 }

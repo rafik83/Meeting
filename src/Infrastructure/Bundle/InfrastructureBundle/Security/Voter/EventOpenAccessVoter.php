@@ -18,6 +18,8 @@ use Symfony\Component\Security\Core\Authorization\Voter\Voter;
 
 class EventOpenAccessVoter extends Voter
 {
+    const PERMISSION_EVENT_OPEN_ACCESS = 'PERMISSION_EVENT_OPEN_ACCESS';
+
     /**
      * @var EventOpenAccessChecker
      */
@@ -38,7 +40,7 @@ class EventOpenAccessVoter extends Voter
      */
     protected function supports($attribute, $subject)
     {
-        return $attribute === 'PERMISSION_EVENT_OPEN_ACCESS' && $subject instanceof Event;
+        return $attribute === self::PERMISSION_EVENT_OPEN_ACCESS && $subject instanceof Event;
     }
 
     /**

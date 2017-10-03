@@ -13,6 +13,12 @@ services:
         class: Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Spot\SpotCreateType
         tags:
             - { name: 'form.type' }
+    vimeet_app.form_type.spot.import.confirm_type:
+        class: Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Spot\Import\SpotConfirmType
+        arguments:
+            - '@vimeet_infrastructure.adapter.translator_adapter'
+        tags:
+            - { name: 'form.type' }
     vimeet_app.form_type.category_create_type:
         class: Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Category\CategoryCreateType
         arguments:

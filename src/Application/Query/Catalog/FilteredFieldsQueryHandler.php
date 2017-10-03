@@ -54,11 +54,19 @@ class FilteredFieldsQueryHandler
      * @param string $locale
      * @param array  $filters
      * @param array  $typeViews
+     * @param array  $availableSlotIds
+     * @param array  $sheetsToExclude
      *
      * @return array|null
      */
-    private function getTypeAggregation(Event $event, string $locale, array $filters, array $typeViews): ?array
-    {
+    private function getTypeAggregation(
+        Event $event,
+        string $locale,
+        array $filters,
+        array $typeViews,
+        array $availableSlotIds = [],
+        array $sheetsToExclude = []
+    ): ?array {
         if (isset($filters[SearchFields::FILTER_TYPE])
             && count($filters[SearchFields::FILTER_TYPE]) === count($typeViews)
         ) {
@@ -70,15 +78,20 @@ class FilteredFieldsQueryHandler
             $event,
             $locale,
             $filters,
-            SearchFields::FILTER_TYPE
+            SearchFields::FILTER_TYPE,
+            [],
+            $availableSlotIds,
+            $sheetsToExclude
         );
     }
 
     /**
-     * @param Event  $event
-     * @param string $locale
-     * @param array  $filters
-     * @param CategoryView[]  $categoryViews
+     * @param Event          $event
+     * @param string         $locale
+     * @param array          $filters
+     * @param CategoryView[] $categoryViews
+     * @param array          $availableSlotIds
+     * @param array          $sheetsToExclude
      *
      * @return array|null
      */
@@ -86,7 +99,9 @@ class FilteredFieldsQueryHandler
         Event $event,
         string $locale,
         array $filters,
-        array $categoryViews
+        array $categoryViews,
+        array $availableSlotIds = [],
+        array $sheetsToExclude = []
     ): ?array {
         if (isset($filters[SearchFields::FILTER_CATEGORY])
             && count($filters[SearchFields::FILTER_CATEGORY]) === count($categoryViews)
@@ -94,12 +109,15 @@ class FilteredFieldsQueryHandler
             return null;
         }
 
-        // if type filter is used, type aggs need to be done with a ES query without type filter
+        // if category filter is used, category aggs need to be done with a ES query category type filter
         return $this->sheetSearchAdapter->getCategoryAggregations(
             $event,
             $locale,
             $filters,
-            SearchFields::FILTER_CATEGORY
+            SearchFields::FILTER_CATEGORY,
+            [],
+            $availableSlotIds,
+            $sheetsToExclude
         );
     }
 
@@ -158,7 +176,9 @@ class FilteredFieldsQueryHandler
             $filteredFieldsQuery->event,
             $filteredFieldsQuery->locale,
             $filteredFieldsQuery->filters,
-            $filteredFieldsQuery->typeViews
+            $filteredFieldsQuery->typeViews,
+            $filteredFieldsQuery->availableSlotIds,
+            $filteredFieldsQuery->sheetsToExclude
         );
 
         $aggregations = null !== $typeAggregations ? $typeAggregations : $filteredFieldsQuery->currentAggregations;
@@ -184,7 +204,9 @@ class FilteredFieldsQueryHandler
             $filteredFieldsQuery->event,
             $filteredFieldsQuery->locale,
             $filteredFieldsQuery->filters,
-            $filteredFieldsQuery->categoryViews
+            $filteredFieldsQuery->categoryViews,
+            $filteredFieldsQuery->availableSlotIds,
+            $filteredFieldsQuery->sheetsToExclude
         );
 
         $aggregations = null !== $categoryAggregations ?

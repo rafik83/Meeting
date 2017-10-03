@@ -17,7 +17,8 @@
         <footer>
             {% if meetingRequestView.isSheetSeeable == true %}
                 <div class="actions">
-                    <a id="complete-sheet-link-{{ meetingRequestView.sheet.id }}" href="{{ sheetToDisplayLink }}" target="_blank"><i class="icon-Document_1"></i> <span>{{ 'catalog.complete_sheet'|trans }}</span></a>
+                    <a id="complete-sheet-link-{{ meetingRequestView.sheet.id }}" href="{{ sheetToDisplayLink }}" target="_blank"><i class="icon-Document_1"></i>
+                        <span>{{ 'catalog.complete_sheet'|trans }}</span></a>
                 </div>
             {% endif %}
 
@@ -31,6 +32,9 @@
                     'isMeetingRequestUpdateLocked': meetingRequestView.isMeetingRequestUpdateLocked|default(false),
                     'isMeetingRequestClosed': meetingRequestView.isMeetingRequestClosed,
                     'isAnsweringMeetingRequestClosed': meetingRequestView.isAnsweringMeetingRequestClosed,
+                    'isPhoneValidationRequired': meetingRequestView.isPhoneValidationRequired,
+                    'phoneValidationLink': meetingRequestView.validatePhoneLink,
+                    'hideMeetingRequest': hideMeetingRequest|default(false)
                 }) }}
             </div>
 

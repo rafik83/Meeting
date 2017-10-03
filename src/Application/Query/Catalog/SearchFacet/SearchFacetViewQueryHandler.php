@@ -32,11 +32,11 @@ class SearchFacetViewQueryHandler implements SearchFacetQueryHandlerInterface
     }
 
     /**
-     * @param SearchFacetViewQuery $query
+     * @param AbstractSearchFacetViewQuery $query
      *
      * @return SearchFacetsView
      */
-    public function handle($query): SearchFacetsView
+    public function handle(AbstractSearchFacetViewQuery $query): SearchFacetsView
     {
         $searchFacets = $this->searchFacetRepository->getByEvent($query->event);
 

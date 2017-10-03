@@ -1,6 +1,13 @@
 #
 # Admin
 #
+planner_callback:
+    path: /planner/callback
+    host: '%admin_domain%'
+    defaults:
+        _controller: AdminBundle:Planner\Callback:index
+    methods: [POST]
+
 root_admin:
     path: /{_locale}
     host: '%admin_domain%'

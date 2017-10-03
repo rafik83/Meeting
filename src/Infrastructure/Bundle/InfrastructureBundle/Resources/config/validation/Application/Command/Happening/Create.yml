@@ -1,5 +1,7 @@
 Proximum\Vimeet\Application\Command\Happening\Create:
     properties:
+        category:
+            - NotNull: ~
         translations:
             - All:
                 - Collection:

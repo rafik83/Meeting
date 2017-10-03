@@ -21,6 +21,7 @@ use Proximum\Vimeet\Domain\Model\Template\SheetTemplate;
 use Proximum\Vimeet\Domain\Model\Type;
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\View\SheetView;
+use Proximum\Vimeet\Domain\View\Spot\Import\SheetView as ImportSheetView;
 
 interface SheetRepositoryInterface
 {
@@ -72,6 +73,23 @@ interface SheetRepositoryInterface
     public function getByEvent(Event $event);
 
     /**
+     * @param Event   $event
+     * @param Sheet[] $excludedSheets
+     *
+     * @return Sheet[]
+     */
+    public function getSheetsInCatalogByEvent(Event $event, array $excludedSheets = []): array;
+
+    /**
+     * @param Event   $event
+     * @param Type[]  $types
+     * @param Sheet[] $excludedSheets
+     *
+     * @return Sheet[]
+     */
+    public function getSheetsInCatalogWithTypesByEvent(Event $event, array $types = [], array $excludedSheets = []): array;
+
+    /**
      * @param Event $event
      *
      * @return Sheet[]
@@ -83,14 +101,21 @@ interface SheetRepositoryInterface
      *
      * @return Sheet[]
      */
-    public function getSheetsInCatalogByEvent(Event $event);
+    public function getSheetsInCatalogWithAtLeastOneAcceptedRequestByEvent(Event $event);
 
     /**
-     * @param Event $event
+     * @param Sheet $sheet
      *
      * @return Sheet[]
      */
-    public function getSheetsInCatalogWithAtLeastOneAcceptedRequestByEvent(Event $event);
+    public function getSheetsMetBySheet(Sheet $sheet): array;
+
+    /**
+     * @param Sheet $sheet
+     *
+     * @return Sheet[]
+     */
+    public function getSheetsWithRequestWithSheet(Sheet $sheet): array;
 
     /**
      * @param Type $type
@@ -115,6 +140,14 @@ interface SheetRepositoryInterface
      * @return SheetView[]
      */
     public function getSheetViewsByUserAndEvent($user, $event, $locale);
+
+    /**
+     * @param Event $event
+     * @param int   $sheetId
+     *
+     * @return null|ImportSheetView
+     */
+    public function getSheetViewByEventAndId(Event $event, int $sheetId):? ImportSheetView;
 
     /**
      * Get only enabled sheet by user or user's participant

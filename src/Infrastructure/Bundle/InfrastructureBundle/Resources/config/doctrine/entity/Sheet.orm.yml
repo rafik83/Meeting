@@ -80,3 +80,8 @@ Proximum\Vimeet\Domain\Model\Sheet:
         orders:
             targetEntity: Proximum\Vimeet\Domain\Model\Order
             mappedBy: sheet
+        availableSlots:
+            targetEntity: Proximum\Vimeet\Domain\Model\Sheet\AvailableSlot
+            cascade: ['persist', 'remove']
+            mappedBy: sheet
+            orphanRemoval: true

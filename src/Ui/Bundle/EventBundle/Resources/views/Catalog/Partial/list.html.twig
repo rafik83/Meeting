@@ -1,19 +1,18 @@
-<div>
-    <div class="row">
-        {% for catalogSheetPreviewView in paginatedResult.results %}
-            {{ include('EventBundle:Catalog:Partial/sheet-card.html.twig', {
-                catalogSheetPreviewView: catalogSheetPreviewView,
-                'viewer': viewer,
-                isCatalog: isCatalog
-            }) }}
-        {% if loop.index % 3 == 0 %}
-    </div>
-    <div class="row">
+<div class="row">
+    {% for catalogSheetPreviewView in paginatedResult.results %}
+        {{ include('EventBundle:Catalog:Partial/sheet-card.html.twig', {
+            catalogSheetPreviewView: catalogSheetPreviewView,
+            'viewer': viewer,
+            isCatalog: isCatalog
+        }) }}
+        {% if loop.last and (loop.index % 3 != 0) %}
+            {% for i in (loop.index % 3)..3 %}
+                    <div class="col-md-4"></div>
+            {% endfor %}
         {% endif %}
-        {% else %}
-            <div class="col-md-12 important fail text-center">
-                {{ 'catalog.noResult'|trans }}
-            </div>
-        {% endfor %}
-    </div>
+    {% else %}
+        <div class="col-md-12 important fail text-center">
+            {{ 'catalog.noResult'|trans }}
+        </div>
+    {% endfor %}
 </div>

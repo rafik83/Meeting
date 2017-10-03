@@ -25,6 +25,7 @@ use Proximum\Vimeet\Domain\Model\Template\SheetTemplate;
 use Proximum\Vimeet\Domain\Model\Type;
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
+use Proximum\Vimeet\Domain\View\Spot\Import\SheetView as ImportSheetView;
 
 class SheetRepository implements SheetRepositoryInterface
 {
@@ -105,7 +106,7 @@ class SheetRepository implements SheetRepositoryInterface
     /**
      * {@inheritdoc}
      */
-    public function getSheetsInCatalogByEvent(Event $event)
+    public function getSheetsInCatalogByEvent(Event $event, array $excludedSheets = []): array
     {
         $queryBuilder = $this
             ->entityManager
@@ -114,6 +115,39 @@ class SheetRepository implements SheetRepositoryInterface
             ->from(Sheet::class, 'sheet')
             ->join('sheet.participants', 'participants', 'WITH', 'sheet.event = :event AND sheet.inCatalog = true')
             ->setParameter('event', $event);
+
+        if (!empty($excludedSheets)) {
+            $queryBuilder->where('sheet NOT IN (:excludedSheets)');
+            $queryBuilder->setParameter('excludedSheets', $excludedSheets);
+        }
+
+        return $queryBuilder->getQuery()->getResult();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getSheetsInCatalogWithTypesByEvent(Event $event, array $types = [], array $excludedSheets = []): array
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('sheet, participants')
+            ->from(Sheet::class, 'sheet')
+            ->join(
+                'sheet.participants',
+                'participants',
+                'WITH',
+                'sheet.event = :event AND sheet.inCatalog = true AND sheet.enable = true AND sheet.type IN (:types)'
+            )
+            ->setParameter('types', $types)
+            ->setParameter('event', $event);
+
+
+        if (!empty($excludedSheets)) {
+            $queryBuilder->andWhere('sheet NOT IN (:excludedSheets)');
+            $queryBuilder->setParameter('excludedSheets', $excludedSheets);
+        }
 
         return $queryBuilder->getQuery()->getResult();
     }
@@ -132,6 +166,50 @@ class SheetRepository implements SheetRepositoryInterface
             ->where('EXISTS (SELECT r.id FROM Entity:Meeting\Request r WHERE r.event = :event AND (r.from = sheet OR r.to = sheet) AND r.state = :approved)')
             ->setParameter('approved', Request::STATE_APPROVED)
             ->setParameter('event', $event);
+
+        return $queryBuilder->getQuery()->getResult();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getSheetsMetBySheet(Sheet $sheet): array
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('sheet')
+            ->from(Sheet::class, 'sheet')
+            ->where('sheet.event = :event AND sheet != :sheet AND EXISTS (
+                   SELECT meeting.id FROM Entity:Meeting meeting WHERE (
+                        meeting.fromSheet = :sheet AND meeting.toSheet = sheet
+                        OR meeting.toSheet = :sheet AND meeting.fromSheet = sheet
+                   )
+            )')
+            ->setParameter('event', $sheet->getEvent())
+            ->setParameter('sheet', $sheet);
+
+        return $queryBuilder->getQuery()->getResult();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getSheetsWithRequestWithSheet(Sheet $sheet): array
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('sheet')
+            ->from(Sheet::class, 'sheet')
+            ->where('sheet.event = :event AND sheet != :sheet AND EXISTS (
+                   SELECT request.id FROM Entity:Meeting\Request request WHERE (
+                        request.from = :sheet AND request.to = sheet
+                        OR request.to = :sheet AND request.from = sheet
+                   )
+            )')
+            ->setParameter('event', $sheet->getEvent())
+            ->setParameter('sheet', $sheet);
 
         return $queryBuilder->getQuery()->getResult();
     }
@@ -174,6 +252,24 @@ class SheetRepository implements SheetRepositoryInterface
             ->setParameter('user', $user);
 
         return $queryBuilder->getQuery()->getResult();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getSheetViewByEventAndId(Event $event, int $sheetId):? ImportSheetView
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('NEW Proximum\Vimeet\Domain\View\Spot\Import\SheetView(sheet.id, sheet.title)')
+            ->from('Entity:Sheet', 'sheet', 'sheet.id')
+            ->where('sheet.event = :event AND sheet.id = :sheetId')
+            ->setParameter('event', $event)
+            ->setParameter('sheetId', $sheetId)
+            ->setMaxResults(1);
+
+        return $queryBuilder->getQuery()->getOneOrNullResult();
     }
 
     /**

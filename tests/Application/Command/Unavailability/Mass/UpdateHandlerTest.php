@@ -63,6 +63,7 @@ class UpdateHandlerTest extends TestCase
 
         $jobQueue = $this->prophesize(JobQueueInterface::class);
         $jobQueue->aggregateEventUsersFullUnavailability($event)->shouldBeCalled();
+        $jobQueue->aggregateAvailableSlot($event)->shouldBeCalled();
 
         // Create
         $update               = new Update($existing);
@@ -128,6 +129,7 @@ class UpdateHandlerTest extends TestCase
 
         $jobQueue = $this->prophesize(JobQueueInterface::class);
         $jobQueue->aggregateEventUsersFullUnavailability($event)->shouldNotBeCalled();
+        $jobQueue->aggregateAvailableSlot($event)->shouldNotBeCalled();
 
         // Create
         $update               = new Update($existing);
@@ -193,6 +195,7 @@ class UpdateHandlerTest extends TestCase
 
         $jobQueue = $this->prophesize(JobQueueInterface::class);
         $jobQueue->aggregateEventUsersFullUnavailability($event)->shouldBeCalled();
+        $jobQueue->aggregateAvailableSlot($event)->shouldBeCalled();
 
         // Create
         $update               = new Update($existing);
@@ -264,6 +267,7 @@ class UpdateHandlerTest extends TestCase
 
         $jobQueue = $this->prophesize(JobQueueInterface::class);
         $jobQueue->aggregateEventUsersFullUnavailability($event)->shouldBeCalled();
+        $jobQueue->aggregateAvailableSlot($event)->shouldBeCalled();
 
         // Create
         $update               = new Update($existing);

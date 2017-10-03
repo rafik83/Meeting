@@ -17,7 +17,7 @@ agenda.unavailability.confirmRemove: 'Confirm your absence'
 agenda.unavailability.remove: Remove
 'Bad credentials.': 'Bad credentials.'
 billing_info.title: 'Billing information'
-catalog.action.meeting.proposition.approved: 'Accepted proposal'
+catalog.action.meeting.proposition.approved: 'Approved proposal'
 catalog.action.meeting.proposition.show.refuse: 'Refused proposal'
 catalog.action.meeting.request.approve: 'Received proposal'
 catalog.action.meeting.request.approved: 'Accepted request'
@@ -39,6 +39,7 @@ catalog.meeting_request.request.approved: 'Accepted request'
 catalog.meeting_request.request.placed: 'Meeting planned'
 catalog.meeting_request.request.refused: 'Refused request'
 catalog.noResult: 'No result'
+catalog.noVisibleCategories: 'You can''t access to any participant''s category'
 catalog.noVisibleTypes: 'You can''t access to any participant''s type'
 catalog.search.no-filter-to-refine: 'No result'
 catalog.seeMore: 'See more'
@@ -53,26 +54,60 @@ event.info.close: Close
 event.info.contact: 'Useful information'
 event.meeting.listRequest.filter.all: All
 event.meeting.listRequest.filter.propositions: 'Requests received only'
-event.meeting.listRequest.filter.requests: 'My requests only'
+event.meeting.listRequest.filter.requests: 'My requests'
+event.meeting.request.closed: 'The meeting requests are now closed'
+event.sheet.export.fields.sheet_type: Type
 gender.man: Mr
 gender.woman: Mrs
-group.request.list.table.header.otherSheet: 'Other files'
-group.request.list.table.header.sheetConcerned: 'My files'
+group.home.link.create_sheet: 'Create a profile'
+group.home.link.participant_update: 'Manage participants'
+group.home.link.participants: 'Participants per profile'
+group.home.link.request: 'Manage meetings'
+group.participant_update.list.sheets: Profile
+group.participant_update.title: 'Manage participants'
+group.participants_list.caption.available.label: 'Available for meetings'
+group.participants_list.caption.unavailable.label: Unavailable
+group.participants.title: 'Participants per profile'
+group.request.list.no-preference: 'No preferences'
+group.request.list.state.approved: Approved
+group.request.list.state.planned: 'Meeting planned'
+group.request.list.state.refused: Refused
+group.request.list.state.sent: Pending
+group.request.list.table.header.otherSheet: 'Other profiles'
+group.request.list.table.header.sheetConcerned: 'My profiles'
+group.request.list.table.header.status: Status
+group.request.list.table.no-result: 'No meeting requests'
+group.sheet.create.title: 'Create a new profile'
+happening.participate.action: Attend
+happening.participate.youAreNotAvailable: 'You are not available to attend'
 happening.participationCancel.action: Cancel
 happening.participationUpdate.action: Edit
 invoice.list.column.number: 'N° invoice'
 invoice.list.column.totalExcludeTaxes: 'Total excl. tax'
 invoice.list.column.totalIncludeTaxes: 'Total incl. VAT'
 invoice.list.title: 'Your invoices'
+invoice.no-result: 'No invoice available'
 invoice.show: 'View final invoice (pdf)'
 login.connect: Login
 login.connection: Connexion
 login.forgot_password: 'Forgotten password?'
 login.forgotPassword: 'Forgotten password?'
 login.memberArea: 'Member area'
+meeting.video.waitingForParticipant: 'Waiting for participant'
 modal.back: Back
-multiple_sheets.request.list.table.header.otherSheet: 'Other files'
-multiple_sheets.request.list.table.header.sheetConcerned: 'My files'
+modal.close: Close
+modal.loading.error: 'A problem occurred while loading, you can close the modal'
+multiple_sheets.request.filter.reset: 'Reset all the filters'
+multiple_sheets.request.list.no-preference: 'No preferences'
+multiple_sheets.request.list.state.approved: Approved
+multiple_sheets.request.list.state.planned: 'Meeting planned'
+multiple_sheets.request.list.state.refused: Refused
+multiple_sheets.request.list.state.sent: Pending
+multiple_sheets.request.list.table.header.otherSheet: 'Other profiles'
+multiple_sheets.request.list.table.header.sheetConcerned: 'My profiles'
+multiple_sheets.request.list.table.header.status: Status
+multiple_sheets.request.list.table.no-result: 'No meeting requests'
+multiple_sheets.title: 'My profiles'
 navigation.category.billing: Billing
 navigation.category.catalog: Catalogue
 navigation.category.happening: 'Meeting administration'
@@ -103,7 +138,7 @@ navigation.links.meetingRequest.proposal: 'Meetings requests'
 navigation.links.meetingRequest.refused: Refused
 navigation.links.meetingRequest.sent: 'Pending requests'
 navigation.links.member_space.avatar: 'Profile picture'
-navigation.links.member_space.company: 'Compagny / Organization'
+navigation.links.member_space.company: 'Company / Organization'
 navigation.links.member_space.profile: Profile
 navigation.links.notification: Notifications
 navigation.links.package.order_list: 'My orders'
@@ -117,6 +152,7 @@ navigation.links.planning.final_date: 'Published on'
 navigation.links.planning.flash_presentation: 'Flash presentations'
 navigation.links.planning.my_schedule: 'My planning'
 navigation.links.planning.unavailability: 'Add an unavailability'
+navigation.links.returnToSelectSheet: 'My profiles'
 navigation.links.sheet.locale: Version
 navigation.menu: Menu
 new_password.confirm.title: 'Reset password'
@@ -132,12 +168,14 @@ notification.category.sheet.label: 'Presentation sheet'
 notification.columns.category: Heading
 notification.columns.createdAt: 'Received on'
 notification.columns.description: Description
+notification.empty: 'No pending notifications'
 notification.label.important: Important
 notification.label.required: Mandatory
 notification.link.label: See
 notification.list.title.label: Notifications
 notification.package.noOrder: 'You must chose a package of participation'
 notification.sheet.completeTranslation: 'Complete your presentation sheet in %locale%'
+notification.transaction.pending: 'The payment of %amount% is pending'
 order.list.cancelled: Cancelled
 order.list.column.date: Date
 order.list.column.numero: Number
@@ -271,6 +309,7 @@ sheet.welcome.programContent: 'Choose your conferences'
 sheet.welcome.sheetContent: "Complete your presentation sheet.\n\nThen\n\nSubmit it for validation"
 sheet.welcome.subtitle: 'To finalise your request you need to'
 sheet.welcome.title: 'TO FINALISE YOUR REQUEST:'
+sheetGroup.quitImpersonation: Leave
 summary.column.quantity: Quantity
 summary.column.title: Title
 summary.column.total: Total
@@ -282,3 +321,6 @@ summary.promotionCode.title: 'Offers of discounts'
 summary.total: Total
 summary.totalToPay: 'Total to pay'
 summary.vatRate: '%vatRate%% VAT'
+unavailability.title: Unavailable
+user_event.confirm.agenda.success: 'Thank you for confirming your schedule'
+user_event.confirm.agenda.title: 'Schedule confirmation'

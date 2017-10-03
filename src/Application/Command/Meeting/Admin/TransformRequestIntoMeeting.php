@@ -33,8 +33,11 @@ class TransformRequestIntoMeeting
      * @param MeetingSlot     $slot
      * @param bool            $visio
      */
-    public function __construct(Meeting\Request $meetingRequest, MeetingSlot $slot, $visio = false)
-    {
+    public function __construct(
+        Meeting\Request $meetingRequest,
+        MeetingSlot $slot,
+        $visio = false
+    ) {
         $this->meetingRequest = $meetingRequest;
         $this->slot           = $slot;
         $this->event          = $slot->getEvent();

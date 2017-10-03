@@ -10,6 +10,8 @@ account.update.avatar.title: Photo
 account.update.company.title: 'Société / Organisme'
 account.update.profile.title: Profil
 account.update.title: 'Modifier mon compte'
+agenda.availability.available_sheets: '{1} Voir le participant disponible|]1,Inf[ Voir les %availableSheets% participants disponibles'
+agenda.availability.available_sheets_with_proposition: '{1} Voir une proposition de RDV|]1,Inf[ Voir les %availableSheets% propositions de RDV'
 agenda.meeting.details: Details
 agenda.participant.view: 'Agenda de %participant%'
 agenda.title: 'Mon agenda'
@@ -42,7 +44,11 @@ catalog.meeting_request.refuse: Refuser
 catalog.meeting_request.request.approved: 'Votre demande acceptée'
 catalog.meeting_request.request.placed: 'RDV planifié'
 catalog.meeting_request.request.refused: 'Votre demande refusée'
+catalog.mobile.filters.allParticipants: 'Tous les participants'
+catalog.mobile.filters.availableSlot.title: 'Qui est disponible ?'
+catalog.mobile.filters.title: 'Catalogue des participants'
 catalog.noResult: 'Aucun résultat trouvé'
+catalog.noVisibleCategories: 'Vous n''avez accès à aucune catégorie de participation'
 catalog.noVisibleTypes: 'Vous n''avez accès à aucun type de participation'
 catalog.search.no-filter-to-refine: 'Aucun filtre ne permet d''affiner la recherche.'
 catalog.seeMore: 'Voir plus'
@@ -73,6 +79,8 @@ event.meeting.listRequest.filter.propositions: 'Propositions reçues'
 event.meeting.listRequest.filter.requests: 'Mes demandes'
 event.meeting.request.answering.closed: 'Les validations de rendez-vous sont terminées'
 event.meeting.request.closed: 'Les demandes de rendez-vous sont terminées'
+event.meeting.request.transformIntoMeeting.success: 'RDV positionné pour %participants% le %date% à %time% : %spot%.'
+event.meeting.request.transformIntoMeeting.error: 'Le RDV ne peut pas être positionné faute de disponibilités communes.'
 event.registration_closed: 'Les inscriptions sont closes, si vous êtes inscrits connectez-vous'
 event.registration_not_open: 'Les inscriptions ne sont pas encore ouvertes'
 event.sheet.export.fields.event_name: 'Nom de l''événement'
@@ -154,6 +162,7 @@ meeting.video.waitingForParticipant: 'En attente d''un participant'
 modal.back: Retour
 modal.close: Fermer
 modal.loading.error: 'Un problème est survenu pendant le chargement, vous pouvez fermer la modale'
+multiple_sheets.modal.close: Fermer
 multiple_sheets.request.filter.reset: 'Réinitialiser les filtres'
 multiple_sheets.request.list.no-preference: 'Pas de préférence'
 multiple_sheets.request.list.state.approved: Acceptée

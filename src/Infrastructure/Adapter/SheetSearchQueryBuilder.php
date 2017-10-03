@@ -18,11 +18,13 @@ use Elastica\Query\MultiMatch;
 use Elastica\Query\Nested;
 use Elastica\Query\Range;
 use Elastica\Query\Term;
+use Proximum\Vimeet\Application\View\Agenda\Slot\AvailableSlotView;
 use Proximum\Vimeet\Application\View\Catalog\PositionView;
 use Proximum\Vimeet\Domain\Admin\Follower\FollowerConstant;
 use Proximum\Vimeet\Domain\Catalog\SearchFields;
 use Proximum\Vimeet\Domain\Exception\Nomenclature\NomenclatureNotFoundException;
 use Proximum\Vimeet\Domain\Model\Admin;
+use Proximum\Vimeet\Domain\Model\Catalog\Internal\CatalogConstant;
 use Proximum\Vimeet\Domain\Model\Category;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Sheet;
@@ -66,27 +68,36 @@ class SheetSearchQueryBuilder
      */
     private $nomenclatureItems;
 
+    /** @var array of available slot ids */
+    private $availableSlots;
+
     /**
-     * @param Event  $event
-     * @param array  $filters
-     * @param string $locale
-     * @param int    $initialBooster
-     * @param array  $nomenclatureItems
+     * @param Event               $event
+     * @param array               $filters
+     * @param string              $locale
+     * @param int                 $initialBooster
+     * @param array               $nomenclatureItems
+     * @param AvailableSlotView[] $availableSlots
+     * @param array               $sheetsToExclude
      */
     public function __construct(
         Event $event,
         array $filters,
         $locale,
         $initialBooster = 1,
-        $nomenclatureItems = []
+        array $nomenclatureItems = [],
+        array $availableSlots = [],
+        array $sheetsToExclude = []
     ) {
         $this->locale            = $locale;
         $this->initialBooster    = $initialBooster > 0 ? $initialBooster : 1;
         $this->nomenclatureItems = $nomenclatureItems;
+        $this->availableSlots    = $availableSlots;
 
         $this->query = new BoolQuery();
         $this->matchEvent($event);
         $this->filter($filters);
+        $this->excludeSheets($sheetsToExclude);
     }
 
     /**
@@ -130,6 +141,7 @@ class SheetSearchQueryBuilder
         $this->filterByCompleted($filters);
         $this->filterByType($filters);
         $this->filterByCategory($filters);
+        $this->filterByAvailableSlotIds($filters);
         $this->filterByFollower($filters);
         $this->filterByPredefined($filters);
         $this->filterByRegisteredAt($filters);
@@ -174,12 +186,12 @@ class SheetSearchQueryBuilder
             $this->filterByHasRemainingToPay($filters['hasRemainingToPay']);
         }
 
-        if (isset($filters['hasNoMeetingRequest']) && true === $filters['hasNoMeetingRequest']) {
-            $this->filterByNoMeetingRequest();
+        if (isset($filters['hasNoMeetingRequest']) && is_bool($filters['hasNoMeetingRequest'])) {
+            $this->filterByNoMeetingRequest($filters['hasNoMeetingRequest']);
         }
 
-        if (isset($filters['hasPendingMeetingPropositions']) && true === $filters['hasPendingMeetingPropositions']) {
-            $this->filterByHasPendingMeetingProposition();
+        if (isset($filters['hasPendingMeetingPropositions']) && is_bool($filters['hasPendingMeetingPropositions'])) {
+            $this->filterByHasPendingMeetingProposition($filters['hasPendingMeetingPropositions']);
         }
 
         if (isset($filters['agendaConfirmedStatus'])
@@ -378,9 +390,13 @@ class SheetSearchQueryBuilder
 
                 if ($type instanceof TypeInterface) {
                     $typeId = $type->getId();
+                } elseif (is_int($type) || is_string($type)) {
+                    $typeId = (int) $type;
                 }
 
-                $filterByTypes->addShould((new Term())->setTerm('type', $typeId));
+                if ($typeId !== null) {
+                    $filterByTypes->addShould((new Term())->setTerm('type', $typeId));
+                }
             }
 
             $this->query->addMust($filterByTypes);
@@ -401,12 +417,59 @@ class SheetSearchQueryBuilder
 
         $matchId = new BoolQuery();
         foreach ($filters['categories'] as $category) {
-            $matchId->addShould(
-                (new Term)->setTerm('categories.id', $category->getId())
-            );
+            $id = null;
+
+            if ($category instanceof Category || $category instanceof CategoryView) {
+                $id = $category->getId();
+            } elseif (is_int($category) || is_string($category)) {
+                $id = (int) $category;
+            }
+
+            if ($category !== null) {
+                $matchId->addShould((new Term)->setTerm('categories.id', $id));
+            }
         }
 
         $nested->setQuery($matchId);
+        $this->query->addMust($nested);
+    }
+
+    /**
+     * @param array $filters
+     */
+    protected function filterByAvailableSlotIds(array &$filters)
+    {
+        if (!isset($filters[SearchFields::FILTER_AVAILABLE_SLOT_IDS])
+            || empty($filters[SearchFields::FILTER_AVAILABLE_SLOT_IDS])
+            || $filters[SearchFields::FILTER_AVAILABLE_SLOT_IDS] === CatalogConstant::AVAILABLE_SLOT_IDS_FILTER_EVERYONE
+        ) {
+            return;
+        }
+
+        $filterAvailableSlotChoice = $filters[SearchFields::FILTER_AVAILABLE_SLOT_IDS];
+
+        $nested = new Nested();
+        $nested->setPath('availableSlotIds');
+
+        $matchSlot = new BoolQuery();
+
+        if (!empty($filters[SearchFields::FILTER_BY_SPECIFIC_SLOT])
+            && $filterAvailableSlotChoice === CatalogConstant::AVAILABLE_SLOT_IDS_FILTER_SLOT
+        ) {
+            $matchSlot->addShould(
+                (new Term)->setTerm('availableSlotIds.id', $filters[SearchFields::FILTER_BY_SPECIFIC_SLOT])
+            );
+        } elseif ($filterAvailableSlotChoice === CatalogConstant::AVAILABLE_SLOT_IDS_FILTER_AVAILABLE) {
+            /** @var AvailableSlotView $availableSlot */
+            foreach ($this->availableSlots as $availableSlot) {
+                $matchSlot->addShould(
+                    (new Term)->setTerm('availableSlotIds.id', $availableSlot->id)
+                );
+            }
+        }
+
+        $nested->setQuery($matchSlot);
+
         $this->query->addMust($nested);
     }
 
@@ -825,14 +888,14 @@ class SheetSearchQueryBuilder
         $this->query->addMust($positiveRange);
     }
 
-    private function filterByNoMeetingRequest()
+    private function filterByNoMeetingRequest(bool $hasNoMeetingRequest)
     {
-        $this->query->addMust((new Term())->setTerm('hasMeetingRequest', false));
+        $this->query->addMust((new Term())->setTerm('hasMeetingRequest', !$hasNoMeetingRequest));
     }
 
-    private function filterByHasPendingMeetingProposition()
+    private function filterByHasPendingMeetingProposition(bool $hasPendingMeetingProposition)
     {
-        $this->query->addMust((new Term())->setTerm('hasPendingMeetingProposition', true));
+        $this->query->addMust((new Term())->setTerm('hasPendingMeetingProposition', $hasPendingMeetingProposition));
     }
 
     /**
@@ -906,5 +969,25 @@ class SheetSearchQueryBuilder
         $matchAgendaConfirmedStatus->setTerm('agendaConfirmedStatus', $agendaConfirmedStatus);
 
         $this->query->addMust($matchAgendaConfirmedStatus);
+    }
+
+    /**
+     * @param Sheet[] $sheetsToExclude
+     */
+    private function excludeSheets(array $sheetsToExclude)
+    {
+        if (empty($sheetsToExclude)) {
+            return;
+        }
+
+        $excludeSheets = new BoolQuery();
+
+        foreach ($sheetsToExclude as $sheetToExclude) {
+            $excludeSheets->addShould(
+                (new Term)->setTerm('id', $sheetToExclude->getId())
+            );
+        }
+
+        $this->query->addMustNot($excludeSheets);
     }
 }

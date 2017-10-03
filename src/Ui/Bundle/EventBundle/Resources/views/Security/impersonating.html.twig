@@ -1,5 +1,5 @@
 {% if impersonateView is not null %}
-    <div class="well">
+    <div class="well impersonating hidden-xs">
         {{ 'admin.sheet.impersonateAs'|trans({
             '%adminFullname%': impersonateView.fromUser.fullname,
             '%adminEmail%': impersonateView.fromUser.email,

@@ -42,6 +42,12 @@ class FilteredFieldsQuery
     /** @var CategoryView[] */
     public $categoryViews;
 
+    /** @var array */
+    public $availableSlotIds;
+
+    /** @var array */
+    public $sheetsToExclude;
+
     /**
      * @param Event                      $event
      * @param array                      $filters
@@ -51,6 +57,8 @@ class FilteredFieldsQuery
      * @param OrganizationCategoryView[] $organizationCategoryViews
      * @param PositionView[]             $positionViews
      * @param string                     $locale
+     * @param array                      $availableSlotIds
+     * @param array                      $sheetsToExclude
      */
     public function __construct(
         Event $event,
@@ -60,7 +68,9 @@ class FilteredFieldsQuery
         array $categoryViews,
         array $organizationCategoryViews,
         array $positionViews,
-        string $locale
+        string $locale,
+        array $availableSlotIds = [],
+        array $sheetsToExclude = []
     ) {
         $this->event                     = $event;
         $this->filters                   = $filters;
@@ -70,5 +80,7 @@ class FilteredFieldsQuery
         $this->positionViews             = $positionViews;
         $this->locale                    = $locale;
         $this->categoryViews             = $categoryViews;
+        $this->availableSlotIds          = $availableSlotIds;
+        $this->sheetsToExclude           = $sheetsToExclude;
     }
 }

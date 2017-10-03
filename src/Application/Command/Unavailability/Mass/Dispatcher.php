@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2017 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -14,9 +14,7 @@ use Proximum\Vimeet\Domain\Model\Event;
 
 class Dispatcher
 {
-    /**
-     * @var Event
-     */
+    /** @var Event */
     public $event;
 
     /**
