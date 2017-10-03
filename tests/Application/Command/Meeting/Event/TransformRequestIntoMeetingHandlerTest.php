@@ -117,7 +117,7 @@ class TransformRequestIntoMeetingHandlerTest extends TestCase
 
         $eventDispatcher->dispatch(
             Events::MEETING_CREATED,
-            new MeetingCreatedEvent($expectedMeeting, [$fromSheet->reveal(), $toSheet->reveal()])
+            new MeetingCreatedEvent($expectedMeeting)
         )->shouldBeCalled();
 
         $eventDispatcher->dispatch(
@@ -255,7 +255,7 @@ class TransformRequestIntoMeetingHandlerTest extends TestCase
 
         $eventDispatcher->dispatch(
             Events::MEETING_CREATED,
-            new MeetingCreatedEvent($expectedMeeting, [$fromSheet->reveal(), $toSheet->reveal()])
+            new MeetingCreatedEvent($expectedMeeting)
         )->shouldBeCalled();
 
         $eventDispatcher->dispatch(

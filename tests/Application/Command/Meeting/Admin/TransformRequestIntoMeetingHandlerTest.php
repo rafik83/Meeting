@@ -90,7 +90,7 @@ class TransformRequestIntoMeetingHandlerTest extends TestCase
 
         $eventDispatcher->dispatch(
             Events::MEETING_CREATED,
-            new MeetingCreatedEvent($meeting,[$fromSheet, $toSheet])
+            new MeetingCreatedEvent($meeting)
         )->shouldBeCalled();
 
         $query = new TransformRequestIntoMeeting(
