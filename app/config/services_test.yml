@@ -44,6 +44,11 @@ services:
             - '@behat_manager.user'
             - '@behat_manager.type'
 
+    behat.service.manager.rule_manager:
+        class: Proximum\Vimeet\Behat\Service\Manager\RuleManager
+        arguments:
+            - '@repository.rule_repository'
+
     behat_manager.group:
         class: Proximum\Vimeet\Behat\Service\Manager\GroupManager
         arguments:
@@ -264,6 +269,12 @@ services:
         arguments:
             - '@behat_storage'
             - '@behat_manager.event.content_manager'
+
+    behat.proxy.rule_context:
+        class: Proximum\Vimeet\Behat\Proxy\RuleContextProxy
+        arguments:
+            - '@behat_storage'
+            - '@behat.service.manager.rule_manager'
 
     #
     # Other services

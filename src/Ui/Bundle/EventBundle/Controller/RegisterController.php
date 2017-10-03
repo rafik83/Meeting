@@ -53,6 +53,14 @@ class RegisterController extends Controller
             return $this->redirectToRoute('event');
         }
 
+        $response = $this
+            ->get('infrastructure.route.home_dispatch.home_user_dispatcher')
+            ->attemptDispatchUser($eventDomain->getEvent(), $this->getUser());
+
+        if ($response instanceof RedirectResponse) {
+            return $response;
+        }
+
         $command = new Email();
         $form    = $this->createForm(EmailType::class, $command, ['action' => $request->getUri()]);
 
@@ -145,6 +153,14 @@ class RegisterController extends Controller
         $event = $eventDomain->getEvent();
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
         $this->hasUserAlreadyCreatedParticipant($event, $this->getUser());
+
+        $response = $this
+            ->get('infrastructure.route.home_dispatch.home_user_dispatcher')
+            ->attemptDispatchUser($event, $this->getUser());
+
+        if ($response instanceof RedirectResponse) {
+            return $response;
+        }
 
         $locale = $request->getLocale();
 

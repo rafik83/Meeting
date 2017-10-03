@@ -50,7 +50,10 @@ class CatalogAvailableSlotIdsViewQueryHandler
         if ($query->sheet->hasUserParticipant($query->user)
             && isset($query->filters[SearchFields::FILTER_AVAILABLE_SLOT_IDS])
             && !empty($query->filters[SearchFields::FILTER_AVAILABLE_SLOT_IDS])
-            && $query->filters[SearchFields::FILTER_AVAILABLE_SLOT_IDS] === CatalogConstant::AVAILABLE_SLOT_IDS_FILTER_AVAILABLE
+            && (
+                $query->filters[SearchFields::FILTER_AVAILABLE_SLOT_IDS] === CatalogConstant::AVAILABLE_SLOT_IDS_FILTER_AVAILABLE
+                || $query->filters[SearchFields::FILTER_AVAILABLE_SLOT_IDS] === CatalogConstant::AVAILABLE_SLOT_IDS_FILTER_SLOT
+            )
         ) {
             $availableSlotIds = $this->availableSlotsByParticipantQueryHandler->handle(
                 new AvailableSlotsByParticipantQuery(

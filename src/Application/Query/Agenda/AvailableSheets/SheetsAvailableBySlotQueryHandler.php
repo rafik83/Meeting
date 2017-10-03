@@ -11,8 +11,6 @@
 namespace Proximum\Vimeet\Application\Query\Agenda\AvailableSheets;
 
 use Proximum\Vimeet\Domain\Catalog\VisibleParticipationTypes;
-use Proximum\Vimeet\Domain\Model\Meeting\Request;
-use Proximum\Vimeet\Domain\Repository\Meeting\RequestRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\ParticipantRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
 
@@ -24,27 +22,21 @@ class SheetsAvailableBySlotQueryHandler
     /** @var ParticipantRepositoryInterface */
     private $participantRepository;
 
-    /** @var RequestRepositoryInterface */
-    private $requestRepository;
-
     /** @var VisibleParticipationTypes */
     private $visibleParticipationTypes;
 
     /**
      * @param SheetRepositoryInterface       $sheetRepository
      * @param ParticipantRepositoryInterface $participantRepository
-     * @param RequestRepositoryInterface     $requestRepository
      * @param VisibleParticipationTypes      $visibleParticipationTypes
      */
     public function __construct(
         SheetRepositoryInterface $sheetRepository,
         ParticipantRepositoryInterface $participantRepository,
-        RequestRepositoryInterface $requestRepository,
         VisibleParticipationTypes $visibleParticipationTypes
     ) {
         $this->sheetRepository = $sheetRepository;
         $this->participantRepository = $participantRepository;
-        $this->requestRepository = $requestRepository;
         $this->visibleParticipationTypes = $visibleParticipationTypes;
     }
 
@@ -55,34 +47,24 @@ class SheetsAvailableBySlotQueryHandler
      */
     public function handle(SheetsAvailableBySlotQuery $query): int
     {
-        $requestForExcludedSheet = $this
-            ->requestRepository
-            ->getApprovedAndRefusedRequestBySheet($query->sheet);
+        $excludedSheets = [$query->sheet->getId() => $query->sheet];
+        $sheetsMet = $this->sheetRepository->getSheetsWithRequestWithSheet($query->sheet);
 
-        $excludedSheets = [];
-
-        /** @var Request $request */
-        foreach ($requestForExcludedSheet as $request) {
-            $sheetMet = $request->getSheetMet($query->sheet);
-            $excludedSheets[$sheetMet->getId()] = $sheetMet;
-        }
-
-        $sheetMets = $this->sheetRepository->getSheetsMetBySheet($query->sheet);
-
-        foreach ($sheetMets as $sheetMet) {
+        foreach ($sheetsMet as $sheetMet) {
             $excludedSheets[$sheetMet->getId()] = $sheetMet;
         };
 
-        $sheets = $this->sheetRepository->getSheetsInCatalogByEvent($query->event, $excludedSheets);
+        $allowedTypes = $this->visibleParticipationTypes->getAllowedTypesList($query->sheet);
+        $sheets       = $this->sheetRepository->getSheetsInCatalogWithTypesByEvent(
+            $query->event,
+            $allowedTypes,
+            $excludedSheets
+        );
         $participants = [];
 
         foreach ($sheets as $sheet) {
-            $allowedTypes = $this->visibleParticipationTypes->getAllowedTypesList($sheet);
-
-            if (in_array($sheet->getType(), $allowedTypes)) {
-                foreach ($sheet->getParticipants() as $participant) {
-                    $participants[] = $participant;
-                }
+            foreach ($sheet->getParticipants()->toArray() as $participant) {
+                $participants[] = $participant;
             }
         }
 

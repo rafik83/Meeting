@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2015 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -18,18 +18,22 @@ use Proximum\Vimeet\Application\Command\Meeting\UnApproveMeetingRequest;
 use Proximum\Vimeet\Application\Command\Meeting\UnRefuseMeetingRequest;
 use Proximum\Vimeet\Application\Command\Meeting\UpdateMeetingRequest;
 use Proximum\Vimeet\Application\Components\Meeting\RequestPermissionManager;
+use Proximum\Vimeet\Application\Query\Agenda\AvailableSheets\AvailableSlotsByParticipantQuery;
 use Proximum\Vimeet\Application\Query\Meeting\MeetingRequestListViewQuery;
 use Proximum\Vimeet\Application\Query\Meeting\Message\DiscussionMeetingRequestViewQuery;
 use Proximum\Vimeet\Application\Query\Meeting\StateListViewQuery;
 use Proximum\Vimeet\Application\Query\Tip\TipTranslationViewQuery;
 use Proximum\Vimeet\Application\Query\Tip\TipTranslationViewQueryHandler;
 use Proximum\Vimeet\Application\Query\Type\MeetingTypeViewQuery;
+use Proximum\Vimeet\Application\View\Agenda\Slot\AvailableSlotView;
 use Proximum\Vimeet\Application\View\Meeting\MeetingRequestListView;
 use Proximum\Vimeet\Application\View\Meeting\Message\DiscussionMeetingRequestView;
 use Proximum\Vimeet\Application\View\Meeting\StateListsView;
+use Proximum\Vimeet\Application\View\Meeting\ApproveRequestResult;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Meeting\Constant;
 use Proximum\Vimeet\Domain\Model\Meeting\Request as MeetingRequest;
+use Proximum\Vimeet\Domain\Model\MeetingSlot;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\User;
@@ -69,28 +73,89 @@ class MeetingRequestController extends Controller
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
         $this->denyAccessUnlessGranted(SheetVoter::EDIT, $sheet);
 
+        $event = $eventDomain->getEvent();
+        $locale = $request->getLocale();
+
         $typeViews = $this->get('tactician.commandbus.query')->handle(new MeetingTypeViewQuery(
             $sheet, $request->getLocale()
         ));
 
-        $defaults   = SearchType::getDefaultFilters($typeViews);
-        $searchForm = $this->createSearchForm($sheet, $defaults, SearchType::transformTypeViews($typeViews));
+        $dDay = $this->get('domain.event.day.dday_guesser')->isItDDayAndFeatureEnabled($event);
+        $isUserParticipant   = $sheet->hasUserParticipant($user);
+        $filterAvailableSlot = $dDay && $isUserParticipant;
+        $availableSlots      = [];
+        $specificSlot        = null;
 
-        if ($searchForm->handleRequest($request)->isSubmitted() && $searchForm->isValid()) {
-            $filters = array_merge($defaults, array_filter(
-                $searchForm->getData(), function ($data) {
-                    return !empty($data);
-                })
+        if (true === $filterAvailableSlot) {
+            /** @var AvailableSlotView[] $availableSlots */
+            $availableSlots = $this->get('tactician.commandbus.query')->handle(
+                new AvailableSlotsByParticipantQuery($event, $sheet->getUserParticipant($user))
             );
 
-            $searchForm = $this->createSearchForm($sheet, $filters, SearchType::transformTypeViews($typeViews));
+            $filterAvailableSlot = !empty($availableSlots);
+
+            $slotId = $request->query->get('slot_id');
+
+            if ($slotId !== null) {
+                $slot = $this->get('vimeet_infrastructure.repository.meeting_slot_repository')->findById((int) $slotId);
+
+                if ($slot !== null) {
+                    foreach ($availableSlots as $availableSlot) {
+                        if ($availableSlot->id === $slot->getId()) {
+                            $specificSlot = $slot;
+                        }
+                    }
+                }
+            }
+        }
+
+        $defaults   = SearchType::getDefaultFilters($typeViews);
+        $searchForm = $this->createSearchForm(
+            $event,
+            $sheet,
+            $locale,
+            $defaults,
+            SearchType::transformTypeViews($typeViews),
+            $filterAvailableSlot,
+            $specificSlot
+        );
+
+        if ($searchForm->handleRequest($request)->isSubmitted() && $searchForm->isValid()) {
+            $filters = array_merge($defaults,
+                array_filter(
+                    $searchForm->getData(), function ($data) {
+                        return !empty($data);
+                    }
+                )
+            );
+
+            $searchForm = $this->createSearchForm(
+                $event,
+                $sheet,
+                $locale,
+                $filters,
+                SearchType::transformTypeViews($typeViews),
+                $filterAvailableSlot,
+                $specificSlot
+            );
         } else {
             $filters = $defaults;
         }
 
-        $event       = $eventDomain->getEvent();
-        $query       = new MeetingRequestListViewQuery($event, $sheet, $user, $request->getLocale(), $filters);
-        $statusQuery = new StateListViewQuery($sheet, $filters);
+        $event = $eventDomain->getEvent();
+        $query = new MeetingRequestListViewQuery(
+            $event,
+            $sheet,
+            $user,
+            $locale,
+            $filters,
+            $this->getSpecificSlot($filters, $specificSlot, $availableSlots)
+        );
+        $statusQuery = new StateListViewQuery(
+            $sheet,
+            $filters,
+            $this->getSpecificSlot($filters, $specificSlot, $availableSlots)
+        );
 
         /** @var MeetingRequestListView $meetingRequestListView */
         $meetingRequestListView = $this->get('tactician.commandbus.query')->handle($query);
@@ -111,21 +176,42 @@ class MeetingRequestController extends Controller
             TipTranslationViewQueryHandler::CONTEXT_MEETING_MANAGEMENT,
             $request->getLocale()
         );
-        $tipTranslationViews = $this->get('tactician.commandbus.query')->handle($tipTranslationViewQuery);
+        $tipTranslationViews     = $this->get('tactician.commandbus.query')->handle($tipTranslationViewQuery);
 
         return $this->render($template, [
-            'event'               => $event,
-            'sheet'               => $sheet,
-            'meetingRequestView'  => $meetingRequestListView,
-            'stateListsView'      => $stateListsView,
-            'searchForm'          => $searchForm->createView(),
-            'isCatalog'           => true, // set menu link visible,
-            'isMeeting'           => true,
-            'isEventOpen'         => $isEventOpen,
+            'event'                    => $event,
+            'sheet'                    => $sheet,
+            'meetingRequestView'       => $meetingRequestListView,
+            'stateListsView'           => $stateListsView,
+            'searchForm'               => $searchForm->createView(),
+            'isCatalog'                => true, // set menu link visible,
+            'isMeeting'                => true,
+            'isEventOpen'              => $isEventOpen,
             'filterRequestProposition' => $this->isFilterRequestPropositionActive($searchForm->get('state')->getData()),
-            'resultsCount'        => count($meetingRequestListView->getMeetingRequestsView()),
-            'tipTranslationViews' => $tipTranslationViews,
+            'resultsCount'             => count($meetingRequestListView->getMeetingRequestsView()),
+            'tipTranslationViews'      => $tipTranslationViews,
+            'participant'              => $sheet->getUserParticipant($user),
         ]);
+    }
+
+    /**
+     * @param array            $filters
+     * @param MeetingSlot|null $specificSlot
+     * @param array            $availableSlots
+     *
+     * @return array
+     */
+    private function getSpecificSlot(array $filters, MeetingSlot $specificSlot = null, array $availableSlots)
+    {
+        if (empty($filters['availableSlot'])) {
+            return [];
+        }
+
+        if ($specificSlot instanceof MeetingSlot && $filters['availableSlot'] === Constant::FILTER_AVAILABLE_SLOT_IDS_SLOT) {
+            return [$specificSlot];
+        }
+
+        return $availableSlots;
     }
 
     /**
@@ -230,7 +316,8 @@ class MeetingRequestController extends Controller
         $createRequest = new CreateRequest($eventDomain->getEvent(), $sheet, $toSheet, $user);
         $form          = $this->createForm(MeetingRequestCreateType::class, $createRequest, [
             'action' => $this->generateUrl('event_catalog_sheet_meeting_request', [
-                'sheet' => $sheet->getId(), 'toSheet' => $toSheet->getId()
+                'sheet'   => $sheet->getId(),
+                'toSheet' => $toSheet->getId(),
             ]),
             'sheet'  => $sheet,
             'locale' => $request->getLocale(),
@@ -246,6 +333,7 @@ class MeetingRequestController extends Controller
                 $this->renderView('EventBundle:MeetingRequest\Button:pendingRequestButton.html.twig', [
                     'sheet'          => $sheet,
                     'meetingRequest' => $result->meetingRequest,
+                    'isPhoneValidationRequired' => false
                 ]),
                 $this->getParticipantsHtml($createRequest->participants, $request->getLocale())
             ));
@@ -297,11 +385,11 @@ class MeetingRequestController extends Controller
             ->get('tactician.commandbus.query')
             ->handle(new DiscussionMeetingRequestViewQuery($meetingRequest, $request->getLocale()));
 
-        $approveRequest = new ApproveRequest($this->getUser(), $meetingRequest, $sheet);
+        $approveRequest = new ApproveRequest($this->getUser(), $meetingRequest, $sheet, $request->getLocale());
         $form           = $this->createForm(MeetingRequestApproveType::class, $approveRequest, [
             'action' => $this->generateUrl('event_meeting_request_approve', [
                 'sheet'          => $sheet->getId(),
-                'meetingRequest' => $meetingRequest->getId()
+                'meetingRequest' => $meetingRequest->getId(),
             ]),
             'locale' => $request->getLocale(),
             'sheet'  => $sheet,
@@ -310,18 +398,32 @@ class MeetingRequestController extends Controller
         $isSubmitted = $form->handleRequest($request)->isSubmitted();
 
         if ($isSubmitted && $form->isValid()) {
-            $this->get('tactician.commandbus')->handle($approveRequest);
+            /** @var ApproveRequestResult $approveRequestResult */
+            $approveRequestResult = $this->get('tactician.commandbus')->handle($approveRequest);
+
+            if ($approveRequestResult !== null) {
+                $flashMessageView = $this->renderView('EventBundle::MeetingRequest\Message\requestTransformedIntoMeeting.html.twig', [
+                    'meetingDdayView' => $approveRequestResult->meetingView,
+                    'error'           => $approveRequestResult->hasError,
+                ]);
+            }
 
             return new JsonResponse($this->createJsonResponseData(
                 true,
-                true,
+                $approveRequestResult->meetingView === null && !$approveRequestResult->hasError,
                 $this->renderView('EventBundle:MeetingRequest\Button:approvedProposition.html.twig', [
                     'sheet'                        => $sheet,
                     'meetingRequest'               => $meetingRequest,
-                    'isMeetingPublished'           => $this->get('domain.key_dates.checker.meeting_published_access_checker')->allowedToAccess($eventDomain->getEvent()),
-                    'isMeetingRequestUpdateLocked' =>$eventDomain->getEvent()->getConfiguration()->isMeetingRequestUpdateLocked()
+                    'isMeetingPublished'           => $this->get('domain.key_dates.checker.meeting_published_access_checker')
+                        ->allowedToAccess($eventDomain->getEvent()),
+                    'isMeetingRequestUpdateLocked' => $eventDomain
+                        ->getEvent()
+                        ->getConfiguration()
+                        ->isMeetingRequestUpdateLocked(),
+                    'isPhoneValidationRequired' => false
                 ]),
-                $this->getParticipantsHtml($approveRequest->participants, $request->getLocale())
+                $this->getParticipantsHtml($approveRequest->participants, $request->getLocale()),
+                $flashMessageView ?? null
             ));
         } elseif ($isSubmitted && !$form->isValid()) {
             return new JsonResponse($this->createJsonResponseData(
@@ -374,7 +476,7 @@ class MeetingRequestController extends Controller
         $form          = $this->createForm(MeetingRequestRefuseType::class, $refuseRequest, [
             'action' => $this->generateUrl('event_meeting_request_refuse', [
                 'sheet'          => $sheet->getId(),
-                'meetingRequest' => $meetingRequest->getId()
+                'meetingRequest' => $meetingRequest->getId(),
             ]),
         ]);
 
@@ -389,6 +491,7 @@ class MeetingRequestController extends Controller
                 $this->renderView('EventBundle:MeetingRequest\Button:refusedProposition.html.twig', [
                     'sheet'          => $sheet,
                     'meetingRequest' => $meetingRequest,
+                    'isPhoneValidationRequired' => false
                 ])
             ));
         } elseif ($isSubmitted && !$form->isValid()) {
@@ -446,7 +549,7 @@ class MeetingRequestController extends Controller
             $form     = $this->createForm(UnRefuseMeetingRequestType::class, $unRefuse, [
                 'action' => $this->generateUrl('event_meeting_request_show_conversation_refuse', [
                     'sheet'          => $sheet->getId(),
-                    'meetingRequest' => $meetingRequest->getId()
+                    'meetingRequest' => $meetingRequest->getId(),
                 ]),
             ]);
 
@@ -456,13 +559,16 @@ class MeetingRequestController extends Controller
                 $this->get('tactician.commandbus')->handle($unRefuse);
 
                 // If the meeting request are still answerable
-                if ($this->get('domain.key_dates.checker.answering_meeting_request_access_checker')->allowedToAccess($eventDomain->getEvent())) {
+                if ($this->get('domain.key_dates.checker.answering_meeting_request_access_checker')
+                    ->allowedToAccess($eventDomain->getEvent())
+                ) {
                     return new JsonResponse($this->createJsonResponseData(
                         true,
                         true,
                         $this->renderView('EventBundle:MeetingRequest\Button:approveRefuseRequestButton.html.twig', [
                             'meetingRequest' => $meetingRequest,
                             'sheet'          => $meetingRequest->getToSheet(),
+                            'isPhoneValidationRequired' => false
                         ])
                     ));
                 } else {
@@ -489,21 +595,28 @@ class MeetingRequestController extends Controller
     }
 
     /**
-     * @param bool   $ok
-     * @param bool   $close
-     * @param string $html
-     * @param string $participantsHtml
+     * @param bool        $ok
+     * @param bool        $close
+     * @param string      $html
+     * @param string      $participantsHtml
+     * @param null|string $flashMessage
      *
      * @return array
      */
-    private function createJsonResponseData($ok, $close, $html, $participantsHtml = '')
+    private function createJsonResponseData($ok, $close, $html, $participantsHtml = '', $flashMessage = null)
     {
-        return [
+        $response = [
             'status'           => $ok === true ? 'ok' : 'error',
             'close'            => $close,
             'html'             => $html,
             'participantsHtml' => $participantsHtml,
         ];
+
+        if ($flashMessage !== null) {
+            $response['flashMessage'] = $flashMessage;
+        }
+
+        return $response;
     }
 
     /**
@@ -547,12 +660,12 @@ class MeetingRequestController extends Controller
         &$cancelForm
     ) {
         if ($permissionManager->isAllowedToCancel($meetingRequest, $sheet)) {
-            $toSheet = $meetingRequest->getToSheet();
+            $toSheet       = $meetingRequest->getToSheet();
             $cancelRequest = new CancelRequest($meetingRequest, $this->getUser(), $sheet);
             $cancelForm    = $this->createForm(MeetingRequestCancelType::class, $cancelRequest, [
                 'action' => $this->generateUrl('event_meeting_request_edit', [
                     'sheet'          => $sheet->getId(),
-                    'meetingRequest' => $meetingRequest->getId()
+                    'meetingRequest' => $meetingRequest->getId(),
                 ]),
             ]);
 
@@ -560,13 +673,16 @@ class MeetingRequestController extends Controller
                 $this->get('tactician.commandbus')->handle($cancelRequest);
 
                 // If you are still allowed to request someone in meeting
-                if ($this->get('domain.key_dates.checker.meeting_request_access_checker')->allowedToAccess($sheet->getEvent())) {
+                if ($this->get('domain.key_dates.checker.meeting_request_access_checker')
+                    ->allowedToAccess($sheet->getEvent())
+                ) {
                     return new JsonResponse($this->createJsonResponseData(
                         true,
                         true,
                         $this->renderView('EventBundle:MeetingRequest/Button:createRequest.html.twig', [
                             'sheet'   => $sheet,
                             'toSheet' => $toSheet,
+                            'isPhoneValidationRequired' => false
                         ])
                     ));
                 } else {
@@ -600,7 +716,7 @@ class MeetingRequestController extends Controller
             $unApprovedForm    = $this->createForm(UnApproveMeetingRequestType::class, $unApprovedRequest, [
                 'action' => $this->generateUrl('event_meeting_request_edit', [
                     'sheet'          => $sheet->getId(),
-                    'meetingRequest' => $meetingRequest->getId()
+                    'meetingRequest' => $meetingRequest->getId(),
                 ]),
             ]);
 
@@ -612,7 +728,8 @@ class MeetingRequestController extends Controller
                     true,
                     $this->renderView('EventBundle:MeetingRequest/Button:approveRefuseRequestButton.html.twig', [
                         'meetingRequest' => $meetingRequest,
-                        'sheet'          => $sheet
+                        'sheet'          => $sheet,
+                        'isPhoneValidationRequired' => false
                     ])
                 ));
             }
@@ -682,14 +799,14 @@ class MeetingRequestController extends Controller
         }
 
         if ($this->displayEditForm($discussion, $sheet)) {
-            $command = new UpdateMeetingRequest($meetingRequest, $sheet, $this->getUser());
+            $command = new UpdateMeetingRequest($meetingRequest, $sheet);
             $form    = $this->createForm(MeetingRequestUpdateType::class, $command, [
                 'sheet'            => $sheet,
                 'locale'           => $request->getLocale(),
                 'show_description' => !$discussion->hasMessageOfSheet($sheet),
                 'action'           => $this->generateUrl('event_meeting_request_edit', [
                     'sheet'          => $sheet->getId(),
-                    'meetingRequest' => $meetingRequest->getId()
+                    'meetingRequest' => $meetingRequest->getId(),
                 ]),
             ]);
 
@@ -759,20 +876,35 @@ class MeetingRequestController extends Controller
     }
 
     /**
-     * @param Sheet $sheet
-     * @param array $filters
-     * @param array $typeViews
+     * @param Event            $event
+     * @param Sheet            $sheet
+     * @param string           $locale
+     * @param array            $filters
+     * @param array            $typeViews
+     * @param bool             $filterAvailableSlot
+     * @param MeetingSlot|null $specificSlot
      *
-     * @return \Symfony\Component\Form\FormInterface
+     * @return FormInterface
      */
-    private function createSearchForm(Sheet $sheet, array $filters, array $typeViews)
-    {
+    private function createSearchForm(
+        Event $event,
+        Sheet $sheet,
+        string $locale,
+        array $filters,
+        array $typeViews,
+        bool $filterAvailableSlot = false,
+        MeetingSlot $specificSlot = null
+    ) {
         return $this->get('form.factory')->createNamed('', SearchType::class, $filters, [
-            'label'     => null,
-            'typeViews' => $typeViews,
-            'action'    => $this->generateUrl('event_meeting_list_request', [
+            'action'              => $this->generateUrl('event_meeting_list_request', [
                 'sheet' => $sheet->getId(),
             ]),
+            'event'               => $event,
+            'filterAvailableSlot' => $filterAvailableSlot,
+            'label'               => null,
+            'locale'              => $locale,
+            'specificSlot'        => $specificSlot,
+            'typeViews'           => $typeViews,
         ]);
     }
 
@@ -785,15 +917,15 @@ class MeetingRequestController extends Controller
     private function getParticipantsHtml(array $participants, $locale)
     {
         $participants = array_map(function (Participant $participant) use ($locale) {
-                return $this
-                    ->get('template.participant_info_guesser')
-                    ->guessParticipantCompleteName($participant, $locale);
-            },
+            return $this
+                ->get('template.participant_info_guesser')
+                ->guessParticipantCompleteName($participant, $locale);
+        },
             $participants
         );
 
         return $this->renderView('EventBundle:MeetingRequest:participantsList.html.twig', [
-            'participants' => $participants
+            'participants' => $participants,
         ]);
     }
 }

@@ -46,4 +46,23 @@ class CatalogVisibilityContext implements Context
         $this->catalogVisibilityContextProxy->getStorage()->set('catalogVisibility', $catalogVisibility);
 
     }
+
+    /**
+     * @Given /^this type is visible in catalog$/
+     */
+    public function typeIsVisibleInCatalog()
+    {
+        $type              = $this->catalogVisibilityContextProxy->getStorage()->get('type');
+        $catalogVisibility = $this->catalogVisibilityContextProxy->getStorage()->get('catalogVisibility');
+
+        if (null === $type) {
+            throw new \InvalidArgumentException('Missing Type');
+        }
+
+        if (null === $catalogVisibility) {
+            throw new \InvalidArgumentException('Missing CatalogVisibility');
+        }
+
+        $this->catalogVisibilityContextProxy->getCatalogVisibilityManager()->setVisibleType($catalogVisibility, $type);
+    }
 }

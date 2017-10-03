@@ -107,4 +107,12 @@ interface TipRepositoryInterface
      * @return Tip[]
      */
     public function getByEvent(Event $event): array;
+
+    /**
+     * @param Event $event
+     * @param Type  $type
+     *
+     * @return bool
+     */
+    public function isConfirmationPhoneEnabled(Event $event, Type $type): bool;
 }

@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Catalog;
 
+use Proximum\Vimeet\Application\Adapter\TranslatorInterface;
 use Proximum\Vimeet\Application\Query\Catalog\SearchFacet\SearchFacetQueryHandlerInterface;
 use Proximum\Vimeet\Application\Query\Catalog\SearchFacet\SearchFacetViewQuery;
 use Proximum\Vimeet\Domain\Catalog\SearchFields;
@@ -25,19 +26,22 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 abstract class AbstractSearchType extends AbstractType
 {
-    /**
-     * @var SearchFacetQueryHandlerInterface
-     */
+    /** @var SearchFacetQueryHandlerInterface*/
     private $searchFacetViewQueryHandler;
 
+    /** @var TranslatorInterface */
+    protected $translator;
+
     /**
-     * SearchType constructor.
-     *
      * @param SearchFacetQueryHandlerInterface $searchFacetViewQueryHandler
+     * @param TranslatorInterface              $translator
      */
-    public function __construct(SearchFacetQueryHandlerInterface $searchFacetViewQueryHandler)
-    {
+    public function __construct(
+        SearchFacetQueryHandlerInterface $searchFacetViewQueryHandler,
+        TranslatorInterface $translator
+    ) {
         $this->searchFacetViewQueryHandler = $searchFacetViewQueryHandler;
+        $this->translator = $translator;
     }
 
     /**

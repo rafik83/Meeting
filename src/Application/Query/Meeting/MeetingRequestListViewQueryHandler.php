@@ -1,9 +1,9 @@
 <?php
 
 /*
- * This file is part of the vimeet project.
+ * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2016 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -17,27 +17,20 @@ use Proximum\Vimeet\Domain\KeyDates\Checker\AnsweringMeetingRequestAccessChecker
 use Proximum\Vimeet\Domain\KeyDates\Checker\MeetingPublishedAccessChecker;
 use Proximum\Vimeet\Domain\KeyDates\Checker\MeetingRequestAccessChecker;
 use Proximum\Vimeet\Domain\Repository\Meeting\RequestRepositoryInterface;
+use Proximum\Vimeet\Domain\User\Phone\ValidationRequiredChecker;
 
 class MeetingRequestListViewQueryHandler
 {
-    /**
-     * @var RequestRepositoryInterface
-     */
+    /** @var RequestRepositoryInterface */
     private $meetingRequestRepository;
 
-    /**
-     * @var MeetingRequestViewQueryHandler
-     */
+    /** @var MeetingRequestViewQueryHandler */
     private $meetingRequestViewQueryHandler;
 
-    /**
-     * @var ViewedSheetListViewQueryHandler
-     */
+    /** @var ViewedSheetListViewQueryHandler */
     private $viewedSheetListViewQueryHandler;
 
-    /**
-     * @var MeetingPublishedAccessChecker
-     */
+    /** @var MeetingPublishedAccessChecker*/
     private $meetingPublishedAccessChecker;
 
     /** @var MeetingRequestAccessChecker */
@@ -45,6 +38,9 @@ class MeetingRequestListViewQueryHandler
 
     /** @var AnsweringMeetingRequestAccessChecker */
     private $answeringMeetingRequestAccessChecker;
+
+    /** @var ValidationRequiredChecker */
+    private $validationRequiredChecker;
 
     /**
      * MeetingRequestListViewQueryHandler constructor.
@@ -55,6 +51,7 @@ class MeetingRequestListViewQueryHandler
      * @param MeetingPublishedAccessChecker        $meetingPublishedAccessChecker
      * @param MeetingRequestAccessChecker          $meetingRequestAccessChecker
      * @param AnsweringMeetingRequestAccessChecker $answeringMeetingRequestAccessChecker
+     * @param ValidationRequiredChecker            $validationRequiredChecker
      */
     public function __construct(
         RequestRepositoryInterface $meetingRequestRepository,
@@ -62,7 +59,8 @@ class MeetingRequestListViewQueryHandler
         ViewedSheetListViewQueryHandler $viewedSheetListViewQueryHandler,
         MeetingPublishedAccessChecker $meetingPublishedAccessChecker,
         MeetingRequestAccessChecker $meetingRequestAccessChecker,
-        AnsweringMeetingRequestAccessChecker $answeringMeetingRequestAccessChecker
+        AnsweringMeetingRequestAccessChecker $answeringMeetingRequestAccessChecker,
+        ValidationRequiredChecker $validationRequiredChecker
     ) {
         $this->meetingRequestRepository             = $meetingRequestRepository;
         $this->meetingRequestViewQueryHandler       = $meetingRequestViewQueryHandler;
@@ -70,6 +68,7 @@ class MeetingRequestListViewQueryHandler
         $this->meetingPublishedAccessChecker        = $meetingPublishedAccessChecker;
         $this->meetingRequestAccessChecker          = $meetingRequestAccessChecker;
         $this->answeringMeetingRequestAccessChecker = $answeringMeetingRequestAccessChecker;
+        $this->validationRequiredChecker            = $validationRequiredChecker;
     }
 
     /**
@@ -80,11 +79,11 @@ class MeetingRequestListViewQueryHandler
     public function handle(MeetingRequestListViewQuery $query)
     {
         $meetingRequests = $this->meetingRequestRepository
-            ->getAllRequestBySheet($query->sheet, $query->filters);
+            ->getAllRequestBySheet($query->sheet, $query->filters, $query->slotsToFilter);
 
         $sheets = [];
         foreach ($meetingRequests as $meetingRequest) {
-            $sheets[] = $meetingRequest->getToSheet();
+            $sheets[] = $meetingRequest->getSheetMet($query->sheet);
         }
 
         $viewedSheetListView = $this->viewedSheetListViewQueryHandler->handle(
@@ -95,8 +94,10 @@ class MeetingRequestListViewQueryHandler
         $isMeetingPublished     = $this->meetingPublishedAccessChecker->allowedToAccess($query->event);
 
         $isMeetingRequestUpdateLocked    = $query->event->getConfiguration()->isMeetingRequestUpdateLocked();
-        $isMeetingrequestClosed          = !$this->meetingRequestAccessChecker->allowedToAccess($query->event);
+        $isMeetingRequestClosed          = !$this->meetingRequestAccessChecker->allowedToAccess($query->event);
         $isAnsweringMeetingRequestClosed = !$this->answeringMeetingRequestAccessChecker->allowedToAccess($query->event);
+
+        $isPhoneValidationRequired = $this->isPhoneValidationRequiredForUser($query);
 
         foreach ($meetingRequests as $meetingRequest) {
             $meetingRequestView = $this->meetingRequestViewQueryHandler->handle(
@@ -107,9 +108,10 @@ class MeetingRequestListViewQueryHandler
                     $query->locale,
                     $isMeetingPublished,
                     $isMeetingRequestUpdateLocked,
-                    $isMeetingrequestClosed,
+                    $isMeetingRequestClosed,
                     $isAnsweringMeetingRequestClosed,
-                    isset($viewedSheetListView[$meetingRequest->getToSheet()->getId()])
+                    isset($viewedSheetListView[$meetingRequest->getSheetMet($query->sheet)->getId()]),
+                    $isPhoneValidationRequired
                 )
             );
 
@@ -122,5 +124,15 @@ class MeetingRequestListViewQueryHandler
         }
 
         return $meetingRequestListView;
+    }
+
+    /**
+     * @param MeetingRequestListViewQuery $query
+     *
+     * @return bool
+     */
+    private function isPhoneValidationRequiredForUser(MeetingRequestListViewQuery $query): bool
+    {
+        return $this->validationRequiredChecker->handle($query->sheet, $query->user);
     }
 }

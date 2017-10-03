@@ -51,7 +51,7 @@ class AvailableSlotsByParticipantAndDayQueryHandlerTest extends TestCase
             ->shouldNotBeCalled()
         ;
         $dDayGuesser
-            ->isItDDay($event)
+            ->isItDDayAndFeatureEnabled($event)
             ->shouldBeCalled()
             ->willReturn(false)
         ;
@@ -102,7 +102,7 @@ class AvailableSlotsByParticipantAndDayQueryHandlerTest extends TestCase
             ->shouldBeCalled()
             ->willReturn($availableSlots);
         $dDayGuesser
-            ->isItDDay($event)
+            ->isItDDayAndFeatureEnabled($event)
             ->shouldBeCalled()
             ->willReturn(true);
 
@@ -150,7 +150,7 @@ class AvailableSlotsByParticipantAndDayQueryHandlerTest extends TestCase
             ->shouldBeCalled()
             ->willReturn($availableSlots);
         $dDayGuesser
-            ->isItDDay($event)
+            ->isItDDayAndFeatureEnabled($event)
             ->shouldBeCalled()
             ->willReturn(true);
 

@@ -12,6 +12,7 @@ namespace Proximum\Vimeet\Behat\Service\Manager;
 
 use Proximum\Vimeet\Domain\Model\Catalog\External\CatalogVisibility;
 use Proximum\Vimeet\Domain\Model\Event;
+use Proximum\Vimeet\Domain\Model\Type;
 use Proximum\Vimeet\Domain\Repository\CatalogVisibilityRepositoryInterface;
 
 class CatalogVisibilityManager
@@ -47,5 +48,16 @@ class CatalogVisibilityManager
         $this->catalogVisibilityRepository->add($catalogVisibility);
 
         return $catalogVisibility;
+    }
+
+    /**
+     * @param CatalogVisibility $catalogVisibility
+     * @param Type              $type
+     */
+    public function setVisibleType(CatalogVisibility $catalogVisibility, Type $type)
+    {
+        $catalogVisibility->setType($type);
+
+        $this->catalogVisibilityRepository->set($catalogVisibility);
     }
 }

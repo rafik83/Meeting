@@ -6,8 +6,6 @@
 
 {% block body_attributes 'class="grey"' %}
 
-{% form_theme searchForm '@Ui/default.html.twig' %}
-
 {% block header_mobile %}
     <div class="catalog-mobile-menu">
     {% if searchForm.type is defined or searchForm.availableSlot is defined %}
@@ -56,7 +54,7 @@
             seeMoreButton: seeMoreButton,
             page: page,
             isCatalog: isCatalog,
-            tipTranslationViews: null
+            tipTranslationViews: null,
         }, false) }}
     </div>
     {{ include('EventBundle:MeetingRequest:modalMeetingRequest.html.twig') }}

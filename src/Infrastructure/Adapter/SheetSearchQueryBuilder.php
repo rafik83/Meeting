@@ -441,21 +441,31 @@ class SheetSearchQueryBuilder
     {
         if (!isset($filters[SearchFields::FILTER_AVAILABLE_SLOT_IDS])
             || empty($filters[SearchFields::FILTER_AVAILABLE_SLOT_IDS])
-            || $filters[SearchFields::FILTER_AVAILABLE_SLOT_IDS] !== CatalogConstant::AVAILABLE_SLOT_IDS_FILTER_AVAILABLE
+            || $filters[SearchFields::FILTER_AVAILABLE_SLOT_IDS] === CatalogConstant::AVAILABLE_SLOT_IDS_FILTER_EVERYONE
         ) {
             return;
         }
+
+        $filterAvailableSlotChoice = $filters[SearchFields::FILTER_AVAILABLE_SLOT_IDS];
 
         $nested = new Nested();
         $nested->setPath('availableSlotIds');
 
         $matchSlot = new BoolQuery();
 
-        /** @var AvailableSlotView $availableSlot */
-        foreach ($this->availableSlots as $availableSlot) {
+        if (!empty($filters[SearchFields::FILTER_BY_SPECIFIC_SLOT])
+            && $filterAvailableSlotChoice === CatalogConstant::AVAILABLE_SLOT_IDS_FILTER_SLOT
+        ) {
             $matchSlot->addShould(
-                (new Term)->setTerm('availableSlotIds.id', $availableSlot->id)
+                (new Term)->setTerm('availableSlotIds.id', $filters[SearchFields::FILTER_BY_SPECIFIC_SLOT])
             );
+        } elseif ($filterAvailableSlotChoice === CatalogConstant::AVAILABLE_SLOT_IDS_FILTER_AVAILABLE) {
+            /** @var AvailableSlotView $availableSlot */
+            foreach ($this->availableSlots as $availableSlot) {
+                $matchSlot->addShould(
+                    (new Term)->setTerm('availableSlotIds.id', $availableSlot->id)
+                );
+            }
         }
 
         $nested->setQuery($matchSlot);

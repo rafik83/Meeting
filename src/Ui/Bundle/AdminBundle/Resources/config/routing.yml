@@ -329,13 +329,6 @@ admin_agenda_spot_detail:
     methods: [GET]
     defaults: { _controller: AdminBundle:Agenda/Agenda:spotDetail }
 
-admin_agenda_sheets_indicators:
-    path: /event/{event}/agenda/sheets/indicators
-    requirements:
-        event: \d+
-    methods: [GET]
-    defaults: { _controller: AdminBundle:Agenda/Agenda:indicators }
-
 admin_agenda_sheet:
     path: /event/{event}/agenda/sheet/{sheet}
     requirements:
@@ -589,6 +582,13 @@ admin_spot_import:
         event: \d+
     methods: [GET, POST]
     defaults: { _controller: AdminBundle:Spot\Import:import }
+
+admin_spot_import_sample:
+    path: /event/{event}/spot/sample
+    requirements:
+        event: \d+
+    methods: [GET]
+    defaults: { _controller: AdminBundle:Spot\Import:getSample }
 
 admin_spot_import_confirm:
     path: /event/{event}/spot/{importedFile}/confirm

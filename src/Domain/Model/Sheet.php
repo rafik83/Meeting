@@ -292,6 +292,14 @@ class Sheet implements TraceableInterface
     }
 
     /**
+     * @return array
+     */
+    public function getParticipantsArray(): array
+    {
+        return $this->participants->toArray();
+    }
+
+    /**
      * @return Participant
      *
      * @throws SheetException
@@ -308,6 +316,7 @@ class Sheet implements TraceableInterface
     }
 
     /**
+     * @deprecated use countParticipants()
      * @return int
      */
     public function countParticipant()

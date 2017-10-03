@@ -1,7 +1,12 @@
 {% if hideMeetingRequest is not defined or hideMeetingRequest == false %}
     {% if allowedToCreate is defined and allowedToCreate == true %}
         {% if isMeetingRequestClosed is defined and isMeetingRequestClosed == false %}
-            {{ include('EventBundle:MeetingRequest/Button:createRequest.html.twig', {'sheet': viewer, 'toSheet': viewed}, false) }}
+            {{ include('EventBundle:MeetingRequest/Button:createRequest.html.twig', {
+                'sheet': viewer,
+                'toSheet': viewed,
+                'isPhoneValidationRequired': isPhoneValidationRequired,
+                'phoneValidationLink': phoneValidationLink
+            }, false) }}
         {% else %}
             {{ include('EventBundle:MeetingRequest/Button:closedMeetingRequest.html.twig', {}, false) }}
         {% endif %}
@@ -15,6 +20,8 @@
                         {{ include('EventBundle:MeetingRequest/Button:approveRefuseRequestButton.html.twig', {
                             'sheet': viewer,
                             'meetingRequest': meetingRequest,
+                            'isPhoneValidationRequired': isPhoneValidationRequired,
+                            'phoneValidationLink': phoneValidationLink
                         }, false) }}
                     {% elseif meetingRequest.isApproved %}
                         {% if not isMeetingRequestUpdateLocked %}
@@ -22,13 +29,17 @@
                                 'sheet': viewer,
                                 'meetingRequest': meetingRequest,
                                 'isMeetingPublished': isMeetingPublished|default(false),
-                                'isMeetingRequestUpdateLocked': isMeetingRequestUpdateLocked
+                                'isMeetingRequestUpdateLocked': isMeetingRequestUpdateLocked,
+                                'isPhoneValidationRequired': isPhoneValidationRequired,
+                                'phoneValidationLink': phoneValidationLink
                             }, false) }}
                         {% endif %}
                     {% elseif meetingRequest.isRefused %}
                         {{ include('EventBundle:MeetingRequest/Button:refusedProposition.html.twig', {
                             'sheet': viewer,
                             'meetingRequest': meetingRequest,
+                            'isPhoneValidationRequired': isPhoneValidationRequired,
+                            'phoneValidationLink': phoneValidationLink
                         }, false) }}
                     {% endif %}
                 {% else %}
@@ -36,6 +47,8 @@
                         {{ include('EventBundle:MeetingRequest/Button:pendingRequestButton.html.twig', {
                             'sheet': viewer,
                             'meetingRequest': meetingRequest,
+                            'isPhoneValidationRequired': isPhoneValidationRequired,
+                            'phoneValidationLink': phoneValidationLink
                         }, false) }}
                     {% elseif meetingRequest.isApproved %}
                         {% if not isMeetingRequestUpdateLocked %}
@@ -43,13 +56,17 @@
                                 'sheet': viewer,
                                 'meetingRequest': meetingRequest,
                                 'isMeetingPublished': isMeetingPublished|default(false),
-                                'isMeetingRequestUpdateLocked': isMeetingRequestUpdateLocked
+                                'isMeetingRequestUpdateLocked': isMeetingRequestUpdateLocked,
+                                'isPhoneValidationRequired': isPhoneValidationRequired,
+                                'phoneValidationLink': phoneValidationLink
                             }, false) }}
                         {% endif %}
                     {% elseif meetingRequest.isRefused %}
                         {{ include('EventBundle:MeetingRequest/Button:refusedRequestButton.html.twig', {
                             'sheet': viewer,
                             'meetingRequest': meetingRequest,
+                            'isPhoneValidationRequired': isPhoneValidationRequired,
+                            'phoneValidationLink': phoneValidationLink
                         }, false) }}
                     {% endif %}
                 {% endif %}

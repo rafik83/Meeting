@@ -127,6 +127,34 @@ class SheetRepository implements SheetRepositoryInterface
     /**
      * {@inheritdoc}
      */
+    public function getSheetsInCatalogWithTypesByEvent(Event $event, array $types = [], array $excludedSheets = []): array
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('sheet, participants')
+            ->from(Sheet::class, 'sheet')
+            ->join(
+                'sheet.participants',
+                'participants',
+                'WITH',
+                'sheet.event = :event AND sheet.inCatalog = true AND sheet.enable = true AND sheet.type IN (:types)'
+            )
+            ->setParameter('types', $types)
+            ->setParameter('event', $event);
+
+
+        if (!empty($excludedSheets)) {
+            $queryBuilder->andWhere('sheet NOT IN (:excludedSheets)');
+            $queryBuilder->setParameter('excludedSheets', $excludedSheets);
+        }
+
+        return $queryBuilder->getQuery()->getResult();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function getSheetsInCatalogWithAtLeastOneAcceptedRequestByEvent(Event $event)
     {
         $queryBuilder = $this

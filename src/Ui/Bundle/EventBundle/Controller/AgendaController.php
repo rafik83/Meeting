@@ -133,10 +133,13 @@ class AgendaController extends Controller
         if ($countAvailableSheetsWithProposition > 0) {
             return new JsonResponse(
                 [
-                    'message' => $this->get('translator')->transChoice(
-                        'agenda.availability.available_sheets_with_proposition',
-                        $countAvailableSheetsWithProposition,
-                        ['%availableSheets%' => $countAvailableSheetsWithProposition]
+                    'message' => $this->renderView(
+                        'EventBundle:Agenda/AvailableSlot:availableRequestForSlot.html.twig',
+                        [
+                            'countAvailableSheetsWithProposition' => $countAvailableSheetsWithProposition,
+                            'sheet'                               => $sheet,
+                            'slot'                                => $slot,
+                        ]
                     ),
                     'countAvailableSheets' => $countAvailableSheetsWithProposition,
                 ]
@@ -149,9 +152,10 @@ class AgendaController extends Controller
         ;
 
         $message = $this->renderView('EventBundle:Agenda/AvailableSlot:availableSheetForSlot.html.twig', [
-            'event' => $eventDomain->getEvent(),
-            'sheet' => $sheet,
             'countAvailableSheets' => $countAvailableSheets,
+            'event'                => $eventDomain->getEvent(),
+            'sheet'                => $sheet,
+            'slot'                 => $slot,
         ]);
 
         return new JsonResponse(['message' => $message, 'countAvailableSheets' => $countAvailableSheets]);

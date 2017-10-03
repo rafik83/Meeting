@@ -322,3 +322,5 @@ summary.total: Total
 summary.totalToPay: 'Total to pay'
 summary.vatRate: '%vatRate%% VAT'
 unavailability.title: Unavailable
+user_event.confirm.agenda.success: 'Thank you for confirming your schedule'
+user_event.confirm.agenda.title: 'Schedule confirmation'

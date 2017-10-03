@@ -21,4 +21,13 @@ interface FileSystemAdapterInterface
      * @throws IOException If the file cannot be written to.
      */
     public function dumpFile($filename, $content);
+
+    /**
+     * Checks the existence of files or directories.
+     *
+     * @param string|array|\Traversable $files A filename, an array of files, or a \Traversable instance to check
+     *
+     * @return bool true if the file exists, false otherwise
+     */
+    public function exists($files): bool;
 }
