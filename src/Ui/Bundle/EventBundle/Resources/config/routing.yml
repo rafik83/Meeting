@@ -684,6 +684,15 @@ event_agenda_participant:
     methods: [GET]
     defaults: { _controller: EventBundle:Agenda:participant }
 
+event_agenda_count_sheets_available_by_slot:
+    path: /sheet/{sheet}/agenda/participant/{participant}/sheets-available-by-slot/{slot}
+    requirements:
+        sheet: \d+
+        participant: \d+
+        slot: \d+
+    methods: [GET]
+    defaults: { _controller: EventBundle:Agenda:countSheetsAvailableBySlot }
+
 happening_program:
     path: /sheet/{sheet}/program
     requirements:
@@ -740,6 +749,14 @@ event_user_phone_validate:
         sheet: \d+
         participant: \d+
     defaults: { _controller: EventBundle:User/Phone/SendCode:sendCode }
+
+event_user_phone_redirect_to_validation:
+    path: /account/sheet/{sheet}/participant/{participant}/validate/phone/redirect
+    methods: [GET]
+    requirements:
+        sheet: \d+
+        participant: \d+
+    defaults: { _controller: EventBundle:User/Phone/SendCode:redirectToSendCodeWithFlash }
 
 #
 # UserEventPhone

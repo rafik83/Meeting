@@ -13,6 +13,7 @@ namespace Proximum\Vimeet\Application\Command\Participant;
 use Proximum\Vimeet\Application\Components\Sheet\Template\Tag;
 use Proximum\Vimeet\Application\Components\Token\User\ActivateAccountTokenGenerator;
 use Proximum\Vimeet\Application\Event\Events;
+use Proximum\Vimeet\Application\Event\Participant\ParticipantAddedEvent;
 use Proximum\Vimeet\Application\Event\Sheet\SheetAddParticipantEvent;
 use Proximum\Vimeet\Application\Event\Sheet\SheetUpdatedEvent;
 use Proximum\Vimeet\Application\Event\User\ActivateAccountEvent;
@@ -170,6 +171,7 @@ class AddHandler
 
         $sheetUpdated = new SheetUpdatedEvent($add->sheet);
         $this->eventDispatcher->dispatch(Events::SHEET_UPDATED, $sheetUpdated);
+        $this->eventDispatcher->dispatch(Events::PARTICIPANT_ADDED, new ParticipantAddedEvent($participant));
 
         return new AddResult($participant);
     }

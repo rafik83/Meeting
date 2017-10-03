@@ -68,6 +68,7 @@
 
     > [class*='col-'] {
       display: flex;
+      flex-grow: 1;
     }
     &:before {
       content: none !important;

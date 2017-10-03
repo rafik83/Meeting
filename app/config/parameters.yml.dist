@@ -76,3 +76,4 @@ parameters:
     feature_video_conference_enabled: false
     feature_video_conference_date_security_enabled: false
     feature_event_dates_to_current_date_enabled: false
+    feature_dday_enabled: false

@@ -3,19 +3,17 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2016 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
 
 namespace Proximum\Vimeet\Application\Query\Agenda;
 
+use Proximum\Vimeet\Application\Query\Agenda\AvailableSheets\AvailableSlotsByParticipantAndDayQuery;
+use Proximum\Vimeet\Application\Query\Agenda\AvailableSheets\AvailableSlotsByParticipantAndDayQueryHandler;
 use Proximum\Vimeet\Application\Components\Agenda\AgendaCollisionManager;
 use Proximum\Vimeet\Application\View\Agenda\DayView;
-use Proximum\Vimeet\Application\View\Agenda\HappeningView;
-use Proximum\Vimeet\Application\View\Agenda\MassUnavailabilityView;
-use Proximum\Vimeet\Application\View\Agenda\MeetingView;
-use Proximum\Vimeet\Application\View\Agenda\UnavailabilityView;
 
 class DayViewQueryHandler
 {
@@ -34,6 +32,9 @@ class DayViewQueryHandler
     /** @var CancelAttendanceUnavailabilityViewQueryHandler */
     private $cancelAttendanceUnavailabilityViewQueryHandler;
 
+    /** @var AvailableSlotsByParticipantAndDayQueryHandler */
+    private $availableSlotsByParticipantAndDayQueryHandler;
+
     /** @var AgendaCollisionManager */
     private $agendaCollisionManager;
 
@@ -43,6 +44,7 @@ class DayViewQueryHandler
      * @param MassUnavailabilityViewQueryHandler             $massHandler
      * @param MeetingViewQueryHandler                        $meetingHandler
      * @param CancelAttendanceUnavailabilityViewQueryHandler $cancelAttendanceUnavailabilityViewQueryHandler
+     * @param AvailableSlotsByParticipantAndDayQueryHandler  $availableSlotsByParticipantAndDayQueryHandler
      * @param AgendaCollisionManager                         $agendaCollisionManager
      */
     public function __construct(
@@ -51,6 +53,7 @@ class DayViewQueryHandler
         MassUnavailabilityViewQueryHandler $massHandler,
         MeetingViewQueryHandler $meetingHandler,
         CancelAttendanceUnavailabilityViewQueryHandler $cancelAttendanceUnavailabilityViewQueryHandler,
+        AvailableSlotsByParticipantAndDayQueryHandler $availableSlotsByParticipantAndDayQueryHandler,
         AgendaCollisionManager $agendaCollisionManager
     ) {
         $this->happeningHandler                               = $happeningHandler;
@@ -58,6 +61,7 @@ class DayViewQueryHandler
         $this->massHandler                                    = $massHandler;
         $this->meetingHandler                                 = $meetingHandler;
         $this->cancelAttendanceUnavailabilityViewQueryHandler = $cancelAttendanceUnavailabilityViewQueryHandler;
+        $this->availableSlotsByParticipantAndDayQueryHandler  = $availableSlotsByParticipantAndDayQueryHandler;
         $this->agendaCollisionManager                         = $agendaCollisionManager;
     }
 
@@ -73,6 +77,8 @@ class DayViewQueryHandler
         $unavailabilities     = [];
         $masses               = [];
         $meetings             = [];
+        $availableSlotViews   = [];
+        $cancelAttendanceView = null;
 
         if ($query->currentSheet->attend()) {
             foreach ($query->happenings as $happening) {
@@ -126,6 +132,15 @@ class DayViewQueryHandler
                     );
                 }
             }
+
+            if ($query->isParticipantUserViewing()) {
+                $availableSlotViewQuery = new AvailableSlotsByParticipantAndDayQuery(
+                    $query->event,
+                    $query->participant,
+                    $query->day
+                );
+                $availableSlotViews = $this->availableSlotsByParticipantAndDayQueryHandler->handle($availableSlotViewQuery);
+            }
         } else {
             $cancelAttendanceView = $this->cancelAttendanceUnavailabilityViewQueryHandler->handle(
                 new CancelAttendanceUnavailabilityViewQuery($query->event, $query->day)
@@ -147,6 +162,7 @@ class DayViewQueryHandler
             $this->agendaCollisionManager->getUnavailabilityViews(),
             $this->agendaCollisionManager->getMassViews(),
             $this->agendaCollisionManager->getMeetingViews(),
+            $availableSlotViews,
             $cancelAttendanceView
         );
     }

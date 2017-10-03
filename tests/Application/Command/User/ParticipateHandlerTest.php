@@ -17,6 +17,7 @@ use Proximum\Vimeet\Application\Event\Events;
 use Proximum\Vimeet\Application\Event\Package\MustSelectPackageEvent;
 use Proximum\Vimeet\Application\Event\Sheet\SheetTitleCheckEvent;
 use Proximum\Vimeet\Application\Event\Sheet\SheetUpdatedEvent;
+use Proximum\Vimeet\Application\Event\User\RegistrationEvent;
 use Proximum\Vimeet\Application\Event\User\RegistrationStepEvent;
 use Proximum\Vimeet\Domain\Account\Synchronizer;
 use Proximum\Vimeet\Domain\Event\LastEventParticipation;
@@ -341,6 +342,8 @@ class ParticipateHandlerTest extends TestCase
                 return true;
             }
         ))->shouldBeCalled();
+
+        $eventDispatcher->dispatch(Events::USER_REGISTRATION, new RegistrationEvent($event, $user))->shouldBeCalled();
 
         $handler->handle(
             new Participate(

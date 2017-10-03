@@ -10,6 +10,8 @@ account.update.avatar.title: Photo
 account.update.company.title: 'Société / Organisme'
 account.update.profile.title: Profil
 account.update.title: 'Modifier mon compte'
+agenda.availability.available_sheets: '{1} Voir le participant disponible|]1,Inf[ Voir les %availableSheets% participants disponibles'
+agenda.availability.available_sheets_with_proposition: '{1} Voir une proposition de RDV|]1,Inf[ Voir les %availableSheets% propositions de RDV'
 agenda.meeting.details: Details
 agenda.participant.view: 'Agenda de %participant%'
 agenda.title: 'Mon agenda'
@@ -43,6 +45,7 @@ catalog.meeting_request.request.approved: 'Votre demande acceptée'
 catalog.meeting_request.request.placed: 'RDV planifié'
 catalog.meeting_request.request.refused: 'Votre demande refusée'
 catalog.mobile.filters.allParticipants: 'Tous les participants'
+catalog.mobile.filters.availableSlot.title: 'Qui est disponible ?'
 catalog.mobile.filters.title: 'Catalogue des participants'
 catalog.noResult: 'Aucun résultat trouvé'
 catalog.noVisibleCategories: 'Vous n''avez accès à aucune catégorie de participation'

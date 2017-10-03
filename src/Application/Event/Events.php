@@ -51,6 +51,7 @@ final class Events
     const EVENT_PRE_REGISTERED                         = 'event.preregistered';
     const EVENT_LOCALE_CHANGED                         = 'event.locale_changed';
     const EVENT_KEY_DATES_UPDATED                      = 'event.key_dates.updated';
+    const USER_REGISTRATION                            = 'user.registration'; // First step completed
     const USER_REGISTERED                              = 'user.registered';
     const USER_RESET_PASSWORD_CONFIRMED                = 'user.reset_password.confirm';
     const ORDER_CONFIRMED                              = 'order.confirm';
@@ -70,6 +71,8 @@ final class Events
     const TRANSACTION_REMOVED                          = 'transaction.removed';
     const TRANSACTION_CONFIRMED                        = 'transaction.confirm';
     const PARTICIPANT_IMPORTED                         = 'participant.imported';
+    const PARTICIPANT_ADDED                            = 'participant.added';
+    const PARTICIPANT_REMOVED                          = 'participant.removed';
     const HAPPENING_PARTICIPATED                       = 'happening.participated';
     const HAPPENING_PARTICIPATE                        = 'happening.participate';
     const HAPPENING_UN_PARTICIPATE                     = 'happening.un_participate';
@@ -80,4 +83,8 @@ final class Events
     const MASS_ASSIGNMENT_UPDATED                      = 'mass.assignment.updated';
     const USER_AGENDA_CONFIRMED                        = 'user.agenda.confirmed';
     const USER_EVENT_TOKEN_AGENDA_CONFIRMATION_CREATED = 'user_event_token.agenda_confirmation.created';
+    const MASS_UNAVAILABILITY_DISPATCHED               = 'mass.unavailability.dispatched';
+    const SLOT_GENERATED                               = 'slot.generated';
+    const SLOT_TOGGLE_LOCKED                           = 'slot.toggle.locked';
+    const SLOT_DELETED                                 = 'slot.deleted';
 }

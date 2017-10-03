@@ -13,6 +13,7 @@ namespace Proximum\Vimeet\Domain\Model;
 use DateTimeInterface;
 use Doctrine\Common\Collections\ArrayCollection;
 use Proximum\Vimeet\Domain\Exception\Sheet\SheetException;
+use Proximum\Vimeet\Domain\Model\Sheet\AvailableSlot;
 use Proximum\Vimeet\Domain\Model\Sheet\Group;
 use Proximum\Vimeet\Domain\Model\Template\SheetTemplate;
 use Proximum\Vimeet\Domain\Trace\TraceableName;
@@ -167,6 +168,9 @@ class Sheet implements TraceableInterface
     /** @var string */
     private $agendaConfirmedStatus = self::AGENDA_NOT_CONCERNED;
 
+    /** @var ArrayCollection */
+    private $availableSlots;
+
     /**
      * Sheet constructor.
      *
@@ -196,6 +200,7 @@ class Sheet implements TraceableInterface
         $this->state        = self::STATE_PENDING;
         $this->completeness = 0;
         $this->group        = $group;
+        $this->availableSlots = new ArrayCollection();
     }
 
     /**
@@ -987,5 +992,51 @@ class Sheet implements TraceableInterface
     public function setAgendaConfirmedStatus(string $agendaConfirmedStatus)
     {
         $this->agendaConfirmedStatus = $agendaConfirmedStatus;
+    }
+
+    /**
+     * @param AvailableSlot[] $availableSlots
+     */
+    public function setAvailableSlots(array $availableSlots)
+    {
+        foreach ($availableSlots as $newAvailableSlot) {
+            $found = false;
+
+            foreach ($this->availableSlots as $oldAvailableSlot) {
+                if ($newAvailableSlot->getSlot()->getId() === $oldAvailableSlot->getSlot()->getId()) {
+                    $found = true;
+
+                    break;
+                }
+            }
+
+            if ($found === false) {
+                $this->availableSlots->add($newAvailableSlot);
+            }
+        }
+
+        foreach ($this->availableSlots as $key => $oldAvailableSlot) {
+            $found = false;
+
+            foreach ($availableSlots as $newAvailableSlot) {
+                if ($newAvailableSlot->getSlot()->getId() === $oldAvailableSlot->getSlot()->getId()) {
+                    $found = true;
+
+                    break;
+                }
+            }
+
+            if ($found === false) {
+                $this->availableSlots->remove($key);
+            }
+        }
+    }
+
+    /**
+     * @return array
+     */
+    public function getAvailableSlots(): array
+    {
+        return $this->availableSlots->toArray();
     }
 }

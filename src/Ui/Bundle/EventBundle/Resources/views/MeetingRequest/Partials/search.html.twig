@@ -1,3 +1,5 @@
+{% form_theme searchForm '@Ui/default.html.twig' %}
+
 {{ form_start(searchForm) }}
 
 <div class="catalog__research hidden-xs">
@@ -7,6 +9,25 @@
                 <i class="glyphicon glyphicon-download-alt"></i>
                 {{ 'event.meeting.listRequest.contact.export'|trans }}
             </a>
+        </div>
+    {% endif %}
+
+    {% if searchForm.availableSlot is defined %}
+        <div class="filter">
+            <h3>{{ form_label(searchForm.availableSlot) }}</h3>
+            {{ form_errors(searchForm.availableSlot) }}
+            <ul class="radio">
+                {% for availableSlotChoice in searchForm.children.availableSlot %}
+                    <li class="filter__item">
+                        <label class="checkbox-inline">
+                        <span class="filter-label">
+                            {{ form_widget(availableSlotChoice) }}
+                            {{ availableSlotChoice.vars.label }}
+                        </span>
+                        </label>
+                    </li>
+                {% endfor %}
+            </ul>
         </div>
     {% endif %}
 

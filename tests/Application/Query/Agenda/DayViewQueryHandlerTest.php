@@ -10,6 +10,9 @@
 
 namespace Proximum\Vimeet\Tests\Application\Query\Agenda;
 
+use Prophecy\Prophecy\ObjectProphecy;
+use Proximum\Vimeet\Application\Query\Agenda\AvailableSheets\AvailableSlotsByParticipantAndDayQuery;
+use Proximum\Vimeet\Application\Query\Agenda\AvailableSheets\AvailableSlotsByParticipantAndDayQueryHandler;
 use Proximum\Vimeet\Application\Components\Agenda\AgendaCollisionManager;
 use Proximum\Vimeet\Application\Query\Agenda\CancelAttendanceUnavailabilityViewQuery;
 use Proximum\Vimeet\Application\Query\Agenda\CancelAttendanceUnavailabilityViewQueryHandler;
@@ -28,6 +31,7 @@ use Proximum\Vimeet\Application\View\Agenda\DayView;
 use Proximum\Vimeet\Application\View\Agenda\HappeningView;
 use Proximum\Vimeet\Application\View\Agenda\MassUnavailabilityView;
 use Proximum\Vimeet\Application\View\Agenda\MeetingView;
+use Proximum\Vimeet\Application\View\Agenda\Slot\AvailableSlotView;
 use Proximum\Vimeet\Application\View\Agenda\UnavailabilityView;
 use Proximum\Vimeet\Domain\Model\Category;
 use Proximum\Vimeet\Domain\Model\Event;
@@ -67,6 +71,9 @@ class DayViewQueryHandlerTest extends TestCase
 
     /** @var \DateTimeInterface */
     private $endTime;
+
+    /** @var \DateTimeInterface */
+    private $currentTime;
 
     /** @var Sheet */
     private $sheet;
@@ -128,8 +135,15 @@ class DayViewQueryHandlerTest extends TestCase
     /** @var AgendaCollisionManager */
     private $agendaCollisionManager;
 
+    /** @var AvailableSlotsByParticipantAndDayQueryHandler */
+    private $availableSlotsByParticipantAndDayQueryHandler;
+
+    /** @var ObjectProphecy */
+    private $cancelAttendanceUnavailabilityViewQueryHandler;
+
     public function setUp()
     {
+        $this->currentTime = new \DateTime('2016-10-12 15:00:00');
         $this->event = EventFactory::createEvent();
         $this->category = null;
         $this->user = UserFactory::create();
@@ -167,10 +181,13 @@ class DayViewQueryHandlerTest extends TestCase
             [$this->expectedHappeningViews[0], $this->expectedHappeningViews[1]],
             [$this->unavailabilityView],
             [$this->massView],
+            [],
             []
         );
 
         $this->agendaCollisionManager = $this->prophesize(AgendaCollisionManager::class);
+        $this->availableSlotsByParticipantAndDayQueryHandler = $this->prophesize(AvailableSlotsByParticipantAndDayQueryHandler::class);
+        $this->cancelAttendanceUnavailabilityViewQueryHandler = $this->prophesize(CancelAttendanceUnavailabilityViewQueryHandler::class);
     }
     
     public function testHandle()
@@ -215,14 +232,19 @@ class DayViewQueryHandlerTest extends TestCase
         $meetingHandler = $this->prophesize(MeetingViewQueryHandler::class);
         $meetingHandler->handle()->shouldNotBeCalled();
 
-        $cancelAttendanceUnavailabilityViewQueryHandler = $this->prophesize(CancelAttendanceUnavailabilityViewQueryHandler::class);
+        $availableSlotViewQuery = new AvailableSlotsByParticipantAndDayQuery($this->event, $this->participant, $this->day);
+        $this->availableSlotsByParticipantAndDayQueryHandler
+            ->handle($availableSlotViewQuery)
+            ->shouldBeCalled()
+            ->willReturn([]);
 
         $handler = new DayViewQueryHandler(
             $happeningViewQueryHandler->reveal(),
             $unavailabilityHandler->reveal(),
             $massHandler->reveal(),
             $meetingHandler->reveal(),
-            $cancelAttendanceUnavailabilityViewQueryHandler->reveal(),
+            $this->cancelAttendanceUnavailabilityViewQueryHandler->reveal(),
+            $this->availableSlotsByParticipantAndDayQueryHandler->reveal(),
             $this->agendaCollisionManager->reveal()
         );
 
@@ -249,7 +271,10 @@ class DayViewQueryHandlerTest extends TestCase
             ->getMassViews()
             ->shouldBeCalled()
             ->willReturn([$this->massView]);
-        $this->agendaCollisionManager->getMeetingViews()->shouldBeCalled()->willReturn([]);
+
+        $this->agendaCollisionManager->getMeetingViews()
+            ->shouldBeCalled()
+            ->willReturn([]);
 
 
         $result = $handler->handle(new DayViewQuery(
@@ -257,11 +282,13 @@ class DayViewQueryHandlerTest extends TestCase
             $this->sheet,
             $this->event,
             $this->participant,
+            $this->user,
             true,
             'fr',
             [$this->participation1, $this->participation2],
             [$this->unavailability],
-            [$this->mass]
+            [$this->mass],
+            []
         ));
 
         $this->assertEquals($this->expectedDayView, $result);
@@ -288,6 +315,7 @@ class DayViewQueryHandlerTest extends TestCase
             'rightColor',
             []
         );
+        $availableSlotViews = new AvailableSlotView(1, $this->beginHappening1, $this->endHappening2);
 
         $expected = new DayView(
             $this->startTime,
@@ -297,6 +325,7 @@ class DayViewQueryHandlerTest extends TestCase
             [$this->unavailabilityView],
             [$this->massView],
             [$meetingView],
+            [$availableSlotViews],
             null
         );
 
@@ -336,14 +365,19 @@ class DayViewQueryHandlerTest extends TestCase
             ->shouldBeCalled()
             ->willReturn($meetingView);
 
-        $cancelAttendanceUnavailabilityViewQueryHandler = $this->prophesize(CancelAttendanceUnavailabilityViewQueryHandler::class);
+        $availableSlotViewQuery = new AvailableSlotsByParticipantAndDayQuery($this->event, $this->participant, $this->day);
+        $this->availableSlotsByParticipantAndDayQueryHandler
+            ->handle($availableSlotViewQuery)
+            ->shouldBeCalled()
+            ->willReturn([$availableSlotViews]);
 
         $handler = new DayViewQueryHandler(
             $happeningViewQueryHandler->reveal(),
             $unavailabilityHandler->reveal(),
             $massHandler->reveal(),
             $meetingHandler->reveal(),
-            $cancelAttendanceUnavailabilityViewQueryHandler->reveal(),
+            $this->cancelAttendanceUnavailabilityViewQueryHandler->reveal(),
+            $this->availableSlotsByParticipantAndDayQueryHandler->reveal(),
             $this->agendaCollisionManager->reveal()
         );
 
@@ -377,6 +411,7 @@ class DayViewQueryHandlerTest extends TestCase
             $this->sheet,
             $this->event,
             $this->participant,
+            $this->user,
             true,
             'fr',
             [$this->participation1, $this->participation2],
@@ -432,6 +467,7 @@ class DayViewQueryHandlerTest extends TestCase
             [],
             [],
             [],
+            [],
             new CancelAttendanceUnavailabilityView($startTime, $endTime, 'Europe/Paris')
         );
         // Mock
@@ -450,8 +486,7 @@ class DayViewQueryHandlerTest extends TestCase
         $unavailabilityHandler->handle(new UnavailabilityViewQuery($unavailability, $event))->shouldNotBeCalled();
         $meetingHandler = $this->prophesize(MeetingViewQueryHandler::class);
         $meetingHandler->handle()->shouldNotBeCalled();
-        $cancelAttendanceUnavailabilityViewQueryHandler = $this->prophesize(CancelAttendanceUnavailabilityViewQueryHandler::class);
-        $cancelAttendanceUnavailabilityViewQueryHandler
+        $this->cancelAttendanceUnavailabilityViewQueryHandler
             ->handle(new CancelAttendanceUnavailabilityViewQuery($event, $eventDay))
             ->shouldBeCalled()
             ->willReturn(new CancelAttendanceUnavailabilityView($startTime, $endTime, 'Europe/Paris'));
@@ -461,9 +496,15 @@ class DayViewQueryHandlerTest extends TestCase
             $unavailabilityHandler->reveal(),
             $massHandler->reveal(),
             $meetingHandler->reveal(),
-            $cancelAttendanceUnavailabilityViewQueryHandler->reveal(),
+            $this->cancelAttendanceUnavailabilityViewQueryHandler->reveal(),
+            $this->availableSlotsByParticipantAndDayQueryHandler->reveal(),
             $this->agendaCollisionManager->reveal()
         );
+
+        $availableSlotViewQuery = new AvailableSlotsByParticipantAndDayQuery($this->event, $this->participant, $this->day);
+        $this->availableSlotsByParticipantAndDayQueryHandler
+            ->handle($availableSlotViewQuery)
+            ->shouldNotBeCalled();
 
         $this->agendaCollisionManager->handleCollision([], [], [], [])->shouldBeCalled();
         $this->agendaCollisionManager->getHappeningViews()->shouldBeCalled()->willReturn([]);
@@ -476,6 +517,7 @@ class DayViewQueryHandlerTest extends TestCase
             $sheet,
             $event,
             $participant,
+            $user,
             false,
             'fr',
             [$participation1, $participation2],

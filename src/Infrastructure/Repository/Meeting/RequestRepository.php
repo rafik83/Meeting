@@ -14,9 +14,11 @@ use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\QueryBuilder;
 use Proximum\Vimeet\Application\Components\Paginator\Paginator;
 use Proximum\Vimeet\Application\Query\MultipleSheets\Request\FilterRequestView;
+use Proximum\Vimeet\Application\View\Agenda\Slot\AvailableSlotView;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Meeting;
 use Proximum\Vimeet\Domain\Model\Meeting\Request;
+use Proximum\Vimeet\Domain\Model\MeetingSlot;
 use Proximum\Vimeet\Domain\Model\PaginatedResult;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Sheet;
@@ -210,6 +212,17 @@ class RequestRepository implements RequestRepositoryInterface
     /**
      * {@inheritdoc}
      */
+    public function getPendingPropositionReceivedBySheet(Sheet $sheet)
+    {
+        $queryBuilder = new RequestQueryBuilder($this->entityManager);
+        $queryBuilder->receivedBy($sheet)->pending()->isEnabled()->isFromAttending();
+
+        return $queryBuilder->getQuery()->getResult();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function hasPendingPropositionReceivedBySheet(Sheet $sheet)
     {
         return $this->countPendingPropositionReceivedBySheet($sheet) > 0;
@@ -274,20 +287,45 @@ class RequestRepository implements RequestRepositoryInterface
     /**
      * {@inheritdoc}
      */
-    public function getAllRequestBySheet(Sheet $sheet, array $filters = [])
+    public function getAllRequestBySheet(Sheet $sheet, array $filters = [], array $slotsToFilter = []): array
     {
         $queryBuilder = $this
             ->entityManager
             ->createQueryBuilder()
             ->select('request')
-            ->from(Request::class, 'request');
+            ->from(Request::class, 'request')
+            ->join('request.from', 'fromSheet', 'WITH', 'request.event = :event')
+            ->join('request.to', 'toSheet')
+            ->setParameter('event', $sheet->getEvent())
+        ;
 
         if (!empty($filters) && isset($filters['disabled'])) {
             $queryBuilder->where('request.disabled = :disabled')
                 ->setParameter('disabled', $filters['disabled']);
         }
 
-        $this->filterQueryBuilder($queryBuilder, $sheet, $filters);
+        $this->filterQueryBuilder($queryBuilder, $sheet, $filters, $slotsToFilter);
+
+        return $queryBuilder->getQuery()->getResult();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getApprovedAndRefusedRequestBySheet(Sheet $sheet): array
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('request')
+            ->from(Request::class, 'request')
+            ->where('
+                (request.from = :sheet OR request.to = :sheet) AND 
+                (request.state = :stateApproved OR request.state = :stateRefused)
+            ')
+            ->setParameter('sheet', $sheet)
+            ->setParameter('stateApproved', Request::STATE_APPROVED)
+            ->setParameter('stateRefused', Request::STATE_REFUSED);
 
         return $queryBuilder->getQuery()->getResult();
     }
@@ -493,30 +531,34 @@ class RequestRepository implements RequestRepositoryInterface
     /**
      * {@inheritdoc}
      */
-    public function countSheetState(Sheet $sheet, array $filters = [])
+    public function countSheetState(Sheet $sheet, array $filters = [], array $slotsToFilter = [])
     {
         $queryBuilder = $this
             ->entityManager
             ->createQueryBuilder()
             ->select('request')
-            ->from(Request::class, 'request');
+            ->from(Request::class, 'request')
+            ->join('request.from', 'fromSheet', 'WITH', 'request.event = :event')
+            ->join('request.to', 'toSheet')
+            ->setParameter('event', $sheet->getEvent())
+        ;
 
         if (!empty($filters)) {
             if (isset($filters['disabled'])) {
-                $queryBuilder->where('request.disabled = :disabled')
+                $queryBuilder->andWhere('request.disabled = :disabled')
                     ->setParameter('disabled', $filters['disabled']);
             }
 
             if (isset($filters['isToAttending'])) {
-                $queryBuilder->join('request.to', 'to', 'WITH', 'to.attend = true');
+                $queryBuilder->andWhere('toSheet.attend = true');
             }
 
             if (isset($filters['isFromAttending'])) {
-                $queryBuilder->join('request.from', 'sheetFrom', 'WITH', 'sheetFrom.attend = true');
+                $queryBuilder->andWhere('fromSheet.attend = true');
             }
         }
 
-        $this->filterQueryBuilder($queryBuilder, $sheet, $filters);
+        $this->filterQueryBuilder($queryBuilder, $sheet, $filters, $slotsToFilter);
 
         return count($queryBuilder->getQuery()->getResult());
     }
@@ -660,9 +702,14 @@ class RequestRepository implements RequestRepositoryInterface
      * @param QueryBuilder $queryBuilder
      * @param Sheet        $sheet
      * @param array        $filters
+     * @param array        $slotsToFilter
      */
-    private function filterQueryBuilder(QueryBuilder &$queryBuilder, Sheet $sheet, array $filters)
-    {
+    private function filterQueryBuilder(
+        QueryBuilder &$queryBuilder,
+        Sheet $sheet,
+        array $filters,
+        array $slotsToFilter = []
+    ) {
         if (!empty($filters['state']) && !Meeting\Constant::isSentOrReceiveFilter($filters['state'])) {
             $queryBuilder
                 ->andWhere('request.to = :sheet OR request.from = :sheet');
@@ -695,15 +742,36 @@ class RequestRepository implements RequestRepositoryInterface
         // filter by participant type
         if (!empty($filters['type'])) {
             $queryBuilder
-                ->leftJoin('request.from', 'fromSheet', 'WITH', 'fromSheet != :sheet')
-                ->leftJoin('request.to', 'toSheet', 'WITH', 'toSheet != :sheet')
-                ->andWhere('fromSheet.type IN (:types) OR toSheet.type IN (:types)')
+                ->andWhere('(fromSheet != :sheet AND fromSheet.type IN (:types)) OR (toSheet != :sheet AND toSheet.type IN (:types))')
                 ->setParameter('types', $filters['type']);
         }
 
         if (!empty($filters['state'])) {
             // set sheet
             $queryBuilder->setParameter('sheet', $sheet);
+        }
+
+        if (!empty($filters['availableSlot'])
+            && $filters['availableSlot'] !== Meeting\Constant::FILTER_AVAILABLE_SLOT_IDS_EVERYONE
+            && ($filters['availableSlot'] === Meeting\Constant::FILTER_AVAILABLE_SLOT_IDS_AVAILABLE
+                || ($filters['availableSlot'] === Meeting\Constant::FILTER_AVAILABLE_SLOT_IDS_SLOT
+                    && !empty($filters['slot_id'])
+                )
+            )
+        ) {
+            $queryBuilder
+                ->join('fromSheet.availableSlots', 'fromAvailableSlot', 'WITH', 'fromAvailableSlot.slot IN (:slots)')
+                ->join('toSheet.availableSlots', 'toAvailableSlot', 'WITH', 'toAvailableSlot.slot IN (:slots)')
+                ->setParameter('slots', array_map(function ($slot) {
+                    if ($slot instanceof MeetingSlot) {
+                        return $slot->getId();
+                    } elseif ($slot instanceof AvailableSlotView) {
+                        return $slot->id;
+                    }
+
+                    return null;
+                }, $slotsToFilter))
+            ;
         }
     }
 
