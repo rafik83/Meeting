@@ -16,7 +16,6 @@ use Proximum\Vimeet\Application\Adapter\SMSSenderInterface;
 use Proximum\Vimeet\Application\Command\MeetingRequest\Counter;
 use Proximum\Vimeet\Application\Command\MeetingRequest\Remind;
 use Proximum\Vimeet\Application\Command\MeetingRequest\ReminderHandler;
-use Proximum\Vimeet\Application\Exception\Event\NoEventOnCurrentDayException;
 use Proximum\Vimeet\Domain\Messaging\SMS\SMS;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Participant;
@@ -79,17 +78,6 @@ class ReminderHandlerTest extends TestCase
             $this->smsFactory->reveal(),
             $this->counter->reveal()
         );
-    }
-
-    public function testNoEventOnCurrentDay()
-    {
-        $this->expectException(NoEventOnCurrentDayException::class);
-
-        $this->eventRepository->findByDay($this->dateTime)
-            ->shouldBeCalled()
-            ->willReturn([]);
-
-        $this->handler->handle(new Remind());
     }
 
     public function testUsersWillBeNotified()
