@@ -31,6 +31,7 @@ use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\PaginatedResult;
 use Proximum\Vimeet\Domain\Model\Sheet\Constant;
 use Proximum\Vimeet\Domain\Template\TemplateObject\Nomenclature;
+use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Service\ForeignChar;
 
 class SheetSearchAdapter implements SheetSearchAdapterInterface
 {
@@ -215,6 +216,7 @@ class SheetSearchAdapter implements SheetSearchAdapterInterface
      */
     public function findKeyword(Event $event, string $filter, array $defaultFilters, string $locale): array
     {
+        $filter = ForeignChar::transliterateString($filter);
         $builder = new SheetSearchQueryBuilder(
             $event,
             $defaultFilters,
