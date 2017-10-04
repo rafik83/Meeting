@@ -57,7 +57,7 @@ class SendSMSReminderCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $this->reminderHandler->handle(
-            new Remind($this->dateTime)
+            new Remind()
         );
     }
 }

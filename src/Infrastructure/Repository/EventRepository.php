@@ -212,7 +212,7 @@ class EventRepository implements EventRepositoryInterface
     /**
      * {@inheritdoc}
      */
-    public function findByDay(\DateTimeInterface $dateTime)
+    public function findByDay(\DateTimeInterface $dateTime): array
     {
         $queryBuilder = $this
             ->entityManager
@@ -223,9 +223,9 @@ class EventRepository implements EventRepositoryInterface
                 'event.days',
                 'day',
                 'WITH',
-                'day.startTime <= :currentTime AND day.endTime >= :currentTime'
+                'day.startTime <= :datetime AND day.endTime >= :datetime'
             )
-            ->setParameter('currentTime', $dateTime)
+            ->setParameter('datetime', $dateTime)
         ;
 
         return $queryBuilder->getQuery()->getResult();
