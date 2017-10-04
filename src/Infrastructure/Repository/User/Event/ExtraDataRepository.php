@@ -30,7 +30,7 @@ class ExtraDataRepository implements ExtraDataRepositoryInterface
     }
 
     /**
-     * @param ExtraData $extraData
+     * {@inheritdoc}
      */
     public function add(ExtraData $extraData)
     {
@@ -39,7 +39,7 @@ class ExtraDataRepository implements ExtraDataRepositoryInterface
     }
 
     /**
-     * @param ExtraData $extraData
+     * {@inheritdoc}
      */
     public function set(ExtraData $extraData)
     {
@@ -47,10 +47,7 @@ class ExtraDataRepository implements ExtraDataRepositoryInterface
     }
 
     /**
-     * @param Event  $event
-     * @param string $name
-     *
-     * @return ExtraData[]
+     * {@inheritdoc}
      */
     public function getExtraDataForEventAndName(Event $event, string $name): array
     {
@@ -62,6 +59,25 @@ class ExtraDataRepository implements ExtraDataRepositoryInterface
             ->setParameter('event', $event)
             ->setParameter('name', $name)
         ;
+
+        return $queryBuilder->getQuery()->getResult();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getForEventNameOlderThanDate(
+        Event $event,
+        string $name,
+        \DateTimeInterface $dateTime
+    ): array {
+        $queryBuilder = $this->entityManager->createQueryBuilder()
+            ->select('extraData', 'user')
+            ->from(ExtraData::class, 'extraData')
+            ->join('extraData.user', 'user', 'WITH', 'extraData.event = :event AND extraData.name = :name AND extraData.updatedAt < :date')
+            ->setParameter('event', $event)
+            ->setParameter('name', $name)
+            ->setParameter('date', $dateTime);
 
         return $queryBuilder->getQuery()->getResult();
     }

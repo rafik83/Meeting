@@ -600,6 +600,7 @@ services:
             - '@vimeet_infrastructure.repository.meeting_repository'
             - '@vimeet_infrastructure.repository.spot_repository'
             - '@query.agenda.admin.meeting_update_slot_view_query_handler'
+            - '@vimeet_infrastructure.adapter.delayed_event_dispatcher'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Meeting\Admin\UpdateSlot }
     vimeet_infrastructure.vimeet.application.command.request.transform_request_into_meeting:
@@ -4046,6 +4047,15 @@ services:
             - '@vimeet_infrastructure.repository.sheet_repository'
             - '@application.components.messaging.message_factory'
             - '@command.messaging.batch.process_handler'
+        tags:
+            - { name: console.command }
+
+    command.send_sms_reminder_command:
+        class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\SendSMSReminderCommand
+        arguments:
+            - '@command.meeting_request.reminder_handler'
+            - '@datetime'
+            - '%feature_dday_enabled%'
         tags:
             - { name: console.command }
 

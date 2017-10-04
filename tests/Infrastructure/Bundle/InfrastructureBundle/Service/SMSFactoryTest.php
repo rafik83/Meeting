@@ -65,6 +65,55 @@ class SMSFactoryTest extends TestCase
         $this->assertEquals($expectedSms, $sms);
     }
 
+    public function testCreatePendingProposition()
+    {
+        $phone               = '+3360000000';
+        $locale              = 'fr';
+        $sheet               = $this->prophesize(Sheet::class);
+        $event               = $this->prophesize(Event::class);
+        $pendingPropositions = 4;
+
+        $sheet->getId()->willReturn(1);
+        $sheet->getEvent()->willReturn($event);
+        $event->getTitle()->willReturn('ProximumEvent');
+
+        $eventUrlGenerator = $this->prophesize(EventUrlGeneratorInterface::class);
+        $translator        = $this->prophesize(TranslatorInterface::class);
+
+        $eventUrlGenerator->generateEventAbsoluteUrl(
+            $event->reveal(),
+            'event_meeting_list_request',
+            array_merge(
+                ['sheet' => 1],
+                ['state' => 'receive'],
+                ['_locale' => $locale]
+            )
+        )->shouldBeCalled()->willReturn('eventMeetingListLink');
+
+        $translator
+            ->trans(
+                'event.sms.reminder.pending_meeting_request',
+                [
+                    '%eventTitle%'                  => 'ProximumEvent',
+                    '%countPendingMeetingRequest%'  => 4,
+                    '%meetingRequestManagementUrl%' => 'eventMeetingListLink',
+                ],
+                'messages',
+                $locale
+            )->shouldBeCalled()->willReturn('translatedMessage');
+
+        $smsFactory = new SMSFactory(
+            $eventUrlGenerator->reveal(),
+            $translator->reveal()
+        );
+
+        $expectedSms = new SMS('+3360000000', 'translatedMessage');
+
+        $sms = $smsFactory->createPendingProposition($phone, $sheet->reveal(), $locale, $pendingPropositions);
+
+        $this->assertEquals($expectedSms, $sms);
+    }
+
     public function testCreateSentMeetingRequestApproved()
     {
         $meeting     = $this->prophesize(Meeting::class);
@@ -108,8 +157,8 @@ class SMSFactoryTest extends TestCase
             '%spot%'  => 'G30',
             '%link%'  => 'eventLink',
         ], 'messages', $locale)
-        ->shouldBeCalled()
-        ->willReturn('translatedMessage');
+            ->shouldBeCalled()
+            ->willReturn('translatedMessage');
 
         $smsFactory = new SMSFactory(
             $eventUrlGenerator->reveal(),
@@ -117,7 +166,7 @@ class SMSFactoryTest extends TestCase
         );
 
         // Expected
-        $expectedSMS = new SMS('+3306000000','translatedMessage');
+        $expectedSMS = new SMS('+3306000000', 'translatedMessage');
 
         $sms = $smsFactory->createSentMeetingRequestApproved(
             $phone,
@@ -174,8 +223,8 @@ class SMSFactoryTest extends TestCase
             '%spot%'  => 'G30',
             '%link%'  => 'eventLink',
         ], 'messages', $locale)
-        ->shouldBeCalled()
-        ->willReturn('translatedMessage');
+            ->shouldBeCalled()
+            ->willReturn('translatedMessage');
 
         $smsFactory = new SMSFactory(
             $eventUrlGenerator->reveal(),
@@ -183,7 +232,7 @@ class SMSFactoryTest extends TestCase
         );
 
         // Expected
-        $expectedSMS = new SMS('+3306000000','translatedMessage');
+        $expectedSMS = new SMS('+3306000000', 'translatedMessage');
 
         $sms = $smsFactory->createReceiveMeetingRequestApproved(
             $phone,

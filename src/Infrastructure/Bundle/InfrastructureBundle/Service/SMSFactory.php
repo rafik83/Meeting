@@ -67,6 +67,46 @@ class SMSFactory
     }
 
     /**
+     * @param string $phone
+     * @param Sheet  $sheet
+     * @param string $locale
+     * @param int    $countPendingMeetingRequest
+     *
+     * @return SMS
+     */
+    public function createPendingProposition(
+        string $phone,
+        Sheet $sheet,
+        string $locale,
+        int $countPendingMeetingRequest
+    ): SMS {
+        $meetingRequestManagementUrl = $this->eventUrlGenerator->generateEventAbsoluteUrl(
+            $sheet->getEvent(),
+            'event_meeting_list_request',
+            array_merge(
+                ['sheet' => $sheet->getId()],
+                ['state' => 'receive'],
+                ['_locale' => $locale]
+            )
+        );
+
+        $message = $this
+            ->translator
+            ->trans(
+                'event.sms.reminder.pending_meeting_request',
+                [
+                    '%eventTitle%'                  => $sheet->getEvent()->getTitle(),
+                    '%countPendingMeetingRequest%'  => $countPendingMeetingRequest,
+                    '%meetingRequestManagementUrl%' => $meetingRequestManagementUrl,
+                ],
+                'messages',
+                $locale
+            );
+
+        return new SMS($phone, $message);
+    }
+
+    /**
      * @param string      $phone
      * @param Meeting     $meeting
      * @param Sheet       $mySheet
@@ -171,8 +211,8 @@ class SMSFactory
     }
 
     /**
-     * @param Event $event
-     * @param string  $locale
+     * @param Event  $event
+     * @param string $locale
      *
      * @return \IntlDateFormatter
      */
