@@ -60,6 +60,7 @@ class RequestController extends Controller
         try {
             $sheetListView = $this->get('tactician.commandbus.query')->handle(
                 new SheetListViewQuery(
+                    $this->getUser(),
                     $sheets,
                     $request->getLocale(),
                     $request->get('page', 1),
