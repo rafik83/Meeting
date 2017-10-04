@@ -44,6 +44,7 @@ final class Events
     const MEETING_CANCELED                             = 'meeting.canceled';
     const MEETING_REMOVED                              = 'meeting.removed';
     const MEETING_CREATED                              = 'meeting.created';
+    const MEETING_MOVED                                = 'meeting.moved';
     const REQUEST_PARTICIPANT_ADDED                    = 'meeting_request.participant.added';
     const REQUEST_PARTICIPANT_REMOVED                  = 'meeting_request.participant.removed';
     const REQUEST_UPDATE_MESSAGE                       = 'meeting_request.update.message';
