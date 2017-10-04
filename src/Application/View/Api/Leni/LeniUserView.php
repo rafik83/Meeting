@@ -18,11 +18,11 @@ class LeniUserView
     /** @var string */
     public $sheetName;
 
-    /** @var string */
-    public $typeName;
+    /** @var int|null */
+    public $typeId;
 
-    /** @var string */
-    public $categoryName;
+    /** @var int|null */
+    public $categoryId;
 
     /** @var string */
     public $email;
@@ -54,8 +54,8 @@ class LeniUserView
     /**
      * @param int              $id
      * @param string|null      $sheetName
-     * @param string|null      $typeName
-     * @param string|null      $categoryName
+     * @param int|null         $typeName
+     * @param int|null         $categoryName
      * @param string           $email
      * @param string           $gender
      * @param string           $firstName
@@ -68,8 +68,8 @@ class LeniUserView
     public function __construct(
         int $id,
         string $sheetName = null,
-        string $typeName = null,
-        string $categoryName = null,
+        int $typeName = null,
+        int $categoryName = null,
         string $email,
         $gender,
         $firstName,
@@ -81,8 +81,8 @@ class LeniUserView
     ) {
         $this->id               = $id;
         $this->sheetName        = $sheetName;
-        $this->typeName         = $typeName;
-        $this->categoryName     = $categoryName;
+        $this->typeId           = $typeName;
+        $this->categoryId       = $categoryName;
         $this->email            = $email;
         $this->gender           = $gender;
         $this->firstName        = $firstName;

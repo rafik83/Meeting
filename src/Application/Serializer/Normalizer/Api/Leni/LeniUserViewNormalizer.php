@@ -30,6 +30,23 @@ class LeniUserViewNormalizer implements NormalizerInterface
     const LENI_COL_UNALLOCATED  = 'ZL_RDVNONORGANISES';
     const LENI_COL_DAY          = 'ZL_JOURNEE';
 
+    const LENI_COLUMNS = [
+        self::LENI_COL_CAB_2,
+        self::LENI_COL_EXTERNAL_KEY,
+        self::LENI_COL_COMPANY_NAME,
+        self::LENI_COL_TYPE,
+        self::LENI_COL_CATEGORY,
+        self::LENI_COL_TITLE,
+        self::LENI_COL_FIRST_NAME,
+        self::LENI_COL_LAST_NAME,
+        self::LENI_COL_POSITION,
+        self::LENI_COL_PHONE_NUMBER,
+        self::LENI_COL_EMAIL,
+        self::LENI_COL_MOBILE_PHONE,
+        self::LENI_COL_UNALLOCATED,
+        self::LENI_COL_DAY,
+    ];
+
     /**
      * {@inheritdoc}
      */
@@ -41,8 +58,8 @@ class LeniUserViewNormalizer implements NormalizerInterface
             self::LENI_COL_CAB_2        => $userView->id,
             self::LENI_COL_EXTERNAL_KEY => $userView->id,
             self::LENI_COL_COMPANY_NAME => $userView->sheetName,
-            self::LENI_COL_CATEGORY     => $userView->categoryName,
-            self::LENI_COL_TYPE         => $userView->typeName,
+            self::LENI_COL_CATEGORY     => $userView->categoryId,
+            self::LENI_COL_TYPE         => $userView->typeId,
             self::LENI_COL_TITLE        => $userView->gender,
             self::LENI_COL_FIRST_NAME   => $userView->firstName,
             self::LENI_COL_LAST_NAME    => $userView->lastName,

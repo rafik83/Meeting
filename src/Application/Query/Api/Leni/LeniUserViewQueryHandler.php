@@ -86,11 +86,14 @@ class LeniUserViewQueryHandler
 
         $leniPlanning = new LeniPlanningView($days, $planning->unallocated);
 
+        $type = $this->typeNameResolver->resolveTypeWithPreloadedSheets($query->sheets);
+        $category = $this->categoryNameResolver->resolveCategoryForPreloadSheets($query->sheets);
+
         return new LeniUserView(
             $query->user->getId(),
             $this->groupNameResolver->resolve($query->event, $query->user, $query->sheets),
-            $this->typeNameResolver->resolveWithPreloadedSheets($query->sheets, $query->event->getFallback()),
-            $this->categoryNameResolver->resolveForPreloadSheets($query->sheets, $query->event->getFallback()),
+            $type->getId(),
+            $category !== null ? $category->getId() : null,
             $query->user->getEmail(),
             $userInfo['gender'],
             $userInfo['firstName'],

@@ -24,10 +24,24 @@ class CategoryNameResolver
      */
     public function resolveForPreloadSheets(array &$sheets, string $locale): string
     {
-        $categoryTitle = '';
+        $category = $this->resolveCategoryForPreloadSheets($sheets);
 
+        if ($category === null) {
+            return '';
+        }
+
+        return $category->getTitle($locale);
+    }
+
+    /**
+     * @param Sheet[] $sheets
+     *
+     * @return null|Category
+     */
+    public function resolveCategoryForPreloadSheets(array &$sheets): ?Category
+    {
         if (empty($sheets)) {
-            return $categoryTitle;
+            return null;
         }
 
         $typesById       = [];
@@ -62,10 +76,10 @@ class CategoryNameResolver
             if (!empty($categories)) {
                 $category = reset($categories);
 
-                return $category->getTitle($locale);
+                return $category;
             }
         }
 
-        return $categoryTitle;
+        return null;
     }
 }

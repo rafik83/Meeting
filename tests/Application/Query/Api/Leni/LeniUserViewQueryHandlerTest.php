@@ -19,8 +19,10 @@ use Proximum\Vimeet\Application\Query\Api\Leni\LeniUserViewQueryHandler;
 use Proximum\Vimeet\Application\View\Api\Leni\LeniPlanningDayView;
 use Proximum\Vimeet\Application\View\Api\Leni\LeniPlanningView;
 use Proximum\Vimeet\Application\View\Api\Leni\LeniUserView;
+use Proximum\Vimeet\Domain\Model\Category;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Sheet;
+use Proximum\Vimeet\Domain\Model\Type;
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Service\Category\CategoryNameResolver;
 use Proximum\Vimeet\Domain\Service\SheetsGroup\GroupNameResolver;
@@ -33,6 +35,8 @@ class LeniUserViewQueryHandlerTest extends TestCase
         $event = $this->prophesize(Event::class);
         $user = $this->prophesize(User::class);
 
+        $type = $this->prophesize(Type::class);
+        $category = $this->prophesize(Category::class);
         $sheet1 = $this->prophesize(Sheet::class);
         $sheet2 = $this->prophesize(Sheet::class);
         $sheets = [$sheet1->reveal(), $sheet2->reveal()];
@@ -42,6 +46,8 @@ class LeniUserViewQueryHandlerTest extends TestCase
         $user->getEmail()->willReturn('email@email.fr');
         $user->getLocale()->willReturn('en');
         $event->getAvailableLocale('en')->willReturn('fr');
+        $type->getId()->willReturn(64);
+        $category->getId()->willReturn(67);
 
         // Mock
         $userInfoGuesser = $this->prophesize(UserInfoGuesser::class);
@@ -51,8 +57,8 @@ class LeniUserViewQueryHandlerTest extends TestCase
         $categoryNameResolver = $this->prophesize(CategoryNameResolver::class);
 
         $groupNameResolver->resolve($event->reveal(), $user->reveal(), $sheets)->shouldBeCalled()->willReturn('sheetName');
-        $typeNameResolver->resolveWithPreloadedSheets($sheets, 'fr')->shouldBeCalled()->willReturn('typeName');
-        $categoryNameResolver->resolveForPreloadSheets($sheets, 'fr')->shouldBeCalled()->willReturn('categoryName');
+        $typeNameResolver->resolveTypeWithPreloadedSheets($sheets)->shouldBeCalled()->willReturn($type->reveal());
+        $categoryNameResolver->resolveCategoryForPreloadSheets($sheets)->shouldBeCalled()->willReturn($category->reveal());
         $userInfoGuesser
             ->getUserInfoFromParticipant($user->reveal(), 'fr', $sheets, false)
             ->shouldBeCalled()
@@ -87,8 +93,8 @@ class LeniUserViewQueryHandlerTest extends TestCase
         $expected = new LeniUserView(
             12,
             'sheetName',
-            'typeName',
-            'categoryName',
+            64,
+            67,
             'email@email.fr',
             'woman',
             'firstName',
