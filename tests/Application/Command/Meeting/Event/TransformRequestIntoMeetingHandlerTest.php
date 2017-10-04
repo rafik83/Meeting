@@ -117,7 +117,7 @@ class TransformRequestIntoMeetingHandlerTest extends TestCase
 
         $eventDispatcher->dispatch(
             Events::MEETING_CREATED,
-            new MeetingCreatedEvent([$fromSheet->reveal(), $toSheet->reveal()])
+            new MeetingCreatedEvent($expectedMeeting)
         )->shouldBeCalled();
 
         $eventDispatcher->dispatch(
@@ -142,7 +142,7 @@ class TransformRequestIntoMeetingHandlerTest extends TestCase
             $datetime
         );
 
-        $query = new TransformRequestIntoMeeting($request->reveal(), false);
+        $query = new TransformRequestIntoMeeting($request->reveal());
 
         $meeting = $transformRequestIntoMeetingHandler->handle($query);
 
@@ -237,9 +237,25 @@ class TransformRequestIntoMeetingHandlerTest extends TestCase
             false
         )->shouldBeCalled()->willReturn($spot->reveal());
 
+        $expectedMeeting = new Meeting(
+            $request->reveal(),
+            $slot->reveal(),
+            $fromSheet->reveal(),
+            [$fromParticipant->reveal()],
+            $toSheet->reveal(),
+            [$toParticipant->reveal()],
+            $datetime,
+            $spot->reveal(),
+            $event
+        );
+
+        $expectedMeeting->setCreatedByParticipant();
+
+        $meetingRepository->add($expectedMeeting)->shouldBeCalled();
+
         $eventDispatcher->dispatch(
             Events::MEETING_CREATED,
-            new MeetingCreatedEvent([$fromSheet->reveal(), $toSheet->reveal()])
+            new MeetingCreatedEvent($expectedMeeting)
         )->shouldBeCalled();
 
         $eventDispatcher->dispatch(
@@ -267,22 +283,6 @@ class TransformRequestIntoMeetingHandlerTest extends TestCase
         $query = new TransformRequestIntoMeeting($request->reveal());
 
         $meeting = $transformRequestIntoMeetingHandler->handle($query);
-
-        $expectedMeeting = new Meeting(
-            $request->reveal(),
-            $slot->reveal(),
-            $fromSheet->reveal(),
-            [$fromParticipant->reveal()],
-            $toSheet->reveal(),
-            [$toParticipant->reveal()],
-            $datetime,
-            $spot->reveal(),
-            $event
-        );
-
-        $expectedMeeting->setCreatedByParticipant();
-
-        $meetingRepository->add($expectedMeeting)->shouldBeCalled();
 
         $this->assertEquals($expectedMeeting, $meeting);
     }

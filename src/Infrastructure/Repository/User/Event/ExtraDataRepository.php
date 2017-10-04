@@ -12,6 +12,7 @@ namespace Proximum\Vimeet\Infrastructure\Repository\User\Event;
 
 use Doctrine\ORM\EntityManager;
 use Proximum\Vimeet\Domain\Model\Event;
+use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Model\User\Event\ExtraData;
 use Proximum\Vimeet\Domain\Repository\User\Event\ExtraDataRepositoryInterface;
 
@@ -63,5 +64,24 @@ class ExtraDataRepository implements ExtraDataRepositoryInterface
         ;
 
         return $queryBuilder->getQuery()->getResult();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getExtraDataForEventNameAndUser(Event $event, string $name, User $user): ?ExtraData
+    {
+        $queryBuilder = $this->entityManager->createQueryBuilder()
+            ->select('extraData')
+            ->from(ExtraData::class, 'extraData')
+            ->where('extraData.event = :event')
+            ->andWhere('extraData.name = :name')
+            ->andWhere('extraData.user = :user')
+            ->setParameter('event', $event)
+            ->setParameter('user', $user)
+            ->setParameter('name', $name)
+            ->setMaxResults(1);
+
+        return $queryBuilder->getQuery()->getOneOrNullResult();
     }
 }

@@ -10,29 +10,29 @@
 
 namespace Proximum\Vimeet\Application\Event\Meeting;
 
-use Proximum\Vimeet\Domain\Model\Sheet;
+use Proximum\Vimeet\Domain\Model\Meeting;
 use Symfony\Component\EventDispatcher\Event;
 
 class MeetingCreatedEvent extends Event
 {
     /**
-     * @var Sheet
+     * @var Meeting
      */
-    private $sheets;
+    private $meeting;
 
     /**
-     * @param Sheet[] $sheets
+     * @param Meeting $meeting
      */
-    public function __construct(array $sheets)
+    public function __construct(Meeting $meeting)
     {
-        $this->sheets = $sheets;
+        $this->meeting = $meeting;
     }
 
     /**
-     * @return Sheet[]
+     * @return Meeting
      */
-    public function getSheets()
+    public function getMeeting(): Meeting
     {
-        return $this->sheets;
+        return $this->meeting;
     }
 }

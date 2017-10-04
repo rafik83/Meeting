@@ -151,6 +151,7 @@ class DayViewQueryHandlerTest extends TestCase
         $this->endTime = new \DateTime('2016-10-12 18:00:00');
         $this->day = new Day($this->event, $this->startTime, $this->endTime);
         $this->sheet = SheetFactory::create($this->event);
+        $this->sheet->setInCatalog(true);
         $this->participant = ParticipantFactory::create($this->sheet, $this->user);
 
         $this->beginHappening1 = new \DateTime('2016-10-12 12:00:00');

@@ -119,6 +119,10 @@ class AgendaController extends Controller
     ): JsonResponse {
         $this->checkAccess($eventDomain, $sheet);
 
+        if (!$sheet->isInCatalog()) {
+            throw $this->createAccessDeniedException('Sheet not in catalog');
+        }
+
         $participant = $sheet->getUserParticipant($user);
 
         if ($participant === null) {
@@ -151,12 +155,17 @@ class AgendaController extends Controller
             ->handle(new SheetsAvailableBySlotQuery($eventDomain->getEvent(), $sheet, $slot))
         ;
 
-        $message = $this->renderView('EventBundle:Agenda/AvailableSlot:availableSheetForSlot.html.twig', [
-            'countAvailableSheets' => $countAvailableSheets,
-            'event'                => $eventDomain->getEvent(),
-            'sheet'                => $sheet,
-            'slot'                 => $slot,
-        ]);
+        $message = $countAvailableSheets === 0
+            ? ''
+            : $this->renderView(
+                'EventBundle:Agenda/AvailableSlot:availableSheetForSlot.html.twig',
+                [
+                    'countAvailableSheets' => $countAvailableSheets,
+                    'event'                => $eventDomain->getEvent(),
+                    'sheet'                => $sheet,
+                    'slot'                 => $slot,
+                ]
+            );
 
         return new JsonResponse(['message' => $message, 'countAvailableSheets' => $countAvailableSheets]);
     }

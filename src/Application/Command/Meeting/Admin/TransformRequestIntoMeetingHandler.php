@@ -114,7 +114,7 @@ class TransformRequestIntoMeetingHandler
 
         $this->eventDispatcher->dispatch(
             Events::MEETING_CREATED,
-            new MeetingCreatedEvent([$fromSheet, $toSheet])
+            new MeetingCreatedEvent($meeting)
         );
 
         foreach ($meeting->getAllParticipants() as $participant) {
