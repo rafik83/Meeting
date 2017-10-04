@@ -80,14 +80,14 @@ class ReminderHandlerTest extends TestCase
             $this->counter->reveal()
         );
     }
-    
+
     public function testNoEventOnCurrentDay()
     {
         $this->expectException(NoEventOnCurrentDayException::class);
 
         $this->eventRepository->findByDay($this->dateTime)
             ->shouldBeCalled()
-            ->willReturn(null);
+            ->willReturn([]);
 
         $this->handler->handle(new Remind());
     }
