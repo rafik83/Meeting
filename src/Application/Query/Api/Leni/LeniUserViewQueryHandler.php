@@ -89,13 +89,20 @@ class LeniUserViewQueryHandler
         $type = $this->typeNameResolver->resolveTypeWithPreloadedSheets($query->sheets);
         $category = $this->categoryNameResolver->resolveCategoryForPreloadSheets($query->sheets);
 
+        $gender = '';
+        if ($userInfo['gender'] === 'man') {
+            $gender = 'M';
+        } elseif ($userInfo['gender'] === 'woman') {
+            $gender = 'MME';
+        }
+
         return new LeniUserView(
             $query->user->getId(),
             $this->groupNameResolver->resolve($query->event, $query->user, $query->sheets),
             $type->getId(),
             $category !== null ? $category->getId() : null,
             $query->user->getEmail(),
-            $userInfo['gender'],
+            $gender,
             $userInfo['firstName'],
             $userInfo['lastName'],
             $userInfo['position'],

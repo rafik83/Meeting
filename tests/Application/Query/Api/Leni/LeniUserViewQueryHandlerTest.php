@@ -96,7 +96,7 @@ class LeniUserViewQueryHandlerTest extends TestCase
             64,
             67,
             'email@email.fr',
-            'woman',
+            'MME',
             'firstName',
             'lastName',
             'position',
