@@ -8,7 +8,7 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Proximum\Vimeet\Tests\Application\Query\Api\Leni;
+namespace Proximum\Vimeet\Tests\Application\ThirdParty\LENI\Query;
 
 use PHPUnit\Framework\TestCase;
 use Proximum\Vimeet\Application\Components\Planning\Formatter\FormattedPlanningView;
@@ -24,6 +24,7 @@ use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\Type;
 use Proximum\Vimeet\Domain\Model\User;
+use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
 use Proximum\Vimeet\Domain\Service\Category\CategoryNameResolver;
 use Proximum\Vimeet\Domain\Service\SheetsGroup\GroupNameResolver;
 use Proximum\Vimeet\Domain\Service\Type\TypeNameResolver;
@@ -56,9 +57,27 @@ class LeniUserViewQueryHandlerTest extends TestCase
         $groupNameResolver = $this->prophesize(GroupNameResolver::class);
         $categoryNameResolver = $this->prophesize(CategoryNameResolver::class);
 
-        $groupNameResolver->resolve($event->reveal(), $user->reveal(), $sheets)->shouldBeCalled()->willReturn('sheetName');
+        $sheetRepository = $this->prophesize(SheetRepositoryInterface::class);
+        $sheetRepository
+            ->getSheetsByUserAndEvent($user->reveal(), $event->reveal())
+            ->shouldBeCalled()
+            ->willReturn($sheets)
+        ;
+
+        $groupNameResolver
+            ->resolve($event->reveal(), $user->reveal(), $sheets)
+            ->shouldBeCalled()
+            ->willReturn('sheetName')
+        ;
+
         $typeNameResolver->resolveTypeWithPreloadedSheets($sheets)->shouldBeCalled()->willReturn($type->reveal());
-        $categoryNameResolver->resolveCategoryForPreloadSheets($sheets)->shouldBeCalled()->willReturn($category->reveal());
+
+        $categoryNameResolver
+            ->resolveCategoryForPreloadSheets($sheets)
+            ->shouldBeCalled()
+            ->willReturn($category->reveal())
+        ;
+
         $userInfoGuesser
             ->getUserInfoFromParticipant($user->reveal(), 'fr', $sheets, false)
             ->shouldBeCalled()
@@ -82,9 +101,10 @@ class LeniUserViewQueryHandlerTest extends TestCase
             $participantPlanningFormatter->reveal(),
             $typeNameResolver->reveal(),
             $categoryNameResolver->reveal(),
-            $groupNameResolver->reveal()
+            $groupNameResolver->reveal(),
+            $sheetRepository->reveal()
         );
-        $result = $handler->handle(new LeniUserViewQuery($event->reveal(), $user->reveal(), $sheets));
+        $result = $handler->handle(new LeniUserViewQuery($event->reveal(), $user->reveal()));
 
         $unallocated = 'unallocated';
         $day1     = new LeniPlanningDayView('day1');
