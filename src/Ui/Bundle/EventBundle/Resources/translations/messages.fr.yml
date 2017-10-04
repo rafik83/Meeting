@@ -51,9 +51,6 @@ catalog.noResult: 'Aucun résultat trouvé'
 catalog.noVisibleCategories: 'Vous n''avez accès à aucune catégorie de participation'
 catalog.noVisibleTypes: 'Vous n''avez accès à aucun type de participation'
 catalog.search.no-filter-to-refine: 'Aucun filtre ne permet d''affiner la recherche.'
-catalog.mobile.filters.allParticipants: 'Tous les participants'
-catalog.mobile.filters.availableSlot.title: 'Qui est disponible ?'
-catalog.mobile.filters.title: 'Catalogue des participants'
 catalog.seeMore: 'Voir plus'
 catalog.title: Catalogue
 common.backToPackage: 'Retour au forfait'
@@ -82,8 +79,8 @@ event.meeting.listRequest.filter.propositions: 'Propositions reçues'
 event.meeting.listRequest.filter.requests: 'Mes demandes'
 event.meeting.request.answering.closed: 'Les validations de rendez-vous sont terminées'
 event.meeting.request.closed: 'Les demandes de rendez-vous sont terminées'
-event.meeting.request.transformIntoMeeting.success: 'RDV positionné pour %participants% le %date% à %time% : %spot%.'
 event.meeting.request.transformIntoMeeting.error: 'Le RDV ne peut pas être positionné faute de disponibilités communes.'
+event.meeting.request.transformIntoMeeting.success: 'RDV positionné pour %participants% le %date% à %time% : %spot%.'
 event.registration_closed: 'Les inscriptions sont closes, si vous êtes inscrits connectez-vous'
 event.registration_not_open: 'Les inscriptions ne sont pas encore ouvertes'
 event.sheet.export.fields.event_name: 'Nom de l''événement'
@@ -103,9 +100,10 @@ event.sheet.export.fields.sheet_turnover: 'Chiffre d''affaires'
 event.sheet.export.fields.sheet_type: Type
 event.sheet.export.fields.sheet_website: 'Site internet'
 event.sheet.export.fields.sheet_zipcode: 'Code postal'
-event.sms.meeting_request.receive: "%event%: Vous avez reçu une proposition de rendez-vous, voir %link%"
-event.sms.receive_meeting_request.approved: "%event%: Votre demande de RDV avec %sheet% a été acceptée. RDV le %date% à %time% : Lieu %spot%, Voir %link%"
-event.sms.sent_meeting_request.approved: "%event%: La proposition de RDV avec %sheet% a été acceptée. RDV le %date% à %time% : Lieu %spot%, Voir %link%"
+event.sms.meeting_request.receive: '%event%: Vous avez reçu une proposition de rendez-vous, voir %link%'
+event.sms.receive_meeting_request.approved: '%event%: Votre demande de RDV avec %sheet% a été acceptée. RDV le %date% à %time% : Lieu %spot%, Voir %link%'
+event.sms.reminder.pending_meeting_request: '%eventTitle% : Vous avez reçu %countPendingMeetingRequest% propositions de RDVs, voir %meetingRequestManagementUrl%'
+event.sms.sent_meeting_request.approved: '%event%: La proposition de RDV avec %sheet% a été acceptée. RDV le %date% à %time% : Lieu %spot%, Voir %link%'
 event.user_event_phone.validate.explanation: 'Vous allez recevoir par SMS un code à 4 chiffres afin de valider votre numéro de téléphone'
 event.user_event_phone.validate.returnToPhone: 'Modifier mon numéro de téléphone'
 event.user_event_phone.validate.success: 'Votre numéro de téléphone est bien confirmé'
@@ -396,7 +394,6 @@ sheet.welcome.subtitle: ''
 sheet.welcome.title: 'POUR FINALISER VOTRE INSCRIPTION :'
 sheetGroup.impersonateAs: '%fromEmail% connecté en tant que %toFullname% (%toEmail%)'
 sheetGroup.quitImpersonation: Quitter
-event.sms.reminder.pending_meeting_request: '%eventTitle% : Vous avez reçu %countPendingMeetingRequest% propositions de RDVs, voir %meetingRequestManagementUrl%'
 summary.column.quantity: Quantité
 summary.column.title: Intitulé
 summary.column.total: Total
