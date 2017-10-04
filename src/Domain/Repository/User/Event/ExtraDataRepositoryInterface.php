@@ -11,6 +11,7 @@
 namespace Proximum\Vimeet\Domain\Repository\User\Event;
 
 use Proximum\Vimeet\Domain\Model\Event;
+use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Model\User\Event\ExtraData;
 
 interface ExtraDataRepositoryInterface
@@ -32,6 +33,15 @@ interface ExtraDataRepositoryInterface
      * @param ExtraData $extraData
      */
     public function set(ExtraData $extraData);
+
+    /**
+     * @param Event  $event
+     * @param string $name
+     * @param User   $user
+     *
+     * @return null|ExtraData
+     */
+    public function getExtraDataForEventNameAndUser(Event $event, string $name, User $user): ?ExtraData;
 
     /**
      * @param Event              $event
