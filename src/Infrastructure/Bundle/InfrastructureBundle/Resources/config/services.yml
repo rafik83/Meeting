@@ -4223,6 +4223,12 @@ services:
             - '@tactician.commandbus'
         tags:
             - { name: console.command }
+    command.api.leni_api_command:
+        class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\Api\LeniApiCommand
+        arguments:
+            - '@command.event.extra_parameter.api.leni_api_handler'
+        tags:
+            - { name: console.command }
 
     #
     # Funnel
