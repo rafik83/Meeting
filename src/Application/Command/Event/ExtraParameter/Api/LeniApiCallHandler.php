@@ -12,6 +12,10 @@ namespace Proximum\Vimeet\Application\Command\Event\ExtraParameter\Api;
 
 use Proximum\Vimeet\Application\Adapter\HttpAdapterInterface;
 use Proximum\Vimeet\Application\Exception\Adapter\Http\ServerErrorException;
+use Proximum\Vimeet\Application\Exception\Api\Leni\LeniApiServerException;
+use Proximum\Vimeet\Application\Exception\Api\Leni\NotValidApiCallException;
+use Proximum\Vimeet\Application\Exception\Api\Leni\WarningApiCallException;
+use Proximum\Vimeet\Application\Serializer\Normalizer\Api\Leni\LeniUserViewNormalizer;
 
 class LeniApiCallHandler
 {
@@ -31,6 +35,10 @@ class LeniApiCallHandler
 
     /**
      * @param LeniApiCall $command
+     *
+     * @throws LeniApiServerException
+     * @throws NotValidApiCallException
+     * @throws WarningApiCallException
      */
     public function handle(LeniApiCall $command)
     {
@@ -43,17 +51,37 @@ class LeniApiCallHandler
         ]);
 
         $headers = [
-            'Authorization' => 'Basic ' . base64_encode($command->leniUserParameter->getValue()),
-            'Host' => self::LENI_HOST,
-            'Content-Type' => 'application/json',
+            'Authorization'  => 'Basic ' . base64_encode($command->leniUserParameter->getValue()),
+            'Host'           => self::LENI_HOST,
+            'Content-Type'   => 'application/json',
             'Content-Length' => strlen($body),
-            'Connection' => 'Close',
+            'Connection'     => 'Close',
         ];
 
         try {
-            $response = $this->httpAdapter->post(self::LENI_ENDPOINT, $headers, $body);
-        } catch (ServerErrorException $exception) {
+            $jsonResponse = $this->httpAdapter->post(self::LENI_ENDPOINT, $headers, $body);
 
+            $response = json_decode($jsonResponse->body, true);
+
+            if (isset($response['IsValid']) && $response['IsValid'] === true) {
+                if (isset($response['hasWarning']) && $response['hasWarning'] === true && isset($response['info'])) {
+                    $warnings = [];
+
+                    foreach ($response['info'] as $key => $info) {
+                        if (in_array($key, LeniUserViewNormalizer::LENI_COLUMNS)) {
+                            $warnings[] = $key;
+                        }
+                    }
+
+                    if (!empty($warnings)) {
+                        throw new WarningApiCallException($warnings);
+                    }
+                }
+            } else {
+                throw new NotValidApiCallException('Leni responded has a non valid response ' . $jsonResponse->body);
+            }
+        } catch (ServerErrorException $exception) {
+            throw new LeniApiServerException($exception);
         }
     }
 }
