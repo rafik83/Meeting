@@ -26,18 +26,24 @@ class SendSMSReminderCommand extends Command
     /** @var \DateTimeInterface */
     private $dateTime;
 
+    /** @var bool */
+    private $ddayFeatureEnabled;
+
     /**
      * @param ReminderHandler    $reminderHandler
      * @param \DateTimeInterface $dateTime
+     * @param bool               $ddayFeatureEnabled
      */
     public function __construct(
         ReminderHandler $reminderHandler,
-        \DateTimeInterface $dateTime
+        \DateTimeInterface $dateTime,
+        bool $ddayFeatureEnabled
     ) {
         parent::__construct(self::NAME);
 
-        $this->reminderHandler = $reminderHandler;
-        $this->dateTime = $dateTime;
+        $this->reminderHandler    = $reminderHandler;
+        $this->dateTime           = $dateTime;
+        $this->ddayFeatureEnabled = $ddayFeatureEnabled;
     }
 
     /**
@@ -47,8 +53,7 @@ class SendSMSReminderCommand extends Command
     {
         $this
             ->setName(self::NAME)
-            ->setDescription('Send SMS reminder to user with count of available pending proposition')
-        ;
+            ->setDescription('Send SMS reminder to user with count of available pending proposition');
     }
 
     /**
@@ -56,6 +61,10 @@ class SendSMSReminderCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
+        if (!$this->ddayFeatureEnabled) {
+            return;
+        }
+
         $this->reminderHandler->handle(
             new Remind()
         );
