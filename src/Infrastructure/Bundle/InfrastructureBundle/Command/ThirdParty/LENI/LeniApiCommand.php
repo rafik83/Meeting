@@ -8,10 +8,10 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\Api;
+namespace Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\ThirdParty\LENI;
 
-use Proximum\Vimeet\Application\Command\Event\ExtraParameter\Api\LeniApi;
-use Proximum\Vimeet\Application\Command\Event\ExtraParameter\Api\LeniApiHandler;
+use Proximum\Vimeet\Application\ThirdParty\LENI\Command\PrepareLeniApiCall;
+use Proximum\Vimeet\Application\ThirdParty\LENI\Command\PrepareLeniApiCallHandler;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -20,13 +20,13 @@ class LeniApiCommand extends Command
 {
     const NAME = 'vimeet:api:leni-export-data';
 
-    /** @var LeniApiHandler */
+    /** @var PrepareLeniApiCallHandler */
     private $apiHandler;
 
     /**
-     * @param LeniApiHandler $apiHandler
+     * @param PrepareLeniApiCallHandler $apiHandler
      */
-    public function __construct(LeniApiHandler $apiHandler)
+    public function __construct(PrepareLeniApiCallHandler $apiHandler)
     {
         parent::__construct(self::NAME);
 
@@ -49,6 +49,6 @@ class LeniApiCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $this->apiHandler->handle(new LeniApi());
+        $this->apiHandler->handle(new PrepareLeniApiCall());
     }
 }

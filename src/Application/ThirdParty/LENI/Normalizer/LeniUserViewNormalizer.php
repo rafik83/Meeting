@@ -8,9 +8,9 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Proximum\Vimeet\Application\Serializer\Normalizer\Api\Leni;
+namespace Proximum\Vimeet\Application\ThirdParty\LENI\Normalizer;
 
-use Proximum\Vimeet\Application\View\Api\Leni\LeniUserView;
+use Proximum\Vimeet\Application\ThirdParty\LENI\View\LeniUserView;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 
 class LeniUserViewNormalizer implements NormalizerInterface

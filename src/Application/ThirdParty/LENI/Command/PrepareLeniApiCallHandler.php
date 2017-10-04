@@ -8,16 +8,16 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Proximum\Vimeet\Application\Command\Event\ExtraParameter\Api;
+namespace Proximum\Vimeet\Application\ThirdParty\LENI\Command;
 
 use Proximum\Vimeet\Application\Adapter\SerializerAdapterInterface;
 use Proximum\Vimeet\Application\Components\Planning\Formatter\ParticipantPlanningFormatter;
-use Proximum\Vimeet\Application\Exception\Api\Leni\LeniApiServerException;
-use Proximum\Vimeet\Application\Exception\Api\Leni\NotValidApiCallException;
-use Proximum\Vimeet\Application\Exception\Api\Leni\WarningApiCallException;
-use Proximum\Vimeet\Application\Query\Api\Leni\LeniUserViewQuery;
-use Proximum\Vimeet\Application\Query\Api\Leni\LeniUserViewQueryHandler;
-use Proximum\Vimeet\Application\View\Api\Leni\LeniUserView;
+use Proximum\Vimeet\Application\ThirdParty\LENI\Exception\LeniApiServerException;
+use Proximum\Vimeet\Application\ThirdParty\LENI\Exception\NotValidApiCallException;
+use Proximum\Vimeet\Application\ThirdParty\LENI\Exception\WarningApiCallException;
+use Proximum\Vimeet\Application\ThirdParty\LENI\Query\LeniUserViewQuery;
+use Proximum\Vimeet\Application\ThirdParty\LENI\Query\LeniUserViewQueryHandler;
+use Proximum\Vimeet\Application\ThirdParty\LENI\View\LeniUserView;
 use Proximum\Vimeet\Domain\Event\ExtraParameter\Type;
 use Proximum\Vimeet\Domain\Model\Event\ExtraParameter;
 use Proximum\Vimeet\Domain\Model\User\Event\ExtraData;
@@ -28,7 +28,10 @@ use Proximum\Vimeet\Domain\Repository\User\Event\ExtraDataRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\UserRepositoryInterface;
 use Proximum\Vimeet\Domain\User\Event\ExtraData\Type as ExtraDataType;
 
-class LeniApiHandler
+/**
+ * Prepare LENI EXHIBIS Api call handler
+ */
+class PrepareLeniApiCallHandler
 {
     /** @var ParticipantPlanningFormatter */
     private $participantPlanningFormatter;
@@ -97,9 +100,13 @@ class LeniApiHandler
     }
 
     /**
-     * @param LeniApi $command
+     * @param PrepareLeniApiCall $command
+     *
+     * @throws LeniApiServerException
+     * @throws NotValidApiCallException
+     * @throws WarningApiCallException
      */
-    public function handle(LeniApi $command): void
+    public function handle(PrepareLeniApiCall $command): void
     {
         $events = $this->eventRepository->findEventWithLeniApiParameters();
 
@@ -120,61 +127,40 @@ class LeniApiHandler
 
             $userFingerPrints = $this->orderExtraData($usersExtraData);
 
-            $leniUserViews = [];
-
             foreach ($users as $user) {
                 $sheets = $this->sheetRepository->getSheetsByUserAndEvent($user, $event);
 
-                $leniUser = $this->leniUserViewQueryHandler->handle(new LeniUserViewQuery($event, $user, $sheets));
-                $leniUserSerialize = $this->serializerAdapter->normalize($leniUser);
-                $leniUser->addSerializeContent($leniUserSerialize);
+                $leniUserView = $this->leniUserViewQueryHandler->handle(new LeniUserViewQuery($event, $user, $sheets));
+                $leniUserSerialize = $this->serializerAdapter->normalize($leniUserView);
+                $leniUserView->addSerializeContent($leniUserSerialize);
 
                 $fingerPrint = md5(implode(',', $leniUserSerialize));
 
+                if (isset($userFingerPrints[$user->getId()])
+                    && $fingerPrint === $userFingerPrints[$user->getId()]->getValue()
+                ) {
+                    continue;
+                }
+
+                $this->notifyLeniWithUsers($leniUserParameter, $leniEventParameter, $leniUserView);
+
                 if (isset($userFingerPrints[$user->getId()])) {
-                    // In case of a different fingerprint, update the fingerprint and add the user to the user to send
-                    if ($fingerPrint !== $userFingerPrints[$user->getId()]->getValue()) {
-                        $userFingerPrints[$user->getId()]->update($fingerPrint, $this->dateTime);
+                    $userFingerPrints[$user->getId()]->update($fingerPrint, $this->dateTime);
+                    $this->extraDataRepository->set($userFingerPrints[$user->getId()]);
 
-                        try {
-                            $this->notifyLeniWithUsers($leniUserParameter, $leniEventParameter, $leniUser);
+                    continue;
+                }
 
-                            $this->extraDataRepository->set($userFingerPrints[$user->getId()]);
-                        } catch (NotValidApiCallException $exception) {
-                            // Data not valid and user not save
-                        } catch (WarningApiCallException $exception) {
-                            // There is warning with the call
-                            // But the call has been made
-                            $this->extraDataRepository->set($userFingerPrints[$user->getId()]);
-                        } catch (LeniApiServerException $exception) {
-                            // In case of 500 on Leni's part
-                        }
-                    }
-                } else {
-                    $userExtraData = new ExtraData(
+                $this->extraDataRepository->add(
+                    new ExtraData(
                         $user,
                         $event,
                         ExtraDataType::LENI_FINGERPRINT,
                         $fingerPrint,
                         $this->dateTime
-                    );
-
-                    try {
-                        $this->notifyLeniWithUsers($leniUserParameter, $leniEventParameter, $leniUser);
-
-                        $this->extraDataRepository->add($userExtraData);
-                    } catch (NotValidApiCallException $exception) {
-                        // Data not valid and user not save
-                    } catch (WarningApiCallException $exception) {
-                        // There is warning with the call
-                        // But the call has been made
-                        $this->extraDataRepository->add($userExtraData);
-                    } catch (LeniApiServerException $exception) {
-                        // In case of 500 on Leni's part
-                    }
-                }
+                    )
+                );
             }
-
         }
     }
 
@@ -198,6 +184,10 @@ class LeniApiHandler
      * @param ExtraParameter $leniUserParameter
      * @param ExtraParameter $leniEventParameter
      * @param LeniUserView   $leniUserView
+     *
+     * @throws LeniApiServerException
+     * @throws NotValidApiCallException
+     * @throws WarningApiCallException
      */
     private function notifyLeniWithUsers(
         ExtraParameter $leniUserParameter,

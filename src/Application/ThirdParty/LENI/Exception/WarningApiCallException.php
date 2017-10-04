@@ -8,7 +8,7 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Proximum\Vimeet\Application\Exception\Api\Leni;
+namespace Proximum\Vimeet\Application\ThirdParty\LENI\Exception;
 
 class WarningApiCallException extends LeniException
 {

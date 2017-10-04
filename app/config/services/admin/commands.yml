@@ -50,7 +50,7 @@ services:
     # API
     #
     command.event.extra_parameter.api.leni_api_handler:
-        class: Proximum\Vimeet\Application\Command\Event\ExtraParameter\Api\LeniApiHandler
+        class: Proximum\Vimeet\Application\ThirdParty\LENI\Command\PrepareLeniApiCallHandler
         arguments:
             - '@vimeet_infrastructure.repository.event_repository'
             - '@repository.event.extra_parameter_repository'
@@ -63,9 +63,9 @@ services:
             - '@adapter.serializer_adapter'
             - '@datetime'
         tags:
-            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Event\ExtraParameter\Api\LeniApi }
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\ThirdParty\LENI\PrepareLeniApiCall }
 
     command.event.extra_parameter.api.leni_api_call_handler:
-        class: Proximum\Vimeet\Application\Command\Event\ExtraParameter\Api\LeniApiCallHandler
+        class: Proximum\Vimeet\Application\ThirdParty\LENI\Command\LeniApiCallHandler
         arguments:
             - '@adapter.http_adapter'

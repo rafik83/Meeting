@@ -8,8 +8,8 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Proximum\Vimeet\Application\Command\Event\ExtraParameter\Api;
+namespace Proximum\Vimeet\Application\ThirdParty\LENI\Command;
 
-class LeniApi
+class PrepareLeniApiCall
 {
 }

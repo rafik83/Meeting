@@ -8,9 +8,9 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Proximum\Vimeet\Application\Command\Event\ExtraParameter\Api;
+namespace Proximum\Vimeet\Application\ThirdParty\LENI\Command;
 
-use Proximum\Vimeet\Application\View\Api\Leni\LeniUserView;
+use Proximum\Vimeet\Application\ThirdParty\LENI\View\LeniUserView;
 use Proximum\Vimeet\Domain\Model\Event\ExtraParameter;
 
 class LeniApiCall

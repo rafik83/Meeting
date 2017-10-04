@@ -8,16 +8,17 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Proximum\Vimeet\Application\Query\Api\Leni;
+namespace Proximum\Vimeet\Application\ThirdParty\LENI\Query;
 
 use Proximum\Vimeet\Application\Components\Planning\Formatter\ParticipantPlanningFormatter;
 use Proximum\Vimeet\Application\Components\User\UserInfoGuesser;
-use Proximum\Vimeet\Application\View\Api\Leni\LeniPlanningDayView;
-use Proximum\Vimeet\Application\View\Api\Leni\LeniPlanningView;
-use Proximum\Vimeet\Application\View\Api\Leni\LeniUserView;
+use Proximum\Vimeet\Application\ThirdParty\LENI\View\LeniPlanningDayView;
+use Proximum\Vimeet\Application\ThirdParty\LENI\View\LeniPlanningView;
+use Proximum\Vimeet\Application\ThirdParty\LENI\View\LeniUserView;
 use Proximum\Vimeet\Domain\Service\Category\CategoryNameResolver;
 use Proximum\Vimeet\Domain\Service\SheetsGroup\GroupNameResolver;
 use Proximum\Vimeet\Domain\Service\Type\TypeNameResolver;
+use Proximum\Vimeet\Domain\Template\TemplateObject\Gender;
 
 class LeniUserViewQueryHandler
 {
@@ -90,9 +91,10 @@ class LeniUserViewQueryHandler
         $category = $this->categoryNameResolver->resolveCategoryForPreloadSheets($query->sheets);
 
         $gender = '';
-        if ($userInfo['gender'] === 'man') {
+
+        if (Gender::MAN === $userInfo['gender']) {
             $gender = 'M';
-        } elseif ($userInfo['gender'] === 'woman') {
+        } elseif (Gender::WOMAN === $userInfo['gender']) {
             $gender = 'MME';
         }
 

@@ -8,19 +8,24 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Proximum\Vimeet\Application\Command\Event\ExtraParameter\Api;
+namespace Proximum\Vimeet\Application\ThirdParty\LENI\Command;
 
 use Proximum\Vimeet\Application\Adapter\HttpAdapterInterface;
 use Proximum\Vimeet\Application\Exception\Adapter\Http\ServerErrorException;
-use Proximum\Vimeet\Application\Exception\Api\Leni\LeniApiServerException;
-use Proximum\Vimeet\Application\Exception\Api\Leni\NotValidApiCallException;
-use Proximum\Vimeet\Application\Exception\Api\Leni\WarningApiCallException;
-use Proximum\Vimeet\Application\Serializer\Normalizer\Api\Leni\LeniUserViewNormalizer;
+use Proximum\Vimeet\Application\ThirdParty\LENI\Exception\LeniApiServerException;
+use Proximum\Vimeet\Application\ThirdParty\LENI\Exception\NotValidApiCallException;
+use Proximum\Vimeet\Application\ThirdParty\LENI\Exception\WarningApiCallException;
+use Proximum\Vimeet\Application\ThirdParty\LENI\Normalizer\LeniUserViewNormalizer;
 
+/**
+ * LENI EXHIBIS Api call handler
+ */
 class LeniApiCallHandler
 {
-    const LENI_ENDPOINT = 'https://gateway.svc.exhibis.net/proximum/domain/IndividuEvt/Description/';
+    const LENI_ENDPOINT = 'https://gateway.svc.exhibis.net/proximum/domain/IndividuEvt/Save/';
     const LENI_HOST = 'gateway.svc.exhibis.net';
+    const LENI_APP = 'O';
+    const LENI_MODE = 'MessageAndModifiedData';
 
     /** @var HttpAdapterInterface */
     private $httpAdapter;
@@ -42,13 +47,15 @@ class LeniApiCallHandler
      */
     public function handle(LeniApiCall $command)
     {
-        $body = json_encode([
-            "idEvt" => $command->leniUserEvent->getValue(),
-            "idUser" => $command->leniUserView->id,
-            "mode" => "MessageAndModifiedData",
-            "app" => "B",
-            "data" => $command->leniUserView->serializeContent,
-        ]);
+        $body = json_encode(
+            [
+                'idEvt'  => $command->leniUserEvent->getValue(),
+                'idUser' => $command->leniUserView->id,
+                'mode'   => self::LENI_MODE,
+                'app'    => self::LENI_APP,
+                'data'   => $command->leniUserView->serializeContent,
+            ]
+        );
 
         $headers = [
             'Authorization'  => 'Basic ' . base64_encode($command->leniUserParameter->getValue()),

@@ -4224,7 +4224,7 @@ services:
         tags:
             - { name: console.command }
     command.api.leni_api_command:
-        class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\Api\LeniApiCommand
+        class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\ThirdParty\LENI\LeniApiCommand
         arguments:
             - '@command.event.extra_parameter.api.leni_api_handler'
         tags:
@@ -4878,7 +4878,7 @@ services:
             - { name: serializer.normalizer }
 
     serializer.normalizer.api.leni.leni_user_view_normalizer:
-        class: Proximum\Vimeet\Application\Serializer\Normalizer\Api\Leni\LeniUserViewNormalizer
+        class: Proximum\Vimeet\Application\ThirdParty\LENI\Normalizer\LeniUserViewNormalizer
         tags:
             - { name: serializer.normalizer }
 
