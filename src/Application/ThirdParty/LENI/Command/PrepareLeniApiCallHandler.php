@@ -125,7 +125,7 @@ class PrepareLeniApiCallHandler
                 ExtraDataType::LENI_FINGERPRINT
             );
 
-            $userFingerPrints = $this->orderExtraData($usersExtraData);
+            $userFingerPrints = $this->indexExtraDataByUserId($usersExtraData);
 
             foreach ($users as $user) {
                 $sheets = $this->sheetRepository->getSheetsByUserAndEvent($user, $event);
@@ -169,7 +169,7 @@ class PrepareLeniApiCallHandler
      *
      * @return array
      */
-    private function orderExtraData(array $usersExtraData)
+    private function indexExtraDataByUserId(array $usersExtraData)
     {
         $userFingerPrints = [];
 
