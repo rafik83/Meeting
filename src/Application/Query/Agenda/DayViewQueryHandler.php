@@ -133,7 +133,7 @@ class DayViewQueryHandler
                 }
             }
 
-            if ($query->isParticipantUserViewing()) {
+            if ($query->isParticipantUserViewing() && $query->currentSheet->isInCatalog()) {
                 $availableSlotViewQuery = new AvailableSlotsByParticipantAndDayQuery(
                     $query->event,
                     $query->participant,
