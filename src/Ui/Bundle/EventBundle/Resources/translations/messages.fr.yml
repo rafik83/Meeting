@@ -51,6 +51,9 @@ catalog.noResult: 'Aucun résultat trouvé'
 catalog.noVisibleCategories: 'Vous n''avez accès à aucune catégorie de participation'
 catalog.noVisibleTypes: 'Vous n''avez accès à aucun type de participation'
 catalog.search.no-filter-to-refine: 'Aucun filtre ne permet d''affiner la recherche.'
+catalog.mobile.filters.allParticipants: 'Tous les participants'
+catalog.mobile.filters.availableSlot.title: 'Qui est disponible ?'
+catalog.mobile.filters.title: 'Catalogue des participants'
 catalog.seeMore: 'Voir plus'
 catalog.title: Catalogue
 common.backToPackage: 'Retour au forfait'
@@ -393,6 +396,7 @@ sheet.welcome.subtitle: ''
 sheet.welcome.title: 'POUR FINALISER VOTRE INSCRIPTION :'
 sheetGroup.impersonateAs: '%fromEmail% connecté en tant que %toFullname% (%toEmail%)'
 sheetGroup.quitImpersonation: Quitter
+event.sms.reminder.pending_meeting_request: '%eventTitle% : Vous avez reçu %countPendingMeetingRequest% propositions de RDVs, voir %meetingRequestManagementUrl%'
 summary.column.quantity: Quantité
 summary.column.title: Intitulé
 summary.column.total: Total

@@ -13,9 +13,6 @@ namespace Proximum\Vimeet\Infrastructure\Repository;
 use Doctrine\ORM\EntityManager;
 use Proximum\Vimeet\Domain\Model\Admin;
 use Proximum\Vimeet\Domain\Model\Event;
-use Proximum\Vimeet\Domain\Model\Participant;
-use Proximum\Vimeet\Domain\Model\Sheet;
-use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Repository\EventRepositoryInterface;
 
 class EventRepository implements EventRepositoryInterface
@@ -210,5 +207,27 @@ class EventRepository implements EventRepositoryInterface
             ->setMaxResults(1);
 
         return $queryBuilder->getQuery()->getOneOrNullResult();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function findByDay(\DateTimeInterface $dateTime): array
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('event')
+            ->from(Event::class, 'event')
+            ->join(
+                'event.days',
+                'day',
+                'WITH',
+                'day.startTime <= :datetime AND day.endTime >= :datetime'
+            )
+            ->setParameter('datetime', $dateTime)
+        ;
+
+        return $queryBuilder->getQuery()->getResult();
     }
 }

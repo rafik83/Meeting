@@ -247,6 +247,14 @@ interface RequestRepositoryInterface
 
     /**
      * @param Sheet $sheet
+     * @param array $availableSlots
+     *
+     * @return int
+     */
+    public function countPendingPropositionWithMetSheetAvailableForSheet(Sheet $sheet, array $availableSlots): int;
+
+    /**
+     * @param Sheet $sheet
      *
      * @return bool
      */

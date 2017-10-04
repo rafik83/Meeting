@@ -25,6 +25,16 @@ interface ExtraDataRepositoryInterface
     public function getExtraDataForEventAndName(Event $event, string $name): array;
 
     /**
+     * @param ExtraData $extraData
+     */
+    public function add(ExtraData $extraData);
+
+    /**
+     * @param ExtraData $extraData
+     */
+    public function set(ExtraData $extraData);
+
+    /**
      * @param Event  $event
      * @param string $name
      * @param User   $user
@@ -34,12 +44,11 @@ interface ExtraDataRepositoryInterface
     public function getExtraDataForEventNameAndUser(Event $event, string $name, User $user): ?ExtraData;
 
     /**
-     * @param ExtraData $extraData
+     * @param Event              $event
+     * @param string             $name
+     * @param \DateTimeInterface $dateTime
+     *
+     * @return ExtraData[]
      */
-    public function add(ExtraData $extraData);
-
-    /**
-     * @param ExtraData $extraData
-     */
-    public function set(ExtraData $extraData);
+    public function getForEventNameOlderThanDate(Event $event, string $name, \DateTimeInterface $dateTime): array;
 }

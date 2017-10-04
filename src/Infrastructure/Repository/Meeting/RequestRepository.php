@@ -223,6 +223,17 @@ class RequestRepository implements RequestRepositoryInterface
     /**
      * {@inheritdoc}
      */
+    public function countPendingPropositionWithMetSheetAvailableForSheet(Sheet $sheet, array $availableSlots): int
+    {
+        $queryBuilder = new RequestQueryBuilder($this->entityManager);
+        $queryBuilder->receivedBy($sheet)->pending()->isEnabled()->isFromAttending()->isToAvailable($availableSlots);
+
+        return count($queryBuilder->getQuery()->getResult());
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function hasPendingPropositionReceivedBySheet(Sheet $sheet)
     {
         return $this->countPendingPropositionReceivedBySheet($sheet) > 0;

@@ -46,7 +46,6 @@ class AvailableSlotCalculatorTest extends TestCase
         $slot3->getId()->willReturn(3);
         $slot4->getId()->willReturn(4);
 
-
         // Mock
         $sheetRepository = $this->prophesize(SheetRepositoryInterface::class);
         $slotRepository = $this->prophesize(MeetingSlotRepositoryInterface::class);
@@ -85,5 +84,4 @@ class AvailableSlotCalculatorTest extends TestCase
         );
         $calculator->calculateAvailableSlotForSheet($sheet->reveal());
     }
-
 }
