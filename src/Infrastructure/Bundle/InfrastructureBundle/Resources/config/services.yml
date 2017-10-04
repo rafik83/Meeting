@@ -4226,7 +4226,7 @@ services:
     command.api.leni_api_command:
         class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\ThirdParty\LENI\LeniApiCommand
         arguments:
-            - '@command.event.extra_parameter.api.leni_api_handler'
+            - '@command.third_party.leni.prepare_leni_api_handler'
         tags:
             - { name: console.command }
 

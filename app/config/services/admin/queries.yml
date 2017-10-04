@@ -51,3 +51,4 @@ services:
             - '@domain.service.sheets_group.type_name_resolver'
             - '@domain.service.category.category_name_resolver'
             - '@domain.service.sheets_group.group_name_resolver'
+            - '@vimeet_infrastructure.repository.sheet_repository'

@@ -15,6 +15,7 @@ use Proximum\Vimeet\Application\Components\User\UserInfoGuesser;
 use Proximum\Vimeet\Application\ThirdParty\LENI\View\LeniPlanningDayView;
 use Proximum\Vimeet\Application\ThirdParty\LENI\View\LeniPlanningView;
 use Proximum\Vimeet\Application\ThirdParty\LENI\View\LeniUserView;
+use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
 use Proximum\Vimeet\Domain\Service\Category\CategoryNameResolver;
 use Proximum\Vimeet\Domain\Service\SheetsGroup\GroupNameResolver;
 use Proximum\Vimeet\Domain\Service\Type\TypeNameResolver;
@@ -37,25 +38,31 @@ class LeniUserViewQueryHandler
     /** @var CategoryNameResolver */
     private $categoryNameResolver;
 
+    /** @var SheetRepositoryInterface */
+    private $sheetRepository;
+
     /**
      * @param UserInfoGuesser              $userInfoGuesser
      * @param ParticipantPlanningFormatter $participantPlanningFormatter
      * @param TypeNameResolver             $typeNameResolver
      * @param CategoryNameResolver         $categoryNameResolver
      * @param GroupNameResolver            $groupNameResolver
+     * @param SheetRepositoryInterface     $sheetRepository
      */
     public function __construct(
         UserInfoGuesser $userInfoGuesser,
         ParticipantPlanningFormatter $participantPlanningFormatter,
         TypeNameResolver $typeNameResolver,
         CategoryNameResolver $categoryNameResolver,
-        GroupNameResolver $groupNameResolver
+        GroupNameResolver $groupNameResolver,
+        SheetRepositoryInterface $sheetRepository
     ) {
         $this->participantPlanningFormatter = $participantPlanningFormatter;
         $this->typeNameResolver             = $typeNameResolver;
         $this->categoryNameResolver         = $categoryNameResolver;
         $this->groupNameResolver            = $groupNameResolver;
         $this->userInfoGuesser              = $userInfoGuesser;
+        $this->sheetRepository              = $sheetRepository;
     }
 
     /**
@@ -65,6 +72,7 @@ class LeniUserViewQueryHandler
      */
     public function handle(LeniUserViewQuery $query): LeniUserView
     {
+        $sheets = $this->sheetRepository->getSheetsByUserAndEvent($query->user, $query->event);
         $userLocale = $query->event->getAvailableLocale($query->user->getLocale());
 
         $planning = $this->participantPlanningFormatter->formatPlanningByDayFromUserAndEventWithUnallocated(
@@ -76,7 +84,7 @@ class LeniUserViewQueryHandler
         $userInfo = $this->userInfoGuesser->getUserInfoFromParticipant(
             $query->user,
             $userLocale,
-            $query->sheets,
+            $sheets,
             false
         );
 
@@ -87,8 +95,8 @@ class LeniUserViewQueryHandler
 
         $leniPlanning = new LeniPlanningView($days, $planning->unallocated);
 
-        $type = $this->typeNameResolver->resolveTypeWithPreloadedSheets($query->sheets);
-        $category = $this->categoryNameResolver->resolveCategoryForPreloadSheets($query->sheets);
+        $type = $this->typeNameResolver->resolveTypeWithPreloadedSheets($sheets);
+        $category = $this->categoryNameResolver->resolveCategoryForPreloadSheets($sheets);
 
         $gender = '';
 
@@ -100,7 +108,7 @@ class LeniUserViewQueryHandler
 
         return new LeniUserView(
             $query->user->getId(),
-            $this->groupNameResolver->resolve($query->event, $query->user, $query->sheets),
+            $this->groupNameResolver->resolve($query->event, $query->user, $sheets),
             $type->getId(),
             $category !== null ? $category->getId() : null,
             $query->user->getEmail(),

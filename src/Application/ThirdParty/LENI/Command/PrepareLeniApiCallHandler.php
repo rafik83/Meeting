@@ -23,7 +23,6 @@ use Proximum\Vimeet\Domain\Model\Event\ExtraParameter;
 use Proximum\Vimeet\Domain\Model\User\Event\ExtraData;
 use Proximum\Vimeet\Domain\Repository\Event\ExtraParameterRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\EventRepositoryInterface;
-use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\User\Event\ExtraDataRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\UserRepositoryInterface;
 use Proximum\Vimeet\Domain\User\Event\ExtraData\Type as ExtraDataType;
@@ -48,9 +47,6 @@ class PrepareLeniApiCallHandler
     /** @var LeniUserViewQueryHandler */
     private $leniUserViewQueryHandler;
 
-    /** @var SheetRepositoryInterface */
-    private $sheetRepository;
-
     /** @var ExtraDataRepositoryInterface */
     private $extraDataRepository;
 
@@ -68,7 +64,6 @@ class PrepareLeniApiCallHandler
      * @param ExtraParameterRepositoryInterface $extraParameterRepository
      * @param ExtraDataRepositoryInterface      $extraDataRepository
      * @param UserRepositoryInterface           $userRepository
-     * @param SheetRepositoryInterface          $sheetRepository
      * @param ParticipantPlanningFormatter      $participantPlanningFormatter
      * @param LeniUserViewQueryHandler          $leniUserViewQueryHandler
      * @param LeniApiCallHandler                $leniApiCallHandler
@@ -80,7 +75,6 @@ class PrepareLeniApiCallHandler
         ExtraParameterRepositoryInterface $extraParameterRepository,
         ExtraDataRepositoryInterface $extraDataRepository,
         UserRepositoryInterface $userRepository,
-        SheetRepositoryInterface $sheetRepository,
         ParticipantPlanningFormatter $participantPlanningFormatter,
         LeniUserViewQueryHandler $leniUserViewQueryHandler,
         LeniApiCallHandler $leniApiCallHandler,
@@ -91,7 +85,6 @@ class PrepareLeniApiCallHandler
         $this->extraParameterRepository = $extraParameterRepository;
         $this->extraDataRepository = $extraDataRepository;
         $this->userRepository = $userRepository;
-        $this->sheetRepository = $sheetRepository;
         $this->participantPlanningFormatter = $participantPlanningFormatter;
         $this->leniUserViewQueryHandler = $leniUserViewQueryHandler;
         $this->leniApiCallHandler = $leniApiCallHandler;
@@ -128,9 +121,7 @@ class PrepareLeniApiCallHandler
             $userFingerPrints = $this->indexExtraDataByUserId($usersExtraData);
 
             foreach ($users as $user) {
-                $sheets = $this->sheetRepository->getSheetsByUserAndEvent($user, $event);
-
-                $leniUserView = $this->leniUserViewQueryHandler->handle(new LeniUserViewQuery($event, $user, $sheets));
+                $leniUserView = $this->leniUserViewQueryHandler->handle(new LeniUserViewQuery($event, $user));
                 $leniUserSerialize = $this->serializerAdapter->normalize($leniUserView);
                 $leniUserView->addSerializeContent($leniUserSerialize);
 

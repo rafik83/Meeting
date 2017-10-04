@@ -11,7 +11,6 @@
 namespace Proximum\Vimeet\Application\ThirdParty\LENI\Query;
 
 use Proximum\Vimeet\Domain\Model\Event;
-use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\User;
 
 class LeniUserViewQuery
@@ -22,18 +21,13 @@ class LeniUserViewQuery
     /** @var User */
     public $user;
 
-    /** @var Sheet[] */
-    public $sheets;
-
     /**
-     * @param Event   $event
-     * @param User    $user
-     * @param Sheet[] $sheets
+     * @param Event $event
+     * @param User  $user
      */
-    public function __construct(Event $event, User $user, array $sheets)
+    public function __construct(Event $event, User $user)
     {
         $this->event = $event;
-        $this->user = $user;
-        $this->sheets = $sheets;
+        $this->user  = $user;
     }
 }
