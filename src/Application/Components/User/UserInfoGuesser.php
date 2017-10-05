@@ -55,6 +55,7 @@ class UserInfoGuesser
             'position'  => '',
             'phone'     => '',
             'mobile'    => '',
+            'country'   => '',
         ];
 
 
@@ -100,6 +101,10 @@ class UserInfoGuesser
 
                 if (!empty($participantInfo[Tag::PARTICIPANT_MOBILE])) {
                     $userInfo['mobile'] = $participantInfo[Tag::PARTICIPANT_MOBILE];
+                }
+
+                if (!empty($participantInfo[Tag::PARTICIPANT_COUNTRY])) {
+                    $userInfo['country'] = $participantInfo[Tag::PARTICIPANT_COUNTRY];
                 }
             }
         }

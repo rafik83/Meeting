@@ -11,6 +11,8 @@
 namespace Proximum\Vimeet\Application\ThirdParty\LENI\Query;
 
 use Proximum\Vimeet\Application\Components\Planning\Formatter\ParticipantPlanningFormatter;
+use Proximum\Vimeet\Application\Components\Sheet\SheetInfoGuesser;
+use Proximum\Vimeet\Application\Components\Sheet\Template\Tag;
 use Proximum\Vimeet\Application\Components\User\UserInfoGuesser;
 use Proximum\Vimeet\Application\ThirdParty\LENI\View\LeniPlanningDayView;
 use Proximum\Vimeet\Application\ThirdParty\LENI\View\LeniPlanningView;
@@ -23,6 +25,13 @@ use Proximum\Vimeet\Domain\Template\TemplateObject\Gender;
 
 class LeniUserViewQueryHandler
 {
+    const GENDER_MAPPING = [
+        Gender::MAN => 'M',
+        Gender::WOMAN => 'MME',
+    ];
+
+    CONST ATTENDANCE = 'Inscrit';
+
     /** @var ParticipantPlanningFormatter */
     private $participantPlanningFormatter;
 
@@ -40,9 +49,12 @@ class LeniUserViewQueryHandler
 
     /** @var SheetRepositoryInterface */
     private $sheetRepository;
+    /** @var SheetInfoGuesser */
+    private $sheetInfoGuesser;
 
     /**
      * @param UserInfoGuesser              $userInfoGuesser
+     * @param SheetInfoGuesser             $sheetInfoGuesser
      * @param ParticipantPlanningFormatter $participantPlanningFormatter
      * @param TypeNameResolver             $typeNameResolver
      * @param CategoryNameResolver         $categoryNameResolver
@@ -51,17 +63,19 @@ class LeniUserViewQueryHandler
      */
     public function __construct(
         UserInfoGuesser $userInfoGuesser,
+        SheetInfoGuesser $sheetInfoGuesser,
         ParticipantPlanningFormatter $participantPlanningFormatter,
         TypeNameResolver $typeNameResolver,
         CategoryNameResolver $categoryNameResolver,
         GroupNameResolver $groupNameResolver,
         SheetRepositoryInterface $sheetRepository
     ) {
+        $this->userInfoGuesser              = $userInfoGuesser;
+        $this->sheetInfoGuesser             = $sheetInfoGuesser;
         $this->participantPlanningFormatter = $participantPlanningFormatter;
         $this->typeNameResolver             = $typeNameResolver;
         $this->categoryNameResolver         = $categoryNameResolver;
         $this->groupNameResolver            = $groupNameResolver;
-        $this->userInfoGuesser              = $userInfoGuesser;
         $this->sheetRepository              = $sheetRepository;
     }
 
@@ -73,6 +87,13 @@ class LeniUserViewQueryHandler
     public function handle(LeniUserViewQuery $query): LeniUserView
     {
         $sheets = $this->sheetRepository->getSheetsByUserAndEvent($query->user, $query->event);
+
+        $firstSheet = reset($sheets);
+
+        if (false === $firstSheet) {
+            throw new \LogicException('User must have at least one sheet');
+        }
+
         $userLocale = $query->event->getAvailableLocale($query->user->getLocale());
 
         $planning = $this->participantPlanningFormatter->formatPlanningByDayFromUserAndEventWithUnallocated(
@@ -98,12 +119,11 @@ class LeniUserViewQueryHandler
         $type = $this->typeNameResolver->resolveTypeWithPreloadedSheets($sheets);
         $category = $this->categoryNameResolver->resolveCategoryForPreloadSheets($sheets);
 
-        $gender = '';
+        $gender = self::GENDER_MAPPING[$userInfo['gender']] ?? '';
 
-        if (Gender::MAN === $userInfo['gender']) {
-            $gender = 'M';
-        } elseif (Gender::WOMAN === $userInfo['gender']) {
-            $gender = 'MME';
+        if ('' === $userInfo['country']) {
+            $sheetInfos = $this->sheetInfoGuesser->guessSheetInfos($firstSheet);
+            $userInfo['country'] = $sheetInfos[Tag::SHEET_COUNTRY] ?? '';
         }
 
         return new LeniUserView(
@@ -118,6 +138,9 @@ class LeniUserViewQueryHandler
             $userInfo['position'],
             $userInfo['phone'],
             $userInfo['mobile'],
+            $userInfo['country'],
+            self::ATTENDANCE,
+            $query->user->getLocale(),
             $leniPlanning
         );
     }

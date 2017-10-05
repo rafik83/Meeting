@@ -45,6 +45,15 @@ class LeniUserView
     /** @var string */
     public $mobile;
 
+    /** @var string */
+    public $country;
+
+    /** @var string */
+    public $attendance;
+
+    /** @var string */
+    public $locale;
+
     /** @var LeniPlanningView */
     public $planning;
 
@@ -63,6 +72,9 @@ class LeniUserView
      * @param string           $position
      * @param string           $phone
      * @param string           $mobile
+     * @param string           $country
+     * @param string           $attendance
+     * @param string           $locale
      * @param LeniPlanningView $planning
      */
     public function __construct(
@@ -71,12 +83,15 @@ class LeniUserView
         int $typeName = null,
         int $categoryName = null,
         string $email,
-        $gender,
-        $firstName,
-        $lastName,
-        $position,
-        $phone,
-        $mobile,
+        string $gender,
+        string $firstName,
+        string $lastName,
+        string $position,
+        string $phone,
+        string $mobile,
+        string $country,
+        string $attendance,
+        string $locale,
         LeniPlanningView $planning
     ) {
         $this->id               = $id;
@@ -91,6 +106,9 @@ class LeniUserView
         $this->phone            = $phone;
         $this->mobile           = $mobile;
         $this->planning         = $planning;
+        $this->country          = $country;
+        $this->attendance       = $attendance;
+        $this->locale           = $locale;
         $this->serializeContent = [];
     }
 

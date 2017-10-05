@@ -46,6 +46,7 @@ class UserInfoGuesserTest extends TestCase
                 // The participant position is not set on purpose
                 Tag::PARTICIPANT_PHONE => 'phone',
                 Tag::PARTICIPANT_MOBILE => 'mobile',
+                Tag::PARTICIPANT_COUNTRY => 'country',
             ])
         ;
 
@@ -58,6 +59,7 @@ class UserInfoGuesserTest extends TestCase
             'position' => '',
             'phone' => 'phone',
             'mobile' => 'mobile',
+            'country' => 'country',
         ];
 
         $userInfoGuesser = new UserInfoGuesser($participantInfoGuesser->reveal(), $translator->reveal());
@@ -99,7 +101,8 @@ class UserInfoGuesserTest extends TestCase
             'lastName' => '',
             'position' => '',
             'phone' => '',
-            'mobile' => ''
+            'mobile' => '',
+            'country' => '',
         ];
 
         $userInfoGuesser = new UserInfoGuesser($participantInfoGuesser->reveal(), $translator->reveal());

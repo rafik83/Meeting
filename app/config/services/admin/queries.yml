@@ -47,6 +47,7 @@ services:
         class: Proximum\Vimeet\Application\ThirdParty\LENI\Query\LeniUserViewQueryHandler
         arguments:
             - '@components.user.user_info_guesser'
+            - '@vimeet_infrastructure.application.components.sheet.sheet_info_guesser'
             - '@planning.formatter.participant_planning_formatter'
             - '@domain.service.sheets_group.type_name_resolver'
             - '@domain.service.category.category_name_resolver'

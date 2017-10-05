@@ -88,6 +88,7 @@ class LeniUserViewQueryHandlerTest extends TestCase
                 'position' => 'position',
                 'phone' => 'phone',
                 'mobile' => 'mobile',
+                'country' => 'FR'
             ])
         ;
 
@@ -122,6 +123,9 @@ class LeniUserViewQueryHandlerTest extends TestCase
             'position',
             'phone',
             'mobile',
+            'FR',
+            'Inscrit',
+            'en',
             $planning
         );
 

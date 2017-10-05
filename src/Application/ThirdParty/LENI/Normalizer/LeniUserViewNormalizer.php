@@ -29,6 +29,9 @@ class LeniUserViewNormalizer implements NormalizerInterface
     const LENI_COL_MOBILE_PHONE = 'TelephoneMobile';
     const LENI_COL_UNALLOCATED  = 'ZL_RDVNONORGANISES';
     const LENI_COL_DAY          = 'ZL_JOURNEE';
+    const LENI_COL_COUNTRY      = 'PAYS';
+    const LENI_COL_ATTENDANCE   = 'INSCRIT';
+    const LENI_COL_LOCALE       = 'LANGUE';
 
     const LENI_COLUMNS = [
         self::LENI_COL_CAB_2,
@@ -45,6 +48,9 @@ class LeniUserViewNormalizer implements NormalizerInterface
         self::LENI_COL_MOBILE_PHONE,
         self::LENI_COL_UNALLOCATED,
         self::LENI_COL_DAY,
+        self::LENI_COL_COUNTRY,
+        self::LENI_COL_ATTENDANCE,
+        self::LENI_COL_LOCALE,
     ];
 
     /**
@@ -55,7 +61,7 @@ class LeniUserViewNormalizer implements NormalizerInterface
         /** @var LeniUserView $userView */
         $userView = $object;
         $data = [
-            self::LENI_COL_CAB_2        => $userView->id,
+            self::LENI_COL_CAB_2        => (string) $userView->id,
             self::LENI_COL_EXTERNAL_KEY => $userView->id,
             self::LENI_COL_COMPANY_NAME => $userView->sheetName,
             self::LENI_COL_CATEGORY     => (string) $userView->categoryId,
@@ -68,6 +74,9 @@ class LeniUserViewNormalizer implements NormalizerInterface
             self::LENI_COL_MOBILE_PHONE => $userView->mobile,
             self::LENI_COL_PHONE_NUMBER => $userView->phone,
             self::LENI_COL_UNALLOCATED  => $userView->planning->unallocated,
+            self::LENI_COL_COUNTRY      => $userView->country,
+            self::LENI_COL_ATTENDANCE   => $userView->attendance,
+            self::LENI_COL_LOCALE       => $userView->locale,
         ];
 
         $dayNumber = 1;
