@@ -11,7 +11,6 @@
 namespace Proximum\Vimeet\Application\Command\MeetingRequest;
 
 use Proximum\Vimeet\Application\Adapter\SMSSenderInterface;
-use Proximum\Vimeet\Application\Exception\Event\NoEventOnCurrentDayException;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\User\Event\ExtraData;
 use Proximum\Vimeet\Domain\Repository\EventRepositoryInterface;
@@ -88,16 +87,10 @@ class ReminderHandler
 
     /**
      * @param Remind $command
-     *
-     * @throws NoEventOnCurrentDayException
      */
     public function handle(Remind $command)
     {
         $currentEvents = $this->eventRepository->findByDay($this->dateTime);
-
-        if (empty($currentEvents)) {
-            throw new NoEventOnCurrentDayException('There is no event today');
-        }
 
         foreach ($currentEvents as $currentEvent) {
             $extraDataIndexedByUserId = $this->getExtraDataIndexedByUserId($currentEvent);
