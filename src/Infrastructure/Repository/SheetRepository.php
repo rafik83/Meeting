@@ -263,7 +263,7 @@ class SheetRepository implements SheetRepositoryInterface
             ->entityManager
             ->createQueryBuilder()
             ->select('NEW Proximum\Vimeet\Domain\View\Spot\Import\SheetView(sheet.id, sheet.title)')
-            ->from('Entity:Sheet', 'sheet', 'sheet.id')
+            ->from(Sheet::class, 'sheet', 'sheet.id')
             ->where('sheet.event = :event AND sheet.id = :sheetId')
             ->setParameter('event', $event)
             ->setParameter('sheetId', $sheetId)
