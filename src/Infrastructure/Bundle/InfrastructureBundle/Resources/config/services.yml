@@ -4049,7 +4049,6 @@ services:
         class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\SendSMSReminderCommand
         arguments:
             - '@command.meeting_request.reminder_handler'
-            - '@datetime'
             - '%feature_dday_enabled%'
         tags:
             - { name: console.command }
