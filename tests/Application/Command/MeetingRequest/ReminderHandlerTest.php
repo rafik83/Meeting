@@ -111,6 +111,8 @@ class ReminderHandlerTest extends TestCase
         $userTwo->getLocale()->willReturn('fr');
         $userTwo->getId()->willReturn(2);
 
+        $eventOne->getAvailableLocale('fr')->shouldBeCalled()->willReturn('fr');
+
         $extraDataUserOne = $this->prophesize(User\Event\ExtraData::class);
         $extraDataUserTwo = $this->prophesize(User\Event\ExtraData::class);
 
