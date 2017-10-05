@@ -80,15 +80,19 @@ form.register.newUser.repeatedPassword.placeholder: 'Confirmer votre mot de pass
 form.search.autocomplete.atLeastThreeChars: 'Saisir au moins 3 caractères'
 form.search.autocomplete.atLeastTwoChars: 'Saisir au moins 2 caractères'
 form.search.autocomplete.searching: 'Recherche en cours...'
+form.search.availableSlot.choice.catalog_available: 'Ayant des disponibilités'
+form.search.availableSlot.choice.catalog_everyone: 'Tout le catalogue'
+form.search.availableSlot.choice.catalog_slot: 'Disponible le %day% à %time%'
+form.search.availableSlot.label: 'Qui est disponible ?'
 form.search.categories.at_least_one_checked: 'Au moins une catégorie de participant doit être sélectionnée'
 form.search.content.label: 'Mots clés'
 form.search.keywords.search.placeholder: 'Sociétés, Compétences...'
 form.search.localization.label: 'Zones géographiques'
 form.search.localization.search.placeholder: '69, Lyon, France'
-form.search.meeting.availableSlot.label: 'Qui est disponbile ?'
-form.search.meeting.availableSlot.choice.everyone: Tous
 form.search.meeting.availableSlot.choice.available: 'Ayant des disponibilités'
+form.search.meeting.availableSlot.choice.everyone: Tous
 form.search.meeting.availableSlot.choice.slot: 'Disponible le %day% à %time%'
+form.search.meeting.availableSlot.label: 'Qui est disponbile ?'
 form.search.meeting.state.all: 'Tous les statuts'
 form.search.meeting.state.approved: Acceptées
 form.search.meeting.state.cancelled: Annulées
@@ -109,10 +113,6 @@ form.search.organizationCategory.label: Structure
 form.search.position.label: Fonctions
 form.search.type.at_least_one_checked: 'Au moins un type de participant doit être sélectionné'
 form.search.type.label: Participants
-form.search.availableSlot.label: 'Qui est disponible ?'
-form.search.availableSlot.choice.catalog_everyone: 'Tout le catalogue'
-form.search.availableSlot.choice.catalog_available: 'Ayant des disponibilités'
-form.search.availableSlot.choice.catalog_slot: 'Disponible le %day% à %time%'
 form.send_code.children.accepted.label: 'J''accepte de recevoir des notifications pendant l''événement'
 form.send_code.children.phone.label: 'Mon numéro de téléphone mobile'
 form.send_code.children.submit.label: Enregistrer
