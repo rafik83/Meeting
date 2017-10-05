@@ -50,4 +50,18 @@ class VideoConferenceController extends Controller
 
         return new JsonResponse($videoConferenceView);
     }
+
+    /**
+     * Opened page to test the Video Conference feature
+     *
+     * @param EventDomain $eventDomain
+     *
+     * @return Response
+     */
+    public function testAction(EventDomain $eventDomain): Response
+    {
+        return $this->render('EventBundle:VideoConference:test.html.twig', [
+            'event' => $eventDomain->getEvent(),
+        ]);
+    }
 }

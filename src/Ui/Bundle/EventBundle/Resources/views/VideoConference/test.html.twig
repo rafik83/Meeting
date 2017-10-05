@@ -1,0 +1,31 @@
+{% extends 'EventBundle:Register:base.html.twig' %}
+
+{% block title event.title %}
+
+{% block content %}
+    <section class="main">
+        <div class="main__content">
+            <div class="has-details meet"
+                 data-meeting-id="test"
+                 data-visio-callback="{{ path('event_video_conference_request_access', {'meeting': 1}) }}"
+                 data-isVisio="1"
+            >
+                <div class="video-container" id="video-test">
+                    <div class="subscriber hide" id="subscriber-test"></div>
+                    <div class="publisher hide" id="publisher-test"></div>
+                    <div class="video-helper hide">
+                        <span><i class="icon-Alerter_1"></i> {{ 'meeting.video.waitingForParticipant'|trans }}</span>
+                    </div>
+
+                    <button class="btn btn-primary start-visio">
+                        <i class="icon-Appeler"></i> {{ 'meeting.video.start'|trans }}
+                    </button>
+
+                    <button class="btn btn-danger end-visio hide">
+                        <i class="icon-Appeler"></i> {{ 'meeting.video.end'|trans }}
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+{% endblock %}

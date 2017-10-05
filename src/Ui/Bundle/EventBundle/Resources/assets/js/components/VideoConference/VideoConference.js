@@ -14,9 +14,9 @@ var Subscriber = require('./Subscriber');
 function VideoConference(element) {
     this.element = element;
 
-    this.publisherContainer = element.querySelector('#publisher-' + element.dataset.meetingId);
-    this.subscriberContainer = element.querySelector('#subscriber-' + element.dataset.meetingId);
-    this.helperContainer = element.querySelector('#video-' + element.dataset.meetingId + ' > .video-helper');
+    this.publisherContainer = element.querySelector('#publisher-' + element.getAttribute('data-meeting-id'));
+    this.subscriberContainer = element.querySelector('#subscriber-' + element.getAttribute('data-meeting-id'));
+    this.helperContainer = element.querySelector('#video-' + element.getAttribute('data-meeting-id') + ' > .video-helper');
 
     this.publisher = new Publisher(this.publisherContainer);
 
@@ -29,7 +29,7 @@ function VideoConference(element) {
  * Request session ID and token in order to access to the session
  */
 VideoConference.prototype.requestAccess = function () {
-    var url = this.element.dataset.visioCallback;
+    var url = this.element.getAttribute('data-visio-callback');
     this.element.querySelector('.start-visio').disabled = true;
 
     var request = axios.get(url);

@@ -793,3 +793,7 @@ event_video_conference_request_access:
     methods: [GET]
     defaults: { _controller: EventBundle:VideoConference:requestAccess }
 
+event_video_conference_test:
+    path: /video/test
+    methods: [GET]
+    defaults: { _controller: EventBundle:VideoConference:test }
