@@ -15,47 +15,49 @@
             </a>
         </div>
     </h1>
+
     {% if extraParameters is not empty %}
     <table class="table table-hover">
         <thead>
             <tr>
-                <th class="col-md-4">{{ 'admin.extraParameter.list.column.type'|trans }}</th>
-                <th class="col-md-3">{{ 'admin.extraParameter.list.column.name'|trans }}</th>
-                <th class="col-md-3">{{ 'admin.extraParameter.list.column.value'|trans }}</th>
-                <th class="col-md-2 text-right">{{ 'admin.extraParameter.list.column.actions'|trans }}</th>
+                <th>{{ 'admin.extraParameter.list.column.type'|trans }}</th>
+                <th>{{ 'admin.extraParameter.list.column.name'|trans }}</th>
+                <th>{{ 'admin.extraParameter.list.column.value'|trans }}</th>
+                <th class="text-right minwidth">{{ 'admin.extraParameter.list.column.actions'|trans }}</th>
             </tr>
         </thead>
         <tbody>
-        {% for extraParameter in extraParameters %}
-            <tr>
-                <td>{{ ('admin.extraParameter.type.' ~ extraParameter.type)|trans }}</td>
-                <td>{{ extraParameter.name }}</td>
-                <td>{{ extraParameter.value }}</td>
-                <td class="pull-right">
-                    <div class="btn-group">
-                        <a class="btn btn-default btn-sm" href="{{ path('admin_event_extra_parameter_update', { 'event': event.id, 'extraParameter': extraParameter.id }) }}">
-                            {{ 'admin.extraParameter.list.action.update'|trans }}
-                        </a>
-                        <button type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            <span class="caret"></span>
-                        </button>
-                        <ul class="dropdown-menu dropdown-menu-right">
-                            <li>
-                                {{ delete_button(
-                                    path('admin_event_extra_parameter_remove', { 'event': event.id, 'extraParameter': extraParameter.id }),
-                                    'admin.extraParameter.list.action.remove'|trans,
-                                    { 'class': 'btn btn-default btn-sm', 'data-confirm': 'admin.extraParameter.list.action.removeConfirm'|trans }) }}
-                            </li>
-                        </ul>
-                    </div>
-                </td>
-            </tr>
-        {% endfor %}
+            {% for extraParameter in extraParameters %}
+                <tr>
+                    <td>{{ ('admin.extraParameter.type.' ~ extraParameter.type)|trans }}</td>
+                    <td>{{ extraParameter.name }}</td>
+                    <td>{{ extraParameter.value }}</td>
+                    <td class="text-right">
+                        <div class="btn-group">
+                            <a class="btn btn-default btn-sm" href="{{ path('admin_event_extra_parameter_update', { 'event': event.id, 'extraParameter': extraParameter.id }) }}">
+                                {{ 'admin.extraParameter.list.action.update'|trans }}
+                            </a>
+                            <button type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <span class="caret"></span>
+                            </button>
+                            <ul class="dropdown-menu dropdown-menu-right">
+                                <li>
+                                    {{ delete_button(
+                                        path('admin_event_extra_parameter_remove', { 'event': event.id, 'extraParameter': extraParameter.id }),
+                                        'admin.extraParameter.list.action.remove'|trans,
+                                        { 'class': 'btn btn-default btn-sm', 'data-confirm': 'admin.extraParameter.list.action.removeConfirm'|trans })
+                                    }}
+                                </li>
+                            </ul>
+                        </div>
+                    </td>
+                </tr>
+            {% endfor %}
         </tbody>
     </table>
     {% else %}
-    <div class="alert alert-info">
-        <p class="center">{{ 'admin.extraParameter.list.empty'|trans }}</p>
-    </div>
+        <div class="alert alert-info">
+            <p class="center">{{ 'admin.extraParameter.list.empty'|trans }}</p>
+        </div>
     {% endif %}
 {% endblock %}
