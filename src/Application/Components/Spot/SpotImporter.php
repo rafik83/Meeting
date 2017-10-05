@@ -103,14 +103,17 @@ class SpotImporter
             }
 
             foreach ($spotImport->sheetIds as $sheetId) {
-                if (!is_int($sheetId)) {
+                $sheetId = (int) $sheetId;
+
+                if ($sheetId < 1) {
                     $spotImport->addError($this->translateError(
-                        'validatorS.spot.sheet.invalid_format',
+                        'validators.spot.sheet.invalid_format',
                         $locale,
                         ['%sheetId%' => $sheetId]
                     ));
                     continue;
                 }
+
                 if (isset($sheetsHasSpot[$sheetId])) {
                     $spotImport->addError($this->translateError(
                         'validators.spot.sheet.already_imported',
