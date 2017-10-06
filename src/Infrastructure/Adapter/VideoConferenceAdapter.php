@@ -16,36 +16,29 @@ use OpenTok\Role;
 use OpenTok\Session;
 use Proximum\Vimeet\Application\Adapter\VideoConferenceAdapterInterface;
 use Proximum\Vimeet\Application\Exception\VideoConference\InvalidTokenGeneratorArgumentsException;
-use Proximum\Vimeet\Domain\Model\MeetingSlot;
 
 class VideoConferenceAdapter implements VideoConferenceAdapterInterface
 {
-    /**
-     * @var string
-     */
-    private $apiKey;
+    const DELAY_AFTER_END_TIME = '+15 min';
 
-    /**
-     * @var OpenTok
-     */
+    /** @var OpenTok */
     private $openTok;
 
-    /**
-     * @var bool
-     */
+    /** @var string */
+    private $tokboxApiKey;
+
+    /** @var bool */
     private $hasSecurity;
 
     /**
-     * VideoConferenceAdapter constructor.
-     *
-     * @param string $apiKey
-     * @param string $apiSecret
-     * @param bool $hasSecurity
+     * @param OpenTok $openTok
+     * @param string  $tokboxApiKey
+     * @param bool    $hasSecurity
      */
-    public function __construct(string $apiKey, string $apiSecret, bool $hasSecurity)
+    public function __construct(OpenTok $openTok, string $tokboxApiKey, bool $hasSecurity)
     {
-        $this->apiKey = $apiKey;
-        $this->openTok = new OpenTok($apiKey, $apiSecret);
+        $this->openTok = $openTok;
+        $this->tokboxApiKey = $tokboxApiKey;
         $this->hasSecurity = $hasSecurity;
     }
 
@@ -90,7 +83,7 @@ class VideoConferenceAdapter implements VideoConferenceAdapterInterface
      */
     public function getApiKey(): string
     {
-        return $this->apiKey;
+        return $this->tokboxApiKey;
     }
 
     /**

@@ -2156,9 +2156,15 @@ services:
     adapter.video_conference_adapter:
         class: Proximum\Vimeet\Infrastructure\Adapter\VideoConferenceAdapter
         arguments:
+            - '@open_tok'
+            - '%tokbox_api_key%'
+            - '%feature_video_conference_date_security_enabled%'
+
+    open_tok:
+        class: OpenTok\OpenTok
+        arguments:
             - '%tokbox_api_key%'
             - '%tokbox_api_secret%'
-            - '%feature_video_conference_date_security_enabled%'
 
     #
     # Components
