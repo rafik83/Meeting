@@ -19,6 +19,7 @@ use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Security\Voter\Vi
 use Proximum\Vimeet\Ui\Bundle\EventBundle\ParamConverter\EventDomain;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
 
 class VideoConferenceController extends Controller
@@ -52,13 +53,28 @@ class VideoConferenceController extends Controller
     }
 
     /**
-     * Opened page to test the Video Conference feature
+     * Opened page to create a session to test the Video Conference feature
      *
      * @param EventDomain $eventDomain
      *
+     * @return RedirectResponse
+     */
+    public function createSessionVideoTestAction(EventDomain $eventDomain): RedirectResponse
+    {
+        $sessionId = $this->get('adapter.video_conference_adapter')->createSession();
+
+        return $this->redirectToRoute('event_video_conference_access_session_test', ['sessionId' => $sessionId]);
+    }
+
+    /**
+     * Opened page to test the Video Conference feature with a sessionId
+     *
+     * @param EventDomain $eventDomain
+     * @param string      $sessionId
+     *
      * @return Response
      */
-    public function testAction(EventDomain $eventDomain): Response
+    public function accessSessionVideoTestAction(EventDomain $eventDomain, string $sessionId): Response
     {
         return $this->render('EventBundle:VideoConference:test.html.twig', [
             'event' => $eventDomain->getEvent(),
