@@ -23,26 +23,20 @@ class SendSMSReminderCommand extends Command
     /** @var ReminderHandler */
     private $reminderHandler;
 
-    /** @var \DateTimeInterface */
-    private $dateTime;
-
     /** @var bool */
     private $ddayFeatureEnabled;
 
     /**
-     * @param ReminderHandler    $reminderHandler
-     * @param \DateTimeInterface $dateTime
-     * @param bool               $ddayFeatureEnabled
+     * @param ReminderHandler $reminderHandler
+     * @param bool            $ddayFeatureEnabled
      */
     public function __construct(
         ReminderHandler $reminderHandler,
-        \DateTimeInterface $dateTime,
         bool $ddayFeatureEnabled
     ) {
         parent::__construct(self::NAME);
 
         $this->reminderHandler    = $reminderHandler;
-        $this->dateTime           = $dateTime;
         $this->ddayFeatureEnabled = $ddayFeatureEnabled;
     }
 
