@@ -16,6 +16,7 @@
     "jquery": "2.1.1",
     "lodash": "^4.17.4",
     "moment": ">=2.8",
+    "opentok-layout-js": "^0.5.1",
     "phantomjs-prebuilt": "^2.1.13",
     "pubsub-js": "1.5.3",
     "select2": "4.0.2",

@@ -1,27 +1,21 @@
-{% extends 'EventBundle:Register:base.html.twig' %}
+{% extends 'EventBundle::base.html.twig' %}
 
-{% block title event.title %}
-
-{% block content %}
-    <section class="main">
-        <div class="main__content">
-            <div class="video-conference"
-                 data-token="{{ videoConferenceView.token }}"
-                 data-session-id="{{ videoConferenceView.sessionId }}"
-                 data-api-key="{{ videoConferenceView.apiKey }}"
-            >
-                <div class="video-container">
-                    <div class="subscriber"></div>
-                    <div class="publisher"></div>
-                    <div class="video-helper">
-                        <span><i class="icon-Alerter_1"></i> {{ 'meeting.video.waitingForParticipant'|trans }}</span>
-                    </div>
-
-                    <button class="btn btn-danger end-visio">
-                        <i class="icon-Disconnect"></i> {{ 'meeting.video.end'|trans }}
-                    </button>
-                </div>
-            </div>
+{% block body %}
+    <div class="video-conference"
+         data-token="{{ videoConferenceView.token }}"
+         data-session-id="{{ videoConferenceView.sessionId }}"
+         data-api-key="{{ videoConferenceView.apiKey }}"
+    >
+        <div class="video-helper">
+            <span><i class="icon-Alerter_1"></i> {{ 'meeting.video.waitingForParticipant'|trans }}</span>
         </div>
-    </section>
-{% endblock %}
+        <div class="layout-container"></div>
+        <div class="publisher-container"></div>
+
+        {#
+        <button class="btn btn-danger end-visio">
+            <i class="icon-Disconnect"></i> {{ 'meeting.video.end'|trans }}
+        </button>
+        #}
+    </div>
+{% endblock body %}
