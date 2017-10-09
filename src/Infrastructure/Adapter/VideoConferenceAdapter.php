@@ -54,10 +54,10 @@ class VideoConferenceAdapter implements VideoConferenceAdapterInterface
     /**
      * {@inheritdoc}
      */
-    public function generateAccessToken(Session $session, \DateTime $endDateTime, array $options = []): string
+    public function generateAccessToken(Session $session, \DateTimeInterface $endDateTime, array $options = []): string
     {
         if ($this->hasSecurity === true) {
-            $sessionEndDate = clone $endDateTime;
+            $sessionEndDate = new \DateTime($endDateTime->format('Y-m-d H:i:s.u'));
 
             if (false === $sessionEndDate->modify(self::DELAY_AFTER_END_TIME)) {
                 throw new \LogicException('Imposible do modify a date');
