@@ -80,10 +80,9 @@ class VideoConferenceController extends Controller
     {
         $videoConferenceAdapter = $this->get('adapter.video_conference_adapter');
         $session = $videoConferenceAdapter->getSession($sessionId);
-
         $token = $videoConferenceAdapter->generateAccessToken(
             $session,
-            $this->get('datetime')
+            new \DateTime($this->get('datetime')->format('Y-m-d H:i:s.u'))
         );
 
         $videoConferenceView = new VideoConferenceView(

@@ -30,15 +30,15 @@ interface VideoConferenceAdapterInterface
     public function getSession(string $sessionId): Session;
 
     /**
-     * @param Session            $session
-     * @param \DateTimeInterface $endDateTime
-     * @param array              $options
+     * @param Session   $session
+     * @param \DateTime $endDateTime
+     * @param array     $options
      *
      * @return string
      *
      * @throws InvalidTokenGeneratorArgumentsException
      */
-    public function generateAccessToken(Session $session, \DateTimeInterface $endDateTime, array $options = []): string;
+    public function generateAccessToken(Session $session, \DateTime $endDateTime, array $options = []): string;
 
     /**
      * @return string

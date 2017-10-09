@@ -19,7 +19,8 @@ use Proximum\Vimeet\Application\Exception\VideoConference\InvalidTokenGeneratorA
 
 class VideoConferenceAdapter implements VideoConferenceAdapterInterface
 {
-    const DELAY_AFTER_END_TIME = '+15 min';
+    const DELAY_AFTER_END_TIME = '+15 minutes';
+    const TOKEN_GENERATION_DEFAULT_OPTIONS = ['role' => Role::PUBLISHER];
 
     /** @var OpenTok */
     private $openTok;
@@ -53,10 +54,8 @@ class VideoConferenceAdapter implements VideoConferenceAdapterInterface
     /**
      * {@inheritdoc}
      */
-    public function generateAccessToken(Session $session, \DateTimeInterface $endDateTime, array $options = []): string
+    public function generateAccessToken(Session $session, \DateTime $endDateTime, array $options = []): string
     {
-        $defaultOptions = ['role' => Role::PUBLISHER];
-
         if ($this->hasSecurity === true) {
             $sessionEndDate = clone $endDateTime;
 
@@ -64,14 +63,12 @@ class VideoConferenceAdapter implements VideoConferenceAdapterInterface
                 throw new \LogicException('Imposible do modify a date');
             }
 
-            $defaultOptions = array_merge($defaultOptions, [
-                'expireTime' => $sessionEndDate->getTimeStamp(),
-            ]);
+            $options['expireTime'] = $sessionEndDate->getTimeStamp();
         }
 
         try {
             return $this->openTok->generateToken($session->getSessionId(), array_merge(
-                $defaultOptions, $options
+                self::TOKEN_GENERATION_DEFAULT_OPTIONS, $options
             ));
         } catch (InvalidArgumentException $argumentException) {
             throw new InvalidTokenGeneratorArgumentsException();
