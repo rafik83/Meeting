@@ -119,7 +119,6 @@ class PrepareLeniApiCallHandler
             );
 
             $userFingerPrints = $this->indexExtraDataByUserId($usersExtraData);
-            $numberUsersSend = 0;
 
             foreach ($users as $user) {
                 $leniUserView = $this->leniUserViewQueryHandler->handle(new LeniUserViewQuery($event, $user));
@@ -152,11 +151,6 @@ class PrepareLeniApiCallHandler
                         $this->dateTime
                     )
                 );
-
-                $numberUsersSend++;
-                if ($numberUsersSend === 100) {
-                    break;
-                }
             }
         }
     }
