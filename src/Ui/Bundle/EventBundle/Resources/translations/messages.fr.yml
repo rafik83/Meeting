@@ -163,6 +163,7 @@ login.memberArea: 'Espace membre'
 meeting.video.end: 'Arrêter le RDV'
 meeting.video.start: 'Démarrer le RDV'
 meeting.video.waitingForParticipant: 'En attente d''un participant'
+meeting.video.notCompatibleBrowserMessage: 'Votre navigateur n''est pas compatible. Merci d''utiliser Chrome ou Firefox.'
 modal.back: Retour
 modal.close: Fermer
 modal.loading.error: 'Un problème est survenu pendant le chargement, vous pouvez fermer la modale'

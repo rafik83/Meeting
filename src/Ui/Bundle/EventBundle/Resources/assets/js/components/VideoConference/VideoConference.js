@@ -17,6 +17,7 @@ function VideoConference(element) {
   this.token = element.getAttribute('data-token');
   this.sessionId = element.getAttribute('data-session-id');
   this.apiKey = element.getAttribute('data-api-key');
+  this.notCompatibleBrowserMessage = element.getAttribute('data-not-compatible-browser-message');
 
   this.publisherContainer = element.querySelector('.publisher-container');
   this.layoutContainer = element.querySelector('.layout-container');
@@ -50,7 +51,9 @@ function VideoConference(element) {
  */
 VideoConference.prototype.init = function () {
   if (tokbox.checkSystemRequirements() !== 1) {
-    alert('Votre navigateur n\'est pas compatible avec la video conférence en webRTC.');
+    alert(this.notCompatibleBrowserMessage);
+
+    return;
   }
 
   this.session = tokbox.initSession(this.apiKey, this.sessionId);
