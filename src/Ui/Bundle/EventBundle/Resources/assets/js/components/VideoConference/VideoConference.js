@@ -48,8 +48,16 @@ VideoConference.prototype.init = function () {
   this.session = tokbox.initSession(this.apiKey, this.sessionId);
 
   this.session.on('streamCreated', function (event) {
-    var subscriberManager = new Subscriber(this.session, this.layoutContainer);
+    var subscriberContainer = document.createElement('div');
+    this.layoutContainer.appendChild(subscriberContainer);
+
+    var subscriberManager = new Subscriber(this.session, subscriberContainer);
     subscriberManager.subscribe(event);
+
+    var infoContainer = document.createElement('div');
+    infoContainer.classList.add('subscriber-info');
+    subscriberContainer.appendChild(infoContainer);
+
     this.layout();
   }.bind(this));
 

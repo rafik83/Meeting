@@ -23,6 +23,7 @@ Publisher.prototype.create = function () {
   };
 
   this.publisher = tokbox.initPublisher(this.container, publisherOptions, this.handleError);
+  console.log(this.publisher);
 
   return this.publisher;
 };

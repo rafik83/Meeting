@@ -17,13 +17,15 @@ function Subscriber(session, container) {
  */
 Subscriber.prototype.subscribe = function (event) {
   var subscriberOptions = {
-    insertMode: 'append',
+    insertMode: 'replace',
     showControls: true,
     width: '100%',
     height: '100%'
   };
 
   this.subscriber = this.session.subscribe(event.stream, this.container, subscriberOptions, this.handleError);
+
+  console.log(this.subscriber);
 
   return this.subscriber;
 };
