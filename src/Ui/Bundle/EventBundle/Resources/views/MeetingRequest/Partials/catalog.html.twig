@@ -28,7 +28,7 @@
 
 
 <div class="hidden" data-meeting-request-mobile-menu="meeting-request-mobile-menu">
-    {% if searchForm.availableSlot is defined %}
+    {% if searchForm.availableSlot is defined or searchForm.state is defined %}
         <div class="catalog-mobile-menu-summary catalog-mobile-menu-container">
             {% if searchForm.availableSlot is defined %}
                 {% for availableSlotOptionChosen in searchForm.availableSlot.children %}
