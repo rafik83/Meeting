@@ -15,7 +15,7 @@ use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 
 class LeniUserViewNormalizer implements NormalizerInterface
 {
-    const LENI_COL_CAB_2        = 'CAB2';
+    const LENI_COL_CAB_2        = 'Cab2';
     const LENI_COL_EXTERNAL_KEY = 'CleExterne';
     const LENI_COL_COMPANY_NAME = 'Societe';
     const LENI_COL_TYPE         = 'ZL_SOUSCATEGORIE';
@@ -29,9 +29,9 @@ class LeniUserViewNormalizer implements NormalizerInterface
     const LENI_COL_MOBILE_PHONE = 'TelephoneMobile';
     const LENI_COL_UNALLOCATED  = 'ZL_RDVNONORGANISES';
     const LENI_COL_DAY          = 'ZL_JOURNEE';
-    const LENI_COL_COUNTRY      = 'PAYS';
-    const LENI_COL_ATTENDANCE   = 'INSCRIT';
-    const LENI_COL_LOCALE       = 'LANGUE';
+    const LENI_COL_COUNTRY      = 'Pays';
+    const LENI_COL_ATTENDANCE   = 'Inscrit';
+    const LENI_COL_LOCALE       = 'Langue';
 
     const LENI_COLUMNS = [
         self::LENI_COL_CAB_2,
