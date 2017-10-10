@@ -9,6 +9,9 @@ Proximum\Vimeet\Domain\Model\VideoConferenceToken:
     fields:
         token:
             type: text
+        streamId:
+            type: text
+            nullable: true
     manyToOne:
         videoConference:
             targetEntity: Proximum\Vimeet\Domain\Model\VideoConference
