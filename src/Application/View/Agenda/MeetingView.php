@@ -127,4 +127,12 @@ class MeetingView extends AbstractTimeEntityView
     {
         return $this->isVisioAvailable;
     }
+
+    /**
+     * @return bool
+     */
+    public function isVisioAndAvailable(): bool
+    {
+        return $this->isVisio && $this->isVisioAvailable;
+    }
 }

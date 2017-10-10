@@ -74,7 +74,7 @@
                             {% endfor %}
 
                             {% for meeting in day.meetings %}
-                                {{ include('EventBundle:Agenda:meeting.html.twig', {'sheetId': agenda.sheet.id, 'meeting': meeting }) }}
+                                {{ include('EventBundle:Agenda:meeting.html.twig', {'sheetId': agenda.sheet.id, 'participantId': agenda.participant.id, 'meeting': meeting }) }}
                             {% endfor %}
 
                             {% for availableSlotView in day.availableSlotViews %}
