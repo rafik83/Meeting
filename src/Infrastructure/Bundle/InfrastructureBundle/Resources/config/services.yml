@@ -1964,7 +1964,7 @@ services:
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Product\Remove\Remove }
 
-    command.video_conference.connect_session_handler:
+    command.video_conference.request_access_handler:
         class: Proximum\Vimeet\Application\Command\VideoConference\RequestAccessHandler
         arguments:
             - '@adapter.video_conference_adapter'
@@ -1972,6 +1972,14 @@ services:
             - '%feature_video_conference_enabled%'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\VideoConference\RequestAccess }
+
+    command.video_conference.request_test_access_handler:
+        class: Proximum\Vimeet\Application\Command\VideoConference\RequestTestAccessHandler
+        arguments:
+            - '@adapter.video_conference_adapter'
+            - '@datetime'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\VideoConference\RequestTestAccess }
 
     command.event.update_event_dates_to_current_date_handler:
         class: Proximum\Vimeet\Application\Command\Event\UpdateEventDatesToCurrentDateHandler

@@ -11,7 +11,7 @@
 namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Controller;
 
 use Proximum\Vimeet\Application\Command\VideoConference\RequestAccess;
-use Proximum\Vimeet\Application\Exception\VideoConference\InvalidTokenGeneratorArgumentsException;
+use Proximum\Vimeet\Application\Command\VideoConference\RequestTestAccess;
 use Proximum\Vimeet\Application\View\Meeting\VideoConferenceView;
 use Proximum\Vimeet\Domain\Model\Meeting;
 use Proximum\Vimeet\Domain\Model\Participant;
@@ -82,21 +82,12 @@ class VideoConferenceController extends Controller
      * @param string      $sessionId
      *
      * @return Response
-     * @throws InvalidTokenGeneratorArgumentsException
      */
     public function accessSessionVideoTestAction(EventDomain $eventDomain, string $sessionId): Response
     {
-        $videoConferenceAdapter = $this->get('adapter.video_conference_adapter');
-        $session = $videoConferenceAdapter->getSession($sessionId);
-        $token = $videoConferenceAdapter->generateAccessToken(
-            $session,
-            $this->get('datetime')
-        );
-
-        $videoConferenceView = new VideoConferenceView(
-            $token,
-            $session->getSessionId(),
-            $videoConferenceAdapter->getApiKey()
+        /** @var VideoConferenceView $videoConferenceView */
+        $videoConferenceView = $this->get('tactician.commandbus')->handle(
+            new RequestTestAccess($sessionId)
         );
 
         return $this->render('EventBundle:VideoConference:videoConference.html.twig', [
