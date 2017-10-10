@@ -24,6 +24,10 @@ Publisher.prototype.create = function () {
 
   this.publisher = tokbox.initPublisher(this.container, publisherOptions, this.handleError);
 
+  this.publisher.on('streamCreated', function (event) {
+    console.log('publisherSTREAM', event.stream.id);
+  });
+
   return this.publisher;
 };
 

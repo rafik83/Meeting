@@ -63,7 +63,9 @@ VideoConference.prototype.init = function () {
     this.layoutContainer.appendChild(subscriberContainer);
 
     var subscriberManager = new Subscriber(this.session, subscriberContainer);
-    subscriberManager.subscribe(event);
+    var subscriber = subscriberManager.subscribe(event);
+
+    console.log('subscriberSTREAM', subscriber.stream.id);
 
     this.helperContainer.classList.add('hide');
 
