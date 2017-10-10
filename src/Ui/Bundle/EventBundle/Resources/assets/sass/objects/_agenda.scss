@@ -224,7 +224,16 @@
 }
 
 .video-conference {
+  .end-meeting {
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+  }
+
   .video-helper {
+    background: #ffffff;
+    padding: 10px;
+    border-radius: 4px;
     position: fixed;
     top: 50%;
     left: 50%;
@@ -232,6 +241,7 @@
   }
 
   .layout-container {
+    background-color: #000000;
     position: absolute;
     top: 0;
     left: 0;
@@ -264,8 +274,6 @@
     float: right;
     margin: 20px;
   }
-
-
 
   @media (max-width: 768px) {
     .publisher-container {

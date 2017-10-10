@@ -25,8 +25,6 @@ Subscriber.prototype.subscribe = function (event) {
 
   this.subscriber = this.session.subscribe(event.stream, this.container, subscriberOptions, this.handleError);
 
-  console.log(this.subscriber);
-
   return this.subscriber;
 };
 

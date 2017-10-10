@@ -22,6 +22,14 @@ function VideoConference(element) {
   this.layoutContainer = element.querySelector('.layout-container');
   this.helperContainer = element.querySelector('.video-helper');
 
+  var endMeetingButton = element.querySelector('.end-meeting');
+
+  if (!window.opener) {
+    endMeetingButton.classList.add('hide');
+  } else {
+    endMeetingButton.addEventListener('click', this.disconnect.bind(this));
+  }
+
   this.layout = openTokLayout.initLayoutContainer(this.layoutContainer).layout;
 
   this.publisher = new Publisher(this.publisherContainer);
@@ -53,6 +61,8 @@ VideoConference.prototype.init = function () {
 
     var subscriberManager = new Subscriber(this.session, subscriberContainer);
     subscriberManager.subscribe(event);
+
+    this.helperContainer.classList.add('hide');
 
     var infoContainer = document.createElement('div');
     infoContainer.classList.add('subscriber-info');
@@ -97,6 +107,12 @@ VideoConference.prototype.disconnect = function () {
   this.session.disconnect();
   this.session.off();
   this.session = null;
+
+  if (window.opener) {
+    window.opener.location.reload(true);
+  }
+
+  window.close();
 };
 
 /**

@@ -12,6 +12,8 @@ namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Controller;
 
 use Proximum\Vimeet\Application\Command\VideoConference\RequestAccess;
 use Proximum\Vimeet\Application\Command\VideoConference\RequestTestAccess;
+use Proximum\Vimeet\Application\Query\Agenda\MeetingViewQuery;
+use Proximum\Vimeet\Application\View\Agenda\MeetingView;
 use Proximum\Vimeet\Application\View\Meeting\VideoConferenceView;
 use Proximum\Vimeet\Domain\Model\Meeting;
 use Proximum\Vimeet\Domain\Model\Participant;
@@ -21,19 +23,24 @@ use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Security\Voter\Vi
 use Proximum\Vimeet\Ui\Bundle\EventBundle\ParamConverter\EventDomain;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 class VideoConferenceController extends Controller
 {
     /**
-     * @param EventDomain $eventDomain
-     * @param Sheet       $sheet
-     * @param Participant $participant
-     * @param Meeting     $meeting
+     * @param EventDomain   $eventDomain
+     * @param Sheet         $sheet
+     * @param Participant   $participant
+     * @param Meeting       $meeting
+     * @param UserInterface $user
      *
      * @return Response
      */
     public function videoMeetingAction(
+        Request $request,
+        UserInterface $user,
         EventDomain $eventDomain,
         Sheet $sheet,
         Participant $participant,
@@ -47,6 +54,13 @@ class VideoConferenceController extends Controller
             throw $this->createAccessDeniedException('Meeting is not visio');
         }
 
+        $event = $eventDomain->getEvent();
+
+        /** @var MeetingView $meetingView */
+        $meetingView = $this->get('tactician.commandbus')->handle(
+            new MeetingViewQuery($meeting, $sheet, false, $user, $event, $request->getLocale())
+        );
+
         /** @var VideoConferenceView $videoConferenceView */
         $videoConferenceView = $this->get('tactician.commandbus')->handle(
             new RequestAccess($meeting, $this->getUser())
@@ -55,8 +69,9 @@ class VideoConferenceController extends Controller
         return $this->render(
             'EventBundle:VideoConference:videoConference.html.twig',
             [
-                'event' => $eventDomain->getEvent(),
+                'event' => $event,
                 'videoConferenceView' => $videoConferenceView,
+                'meetingView' => $meetingView,
             ]
         );
     }
