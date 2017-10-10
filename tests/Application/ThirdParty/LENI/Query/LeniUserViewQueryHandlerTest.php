@@ -13,6 +13,7 @@ namespace Proximum\Vimeet\Tests\Application\ThirdParty\LENI\Query;
 use PHPUnit\Framework\TestCase;
 use Proximum\Vimeet\Application\Components\Planning\Formatter\FormattedPlanningView;
 use Proximum\Vimeet\Application\Components\Planning\Formatter\ParticipantPlanningFormatter;
+use Proximum\Vimeet\Application\Components\Sheet\SheetInfoGuesser;
 use Proximum\Vimeet\Application\Components\User\UserInfoGuesser;
 use Proximum\Vimeet\Application\ThirdParty\LENI\Query\LeniUserViewQuery;
 use Proximum\Vimeet\Application\ThirdParty\LENI\Query\LeniUserViewQueryHandler;
@@ -56,6 +57,9 @@ class LeniUserViewQueryHandlerTest extends TestCase
         $typeNameResolver = $this->prophesize(TypeNameResolver::class);
         $groupNameResolver = $this->prophesize(GroupNameResolver::class);
         $categoryNameResolver = $this->prophesize(CategoryNameResolver::class);
+        $sheetInfoGuesser = $this->prophesize(SheetInfoGuesser::class);
+
+        $sheetInfoGuesser->guessSheetInfos($sheet1->reveal())->shouldBeCalled()->willReturn(['sheet_country' => 'FR']);
 
         $sheetRepository = $this->prophesize(SheetRepositoryInterface::class);
         $sheetRepository
@@ -88,7 +92,7 @@ class LeniUserViewQueryHandlerTest extends TestCase
                 'position' => 'position',
                 'phone' => 'phone',
                 'mobile' => 'mobile',
-                'country' => 'FR'
+                'country' => ''
             ])
         ;
 
@@ -99,6 +103,7 @@ class LeniUserViewQueryHandlerTest extends TestCase
 
         $handler = new LeniUserViewQueryHandler(
             $userInfoGuesser->reveal(),
+            $sheetInfoGuesser->reveal(),
             $participantPlanningFormatter->reveal(),
             $typeNameResolver->reveal(),
             $categoryNameResolver->reveal(),
