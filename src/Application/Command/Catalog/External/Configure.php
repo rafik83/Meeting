@@ -42,6 +42,9 @@ class Configure
     /** @var array of CatalogVisibilityTranslation index by locale */
     public $messageTranslations;
 
+    /** @var string */
+    public $registrationUrl;
+
     /**
      * Configure constructor.
      *

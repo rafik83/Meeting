@@ -123,6 +123,8 @@ form.configure.children.searchFacets.type.help: ''
 form.configure.children.searchFacets.type.label: Type
 form.configure.children.submit.label: Enregistrer
 form.configure.children.types.label: 'Types visibles'
+form.configure.children.registrationUrl.label: "Url d'inscription"
+form.configure.children.registrationUrl.placeholder: "Exemple: https://aerotech.vimeet.event"
 form.content_update.children.submit.label: Enregistrer
 form.create_admin.children.email.label: Email
 form.create_admin.children.events.label: Événements
