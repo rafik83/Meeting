@@ -134,7 +134,6 @@ admin.common.export.yes: Oui
 admin.create_admin.title: 'Créer un nouvel utilisateur du backoffice'
 admin.dashboard.link: 'Tableau de bord'
 admin.event.archive.link: Archivage
-admin.event.extra_parameter.link: 'Paramètres supplémentaires'
 admin.event.archive.title: 'Archiver l''événement %eventTitle%'
 admin.event.billing.configuration.link: 'Information facturation'
 admin.event.billing.configuration.title: 'Configuration des informations de facturation'
@@ -148,6 +147,7 @@ admin.event.dashboard.title: 'Tableau de bord'
 admin.event.days: 'Jours de l''événement'
 admin.event.duplicate.title: 'Créer un événement à partir de'
 admin.event.external_catalog_configure: 'Catalogue public'
+admin.event.extra_parameter.link: 'Paramètres supplémentaires'
 admin.event.fallback: 'Par défaut'
 admin.event.languages: Langues
 admin.event.list.archived.title: 'Événements archivés'
@@ -199,19 +199,19 @@ admin.export.transaction.column.transaction_date: Date
 admin.export.transaction.column.transaction_reference: Référence
 admin.export.transaction.column.transaction_type: Type
 admin.extraParameter.create.title: 'Création d''un paramètre supplémentaire'
-admin.extraParameter.update.title: 'Modification du paramètre supplémentaire %type%'
-admin.extraParameter.list.action.update: Modifier
-admin.extraParameter.list.action.remove: 'Supprimer'
+admin.extraParameter.list.action.remove: Supprimer
 admin.extraParameter.list.action.removeConfirm: 'Êtes vous sûr de vouloir supprimer ce paramètre ?'
-admin.extraParameter.list.column.actions: 'Actions'
+admin.extraParameter.list.action.update: Modifier
+admin.extraParameter.list.column.actions: Actions
 admin.extraParameter.list.column.name: Nom
-admin.extraParameter.list.column.type: Type du paramètre
+admin.extraParameter.list.column.type: 'Type du paramètre'
 admin.extraParameter.list.column.value: Valeur
 admin.extraParameter.list.create: Ajouter
-admin.extraParameter.list.title: 'Liste des paramètres supplémentaires de l''événement'
 admin.extraParameter.list.empty: 'Aucun paramètre'
-admin.extraParameter.type.leni_user: 'Code Utilisateur LENI'
+admin.extraParameter.list.title: 'Liste des paramètres supplémentaires de l''événement'
 admin.extraParameter.type.leni_event: 'Code Event LENI'
+admin.extraParameter.type.leni_user: 'Code Utilisateur LENI'
+admin.extraParameter.update.title: 'Modification du paramètre supplémentaire %type%'
 admin.filter: Filtrer
 admin.filter_by: 'Filtrer par'
 admin.filters.all: Tous

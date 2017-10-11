@@ -85,6 +85,7 @@ validators.spot.seatCapacity.notBlank: 'Le nombre de siège doit être renseign�
 validators.spot.seatCapacity.type: 'Le nombre de siège doit être un nombre'
 validators.spot.sheet.already_affected_reference: 'Cette référence a déjà été affectée à une fiche'
 validators.spot.sheet.already_imported: 'La fiche ayant l''identifiant %sheetId% a déjà été attribuée à un lieu'
+validatorS.spot.sheet.invalid_format: 'L''identifiant de la fiche n''est pas valide (%sheetId%)'
 validators.spot.sheet.invalid_format: 'L''identifiant de la fiche n''est pas valide (%sheetId%)'
 validators.spot.sheet.not_exist: 'L''identifiant de fiche %sheetId% est incorrect'
 validators.spot.size.invalid: 'La taille du lieu doit être supérieure à 0'
