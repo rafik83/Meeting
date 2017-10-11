@@ -30,7 +30,7 @@ class ConfigureHandlerTest extends TestCase
 
     /** @var EventRepositoryInterface */
     private $eventRepository;
-    
+
     /** @var SetSearchFacetHandler */
     private $setSearchFacetHandler;
 
@@ -87,6 +87,54 @@ class ConfigureHandlerTest extends TestCase
         $this->catalogVisibilityRepository->set($catalogVisibility)->shouldBeCalled();
 
         $this->setSearchFacetHandler->handle(new SetSearchFacet([$searchFacet]))->shouldBeCalled();
+
+        $this->eventRepository->set($this->event)->shouldBeCalled();
+
+        $handler = new ConfigureHandler(
+            $this->catalogVisibilityRepository->reveal(),
+            $this->eventRepository->reveal(),
+            $this->setSearchFacetHandler->reveal()
+        );
+
+        $handler->handle($command);
+    }
+
+    public function testHandleAddRegistrationUrl()
+    {
+        $catalogVisibility = $this->prophesize(CatalogVisibility::class);
+        $catalogVisibility->getTypes()->willReturn([]);
+        $catalogVisibility->getCategories()->willReturn([]);
+        $catalogVisibility->hasMessage()->willReturn(false);
+        $catalogVisibility->getRegistrationUrl()->willReturn('');
+        $catalogVisibility->getMessage('fr')->willReturn(null);
+        $catalogVisibility->getMessage('en')->willReturn(null);
+
+        $searchFacet = new SearchFacet($this->event, 'type', true);
+        $command     = new Configure(
+            $this->event,
+            $catalogVisibility->reveal(),
+            [$searchFacet]
+        );
+
+        $command->registrationUrl = 'https://www.google.com';
+        $command->hasMessage = false;
+        $command->messageTranslations = [];
+
+        $catalogVisibility->updateTypesAndCategories([], [])->shouldBeCalled();
+        $catalogVisibility->enableMessage(false)->shouldBeCalled();
+        $catalogVisibility->setRegistrationUrl('https://www.google.com')->shouldBeCalled();
+
+        $this
+            ->catalogVisibilityRepository
+            ->getByEvent($this->event)
+            ->shouldBeCalled()
+            ->willReturn(null);
+
+        $this->catalogVisibilityRepository->add($catalogVisibility->reveal())->shouldBeCalled();
+
+        $this->setSearchFacetHandler->handle(
+            new SetSearchFacet([$searchFacet])
+        )->shouldBeCalled();
 
         $this->eventRepository->set($this->event)->shouldBeCalled();
 

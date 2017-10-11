@@ -34,7 +34,7 @@ class CatalogVisibility
     private $hasMessage;
 
     /** @var string */
-    private $registrationUrl;
+    private $registrationUrl = '';
 
     /**
      * @var ArrayCollection of CatalogVisibilityTranslation
