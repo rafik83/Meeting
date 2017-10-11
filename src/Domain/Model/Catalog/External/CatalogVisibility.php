@@ -34,7 +34,7 @@ class CatalogVisibility
     private $hasMessage;
 
     /** @var string */
-    private $registrationUrl = '';
+    private $registrationUrl;
 
     /**
      * @var ArrayCollection of CatalogVisibilityTranslation
@@ -228,9 +228,9 @@ class CatalogVisibility
     }
 
     /**
-     * @return string
+     * @return null|string
      */
-    public function getRegistrationUrl(): string
+    public function getRegistrationUrl(): ?string
     {
         return $this->registrationUrl;
     }

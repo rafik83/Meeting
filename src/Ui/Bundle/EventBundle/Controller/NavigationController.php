@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Controller;
 
+use Proximum\Vimeet\Application\Query\Catalog\External\CatalogVisibilityRegistrationUrlQuery;
 use Proximum\Vimeet\Application\Query\Navigation\HeaderViewQuery;
 use Proximum\Vimeet\Application\Query\Navigation\MenuViewQuery;
 use Proximum\Vimeet\Application\Query\Navigation\SubmenuViewQuery;
@@ -75,6 +76,12 @@ class NavigationController extends Controller
             );
         }
 
+        if (Route::EXTERNAL_CATALOG === $route) {
+            $registrationUrl = $this->get('tactician.commandbus.query')->handle(
+                new CatalogVisibilityRegistrationUrlQuery($event)
+            );
+        }
+
         $isShowingRegisterButton = Route::EVENT !== $route && null === $user;
 
         return $this->render('EventBundle::Navigation/header.html.twig', [
@@ -82,7 +89,8 @@ class NavigationController extends Controller
             'menuView'                => $menuView,
             'submenuView'             => $submenuView,
             'isShowingRegisterButton' => $isShowingRegisterButton,
-            'isHeaderDisplayed'       => $route === Route::EVENT || $route === Route::LOGIN
+            'isHeaderDisplayed'       => $route === Route::EVENT || $route === Route::LOGIN,
+            'registrationUrl'         => $registrationUrl ?? null
         ]);
     }
 }

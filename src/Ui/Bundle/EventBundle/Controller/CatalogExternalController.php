@@ -12,6 +12,7 @@ namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Controller;
 
 use Proximum\Vimeet\Application\Exception\Paginator\UnavailableCurrentPageException;
 use Proximum\Vimeet\Application\Query\Catalog\External\CatalogVisibilityMessageQuery;
+use Proximum\Vimeet\Application\Query\Catalog\External\CatalogVisibilityRegistrationUrlQuery;
 use Proximum\Vimeet\Application\Query\Catalog\KeywordViewQuery;
 use Proximum\Vimeet\Application\Query\Catalog\LocalizationViewQuery;
 use Proximum\Vimeet\Application\Query\Catalog\SearchFacet\SearchFacetExternalViewQuery;
@@ -107,6 +108,10 @@ class CatalogExternalController extends Controller
             new CatalogVisibilityMessageQuery($event, $locale)
         );
 
+        $registrationUrl = $this->get('tactician.commandbus.query')->handle(
+            new CatalogVisibilityRegistrationUrlQuery($event)
+        );
+
         $seeMoreButtonStatus = $paginatedResult->total > ($paginatedResult->limit * $paginatedResult->page);
 
         if ($request->isXmlHttpRequest()) {
@@ -136,7 +141,8 @@ class CatalogExternalController extends Controller
             'catalogOnlineDate' => $event->getConfiguration()->getCatalogOnlineDate(),
             'typeViews'         => $typeViews,
             'categoryViews'     => $categoryViews,
-            'message'           => $message
+            'message'           => $message,
+            'registrationUrl'   => $registrationUrl
         ]);
     }
 
