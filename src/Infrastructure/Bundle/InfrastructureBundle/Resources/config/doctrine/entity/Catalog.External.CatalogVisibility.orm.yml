@@ -11,6 +11,9 @@ Proximum\Vimeet\Domain\Model\Catalog\External\CatalogVisibility:
             type: boolean
             options:
                 default: false
+        registrationUrl:
+            type: string
+            nullable: true
     manyToOne:
         event:
             targetEntity: Proximum\Vimeet\Domain\Model\Event
