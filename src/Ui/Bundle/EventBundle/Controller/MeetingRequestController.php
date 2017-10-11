@@ -410,7 +410,7 @@ class MeetingRequestController extends Controller
 
             return new JsonResponse($this->createJsonResponseData(
                 true,
-                $approveRequestResult !== null && $approveRequestResult->meetingView === null && !$approveRequestResult->hasError,
+                $approveRequestResult === null || ($approveRequestResult !== null && $approveRequestResult->meetingView === null && !$approveRequestResult->hasError),
                 $this->renderView('EventBundle:MeetingRequest\Button:approvedProposition.html.twig', [
                     'sheet'                        => $sheet,
                     'meetingRequest'               => $meetingRequest,
