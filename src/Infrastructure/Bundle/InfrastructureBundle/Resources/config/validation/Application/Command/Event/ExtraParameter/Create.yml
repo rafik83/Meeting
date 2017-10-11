@@ -1,0 +1,8 @@
+Proximum\Vimeet\Application\Command\Event\ExtraParameter\Create:
+    properties:
+        type:
+            - NotNull: ~
+        name:
+            - NotNull: ~
+        value:
+            - NotNull: ~

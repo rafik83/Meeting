@@ -58,7 +58,19 @@ class TypeNameResolver
      */
     public function resolveWithPreloadedSheets(array &$sheets, string $locale): string
     {
-        $types = $this->getSheetsTypes($sheets, $locale);
+        $type = $this->resolveTypeWithPreloadedSheets($sheets);
+
+        return $type->getTitle($locale);
+    }
+
+    /**
+     * @param array $sheets
+     *
+     * @return Type
+     */
+    public function resolveTypeWithPreloadedSheets(array &$sheets): Type
+    {
+        $types = $this->getSheetsTypes($sheets);
 
         ksort($types);
 
@@ -74,17 +86,16 @@ class TypeNameResolver
 
     /**
      * @param Sheet[] $sheets
-     * @param string  $locale
      *
      * @return Type[]
      */
-    private function getSheetsTypes(array &$sheets, string $locale): array
+    private function getSheetsTypes(array &$sheets): array
     {
         if ($this->atLeastOneTypeHasNoPosition($sheets)) {
-            return $this->getTypesIndexedById($sheets, $locale);
+            return $this->getTypesIndexedById($sheets);
         }
 
-        return $this->getTypesIndexedByPosition($sheets, $locale);
+        return $this->getTypesIndexedByPosition($sheets);
     }
 
     /**
@@ -107,11 +118,10 @@ class TypeNameResolver
 
     /**
      * @param Sheet[] $sheets
-     * @param string  $locale
      *
      * @return Type[] indexed by Type position
      */
-    private function getTypesIndexedByPosition(array &$sheets, string $locale): array
+    private function getTypesIndexedByPosition(array &$sheets): array
     {
         $types = [];
 
@@ -122,7 +132,7 @@ class TypeNameResolver
                 throw new \BadFunctionCallException('This method can not be used when a Type has no position');
             }
 
-            $types[$type->getPosition()] = $type->getTitle($locale);
+            $types[$type->getPosition()] = $type;
         }
 
         return $types;
@@ -130,17 +140,16 @@ class TypeNameResolver
 
     /**
      * @param Sheet[] $sheets
-     * @param string  $locale
      *
      * @return Type[] indexed by Type position
      */
-    private function getTypesIndexedById(array &$sheets, string $locale): array
+    private function getTypesIndexedById(array &$sheets): array
     {
         $types = [];
 
         foreach ($sheets as $sheet) {
             $type = $sheet->getType();
-            $types[$type->getId()] = $type->getTitle($locale);
+            $types[$type->getId()] = $type;
         }
 
         return $types;

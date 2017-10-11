@@ -1,0 +1,3 @@
+services:
+    adapter.http_adapter:
+        class: Proximum\Vimeet\Infrastructure\Adapter\HttpAdapter

@@ -1,0 +1,39 @@
+<?php
+
+/*
+ * This file is part of the vimeet project.
+ *
+ * Copyright (C) vimeet
+ *
+ * @author Elao <contact@elao.com>
+ */
+
+namespace Proximum\Vimeet\Infrastructure\Adapter;
+
+use Guzzle\Http\Client;
+use Guzzle\Http\Exception\ServerErrorResponseException;
+use Proximum\Vimeet\Application\Adapter\HttpAdapterInterface;
+use Proximum\Vimeet\Application\Exception\Adapter\Http\ServerErrorException;
+use Proximum\Vimeet\Application\View\Adapter\Http\Response;
+
+class HttpAdapter implements HttpAdapterInterface
+{
+    /**
+     * {@inheritdoc}
+     */
+    public function post($uri, array $headers, $body): Response
+    {
+        $client = new Client($uri);
+        $resource = $client->post($uri, $headers, $body);
+
+        try {
+            $guzzleResponse = $client->send($resource);
+        } catch (ServerErrorResponseException $exception) {
+            throw new ServerErrorException($exception->getMessage());
+        }
+
+        $response = new Response($guzzleResponse->getStatusCode(), (string) $guzzleResponse->getBody());
+
+        return $response;
+    }
+}

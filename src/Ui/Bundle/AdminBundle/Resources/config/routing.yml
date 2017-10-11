@@ -1532,3 +1532,36 @@ admin_event_order_invoice_find:
     path: /event/order-invoice/find
     methods: [GET, POST]
     defaults: { _controller: AdminBundle:Event/OrderInvoiceFinder:find }
+
+#
+# Extra Parameter
+#
+admin_event_extra_parameter_list:
+    path: /event/{event}/extra/parameter/list
+    methods: [GET]
+    requirements:
+        event: \d+
+    defaults: { _controller: AdminBundle:Event/ExtraParameter/List:list }
+
+admin_event_extra_parameter_create:
+    path: /event/{event}/extra/parameter/create
+    methods: [GET, POST]
+    requirements:
+        event: \d+
+    defaults: { _controller: AdminBundle:Event/ExtraParameter/Create:create }
+
+admin_event_extra_parameter_update:
+    path: /event/{event}/extra/parameter/{extraParameter}/update
+    methods: [GET, POST]
+    requirements:
+        event: \d+
+        extraParameter: \d+
+    defaults: { _controller: AdminBundle:Event/ExtraParameter/Update:update }
+
+admin_event_extra_parameter_remove:
+    path: /event/{event}/extra/parameter/{extraParameter}/remove
+    methods: [DELETE]
+    requirements:
+        event: \d+
+        extraParameter: \d+
+    defaults: { _controller: AdminBundle:Event/ExtraParameter/Remove:remove }

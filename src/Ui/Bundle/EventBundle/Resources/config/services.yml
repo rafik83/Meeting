@@ -559,6 +559,8 @@ services:
         arguments:
             - '@vimeet_infrastructure.repository.type_repository'
 
+    domain.service.category.category_name_resolver:
+        class: Proximum\Vimeet\Domain\Service\Category\CategoryNameResolver
     impersonating_user_checker:
         class: Proximum\Vimeet\Application\Components\User\ImpersonatingUserChecker
         arguments:

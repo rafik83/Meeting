@@ -1,0 +1,6 @@
+Proximum\Vimeet\Application\Command\Event\ExtraParameter\Update:
+    properties:
+        name:
+            - NotNull: ~
+        value:
+            - NotNull: ~
