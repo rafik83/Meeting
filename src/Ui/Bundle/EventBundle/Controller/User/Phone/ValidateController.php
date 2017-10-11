@@ -114,7 +114,7 @@ class ValidateController extends Controller
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
             try {
                 $this->get('tactician.commandbus')->handle($validate);
-                $this->addFlash('success', 'flash.event.user_event_phone.validate.success');
+                $this->addFlash('confirm', 'flash.event.user_event_phone.validate.success');
 
                 if ($redirectTo = $this->container->get('session')->getFlashBag()->get('redirectTo')) {
                     return $this->redirect($redirectTo[0]);

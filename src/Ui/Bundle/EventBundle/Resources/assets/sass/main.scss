@@ -174,7 +174,6 @@
 .important {
   position: relative;
   color: $color-highlighted;
-  text-align: center;
   font-size: 15px;
   padding: 20px;
   border-radius: 5px;
@@ -215,6 +214,11 @@
   &.warning {
     background: $bg-warning-color;
     color: #333;
+  }
+  &.confirm {
+    text-align: center;
+    background: $bg-success-color;
+    color: #ffffff;
   }
 }
 
