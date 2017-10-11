@@ -6,9 +6,9 @@
  * @constructor
  */
 function Subscriber(session, container) {
-    this.session = session;
-    this.container = container;
-    this.subscriber = null;
+  this.session = session;
+  this.container = container;
+  this.subscriber = null;
 }
 
 /**
@@ -16,18 +16,16 @@ function Subscriber(session, container) {
  * @returns {null|Subscriber}
  */
 Subscriber.prototype.subscribe = function (event) {
-    console.log('Subscribe to:', event.stream);
+  var subscriberOptions = {
+    insertMode: 'replace',
+    showControls: true,
+    width: '100%',
+    height: '100%'
+  };
 
-    var subscriberOptions = {
-        insertMode: 'append',
-        width: '500px',
-        height: '500px',
-        accessAllowed: true
-    };
-    
-    this.subscriber = this.session.subscribe(event.stream, this.container.id, subscriberOptions, this.handleError);
+  this.subscriber = this.session.subscribe(event.stream, this.container, subscriberOptions, this.handleError);
 
-    return this.subscriber;
+  return this.subscriber;
 };
 
 /**
@@ -36,9 +34,9 @@ Subscriber.prototype.subscribe = function (event) {
  * @param {Object} error
  */
 Subscriber.prototype.handleError = function (error) {
-    if (error) {
-        console.log('Subscriber error:', error);
-    }
+  if (error) {
+    console.log('Subscriber error:', error);
+  }
 };
 
 module.exports = Subscriber;

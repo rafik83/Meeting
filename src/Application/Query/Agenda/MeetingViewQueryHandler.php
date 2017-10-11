@@ -13,9 +13,8 @@ namespace Proximum\Vimeet\Application\Query\Agenda;
 use Proximum\Vimeet\Application\Components\Security\VideoMeetingAccess;
 use Proximum\Vimeet\Application\Query\Agenda\Meeting\MeetingParticipantViewQuery;
 use Proximum\Vimeet\Application\Query\Agenda\Meeting\MeetingParticipantViewQueryHandler;
-use Proximum\Vimeet\Application\Query\Meeting\VideoConferenceViewQuery;
-use Proximum\Vimeet\Application\Query\Meeting\VideoConferenceViewQueryHandler;
 use Proximum\Vimeet\Application\View\Agenda\MeetingView;
+use Proximum\Vimeet\Domain\Exception\Meeting\NoSheetForUserException;
 use Proximum\Vimeet\Domain\Repository\RuleRepositoryInterface;
 
 class MeetingViewQueryHandler
@@ -54,6 +53,7 @@ class MeetingViewQueryHandler
      * @param MeetingViewQuery $query
      *
      * @return MeetingView
+     * @throws NoSheetForUserException
      */
     public function handle(MeetingViewQuery $query)
     {

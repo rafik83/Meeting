@@ -1,0 +1,31 @@
+{% extends 'EventBundle::base.html.twig' %}
+
+{% block body %}
+    <div class="video-conference"
+         data-token="{{ videoConferenceView.token }}"
+         data-session-id="{{ videoConferenceView.sessionId }}"
+         data-api-key="{{ videoConferenceView.apiKey }}"
+         data-not-compatible-browser-message="{{ 'meeting.video.notCompatibleBrowserMessage'|trans }}"
+    >
+        <div class="layout-container"></div>
+        <div class="publisher-container"></div>
+        <div class="video-helper">
+            <div><i class="icon-Alerter_1"></i> {{ 'meeting.video.waitingForParticipant'|trans }}</div>
+
+            {% if meetingView is defined %}
+                <br>
+                <h1>{{ meetingView.sheetMetTitle }}</h1>
+
+                <div class="list list--users">
+                    {% for participantView in meetingView.participants %}
+                        {{ include('EventBundle:Participant:preview.html.twig', {'participant': participantView.card}) }}
+                    {% endfor %}
+                </div>
+            {% endif %}
+        </div>
+
+        <button class="btn btn-danger end-meeting">
+            <i class="icon-Disconnect"></i> {{ 'meeting.video.end'|trans }}
+        </button>
+    </div>
+{% endblock body %}

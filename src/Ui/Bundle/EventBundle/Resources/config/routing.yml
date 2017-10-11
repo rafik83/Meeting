@@ -786,10 +786,23 @@ event_user_event_phone_validate_code_success:
 #
 # VideoConference
 #
-event_video_conference_request_access:
-    path: /video/{meeting}/request/access
+event_video_video_meeting:
+    path: /sheet/{sheet}/video-meeting/{meeting}/participant/{participant}
     requirements:
+        sheet: \d+
         meeting: \d+
+        participant: \d+
     methods: [GET]
-    defaults: { _controller: EventBundle:VideoConference:requestAccess }
+    defaults: { _controller: EventBundle:VideoConference:videoMeeting }
 
+event_video_conference_create_session_test:
+    path: /video/test
+    methods: [GET]
+    defaults: { _controller: EventBundle:VideoConference:createSessionVideoTest }
+
+event_video_conference_access_session_test:
+    path: /video/test/{sessionId}
+    requirements:
+        sessionId: .*
+    methods: [GET]
+    defaults: { _controller: EventBundle:VideoConference:accessSessionVideoTest }

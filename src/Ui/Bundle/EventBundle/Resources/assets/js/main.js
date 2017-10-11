@@ -222,7 +222,7 @@ function init (target) {
         new CatalogPagination(element);
     });
 
-    [].forEach.call(target.querySelectorAll('.has-details.meet[data-isVisio]'), function (element) {
+    [].forEach.call(target.querySelectorAll('.video-conference'), function (element) {
         new VideoConference(element);
     });
 }
