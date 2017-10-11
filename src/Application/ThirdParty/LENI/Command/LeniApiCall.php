@@ -10,32 +10,18 @@
 
 namespace Proximum\Vimeet\Application\ThirdParty\LENI\Command;
 
-use Proximum\Vimeet\Application\ThirdParty\LENI\View\LeniUserView;
-use Proximum\Vimeet\Domain\Model\Event\ExtraParameter;
+use Proximum\Vimeet\Domain\Model\User\Event\ExtraData;
 
 class LeniApiCall
 {
-    /** @var LeniUserView */
-    public $leniUserView;
-
-    /** @var ExtraParameter */
-    public $leniUserParameter;
-
-    /** @var ExtraParameter */
-    public $leniUserEvent;
+    /** @var ExtraData */
+    public $extraData;
 
     /**
-     * @param LeniUserView   $leniUserView
-     * @param ExtraParameter $leniUserParameter
-     * @param ExtraParameter $leniUserEvent
+     * @param ExtraData $extraData
      */
-    public function __construct(
-        LeniUserView $leniUserView = null,
-        ExtraParameter $leniUserParameter,
-        ExtraParameter $leniUserEvent
-    ) {
-        $this->leniUserView = $leniUserView;
-        $this->leniUserParameter = $leniUserParameter;
-        $this->leniUserEvent = $leniUserEvent;
+    public function __construct(ExtraData $extraData)
+    {
+        $this->extraData = $extraData;
     }
 }

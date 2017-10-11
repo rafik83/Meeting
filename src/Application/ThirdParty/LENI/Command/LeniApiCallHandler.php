@@ -16,6 +16,8 @@ use Proximum\Vimeet\Application\ThirdParty\LENI\Exception\LeniApiServerException
 use Proximum\Vimeet\Application\ThirdParty\LENI\Exception\NotValidApiCallException;
 use Proximum\Vimeet\Application\ThirdParty\LENI\Exception\WarningApiCallException;
 use Proximum\Vimeet\Application\ThirdParty\LENI\Normalizer\LeniUserViewNormalizer;
+use Proximum\Vimeet\Domain\Event\ExtraParameter\Type;
+use Proximum\Vimeet\Domain\Repository\Event\ExtraParameterRepositoryInterface;
 
 /**
  * LENI EXHIBIS Api call handler
@@ -30,27 +32,44 @@ class LeniApiCallHandler
     /** @var HttpAdapterInterface */
     private $httpAdapter;
 
+    /** @var ExtraParameterRepositoryInterface */
+    private $extraParameterRepository;
+
     /**
      * @param HttpAdapterInterface $httpAdapter
+     * @param ExtraParameterRepositoryInterface $extraParameterRepository
      */
-    public function __construct(HttpAdapterInterface $httpAdapter)
-    {
+    public function __construct(
+        HttpAdapterInterface $httpAdapter,
+        ExtraParameterRepositoryInterface $extraParameterRepository
+    ) {
         $this->httpAdapter = $httpAdapter;
+        $this->extraParameterRepository = $extraParameterRepository;
     }
 
     /**
-     * @param LeniApiCall $command
+     * @param LeniApiCall $leniApiCall
      *
      * @throws LeniApiServerException
      * @throws NotValidApiCallException
      * @throws WarningApiCallException
      */
-    public function handle(LeniApiCall $command)
+    public function handle(LeniApiCall $leniApiCall)
     {
+        $event = $leniApiCall->extraData->getEvent();
+        $leniUserParameter  = $this->extraParameterRepository->findByEventAndType($event, Type::TYPE_LENI_USER);
+        $leniEventParameter = $this->extraParameterRepository->findByEventAndType($event, Type::TYPE_LENI_EVENT);
+
+        if (null === $leniUserParameter || null === $leniEventParameter) {
+            throw new \LogicException(
+                'Can not call PrepareLeniApiCallHandler if event has not LENI_USER and LENI_EVENT'
+            );
+        }
+
         $body = json_encode(
             [
-                'idEvt'  => $command->leniUserEvent->getValue(),
-                'idUser' => $command->leniUserView->id,
+                'idEvt'  => $leniEventParameter,
+                'idUser' => $leniUserParameter,
                 'mode'   => self::LENI_MODE,
                 'app'    => self::LENI_APP,
                 'data'   => $command->leniUserView->serializeContent,
