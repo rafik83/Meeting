@@ -89,11 +89,11 @@ class SpotImporter
                 continue;
             }
 
-            if (isset($referenceImported[$spotImport->spot->getReference()])) {
+            if (isset($referenceImported[strtolower($spotImport->spot->getReference())])) {
                 $spotImport->addError($this->translateError('validators.spot.reference.affected', $locale));
             }
 
-            $referenceImported[$spotImport->spot->getReference()] = true;
+            $referenceImported[strtolower($spotImport->spot->getReference())] = true;
 
             $validations = $this->validatorAdapter->validate($spotImport->spot);
 
