@@ -177,6 +177,7 @@ admin.sheet.details.meeting.proposition.title: 'Meetings requests'
 admin.sheet.details.meeting.request.pending: 'Pending requests'
 admin.sheet.details.meeting.request.refused: 'Refused requests'
 admin.sheet.details.meeting.request.title: 'Meeting requests'
+admin.sheet.details.owner.mobile: Mobile
 admin.sheet.details.transactions: Transactions
 admin.sheet.export.fields.status: 'Profile status'
 admin.sheet.export.fields.type: Type
