@@ -10,8 +10,6 @@
 
 namespace Proximum\Vimeet\Application\View\Planning;
 
-use Proximum\Vimeet\Application\View\Planning\DayView;
-
 class PlanningView
 {
     /** @var DayView[] */

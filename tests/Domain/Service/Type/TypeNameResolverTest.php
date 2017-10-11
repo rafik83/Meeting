@@ -93,8 +93,8 @@ class TypeNameResolverTest extends TestCase
         $sheet3->getType()->willReturn($type1->reveal());
 
         // Expected
-        $type1->getTitle('fr')->shouldBeCalled()->willReturn('not the title we want');
         $type2->getTitle('fr')->shouldBeCalled()->willReturn('type title in fr');
+        $type1->getTitle('fr')->shouldNotBeCalled();
         $type1->getPosition()->shouldBeCalled()->willReturn(4);
         $type2->getPosition()->shouldBeCalled()->willReturn(1);
 
@@ -124,7 +124,7 @@ class TypeNameResolverTest extends TestCase
 
         // Expected
         $type1->getTitle('fr')->shouldBeCalled()->willReturn('Type 1');
-        $type2->getTitle('fr')->shouldBeCalled()->willReturn('Type 2');
+        $type2->getTitle('fr')->shouldNotBeCalled()->willReturn('Type 2');
         $type1->getPosition()->shouldBeCalled()->willReturn(null);
         $type1->getId()->shouldBeCalled()->willReturn(200);
         $type2->getId()->shouldBeCalled()->willReturn(300);

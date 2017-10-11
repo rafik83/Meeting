@@ -57,7 +57,8 @@ class ExtraDataRepository implements ExtraDataRepositoryInterface
             ->where('extraData.event = :event')
             ->andWhere('extraData.name = :name')
             ->setParameter('event', $event)
-            ->setParameter('name', $name);
+            ->setParameter('name', $name)
+        ;
 
         return $queryBuilder->getQuery()->getResult();
     }

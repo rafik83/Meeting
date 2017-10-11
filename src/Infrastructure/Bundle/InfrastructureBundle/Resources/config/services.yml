@@ -2525,6 +2525,11 @@ services:
         arguments:
             - '@tagged_info_guesser'
             - '@template.template_data_factory'
+    components.user.user_info_guesser:
+        class: Proximum\Vimeet\Application\Components\User\UserInfoGuesser
+        arguments:
+            - '@template.participant_info_guesser'
+            - '@vimeet_infrastructure.adapter.translator_adapter'
 
     #
     # Getter
@@ -4227,6 +4232,12 @@ services:
             - '@tactician.commandbus'
         tags:
             - { name: console.command }
+    command.api.leni_api_command:
+        class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\ThirdParty\LENI\LeniApiCommand
+        arguments:
+            - '@command.third_party.leni.prepare_leni_api_handler'
+        tags:
+            - { name: console.command }
 
     #
     # Funnel
@@ -4875,6 +4886,11 @@ services:
         tags:
             - { name: serializer.normalizer }
 
+    serializer.normalizer.api.leni.leni_user_view_normalizer:
+        class: Proximum\Vimeet\Application\ThirdParty\LENI\Normalizer\LeniUserViewNormalizer
+        tags:
+            - { name: serializer.normalizer }
+
     serializer.spot_import_denormalizer:
         class: Proximum\Vimeet\Application\Components\Spot\Denormalizer\SpotDenormalizer
         tags:
@@ -5303,10 +5319,9 @@ services:
             - '@vimeet_infrastructure.repository.sheet_repository'
             - '@domain.service.sheets_group.group_name_resolver'
             - '@domain.service.sheets_group.type_name_resolver'
-            - '@template.participant_info_guesser'
+            - '@components.user.user_info_guesser'
             - '@planning.formatter.participant_planning_formatter'
             - '@adapter.serializer_adapter'
-            - '@vimeet_infrastructure.adapter.translator_adapter'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\OMZ\Export }
 
