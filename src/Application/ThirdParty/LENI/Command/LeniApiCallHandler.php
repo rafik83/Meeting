@@ -28,6 +28,7 @@ class LeniApiCallHandler
     const LENI_HOST = 'gateway.svc.exhibis.net';
     const LENI_APP = 'O';
     const LENI_MODE = 'MessageAndModifiedData';
+    const LENI_USER_ID = 'Id';
 
     /** @var HttpAdapterInterface */
     private $httpAdapter;
@@ -56,7 +57,8 @@ class LeniApiCallHandler
      */
     public function handle(LeniApiCall $leniApiCall)
     {
-        $event = $leniApiCall->extraData->getEvent();
+        $extraData = $leniApiCall->extraData;
+        $event = $extraData->getEvent();
         $leniUserParameter  = $this->extraParameterRepository->findByEventAndType($event, Type::TYPE_LENI_USER);
         $leniEventParameter = $this->extraParameterRepository->findByEventAndType($event, Type::TYPE_LENI_EVENT);
 
@@ -66,18 +68,24 @@ class LeniApiCallHandler
             );
         }
 
+        $data = unserialize($extraData->getValue());
+
+        if (@todo user has a leni id) {
+            $data = array_merge($data, [self::LENI_USER_ID => 'd451756d-91ae-e711-80e2-005056ae4dce']);
+        }
+
         $body = json_encode(
             [
-                'idEvt'  => $leniEventParameter,
-                'idUser' => $leniUserParameter,
+                'idEvt'  => $leniEventParameter->getValue(),
+                'idUser' => $leniUserParameter->getValue(),
                 'mode'   => self::LENI_MODE,
                 'app'    => self::LENI_APP,
-                'data'   => $command->leniUserView->serializeContent,
+                'data'   => $data
             ]
         );
 
         $headers = [
-            'Authorization'  => 'Basic ' . base64_encode($command->leniUserParameter->getValue()),
+            'Authorization'  => 'Basic ' . base64_encode($leniUserParameter->getValue()),
             'Host'           => self::LENI_HOST,
             'Content-Type'   => 'application/json',
             'Content-Length' => strlen($body),
