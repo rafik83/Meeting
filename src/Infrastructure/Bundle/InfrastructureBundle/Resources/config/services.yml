@@ -4250,8 +4250,8 @@ services:
             - '@tactician.commandbus'
         tags:
             - { name: console.command }
-    command.api.leni_api_command:
-        class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\ThirdParty\LENI\LeniApiCommand
+    command.api.prepare_leni_api_call_command:
+        class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\ThirdParty\LENI\PrepareLeniApiCallCommand
         arguments:
             - '@command.third_party.leni.prepare_leni_api_handler'
         tags:
