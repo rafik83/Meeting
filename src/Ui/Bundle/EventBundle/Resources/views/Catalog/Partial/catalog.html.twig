@@ -90,24 +90,30 @@
     <div class="catalog-mobile-menu-container catalog-mobile-menu-filters">
         <div class="catalog-mobile-menu-filters-list">
             {% if searchForm.content is defined %}
-                {{ include('EventBundle:Catalog:Partial/Mobile/content_filter_mobile.html.twig', {
-                    form: searchForm.content,
-                    sheet: sheet
-                }, false) }}
+                <div class="filter-element">
+                    {{ include('EventBundle:Catalog:Partial/Mobile/content_filter_mobile.html.twig', {
+                        form: searchForm.content,
+                        sheet: sheet
+                    }, false) }}
+                </div>
             {% endif %}
             {% if searchForm.availableSlot is defined %}
-                {{ include('EventBundle:Catalog:Partial/Mobile/available_slot_filter_mobile.html.twig', {
-                    form: searchForm.availableSlot,
-                }, false) }}
+                <div class="filter-element">
+                    {{ include('EventBundle:Catalog:Partial/Mobile/available_slot_filter_mobile.html.twig', {
+                        form: searchForm.availableSlot,
+                    }, false) }}
+                </div>
             {% endif %}
             {% if searchForm.type is defined %}
-                {{ include('EventBundle:Catalog:Partial/Mobile/type_filters_mobile.html.twig', {
-                    form: searchForm.type,
-                    choices: typeViews,
-                    totalType: totalType,
-                    numberOfDifferentType: numberOfDifferentType,
-                    numberOfTypeSelected: numberOfTypeSelected,
-                }, false) }}
+                <div class="filter-element">
+                    {{ include('EventBundle:Catalog:Partial/Mobile/type_filters_mobile.html.twig', {
+                        form: searchForm.type,
+                        choices: typeViews,
+                        totalType: totalType,
+                        numberOfDifferentType: numberOfDifferentType,
+                        numberOfTypeSelected: numberOfTypeSelected,
+                    }, false) }}
+                </div>
             {% endif %}
         </div>
 
