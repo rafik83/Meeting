@@ -2118,6 +2118,11 @@ services:
         arguments:
             - '@doctrine.orm.entity_manager'
 
+    adapter.leni_api_call_job_queue:
+        class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Adapter\ThirdParty\LENI\LeniApiCallJobQueue
+        arguments:
+            - '@doctrine.orm.entity_manager'
+
     adapter.serializer_adapter:
         class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Adapter\SerializerAdapter
         arguments:
@@ -4250,10 +4255,19 @@ services:
             - '@tactician.commandbus'
         tags:
             - { name: console.command }
+
     command.api.prepare_leni_api_call_command:
         class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\ThirdParty\LENI\PrepareLeniApiCallCommand
         arguments:
             - '@command.third_party.leni.prepare_leni_api_handler'
+        tags:
+            - { name: console.command }
+
+    command.api.leni_api_call_command:
+        class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\ThirdParty\LENI\LeniApiCallCommand
+        arguments:
+            - '@command.third_party.leni.leni_api_call_handler'
+            - '@repository.user.event.extra_data_repository'
         tags:
             - { name: console.command }
 

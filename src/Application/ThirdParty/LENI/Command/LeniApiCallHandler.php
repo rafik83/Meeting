@@ -13,11 +13,13 @@ namespace Proximum\Vimeet\Application\ThirdParty\LENI\Command;
 use Proximum\Vimeet\Application\Adapter\HttpAdapterInterface;
 use Proximum\Vimeet\Application\Exception\Adapter\Http\ServerErrorException;
 use Proximum\Vimeet\Application\ThirdParty\LENI\Exception\LeniApiServerException;
+use Proximum\Vimeet\Application\ThirdParty\LENI\Exception\MissingIdException;
 use Proximum\Vimeet\Application\ThirdParty\LENI\Exception\NotValidApiCallException;
 use Proximum\Vimeet\Application\ThirdParty\LENI\Exception\WarningApiCallException;
 use Proximum\Vimeet\Application\ThirdParty\LENI\Normalizer\LeniUserViewNormalizer;
 use Proximum\Vimeet\Domain\Event\ExtraParameter\Type;
 use Proximum\Vimeet\Domain\Repository\Event\ExtraParameterRepositoryInterface;
+use Proximum\Vimeet\Domain\Repository\User\Event\ExtraDataRepositoryInterface;
 
 /**
  * LENI EXHIBIS Api call handler
@@ -28,7 +30,11 @@ class LeniApiCallHandler
     const LENI_HOST = 'gateway.svc.exhibis.net';
     const LENI_APP = 'O';
     const LENI_MODE = 'MessageAndModifiedData';
-    const LENI_USER_ID = 'Id';
+
+    const LENI_IS_VALID = 'IsValid';
+    const LENI_FIELD_INFO = 'Info';
+    const LENI_FIELD_VALUE = 'Value';
+    const LENI_FIELD_HAS_WARNING = 'HasWarning';
 
     /** @var HttpAdapterInterface */
     private $httpAdapter;
@@ -36,16 +42,22 @@ class LeniApiCallHandler
     /** @var ExtraParameterRepositoryInterface */
     private $extraParameterRepository;
 
+    /** @var ExtraDataRepositoryInterface */
+    private $extraDataRepository;
+
     /**
-     * @param HttpAdapterInterface $httpAdapter
+     * @param HttpAdapterInterface              $httpAdapter
      * @param ExtraParameterRepositoryInterface $extraParameterRepository
+     * @param ExtraDataRepositoryInterface      $extraDataRepository
      */
     public function __construct(
         HttpAdapterInterface $httpAdapter,
-        ExtraParameterRepositoryInterface $extraParameterRepository
+        ExtraParameterRepositoryInterface $extraParameterRepository,
+        ExtraDataRepositoryInterface $extraDataRepository
     ) {
         $this->httpAdapter = $httpAdapter;
         $this->extraParameterRepository = $extraParameterRepository;
+        $this->extraDataRepository = $extraDataRepository;
     }
 
     /**
@@ -54,11 +66,13 @@ class LeniApiCallHandler
      * @throws LeniApiServerException
      * @throws NotValidApiCallException
      * @throws WarningApiCallException
+     * @throws MissingIdException
      */
     public function handle(LeniApiCall $leniApiCall)
     {
         $extraData = $leniApiCall->extraData;
         $event = $extraData->getEvent();
+
         $leniUserParameter  = $this->extraParameterRepository->findByEventAndType($event, Type::TYPE_LENI_USER);
         $leniEventParameter = $this->extraParameterRepository->findByEventAndType($event, Type::TYPE_LENI_EVENT);
 
@@ -69,10 +83,6 @@ class LeniApiCallHandler
         }
 
         $data = unserialize($extraData->getValue());
-
-        if (@todo user has a leni id) {
-            $data = array_merge($data, [self::LENI_USER_ID => 'd451756d-91ae-e711-80e2-005056ae4dce']);
-        }
 
         $body = json_encode(
             [
@@ -94,28 +104,53 @@ class LeniApiCallHandler
 
         try {
             $jsonResponse = $this->httpAdapter->post(self::LENI_ENDPOINT, $headers, $body);
-
-            $response = json_decode($jsonResponse->body, true);
-
-            if (isset($response['IsValid']) && $response['IsValid'] === true) {
-                if (isset($response['hasWarning']) && $response['hasWarning'] === true && isset($response['info'])) {
-                    $warnings = [];
-
-                    foreach ($response['info'] as $key => $info) {
-                        if (in_array($key, LeniUserViewNormalizer::LENI_COLUMNS)) {
-                            $warnings[] = $key;
-                        }
-                    }
-
-                    if (!empty($warnings)) {
-                        throw new WarningApiCallException($warnings);
-                    }
-                }
-            } else {
-                throw new NotValidApiCallException('Leni responded has a non valid response ' . $jsonResponse->body);
-            }
         } catch (ServerErrorException $exception) {
             throw new LeniApiServerException($exception);
+        }
+
+        $response = json_decode($jsonResponse->body, true);
+
+        // Call not valid
+        if (!isset($response[self::LENI_IS_VALID]) || $response[self::LENI_IS_VALID] !== true) {
+            throw new NotValidApiCallException('LENI responded has a non valid response ' . $jsonResponse->body);
+        }
+
+        // When inserting user (first call) we must retrieve the LENI user id
+        if (!isset($data[LeniUserViewNormalizer::LENI_COL_USER_ID])
+            && (
+                !isset($response[self::LENI_FIELD_INFO])
+                || !isset($response[self::LENI_FIELD_INFO][LeniUserViewNormalizer::LENI_COL_USER_ID])
+                || !isset($response[self::LENI_FIELD_INFO][LeniUserViewNormalizer::LENI_COL_USER_ID][self::LENI_FIELD_VALUE])
+            )
+        ) {
+            throw new MissingIdException();
+        }
+
+        // Call has warnings
+        if (isset($response[self::LENI_FIELD_HAS_WARNING])
+            && $response[self::LENI_FIELD_HAS_WARNING] === true
+            && isset($response[self::LENI_FIELD_INFO])
+        ) {
+            $warnings = [];
+
+            foreach ($response[self::LENI_FIELD_INFO] as $key => $info) {
+                if (in_array($key, LeniUserViewNormalizer::LENI_COLUMNS)) {
+                    $warnings[] = $key;
+                }
+            }
+
+            if (!empty($warnings)) {
+                throw new WarningApiCallException($warnings);
+            }
+        }
+
+        // Get and save the LENI user Id when it is the first call (insert user into LENI)
+        if (!isset($data[LeniUserViewNormalizer::LENI_COL_USER_ID])) {
+            $leniUserId = $response[self::LENI_FIELD_INFO][LeniUserViewNormalizer::LENI_COL_USER_ID][self::LENI_FIELD_VALUE];
+            $data[LeniUserViewNormalizer::LENI_COL_USER_ID] = $leniUserId;
+
+            $extraData->update(serialize($data), $extraData->getUpdatedAt());
+            $this->extraDataRepository->set($extraData);
         }
     }
 }

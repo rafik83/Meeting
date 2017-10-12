@@ -11,10 +11,12 @@
 namespace Proximum\Vimeet\Application\ThirdParty\LENI\Normalizer;
 
 use Proximum\Vimeet\Application\ThirdParty\LENI\View\LeniUserView;
+use Proximum\Vimeet\Domain\Model\User\Event\ExtraData;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 
 class LeniUserViewNormalizer implements NormalizerInterface
 {
+    const LENI_COL_USER_ID      = 'Id';
     const LENI_COL_CAB_2        = 'Cab2';
     const LENI_COL_EXTERNAL_KEY = 'CleExterne';
     const LENI_COL_COMPANY_NAME = 'Societe';
@@ -34,6 +36,7 @@ class LeniUserViewNormalizer implements NormalizerInterface
     const LENI_COL_LOCALE       = 'Langue';
 
     const LENI_COLUMNS = [
+        self::LENI_COL_USER_ID,
         self::LENI_COL_CAB_2,
         self::LENI_COL_EXTERNAL_KEY,
         self::LENI_COL_COMPANY_NAME,
@@ -60,6 +63,7 @@ class LeniUserViewNormalizer implements NormalizerInterface
     {
         /** @var LeniUserView $userView */
         $userView = $object;
+
         $data = [
             self::LENI_COL_CAB_2        => (string) $userView->id,
             self::LENI_COL_EXTERNAL_KEY => $userView->id,
@@ -78,6 +82,12 @@ class LeniUserViewNormalizer implements NormalizerInterface
             self::LENI_COL_ATTENDANCE   => $userView->attendance,
             self::LENI_COL_LOCALE       => $userView->locale,
         ];
+
+        // Set the previous LENI user id
+        if ($context['previousUserExtraData'] instanceof ExtraData) {
+            $previousData = unserialize($context['previousUserExtraData']->getValue());
+            $data[self::LENI_COL_USER_ID] = $previousData[self::LENI_COL_USER_ID];
+        }
 
         $dayNumber = 1;
         foreach ($userView->planning->days as $day) {

@@ -18,9 +18,7 @@ use Proximum\Vimeet\Application\ThirdParty\LENI\Exception\NotValidApiCallExcepti
 use Proximum\Vimeet\Application\ThirdParty\LENI\Exception\WarningApiCallException;
 use Proximum\Vimeet\Application\ThirdParty\LENI\Query\LeniUserViewQuery;
 use Proximum\Vimeet\Application\ThirdParty\LENI\Query\LeniUserViewQueryHandler;
-use Proximum\Vimeet\Application\ThirdParty\LENI\View\LeniUserView;
 use Proximum\Vimeet\Domain\Event\ExtraParameter\Type;
-use Proximum\Vimeet\Domain\Model\Event\ExtraParameter;
 use Proximum\Vimeet\Domain\Model\User\Event\ExtraData;
 use Proximum\Vimeet\Domain\Repository\Event\ExtraParameterRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\EventRepositoryInterface;
@@ -128,23 +126,36 @@ class PrepareLeniApiCallHandler
             $usersExtraData = $this->indexExtraDataByUserId($usersExtraData);
 
             foreach ($users as $user) {
+                $previousUserExtraData = null;
+
+                if (isset($usersExtraData[$user->getId()])) {
+                    $previousUserExtraData = $usersExtraData[$user->getId()];
+                }
+
                 $leniUserView = $this->leniUserViewQueryHandler->handle(new LeniUserViewQuery($event, $user));
-                $leniUserData = $this->serializerAdapter->normalize($leniUserView);
+                $leniUserData = $this->serializerAdapter->normalize(
+                    $leniUserView,
+                    null,
+                    ['previousUserExtraData' => $previousUserExtraData]
+                );
                 $fingerPrint = serialize($leniUserData);
 
-                if (isset($userFingerPrints[$user->getId()])
-                    && $fingerPrint === $usersExtraData[$user->getId()]->getValue()
+                // User data not changed, skip
+                if ($previousUserExtraData instanceof ExtraData
+                    && $fingerPrint === $previousUserExtraData->getValue()
                 ) {
                     continue;
                 }
 
                 $userExtraData = null;
 
-                if (isset($userFingerPrints[$user->getId()])) {
-                    $userExtraData = $usersExtraData[$user->getId()];
+                if ($previousUserExtraData instanceof ExtraData) {
+                    // Update fingerprint
+                    $userExtraData = $previousUserExtraData;
                     $userExtraData->update($fingerPrint, $this->dateTime);
                     $this->extraDataRepository->set($userExtraData);
                 } else {
+                    // Create ExtraData and set the fingerprint
                     $userExtraData = new ExtraData(
                         $user,
                         $event,
@@ -155,7 +166,8 @@ class PrepareLeniApiCallHandler
                     $this->extraDataRepository->add($userExtraData);
                 }
 
-                if (null !== $userExtraData) {
+                if ($userExtraData instanceof ExtraData) {
+                    // Call LENI API
                     $this->leniApiCallJobQueue->createJob($userExtraData);
                 }
             }
