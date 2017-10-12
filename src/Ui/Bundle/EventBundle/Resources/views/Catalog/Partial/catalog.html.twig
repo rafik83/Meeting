@@ -26,6 +26,22 @@
 <div class="hidden" data-catalog-mobile-menu="catalog-mobile-menu">
 {% if searchForm.availableSlot is defined or searchForm.type is defined %}
     <div class="catalog-mobile-menu-summary catalog-mobile-menu-container">
+        {% if searchForm.content is defined %}
+            <a href="#" class="catalog-mobile-menu-button btn btn-default btn-block" data-catalog-mobile-menu-button-action="catalog-mobile-menu-button-action-content-filter">
+                {% if searchForm.content.vars.data %}
+                    <span>{{ searchForm.content.vars.data }}</span>
+                    <span class="button-count">
+                        <i class="glyphicon glyphicon-remove"></i>
+                    </span>
+                {% else %}
+                    <span>{{ 'catalog.mobile.filters.content'|trans }}</span>
+                    <span class="button-count">
+                        <i class="glyphicon glyphicon-search"></i>
+                    </span>
+                {% endif %}
+            </a>
+        {% endif %}
+
         {% if searchForm.availableSlot is defined %}
             {% for availableSlotOptionChosen in searchForm.availableSlot.children %}
                 {% if availableSlotOptionChosen.vars.data %}
@@ -43,9 +59,11 @@
             {% for type in typeViews %}
                 {% set totalType = totalType + type.count %}
             {% endfor %}
+
             {% set numberOfDifferentType = searchForm.type.children|length %}
             {% set numberOfTypeSelected = 0 %}
             {% set typeSelected = null %}
+
             {% for child in searchForm.type.children %}
                 {% if child.vars.data %}
                     {% set typeSelected = child %}
@@ -71,6 +89,12 @@
     </div>
     <div class="catalog-mobile-menu-container catalog-mobile-menu-filters">
         <div class="catalog-mobile-menu-filters-list">
+            {% if searchForm.content is defined %}
+                {{ include('EventBundle:Catalog:Partial/Mobile/content_filter_mobile.html.twig', {
+                    form: searchForm.content,
+                    sheet: sheet
+                }, false) }}
+            {% endif %}
             {% if searchForm.availableSlot is defined %}
                 {{ include('EventBundle:Catalog:Partial/Mobile/available_slot_filter_mobile.html.twig', {
                     form: searchForm.availableSlot,
