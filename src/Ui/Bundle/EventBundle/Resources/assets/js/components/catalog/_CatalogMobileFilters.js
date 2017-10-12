@@ -6,7 +6,7 @@ var TypeFilterElement = require('./_CatalogMobileTypeFilterElement'),
 /**
  * @param {HTMLElement} catalogFilterZone the zone where the filters will be displayed
  * @param {HTMLElement} catalogFilter the filter given by the response
- * @param {HTMLElement} catalogForm
+ * @param {HTMLElement} catalogForm desktop form
  */
 function CatalogMobileFilters(catalogFilterZone, catalogFilter, catalogForm) {
     this.catalogFilterZone = catalogFilterZone;
@@ -19,11 +19,13 @@ function CatalogMobileFilters(catalogFilterZone, catalogFilter, catalogForm) {
     this.catalogForm = catalogForm;
     this.typeFilterCheckboxes = this.catalogForm.querySelectorAll('input[name="type[]"]');
     this.availableSlotRadio = this.catalogForm.querySelectorAll('input[name="availableSlot"]');
+    this.contentInput = this.catalogForm.querySelector('input[name="content"]');
     this.typeFilterButtons = [];
     this.availableSlotFilterButtons = [];
 
     if ((this.typeFilterList !== null && this.typeFilterCheckboxes !== null)
         || (this.availableSlotFilterList !== null && this.availableSlotRadio !== null)
+        || (this.contentInput !== null)
     ) {
         // Empty the catalogFilterZone of the placeholder and add the value from the catalogFilter twig
         this.catalogFilterZone.innerHTML = '';
