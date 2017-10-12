@@ -1,0 +1,13 @@
+<h3 class="catalog-mobile-title">{{ 'catalog.mobile.filters.content.title'|trans }}</h3>
+
+<select multiple
+        data-parent-input="{{ form.vars.id }}"
+        data-disable-auto-submit
+        data-ajax-autocomplete
+        data-method="post"
+        data-label-input-too-short="{{ 'form.search.autocomplete.atLeastThreeChars'|trans({}, 'forms') }}"
+        data-label-searching="{{ 'form.search.autocomplete.searching'|trans({}, 'forms') }}"
+        data-action="{{ path('event_catalog_search_keywords', {sheet: sheet.id}) }}"
+        data-minimum-input-length="3"
+        class="form-control">
+</select>

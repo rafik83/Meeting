@@ -8,27 +8,36 @@
 
 {% block header_mobile %}
     <div class="catalog-mobile-menu">
-    {% if searchForm.type is defined or searchForm.availableSlot is defined %}
-        <div class="catalog-mobile-menu-summary catalog-mobile-menu-container">
-            {% if searchForm.availableSlot is defined %}
-                <a href="#" class="catalog-mobile-menu-button btn btn-primary btn-block">
-                    <span>...</span>
-                    <span class="button-count">
+        {% if searchForm.type is defined or searchForm.availableSlot is defined %}
+            <div class="catalog-mobile-menu-summary catalog-mobile-menu-container">
+                {% if searchForm.availableSlot is defined %}
+                    <a href="#" class="catalog-mobile-menu-button btn btn-primary btn-block">
+                        <span>...</span>
+                        <span class="button-count">
                         <i class="glyphicon glyphicon-chevron-down"></i>
                     </span>
-                </a>
-            {% endif %}
-            {% if searchForm.type is defined %}
-            <a href="#" class="catalog-mobile-menu-button btn btn-primary btn-block">
-                <span>...</span>
-                <span class="button-count">
+                    </a>
+                {% endif %}
+                {% if searchForm.type is defined %}
+                    <a href="#" class="catalog-mobile-menu-button btn btn-primary btn-block">
+                        <span>...</span>
+                        <span class="button-count">
                     (...)
                     <i class="glyphicon glyphicon-chevron-down"></i>
                 </span>
-            </a>
-            {% endif %}
-        </div>
-    {% endif %}
+                    </a>
+                {% endif %}
+                {% if searchForm.content is defined %}
+                    <a href="#" class="catalog-mobile-menu-button btn btn-primary btn-block">
+                        <span>...</span>
+                        <span class="button-count">
+                        (...)
+                        <i class="glyphicon glyphicon-chevron-down"></i>
+                    </span>
+                    </a>
+                {% endif %}
+            </div>
+        {% endif %}
     </div>
 {% endblock %}
 
@@ -37,8 +46,7 @@
     {% if searchForm.type is defined %}{% set numberOfFilterOnMobile = numberOfFilterOnMobile + 1 %}{% endif %}
     {% if searchForm.availableSlot is defined %}{% set numberOfFilterOnMobile = numberOfFilterOnMobile + 1 %}{% endif %}
     <div
-        class="
-            catalog catalog--advanced
+            class="catalog catalog--advanced
             {% if numberOfFilterOnMobile > 0 %}
                 catalog-mobile-margin-{{ numberOfFilterOnMobile }}
             {% endif %}
