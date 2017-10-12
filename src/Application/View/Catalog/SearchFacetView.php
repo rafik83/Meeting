@@ -19,10 +19,10 @@ class SearchFacetView
     public $placeholder;
 
     /** @var bool */
-    private $enabled;
+    public $enabled;
 
     /** @var string */
-    private $type;
+    public $type;
 
     /**
      * SearchFacetView constructor.

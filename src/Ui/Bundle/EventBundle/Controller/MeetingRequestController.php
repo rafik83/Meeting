@@ -19,6 +19,7 @@ use Proximum\Vimeet\Application\Command\Meeting\UnRefuseMeetingRequest;
 use Proximum\Vimeet\Application\Command\Meeting\UpdateMeetingRequest;
 use Proximum\Vimeet\Application\Components\Meeting\RequestPermissionManager;
 use Proximum\Vimeet\Application\Query\Agenda\AvailableSheets\AvailableSlotsByParticipantQuery;
+use Proximum\Vimeet\Application\Query\Category\MeetingCategoryViewQuery;
 use Proximum\Vimeet\Application\Query\Meeting\MeetingRequestListViewQuery;
 use Proximum\Vimeet\Application\Query\Meeting\Message\DiscussionMeetingRequestViewQuery;
 use Proximum\Vimeet\Application\Query\Meeting\StateListViewQuery;
@@ -78,6 +79,11 @@ class MeetingRequestController extends Controller
 
         $typeViews = $this->get('tactician.commandbus.query')->handle(new MeetingTypeViewQuery(
             $sheet, $request->getLocale()
+        ));
+
+        $categoryViews = $this->get('tactician.commandbus.query')->handle(new MeetingCategoryViewQuery(
+            $sheet,
+            $request->getLocale()
         ));
 
         $dDay = $this->get('domain.event.day.dday_guesser')->isItDDayAndFeatureEnabled($event);
