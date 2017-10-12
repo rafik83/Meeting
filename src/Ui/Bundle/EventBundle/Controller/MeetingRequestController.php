@@ -115,13 +115,15 @@ class MeetingRequestController extends Controller
             }
         }
 
-        $defaults   = SearchType::getDefaultFilters($typeViews);
+        $defaults   = SearchType::getDefaultFilters($typeViews, $categoryViews);
+
         $searchForm = $this->createSearchForm(
             $event,
             $sheet,
             $locale,
             $defaults,
             SearchType::transformTypeViews($typeViews),
+            SearchType::transformCategoryViews($categoryViews),
             $filterAvailableSlot,
             $specificSlot
         );
@@ -141,6 +143,7 @@ class MeetingRequestController extends Controller
                 $locale,
                 $filters,
                 SearchType::transformTypeViews($typeViews),
+                SearchType::transformCategoryViews($categoryViews),
                 $filterAvailableSlot,
                 $specificSlot
             );
@@ -887,6 +890,7 @@ class MeetingRequestController extends Controller
      * @param string           $locale
      * @param array            $filters
      * @param array            $typeViews
+     * @param array            $categoryViews
      * @param bool             $filterAvailableSlot
      * @param MeetingSlot|null $specificSlot
      *
@@ -898,6 +902,7 @@ class MeetingRequestController extends Controller
         string $locale,
         array $filters,
         array $typeViews,
+        array $categoryViews,
         bool $filterAvailableSlot = false,
         MeetingSlot $specificSlot = null
     ) {
@@ -911,6 +916,7 @@ class MeetingRequestController extends Controller
             'locale'              => $locale,
             'specificSlot'        => $specificSlot,
             'typeViews'           => $typeViews,
+            'categoryViews'       => $categoryViews,
         ]);
     }
 

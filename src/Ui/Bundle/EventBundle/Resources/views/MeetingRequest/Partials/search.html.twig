@@ -68,6 +68,23 @@
 
         </div>
     {% endif %}
+
+    {% if searchForm.category is defined %}
+        <div class="filter">
+            <h3>{{ searchForm.category.vars.label|trans({}, searchForm.vars.translation_domain) }}</h3>
+
+            <ul data-message-at-least-one-checked="{{ ('form.search.' ~ searchForm.category.vars.name  ~ '.at_least_one_checked')|trans({}, 'forms') }}">
+                {% for child in searchForm.category.children %}
+                    <li>
+                        <label class="checkbox-inline">
+                            <span class="filter-label">{{ form_widget(child) }}{{ child.vars.label|trans({}, child.vars.translation_domain) }}</span>
+                        </label>
+                    </li>
+                {% endfor %}
+            </ul>
+
+        </div>
+    {% endif %}
 </div>
 
 {{ include('EventBundle:Tip:tip.html.twig', {tipTranslationViews: tipTranslationViews}) }}

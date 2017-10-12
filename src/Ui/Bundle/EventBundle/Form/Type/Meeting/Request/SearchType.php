@@ -14,6 +14,7 @@ use Proximum\Vimeet\Application\Adapter\TranslatorInterface;
 use Proximum\Vimeet\Domain\Model\Meeting;
 use Proximum\Vimeet\Domain\Model\MeetingSlot;
 use Proximum\Vimeet\Domain\Model\Sheet;
+use Proximum\Vimeet\Domain\View\CategoryView;
 use Proximum\Vimeet\Domain\View\TypeView;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
@@ -64,7 +65,15 @@ class SearchType extends AbstractType
                 },
             ]);
 
-        if (count($options['typeViews']) > 1) {
+        if (count($options['categoryViews']) > 1) {
+            $builder
+                ->add('category', ChoiceType::class, [
+                    'label'        => 'form.search.type.label',
+                    'expanded'     => true,
+                    'multiple'     => true,
+                    'choices'      => $options['categoryViews'],
+                ]);
+        } elseif (count($options['typeViews']) > 1) {
             $builder
                 ->add('type', ChoiceType::class, [
                     'label'        => 'form.search.type.label',
@@ -149,6 +158,7 @@ class SearchType extends AbstractType
     {
         $resolver->setRequired([
             'typeViews',
+            'categoryViews',
             'event',
             'locale',
         ]);
@@ -171,11 +181,12 @@ class SearchType extends AbstractType
     }
 
     /**
-     * @param TypeView[] $typeViews
+     * @param TypeView[]     $typeViews
+     * @param CategoryView[] $categoryViews
      *
      * @return array
      */
-    public static function getDefaultFilters($typeViews = [])
+    public static function getDefaultFilters($typeViews = [], $categoryViews = [])
     {
         $defaultFilters = [
             'availableSlot' => Meeting\Constant::FILTER_AVAILABLE_SLOT_IDS_EVERYONE,
@@ -188,6 +199,9 @@ class SearchType extends AbstractType
         if (count($typeViews) > 1) {
             $defaultFilters['type'] = array_values(self::transformTypeViews($typeViews));
         }
+        if (count($categoryViews) > 1) {
+            $defaultFilters['category'] = array_values(self::transformCategoryViews($categoryViews));
+        }
 
         return $defaultFilters;
     }
@@ -197,7 +211,7 @@ class SearchType extends AbstractType
      *
      * @return array
      */
-    public static function transformTypeViews($typeViews)
+    public static function transformTypeViews(array $typeViews): array
     {
         $typeViews = array_combine(
             array_map(function (TypeView $typeView) {
@@ -209,5 +223,24 @@ class SearchType extends AbstractType
         );
 
         return $typeViews;
+    }
+
+    /**
+     * @param CategoryView[] $categoryViews
+     *
+     * @return array
+     */
+    public static function transformCategoryViews(array $categoryViews): array
+    {
+        $categoryViews = array_combine(
+            array_map(function (CategoryView $categoryView) {
+                return $categoryView->title;
+            }, $categoryViews),
+            array_map(function (CategoryView $categoryView) {
+                return $categoryView->id;
+            }, $categoryViews)
+        );
+
+        return $categoryViews;
     }
 }
