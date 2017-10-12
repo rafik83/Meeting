@@ -36,6 +36,6 @@ class CatalogVisibilityRegistrationUrlQueryHandler
     {
         $catalogVisibility = $this->catalogVisibilityRepository->getByEvent($query->event);
 
-        return $catalogVisibility->getRegistrationUrl();
+        return $catalogVisibility !== null ? $catalogVisibility->getRegistrationUrl() : null;
     }
 }
