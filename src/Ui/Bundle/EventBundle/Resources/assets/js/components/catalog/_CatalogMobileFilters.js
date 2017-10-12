@@ -1,5 +1,7 @@
 var TypeFilterElement = require('./_CatalogMobileTypeFilterElement'),
-    AvailableSlotFilterElement = require('./_CatalogMobileAvailableSlotFilterElement');
+    AvailableSlotFilterElement = require('./_CatalogMobileAvailableSlotFilterElement'),
+    PubSub = require('pubsub-js')
+;
 
 /**
  * @param {HTMLElement} catalogFilterZone the zone where the filters will be displayed
@@ -82,6 +84,10 @@ function CatalogMobileFilters(catalogFilterZone, catalogFilter, catalogForm) {
             }.bind(this))
         }
     }
+
+    // Handle custom events
+    PubSub.publish('build.select2', this.catalogFilterZone);
+    PubSub.subscribe('mobile-input-content-change', this.closeMenu());
 }
 
 CatalogMobileFilters.prototype.openMenu = function () {

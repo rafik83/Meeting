@@ -1,7 +1,12 @@
 var $ = require('jquery');
+var PubSub = require('pubsub-js');
 
 require('select2');
 
+/**
+ * @param {Node} element
+ * @constructor
+ */
 function AjaxAutocomplete(element) {
     this.element = element;
     this.parentInput = document.getElementById(element.getAttribute('data-parent-input'));
@@ -14,6 +19,7 @@ function AjaxAutocomplete(element) {
         // Select2 Event Listener
         this.autocompleteElement.on('select2:select', this.selectTag.bind(this));
         this.autocompleteElement.on('select2:unselect', this.unselectTag.bind(this));
+        this.autocompleteElement.on('change', this.onChange.bind(this));
     }.bind(this));
 }
 
@@ -63,6 +69,14 @@ AjaxAutocomplete.prototype.selectTag = function () {
 
 AjaxAutocomplete.prototype.unselectTag = function () {
     this.updateParentInput();
+};
+
+AjaxAutocomplete.prototype.onChange = function () {
+    var onChangeCustomEvent = this.element.dataset.onChangeEvent;
+
+    if (onChangeCustomEvent !== null) {
+        PubSub.publish(onChangeCustomEvent);
+    }
 };
 
 AjaxAutocomplete.prototype.updateParentInput = function () {

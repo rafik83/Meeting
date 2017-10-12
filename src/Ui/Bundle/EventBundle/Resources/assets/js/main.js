@@ -58,6 +58,10 @@ function init (target) {
         }
     });
 
+    [].forEach.call(target.querySelectorAll('[data-ajax-autocomplete]'), function (element) {
+        new AjaxAutocomplete(element);
+    });
+
     [].forEach.call(target.querySelectorAll('.telephone-intl-input'), function (element) {
         $(element).intlTelInput({
             initialCountry: $(element).data('initial-country'),
@@ -165,10 +169,6 @@ function init (target) {
         new AjaxForm(element);
     });
 
-    [].forEach.call(target.querySelectorAll('[data-ajax-autocomplete]'), function (element) {
-        new AjaxAutocomplete(element);
-    });
-
     [].forEach.call(target.querySelectorAll('[data-choice-description]'), function (element) {
         new ChoiceDescription(element);
     });
@@ -228,5 +228,11 @@ function init (target) {
 }
 
 PubSub.subscribe('dom.added', function (name, element) { init(element); });
+
+PubSub.subscribe('build.select2', function (name, target) {
+    [].forEach.call(target.querySelectorAll('[data-ajax-autocomplete-without-auto-build]'), function (element) {
+        new AjaxAutocomplete(element);
+    });
+});
 
 init(document);
