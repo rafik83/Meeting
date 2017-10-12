@@ -769,7 +769,6 @@ class RequestRepository implements RequestRepositoryInterface
                 ->setParameter('sheet', $sheet);
         }
 
-
         if (!empty($filters['state'])) {
             // set sheet
             $queryBuilder->setParameter('sheet', $sheet);
