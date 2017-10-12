@@ -82,12 +82,14 @@ class SpotImporterTest extends TestCase
         $expectedImportedDenormalizedSpot2 = new Import(new Spot('A2', $this->event, '10', '2', '33', '1', '4', '1'), $sheetIds2);
         $expectedImportedDenormalizedSpot3 = new Import(new Spot('A3', $this->event, '10', '2', '33', '1', '4', '1'), $sheetIds3);
         $expectedImportedDenormalizedSpot4 = new Import(new Spot('A1', $this->event, '10', '2', '33', '1', '4', '1'), $sheetIds4);
+        $expectedImportedDenormalizedSpot5 = new Import(new Spot('a3', $this->event, '10', '2', '33', '1', '4', '1'), []);
 
         $expectedDenormalizedResults = [
             $expectedImportedDenormalizedSpot1,
             $expectedImportedDenormalizedSpot2,
             $expectedImportedDenormalizedSpot3,
-            $expectedImportedDenormalizedSpot4
+            $expectedImportedDenormalizedSpot4,
+            $expectedImportedDenormalizedSpot5
         ];
 
         $this
@@ -117,7 +119,7 @@ class SpotImporterTest extends TestCase
 
         $this->translatorAdapter
             ->trans("validators.spot.reference.affected", [], "validators", "fr")
-            ->shouldBeCalled()
+            ->shouldBeCalledTimes(2)
             ->willReturn('validators.spot.reference.affected');
 
         $this->sheetRepository->getSheetViewByEventAndId($this->event, 12)->shouldBeCalled()->willReturn(null);
@@ -139,6 +141,11 @@ class SpotImporterTest extends TestCase
 
         $this->validatorAdapter
             ->validate($expectedImportedDenormalizedSpot4->spot)
+            ->shouldBeCalled()
+            ->willReturn([]);
+
+        $this->validatorAdapter
+            ->validate($expectedImportedDenormalizedSpot5->spot)
             ->shouldBeCalled()
             ->willReturn([]);
 
