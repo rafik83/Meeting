@@ -1,12 +1,33 @@
 @event @catalog @external
 Feature: External catalog
-  Scenario: I can visit external catalog
+  Scenario: I can visit external catalog smoke test
     Given the database is purged
     And the event "Proximum Event" is created
     And the external catalog is open
     And the catalog visibility is configured
-    And the user "vincent@proximum.com" is created
     And elastica is populate
-    And I am logged with this user
-    When I go to "/fr/list"
-    Then the response status code should be 200
+    When I go to this page "http://super-event.vimeet.proximum.dev/fr/list"
+    Then I should be on this page "http://super-event.vimeet.proximum.dev/fr/list"
+
+  Scenario: The register link from external catalog redirect to another page
+    Given the database is purged
+    And the event "Proximum Event" is created
+    And the external catalog is open
+    And the catalog visibility is configured
+    And the catalog visibility registration url is "http://super-event.vimeet.proximum.dev/fr/login"
+    And there is a sheet with the title "Elao"
+    And this sheet is validated
+    And this sheet is enabled
+    And there is a sheet with the title "Proximum"
+    And this sheet is validated
+    And this sheet is enabled
+    And Allow all types to be visible on catalog visibility
+    And elastica is populate
+    When I go to this page "http://super-event.vimeet.proximum.dev/fr/list"
+    Then I should be on this page "http://super-event.vimeet.proximum.dev/fr/list"
+    When I follow "register.register"
+    Then I should be on this page "http://super-event.vimeet.proximum.dev/fr/login"
+    When I go to this page "http://super-event.vimeet.proximum.dev/fr/list"
+    Then I should be on this page "http://super-event.vimeet.proximum.dev/fr/list"
+    When I follow "modal-register-link"
+    Then I should be on this page "http://super-event.vimeet.proximum.dev/fr/login"

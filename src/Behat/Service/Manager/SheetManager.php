@@ -108,4 +108,24 @@ class SheetManager
 
         $this->sheetRepository->set($sheet);
     }
+
+    /**
+     * @param Sheet $sheet
+     */
+    public function setValidated(Sheet $sheet)
+    {
+        $sheet->markAsValidated();
+
+        $this->sheetRepository->set($sheet);
+    }
+
+    /**
+     * @param Sheet $sheet
+     */
+    public function setEnabled(Sheet $sheet)
+    {
+        $sheet->setEnable(true);
+
+        $this->sheetRepository->set($sheet);
+    }
 }
