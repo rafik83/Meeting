@@ -26,6 +26,7 @@ AjaxAutocomplete.prototype.initSelect = function (callback) {
         minimumInputLength: this.element.getAttribute('data-minimum-input-length'),
         placeholder: this.parentInput.getAttribute('data-placeholder'),
         tokenSeparators: [','],
+        width: 'resolve',
         language: {
             noResults: function () {
                 return ''
