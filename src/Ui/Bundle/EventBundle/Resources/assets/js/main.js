@@ -58,10 +58,6 @@ function init (target) {
         }
     });
 
-    [].forEach.call(target.querySelectorAll('[data-ajax-autocomplete]'), function (element) {
-        new AjaxAutocomplete(element);
-    });
-
     [].forEach.call(target.querySelectorAll('.telephone-intl-input'), function (element) {
         $(element).intlTelInput({
             initialCountry: $(element).data('initial-country'),
@@ -224,6 +220,10 @@ function init (target) {
 
     [].forEach.call(target.querySelectorAll('.video-conference'), function (element) {
         new VideoConference(element);
+    });
+
+    [].forEach.call(target.querySelectorAll('[data-ajax-autocomplete]'), function (element) {
+        new AjaxAutocomplete(element);
     });
 }
 

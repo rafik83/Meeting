@@ -33,6 +33,7 @@ AjaxAutocomplete.prototype.initSelect = function (callback) {
         placeholder: this.parentInput.getAttribute('data-placeholder'),
         tokenSeparators: [','],
         width: 'resolve',
+        closeOnSelect: true,
         language: {
             noResults: function () {
                 return ''
@@ -75,6 +76,9 @@ AjaxAutocomplete.prototype.onChange = function () {
     var onChangeCustomEvent = this.element.dataset.onChangeEvent;
 
     if (onChangeCustomEvent !== null) {
+        var selectDropdown = document.querySelector('.select2-dropdown');
+        $(selectDropdown).remove();
+
         PubSub.publish(onChangeCustomEvent);
     }
 };
