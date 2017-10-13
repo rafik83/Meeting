@@ -23,6 +23,100 @@ use Proximum\Vimeet\Domain\Repository\User\Event\ExtraDataRepositoryInterface;
 
 /**
  * LENI EXHIBIS Api call handler
+ *
+ * Documentation in french:
+ *
+ * // Save : Création d'un Individu dans ATLAS
+ * // création car pas d'Id spécifié lors de l’appel de Save
+ * // on peut aussi créer un Individu en spécifiant un Id inconnu de ATLAS
+ * data = {
+ *   "idEvt" : "'. $IdEvt .'",
+ *   "data" : {
+ *     "actionFlag": "0",
+ *     "Civilite": "Mr",
+ *     "Prenom": "Pascal",
+ *     "Nom": "LENI002",
+ *     "Societe": "TEST",
+ *     "Adresse1": "TEST",
+ *     "CodePostal": "93100",
+ *     "Ville": "MONTREUIL",
+ *     "Pays": "FR",
+ *     "CleExterne": "656477187"
+ *   }
+ * }
+ *
+ * Le WebService renvoie dans le buffer de retour certaines informations
+ * et l'information Id doit être récupérée et être sauvegardée dans la base de données du client
+ * afin de pouvoir rappeler save en mode Update
+ *
+ * Buffer de retour :
+ * {
+ *   "IsValid":true,
+ *   "HasWarning":true,
+ *   "Info":{
+ *   "CreeLe":{
+ *   "Info":"ModifiedData",
+ *     "Value":"\/Date(1507732534642)\/"
+ *     },
+ *     "ModifieLe":{
+ *       "Info":"ModifiedData",
+ *       "Value":"\/Date(1507732534642)\/"
+ *     },
+ *     "OrigineCreation":{
+ *       "Info":"ModifiedData",
+ *       "Value":"X"
+ *     },
+ *     "Npai":{
+ *       "Info":"ModifiedData",
+ *       "Value":false
+ *     },
+ *     "CptNpai":{
+ *       "Info":"ModifiedData",
+ *       "Value":0
+ *     },
+ *     "RegionAdministrative":{
+ *       "Info":"ModifiedData",
+ *       "Value":"11"
+ *     },
+ *     "Departement":{
+ *       "Info":"ModifiedData",
+ *       "Value":"93"
+ *     },
+ *     "Cab1":{
+ *       "Info":"ModifiedData",
+ *       "Value":"X46Z7UXFC"
+ *     },
+ *     "Login":{
+ *       "Info":"ModifiedData",
+ *       "Value":"CaYBB2"
+ *     },
+ *     "Password":{
+ *       "Info":"ModifiedData",
+ *       "Value":"WUyK68"
+ *     },
+ *     "Id":{
+ *       "Info":"ModifiedData",
+ *       "Value":"d451756d-91ae-e711-80e2-005056ae4dce"
+ *     }
+ *   },
+ *   "version":"Beta",
+ *   "versionNumber":"002.021.000",
+ *   "lastDescriptionModification":"\/Date(1507732534626)\/"
+ * }
+ *
+ *
+ * Même appel de save mais en mode Update en spécifiant l'Id
+ *
+ * data = {
+ *   "idEvt" : "'. $IdEvt .'",
+ *   "data" : {
+ *     "Id" : "d451756d-91ae-e711-80e2-005056ae4dce",
+ *     "actionFlag": "0",
+ *     "Civilite": "Mr",
+ *     "Prenom": "Pascal",
+ *     ...
+ *   }
+ * }
  */
 class LeniApiCallHandler
 {
