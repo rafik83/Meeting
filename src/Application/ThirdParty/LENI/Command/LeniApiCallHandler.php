@@ -251,6 +251,11 @@ class LeniApiCallHandler
         // Get and save the LENI user Id when it is the first call (insert user into LENI)
         if ($hasNotUserId) {
             $leniUserId = $response[self::LENI_FIELD_INFO][LeniUserViewNormalizer::LENI_COL_USER_ID][self::LENI_FIELD_VALUE];
+
+            if (null === $leniUserId) {
+                throw new \LogicException('LENI send a null user id');
+            }
+
             $data[LeniUserViewNormalizer::LENI_COL_USER_ID] = $leniUserId;
 
             $extraData->update(serialize($data), $extraData->getUpdatedAt());
