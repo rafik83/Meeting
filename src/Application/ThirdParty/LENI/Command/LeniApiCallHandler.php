@@ -179,7 +179,7 @@ class LeniApiCallHandler
         $data = unserialize($extraData->getValue());
 
         // remove data userId when null
-        if (isset($data[LeniUserViewNormalizer::LENI_COL_USER_ID])
+        if (array_key_exists(LeniUserViewNormalizer::LENI_COL_USER_ID, $data)
             && null === $data[LeniUserViewNormalizer::LENI_COL_USER_ID]
         ) {
             unset($data[LeniUserViewNormalizer::LENI_COL_USER_ID]);
