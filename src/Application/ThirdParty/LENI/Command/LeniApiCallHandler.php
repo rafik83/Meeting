@@ -178,6 +178,13 @@ class LeniApiCallHandler
 
         $data = unserialize($extraData->getValue());
 
+        // remove data userId when null
+        if (isset($data[LeniUserViewNormalizer::LENI_COL_USER_ID])
+            && null === $data[LeniUserViewNormalizer::LENI_COL_USER_ID]
+        ) {
+            unset($data[LeniUserViewNormalizer::LENI_COL_USER_ID]);
+        }
+
         $body = json_encode(
             [
                 'idEvt'  => $leniEventParameter->getValue(),
@@ -209,8 +216,11 @@ class LeniApiCallHandler
             throw new NotValidApiCallException('LENI responded has a non valid response ' . $jsonResponse->body);
         }
 
+        $hasNotUserId = !isset($data[LeniUserViewNormalizer::LENI_COL_USER_ID])
+            || null === $data[LeniUserViewNormalizer::LENI_COL_USER_ID];
+
         // When inserting user (first call) we must retrieve the LENI user id
-        if (!isset($data[LeniUserViewNormalizer::LENI_COL_USER_ID])
+        if ($hasNotUserId
             && (
                 !isset($response[self::LENI_FIELD_INFO])
                 || !isset($response[self::LENI_FIELD_INFO][LeniUserViewNormalizer::LENI_COL_USER_ID])
@@ -239,7 +249,7 @@ class LeniApiCallHandler
         }
 
         // Get and save the LENI user Id when it is the first call (insert user into LENI)
-        if (!isset($data[LeniUserViewNormalizer::LENI_COL_USER_ID])) {
+        if ($hasNotUserId) {
             $leniUserId = $response[self::LENI_FIELD_INFO][LeniUserViewNormalizer::LENI_COL_USER_ID][self::LENI_FIELD_VALUE];
             $data[LeniUserViewNormalizer::LENI_COL_USER_ID] = $leniUserId;
 
