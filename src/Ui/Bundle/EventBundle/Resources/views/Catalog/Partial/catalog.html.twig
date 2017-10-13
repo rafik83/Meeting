@@ -30,7 +30,7 @@
             <a href="#" class="catalog-mobile-menu-button btn btn-default btn-block" data-catalog-mobile-menu-button-action="catalog-mobile-menu-button-action-content-filter">
                 {% if searchForm.content.vars.data %}
                     <span>{{ searchForm.content.vars.data }}</span>
-                    <span class="button-count">
+                    <span id="content-filter-remove" class="button-count">
                         <i class="glyphicon glyphicon-remove"></i>
                     </span>
                 {% else %}
