@@ -8,20 +8,14 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Proximum\Vimeet\Application\ThirdParty\LENI\Command;
+namespace Proximum\Vimeet\Application\Adapter\ThirdParty\LENI;
 
 use Proximum\Vimeet\Domain\Model\User\Event\ExtraData;
 
-class LeniApiCall
+interface LeniApiCallJobQueueInterface
 {
-    /** @var ExtraData */
-    public $extraData;
-
     /**
      * @param ExtraData $extraData
      */
-    public function __construct(ExtraData $extraData)
-    {
-        $this->extraData = $extraData;
-    }
+    public function createJob(ExtraData $extraData);
 }
