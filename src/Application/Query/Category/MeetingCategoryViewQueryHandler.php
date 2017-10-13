@@ -42,7 +42,7 @@ class MeetingCategoryViewQueryHandler
      *
      * @return CategoryView[]
      */
-    public function handle(MeetingCategoryViewQuery $query)
+    public function handle(MeetingCategoryViewQuery $query): array
     {
         $searchFacetViews = $this->searchFacetViewQueryHandler->handle(
             new SearchFacetViewQuery(

@@ -186,7 +186,7 @@ class SearchType extends AbstractType
      *
      * @return array
      */
-    public static function getDefaultFilters($typeViews = [], $categoryViews = [])
+    public static function getDefaultFilters($typeViews = [], $categoryViews = []): array
     {
         $defaultFilters = [
             'availableSlot' => Meeting\Constant::FILTER_AVAILABLE_SLOT_IDS_EVERYONE,
