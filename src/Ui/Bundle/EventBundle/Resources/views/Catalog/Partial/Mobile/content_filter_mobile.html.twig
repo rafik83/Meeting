@@ -6,11 +6,13 @@
         data-parent-input="{{ form.vars.id }}"
         data-disable-auto-submit
         data-ajax-autocomplete-without-auto-build
+        data-is-mobile
         data-method="post"
         data-label-input-too-short="{{ 'form.search.autocomplete.atLeastThreeChars'|trans({}, 'forms') }}"
         data-label-searching="{{ 'form.search.autocomplete.searching'|trans({}, 'forms') }}"
         data-action="{{ path('event_catalog_search_keywords', {sheet: sheet.id}) }}"
         data-minimum-input-length="3"
         data-on-change-event="mobile-input-content-change"
+        data-purge-event="mobile-input-content-purge"
         class="form-control">
 </select>

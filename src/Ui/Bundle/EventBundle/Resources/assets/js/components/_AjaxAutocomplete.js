@@ -21,6 +21,13 @@ function AjaxAutocomplete(element) {
         this.autocompleteElement.on('select2:unselect', this.unselectTag.bind(this));
         this.autocompleteElement.on('change', this.onChange.bind(this));
     }.bind(this));
+
+    // Custom event
+    var purgeEvent = this.element.dataset.purgeEvent;
+
+    if (purgeEvent !== null) {
+        PubSub.subscribe(purgeEvent, this.handlePurge.bind(this));
+    }
 }
 
 AjaxAutocomplete.prototype.initSelect = function (callback) {
@@ -70,17 +77,32 @@ AjaxAutocomplete.prototype.selectTag = function () {
 
 AjaxAutocomplete.prototype.unselectTag = function () {
     this.updateParentInput();
+
+    var isMobile = this.element.dataset.isMobile;
+
+    if (isMobile !== null) {
+        this.removeDropdown();
+    }
 };
 
 AjaxAutocomplete.prototype.onChange = function () {
     var onChangeCustomEvent = this.element.dataset.onChangeEvent;
 
     if (onChangeCustomEvent !== null) {
-        var selectDropdown = document.querySelector('.select2-dropdown');
-        $(selectDropdown).remove();
-
+        this.removeDropdown();
         PubSub.publish(onChangeCustomEvent);
     }
+};
+
+AjaxAutocomplete.prototype.removeDropdown = function () {
+    [].forEach.call(document.querySelectorAll('.select2-dropdown'), function (element) {
+        $(element).remove();
+    });
+};
+
+AjaxAutocomplete.prototype.handlePurge = function () {
+    $(this.element).val(null);
+    this.updateParentInput();
 };
 
 AjaxAutocomplete.prototype.updateParentInput = function () {
@@ -125,7 +147,7 @@ AjaxAutocomplete.prototype.onSuccess = function (data) {
         });
     });
 
-    return {results: results};
+    return { results: results };
 };
 
 module.exports = AjaxAutocomplete;

@@ -31,6 +31,16 @@ function CatalogMobileFilters(catalogFilterZone, catalogFilter, catalogForm) {
         this.catalogFilterZone.innerHTML = '';
         this.catalogFilterZone.appendChild(this.catalogFilter);
 
+        // Handle custom events
+
+        var removeContentElement = this.catalogFilter.querySelector('#content-filter-remove');
+
+        if (removeContentElement !== null) {
+            removeContentElement.addEventListener('click', this.handleRemoveContent.bind(this));
+        }
+
+        // Component events
+
         [].forEach.call(this.catalogFilterZone.querySelectorAll('[data-catalog-mobile-menu-button-action]'), function (element) {
             element.addEventListener('click', function (event) {
                 event.preventDefault();
@@ -87,7 +97,8 @@ function CatalogMobileFilters(catalogFilterZone, catalogFilter, catalogForm) {
         }
     }
 
-    // Handle custom events
+    // Custom select2 events
+
     PubSub.publish('build.select2', this.catalogFilterZone);
     PubSub.subscribe('mobile-input-content-change', this.closeMenu());
 }
@@ -100,13 +111,13 @@ CatalogMobileFilters.prototype.openMenu = function () {
     }
 };
 
-CatalogMobileFilters.prototype.closeMenu = function (){
+CatalogMobileFilters.prototype.closeMenu = function () {
     document.body.classList.remove('menu-mobile-opened');
     this.catalogFilterZone.querySelector('.catalog-mobile-menu-summary').style.display = 'block';
     this.catalogFilterZone.querySelector('.catalog-mobile-menu-filters').style.display = 'none';
 };
 
-CatalogMobileFilters.prototype.onTypeFilterClick = function(typeFilterElementClicked) {
+CatalogMobileFilters.prototype.onTypeFilterClick = function (typeFilterElementClicked) {
     var buttonChecked = null;
     this.typeFilterButtons.forEach(function (typeFilterElement) {
         typeFilterElement.inactive();
@@ -174,7 +185,7 @@ CatalogMobileFilters.prototype.rebuildActionButton = function (button, content, 
     ;
 };
 
-CatalogMobileFilters.prototype.dispatchChangeAndCloseMenu = function(button) {
+CatalogMobileFilters.prototype.dispatchChangeAndCloseMenu = function (button) {
     var event = document.createEvent("HTMLEvents");
 
     event.initEvent("change", false, true);
@@ -184,6 +195,11 @@ CatalogMobileFilters.prototype.dispatchChangeAndCloseMenu = function(button) {
     [].forEach.call(this.catalogFilter.getElementsByTagName('A'), function (aElement) {
         aElement.classList.add('disabled');
     });
+};
+
+CatalogMobileFilters.prototype.handleRemoveContent = function (event) {
+    event.stopPropagation();
+    PubSub.publish('mobile-input-content-purge');
 };
 
 module.exports = CatalogMobileFilters;
