@@ -42,7 +42,7 @@ class Configure
     /** @var array of CatalogVisibilityTranslation index by locale */
     public $messageTranslations;
 
-    /** @var string */
+    /** @var null|string */
     public $registrationUrl;
 
     /**

@@ -6,8 +6,9 @@ Feature: External catalog
     And the external catalog is open
     And the catalog visibility is configured
     And elastica is populate
-    When I go to this page "http://super-event.vimeet.proximum.dev/fr/list"
-    Then I should be on this page "http://super-event.vimeet.proximum.dev/fr/list"
+    And I am on the homepage of this event
+    When I go to this page "/fr/list"
+    Then I should be on this page "/fr/list"
 
   Scenario: The register link from external catalog redirect to another page
     Given the database is purged
@@ -23,11 +24,12 @@ Feature: External catalog
     And this sheet is enabled
     And Allow all types to be visible on catalog visibility
     And elastica is populate
-    When I go to this page "http://super-event.vimeet.proximum.dev/fr/list"
-    Then I should be on this page "http://super-event.vimeet.proximum.dev/fr/list"
+    And I am on the homepage of this event
+    When I go to this page "/fr/list"
+    Then I should be on this page "/fr/list"
     When I follow "register.register"
-    Then I should be on this page "http://super-event.vimeet.proximum.dev/fr/login"
-    When I go to this page "http://super-event.vimeet.proximum.dev/fr/list"
-    Then I should be on this page "http://super-event.vimeet.proximum.dev/fr/list"
+    Then I should be on this page "/fr/login"
+    When I go to this page "/fr/list"
+    Then I should be on this page "/fr/list"
     When I follow "modal-register-link"
-    Then I should be on this page "http://super-event.vimeet.proximum.dev/fr/login"
+    Then I should be on this page "/fr/login"

@@ -236,9 +236,9 @@ class CatalogVisibility
     }
 
     /**
-     * @param string $registrationUrl
+     * @param null|string $registrationUrl
      */
-    public function setRegistrationUrl(string $registrationUrl)
+    public function setRegistrationUrl(?string $registrationUrl)
     {
         $this->registrationUrl = $registrationUrl;
     }
