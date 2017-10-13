@@ -28,6 +28,15 @@
         text-align: left;
         display: block;
 
+        span.filter-content-data {
+          text-overflow: ellipsis;
+          white-space: nowrap;
+          overflow: hidden;
+          display: inline-block;
+          width: 90%;
+          vertical-align: middle;
+        }
+
         > span.button-count {
           float: right;
 
