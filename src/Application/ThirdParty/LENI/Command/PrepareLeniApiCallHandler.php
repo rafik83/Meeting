@@ -13,6 +13,7 @@ namespace Proximum\Vimeet\Application\ThirdParty\LENI\Command;
 use Proximum\Vimeet\Application\Adapter\SerializerAdapterInterface;
 use Proximum\Vimeet\Application\Adapter\ThirdParty\LENI\LeniApiCallJobQueueInterface;
 use Proximum\Vimeet\Application\Components\Planning\Formatter\ParticipantPlanningFormatter;
+use Proximum\Vimeet\Application\Exception\Sheet\SheetNotFoundException;
 use Proximum\Vimeet\Application\ThirdParty\LENI\Exception\LeniApiServerException;
 use Proximum\Vimeet\Application\ThirdParty\LENI\Exception\NotValidApiCallException;
 use Proximum\Vimeet\Application\ThirdParty\LENI\Exception\WarningApiCallException;
@@ -132,7 +133,12 @@ class PrepareLeniApiCallHandler
                     $previousUserExtraData = $usersExtraData[$user->getId()];
                 }
 
-                $leniUserView = $this->leniUserViewQueryHandler->handle(new LeniUserViewQuery($event, $user));
+                try {
+                    $leniUserView = $this->leniUserViewQueryHandler->handle(new LeniUserViewQuery($event, $user));
+                } catch (SheetNotFoundException $sheetNotFoundException) {
+                    continue;
+                }
+
                 $leniUserData = $this->serializerAdapter->normalize(
                     $leniUserView,
                     null,
