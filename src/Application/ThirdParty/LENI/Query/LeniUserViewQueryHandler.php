@@ -14,6 +14,7 @@ use Proximum\Vimeet\Application\Components\Planning\Formatter\ParticipantPlannin
 use Proximum\Vimeet\Application\Components\Sheet\SheetInfoGuesser;
 use Proximum\Vimeet\Application\Components\Sheet\Template\Tag;
 use Proximum\Vimeet\Application\Components\User\UserInfoGuesser;
+use Proximum\Vimeet\Application\Exception\Sheet\SheetNotFoundException;
 use Proximum\Vimeet\Application\ThirdParty\LENI\View\LeniPlanningDayView;
 use Proximum\Vimeet\Application\ThirdParty\LENI\View\LeniPlanningView;
 use Proximum\Vimeet\Application\ThirdParty\LENI\View\LeniUserView;
@@ -83,6 +84,7 @@ class LeniUserViewQueryHandler
      * @param LeniUserViewQuery $query
      *
      * @return LeniUserView
+     * @throws SheetNotFoundException
      */
     public function handle(LeniUserViewQuery $query): LeniUserView
     {
@@ -91,7 +93,7 @@ class LeniUserViewQueryHandler
         $firstSheet = reset($sheets);
 
         if (false === $firstSheet) {
-            throw new \LogicException('User must have at least one sheet');
+            throw new SheetNotFoundException('User must have at least one sheet');
         }
 
         $userLocale = $query->event->getAvailableLocale($query->user->getLocale());
