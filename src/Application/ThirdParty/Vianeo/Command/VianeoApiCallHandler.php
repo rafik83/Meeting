@@ -56,21 +56,13 @@ class VianeoApiCallHandler
         $event = $sheet->getEvent();
 
         $vianeoEndpointParameter = $this->extraParameterRepository->findByEventAndType($event, Type::TYPE_VIANEO_ENDPOINT);
-        $vianeoSharedSecretParameter  = $this->extraParameterRepository->findByEventAndType($event, Type::TYPE_VIANEO_SHARED_SECRET);
-        $vianeoOptionParameter  = $this->extraParameterRepository->findByEventAndType($event, Type::TYPE_VIANEO_OPTION);
-        $vianeoTaskParameter  = $this->extraParameterRepository->findByEventAndType($event, Type::TYPE_VIANEO_TASK);
 
-        if (null === $vianeoEndpointParameter
-            || null === $vianeoSharedSecretParameter
-            || null === $vianeoOptionParameter
-            || null === $vianeoTaskParameter
-        ) {
+        if (null === $vianeoEndpointParameter) {
             throw new \LogicException(
-                'Can not call PrepareLeniApiCallHandler if event has not VIANEO_ENDPOINT, VIANEO_SHARED_SECRET, VIANEO_OPTION or VIANEO_TASK'
+                'Can not call PrepareLeniApiCallHandler if event has not VIANEO_ENDPOINT'
             );
         }
 
-        // Payload building
         $payload = [
 
         ];
@@ -79,9 +71,6 @@ class VianeoApiCallHandler
             self::URL_TEMPLATE,
             [
                 '%endpoint%' => $vianeoEndpointParameter->getValue(),
-                '%option%' => $vianeoOptionParameter->getValue(),
-                '%task%' => $vianeoTaskParameter->getValue(),
-                '%sharedsecret%' => $vianeoSharedSecretParameter->getValue(),
                 '%jsonpayload%' => urlencode(json_encode($payload)),
                 '%lang%' => self::DEFAULT_LOCALE
             ]

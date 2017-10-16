@@ -21,10 +21,12 @@ class Type
     const TYPE_LENI_EVENT = 'leni_event';
 
     const TYPE_VIANEO_ENDPOINT = 'vianeo_endpoint';
+    const TYPE_VIANEO_CONCERNED_TYPES_ID = 'vianeo_concerned_types_id';
 
     const TYPES = [
         self::TYPE_LENI_USER,
         self::TYPE_LENI_EVENT,
         self::TYPE_VIANEO_ENDPOINT,
+        self::TYPE_VIANEO_CONCERNED_TYPES_ID,
     ];
 }
