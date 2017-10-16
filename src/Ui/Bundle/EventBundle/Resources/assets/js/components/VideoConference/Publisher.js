@@ -13,13 +13,18 @@ function Publisher(container) {
 
 /**
  * The Publisher object represents the view of a video you publish
+ *
+ * @param {null|string} videoSource
+ * @returns {null|Publisher}
  */
-Publisher.prototype.create = function () {
+Publisher.prototype.create = function (videoSource) {
+  var source = videoSource || true;
   var publisherOptions = {
     insertMode: 'append',
     showControls: true,
     width: '100%',
-    height: '100%'
+    height: '100%',
+    videoSource: source
   };
 
   this.publisher = tokbox.initPublisher(this.container, publisherOptions, this.handleError);
