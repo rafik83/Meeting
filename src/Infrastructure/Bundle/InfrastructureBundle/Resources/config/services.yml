@@ -4282,6 +4282,11 @@ services:
         tags:
             - { name: console.command }
 
+    application.api.vianeo.sheet.vianeo_sheet_info_guesser:
+        class: Proximum\Vimeet\Application\ThirdParty\Vianeo\Sheet\VianeoSheetInfoGuesser
+        arguments:
+            - '@tagged_info_guesser'
+
     #
     # Funnel
     #
