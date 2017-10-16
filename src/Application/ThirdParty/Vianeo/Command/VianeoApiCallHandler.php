@@ -23,6 +23,9 @@ class VianeoApiCallHandler
     const DEFAULT_LOCALE = 'fr';
     const URL_TEMPLATE = '%endpoint%?option=%option%&task=%task%&sharedsecret=%sharedsecret%&jsonpayload=%jsonpayload%&lang=%lang%';
 
+    const VIANEO_RETURN_CODE = 'returnCode';
+    const VIANEO_ERROR_MESSAGE = 'errorMessage';
+
     /** @var HttpAdapterInterface */
     private $httpAdapter;
 
@@ -61,7 +64,6 @@ class VianeoApiCallHandler
 
         ];
 
-        // build de URL
         $urlWithData = strtr(
             self::URL_TEMPLATE,
             [
@@ -75,10 +77,25 @@ class VianeoApiCallHandler
         );
 
         try {
-            $response = $this->httpAdapter->get($urlWithData);
-            dump($response);
+            $jsonResponse = $this->httpAdapter->get($urlWithData);
+            $response = json_decode($jsonResponse->body, true);
+
+            $returnCode = (int) $response[self::VIANEO_RETURN_CODE];
+
+            if ($returnCode !== 0) {
+                if ($returnCode === -100) {
+                    throw new VianeoApiServerException('User already exists with this email');
+                } else {
+                    if ($returnCode === -403) {
+                        throw new VianeoApiServerException('Access denied to VIANEO. Check VIANEO_SHARED_SECRET');
+                    }
+                }
+
+                throw new VianeoApiServerException(
+                    $response[self::VIANEO_ERROR_MESSAGE] ?? 'Server error with no message'
+                );
+            }
         } catch (ServerErrorException $exception) {
-            dump($exception);
             throw new VianeoApiServerException($exception);
         }
     }
