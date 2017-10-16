@@ -13,6 +13,7 @@ namespace Proximum\Vimeet\Application\ThirdParty\Vianeo\Command;
 use Proximum\Vimeet\Application\Adapter\HttpAdapterInterface;
 use Proximum\Vimeet\Application\Exception\Adapter\Http\ServerErrorException;
 use Proximum\Vimeet\Application\ThirdParty\Vianeo\Exception\VianeoApiServerException;
+use Proximum\Vimeet\Domain\Event\ExtraParameter\Type;
 use Proximum\Vimeet\Domain\Repository\Event\ExtraParameterRepositoryInterface;
 
 /**
@@ -21,7 +22,7 @@ use Proximum\Vimeet\Domain\Repository\Event\ExtraParameterRepositoryInterface;
 class VianeoApiCallHandler
 {
     const DEFAULT_LOCALE = 'fr';
-    const URL_TEMPLATE = '%endpoint%?option=%option%&task=%task%&sharedsecret=%sharedsecret%&jsonpayload=%jsonpayload%&lang=%lang%';
+    const URL_TEMPLATE = '%endpoint%&jsonpayload=%jsonpayload%&lang=%lang%';
 
     const VIANEO_RETURN_CODE = 'returnCode';
     const VIANEO_ERROR_MESSAGE = 'errorMessage';
@@ -54,10 +55,20 @@ class VianeoApiCallHandler
         $sheet = $vianeoApiCall->sheet;
         $event = $sheet->getEvent();
 
-        $vianeoEndpointParameter = 'https://techinnov.vianeo.io/index.php';
-        $vianeoSharedSecretParameter  = 'xyxyxyxyxyxyxyx';
-        $vianeoOptionParameter = 'com_vianeo_select_concours';
-        $vianeoTaskParameter = 'techinnov.createaccount';
+        $vianeoEndpointParameter = $this->extraParameterRepository->findByEventAndType($event, Type::TYPE_VIANEO_ENDPOINT);
+        $vianeoSharedSecretParameter  = $this->extraParameterRepository->findByEventAndType($event, Type::TYPE_VIANEO_SHARED_SECRET);
+        $vianeoOptionParameter  = $this->extraParameterRepository->findByEventAndType($event, Type::TYPE_VIANEO_OPTION);
+        $vianeoTaskParameter  = $this->extraParameterRepository->findByEventAndType($event, Type::TYPE_VIANEO_TASK);
+
+        if (null === $vianeoEndpointParameter
+            || null === $vianeoSharedSecretParameter
+            || null === $vianeoOptionParameter
+            || null === $vianeoTaskParameter
+        ) {
+            throw new \LogicException(
+                'Can not call PrepareLeniApiCallHandler if event has not VIANEO_ENDPOINT, VIANEO_SHARED_SECRET, VIANEO_OPTION or VIANEO_TASK'
+            );
+        }
 
         // Payload building
         $payload = [
@@ -67,10 +78,10 @@ class VianeoApiCallHandler
         $urlWithData = strtr(
             self::URL_TEMPLATE,
             [
-                '%endpoint%' => $vianeoEndpointParameter,
-                '%option%' => $vianeoOptionParameter,
-                '%task%' => $vianeoTaskParameter,
-                '%sharedsecret%' => $vianeoSharedSecretParameter,
+                '%endpoint%' => $vianeoEndpointParameter->getValue(),
+                '%option%' => $vianeoOptionParameter->getValue(),
+                '%task%' => $vianeoTaskParameter->getValue(),
+                '%sharedsecret%' => $vianeoSharedSecretParameter->getValue(),
                 '%jsonpayload%' => urlencode(json_encode($payload)),
                 '%lang%' => self::DEFAULT_LOCALE
             ]
