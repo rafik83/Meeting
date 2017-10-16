@@ -4256,6 +4256,9 @@ services:
         tags:
             - { name: console.command }
 
+    #
+    # Third Party
+    #
     command.api.prepare_leni_api_call_command:
         class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\ThirdParty\LENI\PrepareLeniApiCallCommand
         arguments:
@@ -4268,6 +4271,14 @@ services:
         arguments:
             - '@command.third_party.leni.leni_api_call_handler'
             - '@repository.user.event.extra_data_repository'
+        tags:
+            - { name: console.command }
+
+    command.api.vianeo_api_call_command:
+        class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\ThirdParty\Vianeo\VianeoApiCallCommand
+        arguments:
+            - '@command.third_party.vianeo.vianeo_api_call_handler'
+            - '@vimeet_infrastructure.repository.sheet_repository'
         tags:
             - { name: console.command }
 

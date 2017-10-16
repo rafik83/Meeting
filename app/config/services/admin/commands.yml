@@ -70,3 +70,9 @@ services:
             - '@adapter.http_adapter'
             - '@repository.event.extra_parameter_repository'
             - '@repository.user.event.extra_data_repository'
+
+    command.third_party.vianeo.vianeo_api_call_handler:
+        class: Proximum\Vimeet\Application\ThirdParty\Vianeo\Command\VianeoApiCallHandler
+        arguments:
+            - '@adapter.http_adapter'
+            - '@repository.event.extra_parameter_repository'
