@@ -33,16 +33,22 @@ class VianeoApiCallHandler
     /** @var ExtraParameterRepositoryInterface */
     private $extraParameterRepository;
 
+    /** @var VianeoGetSheetDataHandler */
+    private $vianeoGetSheetDataHandler;
+
     /**
      * @param HttpAdapterInterface              $httpAdapter
      * @param ExtraParameterRepositoryInterface $extraParameterRepository
+     * @param VianeoGetSheetDataHandler         $vianeoGetSheetDataHandler
      */
     public function __construct(
         HttpAdapterInterface $httpAdapter,
-        ExtraParameterRepositoryInterface $extraParameterRepository
+        ExtraParameterRepositoryInterface $extraParameterRepository,
+        VianeoGetSheetDataHandler $vianeoGetSheetDataHandler
     ) {
         $this->httpAdapter = $httpAdapter;
         $this->extraParameterRepository = $extraParameterRepository;
+        $this->vianeoGetSheetDataHandler = $vianeoGetSheetDataHandler;
     }
 
     /**
@@ -63,8 +69,20 @@ class VianeoApiCallHandler
             );
         }
 
-        $payload = [
+        $this->vianeoGetSheetDataHandler->handle(new VianeoGetSheetData($sheet, self::DEFAULT_LOCALE));
+        exit;
 
+        $payload = [
+            'email'           => 'richard.hanna+456@elao.com',
+            'name'            => 'Richard HANNA',
+            'project_name'    => 'élao',
+            'category'        => 'Deeptech',
+            'project_summary' => 'élao, agence web experte Symfony',
+            'civility'        => 'M.',
+            'first_name'      => 'Richard',
+            'last_name'       => 'HANNA',
+            'title'           => 'Développeur',
+            'phone'           => '+33122334455',
         ];
 
         $urlWithData = strtr(

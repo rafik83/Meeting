@@ -4274,6 +4274,11 @@ services:
         tags:
             - { name: console.command }
 
+    serializer.normalizer.api.leni.leni_user_view_normalizer:
+        class: Proximum\Vimeet\Application\ThirdParty\LENI\Normalizer\LeniUserViewNormalizer
+        tags:
+            - { name: serializer.normalizer }
+
     command.api.vianeo_api_call_command:
         class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\ThirdParty\Vianeo\VianeoApiCallCommand
         arguments:
@@ -4286,6 +4291,11 @@ services:
         class: Proximum\Vimeet\Application\ThirdParty\Vianeo\Sheet\VianeoSheetInfoGuesser
         arguments:
             - '@tagged_info_guesser'
+
+    serializer.normalizer.api.vianeo.vianeo_sheet_view_normalizer:
+        class: Proximum\Vimeet\Application\ThirdParty\Vianeo\Normalizer\VianeoSheetViewNormalizer
+        tags:
+            - { name: serializer.normalizer }
 
     #
     # Funnel
@@ -4931,11 +4941,6 @@ services:
 
     serializer.order_export_normalizer:
         class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Serializer\Normalizer\Order\OrderRowNormalizer
-        tags:
-            - { name: serializer.normalizer }
-
-    serializer.normalizer.api.leni.leni_user_view_normalizer:
-        class: Proximum\Vimeet\Application\ThirdParty\LENI\Normalizer\LeniUserViewNormalizer
         tags:
             - { name: serializer.normalizer }
 

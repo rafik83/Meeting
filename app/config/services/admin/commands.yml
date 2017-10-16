@@ -76,3 +76,10 @@ services:
         arguments:
             - '@adapter.http_adapter'
             - '@repository.event.extra_parameter_repository'
+            - '@command.third_party.vianeo.vianeo_get_sheet_data_handler'
+
+    command.third_party.vianeo.vianeo_get_sheet_data_handler:
+        class: Proximum\Vimeet\Application\ThirdParty\Vianeo\Command\VianeoGetSheetDataHandler
+        arguments:
+            - '@application.api.vianeo.sheet.vianeo_sheet_info_guesser'
+            - '@template.participant_info_guesser'
