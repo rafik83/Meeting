@@ -19,7 +19,7 @@ class VianeoTag
     /**
      * @return array
      */
-    public static function getAllTags()
+    public static function getAllTags(): array
     {
         return [
             self::VIANEO_REGISTRATION,
