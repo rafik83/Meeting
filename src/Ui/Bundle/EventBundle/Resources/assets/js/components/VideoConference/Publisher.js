@@ -14,11 +14,10 @@ function Publisher(container) {
 /**
  * The Publisher object represents the view of a video you publish
  *
- * @param {null|string} videoSource
+ * @param {null|Object} options
  * @returns {null|Publisher}
  */
-Publisher.prototype.create = function (videoSource) {
-  var source = videoSource || null;
+Publisher.prototype.create = function (options) {
   var publisherOptions = {
     insertMode: 'append',
     showControls: true,
@@ -26,9 +25,7 @@ Publisher.prototype.create = function (videoSource) {
     height: '100%'
   };
 
-  if (source !== null) {
-    publisherOptions.videoSource = source;
-  }
+  publisherOptions = Object.assign(options, publisherOptions);
 
   this.publisher = tokbox.initPublisher(this.container, publisherOptions, this.handleError);
 
