@@ -64,7 +64,7 @@ class PreUpdateHandler
         $previousMobile = $this->participantInfoGuesser->guessParticipantMobile($update->participant, $update->locale);
 
         if (!isset($update->data[$mobileTemplateObject->getKey()]['telephone'])) {
-            throw new \Exception();
+            return new PreUpdateView(null, self::MOBILE_VALIDATION_NOT_NEED);
         };
 
         $currentMobile = $update->data[$mobileTemplateObject->getKey()]['telephone'];
