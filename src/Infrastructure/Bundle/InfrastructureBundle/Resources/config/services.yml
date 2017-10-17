@@ -2118,11 +2118,6 @@ services:
         arguments:
             - '@doctrine.orm.entity_manager'
 
-    adapter.leni_api_call_job_queue:
-        class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Adapter\ThirdParty\LENI\LeniApiCallJobQueue
-        arguments:
-            - '@doctrine.orm.entity_manager'
-
     adapter.serializer_adapter:
         class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Adapter\SerializerAdapter
         arguments:
@@ -4257,47 +4252,6 @@ services:
             - { name: console.command }
 
     #
-    # Third Party
-    #
-    command.api.prepare_leni_api_call_command:
-        class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\ThirdParty\LENI\PrepareLeniApiCallCommand
-        arguments:
-            - '@command.third_party.leni.prepare_leni_api_handler'
-        tags:
-            - { name: console.command }
-
-    command.api.leni_api_call_command:
-        class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\ThirdParty\LENI\LeniApiCallCommand
-        arguments:
-            - '@command.third_party.leni.leni_api_call_handler'
-            - '@repository.user.event.extra_data_repository'
-        tags:
-            - { name: console.command }
-
-    serializer.normalizer.api.leni.leni_user_view_normalizer:
-        class: Proximum\Vimeet\Application\ThirdParty\LENI\Normalizer\LeniUserViewNormalizer
-        tags:
-            - { name: serializer.normalizer }
-
-    command.api.vianeo_api_call_command:
-        class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\ThirdParty\Vianeo\VianeoApiCallCommand
-        arguments:
-            - '@command.third_party.vianeo.vianeo_api_call_handler'
-            - '@vimeet_infrastructure.repository.sheet_repository'
-        tags:
-            - { name: console.command }
-
-    application.api.vianeo.sheet.vianeo_sheet_info_guesser:
-        class: Proximum\Vimeet\Application\ThirdParty\Vianeo\Sheet\VianeoSheetInfoGuesser
-        arguments:
-            - '@tagged_info_guesser'
-
-    serializer.normalizer.api.vianeo.vianeo_sheet_view_normalizer:
-        class: Proximum\Vimeet\Application\ThirdParty\Vianeo\Normalizer\VianeoSheetViewNormalizer
-        tags:
-            - { name: serializer.normalizer }
-
-    #
     # Funnel
     #
     package.funnel.funnel_factory:
@@ -4409,7 +4363,6 @@ services:
             - '@vimeet_infrastructure.repository.catalog.external.search_facet'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Catalog\External\SetSearchFacet }
-
 
     #
     # Promotion

@@ -1,0 +1,31 @@
+services:
+    command.third_party.vianeo.vianeo_api_call_handler:
+        class: Proximum\Vimeet\Application\ThirdParty\Vianeo\Command\VianeoApiCallHandler
+        arguments:
+            - '@adapter.http_adapter'
+            - '@repository.event.extra_parameter_repository'
+            - '@command.third_party.vianeo.vianeo_get_sheet_data_handler'
+
+    command.third_party.vianeo.vianeo_get_sheet_data_handler:
+        class: Proximum\Vimeet\Application\ThirdParty\Vianeo\Command\VianeoGetSheetDataHandler
+        arguments:
+            - '@application.api.vianeo.sheet.vianeo_sheet_info_guesser'
+            - '@template.participant_info_guesser'
+
+    command.api.vianeo_api_call_command:
+        class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\ThirdParty\Vianeo\VianeoApiCallCommand
+        arguments:
+            - '@command.third_party.vianeo.vianeo_api_call_handler'
+            - '@vimeet_infrastructure.repository.sheet_repository'
+        tags:
+            - { name: console.command }
+
+    application.api.vianeo.sheet.vianeo_sheet_info_guesser:
+        class: Proximum\Vimeet\Application\ThirdParty\Vianeo\Sheet\VianeoSheetInfoGuesser
+        arguments:
+            - '@tagged_info_guesser'
+
+    serializer.normalizer.api.vianeo.vianeo_sheet_view_normalizer:
+        class: Proximum\Vimeet\Application\ThirdParty\Vianeo\Normalizer\VianeoSheetViewNormalizer
+        tags:
+            - { name: serializer.normalizer }
