@@ -1,18 +1,19 @@
 {
-  "name" : "OpenTok Screen Sharing",
-  "author": "TokBox, Inc.",
-  "version" : "2.0",
+  "name" : "Vimeet Screensharing Extension",
+  "author": "Vimeet",
+  "version" : "1.0",
   "manifest_version" : 2,
   "minimum_chrome_version": "34",
-  "description" : "This Chrome extension is developed primary for http://tokbox.com/. It doesn't do anything except capture content of your screen.",
-  "homepage_url": "http://tokbox.com/",
+  "description" : "",
+  "homepage_url": "https://vimeet.events",
   "background": {
     "scripts": ["background-script.js"],
     "persistent": false
   },
   "externally_connectable": {
     "matches": [
-      "https://*.vimeet.proximum.dev/*"
+      "https://*.vimeet.proximum.dev/*",
+      "https://*.vimeet.events/*"
     ]
   },
   "icons": {

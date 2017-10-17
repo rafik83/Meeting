@@ -5,7 +5,7 @@ var openTokLayout = require('opentok-layout-js');
 
 var Publisher = require('./Publisher');
 var Subscriber = require('./Subscriber');
-var CHROME_EXTENSION_ID = 'dhhpbejidjpjbbeicifbgjjpffgljfjk';
+var CHROME_EXTENSION_ID = 'ggkfgpjmepocofollhkkehpdlilfkbnh';
 
 /**
  * @constructor
@@ -24,26 +24,19 @@ function VideoConference(element) {
   this.layoutContainer = element.querySelector('.layout-container');
   this.helperContainer = element.querySelector('.video-helper');
 
-  tokbox.registerScreenSharingExtension('chrome', CHROME_EXTENSION_ID, 2);
-
   var endMeetingButton = element.querySelector('.end-meeting');
-  var startScreenSharingButton = element.querySelector('#start-screensharing');
+  this.startScreenSharingButton = element.querySelector('#start-screensharing');
 
-  startScreenSharingButton.addEventListener('click', this.screenshare.bind(this));
-
-  if (!window.opener) {
-    endMeetingButton.classList.add('hide');
-  } else {
+  // if (!window.opener) {
+  //   endMeetingButton.classList.add('hide');
+  // } else {
     endMeetingButton.addEventListener('click', this.disconnect.bind(this));
-  }
+  // }
 
-  this.layout = openTokLayout.initLayoutContainer(
-    this.layoutContainer).layout;
+  this.layout = openTokLayout.initLayoutContainer(this.layoutContainer).layout;
 
   this.publisher = new Publisher(this.publisherContainer);
   this.publisherStream = null;
-
-  this.init();
 
   var resizeTimeout;
   window.onresize = function () {
@@ -52,7 +45,32 @@ function VideoConference(element) {
       this.layout();
     }.bind(this), 20);
   }.bind(this);
+
+  // Custom Events
+  tokbox.registerScreenSharingExtension('chrome', CHROME_EXTENSION_ID, 2);
+
+  this.startScreenSharingButton.addEventListener('click', this.screenshare.bind(this));
+
+  document.addEventListener('webkitfullscreenchange', this.exitFullscreenHandler.bind(this), false);
+  document.addEventListener('mozfullscreenchange', this.exitFullscreenHandler.bind(this), false);
+  document.addEventListener('fullscreenchange', this.exitFullscreenHandler.bind(this), false);
+  document.addEventListener('MSFullscreenChange', this.exitFullscreenHandler.bind(this), false);
+
+  // Init
+  this.init();
 }
+
+/**
+ * Handle exit fullscreen and rebuild Tokbox UI layout
+ */
+VideoConference.prototype.exitFullscreenHandler = function () {
+  if (document.webkitIsFullScreen
+    || document.mozFullScreen
+    || document.msFullscreenElement !== null
+  ) {
+    this.layout();
+  }
+};
 
 /**
  * Initialize session and subscribe to new other stream
@@ -60,19 +78,24 @@ function VideoConference(element) {
 VideoConference.prototype.init = function () {
   if (tokbox.checkSystemRequirements() !== 1) {
     alert(this.notCompatibleBrowserMessage);
-
     return;
   }
 
+  // Create Tokbox Session
+
   this.session = tokbox.initSession(this.apiKey, this.sessionId);
+
+  // Session Event Listener
 
   this.session.on('streamCreated', function (event) {
     var subscriberContainer = document.createElement('div');
     this.layoutContainer.appendChild(subscriberContainer);
 
-    var subscriberManager = new Subscriber(this.session,
-      subscriberContainer);
+    var subscriberManager = new Subscriber(this.session, subscriberContainer);
     var subscriber = subscriberManager.subscribe(event);
+
+    var fullscreenButton = this.createFullscreenButton();
+    subscriber.element.appendChild(fullscreenButton);
 
     console.log('subscriberSTREAM', subscriber.stream.id);
 
@@ -85,11 +108,11 @@ VideoConference.prototype.init = function () {
     this.layout();
   }.bind(this));
 
-  this.session.on('streamDestroyed', function (event) {
+  this.session.on('streamDestroyed', function () {
     window.setTimeout(this.layout, 100);
   }.bind(this));
 
-  this.session.on('sessionDisconnected', function (event) {
+  this.session.on('sessionDisconnected', function () {
     this.layout();
   });
 
@@ -103,7 +126,7 @@ VideoConference.prototype.connect = function () {
   this.session.connect(this.token, function (error) {
     if (!error) {
       // create video view
-      var publisher = this.publisher.create();
+      var publisher = this.publisher.create({});
 
       // publish video to other participant
       this.session.publish(publisher, this.handlePublish.bind(this));
@@ -114,6 +137,20 @@ VideoConference.prototype.connect = function () {
       console.log(error);
     }
   }.bind(this));
+};
+
+/**
+ *  Publish your camera and microphone stream
+ */
+VideoConference.prototype.publishStream = function () {
+  // create video view
+  var publisher = this.publisher.create({});
+
+  // publish video to other participant
+  this.session.publish(publisher, this.handlePublish.bind(this));
+  this.publisherStream = publisher;
+
+  this.layout();
 };
 
 /**
@@ -138,32 +175,74 @@ VideoConference.prototype.handlePublish = function (error) {
   }
 };
 
+/**
+ * Callback after screensharing started
+ *
+ * @param {Object} error
+ */
 VideoConference.prototype.handlePublishScreensharing = function(error) {
   if (error) {
     alert('There was an error: ' + error.name + ', ' + error.message);
   } else {
-    this.session.unpublish(this.publisherStream);
+    if (this.publisherStream !== null) {
+      this.publisher.disableVideo(this.publisherStream);
+    }
+
+    this.startScreenSharingButton.classList.add('hide');
   }
 };
 
 /**
- * Handle screen sharing
+ * Start screensharing
  */
 VideoConference.prototype.screenshare = function () {
+  if (this.session === null) {
+    alert('You cannot start screensharing outside of a session');
+    return;
+  }
+
   tokbox.checkScreenSharingCapability(function (response) {
-    console.info(response);
     if (!response.supported || response.extensionRegistered === false) {
-      alert('This browser does not support screen sharing.');
-    } else if (response.extensionInstalled === false
-      && (response.extensionRequired)) {
-      alert(
-        'Please install the screen-sharing extension and load this page over HTTPS.');
+      alert(this.notCompatibleBrowserMessage);
+    } else if (response.extensionInstalled === false && (response.extensionRequired)) {
+      alert('Please install the screen-sharing extension and load this page over HTTPS.');
     } else {
-      var publisher = this.publisher.create('screen');
+      // start screensharing
+      var publisher = this.publisher.create({videoSource: 'screen', publishAudio: true});
 
       this.session.publish(publisher, this.handlePublishScreensharing.bind(this));
+
+      console.log(publisher);
+
+      // stop screensharing
+      publisher.on('mediaStopped', this.handleStopScreensharing.bind(this));
     }
   }.bind(this));
+};
+
+/**
+ * Handle stop screen sharing
+ */
+VideoConference.prototype.handleStopScreensharing = function () {
+  this.publisherStream.publishVideo(true);
+  this.publisherStream.element.style.display = 'block';
+  this.startScreenSharingButton.classList.remove('hide');
+};
+
+/**
+ * Create fullscreen button node element
+ *
+ * @returns {Element}
+ */
+VideoConference.prototype.createFullscreenButton = function () {
+  var fullscreenButton = document.createElement('button');
+  var icon = document.createElement('i');
+  icon.classList.add('glyphicon', 'glyphicon-fullscreen');
+
+  fullscreenButton.classList.add('btn', 'btn-default', 'start-fullscreen-button');
+  fullscreenButton.appendChild(icon);
+  
+  return fullscreenButton;
 };
 
 module.exports = VideoConference;
