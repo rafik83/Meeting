@@ -23,7 +23,7 @@ function AjaxAutocomplete(element) {
     }.bind(this));
 
     // Custom event
-    var purgeEvent = this.element.dataset.purgeEvent;
+    var purgeEvent = this.element.getAttribute('data-purge-event');
 
     if (purgeEvent !== null) {
         PubSub.subscribe(purgeEvent, this.handlePurge.bind(this));
@@ -78,7 +78,7 @@ AjaxAutocomplete.prototype.selectTag = function () {
 AjaxAutocomplete.prototype.unselectTag = function () {
     this.updateParentInput();
 
-    var isMobile = this.element.dataset.isMobile;
+    var isMobile = this.element.getAttribute('data-is-mobile');
 
     if (isMobile !== null) {
         this.removeDropdown();
@@ -86,7 +86,7 @@ AjaxAutocomplete.prototype.unselectTag = function () {
 };
 
 AjaxAutocomplete.prototype.onChange = function () {
-    var onChangeCustomEvent = this.element.dataset.onChangeEvent;
+    var onChangeCustomEvent = this.element.getAttribute('data-on-change-event');
 
     if (onChangeCustomEvent !== null) {
         this.removeDropdown();
