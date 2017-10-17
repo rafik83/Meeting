@@ -101,6 +101,8 @@ login.forgot_password: 'Forgotten password?'
 login.forgotPassword: 'Forgotten password?'
 login.memberArea: 'Member area'
 meeting.video.waitingForParticipant: 'Waiting for participant'
+meeting.video.end: 'End call'
+meeting.video.screenshare: 'Screenshare'
 modal.back: Back
 modal.close: Close
 modal.loading.error: 'A problem occurred while loading, you can close the modal'

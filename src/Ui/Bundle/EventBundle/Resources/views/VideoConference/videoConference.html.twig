@@ -24,11 +24,13 @@
             {% endif %}
         </div>
 
-        <button id="start-screensharing" class="btn btn-primary">
-            Scrensharing
-        </button>
-        <button class="btn btn-danger end-meeting">
-            <i class="icon-Disconnect"></i> {{ 'meeting.video.end'|trans }}
-        </button>
+        <div class="buttons-container">
+            <button id="start-screensharing" class="btn btn-default screensharing">
+                <i class="glyphicon glyphicon-share"></i>{{ 'meeting.video.screenshare'|trans }}
+            </button>
+            <button class="btn btn-danger end-meeting">
+                <i class="icon-Disconnect"></i> {{ 'meeting.video.end'|trans }}
+            </button>
+        </div>
     </div>
 {% endblock body %}
