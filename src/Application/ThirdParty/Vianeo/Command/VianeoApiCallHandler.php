@@ -16,9 +16,6 @@ use Proximum\Vimeet\Application\ThirdParty\Vianeo\Exception\VianeoApiServerExcep
 use Proximum\Vimeet\Domain\Event\ExtraParameter\Type;
 use Proximum\Vimeet\Domain\Repository\Event\ExtraParameterRepositoryInterface;
 
-/**
- * Vianeo Api Call Handler
- */
 class VianeoApiCallHandler
 {
     const DEFAULT_LOCALE = 'fr';
@@ -65,7 +62,7 @@ class VianeoApiCallHandler
 
         if (null === $vianeoEndpointParameter) {
             throw new \LogicException(
-                'Can not call PrepareLeniApiCallHandler if event has not VIANEO_ENDPOINT'
+                'Can not call VianeoApiCallHandler::handle() if event has not VIANEO_ENDPOINT'
             );
         }
 
@@ -97,6 +94,10 @@ class VianeoApiCallHandler
         try {
             $jsonResponse = $this->httpAdapter->get($urlWithData);
             $response = json_decode($jsonResponse->body, true);
+
+            if (!array_key_exists(self::VIANEO_RETURN_CODE, $response)) {
+                throw new VianeoApiServerException('Missing Vianeo return code');
+            }
 
             $returnCode = (int) $response[self::VIANEO_RETURN_CODE];
 
