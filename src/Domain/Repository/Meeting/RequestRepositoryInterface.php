@@ -121,6 +121,13 @@ interface RequestRepositoryInterface
      *
      * @return Request[]
      */
+    public function findByEvent(Event $event): array;
+
+    /**
+     * @param Event $event
+     *
+     * @return Request[]
+     */
     public function getAllAcceptedByEvent(Event $event);
 
     /**
