@@ -11,6 +11,7 @@ services:
         arguments:
             - '@application.api.vianeo.sheet.vianeo_sheet_info_guesser'
             - '@template.participant_info_guesser'
+            - '@adapter.serializer_adapter'
 
     command.api.vianeo_api_call_command:
         class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\ThirdParty\Vianeo\VianeoApiCallCommand

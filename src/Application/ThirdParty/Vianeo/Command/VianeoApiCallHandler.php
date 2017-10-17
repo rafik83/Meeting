@@ -13,6 +13,7 @@ namespace Proximum\Vimeet\Application\ThirdParty\Vianeo\Command;
 use Proximum\Vimeet\Application\Adapter\HttpAdapterInterface;
 use Proximum\Vimeet\Application\Exception\Adapter\Http\ServerErrorException;
 use Proximum\Vimeet\Application\ThirdParty\Vianeo\Exception\VianeoApiServerException;
+use Proximum\Vimeet\Application\ThirdParty\Vianeo\Exception\VianeoSheetNotRegisteredException;
 use Proximum\Vimeet\Domain\Event\ExtraParameter\Type;
 use Proximum\Vimeet\Domain\Repository\Event\ExtraParameterRepositoryInterface;
 
@@ -52,6 +53,7 @@ class VianeoApiCallHandler
      * @param VianeoApiCall $vianeoApiCall
      *
      * @throws VianeoApiServerException
+     * @throws VianeoSheetNotRegisteredException
      */
     public function handle(VianeoApiCall $vianeoApiCall)
     {
@@ -66,27 +68,15 @@ class VianeoApiCallHandler
             );
         }
 
-        $this->vianeoGetSheetDataHandler->handle(new VianeoGetSheetData($sheet, self::DEFAULT_LOCALE));
-        exit;
-
-        $payload = [
-            'email'           => 'richard.hanna+456@elao.com',
-            'name'            => 'Richard HANNA',
-            'project_name'    => 'élao',
-            'category'        => 'Deeptech',
-            'project_summary' => 'élao, agence web experte Symfony',
-            'civility'        => 'M.',
-            'first_name'      => 'Richard',
-            'last_name'       => 'HANNA',
-            'title'           => 'Développeur',
-            'phone'           => '+33122334455',
-        ];
+        $jsonPayload = $this->vianeoGetSheetDataHandler->handle(
+            new VianeoGetSheetData($sheet, self::DEFAULT_LOCALE)
+        );
 
         $urlWithData = strtr(
             self::URL_TEMPLATE,
             [
                 '%endpoint%' => $vianeoEndpointParameter->getValue(),
-                '%jsonpayload%' => urlencode(json_encode($payload)),
+                '%jsonpayload%' => urlencode($jsonPayload),
                 '%lang%' => self::DEFAULT_LOCALE
             ]
         );

@@ -10,7 +10,12 @@
 
 namespace Proximum\Vimeet\Application\ThirdParty\Vianeo\Command;
 
+use Proximum\Vimeet\Application\Adapter\SerializerAdapterInterface;
+use Proximum\Vimeet\Application\Components\Sheet\Template\Tag;
+use Proximum\Vimeet\Application\ThirdParty\Vianeo\Exception\VianeoSheetNotRegisteredException;
 use Proximum\Vimeet\Application\ThirdParty\Vianeo\Sheet\VianeoSheetInfoGuesser;
+use Proximum\Vimeet\Application\ThirdParty\Vianeo\Sheet\VianeoTag;
+use Proximum\Vimeet\Application\ThirdParty\Vianeo\View\VianeoSheetView;
 use Proximum\Vimeet\Domain\Template\ParticipantInfoGuesser;
 
 class VianeoGetSheetDataHandler
@@ -21,30 +26,62 @@ class VianeoGetSheetDataHandler
     /** @var ParticipantInfoGuesser */
     private $participantInfoGuesser;
 
+    /** @var SerializerAdapterInterface */
+    private $serializerAdapter;
+
     /**
-     * @param VianeoSheetInfoGuesser $vianeoSheetInfoGuesser
-     * @param ParticipantInfoGuesser $participantInfoGuesser
+     * @param VianeoSheetInfoGuesser     $vianeoSheetInfoGuesser
+     * @param ParticipantInfoGuesser     $participantInfoGuesser
+     * @param SerializerAdapterInterface $serializerAdapter
      */
     public function __construct(
         VianeoSheetInfoGuesser $vianeoSheetInfoGuesser,
-        ParticipantInfoGuesser $participantInfoGuesser
+        ParticipantInfoGuesser $participantInfoGuesser,
+        SerializerAdapterInterface $serializerAdapter
     ) {
         $this->vianeoSheetInfoGuesser = $vianeoSheetInfoGuesser;
         $this->participantInfoGuesser = $participantInfoGuesser;
+        $this->serializerAdapter = $serializerAdapter;
     }
 
     /**
      * @param VianeoGetSheetData $vianeoGetSheetData
+     *
+     * @return string payload in json
+     * @throws VianeoSheetNotRegisteredException
      */
-    public function handle(VianeoGetSheetData $vianeoGetSheetData)
+    public function handle(VianeoGetSheetData $vianeoGetSheetData): string
     {
         $sheet = $vianeoGetSheetData->sheet;
         $locale = $vianeoGetSheetData->locale;
 
-        $participantData = $this->participantInfoGuesser->guessParticipantInfos($sheet->getFirstParticipant(), $locale);
-        dump($participantData);
-
         $sheetData = $this->vianeoSheetInfoGuesser->handle($sheet, $locale);
-        dump($sheetData);
+
+        if (true !== $sheetData[VianeoTag::VIANEO_REGISTRATION]) {
+            throw new VianeoSheetNotRegisteredException();
+        }
+
+        $firstParticipant = $sheet->getFirstParticipant();
+        $participantData = $this->participantInfoGuesser->guessParticipantInfos($firstParticipant, $locale);
+
+        $vianeoSheetView = new VianeoSheetView(
+            $sheet->getId(),
+            $firstParticipant->getEmail(),
+            sprintf(
+                '%s %s',
+                $participantData[Tag::PARTICIPANT_FIRSTNAME] ?? '',
+                $participantData[Tag::PARTICIPANT_LASTNAME] ?? ''
+            ),
+            $sheetData[Tag::SHEET_TITLE] ?? '',
+            $sheetData[VianeoTag::VIANEO_CATEGORY] ?? '',
+            $sheetData[VianeoTag::VIANEO_PROJECT_SUMMARY] ?? '',
+            $participantData[Tag::PARTICIPANT_GENDER] ?? '',
+            $participantData[Tag::PARTICIPANT_FIRSTNAME] ?? '',
+            $participantData[Tag::PARTICIPANT_LASTNAME] ?? '',
+            $participantData[Tag::PARTICIPANT_POSITION] ?? '',
+            $participantData[Tag::PARTICIPANT_PHONE] ?? ''
+        );
+
+        return $this->serializerAdapter->serialize($vianeoSheetView, 'json');
     }
 }
