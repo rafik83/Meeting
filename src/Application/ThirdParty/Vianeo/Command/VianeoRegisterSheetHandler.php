@@ -41,10 +41,9 @@ class VianeoRegisterSheetHandler
     public function handle(VianeoRegisterSheet $vianeoRegisterSheet)
     {
         if (true === $this->extraDataRepository->hasExtraDataForSheet(
-                $vianeoRegisterSheet->sheet,
-                VianeoExtraDataType::VIANEO_SHEET_REGISTERED
-            )
-        ) {
+            $vianeoRegisterSheet->sheet,
+            VianeoExtraDataType::VIANEO_SHEET_REGISTERED
+        )) {
             throw new VianeoSheetAlreadyRegisteredException();
         }
 
