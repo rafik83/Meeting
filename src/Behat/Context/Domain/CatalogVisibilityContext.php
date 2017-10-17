@@ -56,6 +56,10 @@ class CatalogVisibilityContext implements Context
     {
         $catalogVisibility = $this->catalogVisibilityContextProxy->getStorage()->get('catalogVisibility');
 
+        if ($catalogVisibility === null) {
+            throw new \InvalidArgumentException('Missing catalog visibility');
+        }
+
         $this->catalogVisibilityContextProxy
             ->getCatalogVisibilityManager()
             ->allowAllTypesToBeVisible($catalogVisibility);

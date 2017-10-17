@@ -3,5 +3,5 @@ Proximum\Vimeet\Application\Command\Catalog\External\Configure:
         hasMessage:
             - NotNull: ~
         registrationUrl:
-             - Length:
+            - Length:
                 max: 255

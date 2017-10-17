@@ -1,6 +1,6 @@
 @event @catalog @external
 Feature: External catalog
-  Scenario: I can visit external catalog smoke test
+  Scenario: I can visit external catalog
     Given the database is purged
     And the event "Proximum Event" is created
     And the external catalog is open
