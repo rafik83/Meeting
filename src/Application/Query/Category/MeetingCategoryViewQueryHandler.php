@@ -17,9 +17,7 @@ use Proximum\Vimeet\Domain\View\CategoryView;
 
 class MeetingCategoryViewQueryHandler
 {
-    /**
-     * @var VisibleParticipationCategories
-     */
+    /** @var VisibleParticipationCategories */
     private $visibleParticipationCategories;
 
     /** @var SearchFacetViewQueryHandler */
@@ -51,7 +49,7 @@ class MeetingCategoryViewQueryHandler
             )
         );
 
-        if (!$searchFacetViews->getCategory()) {
+        if (!$searchFacetViews->hasCategory()) {
             return [];
         }
 
