@@ -16,7 +16,7 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class LeniApiCommand extends Command
+class PrepareLeniApiCallCommand extends Command
 {
     const NAME = 'vimeet:api:leni-export-data';
 

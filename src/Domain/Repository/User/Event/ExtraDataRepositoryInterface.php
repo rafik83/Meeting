@@ -35,6 +35,13 @@ interface ExtraDataRepositoryInterface
     public function set(ExtraData $extraData);
 
     /**
+     * @param $id
+     *
+     * @return null|ExtraData
+     */
+    public function getById($id): ?ExtraData;
+
+    /**
      * @param Event  $event
      * @param string $name
      * @param User   $user

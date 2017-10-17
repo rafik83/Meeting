@@ -12,7 +12,7 @@ namespace Proximum\Vimeet\Application\ThirdParty\LENI\View;
 
 class LeniPlanningView
 {
-    /** @var LeniPlanningDayView */
+    /** @var LeniPlanningDayView[] */
     public $days;
 
     /** @var string */

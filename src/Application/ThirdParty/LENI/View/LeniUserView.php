@@ -57,9 +57,6 @@ class LeniUserView
     /** @var LeniPlanningView */
     public $planning;
 
-    /** @var array */
-    public $serializeContent;
-
     /**
      * @param int              $id
      * @param string|null      $sheetName
@@ -109,14 +106,5 @@ class LeniUserView
         $this->country          = $country;
         $this->attendance       = $attendance;
         $this->locale           = $locale;
-        $this->serializeContent = [];
-    }
-
-    /**
-     * @param array $serializeContent
-     */
-    public function addSerializeContent(array $serializeContent)
-    {
-        $this->serializeContent = $serializeContent;
     }
 }

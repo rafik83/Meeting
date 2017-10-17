@@ -10,16 +10,16 @@
 
 namespace Proximum\Vimeet\Application\Command\Spot\Import;
 
+use Proximum\Vimeet\Application\Adapter\FileStorageInterface;
 use Proximum\Vimeet\Domain\Model\File;
 use Proximum\Vimeet\Domain\Repository\FileRepositoryInterface;
-use Proximum\Vimeet\Infrastructure\Adapter\LocalFileStorageAdapter;
 
 class SpotImportHandler
 {
     /** @var FileRepositoryInterface */
     private $fileRepository;
 
-    /** @var LocalFileStorageAdapter */
+    /** @var FileStorageInterface */
     private $fileStorage;
 
     /** @var string */
@@ -30,13 +30,13 @@ class SpotImportHandler
 
     /**
      * @param FileRepositoryInterface $fileRepository
-     * @param LocalFileStorageAdapter $fileStorage
+     * @param FileStorageInterface    $fileStorage
      * @param string                  $importDir
      * @param \DateTimeInterface      $dateTime
      */
     public function __construct(
         FileRepositoryInterface $fileRepository,
-        LocalFileStorageAdapter $fileStorage,
+        FileStorageInterface $fileStorage,
         string $importDir,
         \DateTimeInterface $dateTime
     ) {

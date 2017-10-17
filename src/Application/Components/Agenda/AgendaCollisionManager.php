@@ -53,20 +53,18 @@ class AgendaCollisionManager
             $this->removeElementIfOverlapping($unavailabilityView, $this->massViews);
         }
 
-        foreach ($this->massViews as $massView) {
-            if (!$massView->isBlocking) {
+        foreach ($this->massViews as $key => $massView) {
+            if ($massView->isBlocking) {
                 $this->removeElementIfOverlapping($massView, $this->massViews);
             }
         }
 
         foreach ($this->happeningViews as $happeningView) {
             $this->removeElementIfOverlapping($happeningView, $this->massViews);
-            $this->removeElementIfOverlapping($happeningView, $this->unavailabilityViews);
         }
 
         foreach ($this->meetingViews as $meetingView) {
             $this->removeElementIfOverlapping($meetingView, $this->massViews);
-            $this->removeElementIfOverlapping($meetingView, $this->unavailabilityViews);
         }
 
         return [
@@ -118,6 +116,18 @@ class AgendaCollisionManager
         array &$haystack
     ) {
         foreach ($haystack as $abstractTimeEntityKey => $abstractTimeEntity) {
+            if ($needle === $abstractTimeEntity) {
+                continue;
+            }
+
+            if ($needle instanceof MassUnavailabilityView
+                && $abstractTimeEntity instanceof MassUnavailabilityView
+                && $needle->isBlocking
+                && $abstractTimeEntity->isBlocking
+            ) {
+                continue;
+            }
+
             if ($this->doesFirstBeginAfterAndFinishBeforeSecond(
                     $needle,
                     $abstractTimeEntity

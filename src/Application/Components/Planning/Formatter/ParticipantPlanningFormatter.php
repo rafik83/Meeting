@@ -231,13 +231,20 @@ class ParticipantPlanningFormatter
 
             // Display the day name
             $formatted .= MarkdownFormatter::newLine(MarkdownFormatter::bold(
-                ucfirst($this->getFormattedDate($dayFormatter, $day->getDay())))
-            );
+                ucfirst($this->getFormattedDate($dayFormatter, $day->getDay()))
+            ));
 
             // Display the happening, mass, unavailability, meeting
-            $formatted .= MarkdownFormatter::newLine(MarkdownFormatter::newLine(
-                $this->formatTimeEntities($timeEntities, $participantLocale, $timeZone, $isUserMultipleSheets)))
-            ;
+            $formatted .= $this->formatTimeEntities(
+                $timeEntities,
+                $participantLocale,
+                $timeZone,
+                $isUserMultipleSheets
+            );
+
+            if ($day !== end($days)) {
+                $formatted .= MarkdownFormatter::newBreak();
+            }
         }
 
         return $formatted;
@@ -276,7 +283,10 @@ class ParticipantPlanningFormatter
             // Display the information of the time entity (meeting, mass, unavailability, happening)
             if ($timeEntity instanceof MeetingView) {
                 $formatted .= $this->formatMeeting($timeEntity, $userLocale, $isUserMultipleSheets);
-            } elseif ($timeEntity instanceof MassView || $timeEntity instanceof HappeningParticipationView || $timeEntity instanceof AssignmentView) {
+            } elseif ($timeEntity instanceof MassView
+                || $timeEntity instanceof HappeningParticipationView
+                || $timeEntity instanceof AssignmentView
+            ) {
                 $formatted .= $timeEntity->title;
             } elseif ($timeEntity instanceof UnavailabilityView) {
                 if ($timeEntity->hasMessage()) {
