@@ -19,6 +19,7 @@ function VideoConference(element) {
   this.sessionId = element.getAttribute('data-session-id');
   this.apiKey = element.getAttribute('data-api-key');
   this.notCompatibleBrowserMessage = element.getAttribute('data-not-compatible-browser-message');
+  this.accessDeniedErrorMessage = element.getAttribute('data-user-denied-media-access');
 
   this.publisherContainer = element.querySelector('.publisher-container');
   this.layoutContainer = element.querySelector('.layout-container');
@@ -171,7 +172,7 @@ VideoConference.prototype.disconnect = function () {
 
 VideoConference.prototype.handlePublish = function (error) {
   if (error) {
-    alert('There was an error: ' + error.name + ', ' + error.message);
+    this.showError(error);
   }
 };
 
@@ -182,13 +183,24 @@ VideoConference.prototype.handlePublish = function (error) {
  */
 VideoConference.prototype.handlePublishScreensharing = function(error) {
   if (error) {
-    alert('There was an error: ' + error.name + ', ' + error.message);
+    this.showError(error);
   } else {
     if (this.publisherStream !== null) {
       this.publisher.disableVideo(this.publisherStream);
     }
 
     this.startScreenSharingButton.classList.add('hide');
+  }
+};
+
+VideoConference.prototype.showError = function(error) {
+  switch(error.name) {
+    case 'OT_USER_MEDIA_ACCESS_DENIED':
+      alert(this.accessDeniedErrorMessage);
+      break;
+    default:
+      alert('There was an error: ' + error.name + ', ' + error.message);
+      break;
   }
 };
 
@@ -241,7 +253,7 @@ VideoConference.prototype.createFullscreenButton = function () {
 
   fullscreenButton.classList.add('btn', 'btn-default', 'start-fullscreen-button');
   fullscreenButton.appendChild(icon);
-  
+
   return fullscreenButton;
 };
 
