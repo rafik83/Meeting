@@ -424,7 +424,7 @@ class RequestRepository implements RequestRepositoryInterface
             ->createQueryBuilder()
             ->select('request')
             ->from(Request::class, 'request', 'request.id')
-            ->join('request.from', 'fromSheet')
+            ->join('request.from', 'fromSheet', 'WITH', 'request.event = :event')
             ->join('request.to', 'toSheet')
             ->leftJoin('fromSheet.participants', 'fromParticipants')
             ->leftJoin('toSheet.participants', 'toParticipants')
