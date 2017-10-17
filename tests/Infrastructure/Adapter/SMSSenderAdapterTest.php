@@ -117,4 +117,27 @@ class SMSSenderAdapterTest extends TestCase
         $adapter = new SMSSenderAdapter($ovh->reveal(), self::SERVICE, self::SENDER);
         $adapter->send($sms);
     }
+
+    public function testSendNotAdvertising()
+    {
+        $sms = new SMS('+33102030405', 'message content', false);
+
+        // Mock
+        $ovh = $this->prophesize(Api::class);
+        $ovh->post(
+            '/sms/serviceName/jobs',
+            [
+                'message'      => 'message content',
+                'noStopClause' => true,
+                'receivers'    => ['+33102030405'],
+                'sender'       => 'senderName',
+            ]
+        )
+            ->shouldBeCalled()
+            ->willReturn([]);
+
+        // Adapter
+        $adapter = new SMSSenderAdapter($ovh->reveal(), self::SERVICE, self::SENDER);
+        $adapter->send($sms);
+    }
 }

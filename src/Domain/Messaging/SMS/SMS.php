@@ -22,14 +22,19 @@ class SMS
     /** @var string body */
     private $message;
 
+    /** @var bool */
+    private $isAdvertising;
+
     /**
      * @param string $receiver
      * @param string $message
+     * @param bool   $isAdvertising
      */
-    public function __construct($receiver, $message)
+    public function __construct($receiver, $message, bool $isAdvertising = true)
     {
         $this->receiver = $receiver;
         $this->message = $message;
+        $this->isAdvertising = $isAdvertising;
     }
 
     /**
@@ -46,5 +51,13 @@ class SMS
     public function getMessage()
     {
         return $this->message;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isAdvertising(): bool
+    {
+        return $this->isAdvertising;
     }
 }
