@@ -15,8 +15,10 @@ use Proximum\Vimeet\Application\Exception\Adapter\Http\ServerErrorException;
 use Proximum\Vimeet\Application\ThirdParty\Vianeo\Exception\VianeoApiServerException;
 use Proximum\Vimeet\Application\ThirdParty\Vianeo\Exception\VianeoSheetAlreadyRegisteredException;
 use Proximum\Vimeet\Application\ThirdParty\Vianeo\Exception\VianeoSheetNotRegisteredException;
+use Proximum\Vimeet\Application\ThirdParty\Vianeo\Sheet\VianeoExtraDataType;
 use Proximum\Vimeet\Domain\Event\ExtraParameter\Type;
 use Proximum\Vimeet\Domain\Repository\Event\ExtraParameterRepositoryInterface;
+use Proximum\Vimeet\Domain\Repository\Sheet\ExtraDataRepositoryInterface;
 
 class VianeoApiCallHandler
 {
@@ -42,22 +44,28 @@ class VianeoApiCallHandler
     /** @var VianeoRegisterSheetHandler */
     private $vianeoRegisterSheetHandler;
 
+    /** @var ExtraDataRepositoryInterface */
+    private $extraDataRepository;
+
     /**
      * @param HttpAdapterInterface              $httpAdapter
      * @param ExtraParameterRepositoryInterface $extraParameterRepository
      * @param VianeoGetSheetDataHandler         $vianeoGetSheetDataHandler
      * @param VianeoRegisterSheetHandler        $vianeoRegisterSheetHandler
+     * @param ExtraDataRepositoryInterface      $extraDataRepository
      */
     public function __construct(
         HttpAdapterInterface $httpAdapter,
         ExtraParameterRepositoryInterface $extraParameterRepository,
         VianeoGetSheetDataHandler $vianeoGetSheetDataHandler,
-        VianeoRegisterSheetHandler $vianeoRegisterSheetHandler
+        VianeoRegisterSheetHandler $vianeoRegisterSheetHandler,
+        ExtraDataRepositoryInterface $extraDataRepository
     ) {
         $this->httpAdapter = $httpAdapter;
         $this->extraParameterRepository = $extraParameterRepository;
         $this->vianeoGetSheetDataHandler = $vianeoGetSheetDataHandler;
         $this->vianeoRegisterSheetHandler = $vianeoRegisterSheetHandler;
+        $this->extraDataRepository = $extraDataRepository;
     }
 
     /**
@@ -78,6 +86,14 @@ class VianeoApiCallHandler
             throw new \LogicException(
                 'Can not call VianeoApiCallHandler::handle() if event has not VIANEO_ENDPOINT'
             );
+        }
+
+        if (true === $this->extraDataRepository->hasExtraDataForSheet(
+                $sheet,
+                VianeoExtraDataType::VIANEO_SHEET_REGISTERED
+            )
+        ) {
+            throw new VianeoSheetAlreadyRegisteredException();
         }
 
         $jsonPayload = $this->vianeoGetSheetDataHandler->handle(
