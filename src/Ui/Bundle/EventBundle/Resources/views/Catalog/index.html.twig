@@ -44,6 +44,7 @@
     {% set numberOfFilterOnMobile = 0 %}
     {% if searchForm.type is defined %}{% set numberOfFilterOnMobile = numberOfFilterOnMobile + 1 %}{% endif %}
     {% if searchForm.availableSlot is defined %}{% set numberOfFilterOnMobile = numberOfFilterOnMobile + 1 %}{% endif %}
+    {% if searchForm.content is defined %}{% set numberOfFilterOnMobile = numberOfFilterOnMobile + 1 %}{% endif %}
     <div
             class="catalog catalog--advanced
             {% if numberOfFilterOnMobile > 0 %}
