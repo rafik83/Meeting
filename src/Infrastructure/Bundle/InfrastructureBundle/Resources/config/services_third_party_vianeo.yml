@@ -28,6 +28,7 @@ services:
             - '@repository.event.extra_parameter_repository'
             - '@vimeet_infrastructure.repository.type_repository'
             - '@vimeet_infrastructure.repository.sheet_repository'
+            - '@tagged_info_guesser'
             - '@adapter.vianeo_api_call_job_queue'
 
     infrastructure.command.api.vianeo_api_call_command:

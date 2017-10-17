@@ -79,6 +79,7 @@ class VianeoApiCallHandler
     {
         $sheet = $vianeoApiCall->sheet;
         $event = $sheet->getEvent();
+        $locale = $event->getAvailableLocale(self::DEFAULT_LOCALE);
 
         $vianeoEndpointParameter = $this->extraParameterRepository->findByEventAndType(
             $event,
@@ -104,9 +105,7 @@ class VianeoApiCallHandler
             throw new VianeoSheetAlreadyRegisteredException();
         }
 
-        $jsonPayload = $this->vianeoGetSheetDataHandler->handle(
-            new VianeoGetSheetData($sheet, self::DEFAULT_LOCALE)
-        );
+        $jsonPayload = $this->vianeoGetSheetDataHandler->handle(new VianeoGetSheetData($sheet, $locale));
 
         $urlWithData = strtr(
             self::URL_TEMPLATE,
@@ -118,15 +117,14 @@ class VianeoApiCallHandler
         );
 
         try {
-//            $jsonResponse = $this->httpAdapter->get($urlWithData);
-//            $response = json_decode($jsonResponse->body, true);
-//
-//            if (!array_key_exists(self::VIANEO_RETURN_CODE, $response)) {
-//                throw new VianeoApiServerException('Missing Vianeo return code');
-//            }
-//
-//            $returnCode = (int) $response[self::VIANEO_RETURN_CODE];
-            $returnCode = 0;
+            $jsonResponse = $this->httpAdapter->get($urlWithData);
+            $response = json_decode($jsonResponse->body, true);
+
+            if (!array_key_exists(self::VIANEO_RETURN_CODE, $response)) {
+                throw new VianeoApiServerException('Missing Vianeo return code');
+            }
+
+            $returnCode = (int) $response[self::VIANEO_RETURN_CODE];
 
             if ($returnCode === 0) {
                 $this->vianeoRegisterSheetHandler->handle(new VianeoRegisterSheet($sheet));
