@@ -426,8 +426,8 @@ class RequestRepository implements RequestRepositoryInterface
             ->from(Request::class, 'request', 'request.id')
             ->join('request.from', 'fromSheet', 'WITH', 'request.event = :event')
             ->join('request.to', 'toSheet')
-            ->leftJoin('fromSheet.participants', 'fromParticipants')
-            ->leftJoin('toSheet.participants', 'toParticipants')
+            ->leftJoin('request.fromParticipants', 'fromParticipants')
+            ->leftJoin('request.toParticipants', 'toParticipants')
             ->where('request.disabled = false')
             ->setParameter('event', $event)
         ;
