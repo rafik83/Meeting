@@ -26,6 +26,7 @@ class MeetingRequestListViewQueryHandlerTest extends TestCase
     public function testHandle()
     {
         $event = $this->prophesize(Event::class);
+        $event->getTimeZone()->willReturn('Europe/Paris');
         $event->getFallback()->willReturn('fr');
         $request1 = $this->prophesize(Request::class);
         $request2 = $this->prophesize(Request::class);
@@ -69,11 +70,15 @@ class MeetingRequestListViewQueryHandlerTest extends TestCase
             $meetingRequestViewQueryHandler->reveal()
         );
         $result = $handler->handle(new MeetingRequestListViewQuery($event->reveal()));
-        $expected = new MeetingRequestListView([
-            $requestView1->reveal(),
-            $requestView2->reveal(),
-            $requestView3->reveal()
-        ]);
+        $expected = new MeetingRequestListView(
+            [
+                $requestView1->reveal(),
+                $requestView2->reveal(),
+                $requestView3->reveal()
+            ],
+            'Europe/Paris',
+            'fr'
+        );
 
         $this->assertEquals($expected, $result);
     }

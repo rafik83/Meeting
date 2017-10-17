@@ -50,7 +50,9 @@ class MeetingRequestListViewQueryHandler
         }
 
         return new MeetingRequestListView(
-            $requestViews
+            $requestViews,
+            $query->event->getTimeZone(),
+            $locale
         );
     }
 }
