@@ -51,7 +51,12 @@ class ExtraDataRepository implements ExtraDataRepositoryInterface
      */
     public function hasExtraDataForSheet(Sheet $sheet, string $name): bool
     {
-        return null !== $this->getExtraDataForSheetQueryBuilder($sheet, $name)->getQuery()->getOneOrNullResult();
+        return null !== $this
+            ->getExtraDataForSheetQueryBuilder($sheet, $name)
+            ->setMaxResults(1)
+            ->getQuery()
+            ->getOneOrNullResult()
+        ;
     }
 
     /**
