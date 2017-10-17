@@ -96,7 +96,7 @@ class ValidateController extends Controller
     public function validateAction(
         Request $request,
         EventDomain $eventDomain,
-        UserInterface $user,
+        UserInterface $user = null,
         Sheet $sheet,
         Participant $participant
     ) {
