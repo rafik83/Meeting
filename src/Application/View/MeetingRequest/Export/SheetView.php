@@ -13,22 +13,22 @@ namespace Proximum\Vimeet\Application\View\MeetingRequest\Export;
 class SheetView
 {
     /** @var int */
-    private $id;
+    public $id;
 
     /** @var string|null */
-    private $title;
+    public $title;
 
     /** @var string */
-    private $typeTitle;
+    public $typeTitle;
 
     /** @var string|null */
     public $categoryTitle;
 
     /** @var int[] */
-    private $participantIds;
+    public $participantIds;
 
     /** @var string[] */
-    private $participantNames;
+    public $participantNames;
 
     /**
      * @param int         $id
