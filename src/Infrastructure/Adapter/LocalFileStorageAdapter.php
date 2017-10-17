@@ -77,13 +77,7 @@ class LocalFileStorageAdapter implements FileStorageInterface
     }
 
     /**
-     * Create a file with the content given
-     *
-     * @param mixed       $content
-     * @param string      $filename with possible extension
-     * @param string|null $directoryPath
-     *
-     * @return string return the filePath with filename after the directory path
+     * {@inheritdoc}
      */
     public function create($content, $filename, $directoryPath = null)
     {

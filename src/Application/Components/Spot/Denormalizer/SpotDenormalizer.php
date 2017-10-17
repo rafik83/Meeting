@@ -111,9 +111,7 @@ class SpotDenormalizer implements DenormalizerInterface
     private function cleanRow(array $row): array
     {
         return array_filter($row, function ($index) {
-            if (!empty($index)) {
-                return true;
-            }
+            return !empty($index);
         }, ARRAY_FILTER_USE_KEY);
     }
 
