@@ -417,17 +417,20 @@ class RequestRepository implements RequestRepositoryInterface
     /**
      * {@inheritdoc}
      */
-    public function findByEvent(Event $event): array
+    public function findByEventWithHydratationOfElement(Event $event): array
     {
         $queryBuilder = $this
             ->entityManager
             ->createQueryBuilder()
-            ->select('request, fromSheet, toSheet, fromParticipants, toParticipants')
+            ->select('request, fromSheet, toSheet, fromParticipants, toParticipants, meeting, fromType, toType')
             ->from(Request::class, 'request', 'request.id')
             ->join('request.from', 'fromSheet', 'WITH', 'request.event = :event')
             ->join('request.to', 'toSheet')
+            ->join('fromSheet.type', 'fromType')
+            ->join('toSheet.type', 'toType')
             ->leftJoin('request.fromParticipants', 'fromParticipants')
             ->leftJoin('request.toParticipants', 'toParticipants')
+            ->leftJoin('request.meeting', 'meeting')
             ->where('request.disabled = false')
             ->setParameter('event', $event)
         ;

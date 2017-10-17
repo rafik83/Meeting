@@ -121,7 +121,7 @@ interface RequestRepositoryInterface
      *
      * @return Request[]
      */
-    public function findByEvent(Event $event): array;
+    public function findByEventWithHydratationOfElement(Event $event): array;
 
     /**
      * @param Event $event

@@ -43,7 +43,7 @@ class MeetingRequestListViewQueryHandlerTest extends TestCase
         // Mock
         $requestRepository = $this->prophesize(RequestRepositoryInterface::class);
         $requestRepository
-            ->findByEvent($event->reveal())
+            ->findByEventWithHydratationOfElement($event->reveal())
             ->shouldBeCalled()
             ->willReturn($requests)
         ;

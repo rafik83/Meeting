@@ -41,7 +41,7 @@ class MeetingRequestListViewQueryHandler
     public function handle(MeetingRequestListViewQuery $query): MeetingRequestListView
     {
         $locale   = $query->event->getFallback();
-        $requests = $this->requestRepository->findByEvent($query->event);
+        $requests = $this->requestRepository->findByEventWithHydratationOfElement($query->event);
 
         $requestViews = [];
 
