@@ -4,7 +4,6 @@ var allowDomainsPrefKey = 'media.getusermedia.screensharing.allowed_domains';
 var gDomains = ['*.example.com'];
 
 exports.main = function (options) {
-
   if (options.loadReason !== 'startup') {
     var curPrefs = prefsService.get(allowDomainsPrefKey).replace(/\s/g, '').split(',');
 
