@@ -169,6 +169,11 @@ services:
         arguments:
             - '@doctrine.orm.entity_manager'
 
+    repository.sheet.extra_data_repository:
+        class: Proximum\Vimeet\Infrastructure\Repository\Sheet\ExtraDataRepository
+        arguments:
+            - '@doctrine.orm.entity_manager'
+
     repository.admin_activate_account_token_repository:
         class: Proximum\Vimeet\Infrastructure\Repository\Admin\ActivateAccountTokenRepository
         arguments:

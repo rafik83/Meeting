@@ -5,6 +5,7 @@ services:
             - '@adapter.http_adapter'
             - '@repository.event.extra_parameter_repository'
             - '@command.third_party.vianeo.vianeo_get_sheet_data_handler'
+            - '@command.third_party.vianeo.vianeo_register_sheet_handler'
 
     command.third_party.vianeo.vianeo_get_sheet_data_handler:
         class: Proximum\Vimeet\Application\ThirdParty\Vianeo\Command\VianeoGetSheetDataHandler
@@ -13,7 +14,13 @@ services:
             - '@template.participant_info_guesser'
             - '@adapter.serializer_adapter'
 
-    command.api.vianeo_api_call_command:
+    command.third_party.vianeo.vianeo_register_sheet_handler:
+        class: Proximum\Vimeet\Application\ThirdParty\Vianeo\Command\VianeoRegisterSheetHandler
+        arguments:
+            - '@repository.sheet.extra_data_repository'
+            - '@datetime'
+
+    infrastructure.command.api.vianeo_api_call_command:
         class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\ThirdParty\Vianeo\VianeoApiCallCommand
         arguments:
             - '@command.third_party.vianeo.vianeo_api_call_handler'

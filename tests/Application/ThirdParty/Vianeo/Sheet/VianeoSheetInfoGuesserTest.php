@@ -13,7 +13,7 @@ namespace Proximum\Vimeet\Tests\Application\ThirdParty\Vianeo\Sheet;
 use PHPUnit\Framework\TestCase;
 use Proximum\Vimeet\Application\Components\Sheet\Template\Tag;
 use Proximum\Vimeet\Application\ThirdParty\Vianeo\Sheet\VianeoSheetInfoGuesser;
-use Proximum\Vimeet\Application\ThirdParty\Vianeo\Sheet\VianeoTag;
+use Proximum\Vimeet\Application\ThirdParty\Vianeo\Sheet\VianeoTemplateTag;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\Template\RegistrationTemplate;
 use Proximum\Vimeet\Domain\Model\Type;
@@ -45,9 +45,9 @@ class VianeoSheetInfoGuesserTest extends TestCase
             Tag::SHEET_COUNTRY,
             Tag::SHEET_WEBSITE,
             Tag::SHEET_PHONE,
-            VianeoTag::VIANEO_REGISTRATION,
-            VianeoTag::VIANEO_CATEGORY,
-            VianeoTag::VIANEO_PROJECT_SUMMARY,
+            VianeoTemplateTag::VIANEO_REGISTRATION,
+            VianeoTemplateTag::VIANEO_CATEGORY,
+            VianeoTemplateTag::VIANEO_PROJECT_SUMMARY,
         ];
 
         foreach ($allTags as $tag) {

@@ -10,7 +10,7 @@
 
 namespace Proximum\Vimeet\Application\ThirdParty\Vianeo\Sheet;
 
-class VianeoTemplateTag
+final class VianeoTemplateTag
 {
     const VIANEO_REGISTRATION    = 'vianeo_registration';
     const VIANEO_CATEGORY        = 'vianeo_category';

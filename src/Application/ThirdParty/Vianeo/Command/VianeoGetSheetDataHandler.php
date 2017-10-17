@@ -14,7 +14,7 @@ use Proximum\Vimeet\Application\Adapter\SerializerAdapterInterface;
 use Proximum\Vimeet\Application\Components\Sheet\Template\Tag;
 use Proximum\Vimeet\Application\ThirdParty\Vianeo\Exception\VianeoSheetNotRegisteredException;
 use Proximum\Vimeet\Application\ThirdParty\Vianeo\Sheet\VianeoSheetInfoGuesser;
-use Proximum\Vimeet\Application\ThirdParty\Vianeo\Sheet\VianeoTag;
+use Proximum\Vimeet\Application\ThirdParty\Vianeo\Sheet\VianeoTemplateTag;
 use Proximum\Vimeet\Application\ThirdParty\Vianeo\View\VianeoSheetView;
 use Proximum\Vimeet\Domain\Template\ParticipantInfoGuesser;
 
@@ -57,7 +57,7 @@ class VianeoGetSheetDataHandler
 
         $sheetData = $this->vianeoSheetInfoGuesser->handle($sheet, $locale);
 
-        if (true !== $sheetData[VianeoTag::VIANEO_REGISTRATION]) {
+        if (true !== $sheetData[VianeoTemplateTag::VIANEO_REGISTRATION]) {
             throw new VianeoSheetNotRegisteredException();
         }
 
@@ -73,8 +73,8 @@ class VianeoGetSheetDataHandler
                 $participantData[Tag::PARTICIPANT_LASTNAME] ?? ''
             ),
             $sheetData[Tag::SHEET_TITLE] ?? '',
-            $sheetData[VianeoTag::VIANEO_CATEGORY] ?? '',
-            $sheetData[VianeoTag::VIANEO_PROJECT_SUMMARY] ?? '',
+            $sheetData[VianeoTemplateTag::VIANEO_CATEGORY] ?? '',
+            $sheetData[VianeoTemplateTag::VIANEO_PROJECT_SUMMARY] ?? '',
             $participantData[Tag::PARTICIPANT_GENDER] ?? '',
             $participantData[Tag::PARTICIPANT_FIRSTNAME] ?? '',
             $participantData[Tag::PARTICIPANT_LASTNAME] ?? '',

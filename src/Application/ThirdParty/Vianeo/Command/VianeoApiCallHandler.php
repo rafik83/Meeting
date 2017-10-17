@@ -39,19 +39,25 @@ class VianeoApiCallHandler
     /** @var VianeoGetSheetDataHandler */
     private $vianeoGetSheetDataHandler;
 
+    /** @var VianeoRegisterSheetHandler */
+    private $vianeoRegisterSheetHandler;
+
     /**
      * @param HttpAdapterInterface              $httpAdapter
      * @param ExtraParameterRepositoryInterface $extraParameterRepository
      * @param VianeoGetSheetDataHandler         $vianeoGetSheetDataHandler
+     * @param VianeoRegisterSheetHandler        $vianeoRegisterSheetHandler
      */
     public function __construct(
         HttpAdapterInterface $httpAdapter,
         ExtraParameterRepositoryInterface $extraParameterRepository,
-        VianeoGetSheetDataHandler $vianeoGetSheetDataHandler
+        VianeoGetSheetDataHandler $vianeoGetSheetDataHandler,
+        VianeoRegisterSheetHandler $vianeoRegisterSheetHandler
     ) {
         $this->httpAdapter = $httpAdapter;
         $this->extraParameterRepository = $extraParameterRepository;
         $this->vianeoGetSheetDataHandler = $vianeoGetSheetDataHandler;
+        $this->vianeoRegisterSheetHandler = $vianeoRegisterSheetHandler;
     }
 
     /**
@@ -59,6 +65,7 @@ class VianeoApiCallHandler
      *
      * @throws VianeoApiServerException
      * @throws VianeoSheetNotRegisteredException
+     * @throws VianeoSheetAlreadyRegisteredException
      */
     public function handle(VianeoApiCall $vianeoApiCall)
     {
@@ -96,19 +103,23 @@ class VianeoApiCallHandler
 
             $returnCode = (int) $response[self::VIANEO_RETURN_CODE];
 
-            if ($returnCode !== 0) {
-                if ($returnCode === -100) {
-                    throw new VianeoApiServerException('User already exists with this email');
-                } else {
-                    if ($returnCode === -403) {
-                        throw new VianeoApiServerException('Access denied to VIANEO. Check VIANEO_SHARED_SECRET');
-                    }
-                }
+            if ($returnCode === 0) {
+                $this->vianeoRegisterSheetHandler->handle(new VianeoRegisterSheet($sheet));
 
-                throw new VianeoApiServerException(
-                    $response[self::VIANEO_ERROR_MESSAGE] ?? 'Server error with no message'
-                );
+                return;
             }
+
+            if ($returnCode === -100) {
+                throw new VianeoApiServerException('User already exists with this email');
+            } else {
+                if ($returnCode === -403) {
+                    throw new VianeoApiServerException('Access denied to VIANEO. Check VIANEO_SHARED_SECRET');
+                }
+            }
+
+            throw new VianeoApiServerException(
+                $response[self::VIANEO_ERROR_MESSAGE] ?? 'Server error with no message'
+            );
         } catch (ServerErrorException $exception) {
             throw new VianeoApiServerException($exception);
         }

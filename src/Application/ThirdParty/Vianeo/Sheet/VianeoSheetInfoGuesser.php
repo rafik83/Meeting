@@ -39,7 +39,7 @@ class VianeoSheetInfoGuesser
     {
         $infos    = [];
         $template = $sheet->getType()->getRegistrationTemplate();
-        $tags     = array_merge(Tag::getSheetTags(), VianeoTag::getAllTags());
+        $tags     = array_merge(Tag::getSheetTags(), VianeoTemplateTag::getAllTags());
 
         foreach ($tags as $tag) {
             $infos[$tag] = $this->taggedInfoGuesser->guessFirst(
