@@ -36,6 +36,14 @@ Publisher.prototype.create = function (options) {
   return this.publisher;
 };
 
+/**
+ * Disable video stream and hide publisher element
+ */
+Publisher.prototype.disableVideo = function (publisherStream) {
+  publisherStream.publishVideo(false);
+  publisherStream.element.style.display = 'none';
+};
+
 Publisher.prototype.destroy = function () {
   this.publisher.destroy();
 };

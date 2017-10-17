@@ -236,6 +236,24 @@
     }
   }
 
+  .start-fullscreen-button {
+    position: absolute !important;
+    margin-left: auto;
+    margin-right: auto;
+    top: 10px;
+    left: 10px;
+    width: 40px;
+    height: 40px;
+    font-size: 25px;
+    > i {
+      color: #000;
+      font-family: 'Glyphicons Halflings';
+      font-style: normal;
+      font-weight: normal;
+      line-height: 1;
+    }
+  }
+
   .video-helper {
     background: #ffffff;
     padding: 10px;
