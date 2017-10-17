@@ -80,11 +80,19 @@ class VianeoApiCallHandler
         $sheet = $vianeoApiCall->sheet;
         $event = $sheet->getEvent();
 
-        $vianeoEndpointParameter = $this->extraParameterRepository->findByEventAndType($event, Type::TYPE_VIANEO_ENDPOINT);
+        $vianeoEndpointParameter = $this->extraParameterRepository->findByEventAndType(
+            $event,
+            Type::TYPE_VIANEO_ENDPOINT
+        );
 
-        if (null === $vianeoEndpointParameter) {
+        $vianeoConcernedTypesIdParameter = $this->extraParameterRepository->findByEventAndType(
+            $event,
+            Type::TYPE_VIANEO_CONCERNED_TYPES_ID
+        );
+
+        if (null === $vianeoEndpointParameter || null === $vianeoConcernedTypesIdParameter) {
             throw new \LogicException(
-                'Can not call VianeoApiCallHandler::handle() if event has not VIANEO_ENDPOINT'
+                'Can not call VianeoApiCallHandler::handle() if event has not VIANEO_ENDPOINT or VIANEO_CONCERNED_TYPES_ID'
             );
         }
 
@@ -110,14 +118,15 @@ class VianeoApiCallHandler
         );
 
         try {
-            $jsonResponse = $this->httpAdapter->get($urlWithData);
-            $response = json_decode($jsonResponse->body, true);
-
-            if (!array_key_exists(self::VIANEO_RETURN_CODE, $response)) {
-                throw new VianeoApiServerException('Missing Vianeo return code');
-            }
-
-            $returnCode = (int) $response[self::VIANEO_RETURN_CODE];
+//            $jsonResponse = $this->httpAdapter->get($urlWithData);
+//            $response = json_decode($jsonResponse->body, true);
+//
+//            if (!array_key_exists(self::VIANEO_RETURN_CODE, $response)) {
+//                throw new VianeoApiServerException('Missing Vianeo return code');
+//            }
+//
+//            $returnCode = (int) $response[self::VIANEO_RETURN_CODE];
+            $returnCode = 0;
 
             if ($returnCode === 0) {
                 $this->vianeoRegisterSheetHandler->handle(new VianeoRegisterSheet($sheet));

@@ -21,11 +21,27 @@ services:
             - '@repository.sheet.extra_data_repository'
             - '@datetime'
 
+    command.third_party.vianeo.vianeo_prepare_api_call_handler:
+        class: Proximum\Vimeet\Application\ThirdParty\Vianeo\Command\VianeoPrepareApiCallHandler
+        arguments:
+            - '@vimeet_infrastructure.repository.event_repository'
+            - '@repository.event.extra_parameter_repository'
+            - '@vimeet_infrastructure.repository.type_repository'
+            - '@vimeet_infrastructure.repository.sheet_repository'
+            - '@adapter.vianeo_api_call_job_queue'
+
     infrastructure.command.api.vianeo_api_call_command:
         class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\ThirdParty\Vianeo\VianeoApiCallCommand
         arguments:
             - '@command.third_party.vianeo.vianeo_api_call_handler'
             - '@vimeet_infrastructure.repository.sheet_repository'
+        tags:
+            - { name: console.command }
+
+    infrastructure.command.api.vianeo_prepare_api_call_command:
+        class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\ThirdParty\Vianeo\VianeoPrepareApiCallCommand
+        arguments:
+            - '@command.third_party.vianeo.vianeo_prepare_api_call_handler'
         tags:
             - { name: console.command }
 
@@ -38,3 +54,8 @@ services:
         class: Proximum\Vimeet\Application\ThirdParty\Vianeo\Normalizer\VianeoSheetViewNormalizer
         tags:
             - { name: serializer.normalizer }
+
+    adapter.vianeo_api_call_job_queue:
+        class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Adapter\ThirdParty\Vianeo\VianeoApiCallJobQueue
+        arguments:
+            - '@doctrine.orm.entity_manager'
