@@ -13,14 +13,19 @@ namespace Proximum\Vimeet\Application\ThirdParty\Vianeo\Command;
 use Proximum\Vimeet\Application\Adapter\HttpAdapterInterface;
 use Proximum\Vimeet\Application\Exception\Adapter\Http\ServerErrorException;
 use Proximum\Vimeet\Application\ThirdParty\Vianeo\Exception\VianeoApiServerException;
+use Proximum\Vimeet\Application\ThirdParty\Vianeo\Exception\VianeoSheetAlreadyRegisteredException;
 use Proximum\Vimeet\Application\ThirdParty\Vianeo\Exception\VianeoSheetNotRegisteredException;
 use Proximum\Vimeet\Domain\Event\ExtraParameter\Type;
 use Proximum\Vimeet\Domain\Repository\Event\ExtraParameterRepositoryInterface;
 
 class VianeoApiCallHandler
 {
-    const DEFAULT_LOCALE = 'fr';
+    /**
+     * Example:
+     * https://techinnov.vianeo.io/index.php?option=com_vianeo_select_concours&task=techinnov.createaccount&sharedsecret=xxxxx
+     */
     const URL_TEMPLATE = '%endpoint%&jsonpayload=%jsonpayload%&lang=%lang%';
+    const DEFAULT_LOCALE = 'fr';
 
     const VIANEO_RETURN_CODE = 'returnCode';
     const VIANEO_ERROR_MESSAGE = 'errorMessage';
