@@ -10,7 +10,7 @@ var CHROME_EXTENSION_ID = 'ggkfgpjmepocofollhkkehpdlilfkbnh';
 /**
  * @constructor
  *
- * @param {Node} element
+ * @param {Element} element
  */
 function VideoConference(element) {
   this.element = element;
@@ -18,8 +18,14 @@ function VideoConference(element) {
   this.token = element.getAttribute('data-token');
   this.sessionId = element.getAttribute('data-session-id');
   this.apiKey = element.getAttribute('data-api-key');
-  this.notCompatibleBrowserMessage = element.getAttribute('data-not-compatible-browser-message');
-  this.accessDeniedErrorMessage = element.getAttribute('data-user-denied-media-access');
+
+  this.notCompatibleBrowserMessage = element.getAttribute(
+    'data-not-compatible-browser-message'
+  );
+
+  this.accessDeniedErrorMessage = element.getAttribute(
+    'data-user-denied-media-access'
+  );
 
   this.publisherContainer = element.querySelector('.publisher-container');
   this.layoutContainer = element.querySelector('.layout-container');
@@ -27,11 +33,12 @@ function VideoConference(element) {
 
   var endMeetingButton = element.querySelector('.end-meeting');
   this.startScreenSharingButton = element.querySelector('#start-screensharing');
+  this.endScreenSharingButton = element.querySelector('#end-screensharing');
 
   // if (!window.opener) {
   //   endMeetingButton.classList.add('hide');
   // } else {
-    endMeetingButton.addEventListener('click', this.disconnect.bind(this));
+  endMeetingButton.addEventListener('click', this.disconnect.bind(this));
   // }
 
   this.layout = openTokLayout.initLayoutContainer(this.layoutContainer).layout;
@@ -40,9 +47,9 @@ function VideoConference(element) {
   this.publisherStream = null;
 
   var resizeTimeout;
-  window.onresize = function () {
+  window.onresize = function() {
     clearTimeout(resizeTimeout);
-    resizeTimeout = setTimeout(function () {
+    resizeTimeout = setTimeout(function() {
       this.layout();
     }.bind(this), 20);
   }.bind(this);
@@ -50,12 +57,19 @@ function VideoConference(element) {
   // Custom Events
   tokbox.registerScreenSharingExtension('chrome', CHROME_EXTENSION_ID, 2);
 
-  this.startScreenSharingButton.addEventListener('click', this.screenshare.bind(this));
+  this.startScreenSharingButton.addEventListener('click',
+    this.screenshare.bind(this));
+  this.endScreenSharingButton.addEventListener('click',
+    this.endScreenshare.bind(this));
 
-  document.addEventListener('webkitfullscreenchange', this.exitFullscreenHandler.bind(this), false);
-  document.addEventListener('mozfullscreenchange', this.exitFullscreenHandler.bind(this), false);
-  document.addEventListener('fullscreenchange', this.exitFullscreenHandler.bind(this), false);
-  document.addEventListener('MSFullscreenChange', this.exitFullscreenHandler.bind(this), false);
+  document.addEventListener('webkitfullscreenchange',
+    this.exitFullscreenHandler.bind(this), false);
+  document.addEventListener('mozfullscreenchange',
+    this.exitFullscreenHandler.bind(this), false);
+  document.addEventListener('fullscreenchange',
+    this.exitFullscreenHandler.bind(this), false);
+  document.addEventListener('MSFullscreenChange',
+    this.exitFullscreenHandler.bind(this), false);
 
   // Init
   this.init();
@@ -64,7 +78,7 @@ function VideoConference(element) {
 /**
  * Handle exit fullscreen and rebuild Tokbox UI layout
  */
-VideoConference.prototype.exitFullscreenHandler = function () {
+VideoConference.prototype.exitFullscreenHandler = function() {
   if (document.webkitIsFullScreen
     || document.mozFullScreen
     || document.msFullscreenElement !== null
@@ -76,7 +90,7 @@ VideoConference.prototype.exitFullscreenHandler = function () {
 /**
  * Initialize session and subscribe to new other stream
  */
-VideoConference.prototype.init = function () {
+VideoConference.prototype.init = function() {
   if (tokbox.checkSystemRequirements() !== 1) {
     alert(this.notCompatibleBrowserMessage);
     return;
@@ -88,7 +102,7 @@ VideoConference.prototype.init = function () {
 
   // Session Event Listener
 
-  this.session.on('streamCreated', function (event) {
+  this.session.on('streamCreated', function(event) {
     var subscriberContainer = document.createElement('div');
     this.layoutContainer.appendChild(subscriberContainer);
 
@@ -109,11 +123,11 @@ VideoConference.prototype.init = function () {
     this.layout();
   }.bind(this));
 
-  this.session.on('streamDestroyed', function () {
+  this.session.on('streamDestroyed', function() {
     window.setTimeout(this.layout, 100);
   }.bind(this));
 
-  this.session.on('sessionDisconnected', function () {
+  this.session.on('sessionDisconnected', function() {
     this.layout();
   });
 
@@ -123,17 +137,10 @@ VideoConference.prototype.init = function () {
 /**
  * Connect to the session, create and publish your stream
  */
-VideoConference.prototype.connect = function () {
-  this.session.connect(this.token, function (error) {
+VideoConference.prototype.connect = function() {
+  this.session.connect(this.token, function(error) {
     if (!error) {
-      // create video view
-      var publisher = this.publisher.create({});
-
-      // publish video to other participant
-      this.session.publish(publisher, this.handlePublish.bind(this));
-      this.publisherStream = publisher;
-
-      this.layout();
+      this.publishStream();
     } else {
       console.log(error);
     }
@@ -143,7 +150,7 @@ VideoConference.prototype.connect = function () {
 /**
  *  Publish your camera and microphone stream
  */
-VideoConference.prototype.publishStream = function () {
+VideoConference.prototype.publishStream = function() {
   // create video view
   var publisher = this.publisher.create({});
 
@@ -157,7 +164,7 @@ VideoConference.prototype.publishStream = function () {
 /**
  * Disconnect from the session
  */
-VideoConference.prototype.disconnect = function () {
+VideoConference.prototype.disconnect = function() {
   this.session.disconnect();
   this.session.off();
   this.session = null;
@@ -169,8 +176,7 @@ VideoConference.prototype.disconnect = function () {
   window.close();
 };
 
-
-VideoConference.prototype.handlePublish = function (error) {
+VideoConference.prototype.handlePublish = function(error) {
   if (error) {
     this.showError(error);
   }
@@ -190,11 +196,12 @@ VideoConference.prototype.handlePublishScreensharing = function(error) {
     }
 
     this.startScreenSharingButton.classList.add('hide');
+    this.endScreenSharingButton.classList.remove('hide');
   }
 };
 
 VideoConference.prototype.showError = function(error) {
-  switch(error.name) {
+  switch (error.name) {
     case 'OT_USER_MEDIA_ACCESS_DENIED':
       alert(this.accessDeniedErrorMessage);
       break;
@@ -207,24 +214,26 @@ VideoConference.prototype.showError = function(error) {
 /**
  * Start screensharing
  */
-VideoConference.prototype.screenshare = function () {
+VideoConference.prototype.screenshare = function() {
   if (this.session === null) {
     alert('You cannot start screensharing outside of a session');
     return;
   }
 
-  tokbox.checkScreenSharingCapability(function (response) {
+  tokbox.checkScreenSharingCapability(function(response) {
     if (!response.supported || response.extensionRegistered === false) {
       alert(this.notCompatibleBrowserMessage);
-    } else if (response.extensionInstalled === false && (response.extensionRequired)) {
+    } else if (response.extensionInstalled === false &&
+      (response.extensionRequired)) {
       alert('Please install the screen-sharing extension and load this page over HTTPS.');
     } else {
       // start screensharing
-      var publisher = this.publisher.create({videoSource: 'screen', publishAudio: true});
+      var publisher = this.publisher.create({
+        videoSource: 'screen',
+        publishAudio: true,
+      });
 
       this.session.publish(publisher, this.handlePublishScreensharing.bind(this));
-
-      console.log(publisher);
 
       // stop screensharing
       publisher.on('mediaStopped', this.handleStopScreensharing.bind(this));
@@ -233,12 +242,23 @@ VideoConference.prototype.screenshare = function () {
 };
 
 /**
+ * End screensharing requested by user using the UI
+ */
+VideoConference.prototype.endScreenshare = function() {
+  if (this.publisher.isScreensharing()) {
+    this.publisher.destroy();
+    this.handleStopScreensharing();
+  }
+};
+
+/**
  * Handle stop screen sharing
  */
-VideoConference.prototype.handleStopScreensharing = function () {
+VideoConference.prototype.handleStopScreensharing = function() {
   this.publisherStream.publishVideo(true);
   this.publisherStream.element.style.display = 'block';
   this.startScreenSharingButton.classList.remove('hide');
+  this.endScreenSharingButton.classList.add('hide');
 };
 
 /**
@@ -246,12 +266,13 @@ VideoConference.prototype.handleStopScreensharing = function () {
  *
  * @returns {Element}
  */
-VideoConference.prototype.createFullscreenButton = function () {
+VideoConference.prototype.createFullscreenButton = function() {
   var fullscreenButton = document.createElement('button');
   var icon = document.createElement('i');
   icon.classList.add('glyphicon', 'glyphicon-fullscreen');
 
-  fullscreenButton.classList.add('btn', 'btn-default', 'start-fullscreen-button');
+  fullscreenButton.classList.add('btn', 'btn-default',
+    'start-fullscreen-button');
   fullscreenButton.appendChild(icon);
 
   return fullscreenButton;
