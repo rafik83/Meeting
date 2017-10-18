@@ -77,7 +77,7 @@ class SendCodeHandlerTest extends TestCase
         ;
 
         $SMSSender
-            ->send(new SMS($phone, 'Your code confirmation is 1234'))
+            ->send(new SMS($phone, 'Your code confirmation is 1234', false))
             ->shouldBeCalled()
         ;
 

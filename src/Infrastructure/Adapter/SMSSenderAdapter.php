@@ -47,13 +47,19 @@ class SMSSenderAdapter implements SMSSenderInterface
     public function send(SMS $sms)
     {
         try {
+            $content = [
+                'message'   => $sms->getMessage(),
+                'receivers' => [$sms->getReceiver()],
+                'sender'    => $this->ovhSenderName,
+            ];
+
+            if (false === $sms->hasStopClause()) {
+                $content['noStopClause'] = true;
+            }
+
             $response = $this->api->post(
                 sprintf('/sms/%s/jobs', $this->ovhServiceName),
-                [
-                    'message'   => $sms->getMessage(),
-                    'receivers' => [$sms->getReceiver()],
-                    'sender'    => $this->ovhSenderName,
-                ]
+                $content
             );
 
             if (!empty($response['invalidReceivers'])) {
