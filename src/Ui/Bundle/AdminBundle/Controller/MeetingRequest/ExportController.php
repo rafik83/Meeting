@@ -1,9 +1,9 @@
 <?php
 
 /*
- * This file is part of the vimeet project.
+ * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) vimeet
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -28,7 +28,7 @@ class ExportController extends Controller
 
         return new CsvFileResponse(
             $this->get('serializer')->serialize($view, 'csv', ['csv_delimiter' => ';']),
-            'export-meeting-request.csv'
+            sprintf('export_meeting_request_%s.csv', $event->getId())
         );
     }
 }
