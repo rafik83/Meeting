@@ -73,7 +73,7 @@ class VianeoGetSheetDataHandler
                 $participantData[Tag::PARTICIPANT_LASTNAME] ?? ''
             ),
             $sheetData[Tag::SHEET_TITLE] ?? '',
-            $sheetData[VianeoTemplateTag::VIANEO_CATEGORY] ?? '',
+            $sheetData[VianeoTemplateTag::VIANEO_CATEGORY],
             $sheetData[VianeoTemplateTag::VIANEO_PROJECT_SUMMARY] ?? '',
             $participantData[Tag::PARTICIPANT_GENDER] ?? '',
             $participantData[Tag::PARTICIPANT_FIRSTNAME] ?? '',

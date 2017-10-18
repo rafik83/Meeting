@@ -24,7 +24,7 @@ class VianeoSheetView
     /** @var string */
     public $company;
 
-    /** @var string */
+    /** @var null|string */
     public $category;
 
     /** @var string */
@@ -46,24 +46,24 @@ class VianeoSheetView
     public $phone;
 
     /**
-     * @param int    $id
-     * @param string $email
-     * @param string $fullName
-     * @param string $company
-     * @param string $category
-     * @param string $projectSummary
-     * @param string $gender
-     * @param string $firstName
-     * @param string $lastName
-     * @param string $position
-     * @param string $phone
+     * @param int         $id
+     * @param string      $email
+     * @param string      $fullName
+     * @param string      $company
+     * @param null|string $category
+     * @param string      $projectSummary
+     * @param string      $gender
+     * @param string      $firstName
+     * @param string      $lastName
+     * @param string      $position
+     * @param string      $phone
      */
     public function __construct(
         int $id,
         string $email,
         string $fullName,
         string $company,
-        string $category,
+        ?string $category,
         string $projectSummary,
         string $gender,
         string $firstName,
