@@ -54,7 +54,7 @@ class TaggedInfoGuesser
      * @param string           $locale
      * @param string|null      $default
      *
-     * @return string|null
+     * @return string|bool|null
      */
     public function guessFirst(AbstractTemplate $template, $data, $tag, $locale, $default = null)
     {
@@ -73,7 +73,7 @@ class TaggedInfoGuesser
      * @param string       $tag
      * @param string|null  $default
      *
-     * @return string|null
+     * @return string|bool|null
      */
     public function guessFirstFromTemplateData(TemplateData $templateData, $tag, $default = null)
     {

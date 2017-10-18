@@ -211,6 +211,8 @@ admin.extraParameter.list.empty: 'Aucun paramètre'
 admin.extraParameter.list.title: 'Liste des paramètres supplémentaires de l''événement'
 admin.extraParameter.type.leni_event: 'Code Event LENI'
 admin.extraParameter.type.leni_user: 'Code Utilisateur LENI'
+admin.extraParameter.type.vianeo_endpoint: 'Vianeo endpoint'
+admin.extraParameter.type.vianeo_concerned_types_id: 'Vianeo : Ids des types de participation concernés'
 admin.extraParameter.update.title: 'Modification du paramètre supplémentaire %type%'
 admin.filter: Filtrer
 admin.filter_by: 'Filtrer par'

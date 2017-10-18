@@ -101,7 +101,7 @@ class PrepareLeniApiCallHandler
      */
     public function handle(PrepareLeniApiCall $command): void
     {
-        $events = $this->eventRepository->findEventWithLeniApiParameters();
+        $events = $this->eventRepository->findEventWithParameters([Type::TYPE_LENI_USER, Type::TYPE_LENI_EVENT]);
 
         foreach ($events as $event) {
             if (!$event->hasDay() || $event->getLastDay()->getEndTime() < $this->dateTime) {
