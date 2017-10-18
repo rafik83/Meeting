@@ -128,11 +128,11 @@ class MeetingRequestListViewNormalizer implements NormalizerInterface
     }
 
     /**
-     * @param string $input
+     * @param null|string $input
      *
      * @return string
      */
-    private function convertCharset(string $input): string
+    private function convertCharset(?string $input): string
     {
         return iconv(Charset::UTF_8, Charset::WINDOWS_1252 . "//TRANSLIT//IGNORE", $input);
     }
