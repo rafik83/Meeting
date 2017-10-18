@@ -11,6 +11,7 @@
 namespace Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Serializer\Normalizer\MeetingRequest;
 
 use Proximum\Vimeet\Application\Adapter\TranslatorInterface;
+use Proximum\Vimeet\Application\Serializer\Charset;
 use Proximum\Vimeet\Application\View\MeetingRequest\Export\MeetingRequestListView;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 
@@ -72,18 +73,18 @@ class MeetingRequestListViewNormalizer implements NormalizerInterface
                 $this->colTrans(self::COL_REQUEST_ID, $locale)             => $meetingRequest->id,
                 $this->colTrans(self::COL_MEETING_ID, $locale)             => $meetingRequest->meetingId,
                 $this->colTrans(self::COL_FROM_SHEET_ID, $locale)          => $meetingRequest->fromSheet->id,
-                $this->colTrans(self::COL_FROM_SHEET_TITLE, $locale)       => $meetingRequest->fromSheet->title,
-                $this->colTrans(self::COL_FROM_SHEET_TYPE, $locale)        => $meetingRequest->fromSheet->typeTitle,
-                $this->colTrans(self::COL_FROM_SHEET_CATEGORY, $locale)    => $meetingRequest->fromSheet->categoryTitle,
+                $this->colTrans(self::COL_FROM_SHEET_TITLE, $locale)       => $this->convertCharset($meetingRequest->fromSheet->title),
+                $this->colTrans(self::COL_FROM_SHEET_TYPE, $locale)        => $this->convertCharset($meetingRequest->fromSheet->typeTitle),
+                $this->colTrans(self::COL_FROM_SHEET_CATEGORY, $locale)    => $this->convertCharset($meetingRequest->fromSheet->categoryTitle),
                 $this->colTrans(self::COL_FROM_PARTICIPANT_IDS, $locale)   => implode(',', $meetingRequest->fromSheet->participantIds),
                 $this->colTrans(self::COL_FROM_PARTICIPANT_NAMES, $locale) => implode(',', $meetingRequest->fromSheet->participantNames),
                 $this->colTrans(self::COL_TO_SHEET_ID, $locale)            => $meetingRequest->toSheet->id,
-                $this->colTrans(self::COL_TO_SHEET_TITLE, $locale)         => $meetingRequest->toSheet->title,
-                $this->colTrans(self::COL_TO_SHEET_TYPE, $locale)          => $meetingRequest->toSheet->typeTitle,
-                $this->colTrans(self::COL_TO_SHEET_CATEGORY, $locale)      => $meetingRequest->toSheet->categoryTitle,
+                $this->colTrans(self::COL_TO_SHEET_TITLE, $locale)         => $this->convertCharset($meetingRequest->toSheet->title),
+                $this->colTrans(self::COL_TO_SHEET_TYPE, $locale)          => $this->convertCharset($meetingRequest->toSheet->typeTitle),
+                $this->colTrans(self::COL_TO_SHEET_CATEGORY, $locale)      => $this->convertCharset($meetingRequest->toSheet->categoryTitle),
                 $this->colTrans(self::COL_TO_PARTICIPANT_IDS, $locale)     => implode(',', $meetingRequest->toSheet->participantIds),
                 $this->colTrans(self::COL_TO_PARTICIPANT_NAMES, $locale)   => implode(',', $meetingRequest->toSheet->participantNames),
-                $this->colTrans(self::COL_REQUEST_STATE, $locale)          => $this->translator->trans(self::TRANSLATION_STATE_PREFIX . $meetingRequest->state, [], self::TRANSLATION_DOMAIN, $locale),
+                $this->colTrans(self::COL_REQUEST_STATE, $locale)          => $this->convertCharset($this->translator->trans(self::TRANSLATION_STATE_PREFIX . $meetingRequest->state, [], self::TRANSLATION_DOMAIN, $locale)),
                 $this->colTrans(self::COL_REQUEST_CREATED_AT, $locale)     => $this->formatDate($dateFormatter, $meetingRequest->createdAt),
                 $this->colTrans(self::COL_REQUEST_UPDATED_AT, $locale)     => $this->formatDate($dateFormatter, $meetingRequest->updatedAt),
             ];
@@ -121,6 +122,18 @@ class MeetingRequestListViewNormalizer implements NormalizerInterface
      */
     private function colTrans(string $colName, string $locale): string
     {
-        return $this->translator->trans(self::TRANSLATION_COL_PREFIX . $colName, [], self::TRANSLATION_DOMAIN, $locale);
+        return $this->convertCharset(
+            $this->translator->trans(self::TRANSLATION_COL_PREFIX . $colName, [], self::TRANSLATION_DOMAIN, $locale)
+        );
+    }
+
+    /**
+     * @param string $input
+     *
+     * @return string
+     */
+    private function convertCharset(string $input): string
+    {
+        return iconv(Charset::UTF_8, Charset::WINDOWS_1252 . "//TRANSLIT//IGNORE", $input);
     }
 }
