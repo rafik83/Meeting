@@ -634,6 +634,7 @@ admin_meeting_request_lock_update:
 
 admin_meeting_request_export:
     path: /event/{event}/meeting-request/export
+    methods: [GET]
     requirements:
         event: \d+
     defaults: { _controller: AdminBundle:MeetingRequest/Export:export }
