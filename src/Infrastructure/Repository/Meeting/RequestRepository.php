@@ -344,20 +344,17 @@ class RequestRepository implements RequestRepositoryInterface
     /**
      * {@inheritdoc}
      */
-    public function countAllByEvent(Event $event)
+    public function countAllByEvent(Event $event): int
     {
         $queryBuilder = $this
             ->entityManager
             ->createQueryBuilder()
-            ->select('COUNT(request)')
-            ->from(Request::class, 'request', 'request.id')
-            ->join('request.from', 'fromSheet', 'WITH', 'fromSheet.event = :event')
-            ->join('request.to', 'toSheet', 'WITH', 'toSheet.event = :event')
+            ->select('COUNT(request.id)')
+            ->from(Request::class, 'request')
+            ->where('request.event = :event AND request.disabled = false')
             ->setParameter('event', $event);
 
-        $this->requestsWithoutMeeting($queryBuilder);
-
-        return $queryBuilder->getQuery()->getSingleScalarResult();
+        return (int) $queryBuilder->getQuery()->getSingleScalarResult();
     }
 
     /**
@@ -417,22 +414,41 @@ class RequestRepository implements RequestRepositoryInterface
     /**
      * {@inheritdoc}
      */
-    public function findByEventWithHydratationOfElement(Event $event): array
+    public function findByEventWithHydratationOfElement(Event $event, int $page, int $limit): array
     {
         $queryBuilder = $this
             ->entityManager
             ->createQueryBuilder()
-            ->select('request, fromSheet, toSheet, fromParticipants, toParticipants, meeting, fromType, toType')
+            ->select('request, fromSheet, toSheet, meeting, fromType, toType')
             ->from(Request::class, 'request', 'request.id')
             ->join('request.from', 'fromSheet', 'WITH', 'request.event = :event')
             ->join('request.to', 'toSheet')
             ->join('fromSheet.type', 'fromType')
             ->join('toSheet.type', 'toType')
-            ->leftJoin('request.fromParticipants', 'fromParticipants')
-            ->leftJoin('request.toParticipants', 'toParticipants')
             ->leftJoin('request.meeting', 'meeting')
             ->where('request.disabled = false')
+            ->setFirstResult(($page - 1) * $limit)
+            ->setMaxResults($limit)
             ->setParameter('event', $event)
+        ;
+
+        return $queryBuilder->getQuery()->getResult();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function hydrateParticipants(array $requests): array
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('request, fromParticipant, toParticipant')
+            ->from(Request::class, 'request', 'request.id')
+            ->leftJoin('request.fromParticipants', 'fromParticipant')
+            ->leftJoin('request.toParticipants', 'toParticipant')
+            ->where('request.id IN (:requests)')
+            ->setParameter('requests', $requests)
         ;
 
         return $queryBuilder->getQuery()->getResult();

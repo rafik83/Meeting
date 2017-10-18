@@ -41,12 +41,24 @@ class MeetingRequestListViewQueryHandler
     public function handle(MeetingRequestListViewQuery $query): MeetingRequestListView
     {
         $locale   = $query->event->getFallback();
-        $requests = $this->requestRepository->findByEventWithHydratationOfElement($query->event);
+        $countRequest = $this->requestRepository->countAllByEvent($query->event);
 
         $requestViews = [];
 
-        foreach ($requests as $request) {
-            $requestViews[] = $this->requestViewQueryHandler->handle(new MeetingRequestViewQuery($request, $locale));
+        if ($countRequest !== 0) {
+            $pages = ceil($countRequest / 500);
+            for ($page = 1; $page <= $pages; $page++) {
+                $requests = $this->requestRepository->findByEventWithHydratationOfElement($query->event, $page, 500);
+                $requests = $this->requestRepository->hydrateParticipants($requests);
+
+                foreach ($requests as $request) {
+                    $requestViews[] = $this->requestViewQueryHandler->handle(
+                        new MeetingRequestViewQuery($request, $locale)
+                    );
+                }
+
+                unset($requests);
+            }
         }
 
         return new MeetingRequestListView(

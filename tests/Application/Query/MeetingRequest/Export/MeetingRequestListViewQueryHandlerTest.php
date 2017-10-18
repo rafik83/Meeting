@@ -31,9 +31,11 @@ class MeetingRequestListViewQueryHandlerTest extends TestCase
         $request1 = $this->prophesize(Request::class);
         $request2 = $this->prophesize(Request::class);
         $request3 = $this->prophesize(Request::class);
-        $requests = [
+        $requests1 = [
             $request1->reveal(),
             $request2->reveal(),
+        ];
+        $requests2 = [
             $request3->reveal(),
         ];
         $requestView1 = $this->prophesize(MeetingRequestView::class);
@@ -42,11 +44,19 @@ class MeetingRequestListViewQueryHandlerTest extends TestCase
 
         // Mock
         $requestRepository = $this->prophesize(RequestRepositoryInterface::class);
+        $requestRepository->countAllByEvent($event->reveal())->shouldBeCalled()->willReturn(540);
         $requestRepository
-            ->findByEventWithHydratationOfElement($event->reveal())
+            ->findByEventWithHydratationOfElement($event->reveal(), 1, 500)
             ->shouldBeCalled()
-            ->willReturn($requests)
+            ->willReturn($requests1)
         ;
+        $requestRepository->hydrateParticipants($requests1)->shouldBeCalled()->willReturn($requests1);
+        $requestRepository
+            ->findByEventWithHydratationOfElement($event->reveal(), 2, 500)
+            ->shouldBeCalled()
+            ->willReturn($requests2)
+        ;
+        $requestRepository->hydrateParticipants($requests2)->shouldBeCalled()->willReturn($requests2);
 
         $meetingRequestViewQueryHandler = $this->prophesize(MeetingRequestViewQueryHandler::class);
         $meetingRequestViewQueryHandler

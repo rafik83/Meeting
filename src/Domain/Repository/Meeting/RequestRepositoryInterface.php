@@ -96,7 +96,7 @@ interface RequestRepositoryInterface
      *
      * @return int
      */
-    public function countAllByEvent(Event $event);
+    public function countAllByEvent(Event $event): int;
 
     /**
      * @param Event $event
@@ -118,10 +118,21 @@ interface RequestRepositoryInterface
 
     /**
      * @param Event $event
+     * @param int   $page
+     * @param int   $limit
      *
      * @return Request[]
      */
-    public function findByEventWithHydratationOfElement(Event $event): array;
+    public function findByEventWithHydratationOfElement(Event $event, int $page, int $limit): array;
+
+    /**
+     * This method is used to hydrate the participants of the requests to avoid multiple calls
+     *
+     * @param Request[] $requests
+     *
+     * @return Request[]
+     */
+    public function hydrateParticipants(array $requests): array;
 
     /**
      * @param Event $event
