@@ -129,7 +129,10 @@ class ValidateController extends Controller
                     $this->get('translator')->trans('validators.userPhone.validateCode.codeNotValid')
                 ));
             } catch (CodeAlreadyValidatedException $exception) {
-                return $this->redirectToRoute('event_user_phone_validate');
+                return $this->redirectToRoute('event_user_phone_validate', [
+                    'sheet'       => $sheet->getId(),
+                    'participant' => $participant->getId(),
+                ]);
             }
         }
 
