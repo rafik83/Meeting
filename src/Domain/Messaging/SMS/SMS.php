@@ -23,18 +23,18 @@ class SMS
     private $message;
 
     /** @var bool */
-    private $isAdvertising;
+    private $stopClause;
 
     /**
      * @param string $receiver
      * @param string $message
-     * @param bool   $isAdvertising
+     * @param bool   $stopClause
      */
-    public function __construct($receiver, $message, bool $isAdvertising = true)
+    public function __construct($receiver, $message, bool $stopClause = true)
     {
         $this->receiver = $receiver;
         $this->message = $message;
-        $this->isAdvertising = $isAdvertising;
+        $this->stopClause = $stopClause;
     }
 
     /**
@@ -56,8 +56,8 @@ class SMS
     /**
      * @return bool
      */
-    public function isAdvertising(): bool
+    public function hasStopClause(): bool
     {
-        return $this->isAdvertising;
+        return $this->stopClause;
     }
 }

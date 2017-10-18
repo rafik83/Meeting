@@ -53,7 +53,7 @@ class SMSSenderAdapter implements SMSSenderInterface
                 'sender'    => $this->ovhSenderName,
             ];
 
-            if (false === $sms->isAdvertising()) {
+            if (false === $sms->hasStopClause()) {
                 $content['noStopClause'] = true;
             }
 
