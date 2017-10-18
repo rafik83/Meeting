@@ -91,7 +91,7 @@ VideoConference.prototype.exitFullscreenHandler = function() {
  * Initialize session and subscribe to new other stream
  */
 VideoConference.prototype.init = function() {
-  if (tokbox.checkSystemRequirements() !== 1) {
+  if (this.isNotIE() && tokbox.checkSystemRequirements() !== 1) {
     alert(this.notCompatibleBrowserMessage);
     return;
   }
@@ -276,6 +276,19 @@ VideoConference.prototype.createFullscreenButton = function() {
   fullscreenButton.appendChild(icon);
 
   return fullscreenButton;
+};
+
+/**
+ * Check if user agent is not internet explorer
+ *
+ * @returns {boolean}
+ */
+VideoConference.prototype.isNotIE = function() {
+  var userAgent = window.navigator.userAgent.toLowerCase(),
+    appName = window.navigator.appName;
+
+  return !( appName === 'Microsoft Internet Explorer' || // IE <= 10
+    (appName === 'Netscape' && userAgent.indexOf('trident') > -1) ); // IE >= 11
 };
 
 module.exports = VideoConference;
