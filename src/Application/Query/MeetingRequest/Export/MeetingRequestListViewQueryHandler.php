@@ -15,6 +15,8 @@ use Proximum\Vimeet\Domain\Repository\Meeting\RequestRepositoryInterface;
 
 class MeetingRequestListViewQueryHandler
 {
+    const QUERY_LIMIT = 500;
+
     /** @var RequestRepositoryInterface */
     private $requestRepository;
 
@@ -46,9 +48,14 @@ class MeetingRequestListViewQueryHandler
         $requestViews = [];
 
         if ($countRequest !== 0) {
-            $pages = ceil($countRequest / 500);
+            $pages = ceil($countRequest / self::QUERY_LIMIT);
+
             for ($page = 1; $page <= $pages; $page++) {
-                $requests = $this->requestRepository->findByEventWithHydratationOfElement($query->event, $page, 500);
+                $requests = $this->requestRepository->findByEventWithHydratationOfElement(
+                    $query->event,
+                    $page,
+                    self::QUERY_LIMIT
+                );
                 $requests = $this->requestRepository->hydrateParticipants($requests);
 
                 foreach ($requests as $request) {
