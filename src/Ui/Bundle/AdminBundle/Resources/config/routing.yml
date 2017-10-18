@@ -632,6 +632,13 @@ admin_meeting_request_lock_update:
     methods: [GET, POST]
     defaults: { _controller: AdminBundle:MeetingRequest:lockMeetingRequest }
 
+admin_meeting_request_export:
+    path: /event/{event}/meeting-request/export
+    requirements:
+        event: \d+
+    defaults: { _controller: AdminBundle:MeetingRequest/Export:export }
+
+
 #
 # Sheet
 #
@@ -1565,13 +1572,3 @@ admin_event_extra_parameter_remove:
         event: \d+
         extraParameter: \d+
     defaults: { _controller: AdminBundle:Event/ExtraParameter/Remove:remove }
-
-#
-# Meeting Request
-#
-
-admin_meeting_request_rexport:
-    path: /event/{event}/meeting-request/export
-    requirements:
-        event: \d+
-    defaults: { _controller: AdminBundle:MeetingRequest/Export:export }
