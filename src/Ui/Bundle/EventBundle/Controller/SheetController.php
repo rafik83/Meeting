@@ -244,13 +244,15 @@ class SheetController extends Controller
         }
 
         return $this->render('EventBundle:Sheet:print.html.twig', [
-            'event'         => $event,
-            'sheet'         => $sheetToDisplay,
-            'taggedData'    => $taggedData,
-            'locale'        => $locale,
-            'nomenclatures' => $nomenclatures,
-            'participants'  => $participants,
-            'templateData'  => $templateData,
+            'event'                     => $event,
+            'sheet'                     => $sheetToDisplay,
+            'taggedData'                => $taggedData,
+            'locale'                    => $locale,
+            'nomenclatures'             => $nomenclatures,
+            'participants'              => $participants,
+            'templateData'              => $templateData,
+            'isPhoneValidationRequired' => false,
+            'phoneValidationLink'       => null,
         ]);
     }
 
