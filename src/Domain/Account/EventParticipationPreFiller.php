@@ -74,8 +74,12 @@ class EventParticipationPreFiller
         $tags = $templateObject->getTags();
 
         foreach ($tags as $tag) {
+            if ($tag === Tag::SHEET_DATA) {
+                continue;
+            }
+
             $content = $templateObject->getContentValueLocalize($locale);
-            if (empty($previousTaggedData[$tag]) && !empty($content) && $tag !== Tag::SHEET_DATA) {
+            if (empty($previousTaggedData[$tag]) && !empty($content)) {
                 $previousTaggedData[$tag] = $content;
             }
         }
