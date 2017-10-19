@@ -59,24 +59,16 @@ function VideoConference(element) {
   // Custom Events
   tokbox.registerScreenSharingExtension('chrome', CHROME_EXTENSION_ID, 2);
 
-  this.startScreenSharingButton.addEventListener('click',
-    this.screenshare.bind(this));
-  this.endScreenSharingButton.addEventListener('click',
-    this.endScreenshare.bind(this));
+  this.startScreenSharingButton.addEventListener('click', this.screenshare.bind(this));
+  this.endScreenSharingButton.addEventListener('click', this.endScreenshare.bind(this));
 
-  this.toggleAudioElement.addEventListener('click',
-    this.toggleAudio.bind(this));
-  this.toggleVideoElement.addEventListener('click',
-    this.toggleVideo.bind(this));
+  this.toggleAudioElement.addEventListener('click', this.toggleAudio.bind(this));
+  this.toggleVideoElement.addEventListener('click', this.toggleVideo.bind(this));
 
-  document.addEventListener('webkitfullscreenchange',
-    this.exitFullscreenHandler.bind(this), false);
-  document.addEventListener('mozfullscreenchange',
-    this.exitFullscreenHandler.bind(this), false);
-  document.addEventListener('fullscreenchange',
-    this.exitFullscreenHandler.bind(this), false);
-  document.addEventListener('MSFullscreenChange',
-    this.exitFullscreenHandler.bind(this), false);
+  document.addEventListener('webkitfullscreenchange', this.exitFullscreenHandler.bind(this), false);
+  document.addEventListener('mozfullscreenchange', this.exitFullscreenHandler.bind(this), false);
+  document.addEventListener('fullscreenchange', this.exitFullscreenHandler.bind(this), false);
+  document.addEventListener('MSFullscreenChange', this.exitFullscreenHandler.bind(this), false);
 
   // Init
   this.init();
@@ -232,8 +224,7 @@ VideoConference.prototype.screenshare = function() {
       alert(this.notCompatibleBrowserMessage);
     } else if (response.extensionInstalled === false &&
       (response.extensionRequired)) {
-      alert(
-        'Please install the screen-sharing extension and load this page over HTTPS.');
+      alert('Please install the screen-sharing extension and load this page over HTTPS.');
     } else {
       // start screensharing
       var publisher = this.publisher.create({
@@ -241,8 +232,7 @@ VideoConference.prototype.screenshare = function() {
         publishAudio: true,
       });
 
-      this.session.publish(publisher,
-        this.handlePublishScreensharing.bind(this));
+      this.session.publish(publisher, this.handlePublishScreensharing.bind(this));
 
       // stop screensharing
       publisher.on('mediaStopped', this.handleStopScreensharing.bind(this));
