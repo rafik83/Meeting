@@ -34,6 +34,8 @@ function VideoConference(element) {
   var endMeetingButton = element.querySelector('.end-meeting');
   this.startScreenSharingButton = element.querySelector('#start-screensharing');
   this.endScreenSharingButton = element.querySelector('#end-screensharing');
+  this.toggleAudioElement = element.querySelector('#toggle-audio');
+  this.toggleVideoElement = element.querySelector('#toggle-video');
 
   // if (!window.opener) {
   //   endMeetingButton.classList.add('hide');
@@ -61,6 +63,11 @@ function VideoConference(element) {
     this.screenshare.bind(this));
   this.endScreenSharingButton.addEventListener('click',
     this.endScreenshare.bind(this));
+
+  this.toggleAudioElement.addEventListener('click',
+    this.toggleAudio.bind(this));
+  this.toggleVideoElement.addEventListener('click',
+    this.toggleVideo.bind(this));
 
   document.addEventListener('webkitfullscreenchange',
     this.exitFullscreenHandler.bind(this), false);
@@ -225,7 +232,8 @@ VideoConference.prototype.screenshare = function() {
       alert(this.notCompatibleBrowserMessage);
     } else if (response.extensionInstalled === false &&
       (response.extensionRequired)) {
-      alert('Please install the screen-sharing extension and load this page over HTTPS.');
+      alert(
+        'Please install the screen-sharing extension and load this page over HTTPS.');
     } else {
       // start screensharing
       var publisher = this.publisher.create({
@@ -233,7 +241,8 @@ VideoConference.prototype.screenshare = function() {
         publishAudio: true,
       });
 
-      this.session.publish(publisher, this.handlePublishScreensharing.bind(this));
+      this.session.publish(publisher,
+        this.handlePublishScreensharing.bind(this));
 
       // stop screensharing
       publisher.on('mediaStopped', this.handleStopScreensharing.bind(this));
@@ -289,6 +298,33 @@ VideoConference.prototype.isNotIE = function() {
 
   return !( appName === 'Microsoft Internet Explorer' || // IE <= 10
     (appName === 'Netscape' && userAgent.indexOf('trident') > -1) ); // IE >= 11
+};
+
+/**
+ * Toggle audio stream
+ */
+VideoConference.prototype.toggleAudio = function() {
+  var publisher = this.publisher.isScreensharing() ?
+    this.publisherStream : // get camera stream instead of screensharing stream
+    this.publisher.publisher;
+
+  if (publisher.stream.hasAudio) {
+    publisher.publishAudio(false);
+  } else {
+    publisher.publishAudio(true);
+  }
+};
+
+/**
+ * Toggle video stream
+ */
+VideoConference.prototype.toggleVideo = function() {
+  var stream = this.publisher.publisher.stream;
+  if (stream.hasVideo) {
+    this.publisher.publisher.publishVideo(false);
+  } else {
+    this.publisher.publisher.publishVideo(true);
+  }
 };
 
 module.exports = VideoConference;
