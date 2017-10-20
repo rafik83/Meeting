@@ -1,7 +1,10 @@
 var TypeFilterElement = require('./_CatalogMobileTypeFilterElement'),
     AvailableSlotFilterElement = require('./_CatalogMobileAvailableSlotFilterElement'),
-    PubSub = require('pubsub-js')
+    PubSub = require('pubsub-js'),
+    $ = require('jquery')
 ;
+
+require('select2');
 
 /**
  * @param {HTMLElement} catalogFilterZone the zone where the filters will be displayed
@@ -45,7 +48,7 @@ function CatalogMobileFilters(catalogFilterZone, catalogFilter, catalogForm) {
             element.addEventListener('click', function (event) {
                 event.preventDefault();
 
-                this.openMenu();
+                this.openMenu(event);
             }.bind(this));
         }.bind(this));
 
@@ -103,11 +106,19 @@ function CatalogMobileFilters(catalogFilterZone, catalogFilter, catalogForm) {
     PubSub.subscribe('mobile-input-content-change', this.closeMenu());
 }
 
-CatalogMobileFilters.prototype.openMenu = function () {
+CatalogMobileFilters.prototype.openMenu = function (event) {
     if (!this.catalogFilter.classList.contains('disabled')) {
         document.body.classList.add('menu-mobile-opened');
         this.catalogFilterZone.querySelector('.catalog-mobile-menu-summary').style.display = 'none';
         this.catalogFilterZone.querySelector('.catalog-mobile-menu-filters').style.display = 'block';
+
+        // autofocus content input
+        if (event.target.getAttribute('data-catalog-mobile-menu-button-action')
+            === 'catalog-mobile-menu-button-action-content-filter'
+        ) {
+            var inputContent = this.catalogFilterZone.querySelector('#catalog-mobile-filter-input-content');
+            $(inputContent).select2('focus');
+        }
     }
 };
 
