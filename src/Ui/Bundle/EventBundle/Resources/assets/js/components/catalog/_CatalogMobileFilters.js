@@ -113,7 +113,7 @@ CatalogMobileFilters.prototype.openMenu = function (event) {
         this.catalogFilterZone.querySelector('.catalog-mobile-menu-filters').style.display = 'block';
 
         // autofocus content input
-        if (event.target.getAttribute('data-catalog-mobile-menu-button-action')
+        if (event.currentTarget.getAttribute('data-catalog-mobile-menu-button-action')
             === 'catalog-mobile-menu-button-action-content-filter'
         ) {
             var inputContent = this.catalogFilterZone.querySelector('#catalog-mobile-filter-input-content');
