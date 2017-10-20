@@ -85,7 +85,9 @@ class MeetingRepository implements MeetingRepositoryInterface
             ->from(Meeting::class, 'meeting', 'meeting.id')
             ->join('meeting.fromSheet', 'fromSheet', 'WITH', 'fromSheet.event = :event')
             ->join('meeting.toSheet', 'toSheet', 'WITH', 'toSheet.event = :event')
-            ->setParameter('event', $event);
+            ->setParameter('event', $event)
+            ->orderBy('meeting.createdAt', 'DESC')
+        ;
 
         $pagination = $this->paginator->paginate($queryBuilder, $page, $limit, 'meeting', 'id');
 
@@ -98,7 +100,8 @@ class MeetingRepository implements MeetingRepositoryInterface
                 $this->sheetInfoGuesser->guessSheetTitle($meeting->getToSheet(), $locale),
                 $meeting->getCreatedAt(),
                 $meeting->getSlot()->getBegin(),
-                $meeting->getSlot()->getEnd()
+                $meeting->getSlot()->getEnd(),
+                $meeting->isCreatedByParticipants()
             );
         }, $pagination->results);
 
