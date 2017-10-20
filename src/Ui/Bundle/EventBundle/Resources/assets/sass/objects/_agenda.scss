@@ -230,12 +230,33 @@
     bottom: 10px;
     right: 10px;
     .btn {
+      position: relative;
+      font-size: 15px;
+      line-height: 22px;
+      font-family: OpenSans;
+      text-transform: uppercase;
+      border: none;
+      border-radius: 18px;
+      transition: background .2s ease-in-out;
       display: inline-block;
+      background-color: #fff;
       &.screensharing {
         margin-right: 10px;
       }
+      &.btn-off, &.btn-off:hover, &.btn-off:focus {
+        background-color: $bg-fail-color;
+      }
       i {
-        margin: auto !important;
+        &.glyphicon {
+          color: #000;
+          font-family: 'Glyphicons Halflings' !important;
+          font-style: normal;
+          font-weight: normal;
+          line-height: 1;
+        }
+        &.icon-center {
+          margin: auto !important;
+        }
       }
     }
   }

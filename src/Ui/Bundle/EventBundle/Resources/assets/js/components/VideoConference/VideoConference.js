@@ -300,8 +300,10 @@ VideoConference.prototype.toggleAudio = function() {
 
   if (publisher.stream.hasAudio) {
     publisher.publishAudio(false);
+    this.toggleAudioElement.classList.add('btn-off');
   } else {
     publisher.publishAudio(true);
+    this.toggleAudioElement.classList.remove('btn-off');
   }
 };
 
@@ -312,8 +314,10 @@ VideoConference.prototype.toggleVideo = function() {
   var stream = this.publisher.publisher.stream;
   if (stream.hasVideo) {
     this.publisher.publisher.publishVideo(false);
+    this.toggleVideoElement.classList.add('btn-off');
   } else {
     this.publisher.publisher.publishVideo(true);
+    this.toggleVideoElement.classList.remove('btn-off');
   }
 };
 
