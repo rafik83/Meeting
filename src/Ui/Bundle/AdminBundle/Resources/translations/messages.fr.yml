@@ -355,6 +355,7 @@ admin.meeting.export.fields.to_user_ids: 'ids des utilisateurs demandeurs'
 admin.meeting.link: Rendez-vous
 admin.meeting.list.column.head.createdAt: 'Créé le'
 admin.meeting.list.column.head.from: De
+admin.meeting.list.column.head.isCreatedByParticipants: 'Créé par les participants'
 admin.meeting.list.column.head.slot: Créneau
 admin.meeting.list.column.head.to: À
 admin.meeting.list.details: Détails
