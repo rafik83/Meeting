@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2016 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -19,7 +19,7 @@ class CustomPreviewData
     ];
 
     /**
-     * @return array
+     * @return CustomPreviewDataView[]
      */
     public static function getCustomPreviewDataViews(): array
     {
@@ -30,5 +30,21 @@ class CustomPreviewData
         }
 
         return $customPreviewDataViews;
+    }
+
+    /**
+     * @param string $name
+     *
+     * @return null|CustomPreviewDataView
+     */
+    public static function getCustomPreviewDataViewByName(string $name): ?CustomPreviewDataView
+    {
+        $customPreviewDataViews = self::getCustomPreviewDataViews();
+
+        if (array_key_exists($name, $customPreviewDataViews)) {
+            return $customPreviewDataViews[$name];
+        }
+
+        return null;
     }
 }
