@@ -294,9 +294,16 @@ VideoConference.prototype.isNotIE = function() {
  * Toggle audio stream
  */
 VideoConference.prototype.toggleAudio = function() {
-  var publisher = this.publisher.isScreensharing() ?
-    this.publisherStream : // get camera stream instead of screensharing stream
-    this.publisher.publisher;
+  // if publisher stream is destroy because of stop screensharing, use previous stream
+  var publisher = null;
+
+  if (this.publisher.publisher.stream === null) {
+    publisher = this.publisherStream;
+  } else {
+    publisher = this.publisher.isScreensharing() ?
+      this.publisherStream : // get camera stream instead of screensharing stream
+      this.publisher.publisher;
+  }
 
   if (publisher.stream.hasAudio) {
     publisher.publishAudio(false);
@@ -311,12 +318,16 @@ VideoConference.prototype.toggleAudio = function() {
  * Toggle video stream
  */
 VideoConference.prototype.toggleVideo = function() {
-  var stream = this.publisher.publisher.stream;
-  if (stream.hasVideo) {
-    this.publisher.publisher.publishVideo(false);
+  // if publisher stream is destroy because of stop screensharing, use previous stream
+  var publisher = this.publisher.publisher.stream !== null ?
+      this.publisher.publisher :
+      this.publisherStream;
+
+  if (publisher.stream.hasVideo) {
+    publisher.publishVideo(false);
     this.toggleVideoElement.classList.add('btn-off');
   } else {
-    this.publisher.publisher.publishVideo(true);
+    publisher.publishVideo(true);
     this.toggleVideoElement.classList.remove('btn-off');
   }
 };
