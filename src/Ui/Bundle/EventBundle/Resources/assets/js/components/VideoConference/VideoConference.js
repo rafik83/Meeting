@@ -109,6 +109,7 @@ VideoConference.prototype.init = function() {
     var subscriber = subscriberManager.subscribe(event);
 
     var fullscreenButton = this.createFullscreenButton();
+
     subscriber.element.appendChild(fullscreenButton);
 
     console.log('subscriberSTREAM', subscriber.stream.id);
@@ -268,10 +269,12 @@ VideoConference.prototype.handleStopScreensharing = function() {
 VideoConference.prototype.createFullscreenButton = function() {
   var fullscreenButton = document.createElement('button');
   var icon = document.createElement('i');
-  icon.classList.add('glyphicon', 'glyphicon-fullscreen');
+  icon.classList.add('glyphicon');
+  icon.classList.add('glyphicon-fullscreen');
 
-  fullscreenButton.classList.add('btn', 'btn-default',
-    'start-fullscreen-button');
+  fullscreenButton.classList.add('btn');
+  fullscreenButton.classList.add('btn-default');
+  fullscreenButton.classList.add('start-fullscreen-button');
   fullscreenButton.appendChild(icon);
 
   return fullscreenButton;
