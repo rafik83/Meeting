@@ -38,17 +38,18 @@ class ObjectDataTransformer implements DataTransformerInterface
      */
     public function transform($keys)
     {
-        $customPreviewDataViews = CustomPreviewData::getCustomPreviewDataViews();
+        return array_map(
+            function ($key) {
+                $customPreviewDataView = CustomPreviewData::getCustomPreviewDataViewByName($key);
 
-        return array_map(function ($key) use ($customPreviewDataViews) {
-            $customPreviewDataView = CustomPreviewData::getCustomPreviewDataViewByName($key);
+                if (null !== $customPreviewDataView) {
+                    return $customPreviewDataView;
+                }
 
-            if (null !== $customPreviewDataView) {
-                return $customPreviewDataView;
-            }
-
-            return $this->templateData->getObject($key);
-        }, $keys);
+                return $this->templateData->getObject($key);
+            },
+            $keys
+        );
     }
 
     /**
