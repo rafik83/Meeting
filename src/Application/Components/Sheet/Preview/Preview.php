@@ -71,8 +71,17 @@ class Preview
         $rules             = null !== $composedRule ? [$composedRule->rule] : [];
         $templateData      = $this->taggedDataFactory->buildTaggedDataView($sheet, $locale, $rules);
 
+
         foreach ($previewObjectKeys as $key) {
             try {
+                $customPreviewView = $this->getCustomPreviewView($sheet, $key);
+
+                if ($customPreviewView instanceof PreviewView) {
+                    $previewObjects[] = $customPreviewView;
+
+                    continue;
+                }
+
                 $object = $templateData->getObject($key);
 
                 if (empty($cardViews) && $object instanceof TemplateObject\Participant) {
@@ -118,6 +127,7 @@ class Preview
                         );
                     }
                 }
+
                 $previewObjects[] = $previewView;
             } catch (ObjectNotFoundException $exception) {
                 continue;
@@ -164,5 +174,40 @@ class Preview
         }
 
         return $taggedDataView->content;
+    }
+
+    /**
+     * @param Sheet  $sheet
+     * @param string $key
+     *
+     * @return null|PreviewView
+     */
+    private function getCustomPreviewView(Sheet $sheet, string $key): ?PreviewView
+    {
+        if (null === CustomPreviewData::getCustomPreviewDataViewByName($key)) {
+            return null;
+        }
+
+        if (CustomPreviewData::PARTICIPANTS_POSITION === $key) {
+            return $this->resolveParticipantPositions($sheet);
+        }
+
+        throw new \LogicException('Missing preview resolver for key ' . $key);
+    }
+
+    /**
+     * @param Sheet  $sheet
+     *
+     * @return PreviewView
+     */
+    private function resolveParticipantPositions(Sheet $sheet): PreviewView
+    {
+        return new PreviewView(
+            CustomPreviewData::PARTICIPANTS_POSITION,
+            'position names',
+            CustomPreviewData::PARTICIPANTS_POSITION,
+            [],
+            $sheet->countParticipants() > 1 // show link if more than one participant
+        );
     }
 }
