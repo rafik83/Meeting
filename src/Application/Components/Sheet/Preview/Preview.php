@@ -62,7 +62,7 @@ class Preview
      *
      * @return PreviewView[]
      */
-    public function getPreview(Sheet $sheet, $locale, ComposedRule $composedRule = null)
+    public function getPreview(Sheet $sheet, string $locale, ComposedRule $composedRule = null)
     {
         $previewObjects    = [];
         $previewObjectKeys = $sheet->getTypeSheetTemplate()->getPreview();
@@ -92,32 +92,8 @@ class Preview
                     continue;
                 }
 
-                $previewView = new PreviewView($templateObject->getKey(), '', $templateObject->getType());
-
-                if ($templateObject instanceof TemplateObject\ContentObjectInterface) {
-                    if ($templateObject instanceof TemplateObject\EditableText && $templateObject->isTitle()) {
-                        $previewView->strong = true;
-                    }
-
-                    if ($templateObject->getContentValue() === '' && $templateObject->getTag() !== null) {
-                        // In EditableText there is only one tag therefore it is not useful to add a comma
-                        foreach ($templateObject->getTaggedDataViews() as $taggedDataView) {
-                            $previewView->content = $this->getTaggedDataViewContent($taggedDataView, $locale);
-                        }
-                    } else {
-                        $previewView->content = $templateObject->getContentValue();
-                    }
-
-                    $previewView->populatedFromTag = $templateObject->getTag();
-                } elseif ($templateObject instanceof TemplateObject\Tag) {
-                    foreach ($templateObject->getTaggedDataViews() as $taggedDataView) {
-                        $previewView->addTagView(
-                            new TagView($taggedDataView->type, $templateObject->getLabel($locale), $taggedDataView->content)
-                        );
-                    }
-                }
-
-                $previewObjects[] = $previewView;
+                // Other remplate objects
+                $previewObjects[] = $this->resolveTemplateObject($templateObject, $locale);
             } catch (ObjectNotFoundException $exception) {
                 continue;
             }
@@ -126,6 +102,50 @@ class Preview
         $this->removeTitleWhenSheetHasNotImage($sheet, $previewObjects);
 
         return $previewObjects;
+    }
+
+    /**
+     * @param TemplateObject $templateObject
+     * @param string         $locale
+     *
+     * @return PreviewView
+     */
+    private function resolveTemplateObject(TemplateObject $templateObject, string $locale)
+    {
+        $previewView = new PreviewView($templateObject->getKey(), '', $templateObject->getType());
+
+        if ($templateObject instanceof TemplateObject\ContentObjectInterface) {
+            if ($templateObject instanceof TemplateObject\EditableText && $templateObject->isTitle()) {
+                $previewView->strong = true;
+            }
+
+            if ($templateObject->getContentValue() === '' && $templateObject->getTag() !== null) {
+                // In EditableText there is only one tag therefore it is not useful to add a comma
+                foreach ($templateObject->getTaggedDataViews() as $taggedDataView) {
+                    $previewView->content = $this->getTaggedDataViewContent($taggedDataView, $locale);
+                }
+            } else {
+                $previewView->content = $templateObject->getContentValue();
+            }
+
+            $previewView->populatedFromTag = $templateObject->getTag();
+
+            return $previewView;
+        }
+
+        if ($templateObject instanceof TemplateObject\Tag) {
+            foreach ($templateObject->getTaggedDataViews() as $taggedDataView) {
+                $previewView->addTagView(
+                    new TagView(
+                        $taggedDataView->type,
+                        $templateObject->getLabel($locale),
+                        $taggedDataView->content
+                    )
+                );
+            }
+        }
+
+        return $previewView;
     }
 
     /**
