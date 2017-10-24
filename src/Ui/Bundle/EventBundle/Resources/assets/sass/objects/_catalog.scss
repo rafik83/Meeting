@@ -81,6 +81,12 @@
     padding: 20px;
     width: 100%;
 
+    .preview-participants-position {
+      span {
+        font-weight: bold;
+      }
+    }
+
     .see-more {
       text-decoration: underline;
     }

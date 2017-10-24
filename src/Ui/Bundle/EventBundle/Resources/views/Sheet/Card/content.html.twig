@@ -18,7 +18,7 @@
             {{ include('EventBundle:Sheet/Card/Tag:' ~ tag.type ~ '.html.twig', {'tag': tag}, false) }}
         {% endfor %}
     {% elseif object.isParticipantsPosition %}
-        <p>
+        <p class="preview-participants-position">
             <span class="text-highlighted">{{ object.content }}</span>{% if object.link %}, <a href="{{ sheetToDisplayLink }}" class="see-more">{{ 'catalog.preview.participant_positions_see_more'|trans }}</i></a>{% endif %}
         </p>
     {% else %}
