@@ -99,7 +99,6 @@ class Preview
                         $previewView->strong = true;
                     }
 
-
                     if ($templateObject->getContentValue() === '' && $templateObject->getTag() !== null) {
                         // In EditableText there is only one tag therefore it is not useful to add a comma
                         foreach ($templateObject->getTaggedDataViews() as $taggedDataView) {
@@ -124,6 +123,19 @@ class Preview
             }
         }
 
+        $this->removeTitleWhenSheetHasNotImage($sheet, $previewObjects);
+
+        return $previewObjects;
+    }
+
+    /**
+     * Sheet title is removed when sheet has not image/logo because missing image is already replaced by the sheet title
+     *
+     * @param Sheet         $sheet
+     * @param PreviewView[] $previewObjects
+     */
+    private function removeTitleWhenSheetHasNotImage(Sheet $sheet, array &$previewObjects)
+    {
         $hasEmptyImage = false;
 
         foreach ($previewObjects as $previewObject) {
@@ -142,8 +154,6 @@ class Preview
                 }
             }
         }
-
-        return $previewObjects;
     }
 
     /**
