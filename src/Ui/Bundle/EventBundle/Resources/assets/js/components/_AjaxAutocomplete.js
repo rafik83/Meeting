@@ -75,7 +75,13 @@ AjaxAutocomplete.prototype.selectTag = function () {
     this.updateParentInput();
 };
 
-AjaxAutocomplete.prototype.unselectTag = function () {
+AjaxAutocomplete.prototype.unselectTag = function (evt) {
+    // prevent open select2 dropdown when removing tag
+    if (!evt.params.originalEvent) {
+        return;
+    }
+    evt.params.originalEvent.stopPropagation();
+
     this.updateParentInput();
 
     var isMobile = this.element.getAttribute('data-is-mobile');
@@ -94,8 +100,11 @@ AjaxAutocomplete.prototype.onChange = function () {
     }
 };
 
+/**
+ * Remove UI select dropdown
+ */
 AjaxAutocomplete.prototype.removeDropdown = function () {
-    [].forEach.call(document.querySelectorAll('.select2-dropdown'), function (element) {
+    document.querySelectorAll('.select2-dropdown').forEach(function (element) {
         $(element).remove();
     });
 };
