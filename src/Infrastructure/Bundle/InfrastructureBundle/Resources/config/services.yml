@@ -2235,14 +2235,20 @@ services:
         class: Proximum\Vimeet\Application\Components\Sheet\SheetGuesser
         arguments:
             - '@vimeet_infrastructure.repository.sheet_repository'
+
     sheet.preview:
         class: Proximum\Vimeet\Application\Components\Sheet\Preview\Preview
         arguments:
             - '@template.tagged_data_factory'
+            - '@vimeet_infrastructure.adapter.translator_adapter'
+            - '@sheet.preview.resolver.participants_resolver'
+            - '@sheet.preview.resolver.participants_position_resolver'
+
+    sheet.preview.resolver.participants_resolver:
+        class: Proximum\Vimeet\Application\Components\Sheet\Preview\Resolver\ParticipantsResolver
+        arguments:
             - '@query.participant.card_view_query_handler'
             - '@domain.rule.applyer'
-            - '@vimeet_infrastructure.adapter.translator_adapter'
-            - '@sheet.preview.resolver.participants_position_resolver'
 
     sheet.preview.resolver.participants_position_resolver:
         class: Proximum\Vimeet\Application\Components\Sheet\Preview\Resolver\ParticipantsPositionResolver

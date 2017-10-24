@@ -12,12 +12,10 @@ namespace Proximum\Vimeet\Application\Components\Sheet\Preview;
 
 use Proximum\Vimeet\Application\Adapter\TranslatorInterface;
 use Proximum\Vimeet\Application\Components\Sheet\Preview\Resolver\ParticipantsPositionResolver;
-use Proximum\Vimeet\Application\Query\Participant\CardViewQuery;
-use Proximum\Vimeet\Application\Query\Participant\CardViewQueryHandler;
+use Proximum\Vimeet\Application\Components\Sheet\Preview\Resolver\ParticipantsResolver;
 use Proximum\Vimeet\Application\View\Sheet\Preview\PreviewView;
 use Proximum\Vimeet\Application\View\Sheet\Preview\TagView;
 use Proximum\Vimeet\Domain\Model\Sheet;
-use Proximum\Vimeet\Domain\Rule\Applyer;
 use Proximum\Vimeet\Domain\Rule\ComposedRule;
 use Proximum\Vimeet\Domain\Template\AbstractChild;
 use Proximum\Vimeet\Domain\Template\Exception\ObjectNotFoundException;
@@ -27,39 +25,33 @@ use Proximum\Vimeet\Domain\View\Template\TaggedDataView;
 
 class Preview
 {
-    /** @var Applyer */
-    private $applyer;
-
-    /** @var CardViewQueryHandler */
-    private $cardViewQueryHandler;
-
     /** @var TaggedDataFactory */
     private $taggedDataFactory;
 
     /** @var TranslatorInterface */
     private $translator;
 
+    /** @var ParticipantsResolver */
+    private $participantsResolver;
+
     /** @var ParticipantsPositionResolver */
     private $participantsPositionResolver;
 
     /**
      * @param TaggedDataFactory            $taggedDataFactory
-     * @param CardViewQueryHandler         $cardViewQueryHandler
-     * @param Applyer                      $applyer
      * @param TranslatorInterface          $translator
+     * @param ParticipantsResolver         $participantsResolver
      * @param ParticipantsPositionResolver $participantsPositionResolver
      */
     public function __construct(
         TaggedDataFactory $taggedDataFactory,
-        CardViewQueryHandler $cardViewQueryHandler,
-        Applyer $applyer,
         TranslatorInterface $translator,
+        ParticipantsResolver $participantsResolver,
         ParticipantsPositionResolver $participantsPositionResolver
     ) {
         $this->taggedDataFactory            = $taggedDataFactory;
-        $this->applyer                      = $applyer;
-        $this->cardViewQueryHandler         = $cardViewQueryHandler;
         $this->translator                   = $translator;
+        $this->participantsResolver         = $participantsResolver;
         $this->participantsPositionResolver = $participantsPositionResolver;
     }
 
@@ -72,7 +64,6 @@ class Preview
      */
     public function getPreview(Sheet $sheet, $locale, ComposedRule $composedRule = null)
     {
-        $cardViews         = [];
         $previewObjects    = [];
         $previewObjectKeys = $sheet->getTypeSheetTemplate()->getPreview();
         $rules             = null !== $composedRule ? [$composedRule->rule] : [];
@@ -80,6 +71,7 @@ class Preview
 
         foreach ($previewObjectKeys as $key) {
             try {
+                // Manage custom preview data
                 if (CustomPreviewData::PARTICIPANTS_POSITION === $key) {
                     $customPreviewView = $this->participantsPositionResolver->handle($sheet, $locale);
 
@@ -90,48 +82,38 @@ class Preview
                     continue;
                 }
 
-                $object = $templateData->getObject($key);
+                // then manage template object data
+                $templateObject = $templateData->getObject($key);
 
-                if (empty($cardViews) && $object instanceof TemplateObject\Participant) {
-                    $participants       = $sheet->getParticipants()->toArray();
-                    $numberParticipants = $object->getNumberOfParticipantShown();
+                // Participant object
+                if ($templateObject instanceof TemplateObject\Participant) {
+                    $previewObjects[] = $this->participantsResolver->handle($sheet, $locale, $templateObject, $rules);
 
-                    // Create card view for each participant limited by the number of participant shown
-                    for ($index = 0; $index < $numberParticipants && isset($participants[$index]); $index++) {
-                        $cardView = $this->cardViewQueryHandler->handle(
-                            new CardViewQuery($participants[$index], $locale)
-                        );
-
-                        if (null !== $composedRule && null !== $composedRule->rule) {
-                            $this->applyer->applyRuleForParticipantCard($cardView, $rules);
-                        }
-
-                        $cardViews[] = $cardView;
-                    }
+                    continue;
                 }
 
-                $previewView = new PreviewView($object->getKey(), '', $object->getType(), $cardViews);
+                $previewView = new PreviewView($templateObject->getKey(), '', $templateObject->getType());
 
-                if ($object instanceof TemplateObject\ContentObjectInterface) {
-                    if ($object instanceof TemplateObject\EditableText && $object->isTitle()) {
+                if ($templateObject instanceof TemplateObject\ContentObjectInterface) {
+                    if ($templateObject instanceof TemplateObject\EditableText && $templateObject->isTitle()) {
                         $previewView->strong = true;
                     }
 
 
-                    if ($object->getContentValue() === '' && $object->getTag() !== null) {
+                    if ($templateObject->getContentValue() === '' && $templateObject->getTag() !== null) {
                         // In EditableText there is only one tag therefore it is not useful to add a comma
-                        foreach ($object->getTaggedDataViews() as $taggedDataView) {
+                        foreach ($templateObject->getTaggedDataViews() as $taggedDataView) {
                             $previewView->content = $this->getTaggedDataViewContent($taggedDataView, $locale);
                         }
                     } else {
-                        $previewView->content = $object->getContentValue();
+                        $previewView->content = $templateObject->getContentValue();
                     }
 
-                    $previewView->populatedFromTag = $object->getTag();
-                } elseif ($object instanceof TemplateObject\Tag) {
-                    foreach ($object->getTaggedDataViews() as $taggedDataView) {
+                    $previewView->populatedFromTag = $templateObject->getTag();
+                } elseif ($templateObject instanceof TemplateObject\Tag) {
+                    foreach ($templateObject->getTaggedDataViews() as $taggedDataView) {
                         $previewView->addTagView(
-                            new TagView($taggedDataView->type, $object->getLabel($locale), $taggedDataView->content)
+                            new TagView($taggedDataView->type, $templateObject->getLabel($locale), $taggedDataView->content)
                         );
                     }
                 }
