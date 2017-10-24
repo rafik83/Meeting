@@ -2242,6 +2242,12 @@ services:
             - '@query.participant.card_view_query_handler'
             - '@domain.rule.applyer'
             - '@vimeet_infrastructure.adapter.translator_adapter'
+            - '@sheet.preview.resolver.participants_position_resolver'
+
+    sheet.preview.resolver.participants_position_resolver:
+        class: Proximum\Vimeet\Application\Components\Sheet\Preview\Resolver\ParticipantsPositionResolver
+        arguments:
+            - '@template.participant_info_guesser'
 
     vimeet_infrastructure.application.components.sorted_sheet:
         class: Proximum\Vimeet\Application\Components\Sheet\SortedSheet

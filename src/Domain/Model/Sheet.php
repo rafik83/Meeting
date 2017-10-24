@@ -292,7 +292,7 @@ class Sheet implements TraceableInterface
     }
 
     /**
-     * @return array
+     * @return Participant[]
      */
     public function getParticipantsArray(): array
     {

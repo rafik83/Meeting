@@ -13,6 +13,7 @@ namespace Proximum\Vimeet\Tests\Application\Components\Sheet\Preview;
 use Doctrine\Common\Collections\ArrayCollection;
 use Proximum\Vimeet\Application\Adapter\TranslatorInterface;
 use Proximum\Vimeet\Application\Components\Sheet\Preview\Preview;
+use Proximum\Vimeet\Application\Components\Sheet\Preview\Resolver\ParticipantsPositionResolver;
 use Proximum\Vimeet\Application\Query\Participant\CardViewQuery;
 use Proximum\Vimeet\Application\Query\Participant\CardViewQueryHandler;
 use Proximum\Vimeet\Application\View\Participant\CardView;
@@ -98,19 +99,23 @@ class PreviewTest extends TestCase
             ->willReturn($templateData)
         ;
         $cardViewQueryHandler = $this->prophesize(CardViewQueryHandler::class);
+
         $cardView = new CardView(1, false, 'firstName', 'lastName', 'position', 'avatar', false, 2);
         $cardViewQueryHandler
             ->handle(new CardViewQuery($participant->reveal(), $locale))
             ->shouldBeCalled()
             ->willReturn($cardView);
-        $applyer              = $this->prophesize(Applyer::class);
-        $translator           = $this->prophesize(TranslatorInterface::class);
+
+        $applyer                      = $this->prophesize(Applyer::class);
+        $translator                   = $this->prophesize(TranslatorInterface::class);
+        $participantsPositionResolver = $this->prophesize(ParticipantsPositionResolver::class);
 
         $preview = new Preview(
             $taggedDataFactory->reveal(),
             $cardViewQueryHandler->reveal(),
             $applyer->reveal(),
-            $translator->reveal()
+            $translator->reveal(),
+            $participantsPositionResolver->reveal()
         );
 
         $result = $preview->getPreview($sheet->reveal(), $locale, $composedRule);
