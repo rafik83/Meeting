@@ -103,7 +103,7 @@ function CatalogMobileFilters(catalogFilterZone, catalogFilter, catalogForm) {
     // Custom select2 events
 
     PubSub.publish('build.select2', this.catalogFilterZone);
-    PubSub.subscribe('mobile-input-content-change', this.closeMenu());
+    PubSub.subscribe('mobile-input-content-change', this.closeMenu.bind(this));
 }
 
 CatalogMobileFilters.prototype.openMenu = function (event) {
