@@ -78,7 +78,6 @@ class Preview
         $rules             = null !== $composedRule ? [$composedRule->rule] : [];
         $templateData      = $this->taggedDataFactory->buildTaggedDataView($sheet, $locale, $rules);
 
-
         foreach ($previewObjectKeys as $key) {
             try {
                 if (CustomPreviewData::PARTICIPANTS_POSITION === $key) {
