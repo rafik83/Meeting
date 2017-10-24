@@ -154,4 +154,83 @@ class PreviewTest extends TestCase
             $previewTag
         ], $result);
     }
+
+    public function testGetPreviewParticipantsPosition()
+    {
+        $locale      = 'fr';
+        $sheet       = $this->prophesize(Sheet::class);
+        $template    = $this->prophesize(SheetTemplate::class);
+        $participant = $this->prophesize(Participant::class);
+
+        $sheet->getTypeSheetTemplate()->shouldBeCalled()->willReturn($template->reveal());
+        $sheet->getParticipants()->willReturn(new ArrayCollection([$participant->reveal()]));
+        $template->getPreview()->shouldBeCalled()->willReturn(
+            [
+                'key1',
+                'custom_preview_data_participant_position',
+            ]
+        );
+
+        $editableText = $this->prophesize(EditableText::class);
+        $editableText->getTag()->willReturn(null);
+        $editableText->getKey()->willReturn('key1');
+        $editableText->getType()->willReturn(AbstractChild::TEMPLATE_OBJECT_TYPE_EDITABLE_TEXT);
+        $editableText->isTitle()->willReturn(false);
+        $editableText->getContentValue()->willReturn('content value');
+
+        $composedRule = new ComposedRule();
+        $templateData = $this->prophesize(TemplateData::class);
+        $templateData->getObject('key1')->shouldBeCalled()->willReturn($editableText->reveal());
+
+        $taggedDataFactory = $this->prophesize(TaggedDataFactory::class);
+        $taggedDataFactory->buildTaggedDataView($sheet->reveal(), $locale, [$composedRule->rule])
+            ->shouldBeCalled()
+            ->willReturn($templateData)
+        ;
+        $cardViewQueryHandler = $this->prophesize(CardViewQueryHandler::class);
+        $cardViewQueryHandler
+            ->handle(new CardViewQuery($participant->reveal(), $locale))
+            ->shouldNotBeCalled()
+        ;
+
+        $applyer    = $this->prophesize(Applyer::class);
+        $translator = $this->prophesize(TranslatorInterface::class);
+
+        $participantsPositionResolver = $this->prophesize(ParticipantsPositionResolver::class);
+        $previewParticipantsPosition = new PreviewView(
+            'custom_preview_data_participant_position',
+            'Directeur commercial',
+            'custom_preview_data_participant_position'
+        );
+
+        $participantsPositionResolver
+            ->handle($sheet->reveal(), $locale)
+            ->shouldBeCalled()
+            ->willReturn($previewParticipantsPosition)
+        ;
+
+        $preview = new Preview(
+            $taggedDataFactory->reveal(),
+            $cardViewQueryHandler->reveal(),
+            $applyer->reveal(),
+            $translator->reveal(),
+            $participantsPositionResolver->reveal()
+        );
+
+        $result = $preview->getPreview($sheet->reveal(), $locale, $composedRule);
+
+        $previewText = new PreviewView(
+            'key1',
+            'content value',
+            AbstractChild::TEMPLATE_OBJECT_TYPE_EDITABLE_TEXT
+        );
+
+        $this->assertEquals(
+            [
+                $previewText,
+                $previewParticipantsPosition,
+            ],
+            $result
+        );
+    }
 }
