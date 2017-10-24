@@ -19,7 +19,7 @@
         {% endfor %}
     {% elseif object.isParticipantsPosition %}
         <p class="preview-participants-position">
-            <span class="text-highlighted">{{ object.content }}</span>{% if object.link %}, <a href="{{ sheetToDisplayLink }}" class="see-more">{{ 'catalog.preview.participant_positions_see_more'|trans }}</i></a>{% endif %}
+            <span class="text-highlighted">{{ object.content }}</span>{% if object.link and sheetToDisplayLink is defined and sheetToDisplayLink is not null %}, <a href="{{ sheetToDisplayLink }}" class="see-more" target="_blank">{{ 'catalog.preview.participant_positions_see_more'|trans }}</i></a>{% endif %}
         </p>
     {% else %}
         {% if object.isStrong %}
