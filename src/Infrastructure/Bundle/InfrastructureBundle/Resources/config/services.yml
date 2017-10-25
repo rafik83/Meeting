@@ -4332,6 +4332,12 @@ services:
             - '@repository.promotion_code_repository'
             - '@datetime'
 
+    cart_cleaner:
+        class: Proximum\Vimeet\Domain\Cart\CartCleaner
+        arguments:
+            - '@cart_manager'
+            - '@repository.cart_row_repository'
+
     #
     # Catalog
     #

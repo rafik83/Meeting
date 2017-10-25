@@ -57,6 +57,7 @@ class PaymentController extends Controller
         }
 
         $now   = new \DateTime();
+        $this->get('cart_cleaner')->handle($sheet);
         $total = $this->get('payment.total_to_pay')->getTotal($sheet);
 
         // If nothing to pay, create the order
