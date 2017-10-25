@@ -53,9 +53,11 @@ class ParticipantsResolver
         $participants = $sheet->getParticipants()->toArray();
         $cardViews = [];
 
+        $numberOfParticipantShown = $participantObject->getNumberOfParticipantShown();
+
         // Create card view for each participant limited by the number of participant shown
         for ($index = 0;
-             $index < $participantObject->getNumberOfParticipantShown() && array_key_exists($index, $participants);
+             $index < $numberOfParticipantShown && array_key_exists($index, $participants);
              $index++
         ) {
             $cardView = $this->cardViewQueryHandler->handle(
