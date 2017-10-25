@@ -12,7 +12,7 @@
             <div class="catalog-mobile-menu-summary catalog-mobile-menu-container">
                 {% if searchForm.content is defined %}
                     <a href="#" class="catalog-mobile-menu-button btn btn-default btn-block" data-catalog-mobile-menu-button-action="catalog-mobile-menu-button-action-content-filter">
-                        <span>{{ 'catalog.mobile.filters.content'|trans }}</span>
+                        <span>{{ searchForm.content.vars.label }}</span>
                         <span id="content-filter-remove" class="button-count">
                             <i class="glyphicon glyphicon-search"></i>
                         </span>
