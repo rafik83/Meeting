@@ -25,10 +25,10 @@ class TemplateObject extends AbstractChild
     /**
      * @var Product[]
      */
-    protected $buyableProducts;
+    protected $buyableProducts = [];
 
     /**
-     * @var Sheet
+     * @var null|Sheet
      */
     protected $sheet;
 
@@ -250,15 +250,15 @@ class TemplateObject extends AbstractChild
     /**
      * @return Product[]
      */
-    public function getBuyableProducts()
+    public function getBuyableProducts(): array
     {
         return $this->buyableProducts;
     }
 
     /**
-     * @param Product []
+     * @param Product[]
      */
-    public function setBuyableProducts($products)
+    public function setBuyableProducts(array $products)
     {
         $this->buyableProducts = $products;
     }
