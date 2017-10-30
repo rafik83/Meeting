@@ -5,7 +5,7 @@ var openTokLayout = require('opentok-layout-js');
 
 var Publisher = require('./Publisher');
 var Subscriber = require('./Subscriber');
-var CHROME_EXTENSION_ID = 'ggkfgpjmepocofollhkkehpdlilfkbnh';
+var CHROME_EXTENSION_ID = 'alpphdcgnkkpafmlhllecaganiekhjcp';
 
 /**
  * @constructor
