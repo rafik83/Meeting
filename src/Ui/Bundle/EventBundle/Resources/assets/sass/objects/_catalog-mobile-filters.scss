@@ -28,6 +28,15 @@
         text-align: left;
         display: block;
 
+        span.filter-content-data {
+          text-overflow: ellipsis;
+          white-space: nowrap;
+          overflow: hidden;
+          display: inline-block;
+          width: 90%;
+          vertical-align: middle;
+        }
+
         > span.button-count {
           float: right;
 
@@ -98,6 +107,9 @@
 
     .catalog-mobile-menu-filters-list {
       padding: 17px 17px 60px 17px;
+      .filter-element {
+        margin-bottom: 20px;
+      }
     }
 
     .catalog-mobile-menu-filters {
@@ -111,6 +123,10 @@
 
   .catalog-mobile-margin-2 {
     margin-top: 125px !important;
+  }
+
+  .catalog-mobile-margin-3 {
+    margin-top: 175px !important;
   }
 }
 
