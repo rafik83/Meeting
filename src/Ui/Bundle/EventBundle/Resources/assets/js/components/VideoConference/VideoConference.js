@@ -57,19 +57,13 @@ function VideoConference(element) {
   // Custom Events
   tokbox.registerScreenSharingExtension('chrome', CHROME_EXTENSION_ID, 2);
 
-  this.startScreenSharingButton.addEventListener('click',
-    this.screenshare.bind(this));
-  this.endScreenSharingButton.addEventListener('click',
-    this.endScreenshare.bind(this));
+  this.startScreenSharingButton.addEventListener('click', this.preScreenshare.bind(this));
+  this.endScreenSharingButton.addEventListener('click', this.endScreenshare.bind(this));
 
-  document.addEventListener('webkitfullscreenchange',
-    this.exitFullscreenHandler.bind(this), false);
-  document.addEventListener('mozfullscreenchange',
-    this.exitFullscreenHandler.bind(this), false);
-  document.addEventListener('fullscreenchange',
-    this.exitFullscreenHandler.bind(this), false);
-  document.addEventListener('MSFullscreenChange',
-    this.exitFullscreenHandler.bind(this), false);
+  document.addEventListener('webkitfullscreenchange', this.exitFullscreenHandler.bind(this), false);
+  document.addEventListener('mozfullscreenchange', this.exitFullscreenHandler.bind(this), false);
+  document.addEventListener('fullscreenchange', this.exitFullscreenHandler.bind(this), false);
+  document.addEventListener('MSFullscreenChange', this.exitFullscreenHandler.bind(this), false);
 
   // Init
   this.init();
@@ -211,19 +205,27 @@ VideoConference.prototype.showError = function(error) {
   }
 };
 
-/**
- * Start screensharing
- */
-VideoConference.prototype.screenshare = function() {
+VideoConference.prototype.preScreenshare = function () {
   if (this.session === null) {
     alert('You cannot start screensharing outside of a session');
     return;
   }
 
-  // if (this.isChrome()) {
-  //   this.installChromeExtension();
-  // }
+  if (this.isChrome()) {
+    this.installChromeExtension(function() {
+      this.screenshare();
+    }.bind(this), function(error) {
+      alert('Installation fail : ' + error);
+    });
+  } else {
+    this.screenshare();
+  }
+};
 
+/**
+ * Start screensharing
+ */
+VideoConference.prototype.screenshare = function() {
   tokbox.checkScreenSharingCapability(function(response) {
     if (!response.supported || response.extensionRegistered === false) {
       alert(this.notCompatibleBrowserMessage);
@@ -302,16 +304,16 @@ VideoConference.prototype.isChrome = function () {
   return /Chrome/.test(navigator.userAgent) && /Google Inc/.test(navigator.vendor);
 };
 
-VideoConference.prototype.installChromeExtension = function () {
+VideoConference.prototype.installChromeExtension = function (successCallback, errorCallback) {
   if (!chrome.app.isInstalled) {
     console.log('chrome extension not installed');
     chrome.webstore.install(
-      'https://chrome.google.com/webstore/detail/alpphdcgnkkpafmlhllecaganiekhjcp',
+      null, // pick up using link rel="chrome-webstore-item"
       function() {
-        console.log('success');
+        successCallback();
       },
       function(error) {
-        console.log('fail', error);
+        errorCallback(error);
       }
     );
   }
