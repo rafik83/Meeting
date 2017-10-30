@@ -140,6 +140,7 @@ services:
         class: Proximum\Vimeet\Behat\Service\Manager\CatalogVisibilityManager
         arguments:
             - '@repository.catalog_visibility_repository'
+            - '@vimeet_infrastructure.repository.type_repository'
 
     behat_manager.event.content_manager:
         class: Proximum\Vimeet\Behat\Service\Manager\Event\ContentManager
