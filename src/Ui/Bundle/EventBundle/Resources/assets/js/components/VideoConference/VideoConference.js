@@ -220,6 +220,10 @@ VideoConference.prototype.screenshare = function() {
     return;
   }
 
+  // if (this.isChrome()) {
+  //   this.installChromeExtension();
+  // }
+
   tokbox.checkScreenSharingCapability(function(response) {
     if (!response.supported || response.extensionRegistered === false) {
       alert(this.notCompatibleBrowserMessage);
@@ -289,6 +293,28 @@ VideoConference.prototype.isNotIE = function() {
 
   return !( appName === 'Microsoft Internet Explorer' || // IE <= 10
     (appName === 'Netscape' && userAgent.indexOf('trident') > -1) ); // IE >= 11
+};
+
+/**
+ * @returns {boolean}
+ */
+VideoConference.prototype.isChrome = function () {
+  return /Chrome/.test(navigator.userAgent) && /Google Inc/.test(navigator.vendor);
+};
+
+VideoConference.prototype.installChromeExtension = function () {
+  if (!chrome.app.isInstalled) {
+    console.log('chrome extension not installed');
+    chrome.webstore.install(
+      'https://chrome.google.com/webstore/detail/alpphdcgnkkpafmlhllecaganiekhjcp',
+      function() {
+        console.log('success');
+      },
+      function(error) {
+        console.log('fail', error);
+      }
+    );
+  }
 };
 
 module.exports = VideoConference;
