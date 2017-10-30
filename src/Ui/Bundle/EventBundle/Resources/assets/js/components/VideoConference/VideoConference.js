@@ -211,15 +211,18 @@ VideoConference.prototype.preScreenshare = function () {
     return;
   }
 
-  if (this.isChrome()) {
-    this.installChromeExtension(function() {
-      this.screenshare();
-    }.bind(this), function(error) {
-      alert('Installation fail : ' + error);
-    });
-  } else {
-    this.screenshare();
-  }
+  // TODO: Implement inline installation
+  // if (this.isChrome()) {
+  //   this.installChromeExtension(function() {
+  //     this.screenshare();
+  //   }.bind(this), function(error) {
+  //     alert('Installation fail : ' + error);
+  //   });
+  // } else {
+  //   this.screenshare();
+  // }
+
+  this.screenshare();
 };
 
 /**
@@ -316,6 +319,8 @@ VideoConference.prototype.installChromeExtension = function (successCallback, er
         errorCallback(error);
       }
     );
+  } else {
+    successCallback();
   }
 };
 
