@@ -3083,6 +3083,14 @@ services:
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Type\MeetingTypeViewQuery }
 
+    query.type.meeting_category_view_query_handler:
+        class: Proximum\Vimeet\Application\Query\Category\MeetingCategoryViewQueryHandler
+        arguments:
+            - '@catalog.visible_participation_categories'
+            - '@query.catalog.search_facet_view_query_handler'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Category\MeetingCategoryViewQuery }
+
     query.user.user_details_view_query_handler:
         class: Proximum\Vimeet\Application\Query\User\UserDetailsViewQueryHandler
         arguments:

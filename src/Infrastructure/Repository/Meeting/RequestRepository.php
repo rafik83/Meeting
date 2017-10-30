@@ -796,6 +796,18 @@ class RequestRepository implements RequestRepositoryInterface
                 ->setParameter('types', $filters['type']);
         }
 
+        // filter by participant category
+        if (!empty($filters['category'])) {
+            $queryBuilder
+                ->join('fromSheet.type', 'fromType')
+                ->join('toSheet.type', 'toType')
+                ->leftJoin('fromType.categories', 'fromCategory')
+                ->leftJoin('toType.categories', 'toCategory')
+                ->andWhere('(fromSheet != :sheet AND fromCategory IN (:categories)) OR (toSheet != :sheet AND toCategory IN (:categories))')
+                ->setParameter('categories', $filters['category'])
+                ->setParameter('sheet', $sheet);
+        }
+
         if (!empty($filters['state'])) {
             // set sheet
             $queryBuilder->setParameter('sheet', $sheet);
