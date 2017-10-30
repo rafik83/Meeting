@@ -715,6 +715,7 @@ form.sheet_template_preview.children.previewObjects.label_add: 'Ajouter un objet
 form.sheet_template_preview.children.previewObjects.label_delete: 'Supprimer l''objet'
 form.sheet_template_preview.children.previewObjects.prototype.label: Objet
 form.sheet_template_preview.children.submit.label: 'Mettre à jour l''aperçu'
+form.sheet_template_preview.custom_preview_data_participant_position: 'Fonctions des participants'
 form.sheet_template_update.children.close.label: Annuler
 form.sheet_template_update.children.fallback.label: 'Langue par defaut'
 form.sheet_template_update.children.submit.label: Enregistrer

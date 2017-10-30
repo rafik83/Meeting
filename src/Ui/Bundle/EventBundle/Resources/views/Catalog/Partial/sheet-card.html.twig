@@ -8,11 +8,11 @@
                 </a>
             {% endif %}
             {% if catalogSheetPreviewView.isSeenByCurrentUser %}
-                <a href="{{ sheetToDisplayLink }}" class="pull-right no-underline ft-size-18 mg-left-8">
+                <a href="{{ sheetToDisplayLink }}" class="pull-right no-underline ft-size-18 mg-left-8" target="_blank">
                     <i class="icon-Voir_1 ft-bold"></i>
                 </a>
             {% endif %}
-            {{ include('EventBundle:Sheet/Card:content.html.twig', { title: catalogSheetPreviewView.title, preview: catalogSheetPreviewView.preview, isCatalog: isCatalog }, false) }}
+            {{ include('EventBundle:Sheet/Card:content.html.twig', { title: catalogSheetPreviewView.title, preview: catalogSheetPreviewView.preview, isCatalog: isCatalog, sheetToDisplayLink: sheetToDisplayLink }, false) }}
         </div>
         <footer>
             <div class="actions">

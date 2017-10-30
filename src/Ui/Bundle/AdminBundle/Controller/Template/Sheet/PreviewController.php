@@ -30,8 +30,9 @@ class PreviewController extends Controller
     {
         $this->denyAccessUnlessGranted('ROLE_ALLOWED_TO_ORGANIZE');
 
-        $templateData    = $this->get('template.template_data_factory')->createFromTemplate($template);
-        $templateObjects = $templateData->getPreviewAvailableObjects();
+        $templateDataFactory = $this->get('template.template_data_factory');
+        $templateData    = $templateDataFactory->createFromTemplate($template);
+        $templateObjects = $templateDataFactory->getPreviewAvailableData($templateData);
 
         if (null === $template->getEvent()) {
             $locale = $template->getAvailableLocale($request->getLocale());
