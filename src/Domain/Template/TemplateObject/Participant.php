@@ -19,7 +19,7 @@ class Participant extends TemplateObject
      */
     public function getNumberOfParticipantShown()
     {
-        return isset($this->config['numberOfParticipantShown']) ? $this->config['numberOfParticipantShown'] : INF;
+        return isset($this->config['numberOfParticipantShown']) ? (int) $this->config['numberOfParticipantShown'] : INF;
     }
 
     /**

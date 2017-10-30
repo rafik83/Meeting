@@ -52,16 +52,16 @@ class ParticipantsResolver
     ): PreviewView {
         $participants = $sheet->getParticipants()->toArray();
         $cardViews = [];
-
-        $numberOfParticipantShown = $participantObject->getNumberOfParticipantShown();
+        $participantsShown = 0;
 
         // Create card view for each participant limited by the number of participant shown
-        for ($index = 0;
-             $index < $numberOfParticipantShown && array_key_exists($index, $participants);
-             $index++
-        ) {
+        foreach ($participants as $participant) {
+            if ($participantsShown === $participantObject->getNumberOfParticipantShown()) {
+                break;
+            }
+
             $cardView = $this->cardViewQueryHandler->handle(
-                new CardViewQuery($participants[$index], $locale)
+                new CardViewQuery($participant, $locale)
             );
 
             if (!empty($rules)) {
@@ -69,6 +69,7 @@ class ParticipantsResolver
             }
 
             $cardViews[] = $cardView;
+            $participantsShown++;
         }
 
         return new PreviewView($participantObject->getKey(), '', $participantObject->getType(), $cardViews);
