@@ -3,7 +3,7 @@ machine:
     php:
         version: 7.1.6
     node:
-        version: 4.2.6
+        version: 4.5.0
     services:
         - mysql
 dependencies:
