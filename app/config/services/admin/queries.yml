@@ -53,3 +53,24 @@ services:
             - '@domain.service.category.category_name_resolver'
             - '@domain.service.sheets_group.group_name_resolver'
             - '@vimeet_infrastructure.repository.sheet_repository'
+
+    #
+    # Meeting Request Export
+    #
+    query.meeting_request.export.sheet_view_query_handler:
+        class: Proximum\Vimeet\Application\Query\MeetingRequest\Export\SheetViewQueryHandler
+        arguments:
+            - '@command.planning.participant_info_guesser_cache'
+
+    query.meeting_request.export.meeting_request_view_query_handler:
+        class: Proximum\Vimeet\Application\Query\MeetingRequest\Export\MeetingRequestViewQueryHandler
+        arguments:
+            - '@query.meeting_request.export.sheet_view_query_handler'
+
+    query.meeting_request.export.meeting_request_list_view_query_handler:
+        class: Proximum\Vimeet\Application\Query\MeetingRequest\Export\MeetingRequestListViewQueryHandler
+        arguments:
+            - '@vimeet_infrastructure.repository.meeting.request_repository'
+            - '@query.meeting_request.export.meeting_request_view_query_handler'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\MeetingRequest\Export\MeetingRequestListViewQuery }
