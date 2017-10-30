@@ -23,8 +23,5 @@
   },
   "permissions": [
     "desktopCapture"
-  ],
-  "web_accessible_resources": [
-    "icon.png"
   ]
 }
