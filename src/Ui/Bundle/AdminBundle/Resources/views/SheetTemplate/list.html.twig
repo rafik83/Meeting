@@ -48,6 +48,11 @@
                         <a class="btn btn-default btn-sm" href="{{ path('admin_template_sheet_preview_update', {
                             'template': baseTemplate.id
                         }) }}">{{ 'admin.template.action.preview'|trans }}</a>
+
+                        <a class="btn btn-default btn-sm" href="{{ path('admin_template_sheet_print_template_builder', {
+                            'template': baseTemplate.id
+                        }) }}">{{ 'admin.template.action.print'|trans }}</a>
+
                         <div class="btn-group">
                             <a href="{{ path('admin_template_sheet_builder', {
                                 'template': baseTemplate.id, 'locale': baseTemplate.fallback
@@ -100,6 +105,11 @@
                     <a class="btn btn-default btn-sm" href="{{ path('admin_template_sheet_preview_update', {
                         'template': eventsTemplate.id
                     }) }}">{{ 'admin.template.action.preview'|trans }}</a>
+
+                    <a class="btn btn-default btn-sm" href="{{ path('admin_template_sheet_print_template_builder', {
+                        'template': eventsTemplate.id
+                    }) }}">{{ 'admin.template.action.print'|trans }}</a>
+
                     <div class="btn-group">
                         <a href="{{ path('admin_template_sheet_builder', {
                             'template': eventsTemplate.id, 'locale': eventsTemplate.fallback

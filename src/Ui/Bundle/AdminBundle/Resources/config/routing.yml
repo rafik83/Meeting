@@ -960,6 +960,14 @@ admin_template_sheet_update:
     requirements:
         template: \d+
         locale: '[a-z]{2}(_[A-Z]{2})?'
+
+admin_template_sheet_print_template_builder:
+    path: /template/sheet/{template}/print
+    defaults: { _controller: AdminBundle:Template\Sheet\PrintTemplate:builder }
+    methods: [GET, POST]
+    requirements:
+        template: \d+
+
 #
 # Product
 #
