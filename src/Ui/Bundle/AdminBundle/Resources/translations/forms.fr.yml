@@ -108,6 +108,8 @@ form.configure.children.hasMessage.label: 'Message activé'
 form.configure.children.messageTranslations.label: Message
 form.configure.children.messageTranslations.prototype.children.content.label: Contenu
 form.configure.children.messageTranslations.prototype.children.title.label: Titre
+form.configure.children.registrationUrl.label: 'Url d''inscription'
+form.configure.children.registrationUrl.placeholder: 'Exemple: https://nom-evenement.vimeet.events'
 form.configure.children.searchFacets.category.help: ''
 form.configure.children.searchFacets.category.label: Catégorie
 form.configure.children.searchFacets.keywords.help: 'Nom de la fiche, texte, objets collections et nomenclatures sur la fiche de participation'
@@ -123,8 +125,6 @@ form.configure.children.searchFacets.type.help: ''
 form.configure.children.searchFacets.type.label: Type
 form.configure.children.submit.label: Enregistrer
 form.configure.children.types.label: 'Types visibles'
-form.configure.children.registrationUrl.label: "Url d'inscription"
-form.configure.children.registrationUrl.placeholder: "Exemple: https://nom-evenement.vimeet.events"
 form.content_update.children.submit.label: Enregistrer
 form.create_admin.children.email.label: Email
 form.create_admin.children.events.label: Événements
@@ -252,8 +252,8 @@ form.extra_parameter_create.children.name.label: Nom
 form.extra_parameter_create.children.submit.label: Enregistrer
 form.extra_parameter_create.children.type.choices.leni_event: 'Code Event LENI'
 form.extra_parameter_create.children.type.choices.leni_user: 'Code Utilisateur LENI'
-form.extra_parameter_create.children.type.choices.vianeo_endpoint: 'Vianeo endpoint'
 form.extra_parameter_create.children.type.choices.vianeo_concerned_types_id: 'Vianeo : Ids des types de participation concernés (séparés par une virgule)'
+form.extra_parameter_create.children.type.choices.vianeo_endpoint: 'Vianeo endpoint'
 form.extra_parameter_create.children.type.label: Type
 form.extra_parameter_create.children.value.label: Valeur
 form.extra_parameter_update.children.name.label: Nom
