@@ -232,10 +232,14 @@ VideoConference.prototype.preScreenshare = function () {
 
     this.installChromeExtension(function () {
       console.log('chrome extension installation succeeded, start screensharing');
+      localStorage.setItem(CHROME_EXTENSION_IS_INSTALLED, 1);
       this.screenshare();
     }.bind(this), function(error) {
       console.log('Installation fail : ' + error);
+      localStorage.setItem(CHROME_EXTENSION_IS_INSTALLED, 0);
     });
+
+    return;
   }
 
   // otherwise start screensharing directly
