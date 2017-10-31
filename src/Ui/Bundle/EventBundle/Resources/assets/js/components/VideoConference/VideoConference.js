@@ -211,16 +211,15 @@ VideoConference.prototype.preScreenshare = function () {
     return;
   }
 
-  // TODO: Implement inline installation
-  // if (this.isChrome()) {
-  //   this.installChromeExtension(function() {
-  //     this.screenshare();
-  //   }.bind(this), function(error) {
-  //     alert('Installation fail : ' + error);
-  //   });
-  // } else {
-  //   this.screenshare();
-  // }
+  if (this.isChrome()) {
+    this.installChromeExtension(function() {
+      this.screenshare();
+    }.bind(this), function(error) {
+      alert('Installation fail : ' + error);
+    });
+  } else {
+    this.screenshare();
+  }
 
   this.screenshare();
 };
