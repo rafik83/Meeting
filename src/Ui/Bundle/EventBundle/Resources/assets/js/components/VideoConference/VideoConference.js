@@ -6,6 +6,7 @@ var openTokLayout = require('opentok-layout-js');
 var Publisher = require('./Publisher');
 var Subscriber = require('./Subscriber');
 var CHROME_EXTENSION_ID = 'alpphdcgnkkpafmlhllecaganiekhjcp';
+var CHROME_EXTENSION_IS_INSTALLED = 'CHROME_EXTENSION_IS_INSTALLED';
 
 /**
  * @constructor
@@ -64,6 +65,13 @@ function VideoConference(element) {
   document.addEventListener('mozfullscreenchange', this.exitFullscreenHandler.bind(this), false);
   document.addEventListener('fullscreenchange', this.exitFullscreenHandler.bind(this), false);
   document.addEventListener('MSFullscreenChange', this.exitFullscreenHandler.bind(this), false);
+
+  // check if chrome extension already installed
+  if (this.isChrome()) {
+    this.isChromeExtensionInstall(function(response) {
+      localStorage.setItem(CHROME_EXTENSION_IS_INSTALLED, response === true ? 1 : 0);
+    });
+  }
 
   // Init
   this.init();
@@ -215,16 +223,22 @@ VideoConference.prototype.preScreenshare = function () {
   }
 
   if (this.isChrome()) {
-    this.installChromeExtension(function() {
+    var isInstalled = parseInt(localStorage.getItem(CHROME_EXTENSION_IS_INSTALLED));
+
+    if (isInstalled === 1) {
+      this.screenshare();
+      return;
+    }
+
+    this.installChromeExtension(function () {
       console.log('chrome extension installation succeeded, start screensharing');
       this.screenshare();
     }.bind(this), function(error) {
       console.log('Installation fail : ' + error);
     });
-
-    return;
   }
 
+  // otherwise start screensharing directly
   this.screenshare();
 };
 
@@ -309,20 +323,37 @@ VideoConference.prototype.isChrome = function () {
   return /Chrome/.test(navigator.userAgent) && /Google Inc/.test(navigator.vendor);
 };
 
+/**
+ * Check if chrome extension is installed by send it a message
+ *
+ * @param callback
+ */
+VideoConference.prototype.isChromeExtensionInstall = function (callback) {
+  chrome.runtime.sendMessage(
+    CHROME_EXTENSION_ID,
+    { type: 'isInstalled' },
+    function(response) {
+      callback(response);
+    }
+  );
+};
+
+/**
+ * Show prompt install chrome extension
+ *
+ * @param successCallback
+ * @param errorCallback
+ */
 VideoConference.prototype.installChromeExtension = function (successCallback, errorCallback) {
-  if (!chrome.app.isInstalled) {
-    chrome.webstore.install(
-      null, // pick up using link rel="chrome-webstore-item"
-      function() {
-        successCallback();
-      },
-      function(error) {
-        errorCallback(error);
-      }
-    );
-  } else {
-    successCallback();
-  }
+  chrome.webstore.install(
+    null, // pick up using link rel="chrome-webstore-item"
+    function() {
+      successCallback();
+    },
+    function(error) {
+      errorCallback(error);
+    }
+  );
 };
 
 module.exports = VideoConference;
