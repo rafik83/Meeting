@@ -215,12 +215,11 @@ VideoConference.prototype.preScreenshare = function () {
   }
 
   if (this.isChrome()) {
-    console.log('Chrome brower detected');
     this.installChromeExtension(function() {
       console.log('chrome extension installation succeeded, start screensharing');
       this.screenshare();
     }.bind(this), function(error) {
-      alert('Installation fail : ' + error);
+      console.log('Installation fail : ' + error);
     });
 
     return;
@@ -312,7 +311,6 @@ VideoConference.prototype.isChrome = function () {
 
 VideoConference.prototype.installChromeExtension = function (successCallback, errorCallback) {
   if (!chrome.app.isInstalled) {
-    console.log('chrome extension not installed');
     chrome.webstore.install(
       null, // pick up using link rel="chrome-webstore-item"
       function() {
