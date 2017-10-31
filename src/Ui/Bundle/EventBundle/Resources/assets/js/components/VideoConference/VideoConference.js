@@ -205,6 +205,9 @@ VideoConference.prototype.showError = function(error) {
   }
 };
 
+/**
+ * Handle installation of screensharing extension if needed
+ */
 VideoConference.prototype.preScreenshare = function () {
   if (this.session === null) {
     alert('You cannot start screensharing outside of a session');
@@ -212,13 +215,15 @@ VideoConference.prototype.preScreenshare = function () {
   }
 
   if (this.isChrome()) {
+    console.log('Chrome brower detected');
     this.installChromeExtension(function() {
+      console.log('chrome extension installation succeeded, start screensharing');
       this.screenshare();
     }.bind(this), function(error) {
       alert('Installation fail : ' + error);
     });
-  } else {
-    this.screenshare();
+
+    return;
   }
 
   this.screenshare();
@@ -231,9 +236,8 @@ VideoConference.prototype.screenshare = function() {
   tokbox.checkScreenSharingCapability(function(response) {
     if (!response.supported || response.extensionRegistered === false) {
       alert(this.notCompatibleBrowserMessage);
-    } else if (response.extensionInstalled === false &&
-      (response.extensionRequired)) {
-      alert('Please install the screen-sharing extension and load this page over HTTPS.');
+    } else if (response.extensionInstalled === false && (response.extensionRequired)) {
+      alert("Merci d'installer l'extension de partage d'écran et de charger la page en HTTPS.");
     } else {
       // start screensharing
       var publisher = this.publisher.create({
