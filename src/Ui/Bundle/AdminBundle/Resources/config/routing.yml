@@ -968,6 +968,14 @@ admin_template_sheet_print_template_builder:
     requirements:
         template: \d+
 
+admin_template_sheet_print_template_save:
+    path: /template/sheet/{template}/print/{locale}/save
+    defaults: { _controller: AdminBundle:Template\Sheet\PrintTemplate:save }
+    methods: [POST]
+    requirements:
+        template: \d+
+        locale: '[a-z]{2}(_[A-Z]{2})?'
+
 #
 # Product
 #

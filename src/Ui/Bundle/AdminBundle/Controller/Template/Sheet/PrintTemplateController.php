@@ -12,6 +12,7 @@ namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Template\Sheet;
 
 use Proximum\Vimeet\Domain\Model\Template\SheetTemplate;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -27,8 +28,26 @@ class PrintTemplateController extends Controller
     {
         $this->denyAccessUnlessGranted('ROLE_ALLOWED_TO_ORGANIZE');
 
+        $event = $template->getEvent();
+
         return $this->render('AdminBundle:SheetTemplate:printTemplateBuilder.html.twig', [
-            'event' => $template->getEvent(),
+            'event'    => $event,
+            'template' => $template,
+            'locale'   => $event->getFallback(),
         ]);
+    }
+
+    /**
+     * @param Request       $request
+     * @param SheetTemplate $template
+     * @param string        $locale
+     *
+     * @return JsonResponse
+     */
+    public function saveAction(Request $request, SheetTemplate $template, $locale)
+    {
+        $this->denyAccessUnlessGranted('ROLE_ALLOWED_TO_ORGANIZE');
+
+        return new JsonResponse();
     }
 }
