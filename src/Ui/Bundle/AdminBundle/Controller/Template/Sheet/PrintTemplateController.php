@@ -30,10 +30,10 @@ class PrintTemplateController extends Controller
 
         $event = $template->getEvent();
 
-        return $this->render('AdminBundle:SheetTemplate:printTemplateBuilder.html.twig', [
+        return $this->render('AdminBundle:SheetPrintTemplate:builder.html.twig', [
             'event'    => $event,
             'template' => $template,
-            'locale'   => $event->getFallback(),
+            'locale'   => $template->getAvailableLocale($request->getLocale()),
         ]);
     }
 
