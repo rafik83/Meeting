@@ -14,5 +14,5 @@
             </button>
         </li>
     </ul>
-    <div data-bind="content">{{ item.config.label[locale] }}</div>
+    <div data-bind="content">{{ item.config.label[locale]|default('...') }}</div>
 </div>
