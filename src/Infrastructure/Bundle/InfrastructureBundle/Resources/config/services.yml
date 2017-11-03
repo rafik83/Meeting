@@ -1066,6 +1066,13 @@ services:
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Sheet\Template\Save }
 
+    command.sheet.template.save_print_template_handler:
+        class: Proximum\Vimeet\Application\Command\Sheet\Template\SavePrintTemplateHandler
+        arguments:
+            - '@repository.template.sheet_template_repository'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Sheet\Template\SavePrintTemplate }
+
     command.sheet.template.index_handler:
         class: Proximum\Vimeet\Application\Command\Sheet\Template\IndexHandler
         arguments:

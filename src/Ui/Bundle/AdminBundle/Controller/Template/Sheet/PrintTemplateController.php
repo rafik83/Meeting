@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Template\Sheet;
 
+use Proximum\Vimeet\Application\Command\Sheet\Template\SavePrintTemplate;
 use Proximum\Vimeet\Domain\Model\Template\SheetTemplate;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -50,6 +51,7 @@ class PrintTemplateController extends Controller
         $this->checkUserCanEdit($template);
 
         $config = json_decode($request->getContent(), true);
+        $this->get('tactician.commandbus')->handle(new SavePrintTemplate($template, $config));
 
         return new JsonResponse();
     }

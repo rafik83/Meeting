@@ -16,9 +16,14 @@ use Proximum\Vimeet\Domain\Model\Event;
 class SheetTemplate extends AbstractTemplate
 {
     /**
-     * @var array
+     * @var null|array
      */
     protected $preview;
+
+    /**
+     * @var null|array
+     */
+    protected $printValue;
 
     /**
      * SheetTemplate constructor.
@@ -103,5 +108,21 @@ class SheetTemplate extends AbstractTemplate
         }
 
         return $this->getFallback();
+    }
+
+    /**
+     * @return null|array
+     */
+    public function getPrintValue(): ?array
+    {
+        return $this->printValue;
+    }
+
+    /**
+     * @param array $printValue
+     */
+    public function setPrintValue(array $printValue)
+    {
+        $this->printValue = $printValue;
     }
 }
