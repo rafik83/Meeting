@@ -833,7 +833,7 @@ admin.template.action.create: 'Créer un template'
 admin.template.action.duplicate: Dupliquer
 admin.template.action.edit: Modifier
 admin.template.action.preview: 'Gérer l''aperçu catalogue'
-admin.template.action.print: 'Gérer template d''impresion'
+admin.template.action.print: 'Template d''impresion'
 admin.template.action.save: Enregistrer
 admin.template.action.update: Modifier
 admin.template.action.updating: Sauvegarde en cours...
