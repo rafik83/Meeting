@@ -2543,6 +2543,11 @@ services:
             - '@vimeet_infrastructure.adapter.delayed_event_dispatcher'
             - '@datetime'
 
+    template.print_template_resolver:
+        class: Proximum\Vimeet\Domain\Template\PrintTemplateResolver
+        arguments:
+            - '@template.template_data_factory'
+
     #
     # Filter
     #

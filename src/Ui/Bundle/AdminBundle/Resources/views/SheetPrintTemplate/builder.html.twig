@@ -4,11 +4,11 @@
     {{ include('AdminBundle:Common:menu.html.twig') }}
 
     <div class="container-fluid template-builder-container"
-         data-print-template-builder="{{ path('admin_template_sheet_print_template_save', { 'template': template.id }) }}"
+         data-print-template-builder="{{ path('admin_template_sheet_print_template_save', { 'template': templateId }) }}"
     >
         <div class="template-builder-header">
             <div class="clear clear-fix clearfix">
-                <h1 class="pull-left">{{ 'admin.template.action.print'|trans }} "{{ template.title }}"</h1>
+                <h1 class="pull-left">{{ 'admin.template.action.print'|trans }} "{{ templateTitle }}"</h1>
                 <div class="btn-toolbar" role="toolbar" aria-label="Template actions">
                     <button class="btn btn-success" id="template-save-button" data-loading-button="{{ ('<i class="glyphicon glyphicon-refresh spin"></i> ' ~ ('admin.template.action.updating'|trans))|e }}">{{ 'admin.template.action.save'|trans }}</button>
                 </div>
@@ -20,7 +20,7 @@
             <div class="block" data-config="{}">
                 <span class="delete"></span>
                 <div class="template-container container-fluid block-inner" id="template-container">
-                    {% for uid, item in template.value|default([]) %}
+                    {% for uid, item in printValue|default([]) %}
                         {{ include('AdminBundle:SheetPrintTemplate:blockOrObject.html.twig', { uid: uid, item: item, locale: locale }, false) }}
                     {% endfor %}
                 </div>
