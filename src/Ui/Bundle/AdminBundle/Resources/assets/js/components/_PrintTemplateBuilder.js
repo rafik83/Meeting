@@ -60,6 +60,7 @@ function PrintTemplateBuilder(element) {
   document.addEventListener('print.template.object.removed', function (event) {
     this.objectList.appendChild(event.detail.element);
     this.emptyObjectListLabel.style.display = 'none';
+    this.list(this.objectList, 'object-reference');
   }.bind(this));
 }
 
@@ -96,14 +97,11 @@ PrintTemplateBuilder.prototype.closeMenu = function () {
 
 PrintTemplateBuilder.prototype.list = function (element, name) {
   new Sortable(element, {
-    group: {name: name, pull: 'clone', put: false},
+    group: {name: name, pull: true, put: false},
     sort: false,
     onStart: function (event) {
       this.closeMenu();
       this.drag = true;
-      var uid = guidGenerator();
-      event.item.innerHTML = event.item.innerHTML.replace(new RegExp('__UID__', 'g'), uid);
-      event.item.setAttribute('data-uid', uid);
     }.bind(this),
     onEnd: function () {
       this.openMenu();
@@ -159,9 +157,6 @@ PrintTemplateBuilder.prototype.addObject = function (element) {
 
   // Enable object behavior
   this.object(element);
-
-  // Open configure modal
-  element.templateObject.openConfigureModal();
 };
 
 PrintTemplateBuilder.prototype.block = function (element) {
