@@ -46,11 +46,12 @@ function PrintTemplateBuilder(element) {
   this.templateContainer = element.querySelector('#template-container');
   this.sortable(this.templateContainer);
 
-  // Init
-  this.init(this.templateContainer);
-
+  // Init empty object list label
   this.emptyObjectListLabel = element.querySelector('#empty-object-list-label');
   this.updateEmptyObjectListLabel();
+
+  // Init template
+  this.init(this.templateContainer);
 
   document.addEventListener('print.template.object.removed', function (event) {
     this.removeObject(event.detail.element);
@@ -269,13 +270,6 @@ PrintTemplateBuilder.prototype.normalize = function (item) {
 function PrintTemplateObject(element) {
   this.element = element;
   this.deleteButton = element.querySelector('.delete-button');
-  this.type = element.getAttribute('data-object');
-  this.config = JSON.parse(this.element.getAttribute('data-config'));
-
-  // UID
-  this.uid = element.getAttribute('data-uid');
-
-  // Buttons
   this.deleteButton.addEventListener('click', this.deleteButtonClicked.bind(this));
 }
 
@@ -284,15 +278,10 @@ PrintTemplateObject.prototype.deleteButtonClicked = function (event) {
   document.dispatchEvent(new CustomEvent('print.template.object.removed', {'detail': {'element': this.element}}));
 };
 
-// PrintTemplateObject.prototype.getConfig = function () {
-//   return this.config;
-// };
 
 PrintTemplateObject.prototype.normalize = function () {
   return {
-    component: 'object',
-    type: this.type,
-    config: this.config
+    component: 'object'
   };
 };
 
