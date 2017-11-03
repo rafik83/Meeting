@@ -12,6 +12,7 @@ namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Template\Sheet;
 
 use Proximum\Vimeet\Application\Command\Sheet\Template\SavePrintTemplate;
 use Proximum\Vimeet\Domain\Model\Template\SheetTemplate;
+use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Security\Voter\AdminTemplateAccessVoter;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -28,7 +29,7 @@ class PrintTemplateController extends Controller
     public function builderAction(Request $request, SheetTemplate $template)
     {
         $this->denyAccessUnlessGranted('ROLE_ALLOWED_TO_ORGANIZE');
-        $this->checkUserCanEdit($template);
+        $this->denyAccessUnlessGranted(AdminTemplateAccessVoter::PERMISSION_TEMPLATE_EDIT, $template);
 
         $event = $template->getEvent();
 
@@ -48,21 +49,11 @@ class PrintTemplateController extends Controller
     public function saveAction(Request $request, SheetTemplate $template)
     {
         $this->denyAccessUnlessGranted('ROLE_ALLOWED_TO_ORGANIZE');
-        $this->checkUserCanEdit($template);
+        $this->denyAccessUnlessGranted(AdminTemplateAccessVoter::PERMISSION_TEMPLATE_EDIT, $template);
 
         $config = json_decode($request->getContent(), true);
         $this->get('tactician.commandbus')->handle(new SavePrintTemplate($template, $config));
 
         return new JsonResponse();
-    }
-
-    /**
-     * @param SheetTemplate $template
-     */
-    private function checkUserCanEdit(SheetTemplate $template)
-    {
-        if (!$this->getUser()->isSuperAdmin() && !$this->getUser()->hasEvent($template->getEvent())) {
-            throw $this->createAccessDeniedException('You are not allowed to edit this template.');
-        }
     }
 }
