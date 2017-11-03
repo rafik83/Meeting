@@ -40,11 +40,10 @@ class PrintTemplateController extends Controller
     /**
      * @param Request       $request
      * @param SheetTemplate $template
-     * @param string        $locale
      *
      * @return JsonResponse
      */
-    public function saveAction(Request $request, SheetTemplate $template, $locale)
+    public function saveAction(Request $request, SheetTemplate $template)
     {
         $this->denyAccessUnlessGranted('ROLE_ALLOWED_TO_ORGANIZE');
 

@@ -1,4 +1,5 @@
-var LoadingButton = require('./_LoadingButton'),
+var guidGenerator = require('./_GuidGenerator'),
+    LoadingButton = require('./_LoadingButton'),
     Sortable      = require('./_Sortable'),
     TemplateBlock = require('./_TemplateBlock');
 
@@ -10,10 +11,9 @@ var LoadingButton = require('./_LoadingButton'),
  */
 function PrintTemplateBuilder(element) {
   this.element = element;
-  this.url = element.getAttribute('data-template-builder');
+  this.url = element.getAttribute('data-print-template-builder');
   this.menu = element.querySelector('#template-menu');
   this.openButton = element.querySelector('#template-menu-button');
-  this.locale = element.getAttribute('data-locale');
   this.wasOpen = false;
   this.open = false;
   this.drag = false;
@@ -36,11 +36,11 @@ function PrintTemplateBuilder(element) {
 
   // Blocks
   this.blockList = element.querySelector('#block-list');
-  this.list(this.blockList, 'block-reference');
+  this.listBlocks();
 
   // Objects
   this.objectList = element.querySelector('#object-list');
-  this.updateObjectList();
+  this.listObjects();
 
   // Template
   this.templateContainer = element.querySelector('#template-container');
@@ -57,13 +57,9 @@ function PrintTemplateBuilder(element) {
   }.bind(this));
 }
 
-PrintTemplateBuilder.prototype.updateObjectList = function () {
-  this.list(this.objectList, 'object-reference');
-};
-
 PrintTemplateBuilder.prototype.removeObject = function (element) {
   this.objectList.appendChild(element);
-  this.updateObjectList();
+  this.listObjects();
   this.updateEmptyObjectListLabel();
 };
 
@@ -107,11 +103,11 @@ PrintTemplateBuilder.prototype.closeMenu = function () {
   this.toggleMenu(false);
 };
 
-PrintTemplateBuilder.prototype.list = function (element, name) {
-  new Sortable(element, {
-    group: {name: name, pull: true, put: false},
+PrintTemplateBuilder.prototype.listObjects = function () {
+  new Sortable(this.objectList, {
+    group: {name: 'object-reference', pull: true, put: false},
     sort: false,
-    onStart: function (event) {
+    onStart: function () {
       this.closeMenu();
       this.drag = true;
     }.bind(this),
@@ -119,6 +115,25 @@ PrintTemplateBuilder.prototype.list = function (element, name) {
       this.drag = false;
       this.updateEmptyObjectListLabel();
       this.openMenu();
+    }.bind(this)
+  });
+};
+
+PrintTemplateBuilder.prototype.listBlocks = function ()
+{
+  new Sortable(this.blockList, {
+    group: { name: 'block-reference', pull: 'clone', put: false },
+    sort: false,
+    onStart: function (event) {
+      this.closeMenu();
+      this.drag = true;
+      var uid = guidGenerator();
+      event.item.innerHTML = event.item.innerHTML.replace(new RegExp('__UID__', 'g'), uid);
+      event.item.setAttribute('data-uid', uid);
+    }.bind(this),
+    onEnd: function () {
+      this.openMenu();
+      this.drag = false;
     }.bind(this)
   });
 };
@@ -179,7 +194,7 @@ PrintTemplateBuilder.prototype.block = function (element) {
 
 PrintTemplateBuilder.prototype.object = function (element) {
   // Create object
-  element.templateObject = new PrintTemplateObject(element, this.locale);
+  element.templateObject = new PrintTemplateObject(element);
 };
 
 PrintTemplateBuilder.prototype.save = function () {
@@ -191,17 +206,17 @@ PrintTemplateBuilder.prototype.save = function () {
     var OK = 200;
 
     if (xhr.readyState === DONE) {
-      if (xhr.status === OK) {
-        var config = JSON.parse(xhr.response);
-      } else {
-        alert('error');
+      if (xhr.status !== OK) {
+        alert('Error');
       }
 
       this.saveButton.stop();
     }
   }.bind(this);
+
   xhr.open('POST', this.url);
-  xhr.send(JSON.stringify(this.normalize(this.templateContainer)));
+  var data = JSON.stringify(this.normalize(this.templateContainer));
+  xhr.send(data);
 };
 
 PrintTemplateBuilder.prototype.inners = function (item) {
@@ -249,12 +264,10 @@ PrintTemplateBuilder.prototype.normalize = function (item) {
  * Print Template Object
  *
  * @param element
- * @param locale
  * @constructor
  */
-function PrintTemplateObject(element, locale) {
+function PrintTemplateObject(element) {
   this.element = element;
-  this.locale = locale;
   this.deleteButton = element.querySelector('.delete-button');
   this.type = element.getAttribute('data-object');
   this.config = JSON.parse(this.element.getAttribute('data-config'));
@@ -271,15 +284,15 @@ PrintTemplateObject.prototype.deleteButtonClicked = function (event) {
   document.dispatchEvent(new CustomEvent('print.template.object.removed', {'detail': {'element': this.element}}));
 };
 
-PrintTemplateObject.prototype.getConfig = function () {
-  return this.object.config;
-};
+// PrintTemplateObject.prototype.getConfig = function () {
+//   return this.config;
+// };
 
 PrintTemplateObject.prototype.normalize = function () {
   return {
     component: 'object',
     type: this.type,
-    config: this.object.config
+    config: this.config
   };
 };
 

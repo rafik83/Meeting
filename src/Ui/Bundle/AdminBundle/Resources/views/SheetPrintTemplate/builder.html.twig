@@ -4,8 +4,7 @@
     {{ include('AdminBundle:Common:menu.html.twig') }}
 
     <div class="container-fluid template-builder-container"
-         data-print-template-builder="{{ path('admin_template_sheet_save', { 'template': template.id, 'locale': locale }) }}"
-         data-locale="{{ locale }}"
+         data-print-template-builder="{{ path('admin_template_sheet_print_template_save', { 'template': template.id }) }}"
     >
         <div class="template-builder-header">
             <div class="clear clear-fix clearfix">
