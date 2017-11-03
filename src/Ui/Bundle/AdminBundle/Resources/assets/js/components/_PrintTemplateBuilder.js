@@ -1,8 +1,6 @@
-var $           = require('jquery'),
-  guidGenerator = require('./_GuidGenerator'),
-  LoadingButton = require('./_LoadingButton'),
-  Sortable      = require('./_Sortable'),
-  TemplateBlock = require('./_TemplateBlock');
+var LoadingButton = require('./_LoadingButton'),
+    Sortable      = require('./_Sortable'),
+    TemplateBlock = require('./_TemplateBlock');
 
 /**
  * PrintTemplateBuilder
@@ -42,7 +40,7 @@ function PrintTemplateBuilder(element) {
 
   // Objects
   this.objectList = element.querySelector('#object-list');
-  this.list(this.objectList, 'object-reference');
+  this.updateObjectList();
 
   // Template
   this.templateContainer = element.querySelector('#template-container');
@@ -52,17 +50,31 @@ function PrintTemplateBuilder(element) {
   this.init(this.templateContainer);
 
   this.emptyObjectListLabel = element.querySelector('#empty-object-list-label');
-
-  if (this.objectList.hasChildNodes()) {
-    this.emptyObjectListLabel.style.display = 'none';
-  }
+  this.updateEmptyObjectListLabel();
 
   document.addEventListener('print.template.object.removed', function (event) {
-    this.objectList.appendChild(event.detail.element);
-    this.emptyObjectListLabel.style.display = 'none';
-    this.list(this.objectList, 'object-reference');
+    this.removeObject(event.detail.element);
   }.bind(this));
 }
+
+PrintTemplateBuilder.prototype.updateObjectList = function () {
+  this.list(this.objectList, 'object-reference');
+};
+
+PrintTemplateBuilder.prototype.removeObject = function (element) {
+  this.objectList.appendChild(element);
+  this.updateObjectList();
+  this.updateEmptyObjectListLabel();
+};
+
+PrintTemplateBuilder.prototype.updateEmptyObjectListLabel = function () {
+  if (this.objectList.hasChildNodes()) {
+    this.emptyObjectListLabel.style.display = 'none';
+    return;
+  }
+
+  this.emptyObjectListLabel.style.display = 'block';
+};
 
 PrintTemplateBuilder.prototype.init = function (element) {
   [].forEach.call(element.querySelectorAll('.block'), function (block) {
@@ -104,8 +116,9 @@ PrintTemplateBuilder.prototype.list = function (element, name) {
       this.drag = true;
     }.bind(this),
     onEnd: function () {
-      this.openMenu();
       this.drag = false;
+      this.updateEmptyObjectListLabel();
+      this.openMenu();
     }.bind(this)
   });
 };
