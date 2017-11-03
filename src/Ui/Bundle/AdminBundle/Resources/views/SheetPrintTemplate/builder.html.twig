@@ -52,8 +52,11 @@
                         </div>
                     </div>
                     <div role="tabpanel" class="tab-pane" id="objects">
-                        <div id="object-list" class="print-object-list">
-                        </div>
+                        <div id="empty-object-list-label" class="alert alert-warning">{{ 'admin.template.objectsListEmpty'|trans }}</div>
+                        {% spaceless %}
+                            <div id="object-list" class="print-object-list">
+                            </div>
+                        {% endspaceless %}
                     </div>
                 </div>
             </div>

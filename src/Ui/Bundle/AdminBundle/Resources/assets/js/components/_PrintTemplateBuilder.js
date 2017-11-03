@@ -51,8 +51,15 @@ function PrintTemplateBuilder(element) {
   // Init
   this.init(this.templateContainer);
 
+  this.emptyObjectListLabel = element.querySelector('#empty-object-list-label');
+
+  if (this.objectList.hasChildNodes()) {
+    this.emptyObjectListLabel.style.display = 'none';
+  }
+
   document.addEventListener('print.template.object.removed', function (event) {
     this.objectList.appendChild(event.detail.element);
+    this.emptyObjectListLabel.style.display = 'none';
   }.bind(this));
 }
 
