@@ -269,6 +269,7 @@ PrintTemplateBuilder.prototype.normalize = function (item) {
  */
 function PrintTemplateObject(element) {
   this.element = element;
+  this.uid = element.getAttribute('data-uid');
   this.deleteButton = element.querySelector('.delete-button');
   this.deleteButton.addEventListener('click', this.deleteButtonClicked.bind(this));
 }
