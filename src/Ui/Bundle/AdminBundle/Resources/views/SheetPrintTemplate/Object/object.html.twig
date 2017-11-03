@@ -1,6 +1,6 @@
 {% trans_default_domain 'templates' %}
 
-<div class="object" data-object="text" data-uid="{{ uid }}">
+<div class="object" data-object="{{ item.type }}" data-uid="{{ uid }}">
     <ul class="block-buttons list-inline">
         <li class="object-title">{{ ('template.object.' ~ item.type)|trans }}</li>
         <li>

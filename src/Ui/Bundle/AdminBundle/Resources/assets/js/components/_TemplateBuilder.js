@@ -51,7 +51,6 @@ function TemplateBuilder(element)
     this.sortable(this.templateContainer);
 
     // Init
-    //this.init(this.element);
     this.init(this.templateContainer);
 }
 

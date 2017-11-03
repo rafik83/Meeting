@@ -148,9 +148,7 @@
         }
 
         .object-list {
-
             .object {
-
                 border: 1px solid #ccc;
                 border-radius: 4px;
                 padding: 10px;
@@ -159,9 +157,33 @@
                 .block-buttons {
                     display: none;
                 }
-
             }
+        }
 
+        .print-object-list {
+            .object {
+                border: 1px solid #ccc;
+                border-radius: 4px;
+                padding: 10px;
+                margin: 15px 0;
+
+                div {
+                    font-weight: bold;
+                }
+
+                .block-buttons {
+                    display: block;
+                    float: right;
+
+                    li {
+                        display: none;
+                    }
+
+                    li.object-title {
+                        display: block;
+                    }
+                }
+            }
         }
 
     }

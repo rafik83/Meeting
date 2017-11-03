@@ -49,8 +49,11 @@ function PrintTemplateBuilder(element) {
   this.sortable(this.templateContainer);
 
   // Init
-  //this.init(this.element);
   this.init(this.templateContainer);
+
+  document.addEventListener('print.template.object.removed', function (event) {
+    this.objectList.appendChild(event.detail.element);
+  }.bind(this));
 }
 
 PrintTemplateBuilder.prototype.init = function (element) {
@@ -250,7 +253,7 @@ function PrintTemplateObject(element, locale) {
 
 PrintTemplateObject.prototype.deleteButtonClicked = function (event) {
   event.preventDefault();
-  this.element.remove();
+  document.dispatchEvent(new CustomEvent('print.template.object.removed', {'detail': {'element': this.element}}));
 };
 
 PrintTemplateObject.prototype.getConfig = function () {

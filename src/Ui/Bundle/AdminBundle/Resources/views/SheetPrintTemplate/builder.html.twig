@@ -9,7 +9,7 @@
     >
         <div class="template-builder-header">
             <div class="clear clear-fix clearfix">
-                <h1 class="pull-left">{{ template.title }}</h1>
+                <h1 class="pull-left">{{ 'admin.template.action.print'|trans }} "{{ template.title }}"</h1>
                 <div class="btn-toolbar" role="toolbar" aria-label="Template actions">
                     <button class="btn btn-success" id="template-save-button" data-loading-button="{{ ('<i class="glyphicon glyphicon-refresh spin"></i> ' ~ ('admin.template.action.updating'|trans))|e }}">{{ 'admin.template.action.save'|trans }}</button>
                 </div>
@@ -52,7 +52,7 @@
                         </div>
                     </div>
                     <div role="tabpanel" class="tab-pane" id="objects">
-                        <div id="object-list" class="object-list">
+                        <div id="object-list" class="print-object-list">
                         </div>
                     </div>
                 </div>
