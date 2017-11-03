@@ -27,6 +27,7 @@ class PrintTemplateController extends Controller
     public function builderAction(Request $request, SheetTemplate $template)
     {
         $this->denyAccessUnlessGranted('ROLE_ALLOWED_TO_ORGANIZE');
+        $this->checkUserCanEdit($template);
 
         $event = $template->getEvent();
 
@@ -46,7 +47,20 @@ class PrintTemplateController extends Controller
     public function saveAction(Request $request, SheetTemplate $template)
     {
         $this->denyAccessUnlessGranted('ROLE_ALLOWED_TO_ORGANIZE');
+        $this->checkUserCanEdit($template);
+
+        $config = json_decode($request->getContent(), true);
 
         return new JsonResponse();
+    }
+
+    /**
+     * @param SheetTemplate $template
+     */
+    private function checkUserCanEdit(SheetTemplate $template)
+    {
+        if (!$this->getUser()->isSuperAdmin() && !$this->getUser()->hasEvent($template->getEvent())) {
+            throw $this->createAccessDeniedException('You are not allowed to edit this template.');
+        }
     }
 }
