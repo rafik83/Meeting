@@ -33,6 +33,7 @@ function TemplateBlock(element, builder)
   // Delete button behavior
   this.element.querySelector('.delete-button').addEventListener('click', function (event) {
     event.preventDefault();
+    document.dispatchEvent(new CustomEvent('template.block.removed', {'detail': {'element': this.element}}));
     this.element.remove();
   }.bind(this));
 

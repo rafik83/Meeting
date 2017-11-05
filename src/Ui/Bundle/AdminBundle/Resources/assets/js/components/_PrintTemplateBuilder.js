@@ -56,7 +56,17 @@ function PrintTemplateBuilder(element) {
   document.addEventListener('print.template.object.removed', function (event) {
     this.removeObject(event.detail.element);
   }.bind(this));
+
+  document.addEventListener('template.block.removed', function (event) {
+    this.removedBlock(event.detail.element);
+  }.bind(this));
 }
+
+PrintTemplateBuilder.prototype.removedBlock = function (element) {
+  [].forEach.call(element.querySelectorAll('.object'), function (object) {
+    this.removeObject(object);
+  }.bind(this));
+};
 
 PrintTemplateBuilder.prototype.removeObject = function (element) {
   this.objectList.appendChild(element);
