@@ -30,7 +30,7 @@ class PrintTemplateResolver
      *
      * @return array
      */
-    public function resolve(SheetTemplate $template)
+    public function resolve(SheetTemplate $template): array
     {
         $printValue = $template->getPrintValue();
 
