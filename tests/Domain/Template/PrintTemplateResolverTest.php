@@ -11,6 +11,7 @@
 namespace Proximum\Vimeet\Tests\Domain\Template;
 
 use PHPUnit\Framework\TestCase;
+use Prophecy\Argument;
 use Proximum\Vimeet\Domain\Model\Template\SheetTemplate;
 use Proximum\Vimeet\Domain\Template\AbstractChild;
 use Proximum\Vimeet\Domain\Template\PrintTemplateResolver;
@@ -23,6 +24,7 @@ use Proximum\Vimeet\Domain\Template\TemplateObject\Nomenclature;
 use Proximum\Vimeet\Domain\Template\TemplateObject\Participant;
 use Proximum\Vimeet\Domain\Template\TemplateObject\Tag;
 use Proximum\Vimeet\Domain\Template\TemplateObject\Text;
+use Proximum\Vimeet\Domain\View\Template\ResolvedPrintTemplateView;
 
 class PrintTemplateResolverTest extends TestCase
 {
@@ -43,18 +45,18 @@ class PrintTemplateResolverTest extends TestCase
                                 'type'      => '6-6',
                                 'children'  => [
                                     [
-                                        'd927a04b'   => ['component' => 'object'], // object to resolve
-                                        'Med1eM86eb' => ['component' => 'object'], // object to resolve
-                                        'Ma903M43a3' => ['component' => 'object'], // object to resolve
+                                        'd927a04b'   => ['component' => 'object'],
+                                        'Med1eM86eb' => ['component' => 'object'],
+                                        'Ma903M43a3' => ['component' => 'object'],
                                     ],
                                     [
-                                        'Mf3e2Ma2f7' => ['component' => 'object'], // object to resolve
+                                        'Mf3e2Ma2f7' => ['component' => 'object'],
                                         'M69e5Med87' => [
                                             'component' => 'block',
                                             'type'      => '6-6',
                                             'children'  => [
-                                                ['211efd1f' => ['component' => 'object']], // object to resolve
-                                                ['a23a2f5d' => ['component' => 'object']], // object to resolve
+                                                ['211efd1f' => ['component' => 'object']],
+                                                ['a23a2f5d' => ['component' => 'object']],
                                             ],
                                             'config'    => ['style' => 'style1'],
                                         ],
@@ -64,17 +66,16 @@ class PrintTemplateResolverTest extends TestCase
                             ],
                         ],
                         [
-                            'M58cfMcae8' => ['component' => 'object'], // object to resolve
-                            'Macd4Md3ab' => ['component' => 'object'], // object to resolve
-                            'Mca61M421a' => ['component' => 'object'], // object to resolve
-                            'M0c23M9c66' => ['component' => 'object'], // object to resolve
+                            'M58cfMcae8' => ['component' => 'object'],
+                            'Macd4Md3ab' => ['component' => 'object'],
+                            'Mca61M421a' => ['component' => 'object'],
+                            'M0c23M9c66' => ['component' => 'object'],
                         ],
                     ],
                     'config'    => ['style' => 'style3'],
                 ],
             ]
-        )
-        ;
+        );
 
         $expectedObjects = [
             'M58cfMcae8' => new Tag(
@@ -90,7 +91,7 @@ class PrintTemplateResolverTest extends TestCase
                 $locale
             ),
             'Macd4Md3ab' => new Tag(
-                'M58cfMcae8',
+                'Macd4Md3ab',
                 AbstractChild::TEMPLATE_OBJECT_TYPE_TAG,
                 [
                     "label" => [
@@ -293,10 +294,215 @@ class PrintTemplateResolverTest extends TestCase
             ->willReturn($templateData->reveal())
         ;
 
+       $expectedPrintTemplateObjects = [
+           'M58cfMcae8' => new Tag(
+               'M58cfMcae8',
+               AbstractChild::TEMPLATE_OBJECT_TYPE_TAG,
+               [
+                   'label' => [
+                       'en' => 'Website',
+                       'fr' => 'Site internet',
+                   ],
+               ],
+               $locale,
+               $locale
+           ),
+           'Macd4Md3ab' => new Tag(
+               'Macd4Md3ab',
+               AbstractChild::TEMPLATE_OBJECT_TYPE_TAG,
+               [
+                   "label" => [
+                       "en" => "Location",
+                       "fr" => "Localisation",
+                   ],
+               ],
+               $locale,
+               $locale
+           ),
+           'Med1eM86eb' => new Nomenclature(
+               'Med1eM86eb',
+               AbstractChild::TEMPLATE_OBJECT_TYPE_NOMENCLATURE,
+               [
+                   "label" => [
+                       "en" => "Skills",
+                       "fr" => "Compétences",
+                   ],
+               ],
+               $locale,
+               $locale
+           ),
+           'Mf3e2Ma2f7' => new ItemCollection(
+               'Mf3e2Ma2f7',
+               AbstractChild::TEMPLATE_OBJECT_TYPE_COLLECTION,
+               [
+                   "label" => [
+                       "en" => "Innovative projects",
+                       "fr" => "Projets innovants",
+                   ],
+               ],
+               $locale,
+               $locale
+           ),
+           'Ma903M43a3' => new Nomenclature(
+               'Ma903M43a3',
+               AbstractChild::TEMPLATE_OBJECT_TYPE_NOMENCLATURE,
+               [
+                   "label" => [
+                       "en" => "Application fields",
+                       "fr" => "Domaines d'application",
+                   ],
+               ],
+               $locale,
+               $locale
+           ),
+           'a23a2f5d'   => new ItemCollection(
+               'a23a2f5d',
+               AbstractChild::TEMPLATE_OBJECT_TYPE_COLLECTION,
+               [
+                   "label" => [
+                       "en" => "Certifications",
+                       "fr" => "Certifications",
+                   ],
+               ],
+               $locale,
+               $locale
+           ),
+           '211efd1f'   => new MediaCollection(
+               '211efd1f',
+               AbstractChild::TEMPLATE_OBJECT_TYPE_MEDIA,
+               [
+                   "label" => [
+                       "en" => "Medias",
+                       "fr" => "Médias",
+                   ],
+               ],
+               $locale,
+               $locale
+           ),
+           'd927a04b'   => new EditableText(
+               'd927a04b',
+               AbstractChild::TEMPLATE_OBJECT_TYPE_EDITABLE_TEXT,
+               [
+                   "label" => [
+                       "en" => "Description",
+                       "fr" => "Description",
+                   ],
+               ],
+               $locale,
+               $locale
+           ),
+           'Mca61M421a' => new Nomenclature(
+               'Mca61M421a',
+               AbstractChild::TEMPLATE_OBJECT_TYPE_NOMENCLATURE,
+               [
+                   "label" => [
+                       "en" => "Offers",
+                       "fr" => "Offres",
+                   ],
+               ],
+               $locale,
+               $locale
+           ),
+           'M0c23M9c66' => new Nomenclature(
+               'M0c23M9c66',
+               AbstractChild::TEMPLATE_OBJECT_TYPE_NOMENCLATURE,
+               [
+                   "label" => [
+                       "en" => "Needs",
+                       "fr" => "Besoins",
+                   ],
+               ],
+               $locale,
+               $locale
+           ),
+       ];
+
+        $printTemplateData = $this->prophesize(TemplateData::class);
+        $printTemplateData
+            ->getObjects()
+            ->shouldBeCalled()
+            ->willReturn($expectedPrintTemplateObjects)
+        ;
+
+        $templateDataFactory
+            ->create(Argument::type('array'))
+            ->shouldBeCalled()
+            ->willReturn($printTemplateData->reveal())
+        ;
+
         $printTemplateResolver = new PrintTemplateResolver($templateDataFactory->reveal());
         $result                = $printTemplateResolver->resolve($sheetTemplate->reveal());
 
-        $expectedResult = [
+        $expectedMissingObjects = [
+            'M8fb9M2792' => [
+                'component' => 'object',
+                'type'      => 'text',
+                'config'    => [],
+            ],
+            '1adc1873'   => [
+                'component' => 'object',
+                'type'      => 'collection',
+                'config'    => [
+                    "label" => [
+                        "en" => "References",
+                        "fr" => "Clients de référence",
+                    ],
+                ],
+            ],
+            'MdaceM0e5c' => [
+                'component' => 'object',
+                'type'      => 'collection',
+                'config'    => [
+                    "label" => [
+                        "en" => "Equipments, technologies and processes",
+                        "fr" => "Equipements, technologies et process utilisés",
+                    ],
+                ],
+            ],
+            'd6fa1ac7'   => [
+                'component' => 'object',
+                'type'      => 'nomenclature',
+                'config'    => [
+                    "label" => [
+                        "en" => "Landmarks",
+                        "fr" => "Eléments clés",
+                    ],
+                ],
+            ],
+            'a9271999'   => [
+                'component' => 'object',
+                'type'      => 'collection',
+                'config'    => [
+                    "label" => [
+                        "en" => "Group / Member of",
+                        "fr" => "Groupe / Membre",
+                    ],
+                ],
+            ],
+            'bef61d39'   => [
+                'component' => 'object',
+                'type'      => 'participant',
+                'config'    => [
+                    'label'                    => [
+                        'en' => 'Participants',
+                        'fr' => 'Participants',
+                    ],
+                    'numberOfParticipantShown' => 3,
+                ],
+            ],
+            '27db4a35'   => [
+                'component' => 'object',
+                'type'      => 'text',
+                'config'    => [
+                    "content" => [
+                        "en" => "Objectives",
+                        "fr" => "Objectifs de participation",
+                    ],
+                ],
+            ],
+        ];
+
+        $expectedPrintTemplateResolved = [
             'Mc601Mc73f' => [
                 'component' => 'block',
                 'type'      => '8-4',
@@ -431,6 +637,8 @@ class PrintTemplateResolverTest extends TestCase
                 'config'    => ['style' => 'style3'],
             ],
         ];
+
+        $expectedResult = new ResolvedPrintTemplateView($expectedPrintTemplateResolved, $expectedMissingObjects);
 
         $this->assertEquals($expectedResult, $result);
     }

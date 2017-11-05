@@ -31,14 +31,15 @@ class PrintTemplateController extends Controller
         $this->denyAccessUnlessGranted('ROLE_ALLOWED_TO_ORGANIZE');
         $this->denyAccessUnlessGranted(AdminTemplateAccessVoter::PERMISSION_TEMPLATE_EDIT, $template);
 
-        $printValue = $this->get('template.print_template_resolver')->resolve($template);
+        $resolvedPrintTemplateView = $this->get('template.print_template_resolver')->resolve($template);
 
         return $this->render('AdminBundle:SheetPrintTemplate:builder.html.twig', [
-            'event'         => $template->getEvent(),
-            'templateId'    => $template->getId(),
-            'templateTitle' => $template->getTitle(),
-            'locale'        => $template->getAvailableLocale($request->getLocale()),
-            'printValue'    => $printValue,
+            'event'          => $template->getEvent(),
+            'templateId'     => $template->getId(),
+            'templateTitle'  => $template->getTitle(),
+            'locale'         => $template->getAvailableLocale($request->getLocale()),
+            'printValue'     => $resolvedPrintTemplateView->printValueResolved,
+            'missingObjects' => $resolvedPrintTemplateView->missingObjects,
         ]);
     }
 

@@ -54,6 +54,9 @@
                         <div id="empty-object-list-label" class="alert alert-warning">{{ 'admin.template.objectsListEmpty'|trans }}</div>
                         {% spaceless %}
                             <div id="object-list" class="print-object-list">
+                                {% for uid, item in missingObjects|default([]) %}
+                                    {{ include('AdminBundle:SheetPrintTemplate:blockOrObject.html.twig', { uid: uid, item: item, locale: locale }, false) }}
+                                {% endfor %}
                             </div>
                         {% endspaceless %}
                     </div>
