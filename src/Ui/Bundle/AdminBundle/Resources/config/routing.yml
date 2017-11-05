@@ -964,7 +964,7 @@ admin_template_sheet_update:
 admin_template_sheet_print_template_builder:
     path: /template/sheet/{template}/print
     defaults: { _controller: AdminBundle:Template\Sheet\PrintTemplate:builder }
-    methods: [GET, POST]
+    methods: [GET]
     requirements:
         template: \d+
 
