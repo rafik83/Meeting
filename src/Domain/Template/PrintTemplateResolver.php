@@ -35,8 +35,8 @@ class PrintTemplateResolver
     {
         $printValue = $sheetTemplate->getPrintValue();
 
-        if (null === $printValue) {
-            new ResolvedPrintTemplateView($sheetTemplate->getValue(), []);
+        if (empty($printValue)) {
+            return new ResolvedPrintTemplateView($sheetTemplate->getValue(), []);
         }
 
         $sheetTemplateData        = $this->templateDataFactory->createFromTemplate($sheetTemplate);
