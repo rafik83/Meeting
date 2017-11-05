@@ -1,0 +1,437 @@
+<?php
+
+/*
+ * This file is part of the Proximum Vimeet project.
+ *
+ * Copyright (C) Proximum
+ *
+ * @author Elao <contact@elao.com>
+ */
+
+namespace Proximum\Vimeet\Tests\Domain\Template;
+
+use PHPUnit\Framework\TestCase;
+use Proximum\Vimeet\Domain\Model\Template\SheetTemplate;
+use Proximum\Vimeet\Domain\Template\AbstractChild;
+use Proximum\Vimeet\Domain\Template\PrintTemplateResolver;
+use Proximum\Vimeet\Domain\Template\TemplateData;
+use Proximum\Vimeet\Domain\Template\TemplateDataFactory;
+use Proximum\Vimeet\Domain\Template\TemplateObject\EditableText;
+use Proximum\Vimeet\Domain\Template\TemplateObject\ItemCollection;
+use Proximum\Vimeet\Domain\Template\TemplateObject\MediaCollection;
+use Proximum\Vimeet\Domain\Template\TemplateObject\Nomenclature;
+use Proximum\Vimeet\Domain\Template\TemplateObject\Participant;
+use Proximum\Vimeet\Domain\Template\TemplateObject\Tag;
+use Proximum\Vimeet\Domain\Template\TemplateObject\Text;
+
+class PrintTemplateResolverTest extends TestCase
+{
+    public function testResolve()
+    {
+        $locale = 'fr';
+
+        $sheetTemplate = $this->prophesize(SheetTemplate::class);
+        $sheetTemplate->getPrintValue()->willReturn(
+            [
+                'Mc601Mc73f' => [
+                    'component' => 'block',
+                    'type'      => '8-4',
+                    'children'  => [
+                        [
+                            'M9d98Mc018' => [
+                                'component' => 'block',
+                                'type'      => '6-6',
+                                'children'  => [
+                                    [
+                                        'd927a04b'   => ['component' => 'object'], // object to resolve
+                                        'Med1eM86eb' => ['component' => 'object'], // object to resolve
+                                        'Ma903M43a3' => ['component' => 'object'], // object to resolve
+                                    ],
+                                    [
+                                        'Mf3e2Ma2f7' => ['component' => 'object'], // object to resolve
+                                        'M69e5Med87' => [
+                                            'component' => 'block',
+                                            'type'      => '6-6',
+                                            'children'  => [
+                                                ['211efd1f' => ['component' => 'object']], // object to resolve
+                                                ['a23a2f5d' => ['component' => 'object']], // object to resolve
+                                            ],
+                                            'config'    => ['style' => 'style1'],
+                                        ],
+                                    ],
+                                ],
+                                'config'    => ['style' => 'style2'],
+                            ],
+                        ],
+                        [
+                            'M58cfMcae8' => ['component' => 'object'], // object to resolve
+                            'Macd4Md3ab' => ['component' => 'object'], // object to resolve
+                            'Mca61M421a' => ['component' => 'object'], // object to resolve
+                            'M0c23M9c66' => ['component' => 'object'], // object to resolve
+                        ],
+                    ],
+                    'config'    => ['style' => 'style3'],
+                ],
+            ]
+        )
+        ;
+
+        $expectedObjects = [
+            'M58cfMcae8' => new Tag(
+                'M58cfMcae8',
+                AbstractChild::TEMPLATE_OBJECT_TYPE_TAG,
+                [
+                    'label' => [
+                        'en' => 'Website',
+                        'fr' => 'Site internet',
+                    ],
+                ],
+                $locale,
+                $locale
+            ),
+            'Macd4Md3ab' => new Tag(
+                'M58cfMcae8',
+                AbstractChild::TEMPLATE_OBJECT_TYPE_TAG,
+                [
+                    "label" => [
+                        "en" => "Location",
+                        "fr" => "Localisation",
+                    ],
+                ],
+                $locale,
+                $locale
+            ),
+            'M8fb9M2792' => new Text(
+                'M8fb9M2792',
+                AbstractChild::TEMPLATE_OBJECT_TYPE_TEXT,
+                [],
+                $locale,
+                $locale
+            ),
+            'Med1eM86eb' => new Nomenclature(
+                'Med1eM86eb',
+                AbstractChild::TEMPLATE_OBJECT_TYPE_NOMENCLATURE,
+                [
+                    "label" => [
+                        "en" => "Skills",
+                        "fr" => "Compétences",
+                    ],
+                ],
+                $locale,
+                $locale
+            ),
+            '1adc1873'   => new ItemCollection(
+                '1adc1873',
+                AbstractChild::TEMPLATE_OBJECT_TYPE_COLLECTION,
+                [
+                    "label" => [
+                        "en" => "References",
+                        "fr" => "Clients de référence",
+                    ],
+                ],
+                $locale,
+                $locale
+            ),
+            'Mf3e2Ma2f7' => new ItemCollection(
+                'Mf3e2Ma2f7',
+                AbstractChild::TEMPLATE_OBJECT_TYPE_COLLECTION,
+                [
+                    "label" => [
+                        "en" => "Innovative projects",
+                        "fr" => "Projets innovants",
+                    ],
+                ],
+                $locale,
+                $locale
+            ),
+            'MdaceM0e5c' => new ItemCollection(
+                'MdaceM0e5c',
+                AbstractChild::TEMPLATE_OBJECT_TYPE_COLLECTION,
+                [
+                    "label" => [
+                        "en" => "Equipments, technologies and processes",
+                        "fr" => "Equipements, technologies et process utilisés",
+                    ],
+                ],
+                $locale,
+                $locale
+            ),
+            'Ma903M43a3' => new Nomenclature(
+                'Ma903M43a3',
+                AbstractChild::TEMPLATE_OBJECT_TYPE_NOMENCLATURE,
+                [
+                    "label" => [
+                        "en" => "Application fields",
+                        "fr" => "Domaines d'application",
+                    ],
+                ],
+                $locale,
+                $locale
+            ),
+            'd6fa1ac7'   => new Nomenclature(
+                'd6fa1ac7',
+                AbstractChild::TEMPLATE_OBJECT_TYPE_NOMENCLATURE,
+                [
+                    "label" => [
+                        "en" => "Landmarks",
+                        "fr" => "Eléments clés",
+                    ],
+                ],
+                $locale,
+                $locale
+            ),
+            'a9271999'   => new ItemCollection(
+                'a9271999',
+                AbstractChild::TEMPLATE_OBJECT_TYPE_COLLECTION,
+                [
+                    "label" => [
+                        "en" => "Group / Member of",
+                        "fr" => "Groupe / Membre",
+                    ],
+                ],
+                $locale,
+                $locale
+            ),
+            'a23a2f5d'   => new ItemCollection(
+                'a23a2f5d',
+                AbstractChild::TEMPLATE_OBJECT_TYPE_COLLECTION,
+                [
+                    "label" => [
+                        "en" => "Certifications",
+                        "fr" => "Certifications",
+                    ],
+                ],
+                $locale,
+                $locale
+            ),
+            'bef61d39'   => new Participant(
+                'bef61d39',
+                AbstractChild::TEMPLATE_OBJECT_TYPE_PARTICIPANT,
+                [
+                    "label"                    => [
+                        "en" => "Participants",
+                        "fr" => "Participants",
+                    ],
+                    "numberOfParticipantShown" => 3,
+                ],
+                $locale,
+                $locale
+            ),
+            '211efd1f'   => new MediaCollection(
+                '211efd1f',
+                AbstractChild::TEMPLATE_OBJECT_TYPE_MEDIA,
+                [
+                    "label" => [
+                        "en" => "Medias",
+                        "fr" => "Médias",
+                    ],
+                ],
+                $locale,
+                $locale
+            ),
+            '27db4a35'   => new Text(
+                '27db4a35',
+                AbstractChild::TEMPLATE_OBJECT_TYPE_TEXT,
+                [
+                    "content" => [
+                        "en" => "Objectives",
+                        "fr" => "Objectifs de participation",
+                    ],
+                ],
+                $locale,
+                $locale
+            ),
+            'd927a04b'   => new EditableText(
+                'd927a04b',
+                AbstractChild::TEMPLATE_OBJECT_TYPE_EDITABLE_TEXT,
+                [
+                    "label" => [
+                        "en" => "Description",
+                        "fr" => "Description",
+                    ],
+                ],
+                $locale,
+                $locale
+            ),
+            'Mca61M421a' => new Nomenclature(
+                'Mca61M421a',
+                AbstractChild::TEMPLATE_OBJECT_TYPE_NOMENCLATURE,
+                [
+                    "label" => [
+                        "en" => "Offers",
+                        "fr" => "Offres",
+                    ],
+                ],
+                $locale,
+                $locale
+            ),
+            'M0c23M9c66' => new Nomenclature(
+                'M0c23M9c66',
+                AbstractChild::TEMPLATE_OBJECT_TYPE_NOMENCLATURE,
+                [
+                    "label" => [
+                        "en" => "Needs",
+                        "fr" => "Besoins",
+                    ],
+                ],
+                $locale,
+                $locale
+            ),
+        ];
+
+        $templateData = $this->prophesize(TemplateData::class);
+        $templateData
+            ->getObjects()
+            ->shouldBeCalled()
+            ->willReturn($expectedObjects)
+        ;
+
+        $templateDataFactory = $this->prophesize(TemplateDataFactory::class);
+        $templateDataFactory
+            ->createFromTemplate($sheetTemplate->reveal())
+            ->shouldBeCalled()
+            ->willReturn($templateData->reveal())
+        ;
+
+        $printTemplateResolver = new PrintTemplateResolver($templateDataFactory->reveal());
+        $result                = $printTemplateResolver->resolve($sheetTemplate->reveal());
+
+        $expectedResult = [
+            'Mc601Mc73f' => [
+                'component' => 'block',
+                'type'      => '8-4',
+                'children'  => [
+                    [
+                        'M9d98Mc018' => [
+                            'component' => 'block',
+                            'type'      => '6-6',
+                            'children'  => [
+                                [
+                                    'd927a04b'   => [
+                                        'component' => 'object',
+                                        'type'      => 'editable-text',
+                                        'config'    => [
+                                            'label' => [
+                                                'en' => 'Description',
+                                                'fr' => 'Description',
+                                            ],
+                                        ],
+                                    ],
+                                    'Med1eM86eb' => [
+                                        'component' => 'object',
+                                        'type'      => 'nomenclature',
+                                        'config'    => [
+                                            'label' => [
+                                                'en' => 'Skills',
+                                                'fr' => 'Compétences',
+                                            ],
+                                        ],
+                                    ],
+                                    'Ma903M43a3' => [
+                                        'component' => 'object',
+                                        'type'      => 'nomenclature',
+                                        'config'    => [
+                                            'label' => [
+                                                'en' => 'Application fields',
+                                                'fr' => 'Domaines d\'application',
+                                            ],
+                                        ],
+                                    ],
+                                ],
+                                [
+                                    'Mf3e2Ma2f7' => [
+                                        'component' => 'object',
+                                        'type'      => 'collection',
+                                        'config'    => [
+                                            'label' => [
+                                                'en' => 'Innovative projects',
+                                                'fr' => 'Projets innovants',
+                                            ],
+                                        ],
+                                    ],
+                                    'M69e5Med87' => [
+                                        'component' => 'block',
+                                        'type'      => '6-6',
+                                        'children'  => [
+                                            [
+                                                '211efd1f' => [
+                                                    'component' => 'object',
+                                                    'type'      => 'media',
+                                                    'config'    => [
+                                                        'label' => [
+                                                            'en' => 'Medias',
+                                                            'fr' => 'Médias',
+                                                        ],
+                                                    ],
+                                                ],
+                                            ],
+                                            [
+                                                'a23a2f5d' => [
+                                                    'component' => 'object',
+                                                    'type'      => 'collection',
+                                                    'config'    => [
+                                                        'label' => [
+                                                            'en' => 'Certifications',
+                                                            'fr' => 'Certifications',
+                                                        ],
+                                                    ],
+                                                ],
+                                            ],
+                                        ],
+                                        'config'    => ['style' => 'style1'],
+                                    ],
+                                ],
+                            ],
+                            'config'    => ['style' => 'style2'],
+                        ],
+                    ],
+                    [
+                        'M58cfMcae8' => [
+                            'component' => 'object',
+                            'type'      => 'tag',
+                            'config'    => [
+                                'label' => [
+                                    'en' => 'Website',
+                                    'fr' => 'Site internet',
+                                ],
+                            ],
+                        ],
+                        'Macd4Md3ab' => [
+                            'component' => 'object',
+                            'type'      => 'tag',
+                            'config'    => [
+                                'label' => [
+                                    'en' => 'Location',
+                                    'fr' => 'Localisation',
+                                ],
+                            ],
+                        ],
+                        'Mca61M421a' => [
+                            'component' => 'object',
+                            'type'      => 'nomenclature',
+                            'config'    => [
+                                'label' => [
+                                    'en' => 'Offers',
+                                    'fr' => 'Offres',
+                                ],
+                            ],
+                        ],
+                        'M0c23M9c66' => [
+                            'component' => 'object',
+                            'type'      => 'nomenclature',
+                            'config'    => [
+                                'label' => [
+                                    'en' => 'Needs',
+                                    'fr' => 'Besoins',
+                                ],
+                            ],
+                        ],
+                    ],
+                ],
+                'config'    => ['style' => 'style3'],
+            ],
+        ];
+
+        $this->assertEquals($expectedResult, $result);
+    }
+}
