@@ -1738,11 +1738,6 @@
         }
       }
     },
-    "tablesort": {
-      "version": "4.0.1",
-      "from": "https://registry.npmjs.org/tablesort/-/tablesort-4.0.1.tgz",
-      "resolved": "https://registry.npmjs.org/tablesort/-/tablesort-4.0.1.tgz"
-    },
     "tinymce": {
       "version": "4.6.5",
       "from": "https://registry.npmjs.org/tinymce/-/tinymce-4.6.5.tgz",

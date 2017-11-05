@@ -20,7 +20,6 @@
     "phantomjs-prebuilt": "^2.1.13",
     "pubsub-js": "1.5.3",
     "select2": "4.0.2",
-    "tablesort": "4.0.1",
     "tinymce": "^4.5.1",
     "vue": "^2.1.8",
     "vuex": "^2.3.1"
