@@ -1060,4 +1060,12 @@ class Sheet implements TraceableInterface
     {
         return $this->availableSlots->toArray();
     }
+
+    /**
+     * @return string
+     */
+    public function getPhoneValidationStatus(): string
+    {
+        return $this->phoneValidationStatus;
+    }
 }

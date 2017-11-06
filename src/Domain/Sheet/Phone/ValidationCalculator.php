@@ -19,6 +19,11 @@ use Proximum\Vimeet\Domain\Repository\MeetingRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\TipRepositoryInterface;
 use Proximum\Vimeet\Domain\UserEvent\UserEventPhoneChecker;
 
+/**
+ * This class calculate the validation status of the aggregate of a Sheet for the User Event Phone
+ *
+ * @see ValidationStatus for the different possible status
+ */
 class ValidationCalculator
 {
     /** @var TipRepositoryInterface */
@@ -77,6 +82,7 @@ class ValidationCalculator
             if (true === $hasMeeting) {
                 $concerned++;
 
+                // If UserEventPhone is null (meaning not sent), the user is considered notConfirmed
                 if ($userPhone instanceof UserEventPhone && $userPhone->isValidated()) {
                     $confirmed++;
 
@@ -125,7 +131,7 @@ class ValidationCalculator
      *
      * @return Type[]
      */
-    public function preloadTypeAvailable(Event $event, array $types): array
+    public function preloadTypeThatAllowPhones(Event $event, array &$types): array
     {
         $typeThatAllowPhones = [];
 
