@@ -1895,6 +1895,7 @@ services:
     command.user.phone.validate_code_handler:
         class: Proximum\Vimeet\Application\Command\User\Phone\ValidateCodeHandler
         arguments:
+            - '@vimeet_infrastructure.adapter.delayed_event_dispatcher'
             - '@repository.user.user_event_phone_repository'
             - '@datetime'
         tags:

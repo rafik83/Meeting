@@ -88,4 +88,5 @@ final class Events
     const SLOT_GENERATED                               = 'slot.generated';
     const SLOT_TOGGLE_LOCKED                           = 'slot.toggle.locked';
     const SLOT_DELETED                                 = 'slot.deleted';
+    const USER_PHONE_VALIDATED                         = 'user.phone_validated';
 }
