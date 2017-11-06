@@ -873,6 +873,7 @@ admin.tip.event.no_pages: Aucune
 admin.tip.event.no_types: Aucun
 admin.tip.event.pages: 'Page concernées'
 admin.tip.event.remove.link: Retirer
+admin.tip.event.remove.action.confirm: 'Êtes-vous sûr de vouloir retirer l''affectation?'
 admin.tip.event.title: 'Libellé admin'
 admin.tip.event.types: 'Types de participation affectés'
 admin.tip.events: Evénements
