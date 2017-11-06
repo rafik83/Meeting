@@ -61,5 +61,6 @@ class DeleteAllHandler
         $this->meetingRepository->deleteAll($deleteAll->event);
 
         $this->jobQueue->indexInCatalogSheetsByEvent($deleteAll->event);
+        $this->jobQueue->aggregatePhoneValidationStatus($deleteAll->event);
     }
 }
