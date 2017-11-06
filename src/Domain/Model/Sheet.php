@@ -16,6 +16,7 @@ use Proximum\Vimeet\Domain\Exception\Sheet\SheetException;
 use Proximum\Vimeet\Domain\Model\Sheet\AvailableSlot;
 use Proximum\Vimeet\Domain\Model\Sheet\Group;
 use Proximum\Vimeet\Domain\Model\Template\SheetTemplate;
+use Proximum\Vimeet\Domain\Sheet\Phone\ValidationStatus;
 use Proximum\Vimeet\Domain\Trace\TraceableName;
 
 /**
@@ -168,6 +169,9 @@ class Sheet implements TraceableInterface
     /** @var string */
     private $agendaConfirmedStatus = self::AGENDA_NOT_CONCERNED;
 
+    /** @var string */
+    private $phoneValidationStatus = ValidationStatus::NOT_CONCERNED;
+
     /** @var ArrayCollection */
     private $availableSlots;
 
@@ -240,7 +244,7 @@ class Sheet implements TraceableInterface
      */
     public function canBuyParticipant()
     {
-        return $this->getMaxParticipant() > $this->countParticipant();
+        return $this->getMaxParticipant() > $this->countParticipants();
     }
 
     /**
@@ -1001,6 +1005,14 @@ class Sheet implements TraceableInterface
     public function setAgendaConfirmedStatus(string $agendaConfirmedStatus)
     {
         $this->agendaConfirmedStatus = $agendaConfirmedStatus;
+    }
+
+    /**
+     * @param string $phoneValidationStatus
+     */
+    public function setPhoneValidationStatus(string $phoneValidationStatus)
+    {
+        $this->phoneValidationStatus = $phoneValidationStatus;
     }
 
     /**
