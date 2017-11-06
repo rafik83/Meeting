@@ -5516,6 +5516,14 @@ services:
         tags:
             - { name: console.command }
 
+    symfony_command.aggregate.sheet_phone.phone_validation_status_calculator_command:
+        class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\Aggregate\Sheet\Phone\PhoneValidationStatusCalculatorCommand
+        arguments:
+            - '@vimeet_infrastructure.repository.event_repository'
+            - '@command.sheet.phone.update_phone_validation_status_handler'
+        tags:
+            - { name: console.command }
+
     #
     # Multiple sheets request queries
     #
@@ -5663,6 +5671,13 @@ services:
         class: Proximum\Vimeet\Domain\Tip\ConfirmationPhoneTipChecker
         arguments:
             - '@repository.tip.repository'
+
+    domain.sheet.phone.validation_calculator:
+        class: Proximum\Vimeet\Domain\Sheet\Phone\ValidationCalculator
+        arguments:
+            - '@repository.tip.repository'
+            - '@domain.user_event.user_event_phone_checker'
+            - '@vimeet_infrastructure.repository.meeting_repository'
 
     #
     # Spot

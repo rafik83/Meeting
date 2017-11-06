@@ -45,3 +45,13 @@ services:
             - '@repository.event.extra_parameter_repository'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Event\ExtraParameter\Remove }
+
+    #
+    # Sheet Phone
+    #
+    command.sheet.phone.update_phone_validation_status_handler:
+        class: Proximum\Vimeet\Application\Command\Sheet\Phone\UpdatePhoneValidationStatusHandler
+        arguments:
+            - '@vimeet_infrastructure.repository.type_repository'
+            - '@vimeet_infrastructure.repository.sheet_repository'
+            - '@domain.sheet.phone.validation_calculator'
