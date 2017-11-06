@@ -152,10 +152,9 @@ PrintTemplateBuilder.prototype.listObjects = function () {
   });
 };
 
-PrintTemplateBuilder.prototype.listBlocks = function ()
-{
+PrintTemplateBuilder.prototype.listBlocks = function () {
   new Sortable(this.blockList, {
-    group: { name: 'block-reference', pull: 'clone', put: false },
+    group: {name: 'block-reference', pull: 'clone', put: false},
     sort: false,
     onStart: function (event) {
       this.closeMenu();
