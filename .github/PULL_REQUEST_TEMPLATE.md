@@ -10,6 +10,7 @@ Definition of done:
 - [ ] Check access to controllers (if concerned)
 - [ ] Respect the UI Admin (if the feature concerns the Admin)
 - [ ] Generate DB migration if the structure changes (`$ make migrations`)
+- [ ] Regenerate npm-shrinkwrap.json if a new npm package is installed: (`$ npm shrinkwrap`)
 - [ ] Re-check Acceptance test: proofreading the story at the developement end
 - [ ] Unit tests pass
 - [ ] Functionnal tests pass
