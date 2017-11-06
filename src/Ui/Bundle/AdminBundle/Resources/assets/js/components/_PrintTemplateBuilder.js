@@ -114,7 +114,29 @@ PrintTemplateBuilder.prototype.closeMenu = function () {
   this.toggleMenu(false);
 };
 
+PrintTemplateBuilder.prototype.sortObjects = function () {
+  var sortedObjectsList = [];
+
+  // get object content
+  [].forEach.call(this.objectList.querySelectorAll('.object'), function (object) {
+    var objectContent = object.querySelector('[data-bind]');
+    sortedObjectsList.push({'object': object, 'content': objectContent.textContent});
+  }.bind(this));
+
+  // sort by object content
+  sortedObjectsList.sort(function (a, b) {
+    return a.content.localeCompare(b.content);
+  });
+
+  // append sorted list
+  sortedObjectsList.forEach(function (element) {
+    this.objectList.appendChild(element.object);
+  }.bind(this));
+};
+
 PrintTemplateBuilder.prototype.listObjects = function () {
+  this.sortObjects();
+
   new Sortable(this.objectList, {
     group: {name: 'object-reference', pull: true, put: false},
     sort: false,
