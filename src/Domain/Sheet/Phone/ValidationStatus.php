@@ -19,4 +19,10 @@ final class ValidationStatus
     const ALL_CONFIRMED    = 'phone_all_confirmed';
     const PARTLY_CONFIRMED = 'phone_partly_confirmed';
     const NONE_CONFIRMED   = 'phone_none_confirmed';
+
+    const ALL_CONCERNED_STATUS = [
+        self::ALL_CONFIRMED,
+        self::PARTLY_CONFIRMED,
+        self::NONE_CONFIRMED,
+    ];
 }
