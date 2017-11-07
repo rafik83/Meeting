@@ -8,7 +8,7 @@
 
 {% block header_mobile %}
     <div class="catalog-mobile-menu">
-        {% if searchForm.type is defined or searchForm.availableSlot is defined %}
+        {% if searchForm.type is defined or searchForm.availableSlot is defined or searchForm.content is defined %}
             <div class="catalog-mobile-menu-summary catalog-mobile-menu-container">
                 {% if searchForm.content is defined %}
                     <a href="#" class="catalog-mobile-menu-button btn btn-default btn-block" data-catalog-mobile-menu-button-action="catalog-mobile-menu-button-action-content-filter">
