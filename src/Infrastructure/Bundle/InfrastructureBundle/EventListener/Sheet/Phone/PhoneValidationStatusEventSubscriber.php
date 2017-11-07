@@ -10,10 +10,13 @@
 
 namespace Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\EventListener\Sheet\Phone;
 
+use Proximum\Vimeet\Application\Adapter\JobQueueInterface;
 use Proximum\Vimeet\Application\Event\Events;
 use Proximum\Vimeet\Application\Event\Meeting\MeetingCreatedEvent;
 use Proximum\Vimeet\Application\Event\Meeting\MeetingMovedEvent;
 use Proximum\Vimeet\Application\Event\Meeting\MeetingRemovedEvent;
+use Proximum\Vimeet\Application\Event\Tip\AssignedEvent;
+use Proximum\Vimeet\Application\Event\Tip\UnAssignedEvent;
 use Proximum\Vimeet\Application\Event\User\Phone\PhoneValidatedEvent;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
@@ -28,16 +31,22 @@ class PhoneValidationStatusEventSubscriber implements EventSubscriberInterface
     /** @var SheetRepositoryInterface */
     private $sheetRepository;
 
+    /** @var JobQueueInterface */
+    private $jobQueue;
+
     /**
      * @param ValidationCalculator     $validationCalculator
      * @param SheetRepositoryInterface $sheetRepository
+     * @param JobQueueInterface        $jobQueue
      */
     public function __construct(
         ValidationCalculator $validationCalculator,
-        SheetRepositoryInterface $sheetRepository
+        SheetRepositoryInterface $sheetRepository,
+        JobQueueInterface $jobQueue
     ) {
         $this->validationCalculator = $validationCalculator;
         $this->sheetRepository = $sheetRepository;
+        $this->jobQueue = $jobQueue;
     }
 
     /**
@@ -50,6 +59,8 @@ class PhoneValidationStatusEventSubscriber implements EventSubscriberInterface
             Events::MEETING_MOVED        => 'onMeetingMoved',
             Events::MEETING_REMOVED      => 'onMeetingChanged',
             Events::USER_PHONE_VALIDATED => 'onUserPhoneValidated',
+            Events::TIP_ASSIGNED         => 'onTipAssigned',
+            Events::TIP_UN_ASSIGNED      => 'onTipUnAssigned',
         ];
     }
 
@@ -84,6 +95,22 @@ class PhoneValidationStatusEventSubscriber implements EventSubscriberInterface
         foreach ($event->getSheets() as $sheet) {
             $this->setStatusForSheet($sheet);
         }
+    }
+
+    /**
+     * @param AssignedEvent $event
+     */
+    public function onTipAssigned(AssignedEvent $event)
+    {
+        $this->jobQueue->aggregatePhoneValidationStatus($event->getEvent());
+    }
+
+    /**
+     * @param UnAssignedEvent $event
+     */
+    public function onTipUnAssigned(UnAssignedEvent $event)
+    {
+        $this->jobQueue->aggregatePhoneValidationStatus($event->getEvent());
     }
 
     /**
