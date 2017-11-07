@@ -11,7 +11,6 @@
 namespace Proximum\Vimeet\Infrastructure\Repository;
 
 use Doctrine\ORM\EntityManager;
-use Proximum\Vimeet\Domain\Event\ExtraParameter\Type;
 use Proximum\Vimeet\Domain\Model\Admin;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Repository\EventRepositoryInterface;
@@ -213,18 +212,27 @@ class EventRepository implements EventRepositoryInterface
     /**
      * {@inheritdoc}
      */
-    public function findEventWithLeniApiParameters(): array
+    public function findEventWithParameters(array $parameters): array
     {
         $queryBuilder = $this
             ->entityManager
             ->createQueryBuilder()
             ->select('event')
             ->from(Event::class, 'event', 'event.id')
-            ->where('EXISTS(SELECT ep1.id FROM Entity:Event\ExtraParameter ep1 WHERE ep1.event = event.id AND ep1.type = :leniUser)')
-            ->andWhere('EXISTS(SELECT ep2.id FROM Entity:Event\ExtraParameter ep2 WHERE ep2.event = event.id AND ep2.type = :leniEvent)')
-            ->setParameter('leniUser', Type::TYPE_LENI_USER)
-            ->setParameter('leniEvent', Type::TYPE_LENI_EVENT)
         ;
+
+        foreach ($parameters as $key => $parameter) {
+            $queryBuilder
+                ->andWhere(
+                    str_replace(
+                        '%epkey%',
+                        $key,
+                        'EXISTS(SELECT ep_%epkey%.id FROM Entity:Event\ExtraParameter ep_%epkey% WHERE ep_%epkey%.event = event.id AND ep_%epkey%.type = :type_%epkey%)'
+                    )
+                )
+                ->setParameter(str_replace('%epkey%', $key, 'type_%epkey%'), $parameter)
+            ;
+        }
 
         return $queryBuilder->getQuery()->getResult();
     }

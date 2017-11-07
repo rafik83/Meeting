@@ -50,6 +50,7 @@ catalog.mobile.filters.title: 'Catalogue des participants'
 catalog.noResult: 'Aucun résultat trouvé'
 catalog.noVisibleCategories: 'Vous n''avez accès à aucune catégorie de participation'
 catalog.noVisibleTypes: 'Vous n''avez accès à aucun type de participation'
+catalog.preview.participant_positions_see_more: 'voir plus'
 catalog.search.no-filter-to-refine: 'Aucun filtre ne permet d''affiner la recherche.'
 catalog.seeMore: 'Voir plus'
 catalog.title: Catalogue
@@ -166,7 +167,8 @@ meeting.video.screenshare.end: 'Arrêter le partage'
 meeting.video.start: 'Démarrer le RDV'
 meeting.video.waitingForParticipant: 'En attente d''un participant'
 meeting.video.notCompatibleBrowserMessage: 'Votre navigateur n''est pas compatible. Merci d''utiliser Chrome ou Firefox.'
-meeting.video.error.userDeniedAccess: "Vous avez refusé l'accès à vos périphériques audio/video.\n\nPour que la visioconférence fonctionne correctement, merci d'autoriser l'accès à vos périphériques."
+meeting.video.installScreenSharingExtensionMessage: 'Merci d''installer notre extension de partage d''écran.'
+meeting.video.error.userDeniedAccess: "Vous avez refusé l'accès à vos périphériques audio/video ou annulé le lancement du partage d'écran.\nPour que la visioconférence fonctionne correctement, merci d'autoriser l'accès à vos périphériques ou le lancement du partage d'écran."
 meetingRequest.mobile.filters.availableSlot.title: 'Qui est disponible ?'
 meetingRequest.mobile.filters.state.title: 'Gestion de RDV'
 modal.back: Retour

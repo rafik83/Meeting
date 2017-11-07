@@ -42,6 +42,9 @@ class Configure
     /** @var array of CatalogVisibilityTranslation index by locale */
     public $messageTranslations;
 
+    /** @var null|string */
+    public $registrationUrl;
+
     /**
      * Configure constructor.
      *
@@ -58,6 +61,7 @@ class Configure
         $this->types                  = $catalogVisibility->getTypes();
         $this->categories             = $catalogVisibility->getCategories();
         $this->hasMessage             = $catalogVisibility->hasMessage();
+        $this->registrationUrl        = $catalogVisibility->getRegistrationUrl();
 
         foreach ($event->getLocales() as $locale) {
             if (($catalogVisibilityTranslation = $catalogVisibility->getMessage($locale)) !== null) {

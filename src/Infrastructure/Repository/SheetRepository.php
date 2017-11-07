@@ -1095,4 +1095,24 @@ class SheetRepository implements SheetRepositoryInterface
 
         return $queryBuilder->getQuery()->getOneOrNullResult();
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getByTypesAndWithoutGivenExtraData(array $types, string $extraDataName): array
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('sheet')
+            ->from(Sheet::class, 'sheet')
+            ->where('sheet.type IN (:types)')
+            ->andWhere('sheet.enable = true')
+            ->andWhere('NOT EXISTS (SELECT extradata.id FROM Entity:Sheet\ExtraData extradata WHERE extradata.sheet = sheet AND extradata.name = :extraDataName)')
+            ->setParameter('types', $types)
+            ->setParameter('extraDataName', $extraDataName)
+        ;
+
+        return $queryBuilder->getQuery()->getResult();
+    }
 }

@@ -1,10 +1,15 @@
 var TypeFilterElement = require('./_CatalogMobileTypeFilterElement'),
-    AvailableSlotFilterElement = require('./_CatalogMobileAvailableSlotFilterElement');
+    AvailableSlotFilterElement = require('./_CatalogMobileAvailableSlotFilterElement'),
+    PubSub = require('pubsub-js'),
+    $ = require('jquery')
+;
+
+require('select2');
 
 /**
  * @param {HTMLElement} catalogFilterZone the zone where the filters will be displayed
  * @param {HTMLElement} catalogFilter the filter given by the response
- * @param {HTMLElement} catalogForm
+ * @param {HTMLElement} catalogForm desktop form
  */
 function CatalogMobileFilters(catalogFilterZone, catalogFilter, catalogForm) {
     this.catalogFilterZone = catalogFilterZone;
@@ -17,21 +22,33 @@ function CatalogMobileFilters(catalogFilterZone, catalogFilter, catalogForm) {
     this.catalogForm = catalogForm;
     this.typeFilterCheckboxes = this.catalogForm.querySelectorAll('input[name="type[]"]');
     this.availableSlotRadio = this.catalogForm.querySelectorAll('input[name="availableSlot"]');
+    this.contentInput = this.catalogForm.querySelector('input[name="content"]');
     this.typeFilterButtons = [];
     this.availableSlotFilterButtons = [];
 
     if ((this.typeFilterList !== null && this.typeFilterCheckboxes !== null)
         || (this.availableSlotFilterList !== null && this.availableSlotRadio !== null)
+        || (this.contentInput !== null)
     ) {
         // Empty the catalogFilterZone of the placeholder and add the value from the catalogFilter twig
         this.catalogFilterZone.innerHTML = '';
         this.catalogFilterZone.appendChild(this.catalogFilter);
 
+        // Handle custom events
+
+        var removeContentElement = this.catalogFilter.querySelector('#content-filter-remove');
+
+        if (removeContentElement !== null) {
+            removeContentElement.addEventListener('click', this.handleRemoveContent.bind(this));
+        }
+
+        // Component events
+
         [].forEach.call(this.catalogFilterZone.querySelectorAll('[data-catalog-mobile-menu-button-action]'), function (element) {
             element.addEventListener('click', function (event) {
                 event.preventDefault();
 
-                this.openMenu();
+                this.openMenu(event);
             }.bind(this));
         }.bind(this));
 
@@ -82,23 +99,36 @@ function CatalogMobileFilters(catalogFilterZone, catalogFilter, catalogForm) {
             }.bind(this))
         }
     }
+
+    // Custom select2 events
+
+    PubSub.publish('build.select2', this.catalogFilterZone);
+    PubSub.subscribe('mobile-input-content-change', this.closeMenu.bind(this));
 }
 
-CatalogMobileFilters.prototype.openMenu = function () {
+CatalogMobileFilters.prototype.openMenu = function (event) {
     if (!this.catalogFilter.classList.contains('disabled')) {
         document.body.classList.add('menu-mobile-opened');
         this.catalogFilterZone.querySelector('.catalog-mobile-menu-summary').style.display = 'none';
         this.catalogFilterZone.querySelector('.catalog-mobile-menu-filters').style.display = 'block';
+
+        // autofocus content input
+        if (event.currentTarget.getAttribute('data-catalog-mobile-menu-button-action')
+            === 'catalog-mobile-menu-button-action-content-filter'
+        ) {
+            var inputContent = this.catalogFilterZone.querySelector('#catalog-mobile-filter-input-content');
+            $(inputContent).select2('focus');
+        }
     }
 };
 
-CatalogMobileFilters.prototype.closeMenu = function (){
+CatalogMobileFilters.prototype.closeMenu = function () {
     document.body.classList.remove('menu-mobile-opened');
     this.catalogFilterZone.querySelector('.catalog-mobile-menu-summary').style.display = 'block';
     this.catalogFilterZone.querySelector('.catalog-mobile-menu-filters').style.display = 'none';
 };
 
-CatalogMobileFilters.prototype.onTypeFilterClick = function(typeFilterElementClicked) {
+CatalogMobileFilters.prototype.onTypeFilterClick = function (typeFilterElementClicked) {
     var buttonChecked = null;
     this.typeFilterButtons.forEach(function (typeFilterElement) {
         typeFilterElement.inactive();
@@ -166,7 +196,7 @@ CatalogMobileFilters.prototype.rebuildActionButton = function (button, content, 
     ;
 };
 
-CatalogMobileFilters.prototype.dispatchChangeAndCloseMenu = function(button) {
+CatalogMobileFilters.prototype.dispatchChangeAndCloseMenu = function (button) {
     var event = document.createEvent("HTMLEvents");
 
     event.initEvent("change", false, true);
@@ -176,6 +206,11 @@ CatalogMobileFilters.prototype.dispatchChangeAndCloseMenu = function(button) {
     [].forEach.call(this.catalogFilter.getElementsByTagName('A'), function (aElement) {
         aElement.classList.add('disabled');
     });
+};
+
+CatalogMobileFilters.prototype.handleRemoveContent = function (event) {
+    event.stopPropagation();
+    PubSub.publish('mobile-input-content-purge');
 };
 
 module.exports = CatalogMobileFilters;

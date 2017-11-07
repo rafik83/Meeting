@@ -42,8 +42,13 @@
                     {% endif %}
                 </div>
                 <div class="modal-footer">
-                    <a class="btn btn-default" href="{{ path('event_login') }}">{{ 'login.connect'|trans }}</a>
-                    <a class="btn btn-primary" href="{{ path('event') }}">{{ 'register.register'|trans }}</a>
+                    {% if registrationUrl is not null %}
+                        <a class="btn btn-default" href="{{ registrationUrl }}">{{ 'login.connect'|trans }}</a>
+                        <a id="modal-register-link" class="btn btn-primary" href="{{ registrationUrl }}">{{ 'register.register'|trans }}</a>
+                    {% else %}
+                        <a class="btn btn-default" href="{{ path('event_login') }}">{{ 'login.connect'|trans }}</a>
+                        <a class="btn btn-primary" href="{{ path('event') }}">{{ 'register.register'|trans }}</a>
+                    {% endif %}
                 </div>
             </div>
         </div>

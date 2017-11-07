@@ -1,3 +1,24 @@
+export.meeting_request.col.createdAt: 'créée le'
+export.meeting_request.col.fromParticipantIds: 'ids participants demandeurs'
+export.meeting_request.col.fromParticipantNames: 'nom participants demandeurs'
+export.meeting_request.col.fromSheetCategory: 'categorie fiche demandeuse'
+export.meeting_request.col.fromSheetId: 'id fiche demandeuse'
+export.meeting_request.col.fromSheetTitle: 'titre fiche demandeuse'
+export.meeting_request.col.fromSheetType: 'type fiche demandeuse'
+export.meeting_request.col.meetingId: 'ID RDV'
+export.meeting_request.col.requestId: 'ID demande'
+export.meeting_request.col.state: état
+export.meeting_request.col.toParticipantIds: 'ids participants demandés'
+export.meeting_request.col.toParticipantNames: 'noms participants demandés'
+export.meeting_request.col.toSheetCategory: 'categorie fiche demandée'
+export.meeting_request.col.toSheetId: 'id fiche demandée'
+export.meeting_request.col.toSheetTitle: 'titre fiche demandée'
+export.meeting_request.col.toSheetType: 'type fiche demandée'
+export.meeting_request.col.updatedAt: 'Mise à jour le'
+export.meeting_request.state.approved: Acceptée
+export.meeting_request.state.planned: Planifiée
+export.meeting_request.state.refused: Refusée
+export.meeting_request.state.sent: Envoyée
 gender.man: Monsieur
 gender.woman: Madame
 order.column.billing_info_city: ville
