@@ -316,10 +316,5 @@ table th.sort-up:after {
 
 .btn-group, .btn-group-vertical {
   position: relative;
-  display: flex;
   vertical-align: middle;
-}
-
-.btn-group-right {
-  float: right;
 }

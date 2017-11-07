@@ -1,7 +1,12 @@
 var $ = require('jquery');
+var PubSub = require('pubsub-js');
 
 require('select2');
 
+/**
+ * @param {Node} element
+ * @constructor
+ */
 function AjaxAutocomplete(element) {
     this.element = element;
     this.parentInput = document.getElementById(element.getAttribute('data-parent-input'));
@@ -14,7 +19,15 @@ function AjaxAutocomplete(element) {
         // Select2 Event Listener
         this.autocompleteElement.on('select2:select', this.selectTag.bind(this));
         this.autocompleteElement.on('select2:unselect', this.unselectTag.bind(this));
+        this.autocompleteElement.on('change', this.onChange.bind(this));
     }.bind(this));
+
+    // Custom event
+    var purgeEvent = this.element.getAttribute('data-purge-event');
+
+    if (purgeEvent !== null) {
+        PubSub.subscribe(purgeEvent, this.handlePurge.bind(this));
+    }
 }
 
 AjaxAutocomplete.prototype.initSelect = function (callback) {
@@ -26,6 +39,8 @@ AjaxAutocomplete.prototype.initSelect = function (callback) {
         minimumInputLength: this.element.getAttribute('data-minimum-input-length'),
         placeholder: this.parentInput.getAttribute('data-placeholder'),
         tokenSeparators: [','],
+        width: 'resolve',
+        closeOnSelect: true,
         language: {
             noResults: function () {
                 return ''
@@ -60,7 +75,42 @@ AjaxAutocomplete.prototype.selectTag = function () {
     this.updateParentInput();
 };
 
-AjaxAutocomplete.prototype.unselectTag = function () {
+AjaxAutocomplete.prototype.unselectTag = function (evt) {
+    // prevent open select2 dropdown when removing tag
+    if (!evt.params.originalEvent) {
+        return;
+    }
+    evt.params.originalEvent.stopPropagation();
+
+    this.updateParentInput();
+
+    var isMobile = this.element.getAttribute('data-is-mobile');
+
+    if (isMobile !== null) {
+        this.removeDropdown();
+    }
+};
+
+AjaxAutocomplete.prototype.onChange = function () {
+    var onChangeCustomEvent = this.element.getAttribute('data-on-change-event');
+
+    if (onChangeCustomEvent !== null) {
+        this.removeDropdown();
+        PubSub.publish(onChangeCustomEvent);
+    }
+};
+
+/**
+ * Remove UI select dropdown
+ */
+AjaxAutocomplete.prototype.removeDropdown = function () {
+    document.querySelectorAll('.select2-dropdown').forEach(function (element) {
+        $(element).remove();
+    });
+};
+
+AjaxAutocomplete.prototype.handlePurge = function () {
+    $(this.element).val(null);
     this.updateParentInput();
 };
 
@@ -106,7 +156,7 @@ AjaxAutocomplete.prototype.onSuccess = function (data) {
         });
     });
 
-    return {results: results};
+    return { results: results };
 };
 
 module.exports = AjaxAutocomplete;

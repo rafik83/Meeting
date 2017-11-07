@@ -412,4 +412,12 @@ interface SheetRepositoryInterface
      * @return Sheet|null
      */
     public function getSheetByEventAndTitle(Event $event, $title);
+
+    /**
+     * @param Type[] $types
+     * @param string $extraDataName Sheet\ExtraData name
+     *
+     * @return Sheet[]
+     */
+    public function getByTypesAndWithoutGivenExtraData(array $types, string $extraDataName): array;
 }

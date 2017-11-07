@@ -51,8 +51,8 @@ class ConfigureHandler
         $command->event->setExternalCatalog($command->externalCatalogEnabled);
 
         $catalogVisibility->updateTypesAndCategories($command->types, $command->categories);
-
         $catalogVisibility->enableMessage($command->hasMessage);
+        $catalogVisibility->setRegistrationUrl($command->registrationUrl);
 
         foreach ($command->messageTranslations as $locale => $message) {
             $catalogVisibility->translate(

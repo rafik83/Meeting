@@ -50,6 +50,14 @@
                 {{ 'login.link'|trans }}
             </a>
         {% endif %}
+
+        {% if isShowingRegisterButton %}
+            {% if registrationUrl is defined and registrationUrl is not null %}
+                <a class="btn btn-primary btn-lg btn-inactive" href="{{ registrationUrl }}">{{ 'register.register'|trans }}</a>
+            {% else %}
+                <a class="btn btn-primary btn-lg btn-inactive" href="{{ path('event') }}">{{ 'register.register'|trans }}</a>
+            {% endif %}
+        {% endif %}
     </div>
 
     <div class="fixed__navigation__close">

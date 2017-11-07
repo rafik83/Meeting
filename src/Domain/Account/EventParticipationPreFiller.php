@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Domain\Account;
 
+use Proximum\Vimeet\Application\Components\Sheet\Template\Tag;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Template\Exception\ObjectNotFoundException;
 use Proximum\Vimeet\Domain\Template\TemplateData;
@@ -73,6 +74,10 @@ class EventParticipationPreFiller
         $tags = $templateObject->getTags();
 
         foreach ($tags as $tag) {
+            if ($tag === Tag::SHEET_DATA) {
+                continue;
+            }
+
             $content = $templateObject->getContentValueLocalize($locale);
             if (empty($previousTaggedData[$tag]) && !empty($content)) {
                 $previousTaggedData[$tag] = $content;

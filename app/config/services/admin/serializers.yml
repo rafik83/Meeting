@@ -53,3 +53,10 @@ services:
         class: Proximum\Vimeet\Application\Serializer\Denormalizer\Analytic\MeetingSolution\SheetSatisfactionListViewDenormalizer
         tags:
             - { name: serializer.normalizer }
+
+    serializer.normalizer.meeting_request.meeting_request_list_view_normalizer:
+        class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Serializer\Normalizer\MeetingRequest\MeetingRequestListViewNormalizer
+        arguments:
+            - '@vimeet_infrastructure.adapter.translator_adapter'
+        tags:
+            - { name: serializer.normalizer }

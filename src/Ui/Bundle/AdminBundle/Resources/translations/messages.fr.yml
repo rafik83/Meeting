@@ -211,6 +211,8 @@ admin.extraParameter.list.empty: 'Aucun paramètre'
 admin.extraParameter.list.title: 'Liste des paramètres supplémentaires de l''événement'
 admin.extraParameter.type.leni_event: 'Code Event LENI'
 admin.extraParameter.type.leni_user: 'Code Utilisateur LENI'
+admin.extraParameter.type.vianeo_concerned_types_id: 'Vianeo : Ids des types de participation concernés'
+admin.extraParameter.type.vianeo_endpoint: 'Vianeo endpoint'
 admin.extraParameter.update.title: 'Modification du paramètre supplémentaire %type%'
 admin.filter: Filtrer
 admin.filter_by: 'Filtrer par'
@@ -315,6 +317,7 @@ admin.invoice.show: Voir
 admin.invoice.title: 'Liste des préfixes de numéro de facture'
 admin.login.logged_as: '%firstname% %lastname% (%role%)'
 admin.meeting_request_sheets_list.link: 'Par fiche de participation'
+admin.meeting_request.action.export: Exporter
 admin.meeting_request.action.lock: 'Verrouiller les demandes'
 admin.meeting_request.createdAt: 'Date de création'
 admin.meeting_request.details: Détail
@@ -353,6 +356,7 @@ admin.meeting.export.fields.to_user_ids: 'ids des utilisateurs demandeurs'
 admin.meeting.link: Rendez-vous
 admin.meeting.list.column.head.createdAt: 'Créé le'
 admin.meeting.list.column.head.from: De
+admin.meeting.list.column.head.isCreatedByParticipants: 'Créé par les participants'
 admin.meeting.list.column.head.slot: Créneau
 admin.meeting.list.column.head.to: À
 admin.meeting.list.details: Détails

@@ -113,6 +113,24 @@ class SheetContext implements Context
     }
 
     /**
+     * @Given /^this sheet is validated$/
+     */
+    public function sheetValidated()
+    {
+        $sheet = $this->sheetContextProxy->getStorage()->get('sheet');
+        $this->sheetContextProxy->getSheetManager()->setValidated($sheet);
+    }
+
+    /**
+     * @Given /^this sheet is enabled/
+     */
+    public function sheetEnabled()
+    {
+        $sheet = $this->sheetContextProxy->getStorage()->get('sheet');
+        $this->sheetContextProxy->getSheetManager()->setEnabled($sheet);
+    }
+
+    /**
      * @return Event
      * @throws \LogicException
      */

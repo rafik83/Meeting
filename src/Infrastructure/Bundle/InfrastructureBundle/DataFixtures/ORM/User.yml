@@ -59,7 +59,7 @@ Proximum\Vimeet\Domain\Model\User:
         __construct: false
         email: "test@elao.com"
         salt: "0D/UTZan1ZbStvnSEBj6flRGgQ59fyeSV9dnIT+5"
-        password: "q5sEATy5kfjoDYZqxBP7vNVJwqQ="
+        password: "q5sEATy5kfjoDYZqxBP7vNVJwqQ=" ## password: vimeet_admin
         locale: "fr"
         account: '@account_user_test'
     user_random_{1..30}:

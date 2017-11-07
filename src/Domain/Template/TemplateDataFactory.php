@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Domain\Template;
 
+use Proximum\Vimeet\Application\Components\Sheet\Preview\CustomPreviewData;
 use Proximum\Vimeet\Domain\Exception\Nomenclature\NomenclatureNotFoundException;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Nomenclature;
@@ -232,6 +233,16 @@ class TemplateDataFactory
         }
 
         return $templateData;
+    }
+
+    /**
+     * @param TemplateData $templateData
+     *
+     * @return array of TemplateObject and CustomPreviewDataView
+     */
+    public function getPreviewAvailableData(TemplateData $templateData): array
+    {
+        return array_merge($templateData->getPreviewAvailableObjects(), CustomPreviewData::getCustomPreviewDataViews());
     }
 
     /**

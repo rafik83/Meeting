@@ -169,6 +169,11 @@ services:
         arguments:
             - '@doctrine.orm.entity_manager'
 
+    repository.sheet.extra_data_repository:
+        class: Proximum\Vimeet\Infrastructure\Repository\Sheet\ExtraDataRepository
+        arguments:
+            - '@doctrine.orm.entity_manager'
+
     repository.admin_activate_account_token_repository:
         class: Proximum\Vimeet\Infrastructure\Repository\Admin\ActivateAccountTokenRepository
         arguments:
@@ -2118,11 +2123,6 @@ services:
         arguments:
             - '@doctrine.orm.entity_manager'
 
-    adapter.leni_api_call_job_queue:
-        class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Adapter\ThirdParty\LENI\LeniApiCallJobQueue
-        arguments:
-            - '@doctrine.orm.entity_manager'
-
     adapter.serializer_adapter:
         class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Adapter\SerializerAdapter
         arguments:
@@ -2235,13 +2235,25 @@ services:
         class: Proximum\Vimeet\Application\Components\Sheet\SheetGuesser
         arguments:
             - '@vimeet_infrastructure.repository.sheet_repository'
+
     sheet.preview:
         class: Proximum\Vimeet\Application\Components\Sheet\Preview\Preview
         arguments:
             - '@template.tagged_data_factory'
+            - '@vimeet_infrastructure.adapter.translator_adapter'
+            - '@sheet.preview.resolver.participants_resolver'
+            - '@sheet.preview.resolver.participants_position_resolver'
+
+    sheet.preview.resolver.participants_resolver:
+        class: Proximum\Vimeet\Application\Components\Sheet\Preview\Resolver\ParticipantsResolver
+        arguments:
             - '@query.participant.card_view_query_handler'
             - '@domain.rule.applyer'
-            - '@vimeet_infrastructure.adapter.translator_adapter'
+
+    sheet.preview.resolver.participants_position_resolver:
+        class: Proximum\Vimeet\Application\Components\Sheet\Preview\Resolver\ParticipantsPositionResolver
+        arguments:
+            - '@template.participant_info_guesser'
 
     vimeet_infrastructure.application.components.sorted_sheet:
         class: Proximum\Vimeet\Application\Components\Sheet\SortedSheet
@@ -3071,6 +3083,14 @@ services:
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Type\MeetingTypeViewQuery }
 
+    query.type.meeting_category_view_query_handler:
+        class: Proximum\Vimeet\Application\Query\Category\MeetingCategoryViewQueryHandler
+        arguments:
+            - '@catalog.visible_participation_categories'
+            - '@query.catalog.search_facet_view_query_handler'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Category\MeetingCategoryViewQuery }
+
     query.user.user_details_view_query_handler:
         class: Proximum\Vimeet\Application\Query\User\UserDetailsViewQueryHandler
         arguments:
@@ -3273,6 +3293,12 @@ services:
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Catalog\External\CatalogVisibilityMessageQuery }
 
+    query.catalog.external.catalog_visibility_registration_url_query_handler:
+        class: Proximum\Vimeet\Application\Query\Catalog\External\CatalogVisibilityRegistrationUrlQueryHandler
+        arguments:
+            - '@repository.catalog_visibility_repository'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Catalog\External\CatalogVisibilityRegistrationUrlQuery }
     #
     # Program query
     #
@@ -4256,21 +4282,6 @@ services:
         tags:
             - { name: console.command }
 
-    command.api.prepare_leni_api_call_command:
-        class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\ThirdParty\LENI\PrepareLeniApiCallCommand
-        arguments:
-            - '@command.third_party.leni.prepare_leni_api_handler'
-        tags:
-            - { name: console.command }
-
-    command.api.leni_api_call_command:
-        class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\ThirdParty\LENI\LeniApiCallCommand
-        arguments:
-            - '@command.third_party.leni.leni_api_call_handler'
-            - '@repository.user.event.extra_data_repository'
-        tags:
-            - { name: console.command }
-
     #
     # Funnel
     #
@@ -4347,6 +4358,12 @@ services:
             - '@repository.promotion_code_repository'
             - '@datetime'
 
+    cart_cleaner:
+        class: Proximum\Vimeet\Domain\Cart\CartCleaner
+        arguments:
+            - '@cart_manager'
+            - '@repository.cart_row_repository'
+
     #
     # Catalog
     #
@@ -4383,7 +4400,6 @@ services:
             - '@vimeet_infrastructure.repository.catalog.external.search_facet'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Catalog\External\SetSearchFacet }
-
 
     #
     # Promotion
@@ -4915,11 +4931,6 @@ services:
 
     serializer.order_export_normalizer:
         class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Serializer\Normalizer\Order\OrderRowNormalizer
-        tags:
-            - { name: serializer.normalizer }
-
-    serializer.normalizer.api.leni.leni_user_view_normalizer:
-        class: Proximum\Vimeet\Application\ThirdParty\LENI\Normalizer\LeniUserViewNormalizer
         tags:
             - { name: serializer.normalizer }
 

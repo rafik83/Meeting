@@ -1,5 +1,5 @@
 <div class="filter">
-    <h3>{{ form.vars.label|trans({}, form.vars.translation_domain) }}</h3>
+    <h3>{{ form.vars.label }}</h3>
 
     <ul data-message-at-least-one-checked="{{ ('form.search.' ~ form.vars.name  ~ '.at_least_one_checked')|trans({}, 'forms') }}">
         {% for child in form.children %}

@@ -179,6 +179,14 @@ services:
         parent: form_type_partner.partner_type
         tags:
             - { name: form.type }
+
+    form_type_sheet.template.object_choice_type:
+        class: Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Sheet\Template\ObjectChoiceType
+        arguments:
+            - '@vimeet_infrastructure.adapter.translator_adapter'
+        tags:
+            - { name: form.type }
+
     form_type_sheet.batch_type:
         class: Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Sheet\BatchType
         arguments:

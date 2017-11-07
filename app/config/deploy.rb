@@ -62,18 +62,24 @@ set :keep_releases, 3
 before 'symfony:cache:warmup', 'app_tasks:install'
 after 'symfony:cache:warmup', 'symfony:doctrine:migrations:migrate'
 after :deploy, 'app_tasks:php'
+after :deploy, 'app_tasks:supervisor'
 after :deploy, 'deploy:cleanup'
 
 namespace :app_tasks do
   task :php do
-      capifony_pretty_print "--> Restarting PHP"
-      invoke_command "sudo service php5-fpm restart", :via => run_method
-      capifony_puts_ok
+    capifony_pretty_print "--> Restarting PHP"
+    invoke_command "sudo /usr/sbin/service php7.1-fpm reload", :via => run_method
+    capifony_puts_ok
+  end
+  task :supervisor do
+    capifony_pretty_print "--> Restarting Supervisor"
+    invoke_command "sudo supervisorctl restart all", :via => run_method
+    capifony_puts_ok
   end
   task :install do
-      capifony_pretty_print "--> Installing"
-      invoke_command "cd #{latest_release} && make install@prod", :via => run_method
-      capifony_puts_ok
+    capifony_pretty_print "--> Installing"
+    invoke_command "cd #{latest_release} && make install@prod", :via => run_method
+    capifony_puts_ok
   end
 end
 

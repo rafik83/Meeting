@@ -83,9 +83,11 @@ interface EventRepositoryInterface
     public function getById($id);
 
     /**
+     * @param string[] $parameters array of Event Extra Parameter type
+     *
      * @return Event[]
      */
-    public function findEventWithLeniApiParameters(): array;
+    public function findEventWithParameters(array $parameters): array;
 
     /**
      * @param \DateTimeInterface $dateTime

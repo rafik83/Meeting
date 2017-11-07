@@ -57,7 +57,11 @@
 
         {% if isShowingRegisterButton %}
             <li>
-                <a href="{{ path('event') }}">{{ 'register.register'|trans }}</a>
+                {% if registrationUrl is defined and registrationUrl is not null %}
+                    <a href="{{ registrationUrl }}">{{ 'register.register'|trans }}</a>
+                {% else %}
+                    <a href="{{ path('event') }}">{{ 'register.register'|trans }}</a>
+                {% endif %}
             </li>
         {% endif %}
     </ul>

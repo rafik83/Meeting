@@ -21,7 +21,7 @@ class HttpAdapter implements HttpAdapterInterface
     /**
      * {@inheritdoc}
      */
-    public function post($uri, array $headers, $body): Response
+    public function post(string $uri, array $headers = [], $body): Response
     {
         $client = new Client($uri);
         $resource = $client->post($uri, $headers, $body);
@@ -35,5 +35,22 @@ class HttpAdapter implements HttpAdapterInterface
         $response = new Response($guzzleResponse->getStatusCode(), (string) $guzzleResponse->getBody());
 
         return $response;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function get(string $uri, array $headers = [], array $options = []): Response
+    {
+        $client = new Client($uri);
+        $resource = $client->get($uri, $headers, $options);
+
+        try {
+            $guzzleResponse = $client->send($resource);
+        } catch (ServerErrorResponseException $exception) {
+            throw new ServerErrorException($exception->getMessage());
+        }
+
+        return new Response($guzzleResponse->getStatusCode(), (string) $guzzleResponse->getBody());
     }
 }
