@@ -22,7 +22,7 @@ function Publisher(container) {
 Publisher.prototype.create = function(options) {
   var publisherOptions = {
     insertMode: 'append',
-    showControls: true,
+    showControls: false,
     width: '100%',
     height: '100%',
   };

@@ -18,7 +18,7 @@ function Subscriber(session, container) {
 Subscriber.prototype.subscribe = function (event) {
   var subscriberOptions = {
     insertMode: 'replace',
-    showControls: true,
+    showControls: false,
     width: '100%',
     height: '100%'
   };

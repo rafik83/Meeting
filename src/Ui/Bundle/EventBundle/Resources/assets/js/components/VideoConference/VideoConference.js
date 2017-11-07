@@ -24,6 +24,10 @@ function VideoConference(element) {
     'data-not-compatible-browser-message'
   );
 
+  this.installScreenSharingExtensionMessage = element.getAttribute(
+    'data-install-screensharing-extension-message'
+  );
+
   this.accessDeniedErrorMessage = element.getAttribute(
     'data-user-denied-media-access'
   );
@@ -35,6 +39,8 @@ function VideoConference(element) {
   var endMeetingButton = element.querySelector('.end-meeting');
   this.startScreenSharingButton = element.querySelector('#start-screensharing');
   this.endScreenSharingButton = element.querySelector('#end-screensharing');
+  this.toggleAudioElement = element.querySelector('#toggle-audio');
+  this.toggleVideoElement = element.querySelector('#toggle-video');
 
   // if (!window.opener) {
   //   endMeetingButton.classList.add('hide');
@@ -58,8 +64,11 @@ function VideoConference(element) {
   // Custom Events
   tokbox.registerScreenSharingExtension('chrome', CHROME_EXTENSION_ID, 2);
 
-  this.startScreenSharingButton.addEventListener('click', this.preScreenshare.bind(this));
+  this.startScreenSharingButton.addEventListener('click', this.screenshare.bind(this));
   this.endScreenSharingButton.addEventListener('click', this.endScreenshare.bind(this));
+
+  this.toggleAudioElement.addEventListener('click', this.toggleAudio.bind(this));
+  this.toggleVideoElement.addEventListener('click', this.toggleVideo.bind(this));
 
   document.addEventListener('webkitfullscreenchange', this.exitFullscreenHandler.bind(this), false);
   document.addEventListener('mozfullscreenchange', this.exitFullscreenHandler.bind(this), false);
@@ -69,7 +78,7 @@ function VideoConference(element) {
   // check if chrome extension already installed
   if (this.isChrome()) {
     this.isChromeExtensionInstall(function(response) {
-      localStorage.setItem(CHROME_EXTENSION_IS_INSTALLED, response === true ? 1 : 0);
+      localStorage.setItem(CHROME_EXTENSION_IS_INSTALLED, response === true ? '1' : '0');
     });
   }
 
@@ -112,6 +121,7 @@ VideoConference.prototype.init = function() {
     var subscriber = subscriberManager.subscribe(event);
 
     var fullscreenButton = this.createFullscreenButton();
+
     subscriber.element.appendChild(fullscreenButton);
 
     console.log('subscriberSTREAM', subscriber.stream.id);
@@ -225,18 +235,18 @@ VideoConference.prototype.preScreenshare = function () {
   if (this.isChrome()) {
     var isInstalled = parseInt(localStorage.getItem(CHROME_EXTENSION_IS_INSTALLED));
 
-    if (isInstalled === 1) {
+    if (isInstalled === '1') {
       this.screenshare();
       return;
     }
 
     this.installChromeExtension(function () {
       console.log('chrome extension installation succeeded, start screensharing');
-      localStorage.setItem(CHROME_EXTENSION_IS_INSTALLED, 1);
+      localStorage.setItem(CHROME_EXTENSION_IS_INSTALLED, '1');
       this.screenshare();
     }.bind(this), function(error) {
       console.log('Installation fail : ' + error);
-      localStorage.setItem(CHROME_EXTENSION_IS_INSTALLED, 0);
+      localStorage.setItem(CHROME_EXTENSION_IS_INSTALLED, '0');
     });
 
     return;
@@ -254,12 +264,12 @@ VideoConference.prototype.screenshare = function() {
     if (!response.supported || response.extensionRegistered === false) {
       alert(this.notCompatibleBrowserMessage);
     } else if (response.extensionInstalled === false && (response.extensionRequired)) {
-      alert("Merci d'installer l'extension de partage d'écran et de charger la page en HTTPS.");
+      alert(this.installScreenSharingExtensionMessage);
     } else {
       // start screensharing
       var publisher = this.publisher.create({
         videoSource: 'screen',
-        publishAudio: true,
+        publishAudio: true
       });
 
       this.session.publish(publisher, this.handlePublishScreensharing.bind(this));
@@ -298,10 +308,12 @@ VideoConference.prototype.handleStopScreensharing = function() {
 VideoConference.prototype.createFullscreenButton = function() {
   var fullscreenButton = document.createElement('button');
   var icon = document.createElement('i');
-  icon.classList.add('glyphicon', 'glyphicon-fullscreen');
+  icon.classList.add('glyphicon');
+  icon.classList.add('glyphicon-fullscreen');
 
-  fullscreenButton.classList.add('btn', 'btn-default',
-    'start-fullscreen-button');
+  fullscreenButton.classList.add('btn');
+  fullscreenButton.classList.add('btn-default');
+  fullscreenButton.classList.add('start-fullscreen-button');
   fullscreenButton.appendChild(icon);
 
   return fullscreenButton;
@@ -318,6 +330,48 @@ VideoConference.prototype.isNotIE = function() {
 
   return !( appName === 'Microsoft Internet Explorer' || // IE <= 10
     (appName === 'Netscape' && userAgent.indexOf('trident') > -1) ); // IE >= 11
+};
+
+/**
+ * Toggle audio stream
+ */
+VideoConference.prototype.toggleAudio = function() {
+  // if publisher stream is destroy because of stop screensharing, use previous stream
+  var publisher = null;
+
+  if (this.publisher.publisher.stream === null) {
+    publisher = this.publisherStream;
+  } else {
+    publisher = this.publisher.isScreensharing() ?
+      this.publisherStream : // get camera stream instead of screensharing stream
+      this.publisher.publisher;
+  }
+
+  if (publisher.stream.hasAudio) {
+    publisher.publishAudio(false);
+    this.toggleAudioElement.classList.add('btn-off');
+  } else {
+    publisher.publishAudio(true);
+    this.toggleAudioElement.classList.remove('btn-off');
+  }
+};
+
+/**
+ * Toggle video stream
+ */
+VideoConference.prototype.toggleVideo = function() {
+  // if publisher stream is destroy because of stop screensharing, use previous stream
+  var publisher = this.publisher.publisher.stream !== null ?
+      this.publisher.publisher :
+      this.publisherStream;
+
+  if (publisher.stream.hasVideo) {
+    publisher.publishVideo(false);
+    this.toggleVideoElement.classList.add('btn-off');
+  } else {
+    publisher.publishVideo(true);
+    this.toggleVideoElement.classList.remove('btn-off');
+  }
 };
 
 /**
