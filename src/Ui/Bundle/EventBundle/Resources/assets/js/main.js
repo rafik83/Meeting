@@ -31,6 +31,7 @@ require('bootstrap');
 require('elao-form.js');
 require('intl-tel-input');
 require('select2');
+require('babel-polyfill');
 
 function init (target) {
     $('[data-collection]', target).collection();

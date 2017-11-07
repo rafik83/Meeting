@@ -2,6 +2,8 @@
 
 var tokbox = require('@opentok/client');
 
+var STREAM_TYPE_SCREENSHARE = 'screen';
+
 /**
  * @param {Node} container
  * @constructor
@@ -13,29 +15,57 @@ function Publisher(container) {
 
 /**
  * The Publisher object represents the view of a video you publish
+ *
+ * @param {null|Object} options
+ * @returns {null|Publisher}
  */
-Publisher.prototype.create = function () {
+Publisher.prototype.create = function(options) {
   var publisherOptions = {
     insertMode: 'append',
     showControls: true,
     width: '100%',
-    height: '100%'
+    height: '100%',
   };
 
-  this.publisher = tokbox.initPublisher(this.container, publisherOptions, this.handleError);
+  publisherOptions = Object.assign(options, publisherOptions);
 
-  this.publisher.on('streamCreated', function (event) {
+  this.publisher = tokbox.initPublisher(
+    this.container,
+    publisherOptions,
+    this.handleError
+  );
+
+  this.publisher.on('streamCreated', function(event) {
     console.log('publisherSTREAM', event.stream.id);
   });
 
   return this.publisher;
 };
 
-Publisher.prototype.destroy = function () {
+/**
+ * Disable video stream and hide publisher element
+ */
+Publisher.prototype.disableVideo = function(publisherStream) {
+  publisherStream.publishVideo(false);
+  publisherStream.element.style.display = 'none';
+};
+
+Publisher.prototype.destroy = function() {
   this.publisher.destroy();
 };
 
-Publisher.prototype.handleError = function (error) {
+/**
+ * @returns {boolean}
+ */
+Publisher.prototype.isScreensharing = function() {
+  if (this.publisher === null) {
+    return false;
+  }
+
+  return this.publisher.stream.videoType === STREAM_TYPE_SCREENSHARE;
+};
+
+Publisher.prototype.handleError = function(error) {
   if (error) {
     console.log('Publisher error:', error);
   }
