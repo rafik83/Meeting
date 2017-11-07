@@ -698,6 +698,11 @@ form.sheet_filter.children.order.no.label: Sans
 form.sheet_filter.children.order.noPreference.label: 'Peu importe'
 form.sheet_filter.children.order.yes.label: Avec
 form.sheet_filter.children.orderBy.label: 'Trier par'
+form.sheet_filter.children.phoneValidationStatus.label: 'A confirmé son portable'
+form.sheet_filter.children.phoneValidationStatus.choice.all: 'Peu importe'
+form.sheet_filter.children.phoneValidationStatus.choice.all_confirmed: 'Confirmé'
+form.sheet_filter.children.phoneValidationStatus.choice.partly_confirmed: 'Partiellement confirmé'
+form.sheet_filter.children.phoneValidationStatus.choice.none_confirmed: 'Non confirmé'
 form.sheet_filter.children.state.label: Etat
 form.sheet_filter.children.text_search.label: 'Titre de la fiche, nom ou email de participant'
 form.sheet_filter.children.type.label: Type
