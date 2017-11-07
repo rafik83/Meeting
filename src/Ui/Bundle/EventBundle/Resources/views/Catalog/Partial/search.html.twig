@@ -21,7 +21,8 @@
 
     {% if searchForm.objective is defined %}
         <div class="filter">
-            <h3>{{ searchForm.objective.vars.label }}</h3>
+            {# objective is the only field not customizable by admin, so let the |trans #}
+            <h3>{{ searchForm.objective.vars.label|trans({}, searchForm.objective.vars.translation_domain) }}</h3>
 
             {{ form_widget(searchForm.objective) }}
         </div>
