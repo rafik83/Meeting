@@ -89,4 +89,6 @@ final class Events
     const SLOT_TOGGLE_LOCKED                           = 'slot.toggle.locked';
     const SLOT_DELETED                                 = 'slot.deleted';
     const USER_PHONE_VALIDATED                         = 'user.phone_validated';
+    const TIP_ASSIGNED                                 = 'tip.assigned';
+    const TIP_UN_ASSIGNED                              = 'tip.un_assigned';
 }

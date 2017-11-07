@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of the vimeet project.
+ * This file is part of the Proximum Vimeet project.
  *
  * Copyright (C) Proximum
  *
@@ -10,80 +10,96 @@
 
 namespace Application\Command\Tip\Event;
 
+use Prophecy\Argument;
+use Prophecy\Prophecy\ObjectProphecy;
+use Proximum\Vimeet\Application\Adapter\DelayedEventDispatcherInterface;
+use Proximum\Vimeet\Application\Event\Events;
+use Proximum\Vimeet\Application\Event\Tip\AssignedEvent;
 use Proximum\Vimeet\Application\Exception\Tip\TipNotFoundException;
 use Proximum\Vimeet\Application\View\Tip\Event\TipView;
+use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Tip\Tip;
 use Proximum\Vimeet\Domain\Repository\TypeRepositoryInterface;
 use Proximum\Vimeet\Domain\View\TypeView;
-use Proximum\Vimeet\Tests\Factory\TipFactory;
 use Proximum\Vimeet\Application\Command\Tip\Event\Affect;
 use Proximum\Vimeet\Application\Command\Tip\Event\AffectHandler;
 use Proximum\Vimeet\Domain\Model\Type;
 use Proximum\Vimeet\Domain\Repository\TipRepositoryInterface;
-use Proximum\Vimeet\Tests\Factory\EventFactory;
 use PHPUnit\Framework\TestCase;
 
 class AffectHandlerTest extends TestCase
 {
-    /** @var AffectHandler */
-    private $handler;
-    
-    /** @var TipRepositoryInterface */
+    /** @var ObjectProphecy */
     private $tipRepository;
     
-    /** @var TypeRepositoryInterface */
+    /** @var ObjectProphecy */
     private $typeRepository;
-    
-    /** @var Tip */
-    private $tip;
 
-    /** @var Type */
-    private $type;
+    /** @var ObjectProphecy */
+    private $eventDispatcher;
 
-    /** @var Affect */
-    private $command;
+    /** @var ObjectProphecy */
+    private $event;
     
     public function setUp()
     {
-        $event    = EventFactory::createEvent();
-        $tip      = TipFactory::createTip('awesome tip');
-        $type     = new Type($event);
-        $typeView = new TypeView($type->getId(), $type->getTitle('fr'), $type->getDescription('fr'));
+        $this->event           = $this->prophesize(Event::class);
+        $this->tipRepository   = $this->prophesize(TipRepositoryInterface::class);
+        $this->typeRepository  = $this->prophesize(TypeRepositoryInterface::class);
+        $this->eventDispatcher = $this->prophesize(DelayedEventDispatcherInterface::class);
+    }
 
-        $tipView = new TipView($tip->getId(), 'admin_title', 'fr');
+    public function testHandle()
+    {
+        $tipView  = new TipView(14, '', '', [], []);
+        $typeView = new TypeView(56, '', '');
+        $type     = $this->prophesize(Type::class);
+        $tip      = $this->prophesize(Tip::class);
 
-        $command        = new Affect($event);
+        $this->tipRepository->getById(14)->shouldBeCalled()->willReturn($tip->reveal());
+        $this->typeRepository->getById(56)->shouldBeCalled()->willReturn($type->reveal());
+
+        $this->tipRepository->set($tip->reveal())->shouldBeCalled();
+        $this->eventDispatcher
+            ->dispatch(Events::TIP_ASSIGNED, new AssignedEvent($this->event->reveal(), $tip->reveal()))
+            ->shouldBeCalled()
+        ;
+
+        $command        = new Affect($this->event->reveal());
         $command->tip   = $tipView;
         $command->types = [$typeView];
 
-        $this->tipRepository  = $this->prophesize(TipRepositoryInterface::class);
-        $this->typeRepository = $this->prophesize(TypeRepositoryInterface::class);
-        $this->tip            = $tip;
-        $this->type           = $type;
-        $this->command        = $command;
-        $this->handler        = new AffectHandler($this->tipRepository->reveal(), $this->typeRepository->reveal());
-    }
-    public function testHandle()
-    {
-        $this->tipRepository->getById(null)->shouldBeCalled()->willReturn($this->tip);
+        $handler = new AffectHandler(
+            $this->tipRepository->reveal(),
+            $this->typeRepository->reveal(),
+            $this->eventDispatcher->reveal()
+        );
 
-        $this->typeRepository->getById(null)->shouldBeCalled()->willReturn($this->type);
-
-        $this->tipRepository->set($this->tip)->shouldBeCalled();
-
-        $this->handler->handle($this->command);
+        $handler->handle($command);
     }
 
     public function testTipNotFoundException()
     {
-        $this->tipRepository->getById(null)->shouldBeCalled()->willReturn(null);
-
         $this->expectException(TipNotFoundException::class);
 
-        $this->typeRepository->getById(null)->shouldNotBeCalled();
+        $typeView = $this->prophesize(TypeView::class);
+        $tipView  = new TipView(14, '', '', [], []);
 
-        $this->tipRepository->set($this->tip)->shouldNotBeCalled();
+        $this->tipRepository->getById(14)->shouldBeCalled()->willReturn(null);
+        $this->typeRepository->getById(Argument::any())->shouldNotBeCalled();
+        $this->tipRepository->set(Argument::any())->shouldNotBeCalled();
 
-        $this->handler->handle($this->command);
+        $this->eventDispatcher->dispatch(Argument::any())->shouldNotBeCalled();
+
+        $command        = new Affect($this->event->reveal());
+        $command->tip   = $tipView;
+        $command->types = [$typeView];
+
+        $handler = new AffectHandler(
+            $this->tipRepository->reveal(),
+            $this->typeRepository->reveal(),
+            $this->eventDispatcher->reveal()
+        );
+        $handler->handle($command);
     }
 }

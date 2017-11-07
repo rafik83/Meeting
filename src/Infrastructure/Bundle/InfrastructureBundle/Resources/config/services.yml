@@ -707,12 +707,14 @@ services:
         arguments:
             - '@repository.tip.repository'
             - '@vimeet_infrastructure.repository.type_repository'
+            - '@vimeet_infrastructure.adapter.delayed_event_dispatcher'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Tip\Event\Affect }
     command.tip.event.remove_handler:
         class: Proximum\Vimeet\Application\Command\Tip\Event\RemoveHandler
         arguments:
             - '@repository.tip.repository'
+            - '@vimeet_infrastructure.adapter.delayed_event_dispatcher'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Tip\Event\Remove }
     command.transaction.create_handler:
