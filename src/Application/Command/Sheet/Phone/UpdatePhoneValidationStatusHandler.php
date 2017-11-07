@@ -47,9 +47,9 @@ class UpdatePhoneValidationStatusHandler
     {
         $types = $this->typeRepository->getTypesByEvent($command->event);
 
-        $typesThatAllowPhones = $this->validationCalculator->preloadTypeThatAllowPhones($command->event, $types);
+        $this->validationCalculator->preloadTypeThatAllowPhones($command->event, $types);
 
-        $sheets = $this->sheetRepository->getByTypes($typesThatAllowPhones);
+        $sheets = $this->sheetRepository->getByTypes($types);
 
         foreach ($sheets as $sheet) {
             if (!$sheet->isEnabled()) {

@@ -58,10 +58,9 @@ class UpdatePhoneValidationStatusHandlerTest extends TestCase
         $validationCalculator
             ->preloadTypeThatAllowPhones($event->reveal(), $types)
             ->shouldBeCalled()
-            ->willReturn([$type1->reveal()])
         ;
 
-        $sheetRepository->getByTypes([$type1->reveal()])->shouldBeCalled()->willReturn($sheets);
+        $sheetRepository->getByTypes($types)->shouldBeCalled()->willReturn($sheets);
 
         $validationCalculator
             ->getValidationStatusForSheet($sheet2->reveal())

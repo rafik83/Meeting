@@ -128,23 +128,13 @@ class ValidationCalculator
     /**
      * @param Event  $event
      * @param Type[] $types
-     *
-     * @return Type[]
      */
-    public function preloadTypeThatAllowPhones(Event $event, array &$types): array
+    public function preloadTypeThatAllowPhones(Event $event, array &$types)
     {
-        $typeThatAllowPhones = [];
-
         foreach ($types as $type) {
             $allowPhone = $this->tipRepository->isConfirmationPhoneEnabled($event, $type);
 
             $this->typesThatAllowPhones[$type->getId()] = $allowPhone;
-
-            if ($allowPhone) {
-                $typeThatAllowPhones[] = $type;
-            }
         }
-
-        return $typeThatAllowPhones;
     }
 }
