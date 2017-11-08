@@ -10,9 +10,9 @@
 
 namespace Proximum\Vimeet\Application\Event\User\Phone;
 
+use Proximum\Vimeet\Domain\Model\Event as EventModel;
 use Proximum\Vimeet\Domain\Model\User;
 use Symfony\Component\EventDispatcher\Event;
-use Proximum\Vimeet\Domain\Model\Event as EventModel;
 
 class PhoneValidatedEvent extends Event
 {
