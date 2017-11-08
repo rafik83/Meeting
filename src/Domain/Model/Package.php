@@ -187,8 +187,8 @@ class Package
     {
         $this->groups->clear();
 
-        foreach ($groups as $group) {
-            $this->groups->add($group);
+        foreach ($groups as $key => $group) {
+            $this->groups->set($key, $group);
         }
 
         return $this;
@@ -310,7 +310,7 @@ class Package
     public function translate($locale, $plansLabel, $participantAndPlanningLabel, $optionsLabel)
     {
         if (!$this->translations->containsKey($locale)) {
-            $this->translations->add(new PackageTranslation($this, $locale, $plansLabel, $participantAndPlanningLabel, $optionsLabel));
+            $this->translations->set($locale, new PackageTranslation($this, $locale, $plansLabel, $participantAndPlanningLabel, $optionsLabel));
         } else {
             $this->translations->get($locale)->set($plansLabel, $participantAndPlanningLabel, $optionsLabel);
         }
