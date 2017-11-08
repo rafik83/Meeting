@@ -98,10 +98,7 @@ class DuplicatorTest extends TestCase
         $fileStorage->copyAndRename('image')->shouldBeCalled()->willReturn('image2');
         $fileStorage->copyAndRename('image3')->shouldBeCalled()->willReturn('image4');
 
-        $duplicator = new Duplicator(
-            $fileStorage->reveal(),
-            $dateTime
-        );
+        $duplicator = new Duplicator($fileStorage->reveal());
         $products = [$product, $product2];
         $result = $duplicator->duplicateProducts($currentEvent, $products);
 

@@ -19,17 +19,12 @@ class Duplicator
     /** @var FileStorageInterface */
     private $fileStorage;
 
-    /** @var \DateTimeInterface */
-    private $dateTime;
-
     /**
      * @param FileStorageInterface $fileStorage
-     * @param \DateTimeInterface   $dateTime
      */
-    public function __construct(FileStorageInterface $fileStorage, \DateTimeInterface $dateTime)
+    public function __construct(FileStorageInterface $fileStorage)
     {
         $this->fileStorage = $fileStorage;
-        $this->dateTime    = $dateTime;
     }
 
     /**
