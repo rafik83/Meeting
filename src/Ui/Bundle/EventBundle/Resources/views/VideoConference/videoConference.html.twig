@@ -6,6 +6,8 @@
          data-session-id="{{ videoConferenceView.sessionId }}"
          data-api-key="{{ videoConferenceView.apiKey }}"
          data-not-compatible-browser-message="{{ 'meeting.video.notCompatibleBrowserMessage'|trans }}"
+         data-install-screensharing-extension-message="{{ 'meeting.video.installScreenSharingExtensionMessage'|trans }}"
+         data-user-denied-media-access="{{ 'meeting.video.error.userDeniedAccess'|trans }}"
     >
         <div class="layout-container"></div>
         <div class="publisher-container"></div>
@@ -24,8 +26,22 @@
             {% endif %}
         </div>
 
-        <button class="btn btn-danger end-meeting">
-            <i class="icon-Disconnect"></i> {{ 'meeting.video.end'|trans }}
-        </button>
+        <div class="buttons-container">
+            <button id="toggle-audio" class="btn">
+                <i class="icon-Conference icon-center"></i>
+            </button>
+            <button id="toggle-video" class="btn">
+                <i class="glyphicon glyphicon glyphicon-facetime-video icon-center"></i>
+            </button>
+            <button id="start-screensharing" class="btn screensharing">
+                <i class="glyphicon glyphicon-share"></i>{{ 'meeting.video.screenshare.start'|trans }}
+            </button>
+            <button id="end-screensharing" class="btn screensharing hide">
+                <i class="glyphicon glyphicon-share"></i>{{ 'meeting.video.screenshare.end'|trans }}
+            </button>
+            <button class="btn btn-primary end-meeting">
+                <i class="icon-Disconnect"></i> {{ 'meeting.video.end'|trans }}
+            </button>
+        </div>
     </div>
 {% endblock body %}

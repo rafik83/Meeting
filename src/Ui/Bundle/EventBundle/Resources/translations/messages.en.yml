@@ -100,6 +100,8 @@ login.connection: Connexion
 login.forgot_password: 'Forgotten password?'
 login.forgotPassword: 'Forgotten password?'
 login.memberArea: 'Member area'
+meeting.video.end: 'End call'
+meeting.video.screenshare: Screenshare
 meeting.video.waitingForParticipant: 'Waiting for participant'
 modal.back: Back
 modal.close: Close
