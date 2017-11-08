@@ -26,7 +26,7 @@ class PrintTemplateController extends Controller
      *
      * @return Response
      */
-    public function builderAction(Request $request, SheetTemplate $template)
+    public function builderAction(Request $request, SheetTemplate $template): Response
     {
         $this->denyAccessUnlessGranted('ROLE_ALLOWED_TO_ORGANIZE');
         $this->denyAccessUnlessGranted(AdminTemplateAccessVoter::PERMISSION_TEMPLATE_EDIT, $template);
@@ -49,7 +49,7 @@ class PrintTemplateController extends Controller
      *
      * @return JsonResponse
      */
-    public function saveAction(Request $request, SheetTemplate $template)
+    public function saveAction(Request $request, SheetTemplate $template): JsonResponse
     {
         $this->denyAccessUnlessGranted('ROLE_ALLOWED_TO_ORGANIZE');
         $this->denyAccessUnlessGranted(AdminTemplateAccessVoter::PERMISSION_TEMPLATE_EDIT, $template);
