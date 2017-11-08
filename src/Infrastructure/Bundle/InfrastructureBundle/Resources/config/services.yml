@@ -4113,6 +4113,14 @@ services:
             - '@command.planning.export_planning_handler'
         tags:
             - { name: console.command }
+
+    command_planning.print_sheets_pdf:
+        class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\Sheet\PrintPdfCommand
+        arguments:
+            - '@command.sheet.batch_pdf_handler'
+        tags:
+            - { name: console.command }
+
     command.order.export_order_command:
         class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\Order\ExportOrderCommand
         arguments:
@@ -4791,6 +4799,7 @@ services:
             - '%phantomjs_script%'
             - '%phantomjs_http_user%'
             - '%phantomjs_http_password%'
+            - '%infrastructure.print_sheet_path%'
 
     sheet.infos_helper:
         class: Proximum\Vimeet\Application\Components\Sheet\SheetInfosHelper
@@ -5329,6 +5338,13 @@ services:
             - '@adapter.job_queue_adapter'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Planning\ExportPlanningJobCreator }
+
+    command.sheet.batch_pdf_job_creator_handler:
+        class: Proximum\Vimeet\Application\Command\Sheet\BatchPdfJobCreatorHandler
+        arguments:
+            - '@adapter.job_queue_adapter'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Sheet\BatchPdfJobCreator }
 
     #
     # Order export

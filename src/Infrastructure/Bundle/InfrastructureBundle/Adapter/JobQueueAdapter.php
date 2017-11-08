@@ -33,6 +33,7 @@ use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\Order\Exp
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\Planner\ExportPlannerCommand;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\Planner\ImportPlannerCommand;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\SendEmailingCommand;
+use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\Sheet\PrintPdfCommand;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\Sheet\Index\IndexInCatalogSheetsByEventCommand;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\Sheet\Index\IndexSheetsByRegistrationTemplateCommand;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\Sheet\Index\IndexSheetsBySheetTemplateCommand;
@@ -70,6 +71,20 @@ class JobQueueAdapter extends AbstractJobQueueAdapter implements JobQueueInterfa
                 ]
             )
         );
+
+        $this->setJob($job);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function printSheetsPdf(array $sheetIds, string $emailToNotify, string $locale)
+    {
+        $job = new Job(PrintPdfCommand::NAME, [
+            sprintf('--sheetIds=%s', implode(',', $sheetIds)),
+            sprintf('--emailToNotify=%s', $emailToNotify),
+            sprintf('--locale=%s', $locale),
+        ]);
 
         $this->setJob($job);
     }

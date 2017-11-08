@@ -179,6 +179,12 @@ class BatchHandler
             );
         }
 
+        if ($batch->printPdf) {
+            return $this->batchPdfJobCreatorHandler->handle(
+                new BatchPdfJobCreator($batch->ids, $batch->admin, $batch->locale)
+            );
+        }
+
         return new BatchResult(0, $batch->getMessage() . 'no_action');
     }
 }

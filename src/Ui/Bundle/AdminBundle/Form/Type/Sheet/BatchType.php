@@ -72,6 +72,10 @@ class BatchType extends AbstractType
             ])
         ;
 
+        if ($this->authorizationChecker->isGranted('ROLE_ALLOWED_TO_ORGANIZE')) {
+            $builder->add('printPdf', SubmitType::class);
+        }
+
         if ($this->authorizationChecker->isGranted('ROLE_ALLOWED_TO_ADMIN')) {
             $builder
                 ->add('enable', SubmitType::class)
