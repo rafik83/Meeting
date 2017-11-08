@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2016 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -12,12 +12,15 @@ namespace Proximum\Vimeet\Application\Command\Sheet;
 
 use Proximum\Vimeet\Application\Adapter\TranslatorInterface;
 use Proximum\Vimeet\Application\Components\Registration\StepManager;
+use Proximum\Vimeet\Application\Components\Sheet\Request\EnableDisableManager;
 use Proximum\Vimeet\Application\Event\Events;
 use Proximum\Vimeet\Application\Event\Package\MustSelectPackageEvent;
 use Proximum\Vimeet\Application\Event\Sheet\SheetChangedTypeEvent;
 use Proximum\Vimeet\Application\Exception\Sheet\InvoicedSheetException;
+use Proximum\Vimeet\Application\Exception\Sheet\SheetWithMeetingsException;
 use Proximum\Vimeet\Domain\Model\Order;
 use Proximum\Vimeet\Domain\Model\Sheet;
+use Proximum\Vimeet\Domain\Repository\MeetingRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\OrderRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
 use Proximum\Vimeet\Infrastructure\Adapter\DelayedEventDispatcher;
@@ -38,22 +41,31 @@ class ChangeTypeHandler
 
     /** @var \DateTimeInterface */
     private $datetime;
-    /**
-     * @var StepManager
-     */
+
+    /** @var StepManager */
     private $registrationStepManager;
 
+    /** @var MeetingRepositoryInterface */
+    private $meetingRepository;
+
+    /** @var EnableDisableManager */
+    private $enableDisableManager;
+
     /**
-     * @param SheetRepositoryInterface $sheetRepository
-     * @param OrderRepositoryInterface $orderRepository
-     * @param TranslatorInterface      $translator
-     * @param DelayedEventDispatcher   $eventDispatcher
-     * @param StepManager              $registrationStepManager
-     * @param \DateTimeInterface       $datetime
+     * @param SheetRepositoryInterface   $sheetRepository
+     * @param OrderRepositoryInterface   $orderRepository
+     * @param MeetingRepositoryInterface $meetingRepository
+     * @param EnableDisableManager       $enableDisableManager
+     * @param TranslatorInterface        $translator
+     * @param DelayedEventDispatcher     $eventDispatcher
+     * @param StepManager                $registrationStepManager
+     * @param \DateTimeInterface         $datetime
      */
     public function __construct(
         SheetRepositoryInterface $sheetRepository,
         OrderRepositoryInterface $orderRepository,
+        MeetingRepositoryInterface $meetingRepository,
+        EnableDisableManager $enableDisableManager,
         TranslatorInterface $translator,
         DelayedEventDispatcher $eventDispatcher,
         StepManager $registrationStepManager,
@@ -65,6 +77,8 @@ class ChangeTypeHandler
         $this->eventDispatcher         = $eventDispatcher;
         $this->datetime                = $datetime;
         $this->registrationStepManager = $registrationStepManager;
+        $this->meetingRepository       = $meetingRepository;
+        $this->enableDisableManager    = $enableDisableManager;
     }
 
     /**
@@ -73,6 +87,7 @@ class ChangeTypeHandler
     public function handle(ChangeType $changeType)
     {
         $this->denyAccessIfAtLeastOneOrderIsInvoiced($changeType->sheet);
+        $this->denyAccessIfAtLeastOneMeeting($changeType->sheet);
         $previousType = $changeType->sheet->getType();
 
         if (null === $changeType->type || $changeType->type === $previousType) {
@@ -84,6 +99,11 @@ class ChangeTypeHandler
 
         // update sheet type
         $changeType->sheet->updateType($changeType->type);
+
+        // As the sheet is removed from the catalog in the updateType method
+        // The requests need to be disable
+        $this->enableDisableManager->update($changeType->sheet, false);
+
         $this->sheetRepository->set($changeType->sheet);
 
         // get current package
@@ -142,6 +162,18 @@ class ChangeTypeHandler
     {
         if ($this->orderRepository->hasInvoice($sheet) === true) {
             throw new InvoicedSheetException('Sheet type cannot be changed');
+        }
+    }
+
+    /**
+     * @param Sheet $sheet
+     *
+     * @throws SheetWithMeetingsException
+     */
+    private function denyAccessIfAtLeastOneMeeting(Sheet $sheet)
+    {
+        if (0 < $this->meetingRepository->countMeetingsOfSheet($sheet)) {
+            throw new SheetWithMeetingsException('Sheet type cannot be changed as Sheet has meetings');
         }
     }
 }

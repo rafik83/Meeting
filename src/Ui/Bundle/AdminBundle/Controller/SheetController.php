@@ -271,6 +271,7 @@ class SheetController extends Controller
 
         if ($this->get('vimeet_infrastructure.repository.type_repository')->countByEvent($event) > 1
             && $this->get('repository.invoice.invoice_repository')->isSheetInvoiced($sheet) === null
+            && $this->get('vimeet_infrastructure.repository.meeting_repository')->countMeetingsOfSheet($sheet) === 0
         ) {
             $changeType = new ChangeType($sheet, $sheet->getType(), $this->getUser(), $locale);
 

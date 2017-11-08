@@ -30,6 +30,9 @@ class SheetMeetingIndicatorView
     /** @var int "nbre de proposition refusées" */
     public $refusedPropositions;
 
+    /** @var int number of meetings */
+    public $meetings;
+
     /**
      * SheetMeetingIndicatorView constructor.
      *
@@ -39,6 +42,7 @@ class SheetMeetingIndicatorView
      * @param int $approvedPropositions
      * @param int $pendingPropositions
      * @param int $refusedPropositions
+     * @param int $meetings
      */
     public function __construct(
         $approvedRequests,
@@ -46,7 +50,8 @@ class SheetMeetingIndicatorView
         $refusedRequests,
         $approvedPropositions,
         $pendingPropositions,
-        $refusedPropositions
+        $refusedPropositions,
+        int $meetings
     ) {
         $this->approvedRequests     = $approvedRequests;
         $this->pendingRequests      = $pendingRequests;
@@ -54,5 +59,6 @@ class SheetMeetingIndicatorView
         $this->approvedPropositions = $approvedPropositions;
         $this->pendingPropositions  = $pendingPropositions;
         $this->refusedPropositions  = $refusedPropositions;
+        $this->meetings             = $meetings;
     }
 }
