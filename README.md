@@ -32,9 +32,14 @@ Launch vagrant box, and ssh into it
         $ vagrant up
         $ vagrant ssh
 
-Build assets
+Build assets:
 
-        ⇒ gulp
+        ⇒ make build
+
+Build and watch assets:
+
+        ⇒ make watch
+
 
 Build Vimeet events assets
 
@@ -42,23 +47,21 @@ Build Vimeet events assets
 
 Enable/Disable php xdebug
 
-        ⇒ elao_php_xdebug [on|off]
+        ⇒ manala_php_xdebug [on|off]
 
 * *Supervisor*: http://vimeet.proximum.dev:9001
-* *Log.io*: http://vimeet.proximum.dev:28778
-* *OPcache Dashboard*: http://vimeet.proximum.dev:2013
 * *phpMyAdmin*: http://vimeet.proximum.dev:1979
 * *ElasticSearch HEAD*: http://vimeet.proximum.dev:9200/_plugin/head/
 
-### NPM
+### Yarn
 
 Install a package:
 
-        ⇒ npm install <package> --save
+        ⇒ yarn add <package>
 
-Regenerate manually npm-shrinkwrap.json:
+Remove a dependency:
 
-        ⇒ npm shrinkwrap
+        ⇒ yarn remove <package>
 
 ### Migrations
 
