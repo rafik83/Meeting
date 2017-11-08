@@ -133,6 +133,7 @@ After a deploy, you will need to do manually some commands at prod or preprod ([
 - Checker l'accès aux controllers
 - Respecter l'UI Admin (si la story concerne l'Admin)
 - Générer une migration de la DB (si la structure change => make migrations)
+- Regénérer npm-shrinkwrap.json si un nouveau package npm est installé : (`$ npm shrinkwrap`)
 - Tests unitaires et fonctionnels qui passent (make test)
 - La branche est en platinum sur Insight 
 - Être reviewé (avoir plusieurs +1)

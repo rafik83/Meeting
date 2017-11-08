@@ -11,6 +11,7 @@
 namespace Proximum\Vimeet\Infrastructure\Adapter;
 
 use InvalidArgumentException;
+use OpenTok\MediaMode;
 use OpenTok\OpenTok;
 use OpenTok\Role;
 use OpenTok\Session;
@@ -21,6 +22,7 @@ class VideoConferenceAdapter implements VideoConferenceAdapterInterface
 {
     const DELAY_AFTER_END_TIME = '+15 minutes';
     const TOKEN_GENERATION_DEFAULT_OPTIONS = ['role' => Role::PUBLISHER];
+    const SESSION_DEFAULT_OPTIONS = ['mediaMode' => MediaMode::ROUTED];
 
     /** @var OpenTok */
     private $openTok;
@@ -48,7 +50,10 @@ class VideoConferenceAdapter implements VideoConferenceAdapterInterface
      */
     public function createSession(array $options = []): Session
     {
-        return $this->openTok->createSession($options);
+        return $this->openTok->createSession(array_merge(
+            self::SESSION_DEFAULT_OPTIONS,
+            $options
+        ));
     }
 
     /**

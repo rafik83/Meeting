@@ -224,10 +224,60 @@
 }
 
 .video-conference {
-  .end-meeting {
+  .buttons-container {
+    z-index: 9999;
     position: absolute;
     bottom: 10px;
     right: 10px;
+    .btn {
+      position: relative;
+      font-size: 15px;
+      line-height: 22px;
+      font-family: OpenSans;
+      text-transform: uppercase;
+      border: none;
+      border-radius: 18px;
+      transition: background .2s ease-in-out;
+      display: inline-block;
+      background-color: #fff;
+      &.screensharing {
+        margin-right: 10px;
+      }
+      &.btn-off, &.btn-off:hover, &.btn-off:focus {
+        background-color: $bg-fail-color;
+      }
+      i {
+        &.glyphicon {
+          color: #000;
+          font-family: 'Glyphicons Halflings' !important;
+          font-style: normal;
+          font-weight: normal;
+          line-height: 1;
+        }
+        &.icon-center {
+          margin: auto !important;
+        }
+      }
+    }
+  }
+
+  .start-fullscreen-button {
+    z-index: 9999;
+    position: absolute !important;
+    margin-left: auto;
+    margin-right: auto;
+    top: 10px;
+    left: 10px;
+    width: 40px;
+    height: 40px;
+    font-size: 25px;
+    > i {
+      color: #000;
+      font-family: 'Glyphicons Halflings';
+      font-style: normal;
+      font-weight: normal;
+      line-height: 1;
+    }
   }
 
   .video-helper {
