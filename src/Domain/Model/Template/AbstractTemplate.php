@@ -232,7 +232,7 @@ abstract class AbstractTemplate
      *
      * @param array $value
      *
-     * @return SheetTemplate
+     * @return AbstractTemplate
      */
     public function setValue(array $value)
     {
