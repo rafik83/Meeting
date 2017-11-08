@@ -838,6 +838,22 @@ services:
             - '@adapter.job_queue_adapter'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Sheet\BatchGenerateInvoice }
+    command.sheet.batch_pdf_handler:
+        class: Proximum\Vimeet\Application\Command\Sheet\BatchPdfHandler
+        arguments:
+            - '@adapter.mailer_adapter'
+            - '%mailer_sender%'
+            - '@vimeet_infrastructure.repository.sheet_repository'
+            - '@templating'
+            - '@adapter.local_file_storage'
+            - '%infrastructure.print_sheet_path%'
+            - '@repository.file_repository'
+            - '@datetime'
+            - '@printer.sheet_pdf_printer'
+            - '@template.tagged_data_factory'
+            - '@sheet.infos_helper'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Sheet\BatchPdf }
     command.sheet.batch_pending_handler:
         class: Proximum\Vimeet\Application\Command\Sheet\BatchPendingHandler
         arguments:
@@ -985,6 +1001,8 @@ services:
             - '@command.sheet.batch_generate_invoice_handler'
             - '@command.sheet.batch_assign_to_group_handler'
             - '@command.sheet.batch_pending_handler'
+            - '@command.sheet.batch_pdf_job_creator_handler'
+            - '@command.sheet.batch_pdf_handler'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Sheet\Batch }
 

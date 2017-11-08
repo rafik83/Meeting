@@ -49,6 +49,12 @@ class BatchHandler
     /** @var BatchPendingHandler */
     private $batchPendingHandler;
 
+    /** @var BatchPdfJobCreatorHandler */
+    private $batchPdfJobCreatorHandler;
+
+    /** @var BatchPdfHandler */
+    private $batchPdfHandler;
+
     /**
      * BatchHandler constructor.
      *
@@ -63,6 +69,8 @@ class BatchHandler
      * @param BatchGenerateInvoiceHandler    $batchGenerateInvoiceHandler
      * @param BatchAssignToGroupHandler      $batchAssignToGroupHandler
      * @param BatchPendingHandler            $batchPendingHandler
+     * @param BatchPdfJobCreatorHandler      $batchPdfJobCreatorHandler
+     * @param BatchPdfHandler                $batchPdfHandler
      */
     public function __construct(
         SheetSearchAdapterInterface $sheetSearchAdapter,
@@ -75,7 +83,9 @@ class BatchHandler
         BatchValidationValidateHandler $batchValidationValidateHandler,
         BatchGenerateInvoiceHandler $batchGenerateInvoiceHandler,
         BatchAssignToGroupHandler $batchAssignToGroupHandler,
-        BatchPendingHandler $batchPendingHandler
+        BatchPendingHandler $batchPendingHandler,
+        BatchPdfJobCreatorHandler $batchPdfJobCreatorHandler,
+        BatchPdfHandler $batchPdfHandler
     ) {
         $this->sheetSearchAdapter             = $sheetSearchAdapter;
         $this->batchValidateHandler           = $batchValidateHandler;
@@ -88,6 +98,8 @@ class BatchHandler
         $this->batchGenerateInvoiceHandler    = $batchGenerateInvoiceHandler;
         $this->batchAssignToGroupHandler      = $batchAssignToGroupHandler;
         $this->batchPendingHandler            = $batchPendingHandler;
+        $this->batchPdfJobCreatorHandler      = $batchPdfJobCreatorHandler;
+        $this->batchPdfHandler = $batchPdfHandler;
     }
 
     /**

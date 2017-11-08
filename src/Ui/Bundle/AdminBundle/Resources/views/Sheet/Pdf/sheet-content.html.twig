@@ -1,0 +1,25 @@
+<section class="main">
+    <div class="main__container">
+        {% for uid, child in templateData.column(0) %}
+            {{ include('AdminBundle:Sheet/Pdf/' ~ child.component|capitalize ~ ':' ~ child.type ~ '.html.twig', {
+                'sheet': sheet,
+                'uid': uid,
+                'item': child,
+                'locale': templateData.locale,
+                'fallback': templateData.fallback,
+                'taggedData': taggedData,
+                'nomenclatures': nomenclatures,
+                'participants': participants,
+                'userSheet': userSheet|default(false),
+                'meetingRequest' : meetingRequest|default(false),
+                'isMeetingPublished': isMeetingPublished|default(false),
+                'isMeetingRequestUpdateLocked': isMeetingRequestUpdateLocked|default(false),
+                'isMeetingRequestClosed': isMeetingRequestClosed|default(false),
+                'isAnsweringMeetingRequestClosed': isAnsweringMeetingRequestClosed|default(false),
+                'isPhoneValidationRequired': isPhoneValidationRequired,
+                'phoneValidationLink': '',
+                'hideMeetingRequest': hideMeetingRequest|default(false),
+            }, false) }}
+        {% endfor %}
+    </div>
+</section>

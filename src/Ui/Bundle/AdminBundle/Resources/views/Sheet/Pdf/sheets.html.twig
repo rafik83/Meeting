@@ -1,0 +1,13 @@
+{% extends 'EventBundle::base.html.twig' %}
+
+{% block body %}
+    <div class="container-fluid">
+        {{ include('AdminBundle:Sheet/Pdf:sheet-content.html.twig') }}
+    </div>
+    <div style="page-break-after: always;"></div>
+    <script>
+      window.print();
+    </script>
+{% endblock body %}
+
+{% block javascripts '' %}
