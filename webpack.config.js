@@ -16,8 +16,8 @@ Encore
     .addEntry('js/admin', './src/Ui/Bundle/AdminBundle/Resources/assets/js/admin.js')
     .addEntry('js/agenda', './src/Ui/Bundle/AdminBundle/Resources/assets/js/agenda.js')
     .addEntry('tinymce/tinymce', './src/Ui/Bundle/AdminBundle/Resources/assets/js/tinymce.js')
-    .addEntry('tinymce/tinymce/pages', './src/Ui/Bundle/AdminBundle/Resources/assets/js/pages/messaging-message-tinymce.js')
-    .addEntry('tinymce/tinymce/tip', './src/Ui/Bundle/AdminBundle/Resources/assets/js/tip/tip.js')
+    .addEntry('tinymce/pages/messaging-message-tinymce', './src/Ui/Bundle/AdminBundle/Resources/assets/js/pages/messaging-message-tinymce.js')
+    .addEntry('tinymce/tip/tip', './src/Ui/Bundle/AdminBundle/Resources/assets/js/tip/tip.js')
 
     // will output as web/build/global.css
     .addStyleEntry('css/adminStyle', './src/Ui/Bundle/AdminBundle/Resources/assets/sass/admin.scss')

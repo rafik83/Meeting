@@ -5,7 +5,7 @@
         <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width" />
         <title>{% block title (event is defined ? event.title : '') %}</title>
         {% block stylesheets %}
-            <link rel="stylesheet" href="{{ asset('assets/css/main.css') }}">
+            <link rel="stylesheet" href="{{ asset('assets/css/mainStyle.css') }}">
             {% if event is defined %}
                 <link rel="stylesheet" href="{{ asset(event.assetPath) }}">
             {% endif %}
