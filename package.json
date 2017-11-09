@@ -33,9 +33,11 @@
     "install": "napa"
   },
   "devDependencies": {
+    "@symfony/webpack-encore": "^0.17.0",
     "babel-loader": "^7.1.2",
-    "laravel-mix": "1.6.1",
+    "copy-webpack-plugin": "^4.2.0",
     "napa": "2.3.*",
+    "node-sass": "^4.6.0",
     "sass-loader": "^6.0.6",
     "webpack": "^3.2"
   },

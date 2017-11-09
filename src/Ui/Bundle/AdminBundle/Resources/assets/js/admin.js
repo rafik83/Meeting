@@ -1,6 +1,4 @@
 var $                       = require('jquery'),
-    bootstrap               = require('bootstrap'),
-    tablesort               = require('tablesort'),
     Confirm                 = require('./components/_Confirm'),
     CheckAllCheckbox        = require('./components/_CheckAllCheckbox'),
     LoadingButton           = require('./components/_LoadingButton'),
@@ -18,6 +16,7 @@ var $                       = require('jquery'),
     TipPreview              = require('./components/_TipPreview'),
     ToggleVisibility        = require('./components/_ToggleVisibility');
 
+require('bootstrap');
 require('elao-form.js');
 require('select2');
 require('moment/locale/fr');
@@ -76,36 +75,6 @@ function init(target) {
     [].forEach.call($('[data-datatimepicker]'), function (element) {
         new DateTimePicker(element);
     });
-
-    /* tablesort */
-    function cleanNumber(i) {
-        return i.replace(/[^\-?0-9.]/g, '');
-    }
-
-    function compareNumber(a, b) {
-        a = parseFloat(a);
-        b = parseFloat(b);
-
-        a = isNaN(a) ? 0 : a;
-        b = isNaN(b) ? 0 : b;
-
-        return a - b;
-    }
-
-    tablesort.extend('number', function(item) {
-        return item.match(/^-?(\d)*-?([,\.]){0,1}-?(\d)+([E,e][\-+][\d]+)?%?$/); // Number
-    }, function(a, b) {
-        a = cleanNumber(a);
-        b = cleanNumber(b);
-        return compareNumber(b, a);
-    });
-
-    [].forEach.call(target.querySelectorAll('table.sortable'), function (element) {
-        tablesort(element,  {
-            descending: true
-        });
-    });
-    /* tablesort */
 
     [].forEach.call(target.querySelectorAll('[data-confirm]'), function (element) { new Confirm(element); });
     [].forEach.call(target.querySelectorAll('[data-update]'), function (element) { new Update(element); });

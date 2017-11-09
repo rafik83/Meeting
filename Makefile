@@ -135,18 +135,16 @@ install-dep:
 #########
 
 build:
-	node_modules/webpack/bin/webpack.js --progress --color --hide-modules --config=node_modules/laravel-mix/setup/webpack.config.js
+	./node_modules/.bin/encore dev
 
-build@preprod: export NODE_ENV = production
 build@preprod:
-	node_modules/webpack/bin/webpack.js --color --hide-modules --config=node_modules/laravel-mix/setup/webpack.config.js
+	./node_modules/.bin/encore production
 
-build@prod: export NODE_ENV = production
 build@prod:
-	node_modules/webpack/bin/webpack.js --color --hide-modules --config=node_modules/laravel-mix/setup/webpack.config.js
+	./node_modules/.bin/encore production
 
 watch:
-	node_modules/webpack/bin/webpack.js --watch --watch-poll --progress  --color --hide-modules --config=node_modules/laravel-mix/setup/webpack.config.js
+	./node_modules/.bin/encore dev --watch
 
 build-all-assets: build
 	bin/console vimeet:event:build-guideline-asset; \
