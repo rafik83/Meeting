@@ -78,10 +78,11 @@ class JobQueueAdapter extends AbstractJobQueueAdapter implements JobQueueInterfa
     /**
      * {@inheritdoc}
      */
-    public function printSheetsPdf(array $sheetIds, string $emailToNotify, string $locale)
+    public function printSheetsPdf(Event $event, array $sheetIds, string $emailToNotify, string $locale)
     {
         $job = new Job(PrintPdfCommand::NAME, [
             sprintf('--sheetIds=%s', implode(',', $sheetIds)),
+            sprintf('--eventId=%s', $event->getId()),
             sprintf('--emailToNotify=%s', $emailToNotify),
             sprintf('--locale=%s', $locale),
         ]);

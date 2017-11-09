@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2016 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -111,11 +111,12 @@ class SheetPdfPrinter
     }
 
     /**
-     * @param File $file
+     * @param File   $file
+     * @param string $directory
      *
      * @return string
      */
-    public function printFromFile(File $file)
+    public function printFromFile(File $file, string $directory)
     {
         $pathToPdf = sprintf(
             '%s/%s-%s-%s.pdf',
@@ -127,7 +128,7 @@ class SheetPdfPrinter
 
         $pathToHtml = sprintf(
             '%s/%s',
-            sys_get_temp_dir(),
+            $directory,
             $file->getPath()
         );
 

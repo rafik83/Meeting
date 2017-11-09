@@ -1,17 +1,14 @@
 <?php
 
 /*
- * This file is part of the vimeet project.
+ * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) vimeet
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
 
 namespace Proximum\Vimeet\Application\Command\Sheet;
-
-use Proximum\Vimeet\Domain\Model\Admin;
-use Proximum\Vimeet\Domain\Model\Event;
 
 class BatchPdf
 {
@@ -21,19 +18,21 @@ class BatchPdf
     /** @var string */
     public $locale;
 
-    /** @var Event */
-    public $event;
+    /** @var int */
+    public $eventId;
 
-    /** @var array */
+    /** @var Int[] */
     public $sheetIds;
 
     /**
+     * @param int    $eventId
      * @param array  $sheetIds
      * @param string $emailToNotify
      * @param string $locale
      */
-    public function __construct(array $sheetIds, string $emailToNotify, string $locale)
+    public function __construct(int $eventId, array $sheetIds, string $emailToNotify, string $locale)
     {
+        $this->eventId       = $eventId;
         $this->emailToNotify = $emailToNotify;
         $this->locale        = $locale;
         $this->sheetIds      = $sheetIds;

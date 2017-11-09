@@ -33,6 +33,7 @@ class BatchPdfJobCreatorHandler
     public function handle(BatchPdfJobCreator $batchPdfJobCreator): BatchResult
     {
         $this->jobQueue->printSheetsPdf(
+            $batchPdfJobCreator->event,
             $batchPdfJobCreator->sheetIds,
             $batchPdfJobCreator->emailToNotify,
             $batchPdfJobCreator->locale
@@ -40,7 +41,7 @@ class BatchPdfJobCreatorHandler
 
         return new BatchResult(
             count($batchPdfJobCreator->sheetIds),
-            $batchPdfJobCreator->getMessage() . 'generatePdf.success'
+            $batchPdfJobCreator->getMessage() . 'printPdf.success'
         );
     }
 }

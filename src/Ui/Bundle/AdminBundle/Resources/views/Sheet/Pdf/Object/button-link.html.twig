@@ -1,5 +1,5 @@
 <div id="object-{{ uid }}" class="object {{ 'style--' ~ item.style }}">
     <p>
-        <a href="{{ item.data['url']|default('#') }}" class="btn btn-primary"><i class="icon-Desktop"></i> {{ item.data['label'][locale]|default(item.label(locale, fallback)) }}</a>
+        <a href="{{ item.data['url']|default('#') }}" class="btn btn-primary"><i class="icon-Desktop"></i> {{ item.data['url']|default('#') }}</a>
     </p>
 </div>

@@ -44,11 +44,12 @@ interface JobQueueInterface
     public function printPlanning(array $types, $orderBy, $emailToNotify, $locale);
 
     /**
+     * @param Event  $event
      * @param array  $sheetIds
      * @param string $emailToNotify
      * @param string $locale
      */
-    public function printSheetsPdf(array $sheetIds, string $emailToNotify, string $locale);
+    public function printSheetsPdf(Event $event, array $sheetIds, string $emailToNotify, string $locale);
 
     /**
      * @param Event $event

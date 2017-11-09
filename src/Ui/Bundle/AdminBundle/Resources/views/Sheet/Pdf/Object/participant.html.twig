@@ -16,12 +16,6 @@
                 {% endif %}
                 {% if loop.last and loop.index > item.numberOfParticipantShown %}
                     </div>
-                    <div class="pull-right btn btn-link show-more-button"
-                         data-show-more-translation="{{ 'sheet.participant.seeMore.title'|trans }}"
-                         data-show-less-translation="{{ 'sheet.participant.seeLess.title'|trans }}"
-                        >
-                        <i class="icon-Voir_1"></i> {{ 'sheet.participant.seeMore.title'|trans }}
-                    </div>
                 {% endif %}
             {% endfor %}
         </div>

@@ -22,7 +22,7 @@ class PrintPdfMail extends AbstractMail
     protected $template = 'MailBundle:Mail/Sheet:printPdf.html.twig';
 
     /** @var string */
-    protected $messageId = 'import_planner';
+    protected $messageId = 'sheets_pdf';
 
     /** @var Event */
     public $event;

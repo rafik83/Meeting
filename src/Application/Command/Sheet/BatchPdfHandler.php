@@ -15,6 +15,7 @@ use Proximum\Vimeet\Application\Components\Sheet\SheetInfosHelper;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\File;
 use Proximum\Vimeet\Domain\Model\Sheet;
+use Proximum\Vimeet\Domain\Repository\EventRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\FileRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
 use Proximum\Vimeet\Domain\Template\TaggedDataFactory;
@@ -25,7 +26,8 @@ use Symfony\Component\Templating\EngineInterface;
 
 class BatchPdfHandler
 {
-    const SHEETS_TEMPLATE = 'AdminBundle:Sheet/Pdf:sheets.html.twig';
+    const PDF_TEMPLATE   = 'AdminBundle:Sheet/Pdf:index.html.twig';
+    const SHEET_TEMPLATE = 'AdminBundle:Sheet/Pdf:sheet.html.twig';
 
     /** @var MailerInterface */
     private $mailer;
@@ -60,7 +62,17 @@ class BatchPdfHandler
     /** @var SheetInfosHelper */
     private $sheetInfosHelper;
 
+    /** @var EventRepositoryInterface */
+    private $eventRepository;
+
+    /** @var string */
+    private $domain;
+
+    /** @var string */
+    private $scheme;
+
     /**
+     * @param EventRepositoryInterface $eventRepository
      * @param MailerInterface          $mailer
      * @param string                   $mailSender
      * @param SheetRepositoryInterface $sheetRepository
@@ -72,8 +84,11 @@ class BatchPdfHandler
      * @param SheetPdfPrinter          $sheetPdfPrinter
      * @param TaggedDataFactory        $taggedDataFactory
      * @param SheetInfosHelper         $sheetInfosHelper
+     * @param string                   $domain
+     * @param string                   $scheme
      */
     public function __construct(
+        EventRepositoryInterface $eventRepository,
         MailerInterface $mailer,
         string $mailSender,
         SheetRepositoryInterface $sheetRepository,
@@ -84,8 +99,11 @@ class BatchPdfHandler
         \DateTimeInterface $dateTime,
         SheetPdfPrinter $sheetPdfPrinter,
         TaggedDataFactory $taggedDataFactory,
-        SheetInfosHelper $sheetInfosHelper
+        SheetInfosHelper $sheetInfosHelper,
+        string $domain,
+        string $scheme
     ) {
+        $this->eventRepository         = $eventRepository;
         $this->mailer                  = $mailer;
         $this->mailSender              = $mailSender;
         $this->sheetRepository         = $sheetRepository;
@@ -97,6 +115,8 @@ class BatchPdfHandler
         $this->sheetPdfPrinter         = $sheetPdfPrinter;
         $this->taggedDataFactory       = $taggedDataFactory;
         $this->sheetInfosHelper        = $sheetInfosHelper;
+        $this->domain                  = $domain;
+        $this->scheme                  = $scheme;
     }
 
     /**
@@ -104,50 +124,66 @@ class BatchPdfHandler
      */
     public function handle(BatchPdf $batchPdf)
     {
+        $event  = $this->eventRepository->getById($batchPdf->eventId);
         $sheets = $this->sheetRepository->getSheetsById($batchPdf->sheetIds);
-        $event  = reset($sheets)->getEvent();
         $print  = '';
 
         foreach ($sheets as $sheet) {
-            $print .= $this->generateHtml($sheet, $event, $batchPdf->locale);
+            var_dump($sheet->getId());
+            $print .= $this->generateSheetHtml($sheet, $event, $batchPdf->locale);
         }
 
-        $file    = $this->createFile($print);
-        $pdfPath = $this->sheetPdfPrinter->printFromFile($file);
+        $html = $this->templating->render(self::PDF_TEMPLATE, [
+            'event'  => $event,
+            'print'  => $print,
+            'locale' => $batchPdf->locale,
+            'domain' => $this->domain,
+            'scheme' => $this->scheme,
+        ]);
+
+        $htmlFile = $this->createFile($html);
+        $pdfPath  = $this->sheetPdfPrinter->printFromFile($htmlFile, sys_get_temp_dir());
 
         $pdfFile = new File($pdfPath, $this->dateTime);
         $this->fileRepository->add($pdfFile);
 
-        $this->notifyCreationOfFile($event, $batchPdf, $pdfFile);
+        var_dump($htmlFile->getPath());
+        // Remove html file
+        //$this->localFileStorageAdapter->remove($htmlFile->getPath(), true);
+        $this->fileRepository->remove($htmlFile);
+
+        $this->notifyCreationOfFile($event, $batchPdf->emailToNotify, $batchPdf->locale, $pdfFile);
     }
 
     /**
      * Send a mail to the emailToNotify with the summary of the types, orderBy and a link to see the file
      *
-     * @param Event    $event
-     * @param BatchPdf $batchPdf
+     * @param Event  $event
+     * @param string $email
+     * @param string $locale
+     * @param File   $pdfFile
      */
-    private function notifyCreationOfFile(Event $event, BatchPdf $batchPdf, File $pdfFile)
+    private function notifyCreationOfFile(Event $event, string $email, string $locale, File $pdfFile)
     {
         $this->mailer->send(new PrintPdfMail(
             $event,
             $this->mailSender,
-            $batchPdf->emailToNotify,
-            $batchPdf->locale,
+            $email,
+            $locale,
             $pdfFile->getHash(),
             $pdfFile->getId()
         ));
     }
 
     /**
-     * @param string $print
+     * @param string $content
      *
      * @return File
      */
-    private function createFile(&$print)
+    private function createFile(string &$content)
     {
         $filePath = $this->localFileStorageAdapter->create(
-            $print,
+            $content,
             'generate_sheets_pdf.html',
             sys_get_temp_dir()
         );
@@ -165,7 +201,7 @@ class BatchPdfHandler
      *
      * @return string
      */
-    private function generateHtml(Sheet $sheet, Event $event, string $locale)
+    private function generateSheetHtml(Sheet $sheet, Event $event, string $locale): string
     {
         // Build sheet template data and attach tagged data view to template object with tags
         $templateData = $this->taggedDataFactory->buildTaggedDataView($sheet, $locale);
@@ -178,7 +214,7 @@ class BatchPdfHandler
             $locale
         );
 
-        return $this->templating->render(self::SHEETS_TEMPLATE, [
+        $template = $this->templating->render(self::SHEET_TEMPLATE, [
             'event'         => $event,
             'sheet'         => $sheet,
             'taggedData'    => $taggedData,
@@ -187,5 +223,7 @@ class BatchPdfHandler
             'participants'  => $participants,
             'templateData'  => $templateData,
         ]);
+
+        return $template;
     }
 }

@@ -841,6 +841,7 @@ services:
     command.sheet.batch_pdf_handler:
         class: Proximum\Vimeet\Application\Command\Sheet\BatchPdfHandler
         arguments:
+            - '@vimeet_infrastructure.repository.event_repository'
             - '@adapter.mailer_adapter'
             - '%mailer_sender%'
             - '@vimeet_infrastructure.repository.sheet_repository'
@@ -852,6 +853,8 @@ services:
             - '@printer.sheet_pdf_printer'
             - '@template.tagged_data_factory'
             - '@sheet.infos_helper'
+            - '%admin_domain%'
+            - '%scheme%'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Sheet\BatchPdf }
     command.sheet.batch_pending_handler:
