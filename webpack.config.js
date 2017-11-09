@@ -1,4 +1,5 @@
 var Encore = require('@symfony/webpack-encore');
+var webpack = require('webpack');
 var CopyWebPackPlugin = require('copy-webpack-plugin');
 
 Encore
@@ -34,9 +35,28 @@ Encore
         {from: './node_modules/tinymce/skins/lightgray/', to: 'tinymce/skins/lightgray'},
         {from: './src/Ui/Bundle/EventBundle/Resources/assets/images', to: 'images'}
     ]))
+    .addPlugin(new webpack.ProvidePlugin({
+        'jQuery': 'jquery',
+        'window.jQuery': 'jquery',
+        'jquery': 'jquery',
+        'window.jquery': 'jquery',
+        '$': 'jquery',
+        'window.$': 'jquery',
+        // In case you imported plugins individually, you must also require them here:
+        Util: "exports-loader?Util!bootstrap/js/dist/util",
+        Dropdown: "exports-loader?Dropdown!bootstrap/js/dist/dropdown",
+        Modal: "exports-loader?Modal!bootstrap/js/dist/model"
+    }))
 
     .enableSourceMaps(!Encore.isProduction())
 ;
 
-// export the final configuration
-module.exports = Encore.getWebpackConfig();
+var config = Encore.getWebpackConfig();
+
+config.resolve = {
+    alias: {
+        'jquery': require.resolve('jquery')
+    }
+};
+
+module.exports = config;
