@@ -222,6 +222,7 @@ class BatchPdfHandler
             'nomenclatures' => $nomenclatures,
             'participants'  => $participants,
             'templateData'  => $templateData,
+            'fullPath'      => $this->scheme . '://' . $this->domain,
         ]);
 
         return $template;
