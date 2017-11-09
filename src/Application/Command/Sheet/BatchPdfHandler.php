@@ -178,15 +178,14 @@ class BatchPdfHandler
             $locale
         );
 
-        return $this->templating->render('AdminBundle:Sheet/Pdf:sheets.html.twig',
-            [
-                'event'         => $event,
-                'sheet'         => $sheet,
-                'taggedData'    => $taggedData,
-                'locale'        => $locale,
-                'nomenclatures' => $nomenclatures,
-                'participants'  => $participants,
-                'templateData'  => $templateData,
-            ]);
+        return $this->templating->render(self::SHEETS_TEMPLATE, [
+            'event'         => $event,
+            'sheet'         => $sheet,
+            'taggedData'    => $taggedData,
+            'locale'        => $locale,
+            'nomenclatures' => $nomenclatures,
+            'participants'  => $participants,
+            'templateData'  => $templateData,
+        ]);
     }
 }
