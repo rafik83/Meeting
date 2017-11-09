@@ -8,7 +8,7 @@ mix
         clearConsole: false
     })
     .autoload({
-        'jquery': ['jQuery']
+        jquery: ['$', 'window.jQuery', 'jQuery', 'window.$', 'jquery', 'window.jquery']
     })
     // Bundle sass
     .sass('src/Ui/Bundle/AdminBundle/Resources/assets/sass/admin.scss', 'web/assets/css')
