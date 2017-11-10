@@ -216,8 +216,11 @@ class SheetController extends Controller
 
         $isCatalogAllowed = $this->get('domain.key_dates.checker.catalog_access_checker')->allowedToAccess($event);
 
-        // Build sheet template data and attach tagged data view to template object with tags
-        $templateData = $this->get('template.tagged_data_factory')->buildTaggedDataView($sheetToDisplay, $locale);
+        // Build print template data and attach tagged data view to template object with tags
+        $templateData = $this->get('template.tagged_data_factory')->buildTaggedDataViewForPrint(
+            $sheetToDisplay,
+            $locale
+        );
 
         list ($nomenclatures, $participants, $taggedData) = $this->get('sheet.infos_helper')->getInfos(
             $sheetToDisplay,
@@ -244,15 +247,13 @@ class SheetController extends Controller
         }
 
         return $this->render('EventBundle:Sheet:print.html.twig', [
-            'event'                     => $event,
-            'sheet'                     => $sheetToDisplay,
-            'taggedData'                => $taggedData,
-            'locale'                    => $locale,
-            'nomenclatures'             => $nomenclatures,
-            'participants'              => $participants,
-            'templateData'              => $templateData,
-            'isPhoneValidationRequired' => false,
-            'phoneValidationLink'       => null,
+            'event'         => $event,
+            'sheet'         => $sheetToDisplay,
+            'taggedData'    => $taggedData,
+            'locale'        => $locale,
+            'nomenclatures' => $nomenclatures,
+            'participants'  => $participants,
+            'templateData'  => $templateData,
         ]);
     }
 
