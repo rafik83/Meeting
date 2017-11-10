@@ -26,9 +26,6 @@ class HtmlToPdf
     /** @var LocalFileStorageAdapter */
     private $localFileStorageAdapter;
 
-    /** @var string */
-    private $generateSheetsPdfPath;
-
     /** @var FileRepositoryInterface */
     private $fileRepository;
 
@@ -41,20 +38,17 @@ class HtmlToPdf
     /**
      * @param SheetPdfPrinter         $sheetPdfPrinter
      * @param LocalFileStorageAdapter $localFileStorageAdapter
-     * @param string                  $generateSheetsPdfPath
      * @param FileRepositoryInterface $fileRepository
      * @param \DateTimeInterface      $dateTime
      */
     public function __construct(
         SheetPdfPrinter $sheetPdfPrinter,
         LocalFileStorageAdapter $localFileStorageAdapter,
-        string $generateSheetsPdfPath,
         FileRepositoryInterface $fileRepository,
         \DateTimeInterface $dateTime
     ) {
         $this->sheetPdfPrinter         = $sheetPdfPrinter;
         $this->localFileStorageAdapter = $localFileStorageAdapter;
-        $this->generateSheetsPdfPath   = $generateSheetsPdfPath;
         $this->fileRepository          = $fileRepository;
         $this->dateTime                = $dateTime;
         $this->tmpDir                  = sys_get_temp_dir();
