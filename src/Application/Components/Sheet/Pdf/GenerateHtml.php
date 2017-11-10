@@ -101,7 +101,7 @@ class GenerateHtml
     private function generateSheetHtml(Sheet $sheet, Event $event, string $locale): string
     {
         // Build sheet template data and attach tagged data view to template object with tags
-        $templateData = $this->taggedDataFactory->buildTaggedDataView($sheet, $locale);
+        $templateData = $this->taggedDataFactory->buildTaggedDataViewForPrint($sheet, $locale);
         $users        = $sheet->getUsers();
         $user         = reset($users);
 
