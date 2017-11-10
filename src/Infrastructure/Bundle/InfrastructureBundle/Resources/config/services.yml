@@ -1001,7 +1001,6 @@ services:
             - '@command.sheet.batch_assign_to_group_handler'
             - '@command.sheet.batch_pending_handler'
             - '@command.sheet.batch_pdf_job_creator_handler'
-            - '@command.sheet.batch_pdf_handler'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Sheet\Batch }
 
