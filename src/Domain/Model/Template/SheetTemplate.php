@@ -21,6 +21,11 @@ class SheetTemplate extends AbstractTemplate
     protected $preview;
 
     /**
+     * @var array
+     */
+    protected $printValue;
+
+    /**
      * SheetTemplate constructor.
      *
      * @param string            $title
@@ -103,5 +108,21 @@ class SheetTemplate extends AbstractTemplate
         }
 
         return $this->getFallback();
+    }
+
+    /**
+     * @return array
+     */
+    public function getPrintValue(): array
+    {
+        return $this->printValue;
+    }
+
+    /**
+     * @param array $printValue
+     */
+    public function setPrintValue(array $printValue)
+    {
+        $this->printValue = $printValue;
     }
 }

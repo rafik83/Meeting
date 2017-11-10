@@ -42,7 +42,7 @@ abstract class AbstractTemplate
     protected $fallback;
 
     /**
-     * @var Event
+     * @var null|Event
      */
     protected $event;
 
@@ -103,15 +103,23 @@ abstract class AbstractTemplate
     }
 
     /**
-     * @return Event
+     * @return null|Event
      */
-    public function getEvent()
+    public function getEvent(): ?Event
     {
         return $this->event;
     }
 
     /**
-     * @param Event $event
+     * @return bool
+     */
+    public function hasEvent(): bool
+    {
+        return $this->getEvent() instanceof Event;
+    }
+
+    /**
+     * @param null|Event $event
      */
     public function setEvent(Event $event = null)
     {
@@ -232,7 +240,7 @@ abstract class AbstractTemplate
      *
      * @param array $value
      *
-     * @return SheetTemplate
+     * @return AbstractTemplate
      */
     public function setValue(array $value)
     {

@@ -15,6 +15,7 @@ use Proximum\Vimeet\Application\Command\Template\Registration\Update;
 use Proximum\Vimeet\Domain\Exception\Nomenclature\NomenclatureNotFoundException;
 use Proximum\Vimeet\Domain\Model\Template\RegistrationTemplate;
 use Proximum\Vimeet\Domain\Template\Exception\TemplateException;
+use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Security\Voter\AdminTemplateAccessVoter;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Template\AddLocaleType;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Template\Registration\UpdateType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -52,6 +53,7 @@ class RegistrationTemplateController extends Controller
     public function builderAction(Request $request, RegistrationTemplate $template, $locale)
     {
         $this->denyAccessUnlessGranted('ROLE_ALLOWED_TO_ORGANIZE');
+        $this->denyAccessUnlessGranted(AdminTemplateAccessVoter::PERMISSION_TEMPLATE_EDIT, $template);
 
         $update     = new Update($template);
         $updateForm = $this->createForm(UpdateType::class, $update, [
@@ -123,6 +125,7 @@ class RegistrationTemplateController extends Controller
     public function addLocaleAction(Request $request, RegistrationTemplate $template)
     {
         $this->denyAccessUnlessGranted('ROLE_ALLOWED_TO_ORGANIZE');
+        $this->denyAccessUnlessGranted(AdminTemplateAccessVoter::PERMISSION_TEMPLATE_EDIT, $template);
 
         $addLocale     = new AddLocale($template);
         $addLocaleForm = $this->createForm(AddLocaleType::class, $addLocale, [
