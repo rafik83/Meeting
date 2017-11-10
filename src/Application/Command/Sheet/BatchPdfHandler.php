@@ -22,6 +22,7 @@ use Proximum\Vimeet\Domain\Template\TaggedDataFactory;
 use Proximum\Vimeet\Infrastructure\Adapter\LocalFileStorageAdapter;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Printer\SheetPdfPrinter;
 use Proximum\Vimeet\Ui\Bundle\MailBundle\Mail\Command\PrintPdfMail;
+use Symfony\Bundle\FrameworkBundle\Routing\Router;
 use Symfony\Component\Templating\EngineInterface;
 
 class BatchPdfHandler
@@ -71,7 +72,11 @@ class BatchPdfHandler
     /** @var string */
     private $scheme;
 
+    /** @var Router */
+    private $router;
+
     /**
+     * @param Router                   $router
      * @param EventRepositoryInterface $eventRepository
      * @param MailerInterface          $mailer
      * @param string                   $mailSender
@@ -88,6 +93,7 @@ class BatchPdfHandler
      * @param string                   $scheme
      */
     public function __construct(
+        Router $router,
         EventRepositoryInterface $eventRepository,
         MailerInterface $mailer,
         string $mailSender,
@@ -117,6 +123,7 @@ class BatchPdfHandler
         $this->sheetInfosHelper        = $sheetInfosHelper;
         $this->domain                  = $domain;
         $this->scheme                  = $scheme;
+        $this->router = $router;
     }
 
     /**
@@ -128,8 +135,11 @@ class BatchPdfHandler
         $sheets = $this->sheetRepository->getSheetsById($batchPdf->sheetIds);
         $print  = '';
 
+        $context = $this->router->getContext();
+        $context->setHost($this->domain);
+        $context->setScheme($this->scheme);
+
         foreach ($sheets as $sheet) {
-            var_dump($sheet->getId());
             $print .= $this->generateSheetHtml($sheet, $event, $batchPdf->locale);
         }
 
@@ -137,8 +147,6 @@ class BatchPdfHandler
             'event'  => $event,
             'print'  => $print,
             'locale' => $batchPdf->locale,
-            'domain' => $this->domain,
-            'scheme' => $this->scheme,
         ]);
 
         $htmlFile = $this->createFile($html);
@@ -147,9 +155,8 @@ class BatchPdfHandler
         $pdfFile = new File($pdfPath, $this->dateTime);
         $this->fileRepository->add($pdfFile);
 
-        var_dump($htmlFile->getPath());
         // Remove html file
-        //$this->localFileStorageAdapter->remove($htmlFile->getPath(), true);
+        $this->localFileStorageAdapter->remove($htmlFile->getPath(), true);
         $this->fileRepository->remove($htmlFile);
 
         $this->notifyCreationOfFile($event, $batchPdf->emailToNotify, $batchPdf->locale, $pdfFile);
@@ -222,7 +229,6 @@ class BatchPdfHandler
             'nomenclatures' => $nomenclatures,
             'participants'  => $participants,
             'templateData'  => $templateData,
-            'fullPath'      => $this->scheme . '://' . $this->domain,
         ]);
 
         return $template;

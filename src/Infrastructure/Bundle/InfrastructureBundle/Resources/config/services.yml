@@ -841,6 +841,7 @@ services:
     command.sheet.batch_pdf_handler:
         class: Proximum\Vimeet\Application\Command\Sheet\BatchPdfHandler
         arguments:
+            - '@router'
             - '@vimeet_infrastructure.repository.event_repository'
             - '@adapter.mailer_adapter'
             - '%mailer_sender%'
