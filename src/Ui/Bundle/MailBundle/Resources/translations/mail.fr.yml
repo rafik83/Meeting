@@ -86,3 +86,5 @@ mail.sheet.validation.validate.body: "Bonjour %firstname% %lastname%,\n\nVotre f
 mail.sheet.validation.validate.subject: 'Fiche validée'
 mail.transaction.confirm.body: "Bonjour %firstname% %lastname%,\n\nVotre paiement d’un montant de %transactionTotal% a bien été reçu.\n\nCordialement,"
 mail.transaction.confirm.subject: '[%event%] Votre paiement a bien été reçu'
+mail.sheet.generate_pdf.intro: "Bonjour\nLe fichier .pdf des fiches sélectionnés pour l'évenement %eventTitle% a été généré\n"
+mail.sheet.generate_pdf.click: 'Télécharger les fiches en pdf'

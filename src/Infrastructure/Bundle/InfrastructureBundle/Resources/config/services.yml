@@ -838,26 +838,21 @@ services:
             - '@adapter.job_queue_adapter'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Sheet\BatchGenerateInvoice }
+
     command.sheet.batch_pdf_handler:
         class: Proximum\Vimeet\Application\Command\Sheet\BatchPdfHandler
         arguments:
-            - '@router'
             - '@vimeet_infrastructure.repository.event_repository'
             - '@adapter.mailer_adapter'
             - '%mailer_sender%'
             - '@vimeet_infrastructure.repository.sheet_repository'
-            - '@templating'
-            - '@adapter.local_file_storage'
-            - '%infrastructure.print_sheet_path%'
-            - '@repository.file_repository'
-            - '@datetime'
-            - '@printer.sheet_pdf_printer'
-            - '@template.tagged_data_factory'
-            - '@sheet.infos_helper'
+            - '@components.sheet.pdf.html_to_pdf'
+            - '@components.sheet.pdf.generate_html'
             - '%admin_domain%'
             - '%scheme%'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Sheet\BatchPdf }
+
     command.sheet.batch_pending_handler:
         class: Proximum\Vimeet\Application\Command\Sheet\BatchPendingHandler
         arguments:
@@ -2281,6 +2276,23 @@ services:
         class: Proximum\Vimeet\Application\Components\Sheet\SortedSheet
         arguments:
             - '@command.planning.sheet_info_guesser_cache'
+
+    components.sheet.pdf.generate_html:
+        class: Proximum\Vimeet\Application\Components\Sheet\Pdf\GenerateHtml
+        arguments:
+            - '@adapter.router'
+            - '@adapter.templating_adapter'
+            - '@template.tagged_data_factory'
+            - '@sheet.infos_helper'
+
+    components.sheet.pdf.html_to_pdf:
+        class: Proximum\Vimeet\Application\Components\Sheet\Pdf\HtmlToPdf
+        arguments:
+            - '@printer.sheet_pdf_printer'
+            - '@adapter.local_file_storage'
+            - '%infrastructure.print_sheet_path%'
+            - '@repository.file_repository'
+            - '@datetime'
 
     #
     # Sheet Request

@@ -11,7 +11,7 @@
 namespace Proximum\Vimeet\Infrastructure\Adapter;
 
 use Proximum\Vimeet\Application\Adapter\RouterInterface;
-use Proximum\Vimeet\Domain\Model\Sheet;
+use Symfony\Component\Routing\RequestContext;
 use Symfony\Component\Routing\RouterInterface as SymfonyRouterInterface;
 
 class RouterAdapter implements RouterInterface
@@ -37,5 +37,13 @@ class RouterAdapter implements RouterInterface
     public function generate($path, array $parameters = [])
     {
         return $this->router->generate($path, $parameters);
+    }
+
+    /**
+     * @return RequestContext
+     */
+    public function getContext(): RequestContext
+    {
+        return $this->router->getContext();
     }
 }
