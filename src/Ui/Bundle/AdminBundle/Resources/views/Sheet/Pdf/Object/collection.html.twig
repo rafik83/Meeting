@@ -1,5 +1,5 @@
 {% if item.data['items']|default([]) is not empty %}
-<section id="object-{{ uid }}" class="object object--collection {{ 'style--' ~ item.style }} section">
+<section class="object object--collection {{ 'style--' ~ item.style }} section">
     {% set label = item.label(locale, fallback) %}
     {% if label %}
         <header>

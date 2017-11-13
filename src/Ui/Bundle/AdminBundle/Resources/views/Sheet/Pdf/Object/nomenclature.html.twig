@@ -1,7 +1,7 @@
 {% set nomenclature = nomenclatures[item.nomenclature]|default %}
 
 {% if nomenclature and nomenclature.any(item.items) %}
-<div class="object" id="object-{{ uid }}">
+<div class="object">
     {% if nomenclature.depth == 1 %}
         <section class="object--nomenclature {{ 'style--' ~ item.style }} section">
             {% set label = item.label(locale, fallback) %}

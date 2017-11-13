@@ -1,5 +1,5 @@
 {% if item.taggedDataViews is not empty %}
-<div id="object-{{ uid }}" class="object object--tag {{ 'style--' ~ item.style }}">
+<div class="object object--tag {{ 'style--' ~ item.style }}">
     {% set label = item.label(locale, fallback) %}
     {% if not item.hasOnlyTagUrl %}
         <header>

@@ -1,7 +1,7 @@
 {% if (item.option('type') == 'title' and (item.content(locale) is not empty or item.taggedDataViews[0] is defined))
     or (item.option('type') == 'text' and (item.content(locale) is not empty or item.taggedDataViews is not empty))
 %}
-<section id="object-{{ uid }}" class="object object--editable-text {{ 'style--' ~ item.style }}">
+<section class="object object--editable-text {{ 'style--' ~ item.style }}">
 
     {% if true != item.hideLabel|default %}
         {% if item.option('type') == 'title' %}

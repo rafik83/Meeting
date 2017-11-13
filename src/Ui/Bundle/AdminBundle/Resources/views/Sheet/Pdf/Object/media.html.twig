@@ -1,5 +1,5 @@
 {% if item.data['medias']|default([]) is not empty %}
-<section id="object-{{ uid }}" class="object object--media section">
+<section class="object object--media section">
     {% set label = item.label(locale, fallback) %}
     {% if label %}
         <header>
