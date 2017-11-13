@@ -13,12 +13,8 @@ namespace Proximum\Vimeet\Application\Components\Sheet\Pdf;
 use Proximum\Vimeet\Domain\Model\File;
 use Proximum\Vimeet\Domain\Repository\FileRepositoryInterface;
 use Proximum\Vimeet\Infrastructure\Adapter\LocalFileStorageAdapter;
-use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Printer\SheetPdfPrinter;
 
-/**
- * This class generate a pdf file from an html string
- */
-class HtmlToPdf
+class GenerateHtmlFile
 {
     /** @var LocalFileStorageAdapter */
     private $localFileStorageAdapter;
@@ -29,27 +25,21 @@ class HtmlToPdf
     /** @var \DateTimeInterface */
     private $dateTime;
 
-    /** @var SheetPdfPrinter */
-    private $sheetPdfPrinter;
-
     /** @var string */
     private $pdfPath;
 
     /**
-     * @param SheetPdfPrinter         $sheetPdfPrinter
      * @param LocalFileStorageAdapter $localFileStorageAdapter
      * @param FileRepositoryInterface $fileRepository
      * @param string                  $pdfPath
      * @param \DateTimeInterface      $dateTime
      */
     public function __construct(
-        SheetPdfPrinter $sheetPdfPrinter,
         LocalFileStorageAdapter $localFileStorageAdapter,
         FileRepositoryInterface $fileRepository,
         string $pdfPath,
         \DateTimeInterface $dateTime
     ) {
-        $this->sheetPdfPrinter         = $sheetPdfPrinter;
         $this->localFileStorageAdapter = $localFileStorageAdapter;
         $this->fileRepository          = $fileRepository;
         $this->dateTime                = $dateTime;
@@ -57,21 +47,31 @@ class HtmlToPdf
     }
 
     /**
-     * @param File $htmlFile
+     * @param string $html
      *
      * @return File
      */
-    public function generatePdf(File $htmlFile): File
+    public function generateFile(string $html): File
     {
-        $pdfPath = $this->sheetPdfPrinter->printFromFile($htmlFile, $this->pdfPath);
+        return $this->createFile($html);
+    }
 
-        $pdfFile = new File($pdfPath, $this->dateTime);
-        $this->fileRepository->add($pdfFile);
+    /**
+     * @param string $content
+     *
+     * @return File
+     */
+    private function createFile(string &$content): File
+    {
+        $filePath = $this->localFileStorageAdapter->create(
+            $content,
+            'generate_sheets_pdf.html',
+            $this->pdfPath
+        );
 
-        // Remove html file
-        $this->localFileStorageAdapter->remove($htmlFile->getPath());
-        $this->fileRepository->remove($htmlFile);
+        $file = new File($filePath, $this->dateTime);
+        $this->fileRepository->add($file);
 
-        return $pdfFile;
+        return $file;
     }
 }

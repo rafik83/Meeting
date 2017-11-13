@@ -35,7 +35,7 @@ class PrintController extends Controller
             );
         }
 
-        $path = $file->getPath();
+        $path = $this->getParameter('infrastructure.print_sheet_path') . '/' . $file->getPath();
 
         if (!$this->get('filesystem')->exists($path)) {
             throw $this->createNotFoundException(sprintf('File %s not found', $file->getId()));

@@ -847,6 +847,7 @@ services:
             - '%mailer_sender%'
             - '@vimeet_infrastructure.repository.sheet_repository'
             - '@components.sheet.pdf.html_to_pdf'
+            - '@components.sheet.pdf.generate_html_file'
             - '@components.sheet.pdf.generate_html'
             - '%admin_domain%'
             - '%scheme%'
@@ -2291,12 +2292,21 @@ services:
             - '@template.tagged_data_factory'
             - '@sheet.infos_helper'
 
+    components.sheet.pdf.generate_html_file:
+        class: Proximum\Vimeet\Application\Components\Sheet\Pdf\GenerateHtmlFile
+        arguments:
+            - '@adapter.local_file_storage'
+            - '@repository.file_repository'
+            - '%infrastructure.print_sheet_path%'
+            - '@datetime'
+
     components.sheet.pdf.html_to_pdf:
         class: Proximum\Vimeet\Application\Components\Sheet\Pdf\HtmlToPdf
         arguments:
             - '@printer.sheet_pdf_printer'
             - '@adapter.local_file_storage'
             - '@repository.file_repository'
+            - '%infrastructure.print_sheet_path%'
             - '@datetime'
 
     #

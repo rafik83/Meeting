@@ -30,6 +30,7 @@ class InfrastructureExtension extends Extension
         $container->setParameter('infrastructure.bundle_guideline_path', $config['bundle_guideline_path']);
         $container->setParameter('infrastructure.font_path', $config['font_path']);
         $container->setParameter('infrastructure.image_path', $config['image_path']);
+        $container->setParameter('infrastructure.print_sheet_path', $config['print_sheet_path']);
         $container->setParameter('infrastructure.print_planning_path', $config['print_planning_path']);
         $container->setParameter('infrastructure.print_sheet_path', $config['print_sheet_path']);
         $container->setParameter('infrastructure.export_transactions_path', $config['export_transactions_path']);

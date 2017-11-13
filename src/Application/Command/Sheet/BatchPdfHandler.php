@@ -12,6 +12,7 @@ namespace Proximum\Vimeet\Application\Command\Sheet;
 
 use Proximum\Vimeet\Application\Adapter\MailerInterface;
 use Proximum\Vimeet\Application\Components\Sheet\Pdf\GenerateHtml;
+use Proximum\Vimeet\Application\Components\Sheet\Pdf\GenerateHtmlFile;
 use Proximum\Vimeet\Application\Components\Sheet\Pdf\HtmlToPdf;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\File;
@@ -45,12 +46,16 @@ class BatchPdfHandler
     /** @var HtmlToPdf */
     private $htmlToPdf;
 
+    /** @var GenerateHtmlFile */
+    private $generateHtmlFile;
+
     /**
      * @param EventRepositoryInterface $eventRepository
      * @param MailerInterface          $mailer
      * @param string                   $mailSender
      * @param SheetRepositoryInterface $sheetRepository
      * @param HtmlToPdf                $htmlToPdf
+     * @param GenerateHtmlFile         $generateHtmlFile
      * @param GenerateHtml             $generateHtml
      * @param string                   $domain
      * @param string                   $scheme
@@ -61,18 +66,20 @@ class BatchPdfHandler
         string $mailSender,
         SheetRepositoryInterface $sheetRepository,
         HtmlToPdf $htmlToPdf,
+        GenerateHtmlFile $generateHtmlFile,
         GenerateHtml $generateHtml,
         string $domain,
         string $scheme
     ) {
-        $this->eventRepository = $eventRepository;
-        $this->mailer          = $mailer;
-        $this->mailSender      = $mailSender;
-        $this->sheetRepository = $sheetRepository;
-        $this->htmlToPdf       = $htmlToPdf;
-        $this->generateHtml    = $generateHtml;
-        $this->domain          = $domain;
-        $this->scheme          = $scheme;
+        $this->eventRepository  = $eventRepository;
+        $this->mailer           = $mailer;
+        $this->mailSender       = $mailSender;
+        $this->sheetRepository  = $sheetRepository;
+        $this->htmlToPdf        = $htmlToPdf;
+        $this->generateHtmlFile = $generateHtmlFile;
+        $this->generateHtml     = $generateHtml;
+        $this->domain           = $domain;
+        $this->scheme           = $scheme;
     }
 
     /**
@@ -85,9 +92,9 @@ class BatchPdfHandler
 
         $this->generateHtml->setContext($this->scheme, $this->domain);
         $html    = $this->generateHtml->printSheets($event, $sheets, $batchPdf->locale);
-        $pdfFile = $this->htmlToPdf->generatePdf($html);
+        $htmlFile = $this->generateHtmlFile->generateFile($html);
 
-        $this->notifyCreationOfFile($event, $batchPdf->emailToNotify, $batchPdf->locale, $pdfFile);
+        $this->notifyCreationOfFile($event, $batchPdf->emailToNotify, $batchPdf->locale, $htmlFile);
     }
 
     /**
