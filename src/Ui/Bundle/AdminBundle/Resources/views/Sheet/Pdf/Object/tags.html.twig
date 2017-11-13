@@ -1,3 +1,4 @@
+{% if item.tags is not empty %}
 <section id="object-{{ uid }}" class="object object--collection {{ 'style--' ~ item.style }} section">
     {% set label = item.label(locale, fallback) %}
     {% if label %}
@@ -36,3 +37,4 @@
         </ul>
     </div>
 </section>
+{% endif %}

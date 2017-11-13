@@ -1,5 +1,7 @@
+{% if item.data['url']|defaul('#') != '#' %}
 <div id="object-{{ uid }}" class="object {{ 'style--' ~ item.style }}">
     <p>
-        <a href="{{ item.data['url']|default('#') }}" class="btn btn-primary"><i class="icon-Desktop"></i> {{ item.data['url']|default('#') }}</a>
+        <i class="icon-Desktop"></i> {{ item.data['url']|default('#') }}
     </p>
 </div>
+{% endif %}

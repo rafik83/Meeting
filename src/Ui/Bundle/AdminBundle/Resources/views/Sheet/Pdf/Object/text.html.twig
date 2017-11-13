@@ -1,5 +1,6 @@
+{% set label = item.content(locale, fallback) %}
+{% if label is not null and label != '' %}
 <section id="object-{{ uid }}" class="object object--text {{ 'style--' ~ item.style }} section">
-    {% set label = item.content(locale, fallback) %}
 
     {% if label and item.option('type') == 'title' %}
         <header>
@@ -11,3 +12,4 @@
         <p>{{ label|default|nl2br }}</p>
     {% endif %}
 </section>
+{% endif %}
