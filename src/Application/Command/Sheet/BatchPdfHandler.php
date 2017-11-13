@@ -13,7 +13,6 @@ namespace Proximum\Vimeet\Application\Command\Sheet;
 use Proximum\Vimeet\Application\Adapter\MailerInterface;
 use Proximum\Vimeet\Application\Components\Sheet\Pdf\GenerateHtml;
 use Proximum\Vimeet\Application\Components\Sheet\Pdf\GenerateHtmlFile;
-use Proximum\Vimeet\Application\Components\Sheet\Pdf\HtmlToPdf;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\File;
 use Proximum\Vimeet\Domain\Repository\EventRepositoryInterface;
@@ -43,9 +42,6 @@ class BatchPdfHandler
     /** @var GenerateHtml */
     private $generateHtml;
 
-    /** @var HtmlToPdf */
-    private $htmlToPdf;
-
     /** @var GenerateHtmlFile */
     private $generateHtmlFile;
 
@@ -54,7 +50,6 @@ class BatchPdfHandler
      * @param MailerInterface          $mailer
      * @param string                   $mailSender
      * @param SheetRepositoryInterface $sheetRepository
-     * @param HtmlToPdf                $htmlToPdf
      * @param GenerateHtmlFile         $generateHtmlFile
      * @param GenerateHtml             $generateHtml
      * @param string                   $domain
@@ -65,7 +60,6 @@ class BatchPdfHandler
         MailerInterface $mailer,
         string $mailSender,
         SheetRepositoryInterface $sheetRepository,
-        HtmlToPdf $htmlToPdf,
         GenerateHtmlFile $generateHtmlFile,
         GenerateHtml $generateHtml,
         string $domain,
@@ -75,7 +69,6 @@ class BatchPdfHandler
         $this->mailer           = $mailer;
         $this->mailSender       = $mailSender;
         $this->sheetRepository  = $sheetRepository;
-        $this->htmlToPdf        = $htmlToPdf;
         $this->generateHtmlFile = $generateHtmlFile;
         $this->generateHtml     = $generateHtml;
         $this->domain           = $domain;

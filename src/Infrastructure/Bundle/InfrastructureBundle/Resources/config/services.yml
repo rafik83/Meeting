@@ -846,7 +846,6 @@ services:
             - '@adapter.mailer_adapter'
             - '%mailer_sender%'
             - '@vimeet_infrastructure.repository.sheet_repository'
-            - '@components.sheet.pdf.html_to_pdf'
             - '@components.sheet.pdf.generate_html_file'
             - '@components.sheet.pdf.generate_html'
             - '%admin_domain%'
