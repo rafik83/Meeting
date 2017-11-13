@@ -62,7 +62,7 @@ class Duplicator
      *
      * @return Product
      */
-    private function getToProduct(Product $fromProduct, Event $event)
+    private function getToProduct(Product $fromProduct, Event $event): Product
     {
         $image = $this->fileStorage->copyAndRename($fromProduct->getImage());
 

@@ -103,7 +103,7 @@ class Duplicator
      *
      * @return Package
      */
-    public function duplicatePackage(Package $fromPackage, string $title)
+    public function duplicatePackage(Package $fromPackage, string $title): Package
     {
         $event     = $fromPackage->getEvent();
         $toPackage = new Package($event, $title, $this->dateTime);
