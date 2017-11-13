@@ -2294,6 +2294,7 @@ services:
     components.sheet.pdf.generate_html_file:
         class: Proximum\Vimeet\Application\Components\Sheet\Pdf\GenerateHtmlFile
         arguments:
+            - '@domain.token.uniqid_generator'
             - '@adapter.local_file_storage'
             - '@repository.file_repository'
             - '%infrastructure.print_sheet_path%'

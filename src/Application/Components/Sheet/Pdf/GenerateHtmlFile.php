@@ -10,13 +10,14 @@
 
 namespace Proximum\Vimeet\Application\Components\Sheet\Pdf;
 
+use Proximum\Vimeet\Application\Adapter\FileStorageInterface;
 use Proximum\Vimeet\Domain\Model\File;
 use Proximum\Vimeet\Domain\Repository\FileRepositoryInterface;
-use Proximum\Vimeet\Infrastructure\Adapter\LocalFileStorageAdapter;
+use Proximum\Vimeet\Domain\Token\UniqidGenerator;
 
 class GenerateHtmlFile
 {
-    /** @var LocalFileStorageAdapter */
+    /** @var FileStorageInterface */
     private $localFileStorageAdapter;
 
     /** @var FileRepositoryInterface */
@@ -28,18 +29,24 @@ class GenerateHtmlFile
     /** @var string */
     private $pdfPath;
 
+    /** @var UniqidGenerator */
+    private $uniqidGenerator;
+
     /**
-     * @param LocalFileStorageAdapter $localFileStorageAdapter
+     * @param UniqidGenerator         $uniqidGenerator
+     * @param FileStorageInterface    $localFileStorageAdapter
      * @param FileRepositoryInterface $fileRepository
      * @param string                  $pdfPath
      * @param \DateTimeInterface      $dateTime
      */
     public function __construct(
-        LocalFileStorageAdapter $localFileStorageAdapter,
+        UniqidGenerator $uniqidGenerator,
+        FileStorageInterface $localFileStorageAdapter,
         FileRepositoryInterface $fileRepository,
         string $pdfPath,
         \DateTimeInterface $dateTime
     ) {
+        $this->uniqidGenerator         = $uniqidGenerator;
         $this->localFileStorageAdapter = $localFileStorageAdapter;
         $this->fileRepository          = $fileRepository;
         $this->dateTime                = $dateTime;
@@ -65,7 +72,7 @@ class GenerateHtmlFile
     {
         $filePath = $this->localFileStorageAdapter->create(
             $content,
-            'generate_sheets_pdf.html',
+            $this->uniqidGenerator->generate() . '_generate_sheets_pdf.html',
             $this->pdfPath
         );
 
