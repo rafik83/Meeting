@@ -84,7 +84,7 @@ class BatchPdfHandler
         $sheets = $this->sheetRepository->getSheetsById($batchPdf->sheetIds);
 
         $this->generateHtml->setContext($this->scheme, $this->domain);
-        $html    = $this->generateHtml->printSheets($event, $sheets, $batchPdf->locale);
+        $html    = $this->generateHtml->printSheets($event, $sheets, $event->getAvailableLocale($batchPdf->locale));
         $htmlFile = $this->generateHtmlFile->generateFile($html);
 
         $this->notifyCreationOfFile($event, $batchPdf->emailToNotify, $batchPdf->locale, $htmlFile);
