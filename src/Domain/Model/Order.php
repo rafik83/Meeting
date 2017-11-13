@@ -239,7 +239,7 @@ class Order
     public function removeRow(Row $rowToRemove)
     {
         foreach ($this->rows as $key => $row) {
-            if ($row->getId() === $rowToRemove->getId() && $row->getQuantity() > 0) {
+            if ($row->getId() === $rowToRemove->getId() && $row->getQuantity() === 0) {
                 $this->rows->remove($key);
                 return $this;
             }
