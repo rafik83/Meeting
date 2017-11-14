@@ -19,7 +19,7 @@
     },
     "require": {
         "php": "^7.1",
-        "symfony/symfony": "~3.3.12",
+        "symfony/symfony": "3.4.0-BETA4",
         "doctrine/orm": "^2.5.0",
         "doctrine/doctrine-bundle": "~1.6",
         "symfony/swiftmailer-bundle": "^2.3.10",
@@ -74,8 +74,8 @@
         "easycorp/easy-log-handler": "^1.0",
         "behatch/contexts": "^2.5",
         "friends-of-behat/performance-extension": "^1.0",
-        "friends-of-behat/context-service-extension": "^0.3.0",
-        "phpspec/prophecy": "^1.7"
+        "phpspec/prophecy": "^1.7",
+        "friends-of-behat/context-service-extension": "^1.0"
     },
     "scripts": {
         "symfony-scripts": [
