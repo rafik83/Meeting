@@ -31,7 +31,7 @@
         "league/tactician": "^1.0",
         "league/tactician-bundle": "~0.4",
         "league/tactician-doctrine": "^1.0",
-        "sonata-project/intl-bundle": "2.2.*@dev",
+        "sonata-project/intl-bundle": "^2.3",
         "friendsofsymfony/elastica-bundle": "^3.2",
         "pagerfanta/pagerfanta": "^1.0",
         "elao/form-bundle": "^2.1",
