@@ -53,7 +53,7 @@ class PromotionCodeQueryHandlerTest extends TestCase
         // Expected
         $promotionCodeRowView = new PromotionProductRowView(
             $promotion,
-            $product->getName(),
+            $product->getTitle($locale),
             Promotion::TYPE_VALUE_OFF,
             20,
             1
