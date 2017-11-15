@@ -4,6 +4,11 @@ Tasks list:
 - [ ]
 - [ ]
 
+Tasks to run after deploying on preprod or prod:
+- [ ] Reindex Elasticsearch: `$ bin/console fos:elastica:populate --env=prod --no-debug`
+- [ ] Run the whatever calculator : `$ bin/console vimeet:whatever-command`
+- [ ] ...
+
 Definition of Done:
 
 - [ ] 1. Create translation keys in French and listed alphabetically
