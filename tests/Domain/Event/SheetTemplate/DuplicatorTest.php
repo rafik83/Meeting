@@ -57,7 +57,6 @@ class DuplicatorTest extends TestCase
         $sheetTemplate->setValue($templateData->getConfig());
 
         $sheetTemplateRepository = $this->prophesize(SheetTemplateRepositoryInterface::class);
-        $sheetTemplateRepository->set($clonedSheetTemplate)->shouldBeCalled();
         $sheetTemplateRepository
             ->getTemplateForGivenEvent($eventDuplicated)
             ->shouldBeCalled()
@@ -69,16 +68,9 @@ class DuplicatorTest extends TestCase
             ->shouldBeCalled()
             ->willReturn($clonedSheetTemplate);
 
-        $templateDataFactory = $this->prophesize(TemplateDataFactory::class);
-        $templateDataFactory
-            ->createFromTemplate($sheetTemplate)
-            ->shouldBeCalled()
-            ->willReturn($templateData);
-
         $duplicatorDataStorage = (new Duplicator(
             $sheetTemplateRepository->reveal(),
-            $sheetTemplateCloner->reveal(),
-            $templateDataFactory->reveal()
+            $sheetTemplateCloner->reveal()
         ))->duplicate($event, new DuplicatorDataStorage());
 
         $this->assertEquals($clonedSheetTemplate, $duplicatorDataStorage->sheetTemplates[5]);

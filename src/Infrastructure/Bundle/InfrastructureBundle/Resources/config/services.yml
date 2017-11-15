@@ -1154,7 +1154,7 @@ services:
         class: Proximum\Vimeet\Application\Command\Package\DuplicateHandler
         arguments:
             - '@repository.package_repository'
-            - '@datetime'
+            - '@domain.package.duplicator'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Package\Duplicate }
     command.sheet.update_data_handler:
@@ -1554,8 +1554,8 @@ services:
         arguments:
             - '@vimeet_infrastructure.repository.product_repository'
             - '@repository.package_repository'
-            - '@adapter.local_file_storage'
-            - '@datetime'
+            - '@domain.product.duplicator'
+            - '@domain.package.duplicator'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Product\Import\Import }
     command.sheet.assign_spot_handler:
@@ -4651,8 +4651,8 @@ services:
     domain.event.product.duplicator:
         class: Proximum\Vimeet\Domain\Event\Product\Duplicator
         arguments:
+            - '@domain.product.duplicator'
             - '@vimeet_infrastructure.repository.product_repository'
-            - '@adapter.local_file_storage'
 
     domain.event.type.duplicator:
         class: Proximum\Vimeet\Domain\Event\Type\Duplicator
@@ -4664,8 +4664,8 @@ services:
     domain.event.package.duplicator:
         class: Proximum\Vimeet\Domain\Event\Package\Duplicator
         arguments:
+            - '@domain.package.duplicator'
             - '@repository.package_repository'
-            - '@datetime'
 
     domain.event.nomenclature.duplicator:
         class: Proximum\Vimeet\Domain\Event\Nomenclature\Duplicator
@@ -4677,7 +4677,6 @@ services:
         class: Proximum\Vimeet\Domain\Event\RegistrationTemplate\Duplicator
         arguments:
             - '@repository.template.registration_template_repository'
-            - '@template.template_data_factory'
             - '@template.registration.registration_template_cloner'
 
     domain.event.sheet-template.duplicator:
@@ -4685,7 +4684,6 @@ services:
         arguments:
             - '@repository.template.sheet_template_repository'
             - '@template.sheet.sheet_template_cloner'
-            - '@template.template_data_factory'
 
     domain.event.category.duplicator:
         class: Proximum\Vimeet\Domain\Event\Category\Duplicator
