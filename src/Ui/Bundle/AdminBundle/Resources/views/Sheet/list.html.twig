@@ -73,6 +73,10 @@
                         </a>
                     </li>
 
+                    {% if batch_form.printPdf is defined %}
+                        <li>{{ form_widget(batch_form.printPdf) }}</li>
+                    {% endif %}
+
                     {% if batch_form.enable is defined or batch_form.disable is defined %}
                         <li role="separator" class="divider"></li>
                     {% endif %}

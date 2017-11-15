@@ -1,0 +1,16 @@
+{% import "MailBundle:Mail:macros.html.twig" as macros %}
+<html>
+<body>
+{{ 'mail.sheet.generate_pdf.intro'|trans({'%eventTitle%': mail.event.title}, 'mail', mail.locale)|html|nl2br }}
+<br>
+{{ macros.button(
+'mail.sheet.generate_pdf.click'|trans({},'mail', mail.locale),
+url('admin_sheet_print_pdf', {
+    'event': mail.event.id,
+    'hash': mail.fileHash,
+    'file': mail.fileId,
+    '_locale': mail.locale,
+})
+) }}
+</body>
+</html>

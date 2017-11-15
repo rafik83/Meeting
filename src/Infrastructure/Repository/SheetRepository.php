@@ -425,6 +425,29 @@ class SheetRepository implements SheetRepositoryInterface
     /**
      * {@inheritdoc}
      */
+    public function getSheetsByIdOrdered(array $ids, string $orderBy): array
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('sheet')
+            ->from(Sheet::class, 'sheet', 'sheet.id')
+            ->where('sheet.id IN (:ids)')
+            ->setParameter('ids', $ids)
+            ->orderBy('sheet.id');
+
+        if ($orderBy === Sheet\Constant::ORDER_BY_CREATED_AT) {
+            $queryBuilder->orderBy('sheet.createdAt', 'asc');
+        } elseif ($orderBy === Sheet\Constant::ORDER_BY_ALPHABETICAL) {
+            $queryBuilder->orderBy('sheet.title', 'asc');
+        }
+
+        return $queryBuilder->getQuery()->getResult();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function getSheetsByEventAndIds(Event $event, array $ids)
     {
         $queryBuilder = $this

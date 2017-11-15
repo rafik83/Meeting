@@ -840,6 +840,21 @@ services:
             - '@adapter.job_queue_adapter'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Sheet\BatchGenerateInvoice }
+
+    command.sheet.batch_pdf_handler:
+        class: Proximum\Vimeet\Application\Command\Sheet\BatchPdfHandler
+        arguments:
+            - '@vimeet_infrastructure.repository.event_repository'
+            - '@adapter.mailer_adapter'
+            - '%mailer_sender%'
+            - '@vimeet_infrastructure.repository.sheet_repository'
+            - '@components.sheet.pdf.generate_html_file'
+            - '@components.sheet.pdf.generate_html'
+            - '%admin_domain%'
+            - '%scheme%'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Sheet\BatchPdf }
+
     command.sheet.batch_pending_handler:
         class: Proximum\Vimeet\Application\Command\Sheet\BatchPendingHandler
         arguments:
@@ -987,6 +1002,7 @@ services:
             - '@command.sheet.batch_generate_invoice_handler'
             - '@command.sheet.batch_assign_to_group_handler'
             - '@command.sheet.batch_pending_handler'
+            - '@command.sheet.batch_pdf_job_creator_handler'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Sheet\Batch }
 
@@ -2272,6 +2288,32 @@ services:
         arguments:
             - '@command.planning.sheet_info_guesser_cache'
 
+    components.sheet.pdf.generate_html:
+        class: Proximum\Vimeet\Application\Components\Sheet\Pdf\GenerateHtml
+        arguments:
+            - '@adapter.router'
+            - '@adapter.templating_adapter'
+            - '@template.tagged_data_factory'
+            - '@sheet.infos_helper'
+
+    components.sheet.pdf.generate_html_file:
+        class: Proximum\Vimeet\Application\Components\Sheet\Pdf\GenerateHtmlFile
+        arguments:
+            - '@domain.token.uniqid_generator'
+            - '@adapter.local_file_storage'
+            - '@repository.file_repository'
+            - '%infrastructure.print_sheet_path%'
+            - '@datetime'
+
+    components.sheet.pdf.html_to_pdf:
+        class: Proximum\Vimeet\Application\Components\Sheet\Pdf\HtmlToPdf
+        arguments:
+            - '@printer.sheet_pdf_printer'
+            - '@adapter.local_file_storage'
+            - '@repository.file_repository'
+            - '%infrastructure.print_sheet_path%'
+            - '@datetime'
+
     #
     # Sheet Request
     #
@@ -2521,6 +2563,7 @@ services:
         class: Proximum\Vimeet\Domain\Template\TaggedDataFactory
         arguments:
             - '@template.template_data_factory'
+            - '@template.print_template_resolver'
             - '@domain.rule.applyer'
     template.template_remove_field:
         class: Proximum\Vimeet\Domain\Template\TemplateRemoveField
@@ -4132,6 +4175,14 @@ services:
             - '@command.planning.export_planning_handler'
         tags:
             - { name: console.command }
+
+    command_planning.print_sheets_pdf:
+        class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\Sheet\PrintPdfCommand
+        arguments:
+            - '@command.sheet.batch_pdf_handler'
+        tags:
+            - { name: console.command }
+
     command.order.export_order_command:
         class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\Order\ExportOrderCommand
         arguments:
@@ -4808,6 +4859,7 @@ services:
             - '%phantomjs_script%'
             - '%phantomjs_http_user%'
             - '%phantomjs_http_password%'
+            - '%infrastructure.print_sheet_path%'
 
     sheet.infos_helper:
         class: Proximum\Vimeet\Application\Components\Sheet\SheetInfosHelper
@@ -5346,6 +5398,13 @@ services:
             - '@adapter.job_queue_adapter'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Planning\ExportPlanningJobCreator }
+
+    command.sheet.batch_pdf_job_creator_handler:
+        class: Proximum\Vimeet\Application\Command\Sheet\BatchPdfJobCreatorHandler
+        arguments:
+            - '@adapter.job_queue_adapter'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Sheet\BatchPdfJobCreator }
 
     #
     # Order export

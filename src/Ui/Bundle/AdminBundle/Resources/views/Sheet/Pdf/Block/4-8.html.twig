@@ -1,0 +1,30 @@
+<div class="row block block--4-8 {{ 'style--' ~ item.style }}">
+    <div class="col-md-4 sidebar">
+        {% for uid, child in item.column(0) %}
+            {{ include('AdminBundle:Sheet/Pdf/' ~ child.component|capitalize ~ ':' ~ child.type ~ '.html.twig', {
+                'sheet': sheet,
+                'uid': uid,
+                'item': child,
+                'locale': locale,
+                'fallback': fallback|default,
+                'taggedData': taggedData,
+                'nomenclatures': nomenclatures,
+                'participants': participants,
+            }, false) }}
+        {% endfor %}
+    </div>
+    <div class="col-md-8 content">
+        {% for uid, child in item.column(1) %}
+            {{ include('AdminBundle:Sheet/Pdf/' ~ child.component|capitalize ~ ':' ~ child.type ~ '.html.twig', {
+                'sheet': sheet,
+                'uid': uid,
+                'item': child,
+                'locale': locale,
+                'fallback': fallback|default,
+                'taggedData': taggedData,
+                'nomenclatures': nomenclatures,
+                'participants': participants,
+            }, false) }}
+        {% endfor %}
+    </div>
+</div>

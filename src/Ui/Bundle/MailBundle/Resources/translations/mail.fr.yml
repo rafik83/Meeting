@@ -70,6 +70,9 @@ mail.sheet.invoiced.body: "Bonjour %participant%,\n\nPour faire suite à votre p
 mail.sheet.invoiced.end: "Votre facture est &eacute;galement disponible dans votre espace membre par ce lien <a href=\"%ordersLink%\" target=\"_blank\">Facture et liste des commandes</a>\n\nNous vous remercions de votre participation."
 mail.sheet.invoiced.link: 'Télécharger ma facture %invoiceNumber%'
 mail.sheet.invoiced.subject: 'Téléchargez votre facture'
+mail.sheet.print.pdf.subject: 'Génération des PDF de fiches'
+mail.sheet.print.intro: "Bonjour,\n\n Voici le PDF généré des fiches pour l'événement %eventTitle% :\n"
+mail.sheet.print.click: 'Télécharger les fiches'
 mail.sheet.show.link: 'Voir la fiche de présentation'
 mail.sheet.submitted.body: "La fiche de participation de %sheetName% a été finalisée le %date% par %firstname% %lastname%.\n\nPour accéder au détail de la fiche, merci de cliquer sur le lien suivant"
 mail.sheet.submitted.end: 'Cordialement,'
@@ -83,3 +86,5 @@ mail.sheet.validation.validate.body: "Bonjour %firstname% %lastname%,\n\nVotre f
 mail.sheet.validation.validate.subject: 'Fiche validée'
 mail.transaction.confirm.body: "Bonjour %firstname% %lastname%,\n\nVotre paiement d’un montant de %transactionTotal% a bien été reçu.\n\nCordialement,"
 mail.transaction.confirm.subject: '[%event%] Votre paiement a bien été reçu'
+mail.sheet.generate_pdf.intro: "Bonjour\nLe fichier .pdf des fiches sélectionnés pour l'évenement %eventTitle% a été généré\n"
+mail.sheet.generate_pdf.click: 'Télécharger les fiches en pdf'

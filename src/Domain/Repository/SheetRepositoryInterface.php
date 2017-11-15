@@ -210,6 +210,14 @@ interface SheetRepositoryInterface
     public function getSheetsById(array $ids);
 
     /**
+     * @param array  $ids
+     * @param string $orderBy
+     *
+     * @return Sheet[]
+     */
+    public function getSheetsByIdOrdered(array $ids, string $orderBy): array;
+
+    /**
      * @param Event $event
      * @param array $ids
      *

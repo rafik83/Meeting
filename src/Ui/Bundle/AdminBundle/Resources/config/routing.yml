@@ -1388,6 +1388,14 @@ admin_planner_export_file:
     methods: [GET]
     defaults: { _controller: AdminBundle:Planner/Export:exportFile }
 
+admin_sheet_print_pdf:
+    path: /event/{event}/sheet/generate-pdf/{hash}z{file}
+    requirements:
+        event: \d+
+        file: \d+
+    methods: [GET]
+    defaults: { _controller: AdminBundle:Sheet\Print:generate }
+
 #
 # Invoice
 #

@@ -9,6 +9,7 @@
  */
 
 namespace Proximum\Vimeet\Application\Command\Planner\Callback;
+use Proximum\Vimeet\Application\ThirdParty\Jenkins\AbstractSetStatus;
 
 /**
  * A sample of the payload received from Jenkins:
@@ -43,100 +44,18 @@ namespace Proximum\Vimeet\Application\Command\Planner\Callback;
  *     "phase": "FINALIZED"/"status": "SUCCESS",
  *     "phase": "COMPLETED"/"status": "SUCCESS"
  */
-class SetStatus
+class SetStatus extends AbstractSetStatus
 {
-    const PHASE_FINALIZED = 'FINALIZED';
-    const PHASE_COMPLETED = 'COMPLETED';
-    const PHASE_STARTED = 'STARTED';
-    const PHASE_QUEUED = 'QUEUED';
-
-    const PHASE_ALL = [
-        self::PHASE_FINALIZED,
-        self::PHASE_COMPLETED,
-        self::PHASE_STARTED,
-        self::PHASE_QUEUED,
-    ];
-
-    const STATUS_ABORTED = 'ABORTED';
-    const STATUS_FAILURE = 'FAILURE';
-    const STATUS_SUCCESS = 'SUCCESS';
-
-    const STATUS_ALL = [
-        self::STATUS_ABORTED,
-        self::STATUS_FAILURE,
-        self::STATUS_SUCCESS,
-    ];
-
-    /** @var string */
-    public $name;
-
-    /** @var string */
-    public $phase;
-
-    /** @var null|string */
-    public $status;
-
     /** @var string */
     public $filepath;
 
     /**
      * @param array $data
-     *
-     * @throw \InvalidArgumentException
      */
     public function __construct(array $data)
     {
-        $this->name = $data['name'];
-        $build = $data['build'];
-        $this->filepath = $build['parameters']['INPUT'];
+        parent::__construct($data);
 
-        if (!in_array($build['phase'], self::PHASE_ALL, true)) {
-            throw new \InvalidArgumentException(sprintf('PHASE %s not valid.', $build['phase']));
-        }
-
-        $this->phase = $build['phase'];
-
-        if (isset($build['status'])) {
-            if (!in_array($build['status'], self::STATUS_ALL, true)) {
-                throw new \InvalidArgumentException(sprintf('STATUS %s not valid.', $build['status']));
-            }
-
-            $this->status = $build['status'];
-        }
-    }
-
-    public function isPhaseFinalized(): bool
-    {
-        return self::PHASE_FINALIZED === $this->phase;
-    }
-
-    public function isPhaseCompleted(): bool
-    {
-        return self::PHASE_COMPLETED === $this->phase;
-    }
-
-    public function isPhaseStarted(): bool
-    {
-        return self::PHASE_STARTED === $this->phase;
-    }
-
-    public function isPhaseQueued(): bool
-    {
-        return self::PHASE_QUEUED === $this->phase;
-    }
-
-    public function isStatusSuccess(): bool
-    {
-        return self::STATUS_SUCCESS === $this->status;
-    }
-
-    public function isStatusAborted(): bool
-    {
-        return self::STATUS_ABORTED === $this->status;
-    }
-
-    public function isStatusFailure(): bool
-    {
-        return self::STATUS_FAILURE === $this->status;
+        $this->filepath = $data['build']['parameters']['INPUT'];
     }
 }

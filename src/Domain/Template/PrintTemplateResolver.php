@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Domain\Template;
 
+use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\Template\SheetTemplate;
 use Proximum\Vimeet\Domain\View\Template\ResolvedPrintTemplateView;
 
@@ -46,6 +47,38 @@ class PrintTemplateResolver
         $missingObjects = $this->getMissingObjects($printValueResolved, $sheetTemplateDataObjects);
 
         return new ResolvedPrintTemplateView($printValueResolved, $missingObjects);
+    }
+
+    /**
+     * @param Sheet  $sheet
+     * @param string $locale
+     *
+     * @return TemplateData
+     */
+    public function resolvePrintTemplate(Sheet $sheet, string $locale)
+    {
+        $sheetTemplate = $sheet->getTypeSheetTemplate();
+        $printValue = $sheet->getTypeSheetTemplate()->getPrintValue();
+
+        if (empty($printValue)) {
+            return $this->templateDataFactory->createFromTemplate(
+                $sheetTemplate,
+                $sheet->getData(),
+                $locale,
+                $sheetTemplate->getFallback()
+            );
+        }
+
+        $sheetTemplateData        = $this->templateDataFactory->createFromTemplate($sheetTemplate);
+        $sheetTemplateDataObjects = $sheetTemplateData->getObjects();
+        $printTemplateNodes       = $this->replaceObjects($printValue, $sheetTemplateDataObjects);
+
+        return $this->templateDataFactory->create(
+            $printTemplateNodes,
+            $sheet->getData(),
+            $locale,
+            $sheetTemplate->getFallback()
+        );
     }
 
     /**

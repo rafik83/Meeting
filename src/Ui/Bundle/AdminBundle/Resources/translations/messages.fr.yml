@@ -741,6 +741,7 @@ admin.sheet.filter.template_filters: 'Filtres supplémentaires'
 admin.sheet.follower: 'Suivi commercial'
 admin.sheet.follower.un-assigned: 'Non assigné'
 admin.sheet.go_back_to_list: 'Retour à la liste des participations'
+admin.sheet.generate.pdf: 'Imprimer en PDF'
 admin.sheet.impersonate: Impersonnation
 admin.sheet.impersonateAs: '%adminFullname% (%adminEmail%) connecté en tant que %userEmail%'
 admin.sheet.import.button.label: Importer
@@ -826,6 +827,7 @@ admin.spot.listSpot.spot.un-visio: 'Non visio'
 admin.spot.listSpot.spot.visio: Visio
 admin.spot.listSpot.visio: Visio
 admin.spot.listSpot.yes: Oui
+admin.sheet.print: 'Impression de fiches'
 admin.spot.search_facets.link: 'Filtres catalogue'
 admin.spot.title: Lieux
 admin.spot.unavailability: 'Ajouter des indisponibilités'

@@ -12,6 +12,7 @@ namespace Proximum\Vimeet\Application\Command\Sheet;
 
 use Proximum\Vimeet\Application\Adapter\SheetSearchAdapterInterface;
 use Proximum\Vimeet\Domain\Admin\Follower\FollowerConstant;
+use Proximum\Vimeet\Domain\Model\Sheet\Constant;
 use Proximum\Vimeet\Domain\Model\Sheet\Group;
 
 class BatchHandler
@@ -49,6 +50,9 @@ class BatchHandler
     /** @var BatchPendingHandler */
     private $batchPendingHandler;
 
+    /** @var BatchPdfJobCreatorHandler */
+    private $batchPdfJobCreatorHandler;
+
     /**
      * BatchHandler constructor.
      *
@@ -63,6 +67,7 @@ class BatchHandler
      * @param BatchGenerateInvoiceHandler    $batchGenerateInvoiceHandler
      * @param BatchAssignToGroupHandler      $batchAssignToGroupHandler
      * @param BatchPendingHandler            $batchPendingHandler
+     * @param BatchPdfJobCreatorHandler      $batchPdfJobCreatorHandler
      */
     public function __construct(
         SheetSearchAdapterInterface $sheetSearchAdapter,
@@ -75,7 +80,8 @@ class BatchHandler
         BatchValidationValidateHandler $batchValidationValidateHandler,
         BatchGenerateInvoiceHandler $batchGenerateInvoiceHandler,
         BatchAssignToGroupHandler $batchAssignToGroupHandler,
-        BatchPendingHandler $batchPendingHandler
+        BatchPendingHandler $batchPendingHandler,
+        BatchPdfJobCreatorHandler $batchPdfJobCreatorHandler
     ) {
         $this->sheetSearchAdapter             = $sheetSearchAdapter;
         $this->batchValidateHandler           = $batchValidateHandler;
@@ -88,6 +94,7 @@ class BatchHandler
         $this->batchGenerateInvoiceHandler    = $batchGenerateInvoiceHandler;
         $this->batchAssignToGroupHandler      = $batchAssignToGroupHandler;
         $this->batchPendingHandler            = $batchPendingHandler;
+        $this->batchPdfJobCreatorHandler      = $batchPdfJobCreatorHandler;
     }
 
     /**
@@ -175,6 +182,18 @@ class BatchHandler
                     $batch->ids,
                     $batch->group instanceof Group ? $batch->group : null,
                     $batch->locale
+                )
+            );
+        }
+
+        if ($batch->printPdf) {
+            return $this->batchPdfJobCreatorHandler->handle(
+                new BatchPdfJobCreator(
+                    $batch->event,
+                    $batch->ids,
+                    $batch->admin,
+                    $batch->locale,
+                    $batch->filters['orderBy'] ?? Constant::ORDER_BY_ALPHABETICAL
                 )
             );
         }

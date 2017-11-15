@@ -120,6 +120,9 @@ class Batch extends AbstractBatch
      */
     public $generateInvoice;
 
+    /** @var bool */
+    public $printPdf;
+
     /**
      * "Assigner une fiche à un groupe/entité"
      *
