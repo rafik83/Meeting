@@ -1,0 +1,18 @@
+{% trans_default_domain 'templates' %}
+
+<div class="object" data-object="{{ item.type }}" data-uid="{{ uid }}" data-config="{{ item.config|json_encode }}">
+    <ul class="block-buttons list-inline">
+        <li class="object-title">{{ ('template.object.' ~ item.type)|trans }}</li>
+        <li>
+            <span class="btn btn-link move-button">
+                <i class="glyphicon glyphicon-move"></i>
+            </span>
+        </li>
+        <li>
+            <button class="btn btn-link delete-button">
+                <i class="glyphicon glyphicon-remove"></i>
+            </button>
+        </li>
+    </ul>
+    <div data-bind="content">{{ item.config.label[locale]|default('...') }}</div>
+</div>

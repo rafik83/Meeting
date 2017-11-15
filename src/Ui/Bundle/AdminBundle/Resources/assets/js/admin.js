@@ -1,10 +1,10 @@
 var $                       = require('jquery'),
     bootstrap               = require('bootstrap'),
-    tablesort               = require('tablesort'),
     Confirm                 = require('./components/_Confirm'),
     CheckAllCheckbox        = require('./components/_CheckAllCheckbox'),
     LoadingButton           = require('./components/_LoadingButton'),
     TemplateBuilder         = require('./components/_TemplateBuilder'),
+    PrintTemplateBuilder    = require('./components/_PrintTemplateBuilder'),
     Batch                   = require('./components/_Batch'),
     Slots                   = require('./components/_Slots'),
     SharedChoicesCollection = require('./components/_SharedChoicesCollection'),
@@ -77,40 +77,11 @@ function init(target) {
         new DateTimePicker(element);
     });
 
-    /* tablesort */
-    function cleanNumber(i) {
-        return i.replace(/[^\-?0-9.]/g, '');
-    }
-
-    function compareNumber(a, b) {
-        a = parseFloat(a);
-        b = parseFloat(b);
-
-        a = isNaN(a) ? 0 : a;
-        b = isNaN(b) ? 0 : b;
-
-        return a - b;
-    }
-
-    tablesort.extend('number', function(item) {
-        return item.match(/^-?(\d)*-?([,\.]){0,1}-?(\d)+([E,e][\-+][\d]+)?%?$/); // Number
-    }, function(a, b) {
-        a = cleanNumber(a);
-        b = cleanNumber(b);
-        return compareNumber(b, a);
-    });
-
-    [].forEach.call(target.querySelectorAll('table.sortable'), function (element) {
-        tablesort(element,  {
-            descending: true
-        });
-    });
-    /* tablesort */
-
     [].forEach.call(target.querySelectorAll('[data-confirm]'), function (element) { new Confirm(element); });
     [].forEach.call(target.querySelectorAll('[data-update]'), function (element) { new Update(element); });
     [].forEach.call(target.querySelectorAll('[data-check-all-checkbox]'), function (element) { new CheckAllCheckbox(element, element.getAttribute('data-check-all-checkbox')); });
     [].forEach.call(target.querySelectorAll('[data-template-builder]'), function (element) { new TemplateBuilder(element) });
+    [].forEach.call(target.querySelectorAll('[data-print-template-builder]'), function (element) { new PrintTemplateBuilder(element) });
     [].forEach.call(target.querySelectorAll('[data-batch]'), function (element) { new Batch(element) });
     [].forEach.call(target.querySelectorAll('[data-slot]'), function (element) { new Slots(element) });
     [].forEach.call(target.querySelectorAll('[data-sortable-collection]'), function (element) {
