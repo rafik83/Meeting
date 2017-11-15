@@ -658,6 +658,7 @@ admin.sheet.batch.selection.label: 'Les <strong>%sheets%</strong> fiches de cett
 admin.sheet.batch.selectionAll.label: 'Sélectionner les <strong>%allSheets%</strong> fiches correspondantes à vos filtres.'
 admin.sheet.category: Catégorie
 admin.sheet.change.type.link: Changer
+admin.sheet.change.type.hasMeeting: 'La fiche a des RDVs et son type ne peut être changé'
 admin.sheet.change.type.title: 'Changer le type de participation'
 admin.sheet.commercialFollowUp: 'Attribuer le suivi commercial'
 admin.sheet.created_this_week: 'Inscrits cette semaine'
@@ -676,6 +677,7 @@ admin.sheet.details.completeness: 'Complétude de la fiche'
 admin.sheet.details.dashboard.title: 'Tableau de bord'
 admin.sheet.details.historic.title: Historique
 admin.sheet.details.invoices: Factures
+admin.sheet.details.meeting.meeting: 'Rendez-Vous positionnés'
 admin.sheet.details.meeting.proposition.approved: 'Propositions validées'
 admin.sheet.details.meeting.proposition.pending: 'Propositions en attente'
 admin.sheet.details.meeting.proposition.refused: 'Propositions refusées'

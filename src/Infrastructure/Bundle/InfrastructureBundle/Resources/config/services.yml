@@ -1187,6 +1187,8 @@ services:
         arguments:
             - '@vimeet_infrastructure.repository.sheet_repository'
             - '@vimeet_infrastructure.repository.order_repository'
+            - '@vimeet_infrastructure.repository.meeting_repository'
+            - '@sheet.request.enable_disable_manager'
             - '@vimeet_infrastructure.adapter.translator_adapter'
             - '@vimeet_infrastructure.adapter.delayed_event_dispatcher'
             - '@components.registration.step_manager'
@@ -3373,6 +3375,7 @@ services:
         class: Proximum\Vimeet\Application\Query\Sheet\Detail\SheetMeetingIndicatorQueryHandler
         arguments:
             - '@vimeet_infrastructure.repository.meeting.request_repository'
+            - '@vimeet_infrastructure.repository.meeting_repository'
 
     query.sheet.detail.sheet_detail_query_handler:
         class: Proximum\Vimeet\Application\Query\Sheet\Detail\SheetDetailQueryHandler
