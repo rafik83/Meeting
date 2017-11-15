@@ -27,9 +27,12 @@ class BatchPdfJobCreatorHandlerTest extends TestCase
         $admin->getEmail()->willReturn('admin@example.net');
         $jobQueue = $this->prophesize(JobQueueInterface::class);
 
-        $jobQueue->printSheetsPdf($event->reveal(), [11, 13], 'admin@example.net', 'fr')->shouldBeCalled();
+        $jobQueue
+            ->printSheetsPdf($event->reveal(), [11, 13], 'admin@example.net', 'fr', 'alphabetical')
+            ->shouldBeCalled()
+        ;
 
-        $command = new BatchPdfJobCreator($event->reveal(), [11, 13], $admin->reveal(), 'fr');
+        $command = new BatchPdfJobCreator($event->reveal(), [11, 13], $admin->reveal(), 'fr', 'alphabetical');
         $handler = new BatchPdfJobCreatorHandler($jobQueue->reveal());
         $result = $handler->handle($command);
 

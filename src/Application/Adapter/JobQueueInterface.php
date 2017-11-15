@@ -48,8 +48,17 @@ interface JobQueueInterface
      * @param array  $sheetIds
      * @param string $emailToNotify
      * @param string $locale
+     * @param string $orderBy
+     *
+     * @return
      */
-    public function printSheetsPdf(Event $event, array $sheetIds, string $emailToNotify, string $locale);
+    public function printSheetsPdf(
+        Event $event,
+        array $sheetIds,
+        string $emailToNotify,
+        string $locale,
+        string $orderBy
+    );
 
     /**
      * @param Event $event

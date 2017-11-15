@@ -36,7 +36,8 @@ class BatchPdfJobCreatorHandler
             $batchPdfJobCreator->event,
             $batchPdfJobCreator->sheetIds,
             $batchPdfJobCreator->emailToNotify,
-            $batchPdfJobCreator->locale
+            $batchPdfJobCreator->locale,
+            $batchPdfJobCreator->orderBy
         );
 
         return new BatchResult(

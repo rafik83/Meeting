@@ -81,7 +81,7 @@ class BatchPdfHandler
     public function handle(BatchPdf $batchPdf)
     {
         $event  = $this->eventRepository->getById($batchPdf->eventId);
-        $sheets = $this->sheetRepository->getSheetsById($batchPdf->sheetIds);
+        $sheets = $this->sheetRepository->getSheetsByIdOrdered($batchPdf->sheetIds, $batchPdf->orderBy);
 
         $this->generateHtml->setContext($this->scheme, $this->domain);
         $html    = $this->generateHtml->printSheets($event, $sheets, $event->getAvailableLocale($batchPdf->locale));

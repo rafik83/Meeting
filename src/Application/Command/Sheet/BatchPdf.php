@@ -24,17 +24,22 @@ class BatchPdf
     /** @var Int[] */
     public $sheetIds;
 
+    /** @var string */
+    public $orderBy;
+
     /**
      * @param int    $eventId
      * @param array  $sheetIds
      * @param string $emailToNotify
      * @param string $locale
+     * @param string $orderBy
      */
-    public function __construct(int $eventId, array $sheetIds, string $emailToNotify, string $locale)
+    public function __construct(int $eventId, array $sheetIds, string $emailToNotify, string $locale, string $orderBy)
     {
         $this->eventId       = $eventId;
         $this->emailToNotify = $emailToNotify;
         $this->locale        = $locale;
         $this->sheetIds      = $sheetIds;
+        $this->orderBy       = $orderBy;
     }
 }

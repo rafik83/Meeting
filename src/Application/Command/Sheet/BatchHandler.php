@@ -12,6 +12,7 @@ namespace Proximum\Vimeet\Application\Command\Sheet;
 
 use Proximum\Vimeet\Application\Adapter\SheetSearchAdapterInterface;
 use Proximum\Vimeet\Domain\Admin\Follower\FollowerConstant;
+use Proximum\Vimeet\Domain\Model\Sheet\Constant;
 use Proximum\Vimeet\Domain\Model\Sheet\Group;
 
 class BatchHandler
@@ -187,7 +188,13 @@ class BatchHandler
 
         if ($batch->printPdf) {
             return $this->batchPdfJobCreatorHandler->handle(
-                new BatchPdfJobCreator($batch->event, $batch->ids, $batch->admin, $batch->locale)
+                new BatchPdfJobCreator(
+                    $batch->event,
+                    $batch->ids,
+                    $batch->admin,
+                    $batch->locale,
+                    $batch->filters['orderBy'] ?? Constant::ORDER_BY_ALPHABETICAL
+                )
             );
         }
 

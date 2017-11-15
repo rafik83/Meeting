@@ -45,6 +45,7 @@ class PrintPdfCommand extends Command
             ->addOption('eventId', null, InputOption::VALUE_REQUIRED, 'Event id')
             ->addOption('emailToNotify', null, InputOption::VALUE_REQUIRED, 'email to notify at the end of the command')
             ->addOption('locale', null, InputOption::VALUE_REQUIRED, 'locale for the mail of notification')
+            ->addOption('orderBy', null, InputOption::VALUE_REQUIRED, 'the order of the sheets')
         ;
     }
 
@@ -57,16 +58,18 @@ class PrintPdfCommand extends Command
             || null === $input->getOption('emailToNotify')
             || null === $input->getOption('locale')
             || null === $input->getOption('eventId')
+            || null === $input->getOption('orderBy')
         ) {
             $output->writeln('<error>The sheets ids, emailToNotify and locale options are mandatory and can not be null</error>');
 
             throw new \InvalidArgumentException(
                 sprintf(
-                    'The sheets ids, emailToNotify and locale options are mandatory and can not be null, arguments passed: eventId=%s sheetsIds=%s emailToNotify=%s locale=%s',
+                    'The sheets ids, emailToNotify and locale options are mandatory and can not be null, arguments passed: eventId=%s sheetsIds=%s emailToNotify=%s locale=%s orderBy=%s',
                     $input->getOption('eventId'),
                     $input->getOption('sheetIds'),
                     $input->getOption('emailToNotify'),
-                    $input->getOption('locale')
+                    $input->getOption('locale'),
+                    $input->getOption('orderBy')
                 )
             );
         }
@@ -76,7 +79,8 @@ class PrintPdfCommand extends Command
                 $input->getOption('eventId'),
                 explode(',', $input->getOption('sheetIds')),
                 $input->getOption('emailToNotify'),
-                $input->getOption('locale')
+                $input->getOption('locale'),
+                $input->getOption('orderBy')
             )
         );
     }

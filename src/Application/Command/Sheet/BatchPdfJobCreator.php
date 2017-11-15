@@ -27,17 +27,22 @@ class BatchPdfJobCreator extends AbstractBatch
     /** @var Event */
     public $event;
 
+    /** @var string */
+    public $orderBy;
+
     /**
      * @param Event  $event
      * @param array  $sheetIds
      * @param Admin  $admin
      * @param string $locale
+     * @param string $orderBy
      */
-    public function __construct(Event $event, array $sheetIds, Admin $admin, string $locale)
+    public function __construct(Event $event, array $sheetIds, Admin $admin, string $locale, string $orderBy)
     {
         $this->event         = $event;
         $this->emailToNotify = $admin->getEmail();
         $this->locale        = $locale;
         $this->sheetIds      = $sheetIds;
+        $this->orderBy       = $orderBy;
     }
 }

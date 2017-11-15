@@ -51,7 +51,7 @@ class BatchPdfHandlerTest extends TestCase
         $mailer           = $this->prophesize(MailerInterface::class);
 
         $eventRepository->getById(12)->shouldBeCalled()->willReturn($event->reveal());
-        $sheetRepository->getSheetsById([9, 11, 13, 17])->shouldBeCalled()->willReturn($sheets);
+        $sheetRepository->getSheetsByIdOrdered([9, 11, 13, 17], 'alphabetical')->shouldBeCalled()->willReturn($sheets);
         $generateHtml->setContext('https', 'admin.vimeet.proximum.dev')->shouldBeCalled();
         $generateHtml->printSheets($event->reveal(), $sheets, 'fr')->shouldBeCalled()->willReturn('ficheAficheBficheC');
         $generateHtmlFile->generateFile('ficheAficheBficheC')->shouldBeCalled()->willReturn($file->reveal());
@@ -66,7 +66,7 @@ class BatchPdfHandlerTest extends TestCase
         );
         $mailer->send($mail)->shouldBeCalled();
 
-        $command = new BatchPdf(12, [9, 11, 13, 17], 'email@example.net', 'fr');
+        $command = new BatchPdf(12, [9, 11, 13, 17], 'email@example.net', 'fr', 'alphabetical');
         $handler = new BatchPdfHandler(
             $eventRepository->reveal(),
             $mailer->reveal(),
