@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Application\View\Sheet\Details;
 
+use Proximum\Vimeet\Application\View\Sheet\Details\Participant\PhoneValidationStatusView;
 use Proximum\Vimeet\Domain\Template\TemplateData;
 
 class ParticipantView
@@ -34,13 +35,17 @@ class ParticipantView
     /** @var array */
     public $agendaConfirmationStatus;
 
+    /** @var PhoneValidationStatusView */
+    public $phoneValidationStatusView;
+
     /**
-     * @param int          $id
-     * @param string       $email
-     * @param TemplateData $templateData
-     * @param bool         $isOwner
-     * @param bool         $visio
-     * @param array        $agendaConfirmationStatus
+     * @param int                       $id
+     * @param string                    $email
+     * @param TemplateData              $templateData
+     * @param bool                      $isOwner
+     * @param bool                      $visio
+     * @param array                     $agendaConfirmationStatus
+     * @param PhoneValidationStatusView $phoneValidationStatusView
      */
     public function __construct(
         $id,
@@ -48,14 +53,16 @@ class ParticipantView
         TemplateData $templateData,
         $isOwner = false,
         bool $visio,
-        array $agendaConfirmationStatus
+        array $agendaConfirmationStatus,
+        PhoneValidationStatusView $phoneValidationStatusView
     ) {
-        $this->id                = $id;
-        $this->templateData      = $templateData;
-        $this->isOwner           = $isOwner;
-        $this->visio             = $visio;
-        $this->email             = $email;
-        $this->agendaConfirmationStatus = $agendaConfirmationStatus;
+        $this->id                        = $id;
+        $this->templateData              = $templateData;
+        $this->isOwner                   = $isOwner;
+        $this->visio                     = $visio;
+        $this->email                     = $email;
+        $this->agendaConfirmationStatus  = $agendaConfirmationStatus;
+        $this->phoneValidationStatusView = $phoneValidationStatusView;
     }
 
     /**
