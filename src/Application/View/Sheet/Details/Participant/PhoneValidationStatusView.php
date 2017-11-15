@@ -1,0 +1,22 @@
+<?php
+
+/*
+ * This file is part of the Proximum Vimeet project.
+ *
+ * Copyright (C) Proximum
+ *
+ * @author Elao <contact@elao.com>
+ */
+
+namespace Proximum\Vimeet\Application\View\Sheet\Details\Participant;
+
+abstract class PhoneValidationStatusView
+{
+    const TRANS_KEY = 'admin.sheet.details.participant.phoneValidationStatus.';
+
+    /** @var string */
+    public $message = '';
+
+    /** @var string */
+    public $indicator = 'warning';
+}

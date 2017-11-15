@@ -30,6 +30,7 @@ use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\Sheet\Constant;
 use Proximum\Vimeet\Domain\Model\Type;
+use Proximum\Vimeet\Domain\Sheet\Phone\ValidationStatus;
 use Proximum\Vimeet\Domain\Template\TemplateObject\Nomenclature;
 use Proximum\Vimeet\Domain\Type\TypeInterface;
 use Proximum\Vimeet\Domain\View\Catalog\CategoryView;
@@ -199,6 +200,8 @@ class SheetSearchQueryBuilder
         ) {
             $this->filterByAgendaConfirmedStatus($filters['agendaConfirmedStatus']);
         }
+
+        $this->filterByPhoneValidationStatus($filters);
     }
 
     /**
@@ -989,5 +992,20 @@ class SheetSearchQueryBuilder
         }
 
         $this->query->addMustNot($excludeSheets);
+    }
+
+    /**
+     * @param array $filters
+     */
+    private function filterByPhoneValidationStatus(array $filters)
+    {
+        if (isset($filters['phoneValidationStatus'])
+            && in_array($filters['phoneValidationStatus'], ValidationStatus::ALL_CONCERNED_STATUS)
+        ) {
+            $matchPhoneValidationStatus = new Term();
+            $matchPhoneValidationStatus->setTerm('phoneValidationStatus', $filters['phoneValidationStatus']);
+
+            $this->query->addMust($matchPhoneValidationStatus);
+        }
     }
 }

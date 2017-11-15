@@ -61,6 +61,7 @@ class DeleteAllHandlerTest extends TestCase
 
         $jobQueue = $this->prophesize(JobQueueInterface::class);
         $jobQueue->indexInCatalogSheetsByEvent($event)->shouldBeCalled();
+        $jobQueue->aggregatePhoneValidationStatus($event)->shouldBeCalled();
 
         // Handler
         $handler = new DeleteAllHandler(

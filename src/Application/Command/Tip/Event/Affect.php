@@ -26,8 +26,6 @@ class Affect
     public $types;
 
     /**
-     * Affect constructor.
-     *
      * @param Event $event
      */
     public function __construct(Event $event)

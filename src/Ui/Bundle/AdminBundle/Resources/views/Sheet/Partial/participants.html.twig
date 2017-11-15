@@ -48,6 +48,8 @@
                     {% endfor %}
                     <b>{{ 'admin.sheet.details.participant.email'|trans }}: </b>{{ participant.email }}
                     <br/>
+                    <b>{{ 'admin.sheet.details.participant.phoneValidationStatus.title'|trans }}: </b><span class="label label-{{ participant.phoneValidationStatusView.indicator }}">{{ participant.phoneValidationStatusView.message|trans }}</span>
+                    <br/>
                     {% if participant.isOwner %}
                         <a href="{{ impersonationUrl }}" class="btn btn-default btn-sm">{{ 'admin.sheet.impersonate'|trans }}</a>
                     {% endif %}

@@ -139,6 +139,11 @@ interface JobQueueInterface
     public function aggregateAvailableSlot(Event $event);
 
     /**
+     * @param Event $event
+     */
+    public function aggregatePhoneValidationStatus(Event $event);
+
+    /**
      * @param $event
      */
     public function generateMeetingSolutionAnalytic(Event $event);

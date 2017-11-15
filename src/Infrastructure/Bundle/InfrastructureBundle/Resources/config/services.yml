@@ -707,12 +707,14 @@ services:
         arguments:
             - '@repository.tip.repository'
             - '@vimeet_infrastructure.repository.type_repository'
+            - '@vimeet_infrastructure.adapter.delayed_event_dispatcher'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Tip\Event\Affect }
     command.tip.event.remove_handler:
         class: Proximum\Vimeet\Application\Command\Tip\Event\RemoveHandler
         arguments:
             - '@repository.tip.repository'
+            - '@vimeet_infrastructure.adapter.delayed_event_dispatcher'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Tip\Event\Remove }
     command.transaction.create_handler:
@@ -1902,6 +1904,7 @@ services:
     command.user.phone.validate_code_handler:
         class: Proximum\Vimeet\Application\Command\User\Phone\ValidateCodeHandler
         arguments:
+            - '@vimeet_infrastructure.adapter.delayed_event_dispatcher'
             - '@repository.user.user_event_phone_repository'
             - '@datetime'
         tags:
@@ -3355,6 +3358,7 @@ services:
         arguments:
             - '@template.template_data_factory'
             - '@query.sheet.detail.agenda_confirmation_status_query_handler'
+            - '@query.sheet.detail.participant.phone_validation_status_query_handler'
 
     query.sheet.detail.agenda_confirmation_status_query_handler:
         class: Proximum\Vimeet\Application\Query\Sheet\Detail\AgendaConfirmationStatusQueryHandler
@@ -5526,6 +5530,14 @@ services:
         tags:
             - { name: console.command }
 
+    symfony_command.aggregate.sheet_phone.phone_validation_status_calculator_command:
+        class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\Aggregate\Sheet\Phone\PhoneValidationStatusCalculatorCommand
+        arguments:
+            - '@vimeet_infrastructure.repository.event_repository'
+            - '@command.sheet.phone.update_phone_validation_status_handler'
+        tags:
+            - { name: console.command }
+
     #
     # Multiple sheets request queries
     #
@@ -5673,6 +5685,13 @@ services:
         class: Proximum\Vimeet\Domain\Tip\ConfirmationPhoneTipChecker
         arguments:
             - '@repository.tip.repository'
+
+    domain.sheet.phone.validation_calculator:
+        class: Proximum\Vimeet\Domain\Sheet\Phone\ValidationCalculator
+        arguments:
+            - '@repository.tip.repository'
+            - '@domain.user_event.user_event_phone_checker'
+            - '@vimeet_infrastructure.repository.meeting_repository'
 
     #
     # Spot
