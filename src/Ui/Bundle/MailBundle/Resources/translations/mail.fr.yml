@@ -70,6 +70,8 @@ mail.sheet.invoiced.body: "Bonjour %participant%,\n\nPour faire suite à votre p
 mail.sheet.invoiced.end: "Votre facture est &eacute;galement disponible dans votre espace membre par ce lien <a href=\"%ordersLink%\" target=\"_blank\">Facture et liste des commandes</a>\n\nNous vous remercions de votre participation."
 mail.sheet.invoiced.link: 'Télécharger ma facture %invoiceNumber%'
 mail.sheet.invoiced.subject: 'Téléchargez votre facture'
+mail.sheet.print.pdf.error.subject: 'Erreur lors de la génération des PDF de fiches'
+mail.sheet.print.pdf.error.content: "Bonjour, \n\n Un problème est survenu lors de la génération du fichier pdf pour l'impression des fiches de l'événement %eventTitle%.\n\n"
 mail.sheet.print.pdf.subject: 'Génération des PDF de fiches'
 mail.sheet.print.intro: "Bonjour,\n\n Voici le PDF généré des fiches pour l'événement %eventTitle% :\n"
 mail.sheet.print.click: 'Télécharger les fiches'

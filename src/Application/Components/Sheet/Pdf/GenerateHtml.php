@@ -97,6 +97,8 @@ class GenerateHtml
      * @param string $locale
      *
      * @return string
+     *
+     * @throws \DomainException
      */
     private function generateSheetHtml(Sheet $sheet, Event $event, string $locale): string
     {
@@ -104,6 +106,10 @@ class GenerateHtml
         $templateData = $this->taggedDataFactory->buildTaggedDataViewForPrint($sheet, $locale);
         $users        = $sheet->getUsers();
         $user         = reset($users);
+
+        if ($user === false) {
+            throw new \DomainException('A sheet can not have 0 user');
+        }
 
         list ($nomenclatures, $participants, $taggedData) = $this->sheetInfosHelper->getInfos(
             $sheet,

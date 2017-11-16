@@ -164,13 +164,13 @@ class ExportHandler
         } catch (SlotNotConfiguredException $slotNotConfiguredException) {
             $errorKey = sprintf('flash.%s', $slotNotConfiguredException->getMessage());
             $this->saveErrorInPlannerJob($plannerJob, $errorKey);
-            $this->notifyError($errorKey, $event, $export, $plannerJob);
+            $this->notifyError($errorKey, $event, $export);
 
             return null;
         } catch (DayNotConfiguredException $dayNotConfiguredException) {
             $errorKey = sprintf('flash.%s', $dayNotConfiguredException->getMessage());
             $this->saveErrorInPlannerJob($plannerJob, $errorKey);
-            $this->notifyError($errorKey, $event, $export, $plannerJob);
+            $this->notifyError($errorKey, $event, $export);
 
             return null;
         }
@@ -194,7 +194,7 @@ class ExportHandler
             } catch (CallPlannerException $callPlannerException) {
                 $errorKey = sprintf('flash.%s', $callPlannerException->getMessage());
                 $this->saveErrorInPlannerJob($plannerJob, $errorKey);
-                $this->notifyError($errorKey, $event, $export, $plannerJob);
+                $this->notifyError($errorKey, $event, $export);
             }
         }
 

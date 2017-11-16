@@ -1,0 +1,13 @@
+services:
+    application.third_party.jenkins.command.sheet.print_pdf_callback_handler:
+        class: Proximum\Vimeet\Application\ThirdParty\Jenkins\Command\Sheet\PrintPdfCallbackHandler
+        arguments:
+            - '@adapter.local_file_storage'
+            - '@vimeet_infrastructure.repository.event_repository'
+            - '@repository.file_repository'
+            - '@adapter.mailer_adapter'
+            - '%mailer_sender%'
+            - '%jenkins_phantomjs_sheet_pdf_print_build_name%'
+            - '@datetime'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\ThirdParty\Jenkins\Command\Sheet\PrintPdfCallback }

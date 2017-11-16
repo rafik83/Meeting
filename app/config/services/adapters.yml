@@ -1,3 +1,10 @@
 services:
     adapter.http_adapter:
         class: Proximum\Vimeet\Infrastructure\Adapter\HttpAdapter
+
+    adapter.third_party.jenkins.build_creator_adapter:
+        class: Proximum\Vimeet\Infrastructure\Adapter\ThirdParty\Jenkins\BuildCreatorAdapter
+        arguments:
+            - '%jenkins_command%'
+            - '%jenkins_user%'
+            - '%jenkins_password%'
