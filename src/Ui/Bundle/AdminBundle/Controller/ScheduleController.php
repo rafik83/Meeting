@@ -10,7 +10,6 @@
 
 namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller;
 
-use Proximum\Vimeet\Application\Command\Event\Day\Update;
 use Proximum\Vimeet\Application\Command\MeetingSlot\Lock;
 use Proximum\Vimeet\Application\Command\MeetingSlot\Remove;
 use Proximum\Vimeet\Application\Command\MeetingSlot\Unlock;
@@ -19,7 +18,6 @@ use Proximum\Vimeet\Application\Exception\Slot\IsNotAllowedToRemoveSlotException
 use Proximum\Vimeet\Application\Query\Schedule\SlotViewQuery;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\MeetingSlot;
-use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Event\Day\UpdateType;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Schedule\ConfigureType;
 use Proximum\Vimeet\Ui\Flash\TranschoiceMessage;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -154,36 +152,5 @@ class ScheduleController extends Controller
         }
 
         return $this->redirectToRoute('admin_schedule_slots', ['event' => $meetingSlot->getEvent()->getId()]);
-    }
-
-    /**
-     * @param Request $request
-     * @param Event   $event
-     *
-     * @return RedirectResponse|Response
-     */
-    public function dayAction(Request $request, Event $event)
-    {
-        $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
-
-        $update = new Update($event);
-        $form   = $this->createForm(UpdateType::class, $update, [
-            'event'  => $event,
-            'submit' => true,
-        ]);
-
-        if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
-            $this->get('tactician.commandbus')->handle($update);
-            $this->addFlash('success', 'flash.schedule.days.success');
-
-            return $this->redirectToRoute('admin_schedule_slots', [
-                'event' => $event->getId(),
-            ]);
-        }
-
-        return $this->render('AdminBundle:Schedule:day.html.twig', [
-            'event' => $event,
-            'form'  => $form->createView(),
-        ]);
     }
 }

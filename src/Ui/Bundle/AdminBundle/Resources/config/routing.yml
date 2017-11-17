@@ -1131,7 +1131,7 @@ admin_schedule_slot_remove:
 
 admin_schedule_days:
     path: /event/{event}/schedule/days
-    defaults: { _controller: AdminBundle:Schedule:day }
+    defaults: { _controller: AdminBundle:Schedule/Day:day }
     methods: [GET, POST]
     requirements:
         event: \d+

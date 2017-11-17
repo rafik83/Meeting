@@ -1611,6 +1611,7 @@ services:
         class: Proximum\Vimeet\Application\Command\Event\Day\UpdateHandler
         arguments:
             - '@repository.event.day_repository'
+            - '@vimeet_infrastructure.repository.meeting_slot_repository'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Event\Day\Update }
     command.unavailability.category.create_handler:
