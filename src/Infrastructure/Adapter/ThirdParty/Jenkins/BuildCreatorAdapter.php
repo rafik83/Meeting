@@ -56,10 +56,15 @@ class BuildCreatorAdapter implements BuildCreatorInterface
         $output = [];
         $result = 0;
 
-        $command = str_replace('%buildName%', $buildName, $this->jenkinsCommand);
-        $command = str_replace('%jenkinsUser%', $this->jenkinsUser, $command);
-        $command = str_replace('%jenkinsPassword%', $this->jenkinsPassword, $command);
-        $command = str_replace('%jenkinsParameters%', json_encode($argumentsEncoded), $command);
+        $command = strtr(
+            $this->jenkinsCommand,
+            [
+                '%buildName%' => $buildName,
+                '%jenkinsUser%' => $this->jenkinsUser,
+                '%jenkinsPassword%' => $this->jenkinsPassword,
+                '%jenkinsParameters%' => json_encode($argumentsEncoded),
+            ]
+        );
 
         exec($command .' 2>&1', $output, $result);
 
