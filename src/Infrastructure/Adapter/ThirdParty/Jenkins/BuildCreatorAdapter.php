@@ -12,6 +12,7 @@ namespace Proximum\Vimeet\Infrastructure\Adapter\ThirdParty\Jenkins;
 
 use Proximum\Vimeet\Application\Adapter\ThirdParty\Jenkins\BuildCreatorInterface;
 use Proximum\Vimeet\Application\ThirdParty\Jenkins\Exception\BuildCreationFailedException;
+use Proximum\Vimeet\Infrastructure\Adapter\ExecAdapter;
 
 class BuildCreatorAdapter implements BuildCreatorInterface
 {
@@ -24,16 +25,22 @@ class BuildCreatorAdapter implements BuildCreatorInterface
     /** @var string */
     private $jenkinsPassword;
 
+    /** @var ExecAdapter */
+    private $execAdapter;
+
     /**
-     * @param string $jenkinsCommand
-     * @param string $jenkinsUser
-     * @param string $jenkinsPassword
+     * @param ExecAdapter $execAdapter
+     * @param string      $jenkinsCommand
+     * @param string      $jenkinsUser
+     * @param string      $jenkinsPassword
      */
     public function __construct(
+        ExecAdapter $execAdapter,
         string $jenkinsCommand,
         string $jenkinsUser,
         string $jenkinsPassword
     ) {
+        $this->execAdapter     = $execAdapter;
         $this->jenkinsCommand  = $jenkinsCommand;
         $this->jenkinsUser     = $jenkinsUser;
         $this->jenkinsPassword = $jenkinsPassword;
@@ -66,7 +73,7 @@ class BuildCreatorAdapter implements BuildCreatorInterface
             ]
         );
 
-        exec($command .' 2>&1', $output, $result);
+        $this->execAdapter->exec($command .' 2>&1', $output, $result);
 
         if ($result > 0) {
             throw new BuildCreationFailedException();
