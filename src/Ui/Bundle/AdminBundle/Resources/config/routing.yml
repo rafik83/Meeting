@@ -1103,27 +1103,27 @@ admin_schedule_slots:
         event: \d+
 admin_schedule_slots_generate:
     path: /event/{event}/schedule/slots/generate
-    defaults: { _controller: AdminBundle:Schedule:generate }
+    defaults: { _controller: AdminBundle:Schedule/Slot:generate }
     methods: [GET, POST]
     requirements:
         event: \d+
 admin_schedule_slot_lock:
     path: /event/{event}/schedule/slot/{meetingSlot}/lock
-    defaults: { _controller: AdminBundle:Schedule:lock }
+    defaults: { _controller: AdminBundle:Schedule/Slot:lock }
     methods: [GET, POST]
     requirements:
         event: \d+
         meetingSlot: \d+
 admin_schedule_slot_unlock:
     path: /event/{event}/schedule/slot/{meetingSlot}/unlock
-    defaults: { _controller: AdminBundle:Schedule:unlock }
+    defaults: { _controller: AdminBundle:Schedule/Slot:unlock }
     methods: [GET, POST]
     requirements:
         event: \d+
         meetingSlot: \d+
 admin_schedule_slot_remove:
     path: /event/{event}/schedule/slot/{meetingSlot}/remove
-    defaults: { _controller: AdminBundle:Schedule:remove }
+    defaults: { _controller: AdminBundle:Schedule/Slot:remove }
     methods: [DELETE]
     requirements:
         event: \d+

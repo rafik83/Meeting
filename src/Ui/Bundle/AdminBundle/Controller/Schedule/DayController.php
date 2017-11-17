@@ -28,7 +28,7 @@ class DayController extends Controller
      *
      * @return RedirectResponse|Response
      */
-    public function dayAction(Request $request, Event $event)
+    public function dayAction(Request $request, Event $event): Response
     {
         $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
 
