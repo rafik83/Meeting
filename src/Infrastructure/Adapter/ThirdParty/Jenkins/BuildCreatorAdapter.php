@@ -40,12 +40,6 @@ class BuildCreatorAdapter implements BuildCreatorInterface
     }
 
     /**
-     * @param string $buildName
-     * @param array  $arguments
-     *
-     * @return string|null
-     */
-    /**
      * {@inheritdoc}
      */
     public function create(string $buildName, array $arguments = []): string
