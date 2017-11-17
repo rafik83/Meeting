@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "81bf0723c98d7a3f97f9cdd87cc4788e",
+    "content-hash": "c862909146ddec6c8bf3b89213c460aa",
     "packages": [
         {
             "name": "behat/behat",
@@ -5470,16 +5470,16 @@
         },
         {
             "name": "symfony/symfony",
-            "version": "v3.3.12",
+            "version": "v3.3.13",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/symfony.git",
-                "reference": "1452970fc29131776505f684bd81d7a33cbaada4"
+                "reference": "9b0226340705f75fd0cebd220746a36050ead8a9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/symfony/zipball/1452970fc29131776505f684bd81d7a33cbaada4",
-                "reference": "1452970fc29131776505f684bd81d7a33cbaada4",
+                "url": "https://api.github.com/repos/symfony/symfony/zipball/9b0226340705f75fd0cebd220746a36050ead8a9",
+                "reference": "9b0226340705f75fd0cebd220746a36050ead8a9",
                 "shasum": ""
             },
             "require": {
@@ -5620,7 +5620,7 @@
             "keywords": [
                 "framework"
             ],
-            "time": "2017-11-13T19:37:31+00:00"
+            "time": "2017-11-16T18:15:01+00:00"
         },
         {
             "name": "tilleuls/ovh-bundle",
