@@ -50,20 +50,22 @@ class BuildCreatorAdapter implements BuildCreatorInterface
      */
     public function create(string $buildName, array $arguments = []): string
     {
-        $argumentsEncoded = array_map(function($key, $value) {
-            return [
+        $argumentsEncoded = [];
+
+        foreach ($arguments as $key => $value) {
+            $argumentsEncoded[] = [
                 'NAME' => $key,
                 'VALUE' => $value,
             ];
-        }, $arguments);
+        }
 
         $output = [];
         $result = 0;
 
-        $command = str_replace('%%buildName%%', $buildName, $this->jenkinsCommand);
-        $command = str_replace('%%jenkinsUser%%', $this->jenkinsUser, $command);
-        $command = str_replace('%%jenkinsPassword%%', $this->jenkinsPassword, $command);
-        $command = str_replace('%%jenkinsParameters%%', json_encode($argumentsEncoded), $command);
+        $command = str_replace('%buildName%', $buildName, $this->jenkinsCommand);
+        $command = str_replace('%jenkinsUser%', $this->jenkinsUser, $command);
+        $command = str_replace('%jenkinsPassword%', $this->jenkinsPassword, $command);
+        $command = str_replace('%jenkinsParameters%', json_encode($argumentsEncoded), $command);
 
         exec($command .' 2>&1', $output, $result);
 
