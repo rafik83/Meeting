@@ -25,7 +25,6 @@ use Proximum\Vimeet\Domain\Time\TimeOverlap;
 
 class DayViewQueryHandler
 {
-
     /** @var HappeningParticipationViewQueryHandler */
     private $happeningHandler;
 
@@ -76,7 +75,7 @@ class DayViewQueryHandler
         $meetings         = [];
 
         foreach ($query->happenings as $happening) {
-            if (TimeOverlap::contain($happening->getHappening(), $query->day)) {
+            if (TimeOverlap::contains($happening->getHappening(), $query->day)) {
                 $happeningViews[] = $this->happeningHandler->handle(
                     new HappeningParticipationViewQuery(
                         $happening,
@@ -87,7 +86,7 @@ class DayViewQueryHandler
         }
 
         foreach ($query->unavailabilities as $unavailability) {
-            if (TimeOverlap::contain($unavailability, $query->day)) {
+            if (TimeOverlap::contains($unavailability, $query->day)) {
                 $unavailabilities[] = $this->unavailabilityHandler->handle(
                     new UnavailabilityViewQuery($unavailability)
                 );
@@ -95,7 +94,7 @@ class DayViewQueryHandler
         }
 
         foreach ($query->masses as $mass) {
-            if (TimeOverlap::contain($mass, $query->day)) {
+            if (TimeOverlap::contains($mass, $query->day)) {
                 $masses[] = $this->massHandler->handle(
                     new MassViewQuery(
                         $mass,
@@ -106,7 +105,7 @@ class DayViewQueryHandler
         }
 
         foreach ($query->meetings as $meeting) {
-            if (TimeOverlap::contain($meeting->getSlot(), $query->day)) {
+            if (TimeOverlap::contains($meeting->getSlot(), $query->day)) {
                 $meetings[] = $this->meetingHandler->handle(
                     new MeetingViewQuery(
                         $meeting,
@@ -117,7 +116,7 @@ class DayViewQueryHandler
         }
 
         foreach ($query->assignments as $assignment) {
-            if (TimeOverlap::contain($assignment, $query->day)) {
+            if (TimeOverlap::contains($assignment, $query->day)) {
                 $assignments[] = $this->assignmentHandler->handle(
                     new AssignmentViewQuery(
                         $assignment,

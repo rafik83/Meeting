@@ -83,7 +83,7 @@ class DayViewQueryHandler
 
         if ($query->currentSheet->attend()) {
             foreach ($query->happenings as $happening) {
-                if (TimeOverlap::contain($happening->getHappening(), $query->day)) {
+                if (TimeOverlap::contains($happening->getHappening(), $query->day)) {
                     $happeningViews[] = $this->happeningHandler->handle(
                         new HappeningViewQuery(
                             $happening->getHappening(),
@@ -95,7 +95,7 @@ class DayViewQueryHandler
             }
 
             foreach ($query->unavailabilities as $unavailability) {
-                if (TimeOverlap::contain($unavailability, $query->day)) {
+                if (TimeOverlap::contains($unavailability, $query->day)) {
                     $unavailabilities[] = $this->unavailabilityHandler->handle(
                         new UnavailabilityViewQuery($unavailability, $query->event)
                     );
@@ -103,7 +103,7 @@ class DayViewQueryHandler
             }
 
             foreach ($query->masses as $mass) {
-                if (TimeOverlap::contain($mass, $query->day)) {
+                if (TimeOverlap::contains($mass, $query->day)) {
                     $massView = $this->massHandler->handle(
                         new MassUnavailabilityViewQuery(
                             $mass,
@@ -120,7 +120,7 @@ class DayViewQueryHandler
             }
 
             foreach ($query->meetings as $meeting) {
-                if (TimeOverlap::contain($meeting->getSlot(), $query->day)) {
+                if (TimeOverlap::contains($meeting->getSlot(), $query->day)) {
                     $meetings[] = $this->meetingHandler->handle(
                         new MeetingViewQuery(
                             $meeting,

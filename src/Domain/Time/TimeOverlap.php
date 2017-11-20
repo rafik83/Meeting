@@ -18,7 +18,7 @@ class TimeOverlap
      *
      * @return bool
      */
-    public static function contain(TimeRangeInterface $needle, TimeRangeInterface $haystack)
+    public static function contains(TimeRangeInterface $needle, TimeRangeInterface $haystack)
     {
         return $needle->getBegin() >= $haystack->getBegin() && $needle->getEnd() <= $haystack->getEnd();
     }

@@ -26,7 +26,7 @@ class TimeOverlapTest extends TestCase
         $haystack->getBegin()->willReturn(new \DateTime('2017-11-20 08:00:00'));
         $haystack->getEnd()->willReturn(new \DateTime('2017-11-20 20:00:00'));
 
-        $this->assertTrue(TimeOverlap::contain($needle->reveal(), $haystack->reveal()));
+        $this->assertTrue(TimeOverlap::contains($needle->reveal(), $haystack->reveal()));
     }
 
     public function testContainWithNeedleAndHaystackAreEquals()
@@ -39,7 +39,7 @@ class TimeOverlapTest extends TestCase
         $haystack->getBegin()->willReturn(new \DateTime('2017-11-20 08:00:00'));
         $haystack->getEnd()->willReturn(new \DateTime('2017-11-20 20:00:00'));
 
-        $this->assertTrue(TimeOverlap::contain($needle->reveal(), $haystack->reveal()));
+        $this->assertTrue(TimeOverlap::contains($needle->reveal(), $haystack->reveal()));
     }
 
     public function testNotContain()
@@ -52,6 +52,6 @@ class TimeOverlapTest extends TestCase
         $haystack->getBegin()->willReturn(new \DateTime('2017-11-20 08:00:00'));
         $haystack->getEnd()->willReturn(new \DateTime('2017-11-20 20:00:00'));
 
-        $this->assertFalse(TimeOverlap::contain($needle->reveal(), $haystack->reveal()));
+        $this->assertFalse(TimeOverlap::contains($needle->reveal(), $haystack->reveal()));
     }
 }
