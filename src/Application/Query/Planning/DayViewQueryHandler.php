@@ -21,6 +21,7 @@ use Proximum\Vimeet\Application\Query\Planning\Day\MeetingViewQueryHandler;
 use Proximum\Vimeet\Application\Query\Planning\Day\UnavailabilityViewQuery;
 use Proximum\Vimeet\Application\Query\Planning\Day\UnavailabilityViewQueryHandler;
 use Proximum\Vimeet\Application\View\Planning\DayView;
+use Proximum\Vimeet\Domain\Time\TimeOverlap;
 
 class DayViewQueryHandler
 {
@@ -75,7 +76,7 @@ class DayViewQueryHandler
         $meetings         = [];
 
         foreach ($query->happenings as $happening) {
-            if ($query->day->contain($happening->getHappening())) {
+            if (TimeOverlap::contain($happening->getHappening(), $query->day)) {
                 $happeningViews[] = $this->happeningHandler->handle(
                     new HappeningParticipationViewQuery(
                         $happening,
@@ -86,7 +87,7 @@ class DayViewQueryHandler
         }
 
         foreach ($query->unavailabilities as $unavailability) {
-            if ($query->day->contain($unavailability)) {
+            if (TimeOverlap::contain($unavailability, $query->day)) {
                 $unavailabilities[] = $this->unavailabilityHandler->handle(
                     new UnavailabilityViewQuery($unavailability)
                 );
@@ -94,7 +95,7 @@ class DayViewQueryHandler
         }
 
         foreach ($query->masses as $mass) {
-            if ($query->day->contain($mass)) {
+            if (TimeOverlap::contain($mass, $query->day)) {
                 $masses[] = $this->massHandler->handle(
                     new MassViewQuery(
                         $mass,
@@ -105,7 +106,7 @@ class DayViewQueryHandler
         }
 
         foreach ($query->meetings as $meeting) {
-            if ($query->day->contain($meeting->getSlot())) {
+            if (TimeOverlap::contain($meeting->getSlot(), $query->day)) {
                 $meetings[] = $this->meetingHandler->handle(
                     new MeetingViewQuery(
                         $meeting,
@@ -116,7 +117,7 @@ class DayViewQueryHandler
         }
 
         foreach ($query->assignments as $assignment) {
-            if ($query->day->contain($assignment)) {
+            if (TimeOverlap::contain($assignment, $query->day)) {
                 $assignments[] = $this->assignmentHandler->handle(
                     new AssignmentViewQuery(
                         $assignment,

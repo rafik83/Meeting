@@ -14,6 +14,7 @@ use Proximum\Vimeet\Application\Query\Agenda\AvailableSheets\AvailableSlotsByPar
 use Proximum\Vimeet\Application\Query\Agenda\AvailableSheets\AvailableSlotsByParticipantAndDayQueryHandler;
 use Proximum\Vimeet\Application\Components\Agenda\AgendaCollisionManager;
 use Proximum\Vimeet\Application\View\Agenda\DayView;
+use Proximum\Vimeet\Domain\Time\TimeOverlap;
 
 class DayViewQueryHandler
 {
@@ -82,7 +83,7 @@ class DayViewQueryHandler
 
         if ($query->currentSheet->attend()) {
             foreach ($query->happenings as $happening) {
-                if ($query->day->contain($happening->getHappening())) {
+                if (TimeOverlap::contain($happening->getHappening(), $query->day)) {
                     $happeningViews[] = $this->happeningHandler->handle(
                         new HappeningViewQuery(
                             $happening->getHappening(),
@@ -94,7 +95,7 @@ class DayViewQueryHandler
             }
 
             foreach ($query->unavailabilities as $unavailability) {
-                if ($query->day->contain($unavailability)) {
+                if (TimeOverlap::contain($unavailability, $query->day)) {
                     $unavailabilities[] = $this->unavailabilityHandler->handle(
                         new UnavailabilityViewQuery($unavailability, $query->event)
                     );
@@ -102,7 +103,7 @@ class DayViewQueryHandler
             }
 
             foreach ($query->masses as $mass) {
-                if ($query->day->contain($mass)) {
+                if (TimeOverlap::contain($mass, $query->day)) {
                     $massView = $this->massHandler->handle(
                         new MassUnavailabilityViewQuery(
                             $mass,
@@ -119,7 +120,7 @@ class DayViewQueryHandler
             }
 
             foreach ($query->meetings as $meeting) {
-                if ($query->day->contain($meeting->getSlot())) {
+                if (TimeOverlap::contain($meeting->getSlot(), $query->day)) {
                     $meetings[] = $this->meetingHandler->handle(
                         new MeetingViewQuery(
                             $meeting,
