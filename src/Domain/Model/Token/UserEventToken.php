@@ -37,7 +37,7 @@ class UserEventToken
     /** @var bool */
     private $confirmed;
 
-    /** @var \DateTimeInterface */
+    /** @var \DateTimeInterface|null */
     private $confirmedAt;
 
     /**
@@ -128,6 +128,12 @@ class UserEventToken
     {
         $this->confirmed   = true;
         $this->confirmedAt = $confirmedAt;
+    }
+
+    public function unConfirm()
+    {
+        $this->confirmed = false;
+        $this->confirmedAt = null;
     }
 
     /**
