@@ -54,6 +54,7 @@
                 {% endif %}
             {% endfor %}
         {% endif %}
+
         {% if searchForm.type is defined %}
             {% set totalType = 0 %}
             {% for type in typeViews %}
@@ -70,6 +71,7 @@
                     {% set numberOfTypeSelected = numberOfTypeSelected + 1 %}
                 {% endif %}
             {% endfor %}
+
             <a href="#" class="catalog-mobile-menu-button btn btn-primary btn-block" data-catalog-mobile-menu-button-action="catalog-mobile-menu-button-action-type-filter">
                 {% if typeSelected != null and numberOfDifferentType != numberOfTypeSelected %}
                     <span>{{ typeSelected.vars.label|trans({}, typeSelected.vars.translation_domain) }}</span>
@@ -87,6 +89,7 @@
             </a>
         {% endif %}
     </div>
+
     <div class="catalog-mobile-menu-container catalog-mobile-menu-filters">
         <div class="catalog-mobile-menu-filters-list">
             {% if searchForm.content is defined %}
@@ -97,6 +100,7 @@
                     }, false) }}
                 </div>
             {% endif %}
+
             {% if searchForm.availableSlot is defined %}
                 <div class="filter-element">
                     {{ include('EventBundle:Catalog:Partial/Mobile/available_slot_filter_mobile.html.twig', {
@@ -104,6 +108,7 @@
                     }, false) }}
                 </div>
             {% endif %}
+
             {% if searchForm.type is defined %}
                 <div class="filter-element">
                     {{ include('EventBundle:Catalog:Partial/Mobile/type_filters_mobile.html.twig', {
