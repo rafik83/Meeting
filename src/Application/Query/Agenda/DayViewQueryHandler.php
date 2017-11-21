@@ -95,7 +95,7 @@ class DayViewQueryHandler
             }
 
             foreach ($query->unavailabilities as $unavailability) {
-                if (TimeOverlap::contains($unavailability, $query->day)) {
+                if (TimeOverlap::overlap($unavailability, $query->day)) {
                     $unavailabilities[] = $this->unavailabilityHandler->handle(
                         new UnavailabilityViewQuery($unavailability, $query->event)
                     );
