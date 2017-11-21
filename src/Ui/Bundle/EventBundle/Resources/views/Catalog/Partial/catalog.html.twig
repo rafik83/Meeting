@@ -23,6 +23,17 @@
     </div>
 {% endif %}
 
+{% set participantTypesOrCategoriesForm = null %}
+{% set participantTypesOrCategoriesViews = null %}
+
+{% if searchForm.type is defined %}
+    {% set participantTypesOrCategoriesForm = searchForm.type %}
+    {% set participantTypesOrCategoriesViews = typeViews %}
+{% elseif searchForm.categories is defined %}
+    {% set participantTypesOrCategoriesForm = searchForm.categories %}
+    {% set participantTypesOrCategoriesViews = categoryViews %}
+{% endif %}
+
 <div class="hidden" data-catalog-mobile-menu="catalog-mobile-menu">
 {% if searchForm.availableSlot is defined or searchForm.type is defined or searchForm.content is defined %}
     <div class="catalog-mobile-menu-summary catalog-mobile-menu-container">
@@ -55,28 +66,28 @@
             {% endfor %}
         {% endif %}
 
-        {% if searchForm.type is defined %}
+        {% if participantTypesOrCategoriesForm is not null %}
             {% set totalType = 0 %}
-            {% for type in typeViews %}
-                {% set totalType = totalType + type.count %}
+            {% for typeOrCategory in participantTypesOrCategoriesViews %}
+                {% set totalType = totalType + typeOrCategory.count %}
             {% endfor %}
 
-            {% set numberOfDifferentType = searchForm.type.children|length %}
+            {% set numberOfDifferentType = participantTypesOrCategoriesForm.children|length %}
             {% set numberOfTypeSelected = 0 %}
-            {% set typeSelected = null %}
+            {% set typeOrCategorySelected = null %}
 
-            {% for child in searchForm.type.children %}
+            {% for child in participantTypesOrCategoriesForm.children %}
                 {% if child.vars.data %}
-                    {% set typeSelected = child %}
+                    {% set typeOrCategorySelected = child %}
                     {% set numberOfTypeSelected = numberOfTypeSelected + 1 %}
                 {% endif %}
             {% endfor %}
 
             <a href="#" class="catalog-mobile-menu-button btn btn-primary btn-block" data-catalog-mobile-menu-button-action="catalog-mobile-menu-button-action-type-filter">
-                {% if typeSelected != null and numberOfDifferentType != numberOfTypeSelected %}
-                    <span>{{ typeSelected.vars.label|trans({}, typeSelected.vars.translation_domain) }}</span>
+                {% if typeOrCategorySelected != null and numberOfDifferentType != numberOfTypeSelected %}
+                    <span>{{ typeOrCategorySelected.vars.label|trans({}, typeOrCategorySelected.vars.translation_domain) }}</span>
                     <span class="button-count">
-                        ({{ typeViews[typeSelected.vars.value].count }})
+                        ({{ participantTypesOrCategoriesViews[typeOrCategorySelected.vars.value].count }})
                         <i class="glyphicon glyphicon-chevron-down"></i>
                     </span>
                 {% else %}
@@ -109,11 +120,11 @@
                 </div>
             {% endif %}
 
-            {% if searchForm.type is defined %}
+            {% if participantTypesOrCategoriesForm is not null %}
                 <div class="filter-element">
                     {{ include('EventBundle:Catalog:Partial/Mobile/type_filters_mobile.html.twig', {
-                        form: searchForm.type,
-                        choices: typeViews,
+                        form: participantTypesOrCategoriesForm,
+                        choices: participantTypesOrCategoriesViews,
                         totalType: totalType,
                         numberOfDifferentType: numberOfDifferentType,
                         numberOfTypeSelected: numberOfTypeSelected,
