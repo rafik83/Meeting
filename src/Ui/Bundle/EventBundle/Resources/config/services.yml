@@ -626,3 +626,12 @@ services:
         arguments:
             - '@security.validate_mobile_process_access_checker'
             - '@template.participant_info_guesser'
+
+    handler.unavailability.create_form_handler:
+        class: Proximum\Vimeet\Ui\Bundle\EventBundle\Handler\Unavailability\CreateFormHandler
+        arguments:
+            - '@form.factory'
+            - '@vimeet_infrastructure.adapter.translator_adapter'
+            - '@tactician.commandbus'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Ui\Bundle\EventBundle\Handler\Unavailability\CreateForm }

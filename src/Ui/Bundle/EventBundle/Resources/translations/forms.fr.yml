@@ -143,5 +143,6 @@ form.sheet_media_data.children.type.document: Document
 form.sheet_media_data.children.type.video: Vidéo
 form.user_event_phone_validate_code.children.code.label: 'Code de confirmation reçu'
 form.user_event_phone_validate_code.children.confirm.label: Confirmer
+form.user_availability_confirmation.children.confirm.label: 'Confirmer vos disponbilités'
 gender.man: Monsieur
 gender.woman: Madame

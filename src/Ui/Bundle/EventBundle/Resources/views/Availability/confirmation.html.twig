@@ -1,0 +1,16 @@
+{% extends 'EventBundle::base.html.twig' %}
+
+{% block title 'availability.confirmation.title'|trans %}
+
+{% block content %}
+    <section class="main text-center">
+        <p>{{ 'availability.confirmation.explanation.title'|trans }}</p>
+        <div class="col-md-offset-2 col-md-4 text-center">
+            <a href="{{ path('event_unavailability_create_from_confirmation', {'sheet': sheet.id}) }}" class="btn btn-gray" data-toggle="modal" data-target="#unavailability-modal"><i class="icon-Verouiller_1"></i>{{ 'availability.confirmation.action.add_unavailability'|trans }}</a>
+        </div>
+        <div class="col-md-4 text-center">
+            {{ form(form) }}
+        </div>
+    </section>
+    {{ include('EventBundle:Agenda:modal.html.twig') }}
+{% endblock %}
