@@ -145,20 +145,4 @@ class Unavailability implements TimeRangeInterface
         $this->begin = $begin;
         $this->end   = $end;
     }
-
-    /**
-     * @param \DateTimeInterface $begin
-     */
-    public function setBegin(\DateTimeInterface $begin)
-    {
-        $this->begin = $begin;
-    }
-
-    /**
-     * @param \DateTimeInterface $end
-     */
-    public function setEnd(\DateTimeInterface $end)
-    {
-        $this->end = $end;
-    }
 }
