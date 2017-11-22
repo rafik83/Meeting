@@ -2,8 +2,8 @@
 {% if agendaConfirmationStatus.canBeEdited %}
     <a
         class="label label-{{ agendaConfirmationStatus.indicator }}"
-        {% if agendaConfirmationStatus.hasToolTip %}
-            data-toggle="tooltip" data-placement="top" title="{{ agendaConfirmationStatus.tooltip|trans }}"
+        {% if agendaConfirmationStatus.hasExtraMessage %}
+            data-toggle="tooltip" data-placement="top" title="{{ agendaConfirmationStatus.extraMessage|trans }}"
         {% endif %}
         href="{{ path('admin_sheet_participant_update_agenda_confirmation', { 'event': event.id, 'sheet': sheet.id, 'participant': participant.id }) }}"
         data-toggle="modal"
@@ -15,8 +15,8 @@
 {% else %}
 <span
     class="label label-{{ agendaConfirmationStatus.indicator }}"
-    {% if agendaConfirmationStatus.hasToolTip %}
-        data-toggle="tooltip" data-placement="top" title="{{ agendaConfirmationStatus.tooltip|trans }}"
+    {% if agendaConfirmationStatus.hasExtraMessage %}
+        data-toggle="tooltip" data-placement="top" title="{{ agendaConfirmationStatus.extraMessage|trans }}"
     {% endif %}
 >
     {{ agendaConfirmationStatus.message|trans }}

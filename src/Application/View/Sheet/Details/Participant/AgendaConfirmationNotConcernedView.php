@@ -21,7 +21,7 @@ class AgendaConfirmationNotConcernedView extends AgendaConfirmationStatusView
     /**
      * {@inheritdoc}
      */
-    public function hasToolTip(): bool
+    public function hasExtraMessage(): bool
     {
         return true;
     }
@@ -29,7 +29,7 @@ class AgendaConfirmationNotConcernedView extends AgendaConfirmationStatusView
     /**
      * {@inheritdoc}
      */
-    public function getToolTip(): string
+    public function getExtraMessage(): string
     {
         return self::TRANS_KEY . 'tooltip.not_concerned';
     }
