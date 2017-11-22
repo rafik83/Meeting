@@ -5822,3 +5822,8 @@ services:
         arguments:
             - '@datetime'
             - '%feature_dday_enabled%'
+
+    domain.event.day.event_over:
+        class: Proximum\Vimeet\Domain\Event\Day\EventOver
+        arguments:
+            - '@datetime'
