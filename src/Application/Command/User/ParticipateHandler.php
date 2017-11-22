@@ -23,6 +23,7 @@ use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Repository\ParticipantRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
+use Proximum\Vimeet\Domain\Template\AbstractChild;
 use Proximum\Vimeet\Domain\UserEvent\TypeResolver;
 use Proximum\Vimeet\Infrastructure\Adapter\DelayedEventDispatcher;
 
@@ -105,7 +106,9 @@ class ParticipateHandler
 
         // Prefill sheet data from last user participation
         if (null !== $lastUserParticipation) {
-            $sheet->setData($lastUserParticipation->getSheet()->getData());
+            $sheet->setData(
+                $this->getFilteredSheetData($lastUserParticipation->getSheet()->getData())
+            );
         }
 
         $this->typeResolver->resolve($participate->user, $participate->event, $participate->type);
@@ -170,5 +173,22 @@ class ParticipateHandler
                 $participate->user
             )
         );
+    }
+
+    /**
+     * @param array $sheetData
+     *
+     * @return array
+     */
+    private function getFilteredSheetData(array $sheetData): array
+    {
+        foreach ($sheetData as $key => $datum) {
+            $sheetData[$key] = array_filter($datum, function($element) {
+                return $element !== AbstractChild::TEMPLATE_OBJECT_TYPE_IMAGE
+                       && $element !== AbstractChild::TEMPLATE_OBJECT_TYPE_MEDIA;
+            }, ARRAY_FILTER_USE_KEY);
+        }
+
+        return $sheetData;
     }
 }

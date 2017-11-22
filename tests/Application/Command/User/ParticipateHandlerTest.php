@@ -215,10 +215,9 @@ class ParticipateHandlerTest extends TestCase
                 '1efb9cbb' => ['telephone' => 'phone'],
                 '3b759fbb' => ['telephone' => 'mobile'],
             ],
-            $owner = true,
-            true
+            $owner = true
         );
-        $expectedParticipant->getSheet()->setData(['user data']);
+        $expectedParticipant->getSheet()->setData([['user data']]);
 
         $lastEventParticipation
             ->getLastEventParticipation($user, $event)
