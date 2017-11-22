@@ -72,8 +72,8 @@ class AvailabilityConfirmationCheckerHandler
     public function handle(AvailabilityConfirmationChecker $command): AvailabilityConfirmationCheckerView
     {
         if (false === (bool) $this->featureAvailabilityConfirmationActivated
-            || $this->eventOver->isEventOver($command->event)
-            || !$this->agendaAccessChecker->allowedToAccess($command->event)
+            || true === $this->eventOver->isEventOver($command->event)
+            || false === $this->agendaAccessChecker->allowedToAccess($command->event)
         ) {
             return new AvailabilityConfirmationCheckerView(AvailabilityConfirmationCheckerView::ALLOWED_TO_ACCESS, null);
         }
