@@ -1,0 +1,90 @@
+<?php
+
+/*
+ * This file is part of the Proximum Vimeet project.
+ *
+ * Copyright (C) Proximum
+ *
+ * @author Elao <contact@elao.com>
+ */
+
+namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Handler\Catalog;
+
+use Proximum\Vimeet\Application\Adapter\RouterInterface;
+use Proximum\Vimeet\Domain\Event\Day\EventOver;
+use Proximum\Vimeet\Domain\KeyDates\Checker\AgendaAccessChecker;
+use Proximum\Vimeet\Domain\Model\User\Event\ExtraData;
+use Proximum\Vimeet\Domain\Repository\User\Event\ExtraDataRepositoryInterface;
+use Proximum\Vimeet\Domain\User\Event\ExtraData\Type;
+use Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface;
+
+class AvailabilityConfirmationCheckerHandler
+{
+    const ROUTE_AVAILABILITY_CONFIRMATION = 'event_availability_confirmation';
+
+    /** @var ExtraDataRepositoryInterface */
+    private $extraDataRepository;
+
+    /** @var RouterInterface */
+    private $router;
+
+    /** @var FlashBagInterface */
+    private $flashBag;
+
+    /** @var EventOver */
+    private $eventOver;
+    /** @var AgendaAccessChecker */
+    private $agendaAccessChecker;
+
+    /**
+     * @param AgendaAccessChecker          $agendaAccessChecker
+     * @param EventOver                    $eventOver
+     * @param FlashBagInterface            $flashBag
+     * @param ExtraDataRepositoryInterface $extraDataRepository
+     * @param RouterInterface              $router
+     */
+    public function __construct(
+        AgendaAccessChecker $agendaAccessChecker,
+        EventOver $eventOver,
+        FlashBagInterface $flashBag,
+        ExtraDataRepositoryInterface $extraDataRepository,
+        RouterInterface $router
+    ) {
+        $this->eventOver = $eventOver;
+        $this->extraDataRepository = $extraDataRepository;
+        $this->router = $router;
+        $this->flashBag = $flashBag;
+        $this->agendaAccessChecker = $agendaAccessChecker;
+    }
+
+    /**
+     * @param AvailabilityConfirmationChecker $command
+     *
+     * @return AvailabilityConfirmationCheckerView
+     */
+    public function handle(AvailabilityConfirmationChecker $command): AvailabilityConfirmationCheckerView
+    {
+        if ($this->eventOver->isEventOver($command->event)
+            || !$this->agendaAccessChecker->allowedToAccess($command->event)
+        ) {
+            return new AvailabilityConfirmationCheckerView(AvailabilityConfirmationCheckerView::ALLOWED_TO_ACCESS, null);
+        }
+
+        $extraData = $this->extraDataRepository->getExtraDataForEventNameAndUser(
+            $command->event,
+            Type::AVAILABILITY_CONFIRMATION,
+            $command->user
+        );
+
+        if ($extraData instanceof ExtraData) {
+            return new AvailabilityConfirmationCheckerView(AvailabilityConfirmationCheckerView::ALLOWED_TO_ACCESS, null);
+        }
+
+        $this->flashBag->add($command->origin, $command->sheet->getId());
+
+        return new AvailabilityConfirmationCheckerView(
+            AvailabilityConfirmationCheckerView::REDIRECT,
+            $this->router->generate(self::ROUTE_AVAILABILITY_CONFIRMATION, ['sheet' => $command->sheet->getId()])
+        );
+    }
+}

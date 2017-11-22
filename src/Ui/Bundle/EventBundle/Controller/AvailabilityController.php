@@ -14,6 +14,7 @@ use Proximum\Vimeet\Application\Command\User\Availability\Confirmation;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Security\Voter\AgendaAccessVoter;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\User\Availability\ConfirmationType;
+use Proximum\Vimeet\Ui\Bundle\EventBundle\Handler\Catalog\AvailabilityConfirmationChecker;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\ParamConverter\EventDomain;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Security\SheetVoter;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -49,6 +50,12 @@ class AvailabilityController extends Controller
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
             $this->get('tactician.commandbus')->handle($availabilityConfirmation);
 
+            if ($this->hasFlash(AvailabilityConfirmationChecker::ORIGIN_MEETING_REQUEST_MANAGEMENT)) {
+                return $this->redirectToRoute('event_meeting_list_request', [
+                    'sheet' => $sheet->getId()
+                ]);
+            }
+
             return $this->redirectToRoute('event_catalog_index', [
                 'sheet' => $sheet->getId()
             ]);
@@ -59,5 +66,17 @@ class AvailabilityController extends Controller
             'form'  => $form->createView(),
             'sheet' => $sheet,
         ]);
+    }
+
+    /**
+     * @param string $flash
+     *
+     * @return bool
+     */
+    private function hasFlash(string $flash): bool
+    {
+        $values = $this->container->get('session')->getFlashBag()->get($flash);
+
+        return !empty($values);
     }
 }

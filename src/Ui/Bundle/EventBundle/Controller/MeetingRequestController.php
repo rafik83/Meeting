@@ -38,6 +38,7 @@ use Proximum\Vimeet\Domain\Model\MeetingSlot;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\User;
+use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Security\Voter\CatalogAccessVoter;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Meeting\Request\MeetingRequestApproveType;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Meeting\Request\MeetingRequestCancelType;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Meeting\Request\MeetingRequestCreateType;
@@ -46,6 +47,7 @@ use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Meeting\Request\MeetingReque
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Meeting\Request\SearchType;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Meeting\Request\UnApproveMeetingRequestType;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Meeting\Request\UnRefuseMeetingRequestType;
+use Proximum\Vimeet\Ui\Bundle\EventBundle\Handler\Catalog\AvailabilityConfirmationChecker;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\ParamConverter\EventDomain;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Security\SheetVoter;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -73,8 +75,23 @@ class MeetingRequestController extends Controller
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
         $this->denyAccessUnlessGranted(SheetVoter::EDIT, $sheet);
-
         $event = $eventDomain->getEvent();
+        $this->denyAccessUnlessGranted(CatalogAccessVoter::VIEW, $event);
+
+        $availabilityConfirmation = $this->get('handler.catalog.availability_confirmation_checker_handler')
+            ->handle(new AvailabilityConfirmationChecker(
+                $event,
+                $sheet,
+                $user,
+                AvailabilityConfirmationChecker::ORIGIN_MEETING_REQUEST_MANAGEMENT
+            ))
+        ;
+
+        if (!$availabilityConfirmation->isAllowedToAccess()) {
+            return $this->redirect($availabilityConfirmation->redirectRoute);
+        }
+
+
         $locale = $request->getLocale();
 
         $typeViews = $this->get('tactician.commandbus.query')->handle(new MeetingTypeViewQuery(
