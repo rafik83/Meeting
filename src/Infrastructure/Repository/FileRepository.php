@@ -54,4 +54,13 @@ class FileRepository implements FileRepositoryInterface
 
         return $queryBuilder->getQuery()->getOneOrNullResult();
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function remove(File $file)
+    {
+        $this->entityManager->remove($file);
+        $this->entityManager->flush($file);
+    }
 }

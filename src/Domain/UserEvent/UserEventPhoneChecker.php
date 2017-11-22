@@ -1,9 +1,9 @@
 <?php
 
 /*
- * This file is part of the vimeet project.
+ * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2017 vimeet
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -39,7 +39,7 @@ class UserEventPhoneChecker
      */
     public function isValidated(User $user, Event $event)
     {
-        return null !== $this->userEventPhoneRepository->findValidated($user, $event);
+        return null !== $this->getValidatedUserEventPhone($user, $event);
     }
 
     /**

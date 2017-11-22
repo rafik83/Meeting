@@ -25,6 +25,7 @@ use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\Aggregate
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\Aggregate\FullUnavailability\UsersFullUnavailabilityByEventAggregateCommand;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\Aggregate\Participant\ParticipantAssignedToRequestAggregateCommand;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\Aggregate\Sheet\AvailableSlotCalculatorCommand;
+use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\Aggregate\Sheet\Phone\PhoneValidationStatusCalculatorCommand;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\Analytic\MeetingSolution\GenerateMeetingSolutionCommand;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\Event\User\Agenda\Version\GenerateVersionsCommand;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\GenerateInvoiceCommand;
@@ -33,6 +34,7 @@ use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\Order\Exp
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\Planner\ExportPlannerCommand;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\Planner\ImportPlannerCommand;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\SendEmailingCommand;
+use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\Sheet\PrintPdfCommand;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\Sheet\Index\IndexInCatalogSheetsByEventCommand;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\Sheet\Index\IndexSheetsByRegistrationTemplateCommand;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\Sheet\Index\IndexSheetsBySheetTemplateCommand;
@@ -70,6 +72,27 @@ class JobQueueAdapter extends AbstractJobQueueAdapter implements JobQueueInterfa
                 ]
             )
         );
+
+        $this->setJob($job);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function printSheetsPdf(
+        Event $event,
+        array $sheetIds,
+        string $emailToNotify,
+        string $locale,
+        string $orderBy
+    ) {
+        $job = new Job(PrintPdfCommand::NAME, [
+            sprintf('--sheetIds=%s', implode(',', $sheetIds)),
+            sprintf('--eventId=%s', $event->getId()),
+            sprintf('--emailToNotify=%s', $emailToNotify),
+            sprintf('--locale=%s', $locale),
+            sprintf('--orderBy=%s', $orderBy)
+        ]);
 
         $this->setJob($job);
     }
@@ -247,6 +270,18 @@ class JobQueueAdapter extends AbstractJobQueueAdapter implements JobQueueInterfa
         $job = new Job(AvailableSlotCalculatorCommand::NAME, [
             sprintf('--event=%s', $event->getId())
         ]);
+        $this->setJob($job);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function aggregatePhoneValidationStatus(Event $event)
+    {
+        $job = new Job(PhoneValidationStatusCalculatorCommand::NAME, [
+            sprintf('--event=%s', $event->getId())
+        ]);
+
         $this->setJob($job);
     }
 

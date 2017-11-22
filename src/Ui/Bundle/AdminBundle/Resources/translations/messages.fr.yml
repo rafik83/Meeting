@@ -658,6 +658,7 @@ admin.sheet.batch.selection.label: 'Les <strong>%sheets%</strong> fiches de cett
 admin.sheet.batch.selectionAll.label: 'Sélectionner les <strong>%allSheets%</strong> fiches correspondantes à vos filtres.'
 admin.sheet.category: Catégorie
 admin.sheet.change.type.link: Changer
+admin.sheet.change.type.hasMeeting: 'La fiche a des RDVs et son type ne peut être changé'
 admin.sheet.change.type.title: 'Changer le type de participation'
 admin.sheet.commercialFollowUp: 'Attribuer le suivi commercial'
 admin.sheet.created_this_week: 'Inscrits cette semaine'
@@ -676,6 +677,7 @@ admin.sheet.details.completeness: 'Complétude de la fiche'
 admin.sheet.details.dashboard.title: 'Tableau de bord'
 admin.sheet.details.historic.title: Historique
 admin.sheet.details.invoices: Factures
+admin.sheet.details.meeting.meeting: 'Rendez-Vous positionnés'
 admin.sheet.details.meeting.proposition.approved: 'Propositions validées'
 admin.sheet.details.meeting.proposition.pending: 'Propositions en attente'
 admin.sheet.details.meeting.proposition.refused: 'Propositions refusées'
@@ -695,6 +697,10 @@ admin.sheet.details.participant.agenda_confirmation_not_send: 'Confirmation d''a
 admin.sheet.details.participant.agenda_confirmed: 'Agenda validé'
 admin.sheet.details.participant.agenda_not_confirmed: 'Agenda non-validé'
 admin.sheet.details.participant.email: Email
+admin.sheet.details.participant.phoneValidationStatus.title: Validation téléphone
+admin.sheet.details.participant.phoneValidationStatus.validated: Validé
+admin.sheet.details.participant.phoneValidationStatus.not_validated: Non validé
+admin.sheet.details.participant.phoneValidationStatus.not_asked: Non envoyé
 admin.sheet.details.participant.title: Participant
 admin.sheet.details.participant.visio: Visio
 admin.sheet.details.participants: Participants
@@ -735,6 +741,7 @@ admin.sheet.filter.template_filters: 'Filtres supplémentaires'
 admin.sheet.follower: 'Suivi commercial'
 admin.sheet.follower.un-assigned: 'Non assigné'
 admin.sheet.go_back_to_list: 'Retour à la liste des participations'
+admin.sheet.generate.pdf: 'Imprimer en PDF'
 admin.sheet.impersonate: Impersonnation
 admin.sheet.impersonateAs: '%adminFullname% (%adminEmail%) connecté en tant que %userEmail%'
 admin.sheet.import.button.label: Importer
@@ -820,6 +827,7 @@ admin.spot.listSpot.spot.un-visio: 'Non visio'
 admin.spot.listSpot.spot.visio: Visio
 admin.spot.listSpot.visio: Visio
 admin.spot.listSpot.yes: Oui
+admin.sheet.print: 'Impression de fiches'
 admin.spot.search_facets.link: 'Filtres catalogue'
 admin.spot.title: Lieux
 admin.spot.unavailability: 'Ajouter des indisponibilités'
@@ -833,7 +841,13 @@ admin.template.action.create: 'Créer un template'
 admin.template.action.duplicate: Dupliquer
 admin.template.action.edit: Modifier
 admin.template.action.preview: 'Gérer l''aperçu catalogue'
+admin.template.action.print: 'Template d''impression'
 admin.template.action.save: Enregistrer
+admin.template.action.update: Modifier
+admin.template.action.updating: Sauvegarde en cours...
+admin.template.blocks: 'Blocs'
+admin.template.objects: 'Objets'
+admin.template.objectsListEmpty: 'Aucun objet disponible'
 admin.template.preview.title: 'Aperçu du catalogue'
 admin.template.registration.link: 'Template d''Inscription'
 admin.template.registration.table.column.action: Action
@@ -873,6 +887,7 @@ admin.tip.event.no_pages: Aucune
 admin.tip.event.no_types: Aucun
 admin.tip.event.pages: 'Page concernées'
 admin.tip.event.remove.link: Retirer
+admin.tip.event.remove.action.confirm: 'Êtes-vous sûr de vouloir retirer l''affectation?'
 admin.tip.event.title: 'Libellé admin'
 admin.tip.event.types: 'Types de participation affectés'
 admin.tip.events: Evénements

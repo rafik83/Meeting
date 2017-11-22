@@ -11,7 +11,7 @@
 
         <div class="avatar">
             {% if participant.avatar != null %}
-                <img {% if participantAvatarId is defined %}id="{{ participantAvatarId }}"{% endif %} src="{{ participant.avatar|imagine_filter('user_avatar') }}">
+                <img {% if participantAvatarId is defined %}id="{{ participantAvatarId }}"{% endif %} src="{{ participant.avatar|imagine_filter('user_avatar') }}" alt="{{ participant.initials }} avatar">
             {% else %}
                 <p {% if participantAvatarId is defined %}id="{{ participantAvatarId }}"{% endif %}>{{ participant.initials }}</p>
             {% endif %}

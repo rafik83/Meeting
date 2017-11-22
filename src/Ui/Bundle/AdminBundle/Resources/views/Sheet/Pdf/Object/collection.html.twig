@@ -1,0 +1,17 @@
+{% if item.data['items']|default([]) is not empty %}
+<section class="object object--collection {{ 'style--' ~ item.style }} section">
+    {% set label = item.label(locale, fallback) %}
+    {% if label %}
+        <header>
+            <h2>{{ label }}</h2>
+        </header>
+    {% endif %}
+    <div class="section__content">
+        <ul>
+            {% for list_item in item.data['items']|default([]) %}
+                <li>{{ list_item['title']|localize(locale, fallback) }}</li>
+            {% endfor %}
+        </ul>
+    </div>
+</section>
+{% endif %}

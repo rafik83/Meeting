@@ -40,7 +40,7 @@
                         {{ delete_button(
                             path('admin_tip_event_remove', {'event': event.id, 'tip': tip.id}),
                             'admin.tip.event.remove.link'|trans,
-                            {'class' : 'btn btn-danger'})
+                            {'class' : 'btn btn-danger', 'data-confirm': 'admin.tip.event.remove.action.confirm'|trans})
                         }}
                     </td>
                 </tr>

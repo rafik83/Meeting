@@ -74,3 +74,11 @@ services:
             - '@query.meeting_request.export.meeting_request_view_query_handler'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\MeetingRequest\Export\MeetingRequestListViewQuery }
+
+    #
+    # Sheet Details
+    #
+    query.sheet.detail.participant.phone_validation_status_query_handler:
+        class: Proximum\Vimeet\Application\Query\Sheet\Detail\Participant\PhoneValidationStatusQueryHandler
+        arguments:
+            - '@domain.user_event.user_event_phone_checker'

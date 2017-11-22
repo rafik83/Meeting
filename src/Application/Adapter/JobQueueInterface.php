@@ -44,6 +44,23 @@ interface JobQueueInterface
     public function printPlanning(array $types, $orderBy, $emailToNotify, $locale);
 
     /**
+     * @param Event  $event
+     * @param array  $sheetIds
+     * @param string $emailToNotify
+     * @param string $locale
+     * @param string $orderBy
+     *
+     * @return
+     */
+    public function printSheetsPdf(
+        Event $event,
+        array $sheetIds,
+        string $emailToNotify,
+        string $locale,
+        string $orderBy
+    );
+
+    /**
      * @param Event $event
      * @param int[] $sheetIds
      * @param Admin $admin
@@ -137,6 +154,11 @@ interface JobQueueInterface
      * @param Event $event
      */
     public function aggregateAvailableSlot(Event $event);
+
+    /**
+     * @param Event $event
+     */
+    public function aggregatePhoneValidationStatus(Event $event);
 
     /**
      * @param $event

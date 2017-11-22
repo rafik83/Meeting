@@ -8,11 +8,17 @@
         {{ details.title }}
 
         {% spaceless %}
-            <span class="label label-info label-sheet-type">
+            <span class="label label-info label-sheet-type"
+                {% if details.meetingIndicator.meetings > 0 %}
+                    data-toggle="tooltip" data-placement="top" title="{{ 'admin.sheet.change.type.hasMeeting'|trans }}"
+                {% endif %}
+            >
                 {{ sheetTypeTitle }}
 
                 {% if changeTypeForm is not null %}
-                    <a href="#" data-toggle="modal" data-target="#changeType" title="{{ 'admin.sheet.change.type.link'|trans }}"><span class="glyphicon glyphicon-edit"></span></a>
+                    <a href="#" data-toggle="modal" data-target="#changeType" title="{{ 'admin.sheet.change.type.link'|trans }}">
+                        <span class="glyphicon glyphicon-edit"></span>
+                    </a>
                 {% endif %}
             </span>
 

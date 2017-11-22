@@ -4,6 +4,11 @@ Tasks list:
 - [ ]
 - [ ]
 
+Tasks to run after deploying on preprod or prod:
+- [ ] Reindex Elasticsearch: `$ bin/console fos:elastica:populate --env=prod --no-debug`
+- [ ] Run the whatever calculator : `$ bin/console vimeet:whatever-command`
+- [ ] ...
+
 Definition of Done:
 
 - [ ] 1. Create translation keys in French and listed alphabetically
@@ -11,7 +16,7 @@ Definition of Done:
 - [ ] 3. Respect the UI Admin (if the feature concerns the Admin)
 - [ ] 4. Generate DB migration if the structure changes (`$ make migrations`)
 - [ ] 5. Regenerate npm-shrinkwrap.json if a new npm package is installed: (`$ npm shrinkwrap`)
-- [ ] 6. Re-check Acceptance test: proofreading the story at the developement end
+- [ ] 6. Re-check Acceptance test: proofreading the story at the development end
 - [ ] 7. Unit tests pass
 - [ ] 8. Functionnal tests pass
 - [ ] 9. No errors on Insight

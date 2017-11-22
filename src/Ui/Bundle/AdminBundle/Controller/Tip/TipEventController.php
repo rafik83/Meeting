@@ -44,7 +44,7 @@ class TipEventController extends Controller
         $tipListViewQuery = new PaginatedTipViewQuery($event, $request->query->get('page', 1));
         $tipListView      = $this->get('tactician.commandbus')->handle($tipListViewQuery);
 
-        return $this->render('@Admin/Tip/Event/list.html.twig', [
+        return $this->render('AdminBundle:Tip:Event/list.html.twig', [
             'event'       => $event,
             'tipListView' => $tipListView,
             'locale'      => $event->getAvailableLocale($request->getLocale()),
@@ -93,7 +93,7 @@ class TipEventController extends Controller
             return $this->redirectToRoute('admin_tip_event_list', ['event' => $event->getId()]);
         }
 
-        return $this->render('@Admin/Tip/Event/affect.html.twig', [
+        return $this->render('AdminBundle:Tip:Event/affect.html.twig', [
             'event' => $event,
             'form'  => $form->createView()
         ]);

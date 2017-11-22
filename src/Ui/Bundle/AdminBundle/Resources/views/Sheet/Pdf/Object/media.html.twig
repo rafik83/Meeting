@@ -1,0 +1,24 @@
+{% if item.data['medias']|default([]) is not empty %}
+<section class="object object--media section">
+    {% set label = item.label(locale, fallback) %}
+    {% if label %}
+        <header>
+            <h2>{{ label }}</h2>
+        </header>
+    {% endif %}
+    <div class="section__content">
+        <ul class="list list--medias">
+            {% for media in item.data['medias']|default([]) %}
+                <li>
+                    {% if media['type'] is defined and media['type'] == 'video' %}
+                        <i class="icon-Video_1"></i>
+                    {% else %}
+                        <i class="icon-Document_1"></i>
+                    {% endif %}
+                    <span>{{ media['title']|localize(locale, fallback) }}</span>
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
+</section>
+{% endif %}

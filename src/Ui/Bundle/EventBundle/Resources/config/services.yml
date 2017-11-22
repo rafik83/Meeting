@@ -43,6 +43,14 @@ services:
             - '@components.security.admin_event_access'
         tags:
             - { name: security.voter }
+
+    security.admin_template_access_voter:
+        class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Security\Voter\AdminTemplateAccessVoter
+        arguments:
+            - '@components.security.admin_event_access'
+        tags:
+            - { name: security.voter }
+
     security.admin_sheet_access_voter:
         class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Security\Voter\AdminSheetAccessVoter
         arguments:
@@ -432,6 +440,15 @@ services:
         arguments:
             - '@vimeet_infrastructure.repository.sheet_repository'
             - '@domain.sheet.aggregate.available_slot_calculator'
+            - '@adapter.job_queue_adapter'
+        tags:
+            - { name: kernel.event_subscriber }
+
+    event_listener.sheet.phone.phone_validation_status_event_subscriber:
+        class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\EventListener\Sheet\Phone\PhoneValidationStatusEventSubscriber
+        arguments:
+            - '@domain.sheet.phone.validation_calculator'
+            - '@vimeet_infrastructure.repository.sheet_repository'
             - '@adapter.job_queue_adapter'
         tags:
             - { name: kernel.event_subscriber }

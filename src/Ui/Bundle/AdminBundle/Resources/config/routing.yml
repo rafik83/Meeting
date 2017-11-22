@@ -960,6 +960,21 @@ admin_template_sheet_update:
     requirements:
         template: \d+
         locale: '[a-z]{2}(_[A-Z]{2})?'
+
+admin_template_sheet_print_template_builder:
+    path: /template/sheet/{template}/print
+    defaults: { _controller: AdminBundle:Template\Sheet\PrintTemplate:builder }
+    methods: [GET]
+    requirements:
+        template: \d+
+
+admin_template_sheet_print_template_save:
+    path: /template/sheet/{template}/print/save
+    defaults: { _controller: AdminBundle:Template\Sheet\PrintTemplate:save }
+    methods: [POST]
+    requirements:
+        template: \d+
+
 #
 # Product
 #
@@ -1372,6 +1387,14 @@ admin_planner_export_file:
         file: \d+
     methods: [GET]
     defaults: { _controller: AdminBundle:Planner/Export:exportFile }
+
+admin_sheet_print_pdf:
+    path: /event/{event}/sheet/generate-pdf/{hash}z{file}
+    requirements:
+        event: \d+
+        file: \d+
+    methods: [GET]
+    defaults: { _controller: AdminBundle:Sheet\Print:generate }
 
 #
 # Invoice

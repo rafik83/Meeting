@@ -18,28 +18,28 @@ use Proximum\Vimeet\Domain\Token\UserEventTokenType;
 class AgendaConfirmationStatusQueryHandler
 {
     const PREFIX_TRANS_KEY = 'admin.sheet.details.participant.';
-    const AGENDA_CONFIRMED =
-        [
-            'translation_key' => self::PREFIX_TRANS_KEY . 'agenda_confirmed',
-            'css_class'       => 'success'
-        ];
-    const AGENDA_NOT_CONFIRMED =
-        [
-            'translation_key' => self::PREFIX_TRANS_KEY . 'agenda_not_confirmed',
-            'css_class'       => 'warning'
-        ];
-    const CONFIRMATION_NOT_SENT =
-        [
-            'translation_key' => self::PREFIX_TRANS_KEY . 'agenda_confirmation_not_send',
-            'css_class'       => 'danger'
-        ];
+    const AGENDA_CONFIRMED = [
+        'translation_key' => self::PREFIX_TRANS_KEY . 'agenda_confirmed',
+        'css_class'       => 'success'
+    ];
+
+    const AGENDA_NOT_CONFIRMED = [
+        'translation_key' => self::PREFIX_TRANS_KEY . 'agenda_not_confirmed',
+        'css_class'       => 'warning'
+    ];
+
+    const CONFIRMATION_NOT_SENT = [
+        'translation_key' => self::PREFIX_TRANS_KEY . 'agenda_confirmation_not_send',
+        'css_class'       => 'danger'
+    ];
+
     const USER_NOT_CONCERNED = [];
 
     /** @var UserEventTokenRepositoryInterface */
     private $userEventTokenRepository;
 
     /** @var HappeningParticipationRepositoryInterface */
-    private $happenningParticipationRepository;
+    private $happeningParticipationRepository;
 
     /** @var MeetingRepositoryInterface */
     private $meetingRepository;
@@ -48,16 +48,16 @@ class AgendaConfirmationStatusQueryHandler
      * AgendaConfirmationStatusQueryHandler constructor.
      *
      * @param UserEventTokenRepositoryInterface         $userEventTokenRepository
-     * @param HappeningParticipationRepositoryInterface $happenningParticipationRepository
+     * @param HappeningParticipationRepositoryInterface $happeningParticipationRepository
      * @param MeetingRepositoryInterface                $meetingRepository
      */
     public function __construct(
         UserEventTokenRepositoryInterface $userEventTokenRepository,
-        HappeningParticipationRepositoryInterface $happenningParticipationRepository,
+        HappeningParticipationRepositoryInterface $happeningParticipationRepository,
         MeetingRepositoryInterface $meetingRepository
     ) {
         $this->userEventTokenRepository = $userEventTokenRepository;
-        $this->happenningParticipationRepository = $happenningParticipationRepository;
+        $this->happeningParticipationRepository = $happeningParticipationRepository;
         $this->meetingRepository = $meetingRepository;
     }
 
@@ -79,7 +79,7 @@ class AgendaConfirmationStatusQueryHandler
             return $userEventToken->isConfirmed() ? self::AGENDA_CONFIRMED : self::AGENDA_NOT_CONFIRMED;
         }
 
-        if (null !== $this->happenningParticipationRepository->checkAnyParticipation($user, $query->event)
+        if (null !== $this->happeningParticipationRepository->checkAnyParticipation($user, $query->event)
             || false !== $this->meetingRepository->hasScheduledMeetingByParticipant($query->participant)
         ) {
             return self::CONFIRMATION_NOT_SENT;

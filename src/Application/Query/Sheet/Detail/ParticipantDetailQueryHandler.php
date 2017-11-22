@@ -10,6 +10,8 @@
 
 namespace Proximum\Vimeet\Application\Query\Sheet\Detail;
 
+use Proximum\Vimeet\Application\Query\Sheet\Detail\Participant\PhoneValidationStatusQuery;
+use Proximum\Vimeet\Application\Query\Sheet\Detail\Participant\PhoneValidationStatusQueryHandler;
 use Proximum\Vimeet\Application\View\Sheet\Details\OwnerView;
 use Proximum\Vimeet\Application\View\Sheet\Details\ParticipantView;
 use Proximum\Vimeet\Application\View\Sheet\Details\SheetParticipantsView;
@@ -24,18 +26,24 @@ class ParticipantDetailQueryHandler
     /** @var AgendaConfirmationStatusQueryHandler */
     private $agendaConfirmationStatusQueryHandler;
 
+    /** @var PhoneValidationStatusQueryHandler */
+    private $phoneValidationStatusQueryHandler;
+
     /**
      * ParticipantDetailQueryHandler constructor.
      *
      * @param TemplateDataFactory                  $templateDataFactory
      * @param AgendaConfirmationStatusQueryHandler $agendaConfirmationStatusQueryHandler
+     * @param PhoneValidationStatusQueryHandler    $phoneValidationStatusQueryHandler
      */
     public function __construct(
         TemplateDataFactory $templateDataFactory,
-        AgendaConfirmationStatusQueryHandler $agendaConfirmationStatusQueryHandler
+        AgendaConfirmationStatusQueryHandler $agendaConfirmationStatusQueryHandler,
+        PhoneValidationStatusQueryHandler $phoneValidationStatusQueryHandler
     ) {
         $this->templateDataFactory = $templateDataFactory;
         $this->agendaConfirmationStatusQueryHandler = $agendaConfirmationStatusQueryHandler;
+        $this->phoneValidationStatusQueryHandler = $phoneValidationStatusQueryHandler;
     }
 
     /**
@@ -71,7 +79,8 @@ class ParticipantDetailQueryHandler
                 $participant->isVisio(),
                 $this->agendaConfirmationStatusQueryHandler->handle(
                     new AgendaConfirmationStatusQuery($participant, $query->event)
-                )
+                ),
+                $this->phoneValidationStatusQueryHandler->handle(new PhoneValidationStatusQuery($participant))
             );
         }
 

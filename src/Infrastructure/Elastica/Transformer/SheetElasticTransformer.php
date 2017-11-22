@@ -167,6 +167,7 @@ class SheetElasticTransformer implements ModelToElasticaTransformerInterface
                 'state'                   => $sheet->getState(),
                 'validationState'         => $sheet->getValidationState(),
                 'agendaConfirmedStatus'   => $sheet->getAgendaConfirmedStatus(),
+                'phoneValidationStatus'   => $sheet->getPhoneValidationStatus(),
                 'enabled'                 => $sheet->isEnabled(),
                 'completed'               => $sheet->isCompleted(),
                 'type'                    => $sheet->getType()->getId(),
