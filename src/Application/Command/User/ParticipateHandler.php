@@ -107,7 +107,7 @@ class ParticipateHandler
         // Prefill sheet data from last user participation
         if (null !== $lastUserParticipation) {
             $sheet->setData(
-                $this->getFilteredSheetData($lastUserParticipation->getSheet()->getData())
+                $this->getSanitizedSheetData($lastUserParticipation->getSheet()->getData())
             );
         }
 
@@ -176,11 +176,13 @@ class ParticipateHandler
     }
 
     /**
+     * This method filter image and media objects from last sheet participation of previous event
+     *
      * @param array $sheetData
      *
      * @return array
      */
-    private function getFilteredSheetData(array $sheetData): array
+    private function getSanitizedSheetData(array $sheetData): array
     {
         foreach ($sheetData as $key => $datum) {
             $sheetData[$key] = array_filter($datum, function($element) {
