@@ -33,8 +33,12 @@ class AvailabilityConfirmationCheckerHandler
 
     /** @var EventOver */
     private $eventOver;
+
     /** @var AgendaAccessChecker */
     private $agendaAccessChecker;
+
+    /** @var string */
+    private $featureAvailabilityConfirmationActivated;
 
     /**
      * @param AgendaAccessChecker          $agendaAccessChecker
@@ -42,19 +46,22 @@ class AvailabilityConfirmationCheckerHandler
      * @param FlashBagInterface            $flashBag
      * @param ExtraDataRepositoryInterface $extraDataRepository
      * @param RouterInterface              $router
+     * @param string                       $featureAvailabilityConfirmationActivated
      */
     public function __construct(
         AgendaAccessChecker $agendaAccessChecker,
         EventOver $eventOver,
         FlashBagInterface $flashBag,
         ExtraDataRepositoryInterface $extraDataRepository,
-        RouterInterface $router
+        RouterInterface $router,
+        string $featureAvailabilityConfirmationActivated
     ) {
         $this->eventOver = $eventOver;
         $this->extraDataRepository = $extraDataRepository;
         $this->router = $router;
         $this->flashBag = $flashBag;
         $this->agendaAccessChecker = $agendaAccessChecker;
+        $this->featureAvailabilityConfirmationActivated = $featureAvailabilityConfirmationActivated;
     }
 
     /**
@@ -64,7 +71,8 @@ class AvailabilityConfirmationCheckerHandler
      */
     public function handle(AvailabilityConfirmationChecker $command): AvailabilityConfirmationCheckerView
     {
-        if ($this->eventOver->isEventOver($command->event)
+        if (false === (bool) $this->featureAvailabilityConfirmationActivated
+            || $this->eventOver->isEventOver($command->event)
             || !$this->agendaAccessChecker->allowedToAccess($command->event)
         ) {
             return new AvailabilityConfirmationCheckerView(AvailabilityConfirmationCheckerView::ALLOWED_TO_ACCESS, null);
