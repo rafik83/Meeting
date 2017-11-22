@@ -1,0 +1,18 @@
+<?php
+
+/*
+ * This file is part of the Proximum Vimeet project.
+ *
+ * Copyright (C) Proximum
+ *
+ * @author Elao <contact@elao.com>
+ */
+
+namespace Proximum\Vimeet\Domain\Sheet\Availability;
+
+final class ConfirmationStatus
+{
+    const NONE_CONFIRMED = 'none_confirmed';
+    const AT_LEAST_ONE_CONFIRMED = 'at_least_one_confirmed';
+    const ALL_CONFIRMED = 'all_confirmed';
+}
