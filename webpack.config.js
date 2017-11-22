@@ -15,6 +15,7 @@ Encore
     // will output as web/build/app.js
     .addEntry('js/main', './src/Ui/Bundle/EventBundle/Resources/assets/js/main.js')
     .addEntry('js/admin', './src/Ui/Bundle/AdminBundle/Resources/assets/js/admin.js')
+    .addEntry('js/chart', './src/Ui/Bundle/AdminBundle/Resources/assets/js/chart.js')
     .addEntry('js/agenda', './src/Ui/Bundle/AdminBundle/Resources/assets/js/agenda.js')
     .addEntry('tinymce/tinymce', './src/Ui/Bundle/AdminBundle/Resources/assets/js/tinymce.js')
     .addEntry('tinymce/pages/messaging-message-tinymce', './src/Ui/Bundle/AdminBundle/Resources/assets/js/pages/messaging-message-tinymce.js')
@@ -49,6 +50,9 @@ Encore
     }))
 
     .enableSourceMaps(!Encore.isProduction())
+
+    // add hash to the build files
+    .enableVersioning()
 ;
 
 var config = Encore.getWebpackConfig();

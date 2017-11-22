@@ -5437,10 +5437,6 @@ svgo@^0.7.0:
     sax "~1.2.1"
     whet.extend "~0.9.9"
 
-tablesort@4.0.1:
-  version "4.0.1"
-  resolved "https://registry.yarnpkg.com/tablesort/-/tablesort-4.0.1.tgz#faa528cfa715382e8e5a5ed4f2e84482f28245aa"
-
 tapable@^0.2.7:
   version "0.2.8"
   resolved "https://registry.yarnpkg.com/tapable/-/tapable-0.2.8.tgz#99372a5c999bf2df160afc0d74bed4f47948cd22"
