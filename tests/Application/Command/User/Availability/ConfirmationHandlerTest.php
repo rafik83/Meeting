@@ -12,8 +12,11 @@ namespace Proximum\Vimeet\Tests\Application\Command\User\Availability;
 
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
+use Proximum\Vimeet\Application\Adapter\DelayedEventDispatcherInterface;
 use Proximum\Vimeet\Application\Command\User\Availability\Confirmation;
 use Proximum\Vimeet\Application\Command\User\Availability\ConfirmationHandler;
+use Proximum\Vimeet\Application\Event\Events;
+use Proximum\Vimeet\Application\Event\User\Availability\ConfirmedEvent;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Repository\User\Event\ExtraDataRepositoryInterface;
@@ -28,6 +31,7 @@ class ConfirmationHandlerTest extends TestCase
         $user = $this->prophesize(User::class);
         $dateTime = new \DateTime();
 
+        $eventDispatcher = $this->prophesize(DelayedEventDispatcherInterface::class);
         $extraDataRepository = $this->prophesize(ExtraDataRepositoryInterface::class);
         $extraDataRepository
             ->getExtraDataForEventNameAndUser($event->reveal(), Type::AVAILABILITY_CONFIRMATION, $user->reveal())
@@ -38,8 +42,13 @@ class ConfirmationHandlerTest extends TestCase
             ->add(new ExtraData($user->reveal(), $event->reveal(), Type::AVAILABILITY_CONFIRMATION, 'confirmed', $dateTime))
             ->shouldBeCalled()
         ;
+        $eventDispatcher->dispatch(
+            Events::USER_AVAILABILITY_CONFIRMED,
+            new ConfirmedEvent($event->reveal(), $user->reveal())
+        );
 
         $handler = new ConfirmationHandler(
+            $eventDispatcher->reveal(),
             $extraDataRepository->reveal(),
             $dateTime
         );
@@ -53,6 +62,7 @@ class ConfirmationHandlerTest extends TestCase
         $extraData = $this->prophesize(ExtraData::class);
         $dateTime = new \DateTime();
 
+        $eventDispatcher = $this->prophesize(DelayedEventDispatcherInterface::class);
         $extraDataRepository = $this->prophesize(ExtraDataRepositoryInterface::class);
         $extraDataRepository
             ->getExtraDataForEventNameAndUser($event->reveal(), Type::AVAILABILITY_CONFIRMATION, $user->reveal())
@@ -60,8 +70,10 @@ class ConfirmationHandlerTest extends TestCase
             ->willReturn($extraData->reveal())
         ;
         $extraDataRepository->add(Argument::any())->shouldNotBeCalled();
+        $eventDispatcher->dispatch(Argument::any())->shouldNotBeCalled();
 
         $handler = new ConfirmationHandler(
+            $eventDispatcher->reveal(),
             $extraDataRepository->reveal(),
             $dateTime
         );

@@ -1080,4 +1080,12 @@ class Sheet implements TraceableInterface
     {
         return $this->availabilityConfirmationStatus;
     }
+
+    /**
+     * @param string $availabilityConfirmationStatus
+     */
+    public function setAvailabilityConfirmationStatus(string $availabilityConfirmationStatus)
+    {
+        $this->availabilityConfirmationStatus = $availabilityConfirmationStatus;
+    }
 }

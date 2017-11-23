@@ -22,6 +22,7 @@ services:
     command.user.availability.confirmation_handler:
         class: Proximum\Vimeet\Application\Command\User\Availability\ConfirmationHandler
         arguments:
+            - '@vimeet_infrastructure.adapter.delayed_event_dispatcher'
             - '@repository.user.event.extra_data_repository'
             - '@datetime'
         tags:

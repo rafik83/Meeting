@@ -10,6 +10,9 @@
 
 namespace Proximum\Vimeet\Application\Command\User\Availability;
 
+use Proximum\Vimeet\Application\Adapter\DelayedEventDispatcherInterface;
+use Proximum\Vimeet\Application\Event\Events;
+use Proximum\Vimeet\Application\Event\User\Availability\ConfirmedEvent;
 use Proximum\Vimeet\Domain\Model\User\Event\ExtraData;
 use Proximum\Vimeet\Domain\Repository\User\Event\ExtraDataRepositoryInterface;
 use Proximum\Vimeet\Domain\User\Event\ExtraData\Type;
@@ -22,14 +25,22 @@ class ConfirmationHandler
     /** @var \DateTimeInterface */
     private $dateTime;
 
+    /** @var DelayedEventDispatcherInterface */
+    private $delayedEventDispatcher;
+
     /**
-     * @param ExtraDataRepositoryInterface $extraDataRepository
-     * @param \DateTimeInterface           $dateTime
+     * @param DelayedEventDispatcherInterface $delayedEventDispatcher
+     * @param ExtraDataRepositoryInterface    $extraDataRepository
+     * @param \DateTimeInterface              $dateTime
      */
-    public function __construct(ExtraDataRepositoryInterface $extraDataRepository, \DateTimeInterface $dateTime)
-    {
+    public function __construct(
+        DelayedEventDispatcherInterface $delayedEventDispatcher,
+        ExtraDataRepositoryInterface $extraDataRepository,
+        \DateTimeInterface $dateTime
+    ) {
         $this->extraDataRepository = $extraDataRepository;
         $this->dateTime = $dateTime;
+        $this->delayedEventDispatcher = $delayedEventDispatcher;
     }
 
     /**
@@ -56,5 +67,10 @@ class ConfirmationHandler
         );
 
         $this->extraDataRepository->add($availabilityConfirmation);
+
+        $this->delayedEventDispatcher->dispatch(
+            Events::USER_AVAILABILITY_CONFIRMED,
+            new ConfirmedEvent($command->event, $command->user)
+        );
     }
 }
