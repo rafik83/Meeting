@@ -450,6 +450,10 @@ form.participant_import.field.mail: Email
 form.participant_update.children.data.label: Participation
 form.participant_update.children.submit.label: Envoyer
 form.participate_happening.children.participants.label: 'Participants concernés'
+form.participant_update_agenda_confirmation_status.children.status.label: 'Confirmation d''agenda'
+form.participant_update_agenda_confirmation_status.children.submit.label: 'Enregistrer'
+form.participant_update_agenda_confirmation_status.children.status.choice.confirmed: 'Confirmé'
+form.participant_update_agenda_confirmation_status.children.status.choice.not_confirmed: 'Non confirmé'
 form.participate_happening.children.submit.label: Participer
 form.payment_mode_choice.children.paymentMode.bank_check: Chèque
 form.payment_mode_choice.children.paymentMode.bank_transfer: Transfert

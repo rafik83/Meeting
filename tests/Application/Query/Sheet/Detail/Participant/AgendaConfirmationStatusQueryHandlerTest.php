@@ -1,19 +1,23 @@
 <?php
 
 /*
- * This file is part of the vimeet project.
+ * This file is part of the Proximum Vimeet project.
  *
  * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
 
-namespace Application\Query\Sheet\Detail;
+namespace Proximum\Vimeet\Tests\Application\Query\Sheet\Detail\Participant;
 
 use PHPUnit\Framework\TestCase;
 use Prophecy\Prophecy\ObjectProphecy;
-use Proximum\Vimeet\Application\Query\Sheet\Detail\AgendaConfirmationStatusQuery;
-use Proximum\Vimeet\Application\Query\Sheet\Detail\AgendaConfirmationStatusQueryHandler;
+use Proximum\Vimeet\Application\Query\Sheet\Detail\Participant\AgendaConfirmationStatusQuery;
+use Proximum\Vimeet\Application\Query\Sheet\Detail\Participant\AgendaConfirmationStatusQueryHandler;
+use Proximum\Vimeet\Application\View\Sheet\Details\Participant\AgendaConfirmationNotConcernedView;
+use Proximum\Vimeet\Application\View\Sheet\Details\Participant\AgendaConfirmationNotSentView;
+use Proximum\Vimeet\Application\View\Sheet\Details\Participant\AgendaConfirmedView;
+use Proximum\Vimeet\Application\View\Sheet\Details\Participant\AgendaNotConfirmedView;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Sheet;
@@ -34,7 +38,7 @@ class AgendaConfirmationStatusQueryHandlerTest extends TestCase
     private $userEventTokenRepository;
 
     /** @var ObjectProphecy */
-    private $happenningParticipationRepository;
+    private $happeningParticipationRepository;
 
     /** @var ObjectProphecy */
     private $meetingRepository;
@@ -66,13 +70,13 @@ class AgendaConfirmationStatusQueryHandlerTest extends TestCase
     public function setUp()
     {
         $this->userEventTokenRepository = $this->prophesize(UserEventTokenRepositoryInterface::class);
-        $this->happenningParticipationRepository = $this->prophesize(HappeningParticipationRepositoryInterface::class);
+        $this->happeningParticipationRepository = $this->prophesize(HappeningParticipationRepositoryInterface::class);
         $this->meetingRepository = $this->prophesize(MeetingRepositoryInterface::class);
 
         $this->event       = EventFactory::createEvent();
         $this->user        = UserFactory::create();
         $this->sheet       = SheetFactory::create();
-        $this->participant = ParticipantFactory::create($this->sheet);
+        $this->participant = ParticipantFactory::create($this->sheet, $this->user);
         $this->dateTime    = new \DateTime();
         $this->userEventToken = new UserEventToken($this->event, $this->user, 'type', 'token', $this->dateTime);
 
@@ -83,21 +87,33 @@ class AgendaConfirmationStatusQueryHandlerTest extends TestCase
 
         $this->agendaConfirmationStatusQueryHandler = new AgendaConfirmationStatusQueryHandler(
             $this->userEventTokenRepository->reveal(),
-            $this->happenningParticipationRepository->reveal(),
+            $this->happeningParticipationRepository->reveal(),
             $this->meetingRepository->reveal()
         );
     }
 
     public function testHandleWithConfirmedAgenda()
     {
-        $expected = AgendaConfirmationStatusQueryHandler::AGENDA_CONFIRMED;
+        $expected = new AgendaConfirmedView();
 
         $this->userEventToken->confirm($this->dateTime);
 
         $this->userEventTokenRepository
-            ->findByEventAndUserAndType($this->event, $this->participant->getUser(), UserEventTokenType::AGENDA_CONFIRMATION)
+            ->findByEventAndUserAndType($this->event, $this->user, UserEventTokenType::AGENDA_CONFIRMATION)
             ->shouldBeCalled()
             ->willReturn($this->userEventToken);
+
+        $this->happeningParticipationRepository
+            ->checkAnyParticipation($this->user, $this->event)
+            ->shouldBeCalled()
+            ->willReturn(null)
+        ;
+
+        $this->meetingRepository
+            ->hasScheduledMeetingByParticipant($this->participant)
+            ->shouldBeCalled()
+            ->willReturn(true)
+        ;
 
         $result = $this->agendaConfirmationStatusQueryHandler->handle($this->agendaConfirmationStatusQuery);
 
@@ -106,12 +122,25 @@ class AgendaConfirmationStatusQueryHandlerTest extends TestCase
 
     public function testHandleWithNotConfirmedAgenda()
     {
-        $expected = AgendaConfirmationStatusQueryHandler::AGENDA_NOT_CONFIRMED;
+        $expected = new AgendaNotConfirmedView();
 
         $this->userEventTokenRepository
-            ->findByEventAndUserAndType($this->event, $this->participant->getUser(), UserEventTokenType::AGENDA_CONFIRMATION)
+            ->findByEventAndUserAndType($this->event, $this->user, UserEventTokenType::AGENDA_CONFIRMATION)
             ->shouldBeCalled()
-            ->willReturn($this->userEventToken);
+            ->willReturn($this->userEventToken)
+        ;
+
+        $this->happeningParticipationRepository
+            ->checkAnyParticipation($this->user, $this->event)
+            ->shouldBeCalled()
+            ->willReturn(null)
+        ;
+
+        $this->meetingRepository
+            ->hasScheduledMeetingByParticipant($this->participant)
+            ->shouldBeCalled()
+            ->willReturn(true)
+        ;
 
         $result = $this->agendaConfirmationStatusQueryHandler->handle($this->agendaConfirmationStatusQuery);
 
@@ -122,14 +151,14 @@ class AgendaConfirmationStatusQueryHandlerTest extends TestCase
 
     public function testHandleWithNotSentConfirmationWithMeeting()
     {
-        $expected = AgendaConfirmationStatusQueryHandler::CONFIRMATION_NOT_SENT;
+        $expected = new AgendaConfirmationNotSentView();
 
         $this->userEventTokenRepository
-            ->findByEventAndUserAndType($this->event, $this->participant->getUser(), UserEventTokenType::AGENDA_CONFIRMATION)
+            ->findByEventAndUserAndType($this->event, $this->user, UserEventTokenType::AGENDA_CONFIRMATION)
             ->shouldBeCalled()
             ->willReturn(null);
 
-        $this->happenningParticipationRepository
+        $this->happeningParticipationRepository
             ->checkAnyParticipation($this->participant->getUser(), $this->event)
             ->shouldBeCalled()
             ->willReturn(null);
@@ -144,23 +173,19 @@ class AgendaConfirmationStatusQueryHandlerTest extends TestCase
         $this->assertEquals($result, $expected);
     }
 
-    public function testHandleWithNotSentConfirmationWithHapenning()
+    public function testHandleWithNotSentConfirmationWithHappening()
     {
-        $expected = AgendaConfirmationStatusQueryHandler::CONFIRMATION_NOT_SENT;
+        $expected = new AgendaConfirmationNotSentView();
 
         $this->userEventTokenRepository
-            ->findByEventAndUserAndType($this->event, $this->participant->getUser(), UserEventTokenType::AGENDA_CONFIRMATION)
+            ->findByEventAndUserAndType($this->event, $this->user, UserEventTokenType::AGENDA_CONFIRMATION)
             ->shouldBeCalled()
             ->willReturn(null);
 
-        $this->happenningParticipationRepository
-            ->checkAnyParticipation($this->participant->getUser(), $this->event)
+        $this->happeningParticipationRepository
+            ->checkAnyParticipation($this->user, $this->event)
             ->shouldBeCalled()
             ->willReturn(1);
-
-        $this->meetingRepository
-            ->hasScheduledMeetingByParticipant($this->participant)
-            ->shouldNotBeCalled();
 
         $result = $this->agendaConfirmationStatusQueryHandler->handle($this->agendaConfirmationStatusQuery);
 
@@ -169,15 +194,15 @@ class AgendaConfirmationStatusQueryHandlerTest extends TestCase
 
     public function testHandleWithNotConcernedUser()
     {
-        $expected = AgendaConfirmationStatusQueryHandler::USER_NOT_CONCERNED;
+        $expected = new AgendaConfirmationNotConcernedView();
 
         $this->userEventTokenRepository
-            ->findByEventAndUserAndType($this->event, $this->participant->getUser(), UserEventTokenType::AGENDA_CONFIRMATION)
-            ->shouldBeCalled()
-            ->willReturn(null);
+            ->findByEventAndUserAndType($this->event, $this->user, UserEventTokenType::AGENDA_CONFIRMATION)
+            ->shouldNotBeCalled()
+        ;
 
-        $this->happenningParticipationRepository
-            ->checkAnyParticipation($this->participant->getUser(), $this->event)
+        $this->happeningParticipationRepository
+            ->checkAnyParticipation($this->user, $this->event)
             ->shouldBeCalled()
             ->willReturn(null);
 

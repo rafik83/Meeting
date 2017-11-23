@@ -3402,17 +3402,17 @@ services:
         class: Proximum\Vimeet\Application\Query\Sheet\Detail\ParticipantDetailQueryHandler
         arguments:
             - '@template.template_data_factory'
-            - '@query.sheet.detail.agenda_confirmation_status_query_handler'
+            - '@query.sheet.detail.participant.agenda_confirmation_status_query_handler'
             - '@query.sheet.detail.participant.phone_validation_status_query_handler'
 
-    query.sheet.detail.agenda_confirmation_status_query_handler:
-        class: Proximum\Vimeet\Application\Query\Sheet\Detail\AgendaConfirmationStatusQueryHandler
+    query.sheet.detail.participant.agenda_confirmation_status_query_handler:
+        class: Proximum\Vimeet\Application\Query\Sheet\Detail\Participant\AgendaConfirmationStatusQueryHandler
         arguments:
             - '@repository.token.user_event_token_repository'
             - '@vimeet_infrastructure.repository.happening_participation_repository'
             - '@vimeet_infrastructure.repository.meeting_repository'
         tags:
-            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Sheet\Detail\AgendaConfirmationStatusQuery }
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Sheet\Detail\Participant\AgendaConfirmationStatusQuery }
 
     query.sheet.detail.sheet_meeting_indicator_query_handler:
         class: Proximum\Vimeet\Application\Query\Sheet\Detail\SheetMeetingIndicatorQueryHandler

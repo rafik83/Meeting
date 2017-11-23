@@ -1596,3 +1596,15 @@ admin_event_extra_parameter_remove:
         event: \d+
         extraParameter: \d+
     defaults: { _controller: AdminBundle:Event/ExtraParameter/Remove:remove }
+
+#
+# User Event Token
+#
+admin_sheet_participant_update_agenda_confirmation:
+    path: /event/{event}/sheet/{sheet}/details/participant/{participant}/agenda/confirmation/update
+    requirements:
+        event: \d+
+        sheet: \d+
+        participant: \d+
+    methods: [GET, POST]
+    defaults: { _controller: AdminBundle:Participant\AgendaConfirmation:updateAgendaConfirmation }
