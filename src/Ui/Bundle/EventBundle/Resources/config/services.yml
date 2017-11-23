@@ -453,6 +453,14 @@ services:
         tags:
             - { name: kernel.event_subscriber }
 
+    event_listener.sheet_availability.availability_confirmation_event_subscriber:
+        class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\EventListener\Sheet\Availability\AvailabilityConfirmationEventSubscriber
+        arguments:
+            - '@vimeet_infrastructure.repository.sheet_repository'
+            - '@domain.sheet.availability.confirmation_calculator'
+        tags:
+            - { name: kernel.event_subscriber }
+
     #
     # Twig extension
     #
