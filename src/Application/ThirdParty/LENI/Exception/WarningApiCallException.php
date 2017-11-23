@@ -12,16 +12,4 @@ namespace Proximum\Vimeet\Application\ThirdParty\LENI\Exception;
 
 class WarningApiCallException extends LeniException
 {
-    /** @var array */
-    public $warnings;
-
-    /**
-     * @param array $warnings
-     */
-    public function __construct(array $warnings)
-    {
-        parent::__construct();
-
-        $this->warnings = $warnings;
-    }
 }
