@@ -12,6 +12,8 @@ namespace Proximum\Vimeet\Application\Query\Sheet\Detail;
 
 use Proximum\Vimeet\Application\Query\Sheet\Detail\Participant\AgendaConfirmationStatusQuery;
 use Proximum\Vimeet\Application\Query\Sheet\Detail\Participant\AgendaConfirmationStatusQueryHandler;
+use Proximum\Vimeet\Application\Query\Sheet\Detail\Participant\AvailabilityConfirmationStatusQuery;
+use Proximum\Vimeet\Application\Query\Sheet\Detail\Participant\AvailabilityConfirmationStatusQueryHandler;
 use Proximum\Vimeet\Application\Query\Sheet\Detail\Participant\PhoneValidationStatusQuery;
 use Proximum\Vimeet\Application\Query\Sheet\Detail\Participant\PhoneValidationStatusQueryHandler;
 use Proximum\Vimeet\Application\View\Sheet\Details\OwnerView;
@@ -31,21 +33,27 @@ class ParticipantDetailQueryHandler
     /** @var PhoneValidationStatusQueryHandler */
     private $phoneValidationStatusQueryHandler;
 
+    /** @var AvailabilityConfirmationStatusQueryHandler */
+    private $availabilityConfirmationStatusQueryHandler;
+
     /**
      * ParticipantDetailQueryHandler constructor.
      *
-     * @param TemplateDataFactory                  $templateDataFactory
-     * @param AgendaConfirmationStatusQueryHandler $agendaConfirmationStatusQueryHandler
-     * @param PhoneValidationStatusQueryHandler    $phoneValidationStatusQueryHandler
+     * @param TemplateDataFactory                        $templateDataFactory
+     * @param AgendaConfirmationStatusQueryHandler       $agendaConfirmationStatusQueryHandler
+     * @param PhoneValidationStatusQueryHandler          $phoneValidationStatusQueryHandler
+     * @param AvailabilityConfirmationStatusQueryHandler $availabilityConfirmationStatusQueryHandler
      */
     public function __construct(
         TemplateDataFactory $templateDataFactory,
         AgendaConfirmationStatusQueryHandler $agendaConfirmationStatusQueryHandler,
-        PhoneValidationStatusQueryHandler $phoneValidationStatusQueryHandler
+        PhoneValidationStatusQueryHandler $phoneValidationStatusQueryHandler,
+        AvailabilityConfirmationStatusQueryHandler $availabilityConfirmationStatusQueryHandler
     ) {
         $this->templateDataFactory = $templateDataFactory;
         $this->agendaConfirmationStatusQueryHandler = $agendaConfirmationStatusQueryHandler;
         $this->phoneValidationStatusQueryHandler = $phoneValidationStatusQueryHandler;
+        $this->availabilityConfirmationStatusQueryHandler = $availabilityConfirmationStatusQueryHandler;
     }
 
     /**
@@ -82,7 +90,10 @@ class ParticipantDetailQueryHandler
                 $this->agendaConfirmationStatusQueryHandler->handle(
                     new AgendaConfirmationStatusQuery($participant, $query->event)
                 ),
-                $this->phoneValidationStatusQueryHandler->handle(new PhoneValidationStatusQuery($participant))
+                $this->phoneValidationStatusQueryHandler->handle(new PhoneValidationStatusQuery($participant)),
+                $this->availabilityConfirmationStatusQueryHandler->handle(
+                    new AvailabilityConfirmationStatusQuery($query->event, $participant->getUser())
+                )
             );
         }
 

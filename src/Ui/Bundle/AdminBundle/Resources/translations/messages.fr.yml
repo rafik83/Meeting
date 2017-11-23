@@ -701,6 +701,9 @@ admin.sheet.details.participant.agenda_confirmation_status_update.title: 'Mise �
 admin.sheet.details.participant.tooltip.not_concerned: 'Cet utilisateur n''est pas concerné car il/elle n''a pas de RDVs ou ne participe pas à un sous-événement'
 admin.sheet.details.participant.agenda_not_confirmed: 'Non confirmé'
 admin.sheet.details.participant.email: Email
+admin.sheet.details.participant.availability_confirmation.title: 'Confirmation des disponibilités'
+admin.sheet.details.participant.availability_confirmation.confirmed: 'Confirmé'
+admin.sheet.details.participant.availability_confirmation.not_confirmed: 'Non confirmé'
 admin.sheet.details.participant.phoneValidationStatus.title: Validation téléphone
 admin.sheet.details.participant.phoneValidationStatus.validated: Validé
 admin.sheet.details.participant.phoneValidationStatus.not_validated: Non validé

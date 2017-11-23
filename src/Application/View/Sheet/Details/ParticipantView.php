@@ -11,6 +11,7 @@
 namespace Proximum\Vimeet\Application\View\Sheet\Details;
 
 use Proximum\Vimeet\Application\View\Sheet\Details\Participant\AgendaConfirmationStatusView;
+use Proximum\Vimeet\Application\View\Sheet\Details\Participant\AvailabilityConfirmationView;
 use Proximum\Vimeet\Application\View\Sheet\Details\Participant\PhoneValidationStatusView;
 use Proximum\Vimeet\Domain\Template\TemplateData;
 
@@ -39,6 +40,9 @@ class ParticipantView
     /** @var PhoneValidationStatusView */
     public $phoneValidationStatusView;
 
+    /** @var AvailabilityConfirmationView */
+    public $availabilityConfirmationView;
+
     /**
      * @param int                          $id
      * @param string                       $email
@@ -47,6 +51,7 @@ class ParticipantView
      * @param bool                         $visio
      * @param AgendaConfirmationStatusView $agendaConfirmationStatus
      * @param PhoneValidationStatusView    $phoneValidationStatusView
+     * @param AvailabilityConfirmationView $availabilityConfirmationView
      */
     public function __construct(
         $id,
@@ -55,7 +60,8 @@ class ParticipantView
         $isOwner = false,
         bool $visio,
         AgendaConfirmationStatusView $agendaConfirmationStatus,
-        PhoneValidationStatusView $phoneValidationStatusView
+        PhoneValidationStatusView $phoneValidationStatusView,
+        AvailabilityConfirmationView $availabilityConfirmationView
     ) {
         $this->id                        = $id;
         $this->templateData              = $templateData;
@@ -64,6 +70,7 @@ class ParticipantView
         $this->email                     = $email;
         $this->agendaConfirmationStatus  = $agendaConfirmationStatus;
         $this->phoneValidationStatusView = $phoneValidationStatusView;
+        $this->availabilityConfirmationView = $availabilityConfirmationView;
     }
 
     /**

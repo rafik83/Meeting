@@ -3404,6 +3404,7 @@ services:
             - '@template.template_data_factory'
             - '@query.sheet.detail.participant.agenda_confirmation_status_query_handler'
             - '@query.sheet.detail.participant.phone_validation_status_query_handler'
+            - '@query.sheet.detail.participant.availability_confirmation_status_query_handler'
 
     query.sheet.detail.participant.agenda_confirmation_status_query_handler:
         class: Proximum\Vimeet\Application\Query\Sheet\Detail\Participant\AgendaConfirmationStatusQueryHandler
