@@ -5827,3 +5827,11 @@ services:
         class: Proximum\Vimeet\Domain\Event\Day\EventOver
         arguments:
             - '@datetime'
+
+    #
+    # Availability confirmation
+    #
+    domain.sheet.availability.confirmation_calculator:
+        class: Proximum\Vimeet\Domain\Sheet\Availability\ConfirmationCalculator
+        arguments:
+            - '@repository.user.event.extra_data_repository'
