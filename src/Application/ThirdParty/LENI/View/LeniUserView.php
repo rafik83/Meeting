@@ -60,8 +60,8 @@ class LeniUserView
     /**
      * @param int              $id
      * @param string|null      $sheetName
-     * @param int|null         $typeName
-     * @param int|null         $categoryName
+     * @param int|null         $typeId
+     * @param int|null         $categoryId
      * @param string           $email
      * @param string           $gender
      * @param string           $firstName
@@ -77,8 +77,8 @@ class LeniUserView
     public function __construct(
         int $id,
         string $sheetName = null,
-        int $typeName = null,
-        int $categoryName = null,
+        int $typeId = null,
+        int $categoryId = null,
         string $email,
         string $gender,
         string $firstName,
@@ -91,20 +91,20 @@ class LeniUserView
         string $locale,
         LeniPlanningView $planning
     ) {
-        $this->id               = $id;
-        $this->sheetName        = $sheetName;
-        $this->typeId           = $typeName;
-        $this->categoryId       = $categoryName;
-        $this->email            = $email;
-        $this->gender           = $gender;
-        $this->firstName        = $firstName;
-        $this->lastName         = $lastName;
-        $this->position         = $position;
-        $this->phone            = $phone;
-        $this->mobile           = $mobile;
-        $this->planning         = $planning;
-        $this->country          = $country;
-        $this->attendance       = $attendance;
-        $this->locale           = $locale;
+        $this->id         = $id;
+        $this->sheetName  = $sheetName;
+        $this->typeId     = $typeId;
+        $this->categoryId = $categoryId;
+        $this->email      = $email;
+        $this->gender     = $gender;
+        $this->firstName  = $firstName;
+        $this->lastName   = $lastName;
+        $this->position   = $position;
+        $this->phone      = $phone;
+        $this->mobile     = $mobile;
+        $this->planning   = $planning;
+        $this->country    = $country;
+        $this->attendance = $attendance;
+        $this->locale     = $locale;
     }
 }
