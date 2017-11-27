@@ -31,6 +31,7 @@ class AvailabilityConfirmationStatusChoiceType extends AbstractType
             'placeholder' => 'form.sheet_filter.children.availabilityConfirmationStatus.choice.all',
         ]);
     }
+
     /**
      * {@inheritdoc}
      */

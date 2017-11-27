@@ -1012,9 +1012,9 @@ class SheetSearchQueryBuilder
     }
 
     /**
-     * @param $filters
+     * @param array $filters
      */
-    private function filterByAvailabilityConfirmationStatus($filters)
+    private function filterByAvailabilityConfirmationStatus(array $filters)
     {
         if (isset($filters['availabilityConfirmationStatus'])
             && in_array($filters['availabilityConfirmationStatus'], ConfirmationStatus::ALL_STATUS)

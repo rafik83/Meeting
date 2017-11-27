@@ -138,7 +138,7 @@ class CreateFormHandler
      */
     private function createParticipantsSelectedWithMeetingOrHappeningExceptionError(
         ParticipantsSelectedWithMeetingOrHappeningException $exception
-    ) {
+    ): FormError {
         return new FormError(
             $this->translator->transChoice(
                 'validators.unavailability.participantsWithConflict',
@@ -152,7 +152,7 @@ class CreateFormHandler
     /**
      * @return FormError
      */
-    private function createNoParticipantSelectedExceptionError()
+    private function createNoParticipantSelectedExceptionError(): FormError
     {
         return new FormError(
             $this->translator->trans('validators.unavailability.participantsNotSelected', [], 'validators')

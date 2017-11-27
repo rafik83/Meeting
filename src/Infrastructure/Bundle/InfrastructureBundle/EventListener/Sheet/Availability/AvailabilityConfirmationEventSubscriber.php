@@ -53,7 +53,7 @@ class AvailabilityConfirmationEventSubscriber implements EventSubscriberInterfac
     /**
      * @param ParticipantAddedEvent $event
      */
-    public function onParticipantAdded(ParticipantAddedEvent $event)
+    public function onParticipantAdded(ParticipantAddedEvent $event): void
     {
         $sheet = $event->participant->getSheet();
         $sheet->setAvailabilityConfirmationStatus($this->calculator->getConfirmationStatusForSheet($sheet));
@@ -64,7 +64,7 @@ class AvailabilityConfirmationEventSubscriber implements EventSubscriberInterfac
     /**
      * @param ParticipantRemovedEvent $event
      */
-    public function onParticipantRemoved(ParticipantRemovedEvent $event)
+    public function onParticipantRemoved(ParticipantRemovedEvent $event): void
     {
         $sheet = $event->sheet;
         $sheet->setAvailabilityConfirmationStatus($this->calculator->getConfirmationStatusForSheet($sheet));
@@ -75,7 +75,7 @@ class AvailabilityConfirmationEventSubscriber implements EventSubscriberInterfac
     /**
      * @param SheetCreatedByManagerEvent $sheetCreatedByManagerEvent
      */
-    public function onSheetCreatedByGroupManager(SheetCreatedByManagerEvent $sheetCreatedByManagerEvent)
+    public function onSheetCreatedByGroupManager(SheetCreatedByManagerEvent $sheetCreatedByManagerEvent): void
     {
         $sheetCreatedByManagerEvent->sheet->setAvailabilityConfirmationStatus(
             $this->calculator->getConfirmationStatusForSheet($sheetCreatedByManagerEvent->sheet)
@@ -87,7 +87,7 @@ class AvailabilityConfirmationEventSubscriber implements EventSubscriberInterfac
     /**
      * @param ConfirmedEvent $confirmedEvent
      */
-    public function onUserAvailabilityConfirmed(ConfirmedEvent $confirmedEvent)
+    public function onUserAvailabilityConfirmed(ConfirmedEvent $confirmedEvent): void
     {
         $sheets = $this->sheetRepository->getSheetsByUserAndEvent(
             $confirmedEvent->getUser(),

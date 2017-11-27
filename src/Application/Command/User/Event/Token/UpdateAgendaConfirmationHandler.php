@@ -53,7 +53,7 @@ class UpdateAgendaConfirmationHandler
     /**
      * @param UpdateAgendaConfirmation $command
      */
-    public function handle(UpdateAgendaConfirmation $command)
+    public function handle(UpdateAgendaConfirmation $command): void
     {
         $token = $this->userEventTokenGenerator->getUserEventTokenForConfirmAgenda(
             $command->event,

@@ -111,7 +111,7 @@ class UnavailabilityController extends Controller
         EventDomain $eventDomain,
         Sheet $sheet,
         UserInterface $user
-    ): Response{
+    ): Response {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
         $this->denyAccessUnlessGranted(SheetVoter::UNAVAILABILITY_ADD, $sheet);
         $this->denyAccessUnlessGranted(AgendaAccessVoter::PERMISSION, $eventDomain->getEvent());

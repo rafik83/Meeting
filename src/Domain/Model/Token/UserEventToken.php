@@ -130,7 +130,7 @@ class UserEventToken
         $this->confirmedAt = $confirmedAt;
     }
 
-    public function unConfirm()
+    public function unConfirm(): void
     {
         $this->confirmed = false;
         $this->confirmedAt = null;
@@ -139,7 +139,7 @@ class UserEventToken
     /**
      * @return bool
      */
-    public function isAgendaConfirmation()
+    public function isAgendaConfirmation(): bool
     {
         return UserEventTokenType::AGENDA_CONFIRMATION === $this->type;
     }
