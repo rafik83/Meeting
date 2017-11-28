@@ -7,39 +7,7 @@
 {% block body_attributes 'class="grey"' %}
 
 {% block header_mobile %}
-    <div class="catalog-mobile-menu">
-        {% if searchForm.categories is defined or searchForm.type is defined or searchForm.availableSlot is defined or searchForm.content is defined %}
-            <div class="catalog-mobile-menu-summary catalog-mobile-menu-container">
-                {% if searchForm.content is defined %}
-                    <a href="#" class="catalog-mobile-menu-button btn btn-default btn-block" data-catalog-mobile-menu-button-action="catalog-mobile-menu-button-action-content-filter">
-                        <span>{{ searchForm.content.vars.label }}</span>
-                        <span id="content-filter-remove" class="button-count">
-                            <i class="glyphicon glyphicon-search"></i>
-                        </span>
-                    </a>
-                {% endif %}
-
-                {% if searchForm.availableSlot is defined %}
-                    <a href="#" class="catalog-mobile-menu-button btn btn-primary btn-block">
-                        <span>...</span>
-                        <span class="button-count">
-                            <i class="glyphicon glyphicon-chevron-down"></i>
-                        </span>
-                    </a>
-                {% endif %}
-
-                {% if searchForm.categories is defined or searchForm.type is defined %}
-                    <a href="#" class="catalog-mobile-menu-button btn btn-primary btn-block">
-                        <span>...</span>
-                        <span class="button-count">
-                            (...)
-                            <i class="glyphicon glyphicon-chevron-down"></i>
-                        </span>
-                    </a>
-                {% endif %}
-            </div>
-        {% endif %}
-    </div>
+    {{ include('EventBundle::Catalog/Partial/Mobile/menu.html.twig', {searchForm: searchForm}, false) }}
 {% endblock %}
 
 {% block content %}
@@ -63,5 +31,6 @@
             tipTranslationViews: null,
         }, false) }}
     </div>
+
     {{ include('EventBundle:MeetingRequest:modalMeetingRequest.html.twig') }}
 {% endblock %}

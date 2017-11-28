@@ -1,0 +1,119 @@
+{% set participantTypesOrCategoriesForm = null %}
+{% set participantTypesOrCategoriesViews = null %}
+
+{% if searchForm.type is defined %}
+    {% set participantTypesOrCategoriesForm = searchForm.type %}
+    {% set participantTypesOrCategoriesViews = typeViews %}
+{% elseif searchForm.categories is defined %}
+    {% set participantTypesOrCategoriesForm = searchForm.categories %}
+    {% set participantTypesOrCategoriesViews = categoryViews %}
+{% endif %}
+
+<div class="hidden" data-catalog-mobile-menu="catalog-mobile-menu">
+    {% if searchForm.availableSlot is defined or searchForm.type is defined or searchForm.content is defined %}
+        <div class="catalog-mobile-menu-summary catalog-mobile-menu-container">
+            {% if searchForm.content is defined %}
+                <a href="#" class="catalog-mobile-menu-button btn btn-default btn-block" data-catalog-mobile-menu-button-action="catalog-mobile-menu-button-action-content-filter">
+                    {% if searchForm.content.vars.data %}
+                        <span class="filter-content-data">{{ searchForm.content.vars.data }}</span>
+                        <span id="content-filter-remove" class="button-count">
+                        <i class="glyphicon glyphicon-remove"></i>
+                    </span>
+                    {% else %}
+                        <span>{{ searchForm.content.vars.label }}</span>
+                        <span class="button-count">
+                        <i class="glyphicon glyphicon-search"></i>
+                    </span>
+                    {% endif %}
+                </a>
+            {% endif %}
+
+            {% if searchForm.availableSlot is defined %}
+                {% for availableSlotOptionChosen in searchForm.availableSlot.children %}
+                    {% if availableSlotOptionChosen.vars.data %}
+                        <a href="#" class="catalog-mobile-menu-button btn btn-primary btn-block" data-catalog-mobile-menu-button-action="catalog-mobile-menu-button-action-available-slot-filter">
+                            <span>{{ availableSlotOptionChosen.vars.label|trans({}, availableSlotOptionChosen.vars.translation_domain) }}</span>
+                            <span class="button-count">
+                            <i class="glyphicon glyphicon-chevron-down"></i>
+                        </span>
+                        </a>
+                    {% endif %}
+                {% endfor %}
+            {% endif %}
+
+            {% if participantTypesOrCategoriesForm is not null %}
+                {% set totalType = 0 %}
+                {% for typeOrCategory in participantTypesOrCategoriesViews %}
+                    {% set totalType = totalType + typeOrCategory.count %}
+                {% endfor %}
+
+                {% set numberOfDifferentType = participantTypesOrCategoriesForm.children|length %}
+                {% set numberOfTypeSelected = 0 %}
+                {% set typeOrCategorySelected = null %}
+
+                {% for child in participantTypesOrCategoriesForm.children %}
+                    {% if child.vars.data %}
+                        {% set typeOrCategorySelected = child %}
+                        {% set numberOfTypeSelected = numberOfTypeSelected + 1 %}
+                    {% endif %}
+                {% endfor %}
+
+                <a href="#" class="catalog-mobile-menu-button btn btn-primary btn-block" data-catalog-mobile-menu-button-action="catalog-mobile-menu-button-action-type-filter">
+                    {% if typeOrCategorySelected != null and numberOfDifferentType != numberOfTypeSelected %}
+                        <span>{{ typeOrCategorySelected.vars.label|trans({}, typeOrCategorySelected.vars.translation_domain) }}</span>
+                        <span class="button-count">
+                        ({{ participantTypesOrCategoriesViews[typeOrCategorySelected.vars.value].count }})
+                        <i class="glyphicon glyphicon-chevron-down"></i>
+                    </span>
+                    {% else %}
+                        <span>{{ 'catalog.mobile.filters.allParticipants'|trans }}</span>
+                        <span class="button-count">
+                        ({{ totalType }})
+                        <i class="glyphicon glyphicon-chevron-down"></i>
+                    </span>
+                    {% endif %}
+                </a>
+            {% endif %}
+        </div>
+
+        <div class="catalog-mobile-menu-container catalog-mobile-menu-filters">
+            <div class="catalog-mobile-menu-filters-list">
+                {% if searchForm.content is defined %}
+                    <div class="filter-element">
+                        {{ include('EventBundle:Catalog:Partial/Mobile/content_filter_mobile.html.twig', {
+                            form: searchForm.content,
+                            sheet: sheet is defined ? sheet : null,
+                        }, false) }}
+                    </div>
+                {% endif %}
+
+                {% if searchForm.availableSlot is defined %}
+                    <div class="filter-element">
+                        {{ include('EventBundle:Catalog:Partial/Mobile/available_slot_filter_mobile.html.twig', {
+                            form: searchForm.availableSlot,
+                        }, false) }}
+                    </div>
+                {% endif %}
+
+                {% if participantTypesOrCategoriesForm is not null %}
+                    <div class="filter-element">
+                        {{ include('EventBundle:Catalog:Partial/Mobile/type_filters_mobile.html.twig', {
+                            form: participantTypesOrCategoriesForm,
+                            choices: participantTypesOrCategoriesViews,
+                            totalType: totalType,
+                            numberOfDifferentType: numberOfDifferentType,
+                            numberOfTypeSelected: numberOfTypeSelected,
+                        }, false) }}
+                    </div>
+                {% endif %}
+            </div>
+
+            <div class="catalog-mobile-menu-action">
+                <button type="button" class="catalog-close">
+                    <i class="icon-Fermer_4"></i> {{ 'navigation.close'|trans }}
+                </button>
+                <div class="clearfix"></div>
+            </div>
+        </div>
+    {% endif %}
+</div>
