@@ -208,7 +208,8 @@ test-behat@test:
 ##########
 
 ## Deploy application (demo)
-deploy@demo: deploy-capifony@demo
+deploy@demo:
+	ansible-playbook ansible/deploy.yml --inventory-file=ansible/hosts --limit=deploy_preprod
 
 ## Deploy application (preprod)
 deploy@preprod: deploy-capifony@preprod
