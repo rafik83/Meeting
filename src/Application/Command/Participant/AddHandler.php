@@ -23,6 +23,7 @@ use Proximum\Vimeet\Application\Exception\Participant\EmailCanNotBeNullException
 use Proximum\Vimeet\Application\Exception\Sheet\ParticipantAlreadyExistException;
 use Proximum\Vimeet\Domain\Account\Synchronizer;
 use Proximum\Vimeet\Domain\Cart\CartManager;
+use Proximum\Vimeet\Domain\Helper\StringHelper;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Repository\ParticipantRepositoryInterface;
@@ -127,6 +128,8 @@ class AddHandler
         if ($add->email === null) {
             throw new EmailCanNotBeNullException();
         }
+
+        $add->email = StringHelper::trimSpacesAndNonBreakSpaces($add->email);
 
         $user = $this->userRepository->findByEmail($add->email);
         $isNewUser = false;

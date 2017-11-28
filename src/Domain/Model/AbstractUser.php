@@ -48,7 +48,7 @@ abstract class AbstractUser implements UserInterface, EquatableInterface, \Seria
      */
     public function __construct($email, $salt, $password, $locale)
     {
-        $this->email    = $email;
+        $this->email    = strtolower($email);
         $this->salt     = $salt;
         $this->password = $password;
         $this->locale   = $locale;
