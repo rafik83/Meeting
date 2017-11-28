@@ -6,6 +6,10 @@
 
 {% block body_attributes 'class="grey"' %}
 
+{% block header_mobile %}
+    {{ include('EventBundle::Catalog/Partial/Mobile/menu.html.twig', {searchForm: searchForm}, false) }}
+{% endblock %}
+
 {% block content %}
     {% set numberOfFilterOnMobile = (searchForm.type is defined ? 1 : 0)
         + (searchForm.categories is defined ? 1 : 0)
