@@ -50,6 +50,10 @@ Proximum\Vimeet\Domain\Model\Sheet:
             type: string
             options:
                 default: 'phone_not_concerned'
+        availabilityConfirmationStatus:
+            type: string
+            options:
+                default: 'none_confirmed'
     manyToOne:
         event:
             targetEntity: Proximum\Vimeet\Domain\Model\Event

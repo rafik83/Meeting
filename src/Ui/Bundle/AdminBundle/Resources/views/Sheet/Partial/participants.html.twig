@@ -50,6 +50,9 @@
                         'agendaConfirmationStatus': participant.agendaConfirmationStatus
                     } %}
                     <br/>
+                    <b>{{ 'admin.sheet.details.participant.availability_confirmation.title'|trans }}: </b><span class="label label-{{ participant.availabilityConfirmationView.indicator }}">{{ participant.availabilityConfirmationView.message|trans }}</span>
+                    <br/>
+
                     {% if participant.isOwner %}
                         <a href="{{ impersonationUrl }}" class="btn btn-default btn-sm">{{ 'admin.sheet.impersonate'|trans }}</a>
                     {% endif %}

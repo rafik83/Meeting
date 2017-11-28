@@ -3405,6 +3405,7 @@ services:
             - '@template.template_data_factory'
             - '@query.sheet.detail.participant.agenda_confirmation_status_query_handler'
             - '@query.sheet.detail.participant.phone_validation_status_query_handler'
+            - '@query.sheet.detail.participant.availability_confirmation_status_query_handler'
 
     query.sheet.detail.participant.agenda_confirmation_status_query_handler:
         class: Proximum\Vimeet\Application\Query\Sheet\Detail\Participant\AgendaConfirmationStatusQueryHandler
@@ -5823,3 +5824,16 @@ services:
         arguments:
             - '@datetime'
             - '%feature_dday_enabled%'
+
+    domain.event.day.event_over:
+        class: Proximum\Vimeet\Domain\Event\Day\EventOver
+        arguments:
+            - '@datetime'
+
+    #
+    # Availability confirmation
+    #
+    domain.sheet.availability.confirmation_calculator:
+        class: Proximum\Vimeet\Domain\Sheet\Availability\ConfirmationCalculator
+        arguments:
+            - '@repository.user.event.extra_data_repository'
