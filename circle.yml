@@ -21,6 +21,7 @@ dependencies:
         - make install-app@test
         - make install-db@test
         - make install-dep
+        - make build@prod
         - export PATH=$(npm bin):$PATH
 test:
     pre:
