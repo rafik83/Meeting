@@ -13,7 +13,6 @@
 {% block content %}
     {% set numberOfFilterOnMobile = (searchForm.type is defined ? 1 : 0)
         + (searchForm.categories is defined ? 1 : 0)
-        + (searchForm.availableSlot is defined ? 1 : 0)
         + (searchForm.content is defined ? 1 : 0)
     %}
 
