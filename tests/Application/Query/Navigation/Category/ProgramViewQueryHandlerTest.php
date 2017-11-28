@@ -57,7 +57,7 @@ class ProgramViewQueryHandlerTest extends TestCase
             new LinkView('title one'),
         ];
 
-        $categoryViewExpected = new CategoryView('navigation.category.program', 'icon-Calendrier', $linkViews, true);
+        $categoryViewExpected = new CategoryView('navigation.category.program', 'icon-PresFlash_2', $linkViews, true);
 
         // Mocks
         $happeningsAccessChecker = $this->prophesize(HappeningsAccessChecker::class);

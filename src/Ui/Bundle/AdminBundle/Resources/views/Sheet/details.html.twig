@@ -110,4 +110,10 @@
     </div>
 
     {{ include('AdminBundle:Sheet/Partial:change_type_form.html.twig', { changeTypeForm: changeTypeForm }, false) }}
+    <div class="modal fade clear-on-hidden-modal" id="edit_agenda_confirmation_status" tabindex="-1" role="dialog" aria-labelledby="edit_agenda_confirmation_status" data-placeholder="{{ '<div class="modal-body text-center"><i class="glyphicon glyphicon-refresh spin text-xl"></i></div>'|e }}">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+            </div>
+        </div>
+    </div>
 {% endblock %}

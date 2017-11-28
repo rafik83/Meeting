@@ -211,9 +211,16 @@ class LeniApiCallHandler
 
         $response = json_decode($jsonResponse->body, true);
 
+        $apiCallLog = sprintf(
+            "Headers: %s;\nRequest: %s;\nResponse: %s;",
+            json_encode($headers),
+            $body,
+            $jsonResponse->body
+        );
+
         // Call not valid
         if (!isset($response[self::LENI_IS_VALID]) || $response[self::LENI_IS_VALID] !== true) {
-            throw new NotValidApiCallException('LENI responded has a non valid response ' . $jsonResponse->body);
+            throw new NotValidApiCallException($apiCallLog);
         }
 
         $hasNotUserId = !isset($data[LeniUserViewNormalizer::LENI_COL_USER_ID])
@@ -227,7 +234,7 @@ class LeniApiCallHandler
                 || !isset($response[self::LENI_FIELD_INFO][LeniUserViewNormalizer::LENI_COL_USER_ID][self::LENI_FIELD_VALUE])
             )
         ) {
-            throw new MissingIdException();
+            throw new MissingIdException($apiCallLog);
         }
 
         // Call has warnings
@@ -244,7 +251,7 @@ class LeniApiCallHandler
             }
 
             if (!empty($warnings)) {
-                throw new WarningApiCallException($warnings);
+                throw new WarningApiCallException($apiCallLog);
             }
         }
 
@@ -253,7 +260,7 @@ class LeniApiCallHandler
             $leniUserId = $response[self::LENI_FIELD_INFO][LeniUserViewNormalizer::LENI_COL_USER_ID][self::LENI_FIELD_VALUE];
 
             if (null === $leniUserId) {
-                throw new \LogicException('LENI send a null user id');
+                throw new \LogicException('LENI returned a null user id: ' . $apiCallLog);
             }
 
             $data[LeniUserViewNormalizer::LENI_COL_USER_ID] = $leniUserId;

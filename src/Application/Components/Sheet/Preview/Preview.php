@@ -93,7 +93,12 @@ class Preview
                 }
 
                 // Other remplate objects
-                $previewObjects[] = $this->resolveTemplateObject($templateObject, $locale);
+                $previewObjects[] = $this->resolveTemplateObject(
+                    $templateObject,
+                    $locale,
+                    $sheet->getEvent()->getLocales()
+                );
+
             } catch (ObjectNotFoundException $exception) {
                 continue;
             }
@@ -107,10 +112,11 @@ class Preview
     /**
      * @param TemplateObject $templateObject
      * @param string         $locale
+     * @param array          $eventLocales
      *
      * @return PreviewView
      */
-    private function resolveTemplateObject(TemplateObject $templateObject, string $locale)
+    private function resolveTemplateObject(TemplateObject $templateObject, string $locale, array $eventLocales)
     {
         $previewView = new PreviewView($templateObject->getKey(), '', $templateObject->getType());
 
@@ -119,13 +125,13 @@ class Preview
                 $previewView->strong = true;
             }
 
-            if ($templateObject->getContentValue() === '' && $templateObject->getTag() !== null) {
+            if ($templateObject->getContentValue() === '' && !empty($templateObject->getTag())) {
                 // In EditableText there is only one tag therefore it is not useful to add a comma
                 foreach ($templateObject->getTaggedDataViews() as $taggedDataView) {
                     $previewView->content = $this->getTaggedDataViewContent($taggedDataView, $locale);
                 }
             } else {
-                $previewView->content = $templateObject->getContentValue();
+                $previewView->content = $this->getContentValue($templateObject, $eventLocales);
             }
 
             $previewView->populatedFromTag = $templateObject->getTag();
@@ -194,5 +200,24 @@ class Preview
         }
 
         return $taggedDataView->content;
+    }
+
+    /**
+     * @param TemplateObject\ContentObjectInterface $templateObject
+     * @param array                                 $eventLocales
+     *
+     * @return string
+     */
+    private function getContentValue(TemplateObject\ContentObjectInterface $templateObject, array $eventLocales): string
+    {
+        if (empty($templateObject->getContentValue())) {
+            foreach ($eventLocales as $locale) {
+                if (!empty($templateObject->getContentValueLocalize($locale))) {
+                    return $templateObject->getContentValueLocalize($locale);
+                }
+            }
+        }
+
+        return $templateObject->getContentValue();
     }
 }

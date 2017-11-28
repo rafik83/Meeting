@@ -20,6 +20,7 @@ use Proximum\Vimeet\Application\Query\Participant\CardViewQueryHandler;
 use Proximum\Vimeet\Application\View\Participant\CardView;
 use Proximum\Vimeet\Application\View\Sheet\Preview\PreviewView;
 use Proximum\Vimeet\Application\View\Sheet\Preview\TagView;
+use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Rule;
 use Proximum\Vimeet\Domain\Model\Sheet;
@@ -36,15 +37,25 @@ use Proximum\Vimeet\Domain\Template\TemplateObject\Tag;
 use Proximum\Vimeet\Domain\View\Template\TaggedDataView;
 use \Proximum\Vimeet\Application\Components\Sheet\Template\Tag as TemplateTag;
 use PHPUnit\Framework\TestCase;
+use Proximum\Vimeet\Tests\Factory\EventFactory;
 
 class PreviewTest extends TestCase
 {
+    /** @var Event */
+    private $event;
+
+    public function setUp()
+    {
+        $this->event = EventFactory::createEvent();
+    }
+
     public function testGetPreview()
     {
         $locale      = 'fr';
         $sheet       = $this->prophesize(Sheet::class);
         $template    = $this->prophesize(SheetTemplate::class);
         $participant = $this->prophesize(Participant::class);
+        $sheet->getEvent()->shouldBeCalled()->willReturn($this->event);
         $sheet->getTypeSheetTemplate()->shouldBeCalled()->willReturn($template->reveal());
         $sheet->getParticipants()->willReturn(new ArrayCollection([$participant->reveal()]));
         $template->getPreview()->shouldBeCalled()->willReturn([
@@ -151,6 +162,7 @@ class PreviewTest extends TestCase
         $template    = $this->prophesize(SheetTemplate::class);
         $participant = $this->prophesize(Participant::class);
 
+        $sheet->getEvent()->shouldBeCalled()->willReturn($this->event);
         $sheet->getTypeSheetTemplate()->shouldBeCalled()->willReturn($template->reveal());
         $sheet->getParticipants()->willReturn(new ArrayCollection([$participant->reveal()]));
         $template->getPreview()->shouldBeCalled()->willReturn(
