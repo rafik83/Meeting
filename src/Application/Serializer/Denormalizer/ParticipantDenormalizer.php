@@ -379,7 +379,7 @@ class ParticipantDenormalizer implements DenormalizerInterface
         $user = $this->hasUserAccount($email, $users);
 
         if ($user === false) {
-            $user = new User(strtolower($email), '', '', $context['locale']);
+            $user = new User($email, '', '', $context['locale']);
             $user->setAccount(new User\Account());
 
             $this->userRepository->add($user);
