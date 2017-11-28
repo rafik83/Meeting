@@ -1,9 +1,9 @@
 {% set redirectPath = path('event_catalog_index', { 'sheet': sheet.id }) %}
 
-{% if isAnsweringMeetingRequestClosed is defined and isAnsweringMeetingRequestClosed == true %}
-    <a class="btn btn-gray reject" disabled>
+{% if isAnsweringMeetingRequestClosed is defined and isAnsweringMeetingRequestClosed == true or isMeetingRequestUpdateLocked is defined and isMeetingRequestUpdateLocked == true%}
+    <div class="btn btn-gray reject" disabled>
         <i class="icon-Fermer_4"></i> {{ 'catalog.meeting_request.request.refused'|trans }}
-    </a>
+    </div>
 {% else %}
     {% if isPhoneValidationRequired and phoneValidationLink is not null %}
         <a class="btn btn-gray reject" href="{{ phoneValidationLink }}">

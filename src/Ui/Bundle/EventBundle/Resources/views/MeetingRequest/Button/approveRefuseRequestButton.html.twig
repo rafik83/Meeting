@@ -2,6 +2,8 @@
 
 {% if isAnsweringMeetingRequestClosed is defined and isAnsweringMeetingRequestClosed == true %}
     {{ include('EventBundle:MeetingRequest/Button:closedAnsweringMeetingRequest.html.twig', {}, false) }}
+{% elseif isMeetingRequestUpdateLocked is defined and isMeetingRequestUpdateLocked == true  %}
+    {{ include('EventBundle:MeetingRequest/Button:lockedMeetingRequest.html.twig', {}, false) }}
 {% else %}
     {% if isPhoneValidationRequired and phoneValidationLink is not null %}
         <a class="btn btn-gray reject" href="{{ phoneValidationLink }}">

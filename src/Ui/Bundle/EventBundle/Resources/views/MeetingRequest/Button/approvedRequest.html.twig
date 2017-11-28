@@ -1,11 +1,14 @@
 {% set redirectPath = path('event_catalog_index', { 'sheet': sheet.id }) %}
 
-{% if isAnsweringMeetingRequestClosed is defined and isAnsweringMeetingRequestClosed == true %}
+{% if isAnsweringMeetingRequestClosed is defined and isAnsweringMeetingRequestClosed == true or isMeetingRequestUpdateLocked is defined and isMeetingRequestUpdateLocked == true %}
     {% if isMeetingPublished is defined and isMeetingPublished and meetingRequest.hasMeeting %}
         <div class="btn btn-gray accept" disabled>
             <i class="icon-Valider_4"></i> {{ 'catalog.meeting_request.request.placed'|trans }}
         </div>
     {% else %}
+        {% if isMeetingRequestUpdateLocked == true %}
+            {{ include('EventBundle:MeetingRequest/Button:lockedMeetingRequest.html.twig', {}, false) }}
+        {% endif %}
         <div class="btn btn-gray accept" disabled>
             <i class="icon-Valider_4"></i> {{ 'catalog.meeting_request.request.approved'|trans }}
         </div>
