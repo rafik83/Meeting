@@ -7,7 +7,13 @@
 {% block body_attributes 'class="grey"' %}
 
 {% block content %}
-    <div class="catalog catalog--advanced">
+    {% set numberOfFilterOnMobile = (searchForm.type is defined ? 1 : 0)
+        + (searchForm.categories is defined ? 1 : 0)
+        + (searchForm.availableSlot is defined ? 1 : 0)
+        + (searchForm.content is defined ? 1 : 0)
+    %}
+
+    <div class="catalog catalog--advanced {{ numberOfFilterOnMobile > 0 ? 'catalog-mobile-margin-' ~ numberOfFilterOnMobile : '' }}">
         {% if message is defined and message is not null %}
             {{ include('EventBundle::Catalog/External/message.html.twig', {'message': message}) }}
         {% endif %}

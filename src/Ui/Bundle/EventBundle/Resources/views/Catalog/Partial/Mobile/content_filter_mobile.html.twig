@@ -10,7 +10,7 @@
         data-method="post"
         data-label-input-too-short="{{ 'form.search.autocomplete.atLeastThreeChars'|trans({}, 'forms') }}"
         data-label-searching="{{ 'form.search.autocomplete.searching'|trans({}, 'forms') }}"
-        data-action="{{ path('event_catalog_search_keywords', {sheet: sheet.id}) }}"
+        data-action="{{ sheet is not null ? path('event_catalog_search_keywords', {sheet: sheet.id}) : path('event_catalog_external_search_localization') }}"
         data-minimum-input-length="3"
         data-on-change-event="mobile-input-content-change"
         data-purge-event="mobile-input-content-purge"
