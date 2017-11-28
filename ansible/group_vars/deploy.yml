@@ -49,7 +49,7 @@ manala_deploy_shared_dirs:
 manala_deploy_writable_dirs_default:
   mode:   ug=rwx,o=rx
   follow: true
-  raw:    setfacl -R -m u:"www-data":rwX -m u:"ELAO":rwX %(dir)s && setfacl -dR -m u:"www-data":rwX -m u:"ELAO":rwX %(dir)s
+  # ACL managed by Synalabs
 
 manala_deploy_writable_dirs:
   - var/cache
