@@ -62,7 +62,7 @@ app_patterns:
     # Preprod
     - Host proximum-vimeet-preprod:
       - User:         www-data
-      - ProxyCommand: ssh proximum-gw nc vimeet-preprod %p
+      - Hostname:     10.11.0.83
 
     # Prod
     - Host proximum-mysql-master:
@@ -71,11 +71,11 @@ app_patterns:
 
     - Host proximum-web-apache-01:
       - User:         www-data
-      - ProxyCommand: ssh proximum-gw nc web-apache-01 %p
+      - Hostname:     10.11.0.31
 
     - Host proximum-web-apache-02:
       - User:         www-data
-      - ProxyCommand: ssh proximum-gw nc web-apache-02 %p
+      - Hostname:     10.11.0.32
 
     - Host proximum-filer:
       - User:         www-data
