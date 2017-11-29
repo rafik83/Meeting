@@ -92,7 +92,7 @@ form.search.localization.search.placeholder: '69, Lyon, France'
 form.search.meeting.availableSlot.choice.available: 'Ayant des disponibilités'
 form.search.meeting.availableSlot.choice.everyone: Tous
 form.search.meeting.availableSlot.choice.slot: 'Disponible le %day% à %time%'
-form.search.meeting.availableSlot.label: 'Qui est disponbile ?'
+form.search.meeting.availableSlot.label: 'Qui est disponible ?'
 form.search.meeting.state.all: 'Tous les statuts'
 form.search.meeting.state.approved: Acceptées
 form.search.meeting.state.cancelled: Annulées
@@ -143,5 +143,6 @@ form.sheet_media_data.children.type.document: Document
 form.sheet_media_data.children.type.video: Vidéo
 form.user_event_phone_validate_code.children.code.label: 'Code de confirmation reçu'
 form.user_event_phone_validate_code.children.confirm.label: Confirmer
+form.user_availability_confirmation.children.confirm.label: 'Confirmer vos disponibilités'
 gender.man: Monsieur
 gender.woman: Madame

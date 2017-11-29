@@ -14,6 +14,7 @@ use Proximum\Vimeet\Application\Components\Token\Admin\ActivateAccountTokenGener
 use Proximum\Vimeet\Application\Event\Admin\ActivateAccountEvent;
 use Proximum\Vimeet\Application\Event\Events;
 use Proximum\Vimeet\Application\Exception\User\EmailAlreadyExistsException;
+use Proximum\Vimeet\Domain\Helper\StringHelper;
 use Proximum\Vimeet\Domain\Model\Admin;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Repository\AdminRepositoryInterface;
@@ -53,6 +54,7 @@ class UpdateHandler
     public function handle(Update $update)
     {
         $newMail = $update->email !== $update->operator->getEmail();
+        $update->email = StringHelper::trimSpacesAndNonBreakSpaces($update->email);
 
         if ($newMail && $this->adminRepository->emailExists($update->email)) {
             throw new EmailAlreadyExistsException(sprintf('"%s" already exists.', $update->email));

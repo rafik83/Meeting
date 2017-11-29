@@ -82,3 +82,8 @@ services:
         class: Proximum\Vimeet\Application\Query\Sheet\Detail\Participant\PhoneValidationStatusQueryHandler
         arguments:
             - '@domain.user_event.user_event_phone_checker'
+
+    query.sheet.detail.participant.availability_confirmation_status_query_handler:
+        class: Proximum\Vimeet\Application\Query\Sheet\Detail\Participant\AvailabilityConfirmationStatusQueryHandler
+        arguments:
+            - '@repository.user.event.extra_data_repository'

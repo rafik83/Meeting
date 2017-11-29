@@ -129,8 +129,6 @@ class SheetController extends Controller
         );
         $tipTranslationViews = $this->get('tactician.commandbus.query')->handle($tipTranslationViewQuery);
 
-
-
         return $this->render('EventBundle:Sheet:sheet.html.twig', [
             'event'                   => $eventDomain->getEvent(),
             'sheet'                   => $sheet,

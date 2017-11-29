@@ -12,7 +12,7 @@ namespace Proximum\Vimeet\Domain\Template\TemplateObject;
 
 use Proximum\Vimeet\Domain\Template\TemplateObject;
 
-class ItemCollection extends TemplateObject implements SearchableObjectInterface, IndexableObjectInterface, ExportableObjectInterface
+class ItemCollection extends TemplateObject implements SearchableObjectInterface, ExportableObjectInterface
 {
     /**
      * @var Item[]

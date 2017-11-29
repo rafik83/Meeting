@@ -41,6 +41,7 @@ use Proximum\Vimeet\Domain\View\Catalog\OrganizationCategoryView;
 use Proximum\Vimeet\Domain\View\Catalog\TypeView;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\EventListener\Security\CatalogAccessEventListener;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Catalog\SearchType;
+use Proximum\Vimeet\Ui\Bundle\EventBundle\Handler\Catalog\AvailabilityConfirmationChecker;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\ParamConverter\EventDomain;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Security\SheetVoter;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -93,8 +94,21 @@ class CatalogController extends Controller
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
         $this->denyAccessUnlessGranted(SheetVoter::EDIT, $sheet);
-
         $event  = $eventDomain->getEvent();
+
+        $availabilityConfirmation = $this->get('handler.catalog.availability_confirmation_checker_handler')
+            ->handle(new AvailabilityConfirmationChecker(
+                $event,
+                $sheet,
+                $user,
+                AvailabilityConfirmationChecker::ORIGIN_CATALOG
+            ))
+        ;
+
+        if (!$availabilityConfirmation->isAllowedToAccess()) {
+            return $this->redirect($availabilityConfirmation->redirectRoute);
+        }
+
         $locale = $request->getLocale();
 
         if (!$sheet->isInCatalog()) {

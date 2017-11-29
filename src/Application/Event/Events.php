@@ -84,11 +84,13 @@ final class Events
     const MASS_ASSIGNMENT_UPDATED                      = 'mass.assignment.updated';
     const USER_AGENDA_CONFIRMED                        = 'user.agenda.confirmed';
     const USER_EVENT_TOKEN_AGENDA_CONFIRMATION_CREATED = 'user_event_token.agenda_confirmation.created';
+    const USER_AGENDA_CONFIRMATION_STATUS_UPDATED      = 'user_event_token.agenda_confirmation.updated';
     const MASS_UNAVAILABILITY_DISPATCHED               = 'mass.unavailability.dispatched';
     const SLOT_GENERATED                               = 'slot.generated';
     const SLOT_TOGGLE_LOCKED                           = 'slot.toggle.locked';
     const SLOT_DELETED                                 = 'slot.deleted';
     const USER_PHONE_VALIDATED                         = 'user.phone_validated';
+    const USER_AVAILABILITY_CONFIRMED                  = 'user.availability.confirmed';
     const TIP_ASSIGNED                                 = 'tip.assigned';
     const TIP_UN_ASSIGNED                              = 'tip.un_assigned';
 }

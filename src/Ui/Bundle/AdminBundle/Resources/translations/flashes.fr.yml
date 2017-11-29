@@ -184,6 +184,7 @@ flash.payment.deposit.notAvailable: 'Nous sommes désolé, l''accompte n''est pl
 flash.promotion_code.create.success: 'Le code promotion a bien été créé'
 flash.promotion_code.update.success: 'Le code promotion a bien été mis à jour'
 flash.reset_password_token.success: 'Un mail vous a été envoyé avec la procédure pour créer un nouveau mot de passe'
+flash.schedule.slot.generate.missingDay: 'Les jours de l''événement doivent être configurés avant les créneaux'
 flash.schedule.configure.success: 'Votre configuration a bien été enregistrer'
 flash.schedule.days.success: 'Les jours de l''événement ont été définis avec succès'
 flash.schedule.slot.generate.success: '%count% créneau a été ajouté|%count% créneaux ont été ajoutés'

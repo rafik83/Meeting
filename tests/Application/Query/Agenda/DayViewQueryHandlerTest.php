@@ -226,7 +226,7 @@ class DayViewQueryHandlerTest extends TestCase
             ->willReturn($this->massView);
 
         $unavailabilityHandler
-            ->handle(new UnavailabilityViewQuery($this->unavailability, $this->event))
+            ->handle(new UnavailabilityViewQuery($this->unavailability, $this->event, $this->day))
             ->shouldBeCalled()
             ->willReturn($this->unavailabilityView);
 
@@ -356,7 +356,7 @@ class DayViewQueryHandlerTest extends TestCase
             ->willReturn($this->massView);
 
         $unavailabilityHandler
-            ->handle(new UnavailabilityViewQuery($this->unavailability, $this->event))
+            ->handle(new UnavailabilityViewQuery($this->unavailability, $this->event, $this->day))
             ->shouldBeCalled()
             ->willReturn($this->unavailabilityView);
 
@@ -484,7 +484,10 @@ class DayViewQueryHandlerTest extends TestCase
         $massHandler           = $this->prophesize(MassUnavailabilityViewQueryHandler::class);
         $unavailabilityHandler = $this->prophesize(UnavailabilityViewQueryHandler::class);
         $massHandler->handle(new MassUnavailabilityViewQuery($mass, $event, $participant, 'fr'))->shouldNotBeCalled();
-        $unavailabilityHandler->handle(new UnavailabilityViewQuery($unavailability, $event))->shouldNotBeCalled();
+        $unavailabilityHandler
+            ->handle(new UnavailabilityViewQuery($unavailability, $event, $this->day))
+            ->shouldNotBeCalled()
+        ;
         $meetingHandler = $this->prophesize(MeetingViewQueryHandler::class);
         $meetingHandler->handle()->shouldNotBeCalled();
         $this->cancelAttendanceUnavailabilityViewQueryHandler

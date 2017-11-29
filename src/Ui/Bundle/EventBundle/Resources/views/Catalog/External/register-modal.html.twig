@@ -1,0 +1,31 @@
+<div class="modal fade" id="catalogRegisterModal" tabindex="-1" role="dialog" aria-labelledby="catalogRegisterModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                {% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}
+                    {{ 'catalog.external.modal.content.logged'|trans({
+                        '%catalogOnlineDate%': null != catalogOnlineDate
+                        ? catalogOnlineDate|localizeddate('short', 'none', app.request.locale, event.timeZone)
+                    : 'navigation.links.incoming'|trans
+                    }) }}
+                {% else %}
+                    {{ 'catalog.external.modal.content'|trans }}
+                {% endif %}
+            </div>
+            <div class="modal-footer">
+                {% if registrationUrl is not null %}
+                    <a class="btn btn-default" href="{{ registrationUrl }}">{{ 'login.connect'|trans }}</a>
+                    <a id="modal-register-link" class="btn btn-primary" href="{{ registrationUrl }}">{{ 'register.register'|trans }}</a>
+                {% else %}
+                    <a class="btn btn-default" href="{{ path('event_login') }}">{{ 'login.connect'|trans }}</a>
+                    <a class="btn btn-primary" href="{{ path('event') }}">{{ 'register.register'|trans }}</a>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>

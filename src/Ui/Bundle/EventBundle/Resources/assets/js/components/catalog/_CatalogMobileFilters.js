@@ -20,14 +20,20 @@ function CatalogMobileFilters(catalogFilterZone, catalogFilter, catalogForm) {
     this.typeFilterList = this.catalogFilter.querySelector('.catalog-mobile-type-filter-list');
     this.availableSlotFilterList = this.catalogFilter.querySelector('.catalog-mobile-available-slot-filter-list');
     this.catalogForm = catalogForm;
+
     this.typeFilterCheckboxes = this.catalogForm.querySelectorAll('input[name="type[]"]');
+
+    if (!this.typeFilterCheckboxes.length) {
+        this.typeFilterCheckboxes = this.catalogForm.querySelectorAll('input[name="categories[]"]');
+    }
+
     this.availableSlotRadio = this.catalogForm.querySelectorAll('input[name="availableSlot"]');
     this.contentInput = this.catalogForm.querySelector('input[name="content"]');
     this.contentFilterList = this.catalogFilter.querySelector('#catalog-mobile-filter-input-content');
     this.typeFilterButtons = [];
     this.availableSlotFilterButtons = [];
 
-    if ((this.typeFilterList !== null && this.typeFilterCheckboxes !== null)
+    if ((this.typeFilterList !== null && this.typeFilterCheckboxes.length)
         || (this.availableSlotFilterList !== null && this.availableSlotRadio !== null)
         || (this.contentFilterList !== null && this.contentInput !== null)
     ) {

@@ -16,7 +16,6 @@ use Proximum\Vimeet\Application\Components\Planning\Formatter\ParticipantPlannin
 use Proximum\Vimeet\Application\Exception\Sheet\SheetNotFoundException;
 use Proximum\Vimeet\Application\ThirdParty\LENI\Exception\LeniApiServerException;
 use Proximum\Vimeet\Application\ThirdParty\LENI\Exception\NotValidApiCallException;
-use Proximum\Vimeet\Application\ThirdParty\LENI\Exception\WarningApiCallException;
 use Proximum\Vimeet\Application\ThirdParty\LENI\Query\LeniUserViewQuery;
 use Proximum\Vimeet\Application\ThirdParty\LENI\Query\LeniUserViewQueryHandler;
 use Proximum\Vimeet\Domain\Event\ExtraParameter\Type;
@@ -97,7 +96,6 @@ class PrepareLeniApiCallHandler
      *
      * @throws LeniApiServerException
      * @throws NotValidApiCallException
-     * @throws WarningApiCallException
      */
     public function handle(PrepareLeniApiCall $command): void
     {

@@ -453,6 +453,14 @@ services:
         tags:
             - { name: kernel.event_subscriber }
 
+    event_listener.sheet_availability.availability_confirmation_event_subscriber:
+        class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\EventListener\Sheet\Availability\AvailabilityConfirmationEventSubscriber
+        arguments:
+            - '@vimeet_infrastructure.repository.sheet_repository'
+            - '@domain.sheet.availability.confirmation_calculator'
+        tags:
+            - { name: kernel.event_subscriber }
+
     #
     # Twig extension
     #
@@ -626,3 +634,22 @@ services:
         arguments:
             - '@security.validate_mobile_process_access_checker'
             - '@template.participant_info_guesser'
+
+    handler.unavailability.create_form_handler:
+        class: Proximum\Vimeet\Ui\Bundle\EventBundle\Handler\Unavailability\CreateFormHandler
+        arguments:
+            - '@form.factory'
+            - '@vimeet_infrastructure.adapter.translator_adapter'
+            - '@tactician.commandbus'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Ui\Bundle\EventBundle\Handler\Unavailability\CreateForm }
+
+    handler.catalog.availability_confirmation_checker_handler:
+        class: Proximum\Vimeet\Ui\Bundle\EventBundle\Handler\Catalog\AvailabilityConfirmationCheckerHandler
+        arguments:
+            - '@domain.key_dates.checker.agenda_access_checker'
+            - '@domain.event.day.event_over'
+            - '@session.flash_bag'
+            - '@repository.user.event.extra_data_repository'
+            - '@adapter.router'
+            - '%feature_availability_confirmation_enabled%'

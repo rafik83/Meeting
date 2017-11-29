@@ -16,6 +16,8 @@ use Proximum\Vimeet\Application\Components\Sheet\Template\Tag;
 use Proximum\Vimeet\Application\Serializer\Denormalizer\Exception\InvalidObjectContentException;
 use Proximum\Vimeet\Domain\Account\EmailValidator;
 use Proximum\Vimeet\Domain\Account\Synchronizer;
+use Proximum\Vimeet\Domain\Email\EmailHelper;
+use Proximum\Vimeet\Domain\Helper\StringHelper;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\User;
@@ -150,7 +152,7 @@ class ParticipantDenormalizer implements DenormalizerInterface
                 continue;
             }
 
-            $email = $row[$mappedMailCsvColumn];
+            $email = StringHelper::trimSpacesAndNonBreakSpaces($row[$mappedMailCsvColumn]);
 
             if ($this->emailValidator->validate($email) === false) {
                 $this->importLogger->addError($key, new EmailError($email, true), $email, $context['locale']);
@@ -280,6 +282,7 @@ class ParticipantDenormalizer implements DenormalizerInterface
         $registrationTemplate->clear();
 
         foreach ($row as $key => $column) {
+            $column = trim($column);
             $registrationObjectKey = $mappingGuesser->getMappedOutKey($key);
 
             if ($registrationObjectKey === false
@@ -376,7 +379,7 @@ class ParticipantDenormalizer implements DenormalizerInterface
         $user = $this->hasUserAccount($email, $users);
 
         if ($user === false) {
-            $user = new User(strtolower($email), '', '', $context['locale']);
+            $user = new User($email, '', '', $context['locale']);
             $user->setAccount(new User\Account());
 
             $this->userRepository->add($user);
