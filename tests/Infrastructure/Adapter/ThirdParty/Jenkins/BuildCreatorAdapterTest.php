@@ -30,7 +30,7 @@ class BuildCreatorAdapterTest extends TestCase
 
         $output = [];
         $result = 0;
-        $command = "curl -v -X POST http://optaplanner:8080/job/ThisIsATest/build --user jenkins:jenkinsP --data-urlencode json=''{\"parameter\": [{\"NAME\":\"Param1\",\"VALUE\":\"Value1\"},{\"NAME\":\"Param2\",\"VALUE\":\"Value2\"}]}'' 2>&1";
+        $command = "curl -v -X POST http://optaplanner:8080/job/ThisIsATest/build --user jenkins:jenkinsP --data-urlencode json=''{\"parameter\": [{\"name\":\"Param1\",\"value\":\"Value1\"},{\"name\":\"Param2\",\"value\":\"Value2\"}]}'' 2>&1";
 
         $execAdapter->exec(
             $command,

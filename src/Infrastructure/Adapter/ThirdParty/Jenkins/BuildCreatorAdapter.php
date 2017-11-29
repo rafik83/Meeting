@@ -55,8 +55,8 @@ class BuildCreatorAdapter implements BuildCreatorInterface
 
         foreach ($arguments as $key => $value) {
             $argumentsEncoded[] = [
-                'NAME' => $key,
-                'VALUE' => $value,
+                'name' => $key,
+                'value' => $value,
             ];
         }
 
