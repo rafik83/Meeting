@@ -25,6 +25,9 @@ class Tip
     /** @var string */
     private $title;
 
+    /** @var Event|null */
+    private $event;
+
     /** @var ArrayCollection */
     private $translations;
 
@@ -59,6 +62,7 @@ class Tip
      * Tip constructor.
      *
      * @param string             $title
+     * @param Event|null         $event
      * @param bool               $onMeetingManagement
      * @param bool               $onCatalog
      * @param bool               $onPrintPlanning
@@ -70,6 +74,7 @@ class Tip
      */
     public function __construct(
         $title,
+        Event $event = null,
         $onMeetingManagement,
         $onCatalog,
         $onPrintPlanning,
@@ -80,6 +85,7 @@ class Tip
         \DateTimeInterface $createdAt
     ) {
         $this->title               = $title;
+        $this->event               = $event;
         $this->onMeetingManagement = $onMeetingManagement;
         $this->onCatalog           = $onCatalog;
         $this->onPrintPlanning     = $onPrintPlanning;
@@ -261,6 +267,14 @@ class Tip
     public function getTranslations()
     {
         return $this->translations->toArray();
+    }
+
+    /**
+     * @return null|Event
+     */
+    public function getEvent(): ?Event
+    {
+        return $this->event;
     }
 
     /**

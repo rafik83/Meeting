@@ -44,7 +44,14 @@ Proximum\Vimeet\Domain\Model\Tip\Tip:
             targetEntity: Proximum\Vimeet\Domain\Model\Tip\TipTranslation
             mappedBy: tip
             indexBy: locale
+            orphanRemoval: true
             cascade: ['persist', 'remove']
+    manyToOne:
+        event:
+            targetEntity: Proximum\Vimeet\Domain\Model\Event
+            joinColumn:
+                nullable: true
+                onDelete: CASCADE
     manyToMany:
         types:
             targetEntity: Proximum\Vimeet\Domain\Model\Type
