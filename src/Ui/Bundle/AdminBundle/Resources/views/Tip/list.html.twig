@@ -1,5 +1,7 @@
 {% extends 'AdminBundle::base.html.twig' %}
 
+{% from 'AdminBundle::macro.html.twig' import delete_button %}
+
 {% block content %}
     <h1 class="page-header">{{ 'admin.tip.list.title'|trans }}</h1>
 
@@ -36,6 +38,17 @@
                                 <a class="btn btn-default btn-sm" href="{{ path('admin_tip_update', {'tip': tip.id}) }}">
                                     {{ 'admin.tip.update.link'|trans }}
                                 </a>
+                                <button type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    <span class="caret"></span>
+                                </button>
+                                <ul class="dropdown-menu dropdown-menu-right">
+                                    <li>
+                                        {{ delete_button(
+                                            path('admin_tip_remove', {'tip': tip.id }),
+                                            'admin.tip.remove.link'|trans,
+                                            { 'class': 'btn btn-default btn-sm', 'data-confirm': 'admin.tip.remove.action.confirm'|trans }) }}
+                                    </li>
+                                </ul>
                             </div>
                         </td>
                     </tr>

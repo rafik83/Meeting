@@ -1513,6 +1513,13 @@ admin_tip_update:
     methods: [GET, POST]
     defaults: { _controller: AdminBundle:Tip/Tip:update }
 
+admin_tip_remove:
+    path: /tip/{tip}/remove
+    requirements:
+        tip: \d+
+    methods: [DELETE]
+    defaults: { _controller: Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Tip\RemoveAction }
+
 #
 # Tip on event
 #

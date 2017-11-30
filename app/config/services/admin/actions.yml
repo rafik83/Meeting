@@ -14,3 +14,10 @@ services:
             - '@form.factory'
             - '@templating'
             - '@adapter.authorization_checker'
+
+    Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Tip\RemoveAction:
+        arguments:
+            - '@tactician.commandbus'
+            - '@session.flash_bag'
+            - '@adapter.router'
+            - '@adapter.authorization_checker'

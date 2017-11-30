@@ -908,6 +908,8 @@ admin.tip.link: 'Messages d''aide'
 admin.tip.list.title: 'Messages d''aide'
 admin.tip.update.link: Modifier
 admin.tip.update.title: 'Mise à jour du message d''aide'
+admin.tip.remove.link: Supprimer
+admin.tip.remove.action.confirm: 'Êtes-vous sûr de vouloir supprimer ce message d''aide?'
 admin.tip.visible: 'Liste des pages concernées'
 admin.transaction.add: Ajouter
 admin.transaction.column.date: Date
