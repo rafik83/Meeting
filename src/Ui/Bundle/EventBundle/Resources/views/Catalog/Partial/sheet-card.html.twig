@@ -26,7 +26,7 @@
             </div>
 
             {% if not catalogSheetPreviewView.isItMySheet %}
-                <div class="buttons-zone button">
+                <div class="buttons-zone {% if meetingRequestView.isAnsweringMeetingRequestClosed is defined and meetingRequestView.isAnsweringMeetingRequestClosed == false %}button{% endif %}">
                     {{ include('EventBundle:MeetingRequest:buttons.html.twig', {
                         'allowedToCreate': catalogSheetPreviewView.isAllowedToCreateMeetingRequest,
                         'meetingRequest': catalogSheetPreviewView.meetingRequest,

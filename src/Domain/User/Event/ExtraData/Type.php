@@ -18,4 +18,9 @@ final class Type
      * DateTime of the last notification sent to user
      */
     const MEETING_REQUEST_DATE_LAST_NOTIFICATION_REMINDER = 'meeting_request_date_last_notification_reminder';
+
+    /**
+     * State to confirm the availability of a user
+     */
+    const AVAILABILITY_CONFIRMATION = 'availability_confirmed';
 }

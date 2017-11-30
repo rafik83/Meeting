@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of the vimeet project.
+ * This file is part of the Proximum Vimeet project.
  *
  * Copyright (C) Proximum
  *
@@ -10,6 +10,9 @@
 
 namespace Proximum\Vimeet\Application\Command\Tip\Event;
 
+use Proximum\Vimeet\Application\Adapter\DelayedEventDispatcherInterface;
+use Proximum\Vimeet\Application\Event\Events;
+use Proximum\Vimeet\Application\Event\Tip\AssignedEvent;
 use Proximum\Vimeet\Application\Exception\Tip\TipNotFoundException;
 use Proximum\Vimeet\Domain\Repository\TipRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\TypeRepositoryInterface;
@@ -21,17 +24,25 @@ class AffectHandler
 
     /** @var TypeRepositoryInterface */
     private $typeRepository;
-    
+
+    /** @var DelayedEventDispatcherInterface */
+    private $delayedEventDispatcher;
+
     /**
      * AffectHandler constructor.
      *
-     * @param TipRepositoryInterface  $tipRepository
-     * @param TypeRepositoryInterface $typeRepository
+     * @param TipRepositoryInterface          $tipRepository
+     * @param TypeRepositoryInterface         $typeRepository
+     * @param DelayedEventDispatcherInterface $delayedEventDispatcher
      */
-    public function __construct(TipRepositoryInterface $tipRepository, TypeRepositoryInterface $typeRepository)
-    {
+    public function __construct(
+        TipRepositoryInterface $tipRepository,
+        TypeRepositoryInterface $typeRepository,
+        DelayedEventDispatcherInterface $delayedEventDispatcher
+    ) {
         $this->tipRepository  = $tipRepository;
         $this->typeRepository = $typeRepository;
+        $this->delayedEventDispatcher = $delayedEventDispatcher;
     }
 
     /**
@@ -53,5 +64,7 @@ class AffectHandler
         }
 
         $this->tipRepository->set($tip);
+
+        $this->delayedEventDispatcher->dispatch(Events::TIP_ASSIGNED, new AssignedEvent($affect->event, $tip));
     }
 }

@@ -21,6 +21,7 @@ use Proximum\Vimeet\Domain\Model\Type;
 use Proximum\Vimeet\Domain\Repository\NomenclatureRepositoryInterface;
 use Proximum\Vimeet\Domain\Template\Exception\BuildNotImplementedException;
 use Proximum\Vimeet\Domain\Template\Exception\ObjectNotFoundException;
+use Proximum\Vimeet\Domain\Template\TemplateObject\EditableText;
 
 class TemplateDataFactory
 {
@@ -226,13 +227,40 @@ class TemplateDataFactory
 
         foreach ($data as $key => $value) {
             try {
-                $templateData->getObject($key)->setData($value ?: []);
+                $templateObject = $templateData->getObject($key);
+                $templateObject->setData($value ?: []);
+
+                if ($templateObject instanceof EditableText
+                    && empty($templateObject->getContentValueLocalize($locale))
+                    && $templateObject->isTranslatable()
+                ) {
+                    $templateObject->setContent($this->getFirstNotEmptyContent($templateObject));
+                }
+
             } catch (ObjectNotFoundException $exception) {
                 // Don't try to set data if object not found
             }
         }
 
         return $templateData;
+    }
+
+    /**
+     * @param TemplateObject $templateObject
+     *
+     * @return string|null
+     */
+    private function getFirstNotEmptyContent(TemplateObject $templateObject):? string
+    {
+        $translations = $templateObject->getTranslations();
+
+        foreach ($translations as $translation) {
+            if (!empty($translation)) {
+                return $translation;
+            }
+        }
+
+        return null;
     }
 
     /**

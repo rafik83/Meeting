@@ -452,6 +452,13 @@ event_catalog_meeting_request_discussion:
     methods: [GET]
     defaults: { _controller: EventBundle:MeetingRequest/Message:displayDiscussion }
 
+event_availability_confirmation:
+    path: /sheet/{sheet}/availability/confirmation
+    requirements:
+        sheet: \d+
+    methods: [GET, POST]
+    defaults: { _controller: EventBundle:Availability:confirmation }
+
 #
 # Catalog external
 #
@@ -718,8 +725,16 @@ event_unavailability_create:
     path: /sheet/{sheet}/agenda/participant/{participant}/unavailability/create
     requirements:
         sheet: \d+
+        participant: \d+
     methods: [GET, POST]
     defaults: { _controller: EventBundle:Unavailability:create }
+
+event_unavailability_create_from_confirmation:
+    path: /sheet/{sheet}/confirmation/unavailability/create
+    requirements:
+        sheet: \d+
+    methods: [GET, POST]
+    defaults: { _controller: EventBundle:Unavailability:createFromConfirmation }
 
 event_unavailability_remove:
     path: /sheet/{sheet}/agenda/participant/{participant}/unavailability/{unavailability}/remove

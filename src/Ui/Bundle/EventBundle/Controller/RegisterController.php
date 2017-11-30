@@ -17,6 +17,7 @@ use Proximum\Vimeet\Application\Exception\User\EmailAlreadyExistsException;
 use Proximum\Vimeet\Application\Query\Participant\CardViewQuery;
 use Proximum\Vimeet\Application\Query\Register\PreFillUserData;
 use Proximum\Vimeet\Application\View\Register\PreFillUserDataView;
+use Proximum\Vimeet\Domain\Helper\StringHelper;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\User;
@@ -65,6 +66,7 @@ class RegisterController extends Controller
         $form    = $this->createForm(EmailType::class, $command, ['action' => $request->getUri()]);
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
+            $command->email = StringHelper::trimSpacesAndNonBreakSpaces($command->email);
             $user = $this->get('vimeet_infrastructure.repository.user_repository')->findByEmail($command->email);
 
             if ($user) {
@@ -104,7 +106,7 @@ class RegisterController extends Controller
     public function registerNewUserAction(Request $request, EventDomain $eventDomain, TypeView $typeView)
     {
         $command = new RegisterNewUser(
-            $this->getFlashEmail(),
+            StringHelper::trimSpacesAndNonBreakSpaces($this->getFlashEmail()),
             $request->getLocale(),
             $eventDomain->getEvent(),
             $typeView

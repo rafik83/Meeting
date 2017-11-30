@@ -1,0 +1,40 @@
+{% if item.tags is not empty %}
+<section class="object object--collection {{ 'style--' ~ item.style }} section">
+    {% set label = item.label(locale, fallback) %}
+    {% if label %}
+        <header>
+            <h2>{{ label }}</h2>
+        </header>
+    {% endif %}
+    <div class="section__content">
+        <ul>
+            {% for tag in item.tags %}
+                <li>
+                    {{ tag['label']|localize(locale, fallback) }} :
+                    {% if tag.tag in ["sheet_country", "participant_country"] %}
+                        {% for taggedInfo in taggedData[tag.tag]|default([]) %}
+                            {{ taggedInfo|country }} {% if loop.index < loop.length %}, {% endif %}
+                        {% endfor %}
+                    {% else %}
+                        {% if taggedData[tag.tag]|default([])|length == 1 and (taggedData[tag.tag]|default([])|first is same as(true) or taggedData[tag.tag]|default([])|first is same as(false)) %}
+                            {% if taggedData[tag.tag]|default([])|first %}
+                                {{ 'sheet.object.boolean.true'|trans }}
+                            {% else %}
+                                {{ 'sheet.object.boolean.false'|trans }}
+                            {% endif %}
+                        {% else %}
+                            {{ taggedData[tag.tag]|default([])|join(', ') }}
+                        {% endif %}
+                    {% endif %}
+                </li>
+            {% endfor %}
+
+            {% if item.collectionEnabled %}
+                {% for list_item in item.data['items']|default([]) %}
+                    <li>{{ list_item['title']|localize(locale, fallback) }}</li>
+                {% endfor %}
+            {% endif %}
+        </ul>
+    </div>
+</section>
+{% endif %}

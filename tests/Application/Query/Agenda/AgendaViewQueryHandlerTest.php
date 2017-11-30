@@ -73,7 +73,7 @@ class AgendaViewQueryHandlerTest extends TestCase
         ]);
 
         $unavailabilityRepository = $this->prophesize(UnavailabilityRepositoryInterface::class);
-        $unavailabilityRepository->findByParticipant($participant)->shouldBeCalled()->willReturn([$unavailability]);
+        $unavailabilityRepository->findByUserAndEvent($user, $event)->shouldBeCalled()->willReturn([$unavailability]);
 
         $massUnavailabilityRepository     = $this->prophesize(MassRepositoryInterface::class);
         $massUnavailabilityRepository->findByEvent($event, 'fr')->shouldBeCalled()->willReturn([$mass]);
@@ -160,7 +160,7 @@ class AgendaViewQueryHandlerTest extends TestCase
         ;
 
         $unavailabilityRepository = $this->prophesize(UnavailabilityRepositoryInterface::class);
-        $unavailabilityRepository->findByParticipant($participant2)->shouldBeCalled()->willReturn([$unavailability]);
+        $unavailabilityRepository->findByUserAndEvent($user2, $event)->shouldBeCalled()->willReturn([$unavailability]);
 
         $massUnavailabilityRepository     = $this->prophesize(MassRepositoryInterface::class);
         $massUnavailabilityRepository->findByEvent($event, 'fr')->shouldBeCalled()->willReturn([$mass]);

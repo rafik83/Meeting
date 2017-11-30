@@ -158,7 +158,7 @@ class SubmenuViewQueryHandlerTest extends TestCase
                 true
             ),
             new SubmenuButtonView(
-                Category::PLANNING_ICON,
+                Category::PROGRAM_ICON,
                 'program.title',
                 'program.title.link',
                 false,

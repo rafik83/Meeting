@@ -3,12 +3,14 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2015 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
 
 namespace Proximum\Vimeet\Application\Adapter;
+
+use Symfony\Component\Routing\RequestContext;
 
 interface RouterInterface
 {
@@ -19,4 +21,9 @@ interface RouterInterface
      * @return string
      */
     public function generate($path, array $parameters = []);
+
+    /**
+     * @return RequestContext
+     */
+    public function getContext(): RequestContext;
 }

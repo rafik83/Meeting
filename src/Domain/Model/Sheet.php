@@ -16,6 +16,8 @@ use Proximum\Vimeet\Domain\Exception\Sheet\SheetException;
 use Proximum\Vimeet\Domain\Model\Sheet\AvailableSlot;
 use Proximum\Vimeet\Domain\Model\Sheet\Group;
 use Proximum\Vimeet\Domain\Model\Template\SheetTemplate;
+use Proximum\Vimeet\Domain\Sheet\Availability\ConfirmationStatus;
+use Proximum\Vimeet\Domain\Sheet\Phone\ValidationStatus;
 use Proximum\Vimeet\Domain\Trace\TraceableName;
 
 /**
@@ -168,8 +170,14 @@ class Sheet implements TraceableInterface
     /** @var string */
     private $agendaConfirmedStatus = self::AGENDA_NOT_CONCERNED;
 
+    /** @var string */
+    private $phoneValidationStatus = ValidationStatus::NOT_CONCERNED;
+
     /** @var ArrayCollection */
     private $availableSlots;
+
+    /** @var string */
+    private $availabilityConfirmationStatus = ConfirmationStatus::NONE_CONFIRMED;
 
     /**
      * Sheet constructor.
@@ -240,7 +248,7 @@ class Sheet implements TraceableInterface
      */
     public function canBuyParticipant()
     {
-        return $this->getMaxParticipant() > $this->countParticipant();
+        return $this->getMaxParticipant() > $this->countParticipants();
     }
 
     /**
@@ -1004,6 +1012,14 @@ class Sheet implements TraceableInterface
     }
 
     /**
+     * @param string $phoneValidationStatus
+     */
+    public function setPhoneValidationStatus(string $phoneValidationStatus)
+    {
+        $this->phoneValidationStatus = $phoneValidationStatus;
+    }
+
+    /**
      * @param AvailableSlot[] $availableSlots
      */
     public function setAvailableSlots(array $availableSlots)
@@ -1047,5 +1063,29 @@ class Sheet implements TraceableInterface
     public function getAvailableSlots(): array
     {
         return $this->availableSlots->toArray();
+    }
+
+    /**
+     * @return string
+     */
+    public function getPhoneValidationStatus(): string
+    {
+        return $this->phoneValidationStatus;
+    }
+
+    /**
+     * @return string
+     */
+    public function getAvailabilityConfirmationStatus(): string
+    {
+        return $this->availabilityConfirmationStatus;
+    }
+
+    /**
+     * @param string $availabilityConfirmationStatus
+     */
+    public function setAvailabilityConfirmationStatus(string $availabilityConfirmationStatus): void
+    {
+        $this->availabilityConfirmationStatus = $availabilityConfirmationStatus;
     }
 }

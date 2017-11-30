@@ -30,6 +30,8 @@ use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\Sheet\Constant;
 use Proximum\Vimeet\Domain\Model\Type;
+use Proximum\Vimeet\Domain\Sheet\Availability\ConfirmationStatus;
+use Proximum\Vimeet\Domain\Sheet\Phone\ValidationStatus;
 use Proximum\Vimeet\Domain\Template\TemplateObject\Nomenclature;
 use Proximum\Vimeet\Domain\Type\TypeInterface;
 use Proximum\Vimeet\Domain\View\Catalog\CategoryView;
@@ -44,7 +46,7 @@ class SheetSearchQueryBuilder
     const BOOSTER_DEFAULT_CONTENT = 2;
 
     // Percentage content minimum should match
-    const CONTENT_MINIMUM_SHOULD_MATCH = 70;
+    const CONTENT_MINIMUM_SHOULD_MATCH = 90;
 
     /**
      * @var BoolQuery
@@ -199,6 +201,9 @@ class SheetSearchQueryBuilder
         ) {
             $this->filterByAgendaConfirmedStatus($filters['agendaConfirmedStatus']);
         }
+
+        $this->filterByPhoneValidationStatus($filters);
+        $this->filterByAvailabilityConfirmationStatus($filters);
     }
 
     /**
@@ -236,7 +241,6 @@ class SheetSearchQueryBuilder
     {
         if (!isset($filters[SearchFields::FILTER_CONTENT])
             || empty($filters[SearchFields::FILTER_CONTENT])
-            || null === $filters[SearchFields::FILTER_CONTENT]
         ) {
             return;
         }
@@ -252,19 +256,15 @@ class SheetSearchQueryBuilder
             $fields[] = sprintf('content_%s^%s', $this->locale, $this->initialBooster * self::BOOSTER_LOCALE_CONTENT);
         }
 
-        $boolQuery = new BoolQuery();
+        $multiMatch = new MultiMatch();
+        $multiMatch
+            ->setMinimumShouldMatch(self::CONTENT_MINIMUM_SHOULD_MATCH . '%')
+            ->setFields($fields)
+            ->setType(MultiMatch::TYPE_CROSS_FIELDS)
+            ->setQuery(str_replace(',', ' ', $filters['content']))
+        ;
 
-        foreach (explode(',', $filters[SearchFields::FILTER_CONTENT]) as $keyword) {
-            $multiMatch = new MultiMatch();
-            $multiMatch
-                ->setFields($fields)
-                ->setFuzziness(1)
-                ->setQuery($keyword);
-
-            $boolQuery->addShould($multiMatch);
-        }
-
-        $this->query->addMust($boolQuery);
+        $this->query->addMust($multiMatch);
     }
 
     /**
@@ -989,5 +989,38 @@ class SheetSearchQueryBuilder
         }
 
         $this->query->addMustNot($excludeSheets);
+    }
+
+    /**
+     * @param array $filters
+     */
+    private function filterByPhoneValidationStatus(array $filters)
+    {
+        if (isset($filters['phoneValidationStatus'])
+            && in_array($filters['phoneValidationStatus'], ValidationStatus::ALL_CONCERNED_STATUS)
+        ) {
+            $matchPhoneValidationStatus = new Term();
+            $matchPhoneValidationStatus->setTerm('phoneValidationStatus', $filters['phoneValidationStatus']);
+
+            $this->query->addMust($matchPhoneValidationStatus);
+        }
+    }
+
+    /**
+     * @param array $filters
+     */
+    private function filterByAvailabilityConfirmationStatus(array $filters)
+    {
+        if (isset($filters['availabilityConfirmationStatus'])
+            && in_array($filters['availabilityConfirmationStatus'], ConfirmationStatus::ALL_STATUS)
+        ) {
+            $matchAvailabilityConfirmationStatus = new Term();
+            $matchAvailabilityConfirmationStatus->setTerm(
+                'availabilityConfirmationStatus',
+                $filters['availabilityConfirmationStatus']
+            );
+
+            $this->query->addMust($matchAvailabilityConfirmationStatus);
+        }
     }
 }

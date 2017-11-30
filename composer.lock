@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "544ea7c637d65acce19ba8cac74d7750",
+    "content-hash": "c862909146ddec6c8bf3b89213c460aa",
     "packages": [
         {
             "name": "behat/behat",
@@ -5627,7 +5627,7 @@
             "keywords": [
                 "framework"
             ],
-            "time": "2017-11-12T17:27:06+00:00"
+            "time": "2017-11-16T18:15:01+00:00"
         },
         {
             "name": "tilleuls/ovh-bundle",

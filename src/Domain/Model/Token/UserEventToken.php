@@ -37,7 +37,7 @@ class UserEventToken
     /** @var bool */
     private $confirmed;
 
-    /** @var \DateTimeInterface */
+    /** @var \DateTimeInterface|null */
     private $confirmedAt;
 
     /**
@@ -130,10 +130,16 @@ class UserEventToken
         $this->confirmedAt = $confirmedAt;
     }
 
+    public function unConfirm(): void
+    {
+        $this->confirmed = false;
+        $this->confirmedAt = null;
+    }
+
     /**
      * @return bool
      */
-    public function isAgendaConfirmation()
+    public function isAgendaConfirmation(): bool
     {
         return UserEventTokenType::AGENDA_CONFIRMATION === $this->type;
     }

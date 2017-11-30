@@ -170,6 +170,12 @@ fos_elastica:
                         agendaConfirmedStatus:
                             type: string
                             index: "not_analyzed"
+                        phoneValidationStatus:
+                            type: string
+                            index: "not_analyzed"
+                        availabilityConfirmationStatus:
+                            type: string
+                            index: "not_analyzed"
                         enabled:
                             type: boolean
                         completed:
@@ -329,6 +335,7 @@ infrastructure:
     font_path: "/assets/fonts"
     image_path: "/assets/images"
     print_planning_path: '%kernel.project_dir%/web/uploads/print_planning'
+    print_sheet_path: '%kernel.project_dir%/web/uploads/print_sheet'
     export_transactions_path: '%kernel.project_dir%/web/uploads/export_transactions'
     export_order_path: '%kernel.project_dir%/web/uploads/export_orders'
     export_planner_path: '%kernel.project_dir%/web/uploads/export_planner'

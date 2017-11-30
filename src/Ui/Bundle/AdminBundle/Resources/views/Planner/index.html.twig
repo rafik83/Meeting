@@ -75,12 +75,14 @@
     {% else %}
         <table class="table table-hover">
             <thead>
-                <th>{{ 'admin.planner.analytics.table.column.date'|trans }}</th>
-                <th class="text-right">{{ 'admin.planner.analytics.table.column.meetings'|trans }}</th>
-                <th class="text-right">{{ 'admin.planner.analytics.table.column.requests'|trans }}</th>
-                <th class="text-right">{{ 'admin.planner.analytics.table.column.ratio'|trans }}</th>
-                <th class="text-right">{{ 'admin.planner.analytics.table.column.fillingRate'|trans }}</th>
-                <th class="text-right">{{ 'admin.planner.analytics.table.column.details'|trans }}</th>
+                <tr>
+                    <th>{{ 'admin.planner.analytics.table.column.date'|trans }}</th>
+                    <th class="text-right">{{ 'admin.planner.analytics.table.column.meetings'|trans }}</th>
+                    <th class="text-right">{{ 'admin.planner.analytics.table.column.requests'|trans }}</th>
+                    <th class="text-right">{{ 'admin.planner.analytics.table.column.ratio'|trans }}</th>
+                    <th class="text-right">{{ 'admin.planner.analytics.table.column.fillingRate'|trans }}</th>
+                    <th class="text-right">{{ 'admin.planner.analytics.table.column.details'|trans }}</th>
+                </tr>
             </thead>
             <tbody>
                 {% for key, meetingSolution in meetingSolutions %}
@@ -102,9 +104,11 @@
                                 <h2>{{ 'admin.planner.analytics.sheet.title'|trans }}</h2>
                                 <table class="table table-hover">
                                     <thead>
-                                        <th>{{ 'admin.planner.analytics.sheet.table.column.sheet'|trans }}</th>
-                                        <th>{{ 'admin.planner.analytics.sheet.table.column.type'|trans }}</th>
-                                        <th class="text-right">{{ 'admin.planner.analytics.sheet.table.column.satisfaction'|trans }}</th>
+                                        <tr>
+                                            <th>{{ 'admin.planner.analytics.sheet.table.column.sheet'|trans }}</th>
+                                            <th>{{ 'admin.planner.analytics.sheet.table.column.type'|trans }}</th>
+                                            <th class="text-right">{{ 'admin.planner.analytics.sheet.table.column.satisfaction'|trans }}</th>
+                                        </tr>
                                     </thead>
                                     <tbody>
                                     {% for sheetSatisfaction in meetingSolution.sheetSatisfactions.sheetSatisfaction %}
@@ -129,10 +133,12 @@
                                 <h2>{{ 'admin.planner.analytics.spot.title'|trans }}</h2>
                                 <table class="table table-hover">
                                     <thead>
-                                        <th>{{ 'admin.planner.analytics.spot.table.column.reference'|trans }}</th>
-                                        <th>{{ 'admin.planner.analytics.spot.table.column.shared'|trans }}</th>
-                                        <th>{{ 'admin.planner.analytics.spot.table.column.visio'|trans }}</th>
-                                        <th class="text-right">{{ 'admin.planner.analytics.spot.table.column.satisfaction'|trans }}</th>
+                                        <tr>
+                                            <th>{{ 'admin.planner.analytics.spot.table.column.reference'|trans }}</th>
+                                            <th>{{ 'admin.planner.analytics.spot.table.column.shared'|trans }}</th>
+                                            <th>{{ 'admin.planner.analytics.spot.table.column.visio'|trans }}</th>
+                                            <th class="text-right">{{ 'admin.planner.analytics.spot.table.column.satisfaction'|trans }}</th>
+                                        </tr>
                                     </thead>
                                     <tbody>
                                         {% for spotSatisfaction in meetingSolution.spotSatisfactions.spotSatisfaction %}

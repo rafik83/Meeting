@@ -53,7 +53,7 @@ class Merger
 
         // Remove products whose merged quantity return 0
         foreach ($orderMerged->getRows() as $row) {
-            if ($row->getQuantity() === 0) {
+            if ($row->getQuantity() === 0 && null !== $row->getId()) {
                 $orderMerged->removeRow($row);
             }
         }

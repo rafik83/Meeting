@@ -960,6 +960,21 @@ admin_template_sheet_update:
     requirements:
         template: \d+
         locale: '[a-z]{2}(_[A-Z]{2})?'
+
+admin_template_sheet_print_template_builder:
+    path: /template/sheet/{template}/print
+    defaults: { _controller: AdminBundle:Template\Sheet\PrintTemplate:builder }
+    methods: [GET]
+    requirements:
+        template: \d+
+
+admin_template_sheet_print_template_save:
+    path: /template/sheet/{template}/print/save
+    defaults: { _controller: AdminBundle:Template\Sheet\PrintTemplate:save }
+    methods: [POST]
+    requirements:
+        template: \d+
+
 #
 # Product
 #
@@ -1088,27 +1103,27 @@ admin_schedule_slots:
         event: \d+
 admin_schedule_slots_generate:
     path: /event/{event}/schedule/slots/generate
-    defaults: { _controller: AdminBundle:Schedule:generate }
+    defaults: { _controller: AdminBundle:Schedule/Slot:generate }
     methods: [GET, POST]
     requirements:
         event: \d+
 admin_schedule_slot_lock:
     path: /event/{event}/schedule/slot/{meetingSlot}/lock
-    defaults: { _controller: AdminBundle:Schedule:lock }
+    defaults: { _controller: AdminBundle:Schedule/Slot:lock }
     methods: [GET, POST]
     requirements:
         event: \d+
         meetingSlot: \d+
 admin_schedule_slot_unlock:
     path: /event/{event}/schedule/slot/{meetingSlot}/unlock
-    defaults: { _controller: AdminBundle:Schedule:unlock }
+    defaults: { _controller: AdminBundle:Schedule/Slot:unlock }
     methods: [GET, POST]
     requirements:
         event: \d+
         meetingSlot: \d+
 admin_schedule_slot_remove:
     path: /event/{event}/schedule/slot/{meetingSlot}/remove
-    defaults: { _controller: AdminBundle:Schedule:remove }
+    defaults: { _controller: AdminBundle:Schedule/Slot:remove }
     methods: [DELETE]
     requirements:
         event: \d+
@@ -1116,7 +1131,7 @@ admin_schedule_slot_remove:
 
 admin_schedule_days:
     path: /event/{event}/schedule/days
-    defaults: { _controller: AdminBundle:Schedule:day }
+    defaults: { _controller: AdminBundle:Schedule/Day:day }
     methods: [GET, POST]
     requirements:
         event: \d+
@@ -1373,6 +1388,14 @@ admin_planner_export_file:
     methods: [GET]
     defaults: { _controller: AdminBundle:Planner/Export:exportFile }
 
+admin_sheet_print_pdf:
+    path: /event/{event}/sheet/generate-pdf/{hash}z{file}
+    requirements:
+        event: \d+
+        file: \d+
+    methods: [GET]
+    defaults: { _controller: AdminBundle:Sheet\Print:generate }
+
 #
 # Invoice
 #
@@ -1573,3 +1596,15 @@ admin_event_extra_parameter_remove:
         event: \d+
         extraParameter: \d+
     defaults: { _controller: AdminBundle:Event/ExtraParameter/Remove:remove }
+
+#
+# User Event Token
+#
+admin_sheet_participant_update_agenda_confirmation:
+    path: /event/{event}/sheet/{sheet}/details/participant/{participant}/agenda/confirmation/update
+    requirements:
+        event: \d+
+        sheet: \d+
+        participant: \d+
+    methods: [GET, POST]
+    defaults: { _controller: AdminBundle:Participant\AgendaConfirmation:updateAgendaConfirmation }

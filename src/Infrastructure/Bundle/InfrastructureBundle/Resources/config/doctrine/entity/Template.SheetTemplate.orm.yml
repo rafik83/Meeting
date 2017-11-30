@@ -16,6 +16,9 @@ Proximum\Vimeet\Domain\Model\Template\SheetTemplate:
             length: 5
         value:
             type: json_array
+        printValue:
+            type: json_array
+            nullable: true
         preview:
             type: json_array
             nullable: true

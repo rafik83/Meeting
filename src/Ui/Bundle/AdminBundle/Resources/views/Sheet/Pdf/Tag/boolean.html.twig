@@ -1,0 +1,7 @@
+{% if taggedDataView.content is same as(true) %}
+    {{ 'sheet.object.boolean.true'|trans }}
+{% elseif taggedDataView.content is same as(false) %}
+    {{ 'sheet.object.boolean.false'|trans }}
+{% else %}
+    {{ taggedDataView.content }}
+{% endif %}

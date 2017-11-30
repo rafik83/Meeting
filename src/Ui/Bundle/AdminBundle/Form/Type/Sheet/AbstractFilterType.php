@@ -184,6 +184,16 @@ abstract class AbstractFilterType extends AbstractType
                 'required' => false,
                 'expanded' => true,
             ])
+            ->add('phoneValidationStatus', PhoneValidationStatusChoiceType::class, [
+                'label'    => 'form.sheet_filter.children.phoneValidationStatus.label',
+                'required' => false,
+                'expanded' => true,
+            ])
+            ->add('availabilityConfirmationStatus', AvailabilityConfirmationStatusChoiceType::class, [
+                'label'    => 'form.sheet_filter.children.availabilityConfirmationStatus.label',
+                'required' => false,
+                'expanded' => true,
+            ])
             ->add('hasSpot', YesNoType::class, [
                 'label'    => 'form.sheet_filter.children.hasSpot.label',
                 'required' => false,

@@ -14,6 +14,7 @@ use PHPUnit\Framework\TestCase;
 use Proximum\Vimeet\Application\Components\Sheet\Template\Tag;
 use Proximum\Vimeet\Domain\Repository\NomenclatureRepositoryInterface;
 use Proximum\Vimeet\Domain\Rule\Applyer;
+use Proximum\Vimeet\Domain\Template\PrintTemplateResolver;
 use Proximum\Vimeet\Domain\Template\TaggedDataFactory;
 use Proximum\Vimeet\Domain\Template\TemplateData;
 use Proximum\Vimeet\Domain\Template\TemplateDataFactory;
@@ -95,8 +96,11 @@ class TaggedDataFactoryTest extends TestCase
             ->shouldBeCalled()
             ->willReturn($sheetTemplateData);
 
+        $printTemplateResolver = $this->prophesize(PrintTemplateResolver::class);
+
         $taggedDataFactory = new TaggedDataFactory(
             $templateDataFactory->reveal(),
+            $printTemplateResolver->reveal(),
             $applyer->reveal()
         );
 
