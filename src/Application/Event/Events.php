@@ -92,5 +92,5 @@ final class Events
     const USER_PHONE_VALIDATED                         = 'user.phone_validated';
     const USER_AVAILABILITY_CONFIRMED                  = 'user.availability.confirmed';
     const TIP_ASSIGNED                                 = 'tip.assigned';
-    const TIP_UN_ASSIGNED                              = 'tip.un_assigned';
+    const TIP_REMOVED_FROM_EVENT                       = 'tip.removed_from_event';
 }

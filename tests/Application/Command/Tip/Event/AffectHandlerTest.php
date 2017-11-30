@@ -15,12 +15,9 @@ use Prophecy\Prophecy\ObjectProphecy;
 use Proximum\Vimeet\Application\Adapter\DelayedEventDispatcherInterface;
 use Proximum\Vimeet\Application\Event\Events;
 use Proximum\Vimeet\Application\Event\Tip\AssignedEvent;
-use Proximum\Vimeet\Application\Exception\Tip\TipNotFoundException;
-use Proximum\Vimeet\Application\View\Tip\Event\TipView;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Tip\Tip;
 use Proximum\Vimeet\Domain\Repository\TypeRepositoryInterface;
-use Proximum\Vimeet\Domain\View\TypeView;
 use Proximum\Vimeet\Application\Command\Tip\Event\Affect;
 use Proximum\Vimeet\Application\Command\Tip\Event\AffectHandler;
 use Proximum\Vimeet\Domain\Model\Type;
@@ -51,55 +48,76 @@ class AffectHandlerTest extends TestCase
 
     public function testHandle()
     {
-        $tipView  = new TipView(14, '', '', [], []);
-        $typeView = new TypeView(56, '', '');
-        $type     = $this->prophesize(Type::class);
-        $tip      = $this->prophesize(Tip::class);
+        $dateTime =new \DateTime();
+        $this->event->getLocales()->willReturn(['fr']);
+        $type = $this->prophesize(Type::class);
+        $globalTip = $this->prophesize(Tip::class);
+        $globalTip->getTitle()->willReturn('adminTitle');
+        $globalTip->isOnMeetingManagement()->willReturn(true);
+        $globalTip->isOnCatalog()->willReturn(false);
+        $globalTip->isOnPrintPlanning()->willReturn(true);
+        $globalTip->isOnSheet()->willReturn(false);
+        $globalTip->isOnAgenda()->willReturn(true);
+        $globalTip->isOnProgram()->willReturn(false);
+        $globalTip->isOnConfirmationPhone()->willReturn(true);
+        $globalTip->getTranslationTitle('fr')->willReturn('title');
+        $globalTip->getTranslationContent('fr')->willReturn('content');
 
-        $this->tipRepository->getById(14)->shouldBeCalled()->willReturn($tip->reveal());
-        $this->typeRepository->getById(56)->shouldBeCalled()->willReturn($type->reveal());
+        $tip = new Tip(
+            'adminTitle',
+            $this->event->reveal(),
+            true,
+            false,
+            true,
+            false,
+            true,
+            false,
+            true,
+            $dateTime
+        );
 
-        $this->tipRepository->set($tip->reveal())->shouldBeCalled();
+        $tip->translate(
+            'fr',
+            'toto',
+            'content',
+            $dateTime
+        );
+        $type->getId()->willReturn(12);
+        $tip->setType($type->reveal());
+
+        $this->tipRepository->add(Argument::that(function (Tip $tip) use ($type) {
+            return $tip->getTitle() === 'adminTitle'
+                && $tip->isOnMeetingManagement() === true
+                && $tip->isOnCatalog() === false
+                && $tip->isOnPrintPlanning() ===  true
+                && $tip->isOnSheet() === false
+                && $tip->isOnAgenda() === true
+                && $tip->isOnProgram() === false
+                && $tip->isOnConfirmationPhone() === true
+                && $tip->getTranslationTitle('fr') === 'title'
+                && $tip->getTranslationContent('fr') === 'content'
+                && in_array($type->reveal(), $tip->getTypes(), true)
+            ;
+        }))->shouldBeCalled();
         $this->eventDispatcher
-            ->dispatch(Events::TIP_ASSIGNED, new AssignedEvent($this->event->reveal(), $tip->reveal()))
-            ->shouldBeCalled()
-        ;
+            ->dispatch(
+                Events::TIP_ASSIGNED,
+                Argument::that(function (AssignedEvent $event) {
+                    return $event->getEvent() === $this->event->reveal()
+                        && $event->getTip()->getTitle() === 'adminTitle';
+                    })
+            )->shouldBeCalled();
 
         $command        = new Affect($this->event->reveal());
-        $command->tip   = $tipView;
-        $command->types = [$typeView];
+        $command->tip   = $globalTip->reveal();
+        $command->types = [$type->reveal()];
 
         $handler = new AffectHandler(
             $this->tipRepository->reveal(),
-            $this->typeRepository->reveal(),
-            $this->eventDispatcher->reveal()
+            $this->eventDispatcher->reveal(),
+            $dateTime
         );
 
-        $handler->handle($command);
-    }
-
-    public function testTipNotFoundException()
-    {
-        $this->expectException(TipNotFoundException::class);
-
-        $typeView = $this->prophesize(TypeView::class);
-        $tipView  = new TipView(14, '', '', [], []);
-
-        $this->tipRepository->getById(14)->shouldBeCalled()->willReturn(null);
-        $this->typeRepository->getById(Argument::any())->shouldNotBeCalled();
-        $this->tipRepository->set(Argument::any())->shouldNotBeCalled();
-
-        $this->eventDispatcher->dispatch(Argument::any())->shouldNotBeCalled();
-
-        $command        = new Affect($this->event->reveal());
-        $command->tip   = $tipView;
-        $command->types = [$typeView];
-
-        $handler = new AffectHandler(
-            $this->tipRepository->reveal(),
-            $this->typeRepository->reveal(),
-            $this->eventDispatcher->reveal()
-        );
         $handler->handle($command);
     }
 }

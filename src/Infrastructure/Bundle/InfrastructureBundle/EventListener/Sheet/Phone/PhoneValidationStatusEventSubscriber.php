@@ -16,7 +16,7 @@ use Proximum\Vimeet\Application\Event\Meeting\MeetingCreatedEvent;
 use Proximum\Vimeet\Application\Event\Meeting\MeetingMovedEvent;
 use Proximum\Vimeet\Application\Event\Meeting\MeetingRemovedEvent;
 use Proximum\Vimeet\Application\Event\Tip\AssignedEvent;
-use Proximum\Vimeet\Application\Event\Tip\UnAssignedEvent;
+use Proximum\Vimeet\Application\Event\Tip\RemovedEvent;
 use Proximum\Vimeet\Application\Event\User\Phone\PhoneValidatedEvent;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
@@ -55,12 +55,12 @@ class PhoneValidationStatusEventSubscriber implements EventSubscriberInterface
     public static function getSubscribedEvents()
     {
         return [
-            Events::MEETING_CREATED      => 'onMeetingCreated',
-            Events::MEETING_MOVED        => 'onMeetingMoved',
-            Events::MEETING_REMOVED      => 'onMeetingChanged',
-            Events::USER_PHONE_VALIDATED => 'onUserPhoneValidated',
-            Events::TIP_ASSIGNED         => 'onTipAssigned',
-            Events::TIP_UN_ASSIGNED      => 'onTipUnAssigned',
+            Events::MEETING_CREATED        => 'onMeetingCreated',
+            Events::MEETING_MOVED          => 'onMeetingMoved',
+            Events::MEETING_REMOVED        => 'onMeetingChanged',
+            Events::USER_PHONE_VALIDATED   => 'onUserPhoneValidated',
+            Events::TIP_ASSIGNED           => 'onTipAssigned',
+            Events::TIP_REMOVED_FROM_EVENT => 'onTipRemoved',
         ];
     }
 
@@ -106,9 +106,9 @@ class PhoneValidationStatusEventSubscriber implements EventSubscriberInterface
     }
 
     /**
-     * @param UnAssignedEvent $event
+     * @param RemovedEvent $event
      */
-    public function onTipUnAssigned(UnAssignedEvent $event)
+    public function onTipRemoved(RemovedEvent $event)
     {
         $this->jobQueue->aggregatePhoneValidationStatus($event->getEvent());
     }

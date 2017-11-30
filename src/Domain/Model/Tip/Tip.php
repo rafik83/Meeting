@@ -388,21 +388,6 @@ class Tip
     }
 
     /**
-     * @return Event[]
-     */
-    public function getUnduplicatedEventsTitle()
-    {
-        $events = [];
-
-        foreach ($this->types as $type) {
-            $events[$type->getEvent()->getTitle()] = $type->getEvent()->getTitle();
-        }
-        ksort($events);
-
-        return $events;
-    }
-
-    /**
      * @return bool
      */
     public function hasEvent(): bool

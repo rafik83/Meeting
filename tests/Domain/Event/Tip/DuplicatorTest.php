@@ -45,7 +45,7 @@ class DuplicatorTest extends TestCase
         $oldTip = TipFactory::createTip('tip title');
         $oldTip->setType($oldType);
 
-        $expectedTip = TipFactory::createTip('tip title');
+        $expectedTip = TipFactory::createTip('tip title', $event);
         $expectedTip->setType($newType);
 
         $tipRepository = $this->prophesize(TipRepositoryInterface::class);

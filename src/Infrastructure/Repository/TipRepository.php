@@ -63,10 +63,9 @@ class TipRepository implements TipRepositoryInterface
         $queryBuilder = $this
             ->entityManager
             ->createQueryBuilder()
-            ->select('tip', 'type', 'event')
+            ->select('tip')
             ->from(Tip::class, 'tip', 'tip.id')
-            ->leftJoin('tip.types', 'type')
-            ->leftJoin('type.event', 'event')
+            ->where('tip.event IS NULL')
             ->orderBy('tip.title');
 
         return $this->paginator->paginate($queryBuilder, $page, $limit, 'tip');

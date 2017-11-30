@@ -12,8 +12,6 @@ namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Tip;
 
 use Proximum\Vimeet\Application\Command\Tip\Event\Affect;
 use Proximum\Vimeet\Application\Command\Tip\Event\Remove;
-use Proximum\Vimeet\Application\Exception\Tip\TipNotAffectedOnEventException;
-use Proximum\Vimeet\Application\Exception\Tip\TipNotFoundException;
 use Proximum\Vimeet\Application\Query\Tip\Event\PreviewTipViewQuery;
 use Proximum\Vimeet\Application\Query\Tip\Event\PaginatedTipViewQuery;
 use Proximum\Vimeet\Domain\Model\Event;
@@ -71,12 +69,8 @@ class TipEventController extends Controller
         ]);
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
-            try {
-                $this->get('tactician.commandbus')->handle($affect);
-                $this->addFlash('success', 'flash.admin.tip.affect.success');
-            } catch (TipNotFoundException $exception) {
-                $this->addFlash('error', $exception->getMessage());
-            }
+            $this->get('tactician.commandbus')->handle($affect);
+            $this->addFlash('success', 'flash.admin.tip.affect.success');
 
             return $this->redirectToRoute('admin_tip_event_list', ['event' => $event->getId()]);
         }
@@ -98,14 +92,12 @@ class TipEventController extends Controller
         $this->denyAccessUnlessGranted('ROLE_ALLOWED_TO_ORGANIZE');
         $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
 
-        try {
-            $this->get('tactician.commandbus')->handle(new Remove($event, $tip));
-            $this->addFlash('success', 'flash.admin.tip.remove.success');
-        } catch (TipNotFoundException $exception) {
-            $this->addFlash('error', $exception->getMessage());
-        } catch (TipNotAffectedOnEventException $exception) {
-            $this->addFlash('error', $exception->getMessage());
+        if ($tip->getEvent() !== $event) {
+            throw $this->createAccessDeniedException('You can not remove this tip as it is not on this event');
         }
+
+        $this->get('tactician.commandbus')->handle(new Remove($tip));
+        $this->addFlash('success', 'flash.admin.tip.remove.success');
 
         return $this->redirectToRoute('admin_tip_event_list', [
             'event' => $event->getId(),
