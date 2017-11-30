@@ -637,8 +637,8 @@ admin.schedule.slot.unlock: Débloquer
 admin.schedule.slot.unlocked: Débloqué
 admin.schedule.slots.generate.action: 'Générer des créneaux'
 admin.schedule.slots.generate.back: 'Retour à la liste des créneaux'
-admin.schedule.slots.generate.title: 'Générer des créneaux de rendez-vous'
 admin.schedule.slots.generate.eventDay: 'Jours de l''évenement:'
+admin.schedule.slots.generate.title: 'Générer des créneaux de rendez-vous'
 admin.schedule.slots.table.begin: De
 admin.schedule.slots.table.duration: Durée
 admin.schedule.slots.table.end: à
@@ -658,8 +658,8 @@ admin.sheet.batch.cancelSelection.label: 'Annuler la sélection complète'
 admin.sheet.batch.selection.label: 'Les <strong>%sheets%</strong> fiches de cette page sont sélectionnées.'
 admin.sheet.batch.selectionAll.label: 'Sélectionner les <strong>%allSheets%</strong> fiches correspondantes à vos filtres.'
 admin.sheet.category: Catégorie
-admin.sheet.change.type.link: Changer
 admin.sheet.change.type.hasMeeting: 'La fiche a des RDVs et son type ne peut être changé'
+admin.sheet.change.type.link: Changer
 admin.sheet.change.type.title: 'Changer le type de participation'
 admin.sheet.commercialFollowUp: 'Attribuer le suivi commercial'
 admin.sheet.created_this_week: 'Inscrits cette semaine'
@@ -694,22 +694,23 @@ admin.sheet.details.owner.email: Email
 admin.sheet.details.owner.mobile: Mobile
 admin.sheet.details.owner.phone: Téléphone
 admin.sheet.details.owner.title: Propriétaire
-admin.sheet.details.participant.agendaConfirmation.title: 'Confirmation d''agenda'
-admin.sheet.details.participant.agenda_confirmation_not_sent: 'Non envoyée'
-admin.sheet.details.participant.agenda_confirmed: 'Confirmé'
 admin.sheet.details.participant.agenda_confirmation_not_concerned: 'Non concerné'
+admin.sheet.details.participant.agenda_confirmation_not_send: 'Confirmation d''agenda non envoyée'
+admin.sheet.details.participant.agenda_confirmation_not_sent: 'Non envoyée'
 admin.sheet.details.participant.agenda_confirmation_status_update.title: 'Mise à jour de la confirmation d''agenda'
-admin.sheet.details.participant.tooltip.not_concerned: 'Cet utilisateur n''est pas concerné car il/elle n''a pas de RDVs ou ne participe pas à un sous-événement'
-admin.sheet.details.participant.agenda_not_confirmed: 'Non confirmé'
-admin.sheet.details.participant.email: Email
-admin.sheet.details.participant.availability_confirmation.title: 'Confirmation des disponibilités'
-admin.sheet.details.participant.availability_confirmation.confirmed: 'Confirmé'
+admin.sheet.details.participant.agenda_confirmed: 'Agenda validé'
+admin.sheet.details.participant.agenda_not_confirmed: 'Agenda non-validé'
+admin.sheet.details.participant.agendaConfirmation.title: 'Confirmation d''agenda'
+admin.sheet.details.participant.availability_confirmation.confirmed: Confirmé
 admin.sheet.details.participant.availability_confirmation.not_confirmed: 'Non confirmé'
-admin.sheet.details.participant.phoneValidationStatus.title: Validation téléphone
+admin.sheet.details.participant.availability_confirmation.title: 'Confirmation des disponibilités'
+admin.sheet.details.participant.email: Email
+admin.sheet.details.participant.phoneValidationStatus.not_asked: 'Non envoyé'
+admin.sheet.details.participant.phoneValidationStatus.not_validated: 'Non validé'
+admin.sheet.details.participant.phoneValidationStatus.title: 'Validation téléphone'
 admin.sheet.details.participant.phoneValidationStatus.validated: Validé
-admin.sheet.details.participant.phoneValidationStatus.not_validated: Non validé
-admin.sheet.details.participant.phoneValidationStatus.not_asked: Non envoyé
 admin.sheet.details.participant.title: Participant
+admin.sheet.details.participant.tooltip.not_concerned: 'Cet utilisateur n''est pas concerné car il/elle n''a pas de RDVs ou ne participe pas à un sous-événement'
 admin.sheet.details.participant.visio: Visio
 admin.sheet.details.participants: Participants
 admin.sheet.details.remainingToPay: 'Solde restant dû'
@@ -748,8 +749,8 @@ admin.sheet.filter.no_order: 'Fiche sans commande'
 admin.sheet.filter.template_filters: 'Filtres supplémentaires'
 admin.sheet.follower: 'Suivi commercial'
 admin.sheet.follower.un-assigned: 'Non assigné'
-admin.sheet.go_back_to_list: 'Retour à la liste des participations'
 admin.sheet.generate.pdf: 'Imprimer en PDF'
+admin.sheet.go_back_to_list: 'Retour à la liste des participations'
 admin.sheet.impersonate: Impersonnation
 admin.sheet.impersonateAs: '%adminFullname% (%adminEmail%) connecté en tant que %userEmail%'
 admin.sheet.import.button.label: Importer
@@ -761,6 +762,7 @@ admin.sheet.list.filters.label: 'Filtres avancés'
 admin.sheet.participant_visio.success: 'Le participant a été mis à jour'
 admin.sheet.participant.invalid-parameters: 'Le paramètre envoyé n''est pas valide'
 admin.sheet.participant.not_found: 'Ce participant n''existe pas'
+admin.sheet.print: 'Impression de fiches'
 admin.sheet.read: Voir
 admin.sheet.registeredAt.all: 'Peu importe'
 admin.sheet.see_list: 'Voir liste des participations'
@@ -835,7 +837,6 @@ admin.spot.listSpot.spot.un-visio: 'Non visio'
 admin.spot.listSpot.spot.visio: Visio
 admin.spot.listSpot.visio: Visio
 admin.spot.listSpot.yes: Oui
-admin.sheet.print: 'Impression de fiches'
 admin.spot.search_facets.link: 'Filtres catalogue'
 admin.spot.title: Lieux
 admin.spot.unavailability: 'Ajouter des indisponibilités'
@@ -852,9 +853,9 @@ admin.template.action.preview: 'Gérer l''aperçu catalogue'
 admin.template.action.print: 'Template d''impression'
 admin.template.action.save: Enregistrer
 admin.template.action.update: Modifier
-admin.template.action.updating: Sauvegarde en cours...
-admin.template.blocks: 'Blocs'
-admin.template.objects: 'Objets'
+admin.template.action.updating: 'Sauvegarde en cours...'
+admin.template.blocks: Blocs
+admin.template.objects: Objets
 admin.template.objectsListEmpty: 'Aucun objet disponible'
 admin.template.preview.title: 'Aperçu du catalogue'
 admin.template.registration.link: 'Template d''Inscription'
@@ -894,8 +895,8 @@ admin.tip.event.empty: 'Aucun message affecté à cet évènement'
 admin.tip.event.no_pages: Aucune
 admin.tip.event.no_types: Aucun
 admin.tip.event.pages: 'Page concernées'
-admin.tip.event.remove.link: Retirer
 admin.tip.event.remove.action.confirm: 'Êtes-vous sûr de vouloir retirer l''affectation?'
+admin.tip.event.remove.link: Retirer
 admin.tip.event.title: 'Libellé admin'
 admin.tip.event.types: 'Types de participation affectés'
 admin.tip.events: Evénements
