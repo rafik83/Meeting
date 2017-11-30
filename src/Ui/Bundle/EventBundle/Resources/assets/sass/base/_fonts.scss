@@ -1,6 +1,6 @@
 @font-face {
   font-family: 'OpenSans';
-  src: url($font-path + '/OpenSansCondensed.ttf') format('truetype');
+  src: local('OpenSansCondensed'), url($font-path + '/OpenSansCondensed.ttf') format('truetype');
 }
 
 @font-face {
