@@ -101,10 +101,12 @@ class AgendaParticipantViewQueryHandler
         );
 
         $stopSMS = false;
+        $phoneValidated = false;
         $userEventPhone = $this->userEventPhoneRepository->find($query->participant->getUser(), $query->event);
 
         if ($userEventPhone instanceof UserEventPhone) {
             $stopSMS = $userEventPhone->isStop();
+            $phoneValidated = $userEventPhone->isValidated();
         }
 
         return new AgendaParticipantView(
@@ -114,6 +116,7 @@ class AgendaParticipantViewQueryHandler
             $dayViews,
             $query->sheet->attend(),
             $this->smsActivationDateAccessChecker->allowedToAccess($query->event),
+            $phoneValidated,
             $stopSMS
         );
     }
