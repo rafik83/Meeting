@@ -5,23 +5,24 @@
 
 @font-face {
   font-family: 'RobotoRegular';
-  src: url($font-path + '/Roboto-Regular.ttf') format('truetype');
+  src: local('Roboto-Regular'), url($font-path + '/Roboto-Regular.ttf') format('truetype');
 }
 
 @font-face {
   font-family: 'RobotoItalic';
-  src: url($font-path + '/Roboto-Italic.ttf') format('truetype');
+  src: local('Roboto-Italic'), url($font-path + '/Roboto-Italic.ttf') format('truetype');
 }
 
 @font-face {
   font-family: 'RobotoLight';
-  src: url($font-path + '/Roboto-Light.ttf') format('truetype');
+  src: local('Roboto-Light'), url($font-path + '/Roboto-Light.ttf') format('truetype');
 }
 
 @font-face {
   font-family: 'PictoOutline';
-  src: url($font-path + '/PictoOutline.eot');
-  src: url($font-path + '/PictoOutline.eot?#iefix') format('embedded-opentype'),
+  src: local('PictoOutline'), url($font-path + '/PictoOutline.eot');
+  src: local('PictoOutline'),
+       url($font-path + '/PictoOutline.eot?#iefix') format('embedded-opentype'),
        url($font-path + '/PictoOutline.woff2') format('woff2'),
        url($font-path + '/PictoOutline.woff') format('woff'),
        url($font-path + '/PictoOutline.ttf') format('truetype'),
