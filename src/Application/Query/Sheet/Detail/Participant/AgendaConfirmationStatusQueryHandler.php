@@ -8,8 +8,13 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Proximum\Vimeet\Application\Query\Sheet\Detail;
+namespace Proximum\Vimeet\Application\Query\Sheet\Detail\Participant;
 
+use Proximum\Vimeet\Application\View\Sheet\Details\Participant\AgendaConfirmationNotConcernedView;
+use Proximum\Vimeet\Application\View\Sheet\Details\Participant\AgendaConfirmationNotSentView;
+use Proximum\Vimeet\Application\View\Sheet\Details\Participant\AgendaConfirmationStatusView;
+use Proximum\Vimeet\Application\View\Sheet\Details\Participant\AgendaConfirmedView;
+use Proximum\Vimeet\Application\View\Sheet\Details\Participant\AgendaNotConfirmedView;
 use Proximum\Vimeet\Domain\Repository\HappeningParticipationRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\MeetingRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\Token\UserEventTokenRepositoryInterface;
@@ -17,24 +22,6 @@ use Proximum\Vimeet\Domain\Token\UserEventTokenType;
 
 class AgendaConfirmationStatusQueryHandler
 {
-    const PREFIX_TRANS_KEY = 'admin.sheet.details.participant.';
-    const AGENDA_CONFIRMED = [
-        'translation_key' => self::PREFIX_TRANS_KEY . 'agenda_confirmed',
-        'css_class'       => 'success'
-    ];
-
-    const AGENDA_NOT_CONFIRMED = [
-        'translation_key' => self::PREFIX_TRANS_KEY . 'agenda_not_confirmed',
-        'css_class'       => 'warning'
-    ];
-
-    const CONFIRMATION_NOT_SENT = [
-        'translation_key' => self::PREFIX_TRANS_KEY . 'agenda_confirmation_not_send',
-        'css_class'       => 'danger'
-    ];
-
-    const USER_NOT_CONCERNED = [];
-
     /** @var UserEventTokenRepositoryInterface */
     private $userEventTokenRepository;
 
@@ -64,11 +51,18 @@ class AgendaConfirmationStatusQueryHandler
     /**
      * @param AgendaConfirmationStatusQuery $query
      *
-     * @return array ['translation_key' => '', 'css_class' => '']
+     * @return AgendaConfirmationStatusView
      */
-    public function handle(AgendaConfirmationStatusQuery $query): array
+    public function handle(AgendaConfirmationStatusQuery $query): AgendaConfirmationStatusView
     {
-        $user           = $query->participant->getUser();
+        $user = $query->participant->getUser();
+
+        if (null === $this->happeningParticipationRepository->checkAnyParticipation($user, $query->event)
+            && false === $this->meetingRepository->hasScheduledMeetingByParticipant($query->participant)
+        ) {
+            return new AgendaConfirmationNotConcernedView();
+        }
+
         $userEventToken = $this->userEventTokenRepository->findByEventAndUserAndType(
             $query->event,
             $user,
@@ -76,15 +70,9 @@ class AgendaConfirmationStatusQueryHandler
         );
 
         if (null !== $userEventToken) {
-            return $userEventToken->isConfirmed() ? self::AGENDA_CONFIRMED : self::AGENDA_NOT_CONFIRMED;
+            return $userEventToken->isConfirmed() ? new AgendaConfirmedView() : new AgendaNotConfirmedView();
         }
 
-        if (null !== $this->happeningParticipationRepository->checkAnyParticipation($user, $query->event)
-            || false !== $this->meetingRepository->hasScheduledMeetingByParticipant($query->participant)
-        ) {
-            return self::CONFIRMATION_NOT_SENT;
-        }
-
-        return self::USER_NOT_CONCERNED;
+        return new AgendaConfirmationNotSentView();
     }
 }

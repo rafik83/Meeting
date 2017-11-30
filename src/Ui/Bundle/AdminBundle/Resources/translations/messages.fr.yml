@@ -638,6 +638,7 @@ admin.schedule.slot.unlocked: Débloqué
 admin.schedule.slots.generate.action: 'Générer des créneaux'
 admin.schedule.slots.generate.back: 'Retour à la liste des créneaux'
 admin.schedule.slots.generate.title: 'Générer des créneaux de rendez-vous'
+admin.schedule.slots.generate.eventDay: 'Jours de l''évenement:'
 admin.schedule.slots.table.begin: De
 admin.schedule.slots.table.duration: Durée
 admin.schedule.slots.table.end: à
@@ -693,10 +694,17 @@ admin.sheet.details.owner.email: Email
 admin.sheet.details.owner.mobile: Mobile
 admin.sheet.details.owner.phone: Téléphone
 admin.sheet.details.owner.title: Propriétaire
-admin.sheet.details.participant.agenda_confirmation_not_send: 'Confirmation d''agenda non envoyée'
-admin.sheet.details.participant.agenda_confirmed: 'Agenda validé'
-admin.sheet.details.participant.agenda_not_confirmed: 'Agenda non-validé'
+admin.sheet.details.participant.agendaConfirmation.title: 'Confirmation d''agenda'
+admin.sheet.details.participant.agenda_confirmation_not_sent: 'Non envoyée'
+admin.sheet.details.participant.agenda_confirmed: 'Confirmé'
+admin.sheet.details.participant.agenda_confirmation_not_concerned: 'Non concerné'
+admin.sheet.details.participant.agenda_confirmation_status_update.title: 'Mise à jour de la confirmation d''agenda'
+admin.sheet.details.participant.tooltip.not_concerned: 'Cet utilisateur n''est pas concerné car il/elle n''a pas de RDVs ou ne participe pas à un sous-événement'
+admin.sheet.details.participant.agenda_not_confirmed: 'Non confirmé'
 admin.sheet.details.participant.email: Email
+admin.sheet.details.participant.availability_confirmation.title: 'Confirmation des disponibilités'
+admin.sheet.details.participant.availability_confirmation.confirmed: 'Confirmé'
+admin.sheet.details.participant.availability_confirmation.not_confirmed: 'Non confirmé'
 admin.sheet.details.participant.phoneValidationStatus.title: Validation téléphone
 admin.sheet.details.participant.phoneValidationStatus.validated: Validé
 admin.sheet.details.participant.phoneValidationStatus.not_validated: Non validé

@@ -42,7 +42,7 @@
     {% endif %}
 
     {% if isCatalog and userSheet != sheet %}
-        <div class="buttons-zone button">
+        <div class="buttons-zone button clearboth">
             {{ include('EventBundle:Sheet/Partial:meetingRequestButtons.html.twig', {
                 'sheet': sheet,
                 'userSheet': userSheet,

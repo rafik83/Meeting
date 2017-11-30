@@ -43,6 +43,7 @@ class TemplateDataFactoryTest extends TestCase
                                 'help'        => ['fr' => 'Ici le titre'],
                                 'length'      => 100,
                                 'required'    => true,
+                                'translatable' => true
                             ]
                         ],
                         'azerty' => [

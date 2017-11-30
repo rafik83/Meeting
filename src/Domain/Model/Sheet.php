@@ -16,6 +16,7 @@ use Proximum\Vimeet\Domain\Exception\Sheet\SheetException;
 use Proximum\Vimeet\Domain\Model\Sheet\AvailableSlot;
 use Proximum\Vimeet\Domain\Model\Sheet\Group;
 use Proximum\Vimeet\Domain\Model\Template\SheetTemplate;
+use Proximum\Vimeet\Domain\Sheet\Availability\ConfirmationStatus;
 use Proximum\Vimeet\Domain\Sheet\Phone\ValidationStatus;
 use Proximum\Vimeet\Domain\Trace\TraceableName;
 
@@ -174,6 +175,9 @@ class Sheet implements TraceableInterface
 
     /** @var ArrayCollection */
     private $availableSlots;
+
+    /** @var string */
+    private $availabilityConfirmationStatus = ConfirmationStatus::NONE_CONFIRMED;
 
     /**
      * Sheet constructor.
@@ -1067,5 +1071,21 @@ class Sheet implements TraceableInterface
     public function getPhoneValidationStatus(): string
     {
         return $this->phoneValidationStatus;
+    }
+
+    /**
+     * @return string
+     */
+    public function getAvailabilityConfirmationStatus(): string
+    {
+        return $this->availabilityConfirmationStatus;
+    }
+
+    /**
+     * @param string $availabilityConfirmationStatus
+     */
+    public function setAvailabilityConfirmationStatus(string $availabilityConfirmationStatus): void
+    {
+        $this->availabilityConfirmationStatus = $availabilityConfirmationStatus;
     }
 }
