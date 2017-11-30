@@ -7,7 +7,7 @@
 
     p {
         color: $color-highlighted;
-        font-family: openSans;
+        font-family: OpenSans, Helvetica, sans-serif;
         margin: 0;
     }
 
@@ -30,7 +30,7 @@
 
                 &:nth-child(even) { background: none; }
                 &.highlight {
-                    font-family: OpenSans;
+                    font-family: OpenSans, Helvetica, sans-serif;
                     text-transform: uppercase;
                 }
             }
