@@ -115,4 +115,9 @@ interface TipRepositoryInterface
      * @return bool
      */
     public function isConfirmationPhoneEnabled(Event $event, Type $type): bool;
+
+    /**
+     * @return Tip[]
+     */
+    public function getGlobals(): array;
 }

@@ -12,13 +12,10 @@ namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Tip;
 
 use Proximum\Vimeet\Application\Command\Tip\Event\Affect;
 use Proximum\Vimeet\Application\Command\Tip\Event\Remove;
-use Proximum\Vimeet\Application\Exception\Tip\NoTipAvailableException;
 use Proximum\Vimeet\Application\Exception\Tip\TipNotAffectedOnEventException;
 use Proximum\Vimeet\Application\Exception\Tip\TipNotFoundException;
 use Proximum\Vimeet\Application\Query\Tip\Event\PreviewTipViewQuery;
 use Proximum\Vimeet\Application\Query\Tip\Event\PaginatedTipViewQuery;
-use Proximum\Vimeet\Application\Query\Tip\Event\TipListViewQuery;
-use Proximum\Vimeet\Application\Query\Tip\Event\TypeListViewQuery;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Tip\Tip;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Tip\Event\AffectType;
@@ -27,6 +24,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 class TipEventController extends Controller
 {
@@ -52,34 +50,24 @@ class TipEventController extends Controller
     }
 
     /**
-     * @param Request $request
-     * @param Event   $event
+     * @param Request       $request
+     * @param Event         $event
+     * @param UserInterface $admin
      *
      * @return Response
      */
-    public function affectAction(Request $request, Event $event)
+    public function affectAction(Request $request, Event $event, UserInterface $admin)
     {
         $this->denyAccessUnlessGranted('ROLE_ALLOWED_TO_ORGANIZE');
         $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
 
         $locale = $event->getAvailableLocale($request->getLocale());
-
-        try {
-            $tipListViewQuery = new TipListViewQuery($locale);
-            $tipViews = $this->get('tactician.commandbus')->handle($tipListViewQuery);
-        }  catch (NoTipAvailableException $exception) {
-            $this->addFlash('error', $exception->getMessage());
-
-            return $this->redirectToRoute('admin_tip_event_list', ['event' => $event->getId()]);
-        }
-
-        $typeListViewQuery = new TypeListViewQuery($event, $locale);
-        $typeViews         = $this->get('tactician.commandbus')->handle($typeListViewQuery);
-        $affect            = new Affect($event);
-
-        $form = $this->createForm(AffectType::class, $affect, [
-            'tipViews'  => $tipViews,
-            'typeViews' => $typeViews,
+        $affect = new Affect($event);
+        $form   = $this->createForm(AffectType::class, $affect, [
+            'admin'  => $admin,
+            'event'  => $event,
+            'locale' => $locale,
+            'submit' => true,
         ]);
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
@@ -133,6 +121,10 @@ class TipEventController extends Controller
     public function previewAction(Tip $tip, $locale)
     {
         $this->denyAccessUnlessGranted('ROLE_ALLOWED_TO_ORGANIZE');
+
+        if ($tip->hasEvent()) {
+            throw $this->createAccessDeniedException('The tip has an event and can not be previewed');
+        }
 
         $tipView = $this->get('tactician.commandbus')->handle(new PreviewTipViewQuery($tip, $locale));
 

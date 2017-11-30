@@ -2,13 +2,8 @@
 
 {% block form_title 'admin.tip.update.title'|trans %}
 
-{% block form_content %}
-    {# show the form without customization #}
-{% endblock form_content %}
-
 {% block goback_link path('admin_tip_list') %}
 {% block javascripts %}
     {{ parent() }}
-    <script src="{{ asset('assets/tinymce/tinymce.js') }}"></script>
-    <script src="{{ asset('assets/js/tip/tip.js') }}"></script>
+    {{ include('AdminBundle:Tip:tip-js.html.twig') }}
 {% endblock %}

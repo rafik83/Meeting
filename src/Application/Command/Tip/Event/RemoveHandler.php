@@ -26,8 +26,6 @@ class RemoveHandler
     private $eventDispatcher;
 
     /**
-     * RemoveHandler constructor.
-     *
      * @param TipRepositoryInterface          $tipRepository
      * @param DelayedEventDispatcherInterface $eventDispatcher
      */
@@ -47,19 +45,7 @@ class RemoveHandler
      */
     public function handle(Remove $remove)
     {
-        $tip = $this->tipRepository->getByEventAndTip($remove->event, $remove->tip);
-
-        if (null === $tip) {
-            throw new TipNotFoundException();
-        }
-
-        foreach ($tip->getTypes() as $type) {
-            if ($type->getEvent() !== $remove->event) {
-                throw new TipNotAffectedOnEventException();
-            }
-        }
-
-        $this->tipRepository->removeTip($tip);
+        $this->tipRepository->removeTip($remove->tip);
 
         $this->eventDispatcher->dispatch(
             Events::TIP_UN_ASSIGNED,

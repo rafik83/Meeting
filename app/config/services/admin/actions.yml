@@ -1,0 +1,16 @@
+services:
+    Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Tip\Event\CreateAction:
+        arguments:
+            - '@tactician.commandbus'
+            - '@adapter.router'
+            - '@form.factory'
+            - '@templating'
+            - '@adapter.authorization_checker'
+
+    Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Tip\Event\UpdateAction:
+        arguments:
+            - '@tactician.commandbus'
+            - '@adapter.router'
+            - '@form.factory'
+            - '@templating'
+            - '@adapter.authorization_checker'

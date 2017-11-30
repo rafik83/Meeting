@@ -280,6 +280,7 @@ services:
             class: Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Tip\Event\TipSelectType
             arguments:
                 - '@router'
+                - '@repository.tip.repository'
             tags:
                 - { name: form.type }
 

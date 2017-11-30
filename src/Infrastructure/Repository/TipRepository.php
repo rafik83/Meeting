@@ -38,7 +38,9 @@ class TipRepository implements TipRepositoryInterface
         $this->paginator     = $paginator;
     }
 
-    /** {@inheritdoc} */
+    /**
+     * {@inheritdoc}
+     */
     public function getById($id)
     {
         $queryBuilder = $this
@@ -53,7 +55,9 @@ class TipRepository implements TipRepositoryInterface
         return $queryBuilder->getQuery()->getOneOrNullResult();
     }
 
-    /** {@inheritdoc} */
+    /**
+     * {@inheritdoc}
+     */
     public function paginate($page, $limit = 20)
     {
         $queryBuilder = $this
@@ -68,7 +72,9 @@ class TipRepository implements TipRepositoryInterface
         return $this->paginator->paginate($queryBuilder, $page, $limit, 'tip');
     }
 
-    /** {@inheritdoc} */
+    /**
+     * {@inheritdoc}
+     */
     public function add(Tip $tip)
     {
         $this->entityManager->persist($tip);
@@ -78,29 +84,34 @@ class TipRepository implements TipRepositoryInterface
         }
     }
 
-    /** {@inheritdoc} */
+    /**
+     * {@inheritdoc}
+     */
     public function set(Tip $tip)
     {
         $this->entityManager->flush($tip);
     }
 
-    /** {@inheritdoc} */
+    /**
+     * {@inheritdoc}
+     */
     public function removeTranslation(TipTranslation $translation)
     {
         $this->entityManager->remove($translation);
     }
 
-    /** {@inheritdoc} */
+    /**
+     * {@inheritdoc}
+     */
     public function removeTip(Tip $tip)
     {
-        foreach ($tip->getTypes() as $type) {
-            $tip->removeType($type);
-        }
-
+        $this->entityManager->remove($tip);
         $this->entityManager->flush($tip);
     }
 
-    /** {@inheritdoc} */
+    /**
+     * {@inheritdoc}
+     */
     public function getByContextAndEventAndType(Event $event, Type $type, $context, $locale)
     {
         $queryBuilder = $this
@@ -137,7 +148,9 @@ class TipRepository implements TipRepositoryInterface
         return $queryBuilder->getQuery()->getOneOrNullResult() !== null;
     }
 
-    /** {@inheritdoc} */
+    /**
+     * {@inheritdoc}
+     */
     public function getByEventAndTip(Event $event, Tip $tip)
     {
         $queryBuilder = $this
@@ -152,7 +165,9 @@ class TipRepository implements TipRepositoryInterface
         return $queryBuilder->getQuery()->getOneOrNullResult();
     }
 
-    /** {@inheritdoc} */
+    /**
+     * {@inheritdoc}
+     */
     public function paginateByEvent(Event $event, $page, $limit)
     {
         $queryBuilder = $this
@@ -164,6 +179,22 @@ class TipRepository implements TipRepositoryInterface
             ->setParameter('event', $event);
 
         return $this->paginator->paginate($queryBuilder, $page, $limit, 'tip');
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getGlobals(): array
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('tip')
+            ->from(Tip::class, 'tip')
+            ->orderBy('tip.title', 'ASC')
+        ;
+
+        return $queryBuilder->getQuery()->getResult();
     }
 
     /** {@inheritdoc} */
@@ -181,7 +212,9 @@ class TipRepository implements TipRepositoryInterface
         return $queryBuilder->getQuery()->getResult();
     }
 
-    /** {@inheritdoc} */
+    /**
+     * {@inheritdoc}
+     */
     public function getAll()
     {
         $queryBuilder = $this
@@ -195,7 +228,9 @@ class TipRepository implements TipRepositoryInterface
         return $queryBuilder->getQuery()->getResult();
     }
 
-    /** {@inheritdoc} */
+    /**
+     * {@inheritdoc}
+     */
     public function isTipAffectedToEvent(Tip $tip, Event $event)
     {
         $queryBuilder = $this

@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of the vimeet project.
+ * This file is part of the Proximum Vimeet project.
  *
  * Copyright (C) Proximum
  *
@@ -11,19 +11,11 @@
 namespace Proximum\Vimeet\Application\Command\Tip\Event;
 
 use Proximum\Vimeet\Domain\Model\Event;
-use Proximum\Vimeet\Domain\Model\Tip\Tip;
-use Proximum\Vimeet\Domain\Model\Type;
 
-class Affect
+class Create extends AbstractEventTip
 {
     /** @var Event */
     public $event;
-
-    /** @var Tip */
-    public $tip;
-
-    /** @var Type[] */
-    public $types;
 
     /**
      * @param Event $event
@@ -31,5 +23,12 @@ class Affect
     public function __construct(Event $event)
     {
         $this->event = $event;
+
+        foreach ($this->event->getLocales() as $locale) {
+            $this->translations[$locale] = [
+                'title' => '',
+                'content' => '',
+            ];
+        }
     }
 }

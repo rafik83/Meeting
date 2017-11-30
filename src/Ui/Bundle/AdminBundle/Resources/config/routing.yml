@@ -1546,6 +1546,21 @@ admin_tip_event_preview:
         locale: \w+
     defaults: { _controller: AdminBundle:Tip/TipEvent:preview }
 
+admin_tip_event_create:
+    path: /event/{event}/tip/create
+    methods: [GET, POST]
+    requirements:
+        event: \d+
+    defaults: { _controller: Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Tip\Event\CreateAction }
+
+admin_tip_event_update:
+    path: /event/{event}/tip/{tip}/update
+    methods: [GET, POST]
+    requirements:
+        event: \d+
+        tip: \d+
+    defaults: { _controller: Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Tip\Event\UpdateAction }
+
 #
 # Event Archive
 #

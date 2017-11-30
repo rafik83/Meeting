@@ -401,4 +401,12 @@ class Tip
 
         return $events;
     }
+
+    /**
+     * @return bool
+     */
+    public function hasEvent(): bool
+    {
+        return $this->event !== null;
+    }
 }
