@@ -59,8 +59,6 @@ class Tip
     private $createdAt;
 
     /**
-     * Tip constructor.
-     *
      * @param string             $title
      * @param Event|null         $event
      * @param bool               $onMeetingManagement
