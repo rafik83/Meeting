@@ -22,6 +22,7 @@ use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Symfony\Component\Security\Core\User\UserInterface;
 
@@ -44,11 +45,15 @@ class UpdateAction
     /** @var CommandBus */
     private $commandBus;
 
+    /** @var FlashBagInterface */
+    private $flashBag;
+
     /**
      * @param CommandBus                           $commandBus
      * @param RouterInterface                      $router
      * @param FormFactoryInterface                 $formFactory
      * @param EngineInterface                      $engine
+     * @param FlashBagInterface                    $flashBag
      * @param AuthorizationCheckerAdapterInterface $authorizationCheckerAdapter
      */
     public function __construct(
@@ -56,12 +61,14 @@ class UpdateAction
         RouterInterface $router,
         FormFactoryInterface $formFactory,
         EngineInterface $engine,
+        FlashBagInterface $flashBag,
         AuthorizationCheckerAdapterInterface $authorizationCheckerAdapter
     ) {
         $this->router = $router;
         $this->formFactory = $formFactory;
         $this->engine = $engine;
         $this->authorizationCheckerAdapter = $authorizationCheckerAdapter;
+        $this->flashBag = $flashBag;
         $this->commandBus = $commandBus;
     }
 
@@ -72,6 +79,8 @@ class UpdateAction
      * @param UserInterface $admin
      *
      * @return Response
+     *
+     * @throws AccessDeniedException
      */
     public function __invoke(Request $request, Event $event, Tip $tip, UserInterface $admin): Response
     {
@@ -92,6 +101,7 @@ class UpdateAction
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
             $this->commandBus->handle($create);
+            $this->flashBag->add('success', 'flash.admin.tip.event.update.success');
 
             return new RedirectResponse($this->router->generate('admin_tip_event_list', [
                 'event' => $event->getId(),

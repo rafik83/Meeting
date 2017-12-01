@@ -63,8 +63,9 @@ class TipRepository implements TipRepositoryInterface
         $queryBuilder = $this
             ->entityManager
             ->createQueryBuilder()
-            ->select('tip')
+            ->select('tip', 'translation')
             ->from(Tip::class, 'tip', 'tip.id')
+            ->join('tip.translations', 'translation')
             ->where('tip.event IS NULL')
             ->orderBy('tip.title');
 
@@ -190,6 +191,7 @@ class TipRepository implements TipRepositoryInterface
             ->createQueryBuilder()
             ->select('tip')
             ->from(Tip::class, 'tip')
+            ->where('tip.event IS NULL')
             ->orderBy('tip.title', 'ASC')
         ;
 

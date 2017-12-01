@@ -51,6 +51,6 @@ class TipType extends AbstractType
                 'allow_delete'  => true,
                 'label'         => false,
             ])
-            ->add('submit', SubmitType::class);
+        ;
     }
 }
