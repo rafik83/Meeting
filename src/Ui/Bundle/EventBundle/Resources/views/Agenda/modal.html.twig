@@ -4,7 +4,7 @@
             {% if form_unavailability is defined %}
                 {{ include('EventBundle:Unavailability:create-form.html.twig') }}
             {% endif %}
-            {% if sendCodeForm is not null %}
+            {% if sendCodeForm is defined and sendCodeForm is not null %}
                 {{ include('EventBundle:User/Phone/Modal:create-form.html.twig') }}
             {% endif %}
         </div>
