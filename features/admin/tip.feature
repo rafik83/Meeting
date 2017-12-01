@@ -15,7 +15,6 @@
     When I go to this page "/fr/tip/list"
     Then I should see "admin.tip.list.title"
     And I should see "Awesome tip"
-    And I should see "Best of Web"
     And I should see "Français"
 
   Scenario: I can create a new tip
