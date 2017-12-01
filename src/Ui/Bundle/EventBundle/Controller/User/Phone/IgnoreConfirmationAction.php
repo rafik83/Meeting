@@ -42,6 +42,7 @@ class IgnoreConfirmationAction
      * @param Sheet       $sheet
      * @param Participant $participant
      *
+     * @throws AccessDeniedException
      * @return JsonResponse
      */
     public function __invoke(Sheet $sheet, Participant $participant): JsonResponse
