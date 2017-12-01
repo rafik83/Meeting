@@ -14,7 +14,6 @@ use League\Tactician\CommandBus;
 use Proximum\Vimeet\Application\Adapter\AuthorizationCheckerAdapterInterface;
 use Proximum\Vimeet\Application\Adapter\RouterInterface;
 use Proximum\Vimeet\Application\Command\Tip\Event\Affect;
-use Proximum\Vimeet\Domain\Exception\Sheet\AccessDeniedException;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Tip\Event\AffectType;
 use Symfony\Bundle\FrameworkBundle\Templating\EngineInterface;
@@ -23,6 +22,7 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface;
+use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 class AffectAction
@@ -106,7 +106,7 @@ class AffectAction
 
         return $this->engine->renderResponse(self::TEMPLATE, [
             'event' => $event,
-            'form'  => $form->createView()
+            'form'  => $form->createView(),
         ]);
     }
 }
