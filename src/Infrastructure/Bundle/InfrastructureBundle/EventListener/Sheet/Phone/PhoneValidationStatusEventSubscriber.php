@@ -16,6 +16,8 @@ use Proximum\Vimeet\Application\Event\Meeting\MeetingCreatedEvent;
 use Proximum\Vimeet\Application\Event\Meeting\MeetingMovedEvent;
 use Proximum\Vimeet\Application\Event\Meeting\MeetingRemovedEvent;
 use Proximum\Vimeet\Application\Event\Tip\AssignedEvent;
+use Proximum\Vimeet\Application\Event\Tip\Event\CreatedEvent;
+use Proximum\Vimeet\Application\Event\Tip\Event\UpdatedEvent;
 use Proximum\Vimeet\Application\Event\Tip\RemovedEvent;
 use Proximum\Vimeet\Application\Event\User\Phone\PhoneValidatedEvent;
 use Proximum\Vimeet\Domain\Model\Sheet;
@@ -61,6 +63,8 @@ class PhoneValidationStatusEventSubscriber implements EventSubscriberInterface
             Events::USER_PHONE_VALIDATED   => 'onUserPhoneValidated',
             Events::TIP_ASSIGNED           => 'onTipAssigned',
             Events::TIP_REMOVED_FROM_EVENT => 'onTipRemoved',
+            Events::TIP_EVENT_UPDATED      => 'onTipEventUpdated',
+            Events::TIP_EVENT_CREATED      => 'onTipEventCreated',
         ];
     }
 
@@ -101,6 +105,22 @@ class PhoneValidationStatusEventSubscriber implements EventSubscriberInterface
      * @param AssignedEvent $event
      */
     public function onTipAssigned(AssignedEvent $event)
+    {
+        $this->jobQueue->aggregatePhoneValidationStatus($event->getEvent());
+    }
+
+    /**
+     * @param CreatedEvent $event
+     */
+    public function onTipEventCreated(CreatedEvent $event)
+    {
+        $this->jobQueue->aggregatePhoneValidationStatus($event->getEvent());
+    }
+
+    /**
+     * @param UpdatedEvent $event
+     */
+    public function onTipEventUpdated(UpdatedEvent $event)
     {
         $this->jobQueue->aggregatePhoneValidationStatus($event->getEvent());
     }

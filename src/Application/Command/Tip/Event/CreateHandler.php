@@ -11,6 +11,8 @@
 namespace Proximum\Vimeet\Application\Command\Tip\Event;
 
 use Proximum\Vimeet\Application\Adapter\DelayedEventDispatcherInterface;
+use Proximum\Vimeet\Application\Event\Events;
+use Proximum\Vimeet\Application\Event\Tip\Event\CreatedEvent;
 use Proximum\Vimeet\Domain\Model\Tip\Tip;
 use Proximum\Vimeet\Domain\Repository\TipRepositoryInterface;
 
@@ -67,5 +69,10 @@ class CreateHandler
         }
 
         $this->tipRepository->add($tip);
+
+        $this->delayedEventDispatcher->dispatch(
+            Events::TIP_EVENT_CREATED,
+            new CreatedEvent($tip)
+        );
     }
 }

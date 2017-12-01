@@ -14,6 +14,8 @@ use PHPUnit\Framework\TestCase;
 use Proximum\Vimeet\Application\Adapter\DelayedEventDispatcherInterface;
 use Proximum\Vimeet\Application\Command\Tip\Event\Create;
 use Proximum\Vimeet\Application\Command\Tip\Event\CreateHandler;
+use Proximum\Vimeet\Application\Event\Events;
+use Proximum\Vimeet\Application\Event\Tip\Event\CreatedEvent;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Tip\Tip;
 use Proximum\Vimeet\Domain\Model\Type;
@@ -50,6 +52,7 @@ class CreateHandlerTest extends TestCase
         $eventDispatcher = $this->prophesize(DelayedEventDispatcherInterface::class);
 
         $tipRepository->add($expected)->shouldBeCalled();
+        $eventDispatcher->dispatch(Events::TIP_EVENT_CREATED, new CreatedEvent($expected))->shouldBeCalled();
 
         $create = new Create($event->reveal());
         $create->title = 'title';

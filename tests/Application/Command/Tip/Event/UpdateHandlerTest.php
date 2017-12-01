@@ -14,6 +14,8 @@ use PHPUnit\Framework\TestCase;
 use Proximum\Vimeet\Application\Adapter\DelayedEventDispatcherInterface;
 use Proximum\Vimeet\Application\Command\Tip\Event\Update;
 use Proximum\Vimeet\Application\Command\Tip\Event\UpdateHandler;
+use Proximum\Vimeet\Application\Event\Events;
+use Proximum\Vimeet\Application\Event\Tip\Event\UpdatedEvent;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Tip\Tip;
 use Proximum\Vimeet\Domain\Model\Type;
@@ -71,6 +73,7 @@ class UpdateHandlerTest extends TestCase
         $delayedEventDispatcher = $this->prophesize(DelayedEventDispatcherInterface::class);
 
         $tipRepository->set($expected)->shouldBeCalled();
+        $delayedEventDispatcher->dispatch(Events::TIP_EVENT_UPDATED, new UpdatedEvent($expected))->shouldBeCalled();
 
         $update = new Update($tip);
         $update->title = 'title';

@@ -11,6 +11,8 @@
 namespace Proximum\Vimeet\Application\Command\Tip\Event;
 
 use Proximum\Vimeet\Application\Adapter\DelayedEventDispatcherInterface;
+use Proximum\Vimeet\Application\Event\Events;
+use Proximum\Vimeet\Application\Event\Tip\Event\UpdatedEvent;
 use Proximum\Vimeet\Domain\Repository\TipRepositoryInterface;
 
 class UpdateHandler
@@ -75,5 +77,10 @@ class UpdateHandler
         );
 
         $this->tipRepository->set($tip);
+
+        $this->delayedEventDispatcher->dispatch(
+            Events::TIP_EVENT_UPDATED,
+            new UpdatedEvent($tip)
+        );
     }
 }
