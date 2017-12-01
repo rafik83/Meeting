@@ -33,6 +33,7 @@ class AffectType extends AbstractType
                 'expanded' => true,
                 'locale'   => $options['locale'],
                 'multiple' => true,
+                'required' => false,
                 'user'    => $options['admin'],
             ])
         ;

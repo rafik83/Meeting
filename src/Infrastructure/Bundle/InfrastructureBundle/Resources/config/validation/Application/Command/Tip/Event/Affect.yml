@@ -2,5 +2,3 @@ Proximum\Vimeet\Application\Command\Tip\Event\Affect:
     properties:
         tip:
             - NotBlank: ~
-        types:
-            - NotBlank: ~
