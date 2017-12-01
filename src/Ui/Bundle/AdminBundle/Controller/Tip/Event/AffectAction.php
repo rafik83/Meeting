@@ -32,17 +32,17 @@ class AffectAction
     /** @var FormFactoryInterface */
     private $formFactory;
 
-    /** @var EngineInterface */
-    private $engine;
-
-    /** @var AuthorizationCheckerAdapterInterface */
-    private $authorizationCheckerAdapter;
-
     /** @var RouterInterface */
     private $router;
 
+    /** @var EngineInterface */
+    private $engine;
+
     /** @var CommandBus */
     private $commandBus;
+
+    /** @var AuthorizationCheckerAdapterInterface */
+    private $authorizationCheckerAdapter;
 
     /** @var FlashBagInterface */
     private $flashBag;
@@ -64,11 +64,11 @@ class AffectAction
         AuthorizationCheckerAdapterInterface $authorizationCheckerAdapter
     ) {
         $this->router = $router;
+        $this->commandBus = $commandBus;
         $this->formFactory = $formFactory;
         $this->engine = $engine;
         $this->authorizationCheckerAdapter = $authorizationCheckerAdapter;
         $this->flashBag = $flashBag;
-        $this->commandBus = $commandBus;
     }
 
     /**
