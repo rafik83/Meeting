@@ -706,7 +706,7 @@ event_agenda_ignore_phone_confirmation:
     requirements:
         sheet: \d+
         participant: \d+
-    defaults: { _controller: Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\User\Phone\IgnorePopupAction }
+    defaults: { _controller: Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\User\Phone\IgnoreConfirmationAction }
 
 
 happening_program:

@@ -11,6 +11,7 @@
 namespace Proximum\Vimeet\Application\Command\User\Phone;
 
 use Proximum\Vimeet\Domain\Model\User\Event\ExtraData;
+use Proximum\Vimeet\Domain\Repository\User\Event\ExtraDataRepositoryInterface;
 use Proximum\Vimeet\Domain\User\Event\ExtraData\Type;
 use Proximum\Vimeet\Infrastructure\Repository\User\Event\ExtraDataRepository;
 
@@ -23,11 +24,11 @@ class IgnoreConfirmationHandler
     private $dateTime;
 
     /**
-     * @param ExtraDataRepository $extraDataRepository
-     * @param \DateTimeInterface  $dateTime
+     * @param ExtraDataRepositoryInterface $extraDataRepository
+     * @param \DateTimeInterface           $dateTime
      */
     public function __construct(
-        ExtraDataRepository $extraDataRepository,
+        ExtraDataRepositoryInterface $extraDataRepository,
         \DateTimeInterface $dateTime
     ) {
         $this->extraDataRepository = $extraDataRepository;

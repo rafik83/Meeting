@@ -16,7 +16,7 @@ use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
-class IgnorePopupAction
+class IgnoreConfirmationAction
 {
     /** @var IgnoreConfirmationHandler */
     private $ignoreConfirmationHandler;
