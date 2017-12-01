@@ -61,7 +61,7 @@ class CreateHandler
         );
 
         foreach ($command->translations as $locale => $translation) {
-            $tip->setTranslation($locale, $translation['title'], $translation['content'], $this->dateTime);
+            $tip->translate($locale, $translation['title'], $translation['content'], $this->dateTime);
         }
 
         foreach ($command->types as $type) {
