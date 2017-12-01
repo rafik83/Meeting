@@ -63,9 +63,9 @@ class TipManager
      */
     public function createForEvent($tipTitle, $eventTitle)
     {
-        $tip   = TipFactory::createTip($tipTitle);
         $event = $this->eventManager->create($eventTitle);
         $type  = $this->typeManager->create($event);
+        $tip   = TipFactory::createTip($tipTitle, $event);
 
         $tip->setType($type);
 
@@ -83,7 +83,7 @@ class TipManager
      */
     public function affectToType($tipTitle, Type $type, array $contexts)
     {
-        $tip = TipFactory::createTip($tipTitle, $contexts, $type->getEvent()->getLocales());
+        $tip = TipFactory::createTip($tipTitle, $type->getEvent(), $contexts, $type->getEvent()->getLocales());
         $tip->setType($type);
         $this->tipRepository->add($tip);
 
