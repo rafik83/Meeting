@@ -11,6 +11,7 @@
 namespace Proximum\Vimeet\Tests\Application\Command\Tip\Event;
 
 use PHPUnit\Framework\TestCase;
+use Prophecy\Argument;
 use Proximum\Vimeet\Application\Adapter\DelayedEventDispatcherInterface;
 use Proximum\Vimeet\Application\Command\Tip\Event\Update;
 use Proximum\Vimeet\Application\Command\Tip\Event\UpdateHandler;
@@ -47,8 +48,8 @@ class UpdateHandlerTest extends TestCase
         );
         $expected->setType($type1->reveal());
         $expected->setType($type2->reveal());
-        $expected->setTranslation('fr', 'title fr', 'content fr', $dateTime);
-        $expected->setTranslation('en', 'title en', 'content en', $dateTime);
+        $expected->translate('fr', 'title fr', 'content fr', $dateTime);
+        $expected->translate('en', 'title en', 'content en', $dateTime);
 
         $tip = new Tip(
             'old title',
@@ -65,15 +66,34 @@ class UpdateHandlerTest extends TestCase
 
         $tip->setType($oldType1->reveal());
         $tip->setType($type2->reveal());
-        $tip->setTranslation('fr', 'old title fr', 'old content fr', $oldDateTime);
-        $tip->setTranslation('en', 'old title en', 'old content en', $oldDateTime);
-
+        $tip->translate('fr', 'old title fr', 'old content fr', $oldDateTime);
+        $tip->translate('en', 'old title en', 'old content en', $oldDateTime);
 
         $tipRepository = $this->prophesize(TipRepositoryInterface::class);
         $delayedEventDispatcher = $this->prophesize(DelayedEventDispatcherInterface::class);
 
-        $tipRepository->set($expected)->shouldBeCalled();
-        $delayedEventDispatcher->dispatch(Events::TIP_EVENT_UPDATED, new UpdatedEvent($expected))->shouldBeCalled();
+        $tipRepository->set(Argument::that(function (Tip $tip) use ($expected) {
+            return $tip->getTitle() === $expected->getTitle()
+                && $tip->getEvent() === $expected->getEvent()
+                && $tip->isOnMeetingManagement() === $expected->isOnMeetingManagement()
+                && $tip->isOnCatalog() === $expected->isOnCatalog()
+                && $tip->isOnPrintPlanning() === $expected->isOnPrintPlanning()
+                && $tip->isOnSheet() === $expected->isOnSheet()
+                && $tip->isOnAgenda() === $expected->isOnAgenda()
+                && $tip->isOnProgram() === $expected->isOnProgram()
+                && $tip->isOnConfirmationPhone() === $expected->isOnConfirmationPhone()
+                && $tip->getTranslationTitle('fr') === $expected->getTranslationTitle('fr')
+                && $tip->getTranslationTitle('en') === $expected->getTranslationTitle('en')
+                && $tip->getTranslationContent('fr') === $expected->getTranslationContent('fr')
+                && $tip->getTranslationContent('en') === $expected->getTranslationContent('en')
+            ;
+        }))->shouldBeCalled();
+        $delayedEventDispatcher->dispatch(
+            Events::TIP_EVENT_UPDATED,
+            Argument::that(function (UpdatedEvent $event) use ($expected) {
+                return $event->getTip()->getTitle() === $expected->getTitle();
+            })
+        )->shouldBeCalled();
 
         $update = new Update($tip);
         $update->title = 'title';

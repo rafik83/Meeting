@@ -45,8 +45,8 @@ class CreateHandlerTest extends TestCase
         );
         $expected->setType($type1->reveal());
         $expected->setType($type2->reveal());
-        $expected->setTranslation('fr', 'title fr', 'content fr', $dateTime);
-        $expected->setTranslation('en', 'title en', 'content en', $dateTime);
+        $expected->translate('fr', 'title fr', 'content fr', $dateTime);
+        $expected->translate('en', 'title en', 'content en', $dateTime);
 
         $tipRepository   = $this->prophesize(TipRepositoryInterface::class);
         $eventDispatcher = $this->prophesize(DelayedEventDispatcherInterface::class);
