@@ -16,6 +16,7 @@ use Proximum\Vimeet\Application\Command\User\Phone\IgnoreConfirmationHandler;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 class IgnoreConfirmationAction
 {
@@ -45,7 +46,9 @@ class IgnoreConfirmationAction
      */
     public function __invoke(Sheet $sheet, Participant $participant): JsonResponse
     {
-        $this->authorizationCheckerAdapter->isGranted('IS_AUTHENTICATED_REMEMBERED');
+        if (!$this->authorizationCheckerAdapter->isGranted('IS_AUTHENTICATED_REMEMBERED')) {
+            throw new AccessDeniedException('Access denied');
+        }
 
         $this->ignoreConfirmationHandler->handle(
             new IgnoreConfirmation(
