@@ -28,15 +28,21 @@ class SendCodeView
     /** @var TipTranslationView[] */
     public $tipTranslationViews;
 
+    /** @var null|string */
+    public $ignorePhoneConfirmationUrl;
+
     /**
      * @param string             $status
      * @param FormInterface|null $form
      * @param array              $tipTranslationViews
-     *
-     * @throws \InvalidArgumentException
+     * @param null|string        $ignorePhoneConfirmationUrl
      */
-    public function __construct($status, FormInterface $form = null, array $tipTranslationViews = [])
-    {
+    public function __construct(
+        $status,
+        FormInterface $form = null,
+        array $tipTranslationViews = [],
+        ?string $ignorePhoneConfirmationUrl = null
+    ) {
         if (!in_array($status, [self::SEND_CODE_SUCCESS, self::SEND_CODE_SHOW_FORM, self::SEND_CODE_FORM_NOT_SHOWN])) {
             throw new \InvalidArgumentException('Status value is invalid');
         }
@@ -44,6 +50,7 @@ class SendCodeView
         $this->status = $status;
         $this->form = $form;
         $this->tipTranslationViews = $tipTranslationViews;
+        $this->ignorePhoneConfirmationUrl = $ignorePhoneConfirmationUrl;
     }
 
     /**

@@ -11,6 +11,7 @@
 namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Handler\User\Phone;
 
 use League\Tactician\CommandBus;
+use Proximum\Vimeet\Application\Adapter\RouterInterface;
 use Proximum\Vimeet\Application\Command\User\Phone\SendCode;
 use Proximum\Vimeet\Application\Exception\Messaging\SMS\InvalidReceiverException;
 use Proximum\Vimeet\Application\Query\Tip\TipTranslationViewByUserQuery;
@@ -31,19 +32,25 @@ class SendCodeFormHandler
     /** @var CommandBus */
     private $commandBus;
 
+    /** @var RouterInterface */
+    private $router;
+
     /**
      * @param UserEventPhoneRepositoryInterface $userEventPhoneRepository
      * @param FormFactory                       $formFactory
      * @param CommandBus                        $commandBus
+     * @param RouterInterface                   $router
      */
     public function __construct(
         UserEventPhoneRepositoryInterface $userEventPhoneRepository,
         FormFactory $formFactory,
-        CommandBus $commandBus
+        CommandBus $commandBus,
+        RouterInterface $router
     ) {
         $this->userEventPhoneRepository = $userEventPhoneRepository;
         $this->formFactory              = $formFactory;
         $this->commandBus               = $commandBus;
+        $this->router = $router;
     }
 
     /**
@@ -80,10 +87,24 @@ class SendCodeFormHandler
         }
 
         $sendCode = new SendCode($user, $event, $sendCodeForm->mobileNumberToValidate ?? $user->getMobile(), $locale);
-        $form     = $this->formFactory->create(SendCodeType::class, $sendCode, [
+        $formOptions = [
             'country' => $event->getCountry(),
-            'submit'  => true,
-        ]);
+            'submit' => true
+        ];
+
+        $ignorePhoneConfirmationUrl = null;
+        if ($sendCodeForm->fromModal) {
+            $formOptions['action'] = $this->router->generate('event_user_phone_validate', [
+                'sheet'       => $sendCodeForm->sheet->getId(),
+                'participant' => $sendCodeForm->participant->getId(),
+            ]);
+            $ignorePhoneConfirmationUrl = $this->router->generate('event_agenda_ignore_phone_confirmation', [
+                'sheet'       => $sendCodeForm->sheet->getId(),
+                'participant' => $sendCodeForm->participant->getId(),
+            ]);
+        }
+
+        $form = $this->formFactory->create(SendCodeType::class, $sendCode, $formOptions);
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
             try {
@@ -95,6 +116,11 @@ class SendCodeFormHandler
             }
         }
 
-        return new SendCodeView(SendCodeView::SEND_CODE_SHOW_FORM, $form, $tipTranslationViews);
+        return new SendCodeView(
+            SendCodeView::SEND_CODE_SHOW_FORM,
+            $form,
+            $tipTranslationViews,
+            $ignorePhoneConfirmationUrl
+        );
     }
 }

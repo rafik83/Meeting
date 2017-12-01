@@ -30,25 +30,31 @@ class AgendaView
     /** @var ParticipantView[] */
     public $participants;
 
+    /** @var bool */
+    public $isPhoneValidationRequired;
+
     /**
      * @param array             $dayViews
      * @param Sheet             $sheet
      * @param Participant       $participant
      * @param bool              $isUserAloneParticipant
      * @param ParticipantView[] $participants
+     * @param bool              $isPhoneValidationRequired
      */
     public function __construct(
         array $dayViews,
         Sheet $sheet,
         Participant $participant,
         bool $isUserAloneParticipant,
-        array $participants
+        array $participants,
+        bool $isPhoneValidationRequired
     ) {
         $this->days                   = $dayViews;
         $this->sheet                  = $sheet;
         $this->participant            = $participant;
         $this->isUserAloneParticipant = $isUserAloneParticipant;
         $this->participants           = $participants;
+        $this->isPhoneValidationRequired = $isPhoneValidationRequired;
     }
 
     /**

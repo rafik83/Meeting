@@ -20,6 +20,7 @@ use Proximum\Vimeet\Domain\Model\MeetingSlot;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Security\Voter\AgendaAccessVoter;
+use Proximum\Vimeet\Ui\Bundle\EventBundle\Handler\User\Phone\SendCodeForm;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\ParamConverter\EventDomain;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Security\SheetVoter;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -74,6 +75,7 @@ class AgendaController extends Controller
         UserInterface $user
     ) {
         $this->checkAccess($eventDomain, $sheet);
+        $sendCodeView = null;
 
         if ($participant->getSheet() !== $sheet) {
             throw $this->createNotFoundException('This participant is not in this sheet');
@@ -95,11 +97,35 @@ class AgendaController extends Controller
         );
         $tipTranslationViews = $this->get('tactician.commandbus.query')->handle($tipTranslationViewQuery);
 
+        $sendCodeForm               = null;
+        $ignorePhoneConfirmationUrl = null;
+        if ($agenda->isPhoneValidationRequired) {
+            $mobileNumber = $request->query->get('mobile', $user->getMobile());
+
+            $sendCodeView = $this->get('handler.user.phone.send_code_form_handler')->handle(
+                new SendCodeForm(
+                    $request,
+                    $user,
+                    $eventDomain->getEvent(),
+                    $mobileNumber,
+                    false,
+                    true,
+                    $sheet,
+                    $participant
+                )
+            );
+
+            $sendCodeForm = $sendCodeView->form !== null ? $sendCodeView->form->createView() : null;
+            $ignorePhoneConfirmationUrl = $sendCodeView->ignorePhoneConfirmationUrl;
+        }
+
         return $this->render('EventBundle:Agenda:index.html.twig', [
             'event'               => $eventDomain->getEvent(),
             'agenda'              => $agenda,
             'sheet'               => $sheet,
             'tipTranslationViews' => $tipTranslationViews,
+            'sendCodeForm'        => $sendCodeForm,
+            'ignorePhoneConfirmationUrl' => $ignorePhoneConfirmationUrl
         ]);
     }
 

@@ -113,6 +113,7 @@ event.user_event_phone.validate.explanation: 'Vous allez recevoir par SMS un cod
 event.user_event_phone.validate.returnToPhone: 'Modifier mon numéro de téléphone'
 event.user_event_phone.validate.success: 'Votre numéro de téléphone est bien confirmé'
 event.user_event_phone.validate.title: 'Validation du numéro de téléphone'
+event.user_event_phone.validate.ignore: Ignorer
 gender.man: Monsieur
 gender.woman: Madame
 group.home.link.create_sheet: 'Créer une fiche'

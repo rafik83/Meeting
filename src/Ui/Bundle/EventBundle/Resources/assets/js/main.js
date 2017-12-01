@@ -24,7 +24,8 @@ var $                           = require('jquery'),
     PreventMultipleSubmit       = require('./components/_PreventMultipleSubmit'),
     FilterRequestByType         = require('./components/MeetingRequest/_FilterByType'),
     CatalogPagination           = require('./components/_CatalogPagination'),
-    VideoConference             = require('./components/VideoConference/VideoConference')
+    VideoConference             = require('./components/VideoConference/VideoConference'),
+    IgnorePhoneConfirmation     = require('./components/agenda/_IgnorePhoneConfirmation')
 ;
 
 require('bootstrap');
@@ -225,6 +226,10 @@ function init (target) {
 
     [].forEach.call(target.querySelectorAll('[data-ajax-autocomplete]'), function (element) {
         new AjaxAutocomplete(element);
+    });
+
+    [].forEach.call(target.querySelectorAll('[data-ignore-phone-confirmation-url]'), function (element) {
+        new IgnorePhoneConfirmation(element);
     });
 }
 

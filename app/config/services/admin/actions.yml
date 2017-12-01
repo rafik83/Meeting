@@ -1,0 +1,4 @@
+services:
+    Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\User\Phone\IgnorePopupAction:
+        arguments:
+            - '@command.user.event.phone.ignore_confirmation'
