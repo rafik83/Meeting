@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\User\Phone;
 
+use Proximum\Vimeet\Application\Adapter\AuthorizationCheckerAdapterInterface;
 use Proximum\Vimeet\Application\Command\User\Phone\IgnoreConfirmation;
 use Proximum\Vimeet\Application\Command\User\Phone\IgnoreConfirmationHandler;
 use Proximum\Vimeet\Domain\Model\Participant;
@@ -21,12 +22,19 @@ class IgnoreConfirmationAction
     /** @var IgnoreConfirmationHandler */
     private $ignoreConfirmationHandler;
 
+    /** @var AuthorizationCheckerAdapterInterface */
+    private $authorizationCheckerAdapter;
+
     /**
-     * @param IgnoreConfirmationHandler $ignoreConfirmationHandler
+     * @param IgnoreConfirmationHandler            $ignoreConfirmationHandler
+     * @param AuthorizationCheckerAdapterInterface $authorizationCheckerAdapter
      */
-    public function __construct(IgnoreConfirmationHandler $ignoreConfirmationHandler)
-    {
+    public function __construct(
+        IgnoreConfirmationHandler $ignoreConfirmationHandler,
+        AuthorizationCheckerAdapterInterface $authorizationCheckerAdapter
+    ) {
         $this->ignoreConfirmationHandler = $ignoreConfirmationHandler;
+        $this->authorizationCheckerAdapter = $authorizationCheckerAdapter;
     }
 
     /**
@@ -35,8 +43,10 @@ class IgnoreConfirmationAction
      *
      * @return JsonResponse
      */
-    public function __invoke(Sheet $sheet, Participant $participant)
+    public function __invoke(Sheet $sheet, Participant $participant): JsonResponse
     {
+        $this->authorizationCheckerAdapter->isGranted('IS_AUTHENTICATED_REMEMBERED');
+
         $this->ignoreConfirmationHandler->handle(
             new IgnoreConfirmation(
                 $sheet->getEvent(),

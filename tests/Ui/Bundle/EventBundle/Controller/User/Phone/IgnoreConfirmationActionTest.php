@@ -11,6 +11,7 @@
 namespace Proximum\Vimeet\Tests\Ui\Bundle\EventBundle\Controller\User\Phone;
 
 use PHPUnit\Framework\TestCase;
+use Proximum\Vimeet\Application\Adapter\AuthorizationCheckerAdapterInterface;
 use Proximum\Vimeet\Application\Command\User\Phone\IgnoreConfirmation;
 use Proximum\Vimeet\Application\Command\User\Phone\IgnoreConfirmationHandler;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
@@ -30,7 +31,14 @@ class IgnoreConfirmationActionTest extends TestCase
         $ignoreConfirmationHandler = $this->prophesize(IgnoreConfirmationHandler::class);
         $ignoreConfirmationHandler->handle($ignoreConfirmation)->shouldBeCalled();
 
-        $action = new IgnoreConfirmationAction($ignoreConfirmationHandler->reveal());
+        $authorizationChecker = $this->prophesize(AuthorizationCheckerAdapterInterface::class);
+        $authorizationChecker->isGranted('IS_AUTHENTICATED_REMEMBERED')->shouldBeCalled();
+
+        $action = new IgnoreConfirmationAction(
+            $ignoreConfirmationHandler->reveal(),
+            $authorizationChecker->reveal()
+        );
+
         $response = $action(SheetFactory::create($event, $participant->getUser()), $participant);
         $expectedResponse = new JsonResponse([]);
 

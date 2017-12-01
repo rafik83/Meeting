@@ -102,7 +102,7 @@ class AgendaViewQueryHandler
      *
      * @return AgendaView
      */
-    public function handle(AgendaViewQuery $query)
+    public function handle(AgendaViewQuery $query): AgendaView
     {
         $eventDays   = $this->dayRepository->findByEvent($query->event);
         $participant = $query->participant;

@@ -73,7 +73,7 @@ class AgendaController extends Controller
         Participant $participant,
         Sheet $sheet,
         UserInterface $user
-    ) {
+    ): Response {
         $this->checkAccess($eventDomain, $sheet);
         $sendCodeView = null;
 
@@ -99,7 +99,7 @@ class AgendaController extends Controller
 
         $sendCodeForm               = null;
         $ignorePhoneConfirmationUrl = null;
-        if ($agenda->isPhoneValidationRequired) {
+        if ($agenda->isPhoneValidationRequired && $participant->getUser() === $user) {
             $mobileNumber = $request->query->get('mobile', $user->getMobile());
 
             $sendCodeView = $this->get('handler.user.phone.send_code_form_handler')->handle(

@@ -38,7 +38,7 @@ class IgnoreConfirmationHandler
     /**
      * @param IgnoreConfirmation $ignoreConfirmation
      */
-    public function handle(IgnoreConfirmation $ignoreConfirmation)
+    public function handle(IgnoreConfirmation $ignoreConfirmation): void
     {
         $extraData = $this
             ->extraDataRepository
