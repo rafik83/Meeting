@@ -54,7 +54,9 @@ class UpdateHandler
         }
 
         foreach ($command->types as $type) {
-            $tip->setType($type);
+            if (!in_array($type, $tip->getTypes(), true)) {
+                $tip->setType($type);
+            }
         }
 
         foreach ($command->translations as $locale => $translation) {
