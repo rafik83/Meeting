@@ -120,7 +120,7 @@ class TipRepository implements TipRepositoryInterface
             ->select('new \Proximum\Vimeet\Application\View\Tip\Event\TipTranslationView(tipTranslation.id, tipTranslation.title, tipTranslation.content, tip.title)')
             ->from(Tip::class, 'tip')
             ->join('tip.translations', 'tipTranslation', 'WITH', sprintf('tip.%s = true AND tipTranslation.locale = :locale', $context))
-            ->join('tip.types', 'type', 'WITH', 'type.event = :event and type = :type')
+            ->join('tip.types', 'type', 'WITH', 'tip.event = :event and type = :type')
             ->orderBy('tip.createdAt')
             ->setParameter('locale', $locale)
             ->setParameter('event', $event)

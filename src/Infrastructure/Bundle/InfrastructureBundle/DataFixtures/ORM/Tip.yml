@@ -2,6 +2,7 @@ Proximum\Vimeet\Domain\Model\Tip\Tip:
     tip_sample:
         __construct:
             - 'tip_sample'
+            - null
             - true
             - true
             - true
