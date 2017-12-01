@@ -21,6 +21,8 @@ use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 class ListAction
 {
+    const TEMPLATE = 'AdminBundle:Tip:Event/list.html.twig';
+
     /** @var CommandBus */
     private $commandBus;
 
@@ -64,7 +66,7 @@ class ListAction
         $tipListViewQuery = new PaginatedTipViewQuery($event, $request->query->get('page', 1));
         $tipListView      = $this->commandBus->handle($tipListViewQuery);
 
-        return $this->engine->renderResponse('AdminBundle:Tip:Event/list.html.twig', [
+        return $this->engine->renderResponse(self::TEMPLATE, [
             'event'       => $event,
             'tipListView' => $tipListView,
             'locale'      => $event->getAvailableLocale($request->getLocale()),
