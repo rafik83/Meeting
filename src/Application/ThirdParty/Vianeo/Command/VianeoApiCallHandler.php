@@ -133,9 +133,12 @@ class VianeoApiCallHandler
             }
 
             if ($returnCode === -100) {
-                $email = $vianeoApiCall->sheet->getFirstParticipant()->getEmail();
-
-                throw new VianeoApiServerException(sprintf('User already exists with this email %s', $email));
+                throw new VianeoApiServerException(
+                    sprintf(
+                        'User already exists with this email %s',
+                        $vianeoApiCall->sheet->getFirstParticipant()->getEmail()
+                    )
+                );
             } else {
                 if ($returnCode === -403) {
                     throw new VianeoApiServerException('Access denied to VIANEO. Check VIANEO_SHARED_SECRET');
