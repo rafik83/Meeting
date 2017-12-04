@@ -44,7 +44,7 @@ class UpdateHandler
     /**
      * @param Update $command
      */
-    public function handle(Update $command)
+    public function handle(Update $command): void
     {
         $tip = $command->tip;
         $previousTypes = $tip->getTypes();

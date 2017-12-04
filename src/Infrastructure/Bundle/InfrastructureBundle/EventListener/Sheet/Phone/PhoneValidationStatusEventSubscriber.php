@@ -71,7 +71,7 @@ class PhoneValidationStatusEventSubscriber implements EventSubscriberInterface
     /**
      * @param MeetingRemovedEvent $event
      */
-    public function onMeetingChanged(MeetingRemovedEvent $event)
+    public function onMeetingChanged(MeetingRemovedEvent $event): void
     {
         foreach ($event->getSheets() as $sheet) {
             $status = $this->validationCalculator->getValidationStatusForSheet($sheet);
@@ -84,7 +84,7 @@ class PhoneValidationStatusEventSubscriber implements EventSubscriberInterface
     /**
      * @param MeetingCreatedEvent $event
      */
-    public function onMeetingCreated(MeetingCreatedEvent $event)
+    public function onMeetingCreated(MeetingCreatedEvent $event): void
     {
         foreach ($event->getMeeting()->getSheets() as $sheet) {
             $this->setStatusForSheet($sheet);
@@ -94,7 +94,7 @@ class PhoneValidationStatusEventSubscriber implements EventSubscriberInterface
     /**
      * @param MeetingMovedEvent $event
      */
-    public function onMeetingMoved(MeetingMovedEvent $event)
+    public function onMeetingMoved(MeetingMovedEvent $event): void
     {
         foreach ($event->getSheets() as $sheet) {
             $this->setStatusForSheet($sheet);
@@ -104,7 +104,7 @@ class PhoneValidationStatusEventSubscriber implements EventSubscriberInterface
     /**
      * @param AssignedEvent $event
      */
-    public function onTipAssigned(AssignedEvent $event)
+    public function onTipAssigned(AssignedEvent $event): void
     {
         $this->jobQueue->aggregatePhoneValidationStatus($event->getEvent());
     }
@@ -112,7 +112,7 @@ class PhoneValidationStatusEventSubscriber implements EventSubscriberInterface
     /**
      * @param CreatedEvent $event
      */
-    public function onTipEventCreated(CreatedEvent $event)
+    public function onTipEventCreated(CreatedEvent $event): void
     {
         $this->jobQueue->aggregatePhoneValidationStatus($event->getEvent());
     }
@@ -120,7 +120,7 @@ class PhoneValidationStatusEventSubscriber implements EventSubscriberInterface
     /**
      * @param UpdatedEvent $event
      */
-    public function onTipEventUpdated(UpdatedEvent $event)
+    public function onTipEventUpdated(UpdatedEvent $event): void
     {
         $this->jobQueue->aggregatePhoneValidationStatus($event->getEvent());
     }
@@ -128,7 +128,7 @@ class PhoneValidationStatusEventSubscriber implements EventSubscriberInterface
     /**
      * @param RemovedEvent $event
      */
-    public function onTipRemoved(RemovedEvent $event)
+    public function onTipRemoved(RemovedEvent $event): void
     {
         $this->jobQueue->aggregatePhoneValidationStatus($event->getEvent());
     }
@@ -136,7 +136,7 @@ class PhoneValidationStatusEventSubscriber implements EventSubscriberInterface
     /**
      * @param PhoneValidatedEvent $event
      */
-    public function onUserPhoneValidated(PhoneValidatedEvent $event)
+    public function onUserPhoneValidated(PhoneValidatedEvent $event): void
     {
         $sheets = $this->sheetRepository->getSheetsByUserAndEvent($event->getUser(), $event->getEvent());
 
@@ -148,7 +148,7 @@ class PhoneValidationStatusEventSubscriber implements EventSubscriberInterface
     /**
      * @param Sheet $sheet
      */
-    private function setStatusForSheet(Sheet $sheet)
+    private function setStatusForSheet(Sheet $sheet): void
     {
         $status = $this->validationCalculator->getValidationStatusForSheet($sheet);
 

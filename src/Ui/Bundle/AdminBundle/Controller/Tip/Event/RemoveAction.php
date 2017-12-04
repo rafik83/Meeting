@@ -57,6 +57,8 @@ class RemoveAction
      * @param Tip   $tip
      *
      * @return RedirectResponse
+     *
+     * @throws AccessDeniedException
      */
     public function __invoke(Event $event, Tip $tip): RedirectResponse
     {

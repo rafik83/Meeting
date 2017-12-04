@@ -45,7 +45,7 @@ class CreateHandler
     /**
      * @param Create $command
      */
-    public function handle(Create $command)
+    public function handle(Create $command): void
     {
         $tip = new Tip(
             $command->title,
