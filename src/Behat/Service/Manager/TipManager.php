@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Behat\Service\Manager;
 
+use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Tip\Tip;
 use Proximum\Vimeet\Domain\Model\Type;
 use Proximum\Vimeet\Domain\Repository\TipRepositoryInterface;
@@ -57,6 +58,23 @@ class TipManager
 
     /**
      * @param string $tipTitle
+     * @param Type   $type
+     *
+     * @return Tip
+     */
+    public function createForGivenType(string $tipTitle, Type $type)
+    {
+        $event = $type->getEvent();
+        $tip = TipFactory::createTip($tipTitle, $event);
+        $tip->setType($type);
+
+        $this->tipRepository->add($tip);
+
+        return $tip;
+    }
+
+    /**
+     * @param string $tipTitle
      * @param string $eventTitle
      *
      * @return Tip
@@ -88,5 +106,55 @@ class TipManager
         $this->tipRepository->add($tip);
 
         return $tip;
+    }
+
+    /**
+     * @param Tip $tip
+     */
+    public function affectOnCatalog(Tip $tip)
+    {
+        $tip->update(
+            $tip->getTitle(),
+            $tip->isOnMeetingManagement(),
+            true,
+            $tip->isOnPrintPlanning(),
+            $tip->isOnSheet(),
+            $tip->isOnAgenda(),
+            $tip->isOnProgram(),
+            $tip->isOnConfirmationPhone()
+        );
+
+        $this->tipRepository->set($tip);
+    }
+
+    /**
+     * @param Tip $tip
+     */
+    public function affectOnMeetingManagement(Tip $tip)
+    {
+        $tip->update(
+            $tip->getTitle(),
+            true,
+            $tip->isOnCatalog(),
+            $tip->isOnPrintPlanning(),
+            $tip->isOnSheet(),
+            $tip->isOnAgenda(),
+            $tip->isOnProgram(),
+            $tip->isOnConfirmationPhone()
+        );
+
+        $this->tipRepository->set($tip);
+    }
+
+    /**
+     * @param Tip    $tip
+     * @param string $locale
+     * @param string $title
+     */
+    public function translateTitle(Tip $tip, string $locale, string $title)
+    {
+        $tip->translate($locale, $title, $tip->getTranslationContent($locale), new \DateTime());
+
+        $this->tipRepository->set($tip);
     }
 }
