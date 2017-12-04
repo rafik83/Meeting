@@ -1,27 +1,27 @@
 @font-face {
   font-family: 'OpenSans';
-  src: local('OpenSansCondensed'), url($font-path + '/OpenSansCondensed.ttf') format('truetype');
+  src: url('OpenSansCondensed'), url($font-path + '/OpenSansCondensed.ttf') format('truetype');
 }
 
 @font-face {
   font-family: 'RobotoRegular';
-  src: local('Roboto-Regular'), url($font-path + '/Roboto-Regular.ttf') format('truetype');
+  src: url('Roboto-Regular'), url($font-path + '/Roboto-Regular.ttf') format('truetype');
 }
 
 @font-face {
   font-family: 'RobotoItalic';
-  src: local('Roboto-Italic'), url($font-path + '/Roboto-Italic.ttf') format('truetype');
+  src: url('Roboto-Italic'), url($font-path + '/Roboto-Italic.ttf') format('truetype');
 }
 
 @font-face {
   font-family: 'RobotoLight';
-  src: local('Roboto-Light'), url($font-path + '/Roboto-Light.ttf') format('truetype');
+  src: url('Roboto-Light'), url($font-path + '/Roboto-Light.ttf') format('truetype');
 }
 
 @font-face {
   font-family: 'PictoOutline';
-  src: local('PictoOutline'), url($font-path + '/PictoOutline.eot');
-  src: local('PictoOutline'),
+  src: url('PictoOutline'), url($font-path + '/PictoOutline.eot');
+  src: url('PictoOutline'),
        url($font-path + '/PictoOutline.eot?#iefix') format('embedded-opentype'),
        url($font-path + '/PictoOutline.woff2') format('woff2'),
        url($font-path + '/PictoOutline.woff') format('woff'),
