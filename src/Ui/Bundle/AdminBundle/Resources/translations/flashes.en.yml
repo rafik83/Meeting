@@ -1,6 +1,8 @@
 flash.activate_account.success: 'Your account has been successfully activated'
 flash.admin.activate_account.success: 'Your account has been successfully activated'
 flash.admin.change_password.success: 'Your password has been changed'
+flash.admin.event.billing.configuration.success: 'The invoicing settings have been updated'
+flash.admin.invoice.create.success: 'The invoicing prefix has been created'
 flash.admin.meeting.remove.failed: 'This meeting is locked'
 flash.admin.reset_password_token.expired: 'Your request to reset the password has expired. You can do another request.'
 flash.admin.reset_password_token.success: 'You will receive an email allowing you to create a new password'
