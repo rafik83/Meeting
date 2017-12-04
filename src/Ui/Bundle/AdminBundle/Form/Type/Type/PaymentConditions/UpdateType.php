@@ -3,16 +3,18 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2016 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
 
-namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Event\PaymentConditions;
+namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Type\PaymentConditions;
 
-use Proximum\Vimeet\Application\Command\Event\PaymentConditions\Update;
+use Proximum\Vimeet\Application\Command\Type\PaymentConditions\Update;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Form\Type\DateTimePickerType;
+use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Event\PaymentConditions\DepositType;
+use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Event\PaymentConditions\PaymentModeChoiceType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\NumberType;
@@ -26,12 +28,13 @@ class UpdateType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        /**
-         * @var Event
-         */
+        /** @var Event */
         $event = $options['event'];
 
         $builder
+            ->add('specificPaymentConditions', CheckboxType::class, [
+                'required' => false,
+            ])
             ->add('allowDeposit', CheckboxType::class, [
                 'required' => false,
             ])
@@ -52,6 +55,14 @@ class UpdateType extends AbstractType
     /**
      * {@inheritdoc}
      */
+    public function getBlockPrefix()
+    {
+        return 'type_payment_conditions_update';
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setRequired(['event']);
@@ -59,13 +70,5 @@ class UpdateType extends AbstractType
         $resolver->setDefaults([
             'data-class' => Update::class,
         ]);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getBlockPrefix()
-    {
-        return 'event_payment_conditions_update';
     }
 }

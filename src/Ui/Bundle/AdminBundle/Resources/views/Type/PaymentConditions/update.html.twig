@@ -1,0 +1,18 @@
+{% extends 'AdminBundle:Common:form_layout.html.twig' %}
+
+{% block title %}
+    [{{ event.title }}] {{ 'admin.type.paymentConditions.update.title'|trans({'%typeTitle%': type.title(locale)}) }}
+{% endblock %}
+
+{% block form_title 'admin.type.paymentConditions.update.title'|trans({'%typeTitle%': type.title(locale)}) %}
+
+{% block form_content %}
+    {{ form_row(form.specificPaymentConditions) }}<br>
+    {{ form_row(form.allowDeposit) }}<br>
+    {{ form_row(form.minimumForDeposit, {widget_columns: 3}) }}
+    {{ form_row(form.depositUntil, {widget_columns: 3}) }}
+    {{ form_row(form.deposit, {widget_columns: 3}) }}
+    {{ form_row(form.paymentModes, {widget_columns: 3}) }}
+{% endblock form_content %}
+
+{% block goback_link path('admin_event_list') %}
