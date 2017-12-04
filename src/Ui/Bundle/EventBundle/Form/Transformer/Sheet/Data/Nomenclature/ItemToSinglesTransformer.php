@@ -25,7 +25,8 @@ class ItemToSinglesTransformer extends AbstractTransformer
         }
 
         if (!is_string($value)) {
-            throw new TransformationFailedException(sprintf('"string" expected, "%s" given', gettype($value)));
+            // A string is expected, therefore it is cast to string
+            $value = (string) $value;
         }
 
         $item  = self::findByKey($this->nomenclature->getLastLevel(), $value);

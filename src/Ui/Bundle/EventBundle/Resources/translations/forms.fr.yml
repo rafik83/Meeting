@@ -141,8 +141,8 @@ form.sheet_media_collection_data.children.selectedProduct.label: 'Produits liés
 form.sheet_media_collection_data.children.submit.label: Enregistrer
 form.sheet_media_data.children.type.document: Document
 form.sheet_media_data.children.type.video: Vidéo
+form.user_availability_confirmation.children.confirm.label: 'Confirmer vos disponibilités'
 form.user_event_phone_validate_code.children.code.label: 'Code de confirmation reçu'
 form.user_event_phone_validate_code.children.confirm.label: Confirmer
-form.user_availability_confirmation.children.confirm.label: 'Confirmer vos disponibilités'
 gender.man: Monsieur
 gender.woman: Madame
