@@ -185,6 +185,22 @@ class TipRepository implements TipRepositoryInterface
     /**
      * {@inheritdoc}
      */
+    public function getTipWithoutEventWithType(): array
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('tip')
+            ->from(Tip::class, 'tip')
+            ->join('tip.types', 'type', 'WITH', 'tip.event IS NULL')
+        ;
+
+        return $queryBuilder->getQuery()->getResult();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function getGlobals(): array
     {
         $queryBuilder = $this

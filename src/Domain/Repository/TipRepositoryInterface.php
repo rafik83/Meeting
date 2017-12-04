@@ -120,4 +120,11 @@ interface TipRepositoryInterface
      * @return Tip[]
      */
     public function getGlobals(): array;
+
+    /**
+     * @deprecated This methods is used only for the migration of the old globals tips
+     *
+     * @return Tip[]
+     */
+    public function getTipWithoutEventWithType(): array;
 }
