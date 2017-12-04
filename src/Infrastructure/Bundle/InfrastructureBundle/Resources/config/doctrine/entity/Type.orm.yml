@@ -25,6 +25,10 @@ Proximum\Vimeet\Domain\Model\Type:
             mappedBy: type
             indexBy: locale
             cascade: ["persist", "remove"]
+        paymentConditions:
+            targetEntity: Proximum\Vimeet\Domain\Model\Type\PaymentConditions
+            mappedBy: type
+            cascade: ["remove"]
     manyToMany:
         categories:
             targetEntity: Proximum\Vimeet\Domain\Model\Category
