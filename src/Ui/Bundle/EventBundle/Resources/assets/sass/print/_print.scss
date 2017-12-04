@@ -1,4 +1,10 @@
 @media print {
+  * {
+    font-family: 'none' !important;
+    font-stretch: normal !important;
+    text-transform: none !important;
+  }
+
   *,
   *:before,
   *:after {
@@ -105,6 +111,16 @@
     font-size: 6px !important;
   }
 
+  .object--tag {
+    &.style--default {
+      ul {
+        > li:after {
+          font-size: 6px !important;
+        }
+      }
+    }
+  }
+
   .section {
     margin-bottom: 4px !important;
     padding: 0 !important;
@@ -130,6 +146,10 @@
   .object--participant .list--users .user__avatar .avatar {
     width: 50px !important;
     height: 50px !important;
+
+    > p {
+      font-size: 15px !important;
+    }
   }
 
   .object--participant .list--users .user__avatar {
