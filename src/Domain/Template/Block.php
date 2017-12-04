@@ -582,6 +582,27 @@ class Block extends AbstractChild
     }
 
     /**
+     * @param array $data
+     *
+     * @return Block
+     */
+    public function setTaggedDataIfEmpty(array $data)
+    {
+        foreach ($this->getObjects() as $object) {
+            foreach ($data as $tag => $value) {
+                if ($object->hasTag($tag)
+                    && $object instanceof TemplateObject\ContentObjectInterface
+                    && empty($object->getContentValue())
+                ) {
+                    $object->setContentValue($value);
+                }
+            }
+        }
+
+        return $this;
+    }
+
+    /**
      * @param array $taggedDataViews
      *
      * @return Block
