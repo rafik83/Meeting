@@ -20,20 +20,111 @@ use Proximum\Vimeet\Domain\Repository\MeetingRepositoryInterface;
 use Proximum\Vimeet\Domain\Tip\ConfirmationPhoneTipChecker;
 use Proximum\Vimeet\Domain\User\Agenda\Phone\ValidationRequiredChecker;
 use Proximum\Vimeet\Domain\UserEvent\UserEventPhoneChecker;
+use Proximum\Vimeet\Tests\Factory\SheetFactory;
+use Proximum\Vimeet\Tests\Factory\UserFactory;
 
 class ValidationRequiredCheckerTest extends TestCase
 {
-    public function testHandle()
+    /** @var ConfirmationPhoneTipChecker */
+    private $confirmationPhoneTipChecker;
+
+    /** @var MeetingRepositoryInterface */
+    private $meetingRepository;
+
+    /** @var UserEventPhoneChecker */
+    private $userEventPhoneChecker;
+
+    /** @var ValidationRequiredChecker */
+    private $validationRequiredChecker;
+
+    /** @var \DateTimeInterface */
+    private $datetime;
+
+    /** @var User */
+    private $user;
+
+    /** @var Event */
+    private $event;
+
+    /** @var Type */
+    private $type;
+
+    /** @var Sheet */
+    private $sheet;
+
+    public function setUp()
     {
-        $sheet = $this->prophesize(Sheet::class);
-        $user  = $this->prophesize(User::class);
-        $event = $this->prophesize(Event::class);
-        $type  = $this->prophesize(Type::class);
+        $this->confirmationPhoneTipChecker = $this->prophesize(ConfirmationPhoneTipChecker::class);
+        $this->userEventPhoneChecker       = $this->prophesize(UserEventPhoneChecker::class);
+        $this->meetingRepository           = $this->prophesize(MeetingRepositoryInterface::class);
+        $this->datetime                    = new \DateTime();
 
-        $sheet->getEvent()->willReturn($event->reveal());
-        $sheet->getType()->willReturn($type->reveal());
+        $this->validationRequiredChecker = new ValidationRequiredChecker(
+            $this->confirmationPhoneTipChecker->reveal(),
+            $this->userEventPhoneChecker->reveal(),
+            $this->meetingRepository->reveal(),
+            $this->datetime
+        );
 
-        $datetime = new \DateTime('01/01/1900');
+        $this->user  = UserFactory::create();
+        $this->event = $this->prophesize(Event::class);
+        $this->type  = new Type($this->event->reveal());
+
+        $this->sheet = SheetFactory::create($this->event->reveal());
+        $this->sheet->updateType($this->type);
+    }
+
+    public function testHandleTipConfirmationPhoneDisabled()
+    {
+        $this->confirmationPhoneTipChecker->isEnabled(
+            $this->event->reveal(),
+            $this->type
+        )->shouldBeCalled()->willReturn(false);
+
+        $this->userEventPhoneChecker->isValidated(
+            $this->user,
+            $this->event->reveal()
+        )->shouldNotBeCalled();
+
+        $this->meetingRepository->hasMeetingForUserAndEvent($this->user, $this->event)->shouldNotBeCalled();
+
+        $validationRequired = $this->validationRequiredChecker->handle($this->sheet, $this->user);
+        $this->assertEquals(false, $validationRequired);
+    }
+
+    public function testHandleUserHasNoMeeting()
+    {
+        $this->confirmationPhoneTipChecker->isEnabled(
+            $this->event->reveal(),
+            $this->type
+        )->shouldBeCalled()->willReturn(true);
+
+        $this->meetingRepository->hasMeetingForUserAndEvent($this->user, $this->event)
+            ->shouldBeCalled()
+            ->willReturn(false);
+
+        $this->userEventPhoneChecker->isValidated(
+            $this->user,
+            $this->event->reveal()
+        )->shouldNotBeCalled();
+
+        $validationRequired = $this->validationRequiredChecker->handle($this->sheet, $this->user);
+        $this->assertEquals(false, $validationRequired);
+    }
+
+    public function testHandleAgendaOnlineDateNotPassed()
+    {
+        $this->confirmationPhoneTipChecker->isEnabled(
+            $this->event->reveal(),
+            $this->type
+        )->shouldBeCalled()->willReturn(true);
+
+        $this->meetingRepository->hasMeetingForUserAndEvent($this->user, $this->event)
+            ->shouldBeCalled()
+            ->willReturn(true);
+
+        $cloneDatetime = clone $this->datetime;
+        $datetimeInFuture = $cloneDatetime->modify('+1 day');
 
         $configuration = (new Configuration('leftColor', 'rightColor', 'textColor'))->setDates(
             null,
@@ -42,45 +133,49 @@ class ValidationRequiredCheckerTest extends TestCase
             null,
             null,
             null,
-            $datetime
+            $datetimeInFuture
         );
 
-        $event->getConfiguration()->shouldBeCalled()->willReturn($configuration);
+        $this->event->getConfiguration()->shouldBeCalled()->willReturn($configuration);
 
-        $confirmationPhoneTipChecker = $this->prophesize(ConfirmationPhoneTipChecker::class);
-        $userEventPhoneChecker       = $this->prophesize(UserEventPhoneChecker::class);
-        $meetingRepository           = $this->prophesize(MeetingRepositoryInterface::class);
-
-        $validationRequiredChecker = new ValidationRequiredChecker(
-            $confirmationPhoneTipChecker->reveal(),
-            $userEventPhoneChecker->reveal(),
-            $meetingRepository->reveal(),
-            new \DateTime()
-        );
-
-//        $event = $sheet->getEvent();
-//
-//        if ($this->isTipConfirmationPhoneEnabled($event, $sheet->getType())
-//            && $this->userHasMeeting($user, $event)
-//            && $this->agendaOnlineDateHasPassed($event)
-//        ) {
-//            return !$this->userEventPhoneChecker->isValidated($user, $event);
-//        }
-
-        $meetingRepository->hasMeetingForUserAndEvent($user, $event)->shouldBeCalled()->willReturn(true);
-
-        $confirmationPhoneTipChecker->isEnabled(
-            $event->reveal(),
-            $type->reveal()
-        )->shouldBeCalled()->willReturn(true);
-
-        $userEventPhoneChecker->isValidated(
-            $user->reveal(),
-            $event->reveal()
-        )->shouldBeCalled()->willReturn(true);
-
-        $validationRequired = $validationRequiredChecker->handle($sheet->reveal(), $user->reveal());
+        $validationRequired = $this->validationRequiredChecker->handle($this->sheet, $this->user);
 
         $this->assertEquals(false, $validationRequired);
+    }
+
+    public function testHandleAllConditionsValidated()
+    {
+        $cloneDatetime = clone $this->datetime;
+        $oldDatetime = $cloneDatetime->modify('-1 day');
+
+        $configuration = (new Configuration('leftColor', 'rightColor', 'textColor'))->setDates(
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            $oldDatetime
+        );
+
+        $this->event->getConfiguration()->shouldBeCalled()->willReturn($configuration);
+
+        $this->meetingRepository->hasMeetingForUserAndEvent($this->user, $this->event)
+            ->shouldBeCalled()
+            ->willReturn(true);
+
+        $this->confirmationPhoneTipChecker->isEnabled(
+            $this->event->reveal(),
+            $this->type
+        )->shouldBeCalled()->willReturn(true);
+
+        $this->userEventPhoneChecker->isValidated(
+            $this->user,
+            $this->event->reveal()
+        )->shouldBeCalled()->willReturn(false);
+
+        $validationRequired = $this->validationRequiredChecker->handle($this->sheet, $this->user);
+
+        $this->assertEquals(true, $validationRequired);
     }
 }
