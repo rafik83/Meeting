@@ -37,7 +37,7 @@ class TypeViewQueryHandler
      *
      * @return TypeListsView
      */
-    public function handle(TypeViewQuery $query)
+    public function handle(TypeViewQuery $query): TypeListsView
     {
         $locale      = $query->event->getAvailableLocale($query->locale);
         $typeResults = $this->typeRepository->paginate(

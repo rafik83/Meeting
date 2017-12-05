@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2015 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -11,11 +11,8 @@
 namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller;
 
 use Proximum\Vimeet\Application\Command\Type\Create;
-use Proximum\Vimeet\Application\Command\Type\Remove;
 use Proximum\Vimeet\Application\Command\Type\Update;
 use Proximum\Vimeet\Application\Exception\Type\TypeAlreadyExistsException;
-use Proximum\Vimeet\Application\Exception\Type\TypeUsedBySheetException;
-use Proximum\Vimeet\Application\Query\Type\TypeViewQuery;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Type;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Type\TypeCreateType;
@@ -29,30 +26,6 @@ use Symfony\Component\HttpFoundation\Response;
 
 class TypeController extends Controller
 {
-    /**
-     * @param Request $request
-     * @param Event   $event
-     *
-     * @return Response
-     */
-    public function listAction(Request $request, Event $event)
-    {
-        $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
-
-        $typeViewQuery = new TypeViewQuery(
-            $request->query->get('page', 1),
-            $event,
-            $event->getAvailableLocale($request->getLocale())
-        );
-
-        $typeListsView = $this->get('tactician.commandbus.query')->handle($typeViewQuery);
-
-        return $this->render('AdminBundle:Type:list.html.twig', [
-            'event' => $event,
-            'types' => $typeListsView,
-        ]);
-    }
-
     /**
      * @param Request $request
      * @param Event   $event
@@ -139,33 +112,6 @@ class TypeController extends Controller
         return $this->render('AdminBundle:Type:update.html.twig', [
             'event' => $event,
             'form'  => $form->createView(),
-        ]);
-    }
-
-    /**
-     * @param Event $event
-     * @param Type  $type
-     *
-     * @return RedirectResponse
-     */
-    public function removeAction(Event $event, Type $type)
-    {
-        $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
-
-        if ($event !== $type->getEvent()) {
-            throw $this->createNotFoundException('Type not found.');
-        }
-
-        $remove = new Remove($type);
-        try {
-            $this->get('tactician.commandbus')->handle($remove);
-            $this->addFlash('success', 'flash.admin.type.remove.success');
-        } catch (TypeUsedBySheetException $exception) {
-            $this->addFlash('error', 'flash.admin.type.remove.error');
-        }
-
-        return $this->redirectToRoute('admin_type_list', [
-            'event' => $event->getId(),
         ]);
     }
 }

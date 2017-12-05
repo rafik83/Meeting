@@ -4,3 +4,12 @@ services:
     #
     Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Type\PaymentConditionsAction:
         autowire: true
+
+    #
+    # Type
+    #
+    Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Type\ListAction:
+        autowire: true
+
+    Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Type\RemoveAction:
+        autowire: true
