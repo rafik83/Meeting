@@ -7,8 +7,14 @@
     </h4>
 </div>
 
-{{ form_start(sendCodeForm) }}
 <div class="modal-body">
+    {% for tipTranslationView in sendCodeViewTranslationViews %}
+        <h1>{{ tipTranslationView.title }}</h1>
+
+        {{ tipTranslationView.content|html }}
+    {% endfor %}
+
+{{ form_start(sendCodeForm) }}
     {{ form_row(sendCodeForm.phone) }}
     {{ form_row(sendCodeForm.accepted) }}
 </div>

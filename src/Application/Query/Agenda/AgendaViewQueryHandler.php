@@ -19,8 +19,8 @@ use Proximum\Vimeet\Domain\Repository\MeetingRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\Unavailability\MassRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\UnavailabilityRepositoryInterface;
+use Proximum\Vimeet\Domain\User\Agenda\Phone\ValidationRequiredChecker;
 use Proximum\Vimeet\Domain\User\Event\ExtraData\Type;
-use Proximum\Vimeet\Domain\User\Phone\ValidationRequiredChecker;
 use Proximum\Vimeet\Infrastructure\Repository\User\Event\ExtraDataRepository;
 
 class AgendaViewQueryHandler
@@ -123,7 +123,7 @@ class AgendaViewQueryHandler
         );
 
         if (empty($eventDays)) {
-            return new AgendaView([], $sheet, $participant, $isUserAloneParticipant, $participants);
+            return new AgendaView([], $sheet, $participant, $isUserAloneParticipant, $participants, false);
         }
 
         $unavailabilities        = [];
@@ -170,7 +170,6 @@ class AgendaViewQueryHandler
         $isPhoneConfirmationRequired = false;
 
         if (true === $this->validationRequiredChecker->handle($sheet, $query->userViewing)) {
-
             if (null === $this->extraDataRepository->getExtraDataForEventNameAndUser(
                 $query->event,
                 Type::PHONE_CONFIRMATION_IGNORED,
@@ -180,7 +179,7 @@ class AgendaViewQueryHandler
             }
         }
 
-       return new AgendaView(
+        return new AgendaView(
             $dayViews,
             $sheet,
             $participant,

@@ -43,7 +43,7 @@ class SendCodeController extends Controller
         $mobileNumber = $request->query->get('mobile', $user->getMobile());
 
         $sendCodeView = $this->get('handler.user.phone.send_code_form_handler')->handle(
-            new SendCodeForm($request, $user, $eventDomain->getEvent(), $mobileNumber, true)
+            new SendCodeForm($request, $user, $eventDomain->getEvent(), null,  $mobileNumber, true)
         );
 
         if ($sendCodeView->isSuccess()) {

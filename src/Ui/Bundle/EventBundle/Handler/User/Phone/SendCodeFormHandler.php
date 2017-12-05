@@ -87,21 +87,14 @@ class SendCodeFormHandler
         }
 
         $sendCode = new SendCode($user, $event, $sendCodeForm->mobileNumberToValidate ?? $user->getMobile(), $locale);
+
         $formOptions = [
             'country' => $event->getCountry(),
-            'submit' => true
+            'submit'  => true,
         ];
 
-        $ignorePhoneConfirmationUrl = null;
-        if ($sendCodeForm->fromModal) {
-            $formOptions['action'] = $this->router->generate('event_user_phone_validate', [
-                'sheet'       => $sendCodeForm->sheet->getId(),
-                'participant' => $sendCodeForm->participant->getId(),
-            ]);
-            $ignorePhoneConfirmationUrl = $this->router->generate('event_agenda_ignore_phone_confirmation', [
-                'sheet'       => $sendCodeForm->sheet->getId(),
-                'participant' => $sendCodeForm->participant->getId(),
-            ]);
+        if (!empty($sendCodeForm->actionRoute)) {
+            $formOptions['action'] = $sendCodeForm->actionRoute;
         }
 
         $form = $this->formFactory->create(SendCodeType::class, $sendCode, $formOptions);
@@ -119,8 +112,7 @@ class SendCodeFormHandler
         return new SendCodeView(
             SendCodeView::SEND_CODE_SHOW_FORM,
             $form,
-            $tipTranslationViews,
-            $ignorePhoneConfirmationUrl
+            $tipTranslationViews
         );
     }
 }

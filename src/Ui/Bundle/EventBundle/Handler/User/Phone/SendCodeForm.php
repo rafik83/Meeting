@@ -33,42 +33,30 @@ class SendCodeForm
     /** @var string */
     public $mobileNumberToValidate;
 
-    /** @var bool */
-    public $fromModal;
-
-    /** @var null|Sheet */
-    public $sheet;
-
-    /** @var null|Participant */
-    public $participant;
+    /** @var null|string */
+    public $actionRoute;
 
     /**
-     * @param Request          $request
-     * @param User             $user
-     * @param Event            $event
-     * @param null|string      $mobileNumberToValidate
-     * @param bool             $ignorePhoneAlreadyValidated
-     * @param bool             $fromModal
-     * @param null|Sheet       $sheet
-     * @param null|Participant $participant
+     * @param Request     $request
+     * @param User        $user
+     * @param Event       $event
+     * @param null|string $actionRoute
+     * @param null|string $mobileNumberToValidate
+     * @param bool        $ignorePhoneAlreadyValidated
      */
     public function __construct(
         Request $request,
         User $user,
         Event $event,
+        ?string $actionRoute = null,
         ?string $mobileNumberToValidate = null,
-        bool $ignorePhoneAlreadyValidated = false,
-        bool $fromModal = false,
-        ?Sheet $sheet = null,
-        ?Participant $participant = null
+        bool $ignorePhoneAlreadyValidated = false
     ) {
-        $this->request = $request;
-        $this->user = $user;
-        $this->event = $event;
+        $this->request                     = $request;
+        $this->user                        = $user;
+        $this->event                       = $event;
         $this->ignorePhoneAlreadyValidated = $ignorePhoneAlreadyValidated;
-        $this->mobileNumberToValidate = $mobileNumberToValidate;
-        $this->fromModal = $fromModal;
-        $this->sheet = $sheet;
-        $this->participant = $participant;
+        $this->mobileNumberToValidate      = $mobileNumberToValidate;
+        $this->actionRoute                 = $actionRoute;
     }
 }

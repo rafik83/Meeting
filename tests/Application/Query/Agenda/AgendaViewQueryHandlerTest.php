@@ -34,7 +34,7 @@ use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\Unavailability\MassRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\UnavailabilityRepositoryInterface;
 use Proximum\Vimeet\Domain\User\Event\ExtraData\Type;
-use Proximum\Vimeet\Domain\User\Phone\ValidationRequiredChecker;
+use Proximum\Vimeet\Domain\User\Agenda\Phone\ValidationRequiredChecker;
 use Proximum\Vimeet\Infrastructure\Repository\User\Event\ExtraDataRepository;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
 use Proximum\Vimeet\Tests\Factory\ParticipantFactory;
