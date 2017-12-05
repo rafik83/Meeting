@@ -28,13 +28,13 @@
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title" id="configure-modal-label">Ajouter une langue</h4>
+                <h4 class="modal-title" id="configure-modal-label">{{ 'admin.template.registration.addLocale'|trans }}</h4>
             </div>
             <div class="modal-body">
                 {{ form_row(add_locale_form.locale) }}
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Fermer</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">{{ 'admin.common.close'|trans }}</button>
                 {{ form_row(add_locale_form.submit) }}
             </div>
         </div>
