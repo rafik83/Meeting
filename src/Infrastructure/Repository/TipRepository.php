@@ -65,7 +65,7 @@ class TipRepository implements TipRepositoryInterface
             ->createQueryBuilder()
             ->select('tip', 'translation')
             ->from(Tip::class, 'tip', 'tip.id')
-            ->join('tip.translations', 'translation')
+            ->leftJoin('tip.translations', 'translation')
             ->where('tip.event IS NULL')
             ->orderBy('tip.title');
 
