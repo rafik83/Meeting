@@ -1,0 +1,31 @@
+{% trans_default_domain 'templates' %}
+
+{% set config = {
+    label: { (locale): 'template.object.telephone'|trans },
+    type: 'titre',
+    style: ''
+}|merge(config|default({})) %}
+
+<div class="object" data-object="text" data-uid="{{ uid|default('__UID__') }}" data-config="{{ config|json_encode }}">
+    <ul class="block-buttons list-inline">
+        <li class="object-title">{{ 'template.object.telephone'|trans }}</li>
+        <li>
+            <span class="btn btn-link move-button">
+                <i class="glyphicon glyphicon-move"></i>
+            </span>
+        </li>
+        <li>
+            <button class="btn btn-link delete-button">
+                <i class="glyphicon glyphicon-remove"></i>
+            </button>
+        </li>
+        <li>
+            <button class="btn btn-link configure-button">
+                <i class="glyphicon glyphicon-cog"></i>
+            </button>
+            <div class="modal fade configure-modal" tabindex="-1" role="dialog">
+            </div>
+        </li>
+    </ul>
+    <div data-bind="label">{{ config.label[locale] }}</div>
+</div>

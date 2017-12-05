@@ -11,7 +11,9 @@
 namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\RegistrationTemplate;
 
 use Proximum\Vimeet\Application\Adapter\AuthorizationCheckerAdapterInterface;
+use Proximum\Vimeet\Application\Components\Sheet\Template\Tag;
 use Proximum\Vimeet\Domain\Model\Template\RegistrationTemplate;
+use Proximum\Vimeet\Domain\Repository\NomenclatureRepositoryInterface;
 use Proximum\Vimeet\Domain\Template\TemplateDataFactory;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Security\Voter\AdminTemplateAccessVoter;
 use Symfony\Bundle\FrameworkBundle\Templating\EngineInterface;
@@ -28,17 +30,17 @@ class BuildAction
     /** @var EngineInterface */
     private $engine;
 
-    /** @var TemplateDataFactory */
-    private $templateDataFactory;
+    /** @var NomenclatureRepositoryInterface */
+    private $nomenclatureRepository;
 
     public function __construct(
         AuthorizationCheckerAdapterInterface $authorizationChecker,
         EngineInterface $engine,
-        TemplateDataFactory $templateDataFactory
+        NomenclatureRepositoryInterface $nomenclatureRepository
     ) {
         $this->authorizationChecker = $authorizationChecker;
-        $this->engine               = $engine;
-        $this->templateDataFactory  = $templateDataFactory;
+        $this->engine = $engine;
+        $this->nomenclatureRepository = $nomenclatureRepository;
     }
 
     public function __invoke(Request $request, RegistrationTemplate $registrationTemplate, string $locale): Response
@@ -52,16 +54,16 @@ class BuildAction
             throw new AccessDeniedException();
         }
 
-        $registrationTemplateData = $this->templateDataFactory->createRegistrationFromTemplate(
-            $registrationTemplate,
-            $locale
-        );
+        $nomenclatures = $registrationTemplate->getEvent() ?
+            $this->nomenclatureRepository->findByEvent($registrationTemplate->getEvent()) :
+            $this->nomenclatureRepository->findGlobals();
 
         return $this->engine->renderResponse('AdminBundle:RegistrationTemplate:builder.html.twig', [
             'event' => $registrationTemplate->getEvent(),
             'registrationTemplate' => $registrationTemplate,
-            'registrationTemplateData' => $registrationTemplateData,
+            'nomenclatures' => $nomenclatures,
             'locale' => $locale,
+            'sheetTags' => Tag::getTemplateChoiceTags(),
         ]);
     }
 }

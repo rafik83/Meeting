@@ -12,10 +12,11 @@ namespace Proximum\Vimeet\Tests\Ui\Bundle\AdminBundle\Controller\RegistrationTem
 
 use PHPUnit\Framework\TestCase;
 use Proximum\Vimeet\Application\Adapter\AuthorizationCheckerAdapterInterface;
+use Proximum\Vimeet\Application\Components\Sheet\Template\Tag;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Template\RegistrationTemplate;
+use Proximum\Vimeet\Domain\Repository\NomenclatureRepositoryInterface;
 use Proximum\Vimeet\Domain\Template\TemplateData;
-use Proximum\Vimeet\Domain\Template\TemplateDataFactory;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Security\Voter\AdminTemplateAccessVoter;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\RegistrationTemplate\BuildAction;
 use Symfony\Bundle\FrameworkBundle\Templating\EngineInterface;
@@ -28,14 +29,14 @@ class BuildActionTest extends TestCase
     {
         $authorizationChecker = $this->prophesize(AuthorizationCheckerAdapterInterface::class);
         $engine = $this->prophesize(EngineInterface::class);
-        $templateDataFactory = $this->prophesize(TemplateDataFactory::class);
-        $templateData = $this->prophesize(TemplateData::class);
+        $nomenclatureRepository = $this->prophesize(NomenclatureRepositoryInterface::class);
         $request = $this->prophesize(Request::class);
         $response = $this->prophesize(Response::class);
         $event = $this->prophesize(Event::class);
         $registrationTemplate = $this->prophesize(RegistrationTemplate::class);
 
-        $registrationTemplate->getEvent()->willReturn($event->reveal());
+        $registrationTemplate->getEvent()->shouldBeCalled()->willReturn($event->reveal());
+        $nomenclatureRepository->findByEvent($event->reveal())->shouldBeCalled()->willReturn([]);
 
         $authorizationChecker->isGranted('ROLE_ALLOWED_TO_ORGANIZE')->shouldBeCalled()->willReturn(true);
         $authorizationChecker
@@ -47,21 +48,13 @@ class BuildActionTest extends TestCase
             ->willReturn(true)
         ;
 
-        $templateDataFactory
-            ->createRegistrationFromTemplate(
-                $registrationTemplate->reveal(),
-                'fr'
-            )
-            ->shouldBeCalled()
-            ->willReturn($templateData->reveal())
-        ;
-
         $engine
             ->renderResponse('AdminBundle:RegistrationTemplate:builder.html.twig', [
                 'event' => $event->reveal(),
                 'registrationTemplate' => $registrationTemplate->reveal(),
-                'registrationTemplateData' => $templateData->reveal(),
-                'locale' => 'fr'
+                'locale' => 'fr',
+                'nomenclatures' => [],
+                'sheetTags' => Tag::getTemplateChoiceTags(),
             ])
             ->shouldBeCalled()
             ->willReturn($response->reveal())
@@ -70,7 +63,7 @@ class BuildActionTest extends TestCase
         $buildAction = new BuildAction(
             $authorizationChecker->reveal(),
             $engine->reveal(),
-            $templateDataFactory->reveal()
+            $nomenclatureRepository->reveal()
         );
         $response = $buildAction($request->reveal(), $registrationTemplate->reveal(), 'fr');
 

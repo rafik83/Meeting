@@ -3,4 +3,4 @@ services:
         arguments:
             - '@adapter.authorization_checker'
             - '@templating'
-            - '@template.template_data_factory'
+            - '@repository.nomenclature_repository'
