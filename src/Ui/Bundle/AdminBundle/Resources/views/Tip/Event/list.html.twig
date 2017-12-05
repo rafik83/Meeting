@@ -18,7 +18,7 @@
                 <th>{{ 'admin.tip.event.title'|trans }}</th>
                 <th>{{ 'admin.tip.event.types'|trans }}</th>
                 <th>{{ 'admin.tip.event.pages'|trans }}</th>
-                <th class="text-right">{{ 'admin.tip.event.actions'|trans }}</th>
+                <th class="col-md-1 text-right">{{ 'admin.tip.event.actions'|trans }}</th>
             </tr>
         </thead>
         <tbody>
@@ -44,16 +44,25 @@
                         </ul>
                     </td>
                     <td class="text-right">
-                        <a href="{{ path('admin_tip_event_update', {'event': event.id, 'tip': tip.id }) }}"
-                            class="btn btn-default"
-                        >
-                            {{ 'admin.tip.event.update.button'|trans }}
-                        </a>
-                        {{ delete_button(
-                            path('admin_tip_event_remove', {'event': event.id, 'tip': tip.id}),
-                            'admin.tip.event.remove.link'|trans,
-                            {'class' : 'btn btn-danger', 'data-confirm': 'admin.tip.event.remove.action.confirm'|trans})
-                        }}
+                        <div class="btn-group">
+                            <a href="{{ path('admin_tip_event_update', {'event': event.id, 'tip': tip.id }) }}"
+                               class="btn btn-default btn-sm"
+                            >
+                                {{ 'admin.tip.event.update.button'|trans }}
+                            </a>
+                            <button type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <span class="caret"></span>
+                            </button>
+                            <ul class="dropdown-menu dropdown-menu-right">
+                                <li>
+                                    {{ delete_button(
+                                        path('admin_tip_event_remove', {'event': event.id, 'tip': tip.id}),
+                                        'admin.tip.event.remove.link'|trans,
+                                        {'class' : 'btn btn-danger btn-sm', 'data-confirm': 'admin.tip.event.remove.action.confirm'|trans})
+                                    }}
+                                </li>
+                            </ul>
+                        </div>
                     </td>
                 </tr>
             {% else %}
