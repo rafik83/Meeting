@@ -215,6 +215,7 @@ admin.template.action.edit: Modify
 admin.template.action.save: Save
 admin.template.registration.table.column.eventType: Event/Type
 admin.template.registration.table.content.edit: Modify
+admin.template.registration.table.content.editJson: Modify JSON
 admin.template.sheet.table.column.eventType: Event/Type
 admin.tip.event.no_types: None
 admin.tip.event.types: 'Type of participations affected'

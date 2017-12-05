@@ -1,0 +1,5 @@
+services:
+    Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\RegistrationTemplate\BuildAction:
+        arguments:
+            - '@adapter.authorization_checker'
+            - '@templating'

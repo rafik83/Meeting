@@ -50,7 +50,7 @@ class RegistrationTemplateController extends Controller
      *
      * @return Response
      */
-    public function builderAction(Request $request, RegistrationTemplate $template, $locale)
+    public function updateJsonAction(Request $request, RegistrationTemplate $template, $locale)
     {
         $this->denyAccessUnlessGranted('ROLE_ALLOWED_TO_ORGANIZE');
         $this->denyAccessUnlessGranted(AdminTemplateAccessVoter::PERMISSION_TEMPLATE_EDIT, $template);
@@ -79,7 +79,7 @@ class RegistrationTemplateController extends Controller
                 $this->get('tactician.commandbus')->handle($update);
                 $this->addFlash('success', 'flash.admin.template.registration.update.success');
 
-                return $this->redirectToRoute('admin_template_registration_builder', [
+                return $this->redirectToRoute('admin_template_registration_json', [
                     'template' => $template->getId(),
                     'locale'   => $locale,
                 ]);
@@ -105,7 +105,7 @@ class RegistrationTemplateController extends Controller
             $this->addFlash('warning', 'flash.template.incomplete_translations.warning');
         }
 
-        return $this->render('AdminBundle:RegistrationTemplate:builder.html.twig', [
+        return $this->render('AdminBundle:RegistrationTemplate:updateJson.html.twig', [
             'template'        => $template,
             'locale'          => $locale,
             'form'            => $updateForm->createView(),
@@ -138,7 +138,7 @@ class RegistrationTemplateController extends Controller
             if ($addLocaleForm->isValid()) {
                 $this->get('tactician.commandbus')->handle($addLocale);
 
-                return $this->redirectToRoute('admin_template_registration_builder', [
+                return $this->redirectToRoute('admin_template_registration_json', [
                     'template' => $template->getId(),
                     'locale'   => $addLocale->locale,
                 ]);
