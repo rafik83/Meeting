@@ -948,6 +948,7 @@ admin.type.remove.link: Supprimer
 admin.type.sheet.template: 'Template de présentation'
 admin.type.title: Titre
 admin.type.update.link: Modifier
+admin.type.paymentConditions.link: 'Conditions de paiement'
 admin.type.update.title: 'Modifier le type de participation'
 admin.unavailability.button.category: 'Catégorie d''indisponibilité de masse'
 admin.unavailability.button.dispatch: Dispatcher
