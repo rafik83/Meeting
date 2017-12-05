@@ -14,6 +14,7 @@ use Proximum\Vimeet\Application\Command\Order\Create;
 use Proximum\Vimeet\Application\Command\Payment\Choice;
 use Proximum\Vimeet\Application\Command\Payment\ChoiceWithDeposit;
 use Proximum\Vimeet\Application\Exception\Payment\DepositNotAvailableException;
+use Proximum\Vimeet\Application\Query\Payment\PaymentConditionsViewQuery;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\Transaction;
 use Proximum\Vimeet\Domain\Money\AmountFormatter;
@@ -70,8 +71,12 @@ class PaymentController extends Controller
             ]);
         }
 
-        $depositAllowed = DepositApplicable::isApplicable($eventDomain->getEvent(), $now, $total);
-        $deposit        = DepositApplicable::calculateDeposit($eventDomain->getEvent(), $now, $total);
+        $paymentConditionsView = $this
+            ->get('Proximum\Vimeet\Infrastructure\Adapter\QueryBus')
+            ->handle(new PaymentConditionsViewQuery($sheet))
+        ;
+        $depositAllowed = DepositApplicable::isApplicable($paymentConditionsView, $now, $total);
+        $deposit        = DepositApplicable::calculateDeposit($paymentConditionsView, $now, $total);
 
         //Create order from cart and redirect if total payment is negative or zero
         if ($total <= 0) {
@@ -85,12 +90,12 @@ class PaymentController extends Controller
         if ($depositAllowed) {
             $paymentChoice = new ChoiceWithDeposit($sheet, $this->getUser());
             $form          = $this->createForm(PaymentChoiceWithDepositType::class, $paymentChoice, [
-                'event' => $eventDomain->getEvent(),
+                'paymentConditionsView' => $paymentConditionsView,
             ]);
         } else {
             $paymentChoice = new Choice($sheet, $this->getUser());
             $form          = $this->createForm(PaymentChoiceType::class, $paymentChoice, [
-                'event' => $eventDomain->getEvent(),
+                'paymentConditionsView' => $paymentConditionsView,
             ]);
         }
 

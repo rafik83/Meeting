@@ -1510,6 +1510,8 @@ services:
     command.payment.choice_with_deposit_handler:
         class: Proximum\Vimeet\Application\Command\Payment\ChoiceWithDepositHandler
         parent: command.payment.abstract_choice_handler
+        arguments:
+            $queryBus: '@Proximum\Vimeet\Infrastructure\Adapter\QueryBus'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Payment\ChoiceWithDeposit }
     command.order.create_handler:
