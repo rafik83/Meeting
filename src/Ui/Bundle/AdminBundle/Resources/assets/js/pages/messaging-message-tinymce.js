@@ -32,6 +32,7 @@ tinymce.on('addEditor', function(e){
 });
 
 tinymce.init({
+    branding: false,
     selector: "textarea:not(.no-tiny)",
     width: '80%',
     menubar: false,

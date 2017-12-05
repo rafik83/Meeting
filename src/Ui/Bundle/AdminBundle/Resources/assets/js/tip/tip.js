@@ -1,6 +1,7 @@
 var $ = require('jquery');
 
 var config = {
+    branding: false,
     selector: "textarea:not(.no-tiny)",
     width: '80%',
     menubar: false,
