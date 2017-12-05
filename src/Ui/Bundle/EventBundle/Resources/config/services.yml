@@ -629,7 +629,6 @@ services:
             - '@repository.user.user_event_phone_repository'
             - '@form.factory'
             - '@tactician.commandbus.query'
-            - '@adapter.router'
     handler_user_profile.pre_update_handler:
         class: Proximum\Vimeet\Ui\Bundle\EventBundle\Handler\User\Profile\PreUpdateHandler
         arguments:

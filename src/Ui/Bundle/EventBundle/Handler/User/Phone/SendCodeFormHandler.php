@@ -11,7 +11,6 @@
 namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Handler\User\Phone;
 
 use League\Tactician\CommandBus;
-use Proximum\Vimeet\Application\Adapter\RouterInterface;
 use Proximum\Vimeet\Application\Command\User\Phone\SendCode;
 use Proximum\Vimeet\Application\Exception\Messaging\SMS\InvalidReceiverException;
 use Proximum\Vimeet\Application\Query\Tip\TipTranslationViewByUserQuery;
@@ -32,25 +31,19 @@ class SendCodeFormHandler
     /** @var CommandBus */
     private $commandBus;
 
-    /** @var RouterInterface */
-    private $router;
-
     /**
      * @param UserEventPhoneRepositoryInterface $userEventPhoneRepository
      * @param FormFactory                       $formFactory
      * @param CommandBus                        $commandBus
-     * @param RouterInterface                   $router
      */
     public function __construct(
         UserEventPhoneRepositoryInterface $userEventPhoneRepository,
         FormFactory $formFactory,
-        CommandBus $commandBus,
-        RouterInterface $router
+        CommandBus $commandBus
     ) {
         $this->userEventPhoneRepository = $userEventPhoneRepository;
         $this->formFactory              = $formFactory;
         $this->commandBus               = $commandBus;
-        $this->router = $router;
     }
 
     /**
