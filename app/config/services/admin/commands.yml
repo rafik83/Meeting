@@ -73,6 +73,7 @@ services:
     # Type Payment Conditions
     #
     Proximum\Vimeet\Application\Command\Type\PaymentConditions\UpdateHandler:
-        autowire: true
+        arguments:
+            - '@Proximum\Vimeet\Infrastructure\Repository\Type\PaymentConditionsRepository'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Type\PaymentConditions\Update }

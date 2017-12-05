@@ -3,13 +3,26 @@ services:
     # Type Payment Conditions
     #
     Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Type\PaymentConditionsAction:
-        autowire: true
+        arguments:
+            - '@adapter.authorization_checker'
+            - '@form.factory'
+            - '@templating'
+            - '@adapter.router'
+            - '@session.flash_bag'
+            - '@Proximum\Vimeet\Infrastructure\Adapter\CommandBus'
 
     #
     # Type
     #
     Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Type\ListAction:
-        autowire: true
+        arguments:
+            - '@adapter.authorization_checker'
+            - '@Proximum\Vimeet\Infrastructure\Adapter\QueryBus'
+            - '@templating'
 
     Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Type\RemoveAction:
-        autowire: true
+        arguments:
+            - '@adapter.authorization_checker'
+            - '@Proximum\Vimeet\Infrastructure\Adapter\CommandBus'
+            - '@session.flash_bag'
+            - '@adapter.router'

@@ -15,6 +15,7 @@ services:
             - '@doctrine.orm.entity_manager'
 
     Proximum\Vimeet\Infrastructure\Repository\Type\PaymentConditionsRepository:
-        autowire: true
+        arguments:
+            - '@doctrine.orm.entity_manager'
 
     Proximum\Vimeet\Domain\Repository\Type\PaymentConditionsRepositoryInterface: '@Proximum\Vimeet\Infrastructure\Repository\Type\PaymentConditionsRepository'
