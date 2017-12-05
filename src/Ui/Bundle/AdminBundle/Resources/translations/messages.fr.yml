@@ -934,6 +934,13 @@ admin.type.link: 'Types de participation'
 admin.type.list.title: 'Types de participation'
 admin.type.package: Forfait
 admin.type.paymentConditions.update.title: 'Définition des conditions de paiement du type "%typeTitle%"'
+admin.type.paymentConditions.event.info.title: 'Conditions de paiement de l''événement:'
+admin.type.paymentConditions.event.info.allowDeposit: 'Activer le paiement en acompte:'
+admin.type.paymentConditions.event.info.depositUntil: 'Date limite d''acceptation des acomptes:'
+admin.type.paymentConditions.event.info.minimumForDeposit: 'Somme total à partir duquel l''acompte est applicable:'
+admin.type.paymentConditions.event.info.deposit: 'Pourcentage de l''acompte:'
+admin.type.paymentConditions.event.info.paymentModes: 'Moyens de paiement:'
+admin.type.paymentConditions.event.info.paymentModes.none: 'Aucun'
 admin.type.position: Position
 admin.type.register.link: 'Lien d''inscription'
 admin.type.registration.template: 'Template d''inscription'

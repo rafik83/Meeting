@@ -55,4 +55,12 @@ class Update implements Command
             $this->paymentModes      = $paymentConditions->getPaymentModes();
         }
     }
+
+    /**
+     * @return bool
+     */
+    public function isPaymentModesNotEmpty(): bool
+    {
+        return !empty($this->paymentModes);
+    }
 }
