@@ -933,6 +933,7 @@ admin.type.id: Id
 admin.type.link: 'Types de participation'
 admin.type.list.title: 'Types de participation'
 admin.type.package: Forfait
+admin.type.paymentConditions.update.title: 'Définition des conditions de paiement du type "%typeTitle%"'
 admin.type.position: Position
 admin.type.register.link: 'Lien d''inscription'
 admin.type.registration.template: 'Template d''inscription'

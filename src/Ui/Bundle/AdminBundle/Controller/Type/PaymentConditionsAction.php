@@ -10,8 +10,8 @@
 
 namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Type;
 
-use League\Tactician\CommandBus;
 use Proximum\Vimeet\Application\Adapter\AuthorizationCheckerAdapterInterface;
+use Proximum\Vimeet\Application\Adapter\CommandBusInterface;
 use Proximum\Vimeet\Application\Adapter\RouterInterface;
 use Proximum\Vimeet\Application\Command\Type\PaymentConditions\Update;
 use Proximum\Vimeet\Domain\Model\Event;
@@ -19,9 +19,11 @@ use Proximum\Vimeet\Domain\Model\Type;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Type\PaymentConditions\UpdateType;
 use Symfony\Bundle\FrameworkBundle\Templating\EngineInterface;
 use Symfony\Component\Form\FormFactoryInterface;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface;
+use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 class PaymentConditionsAction
 {
@@ -42,7 +44,7 @@ class PaymentConditionsAction
     /** @var FlashBagInterface */
     private $flashBag;
 
-    /** @var CommandBus */
+    /** @var CommandBusInterface */
     private $commandBus;
 
     /**
@@ -51,7 +53,7 @@ class PaymentConditionsAction
      * @param EngineInterface                      $engine
      * @param RouterInterface                      $router
      * @param FlashBagInterface                    $flashBag
-     * @param CommandBus                           $commandBus
+     * @param CommandBusInterface                  $commandBus
      */
     public function __construct(
         AuthorizationCheckerAdapterInterface $authorizationCheckerAdapter,
@@ -59,7 +61,7 @@ class PaymentConditionsAction
         EngineInterface $engine,
         RouterInterface $router,
         FlashBagInterface $flashBag,
-        CommandBus $commandBus
+        CommandBusInterface $commandBus
     ) {
         $this->authorizationCheckerAdapter = $authorizationCheckerAdapter;
         $this->formFactory                 = $formFactory;
@@ -69,19 +71,39 @@ class PaymentConditionsAction
         $this->commandBus                  = $commandBus;
     }
 
+    /**
+     * @param Request $request
+     * @param Event   $event
+     * @param Type    $type
+     *
+     * @return Response|RedirectResponse
+     */
     public function __invoke(Request $request, Event $event, Type $type): Response
     {
+        if (!$this->authorizationCheckerAdapter->isGranted('ROLE_ALLOWED_TO_ORGANIZE')
+            || !$this->authorizationCheckerAdapter->isGranted('PERMISSION_EVENT_ACCESS', $event)
+        ) {
+            throw new AccessDeniedException('Access denied');
+        }
+
         $update = new Update($type);
         $form = $this->formFactory->create(UpdateType::class, $update, [
             'event'  => $event,
             'submit' => true,
         ]);
 
+        if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
+            $this->commandBus->handle($update);
+            $this->flashBag->add('success', 'flash.admin.type.paymentConditions.updated');
+
+            return new RedirectResponse($this->router->generate('admin_type_list', ['event' => $event->getId()]));
+        }
+
         return $this->engine->renderResponse(self::TEMPLATE, [
             'locale' => $event->getAvailableLocale($request->getLocale()),
-            'event' => $event,
-            'type'  => $type,
-            'form'  => $form->createView(),
+            'event'  => $event,
+            'type'   => $type,
+            'form'   => $form->createView(),
         ]);
     }
 }

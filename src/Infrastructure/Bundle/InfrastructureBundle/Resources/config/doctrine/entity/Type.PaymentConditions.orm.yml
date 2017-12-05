@@ -21,6 +21,7 @@ Proximum\Vimeet\Domain\Model\Type\PaymentConditions:
     manyToOne:
         type:
             targetEntity: Proximum\Vimeet\Domain\Model\Type
+            inversedBy: paymentConditions
             joinColumn:
                 nullable: false
                 unique: true

@@ -10,10 +10,14 @@
 
 namespace Proximum\Vimeet\Application\Command\Type\PaymentConditions;
 
+use Proximum\Vimeet\Application\Command\Command;
 use Proximum\Vimeet\Domain\Model\Type;
 
-class Update
+class Update implements Command
 {
+    /** @var Type */
+    public $type;
+
     /** @var bool */
     public $specificPaymentConditions;
 
@@ -37,6 +41,8 @@ class Update
      */
     public function __construct(Type $type)
     {
+        $this->type = $type;
+
         $paymentConditions = $type->getPaymentConditions();
 
         $this->specificPaymentConditions = $paymentConditions instanceof Type\PaymentConditions;

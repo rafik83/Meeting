@@ -3,10 +3,4 @@ services:
     # Type Payment Conditions
     #
     Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Type\PaymentConditionsAction:
-        arguments:
-            - '@adapter.authorization_checker'
-            - '@form.factory'
-            - '@templating'
-            - '@adapter.router'
-            - '@session.flash_bag'
-            - '@tactician.commandbus'
+        autowire: true

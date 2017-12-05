@@ -68,3 +68,11 @@ services:
             - '@datetime'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\User\Event\Token\UpdateAgendaConfirmation }
+
+    #
+    # Type Payment Conditions
+    #
+    Proximum\Vimeet\Application\Command\Type\PaymentConditions\UpdateHandler:
+        autowire: true
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Type\PaymentConditions\Update }

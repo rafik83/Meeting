@@ -114,4 +114,25 @@ class PaymentConditions
     {
         return $this->paymentModes;
     }
+
+    /**
+     * @param array                   $paymentModes
+     * @param bool                    $allowDeposit
+     * @param \DateTimeInterface|null $depositUntil
+     * @param float|null              $minimumForDeposit
+     * @param int|null                $deposit
+     */
+    public function update(
+        array $paymentModes = [],
+        bool $allowDeposit,
+        \DateTimeInterface $depositUntil = null,
+        float $minimumForDeposit = null,
+        int $deposit = null
+    ) {
+        $this->paymentModes      = $paymentModes;
+        $this->allowDeposit      = $allowDeposit;
+        $this->depositUntil      = $depositUntil;
+        $this->minimumForDeposit = $minimumForDeposit;
+        $this->deposit           = $deposit;
+    }
 }
