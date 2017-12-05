@@ -74,7 +74,6 @@ class CreateAction
     /**
      * @param Request       $request
      * @param Event         $event
-     *
      * @param UserInterface $admin
      *
      * @return Response
