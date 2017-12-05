@@ -2,5 +2,8 @@ services:
     Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\RegistrationTemplate\BuildAction:
         arguments:
             - '@adapter.authorization_checker'
+            - '@sheet.template.completeness_calculator'
             - '@templating'
+            - '@form.factory'
             - '@repository.nomenclature_repository'
+            - '@adapter.router'

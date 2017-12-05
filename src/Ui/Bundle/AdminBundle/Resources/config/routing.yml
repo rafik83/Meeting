@@ -890,11 +890,11 @@ admin_template_registration_build:
         locale: '[a-z]{2}(_[A-Z]{2})?'
 
 admin_template_registration_json:
-    path: /template/registration/{template}/{locale}/json
+    path: /template/registration/{registrationTemplate}/{locale}/json
     methods: [GET, POST]
     defaults: { _controller: AdminBundle:RegistrationTemplate:updateJson }
     requirements:
-        template: \d+
+        registrationTemplate: \d+
         locale: '[a-z]{2}(_[A-Z]{2})?'
 
 admin_template_registration_add_locale:

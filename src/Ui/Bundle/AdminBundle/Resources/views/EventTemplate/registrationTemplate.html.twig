@@ -26,7 +26,7 @@
                         </button>
                         <ul class="dropdown-menu dropdown-menu-right">
                             <li>
-                                <a href="{{ path('admin_template_registration_json', { 'template': template.id, 'locale': template.fallback }) }}" class="btn-sm">
+                                <a href="{{ path('admin_template_registration_json', { 'registrationTemplate': template.id, 'locale': template.fallback }) }}" class="btn-sm">
                                     {{ 'admin.template.registration.table.content.editJson'|trans }}
                                 </a>
                             </li>
