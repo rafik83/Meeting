@@ -12,6 +12,7 @@ namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\RegistrationTemplate;
 
 use Proximum\Vimeet\Application\Adapter\AuthorizationCheckerAdapterInterface;
 use Proximum\Vimeet\Domain\Model\Template\RegistrationTemplate;
+use Proximum\Vimeet\Domain\Template\TemplateDataFactory;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Security\Voter\AdminTemplateAccessVoter;
 use Symfony\Bundle\FrameworkBundle\Templating\EngineInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -27,10 +28,17 @@ class BuildAction
     /** @var EngineInterface */
     private $engine;
 
-    public function __construct(AuthorizationCheckerAdapterInterface $authorizationChecker, EngineInterface $engine)
-    {
+    /** @var TemplateDataFactory */
+    private $templateDataFactory;
+
+    public function __construct(
+        AuthorizationCheckerAdapterInterface $authorizationChecker,
+        EngineInterface $engine,
+        TemplateDataFactory $templateDataFactory
+    ) {
         $this->authorizationChecker = $authorizationChecker;
-        $this->engine = $engine;
+        $this->engine               = $engine;
+        $this->templateDataFactory  = $templateDataFactory;
     }
 
     public function __invoke(Request $request, RegistrationTemplate $registrationTemplate, string $locale): Response
@@ -44,9 +52,16 @@ class BuildAction
             throw new AccessDeniedException();
         }
 
+        $registrationTemplateData = $this->templateDataFactory->createRegistrationFromTemplate(
+            $registrationTemplate,
+            $locale
+        );
+
         return $this->engine->renderResponse('AdminBundle:RegistrationTemplate:builder.html.twig', [
-            'registrationTemplate' => $registrationTemplate,
             'event' => $registrationTemplate->getEvent(),
+            'registrationTemplate' => $registrationTemplate,
+            'registrationTemplateData' => $registrationTemplateData,
+            'locale' => $locale,
         ]);
     }
 }

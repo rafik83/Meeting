@@ -17,6 +17,7 @@ use Proximum\Vimeet\Domain\Model\Nomenclature;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\Template\AbstractTemplate;
+use Proximum\Vimeet\Domain\Model\Template\RegistrationTemplate;
 use Proximum\Vimeet\Domain\Model\Type;
 use Proximum\Vimeet\Domain\Repository\NomenclatureRepositoryInterface;
 use Proximum\Vimeet\Domain\Template\Exception\BuildNotImplementedException;
@@ -103,6 +104,24 @@ class TemplateDataFactory
     }
 
     /**
+     * @param RegistrationTemplate $registrationTemplate
+     * @param string               $locale
+     *
+     * @return TemplateData
+     */
+    public function createRegistrationFromTemplate(RegistrationTemplate $registrationTemplate, $locale)
+    {
+        return $this
+            ->loadNomenclatures($registrationTemplate->getEvent())
+            ->create(
+                $registrationTemplate->getValue(),
+                [],
+                $locale,
+                $registrationTemplate->getFallback()
+            );
+    }
+
+    /**
      * @param Type   $type
      * @param string $locale
      *
@@ -110,14 +129,7 @@ class TemplateDataFactory
      */
     public function createRegistrationFromType(Type $type, $locale)
     {
-        return $this
-            ->loadNomenclatures($type->getEvent())
-            ->create(
-                $type->getRegistrationTemplate()->getValue(),
-                [],
-                $locale,
-                $type->getRegistrationTemplate()->getFallback()
-            );
+        return $this->createRegistrationFromTemplate($type->getRegistrationTemplate(), $locale);
     }
 
     /**

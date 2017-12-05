@@ -1,7 +1,11 @@
 {% extends 'AdminBundle::base.html.twig' %}
 
 {% block content %}
-    <h1 class="page-header">{{ 'admin.template.registration.update'|trans }}</h1>
+    <h1 class="page-header">{{ 'admin.template.registration.update'|trans }} "{{ registrationTemplate.title }}"</h1>
 
-    {{ registrationTemplate.title }}
+    <ul>
+        {% for block in registrationTemplateData.blocks %}
+            <li>{{ block.getTitle(locale) }}</li>
+        {% endfor %}
+    </ul>
 {% endblock %}
