@@ -6,8 +6,10 @@ prod-2 ansible_ssh_host=vimeet-prod2 ansible_ssh_user=www-data
 preprod-1
 
 [deploy_prod]
+prod-[1:2]
+
+[deploy_prod_primary]
 prod-1
-prod-2
 
 [deploy:children]
 deploy_preprod
