@@ -26,3 +26,16 @@ services:
             - '@Proximum\Vimeet\Infrastructure\Adapter\CommandBus'
             - '@session.flash_bag'
             - '@adapter.router'
+
+    #
+    # Event
+    #
+    Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Event\PaymentConditionsAction:
+        arguments:
+            - '@adapter.authorization_checker'
+            - '@form.factory'
+            - '@adapter.router'
+            - '@session.flash_bag'
+            - '@Proximum\Vimeet\Infrastructure\Adapter\CommandBus'
+            - '@Proximum\Vimeet\Infrastructure\Adapter\QueryBus'
+            - '@templating'

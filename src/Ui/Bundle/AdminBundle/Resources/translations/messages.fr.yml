@@ -164,6 +164,7 @@ admin.event.page.orderInvoiceFinder.title: 'Recherche commande ou facture'
 admin.event.page.transactions.link: Transactions
 admin.event.page.transactions.title: 'Export des transactions'
 admin.event.paymentConditions.link: 'Conditions de paiement'
+admin.event.paymentConditions.typeWithSpecificPaymentConditions: 'Liste des types avec conditions de paiement spécifiques:'
 admin.event.paymentConditions.update.title: 'Modifier les conditions de paiement'
 admin.event.practicalInfo.link: 'Informations Pratiques'
 admin.event.practicalInfo.update.title: 'Modifier les informations pratiques'

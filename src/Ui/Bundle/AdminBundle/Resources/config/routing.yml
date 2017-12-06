@@ -180,7 +180,7 @@ admin_event_payment_conditions:
     requirements:
         event: \d+
     methods: [GET, POST]
-    defaults: { _controller: AdminBundle:Event:paymentConditions }
+    defaults: { _controller: Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Event\PaymentConditionsAction }
 
 admin_event_configure_dates:
     path: /event/{event}/dates
