@@ -56,13 +56,19 @@ function TemplateBlock(element, builder)
 TemplateBlock.prototype.upButtonClicked = function (event)
 {
   event.preventDefault();
-  console.log('up');
+
+  if (null !== this.element.previousElementSibling) {
+    this.element.parentNode.insertBefore(this.element, this.element.previousElementSibling);
+  }
 };
 
 TemplateBlock.prototype.downButtonClicked = function (event)
 {
   event.preventDefault();
-  console.log('down');
+
+  if (null !== this.element.nextElementSibling) {
+    this.element.parentNode.insertBefore(this.element.nextElementSibling, this.element);
+  }
 };
 
 TemplateBlock.prototype.configureButtonClicked = function (event)
