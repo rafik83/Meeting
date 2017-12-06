@@ -13,7 +13,6 @@
                 <th>{{ 'admin.type.id'|trans }}</th>
                 <th>{{ 'admin.type.title'|trans }}</th>
                 <th>{{ 'admin.type.position'|trans }}</th>
-                <th>{{ 'admin.type.hidden'|trans }}</th>
                 <th>{{ 'admin.type.register.link'|trans }}</th>
                 <th>{{ 'admin.type.registration.template'|trans }}</th>
                 <th>{{ 'admin.type.sheet.template'|trans }}</th>
@@ -25,9 +24,28 @@
         {% for type in types.types %}
             <tr>
                 <td>{{ type.id }}</td>
-                <td>{{ type.title }}</td>
+                <td>
+                    {{ type.title }}
+                    {% if type.hasSpecificPaymentConditions %}
+                        {% if is_granted('ROLE_ALLOWED_TO_ORGANIZE') %}
+                            <a href="{{ path('admin_type_payment_conditions', {'event': event.id, 'type': type.id}) }}" class="label label-info">
+                        {% else %}
+                            <span class="label label-info">
+                        {% endif %}
+                                {{ 'admin.type.specificPaymentConditions'|trans }}
+                        {% if is_granted('ROLE_ALLOWED_TO_ORGANIZE') %}
+                            </a>
+                        {% else %}
+                            </span>
+                        {% endif %}
+                    {% endif %}
+                    {% if type.hidden %}
+                        <span class="label label-default">
+                            <i class="glyphicon glyphicon-eye-close"></i> {{ 'admin.type.hidden'|trans }}
+                        </span>
+                    {% endif %}
+                </td>
                 <td>{{ type.position }}</td>
-                <td>{{ type.hidden ? '✓' : '' }}</td>
                 <td>
                     <a href="{{ app.request.scheme ~ '://' ~ event.domain ~ path('event_register', {'typeView': type.id }) }}" target="_blank">
                         {{ 'admin.type.register.link'|trans }}

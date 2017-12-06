@@ -1,9 +1,9 @@
 <?php
 
 /*
- * This file is part of the vimeet project.
+ * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2016 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -39,12 +39,11 @@ class TypeViewQueryHandler
      */
     public function handle(TypeViewQuery $query): TypeListsView
     {
-        $locale      = $query->event->getAvailableLocale($query->locale);
         $typeResults = $this->typeRepository->paginate(
             $query->page,
             20,
             $query->event->getId(),
-            $locale
+            $query->locale
         );
 
         $typeListsView = new TypeListsView();
@@ -54,11 +53,12 @@ class TypeViewQueryHandler
             $typeListsView->types[] = new TypeListView(
                 $type->getId(),
                 $type->getPosition(),
-                $type->getTitle($locale),
+                $type->getTitle($query->locale),
                 $type->isHidden(),
                 (null !== $type->getRegistrationTemplate()) ? $type->getRegistrationTemplate()->getTitle() : '',
                 (null !== $type->getSheetTemplate()) ? $type->getSheetTemplate()->getTitle() : '',
-                (null !== $type->getPackage()) ? $type->getPackage()->getTitle() : ''
+                (null !== $type->getPackage()) ? $type->getPackage()->getTitle() : '',
+                null !== $type->getPaymentConditions()
             );
         }
 
