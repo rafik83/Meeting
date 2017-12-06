@@ -25,15 +25,14 @@
                 {% for uid, item in registrationTemplate.value|default([]) %}
                     {% if item.component == 'block' %}
                         {{ include('AdminBundle:RegistrationTemplate:block.html.twig', {
-                            'uid': uid, 'children': item.children, 'config': item.config, 'locale': locale,
-                            'fallback': registrationTemplate.fallback, 'nomenclatures': nomenclatures,
-                            'sheet_tags': sheetTags, 'products': []
-                        }, false) }}
-                    {% elseif item.component == 'object' %}
-                        {{ include('AdminBundle:Template/Object:' ~ item.type ~ '.html.twig', {
-                            'uid': uid, 'config': item.config, 'locale': locale,
-                            'fallback': registrationTemplate.fallback, 'nomenclatures': nomenclatures,
-                            'sheet_tags': sheetTags, 'products': []
+                            'uid': uid,
+                            'children': item.children,
+                            'config': item.config,
+                            'locale': locale,
+                            'fallback': registrationTemplate.fallback,
+                            'nomenclatures': nomenclatures,
+                            'sheet_tags': sheetTags,
+                            'products': []
                         }, false) }}
                     {% endif %}
                 {% endfor %}
