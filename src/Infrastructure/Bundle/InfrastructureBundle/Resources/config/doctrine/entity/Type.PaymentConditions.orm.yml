@@ -7,6 +7,8 @@ Proximum\Vimeet\Domain\Model\Type\PaymentConditions:
             generator:
                 strategy: AUTO
     fields:
+        allowDeposit:
+            type: boolean
         depositUntil:
             type: datetime
             nullable: true
