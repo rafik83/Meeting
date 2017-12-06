@@ -562,7 +562,7 @@ class PrintTemplateResolverTest extends TestCase
                                             [
                                                 '211efd1f' => [
                                                     'component' => 'object',
-                                                    'type'      => 'media',
+                                                    'type'      => 'medias',
                                                     'config'    => [
                                                         'label' => [
                                                             'en' => 'Medias',

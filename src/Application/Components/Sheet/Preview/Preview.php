@@ -203,12 +203,12 @@ class Preview
     }
 
     /**
-     * @param TemplateObject $templateObject
-     * @param array          $eventLocales
+     * @param TemplateObject\ContentObjectInterface $templateObject
+     * @param array                                 $eventLocales
      *
      * @return string
      */
-    private function getContentValue(TemplateObject $templateObject, array $eventLocales): string
+    private function getContentValue(TemplateObject\ContentObjectInterface $templateObject, array $eventLocales): string
     {
         if (empty($templateObject->getContentValue())) {
             foreach ($eventLocales as $locale) {

@@ -22,6 +22,7 @@ Definition of Done:
 - [ ] 9. No errors on Insight
 - [ ] 10. No conflict with `master` or solve them as soon as possible.
 - [ ] 11. To be reviewed (have at least one "approve") in order to pass the feature to "preprod"
+- [ ] 12. Copy/Paste all new translations keys in the corresponding user story on Jira
 
 *Cross out unrelevant item of the DoD (items 1 to 5 only), example:*
 - ~~Regenerate npm-shrinkwrap~~

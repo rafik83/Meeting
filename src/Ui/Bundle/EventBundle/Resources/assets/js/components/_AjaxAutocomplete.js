@@ -20,6 +20,12 @@ function AjaxAutocomplete(element) {
         this.autocompleteElement.on('select2:select', this.selectTag.bind(this));
         this.autocompleteElement.on('select2:unselect', this.unselectTag.bind(this));
         this.autocompleteElement.on('change', this.onChange.bind(this));
+
+        // Fix dropdown body positioned incorrectly when dropdownParent isn't statically positioned
+        this.autocompleteElement.on('select2:open', function (e) {
+            var y = $(window).scrollTop();
+            $(window).scrollTop(y + 1);
+        });
     }.bind(this));
 
     // Custom event

@@ -1,6 +1,6 @@
 admin.mail.activateAccount.activate: 'Activer votre compte'
 admin.mail.activateAccount.body: "Bonjour,\n\nVous avez été invité en tant que collaborateur sur Vimeet\n\nPour y accéder, cliquer sur le lien suivant et entrer un mot de passe pour activer votre compte:"
-admin.mail.activateAccount.end: 'Cordialement,'
+admin.mail.activateAccount.end: ''
 admin.mail.activateAccount.subject: 'Activer votre compte'
 admin.mail.resetPassword.body: "Bonjour,\n\nPour réinitialiser votre mot de passe, merci de cliquer sur le lien ci-dessous:"
 admin.mail.resetPassword.end: 'Bien cordialement,'
@@ -24,7 +24,7 @@ mail.confirm.agenda.link: 'Confirmer mon agenda'
 mail.confirmResetPassword.body: "Bonjour %firstname% %lastname%,\n\nVotre mot de passe a bien été changé."
 mail.confirmResetPassword.subject: 'Votre mot de passe a bien été changé'
 mail.event.preregister.body: "%firstname% %lastname%,\n\nVotre demande d'inscription  \"%event%\" a bien été enregistrée et sera examinée dans les plus brefs délais par l'équipe \"%event%\".\n\nVous recevrez un mail de confirmation lorsque votre inscription aura été validée par l'organisateur."
-mail.event.preregister.end: 'Bien cordialement,'
+mail.event.preregister.end: ''
 mail.event.preregister.link: 'Votre profil participant'
 mail.event.preregister.subject: 'Vous êtes pré-enregistré à %event%'
 mail.footer.contact: Contact
@@ -63,6 +63,8 @@ mail.sheet.add_participant_confirmation.subject: 'Invitation envoyée'
 mail.sheet.change_type.body: "Bonjour %firstname% %lastname%,\n\nVotre participation de type %fromType% a été transformée en participation de type %toType%."
 mail.sheet.change_type.end: 'Cordialement,'
 mail.sheet.change_type.subject: '[%event%] Votre participation a changé'
+mail.sheet.generate_pdf.click: 'Télécharger les fiches en pdf'
+mail.sheet.generate_pdf.intro: "Bonjour\nLe fichier .pdf des fiches sélectionnés pour l'évenement %eventTitle% a été généré\n"
 mail.sheet.group.created.body: "Bonjour %firstname% %lastname%,\n\nVotre entité multi-fiches a été créée.\n\nVous pouvez y acceder depuis le lien ci-dessous :"
 mail.sheet.group.created.subject: 'Votre entité multi-fiches a été créée'
 mail.sheet.group.show.link: 'Accéder à l''entité multi-fiches'
@@ -70,9 +72,9 @@ mail.sheet.invoiced.body: "Bonjour %participant%,\n\nPour faire suite à votre p
 mail.sheet.invoiced.end: "Votre facture est &eacute;galement disponible dans votre espace membre par ce lien <a href=\"%ordersLink%\" target=\"_blank\">Facture et liste des commandes</a>\n\nNous vous remercions de votre participation."
 mail.sheet.invoiced.link: 'Télécharger ma facture %invoiceNumber%'
 mail.sheet.invoiced.subject: 'Téléchargez votre facture'
-mail.sheet.print.pdf.subject: 'Génération des PDF de fiches'
-mail.sheet.print.intro: "Bonjour,\n\n Voici le PDF généré des fiches pour l'événement %eventTitle% :\n"
 mail.sheet.print.click: 'Télécharger les fiches'
+mail.sheet.print.intro: "Bonjour,\n\n Voici le PDF généré des fiches pour l'événement %eventTitle% :\n"
+mail.sheet.print.pdf.subject: 'Génération des PDF de fiches'
 mail.sheet.show.link: 'Voir la fiche de présentation'
 mail.sheet.submitted.body: "La fiche de participation de %sheetName% a été finalisée le %date% par %firstname% %lastname%.\n\nPour accéder au détail de la fiche, merci de cliquer sur le lien suivant"
 mail.sheet.submitted.end: 'Cordialement,'
@@ -86,5 +88,3 @@ mail.sheet.validation.validate.body: "Bonjour %firstname% %lastname%,\n\nVotre f
 mail.sheet.validation.validate.subject: 'Fiche validée'
 mail.transaction.confirm.body: "Bonjour %firstname% %lastname%,\n\nVotre paiement d’un montant de %transactionTotal% a bien été reçu.\n\nCordialement,"
 mail.transaction.confirm.subject: '[%event%] Votre paiement a bien été reçu'
-mail.sheet.generate_pdf.intro: "Bonjour\nLe fichier .pdf des fiches sélectionnés pour l'évenement %eventTitle% a été généré\n"
-mail.sheet.generate_pdf.click: 'Télécharger les fiches en pdf'

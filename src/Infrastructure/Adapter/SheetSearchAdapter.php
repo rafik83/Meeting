@@ -85,24 +85,27 @@ class SheetSearchAdapter implements SheetSearchAdapterInterface
         if (Constant::ORDER_BY_DATE_ADDED_TO_CATALOG === $orderBy) {
             $query = new Query($builder->getQuery());
             $query->addSort(['inCatalogAt' => 'desc']);
-        } elseif (Constant::ORDER_BY_RELEVANCE === $orderBy &&
-            isset($nomenclatureItems[Nomenclature::OBJECTIVE_NONE])
-        ) {
-            $functionScore = new FunctionScore();
-            $functionScore->setScoreMode(FunctionScore::SCORE_MODE_SUM);
+        } elseif (Constant::ORDER_BY_RELEVANCE === $orderBy) {
+            $builtQuery = $builder->getQuery();
 
-            foreach ($nomenclatureItems[Nomenclature::OBJECTIVE_NONE] as $key) {
-                $nested = new \Elastica\Filter\Nested();
-                $nested->setFilter((new Term())->setTerm('nomenclatureItems.key', $key));
-                $nested->setPath('nomenclatureItems');
-                $functionScore->addFunction('weight', [], $nested, self::NOMENCLATURE_ITEMS_WEIGHT);
+            if (isset($nomenclatureItems[Nomenclature::OBJECTIVE_NONE])) {
+                $functionScore = new FunctionScore();
+                $functionScore->setScoreMode(FunctionScore::SCORE_MODE_SUM);
+
+                foreach ($nomenclatureItems[Nomenclature::OBJECTIVE_NONE] as $key) {
+                    $nested = new \Elastica\Filter\Nested();
+                    $nested->setFilter((new Term())->setTerm('nomenclatureItems.key', $key));
+                    $nested->setPath('nomenclatureItems');
+                    $functionScore->addFunction('weight', [], $nested, self::NOMENCLATURE_ITEMS_WEIGHT);
+                }
+
+                $builtQuery = $functionScore->setQuery($builtQuery);
             }
 
-            $query = $functionScore->setQuery($builder->getQuery());
-            $query = new Query($query);
+            $query = new Query($builtQuery);
             $query->addSort(['_score' => 'desc']);
         } elseif (Constant::ORDER_BY_CREATED_AT === $orderBy) {
-            $query   = new Query($builder->getQuery());
+            $query = new Query($builder->getQuery());
             $query->addSort(['createdAt' => 'desc']);
         } else {
             $query = new Query($builder->getQuery());
