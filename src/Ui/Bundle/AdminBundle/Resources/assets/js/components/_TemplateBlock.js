@@ -11,13 +11,15 @@ var $        = require('jquery'),
  */
 function TemplateBlock(element, builder)
 {
-  this.element         = element;
-  this.builder         = builder;
-  this.config          = JSON.parse(this.element.getAttribute('data-config'));
-  this.configureModal  = element.querySelector('.configure-modal');
+  this.element = element;
+  this.builder = builder;
+  this.config = JSON.parse(this.element.getAttribute('data-config'));
+  this.configureModal = element.querySelector('.configure-modal');
   this.configureButton = element.querySelector('.configure-button');
-  this.form            = new Form(this.configureModal);
-  this.saveButton      = this.configureModal.querySelector('.save-configuration');
+  this.upButton = element.querySelector('.up-button');
+  this.downButton = element.querySelector('.down-button');
+  this.form = new Form(this.configureModal);
+  this.saveButton = this.configureModal.querySelector('.save-configuration');
 
   // UID
   this.uid = element.getAttribute('data-uid');
@@ -40,7 +42,28 @@ function TemplateBlock(element, builder)
   // Modal behavior
   this.configureButton.addEventListener('click', this.configureButtonClicked.bind(this));
   this.saveButton.addEventListener('click', this.saveButtonClicked.bind(this));
+
+  // Up and down buttons behavior if they exists
+  if (null !== this.upButton) {
+    this.upButton.addEventListener('click', this.upButtonClicked.bind(this));
+  }
+
+  if (null !== this.downButton) {
+    this.downButton.addEventListener('click', this.downButtonClicked.bind(this));
+  }
 }
+
+TemplateBlock.prototype.upButtonClicked = function (event)
+{
+  event.preventDefault();
+  console.log('up');
+};
+
+TemplateBlock.prototype.downButtonClicked = function (event)
+{
+  event.preventDefault();
+  console.log('down');
+};
 
 TemplateBlock.prototype.configureButtonClicked = function (event)
 {
