@@ -1,9 +1,11 @@
 {% extends 'AdminBundle::base.html.twig' %}
 
+{% block title registrationTemplate.title %}
+
 {% block body %}
     {{ include('AdminBundle:Common:menu.html.twig') }}
 
-    <div class="container-fluid template-builder-container">
+    <div class="container-fluid template-builder-container" data-registration-template-builder="">
         <div class="template-builder-header">
             <h1 class="pull-left">{{ registrationTemplate.title }}</h1>
 
@@ -22,7 +24,7 @@
             <div class="template-container container-fluid block-inner" id="template-container">
                 {% for uid, item in registrationTemplate.value|default([]) %}
                     {% if item.component == 'block' %}
-                        {{ include('AdminBundle:Template/Block:' ~ item.type ~ '.html.twig', {
+                        {{ include('AdminBundle:RegistrationTemplate:block.html.twig', {
                             'uid': uid, 'children': item.children, 'config': item.config, 'locale': locale,
                             'fallback': registrationTemplate.fallback, 'nomenclatures': nomenclatures,
                             'sheet_tags': sheetTags, 'products': []
