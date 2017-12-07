@@ -10,11 +10,11 @@
                     <i class="glyphicon glyphicon-arrow-up"></i>
                 </span>
             </li>
-            {#<li>#}
-                {#<button class="btn btn-link delete-button">#}
-                    {#<i class="glyphicon glyphicon-remove"></i>#}
-                {#</button>#}
-            {#</li>#}
+            <li>
+                <button class="btn btn-link delete-button" data-confirmation-message="{{ 'admin.event.registration.template_builder.remove_confirm'|trans }}">
+                    <i class="glyphicon glyphicon-remove"></i>
+                </button>
+            </li>
             <li>
                 <span class="btn btn-link down-button">
                     <i class="glyphicon glyphicon-arrow-down"></i>
