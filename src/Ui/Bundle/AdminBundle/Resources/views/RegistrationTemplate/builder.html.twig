@@ -5,7 +5,14 @@
 {% block body %}
     {{ include('AdminBundle:Common:menu.html.twig') }}
 
-    <div class="container-fluid template-builder-container" data-registration-template-builder="">
+    <div
+        class="container-fluid template-builder-container"
+        data-registration-template-builder="{{ path('admin_template_registration_save', {
+            'registrationTemplate': registrationTemplate.id,
+            'locale': locale
+        }) }}"
+        data-locale="{{ locale }}"
+    >
         <div class="template-builder-header">
             <h1 class="pull-left">{{ registrationTemplate.title }}</h1>
 
@@ -17,6 +24,14 @@
                     completeness: completeness,
                     routeName: 'admin_template_registration_build',
                 }, false) }}
+
+                <button
+                    class="btn btn-success"
+                    id="template-save-button"
+                    data-loading-button="{{ ('<i class="glyphicon glyphicon-refresh spin"></i> ' ~ ('admin.template.action.updating'|trans))|e }}"
+                >
+                    {{ 'admin.template.action.save'|trans }}
+                </button>
             </div>
         </div>
 

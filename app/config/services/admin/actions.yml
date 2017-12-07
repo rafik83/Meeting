@@ -7,3 +7,8 @@ services:
             - '@form.factory'
             - '@repository.nomenclature_repository'
             - '@adapter.router'
+
+    Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\RegistrationTemplate\SaveAction:
+        arguments:
+            - '@adapter.authorization_checker'
+            - '@tactician.commandbus'
