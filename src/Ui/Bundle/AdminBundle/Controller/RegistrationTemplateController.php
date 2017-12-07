@@ -50,8 +50,11 @@ class RegistrationTemplateController extends Controller
      *
      * @return Response
      */
-    public function updateJsonAction(Request $request, RegistrationTemplate $registrationTemplate, $locale)
-    {
+    public function updateJsonAction(
+        Request $request,
+        RegistrationTemplate $registrationTemplate,
+        string $locale
+    ): Response {
         $this->denyAccessUnlessGranted('ROLE_ALLOWED_TO_ORGANIZE');
         $this->denyAccessUnlessGranted(AdminTemplateAccessVoter::PERMISSION_TEMPLATE_EDIT, $registrationTemplate);
 
