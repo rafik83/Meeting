@@ -58,13 +58,13 @@ class TypeListView
         $package,
         bool $hasSpecificPaymentConditions = false
     ) {
-        $this->id                   = $id;
-        $this->position             = $position;
-        $this->title                = $title;
-        $this->hidden               = $hidden;
-        $this->registrationTemplate = $registrationTemplate;
-        $this->sheetTemplate        = $sheetTemplate;
-        $this->package              = $package;
+        $this->id                           = $id;
+        $this->position                     = $position;
+        $this->title                        = $title;
+        $this->hidden                       = $hidden;
+        $this->registrationTemplate         = $registrationTemplate;
+        $this->sheetTemplate                = $sheetTemplate;
+        $this->package                      = $package;
         $this->hasSpecificPaymentConditions = $hasSpecificPaymentConditions;
     }
 }
