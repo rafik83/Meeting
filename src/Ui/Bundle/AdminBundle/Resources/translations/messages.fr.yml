@@ -947,7 +947,7 @@ admin.type.register.link: 'Lien d''inscription'
 admin.type.registration.template: 'Template d''inscription'
 admin.type.remove.link: Supprimer
 admin.type.sheet.template: 'Template de présentation'
-admin.type.specificPaymentConditions: Conditions de paiement particulière
+admin.type.specificPaymentConditions: 'Conditions de paiement particulières'
 admin.type.title: Titre
 admin.type.update.link: Modifier
 admin.type.paymentConditions.link: 'Conditions de paiement'
