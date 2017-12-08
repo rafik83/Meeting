@@ -22,7 +22,7 @@ class Update implements Command
     public $specificPaymentConditions;
 
     /** @var bool */
-    public $allowDeposit;
+    public $allowDeposit = false;
 
     /** @var \DateTimeInterface|null */
     public $depositUntil;
@@ -41,8 +41,7 @@ class Update implements Command
      */
     public function __construct(Type $type)
     {
-        $this->type = $type;
-
+        $this->type        = $type;
         $paymentConditions = $type->getPaymentConditions();
 
         $this->specificPaymentConditions = $paymentConditions instanceof Type\PaymentConditions;
