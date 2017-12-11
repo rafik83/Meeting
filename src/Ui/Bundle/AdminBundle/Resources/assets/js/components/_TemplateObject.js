@@ -36,7 +36,9 @@ function TemplateObject(element, locale)
   // Buttons
   this.deleteButton.addEventListener('click', this.deleteButtonClicked.bind(this));
   this.configureButton.addEventListener('click', this.configureButtonClicked.bind(this));
-  this.saveButton.addEventListener('click', this.saveButtonClicked.bind(this));
+  if (null !== this.saveButton) {
+    this.saveButton.addEventListener('click', this.saveButtonClicked.bind(this));
+  }
 
   // Object
   if (this.type === 'text') {

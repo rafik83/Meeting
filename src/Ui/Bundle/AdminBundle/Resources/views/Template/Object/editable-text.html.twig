@@ -96,9 +96,11 @@
                                     <label class="form-label">{{ 'template.object.tag'|trans }}</label>
                                     <select class="form-control" name="tag">
                                         <option value=""></option>
-                                        {% for tag in sheet_tags %}
-                                            <option value="{{ tag }}">{{ ('template.tag.' ~ tag)|trans }}</option>
-                                        {% endfor %}
+                                        {% if sheet_tags is defined %}
+                                            {% for tag in sheet_tags %}
+                                                <option value="{{ tag }}">{{ ('template.tag.' ~ tag)|trans }}</option>
+                                            {% endfor %}
+                                        {% endif %}
                                     </select>
                                 </div>
                             </div>
