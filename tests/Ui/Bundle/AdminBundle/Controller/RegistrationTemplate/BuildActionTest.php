@@ -95,7 +95,7 @@ class BuildActionTest extends TestCase
                 'locale' => 'fr',
                 'nomenclatures' => [],
                 'registrationTemplate' => $registrationTemplate->reveal(),
-                'sheetTags' => Tag::getTemplateChoiceTags(),
+                'sheet_tags' => Tag::getRegisterTemplateChoiceTags(),
             ])
             ->shouldBeCalled()
             ->willReturn($response->reveal())
@@ -150,7 +150,7 @@ class BuildActionTest extends TestCase
                 'locale' => 'fr',
                 'nomenclatures' => [],
                 'registrationTemplate' => $registrationTemplate->reveal(),
-                'sheetTags' => Tag::getTemplateChoiceTags(),
+                'sheet_tags' => Tag::getRegisterTemplateChoiceTags(),
             ])
             ->shouldBeCalled()
             ->willReturn($response->reveal())
