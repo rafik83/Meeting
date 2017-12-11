@@ -1,3 +1,4 @@
 Proximum\Vimeet\Application\Command\Tip\Event\Affect:
-    constraints:
-        - Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Validator\Constraint\Tip\AffectConstraint: ~
+    properties:
+        tip:
+            - NotBlank: ~
