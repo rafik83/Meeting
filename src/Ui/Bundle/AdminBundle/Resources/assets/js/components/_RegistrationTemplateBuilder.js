@@ -9,6 +9,7 @@ var LoadingButton = require('./_LoadingButton'),
  */
 function RegistrationTemplateBuilder(element) {
   this.element = element;
+  this.url = element.getAttribute('data-registration-template-builder');
   this.templateContainer = element.querySelector('#template-container');
 
   var saveButton = element.querySelector('#template-save-button');
@@ -68,6 +69,37 @@ RegistrationTemplateBuilder.prototype.save = function () {
 
   xhr.open('POST', this.url);
   xhr.send(JSON.stringify(this.normalize(this.templateContainer)));
+};
+
+RegistrationTemplateBuilder.prototype.normalize = function (item)
+{
+  var blockType  = item.getAttribute('data-block');
+  var objectType = item.getAttribute('data-object');
+
+  if (blockType !== null && blockType !== undefined) {
+    return {
+      component: 'block',
+      type: blockType,
+      children: [].map.call(this.inners(item), function (child) {
+        return this.normalize(child);
+      }.bind(this)),
+      config: item.templateBlock.config
+    }
+  }
+
+  if (objectType !== null && objectType !== undefined) {
+    return item.templateObject.normalize();
+  }
+
+  var config = {};
+
+  [].forEach.call(this.children(item), function (child) {
+    var template = child.templateBlock || child.templateObject;
+    console.log(child, template);
+    config[template.uid] = this.normalize(child);
+  }.bind(this));
+
+  return config;
 };
 
 module.exports = RegistrationTemplateBuilder;
