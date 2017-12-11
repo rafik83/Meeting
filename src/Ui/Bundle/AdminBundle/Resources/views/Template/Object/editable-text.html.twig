@@ -13,7 +13,6 @@
     tag: null,
 }|merge(config|default({})) %}
 
-
 <div class="object" data-object="editable-text" data-uid="{{ uid|default('__UID__') }}" data-config="{{ config|json_encode }}">
     <ul class="block-buttons list-inline">
         <li class="object-title">{{ 'template.object.editable-text'|trans }}</li>
@@ -87,13 +86,22 @@
                                 <div class="form-group">
                                     <label class="form-label">{{ 'template.type.title'|trans }}</label>
                                     <select class="form-control" name="type">
-                                        {% for label, value in { 'Titre': 'title', 'Texte': 'text' } %}
+                                        {% if isRegistrationTemplate is defined %}
+                                            {% set types = { 'Textarea': 'textarea', 'Texte': 'text' } %}
+                                        {% else %}
+                                            {% set types = { 'Title': 'title', 'Texte': 'text' } %}
+                                        {% endif %}
+                                        {% for label, value in types %}
                                             <option value="{{ value }}">{{ label }}</option>
                                         {% endfor %}
                                     </select>
                                 </div>
                                 <div class="form-group">
-                                    <label class="form-label">{{ 'template.object.tag'|trans }}</label>
+                                    {% if isRegistrationTemplate is defined %}
+                                        <label class="form-label">{{ 'template.registration.tag'|trans }}</label>
+                                    {% else %}
+                                        <label class="form-label">{{ 'template.object.tag'|trans }}</label>
+                                    {% endif %}
                                     <select class="form-control" name="tag">
                                         <option value=""></option>
                                         {% if sheet_tags is defined %}
