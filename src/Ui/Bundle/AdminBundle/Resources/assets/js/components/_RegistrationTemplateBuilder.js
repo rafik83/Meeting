@@ -1,6 +1,7 @@
 var LoadingButton = require('./_LoadingButton'),
     TemplateBlock = require('./_TemplateBlock'),
     guidGenerator = require('./_GuidGenerator'),
+    normalizeTemplate = require('./_NormalizeTemplate'),
     Sortable = require('./_Sortable'),
     TemplateObject = require('./_TemplateObject');
 
@@ -89,32 +90,7 @@ RegistrationTemplateBuilder.prototype.save = function () {
 
 RegistrationTemplateBuilder.prototype.normalize = function (item)
 {
-  var blockType  = item.getAttribute('data-block');
-  var objectType = item.getAttribute('data-object');
-
-  if (blockType !== null && blockType !== undefined) {
-    return {
-      component: 'block',
-      type: blockType,
-      children: [].map.call(this.inners(item), function (child) {
-        return this.normalize(child);
-      }.bind(this)),
-      config: item.templateBlock.config
-    }
-  }
-
-  if (objectType !== null && objectType !== undefined) {
-    return item.templateObject.normalize();
-  }
-
-  var config = {};
-
-  [].forEach.call(this.children(item), function (child) {
-    var template = child.templateBlock || child.templateObject;
-    config[template.uid] = this.normalize(child);
-  }.bind(this));
-
-  return config;
+  return normalizeTemplate(this, item);
 };
 
 RegistrationTemplateBuilder.prototype.list = function (element, name)
