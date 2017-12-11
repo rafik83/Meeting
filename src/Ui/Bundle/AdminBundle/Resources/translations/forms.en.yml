@@ -106,12 +106,14 @@ form.event_configure_date.children.schedulePublishDate.label: 'Publication of th
 form.event_configure_date.children.submit.label: Save
 form.event_create.children.country.label: Country
 form.event_create.children.currency.label: Currency
+form.event_create.children.invoicePrefix.label: 'Invoicing Prefix'
 form.event_create.children.mode.label: Mode
 form.event_create.children.submit.label: Save
 form.event_create.children.vat.label: 'VAT (%)'
 form.event_payment_conditions_update.children.minimumForDeposit.label: 'Total amount from which the deposit is applicable'
 form.event_payment_conditions_update.children.submit.label: Save
 form.event_practical_info_update.children.submit.label: Save
+form.event_update.children.invoicePrefix.label: 'Invoicing prefix'
 form.event_update.children.mode.label: Mode
 form.event_update.children.submit.label: Save
 form.event_update.children.vat.label: 'VAT (%)'
@@ -295,6 +297,7 @@ form.transaction.children.transaction_mode.bank_cash: Cash
 form.transaction.children.transaction_mode.bank_check: Cheque
 form.transaction.children.transaction_mode.bank_transfer: Transfer
 form.transaction.children.transaction_mode.paypal: Paypal
+form.type_create.children.package.label: 'Package of participation template'
 form.type_create.children.submit.label: Save
 form.type_create.children.validationCriteria.children.sheetAccepted.label: 'Profile approved'
 form.type_template_field_update_lib_choice.children.choices.label_add: Add
@@ -303,6 +306,7 @@ form.type_template_field_update_lib_choice.children.required.label: Mandatory
 form.type_template_field_update_lib_choice.children.submit.label: Save
 form.type_template_field_update.children.required.label: Mandatory
 form.type_template_field_update.children.submit.label: Save
+form.type_update.children.package.label: 'Package of participation template'
 form.type_update.children.submit.label: Save
 form.type_update.children.validationCriteria.children.sheetAccepted.label: 'Profile approved'
 form.unavailability_category_create.children.submit.label: Save

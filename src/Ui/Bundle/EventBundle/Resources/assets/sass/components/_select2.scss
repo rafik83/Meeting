@@ -36,7 +36,7 @@
 // change input content style on mobile only
 @media screen and (max-width: 767px) {
   .select2-search__field {
-    font-family: 'OpenSans';
+    font-family: OpenSans, Helvetica, sans-serif;
     font-size: 15px;
     text-transform: uppercase;
   }

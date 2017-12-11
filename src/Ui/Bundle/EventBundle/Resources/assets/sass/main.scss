@@ -63,10 +63,11 @@
 
 @import "objects/_agenda";
 @import "objects/_program";
-@import "objects/catalog-mobile-filters";
+@import "objects/_catalog-mobile-filters";
 @import "objects/_tip";
-@import "objects/messages";
+@import "objects/_messages";
 
+@import "generic/_titles";
 @import "generic/_buttons";
 @import "generic/_table";
 @import "generic/_lists";
@@ -237,7 +238,7 @@
 }
 
 .product-limite {
-  font-family: 'OpenSans';
+  font-family: OpenSans, Helvetica, sans-serif;
   background: #F2E63D;
   display: inline-block;
   padding: 8px;

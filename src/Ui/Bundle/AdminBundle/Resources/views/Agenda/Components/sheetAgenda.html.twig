@@ -17,7 +17,7 @@
                         </div>
                         <p class="text-center">
                             ${ participant.fullname }
-                            <span v-if="participant.isAttending === true && participant.isSmsActivateDatePassed === true">
+                            <span v-if="participant.isAttending === true && participant.isSmsActivateDatePassed === true && participant.isPhoneValidated === true">
                                 <button
                                     v-if="!participant.stopSMS"
                                     class="btn btn-default btn-xs pull-right text-center"

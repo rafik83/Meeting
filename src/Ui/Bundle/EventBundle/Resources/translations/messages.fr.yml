@@ -19,9 +19,9 @@ agenda.unavailability.add: 'Ajouter une indisponibilité'
 agenda.unavailability.back: Retour
 agenda.unavailability.confirmRemove: 'Confirmer la suppression de l''indisponibilité ?'
 agenda.unavailability.remove: Supprimer
-availability.confirmation.title: 'Confirmer vos disponibilités'
-availability.confirmation.explanation.title: 'Afin d''accéder à la prise de rendez-vous nous vous remercions de confirmer vos disponibilités pour la planification des rendez-vous.'
 availability.confirmation.action.add_unavailability: 'Ajouter une indisponibilité'
+availability.confirmation.explanation.title: 'Afin d''accéder à la prise de rendez-vous nous vous remercions de confirmer vos disponibilités pour la planification des rendez-vous.'
+availability.confirmation.title: 'Confirmer vos disponibilités'
 'Bad credentials.': 'Identifiants incorrects'
 billing_info.title: 'Info de facturation'
 catalog.action.meeting.proposition.approved: 'Proposition acceptée'

@@ -15,6 +15,8 @@ agenda.unavailability.add: 'Add an unavailability'
 agenda.unavailability.back: Back
 agenda.unavailability.confirmRemove: 'Confirm your absence'
 agenda.unavailability.remove: Remove
+availability.confirmation.explanation.title: 'In order to have access to your meeting requests, please confirm your availability on your schedule.'
+availability.confirmation.title: 'Confirm your availabilities'
 'Bad credentials.': 'Bad credentials.'
 billing_info.title: 'Billing information'
 catalog.action.meeting.proposition.approved: 'Approved proposal'
@@ -173,7 +175,9 @@ nomenclature.back_to_sheet: 'Back to sheet'
 nomenclature.select_all: 'Select all'
 nomenclature.select_none: none
 nomenclature.submit: Save
+notification.category.package.label: 'Package of participation'
 notification.category.sheet.label: 'Presentation sheet'
+notification.category.transaction.label: Invoicing
 notification.columns.category: Heading
 notification.columns.createdAt: 'Received on'
 notification.columns.description: Description

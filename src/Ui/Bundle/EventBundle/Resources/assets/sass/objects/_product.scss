@@ -16,7 +16,7 @@
 
     .step-number-title {
         font-size: 20px;
-        font-family: 'OpenSans';
+        font-family: OpenSans, Helvetica, sans-serif;
         font-weight: bold;
         border-width: 2px 0;
         color: #FFF;
@@ -73,7 +73,7 @@
 
             .user__formule {
                 border-left: solid 1px #CCC;
-                font-family: 'OpenSans';
+                font-family: OpenSans, Helvetica, sans-serif;
                 padding: 25px 0;
                 height: 145px;
                 width: 50%;
@@ -154,14 +154,14 @@
                                 padding-top: 0;
                             }
                             dt {
-                                font-family: 'OpenSans';
+                                font-family: OpenSans, Helvetica, sans-serif;
                                 font-size: 18px;
                             }
                             dd { padding-bottom: 10px; }
                         }
 
                         .product {
-                            font-family: 'OpenSans';
+                            font-family: OpenSans, Helvetica, sans-serif;
 
                             h2 { margin-bottom: 0; }
                             h3 { margin-bottom: 0; }
@@ -198,7 +198,7 @@
                                 margin-left: -8px;
                                 margin-top: 0;
                                 font-weight: bold;
-                                font-family: 'OpenSans';
+                                font-family: OpenSans, Helvetica, sans-serif;
                             }
 
                             .qty {
@@ -264,7 +264,7 @@
             }
 
             thead {
-                font-family: 'OpenSans';
+                font-family: OpenSans, Helvetica, sans-serif;
                 color: $color-highlighted;
                 text-transform: uppercase;
 
@@ -291,14 +291,14 @@
                             padding-top: 0;
                         }
                         dt {
-                            font-family: 'OpenSans';
+                            font-family: OpenSans, Helvetica, sans-serif;
                             font-size: 18px;
                         }
                         dd { padding-bottom: 10px; }
                     }
 
                     .product {
-                        font-family: 'OpenSans';
+                        font-family: OpenSans, Helvetica, sans-serif;
 
                         h2 { margin-bottom: 0; }
                         h3 { margin-bottom: 0; }
@@ -348,7 +348,7 @@
                             margin-left: -8px;
                             margin-top: 0;
                             font-weight: bold;
-                            font-family: 'OpenSans';
+                            font-family: OpenSans, Helvetica, sans-serif;
                         }
 
                         .qty {
