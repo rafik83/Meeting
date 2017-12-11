@@ -13,6 +13,7 @@ var LoadingButton = require('./_LoadingButton'),
 function RegistrationTemplateBuilder(element) {
   this.element = element;
   this.url = element.getAttribute('data-registration-template-builder');
+  this.locale = element.getAttribute('data-locale');
   this.templateContainer = element.querySelector('#template-container');
 
   var saveButton = element.querySelector('#template-save-button');
@@ -110,7 +111,6 @@ RegistrationTemplateBuilder.prototype.normalize = function (item)
 
   [].forEach.call(this.children(item), function (child) {
     var template = child.templateBlock || child.templateObject;
-    console.log(child, template);
     config[template.uid] = this.normalize(child);
   }.bind(this));
 
