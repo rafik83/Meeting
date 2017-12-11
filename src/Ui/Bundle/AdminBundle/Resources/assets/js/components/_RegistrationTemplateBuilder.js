@@ -17,7 +17,6 @@ function RegistrationTemplateBuilder(element) {
   this.objectList = element.querySelector('#object-list');
   this.list(this.objectList, 'object-reference');
 
-  this.sortable(this.templateContainer);
   this.init(this.templateContainer);
 }
 
@@ -67,36 +66,6 @@ RegistrationTemplateBuilder.prototype.list = function (element, name)
     }.bind(this),
     onEnd: function () {
       this.drag = false;
-    }.bind(this)
-  });
-};
-
-RegistrationTemplateBuilder.prototype.sortable = function (element)
-{
-  new Sortable(element, {
-    group: { name: 'block-list', pull: true, put: ['block-reference', 'object-reference', 'block-inner'] },
-    handle: '.move-button',
-    onStart: function () {
-      this.closeMenu();
-      this.drag = true;
-    }.bind(this),
-    onEnd: function () {
-      if (this.wasOpen) {
-        this.openMenu();
-      }
-
-      this.drag = false;
-    }.bind(this),
-    onAdd: function (event) {
-
-      if (event.item.parentNode === event.from) {
-        return;
-      }
-
-      if (event.from === this.objectList) {
-        this.addObject(event.item);
-      }
-
     }.bind(this)
   });
 };
