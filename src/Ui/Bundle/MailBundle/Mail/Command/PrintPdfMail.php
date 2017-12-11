@@ -1,9 +1,9 @@
 <?php
 
 /*
- * This file is part of the vimeet project.
+ * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) vimeet
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -34,12 +34,12 @@ class PrintPdfMail extends AbstractMail
     public $fileId;
 
     /**
-     * @param Event  $event
-     * @param string $sender
-     * @param string $receiver
-     * @param string $locale
-     * @param string $fileHash
-     * @param string $fileId
+     * @param Event    $event
+     * @param string   $sender
+     * @param string   $receiver
+     * @param string   $locale
+     * @param string   $fileHash
+     * @param int|null $fileId
      */
     public function __construct(
         Event $event,
@@ -47,8 +47,7 @@ class PrintPdfMail extends AbstractMail
         string $receiver,
         string $locale,
         string $fileHash,
-        string $fileId
-
+        int $fileId = null
     ) {
         parent::__construct($sender, $receiver, $locale);
 

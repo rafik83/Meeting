@@ -45,6 +45,11 @@ security:
             host: '%admin_domain%'
             security: false
 
+        jenkins:
+            pattern: '^/jenkins/callback'
+            host: '%admin_domain%'
+            security: false
+
         admin:
             anonymous: ~
             host: '%admin_domain%'
