@@ -17,7 +17,7 @@
 #      | @InfrastructureBundle/DataFixtures/ORM/User.yml                          |
 #      | @InfrastructureBundle/DataFixtures/ORM/RdvCarnot2016-Sheet.yml           |
 #      | @InfrastructureBundle/DataFixtures/ORM/Meeting/RdvCarnot2016-Request.yml |
-#    Given I am logged with "test@elao.com" on event "http://rdv-carnot-2016.vimeet.proximum.dev"
+#    Given I am logged with "test@elao.com" on event "http://rdv-carnot-2016.vimeet.proximum"
 #    And I go to this page "/fr/"
 #    When I go to this page "/fr/sheet/1/meeting/request"
 #    Then I should see "event.meeting.request.state.from.sent"
@@ -29,13 +29,13 @@
 #    And I should see "flash.meeting_request.edit.success"
 #
 #  Scenario: I can list my meeting request
-#    Given I am logged with "test@elao.com" on event "http://rdv-carnot-2016.vimeet.proximum.dev"
+#    Given I am logged with "test@elao.com" on event "http://rdv-carnot-2016.vimeet.proximum"
 #    And I go to this page "/fr/"
 #    When I go to this page "/fr/sheet/1/meeting/request"
 #    Then I should see "event.meeting.request.state.from.approved"
 #
 #  Scenario: I can list my meeting proposition
-#    Given I am logged with "test@elao.com" on event "http://rdv-carnot-2016.vimeet.proximum.dev"
+#    Given I am logged with "test@elao.com" on event "http://rdv-carnot-2016.vimeet.proximum"
 #    And I go to this page "/fr/"
 #    When I go to this page "/fr/sheet/1/meeting/proposition"
 #    Then I should see "event.meeting.request.state.to.approved"

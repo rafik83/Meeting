@@ -16,7 +16,7 @@ Feature: Agenda
       | @InfrastructureBundle/DataFixtures/ORM/ASDDays2016-Sheet.yml               |
       | @InfrastructureBundle/DataFixtures/ORM/ASDDays2016-Rule.yml                |
       | @InfrastructureBundle/DataFixtures/ORM/Unavailability/ASDDays2016-Mass.yml |
-    When I am logged with "user_asddays_2@proximum.com" on event "http://asddays-2016.vimeet.proximum.dev"
+    When I am logged with "user_asddays_2@proximum.com" on event "http://asddays-2016.vimeet.proximum"
     And I go to this page "/fr"
     Then I should be on this page "/fr/sheet/2"
     When I go to this page "/fr/sheet/2/agenda"

@@ -20,7 +20,7 @@
       | @InfrastructureBundle/DataFixtures/ORM/RdvCarnot2016-Sheet.yml           |
       | @InfrastructureBundle/DataFixtures/ORM/Meeting/RdvCarnot2016-Request.yml |
       | @InfrastructureBundle/DataFixtures/ORM/Tip.yml                           |
-    And I am logged with "test@elao.com" on event "http://rdv-carnot-2016.vimeet.proximum.dev"
+    And I am logged with "test@elao.com" on event "http://rdv-carnot-2016.vimeet.proximum"
     And I go to this page "/fr"
     When I go to this page "/fr/sheet/1/meeting/request"
     Then I should see "tip_title"
@@ -43,6 +43,6 @@
       | @InfrastructureBundle/DataFixtures/ORM/Meeting/RdvCarnot2016-Request.yml |
       | @InfrastructureBundle/DataFixtures/ORM/Tip.yml                           |
     And elastica is populate
-    And I am logged with "test@elao.com" on event "http://rdv-carnot-2016.vimeet.proximum.dev"
+    And I am logged with "test@elao.com" on event "http://rdv-carnot-2016.vimeet.proximum"
     And I go to this page "/fr/catalog"
     Then I should see "tip_title"
