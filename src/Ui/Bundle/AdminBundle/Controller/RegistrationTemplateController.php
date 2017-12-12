@@ -45,33 +45,36 @@ class RegistrationTemplateController extends Controller
 
     /**
      * @param Request              $request
-     * @param RegistrationTemplate $template
+     * @param RegistrationTemplate $registrationTemplate
      * @param string               $locale
      *
      * @return Response
      */
-    public function builderAction(Request $request, RegistrationTemplate $template, $locale)
-    {
+    public function updateJsonAction(
+        Request $request,
+        RegistrationTemplate $registrationTemplate,
+        string $locale
+    ): Response {
         $this->denyAccessUnlessGranted('ROLE_ALLOWED_TO_ORGANIZE');
-        $this->denyAccessUnlessGranted(AdminTemplateAccessVoter::PERMISSION_TEMPLATE_EDIT, $template);
+        $this->denyAccessUnlessGranted(AdminTemplateAccessVoter::PERMISSION_TEMPLATE_EDIT, $registrationTemplate);
 
-        $update     = new Update($template);
+        $update     = new Update($registrationTemplate);
         $updateForm = $this->createForm(UpdateType::class, $update, [
             'submit' => true,
         ]);
 
         $addLocaleForm = null;
 
-        if (!$template->getEvent()) {
-            $addLocaleForm = $this->createForm(AddLocaleType::class, new AddLocale($template), [
+        if (!$registrationTemplate->getEvent()) {
+            $addLocaleForm = $this->createForm(AddLocaleType::class, new AddLocale($registrationTemplate), [
                 'action'   => $this->generateUrl('admin_template_registration_add_locale',
-                    ['template' => $template->getId()]),
+                    ['template' => $registrationTemplate->getId()]),
                 'submit'   => true,
-                'template' => $template,
+                'template' => $registrationTemplate,
             ]);
         }
 
-        $completeness  = $this->get('sheet.template.completeness_calculator')->compute($template);
+        $completeness  = $this->get('sheet.template.completeness_calculator')->compute($registrationTemplate);
         $incompletes   = array_keys(array_filter($completeness, function ($percent) { return $percent < 100; }));
 
         if ($updateForm->handleRequest($request)->isSubmitted() && $updateForm->isValid()) {
@@ -79,9 +82,9 @@ class RegistrationTemplateController extends Controller
                 $this->get('tactician.commandbus')->handle($update);
                 $this->addFlash('success', 'flash.admin.template.registration.update.success');
 
-                return $this->redirectToRoute('admin_template_registration_builder', [
-                    'template' => $template->getId(),
-                    'locale'   => $locale,
+                return $this->redirectToRoute('admin_template_registration_json', [
+                    'registrationTemplate' => $registrationTemplate->getId(),
+                    'locale' => $locale,
                 ]);
             } catch (NomenclatureNotFoundException $exception) {
                 $this->addFlash('error', 'flash.admin.template.registration.update.error.nomenclatureNotFound');
@@ -105,13 +108,13 @@ class RegistrationTemplateController extends Controller
             $this->addFlash('warning', 'flash.template.incomplete_translations.warning');
         }
 
-        return $this->render('AdminBundle:RegistrationTemplate:builder.html.twig', [
-            'template'        => $template,
+        return $this->render('AdminBundle:RegistrationTemplate:updateJson.html.twig', [
+            'template'        => $registrationTemplate,
             'locale'          => $locale,
             'form'            => $updateForm->createView(),
             'add_locale_form' => $addLocaleForm ? $addLocaleForm->createView() : null,
             'completeness'    => $completeness,
-            'event'           => $template->getEvent(),
+            'event'           => $registrationTemplate->getEvent(),
         ]);
     }
 
@@ -138,16 +141,16 @@ class RegistrationTemplateController extends Controller
             if ($addLocaleForm->isValid()) {
                 $this->get('tactician.commandbus')->handle($addLocale);
 
-                return $this->redirectToRoute('admin_template_registration_builder', [
-                    'template' => $template->getId(),
-                    'locale'   => $addLocale->locale,
+                return $this->redirectToRoute('admin_template_registration_build', [
+                    'registrationTemplate' => $template->getId(),
+                    'locale' => $addLocale->locale,
                 ]);
             } else {
                 $this->addFlash('error', (string) $addLocaleForm->getErrors(true));
             }
         }
 
-        return $this->redirectToRoute('admin_template_sheet_builder', [
+        return $this->redirectToRoute('admin_template_registration_build', [
             'template' => $template->getId(),
             'locale'   => $template->getFallback(),
         ]);

@@ -168,6 +168,7 @@ admin.event.paymentConditions.typeWithSpecificPaymentConditions: 'Liste des type
 admin.event.paymentConditions.update.title: 'Modifier les conditions de paiement'
 admin.event.practicalInfo.link: 'Informations Pratiques'
 admin.event.practicalInfo.update.title: 'Modifier les informations pratiques'
+admin.event.registration.template_builder.remove_confirm: 'Confirmez vous la suppression de cet élément ?'
 admin.event.search_facet.enabled.label: Activé
 admin.event.search_facet.title: 'Filtres du catalogue'
 admin.event.search_facets.link: 'Filtres catalogue'
@@ -859,12 +860,14 @@ admin.template.blocks: Blocs
 admin.template.objects: Objets
 admin.template.objectsListEmpty: 'Aucun objet disponible'
 admin.template.preview.title: 'Aperçu du catalogue'
+admin.template.registration.addLocale: 'Ajouter une langue'
 admin.template.registration.link: 'Template d''Inscription'
 admin.template.registration.table.column.action: Action
 admin.template.registration.table.column.createdAt: 'Créé le'
 admin.template.registration.table.column.eventType: Événement/Type(s)
 admin.template.registration.table.column.title: Titre
 admin.template.registration.table.content.edit: Modifier
+admin.template.registration.table.content.editJson: Modifier JSON
 admin.template.registration.title: 'Templates d''Inscription'
 admin.template.registration.titleOrganizer: 'Templates d''Inscription des organisateurs'
 admin.template.registration.update: 'Modifier le template d''Inscription'

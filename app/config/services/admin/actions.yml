@@ -41,6 +41,18 @@ services:
             - '@templating'
 
     #
+    # Registration Template
+    #
+    Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\RegistrationTemplate\BuildAction:
+        arguments:
+            - '@adapter.authorization_checker'
+            - '@sheet.template.completeness_calculator'
+            - '@templating'
+            - '@form.factory'
+            - '@repository.nomenclature_repository'
+            - '@adapter.router'
+
+    #
     # Tip Event Actions
     #
     Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Tip\Event\CreateAction:
@@ -122,3 +134,4 @@ services:
             - '@templating'
             - '@tactician.commandbus'
             - '@adapter.router'
+
