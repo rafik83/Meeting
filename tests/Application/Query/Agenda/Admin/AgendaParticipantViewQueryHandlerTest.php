@@ -91,6 +91,7 @@ class AgendaParticipantViewQueryHandlerTest extends TestCase
         $this->participant->getUser()->willReturn($user->reveal());
         $this->participant->getId()->willReturn(123);
         $userEventPhone->isStop()->shouldBeCalled()->willReturn(false);
+        $userEventPhone->isValidated()->shouldBeCalled()->willReturn(true);
         $user->getEmail()->willReturn('email@example.net');
         $this->sheet->attend()->willReturn(true);
 
@@ -189,6 +190,7 @@ class AgendaParticipantViewQueryHandlerTest extends TestCase
             [$dayView1->reveal(), $dayView2->reveal()],
             true,
             true,
+            true,
             false
         );
 
@@ -204,6 +206,7 @@ class AgendaParticipantViewQueryHandlerTest extends TestCase
         $this->participant->getUser()->willReturn($user->reveal());
         $this->participant->getId()->willReturn(123);
         $userEventPhone->isStop()->shouldBeCalled()->willReturn(true);
+        $userEventPhone->isValidated()->shouldBeCalled()->willReturn(false);
         $user->getEmail()->willReturn('email@example.net');
         $this->sheet->attend()->willReturn(true);
 
@@ -279,6 +282,7 @@ class AgendaParticipantViewQueryHandlerTest extends TestCase
             'email@example.net',
             [$dayView1->reveal()],
             true,
+            false,
             false,
             true
         );

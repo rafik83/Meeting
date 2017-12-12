@@ -1,0 +1,11 @@
+Proximum\Vimeet\Application\Command\Tip\Event\Create:
+    properties:
+        title:
+            - NotBlank: ~
+        translations:
+            - All:
+                - Collection:
+                    fields:
+                        title: ~
+                        content:
+                            - NotBlank: ~

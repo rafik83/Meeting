@@ -10,7 +10,7 @@ ul {
 .list--block {
   > li {
     color: $color-highlighted;
-    font-family: openSans;
+    font-family: OpenSans, Helvetica, sans-serif;
     padding: 5px 10px;
     background: #FFFFFF;
 
@@ -115,7 +115,7 @@ ul {
   .user__infos {
     .job {
       color: $color-highlighted;
-      font-family: openSans;
+      font-family: OpenSans, Helvetica, sans-serif;
       text-transform: uppercase;
     }
 

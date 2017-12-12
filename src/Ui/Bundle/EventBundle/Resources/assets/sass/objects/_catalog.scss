@@ -27,7 +27,7 @@
 
   .select-all {
     text-transform: uppercase;
-    font-family: OpenSans;
+    font-family: OpenSans, Helvetica, sans-serif;
     font-weight: bold;
     font-size: 18px;
   }
@@ -47,7 +47,7 @@
 
     strong {
       text-transform: uppercase;
-      font-family: OpenSans;
+      font-family: OpenSans, Helvetica, sans-serif;
       font-weight: bold;
       font-size: 18px;
       margin-left: 20px;
@@ -202,7 +202,7 @@
         width: 60%;
 
         strong {
-          font-family: OpenSans;
+          font-family: OpenSans, Helvetica, sans-serif;
           color: $color-highlighted;
           margin-left: 5px;
         }
@@ -281,7 +281,7 @@
 
     h3 {
       position: relative;
-      font-family: OpenSans;
+      font-family: OpenSans, Helvetica, sans-serif;
       font-size: 18px;
       padding-left: 22px;
 

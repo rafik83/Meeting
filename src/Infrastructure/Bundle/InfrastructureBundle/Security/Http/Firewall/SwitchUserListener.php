@@ -96,6 +96,7 @@ class SwitchUserListener implements ListenerInterface
      * @param string                         $switchUserParameter
      * @param string                         $role
      * @param EventDispatcherInterface|null  $dispatcher
+     * @param bool                           $stateless
      * @param Impersonate                    $impersonate
      * @param EventRepositoryInterface       $eventRepository
      */
@@ -109,6 +110,7 @@ class SwitchUserListener implements ListenerInterface
         $switchUserParameter = '_switchto',
         $role = 'ROLE_ALLOWED_TO_SWITCH',
         EventDispatcherInterface $dispatcher = null,
+        bool $stateless = false,
         Impersonate $impersonate,
         EventRepositoryInterface $eventRepository
     ) {
