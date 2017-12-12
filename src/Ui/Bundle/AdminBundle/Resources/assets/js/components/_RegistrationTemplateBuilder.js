@@ -75,9 +75,9 @@ RegistrationTemplateBuilder.prototype.save = function () {
 
     if (xhr.readyState === DONE) {
       if (xhr.status === OK) {
-        var config = JSON.parse(xhr.response);
       } else {
-        alert('Error');
+        var response = JSON.parse(xhr.response);
+        alert(response.error);
       }
 
       this.saveButton.stop();

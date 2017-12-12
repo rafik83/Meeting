@@ -13,6 +13,7 @@ namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\RegistrationTemplate;
 use League\Tactician\CommandBus;
 use Proximum\Vimeet\Application\Adapter\AuthorizationCheckerAdapterInterface;
 use Proximum\Vimeet\Application\Command\Template\Registration\Save;
+use Proximum\Vimeet\Application\Exception\Template\RegistrationTemplateException;
 use Proximum\Vimeet\Domain\Model\Template\RegistrationTemplate;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Security\Voter\AdminTemplateAccessVoter;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -52,7 +53,12 @@ class SaveAction
         }
 
         $config = json_decode($request->getContent(), true);
-        $this->commandBus->handle(new Save($registrationTemplate, $config));
+
+        try {
+            $this->commandBus->handle(new Save($registrationTemplate, $config));
+        } catch (RegistrationTemplateException $registrationTemplateException) {
+            return new JsonResponse(['error' => $registrationTemplateException->getMessage()], 500);
+        }
 
         return new JsonResponse($config);
     }
