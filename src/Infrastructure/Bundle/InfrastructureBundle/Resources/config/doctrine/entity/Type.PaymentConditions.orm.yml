@@ -1,0 +1,30 @@
+Proximum\Vimeet\Domain\Model\Type\PaymentConditions:
+    type:  entity
+    table: type_payment_conditions
+    id:
+        id:
+            type: integer
+            generator:
+                strategy: AUTO
+    fields:
+        allowDeposit:
+            type: boolean
+        depositUntil:
+            type: datetime
+            nullable: true
+        minimumForDeposit:
+            type: float
+            nullable: true
+        deposit:
+            type: integer
+            nullable: true
+        paymentModes:
+            type: json_array
+    manyToOne:
+        type:
+            targetEntity: Proximum\Vimeet\Domain\Model\Type
+            inversedBy: paymentConditions
+            joinColumn:
+                nullable: false
+                unique: true
+                onDelete: CASCADE

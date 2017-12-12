@@ -70,6 +70,15 @@ services:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\User\Event\Token\UpdateAgendaConfirmation }
 
     #
+    # Type Payment Conditions
+    #
+    Proximum\Vimeet\Application\Command\Type\PaymentConditions\UpdateHandler:
+        arguments:
+            - '@Proximum\Vimeet\Infrastructure\Repository\Type\PaymentConditionsRepository'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Type\PaymentConditions\Update }
+
+    #
     # Tip
     #
     command.tip.event.create_handler:
