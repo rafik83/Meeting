@@ -180,7 +180,7 @@ admin_event_payment_conditions:
     requirements:
         event: \d+
     methods: [GET, POST]
-    defaults: { _controller: AdminBundle:Event:paymentConditions }
+    defaults: { _controller: Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Event\PaymentConditionsAction }
 
 admin_event_configure_dates:
     path: /event/{event}/dates
@@ -249,7 +249,7 @@ admin_type_list:
     requirements:
         event: \d+
     methods: [GET]
-    defaults: { _controller: AdminBundle:Type:list }
+    defaults: { _controller: Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Type\ListAction }
 
 admin_type_create:
     path: /event/{event}/type/create
@@ -257,6 +257,7 @@ admin_type_create:
         event: \d+
     methods: [GET, POST]
     defaults: { _controller: AdminBundle:Type:create }
+
 admin_type_update:
     path: /event/{event}/type/{type}/update
     requirements:
@@ -264,13 +265,23 @@ admin_type_update:
         type: \d+
     methods: [GET, POST]
     defaults: { _controller: AdminBundle:Type:update }
+
 admin_type_remove:
-    path:  /event/{event}/type/{type}/update
+    path:  /event/{event}/type/{type}/remove
     requirements:
         event: \d+
         type: \d+
     methods: [DELETE]
-    defaults: { _controller: AdminBundle:Type:remove }
+    defaults: { _controller: Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Type\RemoveAction }
+
+admin_type_payment_conditions:
+    path: /event/{event}/type/{type}/payment-conditions
+    requirements:
+        event: \d+
+        type: \d+
+    methods: [GET, POST]
+    defaults: { _controller: Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Type\PaymentConditionsAction }
+
 #
 # Category
 #

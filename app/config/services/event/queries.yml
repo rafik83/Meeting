@@ -1,0 +1,4 @@
+services:
+    Proximum\Vimeet\Application\Query\Payment\PaymentConditionsViewQueryHandler:
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Payment\PaymentConditionsViewQuery }

@@ -195,6 +195,6 @@ final class Tag
      */
     public static function getRegisterTemplateChoiceTags(): array
     {
-        return array_merge(self::getSheetTags(), self::getGenericSheetTags(), self::getParticipantTags());
+        return array_merge(self::getParticipantTags(), self::getSheetTags(), self::getGenericSheetTags());
     }
 }
