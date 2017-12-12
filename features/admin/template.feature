@@ -20,15 +20,15 @@ Feature: Manage templates
     Then I should be on this page "/fr/template/registration"
     And I should see "Template d'inscription de base"
 
-  Scenario: Edit Registration Template
+  Scenario: Edit json Registration Template
     Given I am logged with "test@test.com" on admin
     And I am on this page "/fr/template/registration"
     And I should see "Template d'inscription de base"
-    Then I follow "admin.template.registration.table.content.edit"
-    And I should be on this page "/fr/template/registration/1/fr"
+    Then I follow "admin.template.registration.table.content.editJson"
+    And I should be on this page "/fr/template/registration/1/fr/json"
     Then I fill in "template_registration_update_title" with "Template updated"
     And I press "template_registration_update_submit"
-    Then I should be on this page "/fr/template/registration/1/fr"
+    Then I should be on this page "/fr/template/registration/1/fr/json"
     And I should see "flash.admin.template.registration.update.success"
 
   Scenario: Edit Sheet Template
