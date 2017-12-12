@@ -890,16 +890,21 @@ admin.tip.column.visible.print_planning: 'Impression planning'
 admin.tip.create.link: Nouveau
 admin.tip.create.title: 'Nouveau message d''aide'
 admin.tip.empty: 'Aucun message d''aide'
+admin.tip.event.create.title: 'Création d''un message d''aide pour %eventTitle%'
+admin.tip.event.update.title: 'Modification d''un message d''aide pour %eventTitle%'
 admin.tip.event.actions: Actions
 admin.tip.event.affect.form.title: 'Affecter un message d''aide'
-admin.tip.event.affect.link: 'Affecter un message d''aide'
+admin.tip.event.affect.link: 'Affecter un message d''aide global'
 admin.tip.event.affect.title: 'Gestion des messages d''aide'
+admin.tip.event.create.button: 'Créer un message d''aide'
+admin.tip.event.update.button: 'Modifier'
+admin.tip.event.create.update: 'Modifier'
 admin.tip.event.empty: 'Aucun message affecté à cet évènement'
 admin.tip.event.no_pages: Aucune
 admin.tip.event.no_types: Aucun
 admin.tip.event.pages: 'Page concernées'
-admin.tip.event.remove.action.confirm: 'Êtes-vous sûr de vouloir retirer l''affectation?'
-admin.tip.event.remove.link: Retirer
+admin.tip.event.remove.action.confirm: 'Êtes-vous sûr de vouloir supprimer ce message d''aide?'
+admin.tip.event.remove.link: Supprimer
 admin.tip.event.title: 'Libellé admin'
 admin.tip.event.types: 'Types de participation affectés'
 admin.tip.events: Evénements
@@ -907,6 +912,8 @@ admin.tip.link: 'Messages d''aide'
 admin.tip.list.title: 'Messages d''aide'
 admin.tip.update.link: Modifier
 admin.tip.update.title: 'Mise à jour du message d''aide'
+admin.tip.remove.link: Supprimer
+admin.tip.remove.action.confirm: 'Êtes-vous sûr de vouloir supprimer ce message d''aide?'
 admin.tip.visible: 'Liste des pages concernées'
 admin.transaction.add: Ajouter
 admin.transaction.column.date: Date

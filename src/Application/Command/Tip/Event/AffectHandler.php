@@ -14,35 +14,35 @@ use Proximum\Vimeet\Application\Adapter\DelayedEventDispatcherInterface;
 use Proximum\Vimeet\Application\Event\Events;
 use Proximum\Vimeet\Application\Event\Tip\AssignedEvent;
 use Proximum\Vimeet\Application\Exception\Tip\TipNotFoundException;
+use Proximum\Vimeet\Domain\Model\Tip\Tip;
 use Proximum\Vimeet\Domain\Repository\TipRepositoryInterface;
-use Proximum\Vimeet\Domain\Repository\TypeRepositoryInterface;
 
 class AffectHandler
 {
     /** @var TipRepositoryInterface */
     private $tipRepository;
 
-    /** @var TypeRepositoryInterface */
-    private $typeRepository;
-
     /** @var DelayedEventDispatcherInterface */
     private $delayedEventDispatcher;
+
+    /** @var \DateTimeInterface */
+    private $dateTime;
 
     /**
      * AffectHandler constructor.
      *
      * @param TipRepositoryInterface          $tipRepository
-     * @param TypeRepositoryInterface         $typeRepository
      * @param DelayedEventDispatcherInterface $delayedEventDispatcher
+     * @param \DateTimeInterface              $dateTime
      */
     public function __construct(
         TipRepositoryInterface $tipRepository,
-        TypeRepositoryInterface $typeRepository,
-        DelayedEventDispatcherInterface $delayedEventDispatcher
+        DelayedEventDispatcherInterface $delayedEventDispatcher,
+        \DateTimeInterface $dateTime
     ) {
         $this->tipRepository  = $tipRepository;
-        $this->typeRepository = $typeRepository;
         $this->delayedEventDispatcher = $delayedEventDispatcher;
+        $this->dateTime = $dateTime;
     }
 
     /**
@@ -52,18 +52,35 @@ class AffectHandler
      */
     public function handle(Affect $affect)
     {
-        $tip = $this->tipRepository->getById($affect->tip->id);
+        $globalTip = $affect->tip;
 
-        if (null === $tip) {
-            throw new TipNotFoundException();
+        $tip = new Tip(
+            $globalTip->getTitle(),
+            $affect->event,
+            $globalTip->isOnMeetingManagement(),
+            $globalTip->isOnCatalog(),
+            $globalTip->isOnPrintPlanning(),
+            $globalTip->isOnSheet(),
+            $globalTip->isOnAgenda(),
+            $globalTip->isOnProgram(),
+            $globalTip->isOnConfirmationPhone(),
+            $this->dateTime
+        );
+
+        foreach ($affect->event->getLocales() as $locale) {
+            $tip->translate(
+                $locale,
+                $globalTip->getTranslationTitle($locale),
+                $globalTip->getTranslationContent($locale),
+                $this->dateTime
+            );
         }
 
-        foreach ($affect->types as $typeView) {
-            $type = $this->typeRepository->getById($typeView->id);
+        foreach ($affect->types as $type) {
             $tip->setType($type);
         }
 
-        $this->tipRepository->set($tip);
+        $this->tipRepository->add($tip);
 
         $this->delayedEventDispatcher->dispatch(Events::TIP_ASSIGNED, new AssignedEvent($affect->event, $tip));
     }

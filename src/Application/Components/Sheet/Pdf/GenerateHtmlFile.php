@@ -81,4 +81,12 @@ class GenerateHtmlFile
 
         return $file;
     }
+
+    /**
+     * @return string
+     */
+    public function getFileDirectory(): string
+    {
+        return $this->pdfPath;
+    }
 }

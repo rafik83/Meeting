@@ -706,8 +706,8 @@ services:
         class: Proximum\Vimeet\Application\Command\Tip\Event\AffectHandler
         arguments:
             - '@repository.tip.repository'
-            - '@vimeet_infrastructure.repository.type_repository'
             - '@vimeet_infrastructure.adapter.delayed_event_dispatcher'
+            - '@datetime'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Tip\Event\Affect }
     command.tip.event.remove_handler:
@@ -845,11 +845,11 @@ services:
         class: Proximum\Vimeet\Application\Command\Sheet\BatchPdfHandler
         arguments:
             - '@vimeet_infrastructure.repository.event_repository'
-            - '@adapter.mailer_adapter'
-            - '%mailer_sender%'
             - '@vimeet_infrastructure.repository.sheet_repository'
             - '@components.sheet.pdf.generate_html_file'
             - '@components.sheet.pdf.generate_html'
+            - '@adapter.third_party.jenkins.build_creator_adapter'
+            - '%jenkins_phantomjs_sheet_pdf_print_build_name%'
             - '%admin_domain%'
             - '%scheme%'
         tags:
@@ -2687,14 +2687,6 @@ services:
         class: Proximum\Vimeet\Domain\Account\EmailValidator
         arguments:
             - '@adapter.validator_adapter'
-
-
-    validator.tip.affect_validator:
-        class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Validator\Constraint\Tip\AffectValidator
-        arguments:
-            - '@repository.tip.repository'
-        tags:
-            - { name: validator.constraint_validator }
 
     #
     # Account
