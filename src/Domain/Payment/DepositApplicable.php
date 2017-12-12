@@ -3,46 +3,45 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2016 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
 
 namespace Proximum\Vimeet\Domain\Payment;
 
-use Proximum\Vimeet\Domain\Model\Event;
-
 class DepositApplicable
 {
     /**
-     * @param Event              $event
-     * @param \DateTimeInterface $now
-     * @param float              $total
+     * @param PaymentConditionsView $paymentConditionsView
+     * @param \DateTimeInterface    $now
+     * @param float                 $total
      *
      * @return bool
      */
-    public static function isApplicable(Event $event, \DateTimeInterface $now, $total)
+    public static function isApplicable(PaymentConditionsView $paymentConditionsView, \DateTimeInterface $now, $total)
     {
-        return $event->getConfiguration()->isAllowDeposit()
-        && $now < $event->getConfiguration()->getDepositUntil()
-        && $total > $event->getConfiguration()->getMinimumForDeposit();
+        return $paymentConditionsView->allowDeposit
+            && $now < $paymentConditionsView->depositUntil
+            && $total > $paymentConditionsView->minimumForDeposit
+        ;
     }
 
     /**
-     * @param Event              $event
-     * @param \DateTimeInterface $now
-     * @param float              $total
+     * @param PaymentConditionsView $paymentConditionsView
+     * @param \DateTimeInterface    $now
+     * @param float                 $total
      *
      * @return float
      */
-    public static function calculateDeposit(Event $event, \DateTimeInterface $now, $total)
+    public static function calculateDeposit(PaymentConditionsView $paymentConditionsView, \DateTimeInterface $now, $total)
     {
-        if (!self::isApplicable($event, $now, $total)) {
+        if (!self::isApplicable($paymentConditionsView, $now, $total)) {
             return $total;
         }
 
-        $pourcentageOfDeposit = $event->getConfiguration()->getDeposit();
+        $percentageOfDeposit = $paymentConditionsView->deposit;
 
-        return ceil(($total * $pourcentageOfDeposit) / 100);
+        return ceil(($total * $percentageOfDeposit) / 100);
     }
 }

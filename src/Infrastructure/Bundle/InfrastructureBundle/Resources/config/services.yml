@@ -706,8 +706,8 @@ services:
         class: Proximum\Vimeet\Application\Command\Tip\Event\AffectHandler
         arguments:
             - '@repository.tip.repository'
-            - '@vimeet_infrastructure.repository.type_repository'
             - '@vimeet_infrastructure.adapter.delayed_event_dispatcher'
+            - '@datetime'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Tip\Event\Affect }
     command.tip.event.remove_handler:
@@ -1510,6 +1510,8 @@ services:
     command.payment.choice_with_deposit_handler:
         class: Proximum\Vimeet\Application\Command\Payment\ChoiceWithDepositHandler
         parent: command.payment.abstract_choice_handler
+        arguments:
+            $queryBus: '@Proximum\Vimeet\Infrastructure\Adapter\QueryBus'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Payment\ChoiceWithDeposit }
     command.order.create_handler:
@@ -2095,10 +2097,14 @@ services:
         class: Proximum\Vimeet\Infrastructure\Adapter\TranslatorAdapter
         arguments:
             - '@translator'
+
     adapter.router:
         class: Proximum\Vimeet\Infrastructure\Adapter\RouterAdapter
         arguments:
             - '@router'
+
+    Proximum\Vimeet\Application\Adapter\RouterInterface: '@adapter.router'
+
     adapter.session:
         class: Proximum\Vimeet\Infrastructure\Adapter\SessionAdapter
         arguments:
@@ -2182,6 +2188,8 @@ services:
         class: Proximum\Vimeet\Infrastructure\Adapter\AuthorizationCheckerAdapter
         arguments:
             - '@security.authorization_checker'
+
+    Proximum\Vimeet\Application\Adapter\AuthorizationCheckerAdapterInterface: '@adapter.authorization_checker'
 
     adapter.templating_adapter:
         class: Proximum\Vimeet\Infrastructure\Adapter\TemplatingAdapter
@@ -2680,14 +2688,6 @@ services:
         class: Proximum\Vimeet\Domain\Account\EmailValidator
         arguments:
             - '@adapter.validator_adapter'
-
-
-    validator.tip.affect_validator:
-        class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Validator\Constraint\Tip\AffectValidator
-        arguments:
-            - '@repository.tip.repository'
-        tags:
-            - { name: validator.constraint_validator }
 
     #
     # Account

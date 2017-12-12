@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of the vimeet project.
+ * This file is part of the Proximum Vimeet project.
  *
  * Copyright (C) Proximum
  *
@@ -10,8 +10,11 @@
 
 namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Tip\Event;
 
+use Proximum\Vimeet\Application\Command\Tip\Event\Affect;
+use Proximum\Vimeet\Domain\Model\Admin;
+use Proximum\Vimeet\Domain\Model\Event;
+use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\TypeChoiceType;
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -22,23 +25,34 @@ class AffectType extends AbstractType
     {
         $builder
             ->add('tip', TipSelectType::class, [
-                'tipViews' => $options['tipViews'],
-                'attr'     => ['data-preview-tip' => true]
+                'locale' => $options['locale'],
+                'attr'   => ['data-preview-tip' => true]
             ])
-            ->add('types', TypeCheckboxType::class, [
-                'typeViews' => $options['typeViews'],
+            ->add('types', TypeChoiceType::class, [
+                'event'    => $options['event'],
                 'expanded' => true,
+                'locale'   => $options['locale'],
                 'multiple' => true,
+                'required' => false,
+                'user'    => $options['admin'],
             ])
-            ->add('submit', SubmitType::class);
+        ;
     }
 
     /**{@inheritdoc} */
     public function configureOptions(OptionsResolver $resolver)
     {
-        $resolver->setRequired(['typeViews', 'tipViews']);
-        $resolver->setAllowedTypes('typeViews', 'array');
-        $resolver->setAllowedTypes('tipViews', 'array');
+        $resolver->setRequired([
+            'admin',
+            'event',
+            'locale',
+        ]);
+        $resolver->setAllowedTypes('admin', Admin::class);
+        $resolver->setAllowedTypes('event', Event::class);
+        $resolver->setAllowedTypes('locale', 'string');
+        $resolver->setDefaults([
+            'data_class' => Affect::class,
+        ]);
     }
 
     /** {@inheritdoc} */

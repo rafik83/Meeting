@@ -1,0 +1,49 @@
+{% extends 'AdminBundle:Common:form_layout.html.twig' %}
+
+{% block title %}
+    [{{ event.title }}] {{ 'admin.type.paymentConditions.update.title'|trans({'%typeTitle%': type.title(locale)}) }}
+{% endblock %}
+
+{% block form_title 'admin.type.paymentConditions.update.title'|trans({'%typeTitle%': type.title(locale)}) %}
+
+{% block form_content %}
+    <div class="well">
+        <h4>{{ 'admin.type.paymentConditions.event.info.title'|trans }}</h4>
+        <ul>
+            <li>
+                <b>{{ 'admin.type.paymentConditions.event.info.allowDeposit'|trans }}</b> {{ event.configuration.allowDeposit ? '✔︎' : '' }}
+            </li>
+            <li>
+                <b>{{ 'admin.type.paymentConditions.event.info.minimumForDeposit'|trans }}</b> {{ event.configuration.minimumForDeposit }}
+            </li>
+            <li>
+                <b>{{ 'admin.type.paymentConditions.event.info.depositUntil'|trans }}</b> {{ event.configuration.depositUntil|localizeddate('short', 'short', locale, event.timeZone) }}
+            </li>
+            <li>
+                <b>{{ 'admin.type.paymentConditions.event.info.deposit'|trans }}</b>
+                {{ event.configuration.deposit }} {% if event.configuration.deposit is not null %}%{% endif %}
+            </li>
+            <li>
+                <b>{{ 'admin.type.paymentConditions.event.info.paymentModes'|trans }}</b>
+                {% if event.configuration.paymentModes is not empty %}
+                    <ul>
+                        {% for paymentMode in event.configuration.paymentModes %}
+                        <li>{{ ('form.payment_mode_choice.children.paymentMode.' ~ paymentMode)|trans({}, 'forms') }}</li>
+                        {% endfor %}
+                    </ul>
+                {% else %}
+                    {{ 'admin.type.paymentConditions.event.info.paymentModes.none'|trans  }}
+                {% endif %}
+            </li>
+        </ul>
+    </div>
+    <hr>
+    {{ form_row(form.specificPaymentConditions) }}<br>
+    {{ form_row(form.allowDeposit) }}<br>
+    {{ form_row(form.minimumForDeposit, {widget_columns: 3}) }}
+    {{ form_row(form.depositUntil, {widget_columns: 3}) }}
+    {{ form_row(form.deposit, {widget_columns: 3}) }}
+    {{ form_row(form.paymentModes, {widget_columns: 3}) }}
+{% endblock form_content %}
+
+{% block goback_link path('admin_event_list') %}

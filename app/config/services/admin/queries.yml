@@ -87,3 +87,12 @@ services:
         class: Proximum\Vimeet\Application\Query\Sheet\Detail\Participant\AvailabilityConfirmationStatusQueryHandler
         arguments:
             - '@repository.user.event.extra_data_repository'
+
+    #
+    # Type
+    #
+    Proximum\Vimeet\Application\Query\Type\TypesWithPaymentConditionsViewQueryHandler:
+        arguments:
+            - '@vimeet_infrastructure.repository.type_repository'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Type\TypesWithPaymentConditionsViewQuery }

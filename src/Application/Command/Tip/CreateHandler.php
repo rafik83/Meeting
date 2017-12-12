@@ -40,6 +40,7 @@ class CreateHandler
     {
         $tip = new Tip(
             $command->title,
+            null,
             $command->onMeetingManagement,
             $command->onCatalog,
             $command->onPrintPlanning,
@@ -53,6 +54,7 @@ class CreateHandler
         foreach ($command->translations as $translation) {
             $tip->translate($translation['locale'], $translation['title'], $translation['content'], $this->dateTime);
         }
+
         $this->tipRepository->add($tip);
     }
 }

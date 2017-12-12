@@ -19,9 +19,12 @@ template.nomenclature.objective.none: Aucun
 template.nomenclature.objective.supply: Offre
 template.nomenclature.objective.title: Objectif
 template.nomenclature.title: Nomenclature
+template.object.boolean: 'Champs Oui / Non'
 template.object.button-link: Lien
 template.object.collection: Collection
+template.object.country: Pays
 template.object.editable-text: 'Texte modifiable'
+template.object.gender: Genre
 template.object.image: Image
 template.object.media: Media
 template.object.nomenclature: Nomenclature
@@ -29,10 +32,13 @@ template.object.participant: Participant
 template.object.tag: 'Contenu affiché par défaut'
 template.object.tags: 'Multi tag'
 template.object.text: 'Texte non modifiable'
+template.object.telephone: Téléphone
+template.object.url: Lien
 template.participant.display: 'Nombre de participants affichés sur la fiche'
 template.participant.title: 'Les participants'
 template.placeholder.title: Placeholder
 template.products.title: 'Produits liés'
+template.registration.tag: 'Tags'
 template.required.title: Requis
 template.style.default: 'Par défaut'
 template.style.title: Style

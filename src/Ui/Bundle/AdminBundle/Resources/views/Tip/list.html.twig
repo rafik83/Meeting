@@ -1,5 +1,9 @@
 {% extends 'AdminBundle::base.html.twig' %}
 
+{% from 'AdminBundle::macro.html.twig' import delete_button %}
+
+{% block title 'admin.tip.list.title'|trans %}
+
 {% block content %}
     <h1 class="page-header">{{ 'admin.tip.list.title'|trans }}</h1>
 
@@ -11,8 +15,8 @@
             <tr>
                 <th class="col-md-4">{{ 'admin.tip.column.title'|trans }}</th>
                 <th class="col-md-2">{{ 'admin.tip.column.translation'|trans }}</th>
-                <th class="col-md-3">{{ 'admin.tip.visible'|trans }}</th>
-                <th class="col-md-3">{{ 'admin.tip.events'|trans }}</th>
+                <th class="col-md-4">{{ 'admin.tip.visible'|trans }}</th>
+                <th class="col-md-2"></th>
             </tr>
             </thead>
                 <tbody>
@@ -31,20 +35,22 @@
                                 {{ page|trans }}{{ not loop.last ? ', ' : '' }}
                             {% endfor %}
                         </td>
-                        <td>
-                            <ul>
-                                {% for eventTitle in tip.unduplicatedEventsTitle %}
-                                    <li>
-                                        {{ eventTitle }}
-                                    </li>
-                                {% endfor %}
-                            </ul>
-                        </td>
                         <td class="text-right">
                             <div class="btn-group">
                                 <a class="btn btn-default btn-sm" href="{{ path('admin_tip_update', {'tip': tip.id}) }}">
                                     {{ 'admin.tip.update.link'|trans }}
                                 </a>
+                                <button type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    <span class="caret"></span>
+                                </button>
+                                <ul class="dropdown-menu dropdown-menu-right">
+                                    <li>
+                                        {{ delete_button(
+                                            path('admin_tip_remove', {'tip': tip.id }),
+                                            'admin.tip.remove.link'|trans,
+                                            { 'class': 'btn btn-default btn-sm', 'data-confirm': 'admin.tip.remove.action.confirm'|trans }) }}
+                                    </li>
+                                </ul>
                             </div>
                         </td>
                     </tr>

@@ -12,6 +12,7 @@ namespace Proximum\Vimeet\Application\Command\Tip\Event;
 
 use Proximum\Vimeet\Application\Adapter\DelayedEventDispatcherInterface;
 use Proximum\Vimeet\Application\Event\Events;
+use Proximum\Vimeet\Application\Event\Tip\RemovedEvent;
 use Proximum\Vimeet\Application\Event\Tip\UnAssignedEvent;
 use Proximum\Vimeet\Application\Exception\Tip\TipNotAffectedOnEventException;
 use Proximum\Vimeet\Application\Exception\Tip\TipNotFoundException;
@@ -26,8 +27,6 @@ class RemoveHandler
     private $eventDispatcher;
 
     /**
-     * RemoveHandler constructor.
-     *
      * @param TipRepositoryInterface          $tipRepository
      * @param DelayedEventDispatcherInterface $eventDispatcher
      */
@@ -47,23 +46,15 @@ class RemoveHandler
      */
     public function handle(Remove $remove)
     {
-        $tip = $this->tipRepository->getByEventAndTip($remove->event, $remove->tip);
+        $event = $remove->tip->getEvent();
 
-        if (null === $tip) {
-            throw new TipNotFoundException();
+        $this->tipRepository->removeTip($remove->tip);
+
+        if (null !== $event) {
+            $this->eventDispatcher->dispatch(
+                Events::TIP_REMOVED_FROM_EVENT,
+                new RemovedEvent($event)
+            );
         }
-
-        foreach ($tip->getTypes() as $type) {
-            if ($type->getEvent() !== $remove->event) {
-                throw new TipNotAffectedOnEventException();
-            }
-        }
-
-        $this->tipRepository->removeTip($tip);
-
-        $this->eventDispatcher->dispatch(
-            Events::TIP_UN_ASSIGNED,
-            new UnAssignedEvent($remove->event, $remove->tip)
-        );
     }
 }

@@ -15,7 +15,6 @@ use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Form\Type\DateTimePickerType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
-use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\NumberType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -43,12 +42,8 @@ class UpdateType extends AbstractType
             ->add('minimumForDeposit', NumberType::class, [
                 'required' => false,
             ])
-            ->add('deposit', IntegerType::class, [
+            ->add('deposit', DepositType::class, [
                 'required' => false,
-                'attr'     => [
-                    'min' => 0,
-                    'max' => 100,
-                ],
             ])
             ->add('paymentModes', PaymentModeChoiceType::class)
         ;
