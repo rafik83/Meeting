@@ -43,15 +43,12 @@ class OrderController extends Controller
             throw $this->createNotFoundException('This page is not accessible by this user');
         }
 
-        $canPayIfRemaining = true;
         $paymentConditionsView = $this
             ->get('Proximum\Vimeet\Infrastructure\Adapter\QueryBus')
             ->handle(new PaymentConditionsViewQuery($sheet))
         ;
 
-        if (!in_array(Mode::PAYMENT_PAYPAL, $paymentConditionsView->paymentModes, true)) {
-            $canPayIfRemaining = false;
-        }
+        $canPayIfRemaining = in_array(Mode::PAYMENT_PAYPAL, $paymentConditionsView->paymentModes, true);
 
         return $this->render('EventBundle:Order:list.html.twig', [
             'event'             => $eventDomain->getEvent(),
