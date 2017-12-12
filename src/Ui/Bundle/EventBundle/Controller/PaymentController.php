@@ -19,6 +19,7 @@ use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\Transaction;
 use Proximum\Vimeet\Domain\Money\AmountFormatter;
 use Proximum\Vimeet\Domain\Payment\DepositApplicable;
+use Proximum\Vimeet\Domain\Payment\Mode;
 use Proximum\Vimeet\Infrastructure\Payum\Paypal\CapturePayment;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Payment\PaymentChoiceType;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Payment\PaymentChoiceWithDepositType;
@@ -144,6 +145,14 @@ class PaymentController extends Controller
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
         $this->denyAccessUnlessGranted(SheetVoter::EDIT, $sheet);
+        $paymentConditionsView = $this
+            ->get('Proximum\Vimeet\Infrastructure\Adapter\QueryBus')
+            ->handle(new PaymentConditionsViewQuery($sheet))
+        ;
+
+        if (!in_array(Mode::PAYMENT_PAYPAL, $paymentConditionsView->paymentModes, true)) {
+            throw $this->createAccessDeniedException('Paypal is not accessible for this sheet');
+        }
 
         $remainingToPay = $this->get('order.balance')->getRemainingToPay($sheet);
 

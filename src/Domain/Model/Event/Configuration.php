@@ -422,7 +422,7 @@ class Configuration
      */
     public function isAllowedToPayRemaining()
     {
-        return in_array(Mode::PAYMENT_PAYPAL, $this->paymentModes);
+        return in_array(Mode::PAYMENT_PAYPAL, $this->paymentModes, true);
     }
 
     /**

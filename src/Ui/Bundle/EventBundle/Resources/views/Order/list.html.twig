@@ -47,7 +47,7 @@
                     <div class="panel-body text-center h1">
                         {{ remainingToPay|format_amount|localizedcurrency(event.currency) }}
 
-                        {% if 0 < remainingToPay and event.configuration.isAllowedToPayRemaining %}
+                        {% if 0 < remainingToPay and canPayIfRemaining %}
                             <a href="{{ path('event_package_payment_pay_remaining', {'sheet': sheet.id}) }}" class="btn btn-primary">{{ 'order.list.pay_remaining'|trans }}</a>
                         {% endif %}
                     </div>
