@@ -27,7 +27,7 @@
         <div class="col-md-12">
             <div class="block-inner">
                 {% for uid, item in children[0]|default([]) %}
-                    {{ include('AdminBundle:Template/' ~ item.component|capitalize ~ ':' ~ item.type ~ '.html.twig', { 'uid': uid, 'config': item.config, 'children': item.children|default([]), 'locale': locale, 'fallback': fallback|default(false), 'nomenclatures': nomenclatures, 'sheet_tags': sheet_tags, 'products': products }, false) }}
+                    {{ include('AdminBundle:Template/' ~ item.component|capitalize ~ ':' ~ item.type ~ '.html.twig', { 'uid': uid, 'config': item.config, 'children': item.children|default([]), 'locale': locale, 'fallback': fallback|default(false), 'nomenclatures': nomenclatures, 'sheet_tags': sheet_tags, 'products': products, 'isRegistrationTemplate': true }, false) }}
                 {% endfor %}
             </div>
         </div>
