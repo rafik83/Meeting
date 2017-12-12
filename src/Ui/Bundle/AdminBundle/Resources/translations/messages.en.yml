@@ -70,6 +70,7 @@ admin.event.see_on_front.link: 'See on front'
 admin.event.see.link: See
 admin.event.settings.link: 'Event settings'
 admin.event.template.link: Templates
+admin.event.template.package: 'Package of participation'
 admin.event.template.registration: Registration
 admin.event.template.sheet: Presentation
 admin.event.title: Title
@@ -147,6 +148,8 @@ admin.order_edit.VAT: VAT
 admin.order.cancelled: Cancelled
 admin.order.title: 'Order list'
 admin.order.type: 'Participation type'
+admin.package.link: 'Package of participation template'
+admin.package.title: 'Package of participation template'
 admin.package.update: Modify
 admin.participant.export.fields.participant_type: 'Participation type'
 admin.participant.export.fields.planning.meeting: '%spotRef% - %sheetMet%'
@@ -212,6 +215,7 @@ admin.template.action.edit: Modify
 admin.template.action.save: Save
 admin.template.registration.table.column.eventType: Event/Type
 admin.template.registration.table.content.edit: Modify
+admin.template.registration.table.content.editJson: Modify JSON
 admin.template.sheet.table.column.eventType: Event/Type
 admin.tip.event.no_types: None
 admin.tip.event.types: 'Type of participations affected'

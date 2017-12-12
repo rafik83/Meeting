@@ -35,12 +35,10 @@ class PrintController extends Controller
             );
         }
 
-        $path = $this->getParameter('infrastructure.print_sheet_path') . '/' . $file->getPath();
-
-        if (!$this->get('filesystem')->exists($path)) {
+        if (!$this->get('filesystem')->exists($file->getPath())) {
             throw $this->createNotFoundException(sprintf('File %s not found', $file->getId()));
         }
 
-        return new BinaryFileResponse($path);
+        return new BinaryFileResponse($file->getPath());
     }
 }

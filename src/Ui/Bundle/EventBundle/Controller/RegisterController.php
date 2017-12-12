@@ -112,7 +112,7 @@ class RegisterController extends Controller
             $typeView
         );
 
-        if ($command->email === null || $this->emailExists($command->email)) {
+        if ($command->email === '' || $this->emailExists($command->email)) {
             return $this->redirectToRoute('event_register', ['typeView' => $typeView->id]);
         }
 
@@ -391,13 +391,15 @@ class RegisterController extends Controller
     }
 
     /**
-     * @return string|null
+     * @return string
      */
-    private function getFlashEmail()
+    private function getFlashEmail(): string
     {
         $emails = $this->container->get('session')->getFlashBag()->get('register_email');
 
-        return array_shift($emails);
+        $email = array_shift($emails);
+
+        return $email ?? '';
     }
 
     /**

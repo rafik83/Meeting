@@ -64,7 +64,7 @@ function VideoConference(element) {
   // Custom Events
   tokbox.registerScreenSharingExtension('chrome', CHROME_EXTENSION_ID, 2);
 
-  this.startScreenSharingButton.addEventListener('click', this.screenshare.bind(this));
+  this.startScreenSharingButton.addEventListener('click', this.preScreenshare.bind(this));
   this.endScreenSharingButton.addEventListener('click', this.endScreenshare.bind(this));
 
   this.toggleAudioElement.addEventListener('click', this.toggleAudio.bind(this));

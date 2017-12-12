@@ -447,13 +447,13 @@ form.participant_import.children.submit.label: Importer
 form.participant_import.children.type.label: Type
 form.participant_import.field.ignore: Ignorer
 form.participant_import.field.mail: Email
+form.participant_update_agenda_confirmation_status.children.status.choice.confirmed: Confirmé
+form.participant_update_agenda_confirmation_status.children.status.choice.not_confirmed: 'Non confirmé'
+form.participant_update_agenda_confirmation_status.children.status.label: 'Confirmation d''agenda'
+form.participant_update_agenda_confirmation_status.children.submit.label: Enregistrer
 form.participant_update.children.data.label: Participation
 form.participant_update.children.submit.label: Envoyer
 form.participate_happening.children.participants.label: 'Participants concernés'
-form.participant_update_agenda_confirmation_status.children.status.label: 'Confirmation d''agenda'
-form.participant_update_agenda_confirmation_status.children.submit.label: 'Enregistrer'
-form.participant_update_agenda_confirmation_status.children.status.choice.confirmed: 'Confirmé'
-form.participant_update_agenda_confirmation_status.children.status.choice.not_confirmed: 'Non confirmé'
 form.participate_happening.children.submit.label: Participer
 form.payment_mode_choice.children.paymentMode.bank_check: Chèque
 form.payment_mode_choice.children.paymentMode.bank_transfer: Transfert
@@ -668,11 +668,11 @@ form.sheet_filter.children.agendaConfirmedStatus.choice.all_confirmed: Validé
 form.sheet_filter.children.agendaConfirmedStatus.choice.none_confirmed: 'Non validé'
 form.sheet_filter.children.agendaConfirmedStatus.choice.partly_confirmed: 'Partiellement validé (au moins 1 participant n''ayant pas validé)'
 form.sheet_filter.children.agendaConfirmedStatus.label: 'A validé son agenda'
-form.sheet_filter.children.availabilityConfirmationStatus.label: 'Confirmation des disponibilités'
 form.sheet_filter.children.availabilityConfirmationStatus.choice.all: 'Peu importe'
-form.sheet_filter.children.availabilityConfirmationStatus.choice.all_confirmed: 'Confirmé'
+form.sheet_filter.children.availabilityConfirmationStatus.choice.all_confirmed: Confirmé
 form.sheet_filter.children.availabilityConfirmationStatus.choice.none_confirmed: 'Non confirmé'
 form.sheet_filter.children.availabilityConfirmationStatus.choice.partly_confirmed: 'Confirmé partiellement'
+form.sheet_filter.children.availabilityConfirmationStatus.label: 'Confirmation des disponibilités'
 form.sheet_filter.children.booleanFilters.noPreference.label: 'Peu importe'
 form.sheet_filter.children.cancelAttendance.label: 'Annuler sa venue'
 form.sheet_filter.children.cart.no.label: Sans
@@ -708,11 +708,11 @@ form.sheet_filter.children.order.no.label: Sans
 form.sheet_filter.children.order.noPreference.label: 'Peu importe'
 form.sheet_filter.children.order.yes.label: Avec
 form.sheet_filter.children.orderBy.label: 'Trier par'
-form.sheet_filter.children.phoneValidationStatus.label: 'A confirmé son portable'
 form.sheet_filter.children.phoneValidationStatus.choice.all: 'Peu importe'
-form.sheet_filter.children.phoneValidationStatus.choice.all_confirmed: 'Confirmé'
-form.sheet_filter.children.phoneValidationStatus.choice.partly_confirmed: 'Partiellement confirmé'
+form.sheet_filter.children.phoneValidationStatus.choice.all_confirmed: Confirmé
 form.sheet_filter.children.phoneValidationStatus.choice.none_confirmed: 'Non confirmé'
+form.sheet_filter.children.phoneValidationStatus.choice.partly_confirmed: 'Partiellement confirmé'
+form.sheet_filter.children.phoneValidationStatus.label: 'A confirmé son portable'
 form.sheet_filter.children.state.label: Etat
 form.sheet_filter.children.text_search.label: 'Titre de la fiche, nom ou email de participant'
 form.sheet_filter.children.type.label: Type
@@ -771,6 +771,8 @@ form.spot_import.children.charset.label: 'Encodage du fichier'
 form.spot_import.children.file.label: 'Fichier des lieux'
 form.spot_import.children.submit.label: 'Importer les lieux'
 form.spot.import.confirm: 'L''import de nouveaux lieux supprimera les lieux existants sur cet événement. Voulez vous importer les lieux ?'
+form.template_add_locale.children.locale.label: Langue
+form.template_add_locale.children.submit.label: Valider
 form.template_registration_update.children.submit.label: Enregistrer
 form.template_registration_update.children.title.label: 'Titre du template'
 form.template_registration_update.children.value.label: 'Contenu du template'
@@ -813,6 +815,40 @@ form.tip_update.children.translations.prototype.children.content.label: Contenu
 form.tip_update.children.translations.prototype.children.locale.label: Langue
 form.tip_update.children.translations.prototype.children.title.label: Libellé
 form.tip_update.children.translations.prototype.label: Traductions
+form.tip_event_create.children.title.label: 'Libellé back office'
+form.tip_event_create.children.onAgenda.label: 'Visible sur l''agenda'
+form.tip_event_create.children.onCatalog.label: 'Visible sur le catalogue'
+form.tip_event_create.children.onConfirmationPhone.label: 'Confirmation de planning et de téléphone (conditionne l''affichage du formulaire de validation du numéro de téléphone)'
+form.tip_event_create.children.onMeetingManagement.label: 'Visible sur la gestion des rendez-vous'
+form.tip_event_create.children.onPrintPlanning.label: 'Visible sur l''impression des plannings'
+form.tip_event_create.children.onProgram.label: 'Visible sur le programme'
+form.tip_event_create.children.onSheet.label: 'Visible sur la fiche de présentation'
+form.tip_event_create.children.submit.label: 'Sauvegarder'
+form.tip_event_create.children.title.label: 'Libellé back office'
+form.tip_event_create.children.types.label: 'Types assignés'
+form.tip_event_create.children.translations.label_add: 'Ajouter une traduction'
+form.tip_event_create.children.translations.label_delete: 'Supprimer la traduction'
+form.tip_event_create.children.translations.prototype.children.content.label: Contenu
+form.tip_event_create.children.translations.prototype.children.locale.label: Langue
+form.tip_event_create.children.translations.prototype.children.title.label: Libellé
+form.tip_event_create.children.translations.prototype.label: Traductions
+form.tip_event_update.children.title.label: 'Libellé back office'
+form.tip_event_update.children.onAgenda.label: 'Visible sur l''agenda'
+form.tip_event_update.children.onCatalog.label: 'Visible sur le catalogue'
+form.tip_event_update.children.onConfirmationPhone.label: 'Confirmation de planning et de téléphone (conditionne l''affichage du formulaire de validation du numéro de téléphone)'
+form.tip_event_update.children.onMeetingManagement.label: 'Visible sur la gestion des rendez-vous'
+form.tip_event_update.children.onPrintPlanning.label: 'Visible sur l''impression des plannings'
+form.tip_event_update.children.onProgram.label: 'Visible sur le programme'
+form.tip_event_update.children.onSheet.label: 'Visible sur la fiche de présentation'
+form.tip_event_update.children.submit.label: 'Mettre à jour'
+form.tip_event_update.children.title.label: 'Libellé back office'
+form.tip_event_update.children.types.label: 'Types assignés'
+form.tip_event_update.children.translations.label_add: 'Ajouter une traduction'
+form.tip_event_update.children.translations.label_delete: 'Supprimer la traduction'
+form.tip_event_update.children.translations.prototype.children.content.label: Contenu
+form.tip_event_update.children.translations.prototype.children.locale.label: Langue
+form.tip_event_update.children.translations.prototype.children.title.label: Libellé
+form.tip_event_update.children.translations.prototype.label: Traductions
 form.transaction_find.children.beginDate.label: 'Date de début'
 form.transaction_find.children.date.placeholder: JJ/MM/AAAA
 form.transaction_find.children.endDate.label: 'Date de fin'

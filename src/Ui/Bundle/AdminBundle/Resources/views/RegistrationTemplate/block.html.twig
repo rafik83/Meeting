@@ -1,0 +1,35 @@
+{% set config = {
+    style: null
+}|merge(config|default({})) %}
+
+<div class="block" data-block="12" data-uid="{{ uid|default('__UID__') }}" data-config="{{ config|json_encode }}">
+    <div class="block-buttons">
+        <ul class="list-unstyled">
+            <li>
+                <span class="btn btn-link up-button">
+                    <i class="glyphicon glyphicon-arrow-up"></i>
+                </span>
+            </li>
+            <li>
+                <button class="btn btn-link delete-button" data-confirmation-message="{{ 'admin.event.registration.template_builder.remove_confirm'|trans }}">
+                    <i class="glyphicon glyphicon-remove"></i>
+                </button>
+            </li>
+            <li>
+                <span class="btn btn-link down-button">
+                    <i class="glyphicon glyphicon-arrow-down"></i>
+                </span>
+            </li>
+        </ul>
+    </div>
+
+    <div class="row">
+        <div class="col-md-12">
+            <div class="block-inner">
+                {% for uid, item in children[0]|default([]) %}
+                    {{ include('AdminBundle:Template/' ~ item.component|capitalize ~ ':' ~ item.type ~ '.html.twig', { 'uid': uid, 'config': item.config, 'children': item.children|default([]), 'locale': locale, 'fallback': fallback|default(false), 'nomenclatures': nomenclatures, 'sheet_tags': sheet_tags, 'products': products }, false) }}
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>

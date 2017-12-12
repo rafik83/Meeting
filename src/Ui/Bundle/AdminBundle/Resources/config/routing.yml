@@ -880,13 +880,23 @@ admin_template_registration_list:
     path: /template/registration
     defaults: { _controller: AdminBundle:RegistrationTemplate:list }
     methods: [GET]
-admin_template_registration_builder:
-    path: /template/registration/{template}/{locale}
+
+admin_template_registration_build:
+    path: /template/registration/{registrationTemplate}/{locale}/build
     methods: [GET, POST]
-    defaults: { _controller: AdminBundle:RegistrationTemplate:builder }
+    defaults: { _controller: Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\RegistrationTemplate\BuildAction }
     requirements:
-        template: \d+
+        registrationTemplate: \d+
         locale: '[a-z]{2}(_[A-Z]{2})?'
+
+admin_template_registration_json:
+    path: /template/registration/{registrationTemplate}/{locale}/json
+    methods: [GET, POST]
+    defaults: { _controller: AdminBundle:RegistrationTemplate:updateJson }
+    requirements:
+        registrationTemplate: \d+
+        locale: '[a-z]{2}(_[A-Z]{2})?'
+
 admin_template_registration_add_locale:
     path: /template/registration/{template}/locale
     defaults: { _controller: AdminBundle:RegistrationTemplate:addLocale }
@@ -1499,19 +1509,26 @@ admin_sheet_attend:
 admin_tip_list:
     path: /tip/list
     methods: [GET]
-    defaults: { _controller: AdminBundle:Tip/Tip:list }
+    defaults: { _controller: Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Tip\ListAction }
 
 admin_tip_create:
     path: /tip/create
     methods: [GET, POST]
-    defaults: { _controller: AdminBundle:Tip/Tip:create }
+    defaults: { _controller: Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Tip\CreateAction }
 
 admin_tip_update:
     path: /tip/{tip}/update
     requirements:
         tip: \d+
     methods: [GET, POST]
-    defaults: { _controller: AdminBundle:Tip/Tip:update }
+    defaults: { _controller: Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Tip\UpdateAction }
+
+admin_tip_remove:
+    path: /tip/{tip}/remove
+    requirements:
+        tip: \d+
+    methods: [DELETE]
+    defaults: { _controller: Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Tip\RemoveAction }
 
 #
 # Tip on event
@@ -1521,14 +1538,14 @@ admin_tip_event_list:
     methods: [GET]
     requirements:
         event: \d+
-    defaults: { _controller: AdminBundle:Tip/TipEvent:list }
+    defaults: { _controller: Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Tip\Event\ListAction }
 
 admin_tip_event_affect:
     path: /event/{event}/tip/affect
     methods: [GET, POST]
     requirements:
         event: \d+
-    defaults: { _controller: AdminBundle:Tip/TipEvent:affect }
+    defaults: { _controller: Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Tip\Event\AffectAction }
 
 admin_tip_event_remove:
     path: /event/{event}/tip/{tip}/remove/
@@ -1536,7 +1553,7 @@ admin_tip_event_remove:
     requirements:
         event: \d+
         tip: \d+
-    defaults: { _controller: AdminBundle:Tip/TipEvent:remove }
+    defaults: { _controller: Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Tip\Event\RemoveAction }
 
 admin_tip_event_preview:
     path: /tip/{tip}/preview/{locale}
@@ -1544,7 +1561,22 @@ admin_tip_event_preview:
     requirements:
         tip: \d+
         locale: \w+
-    defaults: { _controller: AdminBundle:Tip/TipEvent:preview }
+    defaults: { _controller: Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Tip\PreviewAction }
+
+admin_tip_event_create:
+    path: /event/{event}/tip/create
+    methods: [GET, POST]
+    requirements:
+        event: \d+
+    defaults: { _controller: Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Tip\Event\CreateAction }
+
+admin_tip_event_update:
+    path: /event/{event}/tip/{tip}/update
+    methods: [GET, POST]
+    requirements:
+        event: \d+
+        tip: \d+
+    defaults: { _controller: Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Tip\Event\UpdateAction }
 
 #
 # Event Archive

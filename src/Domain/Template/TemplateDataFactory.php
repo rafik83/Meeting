@@ -17,6 +17,7 @@ use Proximum\Vimeet\Domain\Model\Nomenclature;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\Template\AbstractTemplate;
+use Proximum\Vimeet\Domain\Model\Template\RegistrationTemplate;
 use Proximum\Vimeet\Domain\Model\Type;
 use Proximum\Vimeet\Domain\Repository\NomenclatureRepositoryInterface;
 use Proximum\Vimeet\Domain\Template\Exception\BuildNotImplementedException;
@@ -103,21 +104,36 @@ class TemplateDataFactory
     }
 
     /**
-     * @param Type   $type
-     * @param string $locale
+     * @param RegistrationTemplate $registrationTemplate
+     * @param null|string          $locale
      *
      * @return TemplateData
      */
-    public function createRegistrationFromType(Type $type, $locale)
-    {
+    public function createRegistrationFromTemplate(
+        RegistrationTemplate $registrationTemplate,
+        ?string $locale
+    ): TemplateData {
         return $this
-            ->loadNomenclatures($type->getEvent())
+            ->loadNomenclatures($registrationTemplate->getEvent())
             ->create(
-                $type->getRegistrationTemplate()->getValue(),
+
+                $registrationTemplate->getValue(),
                 [],
                 $locale,
-                $type->getRegistrationTemplate()->getFallback()
-            );
+                $registrationTemplate->getFallback()
+            )
+        ;
+    }
+
+    /**
+     * @param Type        $type
+     * @param null|string $locale
+     *
+     * @return TemplateData
+     */
+    public function createRegistrationFromType(Type $type, ?string $locale): TemplateData
+    {
+        return $this->createRegistrationFromTemplate($type->getRegistrationTemplate(), $locale);
     }
 
     /**
@@ -126,7 +142,7 @@ class TemplateDataFactory
      *
      * @return TemplateData
      */
-    public function createRegistrationFromSheet(Sheet $sheet, $locale = null)
+    public function createRegistrationFromSheet(Sheet $sheet, ?string $locale = null): TemplateData
     {
         return $this
             ->loadNomenclatures($sheet->getEvent())

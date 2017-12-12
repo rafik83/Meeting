@@ -496,6 +496,7 @@ services:
             - ~
             - ~
             - '@?event_dispatcher'
+            - ~
             - '@security.impersonate'
             - '@vimeet_infrastructure.repository.event_repository'
         tags:
