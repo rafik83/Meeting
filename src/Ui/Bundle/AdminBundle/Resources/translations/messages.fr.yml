@@ -167,6 +167,7 @@ admin.event.paymentConditions.link: 'Conditions de paiement'
 admin.event.paymentConditions.update.title: 'Modifier les conditions de paiement'
 admin.event.practicalInfo.link: 'Informations Pratiques'
 admin.event.practicalInfo.update.title: 'Modifier les informations pratiques'
+admin.event.registration.template_builder.remove_confirm: 'Confirmez vous la suppression de cet élément ?'
 admin.event.search_facet.enabled.label: Activé
 admin.event.search_facet.title: 'Filtres du catalogue'
 admin.event.search_facets.link: 'Filtres catalogue'
