@@ -6,11 +6,16 @@ Proximum\Vimeet\Domain\Model\Sheet:
             - '@type_exposant'
             -
                 # Titre de la fiche
-                dcc42d3d: { text: { fr: "<catchPhrase()>" } }
+                dcc42d3d:
+                    text:
+                        fr: "<catchPhrase()>"
                 # Lien
-                90713a3d: { url: "<url()>" }
+                90713a3d:
+                    url: "<url()>"
                 # Description d'activité
-                d691d21c: { text: { fr: "<sentence()>" } }
+                d691d21c:
+                    text:
+                        fr: "<sentence()>"
             - '@user_test'
             - <dateTime()>
         title: 'WorldCompanyInc'
@@ -33,11 +38,16 @@ Proximum\Vimeet\Domain\Model\Sheet:
             - '@type_visiteur'
             -
                 # Titre de la fiche
-                dcc42d3d: { text: { fr: "<catchPhrase()>" } }
+                dcc42d3d:
+                    text:
+                        fr: "<catchPhrase()>"
                 # Lien
-                90713a3d: { url: "<url()>" }
+                90713a3d:
+                    url: "<url()>"
                 # Description d'activité
-                d691d21c: { text: { fr: "<sentence()>" } }
+                d691d21c:
+                    text:
+                        fr: "<sentence()>"
             - '@proximum_user_visiteur'
             - <dateTime()>
         registrationData:
@@ -54,13 +64,17 @@ Proximum\Vimeet\Domain\Model\Sheet:
             - '@event_rdv_carnot_2016'
             - '@type_institute_carnot'
             -
-            # Titre de la fiche
                 # Titre de la fiche
-                dcc42d3d: { text: { fr: "<catchPhrase()>" } }
+                dcc42d3d:
+                    text:
+                        fr: "<catchPhrase()>"
                 # Lien
-                90713a3d: { url: "<url()>" }
+                90713a3d:
+                    url: "<url()>"
                 # Description d'activité
-                d691d21c: { text: { fr: "<sentence()>" } }
+                d691d21c:
+                    text:
+                        fr: "<sentence()>"
             - '@proximum_user_exposant'
             - <dateTime()>
         registrationData:
@@ -148,11 +162,16 @@ Proximum\Vimeet\Domain\Model\Sheet:
             - '@type_exposant'
             -
                 # Titre de la fiche
-                dcc42d3d: { text: { fr: "<catchPhrase()>" } }
+                dcc42d3d:
+                    text:
+                        fr: "<catchPhrase()>"
                 # Lien
-                90713a3d: { url: "<url()>" }
+                90713a3d:
+                    url: "<url()>"
                 # Description d'activité
-                d691d21c: { text: { fr: "<sentence()>" } }
+                d691d21c:
+                    text:
+                        fr: "<sentence()>"
             - '@user_random_1'
             - <dateTime()>
         registrationData:
@@ -298,11 +317,16 @@ Proximum\Vimeet\Domain\Model\Sheet:
             - '@type_visiteur'
             -
                 # Titre de la fiche
-                dcc42d3d: { text: { fr: "<catchPhrase()>" } }
+                dcc42d3d:
+                    text:
+                        fr: "<catchPhrase()>"
                 # Lien
-                90713a3d: { url: "<url()>" }
+                90713a3d:
+                    url: "<url()>"
                 # Description d'activité
-                d691d21c: { text: { fr: "<sentence()>" } }
+                d691d21c:
+                    text:
+                        fr: "<sentence()>"
             - '@proximum_user_visiteur'
             - <dateTime()>
         registrationData:

@@ -7,6 +7,17 @@
 {% block form_title 'admin.event.paymentConditions.update.title'|trans %}
 
 {% block form_content %}
+    {% if typeWithPaymentConditions.types is not empty %}
+        <div class="well">
+            {{ 'admin.event.paymentConditions.typeWithSpecificPaymentConditions'|trans }}
+            <ul>
+                {% for type in typeWithPaymentConditions.types %}
+                    <li>{{ type.title }}</li>
+                {% endfor %}
+            </ul>
+        </div>
+    {% endif %}
+
     {{ form_row(form.allowDeposit) }}<br>
     {{ form_row(form.minimumForDeposit, {widget_columns: 3}) }}
     {{ form_row(form.depositUntil, {widget_columns: 3}) }}

@@ -13,8 +13,10 @@ namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Controller;
 use Proximum\Vimeet\Application\Components\Sheet\Details\Invoice\InvoiceViewQuery;
 use Proximum\Vimeet\Application\Query\Order\ProFormaQuery;
 use Proximum\Vimeet\Application\Query\Order\SummaryQuery;
+use Proximum\Vimeet\Application\Query\Payment\PaymentConditionsViewQuery;
 use Proximum\Vimeet\Domain\Model\Order;
 use Proximum\Vimeet\Domain\Model\Sheet;
+use Proximum\Vimeet\Domain\Payment\Mode;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\ParamConverter\EventDomain;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Security\SheetVoter;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -41,13 +43,21 @@ class OrderController extends Controller
             throw $this->createNotFoundException('This page is not accessible by this user');
         }
 
+        $paymentConditionsView = $this
+            ->get('Proximum\Vimeet\Infrastructure\Adapter\QueryBus')
+            ->handle(new PaymentConditionsViewQuery($sheet))
+        ;
+
+        $canPayIfRemaining = in_array(Mode::PAYMENT_PAYPAL, $paymentConditionsView->paymentModes, true);
+
         return $this->render('EventBundle:Order:list.html.twig', [
-            'event'          => $eventDomain->getEvent(),
-            'orderVatViews'  => $orderVatViews,
-            'sheet'          => $sheet,
-            'transactions'   => $balance->getTransactions($sheet),
-            'remainingToPay' => $balance->getRemainingToPay($sheet),
-            'invoiceViews'   => $this->get('sheet.sheet_details.invoice_view_query_handler')->handle(
+            'event'             => $eventDomain->getEvent(),
+            'canPayIfRemaining' => $canPayIfRemaining,
+            'orderVatViews'     => $orderVatViews,
+            'remainingToPay'    => $balance->getRemainingToPay($sheet),
+            'sheet'             => $sheet,
+            'transactions'      => $balance->getTransactions($sheet),
+            'invoiceViews'      => $this->get('sheet.sheet_details.invoice_view_query_handler')->handle(
                 new InvoiceViewQuery($sheet)
             ),
         ]);
