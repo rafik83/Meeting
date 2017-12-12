@@ -1,13 +1,15 @@
-preprod-1 ansible_ssh_host=proximum-vimeet-preprod ansible_ssh_user=www-data
-prod-1 ansible_ssh_host=proximum-web-apache-01 ansible_ssh_user=www-data
-prod-2 ansible_ssh_host=proximum-web-apache-02 ansible_ssh_user=www-data
+preprod-1 ansible_ssh_host=vimeet-preprod ansible_ssh_user=www-data
+prod-1 ansible_ssh_host=vimeet-prod1 ansible_ssh_user=www-data
+prod-2 ansible_ssh_host=vimeet-prod2 ansible_ssh_user=www-data
 
 [deploy_preprod]
 preprod-1
 
 [deploy_prod]
+prod-[1:2]
+
+[deploy_prod_primary]
 prod-1
-prod-2
 
 [deploy:children]
 deploy_preprod

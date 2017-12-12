@@ -95,7 +95,7 @@ install: install-app install-db install-db@test install-db-fixtures install-db-f
 
 install@test: install-app@test install-db@test install-db-fixtures@test install-dep build@prod
 
-install@prod: install-dep build@prod
+install@prod: install-app install-dep build@prod
 
 install-app:
 	composer --no-progress --no-interaction install
@@ -208,7 +208,8 @@ test-behat@test:
 ##########
 
 ## Deploy application (demo)
-deploy@demo: deploy-capifony@demo
+deploy@demo:
+	ansible-playbook ansible/deploy.yml --inventory-file=ansible/hosts --limit=deploy_preprod
 
 ## Deploy application (preprod)
 deploy@preprod: deploy-capifony@preprod
