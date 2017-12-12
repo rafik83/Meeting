@@ -72,6 +72,12 @@ parameters:
     planner_command: 'curl -v -X POST http://optaplanner:8080/job/NameOfTheBuildYouShouldChangeIt/build --user vimeet:PasswordYouShouldChangeIt --data-urlencode json=''{"parameter": [{"name":"INPUT", "value":"%%filename%%"}]}'''
     planner_trusted_name: 'NameOfTheBuildYouShouldChangeIt'
 
+    jenkins_user: vimeet
+    jenkins_password: PasswordYouShouldChangeIt
+    jenkins_command: 'curl -v -X POST http://optaplanner:8080/job/%%buildName%%/build --user %%jenkinsUser%%:%%jenkinsPassword%% --data-urlencode json=''{"parameter": %%jenkinsParameters%%}'''
+
+    jenkins_phantomjs_sheet_pdf_print_build_name: 'PhantomJsSheetPrintPdfBuild'
+
     # Features flag
     feature_video_conference_enabled: false
     feature_video_conference_date_security_enabled: false

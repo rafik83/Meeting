@@ -7,7 +7,7 @@
     @include bg-linear-gradient($gradient-left-color, $gradient-right-color);
 
     a {
-        font-family: openSans;
+        font-family: OpenSans, Helvetica, sans-serif;
         color: $gradient-text-color;
     }
 

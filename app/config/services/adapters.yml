@@ -13,3 +13,14 @@ services:
             $commandBus: '@tactician.commandbus.query'
 
     Proximum\Vimeet\Application\Adapter\QueryBusInterface: '@Proximum\Vimeet\Infrastructure\Adapter\QueryBus'
+
+    adapter.exec_adapter:
+        class: Proximum\Vimeet\Infrastructure\Adapter\ExecAdapter
+
+    adapter.third_party.jenkins.build_creator_adapter:
+        class: Proximum\Vimeet\Infrastructure\Adapter\ThirdParty\Jenkins\BuildCreatorAdapter
+        arguments:
+            - '@adapter.exec_adapter'
+            - '%jenkins_command%'
+            - '%jenkins_user%'
+            - '%jenkins_password%'

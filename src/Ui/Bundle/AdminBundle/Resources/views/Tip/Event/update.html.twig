@@ -1,0 +1,10 @@
+{% extends 'AdminBundle:Common:form_layout.html.twig' %}
+
+{% block form_title 'admin.tip.event.update.title'|trans({'%eventTitle%': event.title}) %}
+
+{% block goback_link path('admin_tip_event_list', {'event': event.id}) %}
+
+{% block javascripts %}
+    {{ parent() }}
+    {{ include('AdminBundle:Tip:tip-js.html.twig') }}
+{% endblock %}

@@ -10,13 +10,13 @@
     When I go to this page "/fr/event"
     Then I should see "admin.tip.link"
 
-  Scenario: I can see the tip list on admin
+  Scenario: I can not see the tip on global but on the tip list of the event
     Given I am logged as admin
     When I go to this page "/fr/tip/list"
     Then I should see "admin.tip.list.title"
+    And I should not see "Awesome tip"
+    Then I go to this page "/fr/event/1/tip/list"
     And I should see "Awesome tip"
-    And I should see "Best of Web"
-    And I should see "Français"
 
   Scenario: I can create a new tip
     Given I am logged as admin
@@ -43,7 +43,7 @@
 
   Scenario: I can update an existent tip
     Given I am logged as admin
-    And I go to this page "/fr/tip/1/update"
+    And I go to this page "/fr/tip/2/update"
     And I should see "form.tip_update.children.title.label"
     And I should see "form.tip_update.children.onCatalog.label"
     And I should see "form.tip_update.children.translations.prototype.children.title.label"
@@ -53,8 +53,8 @@
     And I should see "form.tip_update.children.translations.prototype.label"
     And I should see "form.tip_update.children.translations.label"
     When I fill in the following:
-      | tip_update_title | tip_updated_title |
-      | tip_update_translations_fr_title | fr |
+      | tip_update_title                   | tip_updated_title |
+      | tip_update_translations_fr_title   | fr |
       | tip_update_translations_fr_content | tip_updated_content |
     And I check "tip_update_onCatalog"
     And I press "tip_update_submit"
