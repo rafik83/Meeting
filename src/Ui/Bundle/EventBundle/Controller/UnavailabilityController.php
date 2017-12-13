@@ -124,7 +124,7 @@ class UnavailabilityController extends Controller
         ]);
 
         /** @var CreateFormView $createFormView */
-        $createFormView = $this->get('tactician.commandbus')->handle(
+        $createFormView = $this->get('handler.unavailability.create_form_handler')->handle(
             new CreateForm($request, $event, $sheet, $user, $actionUrl)
         );
 
