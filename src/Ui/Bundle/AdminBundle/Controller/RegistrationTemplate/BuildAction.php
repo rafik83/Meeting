@@ -101,7 +101,8 @@ class BuildAction
             'locale' => $locale,
             'nomenclatures' => $nomenclatures,
             'registrationTemplate' => $registrationTemplate,
-            'sheet_tags' => Tag::getRegisterTemplateChoiceTags(),
+            'sheetTags' => Tag::getSheetAndGenericTags(),
+            'participantTags' => Tag::getParticipantAndGenericTags(),
         ]);
     }
 }

@@ -46,8 +46,9 @@
                             'locale': locale,
                             'fallback': registrationTemplate.fallback,
                             'nomenclatures': nomenclatures,
-                            'sheet_tags': sheet_tags,
-                            'products': []
+                            'sheetTags': sheetTags,
+                            'participantTags': participantTags,
+                            'products': [],
                         }, false) }}
                     {% endif %}
                 {% endfor %}
@@ -59,7 +60,14 @@
                 <div class="tab-content">
                     <div id="object-list" class="object-list">
                         {#{{ include('AdminBundle:Template/Object:text.html.twig', { 'locale': locale }, false) }}#}
-                        {{ include('AdminBundle:Template/Object:editable-text.html.twig', { 'locale': locale, 'isRegistrationTemplate': 'true' }, false) }}
+
+                        {{ include('AdminBundle:Template/Object:editable-text.html.twig', {
+                            'isRegistrationTemplate': true,
+                            'locale': locale,
+                            'sheet_tags': sheetTags,
+                            'participant_tags': participantTags,
+                        }, false) }}
+
                         {#{{ include('AdminBundle:Template/Object:button-link.html.twig', { 'locale': locale }, false) }}#}
                         {#{{ include('AdminBundle:Template/Object:participant.html.twig', { 'locale': locale }, false) }}#}
                         {#{{ include('AdminBundle:Template/Object:image.html.twig', { 'locale': locale,'products': products }, false) }}#}

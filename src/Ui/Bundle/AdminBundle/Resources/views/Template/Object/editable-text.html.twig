@@ -68,20 +68,20 @@
                                     {% endif %}
                                 </div>
                                 <div class="form-group">
-                                    <label class="form-label">{{ 'template.required.title'|trans }}</label>
                                     <input type="checkbox" name="required" />
+                                    <label class="form-label">{{ 'template.required.title'|trans }}</label>
                                 </div>
                                 <div class="form-group">
-                                    <label class="form-label">{{ 'template.translatable.title'|trans }}</label>
                                     <input type="checkbox" name="translatable" />
+                                    <label class="form-label">{{ 'template.translatable.title'|trans }}</label>
                                 </div>
                                 <div class="form-group">
                                     <label class="form-label">{{ 'template.maxLength.title'|trans }}</label>
                                     <input class="form-control" type="number" step="1" name="maxLength" />
                                 </div>
                                 <div class="form-group">
-                                    <label class="form-label">{{ 'template.hideLabel.title'|trans }}</label>
                                     <input type="checkbox" name="hideLabel"/>
+                                    <label class="form-label">{{ 'template.hideLabel.title'|trans }}</label>
                                 </div>
                                 <div class="form-group">
                                     <label class="form-label">{{ 'template.type.title'|trans }}</label>
@@ -96,21 +96,56 @@
                                         {% endfor %}
                                     </select>
                                 </div>
-                                <div class="form-group">
-                                    {% if isRegistrationTemplate is defined %}
-                                        <label class="form-label">{{ 'template.registration.tag'|trans }}</label>
-                                    {% else %}
+
+                                {% if isRegistrationTemplate is defined %}
+                                    <div class="form-group">
+                                        <div class="form-group">
+                                            <input type="checkbox" name="sheet_data" />
+                                            <label class="form-label">
+                                                {{ 'template.registration.sheetInformation'|trans }}
+                                            </label>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label class="form-label" for="sheet_tag">
+                                                {{ 'template.registration.sheetTags'|trans }}
+                                            </label>
+                                            <select class="form-control" name="sheet_tag">
+                                                <option value=""></option>
+                                                {% for tag in sheet_tags %}
+                                                    <option value="{{ tag }}">{{ ('template.tag.' ~ tag)|trans }}</option>
+                                                {% endfor %}
+                                            </select>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <input type="checkbox" name="participant_data" />
+                                            <label class="form-label">{{ 'template.registration.participantInformation'|trans }}</label>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label class="form-label" for="participant_tag">
+                                                {{ 'template.registration.participantTags'|trans }}
+                                            </label>
+                                            <select class="form-control" name="participant_tag">
+                                                <option value=""></option>
+                                                {% for tag in participant_tags %}
+                                                    <option value="{{ tag }}">{{ ('template.tag.' ~ tag)|trans }}</option>
+                                                {% endfor %}
+                                            </select>
+                                        </div>
+                                    </div>
+                                {% else %}
+                                    <div class="form-group">
                                         <label class="form-label">{{ 'template.object.tag'|trans }}</label>
-                                    {% endif %}
-                                    <select class="form-control" name="tag">
-                                        <option value=""></option>
-                                        {% if sheet_tags is defined %}
+                                        <select class="form-control" name="tag">
+                                            <option value=""></option>
                                             {% for tag in sheet_tags %}
                                                 <option value="{{ tag }}">{{ ('template.tag.' ~ tag)|trans }}</option>
                                             {% endfor %}
-                                        {% endif %}
-                                    </select>
-                                </div>
+                                        </select>
+                                    </div>
+                                {% endif %}
                             </div>
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-default" data-dismiss="modal">{{ 'template.action.close'|trans }}</button>
