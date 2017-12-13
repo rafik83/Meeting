@@ -15,7 +15,7 @@ Feature: Unavailability
       | @InfrastructureBundle/DataFixtures/ORM/ASDDays2016-Type.yml              |
       | @InfrastructureBundle/DataFixtures/ORM/ASDDays2016-Sheet.yml             |
       | @InfrastructureBundle/DataFixtures/ORM/ASDDays2016-Rule.yml              |
-    When I am logged with "user_asddays_2@proximum.com" on event "http://asddays-2016.vimeet.proximum.dev"
+    When I am logged with "user_asddays_2@proximum.com" on event "http://asddays-2016.vimeet.proximum"
     And I go to this page "/fr"
     Then I should be on this page "/fr/sheet/2"
     When I go to this page "/fr/sheet/2/agenda"
@@ -39,7 +39,7 @@ Feature: Unavailability
     And I should see "unavailability.title"
 
   Scenario: I can remove an unavailability
-    Given I am logged with "user_asddays_2@proximum.com" on event "http://asddays-2016.vimeet.proximum.dev"
+    Given I am logged with "user_asddays_2@proximum.com" on event "http://asddays-2016.vimeet.proximum"
     And I go to this page "/fr/sheet/2/agenda"
     And I should see "unavailability.title"
     When I press "cancelUnavailability"
@@ -47,7 +47,7 @@ Feature: Unavailability
     And I should not see "unavailability.title"
 
   Scenario: I can add comment to an unavailability
-    When I am logged with "user_asddays_2@proximum.com" on event "http://asddays-2016.vimeet.proximum.dev"
+    When I am logged with "user_asddays_2@proximum.com" on event "http://asddays-2016.vimeet.proximum"
     And I go to this page "/fr"
     Then I should be on this page "/fr/sheet/2"
     When I go to this page "/fr/sheet/2/agenda"

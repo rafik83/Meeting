@@ -63,7 +63,7 @@ class CreateHandlerTest extends TestCase
             ->enableOriginalConstructor()
             ->setConstructorArgs([tempnam(sys_get_temp_dir(), ''), 'jpeg'])
             ->getMock();
-        $create->domain        = 'hello.vimeet.proximum.dev';
+        $create->domain        = 'hello.vimeet.proximum';
         $create->timeZone      = 'Europe/Paris';
         $create->organiserName = 'proximum';
         $create->emailTeam     = 'team-project@example.net';
@@ -79,7 +79,7 @@ class CreateHandlerTest extends TestCase
             'FR',
             'USD',
             'Europe/Paris',
-            'hello.vimeet.proximum.dev',
+            'hello.vimeet.proximum',
             'proximum',
             'team-project@example.net',
             $prefix,
@@ -110,7 +110,7 @@ class CreateHandlerTest extends TestCase
         $eventRepository->set(Argument::that(function (Event $event) use ($expectedEvent) {
             return $event->getTitle() === $expectedEvent->getTitle();
         }))->shouldBeCalled();
-        $eventRepository->getEventByDomain('hello.vimeet.proximum.dev')->shouldBeCalled()->willReturn(null);
+        $eventRepository->getEventByDomain('hello.vimeet.proximum')->shouldBeCalled()->willReturn(null);
         $guidelineGenerator = $this->prophesize(Generator::class);
         $guidelineGenerator->generate(Argument::that(function (Event $event) use ($expectedEvent) {
             return $event->getTitle() === $expectedEvent->getTitle();
@@ -173,7 +173,7 @@ class CreateHandlerTest extends TestCase
             ->enableOriginalConstructor()
             ->setConstructorArgs([tempnam(sys_get_temp_dir(), ''), 'jpeg'])
             ->getMock();
-        $create->domain        = 'hello.vimeet.proximum.dev';
+        $create->domain        = 'hello.vimeet.proximum';
         $create->timeZone      = 'Europe/Paris';
         $create->emailTeam     = 'team-project@example.net';
         $create->visible       = true;
@@ -188,7 +188,7 @@ class CreateHandlerTest extends TestCase
             'FR',
             'USD',
             'Europe/Paris',
-            'hello.vimeet.proximum.dev',
+            'hello.vimeet.proximum',
             'proximum',
             'team-project@example.net',
             $prefix,
@@ -224,7 +224,7 @@ class CreateHandlerTest extends TestCase
         $eventRepository->set(Argument::that(function (Event $event) use ($expectedEvent) {
             return $event->getTitle() === $expectedEvent->getTitle();
         }))->shouldBeCalled();
-        $eventRepository->getEventByDomain('hello.vimeet.proximum.dev')->shouldBeCalled()->willReturn(null);
+        $eventRepository->getEventByDomain('hello.vimeet.proximum')->shouldBeCalled()->willReturn(null);
 
         $guidelineGenerator = $this->prophesize(Generator::class);
         $guidelineGenerator->generate(Argument::that(function (Event $event) use ($expectedEvent) {
@@ -291,7 +291,7 @@ class CreateHandlerTest extends TestCase
             ->enableOriginalConstructor()
             ->setConstructorArgs([tempnam(sys_get_temp_dir(), ''), 'jpeg'])
             ->getMock();
-        $create->domain        = 'hello.vimeet.proximum.dev';
+        $create->domain        = 'hello.vimeet.proximum';
         $create->timeZone      = 'Europe/Paris';
         $create->organiserName = 'proximum';
         $create->visible       = true;
@@ -306,7 +306,7 @@ class CreateHandlerTest extends TestCase
             'FR',
             'USD',
             'Europe/Paris',
-            'hello.vimeet.proximum.dev',
+            'hello.vimeet.proximum',
             'proximum',
             'team-project@example.net',
             $prefix,
@@ -335,7 +335,7 @@ class CreateHandlerTest extends TestCase
         $eventRepository->add(Argument::that(function (Event $event) use ($expectedEvent) {
             return $event->getTitle() === $expectedEvent->getTitle();
         }))->shouldNotBeCalled();
-        $eventRepository->getEventByDomain('hello.vimeet.proximum.dev')->shouldBeCalled()
+        $eventRepository->getEventByDomain('hello.vimeet.proximum')->shouldBeCalled()
             ->willReturn(EventFactory::createEvent());
         $guidelineGenerator = $this->prophesize(Generator::class);
         $guidelineGenerator->generate(Argument::that(function (Event $event) use ($expectedEvent) {
@@ -382,7 +382,7 @@ class CreateHandlerTest extends TestCase
             'FR',
             'USD',
             'Europe/Paris',
-            'hello.vimeet.proximum.dev',
+            'hello.vimeet.proximum',
             'proximum',
             'team-project@example.net',
             $prefix,
@@ -400,7 +400,7 @@ class CreateHandlerTest extends TestCase
         $contentRepository  = $this->prophesize(ContentRepositoryInterface::class);
         $duplicator         = $this->prophesize(Duplicator::class);
 
-        $eventRepository->getEventByDomain('hello.vimeet.proximum.dev')->shouldBeCalled()->willReturn(null);
+        $eventRepository->getEventByDomain('hello.vimeet.proximum')->shouldBeCalled()->willReturn(null);
 
         $eventRepository->add(Argument::that(function (Event $expectedEvent) use ($event) {
             return $expectedEvent->getTitle() === $event->getTitle();

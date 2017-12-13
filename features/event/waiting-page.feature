@@ -6,7 +6,7 @@ Feature: Event waiting page
     And the event "Event" is created
     And this event occurs today from "08:00" to "18:00"
     And the registration are not open
-    When I go to this page "http://super-event.vimeet.proximum.dev/fr/"
+    When I go to this page "http://super-event.vimeet.proximum/fr/"
     Then I should be on this page "/fr/registration-not-opened"
     And I should see "event.registration_not_open"
 
@@ -15,7 +15,7 @@ Feature: Event waiting page
     And the event "Event" is created
     And this event occurs today from "08:00" to "18:00"
     And the registration are closed
-    When I go to this page "http://super-event.vimeet.proximum.dev/fr/"
+    When I go to this page "http://super-event.vimeet.proximum/fr/"
     Then I should be on this page "/fr/registration-not-opened"
     And I should see "event.registration_closed"
     And I should see "login.link.label"

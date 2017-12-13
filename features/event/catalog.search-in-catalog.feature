@@ -17,7 +17,7 @@ Feature: Search sheet in catalog
       | @InfrastructureBundle/DataFixtures/ORM/ASDDays2016-Rule.yml              |
       | @InfrastructureBundle/DataFixtures/ORM/ASDDays2016-SearchFacet.yml       |
     And elastica is populate
-    When I am logged with "user_asddays_2@proximum.com" on event "http://asddays-2016.vimeet.proximum.dev"
+    When I am logged with "user_asddays_2@proximum.com" on event "http://asddays-2016.vimeet.proximum"
     And I go to this page "/fr"
     Then I should be on this page "/fr/sheet/2"
     When I follow "navigation.links.catalog.available_date"
@@ -31,7 +31,7 @@ Feature: Search sheet in catalog
     And I should not see "Hello World Company"
 
   Scenario: I can search and filter sheet by localization
-    Given I am logged with "user_asddays_2@proximum.com" on event "http://asddays-2016.vimeet.proximum.dev"
+    Given I am logged with "user_asddays_2@proximum.com" on event "http://asddays-2016.vimeet.proximum"
     And I go to this page "/fr"
     Then I should be on this page "/fr/sheet/2"
     When I follow "navigation.links.catalog.available_date"
@@ -45,7 +45,7 @@ Feature: Search sheet in catalog
     And I should not see "Hello World Company"
 
   Scenario: I can search and filter sheet by keyword
-    Given I am logged with "user_asddays_2@proximum.com" on event "http://asddays-2016.vimeet.proximum.dev"
+    Given I am logged with "user_asddays_2@proximum.com" on event "http://asddays-2016.vimeet.proximum"
     And I go to this page "/fr"
     And I go to this page "/fr/catalog"
     Then I should see "3" in the ".total-result" element
@@ -62,7 +62,7 @@ Feature: Search sheet in catalog
     Then I should see "catalog.noResult"
 
   Scenario: I can search and filter sheet by supply or need
-    Given I am logged with "user_asddays_2@proximum.com" on event "http://asddays-2016.vimeet.proximum.dev"
+    Given I am logged with "user_asddays_2@proximum.com" on event "http://asddays-2016.vimeet.proximum"
     And I go to this page "/fr"
     When I go to this page "/fr/sheet/2/catalog?objective=supply"
     Then I should see "1" in the ".total-result" element

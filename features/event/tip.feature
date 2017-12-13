@@ -18,7 +18,7 @@
     And this tip is affected on the catalog
     And this tip is affected on the meeting request management
     And elastica is populate
-    And I am logged with "user@example.net" on event "http://super-event.vimeet.proximum.dev"
+    And I am logged with "user@example.net" on event "http://super-event.vimeet.proximum"
     And I go to this page "/fr/catalog"
     Then I should see "Awesome tip"
     And I go to this page "/fr/sheet/1/meeting/request"

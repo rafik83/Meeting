@@ -14,7 +14,7 @@ Feature: Register with participant step
       | @InfrastructureBundle/DataFixtures/ORM/ASDDays2016-Template.yml          |
       | @InfrastructureBundle/DataFixtures/ORM/ASDDays2016-Type.yml              |
       | @InfrastructureBundle/DataFixtures/ORM/ASDDays2016-Sheet.yml             |
-    And I am logged with "user_asddays_1@proximum.com" on event "http://asddays-2016.vimeet.proximum.dev"
+    And I am logged with "user_asddays_1@proximum.com" on event "http://asddays-2016.vimeet.proximum"
     When I go to this page "/fr/participant/1/step/3"
     Then I should see "Organisme"
     And I should see "register.step 3/3"
@@ -38,8 +38,8 @@ Feature: Register with participant step
     And I fill in the following:
       | Décrivez votre activité | Ceci est une description |
     When I press "register.finalize"
-    Then the "event.preregistered" mail should be sent to "user_asddays_1@proximum.com" from "no-reply@asddays-2016.vimeet.proximum.dev"
-    Then the "event.preregistered" mail should be sent in bcc to "team-project@example.net" from "no-reply@asddays-2016.vimeet.proximum.dev"
+    Then the "event.preregistered" mail should be sent to "user_asddays_1@proximum.com" from "no-reply@asddays-2016.vimeet.proximum"
+    Then the "event.preregistered" mail should be sent in bcc to "team-project@example.net" from "no-reply@asddays-2016.vimeet.proximum"
     And I should be on this page "/fr/sheet/1"
     And I should see "sheet.welcome.title"
     And I should see "sheet.welcome.sheetContent"

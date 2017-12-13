@@ -16,7 +16,7 @@ Feature: Program Happening
       | @InfrastructureBundle/DataFixtures/ORM/ASDDays2016-Sheet.yml             |
       | @InfrastructureBundle/DataFixtures/ORM/ASDDays2016-Rule.yml              |
       | @InfrastructureBundle/DataFixtures/ORM/ASDDays2016-Happening.yml         |
-    When I am logged with "user_asddays_2@proximum.com" on event "http://asddays-2016.vimeet.proximum.dev"
+    When I am logged with "user_asddays_2@proximum.com" on event "http://asddays-2016.vimeet.proximum"
     And I go to this page "/fr"
     Then I should be on this page "/fr/sheet/2"
     And I should see "Conférence"

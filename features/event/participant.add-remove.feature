@@ -14,7 +14,7 @@ Feature: Manage participant
       | @InfrastructureBundle/DataFixtures/ORM/ASDDays2016-Template.yml          |
       | @InfrastructureBundle/DataFixtures/ORM/ASDDays2016-Type.yml              |
       | @InfrastructureBundle/DataFixtures/ORM/ASDDays2016-Sheet.yml             |
-    And I am logged with "user_asddays_1@proximum.com" on event "http://asddays-2016.vimeet.proximum.dev"
+    And I am logged with "user_asddays_1@proximum.com" on event "http://asddays-2016.vimeet.proximum"
     When I go to this page "/fr"
     Then I should be on this page "/fr/sheet/1"
     And I should see "sheet.object.action.add"
@@ -26,15 +26,15 @@ Feature: Manage participant
       | add_participant_email     | pascal.michelin@example.net |
     And I should see "Participant supplémentaire"
     Then I press "sheet.participant.sendInvite"
-    And the "sheet.participant.add.confirmation" mail should be sent to "user_asddays_1@proximum.com" from "no-reply@asddays-2016.vimeet.proximum.dev"
-    And the "user.account_activated" mail should be sent to "pascal.michelin@example.net" from "no-reply@asddays-2016.vimeet.proximum.dev"
+    And the "sheet.participant.add.confirmation" mail should be sent to "user_asddays_1@proximum.com" from "no-reply@asddays-2016.vimeet.proximum"
+    And the "user.account_activated" mail should be sent to "pascal.michelin@example.net" from "no-reply@asddays-2016.vimeet.proximum"
     And I should be on this page "/fr/sheet/1/fr"
     And I should see "Pascal MICHELIN"
     # initials of Pascal MICHELIN
     And I should see "PM"
 
   Scenario: I can remove a participant of my sheet
-    Given I am logged with "user_asddays_1@proximum.com" on event "http://asddays-2016.vimeet.proximum.dev"
+    Given I am logged with "user_asddays_1@proximum.com" on event "http://asddays-2016.vimeet.proximum"
     When I go to this page "/fr"
     Then I should be on this page "/fr/sheet/1"
     And I should see "sheet.object.action.remove"
