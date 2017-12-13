@@ -17,7 +17,7 @@ Feature: Dday catalog
     And the tip "Confirmation telephone" is created
     And a tip "Confirmation telephone" is enabled on confirmation phone context for this type
     And elastica is populate
-    When I am logged with "user@elao.com" on event "http://super-event.vimeet.proximum.dev"
+    When I am logged with "user@elao.com" on event "http://super-event.vimeet.proximum"
     And I go to this page "/"
     Then I should see "navigation.category.catalog"
     When I follow "navigation.category.catalog"

@@ -13,7 +13,7 @@ Feature: Select payable option in sheet
     | @InfrastructureBundle/DataFixtures/ORM/ASDDays2016-Template.yml          |
     | @InfrastructureBundle/DataFixtures/ORM/ASDDays2016-Type.yml              |
     | @InfrastructureBundle/DataFixtures/ORM/ASDDays2016-Sheet.yml             |
-    When I am logged with "user_asddays_1@proximum.com" on event "http://asddays-2016.vimeet.proximum.dev"
+    When I am logged with "user_asddays_1@proximum.com" on event "http://asddays-2016.vimeet.proximum"
     And I go to this page "/fr"
     Then I should be on this page "/fr/sheet/1"
     When I follow "Ajouter un logo"
@@ -58,7 +58,7 @@ Feature: Select payable option in sheet
     Then I should be on this page "/fr/sheet/1/orders"
 
   Scenario: I can't edit my image object payable option after order paid
-    Given I am logged with "user_asddays_1@proximum.com" on event "http://asddays-2016.vimeet.proximum.dev"
+    Given I am logged with "user_asddays_1@proximum.com" on event "http://asddays-2016.vimeet.proximum"
     When I go to this page "/fr"
     Then I should be on this page "/fr/sheet/1"
     When I follow "Ajouter un logo"
@@ -67,7 +67,7 @@ Feature: Select payable option in sheet
     And I should not see "sheet_image_data_selectedProduct_6"
 
   Scenario: I can always select a payable option in my media because I doesn't buy one in my package
-    Given I am logged with "user_asddays_1@proximum.com" on event "http://asddays-2016.vimeet.proximum.dev"
+    Given I am logged with "user_asddays_1@proximum.com" on event "http://asddays-2016.vimeet.proximum"
     When I go to this page "/fr"
     Then I should be on this page "/fr/sheet/1"
     When I follow "sheet.object.action.edit \"Médias\""
@@ -78,7 +78,7 @@ Feature: Select payable option in sheet
     Then I should be on this page "/fr/sheet/1/fr"
 
   Scenario: I can see my new payable option "Option E" in my package
-    Given I am logged with "user_asddays_1@proximum.com" on event "http://asddays-2016.vimeet.proximum.dev"
+    Given I am logged with "user_asddays_1@proximum.com" on event "http://asddays-2016.vimeet.proximum"
     When I go to this page "/fr"
     Then I should be on this page "/fr/sheet/1"
     When I follow "navigation.links.package.order_summary_total"
@@ -89,7 +89,7 @@ Feature: Select payable option in sheet
     And the "options[11]" field should contain "1"
 
   Scenario: I can pay my new payable option "Option E"
-    Given I am logged with "user_asddays_1@proximum.com" on event "http://asddays-2016.vimeet.proximum.dev"
+    Given I am logged with "user_asddays_1@proximum.com" on event "http://asddays-2016.vimeet.proximum"
     When I go to this page "/fr"
     Then I should be on this page "/fr/sheet/1"
     And I go to this page "/fr/sheet/1/package/step/2"
@@ -104,7 +104,7 @@ Feature: Select payable option in sheet
     Then I should be on this page "/fr/sheet/1/orders"
 
   Scenario: I can't edit my media object payable option after order paid
-    Given I am logged with "user_asddays_1@proximum.com" on event "http://asddays-2016.vimeet.proximum.dev"
+    Given I am logged with "user_asddays_1@proximum.com" on event "http://asddays-2016.vimeet.proximum"
     When I go to this page "/fr"
     Then I should be on this page "/fr/sheet/1"
     When I follow "sheet.object.action.edit \"Médias\""

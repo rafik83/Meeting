@@ -2,7 +2,7 @@
 # vi: set ft=ruby :
 
 app = {
-  :name        => 'vimeet.proximum',
+  :name        => 'vimeet',
   :box         => 'manala/app-dev-debian',
   :box_version => '~> 3.0.0',
   :box_memory  => 2048
@@ -19,7 +19,7 @@ Vagrant.configure(2) do |config|
   # Vm
   config.vm.box           = app[:box]
   config.vm.box_version   = app[:box_version]
-  config.vm.hostname      = app[:name] + '.dev'
+  config.vm.hostname      = app[:name] + '.proximum'
   config.vm.network       'private_network', type: 'dhcp'
   config.vm.define        'localhost' do |localhost| end
   config.vm.synced_folder '.', '/srv/app',

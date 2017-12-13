@@ -8,7 +8,7 @@ Feature: Manage sheet group
     And the user "group@example.net" is created
     And there is a group "Group" managed by this user
     And there is a sheet in this group with the title "Test"
-    And I am logged with "group@example.net" on event "http://super-event.vimeet.proximum.dev"
+    And I am logged with "group@example.net" on event "http://super-event.vimeet.proximum"
     And I am on this page "/fr/sheets-group/1"
     And I should see "Test"
     And I should not see "This is the new sheet"
@@ -23,19 +23,19 @@ Feature: Manage sheet group
     And I should see "This is the new sheet"
 
   Scenario: I can manage meeting in sheet group
-    Given I am logged with "group@example.net" on event "http://super-event.vimeet.proximum.dev"
+    Given I am logged with "group@example.net" on event "http://super-event.vimeet.proximum"
     And I am on this page "/fr/sheets-group/1"
     When I follow "group.home.link.request"
     Then I should be on this page "/fr/sheets-group/1/requests/list"
 
   Scenario: I can see participants list
-    Given I am logged with "group@example.net" on event "http://super-event.vimeet.proximum.dev"
+    Given I am logged with "group@example.net" on event "http://super-event.vimeet.proximum"
     And I am on this page "/fr/sheets-group/1"
     When I follow "group.home.link.participants"
     Then I should be on this page "/fr/sheets-group/1/participants/list"
 
   Scenario: I can update sheet participant
-    Given I am logged with "group@example.net" on event "http://super-event.vimeet.proximum.dev"
+    Given I am logged with "group@example.net" on event "http://super-event.vimeet.proximum"
     And I am on this page "/fr/sheets-group/1"
     When I follow "group.home.link.participant_update"
     Then I should be on this page "/fr/sheets-group/1/participants/update"

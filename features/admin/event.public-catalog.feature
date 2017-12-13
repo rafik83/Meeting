@@ -15,5 +15,5 @@ Feature: Manage event public catalog configuration
     When I check "externalCatalogEnabled"
     And I press "submit"
     Then I should see "flash.admin.event.catalog.external.configure.success"
-    And I should see "http://super-event.vimeet.proximum.dev/app_test.php/fr/list"
-    And I should see "http://super-event.vimeet.proximum.dev/app_test.php/en/list"
+    And I should see "http://super-event.vimeet.proximum/app_test.php/fr/list"
+    And I should see "http://super-event.vimeet.proximum/app_test.php/en/list"

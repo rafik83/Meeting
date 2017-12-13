@@ -15,7 +15,7 @@ Feature: Update participant profile
       | @InfrastructureBundle/DataFixtures/ORM/ASDDays2016-Template.yml          |
       | @InfrastructureBundle/DataFixtures/ORM/ASDDays2016-Type.yml              |
       | @InfrastructureBundle/DataFixtures/ORM/ASDDays2016-Sheet.yml             |
-    And I am logged with "user_asddays_1@proximum.com" on event "http://asddays-2016.vimeet.proximum.dev"
+    And I am logged with "user_asddays_1@proximum.com" on event "http://asddays-2016.vimeet.proximum"
     When I go to this page "/fr"
     Then I should be on this page "/fr/sheet/1"
     And I should see "JD"
@@ -36,7 +36,7 @@ Feature: Update participant profile
     And I should see "Yeb YUPONT"
 
   Scenario: I can update the participant avatar
-    Given I am logged with "user_asddays_1@proximum.com" on event "http://asddays-2016.vimeet.proximum.dev"
+    Given I am logged with "user_asddays_1@proximum.com" on event "http://asddays-2016.vimeet.proximum"
     And I go to this page "/fr/account/sheet/1/participant/1"
     Then I follow "account.profile.updateAvatar"
     And I should be on this page "/fr/account/sheet/1/participant/1/avatar/cb66008e"
@@ -47,7 +47,7 @@ Feature: Update participant profile
     And I should not see "YY"
 
   Scenario: I can update the participant company
-    Given I am logged with "user_asddays_1@proximum.com" on event "http://asddays-2016.vimeet.proximum.dev"
+    Given I am logged with "user_asddays_1@proximum.com" on event "http://asddays-2016.vimeet.proximum"
     When I go to this page "/fr/account/sheet/1/company"
     Then I should see "account.update.company.title"
     And I fill in the following:
