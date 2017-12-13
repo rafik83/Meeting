@@ -1,0 +1,39 @@
+{% trans_default_domain 'templates' %}
+
+<div class="form-group">
+    <div class="form-group">
+        <input type="checkbox" name="sheet_data" />
+        <label class="form-label">
+            {{ 'template.registration.sheetInformation'|trans }}
+        </label>
+    </div>
+
+    <div class="form-group">
+        <label class="form-label" for="sheet_tag">
+            {{ 'template.registration.sheetTags'|trans }}
+        </label>
+        <select class="form-control select2-builder" name="sheet_tag" multiple="multiple">
+            <option value=""></option>
+            {% for tag in sheet_tags %}
+                <option value="{{ tag }}">{{ ('template.tag.' ~ tag)|trans }}</option>
+            {% endfor %}
+        </select>
+    </div>
+
+    <div class="form-group">
+        <input type="checkbox" name="participant_data" />
+        <label class="form-label">{{ 'template.registration.participantInformation'|trans }}</label>
+    </div>
+
+    <div class="form-group">
+        <label class="form-label" for="participant_tag">
+            {{ 'template.registration.participantTags'|trans }}
+        </label>
+        <select class="form-control select2-builder" name="participant_tag" multiple="multiple">
+            <option value=""></option>
+            {% for tag in participant_tags %}
+                <option value="{{ tag }}">{{ ('template.tag.' ~ tag)|trans }}</option>
+            {% endfor %}
+        </select>
+    </div>
+</div>

@@ -98,43 +98,10 @@
                                 </div>
 
                                 {% if isRegistrationTemplate is defined %}
-                                    <div class="form-group">
-                                        <div class="form-group">
-                                            <input type="checkbox" name="sheet_data" />
-                                            <label class="form-label">
-                                                {{ 'template.registration.sheetInformation'|trans }}
-                                            </label>
-                                        </div>
-
-                                        <div class="form-group">
-                                            <label class="form-label" for="sheet_tag">
-                                                {{ 'template.registration.sheetTags'|trans }}
-                                            </label>
-                                            <select class="form-control" name="sheet_tag">
-                                                <option value=""></option>
-                                                {% for tag in sheet_tags %}
-                                                    <option value="{{ tag }}">{{ ('template.tag.' ~ tag)|trans }}</option>
-                                                {% endfor %}
-                                            </select>
-                                        </div>
-
-                                        <div class="form-group">
-                                            <input type="checkbox" name="participant_data" />
-                                            <label class="form-label">{{ 'template.registration.participantInformation'|trans }}</label>
-                                        </div>
-
-                                        <div class="form-group">
-                                            <label class="form-label" for="participant_tag">
-                                                {{ 'template.registration.participantTags'|trans }}
-                                            </label>
-                                            <select class="form-control" name="participant_tag">
-                                                <option value=""></option>
-                                                {% for tag in participant_tags %}
-                                                    <option value="{{ tag }}">{{ ('template.tag.' ~ tag)|trans }}</option>
-                                                {% endfor %}
-                                            </select>
-                                        </div>
-                                    </div>
+                                    {{ include('AdminBundle:RegistrationTemplate:tagsSelect.html.twig', {
+                                        'sheet_tags': sheet_tags,
+                                        'participant_tags': participant_tags,
+                                    }, false) }}
                                 {% else %}
                                     <div class="form-group">
                                         <label class="form-label">{{ 'template.object.tag'|trans }}</label>
