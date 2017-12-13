@@ -117,14 +117,13 @@ class UnavailabilityController extends Controller
         $this->denyAccessUnlessGranted(AgendaAccessVoter::PERMISSION, $eventDomain->getEvent());
 
         $event = $eventDomain->getEvent();
-        $user  = $this->getUser();
 
         $actionUrl = $this->generateUrl('event_unavailability_create_from_confirmation', [
             'sheet' => $sheet->getId(),
         ]);
 
         /** @var CreateFormView $createFormView */
-        $createFormView = $this->get('handler.unavailability.create_form_handler')->handle(
+        $createFormView = $this->get('tactician.commandbus')->handle(
             new CreateForm($request, $event, $sheet, $user, $actionUrl)
         );
 
