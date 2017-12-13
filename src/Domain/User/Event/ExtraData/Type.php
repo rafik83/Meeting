@@ -23,4 +23,9 @@ final class Type
      * State to confirm the availability of a user
      */
     const AVAILABILITY_CONFIRMATION = 'availability_confirmed';
+
+    /**
+     * State to ignore the display of the phone confirmation
+     */
+    const PHONE_CONFIRMATION_IGNORED = 'phone_confirmation_ignored';
 }

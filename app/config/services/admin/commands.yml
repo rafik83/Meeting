@@ -70,6 +70,17 @@ services:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\User\Event\Token\UpdateAgendaConfirmation }
 
     #
+    # User Phone Ignore Confirmation
+    #
+    command.user.event.phone.ignore_confirmation:
+        class: Proximum\Vimeet\Application\Command\User\Phone\IgnoreConfirmationHandler
+        arguments:
+            - '@repository.user.event.extra_data_repository'
+            - '@datetime'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\User\Phone\IgnoreConfirmation }
+
+    #
     # Type Payment Conditions
     #
     Proximum\Vimeet\Application\Command\Type\PaymentConditions\UpdateHandler:

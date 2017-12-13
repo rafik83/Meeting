@@ -32,17 +32,18 @@ class SendCodeView
      * @param string             $status
      * @param FormInterface|null $form
      * @param array              $tipTranslationViews
-     *
-     * @throws \InvalidArgumentException
      */
-    public function __construct($status, FormInterface $form = null, array $tipTranslationViews = [])
-    {
+    public function __construct(
+        $status,
+        FormInterface $form = null,
+        array $tipTranslationViews = []
+    ) {
         if (!in_array($status, [self::SEND_CODE_SUCCESS, self::SEND_CODE_SHOW_FORM, self::SEND_CODE_FORM_NOT_SHOWN])) {
             throw new \InvalidArgumentException('Status value is invalid');
         }
 
-        $this->status = $status;
-        $this->form = $form;
+        $this->status              = $status;
+        $this->form                = $form;
         $this->tipTranslationViews = $tipTranslationViews;
     }
 
