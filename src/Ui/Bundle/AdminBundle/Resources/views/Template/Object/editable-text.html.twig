@@ -68,20 +68,26 @@
                                     {% endif %}
                                 </div>
                                 <div class="form-group">
-                                    <input type="checkbox" name="required" />
-                                    <label class="form-label">{{ 'template.required.title'|trans }}</label>
+                                    <label class="form-label">
+                                        <input type="checkbox" name="required" />
+                                        {{ 'template.required.title'|trans }}
+                                    </label>
                                 </div>
                                 <div class="form-group">
-                                    <input type="checkbox" name="translatable" />
-                                    <label class="form-label">{{ 'template.translatable.title'|trans }}</label>
+                                    <label class="form-label">
+                                        <input type="checkbox" name="translatable" />
+                                        {{ 'template.translatable.title'|trans }}
+                                    </label>
                                 </div>
                                 <div class="form-group">
                                     <label class="form-label">{{ 'template.maxLength.title'|trans }}</label>
                                     <input class="form-control" type="number" step="1" name="maxLength" />
                                 </div>
                                 <div class="form-group">
-                                    <input type="checkbox" name="hideLabel"/>
-                                    <label class="form-label">{{ 'template.hideLabel.title'|trans }}</label>
+                                    <label class="form-label">
+                                        <input type="checkbox" name="hideLabel"/>
+                                        {{ 'template.hideLabel.title'|trans }}
+                                    </label>
                                 </div>
                                 <div class="form-group">
                                     <label class="form-label">{{ 'template.type.title'|trans }}</label>

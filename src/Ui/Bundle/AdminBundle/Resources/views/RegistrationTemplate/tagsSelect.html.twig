@@ -2,15 +2,20 @@
 
 <div class="form-group">
     <div class="form-group">
-        <input type="checkbox" name="sheet_data" />
-        <label class="form-label">
-            {{ 'template.registration.sheetInformation'|trans }}
-        </label>
+        <label class="form-label">{{ 'template.registration.dataType'|trans }}</label>
     </div>
 
     <div class="form-group">
+        <label class="form-label">
+            <input type="checkbox" name="sheet_data" />
+            {{ 'template.registration.sheetData'|trans }}
+        </label>
+    </div>
+
+    <div class="form-group" data-sheet-tag>
         <label class="form-label" for="sheet_tag">
             {{ 'template.registration.sheetTags'|trans }}
+            <span class="label label-default">{{ 'template.registration.optional'|trans }}</span>
         </label>
         <select class="form-control select2-builder" name="sheet_tag" multiple="multiple">
             <option value=""></option>
@@ -21,13 +26,16 @@
     </div>
 
     <div class="form-group">
-        <input type="checkbox" name="participant_data" />
-        <label class="form-label">{{ 'template.registration.participantInformation'|trans }}</label>
+        <label class="form-label">
+            <input type="checkbox" name="participant_data" />
+            {{ 'template.registration.participantData'|trans }}
+        </label>
     </div>
 
-    <div class="form-group">
+    <div class="form-group" data-participant-tag>
         <label class="form-label" for="participant_tag">
             {{ 'template.registration.participantTags'|trans }}
+            <span class="label label-default">{{ 'template.registration.optional'|trans }}</span>
         </label>
         <select class="form-control select2-builder" name="participant_tag" multiple="multiple">
             <option value=""></option>
