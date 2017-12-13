@@ -57,7 +57,7 @@ class SaveAction
         try {
             $this->commandBus->handle(new Save($registrationTemplate, $config));
         } catch (RegistrationTemplateException $registrationTemplateException) {
-            return new JsonResponse(['error' => $registrationTemplateException->getMessage()], 500);
+            return new JsonResponse(['error' => $registrationTemplateException->getMessage()], 422);
         }
 
         return new JsonResponse($config);
