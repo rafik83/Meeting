@@ -71,7 +71,6 @@
         "theofidry/alice-bundle-extension": "~1.1",
         "hautelook/alice-bundle": "~1.2.2",
         "friendsofphp/php-cs-fixer": "^2.1",
-        "easycorp/easy-log-handler": "^1.0",
         "behatch/contexts": "^2.5",
         "friends-of-behat/performance-extension": "^1.0",
         "phpspec/prophecy": "^1.7",
