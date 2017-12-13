@@ -15,7 +15,7 @@ Feature: External catalog
     And the event "Proximum Event" is created
     And the external catalog is open
     And the catalog visibility is configured
-    And the catalog visibility registration url is "http://super-event.vimeet.proximum.dev/fr/login"
+    And the catalog visibility registration url is "http://super-event.vimeet.proximum/fr/login"
     And there is a sheet with the title "Elao"
     And this sheet is validated
     And this sheet is enabled

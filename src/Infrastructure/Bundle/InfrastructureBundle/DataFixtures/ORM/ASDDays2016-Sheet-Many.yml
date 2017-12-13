@@ -19,9 +19,13 @@ Proximum\Vimeet\Domain\Model\Sheet:
             - '<randomElement(["@event_asddays_2016_type_fournisseur", "@event_asddays_2016_type_investisseur"])>'
             -
                 # Titre de la fiche
-                dcc42d3d: { text: { fr: "<catchPhrase()>" } }
+                dcc42d3d:
+                    text:
+                        fr: "<catchPhrase()>"
                 # Description d'activité
-                d691d21c: { text: { fr: "<sentence()>" } }
+                d691d21c:
+                    text:
+                        fr: "<sentence()>"
                 # Compétence
                 e438c993: { items: '<randomElements(["c93def9a", "34eab90c", "cab0332d", "aaa34eb9", "bdec99a0", "b35ae9c7", "993def9a", "e4eab90c", "dab0332d", "faa34eb9", "adec99a0", "a35ae9c7"], 3)>' }
                 # Offre

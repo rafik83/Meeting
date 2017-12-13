@@ -60,22 +60,22 @@ app_patterns:
       - Port:     22
 
     # Preprod
-    - Host proximum-vimeet-preprod:
+    - Host vimeet-preprod:
       - User:         www-data
-      - ProxyCommand: ssh proximum-gw nc vimeet-preprod %p
+      - Hostname:     10.11.0.83
 
     # Prod
     - Host proximum-mysql-master:
       - User:         www-data
       - ProxyCommand: ssh proximum-gw nc mysql-master %p
 
-    - Host proximum-web-apache-01:
+    - Host vimeet-prod1:
       - User:         www-data
-      - ProxyCommand: ssh proximum-gw nc web-apache-01 %p
+      - Hostname:     10.11.0.31
 
-    - Host proximum-web-apache-02:
+    - Host vimeet-prod2:
       - User:         www-data
-      - ProxyCommand: ssh proximum-gw nc web-apache-02 %p
+      - Hostname:     10.11.0.32
 
     - Host proximum-filer:
       - User:         www-data

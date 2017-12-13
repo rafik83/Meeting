@@ -1,21 +1,22 @@
-var $                       = require('jquery'),
-    Confirm                 = require('./components/_Confirm'),
-    CheckAllCheckbox        = require('./components/_CheckAllCheckbox'),
-    LoadingButton           = require('./components/_LoadingButton'),
-    TemplateBuilder         = require('./components/_TemplateBuilder'),
-    PrintTemplateBuilder    = require('./components/_PrintTemplateBuilder'),
-    Batch                   = require('./components/_Batch'),
-    Slots                   = require('./components/_Slots'),
+var $ = require('jquery'),
+    Confirm = require('./components/_Confirm'),
+    CheckAllCheckbox = require('./components/_CheckAllCheckbox'),
+    LoadingButton = require('./components/_LoadingButton'),
+    TemplateBuilder = require('./components/_TemplateBuilder'),
+    RegistrationTemplateBuilder = require('./components/_RegistrationTemplateBuilder'),
+    PrintTemplateBuilder = require('./components/_PrintTemplateBuilder'),
+    Batch = require('./components/_Batch'),
+    Slots = require('./components/_Slots'),
     SharedChoicesCollection = require('./components/_SharedChoicesCollection'),
-    SortableCollection      = require('./components/_SortableCollection'),
-    Update                  = require('./components/_Update'),
-    PreventMultipleSubmit   = require('./components/_PreventMultipleSubmit'),
-    AnchorFocuser           = require('./components/_AnchorFocuser'),
-    DateTimePicker          = require('./components/_DateTimePicker'),
+    SortableCollection = require('./components/_SortableCollection'),
+    Update = require('./components/_Update'),
+    PreventMultipleSubmit = require('./components/_PreventMultipleSubmit'),
+    AnchorFocuser = require('./components/_AnchorFocuser'),
+    DateTimePicker = require('./components/_DateTimePicker'),
     MessagingMessagePreview = require('./components/_MessagingMessagePreview'),
-    ParticipantVisio        = require('./components/_ParticipantVisio'),
-    TipPreview              = require('./components/_TipPreview'),
-    ToggleVisibility        = require('./components/_ToggleVisibility');
+    ParticipantVisio = require('./components/_ParticipantVisio'),
+    TipPreview = require('./components/_TipPreview'),
+    ToggleVisibility = require('./components/_ToggleVisibility');
 
 require('bootstrap');
 require('elao-form.js');
@@ -81,6 +82,11 @@ function init(target) {
     [].forEach.call(target.querySelectorAll('[data-update]'), function (element) { new Update(element); });
     [].forEach.call(target.querySelectorAll('[data-check-all-checkbox]'), function (element) { new CheckAllCheckbox(element, element.getAttribute('data-check-all-checkbox')); });
     [].forEach.call(target.querySelectorAll('[data-template-builder]'), function (element) { new TemplateBuilder(element) });
+
+    [].forEach.call(target.querySelectorAll('[data-registration-template-builder]'), function (element) {
+        new RegistrationTemplateBuilder(element)
+    });
+
     [].forEach.call(target.querySelectorAll('[data-print-template-builder]'), function (element) { new PrintTemplateBuilder(element) });
     [].forEach.call(target.querySelectorAll('[data-batch]'), function (element) { new Batch(element) });
     [].forEach.call(target.querySelectorAll('[data-slot]'), function (element) { new Slots(element) });

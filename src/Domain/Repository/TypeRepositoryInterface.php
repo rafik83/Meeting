@@ -201,4 +201,11 @@ interface TypeRepositoryInterface
      * @return Type[]
      */
     public function getVisibleTypesViewsByEvent(Event $event, $locale);
+
+    /**
+     * @param Event $event
+     *
+     * @return Type[]
+     */
+    public function getTypesWithPaymentConditionsByEvent(Event $event): array;
 }

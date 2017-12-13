@@ -68,3 +68,33 @@ services:
             - '@datetime'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\User\Event\Token\UpdateAgendaConfirmation }
+
+    #
+    # Type Payment Conditions
+    #
+    Proximum\Vimeet\Application\Command\Type\PaymentConditions\UpdateHandler:
+        arguments:
+            - '@Proximum\Vimeet\Infrastructure\Repository\Type\PaymentConditionsRepository'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Type\PaymentConditions\Update }
+
+    #
+    # Tip
+    #
+    command.tip.event.create_handler:
+        class: Proximum\Vimeet\Application\Command\Tip\Event\CreateHandler
+        arguments:
+            - '@repository.tip.repository'
+            - '@vimeet_infrastructure.adapter.delayed_event_dispatcher'
+            - '@datetime'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Tip\Event\Create }
+
+    command.tip.event.update_handler:
+        class: Proximum\Vimeet\Application\Command\Tip\Event\UpdateHandler
+        arguments:
+            - '@repository.tip.repository'
+            - '@vimeet_infrastructure.adapter.delayed_event_dispatcher'
+            - '@datetime'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Tip\Event\Update }
