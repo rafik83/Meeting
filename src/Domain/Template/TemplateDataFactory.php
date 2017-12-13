@@ -116,7 +116,6 @@ class TemplateDataFactory
         return $this
             ->loadNomenclatures($registrationTemplate->getEvent())
             ->create(
-
                 $registrationTemplate->getValue(),
                 [],
                 $locale,

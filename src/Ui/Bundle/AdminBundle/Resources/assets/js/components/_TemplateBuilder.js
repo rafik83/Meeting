@@ -1,5 +1,6 @@
 var guidGenerator = require('./_GuidGenerator'),
     LoadingButton = require('./_LoadingButton'),
+    normalizeTemplate = require('./_NormalizeTemplate'),
     Sortable      = require('./_Sortable'),
     TemplateBlock = require('./_TemplateBlock'),
     TemplateObject = require('./_TemplateObject');
@@ -213,32 +214,7 @@ TemplateBuilder.prototype.children = function (item)
 
 TemplateBuilder.prototype.normalize = function (item)
 {
-    var blockType  = item.getAttribute('data-block');
-    var objectType = item.getAttribute('data-object');
-
-    if (blockType !== null && blockType !== undefined) {
-        return {
-            component: 'block',
-            type: blockType,
-            children: [].map.call(this.inners(item), function (child) {
-                return this.normalize(child);
-            }.bind(this)),
-            config: item.templateBlock.config
-        }
-    }
-
-    if (objectType !== null && objectType !== undefined) {
-        return item.templateObject.normalize();
-    }
-
-    var config = {};
-
-    [].forEach.call(this.children(item), function (child) {
-        var template = child.templateBlock || child.templateObject;
-        config[template.uid] = this.normalize(child);
-    }.bind(this));
-
-    return config;
+    return normalizeTemplate(this, item);
 };
 
 module.exports = TemplateBuilder;
