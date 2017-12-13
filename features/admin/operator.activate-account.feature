@@ -35,8 +35,8 @@ Feature: Operator Activate Account
     And I check "Les rendez-vous CARNOT 2016"
     And I press "form.create_operator.children.submit.label"
     And the "admin.account_activated" mail should be sent to "toto@toto.fr" from "vimeet"
-    And the "admin.account_activated" mail should contain the link "http://admin.vimeet.proximum.dev/app_test.php/fr/activate-account"
-    Then I follow the "http://admin.vimeet.proximum.dev/app_test.php/fr/activate-account" link in the "admin.account_activated" mail
+    And the "admin.account_activated" mail should contain the link "http://admin.vimeet.proximum/app_test.php/fr/activate-account"
+    Then I follow the "http://admin.vimeet.proximum/app_test.php/fr/activate-account" link in the "admin.account_activated" mail
     And the response status code should be 200
     Then I fill in the following:
       | form.admin_activate_account_password.children.password.children.first.label  | tructruc |

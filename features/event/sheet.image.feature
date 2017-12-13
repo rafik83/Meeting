@@ -15,7 +15,7 @@ Feature: Upload and remove image
       | @InfrastructureBundle/DataFixtures/ORM/ASDDays2016-Template.yml          |
       | @InfrastructureBundle/DataFixtures/ORM/ASDDays2016-Type.yml              |
       | @InfrastructureBundle/DataFixtures/ORM/ASDDays2016-Sheet.yml             |
-    When I am logged with "user_asddays_1@proximum.com" on event "http://asddays-2016.vimeet.proximum.dev"
+    When I am logged with "user_asddays_1@proximum.com" on event "http://asddays-2016.vimeet.proximum"
     And I go to this page "/fr"
     Then I should be on this page "/fr/sheet/1"
     When I follow "Ajouter un logo"
@@ -27,7 +27,7 @@ Feature: Upload and remove image
     And I should not see "Ajouter un logo"
 
   Scenario: I can remove my uploaded image on the sheet
-    Given I am logged with "user_asddays_1@proximum.com" on event "http://asddays-2016.vimeet.proximum.dev"
+    Given I am logged with "user_asddays_1@proximum.com" on event "http://asddays-2016.vimeet.proximum"
     When I go to this page "/fr"
     Then I should be on this page "/fr/sheet/1"
     And I should not see "Ajouter un logo"

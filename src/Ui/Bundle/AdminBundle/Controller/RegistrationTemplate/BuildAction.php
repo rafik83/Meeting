@@ -15,6 +15,7 @@ use Proximum\Vimeet\Application\Adapter\RouterInterface;
 use Proximum\Vimeet\Application\Command\Template\Registration\AddLocale;
 use Proximum\Vimeet\Application\Components\Sheet\Template\CompletenessCalculator;
 use Proximum\Vimeet\Application\Components\Sheet\Template\Tag;
+use Proximum\Vimeet\Domain\Adapter\TemplatingAdapterInterface;
 use Proximum\Vimeet\Domain\Model\Template\RegistrationTemplate;
 use Proximum\Vimeet\Domain\Repository\NomenclatureRepositoryInterface;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Security\Voter\AdminTemplateAccessVoter;
@@ -23,12 +24,11 @@ use Symfony\Bundle\FrameworkBundle\Templating\EngineInterface;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 class BuildAction
 {
-    /** @var AuthorizationCheckerInterface */
+    /** @var AuthorizationCheckerAdapterInterface */
     private $authorizationChecker;
 
     /** @var CompletenessCalculator */
@@ -101,7 +101,7 @@ class BuildAction
             'locale' => $locale,
             'nomenclatures' => $nomenclatures,
             'registrationTemplate' => $registrationTemplate,
-            'sheetTags' => Tag::getTemplateChoiceTags(),
+            'sheet_tags' => Tag::getRegisterTemplateChoiceTags(),
         ]);
     }
 }

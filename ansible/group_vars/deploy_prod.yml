@@ -20,8 +20,9 @@ manala_deploy_removed:
 #########
 
 manala_deploy_tasks:
-  - symfony_assets_version
   - make: install@prod
-  - make: migration@prod
   - make: build@prod
-  - command: sudo /usr/sbin/service php5-fpm reload
+  - make: migration@prod
+    when: "'deploy_prod_primary' in group_names"
+  - command: sudo /usr/sbin/service php7.1-fpm reload
+  - command: sudo supervisorctl restart all

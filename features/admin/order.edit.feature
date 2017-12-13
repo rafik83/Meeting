@@ -32,7 +32,7 @@ Feature: Edit an order
     And I should see "-500"
 
   Scenario: Check new custom row in pro forma
-    Given I am logged with "user_asddays_2@proximum.com" on event "http://asddays-2016.vimeet.proximum.dev"
+    Given I am logged with "user_asddays_2@proximum.com" on event "http://asddays-2016.vimeet.proximum"
     When I go to this page "/fr"
     Then I should be on this page "/fr/sheet/2"
     When I follow "navigation.links.package.order_list"
@@ -58,7 +58,7 @@ Feature: Edit an order
     And I should see "-400"
 
   Scenario: Check updated custom row in pro forma
-    Given I am logged with "user_asddays_2@proximum.com" on event "http://asddays-2016.vimeet.proximum.dev"
+    Given I am logged with "user_asddays_2@proximum.com" on event "http://asddays-2016.vimeet.proximum"
     When I go to this page "/fr"
     Then I should be on this page "/fr/sheet/2"
     When I follow "navigation.links.package.order_list"
@@ -76,7 +76,7 @@ Feature: Edit an order
     Then I should not see "Another awesome reduction"
 
   Scenario: Check removed custom row in pro forma
-    Given I am logged with "user_asddays_2@proximum.com" on event "http://asddays-2016.vimeet.proximum.dev"
+    Given I am logged with "user_asddays_2@proximum.com" on event "http://asddays-2016.vimeet.proximum"
     When I go to this page "/fr"
     Then I should be on this page "/fr/sheet/2"
     When I follow "navigation.links.package.order_list"

@@ -1147,6 +1147,14 @@ services:
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Template\Registration\Update }
 
+    Proximum\Vimeet\Application\Command\Template\Registration\SaveHandler:
+        arguments:
+            - '@repository.template.registration_template_repository'
+            - '@adapter.job_queue_adapter'
+            - '@template.template_data_factory'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Template\Registration\Save }
+
     command.sheet.template_registration.index_handler:
         class: Proximum\Vimeet\Application\Command\Template\Registration\IndexHandler
         arguments:

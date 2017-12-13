@@ -5,7 +5,14 @@
 {% block body %}
     {{ include('AdminBundle:Common:menu.html.twig') }}
 
-    <div class="container-fluid template-builder-container" data-registration-template-builder="">
+    <div
+        class="container-fluid template-builder-container"
+        data-registration-template-builder="{{ path('admin_template_registration_save', {
+            'registrationTemplate': registrationTemplate.id,
+            'locale': locale
+        }) }}"
+        data-locale="{{ locale }}"
+    >
         <div class="template-builder-header">
             <h1 class="pull-left">{{ registrationTemplate.title }}</h1>
 
@@ -17,6 +24,14 @@
                     completeness: completeness,
                     routeName: 'admin_template_registration_build',
                 }, false) }}
+
+                <button
+                    class="btn btn-success"
+                    id="template-save-button"
+                    data-loading-button="{{ ('<i class="glyphicon glyphicon-refresh spin"></i> ' ~ ('admin.template.action.updating'|trans))|e }}"
+                >
+                    {{ 'admin.template.action.save'|trans }}
+                </button>
             </div>
         </div>
 
@@ -31,11 +46,30 @@
                             'locale': locale,
                             'fallback': registrationTemplate.fallback,
                             'nomenclatures': nomenclatures,
-                            'sheet_tags': sheetTags,
+                            'sheet_tags': sheet_tags,
                             'products': []
                         }, false) }}
                     {% endif %}
                 {% endfor %}
+            </div>
+        </div>
+
+        <div class="template-builder-menu slide-menu-container-open" id="template-menu">
+            <div class="template-builder-menu-wrapper">
+                <div class="tab-content">
+                    <div id="object-list" class="object-list">
+                        {#{{ include('AdminBundle:Template/Object:text.html.twig', { 'locale': locale }, false) }}#}
+                        {{ include('AdminBundle:Template/Object:editable-text.html.twig', { 'locale': locale, 'isRegistrationTemplate': 'true' }, false) }}
+                        {#{{ include('AdminBundle:Template/Object:button-link.html.twig', { 'locale': locale }, false) }}#}
+                        {#{{ include('AdminBundle:Template/Object:participant.html.twig', { 'locale': locale }, false) }}#}
+                        {#{{ include('AdminBundle:Template/Object:image.html.twig', { 'locale': locale,'products': products }, false) }}#}
+                        {#{{ include('AdminBundle:Template/Object:tag.html.twig', { 'locale': locale, 'sheet_tags': sheet_tags }, false) }}#}
+                        {#{{ include('AdminBundle:Template/Object:collection.html.twig', { 'locale': locale }, false) }}#}
+                        {#{{ include('AdminBundle:Template/Object:nomenclature.html.twig', { 'locale': locale, 'nomenclatures': nomenclatures }, false) }}#}
+                        {#{{ include('AdminBundle:Template/Object:media.html.twig', { 'locale': locale, 'products': products}, false) }}#}
+                        {#{{ include('AdminBundle:Template/Object:tags.html.twig', { 'locale': locale, 'sheet_tags': sheet_tags }, false) }}#}
+                    </div>
+                </div>
             </div>
         </div>
     </div>

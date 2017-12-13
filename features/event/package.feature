@@ -14,7 +14,7 @@ Feature: Complete my package
       | @InfrastructureBundle/DataFixtures/ORM/ASDDays2016-Template.yml          |
       | @InfrastructureBundle/DataFixtures/ORM/ASDDays2016-Type.yml              |
       | @InfrastructureBundle/DataFixtures/ORM/ASDDays2016-Sheet.yml             |
-    And I am logged with "user_asddays_1@proximum.com" on event "http://asddays-2016.vimeet.proximum.dev"
+    And I am logged with "user_asddays_1@proximum.com" on event "http://asddays-2016.vimeet.proximum"
     When I am on this page "/fr"
     And I go to this page "/fr/sheet"
     And I follow "navigation.category.package"
@@ -28,7 +28,7 @@ Feature: Complete my package
     Then The radio "plans_plan_2" should be checked
 
   Scenario: I can buy planning
-    Given I am logged with "user_asddays_1@proximum.com" on event "http://asddays-2016.vimeet.proximum.dev"
+    Given I am logged with "user_asddays_1@proximum.com" on event "http://asddays-2016.vimeet.proximum"
     When I am on this page "/fr/sheet/1/package/step/2"
     Then I should see "Packs de rendez-vous"
     And I should see "sheet.object.action.add"
@@ -40,7 +40,7 @@ Feature: Complete my package
     Then I should be on this page "/fr/sheet/1/package/step/3"
 
   Scenario: I can buy options
-    Given I am logged with "user_asddays_1@proximum.com" on event "http://asddays-2016.vimeet.proximum.dev"
+    Given I am logged with "user_asddays_1@proximum.com" on event "http://asddays-2016.vimeet.proximum"
     When I am on this page "/fr/sheet/1/package/step/3"
     Then I should see "Options d’exposition"
     And I should see "Options d'exposition et de communication"
@@ -63,7 +63,7 @@ Feature: Complete my package
     Then the "options_11" field should contain "3"
 
   Scenario: I can add a participant at step 2
-    Given I am logged with "user_asddays_1@proximum.com" on event "http://asddays-2016.vimeet.proximum.dev"
+    Given I am logged with "user_asddays_1@proximum.com" on event "http://asddays-2016.vimeet.proximum"
     When I am on this page "/fr/sheet/1/package/step/2"
     Then I should see "sheet.object.action.add"
     And I follow "sheet.object.action.add"
@@ -78,7 +78,7 @@ Feature: Complete my package
     And I should see "TT"
 
   Scenario: I can fill my billing-info
-    Given I am logged with "user_asddays_1@proximum.com" on event "http://asddays-2016.vimeet.proximum.dev"
+    Given I am logged with "user_asddays_1@proximum.com" on event "http://asddays-2016.vimeet.proximum"
     When I am on this page "/fr/sheet/1/package/step/3"
     And I press "package.product.validate"
     Then I should be on this page "/fr/sheet/1/billing-info"
@@ -100,7 +100,7 @@ Feature: Complete my package
     Then I should be on this page "/fr/sheet/1/package/summary"
 
   Scenario: I can see my package summary
-    Given I am logged with "user_asddays_1@proximum.com" on event "http://asddays-2016.vimeet.proximum.dev"
+    Given I am logged with "user_asddays_1@proximum.com" on event "http://asddays-2016.vimeet.proximum"
     When I am on this page "/fr/sheet/1/package/summary"
     Then I should see "package.summary.title"
     And I should see "Formule Exposant"
@@ -115,7 +115,7 @@ Feature: Complete my package
     Then I should be on this page "/fr/sheet/1/package/payment"
 
   Scenario: I can add multiple promotion code
-    Given I am logged with "user_asddays_1@proximum.com" on event "http://asddays-2016.vimeet.proximum.dev"
+    Given I am logged with "user_asddays_1@proximum.com" on event "http://asddays-2016.vimeet.proximum"
     When I am on this page "/fr/sheet/1/package/summary"
     Then I should see "package.summary.title"
     And I fill in "package_summary_promotion_code_promotionCode" with "ASDDAYS10"
@@ -129,7 +129,7 @@ Feature: Complete my package
     And I should see "Assdays Promotion Code 2"
 
   Scenario: I can choose my payment method
-    Given I am logged with "user_asddays_1@proximum.com" on event "http://asddays-2016.vimeet.proximum.dev"
+    Given I am logged with "user_asddays_1@proximum.com" on event "http://asddays-2016.vimeet.proximum"
     When I am on this page "/fr/sheet/1/package/summary"
     Then I check "form.package_summary_terms_of_sale.children.termsOfSale.label"
     And I press "package.summary.pay"
@@ -139,11 +139,11 @@ Feature: Complete my package
     When I press "package.payment.pay.label"
     Then I should be on this page "/fr/sheet/1/orders"
     And I should see "order.transaction.state.pending"
-    And the "order.confirm" mail should be sent to "user_asddays_1@proximum.com" from "no-reply@asddays-2016.vimeet.proximum.dev"
-    And the "order.confirm" mail should be sent in bcc to "team-project@example.net" from "no-reply@asddays-2016.vimeet.proximum.dev"
+    And the "order.confirm" mail should be sent to "user_asddays_1@proximum.com" from "no-reply@asddays-2016.vimeet.proximum"
+    And the "order.confirm" mail should be sent in bcc to "team-project@example.net" from "no-reply@asddays-2016.vimeet.proximum"
 
   Scenario: I can see my package total summary:
-    Given I am logged with "user_asddays_1@proximum.com" on event "http://asddays-2016.vimeet.proximum.dev"
+    Given I am logged with "user_asddays_1@proximum.com" on event "http://asddays-2016.vimeet.proximum"
     And I am on this page "/fr/sheet"
     When I follow "navigation.links.package.order_summary_total"
     Then I should be on this page "/fr/sheet/1/order/summary"
@@ -154,7 +154,7 @@ Feature: Complete my package
     And I should see "summary.totalToPay"
 
   Scenario: I can see how to pay in my transaction list
-    Given I am logged with "user_asddays_1@proximum.com" on event "http://asddays-2016.vimeet.proximum.dev"
+    Given I am logged with "user_asddays_1@proximum.com" on event "http://asddays-2016.vimeet.proximum"
     When I am on this page "/fr/sheet"
     And I follow "navigation.links.package.order_list"
     Then I should be on this page "/fr/sheet/1/orders"
@@ -167,7 +167,7 @@ Feature: Complete my package
     And I should see "package.payment.bankInfo"
 
   Scenario: I can see the remaining amount to pay
-    Given I am logged with "user_asddays_1@proximum.com" on event "http://asddays-2016.vimeet.proximum.dev"
+    Given I am logged with "user_asddays_1@proximum.com" on event "http://asddays-2016.vimeet.proximum"
     And I am on this page "/fr/sheet"
     When I follow "navigation.links.package.order_list"
     Then I should be on this page "/fr/sheet/1/orders"

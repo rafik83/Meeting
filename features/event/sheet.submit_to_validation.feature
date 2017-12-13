@@ -15,7 +15,7 @@ Feature: Sheet validation workflow
       | @InfrastructureBundle/DataFixtures/ORM/ASDDays2016-Type.yml              |
       | @InfrastructureBundle/DataFixtures/ORM/ASDDays2016-Sheet.yml             |
       | @InfrastructureBundle/DataFixtures/ORM/AdminWithType.yml                 |
-    And I am logged with "user_asddays_1@proximum.com" on event "http://asddays-2016.vimeet.proximum.dev"
+    And I am logged with "user_asddays_1@proximum.com" on event "http://asddays-2016.vimeet.proximum"
     When I go to this page "/fr"
     Then I should be on this page "/fr/sheet/1"
     And I should see "sheet.submit.validation"

@@ -13,7 +13,7 @@ Feature: Select payable option in sheet
       | @InfrastructureBundle/DataFixtures/ORM/ASDDays2016-Template.yml          |
       | @InfrastructureBundle/DataFixtures/ORM/ASDDays2016-Type.yml              |
       | @InfrastructureBundle/DataFixtures/ORM/ASDDays2016-Sheet.yml             |
-    When I am logged with "user_asddays_1@proximum.com" on event "http://asddays-2016.vimeet.proximum.dev"
+    When I am logged with "user_asddays_1@proximum.com" on event "http://asddays-2016.vimeet.proximum"
     And I go to this page "/fr"
     Then I should be on this page "/fr/sheet/1"
     When I follow "Ajouter un logo"
@@ -29,7 +29,7 @@ Feature: Select payable option in sheet
     And The radio "sheet_image_data_selectedProduct_6" should be checked
 
   Scenario: I can select "Option E" payable option for my media object
-    When I am logged with "user_asddays_1@proximum.com" on event "http://asddays-2016.vimeet.proximum.dev"
+    When I am logged with "user_asddays_1@proximum.com" on event "http://asddays-2016.vimeet.proximum"
     And I go to this page "/fr"
     Then I should be on this page "/fr/sheet/1"
     When I follow "sheet.object.action.edit \"Médias\""
@@ -42,7 +42,7 @@ Feature: Select payable option in sheet
     Then The radio "sheet_media_collection_data_selectedProduct_9" should be checked
 
   Scenario: I should have "Option Chaise" and "Option E" in my package
-    When I am logged with "user_asddays_1@proximum.com" on event "http://asddays-2016.vimeet.proximum.dev"
+    When I am logged with "user_asddays_1@proximum.com" on event "http://asddays-2016.vimeet.proximum"
     And I go to this page "/fr"
     Then I should be on this page "/fr/sheet/1"
     When I go to this page "/fr/sheet/1/package/step/1"
@@ -56,7 +56,7 @@ Feature: Select payable option in sheet
     And the "options[11]" field should contain "1"
 
   Scenario: I can't remove "Option Chaise" or "Option E" from my package because their are payable option
-    Given I am logged with "user_asddays_1@proximum.com" on event "http://asddays-2016.vimeet.proximum.dev"
+    Given I am logged with "user_asddays_1@proximum.com" on event "http://asddays-2016.vimeet.proximum"
     When I go to this page "/fr"
     Then I should be on this page "/fr/sheet/1"
     When I go to this page "/fr/sheet/1/package/step/3"
@@ -67,7 +67,7 @@ Feature: Select payable option in sheet
     And I should see "package.product.quantityMinPayableOption"
 
   Scenario: I can't see the option "Option 4m² supplémentaires Fournisseur" that is included on the plan
-    Given I am logged with "user_asddays_1@proximum.com" on event "http://asddays-2016.vimeet.proximum.dev"
+    Given I am logged with "user_asddays_1@proximum.com" on event "http://asddays-2016.vimeet.proximum"
     When I go to this page "/fr"
     Then I should be on this page "/fr/sheet/1"
     When I follow "Ajouter un logo"
@@ -77,7 +77,7 @@ Feature: Select payable option in sheet
     Then I should be on this page "/fr/sheet/1/fr"
 
   Scenario: I can't see the option "Option F" that is included on the plan
-    Given I am logged with "user_asddays_1@proximum.com" on event "http://asddays-2016.vimeet.proximum.dev"
+    Given I am logged with "user_asddays_1@proximum.com" on event "http://asddays-2016.vimeet.proximum"
     When I go to this page "/fr"
     Then I should be on this page "/fr/sheet/1"
     When I follow "sheet.object.action.edit \"Médias\""
@@ -87,7 +87,7 @@ Feature: Select payable option in sheet
     Then I should be on this page "/fr/sheet/1/fr"
 
   Scenario: I should not see "Option 4m2" and "Option F" on the package because their are included
-    Given I am logged with "user_asddays_1@proximum.com" on event "http://asddays-2016.vimeet.proximum.dev"
+    Given I am logged with "user_asddays_1@proximum.com" on event "http://asddays-2016.vimeet.proximum"
     When I go to this page "/fr"
     Then I should be on this page "/fr/sheet/1"
     When I go to this page "/fr/sheet/1/package/step/3"
@@ -97,7 +97,7 @@ Feature: Select payable option in sheet
     And the "options[12]" field should contain "0"
 
   Scenario: I can remove my payable option in image object
-    Given I am logged with "user_asddays_1@proximum.com" on event "http://asddays-2016.vimeet.proximum.dev"
+    Given I am logged with "user_asddays_1@proximum.com" on event "http://asddays-2016.vimeet.proximum"
     When I go to this page "/fr"
     Then I should be on this page "/fr/sheet/1"
     When I follow "Ajouter un logo"

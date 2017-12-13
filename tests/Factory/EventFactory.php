@@ -44,7 +44,7 @@ class EventFactory
             'FR',
             'EUR',
             'Europe/Paris',
-            'super-event.vimeet.proximum.dev',
+            'super-event.vimeet.proximum',
             'proximum',
             'team-project@example.net',
             $prefix,

@@ -95,7 +95,7 @@ install: install-app install-db install-db@test install-db-fixtures install-db-f
 
 install@test: install-app@test install-db@test install-db-fixtures@test install-dep build@prod
 
-install@prod: install-dep build@prod
+install@prod: install-app install-dep build@prod
 
 install-app:
 	composer --no-progress --no-interaction install
@@ -208,7 +208,8 @@ test-behat@test:
 ##########
 
 ## Deploy application (demo)
-deploy@demo: deploy-capifony@demo
+deploy@demo:
+	ansible-playbook ansible/deploy.yml --inventory-file=ansible/hosts --limit=deploy_preprod
 
 ## Deploy application (preprod)
 deploy@preprod: deploy-capifony@preprod
@@ -316,7 +317,7 @@ elastica-populate@prod:
 	ssh vimeet-prod1 "cd ${REMOTE_INSTALL_DIR} && bin/console fos:elastica:populate --env=prod --no-reset --no-debug"
 
 # next targets must be run in VM
-ifeq ($(HOST), vimeet.proximum.dev)
+ifeq ($(HOST), vimeet.proximum)
 
 get-preprod-db@vm:
 	read -p "You are about to dump then download preprod db, please confirm (y/n)?" CONFIRM; \
@@ -342,14 +343,14 @@ import-preprod-db@vm:
 	bin/console doctrine:database:drop --force
 	bin/console doctrine:database:create
 	mysql -u root proximum_vimeet < preprod.sql
-	bin/console doctrine:query:sql "UPDATE event SET domain = REPLACE(domain, '.preprod.vimeet.events', '.vimeet.proximum.dev')"
+	bin/console doctrine:query:sql "UPDATE event SET domain = REPLACE(domain, '.preprod.vimeet.events', '.vimeet.proximum')"
 	make post-import-db@vm
 
 import-prod-db@vm:
 	bin/console doctrine:database:drop --force
 	bin/console doctrine:database:create
 	mysql -u root proximum_vimeet < prod.sql
-	bin/console doctrine:query:sql "UPDATE event SET domain = REPLACE(domain, '.vimeet.events', '.vimeet.proximum.dev')"
+	bin/console doctrine:query:sql "UPDATE event SET domain = REPLACE(domain, '.vimeet.events', '.vimeet.proximum')"
 	make post-import-db@vm
 
 post-import-db@vm:

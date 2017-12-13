@@ -17,7 +17,7 @@ When I am logged, I need to be able to change my password
       | @InfrastructureBundle/DataFixtures/ORM/User.yml                          |
       | @InfrastructureBundle/DataFixtures/ORM/RdvCarnot2016-Sheet.yml           |
       | @InfrastructureBundle/DataFixtures/ORM/RdvCarnot2016-Participant.yml     |
-    And I am logged with "test_carnot@proximum.com" on event "http://rdv-carnot-2016.vimeet.proximum.dev"
+    And I am logged with "test_carnot@proximum.com" on event "http://rdv-carnot-2016.vimeet.proximum"
     And I go to this page "/fr/sheet/4"
     When I go to this page "/fr/sheet/4/change-password"
     And I fill in the following:
@@ -28,7 +28,7 @@ When I am logged, I need to be able to change my password
     Then I should see "flash.change_password.success"
 
   Scenario: Change the password failed
-    Given I am logged with "test_carnot@proximum.com" on event "http://rdv-carnot-2016.vimeet.proximum.dev"
+    Given I am logged with "test_carnot@proximum.com" on event "http://rdv-carnot-2016.vimeet.proximum"
     And I go to this page "/fr/sheet/4"
     When I go to this page "/fr/sheet/4/change-password"
     And I fill in the following:

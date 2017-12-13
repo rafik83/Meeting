@@ -18,7 +18,7 @@ Feature: Display complete sheet from catalog
       | @InfrastructureBundle/DataFixtures/ORM/ASDDays2016-Sheet.yml             |
       | @InfrastructureBundle/DataFixtures/ORM/ASDDays2016-Rule.yml              |
     And elastica is populate
-    When I am logged with "user_asddays_3@proximum.com" on event "http://asddays-2016.vimeet.proximum.dev"
+    When I am logged with "user_asddays_3@proximum.com" on event "http://asddays-2016.vimeet.proximum"
     And I go to this page "/fr"
     And print current URL
     Then I should be on this page "/fr/sheet/3"
@@ -30,7 +30,7 @@ Feature: Display complete sheet from catalog
     And I should see "catalog.meeting_request.create"
 
   Scenario: I can not see a sheet that not allowed in rules
-    Given I am logged with "user_asddays_3@proximum.com" on event "http://asddays-2016.vimeet.proximum.dev"
+    Given I am logged with "user_asddays_3@proximum.com" on event "http://asddays-2016.vimeet.proximum"
     When I follow "navigation.links.catalog.available_date"
     Then I should not see "World Company Inc"
     And this page "/fr/sheet/3/catalog/display/3" returns 404

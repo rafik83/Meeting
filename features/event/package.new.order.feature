@@ -19,7 +19,7 @@ Feature: Edit my package
       | @InfrastructureBundle/DataFixtures/ORM/ASDDays2016-Type.yml              |
       | @InfrastructureBundle/DataFixtures/ORM/ASDDays2016-Sheet.yml             |
       | Package/Order.yml                                                        |
-    And I am logged with "user_asddays_1@proximum.com" on event "http://asddays-2016.vimeet.proximum.dev"
+    And I am logged with "user_asddays_1@proximum.com" on event "http://asddays-2016.vimeet.proximum"
     When I am on this page "/fr"
     And I go to this page "/fr/sheet"
     And I follow "navigation.links.package.order_summary_total"
@@ -34,7 +34,7 @@ Feature: Edit my package
     And I should see "sheet.participant.sendInvite"
 
   Scenario: I can remove two participant from my package (one included and one payed)
-    Given I am logged with "user_asddays_1@proximum.com" on event "http://asddays-2016.vimeet.proximum.dev"
+    Given I am logged with "user_asddays_1@proximum.com" on event "http://asddays-2016.vimeet.proximum"
     When I am on this page "/fr"
     And I go to this page "/fr/sheet/1/package/step/1"
     Then I should see "package.participants.included"
@@ -48,7 +48,7 @@ Feature: Edit my package
     And I should not see "sheet.object.action.remove"
 
   Scenario: I can remove one planning
-    Given I am logged with "user_asddays_1@proximum.com" on event "http://asddays-2016.vimeet.proximum.dev"
+    Given I am logged with "user_asddays_1@proximum.com" on event "http://asddays-2016.vimeet.proximum"
     When I am on this page "/fr"
     Then I go to this page "/fr/sheet/1/package/step/1"
     And I should not see "sheet.object.action.remove"
@@ -58,7 +58,7 @@ Feature: Edit my package
     Then I should be on this page "/fr/sheet/1/package/step/2"
 
   Scenario: I can edit my package option. Remove 2 options chaise and add 1 option A
-    Given I am logged with "user_asddays_1@proximum.com" on event "http://asddays-2016.vimeet.proximum.dev"
+    Given I am logged with "user_asddays_1@proximum.com" on event "http://asddays-2016.vimeet.proximum"
     When I am on this page "/fr"
     Then I go to this page "/fr/sheet/1/package/step/2"
     And the "options[5]" field should contain "1"
@@ -71,7 +71,7 @@ Feature: Edit my package
     Then I should be on this page "/fr/sheet/1/package/summary"
 
   Scenario: I can see my updated package summary
-    Given I am logged with "user_asddays_1@proximum.com" on event "http://asddays-2016.vimeet.proximum.dev"
+    Given I am logged with "user_asddays_1@proximum.com" on event "http://asddays-2016.vimeet.proximum"
     And I am on this page "/fr"
     When I go to this page "/fr/sheet/1/package/summary"
     Then I should see "package.summary.title"
@@ -85,7 +85,7 @@ Feature: Edit my package
     And the "tr[data-product-id='7']" element should contain "1"
 
   Scenario: I can't remove a product that is not deletable or buyable
-    Given I am logged with "user_asddays_1@proximum.com" on event "http://asddays-2016.vimeet.proximum.dev"
+    Given I am logged with "user_asddays_1@proximum.com" on event "http://asddays-2016.vimeet.proximum"
     When I am on this page "/fr"
     Then I go to this page "/fr/sheet/1/package/step/2"
     And I should see "package.product.unavailable"
@@ -95,7 +95,7 @@ Feature: Edit my package
     And I should see "package.product.productNotDeletable"
 
   Scenario: I can't use a promotion code for a negative product quantity
-    Given I am logged with "user_asddays_1@proximum.com" on event "http://asddays-2016.vimeet.proximum.dev"
+    Given I am logged with "user_asddays_1@proximum.com" on event "http://asddays-2016.vimeet.proximum"
     When I am on this page "/fr"
     Then I go to this page "/fr/sheet/1/package/summary"
     And I fill in "package_summary_promotion_code_promotionCode" with "ASDDAYS10"
@@ -104,7 +104,7 @@ Feature: Edit my package
     And I should see "flash.package.promotionCode.error.negativeRow"
 
   Scenario: I can pay my updated package
-    Given I am logged with "user_asddays_1@proximum.com" on event "http://asddays-2016.vimeet.proximum.dev"
+    Given I am logged with "user_asddays_1@proximum.com" on event "http://asddays-2016.vimeet.proximum"
     When I am on this page "/fr"
     Then I go to this page "/fr/sheet/1/package/summary"
     And I check "form.package_summary_terms_of_sale.children.termsOfSale.label"
