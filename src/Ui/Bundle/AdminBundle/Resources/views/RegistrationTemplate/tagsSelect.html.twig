@@ -1,6 +1,10 @@
 {% trans_default_domain 'templates' %}
 
-<select name="tag"></select>
+<select name="tags" multiple="multiple">
+    {% for tag in participant_tags|merge(sheet_tags) %}
+        <option value="{{ tag }}">{{ ('template.tag.' ~ tag)|trans }}</option>
+    {% endfor %}
+</select>
 
 <div class="form-group" data-at-least-one-data-field-must-be-checked-message="{{ 'template.registration.atLeastOneDataFieldMustBeChecked'|trans }}">
     <div class="form-group">
@@ -20,7 +24,6 @@
             <span class="label label-default">{{ 'template.registration.optional'|trans }}</span>
         </label>
         <select class="form-control select2-builder" name="sheet_tag" multiple="multiple">
-            <option value=""></option>
             {% for tag in sheet_tags %}
                 <option value="{{ tag }}">{{ ('template.tag.' ~ tag)|trans }}</option>
             {% endfor %}
@@ -40,7 +43,6 @@
             <span class="label label-default">{{ 'template.registration.optional'|trans }}</span>
         </label>
         <select class="form-control select2-builder" name="participant_tag" multiple="multiple">
-            <option value=""></option>
             {% for tag in participant_tags %}
                 <option value="{{ tag }}">{{ ('template.tag.' ~ tag)|trans }}</option>
             {% endfor %}

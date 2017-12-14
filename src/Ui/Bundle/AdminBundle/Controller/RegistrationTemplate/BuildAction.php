@@ -102,7 +102,7 @@ class BuildAction
             'nomenclatures' => $nomenclatures,
             'registrationTemplate' => $registrationTemplate,
             'sheetTags' => Tag::getSheetAndGenericTags(),
-            'participantTags' => Tag::getParticipantAndGenericTags(),
+            'participantTags' => Tag::getParticipantTags(),
         ]);
     }
 }

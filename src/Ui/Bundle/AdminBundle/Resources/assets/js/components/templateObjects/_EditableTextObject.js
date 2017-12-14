@@ -35,6 +35,7 @@ EditableTextObject.prototype.fill = function ()
   this.form.set('translatable', this.config.translatable);
   this.form.set('hideLabel', this.config.hideLabel);
   this.form.set('tag', this.config.tag);
+  this.form.set('tags', this.config.tags);
 
   this.form.bind('label', this.config.label[this.locale]);
 };

@@ -189,12 +189,4 @@ final class Tag
     {
         return array_merge(self::getSheetTags(), self::getGenericSheetTags());
     }
-
-    /**
-     * @return array
-     */
-    public static function getParticipantAndGenericTags(): array
-    {
-        return array_merge(self::getParticipantTags(), self::getGenericSheetTags());
-    }
 }
