@@ -41,8 +41,7 @@ EditableTextObject.prototype.fill = function ()
 
 EditableTextObject.prototype.save = function ()
 {
-  if (this.templateTaggableObject) {
-    alert('error');
+  if (this.templateTaggableObject && !this.templateTaggableObject.save()) {
     return false;
   }
 

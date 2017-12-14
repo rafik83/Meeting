@@ -10,6 +10,7 @@ function TemplateTaggableObject(element)
     return;
   }
 
+  this.atLeastOneDataFieldMustBeCheckedMessage = element.querySelector('[data-at-least-one-data-field-must-be-checked-message]').getAttribute('data-at-least-one-data-field-must-be-checked-message');
   this.participantDataField = element.querySelector('input[name="participant_data"]');
   this.sheetDataField.onchange = this.handleDataTypeChanged.bind(this);
   this.participantDataField.onchange = this.handleDataTypeChanged.bind(this);
@@ -35,6 +36,17 @@ TemplateTaggableObject.prototype.handleDataTypeChanged = function (event)
 TemplateTaggableObject.prototype.toggleDisplay = function (element, displayed)
 {
   element.style.display = displayed ? 'block' : 'none';
+};
+
+TemplateTaggableObject.prototype.save = function ()
+{
+  var atLeastOneDataFieldIsChecked = this.sheetDataField.checked || this.participantDataField.checked;
+
+  if (!atLeastOneDataFieldIsChecked) {
+    alert(this.atLeastOneDataFieldMustBeCheckedMessage);
+  }
+
+  return atLeastOneDataFieldIsChecked;
 };
 
 module.exports = TemplateTaggableObject;
