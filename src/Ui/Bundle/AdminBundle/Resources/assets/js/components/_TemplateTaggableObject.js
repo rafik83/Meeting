@@ -37,13 +37,41 @@ function TemplateTaggableObject(element)
 
 TemplateTaggableObject.prototype.handleDataTypeChanged = function (event)
 {
+  var checked = event.target.checked;
+
   if (event.target === this.sheetDataField) {
-    this.toggleDisplay(this.sheetTagNode, event.target.checked);
+    this.toggleDataType(this.sheetDataField, this.sheetTag, checked);
+    this.toggleDisplay(this.sheetTagNode, checked);
 
     return;
   }
 
-  this.toggleDisplay(this.participantTagNode, event.target.checked);
+  this.toggleDataType(this.participantDataField, this.participantTag, checked);
+  this.toggleDisplay(this.participantTagNode, checked);
+};
+
+TemplateTaggableObject.prototype.toggleDataType = function (element, tag, checked)
+{
+  var tags = this.form.get('tags');
+  var tagIndex = tags.indexOf(tag);
+
+  if (checked) {
+    // add tag
+    if (-1 !== tagIndex) {
+      return;
+    }
+
+    tags.push(tag);
+    this.form.set('tags', tags);
+
+    return;
+  }
+
+  if (-1 !== tagIndex) {
+    // remove tag
+    tags.splice(tagIndex, 1);
+    this.form.set('tags', tags);
+  }
 };
 
 TemplateTaggableObject.prototype.toggleDisplay = function (element, displayed)
