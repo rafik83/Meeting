@@ -80,10 +80,17 @@ class SendCodeFormHandler
         }
 
         $sendCode = new SendCode($user, $event, $sendCodeForm->mobileNumberToValidate ?? $user->getMobile(), $locale);
-        $form     = $this->formFactory->create(SendCodeType::class, $sendCode, [
+
+        $formOptions = [
             'country' => $event->getCountry(),
             'submit'  => true,
-        ]);
+        ];
+
+        if (!empty($sendCodeForm->actionRoute)) {
+            $formOptions['action'] = $sendCodeForm->actionRoute;
+        }
+
+        $form = $this->formFactory->create(SendCodeType::class, $sendCode, $formOptions);
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
             try {
@@ -95,6 +102,10 @@ class SendCodeFormHandler
             }
         }
 
-        return new SendCodeView(SendCodeView::SEND_CODE_SHOW_FORM, $form, $tipTranslationViews);
+        return new SendCodeView(
+            SendCodeView::SEND_CODE_SHOW_FORM,
+            $form,
+            $tipTranslationViews
+        );
     }
 }

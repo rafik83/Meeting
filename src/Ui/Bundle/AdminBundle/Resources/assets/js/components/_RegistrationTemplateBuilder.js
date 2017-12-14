@@ -1,5 +1,7 @@
-var TemplateBlock = require('./_TemplateBlock'),
+var LoadingButton = require('./_LoadingButton'),
+    TemplateBlock = require('./_TemplateBlock'),
     guidGenerator = require('./_GuidGenerator'),
+    normalizeTemplate = require('./_NormalizeTemplate'),
     Sortable = require('./_Sortable'),
     TemplateObject = require('./_TemplateObject');
 
@@ -11,7 +13,16 @@ var TemplateBlock = require('./_TemplateBlock'),
  */
 function RegistrationTemplateBuilder(element) {
   this.element = element;
+  this.url = element.getAttribute('data-registration-template-builder');
+  this.locale = element.getAttribute('data-locale');
   this.templateContainer = element.querySelector('#template-container');
+
+  var saveButton = element.querySelector('#template-save-button');
+  this.saveButton = new LoadingButton(saveButton, saveButton.getAttribute('data-loading-button'));
+  this.saveButton.element.addEventListener('click', function (event) {
+    event.preventDefault();
+    this.save();
+  }.bind(this));
 
   // Objects
   this.objectList = element.querySelector('#object-list');
@@ -24,6 +35,7 @@ RegistrationTemplateBuilder.prototype.init = function (element) {
   [].forEach.call(element.querySelectorAll('.block'), function (block) {
     this.block(block);
   }.bind(this));
+
   [].forEach.call(element.querySelectorAll('.object'), function (object) {
       this.object(object);
   }.bind(this));
@@ -50,6 +62,35 @@ RegistrationTemplateBuilder.prototype.children = function (item) {
 };
 
 RegistrationTemplateBuilder.prototype.closeMenu = function () {
+  // nothing to do; closeMenu() is needed by TemplateBlock
+};
+
+RegistrationTemplateBuilder.prototype.save = function () {
+  this.saveButton.start();
+
+  var xhr = new XMLHttpRequest();
+  xhr.onreadystatechange = function () {
+    var DONE = 4;
+    var OK   = 200;
+
+    if (xhr.readyState === DONE) {
+      if (xhr.status === OK) {
+      } else {
+        var response = JSON.parse(xhr.response);
+        alert(response.error);
+      }
+
+      this.saveButton.stop();
+    }
+  }.bind(this);
+
+  xhr.open('POST', this.url);
+  xhr.send(JSON.stringify(this.normalize(this.templateContainer)));
+};
+
+RegistrationTemplateBuilder.prototype.normalize = function (item)
+{
+  return normalizeTemplate(this, item);
 };
 
 RegistrationTemplateBuilder.prototype.list = function (element, name)

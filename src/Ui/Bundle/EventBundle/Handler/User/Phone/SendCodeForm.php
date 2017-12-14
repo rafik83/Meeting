@@ -11,6 +11,8 @@
 namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Handler\User\Phone;
 
 use Proximum\Vimeet\Domain\Model\Event;
+use Proximum\Vimeet\Domain\Model\Participant;
+use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\User;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -31,24 +33,30 @@ class SendCodeForm
     /** @var string */
     public $mobileNumberToValidate;
 
+    /** @var null|string */
+    public $actionRoute;
+
     /**
-     * @param Request $request
-     * @param User $user
-     * @param Event $event
+     * @param Request     $request
+     * @param User        $user
+     * @param Event       $event
+     * @param null|string $actionRoute
      * @param null|string $mobileNumberToValidate
-     * @param bool $ignorePhoneAlreadyValidated
+     * @param bool        $ignorePhoneAlreadyValidated
      */
     public function __construct(
         Request $request,
         User $user,
         Event $event,
+        ?string $actionRoute = null,
         ?string $mobileNumberToValidate = null,
         bool $ignorePhoneAlreadyValidated = false
     ) {
-        $this->request = $request;
-        $this->user = $user;
-        $this->event = $event;
+        $this->request                     = $request;
+        $this->user                        = $user;
+        $this->event                       = $event;
         $this->ignorePhoneAlreadyValidated = $ignorePhoneAlreadyValidated;
-        $this->mobileNumberToValidate = $mobileNumberToValidate;
+        $this->mobileNumberToValidate      = $mobileNumberToValidate;
+        $this->actionRoute                 = $actionRoute;
     }
 }

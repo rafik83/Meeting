@@ -1,0 +1,27 @@
+{% form_theme sendCodeForm '@Ui/default.html.twig' %}
+
+<div class="modal-header">
+    <h4 class="modal-title" id="unavailability-create-modal-title">
+        <i class="icon-Verouiller_1"></i>
+        {{ 'event.user_event_phone.validate.title'|trans }}
+    </h4>
+</div>
+
+<div class="modal-body">
+    {% for tipTranslationView in sendCodeViewTranslationViews %}
+        <h1>{{ tipTranslationView.title }}</h1>
+
+        {{ tipTranslationView.content|html }}
+    {% endfor %}
+
+{{ form_start(sendCodeForm) }}
+    {{ form_row(sendCodeForm.phone) }}
+    {{ form_row(sendCodeForm.accepted) }}
+</div>
+<div class="modal-footer">
+    <button type="button" class="btn btn-gray pull-left" data-dismiss="modal" data-ignore-phone-confirmation-url="{{ ignorePhoneConfirmationUrl }}">
+        <i class="icon-Retour"></i>{{ 'event.user_event_phone.validate.ignore'|trans }}
+    </button>
+    {{ form_row(sendCodeForm.submit) }}
+</div>
+{{ form_end(sendCodeForm) }}
