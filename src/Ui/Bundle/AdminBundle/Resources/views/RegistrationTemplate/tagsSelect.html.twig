@@ -1,51 +1,57 @@
 {% trans_default_domain 'templates' %}
 
-<select name="tags" multiple="multiple">
-    {% for tag in participant_tags|merge(sheet_tags) %}
-        <option value="{{ tag }}">{{ ('template.tag.' ~ tag)|trans }}</option>
-    {% endfor %}
-</select>
-
-<div class="form-group" data-at-least-one-data-field-must-be-checked-message="{{ 'template.registration.atLeastOneDataFieldMustBeChecked'|trans }}">
-    <div class="form-group">
-        <label class="form-label">{{ 'template.registration.dataType'|trans }}</label>
-    </div>
-
-    <div class="form-group">
-        <label class="form-label">
-            <input type="checkbox" name="sheet_data" />
-            {{ 'template.registration.sheetData'|trans }}
-        </label>
-    </div>
-
-    <div class="form-group" data-sheet-tag>
-        <label class="form-label" for="sheet_tag">
-            {{ 'template.registration.sheetTags'|trans }}
-            <span class="label label-default">{{ 'template.registration.optional'|trans }}</span>
-        </label>
-        <select class="form-control select2-builder" name="sheet_tag" multiple="multiple">
-            {% for tag in sheet_tags %}
-                <option value="{{ tag }}">{{ ('template.tag.' ~ tag)|trans }}</option>
-            {% endfor %}
-        </select>
-    </div>
+<div data-template-tags-select
+     data-participant-tag="{{ registrationTemplateTagView.participantDataTag }}"
+     data-sheet-tag="{{ registrationTemplateTagView.sheetDataTag }}"
+     data-at-least-one-data-field-must-be-checked-message="{{ 'template.registration.atLeastOneDataFieldMustBeChecked'|trans }}"
+>
+    <select name="tags" multiple="multiple">
+        {% for tag in registrationTemplateTagView.allTags %}
+            <option value="{{ tag }}">{{ ('template.tag.' ~ tag)|trans }}</option>
+        {% endfor %}
+    </select>
 
     <div class="form-group">
-        <label class="form-label">
-            <input type="checkbox" name="participant_data" />
-            {{ 'template.registration.participantData'|trans }}
-        </label>
-    </div>
+        <div class="form-group">
+            <label class="form-label">{{ 'template.registration.dataType'|trans }}</label>
+        </div>
 
-    <div class="form-group" data-participant-tag>
-        <label class="form-label" for="participant_tag">
-            {{ 'template.registration.participantTags'|trans }}
-            <span class="label label-default">{{ 'template.registration.optional'|trans }}</span>
-        </label>
-        <select class="form-control select2-builder" name="participant_tag" multiple="multiple">
-            {% for tag in participant_tags %}
-                <option value="{{ tag }}">{{ ('template.tag.' ~ tag)|trans }}</option>
-            {% endfor %}
-        </select>
+        <div class="form-group">
+            <label class="form-label">
+                <input type="checkbox" name="{{ registrationTemplateTagView.sheetDataTag }}" />
+                {{ 'template.registration.sheetData'|trans }}
+            </label>
+        </div>
+
+        <div class="form-group" data-sheet-node>
+            <label class="form-label" for="sheet_tags">
+                {{ 'template.registration.sheetTags'|trans }}
+                <span class="label label-default">{{ 'template.registration.optional'|trans }}</span>
+            </label>
+            <select class="form-control select2-builder" name="sheet_tags" multiple="multiple">
+                {% for tag in registrationTemplateTagView.sheetTags %}
+                    <option value="{{ tag }}">{{ ('template.tag.' ~ tag)|trans }}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label class="form-label">
+                <input type="checkbox" name="{{ registrationTemplateTagView.participantDataTag }}" />
+                {{ 'template.registration.participantData'|trans }}
+            </label>
+        </div>
+
+        <div class="form-group" data-participant-node>
+            <label class="form-label" for="participant_tags">
+                {{ 'template.registration.participantTags'|trans }}
+                <span class="label label-default">{{ 'template.registration.optional'|trans }}</span>
+            </label>
+            <select class="form-control select2-builder" name="participant_tags" multiple="multiple">
+                {% for tag in registrationTemplateTagView.participantTags %}
+                    <option value="{{ tag }}">{{ ('template.tag.' ~ tag)|trans }}</option>
+                {% endfor %}
+            </select>
+        </div>
     </div>
 </div>

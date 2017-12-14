@@ -10,6 +10,8 @@
 
 namespace Proximum\Vimeet\Application\Components\Sheet\Template;
 
+use Proximum\Vimeet\Domain\Template\Registration\RegistrationTemplateTagView;
+
 final class Tag
 {
     const GENERIC_TAGS_NUMBER = 99;
@@ -188,5 +190,32 @@ final class Tag
     public static function getSheetAndGenericTags()
     {
         return array_merge(self::getSheetTags(), self::getGenericSheetTags());
+    }
+
+    /**
+     * @return array
+     */
+    public static function getSheetParticipantGenericAndSettersTags()
+    {
+        return array_merge(
+            self::getSheetTags(),
+            self::getParticipantTags(),
+            self::getGenericSheetTags(),
+            self::getSetters()
+        );
+    }
+
+    /**
+     * @return RegistrationTemplateTagView
+     */
+    public static function getRegistrationTemplateTagView(): RegistrationTemplateTagView
+    {
+        return new RegistrationTemplateTagView(
+            self::getSheetParticipantGenericAndSettersTags(),
+            self::PARTICIPANT_DATA,
+            self::getParticipantTags(),
+            self::SHEET_DATA,
+            self::getSheetAndGenericTags()
+        );
     }
 }

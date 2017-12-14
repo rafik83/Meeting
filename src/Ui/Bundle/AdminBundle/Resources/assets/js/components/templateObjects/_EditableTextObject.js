@@ -11,14 +11,12 @@ var Form = require('./../_Form'),
 function EditableTextObject(element, locale)
 {
   this.element = element;
-  this.locale  = locale;
-  this.form    = new Form(element);
-  this.config  = JSON.parse(this.element.getAttribute('data-config'));
-
-  this.sheetDataField = element.querySelector('input[name="sheet_data"]');
+  this.locale = locale;
+  this.form = new Form(element);
+  this.config = JSON.parse(this.element.getAttribute('data-config'));
   this.templateTaggableObject = null;
 
-  if (this.sheetDataField) {
+  if (element.querySelector('[data-template-tags-select]')) {
     this.templateTaggableObject = new TemplateTaggableObject(element);
   }
 }

@@ -46,9 +46,7 @@
                             'locale': locale,
                             'fallback': registrationTemplate.fallback,
                             'nomenclatures': nomenclatures,
-                            'sheetTags': sheetTags,
-                            'participantTags': participantTags,
-                            'products': [],
+                            'registrationTemplateTagView': registrationTemplateTagView,
                         }, false) }}
                     {% endif %}
                 {% endfor %}
@@ -64,8 +62,7 @@
                         {{ include('AdminBundle:Template/Object:editable-text.html.twig', {
                             'isRegistrationTemplate': true,
                             'locale': locale,
-                            'sheet_tags': sheetTags,
-                            'participant_tags': participantTags,
+                            'registrationTemplateTagView': registrationTemplateTagView,
                         }, false) }}
 
                         {#{{ include('AdminBundle:Template/Object:button-link.html.twig', { 'locale': locale }, false) }}#}

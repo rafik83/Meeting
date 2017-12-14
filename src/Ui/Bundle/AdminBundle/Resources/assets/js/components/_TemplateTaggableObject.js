@@ -4,19 +4,23 @@
  */
 function TemplateTaggableObject(element)
 {
-  this.sheetDataField = element.querySelector('input[name="sheet_data"]');
+  var dataTemplateTagsSelectElement = element.querySelector('[data-template-tags-select]');
 
-  if (!this.sheetDataField) {
+  if (!dataTemplateTagsSelectElement) {
     return;
   }
 
-  this.atLeastOneDataFieldMustBeCheckedMessage = element.querySelector('[data-at-least-one-data-field-must-be-checked-message]').getAttribute('data-at-least-one-data-field-must-be-checked-message');
-  this.participantDataField = element.querySelector('input[name="participant_data"]');
+  this.atLeastOneDataFieldMustBeCheckedMessage = dataTemplateTagsSelectElement.getAttribute('data-at-least-one-data-field-must-be-checked-message');
+  this.participantTag = dataTemplateTagsSelectElement.getAttribute('data-participant-tag');
+  this.sheetTag = dataTemplateTagsSelectElement.getAttribute('data-sheet-tag');
+
+  this.sheetDataField = element.querySelector('input[name="' + this.sheetTag + '"]');
+  this.participantDataField = element.querySelector('input[name="' + this.participantTag + '"]');
   this.sheetDataField.onchange = this.handleDataTypeChanged.bind(this);
   this.participantDataField.onchange = this.handleDataTypeChanged.bind(this);
 
-  this.sheetTagNode = element.querySelector('[data-sheet-tag]');
-  this.participantTagNode = element.querySelector('[data-participant-tag]');
+  this.sheetTagNode = element.querySelector('[data-sheet-node]');
+  this.participantTagNode = element.querySelector('[data-participant-node]');
 
   this.toggleDisplay(this.sheetTagNode, false);
   this.toggleDisplay(this.participantTagNode, false);
