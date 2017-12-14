@@ -1,4 +1,5 @@
-var Form = require('./../_Form');
+var Form = require('./../_Form'),
+  TemplateTaggableObject = require('./../_TemplateTaggableObject');
 
 /**
  * EditableTextObject
@@ -15,35 +16,12 @@ function EditableTextObject(element, locale)
   this.config  = JSON.parse(this.element.getAttribute('data-config'));
 
   this.sheetDataField = element.querySelector('input[name="sheet_data"]');
+  this.templateTaggableObject = null;
 
   if (this.sheetDataField) {
-    this.participantDataField = element.querySelector('input[name="participant_data"]');
-    this.sheetDataField.onchange = this.handleDataTypeChanged.bind(this);
-    this.participantDataField.onchange = this.handleDataTypeChanged.bind(this);
-
-    this.sheetTagNode = element.querySelector('[data-sheet-tag]');
-    this.participantTagNode = element.querySelector('[data-participant-tag]');
-
-    this.toggleDisplay(this.sheetTagNode, false);
-    this.toggleDisplay(this.participantTagNode, false);
+    this.templateTaggableObject = new TemplateTaggableObject(element);
   }
 }
-
-EditableTextObject.prototype.handleDataTypeChanged = function (event)
-{
-  if (event.target === this.sheetDataField) {
-    this.toggleDisplay(this.sheetTagNode, event.target.checked);
-
-    return;
-  }
-
-  this.toggleDisplay(this.participantTagNode, event.target.checked);
-};
-
-EditableTextObject.prototype.toggleDisplay = function (element, displayed)
-{
-  element.style.display = displayed ? 'block' : 'none';
-};
 
 EditableTextObject.prototype.fill = function ()
 {
@@ -63,6 +41,11 @@ EditableTextObject.prototype.fill = function ()
 
 EditableTextObject.prototype.save = function ()
 {
+  if (this.templateTaggableObject) {
+    alert('error');
+    return false;
+  }
+
   this.config.style                    = this.form.get('style');
   this.config.label[this.locale]       = this.form.get('label');
   this.config.placeholder[this.locale] = this.form.get('placeholder');
@@ -75,6 +58,8 @@ EditableTextObject.prototype.save = function ()
   this.config.tag                      = this.form.get('tag');
 
   this.form.bind('label', this.config.label[this.locale]);
+
+  return true;
 };
 
 module.exports = EditableTextObject;

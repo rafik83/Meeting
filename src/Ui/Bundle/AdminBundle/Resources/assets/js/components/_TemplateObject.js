@@ -82,8 +82,10 @@ TemplateObject.prototype.configureButtonClicked = function (event)
 TemplateObject.prototype.saveButtonClicked = function (event)
 {
   event.preventDefault();
-  this.object.save();
-  this.closeConfigureModal();
+
+  if (this.object.save()) {
+    this.closeConfigureModal();
+  }
 };
 
 TemplateObject.prototype.openConfigureModal = function ()

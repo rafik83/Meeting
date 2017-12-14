@@ -39,6 +39,8 @@ MediaObject.prototype.save = function ()
   this.config.products                      = this.form.get('products');
 
   this.form.bind('label', this.config.label[this.locale]);
+
+  return true;
 };
 
 module.exports = MediaObject;

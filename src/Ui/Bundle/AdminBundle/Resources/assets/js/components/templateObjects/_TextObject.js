@@ -33,6 +33,8 @@ TextObject.prototype.save = function ()
   this.config.type                 = this.form.get('type');
 
   this.form.bind('content', this.config.content[this.locale]);
+
+  return true;
 };
 
 module.exports = TextObject;
