@@ -57,6 +57,8 @@ Form.prototype.set = function (name, value)
                 option.selected = -1 !== value.indexOf(option.value);
             });
 
+            inputs[0].dispatchEvent(new Event('change'));
+
             return;
         }
 
