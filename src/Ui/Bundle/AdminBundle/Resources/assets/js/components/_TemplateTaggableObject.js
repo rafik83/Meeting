@@ -12,6 +12,9 @@ function TemplateTaggableObject(element)
     return;
   }
 
+  this.sheetTagsFieldName = 'sheet_tags';
+  this.participantTagsFieldName = 'participant_tags';
+
   this.atLeastOneDataFieldMustBeCheckedMessage = dataTemplateTagsSelectElement.getAttribute('data-at-least-one-data-field-must-be-checked-message');
   this.participantTag = dataTemplateTagsSelectElement.getAttribute('data-participant-tag');
   this.sheetTag = dataTemplateTagsSelectElement.getAttribute('data-sheet-tag');
@@ -40,56 +43,12 @@ TemplateTaggableObject.prototype.handleDataTypeChanged = function (event)
   var checked = event.target.checked;
 
   if (event.target === this.sheetDataField) {
-    this.toggleDataType('sheet_tags', this.sheetTag, checked);
     this.toggleDisplay(this.sheetTagNode, checked);
 
     return;
   }
 
-  this.toggleDataType('participant_tags', this.participantTag, checked);
   this.toggleDisplay(this.participantTagNode, checked);
-};
-
-TemplateTaggableObject.prototype.toggleDataType = function (dataTypeTagsName, dataTypeTag, checked)
-{
-  var tags = this.form.get('tags');
-
-  if (checked) {
-    // add tag
-    if (-1 !== tags.indexOf(dataTypeTag)) {
-      return;
-    }
-
-    tags.push(dataTypeTag);
-    this.form.set('tags', tags);
-
-    return;
-  }
-
-  // Remove tag
-  tags = this.removeTagFromTags(dataTypeTag, tags);
-
-  var dataTypeTags = this.form.get(dataTypeTagsName);
-
-  dataTypeTags.forEach(function(tag) {
-    tags = this.removeTagFromTags(tag, tags);
-  }.bind(this));
-
-  this.form.set('tags', tags);
-
-  // reset data type tags
-  this.form.set(dataTypeTagsName, []);
-};
-
-TemplateTaggableObject.prototype.removeTagFromTags = function (tag, tags)
-{
-  var tagIndex = tags.indexOf(tag);
-
-  if (-1 !== tagIndex) {
-    tags.splice(tagIndex, 1);
-  }
-
-  return tags;
 };
 
 TemplateTaggableObject.prototype.toggleDisplay = function (element, displayed)
@@ -103,9 +62,22 @@ TemplateTaggableObject.prototype.save = function ()
 
   if (!atLeastOneDataFieldIsChecked) {
     alert(this.atLeastOneDataFieldMustBeCheckedMessage);
+    return false
   }
 
-  return atLeastOneDataFieldIsChecked;
+  var tags = [];
+
+  if (this.sheetDataField.checked) {
+    tags = tags.concat(this.sheetTag, this.form.get(this.sheetTagsFieldName));
+  }
+
+  if (this.participantDataField.checked) {
+    tags = tags.concat(this.participantTag, this.form.get(this.participantTagsFieldName));
+  }
+
+  this.form.set('tags', tags);
+
+  return true;
 };
 
 module.exports = TemplateTaggableObject;

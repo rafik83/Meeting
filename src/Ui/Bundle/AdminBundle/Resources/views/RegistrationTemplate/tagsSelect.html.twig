@@ -5,7 +5,7 @@
      data-sheet-tag="{{ registrationTemplateTagView.sheetDataTag }}"
      data-at-least-one-data-field-must-be-checked-message="{{ 'template.registration.atLeastOneDataFieldMustBeChecked'|trans }}"
 >
-    <select name="tags" multiple="multiple">
+    <select name="tags" multiple="multiple" class="hidden">
         {% for tag in registrationTemplateTagView.allTags %}
             <option value="{{ tag }}" {% if tag in config.tags %}selected="selected"{% endif %}>{{ ('template.tag.' ~ tag)|trans }}</option>
         {% endfor %}
