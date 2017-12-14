@@ -11,6 +11,7 @@
     style: '',
     translatable: false,
     tag: null,
+    tags: [],
 }|merge(config|default({})) %}
 
 <div class="object" data-object="editable-text" data-uid="{{ uid|default('__UID__') }}" data-config="{{ config|json_encode }}">
@@ -105,6 +106,7 @@
 
                                 {% if isRegistrationTemplate is defined and registrationTemplateTagView is defined %}
                                     {{ include('AdminBundle:RegistrationTemplate:tagsSelect.html.twig', {
+                                        'config': config,
                                         'registrationTemplateTagView': registrationTemplateTagView,
                                     }, false) }}
                                 {% else %}

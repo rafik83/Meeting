@@ -1,3 +1,5 @@
+var Form = require('./_Form');
+
 /**
  * @param element
  * @constructor
@@ -22,8 +24,15 @@ function TemplateTaggableObject(element)
   this.sheetTagNode = element.querySelector('[data-sheet-node]');
   this.participantTagNode = element.querySelector('[data-participant-node]');
 
-  this.toggleDisplay(this.sheetTagNode, false);
-  this.toggleDisplay(this.participantTagNode, false);
+  this.form = new Form(dataTemplateTagsSelectElement);
+
+  if (!this.form.get(this.sheetTag)) {
+    this.toggleDisplay(this.sheetTagNode, false);
+  }
+
+  if (!this.form.get(this.participantTag)) {
+    this.toggleDisplay(this.participantTagNode, false);
+  }
 }
 
 TemplateTaggableObject.prototype.handleDataTypeChanged = function (event)
