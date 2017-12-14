@@ -40,38 +40,56 @@ TemplateTaggableObject.prototype.handleDataTypeChanged = function (event)
   var checked = event.target.checked;
 
   if (event.target === this.sheetDataField) {
-    this.toggleDataType(this.sheetDataField, this.sheetTag, checked);
+    this.toggleDataType('sheet_tags', this.sheetTag, checked);
     this.toggleDisplay(this.sheetTagNode, checked);
 
     return;
   }
 
-  this.toggleDataType(this.participantDataField, this.participantTag, checked);
+  this.toggleDataType('participant_tags', this.participantTag, checked);
   this.toggleDisplay(this.participantTagNode, checked);
 };
 
-TemplateTaggableObject.prototype.toggleDataType = function (element, tag, checked)
+TemplateTaggableObject.prototype.toggleDataType = function (dataTypeTagsName, dataTypeTag, checked)
 {
   var tags = this.form.get('tags');
-  var tagIndex = tags.indexOf(tag);
 
   if (checked) {
     // add tag
-    if (-1 !== tagIndex) {
+    if (-1 !== tags.indexOf(dataTypeTag)) {
       return;
     }
 
-    tags.push(tag);
+    tags.push(dataTypeTag);
     this.form.set('tags', tags);
 
     return;
   }
 
+  // Remove tag
+  tags = this.removeTagFromTags(dataTypeTag, tags);
+
+  var dataTypeTags = this.form.get(dataTypeTagsName);
+
+  dataTypeTags.forEach(function(tag) {
+    tags = this.removeTagFromTags(tag, tags);
+  }.bind(this));
+
+  this.form.set('tags', tags);
+
+  // reset data type tags
+  this.form.set(dataTypeTagsName, []);
+};
+
+TemplateTaggableObject.prototype.removeTagFromTags = function (tag, tags)
+{
+  var tagIndex = tags.indexOf(tag);
+
   if (-1 !== tagIndex) {
-    // remove tag
     tags.splice(tagIndex, 1);
-    this.form.set('tags', tags);
   }
+
+  return tags;
 };
 
 TemplateTaggableObject.prototype.toggleDisplay = function (element, displayed)
