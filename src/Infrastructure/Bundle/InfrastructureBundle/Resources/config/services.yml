@@ -1154,6 +1154,7 @@ services:
             - '@adapter.job_queue_adapter'
             - '@template.template_data_factory'
             - '@components.registration.template_validator_translated'
+            - '@vimeet_infrastructure.adapter.delayed_event_dispatcher'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Template\Registration\Save }
 
