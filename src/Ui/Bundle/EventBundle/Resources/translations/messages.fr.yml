@@ -48,7 +48,7 @@ catalog.meeting_request.request.approved: 'Votre demande acceptée'
 catalog.meeting_request.request.placed: 'RDV planifié'
 catalog.meeting_request.request.refused: 'Votre demande refusée'
 catalog.mobile.filters.allParticipants: 'Tous les participants'
-catalog.mobile.filters.availableSlot.title: 'Who is available?'
+catalog.mobile.filters.availableSlot.title: 'Qui est disponible ?'
 catalog.mobile.filters.title: 'Catalogue des participants'
 catalog.noResult: 'Aucun résultat trouvé'
 catalog.noVisibleCategories: 'Vous n''avez accès à aucune catégorie de participation'
@@ -175,7 +175,7 @@ meeting.video.screenshare.start: 'Partager mon écran'
 meeting.video.start: 'Démarrer le RDV'
 meeting.video.waitingForParticipant: 'En attente d''un participant'
 meetingRequest.mobile.filters.availableSlot.title: 'Qui est disponible ?'
-meetingRequest.mobile.filters.state.title: 'My meetings'
+meetingRequest.mobile.filters.state.title: 'Gestion RDV'
 modal.back: Retour
 modal.close: Fermer
 modal.loading.error: 'Un problème est survenu pendant le chargement, vous pouvez fermer la modale'
@@ -369,7 +369,7 @@ register.already_registered: 'Déjà inscrit ?'
 register.connect: Valider
 register.finalize: Finaliser
 register.photo: "Pourquoi la photo du participant est utile ?\n- Ne restez pas un anonyme pour vos futurs partenaires,\n- Renforcez votre réseau professionnel\n- Lors de l'événement, vos interlocuteurs vous identifient et vice-versa,\n- Des cartes de visites complètes pour tous,\n- Identifiez facilement les agendas de chacun..."
-register.privacy_policies: 'Protection de la vie privée : Conformément à la Loi Informatique et Libertés du 6 janvier 1978 modifiée en 2004, vous disposez d’un droit d’accès et de rectification aux données personnelles / informations vous concernant en nous adressant un e-mail à cnil@proximumgroup.com.'
+register.privacy_policies: 'Protection de la vie privée : Conformément à la Loi Informatique et Libertés du 6 janvier 1978 modifiée en 2004, vous disposez d’un droit d’accès et de rectification aux données personnelles / informations vous concernant en nous adressant un e-mail à cnil@vi-meet.com.'
 register.register: Inscription
 register.register_as: 'S''inscrire en tant que :'
 register.step: Etape

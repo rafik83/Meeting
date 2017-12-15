@@ -105,6 +105,7 @@ login.memberArea: 'Member area'
 meeting.video.end: 'End call'
 meeting.video.screenshare: Screenshare
 meeting.video.waitingForParticipant: 'Waiting for participant'
+meetingRequest.mobile.filters.state.title: 'My meetings'
 modal.back: Back
 modal.close: Close
 modal.loading.error: 'A problem occurred while loading, you can close the modal'
@@ -289,7 +290,7 @@ program.title: Programme
 register.already_registered: 'Already registered?'
 register.finalize: Complete
 register.photo: "Why should you publish a photo?\n- Let potential business partners “put a face to a name” \n- Reinforce your professional network\n- Help contacts identify you more easily, and vice-versa\n- Complete digital business cards available to everyone\n- Easily identify each participant’s schedule"
-register.privacy_policies: 'Privacy protection: In accordance with the French law on Information Technology and Civil Liberties of January 6, 1978, amended in 2004, you have the right to access and correct personal data/information about you by sending us an e-mail at cnil @ Proximumgroup.com.'
+register.privacy_policies: 'Privacy protection: In accordance with the French law on Information Technology and Civil Liberties of January 6, 1978, amended in 2004, you have the right to access and correct personal data/information about you by sending us an e-mail at cnil@vi-meet.com.'
 register.register: Registration
 register.register_as: 'Register as:'
 register.step: Step

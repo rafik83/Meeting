@@ -96,11 +96,11 @@ form.search.meeting.availableSlot.label: 'Qui est disponible ?'
 form.search.meeting.state.all: 'Tous les statuts'
 form.search.meeting.state.approved: Acceptées
 form.search.meeting.state.cancelled: Annulées
-form.search.meeting.state.label: 'My meetings'
+form.search.meeting.state.label: 'Gestion RDV'
 form.search.meeting.state.receive: 'Propositions reçues'
 form.search.meeting.state.refused: Refusées
 form.search.meeting.state.sent: 'Vos demandes en attente'
-form.search.meeting.type.label: 'My meetings'
+form.search.meeting.type.label: 'Gestion RDV'
 form.search.objective.label: Objectifs
 form.search.objective.need: 'Répondre à mes besoins'
 form.search.objective.supply: 'Rechercher mes offres'
