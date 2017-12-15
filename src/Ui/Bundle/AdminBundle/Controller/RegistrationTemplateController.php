@@ -12,6 +12,7 @@ namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller;
 
 use Proximum\Vimeet\Application\Command\Template\Registration\AddLocale;
 use Proximum\Vimeet\Application\Command\Template\Registration\Update;
+use Proximum\Vimeet\Application\Exception\Template\RegistrationTemplateException;
 use Proximum\Vimeet\Domain\Exception\Nomenclature\NomenclatureNotFoundException;
 use Proximum\Vimeet\Domain\Model\Template\RegistrationTemplate;
 use Proximum\Vimeet\Domain\Template\Exception\TemplateException;
@@ -100,6 +101,8 @@ class RegistrationTemplateController extends Controller
                         $this->get('translator')->trans('validators.admin.template.registration.update.error.template', [], 'validators')
                     )
                 );
+            } catch (RegistrationTemplateException $registrationTemplateException) {
+                $this->addFlash('error', $registrationTemplateException->getMessage());
             }
         }
 

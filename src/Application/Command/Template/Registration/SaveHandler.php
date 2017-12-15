@@ -13,6 +13,7 @@ namespace Proximum\Vimeet\Application\Command\Template\Registration;
 use Proximum\Vimeet\Application\Adapter\JobQueueInterface;
 use Proximum\Vimeet\Application\Exception\Template\RegistrationTemplateException;
 use Proximum\Vimeet\Domain\Repository\Template\RegistrationTemplateRepositoryInterface;
+use Proximum\Vimeet\Domain\Template\Registration\RegistrationTemplateValidator;
 use Proximum\Vimeet\Domain\Template\TemplateDataFactory;
 
 class SaveHandler
@@ -22,17 +23,23 @@ class SaveHandler
 
     /** @var JobQueueInterface */
     private $jobQueue;
+
     /** @var TemplateDataFactory */
     private $templateDataFactory;
+
+    /** @var RegistrationTemplateValidator */
+    private $registrationTemplateValidator;
 
     public function __construct(
         RegistrationTemplateRepositoryInterface $registrationTemplateRepository,
         JobQueueInterface $jobQueue,
-        TemplateDataFactory $templateDataFactory
+        TemplateDataFactory $templateDataFactory,
+        RegistrationTemplateValidator $registrationTemplateValidator
     ) {
         $this->registrationTemplateRepository = $registrationTemplateRepository;
         $this->jobQueue = $jobQueue;
         $this->templateDataFactory = $templateDataFactory;
+        $this->registrationTemplateValidator = $registrationTemplateValidator;
     }
 
     /**
@@ -45,10 +52,12 @@ class SaveHandler
         $save->registrationTemplate->setValue($save->value);
 
         try {
-            $this->templateDataFactory->createRegistrationFromTemplate(
+            $templateData = $this->templateDataFactory->createRegistrationFromTemplate(
                 $save->registrationTemplate,
                 $save->registrationTemplate->getFallback()
             );
+
+            $this->registrationTemplateValidator->validate($templateData);
         } catch (\Exception $exception) {
             throw new RegistrationTemplateException($exception->getMessage(), $exception->getCode(), $exception);
         }
