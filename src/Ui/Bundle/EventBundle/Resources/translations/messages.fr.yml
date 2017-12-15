@@ -48,7 +48,7 @@ catalog.meeting_request.request.approved: 'Votre demande acceptée'
 catalog.meeting_request.request.placed: 'RDV planifié'
 catalog.meeting_request.request.refused: 'Votre demande refusée'
 catalog.mobile.filters.allParticipants: 'Tous les participants'
-catalog.mobile.filters.availableSlot.title: 'Qui est disponible ?'
+catalog.mobile.filters.availableSlot.title: 'Who is available?'
 catalog.mobile.filters.title: 'Catalogue des participants'
 catalog.noResult: 'Aucun résultat trouvé'
 catalog.noVisibleCategories: 'Vous n''avez accès à aucune catégorie de participation'
@@ -110,10 +110,10 @@ event.sms.receive_meeting_request.approved: '%event%: Votre demande de RDV avec 
 event.sms.reminder.pending_meeting_request: '%eventTitle% : Vous avez reçu %countPendingMeetingRequest% propositions de RDVs, voir %meetingRequestManagementUrl%'
 event.sms.sent_meeting_request.approved: '%event%: La proposition de RDV avec %sheet% a été acceptée. RDV le %date% à %time% : Lieu %spot%, Voir %link%'
 event.user_event_phone.validate.explanation: 'Vous allez recevoir par SMS un code à 4 chiffres afin de valider votre numéro de téléphone'
+event.user_event_phone.validate.ignore: Ignorer
 event.user_event_phone.validate.returnToPhone: 'Modifier mon numéro de téléphone'
 event.user_event_phone.validate.success: 'Votre numéro de téléphone est bien confirmé'
 event.user_event_phone.validate.title: 'Validation du numéro de téléphone'
-event.user_event_phone.validate.ignore: Ignorer
 gender.man: Monsieur
 gender.woman: Madame
 group.home.link.create_sheet: 'Créer une fiche'
@@ -175,7 +175,7 @@ meeting.video.screenshare.start: 'Partager mon écran'
 meeting.video.start: 'Démarrer le RDV'
 meeting.video.waitingForParticipant: 'En attente d''un participant'
 meetingRequest.mobile.filters.availableSlot.title: 'Qui est disponible ?'
-meetingRequest.mobile.filters.state.title: 'Gestion de RDV'
+meetingRequest.mobile.filters.state.title: 'My meetings'
 modal.back: Retour
 modal.close: Fermer
 modal.loading.error: 'Un problème est survenu pendant le chargement, vous pouvez fermer la modale'
