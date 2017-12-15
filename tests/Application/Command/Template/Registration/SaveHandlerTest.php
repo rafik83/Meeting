@@ -16,6 +16,8 @@ use Proximum\Vimeet\Application\Command\Template\Registration\Save;
 use Proximum\Vimeet\Application\Command\Template\Registration\SaveHandler;
 use Proximum\Vimeet\Domain\Model\Template\RegistrationTemplate;
 use Proximum\Vimeet\Domain\Repository\Template\RegistrationTemplateRepositoryInterface;
+use Proximum\Vimeet\Domain\Template\Registration\RegistrationTemplateValidator;
+use Proximum\Vimeet\Domain\Template\TemplateData;
 use Proximum\Vimeet\Domain\Template\TemplateDataFactory;
 
 class SaveHandlerTest extends TestCase
@@ -31,19 +33,23 @@ class SaveHandlerTest extends TestCase
         $registrationTemplate->setValue(['whatever' => 'data'])->shouldBeCalled();
         $registrationTemplateRepository->set($registrationTemplate->reveal())->shouldBeCalled();
 
+        $templateData = $this->prophesize(TemplateData::class);
         $templateDataFactory
-            ->createRegistrationFromTemplate(
-                $registrationTemplate->reveal(),
-                'fr'
-            )
-            ->shouldBeCalled();
+            ->createRegistrationFromTemplate($registrationTemplate->reveal(), 'fr')
+            ->shouldBeCalled()
+            ->willReturn($templateData->reveal())
+        ;
+
+        $registrationTemplateValidator = $this->prophesize(RegistrationTemplateValidator::class);
+        $registrationTemplateValidator->validate($templateData->reveal());
 
         $jobQueue->indexSheetsByRegistrationTemplate($registrationTemplate->reveal())->shouldBeCalled();
 
         $saveHandler = new SaveHandler(
             $registrationTemplateRepository->reveal(),
             $jobQueue->reveal(),
-            $templateDataFactory->reveal()
+            $templateDataFactory->reveal(),
+            $registrationTemplateValidator->reveal()
         );
         $saveHandler->handle(new Save($registrationTemplate->reveal(), ['whatever' => 'data']));
     }
