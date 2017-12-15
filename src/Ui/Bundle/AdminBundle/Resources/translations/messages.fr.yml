@@ -867,7 +867,7 @@ admin.template.registration.table.column.createdAt: 'Créé le'
 admin.template.registration.table.column.eventType: Événement/Type(s)
 admin.template.registration.table.column.title: Titre
 admin.template.registration.table.content.edit: Modifier
-admin.template.registration.table.content.editJson: Modifier JSON
+admin.template.registration.table.content.editJson: 'Modifier JSON'
 admin.template.registration.title: 'Templates d''Inscription'
 admin.template.registration.titleOrganizer: 'Templates d''Inscription des organisateurs'
 admin.template.registration.update: 'Modifier le template d''Inscription'
@@ -891,30 +891,30 @@ admin.tip.column.visible.print_planning: 'Impression planning'
 admin.tip.create.link: Nouveau
 admin.tip.create.title: 'Nouveau message d''aide'
 admin.tip.empty: 'Aucun message d''aide'
-admin.tip.event.create.title: 'Création d''un message d''aide pour %eventTitle%'
-admin.tip.event.update.title: 'Modification d''un message d''aide pour %eventTitle%'
 admin.tip.event.actions: Actions
 admin.tip.event.affect.form.title: 'Affecter un message d''aide'
-admin.tip.event.affect.link: 'Affecter un message d''aide global'
+admin.tip.event.affect.link: 'Affecter un message d''aide'
 admin.tip.event.affect.title: 'Gestion des messages d''aide'
 admin.tip.event.create.button: 'Créer un message d''aide'
-admin.tip.event.update.button: 'Modifier'
-admin.tip.event.create.update: 'Modifier'
+admin.tip.event.create.title: 'Création d''un message d''aide pour %eventTitle%'
+admin.tip.event.create.update: Modifier
 admin.tip.event.empty: 'Aucun message affecté à cet évènement'
 admin.tip.event.no_pages: Aucune
 admin.tip.event.no_types: Aucun
 admin.tip.event.pages: 'Page concernées'
-admin.tip.event.remove.action.confirm: 'Êtes-vous sûr de vouloir supprimer ce message d''aide?'
-admin.tip.event.remove.link: Supprimer
+admin.tip.event.remove.action.confirm: 'Êtes-vous sûr de vouloir retirer l''affectation?'
+admin.tip.event.remove.link: Retirer
 admin.tip.event.title: 'Libellé admin'
 admin.tip.event.types: 'Types de participation affectés'
+admin.tip.event.update.button: Modifier
+admin.tip.event.update.title: 'Modification d''un message d''aide pour %eventTitle%'
 admin.tip.events: Evénements
 admin.tip.link: 'Messages d''aide'
 admin.tip.list.title: 'Messages d''aide'
+admin.tip.remove.action.confirm: 'Êtes-vous sûr de vouloir supprimer ce message d''aide?'
+admin.tip.remove.link: Supprimer
 admin.tip.update.link: Modifier
 admin.tip.update.title: 'Mise à jour du message d''aide'
-admin.tip.remove.link: Supprimer
-admin.tip.remove.action.confirm: 'Êtes-vous sûr de vouloir supprimer ce message d''aide?'
 admin.tip.visible: 'Liste des pages concernées'
 admin.transaction.add: Ajouter
 admin.transaction.column.date: Date
@@ -944,14 +944,15 @@ admin.type.id: Id
 admin.type.link: 'Types de participation'
 admin.type.list.title: 'Types de participation'
 admin.type.package: Forfait
-admin.type.paymentConditions.update.title: 'Définition des conditions de paiement du type "%typeTitle%"'
-admin.type.paymentConditions.event.info.title: 'Conditions de paiement de l''événement:'
 admin.type.paymentConditions.event.info.allowDeposit: 'Activer le paiement en acompte:'
+admin.type.paymentConditions.event.info.deposit: 'Pourcentage de l''acompte:'
 admin.type.paymentConditions.event.info.depositUntil: 'Date limite d''acceptation des acomptes:'
 admin.type.paymentConditions.event.info.minimumForDeposit: 'Somme total à partir duquel l''acompte est applicable:'
-admin.type.paymentConditions.event.info.deposit: 'Pourcentage de l''acompte:'
 admin.type.paymentConditions.event.info.paymentModes: 'Moyens de paiement:'
-admin.type.paymentConditions.event.info.paymentModes.none: 'Aucun'
+admin.type.paymentConditions.event.info.paymentModes.none: Aucun
+admin.type.paymentConditions.event.info.title: 'Conditions de paiement de l''événement:'
+admin.type.paymentConditions.link: 'Conditions de paiement'
+admin.type.paymentConditions.update.title: 'Définition des conditions de paiement du type "%typeTitle%"'
 admin.type.position: Position
 admin.type.register.link: 'Lien d''inscription'
 admin.type.registration.template: 'Template d''inscription'
@@ -960,7 +961,6 @@ admin.type.sheet.template: 'Template de présentation'
 admin.type.specificPaymentConditions: 'Conditions de paiement particulières'
 admin.type.title: Titre
 admin.type.update.link: Modifier
-admin.type.paymentConditions.link: 'Conditions de paiement'
 admin.type.update.title: 'Modifier le type de participation'
 admin.unavailability.button.category: 'Catégorie d''indisponibilité de masse'
 admin.unavailability.button.dispatch: Dispatcher
