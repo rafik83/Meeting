@@ -11,9 +11,9 @@
 namespace Proximum\Vimeet\Application\Command\Template\Registration;
 
 use Proximum\Vimeet\Application\Adapter\JobQueueInterface;
-use Proximum\Vimeet\Application\Exception\Template\RegistrationTemplateException;
+use Proximum\Vimeet\Application\Components\Registration\RegistrationTemplateValidatorTranslated;
 use Proximum\Vimeet\Domain\Repository\Template\RegistrationTemplateRepositoryInterface;
-use Proximum\Vimeet\Domain\Template\Registration\RegistrationTemplateValidator;
+use Proximum\Vimeet\Domain\Template\Exception\RegistrationTemplateException;
 use Proximum\Vimeet\Domain\Template\TemplateDataFactory;
 
 class SaveHandler
@@ -27,19 +27,19 @@ class SaveHandler
     /** @var TemplateDataFactory */
     private $templateDataFactory;
 
-    /** @var RegistrationTemplateValidator */
-    private $registrationTemplateValidator;
+    /** @var RegistrationTemplateValidatorTranslated */
+    private $registrationTemplateValidatorTranslated;
 
     public function __construct(
         RegistrationTemplateRepositoryInterface $registrationTemplateRepository,
         JobQueueInterface $jobQueue,
         TemplateDataFactory $templateDataFactory,
-        RegistrationTemplateValidator $registrationTemplateValidator
+        RegistrationTemplateValidatorTranslated $registrationTemplateValidatorTranslated
     ) {
         $this->registrationTemplateRepository = $registrationTemplateRepository;
         $this->jobQueue = $jobQueue;
         $this->templateDataFactory = $templateDataFactory;
-        $this->registrationTemplateValidator = $registrationTemplateValidator;
+        $this->registrationTemplateValidatorTranslated = $registrationTemplateValidatorTranslated;
     }
 
     /**
@@ -57,7 +57,7 @@ class SaveHandler
                 $save->registrationTemplate->getFallback()
             );
 
-            $this->registrationTemplateValidator->validate($templateData);
+            $this->registrationTemplateValidatorTranslated->validate($templateData);
         } catch (\Exception $exception) {
             throw new RegistrationTemplateException($exception->getMessage(), $exception->getCode(), $exception);
         }
