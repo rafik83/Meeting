@@ -84,3 +84,4 @@ parameters:
     feature_event_dates_to_current_date_enabled: false
     feature_dday_enabled: false
     feature_availability_confirmation_enabled: true
+    feature_registration_template_builder_enabled: false

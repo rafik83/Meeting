@@ -51,6 +51,7 @@ services:
             - '@form.factory'
             - '@repository.nomenclature_repository'
             - '@adapter.router'
+            - '%feature_registration_template_builder_enabled%'
 
     Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\RegistrationTemplate\SaveAction:
         arguments:
