@@ -18,8 +18,11 @@ function TemplateBlock(element, builder)
   this.configureButton = element.querySelector('.configure-button');
   this.upButton = element.querySelector('.up-button');
   this.downButton = element.querySelector('.down-button');
-  this.form = new Form(this.configureModal);
-  this.saveButton = this.configureModal.querySelector('.save-configuration');
+
+  if (this.configureModal) {
+    this.form = new Form(this.configureModal);
+    this.saveButton = this.configureModal.querySelector('.save-configuration');
+  }
 
   // UID
   this.uid = element.getAttribute('data-uid');
@@ -42,8 +45,13 @@ function TemplateBlock(element, builder)
   }.bind(this));
 
   // Modal behavior
-  this.configureButton.addEventListener('click', this.configureButtonClicked.bind(this));
-  this.saveButton.addEventListener('click', this.saveButtonClicked.bind(this));
+  if (this.configureModal) {
+    this.configureButton.addEventListener('click', this.configureButtonClicked.bind(this));
+  }
+
+  if (this.saveButton) {
+    this.saveButton.addEventListener('click', this.saveButtonClicked.bind(this));
+  }
 
   // Up and down buttons behavior if they exists
   if (null !== this.upButton) {

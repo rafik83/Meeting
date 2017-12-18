@@ -17,6 +17,11 @@ function RegistrationTemplateBuilder(element) {
   this.locale = element.getAttribute('data-locale');
   this.templateContainer = element.querySelector('#template-container');
 
+  this.addBlockTemplate = element.querySelector('[data-add-block-template]');
+  this.blockTemplate = element.querySelector('[data-block-template]');
+  this.addBlockTemplate.style.display = 'none';
+  this.blockTemplate.style.display = 'none';
+
   var saveButton = element.querySelector('#template-save-button');
   this.saveButton = new LoadingButton(saveButton, saveButton.getAttribute('data-loading-button'));
   this.saveButton.element.addEventListener('click', function (event) {
@@ -31,6 +36,18 @@ function RegistrationTemplateBuilder(element) {
   this.init(this.templateContainer);
 }
 
+RegistrationTemplateBuilder.prototype.addAddButtons = function (element) {
+  [].forEach.call(element.querySelectorAll('.block'), function (block) {
+    this.addAddBlockButton(block);
+  }.bind(this));
+};
+
+RegistrationTemplateBuilder.prototype.removeAddButtons = function (element) {
+  [].forEach.call(element.querySelectorAll('[data-add-block]'), function (button) {
+    button.remove();
+  }.bind(this));
+};
+
 RegistrationTemplateBuilder.prototype.init = function (element) {
   [].forEach.call(element.querySelectorAll('.block'), function (block) {
     this.block(block);
@@ -39,6 +56,38 @@ RegistrationTemplateBuilder.prototype.init = function (element) {
   [].forEach.call(element.querySelectorAll('.object'), function (object) {
       this.object(object);
   }.bind(this));
+
+  this.addAddButtons(element);
+};
+
+RegistrationTemplateBuilder.prototype.addAddBlockButton = function (beforeElement) {
+  var addBlock = this.addBlockTemplate.cloneNode(true);
+  addBlock.style.display = 'block';
+  addBlock.removeAttribute('data-add-block-template');
+  addBlock.setAttribute('data-add-block', '');
+  beforeElement.parentNode.insertBefore(addBlock, beforeElement);
+
+  addBlock.addEventListener('click', function (event) {
+    event.preventDefault();
+    this.addBlock(addBlock);
+  }.bind(this));
+};
+
+RegistrationTemplateBuilder.prototype.addBlock = function (beforeElement) {
+  var uid = guidGenerator();
+  var block = this.blockTemplate.children[0].cloneNode(true);
+  block.style.display = 'block';
+  block.setAttribute('data-uid', uid);
+  beforeElement.parentNode.insertBefore(block, beforeElement);
+  this.block(block);
+  this.refreshAddButtons();
+  // this.addAddBlockButton(block);
+  // this.block(block);
+};
+
+RegistrationTemplateBuilder.prototype.refreshAddButtons = function () {
+  this.removeAddButtons(this.element);
+  this.addAddButtons(this.element);
 };
 
 RegistrationTemplateBuilder.prototype.block = function (element) {
@@ -111,14 +160,14 @@ RegistrationTemplateBuilder.prototype.list = function (element, name)
   });
 };
 
-RegistrationTemplateBuilder.prototype.addBlock = function (element)
-{
-  // Dispatch DOM added element event
-  document.dispatchEvent(new CustomEvent('dom.element.added', { 'detail': { 'element': element } }));
-
-  // Enable block behavior
-  this.block(element);
-};
+// RegistrationTemplateBuilder.prototype.addBlock = function (element)
+// {
+//   // Dispatch DOM added element event
+//   document.dispatchEvent(new CustomEvent('dom.element.added', { 'detail': { 'element': element } }));
+//
+//   // Enable block behavior
+//   this.block(element);
+// };
 
 RegistrationTemplateBuilder.prototype.addObject = function (element)
 {
