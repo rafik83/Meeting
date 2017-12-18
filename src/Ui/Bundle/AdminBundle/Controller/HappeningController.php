@@ -12,7 +12,6 @@ namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller;
 
 use Proximum\Vimeet\Application\Command\Happening\Category\Create as CreateCategory;
 use Proximum\Vimeet\Application\Command\Happening\Category\Update as UpdateCategory;
-use Proximum\Vimeet\Application\Command\Happening\Create as CreateHappening;
 use Proximum\Vimeet\Application\Command\Happening\Update as UpdateHappening;
 use Proximum\Vimeet\Application\Exception\Happening\EmptyHappeningParticipationException;
 use Proximum\Vimeet\Application\Serializer\Charset;
@@ -23,7 +22,6 @@ use Proximum\Vimeet\Domain\Model\Happening;
 use Proximum\Vimeet\Domain\Model\Happening\Category;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Happening\Category\CategoryCreateType;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Happening\Category\CategoryUpdateType;
-use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Happening\CreateType;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Happening\UpdateType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
@@ -51,38 +49,6 @@ class HappeningController extends Controller
         return $this->render('AdminBundle:Happening:list.html.twig', [
             'event' => $event,
             'list'  => $list,
-        ]);
-    }
-
-    /**
-     * @param Request $request
-     * @param Event   $event
-     *
-     * @return RedirectResponse|Response
-     */
-    public function createAction(Request $request, Event $event)
-    {
-        $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
-
-        $create = new CreateHappening($event);
-        $form   = $this->createForm(CreateType::class, $create, [
-            'event'  => $event,
-            'locale' => $event->getAvailableLocale($request->getLocale()),
-            'action' => $this->generateUrl('admin_happening_create', ['event' => $event->getId()]),
-            'method' => 'POST',
-        ]);
-        $form->add('submit', SubmitType::class);
-
-        if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
-            $this->get('tactician.commandbus')->handle($create);
-            $this->addFlash('success', 'flash.admin.happening.create.success');
-
-            return $this->redirectToRoute('admin_happening_list', ['event' => $event->getId()]);
-        }
-
-        return $this->render('AdminBundle:Happening:create.html.twig', [
-            'event' => $event,
-            'form'  => $form->createView(),
         ]);
     }
 

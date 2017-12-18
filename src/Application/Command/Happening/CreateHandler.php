@@ -15,9 +15,7 @@ use Proximum\Vimeet\Domain\Repository\HappeningRepositoryInterface;
 
 class CreateHandler
 {
-    /**
-     * @var HappeningRepositoryInterface
-     */
+    /** @var HappeningRepositoryInterface */
     private $happeningRepository;
 
     /**

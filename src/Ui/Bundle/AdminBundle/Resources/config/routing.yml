@@ -809,7 +809,7 @@ admin_happening_create:
     requirements:
         event: \d+
     methods: [GET, POST]
-    defaults: { _controller: AdminBundle:Happening:create }
+    defaults: { _controller: Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Happening\CreateAction }
 admin_happening_update:
     path: /event/{event}/happening/{happening}/update
     requirements:

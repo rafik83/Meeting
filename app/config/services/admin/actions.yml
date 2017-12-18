@@ -148,3 +148,15 @@ services:
         arguments:
             - '@command.user.event.phone.ignore_confirmation'
             - '@adapter.authorization_checker'
+
+    #
+    # Happening
+    #
+    Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Happening\CreateAction:
+        arguments:
+            - '@adapter.authorization_checker'
+            - '@form.factory'
+            - '@templating'
+            - '@adapter.router'
+            - '@Proximum\Vimeet\Infrastructure\Adapter\CommandBus'
+            - '@session.flash_bag'
