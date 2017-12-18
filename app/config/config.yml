@@ -35,7 +35,7 @@ framework:
     fragments:       ~
     http_method_override: true
     assets:
-        version: "%assets_version%"
+        json_manifest_path: '%kernel.project_dir%/web/assets/manifest.json'
     php_errors:
         log: true
 

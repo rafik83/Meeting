@@ -128,34 +128,32 @@ install-db-fixtures@test:
 	#bin/console doctrine:fixtures:load -n --env=test
 
 install-dep:
-	npm --no-spin install
+	yarn install
 
 #########
 # Build #
 #########
 
-## Build application
-build: build-assets
+build:
+	./node_modules/.bin/encore dev
 
-build@prod: build-assets@prod
+build@preprod:
+	./node_modules/.bin/encore production
 
-build-assets:
-	gulp --dev
+build@prod:
+	./node_modules/.bin/encore production
 
-build-assets@prod:
-	gulp
+watch:
+	./node_modules/.bin/encore dev --watch
 
-build-all-assets: build-assets
-	bin/console vimeet:event:build-guideline-asset
+build-all-assets: build
+	bin/console vimeet:event:build-guideline-asset; \
 
-build-all-assets@prod: build-assets@prod
-	bin/console vimeet:event:build-guideline-asset
+build-all-assets@preprod: build@preprod
+	bin/console vimeet:event:build-guideline-asset; \
 
-## Build with watch
-watch: watch-assets
-
-watch-assets:
-	gulp watch --dev
+build-all-assets@prod: build@prod
+	bin/console vimeet:event:build-guideline-asset; \
 
 ################
 # Translations #
