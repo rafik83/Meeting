@@ -39,8 +39,9 @@ function TemplateBlock(element, builder)
   this.element.querySelector('.delete-button').addEventListener('click', function (event) {
     event.preventDefault();
     if (confirm(this.element.querySelector('.delete-button').getAttribute('data-confirmation-message'))) {
-      document.dispatchEvent(new CustomEvent('template.block.removed', {'detail': {'element': this.element}}));
+      document.dispatchEvent(new CustomEvent('template.block.beforeRemoved', {'detail': {'element': this.element}}));
       this.element.remove();
+      document.dispatchEvent(new CustomEvent('template.block.afterRemoved'));
     }
   }.bind(this));
 
@@ -68,7 +69,9 @@ TemplateBlock.prototype.upButtonClicked = function (event)
   event.preventDefault();
 
   if (null !== this.element.previousElementSibling) {
+    document.dispatchEvent(new CustomEvent('template.block.beforeMovedUp', {'detail': {'element': this.element}}));
     this.element.parentNode.insertBefore(this.element, this.element.previousElementSibling);
+    document.dispatchEvent(new CustomEvent('template.block.afterMovedUp', {'detail': {'element': this.element}}));
   }
 };
 
@@ -77,7 +80,9 @@ TemplateBlock.prototype.downButtonClicked = function (event)
   event.preventDefault();
 
   if (null !== this.element.nextElementSibling) {
+    document.dispatchEvent(new CustomEvent('template.block.beforeMovedDown', {'detail': {'element': this.element}}));
     this.element.parentNode.insertBefore(this.element.nextElementSibling, this.element);
+    document.dispatchEvent(new CustomEvent('template.block.afterMovedDown', {'detail': {'element': this.element}}));
   }
 };
 

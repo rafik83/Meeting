@@ -58,7 +58,7 @@ function PrintTemplateBuilder(element) {
     this.removeObject(event.detail.element);
   }.bind(this));
 
-  document.addEventListener('template.block.removed', function (event) {
+  document.addEventListener('template.block.beforeRemoved', function (event) {
     this.removedBlock(event.detail.element);
   }.bind(this));
 }

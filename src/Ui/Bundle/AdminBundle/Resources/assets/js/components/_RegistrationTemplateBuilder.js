@@ -34,6 +34,14 @@ function RegistrationTemplateBuilder(element) {
   this.list(this.objectList, 'object-reference');
 
   this.init(this.templateContainer);
+
+  document.addEventListener('template.block.beforeMovedUp', this.beforeMoveBlock.bind(this));
+  document.addEventListener('template.block.afterMovedUp', this.afterMoveBlock.bind(this));
+
+  document.addEventListener('template.block.beforeMovedDown', this.beforeMoveBlock.bind(this));
+  document.addEventListener('template.block.afterMovedDown', this.afterMoveBlock.bind(this));
+
+  document.addEventListener('template.block.afterRemoved', this.afterRemovedBlock.bind(this));
 }
 
 RegistrationTemplateBuilder.prototype.addAddButtons = function (element) {
@@ -81,8 +89,6 @@ RegistrationTemplateBuilder.prototype.addBlock = function (beforeElement) {
   beforeElement.parentNode.insertBefore(block, beforeElement);
   this.block(block);
   this.refreshAddButtons();
-  // this.addAddBlockButton(block);
-  // this.block(block);
 };
 
 RegistrationTemplateBuilder.prototype.refreshAddButtons = function () {
@@ -160,15 +166,6 @@ RegistrationTemplateBuilder.prototype.list = function (element, name)
   });
 };
 
-// RegistrationTemplateBuilder.prototype.addBlock = function (element)
-// {
-//   // Dispatch DOM added element event
-//   document.dispatchEvent(new CustomEvent('dom.element.added', { 'detail': { 'element': element } }));
-//
-//   // Enable block behavior
-//   this.block(element);
-// };
-
 RegistrationTemplateBuilder.prototype.addObject = function (element)
 {
   // Dispatch DOM added element event
@@ -179,6 +176,21 @@ RegistrationTemplateBuilder.prototype.addObject = function (element)
 
   // Open configure modal
   element.templateObject.openConfigureModal();
+};
+
+RegistrationTemplateBuilder.prototype.afterRemovedBlock = function (block) {
+  // refresh add buttons
+  this.refreshAddButtons(this.element);
+};
+
+RegistrationTemplateBuilder.prototype.beforeMoveBlock = function (block) {
+  // remove add buttons in order to handle block move
+  this.removeAddButtons(this.element);
+};
+
+RegistrationTemplateBuilder.prototype.afterMoveBlock = function (block) {
+  // re-add buttons after block is moved
+  this.addAddButtons(this.element);
 };
 
 module.exports = RegistrationTemplateBuilder;
