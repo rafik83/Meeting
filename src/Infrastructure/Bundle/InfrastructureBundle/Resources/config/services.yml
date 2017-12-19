@@ -3534,6 +3534,8 @@ services:
             - '@query.agenda.participant_view_query_handler'
             - '@vimeet_infrastructure.repository.meeting_repository'
             - '@domain.key_dates.checker.meeting_published_access_checker'
+            - '@domain.user.agenda.phone.validation_required_checker'
+            - '@repository.user.event.extra_data_repository'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Agenda\AgendaViewQuery }
 
@@ -5825,6 +5827,17 @@ services:
             - '@vimeet_infrastructure.repository.sheet_repository'
             - '@vimeet_infrastructure.repository.meeting_slot_repository'
             - '@vimeet_infrastructure.repository.spot_repository'
+
+    #
+    # User Agenda Phone
+    #
+    domain.user.agenda.phone.validation_required_checker:
+        class: Proximum\Vimeet\Domain\User\Agenda\Phone\ValidationRequiredChecker
+        arguments:
+            - '@domain.tip.confirmation_phone_tip_checker'
+            - '@domain.user_event.user_event_phone_checker'
+            - '@vimeet_infrastructure.repository.meeting_repository'
+            - '@datetime'
 
     #
     # HomeDispatcher

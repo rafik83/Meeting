@@ -31,8 +31,8 @@ template.object.nomenclature: Nomenclature
 template.object.participant: Participant
 template.object.tag: 'Contenu affiché par défaut'
 template.object.tags: 'Multi tag'
-template.object.text: 'Texte non modifiable'
 template.object.telephone: Téléphone
+template.object.text: 'Texte non modifiable'
 template.object.url: Lien
 template.participant.display: 'Nombre de participants affichés sur la fiche'
 template.participant.title: 'Les participants'
@@ -46,6 +46,7 @@ template.registration.participantData: 'Information de participant'
 template.registration.participantTags: 'Tags de participant'
 template.registration.sheetData: 'Information de fiche'
 template.registration.sheetTags: 'Tags de fiche'
+template.registration.tag: Tags
 template.required.title: Requis
 template.style.default: 'Par défaut'
 template.style.title: Style

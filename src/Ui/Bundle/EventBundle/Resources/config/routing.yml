@@ -700,6 +700,15 @@ event_agenda_count_sheets_available_by_slot:
     methods: [GET]
     defaults: { _controller: EventBundle:Agenda:countSheetsAvailableBySlot }
 
+
+event_agenda_ignore_phone_confirmation:
+    path: /sheet/{sheet}/agenda/participant/{participant}/ignore-phone-validation-popup
+    requirements:
+        sheet: \d+
+        participant: \d+
+    defaults: { _controller: Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\User\Phone\IgnoreConfirmationAction }
+
+
 happening_program:
     path: /sheet/{sheet}/program
     requirements:

@@ -106,7 +106,8 @@ class BuildActionTest extends TestCase
             $engine->reveal(),
             $formFactory->reveal(),
             $nomenclatureRepository->reveal(),
-            $router->reveal()
+            $router->reveal(),
+            true
         );
         $response = $buildAction($request->reveal(), $registrationTemplate->reveal(), 'fr');
 
@@ -161,7 +162,8 @@ class BuildActionTest extends TestCase
             $engine->reveal(),
             $formFactory->reveal(),
             $nomenclatureRepository->reveal(),
-            $router->reveal()
+            $router->reveal(),
+            true
         );
         $response = $buildAction($request->reveal(), $registrationTemplate->reveal(), 'fr');
 

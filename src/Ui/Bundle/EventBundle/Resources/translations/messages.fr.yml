@@ -110,6 +110,7 @@ event.sms.receive_meeting_request.approved: '%event%: Votre demande de RDV avec 
 event.sms.reminder.pending_meeting_request: '%eventTitle% : Vous avez reçu %countPendingMeetingRequest% propositions de RDVs, voir %meetingRequestManagementUrl%'
 event.sms.sent_meeting_request.approved: '%event%: La proposition de RDV avec %sheet% a été acceptée. RDV le %date% à %time% : Lieu %spot%, Voir %link%'
 event.user_event_phone.validate.explanation: 'Vous allez recevoir par SMS un code à 4 chiffres afin de valider votre numéro de téléphone'
+event.user_event_phone.validate.ignore: Ignorer
 event.user_event_phone.validate.returnToPhone: 'Modifier mon numéro de téléphone'
 event.user_event_phone.validate.success: 'Votre numéro de téléphone est bien confirmé'
 event.user_event_phone.validate.title: 'Validation du numéro de téléphone'
@@ -174,7 +175,7 @@ meeting.video.screenshare.start: 'Partager mon écran'
 meeting.video.start: 'Démarrer le RDV'
 meeting.video.waitingForParticipant: 'En attente d''un participant'
 meetingRequest.mobile.filters.availableSlot.title: 'Qui est disponible ?'
-meetingRequest.mobile.filters.state.title: 'Gestion de RDV'
+meetingRequest.mobile.filters.state.title: 'Gestion RDV'
 modal.back: Retour
 modal.close: Fermer
 modal.loading.error: 'Un problème est survenu pendant le chargement, vous pouvez fermer la modale'
@@ -368,7 +369,7 @@ register.already_registered: 'Déjà inscrit ?'
 register.connect: Valider
 register.finalize: Finaliser
 register.photo: "Pourquoi la photo du participant est utile ?\n- Ne restez pas un anonyme pour vos futurs partenaires,\n- Renforcez votre réseau professionnel\n- Lors de l'événement, vos interlocuteurs vous identifient et vice-versa,\n- Des cartes de visites complètes pour tous,\n- Identifiez facilement les agendas de chacun..."
-register.privacy_policies: 'Protection de la vie privée : Conformément à la Loi Informatique et Libertés du 6 janvier 1978 modifiée en 2004, vous disposez d’un droit d’accès et de rectification aux données personnelles / informations vous concernant en nous adressant un e-mail à cnil@proximumgroup.com.'
+register.privacy_policies: 'Protection de la vie privée : Conformément à la Loi Informatique et Libertés du 6 janvier 1978 modifiée en 2004, vous disposez d’un droit d’accès et de rectification aux données personnelles / informations vous concernant en nous adressant un e-mail à cnil@vi-meet.com.'
 register.register: Inscription
 register.register_as: 'S''inscrire en tant que :'
 register.step: Etape

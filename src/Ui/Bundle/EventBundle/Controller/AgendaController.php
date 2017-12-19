@@ -20,6 +20,7 @@ use Proximum\Vimeet\Domain\Model\MeetingSlot;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Security\Voter\AgendaAccessVoter;
+use Proximum\Vimeet\Ui\Bundle\EventBundle\Handler\User\Phone\SendCodeForm;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\ParamConverter\EventDomain;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Security\SheetVoter;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -72,7 +73,7 @@ class AgendaController extends Controller
         Participant $participant,
         Sheet $sheet,
         UserInterface $user
-    ) {
+    ): Response {
         $this->checkAccess($eventDomain, $sheet);
 
         if ($participant->getSheet() !== $sheet) {
@@ -95,11 +96,54 @@ class AgendaController extends Controller
         );
         $tipTranslationViews = $this->get('tactician.commandbus.query')->handle($tipTranslationViewQuery);
 
+        $sendCodeForm = null;
+        $ignorePhoneConfirmationUrl = null;
+        $sendCodeViewTranslationViews = null;
+
+        if ($agenda->isPhoneValidationRequired && $participant->getUser() === $user) {
+            $mobileNumber = $request->query->get('mobile', $user->getMobile());
+            $actionRoute = $this->generateUrl(
+                'event_user_phone_validate',
+                [
+                    'sheet' => $sheet->getId(),
+                    'participant' => $participant->getId(),
+                    'redirectTo' => $this->generateUrl(
+                        'event_agenda_participant',
+                        [
+                            'sheet' => $sheet->getId(),
+                            'participant' => $participant->getId(),
+                        ]
+                    ),
+                ]
+            );
+
+            $sendCodeView = $this->get('handler.user.phone.send_code_form_handler')->handle(
+                new SendCodeForm(
+                    $request,
+                    $user,
+                    $eventDomain->getEvent(),
+                    $actionRoute,
+                    $mobileNumber
+                )
+            );
+
+            $sendCodeForm = $sendCodeView->form !== null ? $sendCodeView->form->createView() : null;
+            $sendCodeViewTranslationViews = $sendCodeView->tipTranslationViews;
+            $ignorePhoneConfirmationUrl = $this->generateUrl('event_agenda_ignore_phone_confirmation', [
+                'sheet'       => $sheet->getId(),
+                'participant' => $participant->getId(),
+            ]);
+
+        }
+
         return $this->render('EventBundle:Agenda:index.html.twig', [
-            'event'               => $eventDomain->getEvent(),
-            'agenda'              => $agenda,
-            'sheet'               => $sheet,
-            'tipTranslationViews' => $tipTranslationViews,
+            'event'                        => $eventDomain->getEvent(),
+            'agenda'                       => $agenda,
+            'sheet'                        => $sheet,
+            'tipTranslationViews'          => $tipTranslationViews,
+            'sendCodeForm'                 => $sendCodeForm,
+            'sendCodeViewTranslationViews' => $sendCodeViewTranslationViews,
+            'ignorePhoneConfirmationUrl'   => $ignorePhoneConfirmationUrl,
         ]);
     }
 

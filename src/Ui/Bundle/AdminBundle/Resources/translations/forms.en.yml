@@ -290,6 +290,28 @@ form.spot_create.children.filters.yes.label: 'Yes'
 form.spot_create.children.submit.label: Save
 form.template_registration_update.children.submit.label: Save
 form.tip_event_affect.children.types.label: 'Participation type'
+form.tip_event_create.children.translations.label_add: 'Add a translation'
+form.tip_event_create.children.translations.label_delete: 'Delate the translation'
+form.tip_event_create.children.translations.prototype.children.content.label: Contents
+form.tip_event_create.children.translations.prototype.children.locale.label: Language
+form.tip_event_create.children.translations.prototype.children.title.label: Wording
+form.tip_event_create.children.types.label: 'Assigned type'
+form.tip_event_update.children.onAgenda.label: 'Visible on the agenda'
+form.tip_event_update.children.onCatalog.label: 'Visible on the catalog'
+form.tip_event_update.children.onConfirmationPhone.label: 'Schedule and phone confirmation (determines the display of the phone number validation form)'
+form.tip_event_update.children.onMeetingManagement.label: 'Visible on my meetings'
+form.tip_event_update.children.onPrintPlanning.label: 'Visible on the printing of agendas'
+form.tip_event_update.children.onProgram.label: 'Visible on the program'
+form.tip_event_update.children.onSheet.label: 'Visible on the presentation sheet'
+form.tip_event_update.children.submit.label: Update
+form.tip_event_update.children.title.label: 'Back office label'
+form.tip_event_update.children.translations.label_add: 'Add a translation'
+form.tip_event_update.children.translations.label_delete: 'Delete the translation'
+form.tip_event_update.children.translations.prototype.children.content.label: Content
+form.tip_event_update.children.translations.prototype.children.locale.label: Language
+form.tip_event_update.children.translations.prototype.children.title.label: Wording
+form.tip_event_update.children.translations.prototype.label: Translations
+form.tip_event_update.children.types.label: 'Assigned types'
 form.transaction.children.state.cancelled: Cancelled
 form.transaction.children.state.pending: Pending
 form.transaction.children.transaction_mode.bank_card: 'Bank card'

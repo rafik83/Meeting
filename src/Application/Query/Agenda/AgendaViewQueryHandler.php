@@ -19,6 +19,9 @@ use Proximum\Vimeet\Domain\Repository\MeetingRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\Unavailability\MassRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\UnavailabilityRepositoryInterface;
+use Proximum\Vimeet\Domain\User\Agenda\Phone\ValidationRequiredChecker;
+use Proximum\Vimeet\Domain\User\Event\ExtraData\Type;
+use Proximum\Vimeet\Infrastructure\Repository\User\Event\ExtraDataRepository;
 
 class AgendaViewQueryHandler
 {
@@ -49,6 +52,12 @@ class AgendaViewQueryHandler
     /** @var SheetRepositoryInterface */
     private $sheetRepository;
 
+    /** @var ValidationRequiredChecker */
+    private $validationRequiredChecker;
+
+    /** @var ExtraDataRepository */
+    private $extraDataRepository;
+
     /**
      * @param DayRepositoryInterface                    $dayRepository
      * @param SheetRepositoryInterface                  $sheetRepository
@@ -59,6 +68,8 @@ class AgendaViewQueryHandler
      * @param ParticipantViewQueryHandler               $participantViewQueryHandler
      * @param MeetingRepositoryInterface                $meetingRepository
      * @param MeetingPublishedAccessChecker             $meetingPublishedAccessChecker
+     * @param ValidationRequiredChecker                 $validationRequiredChecker
+     * @param ExtraDataRepository                       $extraDataRepository
      */
     public function __construct(
         DayRepositoryInterface $dayRepository,
@@ -69,7 +80,9 @@ class AgendaViewQueryHandler
         MassRepositoryInterface $massUnavailabilityRepository,
         ParticipantViewQueryHandler $participantViewQueryHandler,
         MeetingRepositoryInterface $meetingRepository,
-        MeetingPublishedAccessChecker $meetingPublishedAccessChecker
+        MeetingPublishedAccessChecker $meetingPublishedAccessChecker,
+        ValidationRequiredChecker $validationRequiredChecker,
+        ExtraDataRepository $extraDataRepository
     ) {
         $this->dayRepository                    = $dayRepository;
         $this->sheetRepository                  = $sheetRepository;
@@ -80,6 +93,8 @@ class AgendaViewQueryHandler
         $this->participantViewQueryHandler      = $participantViewQueryHandler;
         $this->meetingRepository                = $meetingRepository;
         $this->meetingPublishedAccessChecker    = $meetingPublishedAccessChecker;
+        $this->validationRequiredChecker = $validationRequiredChecker;
+        $this->extraDataRepository = $extraDataRepository;
     }
 
     /**
@@ -87,7 +102,7 @@ class AgendaViewQueryHandler
      *
      * @return AgendaView
      */
-    public function handle(AgendaViewQuery $query)
+    public function handle(AgendaViewQuery $query): AgendaView
     {
         $eventDays   = $this->dayRepository->findByEvent($query->event);
         $participant = $query->participant;
@@ -108,7 +123,7 @@ class AgendaViewQueryHandler
         );
 
         if (empty($eventDays)) {
-            return new AgendaView([], $sheet, $participant, $isUserAloneParticipant, $participants);
+            return new AgendaView([], $sheet, $participant, $isUserAloneParticipant, $participants, false);
         }
 
         $unavailabilities        = [];
@@ -152,6 +167,25 @@ class AgendaViewQueryHandler
             );
         }
 
-        return new AgendaView($dayViews, $sheet, $participant, $isUserAloneParticipant, $participants);
+        $isPhoneConfirmationRequired = false;
+
+        if (true === $this->validationRequiredChecker->handle($sheet, $query->userViewing)) {
+            if (null === $this->extraDataRepository->getExtraDataForEventNameAndUser(
+                $query->event,
+                Type::PHONE_CONFIRMATION_IGNORED,
+                $query->userViewing)
+            ) {
+                $isPhoneConfirmationRequired = true;
+            }
+        }
+
+        return new AgendaView(
+            $dayViews,
+            $sheet,
+            $participant,
+            $isUserAloneParticipant,
+            $participants,
+            $isPhoneConfirmationRequired
+        );
     }
 }

@@ -51,6 +51,7 @@ services:
             - '@form.factory'
             - '@repository.nomenclature_repository'
             - '@adapter.router'
+            - '%feature_registration_template_builder_enabled%'
 
     Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\RegistrationTemplate\SaveAction:
         arguments:
@@ -139,3 +140,11 @@ services:
             - '@templating'
             - '@tactician.commandbus'
             - '@adapter.router'
+
+    #
+    # User
+    #
+    Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\User\Phone\IgnoreConfirmationAction:
+        arguments:
+            - '@command.user.event.phone.ignore_confirmation'
+            - '@adapter.authorization_checker'
