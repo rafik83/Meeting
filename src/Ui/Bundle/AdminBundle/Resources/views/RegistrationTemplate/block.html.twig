@@ -1,3 +1,5 @@
+{% trans_default_domain 'templates' %}
+
 {% set config = {
     style: null
 }|merge(config|default({})) %}
@@ -11,7 +13,7 @@
                 </span>
             </li>
             <li>
-                <button class="btn btn-link delete-button" data-confirmation-message="{{ 'admin.event.registration.template_builder.remove_confirm'|trans }}">
+                <button class="btn btn-link delete-button" data-confirmation-message="{{ 'template.block.remove_confirm'|trans }}">
                     <i class="glyphicon glyphicon-remove"></i>
                 </button>
             </li>
