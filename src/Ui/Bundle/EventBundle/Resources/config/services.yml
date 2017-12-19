@@ -35,6 +35,15 @@ services:
             - { name: 'request.param_converter', priority: 2, converter: 'sheet_param_converter' }
 
     #
+    # Value Resolver
+    #
+    Proximum\Vimeet\Ui\Bundle\EventBundle\ValueResolver\UserDomainValueResolver:
+        arguments:
+            - '@security.token_storage'
+        tags:
+            - { name: controller.argument_value_resolver, priority: 50 }
+
+    #
     # Security
     #
     security.admin_event_access_voter:
