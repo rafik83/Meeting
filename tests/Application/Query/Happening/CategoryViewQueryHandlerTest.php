@@ -29,7 +29,7 @@ class CategoryViewQueryHandlerTest extends TestCase
         $categoryTranslation = new Happening\CategoryTranslation($category, $locale, 'conference');
         $category->setTranslation($categoryTranslation);
 
-        $happening = new Happening($event, $begin, $end, $category);
+        $happening = new Happening($event, $begin, $end, $category, []);
 
         // Expected
         $expectedCategoryView = new HappeningCategoryView('conference', '', '#aaa', '#bbb');

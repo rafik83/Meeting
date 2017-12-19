@@ -768,6 +768,7 @@ services:
         class: Proximum\Vimeet\Application\Command\Happening\UpdateHandler
         arguments:
             - '@vimeet_infrastructure.repository.happening_repository'
+            - '@vimeet_infrastructure.adapter.delayed_event_dispatcher'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Happening\Update }
     command.user.activate_account_password_handler:

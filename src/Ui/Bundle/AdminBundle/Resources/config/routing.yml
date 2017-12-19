@@ -850,7 +850,7 @@ admin_happening_export:
     requirements:
         event: \d+
     methods: [GET]
-    defaults: { _controller: AdminBundle:Happening:export }
+    defaults: { _controller: Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Happening\ExportAction }
 
 #
 # Happening Speaker

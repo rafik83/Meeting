@@ -51,5 +51,7 @@ class Update extends AbstractHappeningCommand
                 'position' => $position,
             ];
         }
+
+        $this->types = $happening->getTypes();
     }
 }

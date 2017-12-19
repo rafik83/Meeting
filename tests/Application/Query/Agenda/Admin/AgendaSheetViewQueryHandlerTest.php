@@ -73,7 +73,7 @@ class AgendaSheetViewQueryHandlerTest extends TestCase
         $unavailability         = new Unavailability($user, $event, $begin, $end);
 
         $happeningParticipation = new HappeningParticipation(
-            new Happening($event, $begin, $end, $happeningCategory),
+            new Happening($event, $begin, $end, $happeningCategory, []),
             $user
         );
 

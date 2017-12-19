@@ -168,8 +168,8 @@ class DayViewQueryHandlerTest extends TestCase
         $this->massCategory = new Unavailability\Category($this->event, 'picto', 'title', 'leftColor', 'rightColor');
         $this->categoryH1 = new Happening\Category($this->event, 'Conference', 1, '#123123', '#123123');
         $this->categoryH2 = new Happening\Category($this->event, 'RDV', 2, '#123123', '#123123');
-        $this->happening1 = new Happening($this->event, $this->beginHappening1, $this->endHappening1, $this->categoryH1);
-        $this->happening2 = new Happening($this->event, $this->beginHappening2, $this->endHappening2, $this->categoryH2);
+        $this->happening1 = new Happening($this->event, $this->beginHappening1, $this->endHappening1, $this->categoryH1, []);
+        $this->happening2 = new Happening($this->event, $this->beginHappening2, $this->endHappening2, $this->categoryH2, []);
         $this->participation1 = new HappeningParticipation($this->happening1, $this->user);
         $this->participation2 = new HappeningParticipation($this->happening2, $this->user);
         $this->unavailability = new Unavailability($this->participant->getUser(), $this->event, $this->beginHappening2, $this->endHappening2);
@@ -447,13 +447,15 @@ class DayViewQueryHandlerTest extends TestCase
             $event,
             $beginHappening1,
             $endHappening1,
-            $categoryH1
+            $categoryH1,
+            []
         );
         $happening2 = new Happening(
             $event,
             $beginHappening2,
             $endHappening2,
-            $categoryH2
+            $categoryH2,
+            []
         );
         $participation1 = new HappeningParticipation($happening1, $user);
         $participation2 = new HappeningParticipation($happening2, $user);

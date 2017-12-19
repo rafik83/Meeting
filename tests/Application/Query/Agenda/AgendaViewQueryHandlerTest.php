@@ -70,7 +70,7 @@ class AgendaViewQueryHandlerTest extends TestCase
         $mass     = new Mass($event, $category, 'name', $begin, $end, true);
 
         $categoryH = new Happening\Category($event, 'picto', 1, 'leftColor', 'rightColor');
-        $happening = new Happening($event, $begin, $end, $categoryH, false, 100);
+        $happening = new Happening($event, $begin, $end, $categoryH, [], false, 100);
         $happeningParticipation = new HappeningParticipation($happening, $user);
 
         $unavailability = new Unavailability($user, $event, $begin, $end);
@@ -168,7 +168,7 @@ class AgendaViewQueryHandlerTest extends TestCase
         $mass     = new Mass($event, $category, 'name', $begin, $end, true);
 
         $categoryH = new Happening\Category($event, 'picto', 1, 'leftColor', 'rightColor');
-        $happening = new Happening($event, $begin, $end, $categoryH, false, 100);
+        $happening = new Happening($event, $begin, $end, $categoryH, [], false, 100);
         $happeningParticipation = new HappeningParticipation($happening, $user2);
 
         $unavailability = new Unavailability($user2, $event, $begin, $end);

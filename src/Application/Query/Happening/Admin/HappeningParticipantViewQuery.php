@@ -1,38 +1,33 @@
 <?php
 
 /*
- * This file is part of the vimeet project.
+ * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2017 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
 
 namespace Proximum\Vimeet\Application\Query\Happening\Admin;
 
+use Proximum\Vimeet\Application\Query\Query;
 use Proximum\Vimeet\Domain\Model\Event;
 
-class HappeningParticipantViewQuery
+class HappeningParticipantViewQuery implements Query
 {
-    /**
-     * @var Event
-     */
+    /** @var Event */
     public $event;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     public $locale;
 
     /**
-     * HappeningParticipantViewQuery constructor.
-     *
      * @param Event  $event
      * @param string $locale
      */
-    public function __construct(Event $event, $locale)
+    public function __construct(Event $event, string $locale)
     {
-        $this->event  = $event;
+        $this->event = $event;
         $this->locale = $locale;
     }
 }

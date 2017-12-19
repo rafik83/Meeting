@@ -52,14 +52,16 @@ class DayViewQueryHandlerTest extends TestCase
             $event,
             $beginHappening1,
             $endHappening1,
-            $categoryH1
+            $categoryH1,
+            []
         );
 
         $happening2 = new Happening(
             $event,
             $beginHappening2,
             $endHappening2,
-            $categoryH2
+            $categoryH2,
+            []
         );
 
         $reflection = new \ReflectionClass(Happening::class);

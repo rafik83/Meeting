@@ -47,8 +47,8 @@ class ProgramViewQueryHandlerTest extends TestCase
         );
 
         $happenings = [
-            new Happening($event, new \DateTime(), new \DateTime(), $happeningCategoryTwo),
-            new Happening($event, new \DateTime(), new \DateTime(), $happeningCategoryOne)
+            new Happening($event, new \DateTime(), new \DateTime(), $happeningCategoryTwo, []),
+            new Happening($event, new \DateTime(), new \DateTime(), $happeningCategoryOne, [])
         ];
 
         //Expected

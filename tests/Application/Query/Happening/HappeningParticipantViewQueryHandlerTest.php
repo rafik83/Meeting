@@ -42,7 +42,7 @@ class HappeningParticipantViewQueryHandlerTest extends TestCase
         $user->getPosition()->willReturn('ceo');
 
         $sheet     = SheetFactory::create($event, $user->reveal());
-        $happening = new Happening($event, $begin, $end, $category);
+        $happening = new Happening($event, $begin, $end, $category, []);
 
         $participation = new HappeningParticipation($happening, $user->reveal());
         $happening->setParticipations([$participation]);
