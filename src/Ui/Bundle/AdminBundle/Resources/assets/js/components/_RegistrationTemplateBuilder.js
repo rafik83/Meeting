@@ -95,6 +95,7 @@ RegistrationTemplateBuilder.prototype.addBlock = function (beforeElement) {
   beforeElement.parentNode.insertBefore(block, beforeElement);
   this.block(block);
   this.refreshAddButtons();
+  block.scrollIntoView(true);
 };
 
 RegistrationTemplateBuilder.prototype.refreshAddButtons = function () {
@@ -184,17 +185,16 @@ RegistrationTemplateBuilder.prototype.addObject = function (element)
   element.templateObject.openConfigureModal();
 };
 
-RegistrationTemplateBuilder.prototype.afterRemovedBlock = function (block) {
-  // refresh add buttons
+RegistrationTemplateBuilder.prototype.afterRemovedBlock = function (event) {
   this.refreshAddButtons();
 };
 
-RegistrationTemplateBuilder.prototype.beforeMoveBlock = function (block) {
+RegistrationTemplateBuilder.prototype.beforeMoveBlock = function (event) {
   // remove add buttons in order to handle block move
   this.removeAddButtons();
 };
 
-RegistrationTemplateBuilder.prototype.afterMoveBlock = function (block) {
+RegistrationTemplateBuilder.prototype.afterMoveBlock = function (event) {
   // re-add buttons after block is moved
   this.addAddButtons();
 };
