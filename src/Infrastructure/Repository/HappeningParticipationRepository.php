@@ -375,4 +375,21 @@ class HappeningParticipationRepository implements HappeningParticipationReposito
 
         return $queryBuilder->getQuery()->getOneOrNullResult();
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function findByHappening(Happening $happening): array
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('participation')
+            ->from(HappeningParticipation::class, 'participation')
+            ->where('participation.happening = :happening')
+            ->setParameter('happening', $happening)
+        ;
+
+        return $queryBuilder->getQuery()->getResult();
+    }
 }

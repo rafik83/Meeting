@@ -11,6 +11,8 @@
 namespace Proximum\Vimeet\Application\Command\Happening;
 
 use Proximum\Vimeet\Application\Adapter\DelayedEventDispatcherInterface;
+use Proximum\Vimeet\Application\Event\Events;
+use Proximum\Vimeet\Application\Event\Happening\TypesUpdated;
 use Proximum\Vimeet\Domain\Repository\HappeningRepositoryInterface;
 
 class UpdateHandler
@@ -38,6 +40,8 @@ class UpdateHandler
      */
     public function handle(Update $update)
     {
+        $previousTypes = $update->happening->getTypes();
+
         $happening = $update->happening;
         $happening->update(
             $update->begin,
@@ -63,5 +67,9 @@ class UpdateHandler
         $happening->setSpeakers(array_map(function (array $talking) { return $talking['speaker']; }, $update->talkings));
 
         $this->happeningRepository->set($happening);
+
+        if ($previousTypes !== $update->types) {
+            $this->eventDispatcher->dispatch(Events::HAPPENING_TYPES_UPDATED, new TypesUpdated($happening));
+        }
     }
 }

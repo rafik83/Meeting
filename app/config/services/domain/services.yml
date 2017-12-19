@@ -8,3 +8,8 @@ services:
         class: Proximum\Vimeet\Domain\Package\Duplicator
         arguments:
             - '@datetime'
+
+    Proximum\Vimeet\Domain\Happening\Participation\DisableEnableParticipation:
+        arguments:
+            - '@vimeet_infrastructure.repository.happening_participation_repository'
+            - '@vimeet_infrastructure.repository.sheet_repository'

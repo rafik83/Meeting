@@ -13,6 +13,8 @@ namespace Proximum\Vimeet\Tests\Application\Command\Happening;
 use Proximum\Vimeet\Application\Adapter\DelayedEventDispatcherInterface;
 use Proximum\Vimeet\Application\Command\Happening\Update;
 use Proximum\Vimeet\Application\Command\Happening\UpdateHandler;
+use Proximum\Vimeet\Application\Event\Events;
+use Proximum\Vimeet\Application\Event\Happening\TypesUpdated;
 use Proximum\Vimeet\Domain\Model\Happening;
 use Proximum\Vimeet\Domain\Model\Happening\Category;
 use Proximum\Vimeet\Domain\Model\Happening\CategoryTranslation;
@@ -76,6 +78,7 @@ class UpdateHandlerTest extends TestCase
         $happeningRepository = $this->prophesize(HappeningRepositoryInterface::class);
         $eventDispatcher = $this->prophesize(DelayedEventDispatcherInterface::class);
         $happeningRepository->set($expectedSubEvent)->shouldBeCalled();
+        $eventDispatcher->dispatch(Events::HAPPENING_TYPES_UPDATED, new TypesUpdated($happening))->shouldBeCalled();
 
         // Command
         $update                   = new Update($happening);
