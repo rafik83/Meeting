@@ -1142,6 +1142,7 @@ services:
         arguments:
             - '@repository.template.registration_template_repository'
             - '@template.template_data_factory'
+            - '@components.registration.template_validator_translated'
             - '@vimeet_infrastructure.adapter.delayed_event_dispatcher'
             - '@adapter.job_queue_adapter'
         tags:
@@ -1152,6 +1153,8 @@ services:
             - '@repository.template.registration_template_repository'
             - '@adapter.job_queue_adapter'
             - '@template.template_data_factory'
+            - '@components.registration.template_validator_translated'
+            - '@vimeet_infrastructure.adapter.delayed_event_dispatcher'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Template\Registration\Save }
 
@@ -2245,6 +2248,12 @@ services:
             - '@template.template_data_factory'
             - '@vimeet_infrastructure.repository.participant_repository'
 
+    components.registration.template_validator_translated:
+        class: Proximum\Vimeet\Application\Components\Registration\RegistrationTemplateValidatorTranslated
+        arguments:
+            - '@template.registration.registration_template_validator'
+            - '@vimeet_infrastructure.adapter.translator_adapter'
+
     #
     # Sheet Component
     #
@@ -2586,6 +2595,10 @@ services:
         class: Proximum\Vimeet\Domain\Template\TemplateRemoveField
         arguments:
             - '@template.template_data_factory'
+
+    template.registration.registration_template_validator:
+        class: Proximum\Vimeet\Domain\Template\Registration\RegistrationTemplateValidator
+
     template.template_preview_resolver:
         class: Proximum\Vimeet\Domain\Template\TemplatePreviewResolver
         arguments:

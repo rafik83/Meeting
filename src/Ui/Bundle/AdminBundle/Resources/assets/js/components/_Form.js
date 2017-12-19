@@ -54,10 +54,10 @@ Form.prototype.set = function (name, value)
         if (this.isMultipleSelect(inputs[0])) {
 
             [].forEach.call(inputs[0].querySelectorAll('option'), function (option) {
-                if (-1 !== value.indexOf(option.value)) {
-                    option.selected = true;
-                }
+                option.selected = -1 !== value.indexOf(option.value);
             });
+
+            inputs[0].dispatchEvent(new Event('change'));
 
             return;
         }
