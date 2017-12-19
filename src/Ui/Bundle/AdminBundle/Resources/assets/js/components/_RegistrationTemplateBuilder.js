@@ -44,8 +44,10 @@ function RegistrationTemplateBuilder(element) {
 
 RegistrationTemplateBuilder.prototype.addAddButtons = function () {
   [].forEach.call(this.templateContainer.querySelectorAll('.block'), function (block) {
-    this.addAddBlockButton(block);
+    this.addAddBlockButton(block, 'before');
   }.bind(this));
+
+  this.addAddBlockButton(this.templateContainer, 'append');
 };
 
 RegistrationTemplateBuilder.prototype.removeAddButtons = function () {
@@ -66,12 +68,19 @@ RegistrationTemplateBuilder.prototype.init = function () {
   this.addAddButtons();
 };
 
-RegistrationTemplateBuilder.prototype.addAddBlockButton = function (beforeElement) {
+RegistrationTemplateBuilder.prototype.addAddBlockButton = function (element, position) {
   var addBlock = this.addBlockTemplate.cloneNode(true);
   addBlock.classList.remove('hide');
   addBlock.removeAttribute('data-template-add-block');
   addBlock.setAttribute('data-add-block', '');
-  beforeElement.parentNode.insertBefore(addBlock, beforeElement);
+
+  if ('before' === position) {
+    element.parentNode.insertBefore(addBlock, element);
+  } else if ('append' === position) {
+    element.appendChild(addBlock);
+  } else {
+    throw new Error('Given position must be "before" or "append"');
+  }
 
   addBlock.addEventListener('click', function (event) {
     event.preventDefault();
