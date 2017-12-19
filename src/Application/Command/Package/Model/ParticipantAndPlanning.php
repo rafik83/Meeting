@@ -26,9 +26,9 @@ class ParticipantAndPlanning
     public $enabled;
 
     /**
-     * @var Product|null
+     * @var Product[]
      */
-    public $participant;
+    public $participants;
 
     /**
      * @var Product|null
@@ -36,29 +36,29 @@ class ParticipantAndPlanning
     public $planning;
 
     /**
-     * ParticipantAndPlanning constructor.
-     *
-     * @param array   $labels
-     * @param bool    $enabled
-     * @param Product $participant
-     * @param Product $planning
+     * @param array     $labels
+     * @param bool      $enabled
+     * @param Product[] $participants
+     * @param Product   $planning
      *
      * @throws WrongTypeException
      */
-    public function __construct(array $labels, $enabled, Product $participant = null, Product $planning = null)
+    public function __construct(array $labels, $enabled, array $participants = [], Product $planning = null)
     {
-        if (null !== $participant && !$participant->isParticipant()) {
-            throw new WrongTypeException($participant, Product::TYPE_PARTICIPANT);
+        foreach ($participants as $participant) {
+            if (null !== $participant && !$participant->isParticipant()) {
+                throw new WrongTypeException($participant, Product::TYPE_PARTICIPANT);
+            }
         }
 
         if (null !== $planning && !$planning->isPlanning()) {
             throw new WrongTypeException($planning, Product::TYPE_PLANNING);
         }
 
-        $this->labels      = $labels;
-        $this->enabled     = $enabled;
-        $this->participant = $participant;
-        $this->planning    = $planning;
+        $this->labels = $labels;
+        $this->enabled = $enabled;
+        $this->participants = $participants;
+        $this->planning = $planning;
     }
 
     /**
