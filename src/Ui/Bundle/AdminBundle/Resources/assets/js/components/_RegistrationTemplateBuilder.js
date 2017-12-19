@@ -15,12 +15,10 @@ function RegistrationTemplateBuilder(element) {
   this.element = element;
   this.url = element.getAttribute('data-registration-template-builder');
   this.locale = element.getAttribute('data-locale');
-  this.templateContainer = element.querySelector('#template-container');
+  this.templateContainer = element.querySelector('.template-container');
 
-  this.addBlockTemplate = element.querySelector('[data-add-block-template]');
-  this.blockTemplate = element.querySelector('[data-block-template]');
-  this.addBlockTemplate.style.display = 'none';
-  this.blockTemplate.style.display = 'none';
+  this.addBlockTemplate = element.querySelector('[data-template-add-block]');
+  this.blockTemplate = element.querySelector('[data-template-block]');
 
   var saveButton = element.querySelector('#template-save-button');
   this.saveButton = new LoadingButton(saveButton, saveButton.getAttribute('data-loading-button'));
@@ -33,7 +31,7 @@ function RegistrationTemplateBuilder(element) {
   this.objectList = element.querySelector('#object-list');
   this.list(this.objectList, 'object-reference');
 
-  this.init(this.templateContainer);
+  this.init();
 
   document.addEventListener('template.block.beforeMovedUp', this.beforeMoveBlock.bind(this));
   document.addEventListener('template.block.afterMovedUp', this.afterMoveBlock.bind(this));
@@ -44,34 +42,34 @@ function RegistrationTemplateBuilder(element) {
   document.addEventListener('template.block.afterRemoved', this.afterRemovedBlock.bind(this));
 }
 
-RegistrationTemplateBuilder.prototype.addAddButtons = function (element) {
-  [].forEach.call(element.querySelectorAll('.block'), function (block) {
+RegistrationTemplateBuilder.prototype.addAddButtons = function () {
+  [].forEach.call(this.templateContainer.querySelectorAll('.block'), function (block) {
     this.addAddBlockButton(block);
   }.bind(this));
 };
 
-RegistrationTemplateBuilder.prototype.removeAddButtons = function (element) {
-  [].forEach.call(element.querySelectorAll('[data-add-block]'), function (button) {
+RegistrationTemplateBuilder.prototype.removeAddButtons = function () {
+  [].forEach.call(this.templateContainer.querySelectorAll('[data-add-block]'), function (button) {
     button.remove();
   }.bind(this));
 };
 
-RegistrationTemplateBuilder.prototype.init = function (element) {
-  [].forEach.call(element.querySelectorAll('.block'), function (block) {
+RegistrationTemplateBuilder.prototype.init = function () {
+  [].forEach.call(this.templateContainer.querySelectorAll('.block'), function (block) {
     this.block(block);
   }.bind(this));
 
-  [].forEach.call(element.querySelectorAll('.object'), function (object) {
+  [].forEach.call(this.templateContainer.querySelectorAll('.object'), function (object) {
       this.object(object);
   }.bind(this));
 
-  this.addAddButtons(element);
+  this.addAddButtons();
 };
 
 RegistrationTemplateBuilder.prototype.addAddBlockButton = function (beforeElement) {
   var addBlock = this.addBlockTemplate.cloneNode(true);
-  addBlock.style.display = 'block';
-  addBlock.removeAttribute('data-add-block-template');
+  addBlock.classList.remove('hide');
+  addBlock.removeAttribute('data-template-add-block');
   addBlock.setAttribute('data-add-block', '');
   beforeElement.parentNode.insertBefore(addBlock, beforeElement);
 
@@ -84,7 +82,6 @@ RegistrationTemplateBuilder.prototype.addAddBlockButton = function (beforeElemen
 RegistrationTemplateBuilder.prototype.addBlock = function (beforeElement) {
   var uid = guidGenerator();
   var block = this.blockTemplate.children[0].cloneNode(true);
-  block.style.display = 'block';
   block.setAttribute('data-uid', uid);
   beforeElement.parentNode.insertBefore(block, beforeElement);
   this.block(block);
@@ -92,8 +89,8 @@ RegistrationTemplateBuilder.prototype.addBlock = function (beforeElement) {
 };
 
 RegistrationTemplateBuilder.prototype.refreshAddButtons = function () {
-  this.removeAddButtons(this.element);
-  this.addAddButtons(this.element);
+  this.removeAddButtons();
+  this.addAddButtons();
 };
 
 RegistrationTemplateBuilder.prototype.block = function (element) {
@@ -180,17 +177,17 @@ RegistrationTemplateBuilder.prototype.addObject = function (element)
 
 RegistrationTemplateBuilder.prototype.afterRemovedBlock = function (block) {
   // refresh add buttons
-  this.refreshAddButtons(this.element);
+  this.refreshAddButtons();
 };
 
 RegistrationTemplateBuilder.prototype.beforeMoveBlock = function (block) {
   // remove add buttons in order to handle block move
-  this.removeAddButtons(this.element);
+  this.removeAddButtons();
 };
 
 RegistrationTemplateBuilder.prototype.afterMoveBlock = function (block) {
   // re-add buttons after block is moved
-  this.addAddButtons(this.element);
+  this.addAddButtons();
 };
 
 module.exports = RegistrationTemplateBuilder;

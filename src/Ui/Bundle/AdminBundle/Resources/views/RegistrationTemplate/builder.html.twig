@@ -35,16 +35,17 @@
             </div>
         </div>
 
+
+        <button data-template-add-block class="btn btn-primary add-block hide">
+            {{ 'admin.template.registration.addBlock'|trans }}
+        </button>
+
+        <div data-template-block class="hide">
+            {{ include('AdminBundle:RegistrationTemplate:block.html.twig') }}
+        </div>
+
         <div class="template-builder-body">
-            <button data-add-block-template class="btn btn-primary add-block">
-                {{ 'admin.template.registration.addBlock'|trans }}
-            </button>
-
-            <div data-block-template>
-                {{ include('AdminBundle:RegistrationTemplate:block.html.twig') }}
-            </div>
-
-            <div class="template-container container-fluid block-inner" id="template-container">
+            <div class="template-container container-fluid block-inner">
                 {% for uid, item in registrationTemplate.value|default([]) %}
                     {% if item.component == 'block' %}
                         {{ include('AdminBundle:RegistrationTemplate:block.html.twig', {
