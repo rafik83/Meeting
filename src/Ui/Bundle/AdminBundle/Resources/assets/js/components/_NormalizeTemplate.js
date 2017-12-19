@@ -21,7 +21,10 @@ function normalizeTemplate(builder, item) {
 
   [].forEach.call(builder.children(item), function (child) {
     var template = child.templateBlock || child.templateObject;
-    config[template.uid] = normalizeTemplate(builder, child);
+
+    if (template !== undefined) {
+      config[template.uid] = normalizeTemplate(builder, child);
+    }
   });
 
   return config;
