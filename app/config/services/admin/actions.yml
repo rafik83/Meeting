@@ -175,3 +175,12 @@ services:
             - '@adapter.router'
             - '@Proximum\Vimeet\Infrastructure\Adapter\CommandBus'
             - '@session.flash_bag'
+
+    #
+    # Happening Category
+    #
+    Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Happening\Category\ListAction:
+        arguments:
+            - '@adapter.authorization_checker'
+            - '@vimeet_infrastructure.repository_happening.category_repository'
+            - '@templating'

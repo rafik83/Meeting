@@ -828,13 +828,15 @@ admin_happening_category_list:
     requirements:
         event: \d+
     methods: [GET]
-    defaults: { _controller: AdminBundle:Happening:listCategory }
+    defaults: { _controller: Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Happening\Category\ListAction }
+
 admin_happening_category_create:
     path: /event/{event}/happening/category/create
     requirements:
         event: \d+
     methods: [GET, POST]
     defaults: { _controller: AdminBundle:Happening:createCategory }
+
 admin_happening_category_update:
     path: /event/{event}/happening/category/{category}/update
     requirements:
@@ -842,6 +844,7 @@ admin_happening_category_update:
         category: \d+
     methods: [GET, POST]
     defaults: { _controller: AdminBundle:Happening:updateCategory }
+
 admin_happening_export:
     path: /event/{event}/happening/export
     requirements:

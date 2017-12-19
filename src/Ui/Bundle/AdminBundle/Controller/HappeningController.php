@@ -34,26 +34,6 @@ class HappeningController extends Controller
      *
      * @return Response
      */
-    public function listCategoryAction(Request $request, Event $event)
-    {
-        $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
-
-        $categories = $this
-            ->get('vimeet_infrastructure.repository_happening.category_repository')
-            ->findByEvent($event, $event->getAvailableLocale($request->getLocale()));
-
-        return $this->render('AdminBundle:Happening/Category:list.html.twig', [
-            'event'      => $event,
-            'categories' => $categories,
-        ]);
-    }
-
-    /**
-     * @param Request $request
-     * @param Event   $event
-     *
-     * @return Response
-     */
     public function createCategoryAction(Request $request, Event $event)
     {
         $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
