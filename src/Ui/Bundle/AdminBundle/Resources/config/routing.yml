@@ -803,20 +803,22 @@ admin_happening_list:
     requirements:
         event: \d+
     methods: [GET]
-    defaults: { _controller: AdminBundle:Happening:list }
+    defaults: { _controller: Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Happening\ListAction }
+
 admin_happening_create:
     path: /event/{event}/happening/create
     requirements:
         event: \d+
     methods: [GET, POST]
     defaults: { _controller: Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Happening\CreateAction }
+
 admin_happening_update:
     path: /event/{event}/happening/{happening}/update
     requirements:
         event: \d+
         happening: \d+
     methods: [GET, POST]
-    defaults: { _controller: AdminBundle:Happening:update }
+    defaults: { _controller: Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Happening\UpdateAction }
 
 #
 # Happening Category

@@ -12,17 +12,13 @@ namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller;
 
 use Proximum\Vimeet\Application\Command\Happening\Category\Create as CreateCategory;
 use Proximum\Vimeet\Application\Command\Happening\Category\Update as UpdateCategory;
-use Proximum\Vimeet\Application\Command\Happening\Update as UpdateHappening;
 use Proximum\Vimeet\Application\Exception\Happening\EmptyHappeningParticipationException;
 use Proximum\Vimeet\Application\Serializer\Charset;
-use Proximum\Vimeet\Application\Query\Happening\Admin\HappeningListViewQuery;
 use Proximum\Vimeet\Application\Query\Happening\Admin\HappeningParticipantViewQuery;
 use Proximum\Vimeet\Domain\Model\Event;
-use Proximum\Vimeet\Domain\Model\Happening;
 use Proximum\Vimeet\Domain\Model\Happening\Category;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Happening\Category\CategoryCreateType;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Happening\Category\CategoryUpdateType;
-use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Happening\UpdateType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -32,65 +28,6 @@ use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 
 class HappeningController extends Controller
 {
-    /**
-     * @param Request $request
-     * @param Event   $event
-     *
-     * @return Response
-     */
-    public function listAction(Request $request, Event $event)
-    {
-        $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
-
-        $list = $this->get('tactician.commandbus.query')->handle(
-            new HappeningListViewQuery($event, $event->getAvailableLocale($request->getLocale()))
-        );
-
-        return $this->render('AdminBundle:Happening:list.html.twig', [
-            'event' => $event,
-            'list'  => $list,
-        ]);
-    }
-
-    /**
-     * @param Request   $request
-     * @param Event     $event
-     * @param Happening $happening
-     *
-     * @return RedirectResponse|Response
-     */
-    public function updateAction(Request $request, Event $event, Happening $happening)
-    {
-        $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
-
-        $update = new UpdateHappening($happening);
-        $form   = $this->createForm(UpdateType::class, $update, [
-            'event'  => $event,
-            'locale' => $event->getAvailableLocale($request->getLocale()),
-            'action' => $this->generateUrl('admin_happening_update', [
-                'event'     => $event->getId(),
-                'happening' => $happening->getId(),
-            ]),
-            'method' => 'POST',
-        ]);
-        $form->add('submit', SubmitType::class);
-
-        if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
-            $this->get('tactician.commandbus')->handle($update);
-            $this->addFlash('success', 'flash.admin.happening.update.success');
-
-            return $this->redirectToRoute('admin_happening_update', [
-                'event'     => $event->getId(),
-                'happening' => $happening->getId(),
-            ]);
-        }
-
-        return $this->render('AdminBundle:Happening:update.html.twig', [
-            'event' => $event,
-            'form'  => $form->createView(),
-        ]);
-    }
-
     /**
      * @param Request $request
      * @param Event   $event

@@ -10,35 +10,12 @@
 
 namespace Proximum\Vimeet\Application\Command\Happening;
 
-use Proximum\Vimeet\Application\Command\Command;
 use Proximum\Vimeet\Domain\Model\Event;
-use Proximum\Vimeet\Domain\Model\Happening\Category;
 
-class Create implements Command
+class Create extends AbstractHappeningCommand
 {
     /** @var Event */
     public $event;
-
-    /** @var Category */
-    public $category;
-
-    /** @var \DateTimeInterface */
-    public $begin;
-
-    /** @var \DateTimeInterface */
-    public $end;
-
-    /** @var array */
-    public $translations = [];
-
-    /** @var array */
-    public $talkings = [];
-
-    /** @var bool */
-    public $questionAllowed;
-
-    /** @var int|null */
-    public $limitParticipant;
 
     /**
      * @param Event $event

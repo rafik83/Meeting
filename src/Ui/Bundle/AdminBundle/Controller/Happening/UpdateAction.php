@@ -13,9 +13,10 @@ namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Happening;
 use Proximum\Vimeet\Application\Adapter\AuthorizationCheckerAdapterInterface;
 use Proximum\Vimeet\Application\Adapter\CommandBusInterface;
 use Proximum\Vimeet\Application\Adapter\RouterInterface;
-use Proximum\Vimeet\Application\Command\Happening\Create;
+use Proximum\Vimeet\Application\Command\Happening\Update;
 use Proximum\Vimeet\Domain\Model\Event;
-use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Happening\CreateType;
+use Proximum\Vimeet\Domain\Model\Happening;
+use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Happening\UpdateType;
 use Symfony\Bundle\FrameworkBundle\Templating\EngineInterface;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -25,9 +26,9 @@ use Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Symfony\Component\Security\Core\User\UserInterface;
 
-class CreateAction
+class UpdateAction
 {
-    const TEMPLATE = 'AdminBundle:Happening:create.html.twig';
+    const TEMPLATE = 'AdminBundle:Happening:update.html.twig';
 
     /** @var AuthorizationCheckerAdapterInterface */
     private $authorizationCheckerAdapter;
@@ -74,31 +75,33 @@ class CreateAction
     /**
      * @param Request       $request
      * @param Event         $event
+     * @param Happening     $happening
      * @param UserInterface $admin
      *
      * @return Response
      */
-    public function __invoke(Request $request, Event $event, UserInterface $admin): Response
+    public function __invoke(Request $request, Event $event, Happening $happening, UserInterface $admin): Response
     {
         if (!$this->authorizationCheckerAdapter->isGranted('PERMISSION_EVENT_ACCESS', $event)) {
             throw new AccessDeniedException('Access Denied!');
         }
 
-        $create = new Create($event);
-        $form   = $this->formFactory->create(CreateType::class, $create, [
-            'admin'  => $admin,
+        $update = new Update($happening);
+        $form   = $this->formFactory->create(UpdateType::class, $update, [
+            'admin' => $admin,
             'event'  => $event,
             'locale' => $event->getAvailableLocale($request->getLocale()),
             'submit' => true,
         ]);
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
-            $this->commandBus->handle($create);
-            $this->flashBag->add('success', 'flash.admin.happening.create.success');
+            $this->commandBus->handle($update);
+            $this->flashBag->add('success', 'flash.admin.happening.update.success');
 
-            return new RedirectResponse(
-                $this->router->generate('admin_happening_list', ['event' => $event->getId()])
-            );
+            return new RedirectResponse($this->router->generate('admin_happening_update', [
+                'event'     => $event->getId(),
+                'happening' => $happening->getId(),
+            ]));
         }
 
         return $this->engine->renderResponse(self::TEMPLATE, [

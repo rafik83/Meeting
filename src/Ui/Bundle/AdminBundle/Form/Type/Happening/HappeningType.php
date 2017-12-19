@@ -10,7 +10,10 @@
 
 namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Happening;
 
+use Proximum\Vimeet\Domain\Model\Admin;
+use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Form\Type\DateTimePickerType;
+use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\TypeChoiceType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
@@ -67,7 +70,16 @@ abstract class HappeningType extends AbstractType
                 ],
                 'help' => 'form.happening_create.children.limitParticipant.help'
             ])
+            ->add('types', TypeChoiceType::class, [
+                'event'    => $options['event'],
+                'expanded' => true,
+                'locale'   => $options['locale'],
+                'multiple' => true,
+                'required' => false,
+                'user'     => $options['admin'],
+            ])
             ->add('talkings', CollectionType::class, [
+                'required'       => false,
                 'entry_type'     => TalkingType::class,
                 'entry_options'  => ['label' => false, 'event' => $event],
                 'prototype_data' => ['speaker' => null, 'position' => 0],
@@ -92,7 +104,10 @@ abstract class HappeningType extends AbstractType
      */
     public function configureOptions(OptionsResolver $resolver)
     {
-        $resolver->setRequired(['event', 'locale']);
+        $resolver->setRequired(['event', 'locale', 'admin']);
+        $resolver->setAllowedTypes('event', Event::class);
+        $resolver->setAllowedTypes('admin', Admin::class);
+        $resolver->setAllowedTypes('locale', 'string');
     }
 
     /**
