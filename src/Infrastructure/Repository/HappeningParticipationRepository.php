@@ -293,7 +293,7 @@ class HappeningParticipationRepository implements HappeningParticipationReposito
     /**
      * {@inheritdoc}
      */
-    public function getParticipationsForSheet(Sheet $sheet, $happenings)
+    public function getParticipationsForSheet(Sheet $sheet, array $happenings)
     {
         $sheetUsers = $this->getUsersOnSheet($sheet);
 
