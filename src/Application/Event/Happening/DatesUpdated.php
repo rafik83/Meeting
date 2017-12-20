@@ -11,8 +11,9 @@
 namespace Proximum\Vimeet\Application\Event\Happening;
 
 use Proximum\Vimeet\Domain\Model\Happening;
+use Symfony\Component\EventDispatcher\Event;
 
-class DatesUpdated
+class DatesUpdated extends Event
 {
     /** @var Happening */
     private $happening;

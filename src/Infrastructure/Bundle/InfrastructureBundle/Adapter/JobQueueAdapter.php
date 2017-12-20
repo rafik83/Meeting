@@ -279,12 +279,15 @@ class JobQueueAdapter extends AbstractJobQueueAdapter implements JobQueueInterfa
      */
     public function aggregateSheetAvailableSlot(Sheet $sheet)
     {
-        $job = new Job(AvailableSlotCalculatorCommand::NAME, [
-            sprintf('--sheet=%s', $sheet->getId()),
+        $job = new Job(
+            AvailableSlotCalculatorCommand::NAME,
+            [
+                sprintf('--sheet=%s', $sheet->getId()),
+            ],
             true,
             Job::DEFAULT_QUEUE,
             Job::PRIORITY_LOW
-        ]);
+        );
         $this->setJob($job);
     }
 
