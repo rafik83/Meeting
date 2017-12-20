@@ -61,9 +61,15 @@ class Duplicator
         }
         $toPackage->setPlans($plans);
 
-        if (null !== $fromPackage->getParticipant()) {
-            $toPackage->setParticipant($correspondingProducts[$fromPackage->getParticipant()->getId()]);
+        $productsParticipant = [];
+
+        foreach ($fromPackage->getParticipants() as $productParticipant) {
+            if (isset($correspondingProducts[$productParticipant->getId()])) {
+                $productsParticipant[] = $correspondingProducts[$productParticipant->getId()];
+            }
         }
+
+        $toPackage->setParticipants($productsParticipant);
 
         if (null !== $fromPackage->getPlanning()) {
             $toPackage->setPlanning($correspondingProducts[$fromPackage->getPlanning()->getId()]);
