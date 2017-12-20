@@ -134,9 +134,7 @@ class Duplicator
         $toPackage->setPlans($fromPackage->getPlans());
 
         // handle package participant
-        if (null !== $fromPackage->getParticipant()) {
-            $toPackage->setParticipant($fromPackage->getParticipant());
-        }
+        $toPackage->setParticipants($fromPackage->getParticipants());
 
         // handle package planning
         if (null !== $fromPackage->getPlanning()) {

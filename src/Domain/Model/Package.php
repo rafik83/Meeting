@@ -272,7 +272,7 @@ class Package
         $firstPackageParticipantRank = $this->participantRanks->first();
 
         if (!$firstPackageParticipantRank instanceof PackageParticipantRank) {
-            throw new \DomainException('Package must return as least one participant product');
+            throw new \DomainException('Package must return at least one participant product');
         }
 
         return $firstPackageParticipantRank->getProductParticipant();

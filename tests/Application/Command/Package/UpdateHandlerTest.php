@@ -45,7 +45,7 @@ class UpdateHandlerTest extends TestCase
         $expected->translate('fr', 'Plans fr', 'P&P fr', 'Options fr');
         $expected->translate('en', 'Plans en', 'P&P en', 'Options en');
         $expected->setPlans([$plan1, $plan3, $plan2]);
-        $expected->setParticipant($participant);
+        $expected->setParticipants([$participant]);
         $expected->setPlanning($planning);
         $expected->setGroups([
             [$option4, $option1],
@@ -81,14 +81,14 @@ class UpdateHandlerTest extends TestCase
             return true;
         }))->shouldBeCalled();
 
-        $command                                      = new Update($package);
-        $command->title                               = 'Foobar';
-        $command->plans->labels                       = ['fr' => 'Plans fr', 'en' => 'Plans en'];
-        $command->participantAndPlanning->labels      = ['fr' => 'P&P fr', 'en' => 'P&P en'];
-        $command->options->labels                     = ['fr' => 'Options fr', 'en' => 'Options en'];
-        $command->plans->plans                        = [$plan1, $plan3, $plan2];
-        $command->participantAndPlanning->participant = $participant;
-        $command->participantAndPlanning->planning    = $planning;
+        $command = new Update($package);
+        $command->title = 'Foobar';
+        $command->plans->labels = ['fr' => 'Plans fr', 'en' => 'Plans en'];
+        $command->participantAndPlanning->labels = ['fr' => 'P&P fr', 'en' => 'P&P en'];
+        $command->options->labels = ['fr' => 'Options fr', 'en' => 'Options en'];
+        $command->plans->plans = [$plan1, $plan3, $plan2];
+        $command->participantAndPlanning->participants = [$participant];
+        $command->participantAndPlanning->planning = $planning;
         $command->options->groups = [
             new Group(['fr' => 'AAAA', 'en' => 'AAAA'], [$option4, $option1]),
             new Group(['fr' => 'BBBB', 'en' => 'BBBB'], [$option2, $option3]),
