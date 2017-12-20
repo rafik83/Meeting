@@ -55,7 +55,7 @@ class AddHandlerTest extends TestCase
         $package = new Package($event, 'My package', $now);
         $package->enable(true, true, true);
         $package->setPlans([$planProduct]);
-        $package->setParticipant($participantProduct);
+        $package->setParticipants([$participantProduct]);
         $type->setPackage($package);
 
         $expectedSheet       = new Sheet($event, $type, [], $user, $now);

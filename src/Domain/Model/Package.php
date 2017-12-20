@@ -444,24 +444,6 @@ class Package
     }
 
     /**
-     * Set participant
-     *
-     * @param Product $participant
-     *
-     * @return Package
-     *
-     * @deprecated use setParticipants()
-     */
-    public function setParticipant(Product $participant)
-    {
-        if (!$this->hasParticipant($participant)) {
-            $this->participantRanks->add(new PackageParticipantRank($this, $participant, 0));
-        }
-
-        return $this;
-    }
-
-    /**
      * @param Product[] $participantProducts
      *
      * @return Package
