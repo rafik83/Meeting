@@ -10,9 +10,11 @@
 
 namespace Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\EventListener\Happening;
 
+use Proximum\Vimeet\Application\Components\Happening\Participation\UserParticipantAvailabilityReAggregator;
 use Proximum\Vimeet\Application\Event\Events;
+use Proximum\Vimeet\Application\Event\Happening\DatesUpdated;
 use Proximum\Vimeet\Application\Event\Happening\TypesUpdated;
-use Proximum\Vimeet\Domain\Happening\Participation\DisableEnableParticipation;
+use Proximum\Vimeet\Application\Components\Happening\Participation\DisableEnableParticipation;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 class HappeningEventSubscriber implements EventSubscriberInterface
@@ -20,12 +22,19 @@ class HappeningEventSubscriber implements EventSubscriberInterface
     /** @var DisableEnableParticipation */
     private $disableEnableParticipation;
 
+    /** @var UserParticipantAvailabilityReAggregator */
+    private $participantAvailabilityReAggregator;
+
     /**
-     * @param DisableEnableParticipation $disableEnableParticipation
+     * @param DisableEnableParticipation              $disableEnableParticipation
+     * @param UserParticipantAvailabilityReAggregator $participantAvailabilityReAggregator
      */
-    public function __construct(DisableEnableParticipation $disableEnableParticipation)
-    {
+    public function __construct(
+        DisableEnableParticipation $disableEnableParticipation,
+        UserParticipantAvailabilityReAggregator $participantAvailabilityReAggregator
+    ) {
         $this->disableEnableParticipation = $disableEnableParticipation;
+        $this->participantAvailabilityReAggregator = $participantAvailabilityReAggregator;
     }
 
     /**
@@ -35,6 +44,7 @@ class HappeningEventSubscriber implements EventSubscriberInterface
     {
         return [
             Events::HAPPENING_TYPES_UPDATED => 'onTypesUpdated',
+            Events::HAPPENING_DATES_UPDATED => 'onDatesUpdated',
         ];
     }
 
@@ -44,5 +54,13 @@ class HappeningEventSubscriber implements EventSubscriberInterface
     public function onTypesUpdated(TypesUpdated $event)
     {
         $this->disableEnableParticipation->resolveParticipations($event->getHappening());
+    }
+
+    /**
+     * @param DatesUpdated $event
+     */
+    public function onDatesUpdated(DatesUpdated $event)
+    {
+        $this->participantAvailabilityReAggregator->recalculateAvailabilityAggregator($event->getHappening());
     }
 }

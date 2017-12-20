@@ -17,6 +17,7 @@ use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\File;
 use Proximum\Vimeet\Domain\Model\Messaging\Campaign;
 use Proximum\Vimeet\Domain\Model\PlannerJob;
+use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\Template\RegistrationTemplate;
 use Proximum\Vimeet\Domain\Model\Template\SheetTemplate;
 use Proximum\Vimeet\Domain\Model\Type;
@@ -269,6 +270,20 @@ class JobQueueAdapter extends AbstractJobQueueAdapter implements JobQueueInterfa
     {
         $job = new Job(AvailableSlotCalculatorCommand::NAME, [
             sprintf('--event=%s', $event->getId())
+        ]);
+        $this->setJob($job);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function aggregateSheetAvailableSlot(Sheet $sheet)
+    {
+        $job = new Job(AvailableSlotCalculatorCommand::NAME, [
+            sprintf('--sheet=%s', $sheet->getId()),
+            true,
+            Job::DEFAULT_QUEUE,
+            Job::PRIORITY_LOW
         ]);
         $this->setJob($job);
     }

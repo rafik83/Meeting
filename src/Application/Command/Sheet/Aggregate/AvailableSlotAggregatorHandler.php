@@ -10,26 +10,18 @@
 
 namespace Proximum\Vimeet\Application\Command\Sheet\Aggregate;
 
-use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
 use Proximum\Vimeet\Domain\Sheet\Aggregate\AvailableSlotCalculator;
 
 class AvailableSlotAggregatorHandler
 {
-    /** @var SheetRepositoryInterface */
-    private $sheetRepository;
-
     /** @var AvailableSlotCalculator */
     private $availableSlotCalculator;
 
     /**
-     * @param SheetRepositoryInterface $sheetRepository
-     * @param AvailableSlotCalculator  $availableSlotCalculator
+     * @param AvailableSlotCalculator $availableSlotCalculator
      */
-    public function __construct(
-        SheetRepositoryInterface $sheetRepository,
-        AvailableSlotCalculator $availableSlotCalculator
-    ) {
-        $this->sheetRepository = $sheetRepository;
+    public function __construct(AvailableSlotCalculator $availableSlotCalculator)
+    {
         $this->availableSlotCalculator = $availableSlotCalculator;
     }
 
@@ -38,10 +30,6 @@ class AvailableSlotAggregatorHandler
      */
     public function handle(AvailableSlotAggregator $command)
     {
-        $sheets = $this->sheetRepository->getByEvent($command->event);
-
-        foreach ($sheets as $sheet) {
-            $this->availableSlotCalculator->calculateAvailableSlotForSheet($sheet);
-        }
+        $this->availableSlotCalculator->calculateAvailableSlotForSheet($command->sheet);
     }
 }

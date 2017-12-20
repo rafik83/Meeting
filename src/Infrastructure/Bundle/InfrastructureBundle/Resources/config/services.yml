@@ -5601,7 +5601,9 @@ services:
         class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\Aggregate\Sheet\AvailableSlotCalculatorCommand
         arguments:
             - '@vimeet_infrastructure.repository.event_repository'
-            -  '@command.sheet.aggregate.available_slot_aggregator_handler'
+            - '@vimeet_infrastructure.repository.sheet_repository'
+            - '@command.sheet.aggregate.sheets_available_slot_aggregator_handler'
+            - '@command.sheet.aggregate.available_slot_aggregator_handler'
         tags:
             - { name: console.command }
 

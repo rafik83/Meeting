@@ -473,7 +473,8 @@ services:
     event_listener_happening.happening_event_subscriber:
         class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\EventListener\Happening\HappeningEventSubscriber
         arguments:
-            - '@Proximum\Vimeet\Domain\Happening\Participation\DisableEnableParticipation'
+            - '@Proximum\Vimeet\Application\Components\Happening\Participation\DisableEnableParticipation'
+            - '@Proximum\Vimeet\Application\Components\Happening\Participation\UserParticipantAvailabilityReAggregator'
         tags:
             - { name: kernel.event_subscriber }
 

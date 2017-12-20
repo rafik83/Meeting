@@ -1,0 +1,12 @@
+services:
+    Proximum\Vimeet\Application\Components\Happening\Participation\DisableEnableParticipation:
+        arguments:
+            - '@vimeet_infrastructure.repository.happening_participation_repository'
+            - '@vimeet_infrastructure.repository.sheet_repository'
+            - '@adapter.job_queue_adapter'
+
+    Proximum\Vimeet\Application\Components\Happening\Participation\UserParticipantAvailabilityReAggregator:
+        arguments:
+            - '@vimeet_infrastructure.repository.happening_participation_repository'
+            - '@adapter.job_queue_adapter'
+            - '@vimeet_infrastructure.repository.sheet_repository'
