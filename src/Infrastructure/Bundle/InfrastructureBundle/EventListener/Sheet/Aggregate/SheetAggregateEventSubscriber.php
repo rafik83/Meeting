@@ -57,7 +57,14 @@ class SheetAggregateEventSubscriber implements EventSubscriberInterface
      */
     public function onHappeningParticipation(ParticipateEvent $participateEvent)
     {
-        $this->availableSlotCalculator->calculateAvailableSlotForSheet($participateEvent->getSheet());
+        $sheets = $this->sheetRepository->getSheetsByUsersAndEvent(
+            $participateEvent->getSheet()->getUsers(),
+            $participateEvent->getSheet()->getEvent()
+        );
+
+        foreach ($sheets as $sheet) {
+            $this->jobQueueAdapter->aggregateSheetAvailableSlot($sheet);
+        }
     }
 
     /**

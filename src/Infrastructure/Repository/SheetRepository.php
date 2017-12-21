@@ -300,6 +300,30 @@ class SheetRepository implements SheetRepositoryInterface
     /**
      * {@inheritdoc}
      */
+    public function getSheetsByUsersAndEvent(array $users, Event $event)
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('sheet')
+            ->from(Sheet::class, 'sheet', 'sheet.id')
+            ->join(
+                'sheet.participants',
+                'participant',
+                'WITH',
+                '(sheet.owner IN (:users) OR participant.user IN (:users)) AND sheet.event = :event AND sheet.enable = true'
+            )
+            ->setParameter('event', $event)
+            ->setParameter('users', $users)
+            ->groupBy('sheet.id')
+        ;
+
+        return $queryBuilder->getQuery()->getResult();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function countSheetsByUserAndEvent(User $user, Event $event)
     {
         $queryBuilder = $this
