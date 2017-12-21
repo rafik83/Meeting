@@ -3,13 +3,14 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2016 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
 
 namespace Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\EventListener\Sheet;
 
+use Proximum\Vimeet\Application\Components\Happening\Participation\DisableEnableParticipation;
 use Proximum\Vimeet\Application\Components\Sheet\SheetInfoGuesser;
 use Proximum\Vimeet\Application\Event\Events;
 use Proximum\Vimeet\Application\Event\Sheet\SheetChangedTypeEvent;
@@ -21,34 +22,34 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 class SheetUpdatedEventSubscriber implements EventSubscriberInterface
 {
-    /**
-     * @var CompletenessCalculator
-     */
+    /** @var CompletenessCalculator */
     private $completenessCalculator;
 
-    /**
-     * @var SheetRepositoryInterface
-     */
+    /** @var SheetRepositoryInterface */
     private $sheetRepository;
 
-    /**
-     * @var SheetInfoGuesser
-     */
+    /** @var SheetInfoGuesser */
     private $sheetInfoGuesser;
 
+    /** @var DisableEnableParticipation */
+    private $disableEnableParticipation;
+
     /**
-     * @param CompletenessCalculator   $completenessCalculator
-     * @param SheetInfoGuesser         $sheetInfoGuesser
-     * @param SheetRepositoryInterface $sheetRepository
+     * @param CompletenessCalculator     $completenessCalculator
+     * @param DisableEnableParticipation $disableEnableParticipation
+     * @param SheetInfoGuesser           $sheetInfoGuesser
+     * @param SheetRepositoryInterface   $sheetRepository
      */
     public function __construct(
         CompletenessCalculator $completenessCalculator,
+        DisableEnableParticipation $disableEnableParticipation,
         SheetInfoGuesser $sheetInfoGuesser,
         SheetRepositoryInterface $sheetRepository
     ) {
-        $this->completenessCalculator = $completenessCalculator;
-        $this->sheetRepository        = $sheetRepository;
-        $this->sheetInfoGuesser       = $sheetInfoGuesser;
+        $this->completenessCalculator     = $completenessCalculator;
+        $this->disableEnableParticipation = $disableEnableParticipation;
+        $this->sheetRepository            = $sheetRepository;
+        $this->sheetInfoGuesser           = $sheetInfoGuesser;
     }
 
     /**
@@ -65,6 +66,13 @@ class SheetUpdatedEventSubscriber implements EventSubscriberInterface
     public function onChangeType(SheetChangedTypeEvent $sheetChangedTypeEvent)
     {
         $this->completenessCalculator->calculateCompleteness($sheetChangedTypeEvent->getSheet());
+
+        foreach ($sheetChangedTypeEvent->getSheet()->getUsers() as $user) {
+            $this->disableEnableParticipation->resolveParticipationsForUser(
+                $sheetChangedTypeEvent->getSheet()->getEvent(),
+                $user
+            );
+        }
     }
 
     /**

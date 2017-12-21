@@ -387,6 +387,7 @@ services:
         class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\EventListener\Sheet\SheetUpdatedEventSubscriber
         arguments:
             - '@sheet.completeness_calculator'
+            - '@Proximum\Vimeet\Application\Components\Happening\Participation\DisableEnableParticipation'
             - '@vimeet_infrastructure.application.components.sheet.sheet_info_guesser'
             - '@vimeet_infrastructure.repository.sheet_repository'
         tags:
