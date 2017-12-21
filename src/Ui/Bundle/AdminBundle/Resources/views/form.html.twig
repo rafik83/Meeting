@@ -6,7 +6,7 @@
     {% endfor %}
 
     <div class="form-group submit-section">
-        <div class="col-sm-3">
+        <div class="col-md-3 col-md-offset-3">
             {% if back_url is defined %}
                 <a href="{{ back_url }}" class="btn btn-link">
                     <span class="glyphicon glyphicon-arrow-left"></span>
@@ -14,7 +14,7 @@
                 </a>
             {% endif %}
         </div>
-        <div class="col-sm-9 text-right">
+        <div class="col-md-6 text-right">
             {{ form_row(form.submit) }}
         </div>
     </div>
