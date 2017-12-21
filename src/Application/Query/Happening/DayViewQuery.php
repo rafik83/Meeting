@@ -56,6 +56,6 @@ class DayViewQuery
         $this->eventDay = $eventDay;
         $this->category = $category;
         $this->masses   = $masses;
-        $this->sheet = $sheet;
+        $this->sheet    = $sheet;
     }
 }

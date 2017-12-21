@@ -57,7 +57,7 @@ class ListAction
     public function __invoke(Request $request, Event $event): Response
     {
         if (!$this->authorizationCheckerAdapter->isGranted('PERMISSION_EVENT_ACCESS', $event)) {
-            throw new AccessDeniedException('Access Denied!');
+            throw new AccessDeniedException();
         }
 
         $categories = $this->categoryRepository->findByEvent(
