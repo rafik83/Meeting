@@ -192,3 +192,12 @@ services:
             - '@adapter.authorization_checker'
             - '@vimeet_infrastructure.repository_happening.category_repository'
             - '@templating'
+
+    #
+    # Group
+    #
+    Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\SheetsGroup\ListAction:
+        arguments:
+            - '@adapter.authorization_checker'
+            - '@Proximum\Vimeet\Infrastructure\Adapter\QueryBus'
+            - '@templating'

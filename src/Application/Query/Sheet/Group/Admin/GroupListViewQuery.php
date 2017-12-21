@@ -1,19 +1,20 @@
 <?php
 
 /*
- * This file is part of the vimeet project.
+ * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2017 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
 
 namespace Proximum\Vimeet\Application\Query\Sheet\Group\Admin;
 
+use Proximum\Vimeet\Application\Query\Query;
 use Proximum\Vimeet\Domain\Model\Admin;
 use Proximum\Vimeet\Domain\Model\Event;
 
-class GroupListViewQuery
+class GroupListViewQuery implements Query
 {
     /** @var Event */
     public $event;

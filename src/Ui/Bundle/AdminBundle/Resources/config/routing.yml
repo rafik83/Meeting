@@ -1491,7 +1491,7 @@ admin_sheets_group_list:
     requirements:
         event: \d+
     methods: [GET]
-    defaults: { _controller: AdminBundle:SheetsGroup/Group:list }
+    defaults: { _controller: Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\SheetsGroup\ListAction }
 
 admin_sheets_group_pre_create:
     path: /event/{event}/sheets-group/pre-create

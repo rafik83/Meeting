@@ -32,8 +32,12 @@
                 <td>{{ groupView.emailManager }}</td>
                 <td>
                     <ul>
-                        {% for sheetView in groupView.sheetViews %}
-                            <li>{{ sheetView.title }}</li>
+                        {% for sheet in groupView.sheetViews %}
+                            <li>
+                                <a href="{{ path('admin_sheet_details', {'event': event.id, 'sheet': sheet.id }) }}">
+                                    {{ sheet.title }}
+                                </a>
+                            </li>
                         {% endfor %}
                     </ul>
                 </td>

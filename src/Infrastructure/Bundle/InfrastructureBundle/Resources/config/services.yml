@@ -3261,7 +3261,6 @@ services:
         class: Proximum\Vimeet\Application\Query\Sheet\Group\Admin\AdminGroupViewQueryHandler
         arguments:
             - '@vimeet_infrastructure.repository.sheet_repository'
-            - '@vimeet_infrastructure.application.components.sheet.sheet_info_guesser'
             - '@adapter.impersonate_url_generator_adapter'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Sheet\Group\Admin\AdminGroupViewQuery }
