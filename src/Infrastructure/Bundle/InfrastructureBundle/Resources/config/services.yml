@@ -3797,7 +3797,7 @@ services:
         class: Proximum\Vimeet\Application\Query\Navigation\Category\PlanningViewQueryHandler
         arguments:
             - '@navigation.navigation_builder'
-            - '@domain.key_dates.checker.happenings_access_checker'
+            - '@domain.key_dates.checker.agenda_access_checker'
             - '@domain.key_dates.checker.meeting_published_access_checker'
     query.navigation.category_sheet_view_query_handler:
         class: Proximum\Vimeet\Application\Query\Navigation\Category\SheetViewQueryHandler
