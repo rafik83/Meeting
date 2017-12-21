@@ -16,6 +16,7 @@ use Proximum\Vimeet\Application\Adapter\RouterInterface;
 use Proximum\Vimeet\Application\Command\Happening\Create;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Happening\CreateType;
+use Proximum\Vimeet\Ui\Bundle\AdminBundle\ValueResolver\AdminDomain;
 use Symfony\Bundle\FrameworkBundle\Templating\EngineInterface;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -23,7 +24,6 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
-use Symfony\Component\Security\Core\User\UserInterface;
 
 class CreateAction
 {
@@ -72,13 +72,13 @@ class CreateAction
     }
 
     /**
-     * @param Request       $request
-     * @param Event         $event
-     * @param UserInterface $admin
+     * @param Request     $request
+     * @param Event       $event
+     * @param AdminDomain $adminDomain
      *
      * @return Response
      */
-    public function __invoke(Request $request, Event $event, UserInterface $admin): Response
+    public function __invoke(Request $request, Event $event, AdminDomain $adminDomain): Response
     {
         if (!$this->authorizationCheckerAdapter->isGranted('PERMISSION_EVENT_ACCESS', $event)) {
             throw new AccessDeniedException('Access Denied!');
@@ -86,7 +86,7 @@ class CreateAction
 
         $create = new Create($event);
         $form   = $this->formFactory->create(CreateType::class, $create, [
-            'admin'  => $admin,
+            'admin'  => $adminDomain->getAdmin(),
             'event'  => $event,
             'locale' => $event->getAvailableLocale($request->getLocale()),
             'submit' => true,

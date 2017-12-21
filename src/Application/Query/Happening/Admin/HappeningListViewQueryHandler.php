@@ -42,7 +42,7 @@ class HappeningListViewQueryHandler
      *
      * @return HappeningListView
      */
-    public function handle(HappeningListViewQuery $query)
+    public function handle(HappeningListViewQuery $query): HappeningListView
     {
         $list = $this->happeningRepository->findListByEvent($query->event, $query->locale);
 

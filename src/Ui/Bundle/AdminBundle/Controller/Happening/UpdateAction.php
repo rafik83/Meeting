@@ -17,6 +17,7 @@ use Proximum\Vimeet\Application\Command\Happening\Update;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Happening;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Happening\UpdateType;
+use Proximum\Vimeet\Ui\Bundle\AdminBundle\ValueResolver\AdminDomain;
 use Symfony\Bundle\FrameworkBundle\Templating\EngineInterface;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -73,22 +74,24 @@ class UpdateAction
     }
 
     /**
-     * @param Request       $request
-     * @param Event         $event
-     * @param Happening     $happening
-     * @param UserInterface $admin
+     * @param Request     $request
+     * @param Event       $event
+     * @param Happening   $happening
+     * @param AdminDomain $adminDomain
      *
      * @return Response
      */
-    public function __invoke(Request $request, Event $event, Happening $happening, UserInterface $admin): Response
+    public function __invoke(Request $request, Event $event, Happening $happening, AdminDomain $adminDomain): Response
     {
-        if (!$this->authorizationCheckerAdapter->isGranted('PERMISSION_EVENT_ACCESS', $event)) {
+        if (!$this->authorizationCheckerAdapter->isGranted('PERMISSION_EVENT_ACCESS', $event)
+            || $event !== $happening->getEvent()
+        ) {
             throw new AccessDeniedException('Access Denied!');
         }
 
         $update = new Update($happening);
         $form   = $this->formFactory->create(UpdateType::class, $update, [
-            'admin' => $admin,
+            'admin' => $adminDomain->getAdmin(),
             'event'  => $event,
             'locale' => $event->getAvailableLocale($request->getLocale()),
             'submit' => true,
