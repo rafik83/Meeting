@@ -17,11 +17,11 @@ Proximum\Vimeet\Domain\Model\Happening\CategoryTranslation:
 
 Proximum\Vimeet\Domain\Model\Happening:
     happening_01:
-        __construct: ['@event_asddays_2016', <(new DateTime('12-10-2016 10:00:00.000'))>, <(new DateTime('12-10-2016 11:45:00.000'))>, '@category_conference', []]
+        __construct: ['@event_asddays_2016', <(new DateTime('12-10-2016 10:00:00.000'))>, <(new DateTime('12-10-2016 11:45:00.000'))>, '@category_conference', ['@event_asddays_2016_type_fournisseur']]
     happening_02:
-        __construct: ['@event_asddays_2016', <(new DateTime('12-10-2016 14:15:00.000'))>, <(new DateTime('12-10-2016 16:15:00.000'))>, '@category_flash', []]
+        __construct: ['@event_asddays_2016', <(new DateTime('12-10-2016 14:15:00.000'))>, <(new DateTime('12-10-2016 16:15:00.000'))>, '@category_flash', ['@event_asddays_2016_type_fournisseur']]
     happening_03:
-        __construct: ['@event_asddays_2016', <(new DateTime('12-10-2016 11:00:00.000'))>, <(new DateTime('12-10-2016 12:30:00.000'))>, '@category_conference', []]
+        __construct: ['@event_asddays_2016', <(new DateTime('12-10-2016 11:00:00.000'))>, <(new DateTime('12-10-2016 12:30:00.000'))>, '@category_conference', ['@event_asddays_2016_type_fournisseur']]
 
 Proximum\Vimeet\Domain\Model\Happening\HappeningTranslation:
     happening_01_translation_fr:
