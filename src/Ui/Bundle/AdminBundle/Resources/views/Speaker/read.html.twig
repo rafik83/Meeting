@@ -2,7 +2,7 @@
 
 {% import 'AdminBundle::macro.html.twig' as macro %}
 
-{% block title %}{{ 'admin.happening_speaker.speakerName'|trans({'%name%': speaker.name}) }}{% endblock %}
+{% block title 'admin.happening_speaker.speakerName'|trans({'%name%': speaker.name}) %}
 
 {% block content %}
     <h1 class="page-header">{{ block('title') }}</h1>
