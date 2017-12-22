@@ -1156,6 +1156,7 @@ gdr.user.agenda.version.modal.button.purge: 'Cacher différence sans notifier'
 gdr.user.agenda.version.modal.no_diff: 'Il n''y a pas de modification dans l''agenda de cette personne'
 gdr.user.agenda.version.modal.no_phone: 'L''utiliseur n''a pas accepté de recevoir des notifications lives'
 gdr.user.agenda.version.modal.title: 'Notifier modifications de l''agenda'
+help.link: Aide
 login.forgotPassword: 'Mot de passe oublié ?'
 login.link: Connexion
 login.link.label: 'Se connecter'
