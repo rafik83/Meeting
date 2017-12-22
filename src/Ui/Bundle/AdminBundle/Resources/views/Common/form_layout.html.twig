@@ -1,5 +1,7 @@
 {% extends 'AdminBundle::base.html.twig' %}
 
+{% block title block('form_title')|striptags %}
+
 {% block content %}
     <h1 class="page-header">
         {% block goback %}
@@ -7,7 +9,7 @@
                 <span class="glyphicon glyphicon-arrow-left"></span>
             </a>
         {% endblock goback %}
-        {% block form_title 'Form title' %}
+        {% block form_title '' %}
     </h1>
 
     {{ form_start(form, { 'attr': { 'class': 'with-submit-section' } }) }}
