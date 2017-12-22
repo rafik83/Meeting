@@ -13,6 +13,7 @@ use PHPUnit\Framework\TestCase;
 use Proximum\Vimeet\Domain\Event\Category\Duplicator;
 use Proximum\Vimeet\Domain\Event\DuplicatorDataStorage;
 use Proximum\Vimeet\Domain\Model\Category;
+use Proximum\Vimeet\Domain\Model\CategoryTranslation;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\EventTranslation;
 use Proximum\Vimeet\Domain\Model\Type;
@@ -47,15 +48,15 @@ class DuplicatorTest extends TestCase
         $expectedCategory = new Category($event);
         $oldCategory      = new Category($duplicatedEvent);
 
-        $oldCategory->getTranslations()->set('fr', new EventTranslation($event, 'fr', 'description fr'));
-        $oldCategory->getTranslations()->set('en', new EventTranslation($event, 'en', 'description en'));
+        $oldCategory->getTranslations()->set('fr', new CategoryTranslation($oldCategory, 'fr', 'title fr'));
+        $oldCategory->getTranslations()->set('en', new CategoryTranslation($oldCategory, 'en', 'title en'));
         $reflection = new \ReflectionClass(Category::class);
         $property   = $reflection->getProperty('id');
         $property->setAccessible(true);
         $property->setValue($oldCategory, 5);
 
-        $expectedCategory->getTranslations()->set('fr', new EventTranslation($event, 'fr', 'description fr'));
-        $expectedCategory->getTranslations()->set('en', new EventTranslation($event, 'en', 'description en'));
+        $expectedCategory->getTranslations()->set('fr', new CategoryTranslation($expectedCategory, 'fr', 'title fr'));
+        $expectedCategory->getTranslations()->set('en', new CategoryTranslation($expectedCategory, 'en', 'title en'));
 
         $expectedCategory->setType($newType, $newType->getId());
         $oldCategory->setType($oldType, 2);

@@ -12,6 +12,7 @@ namespace Proximum\Vimeet\Domain\Event\Category;
 
 use Proximum\Vimeet\Domain\Event\DuplicatorDataStorage;
 use Proximum\Vimeet\Domain\Model\Category;
+use Proximum\Vimeet\Domain\Model\CategoryTranslation;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\EventTranslation;
 use Proximum\Vimeet\Domain\Repository\CategoryRepositoryInterface;
@@ -47,7 +48,7 @@ class Duplicator
             foreach ($category->getTranslations() as $locale => $translation) {
                 $newCategory
                     ->getTranslations()
-                    ->set($locale, new EventTranslation($event, $locale, $translation->getDescription()));
+                    ->set($locale, new CategoryTranslation($newCategory, $locale, $translation->getTitle()));
             }
 
             foreach ($category->getTypes() as $type) {
