@@ -64,4 +64,6 @@ config.resolve = {
     }
 };
 
+config.watchOptions = { poll: true };
+
 module.exports = config;
