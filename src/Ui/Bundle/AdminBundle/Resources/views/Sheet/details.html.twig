@@ -1,6 +1,6 @@
 {% extends 'AdminBundle::base.html.twig' %}
 
-{% block title %}{{ event.title }}: {{ details.title }}{% endblock %}
+{% block title 'admin.sheet.details.title'|trans ~ ': ' ~ details.title %}
 
 {% block content %}
     <h1>

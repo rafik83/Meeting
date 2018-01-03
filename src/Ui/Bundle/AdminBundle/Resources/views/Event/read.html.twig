@@ -1,7 +1,7 @@
 {% extends 'AdminBundle::base.html.twig' %}
 
 {% block content %}
-    <h1><a href="{{ path('admin_event_read', {event: event.id}) }}">{{ event.title }}</a></h1>
+    <h1 class="page-header"><a href="{{ path('admin_event_read', {event: event.id}) }}">{{ event.title }}</a></h1>
 
     <div class="dropdown">
         <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown">

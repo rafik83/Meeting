@@ -358,6 +358,7 @@ event.sheet.update_product.title: 'Modify an ordered item'
 event.sheet.validationState.draft: Draft
 event.sheet.validationState.validated: Validated
 gdr.user.agenda.version.modal.no_phone: 'The user has not accepted to receive notifications'
+help.link: Help
 login.forgotPassword: 'Forgotten password?'
 login.link: Login
 login.title: Login

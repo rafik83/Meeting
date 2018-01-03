@@ -2,9 +2,7 @@
 
 {% import 'AdminBundle::macro.html.twig' as macro %}
 
-{% block title %}
-    [{{ event.title }}] {{ 'admin.unavailability.mass.title'|trans }}
-{% endblock %}
+{% block title 'admin.unavailability.mass.title'|trans %}
 
 {% block content %}
     <h1 class="page-header">

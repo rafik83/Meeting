@@ -2,6 +2,8 @@
 
 {% import 'AdminBundle::macro.html.twig' as macro %}
 
+{% block title 'admin.users.title'|trans %}
+
 {% block content %}
     <h1 class="page-header">{{ paginatedResult.total }} {{ 'admin.users.title'|trans }}</h1>
 

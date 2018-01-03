@@ -24,6 +24,7 @@ require('select2');
 require('moment/locale/fr');
 require('moment/locale/en-gb');
 require('./vendor/bootstrap-duallistbox/_jquery.bootstrap-duallistbox');
+require('./zendesk/zendesk');
 
 // Init function
 

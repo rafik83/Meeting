@@ -2,9 +2,7 @@
 
 {% import 'AdminBundle::macro.html.twig' as macro %}
 
-{% block title %}
-    [{{ event.title }}] {{ 'admin.meeting_request.link'|trans }}
-{% endblock %}
+{% block title 'admin.meeting_request.link'|trans %}
 
 {% block content %}
     <h1 class="page-header">
