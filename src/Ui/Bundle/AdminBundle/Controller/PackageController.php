@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2016 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -17,6 +17,7 @@ use Proximum\Vimeet\Domain\Model\Package;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Package\CreateType;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Package\DuplicateType;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Package\UpdateType;
+use Proximum\Vimeet\Ui\Bundle\AdminBundle\ValueResolver\AdminDomain;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -25,19 +26,26 @@ use Symfony\Component\HttpFoundation\Response;
 class PackageController extends Controller
 {
     /**
-     * @param Request $request
+     * @param Request     $request
+     * @param AdminDomain $adminDomain
      *
      * @return RedirectResponse|Response
      */
-    public function listAction(Request $request)
+    public function listAction(Request $request, AdminDomain $adminDomain)
     {
         $this->denyAccessUnlessGranted('ROLE_ALLOWED_TO_ORGANIZE');
 
-        $events            = $this->get('vimeet_infrastructure.repository.event_repository')->getEventsByAdmin($this->getUser());
+        $events = $this
+            ->get('vimeet_infrastructure.repository.event_repository')
+            ->getEventsByAdmin($adminDomain->getAdmin())
+        ;
         $packages = $this->get('repository.package_repository')->findByEvents($events);
 
         $create = new Create();
-        $form   = $this->createForm(CreateType::class, $create, ['submit' => true, 'user' => $this->getUser()]);
+        $form   = $this->createForm(CreateType::class, $create, [
+            'submit' => true,
+            'user'   => $adminDomain->getAdmin(),
+        ]);
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
             $result = $this->get('tactician.commandbus')->handle($create);
@@ -54,16 +62,17 @@ class PackageController extends Controller
     }
 
     /**
-     * @param Request          $request
-     * @param Package $package
+     * @param Request     $request
+     * @param Package     $package
+     * @param AdminDomain $adminDomain
      *
      * @return RedirectResponse|Response
      */
-    public function updateAction(Request $request, Package $package)
+    public function updateAction(Request $request, Package $package, AdminDomain $adminDomain)
     {
         $this->denyAccessUnlessGranted('ROLE_ALLOWED_TO_ORGANIZE');
 
-        if (!$this->isGranted('ROLE_SUPER_ADMIN') && !$this->getUser()->hasEvent($package->getEvent())) {
+        if (!$this->isGranted('ROLE_SUPER_ADMIN') && !$adminDomain->getAdmin()->hasEvent($package->getEvent())) {
             throw $this->createAccessDeniedException('You are not allowed to edit this purchasing funnel.');
         }
 
@@ -100,10 +109,7 @@ class PackageController extends Controller
         $this->denyAccessUnlessGranted('ROLE_ALLOWED_TO_ORGANIZE');
 
         $duplicate = new Duplicate($package);
-        $form      = $this->createForm(DuplicateType::class, $duplicate, [
-            'action' => $this->generateUrl('admin_package_duplicate', ['package' => $package->getId()]),
-            'submit' => true,
-        ]);
+        $form      = $this->createForm(DuplicateType::class, $duplicate, ['submit' => true]);
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
             $this->get('tactician.commandbus')->handle($duplicate);

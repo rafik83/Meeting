@@ -14,14 +14,10 @@ use Proximum\Vimeet\Domain\Repository\PackageRepositoryInterface;
 
 class UpdateHandler
 {
-    /**
-     * @var PackageRepositoryInterface
-     */
+    /** @var PackageRepositoryInterface */
     private $packageRepository;
 
     /**
-     * UpdateHandler constructor.
-     *
      * @param PackageRepositoryInterface $packageRepository
      */
     public function __construct(PackageRepositoryInterface $packageRepository)
