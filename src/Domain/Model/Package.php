@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2016 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -15,74 +15,49 @@ use Doctrine\Common\Collections\Criteria;
 
 class Package
 {
-    /**
-     * @var int
-     */
+    /** @var int */
     private $id;
 
-    /**
-     * @var Event
-     */
+    /** @var Event */
     private $event;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     private $title;
 
-    /**
-     * @var ArrayCollection
-     */
+    /** @var ArrayCollection */
     private $planRanks;
 
-    /**
-     * @var ArrayCollection
-     */
+    /** @var ArrayCollection */
     private $participantRanks;
 
-    /**
-     * @var Product
-     */
+    /** @var Product */
     private $planning;
 
-    /**
-     * @var ArrayCollection
-     */
+    /** @var ArrayCollection */
     private $groups;
 
-    /**
-     * @var ArrayCollection
-     */
+    /** @var ArrayCollection */
     private $translations;
 
-    /**
-     * @var bool
-     */
+    /** @var bool */
     private $plansEnabled = true;
 
-    /**
-     * @var bool
-     */
+    /** @var bool */
     private $participantAndPlanningEnabled = true;
 
-    /**
-     * @var bool
-     */
+    /** @var bool */
     private $optionsEnabled = true;
 
-    /**
-     * @var \DateTimeInterface
-     */
+    /** @var null|int */
+    private $maxParticipant;
+
+    /** @var \DateTimeInterface */
     private $createdAt;
 
-    /**
-     * @var Type[]
-     */
+    /** @var Type[] */
     private $types;
 
     /**
-     * Package constructor.
-     *
      * @param Event              $event
      * @param string             $title
      * @param \DateTimeInterface $createdAt
@@ -99,8 +74,6 @@ class Package
     }
 
     /**
-     * Get id
-     *
      * @return int
      */
     public function getId()
@@ -109,8 +82,6 @@ class Package
     }
 
     /**
-     * Get createdAt
-     *
      * @return \DateTimeInterface
      */
     public function getCreatedAt()
@@ -119,8 +90,6 @@ class Package
     }
 
     /**
-     * Get event
-     *
      * @return Event
      */
     public function getEvent()
@@ -129,8 +98,6 @@ class Package
     }
 
     /**
-     * Get title
-     *
      * @return string
      */
     public function getTitle()
@@ -139,8 +106,6 @@ class Package
     }
 
     /**
-     * Set title
-     *
      * @param string $title
      *
      * @return Package
@@ -186,6 +151,14 @@ class Package
     }
 
     /**
+     * @return int|null
+     */
+    public function getMaxParticipant()
+    {
+        return $this->maxParticipant;
+    }
+
+    /**
      * Get ordered groups
      *
      * @return PackageGroup[]
@@ -215,8 +188,6 @@ class Package
     }
 
     /**
-     * Get options
-     *
      * @return Product[]
      */
     public function getOptions()
@@ -279,8 +250,6 @@ class Package
     }
 
     /**
-     * Get planning
-     *
      * @return Product
      */
     public function getPlanning()
@@ -289,8 +258,6 @@ class Package
     }
 
     /**
-     * Get plansEnabled
-     *
      * @return boolean
      */
     public function isPlansEnabled()
@@ -299,8 +266,6 @@ class Package
     }
 
     /**
-     * Get participantAndPlanningEnabled
-     *
      * @return boolean
      */
     public function isParticipantAndPlanningEnabled()
@@ -309,8 +274,6 @@ class Package
     }
 
     /**
-     * Get optionsEnabled
-     *
      * @return boolean
      */
     public function isOptionsEnabled()

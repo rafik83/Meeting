@@ -231,11 +231,8 @@ class Type implements WhoInterface, TypeInterface
      */
     public function getMaxParticipant()
     {
-        if (null !== $this->package
-            && null !== $this->package->getParticipant()
-            && null !== $this->package->getParticipant()->getQuantityMax()
-        ) {
-            return $this->package->getParticipant()->getQuantityMax();
+        if (null !== $this->package && null !== $this->package->getMaxParticipant()) {
+            return $this->package->getMaxParticipant();
         }
 
         return INF;
