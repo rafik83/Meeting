@@ -33,6 +33,8 @@ ButtonLinkObject.prototype.save = function ()
   this.config.required           = this.form.get('required');
 
   this.form.bind('link', this.config.label[this.locale]);
+
+  return true;
 };
 
 module.exports = ButtonLinkObject;

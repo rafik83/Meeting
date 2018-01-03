@@ -135,6 +135,22 @@ class TemplateObject extends AbstractChild
     }
 
     /**
+     * @return bool
+     */
+    public function hasAtLeastOneSetterTag(): bool
+    {
+        $tagSetters = Tag::getSetters();
+
+        foreach ($this->getTags() as $tag) {
+            if (in_array($tag, $tagSetters, true)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
      * @param string $keyTag
      */
     public function removeTag($keyTag)

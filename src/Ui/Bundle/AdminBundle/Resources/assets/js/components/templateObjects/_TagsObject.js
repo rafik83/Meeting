@@ -82,6 +82,8 @@ TagsObject.prototype.save = function ()
   this.config.tags = tags;
 
   this.form.bind('label', this.config.label[this.locale]);
+
+  return true;
 };
 
 module.exports = TagsObject;

@@ -18,8 +18,11 @@ function TemplateBlock(element, builder)
   this.configureButton = element.querySelector('.configure-button');
   this.upButton = element.querySelector('.up-button');
   this.downButton = element.querySelector('.down-button');
-  this.form = new Form(this.configureModal);
-  this.saveButton = this.configureModal.querySelector('.save-configuration');
+
+  if (this.configureModal) {
+    this.form = new Form(this.configureModal);
+    this.saveButton = this.configureModal.querySelector('.save-configuration');
+  }
 
   // UID
   this.uid = element.getAttribute('data-uid');
@@ -36,14 +39,20 @@ function TemplateBlock(element, builder)
   this.element.querySelector('.delete-button').addEventListener('click', function (event) {
     event.preventDefault();
     if (confirm(this.element.querySelector('.delete-button').getAttribute('data-confirmation-message'))) {
-      document.dispatchEvent(new CustomEvent('template.block.removed', {'detail': {'element': this.element}}));
+      document.dispatchEvent(new CustomEvent('template.block.beforeRemoved', {'detail': {'element': this.element}}));
       this.element.remove();
+      document.dispatchEvent(new CustomEvent('template.block.afterRemoved'));
     }
   }.bind(this));
 
   // Modal behavior
-  this.configureButton.addEventListener('click', this.configureButtonClicked.bind(this));
-  this.saveButton.addEventListener('click', this.saveButtonClicked.bind(this));
+  if (this.configureModal) {
+    this.configureButton.addEventListener('click', this.configureButtonClicked.bind(this));
+  }
+
+  if (this.saveButton) {
+    this.saveButton.addEventListener('click', this.saveButtonClicked.bind(this));
+  }
 
   // Up and down buttons behavior if they exists
   if (null !== this.upButton) {
@@ -60,7 +69,9 @@ TemplateBlock.prototype.upButtonClicked = function (event)
   event.preventDefault();
 
   if (null !== this.element.previousElementSibling) {
+    document.dispatchEvent(new CustomEvent('template.block.beforeMovedUp', {'detail': {'element': this.element}}));
     this.element.parentNode.insertBefore(this.element, this.element.previousElementSibling);
+    document.dispatchEvent(new CustomEvent('template.block.afterMovedUp', {'detail': {'element': this.element}}));
   }
 };
 
@@ -69,7 +80,9 @@ TemplateBlock.prototype.downButtonClicked = function (event)
   event.preventDefault();
 
   if (null !== this.element.nextElementSibling) {
+    document.dispatchEvent(new CustomEvent('template.block.beforeMovedDown', {'detail': {'element': this.element}}));
     this.element.parentNode.insertBefore(this.element.nextElementSibling, this.element);
+    document.dispatchEvent(new CustomEvent('template.block.afterMovedDown', {'detail': {'element': this.element}}));
   }
 };
 

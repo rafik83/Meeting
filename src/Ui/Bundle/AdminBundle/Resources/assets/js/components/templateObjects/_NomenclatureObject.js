@@ -39,6 +39,8 @@ NomenclatureObject.prototype.save = function ()
   this.config.required           = this.form.get('required');
 
   this.form.bind('label', this.config.label[this.locale]);
+
+  return true;
 };
 
 module.exports = NomenclatureObject;

@@ -39,6 +39,8 @@ CollectionObject.prototype.save = function ()
   this.config.translatable             = this.form.get('translatable');
 
   this.form.bind('label', this.config.label[this.locale]);
+
+  return true;
 };
 
 module.exports = CollectionObject;

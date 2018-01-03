@@ -31,6 +31,8 @@ ParticipantObject.prototype.save = function ()
   this.config.numberOfParticipantShown = this.form.get('numberOfParticipantShown');
 
   this.form.bind('participant', this.config.label[this.locale] + ' ' + this.config.numberOfParticipantShown);
+
+  return true;
 };
 
 module.exports = ParticipantObject;
