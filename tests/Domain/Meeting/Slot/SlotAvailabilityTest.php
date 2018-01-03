@@ -131,7 +131,7 @@ class SlotAvailabilityTest extends TestCase
         $category               = new Happening\Category($this->event, 'picto', 1, 'leftColor', 'rightColor');
         $beginH                 = new \DateTime('2016-10-12 08:00:00.000');
         $endH                   = new \DateTime('2016-10-12 08:30:00.000');
-        $happening              = new Happening($this->event, $beginH, $endH, $category);
+        $happening              = new Happening($this->event, $beginH, $endH, $category, []);
         $happeningParticipation = new HappeningParticipation($happening, $this->user);
 
         $this->happeningParticipationRepository->getByEvent($this->event)->shouldBeCalled()->willReturn([$happeningParticipation]);
@@ -170,7 +170,7 @@ class SlotAvailabilityTest extends TestCase
         $category               = new Happening\Category($this->event, 'picto', 1, 'leftColor', 'rightColor');
         $beginH                 = new \DateTime('2016-10-12 09:10:00.000');
         $endH                   = new \DateTime('2016-10-12 10:30:00.000');
-        $happening              = new Happening($this->event, $beginH, $endH, $category);
+        $happening              = new Happening($this->event, $beginH, $endH, $category, []);
         $happeningParticipation = new HappeningParticipation($happening, $this->user);
 
         $this->happeningParticipationRepository->getByEvent($this->event)->shouldBeCalled()->willReturn([$happeningParticipation]);
@@ -208,7 +208,7 @@ class SlotAvailabilityTest extends TestCase
         $category               = new Happening\Category($this->event, 'picto', 1, 'leftColor', 'rightColor');
         $beginH                 = new \DateTime('2016-10-12 08:30:00.000');
         $endH                   = new \DateTime('2016-10-12 09:30:00.000');
-        $happening              = new Happening($this->event, $beginH, $endH, $category);
+        $happening              = new Happening($this->event, $beginH, $endH, $category, []);
         $happeningParticipation = new HappeningParticipation($happening, $this->user);
 
         $this->happeningParticipationRepository->getByEvent($this->event)->shouldBeCalled()->willReturn([$happeningParticipation]);
@@ -247,7 +247,7 @@ class SlotAvailabilityTest extends TestCase
         $category               = new Happening\Category($this->event, 'picto', 1, 'leftColor', 'rightColor');
         $beginH                 = new \DateTime('2016-10-12 09:30:00.000');
         $endH                   = new \DateTime('2016-10-12 09:45:00.000');
-        $happening              = new Happening($this->event, $beginH, $endH, $category);
+        $happening              = new Happening($this->event, $beginH, $endH, $category, []);
         $happeningParticipation = new HappeningParticipation($happening, $this->user);
 
         $this->happeningParticipationRepository->getByEvent($this->event)->shouldBeCalled()->willReturn([$happeningParticipation]);
@@ -888,7 +888,7 @@ class SlotAvailabilityTest extends TestCase
         $category               = new Happening\Category($this->event, 'picto', 1, 'leftColor', 'rightColor');
         $beginH                 = new \DateTime('2016-10-12 09:10:00.000');
         $endH                   = new \DateTime('2016-10-12 10:30:00.000');
-        $happening              = new Happening($this->event, $beginH, $endH, $category);
+        $happening              = new Happening($this->event, $beginH, $endH, $category, []);
         $happeningParticipation = new HappeningParticipation($happening, $this->user);
 
         $this->happeningParticipationRepository->getByEvent($this->event)->shouldBeCalled()->willReturn([$happeningParticipation]);
@@ -1013,7 +1013,7 @@ class SlotAvailabilityTest extends TestCase
         $category               = new Happening\Category($this->event, 'picto', 1, 'leftColor', 'rightColor');
         $beginH                 = new \DateTime('2016-10-12 09:10:00.000');
         $endH                   = new \DateTime('2016-10-12 10:30:00.000');
-        $happening              = new Happening($this->event, $beginH, $endH, $category);
+        $happening              = new Happening($this->event, $beginH, $endH, $category, []);
         $happeningParticipation = new HappeningParticipation($happening, $this->user);
 
         $this->happeningParticipationRepository->getByEvent($this->event)->shouldBeCalled()->willReturn([$happeningParticipation]);

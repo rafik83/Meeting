@@ -10,18 +10,18 @@
 
 namespace Proximum\Vimeet\Application\Command\Sheet\Aggregate;
 
-use Proximum\Vimeet\Domain\Model\Event;
+use Proximum\Vimeet\Domain\Model\Sheet;
 
 class AvailableSlotAggregator
 {
-    /** @var Event */
-    public $event;
+    /** @var Sheet */
+    public $sheet;
 
     /**
-     * @param Event $event
+     * @param Sheet $sheet
      */
-    public function __construct(Event $event)
+    public function __construct(Sheet $sheet)
     {
-        $this->event = $event;
+        $this->sheet = $sheet;
     }
 }

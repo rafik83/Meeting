@@ -97,6 +97,7 @@ class ProgramViewQueryHandlerTest extends TestCase
         $dayViewQueryHandler = $this->prophesize(DayViewQueryHandler::class);
         $dayViewQueryHandler->handle(new DayViewQuery(
             $event,
+            $sheet,
             $eventDay1,
              'fr',
             null,
@@ -104,6 +105,7 @@ class ProgramViewQueryHandlerTest extends TestCase
         ))->shouldBeCalled()->willReturn($dayView1);
         $dayViewQueryHandler->handle(new DayViewQuery(
             $event,
+            $sheet,
             $eventDay2,
             'fr',
             null,

@@ -12,7 +12,11 @@ namespace Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\Agg
 
 use Proximum\Vimeet\Application\Command\Sheet\Aggregate\AvailableSlotAggregator;
 use Proximum\Vimeet\Application\Command\Sheet\Aggregate\AvailableSlotAggregatorHandler;
+use Proximum\Vimeet\Application\Command\Sheet\Aggregate\SheetsAvailableSlotAggregator;
+use Proximum\Vimeet\Application\Command\Sheet\Aggregate\SheetsAvailableSlotAggregatorHandler;
+use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Repository\EventRepositoryInterface;
+use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
@@ -28,18 +32,30 @@ class AvailableSlotCalculatorCommand extends Command
     /** @var AvailableSlotAggregatorHandler */
     private $availableSlotAggregatorHandler;
 
+    /** @var SheetRepositoryInterface */
+    private $sheetRepository;
+
+    /** @var SheetsAvailableSlotAggregatorHandler */
+    private $sheetsAvailableSlotAggregatorHandler;
+
     /**
-     * @param EventRepositoryInterface       $eventRepository
-     * @param AvailableSlotAggregatorHandler $availableSlotAggregatorHandler
+     * @param EventRepositoryInterface             $eventRepository
+     * @param SheetRepositoryInterface             $sheetRepository
+     * @param SheetsAvailableSlotAggregatorHandler $sheetsAvailableSlotAggregatorHandler
+     * @param AvailableSlotAggregatorHandler       $availableSlotAggregatorHandler
      */
     public function __construct(
         EventRepositoryInterface $eventRepository,
+        SheetRepositoryInterface $sheetRepository,
+        SheetsAvailableSlotAggregatorHandler $sheetsAvailableSlotAggregatorHandler,
         AvailableSlotAggregatorHandler $availableSlotAggregatorHandler
     ) {
         parent::__construct(self::NAME);
 
         $this->eventRepository = $eventRepository;
         $this->availableSlotAggregatorHandler = $availableSlotAggregatorHandler;
+        $this->sheetRepository = $sheetRepository;
+        $this->sheetsAvailableSlotAggregatorHandler = $sheetsAvailableSlotAggregatorHandler;
     }
 
     /**
@@ -49,12 +65,18 @@ class AvailableSlotCalculatorCommand extends Command
     {
         $this
             ->setName(self::NAME)
-            ->setDescription('Aggregate the slots available for the sheet of the event')
+            ->setDescription('Aggregate the slots available for the sheets of the event')
+            ->addOption(
+                'sheet',
+                null,
+                InputOption::VALUE_OPTIONAL,
+                'If set, the available slots will be calculated only for the given sheet'
+            )
             ->addOption(
                 'event',
                 null,
                 InputOption::VALUE_OPTIONAL,
-                'If set, the available slots will be calculate only for the sheet of the given event id'
+                'If set, the available slots will be calculate only for the sheets of the given event id'
             );
     }
 
@@ -64,6 +86,22 @@ class AvailableSlotCalculatorCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $eventId = $input->getOption('event');
+        $sheetId = $input->getOption('sheet');
+
+        if ($sheetId !== null) {
+            $sheet = $this->sheetRepository->getSheetById($sheetId);
+
+            if ($sheet instanceof Sheet) {
+                $output->writeln(sprintf(
+                    'Calculating available slots for the sheet %s with id %s',
+                    $sheet->getTitle(),
+                    $sheetId
+                ));
+                $this->availableSlotAggregatorHandler->handle(new AvailableSlotAggregator($sheet));
+            }
+
+            return;
+        }
 
         if ($eventId !== null) {
             $event = $this->eventRepository->getById($eventId);
@@ -75,7 +113,7 @@ class AvailableSlotCalculatorCommand extends Command
             }
 
             $output->writeln(sprintf('Calculating available slots for the event %s with id %s', $event->getTitle(), $eventId));
-            $this->availableSlotAggregatorHandler->handle(new AvailableSlotAggregator($event));
+            $this->sheetsAvailableSlotAggregatorHandler->handle(new SheetsAvailableSlotAggregator($event));
 
             return;
         }
@@ -84,7 +122,7 @@ class AvailableSlotCalculatorCommand extends Command
 
         foreach ($events as $event) {
             $output->writeln(sprintf('Calculating available slots for the event %s with id %s', $event->getTitle(), $eventId));
-            $this->availableSlotAggregatorHandler->handle(new AvailableSlotAggregator($event));
+            $this->sheetsAvailableSlotAggregatorHandler->handle(new SheetsAvailableSlotAggregator($event));
         }
     }
 }

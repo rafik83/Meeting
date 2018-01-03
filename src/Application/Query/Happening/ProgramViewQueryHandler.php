@@ -1,9 +1,9 @@
 <?php
 
 /*
- * This file is part of the vimeet project.
+ * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2016 vimeet
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -17,29 +17,19 @@ use Proximum\Vimeet\Domain\Repository\Unavailability\MassRepositoryInterface;
 
 class ProgramViewQueryHandler
 {
-    /**
-     * @var DayRepositoryInterface
-     */
+    /** @var DayRepositoryInterface */
     private $dayRepository;
 
-    /**
-     * @var DayViewQueryHandler
-     */
+    /** @var DayViewQueryHandler */
     private $dayViewQueryHandler;
 
-    /**
-     * @var HappeningParticipationQueryHandler
-     */
+    /** @var HappeningParticipationQueryHandler */
     private $happeningParticipationQueryHandler;
 
-    /**
-     * @var MassRepositoryInterface
-     */
+    /** @var MassRepositoryInterface */
     private $massRepository;
 
-    /**
-     * @var FullHappeningQueryHandler
-     */
+    /** @var FullHappeningQueryHandler */
     private $fullHappeningQueryHandler;
 
     /**
@@ -88,6 +78,7 @@ class ProgramViewQueryHandler
             $dayViews[] = $this->dayViewQueryHandler->handle(
                 new DayViewQuery(
                     $programViewQuery->event,
+                    $programViewQuery->sheet,
                     $day,
                     $programViewQuery->locale,
                     $programViewQuery->category,

@@ -285,6 +285,15 @@ services:
                 - { name: form.type }
 
     #
+    # Value Resolver
+    #
+    Proximum\Vimeet\Ui\Bundle\AdminBundle\ValueResolver\AdminDomainValueResolver:
+        arguments:
+            - '@security.token_storage'
+        tags:
+            - { name: controller.argument_value_resolver, priority: 50 }
+
+    #
     # Helper
     #
     ui.helper.currency_formatter:

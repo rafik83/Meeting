@@ -1,6 +1,8 @@
 {% extends 'AdminBundle:Common:form_layout.html.twig' %}
 
-{% block title 'admin.happening_category.addTitle'|trans %}
+{% block title %}
+    [{{ event.title }}] {{ 'admin.happening_category.addTitle'|trans }}
+{% endblock %}
 
 {% block form_title 'admin.happening_category.addTitle'|trans %}
 

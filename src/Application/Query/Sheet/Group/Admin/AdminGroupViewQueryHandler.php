@@ -11,7 +11,6 @@
 namespace Proximum\Vimeet\Application\Query\Sheet\Group\Admin;
 
 use Proximum\Vimeet\Application\Adapter\ImpersonateUrlGeneratorInterface;
-use Proximum\Vimeet\Application\Components\Sheet\SheetInfoGuesser;
 use Proximum\Vimeet\Application\View\Sheet\Group\Admin\GroupView as AdminGroupView;
 use Proximum\Vimeet\Application\View\Sheet\Group\SheetView;
 use Proximum\Vimeet\Domain\Model\Sheet;
@@ -22,24 +21,18 @@ class AdminGroupViewQueryHandler
     /** @var SheetRepositoryInterface */
     private $sheetRepository;
 
-    /** @var SheetInfoGuesser */
-    private $sheetInfoGuesser;
-
     /** @var ImpersonateUrlGeneratorInterface */
     private $impersonateUrlGenerator;
 
     /**
      * @param SheetRepositoryInterface         $sheetRepository
-     * @param SheetInfoGuesser                 $sheetInfoGuesser
      * @param ImpersonateUrlGeneratorInterface $impersonateUrlGenerator
      */
     public function __construct(
         SheetRepositoryInterface $sheetRepository,
-        SheetInfoGuesser $sheetInfoGuesser,
         ImpersonateUrlGeneratorInterface $impersonateUrlGenerator
     ) {
         $this->sheetRepository         = $sheetRepository;
-        $this->sheetInfoGuesser        = $sheetInfoGuesser;
         $this->impersonateUrlGenerator = $impersonateUrlGenerator;
     }
 
@@ -53,7 +46,7 @@ class AdminGroupViewQueryHandler
         $sheets = $this->sheetRepository->getByGroup($groupViewQuery->group);
 
         $sheetViews = array_map(function (Sheet $sheet) {
-            return new SheetView($sheet->getId(), $this->sheetInfoGuesser->guessSheetTitle($sheet));
+            return new SheetView($sheet->getId(), $sheet->getTitle());
         }, $sheets);
 
         usort($sheetViews, function (SheetView $one, SheetView $other) {

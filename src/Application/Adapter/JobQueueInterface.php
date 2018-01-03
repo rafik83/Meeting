@@ -15,6 +15,7 @@ use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\File;
 use Proximum\Vimeet\Domain\Model\Messaging\Campaign;
 use Proximum\Vimeet\Domain\Model\PlannerJob;
+use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\Template\RegistrationTemplate;
 use Proximum\Vimeet\Domain\Model\Template\SheetTemplate;
 use Proximum\Vimeet\Domain\Model\Type;
@@ -154,6 +155,11 @@ interface JobQueueInterface
      * @param Event $event
      */
     public function aggregateAvailableSlot(Event $event);
+
+    /**
+     * @param Sheet $sheet
+     */
+    public function aggregateSheetAvailableSlot(Sheet $sheet);
 
     /**
      * @param Event $event
