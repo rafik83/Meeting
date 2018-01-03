@@ -47,6 +47,7 @@ class UpdateHandlerTest extends TestCase
         $expected->setPlans([$plan1, $plan3, $plan2]);
         $expected->setParticipants([$participant]);
         $expected->setPlanning($planning);
+        $expected->setMaxParticipant(12);
         $expected->setGroups([
             [$option4, $option1],
             [$option2, $option3],
@@ -65,6 +66,7 @@ class UpdateHandlerTest extends TestCase
             $this->assertEquals($expected->getOptionsLabel('en'), $package->getOptionsLabel('en'));
             $this->assertEquals($expected->getPlans(), $package->getPlans());
             $this->assertEquals($expected->getGroups(), $package->getGroups());
+            $this->assertEquals($expected->getMaxParticipant(), $package->getMaxParticipant());
 
             $groups = $expected->getGroups();
 
@@ -89,6 +91,7 @@ class UpdateHandlerTest extends TestCase
         $command->plans->plans = [$plan1, $plan3, $plan2];
         $command->participantAndPlanning->participants = [$participant];
         $command->participantAndPlanning->planning = $planning;
+        $command->participantAndPlanning->maxParticipant = 12;
         $command->options->groups = [
             new Group(['fr' => 'AAAA', 'en' => 'AAAA'], [$option4, $option1]),
             new Group(['fr' => 'BBBB', 'en' => 'BBBB'], [$option2, $option3]),
