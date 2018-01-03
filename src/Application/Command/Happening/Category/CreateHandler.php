@@ -47,7 +47,5 @@ class CreateHandler
         }
 
         $this->categoryRepository->add($category);
-
-        $create->category = $category;
     }
 }
