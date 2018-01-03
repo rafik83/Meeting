@@ -31,12 +31,13 @@ class CreateHandlerTest extends TestCase
     {
         $event              = EventFactory::createEvent();
         $date               = new \DateTime();
+        $currentYear        = $date->format('Y');
         $type               = new Type($event);
         $user               = new User('test@test.com', 'salt', 'password', 'fr');
         $sheet              = new Sheet($event, $type, [], $user, $date);
         $order              = new Order($sheet, 'test', $date);
         $prefix             = new Prefix('Vimeet', 'Vi');
-        $invoice            = new Invoice($event, $sheet, $prefix, 'Vi', 2017, 1, true, 'et', 20, 1000, 1200, 200, 'EUR', '[]', $date);
+        $invoice            = new Invoice($event, $sheet, $prefix, 'Vi', $currentYear, 1, true, 'et', 20, 1000, 1200, 200, 'EUR', '[]', $date);
         $orderToInvoiceView = new OrdersToInvoiceView([$order], '[]', true, 'et', 20, 1000, 200, 1200, 'EUR');
 
         $invoiceRepository = $this->prophesize(InvoiceRepositoryInterface::class);
@@ -59,6 +60,6 @@ class CreateHandlerTest extends TestCase
             $date
         );
 
-        $handler->handle(new Create($sheet, $prefix, $orderToInvoiceView));
+        $handler->handle(new Create($sheet, $prefix));
     }
 }
