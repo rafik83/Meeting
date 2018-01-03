@@ -18,6 +18,20 @@ use Proximum\Vimeet\Domain\Template\ParticipantInfoGuesser;
 
 class UserInfoGuesser
 {
+    const TAG_PARTICIPANT_CORRELATION = [
+        Tag::PARTICIPANT_GENDER    => 'gender',
+        Tag::PARTICIPANT_FIRSTNAME => 'firstName',
+        Tag::PARTICIPANT_LASTNAME  => 'lastName',
+        Tag::PARTICIPANT_POSITION  => 'position',
+        Tag::PARTICIPANT_PHONE     => 'phone',
+        Tag::PARTICIPANT_MOBILE    => 'mobile',
+        Tag::PARTICIPANT_COUNTRY   => 'country',
+    ];
+
+    const TAG_TRANSLATABLE_WITH_KEY = [
+        Tag::PARTICIPANT_GENDER => 'gender.%s',
+    ];
+
     /** @var ParticipantInfoGuesser */
     private $participantInfoGuesser;
 
@@ -73,38 +87,19 @@ class UserInfoGuesser
             if ($participant !== null) {
                 $participantInfo = $this->participantInfoGuesser->guessParticipantInfos($participant, $locale);
 
-                if (!empty($participantInfo[Tag::PARTICIPANT_GENDER])) {
-                    if ($translateInfo) {
-                        $userInfo['gender'] = $this->translator->trans(
-                            sprintf('gender.%s', $participantInfo[Tag::PARTICIPANT_GENDER])
-                        );
-                    } else {
-                        $userInfo['gender'] = $participantInfo[Tag::PARTICIPANT_GENDER];
+                foreach (self::TAG_PARTICIPANT_CORRELATION as $tag => $arrayValue) {
+                    if (!empty($participantInfo[$tag])) {
+                        if ($translateInfo && array_key_exists($tag, self::TAG_TRANSLATABLE_WITH_KEY)) {
+                            $userInfo[$arrayValue] = $this->translator->trans(
+                                sprintf(
+                                    self::TAG_TRANSLATABLE_WITH_KEY[$tag],
+                                    $participantInfo[$tag]
+                                )
+                            );
+                        } else {
+                            $userInfo[$arrayValue] = $participantInfo[$tag];
+                        }
                     }
-                }
-
-                if (!empty($participantInfo[Tag::PARTICIPANT_FIRSTNAME])) {
-                    $userInfo['firstName'] = $participantInfo[Tag::PARTICIPANT_FIRSTNAME];
-                }
-
-                if (!empty($participantInfo[Tag::PARTICIPANT_LASTNAME])) {
-                    $userInfo['lastName'] = $participantInfo[Tag::PARTICIPANT_LASTNAME];
-                }
-
-                if (!empty($participantInfo[Tag::PARTICIPANT_POSITION])) {
-                    $userInfo['position'] = $participantInfo[Tag::PARTICIPANT_POSITION];
-                }
-
-                if (!empty($participantInfo[Tag::PARTICIPANT_PHONE])) {
-                    $userInfo['phone'] = $participantInfo[Tag::PARTICIPANT_PHONE];
-                }
-
-                if (!empty($participantInfo[Tag::PARTICIPANT_MOBILE])) {
-                    $userInfo['mobile'] = $participantInfo[Tag::PARTICIPANT_MOBILE];
-                }
-
-                if (!empty($participantInfo[Tag::PARTICIPANT_COUNTRY])) {
-                    $userInfo['country'] = $participantInfo[Tag::PARTICIPANT_COUNTRY];
                 }
             }
         }
