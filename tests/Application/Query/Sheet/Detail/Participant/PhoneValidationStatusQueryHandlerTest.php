@@ -13,7 +13,6 @@ namespace Proximum\Vimeet\Tests\Application\Query\Sheet\Detail\Participant;
 use PHPUnit\Framework\TestCase;
 use Proximum\Vimeet\Application\Query\Sheet\Detail\Participant\PhoneValidationStatusQuery;
 use Proximum\Vimeet\Application\Query\Sheet\Detail\Participant\PhoneValidationStatusQueryHandler;
-use Proximum\Vimeet\Application\View\Sheet\Details\Participant\PhoneNotAskedView;
 use Proximum\Vimeet\Application\View\Sheet\Details\Participant\PhoneNotValidatedView;
 use Proximum\Vimeet\Application\View\Sheet\Details\Participant\PhoneValidatedView;
 use Proximum\Vimeet\Application\View\Sheet\Details\Participant\PhoneValidationStatusView;
@@ -57,15 +56,11 @@ class PhoneValidationStatusQueryHandlerTest extends TestCase
     public function getDataSet(): array
     {
         $userEventPhone1 = $this->prophesize(UserEventPhone::class);
-        $userEventPhone2 = $this->prophesize(UserEventPhone::class);
-
-        $userEventPhone1->isValidated()->willReturn(false);
-        $userEventPhone2->isValidated()->willReturn(true);
 
         return [
-            [null, new PhoneNotAskedView()],
-            [$userEventPhone1->reveal(), new PhoneNotValidatedView()],
-            [$userEventPhone2->reveal(), new PhoneValidatedView()],
+            [null, new PhoneNotValidatedView()],
+            [$userEventPhone1->reveal(), new PhoneValidatedView()],
+            [null, new PhoneNotValidatedView()],
         ];
     }
 }
