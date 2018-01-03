@@ -12,30 +12,14 @@ namespace Proximum\Vimeet\Application\View\Package;
 
 class ParticipantsView
 {
-    /**
-     * @var string
-     */
-    public $title;
+    /** @var ParticipantView[] */
+    public $participantViews;
 
     /**
-     * @var string
+     * @param ParticipantView[] $participantViews
      */
-    public $description;
-
-    /**
-     * @var ParticipantView[]
-     */
-    public $participants;
-
-    /**
-     * @param string $title
-     * @param string $description
-     * @param array  $participants
-     */
-    public function __construct($title, $description, array $participants)
+    public function __construct(array $participantViews)
     {
-        $this->title        = $title;
-        $this->description  = $description;
-        $this->participants = $participants;
+        $this->participantViews = $participantViews;
     }
 }

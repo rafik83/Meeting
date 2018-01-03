@@ -62,11 +62,7 @@ class ParticipantsViewQueryHandler
             );
         }
 
-        $participantsView = new ParticipantsView(
-            $participantProduct->getTitle($locale),
-            $participantProduct->getDescription($locale),
-            $participantView
-        );
+        $participantsView = new ParticipantsView($participantView);
 
         return $participantsView;
     }
