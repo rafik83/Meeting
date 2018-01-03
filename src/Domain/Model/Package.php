@@ -36,9 +36,9 @@ class Package
     private $planRanks;
 
     /**
-     * @var Product
+     * @var ArrayCollection
      */
-    private $participant;
+    private $participantRanks;
 
     /**
      * @var Product
@@ -89,11 +89,12 @@ class Package
      */
     public function __construct(Event $event, $title, \DateTimeInterface $createdAt)
     {
-        $this->event        = $event;
-        $this->title        = $title;
-        $this->createdAt    = $createdAt;
-        $this->planRanks    = new ArrayCollection();
-        $this->groups       = new ArrayCollection();
+        $this->event = $event;
+        $this->title = $title;
+        $this->createdAt = $createdAt;
+        $this->planRanks = new ArrayCollection();
+        $this->participantRanks = new ArrayCollection();
+        $this->groups = new ArrayCollection();
         $this->translations = new ArrayCollection();
     }
 
@@ -163,6 +164,25 @@ class Package
             ->matching(Criteria::create()->orderBy(['rank' => Criteria::ASC]))
             ->map(function (PackagePlanRank $plan) { return $plan->getPlan(); })
             ->toArray();
+    }
+
+    /**
+     * Get ordered participant products
+     *
+     * @return Product[]
+     */
+    public function getParticipants()
+    {
+        return $this
+            ->participantRanks
+            ->matching(Criteria::create()->orderBy(['rank' => Criteria::ASC]))
+            ->map(
+                function (PackageParticipantRank $packageParticipantRank) {
+                    return $packageParticipantRank->getProductParticipant();
+                }
+            )
+            ->toArray()
+        ;
     }
 
     /**
@@ -241,13 +261,21 @@ class Package
     }
 
     /**
-     * Get participant
+     * Get participant product
      *
      * @return Product
+     *
+     * @deprecated use getParticipants()
      */
     public function getParticipant()
     {
-        return $this->participant;
+        $firstPackageParticipantRank = $this->participantRanks->first();
+
+        if (!$firstPackageParticipantRank instanceof PackageParticipantRank) {
+            throw new \DomainException('Package must return at least one participant product');
+        }
+
+        return $firstPackageParticipantRank->getProductParticipant();
     }
 
     /**
@@ -339,7 +367,7 @@ class Package
      *
      * @return bool
      */
-    public function hasPlan(Product $plan)
+    public function hasPlan(Product $plan): bool
     {
         return $this->planRanks->exists(function ($key, PackagePlanRank $pfp) use ($plan) {
             return $pfp->getPlan() === $plan;
@@ -347,11 +375,25 @@ class Package
     }
 
     /**
+     * @param Product $participant
+     *
+     * @return bool
+     */
+    public function hasParticipant(Product $participant): bool
+    {
+        return $this->participantRanks->exists(
+            function ($key, PackageParticipantRank $packageParticipantRank) use ($participant) {
+                return $packageParticipantRank->getProductParticipant() === $participant;
+            }
+        );
+    }
+
+    /**
      * @param array $plans
      *
      * @return Package
      */
-    public function setPlans(array $plans)
+    public function setPlans(array $plans): Package
     {
         // Remove delete plans
         foreach ($this->planRanks as $planRank) {
@@ -402,15 +444,28 @@ class Package
     }
 
     /**
-     * Set participant
-     *
-     * @param Product $participant
+     * @param Product[] $participantProducts
      *
      * @return Package
      */
-    public function setParticipant(Product $participant)
+    public function setParticipants(array $participantProducts): Package
     {
-        $this->participant = $participant;
+        // Remove deleted participant product
+        /** @var PackageParticipantRank $participantRank */
+        foreach ($this->participantRanks as $participantRank) {
+            if (!in_array($participantRank->getProductParticipant(), $participantProducts)) {
+                $this->participantRanks->removeElement($participantRank);
+            } else {
+                $participantRank->setRank(array_search($participantRank->getProductParticipant(), $participantProducts));
+            }
+        }
+
+        // Add new participant product
+        foreach ($participantProducts as $rank => $participantProduct) {
+            if (!$this->hasParticipant($participantProduct)) {
+                $this->participantRanks->add(new PackageParticipantRank($this, $participantProduct, $rank));
+            }
+        }
 
         return $this;
     }

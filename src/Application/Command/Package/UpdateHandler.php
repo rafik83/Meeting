@@ -38,7 +38,7 @@ class UpdateHandler
             ->setTitle($update->title)
             ->enable($update->plans->enabled, $update->participantAndPlanning->enabled, $update->options->enabled)
             ->setPlans(array_values($update->plans->plans))
-            ->setParticipant($update->participantAndPlanning->participant)
+            ->setParticipants($update->participantAndPlanning->participants)
             ->setGroups($update->options->getGroupOptions(), $update->options->getGroupLabels())
         ;
 

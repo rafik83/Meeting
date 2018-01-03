@@ -1,0 +1,23 @@
+Proximum\Vimeet\Domain\Model\PackageParticipantRank:
+    type:  entity
+    table: package_participant
+    id:
+        id:
+            type: integer
+            generator:
+                strategy: AUTO
+    fields:
+        rank:
+            type: integer
+    manyToOne:
+        package:
+            targetEntity: Proximum\Vimeet\Domain\Model\Package
+            inversedBy: participantRanks
+            joinColumn:
+                nullable: false
+                onDelete: CASCADE
+        productParticipant:
+            targetEntity: Proximum\Vimeet\Domain\Model\Product
+            joinColumn:
+                nullable: false
+                onDelete: CASCADE
