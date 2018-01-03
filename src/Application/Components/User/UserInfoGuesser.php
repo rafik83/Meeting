@@ -89,7 +89,6 @@ class UserInfoGuesser
 
                 foreach (self::TAG_PARTICIPANT_CORRELATION as $tag => $arrayValue) {
                     if (!empty($participantInfo[$tag])) {
-
                         if ($translateInfo && array_key_exists($tag, self::TAG_TRANSLATABLE_WITH_KEY)) {
                             $userInfo[$arrayValue] = $this->translator->trans(
                                 sprintf(
