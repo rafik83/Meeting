@@ -1,7 +1,10 @@
 {% extends 'AdminBundle::base.html.twig' %}
 
+{% block title 'admin.schedule.slots.generate.title'|trans %}
+
 {% block content %}
-    <h1>{{ 'admin.schedule.slots.generate.title'|trans }}</h1>
+    <h1 class="page-header">{{ 'admin.schedule.slots.generate.title'|trans }}</h1>
+
     <div class="well">
         {{ 'admin.schedule.slots.generate.eventDay'|trans }}
         <ul>

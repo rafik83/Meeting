@@ -2,9 +2,7 @@
 
 {% import 'AdminBundle::macro.html.twig' as macro %}
 
-{% block title %}
-    [{{ event.title }}] {{ 'admin.product.title'|trans }}
-{% endblock %}
+{% block title 'admin.product.title'|trans %}
 
 {% block list_title 'admin.product.title'|trans %}
 

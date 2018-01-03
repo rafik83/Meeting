@@ -8,7 +8,7 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Proximum\Vimeet\Application\Exception\Template;
+namespace Proximum\Vimeet\Domain\Template\Exception;
 
 class RegistrationTemplateException extends TemplateException
 {

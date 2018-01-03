@@ -37,7 +37,6 @@
         "elao/form-bundle": "^2.1",
         "elao/form-translation-bundle": "^2.0",
         "elao/theme-twitter-bootstrap-3-bundle": "^2.0@dev",
-        "nelmio/alice": "2.1.*",
         "doctrine/doctrine-fixtures-bundle": "~2.3",
         "erusev/parsedown": "^1.6",
         "leafo/scssphp": "^0.6.3",
@@ -54,10 +53,10 @@
         "egulias/email-validator": "1.*",
         "jms/job-queue-bundle": "^1.4.2",
         "sentry/sentry-symfony": "^0.7.1",
-        "tilleuls/ovh-bundle": "^1.0.1",
         "behat/behat": "^3.3.1",
         "opentok/opentok": "^3.0",
-        "twig/twig": "~1.35"
+        "twig/twig": "~1.35",
+        "tilleuls/ovh-bundle": "^1.0.1"
     },
     "require-dev": {
         "sensio/generator-bundle": "~3.0",
@@ -74,7 +73,8 @@
         "behatch/contexts": "^2.5",
         "friends-of-behat/performance-extension": "^1.0",
         "phpspec/prophecy": "^1.7",
-        "friends-of-behat/context-service-extension": "^1.0"
+        "friends-of-behat/context-service-extension": "^1.0",
+        "nelmio/alice": "2.1.4"
     },
     "scripts": {
         "symfony-scripts": [

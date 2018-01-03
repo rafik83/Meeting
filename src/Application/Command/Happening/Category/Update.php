@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2015 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -13,41 +13,12 @@ namespace Proximum\Vimeet\Application\Command\Happening\Category;
 use Proximum\Vimeet\Domain\Model\Happening\Category;
 use Proximum\Vimeet\Domain\Model\Happening\CategoryTranslation;
 
-class Update
+class Update extends AbstractCategory
 {
-    /**
-     * @var int
-     */
-    public $rank;
-
-    /**
-     * @var Category
-     */
+    /** @var Category */
     public $category;
 
     /**
-     * @var string
-     */
-    public $picto;
-
-    /**
-     * @var array
-     */
-    public $translations = [];
-
-    /**
-     * @var string
-     */
-    public $leftColor;
-
-    /**
-     * @var string
-     */
-    public $rightColor;
-
-    /**
-     * Update constructor.
-     *
      * @param Category $category
      */
     public function __construct(Category $category)
@@ -59,9 +30,9 @@ class Update
         $this->rightColor = $category->getRightColor();
 
         /** @var CategoryTranslation $translation */
-        foreach ($category->getTranslations() as $translation) {
-            $this->translations[$translation->getLocale()] = [
-                'title' => $translation->getTitle(),
+        foreach ($category->getEvent()->getLocales() as $locale) {
+            $this->translations[$locale] = [
+                'title' => $category->getTitle($locale),
             ];
         }
     }

@@ -12,7 +12,7 @@ Proximum\Vimeet\Domain\Model\Product:
         updatable: false
         buyableUntil: ~
         deletableUntil: ~
-    # participants
+    # participant
     product_participant_1_asddays:
         __construct: { createParticipant: [ '@event_asddays_2016', 'Participant supplémentaire Fournisseur', 195, 10 ] }
         image: ~
@@ -46,6 +46,16 @@ Proximum\Vimeet\Domain\Model\Product:
         __construct: { createOption: ['@event_asddays_2016', 'Option E', 0, 199, 4, 5, 10, true, "<dateTimeBetween('-10days', 'now')>"] }
     product_option_8_asddays:
         __construct: { createOption: ['@event_asddays_2016', 'Option F', 0, 59, 20, 20, 20, true, null, false, null] }
+    # other participant (keep this fixture here because behat tests use products db id)
+    product_participant_2_asddays:
+        __construct: { createParticipant: [ '@event_asddays_2016', 'Participant autre', 299, 2 ] }
+        image: ~
+        availabilityCurrent: 0
+        availabilityMax: 0
+        quantityMax: 4
+        updatable: false
+        deletableUntil: ~
+
 
 Proximum\Vimeet\Domain\Model\Product\ProductIncluded:
     product_included_plan_1_asddays_fr:
@@ -106,6 +116,22 @@ Proximum\Vimeet\Domain\Model\ProductTranslation:
         title: 'Extra participant'
         heading: ''
         description: 'Accompanying the first one on the same agenda including an entry to selected business conventions and unlimited access to coffee breaks and conferences.'
+        addon: ''
+        locale: 'en'
+    product_participant_2_asddays_fr:
+        __construct: false
+        product: '@product_participant_2_asddays'
+        title: 'Participant autre'
+        heading: ''
+        description: ''
+        addon: ''
+        locale: 'fr'
+    product_participant_2_asddays_en:
+        __construct: false
+        product: '@product_participant_2_asddays'
+        title: 'Other participant'
+        heading: ''
+        description: ''
         addon: ''
         locale: 'en'
     product_planning_1_asddays_fr:
@@ -259,7 +285,6 @@ Proximum\Vimeet\Domain\Model\Package:
         event: '@event_asddays_2016'
         title: "Package ASD Days"
         createdAt: "<dateTimeBetween('-10days', 'now')>"
-        participant: '@product_participant_1_asddays'
         planning: '@product_planning_1_asddays'
         plansEnabled: true
         participantAndPlanningEnabled: true
@@ -280,6 +305,18 @@ Proximum\Vimeet\Domain\Model\PackageTranslation:
         plansLabel: 'Plan'
         participantAndPlanningLabel: 'Participants & plannings'
         optionsLabel: 'Options'
+
+Proximum\Vimeet\Domain\Model\PackageParticipantRank:
+    package_participant_1_rank_asd_days:
+        __construct: false
+        rank: 1
+        package: '@package_asd_days'
+        productParticipant: '@product_participant_1_asddays'
+    package_participant_2_rank_asd_days:
+        __construct: false
+        rank: 2
+        package: '@package_asd_days'
+        productParticipant: '@product_participant_2_asddays'
 
 Proximum\Vimeet\Domain\Model\PackagePlanRank:
     package_plan_1_rank_asd_days:

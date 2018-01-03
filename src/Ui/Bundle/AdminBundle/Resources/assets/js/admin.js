@@ -1,5 +1,4 @@
 var $ = require('jquery'),
-    bootstrap = require('bootstrap'),
     Confirm = require('./components/_Confirm'),
     CheckAllCheckbox = require('./components/_CheckAllCheckbox'),
     LoadingButton = require('./components/_LoadingButton'),
@@ -19,11 +18,13 @@ var $ = require('jquery'),
     TipPreview = require('./components/_TipPreview'),
     ToggleVisibility = require('./components/_ToggleVisibility');
 
+require('bootstrap');
 require('elao-form.js');
 require('select2');
 require('moment/locale/fr');
 require('moment/locale/en-gb');
 require('./vendor/bootstrap-duallistbox/_jquery.bootstrap-duallistbox');
+require('./zendesk/zendesk');
 
 // Init function
 

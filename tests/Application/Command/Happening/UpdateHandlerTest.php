@@ -10,11 +10,16 @@
 
 namespace Proximum\Vimeet\Tests\Application\Command\Happening;
 
+use Proximum\Vimeet\Application\Adapter\DelayedEventDispatcherInterface;
 use Proximum\Vimeet\Application\Command\Happening\Update;
 use Proximum\Vimeet\Application\Command\Happening\UpdateHandler;
+use Proximum\Vimeet\Application\Event\Events;
+use Proximum\Vimeet\Application\Event\Happening\DatesUpdated;
+use Proximum\Vimeet\Application\Event\Happening\TypesUpdated;
 use Proximum\Vimeet\Domain\Model\Happening;
 use Proximum\Vimeet\Domain\Model\Happening\Category;
 use Proximum\Vimeet\Domain\Model\Happening\CategoryTranslation;
+use Proximum\Vimeet\Domain\Model\Type;
 use Proximum\Vimeet\Domain\Repository\HappeningRepositoryInterface;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
 use PHPUnit\Framework\TestCase;
@@ -38,8 +43,9 @@ class UpdateHandlerTest extends TestCase
         $catTranslation2 = new CategoryTranslation($category, 'en', 'trac');
         $category->setTranslation($catTranslation1);
         $category->setTranslation($catTranslation2);
+        $previousType = $this->prophesize(Type::class);
 
-        $happening             = new Happening($event, $begin, $end, $category, true, 10);
+        $happening             = new Happening($event, $begin, $end, $category, [$previousType->reveal()], true, 10);
         $happeningTranslation  = new Happening\HappeningTranslation($happening, 'fr', 'truc', 'bidule');
         $happeningTranslation2 = new Happening\HappeningTranslation($happening, 'en', 'trac', 'machin');
 
@@ -51,9 +57,18 @@ class UpdateHandlerTest extends TestCase
         $newCatTranslation2 = new CategoryTranslation($newCategory, 'en', 'troc');
         $newCategory->setTranslation($newCatTranslation1);
         $newCategory->setTranslation($newCatTranslation2);
+        $newType = $this->prophesize(Type::class);
 
         // Expected
-        $expectedSubEvent     = new Happening($event, $newBegin, $newEnd, $newCategory, false, null);
+        $expectedSubEvent     = new Happening(
+            $event,
+            $newBegin,
+            $newEnd,
+            $newCategory,
+            [$newType->reveal()],
+            false,
+            null
+        );
         $expectedTranslation  = new Happening\HappeningTranslation($expectedSubEvent, 'fr', 'test', 'ok');
         $expectedTranslation2 = new Happening\HappeningTranslation($expectedSubEvent, 'en', 'tset', 'ko');
 
@@ -62,7 +77,10 @@ class UpdateHandlerTest extends TestCase
 
         // Mock
         $happeningRepository = $this->prophesize(HappeningRepositoryInterface::class);
+        $eventDispatcher = $this->prophesize(DelayedEventDispatcherInterface::class);
         $happeningRepository->set($expectedSubEvent)->shouldBeCalled();
+        $eventDispatcher->dispatch(Events::HAPPENING_TYPES_UPDATED, new TypesUpdated($happening))->shouldBeCalled();
+        $eventDispatcher->dispatch(Events::HAPPENING_DATES_UPDATED, new DatesUpdated($happening))->shouldBeCalled();
 
         // Command
         $update                   = new Update($happening);
@@ -71,6 +89,9 @@ class UpdateHandlerTest extends TestCase
         $update->begin            = $newBegin;
         $update->end              = $newEnd;
         $update->limitParticipant = null;
+        $update->types            = [
+            $newType->reveal(),
+        ];
         $update->translations     = [
             'fr' => [
                 'title'       => 'test',
@@ -82,7 +103,7 @@ class UpdateHandlerTest extends TestCase
             ],
         ];
 
-        $handler = new UpdateHandler($happeningRepository->reveal());
+        $handler = new UpdateHandler($happeningRepository->reveal(), $eventDispatcher->reveal());
         $handler->handle($update);
     }
 }

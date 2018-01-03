@@ -315,16 +315,6 @@ services:
             - '@doctrine.orm.entity_manager'
 
     #
-    # Fixture providers
-    #
-    vimeet_infrastructure.data_fixtures_orm.provider:
-        class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\DataFixtures\ORM\Provider
-        arguments:
-            - '%domain%'
-        tags:
-            - { name: hautelook_alice.faker.provider }
-
-    #
     # Handlers
     #
     vimeet_infrastructure.application.command.user.change_password:
@@ -768,6 +758,7 @@ services:
         class: Proximum\Vimeet\Application\Command\Happening\UpdateHandler
         arguments:
             - '@vimeet_infrastructure.repository.happening_repository'
+            - '@vimeet_infrastructure.adapter.delayed_event_dispatcher'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Happening\Update }
     command.user.activate_account_password_handler:
@@ -1142,6 +1133,7 @@ services:
         arguments:
             - '@repository.template.registration_template_repository'
             - '@template.template_data_factory'
+            - '@components.registration.template_validator_translated'
             - '@vimeet_infrastructure.adapter.delayed_event_dispatcher'
             - '@adapter.job_queue_adapter'
         tags:
@@ -1152,6 +1144,8 @@ services:
             - '@repository.template.registration_template_repository'
             - '@adapter.job_queue_adapter'
             - '@template.template_data_factory'
+            - '@components.registration.template_validator_translated'
+            - '@vimeet_infrastructure.adapter.delayed_event_dispatcher'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Template\Registration\Save }
 
@@ -2245,6 +2239,12 @@ services:
             - '@template.template_data_factory'
             - '@vimeet_infrastructure.repository.participant_repository'
 
+    components.registration.template_validator_translated:
+        class: Proximum\Vimeet\Application\Components\Registration\RegistrationTemplateValidatorTranslated
+        arguments:
+            - '@template.registration.registration_template_validator'
+            - '@vimeet_infrastructure.adapter.translator_adapter'
+
     #
     # Sheet Component
     #
@@ -2586,6 +2586,10 @@ services:
         class: Proximum\Vimeet\Domain\Template\TemplateRemoveField
         arguments:
             - '@template.template_data_factory'
+
+    template.registration.registration_template_validator:
+        class: Proximum\Vimeet\Domain\Template\Registration\RegistrationTemplateValidator
+
     template.template_preview_resolver:
         class: Proximum\Vimeet\Domain\Template\TemplatePreviewResolver
         arguments:
@@ -3260,7 +3264,6 @@ services:
         class: Proximum\Vimeet\Application\Query\Sheet\Group\Admin\AdminGroupViewQueryHandler
         arguments:
             - '@vimeet_infrastructure.repository.sheet_repository'
-            - '@vimeet_infrastructure.application.components.sheet.sheet_info_guesser'
             - '@adapter.impersonate_url_generator_adapter'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Sheet\Group\Admin\AdminGroupViewQuery }
@@ -3796,7 +3799,7 @@ services:
         class: Proximum\Vimeet\Application\Query\Navigation\Category\PlanningViewQueryHandler
         arguments:
             - '@navigation.navigation_builder'
-            - '@domain.key_dates.checker.happenings_access_checker'
+            - '@domain.key_dates.checker.agenda_access_checker'
             - '@domain.key_dates.checker.meeting_published_access_checker'
     query.navigation.category_sheet_view_query_handler:
         class: Proximum\Vimeet\Application\Query\Navigation\Category\SheetViewQueryHandler
@@ -5600,7 +5603,9 @@ services:
         class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\Aggregate\Sheet\AvailableSlotCalculatorCommand
         arguments:
             - '@vimeet_infrastructure.repository.event_repository'
-            -  '@command.sheet.aggregate.available_slot_aggregator_handler'
+            - '@vimeet_infrastructure.repository.sheet_repository'
+            - '@command.sheet.aggregate.sheets_available_slot_aggregator_handler'
+            - '@command.sheet.aggregate.available_slot_aggregator_handler'
         tags:
             - { name: console.command }
 

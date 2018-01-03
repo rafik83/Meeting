@@ -21,6 +21,8 @@ use Proximum\Vimeet\Application\View\Happening\HappeningCategoryView;
 use Proximum\Vimeet\Application\View\Happening\HappeningView;
 use Proximum\Vimeet\Application\View\Happening\MassUnavailabilityView;
 use Proximum\Vimeet\Domain\Model\Happening;
+use Proximum\Vimeet\Domain\Model\Sheet;
+use Proximum\Vimeet\Domain\Model\Type;
 use Proximum\Vimeet\Domain\Model\Unavailability;
 use Proximum\Vimeet\Domain\Repository\HappeningRepositoryInterface;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
@@ -32,10 +34,14 @@ class DayViewQueryHandlerTest extends TestCase
     public function testHandle()
     {
         $event     = EventFactory::createEvent();
+        $sheet     = $this->prophesize(Sheet::class);
+        $type      = $this->prophesize(Type::class);
         $category  = null;
         $startTime = new \DateTime('2016-10-12 10:00:00');
         $endTime   = new \DateTime('2016-10-12 18:00:00');
         $eventDay  = new Day($event, $startTime, $endTime);
+
+        $sheet->getType()->willReturn($type->reveal());
 
         // Mass
         $categoryMass = new Unavailability\Category($event, 'picto', 'title', 'leftColor', 'rightColor');
@@ -52,14 +58,16 @@ class DayViewQueryHandlerTest extends TestCase
             $event,
             $beginHappening1,
             $endHappening1,
-            $categoryH1
+            $categoryH1,
+            []
         );
 
         $happening2 = new Happening(
             $event,
             $beginHappening2,
             $endHappening2,
-            $categoryH2
+            $categoryH2,
+            []
         );
 
         $reflection = new \ReflectionClass(Happening::class);
@@ -130,8 +138,9 @@ class DayViewQueryHandlerTest extends TestCase
 
         // Mock
         $happeningRepository = $this->prophesize(HappeningRepositoryInterface::class);
-        $happeningRepository->findByEventAndDayAndCategory(
+        $happeningRepository->findByEventAndTypeAndDayAndCategory(
             $event,
+            $type->reveal(),
             $eventDay->getDay(),
             $category
         )->shouldBeCalled()->willReturn($happenings);
@@ -166,6 +175,7 @@ class DayViewQueryHandlerTest extends TestCase
         );
         $result = $handler->handle(new DayViewQuery(
             $event,
+            $sheet->reveal(),
             $eventDay,
             'fr',
             $category,

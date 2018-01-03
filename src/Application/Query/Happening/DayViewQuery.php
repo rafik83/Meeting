@@ -11,49 +11,51 @@
 namespace Proximum\Vimeet\Application\Query\Happening;
 
 use Proximum\Vimeet\Domain\Model\Event;
+use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\Unavailability\Mass;
 use Proximum\Vimeet\Domain\Model\Happening\Category;
 
 class DayViewQuery
 {
-    /**
-     * @var Event\Day
-     */
+    /** @var Event\Day */
     public $eventDay;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     public $locale;
 
-    /**
-     * @var Event
-     */
+    /** @var Event */
     public $event;
 
-    /**
-     * @var Category|null
-     */
+    /** @var Category|null */
     public $category;
 
-    /**
-     * @var Mass[]
-     */
+    /** @var Mass[] */
     public $masses;
+
+    /** @var Sheet */
+    public $sheet;
 
     /**
      * @param Event         $event
+     * @param Sheet         $sheet
      * @param Event\Day     $eventDay
      * @param string        $locale
      * @param Category|null $category
      * @param Mass[]        $masses
      */
-    public function __construct(Event $event, Event\Day $eventDay, $locale, Category $category = null, array $masses)
-    {
+    public function __construct(
+        Event $event,
+        Sheet $sheet,
+        Event\Day $eventDay,
+        string $locale,
+        Category $category = null,
+        array $masses
+    ) {
         $this->locale   = $locale;
         $this->event    = $event;
         $this->eventDay = $eventDay;
         $this->category = $category;
         $this->masses   = $masses;
+        $this->sheet    = $sheet;
     }
 }

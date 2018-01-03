@@ -1,8 +1,6 @@
 {% extends 'AdminBundle::base.html.twig' %}
 
-{% block title %}
-    [{{ event.title }}] {{ 'admin.order.edit'|trans }} {{ 'admin.order_edit.command_name'|trans({'%id%': order.id, '%sheetName%': sheet_info }) }}
-{% endblock %}
+{% block title 'admin.order.edit'|trans %}
 
 {% import 'AdminBundle::macro.html.twig' as macro %}
 

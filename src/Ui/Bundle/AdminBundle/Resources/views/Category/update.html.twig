@@ -1,11 +1,9 @@
 {% extends 'AdminBundle::base.html.twig' %}
 
-{% block title 'Modifier une catégorie de types de participation' %}
+{% block title 'admin.category.update.title'|trans %}
 
 {% block content %}
-    <h1><a href="{{ path('admin_event_read', {event: event.id}) }}">{{ event.title }}</a></h1>
-
-    <h2>Modifier une catégorie de types de participation</h2>
+    <h1 class="page-header">{{ 'admin.category.update.title'|trans }}</h1>
 
     {{ form(form) }}
 {% endblock %}

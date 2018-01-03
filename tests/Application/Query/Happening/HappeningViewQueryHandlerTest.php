@@ -30,7 +30,8 @@ class HappeningViewQueryHandlerTest extends TestCase
             $event,
             $beginHappening1,
             $endHappening1,
-            $categoryH1
+            $categoryH1,
+            []
         );
         $happening1->setTranslation(new Happening\HappeningTranslation($happening1, 'fr', 'title', 'description'));
 

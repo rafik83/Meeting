@@ -1,5 +1,7 @@
 {% extends 'AdminBundle::base.html.twig' %}
 
+{% block title 'admin.template.sheet.title'|trans %}
+
 {% block body %}
     {{ include('AdminBundle:Common:menu.html.twig') }}
     <div class="container-fluid template-builder-container" data-template-builder="{{ path('admin_template_sheet_save', { 'template': template.id, 'locale': locale }) }}" data-locale="{{ locale }}">

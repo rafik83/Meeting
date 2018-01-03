@@ -114,7 +114,7 @@ interface HappeningParticipationRepositoryInterface
      *
      * @return HappeningParticipation[]
      */
-    public function getParticipationsForSheet(Sheet $sheet, $happenings);
+    public function getParticipationsForSheet(Sheet $sheet, array $happenings);
 
     /**
      * @param User      $user
@@ -142,4 +142,11 @@ interface HappeningParticipationRepositoryInterface
      * @return HappeningParticipation|null
      */
     public function findByHappeningAndUser(Happening $happening, User $user);
+
+    /**
+     * @param Happening $happening
+     *
+     * @return HappeningParticipation[]
+     */
+    public function findByHappening(Happening $happening): array;
 }

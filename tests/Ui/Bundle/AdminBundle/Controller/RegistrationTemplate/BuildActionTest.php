@@ -94,7 +94,7 @@ class BuildActionTest extends TestCase
                 'locale' => 'fr',
                 'nomenclatures' => [],
                 'registrationTemplate' => $registrationTemplate->reveal(),
-                'sheet_tags' => Tag::getRegisterTemplateChoiceTags(),
+                 'registrationTemplateTagView' => Tag::getRegistrationTemplateTagView(),
             ])
             ->shouldBeCalled()
             ->willReturn($response->reveal())
@@ -106,7 +106,8 @@ class BuildActionTest extends TestCase
             $engine->reveal(),
             $formFactory->reveal(),
             $nomenclatureRepository->reveal(),
-            $router->reveal()
+            $router->reveal(),
+            true
         );
         $response = $buildAction($request->reveal(), $registrationTemplate->reveal(), 'fr');
 
@@ -149,7 +150,7 @@ class BuildActionTest extends TestCase
                 'locale' => 'fr',
                 'nomenclatures' => [],
                 'registrationTemplate' => $registrationTemplate->reveal(),
-                'sheet_tags' => Tag::getRegisterTemplateChoiceTags(),
+                'registrationTemplateTagView' => Tag::getRegistrationTemplateTagView(),
             ])
             ->shouldBeCalled()
             ->willReturn($response->reveal())
@@ -161,7 +162,8 @@ class BuildActionTest extends TestCase
             $engine->reveal(),
             $formFactory->reveal(),
             $nomenclatureRepository->reveal(),
-            $router->reveal()
+            $router->reveal(),
+            true
         );
         $response = $buildAction($request->reveal(), $registrationTemplate->reveal(), 'fr');
 

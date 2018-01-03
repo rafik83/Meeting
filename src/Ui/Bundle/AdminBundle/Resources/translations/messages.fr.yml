@@ -125,7 +125,9 @@ admin.category.add: Ajouter
 admin.category.column.id: Id
 admin.category.column.title: Titre
 admin.category.link: 'Catégories de participation'
+admin.category.create.title: 'Créer une catégorie de types de participation'
 admin.category.title: 'Catégories de types de participation'
+admin.category.update.title: 'Modifier une catégorie de types de participation'
 admin.category.update: Modifier
 admin.check-all: 'Tout cocher'
 admin.common.close: Fermer
@@ -168,7 +170,6 @@ admin.event.paymentConditions.typeWithSpecificPaymentConditions: 'Liste des type
 admin.event.paymentConditions.update.title: 'Modifier les conditions de paiement'
 admin.event.practicalInfo.link: 'Informations Pratiques'
 admin.event.practicalInfo.update.title: 'Modifier les informations pratiques'
-admin.event.registration.template_builder.remove_confirm: 'Confirmez vous la suppression de cet élément ?'
 admin.event.search_facet.enabled.label: Activé
 admin.event.search_facet.title: 'Filtres du catalogue'
 admin.event.search_facets.link: 'Filtres catalogue'
@@ -598,7 +599,8 @@ admin.product.update.action: Modifier
 admin.promotion_code.action.close: Fermer
 admin.promotion_code.error.non_unique_code: 'Ce code est déjà utilisé'
 admin.promotion_code.link: 'Codes promos'
-admin.promotion_code.new: 'Nouveau code'
+admin.promotion_code.new: 'Nouveau code promo'
+admin.promotion_code.update: 'Modifier code promo'
 admin.promotion_code.table.action.edit: Modifier
 admin.promotion_code.table.column.action: Action
 admin.promotion_code.table.column.code: Code
@@ -716,6 +718,7 @@ admin.sheet.details.participant.tooltip.not_concerned: 'Cet utilisateur n''est p
 admin.sheet.details.participant.visio: Visio
 admin.sheet.details.participants: Participants
 admin.sheet.details.remainingToPay: 'Solde restant dû'
+admin.sheet.details.title: Fiche de présentation
 admin.sheet.details.transactions: Transactions
 admin.sheet.disable: 'Non active'
 admin.sheet.enable: Active
@@ -860,6 +863,7 @@ admin.template.blocks: Blocs
 admin.template.objects: Objets
 admin.template.objectsListEmpty: 'Aucun objet disponible'
 admin.template.preview.title: 'Aperçu du catalogue'
+admin.template.registration.addBlock: 'Ajouter une étape'
 admin.template.registration.addLocale: 'Ajouter une langue'
 admin.template.registration.link: 'Template d''Inscription'
 admin.template.registration.table.column.action: Action
@@ -867,11 +871,12 @@ admin.template.registration.table.column.createdAt: 'Créé le'
 admin.template.registration.table.column.eventType: Événement/Type(s)
 admin.template.registration.table.column.title: Titre
 admin.template.registration.table.content.edit: Modifier
-admin.template.registration.table.content.editJson: Modifier JSON
+admin.template.registration.table.content.editJson: 'Modifier JSON'
 admin.template.registration.title: 'Templates d''Inscription'
 admin.template.registration.titleOrganizer: 'Templates d''Inscription des organisateurs'
 admin.template.registration.update: 'Modifier le template d''Inscription'
 admin.template.sheet.link: 'Template de présentation'
+admin.template.sheet.title: 'Template de présentation'
 admin.template.sheet.table.column.action: Action
 admin.template.sheet.table.column.eventType: Événement/Type(s)
 admin.template.sheet.table.column.title: Titre
@@ -891,30 +896,30 @@ admin.tip.column.visible.print_planning: 'Impression planning'
 admin.tip.create.link: Nouveau
 admin.tip.create.title: 'Nouveau message d''aide'
 admin.tip.empty: 'Aucun message d''aide'
-admin.tip.event.create.title: 'Création d''un message d''aide pour %eventTitle%'
-admin.tip.event.update.title: 'Modification d''un message d''aide pour %eventTitle%'
 admin.tip.event.actions: Actions
 admin.tip.event.affect.form.title: 'Affecter un message d''aide'
-admin.tip.event.affect.link: 'Affecter un message d''aide global'
+admin.tip.event.affect.link: 'Affecter un message d''aide'
 admin.tip.event.affect.title: 'Gestion des messages d''aide'
 admin.tip.event.create.button: 'Créer un message d''aide'
-admin.tip.event.update.button: 'Modifier'
-admin.tip.event.create.update: 'Modifier'
+admin.tip.event.create.title: 'Création d''un message d''aide pour %eventTitle%'
+admin.tip.event.create.update: Modifier
 admin.tip.event.empty: 'Aucun message affecté à cet évènement'
 admin.tip.event.no_pages: Aucune
 admin.tip.event.no_types: Aucun
 admin.tip.event.pages: 'Page concernées'
-admin.tip.event.remove.action.confirm: 'Êtes-vous sûr de vouloir supprimer ce message d''aide?'
-admin.tip.event.remove.link: Supprimer
+admin.tip.event.remove.action.confirm: 'Êtes-vous sûr de vouloir retirer l''affectation?'
+admin.tip.event.remove.link: Retirer
 admin.tip.event.title: 'Libellé admin'
 admin.tip.event.types: 'Types de participation affectés'
+admin.tip.event.update.button: Modifier
+admin.tip.event.update.title: 'Modification d''un message d''aide pour %eventTitle%'
 admin.tip.events: Evénements
 admin.tip.link: 'Messages d''aide'
 admin.tip.list.title: 'Messages d''aide'
+admin.tip.remove.action.confirm: 'Êtes-vous sûr de vouloir supprimer ce message d''aide?'
+admin.tip.remove.link: Supprimer
 admin.tip.update.link: Modifier
 admin.tip.update.title: 'Mise à jour du message d''aide'
-admin.tip.remove.link: Supprimer
-admin.tip.remove.action.confirm: 'Êtes-vous sûr de vouloir supprimer ce message d''aide?'
 admin.tip.visible: 'Liste des pages concernées'
 admin.transaction.add: Ajouter
 admin.transaction.column.date: Date
@@ -944,14 +949,15 @@ admin.type.id: Id
 admin.type.link: 'Types de participation'
 admin.type.list.title: 'Types de participation'
 admin.type.package: Forfait
-admin.type.paymentConditions.update.title: 'Définition des conditions de paiement du type "%typeTitle%"'
-admin.type.paymentConditions.event.info.title: 'Conditions de paiement de l''événement:'
 admin.type.paymentConditions.event.info.allowDeposit: 'Activer le paiement en acompte:'
+admin.type.paymentConditions.event.info.deposit: 'Pourcentage de l''acompte:'
 admin.type.paymentConditions.event.info.depositUntil: 'Date limite d''acceptation des acomptes:'
 admin.type.paymentConditions.event.info.minimumForDeposit: 'Somme total à partir duquel l''acompte est applicable:'
-admin.type.paymentConditions.event.info.deposit: 'Pourcentage de l''acompte:'
 admin.type.paymentConditions.event.info.paymentModes: 'Moyens de paiement:'
-admin.type.paymentConditions.event.info.paymentModes.none: 'Aucun'
+admin.type.paymentConditions.event.info.paymentModes.none: Aucun
+admin.type.paymentConditions.event.info.title: 'Conditions de paiement de l''événement:'
+admin.type.paymentConditions.link: 'Conditions de paiement'
+admin.type.paymentConditions.update.title: 'Définition des conditions de paiement du type "%typeTitle%"'
 admin.type.position: Position
 admin.type.register.link: 'Lien d''inscription'
 admin.type.registration.template: 'Template d''inscription'
@@ -960,7 +966,6 @@ admin.type.sheet.template: 'Template de présentation'
 admin.type.specificPaymentConditions: 'Conditions de paiement particulières'
 admin.type.title: Titre
 admin.type.update.link: Modifier
-admin.type.paymentConditions.link: 'Conditions de paiement'
 admin.type.update.title: 'Modifier le type de participation'
 admin.unavailability.button.category: 'Catégorie d''indisponibilité de masse'
 admin.unavailability.button.dispatch: Dispatcher
@@ -1156,6 +1161,7 @@ gdr.user.agenda.version.modal.button.purge: 'Cacher différence sans notifier'
 gdr.user.agenda.version.modal.no_diff: 'Il n''y a pas de modification dans l''agenda de cette personne'
 gdr.user.agenda.version.modal.no_phone: 'L''utiliseur n''a pas accepté de recevoir des notifications lives'
 gdr.user.agenda.version.modal.title: 'Notifier modifications de l''agenda'
+help.link: Aide
 login.forgotPassword: 'Mot de passe oublié ?'
 login.link: Connexion
 login.link.label: 'Se connecter'

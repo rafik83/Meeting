@@ -1,7 +1,16 @@
 {% extends 'AdminBundle::base.html.twig' %}
 
+{% block title block('form_title')|striptags %}
+
 {% block content %}
-    <h1 class="page-header">{% block form_title 'Form title' %}</h1>
+    <h1 class="page-header">
+        {% block goback %}
+            <a href="{% block goback_link '#' %}" class="btn btn-link" title="{{ 'admin.goback.link'|trans }}">
+                <span class="glyphicon glyphicon-arrow-left"></span>
+            </a>
+        {% endblock goback %}
+        {% block form_title '' %}
+    </h1>
 
     {{ form_start(form, { 'attr': { 'class': 'with-submit-section' } }) }}
     {{ form_errors(form) }}
@@ -10,15 +19,7 @@
 
     {% block submit_section %}
         <div class="form-group submit-section">
-            <div class="col-sm-3">
-                {% block goback %}
-                <a href="{% block goback_link '#' %}" class="btn btn-link">
-                    <span class="glyphicon glyphicon-arrow-left"></span>
-                    {{ 'admin.goback.link'|trans }}
-                </a>
-                {% endblock goback %}
-            </div>
-            <div class="col-sm-9 text-right">
+            <div class="text-right">
                 {% block form_submit %}
                     {{ form_row(form.submit) }}
                 {% endblock form_submit %}

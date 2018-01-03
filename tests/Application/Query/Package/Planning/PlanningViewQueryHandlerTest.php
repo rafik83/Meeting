@@ -101,7 +101,7 @@ class PlanningViewQueryHandlerTest extends TestCase
         );
 
         $package->setPlans([$planProduct]);
-        $package->setParticipant($participantProduct);
+        $package->setParticipants([$participantProduct]);
         $package->setPlanning($planningProduct);
         $group = new PackageGroup($package, 1);
         $group->setOptions([$optionProduct]);
@@ -236,7 +236,7 @@ class PlanningViewQueryHandlerTest extends TestCase
         );
 
         $package->setPlans([$planProduct]);
-        $package->setParticipant($participantProduct);
+        $package->setParticipants([$participantProduct]);
         $package->setPlanning($planningProduct);
         $group = new PackageGroup($package, 1);
         $group->setOptions([$optionProduct]);
@@ -371,7 +371,7 @@ class PlanningViewQueryHandlerTest extends TestCase
         );
 
         $package->setPlans([$planProduct]);
-        $package->setParticipant($participantProduct);
+        $package->setParticipants([$participantProduct]);
         $package->setPlanning($planningProduct);
         $group = new PackageGroup($package, 1);
         $group->setOptions([$optionProduct]);
@@ -506,7 +506,7 @@ class PlanningViewQueryHandlerTest extends TestCase
         );
 
         $package->setPlans([$planProduct]);
-        $package->setParticipant($participantProduct);
+        $package->setParticipants([$participantProduct]);
         $package->setPlanning($planningProduct);
         $group = new PackageGroup($package, 1);
         $group->setOptions([$optionProduct]);
@@ -630,7 +630,7 @@ class PlanningViewQueryHandlerTest extends TestCase
         );
 
         $package->setPlans([$planProduct]);
-        $package->setParticipant($participantProduct);
+        $package->setParticipants([$participantProduct]);
         $package->setPlanning($planningProduct);
         $group = new PackageGroup($package, 1);
         $group->setOptions([$optionProduct]);

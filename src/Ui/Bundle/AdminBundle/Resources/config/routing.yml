@@ -803,20 +803,22 @@ admin_happening_list:
     requirements:
         event: \d+
     methods: [GET]
-    defaults: { _controller: AdminBundle:Happening:list }
+    defaults: { _controller: Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Happening\ListAction }
+
 admin_happening_create:
     path: /event/{event}/happening/create
     requirements:
         event: \d+
     methods: [GET, POST]
-    defaults: { _controller: AdminBundle:Happening:create }
+    defaults: { _controller: Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Happening\CreateAction }
+
 admin_happening_update:
     path: /event/{event}/happening/{happening}/update
     requirements:
         event: \d+
         happening: \d+
     methods: [GET, POST]
-    defaults: { _controller: AdminBundle:Happening:update }
+    defaults: { _controller: Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Happening\UpdateAction }
 
 #
 # Happening Category
@@ -826,26 +828,29 @@ admin_happening_category_list:
     requirements:
         event: \d+
     methods: [GET]
-    defaults: { _controller: AdminBundle:Happening:listCategory }
+    defaults: { _controller: Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Happening\Category\ListAction }
+
 admin_happening_category_create:
     path: /event/{event}/happening/category/create
     requirements:
         event: \d+
     methods: [GET, POST]
-    defaults: { _controller: AdminBundle:Happening:createCategory }
+    defaults: { _controller: Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Happening\Category\CreateAction }
+
 admin_happening_category_update:
     path: /event/{event}/happening/category/{category}/update
     requirements:
         event: \d+
         category: \d+
     methods: [GET, POST]
-    defaults: { _controller: AdminBundle:Happening:updateCategory }
+    defaults: { _controller: Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Happening\Category\UpdateAction }
+
 admin_happening_export:
     path: /event/{event}/happening/export
     requirements:
         event: \d+
     methods: [GET]
-    defaults: { _controller: AdminBundle:Happening:export }
+    defaults: { _controller: Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Happening\ExportAction }
 
 #
 # Happening Speaker
@@ -1486,7 +1491,7 @@ admin_sheets_group_list:
     requirements:
         event: \d+
     methods: [GET]
-    defaults: { _controller: AdminBundle:SheetsGroup/Group:list }
+    defaults: { _controller: Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\SheetsGroup\ListAction }
 
 admin_sheets_group_pre_create:
     path: /event/{event}/sheets-group/pre-create

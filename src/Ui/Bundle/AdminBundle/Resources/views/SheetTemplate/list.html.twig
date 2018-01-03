@@ -1,8 +1,9 @@
 {% extends 'AdminBundle::base.html.twig' %}
 
-{% block content %}
+{% block title 'admin.template.sheet.title'|trans %}
 
-    <h1 class="page-header">{{ 'admin.template.sheet.link'|trans }}</h1>
+{% block content %}
+    <h1 class="page-header">{{ 'admin.template.sheet.title'|trans }}</h1>
 
     <button type="button" class="btn btn-primary btn-success" data-toggle="modal" data-target="#create-modal">
         {{ 'admin.template.action.create'|trans }}

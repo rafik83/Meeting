@@ -15,9 +15,7 @@ use Proximum\Vimeet\Domain\Repository\HappeningRepositoryInterface;
 
 class CreateHandler
 {
-    /**
-     * @var HappeningRepositoryInterface
-     */
+    /** @var HappeningRepositoryInterface */
     private $happeningRepository;
 
     /**
@@ -38,6 +36,7 @@ class CreateHandler
             $create->begin,
             $create->end,
             $create->category,
+            $create->types,
             $create->questionAllowed,
             $create->limitParticipant
         );

@@ -47,6 +47,7 @@ imports:
     - { resource: services/repositories.yml }
     - { resource: services/adapters.yml }
     - { resource: services/domain/services.yml }
+    - { resource: services/application/services.yml }
     - { resource: services/event/commands.yml }
     - { resource: services/event/queries.yml }
     - { resource: services/admin/queries.yml }

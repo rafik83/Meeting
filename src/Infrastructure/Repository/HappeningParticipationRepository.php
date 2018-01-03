@@ -293,7 +293,7 @@ class HappeningParticipationRepository implements HappeningParticipationReposito
     /**
      * {@inheritdoc}
      */
-    public function getParticipationsForSheet(Sheet $sheet, $happenings)
+    public function getParticipationsForSheet(Sheet $sheet, array $happenings)
     {
         $sheetUsers = $this->getUsersOnSheet($sheet);
 
@@ -374,5 +374,22 @@ class HappeningParticipationRepository implements HappeningParticipationReposito
             ]);
 
         return $queryBuilder->getQuery()->getOneOrNullResult();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function findByHappening(Happening $happening): array
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('participation')
+            ->from(HappeningParticipation::class, 'participation')
+            ->where('participation.happening = :happening')
+            ->setParameter('happening', $happening)
+        ;
+
+        return $queryBuilder->getQuery()->getResult();
     }
 }

@@ -46,3 +46,6 @@ Proximum\Vimeet\Domain\Model\Happening:
             targetEntity: Proximum\Vimeet\Domain\Model\Happening\Category
             joinColumn:
                 onDelete: CASCADE
+    manyToMany:
+        types:
+            targetEntity: Proximum\Vimeet\Domain\Model\Type

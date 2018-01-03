@@ -305,6 +305,7 @@ form.happening_create.children.talkings.prototype.children.position.label: Posit
 form.happening_create.children.talkings.prototype.children.speaker.label: Intervenant
 form.happening_create.children.translations.prototype.children.description.label: Description
 form.happening_create.children.translations.prototype.children.title.label: Titre
+form.happening_create.children.types.label: 'Types ayant accès'
 form.happening_update.children.begin.label: 'Date de début'
 form.happening_update.children.category.label: Catégorie
 form.happening_update.children.end.label: 'Date de fin'
@@ -318,6 +319,7 @@ form.happening_update.children.talkings.prototype.children.position.label: Posit
 form.happening_update.children.talkings.prototype.children.speaker.label: Intervenant
 form.happening_update.children.translations.prototype.children.description.label: Description
 form.happening_update.children.translations.prototype.children.title.label: Titre
+form.happening_update.children.types.label: 'Types ayant accès'
 form.import_mapping.children.submit.label: Importer
 form.import_products_and_template.children.event.label: 'Evénement à importer'
 form.import_products_and_template.children.submit.label: Importer
@@ -429,6 +431,9 @@ form.package_update.children.options.children.labels.label: 'Libellé de l''éta
 form.package_update.children.participantAndPlanning.children.enabled.label: Activé
 form.package_update.children.participantAndPlanning.children.labels.label: 'Libellé de l''étape'
 form.package_update.children.participantAndPlanning.children.participant.label: Participant
+form.package_update.children.participantAndPlanning.children.participants.label: 'Produit(s) Participant'
+form.package_update.children.participantAndPlanning.children.participants.label_add: 'Ajouter un produit participant'
+form.package_update.children.participantAndPlanning.children.participants.label_delete: '&times;'
 form.package_update.children.participantAndPlanning.children.planning.label: Planning
 form.package_update.children.plans.children.enabled.label: Activé
 form.package_update.children.plans.children.labels.label: 'Libellé de l''étape'
@@ -800,6 +805,38 @@ form.tip_event_affect.children.preview.label: 'Aperçu du message'
 form.tip_event_affect.children.submit.label: Affecter
 form.tip_event_affect.children.tip.label: 'Message d''aide'
 form.tip_event_affect.children.types.label: 'Types de participation'
+form.tip_event_create.children.onAgenda.label: 'Visible sur l''agenda'
+form.tip_event_create.children.onCatalog.label: 'Visible sur le catalogue'
+form.tip_event_create.children.onConfirmationPhone.label: 'Confirmation de planning et de téléphone (conditionne l''affichage du formulaire de validation du numéro de téléphone)'
+form.tip_event_create.children.onMeetingManagement.label: 'Visible sur la gestion des rendez-vous'
+form.tip_event_create.children.onPrintPlanning.label: 'Visible sur l''impression des plannings'
+form.tip_event_create.children.onProgram.label: 'Visible sur le programme'
+form.tip_event_create.children.onSheet.label: 'Visible sur la fiche de présentation'
+form.tip_event_create.children.submit.label: Sauvegarder
+form.tip_event_create.children.title.label: 'Libellé back office'
+form.tip_event_create.children.translations.label_add: 'Ajouter une traduction'
+form.tip_event_create.children.translations.label_delete: 'Supprimer la traduction'
+form.tip_event_create.children.translations.prototype.children.content.label: Contenu
+form.tip_event_create.children.translations.prototype.children.locale.label: Langue
+form.tip_event_create.children.translations.prototype.children.title.label: Libellé
+form.tip_event_create.children.translations.prototype.label: Traductions
+form.tip_event_create.children.types.label: 'Types assignés'
+form.tip_event_update.children.onAgenda.label: 'Visible sur l''agenda'
+form.tip_event_update.children.onCatalog.label: 'Visible sur le catalogue'
+form.tip_event_update.children.onConfirmationPhone.label: 'Confirmation de planning et de téléphone (conditionne l''affichage du formulaire de validation du numéro de téléphone)'
+form.tip_event_update.children.onMeetingManagement.label: 'Visible sur la gestion des rendez-vous'
+form.tip_event_update.children.onPrintPlanning.label: 'Visible sur l''impression des plannings'
+form.tip_event_update.children.onProgram.label: 'Visible sur le programme'
+form.tip_event_update.children.onSheet.label: 'Visible sur la fiche de présentation'
+form.tip_event_update.children.submit.label: 'Mettre à jour'
+form.tip_event_update.children.title.label: 'Libellé back office'
+form.tip_event_update.children.translations.label_add: 'Ajouter une traduction'
+form.tip_event_update.children.translations.label_delete: 'Supprimer la traduction'
+form.tip_event_update.children.translations.prototype.children.content.label: Contenu
+form.tip_event_update.children.translations.prototype.children.locale.label: Langue
+form.tip_event_update.children.translations.prototype.children.title.label: Libellé
+form.tip_event_update.children.translations.prototype.label: Traductions
+form.tip_event_update.children.types.label: 'Types assignés'
 form.tip_update.children.onAgenda.label: 'Visible sur l''agenda'
 form.tip_update.children.onCatalog.label: 'Visible sur le catalogue'
 form.tip_update.children.onConfirmationPhone.label: 'Confirmation de planning et de téléphone (conditionne l''affichage du formulaire de validation du numéro de téléphone)'
@@ -815,40 +852,6 @@ form.tip_update.children.translations.prototype.children.content.label: Contenu
 form.tip_update.children.translations.prototype.children.locale.label: Langue
 form.tip_update.children.translations.prototype.children.title.label: Libellé
 form.tip_update.children.translations.prototype.label: Traductions
-form.tip_event_create.children.title.label: 'Libellé back office'
-form.tip_event_create.children.onAgenda.label: 'Visible sur l''agenda'
-form.tip_event_create.children.onCatalog.label: 'Visible sur le catalogue'
-form.tip_event_create.children.onConfirmationPhone.label: 'Confirmation de planning et de téléphone (conditionne l''affichage du formulaire de validation du numéro de téléphone)'
-form.tip_event_create.children.onMeetingManagement.label: 'Visible sur la gestion des rendez-vous'
-form.tip_event_create.children.onPrintPlanning.label: 'Visible sur l''impression des plannings'
-form.tip_event_create.children.onProgram.label: 'Visible sur le programme'
-form.tip_event_create.children.onSheet.label: 'Visible sur la fiche de présentation'
-form.tip_event_create.children.submit.label: 'Sauvegarder'
-form.tip_event_create.children.title.label: 'Libellé back office'
-form.tip_event_create.children.types.label: 'Types assignés'
-form.tip_event_create.children.translations.label_add: 'Ajouter une traduction'
-form.tip_event_create.children.translations.label_delete: 'Supprimer la traduction'
-form.tip_event_create.children.translations.prototype.children.content.label: Contenu
-form.tip_event_create.children.translations.prototype.children.locale.label: Langue
-form.tip_event_create.children.translations.prototype.children.title.label: Libellé
-form.tip_event_create.children.translations.prototype.label: Traductions
-form.tip_event_update.children.title.label: 'Libellé back office'
-form.tip_event_update.children.onAgenda.label: 'Visible sur l''agenda'
-form.tip_event_update.children.onCatalog.label: 'Visible sur le catalogue'
-form.tip_event_update.children.onConfirmationPhone.label: 'Confirmation de planning et de téléphone (conditionne l''affichage du formulaire de validation du numéro de téléphone)'
-form.tip_event_update.children.onMeetingManagement.label: 'Visible sur la gestion des rendez-vous'
-form.tip_event_update.children.onPrintPlanning.label: 'Visible sur l''impression des plannings'
-form.tip_event_update.children.onProgram.label: 'Visible sur le programme'
-form.tip_event_update.children.onSheet.label: 'Visible sur la fiche de présentation'
-form.tip_event_update.children.submit.label: 'Mettre à jour'
-form.tip_event_update.children.title.label: 'Libellé back office'
-form.tip_event_update.children.types.label: 'Types assignés'
-form.tip_event_update.children.translations.label_add: 'Ajouter une traduction'
-form.tip_event_update.children.translations.label_delete: 'Supprimer la traduction'
-form.tip_event_update.children.translations.prototype.children.content.label: Contenu
-form.tip_event_update.children.translations.prototype.children.locale.label: Langue
-form.tip_event_update.children.translations.prototype.children.title.label: Libellé
-form.tip_event_update.children.translations.prototype.label: Traductions
 form.transaction_find.children.beginDate.label: 'Date de début'
 form.transaction_find.children.date.placeholder: JJ/MM/AAAA
 form.transaction_find.children.endDate.label: 'Date de fin'

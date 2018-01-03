@@ -116,7 +116,7 @@ class ParticipantProductViewQueryHandlerTest extends TestCase
 
         $package = new Package($event, 'Package', $date);
         $package->setPlans([$plan]);
-        $package->setParticipant($participantProduct);
+        $package->setParticipants([$participantProduct]);
         $package->enable(true, true, false);
 
         $type = new Type($event);

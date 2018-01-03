@@ -91,6 +91,8 @@ class DuplicatorTest extends TestCase
         $option1->isOption()->willReturn(true);
         $option2->isOption()->willReturn(true);
         $option3->isOption()->willReturn(true);
+        $newParticipant->isParticipant()->willReturn(true);
+        $participant->isParticipant()->willReturn(true);
 
         $event    = $this->prophesize(Event::class);
         $newEvent = $this->prophesize(Event::class);
@@ -106,7 +108,7 @@ class DuplicatorTest extends TestCase
             $plan2->reveal()
         ]);
 
-        $package->setParticipant($participant->reveal());
+        $package->setParticipants([$participant->reveal()]);
         $package->setPlanning($planning->reveal());
 
         $packageGroup1 = new PackageGroup($package, 1);
@@ -140,7 +142,7 @@ class DuplicatorTest extends TestCase
             $newPlan1->reveal(),
             $newPlan2->reveal(),
         ]);
-        $expectedPackage->setParticipant($newParticipant->reveal());
+        $expectedPackage->setParticipants([$newParticipant->reveal()]);
         $expectedPackage->setPlanning($newPlanning->reveal());
         $newPackageGroup1 = new PackageGroup($expectedPackage, 1);
         $newPackageGroup2 = new PackageGroup($expectedPackage, 2);

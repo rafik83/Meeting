@@ -68,7 +68,7 @@ class Update
         $this->participantAndPlanning = new Model\ParticipantAndPlanning(
             $participantAndPlanningLabels,
             $package->isParticipantAndPlanningEnabled(),
-            $package->getParticipant(),
+            $package->getParticipants(),
             $package->getPlanning()
         );
         $this->options                = new Model\Options(

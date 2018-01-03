@@ -14,6 +14,7 @@ use Doctrine\ORM\EntityManager;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Happening;
 use Proximum\Vimeet\Domain\Model\Happening\Speaker;
+use Proximum\Vimeet\Domain\Model\Type;
 use Proximum\Vimeet\Domain\Repository\HappeningRepositoryInterface;
 
 class HappeningRepository implements HappeningRepositoryInterface
@@ -121,14 +122,11 @@ class HappeningRepository implements HappeningRepositoryInterface
     }
 
     /**
-     * @param Event                   $event
-     * @param \DateTimeInterface      $day
-     * @param Happening\Category|null $category
-     *
-     * @return Happening[]
+     * {@inheritdoc}
      */
-    public function findByEventAndDayAndCategory(
+    public function findByEventAndTypeAndDayAndCategory(
         Event $event,
+        Type $type,
         \DateTimeInterface $day,
         Happening\Category $category = null
     ) {
@@ -139,6 +137,7 @@ class HappeningRepository implements HappeningRepositoryInterface
             ->createQueryBuilder()
             ->select('happening, translations')
             ->from(Happening::class, 'happening')
+            ->join('happening.types', 'type', 'WITH', 'type = :type')
             ->join(
                 'happening.translations',
                 'translations',
@@ -147,6 +146,7 @@ class HappeningRepository implements HappeningRepositoryInterface
             )
             ->orderBy('happening.begin')
             ->setParameter('event', $event)
+            ->setParameter('type', $type)
             ->setParameter('startDay', sprintf('%s 00:00:00', $date->format('Y-m-d')))
             ->setParameter('endDay', sprintf('%s 00:00:00', $date->modify('+1 day')->format('Y-m-d')));
 

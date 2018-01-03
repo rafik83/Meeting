@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2016 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -14,6 +14,7 @@ use Proximum\Vimeet\Application\Command\Happening\Participate;
 use Proximum\Vimeet\Application\Exception\Happening\NotEnoughtRemainingParticipationsException;
 use Proximum\Vimeet\Application\Exception\Happening\ParticipantNotAvailableException;
 use Proximum\Vimeet\Application\Exception\Happening\ParticipantRequiredException;
+use Proximum\Vimeet\Application\Query\Happening\Participant\ParticipantsAllowedToAccessQuery;
 use Proximum\Vimeet\Domain\Model\Happening;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Participant\ParticipantHelper;
@@ -21,6 +22,7 @@ use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Happening\ParticipateType;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\ParamConverter\EventDomain;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Security\Happening\ParticipationVoter;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Security\SheetVoter;
+use Proximum\Vimeet\Ui\Bundle\EventBundle\ValueResolver\UserDomain;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Form\FormError;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -33,11 +35,17 @@ class HappeningController extends Controller
      * @param EventDomain $eventDomain
      * @param Sheet       $sheet
      * @param Happening   $happening
+     * @param UserDomain  $userDomain
      *
      * @return JsonResponse
      */
-    public function participateAction(Request $request, EventDomain $eventDomain, Sheet $sheet, Happening $happening)
-    {
+    public function participateAction(
+        Request $request,
+        EventDomain $eventDomain,
+        Sheet $sheet,
+        Happening $happening,
+        UserDomain $userDomain
+    ): JsonResponse {
         $event = $eventDomain->getEvent();
 
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
@@ -69,7 +77,7 @@ class HappeningController extends Controller
             }
         }
 
-        $isUserAloneParticipant = ParticipantHelper::isUserAloneParticipant($this->getUser(), $sheet);
+        $isUserAloneParticipant = ParticipantHelper::isUserAloneParticipant($userDomain->getUser(), $sheet);
 
         if ($isUserAloneParticipant) {
             if ($isUpdate) {
@@ -80,6 +88,10 @@ class HappeningController extends Controller
         }
 
         $participants = $sheet->getParticipants()->toArray();
+        $participants = $this
+            ->get('tactician.commandbus.query')
+            ->handle(new ParticipantsAllowedToAccessQuery($happening, $participants))
+        ;
 
         $availableParticipants = $this
             ->get('vimeet_infrastructure.repository.participant_repository')
@@ -103,7 +115,7 @@ class HappeningController extends Controller
         // Case : one participant is current user and no question so no modal
         if ($isParticipationAlone && !$isQuestionAllowed || $isCancelParticipationAlone) {
             try {
-                $participate = new Participate($happening, $sheet, $this->getUser(), $selectedParticipants);
+                $participate = new Participate($happening, $sheet, $userDomain->getUser(), $selectedParticipants);
                 $this->get('tactician.commandbus')->handle($participate);
             } catch (ParticipantNotAvailableException $participantNotAvailableException) {
                 return $this->createJsonResponseWithError('happening.participate.youAreNotAvailable');
@@ -126,7 +138,7 @@ class HappeningController extends Controller
         $participate = new Participate(
             $happening,
             $sheet,
-            $this->getUser(),
+            $userDomain->getUser(),
             $selectedParticipants,
             $previousQuestion
         );
