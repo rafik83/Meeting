@@ -50,7 +50,7 @@ class SelectParticipantAndPlanningHandlerTest extends TestCase
         $package->enable(true, true, true);
         $package->setPlans([$planProduct]);
         $package->setPlanning($planningProduct);
-        $package->setParticipant($participantProduct);
+        $package->setParticipants([$participantProduct]);
         $type->setPackage($package);
 
         $promotionCode    = new PromotionCode($event, 'My promotion code', 'AXYZ', 1, $datetime->modify('+1 month'));
@@ -113,7 +113,7 @@ class SelectParticipantAndPlanningHandlerTest extends TestCase
         $package->enable(true, true, true);
         $package->setPlans([$planProduct]);
         $package->setPlanning($planningProduct);
-        $package->setParticipant($participantProduct);
+        $package->setParticipants([$participantProduct]);
         $type->setPackage($package);
 
         $promotionCode    = new PromotionCode($event, 'My promotion code', 'AXYZ', 1, $datetime->modify('+1 month'));

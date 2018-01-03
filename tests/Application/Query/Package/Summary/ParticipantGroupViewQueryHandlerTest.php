@@ -40,7 +40,7 @@ class ParticipantGroupViewQueryHandlerTest extends TestCase
         $sheet   = SheetFactory::create($event, null, $datetime, $type);
         $product = ProductFactory::create($event, 'participant');
 
-        $package->setParticipant($product);
+        $package->setParticipants([$product]);
         $type->setPackage($package);
 
         $cartRow = new CartRow($sheet, $product, 1);
@@ -86,7 +86,7 @@ class ParticipantGroupViewQueryHandlerTest extends TestCase
         $sheet   = SheetFactory::create($event, null, $datetime, $type);
         $product = ProductFactory::create($event, 'other_than_participant');
 
-        $package->setParticipant($product);
+        $package->setParticipants([$product]);
         $type->setPackage($package);
 
         $cart = new Cart($sheet, [], []);

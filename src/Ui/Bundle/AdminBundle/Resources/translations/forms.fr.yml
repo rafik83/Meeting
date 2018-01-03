@@ -429,6 +429,9 @@ form.package_update.children.options.children.labels.label: 'Libellé de l''éta
 form.package_update.children.participantAndPlanning.children.enabled.label: Activé
 form.package_update.children.participantAndPlanning.children.labels.label: 'Libellé de l''étape'
 form.package_update.children.participantAndPlanning.children.participant.label: Participant
+form.package_update.children.participantAndPlanning.children.participants.label: 'Produit(s) Participant'
+form.package_update.children.participantAndPlanning.children.participants.label_add: 'Ajouter un produit participant'
+form.package_update.children.participantAndPlanning.children.participants.label_delete: '&times;'
 form.package_update.children.participantAndPlanning.children.planning.label: Planning
 form.package_update.children.plans.children.enabled.label: Activé
 form.package_update.children.plans.children.labels.label: 'Libellé de l''étape'

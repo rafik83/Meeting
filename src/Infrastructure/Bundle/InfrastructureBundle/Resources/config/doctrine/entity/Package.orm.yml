@@ -22,10 +22,6 @@ Proximum\Vimeet\Domain\Model\Package:
             targetEntity: Proximum\Vimeet\Domain\Model\Event
             joinColumn:
                 onDelete: CASCADE
-        participant:
-            targetEntity: Proximum\Vimeet\Domain\Model\Product
-            joinColumn:
-                onDelete: SET NULL
         planning:
             targetEntity: Proximum\Vimeet\Domain\Model\Product
             joinColumn:
@@ -39,6 +35,12 @@ Proximum\Vimeet\Domain\Model\Package:
             orphanRemoval: true
         planRanks:
             targetEntity: Proximum\Vimeet\Domain\Model\PackagePlanRank
+            mappedBy: package
+            cascade: ["persist"]
+            orderBy: { rank: ASC }
+            orphanRemoval: true
+        participantRanks:
+            targetEntity: Proximum\Vimeet\Domain\Model\PackageParticipantRank
             mappedBy: package
             cascade: ["persist"]
             orderBy: { rank: ASC }

@@ -38,12 +38,12 @@ class ParticipantAndPlanningType extends AbstractType
                 'locales'    => $options['event']->getLocales(),
                 'required'   => false,
             ])
-            ->add('participant', ProductChoiceType::class, [
+            ->add('participants', ProductCollectionType::class, [
                 'event'            => $options['event'],
                 'locale'           => $options['locale'],
-                'repositoryMethod' => function (ProductRepositoryInterface $productRepository) use ($options) {
-                    return $productRepository->findByEventAndTypes($options['event'], [Product::TYPE_PARTICIPANT]);
-                },
+                'product_types'    => [Product::TYPE_PARTICIPANT],
+                'collection_group' => 'participants',
+                'error_bubbling'   => false,
                 'required'         => true,
             ])
             ->add('planning', ProductChoiceType::class, [
@@ -52,7 +52,7 @@ class ParticipantAndPlanningType extends AbstractType
                 'repositoryMethod' => function (ProductRepositoryInterface $productRepository) use ($options) {
                     return $productRepository->findByEventAndTypes($options['event'], [Product::TYPE_PLANNING]);
                 },
-                'required'         => false,
+                'required' => false,
             ])
         ;
     }
