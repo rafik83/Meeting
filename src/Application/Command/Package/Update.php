@@ -10,40 +10,29 @@
 
 namespace Proximum\Vimeet\Application\Command\Package;
 
+use Proximum\Vimeet\Application\Command\Command;
 use Proximum\Vimeet\Application\Command\Package\Model\Group;
 use Proximum\Vimeet\Domain\Model\Package;
 use Proximum\Vimeet\Domain\Model\PackageGroup;
 
-class Update
+class Update implements Command
 {
-    /**
-     * @var Package
-     */
+    /** @var Package */
     public $package;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     public $title;
 
-    /**
-     * @var Model\Plans
-     */
+    /** @var Model\Plans */
     public $plans;
 
-    /**
-     * @var Model\ParticipantAndPlanning
-     */
+    /** @var Model\ParticipantAndPlanning */
     public $participantAndPlanning;
 
-    /**
-     * @var Model\Options
-     */
+    /** @var Model\Options */
     public $options;
 
     /**
-     * Update constructor.
-     *
      * @param Package $package
      */
     public function __construct(Package $package)

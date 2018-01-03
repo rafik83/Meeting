@@ -219,3 +219,15 @@ services:
             - '@adapter.authorization_checker'
             - '@Proximum\Vimeet\Infrastructure\Adapter\QueryBus'
             - '@templating'
+
+    #
+    # Package
+    #
+    Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Package\UpdateAction:
+        arguments:
+            - '@adapter.authorization_checker'
+            - '@form.factory'
+            - '@Proximum\Vimeet\Infrastructure\Adapter\CommandBus'
+            - '@session.flash_bag'
+            - '@templating'
+            - '@adapter.router'

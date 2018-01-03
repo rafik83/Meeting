@@ -12,11 +12,9 @@ namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller;
 
 use Proximum\Vimeet\Application\Command\Package\Create;
 use Proximum\Vimeet\Application\Command\Package\Duplicate;
-use Proximum\Vimeet\Application\Command\Package\Update;
 use Proximum\Vimeet\Domain\Model\Package;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Package\CreateType;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Package\DuplicateType;
-use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Package\UpdateType;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\ValueResolver\AdminDomain;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -58,43 +56,6 @@ class PackageController extends Controller
         return $this->render('AdminBundle:Package:list.html.twig', [
             'packages' => $packages,
             'form'     => $form->createView(),
-        ]);
-    }
-
-    /**
-     * @param Request     $request
-     * @param Package     $package
-     * @param AdminDomain $adminDomain
-     *
-     * @return RedirectResponse|Response
-     */
-    public function updateAction(Request $request, Package $package, AdminDomain $adminDomain)
-    {
-        $this->denyAccessUnlessGranted('ROLE_ALLOWED_TO_ORGANIZE');
-
-        if (!$this->isGranted('ROLE_SUPER_ADMIN') && !$adminDomain->getAdmin()->hasEvent($package->getEvent())) {
-            throw $this->createAccessDeniedException('You are not allowed to edit this purchasing funnel.');
-        }
-
-        $update = new Update($package);
-        $form   = $this->createForm(UpdateType::class, $update, [
-            'event'  => $package->getEvent(),
-            'locale' => $package->getEvent()->getAvailableLocale($request->getLocale()),
-            'submit' => true,
-        ]);
-
-        if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
-            $this->get('tactician.commandbus')->handle($update);
-            $this->addFlash('success', 'flash.admin.template.package.update.success');
-
-            return $this->redirectToRoute('admin_package_update', [
-                'package' => $package->getId(),
-            ]);
-        }
-
-        return $this->render('AdminBundle:Package:update.html.twig', [
-            'form'  => $form->createView(),
-            'event' => $package->getEvent(),
         ]);
     }
 
