@@ -57,6 +57,7 @@ class Update implements Command
         $this->participantAndPlanning = new Model\ParticipantAndPlanning(
             $participantAndPlanningLabels,
             $package->isParticipantAndPlanningEnabled(),
+            $package->getMaxParticipant(),
             $package->getParticipants(),
             $package->getPlanning()
         );

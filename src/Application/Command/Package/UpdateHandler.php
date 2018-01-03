@@ -33,6 +33,7 @@ class UpdateHandler
         $update->package
             ->setTitle($update->title)
             ->enable($update->plans->enabled, $update->participantAndPlanning->enabled, $update->options->enabled)
+            ->setMaxParticipant($update->participantAndPlanning->maxParticipant)
             ->setPlans(array_values($update->plans->plans))
             ->setParticipants($update->participantAndPlanning->participants)
             ->setGroups($update->options->getGroupOptions(), $update->options->getGroupLabels())

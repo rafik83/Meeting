@@ -326,6 +326,18 @@ class Package
     }
 
     /**
+     * @param int|null $maxParticipant
+     *
+     * @return Package
+     */
+    public function setMaxParticipant($maxParticipant): Package
+    {
+        $this->maxParticipant = $maxParticipant;
+
+        return $this;
+    }
+
+    /**
      * @param Product $plan
      *
      * @return bool
