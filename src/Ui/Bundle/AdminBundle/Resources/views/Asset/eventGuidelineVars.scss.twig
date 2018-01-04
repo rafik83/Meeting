@@ -52,5 +52,5 @@ $color-highlighted: {{ colorHighLighted }};
 }
 
 body {
-  background: {% if backgroundImage %}url({{ backgroundImage }}) no-repeat fixed{% endif %} {{ backgroundColor ? : 'white' }};
+  background: {% if backgroundImage %}url({{ backgroundImage }}) no-repeat fixed center{% endif %} {{ backgroundColor ? : 'white' }};
 }
