@@ -103,10 +103,12 @@ class Cart
      *
      * @param Order $order
      *
-     * @return Cart
+     * @deprecated
      */
     public function resolveParticipantsQuantity(Order $order = null)
     {
+        return;
+
         $orderParticipant            = 0;
         $includedParticipantQuantity = 0;
 

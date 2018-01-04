@@ -75,9 +75,12 @@ class CartManager
 
     /**
      * @param Sheet $sheet
+     *
+     * @deprecated
      */
     public function updateParticipantsQuantity(Sheet $sheet)
     {
+        return;
         $cart = $this->getCart($sheet, null);
 
         if ($sheet->hasNotCancelledOrders()) {

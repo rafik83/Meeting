@@ -434,6 +434,8 @@ class Sheet implements TraceableInterface
 
     /**
      * @return Product
+     *
+     * @deprecated
      */
     public function getPackageParticipant()
     {

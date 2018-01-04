@@ -15,23 +15,18 @@ use Proximum\Vimeet\Application\Event\Package\StepDoneEvent;
 use Proximum\Vimeet\Application\Exception\Package\PackageNotFoundException;
 use Proximum\Vimeet\Domain\Cart\CartManager;
 use Proximum\Vimeet\Domain\Order\Merger;
+use Proximum\Vimeet\Domain\Repository\ParticipantRepositoryInterface;
 use Proximum\Vimeet\Infrastructure\Adapter\DelayedEventDispatcher;
 
 class SelectParticipantAndPlanningHandler
 {
-    /**
-     * @var CartManager
-     */
+    /** @var CartManager */
     private $cartManager;
 
-    /**
-     * @var Merger
-     */
+    /** @var Merger */
     private $merger;
 
-    /**
-     * @var DelayedEventDispatcher
-     */
+    /** @var DelayedEventDispatcher */
     private $eventDispatcher;
 
     /**
@@ -68,15 +63,37 @@ class SelectParticipantAndPlanningHandler
         $orders = $sheet->getNotCancelledOrders();
 
         // Update participant cart row
-        if (count($orders) > 0) {
-            $order = $this->merger->merge($orders);
+//        if (count($orders) > 0) {
+//            $order = $this->merger->merge($orders);
+//
+//            if (null !== $order) {
+//                $cart->resolveParticipantsQuantity($order, $selectParticipantAndPlanning->participantsProduct);
+//            }
+//        } else {
+//            $cart->resolveParticipantsQuantity();
+//        }
+        $availableParticipantProductsById = [];
+        $participantProductsQuantityById = [];
 
-            if (null !== $order) {
-                $cart->resolveParticipantsQuantity($order);
-            }
-        } else {
-            $cart->resolveParticipantsQuantity();
+        foreach ($sheet->getType()->getPackage()->getParticipants() as $product) {
+            $availableParticipantProductsById[$product->getId()] = $product;
         }
+
+        foreach ($sheet->getParticipantsArray() as $participant) {
+            if (isset($selectParticipantAndPlanning->participantsProduct[$participant->getId()])
+                && isset($availableParticipantProductsById[$selectParticipantAndPlanning->participantsProduct[$participant->getId()]])
+            ) {
+                $productId = $selectParticipantAndPlanning->participantsProduct[$participant->getId()];
+                $participantProductsQuantityById[$productId]++;
+            }
+        }
+
+        foreach ($participantProductsQuantityById as $productId => $quantity) {
+            $cart->setProduct($availableParticipantProductsById[$productId], $quantity);
+        }
+
+
+
 
         if (!$package->getPlanning()) {
             return;
