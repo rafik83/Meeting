@@ -466,7 +466,7 @@ class Configuration
     /**
      * @return null|string
      */
-    public function getBackgroundImage()
+    public function getBackgroundImage(): ?string
     {
         return $this->backgroundImage;
     }
@@ -474,7 +474,7 @@ class Configuration
     /**
      * @param null|string $backgroundImage
      */
-    public function setBackgroundImage(?string $backgroundImage)
+    public function setBackgroundImage(?string $backgroundImage): void
     {
         $this->backgroundImage = $backgroundImage;
     }
@@ -482,7 +482,7 @@ class Configuration
     /**
      * @return null|string
      */
-    public function getBackgroundColor()
+    public function getBackgroundColor(): ?string
     {
         return $this->backgroundColor;
     }
@@ -490,7 +490,7 @@ class Configuration
     /**
      * @param null|string $backgroundColor
      */
-    public function setBackgroundColor(?string $backgroundColor)
+    public function setBackgroundColor(?string $backgroundColor): void
     {
         $this->backgroundColor = $backgroundColor;
     }
@@ -498,7 +498,7 @@ class Configuration
     /**
      * @return bool
      */
-    public function hasBackgroundImage()
+    public function hasBackgroundImage(): bool
     {
         return $this->backgroundImage !== null;
     }

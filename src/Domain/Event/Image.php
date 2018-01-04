@@ -15,7 +15,7 @@ class Image
     /**
      * @return array
      */
-    public static function supportedMimeType()
+    public static function supportedMimeType(): array
     {
         return [
             "image/jpeg",

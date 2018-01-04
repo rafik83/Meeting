@@ -75,7 +75,7 @@ class UpdateHandler
      * @throws DomainAlreadyUsedException
      * @throws GuidelineAssetBuildFailedException
      */
-    public function handle(Update $update)
+    public function handle(Update $update): void
     {
         $colorUpdated     = $update->isColorsUpdated();
         $isLocalesUpdated = $update->isLocalesUpdated();
@@ -144,7 +144,7 @@ class UpdateHandler
     /**
      * @param Update $update
      */
-    private function updateTranslatons(Update $update)
+    private function updateTranslatons(Update $update): void
     {
         // Create missing translation
         foreach ($update->event->getLocales() as $locale) {
@@ -171,7 +171,7 @@ class UpdateHandler
      *
      * @throws GuidelineAssetBuildFailedException
      */
-    private function buildAssets(Event $event)
+    private function buildAssets(Event $event): void
     {
         try {
             $event->setAssetPath($this->guidelinesGenerator->generate($event));
