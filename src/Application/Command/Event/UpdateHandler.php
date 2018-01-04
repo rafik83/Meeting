@@ -79,6 +79,7 @@ class UpdateHandler
     {
         $colorUpdated     = $update->isColorsUpdated();
         $isLocalesUpdated = $update->isLocalesUpdated();
+        $backgroundUpdated = $update->isBackgroundUpdated();
 
         if ($update->domain !== $update->event->getDomain()
             && null !== $this->eventRepository->getEventByDomain($update->domain)
@@ -128,7 +129,7 @@ class UpdateHandler
 
         $this->updateTranslatons($update);
 
-        if ($colorUpdated) {
+        if ($colorUpdated || $backgroundUpdated) {
             $this->buildAssets($event);
         }
 

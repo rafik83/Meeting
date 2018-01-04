@@ -55,3 +55,10 @@ Proximum\Vimeet\Application\Command\Event\Update:
                     fields:
                         description:
                             - NotBlank: ~
+        backgroundColor:
+            - Regex:
+                pattern: '/^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/'
+                message: validators.hexadecimal
+        backgroundImage:
+            - Image:
+                mimeTypes: ["image/jpeg", "image/pjpeg", "image/png", "image/x-png", 'image/svg+xml']

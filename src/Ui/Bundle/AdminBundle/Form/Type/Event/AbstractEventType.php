@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Event;
 
+use Proximum\Vimeet\Domain\Event\Image;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Invoice\Prefix;
 use Proximum\Vimeet\Domain\Repository\Invoice\PrefixRepositoryInterface;
@@ -97,13 +98,7 @@ abstract class AbstractEventType extends AbstractType
             ->add('logo', FileType::class, [
                 'required' => false,
                 'attr'     => [
-                    'accept' => implode(', ', [
-                        "image/jpeg",
-                        "image/pjpeg",
-                        "image/png",
-                        "image/x-png",
-                        'image/svg+xml',
-                    ]),
+                    'accept' => implode(', ', Image::supportedMimeType()),
                 ],
             ])
             ->add('country', CountryType::class)
@@ -121,14 +116,8 @@ abstract class AbstractEventType extends AbstractType
             ])
             ->add('backgroundImage', FileType::class, [
                 'required' => false,
-                'attr'     => [
-                    'accept' => implode(', ', [
-                        "image/jpeg",
-                        "image/pjpeg",
-                        "image/png",
-                        "image/x-png",
-                        'image/svg+xml',
-                    ]),
+                'attr'        => [
+                    'accept' => implode(', ', Image::supportedMimeType()),
                 ],
             ])
             ->add('backgroundColor', TextType::class, [

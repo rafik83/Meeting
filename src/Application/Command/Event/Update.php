@@ -82,4 +82,13 @@ class Update extends AbstractEvent
             $this->locales !== $this->event->getLocales() ||
             $this->fallback !== $this->event->getFallback();
     }
+
+    /**
+     * @return bool
+     */
+    public function isBackgroundUpdated()
+    {
+        return $this->backgroundColor !== $this->event->getConfiguration()->getBackgroundColor()
+            || $this->backgroundImage !== $this->event->getConfiguration()->getBackgroundImage();
+    }
 }
