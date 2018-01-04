@@ -12,6 +12,7 @@ namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Controller;
 
 use Proximum\Vimeet\Application\Command\Package\PromotionCode\Add;
 use Proximum\Vimeet\Application\Command\Package\PromotionCode\Remove;
+use Proximum\Vimeet\Application\Command\Package\Step\AbstractStep;
 use Proximum\Vimeet\Application\Command\Participant\Add as AddParticipant;
 use Proximum\Vimeet\Application\Command\Participant\Remove as RemoveParticipant;
 use Proximum\Vimeet\Application\Exception\Participant\AlreadyLinkedToASheetOfThisEventException;
@@ -38,8 +39,8 @@ use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Participant\RemoveType;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\ParamConverter\EventDomain;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Security\SheetVoter;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormError;
+use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -93,7 +94,7 @@ class PackageController extends Controller
      *
      * @return RedirectResponse|Response
      */
-    public function stepAction(Request $request, EventDomain $eventDomain, Sheet $sheet, $step)
+    public function stepAction(Request $request, EventDomain $eventDomain, Sheet $sheet, int $step)
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
         $this->denyAccessUnlessGranted(SheetVoter::EDIT, $sheet);
@@ -126,10 +127,7 @@ class PackageController extends Controller
         $command = $this->get('components.step.step_command_factory')
             ->create($currentStep->type, $sheet, $currentStep->index);
 
-        $form = $this->createForm($this->stepTypeAssociatedForm($currentStep->type), $command, [
-            'action' => $this->generateUrl('event_package_step', ['sheet' => $sheet->getId(), 'step' => $step]),
-            'sheet'  => $sheet,
-        ]);
+        $form = $this->stepTypeAssociatedForm($currentStep->type, $command, $step, $request->getLocale());
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
             $this->get('tactician.commandbus')->handle($command);
@@ -287,25 +285,45 @@ class PackageController extends Controller
     }
 
     /**
-     * @param $type
+     * @param string       $type
+     * @param AbstractStep $command
+     * @param int          $step
+     * @param string       $locale
      *
-     * @return AbstractType
-     *
-     * @throws \Exception
+     * @return FormInterface
+     * @throw \InvalidArgumentException
      */
-    private static function stepTypeAssociatedForm($type)
-    {
-        $forms = [
-            FunnelStep::TYPE_PLAN                 => PlansType::class,
-            FunnelStep::TYPE_PARTICIPANT_PLANNING => ParticipantAndPlanningType::class,
-            FunnelStep::TYPE_OPTIONS              => OptionsType::class,
-        ];
+    private function stepTypeAssociatedForm(
+        string $type,
+        AbstractStep $command,
+        int $step,
+        string $locale
+    ): FormInterface {
+        $action = $this->generateUrl('event_package_step', ['sheet' => $command->sheet->getId(), 'step' => $step]);
 
-        if (isset($forms[$type])) {
-            return $forms[$type];
-        } else {
-            throw new \Exception(sprintf('Form Package Step type %s not implemented', $type));
+        if (FunnelStep::TYPE_PLAN === $type) {
+            return $this->createForm(PlansType::class, $command, [
+                'action' => $action,
+                'sheet' => $command->sheet,
+            ]);
         }
+
+        if (FunnelStep::TYPE_PARTICIPANT_PLANNING === $type) {
+            return $this->createForm(ParticipantAndPlanningType::class, $command, [
+                'action' => $action,
+                'sheet' => $command->sheet,
+                'locale' => $locale,
+            ]);
+        }
+
+        if (FunnelStep::TYPE_OPTIONS === $type) {
+            return $this->createForm(OptionsType::class, $command, [
+                'action' => $action,
+                'sheet' => $command->sheet,
+            ]);
+        }
+
+        throw new \InvalidArgumentException(sprintf('Form Package Step type %s not implemented', $type));
     }
 
     /**

@@ -20,6 +20,8 @@
                     <td>
                         <h3>product.title</h3>
                         <p>product.description</p>
+
+                        {{ form_widget(form.children[participantView.id]) }}
                     </td>
 
                     <td class="col-md-2">
@@ -64,16 +66,3 @@
         </div>
     </div>
 </section>
-
-
-<div class="modal fade clear-on-hidden-modal {% if displayAddParticipantForm or displayRemoveParticipantForm %}show-modal{% endif %}" id="edit-modal" tabindex="-1" role="dialog" data-placeholder="{{ '<div class="modal-body text-center"><i class="glyphicon glyphicon-refresh spin text-xl"></i></div>'|e }}">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            {% if form_add is defined and displayAddParticipantForm %}
-                {{ include('EventBundle:Participant:add.html.twig', { 'form': form_add, 'label': view.products.participantsView.title, 'sheet': sheet, 'backRoute': 'backToPackage', 'participantProductView': participantProductView }) }}
-            {% elseif form_remove is defined and displayRemoveParticipantForm %}
-                {{ include('EventBundle:Participant:removeFromPackage.html.twig', { 'form': form_remove, 'participants': participants, 'label': view.products.participantsView.title }) }}
-            {% endif %}
-        </div>
-    </div>
-</div>
