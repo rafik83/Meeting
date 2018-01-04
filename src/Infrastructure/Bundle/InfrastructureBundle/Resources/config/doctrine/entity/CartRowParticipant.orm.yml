@@ -1,0 +1,15 @@
+Proximum\Vimeet\Domain\Model\CartRowParticipant:
+    type:  entity
+    table: cart_row_participant
+    id:
+        cartRow:
+            associationKey: true
+        participant:
+            associationKey: true
+    manyToOne:
+        cartRow:
+            targetEntity: Proximum\Vimeet\Domain\Model\CartRow
+            joinColumn:
+                onDelete: CASCADE
+        participant:
+            targetEntity: Proximum\Vimeet\Domain\Model\Participant
