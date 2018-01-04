@@ -88,7 +88,9 @@ class Update extends AbstractEvent
      */
     public function isBackgroundUpdated(): bool
     {
+        $eventBackgroundImage = $this->event->getConfiguration()->getBackgroundImage();
+
         return $this->backgroundColor !== $this->event->getConfiguration()->getBackgroundColor()
-            || $this->backgroundImage !== $this->event->getConfiguration()->getBackgroundImage();
+            || ($this->backgroundImage !== null && $this->backgroundImage !== $eventBackgroundImage);
     }
 }

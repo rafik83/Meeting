@@ -98,7 +98,7 @@ abstract class AbstractEventType extends AbstractType
             ->add('logo', FileType::class, [
                 'required' => false,
                 'attr'     => [
-                    'accept' => implode(', ', Image::supportedMimeType()),
+                    'accept' => implode(', ', Image::SUPPORTED_MIME_TYPE),
                 ],
             ])
             ->add('country', CountryType::class)
@@ -117,7 +117,7 @@ abstract class AbstractEventType extends AbstractType
             ->add('backgroundImage', FileType::class, [
                 'required' => false,
                 'attr'        => [
-                    'accept' => implode(', ', Image::supportedMimeType()),
+                    'accept' => implode(', ', Image::SUPPORTED_MIME_TYPE),
                 ],
             ])
             ->add('backgroundColor', TextType::class, [
