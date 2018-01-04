@@ -21,77 +21,49 @@ use Proximum\Vimeet\Domain\Type\TypeInterface;
  */
 class Type implements WhoInterface, TypeInterface
 {
-    /**
-     * @var int
-     */
+    /** @var int */
     private $id;
 
-    /**
-     * @var int|null
-     */
+    /** @var int|null */
     private $position = 0;
 
-    /**
-     * @var Event
-     */
+    /** @var Event */
     private $event;
 
-    /**
-     * @var ArrayCollection
-     */
+    /** @var ArrayCollection of Admin */
     private $admins;
 
-    /**
-     * @var ArrayCollection
-     */
+    /** @var ArrayCollection of TypeTranslation */
     private $translations;
 
-    /**
-     * @var SheetTemplate
-     */
+    /** @var SheetTemplate */
     private $sheetTemplate;
 
-    /**
-     * @var RegistrationTemplate
-     */
+    /** @var RegistrationTemplate */
     private $registrationTemplate;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     private $previewTemplate = '';
 
-    /**
-     * @var string
-     */
+    /** @var string */
     private $viewTemplate = '';
 
-    /**
-     * @var ArrayCollection
-     */
+    /** @var ArrayCollection of Category */
     private $categories;
 
-    /**
-     * @var ValidationCriteria
-     */
+    /** @var ValidationCriteria */
     private $validationCriteria;
 
-    /**
-     * @var Package
-     */
+    /** @var Package */
     private $package;
 
-    /**
-     * @var bool
-     */
+    /** @var bool */
     private $hidden = false;
 
     /** @var ArrayCollection of PaymentConditions */
     private $paymentConditions;
 
     /**
-     * Type constructor.
-     *
      * @param Event $event
      */
     public function __construct(Event $event)
