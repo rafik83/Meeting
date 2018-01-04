@@ -42,7 +42,6 @@ class Duplicator
             $newType = new Type($event);
             $newType->setPosition($type->getPosition());
             $newType->setHidden($type->isHidden());
-            $newType->setPackage($type->getPackage());
             $newType
                 ->getValidationCriteria()
                 ->setSheetAccepted($type->getValidationCriteria()->isSheetAccepted());
