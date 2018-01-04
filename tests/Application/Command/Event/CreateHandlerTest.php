@@ -68,6 +68,12 @@ class CreateHandlerTest extends TestCase
         $create->organiserName = 'proximum';
         $create->emailTeam     = 'team-project@example.net';
         $create->visible       = true;
+        $create->backgroundColor = '#DDDDDD';
+        $create->backgroundImage = $this
+            ->getMockBuilder(UploadedFile::class)
+            ->enableOriginalConstructor()
+            ->setConstructorArgs([tempnam(sys_get_temp_dir(), ''), 'jpeg'])
+            ->getMock();
 
         // Expected event
         $expectedEvent = new Event(
@@ -86,6 +92,8 @@ class CreateHandlerTest extends TestCase
             true
         );
         $expectedEvent->getConfiguration()->setColors('#FFFFFF', '#000000', '#CCCCCC');
+        $expectedEvent->getConfiguration()->setBackgroundColor('#DDDDDD');
+        $expectedEvent->getConfiguration()->setBackgroundImage('foofoo.jpeg');
         $expectedEvent->getTranslations()->set('fr', new EventTranslation($expectedEvent, 'fr', ''));
         $expectedEvent->getTranslations()->set('en', new EventTranslation($expectedEvent, 'en', ''));
         $expectedEvent->setLogo('toto.jpeg', 'jpeg');
@@ -119,6 +127,9 @@ class CreateHandlerTest extends TestCase
         $fileStorage->upload(Argument::that(function (UploadedFile $uploaded) {
             return true;
         }))->shouldBeCalled()->willReturn('toto.jpeg');
+        $fileStorage->upload(Argument::that(function (UploadedFile $uploaded) {
+            return true;
+        }))->shouldBeCalled()->willReturn('foofoo.jpeg');
         $fileStorage->getExtension(Argument::that(function (UploadedFile $uploaded) {
             return true;
         }))->shouldBeCalled()->willReturn('jpeg');

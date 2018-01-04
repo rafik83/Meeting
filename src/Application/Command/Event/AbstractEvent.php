@@ -101,4 +101,13 @@ abstract class AbstractEvent
 
     /** @var null|Event */
     public $duplicatedFrom;
+
+    /** @var null|UploadedFile */
+    public $backgroundImage;
+
+    /** @var null|string */
+    public $backgroundColor;
+
+    /** @var bool */
+    public $isBackgrounImageToRemove = false;
 }

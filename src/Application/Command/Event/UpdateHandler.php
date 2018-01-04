@@ -11,6 +11,8 @@
 namespace Proximum\Vimeet\Application\Command\Event;
 
 use Proximum\Vimeet\Application\Adapter\FileStorageInterface;
+use Proximum\Vimeet\Application\Command\Event\Configuration\Background\RemoveImage;
+use Proximum\Vimeet\Application\Command\Event\Configuration\Background\RemoveImageHandler;
 use Proximum\Vimeet\Application\Components\Guideline\Generator;
 use Proximum\Vimeet\Application\Event\Event\LocaleChangedEvent;
 use Proximum\Vimeet\Application\Event\Events;
@@ -43,22 +45,28 @@ class UpdateHandler
      */
     private $eventDispatcher;
 
+    /** @var RemoveImageHandler */
+    private $removeImageHandler;
+
     /**
      * @param EventRepositoryInterface $eventRepository
      * @param Generator                $guidelinesGenerator
      * @param FileStorageInterface     $fileStorage
      * @param EventDispatcherInterface $eventDispatcher
+     * @param RemoveImageHandler       $removeImageHandler
      */
     public function __construct(
         EventRepositoryInterface $eventRepository,
         Generator $guidelinesGenerator,
         FileStorageInterface $fileStorage,
-        EventDispatcherInterface $eventDispatcher
+        EventDispatcherInterface $eventDispatcher,
+        RemoveImageHandler $removeImageHandler
     ) {
         $this->eventRepository     = $eventRepository;
         $this->guidelinesGenerator = $guidelinesGenerator;
         $this->fileStorage         = $fileStorage;
         $this->eventDispatcher     = $eventDispatcher;
+        $this->removeImageHandler = $removeImageHandler;
     }
 
     /**
@@ -95,6 +103,7 @@ class UpdateHandler
             $update->visible
         );
         $event->getConfiguration()->setColors($update->leftColor, $update->rightColor, $update->textColor);
+        $event->getConfiguration()->setBackgroundColor($update->backgroundColor);
 
         $update->event->getConfiguration()->setAnalyticsCode($update->analyticsCode);
 
@@ -104,6 +113,17 @@ class UpdateHandler
             $logoPath      = $this->fileStorage->upload($update->logo);
             $event->setLogo($logoPath, $logoExtension);
             $this->fileStorage->remove($toRemove);
+        }
+
+        if (null !== $update->backgroundImage) {
+            $backgroundImageToRemove  = $event->getConfiguration()->getBackgroundImage();
+            $backGroundImagePath      = $this->fileStorage->upload($update->backgroundImage);
+            $event->getConfiguration()->setBackgroundImage($backGroundImagePath);
+            $this->fileStorage->remove($backgroundImageToRemove);
+        }
+
+        if ($update->isBackgrounImageToRemove) {
+            $this->removeImageHandler->handle(new RemoveImage($event));
         }
 
         $this->updateTranslatons($update);

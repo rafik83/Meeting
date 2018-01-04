@@ -119,6 +119,21 @@ abstract class AbstractEventType extends AbstractType
                     return Intl::getCurrencyBundle()->getCurrencyName($currentChoice, $currentLocale);
                 },
             ])
+            ->add('backgroundImage', FileType::class, [
+                'required' => false,
+                'attr'     => [
+                    'accept' => implode(', ', [
+                        "image/jpeg",
+                        "image/pjpeg",
+                        "image/png",
+                        "image/x-png",
+                        'image/svg+xml',
+                    ]),
+                ],
+            ])
+            ->add('backgroundColor', TextType::class, [
+                'required' => false,
+            ])
             ->add('leftColor', TextType::class)
             ->add('rightColor', TextType::class)
             ->add('textColor', TextType::class)
@@ -128,6 +143,12 @@ abstract class AbstractEventType extends AbstractType
             ->add('emailTeam', EmailType::class, [
                 'required' => false,
             ]);
+
+        if ($event !== null && $event->getConfiguration()->hasBackgroundImage()) {
+            $builder->add('isBackgrounImageToRemove', CheckboxType::class, [
+                'required' => false,
+            ]);
+        }
 
         // default invoicePrefix choice type options
         $invoicePrefixOptions = [

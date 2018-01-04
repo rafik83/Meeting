@@ -71,3 +71,9 @@ Proximum\Vimeet\Domain\Model\Event\Configuration:
         analyticsCode:
             type: string
             nullable: true
+        backgroundImage:
+            type: string
+            nullable: true
+        backgroundColor:
+            type: string
+            nullable: true

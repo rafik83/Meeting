@@ -1,5 +1,16 @@
 {% extends 'EventBundle::base.html.twig' %}
 
+{% set backgroundStyle = "style=" %}
+
+{% if event.configuration.backgroundColor is not null %}
+    {% set backgroundStyle = backgroundStyle ~ "background:" ~ event.configuration.backgroundColor ~ ";" %}
+{% endif %}
+{% if event.configuration.backgroundImage is not null %}
+    {% set backgroundStyle = backgroundStyle ~ "background-image:url('" ~ event.configuration.backgroundImage ~ "');background-repeat:no-repeat;background-attachment:fixed;" %}
+{% endif %}
+
+{% block body_attributes backgroundStyle  %}
+
 {% block body %}
     <div class="wrapper profile">
         {{ render(controller('EventBundle:Navigation:menu', { 'registration': true })) }}

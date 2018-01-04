@@ -13,6 +13,8 @@ namespace Proximum\Vimeet\Tests\Application\Command\Event;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
 use Proximum\Vimeet\Application\Adapter\FileStorageInterface;
+use Proximum\Vimeet\Application\Command\Event\Configuration\Background\RemoveImage;
+use Proximum\Vimeet\Application\Command\Event\Configuration\Background\RemoveImageHandler;
 use Proximum\Vimeet\Application\Command\Event\Update;
 use Proximum\Vimeet\Application\Command\Event\UpdateHandler;
 use Proximum\Vimeet\Application\Components\Guideline\Generator;
@@ -21,6 +23,7 @@ use Proximum\Vimeet\Application\Event\Events;
 use Proximum\Vimeet\Application\Exception\Event\DomainAlreadyUsedException;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\EventTranslation;
+use Proximum\Vimeet\Domain\Model\Invoice\Prefix;
 use Proximum\Vimeet\Domain\Repository\EventRepositoryInterface;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
@@ -28,13 +31,41 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 class UpdateHandlerTest extends TestCase
 {
-    public function testHandle()
+    /** @var RemoveImageHandler */
+    private $removeImageHandler;
+
+    /** @var Event */
+    private $event;
+
+    /** @var Prefix */
+    private $prefix;
+
+    /** @var EventRepositoryInterface */
+    private $eventRepository;
+
+    /** @var Generator */
+    private $guidelineGenerator;
+
+    /** @var FileStorageInterface */
+    private $fileStorage;
+
+    /** @var EventDispatcherInterface */
+    private $eventDispatcher;
+
+    /** @var UpdateHandler */
+    private $handler;
+
+    public function setUp()
     {
-        // Actual event
-        $event  = EventFactory::createEvent();
-        $prefix = EventFactory::createInvoicePrefix();
-        $event->getConfiguration()->setColors('#111111', '#BBBBBB', '#333333');
-        $event->update(
+        $this->removeImageHandler = $this->prophesize(RemoveImageHandler::class);
+        $this->event              = EventFactory::createEvent();
+        $this->prefix             = EventFactory::createInvoicePrefix();
+        $this->eventRepository    = $this->prophesize(EventRepositoryInterface::class);
+        $this->guidelineGenerator = $this->prophesize(Generator::class);
+        $this->fileStorage        = $this->prophesize(FileStorageInterface::class);
+        $this->eventDispatcher    = $this->prophesize(EventDispatcherInterface::class);
+
+        $this->event->update(
             'foobar',
             ['fr', 'en'],
             'fr',
@@ -46,12 +77,30 @@ class UpdateHandlerTest extends TestCase
             'old.vimeet.proximum.dev',
             'oldProximum',
             'team-project@example.net',
-            $prefix,
+            $this->prefix,
             true
         );
-        $event->getTranslations()->set('fr', new EventTranslation($event, 'fr', 'Bonjour'));
-        $event->getTranslations()->set('en', new EventTranslation($event, 'en', 'Hello'));
+
+        $this->event->getTranslations()->set('fr', new EventTranslation($this->event, 'fr', 'Bonjour'));
+        $this->event->getTranslations()->set('en', new EventTranslation($this->event, 'en', 'Hello'));
+
+        $this->handler = new UpdateHandler(
+            $this->eventRepository->reveal(),
+            $this->guidelineGenerator->reveal(),
+            $this->fileStorage->reveal(),
+            $this->eventDispatcher->reveal(),
+            $this->removeImageHandler->reveal()
+        );
+    }
+
+    public function testHandle()
+    {
+        // Actual event
+        $event = $this->event;
+        $prefix = $this->prefix;
+        $event->getConfiguration()->setColors('#111111', '#BBBBBB', '#333333');
         $event->setLogo('here.jpeg', 'jpeg');
+        $event->getConfiguration()->setBackgroundImage('tutu.jpeg');
 
         // Update command
         $update                = new Update($event);
@@ -82,6 +131,12 @@ class UpdateHandlerTest extends TestCase
         $update->invoicePrefix = $prefix;
         $update->analyticsCode = 'analyticsCode';
         $update->visible       = false;
+        $update->backgroundImage = $this
+            ->getMockBuilder(UploadedFile::class)
+            ->enableOriginalConstructor()
+            ->setConstructorArgs([tempnam(sys_get_temp_dir(), ''), 'jpeg'])
+            ->getMock();
+        $update->backgroundColor = '#CCCCCC';
 
         // Expected event
         $expectedEvent  = EventFactory::createEvent();
@@ -108,57 +163,83 @@ class UpdateHandlerTest extends TestCase
         $expectedEvent
             ->getConfiguration()
             ->setAnalyticsCode('analyticsCode');
+        $expectedEvent->getConfiguration()->setBackgroundImage('tata.jpeg');
+        $expectedEvent->getConfiguration()->setBackgroundColor('#CCCCCC');
 
         // Mock
-        $eventRepository = $this->prophesize(EventRepositoryInterface::class);
-        $eventRepository->set($expectedEvent)->shouldBeCalled();
-        $eventRepository->getEventByDomain('hello.vimeet.proximum.dev')->shouldBeCalled()->willReturn(null);
-        $guidelineGenerator = $this->prophesize(Generator::class);
-        $guidelineGenerator->generate($event)->shouldBeCalled();
-        $fileStorage = $this->prophesize(FileStorageInterface::class);
-        $fileStorage->remove('here.jpeg')->shouldBeCalled();
-        $fileStorage->upload(Argument::that(function (UploadedFile $uploaded) {
+        $this->eventRepository->set(Argument::that(function (Event $event) use ($expectedEvent) {
+            return true;
+        }))->shouldBeCalled();
+        $this->eventRepository->getEventByDomain('hello.vimeet.proximum.dev')->shouldBeCalled()->willReturn(null);
+        $this->guidelineGenerator->generate($event)->shouldBeCalled();
+        $this->fileStorage->remove('here.jpeg')->shouldBeCalled();
+        $this->fileStorage->remove('tutu.jpeg')->shouldBeCalled();
+        $this->fileStorage->upload(Argument::that(function (UploadedFile $uploaded) {
             return true;
         }))->shouldBeCalled()->willReturn('toto.jpeg');
-        $fileStorage->getExtension(Argument::that(function (UploadedFile $uploaded) {
+        $this->fileStorage->upload(Argument::that(function (UploadedFile $uploaded) {
+            return true;
+        }))->shouldBeCalled()->willReturn('tata.jpeg');
+        $this->fileStorage->getExtension(Argument::that(function (UploadedFile $uploaded) {
             return true;
         }))->shouldBeCalled()->willReturn('jpeg');
 
-        $eventDispatcher = $this->prophesize(EventDispatcherInterface::class);
+        $this->handler->handle($update);
+    }
 
-        // Handle
-        $handler = new UpdateHandler(
-            $eventRepository->reveal(),
-            $guidelineGenerator->reveal(),
-            $fileStorage->reveal(),
-            $eventDispatcher->reveal()
+    public function testHandleRemoveBackgroundImage()
+    {
+        $event = $this->event;
+        $event->getConfiguration()->setBackgroundImage('tutu.jpeg');
+
+        $update                = new Update($event);
+        $update->title         = 'barfoo';
+        $update->locales       = ['fr', 'en'];
+        $update->fallback      = 'en';
+        $update->currency      = 'USD';
+        $update->logo          = $this
+            ->getMockBuilder(UploadedFile::class)
+            ->enableOriginalConstructor()
+            ->setConstructorArgs([tempnam(sys_get_temp_dir(), ''), 'jpeg'])
+            ->getMock();
+        $update->domain        = 'hello.vimeet.proximum.dev';
+        $update->timeZone      = 'Europe/Paris';
+        $update->organiserName = 'proximum';
+        $update->emailTeam     = 'team-event@example.net';
+        $update->invoicePrefix = $this->prefix;
+        $update->analyticsCode = 'analyticsCode';
+        $update->visible       = false;
+        $update->isBackgrounImageToRemove = true;
+
+        $expectedEvent  = $this->event;
+        $expectedPrefix = $this->prefix;
+        $expectedEvent->update(
+            'barfoo',
+            ['fr', 'en'],
+            'en',
+            Event::VAT_MODE_ATI,
+            20,
+            'FR',
+            'USD',
+            'Europe/Paris',
+            'hello.vimeet.proximum.dev',
+            'proximum',
+            'team-event@example.net',
+            $expectedPrefix,
+            false
         );
-        $handler->handle($update);
+
+        $this->eventRepository->set($expectedEvent)->shouldBeCalled();
+        $this->removeImageHandler->handle(new RemoveImage($event))->shouldBeCalled();
+
+        $this->handler->handle($update);
     }
 
     public function testHandleAddLocale()
     {
         // Actual event
-        $event  = EventFactory::createEvent();
-        $prefix = EventFactory::createInvoicePrefix();
-        $event->getConfiguration()->setColors('#111111', '#BBBBBB', '#333333');
-        $event->update(
-            'foobar',
-            ['fr', 'en'],
-            'fr',
-            Event::VAT_MODE_ATI,
-            20,
-            'FR',
-            'EUR',
-            'Europe/Madrid',
-            'old.vimeet.proximum.dev',
-            'oldProximum',
-            'team-project@example.net',
-            $prefix,
-            true
-        );
-        $event->getTranslations()->set('fr', new EventTranslation($event, 'fr', 'Bonjour'));
-        $event->getTranslations()->set('en', new EventTranslation($event, 'en', 'Hello'));
+        $event  = $this->event;
+        $prefix = $this->prefix;
 
         // Update command
         $update                = new Update($event);
@@ -207,50 +288,22 @@ class UpdateHandlerTest extends TestCase
         $expectedEvent->getTranslations()->set('de', new EventTranslation($expectedEvent, 'de', ''));
 
         // Mock
-        $eventRepository = $this->prophesize(EventRepositoryInterface::class);
-        $eventRepository->set($expectedEvent)->shouldBeCalled();
-        $eventRepository->getEventByDomain('hello.vimeet.proximum.dev')->shouldBeCalled()->willReturn(null);
-        $guidelineGenerator = $this->prophesize(Generator::class);
-        $guidelineGenerator->generate($event)->shouldBeCalled();
-        $fileStorage = $this->prophesize(FileStorageInterface::class);
+        $this->eventRepository->set($expectedEvent)->shouldBeCalled();
+        $this->eventRepository->getEventByDomain('hello.vimeet.proximum.dev')->shouldBeCalled()->willReturn(null);
+        $this->guidelineGenerator->generate($event)->shouldBeCalled();
 
         $eventLocaleChanged = new LocaleChangedEvent($expectedEvent);
-        $eventDispatcher    = $this->prophesize(EventDispatcherInterface::class);
-        $eventDispatcher->dispatch(Events::EVENT_LOCALE_CHANGED, $eventLocaleChanged)->shouldBeCalled();
+        $this->eventDispatcher->dispatch(Events::EVENT_LOCALE_CHANGED, $eventLocaleChanged)->shouldBeCalled();
 
-        // Handle
-        $handler = new UpdateHandler(
-            $eventRepository->reveal(),
-            $guidelineGenerator->reveal(),
-            $fileStorage->reveal(),
-            $eventDispatcher->reveal()
-        );
-        $handler->handle($update);
+        $this->handler->handle($update);
     }
 
     public function testHandleRemoveLocale()
     {
         // Actual event
-        $event  = EventFactory::createEvent();
-        $prefix = EventFactory::createInvoicePrefix();
+        $event  = $this->event;
+        $prefix = $this->prefix;
         $event->getConfiguration()->setColors('#FFFFFF', '#000000', '#CCCCCC');
-        $event->update(
-            'foobar',
-            ['fr', 'en'],
-            'fr',
-            Event::VAT_MODE_ATI,
-            20,
-            'FR',
-            'EUR',
-            'Europe/Madrid',
-            'old.vimeet.proximum.dev',
-            'oldProximum',
-            'team-project@example.net',
-            $prefix,
-            true
-        );
-        $event->getTranslations()->set('fr', new EventTranslation($event, 'fr', 'Bonjour'));
-        $event->getTranslations()->set('en', new EventTranslation($event, 'en', 'Hello'));
 
         // Update command
         $update                = new Update($event);
@@ -297,51 +350,23 @@ class UpdateHandlerTest extends TestCase
         $expectedEvent->getTranslations()->set('fr', new EventTranslation($expectedEvent, 'fr', 'Bonjour'));
 
         // Mock
-        $eventRepository = $this->prophesize(EventRepositoryInterface::class);
-        $eventRepository->set($expectedEvent)->shouldBeCalled();
-        $eventRepository->getEventByDomain('hello.vimeet.proximum.dev')->shouldBeCalled()->willReturn(null);
-        $guidelineGenerator = $this->prophesize(Generator::class);
-        $guidelineGenerator->generate($event)->shouldNotBeCalled();
-        $fileStorage = $this->prophesize(FileStorageInterface::class);
+        $this->eventRepository->set($expectedEvent)->shouldBeCalled();
+        $this->eventRepository->getEventByDomain('hello.vimeet.proximum.dev')->shouldBeCalled()->willReturn(null);
+        $this->guidelineGenerator->generate($event)->shouldNotBeCalled();
 
         $eventLocaleChanged = new LocaleChangedEvent($expectedEvent);
-        $eventDispatcher    = $this->prophesize(EventDispatcherInterface::class);
-        $eventDispatcher->dispatch(Events::EVENT_LOCALE_CHANGED, $eventLocaleChanged)->shouldBeCalled();
+        $this->eventDispatcher->dispatch(Events::EVENT_LOCALE_CHANGED, $eventLocaleChanged)->shouldBeCalled();
 
-        // Handle
-        $handler = new UpdateHandler(
-            $eventRepository->reveal(),
-            $guidelineGenerator->reveal(),
-            $fileStorage->reveal(),
-            $eventDispatcher->reveal()
-        );
-        $handler->handle($update);
+        $this->handler->handle($update);
     }
 
     public function testHandleWithAlreadyUsedDomain()
     {
         $this->expectException(DomainAlreadyUsedException::class);
         // Actual event
-        $event  = EventFactory::createEvent();
-        $prefix = EventFactory::createInvoicePrefix();
+        $event  = $this->event;
+        $prefix = $this->prefix;
         $event->getConfiguration()->setColors('#111111', '#BBBBBB', '#333333');
-        $event->update(
-            'foobar',
-            ['fr', 'en'],
-            'fr',
-            Event::VAT_MODE_ATI,
-            20,
-            'FR',
-            'EUR',
-            'Europe/Madrid',
-            'old.vimeet.proximum.dev',
-            'oldProximum',
-            'team-project@example.net',
-            $prefix,
-            true
-        );
-        $event->getTranslations()->set('fr', new EventTranslation($event, 'fr', 'Bonjour'));
-        $event->getTranslations()->set('en', new EventTranslation($event, 'en', 'Hello'));
         $event->setLogo('here.jpg', 'jpg');
 
         // Update command
@@ -392,25 +417,13 @@ class UpdateHandlerTest extends TestCase
         $expectedEvent->setLogo('toto.jpeg', 'jpeg');
 
         // Mock
-        $eventRepository = $this->prophesize(EventRepositoryInterface::class);
-        $eventRepository->set($expectedEvent)->shouldNotBeCalled();
-        $eventRepository->getEventByDomain('hello.vimeet.proximum.dev')->shouldBeCalled()
+        $this->eventRepository->set($expectedEvent)->shouldNotBeCalled();
+        $this->eventRepository->getEventByDomain('hello.vimeet.proximum.dev')->shouldBeCalled()
             ->willReturn(EventFactory::createEvent());
-        $guidelineGenerator = $this->prophesize(Generator::class);
-        $guidelineGenerator->generate($event)->shouldNotBeCalled();
-        $fileStorage = $this->prophesize(FileStorageInterface::class);
-        $fileStorage->remove('here.jpg')->shouldNotBeCalled();
-        $fileStorage->upload('shouldBeUploadFile')->shouldNotBeCalled();
+        $this->guidelineGenerator->generate($event)->shouldNotBeCalled();
+        $this->fileStorage->remove('here.jpg')->shouldNotBeCalled();
+        $this->fileStorage->upload('shouldBeUploadFile')->shouldNotBeCalled();
 
-        $eventDispatcher = $this->prophesize(EventDispatcherInterface::class);
-
-        // Handle
-        $handler = new UpdateHandler(
-            $eventRepository->reveal(),
-            $guidelineGenerator->reveal(),
-            $fileStorage->reveal(),
-            $eventDispatcher->reveal()
-        );
-        $handler->handle($update);
+        $this->handler->handle($update);
     }
 }

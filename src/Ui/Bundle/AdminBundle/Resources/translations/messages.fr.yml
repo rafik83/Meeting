@@ -142,6 +142,8 @@ admin.event.billing.configuration.title: 'Configuration des informations de fact
 admin.event.catalog.external.configure: 'Configuration du catalogue public'
 admin.event.configuration.isMeetingRequestLocked: 'Verrouillage des demandes de rendez-vous'
 admin.event.configuration.key_dates.title: 'Date clé de l''événement'
+admin.event.configuration.remove.background_image.link: Supprimer l'image de fond actuelle
+admin.event.configuration.remove.background_image.confirm: 'Confirmer la suppression de l''image de fond ?'
 admin.event.configure_dates: 'Dates clés'
 admin.event.create.from.title: 'Créer un événement à partir de'
 admin.event.create.title: 'Créer un événement'
