@@ -14,6 +14,8 @@ use Proximum\Vimeet\Application\Event\Events;
 use Proximum\Vimeet\Application\Event\Package\StepDoneEvent;
 use Proximum\Vimeet\Application\Exception\Package\PackageNotFoundException;
 use Proximum\Vimeet\Domain\Cart\CartManager;
+use Proximum\Vimeet\Domain\Model\CartRowParticipant;
+use Proximum\Vimeet\Domain\Model\Product;
 use Proximum\Vimeet\Domain\Order\Merger;
 use Proximum\Vimeet\Domain\Repository\ParticipantRepositoryInterface;
 use Proximum\Vimeet\Infrastructure\Adapter\DelayedEventDispatcher;
@@ -79,17 +81,35 @@ class SelectParticipantAndPlanningHandler
             $availableParticipantProductsById[$product->getId()] = $product;
         }
 
+
         foreach ($sheet->getParticipantsArray() as $participant) {
-            if (isset($selectParticipantAndPlanning->participantsProduct[$participant->getId()])
-                && isset($availableParticipantProductsById[$selectParticipantAndPlanning->participantsProduct[$participant->getId()]])
-            ) {
-                $productId = $selectParticipantAndPlanning->participantsProduct[$participant->getId()];
-                $participantProductsQuantityById[$productId]++;
+            if (isset($selectParticipantAndPlanning->participantsProduct[$participant->getId()])) {
+                $product = $selectParticipantAndPlanning->participantsProduct[$participant->getId()];
+
+                if (!$product instanceof Product) {
+                    continue;
+                }
+
+                if (isset($participantProductsQuantityById[$product->getId()])) {
+                    $participantProductsQuantityById[$product->getId()]['quantity']++;
+                    $participantProductsQuantityById[$product->getId()]['participants'][] = $participant;
+                    continue;
+                }
+
+                $participantProductsQuantityById[$product->getId()]['quantity'] = 1;
+                $participantProductsQuantityById[$product->getId()]['participants'] = [];
+                $participantProductsQuantityById[$product->getId()]['participants'][] = $participant;
             }
         }
 
-        foreach ($participantProductsQuantityById as $productId => $quantity) {
-            $cart->setProduct($availableParticipantProductsById[$productId], $quantity);
+        foreach ($participantProductsQuantityById as $productId => $participantProductQuantity) {
+            $cart->setProduct($availableParticipantProductsById[$productId], $participantProductQuantity['quantity']);
+        }
+
+        foreach ($cart->getParticipantRows() as $participantCartRow) {
+            foreach ($participantProductsQuantityById[$participantCartRow->getProduct()->getId()]['participants'] as $participant) {
+                $participantCartRow->addCartRowParticipant(new CartRowParticipant($participantCartRow, $participant));
+            }
         }
 
 

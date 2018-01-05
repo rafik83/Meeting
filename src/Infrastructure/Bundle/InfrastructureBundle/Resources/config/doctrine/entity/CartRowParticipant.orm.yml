@@ -10,6 +10,9 @@ Proximum\Vimeet\Domain\Model\CartRowParticipant:
         cartRow:
             targetEntity: Proximum\Vimeet\Domain\Model\CartRow
             joinColumn:
+                nullable: false
                 onDelete: CASCADE
         participant:
             targetEntity: Proximum\Vimeet\Domain\Model\Participant
+            joinColumn:
+                nullable: false

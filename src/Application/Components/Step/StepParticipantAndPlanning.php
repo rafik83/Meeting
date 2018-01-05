@@ -46,23 +46,34 @@ class StepParticipantAndPlanning
      */
     public function build(Sheet $sheet, $stepIndex)
     {
+        $cart = $this->cartManager->getCart($sheet, $stepIndex);
+
+        if ($sheet->hasNotCancelledOrders()) {
+            $orderMerged = $this->orderMerger->merge($sheet->getNotCancelledOrders());
+        }
+
         $command = new SelectParticipantAndPlanning($sheet, $stepIndex);
-        $cart    = $this->cartManager->getCart($command->sheet, $command->currentStep);
+
+        // Get product by participant
+        foreach ($cart->getParticipantRows() as $cartRow) {
+            foreach ($cartRow->getParticipants() as $participant) {
+                $command->participantsProduct[$participant->getId()] = $cartRow->getProduct();
+            }
+        }
 
         foreach ($command->sheet->getParticipantsArray() as $participant) {
-            $command->participantsProduct[$participant->getId()] = null;
+            if (!isset($command->participantsProduct[$participant->getId()])) {
+                $command->participantsProduct[$participant->getId()] = null;
+            }
         }
 
-        if ($command->sheet->hasNotCancelledOrders()) {
-            $orderMerged = $this->orderMerger->merge($command->sheet->getNotCancelledOrders());
-        }
-
+        // Get Planning quantity
         $planningRow   = $cart->getPlanningRow();
         $orderQuantity = 0;
         $cartQuantity  = 0;
 
         if (isset($orderMerged)) {
-            $planning = $command->sheet->getPackage()->getPlanning();
+            $planning = $sheet->getPackage()->getPlanning();
 
             if ($orderRow = $orderMerged->getRowForProduct($planning)) {
                 $orderQuantity = $orderRow->getQuantity();

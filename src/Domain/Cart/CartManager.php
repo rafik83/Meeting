@@ -65,6 +65,7 @@ class CartManager
      */
     public function getCart(Sheet $sheet, $currentStep = null)
     {
+        // @todo: to optimize : store cart by sheet and step ?
         return new Cart(
             $sheet,
             $this->cartRowRepository->findBySheet($sheet),
@@ -76,7 +77,7 @@ class CartManager
     /**
      * @param Sheet $sheet
      *
-     * @deprecated
+     * @deprecated we must add or remove the choosen participant product when adding or removing participant
      */
     public function updateParticipantsQuantity(Sheet $sheet)
     {

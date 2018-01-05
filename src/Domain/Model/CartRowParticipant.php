@@ -23,4 +23,14 @@ class CartRowParticipant
         $this->cartRow = $cartRow;
         $this->participant = $participant;
     }
+
+    public function getCartRow(): CartRow
+    {
+        return $this->cartRow;
+    }
+
+    public function getParticipant(): Participant
+    {
+        return $this->participant;
+    }
 }

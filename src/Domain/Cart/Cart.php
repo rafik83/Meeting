@@ -168,6 +168,8 @@ class Cart
 
     /**
      * @return null|CartRow
+     *
+     * @deprecated use getParticipantRows()
      */
     public function getParticipantRow()
     {
@@ -178,6 +180,16 @@ class Cart
         }
 
         return null;
+    }
+
+    /**
+     * @return CartRow[]
+     */
+    public function getParticipantRows(): array
+    {
+        return array_filter($this->getRows(), function(CartRow $cartRow) {
+            return $cartRow->getProduct()->isParticipant();
+        });
     }
 
     /**
@@ -211,12 +223,6 @@ class Cart
      */
     public function hasProduct(Product $product)
     {
-        if ($product->isParticipant() || $product->isPlan() || $product->isPlanning()) {
-            return $this->rows->exists(function ($key, CartRow $cartRow) use ($product) {
-                return $cartRow->getProduct()->getType() === $product->getType();
-            });
-        }
-
         return $this->rows->exists(function ($key, CartRow $cartRow) use ($product) {
             return $cartRow->getProduct() === $product;
         });
@@ -258,12 +264,6 @@ class Cart
      */
     public function getRow(Product $product)
     {
-        if ($product->isParticipant() || $product->isPlan() || $product->isPlanning()) {
-            return $this->rows->filter(function (CartRow $cartRow) use ($product) {
-                return $cartRow->getProduct()->getType() === $product->getType();
-            })->first();
-        }
-
         return $this->rows->filter(function (CartRow $cartRow) use ($product) {
             return $cartRow->getProduct() === $product;
         })->first();

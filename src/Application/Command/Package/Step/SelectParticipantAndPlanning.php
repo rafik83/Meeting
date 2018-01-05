@@ -10,6 +10,8 @@
 
 namespace Proximum\Vimeet\Application\Command\Package\Step;
 
+use Proximum\Vimeet\Domain\Model\Product;
+
 class SelectParticipantAndPlanning extends AbstractStep
 {
     /**
@@ -18,7 +20,7 @@ class SelectParticipantAndPlanning extends AbstractStep
     public $planningQuantity = 0;
 
     /**
-     * @var array of participantId => participantProductId
+     * @var array of participantId => Product
      */
     public $participantsProduct;
 
@@ -27,17 +29,17 @@ class SelectParticipantAndPlanning extends AbstractStep
      *
      * @return int Id of participant product
      */
-    public function __get($participantId)
+    public function __get(int $participantId)
     {
         return $this->participantsProduct[$participantId];
     }
 
     /**
-     * @param int $participantId
-     * @param int $participantProductId
+     * @param int     $participantId
+     * @param Product $participantProduct
      */
-    public function __set($participantId, $participantProductId)
+    public function __set(int $participantId, Product $participantProduct)
     {
-        $this->participantsProduct[$participantId] = $participantProductId;
+        $this->participantsProduct[$participantId] = $participantProduct;
     }
 }
