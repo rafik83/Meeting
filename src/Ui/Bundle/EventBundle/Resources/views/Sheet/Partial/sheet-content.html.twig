@@ -68,9 +68,10 @@
                 'isMeetingRequestUpdateLocked': isMeetingRequestUpdateLocked|default(false),
                 'isMeetingRequestClosed': isMeetingRequestClosed|default(false),
                 'isAnsweringMeetingRequestClosed': isAnsweringMeetingRequestClosed|default(false),
-                'isPhoneValidationRequired': isPhoneValidationRequired,
+                'isPhoneValidationRequired': isPhoneValidationRequired|default(false),
                 'phoneValidationLink': link,
                 'hideMeetingRequest': hideMeetingRequest|default(false),
+                'canAddParticipant': canAddParticipant|default(false),
             }, false) }}
         {% endfor %}
     </div>
