@@ -13,11 +13,12 @@ namespace Proximum\Vimeet\Application\Command\Package\Step;
 use Proximum\Vimeet\Application\Event\Events;
 use Proximum\Vimeet\Application\Event\Package\StepDoneEvent;
 use Proximum\Vimeet\Application\Exception\Package\PackageNotFoundException;
+use Proximum\Vimeet\Domain\Cart\Cart;
 use Proximum\Vimeet\Domain\Cart\CartManager;
 use Proximum\Vimeet\Domain\Model\CartRowParticipant;
 use Proximum\Vimeet\Domain\Model\Product;
+use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Order\Merger;
-use Proximum\Vimeet\Domain\Repository\ParticipantRepositoryInterface;
 use Proximum\Vimeet\Infrastructure\Adapter\DelayedEventDispatcher;
 
 class SelectParticipantAndPlanningHandler
@@ -49,7 +50,7 @@ class SelectParticipantAndPlanningHandler
     /**
      * @param SelectParticipantAndPlanning $selectParticipantAndPlanning
      *
-     * @throws \Exception
+     * @throws PackageNotFoundException
      */
     public function handle(SelectParticipantAndPlanning $selectParticipantAndPlanning)
     {
@@ -62,62 +63,29 @@ class SelectParticipantAndPlanningHandler
 
         $cart = $this->cartManager->getCart($sheet, $selectParticipantAndPlanning->currentStep);
 
-        $orders = $sheet->getNotCancelledOrders();
+        $this->handleParticipants($cart, $selectParticipantAndPlanning->participantsProduct);
+        $this->handlePlanning($cart, $selectParticipantAndPlanning->planningQuantity);
+        $this->cartManager->save($cart);
 
-        // Update participant cart row
-//        if (count($orders) > 0) {
-//            $order = $this->merger->merge($orders);
-//
-//            if (null !== $order) {
-//                $cart->resolveParticipantsQuantity($order, $selectParticipantAndPlanning->participantsProduct);
-//            }
-//        } else {
-//            $cart->resolveParticipantsQuantity();
-//        }
-        $availableParticipantProductsById = [];
-        $participantProductsQuantityById = [];
+        $packageStepDone = new StepDoneEvent($selectParticipantAndPlanning->sheet);
+        $this->eventDispatcher->dispatch(Events::PACKAGE_STEP_DONE, $packageStepDone);
+    }
 
-        foreach ($sheet->getType()->getPackage()->getParticipants() as $product) {
-            $availableParticipantProductsById[$product->getId()] = $product;
-        }
+    /**
+     * @param Cart $cart
+     * @param int  $planningQuantity
+     */
+    private function handlePlanning(Cart $cart, int $planningQuantity): void
+    {
+        $sheet = $cart->getSheet();
 
+        $planningProduct = $sheet->getType()->getPackage()->getPlanning();
 
-        foreach ($sheet->getParticipantsArray() as $participant) {
-            if (isset($selectParticipantAndPlanning->participantsProduct[$participant->getId()])) {
-                $product = $selectParticipantAndPlanning->participantsProduct[$participant->getId()];
-
-                if (!$product instanceof Product) {
-                    continue;
-                }
-
-                if (isset($participantProductsQuantityById[$product->getId()])) {
-                    $participantProductsQuantityById[$product->getId()]['quantity']++;
-                    $participantProductsQuantityById[$product->getId()]['participants'][] = $participant;
-                    continue;
-                }
-
-                $participantProductsQuantityById[$product->getId()]['quantity'] = 1;
-                $participantProductsQuantityById[$product->getId()]['participants'] = [];
-                $participantProductsQuantityById[$product->getId()]['participants'][] = $participant;
-            }
-        }
-
-        foreach ($participantProductsQuantityById as $productId => $participantProductQuantity) {
-            $cart->setProduct($availableParticipantProductsById[$productId], $participantProductQuantity['quantity']);
-        }
-
-        foreach ($cart->getParticipantRows() as $participantCartRow) {
-            foreach ($participantProductsQuantityById[$participantCartRow->getProduct()->getId()]['participants'] as $participant) {
-                $participantCartRow->addCartRowParticipant(new CartRowParticipant($participantCartRow, $participant));
-            }
-        }
-
-
-
-
-        if (!$package->getPlanning()) {
+        if (null === $planningProduct) {
             return;
         }
+
+        $orders = $sheet->getNotCancelledOrders();
 
         // Update planning cart row
         $orderPlanningQuantity = 0;
@@ -126,18 +94,61 @@ class SelectParticipantAndPlanningHandler
             $merged = $this->merger->merge($orders);
 
             if ($merged !== null ) {
-                if ($orderRow = $merged->getRowForProduct($package->getPlanning())) {
+                if ($orderRow = $merged->getRowForProduct($planningProduct)) {
                     $orderPlanningQuantity = $orderRow->getQuantity();
                 }
             }
         }
 
-        $quantity = (int) $selectParticipantAndPlanning->planningQuantity - $orderPlanningQuantity;
+        $quantity = $planningQuantity - $orderPlanningQuantity;
 
-        $cart->setProduct($package->getPlanning(), $quantity);
-        $this->cartManager->save($cart);
+        $cart->setProduct($planningProduct, $quantity);
+    }
 
-        $packageStepDone = new StepDoneEvent($selectParticipantAndPlanning->sheet);
-        $this->eventDispatcher->dispatch(Events::PACKAGE_STEP_DONE, $packageStepDone);
+    /***
+     * @param Cart  $cart
+     * @param array $productByParticipantId
+     */
+    private function handleParticipants(Cart $cart, array $productByParticipantId): void
+    {
+        $sheet = $cart->getSheet();
+        $availableParticipantProductsById = [];
+        $participantsByProductId = [];
+
+        foreach ($sheet->getType()->getPackage()->getParticipants() as $product) {
+            $availableParticipantProductsById[$product->getId()] = $product;
+        }
+
+        foreach ($sheet->getParticipantsArray() as $participant) {
+            if (!isset($productByParticipantId[$participant->getId()])) {
+                continue;
+            }
+
+            $product = $productByParticipantId[$participant->getId()];
+
+            if (!$product instanceof Product) {
+                continue;
+            }
+
+            if (isset($participantsByProductId[$product->getId()])) {
+                $participantsByProductId[$product->getId()][] = $participant;
+                continue;
+            }
+
+            $participantsByProductId[$product->getId()] = [];
+            $participantsByProductId[$product->getId()][] = $participant;
+        }
+
+        // @todo: reset cart row for participant product
+
+        foreach ($participantsByProductId as $productId => $participants) {
+            $cart->setProduct($availableParticipantProductsById[$productId], count($participants));
+        }
+
+        foreach ($cart->getParticipantRows() as $participantCartRow) {
+            foreach ($participantsByProductId[$participantCartRow->getProduct()->getId()] as $participant) {
+                $participantCartRow->addCartRowParticipant(new CartRowParticipant($participantCartRow, $participant));
+            }
+        }
     }
 }

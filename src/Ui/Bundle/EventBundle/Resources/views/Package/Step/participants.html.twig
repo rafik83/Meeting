@@ -26,6 +26,8 @@
 
                     <td class="col-md-2">
                         <div class="product">
+                            --
+                            {#
                             {% if participantView.included %}
                                 <h2 class="text-center">{{ 'package.participants.included'|trans }}</h2>
                             {% else %}
@@ -37,6 +39,7 @@
                                     })|html }}
                                 </span>
                             {% endif %}
+                            #}
                         </div>
                     </td>
                 </tr>

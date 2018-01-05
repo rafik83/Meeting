@@ -54,7 +54,7 @@ class StepParticipantAndPlanning
 
         $command = new SelectParticipantAndPlanning($sheet, $stepIndex);
 
-        // Get product by participant
+        // Get product by participant from Cart
         foreach ($cart->getParticipantRows() as $cartRow) {
             foreach ($cartRow->getParticipants() as $participant) {
                 $command->participantsProduct[$participant->getId()] = $cartRow->getProduct();

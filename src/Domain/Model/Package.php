@@ -41,7 +41,7 @@ class Package
     private $participantRanks;
 
     /**
-     * @var Product
+     * @var null|Product
      */
     private $planning;
 
@@ -281,9 +281,9 @@ class Package
     /**
      * Get planning
      *
-     * @return Product
+     * @return null|Product
      */
-    public function getPlanning()
+    public function getPlanning(): ?Product
     {
         return $this->planning;
     }
