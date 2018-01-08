@@ -8,26 +8,31 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Proximum\Vimeet\Application\Query\Catalog;
+namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Handler\Catalog;
 
-use Proximum\Vimeet\Application\Query\Query;
 use Proximum\Vimeet\Domain\Model\Event;
+use Proximum\Vimeet\Domain\Model\Sheet;
 
-class PositionViewQuery implements Query
+class CategoryTypeOrganizationAndPositionViews
 {
     /** @var Event */
     public $event;
+
+    /** @var Sheet */
+    public $sheet;
 
     /** @var string */
     public $locale;
 
     /**
      * @param Event  $event
+     * @param Sheet  $sheet
      * @param string $locale
      */
-    public function __construct(Event $event, $locale)
+    public function __construct(Event $event, Sheet $sheet, string $locale)
     {
-        $this->event  = $event;
+        $this->event = $event;
+        $this->sheet = $sheet;
         $this->locale = $locale;
     }
 }

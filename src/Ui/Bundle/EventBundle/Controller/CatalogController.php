@@ -12,20 +12,13 @@ namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Controller;
 
 use Proximum\Vimeet\Application\Command\Sheet\SheetViewed\Add;
 use Proximum\Vimeet\Application\Exception\Paginator\UnavailableCurrentPageException;
-use Proximum\Vimeet\Application\Query\Agenda\AvailableSheets\AvailableSlotsByParticipantQuery;
 use Proximum\Vimeet\Application\Query\Catalog\CatalogAvailableSlotIdsViewQuery;
-use Proximum\Vimeet\Application\Query\Catalog\CategoryViewQuery;
 use Proximum\Vimeet\Application\Query\Catalog\FilteredFieldsQuery;
 use Proximum\Vimeet\Application\Query\Catalog\KeywordViewQuery;
 use Proximum\Vimeet\Application\Query\Catalog\LocalizationViewQuery;
-use Proximum\Vimeet\Application\Query\Catalog\OrganizationCategoryViewQuery;
-use Proximum\Vimeet\Application\Query\Catalog\PositionViewQuery;
-use Proximum\Vimeet\Application\Query\Catalog\SearchFacet\SearchFacetViewQuery;
-use Proximum\Vimeet\Application\Query\Catalog\TypeViewQuery;
 use Proximum\Vimeet\Application\Query\Sheet\PaginatedCatalogSheetPreviewViewQuery;
 use Proximum\Vimeet\Application\Query\Tip\TipTranslationViewQuery;
 use Proximum\Vimeet\Application\Query\Tip\TipTranslationViewQueryHandler;
-use Proximum\Vimeet\Application\View\Agenda\Slot\AvailableSlotView;
 use Proximum\Vimeet\Application\View\Catalog\FilteredFieldsView;
 use Proximum\Vimeet\Application\View\Catalog\PositionView;
 use Proximum\Vimeet\Domain\Catalog\Catalog;
@@ -42,8 +35,11 @@ use Proximum\Vimeet\Domain\View\Catalog\TypeView;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\EventListener\Security\CatalogAccessEventListener;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Catalog\SearchType;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Handler\Catalog\AvailabilityConfirmationChecker;
+use Proximum\Vimeet\Ui\Bundle\EventBundle\Handler\Catalog\CategoryTypeOrganizationAndPositionViews;
+use Proximum\Vimeet\Ui\Bundle\EventBundle\Handler\Catalog\FilterAvailableSlotAndSpecificSlotChecker;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\ParamConverter\EventDomain;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Security\SheetVoter;
+use Proximum\Vimeet\Ui\Bundle\EventBundle\ValueResolver\UserDomain;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -81,20 +77,22 @@ class CatalogController extends Controller
     }
 
     /**
-     * @param Request       $request
-     * @param EventDomain   $eventDomain
-     * @param Sheet         $sheet
-     * @param UserInterface $user
+     * @param Request     $request
+     * @param EventDomain $eventDomain
+     * @param Sheet       $sheet
+     * @param UserDomain  $userDomain
      *
      * @return Response
      *
      * @throws NotFoundHttpException
      */
-    public function indexAction(Request $request, EventDomain $eventDomain, Sheet $sheet, UserInterface $user)
+    public function indexAction(Request $request, EventDomain $eventDomain, Sheet $sheet, UserDomain $userDomain)
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
         $this->denyAccessUnlessGranted(SheetVoter::EDIT, $sheet);
         $event  = $eventDomain->getEvent();
+        $locale = $request->getLocale();
+        $user   = $userDomain->getUser();
 
         $availabilityConfirmation = $this->get('handler.catalog.availability_confirmation_checker_handler')
             ->handle(new AvailabilityConfirmationChecker(
@@ -109,89 +107,37 @@ class CatalogController extends Controller
             return $this->redirect($availabilityConfirmation->redirectRoute);
         }
 
-        $locale = $request->getLocale();
-
         if (!$sheet->isInCatalog()) {
             throw $this->createAccessDeniedException('Sheet not in catalog');
         }
 
-        $searchFacetsView = $this->get('query.catalog.search_facet_view_query_handler')->handle(
-            new SearchFacetViewQuery($event, $locale)
-        );
+        $categoryTypeOrganizationPositionViews = $this
+            ->get('Proximum\Vimeet\Ui\Bundle\EventBundle\Handler\Catalog\CategoryTypeOrganizationAndPositionViewsHandler')
+            ->handle(new CategoryTypeOrganizationAndPositionViews($event, $sheet, $locale))
+        ;
 
-        $categoryViews = [];
-        $typeViews = [];
-
-        if ($searchFacetsView->hasCategory()) {
-            $visibleCategories = $this
-                ->get('catalog.visible_participation_categories')
-                ->getAllowedCategoriesList($sheet);
-
-            if (empty($visibleCategories)) {
-                return $this->render(
-                    'EventBundle:Catalog:no-visible-category.html.twig',
-                    ['event' => $event, 'sheet' => $sheet]
-                );
-            }
-
-            $categoryViews = $this->get('tactician.commandbus.query')->handle(
-                new CategoryViewQuery($event, $visibleCategories, $locale)
-            );
-        } else {
-            $visibleTypes = $this->get('catalog.visible_participation_types')->getAllowedTypesList($sheet);
-
-            if (empty($visibleTypes)) {
-                return $this->render(
-                    'EventBundle:Catalog:no-visible-type.html.twig',
-                    ['event' => $event, 'sheet' => $sheet]
-                );
-            }
-
-            $typeViews = $this->get('tactician.commandbus.query')->handle(
-                new TypeViewQuery($event, $visibleTypes, $locale)
-            );
+        if ($categoryTypeOrganizationPositionViews->hasEmptyCategoryOrType()) {
+            return $categoryTypeOrganizationPositionViews->response;
         }
 
-        $organizationCategoryViews = $this->get('tactician.commandbus.query')->handle(
-            new OrganizationCategoryViewQuery($event, $locale)
-        );
+        $categoryViews             = $categoryTypeOrganizationPositionViews->categoryViews;
+        $typeViews                 = $categoryTypeOrganizationPositionViews->typeViews;
+        $organizationCategoryViews = $categoryTypeOrganizationPositionViews->organizationCategoryViews;
+        $positionViews             = $categoryTypeOrganizationPositionViews->positionViews;
+        $sheetsToExclude           = [];
+        $availableSlotsIds         = [];
 
-        $positionViews = $this->get('tactician.commandbus.query')->handle(
-            new PositionViewQuery($event, $locale)
-        );
+        $filterAvailableSlotAndSpecificSlotChecker = $this
+            ->get('Proximum\Vimeet\Ui\Bundle\EventBundle\Handler\Catalog\FilterAvailableSlotAndSpecificSlotCheckerHandler')
+            ->handle(new FilterAvailableSlotAndSpecificSlotChecker(
+                $event,
+                $sheet,
+                $user,
+                $request->query->get('slot_id')
+            ))
+        ;
 
         $filters = $this->getDefaultFilters($typeViews, $categoryViews);
-
-        $dDay = $this->get('domain.event.day.dday_guesser')->isItDDayAndFeatureEnabled($event);
-        $isUserParticipant = $sheet->hasUserParticipant($user);
-        $filterAvailableSlot = $dDay && $isUserParticipant;
-        $specificSlot = null;
-
-        $sheetsToExclude = [];
-        $availableSlotsIds = [];
-
-        if (true === $filterAvailableSlot) {
-            /** @var AvailableSlotView[] $availableSlots */
-            $availableSlots = $this->get('tactician.commandbus.query')->handle(
-                new AvailableSlotsByParticipantQuery($event, $sheet->getUserParticipant($user))
-            );
-
-            $filterAvailableSlot = !empty($availableSlots);
-
-            $slotId = $request->query->get('slot_id');
-
-            if ($slotId !== null) {
-                $slot = $this->get('vimeet_infrastructure.repository.meeting_slot_repository')->findById((int) $slotId);
-
-                if ($slot !== null) {
-                    foreach ($availableSlots as $availableSlot) {
-                        if ($availableSlot->id === $slot->getId()) {
-                            $specificSlot = $slot;
-                        }
-                    }
-                }
-            }
-        }
 
         $searchForm = $this->getSearchForm(
             $filters,
@@ -202,8 +148,8 @@ class CatalogController extends Controller
             $event,
             $sheet,
             $locale,
-            $filterAvailableSlot,
-            $specificSlot
+            $filterAvailableSlotAndSpecificSlotChecker->filterAvailableSlot,
+            $filterAvailableSlotAndSpecificSlotChecker->specificSlot
         );
 
         if ($searchForm->handleRequest($request)->isSubmitted() && $searchForm->isValid()) {
@@ -219,7 +165,7 @@ class CatalogController extends Controller
             }
         }
 
-        if ($filterAvailableSlot) {
+        if ($filterAvailableSlotAndSpecificSlotChecker->filterAvailableSlot) {
             $catalogAvailableSlotView = $this
                 ->get('tactician.commandbus.query')
                 ->handle(new CatalogAvailableSlotIdsViewQuery($event, $sheet, $user, $filters))
@@ -268,8 +214,8 @@ class CatalogController extends Controller
             $categoryViews,
             $organizationCategoryViews,
             $positionViews,
-            $filterAvailableSlot,
-            $specificSlot,
+            $filterAvailableSlotAndSpecificSlotChecker->filterAvailableSlot,
+            $filterAvailableSlotAndSpecificSlotChecker->specificSlot,
             $availableSlotsIds,
             $sheetsToExclude
         );

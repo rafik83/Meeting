@@ -219,3 +219,15 @@ services:
             - '@adapter.authorization_checker'
             - '@Proximum\Vimeet\Infrastructure\Adapter\QueryBus'
             - '@templating'
+
+    #
+    # Catalog
+    #
+    Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Catalog\ExportAction:
+        arguments:
+            - '@adapter.authorization_checker'
+            - '@domain.key_dates.checker.catalog_access_checker'
+            - '@form.factory'
+            - '@Proximum\Vimeet\Infrastructure\Adapter\QueryBus'
+            - '@Proximum\Vimeet\Ui\Bundle\EventBundle\Handler\Catalog\CategoryTypeOrganizationAndPositionViewsHandler'
+            - '@Proximum\Vimeet\Ui\Bundle\EventBundle\Handler\Catalog\FilterAvailableSlotAndSpecificSlotCheckerHandler'

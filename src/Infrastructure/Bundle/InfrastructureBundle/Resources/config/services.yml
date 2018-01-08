@@ -2331,6 +2331,10 @@ services:
             - '%infrastructure.print_sheet_path%'
             - '@datetime'
 
+    Proximum\Vimeet\Application\Components\Sheet\Nomenclature\NomenclatureItemsGetter:
+        arguments:
+            - '@template.template_data_factory'
+
     #
     # Sheet Request
     #
@@ -2984,6 +2988,7 @@ services:
             - '@domain.key_dates.checker.meeting_request_access_checker'
             - '@domain.key_dates.checker.answering_meeting_request_access_checker'
             - '@domain.user.phone.validation_required_checker'
+            - '@Proximum\Vimeet\Application\Components\Sheet\Nomenclature\NomenclatureItemsGetter'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Sheet\PaginatedCatalogSheetPreviewViewQuery }
 
@@ -3183,6 +3188,8 @@ services:
         class: Proximum\Vimeet\Application\Query\Catalog\SearchFacet\SearchFacetViewQueryHandler
         arguments:
             - '@vimeet_infrastructure.repository.search_facet'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Catalog\SearchFacet\SearchFacetViewQuery }
 
     query.catalog.search_facet_external_view_query_handler:
         class: Proximum\Vimeet\Application\Query\Catalog\SearchFacet\SearchFacetExternalViewQueryHandler

@@ -8,3 +8,11 @@ services:
             - '@vimeet_infrastructure.repository.sheet_repository'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Happening\Participant\ParticipantsAllowedToAccessQuery }
+
+    Proximum\Vimeet\Application\Query\Catalog\Export\SheetsViewQueryHandler:
+        arguments:
+            - '@adapter.sheet_search_adapter'
+            - '@Proximum\Vimeet\Application\Components\Sheet\Nomenclature\NomenclatureItemsGetter'
+            - '@vimeet_infrastructure.repository.sheet_repository'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Catalog\Export\SheetsViewQuery }
