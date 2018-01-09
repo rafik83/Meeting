@@ -21,11 +21,12 @@ interface ExportableObjectInterface
     public function getKey();
 
     /**
-     * @param array $taggedData is used to return possible value from the taggedData if the field is empty
+     * @param array       $taggedData is used to return possible value from the taggedData if the field is empty
+     * @param string|null $locale
      *
      * @return string
      */
-    public function getExportableContent(array $taggedData = []);
+    public function getExportableContent(array $taggedData = [], string $locale = null);
 
     /**
      * @param string $locale

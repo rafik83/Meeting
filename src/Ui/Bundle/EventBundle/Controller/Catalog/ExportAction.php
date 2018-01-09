@@ -12,13 +12,16 @@ namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Catalog;
 
 use Proximum\Vimeet\Application\Adapter\AuthorizationCheckerAdapterInterface;
 use Proximum\Vimeet\Application\Adapter\QueryBusInterface;
+use Proximum\Vimeet\Application\Adapter\SerializerAdapterInterface;
 use Proximum\Vimeet\Application\Query\Catalog\CatalogAvailableSlotIdsViewQuery;
 use Proximum\Vimeet\Application\Query\Catalog\Export\SheetsViewQuery;
+use Proximum\Vimeet\Application\Serializer\Charset;
 use Proximum\Vimeet\Domain\Catalog\Catalog;
 use Proximum\Vimeet\Domain\Catalog\SearchFields;
 use Proximum\Vimeet\Domain\KeyDates\Checker\CatalogAccessChecker;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\Sheet\Constant;
+use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\HttpFoundation\Response\CsvFileResponse;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Catalog\SearchType;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Handler\Catalog\CategoryTypeOrganizationAndPositionViews;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Handler\Catalog\CategoryTypeOrganizationAndPositionViewsHandler;
@@ -28,7 +31,6 @@ use Proximum\Vimeet\Ui\Bundle\EventBundle\ParamConverter\EventDomain;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Security\SheetVoter;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\ValueResolver\UserDomain;
 use Symfony\Component\Form\FormFactoryInterface;
-use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
@@ -53,6 +55,12 @@ class ExportAction
     /** @var FilterAvailableSlotAndSpecificSlotCheckerHandler */
     private $filterAvailableSlotAndSpecificSlotCheckerHandler;
 
+    /** @var SerializerAdapterInterface */
+    private $serializerAdapter;
+
+    /** @var \DateTimeInterface */
+    private $dateTime;
+
     /**
      * @param AuthorizationCheckerAdapterInterface             $authorizationCheckerAdapter
      * @param CatalogAccessChecker                             $catalogAccessChecker
@@ -60,6 +68,8 @@ class ExportAction
      * @param QueryBusInterface                                $queryBus
      * @param CategoryTypeOrganizationAndPositionViewsHandler  $categoryTypeOrganizationAndPositionViewsHandler
      * @param FilterAvailableSlotAndSpecificSlotCheckerHandler $filterAvailableSlotAndSpecificSlotCheckerHandler
+     * @param SerializerAdapterInterface                       $serializerAdapter
+     * @param \DateTimeInterface                               $dateTime
      */
     public function __construct(
         AuthorizationCheckerAdapterInterface $authorizationCheckerAdapter,
@@ -67,7 +77,9 @@ class ExportAction
         FormFactoryInterface $formFactory,
         QueryBusInterface $queryBus,
         CategoryTypeOrganizationAndPositionViewsHandler $categoryTypeOrganizationAndPositionViewsHandler,
-        FilterAvailableSlotAndSpecificSlotCheckerHandler $filterAvailableSlotAndSpecificSlotCheckerHandler
+        FilterAvailableSlotAndSpecificSlotCheckerHandler $filterAvailableSlotAndSpecificSlotCheckerHandler,
+        SerializerAdapterInterface $serializerAdapter,
+        \DateTimeInterface $dateTime
     ) {
         $this->authorizationCheckerAdapter = $authorizationCheckerAdapter;
         $this->catalogAccessChecker = $catalogAccessChecker;
@@ -75,6 +87,8 @@ class ExportAction
         $this->queryBus = $queryBus;
         $this->categoryTypeOrganizationAndPositionViewsHandler = $categoryTypeOrganizationAndPositionViewsHandler;
         $this->filterAvailableSlotAndSpecificSlotCheckerHandler = $filterAvailableSlotAndSpecificSlotCheckerHandler;
+        $this->serializerAdapter = $serializerAdapter;
+        $this->dateTime = $dateTime;
     }
 
     /**
@@ -83,12 +97,17 @@ class ExportAction
      * @param Sheet       $sheet
      * @param UserDomain  $userDomain
      *
-     * @return JsonResponse
+     * @return CsvFileResponse
      */
-    public function __invoke(Request $request, EventDomain $eventDomain, Sheet $sheet, UserDomain $userDomain)
-    {
+    public function __invoke(
+        Request $request,
+        EventDomain $eventDomain,
+        Sheet $sheet,
+        UserDomain $userDomain
+    ): CsvFileResponse {
         $event = $eventDomain->getEvent();
         $locale = $request->getLocale();
+
         if (!$this->authorizationCheckerAdapter->isGranted('IS_AUTHENTICATED_REMEMBERED')
             || !$this->authorizationCheckerAdapter->isGranted(SheetVoter::EDIT, $sheet)
             || !$sheet->isInCatalog()
@@ -165,15 +184,23 @@ class ExportAction
             [SearchFields::ORDER_BY => Constant::ORDER_BY_ALPHABETICAL]
         );
 
-        $sheets = $this->queryBus->handle(new SheetsViewQuery(
+        $sheetListView = $this->queryBus->handle(new SheetsViewQuery(
             $event,
             $sheet,
             $filters,
             $locale,
             $availableSlotsIds,
-            $sheetsToExclude
+            $sheetsToExclude,
+            empty($categoryViews)
         ));
+        $content = $this->serializerAdapter->serialize($sheetListView, 'csv', [
+            'charset'       => Charset::WINDOWS_1252,
+            'csv_delimiter' => ';',
+        ]);
 
-        return new JsonResponse('test');
+        return new CsvFileResponse(
+            substr($content, strpos($content, "\n") + 1), // Remove first line of the file that contains the keys
+            sprintf('export_catalog_selection_%s.csv', $this->dateTime->format('Y_m_d_His'))
+        );
     }
 }

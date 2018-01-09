@@ -34,6 +34,9 @@ class SheetsViewQuery implements Query
     /** @var array */
     public $sheetsToExclude;
 
+    /** @var bool boolean to determine if the catalog display type or category */
+    public $isTypeColumn;
+
     /**
      * @param Event  $event
      * @param Sheet  $sheet
@@ -41,6 +44,7 @@ class SheetsViewQuery implements Query
      * @param string $locale
      * @param array  $availableSlotIds
      * @param array  $sheetsToExclude
+     * @param bool   $isTypeColumn
      */
     public function __construct(
         Event $event,
@@ -48,7 +52,8 @@ class SheetsViewQuery implements Query
         array $filters,
         string $locale,
         array $availableSlotIds = [],
-        array $sheetsToExclude = []
+        array $sheetsToExclude = [],
+        bool $isTypeColumn
     ) {
         $this->event            = $event;
         $this->sheet            = $sheet;
@@ -56,5 +61,6 @@ class SheetsViewQuery implements Query
         $this->locale           = $locale;
         $this->availableSlotIds = $availableSlotIds;
         $this->sheetsToExclude  = $sheetsToExclude;
+        $this->isTypeColumn = $isTypeColumn;
     }
 }
