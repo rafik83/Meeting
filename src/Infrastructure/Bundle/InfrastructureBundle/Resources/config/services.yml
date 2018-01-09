@@ -2862,24 +2862,19 @@ services:
         arguments:
             - '@query.package.summary.product_view_query_handler'
             - '@query.order.summary.custom_row_view_query_handler'
-    query.package.summary.planning_group_view_query_handler:
-        class: Proximum\Vimeet\Application\Query\Package\Summary\PlanningGroupViewQueryHandler
-        arguments:
-            - '@query.package.summary.product_view_query_handler'
     query.package.summary.plan_group_view_query_handler:
         class: Proximum\Vimeet\Application\Query\Package\Summary\PlanGroupViewQueryHandler
         arguments:
             - '@query.package.summary.product_view_query_handler'
-    query.package.summary.participant_group_view_query_handler:
-        class: Proximum\Vimeet\Application\Query\Package\Summary\ParticipantGroupViewQueryHandler
+    query.package.summary.participant_and_planning_group_view_query_handler:
+        class: Proximum\Vimeet\Application\Query\Package\Summary\ParticipantAndPlanningGroupViewQueryHandler
         arguments:
             - '@query.package.summary.product_view_query_handler'
     query.package.summary.groups_view_query_handler:
         class: Proximum\Vimeet\Application\Query\Package\Summary\GroupsViewQueryHandler
         arguments:
             - '@query.package.summary.plan_group_view_query_handler'
-            - '@query.package.summary.participant_group_view_query_handler'
-            - '@query.package.summary.planning_group_view_query_handler'
+            - '@query.package.summary.participant_and_planning_group_view_query_handler'
             - '@query.package.summary.group_view_query_handler'
     query.package.summary.summary_view_query_handler:
         class: Proximum\Vimeet\Application\Query\Package\Summary\SummaryViewQueryHandler

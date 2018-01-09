@@ -10,6 +10,6 @@
 
 namespace Proximum\Vimeet\Application\View\Package\Summary;
 
-class PlanningGroupView extends AbstractGroupView
+class ParticipantAndPlanningGroupView extends AbstractGroupView
 {
 }

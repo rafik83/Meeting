@@ -13,19 +13,14 @@ namespace Proximum\Vimeet\Application\View\Package\Summary;
 class GroupsView
 {
     /**
-     * @var PlanGroupView
+     * @var null|PlanGroupView
      */
     public $planGroup;
 
     /**
-     * @var ParticipantGroupView
+     * @var null|ParticipantAndPlanningGroupView
      */
-    public $participantGroup;
-
-    /**
-     * @var PlanningGroupView
-     */
-    public $planningGroup;
+    public $participantAndPlanningGroup;
 
     /**
      * @var GroupView[]
@@ -33,21 +28,18 @@ class GroupsView
     public $groups = [];
 
     /**
-     * @param PlanGroupView        $planGroup
-     * @param ParticipantGroupView $participantGroup
-     * @param PlanningGroupView    $planningGroup
-     * @param GroupView[]          $groups
+     * @param PlanGroupView|null                   $planGroup
+     * @param ParticipantAndPlanningGroupView|null $participantAndPlanningGroup
+     * @param GroupView[]                          $groups
      */
     public function __construct(
         PlanGroupView $planGroup = null,
-        ParticipantGroupView $participantGroup = null,
-        PlanningGroupView $planningGroup = null,
+        ParticipantAndPlanningGroupView $participantAndPlanningGroup = null,
         array $groups = []
     ) {
-        $this->planGroup        = $planGroup;
-        $this->participantGroup = $participantGroup;
-        $this->planningGroup    = $planningGroup;
-        $this->groups           = $groups;
+        $this->planGroup = $planGroup;
+        $this->participantAndPlanningGroup = $participantAndPlanningGroup;
+        $this->groups = $groups;
     }
 
     /**
@@ -61,12 +53,8 @@ class GroupsView
             $total += $this->planGroup->total;
         }
 
-        if (null !== $this->participantGroup) {
-            $total += $this->participantGroup->total;
-        }
-
-        if (null !== $this->planningGroup) {
-            $total += $this->planningGroup->total;
+        if (null !== $this->participantAndPlanningGroup) {
+            $total += $this->participantAndPlanningGroup->total;
         }
 
         if (!empty($this->groups)) {
