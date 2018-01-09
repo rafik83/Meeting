@@ -21,7 +21,8 @@ use Proximum\Vimeet\Domain\View\Sheet\SheetIdView;
 class SheetsViewQueryHandler
 {
     const TRANS_COL_TYPE = 'export.catalog.sheet.col.type';
-    const TRANS_COL_CATEGORY = 'export.catalog.sheet.col.type';
+    const TRANS_COL_CATEGORY = 'export.catalog.sheet.col.category';
+    const TRANS_COL_PARTICIPANT_POSITION = 'export.catalog.sheet.col.participantPosition';
 
     /** @var SheetSearchAdapterInterface */
     private $sheetSearchAdapter;
@@ -106,16 +107,24 @@ class SheetsViewQueryHandler
         $sheetRegistrationFields = $this->sheetViewQueryHandler->getSheetRegistrationFields();
         $sheetFields             = $this->sheetViewQueryHandler->getSheetFields();
 
+        $colParticipantPositionTranslation = $this->translator->trans(
+            self::TRANS_COL_PARTICIPANT_POSITION,
+            [],
+            'exports',
+            $query->locale
+        );
+
         if ($query->isTypeColumn) {
-            $colTranslation = $this->translator->trans(self::TRANS_COL_TYPE, [], 'export', $query->locale);
+            $colTranslation = $this->translator->trans(self::TRANS_COL_TYPE, [], 'exports', $query->locale);
         } else {
-            $colTranslation = $this->translator->trans(self::TRANS_COL_CATEGORY, [], 'export', $query->locale);
+            $colTranslation = $this->translator->trans(self::TRANS_COL_CATEGORY, [], 'exports', $query->locale);
         }
 
         $sheetListView = new SheetListView(
             $sheetViews,
             $sheetRegistrationFields,
             $sheetFields,
+            $colParticipantPositionTranslation,
             $colTranslation,
             $query->isTypeColumn
         );

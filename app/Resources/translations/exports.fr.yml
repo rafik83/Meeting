@@ -1,4 +1,5 @@
 export.catalog.sheet.col.type: Type de participation
 export.catalog.sheet.col.category: Catégorie de participation
+export.catalog.sheet.col.participantPosition: Fonction des participants
 gender.man: Monsieur
 gender.woman: Madame

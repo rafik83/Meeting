@@ -97,7 +97,7 @@ class SheetViewQueryHandler
         $template = $this->templateDataFactory->createFromSheet($query->sheet, $query->locale);
 
         // Clean the template data with the who see what rule
-        $this->applyer->applyRuleForTemplate($registrationTemplate, $rules);
+        $this->applyer->applyRuleForRegistrationTemplate($registrationTemplate, $rules);
         $this->applyer->applyRuleForTemplate($template, $rules);
 
         $participantsPosition = '';

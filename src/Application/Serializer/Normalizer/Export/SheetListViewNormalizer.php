@@ -30,11 +30,21 @@ class SheetListViewNormalizer implements NormalizerAwareInterface, NormalizerInt
 
         $data   = [];
         $labels = [];
-        $labels['type'] = $this->convertCharset($sheetListView->typeOrCategoryColumn, Charset::UTF_8, $context['charset']);
+        $labels['type'] = $this->convertCharset(
+            $sheetListView->typeOrCategoryColumn,
+            Charset::UTF_8,
+            $context['charset']
+        );
 
         foreach ($sheetListView->registrationFields as $key => $field) {
             $labels[$key] = $this->convertCharset($field, Charset::UTF_8, $context['charset']);
         }
+
+        $labels['participant'] = $this->convertCharset(
+            $sheetListView->participantPositionColumn,
+            Charset::UTF_8,
+            $context['charset']
+        );
 
         foreach ($sheetListView->sheetFields as $key => $field) {
             $labels[$key] = $this->convertCharset($field, Charset::UTF_8, $context['charset']);

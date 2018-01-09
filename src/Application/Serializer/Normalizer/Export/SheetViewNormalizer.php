@@ -32,6 +32,12 @@ class SheetViewNormalizer implements NormalizerInterface
             $data[$key] = $this->convertCharset($registrationInfo, Charset::UTF_8, $context['charset']);
         }
 
+        $data['participant'] = $this->convertCharset(
+            $sheetView->participantPosition,
+            Charset::UTF_8,
+            $context['charset']
+        );
+
         foreach ($sheetView->sheetInfo as $key => $sheetInfo) {
             $data[$key] = $this->convertCharset($sheetInfo, Charset::UTF_8, $context['charset']);
         }

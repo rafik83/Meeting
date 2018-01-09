@@ -27,10 +27,14 @@ class SheetListView
     /** @var bool */
     public $isTypeColumn;
 
+    /** @var string */
+    public $participantPositionColumn;
+
     /**
      * @param array  $sheetViews
      * @param array  $registrationFields
      * @param array  $sheetFields
+     * @param string $participantPositionColumn
      * @param string $typeOrCategoryColumn
      * @param bool   $isTypeColumn
      */
@@ -38,12 +42,14 @@ class SheetListView
         array $sheetViews = [],
         array $registrationFields = [],
         array $sheetFields = [],
+        string $participantPositionColumn,
         string $typeOrCategoryColumn,
         bool $isTypeColumn = true
     ) {
         $this->sheetViews = $sheetViews;
         $this->registrationFields = $registrationFields;
         $this->sheetFields = $sheetFields;
+        $this->participantPositionColumn = $participantPositionColumn;
         $this->typeOrCategoryColumn = $typeOrCategoryColumn;
         $this->isTypeColumn = $isTypeColumn;
     }
