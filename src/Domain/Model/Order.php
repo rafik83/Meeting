@@ -266,7 +266,7 @@ class Order
         $total = 0;
 
         /** @var Row $row */
-        foreach ($this->rows->toArray() as $row) {
+        foreach ($this->getRows() as $row) {
             $total += $row->getQuantity() * $row->getPrice();
         }
 
@@ -360,7 +360,7 @@ class Order
      */
     public function getProductRowsForGroupId($groupId)
     {
-        return array_filter($this->rows->toArray(), function (Order\Row $row) use ($groupId) {
+        return array_filter($this->getRows(), function (Order\Row $row) use ($groupId) {
             return $row->isProduct() && $row->getGroupId() === $groupId;
         });
     }
@@ -372,7 +372,7 @@ class Order
      */
     public function getCustomRowsForGroupId($groupId)
     {
-        return array_filter($this->rows->toArray(), function (Order\Row $row) use ($groupId) {
+        return array_filter($this->getRows(), function (Order\Row $row) use ($groupId) {
             return !$row->isProduct() && $row->getGroupId() === $groupId && !$row->hasParentRow();
         });
     }
@@ -384,7 +384,7 @@ class Order
      */
     public function getCustomRowsForProduct(Row $parentRow)
     {
-        return array_filter($this->rows->toArray(), function (Order\Row $row) use ($parentRow) {
+        return array_filter($this->getRows(), function (Order\Row $row) use ($parentRow) {
             return !$row->isProduct() && null !== $row->getParentRow() && $parentRow->getId() === $row->getParentRow()->getId();
         });
     }
@@ -394,7 +394,7 @@ class Order
      */
     public function getRowsWithoutParent()
     {
-        return array_filter($this->rows->toArray(), function (Order\Row $row) {
+        return array_filter($this->getRows(), function (Order\Row $row) {
             return !$row->hasParentRow();
         });
     }
@@ -404,7 +404,7 @@ class Order
      */
     public function getRowsWithParent()
     {
-        return array_filter($this->rows->toArray(), function (Order\Row $row) {
+        return array_filter($this->getRows(), function (Order\Row $row) {
             return $row->hasParentRow();
         });
     }
@@ -454,23 +454,19 @@ class Order
      */
     public function hasType($type)
     {
-        return null !== $this->getProductOfType($type) ? true : false;
+        return count($this->getRowsProductOfType($type));
     }
 
     /**
-     * @param $type
+     * @param string $type
      *
-     * @return null|Order\Row
+     * @return Order\Row[]
      */
-    public function getProductOfType($type)
+    public function getRowsProductOfType(string $type): array
     {
-        foreach ($this->rows->toArray() as $row) {
-            if ($row->getType() === $type) {
-                return $row;
-            }
-        }
-
-        return null;
+        return array_filter($this->getRows(), function (Order\Row $row) use ($type) {
+            return $type === $row->getType();
+        });
     }
 
     /**
