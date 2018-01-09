@@ -79,7 +79,7 @@ class SelectParticipantAndPlanningHandler
     {
         $sheet = $cart->getSheet();
 
-        $planningProduct = $sheet->getType()->getPackage()->getPlanning();
+        $planningProduct = $sheet->getPackage()->getPlanning();
 
         if (null === $planningProduct) {
             return;
@@ -114,7 +114,7 @@ class SelectParticipantAndPlanningHandler
     {
         $availableParticipantProductsById = [];
 
-        foreach ($sheet->getType()->getPackage()->getParticipants() as $product) {
+        foreach ($sheet->getPackage()->getParticipants() as $product) {
             $availableParticipantProductsById[$product->getId()] = $product;
         }
 
