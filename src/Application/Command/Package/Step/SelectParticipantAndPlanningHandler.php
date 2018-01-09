@@ -16,6 +16,7 @@ use Proximum\Vimeet\Application\Exception\Package\PackageNotFoundException;
 use Proximum\Vimeet\Domain\Cart\Cart;
 use Proximum\Vimeet\Domain\Cart\CartManager;
 use Proximum\Vimeet\Domain\Model\CartRowParticipant;
+use Proximum\Vimeet\Domain\Model\Order;
 use Proximum\Vimeet\Domain\Model\Product;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Order\Merger;
@@ -31,6 +32,9 @@ class SelectParticipantAndPlanningHandler
 
     /** @var DelayedEventDispatcher */
     private $eventDispatcher;
+
+    /** @var array indexed by sheet id of null|Order */
+    private $mergedOrder = [];
 
     /**
      * @param CartManager            $cartManager
@@ -72,6 +76,28 @@ class SelectParticipantAndPlanningHandler
     }
 
     /**
+     * @param Sheet $sheet
+     *
+     * @return null|Order
+     */
+    private function getMergedOrder(Sheet $sheet): ?Order
+    {
+        if (isset($this->mergedOrder[$sheet->getId()])) {
+            return $this->mergedOrder[$sheet->getId()];
+        }
+
+        $orders = $sheet->getNotCancelledOrders();
+
+        if (0 === count($orders)) {
+            return null;
+        }
+
+        $this->mergedOrder[$sheet->getId()] = $this->merger->merge($orders);
+
+        return $this->mergedOrder[$sheet->getId()];
+    }
+
+    /**
      * @param Cart $cart
      * @param int  $planningQuantity
      */
@@ -85,18 +111,14 @@ class SelectParticipantAndPlanningHandler
             return;
         }
 
-        $orders = $sheet->getNotCancelledOrders();
-
         // Update planning cart row
         $orderPlanningQuantity = 0;
 
-        if (count($orders) > 0) {
-            $merged = $this->merger->merge($orders);
+        $mergedOrder = $this->getMergedOrder($sheet);
 
-            if ($merged !== null ) {
-                if ($orderRow = $merged->getRowForProduct($planningProduct)) {
-                    $orderPlanningQuantity = $orderRow->getQuantity();
-                }
+        if (null !== $mergedOrder) {
+            if ($orderRow = $mergedOrder->getRowForProduct($planningProduct)) {
+                $orderPlanningQuantity = $orderRow->getQuantity();
             }
         }
 
@@ -164,8 +186,6 @@ class SelectParticipantAndPlanningHandler
 
         $participantsByProductId = $this->getParticipantsByProductId($sheet, $productByParticipantId);
 
-        // @todo: take account of previous ordered Participant products
-
         // Reset cart row for participant product
         foreach($cart->getParticipantRows() as $participantCartRow) {
             $cart->removeRow($participantCartRow);
@@ -173,15 +193,53 @@ class SelectParticipantAndPlanningHandler
 
         $availableParticipantProductsById = $this->getAvailableParticipantProductsById($sheet);
 
-        // Set participant products in cart
+        $mergedOrder = $this->getMergedOrder($sheet);
+
         foreach ($participantsByProductId as $productId => $participants) {
-            $cart->setProduct($availableParticipantProductsById[$productId], count($participants));
+            $quantityToAdd = count($participants);
+
+            // take account of previous ordered Participant products
+            if (null !== $mergedOrder) {
+                $row = $mergedOrder->getRowByProductId($productId);
+
+                if (null !== $row) {
+                    $quantityToAdd = $quantityToAdd - $row->getQuantity();
+                }
+            }
+
+            if ($quantityToAdd > 0) {
+                // Set participant products in cart
+                $cart->setProduct($availableParticipantProductsById[$productId], $quantityToAdd);
+            }
+        }
+
+        // Add a negative quantity for participant product not used anymore
+        if (null !== $mergedOrder) {
+            $participantRows = $mergedOrder->getRowsProductOfParticipantType();
+
+            foreach ($participantRows as $participantRow) {
+                if (!isset($participantsByProductId[$participantRow->getProduct()->getId()])) {
+                    $cart->setProduct($participantRow->getProduct(), -1 * $participantRow->getQuantity());
+                } else {
+                    $previousQuantity = $participantRow->getQuantity();
+                    $newQuantity = count($participantsByProductId[$participantRow->getProduct()->getId()]);
+                    $quantityToRemove = $previousQuantity - $newQuantity;
+
+                    if ($quantityToRemove > 0) {
+                        $cart->setProduct($participantRow->getProduct(), -1 * $quantityToRemove);
+                    }
+                }
+            }
         }
 
         // Add link between participant and participant product added to the cart
         foreach ($cart->getParticipantRows() as $participantCartRow) {
-            foreach ($participantsByProductId[$participantCartRow->getProduct()->getId()] as $participant) {
-                $participantCartRow->addCartRowParticipant(new CartRowParticipant($participantCartRow, $participant));
+            if (isset($participantsByProductId[$participantCartRow->getProduct()->getId()])) {
+                foreach ($participantsByProductId[$participantCartRow->getProduct()->getId()] as $participant) {
+                    $participantCartRow->addCartRowParticipant(
+                        new CartRowParticipant($participantCartRow, $participant)
+                    );
+                }
             }
         }
     }

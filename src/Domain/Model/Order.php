@@ -418,6 +418,14 @@ class Order
     }
 
     /**
+     * @return Order\Row[]
+     */
+    public function getRowsProductOfParticipantType(): array
+    {
+        return $this->getRowsProductOfType(Product::TYPE_PARTICIPANT);
+    }
+
+    /**
      * @return Order\PromotionCode[]
      */
     public function getPromotionCodes()

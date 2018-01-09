@@ -63,7 +63,7 @@ class StepParticipantAndPlanning
         }
 
         // Set product to null or Product (from previous order) to others participants
-        foreach ($command->sheet->getParticipantsArray() as $participant) {
+        foreach ($sheet->getParticipantsArray() as $participant) {
             if (!isset($command->participantsProduct[$participant->getId()])) {
                 $command->participantsProduct[$participant->getId()] = $participant->getParticipantProduct();
             }
