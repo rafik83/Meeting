@@ -12,6 +12,7 @@ namespace Proximum\Vimeet\Application\Components\Step;
 
 use Proximum\Vimeet\Application\Command\Package\Step\SelectParticipantAndPlanning;
 use Proximum\Vimeet\Domain\Cart\CartManager;
+use Proximum\Vimeet\Domain\Model\Product;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Order\Merger;
 
@@ -61,9 +62,10 @@ class StepParticipantAndPlanning
             }
         }
 
+        // Set product to null or Product (from previous order) to others participants
         foreach ($command->sheet->getParticipantsArray() as $participant) {
             if (!isset($command->participantsProduct[$participant->getId()])) {
-                $command->participantsProduct[$participant->getId()] = null;
+                $command->participantsProduct[$participant->getId()] = $participant->getParticipantProduct();
             }
         }
 
