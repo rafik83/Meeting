@@ -206,8 +206,12 @@ class Nomenclature extends EditableObject implements ContentObjectInterface, Sea
         }
 
         foreach ($labels as $values) {
-            if (null !== $this->getItem() && isset($values[$this->getItem()])) {
-                return $values[$this->getItem()];
+            if (null !== $this->getItem()) {
+                if (in_array($this->getItem(), $values)) {
+                    return $this->getItem();
+                } else if (isset($values[$this->getItem()])) {
+                    return $values[$this->getItem()];
+                }
             }
         }
 
