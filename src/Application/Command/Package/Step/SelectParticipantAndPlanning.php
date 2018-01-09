@@ -22,7 +22,7 @@ class SelectParticipantAndPlanning extends AbstractStep
     /**
      * @var array of participantId => Product
      */
-    public $participantsProduct;
+    public $participantsProduct = [];
 
     /**
      * @param int $participantId
