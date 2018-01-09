@@ -19,6 +19,7 @@ use Proximum\Vimeet\Application\Serializer\Charset;
 use Proximum\Vimeet\Domain\Catalog\Catalog;
 use Proximum\Vimeet\Domain\Catalog\SearchFields;
 use Proximum\Vimeet\Domain\KeyDates\Checker\CatalogAccessChecker;
+use Proximum\Vimeet\Domain\Model\Catalog\Internal\CatalogConstant;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\Sheet\Constant;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\HttpFoundation\Response\CsvFileResponse;
@@ -116,8 +117,6 @@ class ExportAction
             throw new AccessDeniedException('Access denied!');
         }
 
-        $filters = [];
-
         $categoryTypeOrganizationPositionViews = $this->categoryTypeOrganizationAndPositionViewsHandler
             ->handle(new CategoryTypeOrganizationAndPositionViews($event, $sheet, $locale))
         ;
@@ -132,6 +131,12 @@ class ExportAction
         $positionViews             = $categoryTypeOrganizationPositionViews->positionViews;
         $availableSlotsIds         = [];
         $sheetsToExclude           = [];
+
+        $filters = [
+            SearchFields::FILTER_TYPE               => $typeViews,
+            SearchFields::FILTER_CATEGORY           => $categoryViews,
+            SearchFields::FILTER_AVAILABLE_SLOT_IDS => CatalogConstant::AVAILABLE_SLOT_IDS_FILTER_EVERYONE,
+        ];
 
         $filterAvailableSlotAndSpecificSlotChecker = $this
             ->filterAvailableSlotAndSpecificSlotCheckerHandler
@@ -181,7 +186,7 @@ class ExportAction
         $filters = array_merge(
             Catalog::DEFAULT_FILTERS,
             $filters,
-            [SearchFields::ORDER_BY => Constant::ORDER_BY_ALPHABETICAL]
+            [SearchFields::ORDER_BY => Constant::ORDER_BY_ALPHABETICAL,]
         );
 
         $sheetListView = $this->queryBus->handle(new SheetsViewQuery(
