@@ -105,19 +105,31 @@ class SelectParticipantAndPlanningHandler
         $cart->setProduct($planningProduct, $quantity);
     }
 
-    /***
-     * @param Cart  $cart
-     * @param array $productByParticipantId
+    /**
+     * @param Sheet $sheet
+     *
+     * @return array
      */
-    private function handleParticipants(Cart $cart, array $productByParticipantId): void
+    private function getAvailableParticipantProductsById(Sheet $sheet): array
     {
-        $sheet = $cart->getSheet();
         $availableParticipantProductsById = [];
-        $participantsByProductId = [];
 
         foreach ($sheet->getType()->getPackage()->getParticipants() as $product) {
             $availableParticipantProductsById[$product->getId()] = $product;
         }
+
+        return $availableParticipantProductsById;
+    }
+
+    /**
+     * @param Sheet $sheet
+     * @param array $productByParticipantId
+     *
+     * @return array
+     */
+    private function getParticipantsByProductId(Sheet $sheet, array $productByParticipantId): array
+    {
+        $participantsByProductId = [];
 
         foreach ($sheet->getParticipantsArray() as $participant) {
             if (!isset($productByParticipantId[$participant->getId()])) {
@@ -139,12 +151,34 @@ class SelectParticipantAndPlanningHandler
             $participantsByProductId[$product->getId()][] = $participant;
         }
 
-        // @todo: reset cart row for participant product
+        return $participantsByProductId;
+    }
 
+    /***
+     * @param Cart  $cart
+     * @param array $productByParticipantId
+     */
+    private function handleParticipants(Cart $cart, array $productByParticipantId): void
+    {
+        $sheet = $cart->getSheet();
+
+        $participantsByProductId = $this->getParticipantsByProductId($sheet, $productByParticipantId);
+
+        // @todo: take account of previous ordered Participant products
+
+        // Reset cart row for participant product
+        foreach($cart->getParticipantRows() as $participantCartRow) {
+            $cart->removeRow($participantCartRow);
+        }
+
+        $availableParticipantProductsById = $this->getAvailableParticipantProductsById($sheet);
+
+        // Set participant products in cart
         foreach ($participantsByProductId as $productId => $participants) {
             $cart->setProduct($availableParticipantProductsById[$productId], count($participants));
         }
 
+        // Add link between participant and participant product added to the cart
         foreach ($cart->getParticipantRows() as $participantCartRow) {
             foreach ($participantsByProductId[$participantCartRow->getProduct()->getId()] as $participant) {
                 $participantCartRow->addCartRowParticipant(new CartRowParticipant($participantCartRow, $participant));
