@@ -9,6 +9,7 @@ Proximum\Vimeet\Domain\Model\CartRowParticipant:
     manyToOne:
         cartRow:
             targetEntity: Proximum\Vimeet\Domain\Model\CartRow
+            inversedBy: cartRowParticipants
             joinColumn:
                 nullable: false
                 onDelete: CASCADE
