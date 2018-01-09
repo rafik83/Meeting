@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2016 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -116,18 +116,6 @@ class Order
     }
 
     /**
-     * Get vat
-     *
-     * @return float
-     *
-     * @deprecated Use getVatRate instead
-     */
-    public function getVat()
-    {
-        return $this->getVatRate();
-    }
-
-    /**
      * Get Event vatMode
      *
      * @return string
@@ -161,22 +149,6 @@ class Order
     public function getCreatedAt()
     {
         return $this->createdAt;
-    }
-
-    /**
-     * @deprecated use OrderVatView::isVatApplicable
-     */
-    public function isVatApplicable()
-    {
-        throw new \Exception('Order::isVatApplicable() is a deprecated method');
-    }
-
-    /**
-     * @deprecated
-     */
-    public function getTotalVatMode()
-    {
-        throw new \Exception('Order::getTotalVatMode() is a deprecated method');
     }
 
     /**
@@ -276,30 +248,6 @@ class Order
         }
 
         return $total;
-    }
-
-    /**
-     * @deprecated use OrderVatView::vatAmount
-     */
-    public function getVatAmount()
-    {
-        throw new \Exception('Order::getVatAmount() is a deprecated method');
-    }
-
-    /**
-     * @deprecated use OrderVatView::totalWithVat
-     */
-    public function getTotalWithVat()
-    {
-        throw new \Exception('Order::getTotalWithVat() is a deprecated method');
-    }
-
-    /**
-     * @deprecated use OrderVatView::totalWithVat
-     */
-    public function getTotal()
-    {
-        throw new \Exception('Order::getTotal() is a deprecated method');
     }
 
     /**
