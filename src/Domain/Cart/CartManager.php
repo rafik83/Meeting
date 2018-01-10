@@ -10,7 +10,6 @@
 
 namespace Proximum\Vimeet\Domain\Cart;
 
-use Proximum\Vimeet\Application\Components\Step\StepParticipantAndPlanning;
 use Proximum\Vimeet\Domain\Model\CartRowParticipant;
 use Proximum\Vimeet\Domain\Model\CartStep;
 use Proximum\Vimeet\Domain\Model\Participant;

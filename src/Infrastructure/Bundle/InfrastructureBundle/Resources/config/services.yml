@@ -1351,6 +1351,7 @@ services:
             - '@vimeet_infrastructure.adapter.delayed_event_dispatcher'
             - '@vimeet_infrastructure.repository.meeting_repository'
             - '@template.participant_info_guesser'
+            - '@components.step.step_participant'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Participant\Remove }
     command.promotion_code.create_handler:
