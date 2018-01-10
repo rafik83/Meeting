@@ -153,7 +153,7 @@ class Package
     /**
      * @return int|null
      */
-    public function getMaxParticipant()
+    public function getMaxParticipant(): ?int
     {
         return $this->maxParticipant;
     }
@@ -330,7 +330,7 @@ class Package
      *
      * @return Package
      */
-    public function setMaxParticipant($maxParticipant): Package
+    public function setMaxParticipant(?int $maxParticipant): Package
     {
         $this->maxParticipant = $maxParticipant;
 
