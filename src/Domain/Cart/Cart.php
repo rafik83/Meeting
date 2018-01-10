@@ -99,47 +99,6 @@ class Cart
     }
 
     /**
-     * Set additionnal participant quantity
-     *
-     * @param Order $order
-     *
-     * @deprecated
-     */
-    public function resolveParticipantsQuantity(Order $order = null)
-    {
-        return;
-
-        $orderParticipant            = 0;
-        $includedParticipantQuantity = 0;
-
-        if (isset($order)) {
-            $orderParticipant = $order->countParticipant();
-            if ($plan = $order->getPlan()) {
-                $includedParticipantQuantity = $plan->getIncludedParticipantQuantity();
-            }
-        } else {
-            $includedParticipantQuantity = $this->getIncludedParticipantQuantity();
-        }
-
-        $participantNumber = $this->sheet->countParticipant() - ($includedParticipantQuantity + $orderParticipant);
-
-        if ($participantNumber < 0) {
-            $additionnal = $participantNumber - ($this->sheet->countParticipant() - $includedParticipantQuantity);
-        } else {
-            $additionnal = $participantNumber;
-        }
-
-        // In case of a first order, the number of participant can not be negative
-        if (null === $order && $additionnal < 0) {
-            return $this;
-        }
-
-        $this->setProduct($this->sheet->getPackageParticipant(), $additionnal);
-
-        return $this;
-    }
-
-    /**
      * Get how many participant are included.
      *
      * @return int

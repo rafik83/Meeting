@@ -155,7 +155,7 @@ class AddHandler
         $participant = $this->createAndFillParticipant($add, $user, $isNewUser);
 
         // Update cart
-        $this->cartManager->updateParticipantsQuantity($add->sheet);
+//        $this->cartManager->updateParticipantsQuantity($add->sheet);
 
         if (!$add->sheet->isOwner($user)) {
             // send to the guest

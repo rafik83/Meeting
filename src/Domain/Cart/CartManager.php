@@ -3,14 +3,18 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2015 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
 
 namespace Proximum\Vimeet\Domain\Cart;
 
+use Proximum\Vimeet\Application\Components\Step\StepParticipantAndPlanning;
+use Proximum\Vimeet\Domain\Model\CartRowParticipant;
 use Proximum\Vimeet\Domain\Model\CartStep;
+use Proximum\Vimeet\Domain\Model\Participant;
+use Proximum\Vimeet\Domain\Model\Product;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Order\Merger;
 use Proximum\Vimeet\Domain\Repository\CartRowRepositoryInterface;
@@ -19,24 +23,16 @@ use Proximum\Vimeet\Domain\Repository\PromotionCodeRowRepositoryInterface;
 
 class CartManager
 {
-    /**
-     * @var CartRowRepositoryInterface
-     */
+    /** @var CartRowRepositoryInterface */
     private $cartRowRepository;
 
-    /**
-     * @var CartStepRepositoryInterface
-     */
+    /** @var CartStepRepositoryInterface */
     private $cartStepRepository;
 
-    /**
-     * @var PromotionCodeRowRepositoryInterface
-     */
+    /** @var PromotionCodeRowRepositoryInterface */
     private $promotionCodeRowRepository;
 
-    /**
-     * @var Merger
-     */
+    /** @var Merger */
     private $orderMerger;
 
     /**
@@ -74,30 +70,155 @@ class CartManager
         );
     }
 
+    /***
+     * @param Cart  $cart
+     * @param array $productByParticipantId array of participantId => Product
+     */
+    public function updateParticipantsQuantity(Cart $cart, array $productByParticipantId): void
+    {
+        $sheet = $cart->getSheet();
+
+        $participantsByProductId = $this->getParticipantsByProductId($sheet, $productByParticipantId);
+
+        // Reset cart row for participant product
+        foreach($cart->getParticipantRows() as $participantCartRow) {
+            $cart->removeRow($participantCartRow);
+        }
+
+        $availableParticipantProductsById = $this->getAvailableParticipantProductsById($sheet);
+
+        $mergedOrder = $this->orderMerger->getMergedOrders($sheet);
+
+        foreach ($participantsByProductId as $productId => $participants) {
+            $quantityToAdd = count($participants);
+
+            // take account of previous ordered Participant products
+            if (null !== $mergedOrder) {
+                $row = $mergedOrder->getRowByProductId($productId);
+
+                if (null !== $row) {
+                    $quantityToAdd = $quantityToAdd - $row->getQuantity();
+                }
+            }
+
+            if ($quantityToAdd > 0) {
+                // Set participant products in cart
+                $cart->setProduct($availableParticipantProductsById[$productId], $quantityToAdd);
+            }
+        }
+
+        // Add a negative quantity for participant product not used anymore
+        if (null !== $mergedOrder) {
+            $participantRows = $mergedOrder->getRowsProductOfParticipantType();
+
+            foreach ($participantRows as $participantRow) {
+                if (!isset($participantsByProductId[$participantRow->getProduct()->getId()])) {
+                    $cart->setProduct($participantRow->getProduct(), -1 * $participantRow->getQuantity());
+                } else {
+                    $productId = $participantRow->getProduct()->getId();
+                    $previousQuantity = $participantRow->getQuantity();
+                    $newQuantity = count($participantsByProductId[$productId]);
+                    $quantityToRemove = $previousQuantity - $newQuantity;
+
+                    if (0 === $quantityToRemove) {
+                        foreach ($participantsByProductId[$productId] as $participant) {
+                            if ($participant instanceof Participant && !$participant->hasParticipantProduct()) {
+                                if (isset($availableParticipantProductsById[$productId])
+                                    && $availableParticipantProductsById[$productId] instanceof Product
+                                ) {
+                                    $participant->setParticipantProduct($availableParticipantProductsById[$productId]);
+                                }
+                            }
+                        }
+                    }
+
+                    if ($quantityToRemove > 0) {
+                        $cart->setProduct($participantRow->getProduct(), -1 * $quantityToRemove);
+                    }
+                }
+            }
+        }
+
+        // Add a link between Participant and Product of type 'participant'
+        // when no participant's product where added or removed in the cart.
+        // It allows to remove a participant, add another one then re-assign the same participant's product
+        // to the new participant.
+        // It allows also to witch products between participants.
+//        if (empty($cart->getParticipantRows())) {
+//            foreach ($participantsByProductId as $productId => $participants) {
+//                if (isset($availableParticipantProductsById[$productId])
+//                    && $availableParticipantProductsById[$productId] instanceof Product
+//                ) {
+//                    foreach ($participants as $participant) {
+//                        if ($participant instanceof Participant) {
+//                            $participant->setParticipantProduct($availableParticipantProductsById[$productId]);
+//                        }
+//                    }
+//                }
+//            }
+//
+//            return;
+//        }
+
+        // Add link between participant and participant product added to the cart
+        foreach ($cart->getParticipantRows() as $participantCartRow) {
+            if (isset($participantsByProductId[$participantCartRow->getProduct()->getId()])) {
+                foreach ($participantsByProductId[$participantCartRow->getProduct()->getId()] as $participant) {
+                    $participantCartRow->addCartRowParticipant(
+                        new CartRowParticipant($participantCartRow, $participant)
+                    );
+                }
+            }
+        }
+    }
+
     /**
      * @param Sheet $sheet
      *
-     * @deprecated we must add or remove the choosen participant product when adding or removing participant
+     * @return array
      */
-    public function updateParticipantsQuantity(Sheet $sheet)
+    private function getAvailableParticipantProductsById(Sheet $sheet): array
     {
-        return;
-        $cart = $this->getCart($sheet, null);
+        $availableParticipantProductsById = [];
 
-        if ($sheet->hasNotCancelledOrders()) {
-            $order = $this->orderMerger->merge($sheet->getNotCancelledOrders());
-            $cart->resolveParticipantsQuantity($order);
-            $this->save($cart);
-
-            return;
+        foreach ($sheet->getPackage()->getParticipants() as $product) {
+            $availableParticipantProductsById[$product->getId()] = $product;
         }
 
-        if ($sheet->getPackage()->isPlansEnabled() && !$cart->getPlanRow()) {
-            return;
+        return $availableParticipantProductsById;
+    }
+
+    /**
+     * @param Sheet $sheet
+     * @param array $productByParticipantId
+     *
+     * @return array
+     */
+    private function getParticipantsByProductId(Sheet $sheet, array $productByParticipantId): array
+    {
+        $participantsByProductId = [];
+
+        foreach ($sheet->getParticipantsArray() as $participant) {
+            if (!isset($productByParticipantId[$participant->getId()])) {
+                continue;
+            }
+
+            $product = $productByParticipantId[$participant->getId()];
+
+            if (!$product instanceof Product) {
+                continue;
+            }
+
+            if (isset($participantsByProductId[$product->getId()])) {
+                $participantsByProductId[$product->getId()][] = $participant;
+                continue;
+            }
+
+            $participantsByProductId[$product->getId()] = [];
+            $participantsByProductId[$product->getId()][] = $participant;
         }
 
-        $cart->resolveParticipantsQuantity();
-        $this->save($cart);
+        return $participantsByProductId;
     }
 
     /**

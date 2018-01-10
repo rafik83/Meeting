@@ -3,7 +3,7 @@
 /*
  * This file is part of the vimeet project.
  *
- * Copyright (C) 2016 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -12,24 +12,18 @@ namespace Proximum\Vimeet\Application\Components\Step;
 
 use Proximum\Vimeet\Application\Command\Package\Step\SelectParticipantAndPlanning;
 use Proximum\Vimeet\Domain\Cart\CartManager;
-use Proximum\Vimeet\Domain\Model\Product;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Order\Merger;
 
 class StepParticipantAndPlanning
 {
-    /**
-     * @var Merger
-     */
+    /** @var Merger */
     private $orderMerger;
-    /**
-     * @var CartManager
-     */
+
+    /** @var CartManager */
     private $cartManager;
 
     /**
-     * StepParticipant constructor.
-     *
      * @param Merger      $orderMerger
      * @param CartManager $cartManager
      */
@@ -45,13 +39,10 @@ class StepParticipantAndPlanning
      *
      * @return SelectParticipantAndPlanning
      */
-    public function build(Sheet $sheet, $stepIndex)
+    public function build(Sheet $sheet, $stepIndex): SelectParticipantAndPlanning
     {
         $cart = $this->cartManager->getCart($sheet, $stepIndex);
-
-        if ($sheet->hasNotCancelledOrders()) {
-            $orderMerged = $this->orderMerger->merge($sheet->getNotCancelledOrders());
-        }
+        $orderMerged = $this->orderMerger->getMergedOrders($sheet);
 
         $command = new SelectParticipantAndPlanning($sheet, $stepIndex);
 
@@ -74,7 +65,7 @@ class StepParticipantAndPlanning
         $orderQuantity = 0;
         $cartQuantity  = 0;
 
-        if (isset($orderMerged)) {
+        if (null !== $orderMerged) {
             $planning = $sheet->getPackage()->getPlanning();
 
             if ($orderRow = $orderMerged->getRowForProduct($planning)) {

@@ -320,6 +320,14 @@ class Participant implements MailRecipientInterface
     }
 
     /**
+     * @return bool
+     */
+    public function hasParticipantProduct(): bool
+    {
+        return null !== $this->participantProduct;
+    }
+
+    /**
      * @param Product $participantProduct
      */
     public function setParticipantProduct(Product $participantProduct): void
