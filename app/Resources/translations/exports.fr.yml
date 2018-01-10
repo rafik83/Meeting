@@ -1,3 +1,5 @@
+boolean.yes: 'Oui'
+boolean.no: 'Non'
 export.catalog.sheet.col.type: Type de participation
 export.catalog.sheet.col.category: Catégorie de participation
 export.catalog.sheet.col.participantPosition: Fonction des participants

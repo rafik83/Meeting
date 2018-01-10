@@ -18,6 +18,7 @@ use Proximum\Vimeet\Domain\Template\TemplateObject;
 class SheetRegistrationInfoQueryHandler
 {
     const TRANS_GENDER = 'gender.%';
+    const TRANS_BOOLEAN = 'boolean.%';
 
     /** @var TranslatorInterface */
     private $translator;
@@ -60,11 +61,25 @@ class SheetRegistrationInfoQueryHandler
                 $content = $object->getExportableContent([], $query->locale);
 
                 if ($object instanceof TemplateObject\Gender) {
-                    $content = $this->translator->trans(sprintf(self::TRANS_GENDER, $content), [], 'export', $query->locale);
+                    $content = $this->translator->trans(
+                        sprintf(self::TRANS_GENDER, $content),
+                        [],
+                        'export',
+                        $query->locale
+                    );
                 }
 
                 if ($object instanceof TemplateObject\Country) {
                     $content = $this->intl->getCountryName($content, $query->locale);
+                }
+
+                if ($object instanceof TemplateObject\BooleanObject) {
+                    $content = $this->translator->trans(
+                        sprintf(self::TRANS_BOOLEAN, $content ? 'yes' : 'no'),
+                        [],
+                        'export',
+                        $query->locale
+                    );
                 }
 
                 $data[$key] = $content;

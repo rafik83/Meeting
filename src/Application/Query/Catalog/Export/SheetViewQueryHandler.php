@@ -107,7 +107,7 @@ class SheetViewQueryHandler
         // The participant position is return only if the viewer has the right to see the participant position tag on the viewed
         if ($rule->isPresent(Tag::PARTICIPANT_POSITION)) {
             $participantsPosition = implode(', ', array_map(function (Participant $participant) use ($locale) {
-                return $this->participantInfoGuesser->guessParticipantPosition($participant, $locale);
+                return $this->participantInfoGuesser->guessParticipantPositionLabel($participant, $locale);
             }, $query->sheet->getParticipantsArray()));
         }
 
