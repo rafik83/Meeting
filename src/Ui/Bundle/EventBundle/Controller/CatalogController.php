@@ -36,7 +36,9 @@ use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\EventListener\Sec
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Catalog\SearchType;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Handler\Catalog\AvailabilityConfirmationChecker;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Handler\Catalog\CategoryTypeOrganizationAndPositionViews;
+use Proximum\Vimeet\Ui\Bundle\EventBundle\Handler\Catalog\CategoryTypeOrganizationAndPositionViewsHandler;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Handler\Catalog\FilterAvailableSlotAndSpecificSlotChecker;
+use Proximum\Vimeet\Ui\Bundle\EventBundle\Handler\Catalog\FilterAvailableSlotAndSpecificSlotCheckerHandler;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\ParamConverter\EventDomain;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Security\SheetVoter;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\ValueResolver\UserDomain;
@@ -112,7 +114,7 @@ class CatalogController extends Controller
         }
 
         $categoryTypeOrganizationPositionViews = $this
-            ->get('Proximum\Vimeet\Ui\Bundle\EventBundle\Handler\Catalog\CategoryTypeOrganizationAndPositionViewsHandler')
+            ->get(CategoryTypeOrganizationAndPositionViewsHandler::class)
             ->handle(new CategoryTypeOrganizationAndPositionViews($event, $sheet, $locale))
         ;
 
@@ -128,7 +130,7 @@ class CatalogController extends Controller
         $availableSlotsIds         = [];
 
         $filterAvailableSlotAndSpecificSlotChecker = $this
-            ->get('Proximum\Vimeet\Ui\Bundle\EventBundle\Handler\Catalog\FilterAvailableSlotAndSpecificSlotCheckerHandler')
+            ->get(FilterAvailableSlotAndSpecificSlotCheckerHandler::class)
             ->handle(new FilterAvailableSlotAndSpecificSlotChecker(
                 $event,
                 $sheet,

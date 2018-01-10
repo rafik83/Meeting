@@ -75,7 +75,7 @@
         </div>
     {% endif %}
 
-    <a href="{{ path('event_catalog_export', {'sheet': sheet.id}) }}?{{ app.request.query.all|url_encode }}" class="btn btn-link">
+    <a href="{{ path('event_catalog_export', {'sheet': sheet.id}) ~ '?' ~ app.request.query.all|url_encode }}" class="btn btn-link">
         <i class="glyphicon glyphicon-download"></i> {{ 'catalog.sheet.export.csv'|trans }}
     </a>
 </div>
