@@ -67,7 +67,7 @@ class SheetRegistrationInfoQueryHandler
                 $content = $this->translator->trans(
                     sprintf(self::TRANS_GENDER, $content),
                     [],
-                    'export',
+                    'exports',
                     $query->locale
                 );
             } elseif ($object instanceof TemplateObject\Country) {
@@ -76,7 +76,7 @@ class SheetRegistrationInfoQueryHandler
                 $content = $this->translator->trans(
                     sprintf(self::TRANS_BOOLEAN, $content ? 'yes' : 'no'),
                     [],
-                    'export',
+                    'exports',
                     $query->locale
                 );
             }
