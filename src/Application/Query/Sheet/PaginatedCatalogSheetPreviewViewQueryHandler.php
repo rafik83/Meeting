@@ -21,7 +21,6 @@ use Proximum\Vimeet\Domain\KeyDates\Checker\MeetingRequestAccessChecker;
 use Proximum\Vimeet\Domain\Model\PaginatedResult;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
-use Proximum\Vimeet\Domain\Template\TemplateDataFactory;
 use Proximum\Vimeet\Domain\User\Phone\ValidationRequiredChecker;
 
 class PaginatedCatalogSheetPreviewViewQueryHandler
@@ -37,9 +36,6 @@ class PaginatedCatalogSheetPreviewViewQueryHandler
 
     /** @var SheetPreviewViewQueryHandler */
     private $sheetPreviewViewQueryHandler;
-
-    /** @var TemplateDataFactory */
-    private $templateDataFactory;
 
     /** @var MeetingRequestAccessChecker */
     private $meetingRequestAccessChecker;
@@ -58,7 +54,6 @@ class PaginatedCatalogSheetPreviewViewQueryHandler
      * @param SheetSearchAdapterInterface          $sheetSearchAdapter
      * @param SheetPreviewViewQueryHandler         $sheetPreviewViewQueryHandler
      * @param ViewedSheetListViewQueryHandler      $viewedSheetListViewQueryHandler
-     * @param TemplateDataFactory                  $templateDataFactory
      * @param MeetingRequestAccessChecker          $meetingRequestAccessChecker
      * @param AnsweringMeetingRequestAccessChecker $answeringMeetingRequestAccessChecker
      * @param ValidationRequiredChecker            $validationRequiredChecker
@@ -69,7 +64,6 @@ class PaginatedCatalogSheetPreviewViewQueryHandler
         SheetSearchAdapterInterface $sheetSearchAdapter,
         SheetPreviewViewQueryHandler $sheetPreviewViewQueryHandler,
         ViewedSheetListViewQueryHandler $viewedSheetListViewQueryHandler,
-        TemplateDataFactory $templateDataFactory,
         MeetingRequestAccessChecker $meetingRequestAccessChecker,
         AnsweringMeetingRequestAccessChecker $answeringMeetingRequestAccessChecker,
         ValidationRequiredChecker $validationRequiredChecker,
@@ -79,7 +73,6 @@ class PaginatedCatalogSheetPreviewViewQueryHandler
         $this->sheetSearchAdapter                   = $sheetSearchAdapter;
         $this->sheetPreviewViewQueryHandler         = $sheetPreviewViewQueryHandler;
         $this->viewedSheetListViewQueryHandler      = $viewedSheetListViewQueryHandler;
-        $this->templateDataFactory                  = $templateDataFactory;
         $this->meetingRequestAccessChecker          = $meetingRequestAccessChecker;
         $this->answeringMeetingRequestAccessChecker = $answeringMeetingRequestAccessChecker;
         $this->validationRequiredChecker            = $validationRequiredChecker;
