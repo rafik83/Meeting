@@ -21,7 +21,7 @@ mail.completeProfile.end: 'Best regards,'
 mail.completeProfile.link: 'Complete your member area'
 mail.completeProfile.subject: '[%event%] Invitation as a participant'
 mail.confirm.agenda.link: 'Confirm schedule'
-mail.confirmResetPassword.body: 'Dear %firstname% %lastname%, your password has been changed'
+mail.confirmResetPassword.body: "Dear %firstname% %lastname%, \n\nYour password has been changed"
 mail.confirmResetPassword.subject: 'Your password has been changed'
 mail.event.preregister.body: "%firstname% %lastname%, \n\nYour registration to %event% has been taken into account and will be reviewed by the %event% team as soon as possible. You will receive a confirmation email when your registration has been validated by the organizer"
 mail.event.preregister.end: ''
@@ -35,7 +35,7 @@ mail.orderConfirm.subject: 'Your order has been registered'
 mail.participant.profile.link: 'Your member area'
 mail.register.body: "%firstname% %lastname%, Congratulations! The access to your member area of %event% has been created.\n\nYou can now connect to your member area on the website of %event%. \n\nBest regards,"
 mail.register.subject: 'The access to your member area of %event% has been created'
-mail.resetPassword.body: 'Hello, you have asked for a password modification. Please click on the following link to create a new password:'
+mail.resetPassword.body: "Hello, \n\nYou have asked for a password modification. \nPlease click on the following link to create a new password:"
 mail.resetPassword.end: ''
 mail.resetPassword.link: 'Reset password'
 mail.resetPassword.subject: '[%event%] Forgotten password'
