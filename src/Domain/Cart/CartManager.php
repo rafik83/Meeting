@@ -120,6 +120,11 @@ class CartManager
                     $newQuantity = count($participantsByProductId[$productId]);
                     $quantityToRemove = $previousQuantity - $newQuantity;
 
+                    // Add a link between Participant and Product of type 'participant'
+                    // when no participant's product where added or removed in the cart.
+                    // It allows to remove a participant, add another one then re-assign the same participant's product
+                    // to the new participant.
+                    // It allows also to witch products between participants.
                     if (0 === $quantityToRemove) {
                         foreach ($participantsByProductId[$productId] as $participant) {
                             if ($participant instanceof Participant && !$participant->hasParticipantProduct()) {
@@ -132,33 +137,13 @@ class CartManager
                         }
                     }
 
+                    // Remove quantity for a participant product and add a row in the cart
                     if ($quantityToRemove > 0) {
                         $cart->setProduct($participantRow->getProduct(), -1 * $quantityToRemove);
                     }
                 }
             }
         }
-
-        // Add a link between Participant and Product of type 'participant'
-        // when no participant's product where added or removed in the cart.
-        // It allows to remove a participant, add another one then re-assign the same participant's product
-        // to the new participant.
-        // It allows also to witch products between participants.
-//        if (empty($cart->getParticipantRows())) {
-//            foreach ($participantsByProductId as $productId => $participants) {
-//                if (isset($availableParticipantProductsById[$productId])
-//                    && $availableParticipantProductsById[$productId] instanceof Product
-//                ) {
-//                    foreach ($participants as $participant) {
-//                        if ($participant instanceof Participant) {
-//                            $participant->setParticipantProduct($availableParticipantProductsById[$productId]);
-//                        }
-//                    }
-//                }
-//            }
-//
-//            return;
-//        }
 
         // Add link between participant and participant product added to the cart
         foreach ($cart->getParticipantRows() as $participantCartRow) {
