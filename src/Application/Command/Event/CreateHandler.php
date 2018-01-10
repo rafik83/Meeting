@@ -107,8 +107,12 @@ class CreateHandler
             $create->duplicatedFrom
         );
 
-        $event->getConfiguration()->setColors($create->leftColor, $create->rightColor, $create->textColor);
-        $event->getConfiguration()->setBackgroundColor($create->backgroundColor);
+        $event->getConfiguration()->setColors(
+            $create->leftColor,
+            $create->rightColor,
+            $create->textColor,
+            $create->backgroundColor
+        );
 
         if (null !== $create->logo) {
             $logoExtension = $this->fileStorage->getExtension($create->logo);

@@ -105,9 +105,9 @@ abstract class AbstractEvent
     /** @var null|UploadedFile */
     public $backgroundImage;
 
-    /** @var null|string */
+    /** @var string */
     public $backgroundColor;
 
     /** @var bool */
-    public $isBackgrounImageToRemove = false;
+    public $isBackgroundImageToRemove = false;
 }

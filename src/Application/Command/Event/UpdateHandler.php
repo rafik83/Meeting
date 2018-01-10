@@ -103,8 +103,12 @@ class UpdateHandler
             $update->invoicePrefix,
             $update->visible
         );
-        $event->getConfiguration()->setColors($update->leftColor, $update->rightColor, $update->textColor);
-        $event->getConfiguration()->setBackgroundColor($update->backgroundColor);
+        $event->getConfiguration()->setColors(
+            $update->leftColor,
+            $update->rightColor,
+            $update->textColor,
+            $update->backgroundColor
+        );
 
         $update->event->getConfiguration()->setAnalyticsCode($update->analyticsCode);
 
@@ -123,13 +127,13 @@ class UpdateHandler
             $this->fileStorage->remove($backgroundImageToRemove);
         }
 
-        if ($update->isBackgrounImageToRemove) {
+        if ($update->isBackgroundImageToRemove) {
             $this->removeImageHandler->handle(new RemoveImage($event));
         }
 
         $this->updateTranslatons($update);
 
-        if ($colorUpdated || $backgroundUpdated) {
+        if ($colorUpdated || $backgroundUpdated || $update->isBackgroundImageToRemove) {
             $this->buildAssets($event);
         }
 

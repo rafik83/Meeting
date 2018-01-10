@@ -192,12 +192,14 @@ class Configuration
      * @param string $leftColor
      * @param string $rightColor
      * @param string $textColor
+     * @param string $backgroundColor
      */
-    public function setColors($leftColor, $rightColor, $textColor)
+    public function setColors(string $leftColor, string $rightColor, string $textColor, string $backgroundColor)
     {
         $this->leftColor  = $leftColor;
         $this->rightColor = $rightColor;
         $this->textColor  = $textColor;
+        $this->backgroundColor = $backgroundColor;
     }
 
     /**
@@ -480,19 +482,11 @@ class Configuration
     }
 
     /**
-     * @return null|string
+     * @return string
      */
-    public function getBackgroundColor(): ?string
+    public function getBackgroundColor(): string
     {
         return $this->backgroundColor;
-    }
-
-    /**
-     * @param null|string $backgroundColor
-     */
-    public function setBackgroundColor(?string $backgroundColor): void
-    {
-        $this->backgroundColor = $backgroundColor;
     }
 
     /**

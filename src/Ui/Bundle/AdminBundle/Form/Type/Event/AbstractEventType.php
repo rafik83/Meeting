@@ -121,7 +121,7 @@ abstract class AbstractEventType extends AbstractType
                 ],
             ])
             ->add('backgroundColor', TextType::class, [
-                'required' => false,
+                'required' => true,
             ])
             ->add('leftColor', TextType::class)
             ->add('rightColor', TextType::class)
@@ -134,7 +134,7 @@ abstract class AbstractEventType extends AbstractType
             ]);
 
         if ($event !== null && $event->getConfiguration()->hasBackgroundImage()) {
-            $builder->add('isBackgrounImageToRemove', CheckboxType::class, [
+            $builder->add('isBackgroundImageToRemove', CheckboxType::class, [
                 'required' => false,
             ]);
         }

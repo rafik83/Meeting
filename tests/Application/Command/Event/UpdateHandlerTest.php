@@ -98,7 +98,7 @@ class UpdateHandlerTest extends TestCase
         // Actual event
         $event = $this->event;
         $prefix = $this->prefix;
-        $event->getConfiguration()->setColors('#111111', '#BBBBBB', '#333333');
+        $event->getConfiguration()->setColors('#111111', '#BBBBBB', '#333333', '#CCCCCC');
         $event->setLogo('here.jpeg', 'jpeg');
         $event->getConfiguration()->setBackgroundImage('tutu.jpeg');
 
@@ -141,7 +141,7 @@ class UpdateHandlerTest extends TestCase
         // Expected event
         $expectedEvent  = EventFactory::createEvent();
         $expectedPrefix = EventFactory::createInvoicePrefix();
-        $expectedEvent->getConfiguration()->setColors('#FFFFFF', '#000000', '#CCCCCC');
+        $expectedEvent->getConfiguration()->setColors('#FFFFFF', '#000000', '#CCCCCC', '#CCCCCC');
         $expectedEvent->update(
             'barfoo',
             ['fr', 'en'],
@@ -164,7 +164,6 @@ class UpdateHandlerTest extends TestCase
             ->getConfiguration()
             ->setAnalyticsCode('analyticsCode');
         $expectedEvent->getConfiguration()->setBackgroundImage('tata.jpeg');
-        $expectedEvent->getConfiguration()->setBackgroundColor('#CCCCCC');
 
         // Mock
         $this->eventRepository->set(Argument::that(function (Event $event) use ($expectedEvent) {
@@ -191,6 +190,7 @@ class UpdateHandlerTest extends TestCase
     {
         $event = $this->event;
         $event->getConfiguration()->setBackgroundImage('tutu.jpeg');
+        $event->getConfiguration()->setColors('leftColor', 'rightColor', 'textColor', 'backgroundColor');
 
         $update                = new Update($event);
         $update->title         = 'barfoo';
@@ -209,7 +209,7 @@ class UpdateHandlerTest extends TestCase
         $update->invoicePrefix = $this->prefix;
         $update->analyticsCode = 'analyticsCode';
         $update->visible       = false;
-        $update->isBackgrounImageToRemove = true;
+        $update->isBackgroundImageToRemove = true;
 
         $expectedEvent  = $this->event;
         $expectedPrefix = $this->prefix;
@@ -239,6 +239,7 @@ class UpdateHandlerTest extends TestCase
     {
         // Actual event
         $event  = $this->event;
+        $event->getConfiguration()->setColors('#FFFFFF', '#000000', '#CCCCCC', '#CCCCCC');
         $prefix = $this->prefix;
 
         // Update command
@@ -267,7 +268,7 @@ class UpdateHandlerTest extends TestCase
 
         // Expected event
         $expectedEvent = EventFactory::createEvent();
-        $expectedEvent->getConfiguration()->setColors('#FFFFFF', '#000000', '#CCCCCC');
+        $expectedEvent->getConfiguration()->setColors('#FFFFFF', '#000000', '#CCCCCC', '#CCCCCC');
         $expectedEvent->update(
             'foobar',
             ['fr', 'en', 'de'],
@@ -290,7 +291,7 @@ class UpdateHandlerTest extends TestCase
         // Mock
         $this->eventRepository->set($expectedEvent)->shouldBeCalled();
         $this->eventRepository->getEventByDomain('hello.vimeet.proximum.dev')->shouldBeCalled()->willReturn(null);
-        $this->guidelineGenerator->generate($event)->shouldBeCalled();
+        $this->guidelineGenerator->generate($event)->shouldNotBeCalled();
 
         $eventLocaleChanged = new LocaleChangedEvent($expectedEvent);
         $this->eventDispatcher->dispatch(Events::EVENT_LOCALE_CHANGED, $eventLocaleChanged)->shouldBeCalled();
@@ -303,7 +304,7 @@ class UpdateHandlerTest extends TestCase
         // Actual event
         $event  = $this->event;
         $prefix = $this->prefix;
-        $event->getConfiguration()->setColors('#FFFFFF', '#000000', '#CCCCCC');
+        $event->getConfiguration()->setColors('#FFFFFF', '#000000', '#CCCCCC', '#CCCCCC');
 
         // Update command
         $update                = new Update($event);
@@ -331,7 +332,7 @@ class UpdateHandlerTest extends TestCase
 
         // Expected event
         $expectedEvent = EventFactory::createEvent();
-        $expectedEvent->getConfiguration()->setColors('#FFFFFF', '#000000', '#CCCCCC');
+        $expectedEvent->getConfiguration()->setColors('#FFFFFF', '#000000', '#CCCCCC', '#CCCCCC');
         $expectedEvent->update(
             'foobar',
             ['fr'],
@@ -366,7 +367,7 @@ class UpdateHandlerTest extends TestCase
         // Actual event
         $event  = $this->event;
         $prefix = $this->prefix;
-        $event->getConfiguration()->setColors('#111111', '#BBBBBB', '#333333');
+        $event->getConfiguration()->setColors('#111111', '#BBBBBB', '#333333', '#CCCCCC');
         $event->setLogo('here.jpg', 'jpg');
 
         // Update command
@@ -396,7 +397,7 @@ class UpdateHandlerTest extends TestCase
 
         // Expected event
         $expectedEvent = EventFactory::createEvent();
-        $expectedEvent->getConfiguration()->setColors('#FFFFFF', '#000000', '#CCCCCC');
+        $expectedEvent->getConfiguration()->setColors('#FFFFFF', '#000000', '#CCCCCC', '#CCCCCC');
         $expectedEvent->update(
             'barfoo',
             ['fr', 'en'],

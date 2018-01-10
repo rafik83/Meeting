@@ -40,10 +40,10 @@
     {{ form_row(form.leftColor, {widget_columns: 2}) }}
     {{ form_row(form.rightColor, {widget_columns: 2}) }}
     {{ form_row(form.textColor, {widget_columns: 2}) }}
-    {{ form_row(form.backgroundColor, {widget_columns: 3}) }}
+    {{ form_row(form.backgroundColor, {widget_columns: 2}) }}
     {{ form_row(form.backgroundImage, {widget_columns: 3}) }}
-    {% if form.isBackgrounImageToRemove is defined %}
-        {{ form_row(form.isBackgrounImageToRemove, {widget_columns: 3}) }}
+    {% if form.isBackgroundImageToRemove is defined %}
+        {{ form_row(form.isBackgroundImageToRemove, {widget_columns: 3}) }}
     {% endif %}
 {% endblock form_content %}
 

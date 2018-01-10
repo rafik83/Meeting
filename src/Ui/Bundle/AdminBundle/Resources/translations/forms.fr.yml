@@ -231,7 +231,7 @@ form.event_practical_info_update.children.submit.label: Enregistrer
 form.event_update.children.analyticsCode.label: 'Code analytique'
 form.event_update.children.backgroundColor.label: 'Couleur de fond'
 form.event_update.children.backgroundImage.label: 'Image de fond'
-form.event_update.children.isBackgrounImageToRemove.label: 'Supprimer l''image de fond actuelle'
+form.event_update.children.isBackgroundImageToRemove.label: 'Supprimer l''image de fond actuelle'
 form.event_update.children.country.label: Pays
 form.event_update.children.currency.label: Devise
 form.event_update.children.currency.placeholder: '-- Choisir une devise pour l''événement --'

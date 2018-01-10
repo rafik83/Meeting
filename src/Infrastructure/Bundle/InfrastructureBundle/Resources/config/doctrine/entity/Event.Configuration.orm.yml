@@ -76,4 +76,5 @@ Proximum\Vimeet\Domain\Model\Event\Configuration:
             nullable: true
         backgroundColor:
             type: string
-            nullable: true
+            options:
+                default: '#ffffff'

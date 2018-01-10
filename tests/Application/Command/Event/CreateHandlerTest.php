@@ -91,8 +91,7 @@ class CreateHandlerTest extends TestCase
             $prefix,
             true
         );
-        $expectedEvent->getConfiguration()->setColors('#FFFFFF', '#000000', '#CCCCCC');
-        $expectedEvent->getConfiguration()->setBackgroundColor('#DDDDDD');
+        $expectedEvent->getConfiguration()->setColors('#FFFFFF', '#000000', '#CCCCCC', '#DDDDDD');
         $expectedEvent->getConfiguration()->setBackgroundImage('foofoo.jpeg');
         $expectedEvent->getTranslations()->set('fr', new EventTranslation($expectedEvent, 'fr', ''));
         $expectedEvent->getTranslations()->set('en', new EventTranslation($expectedEvent, 'en', ''));
@@ -188,6 +187,7 @@ class CreateHandlerTest extends TestCase
         $create->timeZone      = 'Europe/Paris';
         $create->emailTeam     = 'team-project@example.net';
         $create->visible       = true;
+        $create->backgroundColor = '#CCCCCC';
 
         // Expected event
         $expectedEvent = new Event(
@@ -205,7 +205,7 @@ class CreateHandlerTest extends TestCase
             $prefix,
             true
         );
-        $expectedEvent->getConfiguration()->setColors('#FFFFFF', '#000000', '#CCCCCC');
+        $expectedEvent->getConfiguration()->setColors('#FFFFFF', '#000000', '#CCCCCC', '#CCCCCC');
         $expectedEvent->getTranslations()->set('fr', new EventTranslation($expectedEvent, 'fr', ''));
         $expectedEvent->getTranslations()->set('en', new EventTranslation($expectedEvent, 'en', ''));
         $expectedEvent->setLogo('toto.jpeg', 'jpeg');
@@ -323,7 +323,7 @@ class CreateHandlerTest extends TestCase
             $prefix,
             true
         );
-        $expectedEvent->getConfiguration()->setColors('#FFFFFF', '#000000', '#CCCCCC');
+        $expectedEvent->getConfiguration()->setColors('#FFFFFF', '#000000', '#CCCCCC', '#CCCCCC');
         $expectedEvent->getTranslations()->set('fr', new EventTranslation($expectedEvent, 'fr', ''));
         $expectedEvent->getTranslations()->set('en', new EventTranslation($expectedEvent, 'en', ''));
         $expectedEvent->setLogo('toto.jpeg', 'jpeg');
@@ -400,8 +400,10 @@ class CreateHandlerTest extends TestCase
             true,
             $duplicatedEvent
         );
+        $event->getConfiguration()->setColors('leftColor', 'rightColor', 'textColor', 'backgroundColor');
 
         $create = new Create($user, $event);
+        $create->backgroundColor = '#FFFFFF';
 
         // Mock
         $adminRepository    = $this->prophesize(AdminRepositoryInterface::class);

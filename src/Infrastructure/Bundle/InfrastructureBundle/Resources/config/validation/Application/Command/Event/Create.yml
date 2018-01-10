@@ -49,6 +49,7 @@ Proximum\Vimeet\Application\Command\Event\Create:
         invoicePrefix:
             - NotBlank: ~
         backgroundColor:
+            - NotBlank: ~
             - Regex:
                 pattern: '/^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/'
                 message: validators.hexadecimal
