@@ -28,7 +28,7 @@ Proximum\Vimeet\Application\Command\Event\Create:
             - NotBlank: ~
         logo:
             - Image:
-                mimeTypes: ["image/jpeg", "image/pjpeg", "image/png", "image/x-png", 'image/svg+xml']
+                mimeTypes: !php/const:Proximum\Vimeet\Domain\Event\Image::SUPPORTED_MIME_TYPE
         textColor:
             - NotBlank: ~
             - Regex:
@@ -55,4 +55,4 @@ Proximum\Vimeet\Application\Command\Event\Create:
                 message: validators.hexadecimal
         backgroundImage:
             - Image:
-                mimeTypes: ["image/jpeg", "image/pjpeg", "image/png", "image/x-png", 'image/svg+xml']
+                mimeTypes: !php/const:Proximum\Vimeet\Domain\Event\Image::SUPPORTED_MIME_TYPE
