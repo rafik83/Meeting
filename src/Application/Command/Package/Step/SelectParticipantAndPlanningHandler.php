@@ -17,6 +17,7 @@ use Proximum\Vimeet\Domain\Cart\Cart;
 use Proximum\Vimeet\Domain\Cart\CartManager;
 use Proximum\Vimeet\Domain\Model\CartRowParticipant;
 use Proximum\Vimeet\Domain\Model\Order;
+use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Product;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Order\Merger;
@@ -232,13 +233,32 @@ class SelectParticipantAndPlanningHandler
             }
         }
 
-        // Add link between participant and participant product added to the cart
-        foreach ($cart->getParticipantRows() as $participantCartRow) {
-            if (isset($participantsByProductId[$participantCartRow->getProduct()->getId()])) {
-                foreach ($participantsByProductId[$participantCartRow->getProduct()->getId()] as $participant) {
-                    $participantCartRow->addCartRowParticipant(
-                        new CartRowParticipant($participantCartRow, $participant)
-                    );
+        // Add a link between Participant and Product of type 'participant'
+        // when no participant's product where added or removed in the cart.
+        // It allows to remove a participant, add another one then re-assign the same participant's product
+        // to the new participant.
+        // It allows also to witch products between participants.
+        if (empty($cart->getParticipantRows())) {
+            foreach ($participantsByProductId as $productId => $participants) {
+                if (isset($availableParticipantProductsById[$productId])
+                    && $availableParticipantProductsById[$productId] instanceof Product
+                ) {
+                    foreach ($participants as $participant) {
+                        if ($participant instanceof Participant) {
+                            $participant->setParticipantProduct($availableParticipantProductsById[$productId]);
+                        }
+                    }
+                }
+            }
+        } else {
+            // Add link between participant and participant product added to the cart
+            foreach ($cart->getParticipantRows() as $participantCartRow) {
+                if (isset($participantsByProductId[$participantCartRow->getProduct()->getId()])) {
+                    foreach ($participantsByProductId[$participantCartRow->getProduct()->getId()] as $participant) {
+                        $participantCartRow->addCartRowParticipant(
+                            new CartRowParticipant($participantCartRow, $participant)
+                        );
+                    }
                 }
             }
         }
