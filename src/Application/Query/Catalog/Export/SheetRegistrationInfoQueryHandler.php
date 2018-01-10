@@ -17,8 +17,8 @@ use Proximum\Vimeet\Domain\Template\TemplateObject;
 
 class SheetRegistrationInfoQueryHandler
 {
-    const TRANS_GENDER = 'gender.%';
-    const TRANS_BOOLEAN = 'boolean.%';
+    const TRANS_GENDER = 'gender.%s';
+    const TRANS_BOOLEAN = 'boolean.%s';
 
     /** @var TranslatorInterface */
     private $translator;

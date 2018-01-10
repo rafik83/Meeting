@@ -126,6 +126,12 @@ class Block extends AbstractChild
         $tags = [];
 
         foreach ($this->getObjects() as $child) {
+            $tag = $child->getTag();
+
+            if ($tag !== null) {
+                $tags[$tag] = $tag;
+            }
+
             foreach ($child->getTags() as $tagInfo) {
                 if (isset($tagInfo['tag'])) {
                     $tags[$tagInfo['tag']] = $tagInfo['tag'];
