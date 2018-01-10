@@ -43,10 +43,31 @@ class AddParticipantCheckerTest extends TestCase
         $this->type->getPackage()->willReturn($this->package->reveal());
     }
 
+    public function testCanAddParticipantFalseAsMaxParticipantReachAndParticipantStepDisabled()
+    {
+        $this->sheet->countParticipants()->willReturn(4);
+        $this->package->getMaxParticipant()->willReturn(4);
+        $this->package->isParticipantAndPlanningEnabled()->willReturn(true);
+
+        $result = $this->addParticipantChecker->canAddParticipant($this->sheet->reveal());
+        $this->assertFalse($result);
+    }
+
+    public function testCanAddParticipantTrueAsMaxParticipantInfAndParticipantStepDisable()
+    {
+        $this->sheet->countParticipants()->willReturn(4);
+        $this->package->getMaxParticipant()->willReturn(null);
+        $this->package->isParticipantAndPlanningEnabled()->willReturn(false);
+
+        $result = $this->addParticipantChecker->canAddParticipant($this->sheet->reveal());
+        $this->assertTrue($result);
+    }
+
     public function testCanAddParticipantFalseAsMaxParticipantReach()
     {
         $this->sheet->countParticipants()->willReturn(4);
         $this->package->getMaxParticipant()->willReturn(4);
+        $this->package->isParticipantAndPlanningEnabled()->willReturn(true);
 
         $result = $this->addParticipantChecker->canAddParticipant($this->sheet->reveal());
         $this->assertFalse($result);
@@ -56,6 +77,7 @@ class AddParticipantCheckerTest extends TestCase
     {
         $this->sheet->countParticipants()->willReturn(4);
         $this->package->getMaxParticipant()->willReturn(7);
+        $this->package->isParticipantAndPlanningEnabled()->willReturn(true);
 
         $participantProduct1 = $this->prophesize(Product::class);
         $participantProduct2 = $this->prophesize(Product::class);
@@ -72,6 +94,7 @@ class AddParticipantCheckerTest extends TestCase
     {
         $this->sheet->countParticipants()->willReturn(4);
         $this->package->getMaxParticipant()->willReturn(7);
+        $this->package->isParticipantAndPlanningEnabled()->willReturn(true);
 
         $participantProduct1 = $this->prophesize(Product::class);
         $participantProduct2 = $this->prophesize(Product::class);
@@ -87,6 +110,7 @@ class AddParticipantCheckerTest extends TestCase
     {
         $this->sheet->countParticipants()->willReturn(4);
         $this->package->getMaxParticipant()->willReturn(7);
+        $this->package->isParticipantAndPlanningEnabled()->willReturn(true);
 
         $participantProduct1 = $this->prophesize(Product::class);
         $participantProduct2 = $this->prophesize(Product::class);
@@ -103,6 +127,7 @@ class AddParticipantCheckerTest extends TestCase
     {
         $this->sheet->countParticipants()->willReturn(4);
         $this->package->getMaxParticipant()->willReturn(7);
+        $this->package->isParticipantAndPlanningEnabled()->willReturn(true);
 
         $participantProduct1 = $this->prophesize(Product::class);
         $participantProduct2 = $this->prophesize(Product::class);

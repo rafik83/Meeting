@@ -19,7 +19,7 @@ class AddParticipantChecker
      *
      * @return bool
      */
-    public function canAddParticipant(Sheet $sheet)
+    public function canAddParticipant(Sheet $sheet): bool
     {
         $package = $sheet->getType()->getPackage();
 
@@ -29,10 +29,11 @@ class AddParticipantChecker
 
         $numberOfParticipant = $sheet->countParticipants();
 
-        if (null !== $package
-            && null !== $package->getMaxParticipant()
-            && $numberOfParticipant >= $package->getMaxParticipant()
-        ) {
+        if (!$package->isParticipantAndPlanningEnabled()) {
+            return null === $package->getMaxParticipant() || $numberOfParticipant >= $package->getMaxParticipant();
+        }
+
+        if (null !== $package->getMaxParticipant() && $numberOfParticipant >= $package->getMaxParticipant()) {
             return false;
         }
 
