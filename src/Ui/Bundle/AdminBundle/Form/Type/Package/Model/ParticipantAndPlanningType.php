@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2015 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -41,8 +41,9 @@ class ParticipantAndPlanningType extends AbstractType
             ])
             ->add('maxParticipant', IntegerType::class, [
                 'attr'     => [
-                    'min' => 1
+                    'min'  => 1,
                 ],
+                'help'     => 'form.package_update.children.participantAndPlanning.children.maxParticipant.help',
                 'required' => false,
             ])
             ->add('participants', ProductCollectionType::class, [
