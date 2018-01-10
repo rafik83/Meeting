@@ -26,6 +26,7 @@ admin.agenda.countSlots: 'Number of slots'
 admin.agenda.countValidatedRequest: 'Number of requests and accepted requests'
 admin.agenda.export.link: Export
 admin.agenda.export.omz: OMZ
+admin.agenda.export.participant_schedules.title: 'Export of participants and plannings'
 admin.agenda.filters.hasParticipantUnavailableWithMeetingRequest.label: 'At least 1 participant is totally unavailable with at least one assigned meeting request'
 admin.agenda.filters.submit.label: 'Filter profiles'
 admin.agenda.filters.type: 'Participation type'
@@ -59,6 +60,7 @@ admin.event.configure_dates: 'Key dates'
 admin.event.create.title: 'Create an event'
 admin.event.dashboard.title: Dashboard
 admin.event.languages: Language
+admin.event.list.currents.title: 'Current events'
 admin.event.page.invoice.title: Invoices
 admin.event.page.list.title: 'List of my events'
 admin.event.practicalInfo.link: 'Practical informations'

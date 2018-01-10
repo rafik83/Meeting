@@ -124,11 +124,11 @@ admin.cancel: Annuler
 admin.category.add: Ajouter
 admin.category.column.id: Id
 admin.category.column.title: Titre
-admin.category.link: 'Catégories de participation'
 admin.category.create.title: 'Créer une catégorie de types de participation'
+admin.category.link: 'Catégories de participation'
 admin.category.title: 'Catégories de types de participation'
-admin.category.update.title: 'Modifier une catégorie de types de participation'
 admin.category.update: Modifier
+admin.category.update.title: 'Modifier une catégorie de types de participation'
 admin.check-all: 'Tout cocher'
 admin.common.close: Fermer
 admin.common.export.no: Non
@@ -170,6 +170,7 @@ admin.event.paymentConditions.typeWithSpecificPaymentConditions: 'Liste des type
 admin.event.paymentConditions.update.title: 'Modifier les conditions de paiement'
 admin.event.practicalInfo.link: 'Informations Pratiques'
 admin.event.practicalInfo.update.title: 'Modifier les informations pratiques'
+admin.event.registration.template_builder.remove_confirm: 'Confirmez vous la suppression de cet élément ?'
 admin.event.search_facet.enabled.label: Activé
 admin.event.search_facet.title: 'Filtres du catalogue'
 admin.event.search_facets.link: 'Filtres catalogue'
@@ -599,8 +600,7 @@ admin.product.update.action: Modifier
 admin.promotion_code.action.close: Fermer
 admin.promotion_code.error.non_unique_code: 'Ce code est déjà utilisé'
 admin.promotion_code.link: 'Codes promos'
-admin.promotion_code.new: 'Nouveau code promo'
-admin.promotion_code.update: 'Modifier code promo'
+admin.promotion_code.new: 'Nouveau code'
 admin.promotion_code.table.action.edit: Modifier
 admin.promotion_code.table.column.action: Action
 admin.promotion_code.table.column.code: Code
@@ -609,6 +609,7 @@ admin.promotion_code.table.column.title: Titre
 admin.promotion_code.table.column.validUntil: 'Valide jusqu''au'
 admin.promotion_code.table.no_result: 'Aucun code promo'
 admin.promotion_code.title: 'Codes promos'
+admin.promotion_code.update: 'Modifier code promo'
 admin.role.ROLE_OPERATOR: Collaborateur
 admin.role.ROLE_ORGANIZER: Organisateur
 admin.role.ROLE_PARTNER: Partenaire
@@ -718,7 +719,7 @@ admin.sheet.details.participant.tooltip.not_concerned: 'Cet utilisateur n''est p
 admin.sheet.details.participant.visio: Visio
 admin.sheet.details.participants: Participants
 admin.sheet.details.remainingToPay: 'Solde restant dû'
-admin.sheet.details.title: Fiche de présentation
+admin.sheet.details.title: 'Fiche de présentation'
 admin.sheet.details.transactions: Transactions
 admin.sheet.disable: 'Non active'
 admin.sheet.enable: Active
@@ -876,10 +877,10 @@ admin.template.registration.title: 'Templates d''Inscription'
 admin.template.registration.titleOrganizer: 'Templates d''Inscription des organisateurs'
 admin.template.registration.update: 'Modifier le template d''Inscription'
 admin.template.sheet.link: 'Template de présentation'
-admin.template.sheet.title: 'Template de présentation'
 admin.template.sheet.table.column.action: Action
 admin.template.sheet.table.column.eventType: Événement/Type(s)
 admin.template.sheet.table.column.title: Titre
+admin.template.sheet.title: 'Template de présentation'
 admin.template.sheet.titleBase: 'Templates globaux'
 admin.template.sheet.titleEvent: 'Templates assignés'
 admin.tip.column.content: Contenu

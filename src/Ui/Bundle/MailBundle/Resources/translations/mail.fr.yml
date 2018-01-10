@@ -23,7 +23,7 @@ mail.completeProfile.subject: '[%event%] Invitation en tant que participant'
 mail.confirm.agenda.link: 'Confirmer mon agenda'
 mail.confirmResetPassword.body: "Bonjour %firstname% %lastname%,\n\nVotre mot de passe a bien été changé."
 mail.confirmResetPassword.subject: 'Votre mot de passe a bien été changé'
-mail.event.preregister.body: "%firstname% %lastname%,\n\nVotre demande d'inscription  \"%event%\" a bien été enregistrée et sera examinée dans les plus brefs délais par l'équipe \"%event%\".\n\nVous recevrez un mail de confirmation lorsque votre inscription aura été validée par l'organisateur."
+mail.event.preregister.body: "%firstname% %lastname%,\n\nVotre demande d'inscription au programme B2B Meetings de \"%event%\" a bien été prise en compte et sera examinée dans les plus brefs délais par nos équipes.\n\nVous recevrez un mail de confirmation lorsque votre inscription aura été validée par l'organisateur."
 mail.event.preregister.end: ''
 mail.event.preregister.link: 'Votre profil participant'
 mail.event.preregister.subject: 'Vous êtes pré-enregistré à %event%'
@@ -54,7 +54,7 @@ mail.planning.print.orderBy.text: 'Le fichier est trié'
 mail.planning.print.subject: 'Fichier de plannings'
 mail.register.body: "%firstname% %lastname%,\n\nFélicitations ! Votre compte d'accès à l'espace membre \"%event%\" est créé. \n\nVous pouvez dès à présent utiliser votre compte pour vous connecter à votre espace membre sur le site \"%event%\".\n\nBien cordialement,"
 mail.register.subject: 'Votre compte d''accès à l''espace membre de %event% est créé'
-mail.resetPassword.body: "Bonjour,\nVous avez fait une demande de réinitialisation de mot de passe.\nRendez-vous sur ce lien pour pouvoir créer un nouveau mot de passe :"
+mail.resetPassword.body: "Bonjour,\n\nVous avez fait une demande de réinitialisation de mot de passe.\nRendez-vous sur ce lien pour pouvoir créer un nouveau mot de passe :"
 mail.resetPassword.end: 'Cordialement,'
 mail.resetPassword.link: 'Réinitialiser le mot de passe'
 mail.resetPassword.subject: '[%event%] Mot de passe oublié'

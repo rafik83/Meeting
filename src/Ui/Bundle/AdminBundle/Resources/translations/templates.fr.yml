@@ -40,14 +40,14 @@ template.participant.title: 'Les participants'
 template.placeholder.title: Placeholder
 template.products.title: 'Produits liés'
 template.registration.atLeastOneDataFieldMustBeChecked: 'Au moins un des champs Type d''information doit être coché'
-template.registration.templateObjectMustHaveAtLeastOneSetterTag: 'Au moins un type d''information (tag "sheet_data" ou "participant_data") doit être assigné pour le ou les champs suivants : %objectsLabel%'
 template.registration.dataType: 'Type d''information'
-template.registration.optional: 'Optionnel'
+template.registration.optional: Optionnel
 template.registration.participantData: 'Information de participant'
 template.registration.participantTags: 'Tags de participant'
 template.registration.sheetData: 'Information de fiche'
 template.registration.sheetTags: 'Tags de fiche'
 template.registration.tag: Tags
+template.registration.templateObjectMustHaveAtLeastOneSetterTag: 'Au moins un type d''information (tag "sheet_data" ou "participant_data") doit être assigné pour le ou les champs suivants : %objectsLabel%'
 template.required.title: Requis
 template.style.default: 'Par défaut'
 template.style.title: Style
