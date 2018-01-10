@@ -93,6 +93,8 @@ class Applyer
             foreach ($composedRule->tags as $tag) {
                 if (in_array($tag, $object->getTags(), true)) {
                     $tagFound = true;
+
+                    break;
                 }
             }
 
