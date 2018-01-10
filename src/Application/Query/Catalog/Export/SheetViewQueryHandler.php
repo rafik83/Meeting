@@ -18,7 +18,10 @@ use Proximum\Vimeet\Domain\Rule\Applyer;
 use Proximum\Vimeet\Domain\Rule\Composer;
 use Proximum\Vimeet\Domain\Service\Category\CategoryNameResolver;
 use Proximum\Vimeet\Domain\Template\ParticipantInfoGuesser;
+use Proximum\Vimeet\Domain\Template\TemplateData;
 use Proximum\Vimeet\Domain\Template\TemplateDataFactory;
+use Proximum\Vimeet\Domain\Template\TemplateObject;
+use Proximum\Vimeet\Domain\Template\TemplateObject\ExportableObjectInterface;
 
 class SheetViewQueryHandler
 {
@@ -95,6 +98,9 @@ class SheetViewQueryHandler
 
         $registrationTemplate = $this->templateDataFactory->createRegistrationFromSheet($query->sheet, $query->locale);
         $template = $this->templateDataFactory->createFromSheet($query->sheet, $query->locale);
+        $tagOfTemplate = $template->getTags();
+
+        $this->purgeRegistrationFromObjectNotShownOnSheet($registrationTemplate, $tagOfTemplate);
 
         // Clean the template data with the who see what rule
         $this->applyer->applyRuleForRegistrationTemplate($registrationTemplate, $rules);
@@ -155,5 +161,33 @@ class SheetViewQueryHandler
     public function getSheetRegistrationFields(): array
     {
         return $this->sheetRegistrationInfoQueryHandler->getSheetRegistrationFields();
+    }
+
+    /**
+     * @param TemplateData $registrationTemplate
+     * @param array        $tagOfTemplate
+     */
+    private function purgeRegistrationFromObjectNotShownOnSheet(
+        TemplateData &$registrationTemplate,
+        array &$tagOfTemplate
+    ) {
+        /** @var ExportableObjectInterface|TemplateObject $object */
+        foreach ($registrationTemplate->getExportableObjects() as $object) {
+            $found = false;
+
+            foreach ($object->getTags() as $tagInfo) {
+                if (isset($tagOfTemplate[$tagInfo])
+                    || (is_array($tagInfo) && isset($tagInfo['tag']) && isset($tagOfTemplate[$tagInfo['tag']]))
+                ) {
+                    $found = true;
+
+                    break;
+                }
+            }
+
+            if (!$found) {
+                $registrationTemplate->removeObject($object->getKey());
+            }
+        }
     }
 }

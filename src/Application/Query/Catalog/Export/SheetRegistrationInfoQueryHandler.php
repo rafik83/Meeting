@@ -50,40 +50,38 @@ class SheetRegistrationInfoQueryHandler
 
         /** @var TemplateObject|TemplateObject\ExportableObjectInterface $object */
         foreach ($query->templateData->getExportableObjects() as $object) {
-            if ($object->hasTag(Tag::SHEET_DATA)) {
-                $key = $object->getKey();
-                $fieldName = $object->getExportableFieldname($query->locale, $query->fallback);
-
-                if (!isset($this->sheetRegistrationFields[$key])) {
-                    $this->sheetRegistrationFields[$key] = $fieldName;
-                }
-
-                $content = $object->getExportableContent([], $query->locale);
-
-                if ($object instanceof TemplateObject\Gender) {
-                    $content = $this->translator->trans(
-                        sprintf(self::TRANS_GENDER, $content),
-                        [],
-                        'export',
-                        $query->locale
-                    );
-                }
-
-                if ($object instanceof TemplateObject\Country) {
-                    $content = $this->intl->getCountryName($content, $query->locale);
-                }
-
-                if ($object instanceof TemplateObject\BooleanObject) {
-                    $content = $this->translator->trans(
-                        sprintf(self::TRANS_BOOLEAN, $content ? 'yes' : 'no'),
-                        [],
-                        'export',
-                        $query->locale
-                    );
-                }
-
-                $data[$key] = $content;
+            if (!$object->hasTag(Tag::SHEET_DATA)) {
+                continue;
             }
+
+            $key = $object->getKey();
+            $fieldName = $object->getExportableFieldname($query->locale, $query->fallback);
+
+            if (!isset($this->sheetRegistrationFields[$key])) {
+                $this->sheetRegistrationFields[$key] = $fieldName;
+            }
+
+            $content = $object->getExportableContent([], $query->locale);
+
+            if ($object instanceof TemplateObject\Gender) {
+                $content = $this->translator->trans(
+                    sprintf(self::TRANS_GENDER, $content),
+                    [],
+                    'export',
+                    $query->locale
+                );
+            } elseif ($object instanceof TemplateObject\Country) {
+                $content = $this->intl->getCountryName($content, $query->locale);
+            } elseif ($object instanceof TemplateObject\BooleanObject) {
+                $content = $this->translator->trans(
+                    sprintf(self::TRANS_BOOLEAN, $content ? 'yes' : 'no'),
+                    [],
+                    'export',
+                    $query->locale
+                );
+            }
+
+            $data[$key] = $content;
         }
 
         return $data;
