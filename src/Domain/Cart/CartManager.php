@@ -12,6 +12,7 @@ namespace Proximum\Vimeet\Domain\Cart;
 
 use Proximum\Vimeet\Domain\Model\CartRowParticipant;
 use Proximum\Vimeet\Domain\Model\CartStep;
+use Proximum\Vimeet\Domain\Model\Order;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Product;
 use Proximum\Vimeet\Domain\Model\Sheet;
@@ -87,58 +88,69 @@ class CartManager
         $availableParticipantProductsById = $this->getAvailableParticipantProductsById($sheet);
 
         $mergedOrder = $this->orderMerger->getMergedOrders($sheet);
+        $participantsIncludedByProductId = $this->getParticipantsIncludedByProductId($mergedOrder);
 
+        $this->saveNeededParticipantProductsToCart(
+            $cart,
+            $mergedOrder,
+            $availableParticipantProductsById,
+            $participantsByProductId,
+            $participantsIncludedByProductId
+        );
+
+        $this->saveUnNeededParticipantProductsToCart(
+            $cart,
+            $mergedOrder,
+            $availableParticipantProductsById,
+            $participantsByProductId,
+            $participantsIncludedByProductId
+        );
+    }
+
+    /**
+     * @param Cart       $cart
+     * @param null|Order $order
+     * @param array      $availableParticipantProductsById
+     * @param array      $participantsByProductId
+     * @param array      $participantsIncludedByProductId
+     */
+    private function saveNeededParticipantProductsToCart(
+        Cart $cart,
+        ?Order $order = null,
+        array &$availableParticipantProductsById,
+        array &$participantsByProductId,
+        array &$participantsIncludedByProductId
+    ) {
         foreach ($participantsByProductId as $productId => $participants) {
+            $participantProduct = $availableParticipantProductsById[$productId];
             $quantityToAdd = count($participants);
 
-            // take account of previous ordered Participant products
-            if (null !== $mergedOrder) {
-                $row = $mergedOrder->getRowByProductId($productId);
+            // Take account of previous ordered Participant products
+            if (null !== $order) {
+                $row = $order->getRowByProductId($productId);
 
                 if (null !== $row) {
+                    // Take account of previous ordered quantity for this product
                     $quantityToAdd = $quantityToAdd - $row->getQuantity();
                 }
             }
 
-            if ($quantityToAdd > 0) {
-                // Set participant products in cart
-                $cart->setProduct($availableParticipantProductsById[$productId], $quantityToAdd);
+            if (isset($participantsIncludedByProductId[$productId])) {
+                // Get included quantity for this product
+                $quantityToAdd = $quantityToAdd - $participantsIncludedByProductId[$productId];
             }
-        }
 
-        // Add a negative quantity for participant product not used anymore
-        if (null !== $mergedOrder) {
-            $participantRows = $mergedOrder->getRowsProductOfParticipantType();
+            if ($quantityToAdd !== 0) {
+                // Set participant products in cart
+                $cart->setProduct($participantProduct, $quantityToAdd);
 
-            foreach ($participantRows as $participantRow) {
-                if (!isset($participantsByProductId[$participantRow->getProduct()->getId()])) {
-                    $cart->setProduct($participantRow->getProduct(), -1 * $participantRow->getQuantity());
-                } else {
-                    $productId = $participantRow->getProduct()->getId();
-                    $previousQuantity = $participantRow->getQuantity();
-                    $newQuantity = count($participantsByProductId[$productId]);
-                    $quantityToRemove = $previousQuantity - $newQuantity;
+                continue;
+            }
 
-                    // Add a link between Participant and Product of type 'participant'
-                    // when no participant's product where added or removed in the cart.
-                    // It allows to remove a participant, add another one then re-assign the same participant's product
-                    // to the new participant.
-                    // It allows also to switch products between participants.
-                    if (0 === $quantityToRemove) {
-                        foreach ($participantsByProductId[$productId] as $participant) {
-                            if ($participant instanceof Participant) {
-                                if (isset($availableParticipantProductsById[$productId])
-                                    && $availableParticipantProductsById[$productId] instanceof Product
-                                ) {
-                                    $participant->setParticipantProduct($availableParticipantProductsById[$productId]);
-                                }
-                            }
-                        }
-                    }
-
-                    // Remove quantity for a participant product and add a row in the cart
-                    if ($quantityToRemove > 0) {
-                        $cart->setProduct($participantRow->getProduct(), -1 * $quantityToRemove);
+            if ($quantityToAdd <= 0) {
+                foreach ($participants as $participant) {
+                    if ($participant instanceof Participant) {
+                        $participant->setParticipantProduct($availableParticipantProductsById[$productId]);
                     }
                 }
             }
@@ -154,6 +166,87 @@ class CartManager
                 }
             }
         }
+    }
+
+    /**
+     * @param Cart       $cart
+     * @param null|Order $order
+     * @param array      $availableParticipantProductsById
+     * @param array      $participantsByProductId
+     * @param array      $participantsIncludedByProductId
+     */
+    private function saveUnNeededParticipantProductsToCart(
+        Cart $cart,
+        ?Order $order = null,
+        array &$availableParticipantProductsById,
+        array &$participantsByProductId,
+        array &$participantsIncludedByProductId
+    ) {
+        if (null === $order) {
+            return;
+        }
+
+        $participantRows = $order->getRowsProductOfParticipantType();
+
+        foreach ($participantRows as $participantRow) {
+            if (!isset($participantsByProductId[$participantRow->getProduct()->getId()])) {
+                // Remove all previous ordered quantity for this product
+                $cart->setProduct($participantRow->getProduct(), -1 * $participantRow->getQuantity());
+
+                continue;
+            }
+
+            $productId = $participantRow->getProduct()->getId();
+            $previousQuantity = $participantRow->getQuantity();
+            $newQuantity = count($participantsByProductId[$productId]);
+            $quantityToRemove = $previousQuantity - $newQuantity;
+
+            // @todo: Take account of included Participant products
+
+            // Add a link between Participant and Product of type 'participant'
+            // when no participant's product where added or removed in the cart.
+            // It allows to remove a participant, add another one then re-assign the same participant's product
+            // to the new participant.
+            // It allows also to switch products between participants.
+            if (0 === $quantityToRemove) {
+                foreach ($participantsByProductId[$productId] as $participant) {
+                    if ($participant instanceof Participant) {
+                        if (isset($availableParticipantProductsById[$productId])
+                            && $availableParticipantProductsById[$productId] instanceof Product
+                        ) {
+                            $participant->setParticipantProduct($availableParticipantProductsById[$productId]);
+                        }
+                    }
+                }
+            }
+
+            // Remove quantity for a participant product and add a row in the cart
+            if ($quantityToRemove > 0) {
+                $cart->setProduct($participantRow->getProduct(), -1 * $quantityToRemove);
+            }
+        }
+    }
+
+    /**
+     * @param Order $order
+     *
+     * @return array of quantity indexed by Participant Product id
+     */
+    private function getParticipantsIncludedByProductId(Order $order): array
+    {
+        if (null === $order || null === $order->getPlan()) {
+            return [];
+        }
+
+        $includedParticipantProducts = $order->getPlan()->getIncludedParticipantProducts();
+
+        $participantsIncludedByProductId = [];
+
+        foreach ($includedParticipantProducts as $includedParticipantProduct) {
+            $participantsIncludedByProductId[$includedParticipantProduct->getIncluded()->getId()] = $includedParticipantProduct->getQuantity();
+        }
+
+        return $participantsIncludedByProductId;
     }
 
     /**

@@ -591,12 +591,30 @@ class Product
 
     /**
      * @return boolean|ProductIncluded
+     *
+     * @deprecated use Product::getIncludedParticipantProducts
      */
     public function getIncludedParticipantProduct()
     {
         return $this->productIncluded->filter(function (ProductIncluded $productIncluded) {
             return $productIncluded->getIncluded()->isParticipant();
         })->first();
+    }
+
+    /**
+     * @return ProductIncluded[]
+     */
+    public function getIncludedParticipantProducts(): array
+    {
+        return $this
+            ->productIncluded
+            ->filter(
+                function (ProductIncluded $productIncluded) {
+                    return $productIncluded->getIncluded()->isParticipant();
+                }
+            )
+            ->toArray()
+        ;
     }
 
     /**
