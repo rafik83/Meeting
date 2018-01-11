@@ -123,10 +123,10 @@ class CartManager
                     // when no participant's product where added or removed in the cart.
                     // It allows to remove a participant, add another one then re-assign the same participant's product
                     // to the new participant.
-                    // It allows also to witch products between participants.
+                    // It allows also to switch products between participants.
                     if (0 === $quantityToRemove) {
                         foreach ($participantsByProductId[$productId] as $participant) {
-                            if ($participant instanceof Participant && !$participant->hasParticipantProduct()) {
+                            if ($participant instanceof Participant) {
                                 if (isset($availableParticipantProductsById[$productId])
                                     && $availableParticipantProductsById[$productId] instanceof Product
                                 ) {
