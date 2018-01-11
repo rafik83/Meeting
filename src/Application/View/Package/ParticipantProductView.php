@@ -12,6 +12,9 @@ namespace Proximum\Vimeet\Application\View\Package;
 
 class ParticipantProductView
 {
+    /** @var int */
+    public $id;
+
     /** @var string */
     public $title;
 
@@ -24,22 +27,36 @@ class ParticipantProductView
     /** @var string */
     public $vatMode;
 
-    /** @var bool */
-    public $isIncluded;
+    /** @var int */
+    public $quantityMax;
+
+    /** @var int */
+    public $quantityIncluded;
 
     /**
+     * @param int    $id
      * @param string $title
      * @param float  $unitPrice
      * @param string $currency
      * @param string $vatMode
-     * @param bool   $isIncluded
+     * @param int    $quantityMax
+     * @param int    $quantityIncluded
      */
-    public function __construct($title, $unitPrice, $currency, $vatMode, $isIncluded)
-    {
-        $this->title      = $title;
-        $this->unitPrice  = $unitPrice;
-        $this->currency   = $currency;
-        $this->vatMode    = $vatMode;
-        $this->isIncluded = $isIncluded;
+    public function __construct(
+        int $id,
+        string $title,
+        float $unitPrice,
+        string $currency,
+        string $vatMode,
+        int $quantityMax,
+        int $quantityIncluded
+    ) {
+        $this->id = $id;
+        $this->title = $title;
+        $this->unitPrice = $unitPrice;
+        $this->currency = $currency;
+        $this->vatMode = $vatMode;
+        $this->quantityMax = $quantityMax;
+        $this->quantityIncluded = $quantityIncluded;
     }
 }

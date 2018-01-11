@@ -12,6 +12,7 @@ namespace Proximum\Vimeet\Application\Query\Package\Participant;
 
 use Proximum\Vimeet\Application\View\Package\ParticipantProductView;
 use Proximum\Vimeet\Domain\Package\Product\IncludedParticipantGuesser;
+use Proximum\Vimeet\Domain\View\Package\Product\IncludedParticipantView;
 
 class ParticipantProductViewQueryHandler
 {
@@ -29,33 +30,43 @@ class ParticipantProductViewQueryHandler
     /**
      * @param ParticipantProductViewQuery $participantProductViewQuery
      *
-     * @return null|ParticipantProductView
+     * @return ParticipantProductView[]
      */
-    public function handle(ParticipantProductViewQuery $participantProductViewQuery)
+    public function handle(ParticipantProductViewQuery $participantProductViewQuery): array
     {
-        $sheet  = $participantProductViewQuery->sheet;
+        $sheet = $participantProductViewQuery->sheet;
         $locale = $participantProductViewQuery->locale;
 
         if (!$sheet->getPackage()->isPassable()) {
-            return null;
+            return [];
         }
 
-        $includedParticipantView = $this->includedParticipantGuesser->getIncludedParticipantView($sheet);
+        $participantProductViews = [];
 
-        if ($includedParticipantView->remainingQuantity > 0) {
-            $isIncluded         = true;
-            $participantProduct = $includedParticipantView->product;
-        } else {
-            $isIncluded         = false;
-            $participantProduct = $sheet->getPackage()->getParticipant();
+        $includedParticipantViews = $this->includedParticipantGuesser->getIncludedParticipantViews($sheet);
+
+        foreach ($sheet->getPackage()->getParticipants() as $participantProduct) {
+            $includedQuantity = 0;
+
+            if (isset($includedParticipantViews[$participantProduct->getId()])) {
+                $includedParticipantView = $includedParticipantViews[$participantProduct->getId()];
+
+                if ($includedParticipantView instanceof IncludedParticipantView) {
+                    $includedQuantity = $includedParticipantView->totalQuantity;
+                }
+            }
+
+            $participantProductViews[] = new ParticipantProductView(
+                $participantProduct->getId(),
+                $participantProduct->getTitle($locale),
+                $participantProduct->getUnitPrice(),
+                $participantProduct->getCurrency(),
+                $participantProduct->getVatMode(),
+                (int) $participantProduct->getQuantityMax(),
+                (int) $includedQuantity
+            );
         }
 
-        return new ParticipantProductView(
-            $participantProduct->getTitle($locale),
-            $participantProduct->getUnitPrice(),
-            $participantProduct->getCurrency(),
-            $participantProduct->getVatMode(),
-            $isIncluded
-        );
+        return $participantProductViews;
     }
 }

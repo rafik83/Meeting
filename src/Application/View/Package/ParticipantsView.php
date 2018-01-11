@@ -15,11 +15,16 @@ class ParticipantsView
     /** @var ParticipantView[] */
     public $participantViews;
 
+    /** @var ParticipantProductView[] */
+    public $participantProductViews;
+
     /**
-     * @param ParticipantView[] $participantViews
+     * @param ParticipantView[]        $participantViews
+     * @param ParticipantProductView[] $participantProductViews
      */
-    public function __construct(array $participantViews)
+    public function __construct(array $participantViews, array $participantProductViews)
     {
         $this->participantViews = $participantViews;
+        $this->participantProductViews = $participantProductViews;
     }
 }

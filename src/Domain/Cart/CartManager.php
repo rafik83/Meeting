@@ -88,7 +88,7 @@ class CartManager
         $availableParticipantProductsById = $this->getAvailableParticipantProductsById($sheet);
 
         $mergedOrder = $this->orderMerger->getMergedOrders($sheet);
-        $participantsIncludedByProductId = $this->getParticipantsIncludedByProductId($mergedOrder);
+        $participantsIncludedByProductId = $this->getParticipantsIncludedByProductId($cart, $mergedOrder);
 
         $this->saveNeededParticipantProductsToCart(
             $cart,
@@ -226,17 +226,18 @@ class CartManager
     }
 
     /**
+     * @param Cart  $cart
      * @param Order $order
      *
      * @return array of quantity indexed by Participant Product id
      */
-    private function getParticipantsIncludedByProductId(Order $order): array
+    private function getParticipantsIncludedByProductId(Cart $cart, ?Order $order = null): array
     {
-        if (null === $order || null === $order->getPlan()) {
-            return [];
+        if (null !== $order) {
+            $includedParticipantProducts = $order->getIncludedParticipantProducts();
+        } else {
+            $includedParticipantProducts = $cart->getIncludedParticipantProducts();
         }
-
-        $includedParticipantProducts = $order->getPlan()->getIncludedParticipantProducts();
 
         $participantsIncludedByProductId = [];
 

@@ -2823,7 +2823,7 @@ services:
         class: Proximum\Vimeet\Application\Query\Package\Participant\ParticipantsViewQueryHandler
         arguments:
             - '@query.package.participant_view_query_handler'
-            - '@package.product.included_participant_guesser'
+            - '@query.package.participant_product_view_query_handler'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Package\ParticipantsViewQuery }
     query.package.participant_product_view_query_handler:

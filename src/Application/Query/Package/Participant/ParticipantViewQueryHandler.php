@@ -31,24 +31,19 @@ class ParticipantViewQueryHandler
 
     /**
      * @param ParticipantViewQuery $participantViewQuery
+     *
      * @return ParticipantView
      */
-    public function handle(ParticipantViewQuery $participantViewQuery)
+    public function handle(ParticipantViewQuery $participantViewQuery): ParticipantView
     {
-        $cardView = $this->cardViewQueryHandler->handle(
-            new CardViewQuery(
-                $participantViewQuery->participant,
-                $participantViewQuery->locale
-            )
-        );
-
         return new ParticipantView(
             $participantViewQuery->participant->getId(),
-            $cardView,
-            $participantViewQuery->participantProduct->getUnitPrice(),
-            $participantViewQuery->participant->getSheet()->getEvent()->getMode(),
-            $participantViewQuery->participant->getSheet()->getEvent()->getCurrency(),
-            $participantViewQuery->included
+            $this->cardViewQueryHandler->handle(
+                new CardViewQuery(
+                    $participantViewQuery->participant,
+                    $participantViewQuery->locale
+                )
+            )
         );
     }
 }

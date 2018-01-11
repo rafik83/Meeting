@@ -99,6 +99,18 @@ class Cart
     }
 
     /**
+     * @return Product\ProductIncluded[]
+     */
+    public function getIncludedParticipantProducts(): array
+    {
+        if (null === $this->getPlanRow()) {
+            return [];
+        }
+
+        return $this->getPlanRow()->getProduct()->getIncludedParticipantProducts();
+    }
+
+    /**
      * Get how many participant are included.
      *
      * @return int

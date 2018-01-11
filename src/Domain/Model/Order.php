@@ -531,6 +531,18 @@ class Order
     }
 
     /**
+     * @return Product\ProductIncluded[]
+     */
+    public function getIncludedParticipantProducts(): array
+    {
+        if (null === $this->getPlan()) {
+            return [];
+        }
+
+        return $this->getPlan()->getIncludedParticipantProducts();
+    }
+
+    /**
      * @return boolean
      */
     public function isCancelled()

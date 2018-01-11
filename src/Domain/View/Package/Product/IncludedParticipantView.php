@@ -14,7 +14,7 @@ use Proximum\Vimeet\Domain\Model\Product;
 
 class IncludedParticipantView
 {
-    /** @var null|Product */
+    /** @var Product */
     public $product;
 
     /** @var int */
@@ -24,14 +24,14 @@ class IncludedParticipantView
     public $remainingQuantity;
 
     /**
-     * @param null|Product $product
-     * @param int          $totalQuantity
-     * @param int          $remainingQuantity
+     * @param Product $product
+     * @param int     $totalQuantity
+     * @param int     $remainingQuantity
      */
-    public function __construct($product, $totalQuantity, $remainingQuantity)
+    public function __construct(Product $product, int $totalQuantity, int $remainingQuantity)
     {
-        $this->product           = $product;
-        $this->totalQuantity     = $totalQuantity;
+        $this->product = $product;
+        $this->totalQuantity = $totalQuantity;
         $this->remainingQuantity = $remainingQuantity;
     }
 }

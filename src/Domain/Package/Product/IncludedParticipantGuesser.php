@@ -19,43 +19,45 @@ class IncludedParticipantGuesser extends AbstractIncludedProductGuesser
     /**
      * @param Sheet $sheet
      *
-     * @return IncludedParticipantView
+     * @deprecated
      */
     public function getIncludedParticipantView(Sheet $sheet)
     {
-        $product             = null;
-        $totalQuantity       = 0;
-        $participantIncluded = $this->getParticipantIncluded($sheet);
-
-        if (null !== $participantIncluded) {
-            $totalQuantity = $participantIncluded->getQuantity();
-            $product       = $participantIncluded->getIncluded();
-        }
-
-        $remainingQuantity = max(0, $totalQuantity - $sheet->countParticipant());
-
-        return new IncludedParticipantView($product, $totalQuantity, $remainingQuantity);
     }
 
     /**
      * @param Sheet $sheet
      *
-     * @return ProductIncluded
-     *
-     * @deprecated
+     * @return IncludedParticipantView[] indexed by included product id
      */
-    private function getParticipantIncluded(Sheet $sheet)
+    public function getIncludedParticipantViews(Sheet $sheet): array
+    {
+        $includedParticipantViews = [];
+
+        foreach ($this->getParticipantIncluded($sheet) as $productIncluded) {
+            $includedParticipantViews[$productIncluded->getIncluded()->getId()] = new IncludedParticipantView(
+                $productIncluded->getIncluded(),
+                $productIncluded->getQuantity(),
+                0 // @todo
+            );
+        }
+
+        return $includedParticipantViews;
+    }
+
+    /**
+     * @param Sheet $sheet
+     *
+     * @return ProductIncluded[]
+     */
+    private function getParticipantIncluded(Sheet $sheet): array
     {
         $selectedPlan = $this->getSelectedPlan($sheet);
 
-        if (null !== $selectedPlan) {
-            $participantProductIncluded = $selectedPlan->getIncludedParticipantProduct();
-
-            if ($participantProductIncluded instanceof ProductIncluded) {
-                return $participantProductIncluded;
-            }
+        if (null === $selectedPlan) {
+            return [];
         }
 
-        return null;
+        return $selectedPlan->getIncludedParticipantProducts();
     }
 }

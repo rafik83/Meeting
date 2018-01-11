@@ -11,26 +11,25 @@
 namespace Proximum\Vimeet\Application\Query\Package\Participant;
 
 use Proximum\Vimeet\Application\View\Package\ParticipantsView;
-use Proximum\Vimeet\Domain\Package\Product\IncludedParticipantGuesser;
 
 class ParticipantsViewQueryHandler
 {
     /** @var ParticipantViewQueryHandler */
     private $participantViewQueryHandler;
 
-    /** @var IncludedParticipantGuesser */
-    private $includedParticipantGuesser;
+    /** @var ParticipantProductViewQueryHandler */
+    private $participantProductViewQueryHandler;
 
     /**
-     * @param ParticipantViewQueryHandler $participantViewQueryHandler
-     * @param IncludedParticipantGuesser  $includedParticipantGuesser
+     * @param ParticipantViewQueryHandler        $participantViewQueryHandler
+     * @param ParticipantProductViewQueryHandler $participantProductViewQueryHandler
      */
     public function __construct(
         ParticipantViewQueryHandler $participantViewQueryHandler,
-        IncludedParticipantGuesser $includedParticipantGuesser
+        ParticipantProductViewQueryHandler $participantProductViewQueryHandler
     ) {
         $this->participantViewQueryHandler = $participantViewQueryHandler;
-        $this->includedParticipantGuesser  = $includedParticipantGuesser;
+        $this->participantProductViewQueryHandler = $participantProductViewQueryHandler;
     }
 
     /**
@@ -40,29 +39,23 @@ class ParticipantsViewQueryHandler
     public function handle(ParticipantsViewQuery $participantsViewQuery)
     {
         $locale = $participantsViewQuery->locale;
-
-        $includedParticipantView = $this->includedParticipantGuesser->getIncludedParticipantView(
-            $participantsViewQuery->sheet
-        );
-
-        $numberIncluded = $includedParticipantView->totalQuantity;
-
-        $participantProduct = $participantsViewQuery->sheet->getPackage()->getParticipant();
+        $sheet = $participantsViewQuery->sheet;
 
         $participantView = [];
 
-        foreach ($participantsViewQuery->sheet->getParticipants() as $participant) {
+        foreach ($sheet->getParticipants() as $participant) {
             $participantView[] = $this->participantViewQueryHandler->handle(
                 new ParticipantViewQuery(
-                    $participantProduct,
                     $participant,
-                    $locale,
-                    count($participantView) < $numberIncluded
+                    $locale
                 )
             );
         }
 
-        $participantsView = new ParticipantsView($participantView);
+        $participantsView = new ParticipantsView(
+            $participantView,
+            $this->participantProductViewQueryHandler->handle(new ParticipantProductViewQuery($sheet, $locale))
+        );
 
         return $participantsView;
     }
