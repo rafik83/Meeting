@@ -40,7 +40,7 @@ class TermsOfSaleViewQueryHandler
      *
      * @return TermsOfSaleView
      */
-    public function handle(TermsOfSaleViewQuery $query)
+    public function handle(TermsOfSaleViewQuery $query): TermsOfSaleView
     {
         $termsOfSale = $this->contentRepository->findByEventAndType($query->event, Content::TYPE_TERMS_OF_SALE);
         $content     = $termsOfSale->getValue($query->locale, $query->event->getFallback());

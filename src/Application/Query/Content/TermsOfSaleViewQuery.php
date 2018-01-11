@@ -27,7 +27,7 @@ class TermsOfSaleViewQuery implements Query
      */
     public function __construct(Event $event, string $locale)
     {
-        $this->event = $event;
+        $this->event  = $event;
         $this->locale = $locale;
     }
 }
