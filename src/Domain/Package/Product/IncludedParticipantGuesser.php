@@ -41,6 +41,8 @@ class IncludedParticipantGuesser extends AbstractIncludedProductGuesser
      * @param Sheet $sheet
      *
      * @return ProductIncluded
+     *
+     * @deprecated
      */
     private function getParticipantIncluded(Sheet $sheet)
     {

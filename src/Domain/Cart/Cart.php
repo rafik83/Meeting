@@ -102,6 +102,8 @@ class Cart
      * Get how many participant are included.
      *
      * @return int
+     *
+     * @deprecated
      */
     public function getIncludedParticipantQuantity()
     {

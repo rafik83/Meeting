@@ -581,6 +581,8 @@ class Product
      * Get the number of participant included in this product
      *
      * @return int
+     *
+     * @deprecated
      */
     public function getIncludedParticipantQuantity()
     {
