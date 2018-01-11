@@ -10,10 +10,10 @@
 
 namespace Proximum\Vimeet\Application\Query\Content;
 
-use Proximum\Vimeet\Application\Command\Command;
+use Proximum\Vimeet\Application\Query\Query;
 use Proximum\Vimeet\Domain\Model\Event;
 
-class TermsOfSaleViewQuery implements Command
+class TermsOfSaleViewQuery implements Query
 {
     /** @var Event */
     public $event;
