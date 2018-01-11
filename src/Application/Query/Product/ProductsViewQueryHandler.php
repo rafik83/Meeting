@@ -60,7 +60,8 @@ class ProductsViewQueryHandler
                 array_map(function (Product\ProductIncluded $includedProduct) {
                     return [
                         'quantity' => $includedProduct->getQuantity(),
-                        'name'     => $includedProduct->getIncluded()->getName()
+                        'type' => $includedProduct->getIncluded()->getType(),
+                        'name' => $includedProduct->getIncluded()->getName()
                     ];
                 }, $product->getIncludedProducts()),
                 $bought,

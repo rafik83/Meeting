@@ -594,6 +594,10 @@ admin.product.remove.link: Supprimer
 admin.product.removeUnAvailable.title: 'Le produit ne peut pas être supprimé car il est utilisé dans une formule, un forfait ou une commande'
 admin.product.subjectedToValidation: 'Soumis à validation'
 admin.product.title: 'Catalogue de produits'
+admin.product.type.option: Produit / option
+admin.product.type.participant: Participant
+admin.product.type.plan: Formule
+admin.product.type.planning: Planning
 admin.product.unitPrice: 'Prix unitaire'
 admin.product.updatable: Supprimable
 admin.product.update.action: Modifier
