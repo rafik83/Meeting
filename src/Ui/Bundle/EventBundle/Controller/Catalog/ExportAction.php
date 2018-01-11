@@ -173,7 +173,7 @@ class ExportAction
             }
         }
 
-        if ($filterAvailableSlotAndSpecificSlotChecker->filterAvailableSlot) {
+        if (true === $filterAvailableSlotAndSpecificSlotChecker->filterAvailableSlot) {
             $catalogAvailableSlotView = $this
                 ->queryBus
                 ->handle(new CatalogAvailableSlotIdsViewQuery($event, $sheet, $userDomain->getUser(), $filters))
