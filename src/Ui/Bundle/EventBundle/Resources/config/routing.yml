@@ -537,7 +537,17 @@ event_notification_list:
 #
 event_content_terms_of_sale:
     path: /sheet/{sheet}/terms-of-sale
+    requirements:
+        sheet: \d+
     defaults: { _controller: Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Content\TermsOfSale\ShowAction }
+    methods: [GET]
+
+#
+# Content
+#
+event_package_content_terms_of_sale:
+    path: /terms-of-sale
+    defaults: { _controller: EventBundle:Content:termsOfSale }
     methods: [GET]
 
 #

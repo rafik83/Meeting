@@ -41,7 +41,7 @@ class ShowActionTest extends TestCase
         $eventDomain->getEvent()->shouldBeCalled()->willReturn($event);
         $request->getLocale()->shouldBeCalled()->willReturn($locale);
 
-        $engine->renderResponse('EventBundle:Package:terms-of-sale.html.twig', [
+        $engine->renderResponse('EventBundle:Content:terms-of-sale.html.twig', [
             'sheet'   => $sheet,
             'event'   => $event,
             'content' => 'foobar'

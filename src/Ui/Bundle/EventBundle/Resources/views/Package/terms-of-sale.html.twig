@@ -1,17 +1,1 @@
-{% extends 'EventBundle::base.html.twig' %}
-
-{% block title %}{{ 'event.content.title'|trans }}{% endblock %}
-
-{% block content %}
-    <div class="main-content container-fluid">
-        <section class="main">
-            <div class="main__content">
-                <div class="row">
-                    <div class="col-md-12 terms-of-sale-content">
-                        {{ content|html }}
-                    </div>
-                </div>
-            </div>
-        </section>
-    </div>
-{% endblock %}
+{{ content|html }}

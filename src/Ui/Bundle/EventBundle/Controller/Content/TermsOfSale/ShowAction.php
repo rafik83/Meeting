@@ -13,7 +13,6 @@ namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Content\TermsOfSale;
 use Proximum\Vimeet\Application\Adapter\QueryBusInterface;
 use Proximum\Vimeet\Application\Query\Content\TermsOfSaleViewQuery;
 use Proximum\Vimeet\Domain\Model\Sheet;
-use League\Tactician\CommandBus;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\ParamConverter\EventDomain;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Templating\EngineInterface;
@@ -50,7 +49,7 @@ class ShowAction
             new TermsOfSaleViewQuery($eventDomain->getEvent(), $request->getLocale())
         );
 
-        return $this->engine->renderResponse('EventBundle:Package:terms-of-sale.html.twig', [
+        return $this->engine->renderResponse('EventBundle:Content:terms-of-sale.html.twig', [
             'sheet'   => $sheet,
             'event'   => $eventDomain->getEvent(),
             'content' => $termsOfSaleView->content
