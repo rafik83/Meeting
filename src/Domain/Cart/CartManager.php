@@ -140,8 +140,7 @@ class CartManager
                 $quantityToAdd = $quantityToAdd - $participantsIncludedByProductId[$productId];
             }
 
-            if ($quantityToAdd !== 0) {
-                // Set participant products in cart
+            if ($quantityToAdd > 0) {
                 $cart->setProduct($participantProduct, $quantityToAdd);
 
                 continue;
@@ -210,12 +209,11 @@ class CartManager
             // It allows also to switch products between participants.
             if (0 === $quantityToRemove) {
                 foreach ($participantsByProductId[$productId] as $participant) {
-                    if ($participant instanceof Participant) {
-                        if (isset($availableParticipantProductsById[$productId])
-                            && $availableParticipantProductsById[$productId] instanceof Product
-                        ) {
-                            $participant->setParticipantProduct($availableParticipantProductsById[$productId]);
-                        }
+                    if ($participant instanceof Participant
+                        && isset($availableParticipantProductsById[$productId])
+                        && $availableParticipantProductsById[$productId] instanceof Product
+                    ) {
+                        $participant->setParticipantProduct($availableParticipantProductsById[$productId]);
                     }
                 }
             }
