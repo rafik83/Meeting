@@ -64,7 +64,7 @@ services:
     Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Content\TermsOfSale\ShowAction:
         arguments:
             - '@templating'
-            - '@tactician.commandbus.query'
+            - '@Proximum\Vimeet\Infrastructure\Adapter\QueryBus'
 
     #
     # Tip Event Actions

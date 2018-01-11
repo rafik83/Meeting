@@ -10,29 +10,31 @@
 
 namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Content\TermsOfSale;
 
+use Proximum\Vimeet\Application\Adapter\QueryBusInterface;
 use Proximum\Vimeet\Application\Query\Content\TermsOfSaleViewQuery;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use League\Tactician\CommandBus;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\ParamConverter\EventDomain;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Templating\EngineInterface;
+use Symfony\Component\HttpFoundation\Response;
 
 class ShowAction
 {
     /** @var EngineInterface */
     private $engine;
 
-    /** @var CommandBus */
-    private $commandBus;
+    /** @var QueryBusInterface */
+    private $queryBus;
 
     /**
-     * @param EngineInterface $engine
-     * @param CommandBus      $commandBus
+     * @param EngineInterface   $engine
+     * @param QueryBusInterface $queryBus
      */
-    public function __construct(EngineInterface $engine, CommandBus $commandBus)
+    public function __construct(EngineInterface $engine, QueryBusInterface $queryBus)
     {
-        $this->engine     = $engine;
-        $this->commandBus = $commandBus;
+        $this->engine   = $engine;
+        $this->queryBus = $queryBus;
     }
 
     /**
@@ -40,11 +42,11 @@ class ShowAction
      * @param Sheet       $sheet
      * @param EventDomain $eventDomain
      *
-     * @return \Symfony\Component\HttpFoundation\Response
+     * @return Response
      */
-    public function __invoke(Request $request, Sheet $sheet, EventDomain $eventDomain)
+    public function __invoke(Request $request, Sheet $sheet, EventDomain $eventDomain): Response
     {
-        $termsOfSaleView = $this->commandBus->handle(
+        $termsOfSaleView = $this->queryBus->handle(
             new TermsOfSaleViewQuery($eventDomain->getEvent(), $request->getLocale())
         );
 
