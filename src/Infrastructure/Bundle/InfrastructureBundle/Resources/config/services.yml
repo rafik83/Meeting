@@ -3164,6 +3164,14 @@ services:
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Category\MeetingCategoryViewQuery }
 
+    query.content.terms_of_sale_view_query_handler:
+        class: Proximum\Vimeet\Application\Query\Content\TermsOfSaleViewQueryHandler
+        arguments:
+            - '@repository.event.content_repository'
+            - '@markdown'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Content\TermsOfSaleViewQuery }
+
     query.user.user_details_view_query_handler:
         class: Proximum\Vimeet\Application\Query\User\UserDetailsViewQueryHandler
         arguments:

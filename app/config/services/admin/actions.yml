@@ -59,6 +59,14 @@ services:
             - '@tactician.commandbus'
 
     #
+    # Content
+    #
+    Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Content\TermsOfSale\ShowAction:
+        arguments:
+            - '@templating'
+            - '@tactician.commandbus.query'
+
+    #
     # Tip Event Actions
     #
     Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Tip\Event\CreateAction:

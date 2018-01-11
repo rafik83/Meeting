@@ -10,7 +10,8 @@
 
 namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Controller;
 
-use Proximum\Vimeet\Domain\Model\Event\Content;
+use Proximum\Vimeet\Application\Query\Content\TermsOfSaleViewQuery;
+use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\ParamConverter\EventDomain;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
@@ -20,21 +21,21 @@ class ContentController extends Controller
 {
     /**
      * @param Request     $request
+     * @param Sheet       $sheet
      * @param EventDomain $eventDomain
      *
      * @return Response
      */
-    public function termsOfSaleAction(Request $request, EventDomain $eventDomain)
+    public function termsOfSaleAction(Request $request, Sheet $sheet, EventDomain $eventDomain)
     {
-        $termsOfSale = $this
-            ->get('repository.event.content_repository')
-            ->findByEventAndType($eventDomain->getEvent(), Content::TYPE_TERMS_OF_SALE)
-        ;
-
-        $content = $termsOfSale->getValue($request->getLocale(), $eventDomain->getEvent()->getFallback());
+        $termsOfSaleView = $this->get('tactician.commandbus')->handle(
+            new TermsOfSaleViewQuery($eventDomain->getEvent(), $request->getLocale())
+        );
 
         return $this->render('EventBundle:Package:terms-of-sale.html.twig', [
-            'content' => $content
+            'sheet'   => $sheet,
+            'event'   => $eventDomain->getEvent(),
+            'content' => $termsOfSaleView->content
         ]);
     }
 }
