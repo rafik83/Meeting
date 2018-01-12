@@ -144,9 +144,11 @@ class CategoryTypeOrganizationAndPositionViewsHandlerTest extends TestCase
         $this->engine->renderResponse(Argument::any())->shouldNotBeCalled();
 
         $organizationCategoryViews = [];
+        $positionView1 = $this->prophesize(PositionView::class);
+        $positionView2 = $this->prophesize(PositionView::class);
         $positionViews = [
-            $this->prophesize(PositionView::class),
-            $this->prophesize(PositionView::class),
+            $positionView1->reveal(),
+            $positionView2->reveal(),
         ];
          $this->queryBus
              ->handle(new OrganizationCategoryViewQuery($this->event->reveal(), 'fr'))
