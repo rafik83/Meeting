@@ -17,17 +17,19 @@ class ParticipantsView
 
     /** @var ParticipantProductView[] */
     public $participantProductViews;
+
+    /** @var string */
     public $serializedParticipantProductViews;
 
     /**
      * @param ParticipantView[]        $participantViews
      * @param ParticipantProductView[] $participantProductViews
-     * @param                          $serializedParticipantProductViews
+     * @param string                   $serializedParticipantProductViews
      */
     public function __construct(
         array $participantViews,
         array $participantProductViews,
-        $serializedParticipantProductViews
+        string $serializedParticipantProductViews
     ) {
         $this->participantViews = $participantViews;
         $this->participantProductViews = $participantProductViews;
