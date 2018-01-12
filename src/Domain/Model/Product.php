@@ -327,9 +327,9 @@ class Product
     /**
      * @param string $locale
      *
-     * @return string
+     * @return null|string
      */
-    public function getDescription($locale)
+    public function getDescription($locale): ?string
     {
         return $this->hasTranslation($locale) ? $this->getTranslation($locale)->getDescription() : '';
     }

@@ -59,6 +59,7 @@ class ParticipantProductViewQueryHandler
             $participantProductViews[] = new ParticipantProductView(
                 $participantProduct->getId(),
                 $participantProduct->getTitle($locale),
+                $participantProduct->getDescription($locale) ?? '',
                 $participantProduct->getUnitPrice(),
                 $participantProduct->getCurrency(),
                 $participantProduct->getVatMode(),

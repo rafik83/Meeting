@@ -33,6 +33,7 @@ class ParticipantProductViewNormalizer extends AbstractNormalizer implements Nor
         return [
             'id' => $object->id,
             'title' => $object->title,
+            'description' => $object->description,
             'unitPrice' => $object->unitPrice,
             'unitPriceFormatted' => $this->translator->trans(
                 'package.product.unitPrice',

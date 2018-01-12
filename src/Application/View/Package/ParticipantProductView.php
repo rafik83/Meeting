@@ -18,6 +18,9 @@ class ParticipantProductView
     /** @var string */
     public $title;
 
+    /** @var string */
+    public $description;
+
     /** @var float */
     public $unitPrice;
 
@@ -36,6 +39,7 @@ class ParticipantProductView
     /**
      * @param int    $id
      * @param string $title
+     * @param string $description
      * @param float  $unitPrice
      * @param string $currency
      * @param string $vatMode
@@ -45,6 +49,7 @@ class ParticipantProductView
     public function __construct(
         int $id,
         string $title,
+        string $description,
         float $unitPrice,
         string $currency,
         string $vatMode,
@@ -53,6 +58,7 @@ class ParticipantProductView
     ) {
         $this->id = $id;
         $this->title = $title;
+        $this->description = $description;
         $this->unitPrice = $unitPrice;
         $this->currency = $currency;
         $this->vatMode = $vatMode;
