@@ -31,15 +31,12 @@
                             </td>
                             <td class="col-xs-3">
                                 <div class="buyable-product-row product-price">
-                                    {% if participantProductView.isIncluded %}
-                                        {{ 'package.participants.included'|trans }}
-                                    {% else %}
-                                        {{ 'package.product.unitPrice'|trans({
-                                            '%price%': participantProductView.unitPrice,
-                                            '%currency%': participantProductView.currency|currency_symbol,
-                                            '%vatMode%': ('package.vatMode.' ~ participantProductView.vatMode)|trans
-                                        })|html }}
-                                    {% endif %}
+                                    {# NB: need to be replaced by a select one from several products #}
+                                    {{ 'package.product.unitPrice'|trans({
+                                        '%price%': participantProductView.unitPrice,
+                                        '%currency%': participantProductView.currency|currency_symbol,
+                                        '%vatMode%': ('package.vatMode.' ~ participantProductView.vatMode)|trans
+                                    })|html }}
                                 </div>
                             </td>
                         </tr>

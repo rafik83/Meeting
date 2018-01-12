@@ -66,9 +66,11 @@ class PackageParticipantController extends Controller
             ]),
         ]);
 
-        $participantProductView = $this->get('tactician.commandbus.query')->handle(
+        $participantProductViews = $this->get('tactician.commandbus.query')->handle(
             new ParticipantProductViewQuery($sheet, $locale)
         );
+
+        $participantProductView = reset($participantProductViews);
 
         return $this->render('EventBundle:Participant:add.html.twig', [
             'label'                  => $label,
