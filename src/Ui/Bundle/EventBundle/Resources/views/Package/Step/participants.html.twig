@@ -18,16 +18,16 @@
                         </div>
                     </td>
                     <td class="col-md-6">
-                        <h3 data-product-title>{#<a href="#">title <span class="icon-Editer_1"></span></a>#}</h3>
-                        <p data-product-description></p>
+                        <h3 data-product-title class="hidden"><a href="#"><span data-product-title-text></span> <span class="icon-Editer_1"></span></a></h3>
+                        <p data-product-description class="hidden"></p>
 
                         {{ form_widget(form.children[participantView.id], { attr: { class: 'participant-product' } }) }}
                     </td>
 
                     <td class="col-md-2">
                         <div class="product">
-                            <h2 class="text-center" data-product-included>{{ 'package.participants.included'|trans }}</h2>
-                            <span class="product-price text-center" data-product-price>
+                            <h2 class="text-center hidden" data-product-included>{{ 'package.participants.included'|trans }}</h2>
+                            <span class="product-price text-center hidden" data-product-price>
                             </span>
                         </div>
                     </td>
