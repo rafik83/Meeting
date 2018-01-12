@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2016 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -17,14 +17,20 @@ class ParticipantsView
 
     /** @var ParticipantProductView[] */
     public $participantProductViews;
+    public $serializedParticipantProductViews;
 
     /**
      * @param ParticipantView[]        $participantViews
      * @param ParticipantProductView[] $participantProductViews
+     * @param                          $serializedParticipantProductViews
      */
-    public function __construct(array $participantViews, array $participantProductViews)
-    {
+    public function __construct(
+        array $participantViews,
+        array $participantProductViews,
+        $serializedParticipantProductViews
+    ) {
         $this->participantViews = $participantViews;
         $this->participantProductViews = $participantProductViews;
+        $this->serializedParticipantProductViews = $serializedParticipantProductViews;
     }
 }

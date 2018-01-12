@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Application\Query\Package\Participant;
 
+use Proximum\Vimeet\Application\Adapter\SerializerAdapterInterface;
 use Proximum\Vimeet\Application\View\Package\ParticipantsView;
 
 class ParticipantsViewQueryHandler
@@ -20,16 +21,22 @@ class ParticipantsViewQueryHandler
     /** @var ParticipantProductViewQueryHandler */
     private $participantProductViewQueryHandler;
 
+    /** @var SerializerAdapterInterface */
+    private $serializerAdapter;
+
     /**
      * @param ParticipantViewQueryHandler        $participantViewQueryHandler
      * @param ParticipantProductViewQueryHandler $participantProductViewQueryHandler
+     * @param SerializerAdapterInterface         $serializerAdapter
      */
     public function __construct(
         ParticipantViewQueryHandler $participantViewQueryHandler,
-        ParticipantProductViewQueryHandler $participantProductViewQueryHandler
+        ParticipantProductViewQueryHandler $participantProductViewQueryHandler,
+        SerializerAdapterInterface $serializerAdapter
     ) {
         $this->participantViewQueryHandler = $participantViewQueryHandler;
         $this->participantProductViewQueryHandler = $participantProductViewQueryHandler;
+        $this->serializerAdapter = $serializerAdapter;
     }
 
     /**
@@ -52,9 +59,14 @@ class ParticipantsViewQueryHandler
             );
         }
 
+        $participantProductViews = $this->participantProductViewQueryHandler->handle(
+            new ParticipantProductViewQuery($sheet, $locale)
+        );
+
         $participantsView = new ParticipantsView(
             $participantView,
-            $this->participantProductViewQueryHandler->handle(new ParticipantProductViewQuery($sheet, $locale))
+            $participantProductViews,
+            $this->serializerAdapter->serialize($participantProductViews, 'json', ['locale' => $locale])
         );
 
         return $participantsView;

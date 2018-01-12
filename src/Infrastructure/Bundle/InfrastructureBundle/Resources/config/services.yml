@@ -2824,6 +2824,7 @@ services:
         arguments:
             - '@query.package.participant_view_query_handler'
             - '@query.package.participant_product_view_query_handler'
+            - '@adapter.serializer_adapter'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Package\ParticipantsViewQuery }
     query.package.participant_product_view_query_handler:
@@ -4981,6 +4982,14 @@ services:
 
     serializer.normalizer.meeting_sheet_normalizer:
         class: Proximum\Vimeet\Application\Serializer\Normalizer\MeetingSheetNormalizer
+        parent: 'serializer.abstract_normalizer'
+        arguments:
+            - '@vimeet_infrastructure.adapter.translator_adapter'
+        tags:
+            - { name: serializer.normalizer }
+
+    serializer.normalizer.package.participant_product_view_normalizer:
+        class: Proximum\Vimeet\Application\Serializer\Normalizer\Package\ParticipantProductViewNormalizer
         parent: 'serializer.abstract_normalizer'
         arguments:
             - '@vimeet_infrastructure.adapter.translator_adapter'
