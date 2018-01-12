@@ -2,14 +2,14 @@
     <div class="form--table--head">
         <table class="table table-striped">
             <thead>
-            <tr>
-                <th></th>
-                <th>{{ 'package.planning.label'|trans }}</th>
-                <th class="text-center">{{ 'package.planning.unitPrice'|trans }}</th>
-            </tr>
+                <tr>
+                    <th></th>
+                    <th>{{ 'package.planning.label'|trans }}</th>
+                    <th class="text-center">{{ 'package.planning.unitPrice'|trans }}</th>
+                </tr>
             </thead>
 
-            <tbody>
+            <tbody data-serialized-participant-products="{{ view.products.participantsView.serializedParticipantProductViews }}">
             {% for participantView in view.products.participantsView.participantViews %}
                 <tr class="selected-line">
                     <td>
@@ -17,29 +17,18 @@
                             {{ include('EventBundle:Participant:preview.html.twig', {participant: participantView.card}) }}
                         </div>
                     </td>
-                    <td>
-                        <h3>product.title</h3>
-                        <p>product.description</p>
+                    <td class="col-md-6">
+                        <h3 data-product-title>{#<a href="#">title <span class="icon-Editer_1"></span></a>#}</h3>
+                        <p data-product-description></p>
 
-                        {{ form_widget(form.children[participantView.id]) }}
+                        {{ form_widget(form.children[participantView.id], { attr: { class: 'participant-product' } }) }}
                     </td>
 
                     <td class="col-md-2">
                         <div class="product">
-                            --
-                            {#
-                            {% if participantView.included %}
-                                <h2 class="text-center">{{ 'package.participants.included'|trans }}</h2>
-                            {% else %}
-                                <span class="product-price text-center">
-                                    {{ 'package.product.unitPrice'|trans({
-                                        '%price%': participantView.price,
-                                        '%currency%': participantView.currency|currency_symbol,
-                                        '%vatMode%': ('package.vatMode.' ~ participantView.vatMode)|trans
-                                    })|html }}
-                                </span>
-                            {% endif %}
-                            #}
+                            <h2 class="text-center" data-product-included>{{ 'package.participants.included'|trans }}</h2>
+                            <span class="product-price text-center" data-product-price>
+                            </span>
                         </div>
                     </td>
                 </tr>

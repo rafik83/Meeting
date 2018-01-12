@@ -1,31 +1,32 @@
-var $                           = require('jquery'),
-    PubSub                      = require('pubsub-js'),
-    Confirm                     = require('./components/_Confirm'),
-    ChoiceDescription           = require('./components/_ChoiceDescription'),
-    ShowPaymentInfo             = require('./components/_ShowPaymentInfo'),
-    AjaxForm                    = require('./components/_AjaxForm'),
-    AjaxAutocomplete            = require('./components/_AjaxAutocomplete'),
-    CheckAllButton              = require('./components/_CheckAllButton'),
-    SelectParent                = require('./components/_SelectParent'),
-    UploadPreview               = require('./components/_UploadPreview'),
-    EditableTextIndicator       = require('./components/_EditableTextIndicator'),
-    ProductSelector             = require('./components/_ProductSelector'),
-    QuantitySelector            = require('./components/_QuantitySelector'),
-    CatalogSheetCard            = require('./components/_CatalogSheetCard'),
-    Agenda                      = require('./components/agenda/_Agenda'),
-    Program                     = require('./components/agenda/_Program'),
-    ShowMore                    = require('./components/_ShowMore'),
-    ShowMoreParticipants        = require('./components/_ShowMoreParticipants'),
-    CatalogFilters              = require('./components/_CatalogFilters'),
-    CatalogMobileFilters        = require('./components/catalog/_CatalogMobileFilters'),
+var $ = require('jquery'),
+    PubSub = require('pubsub-js'),
+    Confirm = require('./components/_Confirm'),
+    ChoiceDescription = require('./components/_ChoiceDescription'),
+    ShowPaymentInfo = require('./components/_ShowPaymentInfo'),
+    AjaxForm = require('./components/_AjaxForm'),
+    AjaxAutocomplete = require('./components/_AjaxAutocomplete'),
+    CheckAllButton = require('./components/_CheckAllButton'),
+    SelectParent = require('./components/_SelectParent'),
+    UploadPreview = require('./components/_UploadPreview'),
+    EditableTextIndicator = require('./components/_EditableTextIndicator'),
+    ProductSelector = require('./components/_ProductSelector'),
+    QuantitySelector = require('./components/_QuantitySelector'),
+    CatalogSheetCard = require('./components/_CatalogSheetCard'),
+    Agenda = require('./components/agenda/_Agenda'),
+    Program = require('./components/agenda/_Program'),
+    ShowMore = require('./components/_ShowMore'),
+    ShowMoreParticipants = require('./components/_ShowMoreParticipants'),
+    CatalogFilters = require('./components/_CatalogFilters'),
+    CatalogMobileFilters = require('./components/catalog/_CatalogMobileFilters'),
     MeetingRequestMobileFilters = require('./components/MeetingRequest/_MeetingRequestMobileFilters'),
-    AnchorFocuser               = require('./components/_AnchorFocuser'),
-    Happening                   = require('./components/_Happening'),
-    PreventMultipleSubmit       = require('./components/_PreventMultipleSubmit'),
-    FilterRequestByType         = require('./components/MeetingRequest/_FilterByType'),
-    CatalogPagination           = require('./components/_CatalogPagination'),
-    VideoConference             = require('./components/VideoConference/VideoConference'),
-    IgnorePhoneConfirmation     = require('./components/agenda/_IgnorePhoneConfirmation')
+    AnchorFocuser = require('./components/_AnchorFocuser'),
+    Happening = require('./components/_Happening'),
+    PreventMultipleSubmit = require('./components/_PreventMultipleSubmit'),
+    FilterRequestByType = require('./components/MeetingRequest/_FilterByType'),
+    CatalogPagination = require('./components/_CatalogPagination'),
+    VideoConference = require('./components/VideoConference/VideoConference'),
+    IgnorePhoneConfirmation = require('./components/agenda/_IgnorePhoneConfirmation'),
+    PackageParticipantProducts = require('./components/_PackageParticipantProducts')
 ;
 
 require('bootstrap');
@@ -35,11 +36,9 @@ require('select2');
 require('babel-polyfill');
 
 function init (target) {
-    $('[data-collection]', target).collection();
-    $('[data-toggle="tooltip"]', target).tooltip();
-    $('[data-choice-description]', target).each(function (key, element) { new ChoiceDescription(element); });
-
+    // always first one in order to avoid collision
     [].forEach.call(target.querySelectorAll('.select2'), function (element) {
+        console.log('select2', element);
         $(element).select2({
             language: {
                 noResults: function () {
@@ -50,6 +49,10 @@ function init (target) {
             minimumResultsForSearch: 5
         });
     });
+
+    $('[data-collection]', target).collection();
+    $('[data-toggle="tooltip"]', target).tooltip();
+    $('[data-choice-description]', target).each(function (key, element) { new ChoiceDescription(element); });
 
     [].forEach.call(target.querySelectorAll('[data-company-info-update]'), function () {
         var anchor         = window.location.hash.substring(1);
@@ -230,6 +233,10 @@ function init (target) {
 
     [].forEach.call(target.querySelectorAll('[data-ignore-phone-confirmation-url]'), function (element) {
         new IgnorePhoneConfirmation(element);
+    });
+
+    [].forEach.call(target.querySelectorAll('[data-serialized-participant-products]'), function (element) {
+        new PackageParticipantProducts(element);
     });
 }
 
