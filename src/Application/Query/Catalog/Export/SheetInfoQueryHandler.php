@@ -10,7 +10,7 @@
 
 namespace Proximum\Vimeet\Application\Query\Catalog\Export;
 
-use Proximum\Vimeet\Domain\Template\TemplateObject\Tag;
+use Proximum\Vimeet\Domain\Template\TemplateObject\TagsCollection;
 
 class SheetInfoQueryHandler
 {
@@ -28,14 +28,14 @@ class SheetInfoQueryHandler
 
         foreach ($query->templateData->getExportableObjects() as $object) {
             // We do not export tag, as they are already given with the registration data
-            if ($object instanceof Tag) {
+            if ($object instanceof TagsCollection) {
                 continue;
             }
 
             $key = $object->getKey();
-            $fieldName = $object->getExportableFieldname($query->locale, $query->fallback);
 
             if (!isset($this->sheetFields[$key])) {
+                $fieldName = $object->getExportableFieldname($query->locale, $query->fallback);
                 $this->sheetFields[$key] = $fieldName;
             }
 

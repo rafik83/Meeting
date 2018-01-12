@@ -176,7 +176,7 @@ class SheetViewQueryHandler
             $found = false;
 
             foreach ($object->getTags() as $tagInfo) {
-                if (isset($tagOfTemplate[$tagInfo])
+                if ((!is_array($tagInfo) && isset($tagOfTemplate[$tagInfo]))
                     || (is_array($tagInfo) && isset($tagInfo['tag']) && isset($tagOfTemplate[$tagInfo['tag']]))
                 ) {
                     $found = true;

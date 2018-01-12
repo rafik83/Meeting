@@ -55,9 +55,9 @@ class SheetRegistrationInfoQueryHandler
             }
 
             $key = $object->getKey();
-            $fieldName = $object->getExportableFieldname($query->locale, $query->fallback);
 
             if (!isset($this->sheetRegistrationFields[$key])) {
+                $fieldName = $object->getExportableFieldname($query->locale, $query->fallback);
                 $this->sheetRegistrationFields[$key] = $fieldName;
             }
 
