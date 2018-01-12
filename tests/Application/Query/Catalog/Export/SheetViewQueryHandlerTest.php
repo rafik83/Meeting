@@ -208,4 +208,73 @@ class SheetViewQueryHandlerTest extends TestCase
 
         $this->assertEquals($expected, $result);
     }
+
+    public function testReMapField()
+    {
+        $sheetFields = [
+            'azerty123' => 'azerty123',
+            'azerty124' => 'azerty124',
+            'azerty125' => 'azerty125',
+            'azerty126' => 'azerty126',
+        ];
+
+        $registrationFields = [
+            'ytreza321' => 'ytreza321',
+            'ytreza322' => 'ytreza322',
+            'ytreza323' => 'ytreza323',
+            'ytreza324' => 'ytreza324',
+        ];
+
+        $sheetView = new SheetView(
+            'Type title',
+            [
+                'ytreza321' => 'ytreza321',
+                'ytreza324' => 'ytreza324',
+            ],
+            [
+                'azerty123' => 'value1',
+                'azerty125' => 'value2',
+            ],
+            'President'
+        );
+
+        $this->sheetInfoQueryHandler->getSheetFields()->shouldBeCalled()->willReturn($sheetFields);
+        $this->sheetRegistrationInfoQueryHandler
+            ->getSheetRegistrationFields()
+            ->shouldBeCalled()
+            ->willReturn($registrationFields)
+        ;
+
+        $handler = new SheetViewQueryHandler(
+            $this->templateDataFactory->reveal(),
+            $this->participantInfoGuesser->reveal(),
+            $this->categoryNameResolver->reveal(),
+            $this->ruleRepository->reveal(),
+            $this->composer->reveal(),
+            $this->applyer->reveal(),
+            $this->sheetInfoQueryHandler->reveal(),
+            $this->sheetRegistrationInfoQueryHandler->reveal()
+        );
+
+        $handler->reMapFields($sheetView);
+
+        $expected = new SheetView(
+            'Type title',
+            [
+                'ytreza321' => 'ytreza321',
+                'ytreza322' => '',
+                'ytreza323' => '',
+                'ytreza324' => 'ytreza324',
+            ],
+            [
+                'azerty123' => 'value1',
+                'azerty125' => 'value2',
+                'azerty124' => '',
+                'azerty126' => '',
+            ],
+            'President'
+        );
+
+        $this->assertEquals($expected, $sheetView);
+    }
 }

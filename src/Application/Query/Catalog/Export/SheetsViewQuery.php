@@ -61,6 +61,6 @@ class SheetsViewQuery implements Query
         $this->locale           = $locale;
         $this->availableSlotIds = $availableSlotIds;
         $this->sheetsToExclude  = $sheetsToExclude;
-        $this->isTypeColumn = $isTypeColumn;
+        $this->isTypeColumn     = $isTypeColumn;
     }
 }
