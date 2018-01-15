@@ -27,7 +27,13 @@ class ParticipantsProductValidator extends ConstraintValidator
 
         foreach ($selectParticipantAndPlanning->participantsProduct as $participantId => $product) {
             if (!$product instanceof Product) {
-                throw new \DomainException('SelectParticipantAndPlanning::participantsProduct must be an array of Product');
+                $this
+                    ->context
+                    ->buildViolation('package.participantsProduct.productMustBeSelected')
+                    ->atPath($participantId)
+                    ->addViolation();
+
+                continue;
             }
 
             if (!isset($quantityIndexedByProductId[$product->getId()])) {
