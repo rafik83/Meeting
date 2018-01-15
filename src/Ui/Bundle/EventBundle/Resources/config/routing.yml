@@ -543,14 +543,6 @@ event_content_terms_of_sale:
     methods: [GET]
 
 #
-# Content
-#
-event_package_content_terms_of_sale:
-    path: /terms-of-sale
-    defaults: { _controller: EventBundle:Content:termsOfSale }
-    methods: [GET]
-
-#
 # Package
 #
 event_package:
