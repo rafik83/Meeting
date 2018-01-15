@@ -89,8 +89,8 @@ class ShowActionTest extends TestCase
 
         $this->authorizationChecker->isGranted(SheetVoter::EDIT, $this->sheet)->shouldBeCalled()->willReturn(false);
 
-        $this->eventDomain->getEvent()->shouldNotBeCalled()->willReturn($this->event);
-        $this->request->getLocale()->shouldNotBeCalled()->willReturn($this->eventLocale);
+        $this->eventDomain->getEvent()->shouldNotBeCalled();
+        $this->request->getLocale()->shouldNotBeCalled();
 
         $this->engine->renderResponse('EventBundle:Content:terms-of-sale.html.twig',
             [
@@ -98,9 +98,9 @@ class ShowActionTest extends TestCase
                 'event'   => $this->event,
                 'content' => 'foobar',
             ]
-        )->shouldNotBeCalled()->willReturn($this->response->reveal());
+        )->shouldNotBeCalled();
 
-        $this->queryBus->handle($this->query)->shouldNotBeCalled()->willReturn($this->view);
+        $this->queryBus->handle($this->query)->shouldNotBeCalled();
 
         $action = new ShowAction(
             $this->engine->reveal(),
