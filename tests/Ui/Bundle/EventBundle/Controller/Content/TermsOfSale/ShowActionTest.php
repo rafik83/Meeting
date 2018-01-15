@@ -11,6 +11,7 @@
 namespace Proximum\Vimeet\Tests\Ui\Bundle\EventBundle\Controller\Content\TermsOfSale;
 
 use PHPUnit\Framework\TestCase;
+use Proximum\Vimeet\Application\Adapter\AuthorizationCheckerAdapterInterface;
 use Proximum\Vimeet\Application\Adapter\QueryBusInterface;
 use Proximum\Vimeet\Application\Query\Content\TermsOfSaleViewQuery;
 use Proximum\Vimeet\Domain\View\Content\TermsOfSaleView;
@@ -18,6 +19,7 @@ use Proximum\Vimeet\Tests\Factory\EventFactory;
 use Proximum\Vimeet\Tests\Factory\SheetFactory;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Content\TermsOfSale\ShowAction;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\ParamConverter\EventDomain;
+use Proximum\Vimeet\Ui\Bundle\EventBundle\Security\SheetVoter;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Bundle\FrameworkBundle\Templating\EngineInterface;
@@ -38,6 +40,9 @@ class ShowActionTest extends TestCase
         $view        = new TermsOfSaleView($content);
         $engine      = $this->prophesize(EngineInterface::class);
 
+        $authorizationChecker = $this->prophesize(AuthorizationCheckerAdapterInterface::class);
+        $authorizationChecker->isGranted(SheetVoter::EDIT, $sheet)->shouldBeCalled()->willReturn(true);
+
         $eventDomain->getEvent()->shouldBeCalled()->willReturn($event);
         $request->getLocale()->shouldBeCalled()->willReturn($locale);
 
@@ -50,8 +55,8 @@ class ShowActionTest extends TestCase
         $queryBus = $this->prophesize(QueryBusInterface::class);
         $queryBus->handle($query)->shouldBeCalled()->willReturn($view);
 
-        $action   = new ShowAction($engine->reveal(), $queryBus->reveal());
-        $response = $action($request->reveal(), $sheet, $eventDomain->reveal());
+        $action   = new ShowAction($engine->reveal(), $queryBus->reveal(), $authorizationChecker->reveal());
+        $response = $action($request->reveal(), $eventDomain->reveal(), $sheet);
 
         $this->assertInstanceOf(Response::class, $response);
     }
