@@ -23,41 +23,90 @@ use Proximum\Vimeet\Ui\Bundle\EventBundle\Security\SheetVoter;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Bundle\FrameworkBundle\Templating\EngineInterface;
+use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 class ShowActionTest extends TestCase
 {
+    private $sheet;
+    private $event;
+    private $eventLocale;
+    private $content;
+    private $response;
+    private $request;
+    private $eventDomain;
+    private $query;
+    private $view;
+    private $engine;
+    private $authorizationChecker;
+    private $queryBus;
+
+    public function setUp()
+    {
+        $this->sheet = SheetFactory::create();
+        $this->event = EventFactory::createEvent();
+
+        $this->eventLocale          = 'fr';
+        $this->content              = 'foobar';
+        $this->response             = $this->prophesize(Response::class);
+        $this->request              = $this->prophesize(Request::class);
+        $this->eventDomain          = $this->prophesize(EventDomain::class);
+        $this->query                = new TermsOfSaleViewQuery($this->event, $this->eventLocale);
+        $this->view                 = new TermsOfSaleView($this->content);
+        $this->engine               = $this->prophesize(EngineInterface::class);
+        $this->authorizationChecker = $this->prophesize(AuthorizationCheckerAdapterInterface::class);
+        $this->queryBus             = $this->prophesize(QueryBusInterface::class);
+    }
+
     public function testInvoke()
     {
-        $sheet = SheetFactory::create();
-        $event = EventFactory::createEvent();
+        $this->authorizationChecker->isGranted(SheetVoter::EDIT, $this->sheet)->shouldBeCalled()->willReturn(true);
 
-        $locale      = 'fr';
-        $content     = 'foobar';
-        $response    = $this->prophesize(Response::class);
-        $request     = $this->prophesize(Request::class);
-        $eventDomain = $this->prophesize(EventDomain::class);
-        $query       = new TermsOfSaleViewQuery($event, $locale);
-        $view        = new TermsOfSaleView($content);
-        $engine      = $this->prophesize(EngineInterface::class);
+        $this->eventDomain->getEvent()->shouldBeCalled()->willReturn($this->event);
+        $this->request->getLocale()->shouldBeCalled()->willReturn($this->eventLocale);
 
-        $authorizationChecker = $this->prophesize(AuthorizationCheckerAdapterInterface::class);
-        $authorizationChecker->isGranted(SheetVoter::EDIT, $sheet)->shouldBeCalled()->willReturn(true);
+        $this->engine->renderResponse('EventBundle:Content:terms-of-sale.html.twig',
+            [
+                'sheet'   => $this->sheet,
+                'event'   => $this->event,
+                'content' => 'foobar',
+            ])->shouldBeCalled()->willReturn($this->response->reveal());
 
-        $eventDomain->getEvent()->shouldBeCalled()->willReturn($event);
-        $request->getLocale()->shouldBeCalled()->willReturn($locale);
+        $this->queryBus->handle($this->query)->shouldBeCalled()->willReturn($this->view);
 
-        $engine->renderResponse('EventBundle:Content:terms-of-sale.html.twig', [
-            'sheet'   => $sheet,
-            'event'   => $event,
-            'content' => 'foobar'
-        ])->shouldBeCalled()->willReturn($response->reveal());
-
-        $queryBus = $this->prophesize(QueryBusInterface::class);
-        $queryBus->handle($query)->shouldBeCalled()->willReturn($view);
-
-        $action   = new ShowAction($engine->reveal(), $queryBus->reveal(), $authorizationChecker->reveal());
-        $response = $action($request->reveal(), $eventDomain->reveal(), $sheet);
+        $action   = new ShowAction(
+            $this->engine->reveal(),
+            $this->queryBus->reveal(),
+            $this->authorizationChecker->reveal()
+        );
+        $response = $action($this->request->reveal(), $this->eventDomain->reveal(), $this->sheet);
 
         $this->assertInstanceOf(Response::class, $response);
+    }
+
+    public function testAccessDenied()
+    {
+        $this->expectException(AccessDeniedException::class);
+
+        $this->authorizationChecker->isGranted(SheetVoter::EDIT, $this->sheet)->shouldBeCalled()->willReturn(false);
+
+        $this->eventDomain->getEvent()->shouldNotBeCalled()->willReturn($this->event);
+        $this->request->getLocale()->shouldNotBeCalled()->willReturn($this->eventLocale);
+
+        $this->engine->renderResponse('EventBundle:Content:terms-of-sale.html.twig',
+            [
+                'sheet'   => $this->sheet,
+                'event'   => $this->event,
+                'content' => 'foobar',
+            ]
+        )->shouldNotBeCalled()->willReturn($this->response->reveal());
+
+        $this->queryBus->handle($this->query)->shouldNotBeCalled()->willReturn($this->view);
+
+        $action = new ShowAction(
+            $this->engine->reveal(),
+            $this->queryBus->reveal(),
+            $this->authorizationChecker->reveal()
+        );
+        $action($this->request->reveal(), $this->eventDomain->reveal(), $this->sheet);
     }
 }
