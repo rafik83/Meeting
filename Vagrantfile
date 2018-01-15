@@ -4,7 +4,7 @@
 app = {
   :name        => 'vimeet',
   :box         => 'manala/app-dev-debian',
-  :box_version => '~> 3.1.0',
+  :box_version => '~> 3.0.0',
   :box_memory  => 2048
 }
 
