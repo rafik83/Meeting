@@ -9,7 +9,9 @@
                 </tr>
             </thead>
 
-            <tbody data-serialized-participant-products="{{ view.products.participantsView.serializedParticipantProductViews }}">
+            <tbody data-serialized-participant-products="{{ view.products.participantsView.serializedParticipantProductViews }}"
+                   data-participants-included-label="{{ 'package.participants.included'|trans }}"
+            >
             {% for participantView in view.products.participantsView.participantViews %}
                 <tr class="selected-line">
                     <td>
@@ -27,7 +29,6 @@
 
                     <td class="col-md-2">
                         <div class="product">
-                            <h2 class="text-center hidden" data-product-included>{{ 'package.participants.included'|trans }}</h2>
                             <span class="product-price text-center hidden" data-product-price>
                             </span>
                         </div>

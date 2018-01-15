@@ -3,9 +3,10 @@ var PackageParticipantRow = require('./_PackageParticipantRow');
 function PackageParticipantProducts(element)
 {
   this.element = element;
-  var participantProductsObjects = JSON.parse(this.element.getAttribute('data-serialized-participant-products'));
+  this.participantsIncludedLabel = this.element.getAttribute('data-participants-included-label');
 
   this.participantProducts = [];
+  var participantProductsObjects = JSON.parse(this.element.getAttribute('data-serialized-participant-products'));
 
   for (var index in participantProductsObjects) {
     this.participantProducts[+participantProductsObjects[index].id] = new PackageParticipantProductModel(this, participantProductsObjects[index]);
@@ -16,6 +17,8 @@ function PackageParticipantProducts(element)
   [].forEach.call(element.querySelectorAll('tr'), function (row) {
     this.packageParticipantRows.push(new PackageParticipantRow(this, row));
   }.bind(this));
+
+  this.updateRows();
 }
 
 PackageParticipantProducts.prototype.select = function () {
@@ -35,12 +38,32 @@ PackageParticipantProducts.prototype.getParticipantProduct = function (id) {
   return null;
 };
 
-PackageParticipantProducts.prototype.hasRemainingQuantity = function (packageParticipantRowToExclude, productId) {
+PackageParticipantProducts.prototype.getUnitPriceFormattedOrIncluded = function (productId, packageParticipantRowToExclude) {
+  var participantProduct = this.getParticipantProduct(productId);
+
+  if (!participantProduct.quantityIncluded) {
+    return participantProduct.unitPriceFormatted;
+  }
+
+  var quantitySelected = this.getSelectedQuantityByProduct(productId, packageParticipantRowToExclude);
+
+  return  quantitySelected < participantProduct.quantityIncluded
+    ? this.participantsIncludedLabel
+    : participantProduct.unitPriceFormatted;
+};
+
+PackageParticipantProducts.prototype.hasRemainingQuantity = function (productId, packageParticipantRowToExclude) {
   var participantProduct = this.getParticipantProduct(productId);
 
   if (participantProduct.isInfiniteQuantityMax()) {
     return true;
   }
+
+  return this.getSelectedQuantityByProduct(productId, packageParticipantRowToExclude) < participantProduct.quantityMax;
+};
+
+PackageParticipantProducts.prototype.getSelectedQuantityByProduct = function (productId, packageParticipantRowToExclude) {
+  var participantProduct = this.getParticipantProduct(productId);
 
   var selectedQuantity = 0;
 
@@ -56,7 +79,34 @@ PackageParticipantProducts.prototype.hasRemainingQuantity = function (packagePar
     }
   }
 
-  return selectedQuantity < participantProduct.quantityMax;
+  return selectedQuantity;
+};
+
+PackageParticipantProducts.prototype.updateRows = function () {
+  var quantitySelectedByProduct = [];
+
+  for (var index in this.packageParticipantRows) {
+    var packageParticipantRow = this.packageParticipantRows[index];
+    var productId = packageParticipantRow.getValue();
+
+    if (!productId) {
+      continue;
+    }
+
+    var participantProduct = this.getParticipantProduct(productId);
+
+    if (!quantitySelectedByProduct[productId]) {
+      quantitySelectedByProduct[productId] = 0;
+    }
+
+    quantitySelectedByProduct[productId]++;
+
+    var priceOrIncluded = quantitySelectedByProduct[productId] <= participantProduct.quantityIncluded
+      ? this.participantsIncludedLabel
+      : participantProduct.unitPriceFormatted;
+
+    this.packageParticipantRows[index].updatePriceOrIncluded(priceOrIncluded);
+  }
 };
 
 module.exports = PackageParticipantProducts;

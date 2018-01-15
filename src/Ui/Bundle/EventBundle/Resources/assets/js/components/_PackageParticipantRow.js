@@ -10,7 +10,6 @@ function PackageParticipantRow(parent, element)
   this.productTitleTextElement = this.element.querySelector('[data-product-title-text]');
   this.productTitleElement = this.element.querySelector('[data-product-title]');
   this.productDescriptionElement = this.element.querySelector('[data-product-description]');
-  this.productIncludedElement = this.element.querySelector('[data-product-included]');
   this.productPriceElement = this.element.querySelector('[data-product-price]');
 
   this.productTitleElement.querySelector('a').addEventListener('click', this.editRow.bind(this));
@@ -22,14 +21,19 @@ function PackageParticipantRow(parent, element)
     this.initSelect();
   }
 
-  $(this.selectElement).on('select2:close', function (event) {
-    if (event.target.value) {
-      $(this.selectElement).select2('destroy');
-      this.hideSelect();
-      this.updateRow(event.target.value);
-    }
-  }.bind(this));
+  $(this.selectElement).on('select2:close', this.closeSelect.bind(this));
 }
+
+PackageParticipantRow.prototype.closeSelect = function () {
+  if (!this.selectElement.value) {
+    return;
+  }
+
+  $(this.selectElement).select2('destroy');
+  this.hideSelect();
+  this.updateRow(this.selectElement.value);
+  this.parent.updateRows()
+};
 
 PackageParticipantRow.prototype.getValue = function () {
   return +this.selectElement.value;
@@ -47,14 +51,13 @@ PackageParticipantRow.prototype.showSelect = function () {
   this.selectElement.classList.remove('select2-hidden-accessible');
 };
 
-PackageParticipantRow.prototype.hideSelect = function (element) {
+PackageParticipantRow.prototype.hideSelect = function () {
   this.selectElement.classList.add('select2-hidden-accessible');
 };
 
 PackageParticipantRow.prototype.initSelect = function () {
   this.hide(this.productTitleElement);
   this.hide(this.productDescriptionElement);
-  this.hide(this.productIncludedElement);
   this.hide(this.productPriceElement);
 
   this.showSelect();
@@ -75,7 +78,7 @@ PackageParticipantRow.prototype.prepareOption = function (option) {
     return;
   }
 
-  if (!this.parent.hasRemainingQuantity(this, productId)) {
+  if (!this.parent.hasRemainingQuantity(productId, this)) {
     option.setAttribute('disabled', 'disabled');
   } else {
     option.removeAttribute('disabled');
@@ -88,6 +91,11 @@ PackageParticipantRow.prototype.editRow = function (event) {
   $(this.selectElement).select2('open');
 };
 
+PackageParticipantRow.prototype.updatePriceOrIncluded = function (priceOrIncluded)
+{
+  this.productPriceElement.innerHTML = priceOrIncluded;
+};
+
 PackageParticipantRow.prototype.updateRow = function (productId)
 {
   var participantProduct = this.parent.getParticipantProduct(productId);
@@ -98,7 +106,7 @@ PackageParticipantRow.prototype.updateRow = function (productId)
 
   this.productTitleTextElement.innerHTML = participantProduct.title;
   this.productDescriptionElement.innerHTML = participantProduct.description;
-  this.productPriceElement.innerHTML = participantProduct.unitPriceFormatted;
+  this.productPriceElement.innerHTML = this.parent.getUnitPriceFormattedOrIncluded(participantProduct.id, this);
   this.show(this.productTitleElement);
   this.show(this.productDescriptionElement);
   this.show(this.productPriceElement);
@@ -112,7 +120,16 @@ PackageParticipantRow.prototype.formatState = function (state)
 
   var participantProduct = this.parent.getParticipantProduct(state.id);
 
-  return $('<div class="row"><div class="col-md-8">' + participantProduct.title + (!participantProduct.isInfiniteQuantityMax() ? ' <span class="label label-default">' + participantProduct.quantityMaxFormatted + '</span>' : '') + '</div><div class="col-md-4 text-right">' + participantProduct.unitPriceFormatted + '</div></div>');
+  return $('<div class="row"><div class="col-md-8">'
+    + participantProduct.title
+    + (
+      !participantProduct.isInfiniteQuantityMax() ?
+        ' <span class="label label-default">' + participantProduct.quantityMaxFormatted + '</span>'
+        : ''
+    )
+    + '</div><div class="col-md-4 text-right">'
+    + this.parent.getUnitPriceFormattedOrIncluded(participantProduct.id, this)
+    + '</div></div>');
 };
 
 module.exports = PackageParticipantRow;
