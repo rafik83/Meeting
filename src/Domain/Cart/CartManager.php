@@ -74,7 +74,7 @@ class CartManager
      * @param Cart  $cart
      * @param array $productByParticipantId array of participantId => Product
      */
-    public function updateParticipantsQuantity(Cart $cart, array $productByParticipantId): void
+    public function updateParticipantsQuantity(Cart $cart, array &$productByParticipantId): void
     {
         $sheet = $cart->getSheet();
 
@@ -270,7 +270,7 @@ class CartManager
      *
      * @return array
      */
-    private function getParticipantsByProductId(Sheet $sheet, array $productByParticipantId): array
+    private function getParticipantsByProductId(Sheet $sheet, array &$productByParticipantId): array
     {
         $participantsByProductId = [];
 

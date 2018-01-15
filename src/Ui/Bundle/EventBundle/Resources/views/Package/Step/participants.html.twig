@@ -21,7 +21,8 @@
                         <h3 data-product-title class="hidden"><a href="#"><span data-product-title-text></span> <span class="icon-Editer_1"></span></a></h3>
                         <p data-product-description class="hidden"></p>
 
-                        {{ form_widget(form.children[participantView.id], { attr: { class: 'participant-product' } }) }}
+                        {{ form_widget(form[participantView.id], { attr: { class: 'participant-product' } }) }}
+                        {{ form_errors(form[participantView.id]) }}
                     </td>
 
                     <td class="col-md-2">

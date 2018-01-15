@@ -620,6 +620,12 @@ services:
             - '@package.planning.quantity_min_guesser'
         tags:
             - { name: validator.constraint_validator }
+
+    validator.package.participants_product_validator:
+        class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Validator\Constraint\Package\ParticipantsProductValidator
+        tags:
+            - { name: validator.constraint_validator }
+
     validator.package.options_validator:
         class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Validator\Constraint\Package\OptionsValidator
         arguments:

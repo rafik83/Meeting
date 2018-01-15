@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2016 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -15,11 +15,6 @@ use Proximum\Vimeet\Application\Event\Package\StepDoneEvent;
 use Proximum\Vimeet\Application\Exception\Package\PackageNotFoundException;
 use Proximum\Vimeet\Domain\Cart\Cart;
 use Proximum\Vimeet\Domain\Cart\CartManager;
-use Proximum\Vimeet\Domain\Model\CartRowParticipant;
-use Proximum\Vimeet\Domain\Model\Order;
-use Proximum\Vimeet\Domain\Model\Participant;
-use Proximum\Vimeet\Domain\Model\Product;
-use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Order\Merger;
 use Proximum\Vimeet\Infrastructure\Adapter\DelayedEventDispatcher;
 

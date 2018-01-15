@@ -1,0 +1,48 @@
+<?php
+
+/*
+ * This file is part of the Proximum Vimeet project.
+ *
+ * Copyright (C) Proximum
+ *
+ * @author Elao <contact@elao.com>
+ */
+
+namespace Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Validator\Constraint\Package;
+
+use Proximum\Vimeet\Application\Command\Package\Step\SelectParticipantAndPlanning;
+use Proximum\Vimeet\Domain\Model\Product;
+use Symfony\Component\Validator\Constraint;
+use Symfony\Component\Validator\ConstraintValidator;
+
+class ParticipantsProductValidator extends ConstraintValidator
+{
+    /**
+     * @param SelectParticipantAndPlanning $selectParticipantAndPlanning
+     * @param Constraint                   $constraint
+     */
+    public function validate($selectParticipantAndPlanning, Constraint $constraint)
+    {
+        $quantityIndexedByProductId = [];
+
+        foreach ($selectParticipantAndPlanning->participantsProduct as $participantId => $product) {
+            if (!$product instanceof Product) {
+                throw new \DomainException('SelectParticipantAndPlanning::participantsProduct must be an array of Product');
+            }
+
+            if (!isset($quantityIndexedByProductId[$product->getId()])) {
+                $quantityIndexedByProductId[$product->getId()] = 0;
+            }
+
+            $quantityIndexedByProductId[$product->getId()]++;
+
+            if ($product->getQuantityMax() < $quantityIndexedByProductId[$product->getId()]) {
+                $this
+                    ->context
+                    ->buildViolation('package.participantsProduct.quantityMaxReached')
+                    ->atPath($participantId)
+                    ->addViolation();
+            }
+        }
+    }
+}
