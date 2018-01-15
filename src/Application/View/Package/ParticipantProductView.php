@@ -65,4 +65,12 @@ class ParticipantProductView
         $this->quantityMax = $quantityMax;
         $this->quantityIncluded = $quantityIncluded;
     }
+
+    /**
+     * @return bool
+     */
+    public function isInfiniteQuantityMax(): bool
+    {
+        return INF === $this->quantityMax;
+    }
 }
