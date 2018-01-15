@@ -34,12 +34,12 @@ class StepParticipantAndPlanning
     }
 
     /**
-     * @param Sheet $sheet
-     * @param int   $stepIndex
+     * @param Sheet    $sheet
+     * @param null|int $stepIndex
      *
      * @return SelectParticipantAndPlanning
      */
-    public function build(Sheet $sheet, $stepIndex): SelectParticipantAndPlanning
+    public function build(Sheet $sheet, ?int $stepIndex = null): SelectParticipantAndPlanning
     {
         $cart = $this->cartManager->getCart($sheet, $stepIndex);
         $orderMerged = $this->orderMerger->getMergedOrders($sheet);
