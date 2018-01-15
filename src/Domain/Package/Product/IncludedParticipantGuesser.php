@@ -19,15 +19,6 @@ class IncludedParticipantGuesser extends AbstractIncludedProductGuesser
     /**
      * @param Sheet $sheet
      *
-     * @deprecated
-     */
-    public function getIncludedParticipantView(Sheet $sheet)
-    {
-    }
-
-    /**
-     * @param Sheet $sheet
-     *
      * @return IncludedParticipantView[] indexed by included product id
      */
     public function getIncludedParticipantViews(Sheet $sheet): array

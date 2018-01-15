@@ -180,11 +180,17 @@ class PackageController extends Controller
             )
         );
 
+        // todo: remove this to send to add form all participants product
         $participantProductViews = $this->get('tactician.commandbus.query')->handle(
             new ParticipantProductViewQuery($sheet, $request->getLocale())
         );
-        // @todo: remove this to send to add form all participants product
+
         $participantProductView = reset($participantProductViews);
+
+        if (false === $participantProductView) {
+            $participantProductView = null;
+        }
+        // /todo
 
         return $this->render('EventBundle:Package:step.html.twig', [
             'event'                        => $eventDomain->getEvent(),

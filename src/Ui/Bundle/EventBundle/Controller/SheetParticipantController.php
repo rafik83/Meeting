@@ -81,9 +81,17 @@ class SheetParticipantController extends Controller
             ),
         ]);
 
-        $participantProductView = $this->get('tactician.commandbus.query')->handle(
+        // todo: remove this to send to add form all participants product
+        $participantProductViews = $this->get('tactician.commandbus.query')->handle(
             new ParticipantProductViewQuery($sheet, $locale)
         );
+
+        $participantProductView = reset($participantProductViews);
+
+        if (false === $participantProductView) {
+            $participantProductView = null;
+        }
+        // /todo
 
         return $this->render('EventBundle:Participant:add.html.twig', [
             'uid'                    => $key,
