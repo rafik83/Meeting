@@ -109,6 +109,18 @@ PackageParticipantProducts.prototype.updateRows = function () {
   }
 };
 
+
+PackageParticipantProducts.prototype.hasOnlyOneProduct = function ()
+{
+  var count = 0;
+
+  for (var index in this.participantProducts) {
+    count++;
+  }
+
+  return 1 === count;
+};
+
 module.exports = PackageParticipantProducts;
 
 function PackageParticipantProductModel(parent, participantProduct)

@@ -104,7 +104,12 @@ PackageParticipantRow.prototype.updateRow = function (productId)
     return;
   }
 
-  this.productTitleTextElement.innerHTML = participantProduct.title;
+  if (this.parent.hasOnlyOneProduct()) {
+    this.productTitleElement.innerHTML = participantProduct.title;
+  } else {
+    this.productTitleTextElement.innerHTML = participantProduct.title;
+  }
+
   this.productDescriptionElement.innerHTML = participantProduct.description;
   this.productPriceElement.innerHTML = this.parent.getUnitPriceFormattedOrIncluded(participantProduct.id, this);
   this.show(this.productTitleElement);
