@@ -209,7 +209,7 @@ class Nomenclature extends EditableObject implements ContentObjectInterface, Sea
             if (null !== $this->getItem()) {
                 if (in_array($this->getItem(), $values, true)) {
                     return $this->getItem();
-                } else if (isset($values[$this->getItem()])) {
+                } elseif (isset($values[$this->getItem()])) {
                     return $values[$this->getItem()];
                 }
             }
