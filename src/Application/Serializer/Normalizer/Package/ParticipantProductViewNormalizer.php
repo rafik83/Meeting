@@ -46,7 +46,7 @@ class ParticipantProductViewNormalizer extends AbstractNormalizer implements Nor
             'vatMode' => $object->vatMode,
             'currency' => $object->currency,
             'quantityIncluded' => $object->quantityIncluded,
-            'quantityMax' => $object->quantityMax,
+            'quantityMax' => INF === $object->quantityMax ? 'Infinity' : $object->quantityMax,
         ];
     }
 

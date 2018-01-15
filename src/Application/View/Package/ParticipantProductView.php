@@ -30,7 +30,7 @@ class ParticipantProductView
     /** @var string */
     public $vatMode;
 
-    /** @var int */
+    /** @var float */
     public $quantityMax;
 
     /** @var int */
@@ -43,7 +43,7 @@ class ParticipantProductView
      * @param float  $unitPrice
      * @param string $currency
      * @param string $vatMode
-     * @param int    $quantityMax
+     * @param float  $quantityMax
      * @param int    $quantityIncluded
      */
     public function __construct(
@@ -53,7 +53,7 @@ class ParticipantProductView
         float $unitPrice,
         string $currency,
         string $vatMode,
-        int $quantityMax,
+        float $quantityMax,
         int $quantityIncluded
     ) {
         $this->id = $id;

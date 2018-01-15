@@ -379,9 +379,9 @@ class Product
     }
 
     /**
-     * @return int
+     * @return float
      */
-    public function getQuantityMax()
+    public function getQuantityMax(): float
     {
         return null === $this->quantityMax ? INF : $this->quantityMax;
     }

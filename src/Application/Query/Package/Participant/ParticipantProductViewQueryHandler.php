@@ -63,8 +63,8 @@ class ParticipantProductViewQueryHandler
                 $participantProduct->getUnitPrice(),
                 $participantProduct->getCurrency(),
                 $participantProduct->getVatMode(),
-                (int) $participantProduct->getQuantityMax(),
-                (int) $includedQuantity
+                $participantProduct->getQuantityMax(),
+                $includedQuantity
             );
         }
 
