@@ -8,7 +8,7 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Proximum\Vimeet\Application\Serializer\Normalizer\Export;
+namespace Proximum\Vimeet\Application\Serializer\Normalizer\Catalog\Export;
 
 use Proximum\Vimeet\Application\Serializer\Charset;
 use Proximum\Vimeet\Application\View\Catalog\Export\SheetListView;

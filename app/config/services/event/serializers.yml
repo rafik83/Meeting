@@ -1,7 +1,7 @@
 services:
-    Proximum\Vimeet\Application\Serializer\Normalizer\Export\SheetViewNormalizer:
+    Proximum\Vimeet\Application\Serializer\Normalizer\Catalog\Export\SheetViewNormalizer:
         tags:
             - { name: serializer.normalizer }
-    Proximum\Vimeet\Application\Serializer\Normalizer\Export\SheetListViewNormalizer:
+    Proximum\Vimeet\Application\Serializer\Normalizer\Catalog\Export\SheetListViewNormalizer:
         tags:
             - { name: serializer.normalizer }
