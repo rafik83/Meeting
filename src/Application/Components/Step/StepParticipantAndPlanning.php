@@ -60,6 +60,21 @@ class StepParticipantAndPlanning
             }
         }
 
+        // Set product to all participants if there only one participant product in the package
+        $participantProducts = $sheet->getPackage()->getParticipants();
+
+        if (1 === count($participantProducts)) {
+            $participantProduct = reset($participantProducts);
+
+            if (false !== $participantProduct) {
+                foreach ($sheet->getParticipantsArray() as $participant) {
+                    if (!isset($command->participantsProduct[$participant->getId()])) {
+                        $command->participantsProduct[$participant->getId()] = $participantProduct;
+                    }
+                }
+            }
+        }
+
         // Get Planning quantity
         $planningRow   = $cart->getPlanningRow();
         $orderQuantity = 0;

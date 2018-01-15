@@ -43,9 +43,11 @@ class ParticipantAndPlanningType extends AbstractType
         $sheet = $options['sheet'];
         $locale = $options['locale'];
 
+        $participantProducts = $sheet->getPackage()->getParticipants();
+
         foreach ($sheet->getParticipantsArray() as $participant) {
             $builder->add($participant->getId(), ChoiceType::class, [
-                'choices' => $sheet->getType()->getPackage()->getParticipants(),
+                'choices' => $participantProducts,
                 'choice_value' => function (Product $product = null) {
                     return null !== $product ? $product->getId() : null;
                 },
