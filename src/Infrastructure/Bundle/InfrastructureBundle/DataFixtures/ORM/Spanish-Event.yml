@@ -46,7 +46,7 @@ Proximum\Vimeet\Domain\Model\Event\Configuration (local):
             - '#00398C'
         contactFirstName: "Maryse"
         contactLastName: "DURAND"
-        backgroundColor: '00398C'
+        backgroundColor: '#00398C'
 
 Proximum\Vimeet\Domain\Model\Address (local):
     payment_address_event_spanish:
