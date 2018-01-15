@@ -50,7 +50,7 @@ class ParticipantsViewQueryHandler
 
         $participantView = [];
 
-        foreach ($sheet->getParticipants() as $participant) {
+        foreach ($sheet->getParticipantsArray() as $participant) {
             $participantView[] = $this->participantViewQueryHandler->handle(
                 new ParticipantViewQuery(
                     $participant,
