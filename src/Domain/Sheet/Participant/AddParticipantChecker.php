@@ -18,6 +18,8 @@ class AddParticipantChecker
      * @param Sheet $sheet
      *
      * @return bool
+     *
+     * @throws \DomainException
      */
     public function canAddParticipant(Sheet $sheet): bool
     {
