@@ -65,6 +65,7 @@ services:
         arguments:
             - '@templating'
             - '@Proximum\Vimeet\Infrastructure\Adapter\QueryBus'
+            - '@adapter.authorization_checker'
 
     #
     # Tip Event Actions
