@@ -114,7 +114,7 @@ class RemoveHandler
 
         // Update cart
         $cart = $this->cartManager->getCart($remove->sheet);
-        $this->cartManager->updateParticipantsQuantity(
+        $cart = $this->cartManager->updateParticipantsQuantity(
             $cart,
             $this->stepParticipantAndPlanning->build($remove->sheet)->participantsProduct
         );
