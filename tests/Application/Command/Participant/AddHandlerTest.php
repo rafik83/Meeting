@@ -133,7 +133,6 @@ class AddHandlerTest extends TestCase
         $eventDispatcher->dispatch(Events::SHEET_UPDATED, $sheetUpdatedEvent)->shouldBeCalled();
 
         $cartManager = $this->prophesize(CartManager::class);
-        $cartManager->updateParticipantsQuantity($sheet)->shouldBeCalled();
 
         $templateData  = new Template\TemplateData('root', [], 'fr', 'fr');
         $block         = new Template\Block('12', [], 'fr', 'fr');
