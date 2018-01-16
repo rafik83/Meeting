@@ -254,8 +254,9 @@ class CartManager
     private function getAvailableParticipantProductsById(Sheet $sheet): array
     {
         $availableParticipantProductsById = [];
+        $package = $sheet->getPackage();
 
-        foreach ($sheet->getPackage()->getParticipants() as $product) {
+        foreach ($package->getParticipants() as $product) {
             $availableParticipantProductsById[$product->getId()] = $product;
         }
 
