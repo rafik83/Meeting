@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of the vimeet project.
+ * This file is part of the Proximum Vimeet project.
  *
  * Copyright (C) Proximum
  *
@@ -31,6 +31,9 @@ class Configure
     public $externalCatalogEnabled;
 
     /** @var SearchFacet[] */
+    public $persistedSearchFacets;
+
+    /** @var array */
     public $searchFacets;
 
     /** @var CatalogVisibility */
@@ -46,8 +49,6 @@ class Configure
     public $registrationUrl;
 
     /**
-     * Configure constructor.
-     *
      * @param Event             $event
      * @param CatalogVisibility $catalogVisibility
      * @param SearchFacet[]     $searchFacets
@@ -56,7 +57,6 @@ class Configure
     {
         $this->event                  = $event;
         $this->catalogVisibility      = $catalogVisibility;
-        $this->searchFacets           = $searchFacets;
         $this->externalCatalogEnabled = $event->isExternalCatalogEnabled();
         $this->types                  = $catalogVisibility->getTypes();
         $this->categories             = $catalogVisibility->getCategories();
@@ -70,6 +70,47 @@ class Configure
             } else {
                 $this->messageTranslations[$locale]['title']   = '';
                 $this->messageTranslations[$locale]['content'] = '';
+            }
+        }
+
+        $this->persistedSearchFacets = $searchFacets;
+
+        $types = SearchFacet::getAllTypes();
+        foreach ($types as $type) {
+            foreach ($searchFacets as $searchFacet) {
+                if ($searchFacet->getType() === $type) {
+                    $translations = [];
+
+                    foreach ($this->event->getLocales() as $locale) {
+                        $translations[$locale] = [
+                            'label'       => $searchFacet->getLabel($locale),
+                            'placeholder' => $searchFacet->getPlaceholder($locale),
+                            'type'        => $type,
+                        ];
+                    }
+
+                    $this->searchFacets[$type] = [
+                        'enabled'      => $searchFacet->isEnabled(),
+                        'translations' => $translations,
+                    ];
+                }
+            }
+
+            if (!isset($this->searchFacets[$type])) {
+                $translations = [];
+
+                foreach ($this->event->getLocales() as $locale) {
+                    $translations[$locale] = [
+                        'label'       => '',
+                        'placeholder' => '',
+                        'type'        => $type,
+                    ];
+                }
+
+                $this->searchFacets[$type] = [
+                    'enabled'      => false,
+                    'translations' => $translations,
+                ];
             }
         }
     }

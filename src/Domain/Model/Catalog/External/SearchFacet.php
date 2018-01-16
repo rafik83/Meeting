@@ -38,4 +38,22 @@ class SearchFacet extends AbstractSearchFacet
     {
         return $this->translations->toArray();
     }
+
+    /**
+     * @param string $locale
+     * @param string $label
+     * @param string $placeholder
+     *
+     * @return SearchFacet
+     */
+    public function translate($locale, $label, $placeholder): SearchFacet
+    {
+        if ($this->hasTranslation($locale)) {
+            $this->translations->get($locale)->update($label, $placeholder);
+        } else {
+            $this->translations->add(new SearchFacetTranslation($this, $label, $placeholder, $locale));
+        }
+
+        return $this;
+    }
 }

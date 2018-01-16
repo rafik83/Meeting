@@ -29,8 +29,8 @@ class UpdateType extends AbstractType
             ->add('searchFacets', CollectionType::class, [
                 'entry_type'    => SearchFacetType::class,
                 'entry_options' => [
+                    'help'     => true,
                     'required' => false,
-                    'help' => true
                 ],
                 'label' => false,
             ])
@@ -57,8 +57,6 @@ class UpdateType extends AbstractType
     }
 
     /**
-     * this gets called in the final stage before rendering the form
-     *
      * @param FormView      $view
      * @param FormInterface $form
      * @param array         $options

@@ -3,25 +3,22 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2016 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
 
 namespace Proximum\Vimeet\Application\Command\Event\SearchFacet;
 
+use Proximum\Vimeet\Domain\Model\Catalog\Internal\SearchFacet;
 use Proximum\Vimeet\Domain\Repository\SearchFacetRepositoryInterface;
 
 class UpdateHandler
 {
-    /**
-     * @var SearchFacetRepositoryInterface
-     */
+    /** @var SearchFacetRepositoryInterface */
     private $searchFacetRepository;
 
     /**
-     * UpdateHandler constructor.
-     *
      * @param SearchFacetRepositoryInterface $searchFacetRepository
      */
     public function __construct(SearchFacetRepositoryInterface $searchFacetRepository)
@@ -34,15 +31,31 @@ class UpdateHandler
      */
     public function handle(Update $update)
     {
-        foreach ($update->searchFacets as $searchFacet) {
-            foreach ($searchFacet->getTranslations() as $locale => $translation) {
-                $searchFacet->translate($locale, $translation->getLabel(), $translation->getPlaceholder());
+        foreach ($update->searchFacets as $type => $searchFacet) {
+            $found = false;
+
+            foreach ($update->persistedSearchFacets as $persistedSearchFacet) {
+                if ($persistedSearchFacet->getType() === $type) {
+                    $found = true;
+                    $persistedSearchFacet->setEnabled($searchFacet['enabled']);
+
+                    foreach ($searchFacet['translations'] as $locale => $translation) {
+                        $persistedSearchFacet->translate($locale, $translation['label'], $translation['placeholder']);
+                    }
+
+                    $this->searchFacetRepository->set($persistedSearchFacet);
+                }
+
             }
 
-            if (null === $searchFacet->getId()) {
-                $this->searchFacetRepository->add($searchFacet);
-            } else {
-                $this->searchFacetRepository->set($searchFacet);
+            if (false === $found) {
+                $newSearchFacet = new SearchFacet($update->event, $type, $searchFacet['enabled']);
+
+                foreach ($searchFacet['translations'] as $locale => $translation) {
+                    $newSearchFacet->translate($locale, $translation['label'], $translation['placeholder']);
+                }
+
+                $this->searchFacetRepository->add($newSearchFacet);
             }
         }
     }

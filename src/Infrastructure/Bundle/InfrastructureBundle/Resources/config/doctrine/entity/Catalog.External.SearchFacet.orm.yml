@@ -22,4 +22,4 @@ Proximum\Vimeet\Domain\Model\Catalog\External\SearchFacet:
             targetEntity: Proximum\Vimeet\Domain\Model\Catalog\External\SearchFacetTranslation
             mappedBy: searchFacet
             indexBy: locale
-            cascade: ["persist"]
+            cascade: ["persist", "remove"]
