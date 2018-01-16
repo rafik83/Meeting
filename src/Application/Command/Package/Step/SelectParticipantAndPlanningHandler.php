@@ -60,7 +60,7 @@ class SelectParticipantAndPlanningHandler
 
         $cart = $this->cartManager->getCart($sheet, $selectParticipantAndPlanning->currentStep);
 
-        $this->cartManager->updateParticipantsQuantity($cart, $selectParticipantAndPlanning->participantsProduct);
+        $cart = $this->cartManager->updateParticipantsQuantity($cart, $selectParticipantAndPlanning->participantsProduct);
         $this->handlePlanning($cart, $selectParticipantAndPlanning->planningQuantity);
         $this->cartManager->save($cart);
 

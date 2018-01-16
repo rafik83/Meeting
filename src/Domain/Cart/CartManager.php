@@ -73,8 +73,10 @@ class CartManager
     /***
      * @param Cart  $cart
      * @param array $productByParticipantId array of participantId => Product
+     *
+     * @return Cart
      */
-    public function updateParticipantsQuantity(Cart $cart, array &$productByParticipantId): void
+    public function updateParticipantsQuantity(Cart $cart, array &$productByParticipantId): Cart
     {
         $sheet = $cart->getSheet();
 
@@ -102,9 +104,10 @@ class CartManager
             $cart,
             $mergedOrder,
             $availableParticipantProductsById,
-            $participantsByProductId,
-            $participantsIncludedByProductId
+            $participantsByProductId
         );
+
+        return $cart;
     }
 
     /**
@@ -172,14 +175,12 @@ class CartManager
      * @param null|Order $order
      * @param array      $availableParticipantProductsById
      * @param array      $participantsByProductId
-     * @param array      $participantsIncludedByProductId
      */
     private function saveUnNeededParticipantProductsToCart(
         Cart $cart,
         ?Order $order = null,
         array &$availableParticipantProductsById,
-        array &$participantsByProductId,
-        array &$participantsIncludedByProductId
+        array &$participantsByProductId
     ) {
         if (null === $order) {
             return;
@@ -199,8 +200,6 @@ class CartManager
             $previousQuantity = $participantRow->getQuantity();
             $newQuantity = count($participantsByProductId[$productId]);
             $quantityToRemove = $previousQuantity - $newQuantity;
-
-            // @todo: Take account of included Participant products
 
             // Add a link between Participant and Product of type 'participant'
             // when no participant's product where added or removed in the cart.

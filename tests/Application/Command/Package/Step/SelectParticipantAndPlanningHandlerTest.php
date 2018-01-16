@@ -85,7 +85,24 @@ class SelectParticipantAndPlanningHandlerTest extends TestCase
         $cartManager = $this->prophesize(CartManager::class);
         $orderMerger = $this->prophesize(Merger::class);
         $cartManager->getCart($sheet->reveal(), 1)->shouldBeCalled()->willReturn($actualCart);
-        $cartManager->save($expectedCart)->shouldBeCalled();
+        $cartManager
+            ->updateParticipantsQuantity($actualCart, [123 => $participantProduct])
+            ->shouldBeCalled()
+            ->willReturn(new Cart(
+                $sheet->reveal(),
+                [
+                    $planRow,
+                    $participantProductRow,
+                ],
+                [$promotionCodeRow],
+                1
+            ))
+        ;
+
+        $cartManager
+            ->save($expectedCart)
+            ->shouldBeCalled()
+        ;
 
         $eventDispatcher = $this->prophesize(DelayedEventDispatcher::class);
         $packageStepDone = new StepDoneEvent($sheet->reveal());
@@ -144,8 +161,7 @@ class SelectParticipantAndPlanningHandlerTest extends TestCase
                 $participant2->reveal(),
                 $participant3->reveal(),
             ]
-        )
-        ;
+        );
         $sheet->getPackage()->willReturn($package);
 
         $planRow = new CartRow($sheet->reveal(), $planProduct, 1);
@@ -178,6 +194,18 @@ class SelectParticipantAndPlanningHandlerTest extends TestCase
         $cartManager = $this->prophesize(CartManager::class);
         $orderMerger = $this->prophesize(Merger::class);
         $cartManager->getCart($sheet->reveal(), 1)->shouldBeCalled()->willReturn($actualCart);
+        $cartManager
+            ->updateParticipantsQuantity(
+                $actualCart,
+                [
+                    11 => $participantProduct1->reveal(),
+                    22 => $participantProduct1->reveal(),
+                    33 => $participantProduct2->reveal(),
+                ]
+            )
+            ->shouldBeCalled()
+            ->willReturn($expectedCart)
+        ;
         $cartManager->save($expectedCart)->shouldBeCalled();
 
         $eventDispatcher = $this->prophesize(DelayedEventDispatcher::class);
