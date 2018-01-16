@@ -11,6 +11,7 @@
 namespace Proximum\Vimeet\Application\Components\Step;
 
 use Proximum\Vimeet\Application\Command\Package\Step\SelectParticipantAndPlanning;
+use Proximum\Vimeet\Application\Components\Package\ProductByParticipantGetter;
 use Proximum\Vimeet\Domain\Cart\CartManager;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Order\Merger;
@@ -23,14 +24,22 @@ class StepParticipantAndPlanning
     /** @var CartManager */
     private $cartManager;
 
+    /** @var ProductByParticipantGetter */
+    private $productByParticipantGetter;
+
     /**
-     * @param Merger      $orderMerger
-     * @param CartManager $cartManager
+     * @param Merger                     $orderMerger
+     * @param CartManager                $cartManager
+     * @param ProductByParticipantGetter $productByParticipantGetter
      */
-    public function __construct(Merger $orderMerger, CartManager $cartManager)
-    {
+    public function __construct(
+        Merger $orderMerger,
+        CartManager $cartManager,
+        ProductByParticipantGetter $productByParticipantGetter
+    ) {
         $this->orderMerger = $orderMerger;
         $this->cartManager = $cartManager;
+        $this->productByParticipantGetter = $productByParticipantGetter;
     }
 
     /**
@@ -42,43 +51,15 @@ class StepParticipantAndPlanning
     public function build(Sheet $sheet, ?int $stepIndex = null): SelectParticipantAndPlanning
     {
         $cart = $this->cartManager->getCart($sheet, $stepIndex);
-        $orderMerged = $this->orderMerger->getMergedOrders($sheet);
-
         $command = new SelectParticipantAndPlanning($sheet, $stepIndex);
-
-        // Get product by participant from Cart
-        foreach ($cart->getParticipantRows() as $cartRow) {
-            foreach ($cartRow->getParticipants() as $participant) {
-                $command->participantsProduct[$participant->getId()] = $cartRow->getProduct();
-            }
-        }
-
-        // Set product to null or Product (from previous order) to others participants
-        foreach ($sheet->getParticipantsArray() as $participant) {
-            if (!isset($command->participantsProduct[$participant->getId()])) {
-                $command->participantsProduct[$participant->getId()] = $participant->getParticipantProduct();
-            }
-        }
-
-        // Set product to all participants if there only one participant product in the package
-        $participantProducts = $sheet->getPackage()->getParticipants();
-
-        if (1 === count($participantProducts)) {
-            $participantProduct = reset($participantProducts);
-
-            if (false !== $participantProduct) {
-                foreach ($sheet->getParticipantsArray() as $participant) {
-                    if (!isset($command->participantsProduct[$participant->getId()])) {
-                        $command->participantsProduct[$participant->getId()] = $participantProduct;
-                    }
-                }
-            }
-        }
+        $command->participantsProduct = $this->productByParticipantGetter->getFromCart($cart);
 
         // Get Planning quantity
         $planningRow   = $cart->getPlanningRow();
         $orderQuantity = 0;
         $cartQuantity  = 0;
+
+        $orderMerged = $this->orderMerger->getMergedOrders($sheet);
 
         if (null !== $orderMerged) {
             $planning = $sheet->getPackage()->getPlanning();
