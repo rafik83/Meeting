@@ -56,12 +56,6 @@ class Configure
     public function __construct(Event $event, CatalogVisibility $catalogVisibility, array $searchFacets)
     {
         $this->event                  = $event;
-        $this->catalogVisibility      = $catalogVisibility;
-        $this->externalCatalogEnabled = $event->isExternalCatalogEnabled();
-        $this->types                  = $catalogVisibility->getTypes();
-        $this->categories             = $catalogVisibility->getCategories();
-        $this->hasMessage             = $catalogVisibility->hasMessage();
-        $this->registrationUrl        = $catalogVisibility->getRegistrationUrl();
 
         foreach ($event->getLocales() as $locale) {
             if (($catalogVisibilityTranslation = $catalogVisibility->getMessage($locale)) !== null) {
@@ -74,6 +68,12 @@ class Configure
         }
 
         $this->persistedSearchFacets = $searchFacets;
+        $this->catalogVisibility      = $catalogVisibility;
+        $this->externalCatalogEnabled = $event->isExternalCatalogEnabled();
+        $this->types                  = $catalogVisibility->getTypes();
+        $this->categories             = $catalogVisibility->getCategories();
+        $this->hasMessage             = $catalogVisibility->hasMessage();
+        $this->registrationUrl        = $catalogVisibility->getRegistrationUrl();
 
         $types = SearchFacet::getAllTypes();
         foreach ($types as $type) {
