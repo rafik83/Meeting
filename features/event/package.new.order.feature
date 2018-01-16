@@ -29,31 +29,33 @@ Feature: Edit my package
     Then I should be on this page "/fr/sheet/1/package/step/1"
     And I should see "Participants & plannings"
     And I should see "Packs de rendez-vous"
-    And I should see "sheet.object.action.add"
-    And I follow "sheet.object.action.add"
+    And I should see "package.participant.add"
+    And I follow "package.participant.add"
     And I should see "sheet.participant.sendInvite"
 
   Scenario: I can remove two participant from my package (one included and one payed)
     Given I am logged with "user_asddays_1@proximum.com" on event "http://asddays-2016.vimeet.proximum"
     When I am on this page "/fr"
     And I go to this page "/fr/sheet/1/package/step/1"
-    Then I should see "package.participants.included"
-    And I should see "package.product.unitPrice"
-    When I follow "sheet.object.action.remove"
+    Then I should see "package.product.unitPrice"
+    When I follow "package.participant.delete"
     Then I should be on this page "/fr/sheet/1/package/step/1/participant/remove"
     And I check "remove_participant_participants_5"
     And I check "remove_participant_participants_4"
     When I press "sheet.participant.remove"
     Then I should be on this page "/fr/sheet/1/package/step/1"
-    And I should not see "sheet.object.action.remove"
+    And I should not see "package.participant.delete"
 
   Scenario: I can remove one planning
     Given I am logged with "user_asddays_1@proximum.com" on event "http://asddays-2016.vimeet.proximum"
     When I am on this page "/fr"
     Then I go to this page "/fr/sheet/1/package/step/1"
-    And I should not see "sheet.object.action.remove"
+    And I should not see "package.participant.delete"
     And the "participant_and_planning[planningQuantity]" field should contain "1"
-    When I fill in "participant_and_planning[planningQuantity]" with "0"
+    # participant product for the participant id=1
+    When I fill in "participant_and_planning[1]" with "3"
+    # planning
+    And I fill in "participant_and_planning[planningQuantity]" with "0"
     And I press "package.participant_planning.validate"
     Then I should be on this page "/fr/sheet/1/package/step/2"
 
@@ -75,13 +77,11 @@ Feature: Edit my package
     And I am on this page "/fr"
     When I go to this page "/fr/sheet/1/package/summary"
     Then I should see "package.summary.title"
-    # participant supplementaire
     # planning supplementaire
-    # option chaise
-    # option A
-    And the "tr[data-product-id='3']" element should contain "-1"
     And the "tr[data-product-id='4']" element should contain "-1"
+    # option chaise
     And the "tr[data-product-id='6']" element should contain "-2"
+    # option A
     And the "tr[data-product-id='7']" element should contain "1"
 
   Scenario: I can't remove a product that is not deletable or buyable

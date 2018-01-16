@@ -27,14 +27,22 @@ Feature: Complete my package
     When I go to this page "/fr/sheet/1/package/step/1"
     Then The radio "plans_plan_2" should be checked
 
+  Scenario: I can buy participant product
+    Given I am logged with "user_asddays_1@proximum.com" on event "http://asddays-2016.vimeet.proximum"
+    When I am on this page "/fr/sheet/1/package/step/2"
+    Then I should see "Participant supplémentaire"
+    And I should see "package.product.unitPrice"
+    When I fill in "participant_and_planning[planningQuantity]" with "1"
+    And I press "package.participant_planning.validate"
+    Then I should be on this page "/fr/sheet/1/package/step/3"
+
   Scenario: I can buy planning
     Given I am logged with "user_asddays_1@proximum.com" on event "http://asddays-2016.vimeet.proximum"
     When I am on this page "/fr/sheet/1/package/step/2"
     Then I should see "Packs de rendez-vous"
-    And I should see "sheet.object.action.add"
-    # This needs to be redefined as it doesn't show the price anymore
-    And the ".user__formule" element should contain "package.product.unitPrice"
-    And the ".product-price" element should contain "package.product.unitPrice"
+    And I should see "package.participant_planning.validate"
+    And I should see "package.product.unitPrice"
+    And I should see "package.product.totalPrice"
     When I fill in "participant_and_planning[planningQuantity]" with "1"
     And I press "package.participant_planning.validate"
     Then I should be on this page "/fr/sheet/1/package/step/3"
@@ -64,16 +72,15 @@ Feature: Complete my package
 
   Scenario: I can add a participant at step 2
     Given I am logged with "user_asddays_1@proximum.com" on event "http://asddays-2016.vimeet.proximum"
-    When I am on this page "/fr/sheet/1/package/step/2"
-    Then I should see "sheet.object.action.add"
-    And I follow "sheet.object.action.add"
-    And I should see "sheet.participant.sendInvite"
+    And I am on this page "/fr/sheet/1/package/step/2"
+    When I follow "package.participant.add"
+    Then I should see "sheet.participant.sendInvite"
     And I fill in the following:
       | add_participant_firstName | Truc         |
       | add_participant_lastName  | Test         |
       | add_participant_email     | truc@test.fr |
-    Then I press "sheet.participant.sendInvite"
-    And I should be on this page "/fr/sheet/1/package/step/2"
+    When I press "sheet.participant.sendInvite"
+    Then I should be on this page "/fr/sheet/1/package/step/2"
     And I should see "Truc TEST"
     And I should see "TT"
 
