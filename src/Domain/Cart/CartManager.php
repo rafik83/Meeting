@@ -61,7 +61,6 @@ class CartManager
      */
     public function getCart(Sheet $sheet, $currentStep = null)
     {
-        // @todo: to optimize : store cart by sheet and step ?
         return new Cart(
             $sheet,
             $this->cartRowRepository->findBySheet($sheet),
