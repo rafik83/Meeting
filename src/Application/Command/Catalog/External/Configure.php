@@ -16,7 +16,7 @@ use Proximum\Vimeet\Domain\Model\Category;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Type;
 
-class Configure
+class Configure extends ConfigureSearchFacet
 {
     /** @var Event */
     public $event;
@@ -29,12 +29,6 @@ class Configure
 
     /** @var bool */
     public $externalCatalogEnabled;
-
-    /** @var SearchFacet[] */
-    public $persistedSearchFacets;
-
-    /** @var array */
-    public $searchFacets;
 
     /** @var CatalogVisibility */
     public $catalogVisibility;
@@ -75,43 +69,6 @@ class Configure
         $this->hasMessage             = $catalogVisibility->hasMessage();
         $this->registrationUrl        = $catalogVisibility->getRegistrationUrl();
 
-        $types = SearchFacet::getAllTypes();
-        foreach ($types as $type) {
-            foreach ($searchFacets as $searchFacet) {
-                if ($searchFacet->getType() === $type) {
-                    $translations = [];
-
-                    foreach ($this->event->getLocales() as $locale) {
-                        $translations[$locale] = [
-                            'label'       => $searchFacet->getLabel($locale),
-                            'placeholder' => $searchFacet->getPlaceholder($locale),
-                            'type'        => $type,
-                        ];
-                    }
-
-                    $this->searchFacets[$type] = [
-                        'enabled'      => $searchFacet->isEnabled(),
-                        'translations' => $translations,
-                    ];
-                }
-            }
-
-            if (!isset($this->searchFacets[$type])) {
-                $translations = [];
-
-                foreach ($this->event->getLocales() as $locale) {
-                    $translations[$locale] = [
-                        'label'       => '',
-                        'placeholder' => '',
-                        'type'        => $type,
-                    ];
-                }
-
-                $this->searchFacets[$type] = [
-                    'enabled'      => false,
-                    'translations' => $translations,
-                ];
-            }
-        }
+        $this->prepareSearchFacetFields();
     }
 }
