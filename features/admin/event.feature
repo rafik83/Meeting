@@ -20,14 +20,15 @@ Feature: See, create and update event
     And I should be on this page "/en/event/create"
     And I check "form.event_create.children.visible.label"
     And I fill in the following:
-      | form.event_create.children.title.label         | Alternative Event                 |
-      | form.event_create.children.domain.label        | alternative-event.vimeet.proximum |
-      | form.event_create.children.vat.label           | 20                                |
-      | form.event_create.children.leftColor.label     | #123456                           |
-      | form.event_create.children.rightColor.label    | #123456                           |
-      | form.event_create.children.textColor.label     | #123456                           |
-      | form.event_create.children.organiserName.label | Proximum                          |
-      | form.event_create.children.emailTeam.label     | team-project@example.net          |
+      | form.event_create.children.title.label           | Alternative Event                 |
+      | form.event_create.children.domain.label          | alternative-event.vimeet.proximum |
+      | form.event_create.children.vat.label             | 20                                |
+      | form.event_create.children.leftColor.label       | #123456                           |
+      | form.event_create.children.rightColor.label      | #123456                           |
+      | form.event_create.children.textColor.label       | #123456                           |
+      | form.event_create.children.backgroundColor.label | #123456                           |
+      | form.event_create.children.organiserName.label   | Proximum                          |
+      | form.event_create.children.emailTeam.label       | team-project@example.net          |
     And I select "Europe/Paris" from "form.event_create.children.timeZone.label"
     And I select "fr" from "form.event_create.children.fallback.label"
     And I select "fr" from "form.event_create.children.locales.label"

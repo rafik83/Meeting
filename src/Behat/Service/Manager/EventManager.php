@@ -36,7 +36,7 @@ class EventManager
     public function create($eventTitle = null)
     {
         $event = EventFactory::createEvent($eventTitle);
-        $event->getConfiguration()->setColors('#4697ff', '#4b41d0', '#00398C');
+        $event->getConfiguration()->setColors('#4697ff', '#4b41d0', '#00398C', '#00398C');
         foreach ($event->getLocales() as $locale) {
             if (!$event->getTranslations()->get($locale)) {
                 $event->getTranslations()->set($locale, new EventTranslation($event, $locale, ''));

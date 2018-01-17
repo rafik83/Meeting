@@ -37,7 +37,7 @@ class MeetingViewQueryHandlerTest extends TestCase
     public function testHandleFrom()
     {
         $event        = EventFactory::createEvent();
-        $event->getConfiguration()->setColors('leftColor', 'rightColor', 'textColor');
+        $event->getConfiguration()->setColors('leftColor', 'rightColor', 'textColor', 'backgroundColor');
         $user         = UserFactory::create();
         $type         = new Type($event);
 
@@ -128,7 +128,7 @@ class MeetingViewQueryHandlerTest extends TestCase
     public function testHandleTo()
     {
         $event        = EventFactory::createEvent();
-        $event->getConfiguration()->setColors('leftColor', 'rightColor', 'textColor');
+        $event->getConfiguration()->setColors('leftColor', 'rightColor', 'textColor', 'backgroundColor');
         $user         = UserFactory::create();
         $type         = new Type($event);
         $sheet    = $this->prophesize(Sheet::class);

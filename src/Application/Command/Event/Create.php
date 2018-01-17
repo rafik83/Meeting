@@ -62,5 +62,6 @@ class Create extends AbstractEvent
         $this->invoicePrefix = $event->getInvoicePrefix();
         $this->visible       = $event->isVisible();
         $this->duplicatedFrom = $event;
+        $this->backgroundColor = $event->getConfiguration()->getBackgroundColor();
     }
 }

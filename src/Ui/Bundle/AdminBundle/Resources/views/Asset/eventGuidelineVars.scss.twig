@@ -50,3 +50,7 @@ $color-highlighted: {{ colorHighLighted }};
 .bg-highlighted {
   background-color: $color-highlighted !important;
 }
+
+body {
+  background: {% if backgroundImage %}url("{{ backgroundImage }}") no-repeat fixed center{% endif %} {{ backgroundColor }};
+}
