@@ -176,16 +176,12 @@
             <th nowrap="nowrap">
                 {{ 'form.sheet_filter.children.type.label'|trans({}, 'forms') }}
             </th>
-            <th nowrap="nowrap">
+            <th nowrap="nowrap" class="col-md-1">
                 {{ 'form.sheet_filter.children.validationState.label'|trans({}, 'forms') }}
-            </th>
-            <th nowrap="nowrap">
-                {{ 'form.sheet_filter.children.completed.label'|trans({}, 'forms') }}
             </th>
             <th nowrap="nowrap">
                 {{ 'form.sheet_filter.children.state.label'|trans({}, 'forms') }}
             </th>
-            <th nowrap="nowrap">{{ 'admin.sheet.inCatalog'|trans }}</th>
             <th>{{ 'admin.sheet.createdAt'|trans }}</th>
             <th>{{ 'admin.sheet.spot'|trans }}</th>
             <th nowrap="nowrap">
@@ -240,27 +236,32 @@
                         'validated': 'success'
                     }
                     ) }}
-                </td>
-                <td>
-                    <div class="progress">
+                    <div class="progress progress-completeness" data-toggle="tooltip" title="{{ 'form.sheet_filter.children.completed.label'|trans({}, 'forms') }}">
                         <div class="progress-bar progress-bar-{{ sheet.completenessStatus }}" role="progressbar" aria-valuenow="{{ sheet.completeness }}" aria-valuemin="0" aria-valuemax="100" style="width: {{ sheet.completeness }}%;">
                             {{ sheet.completeness }}%
                         </div>
                     </div>
                 </td>
                 <td>
-                    {{ macro.state_label(
-                    ('event.sheet.state.' ~ sheet.state)|trans,
-                    sheet.state,
-                    {
-                        'pending': 'default',
-                        'accepted': 'warning',
-                        'validated': 'success'
-                    },
-                    sheet.hasTraceLabel ? ('admin.sheet.trace.' ~ sheet.traceAction)|trans({'%at%': sheet.traceAt|localizeddate('medium', 'short', app.request.locale, event.timeZone)}) ~ ' ' ~ (sheet.traceBy != null ? 'admin.sheet.trace.author'|trans({'%by%': sheet.traceBy}) : 'admin.sheet.trace.auto'|trans) : ''
-                    ) }}
+                    <div>
+                        {{ macro.state_label(
+                        ('event.sheet.state.' ~ sheet.state)|trans,
+                        sheet.state,
+                        {
+                            'pending': 'default',
+                            'accepted': 'warning',
+                            'validated': 'success'
+                        },
+                        sheet.hasTraceLabel ? ('admin.sheet.trace.' ~ sheet.traceAction)|trans({'%at%': sheet.traceAt|localizeddate('medium', 'short', app.request.locale, event.timeZone)}) ~ ' ' ~ (sheet.traceBy != null ? 'admin.sheet.trace.author'|trans({'%by%': sheet.traceBy}) : 'admin.sheet.trace.auto'|trans) : ''
+                        ) }}
+                    </div>
+                    {% if sheet.isInCatalog %}
+                        <div class="label label-info">
+                            {{ 'admin.sheet.inCatalog'|trans }}
+                        </div>
+                    {% endif %}
                 </td>
-                <td class="text-center">{{ sheet.isInCatalog ? '✓' : '' }}</td>
+                <td class="text-center"></td>
                 <td>
                     <small>
                         {{ sheet.createdAt|localizeddate('medium', 'short', app.request.locale, event.timeZone) }}
