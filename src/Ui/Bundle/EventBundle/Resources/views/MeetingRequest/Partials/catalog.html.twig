@@ -34,10 +34,10 @@
                 {% for availableSlotOptionChosen in searchForm.availableSlot.children %}
                     {% if availableSlotOptionChosen.vars.data %}
                         <a href="#" class="catalog-mobile-menu-button btn btn-primary btn-block" data-catalog-mobile-menu-button-action="catalog-mobile-menu-button-action-available-slot-filter">
-                            <span>{{ availableSlotOptionChosen.vars.label|trans({}, availableSlotOptionChosen.vars.translation_domain) }}</span>
                             <span class="button-count">
-                            <i class="glyphicon glyphicon-chevron-down"></i>
-                        </span>
+                                <i class="glyphicon glyphicon-chevron-down"></i>
+                            </span>
+                            <span>{{ availableSlotOptionChosen.vars.label|trans({}, availableSlotOptionChosen.vars.translation_domain) }}</span>
                         </a>
                     {% endif %}
                 {% endfor %}
@@ -46,13 +46,13 @@
                 {% for stateOptionChosen in searchForm.state.children %}
                     {% if stateOptionChosen.vars.data %}
                         <a href="#" class="catalog-mobile-menu-button btn btn-primary btn-block" data-catalog-mobile-menu-button-action="catalog-mobile-menu-button-action-state-filter">
-                            <span>{{ stateOptionChosen.vars.label|trans({}, stateOptionChosen.vars.translation_domain) }}</span>
                             <span class="button-count">
-                            {% if stateListsView.byState(stateOptionChosen.vars.value) is not null %}
-                                ({{ stateListsView.byState(stateOptionChosen.vars.value).count }})
-                            {% endif %}
-                            <i class="glyphicon glyphicon-chevron-down"></i>
-                        </span>
+                                {% if stateListsView.byState(stateOptionChosen.vars.value) is not null %}
+                                    ({{ stateListsView.byState(stateOptionChosen.vars.value).count }})
+                                {% endif %}
+                                <i class="glyphicon glyphicon-chevron-down"></i>
+                            </span>
+                            <span>{{ stateOptionChosen.vars.label|trans({}, stateOptionChosen.vars.translation_domain) }}</span>
                         </a>
                     {% endif %}
                 {% endfor %}

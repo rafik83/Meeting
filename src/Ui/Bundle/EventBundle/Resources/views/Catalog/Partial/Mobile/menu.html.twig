@@ -3,29 +3,29 @@
         <div class="catalog-mobile-menu-summary catalog-mobile-menu-container">
             {% if searchForm.content is defined %}
                 <a href="#" class="catalog-mobile-menu-button btn btn-default btn-block" data-catalog-mobile-menu-button-action="catalog-mobile-menu-button-action-content-filter">
-                    <span>{{ searchForm.content.vars.label }}</span>
                     <span id="content-filter-remove" class="button-count">
                         <i class="glyphicon glyphicon-search"></i>
                     </span>
+                    <span>{{ searchForm.content.vars.label }}</span>
                 </a>
             {% endif %}
 
             {% if searchForm.availableSlot is defined %}
                 <a href="#" class="catalog-mobile-menu-button btn btn-primary btn-block">
-                    <span>...</span>
                     <span class="button-count">
                         <i class="glyphicon glyphicon-chevron-down"></i>
                     </span>
+                    <span>...</span>
                 </a>
             {% endif %}
 
             {% if searchForm.categories is defined or searchForm.type is defined %}
                 <a href="#" class="catalog-mobile-menu-button btn btn-primary btn-block">
-                    <span>...</span>
                     <span class="button-count">
                         (...)
                         <i class="glyphicon glyphicon-chevron-down"></i>
                     </span>
+                    <span>...</span>
                 </a>
             {% endif %}
         </div>

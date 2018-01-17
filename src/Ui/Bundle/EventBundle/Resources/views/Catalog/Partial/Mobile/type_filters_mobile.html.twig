@@ -10,8 +10,8 @@
     >
         <a href="#" class="catalog-mobile-menu-button btn btn-primary btn-block {% if numberOfDifferentType != numberOfTypeSelected %}btn-inactive{% endif %} {% if numberOfDifferentType == 0 %}disabled{% endif %}">
 
-            <span>{{ 'catalog.mobile.filters.allParticipants'|trans }}</span>
             <span class="button-count">({{ totalType }})</span>
+            <span>{{ 'catalog.mobile.filters.allParticipants'|trans }}</span>
         </a>
     </li>
     {% for child in form.children %}
@@ -23,8 +23,8 @@
             data-content="{{ child.vars.label|trans({}, child.vars.translation_domain) }}"
         >
             <a href="#" class="catalog-mobile-menu-button btn btn-primary btn-block {% if numberOfDifferentType == numberOfTypeSelected or not child.vars.data %}btn-inactive{% endif %} {% if choices[child.vars.value].count == 0 %}disabled{% endif %}">
-                <span>{{ child.vars.label|trans({}, child.vars.translation_domain) }}</span>
                 <span class="button-count">({{ choices[child.vars.value].count }})</span>
+                <span>{{ child.vars.label|trans({}, child.vars.translation_domain) }}</span>
             </a>
         </li>
     {% endfor %}
