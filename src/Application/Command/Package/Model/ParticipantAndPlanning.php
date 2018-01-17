@@ -15,36 +15,37 @@ use Proximum\Vimeet\Domain\Model\Product;
 
 class ParticipantAndPlanning
 {
-    /**
-     * @var array
-     */
+    /** @var array */
     public $labels;
 
-    /**
-     * @var bool
-     */
+    /** @var bool */
     public $enabled;
 
-    /**
-     * @var Product[]
-     */
+    /** @var Product[] */
     public $participants;
 
-    /**
-     * @var Product|null
-     */
+    /** @var int|null */
+    public $maxParticipant;
+
+    /** @var Product|null */
     public $planning;
 
     /**
      * @param array     $labels
      * @param bool      $enabled
+     * @param int|null  $maxParticipant
      * @param Product[] $participants
      * @param Product   $planning
      *
      * @throws WrongTypeException
      */
-    public function __construct(array $labels, $enabled, array $participants = [], Product $planning = null)
-    {
+    public function __construct(
+        array $labels,
+        $enabled,
+        $maxParticipant,
+        array $participants = [],
+        Product $planning = null
+    ) {
         foreach ($participants as $participant) {
             if (null !== $participant && !$participant->isParticipant()) {
                 throw new WrongTypeException($participant, Product::TYPE_PARTICIPANT);
@@ -57,6 +58,7 @@ class ParticipantAndPlanning
 
         $this->labels = $labels;
         $this->enabled = $enabled;
+        $this->maxParticipant = $maxParticipant;
         $this->participants = $participants;
         $this->planning = $planning;
     }
