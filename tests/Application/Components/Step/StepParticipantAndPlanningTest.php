@@ -102,4 +102,113 @@ class StepParticipantAndPlanningTest extends TestCase
 
         $this->assertEquals($expected, $result);
     }
+
+    public function testBuildWithoutCart()
+    {
+        $package = $this->prophesize(Package::class);
+        $planning = $this->prophesize(Product::class);
+        $planning->getType()->willReturn(Product::TYPE_PLANNING);
+        $planning->getSerializedData()->willReturn('');
+        $planning->getUnitPrice()->willReturn(123);
+        $planning->isPlanning()->willReturn(true);
+        $package->getPlanning()->willReturn($planning->reveal());
+        $this->sheet->getPackage()->willReturn($package->reveal());
+        $cart = new Cart($this->sheet->reveal(), [], [], null);
+
+        $this->cartManager
+            ->getCart($this->sheet->reveal(), null)
+            ->shouldBeCalled()
+            ->willReturn($cart)
+        ;
+
+        $product1 = $this->prophesize(Product::class);
+        $product2 = $this->prophesize(Product::class);
+        $participantProducts = [
+            123 => null,
+            45 => $product1->reveal(),
+            67 => $product2->reveal()
+        ];
+
+        $this->productByParticipantGetter
+            ->getFromCart($cart)
+            ->shouldBeCalled()
+            ->willReturn($participantProducts)
+        ;
+
+        $orderMerged = $this->prophesize(Order::class);
+        $this->orderMerger
+            ->getMergedOrders($this->sheet->reveal())
+            ->shouldBeCalled()
+            ->willReturn($orderMerged);
+        $order = $this->prophesize(Order::class);
+        $orderRow = new Order\Row($order->reveal(), 2, $planning->reveal(), null, 'label', 123, null);
+        $orderMerged->getRowForProduct($planning)->shouldBeCalled()->willReturn($orderRow);
+
+        $stepParticipantAndPlanning = new StepParticipantAndPlanning(
+            $this->orderMerger->reveal(),
+            $this->cartManager->reveal(),
+            $this->productByParticipantGetter->reveal()
+        );
+
+        $result = $stepParticipantAndPlanning->build($this->sheet->reveal());
+
+        $expected = new SelectParticipantAndPlanning($this->sheet->reveal(), null);
+        $expected->participantsProduct = $participantProducts;
+        $expected->planningQuantity = 2;
+
+        $this->assertEquals($expected, $result);
+    }
+
+    public function testBuildWithoutOrder()
+    {
+        $package = $this->prophesize(Package::class);
+        $planning = $this->prophesize(Product::class);
+        $planning->getType()->willReturn(Product::TYPE_PLANNING);
+        $planning->getSerializedData()->willReturn('');
+        $planning->getUnitPrice()->willReturn(123);
+        $planning->isPlanning()->willReturn(true);
+        $package->getPlanning()->willReturn($planning->reveal());
+        $this->sheet->getPackage()->willReturn($package->reveal());
+        $cartRowPlanning = new CartRow($this->sheet->reveal(), $planning->reveal(), 1);
+        $cart = new Cart($this->sheet->reveal(), [$cartRowPlanning], [], null);
+
+        $this->cartManager
+            ->getCart($this->sheet->reveal(), null)
+            ->shouldBeCalled()
+            ->willReturn($cart)
+        ;
+
+        $product1 = $this->prophesize(Product::class);
+        $product2 = $this->prophesize(Product::class);
+        $participantProducts = [
+            123 => null,
+            45 => $product1->reveal(),
+            67 => $product2->reveal()
+        ];
+
+        $this->productByParticipantGetter
+            ->getFromCart($cart)
+            ->shouldBeCalled()
+            ->willReturn($participantProducts)
+        ;
+
+        $this->orderMerger
+            ->getMergedOrders($this->sheet->reveal())
+            ->shouldBeCalled()
+            ->willReturn(null);
+
+        $stepParticipantAndPlanning = new StepParticipantAndPlanning(
+            $this->orderMerger->reveal(),
+            $this->cartManager->reveal(),
+            $this->productByParticipantGetter->reveal()
+        );
+
+        $result = $stepParticipantAndPlanning->build($this->sheet->reveal());
+
+        $expected = new SelectParticipantAndPlanning($this->sheet->reveal(), null);
+        $expected->participantsProduct = $participantProducts;
+        $expected->planningQuantity = 1;
+
+        $this->assertEquals($expected, $result);
+    }
 }
