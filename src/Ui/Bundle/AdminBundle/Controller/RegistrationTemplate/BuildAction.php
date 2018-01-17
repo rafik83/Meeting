@@ -17,7 +17,6 @@ use Proximum\Vimeet\Application\Components\Sheet\Template\CompletenessCalculator
 use Proximum\Vimeet\Application\Components\Sheet\Template\Tag;
 use Proximum\Vimeet\Domain\Model\Template\RegistrationTemplate;
 use Proximum\Vimeet\Domain\Repository\NomenclatureRepositoryInterface;
-use Proximum\Vimeet\Domain\Template\Registration\RegistrationTemplateTagView;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Security\Voter\AdminTemplateAccessVoter;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Template\AddLocaleType;
 use Symfony\Bundle\FrameworkBundle\Templating\EngineInterface;
