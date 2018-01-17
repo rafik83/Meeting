@@ -121,9 +121,9 @@ class AbstractSearchFacetTranslation
      * @param string $label
      * @param string $placeholder
      *
-     * @return TypeTranslation
+     * @return AbstractSearchFacetTranslation
      */
-    public function update($label = '', $placeholder = '')
+    public function update($label = '', $placeholder = ''): AbstractSearchFacetTranslation
     {
         $this->label       = $label;
         $this->placeholder = $placeholder;

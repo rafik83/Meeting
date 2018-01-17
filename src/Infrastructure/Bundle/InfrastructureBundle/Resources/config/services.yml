@@ -2803,6 +2803,7 @@ services:
             - '@query.package.plans_view_query_handler'
             - '@query.package.participant_and_planning_view_query_handler'
             - '@query.package.groups_view_query_handler'
+            - '@Proximum\Vimeet\Domain\Sheet\Participant\AddParticipantChecker'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Package\PackageViewQuery }
     query.package.participant_and_planning_view_query_handler:

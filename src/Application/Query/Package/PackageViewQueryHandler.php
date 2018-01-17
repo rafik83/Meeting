@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2016 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -16,37 +16,38 @@ use Proximum\Vimeet\Application\Query\Package\Plan\PlansViewQuery;
 use Proximum\Vimeet\Application\Query\Package\Plan\PlansViewQueryHandler;
 use Proximum\Vimeet\Application\View\Package\PackageView;
 use Proximum\Vimeet\Domain\Package\Funnel\Step;
+use Proximum\Vimeet\Domain\Sheet\Participant\AddParticipantChecker;
 
 class PackageViewQueryHandler
 {
-    /**
-     * @var PlansViewQueryHandler
-     */
+    /** @var PlansViewQueryHandler */
     private $plansViewQueryHandler;
 
-    /**
-     * @var ParticipantAndPlanningViewQueryHandler
-     */
+    /** @var ParticipantAndPlanningViewQueryHandler */
     private $participantAndPlanningViewQueryHandler;
 
-    /**
-     * @var GroupsViewQueryHandler
-     */
+    /** @var GroupsViewQueryHandler */
     private $groupsViewQueryHandler;
+
+    /** @var AddParticipantChecker */
+    private $addParticipantChecker;
 
     /**
      * @param PlansViewQueryHandler                  $plansViewQueryHandler
      * @param ParticipantAndPlanningViewQueryHandler $participantAndPlanningViewQueryHandler
      * @param GroupsViewQueryHandler                 $groupsViewQueryHandler
+     * @param AddParticipantChecker                  $addParticipantChecker
      */
     public function __construct(
         PlansViewQueryHandler $plansViewQueryHandler,
         ParticipantAndPlanningViewQueryHandler $participantAndPlanningViewQueryHandler,
-        GroupsViewQueryHandler $groupsViewQueryHandler
+        GroupsViewQueryHandler $groupsViewQueryHandler,
+        AddParticipantChecker $addParticipantChecker
     ) {
         $this->plansViewQueryHandler                  = $plansViewQueryHandler;
         $this->participantAndPlanningViewQueryHandler = $participantAndPlanningViewQueryHandler;
         $this->groupsViewQueryHandler                 = $groupsViewQueryHandler;
+        $this->addParticipantChecker                  = $addParticipantChecker;
     }
 
     /**
@@ -57,6 +58,8 @@ class PackageViewQueryHandler
      */
     public function handle(PackageViewQuery $packageViewQuery)
     {
+        $canAddParticipant = false;
+
         if ($packageViewQuery->currentStep->type === Step::TYPE_PLAN) {
             $packageViewProducts = $this->plansViewQueryHandler->handle(
                 new PlansViewQuery(
@@ -72,6 +75,7 @@ class PackageViewQueryHandler
                     $packageViewQuery->locale
                 )
             );
+            $canAddParticipant = $this->addParticipantChecker->canAddParticipant($packageViewQuery->sheet);
         } else {
             $packageViewProducts = $this->groupsViewQueryHandler->handle(
                 new GroupsViewQuery(
@@ -85,7 +89,8 @@ class PackageViewQueryHandler
             $packageViewProducts,
             $packageViewQuery->sheet,
             $packageViewQuery->funnel,
-            $packageViewQuery->currentStep
+            $packageViewQuery->currentStep,
+            $canAddParticipant
         );
     }
 }

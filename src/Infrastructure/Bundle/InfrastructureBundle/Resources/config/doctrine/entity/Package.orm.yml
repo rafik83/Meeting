@@ -17,6 +17,9 @@ Proximum\Vimeet\Domain\Model\Package:
             type: boolean
         createdAt:
             type: datetime
+        maxParticipant:
+            type: integer
+            nullable: true
     manyToOne:
         event:
             targetEntity: Proximum\Vimeet\Domain\Model\Event

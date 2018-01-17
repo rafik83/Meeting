@@ -938,7 +938,7 @@ admin_package_list:
 
 admin_package_update:
     path: /template/package/{package}/update
-    defaults: { _controller: AdminBundle:Package:update }
+    defaults: { _controller: Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Package\UpdateAction }
     methods: [GET, POST]
     requirements:
         package: \d+

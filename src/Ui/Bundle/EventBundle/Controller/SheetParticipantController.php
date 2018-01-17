@@ -49,7 +49,7 @@ class SheetParticipantController extends Controller
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
         $this->denyAccessUnlessGranted(SheetVoter::EDIT, $sheet);
 
-        if (!$sheet->canBuyParticipant()) {
+        if (!$this->get('Proximum\Vimeet\Domain\Sheet\Participant\AddParticipantChecker')->canAddParticipant($sheet)) {
             throw $this->createNotFoundException(
                 sprintf('This sheet %s can not buy anymore participant', $sheet->getId())
             );
@@ -115,7 +115,7 @@ class SheetParticipantController extends Controller
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
         $this->denyAccessUnlessGranted(SheetVoter::EDIT, $sheet);
 
-        if (!$sheet->canBuyParticipant()) {
+        if (!$this->get('Proximum\Vimeet\Domain\Sheet\Participant\AddParticipantChecker')->canAddParticipant($sheet)) {
             throw $this->createNotFoundException(
                 sprintf('This sheet %s can not buy anymore participant', $sheet->getId())
             );

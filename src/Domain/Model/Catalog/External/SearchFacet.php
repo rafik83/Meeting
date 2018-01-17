@@ -16,8 +16,6 @@ use Proximum\Vimeet\Domain\Model\Event;
 class SearchFacet extends AbstractSearchFacet
 {
     /**
-     * SearchFacet constructor.
-     *
      * @param Event  $event
      * @param string $type
      * @param bool   $enabled
@@ -29,6 +27,24 @@ class SearchFacet extends AbstractSearchFacet
         foreach ($event->getLocales() as $locale) {
             $this->translations[$locale] = new SearchFacetTranslation($this, '', '', $locale);
         }
+    }
+
+    /**
+     * @param string $locale
+     * @param string $label
+     * @param string $placeholder
+     *
+     * @return SearchFacet
+     */
+    public function translate($locale, $label, $placeholder): SearchFacet
+    {
+        if ($this->hasTranslation($locale)) {
+            $this->translations->get($locale)->update($label, $placeholder);
+        } else {
+            $this->translations->add(new SearchFacetTranslation($this, $label, $placeholder, $locale));
+        }
+
+        return $this;
     }
 
     /**

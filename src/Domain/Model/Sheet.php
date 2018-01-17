@@ -245,6 +245,8 @@ class Sheet implements TraceableInterface
 
     /**
      * @return bool
+     *
+     * @deprecated This method is deprecated as the participants now also depend of the max quantity of the product
      */
     public function canBuyParticipant()
     {
