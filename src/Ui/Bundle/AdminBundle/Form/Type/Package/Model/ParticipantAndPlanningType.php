@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2015 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -18,6 +18,7 @@ use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Product\ProductChoiceType;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\TranslationsType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
+use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -37,6 +38,13 @@ class ParticipantAndPlanningType extends AbstractType
                 'entry_type' => TextType::class,
                 'locales'    => $options['event']->getLocales(),
                 'required'   => false,
+            ])
+            ->add('maxParticipant', IntegerType::class, [
+                'attr'     => [
+                    'min'  => 1,
+                ],
+                'help'     => 'form.package_update.children.participantAndPlanning.children.maxParticipant.help',
+                'required' => false,
             ])
             ->add('participants', ProductCollectionType::class, [
                 'event'            => $options['event'],

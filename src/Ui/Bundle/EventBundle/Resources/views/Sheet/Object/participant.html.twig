@@ -27,7 +27,7 @@
         </div>
     </div>
 
-    {% if not isCatalog and sheet.canBuyParticipant %}
+    {% if not isCatalog and canAddParticipant|default(false) %}
         <a href="{{ path('event_sheet_add_participant', { 'sheet': sheet.id, 'locale': locale, 'key': uid }) }}" class="btn btn-primary" data-toggle="modal" data-target="#edit-modal">
             <i class="icon-Profil_1"></i>{{ 'sheet.object.action.add'|trans }} {{ item.label(locale, fallback) }}
         </a>

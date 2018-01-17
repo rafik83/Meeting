@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2016 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -22,8 +22,8 @@ use Symfony\Component\HttpFoundation\Response;
 class SearchFacetController extends Controller
 {
     /**
-     * @param Request     $request
-     * @param Event       $event
+     * @param Request $request
+     * @param Event   $event
      *
      * @return RedirectResponse|Response
      */
@@ -31,19 +31,10 @@ class SearchFacetController extends Controller
     {
         $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
 
-        $searchFacets = $this->get('vimeet_infrastructure.repository.search_facet')
-            ->getByEvent($event);
+        $searchFacets = $this->get('vimeet_infrastructure.repository.search_facet')->getByEvent($event);
 
-        $types = SearchFacet::getAllTypes();
-
-        if (empty($searchFacets)) {
-            foreach ($types as $type) {
-                $searchFacets[] = new SearchFacet($event, $type);
-            }
-        };
-
-        $command = new Update($searchFacets);
-
+        $types   = SearchFacet::getAllTypes();
+        $command = new Update($event, $searchFacets);
         $form    = $this->createForm(UpdateType::class, $command, [
             'submit' => true,
             'types'  => $types,

@@ -2,7 +2,7 @@
 {% set cancelFormIsNotNull = cancelForm is not null %}
 {% set unApprovedFormIsNotNull = unApprovedForm is not null %}
 {% if formIsNotNull %}
-    {% form_theme form '@Ui/default.html.twig' %}
+    {% form_theme form with ['@Ui/default.html.twig'] only %}
 {% endif %}
 
 <div class="modal-header">

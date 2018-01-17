@@ -10,7 +10,6 @@
 
 namespace Proximum\Vimeet\Application\Query\Sheet\Detail\Participant;
 
-use Proximum\Vimeet\Application\View\Sheet\Details\Participant\PhoneNotAskedView;
 use Proximum\Vimeet\Application\View\Sheet\Details\Participant\PhoneNotValidatedView;
 use Proximum\Vimeet\Application\View\Sheet\Details\Participant\PhoneValidatedView;
 use Proximum\Vimeet\Application\View\Sheet\Details\Participant\PhoneValidationStatusView;
@@ -41,10 +40,6 @@ class PhoneValidationStatusQueryHandler
             $query->participant->getSheet()->getEvent()
         );
 
-        if ($userEventPhone === null) {
-            return new PhoneNotAskedView();
-        }
-
-        return $userEventPhone->isValidated() ? new PhoneValidatedView() : new PhoneNotValidatedView();
+        return $userEventPhone !== null ? new PhoneValidatedView() : new PhoneNotValidatedView();
     }
 }

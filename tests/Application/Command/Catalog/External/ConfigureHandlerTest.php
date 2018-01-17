@@ -11,6 +11,7 @@
 namespace Application\Command\Catalog\External;
 
 use PHPUnit\Framework\TestCase;
+use Prophecy\Prophecy\ObjectProphecy;
 use Proximum\Vimeet\Application\Command\Catalog\External\Configure;
 use Proximum\Vimeet\Application\Command\Catalog\External\ConfigureHandler;
 use Proximum\Vimeet\Application\Command\Catalog\External\SetSearchFacet;
@@ -20,36 +21,141 @@ use Proximum\Vimeet\Domain\Model\Catalog\External\SearchFacet;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Repository\CatalogVisibilityRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\EventRepositoryInterface;
-use Proximum\Vimeet\Infrastructure\Repository\CatalogVisibilityRepository;
-use Proximum\Vimeet\Tests\Factory\EventFactory;
 
 class ConfigureHandlerTest extends TestCase
 {
-    /** @var CatalogVisibilityRepositoryInterface */
+    /** @var ObjectProphecy */
     private $catalogVisibilityRepository;
 
-    /** @var EventRepositoryInterface */
+    /** @var ObjectProphecy */
     private $eventRepository;
 
-    /** @var SetSearchFacetHandler */
+    /** @var ObjectProphecy */
     private $setSearchFacetHandler;
 
-    /** @var Event */
+    /** @var ObjectProphecy */
     private $event;
+
+    /** @var array */
+    private $searchFacets;
 
     public function setUp()
     {
-        $this->catalogVisibilityRepository = $this->prophesize(CatalogVisibilityRepository::class);
+        $this->catalogVisibilityRepository = $this->prophesize(CatalogVisibilityRepositoryInterface::class);
         $this->eventRepository = $this->prophesize(EventRepositoryInterface::class);
         $this->setSearchFacetHandler = $this->prophesize(SetSearchFacetHandler::class);
-        $this->event = EventFactory::createEvent();
+        $this->event = $this->prophesize(Event::class);
+
+        $this->searchFacets = [
+            'type' => [
+                'enabled' => true,
+                'translations' => [
+                    'fr' => [
+                        'type' => 'type',
+                        'label' => 'Type',
+                        'placeholder' => '',
+                    ],
+                    'en' => [
+                        'type' => 'type',
+                        'label' => 'Type',
+                        'placeholder' => '',
+                    ],
+                ],
+            ],
+            'category' => [
+                'enabled' => false,
+                'translations' => [
+                    'fr' => [
+                        'type' => 'category',
+                        'label' => 'Category',
+                        'placeholder' => '',
+                    ],
+                    'en' => [
+                        'type' => 'category',
+                        'label' => 'Category',
+                        'placeholder' => '',
+                    ],
+                ],
+            ],
+            'position' => [
+                'enabled' => true,
+                'translations' => [
+                    'fr' => [
+                        'type' => 'position',
+                        'label' => 'Position',
+                        'placeholder' => 'Position placeholder fr',
+                    ],
+                    'en' => [
+                        'type' => 'position',
+                        'label' => 'Position',
+                        'placeholder' => 'Position placeholder en',
+                    ],
+                ],
+            ],
+            'structure' => [
+                'enabled' => true,
+                'translations' => [
+                    'fr' => [
+                        'type' => 'structure',
+                        'label' => 'Structure',
+                        'placeholder' => 'Structure placeholder fr',
+                    ],
+                    'en' => [
+                        'type' => 'structure',
+                        'label' => 'Structure',
+                        'placeholder' => 'Structure placeholder en',
+                    ],
+                ],
+            ],
+            'localization' => [
+                'enabled' => false,
+                'translations' => [
+                    'fr' => [
+                        'type' => 'localization',
+                        'label' => 'Localization',
+                        'placeholder' => 'Localization placeholder fr',
+                    ],
+                    'en' => [
+                        'type' => 'localization',
+                        'label' => 'Localization',
+                        'placeholder' => 'Localization placeholder en',
+                    ],
+                ],
+            ],
+            'keywords' => [
+                'enabled' => false,
+                'translations' => [
+                    'fr' => [
+                        'type' => 'keywords',
+                        'label' => 'Keywords',
+                        'placeholder' => 'Keywords placeholder fr',
+                    ],
+                    'en' => [
+                        'type' => 'keywords',
+                        'label' => 'Keywords',
+                        'placeholder' => 'Keywords placeholder en',
+                    ],
+                ],
+            ],
+        ];
+
+        $this->event->getLocales()->willReturn(['fr', 'en']);
+        $this->event->isExternalCatalogEnabled()->willReturn(false);
     }
 
     public function testHandle()
     {
-        $catalogVisibility = new CatalogVisibility($this->event);
-        $searchFacet = new SearchFacet($this->event, 'type', true);
-        $command     = new Configure($this->event, $catalogVisibility, [$searchFacet]);
+        $catalogVisibility = new CatalogVisibility($this->event->reveal());
+
+        $sf1 = new SearchFacet($this->event->reveal(), 'structure', true);
+        $sf2 = new SearchFacet($this->event->reveal(), 'type', false);
+        $sf3 = new SearchFacet($this->event->reveal(), 'keywords', true);
+
+        $persistedSearchFacets = [$sf1, $sf2, $sf3];
+
+        $command = new Configure($this->event->reveal(), $catalogVisibility, $persistedSearchFacets);
+        $command->externalCatalogEnabled = true;
+        $command->searchFacets = $this->searchFacets;
 
         $this
             ->catalogVisibilityRepository
@@ -59,9 +165,13 @@ class ConfigureHandlerTest extends TestCase
 
         $this->catalogVisibilityRepository->add($catalogVisibility)->shouldBeCalled();
 
-        $this->setSearchFacetHandler->handle(new SetSearchFacet([$searchFacet]))->shouldBeCalled();
+        $this->setSearchFacetHandler
+            ->handle(new SetSearchFacet($this->event->reveal(), $this->searchFacets, $persistedSearchFacets))
+            ->shouldBeCalled()
+        ;
 
-        $this->eventRepository->set($this->event)->shouldBeCalled();
+        $this->event->setExternalCatalog(true)->shouldBeCalled();
+        $this->eventRepository->set($this->event->reveal())->shouldBeCalled();
 
         $handler = new ConfigureHandler(
             $this->catalogVisibilityRepository->reveal(),
@@ -74,21 +184,32 @@ class ConfigureHandlerTest extends TestCase
 
     public function testHandleWithExistingCatalogVisibility()
     {
-        $catalogVisibility = new CatalogVisibility($this->event);
-        $searchFacet = new SearchFacet($this->event, 'type', true);
-        $command     = new Configure($this->event, $catalogVisibility, [$searchFacet]);
+        $catalogVisibility = new CatalogVisibility($this->event->reveal());
+        $persistedSearchFacets = [
+            new SearchFacet($this->event->reveal(), 'structure', true),
+            new SearchFacet($this->event->reveal(), 'type', false),
+            new SearchFacet($this->event->reveal(), 'keywords', true),
+        ];
+
+        $command = new Configure($this->event->reveal(), $catalogVisibility, $persistedSearchFacets);
+        $command->externalCatalogEnabled = false;
+        $command->searchFacets = $this->searchFacets;
 
         $this
             ->catalogVisibilityRepository
-            ->getByEvent($this->event)
+            ->getByEvent($this->event->reveal())
             ->shouldBeCalled()
             ->willReturn($catalogVisibility);
 
         $this->catalogVisibilityRepository->set($catalogVisibility)->shouldBeCalled();
 
-        $this->setSearchFacetHandler->handle(new SetSearchFacet([$searchFacet]))->shouldBeCalled();
+        $this->setSearchFacetHandler
+            ->handle(new SetSearchFacet($this->event->reveal(), $this->searchFacets, $persistedSearchFacets))
+            ->shouldBeCalled()
+        ;
 
-        $this->eventRepository->set($this->event)->shouldBeCalled();
+        $this->event->setExternalCatalog(false)->shouldBeCalled();
+        $this->eventRepository->set($this->event->reveal())->shouldBeCalled();
 
         $handler = new ConfigureHandler(
             $this->catalogVisibilityRepository->reveal(),
@@ -109,12 +230,18 @@ class ConfigureHandlerTest extends TestCase
         $catalogVisibility->getMessage('fr')->willReturn(null);
         $catalogVisibility->getMessage('en')->willReturn(null);
 
-        $searchFacet = new SearchFacet($this->event, 'type', true);
-        $command     = new Configure(
-            $this->event,
+        $persistedSearchFacets = [
+            new SearchFacet($this->event->reveal(), 'structure', true),
+            new SearchFacet($this->event->reveal(), 'type', false),
+            new SearchFacet($this->event->reveal(), 'keywords', true),
+        ];
+        $command = new Configure(
+            $this->event->reveal(),
             $catalogVisibility->reveal(),
-            [$searchFacet]
+            $persistedSearchFacets
         );
+        $command->externalCatalogEnabled = false;
+        $command->searchFacets = $this->searchFacets;
 
         $command->registrationUrl = 'https://www.google.com';
         $command->hasMessage = false;
@@ -133,10 +260,11 @@ class ConfigureHandlerTest extends TestCase
         $this->catalogVisibilityRepository->add($catalogVisibility->reveal())->shouldBeCalled();
 
         $this->setSearchFacetHandler->handle(
-            new SetSearchFacet([$searchFacet])
+            new SetSearchFacet($this->event->reveal(), $this->searchFacets, $persistedSearchFacets)
         )->shouldBeCalled();
 
-        $this->eventRepository->set($this->event)->shouldBeCalled();
+        $this->event->setExternalCatalog(false)->shouldBeCalled();
+        $this->eventRepository->set($this->event->reveal())->shouldBeCalled();
 
         $handler = new ConfigureHandler(
             $this->catalogVisibilityRepository->reveal(),

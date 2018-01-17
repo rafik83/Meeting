@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of the vimeet project.
+ * This file is part of the Proximum Vimeet project.
  *
  * Copyright (C) Proximum
  *
@@ -25,8 +25,6 @@ class ConfigureHandler
     private $setSearchFacetHandler;
 
     /**
-     * ConfigureHandler constructor.
-     *
      * @param CatalogVisibilityRepositoryInterface $catalogVisibilityRepository
      * @param EventRepositoryInterface             $eventRepository
      * @param SetSearchFacetHandler                $setSearchFacetHandler
@@ -68,7 +66,9 @@ class ConfigureHandler
             $this->catalogVisibilityRepository->add($catalogVisibility);
         }
 
-        $this->setSearchFacetHandler->handle(new SetSearchFacet($command->searchFacets));
+        $this->setSearchFacetHandler->handle(
+            new SetSearchFacet($command->event, $command->searchFacets, $command->persistedSearchFacets)
+        );
 
         $this->eventRepository->set($command->event);
     }
