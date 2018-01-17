@@ -90,6 +90,8 @@ PackageParticipantProducts.prototype.updateRows = function () {
     var productId = packageParticipantRow.getValue();
 
     if (!productId) {
+      packageParticipantRow.refreshSelect();
+
       continue;
     }
 
@@ -105,7 +107,7 @@ PackageParticipantProducts.prototype.updateRows = function () {
       ? this.participantsIncludedLabel
       : participantProduct.unitPriceFormatted;
 
-    this.packageParticipantRows[index].updatePriceOrIncluded(priceOrIncluded);
+    packageParticipantRow.updatePriceOrIncluded(priceOrIncluded);
   }
 };
 

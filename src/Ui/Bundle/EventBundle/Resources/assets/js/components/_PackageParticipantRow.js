@@ -26,13 +26,20 @@ function PackageParticipantRow(parent, element)
 
 PackageParticipantRow.prototype.closeSelect = function () {
   if (!this.selectElement.value) {
+    this.parent.updateRows();
+
     return;
   }
 
   $(this.selectElement).select2('destroy');
   this.hideSelect();
   this.updateRow(this.selectElement.value);
-  this.parent.updateRows()
+  this.parent.updateRows();
+};
+
+PackageParticipantRow.prototype.refreshSelect = function () {
+  $(this.selectElement).select2('destroy');
+  this.initSelect();
 };
 
 PackageParticipantRow.prototype.getValue = function () {
