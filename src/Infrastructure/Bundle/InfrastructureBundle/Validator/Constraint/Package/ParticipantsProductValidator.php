@@ -31,7 +31,8 @@ class ParticipantsProductValidator extends ConstraintValidator
                     ->context
                     ->buildViolation('package.participantsProduct.productMustBeSelected')
                     ->atPath($participantId)
-                    ->addViolation();
+                    ->addViolation()
+                ;
 
                 continue;
             }
@@ -47,7 +48,8 @@ class ParticipantsProductValidator extends ConstraintValidator
                     ->context
                     ->buildViolation('package.participantsProduct.quantityMaxReached')
                     ->atPath($participantId)
-                    ->addViolation();
+                    ->addViolation()
+                ;
             }
         }
     }
