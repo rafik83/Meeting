@@ -176,7 +176,7 @@
             <th nowrap="nowrap">
                 {{ 'form.sheet_filter.children.type.label'|trans({}, 'forms') }}
             </th>
-            <th nowrap="nowrap" class="col-md-1">
+            <th nowrap="nowrap">
                 {{ 'form.sheet_filter.children.validationState.label'|trans({}, 'forms') }}
             </th>
             <th nowrap="nowrap">
@@ -261,7 +261,6 @@
                         </div>
                     {% endif %}
                 </td>
-                <td class="text-center"></td>
                 <td>
                     <small>
                         {{ sheet.createdAt|localizeddate('medium', 'short', app.request.locale, event.timeZone) }}
