@@ -74,8 +74,11 @@ class SheetListViewNormalizer implements NormalizerAwareInterface, NormalizerInt
      *
      * @return string
      */
-    protected function convertCharset($input, $inCharset = Charset::UTF_8, $outCharset = Charset::WINDOWS_1252)
-    {
+    protected function convertCharset(
+        $input,
+        string $inCharset = Charset::UTF_8,
+        string $outCharset = Charset::WINDOWS_1252
+    ) {
         if (!$input || !is_string($input)) {
             return $input;
         }

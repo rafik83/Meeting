@@ -17,19 +17,13 @@ use Proximum\Vimeet\Domain\Template\TemplateObject\Nomenclature;
 
 class ParticipantInfoGuesser
 {
-    /**
-     * @var TaggedInfoGuesser
-     */
+    /** @var TaggedInfoGuesser */
     private $taggedInfoGuesser;
 
-    /**
-     * @var TemplateDataFactory
-     */
+    /** @var TemplateDataFactory */
     private $templateDataFactory;
 
     /**
-     * ParticipantInfoGuesser constructor.
-     *
      * @param TaggedInfoGuesser   $taggedInfoGuesser
      * @param TemplateDataFactory $templateDataFactory
      */
@@ -191,7 +185,7 @@ class ParticipantInfoGuesser
      *
      * @return null|string
      */
-    public function guessParticipantPositionLabel(Participant $participant, $locale): ?string
+    public function guessParticipantPositionLabel(Participant $participant, string $locale): ?string
     {
         $templateData = $this->templateDataFactory->createRegistrationFromParticipant($participant, $locale);
 

@@ -83,6 +83,8 @@ class SheetViewQueryHandler
      * @param SheetViewQuery $query
      *
      * @return SheetView
+     *
+     * @throws \DomainException
      */
     public function handle(SheetViewQuery $query): SheetView
     {
@@ -138,7 +140,7 @@ class SheetViewQueryHandler
     /**
      * @param SheetView $sheetView
      */
-    public function reMapFields(SheetView $sheetView)
+    public function reMapFields(SheetView $sheetView): void
     {
         $sheetRegistrationFields = $this->getSheetRegistrationFields();
         $sheetFields = $this->getSheetFields();
@@ -170,7 +172,7 @@ class SheetViewQueryHandler
     private function purgeRegistrationFromObjectNotShownOnSheet(
         TemplateData &$registrationTemplate,
         array &$tagOfTemplate
-    ) {
+    ): void {
         /** @var ExportableObjectInterface|TemplateObject $object */
         foreach ($registrationTemplate->getExportableObjects() as $object) {
             $found = false;

@@ -31,20 +31,20 @@ class SheetsViewQuery implements Query
     /** @var array */
     public $availableSlotIds;
 
-    /** @var array */
+    /** @var Sheet[] */
     public $sheetsToExclude;
 
     /** @var bool boolean to determine if the catalog display type or category */
     public $isTypeColumn;
 
     /**
-     * @param Event  $event
-     * @param Sheet  $sheet
-     * @param array  $filters
-     * @param string $locale
-     * @param array  $availableSlotIds
-     * @param array  $sheetsToExclude
-     * @param bool   $isTypeColumn
+     * @param Event   $event
+     * @param Sheet   $sheet
+     * @param array   $filters
+     * @param string  $locale
+     * @param array   $availableSlotIds
+     * @param Sheet[] $sheetsToExclude
+     * @param bool    $isTypeColumn
      */
     public function __construct(
         Event $event,

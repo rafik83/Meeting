@@ -196,7 +196,7 @@ class EditableText extends EditableObject implements ContentObjectInterface, Sea
     /**
      * {@inheritdoc}
      */
-    public function getExportableContent(array $taggedData = [], string $locale = null)
+    public function getExportableContent(array $taggedData = [], ?string $locale = null)
     {
         $result = $this->getContentValueLocalize($locale);
 

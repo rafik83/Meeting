@@ -181,7 +181,7 @@ class ItemCollection extends TemplateObject implements SearchableObjectInterface
     /**
      * {@inheritdoc}
      */
-    public function getExportableContent(array $taggedData = [], string $locale = null)
+    public function getExportableContent(array $taggedData = [], ?string $locale = null)
     {
         $exportableContents = array_map(function ($content) {
             return str_replace(";", ",", $content);

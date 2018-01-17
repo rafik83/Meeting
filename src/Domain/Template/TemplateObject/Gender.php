@@ -89,7 +89,7 @@ class Gender extends EditableObject implements ContentObjectInterface, Exportabl
     /**
      * {@inheritdoc}
      */
-    public function getExportableContent(array $taggedData = [], string $locale = null)
+    public function getExportableContent(array $taggedData = [], ?string $locale = null)
     {
         $result = $this->getContentValue();
 

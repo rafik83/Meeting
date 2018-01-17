@@ -99,6 +99,9 @@ class ExportAction
      * @param UserDomain  $userDomain
      *
      * @return CsvFileResponse
+     *
+     * @throws AccessDeniedException
+     * @throws NotFoundHttpException
      */
     public function __invoke(
         Request $request,
