@@ -66,8 +66,7 @@
             <div class="template-builder-menu-wrapper">
                 <div class="tab-content">
                     <div id="object-list" class="object-list">
-                        {#{{ include('AdminBundle:Template/Object:text.html.twig', { 'locale': locale }, false) }}#}
-
+                        {{ include('AdminBundle:Template/Object:text.html.twig', { 'locale': locale }, false) }}
                         {{ include('AdminBundle:Template/Object:editable-text.html.twig', {
                             'isRegistrationTemplate': true,
                             'locale': locale,
