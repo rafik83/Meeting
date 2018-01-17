@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of the vimeet project.
+ * This file is part of the Proximum Vimeet project.
  *
  * Copyright (C) Proximum
  *
@@ -15,6 +15,10 @@ use Proximum\Vimeet\Domain\Cart\Cart;
 class ProductByParticipantGetter
 {
     /**
+     * This method returns the the product of type participant indexed by the participant id
+     * The participant product can be null
+     * If there is only one product, this product is taken for all the participant
+     *
      * @param Cart $cart
      *
      * @return array of participantId => Product
