@@ -8,3 +8,5 @@ services:
         class: Proximum\Vimeet\Domain\Package\Duplicator
         arguments:
             - '@datetime'
+
+    Proximum\Vimeet\Domain\Sheet\Participant\AddParticipantChecker:

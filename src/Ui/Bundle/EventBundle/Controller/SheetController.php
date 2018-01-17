@@ -29,6 +29,7 @@ use Proximum\Vimeet\Ui\Bundle\EventBundle\ParamConverter\EventDomain;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Security\SheetVoter;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Form\Form;
+use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -129,7 +130,10 @@ class SheetController extends Controller
         );
         $tipTranslationViews = $this->get('tactician.commandbus.query')->handle($tipTranslationViewQuery);
 
+        $canAddParticipant = $this->get('Proximum\Vimeet\Domain\Sheet\Participant\AddParticipantChecker')->canAddParticipant($sheet);
+
         return $this->render('EventBundle:Sheet:sheet.html.twig', [
+            'canAddParticipant'       => $canAddParticipant,
             'event'                   => $eventDomain->getEvent(),
             'sheet'                   => $sheet,
             'taggedData'              => $taggedData,
@@ -143,7 +147,7 @@ class SheetController extends Controller
             'isRequestMeetingEnabled' => false,
             'isCatalog'               => false,
             'tipTranslationViews'     => $tipTranslationViews,
-            'isPhoneValidationRequired' => false
+            'isPhoneValidationRequired' => false,
         ]);
     }
 
@@ -294,7 +298,7 @@ class SheetController extends Controller
      * @param string                  $locale
      * @param string                  $key
      *
-     * @return Form
+     * @return FormInterface
      */
     private function createObjectForm(Template\TemplateObject $object, $locale, $key)
     {
@@ -423,7 +427,10 @@ class SheetController extends Controller
             ? 'EventBundle:Sheet:nomenclatures.html.twig'
             : 'EventBundle:Sheet:sheet.html.twig';
 
+        $canAddParticipant = $this->get('Proximum\Vimeet\Domain\Sheet\Participant\AddParticipantChecker')->canAddParticipant($sheet);
+
         return $this->render($twig, [
+            'canAddParticipant'       => $canAddParticipant,
             'event'                   => $eventDomain->getEvent(),
             'form'                    => $form->createView(),
             'label'                   => $label,
@@ -442,6 +449,7 @@ class SheetController extends Controller
             'isCatalog'               => false,
             'tipTranslationViews'     => $tipTranslationViews,
             'templateObjectView'      => $templateObjectView,
+            'isPhoneValidationRequired' => false,
         ]);
     }
 
