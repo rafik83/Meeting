@@ -55,7 +55,6 @@ class PackageParticipantController extends Controller
         }
 
         $locale         = $request->getLocale();
-        $label          = $sheet->getPackage()->getParticipant()->getTitle($locale);
         $addParticipant = new AddParticipant($sheet, $locale, $this->getUser());
         $form           = $this->createForm(AddType::class, $addParticipant, [
             'sheet'  => $sheet,
@@ -79,7 +78,6 @@ class PackageParticipantController extends Controller
         // /todo
 
         return $this->render('EventBundle:Participant:add.html.twig', [
-            'label'                  => $label,
             'form'                   => $form->createView(),
             'sheet'                  => $sheet,
             'participantProductView' => $participantProductView,

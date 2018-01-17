@@ -109,9 +109,17 @@ class SheetController extends Controller
         // Build sheet template data and attach tagged data view to template object with tags
         $templateData = $this->get('template.tagged_data_factory')->buildTaggedDataView($sheet, $locale);
 
-        $participantProductView = $this->get('tactician.commandbus.query')->handle(
+        // todo: remove this to send to add form all participants product
+        $participantProductViews = $this->get('tactician.commandbus.query')->handle(
             new ParticipantProductViewQuery($sheet, $locale)
         );
+
+        $participantProductView = reset($participantProductViews);
+
+        if (false === $participantProductView) {
+            $participantProductView = null;
+        }
+        // /todo
 
         $flagFirstRegistration = $this->container->get('session')->getFlashBag()->get('first_registration');
         $isFirstRegistration   = in_array(true, $flagFirstRegistration);

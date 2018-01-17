@@ -253,14 +253,6 @@ class Product
     }
 
     /**
-     * @return ProductTranslation[]
-     */
-    public function getTranslations()
-    {
-        return $this->translations->toArray();
-    }
-
-    /**
      * @param ArrayCollection $translations
      */
     public function setTranslations($translations)

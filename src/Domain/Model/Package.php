@@ -171,7 +171,7 @@ class Package
      *
      * @return Product[]
      */
-    public function getParticipants()
+    public function getParticipants(): array
     {
         return $this
             ->participantRanks

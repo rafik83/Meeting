@@ -68,7 +68,7 @@
                 'isMeetingRequestUpdateLocked': isMeetingRequestUpdateLocked|default(false),
                 'isMeetingRequestClosed': isMeetingRequestClosed|default(false),
                 'isAnsweringMeetingRequestClosed': isAnsweringMeetingRequestClosed|default(false),
-                'isPhoneValidationRequired': isPhoneValidationRequired,
+                'isPhoneValidationRequired': isPhoneValidationRequired|default(false),
                 'phoneValidationLink': link,
                 'hideMeetingRequest': hideMeetingRequest|default(false),
             }, false) }}
@@ -82,7 +82,7 @@
             {% if form is defined %}
                 {{ include('EventBundle:Sheet:form.html.twig', { 'form': form, 'label': label, 'uid': uid, 'type': form.vars.data.type }) }}
             {% elseif form_participant is defined %}
-                {{ include('EventBundle:Participant:add.html.twig', { 'form': form_participant, 'label': label, 'sheet': sheet, 'backRoute': 'backToSheet', 'participantProductView': participantProductView }) }}
+                {{ include('EventBundle:Participant:add.html.twig', { 'form': form_participant, 'sheet': sheet, 'backRoute': 'backToSheet', 'participantProductView': participantProductView }) }}
             {% elseif form_remove is defined %}
                 {{ include('EventBundle:Participant:remove.html.twig', { 'form': form_remove, 'participants': participants, 'label': label }) }}
             {% endif %}
