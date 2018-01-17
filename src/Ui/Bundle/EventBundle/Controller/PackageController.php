@@ -300,7 +300,7 @@ class PackageController extends Controller
      * @param string       $locale
      *
      * @return FormInterface
-     * @throw \InvalidArgumentException
+     * @throws \InvalidArgumentException
      */
     private function stepTypeAssociatedForm(
         string $type,
