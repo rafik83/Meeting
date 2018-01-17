@@ -33,7 +33,7 @@ class ProductByParticipantGetter
 
         // Set product to null or Product (from previous order) to others participants
         foreach ($sheet->getParticipantsArray() as $participant) {
-            if (!isset($command->participantsProduct[$participant->getId()])) {
+            if (!isset($participantsProduct[$participant->getId()])) {
                 $participantsProduct[$participant->getId()] = $participant->getParticipantProduct();
             }
         }
@@ -46,7 +46,7 @@ class ProductByParticipantGetter
 
             if (false !== $participantProduct) {
                 foreach ($sheet->getParticipantsArray() as $participant) {
-                    if (!isset($command->participantsProduct[$participant->getId()])) {
+                    if (!isset($participantsProduct[$participant->getId()])) {
                         $participantsProduct[$participant->getId()] = $participantProduct;
                     }
                 }
