@@ -74,15 +74,15 @@
             </select>
         </div>
     {% endif %}
-
-    <a href="{{ path('event_catalog_export', {'sheet': sheet.id}) ~ '?' ~ app.request.query.all|url_encode }}" class="btn btn-link">
-        <i class="glyphicon glyphicon-download"></i> {{ 'catalog.sheet.export.csv'|trans }}
-    </a>
 </div>
 
 {{ include('EventBundle:Tip:tip.html.twig', {tipTranslationViews: tipTranslationViews}) }}
 
 <div class="catalog__filters">
+
+    <a href="{{ path('event_catalog_export', {'sheet': sheet.id}) ~ '?' ~ app.request.query.all|url_encode }}" class="btn btn-link text-right">
+        <i class="glyphicon glyphicon-download-alt"></i> {{ 'catalog.sheet.export.csv'|trans }}
+    </a>
 
     <div class="select-all">
         <span class="total-result">({{ total }})</span>
