@@ -49,7 +49,7 @@ mail.sheet.invoiced.end: "Your invoice is also available in your member area by 
 mail.sheet.invoiced.link: 'Download my invoice %invoiceNumber%'
 mail.sheet.invoiced.subject: 'Download your invoice'
 mail.sheet.show.link: 'See the presentation sheet'
-mail.sheet.submitted.body: "The presentation sheet of %sheetName% has been finalised on %date% by %firstname% %lastname%. \n\nTo acess the details of the presentation sheet, please click on the link below"
+mail.sheet.submitted.body: "The presentation sheet of %sheetName% has been finalised on %date% by %firstname% %lastname%. \n\nTo access the details of the presentation sheet, please click on the link below"
 mail.sheet.submitted.end: 'Regards,'
 mail.sheet.submitted.link: 'View sheet'
 mail.sheet.submitted.subject: 'Sheet %sheetName% finalized'
