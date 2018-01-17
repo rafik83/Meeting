@@ -260,7 +260,8 @@ class RegisterController extends Controller
             ->createRegistrationFromParticipant($participant, $locale);
 
         // pre-fill user participation data and update registration template with data
-        $this->get('tactician.commandbus.query')->handle(
+        /** @var PreFillUserDataView $preFillUserDataView */
+        $preFillUserDataView = $this->get('tactician.commandbus.query')->handle(
             new PreFillUserData(
                 $participant->getUser(),
                 $eventDomain->getEvent(),
@@ -268,6 +269,10 @@ class RegisterController extends Controller
                 $locale
             )
         );
+
+        if ($preFillUserDataView->isParticipationDataPreFilled()) {
+            $participant->setData($preFillUserDataView->templateData->getData());
+        }
 
         $participantBlock = $registrationTemplate->getBlock(intval($step));
 
