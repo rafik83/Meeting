@@ -430,8 +430,8 @@ form.package_update.children.options.children.groups.prototype.children.item.chi
 form.package_update.children.options.children.labels.label: 'Libellé de l''étape'
 form.package_update.children.participantAndPlanning.children.enabled.label: Activé
 form.package_update.children.participantAndPlanning.children.labels.label: 'Libellé de l''étape'
-form.package_update.children.participantAndPlanning.children.maxParticipant.label: Nombre maximum de participant
 form.package_update.children.participantAndPlanning.children.maxParticipant.help: 'Si vide, pas de limite'
+form.package_update.children.participantAndPlanning.children.maxParticipant.label: 'Nombre maximum de participant'
 form.package_update.children.participantAndPlanning.children.participant.label: Participant
 form.package_update.children.participantAndPlanning.children.participants.label: 'Produit(s) Participant'
 form.package_update.children.participantAndPlanning.children.participants.label_add: 'Ajouter un produit participant'
