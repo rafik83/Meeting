@@ -14,31 +14,18 @@ use Proximum\Vimeet\Domain\Model\Product;
 
 class SelectParticipantAndPlanning extends AbstractStep
 {
-    /**
-     * @var int
-     */
+    /** @var int */
     public $planningQuantity = 0;
 
-    /**
-     * @var array of participantId => Product
-     */
+    /** @var array of participantId => Product */
     public $participantsProduct = [];
 
-    /**
-     * @param int $participantId
-     *
-     * @return int Id of participant product
-     */
-    public function __get(int $participantId)
+    public function __get(int $participantId): ?Product
     {
         return $this->participantsProduct[$participantId];
     }
 
-    /**
-     * @param int     $participantId
-     * @param Product $participantProduct
-     */
-    public function __set(int $participantId, Product $participantProduct)
+    public function __set(int $participantId, ?Product $participantProduct = null)
     {
         $this->participantsProduct[$participantId] = $participantProduct;
     }
