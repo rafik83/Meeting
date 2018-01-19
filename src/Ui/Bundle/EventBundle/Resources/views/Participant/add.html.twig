@@ -55,12 +55,16 @@
                             </td>
                             <td class="col-xs-3">
                                 <div class="buyable-product-row product-price">
-                                    {# NB: need to be replaced by a select one from several products #}
-                                    {{ 'package.product.unitPrice'|trans({
-                                        '%price%': product.unitPrice,
-                                        '%currency%': product.currency|currency_symbol,
-                                        '%vatMode%': ('package.vatMode.' ~ product.vatMode)|trans
-                                    })|html }}
+                                    {% if product.isBuyable and product.hasRemainingIncludedQuantity %}
+                                        {{ 'sheet.object.product.included'|trans }}
+                                    {% else %}
+                                        {# NB: need to be replaced by a select one from several products #}
+                                        {{ 'package.product.unitPrice'|trans({
+                                            '%price%': product.unitPrice,
+                                            '%currency%': product.currency|currency_symbol,
+                                            '%vatMode%': ('package.vatMode.' ~ product.vatMode)|trans
+                                        })|html }}
+                                    {% endif %}
                                 </div>
                             </td>
                         </tr>

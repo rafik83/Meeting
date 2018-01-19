@@ -84,8 +84,13 @@ class ParticipantProductViewQueryHandler
                 }
             }
 
-            if ($includedQuantity > 0 && isset($productAlreadyBought[$participantProduct->getId()])) {
-                $remainingQuantityIncluded = $includedQuantity - count($productAlreadyBought[$participantProduct->getId()]);
+            if ($includedQuantity > 0) {
+                $quantityAlreadyIncluded = isset($productAlreadyBought[$participantProduct->getId()])
+                    ? count($productAlreadyBought[$participantProduct->getId()])
+                    : 0
+                ;
+
+                $remainingQuantityIncluded = $includedQuantity - $quantityAlreadyIncluded;
             }
 
             $quantityBought = 0;
