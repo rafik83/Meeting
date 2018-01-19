@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2015 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -11,7 +11,6 @@
 namespace Proximum\Vimeet\Application\Command\Participant;
 
 use Proximum\Vimeet\Application\View\Package\ParticipantProductView;
-use Proximum\Vimeet\Domain\Model\Product;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\User;
 
@@ -50,24 +49,32 @@ class Add
     public $needToSelectProduct;
 
     /**
-     * @param Sheet                       $sheet
-     * @param string                      $locale
-     * @param User                        $adder
-     * @param ParticipantProductView|null $product
-     * @param bool                        $needToSelectProduct
+     * @param Sheet                   $sheet
+     * @param string                  $locale
+     * @param User                    $adder
+     * @param ParticipantProductView[] $products
      */
     public function __construct(
         Sheet $sheet,
         $locale,
         User $adder,
-        ParticipantProductView $product = null,
-        bool $needToSelectProduct = false
+        array $products = []
     ) {
         $this->sheet               = $sheet;
         $this->locale              = $locale;
         $this->owner               = false;
         $this->adder               = $adder;
-        $this->product             = $product;
-        $this->needToSelectProduct = $needToSelectProduct;
+
+        $productSelected = null;
+        if (count($products) === 1) {
+            $product = reset($products);
+
+            if (false !== $product && $product->isBuyable) {
+                $productSelected = $product;
+            }
+        }
+
+        $this->product = $productSelected;
+        $this->needToSelectProduct = count($products) > 1;
     }
 }

@@ -75,21 +75,11 @@ class SheetParticipantController extends Controller
             new ParticipantProductViewQuery($sheet, $locale)
         );
 
-        $productSelected = null;
-        if (count($participantProductViews) === 1) {
-            $product = reset($participantProductViews);
-
-            if (false !== $product && $product->isBuyable) {
-                $productSelected = $product;
-            }
-        }
-
         $addParticipant = new Add(
             $sheet,
             $locale,
             $userDomain->getUser(),
-            $productSelected,
-            count($participantProductViews) > 1
+            $participantProductViews
         );
         $form = $this->createForm(AddType::class, $addParticipant, [
             'sheet'    => $sheet,
@@ -143,23 +133,14 @@ class SheetParticipantController extends Controller
         $participantProductViews = $this->get('tactician.commandbus.query')->handle(
             new ParticipantProductViewQuery($sheet, $locale)
         );
-        $productSelected = null;
-        if (count($participantProductViews) === 1) {
-            $product = reset($participantProductViews);
-
-            if (false !== $product && $product->isBuyable) {
-                $productSelected = $product;
-            }
-        }
 
         $addParticipant = new Add(
             $sheet,
             $locale,
             $userDomain->getUser(),
-            $productSelected,
-            count($participantProductViews) >= 1
+            $participantProductViews
         );
-        $form           = $this->createForm(AddType::class, $addParticipant, [
+        $form  = $this->createForm(AddType::class, $addParticipant, [
             'sheet'    => $sheet,
             'locale'   => $locale,
             'products' => $participantProductViews,

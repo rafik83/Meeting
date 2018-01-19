@@ -67,7 +67,7 @@ class PackageParticipantController extends Controller
             new ParticipantProductViewQuery($sheet, $locale)
         );
 
-        $addParticipant = new AddParticipant($sheet, $locale, $userDomain->getUser());
+        $addParticipant = new AddParticipant($sheet, $locale, $userDomain->getUser(), $participantProductViews);
         $form           = $this->createForm(AddType::class, $addParticipant, [
             'sheet'    => $sheet,
             'locale'   => $locale,

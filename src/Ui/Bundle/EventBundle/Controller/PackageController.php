@@ -223,21 +223,11 @@ class PackageController extends Controller
         $displayRemoveParticipantForm = false;
         $redirect                     = false;
 
-        $productSelected = null;
-        if (count($participantProductViews) === 1) {
-            $product = reset($participantProductViews);
-
-            if (false !== $product && $product->isBuyable) {
-                $productSelected = $product;
-            }
-        }
-
         $addParticipant = new AddParticipant(
             $sheet,
             $locale,
             $user,
-            $productSelected,
-            count($participantProductViews) >= 1
+            $participantProductViews
         );
         $form_add       = $this->createForm(AddType::class, $addParticipant, [
             'sheet'    => $sheet,
