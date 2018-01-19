@@ -245,15 +245,16 @@
                 <td>
                     <div>
                         {{ macro.state_label(
-                        ('event.sheet.state.' ~ sheet.state)|trans,
-                        sheet.state,
-                        {
-                            'pending': 'default',
-                            'accepted': 'warning',
-                            'validated': 'success'
-                        },
-                        sheet.hasTraceLabel ? ('admin.sheet.trace.' ~ sheet.traceAction)|trans({'%at%': sheet.traceAt|localizeddate('medium', 'short', app.request.locale, event.timeZone)}) ~ ' ' ~ (sheet.traceBy != null ? 'admin.sheet.trace.author'|trans({'%by%': sheet.traceBy}) : 'admin.sheet.trace.auto'|trans) : ''
-                        ) }}
+                                ('event.sheet.state.' ~ sheet.state)|trans,
+                                sheet.state,
+                                {
+                                    'pending': 'default',
+                                    'accepted': 'warning',
+                                    'validated': 'success'
+                                },
+                                sheet.hasTraceLabel ? ('admin.sheet.trace.' ~ sheet.traceAction)|trans({'%at%': sheet.traceAt|localizeddate('medium', 'short', app.request.locale, event.timeZone)}) ~ ' ' ~ (sheet.traceBy != null ? 'admin.sheet.trace.author'|trans({'%by%': sheet.traceBy}) : 'admin.sheet.trace.auto'|trans) : ''
+                            )
+                        }}
                     </div>
                     {% if sheet.isInCatalog %}
                         <div class="label label-info">
@@ -283,7 +284,7 @@
             </tr>
         {% else %}
             <tr>
-                <td colspan="{{ hasCategories ? 11 : 12 }}" class="text-danger text-center">{{ 'admin.zero-result'|trans }}</td>
+                <td colspan="{{ hasCategories ? 9 : 10 }}" class="text-danger text-center">{{ 'admin.zero-result'|trans }}</td>
             </tr>
         {% endfor %}
         </tbody>
