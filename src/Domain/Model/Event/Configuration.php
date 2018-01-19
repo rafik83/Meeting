@@ -74,6 +74,12 @@ class Configuration
     /** @var string */
     private $analyticsCode;
 
+    /** @var null|string */
+    private $backgroundImage;
+
+    /** @var null|string */
+    private $backgroundColor;
+
     /**
      * "Bloquer la demande de rendez-vous"
      *
@@ -186,12 +192,14 @@ class Configuration
      * @param string $leftColor
      * @param string $rightColor
      * @param string $textColor
+     * @param string $backgroundColor
      */
-    public function setColors($leftColor, $rightColor, $textColor)
+    public function setColors(string $leftColor, string $rightColor, string $textColor, string $backgroundColor)
     {
         $this->leftColor  = $leftColor;
         $this->rightColor = $rightColor;
         $this->textColor  = $textColor;
+        $this->backgroundColor = $backgroundColor;
     }
 
     /**
@@ -455,5 +463,37 @@ class Configuration
     public function getRegistrationCloseDate(): ?\DateTimeInterface
     {
         return $this->registrationCloseDate;
+    }
+
+    /**
+     * @return null|string
+     */
+    public function getBackgroundImage(): ?string
+    {
+        return $this->backgroundImage;
+    }
+
+    /**
+     * @param null|string $backgroundImage
+     */
+    public function setBackgroundImage(?string $backgroundImage): void
+    {
+        $this->backgroundImage = $backgroundImage;
+    }
+
+    /**
+     * @return string
+     */
+    public function getBackgroundColor(): string
+    {
+        return $this->backgroundColor;
+    }
+
+    /**
+     * @return bool
+     */
+    public function hasBackgroundImage(): bool
+    {
+        return $this->backgroundImage !== null;
     }
 }

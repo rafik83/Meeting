@@ -111,7 +111,8 @@ class SheetParticipantController extends Controller
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
         $this->denyAccessUnlessGranted(SheetVoter::EDIT, $sheet);
 
-        if (!$this->get(AddParticipantChecker::class)->canAddParticipant($sheet)) {
+        $canAddParticipant = $this->get(AddParticipantChecker::class)->canAddParticipant($sheet);
+        if (!$canAddParticipant) {
             throw $this->createNotFoundException(
                 sprintf('This sheet %s can not buy anymore participant', $sheet->getId())
             );
@@ -172,6 +173,7 @@ class SheetParticipantController extends Controller
         $tipTranslationViews = $this->get('tactician.commandbus.query')->handle($tipTranslationViewQuery);
 
         return $this->render('EventBundle:Sheet:sheet.html.twig', [
+            'canAddParticipant'       => $canAddParticipant,
             'event'                   => $eventDomain->getEvent(),
             'form_participant'        => $form->createView(),
             'isRequestMeetingEnabled' => false,
@@ -295,8 +297,10 @@ class SheetParticipantController extends Controller
             $request->getLocale()
         );
         $tipTranslationViews = $this->get('tactician.commandbus.query')->handle($tipTranslationViewQuery);
+        $canAddParticipant = $this->get(AddParticipantChecker::class)->canAddParticipant($sheet);
 
         return $this->render('EventBundle:Sheet:sheet.html.twig', [
+            'canAddParticipant'       => $canAddParticipant,
             'event'                   => $eventDomain->getEvent(),
             'form_remove'             => $form->createView(),
             'isRequestMeetingEnabled' => false,

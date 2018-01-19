@@ -29,6 +29,7 @@ Proximum\Vimeet\Domain\Model\Event\Configuration (local):
         catalogOnlineDate: <dateTimeBetween('-20days', 'now')>
         happeningsOpenDate: <dateTimeBetween('-15days', 'now')>
         schedulePublishDate: <dateTimeBetween('-10days', 'now')>
+        backgroundColor: '#00398C'
 
 Proximum\Vimeet\Domain\Model\Invoice\Prefix:
     prefix_rdv_carnot:

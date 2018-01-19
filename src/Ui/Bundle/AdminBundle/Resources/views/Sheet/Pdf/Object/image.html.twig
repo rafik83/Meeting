@@ -2,7 +2,7 @@
 <div class="object object--image {{ 'style--' ~ item.style }}">
     <div class="image-background">
         <div class="placeholder">
-            <img src="{{ item.data['image']|imagine_filter('event_sheet_image') }}" alt="image">
+            <img class="image-print-size" src="{{ item.data['image']|imagine_filter('event_sheet_image') }}" alt="image">
         </div>
     </div>
 </div>

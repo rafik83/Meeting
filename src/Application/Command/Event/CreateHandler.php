@@ -107,12 +107,22 @@ class CreateHandler
             $create->duplicatedFrom
         );
 
-        $event->getConfiguration()->setColors($create->leftColor, $create->rightColor, $create->textColor);
+        $event->getConfiguration()->setColors(
+            $create->leftColor,
+            $create->rightColor,
+            $create->textColor,
+            $create->backgroundColor
+        );
 
         if (null !== $create->logo) {
             $logoExtension = $this->fileStorage->getExtension($create->logo);
             $logoPath      = $this->fileStorage->upload($create->logo);
             $event->setLogo($logoPath, $logoExtension);
+        }
+
+        if (null !== $create->backgroundImage) {
+            $backGroundImagePath      = $this->fileStorage->upload($create->backgroundImage);
+            $event->getConfiguration()->setBackgroundImage($backGroundImagePath);
         }
 
         foreach ($event->getLocales() as $locale) {

@@ -98,7 +98,9 @@ class Generator
             'colorHighLighted'    => $colorHighlighted,
             'bundleGuidelinePath' => $this->bundleGuidelinePath,
             'fontPath'            => $this->fontPath,
-            'imagePath'           => $this->imagePath
+            'imagePath'           => $this->imagePath,
+            'backgroundImage'     => $event->getConfiguration()->getBackgroundImage(),
+            'backgroundColor'     => $event->getConfiguration()->getBackgroundColor(),
         ]);
 
         $varsFileName = 'vars-' . sha1(uniqid()) . '.scss';

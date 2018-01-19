@@ -55,7 +55,7 @@
                                 {% include('EventBundle:Package/Flash:promotionError.html.twig') %}
                                 <div class="col-md-8 cgv">
                                     {{ form_row(formTermsOfSale.termsOfSale) }}
-                                    <a href="{{ path('event_content_terms_of_sale') }}"
+                                    <a href="{{ path('event_content_terms_of_sale', {'sheet': sheet.id}) }}"
                                        target="_blank">{{ 'package.summary.seeTermsOfSale'|trans }}</a>
                                 </div>
                                 <div class="col-md-4 sum">

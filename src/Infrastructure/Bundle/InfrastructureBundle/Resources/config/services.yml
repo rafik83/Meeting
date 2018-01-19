@@ -384,6 +384,7 @@ services:
             - '@guideline.generator'
             - '@adapter.local_file_storage'
             - '@vimeet_infrastructure.adapter.delayed_event_dispatcher'
+            - '@command.event.configuration.background.remove_image_handler'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Event\Update }
 
@@ -1995,6 +1996,13 @@ services:
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Event\ArchiveUnArchive }
 
+    command.event.configuration.background.remove_image_handler:
+        class: Proximum\Vimeet\Application\Command\Event\Configuration\Background\RemoveImageHandler
+        arguments:
+            - '@adapter.local_file_storage'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Event\Configuration\Background\RemoveImage }
+
     command.product.remove.remove_handler:
         class: Proximum\Vimeet\Application\Command\Product\Remove\RemoveHandler
         arguments:
@@ -3168,6 +3176,14 @@ services:
             - '@query.catalog.search_facet_view_query_handler'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Category\MeetingCategoryViewQuery }
+
+    query.content.terms_of_sale_view_query_handler:
+        class: Proximum\Vimeet\Application\Query\Content\TermsOfSaleViewQueryHandler
+        arguments:
+            - '@repository.event.content_repository'
+            - '@markdown'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Content\TermsOfSaleViewQuery }
 
     query.user.user_details_view_query_handler:
         class: Proximum\Vimeet\Application\Query\User\UserDetailsViewQueryHandler
