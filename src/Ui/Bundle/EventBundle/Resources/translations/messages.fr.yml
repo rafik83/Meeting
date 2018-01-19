@@ -75,6 +75,7 @@ event.activateAccount.expired.resend: 'Recevoir une nouvelle invitation par emai
 event.activateAccount.expired.title: 'Votre invitation a expiré'
 event.activateAccount.resendToken.explanation: 'Une nouvelle invitation vous a été envoyée par mail. Vous pouvez cliquer sur le lien contenu dans ce mail pour activer votre compte'
 event.activateAccount.resendToken.title: 'Une nouvelle invitation vous a été envoyée'
+event.content.title: 'Conditions générales de vente'
 event.info.close: Fermer
 event.info.contact: 'Informations pratiques'
 event.invisible.label: Invisible
@@ -234,6 +235,7 @@ navigation.links.package.order_list: 'Liste des commandes'
 navigation.links.package.order_summary_total: Récapitulatif
 navigation.links.package.payment: Paiement
 navigation.links.package.summary: Récapitulatif
+navigation.links.package.terms_of_sale: 'Conditions générales de vente'
 navigation.links.planning.all_schedule: 'Tous les agendas'
 navigation.links.planning.available_date: 'Disponible le'
 navigation.links.planning.conference: Conférences

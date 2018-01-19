@@ -35,6 +35,7 @@ class ContentManager
     public function createTermsOfSale(Event $event)
     {
         $content = new Content($event, Content::TYPE_TERMS_OF_SALE);
+        $content->translate('fr', 'foobar');
 
         $this->contentRepository->add($content);
 

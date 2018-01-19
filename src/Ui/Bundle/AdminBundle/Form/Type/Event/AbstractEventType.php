@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Event;
 
+use Proximum\Vimeet\Domain\Event\Image;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Invoice\Prefix;
 use Proximum\Vimeet\Domain\Repository\Invoice\PrefixRepositoryInterface;
@@ -97,13 +98,7 @@ abstract class AbstractEventType extends AbstractType
             ->add('logo', FileType::class, [
                 'required' => false,
                 'attr'     => [
-                    'accept' => implode(', ', [
-                        "image/jpeg",
-                        "image/pjpeg",
-                        "image/png",
-                        "image/x-png",
-                        'image/svg+xml',
-                    ]),
+                    'accept' => implode(', ', Image::SUPPORTED_MIME_TYPE),
                 ],
             ])
             ->add('country', CountryType::class)
@@ -119,6 +114,15 @@ abstract class AbstractEventType extends AbstractType
                     return Intl::getCurrencyBundle()->getCurrencyName($currentChoice, $currentLocale);
                 },
             ])
+            ->add('backgroundImage', FileType::class, [
+                'required' => false,
+                'attr'        => [
+                    'accept' => implode(', ', Image::SUPPORTED_MIME_TYPE),
+                ],
+            ])
+            ->add('backgroundColor', TextType::class, [
+                'required' => true,
+            ])
             ->add('leftColor', TextType::class)
             ->add('rightColor', TextType::class)
             ->add('textColor', TextType::class)
@@ -128,6 +132,12 @@ abstract class AbstractEventType extends AbstractType
             ->add('emailTeam', EmailType::class, [
                 'required' => false,
             ]);
+
+        if ($event !== null && $event->getConfiguration()->hasBackgroundImage()) {
+            $builder->add('isBackgroundImageToRemove', CheckboxType::class, [
+                'required' => false,
+            ]);
+        }
 
         // default invoicePrefix choice type options
         $invoicePrefixOptions = [
