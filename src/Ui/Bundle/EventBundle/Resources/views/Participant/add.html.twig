@@ -6,7 +6,7 @@
     </h4>
 </div>
 <div class="modal-body">
-    {{ form_start(form) }}
+    {{ form_start(form, {'attr': {'class': 'styled-form'}}) }}
         <div class="inputs">
             {{ form_errors(form) }}
 
@@ -31,12 +31,26 @@
                     {% for product in participantProductViews %}
                         <tr>
                             <td class="col-xs-1">
-                                {{ form_widget(form.product[product.id], { 'attr': { 'title': product.title } }) }}
+                                {% if product.isBuyable %}
+                                    {{ form_widget(form.product[product.id], { 'attr': { 'title': product.title } }) }}
+                                {% endif %}
                             </td>
                             <td class="col-xs-8">
                                 <div class="buyable-product-row">
-                                    <b>{{ product.title }}</b>
-                                    <p>{{ product.description|nl2br }}</p>
+                                    {% if product.isBuyable %}
+                                        <label for="{{ form.product[product.id].vars.id }}">
+                                            <b>
+                                                {{ product.title }}
+                                            </b>
+                                        </label>
+                                        <p>{{ product.description|nl2br }}</p>
+                                    {% else %}
+                                        <b>{{ product.title }}</b>
+                                        <p>{{ product.description|nl2br }}</p>
+                                        <span class="alert-danger">
+                                            {{ 'package.product.notAvailable'|trans({}, 'validators') }}
+                                        </span>
+                                    {% endif %}
                                 </div>
                             </td>
                             <td class="col-xs-3">

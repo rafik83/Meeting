@@ -75,8 +75,23 @@ class SheetParticipantController extends Controller
             new ParticipantProductViewQuery($sheet, $locale)
         );
 
-        $addParticipant = new Add($sheet, $locale, $userDomain->getUser());
-        $form           = $this->createForm(AddType::class, $addParticipant, [
+        $productSelected = null;
+        if (count($participantProductViews) === 1) {
+            $product = reset($participantProductViews);
+
+            if (false !== $product && $product->isBuyable) {
+                $productSelected = $product;
+            }
+        }
+
+        $addParticipant = new Add(
+            $sheet,
+            $locale,
+            $userDomain->getUser(),
+            $productSelected,
+            count($participantProductViews) > 1
+        );
+        $form = $this->createForm(AddType::class, $addParticipant, [
             'sheet'    => $sheet,
             'products' => $participantProductViews,
             'locale'   => $locale,
@@ -103,11 +118,18 @@ class SheetParticipantController extends Controller
      * @param Sheet       $sheet
      * @param string      $locale
      * @param string      $key
+     * @param UserDomain  $userDomain
      *
      * @return Response
      */
-    public function handleAddParticipantAction(Request $request, EventDomain $eventDomain, Sheet $sheet, $locale, $key)
-    {
+    public function handleAddParticipantAction(
+        Request $request,
+        EventDomain $eventDomain,
+        Sheet $sheet,
+        $locale,
+        $key,
+        UserDomain $userDomain
+    ) {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
         $this->denyAccessUnlessGranted(SheetVoter::EDIT, $sheet);
 
@@ -121,8 +143,22 @@ class SheetParticipantController extends Controller
         $participantProductViews = $this->get('tactician.commandbus.query')->handle(
             new ParticipantProductViewQuery($sheet, $locale)
         );
+        $productSelected = null;
+        if (count($participantProductViews) === 1) {
+            $product = reset($participantProductViews);
 
-        $addParticipant = new Add($sheet, $locale, $this->getUser());
+            if (false !== $product && $product->isBuyable) {
+                $productSelected = $product;
+            }
+        }
+
+        $addParticipant = new Add(
+            $sheet,
+            $locale,
+            $userDomain->getUser(),
+            $productSelected,
+            count($participantProductViews) >= 1
+        );
         $form           = $this->createForm(AddType::class, $addParticipant, [
             'sheet'    => $sheet,
             'locale'   => $locale,
@@ -149,21 +185,12 @@ class SheetParticipantController extends Controller
         // If the form is not valid, render the sheet and force the popin with the participant form
         list ($nomenclatures, $participants, $taggedData) = $this->get('sheet.infos_helper')->getInfos(
             $sheet,
-            $this->getUser(),
+            $userDomain->getUser(),
             $locale
         );
         $templateData = $this->get('template.template_data_factory')->createFromSheet($sheet, $locale);
         $object       = $this->getParticipantObject($templateData, $key);
         $label        = $object->getLabel($locale, $sheet->getEvent()->getFallback());
-
-
-        // To REMOVE
-        $participantProductView = reset($participantProductViews);
-
-        if (false === $participantProductView) {
-            $participantProductView = null;
-        }
-        // To REMOVE
 
         $tipTranslationViewQuery = new TipTranslationViewQuery(
             $sheet->getType(),
@@ -180,13 +207,13 @@ class SheetParticipantController extends Controller
             'label'                   => $label,
             'locale'                  => $locale,
             'nomenclatures'           => $nomenclatures,
-            'participantProductView'  => $participantProductView,
             'participants'            => $participants,
             'sheet'                   => $sheet,
             'taggedData'              => $taggedData,
             'templateData'            => $templateData,
             'tipTranslationViews'     => $tipTranslationViews,
             'uid'                     => $key,
+            'participantProductViews' => $participantProductViews,
         ]);
     }
 

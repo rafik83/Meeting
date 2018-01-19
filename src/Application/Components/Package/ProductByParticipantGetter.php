@@ -15,7 +15,7 @@ use Proximum\Vimeet\Domain\Cart\Cart;
 class ProductByParticipantGetter
 {
     /**
-     * This method returns the the product of type participant indexed by the participant id
+     * This method returns the product of type participant indexed by the participant id
      * The participant product can be null
      * If there is only one product, this product is taken for all the participant
      *

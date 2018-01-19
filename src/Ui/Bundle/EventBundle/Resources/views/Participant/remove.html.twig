@@ -14,7 +14,9 @@
                 {{ form_widget(form.participants[participant.id]) }}
             </div>
             <div class="col-md-11">
-                {{ include('EventBundle:Participant:preview.html.twig', { 'participant': participant}) }}
+                <label for="{{ form.participants[participant.id].vars.id }}">
+                    {{ include('EventBundle:Participant:preview.html.twig', { 'participant': participant}) }}
+                </label>
             </div>
         {% endfor %}
         <div class="validation">

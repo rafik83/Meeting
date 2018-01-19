@@ -12,6 +12,7 @@ namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Participant;
 
 use Proximum\Vimeet\Application\Command\Participant\Add;
 use Proximum\Vimeet\Application\Components\Sheet\Template\Tag;
+use Proximum\Vimeet\Application\View\Package\ParticipantProductView;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Template\TemplateDataFactory;
 use Symfony\Component\Form\AbstractType;
@@ -79,8 +80,14 @@ class AddType extends AbstractType
             $builder
                 ->add('product', ChoiceType::class, [
                     'required'    => true,
-                    'choices'     => $products,
-                    'choice_name' => function ($product) {
+                    'choices'     => array_filter($products, function (ParticipantProductView $product = null) {
+                        if ($product === null) {
+                            return false;
+                        }
+
+                        return $product->isBuyable;
+                    }),
+                    'choice_name' => function (ParticipantProductView $product) {
                         return $product->id;
                     },
                     'expanded'    => true,

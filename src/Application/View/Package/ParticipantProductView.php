@@ -36,6 +36,12 @@ class ParticipantProductView
     /** @var int */
     public $quantityIncluded;
 
+    /** @var bool */
+    public $isBuyable;
+
+    /** @var bool */
+    public $hasRemainingIncludedQuantity;
+
     /**
      * @param int    $id
      * @param string $title
@@ -45,6 +51,8 @@ class ParticipantProductView
      * @param string $vatMode
      * @param float  $quantityMax
      * @param int    $quantityIncluded
+     * @param bool   $isBuyable
+     * @param bool   $hasRemainingIncludedQuantity
      */
     public function __construct(
         int $id,
@@ -54,7 +62,9 @@ class ParticipantProductView
         string $currency,
         string $vatMode,
         float $quantityMax,
-        int $quantityIncluded
+        int $quantityIncluded,
+        bool $isBuyable,
+        bool $hasRemainingIncludedQuantity
     ) {
         $this->id = $id;
         $this->title = $title;
@@ -64,6 +74,8 @@ class ParticipantProductView
         $this->vatMode = $vatMode;
         $this->quantityMax = $quantityMax;
         $this->quantityIncluded = $quantityIncluded;
+        $this->isBuyable = $isBuyable;
+        $this->hasRemainingIncludedQuantity = $hasRemainingIncludedQuantity;
     }
 
     /**

@@ -25,6 +25,7 @@ use Proximum\Vimeet\Application\Query\Package\Summary\SummaryViewQuery;
 use Proximum\Vimeet\Application\Query\Participant\CardListViewQuery;
 use Proximum\Vimeet\Domain\Model\PromotionCodeRow;
 use Proximum\Vimeet\Domain\Model\Sheet;
+use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Package\Funnel\Step as FunnelStep;
 use Proximum\Vimeet\Domain\Package\Summary\PromotionCode;
 use Proximum\Vimeet\Domain\Package\Summary\TermsOfSale;
@@ -39,6 +40,7 @@ use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Participant\AddType;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Participant\RemoveType;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\ParamConverter\EventDomain;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Security\SheetVoter;
+use Proximum\Vimeet\Ui\Bundle\EventBundle\ValueResolver\UserDomain;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Form\FormError;
 use Symfony\Component\Form\FormInterface;
@@ -92,11 +94,17 @@ class PackageController extends Controller
      * @param EventDomain $eventDomain
      * @param Sheet       $sheet
      * @param int         $step
+     * @param UserDomain  $userDomain
      *
      * @return RedirectResponse|Response
      */
-    public function stepAction(Request $request, EventDomain $eventDomain, Sheet $sheet, int $step)
-    {
+    public function stepAction(
+        Request $request,
+        EventDomain $eventDomain,
+        Sheet $sheet,
+        int $step,
+        UserDomain $userDomain
+    ) {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
         $this->denyAccessUnlessGranted(SheetVoter::EDIT, $sheet);
         $this->authorizeAccess($eventDomain, $sheet);
@@ -166,7 +174,7 @@ class PackageController extends Controller
                 $form_remove,
                 $participants,
                 $redirect
-            ) = $this->handleStepParticipant($request, $sheet, $step, $participantProductViews);
+            ) = $this->handleStepParticipant($request, $sheet, $step, $userDomain->getUser(), $participantProductViews);
 
             if ($redirect) {
                 return $this->redirectToRoute('event_package_step', [
@@ -203,18 +211,34 @@ class PackageController extends Controller
      * @param Request $request
      * @param Sheet   $sheet
      * @param int     $step
+     * @param User    $user
      * @param array   $participantProductViews
      *
      * @return array|RedirectResponse
      */
-    private function handleStepParticipant(Request $request, Sheet $sheet, $step, array $participantProductViews)
+    private function handleStepParticipant(Request $request, Sheet $sheet, $step, User $user, array $participantProductViews)
     {
         $locale = $request->getLocale();
         $displayAddParticipantForm    = false;
         $displayRemoveParticipantForm = false;
         $redirect                     = false;
 
-        $addParticipant = new AddParticipant($sheet, $locale, $this->getUser());
+        $productSelected = null;
+        if (count($participantProductViews) === 1) {
+            $product = reset($participantProductViews);
+
+            if (false !== $product && $product->isBuyable) {
+                $productSelected = $product;
+            }
+        }
+
+        $addParticipant = new AddParticipant(
+            $sheet,
+            $locale,
+            $user,
+            $productSelected,
+            count($participantProductViews) >= 1
+        );
         $form_add       = $this->createForm(AddType::class, $addParticipant, [
             'sheet'    => $sheet,
             'locale'   => $locale,
@@ -234,42 +258,44 @@ class PackageController extends Controller
             'participants' => $sheet->getParticipants(),
         ]);
 
-        if ($form_add->handleRequest($request)->isSubmitted() && $form_add->isValid()) {
-            try {
-                $this->get('tactician.commandbus')->handle($addParticipant);
+        if ($form_add->handleRequest($request)->isSubmitted()) {
+            if ($form_add->isValid()) {
+                try {
+                    $this->get('tactician.commandbus')->handle($addParticipant);
 
-                $redirect = true;
-            } catch (AlreadyLinkedToASheetOfThisEventException $exception) {
-                $form_add->get('email')->addError(new FormError('validators.participant.alreadyLinkedToASheet'));
-            } catch (ParticipantAlreadyExistException $exception) {
-                $form_add->get('email')->addError(new FormError('validators.participant.alreadyLinkedToThisSheet'));
+                    $redirect = true;
+                } catch (AlreadyLinkedToASheetOfThisEventException $exception) {
+                    $form_add->get('email')->addError(new FormError('validators.participant.alreadyLinkedToASheet'));
+                } catch (ParticipantAlreadyExistException $exception) {
+                    $form_add->get('email')->addError(new FormError('validators.participant.alreadyLinkedToThisSheet'));
+                }
             }
 
             $displayAddParticipantForm = true;
         }
 
-        if ($form_remove->handleRequest($request)->isSubmitted() && $form_remove->isValid()) {
-            try {
-                /** @var RemoveResult $result */
-                $result = $this->get('tactician.commandbus')->handle($removeParticipant);
+        if ($form_remove->handleRequest($request)->isSubmitted()) {
+            if ($form_remove->isValid()) {
+                try {
+                    /** @var RemoveResult $result */
+                    $result = $this->get('tactician.commandbus')->handle($removeParticipant);
 
-                if (!$result->hasParticipantWithMeeting()) {
-                    $redirect = true;
-                } else {
-
-
-                    $form_remove->addError(
-                        new FormError(
-                            $this->get('translator')->transChoice(
-                                'validators.participant.remove.hasMeeting',
-                                $result->countParticipants(),
-                                ['%participantName%' => $result->getParticipantsName(), '%contactInfo%' => ContactInfoGuesser::getContactInfos($sheet->getEvent())], 'validators'
+                    if (!$result->hasParticipantWithMeeting()) {
+                        $redirect = true;
+                    } else {
+                        $form_remove->addError(
+                            new FormError(
+                                $this->get('translator')->transChoice(
+                                    'validators.participant.remove.hasMeeting',
+                                    $result->countParticipants(),
+                                    ['%participantName%' => $result->getParticipantsName(), '%contactInfo%' => ContactInfoGuesser::getContactInfos($sheet->getEvent())], 'validators'
+                                )
                             )
-                        )
-                    );
+                        );
+                    }
+                } catch (CanNotRemoveAllParticipantsException $exception) {
+                    $form_remove->addError(new FormError('validators.participant.canNotRemoveAllParticipants'));
                 }
-            } catch (CanNotRemoveAllParticipantsException $exception) {
-                $form_remove->addError(new FormError('validators.participant.canNotRemoveAllParticipants'));
             }
 
             $displayRemoveParticipantForm = true;

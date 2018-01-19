@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Application\Command\Participant;
 
+use Proximum\Vimeet\Application\View\Package\ParticipantProductView;
 use Proximum\Vimeet\Domain\Model\Product;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\User;
@@ -38,25 +39,35 @@ class Add
     public $adder;
 
     /**
-     * Product selected to add the new participant
+     * ParticipantProductView selected to add the new participant
      * This product can be null as the package is not always passable
      *
-     * @var Product|null
+     * @var ParticipantProductView|null
      */
     public $product;
 
+    /** @var bool */
+    public $needToSelectProduct;
+
     /**
-     * @param Sheet        $sheet
-     * @param string       $locale
-     * @param User         $adder
-     * @param Product|null $product
+     * @param Sheet                       $sheet
+     * @param string                      $locale
+     * @param User                        $adder
+     * @param ParticipantProductView|null $product
+     * @param bool                        $needToSelectProduct
      */
-    public function __construct(Sheet $sheet, $locale, User $adder, Product $product = null)
-    {
-        $this->sheet   = $sheet;
-        $this->locale  = $locale;
-        $this->owner   = false;
-        $this->adder   = $adder;
-        $this->product = $product;
+    public function __construct(
+        Sheet $sheet,
+        $locale,
+        User $adder,
+        ParticipantProductView $product = null,
+        bool $needToSelectProduct = false
+    ) {
+        $this->sheet               = $sheet;
+        $this->locale              = $locale;
+        $this->owner               = false;
+        $this->adder               = $adder;
+        $this->product             = $product;
+        $this->needToSelectProduct = $needToSelectProduct;
     }
 }
