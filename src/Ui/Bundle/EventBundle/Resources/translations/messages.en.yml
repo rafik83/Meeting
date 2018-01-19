@@ -301,7 +301,7 @@ sheet.maxParticipantReached: 'Maximum participants reached'
 sheet.object.action.add: Add
 sheet.object.action.backToSheet: 'Back to sheet'
 sheet.object.action.edit: Edit
-sheet.object.action.remove: Delete
+sheet.object.action.remove: 'Delete'
 sheet.object.image.label: 'Your current image'
 sheet.object.image.remove: 'Delete image'
 sheet.object.option.buyable.label: 'Chargeable option'

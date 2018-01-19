@@ -152,8 +152,13 @@ class PackageController extends Controller
         $form_add                     = null;
         $form_remove                  = null;
         $participants                 = [];
+        $participantProductViews      = [];
 
         if ($currentStep->type === FunnelStep::TYPE_PARTICIPANT_PLANNING) {
+            $participantProductViews = $this->get('tactician.commandbus.query')->handle(
+                new ParticipantProductViewQuery($sheet, $request->getLocale())
+            );
+
             list (
                 $displayAddParticipantForm,
                 $displayRemoveParticipantForm,
@@ -161,7 +166,7 @@ class PackageController extends Controller
                 $form_remove,
                 $participants,
                 $redirect
-            ) = $this->handleStepParticipant($request, $sheet, $step);
+            ) = $this->handleStepParticipant($request, $sheet, $step, $participantProductViews);
 
             if ($redirect) {
                 return $this->redirectToRoute('event_package_step', [
@@ -180,18 +185,6 @@ class PackageController extends Controller
             )
         );
 
-        // todo: remove this to send to add form all participants product
-        $participantProductViews = $this->get('tactician.commandbus.query')->handle(
-            new ParticipantProductViewQuery($sheet, $request->getLocale())
-        );
-
-        $participantProductView = reset($participantProductViews);
-
-        if (false === $participantProductView) {
-            $participantProductView = null;
-        }
-        // /todo
-
         return $this->render('EventBundle:Package:step.html.twig', [
             'event'                        => $eventDomain->getEvent(),
             'sheet'                        => $sheet,
@@ -202,18 +195,19 @@ class PackageController extends Controller
             'displayAddParticipantForm'    => $displayAddParticipantForm,
             'displayRemoveParticipantForm' => $displayRemoveParticipantForm,
             'participants'                 => $participants,
-            'participantProductView'       => $participantProductView,
+            'participantProductViews'      => $participantProductViews,
         ]);
     }
 
     /**
-     * @param Request     $request
-     * @param Sheet       $sheet
-     * @param int         $step
+     * @param Request $request
+     * @param Sheet   $sheet
+     * @param int     $step
+     * @param array   $participantProductViews
      *
      * @return array|RedirectResponse
      */
-    private function handleStepParticipant(Request $request, Sheet $sheet, $step)
+    private function handleStepParticipant(Request $request, Sheet $sheet, $step, array $participantProductViews)
     {
         $locale = $request->getLocale();
         $displayAddParticipantForm    = false;
@@ -222,9 +216,10 @@ class PackageController extends Controller
 
         $addParticipant = new AddParticipant($sheet, $locale, $this->getUser());
         $form_add       = $this->createForm(AddType::class, $addParticipant, [
-            'sheet'  => $sheet,
-            'locale' => $locale,
-            'action' => $this->generateUrl('event_package_step', [
+            'sheet'    => $sheet,
+            'locale'   => $locale,
+            'products' => $participantProductViews,
+            'action'   => $this->generateUrl('event_package_step', [
                 'sheet' => $sheet->getId(),
                 'step'  => $step,
             ]),
