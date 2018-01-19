@@ -35,54 +35,34 @@ use Proximum\Vimeet\Infrastructure\Adapter\DelayedEventDispatcher;
 
 class AddHandler
 {
-    /**
-     * @var UserRepositoryInterface
-     */
+    /** @var UserRepositoryInterface */
     private $userRepository;
 
-    /**
-     * @var ParticipantRepositoryInterface
-     */
+    /** @var ParticipantRepositoryInterface */
     private $participantRepository;
 
-    /**
-     * @var SheetRepositoryInterface
-     */
+    /** @var SheetRepositoryInterface */
     private $sheetRepository;
 
-    /**
-     * @var TemplateDataFactory
-     */
+    /** @var TemplateDataFactory */
     private $templateDataFactory;
 
-    /**
-     * @var ActivateAccountTokenGenerator
-     */
+    /** @var ActivateAccountTokenGenerator */
     private $activateAccountTokenGenerator;
 
-    /**
-     * @var DelayedEventDispatcher
-     */
+    /** @var DelayedEventDispatcher */
     private $eventDispatcher;
 
-    /**
-     * @var CartManager
-     */
+    /** @var CartManager */
     private $cartManager;
 
-    /**
-     * @var TypeResolver
-     */
+    /** @var TypeResolver */
     private $typeResolver;
 
-    /**
-     * @var Synchronizer
-     */
+    /** @var Synchronizer */
     private $accountSynchronizer;
 
     /**
-     * AddHandler constructor.
-     *
      * @param UserRepositoryInterface        $userRepository
      * @param ParticipantRepositoryInterface $participantRepository
      * @param SheetRepositoryInterface       $sheetRepository

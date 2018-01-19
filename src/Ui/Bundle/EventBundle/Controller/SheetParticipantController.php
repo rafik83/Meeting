@@ -22,11 +22,13 @@ use Proximum\Vimeet\Application\Query\Tip\TipTranslationViewQuery;
 use Proximum\Vimeet\Application\Query\Tip\TipTranslationViewQueryHandler;
 use Proximum\Vimeet\Domain\Event\ContactInfoGuesser;
 use Proximum\Vimeet\Domain\Model\Sheet;
+use Proximum\Vimeet\Domain\Sheet\Participant\AddParticipantChecker;
 use Proximum\Vimeet\Domain\Template;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Participant\AddType;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Participant\RemoveType;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\ParamConverter\EventDomain;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Security\SheetVoter;
+use Proximum\Vimeet\Ui\Bundle\EventBundle\ValueResolver\UserDomain;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Form\FormError;
 use Symfony\Component\HttpFoundation\Request;
@@ -42,14 +44,16 @@ class SheetParticipantController extends Controller
      * @param string      $locale
      * @param string      $key
      *
+     * @param UserDomain  $userDomain
+     *
      * @return Response
      */
-    public function addParticipantAction(EventDomain $eventDomain, Sheet $sheet, $locale, $key)
+    public function addParticipantAction(EventDomain $eventDomain, Sheet $sheet, $locale, $key, UserDomain $userDomain)
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
         $this->denyAccessUnlessGranted(SheetVoter::EDIT, $sheet);
 
-        if (!$this->get('Proximum\Vimeet\Domain\Sheet\Participant\AddParticipantChecker')->canAddParticipant($sheet)) {
+        if (!$this->get(AddParticipantChecker::class)->canAddParticipant($sheet)) {
             throw $this->createNotFoundException(
                 sprintf('This sheet %s can not buy anymore participant', $sheet->getId())
             );
@@ -67,35 +71,27 @@ class SheetParticipantController extends Controller
             throw $this->createNotFoundException(sprintf('The given object %s is not a participant', $key));
         }
 
-        $addParticipant = new Add($sheet, $locale, $this->getUser());
+        $participantProductViews = $this->get('tactician.commandbus.query')->handle(
+            new ParticipantProductViewQuery($sheet, $locale)
+        );
 
+        $addParticipant = new Add($sheet, $locale, $userDomain->getUser());
         $form           = $this->createForm(AddType::class, $addParticipant, [
-            'sheet'  => $sheet,
-            'locale' => $locale,
-            'action' => $this->generateUrl(
+            'sheet'    => $sheet,
+            'products' => $participantProductViews,
+            'locale'   => $locale,
+            'action'   => $this->generateUrl(
                 'event_sheet_handle_participant',
                 ['sheet' => $sheet->getId(), 'locale' => $locale, 'key' => $key]
             ),
         ]);
 
-        // todo: remove this to send to add form all participants product
-        $participantProductViews = $this->get('tactician.commandbus.query')->handle(
-            new ParticipantProductViewQuery($sheet, $locale)
-        );
-
-        $participantProductView = reset($participantProductViews);
-
-        if (false === $participantProductView) {
-            $participantProductView = null;
-        }
-        // /todo
-
         return $this->render('EventBundle:Participant:add.html.twig', [
-            'uid'                    => $key,
-            'form'                   => $form->createView(),
-            'sheet'                  => $sheet,
-            'participantProductView' => $participantProductView,
-            'backRoute'              => 'backToSheet',
+            'uid'                     => $key,
+            'form'                    => $form->createView(),
+            'sheet'                   => $sheet,
+            'participantProductViews' => $participantProductViews,
+            'backRoute'               => 'backToSheet',
         ]);
     }
 
@@ -115,17 +111,22 @@ class SheetParticipantController extends Controller
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
         $this->denyAccessUnlessGranted(SheetVoter::EDIT, $sheet);
 
-        if (!$this->get('Proximum\Vimeet\Domain\Sheet\Participant\AddParticipantChecker')->canAddParticipant($sheet)) {
+        if (!$this->get(AddParticipantChecker::class)->canAddParticipant($sheet)) {
             throw $this->createNotFoundException(
                 sprintf('This sheet %s can not buy anymore participant', $sheet->getId())
             );
         }
 
+        $participantProductViews = $this->get('tactician.commandbus.query')->handle(
+            new ParticipantProductViewQuery($sheet, $locale)
+        );
+
         $addParticipant = new Add($sheet, $locale, $this->getUser());
         $form           = $this->createForm(AddType::class, $addParticipant, [
-            'sheet'  => $sheet,
-            'locale' => $locale,
-            'action' => $this->generateUrl(
+            'sheet'    => $sheet,
+            'locale'   => $locale,
+            'products' => $participantProductViews,
+            'action'   => $this->generateUrl(
                 'event_sheet_handle_participant',
                 ['sheet' => $sheet->getId(), 'locale' => $locale, 'key' => $key]
             ),
@@ -154,17 +155,14 @@ class SheetParticipantController extends Controller
         $object       = $this->getParticipantObject($templateData, $key);
         $label        = $object->getLabel($locale, $sheet->getEvent()->getFallback());
 
-        // todo: remove this to send to add form all participants product
-        $participantProductViews = $this->get('tactician.commandbus.query')->handle(
-            new ParticipantProductViewQuery($sheet, $locale)
-        );
 
+        // To REMOVE
         $participantProductView = reset($participantProductViews);
 
         if (false === $participantProductView) {
             $participantProductView = null;
         }
-        // /todo
+        // To REMOVE
 
         $tipTranslationViewQuery = new TipTranslationViewQuery(
             $sheet->getType(),

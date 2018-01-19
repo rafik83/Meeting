@@ -10,56 +10,53 @@
 
 namespace Proximum\Vimeet\Application\Command\Participant;
 
+use Proximum\Vimeet\Domain\Model\Product;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\User;
 
 class Add
 {
-    /**
-     * @var Sheet
-     */
+    /** @var Sheet */
     public $sheet;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     public $locale;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     public $firstName;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     public $lastName;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     public $email;
 
-    /**
-     * @var bool
-     */
+    /** @var bool */
     public $owner;
 
-    /**
-     * @var User
-     */
+    /** @var User */
     public $adder;
 
     /**
-     * @param User   $adder
-     * @param Sheet  $sheet
-     * @param string $locale
+     * Product selected to add the new participant
+     * This product can be null as the package is not always passable
+     *
+     * @var Product|null
      */
-    public function __construct(Sheet $sheet, $locale, User $adder)
+    public $product;
+
+    /**
+     * @param Sheet        $sheet
+     * @param string       $locale
+     * @param User         $adder
+     * @param Product|null $product
+     */
+    public function __construct(Sheet $sheet, $locale, User $adder, Product $product = null)
     {
-        $this->sheet  = $sheet;
-        $this->locale = $locale;
-        $this->owner  = false;
-        $this->adder  = $adder;
+        $this->sheet   = $sheet;
+        $this->locale  = $locale;
+        $this->owner   = false;
+        $this->adder   = $adder;
+        $this->product = $product;
     }
 }
