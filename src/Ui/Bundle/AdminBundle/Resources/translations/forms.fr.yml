@@ -667,6 +667,7 @@ form.sheet_batch.children.generateInvoice.label: 'Générer facture'
 form.sheet_batch.children.group.label: Entité
 form.sheet_batch.children.pending.label: 'En attente'
 form.sheet_batch.children.printPdf.label: 'Imprimer en PDF'
+form.sheet_batch.children.refuse.label: Refuser
 form.sheet_batch.children.removeCatalog.label: 'Enlever du catalogue'
 form.sheet_batch.children.validate.label: Valider
 form.sheet_batch.children.validateComment.label: 'Laisser un commentaire (optionnel)'

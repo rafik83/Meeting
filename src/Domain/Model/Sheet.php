@@ -25,16 +25,18 @@ use Proximum\Vimeet\Domain\Trace\TraceableName;
  */
 class Sheet implements TraceableInterface
 {
-    const STATE_PENDING   = 'pending';
+    const STATE_PENDING = 'pending';
     const STATE_VALIDATED = 'validated';
-    const STATE_ACCEPTED  = 'accepted';
+    const STATE_ACCEPTED = 'accepted';
+    const STATE_REFUSED = 'refused';
 
     /**
      * "Etat de validation de la fiche"
      */
-    const STATE_VALIDATION_DRAFT     = 'draft';
-    const STATE_VALIDATION_PENDING   = 'pending';
+    const STATE_VALIDATION_DRAFT = 'draft';
+    const STATE_VALIDATION_PENDING = 'pending';
     const STATE_VALIDATION_VALIDATED = 'validated';
+    const STATE_VALIDATION_REFUSED = 'refused';
 
     /**
      * "Etat de validation des agendas des utilisateurs de la fiche"
