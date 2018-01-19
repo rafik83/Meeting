@@ -26,6 +26,9 @@ class BatchHandler
     /** @var BatchAcceptHandler */
     private $batchAcceptHandler;
 
+    /** @var BatchRefuseHandler */
+    private $batchRefuseHandler;
+
     /** @var BatchEnableDisableHandler */
     private $batchEnableDisableHandler;
 
@@ -60,6 +63,7 @@ class BatchHandler
      * @param BatchValidateHandler           $batchValidateHandler
      * @param BatchAssignHandler             $batchAssignHandler
      * @param BatchAcceptHandler             $batchAcceptHandler
+     * @param BatchRefuseHandler             $batchRefuseHandler
      * @param BatchEnableDisableHandler      $batchEnableDisableHandler
      * @param BatchCatalogHandler            $batchCatalogHandler
      * @param BatchDraftHandler              $batchDraftHandler
@@ -74,6 +78,7 @@ class BatchHandler
         BatchValidateHandler $batchValidateHandler,
         BatchAssignHandler $batchAssignHandler,
         BatchAcceptHandler $batchAcceptHandler,
+        BatchRefuseHandler $batchRefuseHandler,
         BatchEnableDisableHandler $batchEnableDisableHandler,
         BatchCatalogHandler $batchCatalogHandler,
         BatchDraftHandler $batchDraftHandler,
@@ -83,18 +88,19 @@ class BatchHandler
         BatchPendingHandler $batchPendingHandler,
         BatchPdfJobCreatorHandler $batchPdfJobCreatorHandler
     ) {
-        $this->sheetSearchAdapter             = $sheetSearchAdapter;
-        $this->batchValidateHandler           = $batchValidateHandler;
-        $this->batchAssignHandler             = $batchAssignHandler;
-        $this->batchAcceptHandler             = $batchAcceptHandler;
-        $this->batchEnableDisableHandler      = $batchEnableDisableHandler;
-        $this->batchCatalogHandler            = $batchCatalogHandler;
-        $this->batchDraftHandler              = $batchDraftHandler;
+        $this->sheetSearchAdapter = $sheetSearchAdapter;
+        $this->batchValidateHandler = $batchValidateHandler;
+        $this->batchAssignHandler = $batchAssignHandler;
+        $this->batchAcceptHandler = $batchAcceptHandler;
+        $this->batchRefuseHandler = $batchRefuseHandler;
+        $this->batchEnableDisableHandler = $batchEnableDisableHandler;
+        $this->batchCatalogHandler = $batchCatalogHandler;
+        $this->batchDraftHandler = $batchDraftHandler;
         $this->batchValidationValidateHandler = $batchValidationValidateHandler;
-        $this->batchGenerateInvoiceHandler    = $batchGenerateInvoiceHandler;
-        $this->batchAssignToGroupHandler      = $batchAssignToGroupHandler;
-        $this->batchPendingHandler            = $batchPendingHandler;
-        $this->batchPdfJobCreatorHandler      = $batchPdfJobCreatorHandler;
+        $this->batchGenerateInvoiceHandler = $batchGenerateInvoiceHandler;
+        $this->batchAssignToGroupHandler = $batchAssignToGroupHandler;
+        $this->batchPendingHandler = $batchPendingHandler;
+        $this->batchPdfJobCreatorHandler = $batchPdfJobCreatorHandler;
     }
 
     /**
@@ -126,6 +132,10 @@ class BatchHandler
 
         if ($batch->accept) {
             return $this->batchAcceptHandler->handle(new BatchAccept($batch->ids, $batch->admin));
+        }
+
+        if ($batch->refuse) {
+            return $this->batchRefuseHandler->handle(new BatchRefuse($batch->ids, $batch->admin));
         }
 
         if($batch->pending) {

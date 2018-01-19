@@ -222,6 +222,7 @@ class Sheet implements TraceableInterface
             self::STATE_ACCEPTED,
             self::STATE_PENDING,
             self::STATE_VALIDATED,
+            self::STATE_REFUSED,
         ];
     }
 

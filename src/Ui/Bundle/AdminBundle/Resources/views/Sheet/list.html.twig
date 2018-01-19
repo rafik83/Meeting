@@ -257,7 +257,8 @@
                     {
                         'pending': 'default',
                         'accepted': 'warning',
-                        'validated': 'success'
+                        'validated': 'success',
+                        'refused': 'danger',
                     },
                     sheet.hasTraceLabel ? ('admin.sheet.trace.' ~ sheet.traceAction)|trans({'%at%': sheet.traceAt|localizeddate('medium', 'short', app.request.locale, event.timeZone)}) ~ ' ' ~ (sheet.traceBy != null ? 'admin.sheet.trace.author'|trans({'%by%': sheet.traceBy}) : 'admin.sheet.trace.auto'|trans) : ''
                     ) }}
