@@ -80,7 +80,7 @@
 
 <div class="catalog__filters">
     <div class="select-all">
-        <span class="total-result">
+        <span class="total-result" title="{{ total }}">
             {{ 'catalog.sheet.result.total'|transchoice(total, {'%total%': total}) }}
         </span>
         {% if total > 0 %}
