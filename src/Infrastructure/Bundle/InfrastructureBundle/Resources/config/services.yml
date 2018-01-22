@@ -857,6 +857,7 @@ services:
         class: Proximum\Vimeet\Application\Command\Sheet\BatchRefuseHandler
         arguments:
             - '@vimeet_infrastructure.repository.sheet_repository'
+            - '@command.sheet.batch_enable_disable_handler'
             - '@adapter_batch_job_queue.batch_refuse_job_queue'
 
     command.sheet.batch_enable_disable_handler:

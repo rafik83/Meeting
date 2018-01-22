@@ -10,8 +10,8 @@
 
 namespace Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\Batch;
 
-use Proximum\Vimeet\Application\Command\Sheet\PostBatch\PostBatchAccept;
-use Proximum\Vimeet\Application\Command\Sheet\PostBatch\PostBatchAcceptHandler;
+use Proximum\Vimeet\Application\Command\Sheet\PostBatch\PostBatchRefuse;
+use Proximum\Vimeet\Application\Command\Sheet\PostBatch\PostBatchRefuseHandler;
 use Proximum\Vimeet\Domain\Repository\AdminRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
 use Symfony\Component\Console\Command\Command;
@@ -23,36 +23,30 @@ class BatchPostRefuseCommand extends Command
 {
     const NAME = 'vimeet:sheets:post-refuse';
 
-    /**
-     * @var AdminRepositoryInterface
-     */
+    /** @var AdminRepositoryInterface */
     private $adminRepository;
 
-    /**
-     * @var PostBatchAcceptHandler
-     */
-    private $postBatchAcceptHandler;
-
-    /**
-     * @var SheetRepositoryInterface
-     */
+    /** @var SheetRepositoryInterface */
     private $sheetRepository;
+
+    /** @var PostBatchRefuseHandler */
+    private $postBatchRefuseHandler;
 
     /**
      * @param AdminRepositoryInterface $adminRepository
      * @param SheetRepositoryInterface $sheetRepository
-     * @param PostBatchAcceptHandler   $postBatchAcceptHandler
+     * @param PostBatchRefuseHandler   $postBatchRefuseHandler
      */
     public function __construct(
         AdminRepositoryInterface $adminRepository,
         SheetRepositoryInterface $sheetRepository,
-        PostBatchAcceptHandler $postBatchAcceptHandler
+        PostBatchRefuseHandler $postBatchRefuseHandler
     ) {
         parent::__construct(self::NAME);
 
         $this->adminRepository = $adminRepository;
-        $this->postBatchAcceptHandler = $postBatchAcceptHandler;
         $this->sheetRepository = $sheetRepository;
+        $this->postBatchRefuseHandler = $postBatchRefuseHandler;
     }
 
     /**
@@ -81,6 +75,6 @@ class BatchPostRefuseCommand extends Command
             throw new \InvalidArgumentException('Admin not found.');
         }
 
-        $this->postBatchAcceptHandler->handle(new PostBatchAccept($sheets, $admin));
+        $this->postBatchRefuseHandler->handle(new PostBatchRefuse($sheets, $admin));
     }
 }
