@@ -75,6 +75,6 @@ class Add
         }
 
         $this->product = $productSelected;
-        $this->needToSelectProduct = count($products) > 1;
+        $this->needToSelectProduct = count($products) >= 1;
     }
 }
