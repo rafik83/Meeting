@@ -88,7 +88,7 @@ abstract class HappeningType extends AbstractType
                 'allow_delete'   => true,
             ])
             ->add('invitationCode', TextType::class, [
-                'required'       => false,
+                'required' => false,
             ])
         ;
     }

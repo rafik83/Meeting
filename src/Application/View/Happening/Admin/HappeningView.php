@@ -13,50 +13,35 @@ namespace Proximum\Vimeet\Application\View\Happening\Admin;
 class HappeningView
 {
 
-    /**
-     * @var int
-     */
+    /** @var int */
     public $id;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     public $title;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     public $categoryTitle;
 
-    /**
-     * @var \DateTimeInterface
-     */
+    /** @var \DateTimeInterface */
     public $begin;
 
-    /**
-     * @var \DateTimeInterface
-     */
+    /** @var \DateTimeInterface */
     public $end;
 
-    /**
-     * @var bool
-     */
+    /** @var bool */
     public $questionAllowed;
 
-    /**
-     * @var int|null
-     */
+    /** @var int|null */
     public $limit;
 
-    /**
-     * @var int
-     */
+    /** @var int */
     public $participations;
 
-    /**
-     * @var SpeakerView[]
-     */
+    /** @var SpeakerView[] */
     public $speakers;
+
+    /** @var bool */
+    public $isPrivate;
 
     /**
      * @param int                $id
@@ -68,17 +53,19 @@ class HappeningView
      * @param int|null           $limit
      * @param int                $participations
      * @param SpeakerView[]      $speakers
+     * @param bool               $isPrivate
      */
     public function __construct(
-        $id,
-        $title,
-        $categoryTitle,
+        int $id,
+        string $title,
+        string $categoryTitle,
         \DateTimeInterface $begin,
         \DateTimeInterface $end,
-        $questionAllowed,
-        $limit = null,
-        $participations,
-        array $speakers = []
+        bool $questionAllowed,
+        ?int $limit = null,
+        int $participations,
+        array $speakers = [],
+        bool $isPrivate
     ) {
         $this->id              = $id;
         $this->title           = $title;
@@ -89,6 +76,7 @@ class HappeningView
         $this->limit           = $limit;
         $this->participations  = $participations;
         $this->speakers        = $speakers;
+        $this->isPrivate       = $isPrivate;
     }
 
     /**

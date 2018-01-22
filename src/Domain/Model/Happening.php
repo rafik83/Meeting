@@ -361,7 +361,7 @@ class Happening implements TimeRangeInterface
     /**
      * @return null|string
      */
-    public function getInvitationCode()
+    public function getInvitationCode(): ?string
     {
         return $this->invitationCode;
     }
@@ -369,7 +369,7 @@ class Happening implements TimeRangeInterface
     /**
      * @return bool
      */
-    public function hasInvitationCode()
+    public function hasInvitationCode(): bool
     {
         return null !== $this->invitationCode;
     }
@@ -377,7 +377,7 @@ class Happening implements TimeRangeInterface
     /**
      * @return bool
      */
-    public function isPrivate()
+    public function isPrivate(): bool
     {
         return $this->hasInvitationCode();
     }

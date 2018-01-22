@@ -288,6 +288,7 @@ admin.happening.list.question: 'Question ?'
 admin.happening.list.speaker: Intervenants
 admin.happening.list.title: Titre
 admin.happening.menu.link: Programme
+admin.happening.private: 'Privé'
 admin.happening.title: Conférences
 admin.happening.update: Modifier
 admin.happening.updateTitle: 'Modifier une conférence'
