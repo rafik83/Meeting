@@ -115,7 +115,7 @@ class BatchCatalogHandler
             ]);
         }
 
-        return new BatchResult(count($sheets), $command->getMessage() . $message, $ignoredSheetsMessage);
+        return new BatchResult($sheets, $command->getMessage() . $message, $ignoredSheetsMessage);
     }
 
     /**

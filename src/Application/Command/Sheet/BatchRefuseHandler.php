@@ -44,16 +44,15 @@ class BatchRefuseHandler
     {
         $sheets = $this->sheetRepository->getSheetsById($batchRefuse->ids);
 
-        $sheetsId = array_map(
+        $batchDisable = new BatchEnableDisable($batchRefuse->ids, false, $batchRefuse->admin);
+        $batchDisableResult = $this->batchEnableDisableHandler->handle($batchDisable);
+
+        $disabledSheetsId = array_map(
             function (Sheet $sheet) {
                 return $sheet->getId();
             },
-            $sheets
+            $batchDisableResult->sheets
         );
-
-        $batchDisable = new BatchEnableDisable($sheetsId, false, $batchRefuse->admin);
-        $batchDisableResult = $this->batchEnableDisableHandler->handle($batchDisable);
-        $disabledSheetsId = $batchDisable->ids;
 
         if (!empty($disabledSheetsId)) {
             $this->sheetRepository->updateStateBySheetsId($disabledSheetsId, Sheet::STATE_REFUSED);
@@ -62,14 +61,14 @@ class BatchRefuseHandler
 
         if (!empty($batchDisableResult->ignoredSheetsMessage)) {
             return new BatchResult(
-                count($disabledSheetsId),
+                $batchDisableResult->sheets,
                 $batchRefuse->getMessage() . 'refuse.warning',
                 $batchDisableResult->ignoredSheetsMessage
             );
         }
 
         return new BatchResult(
-            count($sheetsId),
+            $sheets,
             $batchRefuse->getMessage() . 'refuse.success'
         );
     }

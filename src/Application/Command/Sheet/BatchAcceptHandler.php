@@ -59,6 +59,6 @@ class BatchAcceptHandler
             $this->batchJobQueue->createJob($batchAccept->ids, $batchAccept->admin);
         }
 
-        return new BatchResult(count($sheets), $batchAccept->getMessage() . 'accept.success');
+        return new BatchResult($sheets, $batchAccept->getMessage() . 'accept.success');
     }
 }

@@ -15,6 +15,7 @@ use Prophecy\Argument;
 use Proximum\Vimeet\Application\Adapter\BatchJobQueueInterface;
 use Proximum\Vimeet\Application\Command\Sheet\BatchEnableDisable;
 use Proximum\Vimeet\Application\Command\Sheet\BatchEnableDisableHandler;
+use Proximum\Vimeet\Application\Command\Sheet\BatchResult;
 use Proximum\Vimeet\Application\Components\Sheet\SheetInfoGuesser;
 use Proximum\Vimeet\Domain\Model\Admin;
 use Proximum\Vimeet\Domain\Model\Sheet;
@@ -22,7 +23,6 @@ use Proximum\Vimeet\Domain\Model\Type;
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Repository\MeetingRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
-use Proximum\Vimeet\Infrastructure\Adapter\DelayedEventDispatcher;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
 
 class BatchEnableDisableHandlerTest extends TestCase
@@ -63,7 +63,7 @@ class BatchEnableDisableHandlerTest extends TestCase
 
         $sheetRepository->updateEnableStateBySheetsId([1, 2, 3], false)->shouldBeCalled();
 
-        $batchJobQueue->createJob([1, 2, 3], $admin, ['state' => BatchEnableDisableHandler::STATE_DISABLE])->shouldBeCalled();
+        $batchJobQueue->createJob([1, 2, 3], $admin, ['state' => 'disable'])->shouldBeCalled();
 
         // Command
         $command = new BatchEnableDisable([1, 2, 3], false, $admin);
@@ -88,9 +88,11 @@ class BatchEnableDisableHandlerTest extends TestCase
         $sheet1 = $this->prophesize(Sheet::class);
         $sheet1->getId()->willReturn(1);
         $sheet1->getEvent()->willReturn($event);
+
         $sheet2 = $this->prophesize(Sheet::class);
         $sheet2->getId()->willReturn(2);
         $sheet2->getEvent()->willReturn($event);
+
         $sheet3 = $this->prophesize(Sheet::class);
         $sheet3->getId()->willReturn(3);
         $sheet3->getEvent()->willReturn($event);
@@ -111,17 +113,18 @@ class BatchEnableDisableHandlerTest extends TestCase
             ->countMeetingsOfSheetByIds([1, 2, 3])
             ->shouldBeCalled()
             ->willReturn([
-                1 => 2,
-                2 => 4,
-                3 => 1,
+                1 => 0, // Sheet 1 has not meeting
+                2 => 4, // Sheet 2 has meetings
+                3 => 1, // Sheet 3 has meetings
             ]);
 
-        $sheetInfoGuesser->guessSheetTitle(Argument::type(Sheet::class), 'fr')
-            ->shouldBeCalledTimes(3)->willReturn("SheetName");
+        $sheetInfoGuesser->guessSheetTitle($sheet1->reveal(), 'fr')->shouldNotBeCalled();
+        $sheetInfoGuesser->guessSheetTitle($sheet2->reveal(), 'fr')->shouldBeCalled()->willReturn("SheetTitle 2");
+        $sheetInfoGuesser->guessSheetTitle($sheet3->reveal(), 'fr')->shouldBeCalled()->willReturn("SheetTitle 3");
 
-        $sheetRepository->updateEnableStateBySheetsId([], false)->shouldNotBeCalled();
+        $sheetRepository->updateEnableStateBySheetsId([1], false)->shouldBeCalled();
 
-        $batchJobQueue->createJob([], $admin, ['state' => false])->shouldNotBeCalled();
+        $batchJobQueue->createJob([1], $admin, ['state' => 'disable'])->shouldBeCalled();
 
         // Command
         $command = new BatchEnableDisable([1, 2, 3], false, $admin);
@@ -133,7 +136,14 @@ class BatchEnableDisableHandlerTest extends TestCase
         );
 
         $result = $handler->handle($command);
-        $this->assertEquals(3, $result->count);
-        $this->assertEquals("SheetName, SheetName, SheetName", $result->ignoredSheetsMessage);
+
+        $this->assertEquals(
+            new BatchResult(
+                [$sheet1->reveal()],
+                'flash.admin.sheet_batch.disable.warning',
+                'SheetTitle 2, SheetTitle 3'
+            ),
+            $result
+        );
     }
 }

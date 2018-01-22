@@ -829,6 +829,7 @@ services:
     command.sheet.batch_generate_invoice_handler:
         class: Proximum\Vimeet\Application\Command\Sheet\BatchGenerateInvoiceHandler
         arguments:
+            - '@vimeet_infrastructure.repository.sheet_repository'
             - '@adapter.job_queue_adapter'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Sheet\BatchGenerateInvoice }
@@ -5465,6 +5466,7 @@ services:
     command.sheet.batch_pdf_job_creator_handler:
         class: Proximum\Vimeet\Application\Command\Sheet\BatchPdfJobCreatorHandler
         arguments:
+            - '@vimeet_infrastructure.repository.sheet_repository'
             - '@adapter.job_queue_adapter'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Sheet\BatchPdfJobCreator }

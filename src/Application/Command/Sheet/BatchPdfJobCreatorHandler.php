@@ -11,18 +11,24 @@
 namespace Proximum\Vimeet\Application\Command\Sheet;
 
 use Proximum\Vimeet\Application\Adapter\JobQueueInterface;
+use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
 
 class BatchPdfJobCreatorHandler
 {
+    /** @var SheetRepositoryInterface */
+    private $sheetRepository;
+
     /** @var JobQueueInterface */
     private $jobQueue;
 
     /**
-     * @param JobQueueInterface $jobQueue
+     * @param SheetRepositoryInterface $sheetRepository
+     * @param JobQueueInterface        $jobQueue
      */
-    public function __construct(JobQueueInterface $jobQueue)
+    public function __construct(SheetRepositoryInterface $sheetRepository, JobQueueInterface $jobQueue)
     {
         $this->jobQueue = $jobQueue;
+        $this->sheetRepository = $sheetRepository;
     }
 
     /**
@@ -32,6 +38,8 @@ class BatchPdfJobCreatorHandler
      */
     public function handle(BatchPdfJobCreator $batchPdfJobCreator): BatchResult
     {
+        $sheets = $this->sheetRepository->findByIds($batchPdfJobCreator->sheetIds);
+
         $this->jobQueue->printSheetsPdf(
             $batchPdfJobCreator->event,
             $batchPdfJobCreator->sheetIds,
@@ -41,7 +49,7 @@ class BatchPdfJobCreatorHandler
         );
 
         return new BatchResult(
-            count($batchPdfJobCreator->sheetIds),
+            $sheets,
             $batchPdfJobCreator->getMessage() . 'printPdf.success'
         );
     }

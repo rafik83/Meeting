@@ -12,9 +12,10 @@ namespace Proximum\Vimeet\Application\Command\Sheet;
 
 class BatchResult
 {
-    /**
-     * @var int
-     */
+    /** @var array */
+    public $sheets;
+
+    /** @var int */
     public $count;
 
     /**
@@ -25,21 +26,22 @@ class BatchResult
     public $message;
 
     /**
+     * Sheets title joined by a comma
+     *
      * @var string
      */
     public $ignoredSheetsMessage;
 
     /**
-     * BatchResult constructor.
-     *
-     * @param int    $count
+     * @param array  $sheets
      * @param string $message
      * @param string $ignoredSheetsMessage
      */
-    public function __construct($count, $message, $ignoredSheetsMessage = '')
+    public function __construct(array $sheets, $message, $ignoredSheetsMessage = '')
     {
-        $this->count                = $count;
-        $this->message              = $message;
+        $this->sheets = $sheets;
+        $this->count = count($sheets);
+        $this->message = $message;
         $this->ignoredSheetsMessage = $ignoredSheetsMessage;
     }
 }

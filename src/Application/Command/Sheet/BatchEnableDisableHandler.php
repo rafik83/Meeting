@@ -66,11 +66,12 @@ class BatchEnableDisableHandler
      *
      * @return BatchResult
      */
-    public function handle(BatchEnableDisable $batchEnableDisable)
+    public function handle(BatchEnableDisable $batchEnableDisable): BatchResult
     {
-        $sheets               = $this->sheetRepository->getSheetsById($batchEnableDisable->ids);
-        $message              = ($batchEnableDisable->state === true) ? 'enable.success' : 'disable.success';
-        $ignoredSheets        = [];
+        $sheets = $this->sheetRepository->getSheetsById($batchEnableDisable->ids);
+        $message = ($batchEnableDisable->state === true) ? 'enable.success' : 'disable.success';
+        $processedSheets = [];
+        $ignoredSheets = [];
         $ignoredSheetsMessage = '';
 
         $meetings = $this->meetingRepository->countMeetingsOfSheetByIds($batchEnableDisable->ids);
@@ -85,6 +86,8 @@ class BatchEnableDisableHandler
                 ) {
                     $ignoredSheets[] = $sheet;
                     $this->excludeSheetFromBatch($batchEnableDisable, $index);
+                } else {
+                    $processedSheets[] = $sheet;
                 }
             }
         }
@@ -112,7 +115,7 @@ class BatchEnableDisableHandler
                 }, $ignoredSheets));
         }
 
-        return new BatchResult(count($sheets), $batchEnableDisable->getMessage() . $message, $ignoredSheetsMessage);
+        return new BatchResult($processedSheets, $batchEnableDisable->getMessage() . $message, $ignoredSheetsMessage);
     }
 
     /**
