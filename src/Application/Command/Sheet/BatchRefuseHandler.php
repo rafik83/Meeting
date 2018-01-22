@@ -19,34 +19,58 @@ class BatchRefuseHandler
     /** @var SheetRepositoryInterface */
     private $sheetRepository;
 
+    /** @var BatchEnableDisableHandler */
+    private $batchEnableDisableHandler;
+
     /** @var BatchRefuseJobQueue */
     private $batchRefuseJobQueue;
 
     /**
-     * @param SheetRepositoryInterface $sheetRepository
-     * @param BatchRefuseJobQueue      $batchRefuseJobQueue
+     * @param SheetRepositoryInterface  $sheetRepository
+     * @param BatchEnableDisableHandler $batchEnableDisableHandler
+     * @param BatchRefuseJobQueue       $batchRefuseJobQueue
      */
     public function __construct(
         SheetRepositoryInterface $sheetRepository,
+        BatchEnableDisableHandler $batchEnableDisableHandler,
         BatchRefuseJobQueue $batchRefuseJobQueue
     ) {
         $this->sheetRepository = $sheetRepository;
         $this->batchRefuseJobQueue = $batchRefuseJobQueue;
+        $this->batchEnableDisableHandler = $batchEnableDisableHandler;
     }
 
     public function handle(BatchRefuse $batchRefuse)
     {
         $sheets = $this->sheetRepository->getSheetsById($batchRefuse->ids);
 
-        if (!empty($batchRefuse->ids)) {
-            $this->sheetRepository->updateStateBySheetsId(
-                $batchRefuse->ids,
-                Sheet::STATE_REFUSED
-            );
+        $sheetsId = array_map(
+            function (Sheet $sheet) {
+                return $sheet->getId();
+            },
+            $sheets
+        );
 
-            $this->batchRefuseJobQueue->createJob($batchRefuse->ids, $batchRefuse->admin);
+        $batchDisable = new BatchEnableDisable($sheetsId, false, $batchRefuse->admin);
+        $batchDisableResult = $this->batchEnableDisableHandler->handle($batchDisable);
+        $disabledSheetsId = $batchDisable->ids;
+
+        if (!empty($disabledSheetsId)) {
+            $this->sheetRepository->updateStateBySheetsId($disabledSheetsId, Sheet::STATE_REFUSED);
+            $this->batchRefuseJobQueue->createJob($disabledSheetsId, $batchRefuse->admin);
         }
 
-        return new BatchResult(count($sheets), $batchRefuse->getMessage() . 'refuse.success');
+        if (!empty($batchDisableResult->ignoredSheetsMessage)) {
+            return new BatchResult(
+                count($disabledSheetsId),
+                $batchRefuse->getMessage() . 'refuse.warning',
+                $batchDisableResult->ignoredSheetsMessage
+            );
+        }
+
+        return new BatchResult(
+            count($sheetsId),
+            $batchRefuse->getMessage() . 'refuse.success'
+        );
     }
 }
