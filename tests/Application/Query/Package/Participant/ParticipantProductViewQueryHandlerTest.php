@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2016 Proximum
+ * Copyright (C)a Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -11,9 +11,13 @@
 namespace Proximum\Vimeet\Tests\Application\Query\Package\Participant;
 
 use Doctrine\Common\Collections\ArrayCollection;
+use Prophecy\Prophecy\ObjectProphecy;
+use Proximum\Vimeet\Application\Components\Package\ProductByParticipantGetter;
 use Proximum\Vimeet\Application\Query\Package\Participant\ParticipantProductViewQuery;
 use Proximum\Vimeet\Application\Query\Package\Participant\ParticipantProductViewQueryHandler;
 use Proximum\Vimeet\Application\View\Package\ParticipantProductView;
+use Proximum\Vimeet\Domain\Cart\Cart;
+use Proximum\Vimeet\Domain\Cart\CartManager;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Package;
 use Proximum\Vimeet\Domain\Model\Product;
@@ -29,6 +33,22 @@ use PHPUnit\Framework\TestCase;
 
 class ParticipantProductViewQueryHandlerTest extends TestCase
 {
+    /** @var ObjectProphecy */
+    private $includedParticipantGuesser;
+
+    /** @var ObjectProphecy */
+    private $productByParticipantGetter;
+
+    /** @var ObjectProphecy */
+    private $cartManager;
+
+    public function setUp()
+    {
+        $this->includedParticipantGuesser = $this->prophesize(IncludedParticipantGuesser::class);
+        $this->productByParticipantGetter = $this->prophesize(ProductByParticipantGetter::class);
+        $this->cartManager = $this->prophesize(CartManager::class);
+    }
+
     /**
      * Test included participant remaining > 0
      */
@@ -69,14 +89,29 @@ class ParticipantProductViewQueryHandlerTest extends TestCase
         $sheet = new Sheet($event, $type, [], new User('user@vimeet.com', 'salt', 'password', 'fr'), $date);
         $participant = ParticipantFactory::create($sheet);
         $sheet->addParticipant($participant);
+        $this->setPropertyValue($participant, 'id', 7331);
 
-        $includedParticipantGuesser = $this->prophesize(IncludedParticipantGuesser::class);
+        $cart = $this->prophesize(Cart::class);
+        $productParticipants = [
+            7331 => null,
+        ];
+        $this->cartManager->getCart($sheet)->shouldBeCalled()->willReturn($cart->reveal());
+        $this->productByParticipantGetter
+            ->getFromCart($cart->reveal())
+            ->shouldBeCalled()
+            ->willReturn($productParticipants)
+        ;
 
-        $handler = new ParticipantProductViewQueryHandler($includedParticipantGuesser->reveal());
-
-        $includedParticipantGuesser->getIncludedParticipantViews($sheet)->shouldBeCalled()->willReturn(
-            [new IncludedParticipantView($participantProduct, 2, 1)]
+        $handler = new ParticipantProductViewQueryHandler(
+            $this->includedParticipantGuesser->reveal(),
+            $this->productByParticipantGetter->reveal(),
+            $this->cartManager->reveal()
         );
+
+        $this->includedParticipantGuesser
+            ->getIncludedParticipantViews($sheet)
+            ->shouldBeCalled()
+            ->willReturn([new IncludedParticipantView($participantProduct, 2)]);
 
         $expectedParticipantProductViews = [
             new ParticipantProductView(
@@ -87,7 +122,9 @@ class ParticipantProductViewQueryHandlerTest extends TestCase
                 'EUR',
                 Event::VAT_MODE_ET,
                 2,
-                0
+                0,
+                true,
+                false
             ),
         ];
 
@@ -134,14 +171,36 @@ class ParticipantProductViewQueryHandlerTest extends TestCase
         $sheet = new Sheet($event, $type, [], new User('user@vimeet.com', 'salt', 'password', 'fr'), $date);
         $participant = ParticipantFactory::create($sheet);
         $sheet->addParticipant($participant);
+        $this->setPropertyValue($participant, 'id', 7331);
 
-        $includedParticipantGuesser = $this->prophesize(IncludedParticipantGuesser::class);
+        $cart = $this->prophesize(Cart::class);
+        $productParticipants = [
+            7331 => $participantProduct,
+        ];
+        $this->cartManager->getCart($sheet)->shouldBeCalled()->willReturn($cart->reveal());
+        $this->productByParticipantGetter
+            ->getFromCart($cart->reveal())
+            ->shouldBeCalled()
+            ->willReturn($productParticipants)
+        ;
 
-        $handler = new ParticipantProductViewQueryHandler($includedParticipantGuesser->reveal());
-
-        $includedParticipantGuesser->getIncludedParticipantViews($sheet)->shouldBeCalled()->willReturn(
-            [new IncludedParticipantView(Product::createParticipant($event, 'My participant product', 49, 2), 1, 0)]
+        $handler = new ParticipantProductViewQueryHandler(
+            $this->includedParticipantGuesser->reveal(),
+            $this->productByParticipantGetter->reveal(),
+            $this->cartManager->reveal()
         );
+
+        $this->includedParticipantGuesser
+            ->getIncludedParticipantViews($sheet)
+            ->shouldBeCalled()
+            ->willReturn(
+                [
+                    1337 => new IncludedParticipantView(
+                        Product::createParticipant($event, 'My participant product', 49, 2),
+                        1
+                    )
+                ]
+            );
 
         $expectedParticipantProductViews = [
             new ParticipantProductView(
@@ -152,7 +211,101 @@ class ParticipantProductViewQueryHandlerTest extends TestCase
                 'EUR',
                 Event::VAT_MODE_ET,
                 2,
-                0
+                1,
+                true,
+                false
+            ),
+        ];
+        $participantProductViews = $handler->handle(new ParticipantProductViewQuery($sheet, $locale));
+
+        $this->assertEquals($expectedParticipantProductViews, $participantProductViews);
+    }
+
+    /**
+     * Test not buyable anymore
+     */
+    public function testNotBuyableParticipantProductHandle()
+    {
+        $locale = 'fr';
+        $date = new \DateTime();
+
+        $event = EventFactory::createEvent();
+
+        $plan = Product::createPlan($event, 'My plan', '', 99, 0, 0);
+        $participantProduct = Product::createParticipant($event, 'Paying participant product', 79, 2);
+        $this->setPropertyValue($participantProduct, 'id', 1337);
+        $participantProductTranslationFr = new ProductTranslation(
+            $participantProduct,
+            $locale,
+            'Participant supplémentaire payant',
+            '',
+            'Description du produit',
+            '',
+            ''
+        );
+
+        $translations = new ArrayCollection();
+        $translations[$locale] = $participantProductTranslationFr;
+        $participantProduct->setTranslations($translations);
+
+        $package = new Package($event, 'Package', $date);
+        $package->setPlans([$plan]);
+        $package->setParticipants([$participantProduct]);
+        $package->enable(true, true, false);
+
+        $type = new Type($event);
+        $type->setPackage($package);
+
+        $sheet = new Sheet($event, $type, [], new User('user@vimeet.com', 'salt', 'password', 'fr'), $date);
+        $participant1 = ParticipantFactory::create($sheet);
+        $participant2 = ParticipantFactory::create($sheet);
+        $sheet->addParticipant($participant1);
+        $sheet->addParticipant($participant2);
+        $this->setPropertyValue($participant1, 'id', 7331);
+        $this->setPropertyValue($participant2, 'id', 7332);
+
+        $cart = $this->prophesize(Cart::class);
+        $productParticipants = [
+            7331 => $participantProduct,
+            7332 => $participantProduct,
+        ];
+        $this->cartManager->getCart($sheet)->shouldBeCalled()->willReturn($cart->reveal());
+        $this->productByParticipantGetter
+            ->getFromCart($cart->reveal())
+            ->shouldBeCalled()
+            ->willReturn($productParticipants)
+        ;
+
+        $handler = new ParticipantProductViewQueryHandler(
+            $this->includedParticipantGuesser->reveal(),
+            $this->productByParticipantGetter->reveal(),
+            $this->cartManager->reveal()
+        );
+
+        $this->includedParticipantGuesser
+            ->getIncludedParticipantViews($sheet)
+            ->shouldBeCalled()
+            ->willReturn(
+                [
+                    1337 => new IncludedParticipantView(
+                        Product::createParticipant($event, 'My participant product', 49, 2),
+                        1
+                    )
+                ]
+            );
+
+        $expectedParticipantProductViews = [
+            new ParticipantProductView(
+                1337,
+                'Participant supplémentaire payant',
+                'Description du produit',
+                79,
+                'EUR',
+                Event::VAT_MODE_ET,
+                2,
+                1,
+                false,
+                false
             ),
         ];
         $participantProductViews = $handler->handle(new ParticipantProductViewQuery($sheet, $locale));
