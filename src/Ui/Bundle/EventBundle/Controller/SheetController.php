@@ -45,7 +45,7 @@ class SheetController extends Controller
      *
      * @return RedirectResponse
      */
-    public function redirectTosheetAction(Request $request, EventDomain $eventDomain, $locale = null)
+    public function redirectToSheetAction(Request $request, EventDomain $eventDomain, $locale = null)
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
 
