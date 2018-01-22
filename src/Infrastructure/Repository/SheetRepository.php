@@ -960,6 +960,25 @@ class SheetRepository implements SheetRepositoryInterface
     /**
      * {@inheritdoc}
      */
+    public function refuseBySheetsId(array $ids)
+    {
+        $queryBuilder = $this->entityManager
+            ->createQueryBuilder()
+            ->update(Sheet::class, 'sheet')
+            ->set('sheet.state', ':state')
+            ->setParameter('state', Sheet::STATE_REFUSED)
+            ->set('sheet.inCatalog', ':inCatalog')
+            ->setParameter('inCatalog', false)
+            ->where('sheet.id IN (:ids)')
+            ->setParameter('ids', $ids)
+        ;
+
+        return $queryBuilder->getQuery()->execute();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function getBySheetTemplate(SheetTemplate $sheetTemplate)
     {
         $queryBuilder = $this

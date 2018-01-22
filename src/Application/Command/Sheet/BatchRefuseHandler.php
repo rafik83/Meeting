@@ -55,7 +55,7 @@ class BatchRefuseHandler
         );
 
         if (!empty($disabledSheetsId)) {
-            $this->sheetRepository->updateStateBySheetsId($disabledSheetsId, Sheet::STATE_REFUSED);
+            $this->sheetRepository->refuseBySheetsId($disabledSheetsId);
             $this->batchRefuseJobQueue->createJob($disabledSheetsId, $batchRefuse->admin);
         }
 

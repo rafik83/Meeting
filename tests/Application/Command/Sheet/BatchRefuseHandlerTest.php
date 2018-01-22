@@ -46,7 +46,7 @@ class BatchRefuseHandlerTest extends TestCase
             ->shouldBeCalled()
             ->willReturn([$sheet1->reveal(), $sheet2->reveal()])
         ;
-        $sheetRepository->updateStateBySheetsId([1337, 2001], 'refused')->shouldBeCalled();
+        $sheetRepository->refuseBySheetsId([1337, 2001])->shouldBeCalled();
 
         $batchRefuseJobQueue = $this->prophesize(BatchRefuseJobQueue::class);
         $batchRefuseJobQueue->createJob([1337, 2001], $admin->reveal());
@@ -88,7 +88,7 @@ class BatchRefuseHandlerTest extends TestCase
             ->shouldBeCalled()
             ->willReturn([$sheet1->reveal(), $sheet2->reveal()])
         ;
-        $sheetRepository->updateStateBySheetsId([1337], 'refused')->shouldBeCalled();
+        $sheetRepository->refuseBySheetsId([1337])->shouldBeCalled();
 
         $batchRefuseJobQueue = $this->prophesize(BatchRefuseJobQueue::class);
         $batchRefuseJobQueue->createJob([1337], $admin->reveal());
