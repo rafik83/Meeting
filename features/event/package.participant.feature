@@ -73,6 +73,11 @@ Feature: Buy participant with from the funnel
     And I should see "Pass Jour 3"
     Then I fill in the following:
       | email | user-2@example.net |
+    And I press "sheet.participant.sendInvite"
+    Then I should be on this page "/fr/sheet/1/package/step/1"
+    And I should see "validators.participant.mustSelectProduct"
+    Then I fill in the following:
+      | email | user-2@example.net |
     And I select "0" from "add_participant[product]"
     # Pass Jour 3
     And I press "sheet.participant.sendInvite"
