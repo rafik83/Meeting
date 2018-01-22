@@ -949,10 +949,13 @@ class SheetRepository implements SheetRepositoryInterface
             ->createQueryBuilder()
             ->update(Sheet::class, 'sheet')
             ->set('sheet.state', ':state')
+            ->setParameter('state', $state)
+            ->set('sheet.enable', ':enabled')
+            ->setParameter('enabled', true)
             ->where('sheet.id IN (:ids)')
-            ->andWhere('sheet.state != :state')
             ->setParameter('ids', $ids)
-            ->setParameter('state', $state);
+            ->andWhere('sheet.state != :state')
+        ;
 
         return $queryBuilder->getQuery()->execute();
     }

@@ -48,6 +48,8 @@ interface SheetRepositoryInterface
     public function updateEnableStateBySheetsId(array $ids, $state);
 
     /**
+     * Change state and enable Sheet if disabled
+     *
      * @param int[]  $ids
      * @param string $state
      */
