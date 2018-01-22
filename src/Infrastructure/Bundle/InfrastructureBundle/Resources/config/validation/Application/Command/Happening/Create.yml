@@ -22,3 +22,7 @@ Proximum\Vimeet\Application\Command\Happening\Create:
             - Type: int
             - Range:
                 min: 0
+        invicationCode:
+            - Length:
+                min: 4
+                maxMessage: "validators.invitationCode.length.min"

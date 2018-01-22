@@ -45,7 +45,7 @@ class UpdateHandlerTest extends TestCase
         $category->setTranslation($catTranslation2);
         $previousType = $this->prophesize(Type::class);
 
-        $happening             = new Happening($event, $begin, $end, $category, [$previousType->reveal()], true, 10);
+        $happening             = new Happening($event, $begin, $end, $category, [$previousType->reveal()], true, 10, 'toto');
         $happeningTranslation  = new Happening\HappeningTranslation($happening, 'fr', 'truc', 'bidule');
         $happeningTranslation2 = new Happening\HappeningTranslation($happening, 'en', 'trac', 'machin');
 
@@ -67,7 +67,8 @@ class UpdateHandlerTest extends TestCase
             $newCategory,
             [$newType->reveal()],
             false,
-            null
+            null,
+            'titi'
         );
         $expectedTranslation  = new Happening\HappeningTranslation($expectedSubEvent, 'fr', 'test', 'ok');
         $expectedTranslation2 = new Happening\HappeningTranslation($expectedSubEvent, 'en', 'tset', 'ko');
@@ -102,6 +103,7 @@ class UpdateHandlerTest extends TestCase
                 'description' => 'ko',
             ],
         ];
+        $update->invitationCode = 'titi';
 
         $handler = new UpdateHandler($happeningRepository->reveal(), $eventDispatcher->reveal());
         $handler->handle($update);

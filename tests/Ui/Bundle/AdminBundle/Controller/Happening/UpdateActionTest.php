@@ -150,6 +150,7 @@ class UpdateActionTest extends TestCase
         $this->event->getLocales()->willReturn([]);
         $this->happening->getSpeakers()->willReturn([]);
         $this->happening->getTypes()->willReturn([]);
+        $this->happening->getInvitationCode()->shouldBeCalled()->willReturn('toto');
 
         $form = $this->prophesize(Form::class);
         $formView = $this->prophesize(FormView::class);
@@ -210,6 +211,7 @@ class UpdateActionTest extends TestCase
         $this->event->getLocales()->willReturn([]);
         $this->happening->getSpeakers()->willReturn([]);
         $this->happening->getTypes()->willReturn([]);
+        $this->happening->getInvitationCode()->shouldBeCalled()->willReturn('toto');
 
         $form = $this->prophesize(Form::class);
         $update = new Update($this->happening->reveal());

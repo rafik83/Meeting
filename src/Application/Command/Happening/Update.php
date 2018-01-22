@@ -28,6 +28,7 @@ class Update extends AbstractHappeningCommand
         $this->end              = $happening->getEnd();
         $this->questionAllowed  = $happening->isQuestionAllowed();
         $this->limitParticipant = $happening->getLimitParticipant();
+        $this->invitationCode   = $happening->getInvitationCode();
 
         foreach ($happening->getEvent()->getLocales() as $locale) {
             if ($happening->getTranslations()->containsKey($locale)) {

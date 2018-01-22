@@ -38,7 +38,8 @@ class CreateHandler
             $create->category,
             $create->types,
             $create->questionAllowed,
-            $create->limitParticipant
+            $create->limitParticipant,
+            $create->invitationCode
         );
 
         foreach ($create->translations as $locale => $translation) {

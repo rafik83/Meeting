@@ -59,9 +59,10 @@ class Happening implements TimeRangeInterface
     /** @var ArrayCollection of Type that can access this Happening */
     private $types;
 
+    /** @var null|string */
+    private $invitationCode;
+
     /**
-     * Happening constructor.
-     *
      * @param Event              $event
      * @param \DateTimeInterface $begin
      * @param \DateTimeInterface $end
@@ -69,6 +70,7 @@ class Happening implements TimeRangeInterface
      * @param array              $types
      * @param bool               $questionAllowed
      * @param int|null           $limitParticipant
+     * @param null|string        $invitationCode
      */
     public function __construct(
         Event $event,
@@ -76,8 +78,9 @@ class Happening implements TimeRangeInterface
         \DateTimeInterface $end,
         CategoryHappening $category,
         array $types,
-        $questionAllowed = false,
-        $limitParticipant = null
+        ?bool $questionAllowed = false,
+        ?int $limitParticipant = null,
+        ?string $invitationCode = null
     ) {
         $this->event            = $event;
         $this->begin            = $begin;
@@ -90,6 +93,7 @@ class Happening implements TimeRangeInterface
         $this->types            = new ArrayCollection($types);
         $this->questionAllowed  = $questionAllowed;
         $this->limitParticipant = $limitParticipant;
+        $this->invitationCode   = $invitationCode;
     }
 
     /**
@@ -203,14 +207,16 @@ class Happening implements TimeRangeInterface
      * @param array              $types
      * @param bool               $questionAllowed
      * @param int|null           $limitParticipant
+     * @param null|string        $invitationCode
      */
     public function update(
         \DateTimeInterface $begin,
         \DateTimeInterface $end,
         CategoryHappening $category,
         array $types,
-        $questionAllowed,
-        $limitParticipant
+        bool $questionAllowed,
+        ?int $limitParticipant,
+        ?string $invitationCode
     ) {
         $this->begin            = $begin;
         $this->end              = $end;
@@ -218,6 +224,7 @@ class Happening implements TimeRangeInterface
         $this->category         = $category;
         $this->questionAllowed  = $questionAllowed;
         $this->limitParticipant = $limitParticipant;
+        $this->invitationCode   = $invitationCode;
     }
 
     /**
@@ -349,5 +356,29 @@ class Happening implements TimeRangeInterface
     public function getTypes(): array
     {
         return $this->types->toArray();
+    }
+
+    /**
+     * @return null|string
+     */
+    public function getInvitationCode()
+    {
+        return $this->invitationCode;
+    }
+
+    /**
+     * @return bool
+     */
+    public function hasInvitationCode()
+    {
+        return null !== $this->invitationCode;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isPrivate()
+    {
+        return $this->hasInvitationCode();
     }
 }

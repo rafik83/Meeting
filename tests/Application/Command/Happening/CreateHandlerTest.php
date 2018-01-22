@@ -39,7 +39,7 @@ class CreateHandlerTest extends TestCase
         $type = $this->prophesize(Type::class);
 
         // Expected
-        $expectedSubEvent     = new Happening($event, $begin, $end, $category, [$type->reveal()], true, 10);
+        $expectedSubEvent     = new Happening($event, $begin, $end, $category, [$type->reveal()], true, 10, 'toto');
         $expectedTranslation  = new Happening\HappeningTranslation($expectedSubEvent, 'fr', 'truc', 'bidule');
         $expectedTranslation2 = new Happening\HappeningTranslation($expectedSubEvent, 'en', 'trac', 'machin');
 
@@ -68,6 +68,7 @@ class CreateHandlerTest extends TestCase
                 'description' => 'machin',
             ],
         ];
+        $create->invitationCode = 'toto';
 
         $handler = new CreateHandler($happeningRepository->reveal());
         $handler->handle($create);
