@@ -167,7 +167,8 @@ class SheetParticipantController extends Controller
         list ($nomenclatures, $participants, $taggedData) = $this->get('sheet.infos_helper')->getInfos(
             $sheet,
             $userDomain->getUser(),
-            $locale
+            $locale,
+            false
         );
         $templateData = $this->get('template.template_data_factory')->createFromSheet($sheet, $locale);
         $object       = $this->getParticipantObject($templateData, $key);
@@ -293,7 +294,8 @@ class SheetParticipantController extends Controller
         list ($nomenclatures, $participants, $taggedData) = $this->get('sheet.infos_helper')->getInfos(
             $sheet,
             $this->getUser(),
-            $locale
+            $locale,
+            false
         );
         $templateData = $this->get('template.template_data_factory')->createFromSheet($sheet, $locale);
         $object       = $this->getParticipantObject($templateData, $key);

@@ -184,7 +184,7 @@ class PackageController extends Controller
             }
         }
 
-        $view = $this->get('tactician.commandbus.query')->handle(
+        $view = $this->get('query.package.package_view_query_handler')->handle(
             new PackageViewQuery(
                 $funnel,
                 $currentStep,
@@ -268,7 +268,7 @@ class PackageController extends Controller
             if ($form_remove->isValid()) {
                 try {
                     /** @var RemoveResult $result */
-                    $result = $this->get('tactician.commandbus')->handle($removeParticipant);
+                    $result = $this->get('command.participant.remove_handler')->handle($removeParticipant);
 
                     if (!$result->hasParticipantWithMeeting()) {
                         $redirect = true;
@@ -292,7 +292,7 @@ class PackageController extends Controller
         }
 
         $cardListViewQuery = new CardListViewQuery($sheet, $this->getUser(), $locale, false);
-        $participants      = $this->get('tactician.commandbus.query')->handle($cardListViewQuery);
+        $participants      = $this->get('query.participant.card_list_view_query_handler')->handle($cardListViewQuery);
 
         return [
             $displayAddParticipantForm,

@@ -47,13 +47,16 @@ class SheetInfosHelper
      * @param Sheet  $sheet
      * @param User   $fromUser
      * @param string $locale
+     * @param bool   $editableParticipantProfile
      *
      * @return array
      */
-    public function getInfos(Sheet $sheet, User $fromUser, $locale)
+    public function getInfos(Sheet $sheet, User $fromUser, $locale, bool $editableParticipantProfile = true)
     {
         $nomenclatures = $this->nomenclatureRepository->findByEvent($sheet->getEvent());
-        $participants  = $this->cardListViewQueryHandler->handle(new CardListViewQuery($sheet, $fromUser, $locale));
+        $participants  = $this->cardListViewQueryHandler->handle(
+            new CardListViewQuery($sheet, $fromUser, $locale, $editableParticipantProfile)
+        );
 
         $registrationTemplateData = $this->templateDataFactory->createRegistrationFromSheet($sheet, $locale);
 
