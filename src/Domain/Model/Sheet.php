@@ -693,6 +693,14 @@ class Sheet implements TraceableInterface
     /**
      * @return bool
      */
+    public function isRefused()
+    {
+        return self::STATE_REFUSED === $this->state;
+    }
+
+    /**
+     * @return bool
+     */
     public function isCompleted()
     {
         return 100 === $this->completeness;

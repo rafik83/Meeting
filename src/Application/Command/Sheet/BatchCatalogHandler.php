@@ -85,7 +85,7 @@ class BatchCatalogHandler
                         $this->excludeSheetFromBatch($command, $index);
                     }
                 } elseif ($command->state === true) {
-                    if (!$sheet->isEnabled()) {
+                    if (!$sheet->isEnabled() || $sheet->isRefused()) {
                         $ignoredSheets[] = $sheet;
                         $this->excludeSheetFromBatch($command, $index);
                     }

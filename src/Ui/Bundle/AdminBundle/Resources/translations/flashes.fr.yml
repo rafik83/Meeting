@@ -75,7 +75,7 @@ flash.admin.sheet_batch.assign.success: '{0} Aucune fiche n''a été assignée.|
 flash.admin.sheet_batch.assignToGroup.ignoredSheets: 'Les fiches suivantes: %sheets% ne peuvent pas être assignées à l''entité car elles ont déjà une entité'
 flash.admin.sheet_batch.assignToGroup.success: '{0} Aucune fiche n''a été assignée à l''entité.|{1} Une fiche a été assignée à l''entité|]1,Inf[ %count% fiches ont été assignées à l''entité'
 flash.admin.sheet_batch.catalog.add.success: '{0} aucune fiche n''a été ajoutée au catalogue.|{1} 1 fiche a été ajoutée au catalogue|]1,Inf[ %count% fiches ont été ajoutées au catalogue'
-flash.admin.sheet_batch.catalog.add.warning: 'Les fiches suivantes: %sheets% ne peuvent pas être ajoutées au catalogue car elles sont désactivées. L''action s''effectue quand même pour les autres fiches non impactées par ce cas.'
+flash.admin.sheet_batch.catalog.add.warning: 'Les fiches suivantes: %sheets% ne peuvent pas être ajoutées au catalogue car elles sont désactivées ou refusées. L''action s''effectue quand même pour les autres fiches non impactées par ce cas.'
 flash.admin.sheet_batch.catalog.remove.success: '{0} aucune fiche n''a été enlevé du catalogue.|{1} 1 fiche a été enlevée du catalogue|]1,Inf[ %count% fiches ont été enlevées du catalogue'
 flash.admin.sheet_batch.catalog.remove.warning: 'Les fiches suivantes: %sheets% ne peuvent pas être enlevées car elles ont des rendez-vous positionnés. L''action s''effectue quand même pour les autres fiches non impactées par ce cas.'
 flash.admin.sheet_batch.disable.success: '{0} aucune fiche n''a été désactivée.|{1} 1 fiche a été désactivée|]1,Inf[ %count% fiches ont été désactivées'
