@@ -11,37 +11,31 @@
 namespace Proximum\Vimeet\Tests\Application\Command\Sheet;
 
 use PHPUnit\Framework\TestCase;
-use Prophecy\Argument;
 use Proximum\Vimeet\Application\Adapter\BatchJobQueueInterface;
 use Proximum\Vimeet\Application\Command\Sheet\BatchEnableDisable;
 use Proximum\Vimeet\Application\Command\Sheet\BatchEnableDisableHandler;
 use Proximum\Vimeet\Application\Command\Sheet\BatchResult;
 use Proximum\Vimeet\Application\Components\Sheet\SheetInfoGuesser;
 use Proximum\Vimeet\Domain\Model\Admin;
+use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Sheet;
-use Proximum\Vimeet\Domain\Model\Type;
-use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Repository\MeetingRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
-use Proximum\Vimeet\Tests\Factory\EventFactory;
 
 class BatchEnableDisableHandlerTest extends TestCase
 {
-    public function testHandle()
+    public function testDisableHandle()
     {
-        $event = EventFactory::createEvent();
-        $type  = new Type($event);
-        $date  = new \DateTime();
+        $admin = $this->prophesize(Admin::class);
 
-        $admin = new Admin('email@email.com', 'toto', 'tata', 'fr', 'truc', 'muche', 'ROLE_SUPER_ADMIN', $date);
+        $sheet1 = $this->prophesize(Sheet::class);
+        $sheet1->getId()->shouldBeCalled()->willReturn(1);
 
-        // Actual sheet
-        $user1  = new User('test@test.com', 'salt', 'password', 'fr');
-        $user2  = new User('test@test.com', 'salt', 'password', 'fr');
-        $user3  = new User('test@test.com', 'salt', 'password', 'fr');
-        $sheet1 = new Sheet($event, $type, [], $user1, $date);
-        $sheet2 = new Sheet($event, $type, [], $user2, $date);
-        $sheet3 = new Sheet($event, $type, [], $user3, $date);
+        $sheet2 = $this->prophesize(Sheet::class);
+        $sheet2->getId()->shouldBeCalled()->willReturn(2);
+
+        $sheet3 = $this->prophesize(Sheet::class);
+        $sheet3->getId()->shouldBeCalled()->willReturn(3);
 
         // Mock
         $sheetRepository     = $this->prophesize(SheetRepositoryInterface::class);
@@ -50,9 +44,9 @@ class BatchEnableDisableHandlerTest extends TestCase
         $batchJobQueue       = $this->prophesize(BatchJobQueueInterface::class);
 
         $sheetRepository->getSheetsById([1, 2, 3])->shouldBeCalled()->willReturn([
-            1 => $sheet1->setEnable(false),
-            2 => $sheet2->setEnable(false),
-            3 => $sheet3->setEnable(false),
+            1 => $sheet1->reveal(),
+            2 => $sheet2->reveal(),
+            3 => $sheet3->reveal(),
         ]);
 
         $meetingRepository->countMeetingsOfSheetByIds([1, 2, 3])->shouldBeCalled()->willReturn([
@@ -66,7 +60,7 @@ class BatchEnableDisableHandlerTest extends TestCase
         $batchJobQueue->createJob([1, 2, 3], $admin, ['state' => 'disable'])->shouldBeCalled();
 
         // Command
-        $command = new BatchEnableDisable([1, 2, 3], false, $admin);
+        $command = new BatchEnableDisable([1, 2, 3], false, $admin->reveal());
         $handler = new BatchEnableDisableHandler(
             $sheetRepository->reveal(),
             $meetingRepository->reveal(),
@@ -78,30 +72,26 @@ class BatchEnableDisableHandlerTest extends TestCase
         $this->assertEquals(3, $result->count);
     }
 
-    public function testHandleWithIgnoredSheets()
+    public function testDisableWithIgnoredSheets()
     {
-        $event = EventFactory::createEvent();
-        $date  = new \DateTime();
+        $event = $this->prophesize(Event::class);
+        $event->getAvailableLocale('fr')->shouldBeCalled()->willReturn('fr');
 
-        $admin = new Admin('email@email.com', 'toto', 'tata', 'fr', 'truc', 'muche', 'ROLE_SUPER_ADMIN', $date);
+        $admin = $this->prophesize(Admin::class);
+        $admin->getLocale()->shouldBeCalled()->willReturn('fr');
 
         $sheet1 = $this->prophesize(Sheet::class);
-        $sheet1->getId()->willReturn(1);
-        $sheet1->getEvent()->willReturn($event);
+        $sheet1->getId()->shouldBeCalled()->willReturn(1);
 
         $sheet2 = $this->prophesize(Sheet::class);
-        $sheet2->getId()->willReturn(2);
-        $sheet2->getEvent()->willReturn($event);
+        $sheet2->getEvent()->shouldBeCalled()->willReturn($event->reveal());
 
         $sheet3 = $this->prophesize(Sheet::class);
-        $sheet3->getId()->willReturn(3);
-        $sheet3->getEvent()->willReturn($event);
 
-        // Mock
-        $sheetRepository     = $this->prophesize(SheetRepositoryInterface::class);
-        $meetingRepository   = $this->prophesize(MeetingRepositoryInterface::class);
-        $sheetInfoGuesser    = $this->prophesize(SheetInfoGuesser::class);
-        $batchJobQueue       = $this->prophesize(BatchJobQueueInterface::class);
+        $sheetRepository = $this->prophesize(SheetRepositoryInterface::class);
+        $meetingRepository = $this->prophesize(MeetingRepositoryInterface::class);
+        $sheetInfoGuesser = $this->prophesize(SheetInfoGuesser::class);
+        $batchJobQueue = $this->prophesize(BatchJobQueueInterface::class);
 
         $sheetRepository->getSheetsById([1, 2, 3])->shouldBeCalled()->willReturn([
             1 => $sheet1->reveal(),
@@ -127,7 +117,7 @@ class BatchEnableDisableHandlerTest extends TestCase
         $batchJobQueue->createJob([1], $admin, ['state' => 'disable'])->shouldBeCalled();
 
         // Command
-        $command = new BatchEnableDisable([1, 2, 3], false, $admin);
+        $command = new BatchEnableDisable([1, 2, 3], false, $admin->reveal());
         $handler = new BatchEnableDisableHandler(
             $sheetRepository->reveal(),
             $meetingRepository->reveal(),
@@ -142,6 +132,67 @@ class BatchEnableDisableHandlerTest extends TestCase
                 [$sheet1->reveal()],
                 'flash.admin.sheet_batch.disable.warning',
                 'SheetTitle 2, SheetTitle 3'
+            ),
+            $result
+        );
+    }
+
+    public function testEnableHandle()
+    {
+        $event = $this->prophesize(Event::class);
+        $event->getAvailableLocale('fr')->shouldBeCalled()->willReturn('fr');
+
+        $admin = $this->prophesize(Admin::class);
+        $admin->getLocale()->shouldBeCalled()->willReturn('fr');
+
+        $sheet1 = $this->prophesize(Sheet::class);
+        $sheet1->getId()->shouldBeCalled()->willReturn(1);
+        $sheet1->isRefused()->shouldBeCalled()->willReturn(false);
+
+        $sheet2 = $this->prophesize(Sheet::class);
+        $sheet2->isRefused()->shouldBeCalled()->willReturn(true);
+        $sheet2->getEvent()->shouldBeCalled()->willReturn($event->reveal());
+
+        $sheet3 = $this->prophesize(Sheet::class);
+        $sheet3->getId()->shouldBeCalled()->willReturn(3);
+        $sheet3->isRefused()->shouldBeCalled()->willReturn(false);
+
+        $sheetRepository = $this->prophesize(SheetRepositoryInterface::class);
+
+        $sheetRepository->getSheetsById([1, 2, 3])->shouldBeCalled()->willReturn([
+            1 => $sheet1->reveal(),
+            2 => $sheet2->reveal(),
+            3 => $sheet3->reveal(),
+        ]);
+
+        $sheetRepository->updateEnableStateBySheetsId([1, 3], true)->shouldBeCalled();
+
+        $meetingRepository = $this->prophesize(MeetingRepositoryInterface::class);
+        $meetingRepository->countMeetingsOfSheetByIds([1, 2, 3])->shouldNotBeCalled();
+
+        $sheetInfoGuesser = $this->prophesize(SheetInfoGuesser::class);
+        $sheetInfoGuesser->guessSheetTitle($sheet1->reveal(), 'fr')->shouldNotBeCalled();
+        $sheetInfoGuesser->guessSheetTitle($sheet2->reveal(), 'fr')->shouldBeCalled()->willReturn('SheetTitle 2');
+        $sheetInfoGuesser->guessSheetTitle($sheet3->reveal(), 'fr')->shouldNotBeCalled();
+
+        $batchJobQueue = $this->prophesize(BatchJobQueueInterface::class);
+        $batchJobQueue->createJob([1, 3], $admin, ['state' => 'enable'])->shouldBeCalled();
+
+        $command = new BatchEnableDisable([1, 2, 3], true, $admin->reveal());
+        $handler = new BatchEnableDisableHandler(
+            $sheetRepository->reveal(),
+            $meetingRepository->reveal(),
+            $sheetInfoGuesser->reveal(),
+            $batchJobQueue->reveal()
+        );
+
+        $result = $handler->handle($command);
+
+        $this->assertEquals(
+            new BatchResult(
+                [$sheet1->reveal(), $sheet3->reveal()],
+                'flash.admin.sheet_batch.enable.warning',
+                'SheetTitle 2'
             ),
             $result
         );
