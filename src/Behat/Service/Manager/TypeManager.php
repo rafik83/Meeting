@@ -66,4 +66,15 @@ class TypeManager
 
         return $type;
     }
+
+    /**
+     * @param Type    $type
+     * @param Package $package
+     */
+    public function assignPackageToType(Type $type, Package $package)
+    {
+        $type->setPackage($package);
+
+        $this->typeRepository->set($type);
+    }
 }

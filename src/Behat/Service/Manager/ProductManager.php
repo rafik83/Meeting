@@ -1,0 +1,111 @@
+<?php
+
+/*
+ * This file is part of the Proximum Vimeet project.
+ *
+ * Copyright (C) Proximum
+ *
+ * @author Elao <contact@elao.com>
+ */
+
+namespace Proximum\Vimeet\Behat\Service\Manager;
+
+use Proximum\Vimeet\Domain\Model\Event;
+use Proximum\Vimeet\Domain\Model\Product;
+use Proximum\Vimeet\Domain\Repository\ProductRepositoryInterface;
+
+class ProductManager
+{
+    /** @var ProductRepositoryInterface */
+    private $productRepository;
+
+    /**
+     * @param ProductRepositoryInterface $productRepository
+     */
+    public function __construct(ProductRepositoryInterface $productRepository)
+    {
+        $this->productRepository = $productRepository;
+    }
+
+    /**
+     * @param Event  $event
+     * @param string $title
+     * @param float  $unitPrice
+     * @param int    $quantity
+     *
+     * @return Product
+     */
+    public function createParticipant(
+        Event $event,
+        string $title = 'Produit Participant',
+        float $unitPrice = 100,
+        int $quantity = 2
+    ): Product {
+        $product = Product::createParticipant($event, $title, $unitPrice, $quantity);
+
+        foreach ($event->getLocales() as $locale) {
+            $product->translate($locale, $title, '', '', '', '');
+        }
+
+        $this->productRepository->add($product);
+
+        return $product;
+    }
+
+    /**
+     * @param Event  $event
+     * @param string $title
+     * @param float  $unitPrice
+     *
+     * @return Product
+     */
+    public function createPlan(Event $event, string $title = 'Formule', float $unitPrice = 567): Product
+    {
+        $product = Product::createPlan($event, $title, '', $unitPrice, 15, 30);
+
+        foreach ($event->getLocales() as $locale) {
+            $product->translate($locale, $title, '', '', '', '');
+        }
+
+        $this->productRepository->add($product);
+
+        return $product;
+    }
+
+    /**
+     * @param Product $plan
+     * @param Product $productParticipant
+     * @param int     $quantity
+     */
+    public function assignProductParticipantToPlan(Product $plan, Product $productParticipant, int $quantity)
+    {
+        if (!$plan->isPlan() || !$productParticipant->isParticipant()) {
+            throw new \InvalidArgumentException('The given products have not the right type');
+        }
+
+        $plan->includeProduct($productParticipant, $quantity);
+
+        $this->productRepository->update($plan);
+    }
+
+    /**
+     * @param Event  $event
+     * @param string $title
+     * @param float  $unitPrice
+     * @param int    $quantity
+     *
+     * @return Product
+     */
+    public function createPlanning(Event $event, string $title, float $unitPrice, int $quantity = 2): Product
+    {
+        $product = Product::createPlanning($event, $title, $unitPrice, $quantity);
+
+        foreach ($event->getLocales() as $locale) {
+            $product->translate($locale, $title, '', '', '', '');
+        }
+
+        $this->productRepository->add($product);
+
+        return $product;
+    }
+}

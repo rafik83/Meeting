@@ -68,5 +68,9 @@ default:
                     - '@behat_proxy.event.content_context'
                 - Proximum\Vimeet\Behat\Context\Domain\RuleContext:
                     - '@behat.proxy.rule_context'
+                - Proximum\Vimeet\Behat\Context\Domain\Package\PackageContext:
+                    - '@Proximum\Vimeet\Behat\Proxy\PackageContextProxy'
+                - Proximum\Vimeet\Behat\Context\Domain\Product\ProductContext:
+                    - '@Proximum\Vimeet\Behat\Proxy\ProductContextProxy'
                 - behatch:context:json
                 - behatch:context:rest
