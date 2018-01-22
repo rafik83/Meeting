@@ -36,7 +36,6 @@ class Sheet implements TraceableInterface
     const STATE_VALIDATION_DRAFT = 'draft';
     const STATE_VALIDATION_PENDING = 'pending';
     const STATE_VALIDATION_VALIDATED = 'validated';
-    const STATE_VALIDATION_REFUSED = 'refused';
 
     /**
      * "Etat de validation des agendas des utilisateurs de la fiche"
