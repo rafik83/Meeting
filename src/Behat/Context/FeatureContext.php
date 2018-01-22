@@ -661,6 +661,14 @@ class FeatureContext extends MinkContext implements KernelAwareContext, SnippetA
     }
 
     /**
+     * @When I want to know the current url
+     */
+    public function echoCurrentUrl()
+    {
+        echo $this->assertSession()->getCurrentUrlPath();
+    }
+
+    /**
      * Checks, that current url is equal to specified.
      *
      * @Then /^(?:|I )should be on this url "(?P<url>[^"]+)"$/
