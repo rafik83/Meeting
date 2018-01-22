@@ -19,11 +19,15 @@ use Proximum\Vimeet\Application\Event\Happening\UnParticipateHappeningEvent;
 use Proximum\Vimeet\Application\Exception\Happening\NotEnoughtRemainingParticipationsException;
 use Proximum\Vimeet\Application\Exception\Happening\ParticipantNotAvailableException;
 use Proximum\Vimeet\Application\Exception\Happening\ParticipantRequiredException;
+use Proximum\Vimeet\Application\Exception\Happening\WrongInvitationCodeException;
 use Proximum\Vimeet\Domain\Happening\ParticipationCount;
+use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Happening;
 use Proximum\Vimeet\Domain\Model\Happening\Category;
 use Proximum\Vimeet\Domain\Model\Happening\Question;
 use Proximum\Vimeet\Domain\Model\HappeningParticipation;
+use Proximum\Vimeet\Domain\Model\Participant;
+use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Repository\Happening\QuestionRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\HappeningParticipationRepositoryInterface;
@@ -36,621 +40,379 @@ use PHPUnit\Framework\TestCase;
 
 class ParticipateHandlerTest extends TestCase
 {
-    public function testNotEnoughtRemainingParticipationsException()
+    /** @var Event */
+    private $event;
+
+    /** @var \DateTimeInterface */
+    private $datetime;
+
+    /** @var User */
+    private $user;
+
+    /** @var Sheet */
+    private $sheet;
+
+    /** @var Participant */
+    private $participant;
+
+    /** @var ParticipateHandler */
+    private $handler;
+
+    /** @var Happening */
+    private $happening;
+
+    /** @var Participate */
+    private $participate;
+
+    private $happeningParticipationRepository;
+    private $participantRepository;
+    private $questionRepository;
+    private $participationCount;
+    private $eventDispatcher;
+
+    public function setUp()
     {
-        $event    = EventFactory::createEvent();
-        $datetime = new \DateTime();
-
-        $user  = new User('user@vimeet.com', 'salt', 'password', 'fr');
-        $sheet = SheetFactory::create($event, $user);
-
-        $participant = ParticipantFactory::create($sheet, $user);
-
-        $happening = new Happening(
-            $event,
+        $this->event                            = EventFactory::createEvent();
+        $this->datetime                         = new \DateTime();
+        $this->user                             = new User('user@vimeet.com', 'salt', 'password', 'fr');
+        $this->sheet                            = SheetFactory::create($this->event, $this->user);
+        $this->participant                      = ParticipantFactory::create($this->sheet, $this->user);
+        $this->happeningParticipationRepository = $this->prophesize(HappeningParticipationRepositoryInterface::class);
+        $this->participantRepository            = $this->prophesize(ParticipantRepositoryInterface::class);
+        $this->questionRepository               = $this->prophesize(QuestionRepositoryInterface::class);
+        $this->participationCount               = $this->prophesize(ParticipationCount::class);
+        $this->eventDispatcher                  = $this->prophesize(DelayedEventDispatcher::class);
+        $this->handler = new ParticipateHandler(
+            $this->happeningParticipationRepository->reveal(),
+            $this->participantRepository->reveal(),
+            $this->questionRepository->reveal(),
+            $this->participationCount->reveal(),
+            $this->eventDispatcher->reveal(),
+            $this->datetime
+        );
+        $this->happening = new Happening(
+            $this->event,
             new \DateTime('2016-01-01 08:00:00'),
             new \DateTime('2016-01-01 09:00:00'),
-            new Category($event, 'picto', 1, '#000000', '#000000'),
+            new Category($this->event, 'picto', 1, '#000000', '#000000'),
             [],
             false,
             10
         );
-
-        $happeningParticipationRepository = $this->prophesize(HappeningParticipationRepositoryInterface::class);
-        $participantRepository            = $this->prophesize(ParticipantRepositoryInterface::class);
-        $questionRepository               = $this->prophesize(QuestionRepositoryInterface::class);
-        $participationCount               = $this->prophesize(ParticipationCount::class);
-        $eventDispatcher                  = $this->prophesize(DelayedEventDispatcher::class);
-
-        $participationCount->getRemaining($happening)->shouldBeCalled()->willReturn(0);
-        $this->expectException(NotEnoughtRemainingParticipationsException::class);
-
-        $participate = new Participate($happening, $sheet, $user, [$participant]);
-
-        $handler = new ParticipateHandler(
-            $happeningParticipationRepository->reveal(),
-            $participantRepository->reveal(),
-            $questionRepository->reveal(),
-            $participationCount->reveal(),
-            $eventDispatcher->reveal(),
-            $datetime
+        $this->participate = new Participate(
+            $this->happening,
+            $this->sheet,
+            $this->user,
+            [$this->participant],
+            null,
+            'tata',
+            false
         );
+    }
 
-        $handler->handle($participate);
+    public function testNotEnoughtRemainingParticipationsException()
+    {
+        $this->expectException(NotEnoughtRemainingParticipationsException::class);
+        $this->participationCount->getRemaining($this->happening)->shouldBeCalled()->willReturn(0);
+
+        $this->handler->handle($this->participate);
+    }
+
+    public function testWrongInvitationCodeException()
+    {
+        $this->expectException(WrongInvitationCodeException::class);
+        $this->happening->setInvitationCode('toto');
+
+        $this->participantRepository
+            ->getParticipantsForHappening($this->participate->sheet, $this->participate->happening)
+            ->shouldBeCalled()
+            ->willReturn([$this->participant])
+        ;
+
+        $this->handler->handle($this->participate);
     }
 
     public function testParticipantNotAvailableException()
     {
-        $event    = EventFactory::createEvent();
-        $datetime = new \DateTime();
-
-        $user  = new User('user@vimeet.com', 'salt', 'password', 'fr');
-        $sheet = SheetFactory::create($event, $user);
-
-        $participant = ParticipantFactory::create($sheet, $user);
-
-        $happening = new Happening(
-            $event,
-            new \DateTime('2016-01-01 08:00:00'),
-            new \DateTime('2016-01-01 09:00:00'),
-            new Category($event, 'picto', 1, '#000000', '#000000'),
-            [],
-            false,
-            10
-        );
-
-        $happeningParticipationRepository = $this->prophesize(HappeningParticipationRepositoryInterface::class);
-        $participantRepository            = $this->prophesize(ParticipantRepositoryInterface::class);
-        $questionRepository               = $this->prophesize(QuestionRepositoryInterface::class);
-        $participationCount               = $this->prophesize(ParticipationCount::class);
-        $eventDispatcher                  = $this->prophesize(DelayedEventDispatcher::class);
-
-        $participationCount->getRemaining($happening)->shouldBeCalled()->willReturn(10);
-        $participantRepository->getParticipantsForHappening($sheet, $happening)->shouldBeCalled()->willReturn([]);
-        $participantRepository
-            ->getAvailableParticipantsForHappening([$participant], $happening)
+        $this->participationCount->getRemaining($this->happening)->shouldBeCalled()->willReturn(10);
+        $this->participantRepository->getParticipantsForHappening($this->sheet, $this->happening)->shouldBeCalled()->willReturn([]);
+        $this->participantRepository
+            ->getAvailableParticipantsForHappening([$this->participant], $this->happening)
             ->shouldBeCalled()
             ->willReturn([]);
 
         $this->expectException(ParticipantNotAvailableException::class);
 
-        $participate = new Participate($happening, $sheet, $user, [$participant]);
-
-        $handler = new ParticipateHandler(
-            $happeningParticipationRepository->reveal(),
-            $participantRepository->reveal(),
-            $questionRepository->reveal(),
-            $participationCount->reveal(),
-            $eventDispatcher->reveal(),
-            $datetime
-        );
-
-        $handler->handle($participate);
+        $this->handler->handle($this->participate);
     }
 
     public function testParticipantRequiredException()
     {
-        $event    = EventFactory::createEvent();
-        $datetime = new \DateTime();
-
-        $user  = new User('user@vimeet.com', 'salt', 'password', 'fr');
-        $sheet = SheetFactory::create($event, $user);
-
-        $happening = new Happening(
-            $event,
-            new \DateTime('2016-01-01 08:00:00'),
-            new \DateTime('2016-01-01 09:00:00'),
-            new Category($event, 'picto', 1, '#000000', '#000000'),
-            [],
-            false,
-            10
-        );
-
-        $happeningParticipationRepository = $this->prophesize(HappeningParticipationRepositoryInterface::class);
-        $participantRepository            = $this->prophesize(ParticipantRepositoryInterface::class);
-        $questionRepository               = $this->prophesize(QuestionRepositoryInterface::class);
-        $participationCount               = $this->prophesize(ParticipationCount::class);
-        $eventDispatcher                  = $this->prophesize(DelayedEventDispatcher::class);
-
         $this->expectException(ParticipantRequiredException::class);
 
-        $participate = new Participate($happening, $sheet, $user, []);
+        $participate = $this->participate;
+        $participate->participants = [];
 
-        $handler = new ParticipateHandler(
-            $happeningParticipationRepository->reveal(),
-            $participantRepository->reveal(),
-            $questionRepository->reveal(),
-            $participationCount->reveal(),
-            $eventDispatcher->reveal(),
-            $datetime
-        );
-
-        $handler->handle($participate);
+        $this->handler->handle($participate);
     }
 
     public function testUnparticipateAlone()
     {
-        $event    = EventFactory::createEvent();
-        $datetime = new \DateTime();
-
-        $user  = new User('user@vimeet.com', 'salt', 'password', 'fr');
-        $sheet = SheetFactory::create($event, $user);
-
-        $participant = ParticipantFactory::create($sheet, $user);
-
-        $happening = new Happening(
-            $event,
-            new \DateTime('2016-01-01 08:00:00'),
-            new \DateTime('2016-01-01 09:00:00'),
-            new Category($event, 'picto', 1, '#000000', '#000000'),
-            [],
-            false,
-            10
-        );
-
-        $happeningParticipationRepository = $this->prophesize(HappeningParticipationRepositoryInterface::class);
-        $participantRepository            = $this->prophesize(ParticipantRepositoryInterface::class);
-        $questionRepository               = $this->prophesize(QuestionRepositoryInterface::class);
-        $participationCount               = $this->prophesize(ParticipationCount::class);
-        $eventDispatcher                  = $this->prophesize(DelayedEventDispatcher::class);
-
-        $participationCount->getRemaining($happening)->shouldBeCalled()->willReturn(10);
-        $participantRepository
-            ->getParticipantsForHappening($sheet, $happening)
+        $this->participationCount->getRemaining($this->happening)->shouldBeCalled()->willReturn(10);
+        $this->participantRepository
+            ->getParticipantsForHappening($this->sheet, $this->happening)
             ->shouldBeCalled()
-            ->willReturn([$participant]);
+            ->willReturn([$this->participant]);
 
-        $happeningParticipationRepository->removeUserForHappening($user, $happening)->shouldBeCalled();
+        $this->happeningParticipationRepository->removeUserForHappening($this->user, $this->happening)->shouldBeCalled();
 
-        $questionRepository->removeQuestionFromUserForHappening()->shouldNotBeCalled();
-        $questionRepository->add()->shouldNotBeCalled();
+        $this->questionRepository->removeQuestionFromUserForHappening()->shouldNotBeCalled();
+        $this->questionRepository->add()->shouldNotBeCalled();
 
-        $eventDispatcher->dispatch(Events::HAPPENING_PARTICIPATED, new ParticipateEvent($sheet, [], $happening))
+        $this->eventDispatcher->dispatch(Events::HAPPENING_PARTICIPATED, new ParticipateEvent($this->sheet, [], $this->happening))
             ->shouldBeCalled();
-        $eventDispatcher->dispatch(Events::HAPPENING_UN_PARTICIPATE, new UnParticipateHappeningEvent($participant))
+        $this->eventDispatcher->dispatch(Events::HAPPENING_UN_PARTICIPATE, new UnParticipateHappeningEvent($this->participant))
             ->shouldBeCalled();
 
-        $participate = new Participate($happening, $sheet, $user, []);
+        $participate = $this->participate;
+        $participate->participants = [];
 
-        $handler = new ParticipateHandler(
-            $happeningParticipationRepository->reveal(),
-            $participantRepository->reveal(),
-            $questionRepository->reveal(),
-            $participationCount->reveal(),
-            $eventDispatcher->reveal(),
-            $datetime
-        );
-
-        $handler->handle($participate);
+        $this->handler->handle($participate);
     }
 
     public function testParticipateAlone()
     {
-        $event    = EventFactory::createEvent();
-        $datetime = new \DateTime();
-
-        $user  = new User('user@vimeet.com', 'salt', 'password', 'fr');
-        $sheet = SheetFactory::create($event, $user);
-
-        $participant = ParticipantFactory::create($sheet, $user);
-
-        $happening = new Happening(
-            $event,
-            new \DateTime('2016-01-01 08:00:00'),
-            new \DateTime('2016-01-01 09:00:00'),
-            new Category($event, 'picto', 1, '#000000', '#000000'),
-            [],
-            false,
-            10
-        );
-
-        $happeningParticipationRepository = $this->prophesize(HappeningParticipationRepositoryInterface::class);
-        $participantRepository            = $this->prophesize(ParticipantRepositoryInterface::class);
-        $questionRepository               = $this->prophesize(QuestionRepositoryInterface::class);
-        $participationCount               = $this->prophesize(ParticipationCount::class);
-        $eventDispatcher                  = $this->prophesize(DelayedEventDispatcher::class);
-
-        $participationCount->getRemaining($happening)->shouldBeCalled()->willReturn(10);
-        $participantRepository
-            ->getParticipantsForHappening($sheet, $happening)
+        $this->participationCount->getRemaining($this->happening)->shouldBeCalled()->willReturn(10);
+        $this->participantRepository
+            ->getParticipantsForHappening($this->sheet, $this->happening)
             ->shouldBeCalled()
             ->willReturn([]);
-        $participantRepository
-            ->getAvailableParticipantsForHappening([$participant], $happening)
+        $this->participantRepository
+            ->getAvailableParticipantsForHappening([$this->participant], $this->happening)
             ->shouldBeCalled()
-            ->willReturn([$participant]);
+            ->willReturn([$this->participant]);
 
-        $happeningParticipationRepository->findByHappeningAndUser(
-            $happening,
-            $user
+        $this->happeningParticipationRepository->findByHappeningAndUser(
+            $this->happening,
+            $this->user
         )->shouldBeCalled()->willReturn(null);
 
-        $happeningParticipationRepository->add(
-            new HappeningParticipation($happening, $user)
+        $this->happeningParticipationRepository->add(
+            new HappeningParticipation($this->happening, $this->user)
         )->shouldBeCalled();
 
-        $questionRepository->removeQuestionFromUserForHappening()->shouldNotBeCalled();
-        $questionRepository->add()->shouldNotBeCalled();
+        $this->questionRepository->removeQuestionFromUserForHappening()->shouldNotBeCalled();
+        $this->questionRepository->add()->shouldNotBeCalled();
 
-        $eventDispatcher->dispatch(Events::HAPPENING_PARTICIPATED, new ParticipateEvent($sheet, [$participant], $happening))
+        $this->eventDispatcher->dispatch(Events::HAPPENING_PARTICIPATED, new ParticipateEvent($this->sheet, [$this->participant], $this->happening))
             ->shouldBeCalled();
-        $eventDispatcher->dispatch(Events::HAPPENING_PARTICIPATE, new ParticipateHappeningEvent($participant))
+        $this->eventDispatcher->dispatch(Events::HAPPENING_PARTICIPATE, new ParticipateHappeningEvent($this->participant))
             ->shouldBeCalled();
 
-        $participate = new Participate($happening, $sheet, $user, [$participant]);
-
-        $handler = new ParticipateHandler(
-            $happeningParticipationRepository->reveal(),
-            $participantRepository->reveal(),
-            $questionRepository->reveal(),
-            $participationCount->reveal(),
-            $eventDispatcher->reveal(),
-            $datetime
-        );
-
-        $handler->handle($participate);
+        $this->handler->handle($this->participate);
     }
 
     public function testParticipateSeveralParticipants()
     {
-        $event    = EventFactory::createEvent();
-        $datetime = new \DateTime();
-
-        $user1 = new User('user1@vimeet.com', 'salt', 'password', 'fr');
         $user2 = new User('user2@vimeet.com', 'salt', 'password', 'fr');
+        $participant2 = ParticipantFactory::create($this->sheet, $user2);
 
-        $sheet = SheetFactory::create($event, $user1);
-
-        $participant1 = ParticipantFactory::create($sheet, $user1);
-        $participant2 = ParticipantFactory::create($sheet, $user2);
-
-        $happening = new Happening(
-            $event,
-            new \DateTime('2016-01-01 08:00:00'),
-            new \DateTime('2016-01-01 09:00:00'),
-            new Category($event, 'picto', 1, '#000000', '#000000'),
-            [],
-            false,
-            10
-        );
-
-        $happeningParticipationRepository = $this->prophesize(HappeningParticipationRepositoryInterface::class);
-        $participantRepository            = $this->prophesize(ParticipantRepositoryInterface::class);
-        $questionRepository               = $this->prophesize(QuestionRepositoryInterface::class);
-        $participationCount               = $this->prophesize(ParticipationCount::class);
-        $eventDispatcher                  = $this->prophesize(DelayedEventDispatcher::class);
-
-        $participationCount->getRemaining($happening)->shouldBeCalled()->willReturn(10);
-        $participantRepository
-            ->getParticipantsForHappening($sheet, $happening)
+        $this->participationCount->getRemaining($this->happening)->shouldBeCalled()->willReturn(10);
+        $this->participantRepository
+            ->getParticipantsForHappening($this->sheet, $this->happening)
             ->shouldBeCalled()
             ->willReturn([]);
-        $participantRepository
-            ->getAvailableParticipantsForHappening([$participant1, $participant2], $happening)
+        $this->participantRepository
+            ->getAvailableParticipantsForHappening([$this->participant, $participant2], $this->happening)
             ->shouldBeCalled()
-            ->willReturn([$participant1, $participant2]);
+            ->willReturn([$this->participant, $participant2]);
 
-        $happeningParticipationRepository->findByHappeningAndUser(
-            $happening,
-            $user1
+        $this->happeningParticipationRepository->findByHappeningAndUser(
+            $this->happening,
+            $this->user
         )->shouldBeCalled()->willReturn(null);
 
-        $happeningParticipationRepository->findByHappeningAndUser(
-            $happening,
+        $this->happeningParticipationRepository->findByHappeningAndUser(
+            $this->happening,
             $user2
         )->shouldBeCalled()->willReturn(null);
 
-        $participate = new Participate($happening, $sheet, $user1, [$participant1, $participant2]);
+        $participate = $this->participate;
+        $participate->participants = [$this->participant, $participant2];
 
-        $happeningParticipationRepository->add(
-            new HappeningParticipation($happening, $user1)
+        $this->happeningParticipationRepository->add(
+            new HappeningParticipation($this->happening, $this->user)
         )->shouldBeCalled();
 
-        $happeningParticipationRepository->add(
-            new HappeningParticipation($happening, $user2)
+        $this->happeningParticipationRepository->add(
+            new HappeningParticipation($this->happening, $user2)
         )->shouldBeCalled();
 
-        $questionRepository->removeQuestionFromUserForHappening()->shouldNotBeCalled();
-        $questionRepository->add()->shouldNotBeCalled();
+        $this->questionRepository->removeQuestionFromUserForHappening()->shouldNotBeCalled();
+        $this->questionRepository->add()->shouldNotBeCalled();
 
-        $eventDispatcher->dispatch(Events::HAPPENING_PARTICIPATED, new ParticipateEvent($sheet, [
-            $participant1,
+        $this->eventDispatcher->dispatch(Events::HAPPENING_PARTICIPATED, new ParticipateEvent($this->sheet, [
+            $this->participant,
             $participant2,
-        ], $happening))->shouldBeCalled();
-        $eventDispatcher->dispatch(Events::HAPPENING_PARTICIPATE, new ParticipateHappeningEvent($participant1))
+        ], $this->happening))->shouldBeCalled();
+        $this->eventDispatcher->dispatch(Events::HAPPENING_PARTICIPATE, new ParticipateHappeningEvent($this->participant))
             ->shouldBeCalled();
-        $eventDispatcher->dispatch(Events::HAPPENING_PARTICIPATE, new ParticipateHappeningEvent($participant2))
+        $this->eventDispatcher->dispatch(Events::HAPPENING_PARTICIPATE, new ParticipateHappeningEvent($participant2))
             ->shouldBeCalled();
 
-        $handler = new ParticipateHandler(
-            $happeningParticipationRepository->reveal(),
-            $participantRepository->reveal(),
-            $questionRepository->reveal(),
-            $participationCount->reveal(),
-            $eventDispatcher->reveal(),
-            $datetime
-        );
-
-        $handler->handle($participate);
+        $this->handler->handle($participate);
     }
 
     public function testUpdateParticipation()
     {
-        $event    = EventFactory::createEvent();
-        $datetime = new \DateTime();
-
-        $user1 = new User('user1@vimeet.com', 'salt', 'password', 'fr');
         $user2 = new User('user2@vimeet.com', 'salt', 'password', 'fr');
+        $participant2 = ParticipantFactory::create($this->sheet, $user2);
 
-        $sheet = SheetFactory::create($event, $user1);
-
-        $participant1 = ParticipantFactory::create($sheet, $user1);
-        $participant2 = ParticipantFactory::create($sheet, $user2);
-
-        $happening = new Happening(
-            $event,
-            new \DateTime('2016-01-01 08:00:00'),
-            new \DateTime('2016-01-01 09:00:00'),
-            new Category($event, 'picto', 1, '#000000', '#000000'),
-            [],
-            false,
-            10
-        );
-
-        $happeningParticipationRepository = $this->prophesize(HappeningParticipationRepositoryInterface::class);
-        $participantRepository            = $this->prophesize(ParticipantRepositoryInterface::class);
-        $questionRepository               = $this->prophesize(QuestionRepositoryInterface::class);
-        $participationCount               = $this->prophesize(ParticipationCount::class);
-        $eventDispatcher                  = $this->prophesize(DelayedEventDispatcher::class);
-
-        $participationCount->getRemaining($happening)->shouldBeCalled()->willReturn(10);
+        $this->participationCount->getRemaining($this->happening)->shouldBeCalled()->willReturn(10);
 
         // Participant1 was participating
-        $participantRepository
-            ->getParticipantsForHappening($sheet, $happening)
+        $this->participantRepository
+            ->getParticipantsForHappening($this->sheet, $this->happening)
             ->shouldBeCalled()
-            ->willReturn([$participant1]);
+            ->willReturn([$this->participant]);
 
         // We remove Participant1 and replace it by Participant2
-        $participantRepository
-            ->getAvailableParticipantsForHappening([$participant2], $happening)
+        $this->participantRepository
+            ->getAvailableParticipantsForHappening([$participant2], $this->happening)
             ->shouldBeCalled()
-            ->willReturn([$participant1, $participant2]);
-        $participate = new Participate($happening, $sheet, $user1, [$participant2]);
+            ->willReturn([$this->participant, $participant2]);
 
-        $happeningParticipationRepository->removeUserForHappening($user1, $happening)->shouldBeCalled();
+        $participate = $this->participate;
+        $participate->participants = [$participant2];
 
-        $happeningParticipationRepository->findByHappeningAndUser(
-            $happening,
+        $this->happeningParticipationRepository->removeUserForHappening($this->user, $this->happening)->shouldBeCalled();
+
+        $this->happeningParticipationRepository->findByHappeningAndUser(
+            $this->happening,
             $user2
         )->shouldBeCalled()->willReturn(null);
 
-        $happeningParticipationRepository->add(
-            new HappeningParticipation($happening, $user2)
+        $this->happeningParticipationRepository->add(
+            new HappeningParticipation($this->happening, $user2)
         )->shouldBeCalled();
 
-        $questionRepository->removeQuestionFromUserForHappening()->shouldNotBeCalled();
-        $questionRepository->add()->shouldNotBeCalled();
+        $this->questionRepository->removeQuestionFromUserForHappening()->shouldNotBeCalled();
+        $this->questionRepository->add()->shouldNotBeCalled();
 
-        $eventDispatcher->dispatch(Events::HAPPENING_PARTICIPATED, new ParticipateEvent($sheet, [$participant2], $happening))
+        $this->eventDispatcher->dispatch(Events::HAPPENING_PARTICIPATED, new ParticipateEvent($this->sheet, [$participant2], $this->happening))
             ->shouldBeCalled();
-        $eventDispatcher->dispatch(Events::HAPPENING_UN_PARTICIPATE, new UnParticipateHappeningEvent($participant1))
+        $this->eventDispatcher->dispatch(Events::HAPPENING_UN_PARTICIPATE, new UnParticipateHappeningEvent($this->participant))
             ->shouldBeCalled();
-        $eventDispatcher->dispatch(Events::HAPPENING_PARTICIPATE, new ParticipateHappeningEvent($participant2))
+        $this->eventDispatcher->dispatch(Events::HAPPENING_PARTICIPATE, new ParticipateHappeningEvent($participant2))
             ->shouldBeCalled();
 
-        $handler = new ParticipateHandler(
-            $happeningParticipationRepository->reveal(),
-            $participantRepository->reveal(),
-            $questionRepository->reveal(),
-            $participationCount->reveal(),
-            $eventDispatcher->reveal(),
-            $datetime
-        );
-
-        $handler->handle($participate);
+        $this->handler->handle($participate);
     }
 
     public function testParticipateWithNoQuestion()
     {
-        $event    = EventFactory::createEvent();
-        $datetime = new \DateTime();
+        $this->happening->setQuestionAllowed(true);
 
-        $user  = new User('user@vimeet.com', 'salt', 'password', 'fr');
-        $sheet = SheetFactory::create($event, $user);
-
-        $participant = ParticipantFactory::create($sheet, $user);
-
-        $happening = new Happening(
-            $event,
-            new \DateTime('2016-01-01 08:00:00'),
-            new \DateTime('2016-01-01 09:00:00'),
-            new Category($event, 'picto', 1, '#000000', '#000000'),
-            [],
-            true,
-            10
-        );
-
-        $happeningParticipationRepository = $this->prophesize(HappeningParticipationRepositoryInterface::class);
-        $participantRepository            = $this->prophesize(ParticipantRepositoryInterface::class);
-        $questionRepository               = $this->prophesize(QuestionRepositoryInterface::class);
-        $participationCount               = $this->prophesize(ParticipationCount::class);
-        $eventDispatcher                  = $this->prophesize(DelayedEventDispatcher::class);
-
-        $participationCount->getRemaining($happening)->shouldBeCalled()->willReturn(10);
-        $participantRepository
-            ->getParticipantsForHappening($sheet, $happening)
+        $this->participationCount->getRemaining($this->happening)->shouldBeCalled()->willReturn(10);
+        $this->participantRepository
+            ->getParticipantsForHappening($this->sheet, $this->happening)
             ->shouldBeCalled()
             ->willReturn([]);
-        $participantRepository
-            ->getAvailableParticipantsForHappening([$participant], $happening)
+        $this->participantRepository
+            ->getAvailableParticipantsForHappening([$this->participant], $this->happening)
             ->shouldBeCalled()
-            ->willReturn([$participant]);
+            ->willReturn([$this->participant]);
 
-        $happeningParticipationRepository->findByHappeningAndUser(
-            $happening,
-            $user
+        $this->happeningParticipationRepository->findByHappeningAndUser(
+            $this->happening,
+            $this->user
         )->shouldBeCalled()->willReturn(null);
 
-        $happeningParticipationRepository->add(
-            new HappeningParticipation($happening, $user)
+        $this->happeningParticipationRepository->add(
+            new HappeningParticipation($this->happening, $this->user)
         )->shouldBeCalled();
 
-        $questionRepository->removeQuestionFromUserForHappening($user, $happening)->shouldBeCalled();
-        $questionRepository->add()->shouldNotBeCalled();
+        $this->questionRepository->removeQuestionFromUserForHappening($this->user, $this->happening)->shouldBeCalled();
+        $this->questionRepository->add()->shouldNotBeCalled();
 
-        $eventDispatcher->dispatch(Events::HAPPENING_PARTICIPATED, new ParticipateEvent($sheet, [$participant], $happening))
+        $this->eventDispatcher->dispatch(Events::HAPPENING_PARTICIPATED, new ParticipateEvent($this->sheet, [$this->participant], $this->happening))
             ->shouldBeCalled();
-        $eventDispatcher->dispatch(Events::HAPPENING_PARTICIPATE, new ParticipateHappeningEvent($participant))
+        $this->eventDispatcher->dispatch(Events::HAPPENING_PARTICIPATE, new ParticipateHappeningEvent($this->participant))
             ->shouldBeCalled();
 
-        $participate = new Participate($happening, $sheet, $user, [$participant]);
-
-        $handler = new ParticipateHandler(
-            $happeningParticipationRepository->reveal(),
-            $participantRepository->reveal(),
-            $questionRepository->reveal(),
-            $participationCount->reveal(),
-            $eventDispatcher->reveal(),
-            $datetime
-        );
-
-        $handler->handle($participate);
+        $this->handler->handle($this->participate);
     }
 
     public function testParticipateWithQuestion()
     {
-        $event    = EventFactory::createEvent();
-        $datetime = new \DateTime();
+        $this->happening->setQuestionAllowed(true);
 
-        $user  = new User('user@vimeet.com', 'salt', 'password', 'fr');
-        $sheet = SheetFactory::create($event, $user);
-
-        $participant = ParticipantFactory::create($sheet, $user);
-
-        $happening = new Happening(
-            $event,
-            new \DateTime('2016-01-01 08:00:00'),
-            new \DateTime('2016-01-01 09:00:00'),
-            new Category($event, 'picto', 1, '#000000', '#000000'),
-            [],
-            true,
-            10
-        );
-
-        $happeningParticipationRepository = $this->prophesize(HappeningParticipationRepositoryInterface::class);
-        $participantRepository            = $this->prophesize(ParticipantRepositoryInterface::class);
-        $questionRepository               = $this->prophesize(QuestionRepositoryInterface::class);
-        $participationCount               = $this->prophesize(ParticipationCount::class);
-        $eventDispatcher                  = $this->prophesize(DelayedEventDispatcher::class);
-
-        $participationCount->getRemaining($happening)->shouldBeCalled()->willReturn(10);
-        $participantRepository
-            ->getParticipantsForHappening($sheet, $happening)
+        $this->participationCount->getRemaining($this->happening)->shouldBeCalled()->willReturn(10);
+        $this->participantRepository
+            ->getParticipantsForHappening($this->sheet, $this->happening)
             ->shouldBeCalled()
             ->willReturn([]);
-        $participantRepository
-            ->getAvailableParticipantsForHappening([$participant], $happening)
+        $this->participantRepository
+            ->getAvailableParticipantsForHappening([$this->participant], $this->happening)
             ->shouldBeCalled()
-            ->willReturn([$participant]);
+            ->willReturn([$this->participant]);
 
-        $happeningParticipationRepository->findByHappeningAndUser(
-            $happening,
-            $user
+        $this->happeningParticipationRepository->findByHappeningAndUser(
+            $this->happening,
+            $this->user
         )->shouldBeCalled()->willReturn(null);
 
-        $happeningParticipationRepository->add(
-            new HappeningParticipation($happening, $user)
+        $this->happeningParticipationRepository->add(
+            new HappeningParticipation($this->happening, $this->user)
         )->shouldBeCalled();
 
-        $questionRepository->removeQuestionFromUserForHappening($user, $happening)->shouldBeCalled();
-        $questionRepository->add(
+        $this->questionRepository->removeQuestionFromUserForHappening($this->user, $this->happening)->shouldBeCalled();
+        $this->questionRepository->add(
             new Question(
-                $happening,
-                $sheet,
-                $user,
-                $datetime,
+                $this->happening,
+                $this->sheet,
+                $this->user,
+                $this->datetime,
                 'My question is...'
             )
         )->shouldBeCalled();
 
-        $eventDispatcher->dispatch(Events::HAPPENING_PARTICIPATED, new ParticipateEvent($sheet, [$participant], $happening))
+        $this->eventDispatcher->dispatch(Events::HAPPENING_PARTICIPATED, new ParticipateEvent($this->sheet, [$this->participant], $this->happening))
             ->shouldBeCalled();
-        $eventDispatcher->dispatch(Events::HAPPENING_PARTICIPATE, new ParticipateHappeningEvent($participant))
+        $this->eventDispatcher->dispatch(Events::HAPPENING_PARTICIPATE, new ParticipateHappeningEvent($this->participant))
             ->shouldBeCalled();
 
-        $participate = new Participate($happening, $sheet, $user, [$participant], 'My question is...');
+        $participate = $this->participate;
+        $participate->question = 'My question is...';
 
-        $handler = new ParticipateHandler(
-            $happeningParticipationRepository->reveal(),
-            $participantRepository->reveal(),
-            $questionRepository->reveal(),
-            $participationCount->reveal(),
-            $eventDispatcher->reveal(),
-            $datetime
-        );
-
-        $handler->handle($participate);
+        $this->handler->handle($participate);
     }
 
     public function testUnparticipateAndRemoveQuestion()
     {
-        $event    = EventFactory::createEvent();
-        $datetime = new \DateTime();
+        $this->happening->setQuestionAllowed(true);
 
-        $user  = new User('user@vimeet.com', 'salt', 'password', 'fr');
-        $sheet = SheetFactory::create($event, $user);
-
-        $participant = ParticipantFactory::create($sheet, $user);
-
-        $happening = new Happening(
-            $event,
-            new \DateTime('2016-01-01 08:00:00'),
-            new \DateTime('2016-01-01 09:00:00'),
-            new Category($event, 'picto', 1, '#000000', '#000000'),
-            [],
-            true,
-            10
-        );
-
-        $happeningParticipationRepository = $this->prophesize(HappeningParticipationRepositoryInterface::class);
-        $participantRepository            = $this->prophesize(ParticipantRepositoryInterface::class);
-        $questionRepository               = $this->prophesize(QuestionRepositoryInterface::class);
-        $participationCount               = $this->prophesize(ParticipationCount::class);
-        $eventDispatcher                  = $this->prophesize(DelayedEventDispatcher::class);
-
-        $participationCount->getRemaining($happening)->shouldBeCalled()->willReturn(10);
-        $participantRepository
-            ->getParticipantsForHappening($sheet, $happening)
+        $this->participationCount->getRemaining($this->happening)->shouldBeCalled()->willReturn(10);
+        $this->participantRepository
+            ->getParticipantsForHappening($this->sheet, $this->happening)
             ->shouldBeCalled()
-            ->willReturn([$participant]);
+            ->willReturn([$this->participant]);
 
-        $happeningParticipationRepository->findByHappeningAndUser(
-            $happening,
-            $user
+        $this->happeningParticipationRepository->findByHappeningAndUser(
+            $this->happening,
+            $this->user
         )->shouldNotBeCalled();
 
-        $happeningParticipationRepository->removeUserForHappening($user, $happening)->shouldBeCalled();
+        $this->happeningParticipationRepository->removeUserForHappening($this->user, $this->happening)->shouldBeCalled();
 
-        $questionRepository->removeQuestionFromUserForHappening($user, $happening)->shouldBeCalled();
-        $questionRepository->add()->shouldNotBeCalled();
+        $this->questionRepository->removeQuestionFromUserForHappening($this->user, $this->happening)->shouldBeCalled();
+        $this->questionRepository->add()->shouldNotBeCalled();
 
-        $eventDispatcher->dispatch(Events::HAPPENING_PARTICIPATED, new ParticipateEvent($sheet, [], $happening))
+        $this->eventDispatcher->dispatch(Events::HAPPENING_PARTICIPATED, new ParticipateEvent($this->sheet, [], $this->happening))
             ->shouldBeCalled();
-        $eventDispatcher->dispatch(Events::HAPPENING_UN_PARTICIPATE, new UnParticipateHappeningEvent($participant))
+        $this->eventDispatcher->dispatch(Events::HAPPENING_UN_PARTICIPATE, new UnParticipateHappeningEvent($this->participant))
             ->shouldBeCalled();
 
-        $participate = new Participate($happening, $sheet, $user, []);
-
-        $handler = new ParticipateHandler(
-            $happeningParticipationRepository->reveal(),
-            $participantRepository->reveal(),
-            $questionRepository->reveal(),
-            $participationCount->reveal(),
-            $eventDispatcher->reveal(),
-            $datetime
-        );
-
-        $handler->handle($participate);
+        $this->handler->handle($this->participate);
     }
 }

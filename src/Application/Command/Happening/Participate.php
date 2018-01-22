@@ -32,24 +32,36 @@ class Participate
     /** @var null|string */
     public $question;
 
+    /** @var null|string */
+    public $invitationCode;
+
+    /** @var bool */
+    public $cancel;
+
     /**
      * @param Happening   $happening
      * @param Sheet       $sheet
      * @param User        $createdBy
      * @param array       $participants
      * @param null|string $question
+     * @param null|string $invitationCode
+     * @param bool        $cancel
      */
     public function __construct(
         Happening $happening,
         Sheet $sheet,
         User $createdBy,
         array $participants,
-        $question = null
+        ?string $question = null,
+        ?string $invitationCode = null,
+        bool $cancel = false
     ) {
         $this->happening    = $happening;
         $this->sheet        = $sheet;
         $this->createdBy    = $createdBy;
         $this->participants = $participants;
         $this->question     = $question;
+        $this->cancel       = $cancel;
+        $this->invitationCode = $invitationCode;
     }
 }

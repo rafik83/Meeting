@@ -14,6 +14,7 @@ use Proximum\Vimeet\Application\Command\Happening\Participate;
 use Proximum\Vimeet\Application\Exception\Happening\NotEnoughtRemainingParticipationsException;
 use Proximum\Vimeet\Application\Exception\Happening\ParticipantNotAvailableException;
 use Proximum\Vimeet\Application\Exception\Happening\ParticipantRequiredException;
+use Proximum\Vimeet\Application\Exception\Happening\WrongInvitationCodeException;
 use Proximum\Vimeet\Application\Query\Happening\Participant\ParticipantsAllowedToAccessQuery;
 use Proximum\Vimeet\Domain\Model\Happening;
 use Proximum\Vimeet\Domain\Model\Sheet;
@@ -113,9 +114,17 @@ class HappeningController extends Controller
         }
 
         // Case : one participant is current user and no question so no modal
-        if ($isParticipationAlone && !$isQuestionAllowed || $isCancelParticipationAlone) {
+        if (!$happening->isPrivate() && $isParticipationAlone && !$isQuestionAllowed || $isCancelParticipationAlone) {
             try {
-                $participate = new Participate($happening, $sheet, $userDomain->getUser(), $selectedParticipants);
+                $participate = new Participate(
+                    $happening,
+                    $sheet,
+                    $userDomain->getUser(),
+                    $selectedParticipants,
+                    null,
+                    null,
+                    $isCancelParticipationAlone
+                );
                 $this->get('tactician.commandbus')->handle($participate);
             } catch (ParticipantNotAvailableException $participantNotAvailableException) {
                 return $this->createJsonResponseWithError('happening.participate.youAreNotAvailable');
@@ -193,6 +202,10 @@ class HappeningController extends Controller
                     'happening.participate.notEnoughtRemainingParticipations',
                     $remainingParticipations,
                     ['%remaining%' => $remainingParticipations]
+                )));
+            } catch (WrongInvitationCodeException $wrongInvitationCodeException) {
+                $formOrParticipantsField->addError(new FormError($this->get('translator')->trans(
+                    'happening.participate.wrongInvitationCode'
                 )));
             }
         }

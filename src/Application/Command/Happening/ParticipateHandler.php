@@ -17,6 +17,7 @@ use Proximum\Vimeet\Application\Event\Happening\UnParticipateHappeningEvent;
 use Proximum\Vimeet\Application\Exception\Happening\NotEnoughtRemainingParticipationsException;
 use Proximum\Vimeet\Application\Exception\Happening\ParticipantNotAvailableException;
 use Proximum\Vimeet\Application\Exception\Happening\ParticipantRequiredException;
+use Proximum\Vimeet\Application\Exception\Happening\WrongInvitationCodeException;
 use Proximum\Vimeet\Domain\Happening\ParticipationCount;
 use Proximum\Vimeet\Domain\Model\Happening\Question;
 use Proximum\Vimeet\Domain\Model\HappeningParticipation;
@@ -75,6 +76,7 @@ class ParticipateHandler
      * @throws NotEnoughtRemainingParticipationsException
      * @throws ParticipantNotAvailableException
      * @throws ParticipantRequiredException
+     * @throws WrongInvitationCodeException
      */
     public function handle(Participate $participate)
     {
@@ -82,6 +84,27 @@ class ParticipateHandler
             $participate->sheet,
             $participate->happening
         );
+
+        $update = false;
+        if (0 < count($previousParticipants)) {
+            foreach ($participate->participants as $participant) {
+                if (false === in_array($participant, $previousParticipants)) {
+                    $update = true;
+                }
+            }
+            foreach ($previousParticipants as $participant) {
+                if (false === in_array($participant, $participate->participants)) {
+                    $update = true;
+                }
+            }
+        }
+
+        if (!$participate->cancel
+            && !$update
+            && $participate->happening->isPrivate()
+            && $participate->invitationCode !== $participate->happening->getInvitationCode()) {
+            throw new WrongInvitationCodeException();
+        }
 
         // If not previous selected participants and 0 new selected participants
         if (0 === count($participate->participants) && 0 === count($previousParticipants)) {

@@ -18,6 +18,7 @@ use Proximum\Vimeet\Infrastructure\Adapter\TranslatorAdapter;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -92,6 +93,13 @@ class ParticipateType extends AbstractType
                         'expanded' => true,
                     ]
                 );
+        }
+
+        if ($happening->isPrivate()
+            && $options['isParticipantsEnabled'] === false || empty($options['data']->participants)) {
+            $builder->add('invitationCode', TextType::class, [
+                'required' => true
+            ]);
         }
     }
     /**

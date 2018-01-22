@@ -381,4 +381,16 @@ class Happening implements TimeRangeInterface
     {
         return $this->hasInvitationCode();
     }
+
+    /**
+     * @param string $invitationCode
+     *
+     * @return Happening
+     */
+    public function setInvitationCode(string $invitationCode)
+    {
+        $this->invitationCode = $invitationCode;
+
+        return $this;
+    }
 }
