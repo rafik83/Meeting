@@ -102,7 +102,8 @@ class ParticipateHandler
         if (!$participate->cancel
             && !$update
             && $participate->happening->isPrivate()
-            && $participate->invitationCode !== $participate->happening->getInvitationCode()) {
+            && $participate->invitationCode !== $participate->happening->getInvitationCode()
+        ) {
             throw new WrongInvitationCodeException();
         }
 

@@ -413,6 +413,9 @@ class ParticipateHandlerTest extends TestCase
         $this->eventDispatcher->dispatch(Events::HAPPENING_UN_PARTICIPATE, new UnParticipateHappeningEvent($this->participant))
             ->shouldBeCalled();
 
+        $participate = $this->participate;
+        $participate->participants = [];
+
         $this->handler->handle($this->participate);
     }
 }

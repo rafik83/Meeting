@@ -96,9 +96,10 @@ class ParticipateType extends AbstractType
         }
 
         if ($happening->isPrivate()
-            && $options['isParticipantsEnabled'] === false || empty($options['data']->participants)) {
+            && ($options['isParticipantsEnabled'] === false || empty($options['data']->participants))
+        ) {
             $builder->add('invitationCode', TextType::class, [
-                'required' => true
+                'required' => true,
             ]);
         }
     }
