@@ -22,7 +22,7 @@ Feature: Buy participant with from the funnel
     And there is a sheet for this type with the title "Proximum Group"
     And the user "user@example.net" is created
     And there is a participant for this sheet and this user
-    When I am logged with "user@example.net" on event "http://super-event.vimeet.proximum"
+    And I am logged with "user@example.net" on event "http://super-event.vimeet.proximum"
     And I go to this page "/fr/sheet"
     When I go to this page "/fr/sheet/1/package/step/1"
     Then I should see "Formule Jumbo"
