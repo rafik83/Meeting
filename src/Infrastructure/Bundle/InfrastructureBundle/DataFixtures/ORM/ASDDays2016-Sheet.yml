@@ -89,6 +89,7 @@ Proximum\Vimeet\Domain\Model\Sheet:
         lastLoginAt: <dateTime()>
         inCatalog: true
         inCatalogAt: <dateTime()>
+        title: Aanera
     sheet_asddays_empty:
         __construct:
             - '@event_asddays_2016'
@@ -113,6 +114,7 @@ Proximum\Vimeet\Domain\Model\Sheet:
         inCatalog: true
         inCatalogAt: <dateTime()>
         completeness: 15
+        title: Hello World Company
     sheet_asddays_empty_with_tag:
         __construct:
             - '@event_asddays_2016'
@@ -137,6 +139,7 @@ Proximum\Vimeet\Domain\Model\Sheet:
         inCatalog: true
         inCatalogAt: <dateTime()>
         completeness: 20
+        title: World Company Inc
 
 Proximum\Vimeet\Domain\Model\SheetCompleteness:
     sheet_completeness_asddays_1_fr:
