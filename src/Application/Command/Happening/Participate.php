@@ -36,7 +36,7 @@ class Participate
     public $invitationCode;
 
     /** @var bool */
-    public $cancel;
+    public $isUpdate;
 
     /**
      * @param Happening   $happening
@@ -45,7 +45,6 @@ class Participate
      * @param array       $participants
      * @param null|string $question
      * @param null|string $invitationCode
-     * @param bool        $cancel
      */
     public function __construct(
         Happening $happening,
@@ -54,14 +53,14 @@ class Participate
         array $participants,
         ?string $question = null,
         ?string $invitationCode = null,
-        bool $cancel = false
+        bool $isUpdate = false
     ) {
-        $this->happening    = $happening;
-        $this->sheet        = $sheet;
-        $this->createdBy    = $createdBy;
-        $this->participants = $participants;
-        $this->question     = $question;
-        $this->cancel       = $cancel;
+        $this->happening      = $happening;
+        $this->sheet          = $sheet;
+        $this->createdBy      = $createdBy;
+        $this->participants   = $participants;
+        $this->question       = $question;
         $this->invitationCode = $invitationCode;
+        $this->isUpdate       = $isUpdate;
     }
 }

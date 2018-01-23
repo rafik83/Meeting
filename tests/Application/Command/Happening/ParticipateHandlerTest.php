@@ -112,10 +112,6 @@ class ParticipateHandlerTest extends TestCase
             false
         );
         $this->question = new Question($this->happening, $this->sheet, $this->user, $this->datetime, 'toto');
-        $this->questionRepository
-            ->findByHappeningAndSheet($this->happening, $this->sheet)
-            ->shouldBeCalled()
-            ->willReturn($this->question);
     }
 
     public function testNotEnoughtRemainingParticipationsException()
@@ -133,12 +129,6 @@ class ParticipateHandlerTest extends TestCase
 
         $participate = $this->participate;
         $participate->question = 'toto';
-
-        $this->participantRepository
-            ->getParticipantsForHappening($this->participate->sheet, $this->participate->happening)
-            ->shouldBeCalled()
-            ->willReturn([$this->participant])
-        ;
 
         $this->handler->handle($participate);
     }

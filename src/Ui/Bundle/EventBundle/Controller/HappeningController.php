@@ -123,7 +123,7 @@ class HappeningController extends Controller
                     $selectedParticipants,
                     null,
                     null,
-                    $isCancelParticipationAlone
+                    $isUpdate
                 );
                 $this->get('tactician.commandbus')->handle($participate);
             } catch (ParticipantNotAvailableException $participantNotAvailableException) {
@@ -149,7 +149,9 @@ class HappeningController extends Controller
             $sheet,
             $userDomain->getUser(),
             $selectedParticipants,
-            $previousQuestion
+            $previousQuestion,
+            null,
+            $isUpdate
         );
 
         // Create Participate form
@@ -165,6 +167,7 @@ class HappeningController extends Controller
             'happening'             => $happening,
             'participants'          => $participants,
             'isParticipantsEnabled' => false === $isUserAloneParticipant,
+            'isUpdate'              => $isUpdate,
             'locale'                => $request->getLocale(),
         ]);
 

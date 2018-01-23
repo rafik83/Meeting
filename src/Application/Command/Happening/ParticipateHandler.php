@@ -80,42 +80,17 @@ class ParticipateHandler
      */
     public function handle(Participate $participate)
     {
-        $previousParticipants = $this->participantRepository->getParticipantsForHappening(
-            $participate->sheet,
-            $participate->happening
-        );
-
-        $updated = false;
-        if (0 < count($previousParticipants)) {
-            foreach ($participate->participants as $participant) {
-                if (false === in_array($participant, $previousParticipants)) {
-                    $updated = true;
-                }
-            }
-            foreach ($previousParticipants as $participant) {
-                if (false === in_array($participant, $participate->participants)) {
-                    $updated = true;
-                }
-            }
-        }
-
-        $previousQuestion = $this->questionRepository
-            ->findByHappeningAndSheet($participate->happening, $participate->sheet);
-
-        $updatedQuestion = $participate->question !== null;
-
-        if (null !== $previousQuestion) {
-            $updatedQuestion = $previousQuestion->getContent() !== $participate->question;
-        }
-
-        if (!$participate->cancel
-            && !$updated
-            && !$updatedQuestion
+        if (!$participate->isUpdate
             && $participate->happening->isPrivate()
             && $participate->invitationCode !== $participate->happening->getInvitationCode()
         ) {
             throw new WrongInvitationCodeException();
         }
+
+        $previousParticipants = $this->participantRepository->getParticipantsForHappening(
+            $participate->sheet,
+            $participate->happening
+        );
 
         // If not previous selected participants and 0 new selected participants
         if (0 === count($participate->participants) && 0 === count($previousParticipants)) {
