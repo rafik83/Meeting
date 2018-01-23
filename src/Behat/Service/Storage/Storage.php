@@ -19,11 +19,6 @@ class Storage implements StorageInterface
      */
     private $storage;
 
-    public function __construct()
-    {
-        var_dump('init Storage');
-    }
-
     /**
      * {@inheritdoc}
      */

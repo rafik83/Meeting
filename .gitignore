@@ -4,6 +4,7 @@
 /var/participants_imports
 /var/planning-print
 /var/planner
+/var/sms
 /var/bootstrap.php.cache
 /var/SymfonyRequirements.php
 /var/cache

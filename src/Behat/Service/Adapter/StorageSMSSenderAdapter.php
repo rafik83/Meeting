@@ -10,24 +10,25 @@
 
 namespace Proximum\Vimeet\Behat\Service\Adapter;
 
+use Behat\Transliterator\Transliterator;
+use Proximum\Vimeet\Application\Adapter\FileSystemAdapterInterface;
 use Proximum\Vimeet\Application\Adapter\SMSSenderInterface;
-use Proximum\Vimeet\Behat\Context\Storage\StorageInterface;
 use Proximum\Vimeet\Domain\Messaging\SMS\SMS;
 
 class StorageSMSSenderAdapter implements SMSSenderInterface
 {
-    const MESSAGE_LOGGED = 'SMS sent to %s with message: %s';
+    const LOGGED_MESSAGE = 'SMS sent to %s with message: %s';
 
-    /** @var StorageInterface */
-    private $storage;
+    /** @var FileSystemAdapterInterface */
+    private $fileSystem;
 
-    /**
-     * @param StorageInterface $storage
-     */
-    public function __construct(StorageInterface $storage)
+    /** @var string */
+    private $smsDirectory;
+
+    public function __construct(FileSystemAdapterInterface $fileSystem, string $smsDirectory)
     {
-        var_dump('init StorageSMSSenderAdapter');
-        $this->storage = $storage;
+        $this->fileSystem = $fileSystem;
+        $this->smsDirectory = $smsDirectory;
     }
 
     /**
@@ -35,9 +36,19 @@ class StorageSMSSenderAdapter implements SMSSenderInterface
      */
     public function send(SMS $sms)
     {
-        $this->storage->set(
-            'sms_sent',
-            sprintf(self::MESSAGE_LOGGED, $sms->getReceiver(), $sms->getMessage())
+        $filePath = $this->smsDirectory . DIRECTORY_SEPARATOR . self::getFileName($sms->getReceiver());
+
+        // remove previous file if exists
+        $this->fileSystem->remove($filePath);
+
+        $this->fileSystem->dumpFile(
+            $filePath,
+            sprintf(self::LOGGED_MESSAGE, $sms->getReceiver(), $sms->getMessage())
         );
+    }
+
+    public static function getFileName(string $receiver): string
+    {
+        return Transliterator::urlize($receiver);
     }
 }

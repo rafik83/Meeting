@@ -14,7 +14,9 @@ use Behat\Behat\Context\SnippetAcceptingContext;
 use Behat\Mink\Driver\BrowserKitDriver;
 use Behat\MinkExtension\Context\MinkContext;
 use Behat\Symfony2Extension\Context\KernelAwareContext;
+use Proximum\Vimeet\Application\Adapter\FileSystemAdapterInterface;
 use Proximum\Vimeet\Behat\Context\Domain\Proxy\FeatureContextProxyInterface;
+use Proximum\Vimeet\Behat\Service\Adapter\StorageSMSSenderAdapter;
 use Proximum\Vimeet\Domain\Model\Admin;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Repository\AdminRepositoryInterface;
@@ -704,17 +706,16 @@ class FeatureContext extends MinkContext implements KernelAwareContext, SnippetA
      *
      * @param string $phone
      */
-    public function aSmsShouldBeSentTo($phone)
+    public function aSmsShouldBeSentTo(string $phone)
     {
-        $smsSent = $this->kernel->getContainer()->get('behat_storage');
-        //->get('sms_sent');
+        /** @var FileSystemAdapterInterface $fileSystem */
+        $fileSystem = $this->kernel->getContainer()->get('adapter.file_system_adapter');
 
-        if (null === $smsSent) {
+        $smsDirectory = $this->kernel->getContainer()->getParameter('sms_directory');
+        $file = $smsDirectory . DIRECTORY_SEPARATOR . StorageSMSSenderAdapter::getFileName($phone);
+
+        if (!$fileSystem->exists($file)) {
             throw new \LogicException('Missing SMS');
-        }
-
-        if (false === strstr(sprintf("SMS sent to %s with message", $phone), $smsSent)) {
-            throw new \LogicException('SMS content not found');
         }
     }
 

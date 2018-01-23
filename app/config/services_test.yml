@@ -1,3 +1,6 @@
+parameters:
+    sms_directory: '%kernel.root_dir%/../var/sms'
+
 services:
     #
     # Storage
@@ -303,7 +306,8 @@ services:
     adapter.storage_sms_sender_adapter:
         class: Proximum\Vimeet\Behat\Service\Adapter\StorageSMSSenderAdapter
         arguments:
-            - '@behat_storage'
+            - '@adapter.file_system_adapter'
+            - '%sms_directory%'
 
     # Override the SMS Sender service
     adapter.smssender_alias: '@adapter.storage_sms_sender_adapter'
