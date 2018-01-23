@@ -44,6 +44,15 @@ class MessageFactory
     public function create(Event $event, $messageId, $sendEmailToTeam = false)
     {
         switch ($messageId) {
+            case Events::SHEET_REFUSED:
+                $command = new CreateMessage(
+                    $event,
+                    Events::SHEET_REFUSED,
+                    'mail.sheet.refused.subject',
+                    'MailBundle:Mail:Sheet/sheetRefused.html.twig',
+                    $sendEmailToTeam
+                );
+                break;
             case Events::SHEET_VALIDATED:
                 $command = new CreateMessage(
                     $event,

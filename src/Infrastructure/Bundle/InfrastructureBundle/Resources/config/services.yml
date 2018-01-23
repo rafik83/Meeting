@@ -860,6 +860,7 @@ services:
             - '@vimeet_infrastructure.repository.sheet_repository'
             - '@command.sheet.batch_enable_disable_handler'
             - '@adapter_batch_job_queue.batch_refuse_job_queue'
+            - '@adapter.job_queue_adapter'
 
     command.sheet.batch_enable_disable_handler:
         class: Proximum\Vimeet\Application\Command\Sheet\BatchEnableDisableHandler
