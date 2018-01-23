@@ -44,7 +44,7 @@ class ProductContext implements Context
             throw new \InvalidArgumentException('Missing Event');
         }
 
-        $product =$this->productContextProxy
+        $product = $this->productContextProxy
             ->getProductManager()
             ->createParticipant($event, $title, $unitPrice, $maxQuantity)
         ;

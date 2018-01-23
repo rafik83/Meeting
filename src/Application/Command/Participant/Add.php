@@ -60,10 +60,10 @@ class Add
         User $adder,
         array $products = []
     ) {
-        $this->sheet               = $sheet;
-        $this->locale              = $locale;
-        $this->owner               = false;
-        $this->adder               = $adder;
+        $this->sheet  = $sheet;
+        $this->locale = $locale;
+        $this->owner  = false;
+        $this->adder  = $adder;
 
         $productSelected = null;
         if (count($products) === 1) {
