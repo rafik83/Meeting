@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Tests\Application\Query\Agenda\Admin;
 
+use PHPUnit\Framework\TestCase;
 use Proximum\Vimeet\Application\Query\Agenda\Admin\AgendaParticipantViewQuery;
 use Proximum\Vimeet\Application\Query\Agenda\Admin\AgendaParticipantViewQueryHandler;
 use Proximum\Vimeet\Application\Query\Agenda\Admin\AgendaSheetViewQuery;
@@ -40,7 +41,7 @@ use Proximum\Vimeet\Tests\Factory\ParticipantFactory;
 use Proximum\Vimeet\Tests\Factory\SheetFactory;
 use Proximum\Vimeet\Tests\Factory\UserFactory;
 
-class AgendaSheetViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
+class AgendaSheetViewQueryHandlerTest extends TestCase
 {
     public function testHandle()
     {
@@ -72,7 +73,7 @@ class AgendaSheetViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
         $unavailability         = new Unavailability($user, $event, $begin, $end);
 
         $happeningParticipation = new HappeningParticipation(
-            new Happening($event, $begin, $end, $happeningCategory),
+            new Happening($event, $begin, $end, $happeningCategory, []),
             $user
         );
 

@@ -1,0 +1,4 @@
+Proximum\Vimeet\Application\Command\User\Event\Token\UpdateAgendaConfirmation:
+    properties:
+        status:
+            - NotNull: ~

@@ -11,6 +11,7 @@
 namespace Proximum\Vimeet\Infrastructure\Repository;
 
 use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\QueryBuilder;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Order\Row;
 use Proximum\Vimeet\Domain\Model\Product;
@@ -39,6 +40,15 @@ class ProductRepository implements ProductRepositoryInterface
     public function add(Product $product)
     {
         $this->entityManager->persist($product);
+        $this->entityManager->flush($product);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function remove(Product $product)
+    {
+        $this->entityManager->remove($product);
         $this->entityManager->flush($product);
     }
 
@@ -158,5 +168,80 @@ class ProductRepository implements ProductRepositoryInterface
             ->setParameter('productId', $productId);
 
         return $queryBuilder->getQuery()->getOneOrNullResult();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function findRemovableProductsForEvent(Event $event): array
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('product')
+            ->from(Product::class, 'product', 'product.id')
+            ->where('product.event = :event')
+            ->setParameter('event', $event);
+
+        $this->addRemovableCondition($queryBuilder);
+
+        return $queryBuilder->getQuery()->getResult();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function isProductRemovable(Product $product): bool
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('product.id')
+            ->from(Product::class, 'product')
+            ->where('product.event = :event')
+            ->andWhere('product = :product')
+            ->setParameter('product', $product)
+            ->setParameter('event', $product->getEvent());
+
+        $this->addRemovableCondition($queryBuilder);
+
+        return null !== $queryBuilder->getQuery()->getOneOrNullResult();
+    }
+
+    /**
+     * @param QueryBuilder $queryBuilder
+     */
+    private function addRemovableCondition(QueryBuilder $queryBuilder)
+    {
+        $queryBuilder
+            ->andWhere('(
+                NOT EXISTS(
+                    SELECT _order.id
+                    FROM Entity:Order _order
+                    JOIN _order.sheet sheet WITH sheet.event = :event
+                    JOIN _order.rows row 
+                    WHERE row.product = product
+                )
+                AND NOT EXISTS(
+                    SELECT plan.id
+                    FROM Entity:Product plan
+                    JOIN plan.productIncluded productIncluded
+                    WHERE plan.event = :event AND productIncluded.included = product
+                )
+                AND NOT EXISTS(
+                    SELECT package.id
+                    FROM Entity:Package package
+                    LEFT JOIN package.participantRanks participantRank
+                    LEFT JOIN package.planning planning
+                    LEFT JOIN package.groups group
+                    LEFT JOIN group.optionRanks optionRank 
+                    LEFT JOIN package.planRanks packagePlanRank
+                    WHERE participantRank.productParticipant = product
+                        OR planning = product
+                        OR packagePlanRank.plan = product
+                        OR optionRank.option = product
+                )
+            )')
+        ;
     }
 }

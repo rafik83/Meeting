@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Tests\Application\Command\Sheet;
 
+use PHPUnit\Framework\TestCase;
 use Proximum\Vimeet\Application\Command\Sheet\Attend;
 use Proximum\Vimeet\Application\Command\Sheet\AttendHandler;
 use Proximum\Vimeet\Application\Components\Sheet\HappeningParticipation\EnableDisableManager;
@@ -18,7 +19,7 @@ use Proximum\Vimeet\Domain\Repository\MeetingRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
 use Proximum\Vimeet\Tests\Factory\SheetFactory;
 
-class AttendHandlerTest extends \PHPUnit_Framework_TestCase
+class AttendHandlerTest extends TestCase
 {
     public function testHandleCancelAttendance()
     {

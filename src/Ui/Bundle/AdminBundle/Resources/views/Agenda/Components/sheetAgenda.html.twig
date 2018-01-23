@@ -12,7 +12,24 @@
             <table class="table-agenda table-condensed">
                 <tr>
                     <td v-for="participant in sheet.participants">
-                        <p class="text-center">${ participant.fullname }</p>
+                        <div >
+
+                        </div>
+                        <p class="text-center">
+                            ${ participant.fullname }
+                            <span v-if="participant.isAttending === true && participant.isSmsActivateDatePassed === true && participant.isPhoneValidated === true">
+                                <button
+                                    v-if="!participant.stopSMS"
+                                    class="btn btn-default btn-xs pull-right text-center"
+                                    v-on:click="$store.commit('OPEN_USER_AGENDA_VERSION_MODAL', participant.id)"
+                                >
+                                    <i class="icon-Smartphone"></i>
+                                </button>
+                                <span class="label label-danger" v-if="participant.stopSMS">
+                                    {{ 'admin.agenda.stopSMS'|trans }}
+                                </span>
+                            </span>
+                        </p>
                         <table class="table">
                             <tr>
                                 <td v-for="day in participant.days" class="col-xs-6">

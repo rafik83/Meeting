@@ -41,11 +41,11 @@ class NomenclatureItem
      * NomenclatureItem constructor.
      *
      * @param string             $key
-     * @param string             $label
+     * @param array              $label indexed by locale
      * @param NomenclatureItem[] $children
      * @param bool               $sort
      */
-    public function __construct($key, $label, array $children = [], $sort = true)
+    public function __construct($key, array $label, array $children = [], $sort = true)
     {
         $this->key      = $key;
         $this->label    = $label;

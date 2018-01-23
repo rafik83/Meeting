@@ -13,8 +13,9 @@ namespace Proximum\Vimeet\Tests\Application\Components\Sheet;
 use Proximum\Vimeet\Application\Command\Planning\SheetInfoGuesserCache;
 use Proximum\Vimeet\Application\Components\Sheet\SortedSheet;
 use Proximum\Vimeet\Domain\Model\Sheet;
+use PHPUnit\Framework\TestCase;
 
-class SortedSheetTest extends \PHPUnit_Framework_TestCase
+class SortedSheetTest extends TestCase
 {
     public function testSort()
     {

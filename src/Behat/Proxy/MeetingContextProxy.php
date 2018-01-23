@@ -13,6 +13,8 @@ namespace Proximum\Vimeet\Behat\Proxy;
 use Proximum\Vimeet\Behat\Context\Domain\Proxy\MeetingContextProxyInterface;
 use Proximum\Vimeet\Behat\Context\Storage\StorageInterface;
 use Proximum\Vimeet\Behat\Service\Manager\MeetingManager;
+use Proximum\Vimeet\Behat\Service\Manager\SlotManager;
+use Proximum\Vimeet\Behat\Service\Manager\SpotManager;
 
 class MeetingContextProxy implements MeetingContextProxyInterface
 {
@@ -22,14 +24,28 @@ class MeetingContextProxy implements MeetingContextProxyInterface
     /** @var MeetingManager */
     private $meetingManager;
 
+    /** @var SpotManager */
+    private $spotManager;
+
+    /** @var SlotManager */
+    private $slotManager;
+
     /**
      * @param StorageInterface $storage
      * @param MeetingManager   $meetingManager
+     * @param SpotManager      $spotManager
+     * @param SlotManager      $slotManager
      */
-    public function __construct(StorageInterface $storage, MeetingManager $meetingManager)
-    {
+    public function __construct(
+        StorageInterface $storage,
+        MeetingManager $meetingManager,
+        SpotManager $spotManager,
+        SlotManager $slotManager
+    ) {
         $this->storage        = $storage;
         $this->meetingManager = $meetingManager;
+        $this->spotManager    = $spotManager;
+        $this->slotManager    = $slotManager;
     }
 
     /**
@@ -41,10 +57,26 @@ class MeetingContextProxy implements MeetingContextProxyInterface
     }
 
     /**
-     * @return MeetingManager
+     * {@inheritdoc}
      */
     public function getMeetingManager()
     {
         return $this->meetingManager;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getSpotManager(): SpotManager
+    {
+        return $this->spotManager;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getSlotManager(): SlotManager
+    {
+        return $this->slotManager;
     }
 }

@@ -10,12 +10,13 @@
 
 namespace Proximum\Vimeet\Tests\Application\Query\Order\Export;
 
+use PHPUnit\Framework\TestCase;
 use Proximum\Vimeet\Application\Adapter\TranslatorInterface;
 use Proximum\Vimeet\Application\Query\Order\Export\SharedColumnsTranslationViewQuery;
 use Proximum\Vimeet\Application\Query\Order\Export\SharedColumnsTranslationViewQueryHandler;
 use Proximum\Vimeet\Application\View\Order\Export\SharedColumnsTranslationView;
 
-class SharedColumnsTranslationViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
+class SharedColumnsTranslationViewQueryHandlerTest extends TestCase
 {
     public function testHandle()
     {

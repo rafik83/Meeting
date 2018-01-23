@@ -12,8 +12,9 @@ namespace Proximum\Vimeet\Tests\Application\Components\Sheet\Template;
 
 use Proximum\Vimeet\Application\Components\Sheet\Template\CompletenessCalculator;
 use Proximum\Vimeet\Domain\Model\Template\SheetTemplate;
+use PHPUnit\Framework\TestCase;
 
-class CompletenessCalculatorTest extends \PHPUnit_Framework_TestCase
+class CompletenessCalculatorTest extends TestCase
 {
     public static function provideLocales()
     {

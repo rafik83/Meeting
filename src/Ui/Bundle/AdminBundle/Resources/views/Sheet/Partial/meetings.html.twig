@@ -5,7 +5,7 @@
                 {{ 'admin.sheet.details.meeting.request.approved'|trans }}
             </div>
             <div class="panel-body text-center h1">
-                {{ details.approvedRequests }}
+                {{ details.meetingIndicator.approvedRequests }}
             </div>
         </div>
     </div>
@@ -15,7 +15,7 @@
                 {{ 'admin.sheet.details.meeting.request.pending'|trans }}
             </div>
             <div class="panel-body text-center h1">
-                {{ details.pendingRequests }}
+                {{ details.meetingIndicator.pendingRequests }}
             </div>
         </div>
     </div>
@@ -25,7 +25,7 @@
                 {{ 'admin.sheet.details.meeting.request.refused'|trans }}
             </div>
             <div class="panel-body text-center h1">
-                {{ details.refusedRequests }}
+                {{ details.meetingIndicator.refusedRequests }}
             </div>
         </div>
     </div>
@@ -38,7 +38,7 @@
                 {{ 'admin.sheet.details.meeting.proposition.approved'|trans }}
             </div>
             <div class="panel-body text-center h1">
-                {{ details.approvedPropositions }}
+                {{ details.meetingIndicator.approvedPropositions }}
             </div>
         </div>
     </div>
@@ -48,7 +48,7 @@
                 {{ 'admin.sheet.details.meeting.proposition.pending'|trans }}
             </div>
             <div class="panel-body text-center h1">
-                {{ details.pendingPropositions }}
+                {{ details.meetingIndicator.pendingPropositions }}
             </div>
         </div>
     </div>
@@ -58,7 +58,20 @@
                 {{ 'admin.sheet.details.meeting.proposition.refused'|trans }}
             </div>
             <div class="panel-body text-center h1">
-                {{ details.refusedPropositions }}
+                {{ details.meetingIndicator.refusedPropositions }}
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-4">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                {{ 'admin.sheet.details.meeting.meeting'|trans }}
+            </div>
+            <div class="panel-body text-center h1">
+                {{ details.meetingIndicator.meetings }}
             </div>
         </div>
     </div>

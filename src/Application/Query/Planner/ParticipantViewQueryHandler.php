@@ -78,7 +78,7 @@ class ParticipantViewQueryHandler
                     $unavailabilitiesSlots = [];
 
                     foreach ($slots as $slot) {
-                        $slotView = $this->slotAvailability->isAvailable($slot, $participant);
+                        $slotView = $this->slotAvailability->getSlotAvailability($slot, $participant);
 
                         // Avoid set as unavailability a meeting
                         if (!$slotView->isAvailable() && !$slotView->isMeeting()) {
@@ -88,6 +88,7 @@ class ParticipantViewQueryHandler
 
                     $participantViews[] = new ParticipantView(
                         $participant->getId(),
+                        $participant->getUser()->getId(),
                         $participant->getUser()->getAccount()->getCompleteName(),
                         $sheet,
                         $unavailabilitiesSlots,

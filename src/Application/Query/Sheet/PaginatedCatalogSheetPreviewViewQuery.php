@@ -16,40 +16,32 @@ use Proximum\Vimeet\Domain\Model\User;
 
 class PaginatedCatalogSheetPreviewViewQuery
 {
-    /**
-     * @var Event
-     */
+    /** @var Event */
     public $event;
 
-    /**
-     * @var array
-     */
+    /** @var array */
     public $filters;
 
-    /**
-     * @var int
-     */
+    /** @var int */
     public $page;
 
-    /**
-     * @var int
-     */
+    /** @var int */
     public $limit;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     public $locale;
 
-    /**
-     * @var Sheet
-     */
+    /** @var Sheet */
     public $viewer;
 
-    /**
-     * @var User
-     */
+    /** @var User */
     public $user;
+
+    /** @var array */
+    public $availableSlotIds;
+
+    /** @var array */
+    public $sheetsToExclude;
 
     /**
      * @param Event  $event
@@ -59,15 +51,28 @@ class PaginatedCatalogSheetPreviewViewQuery
      * @param string $locale
      * @param Sheet  $viewer
      * @param User   $user
+     * @param array  $availableSlotIds
+     * @param array  $sheetsToExclude
      */
-    public function __construct(Event $event, array $filters, $page, $limit, $locale, Sheet $viewer, User $user)
-    {
-        $this->event   = $event;
-        $this->filters = $filters;
-        $this->page    = $page;
-        $this->limit   = $limit;
-        $this->locale  = $locale;
-        $this->viewer  = $viewer;
-        $this->user    = $user;
+    public function __construct(
+        Event $event,
+        array $filters,
+        $page,
+        $limit,
+        $locale,
+        Sheet $viewer,
+        User $user,
+        array $availableSlotIds = [],
+        array $sheetsToExclude = []
+    ) {
+        $this->event            = $event;
+        $this->filters          = $filters;
+        $this->page             = $page;
+        $this->limit            = $limit;
+        $this->locale           = $locale;
+        $this->viewer           = $viewer;
+        $this->user             = $user;
+        $this->availableSlotIds = $availableSlotIds;
+        $this->sheetsToExclude  = $sheetsToExclude;
     }
 }

@@ -5,7 +5,7 @@ app_options:
   php:                   true
   php_version:           '7.1'
   nodejs:                true
-  nodejs_version:        '4'
+  nodejs_version:        '8'
   mysql:                 true
   mysql_version:         '5.6'
   elasticsearch:         true
@@ -17,7 +17,7 @@ app_patterns:
   # Timezone #
   ############
 
-  timezone_default: Etc/UTC
+  timezone_default: Europe/Paris
 
   ###############
   # Environment #
@@ -37,7 +37,7 @@ app_patterns:
   ##########
 
   docker_applications:
-    - manala/openl10n-cli:1.0.0
+    - manala/openl10n-cli:1.1.0
 
   #######
   # Ssh #
@@ -60,22 +60,22 @@ app_patterns:
       - Port:     22
 
     # Preprod
-    - Host proximum-vimeet-preprod:
+    - Host vimeet-preprod:
       - User:         www-data
-      - ProxyCommand: ssh proximum-gw nc vimeet-preprod %p
+      - Hostname:     10.11.0.83
 
     # Prod
     - Host proximum-mysql-master:
       - User:         www-data
       - ProxyCommand: ssh proximum-gw nc mysql-master %p
 
-    - Host proximum-web-apache-01:
+    - Host vimeet-prod1:
       - User:         www-data
-      - ProxyCommand: ssh proximum-gw nc web-apache-01 %p
+      - Hostname:     10.11.0.31
 
-    - Host proximum-web-apache-02:
+    - Host vimeet-prod2:
       - User:         www-data
-      - ProxyCommand: ssh proximum-gw nc web-apache-02 %p
+      - Hostname:     10.11.0.32
 
     - Host proximum-filer:
       - User:         www-data
@@ -153,13 +153,17 @@ app_patterns:
     - file: app.conf
       config:
         - server:
+          - listen: 443 ssl
+          - listen: 80
           - server_name: "{{ app.host }} *.{{ app.host }}"
-          #- server_name: "*.ngrok.io"
+          - server_name: "*.ngrok.io"
           - root:        "{{ app.dir }}{{ app.dir_release }}/web"
           - access_log:  "{{ app.log_dir }}/nginx.access.log"
           - error_log:   "{{ app.log_dir }}/nginx.error.log"
           - client_max_body_size: 8M
           - include:     conf.d/app_gzip
+          - ssl_certificate: "{{ certificate_path }}/{{ certificate_domain }}/cert.pem"
+          - ssl_certificate_key: "{{ certificate_path }}/{{ certificate_domain }}/privkey.pem"
           - location /:
             - try_files: $uri /app.php$is_args$args
           - location ~ ^/(app(_[-\w]+)?)\.php(/|$):
@@ -195,25 +199,6 @@ app_patterns:
   # Supervisor #
   ##############
 
-  #supervisor_configs:
-  #  - file:     app.conf
-  #    template: configs/app_program.{{ env }}.j2
-  #    config:
-  #      - foo-bar:
-  #        - command:        php bin/console app:foo:bar --no-interaction -vv
-  #        - directory:      "{{ app.dir }}{{ app.dir_release }}"
-  #        - user:           "{{ app.user }}"
-  #        - stdout_logfile: "{{ app.log_dir }}/supervisor.foo-bar.log"
-  #        - environment:    "SYMFONY_ENV=\"{{ app.env }}\""
-  #        # Dev
-  #        - autostart:       false
-
-
-
-  ##############
-  # Supervisor #
-  ##############
-
   supervisor_configs:
     - file:     app.conf
       template: configs/app_program.{{ env }}.j2
@@ -226,3 +211,7 @@ app_patterns:
           - environment:    "SYMFONY_ENV=\"{{ app.env }}\""
           # Dev
           - autostart:       false
+
+certificate_path: '/etc/nginx/certificates'
+certificate_domain: 'vimeet'
+certificate_email: 'vimeet@elao.com'

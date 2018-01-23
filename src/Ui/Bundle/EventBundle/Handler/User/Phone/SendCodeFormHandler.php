@@ -42,8 +42,8 @@ class SendCodeFormHandler
         CommandBus $commandBus
     ) {
         $this->userEventPhoneRepository = $userEventPhoneRepository;
-        $this->formFactory = $formFactory;
-        $this->commandBus = $commandBus;
+        $this->formFactory              = $formFactory;
+        $this->commandBus               = $commandBus;
     }
 
     /**
@@ -54,14 +54,16 @@ class SendCodeFormHandler
     public function handle(SendCodeForm $sendCodeForm)
     {
         $request = $sendCodeForm->request;
-        $locale = $request->getLocale();
-        $user = $sendCodeForm->user;
-        $event = $sendCodeForm->event;
+        $locale  = $request->getLocale();
+        $user    = $sendCodeForm->user;
+        $event   = $sendCodeForm->event;
 
-        $userEventPhoneValidated = $this->userEventPhoneRepository->findValidated($user, $event);
+        if ($sendCodeForm->ignorePhoneAlreadyValidated === false) {
+            $userEventPhoneValidated = $this->userEventPhoneRepository->findValidated($user, $event);
 
-        if (null !== $userEventPhoneValidated) {
-            return new SendCodeView(SendCodeView::SEND_CODE_FORM_NOT_SHOWN);
+            if (null !== $userEventPhoneValidated) {
+                return new SendCodeView(SendCodeView::SEND_CODE_FORM_NOT_SHOWN);
+            }
         }
 
         $tipTranslationViews = $this->commandBus->handle(
@@ -77,23 +79,33 @@ class SendCodeFormHandler
             return new SendCodeView(SendCodeView::SEND_CODE_FORM_NOT_SHOWN);
         }
 
-        $sendCode = new SendCode($user, $event, $user->getPhone(), $locale);
-        $form = $this->formFactory->create(SendCodeType::class, $sendCode, [
+        $sendCode = new SendCode($user, $event, $sendCodeForm->mobileNumberToValidate ?? $user->getMobile(), $locale);
+
+        $formOptions = [
             'country' => $event->getCountry(),
-            'submit' => true,
-        ]);
+            'submit'  => true,
+        ];
+
+        if (!empty($sendCodeForm->actionRoute)) {
+            $formOptions['action'] = $sendCodeForm->actionRoute;
+        }
+
+        $form = $this->formFactory->create(SendCodeType::class, $sendCode, $formOptions);
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
             try {
                 $this->commandBus->handle($sendCode);
 
                 return new SendCodeView(SendCodeView::SEND_CODE_SUCCESS);
-
             } catch (InvalidReceiverException $invalidReceiverException) {
                 $form->get('phone')->addError(new FormError('validators.send_code.error.invalidReceiver'));
             }
         }
 
-        return new SendCodeView(SendCodeView::SEND_CODE_SHOW_FORM, $form, $tipTranslationViews);
+        return new SendCodeView(
+            SendCodeView::SEND_CODE_SHOW_FORM,
+            $form,
+            $tipTranslationViews
+        );
     }
 }

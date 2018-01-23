@@ -3,21 +3,20 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2016 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
 
 namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Event\SearchFacet;
 
-use Proximum\Vimeet\Domain\Model\SearchFacetTranslation;
+use Proximum\Vimeet\Domain\Model\Catalog\Internal\SearchFacet;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
-use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class TranslationType extends AbstractType
 {
@@ -32,10 +31,10 @@ class TranslationType extends AbstractType
             ]);
 
         $builder->addEventListener(FormEvents::PRE_SET_DATA, function (FormEvent $event) {
-            $form                   = $event->getForm();
-            $searchFacetTranslation = $event->getData();
+            $form = $event->getForm();
+            $data = $event->getData();
 
-            if ($searchFacetTranslation->getSearchFacet()->hasPlaceholder()) {
+            if (SearchFacet::hasPlaceholder($data['type'])) {
                 $form->add(
                     'placeholder',
                     TextareaType::class,
@@ -45,15 +44,5 @@ class TranslationType extends AbstractType
                 );
             }
         });
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function configureOptions(OptionsResolver $resolver)
-    {
-        $resolver->setDefaults([
-            'data_class' => SearchFacetTranslation::class,
-        ]);
     }
 }

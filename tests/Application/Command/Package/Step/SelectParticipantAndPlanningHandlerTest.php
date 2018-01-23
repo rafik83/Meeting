@@ -28,8 +28,9 @@ use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Order\Merger;
 use Proximum\Vimeet\Infrastructure\Adapter\DelayedEventDispatcher;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
+use PHPUnit\Framework\TestCase;
 
-class SelectParticipantAndPlanningHandlerTest extends \PHPUnit_Framework_TestCase
+class SelectParticipantAndPlanningHandlerTest extends TestCase
 {
     public function testHandle()
     {
@@ -49,7 +50,7 @@ class SelectParticipantAndPlanningHandlerTest extends \PHPUnit_Framework_TestCas
         $package->enable(true, true, true);
         $package->setPlans([$planProduct]);
         $package->setPlanning($planningProduct);
-        $package->setParticipant($participantProduct);
+        $package->setParticipants([$participantProduct]);
         $type->setPackage($package);
 
         $promotionCode    = new PromotionCode($event, 'My promotion code', 'AXYZ', 1, $datetime->modify('+1 month'));
@@ -112,7 +113,7 @@ class SelectParticipantAndPlanningHandlerTest extends \PHPUnit_Framework_TestCas
         $package->enable(true, true, true);
         $package->setPlans([$planProduct]);
         $package->setPlanning($planningProduct);
-        $package->setParticipant($participantProduct);
+        $package->setParticipants([$participantProduct]);
         $type->setPackage($package);
 
         $promotionCode    = new PromotionCode($event, 'My promotion code', 'AXYZ', 1, $datetime->modify('+1 month'));

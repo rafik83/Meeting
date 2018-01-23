@@ -10,10 +10,12 @@
 
 namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Controller;
 
+use Proximum\Vimeet\Application\Query\Catalog\External\CatalogVisibilityRegistrationUrlQuery;
 use Proximum\Vimeet\Application\Query\Navigation\HeaderViewQuery;
 use Proximum\Vimeet\Application\Query\Navigation\MenuViewQuery;
 use Proximum\Vimeet\Application\Query\Navigation\SubmenuViewQuery;
 use Proximum\Vimeet\Domain\Model\Sheet;
+use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Route\Route;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\ParamConverter\EventDomain;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
@@ -45,12 +47,16 @@ class NavigationController extends Controller
         $route           = $requestStack->getMasterRequest()->get('_route');
         $routeParameters = $requestStack->getMasterRequest()->get('_route_params');
 
+        if (null === $route) {
+            $route = Route::EVENT;
+        }
+
         $menuHeaderView = $this->get('tactician.commandbus.query')->handle(
             new HeaderViewQuery(
                 $eventDomain->getEvent(),
                 $request->getLocale(),
                 $route,
-                $routeParameters,
+                null === $routeParameters ? [] : $routeParameters,
                 $registration,
                 $sheet,
                 $user
@@ -70,10 +76,21 @@ class NavigationController extends Controller
             );
         }
 
+        if (Route::EXTERNAL_CATALOG === $route) {
+            $registrationUrl = $this->get('tactician.commandbus.query')->handle(
+                new CatalogVisibilityRegistrationUrlQuery($event)
+            );
+        }
+
+        $isShowingRegisterButton = Route::EVENT !== $route && null === $user;
+
         return $this->render('EventBundle::Navigation/header.html.twig', [
-            'menuHeaderView' => $menuHeaderView,
-            'menuView'       => $menuView,
-            'submenuView'    => $submenuView,
+            'menuHeaderView'          => $menuHeaderView,
+            'menuView'                => $menuView,
+            'submenuView'             => $submenuView,
+            'isShowingRegisterButton' => $isShowingRegisterButton,
+            'isHeaderDisplayed'       => $route === Route::EVENT || $route === Route::LOGIN,
+            'registrationUrl'         => $registrationUrl ?? null
         ]);
     }
 }

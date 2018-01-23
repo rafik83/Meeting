@@ -24,8 +24,9 @@ use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Repository\EventRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\Invoice\InvoiceRepositoryInterface;
 use Proximum\Vimeet\Domain\View\Invoice\ExportView;
+use PHPUnit\Framework\TestCase;
 
-class ExportHandlerTest extends \PHPUnit_Framework_TestCase
+class ExportHandlerTest extends TestCase
 {
     public function testHandle()
     {

@@ -1,12 +1,16 @@
 {% extends 'EventBundle::base.html.twig' %}
 
 {% block body %}
-    {% if is_granted('ROLE_PREVIOUS_ADMIN') and event is defined %}
-        {{ render(controller('EventBundle:Security:impersonatingUser', { 'event': event })) }}
-    {% endif %}
-
     <div class="wrapper profile">
-        {{ render(controller('EventBundle:Navigation:menu', {'registration': true})) }}
+        {{ render(controller('EventBundle:Navigation:menu', { 'registration': true })) }}
+
+        {% if is_granted('ROLE_PREVIOUS_USER') and event is defined and sheet is defined %}
+            {{ render(controller('EventBundle:Security:impersonatingSheetGroupManagerToSheetUser', { 'event': event, 'sheet': sheet })) }}
+        {% endif %}
+
+        {% if is_granted('ROLE_PREVIOUS_ADMIN') and event is defined %}
+            {{ render(controller('EventBundle:Security:impersonatingUser', { 'event': event, 'sheet': participant is defined ? participant.sheet : null })) }}
+        {% endif %}
 
         <div class="profile__content">
             {% block content %}{% endblock %}

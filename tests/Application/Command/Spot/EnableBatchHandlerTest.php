@@ -14,8 +14,9 @@ use Proximum\Vimeet\Application\Command\Spot\EnableBatch;
 use Proximum\Vimeet\Application\Command\Spot\EnableBatchHandler;
 use Proximum\Vimeet\Domain\Repository\SpotRepositoryInterface;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
+use PHPUnit\Framework\TestCase;
 
-class EnableBatchHandlerTest extends \PHPUnit_Framework_TestCase
+class EnableBatchHandlerTest extends TestCase
 {
     public function testHandle()
     {

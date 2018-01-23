@@ -39,8 +39,9 @@ use Proximum\Vimeet\Application\View\Planner\TypePriorityView;
 use Proximum\Vimeet\Application\View\Planner\TypeView;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
 use Proximum\Vimeet\Domain\Model\Event;
+use PHPUnit\Framework\TestCase;
 
-class PlannerViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
+class PlannerViewQueryHandlerTest extends TestCase
 {
     public function testHandle()
     {
@@ -53,7 +54,7 @@ class PlannerViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
         $typeView         = new TypeView(1, 'type');
         $typePriorityView = new TypePriorityView($typeView, $typeView, 1);
         $sheetView        = new SheetView(1, $typeView, 2, 5);
-        $participantView  = new ParticipantView(1, 'fullName', $sheetView, [$slotView]);
+        $participantView  = new ParticipantView(1, 1, 'fullName', $sheetView, [$slotView]);
         $meetingView      = new MeetingView(1, [$sheetView], [$participantView]);
         $spotView         = new SpotView(1, true, 'ref', 2, 3, [$sheetView], 1);
 

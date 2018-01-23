@@ -1,0 +1,62 @@
+services:
+    command.third_party.vianeo.vianeo_api_call_handler:
+        class: Proximum\Vimeet\Application\ThirdParty\Vianeo\Command\VianeoApiCallHandler
+        arguments:
+            - '@adapter.http_adapter'
+            - '@repository.event.extra_parameter_repository'
+            - '@command.third_party.vianeo.vianeo_get_sheet_data_handler'
+            - '@command.third_party.vianeo.vianeo_register_sheet_handler'
+            - '@repository.sheet.extra_data_repository'
+
+    command.third_party.vianeo.vianeo_get_sheet_data_handler:
+        class: Proximum\Vimeet\Application\ThirdParty\Vianeo\Command\VianeoGetSheetDataHandler
+        arguments:
+            - '@application.api.vianeo.sheet.vianeo_sheet_info_guesser'
+            - '@template.participant_info_guesser'
+            - '@adapter.serializer_adapter'
+
+    command.third_party.vianeo.vianeo_register_sheet_handler:
+        class: Proximum\Vimeet\Application\ThirdParty\Vianeo\Command\VianeoRegisterSheetHandler
+        arguments:
+            - '@repository.sheet.extra_data_repository'
+            - '@datetime'
+
+    command.third_party.vianeo.vianeo_prepare_api_call_handler:
+        class: Proximum\Vimeet\Application\ThirdParty\Vianeo\Command\VianeoPrepareApiCallHandler
+        arguments:
+            - '@vimeet_infrastructure.repository.event_repository'
+            - '@repository.event.extra_parameter_repository'
+            - '@vimeet_infrastructure.repository.type_repository'
+            - '@vimeet_infrastructure.repository.sheet_repository'
+            - '@tagged_info_guesser'
+            - '@adapter.vianeo_api_call_job_queue'
+
+    infrastructure.command.api.vianeo_api_call_command:
+        class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\ThirdParty\Vianeo\VianeoApiCallCommand
+        arguments:
+            - '@command.third_party.vianeo.vianeo_api_call_handler'
+            - '@vimeet_infrastructure.repository.sheet_repository'
+        tags:
+            - { name: console.command }
+
+    infrastructure.command.api.vianeo_prepare_api_call_command:
+        class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\ThirdParty\Vianeo\VianeoPrepareApiCallCommand
+        arguments:
+            - '@command.third_party.vianeo.vianeo_prepare_api_call_handler'
+        tags:
+            - { name: console.command }
+
+    application.api.vianeo.sheet.vianeo_sheet_info_guesser:
+        class: Proximum\Vimeet\Application\ThirdParty\Vianeo\Sheet\VianeoSheetInfoGuesser
+        arguments:
+            - '@tagged_info_guesser'
+
+    serializer.normalizer.api.vianeo.vianeo_sheet_view_normalizer:
+        class: Proximum\Vimeet\Application\ThirdParty\Vianeo\Normalizer\VianeoSheetViewNormalizer
+        tags:
+            - { name: serializer.normalizer }
+
+    adapter.vianeo_api_call_job_queue:
+        class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Adapter\ThirdParty\Vianeo\VianeoApiCallJobQueue
+        arguments:
+            - '@doctrine.orm.entity_manager'

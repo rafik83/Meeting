@@ -21,8 +21,9 @@ use Proximum\Vimeet\Domain\Repository\TransactionRepositoryInterface;
 use Proximum\Vimeet\Domain\Transaction\TransactionManager;
 use Proximum\Vimeet\Infrastructure\Adapter\DelayedEventDispatcher;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
+use PHPUnit\Framework\TestCase;
 
-class TransactionManagerTest extends \PHPUnit_Framework_TestCase
+class TransactionManagerTest extends TestCase
 {
     public function testSetPaid()
     {

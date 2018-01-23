@@ -10,7 +10,7 @@
 
 namespace Proximum\Vimeet\Application\Command\Planner;
 
-use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\Planner\ExportPlannerCommand;
+use Proximum\Vimeet\Domain\Planner\ExportSolutionType;
 
 class Export
 {
@@ -27,21 +27,42 @@ class Export
     public $locale;
 
     /** @var string */
-    public $emailToNotify;
+    public  $emailToNotify;
+
+    /** @var bool */
+    public $isModeAuto;
+
+    /** @var int|null */
+    public $plannerJobId;
 
     /**
-     * @param int $eventId
-     * @param string $locale
-     * @param string $emailToNotify
-     * @param string $lockMeetingRequest
-     * @param string $solutionType
+     * @param int      $eventId
+     * @param string   $locale
+     * @param string   $emailToNotify
+     * @param bool     $lockMeetingRequest
+     * @param string   $solutionType
+     * @param bool     $isModeAuto
+     * @param int|null $plannerJobId
      */
-    public function __construct($eventId, $locale, $emailToNotify, $lockMeetingRequest, $solutionType)
-    {
+    public function __construct(
+        int $eventId,
+        string $locale,
+        string $emailToNotify,
+        bool $lockMeetingRequest,
+        string $solutionType,
+        bool $isModeAuto,
+        ?int $plannerJobId
+    ) {
+        if (!in_array($solutionType, ExportSolutionType::getExportSolutionTypes(), true)) {
+            throw new \InvalidArgumentException('solutionType must be one of ExportSolutionType');
+        }
+
         $this->eventId            = $eventId;
         $this->locale             = $locale;
         $this->emailToNotify      = $emailToNotify;
-        $this->lockMeetingRequest = ($lockMeetingRequest === ExportPlannerCommand::LOCK_MEETING_REQUEST) ? true : false;
+        $this->lockMeetingRequest = $lockMeetingRequest;
         $this->solutionType       = $solutionType;
+        $this->isModeAuto         = $isModeAuto;
+        $this->plannerJobId       = $plannerJobId;
     }
 }

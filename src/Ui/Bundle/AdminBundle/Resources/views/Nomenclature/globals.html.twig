@@ -2,6 +2,8 @@
 
 {% import 'AdminBundle::macro.html.twig' as macro %}
 
+{% block title 'admin.global_nomenclature.title'|trans %}
+
 {% block content %}
     <h1 class="page-header">{{ 'admin.global_nomenclature.title'|trans }}</h1>
 
@@ -9,6 +11,6 @@
         {{ include('AdminBundle:Nomenclature:create.html.twig', { 'form': form }, false) }}
     {% endif %}
 
-    {{ include('AdminBundle:Nomenclature:table.html.twig', { 'nomenclatures': nomenclatures }, false) }}
+    {{ include('AdminBundle:Nomenclature:table.html.twig', { 'nomenclatures': nomenclatures, 'tableType': 'global'}, false) }}
 
 {% endblock %}

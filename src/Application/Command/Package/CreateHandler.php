@@ -15,30 +15,25 @@ use Proximum\Vimeet\Domain\Repository\PackageRepositoryInterface;
 
 class CreateHandler
 {
-    /**
-     * @var PackageRepositoryInterface
-     */
+    /** @var PackageRepositoryInterface */
     private $packageRepository;
 
-    /**
-     * @var \DateTimeInterface
-     */
+    /** @var \DateTimeInterface */
     private $dateTime;
 
-    /**
-     * @var array
-     */
+    /** @var array */
     private $defaultLabels;
 
     /**
-     * CreateHandler constructor.
-     *
      * @param PackageRepositoryInterface $packageRepository
      * @param \DateTimeInterface         $dateTime
      * @param array                      $defaultLabels
      */
-    public function __construct(PackageRepositoryInterface $packageRepository, \DateTimeInterface $dateTime, array $defaultLabels)
-    {
+    public function __construct(
+        PackageRepositoryInterface $packageRepository,
+        \DateTimeInterface $dateTime,
+        array $defaultLabels
+    ) {
         $this->packageRepository = $packageRepository;
         $this->dateTime          = $dateTime;
         $this->defaultLabels     = $defaultLabels;

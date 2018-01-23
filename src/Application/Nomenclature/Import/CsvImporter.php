@@ -10,11 +10,16 @@
 
 namespace Proximum\Vimeet\Application\Nomenclature\Import;
 
+use Proximum\Vimeet\Application\Adapter\IntlInterface;
+use Proximum\Vimeet\Application\Nomenclature\Import\Exception\ImportException;
+use Proximum\Vimeet\Application\Nomenclature\Import\Exception\InvalidLocaleException;
+use Proximum\Vimeet\Application\Nomenclature\Import\Exception\LocalesMustCorrespondToThoseOfTheEventException;
 use Proximum\Vimeet\Application\Serializer\Charset;
 use Proximum\Vimeet\Application\Nomenclature\Id\IdGeneratorInterface;
 use Proximum\Vimeet\Application\Nomenclature\Import\Exception\DepthException;
 use Proximum\Vimeet\Application\Nomenclature\Import\Exception\FileNotFoundException;
 use Proximum\Vimeet\Application\Nomenclature\Import\Exception\NoLocaleSpecifiedException;
+use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Nomenclature;
 
 class CsvImporter implements ImporterInterface
@@ -25,13 +30,20 @@ class CsvImporter implements ImporterInterface
     private $generator;
 
     /**
+     * @var IntlInterface
+     */
+    private $intl;
+
+    /**
      * CsvImporter constructor.
      *
      * @param IdGeneratorInterface $generator
+     * @param IntlInterface        $intl
      */
-    public function __construct(IdGeneratorInterface $generator)
+    public function __construct(IdGeneratorInterface $generator, IntlInterface $intl)
     {
         $this->generator = $generator;
+        $this->intl = $intl;
     }
 
     /**
@@ -41,8 +53,14 @@ class CsvImporter implements ImporterInterface
     {
         $csv     = $this->parseFile($value, $charset);
         $locales = $this->parseLocales($csv);
-        $values  = [];
-        $depths  = [];
+        $this->validateLocales($nomenclature->getEvent(), $locales);
+
+        $values = [];
+        $depths = [];
+
+        if (!is_array($csv)) {
+            throw new ImportException();
+        }
 
         foreach (array_slice($csv, 1) as $row) {
 
@@ -58,8 +76,16 @@ class CsvImporter implements ImporterInterface
             if ($depth === 1) {
                 $values[$id] = $this->parseLabels($locales, $row, $depth);
             } elseif ($depth === 2) {
+                if (!isset($depths[1])) {
+                    throw new DepthException();
+                }
+
                 $values[$depths[1]]['children'][$id] = $this->parseLabels($locales, $row, $depth);
             } elseif ($depth === 3) {
+                if (!isset($depths[1]) || !isset($depths[2])) {
+                    throw new DepthException();
+                }
+
                 $values[$depths[1]]['children'][$depths[2]]['children'][$id] = $this->parseLabels($locales, $row, $depth);
             }
         }
@@ -105,17 +131,57 @@ class CsvImporter implements ImporterInterface
      * @param array $csv
      *
      * @return array
+     *
+     * @throws ImportException
+     * @throws InvalidLocaleException
      * @throws NoLocaleSpecifiedException
      */
-    private function parseLocales(array $csv)
+    private function parseLocales(array $csv): array
     {
+        if (!isset($csv[0]) || !is_array($csv[0])) {
+            throw new ImportException();
+        }
+
         $locales = $this->filterEmpty(array_slice($csv[0], 1));
 
         if (empty($locales)) {
             throw new NoLocaleSpecifiedException('No locale specified.');
         }
 
+        $locales = array_map('trim', $locales);
+
+        $validLocales = $this->intl->getLocales();
+
+        foreach ($locales as &$locale) {
+            $locale = trim($locale);
+
+            if (!in_array($locale, $validLocales)) {
+                throw new InvalidLocaleException($locale);
+            }
+        }
+
         return $locales;
+    }
+
+    /**
+     * @param Event|null $event
+     * @param array      $locales
+     *
+     * @throws LocalesMustCorrespondToThoseOfTheEventException
+     */
+    private function validateLocales(Event $event = null, array $locales)
+    {
+        if (null === $event) {
+            return;
+        }
+
+        $eventLocales = $event->getLocales();
+        sort($eventLocales);
+        sort($locales);
+
+        if ($eventLocales !== $locales) {
+            throw new LocalesMustCorrespondToThoseOfTheEventException();
+        }
     }
 
     /**

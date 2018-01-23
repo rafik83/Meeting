@@ -53,6 +53,11 @@ interface NomenclatureRepositoryInterface
     public function set(Nomenclature $nomenclature);
 
     /**
+     * @param Nomenclature $nomenclature
+     */
+    public function remove(Nomenclature $nomenclature);
+
+    /**
      * @return Nomenclature[]
      */
     public function findGlobals();

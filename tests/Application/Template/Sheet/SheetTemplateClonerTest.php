@@ -24,8 +24,9 @@ use Proximum\Vimeet\Domain\Template\TemplateObject\EditableText;
 use Proximum\Vimeet\Domain\Template\TemplateObject\Nomenclature as NomenclatureObject;
 use Proximum\Vimeet\Domain\Template\TemplateRemoveField;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
+use PHPUnit\Framework\TestCase;
 
-class SheetTemplateClonerTest extends \PHPUnit_Framework_TestCase
+class SheetTemplateClonerTest extends TestCase
 {
     public function testDuplicate()
     {

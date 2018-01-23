@@ -13,6 +13,7 @@ namespace Proximum\Vimeet\Application\Command\Participant;
 use Proximum\Vimeet\Application\Components\Sheet\Template\Tag;
 use Proximum\Vimeet\Application\Components\Token\User\ActivateAccountTokenGenerator;
 use Proximum\Vimeet\Application\Event\Events;
+use Proximum\Vimeet\Application\Event\Participant\ParticipantAddedEvent;
 use Proximum\Vimeet\Application\Event\Sheet\SheetAddParticipantEvent;
 use Proximum\Vimeet\Application\Event\Sheet\SheetUpdatedEvent;
 use Proximum\Vimeet\Application\Event\User\ActivateAccountEvent;
@@ -22,6 +23,7 @@ use Proximum\Vimeet\Application\Exception\Participant\EmailCanNotBeNullException
 use Proximum\Vimeet\Application\Exception\Sheet\ParticipantAlreadyExistException;
 use Proximum\Vimeet\Domain\Account\Synchronizer;
 use Proximum\Vimeet\Domain\Cart\CartManager;
+use Proximum\Vimeet\Domain\Helper\StringHelper;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Repository\ParticipantRepositoryInterface;
@@ -127,6 +129,8 @@ class AddHandler
             throw new EmailCanNotBeNullException();
         }
 
+        $add->email = StringHelper::trimSpacesAndNonBreakSpaces($add->email);
+
         $user = $this->userRepository->findByEmail($add->email);
         $isNewUser = false;
 
@@ -170,6 +174,7 @@ class AddHandler
 
         $sheetUpdated = new SheetUpdatedEvent($add->sheet);
         $this->eventDispatcher->dispatch(Events::SHEET_UPDATED, $sheetUpdated);
+        $this->eventDispatcher->dispatch(Events::PARTICIPANT_ADDED, new ParticipantAddedEvent($participant));
 
         return new AddResult($participant);
     }
@@ -185,6 +190,7 @@ class AddHandler
         $token = $this->activateAccountTokenGenerator->generate($user, $add->sheet);
         $event = new ActivateAccountEvent(
             $user,
+            $add->adder,
             $add->sheet->getEvent(),
             $token,
             $add->sheet

@@ -37,49 +37,31 @@ use Symfony\Component\Intl\Intl;
 
 class SheetElasticTransformer implements ModelToElasticaTransformerInterface
 {
-    /**
-     * @var SheetInfoGuesser
-     */
+    /** @var SheetInfoGuesser */
     private $sheetInfoGuesser;
 
-    /**
-     * @var ParticipantInfoGuesser
-     */
+    /** @var ParticipantInfoGuesser */
     private $participantInfoGuesser;
 
-    /**
-     * @var CartRowRepositoryInterface
-     */
+    /** @var CartRowRepositoryInterface */
     private $cartRowRepository;
 
-    /**
-     * @var HappeningParticipationRepositoryInterface
-     */
+    /** @var HappeningParticipationRepositoryInterface */
     private $happeningParticipationRepository;
 
-    /**
-     * @var RequestRepositoryInterface
-     */
+    /** @var RequestRepositoryInterface */
     private $meetingRequestRepository;
 
-    /**
-     * @var TemplateDataFactory
-     */
+    /** @var TemplateDataFactory */
     private $templateDataFactory;
 
-    /**
-     * @var Balance
-     */
+    /** @var Balance */
     private $orderBalance;
 
-    /**
-     * @var MeetingRepositoryInterface
-     */
+    /** @var MeetingRepositoryInterface */
     private $meetingRepository;
 
-    /**
-     * @var InvoiceRepositoryInterface
-     */
+    /** @var InvoiceRepositoryInterface */
     private $invoiceRepository;
 
     /**
@@ -184,6 +166,9 @@ class SheetElasticTransformer implements ModelToElasticaTransformerInterface
                 'sheetName'               => $this->sheetInfoGuesser->guessSheetTitle($sheet, $locale),
                 'state'                   => $sheet->getState(),
                 'validationState'         => $sheet->getValidationState(),
+                'agendaConfirmedStatus'          => $sheet->getAgendaConfirmedStatus(),
+                'phoneValidationStatus'          => $sheet->getPhoneValidationStatus(),
+                'availabilityConfirmationStatus' => $sheet->getAvailabilityConfirmationStatus(),
                 'enabled'                 => $sheet->isEnabled(),
                 'completed'               => $sheet->isCompleted(),
                 'type'                    => $sheet->getType()->getId(),
@@ -217,8 +202,10 @@ class SheetElasticTransformer implements ModelToElasticaTransformerInterface
                 'hasPendingMeetingProposition' => $this->meetingRequestRepository->hasPendingPropositionReceivedBySheet($sheet),
                 'hasScheduledMeeting'          => $this->meetingRepository->hasScheduledMeeting($sheet),
                 'hasInvoice'                   => $this->invoiceRepository->hasInvoice($sheet),
-                'attend' => $sheet->attend(),
-                'hasGroup' => $sheet->hasGroup()
+                'attend'                       => $sheet->attend(),
+                'hasGroup'                     => $sheet->hasGroup(),
+                'hasSpot'                      => $sheet->getSpot() !== null,
+                'availableSlotIds'             => $this->buildAvailableSlots($sheet),
             ],
             $contentByLocale
         ));
@@ -430,5 +417,19 @@ class SheetElasticTransformer implements ModelToElasticaTransformerInterface
         }
 
         return $nomenclatureItems;
+    }
+
+    /**
+     * @param Sheet $sheet
+     *
+     * @return array
+     */
+    private function buildAvailableSlots(Sheet $sheet)
+    {
+        $ids = array_map(function (Sheet\AvailableSlot $availableSlot) {
+            return ['id' => $availableSlot->getSlot()->getId()];
+        }, $sheet->getAvailableSlots());
+
+        return $ids;
     }
 }

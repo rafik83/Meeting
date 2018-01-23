@@ -214,7 +214,7 @@ class MailEventSubscriber implements EventSubscriberInterface
     public function onUserActivateAccount(UserActivateAccountEvent $event)
     {
         $participantMailView = $this->participantMailViewQueryHandler->handle(
-            new ParticipantMailViewQuery($event->getSheet(), $event->getUser())
+            new ParticipantMailViewQuery($event->getSheet(), $event->getFromUser())
         );
 
         $mail = new UserActivateAccountMail(

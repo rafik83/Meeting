@@ -1,0 +1,25 @@
+{% if item.taggedDataViews is not empty %}
+<div class="object object--tag {{ 'style--' ~ item.style }}">
+    {% set label = item.label(locale, fallback) %}
+    {% if not item.hasOnlyTagUrl %}
+        <header>
+            <h2>{{ label }}</h2>
+        </header>
+    {% endif %}
+    <div class="section__content">
+        <ul>
+            {% for taggedDataView in item.taggedDataViews %}
+                <li class="{{ taggedDataView.isTextarea == false ? 'highlight' : '' }}" style="{{ taggedDataView.isTextarea ? 'color: #333333 !important': '' }}">
+                    {{ include('AdminBundle:Sheet/Pdf/Tag:' ~ taggedDataView.type ~ '.html.twig', {
+                        'sheet': sheet,
+                        'taggedDataView': taggedDataView,
+                        'locale': locale,
+                        'label': label,
+                        'loop': loop
+                    }, false) }}
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
+</div>
+{% endif %}

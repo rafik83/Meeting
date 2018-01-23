@@ -1,3 +1,24 @@
+export.meeting_request.col.createdAt: 'created at'
+export.meeting_request.col.fromParticipantIds: 'participant asker ids'
+export.meeting_request.col.fromParticipantNames: 'participant asker name'
+export.meeting_request.col.fromSheetCategory: 'sheet asker category'
+export.meeting_request.col.fromSheetId: 'sheet asker id'
+export.meeting_request.col.fromSheetTitle: 'sheet asker title'
+export.meeting_request.col.fromSheetType: 'sheet asker type'
+export.meeting_request.col.meetingId: 'ID meeting'
+export.meeting_request.col.requestId: 'ID meeting request'
+export.meeting_request.col.state: state
+export.meeting_request.col.toParticipantIds: 'participant asked ids'
+export.meeting_request.col.toParticipantNames: 'participant asked name'
+export.meeting_request.col.toSheetCategory: 'sheet asked category'
+export.meeting_request.col.toSheetId: 'sheet asked id'
+export.meeting_request.col.toSheetTitle: 'sheet asked title'
+export.meeting_request.col.toSheetType: 'sheet asked type'
+export.meeting_request.col.updatedAt: 'updated at'
+export.meeting_request.state.approved: Accepted
+export.meeting_request.state.planned: Planned
+export.meeting_request.state.refused: Refused
+export.meeting_request.state.sent: Sent
 gender.man: Mr
 gender.woman: Mrs
 order.column.product.quantity: '%productTitle% : quantity (excl. tax)'

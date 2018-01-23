@@ -24,8 +24,9 @@ use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Service\EventSend
 use Proximum\Vimeet\Tests\Factory\EventFactory;
 use Proximum\Vimeet\Tests\Factory\SheetFactory;
 use Proximum\Vimeet\Ui\Bundle\MailBundle\Mail\Messaging\MessageContentMail;
+use PHPUnit\Framework\TestCase;
 
-class ProcessHandlerTest extends \PHPUnit_Framework_TestCase
+class ProcessHandlerTest extends TestCase
 {
     public function testSend()
     {

@@ -10,44 +10,67 @@
 
 namespace Proximum\Vimeet\Application\View\Sheet\Details;
 
+use Proximum\Vimeet\Application\View\Sheet\Details\Participant\AgendaConfirmationStatusView;
+use Proximum\Vimeet\Application\View\Sheet\Details\Participant\AvailabilityConfirmationView;
+use Proximum\Vimeet\Application\View\Sheet\Details\Participant\PhoneValidationStatusView;
 use Proximum\Vimeet\Domain\Template\TemplateData;
 
 class ParticipantView
 {
     const VISIO_CHECKED = 'checked';
 
-    /**
-     * @var int
-     */
+    /** @var int */
     public $id;
 
-    /**
-     * @var TemplateData
-     */
+    /** @var TemplateData */
     public $templateData;
 
-    /**
-     * @var bool
-     */
+    /** @var bool */
     public $isOwner;
 
-    /**
-     * @var bool
-     */
+    /** @var bool */
     public $visio;
 
+    /** @var string */
+    public $email;
+
+    /** @var AgendaConfirmationStatusView */
+    public $agendaConfirmationStatus;
+
+    /** @var PhoneValidationStatusView */
+    public $phoneValidationStatusView;
+
+    /** @var AvailabilityConfirmationView */
+    public $availabilityConfirmationView;
+
     /**
-     * @param int          $id
-     * @param TemplateData $templateData
-     * @param bool         $isOwner
-     * @param bool         $visio
+     * @param int                          $id
+     * @param string                       $email
+     * @param TemplateData                 $templateData
+     * @param bool                         $isOwner
+     * @param bool                         $visio
+     * @param AgendaConfirmationStatusView $agendaConfirmationStatus
+     * @param PhoneValidationStatusView    $phoneValidationStatusView
+     * @param AvailabilityConfirmationView $availabilityConfirmationView
      */
-    public function __construct($id, TemplateData $templateData, $isOwner = false, $visio)
-    {
-        $this->id           = $id;
-        $this->templateData = $templateData;
-        $this->isOwner      = $isOwner;
-        $this->visio        = $visio;
+    public function __construct(
+        $id,
+        $email,
+        TemplateData $templateData,
+        $isOwner = false,
+        bool $visio,
+        AgendaConfirmationStatusView $agendaConfirmationStatus,
+        PhoneValidationStatusView $phoneValidationStatusView,
+        AvailabilityConfirmationView $availabilityConfirmationView
+    ) {
+        $this->id                        = $id;
+        $this->templateData              = $templateData;
+        $this->isOwner                   = $isOwner;
+        $this->visio                     = $visio;
+        $this->email                     = $email;
+        $this->agendaConfirmationStatus  = $agendaConfirmationStatus;
+        $this->phoneValidationStatusView = $phoneValidationStatusView;
+        $this->availabilityConfirmationView = $availabilityConfirmationView;
     }
 
     /**

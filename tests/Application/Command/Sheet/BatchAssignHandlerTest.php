@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Tests\Application\Command\Sheet;
 
+use PHPUnit\Framework\TestCase;
 use Proximum\Vimeet\Application\Adapter\JobQueueInterface;
 use Proximum\Vimeet\Application\Command\Sheet\BatchAssign;
 use Proximum\Vimeet\Application\Command\Sheet\BatchAssignHandler;
@@ -20,7 +21,7 @@ use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
 
-class BatchAssignHandlerTest extends \PHPUnit_Framework_TestCase
+class BatchAssignHandlerTest extends TestCase
 {
     public function testHandle()
     {

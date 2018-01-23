@@ -1,6 +1,6 @@
 admin.mail.activateAccount.activate: 'Activate your account'
 admin.mail.activateAccount.body: 'Hello, you have been invited as contributor on Vimeet. To be able to access it, please click on the following link and enter a password to activate you account:'
-admin.mail.activateAccount.end: 'Best regards,'
+admin.mail.activateAccount.end: ''
 admin.mail.activateAccount.subject: 'Activate your account'
 admin.mail.resetPassword.body: 'Hello, to reset your password, please click on the link below:'
 admin.mail.resetPassword.end: 'Best regards,'
@@ -20,10 +20,11 @@ mail.completeProfile.body: 'You have been invited as participant on the event %e
 mail.completeProfile.end: 'Best regards,'
 mail.completeProfile.link: 'Complete your member area'
 mail.completeProfile.subject: '[%event%] Invitation as a participant'
-mail.confirmResetPassword.body: 'Dear %firstname% %lastname%, your password has been changed'
+mail.confirm.agenda.link: 'Confirm schedule'
+mail.confirmResetPassword.body: "Dear %firstname% %lastname%, \n\nYour password has been changed"
 mail.confirmResetPassword.subject: 'Your password has been changed'
-mail.event.preregister.body: "%firstname% %lastname%, \n\nYour registration to %event% has been taken into account and will be reviewed by the %event% team as soon as possible. You will receive a confirmation email when your registration has been validated by the organizer\n\nBest regards,"
-mail.event.preregister.end: 'Best regards,'
+mail.event.preregister.body: "%firstname% %lastname%, \n\nYour registration to %event% has been taken into account and will be reviewed by the %event% team as soon as possible. You will receive a confirmation email when your registration has been validated by the organizer"
+mail.event.preregister.end: ''
 mail.event.preregister.link: 'Your member area'
 mail.event.preregister.subject: 'You are pre-registered to %event%'
 mail.footer.contact: Contact
@@ -34,8 +35,8 @@ mail.orderConfirm.subject: 'Your order has been registered'
 mail.participant.profile.link: 'Your member area'
 mail.register.body: "%firstname% %lastname%, Congratulations! The access to your member area of %event% has been created.\n\nYou can now connect to your member area on the website of %event%. \n\nBest regards,"
 mail.register.subject: 'The access to your member area of %event% has been created'
-mail.resetPassword.body: 'Hello, you have asked for a password modification. Please click on the following link to create a new password:'
-mail.resetPassword.end: 'Best regards,'
+mail.resetPassword.body: "Hello, \n\nYou have asked for a password modification. \nPlease click on the following link to create a new password:"
+mail.resetPassword.end: ''
 mail.resetPassword.link: 'Reset password'
 mail.resetPassword.subject: '[%event%] Forgotten password'
 mail.sheet.add_participant_confirmation.body: "Hello, \n\nYour invitation to %guestEmail% for %event% has been sent. \n\nRegards,"
@@ -48,7 +49,7 @@ mail.sheet.invoiced.end: "Your invoice is also available in your member area by 
 mail.sheet.invoiced.link: 'Download my invoice %invoiceNumber%'
 mail.sheet.invoiced.subject: 'Download your invoice'
 mail.sheet.show.link: 'See the presentation sheet'
-mail.sheet.submitted.body: "The presentation sheet of %sheetName% has been finalised on %date% by %firstname% %lastname%. \n\nTo acess the details of the presentation sheet, please click on the link below"
+mail.sheet.submitted.body: "The presentation sheet of %sheetName% has been finalised on %date% by %firstname% %lastname%. \n\nTo access the details of the presentation sheet, please click on the link below"
 mail.sheet.submitted.end: 'Regards,'
 mail.sheet.submitted.link: 'View sheet'
 mail.sheet.submitted.subject: 'Sheet %sheetName% finalized'

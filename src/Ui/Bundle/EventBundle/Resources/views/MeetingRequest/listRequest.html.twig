@@ -4,10 +4,45 @@
 
 {% block body_attributes 'class="grey"' %}
 
+{% block header_mobile %}
+    <div class="catalog-mobile-menu">
+        {% if searchForm.type is defined or searchForm.availableSlot is defined %}
+            <div class="catalog-mobile-menu-summary catalog-mobile-menu-container">
+                {% if searchForm.availableSlot is defined %}
+                    <a href="#" class="catalog-mobile-menu-button btn btn-primary btn-block">
+                        <span>...</span>
+                        <span class="button-count">
+                        <i class="glyphicon glyphicon-chevron-down"></i>
+                    </span>
+                    </a>
+                {% endif %}
+                {% if searchForm.state is defined %}
+                    <a href="#" class="catalog-mobile-menu-button btn btn-primary btn-block">
+                        <span>...</span>
+                        <span class="button-count">
+                            (...)
+                            <i class="glyphicon glyphicon-chevron-down"></i>
+                        </span>
+                    </a>
+                {% endif %}
+            </div>
+        {% endif %}
+    </div>
+{% endblock %}
+
 {% block content %}
-    <div class="catalog catalog--advanced">
+    {% set numberOfFilterOnMobile = 0 %}
+    {% if searchForm.state is defined %}{% set numberOfFilterOnMobile = numberOfFilterOnMobile + 1 %}{% endif %}
+    {% if searchForm.availableSlot is defined %}{% set numberOfFilterOnMobile = numberOfFilterOnMobile + 1 %}{% endif %}
+    <div class="
+        catalog
+        catalog--advanced
+        {% if numberOfFilterOnMobile > 0 %}
+            catalog-mobile-margin-{{ numberOfFilterOnMobile }}
+        {% endif %}
+    ">
         {{ include('EventBundle:Tip:tip.html.twig', {tipTranslationViews: tipTranslationViews}) }}
-        {{ include('EventBundle:MeetingRequest/Partials:catalog.html.twig', {tipTranslationViews: null}) }}
+        {{ include('EventBundle:MeetingRequest/Partials:catalog.html.twig', {tipTranslationViews: null, participant: participant}) }}
     </div>
     {{ include('EventBundle:MeetingRequest:modalMeetingRequest.html.twig') }}
 {% endblock %}

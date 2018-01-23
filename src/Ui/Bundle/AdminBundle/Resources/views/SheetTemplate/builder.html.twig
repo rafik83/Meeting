@@ -1,5 +1,7 @@
 {% extends 'AdminBundle::base.html.twig' %}
 
+{% block title 'admin.template.sheet.title'|trans %}
+
 {% block body %}
     {{ include('AdminBundle:Common:menu.html.twig') }}
     <div class="container-fluid template-builder-container" data-template-builder="{{ path('admin_template_sheet_save', { 'template': template.id, 'locale': locale }) }}" data-locale="{{ locale }}">
@@ -31,13 +33,13 @@
                         </ul>
                     </div>
                     <button class="btn btn-primary" data-toggle="modal" data-target="#update-modal">{{ 'admin.template.action.edit'|trans }}</button>
-                    <button class="btn btn-success" id="template-save-button" data-loading-button="{{ '<i class="glyphicon glyphicon-refresh spin"></i> Sauvegarde en cours ...'|e }}">{{ 'admin.template.action.save'|trans }}</button>
+                    <button class="btn btn-success" id="template-save-button" data-loading-button="{{ ('<i class="glyphicon glyphicon-refresh spin"></i> ' ~ ('admin.template.action.updating'|trans))|e }}">{{ 'admin.template.action.save'|trans }}</button>
                 </div>
             </div>
             {{ include('AdminBundle::flashes.html.twig') }}
         </div>
-        <div class="template-builder-body">
 
+        <div class="template-builder-body">
             <div class="block" data-config="{}">
                 <span class="delete"></span>
                 <div class="template-container container-fluid block-inner" id="template-container">
@@ -58,20 +60,19 @@
                     {% endfor %}
                 </div>
             </div>
-
         </div>
-        <div class="template-builder-menu" id="template-menu">
 
-            <button class="btn btn-lg btn-default pull-left slide-menu-button" id="template-menu-button" style="margin-top: 30px;">
+        <div class="template-builder-menu" id="template-menu">
+            <button class="btn btn-lg btn-default pull-left slide-menu-button" id="template-menu-button">
                 <i class="glyphicon glyphicon-chevron-left"></i>
             </button>
             <div class="template-builder-menu-wrapper">
                 <ul class="nav nav-tabs" role="tablist">
                     <li role="presentation" class="active">
-                        <a href="#blocks" aria-controls="blocks" role="tab" data-toggle="tab">Blocks</a>
+                        <a href="#blocks" aria-controls="blocks" role="tab" data-toggle="tab">{{ 'admin.template.blocks'|trans }}</a>
                     </li>
                     <li role="presentation">
-                        <a href="#objects" aria-controls="objects" role="tab" data-toggle="tab">Objets</a>
+                        <a href="#objects" aria-controls="objects" role="tab" data-toggle="tab">{{ 'admin.template.objects'|trans }}</a>
                     </li>
                 </ul>
 
@@ -84,6 +85,7 @@
                             {{ include('AdminBundle:Template/Block:12.html.twig', { 'locale': locale, 'nomenclatures': nomenclatures, 'sheet_tags': sheet_tags, 'products': products }, false) }}
                         </div>
                     </div>
+
                     <div role="tabpanel" class="tab-pane" id="objects">
                         <div id="object-list" class="object-list">
                             {{ include('AdminBundle:Template/Object:text.html.twig', { 'locale': locale }, false) }}
@@ -100,7 +102,6 @@
                     </div>
                 </div>
             </div>
-
         </div>
 
         {% if add_locale_form %}
@@ -128,7 +129,7 @@
                 <div class="modal-content">
                     <div class="modal-header">
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                        <h4 class="modal-title" id="configure-modal-label">Modifier</h4>
+                        <h4 class="modal-title" id="configure-modal-label">{{ 'admin.template.action.update'|trans }}</h4>
                     </div>
                     <div class="modal-body">
                         {{ form_row(update_form.title) }}
@@ -137,7 +138,7 @@
                         {% endif %}
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-default" data-dismiss="modal">Fermer</button>
+                        <button type="button" class="btn btn-default" data-dismiss="modal">{{ 'admin.template.action.close'|trans }}</button>
                         {{ form_row(update_form.submit) }}
                     </div>
                 </div>

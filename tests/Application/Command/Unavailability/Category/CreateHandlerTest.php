@@ -15,13 +15,14 @@ use Proximum\Vimeet\Application\Command\Unavailability\Category\CreateHandler;
 use Proximum\Vimeet\Domain\Model\Unavailability\Category;
 use Proximum\Vimeet\Domain\Repository\Unavailability\CategoryRepositoryInterface;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
+use PHPUnit\Framework\TestCase;
 
-class CreateHandlerTest extends \PHPUnit_Framework_TestCase
+class CreateHandlerTest extends TestCase
 {
     public function testHandleWithoutcolorGiven()
     {
         $event = EventFactory::createEvent();
-        $event->getConfiguration()->setColors('#123123', '#456456', '#AABBCC');
+        $event->getConfiguration()->setColors('#123123', '#456456', '#AABBCC', '#CCCCCC');
 
         // Expected
         $expectedCategory = new Category(

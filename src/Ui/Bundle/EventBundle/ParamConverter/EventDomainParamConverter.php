@@ -42,6 +42,10 @@ class EventDomainParamConverter implements ParamConverterInterface
             throw new NotFoundHttpException('Event not found');
         }
 
+        if (!$event->isVisible()) {
+            throw new NotFoundHttpException('Event not visible');
+        }
+
         if (!$event->hasLocale($request->getLocale())) {
             throw new NotFoundHttpException('Locale not found');
         }

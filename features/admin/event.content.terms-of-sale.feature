@@ -5,21 +5,15 @@ Feature: Update terms of sale
 
   Scenario: Update terms of sale
     Given the database is purged
-    And the following fixtures files are loaded:
-      | @InfrastructureBundle/DataFixtures/ORM/Nomenclature.yml                  |
-      | @InfrastructureBundle/DataFixtures/ORM/Template/SheetTemplate.yml        |
-      | @InfrastructureBundle/DataFixtures/ORM/Template/RegistrationTemplate.yml |
-      | @InfrastructureBundle/DataFixtures/ORM/RdvCarnot2016-Event.yml           |
-      | @InfrastructureBundle/DataFixtures/ORM/RdvCarnot2016-Nomenclature.yml    |
-      | @InfrastructureBundle/DataFixtures/ORM/RdvCarnot2016-Template.yml        |
-      | Admin.yml                                                                |
-    Given I am logged with "test@test.com" on admin
+    And the event "Terms And Conditions Party" is created
+    And there is terms of sale for this event
+    And the super admin "test@test.com" is created
+    And I am logged with this admin
+    And I am on the homepage of the admin
     When I go to this page "/en/event"
-    Then I should see "Les rendez-vous CARNOT 2016"
-    And I go to this page "/en/event/1"
-    When I follow "admin.update_content.terms-of-sale.link"
-    And I should be on this page "/en/event/1/content/terms-of-sale/update"
-    And I fill in the following:
+    And I follow "admin.update_content.terms-of-sale.link"
+    Then I should be on this page "/en/event/1/content/terms-of-sale/update"
+    When I fill in the following:
       | content_update_translations_fr_value | Bla Bla Bla  |
       | content_update_translations_en_value | Foo Bar Foo  |
     And I press "form.content_update.children.submit.label"

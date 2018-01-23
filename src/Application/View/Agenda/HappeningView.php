@@ -12,54 +12,34 @@ namespace Proximum\Vimeet\Application\View\Agenda;
 
 class HappeningView extends AbstractTimeEntityView
 {
-    /**
-     * @var int
-     */
+    /** @var int */
     public $id;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     public $picto;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     public $title;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     public $description;
 
-    /**
-     * @var array
-     */
+    /** @var array */
     public $speakers;
 
-    /**
-     * @var bool
-     */
+    /** @var bool */
     public $isFull = false;
 
-    /**
-     * @var int|null
-     */
+    /** @var int|null */
     public $limitParticipant;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     public $leftColor;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     public $rightColor;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     public $timeZone;
 
     /**
@@ -104,7 +84,7 @@ class HappeningView extends AbstractTimeEntityView
     /**
      * @return bool
      */
-    public function hasParticipations()
+    public function hasParticipations(): bool
     {
         return true;
     }

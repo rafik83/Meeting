@@ -321,6 +321,7 @@ class PackageController extends Controller
         $this->denyAccessUnlessGranted(SheetVoter::EDIT, $sheet);
         $this->authorizeAccess($eventDomain, $sheet);
 
+        $this->get('cart_cleaner')->handle($sheet);
         $funnel = $this->get('package.funnel.funnel_factory')->create($sheet, $request->getLocale());
 
         if (!$funnel->isCompleted()) {

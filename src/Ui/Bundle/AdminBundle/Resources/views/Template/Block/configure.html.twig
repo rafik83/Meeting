@@ -1,0 +1,58 @@
+{% trans_default_domain 'templates' %}
+
+<div class="block-buttons">
+    <ul class="list-unstyled">
+        <li>
+            <span class="btn btn-link move-button">
+                <i class="glyphicon glyphicon-move"></i>
+            </span>
+        </li>
+        <li>
+            <button class="btn btn-link delete-button" data-confirmation-message="{{ 'template.block.remove_confirm'|trans }}">
+                <i class="glyphicon glyphicon-remove"></i>
+            </button>
+        </li>
+        <li>
+            <button class="btn btn-link configure-button">
+                <i class="glyphicon glyphicon-cog"></i>
+            </button>
+            <div class="modal fade configure-modal" tabindex="-1" role="dialog">
+                <form action="#" method="GET">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button
+                                    type="button"
+                                    class="close"
+                                    data-dismiss="modal"
+                                    aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                <h4 class="modal-title">{{ 'template.block.configure'|trans }}</h4>
+                            </div>
+                            <div class="modal-body">
+                                <div class="form-group">
+                                    <label class="form-label">Style</label>
+                                    <select class="form-control" name="style" title="Style">
+                                        <option value="style-1">Style 1</option>
+                                        <option value="style-2">Style 2</option>
+                                        <option value="style-3">Style 3</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button
+                                    type="button"
+                                    class="btn btn-default"
+                                    data-dismiss="modal"
+                                >{{ 'template.action.close'|trans }}</button>
+                                <button
+                                    type="button"
+                                    class="btn btn-primary save-configuration"
+                                >{{ 'template.action.save'|trans }}</button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </li>
+    </ul>
+</div>

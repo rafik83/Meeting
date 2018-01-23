@@ -10,7 +10,7 @@
 
 namespace Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Validator\Constraint\Event;
 
-use Proximum\Vimeet\Domain\Model\SearchFacet;
+use Proximum\Vimeet\Domain\Model\Catalog\Internal\SearchFacet;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\ConstraintValidator;
 

@@ -109,7 +109,7 @@ class FeatureContext extends MinkContext implements KernelAwareContext, SnippetA
      */
     public function eslaticaIsPopulate()
     {
-        exec("bin/console fos:elastica:populate --env=test");
+        exec("bin/console fos:elastica:populate --env=test --quiet --no-interaction --no-debug");
     }
 
     /**
@@ -553,7 +553,7 @@ class FeatureContext extends MinkContext implements KernelAwareContext, SnippetA
      */
     public function iAmLoggedAsAdminWithGivenEmail($email)
     {
-        $this->setBaseUrl('http://admin.vimeet.proximum.dev');
+        $this->setBaseUrl('http://admin.vimeet.proximum');
         $driver = $this->getSession()->getDriver();
         if (!$driver instanceof BrowserKitDriver) {
             throw new \Exception('BrowserKitDriver not supported');
@@ -625,6 +625,20 @@ class FeatureContext extends MinkContext implements KernelAwareContext, SnippetA
     {
         $this->visit($this->baseUrl . $page);
         $this->assertResponseStatus(404);
+    }
+
+    /**
+     * Event page returns 404 during template rendering
+     *
+     * @Then /^this event page "(?P<page>[^"]+)" returns 404$/
+     */
+    public function eventPageReturns404(string $eventPageUrl)
+    {
+        try {
+            $this->visit($eventPageUrl);
+        } catch (\Exception $exception) {
+            $this->assertResponseStatus(404);
+        }
     }
 
     /**
@@ -702,5 +716,14 @@ class FeatureContext extends MinkContext implements KernelAwareContext, SnippetA
         if (false === strstr(sprintf("SMS sent to %s with message", $phone), $smsSent)) {
             throw new \LogicException('SMS content not found');
         }
+    }
+
+    /**
+     * @Given I am on the homepage of the admin
+     */
+    public function iAmOnHomePageOfTheAdmin()
+    {
+        $this->setBaseUrl('http://admin.vimeet.proximum');
+        $this->goToThisPage('/');
     }
 }

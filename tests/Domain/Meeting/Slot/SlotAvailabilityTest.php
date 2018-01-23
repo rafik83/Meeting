@@ -33,8 +33,9 @@ use Proximum\Vimeet\Tests\Factory\ParticipantFactory;
 use Proximum\Vimeet\Tests\Factory\SheetFactory;
 use Proximum\Vimeet\Tests\Factory\SpotFactory;
 use Proximum\Vimeet\Tests\Factory\UserFactory;
+use PHPUnit\Framework\TestCase;
 
-class SlotAvailabilityTest extends \PHPUnit_Framework_TestCase
+class SlotAvailabilityTest extends TestCase
 {
     /**
      * @var HappeningParticipationRepositoryInterface
@@ -130,7 +131,7 @@ class SlotAvailabilityTest extends \PHPUnit_Framework_TestCase
         $category               = new Happening\Category($this->event, 'picto', 1, 'leftColor', 'rightColor');
         $beginH                 = new \DateTime('2016-10-12 08:00:00.000');
         $endH                   = new \DateTime('2016-10-12 08:30:00.000');
-        $happening              = new Happening($this->event, $beginH, $endH, $category);
+        $happening              = new Happening($this->event, $beginH, $endH, $category, []);
         $happeningParticipation = new HappeningParticipation($happening, $this->user);
 
         $this->happeningParticipationRepository->getByEvent($this->event)->shouldBeCalled()->willReturn([$happeningParticipation]);
@@ -169,7 +170,7 @@ class SlotAvailabilityTest extends \PHPUnit_Framework_TestCase
         $category               = new Happening\Category($this->event, 'picto', 1, 'leftColor', 'rightColor');
         $beginH                 = new \DateTime('2016-10-12 09:10:00.000');
         $endH                   = new \DateTime('2016-10-12 10:30:00.000');
-        $happening              = new Happening($this->event, $beginH, $endH, $category);
+        $happening              = new Happening($this->event, $beginH, $endH, $category, []);
         $happeningParticipation = new HappeningParticipation($happening, $this->user);
 
         $this->happeningParticipationRepository->getByEvent($this->event)->shouldBeCalled()->willReturn([$happeningParticipation]);
@@ -207,7 +208,7 @@ class SlotAvailabilityTest extends \PHPUnit_Framework_TestCase
         $category               = new Happening\Category($this->event, 'picto', 1, 'leftColor', 'rightColor');
         $beginH                 = new \DateTime('2016-10-12 08:30:00.000');
         $endH                   = new \DateTime('2016-10-12 09:30:00.000');
-        $happening              = new Happening($this->event, $beginH, $endH, $category);
+        $happening              = new Happening($this->event, $beginH, $endH, $category, []);
         $happeningParticipation = new HappeningParticipation($happening, $this->user);
 
         $this->happeningParticipationRepository->getByEvent($this->event)->shouldBeCalled()->willReturn([$happeningParticipation]);
@@ -246,7 +247,7 @@ class SlotAvailabilityTest extends \PHPUnit_Framework_TestCase
         $category               = new Happening\Category($this->event, 'picto', 1, 'leftColor', 'rightColor');
         $beginH                 = new \DateTime('2016-10-12 09:30:00.000');
         $endH                   = new \DateTime('2016-10-12 09:45:00.000');
-        $happening              = new Happening($this->event, $beginH, $endH, $category);
+        $happening              = new Happening($this->event, $beginH, $endH, $category, []);
         $happeningParticipation = new HappeningParticipation($happening, $this->user);
 
         $this->happeningParticipationRepository->getByEvent($this->event)->shouldBeCalled()->willReturn([$happeningParticipation]);
@@ -887,7 +888,7 @@ class SlotAvailabilityTest extends \PHPUnit_Framework_TestCase
         $category               = new Happening\Category($this->event, 'picto', 1, 'leftColor', 'rightColor');
         $beginH                 = new \DateTime('2016-10-12 09:10:00.000');
         $endH                   = new \DateTime('2016-10-12 10:30:00.000');
-        $happening              = new Happening($this->event, $beginH, $endH, $category);
+        $happening              = new Happening($this->event, $beginH, $endH, $category, []);
         $happeningParticipation = new HappeningParticipation($happening, $this->user);
 
         $this->happeningParticipationRepository->getByEvent($this->event)->shouldBeCalled()->willReturn([$happeningParticipation]);
@@ -1012,7 +1013,7 @@ class SlotAvailabilityTest extends \PHPUnit_Framework_TestCase
         $category               = new Happening\Category($this->event, 'picto', 1, 'leftColor', 'rightColor');
         $beginH                 = new \DateTime('2016-10-12 09:10:00.000');
         $endH                   = new \DateTime('2016-10-12 10:30:00.000');
-        $happening              = new Happening($this->event, $beginH, $endH, $category);
+        $happening              = new Happening($this->event, $beginH, $endH, $category, []);
         $happeningParticipation = new HappeningParticipation($happening, $this->user);
 
         $this->happeningParticipationRepository->getByEvent($this->event)->shouldBeCalled()->willReturn([$happeningParticipation]);

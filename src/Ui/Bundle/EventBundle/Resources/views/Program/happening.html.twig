@@ -1,12 +1,26 @@
-<div class="happening has-details meet {{ happening.category.title|lower }}" data-beginHour="{{ happening.beginHour|date('H:i', happening.timeZone) }}" data-duration="{{ happening.duration.format('%H:%I') }}">
+<div class="program-happening happening has-details meet" data-beginHour="{{ happening.begin|date('H:i', happening.timeZone) }}" data-duration="{{ happening.duration.format('%H:%I') }}">
 
-    {{ include('EventBundle:Happening:header.html.twig', {leftColor: happening.category.leftColor, rightColor: happening.category.rightColor, picto: happening.category.picto, doesCurrentUserParticipate: happening.doesCurrentUserParticipate}) }}
+    {{ include('EventBundle:Happening:header.html.twig', {
+        'leftColor': happening.category.leftColor,
+        'rightColor': happening.category.rightColor,
+        'picto': happening.category.picto,
+        'doesCurrentUserParticipate': happening.doesCurrentUserParticipate,
+        'isUserAloneParticipant': isUserAloneParticipant,
+        'withHourPrefix': true,
+        'isActionButtonsOnDetails': false,
+    }) }}
 
     <div class="details">
         {{ include('EventBundle:Happening:speakers.html.twig') }}
 
         <p>{{ happening.description|nl2br }}</p>
 
-        {{ include('EventBundle:Happening:footer.html.twig', { 'happening': happening, 'beginHour': happening.beginHour, 'endHour': happening.endHour, 'isUserAloneParticipant': isUserAloneParticipant}) }}
+        {{ include('EventBundle:Happening:footer.html.twig', {
+            'happening': happening,
+            'beginHour': happening.begin,
+            'endHour': happening.end,
+            'isUserAloneParticipant': isUserAloneParticipant,
+            'isActionButtonsOnDetails': false,
+        }) }}
     </div>
 </div>

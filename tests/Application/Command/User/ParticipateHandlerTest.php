@@ -15,9 +15,12 @@ use Proximum\Vimeet\Application\Command\User\Participate;
 use Proximum\Vimeet\Application\Command\User\ParticipateHandler;
 use Proximum\Vimeet\Application\Event\Events;
 use Proximum\Vimeet\Application\Event\Package\MustSelectPackageEvent;
+use Proximum\Vimeet\Application\Event\Sheet\SheetTitleCheckEvent;
 use Proximum\Vimeet\Application\Event\Sheet\SheetUpdatedEvent;
+use Proximum\Vimeet\Application\Event\User\RegistrationEvent;
 use Proximum\Vimeet\Application\Event\User\RegistrationStepEvent;
 use Proximum\Vimeet\Domain\Account\Synchronizer;
+use Proximum\Vimeet\Domain\Event\LastEventParticipation;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\Template\RegistrationTemplate;
@@ -31,8 +34,9 @@ use Proximum\Vimeet\Domain\Template\TemplateObject;
 use Proximum\Vimeet\Domain\UserEvent\TypeResolver;
 use Proximum\Vimeet\Infrastructure\Adapter\DelayedEventDispatcher;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
+use PHPUnit\Framework\TestCase;
 
-class ParticipateHandlerTest extends \PHPUnit_Framework_TestCase
+class ParticipateHandlerTest extends TestCase
 {
     public function testHandle()
     {
@@ -197,9 +201,11 @@ class ParticipateHandlerTest extends \PHPUnit_Framework_TestCase
         $participantRepository = $this->prophesize(ParticipantRepositoryInterface::class);
         $accountSynchronizer   = $this->prophesize(Synchronizer::class);
         $eventDispatcher       = $this->prophesize(DelayedEventDispatcher::class);
+        $lastEventParticipation = $this->prophesize(LastEventParticipation::class);
 
         $expectedSheetWithParticipant = new Sheet($event, $type, [], $user, $now);
         $expectedSheetWithParticipant->setRegistrationData(['sheet1234' => ['text' => 'truc']]);
+        $expectedSheetWithParticipant->setData(['user data']);
         $expectedParticipant          = new Participant(
             $expectedSheetWithParticipant,
             $user,
@@ -209,9 +215,15 @@ class ParticipateHandlerTest extends \PHPUnit_Framework_TestCase
                 '1efb9cbb' => ['telephone' => 'phone'],
                 '3b759fbb' => ['telephone' => 'mobile'],
             ],
-            $owner = true,
-            true
+            $owner = true
         );
+        $expectedParticipant->getSheet()->setData([['user data']]);
+
+        $lastEventParticipation
+            ->getLastEventParticipation($user, $event)
+            ->shouldBeCalled()
+            ->willReturn($expectedParticipant)
+        ;
 
         $typeResolver = $this->prophesize(TypeResolver::class);
         $typeResolver->resolve($user, $event, $type)->shouldBeCalled();
@@ -235,7 +247,8 @@ class ParticipateHandlerTest extends \PHPUnit_Framework_TestCase
             $typeResolver->reveal(),
             $accountSynchronizer->reveal(),
             $eventDispatcher->reveal(),
-            $now
+            $now,
+            $lastEventParticipation->reveal()
         );
 
         $templateData = new TemplateData('root', [], 'fr', 'fr');
@@ -322,6 +335,14 @@ class ParticipateHandlerTest extends \PHPUnit_Framework_TestCase
                 return true;
             }
         ))->shouldBeCalled();
+
+        $eventDispatcher->dispatch(Events::SHEET_TITLE_CHECK, Argument::that(
+            function (SheetTitleCheckEvent $sheetTitleCheckEvent) {
+                return true;
+            }
+        ))->shouldBeCalled();
+
+        $eventDispatcher->dispatch(Events::USER_REGISTRATION, new RegistrationEvent($event, $user))->shouldBeCalled();
 
         $handler->handle(
             new Participate(

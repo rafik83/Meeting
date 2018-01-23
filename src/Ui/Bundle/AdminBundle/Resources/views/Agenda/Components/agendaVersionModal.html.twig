@@ -1,0 +1,46 @@
+<script type="x/template" id="agenda-version-modal">
+    <modal :show="show" v-on:close-modal="close()">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="{{ 'admin.common.close'|trans }}" v-on:click="close()">
+                <span aria-hidden="true">&times;</span>
+            </button>
+            <h4 class="modal-title">{{ 'gdr.user.agenda.version.modal.title'|trans }}</h4>
+        </div>
+        <div class="modal-body">
+            <div v-if="isLoading !== true">
+                <p v-if="hasNoPhone">
+                    {{ 'gdr.user.agenda.version.modal.no_phone'|trans }}
+                </p>
+                <p v-if="hasNoDiff">
+                    {{ 'gdr.user.agenda.version.modal.no_diff'|trans }}
+                </p>
+                <div v-if="hasDiff">
+                    <span v-for="line in diff.split('\n')">
+                        ${ line }<br />
+                    </span>
+                </div>
+            </div>
+            <div v-if="isLoading === true" class="modal-body text-center">
+                <i class="glyphicon glyphicon-refresh spin text-xl"></i>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <div v-if="isLoading !== true">
+                <div v-if="hasNoPhone || hasNoDiff">
+                    <button type="button" class="btn btn-default" data-dismiss="modal" v-on:click="close()">
+                        {{ 'admin.common.close'|trans }}
+                    </button>
+                </div>
+                <div v-if="hasDiff">
+                    <button v-on:click="purge()" type="button" class="btn btn-secondary">
+                        {{ 'gdr.user.agenda.version.modal.button.purge'|trans }}
+                    </button>
+                    <button v-on:click="notify()" type="button" class="btn btn-primary">
+                        {{ 'gdr.user.agenda.version.modal.button.notify'|trans }}
+                    </button>
+                </div>
+            </div>
+        </div>
+    </modal>
+</script>
+

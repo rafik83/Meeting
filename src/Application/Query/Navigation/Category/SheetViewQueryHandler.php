@@ -3,13 +3,14 @@
 /*
  * This file is part of the vimeet project.
  *
- * Copyright (C) 2016 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
 
 namespace Proximum\Vimeet\Application\Query\Navigation\Category;
 
+use Proximum\Vimeet\Application\Adapter\LocaleHelperInterface;
 use Proximum\Vimeet\Application\Components\Navigation\Category;
 use Proximum\Vimeet\Application\View\Navigation\CategoryView;
 use Proximum\Vimeet\Application\View\Navigation\LinkView;
@@ -17,19 +18,24 @@ use Proximum\Vimeet\Domain\Navigation\NavigationBuilderInterface;
 
 class SheetViewQueryHandler
 {
-    /**
-     * @var NavigationBuilderInterface
-     */
+    const EVENT_SHEET_ROUTE = 'event_sheet_locale';
+
+    /** @var NavigationBuilderInterface */
     private $navigationBuilder;
+
+    /** @var LocaleHelperInterface */
+    private $localeHelper;
 
     /**
      * SheetViewQueryHandler constructor.
      *
      * @param NavigationBuilderInterface $navigationBuilder
+     * @param LocaleHelperInterface      $localeHelper
      */
-    public function __construct(NavigationBuilderInterface $navigationBuilder)
+    public function __construct(NavigationBuilderInterface $navigationBuilder, LocaleHelperInterface $localeHelper)
     {
         $this->navigationBuilder = $navigationBuilder;
+        $this->localeHelper = $localeHelper;
     }
 
     /**
@@ -41,17 +47,17 @@ class SheetViewQueryHandler
     {
         $linksView = [];
 
-        foreach($sheetQuery->sheet->getEvent()->getLocales() as $locale) {
+        foreach ($sheetQuery->sheet->getEvent()->getLocales() as $locale) {
             $linksView[] = new LinkView(
-                'navigation.links.sheet.locale',
+                ucfirst($this->localeHelper->language($locale, $sheetQuery->locale)),
                 $this->navigationBuilder->getRoute(
-                    'event_sheet_locale',
+                    self::EVENT_SHEET_ROUTE,
                     ['sheet' => $sheetQuery->sheet->getId(), 'locale' => $locale]
                 ),
                 $locale
             );
         }
 
-        return new CategoryView(Category::SHEET, Category::SHEET_ICON, $linksView);
+        return new CategoryView(Category::SHEET, Category::SHEET_ICON, $linksView, true);
     }
 }

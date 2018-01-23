@@ -79,8 +79,10 @@ class UpdateHandlerTest extends TestCase
 
         $this->userRepository->findByEmail($newEmail)->shouldBeCalled()->willReturn($expectedManager);
 
-        $this->userToGroupManagerChecker->isUserToGroupManagerAllowed($this->event, $expectedManager)
-            ->shouldBeCalled();
+        $this->userToGroupManagerChecker
+            ->isUserAllowedToManageGroupOnUpdate($expectedManager, $this->group)
+            ->shouldBeCalled()
+            ->willReturn(true);
 
         $this->groupRepository->set($expectedGroup)->shouldBeCalled();
 
@@ -112,7 +114,7 @@ class UpdateHandlerTest extends TestCase
         $this->userRepository->findByEmail($newEmail)->shouldBeCalled()->willReturn($expectedManager);
 
         $this->userToGroupManagerChecker
-            ->isUserToGroupManagerAllowed($this->event, $expectedManager)
+            ->isUserAllowedToManageGroupOnUpdate($expectedManager, $this->group)
             ->shouldBeCalled()
             ->willThrow(UserNotAllowedToManageGroupException::class);
 
@@ -144,7 +146,7 @@ class UpdateHandlerTest extends TestCase
         $this->userRepository->findByEmail($newEmail)->shouldBeCalled()->willReturn(null);
 
         $this->userToGroupManagerChecker
-            ->isUserToGroupManagerAllowed($this->event, Argument::type(User::class))
+            ->isUserAllowedToManageGroupOnUpdate(Argument::type(User::class), Argument::type(Group::class))
             ->shouldNotBeCalled();
 
         $this->groupRepository->set(Argument::type(Group::class))->shouldNotBeCalled();

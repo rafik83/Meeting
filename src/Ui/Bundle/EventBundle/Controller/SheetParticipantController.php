@@ -22,6 +22,7 @@ use Proximum\Vimeet\Application\Query\Tip\TipTranslationViewQuery;
 use Proximum\Vimeet\Application\Query\Tip\TipTranslationViewQueryHandler;
 use Proximum\Vimeet\Domain\Event\ContactInfoGuesser;
 use Proximum\Vimeet\Domain\Model\Sheet;
+use Proximum\Vimeet\Domain\Sheet\Participant\AddParticipantChecker;
 use Proximum\Vimeet\Domain\Template;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Participant\AddType;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Participant\RemoveType;
@@ -49,7 +50,7 @@ class SheetParticipantController extends Controller
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
         $this->denyAccessUnlessGranted(SheetVoter::EDIT, $sheet);
 
-        if (!$sheet->canBuyParticipant()) {
+        if (!$this->get(AddParticipantChecker::class)->canAddParticipant($sheet)) {
             throw $this->createNotFoundException(
                 sprintf('This sheet %s can not buy anymore participant', $sheet->getId())
             );
@@ -111,7 +112,8 @@ class SheetParticipantController extends Controller
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
         $this->denyAccessUnlessGranted(SheetVoter::EDIT, $sheet);
 
-        if (!$sheet->canBuyParticipant()) {
+        $canAddParticipant = $this->get(AddParticipantChecker::class)->canAddParticipant($sheet);
+        if (!$canAddParticipant) {
             throw $this->createNotFoundException(
                 sprintf('This sheet %s can not buy anymore participant', $sheet->getId())
             );
@@ -162,6 +164,7 @@ class SheetParticipantController extends Controller
         $tipTranslationViews = $this->get('tactician.commandbus.query')->handle($tipTranslationViewQuery);
 
         return $this->render('EventBundle:Sheet:sheet.html.twig', [
+            'canAddParticipant'       => $canAddParticipant,
             'event'                   => $eventDomain->getEvent(),
             'form_participant'        => $form->createView(),
             'isRequestMeetingEnabled' => false,
@@ -285,8 +288,10 @@ class SheetParticipantController extends Controller
             $request->getLocale()
         );
         $tipTranslationViews = $this->get('tactician.commandbus.query')->handle($tipTranslationViewQuery);
+        $canAddParticipant = $this->get(AddParticipantChecker::class)->canAddParticipant($sheet);
 
         return $this->render('EventBundle:Sheet:sheet.html.twig', [
+            'canAddParticipant'       => $canAddParticipant,
             'event'                   => $eventDomain->getEvent(),
             'form_remove'             => $form->createView(),
             'isRequestMeetingEnabled' => false,

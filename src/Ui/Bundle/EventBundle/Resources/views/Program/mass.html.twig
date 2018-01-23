@@ -1,1 +1,2 @@
-{{ include('EventBundle:Unavailability/Mass:mass.html.twig', {mass: mass}) }}
+{% set withHourPrefix = (withHourPrefix is defined and withHourPrefix == true) %}
+{{ include('EventBundle:Unavailability/Mass:mass.html.twig', {'mass': mass, 'withHourPrefix': withHourPrefix}) }}

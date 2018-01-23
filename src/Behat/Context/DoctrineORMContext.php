@@ -19,6 +19,10 @@ use Symfony\Component\HttpKernel\KernelInterface;
 
 class DoctrineORMContext implements Context, KernelAwareContext
 {
+    const NotMappedTables = [
+        'jms_job_related_entities'
+    ];
+
     /** @var KernelInterface */
     private $kernel;
 
@@ -50,7 +54,19 @@ class DoctrineORMContext implements Context, KernelAwareContext
         $purger = new ORMPurger($entityManager);
         $purger->setPurgeMode(ORMPurger::PURGE_MODE_TRUNCATE);
         $purger->purge();
+        $this->purgeNotMappedTables();
         $entityManager->clear();
+    }
+
+    private function purgeNotMappedTables()
+    {
+        $entityManager = $this->getEntityManager();
+        $platform = $entityManager->getConnection()->getDatabasePlatform();
+        $connection = $entityManager->getConnection();
+
+        foreach (self::NotMappedTables as $tableName) {
+            $connection->executeUpdate($platform->getTruncateTableSQL($tableName, true));
+        }
     }
 
     /**

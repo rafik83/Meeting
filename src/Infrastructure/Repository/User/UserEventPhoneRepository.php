@@ -110,4 +110,57 @@ class UserEventPhoneRepository implements UserEventPhoneRepositoryInterface
             ->setParameter('event', $event)
         ;
     }
+
+    /**
+     * @param array $blackList
+     */
+    public function setIntoBlackList(array $blackList)
+    {
+        $this->entityManager
+            ->createQueryBuilder()
+            ->update(UserEventPhone::class, 'userEventPhone')
+            ->set('userEventPhone.stop', 'true')
+            ->where('userEventPhone.stop = false')
+            ->andWhere('userEventPhone.phone IN (:blackList)')
+            ->setParameter('blackList', $blackList)
+            ->getQuery()
+            ->execute()
+        ;
+    }
+
+    /**
+     * @param array $blackList
+     */
+    public function unsetFromBlackList(array $blackList)
+    {
+        $this->entityManager
+            ->createQueryBuilder()
+            ->update(UserEventPhone::class, 'userEventPhone')
+            ->set('userEventPhone.stop', 'false')
+            ->where('userEventPhone.stop = true')
+            ->andWhere('userEventPhone.phone NOT IN (:blackList)')
+            ->setParameter('blackList', $blackList)
+            ->getQuery()
+            ->execute()
+        ;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function findValidatedByEventAndUsers(Event $event, array $usersId): array
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('user_event_phone')
+            ->from(User\UserEventPhone::class, 'user_event_phone')
+            ->where('user_event_phone.event = :event')
+            ->andWhere('user_event_phone.user IN (:users)')
+            ->andWhere('user_event_phone.validated = true')
+            ->setParameter('event', $event)
+            ->setParameter('users', $usersId);
+
+        return $queryBuilder->getQuery()->getResult();
+    }
 }

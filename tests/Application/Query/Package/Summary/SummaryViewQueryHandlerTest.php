@@ -30,8 +30,9 @@ use Proximum\Vimeet\Domain\Package\Specification\VatApplicable;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
 use Proximum\Vimeet\Tests\Factory\ProductFactory;
 use Proximum\Vimeet\Tests\Factory\SheetFactory;
+use PHPUnit\Framework\TestCase;
 
-class SummaryViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
+class SummaryViewQueryHandlerTest extends TestCase
 {
     public function testHandle()
     {

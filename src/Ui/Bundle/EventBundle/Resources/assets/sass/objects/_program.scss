@@ -1,0 +1,238 @@
+@media (max-width: 767px) {
+  .container-fluid {
+    &.full-mobile-container {
+      width: 100%;
+      max-width: none;
+      padding: 5px 5px 80px 5px;
+      margin: 0 !important;
+    }
+  }
+
+  .program-container {
+    .meet {
+      > header {
+        .content {
+          max-width: 57% !important;
+          > p {
+            line-height: 1.5em !important;
+            margin-left: 4%;
+          }
+        }
+      }
+    }
+
+    .meets {
+      .actions {
+        margin-right: 8px;
+        > a {
+          margin-left: 16px !important;
+        }
+      }
+    }
+  }
+}
+
+
+.program-container {
+  .program {
+    margin-top: 40px;
+    margin-bottom: 40px;
+  }
+
+  .program-head,
+  .program-foot {
+    font-size: 17px;
+
+    strong {
+      font-size: 18px;
+      text-transform: uppercase;
+      margin-right: 3px;
+    }
+  }
+
+  .program-head {
+    margin-bottom: 20px;
+  }
+  .program-foot {
+    text-align: right;
+  }
+
+  .meets {
+    .program-happening,
+    .program-mass {
+      header {
+        position: relative;
+      }
+      .actions {
+        display: flex;
+        flex-direction: column;
+        order: 0;
+        align-items: center;
+        align-content: flex-end;
+        justify-content: center;
+
+        > a {
+          display: flex;
+          flex-direction: column;
+          order: 0;
+          flex: 0 1 auto;
+          align-self: auto;
+          color: #ffffff;
+          > i {
+            order: 0;
+            flex: 0 1 auto;
+            align-self: center;
+          }
+          > span {
+            order: 0;
+            flex: 0 1 auto;
+            align-self: auto;
+          }
+
+          &:hover,
+          &:focus {
+            text-decoration: none;
+          }
+        }
+        > a, .label {
+          margin-left: 5px;
+        }
+        > .label {
+          margin-top: 10px;
+        }
+      }
+    }
+  }
+
+  .meet {
+    left: 0;
+    width: 100%;
+    padding: $agenda-meet-margin;
+
+    &.open {
+      > header {
+        .actions {
+          display: block;
+          right: 45px;
+          bottom: 16%;
+        }
+      }
+
+      .details {
+        display: block;
+      }
+    }
+
+    > header {
+      display: flex;
+      flex-direction: row;
+      justify-content: flex-start;
+      align-items: center;
+      align-content: center;
+      min-height: 80px;
+      background-color: #0093df;
+      height: 100%;
+      overflow: hidden;
+
+      div.hour {
+        order: 0;
+        width: 50px;
+        color: white;
+        align-items: center;
+        justify-content: flex-start;
+        align-content: flex-start;
+        -webkit-box-orient: horizontal;
+        -webkit-box-direction: normal;
+        -webkit-box-align: center;
+        margin-left: 2%;
+      }
+
+      .content {
+        display: flex;
+        order: 0;
+        flex: 1 1 auto;
+        align-content: center;
+        justify-content: center;
+        align-items: center;
+        color: #fff;
+        z-index: 10;
+        max-width: 86%;
+        padding: 8px 0 8px 0;
+
+        &:hover,
+        &:focus {
+          text-decoration: none;
+        }
+
+        > span.prefix {
+          min-width: 30px;
+          line-height: 1;
+          font-size: 15px;
+          font-weight: bold;
+          text-align: center;
+          text-transform: uppercase;
+
+          .icon {
+            display: block;
+            margin-bottom: 5px;
+            font-size: 20px;
+          }
+        }
+      }
+
+      p {
+        margin-bottom: 0;
+        overflow: hidden;
+        width: 100%;
+        line-height: 30px;
+
+        &:hover,
+        &:focus {
+          text-decoration: underline !important;
+        }
+      }
+
+      .happeningParticipateIcon {
+        font-size: 30px;
+      }
+    }
+
+    &.lock {
+      > header {
+        background-color: rgba(#545454, .9);
+      }
+    }
+
+    &.break {
+      > header {
+        background-color: #78c23a;
+      }
+    }
+
+    > .details {
+      position: relative;
+      display: none;
+      padding: 20px;
+      font-size: 14px;
+      background-color: #fff;
+      border: 1px solid #ccc;
+      border-top: 0;
+
+      footer {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+        font-size: 15px;
+
+        p {
+          margin: 0;
+        }
+
+        a.btn {
+          margin-left: 8px;
+        }
+      }
+    }
+  }
+}

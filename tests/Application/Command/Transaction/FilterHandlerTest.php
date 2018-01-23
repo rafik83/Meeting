@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Application\Command\Transaction;
 
+use PHPUnit\Framework\TestCase;
 use Proximum\Vimeet\Application\Query\Transaction\TransactionViewQueryHandler;
 use Proximum\Vimeet\Domain\Model\Admin;
 use Proximum\Vimeet\Domain\Model\Transaction;
@@ -19,7 +20,7 @@ use Proximum\Vimeet\Domain\Repository\TransactionRepositoryInterface;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
 use Proximum\Vimeet\Tests\Factory\SheetFactory;
 
-class FilterHandlerTest extends \PHPUnit_Framework_TestCase
+class FilterHandlerTest extends TestCase
 {
     public function testHandle()
     {

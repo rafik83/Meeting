@@ -27,7 +27,7 @@
 
   .profile__content {
     max-width: 375px;
-    margin: 0 auto;
+    margin: 25px auto 0 auto;
     padding-bottom: 20px;
 
     .identity { text-align: center; }
@@ -154,7 +154,7 @@
 
   strong {
     display: block;
-    font-family: openSans;
+    font-family: OpenSans, Helvetica, sans-serif;
     text-transform: uppercase;
     color: $color-highlighted;
     margin-bottom: 5px;

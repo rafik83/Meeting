@@ -25,4 +25,9 @@ interface FileRepositoryInterface
      * @return null|File
      */
     public function getById($id);
+
+    /**
+     * @param File $file
+     */
+    public function remove(File $file);
 }

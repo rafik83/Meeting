@@ -1,6 +1,23 @@
-<div class="btn btn-gray reject" data-modal-load="{{ path('event_meeting_request_refuse', { 'sheet': sheet.id, 'meetingRequest': meetingRequest.id }) }}">
-    <i class="icon-Fermer_4"></i> {{ 'catalog.meeting_request.refuse'|trans }}
-</div>
-<div class="btn btn-primary accept" data-modal-load="{{ path('event_meeting_request_approve', { 'sheet': sheet.id, 'meetingRequest': meetingRequest.id }) }}">
-    <i class="icon-Valider_4"></i> {{ 'catalog.meeting_request.approve'|trans }}
-</div>
+{% set redirectPath = path('event_catalog_index', { 'sheet': sheet.id }) %}
+
+{% if isAnsweringMeetingRequestClosed is defined and isAnsweringMeetingRequestClosed == true %}
+    {{ include('EventBundle:MeetingRequest/Button:closedAnsweringMeetingRequest.html.twig', {}, false) }}
+{% elseif isMeetingRequestUpdateLocked is defined and isMeetingRequestUpdateLocked == true  %}
+    {{ include('EventBundle:MeetingRequest/Button:lockedMeetingRequest.html.twig', {}, false) }}
+{% else %}
+    {% if isPhoneValidationRequired and phoneValidationLink is not null %}
+        <a class="btn btn-gray reject" href="{{ phoneValidationLink }}">
+            <i class="icon-Fermer_4"></i> {{ 'catalog.meeting_request.refuse'|trans }}
+        </a>
+        <a class="btn btn-primary accept" href="{{ phoneValidationLink }}">
+            <i class="icon-Valider_4"></i> {{ 'catalog.meeting_request.approve'|trans }}
+        </a>
+    {% else %}
+        <div class="btn btn-gray reject" data-modal-load="{{ path('event_meeting_request_refuse', { 'sheet': sheet.id, 'meetingRequest': meetingRequest.id }) }}">
+            <i class="icon-Fermer_4"></i> {{ 'catalog.meeting_request.refuse'|trans }}
+        </div>
+        <div class="btn btn-primary accept" data-modal-load="{{ path('event_meeting_request_approve', { 'sheet': sheet.id, 'meetingRequest': meetingRequest.id }) }}">
+            <i class="icon-Valider_4"></i> {{ 'catalog.meeting_request.approve'|trans }}
+        </div>
+    {% endif %}
+{% endif %}

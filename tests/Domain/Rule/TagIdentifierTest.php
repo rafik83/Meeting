@@ -18,8 +18,9 @@ use Proximum\Vimeet\Domain\Template\TemplateData;
 use Proximum\Vimeet\Domain\Template\TemplateDataFactory;
 use Proximum\Vimeet\Domain\Template\TemplateObject\EditableText;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
+use PHPUnit\Framework\TestCase;
 
-class TagIdentifierTest extends \PHPUnit_Framework_TestCase
+class TagIdentifierTest extends TestCase
 {
     public function testIdentifyType()
     {

@@ -11,7 +11,6 @@
 namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Agenda;
 
 use Proximum\Vimeet\Application\Query\Agenda\Admin\AgendaSheetViewQuery;
-use Proximum\Vimeet\Application\Query\Agenda\Admin\Indicator\SheetIndicatorsLazyLoadViewQuery;
 use Proximum\Vimeet\Application\Query\Agenda\Admin\Spot\AgendaSpotViewQuery;
 use Proximum\Vimeet\Application\Query\Agenda\SheetListViewQuery;
 use Proximum\Vimeet\Application\Query\Spot\Agenda\ListViewQuery;
@@ -81,29 +80,6 @@ class AgendaController extends Controller
     }
 
     /**
-     * Return an array of sheet indicators
-     *
-     * @param Request $request
-     * @param Event   $event
-     *
-     * @return JsonResponse
-     */
-    public function indicatorsAction(Request $request, Event $event)
-    {
-        $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
-
-        if (!$request->query->has('s')) {
-            return $this->createErrorJsonResponse('admin.agenda.sheet.indicators.error');
-        }
-
-        $indicators = $this->get('tactician.commandbus.query')->handle(
-            new SheetIndicatorsLazyLoadViewQuery($event, $request->query->get('s'))
-        );
-
-        return new JsonResponse($indicators);
-    }
-
-    /**
      * @param Event $event
      *
      * @return JsonResponse
@@ -136,15 +112,5 @@ class AgendaController extends Controller
         );
 
         return new JsonResponse($agendaSpotView);
-    }
-
-    /**
-     * @param string $key
-     *
-     * @return JsonResponse
-     */
-    private function createErrorJsonResponse($key)
-    {
-        return new JsonResponse($this->get('translator')->trans($key), Response::HTTP_UNPROCESSABLE_ENTITY);
     }
 }

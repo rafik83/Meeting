@@ -10,11 +10,13 @@
 
 namespace Proximum\Vimeet\Tests\Application\Command\Register;
 
+use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
 use Proximum\Vimeet\Application\Command\Register\ParticipantStep;
 use Proximum\Vimeet\Application\Command\Register\ParticipantStepHandler;
 use Proximum\Vimeet\Application\Event\Event\PreRegisterEvent;
 use Proximum\Vimeet\Application\Event\Events;
+use Proximum\Vimeet\Application\Event\Sheet\SheetTitleCheckEvent;
 use Proximum\Vimeet\Application\Event\Sheet\SheetUpdatedEvent;
 use Proximum\Vimeet\Application\Event\User\RegisteredEvent;
 use Proximum\Vimeet\Application\Event\User\RegistrationStepEvent;
@@ -32,7 +34,7 @@ use Proximum\Vimeet\Tests\Factory\SheetFactory;
 use Proximum\Vimeet\Tests\Factory\UserFactory;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
-class ParticipantStepHandlerTest extends \PHPUnit_Framework_TestCase
+class ParticipantStepHandlerTest extends TestCase
 {
     public function testHandle()
     {
@@ -115,6 +117,12 @@ class ParticipantStepHandlerTest extends \PHPUnit_Framework_TestCase
         ))->shouldBeCalled();
 
         $eventDispatcher->dispatch(Events::SHEET_UPDATED, new SheetUpdatedEvent($expectedSheet))->shouldBeCalled();
+
+        $eventDispatcher->dispatch(Events::SHEET_TITLE_CHECK, Argument::that(
+            function (SheetTitleCheckEvent $sheetTitleCheckEvent) {
+                return true;
+            }
+        ))->shouldBeCalled();
 
         $participantStep        = new ParticipantStep($templateData, $participant, 1, $locale, $data);
         $participantStepHandler = new ParticipantStepHandler(

@@ -23,8 +23,9 @@ use Proximum\Vimeet\Domain\Repository\Meeting\MessageRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\Meeting\RequestRepositoryInterface;
 use Proximum\Vimeet\Infrastructure\Adapter\DelayedEventDispatcher;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
+use PHPUnit\Framework\TestCase;
 
-class RefuseRequestHandlerTest extends \PHPUnit_Framework_TestCase
+class RefuseRequestHandlerTest extends TestCase
 {
     public function testHandle()
     {

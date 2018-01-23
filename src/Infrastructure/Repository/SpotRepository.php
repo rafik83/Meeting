@@ -102,12 +102,45 @@ class SpotRepository implements SpotRepositoryInterface
     /**
      * {@inheritdoc}
      */
-    public function getActiveByEvent(Event $event)
+    public function getActiveByEvent(Event $event): array
     {
         $queryBuilder = new FilteredQueryBuilder($this->entityManager);
         $queryBuilder->hasEvent($event)->filter(['active' => true]);
 
         return $queryBuilder->getQuery()->getResult();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getAllByEvent(Event $event): array
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('spot')
+            ->from(Spot::class, 'spot')
+            ->where('spot.event = :event')
+            ->setParameter('event', $event);
+
+        return $queryBuilder->getQuery()->getResult();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function hasActiveSpot(Event $event): bool
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('spot.id')
+            ->from(Spot::class, 'spot')
+            ->where('spot.event = :event AND spot.active = true')
+            ->setParameter('event', $event)
+            ->setMaxResults(1);
+
+        return null !== $queryBuilder->getQuery()->getOneOrNullResult();
     }
 
     /**
@@ -148,9 +181,9 @@ class SpotRepository implements SpotRepositoryInterface
         $queryBuilder = $this
             ->entityManager
             ->createQueryBuilder()
-            ->select('spots')
-            ->from(Spot::class, 'spots')
-            ->where('spots.id IN (:spotsIds)')
+            ->select('spot')
+            ->from(Spot::class, 'spot', 'spot.id')
+            ->where('spot.id IN (:spotsIds)')
             ->setParameter('spotsIds', $spotsIds)
         ;
 
@@ -386,5 +419,25 @@ class SpotRepository implements SpotRepositoryInterface
         ;
 
         return $queryBuilder;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function findSharedByEvent(Event $event): array
+    {
+        $queryBuilder = $this->entityManager
+            ->createQueryBuilder()
+            ->select('spot, unavailabilities')
+            ->from(Spot::class, 'spot')
+            ->leftJoin('spot.spotUnavailabilities', 'unavailabilities', 'with', 'spot.event = :event')
+            ->leftJoin('spot.sheets', 'sheet', 'with', 'spot.event = :event')
+            ->where('spot.event = :event')
+            ->andWhere('sheet.id IS NULL')
+            ->andWhere('spot.active = TRUE')
+            ->setParameter('event', $event)
+        ;
+
+        return $queryBuilder->getQuery()->getResult();
     }
 }

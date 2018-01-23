@@ -17,8 +17,9 @@ use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Security\Imperson
 use Proximum\Vimeet\Tests\Factory\EventFactory;
 use Proximum\Vimeet\Tests\Factory\UserFactory;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+use PHPUnit\Framework\TestCase;
 
-class ImpersonateUrlGeneratorAdapterTest extends \PHPUnit_Framework_TestCase
+class ImpersonateUrlGeneratorAdapterTest extends TestCase
 {
     public function testHandle()
     {

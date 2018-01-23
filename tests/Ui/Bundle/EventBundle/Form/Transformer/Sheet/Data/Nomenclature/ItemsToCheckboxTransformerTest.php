@@ -10,11 +10,12 @@
 
 namespace Proximum\Vimeet\Tests\Ui\Bundle\EventBundle\Form\Transformer\Sheet\Data\Nomenclature;
 
+use PHPUnit\Framework\TestCase;
 use Proximum\Vimeet\Domain\Model\NomenclatureItem;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Transformer\Sheet\Data\Nomenclature\ItemsToCheckboxTransformer;
 use Proximum\Vimeet\Domain\Model\Nomenclature;
 
-class ItemsToCheckboxTransformerTest extends \PHPUnit_Framework_TestCase
+class ItemsToCheckboxTransformerTest extends TestCase
 {
     public function testTransform()
     {

@@ -42,11 +42,18 @@ interface MeetingRepositoryInterface
     public function getByEvent(Event $event, $page, $limit, $locale);
 
     /**
-     * @param Event  $event
+     * @param Event $event
      *
      * @return Meeting[]
      */
-    public function getAllByEvent(Event $event);
+    public function getAllByEvent(Event $event): array;
+
+    /**
+     * @param Event $event
+     *
+     * @return Meeting[]
+     */
+    public function getNonBlockedSpotByEvent(Event $event): array;
 
     /**
      * @param Participant $participant
@@ -61,6 +68,14 @@ interface MeetingRepositoryInterface
      * @return Meeting[]
      */
     public function findByParticipants(array $participants);
+
+    /**
+     * @param Event  $event
+     * @param User[] $users
+     *
+     * @return Meeting[]
+     */
+    public function findByEventAndUsers(Event $event, array $users);
 
     /**
      * @param Event $event
@@ -132,11 +147,63 @@ interface MeetingRepositoryInterface
     public function countMeetingsOfEvent(Event $event);
 
     /**
+     * @param Event $event
+     * @param array $sheets
+     *
+     * @return array of ['countMeetings' => int, 'sheetId' => int]
+     */
+    public function countMeetingBySheets(Event $event, array $sheets): array;
+
+    /**
+     * @param Spot[] $spots
+     *
+     * @return array of ['countMeetings' => int, 'spotId' => int]
+     */
+    public function countMeetingsBySpots(array $spots): array;
+
+    /**
+     * @param Spot[] $spots
+     *
+     * @return int
+     */
+    public function countMeetingForSpots(array $spots): int;
+
+    /**
+     * @param Spot[]      $spots
+     * @param MeetingSlot $meetingSlot
+     *
+     * @return int
+     */
+    public function countMeetingForSpotsAndSlot(array $spots, MeetingSlot $meetingSlot): int;
+
+    /**
+     * @param Event $event
+     *
+     * @return int
+     */
+    public function countByEvent(Event $event): int;
+
+    /**
+     * @param Event $event
+     *
+     * @return bool
+     */
+    public function hasMeeting(Event $event): bool;
+
+    /**
      * @param Participant $participant
      *
      * @return int
      */
     public function countByParticipant(Participant $participant);
+
+    /**
+     * @param User  $user
+     * @param Event $event
+     *
+     * @return bool
+     */
+    public function hasMeetingForUserAndEvent(User $user, Event $event): bool;
 
     /**
      * @param Participant $participant

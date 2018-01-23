@@ -1,0 +1,61 @@
+{{ form_start(searchForm) }}
+
+<div class="catalog__research hidden-xs">
+    {% if searchForm.categories is defined %}
+        {{ include('EventBundle:Catalog:Partial/checkboxes.html.twig', { form: searchForm.categories, choices: categoryViews }, false) }}
+    {% endif %}
+
+    {% if searchForm.type is defined %}
+        {{ include('EventBundle:Catalog:Partial/checkboxes.html.twig', { form: searchForm.type, choices: typeViews }, false) }}
+    {% endif %}
+
+    {% if searchForm.organizationCategory is defined %}
+        {{ include('EventBundle:Catalog:Partial/select2.html.twig', { form: searchForm.organizationCategory }, false) }}
+    {% endif %}
+
+    {% if searchForm.position is defined %}
+        {{ include('EventBundle:Catalog:Partial/select2.html.twig', { form: searchForm.position }, false) }}
+    {% endif %}
+
+    {% if searchForm.localization is defined %}
+        <div class="filter">
+            <h3>{{ searchForm.localization.vars.label|trans({}, searchForm.localization.vars.translation_domain) }}</h3>
+            {{ form_widget(searchForm.localization) }}
+
+            <select multiple
+                    data-parent-input="{{ searchForm.localization.vars.id }}"
+                    data-disable-auto-submit
+                    data-ajax-autocomplete
+                    data-method="post"
+                    data-label-input-too-short="{{ 'form.search.autocomplete.atLeastTwoChars'|trans({}, 'forms') }}"
+                    data-label-searching="{{ 'form.search.autocomplete.searching'|trans({}, 'forms') }}"
+                    data-action="{{ path('event_catalog_external_search_localization') }}"
+                    data-minimum-input-length="2"
+                    class="form-control">
+            </select>
+        </div>
+    {% endif %}
+
+    {% if searchForm.content is defined %}
+        <div class="filter">
+            <h3>{{ searchForm.content.vars.label|trans({}, searchForm.content.vars.translation_domain) }}</h3>
+
+            {{ form_widget(searchForm.content) }}
+
+            <select multiple
+                    data-parent-input="{{ searchForm.content.vars.id }}"
+                    data-disable-auto-submit
+                    data-ajax-autocomplete
+                    data-method="post"
+                    data-label-input-too-short="{{ 'form.search.autocomplete.atLeastThreeChars'|trans({}, 'forms') }}"
+                    data-label-searching="{{ 'form.search.autocomplete.searching'|trans({}, 'forms') }}"
+                    data-action="{{ path('event_catalog_external_search_keywords') }}"
+                    data-minimum-input-length="3"
+                    class="form-control">
+            </select>
+        </div>
+    {% endif %}
+
+</div>
+
+{{ form_end(searchForm) }}

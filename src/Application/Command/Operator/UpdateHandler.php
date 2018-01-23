@@ -14,25 +14,21 @@ use Proximum\Vimeet\Application\Components\Token\Admin\ActivateAccountTokenGener
 use Proximum\Vimeet\Application\Event\Admin\ActivateAccountEvent;
 use Proximum\Vimeet\Application\Event\Events;
 use Proximum\Vimeet\Application\Exception\User\EmailAlreadyExistsException;
+use Proximum\Vimeet\Domain\Helper\StringHelper;
 use Proximum\Vimeet\Domain\Model\Admin;
+use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Repository\AdminRepositoryInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 class UpdateHandler
 {
-    /**
-     * @var AdminRepositoryInterface
-     */
+    /** @var AdminRepositoryInterface */
     private $adminRepository;
 
-    /**
-     * @var ActivateAccountTokenGenerator
-     */
+    /** @var ActivateAccountTokenGenerator */
     private $activateAccountTokenGenerator;
 
-    /**
-     * @var EventDispatcherInterface
-     */
+    /** @var EventDispatcherInterface */
     private $eventDispatcher;
 
     /**
@@ -58,6 +54,7 @@ class UpdateHandler
     public function handle(Update $update)
     {
         $newMail = $update->email !== $update->operator->getEmail();
+        $update->email = StringHelper::trimSpacesAndNonBreakSpaces($update->email);
 
         if ($newMail && $this->adminRepository->emailExists($update->email)) {
             throw new EmailAlreadyExistsException(sprintf('"%s" already exists.', $update->email));
@@ -68,7 +65,17 @@ class UpdateHandler
             ->setLastname($update->lastname)
             ->setEmail($update->email);
 
-        $operator->setEvents($update->events);
+        $newEventOfOperator = $update->events;
+
+        // Reintroduce previous event if user doing the action has no right to "see" them
+        /** @var Event $event */
+        foreach ($operator->getEvents()->toArray() as $event) {
+            if (!in_array($event, $update->allowedEventsByAdmin)) {
+                $newEventOfOperator[] = $event;
+            }
+        }
+
+        $operator->setEvents($newEventOfOperator);
 
         $this->adminRepository->set($operator);
 

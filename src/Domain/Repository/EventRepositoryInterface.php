@@ -31,6 +31,13 @@ interface EventRepositoryInterface
     public function getEventsByAdmin(Admin $admin);
 
     /**
+     * @param Admin $admin
+     *
+     * @return Event[]
+     */
+    public function findArchivedByAdmin(Admin $admin): array;
+
+    /**
      * Get events order by title and last event day
      *
      * @param Admin $admin
@@ -74,4 +81,18 @@ interface EventRepositoryInterface
      * @return Event|null
      */
     public function getById($id);
+
+    /**
+     * @param string[] $parameters array of Event Extra Parameter type
+     *
+     * @return Event[]
+     */
+    public function findEventWithParameters(array $parameters): array;
+
+    /**
+     * @param \DateTimeInterface $dateTime
+     *
+     * @return Event[]
+     */
+    public function findByDay(\DateTimeInterface $dateTime): array;
 }

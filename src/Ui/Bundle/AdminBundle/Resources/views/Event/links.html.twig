@@ -23,11 +23,13 @@
                     {{ 'admin.event.billing.configuration.link'|trans }}
                 </a>
             </li>
+            {% if is_granted('ROLE_ALLOWED_TO_ORGANIZE') %}
             <li>
                 <a href="{{ path('admin_event_payment_conditions', { 'event': event.id }) }}">
                     {{ 'admin.event.paymentConditions.link'|trans }}
                 </a>
             </li>
+            {% endif %}
             <li>
                 <a href="{{ path('admin_event_practical_info_update', { 'event': event.id }) }}">
                     {{ 'admin.event.practicalInfo.link'|trans }}
@@ -38,9 +40,26 @@
                     {{ 'admin.event.configure_dates'|trans }}
                 </a>
             </li>
+            {% if is_granted('ROLE_SUPER_ADMIN') %}
+            <li>
+                <a href="{{ path('admin_event_archive', { 'event': event.id }) }}">
+                    {{ 'admin.event.archive.link'|trans }}
+                </a>
+            </li>
+            <li>
+                <a href="{{ path('admin_event_extra_parameter_list', {'event': event.id}) }}">
+                    {{ 'admin.event.extra_parameter.link'|trans }}
+                </a>
+            </li>
+            {% endif %}
             <li>
                 <a href="{{ path('admin_event_search_facets', { 'event': event.id }) }}">
                     {{ 'admin.event.search_facets.link'|trans }}
+                </a>
+            </li>
+            <li>
+                <a href="{{ path('admin_event_external_catalog_configure', { 'event': event.id }) }}">
+                    {{ 'admin.event.external_catalog_configure'|trans }}
                 </a>
             </li>
             <li>
@@ -203,12 +222,14 @@
     </li>
 {% endif %}
 
-{% if is_granted('ROLE_ALLOWED_TO_ORGANIZE') %}
+{% if is_granted('ROLE_ALLOWED_TO_OPERATE') %}
     <li>
         <a href="{{ path('admin_sheets_group_list', { 'event': event.id }) }}">
             {{ 'admin.sheets_group.index'|trans }}
         </a>
     </li>
+{% endif %}
+{% if is_granted('ROLE_ALLOWED_TO_ORGANIZE') %}
     <li>
         <a href="{{ path('admin_tip_event_list', { 'event': event.id }) }}">
             {{ 'admin.tip.link'|trans }}

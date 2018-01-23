@@ -1,0 +1,39 @@
+{% set resultsCount = paginatedResult.results|length %}
+
+{% extends 'EventBundle::base.html.twig' %}
+
+{% block title 'navigation.category.catalog'|trans %}
+
+{% block body_attributes 'class="grey"' %}
+
+{% block header_mobile %}
+    {{ include('EventBundle::Catalog/Partial/Mobile/menu.html.twig', {searchForm: searchForm}, false) }}
+{% endblock %}
+
+{% block content %}
+    {% set numberOfFilterOnMobile = (searchForm.type is defined ? 1 : 0)
+        + (searchForm.categories is defined ? 1 : 0)
+        + (searchForm.content is defined ? 1 : 0)
+    %}
+
+    <div class="catalog catalog--advanced {{ numberOfFilterOnMobile > 0 ? 'catalog-mobile-margin-' ~ numberOfFilterOnMobile : '' }}">
+        {% if message is defined and message is not null %}
+            {{ include('EventBundle::Catalog/External/message.html.twig', {'message': message}) }}
+        {% endif %}
+
+        {{ include('EventBundle::Catalog/External/catalog.html.twig', {
+            searchForm: searchForm,
+            paginatedResult: paginatedResult,
+            seeMoreButton: seeMoreButton,
+            page: page,
+            tipTranslationViews: null,
+            typeViews: typeViews,
+            categoryViews: categoryViews
+        }, false) }}
+    </div>
+
+    {{ include('EventBundle::Catalog/External/register-modal.html.twig', {
+        catalogOnlineDate: catalogOnlineDate,
+        registrationUrl: registrationUrl
+    }, false) }}
+{% endblock %}

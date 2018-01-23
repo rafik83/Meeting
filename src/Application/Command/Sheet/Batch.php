@@ -37,6 +37,11 @@ class Batch extends AbstractBatch
     /**
      * @var bool
      */
+    public $pending;
+
+    /**
+     * @var bool
+     */
     public $assign;
 
     /**
@@ -114,6 +119,9 @@ class Batch extends AbstractBatch
      * @var bool
      */
     public $generateInvoice;
+
+    /** @var bool */
+    public $printPdf;
 
     /**
      * "Assigner une fiche à un groupe/entité"

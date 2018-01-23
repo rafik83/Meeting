@@ -14,7 +14,8 @@ Feature: Handle Operator
       | @InfrastructureBundle/DataFixtures/ORM/RdvCarnot2016-Template.yml        |
       | Admins.yml                                                               |
     And I am logged with "test2@test.com" on admin
-    When I go to this page "/fr/event"
+    And I go to this page "/fr/event"
+    When I go to this page "/fr/event/past"
     And I follow "admin.operator_list.link"
     Then I should be on this page "/fr/operator"
     And I follow "admin.operator_list.action.create"
@@ -28,7 +29,7 @@ Feature: Handle Operator
     Then I should be on this page "/fr/operator"
     And I should see "flash.admin.operator.create.success"
     Given I am logged with "toto@toto.fr" on admin
-    When I go to this page "/fr/event"
+    When I go to this page "/fr/event/past"
     Then I should see "Les rendez-vous CARNOT 2016"
 
   Scenario: I can edit an Operator

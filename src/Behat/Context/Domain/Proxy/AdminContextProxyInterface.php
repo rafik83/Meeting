@@ -1,0 +1,27 @@
+<?php
+
+/*
+ * This file is part of the vimeet project.
+ *
+ * Copyright (C) Proximum
+ *
+ * @author Elao <contact@elao.com>
+ */
+
+namespace Proximum\Vimeet\Behat\Context\Domain\Proxy;
+
+use Proximum\Vimeet\Behat\Context\Storage\StorageInterface;
+use Proximum\Vimeet\Behat\Service\Manager\AdminManager;
+
+interface AdminContextProxyInterface
+{
+    /**
+     * @return StorageInterface
+     */
+    public function getStorage(): StorageInterface;
+
+    /**
+     * @return AdminManager
+     */
+    public function getAdminManager(): AdminManager;
+}

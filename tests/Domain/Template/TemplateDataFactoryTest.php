@@ -14,8 +14,9 @@ use Proximum\Vimeet\Domain\Repository\NomenclatureRepositoryInterface;
 use Proximum\Vimeet\Domain\Template\TemplateDataFactory;
 use Proximum\Vimeet\Domain\Template\TemplateObject\EditableText;
 use Proximum\Vimeet\Domain\Template\TemplateObject\Text;
+use PHPUnit\Framework\TestCase;
 
-class TemplateDataFactoryTest extends \PHPUnit_Framework_TestCase
+class TemplateDataFactoryTest extends TestCase
 {
     public function testCreate()
     {
@@ -42,6 +43,7 @@ class TemplateDataFactoryTest extends \PHPUnit_Framework_TestCase
                                 'help'        => ['fr' => 'Ici le titre'],
                                 'length'      => 100,
                                 'required'    => true,
+                                'translatable' => true
                             ]
                         ],
                         'azerty' => [

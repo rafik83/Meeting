@@ -45,6 +45,7 @@ form.multiple_sheet_request_filter_request_type.children.otherSheet.label: 'Autr
 form.multiple_sheet_request_filter_request_type.children.sheetConcerned.label: 'Fiche concernée'
 form.multiple_sheet_request_filter_request_type.children.state.filter.all: Tous
 form.multiple_sheet_request_filter_request_type.children.state.filter.approved: Accepté
+form.multiple_sheet_request_filter_request_type.children.state.filter.planned: Planifié
 form.multiple_sheet_request_filter_request_type.children.state.filter.refused: Refusé
 form.multiple_sheet_request_filter_request_type.children.state.filter.sent: 'En attente'
 form.multiple_sheet_request_filter_request_type.children.state.label: Statut
@@ -54,6 +55,7 @@ form.multiple_sheet_request_filter_request_type.children.type.filter.proposition
 form.multiple_sheet_request_filter_request_type.children.type.filter.request: 'Mes demandes'
 form.multiple_sheet_request_filter_request_type.children.type.label: Type
 form.multiple_sheet_request_filter_request_type.children.user.label: Participant
+form.multiple_sheet_request_filter_request_type.children.user.noPreference.label: 'Pas de préférence'
 form.nomenclature_data.children.items.label: 'Sélectionnez :'
 form.nomenclature_data.children.submit.label: Enregistrer
 form.package_summary_promotion_code.children.submit.label: Valider
@@ -78,18 +80,27 @@ form.register.newUser.repeatedPassword.placeholder: 'Confirmer votre mot de pass
 form.search.autocomplete.atLeastThreeChars: 'Saisir au moins 3 caractères'
 form.search.autocomplete.atLeastTwoChars: 'Saisir au moins 2 caractères'
 form.search.autocomplete.searching: 'Recherche en cours...'
+form.search.availableSlot.choice.catalog_available: 'Ayant des disponibilités'
+form.search.availableSlot.choice.catalog_everyone: 'Tout le catalogue'
+form.search.availableSlot.choice.catalog_slot: 'Disponible le %day% à %time%'
+form.search.availableSlot.label: 'Qui est disponible ?'
+form.search.categories.at_least_one_checked: 'Au moins une catégorie de participant doit être sélectionnée'
 form.search.content.label: 'Mots clés'
 form.search.keywords.search.placeholder: 'Sociétés, Compétences...'
 form.search.localization.label: 'Zones géographiques'
 form.search.localization.search.placeholder: '69, Lyon, France'
+form.search.meeting.availableSlot.choice.available: 'Ayant des disponibilités'
+form.search.meeting.availableSlot.choice.everyone: Tous
+form.search.meeting.availableSlot.choice.slot: 'Disponible le %day% à %time%'
+form.search.meeting.availableSlot.label: 'Qui est disponible ?'
 form.search.meeting.state.all: 'Tous les statuts'
 form.search.meeting.state.approved: Acceptées
 form.search.meeting.state.cancelled: Annulées
-form.search.meeting.state.label: 'Gestion de RDV'
+form.search.meeting.state.label: 'Gestion RDV'
 form.search.meeting.state.receive: 'Propositions reçues'
 form.search.meeting.state.refused: Refusées
 form.search.meeting.state.sent: 'Vos demandes en attente'
-form.search.meeting.type.label: 'Gestion de RDV'
+form.search.meeting.type.label: 'Gestion RDV'
 form.search.objective.label: Objectifs
 form.search.objective.need: 'Répondre à mes besoins'
 form.search.objective.supply: 'Rechercher mes offres'
@@ -104,7 +115,7 @@ form.search.type.at_least_one_checked: 'Au moins un type de participant doit êt
 form.search.type.label: Participants
 form.send_code.children.accepted.label: 'J''accepte de recevoir des notifications pendant l''événement'
 form.send_code.children.phone.label: 'Mon numéro de téléphone mobile'
-form.send_code.children.submit.label: 'Enregistrer'
+form.send_code.children.submit.label: Enregistrer
 form.sheet_button_link_data.children.submit.label: Enregistrer
 form.sheet_button_link_data.children.url.label: URL
 form.sheet_editable_text_data.children.content.label: Texte
@@ -130,5 +141,8 @@ form.sheet_media_collection_data.children.selectedProduct.label: 'Produits liés
 form.sheet_media_collection_data.children.submit.label: Enregistrer
 form.sheet_media_data.children.type.document: Document
 form.sheet_media_data.children.type.video: Vidéo
+form.user_availability_confirmation.children.confirm.label: 'Confirmer vos disponibilités'
+form.user_event_phone_validate_code.children.code.label: 'Code de confirmation reçu'
+form.user_event_phone_validate_code.children.confirm.label: Confirmer
 gender.man: Monsieur
 gender.woman: Madame

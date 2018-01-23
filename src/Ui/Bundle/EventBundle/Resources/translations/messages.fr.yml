@@ -10,6 +10,8 @@ account.update.avatar.title: Photo
 account.update.company.title: 'Société / Organisme'
 account.update.profile.title: Profil
 account.update.title: 'Modifier mon compte'
+agenda.availability.available_sheets: '{1} Voir le participant disponible|]1,Inf[ Voir les %availableSheets% participants disponibles'
+agenda.availability.available_sheets_with_proposition: '{1} Voir une proposition de RDV|]1,Inf[ Voir les %availableSheets% propositions de RDV'
 agenda.meeting.details: Details
 agenda.participant.view: 'Agenda de %participant%'
 agenda.title: 'Mon agenda'
@@ -17,6 +19,9 @@ agenda.unavailability.add: 'Ajouter une indisponibilité'
 agenda.unavailability.back: Retour
 agenda.unavailability.confirmRemove: 'Confirmer la suppression de l''indisponibilité ?'
 agenda.unavailability.remove: Supprimer
+availability.confirmation.action.add_unavailability: 'Ajouter une indisponibilité'
+availability.confirmation.explanation.title: 'Afin d''accéder à la prise de rendez-vous nous vous remercions de confirmer vos disponibilités pour la planification des rendez-vous.'
+availability.confirmation.title: 'Confirmer vos disponibilités'
 'Bad credentials.': 'Identifiants incorrects'
 billing_info.title: 'Info de facturation'
 catalog.action.meeting.proposition.approved: 'Proposition acceptée'
@@ -30,6 +35,8 @@ catalog.action.meeting.request.pending: 'Demande en attente'
 catalog.action.meeting.request.refuse: 'Proposition reçue'
 catalog.action.meeting.request.show.refuse: 'Demande refusée'
 catalog.complete_sheet: 'Voir la fiche complète'
+catalog.external.modal.content: 'Pour accéder à ce contenu, vous devez être inscrit ou connecté.'
+catalog.external.modal.content.logged: 'La prise de rendez-vous sera accessible le %catalogOnlineDate%.'
 catalog.meeting_request.approve: Accepter
 catalog.meeting_request.create: 'Demander en RDV'
 catalog.meeting_request.pending: 'Demande en attente'
@@ -40,8 +47,13 @@ catalog.meeting_request.refuse: Refuser
 catalog.meeting_request.request.approved: 'Votre demande acceptée'
 catalog.meeting_request.request.placed: 'RDV planifié'
 catalog.meeting_request.request.refused: 'Votre demande refusée'
+catalog.mobile.filters.allParticipants: 'Tous les participants'
+catalog.mobile.filters.availableSlot.title: 'Qui est disponible ?'
+catalog.mobile.filters.title: 'Catalogue des participants'
 catalog.noResult: 'Aucun résultat trouvé'
+catalog.noVisibleCategories: 'Vous n''avez accès à aucune catégorie de participation'
 catalog.noVisibleTypes: 'Vous n''avez accès à aucun type de participation'
+catalog.preview.participant_positions_see_more: 'voir plus'
 catalog.search.no-filter-to-refine: 'Aucun filtre ne permet d''affiner la recherche.'
 catalog.seeMore: 'Voir plus'
 catalog.title: Catalogue
@@ -51,19 +63,32 @@ common.need_help: 'Besoin d''aide'
 common.next: Suivant
 common.update: Modifier
 common.validate: Valider
+error.403.content: 'Vous n''êtes pas autorisé à accéder à ce contenu.'
+error.403.title: 'Non autorisé'
+error.404.content: 'Ce contenu n''est pas ou plus accessible.'
+error.404.title: 'Page introuvable'
+error.500.content: 'Nous en avons été notifié et nous mettons tout en oeuvre pour la corriger.'
+error.500.title: 'Une erreur s''est produite'
 event.activateAccount.expired.explanation: 'Votre invitation a expiré, vous pouvez recevoir une nouvelle invitation par email en cliquant sur le bouton ci-dessous'
 event.activateAccount.expired.resend: 'Recevoir une nouvelle invitation par email'
 event.activateAccount.expired.title: 'Votre invitation a expiré'
 event.activateAccount.resendToken.explanation: 'Une nouvelle invitation vous a été envoyée par mail. Vous pouvez cliquer sur le lien contenu dans ce mail pour activer votre compte'
 event.activateAccount.resendToken.title: 'Une nouvelle invitation vous a été envoyée'
+event.content.title: 'Conditions générales de vente'
 event.info.close: Fermer
 event.info.contact: 'Informations pratiques'
+event.invisible.label: Invisible
 event.meeting.listRequest.contact.export: 'Télécharger mes contacts'
 event.meeting.listRequest.filter.all: Toutes
 event.meeting.listRequest.filter.propositions: 'Propositions reçues'
 event.meeting.listRequest.filter.requests: 'Mes demandes'
 event.meeting.request.answering.closed: 'Les validations de rendez-vous sont terminées'
 event.meeting.request.closed: 'Les demandes de rendez-vous sont terminées'
+event.meeting.request.locked: 'Planification en cours - Les demandes sont verrouillées'
+event.meeting.request.transformIntoMeeting.error: 'Le RDV ne peut pas être positionné faute de disponibilités communes.'
+event.meeting.request.transformIntoMeeting.success: 'RDV positionné pour %participants% le %date% à %time% : %spot%.'
+event.registration_closed: 'Les inscriptions sont closes, si vous êtes inscrits connectez-vous'
+event.registration_not_open: 'Les inscriptions ne sont pas encore ouvertes'
 event.sheet.export.fields.event_name: 'Nom de l''événement'
 event.sheet.export.fields.participant_email: 'Email participant'
 event.sheet.export.fields.participant_firstname: Prénom
@@ -81,6 +106,15 @@ event.sheet.export.fields.sheet_turnover: 'Chiffre d''affaires'
 event.sheet.export.fields.sheet_type: Type
 event.sheet.export.fields.sheet_website: 'Site internet'
 event.sheet.export.fields.sheet_zipcode: 'Code postal'
+event.sms.meeting_request.receive: '%event%: Vous avez reçu une proposition de rendez-vous, voir %link%'
+event.sms.receive_meeting_request.approved: '%event%: Votre demande de RDV avec %sheet% a été acceptée. RDV le %date% à %time% : Lieu %spot%, Voir %link%'
+event.sms.reminder.pending_meeting_request: '%eventTitle% : Vous avez reçu %countPendingMeetingRequest% propositions de RDVs, voir %meetingRequestManagementUrl%'
+event.sms.sent_meeting_request.approved: '%event%: La proposition de RDV avec %sheet% a été acceptée. RDV le %date% à %time% : Lieu %spot%, Voir %link%'
+event.user_event_phone.validate.explanation: 'Vous allez recevoir par SMS un code à 4 chiffres afin de valider votre numéro de téléphone'
+event.user_event_phone.validate.ignore: Ignorer
+event.user_event_phone.validate.returnToPhone: 'Modifier mon numéro de téléphone'
+event.user_event_phone.validate.success: 'Votre numéro de téléphone est bien confirmé'
+event.user_event_phone.validate.title: 'Validation du numéro de téléphone'
 gender.man: Monsieur
 gender.woman: Madame
 group.home.link.create_sheet: 'Créer une fiche'
@@ -133,9 +167,20 @@ login.error.sheetDisabled: 'Votre participation a été désactivée'
 login.forgot_password: 'Mot de passe oublié ?'
 login.forgotPassword: 'Mot de passe oublié ?'
 login.memberArea: 'Espace membre'
+meeting.video.end: 'Arrêter le RDV'
+meeting.video.error.userDeniedAccess: "Vous avez refusé l'accès à vos périphériques audio/video ou annulé le lancement du partage d'écran.\nPour que la visioconférence fonctionne correctement, merci d'autoriser l'accès à vos périphériques ou le lancement du partage d'écran."
+meeting.video.installScreenSharingExtensionMessage: 'Merci d''installer notre extension de partage d''écran.'
+meeting.video.notCompatibleBrowserMessage: 'Votre navigateur n''est pas compatible. Merci d''utiliser Chrome ou Firefox.'
+meeting.video.screenshare.end: 'Arrêter le partage'
+meeting.video.screenshare.start: 'Partager mon écran'
+meeting.video.start: 'Démarrer le RDV'
+meeting.video.waitingForParticipant: 'En attente d''un participant'
+meetingRequest.mobile.filters.availableSlot.title: 'Qui est disponible ?'
+meetingRequest.mobile.filters.state.title: 'Gestion RDV'
 modal.back: Retour
 modal.close: Fermer
 modal.loading.error: 'Un problème est survenu pendant le chargement, vous pouvez fermer la modale'
+multiple_sheets.modal.close: Fermer
 multiple_sheets.request.filter.reset: 'Réinitialiser les filtres'
 multiple_sheets.request.list.no-preference: 'Pas de préférence'
 multiple_sheets.request.list.state.approved: Acceptée
@@ -189,6 +234,7 @@ navigation.links.package.order_list: 'Liste des commandes'
 navigation.links.package.order_summary_total: Récapitulatif
 navigation.links.package.payment: Paiement
 navigation.links.package.summary: Récapitulatif
+navigation.links.package.terms_of_sale: 'Conditions générales de vente'
 navigation.links.planning.all_schedule: 'Tous les agendas'
 navigation.links.planning.available_date: 'Disponible le'
 navigation.links.planning.conference: Conférences
@@ -325,7 +371,7 @@ register.already_registered: 'Déjà inscrit ?'
 register.connect: Valider
 register.finalize: Finaliser
 register.photo: "Pourquoi la photo du participant est utile ?\n- Ne restez pas un anonyme pour vos futurs partenaires,\n- Renforcez votre réseau professionnel\n- Lors de l'événement, vos interlocuteurs vous identifient et vice-versa,\n- Des cartes de visites complètes pour tous,\n- Identifiez facilement les agendas de chacun..."
-register.privacy_policies: 'Protection de la vie privée : Conformément à la Loi Informatique et Libertés du 6 janvier 1978 modifiée en 2004, vous disposez d’un droit d’accès et de rectification aux données personnelles / informations vous concernant en nous adressant un e-mail à cnil@proximumgroup.com.'
+register.privacy_policies: 'Protection de la vie privée : Conformément à la Loi Informatique et Libertés du 6 janvier 1978 modifiée en 2004, vous disposez d’un droit d’accès et de rectification aux données personnelles / informations vous concernant en nous adressant un e-mail à cnil@vi-meet.com.'
 register.register: Inscription
 register.register_as: 'S''inscrire en tant que :'
 register.step: Etape

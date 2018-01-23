@@ -3,7 +3,7 @@
 /*
  * This file is part of the vimeet project.
  *
- * Copyright (C) 2017 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -25,11 +25,26 @@ class ParticipantsSheetIdsViewNormalizer extends AbstractNormalizer implements N
 {
     const COL_SHEET_ID               = 'sheet_id';
     const COL_SHEET_NAME             = 'sheet_name';
+    const COL_SHEET_ENABLE           = 'sheet_enable';
     const COL_PARTICIPANT_TYPE       = 'participant_type';
+    const COL_USER_ID                = 'user_id';
     const COL_PARTICIPANT_ID         = 'participant_id';
     const COL_PARTICIPANT_EMAIL      = 'participant_email';
     const COL_PARTICIPANT_CREATED_AT = 'participant_created_at';
     const COL_HAPPENING_SUBSCRIBER   = 'happening_subscriber';
+    const TRANSLATION_KEY = 'admin.participant.export.fields.';
+
+    const COMMON_COL = [
+        self::COL_SHEET_ID,
+        self::COL_PARTICIPANT_TYPE,
+        self::COL_SHEET_NAME,
+        self::COL_SHEET_ENABLE,
+        self::COL_USER_ID,
+        self::COL_PARTICIPANT_ID,
+        self::COL_PARTICIPANT_EMAIL,
+        self::COL_PARTICIPANT_CREATED_AT,
+        self::COL_HAPPENING_SUBSCRIBER,
+    ];
 
     /**
      * @var string
@@ -134,7 +149,7 @@ class ParticipantsSheetIdsViewNormalizer extends AbstractNormalizer implements N
      *
      * @return array Raw data about sheet
      */
-    private function getParticipantRawData(Participant $participant, $locale)
+    private function getParticipantRawData(Participant $participant, string $locale)
     {
         $event = $participant->getSheet()->getEvent();
 
@@ -154,6 +169,8 @@ class ParticipantsSheetIdsViewNormalizer extends AbstractNormalizer implements N
             self::COL_SHEET_ID               => $sheet->getId(),
             self::COL_PARTICIPANT_TYPE       => $sheet->getType()->getTitle($availableLocale),
             self::COL_SHEET_NAME             => $this->sheetInfoGuesser->guessSheetTitle($sheet, $availableLocale),
+            self::COL_SHEET_ENABLE           => $this->normalizeBoolean($sheet->isEnabled()),
+            self::COL_USER_ID                => $participant->getUser()->getId(),
             self::COL_PARTICIPANT_ID         => $participant->getId(),
             self::COL_PARTICIPANT_EMAIL      => $participant->getUser()->getEmail(),
             self::COL_PARTICIPANT_CREATED_AT => $timeFormatter->format($sheet->getCreatedAt()),
@@ -210,17 +227,17 @@ class ParticipantsSheetIdsViewNormalizer extends AbstractNormalizer implements N
         $normalizedData = [];
 
         // Common fields (event ID, event name, etc.)
-        foreach (self::getCommonFieldKeys() as $fieldKey) {
-            $translationKey = 'admin.participant.export.fields.' . $fieldKey;
+        foreach (self::COMMON_COL as $fieldKey) {
+            $translationKey = sprintf('%s%s', self::TRANSLATION_KEY, $fieldKey);
             $input          = $rawData[$fieldKey];
 
-            $translatedFieldname = $this->convertCharset(
+            $translatedFieldName = $this->convertCharset(
                 $this->translator->trans($translationKey),
                 Charset::UTF_8,
                 $charset
             );
 
-            $normalizedData[$translatedFieldname] = $this->convertCharset(
+            $normalizedData[$translatedFieldName] = $this->convertCharset(
                 $input,
                 Charset::UTF_8,
                 $charset
@@ -229,28 +246,18 @@ class ParticipantsSheetIdsViewNormalizer extends AbstractNormalizer implements N
 
         // Registration data
         foreach ($this->registrationFields as $fieldKey => $fieldName) {
-            $input                      = isset($rawData[$fieldKey]) ? $rawData[$fieldKey] : null;
-            $fieldName                  = $this->convertCharset($fieldName, Charset::UTF_8, $charset);
+            $input     = isset($rawData[$fieldKey]) ? $rawData[$fieldKey] : null;
+            $fieldName = $this->convertCharset($fieldName, Charset::UTF_8, $charset);
+
+            // Avoid set to null in field with same name
+            if ($input === null && isset($normalizedData[$fieldName])) {
+                continue;
+            }
+
             $normalizedData[$fieldName] = $this->normalizeInput($input, Charset::UTF_8, $charset);
         }
 
         return $normalizedData;
-    }
-
-    /**
-     * @return string[] Keys of common columns' headers
-     */
-    private static function getCommonFieldKeys()
-    {
-        return [
-            self::COL_SHEET_ID,
-            self::COL_PARTICIPANT_TYPE,
-            self::COL_SHEET_NAME,
-            self::COL_PARTICIPANT_ID,
-            self::COL_PARTICIPANT_EMAIL,
-            self::COL_PARTICIPANT_CREATED_AT,
-            self::COL_HAPPENING_SUBSCRIBER,
-        ];
     }
 
     /**

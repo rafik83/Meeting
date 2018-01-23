@@ -14,6 +14,8 @@ use Proximum\Vimeet\Application\Adapter\EntityManagerAdapterInterface;
 use Proximum\Vimeet\Application\Adapter\JobQueueInterface;
 use Proximum\Vimeet\Application\Adapter\MailerInterface;
 use Proximum\Vimeet\Application\Adapter\SerializerAdapterInterface;
+use Proximum\Vimeet\Application\Command\Meeting\Admin\SpotReassign;
+use Proximum\Vimeet\Application\Command\Meeting\Admin\SpotReassignHandler;
 use Proximum\Vimeet\Application\Exception\Planner\Import\InvalidArgumentForImportException;
 use Proximum\Vimeet\Application\Exception\Planner\InvalidXmlException;
 use Proximum\Vimeet\Application\View\Planner\Result\MeetingResult;
@@ -27,6 +29,7 @@ use Proximum\Vimeet\Domain\Model\Meeting\Request;
 use Proximum\Vimeet\Domain\Repository\Meeting\RequestRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\MeetingRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\MeetingSlotRepositoryInterface;
+use Proximum\Vimeet\Domain\Repository\PlannerJobRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\SpotRepositoryInterface;
 use Proximum\Vimeet\Domain\Sheet\ParticipantFinder;
@@ -52,6 +55,9 @@ class ImportHandler
 
     /** @var SpotRepositoryInterface */
     private $spotRepository;
+
+    /** @var SpotReassignHandler */
+    private $spotReassignHandler;
 
     /** @var EntityManagerAdapterInterface */
     private $entityManagerAdapter;
@@ -86,6 +92,12 @@ class ImportHandler
     /** @var JobQueueInterface */
     private $jobQueue;
 
+    /** @var string */
+    private $plannerFilesPath;
+
+    /** @var PlannerJobRepositoryInterface */
+    private $plannerJobRepository;
+
     /**
      * @param SerializerAdapterInterface     $serializer
      * @param MeetingRepositoryInterface     $meetingRepository
@@ -93,12 +105,15 @@ class ImportHandler
      * @param RequestRepositoryInterface     $requestRepository
      * @param MeetingSlotRepositoryInterface $slotRepository
      * @param SpotRepositoryInterface        $spotRepository
+     * @param SpotReassignHandler            $spotReassignHandler
+     * @param PlannerJobRepositoryInterface  $plannerJobRepository
      * @param EntityManagerAdapterInterface  $entityManagerAdapter
      * @param MailerInterface                $mailer
      * @param LocalFileStorageAdapter        $localFileStorage
      * @param JobQueueInterface              $jobQueue
      * @param \DateTimeInterface             $dateTime
      * @param string                         $importDirectoryPath
+     * @param string                         $plannerFilesPath
      * @param string                         $mailSender
      */
     public function __construct(
@@ -108,13 +123,16 @@ class ImportHandler
         RequestRepositoryInterface $requestRepository,
         MeetingSlotRepositoryInterface $slotRepository,
         SpotRepositoryInterface $spotRepository,
+        SpotReassignHandler $spotReassignHandler,
+        PlannerJobRepositoryInterface $plannerJobRepository,
         EntityManagerAdapterInterface $entityManagerAdapter,
         MailerInterface $mailer,
         LocalFileStorageAdapter $localFileStorage,
         JobQueueInterface $jobQueue,
         \DateTimeInterface $dateTime,
-        $importDirectoryPath,
-        $mailSender
+        string $importDirectoryPath,
+        string $plannerFilesPath,
+        string $mailSender
     ) {
         $this->serializer           = $serializer;
         $this->meetingRepository    = $meetingRepository;
@@ -122,12 +140,15 @@ class ImportHandler
         $this->requestRepository    = $requestRepository;
         $this->slotRepository       = $slotRepository;
         $this->spotRepository       = $spotRepository;
+        $this->spotReassignHandler  = $spotReassignHandler;
+        $this->plannerJobRepository = $plannerJobRepository;
         $this->entityManagerAdapter = $entityManagerAdapter;
         $this->mailer               = $mailer;
         $this->localFileStorage     = $localFileStorage;
         $this->jobQueue             = $jobQueue;
         $this->dateTime             = $dateTime;
         $this->importDirectoryPath  = $importDirectoryPath;
+        $this->plannerFilesPath     = $plannerFilesPath;
         $this->mailSender           = $mailSender;
     }
 
@@ -142,7 +163,23 @@ class ImportHandler
         // Remove all meeting of the event
         $this->meetingRepository->deleteAll($import->event);
 
-        $content = file_get_contents($this->importDirectoryPath . $import->file->getPath());
+        $plannerJob = null;
+
+        if ($import->plannerJobId > 0) {
+            $plannerJob = $this->plannerJobRepository->getById($import->plannerJobId);
+
+            if ($import->event->getId() !== $plannerJob->getEvent()->getId()) {
+                throw new \InvalidArgumentException('Given PlannerJob not in this event');
+            }
+        }
+
+        $importDirectory = $this->importDirectoryPath;
+
+        if (null !== $plannerJob) {
+            $importDirectory = $this->plannerFilesPath;
+        }
+
+        $content = file_get_contents($importDirectory . $import->file->getPath());
 
         try {
             /** @var PlannerResult $plannerResult */
@@ -152,15 +189,31 @@ class ImportHandler
         }
 
         $this->handlePlannerResult($import->event, $plannerResult);
-
-        $this->jobQueue->indexInCatalogSheetsByEvent($import->event);
+        $this->spotReassignHandler->handle(new SpotReassign($import->event));
 
         $this->notifyAboutImportSuccess($import->event, $import);
 
-        $this->localFileStorage->remove($import->file->getPath(), true);
+        if (null !== $plannerJob) {
+            // Due to entityManager clear() in handlePlannerResult(),
+            // we need to retrieve plannerJob entity before updating it
+            $plannerJob = $this->plannerJobRepository->getById($import->plannerJobId);
+            $plannerJob->setCompleted();
+            $this->plannerJobRepository->set($plannerJob);
+        }
 
+        $this->jobQueue->indexInCatalogSheetsByEvent($import->event);
         $this->jobQueue->aggregateParticipantAssignedToRequest($import->event);
         $this->jobQueue->aggregateEventUsersFullUnavailability($import->event, true);
+        $this->jobQueue->aggregateAvailableSlot($import->event);
+        $this->jobQueue->aggregatePhoneValidationStatus($import->event);
+
+        $this->generateMeetingSolutionAnalytic($import->event);
+
+        $this->localFileStorage->remove($importDirectory . $import->file->getPath(), true);
+
+        if (null !== $plannerJob) {
+            $this->localFileStorage->remove($importDirectory . $plannerJob->getFile()->getPath(), true);
+        }
     }
 
     /**
@@ -227,9 +280,10 @@ class ImportHandler
     }
 
     /**
+     * @param Event         $event
      * @param MeetingResult $meetingResult
      *
-     * @return Meeting|null
+     * @return null|Meeting
      */
     private function handleMeeting(Event $event, MeetingResult $meetingResult)
     {
@@ -252,11 +306,14 @@ class ImportHandler
         $participantsFrom = [];
         $participantsTo   = [];
 
-
         // Check if participant are present also
-        foreach ($meetingResult->participants as $participant) {
-            $participantFrom = ParticipantFinder::getParticipantWithId($sheetFrom, $participant->id);
-            $participantTo   = ParticipantFinder::getParticipantWithId($sheetTo, $participant->id);
+        foreach ($meetingResult->userResults as $userResult) {
+            $participantFrom = ParticipantFinder::getParticipantWithUserId($sheetFrom, $userResult->id);
+            $participantTo   = ParticipantFinder::getParticipantWithUserId($sheetTo, $userResult->id);
+
+            if ((null === $participantFrom && $participantTo === null)) {
+                return null; // Participant of the meeting not found
+            }
 
             if (null !== $participantFrom) {
                 $participantsFrom[] = $participantFrom;
@@ -264,10 +321,6 @@ class ImportHandler
 
             if (null !== $participantTo) {
                 $participantsTo[] = $participantTo;
-            }
-
-            if ((null === $participantFrom && $participantTo === null)) {
-                return null; // Early return if participant of the meeting not found
             }
         }
 
@@ -280,16 +333,10 @@ class ImportHandler
             $participantsTo,
             $this->dateTime,
             $spot,
-            $event
+            $event,
+            $meetingResult->isBlockedSpot,
+            $meetingResult->isBlockedSlot
         );
-
-        if ($meetingResult->isBlockedSlot) {
-            $meeting->blockSlot();
-        }
-
-        if ($meetingResult->isBlockedSpot) {
-            $meeting->blockSpot();
-        }
 
         $this->entityManagerAdapter->persist($meeting);
 
@@ -310,5 +357,13 @@ class ImportHandler
             $command->emailToNotify,
             $command->locale
         ));
+    }
+
+    /**
+     * @param Event $event
+     */
+    public function generateMeetingSolutionAnalytic(Event $event)
+    {
+        $this->jobQueue->generateMeetingSolutionAnalytic($event);
     }
 }

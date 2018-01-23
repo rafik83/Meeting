@@ -1,0 +1,9 @@
+{% if menuHeaderView.event.logo != null %}
+    <a href="{{ path('event') }}">
+        {% if menuHeaderView.event.isSvgLogo %}
+            <img src="{{ menuHeaderView.event.logo }}" class="logo">
+        {% else %}
+            <img src="{{ menuHeaderView.event.logo|imagine_filter('event_header_logo') }}" class="logo">
+        {% endif %}
+    </a>
+{% endif %}

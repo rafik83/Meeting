@@ -13,8 +13,9 @@ namespace Proximum\Vimeet\Tests\Domain\Template;
 use Proximum\Vimeet\Domain\Template\Block;
 use Proximum\Vimeet\Domain\Template\Exception\ObjectNotFoundException;
 use Proximum\Vimeet\Domain\Template\TemplateObject\EditableText;
+use PHPUnit\Framework\TestCase;
 
-class BlockTest extends \PHPUnit_Framework_TestCase
+class BlockTest extends TestCase
 {
     public function testGetBlocks()
     {
@@ -233,5 +234,24 @@ class BlockTest extends \PHPUnit_Framework_TestCase
         $block->addChild(0, 'object-2', $object2);
 
         $block->getObject('object-3');
+    }
+
+    public function testGetData()
+    {
+        $object1 = new EditableText('69b3cde1', 'editable-text', ['foobar' => 'foobar'], 'fr', 'fr');
+        $object2 = new EditableText('69b3cde2', 'editable-text', ['barfoo' => 'barfoo'], 'fr', 'fr');
+
+        $block = new Block('12', [], 'fr', 'fr');
+        $block->addChild(0, 'object-1', $object1);
+        $block->addChild(0, 'object-2', $object2);
+
+        $data = $block->getData();
+
+        $expectedData = [
+            'object-1' => [],
+            'object-2' => [],
+        ];
+
+        $this->assertEquals($expectedData, $data);
     }
 }

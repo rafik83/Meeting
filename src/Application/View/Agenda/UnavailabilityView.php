@@ -12,19 +12,13 @@ namespace Proximum\Vimeet\Application\View\Agenda;
 
 class UnavailabilityView extends AbstractTimeEntityView
 {
-    /**
-     * @var int
-     */
+    /** @var int */
     public $id;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     public $timeZone;
 
-    /**
-     * @var null|string
-     */
+    /** @var null|string */
     public $message;
 
     /**
@@ -41,17 +35,17 @@ class UnavailabilityView extends AbstractTimeEntityView
         $timeZone,
         $message = null
     ) {
-        $this->id              = $id;
-        $this->begin           = $begin;
-        $this->end             = $end;
-        $this->timeZone        = $timeZone;
-        $this->message         = $message;
+        $this->id       = $id;
+        $this->begin    = $begin;
+        $this->end      = $end;
+        $this->timeZone = $timeZone;
+        $this->message  = $message;
     }
 
     /**
      * @return bool
      */
-    public function hasMessage()
+    public function hasMessage(): bool
     {
         return $this->message !== null;
     }

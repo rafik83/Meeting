@@ -1,0 +1,10 @@
+services:
+    Proximum\Vimeet\Application\Query\Payment\PaymentConditionsViewQueryHandler:
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Payment\PaymentConditionsViewQuery }
+
+    Proximum\Vimeet\Application\Query\Happening\Participant\ParticipantsAllowedToAccessQueryHandler:
+        arguments:
+            - '@vimeet_infrastructure.repository.sheet_repository'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Happening\Participant\ParticipantsAllowedToAccessQuery }

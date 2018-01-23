@@ -20,16 +20,13 @@ use Proximum\Vimeet\Application\Query\Agenda\Admin\RequestSlotViewQuery;
 use Proximum\Vimeet\Application\Query\Agenda\Admin\RequestSlotViewQueryHandler;
 use Proximum\Vimeet\Domain\Model\Meeting;
 use Proximum\Vimeet\Domain\Repository\MeetingRepositoryInterface;
-use Proximum\Vimeet\Domain\Repository\SpotRepositoryInterface;
+use Proximum\Vimeet\Domain\Spot\AvailableSpots;
 use Proximum\Vimeet\Infrastructure\Adapter\DelayedEventDispatcher;
 
 class TransformRequestIntoMeetingHandler
 {
     /** @var MeetingRepositoryInterface */
     private $meetingRepository;
-
-    /** @var SpotRepositoryInterface */
-    private $spotRepository;
 
     /** @var RequestSlotViewQueryHandler */
     private $requestSlotViewQueryHandler;
@@ -40,25 +37,28 @@ class TransformRequestIntoMeetingHandler
     /** @var DelayedEventDispatcher */
     private $eventDispatcher;
 
+    /** @var AvailableSpots */
+    private $availableSpots;
+
     /**
      * @param MeetingRepositoryInterface  $meetingRepository
-     * @param SpotRepositoryInterface     $spotRepository
      * @param RequestSlotViewQueryHandler $requestSlotViewQueryHandler
+     * @param AvailableSpots              $availableSpots
      * @param \DateTimeInterface          $dateTime
      * @param DelayedEventDispatcher      $eventDispatcher
      */
     public function __construct(
         MeetingRepositoryInterface $meetingRepository,
-        SpotRepositoryInterface $spotRepository,
         RequestSlotViewQueryHandler $requestSlotViewQueryHandler,
+        AvailableSpots $availableSpots,
         \DateTimeInterface $dateTime,
         DelayedEventDispatcher $eventDispatcher
     ) {
         $this->meetingRepository           = $meetingRepository;
-        $this->spotRepository              = $spotRepository;
         $this->requestSlotViewQueryHandler = $requestSlotViewQueryHandler;
         $this->dateTime                    = $dateTime;
         $this->eventDispatcher             = $eventDispatcher;
+        $this->availableSpots              = $availableSpots;
     }
 
     /**
@@ -87,23 +87,13 @@ class TransformRequestIntoMeetingHandler
             throw new SlotNotAvailableForThisMeetingException();
         }
 
-        // Get available spots for this slot and meeting
-        $spots = $this->spotRepository->getSpotsForSlotAndParticipantsQuantity(
+        $spot = $this->availableSpots->getBySlot(
             $transformRequestIntoMeeting->slot,
-            $transformRequestIntoMeeting->meetingRequest->countParticipants(),
-            null,
             $transformRequestIntoMeeting->meetingRequest->getFromSheet(),
             $transformRequestIntoMeeting->meetingRequest->getToSheet(),
+            $transformRequestIntoMeeting->meetingRequest->countParticipants(),
             $transformRequestIntoMeeting->visio
         );
-
-        // If no spot available
-        if (0 === count($spots)) {
-            throw new NoSpotsAvailableForThisSlotAndMeetingException();
-        }
-
-        // Get first spot
-        $spot = reset($spots);
 
         $fromSheet = $transformRequestIntoMeeting->meetingRequest->getFromSheet();
         $toSheet   = $transformRequestIntoMeeting->meetingRequest->getToSheet();
@@ -124,11 +114,13 @@ class TransformRequestIntoMeetingHandler
 
         $this->eventDispatcher->dispatch(
             Events::MEETING_CREATED,
-            new MeetingCreatedEvent([$fromSheet, $toSheet])
+            new MeetingCreatedEvent($meeting)
         );
 
         foreach ($meeting->getAllParticipants() as $participant) {
-            $this->eventDispatcher->dispatch(Events::MEETING_PARTICIPATE, new MeetingParticipateEvent($participant));
+            $this->eventDispatcher->dispatch(Events::MEETING_PARTICIPATE,
+                new MeetingParticipateEvent($participant)
+            );
         }
     }
 }

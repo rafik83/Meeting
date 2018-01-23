@@ -52,6 +52,8 @@ class Update extends AbstractEvent
         $this->emailTeam     = $event->getEmailTeam();
         $this->invoicePrefix = $event->getInvoicePrefix();
         $this->analyticsCode = $event->getConfiguration()->getAnalyticsCode();
+        $this->visible       = $event->isVisible();
+        $this->backgroundColor = $event->getConfiguration()->getBackgroundColor();
 
         foreach ($event->getTranslations() as $translation) {
             $this->translations[$translation->getLocale()] = [
@@ -79,5 +81,17 @@ class Update extends AbstractEvent
         return
             $this->locales !== $this->event->getLocales() ||
             $this->fallback !== $this->event->getFallback();
+    }
+
+    /**
+     * @return bool
+     */
+    public function isBackgroundUpdated(): bool
+    {
+        $eventBackgroundImage = $this->event->getConfiguration()->getBackgroundImage();
+        $eventBackgroundColor = $this->event->getConfiguration()->getBackgroundColor();
+
+        return $this->backgroundColor !== $eventBackgroundColor
+            || ($this->backgroundImage !== null && $this->backgroundImage !== $eventBackgroundImage);
     }
 }

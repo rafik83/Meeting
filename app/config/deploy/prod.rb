@@ -14,14 +14,6 @@ set :clear_controllers, true
 role :app, front1, :primary => true
 role :app, front2, :primary => false
 
-namespace :app_tasks do
-  task :php do
-    capifony_pretty_print "--> Restarting PHP"
-    invoke_command "sudo /usr/sbin/service php7.1-fpm reload", :via => run_method
-    capifony_puts_ok
-  end
-end
-
 namespace :deploy do
   task :set_permissions, :roles => :app, :except => { :no_release => true } do
     # do not set permissions on prod

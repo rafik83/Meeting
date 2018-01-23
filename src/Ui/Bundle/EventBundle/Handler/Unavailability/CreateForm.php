@@ -1,0 +1,55 @@
+<?php
+
+/*
+ * This file is part of the Proximum Vimeet project.
+ *
+ * Copyright (C) Proximum
+ *
+ * @author Elao <contact@elao.com>
+ */
+
+namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Handler\Unavailability;
+
+use Proximum\Vimeet\Domain\Model\Event;
+use Proximum\Vimeet\Domain\Model\Sheet;
+use Proximum\Vimeet\Domain\Model\User;
+use Symfony\Component\HttpFoundation\Request;
+
+class CreateForm
+{
+    /** @var Request */
+    public $request;
+
+    /** @var Event */
+    public $event;
+
+    /** @var Sheet */
+    public $sheet;
+
+    /** @var User */
+    public $user;
+
+    /** @var string */
+    public $actionUrl;
+
+    /**
+     * @param Request $request
+     * @param Event   $event
+     * @param Sheet   $sheet
+     * @param User    $user
+     * @param string  $actionUrl
+     */
+    public function __construct(
+        Request $request,
+        Event $event,
+        Sheet $sheet,
+        User $user,
+        string $actionUrl
+    ) {
+        $this->request     = $request;
+        $this->event       = $event;
+        $this->sheet       = $sheet;
+        $this->user        = $user;
+        $this->actionUrl   = $actionUrl;
+    }
+}

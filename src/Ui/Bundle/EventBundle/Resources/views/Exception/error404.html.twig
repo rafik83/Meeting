@@ -1,0 +1,14 @@
+{% extends 'EventBundle::base.html.twig' %}
+
+{% block title 'error.404.title'|trans %}
+
+{% block body_attributes 'class="grey"' %}
+
+{% block content %}
+    <div class="error-title well error-content text-center">
+        <b>{{ 'error.404.content'|trans }}</b>
+    </div>
+    <div class="error-powered">
+        <img src="{{ asset('assets/images/vimeet_poweredby.png') }}">
+    </div>
+{% endblock %}

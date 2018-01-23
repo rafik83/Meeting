@@ -15,32 +15,23 @@ use Proximum\Vimeet\Domain\Model\Sheet;
 
 class AgendaView
 {
-    /**
-     * @var DayView[]
-     */
+    /** @var DayView[] */
     public $days;
 
-    /**
-     * @var Sheet
-     */
+    /** @var Sheet */
     public $sheet;
 
-    /**
-     * Participant that owns the agenda looked
-     *
-     * @var Participant
-     */
+    /** @var Participant that owns the agenda looked */
     public $participant;
 
-    /**
-     * @var bool
-     */
+    /** @var bool */
     public $isUserAloneParticipant;
 
-    /**
-     * @var ParticipantView[]
-     */
+    /** @var ParticipantView[] */
     public $participants;
+
+    /** @var bool */
+    public $isPhoneValidationRequired;
 
     /**
      * @param array             $dayViews
@@ -48,33 +39,28 @@ class AgendaView
      * @param Participant       $participant
      * @param bool              $isUserAloneParticipant
      * @param ParticipantView[] $participants
+     * @param bool              $isPhoneValidationRequired
      */
     public function __construct(
         array $dayViews,
         Sheet $sheet,
         Participant $participant,
-        $isUserAloneParticipant,
-        array $participants
+        bool $isUserAloneParticipant,
+        array $participants,
+        bool $isPhoneValidationRequired
     ) {
         $this->days                   = $dayViews;
         $this->sheet                  = $sheet;
         $this->participant            = $participant;
         $this->isUserAloneParticipant = $isUserAloneParticipant;
         $this->participants           = $participants;
-    }
-
-    /**
-     * @return int
-     */
-    public function getNumberOfDays()
-    {
-        return count($this->days);
+        $this->isPhoneValidationRequired = $isPhoneValidationRequired;
     }
 
     /**
      * @return null|ParticipantView
      */
-    public function getCurrentParticipantView()
+    public function getCurrentParticipantView(): ?ParticipantView
     {
         foreach ($this->participants as $participantView) {
             if ($participantView->id === $this->participant->getId()) {
@@ -84,16 +70,4 @@ class AgendaView
 
         return null;
     }
-
-    /**
-     * In case of one day, take the fullscreen size
-     * If more, display 2 column size by size
-     *
-     * @return int
-     */
-    public function getColSize()
-    {
-        return $this->getNumberOfDays() === 1 ? 12 : 6;
-    }
-
 }

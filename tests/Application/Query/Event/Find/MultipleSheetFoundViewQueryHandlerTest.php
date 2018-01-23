@@ -17,8 +17,9 @@ use Proximum\Vimeet\Application\View\Event\Find\MultipleSheetsFoundView;
 use Proximum\Vimeet\Application\View\Event\Find\SheetFoundView;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Sheet;
+use PHPUnit\Framework\TestCase;
 
-class MultipleSheetFoundViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
+class MultipleSheetFoundViewQueryHandlerTest extends TestCase
 {
     public function testHandle()
     {

@@ -2,6 +2,8 @@
 
 {% import 'AdminBundle::macro.html.twig' as macro %}
 
+{% block title 'admin.sheet.title'|trans %}
+
 {% block content %}
     <h1 class="page-header">
         {{ 'admin.sheet.title.count'|transchoice(sheets.total, {'%count%': sheets.total}) }}
@@ -60,6 +62,7 @@
             {% embed 'AdminBundle:Common:batch.html.twig' %}
                 {% block actions %}
                     <li>{{ form_widget(batch_form.accept) }}</li>
+                    <li>{{ form_widget(batch_form.pending) }}</li>
                     <li>
                         <a href="#" data-toggle="modal" data-target="#validate-comment">
                             {{ 'admin.sheet.validate'|trans }}
@@ -121,6 +124,11 @@
                         <li role="separator" class="divider"></li>
                         <li>{{ form_widget(batch_form.generateInvoice, { 'attr': { 'data-confirm': 'admin.batch_actions.generateInvoice.confirm'|trans({'%prefix%': event.invoicePrefix.prefixExample}) } }) }}</li>
                     {% endif %}
+
+                    {% if batch_form.printPdf is defined %}
+                        <li role="separator" class="divider"></li>
+                        <li>{{ form_widget(batch_form.printPdf) }}</li>
+                    {% endif %}
                 {% endblock actions %}
             {% endembed %}
         </div>
@@ -129,7 +137,7 @@
         </div>
     </div>
 
-    {% set hasCategories = filter_form.category is defined ? filter_form.category.vars.choices|length > 1 : false %}
+    {% set hasCategories = filter_form.categories is defined ? filter_form.categories.vars.choices|length > 1 : false %}
 
     <div id="batch-selection-helper" class="batch-helper alert alert-info text-center hide no-select" role="alert" data-page-sheets="{{ sheetsLimit }}" data-all-sheets="{{ sheets.total }}">
         <p>

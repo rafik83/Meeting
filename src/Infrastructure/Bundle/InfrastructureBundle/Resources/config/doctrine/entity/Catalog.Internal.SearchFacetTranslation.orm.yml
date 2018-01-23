@@ -1,0 +1,23 @@
+Proximum\Vimeet\Domain\Model\Catalog\Internal\SearchFacetTranslation:
+    type:  entity
+    table: search_facet_translation
+    id:
+        id:
+            type: integer
+            generator:
+                strategy: AUTO
+    fields:
+        label:
+            type: string
+            nullable: true
+        placeholder:
+            type: string
+            nullable: true
+        locale:
+            type: string
+    manyToOne:
+        searchFacet:
+            targetEntity: Proximum\Vimeet\Domain\Model\Catalog\Internal\SearchFacet
+            inversedBy: translations
+            joinColumn:
+                onDelete: CASCADE

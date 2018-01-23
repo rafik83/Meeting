@@ -12,10 +12,10 @@ namespace Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Serializer\
 
 use Proximum\Vimeet\Application\View\Planner\Result\PlannerResult;
 use Proximum\Vimeet\Application\View\Planner\Result\MeetingResult;
-use Proximum\Vimeet\Application\View\Planner\Result\ParticipantResult;
 use Proximum\Vimeet\Application\View\Planner\Result\SheetResult;
 use Proximum\Vimeet\Application\View\Planner\Result\SlotResult;
 use Proximum\Vimeet\Application\View\Planner\Result\SpotResult;
+use Proximum\Vimeet\Application\View\Planner\Result\UserResult;
 use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
 use Symfony\Component\Serializer\Normalizer\DenormalizerAwareInterface;
 use Symfony\Component\Serializer\Normalizer\DenormalizerAwareTrait;
@@ -28,8 +28,8 @@ class PlannerDenormalizer implements DenormalizerAwareInterface, DenormalizerInt
     /** @var SheetResult[] */
     private $sheetList = [];
 
-    /** @var ParticipantResult[] */
-    private $participantList = [];
+    /** @var UserResult[] */
+    private $userList = [];
 
     /** @var SpotResult[] */
     private $spotList = [];
@@ -39,11 +39,6 @@ class PlannerDenormalizer implements DenormalizerAwareInterface, DenormalizerInt
 
     /** @var MeetingResult[] */
     private $meetingList = [];
-
-    const TYPE_PARTICIPANT = 'type_participant';
-    const TYPE_SLOT        = 'type_slot';
-    CONST TYPE_SPOT        = 'type_spot';
-    CONST TYPE_SHEET       = 'type_sheet';
 
     /**
      * {@inheritdoc}
@@ -56,12 +51,12 @@ class PlannerDenormalizer implements DenormalizerAwareInterface, DenormalizerInt
             || !isset($data['dayList'])
             || !isset($data['slotList'])
             || !isset($data['spotList'])
-            || !isset($data['participantList'])
+            || !isset($data['userList'])
             || !isset($data['typeList'])
             || !isset($data['typePriorityList'])
             || !isset($data['meetingList']['Meeting'])
             || !isset($data['sheetList']['Sheet'])
-            || !isset($data['participantList']['Participant'])
+            || !isset($data['userList']['User'])
             || !isset($data['spotList']['Spot'])
             || !isset($data['slotList']['Slot'])
         ) {
@@ -79,11 +74,11 @@ class PlannerDenormalizer implements DenormalizerAwareInterface, DenormalizerInt
             $plannerResult = new PlannerResult();
         }
 
-        $plannerResult->meetings     = $this->meetingList;
-        $plannerResult->sheets       = $this->sheetList;
-        $plannerResult->participants = $this->participantList;
-        $plannerResult->slots        = $this->slotList;
-        $plannerResult->spots        = $this->spotList;
+        $plannerResult->meetings = $this->meetingList;
+        $plannerResult->sheets   = $this->sheetList;
+        $plannerResult->users    = $this->userList;
+        $plannerResult->slots    = $this->slotList;
+        $plannerResult->spots    = $this->spotList;
 
         return $plannerResult;
     }
@@ -128,9 +123,13 @@ class PlannerDenormalizer implements DenormalizerAwareInterface, DenormalizerInt
             }
         }
 
-        if (is_array($data['participantList']['Participant'])) {
-            foreach ($data['participantList']['Participant'] as $participant) {
-                $this->handleParticipant($participant);
+        if (is_array($data['userList']['User'])) {
+            if (!$this->isSingle($data['userList']['User'])) {
+                foreach ($data['userList']['User'] as $user) {
+                    $this->handleUser($user);
+                }
+            } else {
+                $this->handleUser($data['userList']['User']);
             }
         }
 
@@ -184,50 +183,44 @@ class PlannerDenormalizer implements DenormalizerAwareInterface, DenormalizerInt
                     $this->handleSlot($slot);
                 }
             }
-
         }
 
         return $spotResult;
     }
 
     /**
-     * @param array $participant
+     * @param array $user
      *
-     * @return null|ParticipantResult
+     * @return null|UserResult
      */
-    private function handleParticipant(array &$participant)
+    private function handleUser(array &$user)
     {
-        if (isset($participant['@reference'])) {
-            if (isset($this->participantList[$participant['@reference']])) {
-                return $this->participantList[$participant['@reference']];
+        if (isset($user['@reference'])) {
+            if (isset($this->userList[$user['@reference']])) {
+                return $this->userList[$user['@reference']];
             }
 
             return null;
         }
 
-        if (isset($participant['@id']) && isset($participant['id'])) {
-            $participantResult = new ParticipantResult($participant['id']);
-            $this->participantList[$participant['@id']] = $participantResult;
+        if (isset($user['@id']) && isset($user['id'])) {
+            $userResult = new UserResult($user['id']);
+            $this->userList[$user['@id']] = $userResult;
 
-            if (isset($participant['sheet'])) {
-                $this->handleSheet($participant['sheet']);
-            }
-
-            if (isset($participant['unavailabilityList'])
-                && is_array($participant['unavailabilityList'])
-                && isset($participant['unavailabilityList']['Slot'])
+            if (isset($user['unavailabilityList'])
+                && is_array($user['unavailabilityList'])
+                && isset($user['unavailabilityList']['Slot'])
             ) {
-                if ($this->isSingle($participant['unavailabilityList']['Slot'])) {
-                    $this->handleSlot($participant['unavailabilityList']['Slot']);
+                if ($this->isSingle($user['unavailabilityList']['Slot'])) {
+                    $this->handleSlot($user['unavailabilityList']['Slot']);
                 } else {
-                    foreach ($participant['unavailabilityList']['Slot'] as $slot) {
+                    foreach ($user['unavailabilityList']['Slot'] as $slot) {
                         $this->handleSlot($slot);
                     }
                 }
-
             }
 
-            return $participantResult;
+            return $userResult;
         }
 
         return null;
@@ -310,17 +303,17 @@ class PlannerDenormalizer implements DenormalizerAwareInterface, DenormalizerInt
             }
         }
 
-        if (isset($meeting['participantList'])
-            && is_array($meeting['participantList'])
-            && isset($meeting['participantList']['Participant'])
-            && is_array($meeting['participantList']['Participant'])
+        if (isset($meeting['userList'])
+            && is_array($meeting['userList'])
+            && isset($meeting['userList']['User'])
+            && is_array($meeting['userList']['User'])
         ) {
-            if (!$this->isSingle($meeting['participantList']['Participant'])) {
-                foreach ($meeting['participantList']['Participant'] as $participant) {
-                    $this->handleParticipant($participant);
+            if (!$this->isSingle($meeting['userList']['User'])) {
+                foreach ($meeting['userList']['User'] as $user) {
+                    $this->handleUser($user);
                 }
             } else {
-                $this->handleParticipant($meeting['participantList']['Participant']);
+                $this->handleUser($meeting['userList']['User']);
             }
         }
 
@@ -381,16 +374,24 @@ class PlannerDenormalizer implements DenormalizerAwareInterface, DenormalizerInt
             }
         }
 
-        if (isset($meeting['participantList'])
-            && is_array($meeting['participantList'])
-            && isset($meeting['participantList']['Participant'])
-            && is_array($meeting['participantList']['Participant'])
+        if (isset($meeting['userList'])
+            && is_array($meeting['userList'])
+            && isset($meeting['userList']['User'])
+            && is_array($meeting['userList']['User'])
         ) {
-            foreach ($meeting['participantList']['Participant'] as $participant) {
-                $participantResult = $this->handleParticipant($participant);
+            if (!$this->isSingle($meeting['userList']['User'])) {
+                foreach ($meeting['userList']['User'] as $user) {
+                    $userResult = $this->handleUser($user);
 
-                if ($participantResult !== null) { // this case should not happened but it does not cost much to check
-                    $meetingResult->addParticipant($participantResult);
+                    if ($userResult !== null) {
+                        $meetingResult->addUser($userResult);
+                    }
+                }
+            } else {
+                $userResult = $this->handleUser($meeting['userList']['User']);
+
+                if ($userResult !== null) {
+                    $meetingResult->addUser($userResult);
                 }
             }
         }
@@ -411,13 +412,8 @@ class PlannerDenormalizer implements DenormalizerAwareInterface, DenormalizerInt
             }
         }
 
-        if (isset($meeting['blockedSlot']) && $meeting['blockedSlot'] === true) {
-            $meetingResult->isBlockedSlot = true;
-        }
-
-        if (isset($meeting['blockedSpot']) && $meeting['blockedSpot'] === true) {
-            $meetingResult->isBlockedSpot = true;
-        }
+        $meetingResult->isBlockedSlot = isset($meeting['blockedSlot']) && $meeting['blockedSlot'] === 'true';
+        $meetingResult->isBlockedSpot = isset($meeting['blockedSpot']) && $meeting['blockedSpot'] === 'true';
 
         $this->meetingList[] = $meetingResult;
     }
@@ -429,10 +425,6 @@ class PlannerDenormalizer implements DenormalizerAwareInterface, DenormalizerInt
      */
     private function isSingle(array &$element)
     {
-        if (isset($element['@reference']) || isset($element['@id'])) {
-            return true;
-        }
-
-        return false;
+        return isset($element['@reference']) || isset($element['@id']);
     }
 }

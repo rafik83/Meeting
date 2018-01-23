@@ -1,16 +1,21 @@
 <!DOCTYPE html>
 <html>
-<head>
-    <meta charset="{{ _charset }}" />
-    <title>An Error Occurred: {{ status_text }}</title>
-</head>
-<body>
-<h1>Oops! An Error Occurred</h1>
-<h2>The server returned a "{{ status_code }} {{ status_text }}".</h2>
-
-<div>
-    Something is broken. Please let us know what you were doing when this error occurred.
-    We will fix it as soon as possible. Sorry for any inconvenience caused.
-</div>
-</body>
+    <head>
+        <meta charset="{{ _charset }}" />
+        <link rel="stylesheet" href="{{ asset('assets/css/mainStyle.css') }}">
+        <title>{{ 'error.500.title'|trans }}</title>
+    </head>
+    <body class="grey">
+        <div class="error-header">
+            <img src="{{ asset('assets/images/vimeet.png') }}">
+        </div>
+        <div class="well text-center error-content">
+            <h1 class="error-title">
+                <b>{{ 'error.500.title'|trans }}</b>
+            </h1>
+            <p>
+                {{ 'error.500.content'|trans }}
+            </p>
+        </div>
+    </body>
 </html>

@@ -2,8 +2,9 @@
 
 {% import 'AdminBundle::macro.html.twig' as macro %}
 
-{% block content %}
+{% block title 'admin.meeting.list.title'|trans %}
 
+{% block content %}
     <h2>
         {{ meetings.total }} {{ 'admin.meeting.list.title'|trans }}
         {% if is_granted('ROLE_SUPER_ADMIN') %}
@@ -29,6 +30,7 @@
                 <th>{{ 'admin.meeting.list.column.head.to'|trans }}</th>
                 <th>{{ 'admin.meeting.list.column.head.slot'|trans }}</th>
                 <th>{{ 'admin.meeting.list.column.head.createdAt'|trans }}</th>
+                <th>{{ 'admin.meeting.list.column.head.isCreatedByParticipants'|trans }}</th>
                 <th></th>
             </tr>
         </thead>
@@ -37,21 +39,21 @@
                 <tr>
                     <td>
                         <a href="{{ path('admin_sheet_details', {'event': event.id, 'sheet': meeting.sheetFromId }) }}" target="_blank">
-
                             {{ meeting.sheetNameFrom }}
                         </a>
                     </td>
                     <td>
                         <a href="{{ path('admin_sheet_details', {'event': event.id, 'sheet': meeting.sheetToId }) }}" target="_blank">
-
                             {{ meeting.sheetNameTo }}
                         </a>
                     </td>
                     <td>
                         {{ meeting.slotBegin|localizeddate('medium', 'short', app.request.locale, event.timeZone) }}
+                        -
                         {{ meeting.slotEnd|localizeddate('none', 'short', app.request.locale, event.timeZone) }}
                     </td>
-                    <td>{{ meeting.createdAt|localizeddate('medium', 'none', app.request.locale, event.timeZone) }}</td>
+                    <td>{{ meeting.createdAt|localizeddate('medium', 'short', app.request.locale, event.timeZone) }}</td>
+                    <td>{{ meeting.isCreatedByParticipants ? '✓' : '' }}</td>
                     <td>
                         {{ macro.btnGroupAndRightMenuDropdown({('admin.meeting.list.details'|trans): path('admin_meeting_details', {'event': event.id, 'meeting': meeting.id})}) }}
                     </td>
@@ -65,6 +67,6 @@
             {% endfor %}
         </tbody>
     </table>
-    {{ include('AdminBundle:Paginator:paginate.html.twig', {'paginator': meetings}) }}
 
+    {{ include('AdminBundle:Paginator:paginate.html.twig', {'paginator': meetings}) }}
 {% endblock %}

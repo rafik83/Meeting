@@ -65,7 +65,8 @@ class CatalogViewQueryHandler
                     $catalogViewQuery->locale,
                     $catalogOnlineDate
                 ),
-            ]
+            ],
+            true
         );
     }
 

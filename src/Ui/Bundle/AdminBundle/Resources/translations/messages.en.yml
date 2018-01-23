@@ -18,6 +18,7 @@ admin.admin_list.table.title.firstname: Firstname
 admin.admin_list.table.title.lastname: Lastname
 admin.admin_list.table.title.role: Type
 admin.admin_list.title: 'List of backoffice users'
+admin.agenda.countPendingProposition: 'Number of received proposals to validate'
 admin.agenda.countPlacedMeetings: 'Number of meetings'
 admin.agenda.countProposition: 'Number of proposals received'
 admin.agenda.countRequest: 'Number of requests'
@@ -25,10 +26,22 @@ admin.agenda.countSlots: 'Number of slots'
 admin.agenda.countValidatedRequest: 'Number of requests and accepted requests'
 admin.agenda.export.link: Export
 admin.agenda.export.omz: OMZ
+admin.agenda.export.participant_schedules.title: 'Export of participants and plannings'
+admin.agenda.filters.hasParticipantUnavailableWithMeetingRequest.label: 'At least 1 participant is totally unavailable with at least one assigned meeting request'
+admin.agenda.filters.submit.label: 'Filter profiles'
+admin.agenda.filters.type: 'Participation type'
 admin.agenda.link: 'My meetings'
+admin.agenda.meeting.updateSpot.save: Save
+admin.agenda.noPreference: 'No preferences'
 admin.agenda.remove.confirm: 'Are you sure you want to delete this meeting ?'
+admin.agenda.requestsList.noPreference: 'No preferences'
 admin.agenda.requestsList.title: 'Validated meetings'
 admin.agenda.sheet.see: 'See the presentation sheet'
+admin.agenda.sort.accepted_request.label: Approved
+admin.agenda.sort.pending_request.label: 'Number of proposals waiting for validation'
+admin.agenda.sort.submit.label: 'Sort profiles'
+admin.agenda.sort.title.label: 'Sort by'
+admin.agenda.tab.sheet.title.label: Profile
 admin.agenda.title: 'Meetings planner'
 admin.batch_actions.plural: 'Batch actions on %count% items'
 admin.batch_actions.single: 'Batch actions on one item'
@@ -40,12 +53,14 @@ admin.check-all: 'Check all'
 admin.common.close: Close
 admin.create_admin.title: 'Create a new backoffice user'
 admin.dashboard.link: Dashboard
+admin.event.archive.link: Archiving
 admin.event.billing.configuration.link: 'Billing information'
 admin.event.configuration.key_dates.title: 'Key date of the event'
 admin.event.configure_dates: 'Key dates'
 admin.event.create.title: 'Create an event'
 admin.event.dashboard.title: Dashboard
 admin.event.languages: Language
+admin.event.list.currents.title: 'Current events'
 admin.event.page.invoice.title: Invoices
 admin.event.page.list.title: 'List of my events'
 admin.event.practicalInfo.link: 'Practical informations'
@@ -57,6 +72,7 @@ admin.event.see_on_front.link: 'See on front'
 admin.event.see.link: See
 admin.event.settings.link: 'Event settings'
 admin.event.template.link: Templates
+admin.event.template.package: 'Package of participation'
 admin.event.template.registration: Registration
 admin.event.template.sheet: Presentation
 admin.event.title: Title
@@ -64,6 +80,7 @@ admin.event.update.link: Update
 admin.event.update.title: 'Update the event'
 admin.event.vatMode.ati: VAT
 admin.events.link: 'My events'
+admin.export.transaction.column.transaction_type: Type
 admin.filter: Filter
 admin.filter_by: 'Filter by'
 admin.filters.all: All
@@ -81,6 +98,7 @@ admin.happening_speaker.action.see: See
 admin.happening_speaker.add: Add
 admin.happening_speaker.addTitle: 'Add Speaker'
 admin.happening_speaker.link: Speakers
+admin.happening_speaker.table.column.function: 'Job title'
 admin.happening_speaker.table.column.photo: 'Speaker picture'
 admin.happening_speaker.update: Modify
 admin.happening.add: Add
@@ -95,6 +113,7 @@ admin.meeting_request.link: 'Meeting requests'
 admin.meeting_request.set_a_meeting: 'Organise a meeting'
 admin.meeting_request.state.approved: Approved
 admin.meeting_request.state.cancelled: Cancelled
+admin.meeting_request.state.planned: Planned
 admin.meeting_request.state.refused: Refused
 admin.meeting_request.state.sent: sent
 admin.meeting_request.to: To
@@ -109,6 +128,7 @@ admin.messaging.message.compose.links.agenda: Planning
 admin.messaging.message.compose.links.catalog: Catalogue
 admin.messaging.message.compose.links.meetingRequest: 'My Meetings'
 admin.messaging.message.compose.links.program: Programme
+admin.messaging.message.compose.tags.participationType: 'Participation type'
 admin.messaging.message.content: Content
 admin.messaging.message.create.title: 'Create a new message'
 admin.messaging.message.createdAt: 'Created at'
@@ -118,6 +138,7 @@ admin.messaging.message.list.edit_link: Edit
 admin.messaging.message.name: 'Name emailing'
 admin.messaging.message.subject: Subject
 admin.new.link: admin.new.link
+admin.nomenclature.create.modal.close: Close
 admin.nomenclature.table.read: See
 admin.operator_list.table.content.admin.events.none: None
 admin.operator_list.table.content.update: Edit
@@ -128,7 +149,11 @@ admin.order_edit.link: Modify
 admin.order_edit.VAT: VAT
 admin.order.cancelled: Cancelled
 admin.order.title: 'Order list'
+admin.order.type: 'Participation type'
+admin.package.link: 'Package of participation template'
+admin.package.title: 'Package of participation template'
 admin.package.update: Modify
+admin.participant.export.fields.participant_type: 'Participation type'
 admin.participant.export.fields.planning.meeting: '%spotRef% - %sheetMet%'
 admin.participant.export.fields.planning.unallocated_meetings: 'List of validated meeting requests which have not been planned due to availability conflicts.'
 admin.participant.export.fields.planning.unavailability: Unavailable
@@ -136,20 +161,31 @@ admin.participant.export.fields.planning.warning: 'Please check the booth or tab
 admin.participant.export.happening.subscriber.no: 'No'
 admin.participant.export.no: 'No'
 admin.plan.unitPrice: 'Unit price'
+admin.planner.analytics.sheet.table.column.type: Type
+admin.planner.analytics.sheet.title: Profile
 admin.product.unitPrice: 'Unit price'
 admin.product.update.action: Modify
+admin.promotion_code.action.close: Close
 admin.promotion_code.table.action.edit: Modify
 admin.rule.link: 'Who see who'
+admin.rule.list.content.type: Type
 admin.schedule.link: Planning
 admin.schedule.title: Planning
+admin.sheet.assign.spot.numberOfSheet: '%count% profile'
 admin.sheet.change.type.link: Change
 admin.sheet.change.type.title: 'Change the type of participation'
+admin.sheet.dashboard.totalSheetType: 'Total profiles per type'
 admin.sheet.details.invoices: Invoices
+admin.sheet.details.meeting.proposition.pending: 'Pending proposals'
 admin.sheet.details.meeting.proposition.refused: 'Refused proposals'
 admin.sheet.details.meeting.proposition.title: 'Meetings requests'
 admin.sheet.details.meeting.request.pending: 'Pending requests'
 admin.sheet.details.meeting.request.refused: 'Refused requests'
+admin.sheet.details.meeting.request.title: 'Meeting requests'
+admin.sheet.details.owner.mobile: Mobile
 admin.sheet.details.transactions: Transactions
+admin.sheet.export.fields.status: 'Profile status'
+admin.sheet.export.fields.type: Type
 admin.sheet.export.invoice.button.label: 'Export Invoices'
 admin.sheet.export.no: 'No'
 admin.sheet.link: 'Participation sheets'
@@ -157,6 +193,8 @@ admin.sheet.read: See
 admin.sheet.state: State
 admin.sheet.trace.changed_type: 'The type of participation has been changed'
 admin.sheet.trace.changed_type_comment: 'Changed from %fromType% to %toType%'
+admin.sheet.trace.pending: 'Pending on the %at%'
+admin.sheet.type: Type
 admin.spot.active.no: 'No'
 admin.spot.active.yes: 'Yes'
 admin.spot.batch_create.title: 'Add spots per batch'
@@ -174,9 +212,25 @@ admin.spot.listSpot.reference: Reference
 admin.spot.listSpot.seatCapacity: 'Seats capacity'
 admin.spot.listSpot.size: 'Size (m²)'
 admin.spot.listSpot.yes: 'Yes'
+admin.template.action.close: Close
 admin.template.action.edit: Modify
 admin.template.action.save: Save
+admin.template.registration.table.column.eventType: Event/Type
 admin.template.registration.table.content.edit: Modify
+admin.template.registration.table.content.editJson: 'Modify JSON'
+admin.template.sheet.table.column.eventType: Event/Type
+admin.tip.event.affect.link: 'Assign a help message'
+admin.tip.event.create.button: 'Create a help message'
+admin.tip.event.create.title: 'Create a help message for %eventTitle%'
+admin.tip.event.create.update: Modify
+admin.tip.event.no_types: None
+admin.tip.event.remove.action.confirm: 'Are you sure you want to remove the assignment?'
+admin.tip.event.remove.link: Remove
+admin.tip.event.types: 'Type of participations affected'
+admin.tip.event.update.button: Modify
+admin.tip.event.update.title: 'Modify a help message for %eventTitle%'
+admin.tip.remove.action.confirm: 'Are you sure you want to delete this help message ?'
+admin.tip.remove.link: Delete
 admin.transaction.column.state: States
 admin.transaction.edit: Modify
 admin.transaction.mode.bank_check: Cheque
@@ -184,6 +238,8 @@ admin.transaction.mode.bank_transfer: Transfer
 admin.transaction.mode.paypal: Paypal
 admin.transaction.state.cancelled: Cancelled
 admin.transaction.state.pending: Pending
+admin.type.action.confirmDelete: 'Are you sure to delete this type?'
+admin.type.create.link: Add
 admin.type.link: 'Participation types'
 admin.type.update.link: Modify
 admin.unavailability.category.table.content.update: Modify
@@ -234,7 +290,10 @@ event.meeting.listRequest.informations: Information
 event.meeting.listRequest.participants: 'The participants'
 event.meeting.listRequest.show: See
 event.meeting.listRequest.state: States
+event.meeting.listRequest.title: 'List of you meeting requests'
+event.meeting.refusedRequest.label: 'From %fromName% to %toName%'
 event.meeting.refusedRequest.title: 'Refuse the meeting proposal'
+event.meeting.request.details.updatedAt: 'Change status'
 event.meeting.request.state.from.approved: Approved
 event.meeting.request.state.from.cancelled: Cancelled
 event.meeting.request.state.from.refused: Refused
@@ -300,15 +359,21 @@ event.sheet.summary.update_product: 'Update my participation'
 event.sheet.update_product.title: 'Modify an ordered item'
 event.sheet.validationState.draft: Draft
 event.sheet.validationState.validated: Validated
+gdr.user.agenda.version.modal.no_phone: 'The user has not accepted to receive notifications'
+help.link: Help
 login.forgotPassword: 'Forgotten password?'
 login.link: Login
 login.title: Login
 logout.confirmation: 'Are you sure you want to logout of your account?'
 logout.link: Logout
 logout.title: Logout
+meeting_request_filter.order_by.options.state_updated_at_asc: 'Modification of the ascending order of status'
+meeting_request_filter.order_by.options.state_updated_at_desc: 'Modification of the descending order of status'
 new_password.title: 'Create a new password'
 notification.meeting_request.canceled.action: 'Cancelled meeting request'
 notification.meeting_request.refused.action: 'Refused meeting request'
+notification.meeting_request.refused.withMessage: 'Request refused by %sheetName% for the following reason : "%message%"'
+notification.meeting_request.refused.withoutMessage: 'Request refused by %sheetName%'
 notification.participant.added.action: 'Participant added'
 notification.participant.removed.action: 'Participant removed'
 planning.participant.meeting: '%spotRef% - %sheetMet%'
@@ -317,3 +382,8 @@ planning.participant.unallocated_meetings: 'List of validated meeting requests w
 planning.participant.unavailability: Unavailable
 register.email_already_exists: 'An account with this email address already exists'
 reset_password.title: 'Request new password'
+user.agenda.version.agendaModified: 'Your schedule has been changed:'
+user.agenda.version.meetingAdded: 'You have a new meeting with %sheetTitle% on %day% at %hour% at %spotRef%.'
+user.agenda.version.meetingDeleted: 'The meeting with %sheetTitle% has been cancelled.'
+user.agenda.version.meetingMoved: 'The meeting with %sheetTitle% was moved to %day% at %hour% at %spotRef%.'
+who.the.type: 'the type'

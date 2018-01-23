@@ -10,11 +10,12 @@
 
 namespace Proximum\Vimeet\Tests\Domain\Invoice\Numero;
 
+use PHPUnit\Framework\TestCase;
 use Proximum\Vimeet\Domain\Exception\Invoice\CanNotExplodeNotValidNumeroInvoiceException;
 use Proximum\Vimeet\Domain\Invoice\Numero\Exploder;
 use Proximum\Vimeet\Domain\Invoice\Numero\InvoiceNumeroView;
 
-class ExploderTest extends \PHPUnit_Framework_TestCase
+class ExploderTest extends TestCase
 {
     public function testExplodeCorrect()
     {

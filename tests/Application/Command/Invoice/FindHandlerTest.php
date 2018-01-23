@@ -22,8 +22,9 @@ use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Invoice\Invoice;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Repository\Invoice\InvoiceRepositoryInterface;
+use PHPUnit\Framework\TestCase;
 
-class FindHandlerTest extends \PHPUnit_Framework_TestCase
+class FindHandlerTest extends TestCase
 {
     public function testHandleNotAllowedToFind()
     {

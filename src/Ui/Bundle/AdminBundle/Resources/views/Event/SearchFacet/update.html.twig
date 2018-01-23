@@ -3,12 +3,7 @@
 {% block form_title 'admin.event.search_facet.title'|trans %}
 
 {% block form_content %}
-    {% for searchFacet in form.searchFacets %}
-        {{ form_label(searchFacet) }}
-        <p class="help-block">{{ searchFacet.vars.help|trans({}, searchFacet.vars.translation_domain) }}</p>
-        {{ form_row(searchFacet.enabled, {'label': 'admin.event.search_facet.enabled.label'|trans }) }}
-        {{ form_row(searchFacet.translations, {widget_columns: 8}) }}
-    {% endfor %}
+   {% include '@Admin/SearchFacet/search_facets.html.twig' with {form: form} %}
 {% endblock form_content %}
 
 {% block goback_link path('admin_event_list') %}

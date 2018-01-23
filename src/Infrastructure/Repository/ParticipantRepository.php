@@ -577,4 +577,26 @@ class ParticipantRepository implements ParticipantRepositoryInterface
 
         return $queryBuilder->getQuery()->getResult();
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getLastEventParticipation(User $user, Event $currentEvent): ?Participant
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('participant')
+            ->from(Participant::class, 'participant')
+            ->join('participant.sheet', 'sheet', 'WITH', 'sheet.event != :event')
+            ->join('sheet.event', 'event')
+            ->join('event.days', 'day')
+            ->where('participant.user = :user')
+            ->orderBy('day.startTime', 'DESC')
+            ->setParameter('user', $user)
+            ->setParameter('event', $currentEvent)
+            ->setMaxResults(1);
+
+        return $queryBuilder->getQuery()->getOneOrNullResult();
+    }
 }

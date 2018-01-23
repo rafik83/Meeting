@@ -38,6 +38,7 @@ use Proximum\Vimeet\Tests\Factory\SheetFactory;
 use Symfony\Component\Serializer\Encoder\JsonEncoder;
 use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
 use Symfony\Component\Serializer\Serializer;
+use PHPUnit\Framework\TestCase;
 
 /**
  * WARNING:
@@ -45,7 +46,7 @@ use Symfony\Component\Serializer\Serializer;
  * It should never changed because it is an extract of real invoice
  * If the code should changed, this test must always pass without changes
  */
-class InvoiceViewDenormalizerTest extends \PHPUnit_Framework_TestCase
+class InvoiceViewDenormalizerTest extends TestCase
 {
     public function testDenormalizeInvoiceView()
     {

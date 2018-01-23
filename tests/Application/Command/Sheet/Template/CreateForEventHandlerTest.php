@@ -16,8 +16,9 @@ use Proximum\Vimeet\Application\Command\Sheet\Template\CreateResult;
 use Proximum\Vimeet\Domain\Model\Template\SheetTemplate;
 use Proximum\Vimeet\Domain\Repository\Template\SheetTemplateRepositoryInterface;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
+use PHPUnit\Framework\TestCase;
 
-class CreateForEventHandlerTest extends \PHPUnit_Framework_TestCase
+class CreateForEventHandlerTest extends TestCase
 {
     public function testHandle()
     {

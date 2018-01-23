@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2016 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -15,91 +15,65 @@ use Doctrine\Common\Collections\Criteria;
 
 class Package
 {
-    /**
-     * @var int
-     */
+    /** @var int */
     private $id;
 
-    /**
-     * @var Event
-     */
+    /** @var Event */
     private $event;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     private $title;
 
-    /**
-     * @var ArrayCollection
-     */
+    /** @var ArrayCollection */
     private $planRanks;
 
-    /**
-     * @var Product
-     */
-    private $participant;
+    /** @var ArrayCollection */
+    private $participantRanks;
 
-    /**
-     * @var Product
-     */
+    /** @var Product */
     private $planning;
 
-    /**
-     * @var ArrayCollection
-     */
+    /** @var ArrayCollection */
     private $groups;
 
-    /**
-     * @var ArrayCollection
-     */
+    /** @var ArrayCollection */
     private $translations;
 
-    /**
-     * @var bool
-     */
+    /** @var bool */
     private $plansEnabled = true;
 
-    /**
-     * @var bool
-     */
+    /** @var bool */
     private $participantAndPlanningEnabled = true;
 
-    /**
-     * @var bool
-     */
+    /** @var bool */
     private $optionsEnabled = true;
 
-    /**
-     * @var \DateTimeInterface
-     */
+    /** @var null|int */
+    private $maxParticipant;
+
+    /** @var \DateTimeInterface */
     private $createdAt;
 
-    /**
-     * @var Type[]
-     */
+    /** @var Type[] */
     private $types;
 
     /**
-     * Package constructor.
-     *
      * @param Event              $event
      * @param string             $title
      * @param \DateTimeInterface $createdAt
      */
     public function __construct(Event $event, $title, \DateTimeInterface $createdAt)
     {
-        $this->event        = $event;
-        $this->title        = $title;
-        $this->createdAt    = $createdAt;
-        $this->planRanks    = new ArrayCollection();
-        $this->groups       = new ArrayCollection();
+        $this->event = $event;
+        $this->title = $title;
+        $this->createdAt = $createdAt;
+        $this->planRanks = new ArrayCollection();
+        $this->participantRanks = new ArrayCollection();
+        $this->groups = new ArrayCollection();
         $this->translations = new ArrayCollection();
     }
 
     /**
-     * Get id
-     *
      * @return int
      */
     public function getId()
@@ -108,8 +82,6 @@ class Package
     }
 
     /**
-     * Get createdAt
-     *
      * @return \DateTimeInterface
      */
     public function getCreatedAt()
@@ -118,8 +90,6 @@ class Package
     }
 
     /**
-     * Get event
-     *
      * @return Event
      */
     public function getEvent()
@@ -128,8 +98,6 @@ class Package
     }
 
     /**
-     * Get title
-     *
      * @return string
      */
     public function getTitle()
@@ -138,8 +106,6 @@ class Package
     }
 
     /**
-     * Set title
-     *
      * @param string $title
      *
      * @return Package
@@ -166,6 +132,33 @@ class Package
     }
 
     /**
+     * Get ordered participant products
+     *
+     * @return Product[]
+     */
+    public function getParticipants()
+    {
+        return $this
+            ->participantRanks
+            ->matching(Criteria::create()->orderBy(['rank' => Criteria::ASC]))
+            ->map(
+                function (PackageParticipantRank $packageParticipantRank) {
+                    return $packageParticipantRank->getProductParticipant();
+                }
+            )
+            ->toArray()
+        ;
+    }
+
+    /**
+     * @return int|null
+     */
+    public function getMaxParticipant(): ?int
+    {
+        return $this->maxParticipant;
+    }
+
+    /**
      * Get ordered groups
      *
      * @return PackageGroup[]
@@ -187,16 +180,14 @@ class Package
     {
         $this->groups->clear();
 
-        foreach ($groups as $group) {
-            $this->groups->add($group);
+        foreach ($groups as $key => $group) {
+            $this->groups->set($key, $group);
         }
 
         return $this;
     }
 
     /**
-     * Get options
-     *
      * @return Product[]
      */
     public function getOptions()
@@ -241,18 +232,24 @@ class Package
     }
 
     /**
-     * Get participant
+     * Get participant product
      *
      * @return Product
+     *
+     * @deprecated use getParticipants()
      */
     public function getParticipant()
     {
-        return $this->participant;
+        $firstPackageParticipantRank = $this->participantRanks->first();
+
+        if (!$firstPackageParticipantRank instanceof PackageParticipantRank) {
+            throw new \DomainException('Package must return at least one participant product');
+        }
+
+        return $firstPackageParticipantRank->getProductParticipant();
     }
 
     /**
-     * Get planning
-     *
      * @return Product
      */
     public function getPlanning()
@@ -261,8 +258,6 @@ class Package
     }
 
     /**
-     * Get plansEnabled
-     *
      * @return boolean
      */
     public function isPlansEnabled()
@@ -271,8 +266,6 @@ class Package
     }
 
     /**
-     * Get participantAndPlanningEnabled
-     *
      * @return boolean
      */
     public function isParticipantAndPlanningEnabled()
@@ -281,8 +274,6 @@ class Package
     }
 
     /**
-     * Get optionsEnabled
-     *
      * @return boolean
      */
     public function isOptionsEnabled()
@@ -310,7 +301,7 @@ class Package
     public function translate($locale, $plansLabel, $participantAndPlanningLabel, $optionsLabel)
     {
         if (!$this->translations->containsKey($locale)) {
-            $this->translations->add(new PackageTranslation($this, $locale, $plansLabel, $participantAndPlanningLabel, $optionsLabel));
+            $this->translations->set($locale, new PackageTranslation($this, $locale, $plansLabel, $participantAndPlanningLabel, $optionsLabel));
         } else {
             $this->translations->get($locale)->set($plansLabel, $participantAndPlanningLabel, $optionsLabel);
         }
@@ -335,11 +326,23 @@ class Package
     }
 
     /**
+     * @param int|null $maxParticipant
+     *
+     * @return Package
+     */
+    public function setMaxParticipant(?int $maxParticipant): Package
+    {
+        $this->maxParticipant = $maxParticipant;
+
+        return $this;
+    }
+
+    /**
      * @param Product $plan
      *
      * @return bool
      */
-    public function hasPlan(Product $plan)
+    public function hasPlan(Product $plan): bool
     {
         return $this->planRanks->exists(function ($key, PackagePlanRank $pfp) use ($plan) {
             return $pfp->getPlan() === $plan;
@@ -347,11 +350,25 @@ class Package
     }
 
     /**
+     * @param Product $participant
+     *
+     * @return bool
+     */
+    public function hasParticipant(Product $participant): bool
+    {
+        return $this->participantRanks->exists(
+            function ($key, PackageParticipantRank $packageParticipantRank) use ($participant) {
+                return $packageParticipantRank->getProductParticipant() === $participant;
+            }
+        );
+    }
+
+    /**
      * @param array $plans
      *
      * @return Package
      */
-    public function setPlans(array $plans)
+    public function setPlans(array $plans): Package
     {
         // Remove delete plans
         foreach ($this->planRanks as $planRank) {
@@ -402,15 +419,28 @@ class Package
     }
 
     /**
-     * Set participant
-     *
-     * @param Product $participant
+     * @param Product[] $participantProducts
      *
      * @return Package
      */
-    public function setParticipant(Product $participant)
+    public function setParticipants(array $participantProducts): Package
     {
-        $this->participant = $participant;
+        // Remove deleted participant product
+        /** @var PackageParticipantRank $participantRank */
+        foreach ($this->participantRanks as $participantRank) {
+            if (!in_array($participantRank->getProductParticipant(), $participantProducts)) {
+                $this->participantRanks->removeElement($participantRank);
+            } else {
+                $participantRank->setRank(array_search($participantRank->getProductParticipant(), $participantProducts));
+            }
+        }
+
+        // Add new participant product
+        foreach ($participantProducts as $rank => $participantProduct) {
+            if (!$this->hasParticipant($participantProduct)) {
+                $this->participantRanks->add(new PackageParticipantRank($this, $participantProduct, $rank));
+            }
+        }
 
         return $this;
     }

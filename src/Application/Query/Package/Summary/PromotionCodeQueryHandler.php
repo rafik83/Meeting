@@ -38,7 +38,7 @@ class PromotionCodeQueryHandler
                 if (null !== $cartRow && !$cartRow->isNegative()) {
                     $promotionProductRowViews[] = new PromotionProductRowView(
                         $promotion,
-                        $promotion->getProduct()->getName(),
+                        $promotion->getProduct()->getTitle($promotionCodeQuery->locale),
                         $promotion->getType(),
                         $promotion->getValue(),
                         $promotion->getQuantityForCartRow($cartRow)

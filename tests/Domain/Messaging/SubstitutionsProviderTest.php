@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Tests\Domain\Messaging;
 
+use PHPUnit\Framework\TestCase;
 use Proximum\Vimeet\Application\Components\Token\User\ActivateAccountTokenGenerator;
 use Proximum\Vimeet\Application\Query\Sheet\Planning\SheetPlanningViewQuery;
 use Proximum\Vimeet\Application\Query\Sheet\Planning\SheetPlanningViewQueryHandler;
@@ -28,7 +29,7 @@ use Proximum\Vimeet\Tests\Factory\ParticipantFactory;
 use Proximum\Vimeet\Tests\Factory\SheetFactory;
 use Proximum\Vimeet\Tests\Factory\UserFactory;
 
-class SubstitutionsProviderTest extends \PHPUnit_Framework_TestCase
+class SubstitutionsProviderTest extends TestCase
 {
     /** @var SubstitutionsProvider */
     private $substitutionProvider;

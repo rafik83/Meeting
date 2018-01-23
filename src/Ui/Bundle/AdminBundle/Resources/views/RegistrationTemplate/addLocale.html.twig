@@ -1,0 +1,43 @@
+<div class="btn-group dropdown">
+    <button class="btn btn-default dropdown-toggle" type="button" id="locale-dropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+        {{ locale|locale }}
+        <span class="caret"></span>
+    </button>
+    <ul class="dropdown-menu" aria-labelledby="locale-dropdown">
+        {% for template_locale in template.enabledLocales %}
+            <li{% if template_locale == locale %} class="active"{% endif %}>
+                <a href="{{ path(routeName, { 'registrationTemplate': template.id, 'locale': template_locale }) }}">
+                    <span class="badge pull-right">{{ completeness[template_locale] is defined ? completeness[template_locale]|number_format(0) : '-' }}%</span>
+                    <span class="template-locale{% if template_locale == template.fallback %} template-fallback{% endif %}">{{ template_locale|locale }}</span>
+                </a>
+            </li>
+        {% endfor %}
+        {% if add_locale_form %}
+            <li>
+                <button class="text-center" data-toggle="modal" data-target="#add-locale-modal">
+                    <i class="glyphicon glyphicon-plus"></i>
+                </button>
+            </li>
+        {% endif %}
+    </ul>
+</div>
+
+{% if add_locale_form %}
+    {{ form_start(add_locale_form, { 'attr': { 'class': 'modal fade', 'id': 'add-locale-modal' } }) }}
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="configure-modal-label">{{ 'admin.template.registration.addLocale'|trans }}</h4>
+            </div>
+            <div class="modal-body">
+                {{ form_row(add_locale_form.locale) }}
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">{{ 'admin.common.close'|trans }}</button>
+                {{ form_row(add_locale_form.submit) }}
+            </div>
+        </div>
+    </div>
+    {{ form_end(add_locale_form) }}
+{% endif %}

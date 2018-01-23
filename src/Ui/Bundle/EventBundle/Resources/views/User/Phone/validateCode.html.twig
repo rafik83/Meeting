@@ -1,0 +1,22 @@
+{% extends 'EventBundle::base.html.twig' %}
+
+{% form_theme form '@Ui/default.html.twig' %}
+
+{% block title event.title ~ ' ' ~ 'event.user_event_phone.validate.title'|trans %}
+
+{% block content %}
+    <div class="profile__content">
+        <section class="main">
+            <header>
+                <h1>{{ 'event.user_event_phone.validate.title'|trans }}</h1>
+            </header>
+
+            {{ include('EventBundle:User/Phone:_validateCodeForm.html.twig') }}
+
+            <a class="link" href="{{ path('event_user_phone_validate', {'sheet': sheet.id, 'participant': participant.id}) }}">
+                <i class="icon-Appeler"></i>
+                {{ 'event.user_event_phone.validate.returnToPhone'|trans }}
+            </a>
+        </section>
+    </div>
+{% endblock %}

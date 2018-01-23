@@ -10,12 +10,14 @@
 
 namespace Proximum\Vimeet\Tests\Application\Command\Event;
 
+use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
 use Proximum\Vimeet\Application\Adapter\FileStorageInterface;
 use Proximum\Vimeet\Application\Command\Event\Create;
 use Proximum\Vimeet\Application\Command\Event\CreateHandler;
 use Proximum\Vimeet\Application\Components\Guideline\Generator;
 use Proximum\Vimeet\Application\Exception\Event\DomainAlreadyUsedException;
+use Proximum\Vimeet\Domain\Event\Duplicator;
 use Proximum\Vimeet\Domain\Model\Admin;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\EventTranslation;
@@ -23,10 +25,11 @@ use Proximum\Vimeet\Domain\Model\Invoice\Prefix;
 use Proximum\Vimeet\Domain\Repository\AdminRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\Event\ContentRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\EventRepositoryInterface;
+use Proximum\Vimeet\Tests\Factory\AdminFactory;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
-class CreateHandlerTest extends \PHPUnit_Framework_TestCase
+class CreateHandlerTest extends TestCase
 {
     public function testHandle()
     {
@@ -60,10 +63,17 @@ class CreateHandlerTest extends \PHPUnit_Framework_TestCase
             ->enableOriginalConstructor()
             ->setConstructorArgs([tempnam(sys_get_temp_dir(), ''), 'jpeg'])
             ->getMock();
-        $create->domain        = 'hello.vimeet.proximum.dev';
+        $create->domain        = 'hello.vimeet.proximum';
         $create->timeZone      = 'Europe/Paris';
         $create->organiserName = 'proximum';
         $create->emailTeam     = 'team-project@example.net';
+        $create->visible       = true;
+        $create->backgroundColor = '#DDDDDD';
+        $create->backgroundImage = $this
+            ->getMockBuilder(UploadedFile::class)
+            ->enableOriginalConstructor()
+            ->setConstructorArgs([tempnam(sys_get_temp_dir(), ''), 'jpeg'])
+            ->getMock();
 
         // Expected event
         $expectedEvent = new Event(
@@ -75,12 +85,14 @@ class CreateHandlerTest extends \PHPUnit_Framework_TestCase
             'FR',
             'USD',
             'Europe/Paris',
-            'hello.vimeet.proximum.dev',
+            'hello.vimeet.proximum',
             'proximum',
             'team-project@example.net',
-            $prefix
+            $prefix,
+            true
         );
-        $expectedEvent->getConfiguration()->setColors('#FFFFFF', '#000000', '#CCCCCC');
+        $expectedEvent->getConfiguration()->setColors('#FFFFFF', '#000000', '#CCCCCC', '#DDDDDD');
+        $expectedEvent->getConfiguration()->setBackgroundImage('foofoo.jpeg');
         $expectedEvent->getTranslations()->set('fr', new EventTranslation($expectedEvent, 'fr', ''));
         $expectedEvent->getTranslations()->set('en', new EventTranslation($expectedEvent, 'en', ''));
         $expectedEvent->setLogo('toto.jpeg', 'jpeg');
@@ -105,7 +117,7 @@ class CreateHandlerTest extends \PHPUnit_Framework_TestCase
         $eventRepository->set(Argument::that(function (Event $event) use ($expectedEvent) {
             return $event->getTitle() === $expectedEvent->getTitle();
         }))->shouldBeCalled();
-        $eventRepository->getEventByDomain('hello.vimeet.proximum.dev')->shouldBeCalled()->willReturn(null);
+        $eventRepository->getEventByDomain('hello.vimeet.proximum')->shouldBeCalled()->willReturn(null);
         $guidelineGenerator = $this->prophesize(Generator::class);
         $guidelineGenerator->generate(Argument::that(function (Event $event) use ($expectedEvent) {
             return $event->getTitle() === $expectedEvent->getTitle();
@@ -114,6 +126,9 @@ class CreateHandlerTest extends \PHPUnit_Framework_TestCase
         $fileStorage->upload(Argument::that(function (UploadedFile $uploaded) {
             return true;
         }))->shouldBeCalled()->willReturn('toto.jpeg');
+        $fileStorage->upload(Argument::that(function (UploadedFile $uploaded) {
+            return true;
+        }))->shouldBeCalled()->willReturn('foofoo.jpeg');
         $fileStorage->getExtension(Argument::that(function (UploadedFile $uploaded) {
             return true;
         }))->shouldBeCalled()->willReturn('jpeg');
@@ -123,13 +138,16 @@ class CreateHandlerTest extends \PHPUnit_Framework_TestCase
             return $content->getType() === Event\Content::TYPE_TERMS_OF_SALE;
         }))->shouldBeCalled();
 
+        $duplicator = $this->prophesize(Duplicator::class);
+
         // Handle
         $handler = new CreateHandler(
             $adminRepository->reveal(),
             $eventRepository->reveal(),
             $contentRepository->reveal(),
             $guidelineGenerator->reveal(),
-            $fileStorage->reveal()
+            $fileStorage->reveal(),
+            $duplicator->reveal()
         );
         $handler->handle($create);
     }
@@ -165,9 +183,11 @@ class CreateHandlerTest extends \PHPUnit_Framework_TestCase
             ->enableOriginalConstructor()
             ->setConstructorArgs([tempnam(sys_get_temp_dir(), ''), 'jpeg'])
             ->getMock();
-        $create->domain        = 'hello.vimeet.proximum.dev';
+        $create->domain        = 'hello.vimeet.proximum';
         $create->timeZone      = 'Europe/Paris';
         $create->emailTeam     = 'team-project@example.net';
+        $create->visible       = true;
+        $create->backgroundColor = '#CCCCCC';
 
         // Expected event
         $expectedEvent = new Event(
@@ -179,12 +199,13 @@ class CreateHandlerTest extends \PHPUnit_Framework_TestCase
             'FR',
             'USD',
             'Europe/Paris',
-            'hello.vimeet.proximum.dev',
+            'hello.vimeet.proximum',
             'proximum',
             'team-project@example.net',
-            $prefix
+            $prefix,
+            true
         );
-        $expectedEvent->getConfiguration()->setColors('#FFFFFF', '#000000', '#CCCCCC');
+        $expectedEvent->getConfiguration()->setColors('#FFFFFF', '#000000', '#CCCCCC', '#CCCCCC');
         $expectedEvent->getTranslations()->set('fr', new EventTranslation($expectedEvent, 'fr', ''));
         $expectedEvent->getTranslations()->set('en', new EventTranslation($expectedEvent, 'en', ''));
         $expectedEvent->setLogo('toto.jpeg', 'jpeg');
@@ -214,7 +235,7 @@ class CreateHandlerTest extends \PHPUnit_Framework_TestCase
         $eventRepository->set(Argument::that(function (Event $event) use ($expectedEvent) {
             return $event->getTitle() === $expectedEvent->getTitle();
         }))->shouldBeCalled();
-        $eventRepository->getEventByDomain('hello.vimeet.proximum.dev')->shouldBeCalled()->willReturn(null);
+        $eventRepository->getEventByDomain('hello.vimeet.proximum')->shouldBeCalled()->willReturn(null);
 
         $guidelineGenerator = $this->prophesize(Generator::class);
         $guidelineGenerator->generate(Argument::that(function (Event $event) use ($expectedEvent) {
@@ -234,13 +255,16 @@ class CreateHandlerTest extends \PHPUnit_Framework_TestCase
             return $content->getType() === Event\Content::TYPE_TERMS_OF_SALE;
         }))->shouldBeCalled();
 
+        $duplicator = $this->prophesize(Duplicator::class);
+
         // Handle
         $handler = new CreateHandler(
             $adminRepository->reveal(),
             $eventRepository->reveal(),
             $contentRepository->reveal(),
             $guidelineGenerator->reveal(),
-            $fileStorage->reveal()
+            $fileStorage->reveal(),
+            $duplicator->reveal()
         );
         $handler->handle($create);
     }
@@ -278,9 +302,10 @@ class CreateHandlerTest extends \PHPUnit_Framework_TestCase
             ->enableOriginalConstructor()
             ->setConstructorArgs([tempnam(sys_get_temp_dir(), ''), 'jpeg'])
             ->getMock();
-        $create->domain        = 'hello.vimeet.proximum.dev';
+        $create->domain        = 'hello.vimeet.proximum';
         $create->timeZone      = 'Europe/Paris';
         $create->organiserName = 'proximum';
+        $create->visible       = true;
 
         // Expected event
         $expectedEvent = new Event(
@@ -292,12 +317,13 @@ class CreateHandlerTest extends \PHPUnit_Framework_TestCase
             'FR',
             'USD',
             'Europe/Paris',
-            'hello.vimeet.proximum.dev',
+            'hello.vimeet.proximum',
             'proximum',
             'team-project@example.net',
-            $prefix
+            $prefix,
+            true
         );
-        $expectedEvent->getConfiguration()->setColors('#FFFFFF', '#000000', '#CCCCCC');
+        $expectedEvent->getConfiguration()->setColors('#FFFFFF', '#000000', '#CCCCCC', '#CCCCCC');
         $expectedEvent->getTranslations()->set('fr', new EventTranslation($expectedEvent, 'fr', ''));
         $expectedEvent->getTranslations()->set('en', new EventTranslation($expectedEvent, 'en', ''));
         $expectedEvent->setLogo('toto.jpeg', 'jpeg');
@@ -320,7 +346,7 @@ class CreateHandlerTest extends \PHPUnit_Framework_TestCase
         $eventRepository->add(Argument::that(function (Event $event) use ($expectedEvent) {
             return $event->getTitle() === $expectedEvent->getTitle();
         }))->shouldNotBeCalled();
-        $eventRepository->getEventByDomain('hello.vimeet.proximum.dev')->shouldBeCalled()
+        $eventRepository->getEventByDomain('hello.vimeet.proximum')->shouldBeCalled()
             ->willReturn(EventFactory::createEvent());
         $guidelineGenerator = $this->prophesize(Generator::class);
         $guidelineGenerator->generate(Argument::that(function (Event $event) use ($expectedEvent) {
@@ -339,13 +365,89 @@ class CreateHandlerTest extends \PHPUnit_Framework_TestCase
             return $content->getType() === Event\Content::TYPE_TERMS_OF_SALE;
         }))->shouldNotBeCalled();
 
+        $duplicator = $this->prophesize(Duplicator::class);
+
         // Handle
         $handler = new CreateHandler(
             $adminRepository->reveal(),
             $eventRepository->reveal(),
             $contentRepository->reveal(),
             $guidelineGenerator->reveal(),
-            $fileStorage->reveal()
+            $fileStorage->reveal(),
+            $duplicator->reveal()
+        );
+        $handler->handle($create);
+    }
+
+    public function testCreateFromOtherEvent()
+    {
+        $prefix = new Prefix('Vimeet', 'Vi');
+        $user   = AdminFactory::create();
+        $duplicatedEvent = EventFactory::createEvent('barfoo');
+        $event  = new Event(
+            'barfoo',
+            'en',
+            ['fr', 'en'],
+            Event::VAT_MODE_ATI,
+            20,
+            'FR',
+            'USD',
+            'Europe/Paris',
+            'hello.vimeet.proximum',
+            'proximum',
+            'team-project@example.net',
+            $prefix,
+            true,
+            $duplicatedEvent
+        );
+        $event->getConfiguration()->setColors('leftColor', 'rightColor', 'textColor', 'backgroundColor');
+
+        $create = new Create($user, $event);
+        $create->backgroundColor = '#FFFFFF';
+
+        // Mock
+        $adminRepository    = $this->prophesize(AdminRepositoryInterface::class);
+        $eventRepository    = $this->prophesize(EventRepositoryInterface::class);
+        $guidelineGenerator = $this->prophesize(Generator::class);
+        $fileStorage        = $this->prophesize(FileStorageInterface::class);
+        $contentRepository  = $this->prophesize(ContentRepositoryInterface::class);
+        $duplicator         = $this->prophesize(Duplicator::class);
+
+        $eventRepository->getEventByDomain('hello.vimeet.proximum')->shouldBeCalled()->willReturn(null);
+
+        $eventRepository->add(Argument::that(function (Event $expectedEvent) use ($event) {
+            return $expectedEvent->getTitle() === $event->getTitle();
+        }))->shouldBeCalled();
+
+        $eventRepository->set(Argument::that(function (Event $expectedEvent) use ($event) {
+            return $expectedEvent->getTitle() === $event->getTitle();
+        }))->shouldBeCalled();
+
+        $adminRepository->set($user)->shouldNotBeCalled();
+
+        $guidelineGenerator->generate(Argument::that(function (Event $expectedEvent) use ($event) {
+            return $expectedEvent->getTitle() === $event->getTitle();
+        }))->shouldBeCalled();
+
+        $fileStorage->upload(Argument::type(UploadedFile::class))->shouldNotBeCalled();
+        $fileStorage->getExtension(Argument::type(UploadedFile::class))->shouldNotBeCalled();
+
+        $contentRepository->add(Argument::that(function (Event\Content $content) use ($event) {
+            return $content->getType() === Event\Content::TYPE_TERMS_OF_SALE;
+        }))->shouldBeCalled();
+
+        $duplicator->duplicate(Argument::that(function (Event $expectedEvent) use ($event) {
+            return $expectedEvent->getTitle() === $event->getTitle();
+        }))->shouldBeCalled();
+
+        // Handle
+        $handler = new CreateHandler(
+            $adminRepository->reveal(),
+            $eventRepository->reveal(),
+            $contentRepository->reveal(),
+            $guidelineGenerator->reveal(),
+            $fileStorage->reveal(),
+            $duplicator->reveal()
         );
         $handler->handle($create);
     }

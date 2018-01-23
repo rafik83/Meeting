@@ -1,0 +1,17 @@
+{% extends 'EventBundle::base.html.twig' %}
+
+{% block title event.title ~ ' ' ~ 'event.user_event_phone.validate.title'|trans %}
+
+{% block content %}
+    <div class="profile__content">
+        <section class="main">
+            <header>
+                <h1>{{ 'event.user_event_phone.validate.title'|trans }}</h1>
+            </header>
+
+            <div class="important success">
+                {{ 'event.user_event_phone.validate.success'|trans }}
+            </div>
+        </section>
+    </div>
+{% endblock %}

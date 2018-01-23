@@ -10,8 +10,6 @@
 
 namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Controller;
 
-use Proximum\Vimeet\Domain\Model\Event;
-use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Type\TypeChoiceType;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\ParamConverter\EventDomain;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -35,9 +33,11 @@ class HomeController extends Controller
     public function indexAction(Request $request, EventDomain $eventDomain, UserInterface $user = null)
     {
         $locale = $request->getLocale();
-        $event = $eventDomain->getEvent();
+        $event  = $eventDomain->getEvent();
 
-        $response = $this->attemptDispatchUser($event, $user);
+        $response = $this
+            ->get('infrastructure.route.home_dispatch.home_user_dispatcher')
+            ->attemptDispatchUser($event, $user);
 
         if ($response instanceof RedirectResponse) {
             return $response;
@@ -68,40 +68,5 @@ class HomeController extends Controller
             'event' => $event,
             'form'  => $form->createView(),
         ]);
-    }
-
-    /**
-     * @param Event              $event
-     * @param null|UserInterface $user
-     *
-     * @return null|RedirectResponse
-     */
-    private function attemptDispatchUser(Event $event, UserInterface $user = null)
-    {
-        if ($this->isGranted('IS_AUTHENTICATED_REMEMBERED') && $user instanceof User) {
-            $homeDispatchView = $this->get('components.home.home_dispatch')->handle($event, $user);
-
-            if (null !== $homeDispatchView) {
-                if ($homeDispatchView->isGroup()) {
-                    return $this->redirectToRoute(
-                        'event_sheet_group_index',
-                        ['sheetGroup' => $homeDispatchView->getGroup()->getId()]
-                    );
-                }
-
-                if ($homeDispatchView->isOneSheet()) {
-                    return $this->redirectToRoute(
-                        'event_sheet_default',
-                        ['sheet' => $homeDispatchView->getSheet()->getId()]
-                    );
-                }
-
-                if ($homeDispatchView->isMultipleSheet()) {
-                    return $this->redirectToRoute('event_select_sheet');
-                }
-            }
-        }
-
-        return null;
     }
 }

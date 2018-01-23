@@ -23,12 +23,8 @@ class HappeningDateHelper
      */
     public static function getHour(\DateTimeInterface $datetime, $locale, $timeZone)
     {
-        if (null === $locale) {
-            $locale = self::DEFAULT_LOCALE;
-        }
-
         $dateFormatter = \IntlDateFormatter::create(
-            $locale,
+            $locale ? : self::DEFAULT_LOCALE,
             \IntlDateFormatter::NONE,
             \IntlDateFormatter::SHORT,
             $timeZone
@@ -44,7 +40,7 @@ class HappeningDateHelper
      *
      * @return string
      */
-    public static function getDay(\DateTimeInterface $datetime, $locale, $timeZone)
+    public static function getDay(\DateTimeInterface $datetime, string $locale, string $timeZone)
     {
         $dateFormatter = \IntlDateFormatter::create(
             $locale,

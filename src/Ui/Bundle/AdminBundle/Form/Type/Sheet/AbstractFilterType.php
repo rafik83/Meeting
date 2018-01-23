@@ -96,13 +96,15 @@ abstract class AbstractFilterType extends AbstractType
                 'required' => false,
                 'expanded' => true,
             ])
-            ->add('hasNoMeetingRequest', CheckboxType::class, [
+            ->add('hasNoMeetingRequest', YesNoType::class, [
                 'label'    => 'form.sheet_filter.children.hasNoMeetingRequest.label',
                 'required' => false,
+                'expanded' => true,
             ])
-            ->add('hasPendingMeetingPropositions', CheckboxType::class, [
+            ->add('hasPendingMeetingPropositions', YesNoType::class, [
                 'label'    => 'form.sheet_filter.children.hasPendingMeetingPropositions.label',
                 'required' => false,
+                'expanded' => true,
             ])
             ->add('imported', ImportedChoiceType::class, [
                 'label'    => 'form.sheet_filter.children.imported.label',
@@ -177,15 +179,35 @@ abstract class AbstractFilterType extends AbstractType
                 'required' => false,
                 'expanded' => true,
             ])
+            ->add('agendaConfirmedStatus', AgendaConfirmedStatusChoiceType::class, [
+                'label'    => 'form.sheet_filter.children.agendaConfirmedStatus.label',
+                'required' => false,
+                'expanded' => true,
+            ])
+            ->add('phoneValidationStatus', PhoneValidationStatusChoiceType::class, [
+                'label'    => 'form.sheet_filter.children.phoneValidationStatus.label',
+                'required' => false,
+                'expanded' => true,
+            ])
+            ->add('availabilityConfirmationStatus', AvailabilityConfirmationStatusChoiceType::class, [
+                'label'    => 'form.sheet_filter.children.availabilityConfirmationStatus.label',
+                'required' => false,
+                'expanded' => true,
+            ])
+            ->add('hasSpot', YesNoType::class, [
+                'label'    => 'form.sheet_filter.children.hasSpot.label',
+                'required' => false,
+                'expanded' => true,
+            ])
         ;
 
         /** @var Event $event */
         $event = $options['event'];
 
-        $categories = $this->categoryRepository->getCategoriesByEvent($event, $options['locale']);
+        $categories = $this->categoryRepository->getCategoriesByEventAndLocale($event, $options['locale']);
 
         if (count($categories) > 0) {
-            $builder->add('category', CategoryChoiceType::class, [
+            $builder->add('categories', CategoryChoiceType::class, [
                 'label'    => 'form.sheet_filter.children.category.label',
                 'event'    => $event,
                 'locale'   => $options['locale'],

@@ -1,9 +1,9 @@
 <?php
 
 /*
- * This file is part of the vimeet project.
+ * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2017 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -18,7 +18,6 @@ use Proximum\Vimeet\Application\Exception\Group\UserAlreadyParticipantOrOwnerOnG
 use Proximum\Vimeet\Application\Exception\Group\UserNotAllowedToManageGroupException;
 use Proximum\Vimeet\Application\Exception\Group\UserNotFoundForGivenEmailException;
 use Proximum\Vimeet\Application\Query\Group\Sheet\SheetViewQuery;
-use Proximum\Vimeet\Application\Query\Sheet\Group\Admin\GroupListViewQuery;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Sheet\Group;
 use Proximum\Vimeet\Domain\Model\User;
@@ -36,27 +35,6 @@ use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 class GroupController extends Controller
 {
     /**
-     * @param Event $event
-     *
-     * @return Response
-     */
-    public function listAction(Event $event)
-    {
-        // Only admin & organizers are allowed to manage sheetsGroup
-        $this->denyAccessUnlessGranted('ROLE_ALLOWED_TO_ORGANIZE');
-        $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
-
-        $groupViews = $this->get('tactician.commandbus')->handle(
-            new GroupListViewQuery($event, $this->getUser())
-        );
-
-        return $this->render('AdminBundle:SheetsGroup:list.html.twig', [
-            'event'      => $event,
-            'groupViews' => $groupViews,
-        ]);
-    }
-
-    /**
      * Search user by email to pre-populate the real create form
      *
      * @param Request $request
@@ -66,7 +44,7 @@ class GroupController extends Controller
      */
     public function preCreateAction(Request $request, Event $event)
     {
-        $this->denyAccessUnlessGranted('ROLE_ALLOWED_TO_ORGANIZE');
+        $this->denyAccessUnlessGranted('ROLE_ALLOWED_TO_OPERATE');
         $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
 
         $searchUser = new SearchUser($event);
@@ -105,7 +83,7 @@ class GroupController extends Controller
      */
     public function createAction(Request $request, Event $event, User $user)
     {
-        $this->denyAccessUnlessGranted('ROLE_ALLOWED_TO_ORGANIZE');
+        $this->denyAccessUnlessGranted('ROLE_ALLOWED_TO_OPERATE');
         $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
 
         try {
@@ -145,7 +123,7 @@ class GroupController extends Controller
      */
     public function updateAction(Request $request, Event $event, Group $group)
     {
-        $this->denyAccessUnlessGranted('ROLE_ALLOWED_TO_ORGANIZE');
+        $this->denyAccessUnlessGranted('ROLE_ALLOWED_TO_OPERATE');
         $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
 
         $command = new Update($group);

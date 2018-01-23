@@ -35,9 +35,11 @@ Proximum\Vimeet\Domain\Model\Event\Configuration (local):
             - '#00398C'
         catalogOnlineDate: "<dateTimeBetween('2016-08-25', 'now')>"
         happeningsOpenDate: "<dateTimeBetween('2016-07-08', 'now')>"
+        agendaOnlineDate: "<dateTimeBetween('2016-07-08', 'now')>"
         schedulePublishDate: "<dateTimeBetween('now', '2032-07-08')>"
         contactFirstName: "Maryse"
         contactLastName: "DURAND"
+        backgroundColor: '00398C'
 
 Proximum\Vimeet\Domain\Model\EventTranslation:
     event_asddays_2016_fr:

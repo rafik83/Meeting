@@ -16,6 +16,7 @@ use Proximum\Vimeet\Application\Event\User\ChangeMailAddressEvent;
 use Proximum\Vimeet\Application\Exception\Field\EmptyFieldException;
 use Proximum\Vimeet\Application\Exception\User\EmailAlreadyExistsException;
 use Proximum\Vimeet\Application\Exception\User\SameEmailException;
+use Proximum\Vimeet\Domain\Helper\StringHelper;
 use Proximum\Vimeet\Domain\Repository\ChangeMailTokenRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\UserRepositoryInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
@@ -74,11 +75,13 @@ class ChangeMailHandler
             throw new EmptyFieldException();
         }
 
+        $changeMail->mail = StringHelper::trimSpacesAndNonBreakSpaces($changeMail->mail);
+
         if ($user->getEmail() === $changeMail->mail) {
             throw new SameEmailException();
         }
 
-        if ($this->userRepository->findByEmail($changeMail->mail)) {
+        if (null !== $this->userRepository->findByEmail($changeMail->mail)) {
             throw new EmailAlreadyExistsException();
         }
 

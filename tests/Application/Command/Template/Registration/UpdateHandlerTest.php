@@ -10,18 +10,21 @@
 
 namespace Proximum\Vimeet\Tests\Application\Command\Template\Registration;
 
+use PHPUnit\Framework\TestCase;
 use Proximum\Vimeet\Application\Adapter\JobQueueInterface;
 use Proximum\Vimeet\Application\Command\Template\Registration\Update;
 use Proximum\Vimeet\Application\Command\Template\Registration\UpdateHandler;
+use Proximum\Vimeet\Application\Components\Registration\RegistrationTemplateValidatorTranslated;
 use Proximum\Vimeet\Application\Event\Events;
 use Proximum\Vimeet\Application\Event\Template\Registration\RegistrationTemplateUpdatedEvent;
 use Proximum\Vimeet\Domain\Model\Template\RegistrationTemplate;
 use Proximum\Vimeet\Domain\Repository\Template\RegistrationTemplateRepositoryInterface;
+use Proximum\Vimeet\Domain\Template\TemplateData;
 use Proximum\Vimeet\Domain\Template\TemplateDataFactory;
 use Proximum\Vimeet\Infrastructure\Adapter\DelayedEventDispatcher;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
 
-class UpdateHandlerTest extends \PHPUnit_Framework_TestCase
+class UpdateHandlerTest extends TestCase
 {
     public function testHandle()
     {
@@ -60,12 +63,28 @@ class UpdateHandlerTest extends \PHPUnit_Framework_TestCase
         $registrationTemplateRepository = $this->prophesize(RegistrationTemplateRepositoryInterface::class);
         $registrationTemplateRepository->set($expectedTemplate)->shouldBeCalled();
         $eventDispatcher = $this->prophesize(DelayedEventDispatcher::class);
+
+        $templateData = $this->prophesize(TemplateData::class);
+
         $templateDataFactory = $this->prophesize(TemplateDataFactory::class);
+        $templateDataFactory
+            ->createRegistrationFromTemplate(
+                $registrationTemplate,
+                'fr'
+            )
+            ->shouldBeCalled()
+            ->willReturn($templateData->reveal())
+        ;
+
         $jobQueue = $this->prophesize(JobQueueInterface::class);
+
+        $registrationTemplateValidatorTranslated = $this->prophesize(RegistrationTemplateValidatorTranslated::class);
+        $registrationTemplateValidatorTranslated->validate($templateData->reveal());
 
         $handler = new UpdateHandler(
             $registrationTemplateRepository->reveal(),
             $templateDataFactory->reveal(),
+            $registrationTemplateValidatorTranslated->reveal(),
             $eventDispatcher->reveal(),
             $jobQueue->reveal()
         );
@@ -117,12 +136,24 @@ class UpdateHandlerTest extends \PHPUnit_Framework_TestCase
         $eventDispatcher
             ->dispatch(Events::REGISTRATION_TEMPLATE_UPDATED, $registrationTemplateUpdated)
             ->shouldBeCalled();
-        $templateDataFactory = $this->prophesize(TemplateDataFactory::class);
         $jobQueue = $this->prophesize(JobQueueInterface::class);
+
+        $templateData = $this->prophesize(TemplateData::class);
+
+        $templateDataFactory = $this->prophesize(TemplateDataFactory::class);
+        $templateDataFactory
+            ->createRegistrationFromTemplate($registrationTemplate, 'fr')
+            ->shouldBeCalled()
+            ->willReturn($templateData->reveal())
+        ;
+
+        $registrationTemplateValidatorTranslated = $this->prophesize(RegistrationTemplateValidatorTranslated::class);
+        $registrationTemplateValidatorTranslated->validate($templateData->reveal());
 
         $handler = new UpdateHandler(
             $registrationTemplateRepository->reveal(),
             $templateDataFactory->reveal(),
+            $registrationTemplateValidatorTranslated->reveal(),
             $eventDispatcher->reveal(),
             $jobQueue->reveal()
         );

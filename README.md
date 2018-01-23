@@ -1,6 +1,7 @@
 # Proximum - Vimeet
 
 [![SensioLabsInsight](https://insight.sensiolabs.com/projects/462b40d5-87f6-4cb6-82c3-d88ed6a5021f/mini.png)](https://insight.sensiolabs.com/projects/462b40d5-87f6-4cb6-82c3-d88ed6a5021f) [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/proximum/vimeet/badges/quality-score.png?b=master&s=0e5fdaf722de66e218a5900f4197ab71bf6bd001)](https://scrutinizer-ci.com/g/proximum/vimeet/?branch=master)
+[![CircleCI](https://circleci.com/gh/proximum/vimeet/tree/master.svg?style=svg&circle-token=1177af92f29a64cb40f13255e22d302b38d032b5)](https://circleci.com/gh/proximum/vimeet/tree/master)
 
 ## Development
 
@@ -31,9 +32,14 @@ Launch vagrant box, and ssh into it
         $ vagrant up
         $ vagrant ssh
 
-Build assets
+Build assets:
 
-        ⇒ gulp
+        ⇒ make build
+
+Build and watch assets:
+
+        ⇒ make watch
+
 
 Build Vimeet events assets
 
@@ -41,23 +47,21 @@ Build Vimeet events assets
 
 Enable/Disable php xdebug
 
-        ⇒ elao_php_xdebug [on|off]
+        ⇒ manala_php_xdebug [on|off]
 
 * *Supervisor*: http://vimeet.proximum.dev:9001
-* *Log.io*: http://vimeet.proximum.dev:28778
-* *OPcache Dashboard*: http://vimeet.proximum.dev:2013
 * *phpMyAdmin*: http://vimeet.proximum.dev:1979
 * *ElasticSearch HEAD*: http://vimeet.proximum.dev:9200/_plugin/head/
 
-### NPM
+### Yarn
 
 Install a package:
 
-        ⇒ npm install <package> --save
+        ⇒ yarn add <package>
 
-Regenerate manually npm-shrinkwrap.json:
+Remove a dependency:
 
-        ⇒ npm shrinkwrap
+        ⇒ yarn remove <package>
 
 ### Migrations
 
@@ -83,6 +87,11 @@ Remarks :
 
 - Translations on Openl10n are never deleted or updated with a `push` command. Only new translations will be added.
 - Your locale translations will be updated with a `pull` command (new, update or delete).
+
+## Commits
+
+Please provide the User Story Id in the commit message: `"1337 - Add a killing feature".
+You can ignore pre commit hooks with `-n` option: `$ git commit -n`
 
 ### Deployment
 
@@ -127,6 +136,7 @@ After a deploy, you will need to do manually some commands at prod or preprod ([
 - Checker l'accès aux controllers
 - Respecter l'UI Admin (si la story concerne l'Admin)
 - Générer une migration de la DB (si la structure change => make migrations)
+- Regénérer npm-shrinkwrap.json si un nouveau package npm est installé : (`$ npm shrinkwrap`)
 - Tests unitaires et fonctionnels qui passent (make test)
 - La branche est en platinum sur Insight 
 - Être reviewé (avoir plusieurs +1)

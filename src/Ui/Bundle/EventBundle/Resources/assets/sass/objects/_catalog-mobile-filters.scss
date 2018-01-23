@@ -1,0 +1,137 @@
+@media screen and (max-width: 767px) {
+  .catalog-mobile-menu {
+    .catalog-mobile-menu-summary {
+      position: fixed !important;
+      top: 0;
+      left: 0;
+      width: 100%;
+      padding: 17px;
+      z-index: 1;
+
+      box-shadow: 0 6px 5px rgba(0, 0, 0, 0.2);
+
+      a:not(:last-child) {
+        margin-bottom: 10px;
+      }
+    }
+
+    .catalog-mobile-menu-container {
+      width: 100%;
+      position: absolute;
+      top: 0;
+      left: 0;
+      color: white;
+      background: $color-primary;
+
+      .catalog-mobile-menu-button {
+        cursor: pointer;
+        text-align: left;
+        display: block;
+
+        span.filter-content-data {
+          text-overflow: ellipsis;
+          white-space: nowrap;
+          overflow: hidden;
+          display: inline-block;
+          width: 90%;
+          vertical-align: middle;
+        }
+
+        > span.button-count {
+          float: right;
+
+          > i.glyphicon {
+            top: 3px !important;
+            left: 5px !important;
+          }
+        }
+      }
+
+      .catalog-mobile-title {
+        display: block;
+        margin-left: 12px;
+        font-size: 15px !important;
+      }
+
+      ul {
+        margin-bottom: 30px;
+
+        > li.catalog-mobile-filter {
+          margin-top: 8px;
+
+          > a {
+            color: white;
+          }
+
+          > span {
+            min-height: 1px;
+          }
+
+          > span.filter-content {
+            padding: 0;
+            text-align: left;
+          }
+
+          > span.filter-count {
+            margin-right: 10px;
+            width: 16.6666666667%;
+          }
+        }
+      }
+
+      .catalog-mobile-menu-action {
+        background: $color-primary;
+        width: 100%;
+        position: fixed;
+        bottom: 0;
+        padding: 10px 0;
+        text-align: right;
+
+        .catalog-close {
+          background: none;
+          border: none;
+          color: white;
+          text-transform: uppercase;
+          font-weight: bold;
+          font-size: 18px;
+          font-family: OpenSans, Helvetica, sans-serif;
+
+          > i {
+            font-size: 35px;
+            float: right;
+            margin: -4px 0 0 10px;
+          }
+        }
+      }
+    }
+
+    .catalog-mobile-menu-filters-list {
+      padding: 17px 17px 60px 17px;
+      .filter-element {
+        margin-bottom: 20px;
+      }
+    }
+
+    .catalog-mobile-menu-filters {
+      display: none;
+    }
+  }
+
+  .catalog-mobile-margin-1 {
+    margin-top: 75px !important;
+  }
+
+  .catalog-mobile-margin-2 {
+    margin-top: 125px !important;
+  }
+
+  .catalog-mobile-margin-3 {
+    margin-top: 175px !important;
+  }
+}
+
+@media screen and (min-width: 768px) {
+  .catalog-mobile-menu {
+    display: none;
+  }
+}

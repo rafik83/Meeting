@@ -1,6 +1,6 @@
 {% extends 'AdminBundle::base.html.twig' %}
 
-{% block title %}{{ event.title }}: {{ details.title }}{% endblock %}
+{% block title 'admin.sheet.details.title'|trans ~ ': ' ~ details.title %}
 
 {% block content %}
     <h1>
@@ -8,11 +8,17 @@
         {{ details.title }}
 
         {% spaceless %}
-            <span class="label label-info label-sheet-type">
+            <span class="label label-info label-sheet-type"
+                {% if details.meetingIndicator.meetings > 0 %}
+                    data-toggle="tooltip" data-placement="top" title="{{ 'admin.sheet.change.type.hasMeeting'|trans }}"
+                {% endif %}
+            >
                 {{ sheetTypeTitle }}
 
                 {% if changeTypeForm is not null %}
-                    <a href="#" data-toggle="modal" data-target="#changeType" title="{{ 'admin.sheet.change.type.link'|trans }}"><span class="glyphicon glyphicon-edit"></span></a>
+                    <a href="#" data-toggle="modal" data-target="#changeType" title="{{ 'admin.sheet.change.type.link'|trans }}">
+                        <span class="glyphicon glyphicon-edit"></span>
+                    </a>
                 {% endif %}
             </span>
 
@@ -104,4 +110,10 @@
     </div>
 
     {{ include('AdminBundle:Sheet/Partial:change_type_form.html.twig', { changeTypeForm: changeTypeForm }, false) }}
+    <div class="modal fade clear-on-hidden-modal" id="edit_agenda_confirmation_status" tabindex="-1" role="dialog" aria-labelledby="edit_agenda_confirmation_status" data-placeholder="{{ '<div class="modal-body text-center"><i class="glyphicon glyphicon-refresh spin text-xl"></i></div>'|e }}">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+            </div>
+        </div>
+    </div>
 {% endblock %}

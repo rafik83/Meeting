@@ -10,27 +10,30 @@
 
 namespace Proximum\Vimeet\Application\Query\Catalog;
 
+use PHPUnit\Framework\TestCase;
+use Proximum\Vimeet\Application\Query\Catalog\SearchFacet\SearchFacetViewQuery;
+use Proximum\Vimeet\Application\Query\Catalog\SearchFacet\SearchFacetViewQueryHandler;
 use Proximum\Vimeet\Application\View\Catalog\SearchFacetsView;
 use Proximum\Vimeet\Application\View\Catalog\SearchFacetView;
-use Proximum\Vimeet\Domain\Model\SearchFacet;
+use Proximum\Vimeet\Domain\Model\Catalog\Internal\SearchFacet;
 use Proximum\Vimeet\Domain\Repository\SearchFacetRepositoryInterface;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
 
-class SearchFacetViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
+class SearchFacetViewQueryHandlerTest extends TestCase
 {
     public function testHandle()
     {
         $event  = EventFactory::createEvent();
         $locale = 'fr';
 
-        $typeSearchFacet         = new SearchFacet($event, 'type', true);
-        $keywordsSearchFacet     = new SearchFacet($event, 'keywords', true);
-        $localizationSearchFacet = new SearchFacet($event, 'localization', false);
+        $typeSearchFacet         = new SearchFacet($event, SearchFacet::TYPE_TYPE, true);
+        $keywordsSearchFacet     = new SearchFacet($event, SearchFacet::TYPE_KEYWORDS, true);
+        $localizationSearchFacet = new SearchFacet($event, SearchFacet::TYPE_LOCALIZATION, false);
 
         // Expected
-        $searchFacetTypeView         = new SearchFacetView('type', '', '', true);
-        $searchFacetKeywordsView     = new SearchFacetView('keywords', '', '', true);
-        $searchFacetLocalizationView = new SearchFacetView('localization', '', '', false);
+        $searchFacetTypeView         = new SearchFacetView(SearchFacet::TYPE_TYPE, '', '', true);
+        $searchFacetKeywordsView     = new SearchFacetView(SearchFacet::TYPE_KEYWORDS, '', '', true);
+        $searchFacetLocalizationView = new SearchFacetView(SearchFacet::TYPE_LOCALIZATION, '', '', false);
 
         $expectedSearchFacetsView = new SearchFacetsView([
             $searchFacetTypeView,
@@ -50,8 +53,8 @@ class SearchFacetViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
         $searchFacetsView = $handler->handle(new SearchFacetViewQuery($event, $locale));
 
         $this->assertEquals($searchFacetsView, $expectedSearchFacetsView);
-        $this->assertEquals($searchFacetsView->hasType(), $searchFacetTypeView);
-        $this->assertEquals($searchFacetsView->hasKeywords(), $searchFacetKeywordsView);
-        $this->assertEquals($searchFacetsView->hasLocalization(), false);
+        $this->assertEquals($searchFacetsView->hasType(), true);
+        $this->assertEquals($searchFacetsView->getKeywords(), $searchFacetKeywordsView);
+        $this->assertEquals($searchFacetsView->getLocalization(), null);
     }
 }

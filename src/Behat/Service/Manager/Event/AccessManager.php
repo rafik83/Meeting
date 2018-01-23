@@ -33,10 +33,12 @@ class AccessManager
     {
         $event->getConfiguration()->setDates(
             $event->getConfiguration()->getCatalogOnlineDate(),
-            new \DateTime('2000-01-01 08:00:00'),
+            $event->getConfiguration()->getHappeningsOpenDate(),
             $event->getConfiguration()->getSchedulePublishDate(),
             $event->getConfiguration()->getCloseMeetingRequestDate(),
-            $event->getConfiguration()->getCloseAnsweringMeetingRequestDate()
+            $event->getConfiguration()->getCloseAnsweringMeetingRequestDate(),
+            $event->getConfiguration()->getSmsActivationDate(),
+            new \DateTime('2000-01-01 08:00:00')
         );
 
         $this->eventRepository->set($event);
@@ -52,8 +54,72 @@ class AccessManager
             $event->getConfiguration()->getHappeningsOpenDate(),
             new \DateTime('2000-01-01 08:00:00'),
             $event->getConfiguration()->getCloseMeetingRequestDate(),
-            $event->getConfiguration()->getCloseAnsweringMeetingRequestDate()
+            $event->getConfiguration()->getCloseAnsweringMeetingRequestDate(),
+            $event->getConfiguration()->getsmsActivationDate(),
+            $event->getConfiguration()->getAgendaOnlineDate()
         );
+
+        $this->eventRepository->set($event);
+    }
+
+    /**
+     * @param \DateTime $dateTime
+     * @param Event     $event
+     */
+    public function setRegistrationOpenDate(\DateTime $dateTime, Event $event)
+    {
+        $event->getConfiguration()->setDates(
+            $event->getConfiguration()->getCatalogOnlineDate(),
+            $event->getConfiguration()->getHappeningsOpenDate(),
+            $event->getConfiguration()->getSchedulePublishDate(),
+            $event->getConfiguration()->getCloseMeetingRequestDate(),
+            $event->getConfiguration()->getCloseAnsweringMeetingRequestDate(),
+            $event->getConfiguration()->getsmsActivationDate(),
+            $event->getConfiguration()->getAgendaOnlineDate(),
+            $dateTime
+        );
+
+        $this->eventRepository->set($event);
+    }
+
+    /**
+     * @param \DateTime $dateTime
+     * @param Event     $event
+     */
+    public function setRegistrationCloseDate(\DateTime $dateTime, Event $event)
+    {
+        $event->getConfiguration()->setDates(
+            $event->getConfiguration()->getCatalogOnlineDate(),
+            $event->getConfiguration()->getHappeningsOpenDate(),
+            $event->getConfiguration()->getSchedulePublishDate(),
+            $event->getConfiguration()->getCloseMeetingRequestDate(),
+            $event->getConfiguration()->getCloseAnsweringMeetingRequestDate(),
+            $event->getConfiguration()->getsmsActivationDate(),
+            $event->getConfiguration()->getAgendaOnlineDate(),
+            null,
+            $dateTime
+        );
+
+        $this->eventRepository->set($event);
+    }
+
+    /**
+     * @param Event $event
+     */
+    public function openExternalCatalog(Event $event)
+    {
+        $event->setExternalCatalog(true);
+
+        $this->eventRepository->set($event);
+    }
+
+    /**
+     * @param Event     $event
+     * @param \DateTime $datetime
+     */
+    public function openCatalog(Event $event, \DateTime $datetime)
+    {
+        $event->getConfiguration()->setDates($datetime);
 
         $this->eventRepository->set($event);
     }

@@ -118,6 +118,23 @@ class UnavailabilityRepository implements UnavailabilityRepositoryInterface
     /**
      * {@inheritdoc}
      */
+    public function findByEventAndUsers(Event $event, array $users)
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('unavailability')
+            ->from(Unavailability::class, 'unavailability')
+            ->where('unavailability.event = :event AND unavailability.user IN (:users)')
+            ->setParameters(['users' => $users, 'event' => $event])
+        ;
+
+        return $queryBuilder->getQuery()->getResult();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function findBySheet(Sheet $sheet)
     {
         $queryBuilder = $this

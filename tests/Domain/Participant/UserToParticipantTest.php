@@ -20,8 +20,9 @@ use Proximum\Vimeet\Domain\Participant\UserToParticipant;
 use Proximum\Vimeet\Domain\Repository\ParticipantRepositoryInterface;
 use Proximum\Vimeet\Domain\Template\TemplateData;
 use Proximum\Vimeet\Domain\Template\TemplateDataFactory;
+use PHPUnit\Framework\TestCase;
 
-class UserToParticipantTest extends \PHPUnit_Framework_TestCase
+class UserToParticipantTest extends TestCase
 {
     public function testHandle()
     {

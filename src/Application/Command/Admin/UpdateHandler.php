@@ -11,12 +11,14 @@
 namespace Proximum\Vimeet\Application\Command\Admin;
 
 use Proximum\Vimeet\Application\Exception\User\EmailAlreadyExistsException;
+use Proximum\Vimeet\Domain\Helper\StringHelper;
 
 class UpdateHandler extends AbstractCreateHandler
 {
     public function handle(Update $update)
     {
-        $admin   = $update->admin;
+        $admin = $update->admin;
+        $update->email = StringHelper::trimSpacesAndNonBreakSpaces($update->email);
         $newMail = ($update->email !== $admin->getEmail());
 
         if ($newMail && $this->adminRepository->emailExists($update->email)) {

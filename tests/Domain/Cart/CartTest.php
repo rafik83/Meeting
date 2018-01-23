@@ -16,8 +16,9 @@ use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\Type;
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
+use PHPUnit\Framework\TestCase;
 
-class CartTest extends \PHPUnit_Framework_TestCase
+class CartTest extends TestCase
 {
     public function testAdd()
     {

@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Application\Command\Sheet\Template;
 
+use Proximum\Vimeet\Application\Components\Sheet\Preview\CustomPreviewData;
 use Proximum\Vimeet\Application\Exception\Sheet\Template\TemplateException;
 use Proximum\Vimeet\Domain\Repository\Template\SheetTemplateRepositoryInterface;
 use Proximum\Vimeet\Domain\Template\Exception\NonUniquePreviewObjectsException;
@@ -59,6 +60,12 @@ class UpdatePreviewHandler
 
         // check exist in template
         foreach ($updatePreview->previewObjects as $key) {
+            $customPreviewDataView = CustomPreviewData::getCustomPreviewDataViewByName($key);
+
+            if (null !== $customPreviewDataView) {
+                continue;
+            }
+
             if (false === $templateData->hasObject($key)) {
                 throw new ObjectNotFoundException($key);
             }

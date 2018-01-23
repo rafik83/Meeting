@@ -31,8 +31,9 @@ use Proximum\Vimeet\Domain\Promotion\Exception\PromotionCodeNotUsedException;
 use Proximum\Vimeet\Domain\Promotion\Exception\PromotionCodeOutDatedException;
 use Proximum\Vimeet\Domain\Repository\PromotionCodeRepositoryInterface;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
+use PHPUnit\Framework\TestCase;
 
-class AddHandlerTest extends \PHPUnit_Framework_TestCase
+class AddHandlerTest extends TestCase
 {
     /**
      * @var Type

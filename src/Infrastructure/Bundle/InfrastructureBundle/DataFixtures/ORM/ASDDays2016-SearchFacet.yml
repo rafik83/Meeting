@@ -1,9 +1,9 @@
-Proximum\Vimeet\Domain\Model\SearchFacet:
+Proximum\Vimeet\Domain\Model\Catalog\Internal\SearchFacet:
     search_facet_category:
         __construct:
             - '@event_asddays_2016'
             - 'category'
-            - true
+            - false
     search_facet_type:
         __construct:
             - '@event_asddays_2016'
@@ -30,7 +30,7 @@ Proximum\Vimeet\Domain\Model\SearchFacet:
             - 'localization'
             - true
 
-Proximum\Vimeet\Domain\Model\SearchFacetTranslation:
+Proximum\Vimeet\Domain\Model\Catalog\Internal\SearchFacetTranslation:
     search_facet_translation_type_fr:
         __construct:
             - '@search_facet_type'

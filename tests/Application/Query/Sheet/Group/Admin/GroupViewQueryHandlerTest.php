@@ -10,6 +10,7 @@
 
 namespace Application\Query\Sheet\Group\Admin;
 
+use PHPUnit\Framework\TestCase;
 use Proximum\Vimeet\Application\Adapter\ImpersonateUrlGeneratorInterface;
 use Proximum\Vimeet\Application\Components\Sheet\SheetInfoGuesser;
 use Proximum\Vimeet\Application\Query\Sheet\Group\Admin\AdminGroupViewQuery;
@@ -24,7 +25,7 @@ use Proximum\Vimeet\Tests\Factory\EventFactory;
 use Proximum\Vimeet\Tests\Factory\SheetFactory;
 use Proximum\Vimeet\Tests\Factory\UserFactory;
 
-class GroupViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
+class GroupViewQueryHandlerTest extends TestCase
 {
     public function testHandle()
     {
@@ -45,12 +46,13 @@ class GroupViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
         $propertySheetId->setAccessible(true);
 
         $sheet1 = SheetFactory::create($event);
+        $sheet1->setTitle('Sheet title 1');
         $propertySheetId->setValue($sheet1, 1);
 
         $sheet2 = SheetFactory::create($event);
+        $sheet2->setTitle('Sheet title 2');
         $propertySheetId->setValue($sheet2, 2);
 
-        $sheetInfoGuesser        = $this->prophesize(SheetInfoGuesser::class);
         $sheetRepository         = $this->prophesize(SheetRepositoryInterface::class);
         $impersonateUrlGenerator = $this->prophesize(ImpersonateUrlGeneratorInterface::class);
 
@@ -68,9 +70,6 @@ class GroupViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
 
         $sheetRepository->getByGroup($group)->shouldBeCalled()->willReturn([$sheet1, $sheet2]);
 
-        $sheetInfoGuesser->guessSheetTitle($sheet1)->shouldBeCalled()->willReturn('Sheet title 1');
-        $sheetInfoGuesser->guessSheetTitle($sheet2)->shouldBeCalled()->willReturn('Sheet title 2');
-
         $impersonateUrlGenerator->generate(
             $admin,
             $user,
@@ -79,11 +78,7 @@ class GroupViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
             ['sheetGroup' => 1]
         )->shouldBeCalled()->willReturn('_IMPERSONATE_LINK_');
 
-        $handler = new AdminGroupViewQueryHandler(
-            $sheetRepository->reveal(),
-            $sheetInfoGuesser->reveal(),
-            $impersonateUrlGenerator->reveal()
-        );
+        $handler = new AdminGroupViewQueryHandler($sheetRepository->reveal(), $impersonateUrlGenerator->reveal());
 
         $groupView = $handler->handle(new AdminGroupViewQuery($group, $admin));
 

@@ -19,8 +19,9 @@ use Proximum\Vimeet\Domain\Model\ProductTranslation;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
 use Proximum\Vimeet\Tests\Factory\ProductFactory;
 use Proximum\Vimeet\Tests\Factory\SheetFactory;
+use PHPUnit\Framework\TestCase;
 
-class ProductViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
+class ProductViewQueryHandlerTest extends TestCase
 {
     public function testHandle()
     {

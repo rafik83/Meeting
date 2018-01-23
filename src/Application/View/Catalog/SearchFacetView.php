@@ -12,25 +12,17 @@ namespace Proximum\Vimeet\Application\View\Catalog;
 
 class SearchFacetView
 {
-    /**
-     * @var string
-     */
+    /** @var string */
     public $label;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     public $placeholder;
 
-    /**
-     * @var bool
-     */
-    private $state;
+    /** @var bool */
+    public $enabled;
 
-    /**
-     * @var string
-     */
-    private $type;
+    /** @var string */
+    public $type;
 
     /**
      * SearchFacetView constructor.
@@ -38,14 +30,14 @@ class SearchFacetView
      * @param string $type
      * @param string $label
      * @param string $placeholder
-     * @param bool   $state
+     * @param bool   $enabled
      */
-    public function __construct($type, $label, $placeholder, $state)
+    public function __construct($type, $label, $placeholder, $enabled)
     {
         $this->type        = $type;
         $this->label       = $label;
         $this->placeholder = $placeholder;
-        $this->state       = $state;
+        $this->enabled     = $enabled;
     }
 
     /**
@@ -61,6 +53,6 @@ class SearchFacetView
      */
     public function isEnabled()
     {
-        return $this->state === true;
+        return $this->enabled === true;
     }
 }

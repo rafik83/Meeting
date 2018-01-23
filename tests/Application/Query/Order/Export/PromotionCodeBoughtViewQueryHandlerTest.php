@@ -15,8 +15,9 @@ use Proximum\Vimeet\Application\Query\Order\Export\PromotionCodeBoughtViewQueryH
 use Proximum\Vimeet\Application\View\Order\Export\PromotionCodeBoughtView;
 use Proximum\Vimeet\Domain\Model\Order\PromotionCode;
 use Proximum\Vimeet\Domain\Model\PromotionCode as PromotionCodeModel;
+use PHPUnit\Framework\TestCase;
 
-class PromotionCodeBoughtViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
+class PromotionCodeBoughtViewQueryHandlerTest extends TestCase
 {
     public function testHandle()
     {

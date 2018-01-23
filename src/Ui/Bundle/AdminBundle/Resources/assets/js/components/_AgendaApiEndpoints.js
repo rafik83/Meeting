@@ -49,17 +49,6 @@ AgendaApiEndpoints.prototype.getSheetAgendaEndpoint = function (sheet) {
 };
 
 /**
- * Returns /admin/fr/event/{event_id}/agenda/sheets/indicators
- * or      /app_dev.php/admin/fr/event/{event_id}/agenda/sheets/indicators
- *
- * @returns {string}
- */
-AgendaApiEndpoints.prototype.getSheetsIndicatorsEndpoint = function ()
-{
-    return this.getPathname() + '/sheets/indicators';
-};
-
-/**
  * Returns /admin/fr/event/{event_id}/agenda/meeting/{meetingId}/update-spot
  * or      /app_dev.php/admin/fr/event/{event_id}/agenda/meeting/{meetingId}/update-spot
  *
@@ -145,6 +134,18 @@ AgendaApiEndpoints.prototype.updateParticipantsOfRequestEndpoint = function (req
 
 AgendaApiEndpoints.prototype.updateSheetAttendance = function (sheetId) {
     return this.getPathname() + '/sheet/' + sheetId + '/attend/form';
+};
+
+AgendaApiEndpoints.prototype.getUserAgendaVersion = function (participantId) {
+    return this.getPathname() + '/participant/' + participantId + '/agenda/version';
+};
+
+AgendaApiEndpoints.prototype.notifyUserAgendaVersion = function (participantId) {
+    return this.getPathname() + '/participant/' + participantId + '/agenda/version/notify';
+};
+
+AgendaApiEndpoints.prototype.purgeUserAgendaVersion = function (participantId) {
+    return this.getPathname() + '/participant/' + participantId + '/agenda/version/purge';
 };
 
 module.exports = AgendaApiEndpoints;

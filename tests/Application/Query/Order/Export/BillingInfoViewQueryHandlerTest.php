@@ -10,8 +10,9 @@
 
 namespace Proximum\Vimeet\Tests\Application\Query\Order\Export;
 
+use PHPUnit\Framework\TestCase;
 use Prophecy\Prophecy\ObjectProphecy;
-use Proximum\Vimeet\Application\Adapter\IntlAdapterInterface;
+use Proximum\Vimeet\Application\Adapter\IntlInterface;
 use Proximum\Vimeet\Application\Adapter\TranslatorInterface;
 use Proximum\Vimeet\Application\Query\Order\Export\BillingInfoViewQuery;
 use Proximum\Vimeet\Application\Query\Order\Export\BillingInfoViewQueryHandler;
@@ -22,7 +23,7 @@ use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Repository\BillingInfoRepositoryInterface;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
 
-class BillingInfoViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
+class BillingInfoViewQueryHandlerTest extends TestCase
 {
     /** @var ObjectProphecy */
     private $billingInfoRepository;
@@ -37,7 +38,7 @@ class BillingInfoViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
     {
         $this->billingInfoRepository = $this->prophesize(BillingInfoRepositoryInterface::class);
         $this->translator            = $this->prophesize(TranslatorInterface::class);
-        $this->intlAdapter           = $this->prophesize(IntlAdapterInterface::class);
+        $this->intlAdapter           = $this->prophesize(IntlInterface::class);
     }
 
     public function testHandlePreload()

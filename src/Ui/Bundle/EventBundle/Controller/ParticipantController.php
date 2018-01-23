@@ -21,6 +21,8 @@ use Proximum\Vimeet\Domain\Template;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Participant\AvatarType;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Participant\CompanyType;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Participant\ProfileType;
+use Proximum\Vimeet\Ui\Bundle\EventBundle\Handler\User\Profile\PreUpdate;
+use Proximum\Vimeet\Ui\Bundle\EventBundle\Handler\User\Profile\PreUpdateHandler;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\ParamConverter\EventDomain;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Security\SheetVoter;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -113,8 +115,20 @@ class ParticipantController extends Controller
                 return null !== $value;
             });
 
+            $preUpdateView = $this->get('handler_user_profile.pre_update_handler')->handle(
+                new PreUpdate($user, $participant, $eventDomain->getEvent(), $data, $profileTemplate, $locale)
+            );
+
             $updateProfile = new UpdateProfile($profileTemplate, $participant, $locale, $data, $user);
             $this->get('tactician.commandbus')->handle($updateProfile);
+
+            if ($preUpdateView->preUpdateState === PreUpdateHandler::MOBILE_VALIDATION_NEEDED) {
+                return $this->redirectToRoute('event_user_phone_validate', [
+                    'sheet'       => $sheet->getId(),
+                    'participant' => $participant->getId(),
+                    'mobile'      => $preUpdateView->currentMobile,
+                ]);
+            }
 
             return $this->redirectToRoute('event_account_participant', [
                 'participant' => $participant->getId(),
@@ -188,7 +202,7 @@ class ParticipantController extends Controller
                 $this->get('tactician.commandbus')->handle($updateAvatar);
 
                 if (null !== $imagePath) {
-                    $fileStorage->remove($imagePath);
+                    $fileStorage->remove($imagePath, true);
                 }
 
                 return $this->redirectToRoute('event_account_participant', [

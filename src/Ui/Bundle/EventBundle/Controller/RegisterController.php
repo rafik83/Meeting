@@ -15,6 +15,9 @@ use Proximum\Vimeet\Application\Command\Register\RegisterNewUser;
 use Proximum\Vimeet\Application\Command\User\Participate;
 use Proximum\Vimeet\Application\Exception\User\EmailAlreadyExistsException;
 use Proximum\Vimeet\Application\Query\Participant\CardViewQuery;
+use Proximum\Vimeet\Application\Query\Register\PreFillUserData;
+use Proximum\Vimeet\Application\View\Register\PreFillUserDataView;
+use Proximum\Vimeet\Domain\Helper\StringHelper;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\User;
@@ -25,6 +28,7 @@ use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Common\EmailType;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Register\RegisterNewUserType;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Sheet\BlockType;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\ParamConverter\EventDomain;
+use Proximum\Vimeet\Ui\Flash\TransMessage;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Form\FormError;
 use Symfony\Component\Form\FormInterface;
@@ -50,10 +54,19 @@ class RegisterController extends Controller
             return $this->redirectToRoute('event');
         }
 
+        $response = $this
+            ->get('infrastructure.route.home_dispatch.home_user_dispatcher')
+            ->attemptDispatchUser($eventDomain->getEvent(), $this->getUser());
+
+        if ($response instanceof RedirectResponse) {
+            return $response;
+        }
+
         $command = new Email();
         $form    = $this->createForm(EmailType::class, $command, ['action' => $request->getUri()]);
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
+            $command->email = StringHelper::trimSpacesAndNonBreakSpaces($command->email);
             $user = $this->get('vimeet_infrastructure.repository.user_repository')->findByEmail($command->email);
 
             if ($user) {
@@ -93,13 +106,13 @@ class RegisterController extends Controller
     public function registerNewUserAction(Request $request, EventDomain $eventDomain, TypeView $typeView)
     {
         $command = new RegisterNewUser(
-            $this->getFlashEmail(),
+            StringHelper::trimSpacesAndNonBreakSpaces($this->getFlashEmail()),
             $request->getLocale(),
             $eventDomain->getEvent(),
             $typeView
         );
 
-        if ($command->email === null || $this->emailExists($command->email)) {
+        if ($command->email === '' || $this->emailExists($command->email)) {
             return $this->redirectToRoute('event_register', ['typeView' => $typeView->id]);
         }
 
@@ -143,12 +156,36 @@ class RegisterController extends Controller
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
         $this->hasUserAlreadyCreatedParticipant($event, $this->getUser());
 
-        $locale               = $request->getLocale();
-        $type                 = $this->get('vimeet_infrastructure.repository.type_repository')->getById($typeView->id);
-        $registrationTemplate = $this->get('template.template_data_factory')->createRegistrationFromType($type, $locale);
-        $user                 = $this->get('vimeet_infrastructure.repository.user_repository')->findByEmail($this->getUser()->getEmail());
-        $registrationTemplate = $this->get('account.synchronizer')->get($registrationTemplate, $user);
-        $participantBlock     = $registrationTemplate->getFirstBlock();
+        $response = $this
+            ->get('infrastructure.route.home_dispatch.home_user_dispatcher')
+            ->attemptDispatchUser($event, $this->getUser());
+
+        if ($response instanceof RedirectResponse) {
+            return $response;
+        }
+
+        $locale = $request->getLocale();
+
+        $type = $this->get('vimeet_infrastructure.repository.type_repository')
+            ->getById($typeView->id);
+
+        $registrationTemplate = $this->get('template.template_data_factory')
+            ->createRegistrationFromType($type, $locale);
+
+        $user = $this->get('vimeet_infrastructure.repository.user_repository')
+            ->findByEmail($this->getUser()->getEmail());
+
+        /** @var PreFillUserDataView $preFillUserDataView */
+        $preFillUserDataView = $this->get('tactician.commandbus.query')->handle(
+            new PreFillUserData(
+                $user,
+                $event,
+                $registrationTemplate,
+                $locale
+            )
+        );
+
+        $participantBlock = $registrationTemplate->getFirstBlock();
 
         // Add or update UserEvent type
         $this->get('components.user.type_resolver')->resolve($user, $event, $type);
@@ -160,14 +197,26 @@ class RegisterController extends Controller
         ]);
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
-            $data        = $this->handleData($registrationTemplate, $form, $participantBlock->getData());
-            $participate = new Participate($this->getUser(), $event, $type, $locale, $data, $registrationTemplate);
+            $data = $this->handleData($registrationTemplate, $form, $participantBlock->getData());
+
+            $participate = new Participate(
+                $this->getUser(),
+                $event,
+                $type,
+                $locale,
+                $data,
+                $registrationTemplate
+            );
+
             $this->get('tactician.commandbus')->handle($participate);
 
             $nextStep = $registrationTemplate->getNextBlockPosition(1);
 
             if ($nextStep) {
-                return $this->redirectToRoute('event_participant_step', ['step' => $nextStep, 'participant' => $participate->participant->getId()]);
+                return $this->redirectToRoute('event_participant_step', [
+                    'step' => $nextStep,
+                    'participant' => $participate->participant->getId()
+                ]);
             }
 
             $this->container->get('session')->getFlashBag()->set('first_registration', true);
@@ -175,12 +224,20 @@ class RegisterController extends Controller
             return $this->redirectToRoute('event_sheet_default', ['sheet' => $participate->sheet->getId()]);
         }
 
+        if ($preFillUserDataView->isParticipationDataPreFilled()) {
+            $this->addFlash('success', new TransMessage(
+                'flash.register.participationData.prefilled',
+                ['%event%' => $preFillUserDataView->event->getTitle()]
+            ));
+        }
+
         return $this->render('EventBundle:Register:participate.html.twig', [
             'event'           => $eventDomain->getEvent(),
             'typeView'        => $typeView,
             'form'            => $form->createView(),
             'stepTitle'       => $participantBlock->getTitle($locale),
-            'stepDescription' => $this->get('markdown')->toHtml($participantBlock->getDescription($locale)),
+            'stepDescription' => $this->get('markdown')
+                ->toHtml($participantBlock->getDescription($locale)),
             'stepsCount'      => $registrationTemplate->getBlocksCount(),
         ]);
     }
@@ -199,22 +256,53 @@ class RegisterController extends Controller
         $this->denyAccessIfWrongParticipant($eventDomain, $participant);
 
         $locale               = $request->getLocale();
-        $registrationTemplate = $this->get('template.template_data_factory')->createRegistrationFromParticipant($participant, $locale);
-        $registrationTemplate = $this->get('account.synchronizer')->get($registrationTemplate, $participant->getUser());
-        $participantBlock     = $registrationTemplate->getBlock(intval($step));
+        $registrationTemplate = $this->get('template.template_data_factory')
+            ->createRegistrationFromParticipant($participant, $locale);
+
+        // pre-fill user participation data and update registration template with data
+        /** @var PreFillUserDataView $preFillUserDataView */
+        $preFillUserDataView = $this->get('tactician.commandbus.query')->handle(
+            new PreFillUserData(
+                $participant->getUser(),
+                $eventDomain->getEvent(),
+                $registrationTemplate,
+                $locale
+            )
+        );
+
+        if ($preFillUserDataView->isParticipationDataPreFilled()) {
+            $participant->setData($preFillUserDataView->templateData->getData());
+        }
+
+        $participantBlock = $registrationTemplate->getBlock(intval($step));
 
         if (null === $participantBlock) {
             throw $this->createNotFoundException('Unknown step');
         }
 
-        $data = ['block' => $participantBlock, 'locale' => $locale, 'country' => $eventDomain->getEvent()->getCountry()];
+        $data = [
+            'block' => $participantBlock,
+            'locale' => $locale,
+            'country' => $eventDomain->getEvent()->getCountry()
+        ];
+
         $form = $this->createForm(BlockType::class, $participantBlock, $data);
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
-            $data = $this->handleData($registrationTemplate, $form, $participantBlock->getData());
+            $data = $this->handleData(
+                $registrationTemplate,
+                $form,
+                $participantBlock->getData()
+            );
 
             if ($form->isValid()) {
-                $participantStep = new ParticipantStep($registrationTemplate, $participant, $step, $locale, $data);
+                $participantStep = new ParticipantStep(
+                    $registrationTemplate,
+                    $participant,
+                    $step,
+                    $locale,
+                    $data
+                );
                 $this->get('tactician.commandbus')->handle($participantStep);
 
                 $nextStep = $registrationTemplate->getNextBlockPosition($step);
@@ -228,11 +316,15 @@ class RegisterController extends Controller
 
                 $this->container->get('session')->getFlashBag()->add('first_registration', true);
 
-                return $this->redirectToRoute('event_sheet_default', ['sheet' => $participant->getSheet()->getId()]);
+                return $this->redirectToRoute('event_sheet_default', [
+                    'sheet' => $participant->getSheet()->getId()
+                ]);
             }
         }
 
-        $participantCard = $this->get('tactician.commandbus.query')->handle(new CardViewQuery($participant, $locale));
+        $participantCard = $this->get('tactician.commandbus.query')->handle(
+            new CardViewQuery($participant, $locale)
+        );
 
         return $this->render('EventBundle:Register:participateStep.html.twig', [
             'event'           => $eventDomain->getEvent(),
@@ -240,7 +332,9 @@ class RegisterController extends Controller
             'stepsCount'      => $registrationTemplate->getBlocksCount(),
             'stepNumber'      => $step,
             'stepTitle'       => $participantBlock->getTitle($locale),
-            'stepDescription' => $this->get('markdown')->toHtml($participantBlock->getDescription($locale)),
+            'stepDescription' => $this->get('markdown')
+                ->toHtml($participantBlock->getDescription($locale)),
+            'participant'     => $participant,
             'participantCard' => $participantCard,
         ]);
     }
@@ -285,11 +379,15 @@ class RegisterController extends Controller
                         $data[$key]['image'] = $fileStorage->upload($file);
                         $fileStorage->remove($object->getContentValue());
                     } catch (\Exception $exception) {
-                        $form->get($key)->get('file')->addError(new FormError('account.profile.updateAvatar.error'));
+                        $form->get($key)->get('file')->addError(
+                            new FormError('account.profile.updateAvatar.error')
+                        );
                     }
 
                 } else {
-                    $form->get($key)->get('file')->addError(new FormError('validators.field.notValid.image'));
+                    $form->get($key)->get('file')->addError(
+                        new FormError('validators.field.notValid.image')
+                    );
                 }
             }
         }
@@ -298,13 +396,15 @@ class RegisterController extends Controller
     }
 
     /**
-     * @return string|null
+     * @return string
      */
-    private function getFlashEmail()
+    private function getFlashEmail(): string
     {
         $emails = $this->container->get('session')->getFlashBag()->get('register_email');
 
-        return array_shift($emails);
+        $email = array_shift($emails);
+
+        return $email ?? '';
     }
 
     /**

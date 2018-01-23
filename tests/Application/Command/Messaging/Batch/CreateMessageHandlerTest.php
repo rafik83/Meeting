@@ -17,8 +17,9 @@ use Proximum\Vimeet\Application\Command\Messaging\Batch\CreateMessageHandler;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Messaging\Message;
 use Proximum\Vimeet\Ui\Bundle\MailBundle\Mail\Messaging\MessageContentMail;
+use PHPUnit\Framework\TestCase;
 
-class CreateMessageHandlerTest extends \PHPUnit_Framework_TestCase
+class CreateMessageHandlerTest extends TestCase
 {
     public function testHandle()
     {

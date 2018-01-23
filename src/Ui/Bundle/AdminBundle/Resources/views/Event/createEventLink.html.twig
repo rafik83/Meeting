@@ -1,0 +1,11 @@
+{% if is_granted('ROLE_ALLOWED_TO_ORGANIZE') %}
+    <div class="text-right">
+        <a href="{{ path('admin_event_create') }}" class="btn btn-primary">
+            <i class="glyphicon glyphicon-plus
+glyphicon "></i> {{ 'admin.event.create.title'|trans }}
+        </a>
+        <a href="{{ path('admin_event_duplicate') }}" class="btn btn-primary">
+            <i class="glyphicon glyphicon-copy"></i> {{ 'admin.event.create.from.title'|trans }}
+        </a>
+    </div>
+{% endif %}

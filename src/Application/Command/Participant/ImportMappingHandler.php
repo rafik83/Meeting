@@ -10,20 +10,17 @@
 
 namespace Proximum\Vimeet\Application\Command\Participant;
 
+use Proximum\Vimeet\Application\Adapter\SerializerAdapterInterface;
 use Proximum\Vimeet\Application\Adapter\SessionInterface;
 use Proximum\Vimeet\Application\Components\Import\ParticipantImportTag;
 use Proximum\Vimeet\Application\Event\Events;
 use Proximum\Vimeet\Application\Event\Participant\ParticipantImportedEvent;
-use Proximum\Vimeet\Application\Serializer\Decoder\CsvDecoder;
-use Proximum\Vimeet\Application\Serializer\Denormalizer\ParticipantDenormalizer;
 use Proximum\Vimeet\Application\Serializer\Denormalizer\ParticipantImportLogger;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\ParticipantImport;
 use Proximum\Vimeet\Domain\Repository\ParticipantImportRepositoryInterface;
 use Proximum\Vimeet\Infrastructure\Adapter\DelayedEventDispatcher;
 use Proximum\Vimeet\Infrastructure\Adapter\LocalFileStorageAdapter;
-use Symfony\Component\Serializer\Encoder\DecoderInterface;
-use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 
 class ImportMappingHandler
 {
@@ -31,16 +28,6 @@ class ImportMappingHandler
      * @var SessionInterface
      */
     private $session;
-
-    /**
-     * @var DecoderInterface
-     */
-    private $csvDecoder;
-
-    /**
-     * @var DenormalizerInterface
-     */
-    private $denormalizer;
 
     /**
      * @var DelayedEventDispatcher
@@ -63,28 +50,28 @@ class ImportMappingHandler
     private $participantImportRepository;
 
     /**
-     * ImportMappingHandler constructor.
-     *
-     * @param DecoderInterface                     $csvDecoder
+     * @var SerializerAdapterInterface
+     */
+    private $serializerAdapter;
+
+    /**
+     * @param SerializerAdapterInterface           $serializerAdapter
      * @param SessionInterface                     $session
-     * @param DenormalizerInterface                $denormalizer
      * @param DelayedEventDispatcher               $eventDispatcher
      * @param LocalFileStorageAdapter              $localFileStorage
      * @param \DateTimeInterface                   $date
      * @param ParticipantImportRepositoryInterface $participantImportRepository
      */
     public function __construct(
-        DecoderInterface $csvDecoder,
+        SerializerAdapterInterface $serializerAdapter,
         SessionInterface $session,
-        DenormalizerInterface $denormalizer,
         DelayedEventDispatcher $eventDispatcher,
         LocalFileStorageAdapter $localFileStorage,
         \DateTimeInterface $date,
         ParticipantImportRepositoryInterface $participantImportRepository
     ) {
+        $this->serializerAdapter           = $serializerAdapter;
         $this->session                     = $session;
-        $this->csvDecoder                  = $csvDecoder;
-        $this->denormalizer                = $denormalizer;
         $this->eventDispatcher             = $eventDispatcher;
         $this->date                        = $date;
         $this->localFileStorage            = $localFileStorage;
@@ -98,16 +85,19 @@ class ImportMappingHandler
     {
         $filename = $this->session->get(ParticipantImportTag::PARTICIPANT_IMPORT_FILE);
 
-        $csvData = $this->csvDecoder->decode($filename, CsvDecoder::FORMAT);
-
-        $importLogger = $this->denormalizer->denormalize($csvData, Participant::class, ParticipantDenormalizer::FORMAT, [
-            'csvHeaders'          => $importMapping->csvHeaders,
-            'registrationHeaders' => $importMapping->registrationHeaders,
-            'mappings'            => $this->removeIgnoreFields($importMapping->mappings),
-            'event'               => $importMapping->event,
-            'type'                => $importMapping->type,
-            'locale'              => $importMapping->locale,
-        ]);
+        /** @var ParticipantImportLogger $importLogger */
+        $importLogger = $this->serializerAdapter->deserialize(
+            file_get_contents($filename),
+            Participant::class,
+            'csv',
+            [
+                'csv_delimiter' => ';',
+                'mappings'      => $this->removeIgnoreFields($importMapping->getMappings()),
+                'event'         => $importMapping->event,
+                'type'          => $importMapping->type,
+                'locale'        => $importMapping->locale,
+            ]
+        );
 
         $participantImport = new ParticipantImport(
             $importMapping->type,

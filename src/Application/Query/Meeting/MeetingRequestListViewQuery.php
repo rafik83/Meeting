@@ -1,9 +1,9 @@
 <?php
 
 /*
- * This file is part of the vimeet project.
+ * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2016 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -16,46 +16,45 @@ use Proximum\Vimeet\Domain\Model\User;
 
 class MeetingRequestListViewQuery
 {
-    /**
-     * @var Sheet
-     */
+    /** @var Sheet */
     public $sheet;
 
-    /**
-     * @var User
-     */
+    /** @var User */
     public $user;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     public $locale;
 
-    /**
-     * @var array
-     */
+    /** @var array */
     public $filters;
 
-    /**
-     * @var Event
-     */
+    /** @var array */
+    public $slotsToFilter;
+
+    /** @var Event */
     public $event;
 
     /**
-     * MeetingRequestListViewQuery constructor.
-     *
      * @param Event  $event
      * @param Sheet  $sheet
      * @param User   $user
      * @param string $locale
      * @param array  $filters
+     * @param array  $slotsToFilter
      */
-    public function __construct(Event $event, Sheet $sheet, User $user, $locale, array $filters = [])
-    {
-        $this->event   = $event;
-        $this->sheet   = $sheet;
-        $this->user    = $user;
-        $this->locale  = $locale;
-        $this->filters = $filters;
+    public function __construct(
+        Event $event,
+        Sheet $sheet,
+        User $user,
+        $locale,
+        array $filters = [],
+        array $slotsToFilter = []
+    ) {
+        $this->event         = $event;
+        $this->sheet         = $sheet;
+        $this->user          = $user;
+        $this->locale        = $locale;
+        $this->filters       = $filters;
+        $this->slotsToFilter = $slotsToFilter;
     }
 }

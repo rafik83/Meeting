@@ -18,35 +18,30 @@ use Proximum\Vimeet\Application\Query\Navigation\Category\PlanningViewQueryHandl
 use Proximum\Vimeet\Application\View\Navigation\CategoryView;
 use Proximum\Vimeet\Application\View\Navigation\LinkView;
 use Proximum\Vimeet\Application\View\Navigation\StateButtonView;
-use Proximum\Vimeet\Domain\KeyDates\Checker\HappeningsAccessChecker;
+use Proximum\Vimeet\Domain\KeyDates\Checker\AgendaAccessChecker;
 use Proximum\Vimeet\Domain\KeyDates\Checker\MeetingPublishedAccessChecker;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Navigation\NavigationBuilderInterface;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
 use Proximum\Vimeet\Tests\Factory\SheetFactory;
 use Proximum\Vimeet\Tests\Factory\UserFactory;
+use PHPUnit\Framework\TestCase;
 
-class PlanningViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
+class PlanningViewQueryHandlerTest extends TestCase
 {
-    /**
-     * @var ObjectProphecy
-     */
+    /** @var ObjectProphecy */
     private $navigationBuilder;
 
-    /**
-     * @var ObjectProphecy
-     */
-    private $happeningsAccessChecker;
+    /** @var ObjectProphecy */
+    private $agendaAccessChecker;
 
-    /**
-     * @var ObjectProphecy
-     */
+    /** @var ObjectProphecy */
     private $meetingPublishedAccessChecker;
 
     public function setUp()
     {
         $this->navigationBuilder             = $this->prophesize(NavigationBuilderInterface::class);
-        $this->happeningsAccessChecker       = $this->prophesize(HappeningsAccessChecker::class);
+        $this->agendaAccessChecker           = $this->prophesize(AgendaAccessChecker::class);
         $this->meetingPublishedAccessChecker = $this->prophesize(MeetingPublishedAccessChecker::class);
     }
 
@@ -57,18 +52,18 @@ class PlanningViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
         $sheet = SheetFactory::create($event, $user);
 
         $this->navigationBuilder->getRoute(Argument::any())->shouldNotBeCalled();
-        $this->happeningsAccessChecker->allowedToAccess(Argument::any())->shouldNotBeCalled();
+        $this->agendaAccessChecker->allowedToAccess(Argument::any())->shouldNotBeCalled();
         $this->meetingPublishedAccessChecker->allowedToAccess(Argument::any())->shouldNotBeCalled();
 
         $handler = new PlanningViewQueryHandler(
             $this->navigationBuilder->reveal(),
-            $this->happeningsAccessChecker->reveal(),
+            $this->agendaAccessChecker->reveal(),
             $this->meetingPublishedAccessChecker->reveal()
         );
         $result = $handler->handle(new PlanningViewQuery($sheet, $user, 'fr'));
 
         $linkView = new LinkView('navigation.links.incoming', null);
-        $expected = new CategoryView(Category::PLANNING, Category::PLANNING_ICON, [$linkView]);
+        $expected = new CategoryView(Category::PLANNING, Category::PLANNING_ICON, [$linkView], true);
 
         $this->assertEquals($expected, $result);
     }
@@ -79,15 +74,15 @@ class PlanningViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
         $user  = UserFactory::create();
         $sheet = SheetFactory::create($event, $user);
         $date  = new \DateTime('2016-10-12 10:00:00.000');
-        $event->getConfiguration()->setDates(null, $date, null);
+        $event->getConfiguration()->setDates(null, null, null, null, null, null, $date);
 
         $this->navigationBuilder->getRoute(Argument::any())->shouldNotBeCalled();
-        $this->happeningsAccessChecker->allowedToAccess($event)->shouldBeCalled()->willReturn(false);
+        $this->agendaAccessChecker->allowedToAccess($event)->shouldBeCalled()->willReturn(false);
         $this->meetingPublishedAccessChecker->allowedToAccess(Argument::any())->shouldNotBeCalled();
 
         $handler = new PlanningViewQueryHandler(
             $this->navigationBuilder->reveal(),
-            $this->happeningsAccessChecker->reveal(),
+            $this->agendaAccessChecker->reveal(),
             $this->meetingPublishedAccessChecker->reveal()
         );
         $result = $handler->handle(new PlanningViewQuery($sheet, $user, 'fr'));
@@ -98,7 +93,7 @@ class PlanningViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
             null,
             new StateButtonView(false, '12 octobre 2016')
         );
-        $expected = new CategoryView(Category::PLANNING, Category::PLANNING_ICON, [$linkView]);
+        $expected = new CategoryView(Category::PLANNING, Category::PLANNING_ICON, [$linkView], true);
 
         $this->assertEquals($expected, $result);
     }
@@ -112,15 +107,15 @@ class PlanningViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
         $sheet->getId()->shouldBeCalled()->willReturn(1);
 
         $date  = new \DateTime('2016-10-12 10:00:00.000');
-        $event->getConfiguration()->setDates(null, $date, null);
+        $event->getConfiguration()->setDates(null, null, null, null, null, null, $date);
 
         $this->navigationBuilder->getRoute('event_agenda', ['sheet' => 1])->shouldBeCalled()->willReturn('route');
-        $this->happeningsAccessChecker->allowedToAccess($event)->shouldBeCalled()->willReturn(true);
+        $this->agendaAccessChecker->allowedToAccess($event)->shouldBeCalled()->willReturn(true);
         $this->meetingPublishedAccessChecker->allowedToAccess(Argument::any())->shouldNotBeCalled();
 
         $handler = new PlanningViewQueryHandler(
             $this->navigationBuilder->reveal(),
-            $this->happeningsAccessChecker->reveal(),
+            $this->agendaAccessChecker->reveal(),
             $this->meetingPublishedAccessChecker->reveal()
         );
         $result = $handler->handle(new PlanningViewQuery($sheet->reveal(), $user, 'fr'));
@@ -131,7 +126,7 @@ class PlanningViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
             null,
             new StateButtonView(false, '12 octobre 2016')
         );
-        $expected = new CategoryView(Category::PLANNING, Category::PLANNING_ICON, [$linkView]);
+        $expected = new CategoryView(Category::PLANNING, Category::PLANNING_ICON, [$linkView], true);
 
         $this->assertEquals($expected, $result);
     }
@@ -145,12 +140,12 @@ class PlanningViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
         $event->getConfiguration()->setDates(null, null, $date);
 
         $this->navigationBuilder->getRoute(Argument::any())->shouldNotBeCalled();
-        $this->happeningsAccessChecker->allowedToAccess(Argument::any())->shouldNotBeCalled();
+        $this->agendaAccessChecker->allowedToAccess(Argument::any())->shouldNotBeCalled();
         $this->meetingPublishedAccessChecker->allowedToAccess($event)->shouldBeCalled()->willReturn(false);
 
         $handler = new PlanningViewQueryHandler(
             $this->navigationBuilder->reveal(),
-            $this->happeningsAccessChecker->reveal(),
+            $this->agendaAccessChecker->reveal(),
             $this->meetingPublishedAccessChecker->reveal()
         );
         $result = $handler->handle(new PlanningViewQuery($sheet, $user, 'fr'));
@@ -162,7 +157,12 @@ class PlanningViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
             null,
             new StateButtonView(false, '12 octobre 2016')
         );
-        $expected = new CategoryView(Category::PLANNING, Category::PLANNING_ICON, [$linkViewHappening, $linkView]);
+        $expected = new CategoryView(
+            Category::PLANNING,
+            Category::PLANNING_ICON,
+            [$linkViewHappening, $linkView],
+            true
+        );
 
         $this->assertEquals($expected, $result);
     }
@@ -179,12 +179,12 @@ class PlanningViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
         $sheet->getId()->shouldBeCalled()->willReturn(1);
 
         $this->navigationBuilder->getRoute('event_agenda', ['sheet' => 1])->shouldBeCalled()->willReturn('route');
-        $this->happeningsAccessChecker->allowedToAccess(Argument::any())->shouldNotBeCalled();
+        $this->agendaAccessChecker->allowedToAccess(Argument::any())->shouldNotBeCalled();
         $this->meetingPublishedAccessChecker->allowedToAccess($event)->shouldBeCalled()->willReturn(true);
 
         $handler = new PlanningViewQueryHandler(
             $this->navigationBuilder->reveal(),
-            $this->happeningsAccessChecker->reveal(),
+            $this->agendaAccessChecker->reveal(),
             $this->meetingPublishedAccessChecker->reveal()
         );
         $result = $handler->handle(new PlanningViewQuery($sheet->reveal(), $user, 'fr'));
@@ -196,7 +196,13 @@ class PlanningViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
             null,
             new StateButtonView(false, '12 octobre 2016')
         );
-        $expected = new CategoryView(Category::PLANNING, Category::PLANNING_ICON, [$linkViewHappening, $linkView]);
+
+        $expected = new CategoryView(
+            Category::PLANNING,
+            Category::PLANNING_ICON,
+            [$linkViewHappening, $linkView],
+            true
+        );
 
         $this->assertEquals($expected, $result);
     }

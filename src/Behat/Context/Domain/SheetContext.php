@@ -66,6 +66,25 @@ class SheetContext implements Context
     }
 
     /**
+     * @Given /^there is a sheet for this type with the title "(?P<title>[^"]+)"$/
+     *
+     * @param string|null $title
+     */
+    public function thereIsASheetForThisTypeWithThisTitle($title)
+    {
+        $event = $this->getEvent();
+
+        $type = $this->sheetContextProxy->getStorage()->get('type');
+
+        if (null === $type) {
+            throw new \LogicException('Missing Type');
+        }
+
+        $sheet = $this->sheetContextProxy->getSheetManager()->create($event, null, $type, $title);
+        $this->sheetContextProxy->getStorage()->set('sheet', $sheet);
+    }
+
+    /**
      * @Given /^there is a sheet in this group with the title "(?P<title>[^"]+)"$/
      *
      * @param string|null $title
@@ -82,6 +101,33 @@ class SheetContext implements Context
         $sheet = $this->sheetContextProxy->getSheetManager()->create($event, null, null, $title, $group);
 
         $this->sheetContextProxy->getStorage()->set('sheet', $sheet);
+    }
+
+    /**
+     * @Given /^this sheet is in catalog$/
+     */
+    public function sheetInCatalog()
+    {
+        $sheet = $this->sheetContextProxy->getStorage()->get('sheet');
+        $this->sheetContextProxy->getSheetManager()->setInCatalog($sheet);
+    }
+
+    /**
+     * @Given /^this sheet is validated$/
+     */
+    public function sheetValidated()
+    {
+        $sheet = $this->sheetContextProxy->getStorage()->get('sheet');
+        $this->sheetContextProxy->getSheetManager()->setValidated($sheet);
+    }
+
+    /**
+     * @Given /^this sheet is enabled/
+     */
+    public function sheetEnabled()
+    {
+        $sheet = $this->sheetContextProxy->getStorage()->get('sheet');
+        $this->sheetContextProxy->getSheetManager()->setEnabled($sheet);
     }
 
     /**

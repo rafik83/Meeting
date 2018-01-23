@@ -27,4 +27,14 @@ class CatalogAccessChecker extends AccessChecker
 
         return $this->datetime >= $event->getConfiguration()->getCatalogOnlineDate();
     }
+
+    /**
+     * @param Event $event
+     *
+     * @return bool
+     */
+    public function allowedToAccessExternal(Event $event)
+    {
+        return $event->isExternalCatalogEnabled();
+    }
 }

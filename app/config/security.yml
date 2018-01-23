@@ -37,13 +37,26 @@ security:
         internal:
             pattern: '^/([a-z]{2})/_internal/'
             anonymous: false
+            logout_on_user_change: true
+            provider: user_provider # unless a provider is specified explicitly, the first provider is always used
             http_basic:
                 provider: phantomjs_provider
+
+        planner:
+            pattern: '^/planner/callback'
+            host: '%admin_domain%'
+            security: false
+
+        jenkins:
+            pattern: '^/jenkins/callback'
+            host: '%admin_domain%'
+            security: false
 
         admin:
             anonymous: ~
             host: '%admin_domain%'
             provider: admin_provider
+            logout_on_user_change: true
             form_login:
                 login_path: admin_login
                 check_path: admin_login_check
@@ -64,6 +77,7 @@ security:
         main:
             anonymous: ~
             provider: user_provider
+            logout_on_user_change: true
             user_checker: security.app.user_checker
             form_login:
                 login_path: event_login_second_step
@@ -90,6 +104,8 @@ security:
         - { path: ^/(fr|en)/reset-password, role: IS_AUTHENTICATED_ANONYMOUSLY, host: '%admin_domain%' }
         - { path: ^/(fr|en)/activate-account, role: IS_AUTHENTICATED_ANONYMOUSLY, host: '%admin_domain%' }
         - { path: '^/(fr|en)/event$', role: ROLE_ALLOWED_TO_MANAGE_SHEET, host: '%admin_domain%' }
+        - { path: '^/(fr|en)/event/past', role: ROLE_ALLOWED_TO_MANAGE_SHEET, host: '%admin_domain%' }
+        - { path: '^/(fr|en)/event/archived', role: ROLE_ALLOWED_TO_MANAGE_SHEET, host: '%admin_domain%' }
         - { path: '^/(fr|en)/event/[0-9]+/sheet', role: ROLE_ALLOWED_TO_MANAGE_SHEET, host: '%admin_domain%' }
         - { path: '^/(fr|en)/event/[0-9]+/users', role: ROLE_ALLOWED_TO_MANAGE_USER, host: '%admin_domain%' }
         - { path: ^/(fr|en)/account, role: ROLE_ALLOWED_TO_ACCOUNT, host: '%admin_domain%' }

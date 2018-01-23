@@ -1,0 +1,23 @@
+<section class="object object--participant {{ 'style--' ~ item.style }} section section--list">
+    {% set label = item.label(locale, fallback) %}
+    {% if label %}
+        <header>
+            <h2>{{ label }}</h2>
+        </header>
+    {% endif %}
+
+    <div class="section__content">
+        <div class="list list--users sheet-participants-list-users">
+            {% for participant in participants.cardViews %}
+                {{ include('AdminBundle:Participant:preview.html.twig', { 'participant': participant }) }}
+
+                {% if not loop.last and loop.index == item.numberOfParticipantShown %}
+                    <div class="show-more-zone" style="display: none;">
+                {% endif %}
+                {% if loop.last and loop.index > item.numberOfParticipantShown %}
+                    </div>
+                {% endif %}
+            {% endfor %}
+        </div>
+    </div>
+</section>

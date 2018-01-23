@@ -20,8 +20,9 @@ use Proximum\Vimeet\Application\View\Dashboard\DashboardSheetView;
 use Proximum\Vimeet\Application\View\Dashboard\DashboardTransactionView;
 use Proximum\Vimeet\Application\View\Dashboard\DashboardView;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
+use PHPUnit\Framework\TestCase;
 
-class DashboardViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
+class DashboardViewQueryHandlerTest extends TestCase
 {
     public function testHandle()
     {

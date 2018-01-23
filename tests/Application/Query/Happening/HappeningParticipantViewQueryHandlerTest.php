@@ -22,8 +22,9 @@ use Proximum\Vimeet\Domain\Repository\HappeningRepositoryInterface;
 use Proximum\Vimeet\Domain\Service\SheetsGroup\GroupNameResolver;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
 use Proximum\Vimeet\Tests\Factory\SheetFactory;
+use PHPUnit\Framework\TestCase;
 
-class HappeningParticipantViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
+class HappeningParticipantViewQueryHandlerTest extends TestCase
 {
     public function testHandle()
     {
@@ -41,7 +42,7 @@ class HappeningParticipantViewQueryHandlerTest extends \PHPUnit_Framework_TestCa
         $user->getPosition()->willReturn('ceo');
 
         $sheet     = SheetFactory::create($event, $user->reveal());
-        $happening = new Happening($event, $begin, $end, $category);
+        $happening = new Happening($event, $begin, $end, $category, []);
 
         $participation = new HappeningParticipation($happening, $user->reveal());
         $happening->setParticipations([$participation]);

@@ -19,9 +19,16 @@ Proximum\Vimeet\Domain\Model\Meeting:
             type: boolean
             options:
                 default: false
+        isCreatedByParticipants:
+            type: boolean
+            options:
+                default: false
     manyToOne:
         event:
             targetEntity: Proximum\Vimeet\Domain\Model\Event
+            joinColumn:
+                nullable: false
+                onDelete: CASCADE
         request:
             targetEntity: Proximum\Vimeet\Domain\Model\Meeting\Request
             inversedBy: meeting

@@ -15,50 +15,52 @@ use Proximum\Vimeet\Domain\Model\Product;
 
 class ParticipantAndPlanning
 {
-    /**
-     * @var array
-     */
+    /** @var array */
     public $labels;
 
-    /**
-     * @var bool
-     */
+    /** @var bool */
     public $enabled;
 
-    /**
-     * @var Product|null
-     */
-    public $participant;
+    /** @var Product[] */
+    public $participants;
 
-    /**
-     * @var Product|null
-     */
+    /** @var int|null */
+    public $maxParticipant;
+
+    /** @var Product|null */
     public $planning;
 
     /**
-     * ParticipantAndPlanning constructor.
-     *
-     * @param array   $labels
-     * @param bool    $enabled
-     * @param Product $participant
-     * @param Product $planning
+     * @param array     $labels
+     * @param bool      $enabled
+     * @param int|null  $maxParticipant
+     * @param Product[] $participants
+     * @param Product   $planning
      *
      * @throws WrongTypeException
      */
-    public function __construct(array $labels, $enabled, Product $participant = null, Product $planning = null)
-    {
-        if (null !== $participant && !$participant->isParticipant()) {
-            throw new WrongTypeException($participant, Product::TYPE_PARTICIPANT);
+    public function __construct(
+        array $labels,
+        $enabled,
+        $maxParticipant,
+        array $participants = [],
+        Product $planning = null
+    ) {
+        foreach ($participants as $participant) {
+            if (null !== $participant && !$participant->isParticipant()) {
+                throw new WrongTypeException($participant, Product::TYPE_PARTICIPANT);
+            }
         }
 
         if (null !== $planning && !$planning->isPlanning()) {
             throw new WrongTypeException($planning, Product::TYPE_PLANNING);
         }
 
-        $this->labels      = $labels;
-        $this->enabled     = $enabled;
-        $this->participant = $participant;
-        $this->planning    = $planning;
+        $this->labels = $labels;
+        $this->enabled = $enabled;
+        $this->maxParticipant = $maxParticipant;
+        $this->participants = $participants;
+        $this->planning = $planning;
     }
 
     /**

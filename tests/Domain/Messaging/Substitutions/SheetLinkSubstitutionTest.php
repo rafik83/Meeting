@@ -10,12 +10,13 @@
 
 namespace Proximum\Vimeet\Tests\Domain\Messaging\Substitutions;
 
+use PHPUnit\Framework\TestCase;
 use Proximum\Vimeet\Domain\Messaging\Substitutions\SheetLinkSubstitution;
 use Proximum\Vimeet\Domain\Model\Event\EventUrlGeneratorInterface;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
 
-class SheetLinkSubstitutionTest extends \PHPUnit_Framework_TestCase
+class SheetLinkSubstitutionTest extends TestCase
 {
     public function testSubstitute()
     {

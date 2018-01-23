@@ -81,10 +81,10 @@ class Participant implements MailRecipientInterface
      */
     public function __construct(Sheet $sheet, User $user, array $data, $active)
     {
-        $this->sheet                   = $sheet;
-        $this->user                    = $user;
-        $this->data                    = $data;
-        $this->active                  = $active;
+        $this->sheet  = $sheet;
+        $this->user   = $user;
+        $this->data   = $data;
+        $this->active = $active;
     }
 
     /**

@@ -48,18 +48,34 @@ interface CategoryRepositoryInterface
     public function getCategoryViewsByEventAndUser(Event $event, User $user, $locale);
 
     /**
+     * @param Event $event
+     *
+     * @return Category[]
+     */
+    public function getCategoriesByEvent(Event $event): array;
+
+    /**
      * @param Event  $event
      * @param string $locale
      *
      * @return Category[]
      */
-    public function getCategoriesByEvent(Event $event, $locale);
+    public function getCategoriesByEventAndLocale(Event $event, string $locale): array;
 
     /**
      * @param int    $id
      * @param string $locale
      *
-     * @return CategoryView
+     * @return null|CategoryView
      */
     public function getCategoryViewById($id, $locale);
+
+    /**
+     * @param Event  $event
+     * @param string $locale
+     * @param array  $categories
+     *
+     * @return array
+     */
+    public function getCategoriesTitleByEventAndLocale(Event $event, string $locale, array $categories): array;
 }

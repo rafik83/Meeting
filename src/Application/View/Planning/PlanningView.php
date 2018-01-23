@@ -12,16 +12,24 @@ namespace Proximum\Vimeet\Application\View\Planning;
 
 class PlanningView
 {
-    /**
-     * @var array
-     */
+    /** @var DayView[] */
     public $days;
 
+    /** @var bool */
+    public $isUserMultipleSheet;
+
+    /** @var string */
+    public $eventTimeZone;
+
     /**
-     * @param array $days
+     * @param DayView[] $days
+     * @param string    $eventTimeZone
+     * @param bool      $isUserMultipleSheet
      */
-    public function __construct(array $days = [])
+    public function __construct(array $days = [], $eventTimeZone, $isUserMultipleSheet = false)
     {
         $this->days = $days;
+        $this->eventTimeZone = $eventTimeZone;
+        $this->isUserMultipleSheet = $isUserMultipleSheet;
     }
 }

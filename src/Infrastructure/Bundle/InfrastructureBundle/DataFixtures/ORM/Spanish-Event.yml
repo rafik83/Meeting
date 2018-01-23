@@ -46,6 +46,7 @@ Proximum\Vimeet\Domain\Model\Event\Configuration (local):
             - '#00398C'
         contactFirstName: "Maryse"
         contactLastName: "DURAND"
+        backgroundColor: '#00398C'
 
 Proximum\Vimeet\Domain\Model\Address (local):
     payment_address_event_spanish:
@@ -322,7 +323,6 @@ Proximum\Vimeet\Domain\Model\Package:
         event: '@event_spanish'
         title: "Package Spanish Event"
         createdAt: "<dateTimeBetween('-10days', 'now')>"
-        participant: '@product_participant_1_spanish_event'
         planning: '@product_planning_1_spanish_event'
         plansEnabled: true
         participantAndPlanningEnabled: true
@@ -355,6 +355,13 @@ Proximum\Vimeet\Domain\Model\PackagePlanRank:
         rank: 2
         package: '@package_spanish_event'
         plan: '@product_plan_2_spanish_event'
+
+Proximum\Vimeet\Domain\Model\PackageParticipantRank:
+    package_participant_1_rank_spanish_event:
+        __construct: false
+        rank: 1
+        package: '@package_spanish_event'
+        productParticipant: '@product_participant_1_spanish_event'
 
 Proximum\Vimeet\Domain\Model\PackageGroup:
     package_group_1_spanish_event:

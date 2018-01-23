@@ -19,8 +19,9 @@ use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Repository\Sheet\GroupRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
 use Prophecy\Prophecy\ObjectProphecy;
+use PHPUnit\Framework\TestCase;
 
-class HomeDispatchTest extends \PHPUnit_Framework_TestCase
+class HomeDispatchTest extends TestCase
 {
     /** @var ObjectProphecy */
     public $sheetRepository;

@@ -21,6 +21,7 @@ use Proximum\Vimeet\Domain\Model\Template\SheetTemplate;
 use Proximum\Vimeet\Domain\Model\Type;
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\View\SheetView;
+use Proximum\Vimeet\Domain\View\Spot\Import\SheetView as ImportSheetView;
 
 interface SheetRepositoryInterface
 {
@@ -72,11 +73,28 @@ interface SheetRepositoryInterface
     public function getByEvent(Event $event);
 
     /**
+     * @param Event   $event
+     * @param Sheet[] $excludedSheets
+     *
+     * @return Sheet[]
+     */
+    public function getSheetsInCatalogByEvent(Event $event, array $excludedSheets = []): array;
+
+    /**
+     * @param Event   $event
+     * @param Type[]  $types
+     * @param Sheet[] $excludedSheets
+     *
+     * @return Sheet[]
+     */
+    public function getSheetsInCatalogWithTypesByEvent(Event $event, array $types = [], array $excludedSheets = []): array;
+
+    /**
      * @param Event $event
      *
      * @return Sheet[]
      */
-    public function getSheetsInCatalogByEvent(Event $event);
+    public function getByEventWithParticipantsAndOwner(Event $event);
 
     /**
      * @param Event $event
@@ -84,6 +102,20 @@ interface SheetRepositoryInterface
      * @return Sheet[]
      */
     public function getSheetsInCatalogWithAtLeastOneAcceptedRequestByEvent(Event $event);
+
+    /**
+     * @param Sheet $sheet
+     *
+     * @return Sheet[]
+     */
+    public function getSheetsMetBySheet(Sheet $sheet): array;
+
+    /**
+     * @param Sheet $sheet
+     *
+     * @return Sheet[]
+     */
+    public function getSheetsWithRequestWithSheet(Sheet $sheet): array;
 
     /**
      * @param Type $type
@@ -110,6 +142,14 @@ interface SheetRepositoryInterface
     public function getSheetViewsByUserAndEvent($user, $event, $locale);
 
     /**
+     * @param Event $event
+     * @param int   $sheetId
+     *
+     * @return null|ImportSheetView
+     */
+    public function getSheetViewByEventAndId(Event $event, int $sheetId):? ImportSheetView;
+
+    /**
      * Get only enabled sheet by user or user's participant
      *
      * @param User  $user
@@ -118,6 +158,16 @@ interface SheetRepositoryInterface
      * @return Sheet[]
      */
     public function getSheetsByUserAndEvent(User $user, Event $event);
+
+    /**
+     * Get only enabled sheet of users on this event
+     *
+     * @param User[] $users
+     * @param Event  $event
+     *
+     * @return Sheet[]
+     */
+    public function getSheetsByUsersAndEvent(array $users, Event $event);
 
     /**
      * Get count enabled sheet by user or user's participant
@@ -170,6 +220,14 @@ interface SheetRepositoryInterface
     public function getSheetsById(array $ids);
 
     /**
+     * @param array  $ids
+     * @param string $orderBy
+     *
+     * @return Sheet[]
+     */
+    public function getSheetsByIdOrdered(array $ids, string $orderBy): array;
+
+    /**
      * @param Event $event
      * @param array $ids
      *
@@ -178,11 +236,11 @@ interface SheetRepositoryInterface
     public function getSheetsByEventAndIds(Event $event, array $ids);
 
     /**
-     * @param Event       $event
-     * @param Sheet[]     $sheets
-     * @param string|null $state
-     * @param string|null $type
-     * @param User|null   $user
+     * @param Event            $event
+     * @param Sheet[]          $sheets
+     * @param string|null      $state
+     * @param string|null      $type
+     * @param User|string|null $user
      *
      * @return Sheet[]
      */
@@ -191,17 +249,17 @@ interface SheetRepositoryInterface
         array $sheets,
         $state = null,
         $type = null,
-        User $user = null
+        $user = null
     );
 
     /**
-     * @param Event       $event
-     * @param Sheet[]     $sheets
-     * @param int         $page
-     * @param int         $limit
-     * @param string|null $state
-     * @param string|null $type
-     * @param User|null   $user
+     * @param Event            $event
+     * @param Sheet[]          $sheets
+     * @param int              $page
+     * @param int              $limit
+     * @param string|null      $state
+     * @param string|null      $type
+     * @param User|string|null $user
      *
      * @return PaginatedResult
      */
@@ -212,7 +270,7 @@ interface SheetRepositoryInterface
         $limit,
         $state = null,
         $type = null,
-        User $user = null
+        $user = null
     );
 
     /**
@@ -228,6 +286,13 @@ interface SheetRepositoryInterface
      * @return Sheet[]
      */
     public function getSheetsUnacceptedById(array $ids);
+
+    /**
+     * @param array $ids
+     *
+     * @return Sheet[]
+     */
+    public function getSheetsNotPendingById(array $ids): array;
 
     /**
      * @param User  $user
@@ -340,7 +405,15 @@ interface SheetRepositoryInterface
      *
      * @return bool
      */
-    public function hasSheetWithGroupByUserByEvent(User $user, Event $event);
+    public function hasSheetWithGroupByUserByEvent(User $user, Event $event): bool;
+
+    /**
+     * @param User  $user
+     * @param Group $group
+     *
+     * @return bool
+     */
+    public function hasSheetOutOfGroup(User $user, Group $group): bool;
 
     /**
      * @param User  $user
@@ -357,4 +430,12 @@ interface SheetRepositoryInterface
      * @return Sheet|null
      */
     public function getSheetByEventAndTitle(Event $event, $title);
+
+    /**
+     * @param Type[] $types
+     * @param string $extraDataName Sheet\ExtraData name
+     *
+     * @return Sheet[]
+     */
+    public function getByTypesAndWithoutGivenExtraData(array $types, string $extraDataName): array;
 }

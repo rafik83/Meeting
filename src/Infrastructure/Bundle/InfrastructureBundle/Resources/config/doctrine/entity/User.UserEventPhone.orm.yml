@@ -25,6 +25,10 @@ Proximum\Vimeet\Domain\Model\User\UserEventPhone:
             type: boolean
             options:
                 default: false
+        stop:
+            type: boolean
+            options:
+                default: false
     manyToOne:
         user:
             targetEntity: Proximum\Vimeet\Domain\Model\User

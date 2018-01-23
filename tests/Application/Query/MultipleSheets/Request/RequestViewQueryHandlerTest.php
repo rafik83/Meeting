@@ -19,8 +19,9 @@ use Proximum\Vimeet\Application\View\MultipleSheets\Request\RequestView;
 use Proximum\Vimeet\Domain\Model\Meeting\Request;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Sheet;
+use PHPUnit\Framework\TestCase;
 
-class RequestViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
+class RequestViewQueryHandlerTest extends TestCase
 {
     public function testHandleWithNoPreference()
     {

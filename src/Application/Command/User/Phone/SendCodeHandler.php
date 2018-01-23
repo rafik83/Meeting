@@ -124,7 +124,7 @@ class SendCodeHandler
             $locale
         );
 
-        $this->SMSSender->send(new SMS($phone, $message));
+        $this->SMSSender->send(new SMS($phone, $message, false));
     }
 
     /**

@@ -1,5 +1,5 @@
 // Responsive
-@media screen and (max-width: 1280px) {
+@media screen {
   .container-fluid { margin: 0 20px !important; }
 }
 
@@ -25,10 +25,87 @@
   .header__info { display: none; }
 }
 
+// Mobile Menu and toolbar
+body {
+  .wrapper {
+    .mobile-menu {
+      display: none;
+      position: absolute;
+      width: 100%;
+      top: 100%;
+      transition: top 0.3s;
+    }
+
+    .toolbar-mobile {
+      display: none;
+    }
+  }
+}
+
+@media screen and (max-width: 767px) {
+  .container-fluid { padding-bottom: 100px; }
+  body {
+    .wrapper {
+      .toolbar-mobile {
+        display: block;
+      }
+    }
+
+    &.menu-mobile-opened {
+      .main-content, .profile__content, .catalog-mobile-menu-summary {
+        display: none;
+      }
+
+      .wrapper {
+        .header, .toolbar-mobile {
+          display: none;
+        }
+
+        .mobile-menu {
+          top: 0;
+        }
+      }
+    }
+  }
+}
+
+// Size of button in small width mobile screen
+@media screen and (max-width: 320px){
+  .toolbar-mobile {
+    .sub-header__item {
+      a {
+        height: 40px;
+        width: 40px;
+
+        > span {
+          font-size: 20px;
+        }
+      }
+    }
+  }
+}
+
+// Size of button in medium width mobile screen
+@media screen and (min-width: 321px) {
+  .toolbar-mobile {
+    .sub-header__item {
+      a {
+        height: 50px;
+        width: 50px;
+      }
+    }
+  }
+}
+
+// mobile
 @media screen and (max-width: 435px) {
-  .wrapper { padding: 0 0 80px 0; }
+  .wrapper { padding: 0 0 40px 0; }
 
   .header {
+    &.hide-on-mobile {
+      display: none !important;
+    }
+
     position: fixed;
     top: 0;
     left: 0;
@@ -44,17 +121,17 @@
 
   .header__navigation { display: none; }
 
-  .sub-header {
+  /*.toolbar-mobile {
     position: fixed;
     bottom: 0;
     left: 0;
     right: 0;
     z-index: 10;
-    box-shadow: 0px 5px 5px 8px rgba(0,0,0,.3);
+    box-shadow: 8px 5px 5px 0 rgba(0,0,0,.3);
 
     .name { display: none; }
     .btn-lg { padding-left: 39px; }
-  }
+  }*/
 
   .main {
     > header {

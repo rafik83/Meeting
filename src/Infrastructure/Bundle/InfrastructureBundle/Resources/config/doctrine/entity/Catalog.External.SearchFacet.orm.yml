@@ -1,0 +1,25 @@
+Proximum\Vimeet\Domain\Model\Catalog\External\SearchFacet:
+    type:  entity
+    table: external_search_facet
+    id:
+        id:
+            type: integer
+            generator:
+                strategy: AUTO
+    fields:
+        enabled:
+            type: boolean
+        type:
+            type: string
+    manyToOne:
+        event:
+            targetEntity: Proximum\Vimeet\Domain\Model\Event
+            joinColumn:
+                onDelete: CASCADE
+                nullable: false
+    oneToMany:
+        translations:
+            targetEntity: Proximum\Vimeet\Domain\Model\Catalog\External\SearchFacetTranslation
+            mappedBy: searchFacet
+            indexBy: locale
+            cascade: ["persist", "remove"]

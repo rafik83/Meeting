@@ -33,12 +33,28 @@ use Proximum\Vimeet\Domain\Repository\MeetingRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\Unavailability\MassRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\UnavailabilityRepositoryInterface;
+use Proximum\Vimeet\Domain\User\Event\ExtraData\Type;
+use Proximum\Vimeet\Domain\User\Agenda\Phone\ValidationRequiredChecker;
+use Proximum\Vimeet\Infrastructure\Repository\User\Event\ExtraDataRepository;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
 use Proximum\Vimeet\Tests\Factory\ParticipantFactory;
 use Proximum\Vimeet\Tests\Factory\SheetFactory;
+use PHPUnit\Framework\TestCase;
 
-class AgendaViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
+class AgendaViewQueryHandlerTest extends TestCase
 {
+    /** @var ValidationRequiredChecker */
+    private $validationRequiredChecker;
+
+    /** @var ExtraDataRepository */
+    private $extraDataRepository;
+
+    public function setUp()
+    {
+        $this->validationRequiredChecker = $this->prophesize(ValidationRequiredChecker::class);
+        $this->extraDataRepository = $this->prophesize(ExtraDataRepository::class);
+    }
+
     public function testHandle()
     {
         $event       = EventFactory::createEvent();
@@ -54,7 +70,7 @@ class AgendaViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
         $mass     = new Mass($event, $category, 'name', $begin, $end, true);
 
         $categoryH = new Happening\Category($event, 'picto', 1, 'leftColor', 'rightColor');
-        $happening = new Happening($event, $begin, $end, $categoryH, false, 100);
+        $happening = new Happening($event, $begin, $end, $categoryH, [], false, 100);
         $happeningParticipation = new HappeningParticipation($happening, $user);
 
         $unavailability = new Unavailability($user, $event, $begin, $end);
@@ -71,15 +87,28 @@ class AgendaViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
             $happeningParticipation
         ]);
 
+        $this->validationRequiredChecker->handle($sheet, $user)->shouldBeCalled()->willReturn(true);
+        $this->extraDataRepository
+            ->getExtraDataForEventNameAndUser($event, Type::PHONE_CONFIRMATION_IGNORED, $user)
+            ->shouldBeCalled()
+            ->willReturn(new User\Event\ExtraData(
+                $user,
+                $event,
+                Type::PHONE_CONFIRMATION_IGNORED,
+                '',
+                new \DateTime()
+            ))
+        ;
+
         $unavailabilityRepository = $this->prophesize(UnavailabilityRepositoryInterface::class);
-        $unavailabilityRepository->findByParticipant($participant)->shouldBeCalled()->willReturn([$unavailability]);
+        $unavailabilityRepository->findByUserAndEvent($user, $event)->shouldBeCalled()->willReturn([$unavailability]);
 
         $massUnavailabilityRepository     = $this->prophesize(MassRepositoryInterface::class);
         $massUnavailabilityRepository->findByEvent($event, 'fr')->shouldBeCalled()->willReturn([$mass]);
         $dayViewQueryHandler              = $this->prophesize(DayViewQueryHandler::class);
-        $dayView = new DayView($begin, $end, $event->getConfiguration()->getScheduleScale(), [], [], [], []);
+        $dayView = new DayView($begin, $end, $event->getConfiguration()->getScheduleScale(), [], [], [], [], []);
         $dayViewQueryHandler
-            ->handle(new DayViewQuery($day, $sheet, $event, $participant, true, 'fr', [$happeningParticipation], [$unavailability], [$mass]))
+            ->handle(new DayViewQuery($day, $sheet, $event, $participant, $user, true, 'fr', [$happeningParticipation], [$unavailability], [$mass]))
             ->shouldBeCalled()
             ->willReturn($dayView)
         ;
@@ -110,12 +139,14 @@ class AgendaViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
             $massUnavailabilityRepository->reveal(),
             $participantHandler->reveal(),
             $meetingRepository->reveal(),
-            $meetingPublishedAccessChecker->reveal()
+            $meetingPublishedAccessChecker->reveal(),
+            $this->validationRequiredChecker->reveal(),
+            $this->extraDataRepository->reveal()
         );
         $result = $handler->handle(new AgendaViewQuery($event, $sheet, $participant, 'fr', $user));
 
         // Expected
-        $expected = new AgendaView([$dayView], $sheet, $participant, true, [new ParticipantView(1, 'fullName')]);
+        $expected = new AgendaView([$dayView], $sheet, $participant, true, [new ParticipantView(1, 'fullName')], false);
 
         $this->assertEquals($expected, $result);
     }
@@ -137,7 +168,7 @@ class AgendaViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
         $mass     = new Mass($event, $category, 'name', $begin, $end, true);
 
         $categoryH = new Happening\Category($event, 'picto', 1, 'leftColor', 'rightColor');
-        $happening = new Happening($event, $begin, $end, $categoryH, false, 100);
+        $happening = new Happening($event, $begin, $end, $categoryH, [], false, 100);
         $happeningParticipation = new HappeningParticipation($happening, $user2);
 
         $unavailability = new Unavailability($user2, $event, $begin, $end);
@@ -159,14 +190,14 @@ class AgendaViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
         ;
 
         $unavailabilityRepository = $this->prophesize(UnavailabilityRepositoryInterface::class);
-        $unavailabilityRepository->findByParticipant($participant2)->shouldBeCalled()->willReturn([$unavailability]);
+        $unavailabilityRepository->findByUserAndEvent($user2, $event)->shouldBeCalled()->willReturn([$unavailability]);
 
         $massUnavailabilityRepository     = $this->prophesize(MassRepositoryInterface::class);
         $massUnavailabilityRepository->findByEvent($event, 'fr')->shouldBeCalled()->willReturn([$mass]);
         $dayViewQueryHandler              = $this->prophesize(DayViewQueryHandler::class);
-        $dayView = new DayView($begin, $end, $event->getConfiguration()->getScheduleScale(), [], [], [], []);
+        $dayView = new DayView($begin, $end, $event->getConfiguration()->getScheduleScale(), [], [], [], [], []);
         $dayViewQueryHandler
-            ->handle(new DayViewQuery($day, $sheet, $event, $participant2, true, 'fr', [$happeningParticipation], [$unavailability], [$mass], []))
+            ->handle(new DayViewQuery($day, $sheet, $event, $participant2, $user, true, 'fr', [$happeningParticipation], [$unavailability], [$mass], []))
             ->shouldBeCalled()
             ->willReturn($dayView)
         ;
@@ -188,6 +219,13 @@ class AgendaViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
         $property->setValue($user2, 2);
         $property->setAccessible(false);
 
+        $this->validationRequiredChecker->handle($sheet, $user)->shouldBeCalled()->willReturn(true);
+        $this->extraDataRepository
+            ->getExtraDataForEventNameAndUser($event, Type::PHONE_CONFIRMATION_IGNORED, $user)
+            ->shouldBeCalled()
+            ->willReturn(null)
+        ;
+
         // Handler
         $handler = new AgendaViewQueryHandler(
             $dayRepository->reveal(),
@@ -198,12 +236,14 @@ class AgendaViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
             $massUnavailabilityRepository->reveal(),
             $participantHandler->reveal(),
             $meetingRepository->reveal(),
-            $meetingPublishedAccessChecker->reveal()
+            $meetingPublishedAccessChecker->reveal(),
+            $this->validationRequiredChecker->reveal(),
+            $this->extraDataRepository->reveal()
         );
-        $result = $handler->handle(new AgendaViewQuery($event, $sheet, $participant2, 'fr', $user2));
+        $result = $handler->handle(new AgendaViewQuery($event, $sheet, $participant2, 'fr', $user));
 
         // Expected
-        $expected = new AgendaView([$dayView], $sheet, $participant2, false, [new ParticipantView(1, 'fullName'), new ParticipantView(2, 'fullName2')]);
+        $expected = new AgendaView([$dayView], $sheet, $participant2, false, [new ParticipantView(1, 'fullName'), new ParticipantView(2, 'fullName2')], true);
 
         $this->assertEquals($expected, $result);
     }

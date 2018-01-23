@@ -1,31 +1,31 @@
 @font-face {
   font-family: 'OpenSans';
-  src: url($font-path + '/OpenSansCondensed.ttf') format('truetype');
+  src: url('../../fonts/OpenSansCondensed.ttf') format('truetype');
 }
 
 @font-face {
   font-family: 'RobotoRegular';
-  src: url($font-path + '/Roboto-Regular.ttf') format('truetype');
+  src: url('../../fonts/Roboto-Regular.ttf') format('truetype');
 }
 
 @font-face {
   font-family: 'RobotoItalic';
-  src: url($font-path + '/Roboto-Italic.ttf') format('truetype');
+  src: url('../../fonts/Roboto-Italic.ttf') format('truetype');
 }
 
 @font-face {
   font-family: 'RobotoLight';
-  src: url($font-path + '/Roboto-Light.ttf') format('truetype');
+  src: url('../../fonts/Roboto-Light.ttf') format('truetype');
 }
 
 @font-face {
   font-family: 'PictoOutline';
-  src: url($font-path + '/PictoOutline.eot');
-  src: url($font-path + '/PictoOutline.eot?#iefix') format('embedded-opentype'),
-       url($font-path + '/PictoOutline.woff2') format('woff2'),
-       url($font-path + '/PictoOutline.woff') format('woff'),
-       url($font-path + '/PictoOutline.ttf') format('truetype'),
-       url($font-path + '/PictoOutline.svg#PictoOutline') format('svg');
+  src: url('../../fonts/PictoOutline.eot');
+  src: url('../../fonts/PictoOutline.eot?#iefix') format('embedded-opentype'),
+       url('../../fonts/PictoOutline.woff2') format('woff2'),
+       url('../../fonts/PictoOutline.woff') format('woff'),
+       url('../../fonts/PictoOutline.ttf') format('truetype'),
+       url('../../fonts/PictoOutline.svg#PictoOutline') format('svg');
   font-weight: normal;
   font-style: normal;
 }

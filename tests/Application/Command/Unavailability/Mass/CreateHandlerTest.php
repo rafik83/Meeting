@@ -18,8 +18,9 @@ use Proximum\Vimeet\Domain\Model\Unavailability\Category;
 use Proximum\Vimeet\Domain\Model\Unavailability\Mass;
 use Proximum\Vimeet\Domain\Repository\Unavailability\MassRepositoryInterface;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
+use PHPUnit\Framework\TestCase;
 
-class CreateHandlerTest extends \PHPUnit_Framework_TestCase
+class CreateHandlerTest extends TestCase
 {
     public function testHandle()
     {
@@ -47,6 +48,7 @@ class CreateHandlerTest extends \PHPUnit_Framework_TestCase
 
         $jobQueue = $this->prophesize(JobQueueInterface::class);
         $jobQueue->aggregateEventUsersFullUnavailability($event)->shouldBeCalled();
+        $jobQueue->aggregateAvailableSlot($event)->shouldBeCalled();
 
         // Create
         $create               = new Create($event, null);
@@ -99,6 +101,7 @@ class CreateHandlerTest extends \PHPUnit_Framework_TestCase
 
         $jobQueue = $this->prophesize(JobQueueInterface::class);
         $jobQueue->aggregateEventUsersFullUnavailability($event)->shouldNotBeCalled();
+        $jobQueue->aggregateAvailableSlot($event)->shouldNotBeCalled();
 
         // Create
         $create               = new Create($event, null);
@@ -156,6 +159,7 @@ class CreateHandlerTest extends \PHPUnit_Framework_TestCase
 
         $jobQueue = $this->prophesize(JobQueueInterface::class);
         $jobQueue->aggregateEventUsersFullUnavailability($event)->shouldBeCalled();
+        $jobQueue->aggregateAvailableSlot($event)->shouldBeCalled();
 
         // Create
         $create               = new Create($event, null);
@@ -231,6 +235,7 @@ class CreateHandlerTest extends \PHPUnit_Framework_TestCase
 
         $jobQueue = $this->prophesize(JobQueueInterface::class);
         $jobQueue->aggregateEventUsersFullUnavailability($event)->shouldNotBeCalled();
+        $jobQueue->aggregateAvailableSlot($event)->shouldNotBeCalled();
 
         // Create
         $create               = new Create($event, null);

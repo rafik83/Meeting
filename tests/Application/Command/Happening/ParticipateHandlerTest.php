@@ -32,8 +32,9 @@ use Proximum\Vimeet\Infrastructure\Adapter\DelayedEventDispatcher;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
 use Proximum\Vimeet\Tests\Factory\ParticipantFactory;
 use Proximum\Vimeet\Tests\Factory\SheetFactory;
+use PHPUnit\Framework\TestCase;
 
-class ParticipateHandlerTest extends \PHPUnit_Framework_TestCase
+class ParticipateHandlerTest extends TestCase
 {
     public function testNotEnoughtRemainingParticipationsException()
     {
@@ -50,6 +51,7 @@ class ParticipateHandlerTest extends \PHPUnit_Framework_TestCase
             new \DateTime('2016-01-01 08:00:00'),
             new \DateTime('2016-01-01 09:00:00'),
             new Category($event, 'picto', 1, '#000000', '#000000'),
+            [],
             false,
             10
         );
@@ -92,6 +94,7 @@ class ParticipateHandlerTest extends \PHPUnit_Framework_TestCase
             new \DateTime('2016-01-01 08:00:00'),
             new \DateTime('2016-01-01 09:00:00'),
             new Category($event, 'picto', 1, '#000000', '#000000'),
+            [],
             false,
             10
         );
@@ -138,6 +141,7 @@ class ParticipateHandlerTest extends \PHPUnit_Framework_TestCase
             new \DateTime('2016-01-01 08:00:00'),
             new \DateTime('2016-01-01 09:00:00'),
             new Category($event, 'picto', 1, '#000000', '#000000'),
+            [],
             false,
             10
         );
@@ -179,6 +183,7 @@ class ParticipateHandlerTest extends \PHPUnit_Framework_TestCase
             new \DateTime('2016-01-01 08:00:00'),
             new \DateTime('2016-01-01 09:00:00'),
             new Category($event, 'picto', 1, '#000000', '#000000'),
+            [],
             false,
             10
         );
@@ -234,6 +239,7 @@ class ParticipateHandlerTest extends \PHPUnit_Framework_TestCase
             new \DateTime('2016-01-01 08:00:00'),
             new \DateTime('2016-01-01 09:00:00'),
             new Category($event, 'picto', 1, '#000000', '#000000'),
+            [],
             false,
             10
         );
@@ -303,6 +309,7 @@ class ParticipateHandlerTest extends \PHPUnit_Framework_TestCase
             new \DateTime('2016-01-01 08:00:00'),
             new \DateTime('2016-01-01 09:00:00'),
             new Category($event, 'picto', 1, '#000000', '#000000'),
+            [],
             false,
             10
         );
@@ -385,6 +392,7 @@ class ParticipateHandlerTest extends \PHPUnit_Framework_TestCase
             new \DateTime('2016-01-01 08:00:00'),
             new \DateTime('2016-01-01 09:00:00'),
             new Category($event, 'picto', 1, '#000000', '#000000'),
+            [],
             false,
             10
         );
@@ -458,6 +466,7 @@ class ParticipateHandlerTest extends \PHPUnit_Framework_TestCase
             new \DateTime('2016-01-01 08:00:00'),
             new \DateTime('2016-01-01 09:00:00'),
             new Category($event, 'picto', 1, '#000000', '#000000'),
+            [],
             true,
             10
         );
@@ -524,6 +533,7 @@ class ParticipateHandlerTest extends \PHPUnit_Framework_TestCase
             new \DateTime('2016-01-01 08:00:00'),
             new \DateTime('2016-01-01 09:00:00'),
             new Category($event, 'picto', 1, '#000000', '#000000'),
+            [],
             true,
             10
         );
@@ -598,6 +608,7 @@ class ParticipateHandlerTest extends \PHPUnit_Framework_TestCase
             new \DateTime('2016-01-01 08:00:00'),
             new \DateTime('2016-01-01 09:00:00'),
             new Category($event, 'picto', 1, '#000000', '#000000'),
+            [],
             true,
             10
         );

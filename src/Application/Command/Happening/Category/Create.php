@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2015 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -11,44 +11,11 @@
 namespace Proximum\Vimeet\Application\Command\Happening\Category;
 
 use Proximum\Vimeet\Domain\Model\Event;
-use Proximum\Vimeet\Domain\Model\Happening\Category;
 
-class Create
+class Create extends AbstractCategory
 {
-    /**
-     * @var int
-     */
-    public $rank;
-
-    /**
-     * @var Event
-     */
+    /** @var Event */
     public $event;
-
-    /**
-     * @var string
-     */
-    public $picto;
-
-    /**
-     * @var array
-     */
-    public $translations = [];
-
-    /**
-     * @var Category
-     */
-    public $category;
-
-    /**
-     * @var string
-     */
-    public $leftColor;
-
-    /**
-     * @var string
-     */
-    public $rightColor;
 
     /**
      * @param Event $event

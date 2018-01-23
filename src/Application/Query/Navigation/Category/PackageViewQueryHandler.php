@@ -98,6 +98,13 @@ class PackageViewQueryHandler
             }
         }
 
-        return new CategoryView(Category::PACKAGE, Category::PACKAGE_ICON, $linksView);
+        $linksView[] = new LinkView(
+            'navigation.links.package.terms_of_sale',
+            $this->navigationBuilder->getRoute('event_content_terms_of_sale', [
+                'sheet' => $packageQuery->sheet->getId(),
+            ])
+        );
+
+        return new CategoryView(Category::PACKAGE, Category::PACKAGE_ICON, $linksView, false);
     }
 }

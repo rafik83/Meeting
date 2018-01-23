@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Tests\Application\Command\Group;
 
+use PHPUnit\Framework\TestCase;
 use Proximum\Vimeet\Application\Command\Group\UserAvailabilitiesBuilderCache;
 use Proximum\Vimeet\Application\View\Sheet\Group\Participant\AgendaDayView;
 use Proximum\Vimeet\Application\View\Sheet\Group\Participant\SlotView;
@@ -20,7 +21,7 @@ use Proximum\Vimeet\Domain\Repository\MeetingSlotRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\ParticipantRepositoryInterface;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
 
-class UserAvailabilitiesBuilderCacheTest extends \PHPUnit_Framework_TestCase
+class UserAvailabilitiesBuilderCacheTest extends TestCase
 {
     public function testBuildAvailabilitiesByUserAndEventFromSkeleton()
     {

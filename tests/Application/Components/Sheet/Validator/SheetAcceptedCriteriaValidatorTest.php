@@ -16,8 +16,9 @@ use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\Type;
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
+use PHPUnit\Framework\TestCase;
 
-class SheetAcceptedCriteriaValidatorTest extends \PHPUnit_Framework_TestCase
+class SheetAcceptedCriteriaValidatorTest extends TestCase
 {
     public function testWithoutValidatorCriteria()
     {

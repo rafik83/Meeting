@@ -17,6 +17,8 @@ use Symfony\Component\Security\Core\Authorization\Voter\Voter;
 
 class HappeningAccessVoter extends Voter
 {
+    const PERMISSION = 'PERMISSION_HAPPENING_ACCESS';
+
     /**
      * @var HappeningsAccessChecker
      */
@@ -37,7 +39,7 @@ class HappeningAccessVoter extends Voter
      */
     protected function supports($attribute, $subject)
     {
-        return $attribute === 'PERMISSION_HAPPENING_ACCESS' && $subject instanceof Event;
+        return $attribute === self::PERMISSION && $subject instanceof Event;
     }
 
     /**

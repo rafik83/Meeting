@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Tests\Application\Command\Order;
 
+use PHPUnit\Framework\TestCase;
 use Proximum\Vimeet\Application\Command\Order\Find;
 use Proximum\Vimeet\Application\Command\Order\FindHandler;
 use Proximum\Vimeet\Application\Command\Order\FindResult;
@@ -22,7 +23,7 @@ use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Order\Numero\OrderNumeroView;
 use Proximum\Vimeet\Domain\Repository\OrderRepositoryInterface;
 
-class FindHandlerTest extends \PHPUnit_Framework_TestCase
+class FindHandlerTest extends TestCase
 {
     public function testHandleNotAllowedToFind()
     {

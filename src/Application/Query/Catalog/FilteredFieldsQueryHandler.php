@@ -1,0 +1,337 @@
+<?php
+
+/*
+ * This file is part of the Proximum Vimeet project.
+ *
+ * Copyright (C) Proximum
+ *
+ * @author Elao <contact@elao.com>
+ */
+
+namespace Proximum\Vimeet\Application\Query\Catalog;
+
+use Proximum\Vimeet\Application\Adapter\SheetSearchAdapterInterface;
+use Proximum\Vimeet\Application\View\Catalog\FilteredFieldsView;
+use Proximum\Vimeet\Domain\Catalog\SearchFields;
+use Proximum\Vimeet\Domain\Model\Event;
+use Proximum\Vimeet\Domain\View\Catalog\CategoryView;
+
+class FilteredFieldsQueryHandler
+{
+    /** @var SheetSearchAdapterInterface */
+    private $sheetSearchAdapter;
+
+    /**
+     * @param SheetSearchAdapterInterface $sheetSearchAdapter
+     */
+    public function __construct(SheetSearchAdapterInterface $sheetSearchAdapter)
+    {
+        $this->sheetSearchAdapter = $sheetSearchAdapter;
+    }
+
+    /**
+     * @param FilteredFieldsQuery $filteredFieldsQuery
+     *
+     * @return FilteredFieldsView
+     */
+    public function handle(FilteredFieldsQuery $filteredFieldsQuery): FilteredFieldsView
+    {
+        $this->filterTypeViews($filteredFieldsQuery);
+        $this->filterCategoryViews($filteredFieldsQuery);
+        $this->filterOrganizationCategoryViews($filteredFieldsQuery);
+        $this->filterPositionViews($filteredFieldsQuery);
+
+        return new FilteredFieldsView(
+            $filteredFieldsQuery->typeViews,
+            $filteredFieldsQuery->organizationCategoryViews,
+            $filteredFieldsQuery->positionViews,
+            $filteredFieldsQuery->categoryViews
+        );
+    }
+
+    /**
+     * @param Event  $event
+     * @param string $locale
+     * @param array  $filters
+     * @param array  $typeViews
+     * @param array  $availableSlotIds
+     * @param array  $sheetsToExclude
+     *
+     * @return array|null
+     */
+    private function getTypeAggregation(
+        Event $event,
+        string $locale,
+        array $filters,
+        array $typeViews,
+        array $availableSlotIds = [],
+        array $sheetsToExclude = []
+    ): ?array {
+        if (isset($filters[SearchFields::FILTER_TYPE])
+            && count($filters[SearchFields::FILTER_TYPE]) === count($typeViews)
+        ) {
+            return null;
+        }
+
+        // if type filter is used, type aggs need to be done with a ES query without type filter
+        return $this->sheetSearchAdapter->getTypeAggregations(
+            $event,
+            $locale,
+            $filters,
+            SearchFields::FILTER_TYPE,
+            [],
+            $availableSlotIds,
+            $sheetsToExclude
+        );
+    }
+
+    /**
+     * @param Event          $event
+     * @param string         $locale
+     * @param array          $filters
+     * @param CategoryView[] $categoryViews
+     * @param array          $availableSlotIds
+     * @param array          $sheetsToExclude
+     *
+     * @return array|null
+     */
+    private function getCategoryAggregation(
+        Event $event,
+        string $locale,
+        array $filters,
+        array $categoryViews,
+        array $availableSlotIds = [],
+        array $sheetsToExclude = []
+    ): ?array {
+        if (isset($filters[SearchFields::FILTER_CATEGORY])
+            && count($filters[SearchFields::FILTER_CATEGORY]) === count($categoryViews)
+        ) {
+            return null;
+        }
+
+        // if category filter is used, category aggs need to be done with a ES query category type filter
+        return $this->sheetSearchAdapter->getCategoryAggregations(
+            $event,
+            $locale,
+            $filters,
+            SearchFields::FILTER_CATEGORY,
+            [],
+            $availableSlotIds,
+            $sheetsToExclude
+        );
+    }
+
+    /**
+     * @param Event  $event
+     * @param string $locale
+     * @param array  $filters
+     *
+     * @return array|null
+     */
+    private function getOrganizationCategoryAggregation(Event $event, string $locale, array $filters): ?array
+    {
+        if (!isset($filters[SearchFields::FILTER_ORGANIZATION_CATEGORY])) {
+            return null;
+        }
+
+        // if organizationCategory filter is used,
+        // organizationCategory aggs need to be done with a ES query without organizationCategory filter
+        return $this->sheetSearchAdapter->getOrganizationCategoryAggregations(
+            $event,
+            $locale,
+            $filters,
+            SearchFields::FILTER_ORGANIZATION_CATEGORY
+        );
+    }
+
+    /**
+     * @param Event  $event
+     * @param string $locale
+     * @param array  $filters
+     *
+     * @return array|null
+     */
+    private function getPositionAggregation(Event $event, string $locale, array $filters): ?array
+    {
+        if (!isset($filters[SearchFields::FILTER_POSITION])) {
+            return null;
+        }
+
+        // if position filter is used,
+        // position aggs need to be done with a ES query without position filter
+        return $this->sheetSearchAdapter->getPositionAggregations(
+            $event,
+            $locale,
+            $filters,
+            SearchFields::FILTER_POSITION
+        );
+    }
+
+    /**
+     * @param FilteredFieldsQuery $filteredFieldsQuery
+     */
+    private function filterTypeViews(FilteredFieldsQuery $filteredFieldsQuery)
+    {
+        $typeAggregations = $this->getTypeAggregation(
+            $filteredFieldsQuery->event,
+            $filteredFieldsQuery->locale,
+            $filteredFieldsQuery->filters,
+            $filteredFieldsQuery->typeViews,
+            $filteredFieldsQuery->availableSlotIds,
+            $filteredFieldsQuery->sheetsToExclude
+        );
+
+        $aggregations = null !== $typeAggregations ? $typeAggregations : $filteredFieldsQuery->currentAggregations;
+
+        $aggregationsIndexedByKey = $this->getAggregationsIndexedByKey(
+            $aggregations,
+            SheetSearchAdapterInterface::ES_FIELD_TYPE
+        );
+
+        foreach ($filteredFieldsQuery->typeViews as $typeView) {
+            if (isset($aggregationsIndexedByKey[$typeView->id])) {
+                $typeView->count = $aggregationsIndexedByKey[$typeView->id];
+            }
+        }
+    }
+
+    /**
+     * @param FilteredFieldsQuery $filteredFieldsQuery
+     */
+    private function filterCategoryViews(FilteredFieldsQuery $filteredFieldsQuery)
+    {
+        $categoryAggregations = $this->getCategoryAggregation(
+            $filteredFieldsQuery->event,
+            $filteredFieldsQuery->locale,
+            $filteredFieldsQuery->filters,
+            $filteredFieldsQuery->categoryViews,
+            $filteredFieldsQuery->availableSlotIds,
+            $filteredFieldsQuery->sheetsToExclude
+        );
+
+        $aggregations = null !== $categoryAggregations ?
+            $categoryAggregations
+            : $filteredFieldsQuery->currentAggregations;
+
+        $aggregationsIndexedByKey = $this->getAggregationsIndexedByKey(
+            $aggregations,
+            SheetSearchAdapterInterface::ES_FIELD_CATEGORIES,
+            true
+        );
+
+        foreach ($filteredFieldsQuery->categoryViews as $categoryView) {
+            if (isset($aggregationsIndexedByKey[$categoryView->id])) {
+                $categoryView->count = $aggregationsIndexedByKey[$categoryView->id];
+            }
+        }
+    }
+
+    /**
+     * @param FilteredFieldsQuery $filteredFieldsQuery
+     */
+    private function filterOrganizationCategoryViews(FilteredFieldsQuery $filteredFieldsQuery)
+    {
+        $aggregations = $this->getOrganizationCategoryAggregation(
+            $filteredFieldsQuery->event,
+            $filteredFieldsQuery->locale,
+            $filteredFieldsQuery->filters
+        );
+
+        $aggregations = null !== $aggregations ? $aggregations : $filteredFieldsQuery->currentAggregations;
+
+        $aggregationsIndexedByKey = $this->getAggregationsIndexedByKey(
+            $aggregations,
+            SheetSearchAdapterInterface::ES_FIELD_ORGANIZATION_CATEGORY
+        );
+
+        if (empty($aggregationsIndexedByKey)) {
+            $filteredFieldsQuery->organizationCategoryViews = [];
+
+            return;
+        }
+
+        foreach ($filteredFieldsQuery->organizationCategoryViews as $index => $organizationCategoryView) {
+            // Show only filter which have result
+            if (!isset($aggregationsIndexedByKey[$organizationCategoryView->key])
+                || $aggregationsIndexedByKey[$organizationCategoryView->key] === 0
+            ) {
+                unset($filteredFieldsQuery->organizationCategoryViews[$index]);
+            }
+        }
+    }
+
+    /**
+     * @param FilteredFieldsQuery $filteredFieldsQuery
+     */
+    private function filterPositionViews(FilteredFieldsQuery $filteredFieldsQuery)
+    {
+        $aggregations = $this->getPositionAggregation(
+            $filteredFieldsQuery->event,
+            $filteredFieldsQuery->locale,
+            $filteredFieldsQuery->filters
+        );
+
+        $aggregations = null !== $aggregations ? $aggregations : $filteredFieldsQuery->currentAggregations;
+
+        $aggregationsIndexedByKey = $this->getAggregationsIndexedByKey(
+            $aggregations,
+            SheetSearchAdapterInterface::ES_FIELD_POSITION,
+            true
+        );
+
+        if (empty($aggregationsIndexedByKey)) {
+            $filteredFieldsQuery->positionViews = [];
+
+            return;
+        }
+
+        foreach ($filteredFieldsQuery->positionViews as $index => $positionView) {
+            // Show only filter which have result
+            if (!isset($aggregationsIndexedByKey[$positionView->getKey()])
+                || $aggregationsIndexedByKey[$positionView->getKey()] === 0
+            ) {
+                unset($filteredFieldsQuery->positionViews[$index]);
+            }
+        }
+    }
+
+    /**
+     * @param array  $aggregations ElasticSearch aggregations
+     * @param string $fieldName ElasticSearch field name
+     * @param bool   $subField: is aggregations is organized in subfield: $aggregations['position']['position'] = [...]
+     *                          else: $aggregations['type'] = [...]
+     *
+     * @return array
+     */
+    private function getAggregationsIndexedByKey(array $aggregations, string $fieldName, bool $subField = false): array
+    {
+        if (null === $aggregations || !isset($aggregations[$fieldName])) {
+            return [];
+        }
+
+        if (!$subField && !isset($aggregations[$fieldName][SheetSearchAdapterInterface::ES_BUCKETS])) {
+            return [];
+        }
+
+        if ($subField && (
+            !isset($aggregations[$fieldName][$fieldName])
+            || !isset($aggregations[$fieldName][$fieldName][SheetSearchAdapterInterface::ES_BUCKETS])
+        )) {
+            return [];
+        }
+
+        if ($subField) {
+            $items = $aggregations[$fieldName][$fieldName][SheetSearchAdapterInterface::ES_BUCKETS];
+        } else {
+            $items = $aggregations[$fieldName][SheetSearchAdapterInterface::ES_BUCKETS];
+        }
+
+        $aggregationsIndexedByKey = [];
+
+        foreach ($items as $item) {
+            $aggregationsIndexedByKey[$item[SheetSearchAdapterInterface::ES_KEY]] = $item[SheetSearchAdapterInterface::ES_DOC_COUNT];
+        }
+
+        return $aggregationsIndexedByKey;
+    }
+}

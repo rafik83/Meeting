@@ -87,6 +87,6 @@ class MemberSpaceViewQueryHandler
             );
         }
 
-        return new CategoryView(Category::MEMBER_SPACE, Category::MEMBER_SPACE_ICON, $linksView);
+        return new CategoryView(Category::MEMBER_SPACE, Category::MEMBER_SPACE_ICON, $linksView, false);
     }
 }

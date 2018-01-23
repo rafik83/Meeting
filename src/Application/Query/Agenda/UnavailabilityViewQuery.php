@@ -11,6 +11,7 @@
 namespace Proximum\Vimeet\Application\Query\Agenda;
 
 use Proximum\Vimeet\Domain\Model\Event;
+use Proximum\Vimeet\Domain\Model\Event\Day;
 use Proximum\Vimeet\Domain\Model\Unavailability;
 
 class UnavailabilityViewQuery
@@ -26,12 +27,19 @@ class UnavailabilityViewQuery
     public $event;
 
     /**
+     * @var Day
+     */
+    public $day;
+
+    /**
      * @param Unavailability $unavailability
      * @param Event          $event
+     * @param Day            $day
      */
-    public function __construct(Unavailability $unavailability, Event $event)
+    public function __construct(Unavailability $unavailability, Event $event, Day $day)
     {
         $this->unavailability = $unavailability;
         $this->event          = $event;
+        $this->day            = $day;
     }
 }

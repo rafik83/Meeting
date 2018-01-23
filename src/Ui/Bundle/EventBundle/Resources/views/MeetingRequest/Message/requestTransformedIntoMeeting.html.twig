@@ -1,0 +1,28 @@
+<div class="modal-header">
+    <h4 class="modal-title">
+        <i class="icon-RDV"></i> {{ 'catalog.meeting_request.proposition.placed'|trans }}
+    </h4>
+</div>
+
+<div class="modal-body">
+    {% if not error %}
+        <div class="important success">
+            {{ 'event.meeting.request.transformIntoMeeting.success'|trans({
+                '%date%': meetingDdayView.date,
+                '%time%': meetingDdayView.time,
+                '%spot%': meetingDdayView.spotName,
+                '%participants%': meetingDdayView.participants
+            }) }}
+        </div>
+    {% else %}
+        <div class="important fail">
+            {{ 'event.meeting.request.transformIntoMeeting.error'|trans }}
+        </div>
+    {% endif %}
+</div>
+
+<div class="modal-footer">
+    <button type="button" class="btn btn-gray pull-right" data-dismiss="modal">
+        <i class="icon-Retour"></i>{{ 'modal.back'|trans }}
+    </button>
+</div>

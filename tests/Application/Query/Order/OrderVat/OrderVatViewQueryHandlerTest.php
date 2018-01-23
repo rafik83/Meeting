@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Tests\Application\Query\Order\OrderVat;
 
+use PHPUnit\Framework\TestCase;
 use Proximum\Vimeet\Application\Query\Order\OrderVat\OrderVatViewQuery;
 use Proximum\Vimeet\Application\Query\Order\OrderVat\OrderVatViewQueryHandler;
 use Proximum\Vimeet\Domain\Model\Event;
@@ -18,7 +19,7 @@ use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Package\Specification\VatApplicable;
 use Proximum\Vimeet\Domain\View\OrderVatView;
 
-class OrderVatViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
+class OrderVatViewQueryHandlerTest extends TestCase
 {
     public function testHandleWithVat()
     {

@@ -14,8 +14,9 @@ use Proximum\Vimeet\Domain\Model\Package;
 use Proximum\Vimeet\Domain\Model\PackageGroup;
 use Proximum\Vimeet\Domain\Model\Product;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
+use PHPUnit\Framework\TestCase;
 
-class PackageTest extends \PHPUnit_Framework_TestCase
+class PackageTest extends TestCase
 {
     public function testSetGroups()
     {

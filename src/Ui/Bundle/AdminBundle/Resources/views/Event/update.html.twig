@@ -4,10 +4,19 @@
     [{{ event.title }}] {{ 'admin.event.update.title'|trans  }}
 {% endblock %}
 
-{% block form_title 'admin.event.update.title'|trans %}
+{% block form_title %}
+{{ 'admin.event.update.title'|trans }}
+    {% if event.duplicatedFrom is not null and is_granted('ROLE_ALLOWED_TO_ORGANIZE') %}
+        <span class="text-center label label-info">
+                {{ 'admin.event.update.origin'|trans }} {{ event.duplicatedFrom.title }}
+        </span>
+    {% endif %}
+{% endblock form_title %}
 
 {% block form_content %}
+
     {{ form_row(form.title) }}
+    {{ form_row(form.visible) }}
     {{ form_row(form.organiserName, {widget_columns: 4}) }}
     {{ form_row(form.domain) }}
     {{ form_row(form.emailTeam) }}
@@ -31,6 +40,11 @@
     {{ form_row(form.leftColor, {widget_columns: 2}) }}
     {{ form_row(form.rightColor, {widget_columns: 2}) }}
     {{ form_row(form.textColor, {widget_columns: 2}) }}
+    {{ form_row(form.backgroundColor, {widget_columns: 2}) }}
+    {{ form_row(form.backgroundImage, {widget_columns: 3}) }}
+    {% if form.isBackgroundImageToRemove is defined %}
+        {{ form_row(form.isBackgroundImageToRemove, {widget_columns: 3}) }}
+    {% endif %}
 {% endblock form_content %}
 
 {% block goback_link path('admin_event_list') %}

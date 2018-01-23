@@ -11,6 +11,7 @@
 namespace Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\EventListener;
 
 use Proximum\Vimeet\Domain\Model\Event;
+use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Route\Route;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Event\GetResponseEvent;
 
@@ -39,7 +40,7 @@ class DomainEventListener extends AbstractRedirectToEventListener
      */
     public function onKernelRequest(GetResponseEvent $getResponseEvent)
     {
-        return $this->handleRedirect($getResponseEvent);
+        $this->handleRedirect($getResponseEvent);
     }
 
     /**
@@ -49,8 +50,8 @@ class DomainEventListener extends AbstractRedirectToEventListener
     {
         // If the locale is not in event locales, redirect to the fallback locale
         if (!$event->hasLocale($locale)) {
-            if ($route === 'default_event') {
-                $route = 'event';
+            if ($route === Route::DEFAULT_EVENT) {
+                $route = Route::EVENT;
             }
 
             $getResponseEvent->setResponse($this->createRedirectResponse($request, $event, $route));

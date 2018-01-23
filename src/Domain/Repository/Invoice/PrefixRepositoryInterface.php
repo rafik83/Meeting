@@ -20,7 +20,7 @@ interface PrefixRepositoryInterface
     public function add(Prefix $prefix);
 
     /**
-     * @return Prefix[]|null
+     * @return Prefix[]
      */
     public function getAll();
 

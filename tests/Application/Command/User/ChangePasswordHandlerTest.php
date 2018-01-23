@@ -16,8 +16,9 @@ use Proximum\Vimeet\Application\Command\User\ChangePassword;
 use Proximum\Vimeet\Application\Command\User\ChangePasswordHandler;
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Repository\UserRepositoryInterface;
+use PHPUnit\Framework\TestCase;
 
-class ChangePasswordHandlerTest extends \PHPUnit_Framework_TestCase
+class ChangePasswordHandlerTest extends TestCase
 {
     public function testHandle()
     {

@@ -18,6 +18,7 @@ use Proximum\Vimeet\Application\Command\Sheet\Template\Save;
 use Proximum\Vimeet\Application\Command\Sheet\Template\Update;
 use Proximum\Vimeet\Application\Components\Sheet\Template\Tag;
 use Proximum\Vimeet\Domain\Model\Template\SheetTemplate;
+use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Security\Voter\AdminTemplateAccessVoter;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Sheet\Template\AddLocaleType;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Sheet\Template\CreateForEventType;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Sheet\Template\CreateType;
@@ -140,6 +141,7 @@ class SheetTemplateController extends Controller
     public function duplicateAction(Request $request, SheetTemplate $template)
     {
         $this->denyAccessUnlessGranted('ROLE_ALLOWED_TO_ORGANIZE');
+        $this->denyAccessUnlessGranted(AdminTemplateAccessVoter::PERMISSION_TEMPLATE_EDIT, $template);
 
         $duplicate = new Duplicate($template, new \DateTime());
         $form      = $this->createForm(DuplicateForEventType::class, $duplicate, [
@@ -174,6 +176,7 @@ class SheetTemplateController extends Controller
     public function duplicateOrganizerTemplateAction(Request $request, SheetTemplate $template)
     {
         $this->denyAccessUnlessGranted('ROLE_ALLOWED_TO_ORGANIZE');
+        $this->denyAccessUnlessGranted(AdminTemplateAccessVoter::PERMISSION_TEMPLATE_EDIT, $template);
 
         $duplicate = new Duplicate($template, new \DateTime());
 
@@ -209,10 +212,7 @@ class SheetTemplateController extends Controller
     public function builderAction(SheetTemplate $template, $locale)
     {
         $this->denyAccessUnlessGranted('ROLE_ALLOWED_TO_ORGANIZE');
-
-        if (!$this->getUser()->isSuperAdmin() && !$this->getUser()->hasEvent($template->getEvent())) {
-            throw $this->createAccessDeniedException('You are not allowed to edit this template.');
-        }
+        $this->denyAccessUnlessGranted(AdminTemplateAccessVoter::PERMISSION_TEMPLATE_EDIT, $template);
 
         if (!$template->hasLocale($locale)) {
             throw $this->createNotFoundException(sprintf('Locale "%s" does not exist on this template', $locale));
@@ -268,7 +268,7 @@ class SheetTemplateController extends Controller
             'completeness'    => $completeness,
             'nomenclatures'   => $nomenclatures,
             'products'        => $products,
-            'sheet_tags'      => Tag::getTemplateChoiceTags(),
+            'sheet_tags'      => Tag::getSheetAndGenericTags(),
             'event'           => $template->getEvent(),
         ]);
     }
@@ -282,6 +282,7 @@ class SheetTemplateController extends Controller
     public function addLocaleAction(Request $request, SheetTemplate $template)
     {
         $this->denyAccessUnlessGranted('ROLE_SUPER_ADMIN');
+        $this->denyAccessUnlessGranted(AdminTemplateAccessVoter::PERMISSION_TEMPLATE_EDIT, $template);
 
         $addLocale     = new AddLocale($template);
         $addLocaleForm = $this->createForm(AddLocaleType::class, $addLocale, [
@@ -319,10 +320,7 @@ class SheetTemplateController extends Controller
     public function saveAction(Request $request, SheetTemplate $template, $locale)
     {
         $this->denyAccessUnlessGranted('ROLE_ALLOWED_TO_ORGANIZE');
-
-        if (!$this->getUser()->isSuperAdmin() && !$this->getUser()->hasEvent($template->getEvent())) {
-            throw $this->createAccessDeniedException('You are not allowed to edit this template.');
-        }
+        $this->denyAccessUnlessGranted(AdminTemplateAccessVoter::PERMISSION_TEMPLATE_EDIT, $template);
 
         if (!$template->hasLocale($locale)) {
             return new JsonResponse(['error' => sprintf('Locale "%s" does not exist on this template', $locale)], 404);
@@ -343,6 +341,9 @@ class SheetTemplateController extends Controller
      */
     public function updateAction(Request $request, SheetTemplate $template, $locale)
     {
+        $this->denyAccessUnlessGranted('ROLE_ALLOWED_TO_ORGANIZE');
+        $this->denyAccessUnlessGranted(AdminTemplateAccessVoter::PERMISSION_TEMPLATE_EDIT, $template);
+
         $command = new Update($template);
         $form    = $this->createForm(UpdateType::class, $command, [
             'action'   => $this->generateUrl('admin_template_sheet_update', [

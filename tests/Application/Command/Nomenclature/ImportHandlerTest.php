@@ -11,6 +11,7 @@
 
 namespace Proximum\Vimeet\Tests\Application\Command\Nomenclature;
 
+use PHPUnit\Framework\TestCase;
 use Proximum\Vimeet\Application\Command\Nomenclature\Exception\MissingKeysException;
 use Proximum\Vimeet\Application\Command\Nomenclature\Import;
 use Proximum\Vimeet\Application\Command\Nomenclature\ImportHandler;
@@ -21,7 +22,7 @@ use Proximum\Vimeet\Domain\Model\Nomenclature;
 use Proximum\Vimeet\Domain\Repository\NomenclatureRepositoryInterface;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
 
-class ImportHandlerTest extends \PHPUnit_Framework_TestCase
+class ImportHandlerTest extends TestCase
 {
     public function testHandle()
     {

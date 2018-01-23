@@ -11,6 +11,7 @@
 namespace Proximum\Vimeet\Tests\Application\Command\Admin;
 
 use DateTime;
+use PHPUnit\Framework\TestCase;
 use Proximum\Vimeet\Application\Command\Admin\ForgottenPassword;
 use Proximum\Vimeet\Application\Command\Admin\ForgottenPasswordHandler;
 use Proximum\Vimeet\Application\Components\Token\AdminForgottenPasswordTokenGenerator;
@@ -23,7 +24,7 @@ use Proximum\Vimeet\Domain\Repository\Admin\ForgottenPasswordTokenRepositoryInte
 use Proximum\Vimeet\Domain\Repository\AdminRepositoryInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
-class ForgottenPasswordTokenHandlerTest extends \PHPUnit_Framework_TestCase
+class ForgottenPasswordTokenHandlerTest extends TestCase
 {
     public function testHandle()
     {

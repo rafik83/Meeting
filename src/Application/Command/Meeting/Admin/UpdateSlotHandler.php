@@ -10,6 +10,9 @@
 
 namespace Proximum\Vimeet\Application\Command\Meeting\Admin;
 
+use Proximum\Vimeet\Application\Adapter\DelayedEventDispatcherInterface;
+use Proximum\Vimeet\Application\Event\Events;
+use Proximum\Vimeet\Application\Event\Meeting\MeetingMovedEvent;
 use Proximum\Vimeet\Application\Exception\Meeting\BlockedSpotNotAvailableForThisMeetingAndSlotException;
 use Proximum\Vimeet\Application\Exception\Meeting\MeetingIsBlockedSlotException;
 use Proximum\Vimeet\Application\Exception\Meeting\NoSpotsAvailableForThisSlotAndMeetingException;
@@ -30,19 +33,25 @@ class UpdateSlotHandler
     /** @var MeetingUpdateSlotViewQueryHandler */
     private $meetingUpdateSlotViewQueryHandler;
 
+    /** @var DelayedEventDispatcherInterface */
+    private $eventDispatcher;
+
     /**
      * @param MeetingRepositoryInterface        $meetingRepository
      * @param SpotRepositoryInterface           $spotRepository
      * @param MeetingUpdateSlotViewQueryHandler $meetingUpdateSlotViewQueryHandler
+     * @param DelayedEventDispatcherInterface   $eventDispatcher
      */
     public function __construct(
         MeetingRepositoryInterface $meetingRepository,
         SpotRepositoryInterface $spotRepository,
-        MeetingUpdateSlotViewQueryHandler $meetingUpdateSlotViewQueryHandler
+        MeetingUpdateSlotViewQueryHandler $meetingUpdateSlotViewQueryHandler,
+        DelayedEventDispatcherInterface $eventDispatcher
     ) {
-        $this->meetingRepository     = $meetingRepository;
-        $this->spotRepository        = $spotRepository;
+        $this->meetingRepository                 = $meetingRepository;
+        $this->spotRepository                    = $spotRepository;
         $this->meetingUpdateSlotViewQueryHandler = $meetingUpdateSlotViewQueryHandler;
+        $this->eventDispatcher                   = $eventDispatcher;
     }
 
     /**
@@ -100,5 +109,7 @@ class UpdateSlotHandler
 
         $updateSlot->meeting->updateSlotAndSpot($updateSlot->slot, $newSpot);
         $this->meetingRepository->set($updateSlot->meeting);
+
+        $this->eventDispatcher->dispatch(Events::MEETING_MOVED, new MeetingMovedEvent($updateSlot->meeting));
     }
 }

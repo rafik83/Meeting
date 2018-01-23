@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Tests\Application\Query\Planning;
 
+use PHPUnit\Framework\TestCase;
 use Proximum\Vimeet\Application\Query\Planning\Day\AssignmentViewQuery;
 use Proximum\Vimeet\Application\Query\Planning\Day\AssignmentViewQueryHandler;
 use Proximum\Vimeet\Application\Query\Planning\Day\HappeningParticipationViewQuery;
@@ -33,12 +34,12 @@ use Proximum\Vimeet\Domain\Model\Happening;
 use Proximum\Vimeet\Domain\Model\HappeningParticipation;
 use Proximum\Vimeet\Domain\Model\Meeting;
 use Proximum\Vimeet\Domain\Model\MeetingSlot as Slot;
-use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\Unavailability;
 use Proximum\Vimeet\Domain\Model\Unavailability\MassAssignment;
+use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
 
-class DayViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
+class DayViewQueryHandlerTest extends TestCase
 {
     public function testHandle()
     {
@@ -47,7 +48,7 @@ class DayViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
         $begin = new \DateTime('2016-10-12 10:00');
         $end   = new \DateTime('2016-10-12 18:00');
         $day   = new Day($event, $begin, $end);
-        $sheet = $this->prophesize(Sheet::class);
+        $user  = $this->prophesize(User::class);
 
         $participation = $this->prophesize(HappeningParticipation::class);
         $happening = $this->prophesize(Happening::class);
@@ -79,7 +80,6 @@ class DayViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
         $meeting1->getSlot()->willReturn($slot1);
         $meeting2->getSlot()->willReturn($slot2);
 
-
         $mass1   = $this->prophesize(Unavailability\Mass::class);
         $mass2   = $this->prophesize(Unavailability\Mass::class);
         $mass1->getBegin()->willReturn(new \DateTime('2016-10-12 13:00'));
@@ -89,7 +89,7 @@ class DayViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
 
         $happenings       = [$participation->reveal()];
         $assignments      = [$assignment->reveal()];
-        $unavailabilities = [$unavailability1->reveal(), $unavailability2];
+        $unavailabilities = [$unavailability1->reveal(), $unavailability2->reveal()];
         $masses           = [$mass1->reveal(), $mass2->reveal()];
         $meetings         = [$meeting1->reveal(), $meeting2->reveal()];
 
@@ -122,11 +122,11 @@ class DayViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
             ->shouldNotBeCalled();
         $meetingHandler = $this->prophesize(MeetingViewQueryHandler::class);
         $meetingHandler
-            ->handle(new MeetingViewQuery($meeting2->reveal(), $sheet->reveal()))
+            ->handle(new MeetingViewQuery($meeting2->reveal(), $user->reveal()))
             ->shouldBeCalled()
-            ->willReturn(new MeetingView($begin, $end, 'spotRef', 'sheetTitle'));
+            ->willReturn(new MeetingView($begin, $end, 'spotRef', 'userSheetTitle', 'sheetMetTitle'));
         $meetingHandler
-            ->handle(new MeetingViewQuery($meeting1->reveal(), $sheet->reveal()))
+            ->handle(new MeetingViewQuery($meeting1->reveal(), $user->reveal()))
             ->shouldNotBeCalled();
 
         $handler = new DayViewQueryHandler(
@@ -137,7 +137,7 @@ class DayViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
             $meetingHandler->reveal()
         );
         $result = $handler->handle(new DayViewQuery(
-            $sheet->reveal(),
+            $user->reveal(),
             $day,
             $locale,
             $unavailabilities,
@@ -154,7 +154,7 @@ class DayViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
             [new UnavailabilityView($begin, $end)],
             [new MassView($begin, $end, 'title')],
             [new AssignmentView($begin, $end, 'title')],
-            [new MeetingView($begin, $end, 'spotRef', 'sheetTitle')]
+            [new MeetingView($begin, $end, 'spotRef', 'userSheetTitle', 'sheetMetTitle')]
         );
 
         $this->assertEquals($expected, $result);

@@ -17,8 +17,9 @@ use Proximum\Vimeet\Application\Query\Agenda\Admin\Spot\MeetingSlotViewQueryHand
 use Proximum\Vimeet\Application\View\Agenda\Slot\SpotMeetingSlotView;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Tests\Factory\MeetingFactory;
+use PHPUnit\Framework\TestCase;
 
-class MeetingSlotViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
+class MeetingSlotViewQueryHandlerTest extends TestCase
 {
     public function testHandle()
     {

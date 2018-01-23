@@ -24,8 +24,9 @@ use Proximum\Vimeet\Domain\Model\Type;
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Order\Merger;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
+use PHPUnit\Framework\TestCase;
 
-class PlanningViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
+class PlanningViewQueryHandlerTest extends TestCase
 {
     public function testHandle()
     {
@@ -100,7 +101,7 @@ class PlanningViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
         );
 
         $package->setPlans([$planProduct]);
-        $package->setParticipant($participantProduct);
+        $package->setParticipants([$participantProduct]);
         $package->setPlanning($planningProduct);
         $group = new PackageGroup($package, 1);
         $group->setOptions([$optionProduct]);
@@ -235,7 +236,7 @@ class PlanningViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
         );
 
         $package->setPlans([$planProduct]);
-        $package->setParticipant($participantProduct);
+        $package->setParticipants([$participantProduct]);
         $package->setPlanning($planningProduct);
         $group = new PackageGroup($package, 1);
         $group->setOptions([$optionProduct]);
@@ -370,7 +371,7 @@ class PlanningViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
         );
 
         $package->setPlans([$planProduct]);
-        $package->setParticipant($participantProduct);
+        $package->setParticipants([$participantProduct]);
         $package->setPlanning($planningProduct);
         $group = new PackageGroup($package, 1);
         $group->setOptions([$optionProduct]);
@@ -505,7 +506,7 @@ class PlanningViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
         );
 
         $package->setPlans([$planProduct]);
-        $package->setParticipant($participantProduct);
+        $package->setParticipants([$participantProduct]);
         $package->setPlanning($planningProduct);
         $group = new PackageGroup($package, 1);
         $group->setOptions([$optionProduct]);
@@ -629,7 +630,7 @@ class PlanningViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
         );
 
         $package->setPlans([$planProduct]);
-        $package->setParticipant($participantProduct);
+        $package->setParticipants([$participantProduct]);
         $package->setPlanning($planningProduct);
         $group = new PackageGroup($package, 1);
         $group->setOptions([$optionProduct]);

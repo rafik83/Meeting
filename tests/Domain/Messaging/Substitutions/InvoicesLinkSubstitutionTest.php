@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Tests\Domain\Messaging\Substitutions;
 
+use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
 use Proximum\Vimeet\Application\Components\Invoice\InvoiceUrlViewQuery;
 use Proximum\Vimeet\Application\Components\Invoice\InvoiceUrlViewQueryHandler;
@@ -22,7 +23,7 @@ use Proximum\Vimeet\Tests\Factory\SheetFactory;
 use Twig_Template;
 use Twig_TemplateWrapper;
 
-class InvoicesLinkSubstitutionTest extends \PHPUnit_Framework_TestCase
+class InvoicesLinkSubstitutionTest extends TestCase
 {
     public function testSubstitute()
     {

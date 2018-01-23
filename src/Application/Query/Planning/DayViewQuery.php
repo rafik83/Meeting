@@ -12,7 +12,7 @@ namespace Proximum\Vimeet\Application\Query\Planning;
 
 use Proximum\Vimeet\Domain\Model\Event\Day;
 use Proximum\Vimeet\Domain\Model\HappeningParticipation;
-use Proximum\Vimeet\Domain\Model\Sheet;
+use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Model\Unavailability\Mass;
 use Proximum\Vimeet\Domain\Model\Unavailability\MassAssignment;
 use Proximum\Vimeet\Domain\Model\Meeting;
@@ -20,48 +20,32 @@ use Proximum\Vimeet\Domain\Model\Unavailability;
 
 class DayViewQuery
 {
-    /**
-     * @var Mass[]
-     */
+    /** @var Mass[] */
     public $masses;
 
-    /**
-     * @var Meeting[]
-     */
+    /** @var Meeting[] */
     public $meetings;
 
-    /**
-     * @var HappeningParticipation[]
-     */
+    /** @var HappeningParticipation[] */
     public $happenings;
 
-    /**
-     * @var Unavailability[]
-     */
+    /** @var Unavailability[] */
     public $unavailabilities;
 
-    /**
-     * @var MassAssignment[]
-     */
+    /** @var MassAssignment[] */
     public $assignments;
 
-    /**
-     * @var Sheet
-     */
-    public $sheet;
+    /** @var User */
+    public $user;
 
-    /**
-     * @var Day
-     */
+    /** @var Day */
     public $day;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     public $locale;
 
     /**
-     * @param Sheet                    $sheet
+     * @param User                     $user
      * @param Day                      $day
      * @param string                   $locale
      * @param Unavailability[]         $unavailabilities
@@ -71,7 +55,7 @@ class DayViewQuery
      * @param Meeting[]                $meetings
      */
     public function __construct(
-        Sheet $sheet,
+        User $user,
         Day $day,
         $locale,
         array $unavailabilities,
@@ -80,7 +64,7 @@ class DayViewQuery
         array $assignments,
         array $meetings
     ) {
-        $this->sheet            = $sheet;
+        $this->user             = $user;
         $this->day              = $day;
         $this->locale           = $locale;
         $this->unavailabilities = $unavailabilities;

@@ -10,8 +10,10 @@
 
 namespace Proximum\Vimeet\Tests\Application\Command\Payment;
 
+use Proximum\Vimeet\Application\Adapter\QueryBusInterface;
 use Proximum\Vimeet\Application\Command\Payment\ChoiceWithDeposit;
 use Proximum\Vimeet\Application\Command\Payment\ChoiceWithDepositHandler;
+use Proximum\Vimeet\Application\Query\Payment\PaymentConditionsViewQuery;
 use Proximum\Vimeet\Domain\Cart\Cart;
 use Proximum\Vimeet\Domain\Cart\CartManager;
 use Proximum\Vimeet\Domain\Cart\Converter;
@@ -23,31 +25,36 @@ use Proximum\Vimeet\Domain\Model\Transaction;
 use Proximum\Vimeet\Domain\Model\Type;
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Payment\Mode;
+use Proximum\Vimeet\Domain\Payment\PaymentConditionsView;
 use Proximum\Vimeet\Domain\Payment\TotalToPay;
 use Proximum\Vimeet\Domain\Repository\TransactionRepositoryInterface;
 use Proximum\Vimeet\Infrastructure\Adapter\DelayedEventDispatcher;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
+use PHPUnit\Framework\TestCase;
 
-class ChoiceWithDepositHandlerTest extends \PHPUnit_Framework_TestCase
+class ChoiceWithDepositHandlerTest extends TestCase
 {
     public function testHandle()
     {
-        $datetime = new \DateTime();
+        $datetime = new \DateTime('2017-10-10 10:10:00');
 
         $event  = EventFactory::createEvent();
-        $event->getConfiguration()->updatePaymentConditions(
-            [Mode::PAYMENT_BANK_CARD],
-            true,
-            new \DateTime('10/10/2020 10:10:10'),
-            200,
-            50
-        );
         $type   = new Type($event);
         $owner  = new User('test@test.fr', '__SALT__', '__PASSWORD__', 'fr');
         $sheet  = new Sheet($event, $type, [], $owner, $datetime);
         $choice = new ChoiceWithDeposit($sheet, $owner);
         $choice->mode    = Mode::PAYMENT_BANK_CARD;
         $choice->deposit = true;
+
+        $queryBus = $this->prophesize(QueryBusInterface::class);
+        $paymentConditionsView = new PaymentConditionsView(
+            [Mode::PAYMENT_BANK_CARD],
+            true,
+            new \DateTime('2020-10-10 10:10:10'),
+            200,
+            50
+        );
+        $queryBus->handle(new PaymentConditionsViewQuery($sheet))->shouldBeCalled()->willReturn($paymentConditionsView);
 
         $plan = Product::createPlan($event, 'plan', '', 200, 20, 100);
         $plan->translate('fr', 'plan', '', '', '', '');
@@ -93,7 +100,8 @@ class ChoiceWithDepositHandlerTest extends \PHPUnit_Framework_TestCase
             $cartManager->reveal(),
             $totalToPay->reveal(),
             $eventDispatcher->reveal(),
-            $datetime
+            $datetime,
+            $queryBus->reveal()
         );
 
         $handler->handle($choice);
@@ -101,22 +109,18 @@ class ChoiceWithDepositHandlerTest extends \PHPUnit_Framework_TestCase
 
     public function testHandleWithoutDeposit()
     {
-        $datetime = new \DateTime();
+        $datetime = new \DateTime('2017-10-10 10:10:10');
 
         $event  = EventFactory::createEvent();
-        $event->getConfiguration()->updatePaymentConditions(
-            [Mode::PAYMENT_BANK_CARD],
-            true,
-            new \DateTime('10/10/2020 10:10:10'),
-            200,
-            50
-        );
         $type   = new Type($event);
         $owner  = new User('test@test.fr', '__SALT__', '__PASSWORD__', 'fr');
         $sheet  = new Sheet($event, $type, [], $owner, $datetime);
         $choice = new ChoiceWithDeposit($sheet, $owner);
         $choice->mode    = Mode::PAYMENT_BANK_CARD;
         $choice->deposit = false;
+
+        $queryBus = $this->prophesize(QueryBusInterface::class);
+        $queryBus->handle(new PaymentConditionsViewQuery($sheet))->shouldNotBeCalled()->willReturn();
 
         $plan = Product::createPlan($event, 'plan', '', 200, 20, 100);
         $plan->translate('fr', 'plan', '', '', '', '');
@@ -162,7 +166,8 @@ class ChoiceWithDepositHandlerTest extends \PHPUnit_Framework_TestCase
             $cartManager->reveal(),
             $totalToPay->reveal(),
             $eventDispatcher->reveal(),
-            $datetime
+            $datetime,
+            $queryBus->reveal()
         );
 
         $handler->handle($choice);

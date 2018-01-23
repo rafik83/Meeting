@@ -21,8 +21,9 @@ use Proximum\Vimeet\Domain\Model\Event\Day;
 use Proximum\Vimeet\Domain\Model\Spot;
 use Proximum\Vimeet\Domain\Repository\Event\DayRepositoryInterface;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
+use PHPUnit\Framework\TestCase;
 
-class AgendaSpotViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
+class AgendaSpotViewQueryHandlerTest extends TestCase
 {
     public function testHandle()
     {

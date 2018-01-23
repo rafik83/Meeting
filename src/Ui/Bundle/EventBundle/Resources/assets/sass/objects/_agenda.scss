@@ -2,6 +2,12 @@
   margin: 50px 0 0 0;
   z-index: 0;
 
+  button {
+    > i {
+      margin: 0 !important;
+    }
+  }
+
   .agenda-head,
   .agenda-foot {
     font-size: 17px;
@@ -99,7 +105,22 @@
       .details { display: block; }
     }
 
+    &.available {
+      > header {
+        background: transparent;
+
+        .content {
+          color: black;
+        }
+      }
+    }
+
     > header {
+      display: flex;
+      flex-direction: row;
+      justify-content: flex-start;
+      align-items: center;
+      align-content: center;
       min-height: 56px;
       background-color: #0093df;
       height: 100%;
@@ -107,7 +128,10 @@
 
       .content {
         display: flex;
-        flex-direction: row;
+        order: 0;
+        flex: 10 0 auto;
+        align-content: center;
+        justify-content: center;
         align-items: center;
         height: 100%;
         padding: 0 10px 0 25px;
@@ -136,9 +160,6 @@
       p {
         margin-bottom: 0;
         overflow: hidden;
-        display: -webkit-box;
-        -webkit-line-clamp: 3;
-        -webkit-box-orient: vertical;
         width: 100%;
         line-height: 30px;
       }
@@ -195,6 +216,143 @@
           }
           .title {
             display: none;
+          }
+        }
+      }
+    }
+  }
+}
+
+.video-conference {
+  .buttons-container {
+    z-index: 9999;
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+    .btn {
+      position: relative;
+      font-size: 15px;
+      line-height: 22px;
+      font-family: OpenSans, Helvetica, sans-serif;
+      text-transform: uppercase;
+      border: none;
+      border-radius: 18px;
+      transition: background .2s ease-in-out;
+      display: inline-block;
+      background-color: #fff;
+      &.screensharing {
+        margin-right: 10px;
+      }
+      &.btn-off, &.btn-off:hover, &.btn-off:focus {
+        background-color: $bg-fail-color;
+      }
+      i {
+        &.glyphicon {
+          color: #000;
+          font-family: 'Glyphicons Halflings' !important;
+          font-style: normal;
+          font-weight: normal;
+          line-height: 1;
+        }
+        &.icon-center {
+          margin: auto !important;
+        }
+      }
+    }
+  }
+
+  .start-fullscreen-button {
+    z-index: 9999;
+    position: absolute !important;
+    margin-left: auto;
+    margin-right: auto;
+    top: 10px;
+    left: 10px;
+    width: 40px;
+    height: 40px;
+    font-size: 25px;
+    > i {
+      color: #000;
+      font-family: 'Glyphicons Halflings';
+      font-style: normal;
+      font-weight: normal;
+      line-height: 1;
+    }
+  }
+
+  .video-helper {
+    background: #ffffff;
+    padding: 10px;
+    border-radius: 4px;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
+
+  .layout-container {
+    background-color: #000000;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+
+    > * {
+      transition-property: all;
+      transition-duration: 0.2s;
+    }
+
+    > div {
+      background-color: #000;
+      display: inline-block;
+    }
+
+    .subscriber-info {
+      position: absolute;
+      bottom: 0;
+      background: #000;
+      opacity: 0.8;
+      padding: 10px;
+      width: 100%;
+    }
+  }
+
+  .publisher-container {
+    width: 300px;
+    height: 200px;
+    float: right;
+    margin: 20px;
+  }
+
+  @media (max-width: 768px) {
+    .publisher-container {
+      width: 150px;
+      height: 100px;
+      margin: 10px;
+    }
+  }
+}
+
+@media (max-width: 640px) {
+  .agenda-container {
+    margin: 20px 0 0 0;
+
+    .meet {
+      > header {
+        display: inherit !important;
+        .actions {
+          max-width: 60px !important;
+        }
+
+        .content {
+          > p {
+            overflow: visible;
+            line-height: 1em !important;
+          }
+
+          > span {
+            margin-right: 1%;
           }
         }
       }

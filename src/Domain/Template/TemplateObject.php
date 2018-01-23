@@ -25,10 +25,10 @@ class TemplateObject extends AbstractChild
     /**
      * @var Product[]
      */
-    protected $buyableProducts;
+    protected $buyableProducts = [];
 
     /**
-     * @var Sheet
+     * @var null|Sheet
      */
     protected $sheet;
 
@@ -132,6 +132,22 @@ class TemplateObject extends AbstractChild
     public function getTagsWithoutSetters()
     {
         return array_diff($this->getTags(), Tag::getSetters());
+    }
+
+    /**
+     * @return bool
+     */
+    public function hasAtLeastOneSetterTag(): bool
+    {
+        $tagSetters = Tag::getSetters();
+
+        foreach ($this->getTags() as $tag) {
+            if (in_array($tag, $tagSetters, true)) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     /**
@@ -250,15 +266,15 @@ class TemplateObject extends AbstractChild
     /**
      * @return Product[]
      */
-    public function getBuyableProducts()
+    public function getBuyableProducts(): array
     {
         return $this->buyableProducts;
     }
 
     /**
-     * @param Product []
+     * @param Product[]
      */
-    public function setBuyableProducts($products)
+    public function setBuyableProducts(array $products)
     {
         $this->buyableProducts = $products;
     }

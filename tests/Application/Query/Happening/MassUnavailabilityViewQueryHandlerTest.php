@@ -15,8 +15,9 @@ use Proximum\Vimeet\Application\Query\Happening\MassUnavailabilityViewQueryHandl
 use Proximum\Vimeet\Application\View\Happening\MassUnavailabilityView;
 use Proximum\Vimeet\Domain\Model\Unavailability;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
+use PHPUnit\Framework\TestCase;
 
-class MassUnavailabilityViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
+class MassUnavailabilityViewQueryHandlerTest extends TestCase
 {
     public function testHandle()
     {
@@ -51,7 +52,8 @@ class MassUnavailabilityViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
             'picto',
             'leftColor',
             'rightColor',
-            'Europe/Paris'
+            'Europe/Paris',
+            true
         );
 
         $this->assertEquals($expected, $result);

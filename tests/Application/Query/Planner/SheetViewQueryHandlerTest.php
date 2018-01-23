@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Tests\Application\Query\Planner;
 
+use PHPUnit\Framework\TestCase;
 use Proximum\Vimeet\Application\Query\Planner\SheetViewQuery;
 use Proximum\Vimeet\Application\Query\Planner\SheetViewQueryHandler;
 use Proximum\Vimeet\Application\View\Planner\SheetView;
@@ -24,7 +25,7 @@ use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
 use Proximum\Vimeet\Tests\Factory\SheetFactory;
 
-class SheetViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
+class SheetViewQueryHandlerTest extends TestCase
 {
     public function testHandle()
     {

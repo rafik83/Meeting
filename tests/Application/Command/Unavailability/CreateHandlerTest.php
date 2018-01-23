@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Tests\Application\Command\Unavailability;
 
+use PHPUnit\Framework\TestCase;
 use Proximum\Vimeet\Application\Command\Unavailability\Create;
 use Proximum\Vimeet\Application\Command\Unavailability\CreateHandler;
 use Proximum\Vimeet\Application\Exception\Unavailability\CanNotCreateUnavailabilityException;
@@ -29,7 +30,7 @@ use Proximum\Vimeet\Tests\Factory\ParticipantFactory;
 use Proximum\Vimeet\Tests\Factory\SheetFactory;
 use Proximum\Vimeet\Tests\Factory\UserFactory;
 
-class CreateHandlerTest extends \PHPUnit_Framework_TestCase
+class CreateHandlerTest extends TestCase
 {
     /**
      * @var UnavailabilityRepositoryInterface
@@ -363,7 +364,8 @@ class CreateHandlerTest extends \PHPUnit_Framework_TestCase
             $event->getDomain(),
             $event->getOrganiserName(),
             $event->getEmailTeam(),
-            $prefix
+            $prefix,
+            $event->isVisible()
         );
         $user   = UserFactory::create();
         $sheet  = SheetFactory::create($event, $user);
@@ -414,7 +416,8 @@ class CreateHandlerTest extends \PHPUnit_Framework_TestCase
             $event->getDomain(),
             $event->getOrganiserName(),
             $event->getEmailTeam(),
-            $prefix
+            $prefix,
+            $event->isVisible()
         );
         $user   = UserFactory::create();
         $sheet  = SheetFactory::create($event, $user);
@@ -537,7 +540,8 @@ class CreateHandlerTest extends \PHPUnit_Framework_TestCase
             $event->getDomain(),
             $event->getOrganiserName(),
             $event->getEmailTeam(),
-            $prefix
+            $prefix,
+            $event->isVisible()
         );
         $user   = UserFactory::create();
         $sheet  = SheetFactory::create($event, $user);
@@ -588,7 +592,8 @@ class CreateHandlerTest extends \PHPUnit_Framework_TestCase
             $event->getDomain(),
             $event->getOrganiserName(),
             $event->getEmailTeam(),
-            $prefix
+            $prefix,
+            $event->isVisible()
         );
         $user   = UserFactory::create();
         $sheet  = SheetFactory::create($event, $user);

@@ -1,6 +1,7 @@
+{% set link = phoneValidationLink is defined and phoneValidationLink is not null ? phoneValidationLink : null %}
+
 <section class="main {% if isRequestMeetingEnabled %}catalog__sheet{% endif %}">
     <header class="sheet-header">
-
         <h1>
             <i class="icon-Document_1"></i> {{ 'sheet.title'|trans }}
         </h1>
@@ -20,6 +21,9 @@
                         'isMeetingRequestUpdateLocked': isMeetingRequestUpdateLocked|default(false),
                         'isMeetingRequestClosed': isMeetingRequestClosed|default(false),
                         'isAnsweringMeetingRequestClosed': isAnsweringMeetingRequestClosed|default(false),
+                        'isPhoneValidationRequired': isPhoneValidationRequired,
+                        'phoneValidationLink': link,
+                        'hideMeetingRequest': hideMeetingRequest|default(false),
                     }, false) }}
                 {% endif %}
             {% else %}
@@ -64,6 +68,10 @@
                 'isMeetingRequestUpdateLocked': isMeetingRequestUpdateLocked|default(false),
                 'isMeetingRequestClosed': isMeetingRequestClosed|default(false),
                 'isAnsweringMeetingRequestClosed': isAnsweringMeetingRequestClosed|default(false),
+                'isPhoneValidationRequired': isPhoneValidationRequired|default(false),
+                'phoneValidationLink': link,
+                'hideMeetingRequest': hideMeetingRequest|default(false),
+                'canAddParticipant': canAddParticipant|default(false),
             }, false) }}
         {% endfor %}
     </div>

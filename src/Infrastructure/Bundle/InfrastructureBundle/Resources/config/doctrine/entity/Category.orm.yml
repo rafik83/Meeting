@@ -6,9 +6,6 @@ Proximum\Vimeet\Domain\Model\Category:
             type: integer
             generator:
                 strategy: AUTO
-    fields:
-        filters:
-            type: json_array
     oneToMany:
         translations:
             targetEntity: Proximum\Vimeet\Domain\Model\CategoryTranslation

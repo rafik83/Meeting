@@ -47,9 +47,10 @@ class ExportQueryHandler
         );
 
         return $this->serializerAdapter->serialize($participantsSheetIdsView, 'csv', [
-            'locale'  => $exportQuery->locale,
-            'charset' => $exportQuery->charset,
-            'event'   => $exportQuery->event,
+            'locale'        => $exportQuery->locale,
+            'charset'       => $exportQuery->charset,
+            'event'         => $exportQuery->event,
+            'csv_delimiter' => ';',
         ]);
     }
 }

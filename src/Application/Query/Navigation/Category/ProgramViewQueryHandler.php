@@ -78,7 +78,7 @@ class ProgramViewQueryHandler
             $categories[$happening->getCategory()->getId()] = $happening->getCategory();
         }
 
-        usort($categories, function(HappeningCategory $previousCategory, HappeningCategory $nextCategory) {
+        usort($categories, function (HappeningCategory $previousCategory, HappeningCategory $nextCategory) {
             return strcmp($previousCategory->getRank(), $nextCategory->getRank());
         });
 
@@ -91,6 +91,6 @@ class ProgramViewQueryHandler
             );
         }
 
-        return new CategoryView(Category::PROGRAM, Category::PROGRAM_ICON, $linksView);
+        return new CategoryView(Category::PROGRAM, Category::PROGRAM_ICON, $linksView, true);
     }
 }

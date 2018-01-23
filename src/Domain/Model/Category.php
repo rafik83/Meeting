@@ -33,11 +33,6 @@ class Category implements WhoInterface
     private $types;
 
     /**
-     * @var array
-     */
-    private $filters = [];
-
-    /**
      * @var Event
      */
     private $event;
@@ -134,16 +129,6 @@ class Category implements WhoInterface
     }
 
     /**
-     * Get filters.
-     *
-     * @return array
-     */
-    public function getFilters()
-    {
-        return $this->filters;
-    }
-
-    /**
      * Get event.
      *
      * @return Event
@@ -159,5 +144,26 @@ class Category implements WhoInterface
     public function getIdentifier()
     {
         return 'category';
+    }
+
+    /**
+     * @param string $locale
+     * @param string $title
+     * @param string $description
+     *
+     * @return Category
+     */
+    public function translate(string $locale, string $title, string $description): Category
+    {
+        if ($this->translations->containsKey($locale)) {
+            $this->translations->get($locale)->update($title, $description);
+        } else {
+            $this->translations->set(
+                $locale,
+                new CategoryTranslation($this, $locale, $title, $description)
+            );
+        }
+
+        return $this;
     }
 }

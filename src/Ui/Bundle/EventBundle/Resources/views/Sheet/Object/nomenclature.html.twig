@@ -46,6 +46,8 @@
                         {% for grandchild in child.childrenSorted(locale) if grandchild.key in item.items %}
                             <li>{{ grandchild.label(locale, fallback) }}</li>
                         {% endfor %}
+                    {% else %}
+                        <p class="help">{{ item.help(locale, fallback) }}</p>
                     {% endfor %}
                 </ul>
             </div>
@@ -71,6 +73,8 @@
                                 {% for grandgrandchild in grandchild.childrenSorted(locale) if grandgrandchild.key in item.items %}
                                     <li>{{ grandgrandchild.label(locale, fallback) }}</li>
                                 {% endfor %}
+                            {% else %}
+                                <p class="help">{{ item.help(locale, fallback) }}</p>
                             {% endfor %}
                         </ul>
                     </div>

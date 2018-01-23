@@ -1,7 +1,9 @@
-var Meet = require('./_Meet');
-var Slot = require('./_Slot');
-var Planner = require('./_Planner');
-var ResizeHandler = require('./_ResizeHandler');
+var Meet = require('./_Meet'),
+    Slot = require('./_Slot'),
+    Planner = require('./_Planner'),
+    ResizeHandler = require('./_ResizeHandler'),
+    AvailableSheetsForSlot = require('./_AvailableSheetsForSlot'),
+    moment = require('moment');
 
 /**
  * Agenda
@@ -10,6 +12,8 @@ var ResizeHandler = require('./_ResizeHandler');
  */
 function Agenda(element) {
     this.element      = element;
+    this.agendaDate   = moment(this.element.querySelector('.agenda-date').getAttribute('data-date'), 'DD-MM-YY HH:mm:ss').format('MM-DD-YY');
+    this.sheetId      = this.element.getAttribute('data-sheet-id');
     this.start        = this.parseTime(this.element.getAttribute('data-beginhour'));
     this.end          = this.parseTime(this.element.getAttribute('data-endhour'));
     this.duration     = this.end - this.start;
@@ -28,14 +32,19 @@ function Agenda(element) {
     this.updateMeet  = this.updateMeet.bind(this);
 
     for (var time = this.start; time <= this.end; time += this.slotDuration) {
-        this.addSlot(time);
+        this.addSlot(time, this.agendaDate);
     }
-
-    this.setSlotHeight(this.slots[0].element.offsetHeight);
-
     Array.prototype.forEach.call(this.element.querySelectorAll('.meet'), this.addMeet);
 
     this.planner.setMeets(this.meets);
+
+    if (moment(this.agendaDate, 'MM/DD/YY').format('MM/DD/YY') === moment().format('MM/DD/YY')) {
+        [].forEach.call(this.slots, this.scrollOnSlot.bind(this));
+    }
+
+    [].forEach.call(element.querySelectorAll('.meet.available'), function(slotAvailable) {
+        AvailableSheetsForSlot(slotAvailable, slotAvailable.getAttribute('data-slot-id'));
+    });
 
     this.resize.on('resized', this.onResize);
 }
@@ -44,12 +53,14 @@ function Agenda(element) {
  * Add slot
  *
  * @param {Number} time Time in minutes
+ * @param {String} dateAgenda
  */
-Agenda.prototype.addSlot = function(time) {
-    var slot = new Slot(this, time, this.slotDuration);
+Agenda.prototype.addSlot = function(time, dateAgenda) {
+    var slot = new Slot(this, time, this.slotDuration, dateAgenda);
     this.slots.push(slot);
     this.layout.appendChild(slot.element);
     slot.on('scale', this.onSlotScale);
+    this.setSlotHeight(slot.element.offsetHeight);
 };
 
 /**
@@ -68,6 +79,30 @@ Agenda.prototype.addMeet = function(element) {
 
         if (slot.match(meet.start, meet.end)) {
             slot.addMeet(meet);
+        }
+    }
+};
+
+/**
+ * @param {Slot} slot
+ */
+Agenda.prototype.scrollOnSlot = function(slot) {
+    var now = moment();
+    var momentMidnight = now.clone().startOf('day');
+    var currentTimeInMinutesFromMidnight = now.diff(momentMidnight, 'minutes');
+
+    if (this.agendaDate === slot.dateAgenda
+        && currentTimeInMinutesFromMidnight >= slot.time
+        && currentTimeInMinutesFromMidnight <= (slot.time + slot.duration)
+        && slot.element.id ===  'm' + this.agendaDate + '-' + slot.time
+    ) {
+        window.location.hash = slot.element.id;
+
+        // If there is an element on slot open it
+        if (slot.meets.length > 0) {
+            if (slot.meets[0].element.classList.contains('has-details')) {
+                slot.meets[0].toggleOpen();
+            }
         }
     }
 };

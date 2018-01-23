@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Tests\Application\Query\Sheet;
 
+use PHPUnit\Framework\TestCase;
 use Proximum\Vimeet\Application\Query\Sheet\TemplateObjectViewQuery;
 use Proximum\Vimeet\Application\Query\Sheet\TemplateObjectViewQueryHandler;
 use Proximum\Vimeet\Application\View\Sheet\TemplateObjectView;
@@ -23,7 +24,7 @@ use Proximum\Vimeet\Tests\Factory\EventFactory;
 use Proximum\Vimeet\Tests\Factory\ProductFactory;
 use Proximum\Vimeet\Tests\Factory\SheetFactory;
 
-class TemplateObjectViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
+class TemplateObjectViewQueryHandlerTest extends TestCase
 {
     public function testHandle()
     {

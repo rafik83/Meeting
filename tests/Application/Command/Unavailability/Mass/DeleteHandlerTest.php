@@ -17,8 +17,9 @@ use Proximum\Vimeet\Domain\Model\Unavailability\Category;
 use Proximum\Vimeet\Domain\Model\Unavailability\Mass;
 use Proximum\Vimeet\Domain\Repository\Unavailability\MassRepositoryInterface;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
+use PHPUnit\Framework\TestCase;
 
-class DeleteHandlerTest extends \PHPUnit_Framework_TestCase
+class DeleteHandlerTest extends TestCase
 {
     public function testHandle()
     {

@@ -14,8 +14,9 @@ use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
 use Proximum\Vimeet\Tests\Factory\ParticipantFactory;
 use Proximum\Vimeet\Tests\Factory\UserFactory;
+use PHPUnit\Framework\TestCase;
 
-class SheetsViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
+class SheetsViewQueryHandlerTest extends TestCase
 {
     public function testHandle()
     {

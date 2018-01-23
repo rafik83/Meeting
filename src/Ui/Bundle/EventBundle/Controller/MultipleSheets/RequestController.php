@@ -31,8 +31,9 @@ class RequestController extends Controller
      *
      * @return Response
      */
-    public function listAction(Request $request, EventDomain $eventDomain, UserInterface $user)
+    public function listAction(Request $request, EventDomain $eventDomain, UserInterface $user = null)
     {
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
         $event = $eventDomain->getEvent();
 
         $sheets = $this
@@ -59,6 +60,7 @@ class RequestController extends Controller
         try {
             $sheetListView = $this->get('tactician.commandbus.query')->handle(
                 new SheetListViewQuery(
+                    $this->getUser(),
                     $sheets,
                     $request->getLocale(),
                     $request->get('page', 1),
@@ -74,6 +76,7 @@ class RequestController extends Controller
             'event'         => $event,
             'filterForm'    => $form->createView(),
             'sheetListView' => $sheetListView,
+            'isMultipleSheet' => true,
         ]);
     }
 }

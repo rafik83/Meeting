@@ -11,6 +11,7 @@
 namespace Proximum\Vimeet\Domain\View\Meeting;
 
 use Doctrine\Common\Collections\ArrayCollection;
+use Proximum\Vimeet\Domain\Model\Meeting\Request;
 
 class RequestView
 {
@@ -42,7 +43,12 @@ class RequestView
     /**
      * @var string
      */
-    public $state;
+    private $state;
+
+    /**
+     * @var bool
+     */
+    public $hasMeeting;
 
     /**
      * @var ArrayCollection
@@ -104,6 +110,7 @@ class RequestView
      * @param \DateTimeInterface $createdAt
      * @param \DateTimeInterface $stateUpdatedAt
      * @param string             $message
+     * @param bool               $hasMeeting
      */
     public function __construct(
         $id,
@@ -114,7 +121,8 @@ class RequestView
         $state,
         \DateTimeInterface $createdAt,
         \DateTimeInterface $stateUpdatedAt,
-        $message
+        $message,
+        bool $hasMeeting = false
     ) {
         $this->id               = $id;
         $this->sheetFromId      = $sheetFromId;
@@ -127,5 +135,18 @@ class RequestView
         $this->fromParticipants = new ArrayCollection();
         $this->toParticipants   = new ArrayCollection();
         $this->message          = $message;
+        $this->hasMeeting       = $hasMeeting;
+    }
+
+    /**
+     * @return string
+     */
+    public function getState(): string
+    {
+        if ($this->hasMeeting === true) {
+            return Request::STATE_PLANNED;
+        }
+
+        return $this->state;
     }
 }

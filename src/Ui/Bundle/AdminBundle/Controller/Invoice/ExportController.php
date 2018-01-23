@@ -27,26 +27,31 @@ class ExportController extends Controller
      *
      * @return Response
      */
-    public function exportAction(UserInterface $admin, Request $request)
+    public function exportAction(UserInterface $admin, Request $request): Response
     {
         $this->denyAccessUnlessGranted('ROLE_ALLOWED_TO_ORGANIZE');
 
         $export = new Export($admin);
-        $form   = $this->createForm(ExportType::class, $export, ['submit' => true])->handleRequest($request);
+        $form   = $this->createForm(ExportType::class, $export, ['submit' => true]);
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            $invoicesNormaliserView = $this->get('tactician.commandbus')->handle($export);
+        if ($form->handleRequest($request)->isSubmitted()) {
+            if ($form->isValid()) {
+                $invoicesNormaliserView = $this->get('tactician.commandbus')->handle($export);
 
-            $exportContent = $this->get('serializer')->serialize($invoicesNormaliserView, 'csv', [
-                'locale'  => $request->getLocale(),
-                'charset' => Charset::WINDOWS_1252,
-            ]);
+                $exportContent = $this->get('serializer')->serialize($invoicesNormaliserView, 'csv', [
+                    'locale'        => $request->getLocale(),
+                    'charset'       => Charset::WINDOWS_1252,
+                    'csv_delimiter' => ';',
+                ]);
 
-            return new CsvFileResponse($exportContent, "export_invoices_" . date("Y_m_d_His") . ".csv");
+                return new CsvFileResponse($exportContent, "export_invoices_" . date("Y_m_d_His") . ".csv");
+            } else {
+                $this->addFlash('error', 'flash.admin.invoice.export.failed');
+            }
         }
 
-        $this->addFlash('error', 'flash.admin.invoice.export.failed');
-
-        return $this->redirectToRoute('admin_event_list');
+        return $this->render('AdminBundle:Invoice:export.html.twig', [
+            'form' => $form->createView(),
+        ]);
     }
 }

@@ -10,12 +10,12 @@
 
 namespace Proximum\Vimeet\Tests\Application\Nomenclature\Export;
 
-
 use Proximum\Vimeet\Application\Serializer\Charset;
 use Proximum\Vimeet\Application\Nomenclature\Export\CsvExporter;
 use Proximum\Vimeet\Domain\Model\Nomenclature;
+use PHPUnit\Framework\TestCase;
 
-class CsvExporterTest extends \PHPUnit_Framework_TestCase
+class CsvExporterTest extends TestCase
 {
     public function testExport()
     {
@@ -208,6 +208,8 @@ class CsvExporterTest extends \PHPUnit_Framework_TestCase
 
         $exporter = new CsvExporter();
         $output   = '/tmp/nomenclature_' . uniqid();
-        $exporter->export($nomenclature, $output, Charset::UTF_8);
+        $result = $exporter->export($nomenclature, $output, Charset::UTF_8);
+
+        $this->assertInstanceOf(\SplFileObject::class, $result);
     }
 }

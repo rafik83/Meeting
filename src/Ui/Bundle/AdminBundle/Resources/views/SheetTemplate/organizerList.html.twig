@@ -2,14 +2,15 @@
 
 {% import 'AdminBundle::macro.html.twig' as macro %}
 
+{% block title 'admin.template.sheet.title'|trans %}
+
 {% block content %}
 
     <h1 class="page-header">{{ 'admin.template.sheet.link'|trans }}</h1>
 
     <h2>
-        Vos templates
         <button type="button" class="btn btn-primary btn-success" data-toggle="modal" data-target="#create-modal">
-            Créer un template
+            {{ 'admin.template.action.create'|trans }}
         </button>
     </h2>
 
@@ -19,7 +20,7 @@
                 <div class="modal-content">
                     <div class="modal-header">
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                        <h4 class="modal-title" id="create-modal-label">Créer un template</h4>
+                        <h4 class="modal-title" id="create-modal-label">{{ 'admin.template.action.create'|trans }}</h4>
                     </div>
                     <div class="modal-body">
                         {{ form_errors(form) }}
@@ -67,9 +68,6 @@
                 </td>
                 <td>{{ template.createdAt|localizeddate('medium', 'short', app.request.locale) }}</td>
                 <td class="text-right">
-                    <a class="btn btn-default btn-sm" href="{{ path('admin_template_sheet_preview_update', {
-                        'template': template.id
-                    }) }}">{{ 'admin.template.action.preview'|trans }}</a>
                     <div class="btn-group">
                         <a href="{{ path('admin_template_sheet_builder', {
                             'template': template.id, 'locale': template.fallback
@@ -80,6 +78,16 @@
                             <span class="caret"></span>
                         </button>
                         <ul class="dropdown-menu dropdown-menu-right">
+                            <li>
+                                <a href="{{ path('admin_template_sheet_preview_update', {
+                                    'template': template.id
+                                }) }}">{{ 'admin.template.action.preview'|trans }}</a>
+                            </li>
+                            <li>
+                                <a href="{{ path('admin_template_sheet_print_template_builder', {
+                                    'template': template.id
+                                }) }}">{{ 'admin.template.action.print'|trans }}</a>
+                            </li>
                             <li>
                                 <a href="{{ path('admin_organizer_template_sheet_duplicate', { 'template': template.id }) }}"
                                    data-toggle="modal" data-target="#duplicate-modal">
@@ -110,7 +118,33 @@
                 <td>{{ template.title }}</td>
                 <td>{{ macro.more(template.locales|locales, 3) }}</td>
                 <td class="text-right">
-                    <a href="{{ path('admin_organizer_template_sheet_duplicate', { 'template': template.id }) }}" class="btn btn-default btn-sm" data-toggle="modal" data-target="#duplicate-modal">{{ 'admin.template.action.duplicate'|trans }}</a>
+                    <div class="btn-group">
+                        <a href="{{ path('admin_template_sheet_builder', {
+                            'template': template.id, 'locale': template.fallback
+                        }) }}" class="btn btn-sm btn-default">
+                            {{ 'admin.template.action.edit'|trans }}
+                        </a>
+                        <button type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <span class="caret"></span>
+                        </button>
+                        <ul class="dropdown-menu dropdown-menu-right">
+                            <li>
+                                <a class="btn btn-default btn-sm" href="{{ path('admin_template_sheet_preview_update', {
+                                    'template': template.id
+                                }) }}">{{ 'admin.template.action.preview'|trans }}</a>
+                            </li>
+                            <li>
+                                <a href="{{ path('admin_template_sheet_print_template_builder', {
+                                    'template': template.id
+                                }) }}">{{ 'admin.template.action.print'|trans }}</a>
+                            </li>
+                            <li>
+                                <a href="{{ path('admin_organizer_template_sheet_duplicate', { 'template': template.id }) }}" data-toggle="modal" data-target="#duplicate-modal">
+                                    {{ 'admin.template.action.duplicate'|trans }}
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
                 </td>
             </tr>
         {% endfor %}

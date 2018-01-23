@@ -17,8 +17,9 @@ use Proximum\Vimeet\Application\Exception\Meeting\NotAllowedToDeleteAllMeetingsE
 use Proximum\Vimeet\Domain\KeyDates\Checker\MeetingPublishedAccessChecker;
 use Proximum\Vimeet\Domain\Repository\MeetingRepositoryInterface;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
+use PHPUnit\Framework\TestCase;
 
-class DeleteAllHandlerTest extends \PHPUnit_Framework_TestCase
+class DeleteAllHandlerTest extends TestCase
 {
     public function testHandleWithException()
     {
@@ -60,6 +61,7 @@ class DeleteAllHandlerTest extends \PHPUnit_Framework_TestCase
 
         $jobQueue = $this->prophesize(JobQueueInterface::class);
         $jobQueue->indexInCatalogSheetsByEvent($event)->shouldBeCalled();
+        $jobQueue->aggregatePhoneValidationStatus($event)->shouldBeCalled();
 
         // Handler
         $handler = new DeleteAllHandler(

@@ -26,8 +26,9 @@ use Proximum\Vimeet\Domain\Repository\Event\DayRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\Unavailability\MassRepositoryInterface;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
 use Proximum\Vimeet\Tests\Factory\SheetFactory;
+use PHPUnit\Framework\TestCase;
 
-class ProgramViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
+class ProgramViewQueryHandlerTest extends TestCase
 {
     public function testHandleException()
     {
@@ -96,6 +97,7 @@ class ProgramViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
         $dayViewQueryHandler = $this->prophesize(DayViewQueryHandler::class);
         $dayViewQueryHandler->handle(new DayViewQuery(
             $event,
+            $sheet,
             $eventDay1,
              'fr',
             null,
@@ -103,6 +105,7 @@ class ProgramViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
         ))->shouldBeCalled()->willReturn($dayView1);
         $dayViewQueryHandler->handle(new DayViewQuery(
             $event,
+            $sheet,
             $eventDay2,
             'fr',
             null,

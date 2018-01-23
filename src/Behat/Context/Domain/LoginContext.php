@@ -14,6 +14,7 @@ use Behat\MinkExtension\Context\MinkContext;
 use Behat\MinkExtension\Context\RawMinkContext;
 use Behat\Symfony2Extension\Context\KernelAwareContext;
 use Proximum\Vimeet\Behat\Context\Domain\Proxy\LoginContextProxyInterface;
+use Proximum\Vimeet\Domain\Model\Admin;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\User;
 use Symfony\Component\BrowserKit\Cookie;
@@ -60,6 +61,20 @@ class LoginContext extends RawMinkContext implements KernelAwareContext
         }
 
         $this->createLoginCookie($user, 'main');
+    }
+
+    /**
+     * @Given I am logged with this admin
+     */
+    public function iAmLoggedWithThisAdmin()
+    {
+        $admin = $this->loginContextProxy->getStorage()->get('admin');
+
+        if (!$admin instanceof Admin) {
+            throw new \InvalidArgumentException('Missing Admin');
+        }
+
+        $this->createLoginCookie($admin, 'admin');
     }
 
     /**

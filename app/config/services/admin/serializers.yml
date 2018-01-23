@@ -1,0 +1,62 @@
+services:
+    normalizer.analytic.meeting_solution.spot_filling_rate_slot_view_normalizer:
+        class: Proximum\Vimeet\Application\Serializer\Normalizer\Analytic\MeetingSolution\SpotFillingRateSlotViewNormalizer
+        tags:
+            - { name: serializer.normalizer }
+
+    normalizer.analytic.meeting_solution.spot_filling_rate_day_view_normalizer:
+        class: Proximum\Vimeet\Application\Serializer\Normalizer\Analytic\MeetingSolution\SpotFillingRateDayViewNormalizer
+        tags:
+            - { name: serializer.normalizer }
+
+    normalizer.analytic.meeting_solution.spot_satisfaction_view_normalizer:
+        class: Proximum\Vimeet\Application\Serializer\Normalizer\Analytic\MeetingSolution\SpotSatisfactionViewNormalizer
+        tags:
+            - { name: serializer.normalizer }
+
+    normalizer.analytic.meeting_solution.sheet_satisfaction_view_normalizer:
+        class: Proximum\Vimeet\Application\Serializer\Normalizer\Analytic\MeetingSolution\SheetSatisfactionViewNormalizer
+        tags:
+            - { name: serializer.normalizer }
+
+    denormalizer.analytic.meeting_solution.sheet_satisfaction_view_denormalizer:
+        class: Proximum\Vimeet\Application\Serializer\Denormalizer\Analytic\MeetingSolution\SheetSatisfactionViewDenormalizer
+        tags:
+            - { name: serializer.normalizer }
+
+    denormalizer.analytic.meeting_solution.spot_filling_rate_day_view_denormalizer:
+        class: Proximum\Vimeet\Application\Serializer\Denormalizer\Analytic\MeetingSolution\SpotFillingRateDayViewDenormalizer
+        tags:
+            - { name: serializer.normalizer }
+
+    denormalizer.analytic.meeting_solution.spot_filling_rate_slot_view_denormalizer:
+        class: Proximum\Vimeet\Application\Serializer\Denormalizer\Analytic\MeetingSolution\SpotFillingRateSlotViewDenormalizer
+        tags:
+            - { name: serializer.normalizer }
+
+    denormalizer.analytic.meeting_solution.spot_satisfaction_view_denormalizer:
+        class: Proximum\Vimeet\Application\Serializer\Denormalizer\Analytic\MeetingSolution\SpotSatisfactionViewDenormalizer
+        tags:
+            - { name: serializer.normalizer }
+
+    denormalizer.analytic.meeting_solution.spot_satisfaction_list_view_denormalizer:
+        class: Proximum\Vimeet\Application\Serializer\Denormalizer\Analytic\MeetingSolution\SpotSatisfactionListViewDenormalizer
+        tags:
+            - { name: serializer.normalizer }
+
+    denormalizer.analytic.meeting_solution.spot_filling_rate_view_denormalizer:
+        class: Proximum\Vimeet\Application\Serializer\Denormalizer\Analytic\MeetingSolution\SpotFillingRateViewDenormalizer
+        tags:
+            - { name: serializer.normalizer }
+
+    denormalizer.analytic.meeting_solution.sheet_satisfaction_list_view_denormalizer:
+        class: Proximum\Vimeet\Application\Serializer\Denormalizer\Analytic\MeetingSolution\SheetSatisfactionListViewDenormalizer
+        tags:
+            - { name: serializer.normalizer }
+
+    serializer.normalizer.meeting_request.meeting_request_list_view_normalizer:
+        class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Serializer\Normalizer\MeetingRequest\MeetingRequestListViewNormalizer
+        arguments:
+            - '@vimeet_infrastructure.adapter.translator_adapter'
+        tags:
+            - { name: serializer.normalizer }

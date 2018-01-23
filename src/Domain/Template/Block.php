@@ -132,6 +132,22 @@ class Block extends AbstractChild
     }
 
     /**
+     * @param string $tag
+     *
+     * @return null|TemplateObject
+     */
+    public function getObjectByTag(string $tag): ?TemplateObject
+    {
+        foreach ($this->getObjects() as $object) {
+            if ($object->hasTag($tag)) {
+                return $object;
+            }
+        }
+
+        return null;
+    }
+
+    /**
      * @param string|null $key
      *
      * @return TemplateObject[]
@@ -557,6 +573,27 @@ class Block extends AbstractChild
         foreach ($this->getObjects() as $object) {
             foreach ($data as $tag => $value) {
                 if ($object->hasTag($tag) && $object instanceof TemplateObject\ContentObjectInterface) {
+                    $object->setContentValue($value);
+                }
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param array $data
+     *
+     * @return Block
+     */
+    public function setTaggedDataIfEmpty(array $data)
+    {
+        foreach ($this->getObjects() as $object) {
+            foreach ($data as $tag => $value) {
+                if ($object->hasTag($tag)
+                    && $object instanceof TemplateObject\ContentObjectInterface
+                    && empty($object->getContentValue())
+                ) {
                     $object->setContentValue($value);
                 }
             }

@@ -15,7 +15,7 @@ Feature: Unavailability
       | @InfrastructureBundle/DataFixtures/ORM/ASDDays2016-Type.yml              |
       | @InfrastructureBundle/DataFixtures/ORM/ASDDays2016-Sheet.yml             |
       | @InfrastructureBundle/DataFixtures/ORM/ASDDays2016-Rule.yml              |
-    When I am logged with "user_asddays_2@proximum.com" on event "http://asddays-2016.vimeet.proximum.dev"
+    When I am logged with "user_asddays_2@proximum.com" on event "http://asddays-2016.vimeet.proximum"
     And I go to this page "/fr"
     Then I should be on this page "/fr/sheet/2"
     When I go to this page "/fr/sheet/2/agenda"
@@ -39,15 +39,15 @@ Feature: Unavailability
     And I should see "unavailability.title"
 
   Scenario: I can remove an unavailability
-    Given I am logged with "user_asddays_2@proximum.com" on event "http://asddays-2016.vimeet.proximum.dev"
+    Given I am logged with "user_asddays_2@proximum.com" on event "http://asddays-2016.vimeet.proximum"
     And I go to this page "/fr/sheet/2/agenda"
     And I should see "unavailability.title"
-    When I press "agenda.unavailability.remove"
+    When I press "cancelUnavailability"
     Then I should be on this page "/fr/sheet/2/agenda/participant/2"
     And I should not see "unavailability.title"
 
   Scenario: I can add comment to an unavailability
-    When I am logged with "user_asddays_2@proximum.com" on event "http://asddays-2016.vimeet.proximum.dev"
+    When I am logged with "user_asddays_2@proximum.com" on event "http://asddays-2016.vimeet.proximum"
     And I go to this page "/fr"
     Then I should be on this page "/fr/sheet/2"
     When I go to this page "/fr/sheet/2/agenda"
@@ -69,5 +69,5 @@ Feature: Unavailability
       | create_unavailability_message                 | "Concert de Patrick sebastien" |
     And I press "form.create_unavailability.children.submit.label"
     Then I should be on this page "/fr/sheet/2/agenda/participant/2"
-    And I should not see "unavailability.title"
+    And I should see "unavailability.title"
     And I should see "Concert de Patrick sebastien"

@@ -27,8 +27,8 @@ class MeetingResult
     /** @var SheetResult */
     public $sheetTo;
 
-    /** @var ParticipantResult[] */
-    public $participants;
+    /** @var UserResult[] */
+    public $userResults;
 
     /** @var bool */
     public $isBlockedSlot = false;
@@ -37,10 +37,10 @@ class MeetingResult
     public $isBlockedSpot = false;
 
     /**
-     * @param ParticipantResult $participantResult
+     * @param UserResult $userResult
      */
-    public function addParticipant(ParticipantResult $participantResult)
+    public function addUser(UserResult $userResult)
     {
-        $this->participants[] = $participantResult;
+        $this->userResults[] = $userResult;
     }
 }

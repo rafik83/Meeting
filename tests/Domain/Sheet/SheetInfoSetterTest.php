@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Tests\Domain\Sheet;
 
+use PHPUnit\Framework\TestCase;
 use Proximum\Vimeet\Application\Components\Sheet\Template\Tag;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Sheet\SheetInfoSetter;
@@ -17,7 +18,7 @@ use Proximum\Vimeet\Domain\Template\TemplateData;
 use Proximum\Vimeet\Domain\Template\TemplateDataFactory;
 use Proximum\Vimeet\Domain\Template\TemplateObject\EditableText;
 
-class SheetInfoSetterTest extends \PHPUnit_Framework_TestCase
+class SheetInfoSetterTest extends TestCase
 {
     public function testSetSheetTitle()
     {

@@ -10,13 +10,14 @@
 
 namespace Application\Command\Order;
 
+use PHPUnit\Framework\TestCase;
 use Proximum\Vimeet\Application\Command\Order\AddRowToGroup;
 use Proximum\Vimeet\Application\Command\Order\AddRowToGroupHandler;
 use Proximum\Vimeet\Domain\Model\Order;
 use Proximum\Vimeet\Domain\Repository\OrderRepositoryInterface;
 use Proximum\Vimeet\Infrastructure\Adapter\DelayedEventDispatcher;
 
-class AddRowToGroupTest extends \PHPUnit_Framework_TestCase
+class AddRowToGroupTest extends TestCase
 {
     public function testHandle()
     {

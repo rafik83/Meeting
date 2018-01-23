@@ -64,7 +64,7 @@ class UserEventTokenController extends Controller
 
         if ($sendCodeView->isSuccess()) {
             return $this->redirectToRoute(
-                'event_user_event_token_confirm_agenda',
+                'event_user_event_phone_validate_code_with_token',
                 ['token' => $userEventToken->getToken()]
             );
         }

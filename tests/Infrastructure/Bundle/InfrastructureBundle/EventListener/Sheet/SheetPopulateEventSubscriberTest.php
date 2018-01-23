@@ -10,12 +10,13 @@
 
 namespace Proximum\Vimeet\tests\Infrastructure\Bundle\InfrastructureBundle\EventListener\Sheet;
 
+use PHPUnit\Framework\TestCase;
 use Proximum\Vimeet\Application\Adapter\SheetIndexerInterface;
 use Proximum\Vimeet\Application\Event\Package\StepDoneEvent;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\EventListener\Sheet\SheetPopulateEventSubscriber;
 use Proximum\Vimeet\Tests\Factory\SheetFactory;
 
-class SheetPopulateEventSubscriberTest extends \PHPUnit_Framework_TestCase
+class SheetPopulateEventSubscriberTest extends TestCase
 {
     public function testOnSheetTemplateUpdated()
     {

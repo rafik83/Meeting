@@ -16,8 +16,9 @@ use Proximum\Vimeet\Application\Serializer\Charset;
 use Proximum\Vimeet\Application\View\Transaction\TransactionView;
 use Proximum\Vimeet\Infrastructure\Adapter\LocalFileStorageAdapter;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Adapter\SerializerAdapter;
+use PHPUnit\Framework\TestCase;
 
-class TransactionListViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
+class TransactionListViewQueryHandlerTest extends TestCase
 {
     public function testHandle()
     {
@@ -32,8 +33,8 @@ class TransactionListViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
         
         $serializer
             ->serialize($transactionListViewQuery, 'csv', [
-                'delimiters' => ';',
-                'charset'    => Charset::WINDOWS_1252,
+                'csv_delimiter' => ';',
+                'charset'       => Charset::WINDOWS_1252,
             ])
             ->shouldBeCalled()
             ->willReturn($data);

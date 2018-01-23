@@ -2,9 +2,15 @@
 
 {% from 'AdminBundle::macro.html.twig' import delete_button %}
 
-{% block content %}
-    <h1 class="page-header">{{ 'admin.schedule.title'|trans }}</h1>
+{% block title 'admin.schedule.title'|trans %}
 
+{% block content %}
+    <h1 class="page-header">
+        {{ 'admin.schedule.title'|trans }}
+        {% if featureEventDatesToCurrentDateEnabled %}
+            <a href="{{ path('admin_update_event_dates_to_current_date', {'event' : event.id}) }}" class="btn btn-danger">Modifier à la date actuelle</a>
+        {% endif %}
+    </h1>
     <div class="mg-bt">
         {{ form_start(form) }}
             {{ form_errors(form) }}

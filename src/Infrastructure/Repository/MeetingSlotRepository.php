@@ -195,7 +195,7 @@ class MeetingSlotRepository implements MeetingSlotRepositoryInterface
         $queryBuilder
             ->andWhere('NOT EXISTS (
                 SELECT hp.id FROM Entity:HappeningParticipation hp
-                JOIN hp.happening happening WITH happening.event = :event AND hp.user IN (:userIds)
+                JOIN hp.happening happening WITH happening.event = :event AND hp.user IN (:userIds) AND hp.disabled = false
                 WHERE
                     slot.begin >= happening.begin AND slot.begin < happening.end
                     OR slot.end > happening.begin AND slot.end <= happening.end
@@ -275,5 +275,57 @@ class MeetingSlotRepository implements MeetingSlotRepositoryInterface
         ;
 
         return $queryBuilder->getQuery()->getResult();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function findById($slotId): ?MeetingSlot
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('slot')
+            ->from(MeetingSlot::class, 'slot')
+            ->where('slot.id = :slotId')
+            ->setParameter('slotId', $slotId)
+            ->setMaxResults(1)
+        ;
+
+        return $queryBuilder->getQuery()->getOneOrNullResult();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function findByIds(array $slotIds): array
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('slot')
+            ->from(MeetingSlot::class, 'slot', 'slot.id')
+            ->where('slot.id IN (:slotIds)')
+            ->setParameter('slotIds', $slotIds)
+        ;
+
+        return $queryBuilder->getQuery()->getResult();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function hasActiveSlot(Event $event): bool
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('slot.id')
+            ->from(MeetingSlot::class, 'slot')
+            ->where('slot.event = :event AND slot.locked = false')
+            ->setParameter('event', $event)
+            ->setMaxResults(1);
+
+        return null !== $queryBuilder->getQuery()->getOneOrNullResult();
     }
 }

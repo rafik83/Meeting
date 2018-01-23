@@ -10,15 +10,17 @@
 
 namespace Proximum\Vimeet\Tests\Application\Command\Happening;
 
+use PHPUnit\Framework\TestCase;
 use Proximum\Vimeet\Application\Command\Happening\Create;
 use Proximum\Vimeet\Application\Command\Happening\CreateHandler;
 use Proximum\Vimeet\Domain\Model\Happening;
 use Proximum\Vimeet\Domain\Model\Happening\Category;
 use Proximum\Vimeet\Domain\Model\Happening\CategoryTranslation;
+use Proximum\Vimeet\Domain\Model\Type;
 use Proximum\Vimeet\Domain\Repository\HappeningRepositoryInterface;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
 
-class CreateHandlerTest extends \PHPUnit_Framework_TestCase
+class CreateHandlerTest extends TestCase
 {
     public function testHandle()
     {
@@ -34,9 +36,10 @@ class CreateHandlerTest extends \PHPUnit_Framework_TestCase
         $catTranslation2 = new CategoryTranslation($category, 'en', 'trac');
         $category->setTranslation($catTranslation1);
         $category->setTranslation($catTranslation2);
+        $type = $this->prophesize(Type::class);
 
         // Expected
-        $expectedSubEvent     = new Happening($event, $begin, $end, $category, true, 10);
+        $expectedSubEvent     = new Happening($event, $begin, $end, $category, [$type->reveal()], true, 10);
         $expectedTranslation  = new Happening\HappeningTranslation($expectedSubEvent, 'fr', 'truc', 'bidule');
         $expectedTranslation2 = new Happening\HappeningTranslation($expectedSubEvent, 'en', 'trac', 'machin');
 
@@ -54,6 +57,7 @@ class CreateHandlerTest extends \PHPUnit_Framework_TestCase
         $create->category         = $category;
         $create->end              = $end;
         $create->limitParticipant = 10;
+        $create->types            = [$type->reveal()];
         $create->translations     = [
             'fr' => [
                 'title'       => 'truc',

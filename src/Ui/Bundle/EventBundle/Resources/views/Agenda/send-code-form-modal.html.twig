@@ -1,0 +1,9 @@
+<div class="modal clear-on-hidden-modal fade{% if sendCodeForm is defined and sendCodeForm is not null %} show-modal{% endif %}" id="unavailability-modal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            {% if sendCodeForm is defined and sendCodeForm is not null %}
+                {{ include('EventBundle:User/Phone/Modal:create-form.html.twig') }}
+            {% endif %}
+        </div>
+    </div>
+</div>

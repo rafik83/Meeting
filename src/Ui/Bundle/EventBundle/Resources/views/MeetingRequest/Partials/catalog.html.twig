@@ -11,12 +11,74 @@
         {% for meetingView in meetingRequestView.meetingRequestsView %}
             {{ include('EventBundle:MeetingRequest/Partials:sheet-card.html.twig', {
                 'meetingRequestView': meetingView,
-                'sheet': sheet
+                'sheet': sheet,
             }) }}
+            {% if loop.last and (loop.index % 3 != 0) %}
+                {% for i in (loop.index % 3)..3 %}
+                    <div class="col-md-4"></div>
+                {% endfor %}
+            {% endif %}
         {% else %}
             <div class="col-md-12 important fail text-center">
                 {{ 'catalog.noResult'|trans }}
             </div>
         {% endfor %}
     </div>
+</div>
+
+
+<div class="hidden" data-meeting-request-mobile-menu="meeting-request-mobile-menu">
+    {% if searchForm.availableSlot is defined or searchForm.state is defined %}
+        <div class="catalog-mobile-menu-summary catalog-mobile-menu-container">
+            {% if searchForm.availableSlot is defined %}
+                {% for availableSlotOptionChosen in searchForm.availableSlot.children %}
+                    {% if availableSlotOptionChosen.vars.data %}
+                        <a href="#" class="catalog-mobile-menu-button btn btn-primary btn-block" data-catalog-mobile-menu-button-action="catalog-mobile-menu-button-action-available-slot-filter">
+                            <span>{{ availableSlotOptionChosen.vars.label|trans({}, availableSlotOptionChosen.vars.translation_domain) }}</span>
+                            <span class="button-count">
+                            <i class="glyphicon glyphicon-chevron-down"></i>
+                        </span>
+                        </a>
+                    {% endif %}
+                {% endfor %}
+            {% endif %}
+            {% if searchForm.state is defined %}
+                {% for stateOptionChosen in searchForm.state.children %}
+                    {% if stateOptionChosen.vars.data %}
+                        <a href="#" class="catalog-mobile-menu-button btn btn-primary btn-block" data-catalog-mobile-menu-button-action="catalog-mobile-menu-button-action-state-filter">
+                            <span>{{ stateOptionChosen.vars.label|trans({}, stateOptionChosen.vars.translation_domain) }}</span>
+                            <span class="button-count">
+                            {% if stateListsView.byState(stateOptionChosen.vars.value) is not null %}
+                                ({{ stateListsView.byState(stateOptionChosen.vars.value).count }})
+                            {% endif %}
+                            <i class="glyphicon glyphicon-chevron-down"></i>
+                        </span>
+                        </a>
+                    {% endif %}
+                {% endfor %}
+            {% endif %}
+        </div>
+        <div class="catalog-mobile-menu-container catalog-mobile-menu-filters">
+            <div class="catalog-mobile-menu-filters-list">
+                {% if searchForm.availableSlot is defined %}
+                    {{ include('EventBundle:MeetingRequest:Mobile/available_slot_filter_mobile.html.twig', {
+                        form: searchForm.availableSlot,
+                    }, false) }}
+                {% endif %}
+                {% if searchForm.state is defined %}
+                    {{ include('EventBundle:MeetingRequest:Mobile/state_filter_mobile.html.twig', {
+                        form: searchForm.state,
+                        stateListsView: stateListsView,
+                    }, false) }}
+                {% endif %}
+            </div>
+
+            <div class="catalog-mobile-menu-action">
+                <button type="button" class="catalog-close">
+                    <i class="icon-Fermer_4"></i> {{ 'navigation.close'|trans }}
+                </button>
+                <div class="clearfix"></div>
+            </div>
+        </div>
+    {% endif %}
 </div>

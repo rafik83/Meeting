@@ -19,8 +19,9 @@ use Proximum\Vimeet\Domain\Model\Messaging\Message;
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
 use Proximum\Vimeet\Tests\Factory\SheetFactory;
+use PHPUnit\Framework\TestCase;
 
-class SendHandlerTest extends \PHPUnit_Framework_TestCase
+class SendHandlerTest extends TestCase
 {
     public function testSend()
     {

@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2017 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -14,6 +14,9 @@ class ParticipantView
 {
     /** @var int */
     public $id;
+
+    /** @var int */
+    public $userId;
 
     /** @var string */
     public $fullName;
@@ -32,26 +35,26 @@ class ParticipantView
 
     /**
      * @param int        $id
+     * @param int        $userId
      * @param string     $fullName
      * @param SheetView  $sheet
      * @param SlotView[] $unavailabilityList
      * @param bool       $isVisio
      */
-    public function __construct($id, $fullName, SheetView $sheet, array $unavailabilityList, $isVisio = false)
-    {
+    public function __construct(
+        int $id,
+        int $userId,
+        string $fullName,
+        SheetView $sheet,
+        array $unavailabilityList,
+        bool $isVisio = false
+    ) {
         $this->id                 = $id;
+        $this->userId             = $userId;
         $this->fullName           = $fullName;
         $this->sheet              = $sheet;
         $this->unavailabilityList = $unavailabilityList;
-        $this->reference          = sprintf('participant%s', $id);
+        $this->reference          = sprintf('user%s', $userId);
         $this->isVisio            = $isVisio;
-    }
-
-    /**
-     * @return string
-     */
-    public function getSheetReference()
-    {
-        return $this->sheet->reference;
     }
 }

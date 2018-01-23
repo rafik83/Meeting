@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2015 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -23,13 +23,14 @@ use Proximum\Vimeet\Application\Exception\Paginator\UnavailableCurrentPageExcept
 use Proximum\Vimeet\Application\Exception\Spot\SpotNotActiveException;
 use Proximum\Vimeet\Application\Exception\Spot\SpotNotFoundException;
 use Proximum\Vimeet\Application\Query\Participant\Import\ImportMappingViewQuery;
+use Proximum\Vimeet\Application\Query\Sheet\Detail\SheetDetailQuery;
 use Proximum\Vimeet\Application\Query\Sheet\PaginatedSheetListViewQuery;
 use Proximum\Vimeet\Application\View\Participant\ImportMappingView;
 use Proximum\Vimeet\Application\View\Sheet\SheetListView;
 use Proximum\Vimeet\Domain\Model\Event;
-use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\PaginatedResult;
 use Proximum\Vimeet\Domain\Model\Participant;
+use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\Type;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Participant\ImportMappingType;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Participant\ImportType;
@@ -184,9 +185,14 @@ class SheetController extends Controller
             if ($batchForm->isValid()) {
                 $batch->assign             = $batchForm->get('assign')->isClicked();
                 $batch->accept             = $batchForm->get('accept')->isClicked();
+                $batch->pending            = $batchForm->get('pending')->isClicked();
                 $batch->validate           = $batchForm->get('validate')->isClicked();
                 $batch->draft              = $batchForm->get('validationStateDraft')->isClicked();
                 $batch->validationValidate = $batchForm->get('validationStateValidate')->isClicked();
+
+                if ($this->isGranted('ROLE_ALLOWED_TO_ORGANIZE')) {
+                    $batch->printPdf  = $batchForm->get('printPdf')->isClicked();
+                }
 
                 if ($this->isGranted('ROLE_ALLOWED_TO_ADMIN')) {
                     $batch->enable          = $batchForm->get('enable')->isClicked();
@@ -261,12 +267,15 @@ class SheetController extends Controller
 
         $locale = $event->getAvailableLocale($request->getLocale());
 
-        $details = $this->get('sheet.sheet_details_view_factory')->create($sheet, $locale);
+        $sheetDetailView = $this->get('tactician.commandbus.query')->handle(new SheetDetailQuery(
+            $sheet, $locale
+        ));
 
         $changeTypeForm = null;
 
         if ($this->get('vimeet_infrastructure.repository.type_repository')->countByEvent($event) > 1
             && $this->get('repository.invoice.invoice_repository')->isSheetInvoiced($sheet) === null
+            && $this->get('vimeet_infrastructure.repository.meeting_repository')->countMeetingsOfSheet($sheet) === 0
         ) {
             $changeType = new ChangeType($sheet, $sheet->getType(), $this->getUser(), $locale);
 
@@ -315,7 +324,7 @@ class SheetController extends Controller
             'event'              => $event,
             'sheet'              => $sheet,
             'sheetTypeTitle'     => $sheet->getType()->getTitle($locale),
-            'details'            => $details,
+            'details'            => $sheetDetailView,
             'addCommentForm'     => $addCommentForm->createView(),
             'changeTypeForm'     => $changeTypeForm === null ? null : $changeTypeForm->createView(),
             'impersonationToken' => $impersonationToken,
@@ -416,31 +425,35 @@ class SheetController extends Controller
         $this->checkAccess($event);
         $this->denyAccessUnlessGranted('PERMISSION_PARTICIPANT_IMPORT_ACCESS');
 
-        $availableLocale = $event->getAvailableLocale($request->getLocale());
+        $locale = $event->getAvailableLocale($request->getLocale());
 
-        $query = new ImportMappingViewQuery($type, $availableLocale);
+        $importMappingViewQuery = new ImportMappingViewQuery($type, $locale);
 
-        /** @var ImportMappingView $importMappingView */
-        $importMappingView = $this->get('tactician.commandbus.query')->handle($query);
+        try {
+            /** @var ImportMappingView $importMappingView */
+            $importMappingView = $this->get('tactician.commandbus.query')->handle($importMappingViewQuery);
+        } catch(\Exception $exception) {
+            $this->addFlash('error', 'flash.admin.sheet.participant.import.error');
 
-        $command = new ImportMapping(
+            return $this->redirectToRoute('admin_sheet_import', ['event' => $event->getId()]);
+        }
+
+        $importMapping = new ImportMapping(
             $event,
             $type,
             $this->getUser(),
-            $availableLocale,
-            $importMappingView->fieldHeaders,
-            $importMappingView->registrationHeaders
+            $locale,
+            $importMappingView
         );
 
-        $form = $this->createForm(ImportMappingType::class, $command, [
-            'locale'              => $availableLocale,
-            'registrationHeaders' => $importMappingView->registrationHeaders,
-            'csvHeaders'          => $importMappingView->fieldHeaders,
-            'submit'              => true,
+        $form = $this->createForm(ImportMappingType::class, $importMapping, [
+            'locale'            => $locale,
+            'importMappingView' => $importMappingView,
+            'submit'            => true,
         ]);
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
-            $this->get('tactician.commandbus')->handle($command);
+            $this->get('tactician.commandbus')->handle($importMapping);
 
             return $this->redirectToRoute('admin_sheet_import_result', [
                 'event' => $event->getId(),

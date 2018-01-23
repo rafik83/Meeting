@@ -10,10 +10,12 @@
 
 namespace Proximum\Vimeet\Tests\Application\Command\Participant;
 
+use PHPUnit\Framework\TestCase;
 use Proximum\Vimeet\Application\Command\Participant\Remove;
 use Proximum\Vimeet\Application\Command\Participant\RemoveHandler;
 use Proximum\Vimeet\Application\Command\Participant\RemoveResult;
 use Proximum\Vimeet\Application\Event\Events;
+use Proximum\Vimeet\Application\Event\Participant\ParticipantRemovedEvent;
 use Proximum\Vimeet\Application\Event\Sheet\SheetUpdatedEvent;
 use Proximum\Vimeet\Application\Exception\Participant\CanNotRemoveAllParticipantsException;
 use Proximum\Vimeet\Domain\Cart\CartManager;
@@ -27,7 +29,7 @@ use Proximum\Vimeet\Domain\Template\ParticipantInfoGuesser;
 use Proximum\Vimeet\Infrastructure\Adapter\DelayedEventDispatcher;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
 
-class RemoveHandlerTest extends \PHPUnit_Framework_TestCase
+class RemoveHandlerTest extends TestCase
 {
     public function testHandle()
     {
@@ -51,6 +53,7 @@ class RemoveHandlerTest extends \PHPUnit_Framework_TestCase
         $eventDispatcher   = $this->prophesize(DelayedEventDispatcher::class);
         $sheetUpdatedEvent = new SheetUpdatedEvent($sheet);
         $eventDispatcher->dispatch(Events::SHEET_UPDATED, $sheetUpdatedEvent)->shouldBeCalled();
+        $eventDispatcher->dispatch(Events::PARTICIPANT_REMOVED, new ParticipantRemovedEvent($sheet))->shouldBeCalled();
 
         $meetingRepository      = $this->prophesize(MeetingRepositoryInterface::class);
         $meetingRepository->countByParticipant($participant1)->shouldBeCalled()->willReturn(0);
@@ -109,6 +112,7 @@ class RemoveHandlerTest extends \PHPUnit_Framework_TestCase
         $eventDispatcher   = $this->prophesize(DelayedEventDispatcher::class);
         $sheetUpdatedEvent = new SheetUpdatedEvent($sheet);
         $eventDispatcher->dispatch(Events::SHEET_UPDATED, $sheetUpdatedEvent)->shouldBeCalled();
+        $eventDispatcher->dispatch(Events::PARTICIPANT_REMOVED, new ParticipantRemovedEvent($sheet))->shouldBeCalled();
 
         $meetingRepository      = $this->prophesize(MeetingRepositoryInterface::class);
         $meetingRepository->countByParticipant($participant1)->shouldBeCalled()->willReturn(2);
@@ -167,6 +171,7 @@ class RemoveHandlerTest extends \PHPUnit_Framework_TestCase
         $participantRepository = $this->prophesize(ParticipantRepositoryInterface::class);
         $cartManager = $this->prophesize(CartManager::class);
         $eventDispatcher   = $this->prophesize(DelayedEventDispatcher::class);
+        $eventDispatcher->dispatch(Events::PARTICIPANT_REMOVED, new ParticipantRemovedEvent($sheet))->shouldNotBeCalled();
         $meetingRepository      = $this->prophesize(MeetingRepositoryInterface::class);
         $meetingRepository->countByParticipant($participant1)->shouldNotBeCalled();
         $participantInfoGuesser = $this->prophesize(ParticipantInfoGuesser::class);

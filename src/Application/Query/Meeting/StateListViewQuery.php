@@ -1,9 +1,9 @@
 <?php
 
 /*
- * This file is part of the vimeet project.
+ * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2016 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -14,25 +14,26 @@ use Proximum\Vimeet\Domain\Model\Sheet;
 
 class StateListViewQuery
 {
-    /**
-     * @var Sheet
-     */
+    /** @var Sheet */
     public $sheet;
 
-    /**
-     * @var array
-     */
+    /** @var array */
     public $filters;
+
+    /** @var array */
+    public $slotsToFilter;
 
     /**
      * StateListViewQuery constructor.
      *
      * @param Sheet $sheet
      * @param array $filters
+     * @param array $slotsToFilter
      */
-    public function __construct(Sheet $sheet, array $filters = [])
+    public function __construct(Sheet $sheet, array $filters = [], array $slotsToFilter = [])
     {
-        $this->sheet   = $sheet;
-        $this->filters = $filters;
+        $this->sheet         = $sheet;
+        $this->filters       = $filters;
+        $this->slotsToFilter = $slotsToFilter;
     }
 }

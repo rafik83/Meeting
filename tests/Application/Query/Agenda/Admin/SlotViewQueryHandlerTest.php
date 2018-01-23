@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Application\Query\Agenda\Admin;
 
+use PHPUnit\Framework\TestCase;
 use Proximum\Vimeet\Application\Components\Sheet\SheetInfoGuesser;
 use Proximum\Vimeet\Application\View\Agenda\Slot\MassUnavailabilitySlotView;
 use Proximum\Vimeet\Application\View\Agenda\Slot\MeetingOnOtherSheetView;
@@ -31,7 +32,7 @@ use Proximum\Vimeet\Tests\Factory\EventFactory;
 use Proximum\Vimeet\Tests\Factory\ParticipantFactory;
 use Proximum\Vimeet\Tests\Factory\SheetFactory;
 
-class SlotViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
+class SlotViewQueryHandlerTest extends TestCase
 {
     /** @var Event */
     private $event;

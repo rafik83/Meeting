@@ -125,7 +125,23 @@ class CategoryRepository implements CategoryRepositoryInterface
     /**
      * {@inheritdoc}
      */
-    public function getCategoriesByEvent(Event $event, $locale)
+    public function getCategoriesByEvent(Event $event): array
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('category')
+            ->from('Entity:Category', 'category')
+            ->where('category.event = :event')
+            ->setParameter('event', $event);
+
+        return $queryBuilder->getQuery()->getResult();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getCategoriesByEventAndLocale(Event $event, string $locale): array
     {
         $queryBuilder = $this
             ->entityManager
@@ -157,5 +173,32 @@ class CategoryRepository implements CategoryRepositoryInterface
             ->setMaxResults(1);
 
         return $queryBuilder->getQuery()->getOneOrNullResult();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getCategoriesTitleByEventAndLocale(Event $event, string $locale, array $categories): array
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('category.id, translations.title')
+            ->from('Entity:Category', 'category', 'category.id')
+            ->join('category.translations', 'translations', 'WITH', 'category.event = :event AND translations.locale = :locale')
+            ->setParameter('event', $event)
+            ->setParameter('locale', $locale)
+        ;
+
+        if (!empty($categories)) {
+            $queryBuilder->andWhere('category IN (:categories)')->setParameter('categories', $categories);
+        }
+
+        return array_map(
+            function ($category) {
+                return $category['title'];
+            },
+            $queryBuilder->getQuery()->getResult()
+        );
     }
 }

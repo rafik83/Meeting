@@ -14,7 +14,6 @@ use Proximum\Vimeet\Domain\Model\Template\AbstractTemplate;
 
 /**
  * Calculate the completeness of translations for each locales of a template.
- * @deprecated
  */
 class CompletenessCalculator
 {
@@ -39,7 +38,7 @@ class CompletenessCalculator
      *
      * @return array
      */
-    private function getTranslatables(array $config)
+    private function getTranslatables(array $config): array
     {
         if (!isset($config['component'])) {
             return array_reduce($config, function (array $carry, array $component) {
@@ -66,11 +65,11 @@ class CompletenessCalculator
     /**
      * Get values translated in at lead one locale
      *
-     * @param $translatables
+     * @param array $translatables
      *
      * @return array
      */
-    private function getTranslated($translatables)
+    private function getTranslated(array $translatables): array
     {
         return array_filter($translatables, function (array $translatable) {
             foreach ($translatable as $locale => $value) {

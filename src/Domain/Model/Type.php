@@ -13,6 +13,7 @@ namespace Proximum\Vimeet\Domain\Model;
 use Doctrine\Common\Collections\ArrayCollection;
 use Proximum\Vimeet\Domain\Model\Template\RegistrationTemplate;
 use Proximum\Vimeet\Domain\Model\Template\SheetTemplate;
+use Proximum\Vimeet\Domain\Model\Type\PaymentConditions;
 use Proximum\Vimeet\Domain\Type\TypeInterface;
 
 /**
@@ -20,74 +21,49 @@ use Proximum\Vimeet\Domain\Type\TypeInterface;
  */
 class Type implements WhoInterface, TypeInterface
 {
-    /**
-     * @var int
-     */
+    /** @var int */
     private $id;
 
-    /**
-     * @var int
-     */
+    /** @var int|null */
     private $position = 0;
 
-    /**
-     * @var Event
-     */
+    /** @var Event */
     private $event;
 
-    /**
-     * @var ArrayCollection
-     */
+    /** @var ArrayCollection of Admin */
     private $admins;
 
-    /**
-     * @var ArrayCollection
-     */
+    /** @var ArrayCollection of TypeTranslation */
     private $translations;
 
-    /**
-     * @var SheetTemplate
-     */
+    /** @var SheetTemplate */
     private $sheetTemplate;
 
-    /**
-     * @var RegistrationTemplate
-     */
+    /** @var RegistrationTemplate */
     private $registrationTemplate;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     private $previewTemplate = '';
 
-    /**
-     * @var string
-     */
+    /** @var string */
     private $viewTemplate = '';
 
-    /**
-     * @var ArrayCollection
-     */
+    /** @var ArrayCollection of Category */
     private $categories;
 
-    /**
-     * @var ValidationCriteria
-     */
+    /** @var ValidationCriteria */
     private $validationCriteria;
 
-    /**
-     * @var Package
-     */
+    /** @var Package */
     private $package;
 
-    /**
-     * @var bool
-     */
+    /** @var bool */
     private $hidden = false;
 
+    /** @var ArrayCollection of PaymentConditions */
+    private $paymentConditions;
+
     /**
-     * Type constructor.
-     *
      * @param Event $event
      */
     public function __construct(Event $event)
@@ -97,6 +73,7 @@ class Type implements WhoInterface, TypeInterface
         $this->categories         = new ArrayCollection();
         $this->admins             = new ArrayCollection();
         $this->validationCriteria = new ValidationCriteria(false);
+        $this->paymentConditions  = new ArrayCollection();
     }
 
     /**
@@ -108,9 +85,9 @@ class Type implements WhoInterface, TypeInterface
     }
 
     /**
-     * @return int
+     * @return int|null
      */
-    public function getPosition()
+    public function getPosition(): ?int
     {
         return $this->position;
     }
@@ -226,11 +203,8 @@ class Type implements WhoInterface, TypeInterface
      */
     public function getMaxParticipant()
     {
-        if (null !== $this->package
-            && null !== $this->package->getParticipant()
-            && null !== $this->package->getParticipant()->getQuantityMax()
-        ) {
-            return $this->package->getParticipant()->getQuantityMax();
+        if (null !== $this->package && null !== $this->package->getMaxParticipant()) {
+            return $this->package->getMaxParticipant();
         }
 
         return INF;
@@ -375,5 +349,19 @@ class Type implements WhoInterface, TypeInterface
     public function getAdmins()
     {
         return $this->admins->toArray();
+    }
+
+    /**
+     * @return null|PaymentConditions
+     */
+    public function getPaymentConditions(): ?PaymentConditions
+    {
+        $paymentConditions = $this->paymentConditions->first();
+
+        if (false === $paymentConditions) {
+            return null;
+        }
+
+        return $paymentConditions;
     }
 }

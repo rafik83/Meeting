@@ -20,8 +20,9 @@ use Proximum\Vimeet\Domain\Model\Admin;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
 use Proximum\Vimeet\Tests\Factory\SheetFactory;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use PHPUnit\Framework\TestCase;
 
-class PostBatchAcceptHandlerTest extends \PHPUnit_Framework_TestCase
+class PostBatchAcceptHandlerTest extends TestCase
 {
     public function testHandle()
     {

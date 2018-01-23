@@ -6,6 +6,16 @@ services:
         class: Proximum\Vimeet\Behat\Service\Storage\Storage
 
     #
+    # Fixture providers
+    #
+    vimeet_infrastructure.data_fixtures_orm.provider:
+        class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\DataFixtures\ORM\Provider
+        arguments:
+            - '%domain%'
+        tags:
+            - { name: hautelook_alice.faker.provider }
+
+    #
     # Managers
     #
     behat_manager.user:
@@ -43,6 +53,11 @@ services:
             - '@template.sheet.sheet_info_setter'
             - '@behat_manager.user'
             - '@behat_manager.type'
+
+    behat.service.manager.rule_manager:
+        class: Proximum\Vimeet\Behat\Service\Manager\RuleManager
+        arguments:
+            - '@repository.rule_repository'
 
     behat_manager.group:
         class: Proximum\Vimeet\Behat\Service\Manager\GroupManager
@@ -121,6 +136,32 @@ services:
         arguments:
              - '@repository.token.user_event_token_repository'
 
+    behat_manager.admin_manager:
+        class: Proximum\Vimeet\Behat\Service\Manager\AdminManager
+        arguments:
+            - '@repository.admin_repository'
+
+    behat_manager.invoice.prefix_manager:
+        class: Proximum\Vimeet\Behat\Service\Manager\Invoice\PrefixManager
+        arguments:
+            - '@repository.invoice.prefix_repository'
+
+    behat.service.manager.catalog_visibility_manager:
+        class: Proximum\Vimeet\Behat\Service\Manager\CatalogVisibilityManager
+        arguments:
+            - '@repository.catalog_visibility_repository'
+            - '@vimeet_infrastructure.repository.type_repository'
+
+    behat_manager.event.content_manager:
+        class: Proximum\Vimeet\Behat\Service\Manager\Event\ContentManager
+        arguments:
+            - '@repository.event.content_repository'
+
+    behat.service.manager.meeting.request_manager:
+        class: Proximum\Vimeet\Behat\Service\Manager\Meeting\RequestManager
+        arguments:
+            - '@vimeet_infrastructure.repository.meeting.request_repository'
+
     #
     # Proxies
     #
@@ -190,6 +231,8 @@ services:
         arguments:
             - '@behat_storage'
             - '@behat_manager.meeting'
+            - '@behat_manager.spot'
+            - '@behat_manager.slot'
 
     behat_proxy.order_context:
         class: Proximum\Vimeet\Behat\Proxy\OrderContextProxy
@@ -208,11 +251,45 @@ services:
         arguments:
              - '@behat_storage'
 
+    behat.proxy.catalog_visibility_context_proxy:
+        class: Proximum\Vimeet\Behat\Proxy\CatalogVisibilityContextProxy
+        arguments:
+            - '@behat_storage'
+            - '@behat.service.manager.catalog_visibility_manager'
+
     behat_proxy.event.day_context:
         class: Proximum\Vimeet\Behat\Proxy\Event\DayContextProxy
         arguments:
             - '@behat_storage'
             - '@behat_manager.event.day'
+
+    behat_proxy.admin_context:
+        class: Proximum\Vimeet\Behat\Proxy\AdminContextProxy
+        arguments:
+            - '@behat_storage'
+            - '@behat_manager.admin_manager'
+
+    behat_proxy.invoice.prefix_context:
+        class: Proximum\Vimeet\Behat\Proxy\Invoice\PrefixContextProxy
+        arguments:
+            - '@behat_storage'
+            - '@behat_manager.invoice.prefix_manager'
+
+    behat_proxy.event.content_context:
+        class: Proximum\Vimeet\Behat\Proxy\Event\ContentContextProxy
+        arguments:
+            - '@behat_storage'
+            - '@behat_manager.event.content_manager'
+
+    behat.proxy.rule_context:
+        class: Proximum\Vimeet\Behat\Proxy\RuleContextProxy
+        arguments:
+            - '@behat_storage'
+            - '@behat.service.manager.rule_manager'
+
+    #
+    # Other services
+    #
 
     behat_proxy.token.user_event_token_context:
         class: Proximum\Vimeet\Behat\Proxy\Token\UserEventTokenContextProxy
@@ -223,10 +300,25 @@ services:
     #
     # Adapter
     #
-    adapter.smssender_alias:
+    adapter.storage_sms_sender_adapter:
         class: Proximum\Vimeet\Behat\Service\Adapter\StorageSMSSenderAdapter
         arguments:
             - '@behat_storage'
 
     # Override the SMS Sender service
-    #adapter.smssender_alias: '@behat_adapter.storage_sms_sender'
+    adapter.smssender_alias: '@adapter.storage_sms_sender_adapter'
+
+    behat.proxy.meeting.request_context_proxy:
+        class: Proximum\Vimeet\Behat\Proxy\Meeting\RequestContextProxy
+        arguments:
+            - '@behat_storage'
+            - '@behat.service.manager.meeting.request_manager'
+
+    event_listener.exception_listener:
+        class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\EventListener\ExceptionListener
+        arguments:
+            - '@vimeet_infrastructure.repository.event_repository'
+            - '@templating'
+            - '@adapter.authorization_checker'
+        tags:
+            - { name: kernel.event_listener, event: kernel.exception, priority: -127 }

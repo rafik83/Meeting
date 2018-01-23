@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Tests\Application\Query\Planner;
 
+use PHPUnit\Framework\TestCase;
 use Proximum\Vimeet\Application\Exception\Planner\DayNotConfiguredException;
 use Proximum\Vimeet\Application\Query\Planner\DayViewQuery;
 use Proximum\Vimeet\Application\Query\Planner\DayViewQueryHandler;
@@ -17,7 +18,7 @@ use Proximum\Vimeet\Application\View\Planner\Day;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
 
-class DayViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
+class DayViewQueryHandlerTest extends TestCase
 {
     public function testHandleNoDayException()
     {

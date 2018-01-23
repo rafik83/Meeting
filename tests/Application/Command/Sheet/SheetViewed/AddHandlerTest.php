@@ -10,6 +10,7 @@
 
 namespace Application\Command\Sheet\SheetViewed;
 
+use PHPUnit\Framework\TestCase;
 use Proximum\Vimeet\Application\Adapter\ImpersonatingUserCheckerInterface;
 use Proximum\Vimeet\Application\Command\Sheet\SheetViewed\Add;
 use Proximum\Vimeet\Application\Command\Sheet\SheetViewed\AddHandler;
@@ -21,7 +22,7 @@ use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
 use Proximum\Vimeet\Tests\Factory\SheetFactory;
 use Proximum\Vimeet\Tests\Factory\UserFactory;
 
-class AddHandlerTest extends \PHPUnit_Framework_TestCase
+class AddHandlerTest extends TestCase
 {
     /** @var Sheet */
     private $sheet;

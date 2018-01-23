@@ -1,56 +1,77 @@
-{% if allowedToCreate is defined and allowedToCreate == true %}
-    {% if isMeetingRequestClosed is defined and isMeetingRequestClosed == false %}
-        {{ include('EventBundle:MeetingRequest/Button:createRequest.html.twig', {'sheet': viewer, 'toSheet': viewed}, false) }}
-    {% else %}
-        {{ include('EventBundle:MeetingRequest/Button:closedMeetingRequest.html.twig', {}, false) }}
-    {% endif %}
-{% else %}
-    {% if isAnsweringMeetingRequestClosed is defined and isAnsweringMeetingRequestClosed == true %}
-        {{ include('EventBundle:MeetingRequest/Button:closedAnsweringMeetingRequest.html.twig', {}, false) }}
+{% if hideMeetingRequest is not defined or hideMeetingRequest == false %}
+    {% if allowedToCreate is defined and allowedToCreate == true %}
+        {% if isMeetingRequestClosed is defined and isMeetingRequestClosed == false %}
+            {{ include('EventBundle:MeetingRequest/Button:createRequest.html.twig', {
+                'sheet': viewer,
+                'toSheet': viewed,
+                'isPhoneValidationRequired': isPhoneValidationRequired,
+                'phoneValidationLink': phoneValidationLink
+            }, false) }}
+        {% else %}
+            {{ include('EventBundle:MeetingRequest/Button:closedMeetingRequest.html.twig', {}, false) }}
+        {% endif %}
     {% else %}
         {% if meetingRequest is defined and meetingRequest is not null %}
-            {% if meetingRequest.toSheet == viewer %}
-                {% if meetingRequest.isSent %}
-                    {{ include('EventBundle:MeetingRequest/Button:approveRefuseRequestButton.html.twig', {
-                        'sheet': viewer,
-                        'meetingRequest': meetingRequest,
-                    }, false) }}
-                {% elseif meetingRequest.isApproved %}
-                    {% if not isMeetingRequestUpdateLocked %}
+                {% if meetingRequest.toSheet == viewer %}
+                    {% if meetingRequest.isSent %}
+                        {{ include('EventBundle:MeetingRequest/Button:approveRefuseRequestButton.html.twig', {
+                            'sheet': viewer,
+                            'meetingRequest': meetingRequest,
+                            'isPhoneValidationRequired': isPhoneValidationRequired,
+                            'phoneValidationLink': phoneValidationLink,
+                            'isAnsweringMeetingRequestClosed': isAnsweringMeetingRequestClosed,
+                            'isMeetingRequestUpdateLocked': isMeetingRequestUpdateLocked
+                        }, false) }}
+                    {% elseif meetingRequest.isApproved %}
                         {{ include('EventBundle:MeetingRequest/Button:approvedProposition.html.twig', {
                             'sheet': viewer,
                             'meetingRequest': meetingRequest,
                             'isMeetingPublished': isMeetingPublished|default(false),
+                            'isMeetingRequestUpdateLocked': isMeetingRequestUpdateLocked,
+                            'isPhoneValidationRequired': isPhoneValidationRequired,
+                            'phoneValidationLink': phoneValidationLink,
+                            'isAnsweringMeetingRequestClosed': isAnsweringMeetingRequestClosed
+                        }, false) }}
+                    {% elseif meetingRequest.isRefused %}
+                        {{ include('EventBundle:MeetingRequest/Button:refusedProposition.html.twig', {
+                            'sheet': viewer,
+                            'meetingRequest': meetingRequest,
+                            'isPhoneValidationRequired': isPhoneValidationRequired,
+                            'phoneValidationLink': phoneValidationLink,
+                            'isAnsweringMeetingRequestClosed': isAnsweringMeetingRequestClosed,
                             'isMeetingRequestUpdateLocked': isMeetingRequestUpdateLocked
                         }, false) }}
                     {% endif %}
-                {% elseif meetingRequest.isRefused %}
-                    {{ include('EventBundle:MeetingRequest/Button:refusedProposition.html.twig', {
-                        'sheet': viewer,
-                        'meetingRequest': meetingRequest,
-                    }, false) }}
-                {% endif %}
-            {% else %}
-                {% if meetingRequest.isSent %}
-                    {{ include('EventBundle:MeetingRequest/Button:pendingRequestButton.html.twig', {
-                        'sheet': viewer,
-                        'meetingRequest': meetingRequest,
-                    }, false) }}
-                {% elseif meetingRequest.isApproved %}
-                    {% if not isMeetingRequestUpdateLocked %}
+                {% else %}
+                    {% if meetingRequest.isSent %}
+                        {{ include('EventBundle:MeetingRequest/Button:pendingRequestButton.html.twig', {
+                            'sheet': viewer,
+                            'meetingRequest': meetingRequest,
+                            'isPhoneValidationRequired': isPhoneValidationRequired,
+                            'phoneValidationLink': phoneValidationLink,
+                            'isAnsweringMeetingRequestClosed': isAnsweringMeetingRequestClosed,
+                            'isMeetingRequestUpdateLocked': isMeetingRequestUpdateLocked
+                        }, false) }}
+                    {% elseif meetingRequest.isApproved %}
                         {{ include('EventBundle:MeetingRequest/Button:approvedRequest.html.twig', {
                             'sheet': viewer,
                             'meetingRequest': meetingRequest,
                             'isMeetingPublished': isMeetingPublished|default(false),
+                            'isMeetingRequestUpdateLocked': isMeetingRequestUpdateLocked,
+                            'isPhoneValidationRequired': isPhoneValidationRequired,
+                            'phoneValidationLink': phoneValidationLink,
+                            'isAnsweringMeetingRequestClosed': isAnsweringMeetingRequestClosed
+                        }, false) }}
+                    {% elseif meetingRequest.isRefused %}
+                        {{ include('EventBundle:MeetingRequest/Button:refusedRequestButton.html.twig', {
+                            'sheet': viewer,
+                            'meetingRequest': meetingRequest,
+                            'isPhoneValidationRequired': isPhoneValidationRequired,
+                            'phoneValidationLink': phoneValidationLink,
+                            'isAnsweringMeetingRequestClosed': isAnsweringMeetingRequestClosed,
                             'isMeetingRequestUpdateLocked': isMeetingRequestUpdateLocked
                         }, false) }}
                     {% endif %}
-                {% elseif meetingRequest.isRefused %}
-                    {{ include('EventBundle:MeetingRequest/Button:refusedRequestButton.html.twig', {
-                        'sheet': viewer,
-                        'meetingRequest': meetingRequest,
-                    }, false) }}
-                {% endif %}
             {% endif %}
         {% endif %}
     {% endif %}

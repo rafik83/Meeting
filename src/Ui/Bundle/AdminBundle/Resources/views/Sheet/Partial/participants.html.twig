@@ -1,23 +1,22 @@
 <div class="row">
     {% set impersonationUrl = app.request.scheme ~ '://' ~ event.domain ~ path('event_sheet_default', {'sheet': sheet.id, '_switchto': impersonationToken}) %}
     <div class="col-md-6">
-    {% if details.owner.shouldBeDisplayed %}
+    {% if details.participants.owner.shouldBeDisplayed %}
         <div class="col-md-12">
             <div class="panel panel-default">
                 <div class="panel-heading">
                     {{ 'admin.sheet.details.owner_not_participant.title'|trans }}
                 </div>
                 <div class="panel-body">
-                    {{ details.owner.firstName }}  {{ details.owner.lastName }}<br>
-                    {{ details.owner.email }}<br>
-                    {{ 'admin.sheet.details.owner.mobile'|trans }}: {{ details.owner.mobile }}<br>
-                    {{ 'admin.sheet.details.owner.phone'|trans }}: {{ details.owner.phone }}<br>
+                    {{ details.participants.owner.firstName }}  {{ details.participants.owner.lastName }}<br>
+                    {{ 'admin.sheet.details.owner.mobile'|trans }}: {{ details.participants.owner.mobile }}<br>
+                    {{ 'admin.sheet.details.owner.phone'|trans }}: {{ details.participants.owner.phone }}<br>
                     <a href="{{ impersonationUrl }}" class="btn btn-default btn-sm">{{ 'admin.sheet.impersonate'|trans }}</a>
                 </div>
             </div>
         </div>
     {% endif %}
-    {% for participant in details.participants %}
+    {% for participant in details.participants.participants %}
         <div class="col-md-12">
             <div class="panel panel-default">
                 <div class="panel-heading">
@@ -43,6 +42,16 @@
                     {% for object in participant.templateData.getProfileObjects %}
                         {{ include('AdminBundle:Sheet/Object:' ~ object.type ~ '.html.twig', { 'object': object}) }}
                     {% endfor %}
+                    <b>{{ 'admin.sheet.details.participant.email'|trans }}: </b>{{ participant.email }}
+                    <br/>
+                    <b>{{ 'admin.sheet.details.participant.phoneValidationStatus.title'|trans }}: </b><span class="label label-{{ participant.phoneValidationStatusView.indicator }}">{{ participant.phoneValidationStatusView.message|trans }}</span>
+                    <br/>
+                    {% include 'AdminBundle:Sheet/Partial:is_agenda_confirmed.html.twig' with {
+                        'agendaConfirmationStatus': participant.agendaConfirmationStatus
+                    } %}
+                    <br/>
+                    <b>{{ 'admin.sheet.details.participant.availability_confirmation.title'|trans }}: </b><span class="label label-{{ participant.availabilityConfirmationView.indicator }}">{{ participant.availabilityConfirmationView.message|trans }}</span>
+                    <br/>
 
                     {% if participant.isOwner %}
                         <a href="{{ impersonationUrl }}" class="btn btn-default btn-sm">{{ 'admin.sheet.impersonate'|trans }}</a>

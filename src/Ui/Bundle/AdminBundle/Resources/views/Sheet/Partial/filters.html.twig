@@ -24,10 +24,11 @@
                     {{ form_row(form.inCatalog, {'inline': true}) }}
                     {{ form_row(form.cancelAttendance, {'inline': true}) }}
                     {{ form_row(form.hasGroup, {'inline': true}) }}
+                    {{ form_row(form.hasSpot, {'inline': true}) }}
                     {{ form_row(form.type) }}
 
-                    {% if form.category is defined %}
-                        {{ form_row(form.category) }}
+                    {% if form.categories is defined %}
+                        {{ form_row(form.categories) }}
                     {% endif %}
 
                     {{ form_row(form.registeredAt, {'inline': true}) }}
@@ -44,8 +45,11 @@
                     <hr>
 
                     {{ form_row(form.hasScheduledMeeting, {'inline': true}) }}
-                    {{ form_row(form.hasPendingMeetingPropositions) }}
-                    {{ form_row(form.hasNoMeetingRequest) }}
+                    {{ form_row(form.agendaConfirmedStatus) }}
+                    {{ form_row(form.phoneValidationStatus) }}
+                    {{ form_row(form.availabilityConfirmationStatus) }}
+                    {{ form_row(form.hasPendingMeetingPropositions, {'inline': true}) }}
+                    {{ form_row(form.hasNoMeetingRequest, {'inline': true}) }}
                 </div>
                 <div class="col-md-6">
                     {{ form_row(form.follower) }}

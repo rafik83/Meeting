@@ -25,8 +25,9 @@ use Proximum\Vimeet\Domain\Model\Type;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
 use Proximum\Vimeet\Tests\Factory\ProductFactory;
 use Proximum\Vimeet\Tests\Factory\SheetFactory;
+use PHPUnit\Framework\TestCase;
 
-class ParticipantGroupViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
+class ParticipantGroupViewQueryHandlerTest extends TestCase
 {
     public function testHandle()
     {
@@ -39,7 +40,7 @@ class ParticipantGroupViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
         $sheet   = SheetFactory::create($event, null, $datetime, $type);
         $product = ProductFactory::create($event, 'participant');
 
-        $package->setParticipant($product);
+        $package->setParticipants([$product]);
         $type->setPackage($package);
 
         $cartRow = new CartRow($sheet, $product, 1);
@@ -85,7 +86,7 @@ class ParticipantGroupViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
         $sheet   = SheetFactory::create($event, null, $datetime, $type);
         $product = ProductFactory::create($event, 'other_than_participant');
 
-        $package->setParticipant($product);
+        $package->setParticipants([$product]);
         $type->setPackage($package);
 
         $cart = new Cart($sheet, [], []);

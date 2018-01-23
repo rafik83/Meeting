@@ -1,0 +1,12 @@
+{% extends 'AdminBundle:Common:form_layout.html.twig' %}
+
+{% block title 'admin.event.page.invoice.title'|trans %}
+
+{% block form_title 'admin.event.page.invoice.title'|trans %}
+
+{% block form_content %}
+    {{ form_row(form.beginDate, {widget_columns: 2}) }}
+    {{ form_row(form.endDate, {widget_columns: 2}) }}
+{% endblock %}
+
+{% block goback_link path('admin_event_list') %}

@@ -1,0 +1,44 @@
+Proximum\Vimeet\Domain\Model\Catalog\External\CatalogVisibility:
+    type:  entity
+    table: catalog_visibility
+    id:
+        id:
+            type: integer
+            generator:
+                strategy: AUTO
+    fields:
+        hasMessage:
+            type: boolean
+            options:
+                default: false
+        registrationUrl:
+            type: string
+            nullable: true
+    manyToOne:
+        event:
+            targetEntity: Proximum\Vimeet\Domain\Model\Event
+            joinColumn:
+                onDelete: CASCADE
+                nullable: false
+    oneToMany:
+        messageTranslations:
+            targetEntity: Proximum\Vimeet\Domain\Model\Catalog\External\CatalogVisibilityTranslation
+            mappedBy: catalogVisibility
+            indexBy: locale
+            cascade: ["persist"]
+    manyToMany:
+        types:
+            targetEntity: Proximum\Vimeet\Domain\Model\Type
+            joinTable:
+              name: catalog_visibility_types
+              onDelete: CASCADE
+              nullable: false
+        categories:
+            targetEntity: Proximum\Vimeet\Domain\Model\Category
+            joinTable:
+              name: catalog_visibility_categories
+              onDelete: CASCADE
+              nullable: false
+    uniqueConstraints:
+        catalog_visibility_event:
+            columns: [event_id]

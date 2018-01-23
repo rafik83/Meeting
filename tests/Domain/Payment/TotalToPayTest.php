@@ -21,8 +21,9 @@ use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Package\Specification\VatApplicable;
 use Proximum\Vimeet\Domain\Payment\TotalToPay;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
+use PHPUnit\Framework\TestCase;
 
-class TotalToPayTest extends \PHPUnit_Framework_TestCase
+class TotalToPayTest extends TestCase
 {
     public function testGetTotal()
     {

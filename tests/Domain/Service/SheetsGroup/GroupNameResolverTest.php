@@ -11,74 +11,107 @@
 namespace Proximum\Vimeet\Tests\Domain\Service\SheetsGroup;
 
 use Proximum\Vimeet\Application\Exception\Sheet\SheetNotFoundException;
+use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Sheet;
+use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Repository\Sheet\GroupRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
 use Proximum\Vimeet\Domain\Service\SheetsGroup\GroupNameResolver;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
 use Proximum\Vimeet\Tests\Factory\GroupFactory;
 use Proximum\Vimeet\Tests\Factory\UserFactory;
+use PHPUnit\Framework\TestCase;
 
-class GroupNameResolverTest extends \PHPUnit_Framework_TestCase
+class GroupNameResolverTest extends TestCase
 {
+    /** @var Event $event */
+    public $event;
+    
+    /** @var User $user */
+    public $user;
+    
+    /** @var \DateTimeInterface */
+    public $dateTime;
+
+    /** @var GroupRepositoryInterface */
+    public $groupRepository;
+
+    /** @var SheetRepositoryInterface */
+    public $sheetRepository;
+
+    /** @var GroupNameResolver */
+    public $resolver;
+    
+    
+    public function setUp()
+    {
+        $this->event    = EventFactory::createEvent();
+        $this->user     = UserFactory::create();
+        $this->dateTime = new \DateTime();
+
+        $this->groupRepository = $this->prophesize(GroupRepositoryInterface::class);
+        $this->sheetRepository = $this->prophesize(SheetRepositoryInterface::class);
+        $this->resolver        = new GroupNameResolver(
+            $this->groupRepository->reveal(),
+            $this->sheetRepository->reveal()
+        );
+    }
+    
     public function testResolveForGroup()
     {
-        $now        = new \DateTime();
-        $event      = EventFactory::createEvent();
-        $user       = UserFactory::create();
+        $event      = $this->event;
+        $user       = $this->user;
         $groupTitle = 'ProximumGroup';
-        $group      = GroupFactory::createGroup($event, $user, $now, $groupTitle);
+        $group      = GroupFactory::createGroup($event, $user, $this->dateTime, $groupTitle);
 
-        $groupRepository = $this->prophesize(GroupRepositoryInterface::class);
-        $sheetRepository = $this->prophesize(SheetRepositoryInterface::class);
+        $this->groupRepository->getByUserAndEvent($user, $event)->shouldBeCalled()->willReturn($group);
 
-        $groupRepository->getByUserAndEvent($user, $event)->shouldBeCalled()->willReturn($group);
-
-        $resolver = new GroupNameResolver($groupRepository->reveal(), $sheetRepository->reveal());
-        $name     = $resolver->resolve($event, $user);
-
-        $this->assertEquals($groupTitle, $name);
+        $this->assertEquals($groupTitle, $this->resolver->resolve($event, $user));
     }
 
     public function testResolveForSheet()
     {
-        $event      = EventFactory::createEvent();
-        $user       = UserFactory::create();
+        $user       = $this->user;
+        $event      = $this->event;
         $sheet      = $this->prophesize(Sheet::class);
         $sheetTitle = 'Proximum';
         $sheet->getTitle()->willReturn($sheetTitle);
 
-        $groupRepository = $this->prophesize(GroupRepositoryInterface::class);
-        $sheetRepository = $this->prophesize(SheetRepositoryInterface::class);
+        $this->groupRepository->getByUserAndEvent($user, $event)->shouldBeCalled()->willReturn(null);
 
-        $groupRepository->getByUserAndEvent($user, $event)->shouldBeCalled()->willReturn(null);
+        $this->sheetRepository->getSheetsByUserAndEvent($user, $event)->shouldBeCalled()->willReturn([$sheet]);
 
-        $sheetRepository->getSheetsByUserAndEvent($user, $event)->shouldBeCalled()->willReturn([$sheet]);
-
-        $resolver = new GroupNameResolver($groupRepository->reveal(), $sheetRepository->reveal());
-        $name     = $resolver->resolve($event, $user);
-
-        $this->assertEquals($sheetTitle, $name);
+        $this->assertEquals($sheetTitle, $this->resolver->resolve($event, $user));
     }
 
     public function testResolveWithNoGroupAndNoSheet()
     {
         $this->expectException(SheetNotFoundException::class);
 
-        $event      = EventFactory::createEvent();
-        $user       = UserFactory::create();
+        $event      = $this->event;
+        $user       = $this->user;
         $sheet      = $this->prophesize(Sheet::class);
         $sheetTitle = 'Proximum';
         $sheet->getTitle()->willReturn($sheetTitle);
 
-        $groupRepository = $this->prophesize(GroupRepositoryInterface::class);
-        $sheetRepository = $this->prophesize(SheetRepositoryInterface::class);
+        $this->groupRepository->getByUserAndEvent($user, $event)->shouldBeCalled()->willReturn(null);
 
-        $groupRepository->getByUserAndEvent($user, $event)->shouldBeCalled()->willReturn(null);
+        $this->sheetRepository->getSheetsByUserAndEvent($user, $event)->shouldBeCalled()->willReturn([]);
 
-        $sheetRepository->getSheetsByUserAndEvent($user, $event)->shouldBeCalled()->willReturn([]);
+        $this->resolver->resolve($event, $user);
+    }
+    
+    public function testResolveWithPreloadedSheets()
+    {
+        $sheet      = $this->prophesize(Sheet::class);
+        $sheetTitle = 'Proximum';
+        $sheet->getTitle()->willReturn($sheetTitle);
+        $sheets = [$sheet->reveal()];
 
-        $resolver = new GroupNameResolver($groupRepository->reveal(), $sheetRepository->reveal());
-        $resolver->resolve($event, $user);
+        $this->groupRepository->getByUserAndEvent($this->user, $this->event)->shouldBeCalled()->willReturn(null);
+
+        $this->sheetRepository->getSheetsByUserAndEvent($this->user, $this->event)->shouldNotBeCalled();
+
+        $this->assertEquals($sheetTitle, $this->resolver->resolve($this->event, $this->user, $sheets));
     }
 }

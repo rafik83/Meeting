@@ -1,9 +1,0 @@
-<div class="modal clear-on-hidden-modal fade {% if form_unavailability is defined %}show-modal{% endif %}" id="unavailability-modal" tabindex="-1" role="dialog">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            {% if form_unavailability is defined %}
-                {{ include('EventBundle:Unavailability:create-form.html.twig') }}
-            {% endif %}
-        </div>
-    </div>
-</div>

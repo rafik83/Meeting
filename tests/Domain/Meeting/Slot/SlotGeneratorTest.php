@@ -10,12 +10,13 @@
 
 namespace Proximum\Vimeet\Tests\Domain\Meeting\Slot;
 
+use PHPUnit\Framework\TestCase;
 use Proximum\Vimeet\Domain\Meeting\Slot\Recipe;
 use Proximum\Vimeet\Domain\Meeting\Slot\SlotGenerator;
 use Proximum\Vimeet\Domain\Model\MeetingSlot;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
 
-class SlotGeneratorTest extends \PHPUnit_Framework_TestCase
+class SlotGeneratorTest extends TestCase
 {
     public function testGenerate()
     {

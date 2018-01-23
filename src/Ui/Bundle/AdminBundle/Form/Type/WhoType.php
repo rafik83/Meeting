@@ -54,7 +54,7 @@ class WhoType extends AbstractType
         $resolver->setDefaults([
             'choices'      => function (Options $options) {
                 return [
-                    'Categorie' => $this->categoryRepository->getCategoriesByEvent(
+                    'Categorie' => $this->categoryRepository->getCategoriesByEventAndLocale(
                         $options['event'],
                         $options['locale']
                     ),

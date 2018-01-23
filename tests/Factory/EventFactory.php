@@ -19,9 +19,10 @@ class EventFactory
 
     /**
      * @param string|null $eventTitle
-     * @param string      $fallbackLocale
-     * @param string[]    $locales
-     * @param string      $vatMode
+     * @param string $fallbackLocale
+     * @param string[] $locales
+     * @param string $vatMode
+     * @param null|Event $duplicatedFrom
      *
      * @return Event
      */
@@ -29,7 +30,8 @@ class EventFactory
         $eventTitle = null,
         $fallbackLocale = self::FALLBACK_LOCALE_DEFAULT,
         array $locales = ['fr', 'en'],
-        $vatMode = Event::VAT_MODE_ET
+        $vatMode = Event::VAT_MODE_ET,
+        Event $duplicatedFrom = null
     ) {
         $prefix = self::createInvoicePrefix();
 
@@ -42,10 +44,12 @@ class EventFactory
             'FR',
             'EUR',
             'Europe/Paris',
-            'super-event.vimeet.proximum.dev',
+            'super-event.vimeet.proximum',
             'proximum',
             'team-project@example.net',
-            $prefix
+            $prefix,
+            true,
+            $duplicatedFrom
         );
     }
 

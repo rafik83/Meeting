@@ -51,10 +51,15 @@ class SubstitutionsProvider
     private $agendaConfirmationCTASubstitution;
 
     /**
-     * @param EventUrlGeneratorInterface        $eventUrlGenerator             Event URL generator used to substitute event-related link placeholders
-     * @param ParticipantInfoGuesser            $participantInfoGuesser        Service used to retrieve a participant complete name
-     * @param ActivateAccountTokenGenerator     $activateAccountTokenGenerator Service used to generate tokens for inactive users who must activate their account
-     * @param SheetPlanningViewQueryHandler     $sheetPlanningViewQueryHandler Service used to generate the sheet planning in html format
+     * @param EventUrlGeneratorInterface        $eventUrlGenerator             Event URL generator used to substitute
+     *                                                                         event-related link placeholders
+     * @param ParticipantInfoGuesser            $participantInfoGuesser        Service used to retrieve a participant
+     *                                                                         complete name
+     * @param ActivateAccountTokenGenerator     $activateAccountTokenGenerator Service used to generate tokens for
+     *                                                                         inactive users who must activate their
+     *                                                                         account
+     * @param SheetPlanningViewQueryHandler     $sheetPlanningViewQueryHandler Service used to generate the sheet
+     *                                                                         planning in html format
      * @param AgendaConfirmationCTASubstitution $agendaConfirmationCTASubstitution
      */
     public function __construct(
@@ -150,21 +155,60 @@ class SubstitutionsProvider
             case Compose::LINK_ACTIVACTE_ACCOUNT:
                 return $this->getActivateAccountUrl($recipient, $sheet, $locale);
             case Compose::LINK_AGENDA:
-                return $this->eventUrlGenerator->generateEventAbsoluteUrl($event, 'event_agenda', ['sheet' => $sheet->getId(), '_locale' => $locale]);
+                return $this->eventUrlGenerator->generateEventAbsoluteUrl($event, 'event_agenda', [
+                    'sheet'   => $sheet->getId(),
+                    '_locale' => $locale,
+                ]);
             case Compose::LINK_CATALOG:
-                return $this->eventUrlGenerator->generateEventAbsoluteUrl($event, 'event_catalog_index', ['sheet' => $sheet->getId(), '_locale' => $locale]);
+                return $this->eventUrlGenerator->generateEventAbsoluteUrl($event, 'event_catalog_index', [
+                    'sheet'   => $sheet->getId(),
+                    '_locale' => $locale,
+                ]);
             case Compose::LINK_MEETING_REQUEST:
-                return $this->eventUrlGenerator->generateEventAbsoluteUrl($event, 'event_meeting_list_request', ['_locale' => $locale, 'sheet' => $sheet->getId()]);
+                return $this->eventUrlGenerator->generateEventAbsoluteUrl($event, 'event_meeting_list_request', [
+                    '_locale' => $locale,
+                    'sheet'   => $sheet->getId(),
+                ]);
             case Compose::LINK_ORDERS:
-                return $this->eventUrlGenerator->generateEventAbsoluteUrl($event, 'event_order_list', ['_locale' => $locale, 'sheet' => $sheet->getId()]);
+                return $this->eventUrlGenerator->generateEventAbsoluteUrl($event, 'event_order_list', [
+                    '_locale' => $locale,
+                    'sheet'   => $sheet->getId(),
+                ]);
             case Compose::LINK_PACKAGE:
-                return $this->eventUrlGenerator->generateEventAbsoluteUrl($event, 'event_package_redirect_depending_on_context', ['sheet' => $sheet->getId(), '_locale' => $locale]);
+                return $this->eventUrlGenerator->generateEventAbsoluteUrl($event, 'event_package_redirect_depending_on_context', [
+                    'sheet'   => $sheet->getId(),
+                    '_locale' => $locale,
+                ]);
             case Compose::LINK_PROGRAM:
-                return $this->eventUrlGenerator->generateEventAbsoluteUrl($event, 'happening_program', ['sheet' => $sheet->getId(), '_locale' => $locale]);
+                return $this->eventUrlGenerator->generateEventAbsoluteUrl($event, 'happening_program', [
+                    'sheet'   => $sheet->getId(),
+                    '_locale' => $locale,
+                ]);
             case Compose::LINK_SHEET:
-                return $this->eventUrlGenerator->generateEventAbsoluteUrl($event, 'event_sheet_default', ['sheet' => $sheet->getId(), '_locale' => $locale]);
+                return $this->eventUrlGenerator->generateEventAbsoluteUrl($event, 'event_sheet_default', [
+                    'sheet'   => $sheet->getId(),
+                    '_locale' => $locale,
+                ]);
             case Compose::LINK_EXPORT_MEETING_SHEET:
-                return $this->eventUrlGenerator->generateEventAbsoluteUrl($event, 'event_meeting_request_export_contact', ['sheet' => $sheet->getId(), '_locale' => $locale]);
+                return $this->eventUrlGenerator->generateEventAbsoluteUrl($event, 'event_meeting_request_export_contact', [
+                    'sheet'   => $sheet->getId(),
+                    '_locale' => $locale,
+                ]);
+            case Compose::LINK_VALIDATE_MOBILE_PHONE:
+                $participant = $recipient instanceof Participant ?
+                    $recipient :
+                    $sheet->getParticipantOwner();
+
+                if ($participant === null) {
+                    return '';
+                }
+
+                return $this->eventUrlGenerator->generateEventAbsoluteUrl($event, 'event_user_phone_validate', [
+                        'sheet'       => $sheet->getId(),
+                        'participant' => $participant->getId(),
+                        '_locale'     => $locale,
+                    ]
+                );
         }
 
         throw new InvalidMessagePlaceholderException($placeholder);
@@ -203,10 +247,9 @@ class SubstitutionsProvider
                 'event_activate_account',
                 [
                     'token'   => $this->activateAccountTokenGenerator->generate($user, $sheet)->getToken(),
-                    '_locale' => $locale
+                    '_locale' => $locale,
                 ]
-            )
-        ;
+            );
     }
 
     /**

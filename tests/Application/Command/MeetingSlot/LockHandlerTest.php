@@ -10,14 +10,18 @@
 
 namespace Proximum\Vimeet\Tests\Application\Command\MeetingSlot;
 
+use Proximum\Vimeet\Application\Adapter\DelayedEventDispatcherInterface;
 use Proximum\Vimeet\Application\Command\MeetingSlot\Lock;
 use Proximum\Vimeet\Application\Command\MeetingSlot\LockHandler;
+use Proximum\Vimeet\Application\Event\Events;
+use Proximum\Vimeet\Application\Event\Slot\ToggleLockedEvent;
 use Proximum\Vimeet\Application\Exception\Slot\IsNotAllowedToLockSlotException;
 use Proximum\Vimeet\Domain\Model\MeetingSlot;
 use Proximum\Vimeet\Domain\Repository\MeetingSlotRepositoryInterface;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
+use PHPUnit\Framework\TestCase;
 
-class LockHandlerTest extends \PHPUnit_Framework_TestCase
+class LockHandlerTest extends TestCase
 {
     public function testHandle()
     {
@@ -32,8 +36,11 @@ class LockHandlerTest extends \PHPUnit_Framework_TestCase
         $meetingSlotRepository->set($lockedMeetingSlot)->shouldBeCalled();
         $meetingSlotRepository->findWithAtLeastOneMeetingByEvent($event)->shouldBeCalled();
 
-        $handler = new LockHandler($meetingSlotRepository->reveal());
-        $handler->handle(new Lock($unlockedMeetingSlot, $event));
+        $eventDispatcher = $this->prophesize(DelayedEventDispatcherInterface::class);
+        $eventDispatcher->dispatch(Events::SLOT_TOGGLE_LOCKED, new ToggleLockedEvent($event))->shouldBeCalled();
+
+        $handler = new LockHandler($meetingSlotRepository->reveal(), $eventDispatcher->reveal());
+        $handler->handle(new Lock($unlockedMeetingSlot));
     }
 
     public function testIsNotAllowedToLockSlotException()
@@ -49,7 +56,10 @@ class LockHandlerTest extends \PHPUnit_Framework_TestCase
         $meetingSlotRepository = $this->prophesize(MeetingSlotRepositoryInterface::class);
         $meetingSlotRepository->findWithAtLeastOneMeetingByEvent($event)->shouldBeCalled()->willReturn(['1' => 'meeting']);
 
-        $handler = new LockHandler($meetingSlotRepository->reveal());
+        $eventDispatcher = $this->prophesize(DelayedEventDispatcherInterface::class);
+        $eventDispatcher->dispatch(Events::SLOT_TOGGLE_LOCKED, new ToggleLockedEvent($event))->shouldNotBeCalled();
+
+        $handler = new LockHandler($meetingSlotRepository->reveal(), $eventDispatcher->reveal());
         $handler->handle(new Lock($meetingSlot->reveal()));
     }
 }

@@ -10,22 +10,46 @@
 
 namespace Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command;
 
+use Proximum\Vimeet\Application\Components\Guideline\Generator;
 use Proximum\Vimeet\Application\Exception\Asset\GuidelineAssetBuildFailedException;
 use Proximum\Vimeet\Domain\Model\Event;
-use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
+use Proximum\Vimeet\Domain\Repository\EventRepositoryInterface;
+use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class BuildEventGuidelineAssetCommand extends ContainerAwareCommand
+class BuildEventGuidelineAssetCommand extends Command
 {
+    const NAME = 'vimeet:event:build-guideline-asset';
+
+    /** @var EventRepositoryInterface */
+    private $eventRepository;
+
+    /** @var Generator */
+    private $generator;
+
+    /**
+     * @param EventRepositoryInterface $eventRepository
+     * @param Generator                $generator
+     */
+    public function __construct(
+        EventRepositoryInterface $eventRepository,
+        Generator $generator
+    ) {
+        parent::__construct(self::NAME);
+
+        $this->eventRepository = $eventRepository;
+        $this->generator = $generator;
+    }
+
     /**
      * {@inheritdoc}
      */
     protected function configure()
     {
         $this
-            ->setName('vimeet:event:build-guideline-asset')
+            ->setName(self::NAME)
             ->setDescription('Build guideline asset for the events')
             ->addOption(
                 'event',
@@ -47,15 +71,26 @@ class BuildEventGuidelineAssetCommand extends ContainerAwareCommand
         $event   = null;
 
         if ($eventId !== null) {
-            $event = $this->getContainer()->get('vimeet_infrastructure.repository.event_repository')->getById($eventId);
+            $event = $this->eventRepository->getById($eventId);
 
             if ($event === null) {
-                $output->writeln(sprintf('The event for the id %s was not found, the guideline assets will not be built', $eventId));
+                $output->writeln(
+                    sprintf(
+                        'The event for the id %s was not found, the guideline assets will not be built',
+                        $eventId
+                    )
+                );
             } else {
-                $output->writeln(sprintf('Building guideline assets for the event %s with id %s', $event->getTitle(), $eventId));
+                $output->writeln(
+                    sprintf(
+                        'Building guideline assets for the event %s with id %s',
+                        $event->getTitle(),
+                        $eventId
+                    )
+                );
             }
         } else {
-            $events = $this->getContainer()->get('vimeet_infrastructure.repository.event_repository')->getAll();
+            $events = $this->eventRepository->getAll();
         }
 
         if (null !== $event) {
@@ -76,13 +111,22 @@ class BuildEventGuidelineAssetCommand extends ContainerAwareCommand
     private function buildAsset(OutputInterface $output, Event $event)
     {
         try {
-            $assetPath = $this->getContainer()->get('guideline.generator')->generate($event);
+            $assetPath = $this->generator->generate($event);
             $event->setAssetPath($assetPath);
-            $this->getContainer()->get('vimeet_infrastructure.repository.event_repository')->set($event);
+            $this->eventRepository->set($event);
 
-            $output->writeln(sprintf('Guideline assets built for the event %s with the id %s', $event->getTitle(), $event->getId()));
+            $output->writeln(
+                sprintf(
+                    'Guideline assets built for the event %s with the id %s',
+                    $event->getTitle(),
+                    $event->getId())
+            );
         } catch (GuidelineAssetBuildFailedException $ex) {
-            $output->writeln(sprintf('Could not build the asset for the event %s with the id %s', $event->getTitle(), $event->getId()));
+            $output->writeln(
+                sprintf('Could not build the asset for the event %s with the id %s',
+                    $event->getTitle(),
+                    $event->getId())
+            );
         }
     }
 }

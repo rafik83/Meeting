@@ -1,9 +1,20 @@
 <tr class="catalog__sheet">
     <td rowspan="{{ sheetView.numberOfRequest }}">
-        {{ sheetView.sheetTitle }}
+        <p>{{ sheetView.sheetTitle }} <span class="label label-primary">{{ sheetView.type }}</span></p>
     </td>
 
     {% for requestView in sheetView.requestViews %}
+        <td>
+            {% if isMultipleSheet %}
+                {{ include('EventBundle:MultipleSheets/Request:displayModalSheetLink.html.twig', {
+                    'displaySheetRoute': 'event_sheet_group_display_sheet_for_multisheet_user'}
+                ) }}
+            {% else %}
+                {{ include('EventBundle:MultipleSheets/Request:displayModalSheetLink.html.twig', {
+                    'displaySheetRoute': 'event_sheet_group_display_sheet_for_group_manager'}
+                ) }}
+            {% endif %}
+        </td>
         <td>
             <div class="buttons-zone">
                 {{ include('EventBundle:MeetingRequest:buttons.html.twig', {
@@ -15,6 +26,9 @@
                     'isMeetingRequestUpdateLocked': isMeetingRequestUpdateLocked,
                     'isMeetingRequestClosed': isMeetingRequestClosed,
                     'isAnsweringMeetingRequestClosed': isAnsweringMeetingRequestClosed,
+                    'hideMeetingRequest': hideMeetingRequest|default(false),
+                    'isPhoneValidationRequired': sheetView.isPhoneValidationRequired,
+                    'phoneValidationLink': sheetView.validatePhoneLink
                 }) }}
             </div>
         </td>

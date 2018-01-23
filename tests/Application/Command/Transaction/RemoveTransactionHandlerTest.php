@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Application\Command\Transaction;
 
+use PHPUnit\Framework\TestCase;
 use Proximum\Vimeet\Application\Event\Events;
 use Proximum\Vimeet\Application\Event\Transaction\TransactionRemovedEvent;
 use Proximum\Vimeet\Domain\Model\Sheet;
@@ -21,7 +22,7 @@ use Proximum\Vimeet\Domain\Repository\TransactionRepositoryInterface;
 use Proximum\Vimeet\Infrastructure\Adapter\DelayedEventDispatcher;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
 
-class RemoveTransactionHandlerTest extends \PHPUnit_Framework_TestCase
+class RemoveTransactionHandlerTest extends TestCase
 {
     public function testHandle()
     {

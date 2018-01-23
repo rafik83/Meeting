@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Tests\Application\Query\Agenda\Admin\Spot;
 
+use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
 use Proximum\Vimeet\Application\Query\Agenda\Admin\Spot\SlotViewQuery;
 use Proximum\Vimeet\Application\Query\Agenda\Admin\Spot\DaySpotViewQuery;
@@ -21,7 +22,7 @@ use Proximum\Vimeet\Domain\Model\Event\Day;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
 use Proximum\Vimeet\Tests\Factory\SpotFactory;
 
-class DaySpotViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
+class DaySpotViewQueryHandlerTest extends TestCase
 {
     public function testHandle()
     {

@@ -15,40 +15,35 @@ use Proximum\Vimeet\Domain\Model\Event;
 
 class Update
 {
-    /**
-     * @var string
-     */
+    /** @var string */
     public $email;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     public $lastname;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     public $firstname;
 
-    /**
-     * @var Admin
-     */
+    /** @var Admin */
     public $operator;
 
-    /**
-     * @var Event[]
-     */
+    /** @var Event[] */
     public $events;
 
+    /** @var Event[] */
+    public $allowedEventsByAdmin;
+
     /**
-     * @param Admin $operator
+     * @param Admin   $operator
+     * @param Event[] $allowedEventsByAdmin
      */
-    public function __construct(Admin $operator)
+    public function __construct(Admin $operator, array $allowedEventsByAdmin)
     {
         $this->operator  = $operator;
         $this->email     = $operator->getEmail();
         $this->lastname  = $operator->getLastname();
         $this->firstname = $operator->getFirstname();
         $this->events    = $operator->getEvents()->toArray();
+        $this->allowedEventsByAdmin = $allowedEventsByAdmin;
     }
 }

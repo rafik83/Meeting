@@ -14,31 +14,29 @@ use Proximum\Vimeet\Domain\Model\Event;
 
 class ConfigureDates
 {
-    /**
-     * @var Event
-     */
+    /** @var Event */
     public $event;
 
-    /**
-     * "la date de mise en ligne du catalogue"
-     *
-     * @var \DateTimeInterface|null
-     */
+    /** @var \DateTimeInterface|null "la date de mise en ligne du catalogue" */
     public $catalogOnlineDate;
 
-    /**
-     * "la date d'ouverture des inscriptions au s-event"
-     *
-     * @var \DateTimeInterface|null
-     */
+    /** @var \DateTimeInterface|null "la date d'ouverture des inscriptions au s-event" */
     public $happeningsOpenDate;
 
-    /**
-     * "la date de publication des agendas définitifs (RDV)"
-     *
-     * @var \DateTimeInterface|null
-     */
+    /** @var \DateTimeInterface|null "la date de publication des agendas définitifs (RDV)" */
     public $schedulePublishDate;
+
+    /** @var null|\DateTimeInterface "la date d'activation des notifications SMS" */
+    public $smsActivationDate;
+
+    /** @var null|\DateTimeInterface "la date d'ouverture de l'agenda" */
+    public $agendaOnlineDate;
+
+    /** @var null|\DateTimeInterface "Date d'ouverture des inscriptions" */
+    public $registrationOpenDate;
+
+    /** @var null|\DateTimeInterface "Date de cloture des inscriptions" */
+    public $registrationCloseDate;
 
     /**
      * "Bloquer la demande de rendez-vous"
@@ -59,13 +57,6 @@ class ConfigureDates
     public $closeAnsweringMeetingRequestDate;
 
     /**
-     * "la date d'activation des notifications SMS"
-     *
-     * @var null|\DateTimeInterface
-     */
-    public $smsActivationDate;
-
-    /**
      * ConfigureDates constructor.
      *
      * @param Event $event
@@ -79,5 +70,8 @@ class ConfigureDates
         $this->closeMeetingRequestDate          = $event->getConfiguration()->getCloseMeetingRequestDate();
         $this->closeAnsweringMeetingRequestDate = $event->getConfiguration()->getCloseAnsweringMeetingRequestDate();
         $this->smsActivationDate                = $event->getConfiguration()->getSmsActivationDate();
+        $this->agendaOnlineDate                 = $event->getConfiguration()->getAgendaOnlineDate();
+        $this->registrationOpenDate             = $event->getConfiguration()->getRegistrationOpenDate();
+        $this->registrationCloseDate            = $event->getConfiguration()->getRegistrationCloseDate();
     }
 }

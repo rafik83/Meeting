@@ -13,6 +13,7 @@ namespace Proximum\Vimeet\Application\Query\Navigation\Submenu;
 use Proximum\Vimeet\Application\Components\Navigation\Category;
 use Proximum\Vimeet\Application\Components\Navigation\Route;
 use Proximum\Vimeet\Application\View\Navigation\SubmenuButtonView;
+use Proximum\Vimeet\Domain\KeyDates\Checker\AgendaAccessChecker;
 use Proximum\Vimeet\Domain\KeyDates\Checker\HappeningsAccessChecker;
 use Proximum\Vimeet\Domain\Navigation\NavigationBuilderInterface;
 
@@ -29,17 +30,25 @@ class AgendaSubmenuViewQueryHandler
     private $happeningsAccessChecker;
 
     /**
+     * @var AgendaAccessChecker
+     */
+    private $agendaAccessChecker;
+
+    /**
      * CatalogSubmenuViewQueryHandler constructor.
      *
      * @param NavigationBuilderInterface $navigationBuilder
      * @param HappeningsAccessChecker    $happeningsAccessChecker
+     * @param AgendaAccessChecker        $agendaAccessChecker
      */
     public function __construct(
         NavigationBuilderInterface $navigationBuilder,
-        HappeningsAccessChecker $happeningsAccessChecker
+        HappeningsAccessChecker $happeningsAccessChecker,
+        AgendaAccessChecker $agendaAccessChecker
     ) {
         $this->navigationBuilder       = $navigationBuilder;
         $this->happeningsAccessChecker = $happeningsAccessChecker;
+        $this->agendaAccessChecker     = $agendaAccessChecker;
     }
 
     /**
@@ -51,19 +60,25 @@ class AgendaSubmenuViewQueryHandler
     {
         $buttonViews = [];
 
-        if ($this->happeningsAccessChecker->allowedToAccess($query->event)) {
+        if ($this->agendaAccessChecker->allowedToAccess($query->event)) {
             $buttonViews[] = new SubmenuButtonView(
                 Category::AGENDA_ICON,
                 'agenda.title',
                 $this->navigationBuilder->getRoute('event_agenda', ['sheet' => $query->sheet->getId()]),
-                Route::isAgenda($query->route)
+                Route::isAgenda($query->route),
+                false,
+                true
             );
+        }
 
+        if ($this->happeningsAccessChecker->allowedToAccess($query->event)) {
             $buttonViews[] = new SubmenuButtonView(
-                Category::PLANNING_ICON,
+                Category::PROGRAM_ICON,
                 'program.title',
                 $this->navigationBuilder->getRoute('happening_program', ['sheet' => $query->sheet->getId()]),
-                Route::isProgram($query->route)
+                Route::isProgram($query->route),
+                false,
+                true
             );
         }
 

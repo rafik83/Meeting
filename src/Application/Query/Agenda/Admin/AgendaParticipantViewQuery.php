@@ -48,7 +48,7 @@ class AgendaParticipantViewQuery
     /**
      * @var Unavailability[]
      */
-    public $unavailabilites;
+    public $unavailabilities;
 
     /**
      * @var Unavailability\Mass[]
@@ -73,7 +73,7 @@ class AgendaParticipantViewQuery
      * @param Sheet                    $sheet
      * @param string                   $locale
      * @param HappeningParticipation[] $happeningParticipations
-     * @param Unavailability[]         $unavailabilites
+     * @param Unavailability[]         $unavailabilities
      * @param Unavailability\Mass[]    $masses
      * @param Meeting[]                $meetings
      * @param MassAssignment[]         $assignment
@@ -84,7 +84,7 @@ class AgendaParticipantViewQuery
         Sheet $sheet,
         $locale,
         array $happeningParticipations,
-        array $unavailabilites,
+        array $unavailabilities,
         array $masses,
         array $meetings,
         array $assignment
@@ -94,7 +94,7 @@ class AgendaParticipantViewQuery
         $this->sheet                   = $sheet;
         $this->locale                  = $locale;
         $this->happeningParticipations = $happeningParticipations;
-        $this->unavailabilites         = $unavailabilites;
+        $this->unavailabilities        = $unavailabilities;
         $this->masses                  = $masses;
         $this->meetings                = $meetings;
         $this->massAssignments         = $assignment;

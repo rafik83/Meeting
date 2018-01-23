@@ -1,5 +1,7 @@
 template.action.close: Fermer
 template.action.save: Enregistrer
+template.block.configure: Configurer
+template.block.remove_confirm: 'Confirmez vous la suppression de cet élément ?'
 template.collection.title: 'Champs collection activés'
 template.content.title: Contenu
 template.defaultElement.title: 'Élément par défaut'
@@ -18,20 +20,34 @@ template.nomenclature.objective.none: Aucun
 template.nomenclature.objective.supply: Offre
 template.nomenclature.objective.title: Objectif
 template.nomenclature.title: Nomenclature
+template.object.boolean: 'Champs Oui / Non'
 template.object.button-link: Lien
 template.object.collection: Collection
+template.object.country: Pays
 template.object.editable-text: 'Texte modifiable'
+template.object.gender: Genre
 template.object.image: Image
 template.object.media: Media
 template.object.nomenclature: Nomenclature
 template.object.participant: Participant
 template.object.tag: 'Contenu affiché par défaut'
 template.object.tags: 'Multi tag'
+template.object.telephone: Téléphone
 template.object.text: 'Texte non modifiable'
+template.object.url: Lien
 template.participant.display: 'Nombre de participants affichés sur la fiche'
 template.participant.title: 'Les participants'
 template.placeholder.title: Placeholder
 template.products.title: 'Produits liés'
+template.registration.atLeastOneDataFieldMustBeChecked: 'Au moins un des champs Type d''information doit être coché'
+template.registration.dataType: 'Type d''information'
+template.registration.optional: Optionnel
+template.registration.participantData: 'Information de participant'
+template.registration.participantTags: 'Tags de participant'
+template.registration.sheetData: 'Information de fiche'
+template.registration.sheetTags: 'Tags de fiche'
+template.registration.tag: Tags
+template.registration.templateObjectMustHaveAtLeastOneSetterTag: 'Au moins un type d''information (tag "sheet_data" ou "participant_data") doit être assigné pour le ou les champs suivants : %objectsLabel%'
 template.required.title: Requis
 template.style.default: 'Par défaut'
 template.style.title: Style

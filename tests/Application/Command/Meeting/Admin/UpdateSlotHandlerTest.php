@@ -12,8 +12,12 @@ namespace Proximum\Vimeet\Tests\Application\Command\Meeting\Admin;
 
 use DateTime;
 use Prophecy\Argument;
+use Prophecy\Prophecy\ObjectProphecy;
+use Proximum\Vimeet\Application\Adapter\DelayedEventDispatcherInterface;
 use Proximum\Vimeet\Application\Command\Meeting\Admin\UpdateSlot;
 use Proximum\Vimeet\Application\Command\Meeting\Admin\UpdateSlotHandler;
+use Proximum\Vimeet\Application\Event\Events;
+use Proximum\Vimeet\Application\Event\Meeting\MeetingMovedEvent;
 use Proximum\Vimeet\Application\Exception\Meeting\BlockedSpotNotAvailableForThisMeetingAndSlotException;
 use Proximum\Vimeet\Application\Exception\Meeting\MeetingIsBlockedSlotException;
 use Proximum\Vimeet\Application\Exception\Meeting\NoSpotsAvailableForThisSlotAndMeetingException;
@@ -35,8 +39,9 @@ use Proximum\Vimeet\Tests\Factory\SheetFactory;
 use Proximum\Vimeet\Tests\Factory\SlotFactory;
 use Proximum\Vimeet\Tests\Factory\SpotFactory;
 use Proximum\Vimeet\Tests\Factory\UserFactory;
+use PHPUnit\Framework\TestCase;
 
-class UpdateSlotHandlerTest extends \PHPUnit_Framework_TestCase
+class UpdateSlotHandlerTest extends TestCase
 {
     /** @var \DateTimeInterface */
     private $dateTime;
@@ -65,6 +70,9 @@ class UpdateSlotHandlerTest extends \PHPUnit_Framework_TestCase
     /** @var Request */
     private $request;
 
+    /** @var ObjectProphecy */
+    private $eventDispatcher;
+
     public function setUp()
     {
         $this->dateTime        = new DateTime();
@@ -76,6 +84,7 @@ class UpdateSlotHandlerTest extends \PHPUnit_Framework_TestCase
         $this->toSheet         = SheetFactory::create($this->event, $this->toUser);
         $this->toParticipant   = ParticipantFactory::create($this->toSheet, $this->toUser);
         $this->request         = new Request($this->fromSheet, [], $this->toSheet, [], $this->dateTime, $this->fromUser, $this->event);
+        $this->eventDispatcher = $this->prophesize(DelayedEventDispatcherInterface::class);
     }
 
     public function testHandle()
@@ -136,10 +145,12 @@ class UpdateSlotHandlerTest extends \PHPUnit_Framework_TestCase
         $updateSpotHandler = new UpdateSlotHandler(
             $meetingRepository->reveal(),
             $spotRepository->reveal(),
-            $meetingUpdateSlotViewQueryHandler->reveal()
+            $meetingUpdateSlotViewQueryHandler->reveal(),
+            $this->eventDispatcher->reveal()
         );
 
         $meetingRepository->set($expectedMeeting)->shouldBeCalled();
+        $this->eventDispatcher->dispatch(Events::MEETING_MOVED, new MeetingMovedEvent($expectedMeeting))->shouldBeCalled();
 
         $updateSpotHandler->handle($updateSlot);
     }
@@ -170,11 +181,14 @@ class UpdateSlotHandlerTest extends \PHPUnit_Framework_TestCase
 
         $meetingRepository->set(Argument::any())->shouldNotBeCalled();
 
+        $this->eventDispatcher->dispatch(Argument::any())->shouldNotBeCalled();
+
         $updateSlot = new UpdateSlot($meeting, $slot2);
         $updateSpotHandler = new UpdateSlotHandler(
             $meetingRepository->reveal(),
             $spotRepository->reveal(),
-            $meetingUpdateSlotViewQueryHandler->reveal()
+            $meetingUpdateSlotViewQueryHandler->reveal(),
+            $this->eventDispatcher->reveal()
         );
 
         $this->expectException(MeetingIsBlockedSlotException::class);
@@ -211,11 +225,14 @@ class UpdateSlotHandlerTest extends \PHPUnit_Framework_TestCase
             // not returned 404 ($slot2)
             ->willReturn(new MeetingUpdateSlotView([67]));
 
+        $this->eventDispatcher->dispatch(Argument::any())->shouldNotBeCalled();
+
         $updateSlot = new UpdateSlot($meeting, $slot2);
         $updateSpotHandler = new UpdateSlotHandler(
             $meetingRepository->reveal(),
             $spotRepository->reveal(),
-            $meetingUpdateSlotViewQueryHandler->reveal()
+            $meetingUpdateSlotViewQueryHandler->reveal(),
+            $this->eventDispatcher->reveal()
         );
 
         $meetingRepository->set(Argument::any())->shouldNotBeCalled();
@@ -253,6 +270,8 @@ class UpdateSlotHandlerTest extends \PHPUnit_Framework_TestCase
             ->shouldBeCalled()
             ->willReturn(new MeetingUpdateSlotView([67, 76]));
 
+        $this->eventDispatcher->dispatch(Argument::any())->shouldNotBeCalled();
+
         // No spots are available for selected slot
         $spotRepository->getSpotsForSlotAndParticipantsQuantity(
             $slot2,
@@ -267,7 +286,8 @@ class UpdateSlotHandlerTest extends \PHPUnit_Framework_TestCase
         $updateSpotHandler = new UpdateSlotHandler(
             $meetingRepository->reveal(),
             $spotRepository->reveal(),
-            $meetingUpdateSlotViewQueryHandler->reveal()
+            $meetingUpdateSlotViewQueryHandler->reveal(),
+            $this->eventDispatcher->reveal()
         );
 
         $meetingRepository->set(Argument::any())->shouldNotBeCalled();
@@ -317,11 +337,14 @@ class UpdateSlotHandlerTest extends \PHPUnit_Framework_TestCase
             false
         )->shouldBeCalled()->willReturn([$spot2]);
 
+        $this->eventDispatcher->dispatch(Argument::any())->shouldNotBeCalled();
+
         $updateSlot = new UpdateSlot($meeting, $slot2);
         $updateSpotHandler = new UpdateSlotHandler(
             $meetingRepository->reveal(),
             $spotRepository->reveal(),
-            $meetingUpdateSlotViewQueryHandler->reveal()
+            $meetingUpdateSlotViewQueryHandler->reveal(),
+            $this->eventDispatcher->reveal()
         );
 
         $meetingRepository->set(Argument::any())->shouldNotBeCalled();

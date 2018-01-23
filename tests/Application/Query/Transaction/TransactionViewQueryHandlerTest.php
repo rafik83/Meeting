@@ -22,8 +22,9 @@ use Proximum\Vimeet\Domain\Repository\BillingInfoRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\Payment\PaymentRepositoryInterface;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
 use Proximum\Vimeet\Tests\Factory\SheetFactory;
+use PHPUnit\Framework\TestCase;
 
-class TransactionViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
+class TransactionViewQueryHandlerTest extends TestCase
 {
     public function testHandle()
     {

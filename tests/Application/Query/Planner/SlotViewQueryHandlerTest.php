@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Tests\Application\Query\Planner;
 
+use PHPUnit\Framework\TestCase;
 use Proximum\Vimeet\Application\Exception\Planner\SlotNotConfiguredException;
 use Proximum\Vimeet\Application\Query\Planner\SlotViewQuery;
 use Proximum\Vimeet\Application\Query\Planner\SlotViewQueryHandler;
@@ -21,7 +22,7 @@ use Proximum\Vimeet\Domain\Repository\MeetingSlotRepositoryInterface;
 use Prophecy\Prophecy\ObjectProphecy;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
 
-class SlotViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
+class SlotViewQueryHandlerTest extends TestCase
 {
     /**
      * @var ObjectProphecy

@@ -10,12 +10,14 @@
 
 namespace Proximum\Vimeet\Tests\Application\Command\Participant;
 
+use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
 use Proximum\Vimeet\Application\Command\Participant\Add;
 use Proximum\Vimeet\Application\Command\Participant\AddHandler;
 use Proximum\Vimeet\Application\Command\Participant\AddResult;
 use Proximum\Vimeet\Application\Components\Token\User\ActivateAccountTokenGenerator;
 use Proximum\Vimeet\Application\Event\Events;
+use Proximum\Vimeet\Application\Event\Participant\ParticipantAddedEvent;
 use Proximum\Vimeet\Application\Event\Sheet\SheetAddParticipantEvent;
 use Proximum\Vimeet\Application\Event\Sheet\SheetUpdatedEvent;
 use Proximum\Vimeet\Application\Event\User\ActivateAccountEvent;
@@ -37,7 +39,7 @@ use Proximum\Vimeet\Domain\UserEvent\TypeResolver;
 use Proximum\Vimeet\Infrastructure\Adapter\DelayedEventDispatcher;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
 
-class AddHandlerTest extends \PHPUnit_Framework_TestCase
+class AddHandlerTest extends TestCase
 {
     public function testHandleWhenUserNotExists()
     {
@@ -53,7 +55,7 @@ class AddHandlerTest extends \PHPUnit_Framework_TestCase
         $package = new Package($event, 'My package', $now);
         $package->enable(true, true, true);
         $package->setPlans([$planProduct]);
-        $package->setParticipant($participantProduct);
+        $package->setParticipants([$participantProduct]);
         $type->setPackage($package);
 
         $expectedSheet       = new Sheet($event, $type, [], $user, $now);
@@ -102,6 +104,7 @@ class AddHandlerTest extends \PHPUnit_Framework_TestCase
 
         $activateAccountEvent = new ActivateAccountEvent(
             $expectedUser,
+            $user,
             $event,
             $expectedActivateAccountToken,
             $sheet
@@ -120,6 +123,10 @@ class AddHandlerTest extends \PHPUnit_Framework_TestCase
         $eventDispatcher->dispatch(
             Events::SHEET_ADD_PARTICIPANT_CONFIRMATION,
             $sheetAddConfirmationEvent
+        )->shouldBeCalled();
+        $eventDispatcher->dispatch(
+            Events::PARTICIPANT_ADDED,
+            new ParticipantAddedEvent($expectedParticipant)
         )->shouldBeCalled();
         $eventDispatcher->dispatch(Events::USER_ACCOUNT_ACTIVATED, $activateAccountEvent)->shouldBeCalled();
         $sheetUpdatedEvent = new SheetUpdatedEvent($sheet);

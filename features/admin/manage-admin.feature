@@ -19,7 +19,6 @@ Feature: Manage Admin
     Then I should be on this page "/fr/admin"
     And I should see "DUPONT"
     And I should see "admin.admin_list.table.content.super_admin.events.all"
-    And I should see ""
     Then I follow "admin.admin_list.action.create"
     And I should be on this page "/fr/admin/create"
     Then I fill in the following:

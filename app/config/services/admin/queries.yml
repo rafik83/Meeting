@@ -1,0 +1,98 @@
+services:
+    query.analytic.meeting_solution.spot.spot_satisfaction_view_query_handler:
+        class: Proximum\Vimeet\Application\Query\Analytic\MeetingSolution\Spot\SpotSatisfactionViewQueryHandler
+
+    query.analytic.meeting_solution.spot.spot_satisfaction_list_query_handler:
+        class: Proximum\Vimeet\Application\Query\Analytic\MeetingSolution\Spot\SpotSatisfactionListQueryHandler
+        arguments:
+            - '@vimeet_infrastructure.repository.spot_repository'
+            - '@vimeet_infrastructure.repository.meeting_repository'
+            - '@query.analytic.meeting_solution.spot.spot_satisfaction_view_query_handler'
+
+    query.analytic.meeting_solution.sheet.sheet_satisfaction_view_query_handler:
+        class: Proximum\Vimeet\Application\Query\Analytic\MeetingSolution\Sheet\SheetSatisfactionViewQueryHandler
+
+    query.analytic.meeting_solution.sheet.sheet_satisfaction_list_query_handler:
+        class: Proximum\Vimeet\Application\Query\Analytic\MeetingSolution\Sheet\SheetSatisfactionListQueryHandler
+        arguments:
+            - '@vimeet_infrastructure.repository.sheet_repository'
+            - '@vimeet_infrastructure.repository.meeting.request_repository'
+            - '@vimeet_infrastructure.repository.meeting_repository'
+            - '@query.analytic.meeting_solution.sheet.sheet_satisfaction_view_query_handler'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Analytic\MeetingSolution\Sheet\SheetSatisfactionListQuery }
+
+    query.analytic.meeting_solution.spot_filling_rate.spot_filling_rate_query_handler:
+        class: Proximum\Vimeet\Application\Query\Analytic\MeetingSolution\SpotFillingRate\SpotFillingRateQueryHandler
+        arguments:
+            - '@vimeet_infrastructure.repository.meeting_repository'
+
+    query.analytic.meeting_solution.meeting_solution_list_query_handler:
+        class: Proximum\Vimeet\Application\Query\Analytic\MeetingSolution\MeetingSolutionListQueryHandler
+        arguments:
+            - '@repository.analytic.meeting_solution_repository'
+            - '@adapter.serializer_adapter'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Analytic\MeetingSolution\MeetingSolutionListQuery }
+
+    query.analytic.meeting_solution.filling_rate_query_handler:
+        class: Proximum\Vimeet\Application\Query\Analytic\MeetingSolution\FillingRateQueryHandler
+        arguments:
+            - '@vimeet_infrastructure.repository.meeting_repository'
+
+    #
+    # API
+    #
+    query.api.leni.leni_user_view_query_handler:
+        class: Proximum\Vimeet\Application\ThirdParty\LENI\Query\LeniUserViewQueryHandler
+        arguments:
+            - '@components.user.user_info_guesser'
+            - '@vimeet_infrastructure.application.components.sheet.sheet_info_guesser'
+            - '@planning.formatter.participant_planning_formatter'
+            - '@domain.service.sheets_group.type_name_resolver'
+            - '@domain.service.category.category_name_resolver'
+            - '@domain.service.sheets_group.group_name_resolver'
+            - '@vimeet_infrastructure.repository.sheet_repository'
+
+    #
+    # Meeting Request Export
+    #
+    query.meeting_request.export.sheet_view_query_handler:
+        class: Proximum\Vimeet\Application\Query\MeetingRequest\Export\SheetViewQueryHandler
+        arguments:
+            - '@command.planning.participant_info_guesser_cache'
+
+    query.meeting_request.export.meeting_request_view_query_handler:
+        class: Proximum\Vimeet\Application\Query\MeetingRequest\Export\MeetingRequestViewQueryHandler
+        arguments:
+            - '@query.meeting_request.export.sheet_view_query_handler'
+
+    query.meeting_request.export.meeting_request_list_view_query_handler:
+        class: Proximum\Vimeet\Application\Query\MeetingRequest\Export\MeetingRequestListViewQueryHandler
+        arguments:
+            - '@vimeet_infrastructure.repository.meeting.request_repository'
+            - '@query.meeting_request.export.meeting_request_view_query_handler'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\MeetingRequest\Export\MeetingRequestListViewQuery }
+
+    #
+    # Sheet Details
+    #
+    query.sheet.detail.participant.phone_validation_status_query_handler:
+        class: Proximum\Vimeet\Application\Query\Sheet\Detail\Participant\PhoneValidationStatusQueryHandler
+        arguments:
+            - '@domain.user_event.user_event_phone_checker'
+
+    query.sheet.detail.participant.availability_confirmation_status_query_handler:
+        class: Proximum\Vimeet\Application\Query\Sheet\Detail\Participant\AvailabilityConfirmationStatusQueryHandler
+        arguments:
+            - '@repository.user.event.extra_data_repository'
+
+    #
+    # Type
+    #
+    Proximum\Vimeet\Application\Query\Type\TypesWithPaymentConditionsViewQueryHandler:
+        arguments:
+            - '@vimeet_infrastructure.repository.type_repository'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Type\TypesWithPaymentConditionsViewQuery }

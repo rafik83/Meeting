@@ -26,11 +26,26 @@
                             </ul>
                         </li>
                     {% else %}
+                        {{ include('AdminBundle:Event:linkCurrentPastArchived.html.twig', {horizontal: false}) }}
+                        {% if is_granted('ROLE_ALLOWED_TO_OPERATE') %}
                         <li>
-                            <a href="{{ path('admin_event_list') }}">
-                                {{ 'admin.events.link'|trans }}
+                            <a href="{{ path('admin_event_order_invoice_find') }}">
+                                {{ 'admin.event.page.orderInvoiceFinder.title'|trans }}
                             </a>
                         </li>
+                        {% endif %}
+                        {% if is_granted('ROLE_ALLOWED_TO_ORGANIZE') %}
+                            <li>
+                                <a href="{{ path('admin_event_transaction_export') }}">
+                                    {{ 'admin.event.page.transactions.link'|trans }}
+                                </a>
+                            </li>
+                            <li>
+                                <a href="{{ path('admin_invoice_export') }}">
+                                    {{ 'admin.event.page.invoice.link'|trans }}
+                                </a>
+                            </li>
+                        {% endif %}
                         {% if is_granted('ROLE_SUPER_ADMIN') %}
                             <li>
                                 <a href="{{ path('admin_list_admin') }}">
@@ -114,11 +129,26 @@
                                 <span class="caret"></span>
                             </a>
                             <ul class="dropdown-menu">
-                                <li>
-                                    <a href="{{ path('admin_event_list') }}">
-                                        {{ 'admin.events.link'|trans }}
-                                    </a>
-                                </li>
+                                {{ include('AdminBundle:Event:linkCurrentPastArchived.html.twig', {horizontal: true}) }}
+                                {% if is_granted('ROLE_ALLOWED_TO_OPERATE') %}
+                                    <li>
+                                        <a href="{{ path('admin_event_order_invoice_find') }}">
+                                            {{ 'admin.event.page.orderInvoiceFinder.title'|trans }}
+                                        </a>
+                                    </li>
+                                {% endif %}
+                                {% if is_granted('ROLE_ALLOWED_TO_ORGANIZE') %}
+                                    <li>
+                                        <a href="{{ path('admin_event_transaction_export') }}">
+                                            {{ 'admin.event.page.transactions.link'|trans }}
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="{{ path('admin_invoice_export') }}">
+                                            {{ 'admin.event.page.invoice.link'|trans }}
+                                        </a>
+                                    </li>
+                                {% endif %}
                                 {% if is_granted('ROLE_SUPER_ADMIN') %}
                                     <li>
                                         <a href="{{ path('admin_nomenclature_globals') }}">
@@ -178,6 +208,9 @@
                             </ul>
                         </li>
                     {% endif %}
+                    <li>
+                        <a href="#" onclick="zE.activate({hideOnClose: true}); return false;"><span class="glyphicon glyphicon-info-sign"></span> {{ 'help.link'|trans }}</a>
+                    </li>
                     <li class="dropdown">
                         <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
                             <span class="glyphicon glyphicon-user"></span>

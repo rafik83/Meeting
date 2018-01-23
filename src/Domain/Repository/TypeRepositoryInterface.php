@@ -143,6 +143,14 @@ interface TypeRepositoryInterface
     public function getTypesTitleByEventAndLocale(Event $event, $locale, array $types = null);
 
     /**
+     * @param Event  $event
+     * @param User   $user
+     *
+     * @return Type|null
+     */
+    public function getFirstPositionTypeByEventAndUser(Event $event, User $user);
+
+    /**
      * @param User|int $user
      *
      * @return array
@@ -193,4 +201,11 @@ interface TypeRepositoryInterface
      * @return Type[]
      */
     public function getVisibleTypesViewsByEvent(Event $event, $locale);
+
+    /**
+     * @param Event $event
+     *
+     * @return Type[]
+     */
+    public function getTypesWithPaymentConditionsByEvent(Event $event): array;
 }

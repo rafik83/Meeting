@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Application\Components\Planning\Formatter;
 
+use Proximum\Vimeet\Application\Adapter\TranslatorInterface;
 use Proximum\Vimeet\Application\Query\Planning\PlanningViewQuery;
 use Proximum\Vimeet\Application\Query\Planning\PlanningViewQueryHandler;
 use Proximum\Vimeet\Application\View\Planning\Day\AbstractTimeEntityView;
@@ -21,40 +22,33 @@ use Proximum\Vimeet\Application\View\Planning\day\MeetingView;
 use Proximum\Vimeet\Application\View\Planning\day\UnavailabilityView;
 use Proximum\Vimeet\Application\View\Planning\PlanningView;
 use Proximum\Vimeet\Domain\Model\Event;
-use Proximum\Vimeet\Domain\Model\Participant;
-use Proximum\Vimeet\Domain\Model\Sheet;
+use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Service\MarkdownFormatter;
-use Proximum\Vimeet\Infrastructure\Adapter\TranslatorAdapter;
 
 class ParticipantPlanningFormatter
 {
-    const TRANSLATION_DOMAIN       = 'messages';
-    const TRANSLATE_MEETING        = 'planning.participant.meeting';
-    const TRANSLATE_UNAVAILABILITY = 'planning.participant.unavailability';
-    const TRANSLATE_TIME_ENTITY    = 'planning.participant.time';
+    const TRANSLATION_DOMAIN               = 'messages';
+    const TRANSLATE_MEETING                = 'planning.participant.meeting';
+    const TRANSLATE_MEETING_MULTIPLE_SHEET = 'planning.participant.meeting_multiple_sheet';
+    const TRANSLATE_UNAVAILABILITY         = 'planning.participant.unavailability';
+    const TRANSLATE_TIME_ENTITY            = 'planning.participant.time';
 
-    /**
-     * @var TranslatorAdapter
-     */
+    /** @var TranslatorInterface */
     private $translator;
 
-    /**
-     * @var UnallocatedFormatter
-     */
+    /** @var UnallocatedFormatter */
     private $unallocatedFormatter;
 
-    /**
-     * @var PlanningViewQueryHandler
-     */
+    /** @var PlanningViewQueryHandler */
     private $planningViewQueryHandler;
 
     /**
-     * @param TranslatorAdapter        $translator
+     * @param TranslatorInterface      $translator
      * @param UnallocatedFormatter     $unallocatedFormatter
      * @param PlanningViewQueryHandler $planningViewQueryHandler
      */
     public function __construct(
-        TranslatorAdapter $translator,
+        TranslatorInterface $translator,
         UnallocatedFormatter $unallocatedFormatter,
         PlanningViewQueryHandler $planningViewQueryHandler
     ) {
@@ -64,35 +58,73 @@ class ParticipantPlanningFormatter
     }
 
     /**
-     * Format the planning of the participant
+     * Format the planning of the user
      *
-     * @param Participant $participant
-     * @param string      $userLocale
+     * @param User   $user
+     * @param Event  $event
+     * @param string $userLocale
      *
      * @return string
      */
-    public function formatPlanningFromParticipant(Participant $participant, $userLocale)
+    public function formatPlanningFromUserAndEvent(User $user, Event $event, $userLocale)
     {
-        $sheet  = $participant->getSheet();
-        $event  = $sheet->getEvent();
-        $planning = $this->getPlanningFromParticipant($event, $participant, $userLocale);
+        $planning = $this->getPlanningFromUser($event, $user, $userLocale);
 
         return $this->formatPlanningFromPlanningView($planning, $userLocale);
     }
 
     /**
-     * @param Participant $participant
-     * @param string      $userLocale
+     * @param User   $user
+     * @param Event  $event
+     * @param string $userLocale
      *
      * @return string
      */
-    public function formatPlanningFromParticipantWithUnallocated(Participant $participant, $userLocale)
+    public function formatPlanningFromUserAndEventWithUnallocated(User $user, Event $event, $userLocale)
     {
-        $sheet        = $participant->getSheet();
-        $event        = $sheet->getEvent();
-        $planningView = $this->getPlanningFromParticipant($event, $participant, $userLocale);
+        $planningView = $this->getPlanningFromUser($event, $user, $userLocale);
 
-        return $this->formatPlanningFromPlanningViewWithUnallocated($sheet, $planningView, $userLocale);
+        return $this->formatPlanningFromPlanningViewWithUnallocatedForUser(
+            $event,
+            $user,
+            $planningView,
+            $userLocale
+        );
+    }
+
+    /**
+     * @param User   $user
+     * @param Event  $event
+     * @param string $userLocale
+     *
+     * @return FormattedPlanningView
+     */
+    public function formatPlanningByDayFromUserAndEventWithUnallocated(
+        User $user,
+        Event $event,
+        $userLocale
+    ): FormattedPlanningView {
+        $planningView = $this->getPlanningFromUser($event, $user, $userLocale);
+
+        $plannings = [];
+
+        foreach ($planningView->days as $key => $day) {
+            $plannings[$key] = $this->format(
+                [$day],
+                $userLocale,
+                $planningView->eventTimeZone,
+                $planningView->isUserMultipleSheet
+            );
+        }
+
+        $unallocated = $this->unallocatedFormatter->formatForUser(
+            $event,
+            $user,
+            $userLocale,
+            $planningView->isUserMultipleSheet
+        );
+
+        return new FormattedPlanningView($plannings, $unallocated);
     }
 
     /**
@@ -104,23 +136,26 @@ class ParticipantPlanningFormatter
     }
 
     /**
-     * @param Participant[] $participants
+     * @param User[] $users
+     * @param Event  $event
      */
-    public function preloadPlanningHandlerForParticipants(array $participants)
+    public function preloadPlanningHandlerForUsersAndEvent(array $users, Event $event)
     {
-        $this->planningViewQueryHandler->preloadForParticipants($participants);
+        $this->planningViewQueryHandler->preloadForEventAndUsers($event, $users);
     }
 
     /**
-     * @param Event       $event
-     * @param Participant $participant
-     * @param string      $userLocale
+     * @param Event  $event
+     * @param User   $user
+     * @param string $userLocale
      *
      * @return PlanningView
      */
-    private function getPlanningFromParticipant(Event $event, Participant $participant, $userLocale)
+    private function getPlanningFromUser(Event $event, User $user, $userLocale)
     {
-        return $this->planningViewQueryHandler->handle(new PlanningViewQuery($event, $participant, $userLocale));
+        return $this->planningViewQueryHandler->handle(
+            new PlanningViewQuery($event, $user, $userLocale)
+        );
     }
 
     /**
@@ -133,22 +168,37 @@ class ParticipantPlanningFormatter
      */
     public function formatPlanningFromPlanningView(PlanningView $planning, $userLocale)
     {
-        return $this->format($planning->days, $userLocale);
+        return $this->format($planning->days, $userLocale, $planning->eventTimeZone, $planning->isUserMultipleSheet);
     }
 
     /**
-     * Format the planning of the participant with the sheet unallocated
+     * Format the planning of the user with the user's sheets unallocated
      *
-     * @param Sheet      $sheet
+     * @param Event        $event
+     * @param User         $user
      * @param PlanningView $planningView
-     * @param string     $userLocale
+     * @param string       $userLocale
      *
      * @return string
      */
-    public function formatPlanningFromPlanningViewWithUnallocated(Sheet $sheet, PlanningView $planningView, $userLocale)
-    {
-        $planning    = $this->format($planningView->days, $userLocale);
-        $unallocated = $this->unallocatedFormatter->format($sheet, $userLocale);
+    public function formatPlanningFromPlanningViewWithUnallocatedForUser(
+        Event $event,
+        User $user,
+        PlanningView $planningView,
+        $userLocale
+    ) {
+        $planning = $this->format(
+            $planningView->days,
+            $userLocale,
+            $planningView->eventTimeZone,
+            $planningView->isUserMultipleSheet
+        );
+        $unallocated = $this->unallocatedFormatter->formatForUser(
+            $event,
+            $user,
+            $userLocale,
+            $planningView->isUserMultipleSheet
+        );
 
         if (empty($unallocated)) {
             return $planning;
@@ -160,13 +210,20 @@ class ParticipantPlanningFormatter
     /**
      * @param DayView[] $days
      * @param string    $participantLocale
+     * @param string    $timeZone
+     * @param bool      $isUserMultipleSheets
      *
      * @return string
      */
-    private function format(array $days, $participantLocale)
+    private function format(array $days, $participantLocale, $timeZone, $isUserMultipleSheets = false)
     {
         $formatted    = '';
-        $dayFormatter = new \IntlDateFormatter($participantLocale, \IntlDateFormatter::FULL, \IntlDateFormatter::NONE);
+        $dayFormatter = new \IntlDateFormatter(
+            $participantLocale,
+            \IntlDateFormatter::FULL,
+            \IntlDateFormatter::NONE,
+            $timeZone
+        );
 
         foreach ($days as $day) {
             // Sort the time entities of the day by time asc
@@ -174,13 +231,20 @@ class ParticipantPlanningFormatter
 
             // Display the day name
             $formatted .= MarkdownFormatter::newLine(MarkdownFormatter::bold(
-                ucfirst($this->getFormattedDate($dayFormatter, $day->getDay())))
-            );
+                ucfirst($this->getFormattedDate($dayFormatter, $day->getDay()))
+            ));
 
             // Display the happening, mass, unavailability, meeting
-            $formatted .= MarkdownFormatter::newLine(MarkdownFormatter::newLine(
-                $this->formatTimeEntities($timeEntities, $participantLocale)))
-            ;
+            $formatted .= $this->formatTimeEntities(
+                $timeEntities,
+                $participantLocale,
+                $timeZone,
+                $isUserMultipleSheets
+            );
+
+            if ($day !== end($days)) {
+                $formatted .= MarkdownFormatter::newBreak();
+            }
         }
 
         return $formatted;
@@ -188,14 +252,21 @@ class ParticipantPlanningFormatter
 
     /**
      * @param AbstractTimeEntityView[] $timeEntities
-     * @param string                   $participantLocale
+     * @param string                   $userLocale
+     * @param string                   $timeZone
+     * @param bool                     $isUserMultipleSheets
      *
      * @return string
      */
-    private function formatTimeEntities(array $timeEntities, $participantLocale)
+    private function formatTimeEntities(array $timeEntities, $userLocale, $timeZone, $isUserMultipleSheets)
     {
         $formattedTimes = [];
-        $timeFormatter  = new \IntlDateFormatter($participantLocale, \IntlDateFormatter::NONE, \IntlDateFormatter::SHORT);
+        $timeFormatter  = new \IntlDateFormatter(
+            $userLocale,
+            \IntlDateFormatter::NONE,
+            \IntlDateFormatter::SHORT,
+            $timeZone
+        );
 
         foreach ($timeEntities as $timeEntity) {
             // Display the time of begin and end of the time entity
@@ -206,25 +277,23 @@ class ParticipantPlanningFormatter
                     '%endHour%' => $this->getFormattedDate($timeFormatter, $timeEntity->end),
                 ],
                 self::TRANSLATION_DOMAIN,
-                $participantLocale
+                $userLocale
             );
 
             // Display the information of the time entity (meeting, mass, unavailability, happening)
             if ($timeEntity instanceof MeetingView) {
-                $formatted .= $this->translator->trans(
-                    self::TRANSLATE_MEETING,
-                    ['%sheetMet%' => $timeEntity->sheetMetTitle, '%spotRef%'  => $timeEntity->spotRef,],
-                    self::TRANSLATION_DOMAIN,
-                    $participantLocale
-                );
-            } elseif ($timeEntity instanceof MassView || $timeEntity instanceof HappeningParticipationView || $timeEntity instanceof AssignmentView) {
+                $formatted .= $this->formatMeeting($timeEntity, $userLocale, $isUserMultipleSheets);
+            } elseif ($timeEntity instanceof MassView
+                || $timeEntity instanceof HappeningParticipationView
+                || $timeEntity instanceof AssignmentView
+            ) {
                 $formatted .= $timeEntity->title;
             } elseif ($timeEntity instanceof UnavailabilityView) {
                 if ($timeEntity->hasMessage()) {
                     $formatted .= $timeEntity->message;
                 } else {
                     $formatted .= $this->translator
-                        ->trans(self::TRANSLATE_UNAVAILABILITY, [], self::TRANSLATION_DOMAIN, $participantLocale)
+                        ->trans(self::TRANSLATE_UNAVAILABILITY, [], self::TRANSLATION_DOMAIN, $userLocale)
                     ;
                 }
             }
@@ -233,6 +302,36 @@ class ParticipantPlanningFormatter
         }
 
         return MarkdownFormatter::lists($formattedTimes);
+    }
+
+    /**
+     * @param MeetingView $meetingView
+     * @param string      $userLocale
+     * @param bool        $isUserMultipleSheets
+     *
+     * @return string
+     */
+    private function formatMeeting(MeetingView $meetingView, $userLocale, $isUserMultipleSheets)
+    {
+        if (true === $isUserMultipleSheets) {
+            return $this->translator->trans(
+                self::TRANSLATE_MEETING_MULTIPLE_SHEET,
+                [
+                    '%userSheet%' => $meetingView->userSheetTitle,
+                    '%sheetMet%' => $meetingView->sheetMetTitle,
+                    '%spotRef%'  => $meetingView->spotRef,
+                ],
+                self::TRANSLATION_DOMAIN,
+                $userLocale
+            );
+        }
+
+        return $this->translator->trans(
+            self::TRANSLATE_MEETING,
+            ['%sheetMet%' => $meetingView->sheetMetTitle, '%spotRef%'  => $meetingView->spotRef],
+            self::TRANSLATION_DOMAIN,
+            $userLocale
+        );
     }
 
     /**
@@ -250,7 +349,7 @@ class ParticipantPlanningFormatter
     }
 
     /**
-     * @param \IntlDateFormatter  $formatter
+     * @param \IntlDateFormatter $formatter
      * @param \DateTimeInterface $date
      *
      * @return string

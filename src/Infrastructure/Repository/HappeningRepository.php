@@ -14,6 +14,7 @@ use Doctrine\ORM\EntityManager;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Happening;
 use Proximum\Vimeet\Domain\Model\Happening\Speaker;
+use Proximum\Vimeet\Domain\Model\Type;
 use Proximum\Vimeet\Domain\Repository\HappeningRepositoryInterface;
 
 class HappeningRepository implements HappeningRepositoryInterface
@@ -68,13 +69,19 @@ class HappeningRepository implements HappeningRepositoryInterface
         $queryBuilder = $this
             ->entityManager
             ->createQueryBuilder()
-            ->select('happening, translation, talking, speaker')
+            ->select('happening, translation, talking, speaker, category, categoryTranslation')
             ->from(Happening::class, 'happening')
-            ->join('happening.translations', 'translation', 'WITH', 'translation.locale = :locale')
-            ->setParameter('locale', $locale)
+            ->join(
+                'happening.translations',
+                'translation',
+                'WITH',
+                'happening.event = :event AND translation.locale = :locale'
+            )
+            ->join('happening.category', 'category')
+            ->join('category.translations', 'categoryTranslation')
             ->leftJoin('happening.talkings', 'talking')
             ->leftJoin('talking.speaker', 'speaker')
-            ->where('happening.event = :event')
+            ->setParameter('locale', $locale)
             ->setParameter('event', $event);
 
         return $queryBuilder->getQuery()->getResult();
@@ -107,8 +114,7 @@ class HappeningRepository implements HappeningRepositoryInterface
             ->createQueryBuilder()
             ->select('happening, translations')
             ->from(Happening::class, 'happening')
-            ->join('happening.translations', 'translations')
-            ->where('happening.event = :event')
+            ->join('happening.translations', 'translations', 'WITH', 'happening.event = :event')
             ->orderBy('happening.begin')
             ->setParameter('event', $event);
 
@@ -116,14 +122,11 @@ class HappeningRepository implements HappeningRepositoryInterface
     }
 
     /**
-     * @param Event                   $event
-     * @param \DateTimeInterface      $day
-     * @param Happening\Category|null $category
-     *
-     * @return Happening[]
+     * {@inheritdoc}
      */
-    public function findByEventAndDayAndCategory(
+    public function findByEventAndTypeAndDayAndCategory(
         Event $event,
+        Type $type,
         \DateTimeInterface $day,
         Happening\Category $category = null
     ) {
@@ -134,12 +137,16 @@ class HappeningRepository implements HappeningRepositoryInterface
             ->createQueryBuilder()
             ->select('happening, translations')
             ->from(Happening::class, 'happening')
-            ->join('happening.translations', 'translations')
-            ->where('happening.event = :event')
-            ->andWhere('happening.begin >= :startDay')
-            ->andWhere('happening.begin < :endDay')
+            ->join('happening.types', 'type', 'WITH', 'type = :type')
+            ->join(
+                'happening.translations',
+                'translations',
+                'WITH',
+                'happening.event = :event AND happening.begin >= :startDay AND happening.begin < :endDay'
+            )
             ->orderBy('happening.begin')
             ->setParameter('event', $event)
+            ->setParameter('type', $type)
             ->setParameter('startDay', sprintf('%s 00:00:00', $date->format('Y-m-d')))
             ->setParameter('endDay', sprintf('%s 00:00:00', $date->modify('+1 day')->format('Y-m-d')));
 
@@ -163,9 +170,9 @@ class HappeningRepository implements HappeningRepositoryInterface
             ->select('happening, translation')
             ->from(Happening::class, 'happening')
             ->join('happening.translations', 'translation', 'WITH', 'translation.locale = :locale')
-            ->setParameter('locale', $locale)
             ->join('happening.talkings', 'talking')
             ->join('talking.speaker', 'speaker', 'WITH', 'talking.speaker = :speaker')
+            ->setParameter('locale', $locale)
             ->setParameter('speaker', $speaker);
 
         return $queryBuilder->getQuery()->getResult();
@@ -181,13 +188,11 @@ class HappeningRepository implements HappeningRepositoryInterface
         $queryBuilder = $this
             ->entityManager
             ->createQueryBuilder()
-            ->select('happening', 'translations', 'participations')
+            ->select('happening, translations, participations, user')
             ->from(Happening::class, 'happening')
-            ->join('happening.translations', 'translations')
-            ->join('happening.participations', 'participations')
+            ->join('happening.translations', 'translations', 'WITH', 'happening.event = :event')
+            ->join('happening.participations', 'participations', 'WITH', 'participations.disabled = false')
             ->join('participations.user', 'user')
-            ->where('happening.event = :event')
-            ->andWhere('participations.disabled = false')
             ->orderBy('happening.begin')
             ->setParameter('event', $event);
 

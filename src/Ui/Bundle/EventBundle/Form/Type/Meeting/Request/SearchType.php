@@ -3,28 +3,46 @@
 /*
  * This file is part of the vimeet project.
  *
- * Copyright (C) 2016 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
 
 namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Meeting\Request;
 
+use Proximum\Vimeet\Application\Adapter\TranslatorInterface;
 use Proximum\Vimeet\Domain\Model\Meeting;
+use Proximum\Vimeet\Domain\Model\MeetingSlot;
 use Proximum\Vimeet\Domain\Model\Sheet;
+use Proximum\Vimeet\Domain\View\CategoryView;
 use Proximum\Vimeet\Domain\View\TypeView;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class SearchType extends AbstractType
 {
+    /** @var TranslatorInterface */
+    private $translator;
+
+    /**
+     * @param TranslatorInterface $translator
+     */
+    public function __construct(TranslatorInterface $translator)
+    {
+        $this->translator = $translator;
+    }
+
     /**
      * {@inheritdoc}
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
+        $event  = $options['event'];
+        $locale = $options['locale'];
+
         $builder
             ->add('orderBy', ChoiceType::class, [
                 'label'    => 'form.search.orderBy.label',
@@ -47,7 +65,15 @@ class SearchType extends AbstractType
                 },
             ]);
 
-        if (count($options['typeViews']) > 1) {
+        if (count($options['categoryViews']) > 1) {
+            $builder
+                ->add('category', ChoiceType::class, [
+                    'label'        => 'form.search.type.label',
+                    'expanded'     => true,
+                    'multiple'     => true,
+                    'choices'      => $options['categoryViews'],
+                ]);
+        } elseif (count($options['typeViews']) > 1) {
             $builder
                 ->add('type', ChoiceType::class, [
                     'label'        => 'form.search.type.label',
@@ -56,6 +82,73 @@ class SearchType extends AbstractType
                     'choices'      => $options['typeViews'],
                 ]);
         }
+
+        if ($options['filterAvailableSlot'] === true) {
+            $everyone = Meeting\Constant::FILTER_AVAILABLE_SLOT_IDS_EVERYONE;
+            $available = Meeting\Constant::FILTER_AVAILABLE_SLOT_IDS_AVAILABLE;
+            $slotFilter = Meeting\Constant::FILTER_AVAILABLE_SLOT_IDS_SLOT;
+
+            $everyoneTranslation = $this->translator->trans(
+                sprintf('form.search.meeting.availableSlot.choice.%s', $everyone),
+                [],
+                'forms',
+                $locale
+            );
+            $availableTranslation = $this->translator->trans(
+                sprintf('form.search.meeting.availableSlot.choice.%s', $available),
+                [],
+                'forms',
+                $locale
+            );
+
+            $filterAvailableChoices = [
+                $everyoneTranslation  => $everyone,
+                $availableTranslation => $available,
+            ];
+
+            if ($options['specificSlot'] instanceof MeetingSlot) {
+                $dayFormatter = new \IntlDateFormatter(
+                    $locale,
+                    \IntlDateFormatter::SHORT,
+                    \IntlDateFormatter::NONE,
+                    $event->getTimeZone()
+                );
+                $hourFormatter = new \IntlDateFormatter(
+                    $locale,
+                    \IntlDateFormatter::NONE,
+                    \IntlDateFormatter::SHORT,
+                    $event->getTimeZone()
+                );
+
+                /** @var MeetingSlot $slot */
+                $slot = $options['specificSlot'];
+                $slotTranslation = $this->translator->trans(
+                    sprintf('form.search.meeting.availableSlot.choice.%s', $slotFilter),
+                    [
+                        '%day%'  => $dayFormatter->format($slot->getBegin()) ?? '',
+                        '%time%' => $hourFormatter->format($slot->getBegin()) ?? '',
+                    ],
+                    'forms',
+                    $locale
+                );
+
+
+                $filterAvailableChoices[$slotTranslation] = $slotFilter;
+
+                $builder->add('slot_id', HiddenType::class, [
+                    'data' => $slot->getId(),
+                ]);
+            }
+
+            $builder
+                ->add('availableSlot', ChoiceType::class, [
+                    'choices'  => $filterAvailableChoices,
+                    'expanded' => true,
+                    'multiple' => false,
+                    'label'    => 'form.search.meeting.availableSlot.label'
+                ])
+            ;
+        }
     }
 
     /**
@@ -63,11 +156,19 @@ class SearchType extends AbstractType
      */
     public function configureOptions(OptionsResolver $resolver)
     {
-        $resolver->setRequired(['typeViews']);
+        $resolver->setRequired([
+            'typeViews',
+            'categoryViews',
+            'event',
+            'locale',
+        ]);
+
         $resolver->setDefaults([
-            'required'        => false,
-            'method'          => 'GET',
-            'csrf_protection' => false,
+            'specificSlot'        => null,
+            'csrf_protection'     => false,
+            'filterAvailableSlot' => false,
+            'method'              => 'GET',
+            'required'            => false,
         ]);
     }
 
@@ -80,21 +181,26 @@ class SearchType extends AbstractType
     }
 
     /**
-     * @param TypeView[] $typeViews
+     * @param TypeView[]     $typeViews
+     * @param CategoryView[] $categoryViews
      *
      * @return array
      */
-    public static function getDefaultFilters($typeViews = [])
+    public static function getDefaultFilters($typeViews = [], $categoryViews = []): array
     {
         $defaultFilters = [
-            'orderBy' => Sheet\Constant::ORDER_BY_ALPHABETICAL,
-            'state'   => Meeting\Constant::FILTER_STATE_ALL,
-            'disabled' => false
+            'availableSlot' => Meeting\Constant::FILTER_AVAILABLE_SLOT_IDS_EVERYONE,
+            'disabled'      => false,
+            'orderBy'       => Sheet\Constant::ORDER_BY_ALPHABETICAL,
+            'state'         => Meeting\Constant::FILTER_STATE_ALL,
         ];
 
         // Allow to filters by type if there are more than 1
         if (count($typeViews) > 1) {
             $defaultFilters['type'] = array_values(self::transformTypeViews($typeViews));
+        }
+        if (count($categoryViews) > 1) {
+            $defaultFilters['category'] = array_values(self::transformCategoryViews($categoryViews));
         }
 
         return $defaultFilters;
@@ -105,7 +211,7 @@ class SearchType extends AbstractType
      *
      * @return array
      */
-    public static function transformTypeViews($typeViews)
+    public static function transformTypeViews(array $typeViews): array
     {
         $typeViews = array_combine(
             array_map(function (TypeView $typeView) {
@@ -117,5 +223,24 @@ class SearchType extends AbstractType
         );
 
         return $typeViews;
+    }
+
+    /**
+     * @param CategoryView[] $categoryViews
+     *
+     * @return array
+     */
+    public static function transformCategoryViews(array $categoryViews): array
+    {
+        $categoryViews = array_combine(
+            array_map(function (CategoryView $categoryView) {
+                return $categoryView->title;
+            }, $categoryViews),
+            array_map(function (CategoryView $categoryView) {
+                return $categoryView->id;
+            }, $categoryViews)
+        );
+
+        return $categoryViews;
     }
 }

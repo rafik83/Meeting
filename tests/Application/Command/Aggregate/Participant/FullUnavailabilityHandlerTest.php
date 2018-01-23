@@ -10,16 +10,15 @@
 
 namespace Proximum\Vimeet\Tests\Application\Command\Aggregate\Participant;
 
+use PHPUnit\Framework\TestCase;
 use Proximum\Vimeet\Application\Command\Aggregate\Participant\FullUnavailability;
 use Proximum\Vimeet\Application\Command\Aggregate\Participant\FullUnavailabilityHandler;
 use Proximum\Vimeet\Domain\Model\Event;
-use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\User;
-use Proximum\Vimeet\Domain\Repository\ParticipantRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\UserRepositoryInterface;
 use Proximum\Vimeet\Domain\Unavailability\ParticipantUnavailableAggregator;
 
-class FullUnavailabilityHandlerTest extends \PHPUnit_Framework_TestCase
+class FullUnavailabilityHandlerTest extends TestCase
 {
     public function testHandleOnlyCatalog()
     {

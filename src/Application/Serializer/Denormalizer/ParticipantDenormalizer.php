@@ -16,11 +16,15 @@ use Proximum\Vimeet\Application\Components\Sheet\Template\Tag;
 use Proximum\Vimeet\Application\Serializer\Denormalizer\Exception\InvalidObjectContentException;
 use Proximum\Vimeet\Domain\Account\EmailValidator;
 use Proximum\Vimeet\Domain\Account\Synchronizer;
+use Proximum\Vimeet\Domain\Email\EmailHelper;
+use Proximum\Vimeet\Domain\Helper\StringHelper;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\User;
+use Proximum\Vimeet\Domain\Model\UserEvent;
 use Proximum\Vimeet\Domain\Repository\ParticipantRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
+use Proximum\Vimeet\Domain\Repository\UserEventRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\UserRepositoryInterface;
 use Proximum\Vimeet\Domain\Template\Exception\ObjectValidatorNotExistException;
 use Proximum\Vimeet\Domain\Template\TemplateData;
@@ -77,11 +81,17 @@ class ParticipantDenormalizer implements DenormalizerInterface
     private $sheetRepository;
 
     /**
+     * @var UserEventRepositoryInterface
+     */
+    private $userEventRepository;
+
+    /**
      * ParticipantDenormalizer constructor.
      *
      * @param ParticipantRepositoryInterface $participantRepository
-     * @param SheetRepositoryInterface       $sheetRepository
      * @param UserRepositoryInterface        $userRepository
+     * @param SheetRepositoryInterface       $sheetRepository
+     * @param UserEventRepositoryInterface   $userEventRepository
      * @param TemplateDataFactory            $templateDataFactory
      * @param EmailValidator                 $emailValidator
      * @param Synchronizer                   $synchronizer
@@ -92,6 +102,7 @@ class ParticipantDenormalizer implements DenormalizerInterface
         ParticipantRepositoryInterface $participantRepository,
         UserRepositoryInterface $userRepository,
         SheetRepositoryInterface $sheetRepository,
+        UserEventRepositoryInterface $userEventRepository,
         TemplateDataFactory $templateDataFactory,
         EmailValidator $emailValidator,
         Synchronizer $synchronizer,
@@ -99,13 +110,14 @@ class ParticipantDenormalizer implements DenormalizerInterface
         \DateTimeInterface $dateTime
     ) {
         $this->participantRepository = $participantRepository;
-        $this->templateDataFactory   = $templateDataFactory;
-        $this->synchronizer          = $synchronizer;
-        $this->dateTime              = $dateTime;
         $this->userRepository        = $userRepository;
-        $this->emailValidator        = $emailValidator;
-        $this->importLogger          = $importLogger;
         $this->sheetRepository       = $sheetRepository;
+        $this->userEventRepository   = $userEventRepository;
+        $this->templateDataFactory   = $templateDataFactory;
+        $this->emailValidator        = $emailValidator;
+        $this->synchronizer          = $synchronizer;
+        $this->importLogger          = $importLogger;
+        $this->dateTime              = $dateTime;
     }
 
     /**
@@ -113,7 +125,14 @@ class ParticipantDenormalizer implements DenormalizerInterface
      */
     public function denormalize($data, $class, $format = null, array $context = [])
     {
-        $participants = $this->participantRepository->findByEvent($context['event']);
+        $sheets = $this->sheetRepository->getByEventWithParticipantsAndOwner($context['event']);
+        $participants = [];
+
+        foreach ($sheets as $sheet) {
+            foreach ($sheet->getParticipants()->toArray() as $participant) {
+                $participants[] = $participant;
+            }
+        }
 
         $this->importLogger->init(count($data));
 
@@ -133,7 +152,7 @@ class ParticipantDenormalizer implements DenormalizerInterface
                 continue;
             }
 
-            $email = $row[$mappedMailCsvColumn];
+            $email = StringHelper::trimSpacesAndNonBreakSpaces($row[$mappedMailCsvColumn]);
 
             if ($this->emailValidator->validate($email) === false) {
                 $this->importLogger->addError($key, new EmailError($email, true), $email, $context['locale']);
@@ -145,13 +164,18 @@ class ParticipantDenormalizer implements DenormalizerInterface
                 continue;
             }
 
-            if ($this->isAlreadyParticipant($email, $participants)) {
+            if ($this->isAlreadyOwner($email, $sheets) || $this->isAlreadyParticipant($email, $participants)) {
                 $this->importLogger->existingParticipations();
                 continue;
             }
 
             try {
-                list($sheetData, $participantData, $sheetTitle) = $this->handleRow($row, $mappingGuesser, $registrationTemplate, $context);
+                list($sheetData, $participantData, $sheetTitle) = $this->handleRow(
+                    $row,
+                    $mappingGuesser,
+                    $registrationTemplate,
+                    $context
+                );
 
                 $this->createEntities(
                     $context,
@@ -162,7 +186,6 @@ class ParticipantDenormalizer implements DenormalizerInterface
                     $participantData,
                     $registrationTemplate
                 );
-
             } catch (InvalidObjectContentException $exception) {
                 $this->importLogger->addError(
                     $key,
@@ -181,7 +204,7 @@ class ParticipantDenormalizer implements DenormalizerInterface
      */
     public function supportsDenormalization($data, $type, $format = null)
     {
-        return $format === self::FORMAT;
+        return $type === Participant::class && $format === self::FORMAT;
     }
 
     /**
@@ -194,6 +217,23 @@ class ParticipantDenormalizer implements DenormalizerInterface
     {
         foreach ($participants as $participant) {
             if (strtolower($participant->getUser()->getEmail()) === strtolower($email)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * @param string  $email
+     * @param Sheet[] $sheets
+     *
+     * @return bool
+     */
+    private function isAlreadyOwner($email, &$sheets)
+    {
+        foreach ($sheets as $sheet) {
+            if (strtolower($sheet->getOwner()->getEmail()) === strtolower($email)) {
                 return true;
             }
         }
@@ -226,6 +266,7 @@ class ParticipantDenormalizer implements DenormalizerInterface
      *
      * @return array of sheetData, participantData and sheetTitle
      * @throws InvalidObjectContentException
+     * @throws \Exception
      */
     private function handleRow(
         array $row,
@@ -237,7 +278,11 @@ class ParticipantDenormalizer implements DenormalizerInterface
         $participantData = [];
         $sheetTitle      = '';
 
+        // clear previous data before process current imported participant row
+        $registrationTemplate->clear();
+
         foreach ($row as $key => $column) {
+            $column = trim($column);
             $registrationObjectKey = $mappingGuesser->getMappedOutKey($key);
 
             if ($registrationObjectKey === false
@@ -252,10 +297,6 @@ class ParticipantDenormalizer implements DenormalizerInterface
                 continue;
             }
 
-            if ($templateObject->hasTag(Tag::SHEET_TITLE)) {
-                $sheetTitle = $templateObject->getContentValue();
-            }
-
             try {
                 if ($templateObject instanceof TemplateObject\Telephone) {
                     $column = $this->denormalizerPhoneNumber($column);
@@ -268,8 +309,6 @@ class ParticipantDenormalizer implements DenormalizerInterface
                 ]);
 
                 if (!$validatorError->hasError()) {
-                    $registrationTemplate->clear();
-
                     if ($templateObject instanceof TemplateObject\Nomenclature) {
                         $nomenclatureKey = $templateObject->getKeyForLabel($column, $context['locale']);
                         $templateObject->setContentValue($nomenclatureKey);
@@ -281,11 +320,8 @@ class ParticipantDenormalizer implements DenormalizerInterface
                 } else {
                     throw new InvalidObjectContentException($validatorError);
                 }
-
             } catch (ObjectValidatorNotExistException $exception) {
                 // if not validator defined, set data without check if valid
-                $registrationTemplate->clear();
-
                 if ($templateObject instanceof TemplateObject\Nomenclature) {
                     $nomenclatureKey = $templateObject->getKeyForLabel($column, $context['locale']);
                     $templateObject->setContentValue($nomenclatureKey);
@@ -294,6 +330,18 @@ class ParticipantDenormalizer implements DenormalizerInterface
                 }
 
                 $this->dispatchTemplateData($templateObject, $sheetData, $participantData, $registrationObjectKey);
+            }
+
+            if ($templateObject->hasTag(Tag::SHEET_ORGANIZATION) && !empty($templateObject->getContentValue())) {
+
+                $sheetTitle = $column;
+            }
+
+            if ('' === $sheetTitle
+                && $templateObject->hasTag(Tag::SHEET_TITLE)
+                && !empty($templateObject->getContentValue())
+            ) {
+                $sheetTitle = $column;
             }
         }
 
@@ -331,7 +379,7 @@ class ParticipantDenormalizer implements DenormalizerInterface
         $user = $this->hasUserAccount($email, $users);
 
         if ($user === false) {
-            $user = new User(strtolower($email), '', '', $context['locale']);
+            $user = new User($email, '', '', $context['locale']);
             $user->setAccount(new User\Account());
 
             $this->userRepository->add($user);
@@ -340,17 +388,18 @@ class ParticipantDenormalizer implements DenormalizerInterface
 
         $sheet = new Sheet($context['event'], $context['type'], [], $user, $this->dateTime);
         $sheet->setImported(true);
+        $sheetTitle = !empty(trim($sheetTitle)) ? $sheetTitle : $user->getFullname();
+        $sheetTitle = !empty(trim($sheetTitle)) ? $sheetTitle : $user->getEmail();
         $sheet->setTitle($sheetTitle);
+        $sheet->setRegistrationData($sheetData);
+        $this->sheetRepository->add($sheet);
 
         $participant = new Participant($sheet, $user, $participantData, false);
         $participant->setImported(true);
-
-        $sheet->setRegistrationData($sheetData);
-
-        $this->sheetRepository->add($sheet);
         $this->participantRepository->add($participant);
-
         $sheet->addParticipant($participant); // required to have participant in array sheet array collection
+
+        $this->userEventRepository->add(new UserEvent($user, $context['event'], $context['type']));
 
         $this->importLogger->sheetImported($sheet);
 

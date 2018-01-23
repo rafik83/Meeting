@@ -18,8 +18,9 @@ use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\Sheet\Group;
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Repository\ParticipantRepositoryInterface;
+use PHPUnit\Framework\TestCase;
 
-class UsersParticipantViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
+class UsersParticipantViewQueryHandlerTest extends TestCase
 {
     public function testHandle()
     {

@@ -37,22 +37,33 @@ class SubmenuButtonView
      */
     public $link;
 
+    /** @var bool */
+    public $isShowOnMobile;
+
     /**
      * SubmenuButtonView constructor.
      *
-     * @param string $icon
-     * @param string $label
-     * @param string $link
-     * @param bool   $state
-     * @param bool   $alert
+     * @param string|null $icon
+     * @param string|null $label
+     * @param string|null $link
+     * @param bool        $state
+     * @param bool        $alert
+     * @param bool        $isShowOnMobile
      */
-    public function __construct($icon, $label, $link, $state = true, $alert = false)
-    {
-        $this->icon  = $icon;
+    public function __construct(
+        ?string $icon,
+        ?string $label,
+        ?string $link,
+        bool $state = true,
+        bool $alert = false,
+        bool $isShowOnMobile = false
+    ) {
+        $this->icon = $icon;
         $this->state = $state;
         $this->label = $label;
-        $this->link  = $link;
+        $this->link = $link;
         $this->alert = $alert;
+        $this->isShowOnMobile = $isShowOnMobile;
     }
 
     /**

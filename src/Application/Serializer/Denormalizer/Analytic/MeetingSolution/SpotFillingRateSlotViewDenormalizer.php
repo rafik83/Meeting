@@ -1,0 +1,48 @@
+<?php
+
+/*
+ * This file is part of the Proximum Vimeet project.
+ *
+ * Copyright (C) Proximum
+ *
+ * @author Elao <contact@elao.com>
+ */
+
+namespace Proximum\Vimeet\Application\Serializer\Denormalizer\Analytic\MeetingSolution;
+
+use Proximum\Vimeet\Application\View\Analytic\MeetingSolution\Graph\SpotFillingRateSlotView;
+use Symfony\Component\Serializer\Normalizer\DenormalizerAwareInterface;
+use Symfony\Component\Serializer\Normalizer\DenormalizerAwareTrait;
+use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
+
+class SpotFillingRateSlotViewDenormalizer implements DenormalizerAwareInterface, DenormalizerInterface
+{
+    use DenormalizerAwareTrait;
+
+    /**
+     * {@inheritdoc}
+     */
+    public function denormalize($data, $class, $format = null, array $context = array())
+    {
+        /** @var \DateTime $begin */
+        $begin = $this->denormalizer->denormalize($data['begin'], \DateTime::class, $format);
+
+        /** @var \DateTime $end */
+        $end = $this->denormalizer->denormalize($data['end'], \DateTime::class, $format);
+
+        return new SpotFillingRateSlotView($begin, $end, $data['fillingRate']);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function supportsDenormalization($data, $type, $format = null)
+    {
+        return $type === SpotFillingRateSlotView::class
+            && $format === 'json'
+            && isset($data['begin'])
+            && isset($data['end'])
+            && isset($data['fillingRate'])
+        ;
+    }
+}

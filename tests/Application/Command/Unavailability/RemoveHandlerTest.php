@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Tests\Application\Command\Unavailability;
 
+use PHPUnit\Framework\TestCase;
 use Proximum\Vimeet\Application\Command\Unavailability\Remove;
 use Proximum\Vimeet\Application\Command\Unavailability\RemoveHandler;
 use Proximum\Vimeet\Application\Event\Events;
@@ -20,7 +21,7 @@ use Proximum\Vimeet\Domain\Repository\UnavailabilityRepositoryInterface;
 use Proximum\Vimeet\Infrastructure\Adapter\DelayedEventDispatcher;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
 
-class RemoveTestHandler extends \PHPUnit_Framework_TestCase
+class RemoveTestHandler extends TestCase
 {
     public function testHandle()
     {

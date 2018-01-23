@@ -293,4 +293,14 @@ class Mass implements TimeRangeInterface
 
         return $this;
     }
+
+    /**
+     * @param \DateTimeInterface $begin
+     * @param \DateTimeInterface $end
+     */
+    public function setDates(\DateTimeInterface $begin, \DateTimeInterface $end)
+    {
+        $this->begin = $begin;
+        $this->end = $end;
+    }
 }

@@ -73,14 +73,14 @@ class TemplateProductGuesser
      * @param TemplateObject $object
      * @param Package        $package
      *
-     * @return null|array
+     * @return array
      */
-    public function getProducts(TemplateObject $object, Package $package)
+    public function getProducts(TemplateObject $object, Package $package): array
     {
-        $products = null;
+        $products = [];
 
         if (!$object->isBuyable()) {
-            return null;
+            return [];
         }
 
         foreach ($object->getProducts() as $productId) {
@@ -153,7 +153,7 @@ class TemplateProductGuesser
      */
     public function hasPayableOption(TemplateObject $templateObject)
     {
-        if (null === $templateObject->getBuyableProducts() || !$templateObject->isBuyable()) {
+        if (empty($templateObject->getBuyableProducts()) || !$templateObject->isBuyable()) {
             return false;
         }
 

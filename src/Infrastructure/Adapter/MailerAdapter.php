@@ -16,19 +16,13 @@ use Proximum\Vimeet\Application\Components\Mail\UserMail;
 
 class MailerAdapter implements MailerInterface
 {
-    /**
-     * @var \Swift_Mailer
-     */
+    /** @var \Swift_Mailer */
     private $mailer;
 
-    /**
-     * @var \Twig_Environment
-     */
+    /** @var \Twig_Environment */
     private $twig;
 
-    /**
-     * @var TranslatorAdapter
-     */
+    /** @var TranslatorAdapter */
     private $translator;
 
     /**
@@ -60,9 +54,8 @@ class MailerAdapter implements MailerInterface
             $mail->getLocale()
         );
 
-        $message = \Swift_Message::newInstance()
-            ->setSubject($subject)
-            ->setFrom($mail->getSender());
+        $message = new \Swift_Message($subject);
+        $message->setFrom($mail->getSender());
 
         foreach ($mail->getReceivers() as $receiver) {
             $message->addTo($receiver);

@@ -368,7 +368,6 @@ Proximum\Vimeet\Domain\Model\Package:
         event: '@event_rdv_carnot_2016'
         title: "Package RDV Carnot"
         createdAt: "<dateTimeBetween('-10days', 'now')>"
-        participant: '@product_participant_1_rdv_carnot'
         planning: '@product_planning_1_rdv_carnot'
         plansEnabled: true
         participantAndPlanningEnabled: true
@@ -401,6 +400,13 @@ Proximum\Vimeet\Domain\Model\PackagePlanRank:
         rank: 2
         package: '@package_rdv_carnot'
         plan: '@product_plan_2_rdv_carnot'
+
+Proximum\Vimeet\Domain\Model\PackageParticipantRank:
+    package_participant_1_rank_rdv_carnot:
+        __construct: false
+        rank: 1
+        package: '@package_rdv_carnot'
+        productParticipant: '@product_participant_1_rdv_carnot'
 
 Proximum\Vimeet\Domain\Model\PackageGroup:
     package_group_1_rdv_carnot:

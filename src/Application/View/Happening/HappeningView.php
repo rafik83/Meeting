@@ -10,77 +10,41 @@
 
 namespace Proximum\Vimeet\Application\View\Happening;
 
-use DateInterval;
+use Proximum\Vimeet\Application\View\Agenda\AbstractTimeEntityView;
 
-class HappeningView
+class HappeningView extends AbstractTimeEntityView implements ProgramElementViewInterface
 {
-    /**
-     * @var int
-     */
+    /** @var int */
     private $id;
 
-    /**
-     * @var \DateTimeInterface
-     */
-    private $beginHour;
-
-    /**
-     * @var \DateTimeInterface
-     */
-    private $endHour;
-
-    /**
-     * @var string
-     */
+    /** @var string */
     private $title;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     private $description;
 
-    /**
-     * @var string|null
-     */
+    /** @var string|null */
     private $picture;
 
-    /**
-     * @var HappeningSpeakerView[]
-     */
+    /** @var HappeningSpeakerView[] */
     private $speakers;
 
-    /**
-     * @var HappeningCategoryView
-     */
+    /** @var HappeningCategoryView */
     private $category;
 
-    /**
-     * If participants of the current sheet participate
-     *
-     * @var bool
-     */
+    /** @var bool If participants of the current sheet participate */
     private $hasParticipations = false;
 
-    /**
-     * If the current user participates
-     *
-     * @var bool
-     */
+    /** @var bool If the current user participates */
     private $currentUserParticipate = false;
 
-    /**
-     * @var bool
-     */
+    /** @var bool */
     private $isFull;
 
-    /**
-     * @var int|null
-     */
+    /** @var int|null */
     public $limitParticipant;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     public $timeZone;
 
     /**
@@ -113,8 +77,8 @@ class HappeningView
     ) {
         $this->id               = $id;
         $this->category         = $category;
-        $this->beginHour        = $beginHour;
-        $this->endHour          = $endHour;
+        $this->begin            = $beginHour;
+        $this->end              = $endHour;
         $this->title            = $title;
         $this->description      = $description;
         $this->picture          = $picture;
@@ -133,35 +97,11 @@ class HappeningView
     }
 
     /**
-     * @return DateInterval
-     */
-    public function getDuration()
-    {
-        return $this->endHour->diff($this->beginHour);
-    }
-
-    /**
      * @return HappeningCategoryView
      */
     public function getCategory()
     {
         return $this->category;
-    }
-
-    /**
-     * @return \DateTimeInterface
-     */
-    public function getBeginHour()
-    {
-        return $this->beginHour;
-    }
-
-    /**
-     * @return \DateTimeInterface
-     */
-    public function getEndHour()
-    {
-        return $this->endHour;
     }
 
     /**
@@ -258,5 +198,21 @@ class HappeningView
     public function getPicto()
     {
         return $this->getCategory()->getPicto();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function isHappeningView(): bool
+    {
+        return true;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function isMassUnavailabilityView(): bool
+    {
+        return false;
     }
 }

@@ -1,8 +1,6 @@
 {% extends 'AdminBundle::base.html.twig' %}
 
-{% block title %}
-    {{ parent() }} - {{ 'admin.messaging.campaign.sheet_list.title'|trans }}
-{% endblock %}
+{% block title 'admin.messaging.campaign.sheet_list.title'|trans %}
 
 {% block content %}
 
@@ -69,6 +67,7 @@
                 {{ form_row(filter_form.inCatalog, {'inline': true}) }}
                 {{ form_row(filter_form.cancelAttendance, {'inline': true}) }}
                 {{ form_row(filter_form.hasGroup, {'inline': true}) }}
+                {{ form_row(filter_form.hasSpot, {'inline': true}) }}
                 {{ form_row(filter_form.type) }}
 
                 {% if filter_form.category is defined %}
@@ -83,15 +82,18 @@
                 <hr>
 
                 {{ form_row(filter_form.hasRemainingToPay, {'inline': true}) }}
-                {{ form_row(filter_form[constant('Proximum\\Vimeet\\Domain\\Model\\Sheet\\Constant::HAS_ORDER')], {'inline': true}) }}
-                {{ form_row(filter_form[constant('Proximum\\Vimeet\\Domain\\Model\\Sheet\\Constant::HAS_CART')], {'inline': true}) }}
+                {{ form_row(filter_form.has_order, {'inline': true}) }}
+                {{ form_row(filter_form.has_cart, {'inline': true}) }}
                 {{ form_row(filter_form.hasInvoice, {'inline': true}) }}
 
                 <hr>
 
                 {{ form_row(filter_form.hasScheduledMeeting, {'inline': true}) }}
-                {{ form_row(filter_form.hasPendingMeetingPropositions) }}
-                {{ form_row(filter_form.hasNoMeetingRequest) }}
+                {{ form_row(filter_form.agendaConfirmedStatus) }}
+                {{ form_row(filter_form.phoneValidationStatus) }}
+                {{ form_row(filter_form.availabilityConfirmationStatus) }}
+                {{ form_row(filter_form.hasPendingMeetingPropositions, {'inline': true}) }}
+                {{ form_row(filter_form.hasNoMeetingRequest, {'inline': true}) }}
 
                 {% if filter_form.boolean_filters is defined %}
                     <hr>

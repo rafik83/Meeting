@@ -77,13 +77,7 @@ class LocalFileStorageAdapter implements FileStorageInterface
     }
 
     /**
-     * Create a file with the content given
-     *
-     * @param mixed       $content
-     * @param string      $filename with possible extension
-     * @param string|null $directoryPath
-     *
-     * @return string return the filePath with filename after the directory path
+     * {@inheritdoc}
      */
     public function create($content, $filename, $directoryPath = null)
     {
@@ -124,7 +118,7 @@ class LocalFileStorageAdapter implements FileStorageInterface
     public function remove($identifier, $fullPath = false)
     {
         if (!empty($identifier)) {
-            $filepath = ($fullPath === null) ? $this->publicDir . $identifier : $identifier;
+            $filepath = ($fullPath === false) ? $this->publicDir . $identifier : $identifier;
 
             if (file_exists($filepath) && is_file($filepath) && is_writable($filepath)) {
                 unlink($filepath);

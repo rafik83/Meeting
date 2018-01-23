@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2015 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -14,7 +14,6 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Criteria;
 use Proximum\Vimeet\Domain\Model\Happening\Category as CategoryHappening;
 use Proximum\Vimeet\Domain\Model\Happening\HappeningTranslation;
-use Proximum\Vimeet\Domain\Model\Happening\Question;
 use Proximum\Vimeet\Domain\Model\Happening\Speaker;
 use Proximum\Vimeet\Domain\Model\Happening\Talking;
 use Proximum\Vimeet\Domain\Time\TimeRangeInterface;
@@ -24,64 +23,41 @@ use Proximum\Vimeet\Domain\Time\TimeRangeInterface;
  */
 class Happening implements TimeRangeInterface
 {
-    /**
-     * @var int
-     */
+    /** @var int */
     private $id;
 
-    /**
-     * @var Event
-     */
+    /** @var Event */
     private $event;
 
-    /**
-     * @var CategoryHappening
-     */
+    /** @var CategoryHappening */
     private $category;
 
-    /**
-     * @var \DateTimeInterface
-     */
+    /** @var \DateTimeInterface */
     private $begin;
 
-    /**
-     * @var \DateTimeInterface
-     */
+    /** @var \DateTimeInterface */
     private $end;
 
-    /**
-     * @var ArrayCollection
-     */
+    /** @var ArrayCollection of HappeningTranslation */
     private $translations;
 
-    /**
-     * @var ArrayCollection
-     */
+    /** @var ArrayCollection */
     private $talkings;
 
-    /**
-     * @var bool
-     */
+    /** @var bool */
     private $questionAllowed = false;
 
-    /**
-     * @var int|null
-     */
+    /** @var int|null */
     private $limitParticipant;
 
-    /**
-     * array of HappeningParticipation
-     *
-     * @var ArrayCollection
-     */
+    /** @var ArrayCollection of HappeningParticipation */
     private $participations;
 
-    /**
-     * Question[]
-     *
-     * @var ArrayCollection
-     */
+    /** @var ArrayCollection of Question */
     private $questions;
+
+    /** @var ArrayCollection of Type that can access this Happening */
+    private $types;
 
     /**
      * Happening constructor.
@@ -90,6 +66,7 @@ class Happening implements TimeRangeInterface
      * @param \DateTimeInterface $begin
      * @param \DateTimeInterface $end
      * @param CategoryHappening  $category
+     * @param array              $types
      * @param bool               $questionAllowed
      * @param int|null           $limitParticipant
      */
@@ -98,6 +75,7 @@ class Happening implements TimeRangeInterface
         \DateTimeInterface $begin,
         \DateTimeInterface $end,
         CategoryHappening $category,
+        array $types,
         $questionAllowed = false,
         $limitParticipant = null
     ) {
@@ -109,6 +87,7 @@ class Happening implements TimeRangeInterface
         $this->talkings         = new ArrayCollection();
         $this->participations   = new ArrayCollection();
         $this->questions        = new ArrayCollection();
+        $this->types            = new ArrayCollection($types);
         $this->questionAllowed  = $questionAllowed;
         $this->limitParticipant = $limitParticipant;
     }
@@ -221,6 +200,7 @@ class Happening implements TimeRangeInterface
      * @param \DateTimeInterface $begin
      * @param \DateTimeInterface $end
      * @param CategoryHappening  $category
+     * @param array              $types
      * @param bool               $questionAllowed
      * @param int|null           $limitParticipant
      */
@@ -228,11 +208,13 @@ class Happening implements TimeRangeInterface
         \DateTimeInterface $begin,
         \DateTimeInterface $end,
         CategoryHappening $category,
+        array $types,
         $questionAllowed,
         $limitParticipant
     ) {
         $this->begin            = $begin;
         $this->end              = $end;
+        $this->types            = new ArrayCollection($types);
         $this->category         = $category;
         $this->questionAllowed  = $questionAllowed;
         $this->limitParticipant = $limitParticipant;
@@ -346,7 +328,7 @@ class Happening implements TimeRangeInterface
     }
 
     /**
-     * @return Happening\Question[]
+     * @return ArrayCollection of Question
      */
     public function getQuestions()
     {
@@ -359,5 +341,13 @@ class Happening implements TimeRangeInterface
     public function setParticipations(array $participations)
     {
         $this->participations = new ArrayCollection($participations);
+    }
+
+    /**
+     * @return Type[]
+     */
+    public function getTypes(): array
+    {
+        return $this->types->toArray();
     }
 }

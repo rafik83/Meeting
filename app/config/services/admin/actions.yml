@@ -1,0 +1,242 @@
+services:
+    #
+    # Type Payment Conditions
+    #
+    Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Type\PaymentConditionsAction:
+        arguments:
+            - '@adapter.authorization_checker'
+            - '@form.factory'
+            - '@templating'
+            - '@adapter.router'
+            - '@session.flash_bag'
+            - '@Proximum\Vimeet\Infrastructure\Adapter\CommandBus'
+
+    #
+    # Type
+    #
+    Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Type\ListAction:
+        arguments:
+            - '@adapter.authorization_checker'
+            - '@Proximum\Vimeet\Infrastructure\Adapter\QueryBus'
+            - '@templating'
+
+    Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Type\RemoveAction:
+        arguments:
+            - '@adapter.authorization_checker'
+            - '@Proximum\Vimeet\Infrastructure\Adapter\CommandBus'
+            - '@session.flash_bag'
+            - '@adapter.router'
+
+    #
+    # Event
+    #
+    Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Event\PaymentConditionsAction:
+        arguments:
+            - '@adapter.authorization_checker'
+            - '@form.factory'
+            - '@adapter.router'
+            - '@session.flash_bag'
+            - '@Proximum\Vimeet\Infrastructure\Adapter\CommandBus'
+            - '@Proximum\Vimeet\Infrastructure\Adapter\QueryBus'
+            - '@templating'
+
+    #
+    # Registration Template
+    #
+    Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\RegistrationTemplate\BuildAction:
+        arguments:
+            - '@adapter.authorization_checker'
+            - '@sheet.template.completeness_calculator'
+            - '@templating'
+            - '@form.factory'
+            - '@repository.nomenclature_repository'
+            - '@adapter.router'
+            - '%feature_registration_template_builder_enabled%'
+
+    Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\RegistrationTemplate\SaveAction:
+        arguments:
+            - '@adapter.authorization_checker'
+            - '@tactician.commandbus'
+
+    #
+    # Content
+    #
+    Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Content\TermsOfSale\ShowAction:
+        arguments:
+            - '@templating'
+            - '@Proximum\Vimeet\Infrastructure\Adapter\QueryBus'
+            - '@adapter.authorization_checker'
+
+    #
+    # Tip Event Actions
+    #
+    Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Tip\Event\CreateAction:
+        arguments:
+            - '@tactician.commandbus'
+            - '@adapter.router'
+            - '@form.factory'
+            - '@templating'
+            - '@session.flash_bag'
+            - '@adapter.authorization_checker'
+
+    Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Tip\Event\UpdateAction:
+        arguments:
+            - '@tactician.commandbus'
+            - '@adapter.router'
+            - '@form.factory'
+            - '@templating'
+            - '@session.flash_bag'
+            - '@adapter.authorization_checker'
+
+    Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Tip\RemoveAction:
+        arguments:
+            - '@tactician.commandbus'
+            - '@session.flash_bag'
+            - '@adapter.router'
+            - '@adapter.authorization_checker'
+
+    Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Tip\Event\RemoveAction:
+        arguments:
+            - '@tactician.commandbus'
+            - '@adapter.authorization_checker'
+            - '@session.flash_bag'
+            - '@adapter.router'
+
+    Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Tip\Event\AffectAction:
+        arguments:
+            - '@tactician.commandbus'
+            - '@adapter.router'
+            - '@form.factory'
+            - '@templating'
+            - '@session.flash_bag'
+            - '@adapter.authorization_checker'
+
+    Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Tip\PreviewAction:
+        arguments:
+            - '@tactician.commandbus'
+            - '@adapter.authorization_checker'
+
+    Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Tip\Event\ListAction:
+        arguments:
+            - '@tactician.commandbus.query'
+            - '@adapter.authorization_checker'
+            - '@templating'
+
+    #
+    # Tip Actions
+    #
+    Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Tip\ListAction:
+        arguments:
+            - '@adapter.authorization_checker'
+            - '@tactician.commandbus.query'
+            - '@templating'
+
+    Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Tip\CreateAction:
+        arguments:
+            - '@tactician.commandbus'
+            - '@form.factory'
+            - '@session.flash_bag'
+            - '@adapter.router'
+            - '@templating'
+            - '@adapter.authorization_checker'
+            - '%infrastructure.default_locales%'
+
+    Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Tip\UpdateAction:
+        arguments:
+            - '@adapter.authorization_checker'
+            - '@form.factory'
+            - '@session.flash_bag'
+            - '@templating'
+            - '@tactician.commandbus'
+            - '@adapter.router'
+
+    #
+    # User
+    #
+    Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\User\Phone\IgnoreConfirmationAction:
+        arguments:
+            - '@command.user.event.phone.ignore_confirmation'
+            - '@adapter.authorization_checker'
+
+    #
+    # Happening
+    #
+    Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Happening\CreateAction:
+        arguments:
+            - '@adapter.authorization_checker'
+            - '@form.factory'
+            - '@templating'
+            - '@adapter.router'
+            - '@Proximum\Vimeet\Infrastructure\Adapter\CommandBus'
+            - '@session.flash_bag'
+
+    Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Happening\ListAction:
+        arguments:
+            - '@adapter.authorization_checker'
+            - '@Proximum\Vimeet\Infrastructure\Adapter\QueryBus'
+            - '@templating'
+
+    Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Happening\UpdateAction:
+        arguments:
+            - '@adapter.authorization_checker'
+            - '@form.factory'
+            - '@templating'
+            - '@adapter.router'
+            - '@Proximum\Vimeet\Infrastructure\Adapter\CommandBus'
+            - '@session.flash_bag'
+
+    Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Happening\ExportAction:
+        arguments:
+            - '@adapter.authorization_checker'
+            - '@session.flash_bag'
+            - '@adapter.router'
+            - '@Proximum\Vimeet\Infrastructure\Adapter\QueryBus'
+            - '@adapter.serializer_adapter'
+
+    #
+    # Happening Category
+    #
+    Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Happening\Category\ListAction:
+        arguments:
+            - '@adapter.authorization_checker'
+            - '@vimeet_infrastructure.repository_happening.category_repository'
+            - '@templating'
+
+    Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Happening\Category\CreateAction:
+        arguments:
+            - '@adapter.authorization_checker'
+            - '@form.factory'
+            - '@Proximum\Vimeet\Infrastructure\Adapter\CommandBus'
+            - '@session.flash_bag'
+            - '@adapter.router'
+            - '@templating'
+
+    Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Happening\Category\UpdateAction:
+        arguments:
+            - '@adapter.authorization_checker'
+            - '@form.factory'
+            - '@Proximum\Vimeet\Infrastructure\Adapter\CommandBus'
+            - '@session.flash_bag'
+            - '@adapter.router'
+            - '@templating'
+
+    #
+    # Group
+    #
+    Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\SheetsGroup\ListAction:
+        arguments:
+            - '@adapter.authorization_checker'
+            - '@Proximum\Vimeet\Infrastructure\Adapter\QueryBus'
+            - '@templating'
+
+    #
+    # Package
+    #
+    Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Package\UpdateAction:
+        arguments:
+            - '@adapter.authorization_checker'
+            - '@form.factory'
+            - '@Proximum\Vimeet\Infrastructure\Adapter\CommandBus'
+            - '@session.flash_bag'
+            - '@templating'
+            - '@adapter.router'

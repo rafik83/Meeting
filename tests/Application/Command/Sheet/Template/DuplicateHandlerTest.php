@@ -19,8 +19,9 @@ use Proximum\Vimeet\Domain\Model\Template\SheetTemplate;
 use Proximum\Vimeet\Domain\Repository\Template\SheetTemplateRepositoryInterface;
 use Proximum\Vimeet\Domain\Template\TemplateRemoveField;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
+use PHPUnit\Framework\TestCase;
 
-class DuplicateHandlerTest extends \PHPUnit_Framework_TestCase
+class DuplicateHandlerTest extends TestCase
 {
     public function testHandle()
     {

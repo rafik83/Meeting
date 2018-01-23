@@ -1,15 +1,17 @@
 <?php
 
 /*
- * This file is part of the vimeet project.
+ * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2017 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
 
 namespace Proximum\Vimeet\Tests\Application\Query\Event;
 
+use PHPUnit\Framework\TestCase;
+use Prophecy\Prophecy\ObjectProphecy;
 use Proximum\Vimeet\Application\Query\Event\EventListQuery;
 use Proximum\Vimeet\Application\Query\Event\EventListQueryHandler;
 use Proximum\Vimeet\Application\View\Event\DayView;
@@ -20,67 +22,163 @@ use Proximum\Vimeet\Domain\Repository\EventRepositoryInterface;
 use Proximum\Vimeet\Domain\View\EventListView;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
 
-class EventListQueryHandlerTest extends \PHPUnit_Framework_TestCase
+class EventListQueryHandlerTest extends TestCase
 {
-    public function testHandle()
+    /** @var ObjectProphecy */
+    private $eventRepository;
+
+    /** @var ObjectProphecy */
+    private $admin;
+
+    /** @var \DateTime */
+    private $dateTime;
+
+    public function setUp()
     {
-        $startTime = new \DateTime();
-        $endTime   = new \DateTime();
+        $this->eventRepository = $this->prophesize(EventRepositoryInterface::class);
+        $this->admin           = $this->prophesize(Admin::class);
+        $this->dateTime        = new \DateTime('2017-04-04 10:10:00.000');
+    }
+
+    public function testHandleCurrent()
+    {
         $eventOne  = EventFactory::createEvent('event1');
+        $startTime = new \DateTime('2017-04-14 10:10:00.000');
+        $endTime   = new \DateTime('2017-04-14 18:10:00.000');
         $day       = new Day($eventOne, $startTime, $endTime);
         $eventOne->setDays([$day]);
 
-        $eventTwo     = EventFactory::createEvent('event2');
-        $startTimeTwo = new \DateTime();
-        $endTimeTwo   = new \DateTime();
-        $startTimeTwo->modify('-2 month');
-        $endTimeTwo->modify('-2 month');
-        $dayTwo = new Day($eventTwo, $startTimeTwo, $endTimeTwo);
-        $eventTwo->setDays([$dayTwo]);
+        $eventTwo = EventFactory::createEvent('event2');
+
+        $eventThree     = EventFactory::createEvent('event3');
+        $startTimeThree = new \DateTime('2017-01-04 10:00:00.000');
+        $endTimeThree   = new \DateTime('2017-01-04 18:00:00.000');
+        $dayThree       = new Day($eventThree, $startTimeThree, $endTimeThree);
+        $eventThree->setDays([$dayThree]);
 
         // Expected
-        $currentEvent = new EventListView(
+        $currentEvent1 = new EventListView(
             null,
             'event1',
-            'super-event.vimeet.proximum.dev',
+            'super-event.vimeet.proximum',
             ['fr', 'en'],
             'fr',
+            true,
             [new DayView($startTime, $endTime)]
         );
 
-        $pastEvent = new EventListView(
+        $currentEvent2 = new EventListView(
             null,
             'event2',
-            'super-event.vimeet.proximum.dev',
+            'super-event.vimeet.proximum',
             ['fr', 'en'],
             'fr',
-            [new DayView($startTimeTwo, $endTimeTwo)]
+            true,
+            []
         );
+        $expectedEventListsView = new EventListsView([$currentEvent1, $currentEvent2]);
 
-        $expectedEventListsView = new EventListsView(
-            [$currentEvent],
-            [$pastEvent]
-        );
-
-        // Mock
-        $eventRepository = $this->prophesize(EventRepositoryInterface::class);
-        $admin           = $this->prophesize(Admin::class);
-        $datetime        = new \DateTime();
-
-        $eventRepository->getEventsWithDaysByAdmin($admin->reveal())
+        $this->eventRepository
+            ->getEventsWithDaysByAdmin($this->admin->reveal())
             ->shouldBeCalled()
-            ->willReturn([
-                $eventOne,
-                $eventTwo,
-            ]);
+            ->willReturn([$eventOne, $eventTwo, $eventThree]);
 
-        $query   = new EventListQuery($admin->reveal());
-        $handler = new EventListQueryHandler($eventRepository->reveal(), $datetime);
+        $query   = new EventListQuery($this->admin->reveal(), EventListQuery::STATE_CURRENT);
+        $handler = new EventListQueryHandler($this->eventRepository->reveal(), $this->dateTime);
 
         $eventListsView = $handler->handle($query);
 
         $this->assertEquals($expectedEventListsView, $eventListsView);
-        $this->assertCount(1, $eventListsView->currentsEventListView);
-        $this->assertCount(1, $eventListsView->pastsEventListView);
+    }
+
+    public function testHandlePast()
+    {
+        $eventOne  = EventFactory::createEvent('event1');
+        $startTime = new \DateTime('2017-04-14 10:10:00.000');
+        $endTime   = new \DateTime('2017-04-14 18:10:00.000');
+        $day       = new Day($eventOne, $startTime, $endTime);
+        $eventOne->setDays([$day]);
+
+        $eventTwo = EventFactory::createEvent('event2');
+
+        $eventThree     = EventFactory::createEvent('event3');
+        $startTimeThree = new \DateTime('2017-01-04 10:00:00.000');
+        $endTimeThree   = new \DateTime('2017-01-04 18:00:00.000');
+        $dayThree       = new Day($eventThree, $startTimeThree, $endTimeThree);
+        $eventThree->setDays([$dayThree]);
+
+        // Expected
+        $expectedEventListsView = new EventListsView([
+            new EventListView(
+                null,
+                'event3',
+                'super-event.vimeet.proximum',
+                ['fr', 'en'],
+                'fr',
+                true,
+                [new DayView($startTimeThree, $endTimeThree)]
+            )
+        ]);
+
+        $this->eventRepository
+            ->getEventsWithDaysByAdmin($this->admin->reveal())
+            ->shouldBeCalled()
+            ->willReturn([$eventOne, $eventTwo, $eventThree]);
+
+        $query   = new EventListQuery($this->admin->reveal(), EventListQuery::STATE_PAST);
+        $handler = new EventListQueryHandler($this->eventRepository->reveal(), $this->dateTime);
+
+        $eventListsView = $handler->handle($query);
+
+        $this->assertEquals($expectedEventListsView, $eventListsView);
+    }
+
+    public function testHandleArchived()
+    {
+        $eventOne  = EventFactory::createEvent('event1');
+        $startTime = new \DateTime('2017-04-14 10:10:00.000');
+        $endTime   = new \DateTime('2017-04-14 18:10:00.000');
+        $day       = new Day($eventOne, $startTime, $endTime);
+        $eventOne->setDays([$day]);
+
+        $eventThree     = EventFactory::createEvent('event3');
+        $startTimeThree = new \DateTime('2017-01-04 10:00:00.000');
+        $endTimeThree   = new \DateTime('2017-01-04 18:00:00.000');
+        $dayThree       = new Day($eventThree, $startTimeThree, $endTimeThree);
+        $eventThree->setDays([$dayThree]);
+
+        // Expected
+        $expectedEventListsView = new EventListsView([
+            new EventListView(
+                null,
+                'event1',
+                'super-event.vimeet.proximum',
+                ['fr', 'en'],
+                'fr',
+                true,
+                [new DayView($startTime, $endTime)]
+            ),
+            new EventListView(
+                null,
+                'event3',
+                'super-event.vimeet.proximum',
+                ['fr', 'en'],
+                'fr',
+                true,
+                [new DayView($startTimeThree, $endTimeThree)]
+            )
+        ]);
+
+        $this->eventRepository
+            ->findArchivedByAdmin($this->admin->reveal())
+            ->shouldBeCalled()
+            ->willReturn([$eventOne, $eventThree]);
+
+        $query   = new EventListQuery($this->admin->reveal(), EventListQuery::STATE_ARCHIVED);
+        $handler = new EventListQueryHandler($this->eventRepository->reveal(), $this->dateTime);
+
+        $eventListsView = $handler->handle($query);
+
+        $this->assertEquals($expectedEventListsView, $eventListsView);
     }
 }

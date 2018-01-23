@@ -1,6 +1,10 @@
-<div class="has-details meet" data-beginHour="{{ meeting.begin|date('H:i', meeting.timeZone) }}" data-duration="{{ meeting.duration.format('%H:%I') }}">
+<div class="has-details meet"
+     data-meeting-id="{{ meeting.id }}"
+     data-beginHour="{{ meeting.begin|date('H:i', meeting.timeZone) }}"
+     data-duration="{{ meeting.duration.format('%H:%I') }}"
+>
     <header style="background: linear-gradient(to right, {{ meeting.leftColor }} 0%, {{ meeting.rightColor }} 100%) !important;">
-        <a class="content" href="#">
+        <a class="content col-xs-12" href="#">
             <span class="prefix"><i class="icon icon-RDV"></i></span>
             <p class="title">
                 <b>{{ meeting.spotRef }}</b> -
@@ -14,6 +18,16 @@
     <div class="details">
         <div class="row">
             <div class="col-md-12">
+                {% if meeting.visio %}
+                    <div class="video-container" id="video-{{ meeting.id }}">
+                        <div class="subscriber hide" id="subscriber-{{ meeting.id }}"></div>
+                        <div class="publisher hide" id="publisher-{{ meeting.id }}"></div>
+                        <div class="video-helper hide">
+                            <span>
+                                <i class="icon-Alerter_1"></i> {{ 'meeting.video.waitingForParticipant'|trans }}</span>
+                        </div>
+                    </div>
+                {% endif %}
                 <div class="list list--users">
                     {% for participantView in meeting.participants %}
                         {{ include('EventBundle:Participant:preview.html.twig', {'participant': participantView.card}) }}
@@ -26,19 +40,23 @@
                 <i class="icon icon-Horaire"></i>
                 <span>{{ meeting.begin|date('H:i', meeting.timeZone) }} - {{ meeting.end|date('H:i', meeting.timeZone) }}</span>
             </p>
+
             {% if meeting.isSheetDetailsSeeAble %}
                 <a href="{{ path('event_catalog_complete_sheet', { sheet: sheetId, sheetToDisplay: meeting.sheetMetId }) }}" target="_blank">
                     <i class="icon icon-Document_1"></i>
                     {{ 'agenda.meeting.details'|trans }}
                 </a>
             {% endif %}
+
             <div class="actions">
-                {#
-                    <a href="" class="btn btn-gray"><i class="icon icon-Fermer_4"></i></a>
-                    <a href="" class="btn btn-gray"><i class="icon icon-Transferer"></i></a>
-                    <a href="" class="btn btn-gray"><i class="icon icon-Editer_1"></i></a>
-                    <a href="" class="btn btn-gray"><i class="icon icon-Retard"></i></a>
-                #}
+                {% if meeting.isVisioAndAvailable %}
+                    <a class="btn btn-primary start-visio"
+                       href="{{ path('event_video_video_meeting', { meeting: meeting.id, sheet: sheetId, participant: participantId }) }}"
+                       target="_blank"
+                    >
+                        <i class="icon-Appeler"></i> {{ 'meeting.video.start'|trans }}
+                    </a>
+                {% endif %}
                 <i class="icon icon-Localiser"></i> {{ meeting.spotRef }}
             </div>
         </footer>

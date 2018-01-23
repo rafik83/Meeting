@@ -22,6 +22,7 @@ Feature: See sheet details
     And elastica is populate
     And I am logged with "test@test.com" on admin
     And I go to "/fr/event"
+    When I go to this page "/fr/event/past"
     When I follow "admin.sheet.link"
     Then the response status code should be 200
     And I should be on this page "/fr/event/1/sheet"
@@ -64,8 +65,8 @@ Feature: See sheet details
     And I press "form.change_type.children.submit.label"
     Then I should be on this page "/fr/event/1/sheet/1"
     And I should see "flash.admin.sheet.change_type.success"
-    And the "sheet.changed_type" mail should be sent to "test@elao.com" from "no-reply@rdv-carnot-2016.vimeet.proximum.dev"
-    And the "sheet.changed_type" mail should be sent in bcc to "team-project@example.net" from "no-reply@rdv-carnot-2016.vimeet.proximum.dev"
+    And the "sheet.changed_type" mail should be sent to "test@elao.com" from "no-reply@rdv-carnot-2016.vimeet.proximum"
+    And the "sheet.changed_type" mail should be sent in bcc to "team-project@example.net" from "no-reply@rdv-carnot-2016.vimeet.proximum"
     And the ".label-sheet-type" element should contain "Investisseur"
     And I should see "admin.sheet.trace.changed_type"
 

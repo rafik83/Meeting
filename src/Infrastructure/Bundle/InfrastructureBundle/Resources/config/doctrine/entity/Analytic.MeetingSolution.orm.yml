@@ -1,0 +1,29 @@
+Proximum\Vimeet\Domain\Model\Analytic\MeetingSolution:
+    type:  entity
+    table: analytic_meeting_solution
+    id:
+        id:
+            type: integer
+            generator:
+                strategy: AUTO
+    fields:
+        meetings:
+            type: integer
+        requests:
+            type: integer
+        fillingRate:
+            type: integer
+        sheetSatisfaction:
+            type: text
+        spotSatisfaction:
+            type: text
+        spotFillingGraph:
+            type: text
+        createdAt:
+            type: datetime
+    manyToOne:
+        event:
+            targetEntity: Proximum\Vimeet\Domain\Model\Event
+            joinColumn:
+                onDelete: CASCADE
+                nullable: false

@@ -22,3 +22,5 @@ validators.unavailability.timeOutOfRange.begin: 'L''heure de fin sélectionnée 
 validators.unavailability.timeOutOfRange.end: 'L''heure de début sélectionnée est hors des heures du %day%'
 validators.userPhone.sendCode.phone.min: 'Le numéro de téléphone doit comporter au moins {{ limit }} chiffres'
 validators.userPhone.sendCode.phone.mustAccept: 'Vous devez cocher cette case'
+validators.userPhone.validateCode.code.exact: 'Le code doit être composé de 4 chiffres'
+validators.userPhone.validateCode.codeNotValid: 'Le code n''est pas valide'

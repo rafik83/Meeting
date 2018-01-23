@@ -1,10 +1,23 @@
 <header style="background: linear-gradient(to right, {{ leftColor }} 0%, {{ rightColor }} 100%) !important;">
-    <a class="content" href="#{{ happening.title|url_encode }}">
+    {% if withHourPrefix is defined and withHourPrefix == true %}
+        <div class="hour">{{ happening.begin|date('H:i', happening.timeZone) }} {{ happening.end|date('H:i', happening.timeZone) }}</div>
+    {% endif %}
+
+    <a class="content" href="#">
         <span class="prefix"><i class="icon icon-{{ picto }}"></i></span>
         <p class="title">
             {{ happening.title }}
-            <i class="pull-right icon icon-Valider_3 happeningParticipateIcon {{ doesCurrentUserParticipate ? '' : 'hide'}}"></i>
+            {% if suffixTitleWithTick is defined and suffixTitleWithTick == true %}
+                <i class="pull-right icon icon-Valider_3 happeningParticipateIcon {{ doesCurrentUserParticipate ? '' : 'hide' }}"></i>
+            {% endif %}
         </p>
     </a>
-    {{ include('EventBundle:Happening:actions.html.twig', { 'sheet': sheet, 'happening': happening, 'isUserAloneParticipant': isUserAloneParticipant }) }}
+    {% if not isActionButtonsOnDetails %}
+        {{ include('EventBundle:Happening:actions.html.twig', {
+            'sheet': sheet,
+            'happening': happening,
+            'isUserAloneParticipant': isUserAloneParticipant,
+            'doesCurrentUserParticipate': doesCurrentUserParticipate
+        }) }}
+    {% endif %}
 </header>

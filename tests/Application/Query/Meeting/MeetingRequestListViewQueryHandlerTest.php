@@ -3,7 +3,7 @@
 /*
  * This file is part of the vimeet project.
  *
- * Copyright (C) 2016 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -21,31 +21,43 @@ use Proximum\Vimeet\Application\View\Meeting\MeetingRequestView;
 use Proximum\Vimeet\Domain\KeyDates\Checker\AnsweringMeetingRequestAccessChecker;
 use Proximum\Vimeet\Domain\KeyDates\Checker\MeetingPublishedAccessChecker;
 use Proximum\Vimeet\Domain\KeyDates\Checker\MeetingRequestAccessChecker;
+use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Meeting\Request;
+use Proximum\Vimeet\Domain\Model\MeetingSlot;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\Type;
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Repository\Meeting\RequestRepositoryInterface;
-use Proximum\Vimeet\Tests\Factory\EventFactory;
+use Proximum\Vimeet\Domain\User\Phone\ValidationRequiredChecker;
+use PHPUnit\Framework\TestCase;
 
-class MeetingRequestListViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
+class MeetingRequestListViewQueryHandlerTest extends TestCase
 {
     public function testHandle()
     {
         $now      = new \DateTime();
-        $event    = EventFactory::createEvent();
-        $eventTwo = EventFactory::createEvent();
+        $configuration = $this->prophesize(Event\Configuration::class);
+        $event = $this->prophesize(Event::class);
+        $event->getConfiguration()->willReturn($configuration->reveal());
+        $configuration->isMeetingRequestUpdateLocked()->willReturn(true);
 
-        $type    = new Type($event);
+        $type    = new Type($event->reveal());
         $user    = new User('email@email.com', 'salt', 'password', 'fr');
         $userTwo = new User('otheruser@email.com', 'salt', 'password', 'fr');
 
-        $sheet    = new Sheet($event, $type, [], $user, $now);
-        $sheetTwo = new Sheet($eventTwo, new Type($eventTwo), [], $userTwo, $now);
+        $sheet    = new Sheet($event->reveal(), $type, [], $user, $now);
+        $sheetTwo = new Sheet($event->reveal(), new Type($event->reveal()), [], $userTwo, $now);
 
-        $meetingRequest = new Request($sheet, [], $sheetTwo, [], $now, $user, $event);
+        $reflection  = new \ReflectionClass(Sheet::class);
+        $property = $reflection->getProperty('id');
+        $property->setAccessible(true);
+        $property->setValue($sheet, 1);
+        $property->setValue($sheetTwo, 2);
+        $property->setAccessible(false);
 
-        $query = new MeetingRequestListViewQuery($event, $sheet, $user, 'fr');
+        $meetingRequest = new Request($sheet, [], $sheetTwo, [], $now, $user, $event->reveal());
+
+        $query = new MeetingRequestListViewQuery($event->reveal(), $sheet, $user, 'fr', [], []);
 
         // Expected
         $meetingRequestListView = new MeetingRequestListView();
@@ -59,15 +71,17 @@ class MeetingRequestListViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
         $meetingRequestAccessChecker          = $this->prophesize(MeetingRequestAccessChecker::class);
         $answeringMeetingRequestAccessChecker = $this->prophesize(AnsweringMeetingRequestAccessChecker::class);
         $viewedSheetListViewQueryHandler      = $this->prophesize(ViewedSheetListViewQueryHandler::class);
+        $validationRequiredChecker = $this->prophesize(ValidationRequiredChecker::class);
 
         $meetingRequestRepository
-            ->getAllRequestBySheet($sheet, [])
+            ->getAllRequestBySheet($sheet, [], [])
             ->shouldBeCalled()
             ->willReturn([$meetingRequest]);
 
         $viewedSheetListViewQueryHandler
             ->handle(new ViewedSheetListViewQuery($user, [$meetingRequest->getToSheet()]))
-            ->shouldBeCalled();
+            ->shouldBeCalled()
+            ->willReturn([2 => $sheetTwo]);
 
         $meetingRequestViewQueryHandler
             ->handle(new MeetingRequestViewQuery(
@@ -76,9 +90,10 @@ class MeetingRequestListViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
                 $user,
                 'fr',
                 false,
+                true,
                 false,
                 false,
-                false
+                true
             ))
             ->shouldBeCalled()
             ->willReturn($meetingRequestView);
@@ -86,6 +101,7 @@ class MeetingRequestListViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
         $meetingPublishedAccessChecker->allowedToAccess($event)->shouldBeCalled()->willReturn(false);
         $meetingRequestAccessChecker->allowedToAccess($event)->shouldBeCalled()->willReturn(true);
         $answeringMeetingRequestAccessChecker->allowedToAccess($event)->shouldBeCalled()->willReturn(true);
+        $validationRequiredChecker->handle($sheet, $user)->shouldBeCalled()->willReturn(false);
 
         $handler = new MeetingRequestListViewQueryHandler(
             $meetingRequestRepository->reveal(),
@@ -93,7 +109,8 @@ class MeetingRequestListViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
             $viewedSheetListViewQueryHandler->reveal(),
             $meetingPublishedAccessChecker->reveal(),
             $meetingRequestAccessChecker->reveal(),
-            $answeringMeetingRequestAccessChecker->reveal()
+            $answeringMeetingRequestAccessChecker->reveal(),
+            $validationRequiredChecker->reveal()
         );
 
         $handler->handle($query);
@@ -102,19 +119,29 @@ class MeetingRequestListViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
     public function testHandleWithClosedMeetingRequest()
     {
         $now      = new \DateTime();
-        $event    = EventFactory::createEvent();
-        $eventTwo = EventFactory::createEvent();
+        $configuration = $this->prophesize(Event\Configuration::class);
+        $event = $this->prophesize(Event::class);
+        $event->getConfiguration()->willReturn($configuration->reveal());
+        $configuration->isMeetingRequestUpdateLocked()->willReturn(false);
 
-        $type    = new Type($event);
+        $type    = new Type($event->reveal());
         $user    = new User('email@email.com', 'salt', 'password', 'fr');
         $userTwo = new User('otheruser@email.com', 'salt', 'password', 'fr');
 
-        $sheet    = new Sheet($event, $type, [], $user, $now);
-        $sheetTwo = new Sheet($eventTwo, new Type($eventTwo), [], $userTwo, $now);
+        $sheet    = new Sheet($event->reveal(), $type, [], $user, $now);
+        $sheetTwo = new Sheet($event->reveal(), new Type($event->reveal()), [], $userTwo, $now);
+        $reflection  = new \ReflectionClass(Sheet::class);
+        $property = $reflection->getProperty('id');
+        $property->setAccessible(true);
+        $property->setValue($sheet, 1);
+        $property->setValue($sheetTwo, 2);
+        $property->setAccessible(false);
 
-        $meetingRequest = new Request($sheet, [], $sheetTwo, [], $now, $user, $event);
+        $meetingRequest = new Request($sheet, [], $sheetTwo, [], $now, $user, $event->reveal());
 
-        $query = new MeetingRequestListViewQuery($event, $sheet, $user, 'fr');
+        $meetingSlot = $this->prophesize(MeetingSlot::class);
+
+        $query = new MeetingRequestListViewQuery($event->reveal(), $sheet, $user, 'fr', [], [$meetingSlot]);
 
         // Expected
         $meetingRequestListView = new MeetingRequestListView();
@@ -128,15 +155,17 @@ class MeetingRequestListViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
         $meetingRequestAccessChecker          = $this->prophesize(MeetingRequestAccessChecker::class);
         $answeringMeetingRequestAccessChecker = $this->prophesize(AnsweringMeetingRequestAccessChecker::class);
         $viewedSheetListViewQueryHandler      = $this->prophesize(ViewedSheetListViewQueryHandler::class);
+        $validationRequiredChecker = $this->prophesize(ValidationRequiredChecker::class);
 
         $meetingRequestRepository
-            ->getAllRequestBySheet($sheet, [])
+            ->getAllRequestBySheet($sheet, [], [$meetingSlot])
             ->shouldBeCalled()
             ->willReturn([$meetingRequest]);
 
         $viewedSheetListViewQueryHandler
             ->handle(new ViewedSheetListViewQuery($user, [$meetingRequest->getToSheet()]))
-            ->shouldBeCalled();
+            ->shouldBeCalled()
+            ->willReturn([]);
 
         $meetingRequestViewQueryHandler
             ->handle(new MeetingRequestViewQuery(
@@ -147,7 +176,8 @@ class MeetingRequestListViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
                 false,
                 false,
                 true,
-                true
+                true,
+                false
             ))
             ->shouldBeCalled()
             ->willReturn($meetingRequestView);
@@ -155,6 +185,7 @@ class MeetingRequestListViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
         $meetingPublishedAccessChecker->allowedToAccess($event)->shouldBeCalled()->willReturn(false);
         $meetingRequestAccessChecker->allowedToAccess($event)->shouldBeCalled()->willReturn(false);
         $answeringMeetingRequestAccessChecker->allowedToAccess($event)->shouldBeCalled()->willReturn(false);
+        $validationRequiredChecker->handle($sheet, $user)->shouldBeCalled()->willReturn(false);
 
         $handler = new MeetingRequestListViewQueryHandler(
             $meetingRequestRepository->reveal(),
@@ -162,7 +193,8 @@ class MeetingRequestListViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
             $viewedSheetListViewQueryHandler->reveal(),
             $meetingPublishedAccessChecker->reveal(),
             $meetingRequestAccessChecker->reveal(),
-            $answeringMeetingRequestAccessChecker->reveal()
+            $answeringMeetingRequestAccessChecker->reveal(),
+            $validationRequiredChecker->reveal()
         );
 
         $handler->handle($query);

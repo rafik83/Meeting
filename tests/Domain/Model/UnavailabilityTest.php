@@ -16,8 +16,9 @@ use Proximum\Vimeet\Domain\Model\Type;
 use Proximum\Vimeet\Domain\Model\Unavailability;
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
+use PHPUnit\Framework\TestCase;
 
-class UnavailabilityTest extends \PHPUnit_Framework_TestCase
+class UnavailabilityTest extends TestCase
 {
     public static function provideDateTime()
     {

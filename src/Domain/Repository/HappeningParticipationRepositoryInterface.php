@@ -39,12 +39,32 @@ interface HappeningParticipationRepositoryInterface
     public function findByUser(User $user, Event $event, array $filters = []);
 
     /**
-     * @param Participant[] $participants
-     * @param Event         $event
+     * @param User  $user
+     * @param Event $event
+     *
+     * @return bool
+     */
+    public function hasParticipationForUserAndEvent(User $user, Event $event): bool;
+
+    /**
+     * @param Event  $event
+     * @param User[] $users
      *
      * @return HappeningParticipation[]
      */
-    public function findByUsers(array $participants, Event $event);
+    public function findByEventAndUsers(Event $event, array $users);
+
+    /**
+     * @deprecated
+     *
+     * @see findByEventAndUsers
+     *
+     * @param Participant[] $participants
+     * @param Event $event
+     *
+     * @return HappeningParticipation[]
+     */
+    public function findByParticipants(array $participants, Event $event);
 
     /**
      * @param Happening $happening
@@ -94,7 +114,7 @@ interface HappeningParticipationRepositoryInterface
      *
      * @return HappeningParticipation[]
      */
-    public function getParticipationsForSheet(Sheet $sheet, $happenings);
+    public function getParticipationsForSheet(Sheet $sheet, array $happenings);
 
     /**
      * @param User      $user
@@ -122,4 +142,11 @@ interface HappeningParticipationRepositoryInterface
      * @return HappeningParticipation|null
      */
     public function findByHappeningAndUser(Happening $happening, User $user);
+
+    /**
+     * @param Happening $happening
+     *
+     * @return HappeningParticipation[]
+     */
+    public function findByHappening(Happening $happening): array;
 }

@@ -1,5 +1,6 @@
 imports:
     - { resource: config.yml }
+    - { resource: services_prod.yml }
 
 #framework:
 #    validation:
@@ -24,4 +25,5 @@ monolog:
             path:  "%kernel.logs_dir%/%kernel.environment%.log"
             level: debug
         console:
-            type:  console
+            type: console
+            process_psr_3_messages: false

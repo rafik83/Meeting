@@ -1,0 +1,12 @@
+{% extends 'AdminBundle:Common:form_layout.html.twig' %}
+
+{% block title %}
+    [{{ event.title }}] {{ 'admin.extraParameter.update.title'|trans({'%type%': ('admin.extraParameter.type.' ~ extraParameter.type)|trans }) }}
+{% endblock %}
+
+{% block form_title 'admin.extraParameter.update.title'|trans({'%type%': ('admin.extraParameter.type.' ~ extraParameter.type)|trans }) %}
+
+{% block form_content %}
+{% endblock form_content %}
+
+{% block goback_link path('admin_event_extra_parameter_list', {'event': event.id}) %}

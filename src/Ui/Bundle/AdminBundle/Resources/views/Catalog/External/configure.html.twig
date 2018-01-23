@@ -1,0 +1,31 @@
+{% extends 'AdminBundle:Common:form_layout.html.twig' %}
+
+{% block form_title 'admin.event.catalog.external.configure'|trans %}
+
+{% block form_content %}
+    {{ form_row(form.externalCatalogEnabled) }}
+
+    {% if event.externalCatalogEnabled %}
+        <div class="col-lg-9 col-md-9 col-sm-9 col-lg-offset-3 col-md-offset-3 col-sm-offset-3">
+            <ul>
+                {% for url in externalCatalogUrls %}
+                    <li>
+                        <a target="_blank" href="{{ url }}">
+                            {{ url }}
+                        </a>
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>
+    {% endif %}
+
+    <hr>
+    {{ form_row(form.registrationUrl) }}
+    {{ form_row(form.hasMessage) }}
+    {{ form_row(form.messageTranslations) }}
+    {{ form_row(form.types) }}
+    {{ form_row(form.categories) }}
+    {% include 'AdminBundle:SearchFacet:search_facets.html.twig' with {form: form} %}
+{% endblock form_content %}
+
+{% block goback_link path('admin_event_read', { 'event': event.id }) %}

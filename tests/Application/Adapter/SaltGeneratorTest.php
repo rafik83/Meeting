@@ -10,9 +10,10 @@
 
 namespace Proximum\Vimeet\Tests\Application\Adapter;
 
+use PHPUnit\Framework\TestCase;
 use Proximum\Vimeet\Application\Adapter\SaltGenerator;
 
-class SaltGeneratorTest extends \PHPUnit_Framework_TestCase
+class SaltGeneratorTest extends TestCase
 {
     public function testGenerate()
     {

@@ -1,0 +1,36 @@
+<li {% if horizontal %}class="dropdown-submenu"{% endif %}>
+    <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" href="{{ path('admin_event_list') }}">
+        {{ 'admin.events.link'|trans }}
+        {% if not horizontal %}<span class="caret"></span>{% endif %}
+    </a>
+    <ul class="dropdown-menu">
+        <li class="{% if app.request.uri == url('admin_event_list') %}active{% endif %}">
+            <a href="{{ path('admin_event_list') }}">
+                {{ 'admin.event.list.currents.title'|trans }}
+            </a>
+        </li>
+        <li class="{% if app.request.uri == url('admin_past_event_list') %}active{% endif %}">
+            <a href="{{ path('admin_past_event_list') }}">
+                {{ 'admin.event.list.pasts.title'|trans }}
+            </a>
+        </li>
+        <li class="{% if app.request.uri == url('admin_archived_event_list') %}active{% endif %}">
+            <a href="{{ path('admin_archived_event_list') }}">
+                {{ 'admin.event.list.archived.title'|trans }}
+            </a>
+        </li>
+        {% if is_granted('ROLE_ALLOWED_TO_ORGANIZE') %}
+            <li role="separator" class="divider"></li>
+            <li class="{% if app.request.uri == url('admin_event_create') %}active{% endif %}">
+                <a href="{{ path('admin_event_create') }}">
+                    {{ 'admin.event.create.title'|trans }}
+                </a>
+            </li>
+            <li class="{% if app.request.uri == url('admin_event_duplicate') %}active{% endif %}">
+                <a href="{{ path('admin_event_duplicate') }}">
+                    {{ 'admin.event.duplicate.title'|trans }}
+                </a>
+            </li>
+        {% endif %}
+    </ul>
+</li>

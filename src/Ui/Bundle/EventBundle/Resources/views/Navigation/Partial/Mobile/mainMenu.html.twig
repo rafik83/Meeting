@@ -1,0 +1,69 @@
+<div class="mobile-menu">
+    {% if menuHeaderView.event is defined %}
+        <div class="header-mobile">
+            {{ include('EventBundle:Navigation/Partial:logo.html.twig') }}
+        </div>
+    {% endif %}
+
+    <div class="mobile-menu-items">
+        <a href="#event-contact-modal" data-toggle="modal" data-target="#event-contact-modal"
+           class="btn btn-primary btn-lg btn-inactive">
+            <i class="icon-Appeler"></i>
+            Nous contacter
+        </a>
+
+        {% if is_granted('ROLE_USER') and menuHeaderView.hasMultipleSheets %}
+            <a href="{{ path('event_select_sheet') }}" class="btn btn-primary btn-lg btn-inactive">
+                <i class="icon-Document_1"></i>
+                {{ 'navigation.links.returnToSelectSheet'|trans }}
+            </a>
+        {% endif %}
+
+        {% if menuView and menuView.categoriesView %}
+            {% for category in menuView.categoriesView %}
+                {% if category.isShowOnMobile and category.enabledLinkView %}
+                    <a href="{{ category.enabledLinkView.link }}" class="btn btn-primary btn-lg btn-inactive">
+                        <i class="{{ category.icon }}"></i>
+                        {{ category.title|trans }}
+                    </a>
+                {% endif %}
+            {% endfor %}
+        {% endif %}
+
+        {% if menuHeaderView.event is defined %}
+            {% for locale, path in menuHeaderView.localeRoutes %}
+                <a href="{{ path }}" class="btn btn-primary btn-lg btn-inactive">
+                    <i class="icon-Langue"></i>
+                    {{ locale|locale(locale) }}
+                </a>
+            {% endfor %}
+        {% endif %}
+
+        {% if is_granted('ROLE_USER') %}
+            <a href="{{ path('event_logout_confirmation') }}" class="btn btn-primary btn-lg btn-inactive">
+                <i class="icon-Disconnect"></i>
+                {{ 'logout.link'|trans }}
+            </a>
+        {% else %}
+            <a href="{{ path('event_login') }}" class="btn btn-primary btn-lg btn-inactive">
+                <i class="icon-Disconnect"></i>
+                {{ 'login.link'|trans }}
+            </a>
+        {% endif %}
+
+        {% if isShowingRegisterButton %}
+            {% if registrationUrl is defined and registrationUrl is not null %}
+                <a class="btn btn-primary btn-lg btn-inactive" href="{{ registrationUrl }}">{{ 'register.register'|trans }}</a>
+            {% else %}
+                <a class="btn btn-primary btn-lg btn-inactive" href="{{ path('event') }}">{{ 'register.register'|trans }}</a>
+            {% endif %}
+        {% endif %}
+    </div>
+
+    <div class="fixed__navigation__close">
+        <button type="button" class="navigation__close">
+            <i class="icon-Fermer_4"></i> {{ 'navigation.close'|trans }}
+        </button>
+        <div class="clearfix"></div>
+    </div>
+</div>

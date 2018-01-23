@@ -21,10 +21,10 @@ use Proximum\Vimeet\Application\Query\Planning\Day\MeetingViewQueryHandler;
 use Proximum\Vimeet\Application\Query\Planning\Day\UnavailabilityViewQuery;
 use Proximum\Vimeet\Application\Query\Planning\Day\UnavailabilityViewQueryHandler;
 use Proximum\Vimeet\Application\View\Planning\DayView;
+use Proximum\Vimeet\Domain\Time\TimeOverlap;
 
 class DayViewQueryHandler
 {
-
     /** @var HappeningParticipationViewQueryHandler */
     private $happeningHandler;
 
@@ -75,9 +75,7 @@ class DayViewQueryHandler
         $meetings         = [];
 
         foreach ($query->happenings as $happening) {
-            if ($happening->getHappening()->getBegin() >= $query->day->getStartTime()
-                && $happening->getHappening()->getEnd() <= $query->day->getEndTime()
-            ) {
+            if (TimeOverlap::contains($happening->getHappening(), $query->day)) {
                 $happeningViews[] = $this->happeningHandler->handle(
                     new HappeningParticipationViewQuery(
                         $happening,
@@ -88,9 +86,7 @@ class DayViewQueryHandler
         }
 
         foreach ($query->unavailabilities as $unavailability) {
-            if ($unavailability->getBegin() >= $query->day->getStartTime()
-                && $unavailability->getEnd() <= $query->day->getEndTime()
-            ) {
+            if (TimeOverlap::contains($unavailability, $query->day)) {
                 $unavailabilities[] = $this->unavailabilityHandler->handle(
                     new UnavailabilityViewQuery($unavailability)
                 );
@@ -98,9 +94,7 @@ class DayViewQueryHandler
         }
 
         foreach ($query->masses as $mass) {
-            if ($mass->getBegin() >= $query->day->getStartTime()
-                && $mass->getEnd() <= $query->day->getEndTime()
-            ) {
+            if (TimeOverlap::contains($mass, $query->day)) {
                 $masses[] = $this->massHandler->handle(
                     new MassViewQuery(
                         $mass,
@@ -111,22 +105,18 @@ class DayViewQueryHandler
         }
 
         foreach ($query->meetings as $meeting) {
-            if ($meeting->getSlot()->getBegin() >= $query->day->getStartTime()
-                && $meeting->getSlot()->getEnd() <= $query->day->getEndTime()
-            ) {
+            if (TimeOverlap::contains($meeting->getSlot(), $query->day)) {
                 $meetings[] = $this->meetingHandler->handle(
                     new MeetingViewQuery(
                         $meeting,
-                        $query->sheet
+                        $query->user
                     )
                 );
             }
         }
 
         foreach ($query->assignments as $assignment) {
-            if ($assignment->getBegin() >= $query->day->getStartTime()
-                && $assignment->getEnd() <= $query->day->getEndTime()
-            ) {
+            if (TimeOverlap::contains($assignment, $query->day)) {
                 $assignments[] = $this->assignmentHandler->handle(
                     new AssignmentViewQuery(
                         $assignment,

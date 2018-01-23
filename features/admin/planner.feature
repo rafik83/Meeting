@@ -4,21 +4,10 @@ Feature: See planner page
 
   Scenario: I can access the page of the planner
     Given the database is purged
-    And the following fixtures files are loaded:
-      | @InfrastructureBundle/DataFixtures/ORM/Nomenclature.yml                  |
-      | @InfrastructureBundle/DataFixtures/ORM/Template/SheetTemplate.yml        |
-      | @InfrastructureBundle/DataFixtures/ORM/Template/RegistrationTemplate.yml |
-      | @InfrastructureBundle/DataFixtures/ORM/ASDDays2016-Event.yml             |
-      | @InfrastructureBundle/DataFixtures/ORM/ASDDays2016-Nomenclature.yml      |
-      | @InfrastructureBundle/DataFixtures/ORM/ASDDays2016-Product.yml           |
-      | @InfrastructureBundle/DataFixtures/ORM/ASDDays2016-Template.yml          |
-      | @InfrastructureBundle/DataFixtures/ORM/ASDDays2016-Type.yml              |
-      | @InfrastructureBundle/DataFixtures/ORM/ASDDays2016-Sheet.yml             |
-      | @InfrastructureBundle/DataFixtures/ORM/ASDDays2016-Rule.yml              |
-      | @InfrastructureBundle/DataFixtures/ORM/ASDDays2016-Happening.yml         |
-      | Admin.yml                                                                |
-    When I am logged with "test@test.com" on admin
-    And I go to "/fr/event"
-    And I follow "admin.planner.index"
+    And the event "Best of Planner" is created
+    And the super admin "test@test.com" is created
+    And I am logged with this admin
+    And I am on the homepage of the admin
+    When I follow "admin.planner.index"
     Then the response status code should be 200
     And I should be on this page "/fr/event/1/planner"

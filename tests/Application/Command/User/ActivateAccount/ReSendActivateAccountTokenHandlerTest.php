@@ -19,8 +19,10 @@ use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Infrastructure\Adapter\DelayedEventDispatcher;
+use PHPUnit\Framework\TestCase;
+use Proximum\Vimeet\Tests\Factory\UserFactory;
 
-class ReSendActivateAccountTokenHandlerTest extends \PHPUnit_Framework_TestCase
+class ReSendActivateAccountTokenHandlerTest extends TestCase
 {
     public function testHandle()
     {
@@ -35,6 +37,7 @@ class ReSendActivateAccountTokenHandlerTest extends \PHPUnit_Framework_TestCase
         $event = $this->prophesize(Event::class);
         $sheet = $this->prophesize(Sheet::class);
         $user  = $this->prophesize(User::class);
+        $fromUser = UserFactory::create();
         $sheet->getEvent()->willReturn($event->reveal());
 
         $token = $this->prophesize(User\ActivateAccountToken::class);
@@ -47,9 +50,9 @@ class ReSendActivateAccountTokenHandlerTest extends \PHPUnit_Framework_TestCase
 
         $eventDispatcher->dispatch(
             Events::USER_ACCOUNT_ACTIVATED,
-            new ActivateAccountEvent($user->reveal(), $event->reveal(), $token->reveal(), $sheet->reveal())
+            new ActivateAccountEvent($user->reveal(), $fromUser, $event->reveal(), $token->reveal(), $sheet->reveal())
         )->shouldBeCalled();
 
-        $handler->handle(new ReSendActivateAccountToken($sheet->reveal(), $user->reveal()));
+        $handler->handle(new ReSendActivateAccountToken($sheet->reveal(), $user->reveal(), $fromUser));
     }
 }

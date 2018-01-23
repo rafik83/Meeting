@@ -3,33 +3,45 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2015 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
 
 namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Controller;
 
-use Proximum\Vimeet\Application\Adapter\SheetSearchAdapterInterface;
 use Proximum\Vimeet\Application\Command\Sheet\SheetViewed\Add;
 use Proximum\Vimeet\Application\Exception\Paginator\UnavailableCurrentPageException;
+use Proximum\Vimeet\Application\Query\Agenda\AvailableSheets\AvailableSlotsByParticipantQuery;
+use Proximum\Vimeet\Application\Query\Catalog\CatalogAvailableSlotIdsViewQuery;
+use Proximum\Vimeet\Application\Query\Catalog\CategoryViewQuery;
+use Proximum\Vimeet\Application\Query\Catalog\FilteredFieldsQuery;
 use Proximum\Vimeet\Application\Query\Catalog\KeywordViewQuery;
 use Proximum\Vimeet\Application\Query\Catalog\LocalizationViewQuery;
 use Proximum\Vimeet\Application\Query\Catalog\OrganizationCategoryViewQuery;
 use Proximum\Vimeet\Application\Query\Catalog\PositionViewQuery;
+use Proximum\Vimeet\Application\Query\Catalog\SearchFacet\SearchFacetViewQuery;
 use Proximum\Vimeet\Application\Query\Catalog\TypeViewQuery;
-use Proximum\Vimeet\Application\Query\Participant\CardListViewQuery;
 use Proximum\Vimeet\Application\Query\Sheet\PaginatedCatalogSheetPreviewViewQuery;
 use Proximum\Vimeet\Application\Query\Tip\TipTranslationViewQuery;
 use Proximum\Vimeet\Application\Query\Tip\TipTranslationViewQueryHandler;
+use Proximum\Vimeet\Application\View\Agenda\Slot\AvailableSlotView;
+use Proximum\Vimeet\Application\View\Catalog\FilteredFieldsView;
 use Proximum\Vimeet\Application\View\Catalog\PositionView;
+use Proximum\Vimeet\Domain\Catalog\Catalog;
+use Proximum\Vimeet\Domain\Catalog\SearchFields;
+use Proximum\Vimeet\Domain\Model\Catalog\Internal\CatalogConstant;
+use Proximum\Vimeet\Domain\Exception\Sheet\AccessDeniedException;
 use Proximum\Vimeet\Domain\Model\Event;
+use Proximum\Vimeet\Domain\Model\MeetingSlot;
 use Proximum\Vimeet\Domain\Model\PaginatedResult;
 use Proximum\Vimeet\Domain\Model\Sheet;
-use Proximum\Vimeet\Domain\Model\User;
+use Proximum\Vimeet\Domain\View\Catalog\CategoryView;
 use Proximum\Vimeet\Domain\View\Catalog\OrganizationCategoryView;
 use Proximum\Vimeet\Domain\View\Catalog\TypeView;
+use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\EventListener\Security\CatalogAccessEventListener;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Catalog\SearchType;
+use Proximum\Vimeet\Ui\Bundle\EventBundle\Handler\Catalog\AvailabilityConfirmationChecker;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\ParamConverter\EventDomain;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Security\SheetVoter;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -40,6 +52,13 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Security\Core\User\UserInterface;
 
+/**
+ * Class CatalogController
+ *
+ * Routes are being protected by security access checker
+ *
+ * @see CatalogAccessEventListener
+ */
 class CatalogController extends Controller
 {
     /**
@@ -75,11 +94,19 @@ class CatalogController extends Controller
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
         $this->denyAccessUnlessGranted(SheetVoter::EDIT, $sheet);
+        $event  = $eventDomain->getEvent();
 
-        $event = $eventDomain->getEvent();
+        $availabilityConfirmation = $this->get('handler.catalog.availability_confirmation_checker_handler')
+            ->handle(new AvailabilityConfirmationChecker(
+                $event,
+                $sheet,
+                $user,
+                AvailabilityConfirmationChecker::ORIGIN_CATALOG
+            ))
+        ;
 
-        if (!$this->get('domain.key_dates.checker.catalog_access_checker')->allowedToAccess($event)) {
-            throw $this->createNotFoundException();
+        if (!$availabilityConfirmation->isAllowedToAccess()) {
+            return $this->redirect($availabilityConfirmation->redirectRoute);
         }
 
         $locale = $request->getLocale();
@@ -88,18 +115,42 @@ class CatalogController extends Controller
             throw $this->createAccessDeniedException('Sheet not in catalog');
         }
 
-        $visibleTypes = $this->get('catalog.visible_participation_types')->getAllowedTypesList($sheet);
+        $searchFacetsView = $this->get('query.catalog.search_facet_view_query_handler')->handle(
+            new SearchFacetViewQuery($event, $locale)
+        );
 
-        if (empty($visibleTypes)) {
-            return $this->render(
-                'EventBundle:Catalog:no-visible-type.html.twig',
-                ['event' => $event, 'sheet' => $sheet]
+        $categoryViews = [];
+        $typeViews = [];
+
+        if ($searchFacetsView->hasCategory()) {
+            $visibleCategories = $this
+                ->get('catalog.visible_participation_categories')
+                ->getAllowedCategoriesList($sheet);
+
+            if (empty($visibleCategories)) {
+                return $this->render(
+                    'EventBundle:Catalog:no-visible-category.html.twig',
+                    ['event' => $event, 'sheet' => $sheet]
+                );
+            }
+
+            $categoryViews = $this->get('tactician.commandbus.query')->handle(
+                new CategoryViewQuery($event, $visibleCategories, $locale)
+            );
+        } else {
+            $visibleTypes = $this->get('catalog.visible_participation_types')->getAllowedTypesList($sheet);
+
+            if (empty($visibleTypes)) {
+                return $this->render(
+                    'EventBundle:Catalog:no-visible-type.html.twig',
+                    ['event' => $event, 'sheet' => $sheet]
+                );
+            }
+
+            $typeViews = $this->get('tactician.commandbus.query')->handle(
+                new TypeViewQuery($event, $visibleTypes, $locale)
             );
         }
-
-        $typeViews = $this->get('tactician.commandbus.query')->handle(
-            new TypeViewQuery($event, $visibleTypes, $locale)
-        );
 
         $organizationCategoryViews = $this->get('tactician.commandbus.query')->handle(
             new OrganizationCategoryViewQuery($event, $locale)
@@ -109,23 +160,78 @@ class CatalogController extends Controller
             new PositionViewQuery($event, $locale)
         );
 
-        $filters = $this->getDefaultFilters($typeViews);
+        $filters = $this->getDefaultFilters($typeViews, $categoryViews);
+
+        $dDay = $this->get('domain.event.day.dday_guesser')->isItDDayAndFeatureEnabled($event);
+        $isUserParticipant = $sheet->hasUserParticipant($user);
+        $filterAvailableSlot = $dDay && $isUserParticipant;
+        $specificSlot = null;
+
+        $sheetsToExclude = [];
+        $availableSlotsIds = [];
+
+        if (true === $filterAvailableSlot) {
+            /** @var AvailableSlotView[] $availableSlots */
+            $availableSlots = $this->get('tactician.commandbus.query')->handle(
+                new AvailableSlotsByParticipantQuery($event, $sheet->getUserParticipant($user))
+            );
+
+            $filterAvailableSlot = !empty($availableSlots);
+
+            $slotId = $request->query->get('slot_id');
+
+            if ($slotId !== null) {
+                $slot = $this->get('vimeet_infrastructure.repository.meeting_slot_repository')->findById((int) $slotId);
+
+                if ($slot !== null) {
+                    foreach ($availableSlots as $availableSlot) {
+                        if ($availableSlot->id === $slot->getId()) {
+                            $specificSlot = $slot;
+                        }
+                    }
+                }
+            }
+        }
 
         $searchForm = $this->getSearchForm(
             $filters,
             $typeViews,
+            $categoryViews,
             $organizationCategoryViews,
             $positionViews,
             $event,
             $sheet,
-            $locale
+            $locale,
+            $filterAvailableSlot,
+            $specificSlot
         );
 
         if ($searchForm->handleRequest($request)->isSubmitted() && $searchForm->isValid()) {
             $filters = $searchForm->getData();
+
+            // if type field is empty, set the default types
+            if (empty($filters[SearchFields::FILTER_TYPE])) {
+                $filters[SearchFields::FILTER_TYPE] = $typeViews;
+            }
+
+            if (empty($filters[SearchFields::FILTER_CATEGORY])) {
+                $filters[SearchFields::FILTER_CATEGORY] = $categoryViews;
+            }
+        }
+
+        if ($filterAvailableSlot) {
+            $catalogAvailableSlotView = $this
+                ->get('tactician.commandbus.query')
+                ->handle(new CatalogAvailableSlotIdsViewQuery($event, $sheet, $user, $filters))
+            ;
+
+            $availableSlotsIds = $catalogAvailableSlotView->availableSlotIds;
+            $sheetsToExclude = $catalogAvailableSlotView->sheetsToExclude;
         }
 
         $page = $request->query->getInt('page', 1);
+
+        $filters = array_merge(Catalog::DEFAULT_FILTERS, $filters);
 
         try {
             /** @var PaginatedResult $paginatedResult */
@@ -137,7 +243,9 @@ class CatalogController extends Controller
                     48,
                     $locale,
                     $sheet,
-                    $user
+                    $user,
+                    $availableSlotsIds,
+                    $sheetsToExclude
                 )
             );
         } catch (UnavailableCurrentPageException $exception) {
@@ -154,12 +262,16 @@ class CatalogController extends Controller
             $event,
             $sheet,
             $locale,
-            $visibleTypes,
             $filters,
             $paginatedResult->aggregations,
             $typeViews,
+            $categoryViews,
             $organizationCategoryViews,
-            $positionViews
+            $positionViews,
+            $filterAvailableSlot,
+            $specificSlot,
+            $availableSlotsIds,
+            $sheetsToExclude
         );
 
         if ($request->isXmlHttpRequest()) {
@@ -178,7 +290,6 @@ class CatalogController extends Controller
                     ]
                 );
             }
-
         } else {
             $template = 'EventBundle:Catalog:index.html.twig';
         }
@@ -196,6 +307,7 @@ class CatalogController extends Controller
             'page'                => 1,
             'isCatalog'           => true,
             'typeViews'           => $typeViews,
+            'categoryViews'       => $categoryViews,
             'paginatedResult'     => $paginatedResult,
             'seeMoreButton'       => $seeMoreButton,
             'searchForm'          => $searchForm->createView(),
@@ -221,16 +333,17 @@ class CatalogController extends Controller
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
         $this->denyAccessUnlessGranted(SheetVoter::EDIT, $sheet);
 
-        $catalogAccessChecker = $this->get('domain.key_dates.checker.catalog_access_checker');
+        $query = $request->get('query');
 
-        if (!$catalogAccessChecker->allowedToAccess($eventDomain->getEvent())) {
-            throw $this->createNotFoundException();
+        if (null === $query) {
+            return new JsonResponse([]);
         }
 
         $localizationView = $this->get('tactician.commandbus.query')->handle(
             new LocalizationViewQuery(
                 $eventDomain->getEvent(),
-                $request->get('query'),
+                $query,
+                Catalog::DEFAULT_FILTERS,
                 $request->getLocale()
             )
         );
@@ -254,16 +367,17 @@ class CatalogController extends Controller
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
         $this->denyAccessUnlessGranted(SheetVoter::EDIT, $sheet);
 
-        $catalogAccessChecker = $this->get('domain.key_dates.checker.catalog_access_checker');
+        $query = $request->get('query');
 
-        if (!$catalogAccessChecker->allowedToAccess($eventDomain->getEvent())) {
-            throw $this->createNotFoundException();
+        if (null === $query) {
+            return new JsonResponse([]);
         }
 
         $keywordView = $this->get('tactician.commandbus.query')->handle(
             new KeywordViewQuery(
                 $eventDomain->getEvent(),
-                $request->get('query'),
+                $query,
+                Catalog::DEFAULT_FILTERS,
                 $request->getLocale()
             )
         );
@@ -295,10 +409,6 @@ class CatalogController extends Controller
 
         $event = $eventDomain->getEvent();
 
-        if (!$this->get('domain.key_dates.checker.catalog_access_checker')->allowedToAccess($event)) {
-            throw $this->createAccessDeniedException();
-        }
-
         if (!$sheet->isInCatalog()) {
             throw $this->createAccessDeniedException('Sheet not in catalog');
         }
@@ -328,13 +438,19 @@ class CatalogController extends Controller
             throw $this->createNotFoundException('You do not have the right to see this sheet');
         }
 
-        list ($nomenclatures, $participants, $taggedData) = $this->sheetInfos(
-            $eventDomain->getEvent(),
-            $sheet,
-            $sheetToDisplay,
-            $user,
-            $locale
-        );
+        try {
+            list ($nomenclatures, $participants, $taggedData) = $this
+                ->get('template.sheet.sheet_info_getter')
+                ->sheetInfos(
+                    $eventDomain->getEvent(),
+                    $sheet,
+                    $sheetToDisplay,
+                    $user,
+                    $locale
+                );
+        } catch (AccessDeniedException $exception) {
+            throw $this->createAccessDeniedException();
+        }
 
         // Build sheet template data and attach tagged data view to template object with tags
         $templateData = $this->get('template.tagged_data_factory')
@@ -361,16 +477,38 @@ class CatalogController extends Controller
                 ->allowedToAccess($event);
 
             $isMeetingRequestUpdateLocked = $event->getConfiguration()->isMeetingRequestUpdateLocked();
-            $isMeetingRequestClosed          = !$this->get('domain.key_dates.checker.meeting_request_access_checker')->allowedToAccess($event);
+            $isMeetingRequestClosed          = !$this
+                ->get('domain.key_dates.checker.meeting_request_access_checker')
+                ->allowedToAccess($event)
+            ;
             $isAnsweringMeetingRequestClosed = !$this
                 ->get('domain.key_dates.checker.answering_meeting_request_access_checker')
                 ->allowedToAccess($event)
             ;
         }
 
+        $isPhoneValidationRequired = $this->get('domain.user.phone.validation_required_checker')
+            ->handle($sheet, $user, $locale);
+
+        if ($isPhoneValidationRequired === true) {
+            $participant = $sheet->getUserParticipant($user);
+
+            if ($participant !== null) {
+                $phoneValidationLink = $this->generateUrl('event_user_phone_redirect_to_validation', [
+                    'sheet'       => $sheet->getId(),
+                    'participant' => $participant->getId(),
+                    'redirectTo'  => $this->generateUrl('event_catalog_complete_sheet', [
+                        'sheet'          => $sheet->getId(),
+                        'sheetToDisplay' => $sheetToDisplay->getId(),
+                    ]),
+                ]);
+            }
+        }
+
         return $this->render('EventBundle:Catalog:displaySheet.html.twig', [
             'event'                           => $event,
             'sheet'                           => $sheet,
+            'participant'                     => $sheet->getUserParticipant($user),
             'sheetToDisplay'                  => $sheetToDisplay,
             'taggedData'                      => $taggedData,
             'locale'                          => $locale,
@@ -382,176 +520,69 @@ class CatalogController extends Controller
             'isMeetingRequestUpdateLocked'    => $isMeetingRequestUpdateLocked,
             'isMeetingRequestClosed'          => $isMeetingRequestClosed,
             'isAnsweringMeetingRequestClosed' => $isAnsweringMeetingRequestClosed,
+            'isPhoneValidationRequired'       => $isPhoneValidationRequired,
+            'phoneValidationLink'             => $phoneValidationLink ?? null,
             'isRequestMeetingEnabled'         => $sheet !== $sheetToDisplay,
             'isCatalog'                       => true,
         ]);
     }
 
     /**
-     * @param Event  $event
-     * @param Sheet  $sheet
-     * @param Sheet  $sheetToDisplay
-     * @param User   $user
-     * @param string $locale
+     * @param TypeView[]     $typeViews
+     * @param CategoryView[] $categoryViews
      *
      * @return array
      */
-    private function sheetInfos(Event $event, Sheet $sheet, Sheet $sheetToDisplay, User $user, $locale)
-    {
-        if (!$this->get('catalog.sheet_access_checker')->checkAccess($sheet, $sheetToDisplay)) {
-            throw $this->createAccessDeniedException();
-        }
-
-        $nomenclatures     = $this->get('repository.nomenclature_repository')->findByEvent($event);
-        $cardListViewQuery = new CardListViewQuery($sheetToDisplay, $user, $locale);
-        $participants      = $this->get('tactician.commandbus.query')->handle($cardListViewQuery);
-
-        $registrationTemplateData = $this
-            ->get('template.template_data_factory')
-            ->createRegistrationFromSheet($sheetToDisplay, $locale);
-
-        $taggedData = $registrationTemplateData->getAllTaggedDatas();
-
-        return [$nomenclatures, $participants, $taggedData];
-    }
-
-    /**
-     * @param TypeView[] $typeViews
-     *
-     * @return array
-     */
-    private function getDefaultFilters(array $typeViews)
+    private function getDefaultFilters(array $typeViews, array $categoryViews): array
     {
         $filters = [
-            SearchType::ORDER_BY    => Sheet\Constant::ORDER_BY_RELEVANCE,
-            SearchType::FILTER_TYPE => $typeViews,
+            SearchFields::ORDER_BY                  => Sheet\Constant::ORDER_BY_RELEVANCE,
+            SearchFields::FILTER_TYPE               => $typeViews,
+            SearchFields::FILTER_CATEGORY           => $categoryViews,
+            SearchFields::FILTER_AVAILABLE_SLOT_IDS => CatalogConstant::AVAILABLE_SLOT_IDS_FILTER_EVERYONE,
         ];
 
         return $filters;
     }
 
     /**
-     * @param TypeView[] $typeViews
-     * @param array|null $aggregations
-     *
-     * @return TypeView[]
-     */
-    private function filterTypeViews(array $typeViews, array $aggregations = null)
-    {
-        $typeField = SheetSearchAdapterInterface::ES_FIELD_TYPE;
-
-        $aggregationsIndexedByKey = [];
-
-        foreach ($aggregations[$typeField]['buckets'] as $item) {
-            $aggregationsIndexedByKey[$item['key']] = $item['doc_count'];
-        }
-
-        foreach ($typeViews as $typeView) {
-            if (isset($aggregationsIndexedByKey[$typeView->id])) {
-                $typeView->count = $aggregationsIndexedByKey[$typeView->id];
-            }
-        }
-
-        return $typeViews;
-    }
-
-    /**
-     * @param OrganizationCategoryView[] $organizationCategoryViews
-     * @param array|null                 $aggregations
-     *
-     * @return OrganizationCategoryView[]
-     */
-    private function filterOrganizationCategoryViews(array $organizationCategoryViews, array $aggregations = null)
-    {
-        $organizationCategoryField = SheetSearchAdapterInterface::ES_FIELD_ORGANIZATION_CATEGORY;
-
-        if (null === $aggregations
-            || !isset($aggregations[$organizationCategoryField])
-            || !isset($aggregations[$organizationCategoryField]['buckets'])
-        ) {
-            return [];
-        }
-
-        $aggregationsIndexedByKey = [];
-
-        foreach ($aggregations[$organizationCategoryField]['buckets'] as $item) {
-            $aggregationsIndexedByKey[$item['key']] = $item['doc_count'];
-        }
-
-        foreach ($organizationCategoryViews as $index => $organizationCategoryView) {
-            // Show only filter which have result
-            if (!isset($aggregationsIndexedByKey[$organizationCategoryView->key])
-                || $aggregationsIndexedByKey[$organizationCategoryView->key] === 0
-            ) {
-                unset($organizationCategoryViews[$index]);
-            }
-        }
-
-        return $organizationCategoryViews;
-    }
-
-    /**
-     * @param PositionView[] $positionViews
-     * @param array|null     $aggregations
-     *
-     * @return array
-     */
-    private function filterPositionViews(array $positionViews, array $aggregations = null)
-    {
-        $positionField = SheetSearchAdapterInterface::ES_FIELD_POSITION;
-
-        if (null === $aggregations
-            || !isset($aggregations[$positionField])
-            || !isset($aggregations[$positionField][$positionField]['buckets'])
-        ) {
-            return [];
-        }
-
-        $aggregationsIndexedByKey = [];
-
-        foreach ($aggregations[$positionField][$positionField]['buckets'] as $item) {
-            $aggregationsIndexedByKey[$item['key']] = $item['doc_count'];
-        }
-
-        foreach ($positionViews as $index => $positionView) {
-            // Show only filter which have result
-            if (!isset($aggregationsIndexedByKey[$positionView->getKey()])
-                || $aggregationsIndexedByKey[$positionView->getKey()] === 0
-            ) {
-                unset($positionViews[$index]);
-            }
-        }
-
-        return $positionViews;
-    }
-
-    /**
      * @param array                      $filters
      * @param TypeView[]                 $typeViews
+     * @param CategoryView[]             $categoryViews
      * @param OrganizationCategoryView[] $organizationCategoryViews
      * @param PositionView[]             $positionViews
      * @param Event                      $event
      * @param Sheet                      $sheet
      * @param string                     $locale
+     * @param bool                       $filterAvailableSlotIds
+     * @param MeetingSlot|null           $specificSlot
      *
      * @return FormInterface
+     *
      */
     private function getSearchForm(
         array $filters,
         array $typeViews,
+        array $categoryViews,
         array $organizationCategoryViews,
         array $positionViews,
         Event $event,
         Sheet $sheet,
-        $locale
+        $locale,
+        bool $filterAvailableSlotIds = false,
+        MeetingSlot $specificSlot = null
     ) {
         return $this->get('form.factory')->createNamed('', SearchType::class, $filters, [
             'action'                    => $this->generateUrl('event_catalog_index', ['sheet' => $sheet->getId()]),
             'typeViews'                 => $typeViews,
+            'categoryViews'             => $categoryViews,
             'organizationCategoryViews' => $organizationCategoryViews,
             'positionViews'             => $positionViews,
             'event'                     => $event,
             'locale'                    => $locale,
+            'filterByAvailableSlotIds'  => $filterAvailableSlotIds,
+            'filterBySpecificSlot'      => $specificSlot !== null,
+            'specificSlot'              => $specificSlot,
         ]);
     }
 
@@ -559,12 +590,16 @@ class CatalogController extends Controller
      * @param Event                      $event
      * @param Sheet                      $sheet
      * @param string                     $locale
-     * @param array                      $visibleTypes
      * @param array                      $filters
      * @param array                      $currentAggregations
      * @param TypeView[]                 $typeViews
+     * @param CategoryView[]             $categoryViews
      * @param OrganizationCategoryView[] $organizationCategoryViews
      * @param PositionView[]             $positionViews
+     * @param bool                       $filterAvailableSlotIds
+     * @param MeetingSlot|null           $specificSlot
+     * @param array                      $availableSlotsIds
+     * @param array                      $sheetsToExclude
      *
      * @return FormInterface
      */
@@ -572,70 +607,44 @@ class CatalogController extends Controller
         Event $event,
         Sheet $sheet,
         $locale,
-        array $visibleTypes,
         array $filters,
         array $currentAggregations,
         array $typeViews,
+        array $categoryViews,
         array $organizationCategoryViews,
-        array $positionViews
+        array $positionViews,
+        bool $filterAvailableSlotIds = false,
+        MeetingSlot $specificSlot = null,
+        array $availableSlotsIds = [],
+        array $sheetsToExclude = []
     ) {
-        $searchAdapter = $this->get('adapter.sheet_search_adapter');
-
-        if (!isset($filters[SearchType::FILTER_TYPE])
-            || count($filters[SearchType::FILTER_TYPE]) !== count($visibleTypes)
-        ) {
-            // if type filter is used, type aggs need to be done with a ES query without type filter
-            $typeAggregations = $searchAdapter->getTypeAggregations(
+        /** @var FilteredFieldsView $filteredFieldsView */
+        $filteredFieldsView = $this->get('tactician.commandbus.query')->handle(
+            new FilteredFieldsQuery(
                 $event,
-                $locale,
                 $filters,
-                SearchType::FILTER_TYPE
-            );
-        }
-
-        if (isset($filters[SearchType::FILTER_ORGANIZATION_CATEGORY])) {
-            // if organizationCategory filter is used,
-            // organizationCategory aggs need to be done with a ES query without organizationCategory filter
-            $categoryOrganisationAggregations = $searchAdapter->getOrganizationCategoryAggregations(
-                $event,
+                $currentAggregations,
+                $typeViews,
+                $categoryViews,
+                $organizationCategoryViews,
+                $positionViews,
                 $locale,
-                $filters,
-                SearchType::FILTER_ORGANIZATION_CATEGORY
-            );
-        }
-
-        if (isset($filters[SearchType::FILTER_POSITION])) {
-            $positionAggregations = $searchAdapter->getPositionAggregations(
-                $event,
-                $locale,
-                $filters,
-                SearchType::FILTER_POSITION
-            );
-        }
-
-        $filteredTypeViews = $this->filterTypeViews(
-            $typeViews,
-            isset($typeAggregations) ? $typeAggregations : $currentAggregations
-        );
-
-        $filteredOrganizationCategoryViews = $this->filterOrganizationCategoryViews(
-            $organizationCategoryViews,
-            isset($categoryOrganisationAggregations) ? $categoryOrganisationAggregations : $currentAggregations
-        );
-
-        $filteredPositionViews = $this->filterPositionViews(
-            $positionViews,
-            isset($positionAggregations) ? $positionAggregations : $currentAggregations
+                $availableSlotsIds,
+                $sheetsToExclude
+            )
         );
 
         return $this->getSearchForm(
             $filters,
-            $filteredTypeViews,
-            $filteredOrganizationCategoryViews,
-            $filteredPositionViews,
+            $filteredFieldsView->typeViews,
+            $filteredFieldsView->categoryViews,
+            $filteredFieldsView->organizationCategoryViews,
+            $filteredFieldsView->positionViews,
             $event,
             $sheet,
-            $locale
+            $locale,
+            $filterAvailableSlotIds,
+            $specificSlot
         );
     }
 }

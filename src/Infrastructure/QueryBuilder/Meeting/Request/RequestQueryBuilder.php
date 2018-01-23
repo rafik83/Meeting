@@ -12,6 +12,8 @@ namespace Proximum\Vimeet\Infrastructure\QueryBuilder\Meeting\Request;
 
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\QueryBuilder;
+use Proximum\Vimeet\Application\View\Agenda\Slot\AvailableSlotView;
+use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\Meeting\Request;
 
@@ -149,6 +151,39 @@ class RequestQueryBuilder extends QueryBuilder
     public function isFromAttending()
     {
         $this->join('request.from', 'sheetFrom', 'WITH', 'sheetFrom.attend = true');
+
+        return $this;
+    }
+
+    /**
+     * @param array $availableSlots
+     *
+     * @return RequestQueryBuilder
+     */
+    public function isToAvailable(array $availableSlots)
+    {
+        $this->join('request.to', 'toSheet')
+            ->join('toSheet.availableSlots', 'availableSlot', 'WITH', 'availableSlot.slot IN (:availableSlots)')
+            ->setParameter('availableSlots', array_map(function ($slot) {
+                    if ($slot instanceof AvailableSlotView) {
+                        return $slot->id;
+                    }
+
+                    return null;
+                }, $availableSlots)
+            )
+        ;
+        return $this;
+    }
+
+    /**
+     * @param Event $event
+     *
+     * @return RequestQueryBuilder
+     */
+    public function fromEvent(Event $event)
+    {
+        $this->where('request.event = :event')->setParameter('event', $event);
 
         return $this;
     }

@@ -25,8 +25,9 @@ use Proximum\Vimeet\Domain\Package\Product\IncludedParticipantGuesser;
 use Proximum\Vimeet\Domain\View\Package\Product\IncludedParticipantView;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
 use Proximum\Vimeet\Tests\Factory\ParticipantFactory;
+use PHPUnit\Framework\TestCase;
 
-class ParticipantProductViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
+class ParticipantProductViewQueryHandlerTest extends TestCase
 {
     /**
      * Test included participant remaining > 0
@@ -115,7 +116,7 @@ class ParticipantProductViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
 
         $package = new Package($event, 'Package', $date);
         $package->setPlans([$plan]);
-        $package->setParticipant($participantProduct);
+        $package->setParticipants([$participantProduct]);
         $package->enable(true, true, false);
 
         $type = new Type($event);

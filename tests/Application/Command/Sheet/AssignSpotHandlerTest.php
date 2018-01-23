@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Tests\Application\Command\Sheet;
 
+use PHPUnit\Framework\TestCase;
 use Proximum\Vimeet\Application\Command\Sheet\AssignSpot;
 use Proximum\Vimeet\Application\Command\Sheet\AssignSpotHandler;
 use Proximum\Vimeet\Application\Command\Sheet\AssignSpotResult;
@@ -23,7 +24,7 @@ use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\SpotRepositoryInterface;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
 
-class AssignSpotHandlerTest extends \PHPUnit_Framework_TestCase
+class AssignSpotHandlerTest extends TestCase
 {
     public function testHandle()
     {

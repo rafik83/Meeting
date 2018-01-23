@@ -1,0 +1,22 @@
+{% extends 'EventBundle::base.html.twig' %}
+
+{% block title 'event.user_event_phone.validate.title'|trans %}
+
+{% block content %}
+    <div class="profile__content">
+        <section class="main">
+            <div class="main__content styled-form mg-tp">
+                {% for tipTranslationView in tipTranslationViews %}
+                    <h1>{{ tipTranslationView.title }}</h1>
+
+                    {{ tipTranslationView.content|html }}
+                {% endfor %}
+
+                {% if sendCodeForm is not null %}
+                    {% form_theme sendCodeForm '@Ui/default.html.twig' %}
+                    {{ form(sendCodeForm) }}
+                {% endif %}
+            </div>
+        </section>
+    </div>
+{% endblock %}

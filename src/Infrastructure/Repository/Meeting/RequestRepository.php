@@ -13,16 +13,19 @@ namespace Proximum\Vimeet\Infrastructure\Repository\Meeting;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\QueryBuilder;
 use Proximum\Vimeet\Application\Components\Paginator\Paginator;
-use Proximum\Vimeet\Application\Components\Sheet\SheetInfoGuesser;
+use Proximum\Vimeet\Application\Query\MultipleSheets\Request\FilterRequestView;
+use Proximum\Vimeet\Application\View\Agenda\Slot\AvailableSlotView;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Meeting;
 use Proximum\Vimeet\Domain\Model\Meeting\Request;
+use Proximum\Vimeet\Domain\Model\MeetingSlot;
 use Proximum\Vimeet\Domain\Model\PaginatedResult;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Repository\Meeting\RequestRepositoryInterface;
 use Proximum\Vimeet\Domain\View\Meeting\RequestView;
+use Proximum\Vimeet\Infrastructure\QueryBuilder\Meeting\Request\FilterQueryBuilder;
 use Proximum\Vimeet\Infrastructure\QueryBuilder\Meeting\Request\RequestQueryBuilder;
 
 class RequestRepository implements RequestRepositoryInterface
@@ -38,25 +41,15 @@ class RequestRepository implements RequestRepositoryInterface
     private $paginator;
 
     /**
-     * @var SheetInfoGuesser
-     */
-    private $sheetInfoGuesser;
-
-    /**
      * RequestRepository constructor.
      *
-     * @param EntityManager    $entityManager
-     * @param Paginator        $paginator
-     * @param SheetInfoGuesser $sheetInfoGuesser
+     * @param EntityManager $entityManager
+     * @param Paginator     $paginator
      */
-    public function __construct(
-        EntityManager $entityManager,
-        Paginator $paginator,
-        SheetInfoGuesser $sheetInfoGuesser
-    ) {
-        $this->entityManager    = $entityManager;
-        $this->paginator        = $paginator;
-        $this->sheetInfoGuesser = $sheetInfoGuesser;
+    public function __construct(EntityManager $entityManager, Paginator $paginator)
+    {
+        $this->entityManager = $entityManager;
+        $this->paginator     = $paginator;
     }
 
     /**
@@ -100,8 +93,7 @@ class RequestRepository implements RequestRepositoryInterface
 
         $request = $requestQueryBuilder
             ->where('request = :request')
-            ->setParameter('request', $request)
-        ;
+            ->setParameter('request', $request);
 
         return $request->getQuery()->getOneOrNullResult();
     }
@@ -220,6 +212,28 @@ class RequestRepository implements RequestRepositoryInterface
     /**
      * {@inheritdoc}
      */
+    public function getPendingPropositionReceivedBySheet(Sheet $sheet)
+    {
+        $queryBuilder = new RequestQueryBuilder($this->entityManager);
+        $queryBuilder->receivedBy($sheet)->pending()->isEnabled()->isFromAttending();
+
+        return $queryBuilder->getQuery()->getResult();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function countPendingPropositionWithMetSheetAvailableForSheet(Sheet $sheet, array $availableSlots): int
+    {
+        $queryBuilder = new RequestQueryBuilder($this->entityManager);
+        $queryBuilder->receivedBy($sheet)->pending()->isEnabled()->isFromAttending()->isToAvailable($availableSlots);
+
+        return count($queryBuilder->getQuery()->getResult());
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function hasPendingPropositionReceivedBySheet(Sheet $sheet)
     {
         return $this->countPendingPropositionReceivedBySheet($sheet) > 0;
@@ -233,6 +247,34 @@ class RequestRepository implements RequestRepositoryInterface
         $queryBuilder = new RequestQueryBuilder($this->entityManager);
 
         return $queryBuilder->sendBy($sheet)->isEnabled()->isToAttending()->count()->getIntResult();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function countApprovedRequestBySheets(Event $event, array $sheets): array
+    {
+        $queryBuilder = $this->entityManager
+            ->createQueryBuilder()
+            ->select('count(request.id) AS countRequest, sheet.id AS sheetId')
+            ->from(Sheet::class, 'sheet', 'sheet.id')
+            ->join(
+                Request::class,
+                'request',
+                'WITH',
+                'sheet.id IN (:sheets)
+                AND request.state = :state
+                AND request.event = :event
+                AND (request.from = sheet OR request.to = sheet)
+                AND request.disabled = FALSE
+            ')
+            ->groupBy('sheet.id')
+            ->setParameter('state', Request::STATE_APPROVED)
+            ->setParameter('event', $event)
+            ->setParameter('sheets', $sheets)
+        ;
+
+        return $queryBuilder->getQuery()->getResult();
     }
 
     /**
@@ -256,13 +298,16 @@ class RequestRepository implements RequestRepositoryInterface
     /**
      * {@inheritdoc}
      */
-    public function getAllRequestBySheet(Sheet $sheet, array $filters = [])
+    public function getAllRequestBySheet(Sheet $sheet, array $filters = [], array $slotsToFilter = []): array
     {
         $queryBuilder = $this
             ->entityManager
             ->createQueryBuilder()
             ->select('request')
             ->from(Request::class, 'request')
+            ->join('request.from', 'fromSheet', 'WITH', 'request.event = :event')
+            ->join('request.to', 'toSheet')
+            ->setParameter('event', $sheet->getEvent())
         ;
 
         if (!empty($filters) && isset($filters['disabled'])) {
@@ -270,7 +315,7 @@ class RequestRepository implements RequestRepositoryInterface
                 ->setParameter('disabled', $filters['disabled']);
         }
 
-        $this->filterQueryBuilder($queryBuilder, $sheet, $filters);
+        $this->filterQueryBuilder($queryBuilder, $sheet, $filters, $slotsToFilter);
 
         return $queryBuilder->getQuery()->getResult();
     }
@@ -278,20 +323,51 @@ class RequestRepository implements RequestRepositoryInterface
     /**
      * {@inheritdoc}
      */
-    public function countAllByEvent(Event $event)
+    public function getApprovedAndRefusedRequestBySheet(Sheet $sheet): array
     {
         $queryBuilder = $this
             ->entityManager
             ->createQueryBuilder()
-            ->select('COUNT(request)')
-            ->from(Request::class, 'request', 'request.id')
-            ->join('request.from', 'fromSheet', 'WITH', 'fromSheet.event = :event')
-            ->join('request.to', 'toSheet', 'WITH', 'toSheet.event = :event')
+            ->select('request')
+            ->from(Request::class, 'request')
+            ->where('
+                (request.from = :sheet OR request.to = :sheet) AND 
+                (request.state = :stateApproved OR request.state = :stateRefused)
+            ')
+            ->setParameter('sheet', $sheet)
+            ->setParameter('stateApproved', Request::STATE_APPROVED)
+            ->setParameter('stateRefused', Request::STATE_REFUSED);
+
+        return $queryBuilder->getQuery()->getResult();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function countAllByEvent(Event $event): int
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('COUNT(request.id)')
+            ->from(Request::class, 'request')
+            ->where('request.event = :event AND request.disabled = false')
             ->setParameter('event', $event);
 
-        $this->requestsWithoutMeeting($queryBuilder);
+        return (int) $queryBuilder->getQuery()->getSingleScalarResult();
+    }
 
-        return $queryBuilder->getQuery()->getSingleScalarResult();
+    /**
+     * @param Event $event
+     *
+     * @return int
+     */
+    public function countApprovedByEvent(Event $event): int
+    {
+        $queryBuilder = new RequestQueryBuilder($this->entityManager);
+        $queryBuilder->count()->fromEvent($event)->approved()->isEnabled();
+
+        return (int) $queryBuilder->getQuery()->getSingleScalarResult();
     }
 
     /**
@@ -299,63 +375,82 @@ class RequestRepository implements RequestRepositoryInterface
      */
     public function findByEventAndFilterByState(Event $event, $page, $limit, $locale, array $filter = [])
     {
-        $queryBuilder = $this
-            ->entityManager
-            ->createQueryBuilder()
-            ->select('request')
-            ->from(Request::class, 'request', 'request.id')
-            ->join('request.from', 'fromSheet', 'WITH', 'fromSheet.event = :event')
-            ->join('request.to', 'toSheet', 'WITH', 'toSheet.event = :event')
-            ->where('request.disabled = FALSE')
-            ->setParameter('event', $event);
-
-        $this->requestsWithoutMeeting($queryBuilder);
+        $queryBuilder = new FilterQueryBuilder($this->entityManager, $event);
 
         if (!empty($filter)) {
-            if (isset($filter['state'])) {
-                $queryBuilder
-                    ->andWhere('request.state = :state')
-                    ->setParameter('state', $filter['state']);
+            if (!empty($filter['state'])) {
+                $filterState = $filter['state'];
+
+                if ($filterState === Request::STATE_PLANNED) {
+                    $queryBuilder->filterPlanned();
+                } else {
+                    $queryBuilder->filterByState($filterState);
+                }
             }
 
             if (!empty($filter['orderBy']) && in_array($filter['orderBy'], $this->getOrderBy())) {
-                if ($filter['orderBy'] === RequestRepositoryInterface::ORDER_BY_CREATE_AT_ASC) {
-                    $queryBuilder
-                        ->orderBy('request.createdAt', 'ASC');
-                } elseif ($filter['orderBy'] === RequestRepositoryInterface::ORDER_BY_CREATE_AT_DESC) {
-                    $queryBuilder
-                        ->orderBy('request.createdAt', 'DESC');
-                } elseif ($filter['orderBy'] === RequestRepositoryInterface::ORDER_BY_STATE_UPDATED_AT_ASC) {
-                    $queryBuilder
-                        ->orderBy('request.stateUpdatedAt', 'ASC');
-                } elseif ($filter['orderBy'] === RequestRepositoryInterface::ORDER_BY_STATE_UPDATED_AT_DESC) {
-                    $queryBuilder
-                        ->orderBy('request.stateUpdatedAt', 'DESC');
-                }
-            } else {
-                $queryBuilder
-                    ->orderBy('request.stateUpdatedAt', 'DESC');
+                $queryBuilder->order($filter['orderBy']);
             }
-        } else {
-            $queryBuilder
-                ->orderBy('request.stateUpdatedAt', 'DESC');
         }
 
         list ($results, $count) = $this->paginator->getResultsAndTotal($queryBuilder, $page, $limit, 'request', 'id');
 
-        return new PaginatedResult(array_map(function (Request $request) use ($locale) {
+        return new PaginatedResult(array_map(function (Request $request) {
             return new RequestView(
                 $request->getId(),
                 $request->getFromSheet()->getId(),
-                $this->sheetInfoGuesser->guessSheetTitle($request->getFromSheet(), $locale),
+                $request->getFromSheet()->getTitle(),
                 $request->getToSheet()->getId(),
-                $this->sheetInfoGuesser->guessSheetTitle($request->getToSheet(), $locale),
+                $request->getToSheet()->getTitle(),
                 $request->getState(),
                 $request->getCreatedAt(),
                 $request->getStateUpdatedAt(),
-                ''
+                '',
+                $request->hasMeeting()
             );
         }, $results), $page, $limit, $count);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function findByEventWithHydratationOfElement(Event $event, int $page, int $limit): array
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('request, fromSheet, toSheet, meeting, fromType, toType')
+            ->from(Request::class, 'request', 'request.id')
+            ->join('request.from', 'fromSheet', 'WITH', 'request.event = :event AND request.disabled = false')
+            ->join('request.to', 'toSheet')
+            ->join('fromSheet.type', 'fromType')
+            ->join('toSheet.type', 'toType')
+            ->leftJoin('request.meeting', 'meeting')
+            ->setFirstResult(($page - 1) * $limit)
+            ->setMaxResults($limit)
+            ->setParameter('event', $event)
+        ;
+
+        return $queryBuilder->getQuery()->getResult();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function hydrateParticipants(array $requests): array
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('request, fromParticipant, toParticipant')
+            ->from(Request::class, 'request', 'request.id')
+            ->leftJoin('request.fromParticipants', 'fromParticipant')
+            ->leftJoin('request.toParticipants', 'toParticipant')
+            ->where('request.id IN (:requests)')
+            ->setParameter('requests', $requests)
+        ;
+
+        return $queryBuilder->getQuery()->getResult();
     }
 
     /**
@@ -368,8 +463,20 @@ class RequestRepository implements RequestRepositoryInterface
             ->createQueryBuilder()
             ->select('request')
             ->from(Request::class, 'request', 'request.id')
-            ->join('request.from', 'fromSheet', 'WITH', 'fromSheet.event = :event AND fromSheet.inCatalog = true AND fromSheet.enable = true AND fromSheet.attend = true')
-            ->join('request.to', 'toSheet', 'WITH', 'toSheet.event = :event AND toSheet.inCatalog = true AND toSheet.enable = true AND toSheet.attend = true')
+            ->join(
+                'request.from',
+                'fromSheet',
+                'WITH',
+                'fromSheet.event = :event AND fromSheet.inCatalog = true 
+                AND fromSheet.enable = true AND fromSheet.attend = true'
+            )
+            ->join(
+                'request.to',
+                'toSheet',
+                'WITH',
+                'toSheet.event = :event AND toSheet.inCatalog = true 
+                AND toSheet.enable = true AND toSheet.attend = true'
+            )
             ->join('fromSheet.participants', 'fromParticipants')
             ->join('toSheet.participants', 'toParticipants')
             ->where('request.state = :approved')
@@ -383,19 +490,19 @@ class RequestRepository implements RequestRepositoryInterface
     /**
      * {@inheritdoc}
      */
-    public function getRequestsByEventAndUser(Event $event, User $user)
+    public function getRequestsPlacedByEventAndUser(Event $event, User $user)
     {
         $queryBuilder = $this
             ->entityManager
             ->createQueryBuilder()
             ->select('request')
-            ->from(Request::class, 'request');
-
-        // By event and user
-        $queryBuilder
-            ->join('request.to', 'toSheet', 'WITH', 'toSheet.event = :event')
+            ->from(Request::class, 'request')
+            ->join('request.meeting', 'meeting')
+            ->leftJoin('meeting.fromParticipants', 'fp')
+            ->leftJoin('meeting.toParticipants', 'tp')
+            ->where('request.event = :event')
+            ->andWhere('(fp.user = :user OR tp.user = :user)')
             ->setParameter('event', $event)
-            ->join('toSheet.participants', 'participant', 'WITH', 'participant.user = :user')
             ->setParameter('user', $user);
 
         return $queryBuilder->getQuery()->getResult();
@@ -416,6 +523,27 @@ class RequestRepository implements RequestRepositoryInterface
             ->andWhere('request.disabled = false')
             ->setParameter('sheet', $sheet)
             ->setParameter('state', $state);
+
+        $this->requestsWithoutMeeting($queryBuilder);
+
+        return $queryBuilder->getQuery()->getResult();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getUnallocatedRequestForSheets(array $sheets)
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('request')
+            ->from(Request::class, 'request')
+            ->andWhere('request.to IN (:sheets) OR request.from IN (:sheets)')
+            ->andWhere('request.state = :state')
+            ->andWhere('request.disabled = false')
+            ->setParameter('sheets', $sheets)
+            ->setParameter('state', Request::STATE_APPROVED);
 
         $this->requestsWithoutMeeting($queryBuilder);
 
@@ -453,31 +581,34 @@ class RequestRepository implements RequestRepositoryInterface
     /**
      * {@inheritdoc}
      */
-    public function countSheetState(Sheet $sheet, array $filters = [])
+    public function countSheetState(Sheet $sheet, array $filters = [], array $slotsToFilter = [])
     {
         $queryBuilder = $this
             ->entityManager
             ->createQueryBuilder()
             ->select('request')
             ->from(Request::class, 'request')
+            ->join('request.from', 'fromSheet', 'WITH', 'request.event = :event')
+            ->join('request.to', 'toSheet')
+            ->setParameter('event', $sheet->getEvent())
         ;
 
         if (!empty($filters)) {
             if (isset($filters['disabled'])) {
-                $queryBuilder->where('request.disabled = :disabled')
+                $queryBuilder->andWhere('request.disabled = :disabled')
                     ->setParameter('disabled', $filters['disabled']);
             }
 
             if (isset($filters['isToAttending'])) {
-                $queryBuilder->join('request.to', 'to', 'WITH', 'to.attend = true');
+                $queryBuilder->andWhere('toSheet.attend = true');
             }
-            
+
             if (isset($filters['isFromAttending'])) {
-                $queryBuilder->join('request.from', 'sheetFrom', 'WITH', 'sheetFrom.attend = true');
+                $queryBuilder->andWhere('fromSheet.attend = true');
             }
         }
 
-        $this->filterQueryBuilder($queryBuilder, $sheet, $filters);
+        $this->filterQueryBuilder($queryBuilder, $sheet, $filters, $slotsToFilter);
 
         return count($queryBuilder->getQuery()->getResult());
     }
@@ -515,7 +646,7 @@ class RequestRepository implements RequestRepositoryInterface
         array $sheetsMet,
         $state = null,
         $type = null,
-        User $user = null
+        $user = null
     ) {
         $queryBuilder = $this->requestOfSheetsWithSheets($event, $sheets, $sheetsMet, $state, $type, $user);
 
@@ -533,7 +664,7 @@ class RequestRepository implements RequestRepositoryInterface
         array $sheetsMet,
         $state = null,
         $type = null,
-        User $user = null
+        $user = null
     ) {
         $queryBuilder = $this->requestOfSheetsWithSheets($event, $sheets, $sheetsMet, $state, $type, $user);
 
@@ -543,12 +674,12 @@ class RequestRepository implements RequestRepositoryInterface
     }
 
     /**
-     * @param Event       $event
-     * @param Sheet[]     $sheets
-     * @param Sheet[]     $sheetsMet
-     * @param string|null $state
-     * @param string|null $type
-     * @param User|null   $user
+     * @param Event            $event
+     * @param Sheet[]          $sheets
+     * @param Sheet[]          $sheetsMet
+     * @param string|null      $state
+     * @param string|null      $type
+     * @param User|string|null $user
      *
      * @return QueryBuilder
      */
@@ -558,7 +689,7 @@ class RequestRepository implements RequestRepositoryInterface
         array $sheetsMet,
         $state = null,
         $type = null,
-        User $user = null
+        $user = null
     ) {
         $typeCondition = '(
             (fromSheet.id IN (:sheets) AND toSheet.id IN (:sheetsMet))
@@ -578,25 +709,40 @@ class RequestRepository implements RequestRepositoryInterface
             }
         }
 
-        $queryBuilder = $this
-            ->entityManager
-            ->createQueryBuilder()
-            ->from(Request::class, 'request', 'request.id')
-            ->join('request.from', 'fromSheet', 'WITH', 'request.disabled = false AND fromSheet.event = :event AND fromSheet.enable = true')
-            ->join('request.to', 'toSheet', 'WITH', 'toSheet.event = :event AND toSheet.enable = true')
+        // filter meeting request with fromParticipants or toParticipants empty
+        if ($user === FilterRequestView::NO_PREFERENCE) {
+            $typeCondition = '(
+                (fromSheet.id IN (:sheets) AND toSheet.id IN (:sheetsMet)) AND fp.id IS NULL
+                OR
+                (toSheet.id IN (:sheets) AND fromSheet.id IN (:sheetsMet)) AND tp.id IS NULL
+            )';
+        }
+
+        $queryBuilder = new FilterQueryBuilder($this->entityManager, $event);
+
+        $queryBuilder
             ->leftJoin('request.meeting', 'meeting')
             ->where(sprintf('%s AND %s', $typeCondition, $stateCondition))
-            ->setParameter('event', $event)
             ->setParameter('sheets', $sheets)
             ->setParameter('sheetsMet', $sheetsMet);
 
-        if ($user !== null) {
+        if ($user instanceof User) {
             $queryBuilder
                 ->leftJoin('request.fromParticipants', 'fp')
                 ->leftJoin('request.toParticipants', 'tp')
                 ->andWhere('(tp.user = :user OR fp.user = :user)')
                 ->setParameter('user', $user)
             ;
+        }
+
+        if ($user === FilterRequestView::NO_PREFERENCE) {
+            $queryBuilder
+                ->leftJoin('request.fromParticipants', 'fp')
+                ->leftJoin('request.toParticipants', 'tp');
+        }
+
+        if ($state === Request::STATE_PLANNED) {
+            $queryBuilder->filterPlanned();
         }
 
         return $queryBuilder;
@@ -606,9 +752,14 @@ class RequestRepository implements RequestRepositoryInterface
      * @param QueryBuilder $queryBuilder
      * @param Sheet        $sheet
      * @param array        $filters
+     * @param array        $slotsToFilter
      */
-    private function filterQueryBuilder(QueryBuilder &$queryBuilder, Sheet $sheet, array $filters)
-    {
+    private function filterQueryBuilder(
+        QueryBuilder &$queryBuilder,
+        Sheet $sheet,
+        array $filters,
+        array $slotsToFilter = []
+    ) {
         if (!empty($filters['state']) && !Meeting\Constant::isSentOrReceiveFilter($filters['state'])) {
             $queryBuilder
                 ->andWhere('request.to = :sheet OR request.from = :sheet');
@@ -641,15 +792,48 @@ class RequestRepository implements RequestRepositoryInterface
         // filter by participant type
         if (!empty($filters['type'])) {
             $queryBuilder
-                ->leftJoin('request.from', 'fromSheet', 'WITH', 'fromSheet != :sheet')
-                ->leftJoin('request.to', 'toSheet', 'WITH', 'toSheet != :sheet')
-                ->andWhere('fromSheet.type IN (:types) OR toSheet.type IN (:types)')
+                ->andWhere('(fromSheet != :sheet AND fromSheet.type IN (:types)) OR (toSheet != :sheet AND toSheet.type IN (:types))')
                 ->setParameter('types', $filters['type']);
+        }
+
+        // filter by participant category
+        if (!empty($filters['category'])) {
+            $queryBuilder
+                ->join('fromSheet.type', 'fromType')
+                ->join('toSheet.type', 'toType')
+                ->leftJoin('fromType.categories', 'fromCategory')
+                ->leftJoin('toType.categories', 'toCategory')
+                ->andWhere('(fromSheet != :sheet AND fromCategory IN (:categories)) OR (toSheet != :sheet AND toCategory IN (:categories))')
+                ->setParameter('categories', $filters['category'])
+                ->setParameter('sheet', $sheet);
         }
 
         if (!empty($filters['state'])) {
             // set sheet
             $queryBuilder->setParameter('sheet', $sheet);
+        }
+
+        if (!empty($filters['availableSlot'])
+            && $filters['availableSlot'] !== Meeting\Constant::FILTER_AVAILABLE_SLOT_IDS_EVERYONE
+            && ($filters['availableSlot'] === Meeting\Constant::FILTER_AVAILABLE_SLOT_IDS_AVAILABLE
+                || ($filters['availableSlot'] === Meeting\Constant::FILTER_AVAILABLE_SLOT_IDS_SLOT
+                    && !empty($filters['slot_id'])
+                )
+            )
+        ) {
+            $queryBuilder
+                ->join('fromSheet.availableSlots', 'fromAvailableSlot', 'WITH', 'fromAvailableSlot.slot IN (:slots)')
+                ->join('toSheet.availableSlots', 'toAvailableSlot', 'WITH', 'toAvailableSlot.slot IN (:slots)')
+                ->setParameter('slots', array_map(function ($slot) {
+                    if ($slot instanceof MeetingSlot) {
+                        return $slot->getId();
+                    } elseif ($slot instanceof AvailableSlotView) {
+                        return $slot->id;
+                    }
+
+                    return null;
+                }, $slotsToFilter))
+            ;
         }
     }
 
@@ -702,7 +886,10 @@ class RequestRepository implements RequestRepositoryInterface
             ->from(Request::class, 'request')
             ->leftjoin('request.fromParticipants', 'fromParticipant')
             ->leftjoin('request.toParticipants', 'toParticipant')
-            ->where('request.state = :approved AND request.disabled = false AND (fromParticipant.id = :participant OR toParticipant.id = :participant)')
+            ->where(
+                'request.state = :approved AND request.disabled = false 
+                AND (fromParticipant.id = :participant OR toParticipant.id = :participant)'
+            )
             ->andWhere('NOT EXISTS(SELECT m.id FROM Entity:Meeting m where m.request = request)')
             ->setParameter('participant', $participant)
             ->setParameter('approved', Request::STATE_APPROVED);
@@ -722,7 +909,10 @@ class RequestRepository implements RequestRepositoryInterface
             ->from(Request::class, 'request')
             ->leftjoin('request.fromParticipants', 'fromParticipant')
             ->leftjoin('request.toParticipants', 'toParticipant')
-            ->where('(fromParticipant.id = :participant OR toParticipant.id = :participant) AND request.disabled = false')
+            ->where(
+                '(fromParticipant.id = :participant OR toParticipant.id = :participant) 
+                AND request.disabled = false'
+            )
             ->setParameter('participant', $participant)
             ->setMaxResults(1);
 

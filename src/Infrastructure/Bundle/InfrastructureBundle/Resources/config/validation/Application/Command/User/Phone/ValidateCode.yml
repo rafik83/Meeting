@@ -1,0 +1,8 @@
+Proximum\Vimeet\Application\Command\User\Phone\ValidateCode:
+    properties:
+        code:
+            - NotBlank: ~
+            - Length:
+                min: 4
+                max: 4
+                exactMessage: validators.userPhone.validateCode.code.exact

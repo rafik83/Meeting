@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Tests\Application\Command\Order;
 
+use PHPUnit\Framework\TestCase;
 use Proximum\Vimeet\Application\Command\Order\UpdateRow;
 use Proximum\Vimeet\Application\Command\Order\UpdateRowHandler;
 use Proximum\Vimeet\Domain\Model\Order;
@@ -18,7 +19,7 @@ use Proximum\Vimeet\Domain\Repository\Order\RowRepositoryInterface;
 use Proximum\Vimeet\Infrastructure\Adapter\DelayedEventDispatcher;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
 
-class UpdateRowHandlerTest extends \PHPUnit_Framework_TestCase
+class UpdateRowHandlerTest extends TestCase
 {
     public function testHandle()
     {

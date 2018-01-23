@@ -13,16 +13,16 @@
     </header>
 
     <div class="main__container">
-        <a href="{{ path('event_sheet_group_requests_list', {'sheetGroup': groupView.id}) }}" class="btn btn-default pull-right mg-left">
+        <a href="{{ path('event_sheet_group_requests_list', {'sheetGroup': groupView.id}) }}" class="btn btn-default pull-right mg-left hidden-xs">
             {{ 'group.home.link.request'|trans }}
         </a>
-        <a href="{{ path('event_sheet_group_participant_update', {'sheetGroup': groupView.id}) }}" class="btn btn-default pull-right mg-left">
+        <a href="{{ path('event_sheet_group_participant_update', {'sheetGroup': groupView.id}) }}" class="btn btn-default pull-right mg-left hidden-xs">
             {{ 'group.home.link.participant_update'|trans }}
         </a>
-        <a href="{{ path('event_sheet_group_participants_list', {'sheetGroup': groupView.id}) }}" class="btn btn-default pull-right mg-left">
+        <a href="{{ path('event_sheet_group_participants_list', {'sheetGroup': groupView.id}) }}" class="btn btn-default pull-right mg-left hidden-xs">
             {{ 'group.home.link.participants'|trans }}
         </a>
-        <a href="{{ path('event_sheet_group_create_sheet', {'sheetGroup': groupView.id}) }}" class="btn btn-default pull-right">
+        <a href="{{ path('event_sheet_group_create_sheet', {'sheetGroup': groupView.id}) }}" class="btn btn-default pull-right hidden-xs">
             {{ 'group.home.link.create_sheet'|trans }}
         </a>
 

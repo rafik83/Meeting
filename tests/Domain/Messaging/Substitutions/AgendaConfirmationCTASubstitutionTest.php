@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Tests\Domain\Messaging\Substitutions;
 
+use PHPUnit\Framework\TestCase;
 use Prophecy\Prophecy\ObjectProphecy;
 use Proximum\Vimeet\Domain\Adapter\TemplatingAdapterInterface;
 use Proximum\Vimeet\Domain\Messaging\Substitutions\AgendaConfirmationCTASubstitution;
@@ -23,7 +24,7 @@ use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Token\UserEventTokenGenerator;
 use Proximum\Vimeet\Domain\Token\UserEventTokenType;
 
-class AgendaConfirmationCTASubstitutionTest extends \PHPUnit_Framework_TestCase
+class AgendaConfirmationCTASubstitutionTest extends TestCase
 {
     /** @var ObjectProphecy */
     private $templating;

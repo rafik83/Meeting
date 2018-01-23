@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Application\Command\User;
 
+use Proximum\Vimeet\Domain\Helper\StringHelper;
 use Proximum\Vimeet\Domain\Repository\ChangeMailTokenRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\UserRepositoryInterface;
 
@@ -42,7 +43,7 @@ class ChangeMailActivationHandler
      */
     public function handle(ChangeMailActivation $changeMailActivation)
     {
-        $mail = $changeMailActivation->mail;
+        $mail = StringHelper::trimSpacesAndNonBreakSpaces($changeMailActivation->mail);
         $user = $changeMailActivation->user;
 
         $user->updateEmail($mail);

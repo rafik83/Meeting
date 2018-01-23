@@ -13,8 +13,9 @@ namespace Proximum\Vimeet\Tests\Domain\Messaging\Substitutions;
 use Proximum\Vimeet\Domain\Messaging\Substitutions\EventSubstitution;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
 use Proximum\Vimeet\Tests\Factory\SheetFactory;
+use PHPUnit\Framework\TestCase;
 
-class EventSubstitutionTest extends \PHPUnit_Framework_TestCase
+class EventSubstitutionTest extends TestCase
 {
     public function testSubstitute()
     {

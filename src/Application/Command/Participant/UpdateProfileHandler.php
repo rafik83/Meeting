@@ -12,6 +12,7 @@ namespace Proximum\Vimeet\Application\Command\Participant;
 
 use Proximum\Vimeet\Application\Components\Sheet\Template\Tag;
 use Proximum\Vimeet\Application\Event\Events;
+use Proximum\Vimeet\Application\Event\Sheet\SheetTitleCheckEvent;
 use Proximum\Vimeet\Application\Event\Sheet\SheetUpdatedEvent;
 use Proximum\Vimeet\Domain\Account\Synchronizer;
 use Proximum\Vimeet\Domain\Repository\ParticipantRepositoryInterface;
@@ -77,6 +78,11 @@ class UpdateProfileHandler
 
         // Send Sheet Update Event to recalculate completeness of the sheet
         $sheetUpdatedEvent = new SheetUpdatedEvent($participant->getSheet());
+
+        // Send event to check and update sheet title depends on sheet title or owner fullname settings
+        $sheetTitleCheckEvent = new SheetTitleCheckEvent($participant->getSheet());
+
         $this->eventDispatcher->dispatch(Events::SHEET_UPDATED, $sheetUpdatedEvent);
+        $this->eventDispatcher->dispatch(Events::SHEET_TITLE_CHECK, $sheetTitleCheckEvent);
     }
 }

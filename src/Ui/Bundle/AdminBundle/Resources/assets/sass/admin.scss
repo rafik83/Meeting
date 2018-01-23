@@ -1,5 +1,5 @@
-@import "bootstrap-sass/assets/stylesheets/bootstrap";
-@import "eonasdan-bootstrap-datetimepicker/src/sass/bootstrap-datetimepicker-build";
+@import "~bootstrap-sass/assets/stylesheets/bootstrap";
+@import "~eonasdan-bootstrap-datetimepicker/src/sass/bootstrap-datetimepicker-build";
 @import "components/agenda";
 @import "components/template-builder";
 @import "components/package";
@@ -312,4 +312,9 @@ table th.sort-up:after {
 
 .pagination ul {
   margin-bottom: 0 !important;
+}
+
+.btn-group, .btn-group-vertical {
+  position: relative;
+  vertical-align: middle;
 }

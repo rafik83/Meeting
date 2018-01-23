@@ -1,0 +1,33 @@
+Proximum\Vimeet\Domain\Model\PlannerJob:
+    type:  entity
+    table: planner_job
+    id:
+        id:
+            type: integer
+            generator:
+                strategy: AUTO
+    fields:
+        solutionType:
+            type: string
+        lockMeetingRequest:
+            type: boolean
+        status:
+            type: string
+        errorMessage:
+            type: string
+            nullable: true
+        createdAt:
+            type: datetime
+    manyToOne:
+        event:
+            targetEntity: Proximum\Vimeet\Domain\Model\Event
+            joinColumn:
+                nullable: false
+        admin:
+            targetEntity: Proximum\Vimeet\Domain\Model\Admin
+            joinColumn:
+                nullable: false
+        file:
+            targetEntity: Proximum\Vimeet\Domain\Model\File
+            joinColumn:
+                nullable: true

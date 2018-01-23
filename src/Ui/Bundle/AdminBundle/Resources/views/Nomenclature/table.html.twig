@@ -1,9 +1,11 @@
+{% import 'AdminBundle::macro.html.twig' as macro %}
+
 <table class="table table-hover">
     <thead>
         <tr>
             <th>{{ 'admin.nomenclature.table.title'|trans }}</th>
             <th></th>
-            <th></th>
+            <th class="col-md-1"></th>
         </tr>
     </thead>
     <tbody>
@@ -18,9 +20,35 @@
                 {{ 'admin.nomenclature.table.depth'|transchoice(nomenclature.depth, { '%depth%': nomenclature.depth }) }}
             </td>
             <td class="text-right">
-                <a href="{{ nomenclature.event ? path('admin_nomenclature_event_read', { 'event': nomenclature.event.id, 'nomenclature': nomenclature.id }) : path('admin_nomenclature_read', { 'nomenclature': nomenclature.id }) }}" class="btn btn-primary btn-sm">
-                    {{ 'admin.nomenclature.table.read'|trans }}
-                </a>
+                <div class="btn-group">
+                    <a href="{{ nomenclature.event ? path('admin_nomenclature_event_read', { 'event': nomenclature.event.id, 'nomenclature': nomenclature.id }) : path('admin_nomenclature_read', { 'nomenclature': nomenclature.id }) }}" class="btn btn-default btn-sm">
+                        {{ 'admin.nomenclature.table.read'|trans }}
+                    </a>
+                    {% if (tableType == 'event' and is_granted('ROLE_ALLOWED_TO_ORGANIZE'))
+                        or (tableType == 'global' and is_granted('ROLE_SUPER_ADMIN'))
+                    %}
+                        <button type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <span class="caret"></span>
+                        </button>
+                        <ul class="dropdown-menu dropdown-menu-right">
+                             {% if nomenclature.deletable %}
+                                <li>
+                                    {{ macro.delete_button(
+                                        path('admin_nomenclature_remove', { 'nomenclature': nomenclature.id }),
+                                        'admin.nomenclature.remove.link'|trans,
+                                        { 'class': 'btn btn-default btn-sm', 'data-confirm': 'admin.nomenclature.action.confirmDelete'|trans })
+                                    }}
+                                </li>
+                            {% else %}
+                                <li>
+                                    <button class="btn disabled btn-default btn-sm" title="{{ 'admin.nomenclature.removeUnAvailable.title'|trans }}">
+                                        {{ 'admin.nomenclature.remove.link'|trans }}
+                                    </button>
+                                </li>
+                            {% endif %}
+                        </ul>
+                    {% endif %}
+                </div>
             </td>
         </tr>
     {% else %}

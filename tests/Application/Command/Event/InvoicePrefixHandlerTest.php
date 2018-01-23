@@ -10,12 +10,13 @@
 
 namespace Application\Command\Event;
 
+use PHPUnit\Framework\TestCase;
 use Proximum\Vimeet\Application\Command\InvoicePrefix\Create;
 use Proximum\Vimeet\Application\Command\InvoicePrefix\CreateHandler;
 use Proximum\Vimeet\Domain\Model\Invoice\Prefix;
 use Proximum\Vimeet\Domain\Repository\Invoice\PrefixRepositoryInterface;
 
-class InvoicePrefixHandlerTest extends \PHPUnit_Framework_TestCase
+class InvoicePrefixHandlerTest extends TestCase
 {
     public function testCreateHandler()
     {

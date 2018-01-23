@@ -26,8 +26,9 @@ use Proximum\Vimeet\Domain\Model\Type;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
 use Proximum\Vimeet\Tests\Factory\ProductFactory;
 use Proximum\Vimeet\Tests\Factory\SheetFactory;
+use PHPUnit\Framework\TestCase;
 
-class GroupViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
+class GroupViewQueryHandlerTest extends TestCase
 {
     public function testHandle()
     {

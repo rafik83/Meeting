@@ -18,8 +18,9 @@ use Proximum\Vimeet\Domain\Model\Package;
 use Proximum\Vimeet\Domain\Model\Product;
 use Proximum\Vimeet\Domain\Repository\PackageRepositoryInterface;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
+use PHPUnit\Framework\TestCase;
 
-class UpdateHandlerTest extends \PHPUnit_Framework_TestCase
+class UpdateHandlerTest extends TestCase
 {
     public function testHandle()
     {
@@ -44,8 +45,9 @@ class UpdateHandlerTest extends \PHPUnit_Framework_TestCase
         $expected->translate('fr', 'Plans fr', 'P&P fr', 'Options fr');
         $expected->translate('en', 'Plans en', 'P&P en', 'Options en');
         $expected->setPlans([$plan1, $plan3, $plan2]);
-        $expected->setParticipant($participant);
+        $expected->setParticipants([$participant]);
         $expected->setPlanning($planning);
+        $expected->setMaxParticipant(12);
         $expected->setGroups([
             [$option4, $option1],
             [$option2, $option3],
@@ -64,6 +66,7 @@ class UpdateHandlerTest extends \PHPUnit_Framework_TestCase
             $this->assertEquals($expected->getOptionsLabel('en'), $package->getOptionsLabel('en'));
             $this->assertEquals($expected->getPlans(), $package->getPlans());
             $this->assertEquals($expected->getGroups(), $package->getGroups());
+            $this->assertEquals($expected->getMaxParticipant(), $package->getMaxParticipant());
 
             $groups = $expected->getGroups();
 
@@ -80,14 +83,15 @@ class UpdateHandlerTest extends \PHPUnit_Framework_TestCase
             return true;
         }))->shouldBeCalled();
 
-        $command                                      = new Update($package);
-        $command->title                               = 'Foobar';
-        $command->plans->labels                       = ['fr' => 'Plans fr', 'en' => 'Plans en'];
-        $command->participantAndPlanning->labels      = ['fr' => 'P&P fr', 'en' => 'P&P en'];
-        $command->options->labels                     = ['fr' => 'Options fr', 'en' => 'Options en'];
-        $command->plans->plans                        = [$plan1, $plan3, $plan2];
-        $command->participantAndPlanning->participant = $participant;
-        $command->participantAndPlanning->planning    = $planning;
+        $command = new Update($package);
+        $command->title = 'Foobar';
+        $command->plans->labels = ['fr' => 'Plans fr', 'en' => 'Plans en'];
+        $command->participantAndPlanning->labels = ['fr' => 'P&P fr', 'en' => 'P&P en'];
+        $command->options->labels = ['fr' => 'Options fr', 'en' => 'Options en'];
+        $command->plans->plans = [$plan1, $plan3, $plan2];
+        $command->participantAndPlanning->participants = [$participant];
+        $command->participantAndPlanning->planning = $planning;
+        $command->participantAndPlanning->maxParticipant = 12;
         $command->options->groups = [
             new Group(['fr' => 'AAAA', 'en' => 'AAAA'], [$option4, $option1]),
             new Group(['fr' => 'BBBB', 'en' => 'BBBB'], [$option2, $option3]),

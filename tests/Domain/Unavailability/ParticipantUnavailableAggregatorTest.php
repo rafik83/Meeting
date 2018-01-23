@@ -18,8 +18,9 @@ use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Repository\MeetingSlotRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\ParticipantRepositoryInterface;
 use Proximum\Vimeet\Domain\Unavailability\ParticipantUnavailableAggregator;
+use PHPUnit\Framework\TestCase;
 
-class ParticipantUnavailableAggregatorTest extends \PHPUnit_Framework_TestCase
+class ParticipantUnavailableAggregatorTest extends TestCase
 {
     public function testAggregateWithNoSlot()
     {

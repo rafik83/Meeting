@@ -1,0 +1,46 @@
+<?php
+
+/*
+ * This file is part of the Proximum Vimeet project.
+ *
+ * Copyright (C) Proximum
+ *
+ * @author Elao <contact@elao.com>
+ */
+
+namespace Proximum\Vimeet\Application\Serializer\Denormalizer\Analytic\MeetingSolution;
+
+use Proximum\Vimeet\Application\View\Analytic\MeetingSolution\Spot\SpotSatisfactionView;
+use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
+
+class SpotSatisfactionViewDenormalizer implements DenormalizerInterface
+{
+    /**
+     * {@inheritdoc}
+     */
+    public function denormalize($data, $class, $format = null, array $context = array())
+    {
+        return new SpotSatisfactionView(
+            $data['spotId'],
+            $data['reference'],
+            $data['shared'],
+            $data['visio'],
+            $data['satisfaction']
+        );
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function supportsDenormalization($data, $type, $format = null)
+    {
+        return $type === SpotSatisfactionView::class
+            && $format === 'json'
+            && isset($data['spotId'])
+            && isset($data['reference'])
+            && isset($data['shared'])
+            && isset($data['visio'])
+            && isset($data['satisfaction'])
+        ;
+    }
+}

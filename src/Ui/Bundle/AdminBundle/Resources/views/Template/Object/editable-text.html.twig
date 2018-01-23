@@ -11,8 +11,8 @@
     style: '',
     translatable: false,
     tag: null,
+    tags: [],
 }|merge(config|default({})) %}
-
 
 <div class="object" data-object="editable-text" data-uid="{{ uid|default('__UID__') }}" data-config="{{ config|json_encode }}">
     <ul class="block-buttons list-inline">
@@ -69,38 +69,57 @@
                                     {% endif %}
                                 </div>
                                 <div class="form-group">
-                                    <label class="form-label">{{ 'template.required.title'|trans }}</label>
-                                    <input type="checkbox" name="required" />
+                                    <label class="form-label">
+                                        <input type="checkbox" name="required" />
+                                        {{ 'template.required.title'|trans }}
+                                    </label>
                                 </div>
                                 <div class="form-group">
-                                    <label class="form-label">{{ 'template.translatable.title'|trans }}</label>
-                                    <input type="checkbox" name="translatable" />
+                                    <label class="form-label">
+                                        <input type="checkbox" name="translatable" />
+                                        {{ 'template.translatable.title'|trans }}
+                                    </label>
                                 </div>
                                 <div class="form-group">
                                     <label class="form-label">{{ 'template.maxLength.title'|trans }}</label>
                                     <input class="form-control" type="number" step="1" name="maxLength" />
                                 </div>
                                 <div class="form-group">
-                                    <label class="form-label">{{ 'template.hideLabel.title'|trans }}</label>
-                                    <input type="checkbox" name="hideLabel"/>
+                                    <label class="form-label">
+                                        <input type="checkbox" name="hideLabel"/>
+                                        {{ 'template.hideLabel.title'|trans }}
+                                    </label>
                                 </div>
                                 <div class="form-group">
                                     <label class="form-label">{{ 'template.type.title'|trans }}</label>
                                     <select class="form-control" name="type">
-                                        {% for label, value in { 'Titre': 'title', 'Texte': 'text' } %}
+                                        {% if isRegistrationTemplate is defined %}
+                                            {% set types = { 'Textarea': 'textarea', 'Texte': 'text' } %}
+                                        {% else %}
+                                            {% set types = { 'Title': 'title', 'Texte': 'text' } %}
+                                        {% endif %}
+                                        {% for label, value in types %}
                                             <option value="{{ value }}">{{ label }}</option>
                                         {% endfor %}
                                     </select>
                                 </div>
-                                <div class="form-group">
-                                    <label class="form-label">{{ 'template.object.tag'|trans }}</label>
-                                    <select class="form-control" name="tag">
-                                        <option value=""></option>
-                                        {% for tag in sheet_tags %}
-                                            <option value="{{ tag }}">{{ ('template.tag.' ~ tag)|trans }}</option>
-                                        {% endfor %}
-                                    </select>
-                                </div>
+
+                                {% if isRegistrationTemplate is defined and registrationTemplateTagView is defined %}
+                                    {{ include('AdminBundle:RegistrationTemplate:tagsSelect.html.twig', {
+                                        'config': config,
+                                        'registrationTemplateTagView': registrationTemplateTagView,
+                                    }, false) }}
+                                {% else %}
+                                    <div class="form-group">
+                                        <label class="form-label">{{ 'template.object.tag'|trans }}</label>
+                                        <select class="form-control" name="tag">
+                                            <option value=""></option>
+                                            {% for tag in sheet_tags %}
+                                                <option value="{{ tag }}">{{ ('template.tag.' ~ tag)|trans }}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                {% endif %}
                             </div>
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-default" data-dismiss="modal">{{ 'template.action.close'|trans }}</button>

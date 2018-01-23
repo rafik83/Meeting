@@ -1,0 +1,31 @@
+<h3 class="catalog-mobile-title">{{ form.vars.label }}</h3>
+
+<ul class="catalog-mobile-type-filter-list">
+    <li
+        class="catalog-mobile-filter"
+        data-catalog-mobile-type-filter="catalog-mobile-type-filter"
+        data-filter-id="all"
+        data-count-participant="{{ totalType }}"
+        data-content="{{ 'catalog.mobile.filters.allParticipants'|trans }}"
+    >
+        <a href="#" class="catalog-mobile-menu-button btn btn-primary btn-block {% if numberOfDifferentType != numberOfTypeSelected %}btn-inactive{% endif %} {% if numberOfDifferentType == 0 %}disabled{% endif %}">
+
+            <span>{{ 'catalog.mobile.filters.allParticipants'|trans }}</span>
+            <span class="button-count">({{ totalType }})</span>
+        </a>
+    </li>
+    {% for child in form.children %}
+        <li
+            class="catalog-mobile-filter"
+            data-catalog-mobile-type-filter="catalog-mobile-type-filter"
+            data-filter-id="{{ choices[child.vars.value].id }}"
+            data-count-participant="{{ choices[child.vars.value].count }}"
+            data-content="{{ child.vars.label|trans({}, child.vars.translation_domain) }}"
+        >
+            <a href="#" class="catalog-mobile-menu-button btn btn-primary btn-block {% if numberOfDifferentType == numberOfTypeSelected or not child.vars.data %}btn-inactive{% endif %} {% if choices[child.vars.value].count == 0 %}disabled{% endif %}">
+                <span>{{ child.vars.label|trans({}, child.vars.translation_domain) }}</span>
+                <span class="button-count">({{ choices[child.vars.value].count }})</span>
+            </a>
+        </li>
+    {% endfor %}
+</ul>

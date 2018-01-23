@@ -15,9 +15,9 @@ use Proximum\Vimeet\Domain\Model\Sheet\Group;
 
 class HomeDispatchView
 {
-    const TYPE_GROUP           = 'group';
-    const TYPE_ONE_SHEET       = 'one_sheet';
-    const TYPE_MULTIPLE_SHEETS = 'multiple_sheets';
+    const TYPE_GROUP                 = 'group';
+    const TYPE_ONE_SHEET             = 'one_sheet';
+    const TYPE_MULTIPLE_SHEETS       = 'multiple_sheets';
 
     /** @var string */
     private $type;
@@ -34,7 +34,7 @@ class HomeDispatchView
      */
     public function __construct($type, $object = null)
     {
-        if (false === in_array($type, [self::TYPE_GROUP, self::TYPE_ONE_SHEET, self::TYPE_MULTIPLE_SHEETS])) {
+        if (false === $this->isGivenTypeValid($type)) {
             throw new \InvalidArgumentException('Given type is invalid');
         }
 
@@ -102,4 +102,22 @@ class HomeDispatchView
 
         return $this->sheet;
     }
+
+    /**
+     * @param string $type
+     *
+     * @return bool
+     */
+    private function isGivenTypeValid(string $type): bool
+    {
+        return in_array(
+            $type,
+            [
+                self::TYPE_GROUP,
+                self::TYPE_ONE_SHEET,
+                self::TYPE_MULTIPLE_SHEETS,
+            ]
+        );
+    }
+
 }

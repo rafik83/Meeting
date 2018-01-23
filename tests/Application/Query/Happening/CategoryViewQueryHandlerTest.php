@@ -14,8 +14,9 @@ use Proximum\Vimeet\Application\View\Happening\HappeningCategoryView;
 use Proximum\Vimeet\Domain\Model\Happening;
 use Proximum\Vimeet\Domain\Model\Happening\Category;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
+use PHPUnit\Framework\TestCase;
 
-class CategoryViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
+class CategoryViewQueryHandlerTest extends TestCase
 {
     public function testHandle()
     {
@@ -28,7 +29,7 @@ class CategoryViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
         $categoryTranslation = new Happening\CategoryTranslation($category, $locale, 'conference');
         $category->setTranslation($categoryTranslation);
 
-        $happening = new Happening($event, $begin, $end, $category);
+        $happening = new Happening($event, $begin, $end, $category, []);
 
         // Expected
         $expectedCategoryView = new HappeningCategoryView('conference', '', '#aaa', '#bbb');

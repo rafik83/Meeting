@@ -10,24 +10,22 @@
 
 namespace Proximum\Vimeet\Application\Command\Tip\Event;
 
-use Proximum\Vimeet\Application\View\Tip\Event\TipView;
 use Proximum\Vimeet\Domain\Model\Event;
-use Proximum\Vimeet\Domain\View\TypeView;
+use Proximum\Vimeet\Domain\Model\Tip\Tip;
+use Proximum\Vimeet\Domain\Model\Type;
 
 class Affect
 {
     /** @var Event */
     public $event;
 
-    /** @var TipView */
+    /** @var Tip */
     public $tip;
 
-    /** @var TypeView[] */
+    /** @var Type[] */
     public $types;
 
     /**
-     * Affect constructor.
-     *
      * @param Event $event
      */
     public function __construct(Event $event)

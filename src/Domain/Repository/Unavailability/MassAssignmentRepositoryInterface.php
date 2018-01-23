@@ -15,6 +15,7 @@ use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\Unavailability\Mass;
 use Proximum\Vimeet\Domain\Model\Unavailability\MassAssignment;
+use Proximum\Vimeet\Domain\Model\User;
 
 interface MassAssignmentRepositoryInterface
 {
@@ -65,6 +66,10 @@ interface MassAssignmentRepositoryInterface
     public function findByParticipant(Participant $participant);
 
     /**
+     * @deprecated Prefer use findEnabledByUserAndEvent instead
+     *
+     * @see findEnabledByUserAndEvent
+     *
      * @param Participant $participant
      *
      * @return MassAssignment[]
@@ -72,9 +77,29 @@ interface MassAssignmentRepositoryInterface
     public function findEnabledByParticipant(Participant $participant);
 
     /**
+     * @param User  $user
+     * @param Event $event
+     *
+     * @return MassAssignment[]
+     */
+    public function findEnabledByUserAndEvent(User $user, Event $event);
+
+    /**
+     * @deprecated
+     *
+     * @see findEnabledByEventAndUsers
+     *
      * @param Participant[] $participants
      *
      * @return MassAssignment[]
      */
     public function findEnabledByParticipants(array $participants);
+
+    /**
+     * @param Event  $event
+     * @param User[] $users
+     *
+     * @return MassAssignment[]
+     */
+    public function findEnabledByEventAndUsers(Event $event, array $users);
 }

@@ -22,144 +22,101 @@ use Proximum\Vimeet\Domain\Trace\TraceableName;
  */
 class Event implements EventInterface, TraceableInterface
 {
-    /**
-     * All Taxes Include : prices include taxes, no additional taxes computed
-     */
+    /** All Taxes Include : prices include taxes, no additional taxes computed*/
     const VAT_MODE_ATI = 'ati';
 
-    /**
-     * Exclusive of Taxes : prices don't includes taxes, taxes are computed from prices
-     */
+    /** Exclusive of Taxes : prices don't includes taxes, taxes are computed from prices*/
     const VAT_MODE_ET = 'et';
 
-    /**
-     * @var int
-     */
+    /** @var int */
     private $id;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     private $domain;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     private $title;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     private $logo;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     private $invoiceLogo;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     private $invoiceLogoExtension;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     private $timeZone;
 
-    /**
-     * @var ArrayCollection
-     */
+    /** @var ArrayCollection */
     private $translations;
 
-    /**
-     * @var array
-     */
+    /** @var array */
     private $locales = [];
 
-    /**
-     * @var string
-     */
+    /** @var string */
     private $fallback;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     private $organiserName;
 
-    /**
-     * @var Address
-     */
+    /** @var Address */
     private $paymentAddress;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     private $organiserEmail;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     private $legalInformation;
 
-    /**
-     * @var string 'ati'|'et' ; See VAT_MODE_ATI and VAT_MODE_ET const
-     */
+    /** @var string 'ati'|'et' ; See VAT_MODE_ATI and VAT_MODE_ET const */
     private $mode;
 
-    /**
-     * @var float
-     */
+    /** @var float */
     private $vat;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     private $elementToJoinWithInvoice;
 
-    /**
-     * @var Configuration
-     */
+    /** @var Configuration */
     private $configuration;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     private $assetPath;
 
-    /**
-     * ISO 3166-1 alpha-2 country code
-     *
-     * @var string
-     */
+    /** @var string ISO 3166-1 alpha-2 country code */
     private $country;
 
-    /**
-     * ISO 4217 3-letter currency code
-     *
-     * @var string
-     */
+    /** @var string ISO 4217 3-letter currency code */
     private $currency;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     private $logoExtension;
 
-    /**
-     * @var string|null
-     */
+    /** @var string|null */
     private $emailTeam;
 
-    /**
-     * @var ArrayCollection
-     */
+    /** @var ArrayCollection */
     private $days;
 
-    /**
-     * @var null|Prefix
-     */
+    /** @var null|Prefix */
     private $invoicePrefix;
+
+    /** @var bool */
+    private $externalCatalogEnabled = false;
+
+    /** @var bool */
+    private $userAgendaVersionsGenerated;
+
+    /** @var bool */
+    private $archived;
+
+    /** @var bool */
+    private $visible;
+
+    /** @var null|Event */
+    private $duplicatedFrom;
 
     /**
      * @param string      $title
@@ -173,7 +130,9 @@ class Event implements EventInterface, TraceableInterface
      * @param string      $domain
      * @param string      $organiserName
      * @param string|null $emailTeam
-     * @param Prefix $invoicePrefix
+     * @param Prefix      $invoicePrefix
+     * @param bool        $visible
+     * @param null|Event  $duplicatedFrom
      */
     public function __construct(
         $title,
@@ -187,7 +146,9 @@ class Event implements EventInterface, TraceableInterface
         $domain,
         $organiserName,
         $emailTeam,
-        Prefix $invoicePrefix
+        Prefix $invoicePrefix,
+        bool $visible = true,
+        Event $duplicatedFrom = null
     ) {
         $this->translations   = new ArrayCollection();
         $this->configuration  = new Configuration('', '', '');
@@ -206,6 +167,10 @@ class Event implements EventInterface, TraceableInterface
         $this->emailTeam      = $emailTeam;
         $this->invoicePrefix  = $invoicePrefix;
         $this->assetPath      = '';
+        $this->visible        = $visible;
+        $this->userAgendaVersionsGenerated = false;
+        $this->archived = false;
+        $this->duplicatedFrom = $duplicatedFrom;
     }
 
     /**
@@ -221,9 +186,17 @@ class Event implements EventInterface, TraceableInterface
     /**
      * @return string
      */
-    public function getDomain()
+    public function getDomain(): string
     {
         return $this->domain;
+    }
+
+    /**
+     * @param string $domain
+     */
+    public function setDomain(string $domain)
+    {
+        $this->domain = $domain;
     }
 
     /**
@@ -249,7 +222,9 @@ class Event implements EventInterface, TraceableInterface
      */
     public function getDescription($locale)
     {
-        return $this->translations->containsKey($locale) ? $this->translations->get($locale)->getDescription() : '';
+        $isTranslatable = $this->translations->containsKey($locale);
+
+        return $isTranslatable ? $this->translations->get($locale)->getDescription() : '';
     }
 
     /**
@@ -259,7 +234,9 @@ class Event implements EventInterface, TraceableInterface
      */
     public function getBankInfo($locale)
     {
-        return $this->translations->containsKey($locale) ? $this->translations->get($locale)->getBankInfo() : '';
+        $isTranslatable = $this->translations->containsKey($locale);
+
+        return $isTranslatable ? $this->translations->get($locale)->getBankInfo() : '';
     }
 
     /**
@@ -269,7 +246,9 @@ class Event implements EventInterface, TraceableInterface
      */
     public function getBillingAddress($locale)
     {
-        return $this->translations->containsKey($locale) ? $this->translations->get($locale)->getBillingAddress() : '';
+        $isTranslatable = $this->translations->containsKey($locale);
+
+        return $isTranslatable ? $this->translations->get($locale)->getBillingAddress() : '';
     }
 
     /**
@@ -279,7 +258,9 @@ class Event implements EventInterface, TraceableInterface
      */
     public function getPaymentCondition($locale)
     {
-        return $this->translations->containsKey($locale) ? $this->translations->get($locale)->getPaymentCondition() : '';
+        $isTranslatable = $this->translations->containsKey($locale);
+
+        return $isTranslatable ? $this->translations->get($locale)->getPaymentCondition() : '';
     }
 
     /**
@@ -289,7 +270,9 @@ class Event implements EventInterface, TraceableInterface
      */
     public function getPaymentFooter($locale)
     {
-        return $this->translations->containsKey($locale) ? $this->translations->get($locale)->getPaymentFooter() : '';
+        $isTranslatable = $this->translations->containsKey($locale);
+
+        return $isTranslatable ? $this->translations->get($locale)->getPaymentFooter() : '';
     }
 
     /**
@@ -455,6 +438,7 @@ class Event implements EventInterface, TraceableInterface
      * @param string      $organiserName
      * @param string|null $emailTeam
      * @param null|Prefix $invoicePrefix
+     * @param bool        $visible
      */
     public function update(
         $title,
@@ -468,7 +452,8 @@ class Event implements EventInterface, TraceableInterface
         $domain,
         $organiserName,
         $emailTeam,
-        Prefix $invoicePrefix
+        Prefix $invoicePrefix,
+        bool $visible
     ) {
         $this->title         = $title;
         $this->locales       = $locales;
@@ -482,6 +467,7 @@ class Event implements EventInterface, TraceableInterface
         $this->organiserName = $organiserName;
         $this->emailTeam     = $emailTeam;
         $this->invoicePrefix = $invoicePrefix;
+        $this->visible       = $visible;
     }
 
     /**
@@ -657,21 +643,25 @@ class Event implements EventInterface, TraceableInterface
     }
 
     /**
+     * @return bool
+     */
+    public function hasDay()
+    {
+        return !empty($this->days->toArray());
+    }
+
+    /**
      * @return Event\Day
      *
      * @throws DayNotDefinedException
      */
     public function getFirstDay()
     {
-        $days = $this->days->toArray();
-
-        if (empty($days)) {
+        if (!$this->hasDay()) {
             throw new DayNotDefinedException();
         }
 
-        usort($days, function (Day $day1, Day $day2) {
-            return $day1->getDay() > $day2->getDay();
-        });
+        $days = $this->getDays();
 
         return reset($days);
     }
@@ -683,17 +673,13 @@ class Event implements EventInterface, TraceableInterface
      */
     public function getLastDay()
     {
-        $days = $this->days->toArray();
-
-        if (empty($days)) {
+        if (!$this->hasDay()) {
             throw new DayNotDefinedException();
         }
 
-        usort($days, function (Day $day1, Day $day2) {
-            return $day1->getDay() < $day2->getDay();
-        });
+        $days = $this->getDays();
 
-        return reset($days);
+        return end($days);
     }
 
     /**
@@ -706,5 +692,81 @@ class Event implements EventInterface, TraceableInterface
         } catch (DayNotDefinedException $exception) {
             return null;
         }
+    }
+
+    /**
+     * @return bool
+     */
+    public function isExternalCatalogEnabled(): bool
+    {
+        return true === $this->externalCatalogEnabled;
+    }
+
+    /**
+     * @param bool $state
+     *
+     * @return Event
+     */
+    public function setExternalCatalog(bool $state): Event
+    {
+        $this->externalCatalogEnabled = $state;
+
+        return $this;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isUserAgendaVersionsGenerated(): bool
+    {
+        return $this->userAgendaVersionsGenerated;
+    }
+
+    /**
+     * @param bool $userAgendaVersionsGenerated
+     */
+    public function setUserAgendaVersionsGenerated(bool $userAgendaVersionsGenerated)
+    {
+        $this->userAgendaVersionsGenerated = $userAgendaVersionsGenerated;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isVisible(): bool
+    {
+        return $this->visible;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isArchived(): bool
+    {
+        return $this->archived;
+    }
+
+    /**
+     * Archive the event
+     */
+    public function archive()
+    {
+        $this->archived = true;
+    }
+
+    /**
+     * Un archive the event
+     */
+    public function unArchive()
+    {
+        $this->archived = false;
+    }
+
+    /**
+     * @return null|Event
+     */
+    public function getDuplicatedFrom(): ?Event
+    {
+        return $this->duplicatedFrom;
     }
 }

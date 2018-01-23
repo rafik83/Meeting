@@ -25,6 +25,7 @@ Feature: Sheet participations list filters
     And elastica is populate
     And I am logged with "test@test.com" on admin
     And I go to "/fr/event"
+    When I go to this page "/fr/event/past"
     When I follow "admin.sheet.link"
     Then I should be on this page "/fr/event/1/sheet?orderBy=created_at"
     And I should see "admin.sheet.list.filters.label"

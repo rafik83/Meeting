@@ -2,11 +2,21 @@
   margin-top: 15px;
 }
 
-.catalog--advanced {
-  padding-left: 300px;
+@media screen and (max-width: 768px) {
+  .catalog--advanced {
+    padding-left: 0;
+    .catalog__research {
+      left: 0;
+    }
+  }
+}
 
-  .catalog__research {
-    left: 0;
+@media screen and (min-width: 768px) {
+  .catalog--advanced {
+    padding-left: 300px;
+    .catalog__research {
+      left: 0;
+    }
   }
 }
 
@@ -17,7 +27,7 @@
 
   .select-all {
     text-transform: uppercase;
-    font-family: OpenSans;
+    font-family: OpenSans, Helvetica, sans-serif;
     font-weight: bold;
     font-size: 18px;
   }
@@ -37,7 +47,7 @@
 
     strong {
       text-transform: uppercase;
-      font-family: OpenSans;
+      font-family: OpenSans, Helvetica, sans-serif;
       font-weight: bold;
       font-size: 18px;
       margin-left: 20px;
@@ -58,6 +68,7 @@
 
     > [class*='col-'] {
       display: flex;
+      flex-grow: 1;
     }
     &:before {
       content: none !important;
@@ -69,6 +80,16 @@
     margin: 15px 0;
     padding: 20px;
     width: 100%;
+
+    .preview-participants-position {
+      span {
+        font-weight: bold;
+      }
+    }
+
+    .see-more {
+      text-decoration: underline;
+    }
 
     > header {
       input[type='checkbox'] {
@@ -181,7 +202,7 @@
         width: 60%;
 
         strong {
-          font-family: OpenSans;
+          font-family: OpenSans, Helvetica, sans-serif;
           color: $color-highlighted;
           margin-left: 5px;
         }
@@ -260,7 +281,7 @@
 
     h3 {
       position: relative;
-      font-family: OpenSans;
+      font-family: OpenSans, Helvetica, sans-serif;
       font-size: 18px;
       padding-left: 22px;
 

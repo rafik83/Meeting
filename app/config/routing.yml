@@ -1,6 +1,20 @@
 #
 # Admin
 #
+planner_callback:
+    path: /planner/callback
+    host: '%admin_domain%'
+    defaults:
+        _controller: AdminBundle:Planner\Callback:index
+    methods: [POST]
+
+jenkins_callback_sheet_print_pdf:
+    path: /jenkins/callback/phantomjs/sheet/print-pdf
+    host: '%admin_domain%'
+    defaults:
+        _controller: AdminBundle:ThirdParty\Jenkins\Callback:printSheetBuildCallback
+    methods: [POST]
+
 root_admin:
     path: /{_locale}
     host: '%admin_domain%'
@@ -39,6 +53,17 @@ JMSJobQueueBundle:
 #
 default_event:
     path: /
+    methods: [GET]
+
+#
+# Trailing slash redirect to home event
+#
+default_redirect:
+    path: /{_locale}
+    defaults:
+        _controller: FrameworkBundle:Redirect:redirect
+        route: event
+        permanent: true
     methods: [GET]
 
 vimeet_event:

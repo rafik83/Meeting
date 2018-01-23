@@ -13,8 +13,11 @@ namespace Proximum\Vimeet\Domain\Model;
 use DateTimeInterface;
 use Doctrine\Common\Collections\ArrayCollection;
 use Proximum\Vimeet\Domain\Exception\Sheet\SheetException;
+use Proximum\Vimeet\Domain\Model\Sheet\AvailableSlot;
 use Proximum\Vimeet\Domain\Model\Sheet\Group;
 use Proximum\Vimeet\Domain\Model\Template\SheetTemplate;
+use Proximum\Vimeet\Domain\Sheet\Availability\ConfirmationStatus;
+use Proximum\Vimeet\Domain\Sheet\Phone\ValidationStatus;
 use Proximum\Vimeet\Domain\Trace\TraceableName;
 
 /**
@@ -32,6 +35,21 @@ class Sheet implements TraceableInterface
     const STATE_VALIDATION_DRAFT     = 'draft';
     const STATE_VALIDATION_PENDING   = 'pending';
     const STATE_VALIDATION_VALIDATED = 'validated';
+
+    /**
+     * "Etat de validation des agendas des utilisateurs de la fiche"
+     */
+    const AGENDA_ALL_CONFIRMED    = 'all_agenda_confirmed';
+    const AGENDA_PARTLY_CONFIRMED = 'agenda_partly_confirmed';
+    const AGENDA_NONE_CONFIRMED   = 'no_agenda_confirmed';
+    const AGENDA_NOT_CONCERNED    = 'agenda_not_concerned';
+
+    const AGENDA_CONFIRMED_STATUS = [
+        self::AGENDA_ALL_CONFIRMED,
+        self::AGENDA_PARTLY_CONFIRMED,
+        self::AGENDA_NONE_CONFIRMED,
+        self::AGENDA_NOT_CONCERNED,
+    ];
 
     /**
      * @var int
@@ -124,9 +142,7 @@ class Sheet implements TraceableInterface
      */
     private $inCatalogAt;
 
-    /**
-     * @var Spot
-     */
+    /** @var Spot|null */
     private $spot;
 
     /**
@@ -150,6 +166,18 @@ class Sheet implements TraceableInterface
      * @var string|null
      */
     private $title = null;
+
+    /** @var string */
+    private $agendaConfirmedStatus = self::AGENDA_NOT_CONCERNED;
+
+    /** @var string */
+    private $phoneValidationStatus = ValidationStatus::NOT_CONCERNED;
+
+    /** @var ArrayCollection */
+    private $availableSlots;
+
+    /** @var string */
+    private $availabilityConfirmationStatus = ConfirmationStatus::NONE_CONFIRMED;
 
     /**
      * Sheet constructor.
@@ -180,6 +208,7 @@ class Sheet implements TraceableInterface
         $this->state        = self::STATE_PENDING;
         $this->completeness = 0;
         $this->group        = $group;
+        $this->availableSlots = new ArrayCollection();
     }
 
     /**
@@ -216,10 +245,12 @@ class Sheet implements TraceableInterface
 
     /**
      * @return bool
+     *
+     * @deprecated This method is deprecated as the participants now also depend of the max quantity of the product
      */
     public function canBuyParticipant()
     {
-        return $this->getMaxParticipant() > $this->countParticipant();
+        return $this->getMaxParticipant() > $this->countParticipants();
     }
 
     /**
@@ -271,6 +302,14 @@ class Sheet implements TraceableInterface
     }
 
     /**
+     * @return Participant[]
+     */
+    public function getParticipantsArray(): array
+    {
+        return $this->participants->toArray();
+    }
+
+    /**
      * @return Participant
      *
      * @throws SheetException
@@ -287,6 +326,7 @@ class Sheet implements TraceableInterface
     }
 
     /**
+     * @deprecated use countParticipants()
      * @return int
      */
     public function countParticipant()
@@ -815,9 +855,9 @@ class Sheet implements TraceableInterface
     }
 
     /**
-     * @return Spot
+     * @return Spot|null
      */
-    public function getSpot()
+    public function getSpot(): ?Spot
     {
         return $this->spot;
     }
@@ -953,5 +993,101 @@ class Sheet implements TraceableInterface
         $this->title = $title;
 
         return $this;
+    }
+
+    /**
+     * Status of the agenda confirmation
+     *
+     * @return string
+     */
+    public function getAgendaConfirmedStatus(): string
+    {
+        return $this->agendaConfirmedStatus;
+    }
+
+    /**
+     * @param string $agendaConfirmedStatus
+     */
+    public function setAgendaConfirmedStatus(string $agendaConfirmedStatus)
+    {
+        $this->agendaConfirmedStatus = $agendaConfirmedStatus;
+    }
+
+    /**
+     * @param string $phoneValidationStatus
+     */
+    public function setPhoneValidationStatus(string $phoneValidationStatus)
+    {
+        $this->phoneValidationStatus = $phoneValidationStatus;
+    }
+
+    /**
+     * @param AvailableSlot[] $availableSlots
+     */
+    public function setAvailableSlots(array $availableSlots)
+    {
+        foreach ($availableSlots as $newAvailableSlot) {
+            $found = false;
+
+            foreach ($this->availableSlots as $oldAvailableSlot) {
+                if ($newAvailableSlot->getSlot()->getId() === $oldAvailableSlot->getSlot()->getId()) {
+                    $found = true;
+
+                    break;
+                }
+            }
+
+            if ($found === false) {
+                $this->availableSlots->add($newAvailableSlot);
+            }
+        }
+
+        foreach ($this->availableSlots as $key => $oldAvailableSlot) {
+            $found = false;
+
+            foreach ($availableSlots as $newAvailableSlot) {
+                if ($newAvailableSlot->getSlot()->getId() === $oldAvailableSlot->getSlot()->getId()) {
+                    $found = true;
+
+                    break;
+                }
+            }
+
+            if ($found === false) {
+                $this->availableSlots->remove($key);
+            }
+        }
+    }
+
+    /**
+     * @return array
+     */
+    public function getAvailableSlots(): array
+    {
+        return $this->availableSlots->toArray();
+    }
+
+    /**
+     * @return string
+     */
+    public function getPhoneValidationStatus(): string
+    {
+        return $this->phoneValidationStatus;
+    }
+
+    /**
+     * @return string
+     */
+    public function getAvailabilityConfirmationStatus(): string
+    {
+        return $this->availabilityConfirmationStatus;
+    }
+
+    /**
+     * @param string $availabilityConfirmationStatus
+     */
+    public function setAvailabilityConfirmationStatus(string $availabilityConfirmationStatus): void
+    {
+        $this->availabilityConfirmationStatus = $availabilityConfirmationStatus;
     }
 }

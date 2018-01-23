@@ -18,8 +18,9 @@ use Proximum\Vimeet\Domain\Model\Tip\Tip;
 use Proximum\Vimeet\Domain\Model\Type;
 use Proximum\Vimeet\Domain\Repository\TipRepositoryInterface;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
+use PHPUnit\Framework\TestCase;
 
-class PaginatedTipViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
+class PaginatedTipViewQueryHandlerTest extends TestCase
 {
     public function testHandle()
     {
@@ -28,9 +29,9 @@ class PaginatedTipViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
         $dateTime      = new \DateTime();
         $tipRepository = $this->prophesize(TipRepositoryInterface::class);
 
-        $tip1 = new Tip('tip_1', false, true, false, false, true, false, false, $dateTime);
-        $tip2 = new Tip('tip_2', false, false, true, false, true, false, false, $dateTime);
-        $tip3 = new Tip('tip_3', true, false, true, false, true, false, false, $dateTime);
+        $tip1 = new Tip('tip_1', null, false, true, false, false, true, false, false, $dateTime);
+        $tip2 = new Tip('tip_2', null, false, false, true, false, true, false, false, $dateTime);
+        $tip3 = new Tip('tip_3', null, true, false, true, false, true, false, false, $dateTime);
         $tips = [$tip1, $tip2, $tip3];
 
         foreach ($tips as $tip) {

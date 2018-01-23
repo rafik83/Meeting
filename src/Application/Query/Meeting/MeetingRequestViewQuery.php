@@ -55,6 +55,9 @@ class MeetingRequestViewQuery
     /** @var bool */
     public $isSeenByUser;
 
+    /** @var bool */
+    public $isPhoneValidationRequired;
+
     /**
      * MeetingRequestViewQuery constructor.
      *
@@ -67,6 +70,7 @@ class MeetingRequestViewQuery
      * @param bool           $isMeetingRequestClosed
      * @param bool           $isAnsweringMeetingRequestClosed
      * @param bool           $isSeenByUser
+     * @param bool           $isPhoneValidationRequired
      */
     public function __construct(
         MeetingRequest $meetingRequest,
@@ -77,7 +81,8 @@ class MeetingRequestViewQuery
         $isMeetingRequestUpdateLocked,
         $isMeetingRequestClosed = false,
         $isAnsweringMeetingRequestClosed = false,
-        $isSeenByUser = false
+        $isSeenByUser = false,
+        $isPhoneValidationRequired = false
     ) {
         $this->meetingRequest                  = $meetingRequest;
         $this->locale                          = $locale;
@@ -88,5 +93,6 @@ class MeetingRequestViewQuery
         $this->isMeetingRequestClosed          = $isMeetingRequestClosed;
         $this->isAnsweringMeetingRequestClosed = $isAnsweringMeetingRequestClosed;
         $this->isSeenByUser                    = $isSeenByUser;
+        $this->isPhoneValidationRequired       = $isPhoneValidationRequired;
     }
 }

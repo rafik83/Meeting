@@ -2,6 +2,7 @@
 
 namespace Proximum\Vimeet\Tests\Domain\Template\TemplateObject;
 
+use PHPUnit\Framework\TestCase;
 use Proximum\Vimeet\Domain\Model\Product;
 use Proximum\Vimeet\Domain\Package\Product\IncludedProductGuesser;
 use Proximum\Vimeet\Domain\Template\TemplateObject;
@@ -10,7 +11,7 @@ use Proximum\Vimeet\Tests\Factory\EventFactory;
 use Proximum\Vimeet\Tests\Factory\ProductFactory;
 use Proximum\Vimeet\Tests\Factory\SheetFactory;
 
-class BuyableIncludedProductGuesserTest extends \PHPUnit_Framework_TestCase
+class BuyableIncludedProductGuesserTest extends TestCase
 {
     public function testHasBuyableIncludedProduct()
     {

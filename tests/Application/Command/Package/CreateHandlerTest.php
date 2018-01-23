@@ -17,8 +17,9 @@ use Proximum\Vimeet\Application\Command\Package\CreateResult;
 use Proximum\Vimeet\Domain\Model\Package;
 use Proximum\Vimeet\Domain\Repository\PackageRepositoryInterface;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
+use PHPUnit\Framework\TestCase;
 
-class CreateHandlerTest extends \PHPUnit_Framework_TestCase
+class CreateHandlerTest extends TestCase
 {
     public function testHandle()
     {

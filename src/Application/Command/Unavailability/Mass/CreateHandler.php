@@ -58,6 +58,7 @@ class CreateHandler
 
         if ($create->blocking === true) {
             $this->jobQueueAdapter->aggregateEventUsersFullUnavailability($create->event);
+            $this->jobQueueAdapter->aggregateAvailableSlot($create->event);
         }
     }
 }

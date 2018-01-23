@@ -10,6 +10,8 @@
 
 namespace Proximum\Vimeet\Application\View\Sheet\Preview;
 
+use Proximum\Vimeet\Application\Components\Sheet\Preview\CustomPreviewData;
+use Proximum\Vimeet\Application\Components\Sheet\Template\Tag;
 use Proximum\Vimeet\Application\View\Participant\CardView;
 use Proximum\Vimeet\Domain\Template\AbstractChild;
 
@@ -35,6 +37,26 @@ class PreviewView
 
     /** @var TagView[] */
     public $tagViews;
+
+    /** @var string */
+    public $populatedFromTag;
+
+    /**
+     * @param string     $id
+     * @param string     $content
+     * @param string     $type
+     * @param CardView[] $cardViews
+     * @param bool       $link
+     */
+    public function __construct($id, $content, $type, array $cardViews = [], bool $link = false)
+    {
+        $this->id        = $id;
+        $this->content   = $content;
+        $this->type      = $type;
+        $this->cardViews = $cardViews;
+        $this->tagViews  = [];
+        $this->link      = $link;
+    }
 
     /**
      * @return bool
@@ -63,24 +85,25 @@ class PreviewView
     /**
      * @return bool
      */
+    public function isParticipantsPosition()
+    {
+        return $this->type === CustomPreviewData::PARTICIPANTS_POSITION;
+    }
+
+    /**
+     * @return bool
+     */
     public function isStrong()
     {
         return $this->strong !== false;
     }
 
     /**
-     * @param string     $id
-     * @param string     $content
-     * @param string     $type
-     * @param CardView[] $cardViews
+     * @return bool
      */
-    public function __construct($id, $content, $type, array $cardViews = [])
+    public function isPopulatedFromTagSheetOrganization(): bool
     {
-        $this->id        = $id;
-        $this->content   = $content;
-        $this->type      = $type;
-        $this->cardViews = $cardViews;
-        $this->tagViews  = [];
+        return $this->populatedFromTag === Tag::SHEET_ORGANIZATION;
     }
 
     /**

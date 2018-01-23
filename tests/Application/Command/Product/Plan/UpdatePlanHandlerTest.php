@@ -11,8 +11,9 @@ use Proximum\Vimeet\Domain\Product\UpdatePriceResolver;
 use Proximum\Vimeet\Domain\Model\Product;
 use Proximum\Vimeet\Domain\Repository\ProductRepositoryInterface;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
+use PHPUnit\Framework\TestCase;
 
-class UpdatePlanHandlerTest extends \PHPUnit_Framework_TestCase
+class UpdatePlanHandlerTest extends TestCase
 {
     public function testHandle()
     {

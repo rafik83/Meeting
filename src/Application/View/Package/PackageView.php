@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2016 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -16,37 +16,39 @@ use Proximum\Vimeet\Domain\Package\Funnel\Funnel;
 
 class PackageView
 {
-    /**
-     * @var Step
-     */
+    /** @var Step */
     public $currentStep;
 
-    /**
-     * @var Sheet
-     */
+    /** @var Sheet */
     public $sheet;
 
-    /**
-     * @var Funnel
-     */
+    /** @var Funnel */
     public $funnel;
 
-    /**
-     * @var AbstractProductsView
-     */
+    /** @var AbstractProductsView */
     public $products;
+
+    /** @var bool */
+    public $canAddParticipant;
 
     /**
      * @param AbstractProductsView $productsView
      * @param Sheet                $sheet
      * @param Funnel               $funnel
      * @param Step                 $currentStep
+     * @param bool                 $canAddParticipant
      */
-    public function __construct(AbstractProductsView $productsView, Sheet $sheet, Funnel $funnel, Step $currentStep)
-    {
+    public function __construct(
+        AbstractProductsView $productsView,
+        Sheet $sheet,
+        Funnel $funnel,
+        Step $currentStep,
+        bool $canAddParticipant = false
+    ) {
         $this->products    = $productsView;
         $this->sheet       = $sheet;
         $this->funnel      = $funnel;
         $this->currentStep = $currentStep;
+        $this->canAddParticipant = $canAddParticipant;
     }
 }

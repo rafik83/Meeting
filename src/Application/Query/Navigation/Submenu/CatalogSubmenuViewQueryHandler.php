@@ -56,7 +56,9 @@ class CatalogSubmenuViewQueryHandler
                 Category::CATALOG_ICON,
                 'navigation.category.catalog',
                 $this->navigationBuilder->getRoute('event_catalog_index', ['sheet' => $query->sheet->getId()]),
-                Route::isCatalog($query->route)
+                Route::isCatalog($query->route),
+                false,
+                true
             );
 
             $buttonViews[] = new SubmenuButtonView(
@@ -65,7 +67,9 @@ class CatalogSubmenuViewQueryHandler
                 $this->navigationBuilder->getRoute('event_meeting_list_request', [
                     'sheet' => $query->sheet->getId(),
                 ]),
-                Route::isMeetingRequest($query->route)
+                Route::isMeetingRequest($query->route),
+                false,
+                true
             );
         }
 

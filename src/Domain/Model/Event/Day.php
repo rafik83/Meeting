@@ -14,7 +14,7 @@ use DateTimeInterface;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Time\TimeRangeInterface;
 
-class Day
+class Day implements TimeRangeInterface
 {
     /**
      * @var int
@@ -108,12 +108,18 @@ class Day
     }
 
     /**
-     * @param TimeRangeInterface $timeRange
-     *
-     * @return bool
+     * @return \DateTimeInterface
      */
-    public function contain(TimeRangeInterface $timeRange)
+    public function getBegin()
     {
-        return $timeRange->getBegin() >= $this->startTime && $timeRange->getEnd() <= $this->endTime;
+        return $this->getStartTime();
+    }
+
+    /**
+     * @return \DateTimeInterface
+     */
+    public function getEnd()
+    {
+        return $this->getEndTime();
     }
 }

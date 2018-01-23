@@ -10,59 +10,30 @@
 
 namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Catalog;
 
-use Proximum\Vimeet\Application\Query\Catalog\SearchFacetViewQuery;
-use Proximum\Vimeet\Application\Query\Catalog\SearchFacetViewQueryHandler;
-use Proximum\Vimeet\Domain\Model\Event;
+use Proximum\Vimeet\Domain\Catalog\SearchFields;
+use Proximum\Vimeet\Domain\Model\Catalog\Internal\CatalogConstant;
+use Proximum\Vimeet\Domain\Model\MeetingSlot;
 use Proximum\Vimeet\Domain\Model\Sheet\Constant;
 use Proximum\Vimeet\Domain\Template\TemplateObject\Nomenclature;
-use Proximum\Vimeet\Domain\View\Catalog\OrganizationCategoryView;
-use Proximum\Vimeet\Domain\View\Catalog\TypeView;
-use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class SearchType extends AbstractType
+class SearchType extends AbstractSearchType
 {
-    const FILTER_ORGANIZATION_CATEGORY = 'organizationCategory';
-    const FILTER_LOCALIZATION          = 'localization';
-    const FILTER_POSITION              = 'position';
-    const FILTER_TYPE                  = 'type';
-    const FILTER_CONTENT               = 'content';
-    const FILTER_OBJECTIVE             = 'objective';
-    const ORDER_BY                     = 'orderBy';
-
-    /**
-     * @var SearchFacetViewQueryHandler
-     */
-    private $searchFacetViewQueryHandler;
-
-    /**
-     * SearchType constructor.
-     *
-     * @param SearchFacetViewQueryHandler $searchFacetViewQueryHandler
-     */
-    public function __construct(SearchFacetViewQueryHandler $searchFacetViewQueryHandler)
-    {
-        $this->searchFacetViewQueryHandler = $searchFacetViewQueryHandler;
-    }
-
     /**
      * {@inheritdoc}
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $typeViews                 = $options['typeViews'];
-        $organizationCategoryViews = $options['organizationCategoryViews'];
-        $positionViews             = $options['positionViews'];
+        parent::buildForm($builder, $options);
 
-        $searchFacetsView = $this->searchFacetViewQueryHandler->handle(
-            new SearchFacetViewQuery($options['event'], $options['locale'])
-        );
+        $locale = $options['locale'];
+        $event  = $options['event'];
 
         $builder
-            ->add(self::ORDER_BY, ChoiceType::class, [
+            ->add(SearchFields::ORDER_BY, ChoiceType::class, [
                 'label'    => 'form.search.orderBy.label',
                 'expanded' => true,
                 'choices'  => [
@@ -70,94 +41,82 @@ class SearchType extends AbstractType
                     'form.search.orderBy.alphabetical'       => Constant::ORDER_BY_ALPHABETICAL,
                     'form.search.orderBy.dateAddedToCatalog' => Constant::ORDER_BY_DATE_ADDED_TO_CATALOG,
                 ],
-            ]);
+            ])
+            ->add(SearchFields::FILTER_OBJECTIVE, ChoiceType::class, [
+                'label'    => 'form.search.objective.label',
+                'expanded' => true,
+                'multiple' => true,
+                'choices'  => [
+                    'form.search.objective.supply' => Nomenclature::OBJECTIVE_SUPPLY,
+                    'form.search.objective.need'   => Nomenclature::OBJECTIVE_NEED,
+                ],
+            ])
+        ;
 
-        // show type facette only if there is more than one filter
-        if (count($typeViews) > 1 && ($typeSearchFacet = $searchFacetsView->hasType()) !== false) {
-            $builder
-                ->add(
-                    self::FILTER_TYPE,
-                    ChoiceType::class,
-                    [
-                        'label'        => $typeSearchFacet->label,
-                        'expanded'     => true,
-                        'multiple'     => true,
-                        'choices'      => $typeViews,
-                        'choice_value' => function (TypeView $typeView) {
-                            return $typeView->id;
-                        },
-                        'choice_label' => function (TypeView $typeView) {
-                            return $typeView->title;
-                        },
-                    ]
+        if ($options['filterByAvailableSlotIds'] === true) {
+            $everyone = CatalogConstant::AVAILABLE_SLOT_IDS_FILTER_EVERYONE;
+            $available = CatalogConstant::AVAILABLE_SLOT_IDS_FILTER_AVAILABLE;
+            $slotFilter = CatalogConstant::AVAILABLE_SLOT_IDS_FILTER_SLOT;
+
+            $everyoneTranslation = $this->translator->trans(
+                sprintf('form.search.availableSlot.choice.%s', $everyone),
+                [],
+                'forms',
+                $locale
+            );
+            $availableTranslation = $this->translator->trans(
+                sprintf('form.search.availableSlot.choice.%s', $available),
+                [],
+                'forms',
+                $locale
+            );
+
+            $filterAvailableChoices = [
+                $everyoneTranslation => $everyone,
+                $availableTranslation => $available,
+            ];
+
+            if ($options['filterBySpecificSlot'] === true && $options['specificSlot'] instanceof MeetingSlot) {
+                $dayFormatter = new \IntlDateFormatter(
+                    $locale,
+                    \IntlDateFormatter::SHORT,
+                    \IntlDateFormatter::NONE,
+                    $event->getTimeZone()
                 );
-        }
+                $hourFormatter = new \IntlDateFormatter(
+                    $locale,
+                    \IntlDateFormatter::NONE,
+                    \IntlDateFormatter::SHORT,
+                    $event->getTimeZone()
+                );
 
-        $builder->add(self::FILTER_OBJECTIVE, ChoiceType::class, [
-            'label'    => 'form.search.objective.label',
-            'expanded' => true,
-            'multiple' => true,
-            'choices'  => [
-                'form.search.objective.supply' => Nomenclature::OBJECTIVE_SUPPLY,
-                'form.search.objective.need'   => Nomenclature::OBJECTIVE_NEED,
-            ],
-        ]);
+                /** @var MeetingSlot $slot */
+                $slot = $options['specificSlot'];
+                $slotTranslation = $this->translator->trans(
+                    sprintf('form.search.availableSlot.choice.%s', $slotFilter),
+                    [
+                        '%day%'  => $dayFormatter->format($slot->getBegin()) ?? '',
+                        '%time%' => $hourFormatter->format($slot->getBegin()) ?? '',
+                    ],
+                    'forms',
+                    $locale
+                );
 
-        if (($organizationCategoryFacet = $searchFacetsView->hasOrganizationCategory()) !== false) {
-            $builder->add(self::FILTER_ORGANIZATION_CATEGORY, ChoiceType::class, [
-                'label'        => $organizationCategoryFacet->label,
-                'choices'      => $organizationCategoryViews,
-                'choice_value' => function (OrganizationCategoryView $organizationCategoryView = null) {
-                    if ($organizationCategoryView !== null) {
-                        return $organizationCategoryView->key;
-                    }
+                $filterAvailableChoices[$slotTranslation] = $slotFilter;
 
-                    return null;
-                },
-                'choice_label' => function (OrganizationCategoryView $organizationCategoryView = null) {
-                    if ($organizationCategoryView !== null) {
-                        return $organizationCategoryView->title;
-                    }
-                    return null;
-                },
-                'required'     => false,
-                'multiple'     => true,
-                'attr' => [
-                    'class'               => 'form-control select2',
-                    'data-disallow-clear' => 'true',
-                    'data-placeholder'    => $organizationCategoryFacet->placeholder,
-                ],
-            ]);
-        }
+                $builder->add(SearchFields::FILTER_BY_SPECIFIC_SLOT, HiddenType::class, [
+                    'data' => $slot->getId(),
+                ]);
+            }
 
-        if (($positionFacet = $searchFacetsView->hasPosition()) !== false) {
-            $builder->add(self::FILTER_POSITION, TagChoiceType::class, [
-                'label'   => $positionFacet->label,
-                'choices' => $positionViews,
-                'attr' => [
-                    'class'            => 'form-control select2',
-                    'data-placeholder' => $positionFacet->placeholder,
-                ],
-            ]);
-        }
-
-        if (($localizationFacet = $searchFacetsView->hasLocalization()) !== false) {
-            $builder->add(self::FILTER_LOCALIZATION, HiddenType::class, [
-                'label'    => $localizationFacet->label,
-                'required' => false,
-                'attr'     => [
-                    'data-placeholder' => $localizationFacet->placeholder,
-                ],
-            ]);
-        }
-
-        if (($keywordFacet = $searchFacetsView->hasKeywords()) !== false) {
-            $builder->add(self::FILTER_CONTENT, HiddenType::class, [
-                'label' => $keywordFacet->label,
-                'attr'  => [
-                    'data-placeholder' => $keywordFacet->placeholder,
-                ],
-            ]);
+            $builder
+                ->add(SearchFields::FILTER_AVAILABLE_SLOT_IDS, ChoiceType::class, [
+                    'choices'  => $filterAvailableChoices,
+                    'expanded' => true,
+                    'multiple' => false,
+                    'label'    => 'form.search.availableSlot.label'
+                ])
+            ;
         }
     }
 
@@ -166,21 +125,12 @@ class SearchType extends AbstractType
      */
     public function configureOptions(OptionsResolver $resolver)
     {
-        $resolver->setRequired([
-            'typeViews',
-            'organizationCategoryViews',
-            'positionViews',
-            'event',
-            'locale',
-        ]);
-
-        $resolver->setAllowedTypes('event', Event::class);
+        parent::configureOptions($resolver);
 
         $resolver->setDefaults([
-            'required'           => false,
-            'method'             => 'GET',
-            'csrf_protection'    => false,
-            'allow_extra_fields' => true,
+            'filterByAvailableSlotIds' => false,
+            'filterBySpecificSlot'     => false,
+            'specificSlot'             => null,
         ]);
     }
 

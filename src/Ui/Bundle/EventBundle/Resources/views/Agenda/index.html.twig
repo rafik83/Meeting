@@ -2,6 +2,8 @@
 
 {% block title 'agenda.title'|trans %}
 
+{% block full_mobile_container 'full-mobile-container' %}
+
 {% block content %}
     {% if tipTranslationViews is defined %}
         {{ include('EventBundle:Tip:tip.html.twig', {tipTranslationViews: tipTranslationViews}) }}
@@ -48,11 +50,13 @@
     <div class="agenda-container">
         <div class="row">
             {% for day in agenda.days %}
-                <div class="col-md-{{ agenda.colSize }} agenda" data-beginHour="{{ day.begin|date('H:i', event.timeZone) }}" data-endHour="{{ day.end|date('H:i', event.timeZone) }}" data-slotDuration="{{ day.getScale }}">
+                <div class="col-md-12 agenda" data-beginHour="{{ day.begin|date('H:i', event.timeZone) }}" data-endHour="{{ day.end|date('H:i', event.timeZone) }}" data-slotDuration="{{ day.getScale }}">
                     <header class="agenda-head">
                         <p>
                             <i class="icon icon-Calendrier"></i>
-                            <span>{{ day.day|localizeddate('full', 'none', app.request.locale, event.timeZone)|capitalize }}</span>
+                            <span class="agenda-date" data-date="{{ day.day|date('d/m/y h:i:s') }}">
+                                {{ day.day|localizeddate('full', 'none', app.request.locale, event.timeZone)|capitalize }}
+                            </span>
                         </p>
                     </header>
                     <div class="meets">
@@ -60,14 +64,27 @@
                             {% for happening in day.happenings %}
                                 {{ include('EventBundle:Agenda:happening.html.twig', {'sheet': agenda.sheet, 'happening': happening, 'isUserAloneParticipant': agenda.isUserAloneParticipant }) }}
                             {% endfor %}
+
                             {% for unavailability in day.unavailabilities %}
                                 {{ include('EventBundle:Agenda:unavailability.html.twig', {'sheetId': agenda.sheet.id, 'unavailability': unavailability, 'participantId': agenda.participant.id }) }}
                             {% endfor %}
+
                             {% for mass in day.masses %}
                                 {{ include('EventBundle:Agenda:mass.html.twig', {'mass': mass }) }}
                             {% endfor %}
+
                             {% for meeting in day.meetings %}
-                                {{ include('EventBundle:Agenda:meeting.html.twig', {'sheetId': agenda.sheet.id, 'meeting': meeting }) }}
+                                {{ include('EventBundle:Agenda:meeting.html.twig', {'sheetId': agenda.sheet.id, 'participantId': agenda.participant.id, 'meeting': meeting }) }}
+                            {% endfor %}
+
+                            {% for availableSlotView in day.availableSlotViews %}
+                                <div class="meet available"
+                                     data-beginHour="{{ availableSlotView.beginHour|date('H:i', event.timeZone) }}"
+                                     data-duration="{{ availableSlotView.duration.format('%H:%I') }}"
+                                     data-slot-id="{{ availableSlotView.id }}"
+                                >
+                                    <header><div class="content"></div></header>
+                                </div>
                             {% endfor %}
                         {% else %}
                             {{ include('EventBundle:Unavailability/CancelAttendance:cancelAttendanceUnavailability.html.twig', {'cancelAttendanceUnavailability': day.cancelAttendanceUnavailabilityView }) }}
@@ -82,7 +99,8 @@
         <div class="pull-right mg-tp mg-bt">
             <a href="{{ path('event_unavailability_create', { 'participant': agenda.participant.id, 'sheet': agenda.participant.sheet.id }) }}" class="btn btn-primary" data-toggle="modal" data-target="#unavailability-modal"><i class="icon-Verouiller_1"></i>{{ 'agenda.unavailability.add'|trans }}</a>
         </div>
-        {{ include('EventBundle:Agenda:modal.html.twig') }}
+        {{ include('EventBundle:Agenda:unavailability-modal.html.twig') }}
+        {{ include('EventBundle:Agenda:send-code-form-modal.html.twig') }}
     {% endif %}
     {{ include('EventBundle:Program/Partials:modal.html.twig', {}, false) }}
 {% endblock %}

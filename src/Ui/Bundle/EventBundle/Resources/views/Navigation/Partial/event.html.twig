@@ -1,14 +1,7 @@
-<div class="header">
+<div class="header {{ not isHeaderDisplayed ? 'hide-on-mobile' : '' }}">
     {% if menuHeaderView.event is defined %}
-        {% if menuHeaderView.event.logo != null %}
-            <a href="{{ path('event') }}">
-                {% if menuHeaderView.event.isSvgLogo %}
-                    <img src="{{ menuHeaderView.event.logo }}" class="logo">
-                {% else %}
-                    <img src="{{ menuHeaderView.event.logo|imagine_filter('event_header_logo') }}" class="logo">
-                {% endif %}
-            </a>
-        {% endif %}
+        {{ include('EventBundle:Navigation/Partial:logo.html.twig') }}
+
         <div class="header__info">
             <div>{{ menuHeaderView.event.description(app.request.locale)|nl2br }}</div>
         </div>
@@ -28,7 +21,7 @@
         {% endif %}
 
         {% if is_granted('ROLE_USER') and menuHeaderView.hasMultipleSheets %}
-            <li class="notifs">
+            <li>
                 <a href="{{ path('event_select_sheet') }}">
                     <i class="icon-Document_1"></i>
                     <span class="name">{{ 'navigation.links.returnToSelectSheet'|trans }}</span>
@@ -61,6 +54,16 @@
                 <i class="icon-Appeler"></i>
             </a>
         </li>
+
+        {% if isShowingRegisterButton %}
+            <li>
+                {% if registrationUrl is defined and registrationUrl is not null %}
+                    <a href="{{ registrationUrl }}">{{ 'register.register'|trans }}</a>
+                {% else %}
+                    <a href="{{ path('event') }}">{{ 'register.register'|trans }}</a>
+                {% endif %}
+            </li>
+        {% endif %}
     </ul>
 </div>
 

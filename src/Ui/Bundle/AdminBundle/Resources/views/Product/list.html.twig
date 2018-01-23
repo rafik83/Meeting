@@ -1,8 +1,8 @@
 {% extends 'AdminBundle::base.html.twig' %}
 
-{% block title %}
-    [{{ event.title }}] {{ 'admin.product.title'|trans }}
-{% endblock %}
+{% import 'AdminBundle::macro.html.twig' as macro %}
+
+{% block title 'admin.product.title'|trans %}
 
 {% block list_title 'admin.product.title'|trans %}
 
@@ -49,9 +49,8 @@
         </tr>
         </thead>
         <tbody>
-        {% for row in products %}
-            {% set bought = row.bought %}
-            {% set product = row[0] %}
+        {% set availabilityCssClass = {'default': 'success', 'warning': 'warning', 'alert': 'danger'} %}
+        {% for product in products %}
             <tr>
                 <td>
                     <i class="glyphicon glyphicon-product-{{ product.type }}"></i>
@@ -66,18 +65,16 @@
                     {% if product.hasIncludedProducts %}
                         <ul>
                             {% for includedProduct in product.includedProducts %}
-                                <li>{{ includedProduct.quantity }} &times; {{ includedProduct.included.name }}</li>
+                                <li>{{ includedProduct.quantity }} &times; {{ includedProduct.name }}</li>
                             {% endfor %}
                         </ul>
                     {% endif %}
                 </td>
                 <td class="text-center">
-                    {% if bought > 0 %}
-                        {% set availabilityStatus = product.getAvailabilityStatus(bought) %}
-                        {% set availabilityCssClass = {'default': 'success', 'warning': 'warning', 'alert': 'danger'} %}
+                    {% if product.bought > 0 %}
                         <a href="{{ path('admin_sheet_order_list', {'event': event.id, 'product': product.id}) }}">
-                            <span class="label label-{{ availabilityCssClass[availabilityStatus] }}">
-                                {{ bought }}
+                            <span class="label label-{{ availabilityCssClass[product.availabilityStatus] }}">
+                                {{ product.bought }}
                             </span>
                         </a>
                     {% endif %}
@@ -98,10 +95,34 @@
                 <td class="text-center">{{ product.buyableUntil ? product.buyableUntil|localizeddate('medium', 'short', app.request.locale, event.timeZone) : '-' }}</td>
                 <td class="text-center">{{ product.updatable ? '✓' : '' }}</td>
                 <td class="text-center">{{ product.deletableUntil ? product.deletableUntil|localizeddate('medium', 'short', app.request.locale, event.timeZone) : '-' }}</td>
-                <td class="text-right">
-                    <a href="{{ path('admin_product_update_' ~ product.type|lower, {'event': event.id, 'product': product.id}) }}" class="btn btn-default btn-sm">
-                        {{ 'admin.product.update.action'|trans }}
-                    </a>
+                <td class="text-right col-md-1">
+                    <div class="btn-group">
+                        <a href="{{ path('admin_product_update_' ~ product.type|lower, {'event': event.id, 'product': product.id}) }}" class="btn btn-default btn-sm">
+                            {{ 'admin.product.update.action'|trans }}
+                        </a>
+                        {% if is_granted('ROLE_ALLOWED_TO_ORGANIZE') %}
+                            <button type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <span class="caret"></span>
+                            </button>
+                            <ul class="dropdown-menu dropdown-menu-right">
+                                {% if product.removable %}
+                                    <li>
+                                        {{ macro.delete_button(
+                                            path('admin_product_remove', { 'event': event.id, 'product': product.id }),
+                                            'admin.product.remove.link'|trans,
+                                            { 'class': 'btn btn-default btn-sm', 'data-confirm': 'admin.product.action.confirmDelete'|trans })
+                                        }}
+                                    </li>
+                                {% else %}
+                                    <li>
+                                        <button class="btn disabled btn-default btn-sm" title="{{ 'admin.product.removeUnAvailable.title'|trans }}">
+                                            {{ 'admin.product.remove.link'|trans }}
+                                        </button>
+                                    </li>
+                                {% endif %}
+                            </ul>
+                        {% endif %}
+                    </div>
                 </td>
             </tr>
         {% else %}

@@ -1,0 +1,25 @@
+<?php
+
+/*
+ * This file is part of the Proximum Vimeet project.
+ *
+ * Copyright (C) Proximum
+ *
+ * @author Elao <contact@elao.com>
+ */
+
+namespace Proximum\Vimeet\Domain\Template\Exception;
+
+use Proximum\Vimeet\Domain\Template\TemplateObject;
+
+class RegistrationTemplateObjectMustHaveAtLeastOneSetterTagException extends RegistrationTemplateException
+{
+    /** @var TemplateObject[] */
+    public $templateObjects = [];
+
+    public function __construct(array $templateObjects)
+    {
+        $this->templateObjects = $templateObjects;
+        parent::__construct('template.registration.templateObjectMustHaveAtLeastOneSetterTag', 422);
+    }
+}

@@ -11,6 +11,7 @@
 namespace Proximum\Vimeet\Application\Query\Agenda\Admin;
 
 use DateTime;
+use PHPUnit\Framework\TestCase;
 use Proximum\Vimeet\Application\Adapter\TranslatorInterface;
 use Proximum\Vimeet\Application\Components\Sheet\SheetInfoGuesser;
 use Proximum\Vimeet\Application\View\Agenda\Admin\MeetingUpdateSpotView;
@@ -28,7 +29,7 @@ use Proximum\Vimeet\Tests\Factory\ParticipantFactory;
 use Proximum\Vimeet\Tests\Factory\SpotFactory;
 use Proximum\Vimeet\Tests\Factory\UserFactory;
 
-class MeetingUpdateSpotViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
+class MeetingUpdateSpotViewQueryHandlerTest extends TestCase
 {
     public function testHandle()
     {

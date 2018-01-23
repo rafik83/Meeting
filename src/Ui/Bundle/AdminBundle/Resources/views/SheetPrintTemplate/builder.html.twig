@@ -1,0 +1,69 @@
+{% extends 'AdminBundle::base.html.twig' %}
+
+{% block title 'admin.template.action.print'|trans %}
+
+{% block body %}
+    {{ include('AdminBundle:Common:menu.html.twig') }}
+
+    <div class="container-fluid template-builder-container"
+         data-print-template-builder="{{ path('admin_template_sheet_print_template_save', { 'template': templateId }) }}"
+    >
+        <div class="template-builder-header">
+            <div class="clear clear-fix clearfix">
+                <h1 class="pull-left">{{ 'admin.template.action.print'|trans }} "{{ templateTitle }}"</h1>
+                <div class="btn-toolbar" role="toolbar" aria-label="Template actions">
+                    <button class="btn btn-success" id="template-save-button" data-loading-button="{{ ('<i class="glyphicon glyphicon-refresh spin"></i> ' ~ ('admin.template.action.updating'|trans))|e }}">{{ 'admin.template.action.save'|trans }}</button>
+                </div>
+            </div>
+            {{ include('AdminBundle::flashes.html.twig') }}
+        </div>
+
+        <div class="template-builder-body">
+            <div class="block" data-config="{}">
+                <span class="delete"></span>
+                <div class="template-container container-fluid block-inner" id="template-container">
+                    {% for uid, item in printValue|default([]) %}
+                        {{ include('AdminBundle:SheetPrintTemplate:blockOrObject.html.twig', { uid: uid, item: item, locale: locale }, false) }}
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+
+        <div class="template-builder-menu" id="template-menu">
+            <button class="btn btn-lg btn-default pull-left slide-menu-button" id="template-menu-button">
+                <i class="glyphicon glyphicon-chevron-left"></i>
+            </button>
+            <div class="template-builder-menu-wrapper">
+                <ul class="nav nav-tabs" role="tablist">
+                    <li role="presentation" class="active">
+                        <a href="#blocks" aria-controls="blocks" role="tab" data-toggle="tab">{{ 'admin.template.blocks'|trans }}</a>
+                    </li>
+                    <li role="presentation">
+                        <a href="#objects" aria-controls="objects" role="tab" data-toggle="tab">{{ 'admin.template.objects'|trans }}</a>
+                    </li>
+                </ul>
+
+                <div class="tab-content">
+                    <div role="tabpanel" class="tab-pane active" id="blocks">
+                        <div id="block-list" class="block-list">
+                            {{ include('AdminBundle:SheetPrintTemplate/Block:8-4.html.twig', { 'locale': locale }, false) }}
+                            {{ include('AdminBundle:SheetPrintTemplate/Block:4-8.html.twig', { 'locale': locale }, false) }}
+                            {{ include('AdminBundle:SheetPrintTemplate/Block:6-6.html.twig', { 'locale': locale }, false) }}
+                            {{ include('AdminBundle:SheetPrintTemplate/Block:12.html.twig', { 'locale': locale }, false) }}
+                        </div>
+                    </div>
+                    <div role="tabpanel" class="tab-pane" id="objects">
+                        <div id="empty-object-list-label" class="alert alert-warning">{{ 'admin.template.objectsListEmpty'|trans }}</div>
+                        {% spaceless %}
+                            <div id="object-list" class="print-object-list">
+                                {% for uid, item in missingObjects|default([]) %}
+                                    {{ include('AdminBundle:SheetPrintTemplate:blockOrObject.html.twig', { uid: uid, item: item, locale: locale }, false) }}
+                                {% endfor %}
+                            </div>
+                        {% endspaceless %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

@@ -24,6 +24,13 @@ class ActivateAccountEvent extends Event
     private $user;
 
     /**
+     * "User invitant"
+     *
+     * @var User
+     */
+    private $fromUser;
+
+    /**
      * @var ProximumEvent
      */
     private $event;
@@ -40,12 +47,14 @@ class ActivateAccountEvent extends Event
 
     /**
      * @param User                 $user
+     * @param User                 $fromUser
      * @param ProximumEvent        $event
      * @param ActivateAccountToken $activateAccountToken
      * @param Sheet                $sheet
      */
     public function __construct(
         User $user,
+        User $fromUser,
         ProximumEvent $event,
         ActivateAccountToken $activateAccountToken,
         Sheet $sheet
@@ -54,12 +63,13 @@ class ActivateAccountEvent extends Event
         $this->event                = $event;
         $this->activateAccountToken = $activateAccountToken;
         $this->sheet                = $sheet;
+        $this->fromUser             = $fromUser;
     }
 
     /**
      * @return User
      */
-    public function getUser()
+    public function getUser(): User
     {
         return $this->user;
     }
@@ -67,7 +77,7 @@ class ActivateAccountEvent extends Event
     /**
      * @return ProximumEvent
      */
-    public function getEvent()
+    public function getEvent(): ProximumEvent
     {
         return $this->event;
     }
@@ -75,7 +85,7 @@ class ActivateAccountEvent extends Event
     /**
      * @return ActivateAccountToken
      */
-    public function getActivateAccountToken()
+    public function getActivateAccountToken(): ActivateAccountToken
     {
         return $this->activateAccountToken;
     }
@@ -83,8 +93,16 @@ class ActivateAccountEvent extends Event
     /**
      * @return Sheet
      */
-    public function getSheet()
+    public function getSheet(): Sheet
     {
         return $this->sheet;
+    }
+
+    /**
+     * @return User
+     */
+    public function getFromUser(): User
+    {
+        return $this->fromUser;
     }
 }

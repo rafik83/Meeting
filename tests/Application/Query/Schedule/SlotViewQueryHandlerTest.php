@@ -9,8 +9,9 @@ use Proximum\Vimeet\Domain\Model\MeetingSlot;
 use Proximum\Vimeet\Domain\Repository\MeetingRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\MeetingSlotRepositoryInterface;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
+use PHPUnit\Framework\TestCase;
 
-class SlotViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
+class SlotViewQueryHandlerTest extends TestCase
 {
     public function testHandle()
     {

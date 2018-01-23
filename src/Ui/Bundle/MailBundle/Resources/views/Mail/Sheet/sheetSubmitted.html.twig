@@ -7,7 +7,7 @@
         '%sheetName%': mail.sheetName,
         '%firstname%': mail.firstname|capitalize,
         '%lastname%': mail.lastname|upper,
-        '%date%': mail.datetime|localizeddate('medium', 'none', mail.locale)
+        '%date%': mail.datetime|localizeddate('medium', 'none', mail.locale, mail.event.timeZone)
     }, 'mail', mail.locale)|html|nl2br }}
 
     <br>

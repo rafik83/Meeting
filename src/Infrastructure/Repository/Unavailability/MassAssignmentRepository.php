@@ -16,6 +16,7 @@ use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\Unavailability\Mass;
 use Proximum\Vimeet\Domain\Model\Unavailability\MassAssignment;
+use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Repository\Unavailability\MassAssignmentRepositoryInterface;
 
 class MassAssignmentRepository implements MassAssignmentRepositoryInterface
@@ -155,15 +156,22 @@ class MassAssignmentRepository implements MassAssignmentRepositoryInterface
      */
     public function findEnabledByParticipant(Participant $participant)
     {
+        return $this->findEnabledByUserAndEvent($participant->getUser(), $participant->getSheet()->getEvent());
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function findEnabledByUserAndEvent(User $user, Event $event)
+    {
         $queryBuilder = $this
             ->entityManager
             ->createQueryBuilder()
-            ->select('assignment, mass, user')
+            ->select('assignment, mass')
             ->from(MassAssignment::class, 'assignment')
-            ->join('assignment.user', 'user', 'WITH', 'user = :user')
-            ->join('assignment.mass', 'mass', 'WITH', 'mass.event = :event AND assignment.enabled = true')
-            ->setParameter('user', $participant->getUser())
-            ->setParameter('event', $participant->getSheet()->getEvent())
+            ->join('assignment.mass', 'mass', 'WITH', 'assignment.user = :user AND mass.event = :event AND assignment.enabled = true')
+            ->setParameter('user', $user)
+            ->setParameter('event', $event)
         ;
 
         return $queryBuilder->getQuery()->getResult();
@@ -186,13 +194,21 @@ class MassAssignmentRepository implements MassAssignmentRepositoryInterface
             $event = $firstParticipant->getSheet()->getEvent();
         }
 
+        return $this->findEnabledByEventAndUsers($event, $users);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function findEnabledByEventAndUsers(Event $event, array $users)
+    {
         $queryBuilder = $this
             ->entityManager
             ->createQueryBuilder()
             ->select('assignment, mass, user')
             ->from(MassAssignment::class, 'assignment')
-            ->join('assignment.user', 'user', 'WITH', 'user IN (:users)')
-            ->join('assignment.mass', 'mass', 'WITH', 'mass.event = :event AND assignment.enabled = true')
+            ->join('assignment.user', 'user', 'WITH', 'user IN (:users) AND assignment.enabled = true')
+            ->join('assignment.mass', 'mass', 'WITH', 'mass.event = :event')
             ->setParameter('event', $event)
             ->setParameter('users', $users);
         ;

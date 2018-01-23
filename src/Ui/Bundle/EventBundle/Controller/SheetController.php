@@ -29,6 +29,7 @@ use Proximum\Vimeet\Ui\Bundle\EventBundle\ParamConverter\EventDomain;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Security\SheetVoter;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Form\Form;
+use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -129,7 +130,10 @@ class SheetController extends Controller
         );
         $tipTranslationViews = $this->get('tactician.commandbus.query')->handle($tipTranslationViewQuery);
 
+        $canAddParticipant = $this->get('Proximum\Vimeet\Domain\Sheet\Participant\AddParticipantChecker')->canAddParticipant($sheet);
+
         return $this->render('EventBundle:Sheet:sheet.html.twig', [
+            'canAddParticipant'       => $canAddParticipant,
             'event'                   => $eventDomain->getEvent(),
             'sheet'                   => $sheet,
             'taggedData'              => $taggedData,
@@ -143,6 +147,7 @@ class SheetController extends Controller
             'isRequestMeetingEnabled' => false,
             'isCatalog'               => false,
             'tipTranslationViews'     => $tipTranslationViews,
+            'isPhoneValidationRequired' => false,
         ]);
     }
 
@@ -213,8 +218,11 @@ class SheetController extends Controller
 
         $isCatalogAllowed = $this->get('domain.key_dates.checker.catalog_access_checker')->allowedToAccess($event);
 
-        // Build sheet template data and attach tagged data view to template object with tags
-        $templateData = $this->get('template.tagged_data_factory')->buildTaggedDataView($sheetToDisplay, $locale);
+        // Build print template data and attach tagged data view to template object with tags
+        $templateData = $this->get('template.tagged_data_factory')->buildTaggedDataViewForPrint(
+            $sheetToDisplay,
+            $locale
+        );
 
         list ($nomenclatures, $participants, $taggedData) = $this->get('sheet.infos_helper')->getInfos(
             $sheetToDisplay,
@@ -290,7 +298,7 @@ class SheetController extends Controller
      * @param string                  $locale
      * @param string                  $key
      *
-     * @return Form
+     * @return FormInterface
      */
     private function createObjectForm(Template\TemplateObject $object, $locale, $key)
     {
@@ -365,6 +373,11 @@ class SheetController extends Controller
         $object->setBuyableProducts($products);
         $object->setSheet($sheet);
 
+        $templateObjectView = $this
+            ->get('tactician.commandbus')
+            ->handle(new TemplateObjectViewQuery($sheet, $locale, $key))
+        ;
+
         $form = $this->createObjectForm($object, $locale, $key);
 
         // Handle the form, update the object and redirect to the sheet if valid
@@ -414,7 +427,10 @@ class SheetController extends Controller
             ? 'EventBundle:Sheet:nomenclatures.html.twig'
             : 'EventBundle:Sheet:sheet.html.twig';
 
+        $canAddParticipant = $this->get('Proximum\Vimeet\Domain\Sheet\Participant\AddParticipantChecker')->canAddParticipant($sheet);
+
         return $this->render($twig, [
+            'canAddParticipant'       => $canAddParticipant,
             'event'                   => $eventDomain->getEvent(),
             'form'                    => $form->createView(),
             'label'                   => $label,
@@ -432,6 +448,8 @@ class SheetController extends Controller
             'isRequestMeetingEnabled' => false,
             'isCatalog'               => false,
             'tipTranslationViews'     => $tipTranslationViews,
+            'templateObjectView'      => $templateObjectView,
+            'isPhoneValidationRequired' => false,
         ]);
     }
 

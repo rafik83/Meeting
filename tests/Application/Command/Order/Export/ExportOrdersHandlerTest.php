@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Tests\Application\Command\Order\Export;
 
+use PHPUnit\Framework\TestCase;
 use Proximum\Vimeet\Application\Adapter\MailerInterface;
 use Proximum\Vimeet\Application\Adapter\SerializerAdapterInterface;
 use Proximum\Vimeet\Application\Command\Order\Export\ExportOrders;
@@ -25,7 +26,7 @@ use Proximum\Vimeet\Domain\Repository\FileRepositoryInterface;
 use Proximum\Vimeet\Infrastructure\Adapter\LocalFileStorageAdapter;
 use Proximum\Vimeet\Ui\Bundle\MailBundle\Mail\Command\ExportOrdersMail;
 
-class ExportOrdersHandlerTest extends \PHPUnit_Framework_TestCase
+class ExportOrdersHandlerTest extends TestCase
 {
     public function testHandle()
     {
@@ -48,8 +49,8 @@ class ExportOrdersHandlerTest extends \PHPUnit_Framework_TestCase
         $eventRepository->getById(1234)->shouldBeCalled()->willReturn($event->reveal());
         $queryHandler->handle(new OrdersExportViewQuery($event->reveal(), 'fr'))->shouldBeCalled()->willReturn($view->reveal());
         $serializer->serialize($view->reveal(), 'csv', [
-            'delimiters' => ';',
-            'charset'    => Charset::WINDOWS_1252,
+            'csv_delimiter' => ';',
+            'charset' => Charset::WINDOWS_1252,
         ])->shouldBeCalled()->willReturn($data);
 
         $fileStorageAdapter->create(

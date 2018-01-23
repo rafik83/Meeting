@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2015 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -18,6 +18,7 @@ use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Product\ProductChoiceType;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\TranslationsType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
+use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -38,12 +39,19 @@ class ParticipantAndPlanningType extends AbstractType
                 'locales'    => $options['event']->getLocales(),
                 'required'   => false,
             ])
-            ->add('participant', ProductChoiceType::class, [
+            ->add('maxParticipant', IntegerType::class, [
+                'attr'     => [
+                    'min'  => 1,
+                ],
+                'help'     => 'form.package_update.children.participantAndPlanning.children.maxParticipant.help',
+                'required' => false,
+            ])
+            ->add('participants', ProductCollectionType::class, [
                 'event'            => $options['event'],
                 'locale'           => $options['locale'],
-                'repositoryMethod' => function (ProductRepositoryInterface $productRepository) use ($options) {
-                    return $productRepository->findByEventAndTypes($options['event'], [Product::TYPE_PARTICIPANT]);
-                },
+                'product_types'    => [Product::TYPE_PARTICIPANT],
+                'collection_group' => 'participants',
+                'error_bubbling'   => false,
                 'required'         => true,
             ])
             ->add('planning', ProductChoiceType::class, [
@@ -52,7 +60,7 @@ class ParticipantAndPlanningType extends AbstractType
                 'repositoryMethod' => function (ProductRepositoryInterface $productRepository) use ($options) {
                     return $productRepository->findByEventAndTypes($options['event'], [Product::TYPE_PLANNING]);
                 },
-                'required'         => false,
+                'required' => false,
             ])
         ;
     }

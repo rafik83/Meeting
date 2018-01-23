@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Tests\Application\Command\Event\Find;
 
+use PHPUnit\Framework\TestCase;
 use Proximum\Vimeet\Application\Command\Event\Find\Find;
 use Proximum\Vimeet\Application\Command\Event\Find\FindHandler;
 use Proximum\Vimeet\Application\Command\Order\FindHandler as OrderFindHandler;
@@ -22,7 +23,7 @@ use Proximum\Vimeet\Application\Exception\Event\InvalidFindException;
 use Proximum\Vimeet\Domain\Model\Admin;
 use Proximum\Vimeet\Domain\Model\Sheet;
 
-class FindHandlerTest extends \PHPUnit_Framework_TestCase
+class FindHandlerTest extends TestCase
 {
     public function testHandleException()
     {

@@ -8,6 +8,7 @@ var _ = require('lodash'),
     meetingUpdateModal = require('./modal/MeetingUpdateModal'),
     massAssignmentModal = require('./modal/massAssignmentModal'),
     updateParticipantModal = require('./modal/updateParticipantModal'),
+    userAgendaVersionModal = require('./modal/agendaVersionModal'),
     sortModal = require('./modal/sortModal'),
     eventDispatcher = require('../../vueComponents/EventDispatcher'),
     AgendaApiEndpoints = require('../../components/_AgendaApiEndpoints'),
@@ -30,7 +31,8 @@ module.exports = {
         'update-participant-modal': updateParticipantModal,
         'MeetingUpdateModal': meetingUpdateModal,
         'mass-assignment-modal': massAssignmentModal,
-        'sort-modal': sortModal
+        'sort-modal': sortModal,
+        'agenda-version-modal': userAgendaVersionModal,
     },
 
     data: function () {

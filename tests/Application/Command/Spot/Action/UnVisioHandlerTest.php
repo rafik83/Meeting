@@ -15,8 +15,9 @@ use Proximum\Vimeet\Application\Command\Spot\Action\UnVisioHandler;
 use Proximum\Vimeet\Domain\Model\Spot;
 use Proximum\Vimeet\Domain\Repository\SpotRepositoryInterface;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
+use PHPUnit\Framework\TestCase;
 
-class UnVisioHandlerTest extends \PHPUnit_Framework_TestCase
+class UnVisioHandlerTest extends TestCase
 {
     public function testHandle()
     {

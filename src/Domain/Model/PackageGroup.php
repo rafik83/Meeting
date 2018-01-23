@@ -176,7 +176,7 @@ class PackageGroup
         // Add new option
         foreach (array_values($options) as $rank => $option) {
             if (!$this->hasOption($option)) {
-                $this->optionRanks->add(new PackageOptionRank($this, $option, $rank));
+                $this->optionRanks->set($rank, new PackageOptionRank($this, $option, $rank));
             }
         }
 

@@ -41,7 +41,7 @@ class Nomenclature
     private $sort = true;
 
     /**
-     * @var Event
+     * @var Event|null
      */
     private $event;
 
@@ -206,7 +206,7 @@ class Nomenclature
         return array_map(function ($key, $item) use ($sort) {
             return new NomenclatureItem(
                 $key,
-                isset($item['label']) ? $item['label'] : '',
+                isset($item['label']) ? $item['label'] : [],
                 isset($item['children']) ? self::items($item['children'], $sort) : [],
                 $sort
             );
@@ -424,9 +424,9 @@ class Nomenclature
     /**
      * Get event
      *
-     * @return Event
+     * @return Event|null
      */
-    public function getEvent()
+    public function getEvent(): ?Event
     {
         return $this->event;
     }
@@ -436,7 +436,7 @@ class Nomenclature
      *
      * @return Nomenclature
      */
-    public function getOriginal()
+    public function getOriginal(): ?Nomenclature
     {
         return $this->original;
     }

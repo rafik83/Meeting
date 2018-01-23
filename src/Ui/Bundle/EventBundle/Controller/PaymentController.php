@@ -14,10 +14,12 @@ use Proximum\Vimeet\Application\Command\Order\Create;
 use Proximum\Vimeet\Application\Command\Payment\Choice;
 use Proximum\Vimeet\Application\Command\Payment\ChoiceWithDeposit;
 use Proximum\Vimeet\Application\Exception\Payment\DepositNotAvailableException;
+use Proximum\Vimeet\Application\Query\Payment\PaymentConditionsViewQuery;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\Transaction;
 use Proximum\Vimeet\Domain\Money\AmountFormatter;
 use Proximum\Vimeet\Domain\Payment\DepositApplicable;
+use Proximum\Vimeet\Domain\Payment\Mode;
 use Proximum\Vimeet\Infrastructure\Payum\Paypal\CapturePayment;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Payment\PaymentChoiceType;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Payment\PaymentChoiceWithDepositType;
@@ -57,6 +59,7 @@ class PaymentController extends Controller
         }
 
         $now   = new \DateTime();
+        $this->get('cart_cleaner')->handle($sheet);
         $total = $this->get('payment.total_to_pay')->getTotal($sheet);
 
         // If nothing to pay, create the order
@@ -69,8 +72,12 @@ class PaymentController extends Controller
             ]);
         }
 
-        $depositAllowed = DepositApplicable::isApplicable($eventDomain->getEvent(), $now, $total);
-        $deposit        = DepositApplicable::calculateDeposit($eventDomain->getEvent(), $now, $total);
+        $paymentConditionsView = $this
+            ->get('Proximum\Vimeet\Infrastructure\Adapter\QueryBus')
+            ->handle(new PaymentConditionsViewQuery($sheet))
+        ;
+        $depositAllowed = DepositApplicable::isApplicable($paymentConditionsView, $now, $total);
+        $deposit        = DepositApplicable::calculateDeposit($paymentConditionsView, $now, $total);
 
         //Create order from cart and redirect if total payment is negative or zero
         if ($total <= 0) {
@@ -84,12 +91,12 @@ class PaymentController extends Controller
         if ($depositAllowed) {
             $paymentChoice = new ChoiceWithDeposit($sheet, $this->getUser());
             $form          = $this->createForm(PaymentChoiceWithDepositType::class, $paymentChoice, [
-                'event' => $eventDomain->getEvent(),
+                'paymentConditionsView' => $paymentConditionsView,
             ]);
         } else {
             $paymentChoice = new Choice($sheet, $this->getUser());
             $form          = $this->createForm(PaymentChoiceType::class, $paymentChoice, [
-                'event' => $eventDomain->getEvent(),
+                'paymentConditionsView' => $paymentConditionsView,
             ]);
         }
 
@@ -138,6 +145,14 @@ class PaymentController extends Controller
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
         $this->denyAccessUnlessGranted(SheetVoter::EDIT, $sheet);
+        $paymentConditionsView = $this
+            ->get('Proximum\Vimeet\Infrastructure\Adapter\QueryBus')
+            ->handle(new PaymentConditionsViewQuery($sheet))
+        ;
+
+        if (!in_array(Mode::PAYMENT_PAYPAL, $paymentConditionsView->paymentModes, true)) {
+            throw $this->createAccessDeniedException('Paypal is not accessible for this sheet');
+        }
 
         $remainingToPay = $this->get('order.balance')->getRemainingToPay($sheet);
 

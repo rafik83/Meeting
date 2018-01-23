@@ -36,7 +36,7 @@ class AccountController extends Controller
      *
      * @return RedirectResponse|Response
      */
-    public function updateEmailAction(Request $request, EventDomain $eventDomain, Sheet $sheet, UserInterface $user)
+    public function updateEmailAction(Request $request, EventDomain $eventDomain, Sheet $sheet, UserInterface $user = null)
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
         $this->denyAccessUnlessGranted(SheetVoter::EDIT, $sheet);

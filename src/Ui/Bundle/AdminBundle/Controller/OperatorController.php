@@ -22,6 +22,7 @@ use Symfony\Component\Form\Form;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 class OperatorController extends Controller
 {
@@ -119,12 +120,14 @@ class OperatorController extends Controller
             throw $this->createAccessDeniedException('Only operator can be updated with this page');
         }
 
-        $update = new Update($operator);
+        $eventsAllowedByAdmin = $this->getUser()->getEvents()->toArray();
+
+        $update = new Update($operator, $eventsAllowedByAdmin);
         $form   = $this->createForm(UpdateType::class, $update, [
             'action' => $this->generateUrl('admin_update_operator', ['operator' => $operator->getId()]),
             'method' => 'POST',
             'submit' => true,
-            'events' => $this->getUser()->getEvents(),
+            'events' => $eventsAllowedByAdmin,
         ]);
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {

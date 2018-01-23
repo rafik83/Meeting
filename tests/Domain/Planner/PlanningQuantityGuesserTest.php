@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Tests\Domain\Planner;
 
+use PHPUnit\Framework\TestCase;
 use Proximum\Vimeet\Domain\Model\Order;
 use Proximum\Vimeet\Domain\Model\Package;
 use Proximum\Vimeet\Domain\Model\Product;
@@ -20,7 +21,7 @@ use Proximum\Vimeet\Tests\Factory\EventFactory;
 use Proximum\Vimeet\Tests\Factory\ParticipantFactory;
 use Proximum\Vimeet\Tests\Factory\SheetFactory;
 
-class PlanningQuantityGuesserTest extends \PHPUnit_Framework_TestCase
+class PlanningQuantityGuesserTest extends TestCase
 {
     /**
      * Prophecy of Order Merger

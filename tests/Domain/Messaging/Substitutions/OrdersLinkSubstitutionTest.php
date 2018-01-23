@@ -15,8 +15,9 @@ use Proximum\Vimeet\Domain\Model\Event\EventUrlGeneratorInterface;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
 use Proximum\Vimeet\Tests\Factory\SheetFactory;
+use PHPUnit\Framework\TestCase;
 
-class OrdersLinkSubstitutionTest extends \PHPUnit_Framework_TestCase
+class OrdersLinkSubstitutionTest extends TestCase
 {
     public function testSubstitute()
     {

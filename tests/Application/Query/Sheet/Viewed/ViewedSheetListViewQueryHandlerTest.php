@@ -16,8 +16,9 @@ use Proximum\Vimeet\Domain\Model\Sheet\SheetViewed;
 use Proximum\Vimeet\Domain\Repository\Sheet\SheetViewedRepositoryInterface;
 use Proximum\Vimeet\Tests\Factory\SheetFactory;
 use Proximum\Vimeet\Tests\Factory\UserFactory;
+use PHPUnit\Framework\TestCase;
 
-class ViewedSheetListViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
+class ViewedSheetListViewQueryHandlerTest extends TestCase
 {
     public function testHandle()
     {

@@ -20,8 +20,9 @@ use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Navigation\NavigationBuilderInterface;
 use Proximum\Vimeet\Domain\Repository\CartRowRepositoryInterface;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
+use PHPUnit\Framework\TestCase;
 
-class PackageSubmenuButtonViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
+class PackageSubmenuButtonViewQueryHandlerTest extends TestCase
 {
     public function testHandle()
     {

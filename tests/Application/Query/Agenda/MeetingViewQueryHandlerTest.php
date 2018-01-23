@@ -10,7 +10,9 @@
 
 namespace Proximum\Vimeet\Tests\Application\Query\Agenda;
 
+use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
+use Proximum\Vimeet\Application\Components\Security\VideoMeetingAccess;
 use Proximum\Vimeet\Application\Query\Agenda\Meeting\MeetingParticipantViewQuery;
 use Proximum\Vimeet\Application\Query\Agenda\Meeting\MeetingParticipantViewQueryHandler;
 use Proximum\Vimeet\Application\Query\Agenda\MeetingViewQuery;
@@ -30,12 +32,12 @@ use Proximum\Vimeet\Domain\Repository\RuleRepositoryInterface;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
 use Proximum\Vimeet\Tests\Factory\UserFactory;
 
-class MeetingViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
+class MeetingViewQueryHandlerTest extends TestCase
 {
     public function testHandleFrom()
     {
         $event        = EventFactory::createEvent();
-        $event->getConfiguration()->setColors('leftColor', 'rightColor', 'textColor');
+        $event->getConfiguration()->setColors('leftColor', 'rightColor', 'textColor', 'backgroundColor');
         $user         = UserFactory::create();
         $type         = new Type($event);
 
@@ -44,9 +46,6 @@ class MeetingViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
 
         $sheet->getType()->willReturn($type);
         $sheetMet->getType()->willReturn($type);
-
-        $sheet->hasUser($user)->shouldBeCalled()->willReturn(true);
-        $sheetMet->hasUser($user)->willReturn(false);
 
         $sheetMet->getId()->willReturn(2);
 
@@ -63,17 +62,21 @@ class MeetingViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
         $rule         = new Rule($event, $type, $type, [], 1);
         $cardView     = new CardView(1, false, 'firstName1', 'lastName1', 'position1', 'avatar1', false, 2);
         $cardView2    = new CardView(2, false, 'firstName2', 'lastName2', 'position2', 'avatar2', false, 2);
-        $meeting      = new Meeting(
-            $request,
-            $slot,
-            $sheet->reveal(),
-            [],
-            $sheetMet->reveal(),
-            [$participant->reveal(), $participant2->reveal()],
-            new \DateTime(),
-            $spot,
-            $event
-        );
+
+        $meeting = $this->prophesize(Meeting::class);
+        $meeting->getId()->willReturn(1);
+        $meeting->getRequest()->willReturn($request);
+        $meeting->getSlot()->willReturn($slot);
+        $meeting->getFromSheet()->willReturn($sheet->reveal());
+        $meeting->getFromParticipants()->willReturn([]);
+        $meeting->getToSheet()->willReturn($sheetMet->reveal());
+        $meeting->getToParticipants()->willReturn([$participant->reveal(), $participant2->reveal()]);
+        $meeting->getCreatedAt()->willReturn(new \DateTime());
+        $meeting->getSpot()->willReturn($spot);
+        $meeting->getEvent()->willReturn($event);
+        $meeting->getSheetOfUser($user)->willReturn($sheet);
+        $meeting->getSheetMet($sheet)->willReturn($sheetMet->reveal());
+        $meeting->getParticipants($sheetMet->reveal())->willReturn([$participant->reveal(), $participant2->reveal()]);
 
         $participantView1 = new MeetingParticipantView($cardView);
         $participantView2 = new MeetingParticipantView($cardView2);
@@ -81,6 +84,8 @@ class MeetingViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
 
         $participantHandler = $this->prophesize(MeetingParticipantViewQueryHandler::class);
         $ruleRepository     = $this->prophesize(RuleRepositoryInterface::class);
+        $videoMeetingAccess = $this->prophesize(VideoMeetingAccess::class);
+
         $participantHandler
             ->handle(new MeetingParticipantViewQuery($participant->reveal(), [$rule], 'fr'))
             ->shouldBeCalled()
@@ -89,15 +94,20 @@ class MeetingViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
             ->handle(new MeetingParticipantViewQuery($participant2->reveal(), [$rule], 'fr'))
             ->shouldBeCalled()
             ->willReturn($participantView2);
+
         $ruleRepository->getBySeerTypeAndSeeableType($type, $type)->shouldBeCalled()->willReturn([$rule]);
+
+        $videoMeetingAccess->allowedToAccess($meeting)->shouldBeCalled()->willReturn(false);
 
         $meetingHandler = new MeetingViewQueryHandler(
             $participantHandler->reveal(),
-            $ruleRepository->reveal()
+            $ruleRepository->reveal(),
+            $videoMeetingAccess->reveal()
         );
 
-        $result   = $meetingHandler->handle(new MeetingViewQuery($meeting, $sheet->reveal(), true, $user, $event, 'fr'));
+        $result   = $meetingHandler->handle(new MeetingViewQuery($meeting->reveal(), $sheet->reveal(), true, $user, $event, 'fr'));
         $expected = new MeetingView(
+            1,
             'userSheetTitle',
             2,
             'sheetMetTitle',
@@ -118,16 +128,13 @@ class MeetingViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
     public function testHandleTo()
     {
         $event        = EventFactory::createEvent();
-        $event->getConfiguration()->setColors('leftColor', 'rightColor', 'textColor');
+        $event->getConfiguration()->setColors('leftColor', 'rightColor', 'textColor', 'backgroundColor');
         $user         = UserFactory::create();
         $type         = new Type($event);
         $sheet    = $this->prophesize(Sheet::class);
         $sheetMet = $this->prophesize(Sheet::class);
         $sheet->getType()->willReturn($type);
         $sheetMet->getType()->willReturn($type);
-
-        $sheetMet->hasUser($user)->shouldBeCalled()->willReturn(false);
-        $sheet->hasUser($user)->shouldBeCalled()->willReturn(true);
 
         $sheetMet->getId()->willReturn(1);
 
@@ -145,17 +152,21 @@ class MeetingViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
         $rule         = new Rule($event, $type, $type, [], 1);
         $cardView     = new CardView(1, false, 'firstName1', 'lastName1', 'position1', 'avatar1', false, 2);
         $cardView2    = new CardView(2, false, 'firstName2', 'lastName2', 'position2', 'avatar2', false, 2);
-        $meeting      = new Meeting(
-            $request,
-            $slot,
-            $sheetMet->reveal(),
-            [$participant->reveal(), $participant2->reveal()],
-            $sheet->reveal(),
-            [],
-            new \DateTime(),
-            $spot,
-            $event
-        );
+
+        $meeting = $this->prophesize(Meeting::class);
+        $meeting->getId()->willReturn(1);
+        $meeting->getRequest()->willReturn($request);
+        $meeting->getSlot()->willReturn($slot);
+        $meeting->getFromSheet()->willReturn($sheet->reveal());
+        $meeting->getFromParticipants()->willReturn([]);
+        $meeting->getToSheet()->willReturn($sheetMet->reveal());
+        $meeting->getToParticipants()->willReturn([$participant->reveal(), $participant2->reveal()]);
+        $meeting->getCreatedAt()->willReturn(new \DateTime());
+        $meeting->getSpot()->willReturn($spot);
+        $meeting->getEvent()->willReturn($event);
+        $meeting->getSheetOfUser($user)->willReturn($sheet);
+        $meeting->getSheetMet($sheet)->willReturn($sheetMet->reveal());
+        $meeting->getParticipants($sheetMet->reveal())->willReturn([$participant->reveal(), $participant2->reveal()]);
 
         $participantView1 = new MeetingParticipantView($cardView);
         $participantView2 = new MeetingParticipantView($cardView2);
@@ -166,6 +177,8 @@ class MeetingViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
 
         $participantHandler = $this->prophesize(MeetingParticipantViewQueryHandler::class);
         $ruleRepository     = $this->prophesize(RuleRepositoryInterface::class);
+        $videoMeetingAccess = $this->prophesize(VideoMeetingAccess::class);
+
         $participantHandler
             ->handle($participantViewQuery1)
             ->shouldBeCalled()
@@ -176,13 +189,17 @@ class MeetingViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
             ->willReturn($participantView2);
         $ruleRepository->getBySeerTypeAndSeeableType($type, $type)->shouldBeCalled()->willReturn([$rule]);
 
+        $videoMeetingAccess->allowedToAccess($meeting)->shouldBeCalled()->willReturn(false);
+
         $meetingHandler = new MeetingViewQueryHandler(
             $participantHandler->reveal(),
-            $ruleRepository->reveal()
+            $ruleRepository->reveal(),
+            $videoMeetingAccess->reveal()
         );
 
-        $result   = $meetingHandler->handle(new MeetingViewQuery($meeting, $sheet->reveal(), true, $user, $event, 'fr'));
+        $result   = $meetingHandler->handle(new MeetingViewQuery($meeting->reveal(), $sheet->reveal(), true, $user, $event, 'fr'));
         $expected = new MeetingView(
+            1,
             'userSheetTitle',
             1,
             'sheetMetTitle',

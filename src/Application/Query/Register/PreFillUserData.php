@@ -1,0 +1,52 @@
+<?php
+
+/*
+ * This file is part of the vimeet project.
+ *
+ * Copyright (C) 2017 vimeet
+ *
+ * @author Elao <contact@elao.com>
+ */
+
+namespace Proximum\Vimeet\Application\Query\Register;
+
+use Proximum\Vimeet\Domain\Model\Event;
+use Proximum\Vimeet\Domain\Model\User;
+use Proximum\Vimeet\Domain\Template\TemplateData;
+
+class PreFillUserData
+{
+    /**
+     * @var User
+     */
+    public $user;
+
+    /**
+     * @var Event
+     */
+    public $event;
+
+    /**
+     * @var TemplateData
+     */
+    public $templateData;
+
+    /**
+     * @var string
+     */
+    public $locale;
+
+    /**
+     * @param User $user
+     * @param Event $event
+     * @param TemplateData $templateData
+     * @param string $locale
+     */
+    public function __construct(User $user, Event $event, TemplateData $templateData, string $locale)
+    {
+        $this->user = $user;
+        $this->event = $event;
+        $this->templateData = $templateData;
+        $this->locale = $locale;
+    }
+}

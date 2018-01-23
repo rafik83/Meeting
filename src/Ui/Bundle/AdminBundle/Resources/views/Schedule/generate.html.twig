@@ -1,7 +1,22 @@
 {% extends 'AdminBundle::base.html.twig' %}
 
+{% block title 'admin.schedule.slots.generate.title'|trans %}
+
 {% block content %}
-    <h1>{{ 'admin.schedule.slots.generate.title'|trans }}</h1>
+    <h1 class="page-header">{{ 'admin.schedule.slots.generate.title'|trans }}</h1>
+
+    <div class="well">
+        {{ 'admin.schedule.slots.generate.eventDay'|trans }}
+        <ul>
+            {% for day in days %}
+                <li>
+                    {{ day.startTime|localizeddate('short', 'none', app.request.locale, event.timeZone)}}:
+                    {{ day.startTime|localizeddate('none', 'short', app.request.locale, event.timeZone)}} -
+                    {{ day.endTime|localizeddate('none', 'short', app.request.locale, event.timeZone)}}
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
 
     {{ form_start(form, { 'attr': { 'class': 'with-submit-section' } }) }}
         {{ form_errors(form) }}

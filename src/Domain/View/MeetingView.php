@@ -53,6 +53,11 @@ class MeetingView
     public $sheetToId;
 
     /**
+     * @var bool
+     */
+    public $isCreatedByParticipants;
+
+    /**
      * @param int                $id
      * @param int                $sheetFromId
      * @param int                $sheetToId
@@ -61,24 +66,27 @@ class MeetingView
      * @param \DateTimeInterface $createdAt
      * @param \DateTimeInterface $slotBegin
      * @param \DateTimeInterface $slotEnd
+     * @param bool               $isCreatedByParticipants
      */
     public function __construct(
-        $id,
-        $sheetFromId,
-        $sheetToId,
-        $sheetNameFrom,
-        $sheetNameTo,
+        int $id,
+        int $sheetFromId,
+        int $sheetToId,
+        string $sheetNameFrom,
+        string $sheetNameTo,
         \DateTimeInterface $createdAt,
         \DateTimeInterface $slotBegin,
-        \DateTimeInterface $slotEnd
+        \DateTimeInterface $slotEnd,
+        bool $isCreatedByParticipants
     ) {
-        $this->id            = $id;
-        $this->sheetFromId   = $sheetFromId;
-        $this->sheetToId     = $sheetToId;
-        $this->sheetNameFrom = $sheetNameFrom;
-        $this->sheetNameTo   = $sheetNameTo;
-        $this->createdAt     = $createdAt;
-        $this->slotBegin     = $slotBegin;
-        $this->slotEnd       = $slotEnd;
+        $this->id                      = $id;
+        $this->sheetFromId             = $sheetFromId;
+        $this->sheetToId               = $sheetToId;
+        $this->sheetNameFrom           = $sheetNameFrom;
+        $this->sheetNameTo             = $sheetNameTo;
+        $this->createdAt               = $createdAt;
+        $this->slotBegin               = $slotBegin;
+        $this->slotEnd                 = $slotEnd;
+        $this->isCreatedByParticipants = $isCreatedByParticipants;
     }
 }

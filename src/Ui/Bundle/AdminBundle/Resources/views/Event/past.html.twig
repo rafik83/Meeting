@@ -1,0 +1,11 @@
+{% extends 'AdminBundle::base.html.twig' %}
+
+{% block title 'admin.event.list.pasts.title'|trans %}
+
+{% block content %}
+    <div id="eventList" style="margin-bottom: 600px;">
+        {{ include('AdminBundle::Event/createEventLink.html.twig') }}
+        <h1 class="content-header">{{ 'admin.event.list.pasts.title'|trans }}</h1>
+        {% include 'AdminBundle:Event:list.html.twig' %}
+    </div>
+{% endblock %}

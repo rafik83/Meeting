@@ -12,8 +12,9 @@ use Proximum\Vimeet\Domain\Package\Specification\VatApplicable;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
 use Proximum\Vimeet\Tests\Factory\ParticipantFactory;
 use Proximum\Vimeet\Tests\Factory\SheetFactory;
+use PHPUnit\Framework\TestCase;
 
-class IncludedProductGuesserTest extends \PHPUnit_Framework_TestCase
+class IncludedProductGuesserTest extends TestCase
 {
     public function testGetIncludedProductIds()
     {

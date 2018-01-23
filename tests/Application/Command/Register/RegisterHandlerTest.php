@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Tests\Application\Command\User;
 
+use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
 use Proximum\Vimeet\Application\Adapter\PasswordEncoderInterface;
 use Proximum\Vimeet\Application\Adapter\SaltGeneratorInterface;
@@ -25,7 +26,7 @@ use Proximum\Vimeet\Domain\View\TypeView;
 use Proximum\Vimeet\Infrastructure\Adapter\DelayedEventDispatcher;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
 
-class RegisterHandlerTest extends \PHPUnit_Framework_TestCase
+class RegisterHandlerTest extends TestCase
 {
     public function testHandle()
     {

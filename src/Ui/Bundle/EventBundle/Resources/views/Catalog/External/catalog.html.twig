@@ -1,0 +1,30 @@
+{{ include('EventBundle::Catalog/External/search.html.twig', {
+    searchForm: searchForm,
+    typeViews: typeViews,
+    categoryViews: categoryViews
+}, false) }}
+
+<div class="catalog__filters">
+    <div class="select-all">
+        <span class="total-result">({{ paginatedResult.total }})</span>
+    </div>
+</div>
+
+<div class="catalog__list catalog__list--block">
+    {{ include('EventBundle::Catalog/External/list.html.twig', {
+        paginatedResult: paginatedResult,
+        page: page,
+    }, false) }}
+</div>
+
+{% if seeMoreButton %}
+    <div class="col-md-12 text-center see-more-align" >
+        <div class="btn btn-primary see-more" data-page="{{ paginatedResult.page }}">{{ 'catalog.seeMore'|trans }}</div>
+    </div>
+{% endif %}
+
+{{ include('EventBundle:Catalog:Partial/Mobile/search.html.twig', {
+    searchForm: searchForm,
+    typeViews: typeViews,
+    categoryViews: categoryViews
+}, false) }}

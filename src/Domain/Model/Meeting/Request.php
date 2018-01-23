@@ -12,6 +12,7 @@ namespace Proximum\Vimeet\Domain\Model\Meeting;
 
 use DateTimeInterface;
 use Doctrine\Common\Collections\ArrayCollection;
+use Proximum\Vimeet\Domain\Exception\Meeting\NoSheetForUserException;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Meeting;
 use Proximum\Vimeet\Domain\Model\MeetingSlot;
@@ -24,6 +25,7 @@ class Request implements MessageSubjectInterface
     const STATE_SENT     = 'sent';
     const STATE_APPROVED = 'approved';
     const STATE_REFUSED  = 'refused';
+    const STATE_PLANNED  = 'planned';
 
     const TYPE_REQUEST     = 'request';
     const TYPE_PROPOSITION = 'proposition';
@@ -540,6 +542,25 @@ class Request implements MessageSubjectInterface
         }
 
         throw new \InvalidArgumentException('Sheet not concerned by this meeting request');
+    }
+
+    /**
+     * @param User $user
+     *
+     * @return Sheet
+     * @throws NoSheetForUserException
+     */
+    public function getSheetOfUser(User $user)
+    {
+        if ($this->from->hasUser($user)) {
+            return $this->from;
+        }
+
+        if ($this->to->hasUser($user)) {
+            return $this->to;
+        }
+
+        throw new NoSheetForUserException();
     }
 
     /**

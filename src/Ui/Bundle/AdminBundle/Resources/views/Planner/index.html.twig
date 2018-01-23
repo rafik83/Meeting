@@ -1,37 +1,179 @@
 {% extends 'AdminBundle::base.html.twig' %}
 
-{% block title %}
-[{{ event.title }}] {{ 'admin.planner.index'|trans }}
-{% endblock %}
+{% block title 'admin.planner.index'|trans %}
 
 {% block content %}
-    <h1>{{ 'admin.planner.index'|trans }}</h1>
-    <hr>
     <div class="row">
         <div class="col-md-6">
-            <div class="panel panel-default">
-                <div class="panel-heading">
-                    {{ 'admin.planner.heading.export'|trans }}
-                </div>
-                <div class="panel-body text-center">
-                    <a href="{{ path('admin_export_planner_data', {'event': event.id}) }}" class="btn btn-primary btn-lg">
-                        {{ 'admin.planner.export'|trans }}
-                    </a>
-                </div>
-            </div>
-        </div>
+            <h1>{{ 'admin.planner.index'|trans }}</h1>
 
-        <div class="col-md-6">
-            <div class="panel panel-default">
-                <div class="panel-heading">
-                    {{ 'admin.planner.heading.import'|trans }}
-                </div>
-                <div class="panel-body text-center">
-                    <a href="{{ path('admin_import_planner_data', {'event': event.id}) }}" class="btn btn-success btn-lg">
-                        {{ 'admin.planner.import.link'|trans }}
-                    </a>
-                </div>
-            </div>
+        </div>
+        <div class="col-md-6 text-right">
+            <a href="{{ path('admin_export_planner_data', {'event': event.id, 'mode': 'auto'}) }}" class="btn btn-primary {{ isEventOpened ? 'disabled' : '' }}">
+                {{ 'admin.planner.run'|trans }}
+            </a>
+
+            <a href="{{ path('admin_export_planner_data', {'event': event.id}) }}" class="btn btn-default">
+                {{ 'admin.planner.export'|trans }}
+            </a>
+
+            <a href="{{ path('admin_import_planner_data', {'event': event.id}) }}" class="btn btn-default">
+                {{ 'admin.planner.import.link'|trans }}
+            </a>
         </div>
     </div>
+
+    {% if isEventOpened %}
+        <div class="alert alert-warning">{{ 'admin.planner.notAvailable'|trans }}</div>
+    {% endif %}
+
+    {% if lastPlannerJob %}
+        <div class="alert alert-{{ lastPlannerJob.completed ? 'success' : (lastPlannerJob.aborted or lastPlannerJob.error ? 'danger' : 'warning') }}">
+            <p>
+                {% if lastPlannerJob.hasFile %}
+                    <span class="label label-success">{{ 'admin.planner.pendingPlannerJob.fileExported'|trans }}</span>
+                {% else %}
+                    <span class="label label-default">{{ 'admin.planner.pendingPlannerJob.fileNotExported'|trans }}</span>
+                {% endif %}
+
+                {% if lastPlannerJob.pending %}
+                    <span class="label label-default">{{ 'admin.planner.pendingPlannerJob.status.pending'|trans }}</span>
+                {% elseif lastPlannerJob.started %}
+                    <span class="label label-info">{{ 'admin.planner.pendingPlannerJob.status.started'|trans }}</span>
+                {% elseif lastPlannerJob.queued %}
+                    <span class="label label-warning">{{ 'admin.planner.pendingPlannerJob.status.queued'|trans }}</span>
+                {% elseif lastPlannerJob.error %}
+                    <span class="label label-danger">{{ 'admin.planner.pendingPlannerJob.status.error'|trans }}</span>
+                {% elseif lastPlannerJob.aborted %}
+                    <span class="label label-danger">{{ 'admin.planner.pendingPlannerJob.status.aborted'|trans }}</span>
+                {% elseif lastPlannerJob.success %}
+                    <span class="label label-warning">{{ 'admin.planner.pendingPlannerJob.status.success'|trans }}</span>
+                {% elseif lastPlannerJob.completed %}
+                    <span class="label label-success">{{ 'admin.planner.pendingPlannerJob.status.completed'|trans }}</span>
+                {% endif %}
+
+                {{ 'admin.planner.pendingPlannerJob.details'|trans({
+                    '%adminFirstname%': lastPlannerJob.admin.firstname,
+                    '%adminLastname%': lastPlannerJob.admin.lastname,
+                    '%solutionType%': ('form.planner_export.children.solutionType.option.' ~ lastPlannerJob.solutionType)|trans({}, 'forms'),
+                    '%createdAt%': lastPlannerJob.createdAt|localizeddate('long', 'short', app.request.locale, event.timeZone)
+                }) }}
+            </p>
+
+            {% if lastPlannerJob.error and lastPlannerJob.errorMessage %}
+                <p>⚠️ {{ lastPlannerJob.errorMessage|trans({}, 'flashes') }}</p>
+            {% endif %}
+        </div>
+    {% endif %}
+
+    <hr>
+
+    {% if meetingSolutions is empty %}
+        <div class="alert alert-info">{{ 'admin.zero-result'|trans }}</div>
+    {% else %}
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th>{{ 'admin.planner.analytics.table.column.date'|trans }}</th>
+                    <th class="text-right">{{ 'admin.planner.analytics.table.column.meetings'|trans }}</th>
+                    <th class="text-right">{{ 'admin.planner.analytics.table.column.requests'|trans }}</th>
+                    <th class="text-right">{{ 'admin.planner.analytics.table.column.ratio'|trans }}</th>
+                    <th class="text-right">{{ 'admin.planner.analytics.table.column.fillingRate'|trans }}</th>
+                    <th class="text-right">{{ 'admin.planner.analytics.table.column.details'|trans }}</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for key, meetingSolution in meetingSolutions %}
+                    <tr>
+                        <td>{{ meetingSolution.createdAt|localizeddate('medium', 'medium', app.request.locale, event.timeZone) }}</td>
+                        <td class="text-right">{{ meetingSolution.numberOfMeetings }}</td>
+                        <td class="text-right">{{ meetingSolution.numberOfRequests }}</td>
+                        <td class="text-right">{{ meetingSolution.ratio|round(2, "floor") }}%</td>
+                        <td class="text-right">{{ meetingSolution.fillingRate|round(2, "floor") }}%</td>
+                        <td class="text-right" data-toggle-visibility="true" data-element-id-to-hide="meetingSolution{{ key }}" data-toggle-visibility-display-type="table-row">
+                            <button class="btn btn-default">
+                                {{ 'admin.planner.analytics.table.column.details'|trans }}
+                            </button>
+                        </td>
+                    </tr>
+                    <tr id="meetingSolution{{ key }}" style="display: none;">
+                        <td colspan="6">
+                            <div class="col-md-6">
+                                <h2>{{ 'admin.planner.analytics.sheet.title'|trans }}</h2>
+                                <table class="table table-hover">
+                                    <thead>
+                                        <tr>
+                                            <th>{{ 'admin.planner.analytics.sheet.table.column.sheet'|trans }}</th>
+                                            <th>{{ 'admin.planner.analytics.sheet.table.column.type'|trans }}</th>
+                                            <th class="text-right">{{ 'admin.planner.analytics.sheet.table.column.satisfaction'|trans }}</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                    {% for sheetSatisfaction in meetingSolution.sheetSatisfactions.sheetSatisfaction %}
+                                        <tr>
+                                            <td>
+                                                <a href="{{ path('admin_sheet_details', {'event': event.id, 'sheet': sheetSatisfaction.id}) }}">
+                                                    {{ sheetSatisfaction.title }}
+                                                </a>
+                                            </td>
+                                            <td>
+                                                {{ sheetSatisfaction.typeTitle }}
+                                            </td>
+                                            <td class="text-right">
+                                                {{ sheetSatisfaction.satisfaction|round(2, 'floor') }}%
+                                            </td>
+                                        </tr>
+                                    {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="col-md-6">
+                                <h2>{{ 'admin.planner.analytics.spot.title'|trans }}</h2>
+                                <table class="table table-hover">
+                                    <thead>
+                                        <tr>
+                                            <th>{{ 'admin.planner.analytics.spot.table.column.reference'|trans }}</th>
+                                            <th>{{ 'admin.planner.analytics.spot.table.column.shared'|trans }}</th>
+                                            <th>{{ 'admin.planner.analytics.spot.table.column.visio'|trans }}</th>
+                                            <th class="text-right">{{ 'admin.planner.analytics.spot.table.column.satisfaction'|trans }}</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for spotSatisfaction in meetingSolution.spotSatisfactions.spotSatisfaction %}
+                                            <tr>
+                                                <td>{{ spotSatisfaction.reference }}</td>
+                                                <td>{{ spotSatisfaction.shared ? '✔︎' : '' }}</td>
+                                                <td>{{ spotSatisfaction.visio ? '✔︎' : '' }}</td>
+                                                <td class="text-right">{{ spotSatisfaction.satisfaction|round(2, 'floor') }}%</td>
+                                            </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="col-md-12">
+                                {% for key, dayView in meetingSolution.spotFillingGraph.spotFillingRateDayView %}
+                                <div class="col-md-6">
+                                    <h1>{{ dayView.date|localizeddate('medium', 'none', app.request.locale, dayView.timeZone) }}</h1>
+                                    <canvas id="filling_rate_chart_{{ key }}"
+                                        data-chart-bar="true"
+                                        data-chart-label='[{% for slotView in dayView.slotsFillingRate %}"{{ slotView.begin|date('H:i', dayView.timeZone) }}"{% if not loop.last %},{% endif %}{% endfor %}]'
+                                        data-chart-data="[{% for slotView in dayView.slotsFillingRate %}{{ slotView.fillingRate }}{% if not loop.last %},{% endif %}{% endfor %}]"
+                                        data-chart-legend="{{ 'admin.planner.analytics.slotFillingRate.graph.legend'|trans }}"
+                                        data-chart-axeY-min="0"
+                                        data-chart-axeY-max="100"
+                                    ></canvas>
+                                </div>
+                                {% endfor %}
+                            </div>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% endif %}
+{% endblock %}
+
+{% block javascripts %}
+    <script src="{{ asset('assets/js/admin.js') }}"></script>
+    <script src="{{ asset('assets/js/chart.js') }}"></script>
 {% endblock %}

@@ -23,8 +23,9 @@ use Proximum\Vimeet\Domain\Template\TemplateDataFactory;
 use Proximum\Vimeet\Infrastructure\Elastica\Transformer\SheetElasticTransformer;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
 use Proximum\Vimeet\Tests\Factory\SheetFactory;
+use PHPUnit\Framework\TestCase;
 
-class SheetElasticTransformerTest extends \PHPUnit_Framework_TestCase
+class SheetElasticTransformerTest extends TestCase
 {
     public function testTransform()
     {

@@ -10,16 +10,18 @@
 
 namespace Proximum\Vimeet\Tests\Domain\Template;
 
+use PHPUnit\Framework\TestCase;
 use Proximum\Vimeet\Application\Components\Sheet\Template\Tag;
 use Proximum\Vimeet\Domain\Repository\NomenclatureRepositoryInterface;
 use Proximum\Vimeet\Domain\Rule\Applyer;
+use Proximum\Vimeet\Domain\Template\PrintTemplateResolver;
 use Proximum\Vimeet\Domain\Template\TaggedDataFactory;
 use Proximum\Vimeet\Domain\Template\TemplateData;
 use Proximum\Vimeet\Domain\Template\TemplateDataFactory;
 use Proximum\Vimeet\Domain\View\Template\TaggedDataView;
 use Proximum\Vimeet\Tests\Factory\SheetFactory;
 
-class TaggedDataFactoryTest extends \PHPUnit_Framework_TestCase
+class TaggedDataFactoryTest extends TestCase
 {
     public function testHandle()
     {
@@ -94,8 +96,11 @@ class TaggedDataFactoryTest extends \PHPUnit_Framework_TestCase
             ->shouldBeCalled()
             ->willReturn($sheetTemplateData);
 
+        $printTemplateResolver = $this->prophesize(PrintTemplateResolver::class);
+
         $taggedDataFactory = new TaggedDataFactory(
             $templateDataFactory->reveal(),
+            $printTemplateResolver->reveal(),
             $applyer->reveal()
         );
 

@@ -38,4 +38,12 @@ abstract class AbstractJobQueueAdapter
         $this->entityManager->persist($job);
         $this->entityManager->flush($job);
     }
+
+    /**
+     * @param Job $job
+     */
+    protected function updateJob(Job $job)
+    {
+        $this->entityManager->flush($job);
+    }
 }

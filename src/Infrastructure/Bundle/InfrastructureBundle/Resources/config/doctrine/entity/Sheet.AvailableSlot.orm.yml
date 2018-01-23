@@ -1,0 +1,20 @@
+Proximum\Vimeet\Domain\Model\Sheet\AvailableSlot:
+    type:  entity
+    table: sheet_available_slot
+    id:
+        sheet:
+             associationKey: true
+        slot:
+             associationKey: true
+    manyToOne:
+        sheet:
+            targetEntity: Proximum\Vimeet\Domain\Model\Sheet
+            inversedBy: availableSlots
+            joinColumn:
+                onDelete: CASCADE
+                nullable: false
+        slot:
+            targetEntity: Proximum\Vimeet\Domain\Model\MeetingSlot
+            joinColumn:
+                onDelete: CASCADE
+                nullable: false

@@ -25,6 +25,11 @@ class LocalizationViewQuery
     public $filter;
 
     /**
+     * @var array
+     */
+    public $defaultFilters;
+
+    /**
      * @var string
      */
     public $locale;
@@ -34,12 +39,14 @@ class LocalizationViewQuery
      *
      * @param Event  $event
      * @param string $filter
+     * @param array  $defaultFilters
      * @param string $locale
      */
-    public function __construct(Event $event, $filter, $locale)
+    public function __construct(Event $event, string $filter, array $defaultFilters, string $locale)
     {
-        $this->event  = $event;
+        $this->event = $event;
         $this->filter = $filter;
+        $this->defaultFilters = $defaultFilters;
         $this->locale = $locale;
     }
 }

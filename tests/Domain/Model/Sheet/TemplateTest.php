@@ -11,8 +11,9 @@
 namespace Proximum\Vimeet\Tests\Domain\Model\Sheet;
 
 use Proximum\Vimeet\Domain\Model\Template\SheetTemplate;
+use PHPUnit\Framework\TestCase;
 
-class TemplateTest extends \PHPUnit_Framework_TestCase
+class TemplateTest extends TestCase
 {
     public function testAddLocale()
     {

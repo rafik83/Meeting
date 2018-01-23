@@ -11,6 +11,7 @@
 namespace Proximum\Vimeet\Application\Command\Billing;
 
 use DateTime;
+use PHPUnit\Framework\TestCase;
 use Proximum\Vimeet\Domain\Model\Address;
 use Proximum\Vimeet\Domain\Model\BillingInfo;
 use Proximum\Vimeet\Domain\Model\Sheet;
@@ -19,7 +20,7 @@ use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Repository\BillingInfoRepositoryInterface;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
 
-class UpdateInfoHandlerTest extends \PHPUnit_Framework_TestCase
+class UpdateInfoHandlerTest extends TestCase
 {
     public function testHandle()
     {

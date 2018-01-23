@@ -22,14 +22,16 @@ use Proximum\Vimeet\Domain\Meeting\Slot\SlotAvailabilityView;
 use Proximum\Vimeet\Domain\Model\MeetingSlot;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Sheet;
+use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Model\User\Account;
 use Proximum\Vimeet\Domain\Repository\MeetingSlotRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\ParticipantRepositoryInterface;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
 use Proximum\Vimeet\Tests\Factory\ParticipantFactory;
 use Proximum\Vimeet\Tests\Factory\SheetFactory;
+use PHPUnit\Framework\TestCase;
 
-class ParticipantViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
+class ParticipantViewQueryHandlerTest extends TestCase
 {
     public function testHandle()
     {
@@ -46,6 +48,14 @@ class ParticipantViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
         $sheet2       = SheetFactory::create($event);
         $participant2 = ParticipantFactory::create($sheet2);
         $participant3 = ParticipantFactory::create($sheet2);
+
+        $userReflection = new \ReflectionClass(User::class);
+        $usedIdProperty   = $userReflection->getProperty('id');
+        $usedIdProperty->setAccessible(true);
+        $usedIdProperty->setValue($participant1->getUser(), 1);
+        $usedIdProperty->setValue($participant2->getUser(), 2);
+        $usedIdProperty->setValue($participant3->getUser(), 3);
+
         $participant2->getUser()->setAccount(new Account())->getAccount()->setFirstName('firstName2');
         $participant2->getUser()->getAccount()->setLastName('lastName2');
         $participant3->getUser()->setAccount(new Account())->getAccount()->setFirstName('firstName3');
@@ -85,19 +95,38 @@ class ParticipantViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
         $participantRepository = $this->prophesize(ParticipantRepositoryInterface::class);
         $slotRepository        = $this->prophesize(MeetingSlotRepositoryInterface::class);
         $slotAvailability      = $this->prophesize(SlotAvailability::class);
-        $participantRepository->getParticipantsBySheetIds([1, 2])->shouldBeCalled()->willReturn([$participant1, $participant2, $participant3]);
+
+        $participantRepository->getParticipantsBySheetIds([1, 2])->shouldBeCalled()->willReturn(
+            [$participant1, $participant2, $participant3]
+        );
+
         $slotRepository->getAvailableSlotByEvent($event)->shouldBeCalled()->willReturn([$slot, $slot2]);
         // Participant 1
-        $slotAvailability->isAvailable($slot, $participant1)->shouldBeCalled()->willReturn(new SlotAvailabilityView(SlotAvailability::SLOT_AVAILABLE));
-        $slotAvailability->isAvailable($slot2, $participant1)->shouldBeCalled()->willReturn(new SlotAvailabilityView(SlotAvailability::UNAVAILABILITY));
+        $slotAvailability->getSlotAvailability($slot, $participant1)->shouldBeCalled()->willReturn(
+            new SlotAvailabilityView(SlotAvailability::SLOT_AVAILABLE)
+        );
+
+        $slotAvailability->getSlotAvailability($slot2, $participant1)->shouldBeCalled()->willReturn(
+            new SlotAvailabilityView(SlotAvailability::UNAVAILABILITY)
+        );
 
         // Participant 2
-        $slotAvailability->isAvailable($slot, $participant2)->shouldBeCalled()->willReturn(new SlotAvailabilityView(SlotAvailability::SLOT_AVAILABLE));
-        $slotAvailability->isAvailable($slot2, $participant2)->shouldBeCalled()->willReturn(new SlotAvailabilityView(SlotAvailability::SLOT_AVAILABLE));
+        $slotAvailability->getSlotAvailability($slot, $participant2)->shouldBeCalled()->willReturn(
+            new SlotAvailabilityView(SlotAvailability::SLOT_AVAILABLE)
+        );
+
+        $slotAvailability->getSlotAvailability($slot2, $participant2)->shouldBeCalled()->willReturn(
+            new SlotAvailabilityView(SlotAvailability::SLOT_AVAILABLE)
+        );
 
         // Participant 3
-        $slotAvailability->isAvailable($slot, $participant3)->shouldBeCalled()->willReturn(new SlotAvailabilityView(SlotAvailability::MASS_UNAVAILABILITY));
-        $slotAvailability->isAvailable($slot2, $participant3)->shouldBeCalled()->willReturn(new SlotAvailabilityView(SlotAvailability::HAPPENING_UNAVAILABILITY));
+        $slotAvailability->getSlotAvailability($slot, $participant3)->shouldBeCalled()->willReturn(
+            new SlotAvailabilityView(SlotAvailability::MASS_UNAVAILABILITY)
+        );
+
+        $slotAvailability->getSlotAvailability($slot2, $participant3)->shouldBeCalled()->willReturn(
+            new SlotAvailabilityView(SlotAvailability::HAPPENING_UNAVAILABILITY)
+        );
 
         // Handler
         $handler = new ParticipantViewQueryHandler(
@@ -105,13 +134,16 @@ class ParticipantViewQueryHandlerTest extends \PHPUnit_Framework_TestCase
             $slotRepository->reveal(),
             $slotAvailability->reveal()
         );
-        $result = $handler->handle(new ParticipantViewQuery($event, [$sheetView, $sheetView2], [$slotView, $slotView2]));
+
+        $result = $handler->handle(
+            new ParticipantViewQuery($event, [$sheetView, $sheetView2], [$slotView, $slotView2])
+        );
 
         // Expected
         $expected = [
-            new ParticipantView(1, 'firstName1 lastName1', $sheetView, [$slotView2]),
-            new ParticipantView(2, 'firstName2 lastName2', $sheetView2, []),
-            new ParticipantView(3, 'firstName3 lastName3', $sheetView2, [$slotView, $slotView2]),
+            new ParticipantView(1, 1, 'firstName1 lastName1', $sheetView, [$slotView2]),
+            new ParticipantView(2, 2, 'firstName2 lastName2', $sheetView2, []),
+            new ParticipantView(3, 3, 'firstName3 lastName3', $sheetView2, [$slotView, $slotView2]),
         ];
 
         $this->assertEquals($expected, $result);

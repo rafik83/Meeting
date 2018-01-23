@@ -2,15 +2,18 @@
 
 {% import 'AdminBundle::macro.html.twig' as macro %}
 
-{% block title %}
-    [{{ event.title }}] {{ 'admin.meeting_request.link'|trans }}
-{% endblock %}
+{% block title 'admin.meeting_request.link'|trans %}
 
 {% block content %}
     <h1 class="page-header">
         {{ 'admin.meeting_request.title'|transchoice(meeting_requests.total, {'%count%': meeting_requests.total}) }}
         {% if is_granted('ROLE_ALLOWED_TO_ORGANIZE') %}
-            <a href="{{ path('admin_meeting_request_lock_update', {'event': event.id}) }}" class="btn btn-info pull-right">
+            <form action="{{ path('admin_meeting_request_export', {'event': event.id}) }}" method="GET" class="pull-right">
+                <button type="submit" class="btn btn-default">
+                    {{ 'admin.meeting_request.action.export'|trans }}
+                </button>
+            </form>
+            <a href="{{ path('admin_meeting_request_lock_update', {'event': event.id}) }}" class="btn btn-info pull-right" style="margin: 0px 10px 0 0;">
                 {{ 'admin.meeting_request.action.lock'|trans }}
             </a>
         {% endif %}
@@ -60,6 +63,7 @@
                             'approved': 'success',
                             'refused': 'danger',
                             'cancelled': 'danger',
+                            'planned': 'primary'
                         }
                     ) }}
                 </td>

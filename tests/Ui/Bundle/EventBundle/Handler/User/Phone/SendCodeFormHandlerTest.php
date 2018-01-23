@@ -13,6 +13,7 @@ namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Handler\User\Phone;
 use League\Tactician\CommandBus;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Prophecy\ObjectProphecy;
+use Proximum\Vimeet\Application\Adapter\RouterInterface;
 use Proximum\Vimeet\Application\Command\User\Phone\SendCode;
 use Proximum\Vimeet\Application\Exception\Messaging\SMS\InvalidReceiverException;
 use Proximum\Vimeet\Application\Query\Tip\TipTranslationViewByUserQuery;
@@ -34,10 +35,10 @@ class SendCodeFormHandlerTest extends TestCase
 
     /** @var ObjectProphecy */
     private $user;
-    
+
     /** @var ObjectProphecy */
     private $event;
-    
+
     /** @var ObjectProphecy */
     private $tipTranslationView;
 
@@ -56,13 +57,16 @@ class SendCodeFormHandlerTest extends TestCase
     /** @var SendCodeFormHandler */
     private $sendCodeFormHandler;
 
+    /** @var RouterInterface */
+    private $router;
+
     public function setUp()
     {
         $this->request = $this->prophesize(Request::class);
         $this->request->getLocale()->willReturn('fr');
 
         $this->user = $this->prophesize(User::class);
-        $this->user->getPhone()->willReturn('+3312345678');
+        $this->user->getMobile()->willReturn('+3312345678');
 
         $this->event = $this->prophesize(Event::class);
         $this->event->getCountry()->willReturn('FR');
@@ -75,11 +79,13 @@ class SendCodeFormHandlerTest extends TestCase
         $this->userEventPhoneRepository = $this->prophesize(UserEventPhoneRepositoryInterface::class);
         $this->formFactory = $this->prophesize(FormFactory::class);
         $this->commandBus = $this->prophesize(CommandBus::class);
+        $this->router = $this->prophesize(RouterInterface::class);
 
         $this->sendCodeFormHandler = new SendCodeFormHandler(
             $this->userEventPhoneRepository->reveal(),
             $this->formFactory->reveal(),
-            $this->commandBus->reveal()
+            $this->commandBus->reveal(),
+            $this->router->reveal()
         );
     }
 

@@ -11,34 +11,28 @@
 namespace Proximum\Vimeet\Application\Query\Planning;
 
 use Proximum\Vimeet\Domain\Model\Event;
-use Proximum\Vimeet\Domain\Model\Participant;
+use Proximum\Vimeet\Domain\Model\User;
 
 class PlanningViewQuery
 {
-    /**
-     * @var Event
-     */
+    /** @var Event */
     public $event;
 
-    /**
-     * @var Participant
-     */
-    public $participant;
-
-    /**
-     * @var string
-     */
+    /** @var string */
     public $locale;
 
+    /** @var User */
+    public $user;
+
     /**
-     * @param Event       $event
-     * @param Participant $participant
-     * @param string      $locale
+     * @param Event  $event
+     * @param User   $user
+     * @param string $locale
      */
-    public function __construct(Event $event, Participant $participant, $locale)
+    public function __construct(Event $event, User $user, $locale)
     {
-        $this->event       = $event;
-        $this->participant = $participant;
-        $this->locale      = $locale;
+        $this->event  = $event;
+        $this->user   = $user;
+        $this->locale = $locale;
     }
 }

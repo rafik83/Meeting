@@ -14,8 +14,9 @@ use Proximum\Vimeet\Domain\Messaging\Substitutions\ParticipantTypeSubstitution;
 use Proximum\Vimeet\Domain\Model\Type;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
 use Proximum\Vimeet\Tests\Factory\SheetFactory;
+use PHPUnit\Framework\TestCase;
 
-class ParticipantTypeSubstitutionTest extends \PHPUnit_Framework_TestCase
+class ParticipantTypeSubstitutionTest extends TestCase
 {
     public function testSubstitute()
     {

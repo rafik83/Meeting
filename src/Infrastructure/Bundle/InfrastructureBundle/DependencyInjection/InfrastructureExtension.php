@@ -30,14 +30,20 @@ class InfrastructureExtension extends Extension
         $container->setParameter('infrastructure.bundle_guideline_path', $config['bundle_guideline_path']);
         $container->setParameter('infrastructure.font_path', $config['font_path']);
         $container->setParameter('infrastructure.image_path', $config['image_path']);
+        $container->setParameter('infrastructure.print_sheet_path', $config['print_sheet_path']);
         $container->setParameter('infrastructure.print_planning_path', $config['print_planning_path']);
+        $container->setParameter('infrastructure.print_sheet_path', $config['print_sheet_path']);
         $container->setParameter('infrastructure.export_transactions_path', $config['export_transactions_path']);
         $container->setParameter('infrastructure.export_order_path', $config['export_order_path']);
         $container->setParameter('infrastructure.export_planner_path', $config['export_planner_path']);
         $container->setParameter('infrastructure.import_planner_path', $config['import_planner_path']);
+        $container->setParameter('infrastructure.import_spot_path', $config['import_spot_path']);
         $container->setParameter('infrastructure.package.default_labels', $config['package']['default_labels']);
 
         $loader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
         $loader->load('services.yml');
+        $loader->load('services_third_party_leni.yml');
+        $loader->load('services_third_party_vianeo.yml');
+        $loader->load('services_third_party_jenkins.yml');
     }
 }

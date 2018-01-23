@@ -25,8 +25,9 @@ use Proximum\Vimeet\Domain\Model\Type;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
 use Proximum\Vimeet\Tests\Factory\ProductFactory;
 use Proximum\Vimeet\Tests\Factory\SheetFactory;
+use PHPUnit\Framework\TestCase;
 
-class PromotionCodeQueryHandlerTest extends \PHPUnit_Framework_TestCase
+class PromotionCodeQueryHandlerTest extends TestCase
 {
     public function testHandle()
     {
@@ -52,7 +53,7 @@ class PromotionCodeQueryHandlerTest extends \PHPUnit_Framework_TestCase
         // Expected
         $promotionCodeRowView = new PromotionProductRowView(
             $promotion,
-            $product->getName(),
+            $product->getTitle($locale),
             Promotion::TYPE_VALUE_OFF,
             20,
             1

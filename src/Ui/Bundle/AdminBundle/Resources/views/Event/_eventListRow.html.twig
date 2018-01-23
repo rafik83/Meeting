@@ -5,6 +5,9 @@
                 {{ event.title }}
                 <span class="caret"></span>
             </a>
+            {% if event.visible == false %}
+                <span class="label label-danger">{{ 'event.invisible.label'|trans }}</span>
+            {% endif %}
             <ul class="dropdown-menu">
                 {{ include('AdminBundle:Event:links.html.twig', {event: event}) }}
             </ul>

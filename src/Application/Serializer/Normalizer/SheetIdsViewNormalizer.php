@@ -40,6 +40,7 @@ class SheetIdsViewNormalizer extends AbstractNormalizer implements NormalizerInt
     const COL_EVENT_ID          = 'event_id';
     const COL_EVENT_NAME        = 'event_name';
     const COL_SHEET_ID          = 'sheet_id';
+    const COL_SHEET_ENABLE      = 'sheet_enable';
     const COL_OWNER_ID          = 'owner_id';
     const COL_OWNER_EMAIL       = 'owner_email';
     const COL_TYPE              = 'type';
@@ -53,6 +54,26 @@ class SheetIdsViewNormalizer extends AbstractNormalizer implements NormalizerInt
     const COL_SHEET_STATE       = 'sheet_state'; // State
     const COL_TOTAL_ORDER       = 'total_excluded_vat'; // Total hors taxes
     const COL_BALANCE           = 'balance';
+
+    const COMMON_COL = [
+        self::COL_EVENT_ID,
+        self::COL_EVENT_NAME,
+        self::COL_SHEET_ID,
+        self::COL_SHEET_ENABLE,
+        self::COL_SHEET_STATE,
+        self::COL_OWNER_ID,
+        self::COL_OWNER_EMAIL,
+        self::COL_TYPE,
+        self::COL_CATEGORY,
+        self::COL_REGISTRATION_DATE,
+        self::COL_PARTICIPANTS,
+        self::COL_STATUS,
+        self::COL_FOLLOWING,
+        self::COL_IN_CATALOG,
+        self::COL_ORDER_PROMO_CODE,
+        self::COL_TOTAL_ORDER,
+        self::COL_BALANCE,
+    ];
 
     protected $normalizerType = 'sheet';
 
@@ -169,7 +190,7 @@ class SheetIdsViewNormalizer extends AbstractNormalizer implements NormalizerInt
      *
      * @return array Raw data about sheet
      */
-    private function getSheetRawData(Sheet $sheet, $locale)
+    private function getSheetRawData(Sheet $sheet, string $locale)
     {
         $event    = $sheet->getEvent();
         $owner    = $sheet->getOwner();
@@ -204,6 +225,7 @@ class SheetIdsViewNormalizer extends AbstractNormalizer implements NormalizerInt
             self::COL_EVENT_ID          => $event->getId(),
             self::COL_EVENT_NAME        => $event->getTitle(),
             self::COL_SHEET_ID          => $sheet->getId(),
+            self::COL_SHEET_ENABLE      => $this->normalizeBoolean($sheet->isEnabled()),
             self::COL_SHEET_STATE       => $sheet->getState(),
             self::COL_OWNER_ID          => $owner->getId(),
             self::COL_OWNER_EMAIL       => $owner->getEmail(),
@@ -295,7 +317,7 @@ class SheetIdsViewNormalizer extends AbstractNormalizer implements NormalizerInt
         $normalizedData = [];
 
         // Common fields (event ID, event name, etc.)
-        foreach (self::getCommonFieldKeys() as $fieldKey) {
+        foreach (self::COMMON_COL as $fieldKey) {
             $translationKey = sprintf('%s.%s', self::TRANSLATION_COL, $fieldKey);
             $input          = $rawData[$fieldKey];
 
@@ -339,30 +361,5 @@ class SheetIdsViewNormalizer extends AbstractNormalizer implements NormalizerInt
         }
 
         return $normalizedData;
-    }
-
-    /**
-     * @return string[] Keys of common columns' headers
-     */
-    private static function getCommonFieldKeys()
-    {
-        return [
-            self::COL_EVENT_ID,
-            self::COL_EVENT_NAME,
-            self::COL_SHEET_ID,
-            self::COL_SHEET_STATE,
-            self::COL_OWNER_ID,
-            self::COL_OWNER_EMAIL,
-            self::COL_TYPE,
-            self::COL_CATEGORY,
-            self::COL_REGISTRATION_DATE,
-            self::COL_PARTICIPANTS,
-            self::COL_STATUS,
-            self::COL_FOLLOWING,
-            self::COL_IN_CATALOG,
-            self::COL_ORDER_PROMO_CODE,
-            self::COL_TOTAL_ORDER,
-            self::COL_BALANCE,
-        ];
     }
 }
