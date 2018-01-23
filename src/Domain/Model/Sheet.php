@@ -179,6 +179,9 @@ class Sheet implements TraceableInterface
     /** @var string */
     private $availabilityConfirmationStatus = ConfirmationStatus::NONE_CONFIRMED;
 
+    /** @var null|string */
+    private $commercialStatus = null;
+
     /**
      * Sheet constructor.
      *
@@ -1089,5 +1092,21 @@ class Sheet implements TraceableInterface
     public function setAvailabilityConfirmationStatus(string $availabilityConfirmationStatus): void
     {
         $this->availabilityConfirmationStatus = $availabilityConfirmationStatus;
+    }
+
+    /**
+     * @return null|string
+     */
+    public function getCommercialStatus(): ?string
+    {
+        return $this->commercialStatus;
+    }
+
+    /**
+     * @param null|string $commercialStatus
+     */
+    public function setCommercialStatus(?string $commercialStatus = null)
+    {
+        $this->commercialStatus = $commercialStatus;
     }
 }
