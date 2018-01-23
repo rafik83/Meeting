@@ -100,10 +100,13 @@ class ParticipateHandler
         }
 
         $previousQuestion = $this->questionRepository
-            ->findByHappeningAndSheet($participate->happening, $participate->sheet)
-            ->getContent();
+            ->findByHappeningAndSheet($participate->happening, $participate->sheet);
 
-        $updatedQuestion = $previousQuestion !== $participate->question;
+        $updatedQuestion = $participate->question !== null;;
+
+        if (null !== $previousQuestion) {
+            $updatedQuestion = $previousQuestion->getContent() !== $participate->question;
+        }
 
         if (!$participate->cancel
             && !$updated
