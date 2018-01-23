@@ -929,6 +929,7 @@ services:
         class: Proximum\Vimeet\Application\Command\Sheet\AddCommentHandler
         arguments:
             - '@repository.sheet.comment_repository'
+            - '@datetime'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Sheet\AddComment }
     command.sheet.batch_assign_handler:

@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2016 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -15,17 +15,20 @@ use Proximum\Vimeet\Domain\Repository\Sheet\CommentRepositoryInterface;
 
 class AddCommentHandler
 {
-    /**
-     * @var CommentRepositoryInterface
-     */
+    /** @var CommentRepositoryInterface */
     private $commentRepository;
+
+    /** @var \DateTimeInterface */
+    private $dateTime;
 
     /**
      * @param CommentRepositoryInterface $commentRepository
+     * @param \DateTimeInterface         $dateTime
      */
-    public function __construct(CommentRepositoryInterface $commentRepository)
+    public function __construct(CommentRepositoryInterface $commentRepository, \DateTimeInterface $dateTime)
     {
         $this->commentRepository = $commentRepository;
+        $this->dateTime = $dateTime;
     }
 
     /**
@@ -38,7 +41,7 @@ class AddCommentHandler
                 $addComment->sheet,
                 $addComment->author,
                 $addComment->text,
-                $addComment->date
+                $this->dateTime
             )
         );
     }

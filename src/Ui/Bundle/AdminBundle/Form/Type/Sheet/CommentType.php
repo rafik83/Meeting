@@ -24,6 +24,10 @@ class CommentType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
+            ->add('commercialStatus', CommercialStatusChoiceType::class, [
+                'placeholder' => '',
+                'required'    => false,
+            ])
             ->add('text', TextareaType::class, [
                 'placeholder' => 'form.sheet_comment.children.text.placeholder',
                 'required'    => true,

@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2016 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -15,35 +15,27 @@ use Proximum\Vimeet\Domain\Model\Sheet;
 
 class AddComment
 {
-    /**
-     * @var Admin
-     */
+    /** @var Admin */
     public $author;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     public $text;
 
-    /**
-     * @var Sheet
-     */
+    /** @var Sheet */
     public $sheet;
 
-    /**
-     * @var \DateTimeInterface
-     */
-    public $date;
+    /** @var null|string */
+    public $commercialStatus;
 
     /**
-     * @param Sheet              $sheet
-     * @param Admin              $author
-     * @param \DateTimeInterface $date
+     * @param Sheet       $sheet
+     * @param Admin       $author
+     * @param null|string $commercialStatus
      */
-    public function __construct(Sheet $sheet, Admin $author, \DateTimeInterface $date)
+    public function __construct(Sheet $sheet, Admin $author, ?string $commercialStatus = null)
     {
-        $this->sheet  = $sheet;
+        $this->sheet = $sheet;
         $this->author = $author;
-        $this->date   = $date;
+        $this->commercialStatus = $commercialStatus;
     }
 }

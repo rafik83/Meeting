@@ -38,6 +38,7 @@ use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Sheet\BatchType;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Sheet\ChangeTypeType;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Sheet\CommentType;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Sheet\SheetFilterType;
+use Proximum\Vimeet\Ui\Bundle\AdminBundle\ValueResolver\AdminDomain;
 use Proximum\Vimeet\Ui\Flash\TranschoiceMessage;
 use Proximum\Vimeet\Ui\Flash\TransMessage;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -244,13 +245,14 @@ class SheetController extends Controller
     }
 
     /**
-     * @param Request $request
-     * @param Event   $event
-     * @param Sheet   $sheet
+     * @param Request     $request
+     * @param Event       $event
+     * @param Sheet       $sheet
+     * @param AdminDomain $adminDomain
      *
      * @return Response
      */
-    public function detailsAction(Request $request, Event $event, Sheet $sheet)
+    public function detailsAction(Request $request, Event $event, Sheet $sheet, AdminDomain $adminDomain)
     {
         $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
         $this->denyAccessUnlessGranted('PERMISSION_SHEET_ACCESS', $sheet);
@@ -277,7 +279,7 @@ class SheetController extends Controller
             && $this->get('repository.invoice.invoice_repository')->isSheetInvoiced($sheet) === null
             && $this->get('vimeet_infrastructure.repository.meeting_repository')->countMeetingsOfSheet($sheet) === 0
         ) {
-            $changeType = new ChangeType($sheet, $sheet->getType(), $this->getUser(), $locale);
+            $changeType = new ChangeType($sheet, $sheet->getType(), $adminDomain->getAdmin(), $locale);
 
             $changeTypeForm = $this->createForm(ChangeTypeType::class, $changeType, [
                 'event'  => $event,
@@ -297,7 +299,7 @@ class SheetController extends Controller
             }
         }
 
-        $addComment = new AddComment($sheet, $this->getUser(), new \DateTime());
+        $addComment = new AddComment($sheet, $adminDomain->getAdmin(), $sheet->getCommercialStatus());
 
         $addCommentForm = $this->createForm(CommentType::class, $addComment, [
             'action' => $this->generateUrl('admin_sheet_details', [
@@ -318,7 +320,10 @@ class SheetController extends Controller
             ]);
         }
 
-        $impersonationToken = $this->get('security.impersonate')->getEncodedToken($this->getUser(), $sheet->getOwner());
+        $impersonationToken = $this
+            ->get('security.impersonate')
+            ->getEncodedToken($adminDomain->getAdmin(), $sheet->getOwner())
+        ;
 
         return $this->render('AdminBundle:Sheet:details.html.twig', [
             'event'              => $event,
