@@ -15,14 +15,10 @@ use Proximum\Vimeet\Domain\Model\Sheet;
 
 class PostBatchRefuse
 {
-    /**
-     * @var Sheet[]
-     */
+    /** @var Sheet[] */
     public $sheets;
 
-    /**
-     * @var Admin
-     */
+    /** @var Admin */
     public $admin;
 
     public function __construct(array $sheets, Admin $admin)

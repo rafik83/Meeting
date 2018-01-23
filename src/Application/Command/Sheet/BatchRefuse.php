@@ -14,13 +14,11 @@ use Proximum\Vimeet\Domain\Model\Admin;
 
 class BatchRefuse extends AbstractBatch
 {
-    /**
-     * @var Admin
-     */
+    /** @var Admin */
     public $admin;
 
     /**
-     * @param array $ids
+     * @param int[] $ids array of Sheets id
      * @param Admin $admin
      */
     public function __construct(array $ids, Admin $admin)
