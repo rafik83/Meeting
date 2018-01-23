@@ -99,8 +99,15 @@ class ParticipateHandler
             }
         }
 
+        $previousQuestion = $this->questionRepository
+            ->findByHappeningAndSheet($participate->happening, $participate->sheet)
+            ->getContent();
+
+        $updatedQuestion = $previousQuestion !== $participate->question;
+
         if (!$participate->cancel
             && !$update
+            && !$updatedQuestion
             && $participate->happening->isPrivate()
             && $participate->invitationCode !== $participate->happening->getInvitationCode()
         ) {

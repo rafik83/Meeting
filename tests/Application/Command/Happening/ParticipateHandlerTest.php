@@ -64,6 +64,9 @@ class ParticipateHandlerTest extends TestCase
     /** @var Participate */
     private $participate;
 
+    /** @var Question */
+    private $question;
+
     private $happeningParticipationRepository;
     private $participantRepository;
     private $questionRepository;
@@ -108,6 +111,11 @@ class ParticipateHandlerTest extends TestCase
             'tata',
             false
         );
+        $this->question = new Question($this->happening, $this->sheet, $this->user, $this->datetime, 'toto');
+        $this->questionRepository
+            ->findByHappeningAndSheet($this->happening, $this->sheet)
+            ->shouldBeCalled()
+            ->willReturn($this->question);
     }
 
     public function testNotEnoughtRemainingParticipationsException()
@@ -123,13 +131,16 @@ class ParticipateHandlerTest extends TestCase
         $this->expectException(WrongInvitationCodeException::class);
         $this->happening->setInvitationCode('toto');
 
+        $participate = $this->participate;
+        $participate->question = 'toto';
+
         $this->participantRepository
             ->getParticipantsForHappening($this->participate->sheet, $this->participate->happening)
             ->shouldBeCalled()
             ->willReturn([$this->participant])
         ;
 
-        $this->handler->handle($this->participate);
+        $this->handler->handle($participate);
     }
 
     public function testParticipantNotAvailableException()
