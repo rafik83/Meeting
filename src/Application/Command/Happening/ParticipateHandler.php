@@ -85,16 +85,16 @@ class ParticipateHandler
             $participate->happening
         );
 
-        $update = false;
+        $updated = false;
         if (0 < count($previousParticipants)) {
             foreach ($participate->participants as $participant) {
                 if (false === in_array($participant, $previousParticipants)) {
-                    $update = true;
+                    $updated = true;
                 }
             }
             foreach ($previousParticipants as $participant) {
                 if (false === in_array($participant, $participate->participants)) {
-                    $update = true;
+                    $updated = true;
                 }
             }
         }
@@ -106,7 +106,7 @@ class ParticipateHandler
         $updatedQuestion = $previousQuestion !== $participate->question;
 
         if (!$participate->cancel
-            && !$update
+            && !$updated
             && !$updatedQuestion
             && $participate->happening->isPrivate()
             && $participate->invitationCode !== $participate->happening->getInvitationCode()
