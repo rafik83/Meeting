@@ -950,8 +950,6 @@ class SheetRepository implements SheetRepositoryInterface
             ->update(Sheet::class, 'sheet')
             ->set('sheet.state', ':state')
             ->setParameter('state', $state)
-            ->set('sheet.enable', ':enabled')
-            ->setParameter('enabled', true)
             ->where('sheet.id IN (:ids)')
             ->setParameter('ids', $ids)
             ->andWhere('sheet.state != :state')
