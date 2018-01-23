@@ -9,8 +9,12 @@ Proximum\Vimeet\Domain\Model\Sheet\Comment:
     fields:
         text:
             type: text
+            nullable: true
         createdAt:
             type: datetime
+        commercialStatus:
+            type: string
+            nullable: true
     manyToOne:
         sheet:
             targetEntity: Proximum\Vimeet\Domain\Model\Sheet
