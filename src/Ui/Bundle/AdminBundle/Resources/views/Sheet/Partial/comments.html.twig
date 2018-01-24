@@ -1,5 +1,11 @@
 <div class="well well-sm">
-    {{ form(addCommentForm) }}
+    {{ form_start(addCommentForm) }}
+        {{ form_label(addCommentForm.commercialStatus) }}
+        {{ form_errors(addCommentForm.commercialStatus) }}
+        {{ form_widget(addCommentForm.commercialStatus) }}
+        <hr />
+        {{ form_row(addCommentForm.text) }}
+    {{ form_end(addCommentForm) }}
 </div>
 
 {% for comment in comments %}
