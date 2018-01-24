@@ -32,7 +32,11 @@ class AddParticipantChecker
         $numberOfParticipant = $sheet->countParticipants();
 
         if (!$package->isParticipantAndPlanningEnabled()) {
-            return null === $package->getMaxParticipant() || $numberOfParticipant >= $package->getMaxParticipant();
+            if (null === $package->getMaxParticipant()) {
+                return true;
+            }
+
+            return $numberOfParticipant < $package->getMaxParticipant();
         }
 
         if (null !== $package->getMaxParticipant() && $numberOfParticipant >= $package->getMaxParticipant()) {
