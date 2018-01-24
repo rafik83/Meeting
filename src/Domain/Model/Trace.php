@@ -97,6 +97,14 @@ class Trace
     }
 
     /**
+     * @return null|Admin
+     */
+    public function getAdmin(): ?Admin
+    {
+        return $this->admin;
+    }
+
+    /**
      * @return string
      */
     public function getAuthor()

@@ -1,9 +1,9 @@
 <?php
 
 /*
- * This file is part of the vimeet project.
+ * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2017 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -12,16 +12,17 @@ namespace Proximum\Vimeet\Application\Query\Sheet\Detail;
 
 use Proximum\Vimeet\Application\Components\Sheet\Details\Invoice\InvoiceViewQuery;
 use Proximum\Vimeet\Application\Components\Sheet\Details\Invoice\InvoiceViewQueryHandler;
+use Proximum\Vimeet\Application\Query\Sheet\Detail\CRM\RecordViewsQuery;
+use Proximum\Vimeet\Application\Query\Sheet\Detail\CRM\RecordViewsQueryHandler;
 use Proximum\Vimeet\Application\View\Sheet\Details\SheetDetailsView;
 use Proximum\Vimeet\Domain\Order\Balance;
-use Proximum\Vimeet\Domain\Repository\Sheet\CommentRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\TraceRepositoryInterface;
 use Proximum\Vimeet\Domain\Template\TemplateDataFactory;
 
 class SheetDetailQueryHandler
 {
-    /** @var CommentRepositoryInterface */
-    private $commentRepository;
+    /** @var RecordViewsQueryHandler */
+    private $recordViewsQueryHandler;
 
     /** @var TraceRepositoryInterface */
     private $traceRepository;
@@ -42,9 +43,7 @@ class SheetDetailQueryHandler
     private $participantDetailQueryHandler;
 
     /**
-     * SheetDetailQueryHandler constructor.
-     *
-     * @param CommentRepositoryInterface        $commentRepository
+     * @param RecordViewsQueryHandler           $recordViewsQueryHandler
      * @param TraceRepositoryInterface          $traceRepository
      * @param Balance                           $balance
      * @param InvoiceViewQueryHandler           $invoiceViewQueryHandler
@@ -53,7 +52,7 @@ class SheetDetailQueryHandler
      * @param TemplateDataFactory               $templateDataFactory
      */
     public function __construct(
-        CommentRepositoryInterface $commentRepository,
+        RecordViewsQueryHandler $recordViewsQueryHandler,
         TraceRepositoryInterface $traceRepository,
         Balance $balance,
         InvoiceViewQueryHandler $invoiceViewQueryHandler,
@@ -61,7 +60,7 @@ class SheetDetailQueryHandler
         ParticipantDetailQueryHandler $participantDetailQueryHandler,
         TemplateDataFactory $templateDataFactory
     ) {
-        $this->commentRepository                 = $commentRepository;
+        $this->recordViewsQueryHandler           = $recordViewsQueryHandler;
         $this->traceRepository                   = $traceRepository;
         $this->balance                           = $balance;
         $this->invoiceViewQueryHandler           = $invoiceViewQueryHandler;
@@ -86,8 +85,7 @@ class SheetDetailQueryHandler
             $this->sheetMeetingIndicatorQueryHandler->handle(
                 new SheetMeetingIndicatorQuery($query->sheet)
             ),
-            $this->commentRepository->getCommentsBySheet($query->sheet),
-            // Trace for accepted
+            $this->recordViewsQueryHandler->handle(new RecordViewsQuery($query->sheet)),
             $this->traceRepository->getAllTracesByObject($query->sheet),
             $this->balance->getOrderVatViews($query->sheet),
             $this->balance->getTransactions($query->sheet),

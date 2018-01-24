@@ -82,4 +82,24 @@ class TraceRepository implements TraceRepositoryInterface
 
         return $queryBuilder->getQuery()->getResult();
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getAllTracesByObjectAndAction(TraceableInterface $traceable, string $action): array
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('trace')
+            ->from(Trace::class, 'trace', 'trace.id')
+            ->where('trace.objectType = :type AND trace.objectId = :id')
+            ->andWhere('trace.action = :action')
+            ->setParameter('type', $traceable->getTraceableName())
+            ->setParameter('id', $traceable->getId())
+            ->setParameter('action', $action)
+        ;
+
+        return $queryBuilder->getQuery()->getResult();
+    }
 }

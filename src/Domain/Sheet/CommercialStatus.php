@@ -61,4 +61,18 @@ class CommercialStatus
         self::STATUS_REFUSED_BY_ORGANIZER,
         self::STATUS_FOLLOWED,
     ];
+
+    const STATUS_WITH_LABEL = [
+        self::STATUS_VERBAL_AGREEMENT => 'success',
+        self::STATUS_CANCELED => 'danger',
+        self::STATUS_HOT => 'info',
+        self::STATUS_HOT_STALL => 'info',
+        self::STATUS_REGISTERED => 'success',
+        self::STATUS_INTEREST => 'info',
+        self::STATUS_INTEREST_NEXT_EDITION => 'danger',
+        self::STATUS_DO_NOT_CALL => 'danger',
+        self::STATUS_NO_INTEREST => 'danger',
+        self::STATUS_REFUSED_BY_ORGANIZER => 'danger',
+        self::STATUS_FOLLOWED => 'info',
+    ];
 }

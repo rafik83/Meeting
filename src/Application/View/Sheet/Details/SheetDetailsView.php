@@ -3,15 +3,15 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2015 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
 
 namespace Proximum\Vimeet\Application\View\Sheet\Details;
 
+use Proximum\Vimeet\Application\View\Sheet\Details\CRM\RecordView;
 use Proximum\Vimeet\Application\View\Sheet\Details\Invoice\InvoiceView;
-use Proximum\Vimeet\Domain\Model\Sheet\Comment;
 use Proximum\Vimeet\Domain\Model\Trace;
 use Proximum\Vimeet\Domain\Model\Transaction;
 use Proximum\Vimeet\Domain\Template\TemplateObject;
@@ -34,8 +34,8 @@ class SheetDetailsView
     /** @var string "Forfait" */
     public $package;
 
-    /** @var Comment[] */
-    public $comments;
+    /** @var RecordView[] */
+    public $recordViews;
 
     /** @var Trace[] */
     public $traces;
@@ -62,13 +62,11 @@ class SheetDetailsView
     public $companyObjects;
 
     /**
-     * SheetDetailsView constructor.
-     *
      * @param string                    $title
      * @param string                    $state
      * @param SheetParticipantsView     $participants
      * @param SheetMeetingIndicatorView $meetingIndicator
-     * @param Comment[]                 $comments
+     * @param RecordView[]              $recordViews
      * @param Trace[]                   $traces
      * @param OrderVatView[]            $orderVatViews
      * @param Transaction[]             $transactions
@@ -83,7 +81,7 @@ class SheetDetailsView
         $state,
         SheetParticipantsView $participants,
         SheetMeetingIndicatorView $meetingIndicator,
-        array $comments,
+        array $recordViews,
         array $traces,
         array $orderVatViews,
         array $transactions,
@@ -95,7 +93,7 @@ class SheetDetailsView
     ) {
         $this->title            = $title;
         $this->state            = $state;
-        $this->comments         = $comments;
+        $this->recordViews      = $recordViews;
         $this->traces           = $traces;
         $this->orderVatViews    = $orderVatViews;
         $this->transactions     = $transactions;
