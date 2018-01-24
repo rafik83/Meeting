@@ -17,8 +17,6 @@ use Proximum\Vimeet\Domain\Messaging\SMS\SMS;
 
 class StorageSMSSenderAdapter implements SMSSenderInterface
 {
-    const LOGGED_MESSAGE = 'SMS sent to %s with message: %s';
-
     /** @var FileSystemAdapterInterface */
     private $fileSystem;
 
@@ -43,7 +41,7 @@ class StorageSMSSenderAdapter implements SMSSenderInterface
 
         $this->fileSystem->dumpFile(
             $filePath,
-            sprintf(self::LOGGED_MESSAGE, $sms->getReceiver(), $sms->getMessage())
+            $sms->getMessage()
         );
     }
 

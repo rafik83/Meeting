@@ -33,4 +33,4 @@
       | form.send_code.children.phone.label | +33112233445566 |
     And I check "form.send_code.children.accepted.label"
     And I press "form.send_code.children.submit.label"
-    Then a SMS should be sent to "+33112233445566"
+    Then a SMS should be sent to "+33112233445566" with content "user.phone.confirmationCode.message"

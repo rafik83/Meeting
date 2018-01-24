@@ -702,11 +702,12 @@ class FeatureContext extends MinkContext implements KernelAwareContext, SnippetA
     }
 
     /**
-     * @Then a SMS should be sent to :phone
+     * @Then a SMS should be sent to :phone with content :content
      *
      * @param string $phone
+     * @param string $expectedContent
      */
-    public function aSmsShouldBeSentTo(string $phone)
+    public function aSmsShouldBeSentTo(string $phone, string $expectedContent)
     {
         /** @var FileSystemAdapterInterface $fileSystem */
         $fileSystem = $this->kernel->getContainer()->get('adapter.file_system_adapter');
@@ -716,6 +717,10 @@ class FeatureContext extends MinkContext implements KernelAwareContext, SnippetA
 
         if (!$fileSystem->exists($file)) {
             throw new \LogicException('Missing SMS');
+        }
+
+        if (file_get_contents($file) !== $expectedContent) {
+            throw new \LogicException('SMS content is not the expected one');
         }
     }
 
