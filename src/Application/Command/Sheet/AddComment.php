@@ -29,15 +29,14 @@ class AddComment implements Command
     public $commercialStatus;
 
     /**
-     * @param Sheet       $sheet
-     * @param Admin       $author
-     * @param null|string $commercialStatus
+     * @param Sheet $sheet
+     * @param Admin $author
      */
-    public function __construct(Sheet $sheet, Admin $author, ?string $commercialStatus = null)
+    public function __construct(Sheet $sheet, Admin $author)
     {
         $this->sheet = $sheet;
         $this->author = $author;
-        $this->commercialStatus = $commercialStatus;
+        $this->commercialStatus = $sheet->getCommercialStatus();
     }
 
     /**

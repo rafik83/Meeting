@@ -152,7 +152,7 @@ class DetailAction
             }
         }
 
-        $addComment = new AddComment($sheet, $adminDomain->getAdmin(), $sheet->getCommercialStatus());
+        $addComment = new AddComment($sheet, $adminDomain->getAdmin());
         $addCommentForm = $this->formFactory->create(CommentType::class, $addComment, [
             'submit' => true,
         ]);
