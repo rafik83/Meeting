@@ -30,28 +30,22 @@ class Comment
     /** @var \DateTimeInterface */
     private $createdAt;
 
-    /** @var string|null */
-    private $commercialStatus;
-
     /**
      * @param Sheet              $sheet
      * @param Admin              $author
      * @param string|null        $text
-     * @param null|string        $commercialStatus
      * @param \DateTimeInterface $createdAt
      */
     public function __construct(
         Sheet $sheet,
         Admin $author,
         ?string $text = null,
-        ?string $commercialStatus = null,
         \DateTimeInterface $createdAt
     ) {
         $this->sheet = $sheet;
         $this->author = $author;
         $this->createdAt = $createdAt;
         $this->text = $text;
-        $this->commercialStatus = $commercialStatus;
     }
 
     /**
@@ -92,13 +86,5 @@ class Comment
     public function getCreatedAt(): \DateTimeInterface
     {
         return $this->createdAt;
-    }
-
-    /**
-     * @return null|string
-     */
-    public function getCommercialStatus(): ?string
-    {
-        return $this->commercialStatus;
     }
 }

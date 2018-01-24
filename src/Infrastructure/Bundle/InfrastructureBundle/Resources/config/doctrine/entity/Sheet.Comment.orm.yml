@@ -12,9 +12,6 @@ Proximum\Vimeet\Domain\Model\Sheet\Comment:
             nullable: true
         createdAt:
             type: datetime
-        commercialStatus:
-            type: string
-            nullable: true
     manyToOne:
         sheet:
             targetEntity: Proximum\Vimeet\Domain\Model\Sheet
