@@ -69,6 +69,7 @@ validators.schedule_day.shouldBeTheSameDay: 'L''heure de début doit être au m�
 validators.schedule_day.startTimeMustBeBeforeEndTime: 'L''heure de début doit être avant l''heure de fin'
 validators.schedule.slot.recipes.slotOutOfDay: 'Le créneau du %day% de %begin% à %end% est en dehors des heures des jours de l''événements, changer la plage concernée ou changer les dates de l''événement'
 validators.searchFacet.translations.label.empty: 'Vous devez renseigner les traductions manquantes'
+validators.sheet.commentCommercialStatus: 'Si vous ne changez pas le statut commercial, vous devez remplir le champ commentaire'
 validators.sheet.messaging_campaign.create.name: 'Veuillez entrer un titre pour votre ciblage'
 validators.sheet.messaging_campaign.create.sheetIds: 'Veuillez sélectionner au moins une fiche'
 validators.sheet.messaging_campaign.message: 'Veuillez sélectionner un message'

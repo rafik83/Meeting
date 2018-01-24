@@ -10,9 +10,10 @@
 
 namespace Proximum\Vimeet\Application\Query\Sheet\Detail;
 
+use Proximum\Vimeet\Application\Query\Query;
 use Proximum\Vimeet\Domain\Model\Sheet;
 
-class SheetDetailQuery
+class SheetDetailQuery implements Query
 {
     /** @var Sheet */
     public $sheet;

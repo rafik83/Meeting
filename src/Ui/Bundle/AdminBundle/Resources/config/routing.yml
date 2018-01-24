@@ -666,7 +666,7 @@ admin_sheet_details:
         event: \d+
         sheet: \d+
     methods: [GET, POST]
-    defaults: { _controller: AdminBundle:Sheet:details }
+    defaults: { _controller: Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Sheet\DetailAction }
 admin_sheet_batch:
     path: /event/{event}/sheet/batch
     requirements:

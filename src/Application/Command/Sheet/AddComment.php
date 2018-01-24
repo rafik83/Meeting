@@ -10,15 +10,16 @@
 
 namespace Proximum\Vimeet\Application\Command\Sheet;
 
+use Proximum\Vimeet\Application\Command\Command;
 use Proximum\Vimeet\Domain\Model\Admin;
 use Proximum\Vimeet\Domain\Model\Sheet;
 
-class AddComment
+class AddComment implements Command
 {
     /** @var Admin */
     public $author;
 
-    /** @var string */
+    /** @var string|string */
     public $text;
 
     /** @var Sheet */
@@ -37,5 +38,21 @@ class AddComment
         $this->sheet = $sheet;
         $this->author = $author;
         $this->commercialStatus = $commercialStatus;
+    }
+
+    /**
+     * @return bool
+     */
+    public function commercialStatusChangeOrCommentNotEmpty(): bool
+    {
+        if ($this->sheet->getCommercialStatus() !== $this->commercialStatus) {
+            return true;
+        }
+
+        if ($this->text !== null && $this->text !== '') {
+            return true;
+        }
+
+        return false;
     }
 }

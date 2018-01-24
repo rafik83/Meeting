@@ -240,3 +240,20 @@ services:
             - '@session.flash_bag'
             - '@templating'
             - '@adapter.router'
+
+    #
+    # Sheet
+    #
+    Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Sheet\DetailAction:
+        arguments:
+            - '@adapter.authorization_checker'
+            - '@vimeet_infrastructure.repository.type_repository'
+            - '@repository.invoice.invoice_repository'
+            - '@vimeet_infrastructure.repository.meeting_repository'
+            - '@form.factory'
+            - '@Proximum\Vimeet\Infrastructure\Adapter\CommandBus'
+            - '@Proximum\Vimeet\Infrastructure\Adapter\QueryBus'
+            - '@session.flash_bag'
+            - '@templating'
+            - '@adapter.router'
+            - '@security.impersonate'

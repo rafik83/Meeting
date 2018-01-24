@@ -10,8 +10,10 @@
 
 namespace Proximum\Vimeet\Application\Command\Sheet;
 
+use Proximum\Vimeet\Application\Adapter\DelayedEventDispatcherInterface;
 use Proximum\Vimeet\Domain\Model\Sheet\Comment;
 use Proximum\Vimeet\Domain\Repository\Sheet\CommentRepositoryInterface;
+use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
 
 class AddCommentHandler
 {
@@ -21,13 +23,27 @@ class AddCommentHandler
     /** @var \DateTimeInterface */
     private $dateTime;
 
+    /** @var SheetRepositoryInterface */
+    private $sheetRepository;
+
+    /** @var DelayedEventDispatcherInterface */
+    private $eventDispatcher;
+
     /**
-     * @param CommentRepositoryInterface $commentRepository
-     * @param \DateTimeInterface         $dateTime
+     * @param SheetRepositoryInterface        $sheetRepository
+     * @param CommentRepositoryInterface      $commentRepository
+     * @param DelayedEventDispatcherInterface $eventDispatcher
+     * @param \DateTimeInterface              $dateTime
      */
-    public function __construct(CommentRepositoryInterface $commentRepository, \DateTimeInterface $dateTime)
-    {
+    public function __construct(
+        SheetRepositoryInterface $sheetRepository,
+        CommentRepositoryInterface $commentRepository,
+        DelayedEventDispatcherInterface $eventDispatcher,
+        \DateTimeInterface $dateTime
+    ) {
+        $this->sheetRepository = $sheetRepository;
         $this->commentRepository = $commentRepository;
+        $this->eventDispatcher = $eventDispatcher;
         $this->dateTime = $dateTime;
     }
 
@@ -36,13 +52,21 @@ class AddCommentHandler
      */
     public function handle(AddComment $addComment)
     {
-        $this->commentRepository->add(
-            new Comment(
-                $addComment->sheet,
-                $addComment->author,
-                $addComment->text,
-                $this->dateTime
-            )
-        );
+        if ($addComment->text !== null) {
+            $this->commentRepository->add(
+                new Comment(
+                    $addComment->sheet,
+                    $addComment->author,
+                    $addComment->text,
+                    $this->dateTime
+                )
+            );
+        }
+
+        if ($addComment->commercialStatus !== $addComment->sheet->getCommercialStatus()) {
+            $addComment->sheet->setCommercialStatus($addComment->commercialStatus);
+
+            $this->sheetRepository->set($addComment->sheet);
+        }
     }
 }
