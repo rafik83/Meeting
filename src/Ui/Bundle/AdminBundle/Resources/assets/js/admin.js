@@ -16,7 +16,9 @@ var $ = require('jquery'),
     MessagingMessagePreview = require('./components/_MessagingMessagePreview'),
     ParticipantVisio = require('./components/_ParticipantVisio'),
     TipPreview = require('./components/_TipPreview'),
-    ToggleVisibility = require('./components/_ToggleVisibility');
+    ToggleVisibility = require('./components/_ToggleVisibility'),
+    CommercialStatusSelect = require('./components/_CommercialStatusSelect')
+;
 
 require('bootstrap');
 require('elao-form.js');
@@ -128,6 +130,10 @@ function init(target) {
             selectedListLabel: selectedListLabel,
             nonSelectedListLabel: nonSelectedListLabel
         });
+    });
+
+    [].forEach.call(target.querySelectorAll('select.commercial_status_selector'), function(element) {
+        new CommercialStatusSelect(element);
     });
 
     [].forEach.call(target.querySelectorAll('[data-switch-to-tab]'), function (element) {

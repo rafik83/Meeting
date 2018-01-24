@@ -11,6 +11,7 @@
 namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Sheet;
 
 use Proximum\Vimeet\Application\Command\Sheet\AddComment;
+use Proximum\Vimeet\Domain\Sheet\CommercialStatus;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -31,6 +32,10 @@ class CommentType extends AbstractType
                     return  sprintf('form.sheet_comment.children.commercialStatus.status.%s', $key);
                 },
                 'translation_domain' => 'forms',
+                'attr' => [
+                    'class' => 'commercial_status_selector',
+                    'data-associated-label' => json_encode(CommercialStatus::STATUS_WITH_LABEL),
+                ],
             ])
             ->add('text', TextareaType::class, [
                 'placeholder' => 'form.sheet_comment.children.text.placeholder',
