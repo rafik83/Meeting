@@ -14,6 +14,7 @@ use DateTimeInterface;
 use Proximum\Vimeet\Application\Event\Events;
 use Proximum\Vimeet\Application\Event\Group\Sheet\SheetCreatedByManagerEvent;
 use Proximum\Vimeet\Application\Event\Participant\ParticipantImportedEvent;
+use Proximum\Vimeet\Application\Event\Sheet\CommercialStatusChanged;
 use Proximum\Vimeet\Application\Event\Sheet\SheetAcceptedEvent;
 use Proximum\Vimeet\Application\Event\Sheet\SheetCatalogEvent;
 use Proximum\Vimeet\Application\Event\Sheet\SheetChangedTypeEvent;
@@ -41,6 +42,17 @@ class TraceEventSubscriber implements EventSubscriberInterface
     public function __construct(TraceRepositoryInterface $traceRepository)
     {
         $this->traceRepository = $traceRepository;
+    }
+
+    public function onSheetCommercialStatusChanged(CommercialStatusChanged $event)
+    {
+        $this->addTrace(
+            $event->getSheet(),
+            Trace::SET_COMMERCIAL_STATUS,
+            $event->getDate(),
+            $event->getSheet()->getCommercialStatus() ?? 'none',
+            $event->getAuthor()
+        );
     }
 
     /**
@@ -224,6 +236,7 @@ class TraceEventSubscriber implements EventSubscriberInterface
             Events::SHEET_VALIDATION_VALIDATE     => 'onSheetValidationValidate',
             Events::PARTICIPANT_IMPORTED          => 'onParticipantImported',
             Events::SHEET_CREATE_BY_GROUP_MANAGER => 'onSheetCreateByGroupManager',
+            Events::SHEET_SET_COMMERCIAL_STATUS   => 'onSheetCommercialStatusChanged',
         ];
     }
 }

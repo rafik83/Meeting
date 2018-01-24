@@ -33,6 +33,10 @@ class Trace
     const PENDING                        = 'pending';
     const SET_COMMERCIAL_STATUS          = 'set_commercial_status';
 
+    const ACTIONS_REQUIRED_TRANSLATION = [
+        self::SET_COMMERCIAL_STATUS,
+    ];
+
     /** @var int */
     private $id;
 
@@ -163,5 +167,13 @@ class Trace
         }
 
         return null;
+    }
+
+    /**
+     * @return bool
+     */
+    public function hasToBeTranslated(): bool
+    {
+        return in_array($this->action, self::ACTIONS_REQUIRED_TRANSLATION, true);
     }
 }

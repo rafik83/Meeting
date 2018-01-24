@@ -11,6 +11,8 @@
 namespace Proximum\Vimeet\Application\Command\Sheet;
 
 use Proximum\Vimeet\Application\Adapter\DelayedEventDispatcherInterface;
+use Proximum\Vimeet\Application\Event\Events;
+use Proximum\Vimeet\Application\Event\Sheet\CommercialStatusChanged;
 use Proximum\Vimeet\Domain\Model\Sheet\Comment;
 use Proximum\Vimeet\Domain\Repository\Sheet\CommentRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
@@ -67,6 +69,11 @@ class AddCommentHandler
             $addComment->sheet->setCommercialStatus($addComment->commercialStatus);
 
             $this->sheetRepository->set($addComment->sheet);
+
+            $this->eventDispatcher->dispatch(
+                Events::SHEET_SET_COMMERCIAL_STATUS,
+                new CommercialStatusChanged($addComment->sheet, $addComment->author, $this->dateTime)
+            );
         }
     }
 }

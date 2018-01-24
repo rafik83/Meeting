@@ -30,6 +30,7 @@ final class Events
     const SHEET_UPDATED                                = 'sheet.updated';
     const SHEET_TITLE_CHECK                            = 'sheet.title';
     const SHEET_CREATE_BY_GROUP_MANAGER                = 'group.sheet.created';
+    const SHEET_SET_COMMERCIAL_STATUS                  = 'sheet.set_commercial_status';
     const USER_MAIL_CHANGED                            = 'change_mail';
     const MEETING_PARTICIPANT_ADDED                    = 'meeting.participant.added';
     const MEETING_PARTICIPANT_REMOVED                  = 'meeting.participant.removed';
