@@ -967,10 +967,10 @@ class SheetRepository implements SheetRepositoryInterface
             ->createQueryBuilder()
             ->update(Sheet::class, 'sheet')
             ->set('sheet.state', ':state')
-            ->setParameter('state', Sheet::STATE_REFUSED)
             ->set('sheet.inCatalog', ':inCatalog')
-            ->setParameter('inCatalog', false)
             ->where('sheet.id IN (:ids)')
+            ->setParameter('state', Sheet::STATE_REFUSED)
+            ->setParameter('inCatalog', false)
             ->setParameter('ids', $ids)
         ;
 

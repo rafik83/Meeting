@@ -54,7 +54,7 @@ interface SheetRepositoryInterface
     public function updateStateBySheetsId(array $ids, $state);
 
     /**
-     * @param int[]  $ids array of Sheet id
+     * @param int[] $ids array of Sheet id
      */
     public function refuseBySheetsId(array $ids);
 
