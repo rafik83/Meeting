@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2015 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -45,6 +45,7 @@ class Participate
      * @param array       $participants
      * @param null|string $question
      * @param null|string $invitationCode
+     * @param bool        $isUpdate
      */
     public function __construct(
         Happening $happening,

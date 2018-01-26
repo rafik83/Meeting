@@ -78,7 +78,7 @@ class Happening implements TimeRangeInterface
         \DateTimeInterface $end,
         CategoryHappening $category,
         array $types,
-        ?bool $questionAllowed = false,
+        bool $questionAllowed = false,
         ?int $limitParticipant = null,
         ?string $invitationCode = null
     ) {
@@ -216,7 +216,7 @@ class Happening implements TimeRangeInterface
         array $types,
         bool $questionAllowed,
         ?int $limitParticipant,
-        ?string $invitationCode
+        ?string $invitationCode = null
     ) {
         $this->begin            = $begin;
         $this->end              = $end;
