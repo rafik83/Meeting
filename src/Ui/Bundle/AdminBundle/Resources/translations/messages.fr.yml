@@ -791,6 +791,7 @@ admin.sheet.trace.sheet_created_by_group_manager: 'Fiche dupliquée par le gesti
 admin.sheet.trace.validate: 'Validée le %at%'
 admin.sheet.trace.validation_draft: 'Au brouillon le %at%'
 admin.sheet.trace.validation_validate: 'Contenu validé le %at%'
+admin.sheet.validateSheets: 'Valider les fiches'
 admin.sheet.type: Type
 admin.sheet.validate: Valider
 admin.sheets_group.column.created_at: 'Date de création'

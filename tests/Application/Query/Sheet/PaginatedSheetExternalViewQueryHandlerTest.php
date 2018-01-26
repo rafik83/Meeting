@@ -44,7 +44,7 @@ class PaginatedSheetExternalViewQueryHandlerTest extends TestCase
         $sheetPreviewExternalViewQueryHandler = $this->prophesize(SheetPreviewExternalViewQueryHandler::class);
 
         $sheetSearchAdapter
-            ->find(
+            ->paginate(
                 $event,
                 ExternalCatalog::DEFAULT_FILTERS,
                 Sheet\Constant::ORDER_BY_ALPHABETICAL,

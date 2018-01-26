@@ -139,4 +139,24 @@ class AddParticipantCheckerTest extends TestCase
         $result = $this->addParticipantChecker->canAddParticipant($this->sheet->reveal());
         $this->assertTrue($result);
     }
+
+    public function testCanAddParticipantTrueAsMaxParticipantAndParticipantStepDisabled()
+    {
+        $this->sheet->countParticipants()->willReturn(4);
+        $this->package->getMaxParticipant()->willReturn(5);
+        $this->package->isParticipantAndPlanningEnabled()->willReturn(false);
+
+        $result = $this->addParticipantChecker->canAddParticipant($this->sheet->reveal());
+        $this->assertTrue($result);
+    }
+
+    public function testCanNotAddParticipantAsMaxParticipantAndParticipantStepDisabled()
+    {
+        $this->sheet->countParticipants()->willReturn(5);
+        $this->package->getMaxParticipant()->willReturn(5);
+        $this->package->isParticipantAndPlanningEnabled()->willReturn(false);
+
+        $result = $this->addParticipantChecker->canAddParticipant($this->sheet->reveal());
+        $this->assertFalse($result);
+    }
 }

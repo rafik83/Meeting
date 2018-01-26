@@ -60,7 +60,7 @@ class Applyer
         foreach ($templateData->getObjects() as $object) {
             if ($object->getType() === 'tag') {
                 if (null !== $tag = $object->getOption('tag')) {
-                    if (!in_array($tag, $composedRule->tags)) {
+                    if (!in_array($tag, $composedRule->tags, true)) {
                         $object->setOption('tag', null);
                     }
                 }
@@ -68,10 +68,38 @@ class Applyer
                 $tags = $object->getTags();
 
                 foreach ($tags as $key => $tag) {
-                    if (isset($tag['tag']) && !in_array($tag['tag'], $composedRule->tags)) {
+                    if (isset($tag['tag']) && !in_array($tag['tag'], $composedRule->tags, true)) {
                         $object->removeTag($key);
                     }
                 }
+            }
+        }
+    }
+
+    /**
+     * @param TemplateData $templateData
+     * @param array        $rules
+     */
+    public function applyRuleForRegistrationTemplate(TemplateData &$templateData, array $rules)
+    {
+        try {
+            $composedRule = $this->composer->compose($rules);
+        } catch (NoRuleException $exception) {
+            return;
+        }
+
+        foreach ($templateData->getObjects() as $object) {
+            $tagFound = false;
+            foreach ($composedRule->tags as $tag) {
+                if (in_array($tag, $object->getTags(), true)) {
+                    $tagFound = true;
+
+                    break;
+                }
+            }
+
+            if (!$tagFound) {
+                $object->setData([]);
             }
         }
     }
