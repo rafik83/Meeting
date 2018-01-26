@@ -22,7 +22,7 @@
             {% endif %}
             {% if trace.comment != '' %}
                 {% if trace.hasToBeTranslated %}
-                    : {{ ('admin.sheet.trace.comment.translated.' ~ trace.action ~ '.' ~ trace.comment)|trans }}
+                    : {{ ('admin.sheet.details.crm.record.trace.' ~ trace.action ~ '.' ~ trace.comment)|trans }}
                 {% else %}
                     {{ 'admin.sheet.trace.comment'|trans({'%comment%': trace.comment}) }}
                 {% endif %}
