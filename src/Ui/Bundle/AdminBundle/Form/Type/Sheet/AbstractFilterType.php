@@ -13,6 +13,7 @@ namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Sheet;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Sheet\Constant;
 use Proximum\Vimeet\Domain\Repository\CategoryRepositoryInterface;
+use Proximum\Vimeet\Domain\Sheet\CommercialStatus;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Service\BooleanFiltersBuilder;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\CategoryChoiceType;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Messaging\Campaign\ImportedChoiceType;
@@ -118,6 +119,19 @@ abstract class AbstractFilterType extends AbstractType
                 'required'   => false,
                 'multiple'   => true,
                 'expanded'   => true,
+            ])
+            ->add('commercialStatus', CommercialStatusChoiceType::class, [
+                'required'     => false,
+                'multiple'     => true,
+                'choice_label' => function ($key) {
+                    return  sprintf('form.sheet_comment.children.commercialStatus.status.%s', $key);
+                },
+                'label'       => 'form.sheet_filter.children.commercialStatus.label',
+                'translation_domain' => 'forms',
+                'attr' => [
+                    'class'                 => 'commercial_status_selector',
+                    'data-associated-label' => json_encode(CommercialStatus::STATUS_WITH_LABEL),
+                ],
             ])
             ->add(Constant::HAS_ORDER, ChoiceType::class, [
                 'choices'     => [

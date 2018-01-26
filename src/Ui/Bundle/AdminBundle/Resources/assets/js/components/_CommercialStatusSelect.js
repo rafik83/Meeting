@@ -7,6 +7,7 @@ function CommercialStatusSelect(element)
     this.associatedLabel = JSON.parse(this.element.getAttribute('data-associated-label'));
 
     $(this.element).select2({
+        width: '100%',
         templateResult: this.formatResult.bind(this),
         templateSelection: this.formatResult.bind(this)
     }).bind(this);
