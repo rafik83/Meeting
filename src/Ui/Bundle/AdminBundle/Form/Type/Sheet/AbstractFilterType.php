@@ -20,7 +20,6 @@ use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Messaging\Campaign\ImportedC
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\TypeChoiceType;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\YesNoType;
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -124,10 +123,10 @@ abstract class AbstractFilterType extends AbstractType
                 'required'     => false,
                 'multiple'     => true,
                 'choice_label' => function ($key) {
-                    return  sprintf('form.sheet_comment.children.commercialStatus.status.%s', $key);
+                    return  sprintf('admin.sheet.details.crm.record.trace.set_commercial_status.%s', $key);
                 },
-                'label'       => 'form.sheet_filter.children.commercialStatus.label',
-                'translation_domain' => 'forms',
+                'label'              => 'admin.sheet.commercialStatus',
+                'translation_domain' => 'messages',
                 'attr' => [
                     'class'                 => 'commercial_status_selector',
                     'data-associated-label' => json_encode(CommercialStatus::STATUS_WITH_LABEL),
