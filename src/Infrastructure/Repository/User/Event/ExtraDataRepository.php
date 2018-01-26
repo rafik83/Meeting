@@ -49,6 +49,15 @@ class ExtraDataRepository implements ExtraDataRepositoryInterface
     /**
      * {@inheritdoc}
      */
+    public function remove(ExtraData $extraData): void
+    {
+        $this->entityManager->remove($extraData);
+        $this->entityManager->flush($extraData);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function getById($id): ?ExtraData
     {
         $queryBuilder = $this
@@ -113,6 +122,7 @@ class ExtraDataRepository implements ExtraDataRepositoryInterface
             ->setParameter('event', $event)
             ->setParameter('user', $user)
             ->setParameter('name', $name)
+            ->orderBy('extraData.updatedAt', 'desc')
             ->setMaxResults(1);
 
         return $queryBuilder->getQuery()->getOneOrNullResult();
