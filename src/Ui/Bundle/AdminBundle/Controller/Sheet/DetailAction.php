@@ -68,6 +68,7 @@ class DetailAction
 
     /** @var QueryBusInterface */
     private $queryBus;
+
     /** @var FlashBagInterface */
     private $flashBag;
 
