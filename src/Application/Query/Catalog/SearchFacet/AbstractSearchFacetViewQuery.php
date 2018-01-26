@@ -10,9 +10,10 @@
 
 namespace Proximum\Vimeet\Application\Query\Catalog\SearchFacet;
 
+use Proximum\Vimeet\Application\Query\Query;
 use Proximum\Vimeet\Domain\Model\Event;
 
-class AbstractSearchFacetViewQuery
+class AbstractSearchFacetViewQuery implements Query
 {
     /** @var Event */
     public $event;

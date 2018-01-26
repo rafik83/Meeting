@@ -3,13 +3,14 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2016 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
 
 namespace Proximum\Vimeet\Application\Adapter;
 
+use Elastica\Result;
 use Proximum\Vimeet\Application\Query\Messaging\Campaign\SheetListView;
 use Proximum\Vimeet\Application\View\Agenda\Slot\AvailableSlotView;
 use Proximum\Vimeet\Application\View\Participant\ParticipantsSheetIdsView;
@@ -38,6 +39,27 @@ interface SheetSearchAdapterInterface
      * @param Event               $event
      * @param array               $filters
      * @param string|null         $orderBy
+     * @param string              $locale
+     * @param array               $nomenclatureItems
+     * @param AvailableSlotView[] $availableSlotIds
+     * @param Sheet[]             $sheetsToExclude
+     *
+     * @return Result[]
+     */
+    public function find(
+        Event $event,
+        array $filters,
+        string $orderBy = null,
+        string $locale,
+        array $nomenclatureItems = [],
+        array $availableSlotIds = [],
+        array $sheetsToExclude = []
+    ): array;
+
+    /**
+     * @param Event               $event
+     * @param array               $filters
+     * @param string|null         $orderBy
      * @param int                 $page
      * @param int                 $limit
      * @param string              $locale
@@ -48,7 +70,7 @@ interface SheetSearchAdapterInterface
      *
      * @return PaginatedResult
      */
-    public function find(
+    public function paginate(
         Event $event,
         array $filters,
         string $orderBy = null,

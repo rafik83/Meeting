@@ -705,4 +705,20 @@ class FeatureContext extends MinkContext implements KernelAwareContext, SnippetA
         $this->setBaseUrl('http://admin.vimeet.proximum');
         $this->goToThisPage('/');
     }
+
+    /**
+     * @Then /^(?:|I )should see "(?P<text>(?:[^"]|\\")*)" in the title of the "(?P<element>[^"]*)" element$/
+     */
+    public function assertElementTitleContainsText($element, $text)
+    {
+        $element = $this->assertSession()->elementExists('css', $element);
+
+        if (null === $element) {
+            throw new \InvalidArgumentException('Element not found');
+        }
+
+        if ($this->fixStepArgument($text) !== $element->getAttribute('title')) {
+            throw new \InvalidArgumentException('Element does not contain this text');
+        }
+    }
 }

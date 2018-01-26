@@ -275,12 +275,16 @@ class SheetController extends Controller
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
         $this->denyAccessUnlessGranted(SheetVoter::EDIT, $sheet);
 
-        $templateObjectView = $this
-            ->get('tactician.commandbus')
-            ->handle(new TemplateObjectViewQuery($sheet, $locale, $key))
-        ;
+        try {
+            $templateObjectView = $this
+                ->get('tactician.commandbus')
+                ->handle(new TemplateObjectViewQuery($sheet, $locale, $key))
+            ;
+        } catch (Template\Exception\ObjectNotFoundException $exception) {
+            throw $this->createNotFoundException($exception->getMessage());
+        }
 
-        $form  = $this->createObjectForm($templateObjectView->templateObject, $locale, $key);
+        $form = $this->createObjectForm($templateObjectView->templateObject, $locale, $key);
 
         return $this->render('EventBundle:Sheet:form.html.twig', [
             'sheet'    => $sheet,
@@ -301,7 +305,7 @@ class SheetController extends Controller
      *
      * @return FormInterface
      */
-    private function createObjectForm(Template\TemplateObject $object, $locale, $key)
+    private function createObjectForm(Template\TemplateObject $object, $locale, $key): FormInterface
     {
         $types = [
             'editable-text' => Data\EditableTextDataType::class,
@@ -355,7 +359,6 @@ class SheetController extends Controller
         } catch (Template\Exception\ObjectNotFoundException $exception) {
             throw $this->createNotFoundException(sprintf('The given key %s is not found', $key));
         }
-
 
         if ($object instanceof Template\TemplateObject\Nomenclature) {
             $nomenclature = $object->getNomenclatureModel();

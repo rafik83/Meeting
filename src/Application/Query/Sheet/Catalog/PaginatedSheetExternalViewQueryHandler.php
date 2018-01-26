@@ -49,7 +49,7 @@ class PaginatedSheetExternalViewQueryHandler
      */
     public function handle(PaginatedSheetExternalViewQuery $query)
     {
-        $paginatedResult = $this->sheetSearchAdapter->find(
+        $paginatedResult = $this->sheetSearchAdapter->paginate(
             $query->event,
             $query->filters,
             Sheet\Constant::ORDER_BY_ALPHABETICAL,

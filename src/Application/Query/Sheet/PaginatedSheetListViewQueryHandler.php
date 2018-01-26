@@ -88,7 +88,7 @@ class PaginatedSheetListViewQueryHandler
             $query->filters['type'] = $this->typeRepository->getAllowedTypesByEvent($query->admin, $query->event);
         }
 
-        $sheets = $this->sheetSearchAdapter->find(
+        $sheets = $this->sheetSearchAdapter->paginate(
             $query->event,
             $query->filters,
             isset($query->filters['orderBy']) ? $query->filters['orderBy'] : null,

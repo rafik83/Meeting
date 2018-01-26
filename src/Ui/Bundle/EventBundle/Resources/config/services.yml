@@ -672,3 +672,16 @@ services:
             - '@repository.user.event.extra_data_repository'
             - '@adapter.router'
             - '%feature_availability_confirmation_enabled%'
+
+    Proximum\Vimeet\Ui\Bundle\EventBundle\Handler\Catalog\CategoryTypeOrganizationAndPositionViewsHandler:
+        arguments:
+            - '@Proximum\Vimeet\Infrastructure\Adapter\QueryBus'
+            - '@catalog.visible_participation_categories'
+            - '@catalog.visible_participation_types'
+            - '@templating'
+
+    Proximum\Vimeet\Ui\Bundle\EventBundle\Handler\Catalog\FilterAvailableSlotAndSpecificSlotCheckerHandler:
+        arguments:
+            - '@domain.event.day.dday_guesser'
+            - '@Proximum\Vimeet\Infrastructure\Adapter\QueryBus'
+            - '@vimeet_infrastructure.repository.meeting_slot_repository'

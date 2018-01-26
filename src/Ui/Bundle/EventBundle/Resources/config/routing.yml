@@ -459,6 +459,13 @@ event_availability_confirmation:
     methods: [GET, POST]
     defaults: { _controller: EventBundle:Availability:confirmation }
 
+event_catalog_export:
+    path: /sheet/{sheet}/catalog/export
+    requirements:
+        sheet: \d+
+    methods: [GET]
+    defaults: { _controller: Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Catalog\ExportAction }
+
 #
 # Catalog external
 #
