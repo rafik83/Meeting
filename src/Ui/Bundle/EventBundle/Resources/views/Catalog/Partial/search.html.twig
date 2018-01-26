@@ -79,9 +79,15 @@
 {{ include('EventBundle:Tip:tip.html.twig', {tipTranslationViews: tipTranslationViews}) }}
 
 <div class="catalog__filters">
-
     <div class="select-all">
-        <span class="total-result">({{ total }})</span>
+        <span class="total-result" title="{{ total }}">
+            {{ 'catalog.sheet.result.total'|transchoice(total, {'%total%': total}) }}
+        </span>
+        {% if total > 0 %}
+        <a href="{{ path('event_catalog_export', {'sheet': sheet.id}) ~ '?' ~ app.request.query.all|url_encode }}" class="btn btn-link text-right">
+            <i class="glyphicon glyphicon-download-alt"></i> {{ 'catalog.sheet.export.csv'|trans }}
+        </a>
+        {% endif %}
     </div>
 
     <div class="sort">

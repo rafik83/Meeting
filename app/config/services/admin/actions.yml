@@ -230,6 +230,20 @@ services:
             - '@templating'
 
     #
+    # Catalog
+    #
+    Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Catalog\ExportAction:
+        arguments:
+            - '@adapter.authorization_checker'
+            - '@domain.key_dates.checker.catalog_access_checker'
+            - '@form.factory'
+            - '@Proximum\Vimeet\Infrastructure\Adapter\QueryBus'
+            - '@Proximum\Vimeet\Ui\Bundle\EventBundle\Handler\Catalog\CategoryTypeOrganizationAndPositionViewsHandler'
+            - '@Proximum\Vimeet\Ui\Bundle\EventBundle\Handler\Catalog\FilterAvailableSlotAndSpecificSlotCheckerHandler'
+            - '@adapter.serializer_adapter'
+            - '@datetime'
+
+    #
     # Package
     #
     Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Package\UpdateAction:

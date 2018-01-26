@@ -23,6 +23,7 @@ use Proximum\Vimeet\Application\Query\Tip\TipTranslationViewQueryHandler;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\User;
+use Proximum\Vimeet\Domain\Sheet\Participant\AddParticipantChecker;
 use Proximum\Vimeet\Domain\Template;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Sheet\Data;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\ParamConverter\EventDomain;
@@ -130,7 +131,7 @@ class SheetController extends Controller
         );
         $tipTranslationViews = $this->get('tactician.commandbus.query')->handle($tipTranslationViewQuery);
 
-        $canAddParticipant = $this->get('Proximum\Vimeet\Domain\Sheet\Participant\AddParticipantChecker')->canAddParticipant($sheet);
+        $canAddParticipant = $this->get(AddParticipantChecker::class)->canAddParticipant($sheet);
 
         return $this->render('EventBundle:Sheet:sheet.html.twig', [
             'canAddParticipant'       => $canAddParticipant,
@@ -274,12 +275,16 @@ class SheetController extends Controller
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
         $this->denyAccessUnlessGranted(SheetVoter::EDIT, $sheet);
 
-        $templateObjectView = $this
-            ->get('tactician.commandbus')
-            ->handle(new TemplateObjectViewQuery($sheet, $locale, $key))
-        ;
+        try {
+            $templateObjectView = $this
+                ->get('tactician.commandbus')
+                ->handle(new TemplateObjectViewQuery($sheet, $locale, $key))
+            ;
+        } catch (Template\Exception\ObjectNotFoundException $exception) {
+            throw $this->createNotFoundException($exception->getMessage());
+        }
 
-        $form  = $this->createObjectForm($templateObjectView->templateObject, $locale, $key);
+        $form = $this->createObjectForm($templateObjectView->templateObject, $locale, $key);
 
         return $this->render('EventBundle:Sheet:form.html.twig', [
             'sheet'    => $sheet,
@@ -300,7 +305,7 @@ class SheetController extends Controller
      *
      * @return FormInterface
      */
-    private function createObjectForm(Template\TemplateObject $object, $locale, $key)
+    private function createObjectForm(Template\TemplateObject $object, $locale, $key): FormInterface
     {
         $types = [
             'editable-text' => Data\EditableTextDataType::class,
@@ -354,7 +359,6 @@ class SheetController extends Controller
         } catch (Template\Exception\ObjectNotFoundException $exception) {
             throw $this->createNotFoundException(sprintf('The given key %s is not found', $key));
         }
-
 
         if ($object instanceof Template\TemplateObject\Nomenclature) {
             $nomenclature = $object->getNomenclatureModel();

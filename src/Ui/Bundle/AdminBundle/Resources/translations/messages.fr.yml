@@ -817,6 +817,7 @@ admin.sheet.trace.validation_draft: 'Au brouillon le %at%'
 admin.sheet.trace.validation_validate: 'Contenu validé le %at%'
 admin.sheet.trace.set_commercial_status: 'Le statut commercial a été changé'
 admin.sheet.type: Type
+admin.sheet.validateSheets: 'Valider les fiches'
 admin.sheet.validate: Valider
 admin.sheets_group.column.created_at: 'Date de création'
 admin.sheets_group.column.email_manager: 'Email du gestionnaire'

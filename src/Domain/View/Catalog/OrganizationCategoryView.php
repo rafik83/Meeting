@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2015 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -12,14 +12,10 @@ namespace Proximum\Vimeet\Domain\View\Catalog;
 
 class OrganizationCategoryView
 {
-    /**
-     * @var string
-     */
+    /** @var string */
     public $key;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     public $title;
 
     /**

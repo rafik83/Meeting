@@ -10,10 +10,11 @@
 
 namespace Proximum\Vimeet\Application\Query\Agenda\AvailableSheets;
 
+use Proximum\Vimeet\Application\Query\Query;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Participant;
 
-class AvailableSlotsByParticipantQuery
+class AvailableSlotsByParticipantQuery implements Query
 {
     /** @var Event */
     public $event;
