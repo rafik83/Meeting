@@ -174,6 +174,7 @@ class SheetElasticTransformer implements ModelToElasticaTransformerInterface
                 'type'                    => $sheet->getType()->getId(),
                 'categories'              => $categories,
                 'followUp'                => $sheet->getFollower() instanceof Admin ? $sheet->getFollower()->getId() : null,
+                'commercialStatus'        => $sheet->getCommercialStatus(),
                 'participantNumber'       => count($sheet->getParticipants()),
                 'participants'            => $participants,
                 'event'                   => $sheet->getEvent()->getId(),
