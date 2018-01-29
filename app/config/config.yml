@@ -195,7 +195,6 @@ fos_elastica:
                             null_value: 0
                         commercialStatus:
                             type: string
-                            nullable: true
                         participantNumber:
                             type: integer
                         participants:
