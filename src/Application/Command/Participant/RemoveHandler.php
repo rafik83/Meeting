@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Application\Command\Participant;
 
+use Proximum\Vimeet\Application\Components\Step\StepParticipantAndPlanning;
 use Proximum\Vimeet\Application\Event\Events;
 use Proximum\Vimeet\Application\Event\Participant\ParticipantRemovedEvent;
 use Proximum\Vimeet\Application\Event\Sheet\SheetUpdatedEvent;
@@ -48,25 +49,31 @@ class RemoveHandler
      */
     private $participantInfoGuesser;
 
+    /** @var StepParticipantAndPlanning */
+    private $stepParticipantAndPlanning;
+
     /**
      * @param ParticipantRepositoryInterface $participantRepository
      * @param CartManager                    $cartManager
      * @param DelayedEventDispatcher         $eventDispatcher
      * @param MeetingRepositoryInterface     $meetingRepository
      * @param ParticipantInfoGuesser         $participantInfoGuesser
+     * @param StepParticipantAndPlanning     $stepParticipantAndPlanning
      */
     public function __construct(
         ParticipantRepositoryInterface $participantRepository,
         CartManager $cartManager,
         DelayedEventDispatcher $eventDispatcher,
         MeetingRepositoryInterface $meetingRepository,
-        ParticipantInfoGuesser $participantInfoGuesser
+        ParticipantInfoGuesser $participantInfoGuesser,
+        StepParticipantAndPlanning $stepParticipantAndPlanning
     ) {
-        $this->participantRepository  = $participantRepository;
-        $this->cartManager            = $cartManager;
-        $this->eventDispatcher        = $eventDispatcher;
-        $this->meetingRepository      = $meetingRepository;
+        $this->participantRepository = $participantRepository;
+        $this->cartManager = $cartManager;
+        $this->eventDispatcher = $eventDispatcher;
+        $this->meetingRepository = $meetingRepository;
         $this->participantInfoGuesser = $participantInfoGuesser;
+        $this->stepParticipantAndPlanning = $stepParticipantAndPlanning;
     }
 
     /**
@@ -106,7 +113,12 @@ class RemoveHandler
         }
 
         // Update cart
-        $this->cartManager->updateParticipantsQuantity($remove->sheet);
+        $cart = $this->cartManager->getCart($remove->sheet);
+        $cart = $this->cartManager->updateParticipantsQuantity(
+            $cart,
+            $this->stepParticipantAndPlanning->build($remove->sheet)->participantsProduct
+        );
+        $this->cartManager->save($cart);
 
         $sheetUpdated = new SheetUpdatedEvent($remove->sheet);
         $this->eventDispatcher->dispatch(Events::SHEET_UPDATED, $sheetUpdated);

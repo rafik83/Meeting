@@ -1,7 +1,7 @@
 account.change_password.link: 'Change the password'
 account.change_password.title: 'Change the password'
 account.profile.company: 'Company / Organization'
-account.profile.contactInformation: 'Contact information'
+account.profile.contactInformation: 'Contact informations'
 account.profile.profile: Profile
 account.profile.title: Profile
 account.profile.updateAvatar: 'Change profile picture'
@@ -30,6 +30,7 @@ catalog.action.meeting.request.refuse: 'Received proposal'
 catalog.action.meeting.request.show.refuse: 'Refused request'
 catalog.complete_sheet: 'View sheet details'
 catalog.external.modal.content: 'To access the full profile, you need to register to the event.'
+catalog.external.modal.content.logged: 'The schedule of appointment will be available on the %catalogueOnlineDate%'
 catalog.meeting_request.approve: Approve
 catalog.meeting_request.create: 'Request a meeting'
 catalog.meeting_request.pending: 'Pending request'
@@ -249,6 +250,7 @@ package.product.outOfStock: 'Sold out'
 package.product.priceWithCurrency: '%price% <sup>%currency%</sup>'
 package.product.quantity: Quantity
 package.product.quantityMax: 'Maximum quantity reached'
+package.product.quantityMaxInformation: 'Max: %quantityMax%'
 package.product.quantityMin: 'Maximum minimum reached'
 package.product.selectOptions: 'Select your options'
 package.product.subjectedToValidationHelp: 'Subject to validation'

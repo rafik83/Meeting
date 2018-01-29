@@ -1,0 +1,4 @@
+{% block body %}
+    {# placeholders are managed by the email router provider, not in twig #}
+    {{ 'mail.sheet.refused.body'|trans({}, 'mail', mail.locale)|html|nl2br }}
+{% endblock %}

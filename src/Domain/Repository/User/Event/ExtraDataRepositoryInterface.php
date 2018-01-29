@@ -35,6 +35,11 @@ interface ExtraDataRepositoryInterface
     public function set(ExtraData $extraData);
 
     /**
+     * @param ExtraData $extraData
+     */
+    public function remove(ExtraData $extraData): void;
+
+    /**
      * @param $id
      *
      * @return null|ExtraData

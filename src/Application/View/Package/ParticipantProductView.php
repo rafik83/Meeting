@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2016 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -12,8 +12,14 @@ namespace Proximum\Vimeet\Application\View\Package;
 
 class ParticipantProductView
 {
+    /** @var int */
+    public $id;
+
     /** @var string */
     public $title;
+
+    /** @var string */
+    public $description;
 
     /** @var float */
     public $unitPrice;
@@ -24,22 +30,59 @@ class ParticipantProductView
     /** @var string */
     public $vatMode;
 
+    /** @var float */
+    public $quantityMax;
+
+    /** @var int */
+    public $quantityIncluded;
+
     /** @var bool */
-    public $isIncluded;
+    public $isBuyable;
+
+    /** @var bool */
+    public $hasRemainingIncludedQuantity;
 
     /**
+     * @param int    $id
      * @param string $title
+     * @param string $description
      * @param float  $unitPrice
      * @param string $currency
      * @param string $vatMode
-     * @param bool   $isIncluded
+     * @param float  $quantityMax
+     * @param int    $quantityIncluded
+     * @param bool   $isBuyable
+     * @param bool   $hasRemainingIncludedQuantity
      */
-    public function __construct($title, $unitPrice, $currency, $vatMode, $isIncluded)
+    public function __construct(
+        int $id,
+        string $title,
+        string $description,
+        float $unitPrice,
+        string $currency,
+        string $vatMode,
+        float $quantityMax,
+        int $quantityIncluded,
+        bool $isBuyable,
+        bool $hasRemainingIncludedQuantity
+    ) {
+        $this->id = $id;
+        $this->title = $title;
+        $this->description = $description;
+        $this->unitPrice = $unitPrice;
+        $this->currency = $currency;
+        $this->vatMode = $vatMode;
+        $this->quantityMax = $quantityMax;
+        $this->quantityIncluded = $quantityIncluded;
+        $this->isBuyable = $isBuyable;
+        $this->hasRemainingIncludedQuantity = $hasRemainingIncludedQuantity;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isInfiniteQuantityMax(): bool
     {
-        $this->title      = $title;
-        $this->unitPrice  = $unitPrice;
-        $this->currency   = $currency;
-        $this->vatMode    = $vatMode;
-        $this->isIncluded = $isIncluded;
+        return INF === $this->quantityMax;
     }
 }

@@ -3,6 +3,7 @@ boolean.yes: Oui
 form.add_participant.children.email.placeholder: E-mail
 form.add_participant.children.firstName.placeholder: Prénom
 form.add_participant.children.lastName.placeholder: NOM
+form.add_participant.children.product.label: 'Produits liés'
 form.catalog_approve_meeting_request.children.description.label: 'Répondre à la proposition de RDV?'
 form.catalog_approve_meeting_request.children.description.placeholder: 'Ecrire un message'
 form.catalog_approve_meeting_request.children.participants.label: 'Attribuer ce RDV exclusivement à ?'
@@ -61,6 +62,8 @@ form.nomenclature_data.children.submit.label: Enregistrer
 form.package_summary_promotion_code.children.submit.label: Valider
 form.package_summary_promotion_code.placeholder: 'Saisir votre code promotionnel'
 form.package_summary_terms_of_sale.children.termsOfSale.label: 'Je reconnais avoir pris connaissance et accepter les Conditions générales de vente ainsi que les Conditions tarifaires relatives au forfait de participation que je souscris.'
+form.participantAndPlanning.participantProduct.selectAnOption: '-- Sélectionnez une option --'
+form.participate.children.invitationCode.label: 'Code d''invitation'
 form.participate.children.participants.label: 'Qui participe ?'
 form.participate.children.participants.unavailable: Indisponible
 form.participate.children.question.label: 'Posez une question aux intervenants pour préparer l''atelier'

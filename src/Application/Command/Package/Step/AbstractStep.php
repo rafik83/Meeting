@@ -20,7 +20,7 @@ class AbstractStep
     public $sheet;
 
     /**
-     * @var int
+     * @var null|int
      */
     public $currentStep;
 
@@ -28,7 +28,7 @@ class AbstractStep
      * @param Sheet $sheet
      * @param int   $currentStep
      */
-    public function __construct(Sheet $sheet, $currentStep)
+    public function __construct(Sheet $sheet, $currentStep = null)
     {
         $this->sheet       = $sheet;
         $this->currentStep = $currentStep;

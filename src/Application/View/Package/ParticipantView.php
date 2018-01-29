@@ -14,51 +14,19 @@ use Proximum\Vimeet\Application\View\Participant;
 
 class ParticipantView
 {
-    /**
-     * @var Participant\CardView
-     */
-    public $card;
-
-    /**
-     * @var int
-     */
+    /** @var int */
     public $id;
 
-    /**
-     * @var float
-     */
-    public $price;
-
-    /**
-     * @var string
-     */
-    public $vatMode;
-
-    /**
-     * @var bool
-     */
-    public $included;
-
-    /**
-     * @var string
-     */
-    public $currency;
+    /** @var Participant\CardView */
+    public $card;
 
     /**
      * @param int                  $id
      * @param Participant\CardView $card
-     * @param float                $price
-     * @param string               $vatMode
-     * @param string               $currency
-     * @param bool                 $included
      */
-    public function __construct($id, Participant\CardView $card, $price, $vatMode, $currency, $included)
+    public function __construct($id, Participant\CardView $card)
     {
-        $this->id       = $id;
-        $this->card     = $card;
-        $this->price    = $price;
-        $this->vatMode  = $vatMode;
-        $this->currency = $currency;
-        $this->included = $included;
+        $this->id = $id;
+        $this->card = $card;
     }
 }

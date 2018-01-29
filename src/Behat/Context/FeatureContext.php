@@ -11,15 +11,19 @@
 namespace Proximum\Vimeet\Behat\Context;
 
 use Behat\Behat\Context\SnippetAcceptingContext;
+use Behat\Mink\Driver\BrowserKitDriver;
 use Behat\MinkExtension\Context\MinkContext;
 use Behat\Symfony2Extension\Context\KernelAwareContext;
+use Proximum\Vimeet\Application\Adapter\FileSystemAdapterInterface;
 use Proximum\Vimeet\Behat\Context\Domain\Proxy\FeatureContextProxyInterface;
+use Proximum\Vimeet\Behat\Service\Adapter\StorageSMSSenderAdapter;
 use Proximum\Vimeet\Domain\Model\Admin;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Repository\AdminRepositoryInterface;
 use Symfony\Component\BrowserKit\Cookie;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Finder\Finder;
+use Symfony\Component\HttpKernel\KernelInterface;
 use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 
 /**
@@ -50,9 +54,9 @@ class FeatureContext extends MinkContext implements KernelAwareContext, SnippetA
     }
 
     /**
-     * @param \Symfony\Component\HttpKernel\KernelInterface $kernel
+     * @param KernelInterface $kernel
      */
-    public function setKernel(\Symfony\Component\HttpKernel\KernelInterface $kernel)
+    public function setKernel(KernelInterface $kernel)
     {
         $this->kernel = $kernel;
     }
@@ -522,7 +526,7 @@ class FeatureContext extends MinkContext implements KernelAwareContext, SnippetA
     {
         $this->setBaseUrl($eventUrl);
         $driver = $this->getSession()->getDriver();
-        if (!$driver instanceof \Behat\Mink\Driver\BrowserKitDriver) {
+        if (!$driver instanceof BrowserKitDriver) {
             throw new \Exception('BrowserKitDriver not supported');
         }
 
@@ -553,7 +557,7 @@ class FeatureContext extends MinkContext implements KernelAwareContext, SnippetA
     {
         $this->setBaseUrl('http://admin.vimeet.proximum');
         $driver = $this->getSession()->getDriver();
-        if (!$driver instanceof \Behat\Mink\Driver\BrowserKitDriver) {
+        if (!$driver instanceof BrowserKitDriver) {
             throw new \Exception('BrowserKitDriver not supported');
         }
 
@@ -661,6 +665,14 @@ class FeatureContext extends MinkContext implements KernelAwareContext, SnippetA
     }
 
     /**
+     * @When I want to know the current url
+     */
+    public function echoCurrentUrl()
+    {
+        echo $this->assertSession()->getCurrentUrlPath();
+    }
+
+    /**
      * Checks, that current url is equal to specified.
      *
      * @Then /^(?:|I )should be on this url "(?P<url>[^"]+)"$/
@@ -695,6 +707,29 @@ class FeatureContext extends MinkContext implements KernelAwareContext, SnippetA
 
         $this->setBaseUrl(sprintf('http://%s', $event->getDomain()));
         $this->goToThisPage('/');
+    }
+
+    /**
+     * @Then a SMS should be sent to :phone with content :content
+     *
+     * @param string $phone
+     * @param string $expectedContent
+     */
+    public function aSmsShouldBeSentTo(string $phone, string $expectedContent)
+    {
+        /** @var FileSystemAdapterInterface $fileSystem */
+        $fileSystem = $this->kernel->getContainer()->get('adapter.file_system_adapter');
+
+        $smsDirectory = $this->kernel->getContainer()->getParameter('sms_directory');
+        $file = $smsDirectory . DIRECTORY_SEPARATOR . StorageSMSSenderAdapter::getFileName($phone);
+
+        if (!$fileSystem->exists($file)) {
+            throw new \LogicException('Missing SMS');
+        }
+
+        if (file_get_contents($file) !== $expectedContent) {
+            throw new \LogicException('SMS content is not the expected one');
+        }
     }
 
     /**

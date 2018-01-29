@@ -14,7 +14,6 @@ use Proximum\Vimeet\Application\Command\Sheet\RemoveImage;
 use Proximum\Vimeet\Application\Command\Sheet\SubmitValidation;
 use Proximum\Vimeet\Application\Command\Sheet\UpdateData;
 use Proximum\Vimeet\Application\Exception\Sheet\SheetNotFoundException;
-use Proximum\Vimeet\Application\Query\Package\Participant\ParticipantProductViewQuery;
 use Proximum\Vimeet\Application\Query\Sheet\SheetValidationViewQuery;
 use Proximum\Vimeet\Application\Query\Sheet\TemplateObjectViewQuery;
 use Proximum\Vimeet\Application\Query\Sheet\WelcomeViewQuery;
@@ -29,7 +28,6 @@ use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Sheet\Data;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\ParamConverter\EventDomain;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Security\SheetVoter;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Symfony\Component\Form\Form;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
@@ -47,7 +45,7 @@ class SheetController extends Controller
      *
      * @return RedirectResponse
      */
-    public function redirectTosheetAction(Request $request, EventDomain $eventDomain, $locale = null)
+    public function redirectToSheetAction(Request $request, EventDomain $eventDomain, $locale = null)
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
 
@@ -111,10 +109,6 @@ class SheetController extends Controller
         // Build sheet template data and attach tagged data view to template object with tags
         $templateData = $this->get('template.tagged_data_factory')->buildTaggedDataView($sheet, $locale);
 
-        $participantProductView = $this->get('tactician.commandbus.query')->handle(
-            new ParticipantProductViewQuery($sheet, $locale)
-        );
-
         $flagFirstRegistration = $this->container->get('session')->getFlashBag()->get('first_registration');
         $isFirstRegistration   = in_array(true, $flagFirstRegistration);
         $popinWelcome          = null;
@@ -144,7 +138,6 @@ class SheetController extends Controller
             'templateData'            => $templateData,
             'popinWelcome'            => $popinWelcome,
             'sheetValidationView'     => (isset($sheetValidationView)) ? $sheetValidationView : null,
-            'participantProductView'  => $participantProductView,
             'isRequestMeetingEnabled' => false,
             'isCatalog'               => false,
             'tipTranslationViews'     => $tipTranslationViews,

@@ -74,6 +74,6 @@ class BatchDraftHandler
             );
         }
 
-        return new BatchResult(count($sheets), $batchPending->getMessage() . 'draft.success');
+        return new BatchResult($sheets, $batchPending->getMessage() . 'draft.success');
     }
 }

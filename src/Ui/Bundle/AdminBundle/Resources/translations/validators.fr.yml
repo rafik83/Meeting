@@ -30,6 +30,7 @@ validators.group.no_sheet_selected: 'Au moins une fiche doit être selectionnée
 validators.group.user_not_allowed_to_manage: 'L''utilisateur suivant n''est pas autorisé à gérer une nouvelle entité: %email%'
 validators.happening.startTimeMustBeBeforeEndTime: 'Le début doit être avant la fin'
 validators.hexadecimal: 'Cette valeur doit être au format hexadécimal'
+validators.invitationCode.length.min: 'Le code doit être composé de 4 caractères minimum'
 validators.invoice.invoiceNotFound: 'Aucune facture avec ce numéro'
 validators.invoice.numeroNotValid: 'Le numéro de la facture que vous avez entré n''est pas valide'
 validators.json.invalid: 'Le JSON n''est pas valide'

@@ -43,4 +43,12 @@ class FileSystemAdapter implements FileSystemAdapterInterface
     {
         return $this->fileSystem->exists($files);
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function remove($files): void
+    {
+        $this->fileSystem->remove($files);
+    }
 }

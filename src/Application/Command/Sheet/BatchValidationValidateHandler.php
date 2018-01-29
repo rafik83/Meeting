@@ -74,6 +74,6 @@ class BatchValidationValidateHandler
             $this->batchJobQueue->createJob($batch->ids, $batch->admin);
         }
 
-        return new BatchResult(count($sheets), $batch->getMessage() . 'validation.validate.success');
+        return new BatchResult($sheets, $batch->getMessage() . 'validation.validate.success');
     }
 }

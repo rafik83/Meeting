@@ -50,7 +50,18 @@
         </thead>
         <tbody>
         {% set availabilityCssClass = {'default': 'success', 'warning': 'warning', 'alert': 'danger'} %}
+        {% set currentType = null %}
+
         {% for product in products %}
+            {% if currentType is null or currentType != product.type %}
+                {% set currentType = product.type %}
+                <tr class="info">
+                    <th colspan="9">
+                        <i class="glyphicon glyphicon-product-{{ product.type }}"></i>
+                        {{ ('admin.product.type.' ~ product.type)|trans }}
+                    </th>
+                </tr>
+            {% endif %}
             <tr>
                 <td>
                     <i class="glyphicon glyphicon-product-{{ product.type }}"></i>
@@ -65,7 +76,10 @@
                     {% if product.hasIncludedProducts %}
                         <ul>
                             {% for includedProduct in product.includedProducts %}
-                                <li>{{ includedProduct.quantity }} &times; {{ includedProduct.name }}</li>
+                                <li>
+                                    <i class="glyphicon glyphicon-product-{{ includedProduct.type }}"></i>
+                                    {{ includedProduct.quantity }} &times; {{ includedProduct.name }}
+                                </li>
                             {% endfor %}
                         </ul>
                     {% endif %}

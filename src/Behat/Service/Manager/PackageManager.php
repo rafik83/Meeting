@@ -1,0 +1,110 @@
+<?php
+
+/*
+ * This file is part of the Proximum Vimeet project.
+ *
+ * Copyright (C) Proximum
+ *
+ * @author Elao <contact@elao.com>
+ */
+
+namespace Proximum\Vimeet\Behat\Service\Manager;
+
+use Proximum\Vimeet\Domain\Model\Event;
+use Proximum\Vimeet\Domain\Model\Package;
+use Proximum\Vimeet\Domain\Model\Product;
+use Proximum\Vimeet\Domain\Repository\PackageRepositoryInterface;
+
+class PackageManager
+{
+    /** @var PackageRepositoryInterface */
+    private $packageRepository;
+
+    /**
+     * @param PackageRepositoryInterface $packageRepository
+     */
+    public function __construct(PackageRepositoryInterface $packageRepository)
+    {
+        $this->packageRepository = $packageRepository;
+    }
+
+    /**
+     * @param Event  $event
+     * @param string $title
+     *
+     * @return Package
+     */
+    public function create(Event $event, string $title = 'Package'): Package
+    {
+        $package = new Package($event, $title, new \DateTime());
+        $this->packageRepository->add($package);
+
+        return $package;
+    }
+
+    /**
+     * @param Package $package
+     * @param Product $product
+     */
+    public function assignProductParticipant(Package $package, Product $product)
+    {
+        if (!$product->isParticipant()) {
+            throw new \InvalidArgumentException('The given product is not of type participant');
+        }
+
+        // As we set a product participant, we enable the participant step
+        $package->enable(
+            $package->isPlansEnabled(),
+            true,
+            $package->isOptionsEnabled()
+        );
+
+        $package->setParticipants(array_merge($package->getParticipants(), [$product]));
+
+        $this->packageRepository->set($package);
+    }
+
+    /**
+     * @param Package $package
+     * @param Product $product
+     */
+    public function assignPlan(Package $package, Product $product)
+    {
+        if (!$product->isPlan()) {
+            throw new \InvalidArgumentException('The given product is not of type plan');
+        }
+
+        // As we set a product plan, we enable the plan step
+        $package->enable(
+            true,
+            $package->isParticipantAndPlanningEnabled(),
+            $package->isOptionsEnabled()
+        );
+
+        $package->setPlans(array_merge($package->getPlans(), [$product]));
+
+        $this->packageRepository->set($package);
+    }
+
+    /**
+     * @param Package $package
+     * @param Product $planning
+     */
+    public function assignPlanning(Package $package, Product $planning)
+    {
+        if (!$planning->isPlanning()) {
+            throw new \InvalidArgumentException('The given product is not of type plan');
+        }
+
+        // As we set a product planning, we enable the participant and planning step
+        $package->enable(
+            $package->isPlansEnabled(),
+            true,
+            $package->isOptionsEnabled()
+        );
+
+        $package->setPlanning($planning);
+
+        $this->packageRepository->set($package);
+    }
+}

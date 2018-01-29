@@ -66,6 +66,7 @@ class BatchType extends AbstractType
             ->add('validate', SubmitType::class)
             ->add('assign', SubmitType::class)
             ->add('accept', SubmitType::class)
+            ->add('refuse', SubmitType::class)
             ->add('pending', SubmitType::class)
             ->add('selectionType', HiddenType::class, [
                 'data' => Batch::SELECTION_TYPE_PAGE,

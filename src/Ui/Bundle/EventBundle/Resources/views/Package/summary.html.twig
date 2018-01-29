@@ -34,11 +34,8 @@
                                 {{ include('EventBundle:Package/Summary:plan.html.twig', {
                                     planGroup: view.groups.planGroup
                                 }) }}
-                                {{ include('EventBundle:Package/Summary:participant.html.twig', {
-                                    participantGroup: view.groups.participantGroup
-                                }) }}
-                                {{ include('EventBundle:Package/Summary:planning.html.twig', {
-                                    planningGroup: view.groups.planningGroup
+                                {{ include('EventBundle:Package/Summary:participantAndPlanningGroup.html.twig', {
+                                    participantGroup: view.groups.participantAndPlanningGroup
                                 }) }}
                                 {{ include('EventBundle:Package/Summary:groups.html.twig', {
                                     groups: view.groups.groups

@@ -10,19 +10,19 @@
             <div class="catalog-mobile-menu-summary catalog-mobile-menu-container">
                 {% if searchForm.availableSlot is defined %}
                     <a href="#" class="catalog-mobile-menu-button btn btn-primary btn-block">
-                        <span>...</span>
                         <span class="button-count">
-                        <i class="glyphicon glyphicon-chevron-down"></i>
-                    </span>
+                            <i class="glyphicon glyphicon-chevron-down"></i>
+                        </span>
+                        <span>...</span>
                     </a>
                 {% endif %}
                 {% if searchForm.state is defined %}
                     <a href="#" class="catalog-mobile-menu-button btn btn-primary btn-block">
-                        <span>...</span>
                         <span class="button-count">
                             (...)
                             <i class="glyphicon glyphicon-chevron-down"></i>
                         </span>
+                        <span>...</span>
                     </a>
                 {% endif %}
             </div>

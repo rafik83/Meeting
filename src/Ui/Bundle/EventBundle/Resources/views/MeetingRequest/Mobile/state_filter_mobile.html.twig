@@ -12,10 +12,10 @@
             data-count="{{ count }}"
         >
             <a href="#" class="catalog-mobile-menu-button btn btn-primary btn-block {% if not child.vars.data %}btn-inactive{% endif %} {% if count == 0 %}disabled{% endif %}" data-catalog-mobile-menu-button-action="catalog-mobile-menu-button-action-state-filter">
-                <span>{{ child.vars.label|trans({}, child.vars.translation_domain) }}</span>
                 <span class="button-count">
                     ({{ count }})
                 </span>
+                <span>{{ child.vars.label|trans({}, child.vars.translation_domain) }}</span>
             </a>
         </li>
     {% endfor %}

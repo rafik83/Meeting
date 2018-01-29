@@ -86,17 +86,22 @@ class LeniUserViewNormalizer implements NormalizerInterface
             self::LENI_COL_LOCALE       => $userView->locale,
         ];
 
-        // Set the previous LENI user id
-        if ($context['previousUserExtraData'] instanceof ExtraData) {
-            $previousData = unserialize($context['previousUserExtraData']->getValue());
-            $data[self::LENI_COL_USER_ID] = $previousData[self::LENI_COL_USER_ID];
-        }
-
         $dayNumber = 1;
+
         foreach ($userView->planning->days as $day) {
             $data[self::LENI_COL_DAY . $dayNumber] = $day->planning;
 
             $dayNumber++;
+        }
+
+        // Set the previous LENI user id
+        // Warning: always on end of the returned array
+        if ($context['previousUserExtraData'] instanceof ExtraData) {
+            $previousData = unserialize($context['previousUserExtraData']->getValue());
+
+            if (isset($previousData[self::LENI_COL_USER_ID])) {
+                $data[self::LENI_COL_USER_ID] = $previousData[self::LENI_COL_USER_ID];
+            }
         }
 
         return $data;

@@ -39,4 +39,7 @@ class AbstractHappeningCommand implements Command
 
     /** @var int|null */
     public $limitParticipant;
+
+    /** @var null|string */
+    public $invitationCode;
 }

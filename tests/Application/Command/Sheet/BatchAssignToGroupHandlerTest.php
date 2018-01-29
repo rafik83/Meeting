@@ -64,7 +64,10 @@ class BatchAssignToGroupHandlerTest extends TestCase
 
         $result = $handler->handle(new BatchAssignToGroup([1, 2], $group->reveal(), 'fr'));
 
-        $expected = new BatchResult(2, 'flash.admin.sheet_batch.assignToGroup.success');
+        $expected = new BatchResult(
+            [$sheet1->reveal(), $sheet2->reveal()],
+            'flash.admin.sheet_batch.assignToGroup.success'
+        );
 
         $this->assertEquals($expected, $result);
     }
@@ -118,7 +121,7 @@ class BatchAssignToGroupHandlerTest extends TestCase
         $result = $handler->handle(new BatchAssignToGroup([1, 2, 3], $group->reveal(), 'fr'));
 
         $expected = new BatchResult(
-            2,
+            [$sheet1->reveal(), $sheet2->reveal()],
             'flash.admin.sheet_batch.assignToGroup.ignoredSheets',
             'Flash message with ignored sheets'
         );
@@ -167,7 +170,10 @@ class BatchAssignToGroupHandlerTest extends TestCase
 
         $result = $handler->handle(new BatchAssignToGroup([1, 2], null, 'fr'));
 
-        $expected = new BatchResult(2, 'flash.admin.sheet_batch.unassignFromGroup.success');
+        $expected = new BatchResult(
+            [$sheet1->reveal(), $sheet2->reveal()],
+            'flash.admin.sheet_batch.unassignFromGroup.success'
+        );
 
         $this->assertEquals($expected, $result);
     }
@@ -241,7 +247,7 @@ class BatchAssignToGroupHandlerTest extends TestCase
         $result = $handler->handle(new BatchAssignToGroup([1, 2, 3], null, 'fr'));
 
         $expected = new BatchResult(
-            1,
+            [$sheet1->reveal()],
             'flash.admin.sheet_batch.unassignFromGroup.ignoredSheets',
             'sheet Not Have Group : Sheet3, sheet can not be removed from group : Sheet2'
         );

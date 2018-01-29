@@ -56,7 +56,7 @@ catalog.noVisibleTypes: 'Vous n''avez accès à aucun type de participation'
 catalog.preview.participant_positions_see_more: 'voir plus'
 catalog.search.no-filter-to-refine: 'Aucun filtre ne permet d''affiner la recherche.'
 catalog.seeMore: 'Voir plus'
-catalog.sheet.export.csv: 'Exporter'
+catalog.sheet.export.csv: Exporter
 catalog.sheet.result.total: '{0} Aucun résultat|{1} 1 résultat|]1,Inf[ %total% résultats'
 catalog.title: Catalogue
 common.backToPackage: 'Retour au forfait'
@@ -77,6 +77,7 @@ event.activateAccount.expired.title: 'Votre invitation a expiré'
 event.activateAccount.resendToken.explanation: 'Une nouvelle invitation vous a été envoyée par mail. Vous pouvez cliquer sur le lien contenu dans ce mail pour activer votre compte'
 event.activateAccount.resendToken.title: 'Une nouvelle invitation vous a été envoyée'
 event.content.title: 'Conditions générales de vente'
+event.happening.invitationCode.label: 'L''accès à cet événement est soumis à invitation. Merci de saisir votre code invitation.'
 event.info.close: Fermer
 event.info.contact: 'Informations pratiques'
 event.invisible.label: Invisible
@@ -153,6 +154,7 @@ happening.participate.noParticipantSelected: 'Vous n''avez sélectionné aucun p
 happening.participate.notEnoughtRemainingParticipations: '{0} Plus aucune place de disponible|{1} Il ne reste plus qu''une place disponible|]1,Inf[ Il ne reste plus que %remaining% places disponibles'
 happening.participate.participantNotAvailable: 'Au moins un des participants sélectionné n''est pas disponible'
 happening.participate.participantNotFound: 'Participant non trouvé'
+happening.participate.wrongInvitationCode: 'Code d''invitation incorrect'
 happening.participate.youAreNotAvailable: 'Vous n''êtes pas disponible pour y participer'
 happening.participationCancel.action: Annuler
 happening.participationUpdate.action: Modifier
@@ -299,6 +301,8 @@ package.funnel.payment: Paiement
 package.funnel.summary: 'Récapitulatif & Facturation'
 package.options.included: inclus
 package.participant_planning.validate: Valider
+package.participant.add: 'Ajouter un participant'
+package.participant.delete: 'Supprimer un participant'
 package.participants.add: 'Ajouter des participants'
 package.participants.delete: 'Supprimer des participants'
 package.participants.included: inclus
@@ -330,6 +334,7 @@ package.product.outOfStock: Epuisé
 package.product.priceWithCurrency: '%price% <sup>%currency%</sup>'
 package.product.quantity: Quantité
 package.product.quantityMax: 'Quantité maximum atteinte'
+package.product.quantityMaxInformation: 'Max : %quantityMax%'
 package.product.quantityMin: 'Quantité minimum atteinte'
 package.product.selectOptions: 'Sélectionner vos options'
 package.product.subjectedToValidationHelp: 'Sous réserve de validation'

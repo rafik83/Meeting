@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2016 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -12,30 +12,27 @@ namespace Proximum\Vimeet\Application\View\Package;
 
 class ParticipantsView
 {
-    /**
-     * @var string
-     */
-    public $title;
+    /** @var ParticipantView[] */
+    public $participantViews;
+
+    /** @var ParticipantProductView[] */
+    public $participantProductViews;
+
+    /** @var string */
+    public $serializedParticipantProductViews;
 
     /**
-     * @var string
+     * @param ParticipantView[]        $participantViews
+     * @param ParticipantProductView[] $participantProductViews
+     * @param string                   $serializedParticipantProductViews
      */
-    public $description;
-
-    /**
-     * @var ParticipantView[]
-     */
-    public $participants;
-
-    /**
-     * @param string $title
-     * @param string $description
-     * @param array  $participants
-     */
-    public function __construct($title, $description, array $participants)
-    {
-        $this->title        = $title;
-        $this->description  = $description;
-        $this->participants = $participants;
+    public function __construct(
+        array $participantViews,
+        array $participantProductViews,
+        string $serializedParticipantProductViews
+    ) {
+        $this->participantViews = $participantViews;
+        $this->participantProductViews = $participantProductViews;
+        $this->serializedParticipantProductViews = $serializedParticipantProductViews;
     }
 }

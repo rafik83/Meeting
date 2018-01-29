@@ -30,7 +30,7 @@ class Package
     /** @var ArrayCollection */
     private $participantRanks;
 
-    /** @var Product */
+    /** @var null|Product */
     private $planning;
 
     /** @var ArrayCollection */
@@ -136,7 +136,7 @@ class Package
      *
      * @return Product[]
      */
-    public function getParticipants()
+    public function getParticipants(): array
     {
         return $this
             ->participantRanks
@@ -250,9 +250,9 @@ class Package
     }
 
     /**
-     * @return Product
+     * @return null|Product
      */
-    public function getPlanning()
+    public function getPlanning(): ?Product
     {
         return $this->planning;
     }
