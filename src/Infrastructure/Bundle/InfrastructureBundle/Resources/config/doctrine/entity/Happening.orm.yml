@@ -18,6 +18,9 @@ Proximum\Vimeet\Domain\Model\Happening:
         limitParticipant:
             type: integer
             nullable: true
+        invitationCode:
+            type: string
+            nullable: true
     oneToMany:
         translations:
             targetEntity: Proximum\Vimeet\Domain\Model\Happening\HappeningTranslation

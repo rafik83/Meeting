@@ -77,6 +77,7 @@ event.activateAccount.expired.title: 'Votre invitation a expiré'
 event.activateAccount.resendToken.explanation: 'Une nouvelle invitation vous a été envoyée par mail. Vous pouvez cliquer sur le lien contenu dans ce mail pour activer votre compte'
 event.activateAccount.resendToken.title: 'Une nouvelle invitation vous a été envoyée'
 event.content.title: 'Conditions générales de vente'
+event.happening.invitationCode.label: 'L''accès à cet événement est soumis à invitation. Merci de saisir votre code invitation.'
 event.info.close: Fermer
 event.info.contact: 'Informations pratiques'
 event.invisible.label: Invisible
@@ -153,6 +154,7 @@ happening.participate.noParticipantSelected: 'Vous n''avez sélectionné aucun p
 happening.participate.notEnoughtRemainingParticipations: '{0} Plus aucune place de disponible|{1} Il ne reste plus qu''une place disponible|]1,Inf[ Il ne reste plus que %remaining% places disponibles'
 happening.participate.participantNotAvailable: 'Au moins un des participants sélectionné n''est pas disponible'
 happening.participate.participantNotFound: 'Participant non trouvé'
+happening.participate.wrongInvitationCode: 'Code d''invitation incorrect'
 happening.participate.youAreNotAvailable: 'Vous n''êtes pas disponible pour y participer'
 happening.participationCancel.action: Annuler
 happening.participationUpdate.action: Modifier

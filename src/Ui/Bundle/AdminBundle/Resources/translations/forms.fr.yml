@@ -297,6 +297,7 @@ form.generate_slot.children.submit.label: Enregistrer
 form.happening_create.children.begin.label: 'Date de début'
 form.happening_create.children.category.label: Catégorie
 form.happening_create.children.end.label: 'Date de fin'
+form.happening_create.children.invitationCode.label: 'Code d''invitation'
 form.happening_create.children.limitParticipant.help: 'Pas de limite si vide'
 form.happening_create.children.limitParticipant.label: 'Limite du nombre de participants'
 form.happening_create.children.questionAllowed.answer.false: Non
@@ -314,6 +315,7 @@ form.happening_create.children.types.label: 'Types ayant accès'
 form.happening_update.children.begin.label: 'Date de début'
 form.happening_update.children.category.label: Catégorie
 form.happening_update.children.end.label: 'Date de fin'
+form.happening_update.children.invitationCode.label: 'Code d''invitation'
 form.happening_update.children.limitParticipant.label: 'Limite du nombre de participants'
 form.happening_update.children.questionAllowed.label: 'Question des participants'
 form.happening_update.children.submit.label: Envoyer

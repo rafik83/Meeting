@@ -23,6 +23,7 @@ use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormView;
 use Symfony\Component\Intl\Intl;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 
 abstract class HappeningType extends AbstractType
 {
@@ -85,6 +86,9 @@ abstract class HappeningType extends AbstractType
                 'prototype_data' => ['speaker' => null, 'position' => 0],
                 'allow_add'      => true,
                 'allow_delete'   => true,
+            ])
+            ->add('invitationCode', TextType::class, [
+                'required' => false,
             ])
         ;
     }
