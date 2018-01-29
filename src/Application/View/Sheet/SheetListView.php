@@ -12,12 +12,11 @@ namespace Proximum\Vimeet\Application\View\Sheet;
 
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\Trace;
+use Proximum\Vimeet\Domain\Sheet\CommercialStatus;
 
 class SheetListView
 {
-    /**
-     * @var int
-     */
+    /** @var int */
     public $id;
 
     /**
@@ -34,9 +33,7 @@ class SheetListView
      */
     public $state;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     public $validationState;
 
     /**
@@ -68,6 +65,13 @@ class SheetListView
     public $follower;
 
     /**
+     * "Statut commercial"
+     *
+     * @var string|null
+     */
+    public $commercialStatus;
+
+    /**
      * "Date de création de la fiche"
      *
      * @var \DateTimeInterface
@@ -81,49 +85,31 @@ class SheetListView
      */
     public $lastLoginAt;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     public $impersonationToken;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     public $traceAction;
 
-    /**
-     * @var \DateTimeInterface
-     */
+    /** @var \DateTimeInterface|null */
     public $traceAt = null;
 
-    /**
-     * @var string
-     */
+    /** @var string|null */
     public $traceBy = null;
 
-    /**
-     * @var int
-     */
+    /** @var int */
     public $completeness;
 
-    /**
-     * @var bool
-     */
+    /** @var bool */
     public $enabled;
 
-    /**
-     * @var bool
-     */
+    /** @var bool */
     public $inCatalog;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     public $spotReference;
 
-    /**
-     * @var int
-     */
+    /** @var int */
     public $countParticipant;
 
     /** @var bool */
@@ -132,14 +118,10 @@ class SheetListView
     /** @var null|string */
     public $groupTitle;
 
-    /**
-     * @var bool
-     */
+    /** @var bool */
     public $attend;
 
     /**
-     * SheetListView constructor.
-     *
      * @param int                  $id
      * @param string               $title
      * @param string               $state
@@ -152,6 +134,7 @@ class SheetListView
      * @param string               $type
      * @param SheetParticipantView $owner
      * @param string               $follower
+     * @param string|null          $commercialStatus
      * @param \DateTimeInterface   $createdAt
      * @param \DateTimeInterface   $lastLoginAt
      * @param string               $impersonationToken
@@ -174,6 +157,7 @@ class SheetListView
         $type,
         SheetParticipantView $owner,
         $follower,
+        ?string $commercialStatus = null,
         \DateTimeInterface $createdAt,
         \DateTimeInterface $lastLoginAt = null,
         $impersonationToken,
@@ -195,6 +179,7 @@ class SheetListView
         $this->type               = $type;
         $this->owner              = $owner;
         $this->follower           = $follower;
+        $this->commercialStatus   = $commercialStatus;
         $this->createdAt          = $createdAt;
         $this->lastLoginAt        = $lastLoginAt;
         $this->impersonationToken = $impersonationToken;
@@ -232,6 +217,26 @@ class SheetListView
     public function isInCatalog()
     {
         return $this->inCatalog;
+    }
+
+    /**
+     * @return bool
+     */
+    public function hasCommercialStatus(): bool
+    {
+        return $this->commercialStatus !== null;
+    }
+
+    /**
+     * @return string
+     */
+    public function getCommercialStatusLabel(): string
+    {
+        if (isset(CommercialStatus::STATUS_WITH_LABEL[$this->commercialStatus])) {
+            return CommercialStatus::STATUS_WITH_LABEL[$this->commercialStatus];
+        }
+
+        return 'default';
     }
 
     /**

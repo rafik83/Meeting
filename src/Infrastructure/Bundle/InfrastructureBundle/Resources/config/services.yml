@@ -944,7 +944,10 @@ services:
     command.sheet.add_comment_handler:
         class: Proximum\Vimeet\Application\Command\Sheet\AddCommentHandler
         arguments:
+            - '@vimeet_infrastructure.repository.sheet_repository'
             - '@repository.sheet.comment_repository'
+            - '@vimeet_infrastructure.adapter.delayed_event_dispatcher'
+            - '@datetime'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Sheet\AddComment }
     command.sheet.batch_assign_handler:
@@ -3492,7 +3495,7 @@ services:
     query.sheet.detail.sheet_detail_query_handler:
         class: Proximum\Vimeet\Application\Query\Sheet\Detail\SheetDetailQueryHandler
         arguments:
-            - '@repository.sheet.comment_repository'
+            - '@Proximum\Vimeet\Application\Query\Sheet\Detail\CRM\RecordViewsQueryHandler'
             - '@repository.trace_repository'
             - '@order.balance'
             - '@sheet.sheet_details.invoice_view_query_handler'
@@ -3501,6 +3504,11 @@ services:
             - '@template.template_data_factory'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Sheet\Detail\SheetDetailQuery }
+
+    Proximum\Vimeet\Application\Query\Sheet\Detail\CRM\RecordViewsQueryHandler:
+        arguments:
+            - '@repository.trace_repository'
+            - '@repository.sheet.comment_repository'
 
     query.product.products_view_query_handler:
         class: Proximum\Vimeet\Application\Query\Product\ProductsViewQueryHandler

@@ -145,6 +145,7 @@ class SheetSearchQueryBuilder
         $this->filterByCategory($filters);
         $this->filterByAvailableSlotIds($filters);
         $this->filterByFollower($filters);
+        $this->filterByCommercialStatus($filters);
         $this->filterByPredefined($filters);
         $this->filterByRegisteredAt($filters);
         $this->filterByInCatalog($filters);
@@ -1022,5 +1023,27 @@ class SheetSearchQueryBuilder
 
             $this->query->addMust($matchAvailabilityConfirmationStatus);
         }
+    }
+
+    /**
+     * @param array $filters
+     */
+    private function filterByCommercialStatus(array $filters)
+    {
+        if (!isset($filters['commercialStatus']) || empty($filters['commercialStatus'])) {
+            return;
+        }
+
+        $commercialStatuses = $filters['commercialStatus'];
+
+        $commercialStatusQuery = new BoolQuery();
+
+        foreach ($commercialStatuses as $commercialStatus) {
+            $matchFollower = new Term();
+            $matchFollower->setTerm('commercialStatus', $commercialStatus);
+            $commercialStatusQuery->addShould($matchFollower);
+        }
+
+        $this->query->addMust($commercialStatusQuery);
     }
 }

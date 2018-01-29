@@ -672,6 +672,7 @@ admin.sheet.change.type.hasMeeting: 'La fiche a des RDVs et son type ne peut êt
 admin.sheet.change.type.link: Changer
 admin.sheet.change.type.title: 'Changer le type de participation'
 admin.sheet.commercialFollowUp: 'Attribuer le suivi commercial'
+admin.sheet.commercialStatus: 'Statut commercial'
 admin.sheet.created_this_week: 'Inscrits cette semaine'
 admin.sheet.created_today: 'Inscrits aujourd''hui'
 admin.sheet.createdAt: 'Date inscription'
@@ -685,6 +686,18 @@ admin.sheet.details.comments.author: 'Par %firstname% %lastname%, le %date%'
 admin.sheet.details.comments.title: Commentaires
 admin.sheet.details.company.title: Société
 admin.sheet.details.completeness: 'Complétude de la fiche'
+admin.sheet.details.crm.record.trace.set_commercial_status.none: 'Pas de statut'
+admin.sheet.details.crm.record.trace.set_commercial_status.verbal_agreement: 'Accord verbal'
+admin.sheet.details.crm.record.trace.set_commercial_status.canceled: 'Annulation'
+admin.sheet.details.crm.record.trace.set_commercial_status.hot: 'Chaud'
+admin.sheet.details.crm.record.trace.set_commercial_status.hot_stall: 'Chaud stand'
+admin.sheet.details.crm.record.trace.set_commercial_status.registered: 'Inscrit'
+admin.sheet.details.crm.record.trace.set_commercial_status.interest: 'Intérêt'
+admin.sheet.details.crm.record.trace.set_commercial_status.interest_next_edition: 'Intérêt N+1'
+admin.sheet.details.crm.record.trace.set_commercial_status.do_not_call: 'Ne pas appeler'
+admin.sheet.details.crm.record.trace.set_commercial_status.no_interest: 'Pas intéressé'
+admin.sheet.details.crm.record.trace.set_commercial_status.refused_by_organizer: 'Refus organisateur'
+admin.sheet.details.crm.record.trace.set_commercial_status.followed: 'Suivi'
 admin.sheet.details.dashboard.title: 'Tableau de bord'
 admin.sheet.details.historic.title: Historique
 admin.sheet.details.invoices: Factures
@@ -796,7 +809,9 @@ admin.sheet.trace.sheet_created_by_group_manager: 'Fiche dupliquée par le gesti
 admin.sheet.trace.validate: 'Validée le %at%'
 admin.sheet.trace.validation_draft: 'Au brouillon le %at%'
 admin.sheet.trace.validation_validate: 'Contenu validé le %at%'
+admin.sheet.trace.set_commercial_status: 'Le statut commercial a été changé'
 admin.sheet.type: Type
+admin.sheet.validateSheets: 'Valider les fiches'
 admin.sheet.validate: Valider
 admin.sheet.validateSheets: 'Valider les fiches'
 admin.sheets_group.column.created_at: 'Date de création'

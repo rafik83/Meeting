@@ -1,0 +1,29 @@
+<div class="well well-sm">
+    {{ form_start(addCommentForm) }}
+        {{ form_label(addCommentForm.commercialStatus) }}
+        {{ form_errors(addCommentForm.commercialStatus) }}
+        {{ form_widget(addCommentForm.commercialStatus) }}
+        <br />
+        <br />
+        {{ form_row(addCommentForm.text) }}
+    {{ form_end(addCommentForm) }}
+</div>
+
+{% for record in records %}
+        <blockquote>
+        {% if record.isTrace %}
+            <span class="label label-{{ record.getCorrespondingLabel }}">
+                {{ (record.getTraceTranslationKey ~ record.comment)|trans }}
+            </span>
+        {% else %}
+            {{ record.comment|nl2br }}
+        {% endif %}
+        <footer>
+            {{ 'admin.sheet.details.comments.author'|trans({
+                '%firstname%': record.author.firstname,
+                '%lastname%': record.author.lastname,
+                '%date%': record.createdAt|localizeddate('medium', 'short', app.request.locale)
+            }) }}
+        </footer>
+    </blockquote>
+{% endfor %}

@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2016 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -15,29 +15,19 @@ use Proximum\Vimeet\Domain\Model\Sheet;
 
 class Comment
 {
-    /**
-     * @var int
-     */
+    /** @var int */
     private $id;
 
-    /**
-     * @var Sheet
-     */
+    /** @var Sheet */
     private $sheet;
 
-    /**
-     * @var Admin
-     */
+    /** @var Admin */
     private $author;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     private $text;
 
-    /**
-     * @var \DateTimeInterface
-     */
+    /** @var \DateTimeInterface */
     private $createdAt;
 
     /**
@@ -46,12 +36,16 @@ class Comment
      * @param string             $text
      * @param \DateTimeInterface $createdAt
      */
-    public function __construct(Sheet $sheet, Admin $author, $text, \DateTimeInterface $createdAt)
-    {
-        $this->sheet     = $sheet;
-        $this->author    = $author;
+    public function __construct(
+        Sheet $sheet,
+        Admin $author,
+        string $text,
+        \DateTimeInterface $createdAt
+    ) {
+        $this->sheet = $sheet;
+        $this->author = $author;
         $this->createdAt = $createdAt;
-        $this->text      = $text;
+        $this->text = $text;
     }
 
     /**
@@ -65,7 +59,7 @@ class Comment
     /**
      * @return Sheet
      */
-    public function getSheet()
+    public function getSheet(): Sheet
     {
         return $this->sheet;
     }
@@ -73,7 +67,7 @@ class Comment
     /**
      * @return Admin
      */
-    public function getAuthor()
+    public function getAuthor(): Admin
     {
         return $this->author;
     }
@@ -81,7 +75,7 @@ class Comment
     /**
      * @return string
      */
-    public function getText()
+    public function getText(): string
     {
         return $this->text;
     }
@@ -89,7 +83,7 @@ class Comment
     /**
      * @return \DateTimeInterface
      */
-    public function getCreatedAt()
+    public function getCreatedAt(): \DateTimeInterface
     {
         return $this->createdAt;
     }

@@ -1,4 +1,5 @@
 Proximum\Vimeet\Application\Command\Sheet\AddComment:
-    properties:
-        text:
-            - NotBlank: ~
+    constraints:
+        - Expression:
+            expression: "this.commercialStatusChangeOrCommentNotEmpty()"
+            message: "validators.sheet.commentCommercialStatus"

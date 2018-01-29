@@ -13,13 +13,13 @@ namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Sheet;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Sheet\Constant;
 use Proximum\Vimeet\Domain\Repository\CategoryRepositoryInterface;
+use Proximum\Vimeet\Domain\Sheet\CommercialStatus;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Service\BooleanFiltersBuilder;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\CategoryChoiceType;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Messaging\Campaign\ImportedChoiceType;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\TypeChoiceType;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\YesNoType;
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -118,6 +118,19 @@ abstract class AbstractFilterType extends AbstractType
                 'required'   => false,
                 'multiple'   => true,
                 'expanded'   => true,
+            ])
+            ->add('commercialStatus', CommercialStatusChoiceType::class, [
+                'required'     => false,
+                'multiple'     => true,
+                'choice_label' => function ($key) {
+                    return  sprintf('admin.sheet.details.crm.record.trace.set_commercial_status.%s', $key);
+                },
+                'label'              => 'admin.sheet.commercialStatus',
+                'translation_domain' => 'messages',
+                'attr' => [
+                    'class'                 => 'commercial_status_selector',
+                    'data-associated-label' => json_encode(CommercialStatus::STATUS_WITH_LABEL),
+                ],
             ])
             ->add(Constant::HAS_ORDER, ChoiceType::class, [
                 'choices'     => [

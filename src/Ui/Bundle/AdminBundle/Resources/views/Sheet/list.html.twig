@@ -189,6 +189,7 @@
             <th nowrap="nowrap">
                 {{ 'form.sheet_batch.children.follower.label'|trans({}, 'forms') }}
             </th>
+            <th>{{ 'admin.sheet.commercialStatus'|trans() }}</th>
             <th class="col-md-1"></th>
         </tr>
         </thead>
@@ -277,6 +278,13 @@
                     </div>
                 </td>
                 <td>{{ sheet.follower }}</td>
+                <td>
+                    {% if sheet.hasCommercialStatus %}
+                        <span class="label label-{{ sheet.getCommercialStatusLabel }}">
+                            {{ ('admin.sheet.details.crm.record.trace.set_commercial_status.' ~ sheet.commercialStatus)|trans }}
+                        </span>
+                    {% endif %}
+                </td>
                 <td class="text-right">
                     {{ macro.btnGroupAndRightMenuDropdown({
                         ('admin.sheet.read'|trans): path('admin_sheet_details', { 'event': event.id, 'sheet': sheet.id }),
@@ -286,7 +294,7 @@
             </tr>
         {% else %}
             <tr>
-                <td colspan="{{ hasCategories ? 9 : 10 }}" class="text-danger text-center">{{ 'admin.zero-result'|trans }}</td>
+                <td colspan="{{ hasCategories ? 10 : 11 }}" class="text-danger text-center">{{ 'admin.zero-result'|trans }}</td>
             </tr>
         {% endfor %}
         </tbody>

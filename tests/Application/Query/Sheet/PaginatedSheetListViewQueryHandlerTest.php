@@ -29,6 +29,7 @@ use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\TraceRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\TypeRepositoryInterface;
+use Proximum\Vimeet\Domain\Sheet\CommercialStatus;
 use Proximum\Vimeet\Domain\Template\ParticipantInfoGuesser;
 use Proximum\Vimeet\Domain\Trace\TraceableName;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Security\Impersonate\Impersonate;
@@ -112,6 +113,8 @@ class PaginatedSheetListViewQueryHandlerTest extends TestCase
         $sheet2->getSpot()->willReturn(null);
         $sheet2->isAccepted()->willReturn(false);
         $sheet2->isValidated()->willReturn(false);
+        $sheet1->getCommercialStatus()->willReturn(CommercialStatus::STATUS_INTEREST);
+        $sheet2->getCommercialStatus()->willReturn(CommercialStatus::STATUS_DO_NOT_CALL);
 
         $paginatedResult = new PaginatedResult([$sheet1->reveal(), $sheet2->reveal()], 1, 20, 2);
         $sheetSearchAdapter = $this->prophesize(SheetSearchAdapterInterface::class);
@@ -170,6 +173,7 @@ class PaginatedSheetListViewQueryHandlerTest extends TestCase
             'type1',
             new SheetParticipantView('participant first name', 'participant last name', 'email1@sheet.fr'),
             'admin name',
+            CommercialStatus::STATUS_INTEREST,
             $datetime1,
             $datetime1,
             'token1',
@@ -192,6 +196,7 @@ class PaginatedSheetListViewQueryHandlerTest extends TestCase
             'type2',
             new SheetParticipantView('truc', 'muche', 'email2@sheet.fr'),
             '',
+            CommercialStatus::STATUS_DO_NOT_CALL,
             $datetime2,
             $datetime2,
             'token2',

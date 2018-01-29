@@ -13,17 +13,14 @@ namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller;
 use Proximum\Vimeet\Application\Command\Participant\Import;
 use Proximum\Vimeet\Application\Command\Participant\ImportMapping;
 use Proximum\Vimeet\Application\Command\Participant\UpdateVisio;
-use Proximum\Vimeet\Application\Command\Sheet\AddComment;
 use Proximum\Vimeet\Application\Command\Sheet\AssignSpot;
 use Proximum\Vimeet\Application\Command\Sheet\AssignSpotResult;
 use Proximum\Vimeet\Application\Command\Sheet\Batch;
 use Proximum\Vimeet\Application\Command\Sheet\BatchResult;
-use Proximum\Vimeet\Application\Command\Sheet\ChangeType;
 use Proximum\Vimeet\Application\Exception\Paginator\UnavailableCurrentPageException;
 use Proximum\Vimeet\Application\Exception\Spot\SpotNotActiveException;
 use Proximum\Vimeet\Application\Exception\Spot\SpotNotFoundException;
 use Proximum\Vimeet\Application\Query\Participant\Import\ImportMappingViewQuery;
-use Proximum\Vimeet\Application\Query\Sheet\Detail\SheetDetailQuery;
 use Proximum\Vimeet\Application\Query\Sheet\PaginatedSheetListViewQuery;
 use Proximum\Vimeet\Application\View\Participant\ImportMappingView;
 use Proximum\Vimeet\Application\View\Sheet\SheetListView;
@@ -35,8 +32,6 @@ use Proximum\Vimeet\Domain\Model\Type;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Participant\ImportMappingType;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Participant\ImportType;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Sheet\BatchType;
-use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Sheet\ChangeTypeType;
-use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Sheet\CommentType;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Sheet\SheetFilterType;
 use Proximum\Vimeet\Ui\Flash\TranschoiceMessage;
 use Proximum\Vimeet\Ui\Flash\TransMessage;
@@ -242,94 +237,6 @@ class SheetController extends Controller
             'required'           => false,
             'allow_extra_fields' => true,
         ]));
-    }
-
-    /**
-     * @param Request $request
-     * @param Event   $event
-     * @param Sheet   $sheet
-     *
-     * @return Response
-     */
-    public function detailsAction(Request $request, Event $event, Sheet $sheet)
-    {
-        $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
-        $this->denyAccessUnlessGranted('PERMISSION_SHEET_ACCESS', $sheet);
-
-        if ($sheet->getEvent() !== $event) {
-            throw $this->createNotFoundException(
-                sprintf(
-                    'The sheet %s is not on this event %s',
-                    $sheet->getId(),
-                    $event->getId()
-                )
-            );
-        }
-
-        $locale = $event->getAvailableLocale($request->getLocale());
-
-        $sheetDetailView = $this->get('tactician.commandbus.query')->handle(new SheetDetailQuery(
-            $sheet, $locale
-        ));
-
-        $changeTypeForm = null;
-
-        if ($this->get('vimeet_infrastructure.repository.type_repository')->countByEvent($event) > 1
-            && $this->get('repository.invoice.invoice_repository')->isSheetInvoiced($sheet) === null
-            && $this->get('vimeet_infrastructure.repository.meeting_repository')->countMeetingsOfSheet($sheet) === 0
-        ) {
-            $changeType = new ChangeType($sheet, $sheet->getType(), $this->getUser(), $locale);
-
-            $changeTypeForm = $this->createForm(ChangeTypeType::class, $changeType, [
-                'event'  => $event,
-                'type'   => $sheet->getType(),
-                'locale' => $locale,
-                'submit' => true,
-            ]);
-
-            if ($changeTypeForm->handleRequest($request)->isSubmitted() && $changeTypeForm->isValid()) {
-                $this->get('tactician.commandbus')->handle($changeType);
-                $this->addFlash('success', 'flash.admin.sheet.change_type.success');
-
-                return $this->redirectToRoute('admin_sheet_details', [
-                    'event' => $event->getId(),
-                    'sheet' => $sheet->getId(),
-                ]);
-            }
-        }
-
-        $addComment = new AddComment($sheet, $this->getUser(), new \DateTime());
-
-        $addCommentForm = $this->createForm(CommentType::class, $addComment, [
-            'action' => $this->generateUrl('admin_sheet_details', [
-                'event' => $event->getId(),
-                'sheet' => $sheet->getId(),
-            ]),
-            'method' => 'POST',
-            'submit' => true,
-        ]);
-
-        if ($addCommentForm->handleRequest($request)->isSubmitted() && $addCommentForm->isValid()) {
-            $this->get('tactician.commandbus')->handle($addComment);
-            $this->addFlash('success', 'flash.admin.sheet.add_comment.success');
-
-            return $this->redirectToRoute('admin_sheet_details', [
-                'event' => $event->getId(),
-                'sheet' => $sheet->getId(),
-            ]);
-        }
-
-        $impersonationToken = $this->get('security.impersonate')->getEncodedToken($this->getUser(), $sheet->getOwner());
-
-        return $this->render('AdminBundle:Sheet:details.html.twig', [
-            'event'              => $event,
-            'sheet'              => $sheet,
-            'sheetTypeTitle'     => $sheet->getType()->getTitle($locale),
-            'details'            => $sheetDetailView,
-            'addCommentForm'     => $addCommentForm->createView(),
-            'changeTypeForm'     => $changeTypeForm === null ? null : $changeTypeForm->createView(),
-            'impersonationToken' => $impersonationToken,
-        ]);
     }
 
     /**
