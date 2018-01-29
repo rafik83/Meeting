@@ -15,15 +15,15 @@
             {% if searchForm.content is defined %}
                 <a href="#" class="catalog-mobile-menu-button btn btn-default btn-block" data-catalog-mobile-menu-button-action="catalog-mobile-menu-button-action-content-filter">
                     {% if searchForm.content.vars.data %}
-                        <span class="filter-content-data">{{ searchForm.content.vars.data }}</span>
                         <span id="content-filter-remove" class="button-count">
-                        <i class="glyphicon glyphicon-remove"></i>
-                    </span>
+                            <i class="glyphicon glyphicon-remove"></i>
+                        </span>
+                        <span class="filter-content-data">{{ searchForm.content.vars.data }}</span>
                     {% else %}
-                        <span>{{ searchForm.content.vars.label }}</span>
                         <span class="button-count">
-                        <i class="glyphicon glyphicon-search"></i>
-                    </span>
+                            <i class="glyphicon glyphicon-search"></i>
+                        </span>
+                        <span>{{ searchForm.content.vars.label }}</span>
                     {% endif %}
                 </a>
             {% endif %}
@@ -32,10 +32,10 @@
                 {% for availableSlotOptionChosen in searchForm.availableSlot.children %}
                     {% if availableSlotOptionChosen.vars.data %}
                         <a href="#" class="catalog-mobile-menu-button btn btn-primary btn-block" data-catalog-mobile-menu-button-action="catalog-mobile-menu-button-action-available-slot-filter">
-                            <span>{{ availableSlotOptionChosen.vars.label|trans({}, availableSlotOptionChosen.vars.translation_domain) }}</span>
                             <span class="button-count">
-                            <i class="glyphicon glyphicon-chevron-down"></i>
-                        </span>
+                                <i class="glyphicon glyphicon-chevron-down"></i>
+                            </span>
+                            <span>{{ availableSlotOptionChosen.vars.label|trans({}, availableSlotOptionChosen.vars.translation_domain) }}</span>
                         </a>
                     {% endif %}
                 {% endfor %}
@@ -60,17 +60,17 @@
 
                 <a href="#" class="catalog-mobile-menu-button btn btn-primary btn-block" data-catalog-mobile-menu-button-action="catalog-mobile-menu-button-action-type-filter">
                     {% if typeOrCategorySelected != null and numberOfDifferentType != numberOfTypeSelected %}
+                        <span class="button-count">
+                            ({{ participantTypesOrCategoriesViews[typeOrCategorySelected.vars.value].count }})
+                            <i class="glyphicon glyphicon-chevron-down"></i>
+                        </span>
                         <span>{{ typeOrCategorySelected.vars.label|trans({}, typeOrCategorySelected.vars.translation_domain) }}</span>
-                        <span class="button-count">
-                        ({{ participantTypesOrCategoriesViews[typeOrCategorySelected.vars.value].count }})
-                        <i class="glyphicon glyphicon-chevron-down"></i>
-                    </span>
                     {% else %}
-                        <span>{{ 'catalog.mobile.filters.allParticipants'|trans }}</span>
                         <span class="button-count">
-                        ({{ totalType }})
-                        <i class="glyphicon glyphicon-chevron-down"></i>
-                    </span>
+                            ({{ totalType }})
+                            <i class="glyphicon glyphicon-chevron-down"></i>
+                        </span>
+                        <span>{{ 'catalog.mobile.filters.allParticipants'|trans }}</span>
                     {% endif %}
                 </a>
             {% endif %}

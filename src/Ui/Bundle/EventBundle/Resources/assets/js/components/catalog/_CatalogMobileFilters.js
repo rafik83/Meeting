@@ -198,8 +198,10 @@ CatalogMobileFilters.prototype.rebuildActionButton = function (button, content, 
     }
 
     button.innerHTML =
-        '<span>' + content + ' </span><span class="button-count total-participants">' + countElement +
-        ' <i class="glyphicon glyphicon-chevron-down"></i></span>'
+        '<span class="button-count total-participants">' + countElement +
+        ' <i class="glyphicon glyphicon-chevron-down"></i>' +
+        '</span>' +
+        '<span>' + content + ' </span>'
     ;
 };
 
