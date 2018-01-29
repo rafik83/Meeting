@@ -26,10 +26,9 @@ class CommentType extends AbstractType
     {
         $builder
             ->add('commercialStatus', CommercialStatusChoiceType::class, [
-                'placeholder'  => 'form.sheet_comment.children.commercialStatus.status.no_status',
                 'required'     => false,
                 'choice_label' => function ($key) {
-                    return  sprintf('form.sheet_comment.children.commercialStatus.status.%s', $key);
+                    return sprintf('form.sheet_comment.children.commercialStatus.status.%s', $key);
                 },
                 'translation_domain' => 'forms',
                 'attr' => [

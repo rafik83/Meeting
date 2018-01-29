@@ -44,13 +44,16 @@ class TraceEventSubscriber implements EventSubscriberInterface
         $this->traceRepository = $traceRepository;
     }
 
+    /**
+     * @param CommercialStatusChanged $event
+     */
     public function onSheetCommercialStatusChanged(CommercialStatusChanged $event)
     {
         $this->addTrace(
             $event->getSheet(),
             Trace::SET_COMMERCIAL_STATUS,
             $event->getDate(),
-            $event->getSheet()->getCommercialStatus() ?? 'none',
+            $event->getSheet()->getCommercialStatus(),
             $event->getAuthor()
         );
     }

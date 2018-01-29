@@ -1106,7 +1106,7 @@ class Sheet implements TraceableInterface
     /**
      * @param string $commercialStatus
      */
-    public function setCommercialStatus(string $commercialStatus)
+    public function setCommercialStatus(string $commercialStatus): void
     {
         $this->commercialStatus = $commercialStatus;
     }

@@ -18,7 +18,7 @@ class RecordViewsQuery
     public $sheet;
 
     /**
-     * @param Sheet  $sheet
+     * @param Sheet $sheet
      */
     public function __construct(Sheet $sheet)
     {

@@ -672,7 +672,7 @@ form.sheet_batch.children.validate.label: Valider
 form.sheet_batch.children.validateComment.label: 'Laisser un commentaire (optionnel)'
 form.sheet_batch.children.validationStateDraft.label: 'Remettre la fiche en brouillon'
 form.sheet_batch.children.validationStateValidate.label: 'Valider le contenu de la fiche'
-form.sheet_comment.children.commercialStatus.status.no_status: 'Pas de statut'
+form.sheet_comment.children.commercialStatus.status.none: 'Pas de statut'
 form.sheet_comment.children.commercialStatus.status.verbal_agreement: 'Accord verbal'
 form.sheet_comment.children.commercialStatus.status.canceled: 'Annulation'
 form.sheet_comment.children.commercialStatus.status.hot: 'Chaud'

@@ -48,7 +48,7 @@ class AddComment implements Command
             return true;
         }
 
-        if ($this->text !== null && $this->text !== '') {
+        if (!empty($this->text)) {
             return true;
         }
 
