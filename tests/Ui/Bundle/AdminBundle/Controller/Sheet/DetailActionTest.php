@@ -27,6 +27,7 @@ use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Repository\Invoice\InvoiceRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\MeetingRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\TypeRepositoryInterface;
+use Proximum\Vimeet\Domain\Sheet\CommercialStatus;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Security\Impersonate\Impersonate;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Sheet\DetailAction;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Sheet\CommentType;
@@ -144,7 +145,7 @@ class DetailActionTest extends TestCase
             ->willReturn($sheetDetailView->reveal())
         ;
 
-        $this->sheet->getCommercialStatus()->willReturn(null);
+        $this->sheet->getCommercialStatus()->willReturn(CommercialStatus::STATUS_NONE);
 
         $this->typeRepository->countByEvent($this->event->reveal())->shouldBeCalled()->willReturn(4);
         $this->invoiceRepository->isSheetInvoiced($this->sheet->reveal())->shouldBeCalled()->willReturn(null);
@@ -223,7 +224,7 @@ class DetailActionTest extends TestCase
             ->willReturn($sheetDetailView->reveal())
         ;
 
-        $this->sheet->getCommercialStatus()->willReturn(null);
+        $this->sheet->getCommercialStatus()->willReturn(CommercialStatus::STATUS_NONE);
 
         $this->typeRepository->countByEvent($this->event->reveal())->shouldBeCalled()->willReturn(4);
         $this->invoiceRepository->isSheetInvoiced($this->sheet->reveal())->shouldBeCalled()->willReturn(null);
