@@ -24,7 +24,7 @@ class Comment
     /** @var Admin */
     private $author;
 
-    /** @var string|null */
+    /** @var string */
     private $text;
 
     /** @var \DateTimeInterface */
@@ -33,13 +33,13 @@ class Comment
     /**
      * @param Sheet              $sheet
      * @param Admin              $author
-     * @param string|null        $text
+     * @param string             $text
      * @param \DateTimeInterface $createdAt
      */
     public function __construct(
         Sheet $sheet,
         Admin $author,
-        ?string $text = null,
+        string $text,
         \DateTimeInterface $createdAt
     ) {
         $this->sheet = $sheet;
@@ -73,9 +73,9 @@ class Comment
     }
 
     /**
-     * @return string|null
+     * @return string
      */
-    public function getText(): ?string
+    public function getText(): string
     {
         return $this->text;
     }

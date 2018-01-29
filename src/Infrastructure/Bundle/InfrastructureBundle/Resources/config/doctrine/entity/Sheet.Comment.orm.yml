@@ -9,7 +9,6 @@ Proximum\Vimeet\Domain\Model\Sheet\Comment:
     fields:
         text:
             type: text
-            nullable: true
         createdAt:
             type: datetime
     manyToOne:
