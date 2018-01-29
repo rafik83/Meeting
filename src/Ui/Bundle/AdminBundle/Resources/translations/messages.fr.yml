@@ -288,7 +288,7 @@ admin.happening.list.question: 'Question ?'
 admin.happening.list.speaker: Intervenants
 admin.happening.list.title: Titre
 admin.happening.menu.link: Programme
-admin.happening.private: 'Privé'
+admin.happening.private: Privé
 admin.happening.title: Conférences
 admin.happening.update: Modifier
 admin.happening.updateTitle: 'Modifier une conférence'
@@ -595,7 +595,7 @@ admin.product.remove.link: Supprimer
 admin.product.removeUnAvailable.title: 'Le produit ne peut pas être supprimé car il est utilisé dans une formule, un forfait ou une commande'
 admin.product.subjectedToValidation: 'Soumis à validation'
 admin.product.title: 'Catalogue de produits'
-admin.product.type.option: Produit / option
+admin.product.type.option: 'Produit / option'
 admin.product.type.participant: Participant
 admin.product.type.plan: Formule
 admin.product.type.planning: Planning
@@ -796,9 +796,9 @@ admin.sheet.trace.sheet_created_by_group_manager: 'Fiche dupliquée par le gesti
 admin.sheet.trace.validate: 'Validée le %at%'
 admin.sheet.trace.validation_draft: 'Au brouillon le %at%'
 admin.sheet.trace.validation_validate: 'Contenu validé le %at%'
-admin.sheet.validateSheets: 'Valider les fiches'
 admin.sheet.type: Type
 admin.sheet.validate: Valider
+admin.sheet.validateSheets: 'Valider les fiches'
 admin.sheets_group.column.created_at: 'Date de création'
 admin.sheets_group.column.email_manager: 'Email du gestionnaire'
 admin.sheets_group.column.sheet_list: 'Liste des fiches'
@@ -1150,8 +1150,8 @@ event.sheet.participant.owner: Propriétaire
 event.sheet.payment.description: 'Choisissez votre mode de paiement'
 event.sheet.payment.title: 'Mode de paiement'
 event.sheet.state.accepted: Acceptée
-event.sheet.state.refused: Refusée
 event.sheet.state.pending: 'En attente'
+event.sheet.state.refused: Refusée
 event.sheet.state.validated: Validée
 event.sheet.summary.action: Action
 event.sheet.summary.product: Produit
