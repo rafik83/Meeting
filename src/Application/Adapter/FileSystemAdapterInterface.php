@@ -30,4 +30,13 @@ interface FileSystemAdapterInterface
      * @return bool true if the file exists, false otherwise
      */
     public function exists($files): bool;
+
+    /**
+     * Removes files or directories.
+     *
+     * @param string|iterable $files A filename, an array of files, or a \Traversable instance to remove
+     *
+     * @throws IOException When removal fails
+     */
+    public function remove($files): void;
 }

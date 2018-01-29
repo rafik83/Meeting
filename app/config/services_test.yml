@@ -1,3 +1,6 @@
+parameters:
+    sms_directory: '%kernel.root_dir%/../var/sms'
+
 services:
     #
     # Storage
@@ -316,18 +319,23 @@ services:
             - '@behat_storage'
             - '@behat_manager.token.user_event_token_manager'
 
+    #
+    # Adapter
+    #
+    adapter.storage_sms_sender_adapter:
+        class: Proximum\Vimeet\Behat\Service\Adapter\StorageSMSSenderAdapter
+        arguments:
+            - '@adapter.file_system_adapter'
+            - '%sms_directory%'
+
+    # Override the SMS Sender service
+    adapter.smssender_alias: '@adapter.storage_sms_sender_adapter'
+
     behat.proxy.meeting.request_context_proxy:
         class: Proximum\Vimeet\Behat\Proxy\Meeting\RequestContextProxy
         arguments:
             - '@behat_storage'
             - '@behat.service.manager.meeting.request_manager'
-
-    infrastructure.adapter.monolog_smssender_adapter:
-        class: Proximum\Vimeet\Infrastructure\Adapter\MonologSMSSenderAdapter
-        arguments:
-            - '@logger'
-
-    adapter.smssender_alias: '@infrastructure.adapter.monolog_smssender_adapter'
 
     event_listener.exception_listener:
         class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\EventListener\ExceptionListener
