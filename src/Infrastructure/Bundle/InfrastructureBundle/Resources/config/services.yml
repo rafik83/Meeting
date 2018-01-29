@@ -829,6 +829,7 @@ services:
     command.sheet.batch_generate_invoice_handler:
         class: Proximum\Vimeet\Application\Command\Sheet\BatchGenerateInvoiceHandler
         arguments:
+            - '@vimeet_infrastructure.repository.sheet_repository'
             - '@adapter.job_queue_adapter'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Sheet\BatchGenerateInvoice }
@@ -852,6 +853,15 @@ services:
         arguments:
             - '@vimeet_infrastructure.repository.sheet_repository'
             - '@adapter_batch_job_queue.batch_pending_job_queue'
+
+    command.sheet.batch_refuse_handler:
+        class: Proximum\Vimeet\Application\Command\Sheet\BatchRefuseHandler
+        arguments:
+            - '@vimeet_infrastructure.repository.sheet_repository'
+            - '@command.sheet.batch_enable_disable_handler'
+            - '@adapter_batch_job_queue.batch_refuse_job_queue'
+            - '@adapter.job_queue_adapter'
+
     command.sheet.batch_enable_disable_handler:
         class: Proximum\Vimeet\Application\Command\Sheet\BatchEnableDisableHandler
         arguments:
@@ -987,6 +997,7 @@ services:
             - '@command.sheet.batch_validate_handler'
             - '@command.sheet.batch_assign_handler'
             - '@command.sheet.batch_accept_handler'
+            - '@command.sheet.batch_refuse_handler'
             - '@command.sheet.batch_enable_disable_handler'
             - '@command.sheet.batch_catalog_handler'
             - '@command.sheet.batch_draft_handler'
@@ -2078,6 +2089,12 @@ services:
            - '@adapter.sheet_indexer'
            - '@event_dispatcher'
            - '@datetime'
+
+    command.sheet.post_batch.post_batch_refuse_handler:
+        class: Proximum\Vimeet\Application\Command\Sheet\PostBatch\PostBatchRefuseHandler
+        arguments:
+           - '@adapter.sheet_indexer'
+
     command.sheet.post_batch.post_batch_draft_handler:
         class: Proximum\Vimeet\Application\Command\Sheet\PostBatch\PostBatchDraftHandler
         arguments:
@@ -2141,6 +2158,10 @@ services:
             - '@doctrine.orm.entity_manager'
     adapter_batch_job_queue.batch_accept_job_queue:
         class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Adapter\BatchJobQueue\BatchAcceptJobQueue
+        arguments:
+            - '@doctrine.orm.entity_manager'
+    adapter_batch_job_queue.batch_refuse_job_queue:
+        class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Adapter\BatchJobQueue\BatchRefuseJobQueue
         arguments:
             - '@doctrine.orm.entity_manager'
     adapter_batch_job_queue.batch_pending_job_queue:
@@ -4302,6 +4323,15 @@ services:
         tags:
             - { name: console.command }
 
+    command_batch.batch_post_refuse_command:
+        class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\Batch\BatchPostRefuseCommand
+        arguments:
+            - '@repository.admin_repository'
+            - '@vimeet_infrastructure.repository.sheet_repository'
+            - '@command.sheet.post_batch.post_batch_refuse_handler'
+        tags:
+            - { name: console.command }
+
     command_batch.batch_catalog_command:
         class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\Batch\BatchCatalogCommand
         arguments:
@@ -5443,6 +5473,7 @@ services:
     command.sheet.batch_pdf_job_creator_handler:
         class: Proximum\Vimeet\Application\Command\Sheet\BatchPdfJobCreatorHandler
         arguments:
+            - '@vimeet_infrastructure.repository.sheet_repository'
             - '@adapter.job_queue_adapter'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Sheet\BatchPdfJobCreator }

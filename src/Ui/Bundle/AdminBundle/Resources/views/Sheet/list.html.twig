@@ -68,7 +68,9 @@
                             {{ 'admin.sheet.validate'|trans }}
                         </a>
                     </li>
+                    <li>{{ form_widget(batch_form.refuse, { 'attr': { 'data-confirm': 'admin.batch_actions.confirm'|trans } }) }}</li>
                     <li role="separator" class="divider"></li>
+
                     <li>
                         <a href="#" data-toggle="modal" data-target="#commercial-follow-up">
                             {{ 'admin.sheet.commercialFollowUp'|trans }}
@@ -245,16 +247,16 @@
                 <td>
                     <div>
                         {{ macro.state_label(
-                                ('event.sheet.state.' ~ sheet.state)|trans,
-                                sheet.state,
-                                {
-                                    'pending': 'default',
-                                    'accepted': 'warning',
-                                    'validated': 'success'
-                                },
-                                sheet.hasTraceLabel ? ('admin.sheet.trace.' ~ sheet.traceAction)|trans({'%at%': sheet.traceAt|localizeddate('medium', 'short', app.request.locale, event.timeZone)}) ~ ' ' ~ (sheet.traceBy != null ? 'admin.sheet.trace.author'|trans({'%by%': sheet.traceBy}) : 'admin.sheet.trace.auto'|trans) : ''
-                            )
-                        }}
+                        ('event.sheet.state.' ~ sheet.state)|trans,
+                        sheet.state,
+                        {
+                            'pending': 'default',
+                            'accepted': 'warning',
+                            'validated': 'success',
+                            'refused': 'danger',
+                        },
+                        sheet.hasTraceLabel ? ('admin.sheet.trace.' ~ sheet.traceAction)|trans({'%at%': sheet.traceAt|localizeddate('medium', 'short', app.request.locale, event.timeZone)}) ~ ' ' ~ (sheet.traceBy != null ? 'admin.sheet.trace.author'|trans({'%by%': sheet.traceBy}) : 'admin.sheet.trace.auto'|trans) : ''
+                        ) }}
                     </div>
                     {% if sheet.isInCatalog %}
                         <div class="label label-info">

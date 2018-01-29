@@ -105,7 +105,7 @@ class BatchAssignToGroupHandler
             $ignoredSheetsMessage = $this->getSheetsTitleList($sheetsAlreadyWithGroup, $locale);
         }
 
-        return new BatchResult(count($sheets), $message, $ignoredSheetsMessage);
+        return new BatchResult($sheets, $message, $ignoredSheetsMessage);
     }
 
     /**
@@ -150,7 +150,7 @@ class BatchAssignToGroupHandler
             );
         }
 
-        return new BatchResult(count($sheets), $message, $ignoredSheetsMessage);
+        return new BatchResult($sheets, $message, $ignoredSheetsMessage);
     }
 
     /**

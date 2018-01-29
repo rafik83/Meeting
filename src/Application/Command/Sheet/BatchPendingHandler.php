@@ -59,6 +59,6 @@ class BatchPendingHandler
             $this->batchJobQueue->createJob($batchPending->ids, $batchPending->admin);
         }
 
-        return new BatchResult(count($sheets), $batchPending->getMessage() . 'pending.success');
+        return new BatchResult($sheets, $batchPending->getMessage() . 'pending.success');
     }
 }

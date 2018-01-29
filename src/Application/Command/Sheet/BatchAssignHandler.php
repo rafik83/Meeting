@@ -64,6 +64,6 @@ class BatchAssignHandler
         // reindex sheets
         $this->jobQueue->indexSheets($batchAssign->ids);
 
-        return new BatchResult(count($sheets), $batchAssign->getMessage() . $endMessage);
+        return new BatchResult($sheets, $batchAssign->getMessage() . $endMessage);
     }
 }

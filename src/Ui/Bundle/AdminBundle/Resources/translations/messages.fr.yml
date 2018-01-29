@@ -1145,6 +1145,7 @@ event.sheet.participant.owner: Propriétaire
 event.sheet.payment.description: 'Choisissez votre mode de paiement'
 event.sheet.payment.title: 'Mode de paiement'
 event.sheet.state.accepted: Acceptée
+event.sheet.state.refused: Refusée
 event.sheet.state.pending: 'En attente'
 event.sheet.state.validated: Validée
 event.sheet.summary.action: Action

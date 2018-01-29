@@ -77,6 +77,8 @@ mail.sheet.print.intro: "Bonjour,\n\n Voici le PDF généré des fiches pour l'�
 mail.sheet.print.pdf.error.content: "Bonjour, \n\n Un problème est survenu lors de la génération du fichier pdf pour l'impression des fiches de l'événement %eventTitle%.\n\n"
 mail.sheet.print.pdf.error.subject: 'Erreur lors de la génération des PDF de fiches'
 mail.sheet.print.pdf.subject: 'Génération des PDF de fiches'
+mail.sheet.refused.body: "%firstname% %lastname%,\n\nNous avons le regret de vous annoncer le refus de votre participation en tant que \"%participationType%\" à l'événement %event%.\n\nBien cordialement,"
+mail.sheet.refused.subject: 'Votre inscription à l''événement %event% est refusée'
 mail.sheet.show.link: 'Voir la fiche de présentation'
 mail.sheet.submitted.body: "La fiche de participation de %sheetName% a été finalisée le %date% par %firstname% %lastname%.\n\nPour accéder au détail de la fiche, merci de cliquer sur le lien suivant"
 mail.sheet.submitted.end: 'Cordialement,'

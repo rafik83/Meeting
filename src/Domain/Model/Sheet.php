@@ -25,15 +25,16 @@ use Proximum\Vimeet\Domain\Trace\TraceableName;
  */
 class Sheet implements TraceableInterface
 {
-    const STATE_PENDING   = 'pending';
+    const STATE_PENDING = 'pending';
     const STATE_VALIDATED = 'validated';
-    const STATE_ACCEPTED  = 'accepted';
+    const STATE_ACCEPTED = 'accepted';
+    const STATE_REFUSED = 'refused';
 
     /**
      * "Etat de validation de la fiche"
      */
-    const STATE_VALIDATION_DRAFT     = 'draft';
-    const STATE_VALIDATION_PENDING   = 'pending';
+    const STATE_VALIDATION_DRAFT = 'draft';
+    const STATE_VALIDATION_PENDING = 'pending';
     const STATE_VALIDATION_VALIDATED = 'validated';
 
     /**
@@ -220,6 +221,7 @@ class Sheet implements TraceableInterface
             self::STATE_ACCEPTED,
             self::STATE_PENDING,
             self::STATE_VALIDATED,
+            self::STATE_REFUSED,
         ];
     }
 
@@ -686,6 +688,14 @@ class Sheet implements TraceableInterface
     public function isAccepted()
     {
         return self::STATE_ACCEPTED === $this->state;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isRefused()
+    {
+        return self::STATE_REFUSED === $this->state;
     }
 
     /**

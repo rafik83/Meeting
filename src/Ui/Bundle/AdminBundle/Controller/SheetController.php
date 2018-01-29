@@ -191,6 +191,7 @@ class SheetController extends Controller
                 $batch->validationValidate = $batchForm->get('validationStateValidate')->isClicked();
 
                 if ($this->isGranted('ROLE_ALLOWED_TO_ORGANIZE')) {
+                    $batch->refuse = $batchForm->get('refuse')->isClicked();
                     $batch->printPdf  = $batchForm->get('printPdf')->isClicked();
                 }
 

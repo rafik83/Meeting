@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2015 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -16,28 +16,22 @@ use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
 
 class BatchAcceptHandler
 {
-    /**
-     * @var SheetRepositoryInterface
-     */
+    /** @var SheetRepositoryInterface */
     private $sheetRepository;
 
-    /**
-     * @var BatchJobQueueInterface
-     */
+    /** @var BatchJobQueueInterface */
     private $batchJobQueue;
 
     /**
-     * BatchValidateHandler constructor.
-     *
-     * @param SheetRepositoryInterface $sheetRepository
-     * @param BatchJobQueueInterface   $batchJobQueue
+     * @param SheetRepositoryInterface  $sheetRepository
+     * @param BatchJobQueueInterface    $batchJobQueue
      */
     public function __construct(
         SheetRepositoryInterface $sheetRepository,
         BatchJobQueueInterface $batchJobQueue
     ) {
         $this->sheetRepository = $sheetRepository;
-        $this->batchJobQueue   = $batchJobQueue;
+        $this->batchJobQueue = $batchJobQueue;
     }
 
     /**
@@ -47,18 +41,20 @@ class BatchAcceptHandler
      */
     public function handle(BatchAccept $batchAccept)
     {
-        // Get sheets unaccepted by id
         $sheets = $this->sheetRepository->getSheetsUnacceptedById($batchAccept->ids);
+        $sheetsId = array_map(function (Sheet $sheet) {
+            return $sheet->getId();
+        }, $sheets);
 
-        if (!empty($batchAccept->ids)) {
+        if (!empty($sheetsId)) {
             $this->sheetRepository->updateStateBySheetsId(
                 $batchAccept->ids,
                 Sheet::STATE_ACCEPTED
             );
 
-            $this->batchJobQueue->createJob($batchAccept->ids, $batchAccept->admin);
+            $this->batchJobQueue->createJob($sheetsId, $batchAccept->admin);
         }
 
-        return new BatchResult(count($sheets), $batchAccept->getMessage() . 'accept.success');
+        return new BatchResult($sheets, $batchAccept->getMessage() . 'accept.success');
     }
 }
