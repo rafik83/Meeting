@@ -12,7 +12,11 @@ namespace Proximum\Vimeet\Domain\User\Event\ExtraData;
 
 final class Type
 {
+    // Fingerprint ot the payload sent to LENI
     const LENI_FINGERPRINT = 'leni_fingerprint';
+
+    // Fingerprint of the payload pending to be sent to LENI
+    const LENI_FINGERPRINT_PENDING = 'leni_fingerprint_pending';
 
     /**
      * DateTime of the last notification sent to user
