@@ -3,7 +3,7 @@
 /*
  * This file is part of the vimeet project.
  *
- * Copyright (C) 2016 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -66,41 +66,56 @@ class BatchEnableDisableHandler
      *
      * @return BatchResult
      */
-    public function handle(BatchEnableDisable $batchEnableDisable)
+    public function handle(BatchEnableDisable $batchEnableDisable): BatchResult
     {
-        $sheets               = $this->sheetRepository->getSheetsById($batchEnableDisable->ids);
-        $message              = ($batchEnableDisable->state === true) ? 'enable.success' : 'disable.success';
-        $ignoredSheets        = [];
+        $sheets = $this->sheetRepository->getSheetsById($batchEnableDisable->ids);
+        $message = ($batchEnableDisable->state === true) ? 'enable.success' : 'disable.success';
+        $processedSheets = [];
+        $ignoredSheets = [];
         $ignoredSheetsMessage = '';
+        $meetings = [];
 
-        $meetings = $this->meetingRepository->countMeetingsOfSheetByIds($batchEnableDisable->ids);
+        if (false === $batchEnableDisable->state) {
+            $meetings = $this->meetingRepository->countMeetingsOfSheetByIds($batchEnableDisable->ids);
+        }
 
         foreach ($batchEnableDisable->ids as $index => $id) {
             if (isset($sheets[$id])) {
                 $sheet = $sheets[$id];
 
-                if ($batchEnableDisable->state === false
-                    && isset($meetings[$id])
-                    && $meetings[$id] > 0
-                ) {
+                $disableSheetWithMeeting = $batchEnableDisable->state === false
+                    && isset($meetings[$id]) && $meetings[$id] > 0;
+
+                $enableRefusedSheet = $batchEnableDisable->state === true && $sheet->isRefused();
+
+                if ($disableSheetWithMeeting || $enableRefusedSheet) {
                     $ignoredSheets[] = $sheet;
                     $this->excludeSheetFromBatch($batchEnableDisable, $index);
+                } else {
+                    $processedSheets[] = $sheet;
                 }
             }
         }
 
-        if (!empty($batchEnableDisable->ids)) {
-            $this->sheetRepository->updateEnableStateBySheetsId($batchEnableDisable->ids, $batchEnableDisable->state);
+        $processedSheetsIds = array_map(
+            function (Sheet $sheet) {
+                return $sheet->getId();
+            },
+            $processedSheets
+        );
+
+        if (!empty($processedSheetsIds)) {
+            $this->sheetRepository->updateEnableStateBySheetsId($processedSheetsIds, $batchEnableDisable->state);
 
             $this->batchJobQueue->createJob(
-                $batchEnableDisable->ids,
+                $processedSheetsIds,
                 $batchEnableDisable->admin,
                 ['state' => $batchEnableDisable->state ? self::STATE_ENABLE : self::STATE_DISABLE]
             );
         }
 
         if (count($ignoredSheets) > 0) {
-            $message = 'disable.warning';
+            $message = $batchEnableDisable->state === true ? 'enable.warning' : 'disable.warning';
             $locale  = $ignoredSheets[0]->getEvent()->getAvailableLocale($batchEnableDisable->admin->getLocale());
             // Format sheets title to display them in flash warning message
             $ignoredSheetsMessage = implode(', ',
@@ -112,7 +127,7 @@ class BatchEnableDisableHandler
                 }, $ignoredSheets));
         }
 
-        return new BatchResult(count($sheets), $batchEnableDisable->getMessage() . $message, $ignoredSheetsMessage);
+        return new BatchResult($processedSheets, $batchEnableDisable->getMessage() . $message, $ignoredSheetsMessage);
     }
 
     /**

@@ -85,7 +85,7 @@ class BatchCatalogHandler
                         $this->excludeSheetFromBatch($command, $index);
                     }
                 } elseif ($command->state === true) {
-                    if (!$sheet->isEnabled()) {
+                    if (!$sheet->isEnabled() || $sheet->isRefused()) {
                         $ignoredSheets[] = $sheet;
                         $this->excludeSheetFromBatch($command, $index);
                     }
@@ -115,7 +115,7 @@ class BatchCatalogHandler
             ]);
         }
 
-        return new BatchResult(count($sheets), $command->getMessage() . $message, $ignoredSheetsMessage);
+        return new BatchResult($sheets, $command->getMessage() . $message, $ignoredSheetsMessage);
     }
 
     /**

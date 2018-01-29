@@ -79,6 +79,6 @@ class BatchValidateHandler
             );
         }
 
-        return new BatchResult(count($sheets), $batchValidate->getMessage() . 'validate.success');
+        return new BatchResult($sheets, $batchValidate->getMessage() . 'validate.success');
     }
 }

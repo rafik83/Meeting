@@ -118,6 +118,31 @@ class Block extends AbstractChild
     }
 
     /**
+     * This function returns all the tags present on the block's children
+     * @return array
+     */
+    public function getTags(): array
+    {
+        $tags = [];
+
+        foreach ($this->getObjects() as $child) {
+            $tag = $child->getTag();
+
+            if ($tag !== null) {
+                $tags[$tag] = $tag;
+            }
+
+            foreach ($child->getTags() as $tagInfo) {
+                if (isset($tagInfo['tag'])) {
+                    $tags[$tagInfo['tag']] = $tagInfo['tag'];
+                }
+            }
+        }
+
+        return $tags;
+    }
+
+    /**
      * Get first levels blocks
      *
      * @return Block[]
@@ -169,6 +194,24 @@ class Block extends AbstractChild
 
             return $carry;
         }, []);
+    }
+
+    /**
+     * @param string $key
+     */
+    public function removeObject(string $key)
+    {
+        foreach ($this->children as $columnKey => $column) {
+            foreach ($column as $childKey => $child) {
+                if ($child instanceof Block) {
+                    $child->removeObject($key);
+                } elseif ($childKey === $key) {
+                    unset($this->children[$columnKey][$childKey]);
+
+                    return;
+                }
+            }
+        }
     }
 
     /**

@@ -15,7 +15,6 @@ use Proximum\Vimeet\Application\Query\Sheet\TemplateObjectViewQuery;
 use Proximum\Vimeet\Application\Query\Sheet\TemplateObjectViewQueryHandler;
 use Proximum\Vimeet\Application\View\Sheet\TemplateObjectView;
 use Proximum\Vimeet\Domain\Model\Package;
-use Proximum\Vimeet\Domain\Package\Product\IncludedProductGuesser;
 use Proximum\Vimeet\Domain\Package\Product\TemplateProductGuesser;
 use Proximum\Vimeet\Domain\Template\TemplateData;
 use Proximum\Vimeet\Domain\Template\TemplateDataFactory;

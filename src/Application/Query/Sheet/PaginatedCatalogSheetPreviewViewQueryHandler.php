@@ -11,6 +11,7 @@
 namespace Proximum\Vimeet\Application\Query\Sheet;
 
 use Proximum\Vimeet\Application\Adapter\SheetSearchAdapterInterface;
+use Proximum\Vimeet\Application\Components\Sheet\Nomenclature\NomenclatureItemsGetter;
 use Proximum\Vimeet\Application\Query\Catalog\SheetPreviewViewQuery;
 use Proximum\Vimeet\Application\Query\Catalog\SheetPreviewViewQueryHandler;
 use Proximum\Vimeet\Application\Query\Sheet\Viewed\ViewedSheetListViewQuery;
@@ -20,7 +21,6 @@ use Proximum\Vimeet\Domain\KeyDates\Checker\MeetingRequestAccessChecker;
 use Proximum\Vimeet\Domain\Model\PaginatedResult;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
-use Proximum\Vimeet\Domain\Template\TemplateDataFactory;
 use Proximum\Vimeet\Domain\User\Phone\ValidationRequiredChecker;
 
 class PaginatedCatalogSheetPreviewViewQueryHandler
@@ -37,9 +37,6 @@ class PaginatedCatalogSheetPreviewViewQueryHandler
     /** @var SheetPreviewViewQueryHandler */
     private $sheetPreviewViewQueryHandler;
 
-    /** @var TemplateDataFactory */
-    private $templateDataFactory;
-
     /** @var MeetingRequestAccessChecker */
     private $meetingRequestAccessChecker;
 
@@ -49,34 +46,37 @@ class PaginatedCatalogSheetPreviewViewQueryHandler
     /** @var ValidationRequiredChecker */
     private $validationRequiredChecker;
 
+    /** @var NomenclatureItemsGetter */
+    private $nomenclatureItemsGetter;
+
     /**
      * @param SheetRepositoryInterface             $sheetRepository
      * @param SheetSearchAdapterInterface          $sheetSearchAdapter
      * @param SheetPreviewViewQueryHandler         $sheetPreviewViewQueryHandler
      * @param ViewedSheetListViewQueryHandler      $viewedSheetListViewQueryHandler
-     * @param TemplateDataFactory                  $templateDataFactory
      * @param MeetingRequestAccessChecker          $meetingRequestAccessChecker
      * @param AnsweringMeetingRequestAccessChecker $answeringMeetingRequestAccessChecker
      * @param ValidationRequiredChecker            $validationRequiredChecker
+     * @param NomenclatureItemsGetter              $nomenclatureItemsGetter
      */
     public function __construct(
         SheetRepositoryInterface $sheetRepository,
         SheetSearchAdapterInterface $sheetSearchAdapter,
         SheetPreviewViewQueryHandler $sheetPreviewViewQueryHandler,
         ViewedSheetListViewQueryHandler $viewedSheetListViewQueryHandler,
-        TemplateDataFactory $templateDataFactory,
         MeetingRequestAccessChecker $meetingRequestAccessChecker,
         AnsweringMeetingRequestAccessChecker $answeringMeetingRequestAccessChecker,
-        ValidationRequiredChecker $validationRequiredChecker
+        ValidationRequiredChecker $validationRequiredChecker,
+        NomenclatureItemsGetter $nomenclatureItemsGetter
     ) {
         $this->sheetRepository                      = $sheetRepository;
         $this->sheetSearchAdapter                   = $sheetSearchAdapter;
         $this->sheetPreviewViewQueryHandler         = $sheetPreviewViewQueryHandler;
         $this->viewedSheetListViewQueryHandler      = $viewedSheetListViewQueryHandler;
-        $this->templateDataFactory                  = $templateDataFactory;
         $this->meetingRequestAccessChecker          = $meetingRequestAccessChecker;
         $this->answeringMeetingRequestAccessChecker = $answeringMeetingRequestAccessChecker;
         $this->validationRequiredChecker            = $validationRequiredChecker;
+        $this->nomenclatureItemsGetter = $nomenclatureItemsGetter;
     }
 
     /**
@@ -86,7 +86,7 @@ class PaginatedCatalogSheetPreviewViewQueryHandler
      */
     public function handle(PaginatedCatalogSheetPreviewViewQuery $query)
     {
-        $paginatedResult = $this->sheetSearchAdapter->find(
+        $paginatedResult = $this->sheetSearchAdapter->paginate(
             $query->event,
             $query->filters,
             $query->filters['orderBy'],
@@ -94,7 +94,10 @@ class PaginatedCatalogSheetPreviewViewQueryHandler
             $query->limit,
             $query->locale,
             true,
-            $this->getNomenclatureItems($query->viewer, $query->locale),
+            $this->nomenclatureItemsGetter->getNomenclatureItems(
+                $query->viewer,
+                $query->locale
+            ),
             $query->availableSlotIds,
             $query->sheetsToExclude
         );
@@ -137,36 +140,6 @@ class PaginatedCatalogSheetPreviewViewQueryHandler
         );
 
         return $paginatedResult;
-    }
-
-    /**
-     * @param Sheet  $sheet
-     * @param string $locale
-     *
-     * @return array
-     */
-    private function getNomenclatureItems(Sheet $sheet, $locale)
-    {
-        $templateData = $this->templateDataFactory->createFromSheet($sheet, $locale);
-
-        $nomenclatureItems   = [];
-        $nomenclatureObjects = $templateData->getNomenclatureObjects();
-
-        foreach ($nomenclatureObjects as $nomenclatureObject) {
-            $items = $nomenclatureObject->getData();
-            if (isset($items['items'])) {
-                if (!isset($nomenclatureItems[$nomenclatureObject->getObjective()])) {
-                    $nomenclatureItems[$nomenclatureObject->getObjective()] = [];
-                }
-
-                $nomenclatureItems[$nomenclatureObject->getObjective()] = array_merge(
-                    $nomenclatureItems[$nomenclatureObject->getObjective()],
-                    $items['items']
-                );
-            }
-        }
-
-        return $nomenclatureItems;
     }
 
     /**

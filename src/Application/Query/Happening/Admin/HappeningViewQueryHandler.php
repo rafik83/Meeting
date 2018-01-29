@@ -62,7 +62,8 @@ class HappeningViewQueryHandler
             $query->happening->isQuestionAllowed(),
             $query->happening->getLimitParticipant(),
             $participation,
-            $speakerView
+            $speakerView,
+            $query->happening->isPrivate()
         );
     }
 }

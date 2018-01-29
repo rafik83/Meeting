@@ -10,24 +10,20 @@
 
 namespace Proximum\Vimeet\Domain\Template;
 
+use Proximum\Vimeet\Application\Components\Sheet\Nomenclature\NomenclatureItemsGetter;
 use Proximum\Vimeet\Application\Components\Sheet\Template\Tag;
 use Proximum\Vimeet\Domain\Model\Participant;
+use Proximum\Vimeet\Domain\Template\TemplateObject\Nomenclature;
 
 class ParticipantInfoGuesser
 {
-    /**
-     * @var TaggedInfoGuesser
-     */
+    /** @var TaggedInfoGuesser */
     private $taggedInfoGuesser;
 
-    /**
-     * @var TemplateDataFactory
-     */
+    /** @var TemplateDataFactory */
     private $templateDataFactory;
 
     /**
-     * ParticipantInfoGuesser constructor.
-     *
      * @param TaggedInfoGuesser   $taggedInfoGuesser
      * @param TemplateDataFactory $templateDataFactory
      */
@@ -181,6 +177,31 @@ class ParticipantInfoGuesser
         $templateData = $this->templateDataFactory->createRegistrationFromParticipant($participant, $locale);
 
         return $templateData->getTaggedContentValue(Tag::PARTICIPANT_POSITION);
+    }
+
+    /**
+     * @param Participant $participant
+     * @param string      $locale
+     *
+     * @return null|string
+     */
+    public function guessParticipantPositionLabel(Participant $participant, string $locale): ?string
+    {
+        $templateData = $this->templateDataFactory->createRegistrationFromParticipant($participant, $locale);
+
+        foreach ($templateData->getProfileObjects() as $object) {
+            if ($object instanceof TemplateObject\ContentObjectInterface
+                && $object->hasTag(Tag::PARTICIPANT_POSITION)
+            ) {
+                if ($object instanceof Nomenclature) {
+                    return $object->getContentLabel();
+                } else {
+                    return $object->getContentValue();
+                }
+            }
+        }
+
+        return null;
     }
 
     /**

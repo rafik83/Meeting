@@ -115,7 +115,7 @@ class PaginatedSheetListViewQueryHandlerTest extends TestCase
 
         $paginatedResult = new PaginatedResult([$sheet1->reveal(), $sheet2->reveal()], 1, 20, 2);
         $sheetSearchAdapter = $this->prophesize(SheetSearchAdapterInterface::class);
-        $sheetSearchAdapter->find($event->reveal(), [], null, 1, 20, 'fr', false)->shouldBeCalled()->willReturn($paginatedResult);
+        $sheetSearchAdapter->paginate($event->reveal(), [], null, 1, 20, 'fr', false)->shouldBeCalled()->willReturn($paginatedResult);
         $sheetInfoGuesser = $this->prophesize(SheetInfoGuesser::class);
         $sheetInfoGuesser->guessSheetTitle($sheet1->reveal(), 'fr')->shouldBeCalled()->willReturn('sheet title 1');
         $sheetInfoGuesser->guessSheetTitle($sheet2->reveal(), 'fr')->shouldBeCalled()->willReturn('sheet title 2');

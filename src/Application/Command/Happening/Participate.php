@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2015 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -32,24 +32,36 @@ class Participate
     /** @var null|string */
     public $question;
 
+    /** @var null|string */
+    public $invitationCode;
+
+    /** @var bool */
+    public $isUpdate;
+
     /**
      * @param Happening   $happening
      * @param Sheet       $sheet
      * @param User        $createdBy
      * @param array       $participants
      * @param null|string $question
+     * @param null|string $invitationCode
+     * @param bool        $isUpdate
      */
     public function __construct(
         Happening $happening,
         Sheet $sheet,
         User $createdBy,
         array $participants,
-        $question = null
+        ?string $question = null,
+        ?string $invitationCode = null,
+        bool $isUpdate = false
     ) {
-        $this->happening    = $happening;
-        $this->sheet        = $sheet;
-        $this->createdBy    = $createdBy;
-        $this->participants = $participants;
-        $this->question     = $question;
+        $this->happening      = $happening;
+        $this->sheet          = $sheet;
+        $this->createdBy      = $createdBy;
+        $this->participants   = $participants;
+        $this->question       = $question;
+        $this->invitationCode = $invitationCode;
+        $this->isUpdate       = $isUpdate;
     }
 }

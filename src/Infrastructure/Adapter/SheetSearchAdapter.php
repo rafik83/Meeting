@@ -54,20 +54,25 @@ class SheetSearchAdapter implements SheetSearchAdapterInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @param Event       $event
+     * @param array       $filters
+     * @param string|null $orderBy
+     * @param string      $locale
+     * @param array       $nomenclatureItems
+     * @param array       $availableSlotIds
+     * @param array       $sheetsToExclude
+     *
+     * @return Query
      */
-    public function find(
+    private function getQueryToFind(
         Event $event,
         array $filters,
         string $orderBy = null,
-        int $page,
-        int $limit,
         string $locale,
-        bool $getAggregations,
         array $nomenclatureItems = [],
         array $availableSlotIds = [],
         array $sheetsToExclude = []
-    ): PaginatedResult {
+    ): Query {
         $nomenclatureBoost = (isset($nomenclatureItems[Nomenclature::OBJECTIVE_NONE]))
             ? count($nomenclatureItems[Nomenclature::OBJECTIVE_NONE])
             : 1;
@@ -111,6 +116,60 @@ class SheetSearchAdapter implements SheetSearchAdapterInterface
             $query = new Query($builder->getQuery());
             $query->addSort(['sheetName.raw' => 'asc']);
         }
+
+        return $query;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function find(
+        Event $event,
+        array $filters,
+        string $orderBy = null,
+        string $locale,
+        array $nomenclatureItems = [],
+        array $availableSlotIds = [],
+        array $sheetsToExclude = []
+    ): array {
+        $query = $this->getQueryToFind(
+            $event,
+            $filters,
+            $orderBy,
+            $locale,
+            $nomenclatureItems,
+            $availableSlotIds,
+            $sheetsToExclude
+        );
+        $options = ["size" => 100000];
+
+        return $this->searchable->search($query, $options)->getResults();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function paginate(
+        Event $event,
+        array $filters,
+        string $orderBy = null,
+        int $page,
+        int $limit,
+        string $locale,
+        bool $getAggregations,
+        array $nomenclatureItems = [],
+        array $availableSlotIds = [],
+        array $sheetsToExclude = []
+    ): PaginatedResult {
+        $query = $this->getQueryToFind(
+            $event,
+            $filters,
+            $orderBy,
+            $locale,
+            $nomenclatureItems,
+            $availableSlotIds,
+            $sheetsToExclude
+        );
 
         if (true === $getAggregations) {
             $query->addAggregation($this->getAggregation(self::ES_FIELD_TYPE));

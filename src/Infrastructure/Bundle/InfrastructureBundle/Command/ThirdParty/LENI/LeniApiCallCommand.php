@@ -12,6 +12,8 @@ namespace Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\Thi
 
 use Proximum\Vimeet\Application\ThirdParty\LENI\Command\LeniApiCall;
 use Proximum\Vimeet\Application\ThirdParty\LENI\Command\LeniApiCallHandler;
+use Proximum\Vimeet\Application\ThirdParty\LENI\Exception\LeniException;
+use Proximum\Vimeet\Domain\Exception\DomainException;
 use Proximum\Vimeet\Domain\Repository\User\Event\ExtraDataRepositoryInterface;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
@@ -57,6 +59,8 @@ class LeniApiCallCommand extends Command
 
     /**
      * {@inheritdoc}
+     * @throws LeniException
+     * @throws \LogicException
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
@@ -67,6 +71,10 @@ class LeniApiCallCommand extends Command
             throw new \InvalidArgumentException(sprintf('ExtraData not found for id %s', $extraDataId));
         }
 
-        $this->leniApiCallHandler->handle(new LeniApiCall($extraData));
+        try {
+            $this->leniApiCallHandler->handle(new LeniApiCall($extraData));
+        } catch (\Exception $leniException) {
+            throw new LeniException($leniException->getMessage(), $leniException->getCode(), $leniException);
+        }
     }
 }

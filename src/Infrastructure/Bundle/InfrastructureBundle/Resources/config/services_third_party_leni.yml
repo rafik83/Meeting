@@ -20,6 +20,7 @@ services:
             - '@adapter.http_adapter'
             - '@repository.event.extra_parameter_repository'
             - '@repository.user.event.extra_data_repository'
+            - '@datetime'
 
     adapter.leni_api_call_job_queue:
         class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Adapter\ThirdParty\LENI\LeniApiCallJobQueue

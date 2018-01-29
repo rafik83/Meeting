@@ -1,9 +1,9 @@
 <?php
 
 /*
- * This file is part of the vimeet project.
+ * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2016 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -16,9 +16,7 @@ use Proximum\Vimeet\Domain\Catalog\TaggedNomenclatureFilterGetter;
 
 class PositionViewQueryHandler
 {
-    /**
-     * @var TaggedNomenclatureFilterGetter
-     */
+    /** @var TaggedNomenclatureFilterGetter */
     private $taggedNomenclatureFilterGetter;
 
     /**
@@ -34,7 +32,7 @@ class PositionViewQueryHandler
      *
      * @return PositionView[]
      */
-    public function handle(PositionViewQuery $query)
+    public function handle(PositionViewQuery $query): array
     {
         $positionItems = $this->taggedNomenclatureFilterGetter->getLastNomenclaturesItems(
             $query->event,
