@@ -24,6 +24,7 @@ admin.agenda.countProposition: 'Number of proposals received'
 admin.agenda.countRequest: 'Number of requests'
 admin.agenda.countSlots: 'Number of slots'
 admin.agenda.countValidatedRequest: 'Number of requests and accepted requests'
+admin.agenda.dayPrefix: D
 admin.agenda.export.link: Export
 admin.agenda.export.omz: OMZ
 admin.agenda.export.participant_schedules.title: 'Export of participants and plannings'

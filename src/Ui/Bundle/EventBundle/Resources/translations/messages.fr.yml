@@ -56,7 +56,7 @@ catalog.noVisibleTypes: 'Vous n''avez accès à aucun type de participation'
 catalog.preview.participant_positions_see_more: 'voir plus'
 catalog.search.no-filter-to-refine: 'Aucun filtre ne permet d''affiner la recherche.'
 catalog.seeMore: 'Voir plus'
-catalog.sheet.export.csv: 'Exporter'
+catalog.sheet.export.csv: Exporter
 catalog.sheet.result.total: '{0} Aucun résultat|{1} 1 résultat|]1,Inf[ %total% résultats'
 catalog.title: Catalogue
 common.backToPackage: 'Retour au forfait'
