@@ -17,7 +17,7 @@ class Version20180123091400 extends AbstractMigration
     {
         $this->abortIf($this->connection->getDatabasePlatform()->getName() !== 'mysql', 'Migration can only be executed safely on \'mysql\'.');
 
-        $this->addSql('ALTER TABLE sheet ADD commercial_status VARCHAR(255) DEFAULT NULL');
+        $this->addSql('ALTER TABLE sheet ADD commercial_status VARCHAR(255) DEFAULT \'none\'');
     }
 
     /**

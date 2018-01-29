@@ -15,6 +15,9 @@ namespace Proximum\Vimeet\Domain\Sheet;
  */
 class CommercialStatus
 {
+    /** Aucun */
+    const STATUS_NONE = 'none';
+
     /** Accord verbal */
     const STATUS_VERBAL_AGREEMENT = 'verbal_agreement';
 
@@ -49,6 +52,7 @@ class CommercialStatus
     const STATUS_FOLLOWED = 'followed';
 
     const STATUS = [
+        self::STATUS_NONE,
         self::STATUS_VERBAL_AGREEMENT,
         self::STATUS_CANCELED,
         self::STATUS_HOT,
@@ -63,6 +67,7 @@ class CommercialStatus
     ];
 
     const STATUS_WITH_LABEL = [
+        self::STATUS_NONE => 'default',
         self::STATUS_VERBAL_AGREEMENT => 'success',
         self::STATUS_CANCELED => 'danger',
         self::STATUS_HOT => 'info',

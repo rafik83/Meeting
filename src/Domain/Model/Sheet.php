@@ -17,6 +17,7 @@ use Proximum\Vimeet\Domain\Model\Sheet\AvailableSlot;
 use Proximum\Vimeet\Domain\Model\Sheet\Group;
 use Proximum\Vimeet\Domain\Model\Template\SheetTemplate;
 use Proximum\Vimeet\Domain\Sheet\Availability\ConfirmationStatus;
+use Proximum\Vimeet\Domain\Sheet\CommercialStatus;
 use Proximum\Vimeet\Domain\Sheet\Phone\ValidationStatus;
 use Proximum\Vimeet\Domain\Trace\TraceableName;
 
@@ -179,8 +180,8 @@ class Sheet implements TraceableInterface
     /** @var string */
     private $availabilityConfirmationStatus = ConfirmationStatus::NONE_CONFIRMED;
 
-    /** @var null|string */
-    private $commercialStatus = null;
+    /** @var string */
+    private $commercialStatus = CommercialStatus::STATUS_NONE;
 
     /**
      * Sheet constructor.
@@ -1095,17 +1096,17 @@ class Sheet implements TraceableInterface
     }
 
     /**
-     * @return null|string
+     * @return string
      */
-    public function getCommercialStatus(): ?string
+    public function getCommercialStatus(): string
     {
         return $this->commercialStatus;
     }
 
     /**
-     * @param null|string $commercialStatus
+     * @param string $commercialStatus
      */
-    public function setCommercialStatus(?string $commercialStatus = null)
+    public function setCommercialStatus(string $commercialStatus)
     {
         $this->commercialStatus = $commercialStatus;
     }
