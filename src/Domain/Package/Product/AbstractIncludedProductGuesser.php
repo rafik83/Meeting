@@ -30,20 +30,20 @@ abstract class AbstractIncludedProductGuesser
      *
      * @return null|Product
      */
-    protected function getSelectedPlan(Sheet $sheet)
+    protected function getSelectedPlan(Sheet $sheet): ?Product
     {
-        if ($sheet->hasNotCancelledOrders()) {
-            $orderMerged = $this->orderMerger->merge($sheet->getNotCancelledOrders());
+        $orderMerged = $this->orderMerger->getMergedOrders($sheet);
 
+        if (null !== $orderMerged && null !== $orderMerged->getPlan()) {
             return $orderMerged->getPlan();
         }
 
         $cart = $this->cartManager->getCart($sheet);
 
-        if (null !== $cart->getPlanRow()) {
-            return $cart->getPlanRow()->getProduct();
+        if (null === $cart->getPlanRow()) {
+            return null;
         }
 
-        return null;
+        return $cart->getPlanRow()->getProduct();
     }
 }

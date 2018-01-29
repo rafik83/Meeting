@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2016 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -13,25 +13,20 @@ namespace Proximum\Vimeet\Application\Command\Package\Step;
 use Proximum\Vimeet\Application\Event\Events;
 use Proximum\Vimeet\Application\Event\Package\StepDoneEvent;
 use Proximum\Vimeet\Application\Exception\Package\PackageNotFoundException;
+use Proximum\Vimeet\Domain\Cart\Cart;
 use Proximum\Vimeet\Domain\Cart\CartManager;
 use Proximum\Vimeet\Domain\Order\Merger;
 use Proximum\Vimeet\Infrastructure\Adapter\DelayedEventDispatcher;
 
 class SelectParticipantAndPlanningHandler
 {
-    /**
-     * @var CartManager
-     */
+    /** @var CartManager */
     private $cartManager;
 
-    /**
-     * @var Merger
-     */
+    /** @var Merger */
     private $merger;
 
-    /**
-     * @var DelayedEventDispatcher
-     */
+    /** @var DelayedEventDispatcher */
     private $eventDispatcher;
 
     /**
@@ -52,7 +47,7 @@ class SelectParticipantAndPlanningHandler
     /**
      * @param SelectParticipantAndPlanning $selectParticipantAndPlanning
      *
-     * @throws \Exception
+     * @throws PackageNotFoundException
      */
     public function handle(SelectParticipantAndPlanning $selectParticipantAndPlanning)
     {
@@ -65,42 +60,41 @@ class SelectParticipantAndPlanningHandler
 
         $cart = $this->cartManager->getCart($sheet, $selectParticipantAndPlanning->currentStep);
 
-        $orders = $sheet->getNotCancelledOrders();
+        $cart = $this->cartManager->updateParticipantsQuantity($cart, $selectParticipantAndPlanning->participantsProduct);
+        $this->handlePlanning($cart, $selectParticipantAndPlanning->planningQuantity);
+        $this->cartManager->save($cart);
 
-        // Update participant cart row
-        if (count($orders) > 0) {
-            $order = $this->merger->merge($orders);
+        $packageStepDone = new StepDoneEvent($selectParticipantAndPlanning->sheet);
+        $this->eventDispatcher->dispatch(Events::PACKAGE_STEP_DONE, $packageStepDone);
+    }
 
-            if (null !== $order) {
-                $cart->resolveParticipantsQuantity($order);
-            }
-        } else {
-            $cart->resolveParticipantsQuantity();
-        }
+    /**
+     * @param Cart $cart
+     * @param int  $planningQuantity
+     */
+    private function handlePlanning(Cart $cart, int $planningQuantity): void
+    {
+        $sheet = $cart->getSheet();
 
-        if (!$package->getPlanning()) {
+        $planningProduct = $sheet->getPackage()->getPlanning();
+
+        if (null === $planningProduct) {
             return;
         }
 
         // Update planning cart row
         $orderPlanningQuantity = 0;
 
-        if (count($orders) > 0) {
-            $merged = $this->merger->merge($orders);
+        $mergedOrder = $this->merger->getMergedOrders($sheet);
 
-            if ($merged !== null ) {
-                if ($orderRow = $merged->getRowForProduct($package->getPlanning())) {
-                    $orderPlanningQuantity = $orderRow->getQuantity();
-                }
+        if (null !== $mergedOrder) {
+            if ($orderRow = $mergedOrder->getRowForProduct($planningProduct)) {
+                $orderPlanningQuantity = $orderRow->getQuantity();
             }
         }
 
-        $quantity = (int) $selectParticipantAndPlanning->planningQuantity - $orderPlanningQuantity;
+        $quantity = $planningQuantity - $orderPlanningQuantity;
 
-        $cart->setProduct($package->getPlanning(), $quantity);
-        $this->cartManager->save($cart);
-
-        $packageStepDone = new StepDoneEvent($selectParticipantAndPlanning->sheet);
-        $this->eventDispatcher->dispatch(Events::PACKAGE_STEP_DONE, $packageStepDone);
+        $cart->setProduct($planningProduct, $quantity);
     }
 }

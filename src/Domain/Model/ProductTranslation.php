@@ -137,7 +137,7 @@ class ProductTranslation
     /**
      * Get description
      *
-     * @return string
+     * @return null|string
      */
     public function getDescription()
     {

@@ -99,48 +99,23 @@ class Cart
     }
 
     /**
-     * Set additionnal participant quantity
-     *
-     * @param Order $order
-     *
-     * @return Cart
+     * @return Product\ProductIncluded[]
      */
-    public function resolveParticipantsQuantity(Order $order = null)
+    public function getIncludedParticipantProducts(): array
     {
-        $orderParticipant            = 0;
-        $includedParticipantQuantity = 0;
-
-        if (isset($order)) {
-            $orderParticipant = $order->countParticipant();
-            if ($plan = $order->getPlan()) {
-                $includedParticipantQuantity = $plan->getIncludedParticipantQuantity();
-            }
-        } else {
-            $includedParticipantQuantity = $this->getIncludedParticipantQuantity();
+        if (null === $this->getPlanRow()) {
+            return [];
         }
 
-        $participantNumber = $this->sheet->countParticipant() - ($includedParticipantQuantity + $orderParticipant);
-
-        if ($participantNumber < 0) {
-            $additionnal = $participantNumber - ($this->sheet->countParticipant() - $includedParticipantQuantity);
-        } else {
-            $additionnal = $participantNumber;
-        }
-
-        // In case of a first order, the number of participant can not be negative
-        if (null === $order && $additionnal < 0) {
-            return $this;
-        }
-
-        $this->setProduct($this->sheet->getPackageParticipant(), $additionnal);
-
-        return $this;
+        return $this->getPlanRow()->getProduct()->getIncludedParticipantProducts();
     }
 
     /**
      * Get how many participant are included.
      *
      * @return int
+     *
+     * @deprecated
      */
     public function getIncludedParticipantQuantity()
     {
@@ -166,6 +141,8 @@ class Cart
 
     /**
      * @return null|CartRow
+     *
+     * @deprecated use getParticipantRows()
      */
     public function getParticipantRow()
     {
@@ -176,6 +153,16 @@ class Cart
         }
 
         return null;
+    }
+
+    /**
+     * @return CartRow[]
+     */
+    public function getParticipantRows(): array
+    {
+        return array_filter($this->getRows(), function(CartRow $cartRow) {
+            return $cartRow->getProduct()->isParticipant();
+        });
     }
 
     /**
@@ -209,12 +196,6 @@ class Cart
      */
     public function hasProduct(Product $product)
     {
-        if ($product->isParticipant() || $product->isPlan() || $product->isPlanning()) {
-            return $this->rows->exists(function ($key, CartRow $cartRow) use ($product) {
-                return $cartRow->getProduct()->getType() === $product->getType();
-            });
-        }
-
         return $this->rows->exists(function ($key, CartRow $cartRow) use ($product) {
             return $cartRow->getProduct() === $product;
         });
@@ -256,12 +237,6 @@ class Cart
      */
     public function getRow(Product $product)
     {
-        if ($product->isParticipant() || $product->isPlan() || $product->isPlanning()) {
-            return $this->rows->filter(function (CartRow $cartRow) use ($product) {
-                return $cartRow->getProduct()->getType() === $product->getType();
-            })->first();
-        }
-
         return $this->rows->filter(function (CartRow $cartRow) use ($product) {
             return $cartRow->getProduct() === $product;
         })->first();

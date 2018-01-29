@@ -3,7 +3,7 @@
 /*
  * This file is part of the vimeet project.
  *
- * Copyright (C) 2016 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -11,54 +11,58 @@
 namespace Proximum\Vimeet\Application\Components\Step;
 
 use Proximum\Vimeet\Application\Command\Package\Step\SelectParticipantAndPlanning;
+use Proximum\Vimeet\Application\Components\Package\ProductByParticipantGetter;
 use Proximum\Vimeet\Domain\Cart\CartManager;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Order\Merger;
 
 class StepParticipantAndPlanning
 {
-    /**
-     * @var Merger
-     */
+    /** @var Merger */
     private $orderMerger;
-    /**
-     * @var CartManager
-     */
+
+    /** @var CartManager */
     private $cartManager;
 
+    /** @var ProductByParticipantGetter */
+    private $productByParticipantGetter;
+
     /**
-     * StepParticipant constructor.
-     *
-     * @param Merger      $orderMerger
-     * @param CartManager $cartManager
+     * @param Merger                     $orderMerger
+     * @param CartManager                $cartManager
+     * @param ProductByParticipantGetter $productByParticipantGetter
      */
-    public function __construct(Merger $orderMerger, CartManager $cartManager)
-    {
+    public function __construct(
+        Merger $orderMerger,
+        CartManager $cartManager,
+        ProductByParticipantGetter $productByParticipantGetter
+    ) {
         $this->orderMerger = $orderMerger;
         $this->cartManager = $cartManager;
+        $this->productByParticipantGetter = $productByParticipantGetter;
     }
 
     /**
-     * @param Sheet $sheet
-     * @param int   $stepIndex
+     * @param Sheet    $sheet
+     * @param null|int $stepIndex
      *
      * @return SelectParticipantAndPlanning
      */
-    public function build(Sheet $sheet, $stepIndex)
+    public function build(Sheet $sheet, ?int $stepIndex = null): SelectParticipantAndPlanning
     {
+        $cart = $this->cartManager->getCart($sheet, $stepIndex);
         $command = new SelectParticipantAndPlanning($sheet, $stepIndex);
-        $cart    = $this->cartManager->getCart($command->sheet, $command->currentStep);
+        $command->participantsProduct = $this->productByParticipantGetter->getFromCart($cart);
 
-        if ($command->sheet->hasNotCancelledOrders()) {
-            $orderMerged = $this->orderMerger->merge($command->sheet->getNotCancelledOrders());
-        }
-
+        // Get Planning quantity
         $planningRow   = $cart->getPlanningRow();
         $orderQuantity = 0;
         $cartQuantity  = 0;
 
-        if (isset($orderMerged)) {
-            $planning = $command->sheet->getPackage()->getPlanning();
+        $orderMerged = $this->orderMerger->getMergedOrders($sheet);
+
+        if (null !== $orderMerged) {
+            $planning = $sheet->getPackage()->getPlanning();
 
             if ($orderRow = $orderMerged->getRowForProduct($planning)) {
                 $orderQuantity = $orderRow->getQuantity();

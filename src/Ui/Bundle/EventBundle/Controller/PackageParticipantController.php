@@ -55,7 +55,6 @@ class PackageParticipantController extends Controller
         }
 
         $locale         = $request->getLocale();
-        $label          = $sheet->getPackage()->getParticipant()->getTitle($locale);
         $addParticipant = new AddParticipant($sheet, $locale, $this->getUser());
         $form           = $this->createForm(AddType::class, $addParticipant, [
             'sheet'  => $sheet,
@@ -66,12 +65,19 @@ class PackageParticipantController extends Controller
             ]),
         ]);
 
-        $participantProductView = $this->get('tactician.commandbus.query')->handle(
+        // todo: remove this to send to add form all participants product
+        $participantProductViews = $this->get('tactician.commandbus.query')->handle(
             new ParticipantProductViewQuery($sheet, $locale)
         );
 
+        $participantProductView = reset($participantProductViews);
+
+        if (false === $participantProductView) {
+            $participantProductView = null;
+        }
+        // /todo
+
         return $this->render('EventBundle:Participant:add.html.twig', [
-            'label'                  => $label,
             'form'                   => $form->createView(),
             'sheet'                  => $sheet,
             'participantProductView' => $participantProductView,

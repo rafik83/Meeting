@@ -42,7 +42,7 @@ interface ProductRepositoryInterface
     /**
      * @param Event $event
      *
-     * @return array
+     * @return array ordered by product type, then by product name
      */
     public function countByEvent(Event $event);
 

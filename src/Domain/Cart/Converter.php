@@ -130,6 +130,13 @@ class Converter
             $groupId = $group->getId();
         }
 
+        // Add a link between Participant and Product of type 'participant'
+        if ($cartRow->getProduct()->isParticipant()) {
+            foreach ($cartRow->getParticipants() as $participant) {
+                $participant->setParticipantProduct($cartRow->getProduct());
+            }
+        }
+
         return new Order\Row(
             $order,
             $cartRow->getQuantity(),

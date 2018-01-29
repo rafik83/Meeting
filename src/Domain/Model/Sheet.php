@@ -437,14 +437,6 @@ class Sheet implements TraceableInterface
     }
 
     /**
-     * @return Product
-     */
-    public function getPackageParticipant()
-    {
-        return $this->getPackage()->getParticipant();
-    }
-
-    /**
      * Get createdAt
      *
      * @return DateTimeInterface

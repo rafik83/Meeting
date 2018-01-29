@@ -1363,6 +1363,7 @@ services:
             - '@vimeet_infrastructure.adapter.delayed_event_dispatcher'
             - '@vimeet_infrastructure.repository.meeting_repository'
             - '@template.participant_info_guesser'
+            - '@components.step.step_participant'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Participant\Remove }
     command.promotion_code.create_handler:
@@ -2510,6 +2511,7 @@ services:
         arguments:
             - '@order.merger'
             - '@cart_manager'
+            - '@components.package.product_by_participant_getter'
     components.step.step_plan:
         class: Proximum\Vimeet\Application\Components\Step\StepPlan
         arguments:
@@ -2525,6 +2527,12 @@ services:
         class: Proximum\Vimeet\Application\Security\ValidateMobileProcessAccessChecker
         arguments:
             - '@query.tip.tip_translation_view_by_user_query_handler'
+
+    #
+    # Package component
+    #
+    components.package.product_by_participant_getter:
+        class: Proximum\Vimeet\Application\Components\Package\ProductByParticipantGetter
 
     #
     # DateTime
@@ -2856,7 +2864,8 @@ services:
         class: Proximum\Vimeet\Application\Query\Package\Participant\ParticipantsViewQueryHandler
         arguments:
             - '@query.package.participant_view_query_handler'
-            - '@package.product.included_participant_guesser'
+            - '@query.package.participant_product_view_query_handler'
+            - '@adapter.serializer_adapter'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Package\ParticipantsViewQuery }
     query.package.participant_product_view_query_handler:
@@ -2896,24 +2905,19 @@ services:
         arguments:
             - '@query.package.summary.product_view_query_handler'
             - '@query.order.summary.custom_row_view_query_handler'
-    query.package.summary.planning_group_view_query_handler:
-        class: Proximum\Vimeet\Application\Query\Package\Summary\PlanningGroupViewQueryHandler
-        arguments:
-            - '@query.package.summary.product_view_query_handler'
     query.package.summary.plan_group_view_query_handler:
         class: Proximum\Vimeet\Application\Query\Package\Summary\PlanGroupViewQueryHandler
         arguments:
             - '@query.package.summary.product_view_query_handler'
-    query.package.summary.participant_group_view_query_handler:
-        class: Proximum\Vimeet\Application\Query\Package\Summary\ParticipantGroupViewQueryHandler
+    query.package.summary.participant_and_planning_group_view_query_handler:
+        class: Proximum\Vimeet\Application\Query\Package\Summary\ParticipantAndPlanningGroupViewQueryHandler
         arguments:
             - '@query.package.summary.product_view_query_handler'
     query.package.summary.groups_view_query_handler:
         class: Proximum\Vimeet\Application\Query\Package\Summary\GroupsViewQueryHandler
         arguments:
             - '@query.package.summary.plan_group_view_query_handler'
-            - '@query.package.summary.participant_group_view_query_handler'
-            - '@query.package.summary.planning_group_view_query_handler'
+            - '@query.package.summary.participant_and_planning_group_view_query_handler'
             - '@query.package.summary.group_view_query_handler'
     query.package.summary.summary_view_query_handler:
         class: Proximum\Vimeet\Application\Query\Package\Summary\SummaryViewQueryHandler
@@ -5038,6 +5042,14 @@ services:
 
     serializer.normalizer.meeting_sheet_normalizer:
         class: Proximum\Vimeet\Application\Serializer\Normalizer\MeetingSheetNormalizer
+        parent: 'serializer.abstract_normalizer'
+        arguments:
+            - '@vimeet_infrastructure.adapter.translator_adapter'
+        tags:
+            - { name: serializer.normalizer }
+
+    serializer.normalizer.package.participant_product_view_normalizer:
+        class: Proximum\Vimeet\Application\Serializer\Normalizer\Package\ParticipantProductViewNormalizer
         parent: 'serializer.abstract_normalizer'
         arguments:
             - '@vimeet_infrastructure.adapter.translator_adapter'

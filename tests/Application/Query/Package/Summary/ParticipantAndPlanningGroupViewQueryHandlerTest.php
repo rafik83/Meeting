@@ -11,11 +11,11 @@
 namespace Proximum\Vimeet\Tests\Application\Query\Package\Summary;
 
 use Prophecy\Argument;
-use Proximum\Vimeet\Application\Query\Package\Summary\ParticipantGroupViewQuery;
-use Proximum\Vimeet\Application\Query\Package\Summary\ParticipantGroupViewQueryHandler;
+use Proximum\Vimeet\Application\Query\Package\Summary\ParticipantAndPlanningGroupViewQuery;
+use Proximum\Vimeet\Application\Query\Package\Summary\ParticipantAndPlanningGroupViewQueryHandler;
 use Proximum\Vimeet\Application\Query\Package\Summary\ProductViewQuery;
 use Proximum\Vimeet\Application\Query\Package\Summary\ProductViewQueryHandler;
-use Proximum\Vimeet\Application\View\Package\Summary\ParticipantGroupView;
+use Proximum\Vimeet\Application\View\Package\Summary\ParticipantAndPlanningGroupView;
 use Proximum\Vimeet\Application\View\Package\Summary\PlanGroupView;
 use Proximum\Vimeet\Application\View\Package\Summary\ProductView;
 use Proximum\Vimeet\Domain\Cart\Cart;
@@ -27,7 +27,7 @@ use Proximum\Vimeet\Tests\Factory\ProductFactory;
 use Proximum\Vimeet\Tests\Factory\SheetFactory;
 use PHPUnit\Framework\TestCase;
 
-class ParticipantGroupViewQueryHandlerTest extends TestCase
+class ParticipantAndPlanningGroupViewQueryHandlerTest extends TestCase
 {
     public function testHandle()
     {
@@ -59,15 +59,15 @@ class ParticipantGroupViewQueryHandlerTest extends TestCase
         );
 
         // Expected
-        $expectedParticipantGroupView = new ParticipantGroupView('', [$productView], 25);
+        $expectedParticipantGroupView = new ParticipantAndPlanningGroupView('', [$productView], 25);
 
         // Mock
         $productViewQueryHandler = $this->prophesize(ProductViewQueryHandler::class);
 
         $productViewQueryHandler->handle(Argument::type(ProductViewQuery::class))->shouldBeCalled()->willReturn($productView);
 
-        $handler              = new ParticipantGroupViewQueryHandler($productViewQueryHandler->reveal());
-        $query                = new ParticipantGroupViewQuery($sheet, $cart, $locale, $planGroupView);
+        $handler              = new ParticipantAndPlanningGroupViewQueryHandler($productViewQueryHandler->reveal());
+        $query                = new ParticipantAndPlanningGroupViewQuery($sheet, $cart, $locale, $planGroupView);
         $participantGroupView = $handler->handle($query);
 
         $this->assertEquals($participantGroupView, $expectedParticipantGroupView);
@@ -98,8 +98,8 @@ class ParticipantGroupViewQueryHandlerTest extends TestCase
 
         $productViewQueryHandler->handle(Argument::type(ProductViewQuery::class))->shouldNotBeCalled();
 
-        $handler              = new ParticipantGroupViewQueryHandler($productViewQueryHandler->reveal());
-        $query                = new ParticipantGroupViewQuery($sheet, $cart, $locale, $planGroupView);
+        $handler = new ParticipantAndPlanningGroupViewQueryHandler($productViewQueryHandler->reveal());
+        $query   = new ParticipantAndPlanningGroupViewQuery($sheet, $cart, $locale, $planGroupView);
 
         $handler->handle($query);
     }

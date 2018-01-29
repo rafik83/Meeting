@@ -253,14 +253,6 @@ class Product
     }
 
     /**
-     * @return ProductTranslation[]
-     */
-    public function getTranslations()
-    {
-        return $this->translations->toArray();
-    }
-
-    /**
      * @param ArrayCollection $translations
      */
     public function setTranslations($translations)
@@ -327,9 +319,9 @@ class Product
     /**
      * @param string $locale
      *
-     * @return string
+     * @return null|string
      */
-    public function getDescription($locale)
+    public function getDescription($locale): ?string
     {
         return $this->hasTranslation($locale) ? $this->getTranslation($locale)->getDescription() : '';
     }
@@ -379,9 +371,9 @@ class Product
     }
 
     /**
-     * @return int
+     * @return float
      */
-    public function getQuantityMax()
+    public function getQuantityMax(): float
     {
         return null === $this->quantityMax ? INF : $this->quantityMax;
     }
@@ -581,6 +573,8 @@ class Product
      * Get the number of participant included in this product
      *
      * @return int
+     *
+     * @deprecated
      */
     public function getIncludedParticipantQuantity()
     {
@@ -591,12 +585,30 @@ class Product
 
     /**
      * @return boolean|ProductIncluded
+     *
+     * @deprecated use Product::getIncludedParticipantProducts
      */
     public function getIncludedParticipantProduct()
     {
         return $this->productIncluded->filter(function (ProductIncluded $productIncluded) {
             return $productIncluded->getIncluded()->isParticipant();
         })->first();
+    }
+
+    /**
+     * @return ProductIncluded[]
+     */
+    public function getIncludedParticipantProducts(): array
+    {
+        return $this
+            ->productIncluded
+            ->filter(
+                function (ProductIncluded $productIncluded) {
+                    return $productIncluded->getIncluded()->isParticipant();
+                }
+            )
+            ->toArray()
+        ;
     }
 
     /**

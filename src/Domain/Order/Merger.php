@@ -12,6 +12,7 @@ namespace Proximum\Vimeet\Domain\Order;
 
 use Proximum\Vimeet\Domain\Exception\Order\OrderMergerException;
 use Proximum\Vimeet\Domain\Model\Order;
+use Proximum\Vimeet\Domain\Model\Sheet;
 
 class Merger
 {
@@ -59,6 +60,22 @@ class Merger
         }
 
         return $orderMerged;
+    }
+
+    /**
+     * @param Sheet $sheet
+     *
+     * @return null|Order
+     */
+    public function getMergedOrders(Sheet $sheet): ?Order
+    {
+        $orders = $sheet->getNotCancelledOrders();
+
+        if (0 === count($orders)) {
+            return null;
+        }
+
+        return $this->merge($orders);
     }
 
     /**

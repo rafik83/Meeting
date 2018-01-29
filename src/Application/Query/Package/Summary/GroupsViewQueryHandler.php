@@ -26,31 +26,23 @@ class GroupsViewQueryHandler
     private $planGroupViewQueryHandler;
 
     /**
-     * @var ParticipantGroupViewQueryHandler
+     * @var ParticipantAndPlanningGroupViewQueryHandler
      */
-    private $participantGroupViewQueryHandler;
+    private $participantAndPlanningGroupViewQueryHandler;
 
     /**
-     * @var PlanningGroupViewQueryHandler
-     */
-    private $planningGroupViewQueryHandler;
-
-    /**
-     * @param PlanGroupViewQueryHandler        $planGroupViewQueryHandler
-     * @param ParticipantGroupViewQueryHandler $participantGroupViewQueryHandler
-     * @param PlanningGroupViewQueryHandler    $planningGroupViewQueryHandler
-     * @param GroupViewQueryHandler            $groupViewQueryHandler
+     * @param PlanGroupViewQueryHandler                   $planGroupViewQueryHandler
+     * @param ParticipantAndPlanningGroupViewQueryHandler $participantAndPlanningGroupViewQueryHandler
+     * @param GroupViewQueryHandler                       $groupViewQueryHandler
      */
     public function __construct(
         PlanGroupViewQueryHandler $planGroupViewQueryHandler,
-        ParticipantGroupViewQueryHandler $participantGroupViewQueryHandler,
-        PlanningGroupViewQueryHandler $planningGroupViewQueryHandler,
+        ParticipantAndPlanningGroupViewQueryHandler $participantAndPlanningGroupViewQueryHandler,
         GroupViewQueryHandler $groupViewQueryHandler
     ) {
-        $this->planGroupViewQueryHandler        = $planGroupViewQueryHandler;
-        $this->participantGroupViewQueryHandler = $participantGroupViewQueryHandler;
-        $this->planningGroupViewQueryHandler    = $planningGroupViewQueryHandler;
-        $this->groupViewQueryHandler            = $groupViewQueryHandler;
+        $this->planGroupViewQueryHandler = $planGroupViewQueryHandler;
+        $this->participantAndPlanningGroupViewQueryHandler = $participantAndPlanningGroupViewQueryHandler;
+        $this->groupViewQueryHandler = $groupViewQueryHandler;
     }
 
     /**
@@ -61,12 +53,11 @@ class GroupsViewQueryHandler
     public function handle(GroupsViewQuery $groupsViewQuery)
     {
         $groupViewQueryHandler = $this->groupViewQueryHandler;
-        $cart                  = $groupsViewQuery->cart;
-        $package               = $groupsViewQuery->sheet->getPackage();
-        $planGroupView         = null;
-        $participantGroupView  = null;
-        $planningGroupView     = null;
-        $groupsView            = [];
+        $cart = $groupsViewQuery->cart;
+        $package = $groupsViewQuery->sheet->getPackage();
+        $planGroupView = null;
+        $participantAndPlanningGroupView = null;
+        $groupsView = [];
 
         if ($package->isPlansEnabled() ) {
             $planGroupView = $this->planGroupViewQueryHandler->handle(
@@ -78,20 +69,11 @@ class GroupsViewQueryHandler
             );
         }
 
-        if ($package->isParticipantAndPlanningEnabled() && null !== $cart->getParticipantRow()) {
-            $participantGroupView = $this->participantGroupViewQueryHandler->handle(
-                new ParticipantGroupViewQuery(
-                    $groupsViewQuery->sheet,
-                    $cart,
-                    $groupsViewQuery->locale,
-                    $planGroupView
-                )
-            );
-        }
-
-        if ($package->isParticipantAndPlanningEnabled() && null !== $cart->getPlanningRow()) {
-            $planningGroupView = $this->planningGroupViewQueryHandler->handle(
-                new PlanningGroupViewQuery(
+        if ($package->isParticipantAndPlanningEnabled()
+            && (count($cart->getParticipantRows()) || null !== $cart->getPlanningRow())
+        ) {
+            $participantAndPlanningGroupView = $this->participantAndPlanningGroupViewQueryHandler->handle(
+                new ParticipantAndPlanningGroupViewQuery(
                     $groupsViewQuery->sheet,
                     $cart,
                     $groupsViewQuery->locale,
@@ -118,8 +100,7 @@ class GroupsViewQueryHandler
 
         return new GroupsView(
             $planGroupView,
-            $participantGroupView,
-            $planningGroupView,
+            $participantAndPlanningGroupView,
             $groupsView
         );
     }

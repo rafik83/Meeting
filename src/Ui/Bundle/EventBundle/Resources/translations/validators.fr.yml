@@ -2,6 +2,8 @@ account.profile.updateAvatar.error: 'Une erreur s''est produite lors du téléch
 'Bad credentials.': 'Identifiants incorrects'
 login.error.sheetDisabled: 'Votre participation a été désactivée.'
 package.planning.quantity: 'La quantité doit être comprise entre %min% et %max%'
+package.participantsProduct.productMustBeSelected: 'Un produit doit être sélectionné'
+package.participantsProduct.quantityMaxReached: 'Quantité maximum atteinte pour le produit sélectionné'
 package.plans.notBlank: 'Vous devez sélectionner une formule.'
 package.product.notAvailable: 'Ce produit n''est plus disponible'
 package.product.productNotDeletable: 'Le produit n''est plus supprimable'

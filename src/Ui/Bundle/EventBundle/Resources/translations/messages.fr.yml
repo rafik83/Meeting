@@ -301,6 +301,8 @@ package.funnel.payment: Paiement
 package.funnel.summary: 'Récapitulatif & Facturation'
 package.options.included: inclus
 package.participant_planning.validate: Valider
+package.participant.add: 'Ajouter un participant'
+package.participant.delete: 'Supprimer un participant'
 package.participants.add: 'Ajouter des participants'
 package.participants.delete: 'Supprimer des participants'
 package.participants.included: inclus
@@ -332,6 +334,7 @@ package.product.outOfStock: Epuisé
 package.product.priceWithCurrency: '%price% <sup>%currency%</sup>'
 package.product.quantity: Quantité
 package.product.quantityMax: 'Quantité maximum atteinte'
+package.product.quantityMaxInformation: 'Max : %quantityMax%'
 package.product.quantityMin: 'Quantité minimum atteinte'
 package.product.selectOptions: 'Sélectionner vos options'
 package.product.subjectedToValidationHelp: 'Sous réserve de validation'

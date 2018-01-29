@@ -68,9 +68,6 @@ class SheetParticipantController extends Controller
             throw $this->createNotFoundException(sprintf('The given object %s is not a participant', $key));
         }
 
-
-        $label = $object->getLabel($locale, $sheet->getEvent()->getFallback());
-
         $addParticipant = new Add($sheet, $locale, $this->getUser());
 
         $form           = $this->createForm(AddType::class, $addParticipant, [
@@ -82,15 +79,22 @@ class SheetParticipantController extends Controller
             ),
         ]);
 
-        $participantProductView = $this->get('tactician.commandbus.query')->handle(
+        // todo: remove this to send to add form all participants product
+        $participantProductViews = $this->get('tactician.commandbus.query')->handle(
             new ParticipantProductViewQuery($sheet, $locale)
         );
+
+        $participantProductView = reset($participantProductViews);
+
+        if (false === $participantProductView) {
+            $participantProductView = null;
+        }
+        // /todo
 
         return $this->render('EventBundle:Participant:add.html.twig', [
             'uid'                    => $key,
             'form'                   => $form->createView(),
             'sheet'                  => $sheet,
-            'label'                  => $label,
             'participantProductView' => $participantProductView,
             'backRoute'              => 'backToSheet',
         ]);
@@ -132,7 +136,7 @@ class SheetParticipantController extends Controller
         // Handle the form, update the object and redirect to the sheet if valid
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
             try {
-                $this->get('tactician.commandbus')->handle($addParticipant);
+                $this->get('vimeet_infrastructure.vimeet.application.command.participant.add_handler')->handle($addParticipant);
 
                 return $this->redirectToRoute('event_sheet_locale', ['sheet' => $sheet->getId(), 'locale' => $locale]);
             } catch (AlreadyLinkedToASheetOfThisEventException $exception) {
@@ -152,9 +156,17 @@ class SheetParticipantController extends Controller
         $object       = $this->getParticipantObject($templateData, $key);
         $label        = $object->getLabel($locale, $sheet->getEvent()->getFallback());
 
-        $participantProductView = $this->get('tactician.commandbus.query')->handle(
+        // todo: remove this to send to add form all participants product
+        $participantProductViews = $this->get('tactician.commandbus.query')->handle(
             new ParticipantProductViewQuery($sheet, $locale)
         );
+
+        $participantProductView = reset($participantProductViews);
+
+        if (false === $participantProductView) {
+            $participantProductView = null;
+        }
+        // /todo
 
         $tipTranslationViewQuery = new TipTranslationViewQuery(
             $sheet->getType(),

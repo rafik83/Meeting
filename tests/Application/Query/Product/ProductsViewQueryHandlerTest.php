@@ -58,7 +58,7 @@ class ProductsViewQueryHandlerTest extends TestCase
         $product1->isUpdatable()->willReturn(true);
         $product2->isUpdatable()->willReturn(true);
         $product3->isUpdatable()->willReturn(false);
-        $product1->getQuantityMax()->willReturn(null);
+        $product1->getQuantityMax()->willReturn(INF);
         $product2->getQuantityMax()->willReturn(9);
         $product3->getQuantityMax()->willReturn(100);
         $product1->getAvailabilityCurrent()->willReturn(null);
@@ -101,13 +101,19 @@ class ProductsViewQueryHandlerTest extends TestCase
                 'plan',
                 123.99,
                 false,
-                [0 => ['quantity' => 4, 'name' => 'name 3']],
+                [
+                    [
+                        'quantity' => 4,
+                        'name' => 'name 3',
+                        'type' => 'planning',
+                    ],
+                ],
                 4,
                 true,
                 'default',
                 false,
                 true,
-                null,
+                INF,
                 null,
                 23,
                 $date,

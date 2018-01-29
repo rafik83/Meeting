@@ -3,12 +3,14 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2016 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
 
 namespace Proximum\Vimeet\Domain\Model;
+
+use Doctrine\Common\Collections\ArrayCollection;
 
 class CartRow
 {
@@ -37,6 +39,9 @@ class CartRow
      */
     private $serializedProduct;
 
+    /** @var ArrayCollection of CartRowParticipant */
+    private $cartRowParticipants;
+
     /**
      * @param Sheet   $sheet
      * @param Product $product
@@ -44,10 +49,11 @@ class CartRow
      */
     public function __construct(Sheet $sheet, Product $product, $quantity)
     {
-        $this->sheet             = $sheet;
-        $this->quantity          = $quantity;
-        $this->product           = $product;
+        $this->sheet = $sheet;
+        $this->quantity = $quantity;
+        $this->product = $product;
         $this->serializedProduct = $product->getSerializedData();
+        $this->cartRowParticipants = new ArrayCollection();
     }
 
     /**
@@ -139,5 +145,28 @@ class CartRow
     public function getSerializedProduct()
     {
         return $this->serializedProduct;
+    }
+
+    /**
+     * @param CartRowParticipant $cartRowParticipant
+     */
+    public function addCartRowParticipant(CartRowParticipant $cartRowParticipant)
+    {
+        $this->cartRowParticipants->add($cartRowParticipant);
+    }
+
+    /**
+     * @return Participant[]
+     */
+    public function getParticipants(): array
+    {
+        $participants = [];
+
+        /** @var CartRowParticipant $cartRowParticipant */
+        foreach ($this->cartRowParticipants as $cartRowParticipant) {
+            $participants[] = $cartRowParticipant->getParticipant();
+        }
+
+        return $participants;
     }
 }

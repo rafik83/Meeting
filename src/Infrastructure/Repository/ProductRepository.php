@@ -82,7 +82,7 @@ class ProductRepository implements ProductRepositoryInterface
             ->where('product.event = :event')
             ->setParameter('event', $event)
             ->groupBy('product')
-            ->orderBy('product.name');
+            ->orderBy('product.type, product.name');
 
         return $queryBuilder->getQuery()->getResult();
     }

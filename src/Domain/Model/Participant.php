@@ -73,6 +73,9 @@ class Participant implements MailRecipientInterface
      */
     private $isFullyUnavailable = false;
 
+    /** @var null|Product */
+    private $participantProduct;
+
     /**
      * @param Sheet $sheet
      * @param User  $user
@@ -306,5 +309,33 @@ class Participant implements MailRecipientInterface
     public function setFullyUnavailable($isFullyUnavailable)
     {
         $this->isFullyUnavailable = $isFullyUnavailable;
+    }
+
+    /**
+     * @return null|Product
+     */
+    public function getParticipantProduct(): ?Product
+    {
+        return $this->participantProduct;
+    }
+
+    /**
+     * @return bool
+     */
+    public function hasParticipantProduct(): bool
+    {
+        return null !== $this->participantProduct;
+    }
+
+    /**
+     * @param Product $participantProduct
+     */
+    public function setParticipantProduct(Product $participantProduct): void
+    {
+        if (!$participantProduct->isParticipant()) {
+            throw new \InvalidArgumentException('Product assigned to Participant must be of type Participant');
+        }
+
+        $this->participantProduct = $participantProduct;
     }
 }

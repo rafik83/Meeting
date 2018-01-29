@@ -14,7 +14,7 @@ use Proximum\Vimeet\Application\View\Package\Summary\PlanGroupView;
 use Proximum\Vimeet\Domain\Cart\Cart;
 use Proximum\Vimeet\Domain\Model\Sheet;
 
-class PlanningGroupViewQuery
+class ParticipantAndPlanningGroupViewQuery
 {
     /**
      * @var Sheet

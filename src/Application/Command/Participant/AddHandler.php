@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2015 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -104,15 +104,15 @@ class AddHandler
         TypeResolver $typeResolver,
         Synchronizer $accountSynchronizer
     ) {
-        $this->userRepository                = $userRepository;
-        $this->participantRepository         = $participantRepository;
-        $this->sheetRepository               = $sheetRepository;
-        $this->templateDataFactory           = $templateDataFactory;
+        $this->userRepository = $userRepository;
+        $this->participantRepository = $participantRepository;
+        $this->sheetRepository = $sheetRepository;
+        $this->templateDataFactory = $templateDataFactory;
         $this->activateAccountTokenGenerator = $activateAccountTokenGenerator;
-        $this->eventDispatcher               = $eventDispatcher;
-        $this->cartManager                   = $cartManager;
-        $this->typeResolver                  = $typeResolver;
-        $this->accountSynchronizer           = $accountSynchronizer;
+        $this->eventDispatcher = $eventDispatcher;
+        $this->cartManager = $cartManager;
+        $this->typeResolver = $typeResolver;
+        $this->accountSynchronizer = $accountSynchronizer;
     }
 
     /**
@@ -155,7 +155,7 @@ class AddHandler
         $participant = $this->createAndFillParticipant($add, $user, $isNewUser);
 
         // Update cart
-        $this->cartManager->updateParticipantsQuantity($add->sheet);
+        // todo: must call CartManager::updateParticipantsQuantity() with updated data
 
         if (!$add->sheet->isOwner($user)) {
             // send to the guest
