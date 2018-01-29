@@ -346,11 +346,17 @@ services:
             - '@template.template_data_factory'
             - '@components.token.user.activate_account_token_generator'
             - '@vimeet_infrastructure.adapter.delayed_event_dispatcher'
-            - '@cart_manager'
+            - '@Proximum\Vimeet\Application\Command\Participant\UpdateParticipantProductQuantityHandler'
             - '@components.user.type_resolver'
             - '@account.synchronizer'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Participant\Add }
+
+    Proximum\Vimeet\Application\Command\Participant\UpdateParticipantProductQuantityHandler:
+        arguments:
+            - '@cart_manager'
+            - '@components.package.product_by_participant_getter'
+            - '@vimeet_infrastructure.repository.product_repository'
     vimeet_infrastructure.vimeet.application.command.participant.delete_handler:
         class: Proximum\Vimeet\Application\Command\Participant\DeleteHandler
         arguments:
@@ -2872,6 +2878,8 @@ services:
         class: Proximum\Vimeet\Application\Query\Package\Participant\ParticipantProductViewQueryHandler
         arguments:
             - '@package.product.included_participant_guesser'
+            - '@components.package.product_by_participant_getter'
+            - '@cart_manager'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Package\Participant\ParticipantProductViewQuery }
     query.package.groups_view_query_handler:

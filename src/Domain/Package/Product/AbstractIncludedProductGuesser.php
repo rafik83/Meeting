@@ -10,10 +10,10 @@ use Proximum\Vimeet\Domain\Order\Merger;
 abstract class AbstractIncludedProductGuesser
 {
     /** @var CartManager */
-    private $cartManager;
+    protected $cartManager;
 
     /** @var Merger */
-    private $orderMerger;
+    protected $orderMerger;
 
     /**
      * @param CartManager $cartManager

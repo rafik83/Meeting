@@ -1,0 +1,102 @@
+<?php
+
+/*
+ * This file is part of the Proximum Vimeet project.
+ *
+ * Copyright (C) Proximum
+ *
+ * @author Elao <contact@elao.com>
+ */
+
+namespace Proximum\Vimeet\Behat\Context\Domain\Package;
+
+use Behat\Behat\Context\Context;
+use Proximum\Vimeet\Behat\Context\Domain\Proxy\PackageContextProxyInterface;
+
+class PackageContext implements Context
+{
+    /** @var PackageContextProxyInterface */
+    private $packageContextProxy;
+
+    /**
+     * @param PackageContextProxyInterface $packageContextProxy
+     */
+    public function __construct(PackageContextProxyInterface $packageContextProxy)
+    {
+        $this->packageContextProxy = $packageContextProxy;
+    }
+
+    /**
+     * @Given /^there is a package "(?P<title>[^"]+)" for this event$/
+     *
+     * @param string $title
+     */
+    public function createInEvent(string $title)
+    {
+        $event = $this->packageContextProxy->getStorage()->get('event');
+
+        if (null === $event) {
+            throw new \InvalidArgumentException('Missing Event');
+        }
+
+        $package = $this->packageContextProxy->getPackageManager()->create($event, $title);
+        $this->packageContextProxy->getStorage()->set('package', $package);
+    }
+
+    /**
+     * @Given /^this plan is assigned to this package$/
+     */
+    public function assignPlan()
+    {
+        $package = $this->packageContextProxy->getStorage()->get('package');
+        $plan = $this->packageContextProxy->getStorage()->get('plan');
+
+        if ($package === null) {
+            throw new \InvalidArgumentException('Missing Package');
+        }
+
+        if ($plan === null) {
+            throw new \InvalidArgumentException('Missing Product Participant');
+        }
+
+        $this->packageContextProxy->getPackageManager()->assignPlan($package, $plan);
+    }
+
+    /**
+     * @Given /^this product participant is assigned to this package$/
+     */
+    public function assignProductParticipant()
+    {
+        $package = $this->packageContextProxy->getStorage()->get('package');
+        $productParticipant = $this->packageContextProxy->getStorage()->get('productParticipant');
+
+        if ($package === null) {
+            throw new \InvalidArgumentException('Missing Package');
+        }
+
+        if ($productParticipant === null) {
+            throw new \InvalidArgumentException('Missing Product Participant');
+        }
+
+        $this->packageContextProxy->getPackageManager()->assignProductParticipant($package, $productParticipant);
+    }
+
+    /**
+     * @Given /^this product planning is assigned to this package$/
+     */
+    public function assignProductPlanning()
+    {
+        $package = $this->packageContextProxy->getStorage()->get('package');
+        $planning = $this->packageContextProxy->getStorage()->get('planning');
+
+        if ($package === null) {
+            throw new \InvalidArgumentException('Missing Package');
+        }
+
+        if ($planning === null) {
+            throw new \InvalidArgumentException('Missing Product Planning');
+        }
+
+        $this->packageContextProxy->getPackageManager()->assignPlanning($package, $planning);
+    }
+}

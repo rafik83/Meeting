@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2015 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -20,18 +20,13 @@ class IncludedParticipantView
     /** @var int */
     public $totalQuantity;
 
-    /** @var int */
-    public $remainingQuantity;
-
     /**
      * @param Product $product
      * @param int     $totalQuantity
-     * @param int     $remainingQuantity
      */
-    public function __construct(Product $product, int $totalQuantity, int $remainingQuantity)
+    public function __construct(Product $product, int $totalQuantity)
     {
         $this->product = $product;
         $this->totalQuantity = $totalQuantity;
-        $this->remainingQuantity = $remainingQuantity;
     }
 }

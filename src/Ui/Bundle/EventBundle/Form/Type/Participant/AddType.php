@@ -12,9 +12,11 @@ namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Participant;
 
 use Proximum\Vimeet\Application\Command\Participant\Add;
 use Proximum\Vimeet\Application\Components\Sheet\Template\Tag;
+use Proximum\Vimeet\Application\View\Package\ParticipantProductView;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Template\TemplateDataFactory;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -23,9 +25,7 @@ use Symfony\Component\Validator\Constraints\NotBlank;
 
 class AddType extends AbstractType
 {
-    /**
-     * @var TemplateDataFactory
-     */
+    /** @var TemplateDataFactory */
     private $templateDataFactory;
 
     /**
@@ -43,6 +43,7 @@ class AddType extends AbstractType
     {
         $sheet = $options['sheet'];
         $locale = $options['locale'];
+        $products = $options['products'];
 
         $registrationTemplate = $this->templateDataFactory->createRegistrationFromType($sheet->getType(), $locale);
         $identityObjects = $registrationTemplate->getUserIdentityObjects();
@@ -74,6 +75,26 @@ class AddType extends AbstractType
                 'required' => true,
                 'label'    => 'form.add_participant.children.email.placeholder',
             ]);
+
+        if (!empty($products)) {
+            $builder
+                ->add('product', ChoiceType::class, [
+                    'required'    => true,
+                    'choices'     => array_filter($products, function (ParticipantProductView $product = null) {
+                        if ($product === null) {
+                            return false;
+                        }
+
+                        return $product->isBuyable;
+                    }),
+                    'choice_name' => function (ParticipantProductView $product) {
+                        return $product->id;
+                    },
+                    'expanded'    => true,
+                    'multiple'    => false,
+                ])
+            ;
+        }
     }
 
     /**
@@ -82,7 +103,7 @@ class AddType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults(['data_class' => Add::class]);
-        $resolver->setRequired(['sheet', 'locale']);
+        $resolver->setRequired(['sheet', 'locale', 'products']);
         $resolver->setAllowedTypes('sheet', Sheet::class);
     }
 

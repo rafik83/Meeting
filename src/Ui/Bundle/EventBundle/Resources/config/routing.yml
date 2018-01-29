@@ -168,7 +168,7 @@ event_account_participant_avatar:
 event_sheet:
     path:     /sheet
     methods:  [GET]
-    defaults: { _controller: EventBundle:Sheet:redirectTosheet }
+    defaults: { _controller: EventBundle:Sheet:redirectToSheet }
 
 event_sheet_default:
     path:     /sheet/{sheet}

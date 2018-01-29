@@ -48,7 +48,7 @@
                 </a>
             {% endif %}
 
-            {% if view.sheet.canBuyParticipant %}
+            {% if view.canAddParticipant %}
                 <a href="{{ path('event_package_add_participant', { 'sheet': view.sheet.id, 'step': view.currentStep.index }) }}" class="btn btn-primary pull-right" data-toggle="modal" data-target="#edit-modal">
                     <i class="icon-Profil_1"></i>{{ 'package.participant.add'|trans }}
                 </a>

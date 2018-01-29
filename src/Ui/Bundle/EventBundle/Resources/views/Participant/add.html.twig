@@ -6,7 +6,7 @@
     </h4>
 </div>
 <div class="modal-body">
-    {{ form_start(form, {attr: {class: 'styled-form'}}) }}
+    {{ form_start(form, {'attr': {'class': 'styled-form'}}) }}
         <div class="inputs">
             {{ form_errors(form) }}
 
@@ -20,26 +20,55 @@
 
             {{ form_row(form.email) }}
 
-            {% if participantProductView is not null %}
+            {% if participantProductViews is not empty and form.product is defined %}
+                <p class="info-block buyable-product text-center">
+                    <i class="icon-Info_1"></i> {{ 'sheet.object.option.buyable.label'|trans }}
+                </p>
+                {{ form_label(form.product) }}
+                {{ form_errors(form.product) }}
                 <table class="table">
                     <tbody>
+                    {% for product in participantProductViews %}
                         <tr>
-                            <td class="col-xs-9">
+                            <td class="col-xs-1">
+                                {% if product.isBuyable %}
+                                    {{ form_widget(form.product[product.id], { 'attr': { 'title': product.title } }) }}
+                                {% endif %}
+                            </td>
+                            <td class="col-xs-8">
                                 <div class="buyable-product-row">
-                                    {{ participantProductView.title }}
+                                    {% if product.isBuyable %}
+                                        <label for="{{ form.product[product.id].vars.id }}">
+                                            <b>
+                                                {{ product.title }}
+                                            </b>
+                                        </label>
+                                        <p>{{ product.description|nl2br }}</p>
+                                    {% else %}
+                                        <b>{{ product.title }}</b>
+                                        <p>{{ product.description|nl2br }}</p>
+                                        <span class="alert-danger">
+                                            {{ 'package.product.notAvailable'|trans({}, 'validators') }}
+                                        </span>
+                                    {% endif %}
                                 </div>
                             </td>
                             <td class="col-xs-3">
                                 <div class="buyable-product-row product-price">
-                                    {# NB: need to be replaced by a select one from several products #}
-                                    {{ 'package.product.unitPrice'|trans({
-                                        '%price%': participantProductView.unitPrice,
-                                        '%currency%': participantProductView.currency|currency_symbol,
-                                        '%vatMode%': ('package.vatMode.' ~ participantProductView.vatMode)|trans
-                                    })|html }}
+                                    {% if product.isBuyable and product.hasRemainingIncludedQuantity %}
+                                        {{ 'sheet.object.product.included'|trans }}
+                                    {% else %}
+                                        {# NB: need to be replaced by a select one from several products #}
+                                        {{ 'package.product.unitPrice'|trans({
+                                            '%price%': product.unitPrice,
+                                            '%currency%': product.currency|currency_symbol,
+                                            '%vatMode%': ('package.vatMode.' ~ product.vatMode)|trans
+                                        })|html }}
+                                    {% endif %}
                                 </div>
                             </td>
                         </tr>
+                    {% endfor %}
                     </tbody>
                 </table>
             {% endif %}

@@ -162,6 +162,15 @@ services:
         arguments:
             - '@vimeet_infrastructure.repository.meeting.request_repository'
 
+    Proximum\Vimeet\Behat\Service\Manager\ProductManager:
+        arguments:
+            - '@vimeet_infrastructure.repository.product_repository'
+
+    Proximum\Vimeet\Behat\Service\Manager\PackageManager:
+        arguments:
+            - '@repository.package_repository'
+
+
     #
     # Proxies
     #
@@ -286,6 +295,16 @@ services:
         arguments:
             - '@behat_storage'
             - '@behat.service.manager.rule_manager'
+
+    Proximum\Vimeet\Behat\Proxy\ProductContextProxy:
+        arguments:
+            - '@behat_storage'
+            - '@Proximum\Vimeet\Behat\Service\Manager\ProductManager'
+
+    Proximum\Vimeet\Behat\Proxy\PackageContextProxy:
+        arguments:
+            - '@behat_storage'
+            - '@Proximum\Vimeet\Behat\Service\Manager\PackageManager'
 
     #
     # Other services

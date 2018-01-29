@@ -3,14 +3,16 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2016 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
 
 namespace Proximum\Vimeet\Application\Query\Package\Participant;
 
+use Proximum\Vimeet\Application\Components\Package\ProductByParticipantGetter;
 use Proximum\Vimeet\Application\View\Package\ParticipantProductView;
+use Proximum\Vimeet\Domain\Cart\CartManager;
 use Proximum\Vimeet\Domain\Package\Product\IncludedParticipantGuesser;
 use Proximum\Vimeet\Domain\View\Package\Product\IncludedParticipantView;
 
@@ -19,12 +21,25 @@ class ParticipantProductViewQueryHandler
     /** @var IncludedParticipantGuesser */
     private $includedParticipantGuesser;
 
+    /** @var ProductByParticipantGetter */
+    private $productByParticipantGetter;
+
+    /** @var CartManager */
+    private $cartManager;
+
     /**
      * @param IncludedParticipantGuesser $includedParticipantGuesser
+     * @param ProductByParticipantGetter $productByParticipantGetter
+     * @param CartManager                $cartManager
      */
-    public function __construct(IncludedParticipantGuesser $includedParticipantGuesser)
-    {
+    public function __construct(
+        IncludedParticipantGuesser $includedParticipantGuesser,
+        ProductByParticipantGetter $productByParticipantGetter,
+        CartManager $cartManager
+    ) {
         $this->includedParticipantGuesser = $includedParticipantGuesser;
+        $this->productByParticipantGetter = $productByParticipantGetter;
+        $this->cartManager = $cartManager;
     }
 
     /**
@@ -45,8 +60,21 @@ class ParticipantProductViewQueryHandler
 
         $includedParticipantViews = $this->includedParticipantGuesser->getIncludedParticipantViews($sheet);
 
+        $productParticipants = $this->productByParticipantGetter->getFromCart($this->cartManager->getCart($sheet));
+
+        $productAlreadyBought = [];
+
+        foreach ($productParticipants as $participantId => $productParticipant) {
+            if ($productParticipant === null) {
+                continue;
+            }
+
+            $productAlreadyBought[$productParticipant->getId()][] = $participantId;
+        }
+
         foreach ($sheet->getPackage()->getParticipants() as $participantProduct) {
             $includedQuantity = 0;
+            $remainingQuantityIncluded = 0;
 
             if (isset($includedParticipantViews[$participantProduct->getId()])) {
                 $includedParticipantView = $includedParticipantViews[$participantProduct->getId()];
@@ -54,6 +82,21 @@ class ParticipantProductViewQueryHandler
                 if ($includedParticipantView instanceof IncludedParticipantView) {
                     $includedQuantity = $includedParticipantView->totalQuantity;
                 }
+            }
+
+            if ($includedQuantity > 0) {
+                $quantityAlreadyIncluded = isset($productAlreadyBought[$participantProduct->getId()])
+                    ? count($productAlreadyBought[$participantProduct->getId()])
+                    : 0
+                ;
+
+                $remainingQuantityIncluded = $includedQuantity - $quantityAlreadyIncluded;
+            }
+
+            $quantityBought = 0;
+
+            if (isset($productAlreadyBought[$participantProduct->getId()])) {
+                $quantityBought = count($productAlreadyBought[$participantProduct->getId()]);
             }
 
             $participantProductViews[] = new ParticipantProductView(
@@ -64,7 +107,9 @@ class ParticipantProductViewQueryHandler
                 $participantProduct->getCurrency(),
                 $participantProduct->getVatMode(),
                 $participantProduct->getQuantityMax(),
-                $includedQuantity
+                $includedQuantity,
+                $participantProduct->getQuantityMax() > $quantityBought,
+                $remainingQuantityIncluded > 0
             );
         }
 
