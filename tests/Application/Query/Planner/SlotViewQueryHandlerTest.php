@@ -16,7 +16,6 @@ use Proximum\Vimeet\Application\Query\Planner\SlotViewQuery;
 use Proximum\Vimeet\Application\Query\Planner\SlotViewQueryHandler;
 use Proximum\Vimeet\Application\View\Planner\Day;
 use Proximum\Vimeet\Application\View\Planner\SlotView;
-use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\MeetingSlot;
 use Proximum\Vimeet\Domain\Repository\MeetingSlotRepositoryInterface;
 use Prophecy\Prophecy\ObjectProphecy;
@@ -106,9 +105,9 @@ class SlotViewQueryHandlerTest extends TestCase
 
         // Expected
         $expected = [
-            new SlotView(1, 1, 10, 0, $day),
-            new SlotView(2, 2, 11, 0, $day),
-            new SlotView(3, 3, 10, 30, $day2),
+            new SlotView(1, 0, 10, 0, $day),
+            new SlotView(2, 1, 11, 0, $day),
+            new SlotView(3, 2, 10, 30, $day2),
         ];
 
         // Assertion
