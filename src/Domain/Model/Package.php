@@ -407,11 +407,11 @@ class Package
     /**
      * Set planning
      *
-     * @param Product $planning
+     * @param null|Product $planning
      *
      * @return Package
      */
-    public function setPlanning(Product $planning)
+    public function setPlanning(?Product $planning = null)
     {
         $this->planning = $planning;
 
