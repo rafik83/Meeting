@@ -101,7 +101,8 @@ class UpdateHandler
             $update->organiserName,
             $update->emailTeam,
             $update->invoicePrefix,
-            $update->visible
+            $update->visible,
+            $update->welcomeEnabled
         );
         $event->getConfiguration()->setColors(
             $update->leftColor,

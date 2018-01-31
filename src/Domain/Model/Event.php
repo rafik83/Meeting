@@ -153,7 +153,7 @@ class Event implements EventInterface, TraceableInterface
         Prefix $invoicePrefix,
         bool $visible = true,
         Event $duplicatedFrom = null,
-        $welcomeEnabled = true
+        bool $welcomeEnabled = true
     ) {
         $this->translations   = new ArrayCollection();
         $this->configuration  = new Configuration('', '', '');
@@ -445,6 +445,7 @@ class Event implements EventInterface, TraceableInterface
      * @param string|null $emailTeam
      * @param null|Prefix $invoicePrefix
      * @param bool        $visible
+     * @param bool        $welcomeEnabled
      */
     public function update(
         $title,
@@ -459,21 +460,23 @@ class Event implements EventInterface, TraceableInterface
         $organiserName,
         $emailTeam,
         Prefix $invoicePrefix,
-        bool $visible
+        bool $visible,
+        bool $welcomeEnabled
     ) {
-        $this->title         = $title;
-        $this->locales       = $locales;
-        $this->fallback      = $fallback;
-        $this->mode          = $mode;
-        $this->vat           = $vat;
-        $this->country       = $country;
-        $this->currency      = $currency;
-        $this->timeZone      = $timeZone;
-        $this->domain        = $domain;
+        $this->title = $title;
+        $this->locales = $locales;
+        $this->fallback = $fallback;
+        $this->mode = $mode;
+        $this->vat = $vat;
+        $this->country = $country;
+        $this->currency = $currency;
+        $this->timeZone = $timeZone;
+        $this->domain = $domain;
         $this->organiserName = $organiserName;
-        $this->emailTeam     = $emailTeam;
+        $this->emailTeam = $emailTeam;
         $this->invoicePrefix = $invoicePrefix;
-        $this->visible       = $visible;
+        $this->visible = $visible;
+        $this->welcomeEnabled = $welcomeEnabled;
     }
 
     /**

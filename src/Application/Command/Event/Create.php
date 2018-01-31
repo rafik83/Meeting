@@ -26,10 +26,11 @@ class Create extends AbstractEvent
      */
     public function __construct(Admin $admin, Event $event = null)
     {
-        $this->admin    = $admin;
+        $this->admin = $admin;
         $this->timeZone = 'Europe/Paris';
-        $this->country  = 'FR';
-        $this->visible  = true;
+        $this->country = 'FR';
+        $this->visible = true;
+        $this->welcomeEnabled = true;
 
         if ($event !== null) {
             $this->prefillData($event);
@@ -41,27 +42,28 @@ class Create extends AbstractEvent
      */
     public function prefillData(Event $event)
     {
-        $this->title         = $event->getTitle();
-        $this->locales       = $event->getLocales();
-        $this->fallback      = $event->getFallback();
-        $this->emailTeam     = $event->getEmailTeam();
-        $this->mode          = $event->getMode();
-        $this->visible       = $event->isVisible();
-        $this->country       = $event->getCountry();
-        $this->domain        = $event->getDomain();
-        $this->vat           = $event->getVat();
-        $this->currency      = $event->getCurrency();
+        $this->title = $event->getTitle();
+        $this->locales = $event->getLocales();
+        $this->fallback = $event->getFallback();
+        $this->emailTeam = $event->getEmailTeam();
+        $this->mode = $event->getMode();
+        $this->visible = $event->isVisible();
+        $this->country = $event->getCountry();
+        $this->domain = $event->getDomain();
+        $this->vat = $event->getVat();
+        $this->currency = $event->getCurrency();
         $this->organiserName = $event->getOrganiserName();
         $this->invoicePrefix = $event->getInvoicePrefix();
-        $this->timeZone      = $event->getTimeZone();
-        $this->leftColor     = $event->getConfiguration()->getLeftColor();
-        $this->rightColor    = $event->getConfiguration()->getRightColor();
-        $this->textColor     = $event->getConfiguration()->getTextColor();
+        $this->timeZone = $event->getTimeZone();
+        $this->leftColor = $event->getConfiguration()->getLeftColor();
+        $this->rightColor = $event->getConfiguration()->getRightColor();
+        $this->textColor = $event->getConfiguration()->getTextColor();
         $this->organiserName = $event->getOrganiserName();
-        $this->emailTeam     = $event->getEmailTeam();
+        $this->emailTeam = $event->getEmailTeam();
         $this->invoicePrefix = $event->getInvoicePrefix();
-        $this->visible       = $event->isVisible();
+        $this->visible = $event->isVisible();
         $this->duplicatedFrom = $event;
         $this->backgroundColor = $event->getConfiguration()->getBackgroundColor();
+        $this->welcomeEnabled = $event->isWelcomeEnabled();
     }
 }

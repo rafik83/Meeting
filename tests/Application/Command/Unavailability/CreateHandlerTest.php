@@ -365,7 +365,8 @@ class CreateHandlerTest extends TestCase
             $event->getOrganiserName(),
             $event->getEmailTeam(),
             $prefix,
-            $event->isVisible()
+            $event->isVisible(),
+            $event->isWelcomeEnabled()
         );
         $user   = UserFactory::create();
         $sheet  = SheetFactory::create($event, $user);
@@ -417,7 +418,8 @@ class CreateHandlerTest extends TestCase
             $event->getOrganiserName(),
             $event->getEmailTeam(),
             $prefix,
-            $event->isVisible()
+            $event->isVisible(),
+            $event->isWelcomeEnabled()
         );
         $user   = UserFactory::create();
         $sheet  = SheetFactory::create($event, $user);
@@ -541,7 +543,8 @@ class CreateHandlerTest extends TestCase
             $event->getOrganiserName(),
             $event->getEmailTeam(),
             $prefix,
-            $event->isVisible()
+            $event->isVisible(),
+            $event->isWelcomeEnabled()
         );
         $user   = UserFactory::create();
         $sheet  = SheetFactory::create($event, $user);
@@ -593,7 +596,8 @@ class CreateHandlerTest extends TestCase
             $event->getOrganiserName(),
             $event->getEmailTeam(),
             $prefix,
-            $event->isVisible()
+            $event->isVisible(),
+            $event->isWelcomeEnabled()
         );
         $user   = UserFactory::create();
         $sheet  = SheetFactory::create($event, $user);
