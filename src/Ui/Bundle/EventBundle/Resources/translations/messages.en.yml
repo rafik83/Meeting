@@ -219,6 +219,7 @@ package.funnel.payment: Payment
 package.funnel.summary: 'Summary & billing details'
 package.options.included: Included
 package.participant_planning.validate: Validate
+package.participant.add: 'Add participant'
 package.participants.add: 'Add participants'
 package.participants.delete: 'Remove participants'
 package.participants.included: Included

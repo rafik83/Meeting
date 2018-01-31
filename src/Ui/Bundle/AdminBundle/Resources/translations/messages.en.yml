@@ -25,10 +25,25 @@ admin.agenda.countRequest: 'Number of requests'
 admin.agenda.countSlots: 'Number of slots'
 admin.agenda.countValidatedRequest: 'Number of requests and accepted requests'
 admin.agenda.dayPrefix: D
+admin.agenda.event.configuration.isMeetingRequestLocked: 'Meetings requests are locked.'
 admin.agenda.export.link: Export
 admin.agenda.export.omz: OMZ
+admin.agenda.export.participant_schedules.danger: 'Beware, if there is any export before any publication of  the meetings plannings, plannings won''t be available on line.'
 admin.agenda.export.participant_schedules.title: 'Export of participants and plannings'
+admin.agenda.export.title: Meetings/export
+admin.agenda.filters.follower.label: 'Commercial follow-up.'
+admin.agenda.filters.follower.unassigned.label: Unassigned
+admin.agenda.filters.hasAvailableSlot.label: 'Has free slots.'
+admin.agenda.filters.hasMeetingToApprove.label: 'Has meetings to approve.'
+admin.agenda.filters.hasNotEnoughtAvailableSlot.label: 'Not enough available slots.'
 admin.agenda.filters.hasParticipantUnavailableWithMeetingRequest.label: 'At least 1 participant is totally unavailable with at least one assigned meeting request'
+admin.agenda.filters.hasScheduledMeeting.all: 'no matter'
+admin.agenda.filters.hasScheduledMeeting.label: 'Has scheduled meetings.'
+admin.agenda.filters.hasScheduledMeeting.no: 'No'
+admin.agenda.filters.hasScheduledMeeting.yes: 'yes'
+admin.agenda.filters.hasSentMeetingRequest.all: 'no matter'
+admin.agenda.filters.hasSentMeetingRequest.label: 'has sent meetings requests.'
+admin.agenda.filters.hasSentMeetingRequest.no: No.
 admin.agenda.filters.submit.label: 'Filter profiles'
 admin.agenda.filters.type: 'Participation type'
 admin.agenda.link: 'My meetings'
