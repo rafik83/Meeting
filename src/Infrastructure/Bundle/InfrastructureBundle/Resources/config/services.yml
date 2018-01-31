@@ -2790,6 +2790,7 @@ services:
         class: Proximum\Vimeet\Application\Query\Sheet\WelcomeViewQueryHandler
         arguments:
              - '@domain.key_dates.checker.happenings_access_checker'
+             - '@adapter.session'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Sheet\WelcomeViewQuery }
     query.participant.card_list_view_query_handler:

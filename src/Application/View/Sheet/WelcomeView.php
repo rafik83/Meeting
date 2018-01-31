@@ -23,6 +23,16 @@ class WelcomeView
     public $hasProgram = false;
 
     /**
+     * @param bool $hasPackage
+     * @param bool $hasProgram
+     */
+    public function __construct(bool $hasPackage, bool $hasProgram)
+    {
+        $this->hasPackage = $hasPackage;
+        $this->hasProgram = $hasProgram;
+    }
+
+    /**
      * @return int
      */
     public function getColSize()
