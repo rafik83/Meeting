@@ -114,8 +114,7 @@ class SheetController extends Controller
         $popinWelcome          = null;
 
         if ($isFirstRegistration) {
-            $welcomeViewQuery = new WelcomeViewQuery($sheet);
-            $popinWelcome     = $this->get('tactician.commandbus.query')->handle($welcomeViewQuery);
+            $popinWelcome = $this->get('tactician.commandbus.query')->handle(new WelcomeViewQuery($sheet));
         }
 
         $tipTranslationViewQuery = new TipTranslationViewQuery(

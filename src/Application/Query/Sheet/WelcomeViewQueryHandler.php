@@ -31,12 +31,16 @@ class WelcomeViewQueryHandler
     /**
      * @param WelcomeViewQuery $welcomeViewQuery
      *
-     * @return WelcomeView
+     * @return null|WelcomeView
      */
-    public function handle(WelcomeViewQuery $welcomeViewQuery)
+    public function handle(WelcomeViewQuery $welcomeViewQuery): ?WelcomeView
     {
         $welcomeView = new WelcomeView();
         $sheet       = $welcomeViewQuery->sheet;
+
+        if (!$sheet->getEvent()->isWelcomeEnabled()) {
+            return null;
+        }
 
         $welcomeView->hasPackage = null !== $sheet->getPackage()
             && $sheet->getPackage()->isPassable();
