@@ -118,6 +118,9 @@ class Event implements EventInterface, TraceableInterface
     /** @var null|Event */
     private $duplicatedFrom;
 
+    /** @var bool */
+    private $welcomeEnabled;
+
     /**
      * @param string      $title
      * @param string      $fallback
@@ -133,6 +136,7 @@ class Event implements EventInterface, TraceableInterface
      * @param Prefix      $invoicePrefix
      * @param bool        $visible
      * @param null|Event  $duplicatedFrom
+     * @param bool        $welcomeEnabled
      */
     public function __construct(
         $title,
@@ -148,7 +152,8 @@ class Event implements EventInterface, TraceableInterface
         $emailTeam,
         Prefix $invoicePrefix,
         bool $visible = true,
-        Event $duplicatedFrom = null
+        Event $duplicatedFrom = null,
+        $welcomeEnabled = true
     ) {
         $this->translations   = new ArrayCollection();
         $this->configuration  = new Configuration('', '', '');
@@ -171,6 +176,7 @@ class Event implements EventInterface, TraceableInterface
         $this->userAgendaVersionsGenerated = false;
         $this->archived = false;
         $this->duplicatedFrom = $duplicatedFrom;
+        $this->welcomeEnabled = $welcomeEnabled;
     }
 
     /**
@@ -768,5 +774,13 @@ class Event implements EventInterface, TraceableInterface
     public function getDuplicatedFrom(): ?Event
     {
         return $this->duplicatedFrom;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isWelcomeEnabled(): bool
+    {
+        return $this->welcomeEnabled;
     }
 }
