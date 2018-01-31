@@ -686,18 +686,18 @@ admin.sheet.details.comments.author: 'Par %firstname% %lastname%, le %date%'
 admin.sheet.details.comments.title: Commentaires
 admin.sheet.details.company.title: Société
 admin.sheet.details.completeness: 'Complétude de la fiche'
-admin.sheet.details.crm.record.trace.set_commercial_status.none: 'Pas de statut'
-admin.sheet.details.crm.record.trace.set_commercial_status.verbal_agreement: 'Accord verbal'
-admin.sheet.details.crm.record.trace.set_commercial_status.canceled: 'Annulation'
-admin.sheet.details.crm.record.trace.set_commercial_status.hot: 'Chaud'
-admin.sheet.details.crm.record.trace.set_commercial_status.hot_stall: 'Chaud stand'
-admin.sheet.details.crm.record.trace.set_commercial_status.registered: 'Inscrit'
-admin.sheet.details.crm.record.trace.set_commercial_status.interest: 'Intérêt'
-admin.sheet.details.crm.record.trace.set_commercial_status.interest_next_edition: 'Intérêt N+1'
+admin.sheet.details.crm.record.trace.set_commercial_status.canceled: Annulation
 admin.sheet.details.crm.record.trace.set_commercial_status.do_not_call: 'Ne pas appeler'
+admin.sheet.details.crm.record.trace.set_commercial_status.followed: Suivi
+admin.sheet.details.crm.record.trace.set_commercial_status.hot: Chaud
+admin.sheet.details.crm.record.trace.set_commercial_status.hot_stall: 'Chaud stand'
+admin.sheet.details.crm.record.trace.set_commercial_status.interest: Intérêt
+admin.sheet.details.crm.record.trace.set_commercial_status.interest_next_edition: 'Intérêt N+1'
 admin.sheet.details.crm.record.trace.set_commercial_status.no_interest: 'Pas intéressé'
+admin.sheet.details.crm.record.trace.set_commercial_status.none: 'Pas de statut'
 admin.sheet.details.crm.record.trace.set_commercial_status.refused_by_organizer: 'Refus organisateur'
-admin.sheet.details.crm.record.trace.set_commercial_status.followed: 'Suivi'
+admin.sheet.details.crm.record.trace.set_commercial_status.registered: Inscrit
+admin.sheet.details.crm.record.trace.set_commercial_status.verbal_agreement: 'Accord verbal'
 admin.sheet.details.dashboard.title: 'Tableau de bord'
 admin.sheet.details.historic.title: Historique
 admin.sheet.details.invoices: Factures
@@ -805,13 +805,12 @@ admin.sheet.trace.disable_catalog: 'Enlevée du catalogue le %at%'
 admin.sheet.trace.enable: 'Activée le %at%'
 admin.sheet.trace.enable_catalog: 'Ajoutée au catalogue le %at%'
 admin.sheet.trace.pending: 'En attente le %at%'
+admin.sheet.trace.set_commercial_status: 'Le statut commercial a été changé'
 admin.sheet.trace.sheet_created_by_group_manager: 'Fiche dupliquée par le gestionnaire d''entité'
 admin.sheet.trace.validate: 'Validée le %at%'
 admin.sheet.trace.validation_draft: 'Au brouillon le %at%'
 admin.sheet.trace.validation_validate: 'Contenu validé le %at%'
-admin.sheet.trace.set_commercial_status: 'Le statut commercial a été changé'
 admin.sheet.type: Type
-admin.sheet.validateSheets: 'Valider les fiches'
 admin.sheet.validate: Valider
 admin.sheet.validateSheets: 'Valider les fiches'
 admin.sheets_group.column.created_at: 'Date de création'
