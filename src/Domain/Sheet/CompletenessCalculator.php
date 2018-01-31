@@ -93,7 +93,7 @@ class CompletenessCalculator
         $notificationCompleteness = [];
         $averageCompleteness      = 0;
         foreach ($locales as $locale) {
-            $localeCompleteness        = floor($completed[$locale] / $total[$locale] * 100);
+            $localeCompleteness        = $total[$locale] !== 0 ? floor($completed[$locale] / $total[$locale] * 100) : 0;
             $unitLocalizedCompleteness = new SheetCompleteness(
                 $sheet,
                 $locale,
@@ -116,7 +116,7 @@ class CompletenessCalculator
             new SheetCompletenessEvent($sheet, $notificationCompleteness)
         );
     }
-    
+
     /**
      * @param TemplateData $templateData
      * @param array        $total
