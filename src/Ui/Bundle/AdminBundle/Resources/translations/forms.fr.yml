@@ -213,6 +213,7 @@ form.event_create.children.timeZone.label: 'Fuseau horaire'
 form.event_create.children.title.label: Titre
 form.event_create.children.vat.label: TVA
 form.event_create.children.visible.label: Visible
+form.event_create.children.welcomeEnabled.label: 'Popup de bienvenue'
 form.event_duplicate.children.event.label: Événement
 form.event_duplicate.children.submit.label: Créer
 form.event_payment_conditions_update.children.allowDeposit.label: 'Activer le paiement en acompte'
@@ -252,6 +253,7 @@ form.event_update.children.title.label: Titre
 form.event_update.children.translations.prototype.children.description.label: 'Entête de page'
 form.event_update.children.vat.label: TVA
 form.event_update.children.visible.label: Visible
+form.event_update.children.welcomeEnabled.label: 'Popup de bienvenue'
 form.event.children.invoicePrefix.help.label: 'Changer de préfixe ? Nous contacter'
 form.extra_parameter_create.children.name.label: Nom
 form.extra_parameter_create.children.submit.label: Enregistrer

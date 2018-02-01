@@ -78,6 +78,7 @@ class UpdateHandlerTest extends TestCase
             'oldProximum',
             'team-project@example.net',
             $this->prefix,
+            true,
             true
         );
 
@@ -155,7 +156,8 @@ class UpdateHandlerTest extends TestCase
             'proximum',
             'team-event@example.net',
             $expectedPrefix,
-            false
+            false,
+            true
         );
         $expectedEvent->getTranslations()->set('fr', new EventTranslation($expectedEvent, 'fr', 'Salut'));
         $expectedEvent->getTranslations()->set('en', new EventTranslation($expectedEvent, 'en', 'Hello'));
@@ -226,7 +228,8 @@ class UpdateHandlerTest extends TestCase
             'proximum',
             'team-event@example.net',
             $expectedPrefix,
-            false
+            false,
+            true
         );
 
         $this->eventRepository->set($expectedEvent)->shouldBeCalled();
@@ -282,7 +285,8 @@ class UpdateHandlerTest extends TestCase
             'proximum',
             'team-event@example.net',
             $prefix,
-            false
+            false,
+            true
         );
         $expectedEvent->getTranslations()->set('fr', new EventTranslation($expectedEvent, 'fr', 'Bonjour'));
         $expectedEvent->getTranslations()->set('en', new EventTranslation($expectedEvent, 'en', 'Hello'));
@@ -346,7 +350,8 @@ class UpdateHandlerTest extends TestCase
             'proximum',
             'team-event@example.net',
             $prefix,
-            false
+            false,
+            true
         );
         $expectedEvent->getTranslations()->set('fr', new EventTranslation($expectedEvent, 'fr', 'Bonjour'));
 
@@ -411,7 +416,8 @@ class UpdateHandlerTest extends TestCase
             'proximum',
             'team-event@example.net',
             $prefix,
-            false
+            false,
+            true
         );
         $expectedEvent->getTranslations()->set('fr', new EventTranslation($expectedEvent, 'fr', 'Salut'));
         $expectedEvent->getTranslations()->set('en', new EventTranslation($expectedEvent, 'en', 'Hello'));

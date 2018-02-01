@@ -70,6 +70,10 @@ Proximum\Vimeet\Domain\Model\Event:
             type: boolean
             options:
                 default: false
+        welcomeEnabled:
+            type: boolean
+            options:
+                default: true
     embedded:
         paymentAddress:
             class: Proximum\Vimeet\Domain\Model\Address
