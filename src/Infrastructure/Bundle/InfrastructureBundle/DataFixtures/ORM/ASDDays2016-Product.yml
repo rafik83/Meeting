@@ -1,12 +1,12 @@
 Proximum\Vimeet\Domain\Model\Product:
     # plans
     product_plan_1_asddays:
-        __construct: { createPlan: ['@event_asddays_2016', 'Formule B2B Meeting', 0, 20, 1690, 0, 0] }
+        __construct: { createPlan: ['@event_asddays_2016', 'Formule B2B Meeting', 0, 1690, 20, 0, 0] }
         quantityMax: 1
         updatable: false
         deletableUntil: ~
     product_plan_2_asddays:
-        __construct: { createPlan: [ '@event_asddays_2016', 'Formule Exposant', 0, 20, 2880, 0, 0] }
+        __construct: { createPlan: [ '@event_asddays_2016', 'Formule Exposant', 0, 2880, 20, 0, 0] }
         quantityMax: 1
         updatable: false
         deletableUntil: ~
