@@ -1,9 +1,9 @@
 <?php
 
 /*
- * This file is part of the vimeet project.
+ * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2016 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -18,7 +18,6 @@ use Proximum\Vimeet\Domain\Model\Product;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\Type;
 use Proximum\Vimeet\Domain\Model\User;
-use Proximum\Vimeet\Domain\Package\Specification\VatApplicable;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
 use PHPUnit\Framework\TestCase;
 
@@ -34,9 +33,9 @@ class MergerTest extends TestCase
         $owner = new User('test@test.fr', '__SALT__', '__PASSWORD__', 'fr');
         $sheet = new Sheet($event, $type, [], $owner, $datetime);
 
-        $plan        = Product::createPlan($event, 'plan', '', 200, 20, 100);
-        $participant = Product::createParticipant($event, 'participant', 1250, 20);
-        $option      = Product::createOption($event, 'option', '', 99, 50, 10, 20, true);
+        $plan        = Product::createPlan($event, 'plan', '', 200, 20, 20, 100);
+        $participant = Product::createParticipant($event, 'participant', 1250, 20, 20);
+        $option      = Product::createOption($event, 'option', '', 99, 20, 50, 10, 20, true);
 
 
         // Setup

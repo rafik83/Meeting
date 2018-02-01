@@ -25,6 +25,7 @@ class CreateOptionHandler extends AbstractHandler
             $createOption->name,
             $this->fileStorageInterface->upload($createOption->file),
             $createOption->unitPrice,
+            $createOption->vat,
             $createOption->quantityMax,
             $createOption->availabilityCurrent,
             $createOption->availabilityMax,

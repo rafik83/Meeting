@@ -3,7 +3,7 @@
 /*
  * This file is part of the vimeet project.
  *
- * Copyright (C) 2016 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -34,6 +34,7 @@ class UpdatePriceResolverTest extends TestCase
             'name',
             'image',
             10,
+            20,
             10,
             10,
             10,
@@ -66,6 +67,7 @@ class UpdatePriceResolverTest extends TestCase
             'name',
             'image',
             10,
+            20,
             10,
             10,
             10,
@@ -99,6 +101,7 @@ class UpdatePriceResolverTest extends TestCase
             'name',
             'image',
             10,
+            20,
             10,
             10,
             10,

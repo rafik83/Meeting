@@ -670,6 +670,14 @@ class Product
     }
 
     /**
+     * @return float
+     */
+    public function getVat(): float
+    {
+        return $this->vat;
+    }
+
+    /**
      * @return string
      */
     public function getVatMode()

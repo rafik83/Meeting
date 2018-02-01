@@ -25,7 +25,16 @@ abstract class AbstractCreateType extends AbstractProductType
         parent::buildForm($builder, $options);
         
         $builder
-            ->add('unitPrice', NumberType::class)
+            ->add('unitPrice', NumberType::class, [
+                'attr' => [
+                    'min' => 0,
+                ],
+            ])
+            ->add('vat', NumberType::class, [
+                'attr' => [
+                    'min' => 0,
+                ],
+            ])
         ;
     }
 

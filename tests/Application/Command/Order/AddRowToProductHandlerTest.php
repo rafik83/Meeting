@@ -3,12 +3,12 @@
 /*
  * This file is part of the vimeet project.
  *
- * Copyright (C) 2016 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
 
-namespace Application\Command\Order;
+namespace Proximum\Vimeet\Tests\Application\Command\Order;
 
 use PHPUnit\Framework\TestCase;
 use Proximum\Vimeet\Application\Command\Order\AddRowToProduct;
@@ -24,7 +24,7 @@ class AddRowToProductTest extends TestCase
     public function testHandle()
     {
         $event    = EventFactory::createEvent();
-        $product  = Product::createOption($event, 'Option A', 'a.jpg', 100, 2, 4, 3, false);
+        $product  = Product::createOption($event, 'Option A', 'a.jpg', 100, 20, 2, 4, 3, false);
 
         $orderRepository = $this->prophesize(OrderRepositoryInterface::class);
         $order           = $this->prophesize(Order::class);

@@ -8,7 +8,7 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Application\Command\Order;
+namespace Proximum\Vimeet\Tests\Application\Command\Order;
 
 use PHPUnit\Framework\TestCase;
 use Proximum\Vimeet\Application\Command\Order\AddRowToGroup;

@@ -18,14 +18,10 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class AbstractUpdateType extends AbstractProductType
 {
-    /**
-     * @var UpdatePriceResolver
-     */
+    /** @var UpdatePriceResolver */
     private $updatePriceResolver;
 
     /**
-     * AbstractUpdateType constructor.
-     *
      * @param UpdatePriceResolver $updatePriceResolver
      */
     public function __construct(UpdatePriceResolver $updatePriceResolver)
@@ -41,7 +37,16 @@ class AbstractUpdateType extends AbstractProductType
         parent::buildForm($builder, $options);
 
         if (true === $this->updatePriceResolver->resolve($options['product'])) {
-            $builder->add('unitPrice', NumberType::class);
+            $builder->add('unitPrice', NumberType::class, [
+                'attr' => [
+                    'min' => 0,
+                ],
+            ]);
+            $builder->add('vat', NumberType::class, [
+                'attr' => [
+                    'min' => 0,
+                ],
+            ]);
         }
     }
 

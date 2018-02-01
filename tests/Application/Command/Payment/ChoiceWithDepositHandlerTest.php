@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2016 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -56,10 +56,10 @@ class ChoiceWithDepositHandlerTest extends TestCase
         );
         $queryBus->handle(new PaymentConditionsViewQuery($sheet))->shouldBeCalled()->willReturn($paymentConditionsView);
 
-        $plan = Product::createPlan($event, 'plan', '', 200, 20, 100);
+        $plan = Product::createPlan($event, 'plan', '', 200, 20, 20, 100);
         $plan->translate('fr', 'plan', '', '', '', '');
         $plan->translate('en', 'plan', '', '', '', '');
-        $chair = Product::createOption($event, 'chair', '', 100, 2, 20,100, true, null, null, null);
+        $chair = Product::createOption($event, 'chair', '', 100, 20, 2, 20,100, true, null, null, null);
         $chair->translate('fr', 'chair', '', '', '', '');
         $chair->translate('en', 'chair', '', '', '', '');
 
@@ -122,10 +122,10 @@ class ChoiceWithDepositHandlerTest extends TestCase
         $queryBus = $this->prophesize(QueryBusInterface::class);
         $queryBus->handle(new PaymentConditionsViewQuery($sheet))->shouldNotBeCalled()->willReturn();
 
-        $plan = Product::createPlan($event, 'plan', '', 200, 20, 100);
+        $plan = Product::createPlan($event, 'plan', '', 200, 20, 20, 100);
         $plan->translate('fr', 'plan', '', '', '', '');
         $plan->translate('en', 'plan', '', '', '', '');
-        $chair = Product::createOption($event, 'chair', '', 100, 2, 20,100, true, null, null, null);
+        $chair = Product::createOption($event, 'chair', '', 100, 20, 2, 20,100, true, null, null, null);
         $chair->translate('fr', 'chair', '', '', '', '');
         $chair->translate('en', 'chair', '', '', '', '');
 

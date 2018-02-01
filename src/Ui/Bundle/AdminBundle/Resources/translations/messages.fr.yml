@@ -578,6 +578,7 @@ admin.product_create.option.title: 'Ajouter un produit'
 admin.product_create.participant.title: 'Ajouter un produit participant'
 admin.product_create.plan.title: 'Ajouter une formule'
 admin.product_create.planning.title: 'Ajouter un produit planning'
+admin.product_update.info.vat: TVA
 admin.product_update.option.title: 'Modifier un produit'
 admin.product_update.participant.title: 'Modifier un participant'
 admin.product_update.plan.title: 'Modifier une formule'

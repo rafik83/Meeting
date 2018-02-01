@@ -92,8 +92,8 @@ class AddHandlerTest extends TestCase
         $user  = new User('email@email.com', 'salt', 'password', 'fr');
         $sheet = new Sheet($event, $type, [], $user, $now);
 
-        $planProduct        = Product::createPlan($event, 'plan', '', 100, 10, 40);
-        $participantProduct = Product::createParticipant($event, 'participant', 50, 10);
+        $planProduct        = Product::createPlan($event, 'plan', '', 100, 20, 10, 40);
+        $participantProduct = Product::createParticipant($event, 'participant', 50, 20, 10);
 
         $participantProductView = new ParticipantProductView(
             15,

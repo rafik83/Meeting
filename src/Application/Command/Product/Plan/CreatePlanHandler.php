@@ -26,6 +26,7 @@ class CreatePlanHandler extends AbstractHandler
             $createPlan->name,
             $this->fileStorageInterface->upload($createPlan->file),
             $createPlan->unitPrice,
+            $createPlan->vat,
             $createPlan->availabilityCurrent,
             $createPlan->availabilityMax
         );

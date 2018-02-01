@@ -24,6 +24,7 @@ class CreateParticipantHandler extends AbstractHandler
             $createParticipant->event,
             $createParticipant->name,
             $createParticipant->unitPrice,
+            $createParticipant->vat,
             $createParticipant->quantityMax
         );
 

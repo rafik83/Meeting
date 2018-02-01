@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2016 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -30,6 +30,7 @@ class CreatePlanHandlerTest extends TestCase
         $name                = 'Name';
         $image               = 'Image';
         $unitPrice           = 100;
+        $vat                 = 20;
         $availabilityCurrent = 10;
         $availabilityMax     = 50;
         $translations = [
@@ -46,7 +47,7 @@ class CreatePlanHandlerTest extends TestCase
                 'addon'       => 'enoptional',
             ],
         ];
-        $product = Product::createOption($event, 'Option A', 'a.jpg', 100, 2, 4, 3, false);
+        $product = Product::createOption($event, 'Option A', 'a.jpg', 100, 20, 2, 4, 3, false);
         $product->translate('fr', 'foo', null, 'bar', 'optional', null);
         $product->translate('en', 'enfoo', null, 'enbar', 'enoptional', null);
 
@@ -70,6 +71,7 @@ class CreatePlanHandlerTest extends TestCase
             $name,
             $image,
             $unitPrice,
+            $vat,
             $availabilityCurrent,
             $availabilityMax
         );
@@ -103,6 +105,7 @@ class CreatePlanHandlerTest extends TestCase
         $name                = 'Name';
         $image               = 'Image';
         $unitPrice           = 100;
+        $vat                 = 19.6;
         $availabilityCurrent = 10;
         $availabilityMax     = 50;
         $translations = [
@@ -119,13 +122,14 @@ class CreatePlanHandlerTest extends TestCase
                 'addon'       => 'enoptional',
             ],
         ];
-        $product = Product::createOption($event, 'Option A', 'a.jpg', 100, 2, 4, 3, false);
+        $product = Product::createOption($event, 'Option A', 'a.jpg', 100, $vat, 2, 4, 3, false);
         $product->translate('fr', 'foo', null, 'bar', 'optional', null);
         $product->translate('en', 'enfoo', null, 'enbar', 'enoptional', null);
 
         $create                      = new CreatePlan($event);
         $create->name                = $name;
         $create->unitPrice           = $unitPrice;
+        $create->vat                 = $vat;
         $create->availabilityCurrent = $availabilityCurrent;
         $create->availabilityMax     = $availabilityMax;
         $create->translations        = $translations;
@@ -151,6 +155,7 @@ class CreatePlanHandlerTest extends TestCase
             $name,
             $image,
             $unitPrice,
+            $vat,
             $availabilityCurrent,
             $availabilityMax
         );

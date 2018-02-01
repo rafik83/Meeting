@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2017 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -11,6 +11,7 @@
 namespace Proximum\Vimeet\Tests\Domain\Planner;
 
 use PHPUnit\Framework\TestCase;
+use Prophecy\Prophecy\ObjectProphecy;
 use Proximum\Vimeet\Domain\Model\Order;
 use Proximum\Vimeet\Domain\Model\Package;
 use Proximum\Vimeet\Domain\Model\Product;
@@ -24,12 +25,12 @@ use Proximum\Vimeet\Tests\Factory\SheetFactory;
 class PlanningQuantityGuesserTest extends TestCase
 {
     /**
-     * Prophecy of Order Merger
+     * @var ObjectProphecy of Order Merger
      */
     private $orderMerger;
 
     /**
-     * Prophecy of OrderRepositoryInterface
+     * @var ObjectProphecy  Prophecy of OrderRepositoryInterface
      */
     private $orderRepository;
 
@@ -62,6 +63,7 @@ class PlanningQuantityGuesserTest extends TestCase
     {
         $event        = EventFactory::createEvent();
         $sheet        = SheetFactory::create($event);
+        // Useful as this method add the participant on the sheet
         $participant  = ParticipantFactory::create($sheet);
         $participant2 = ParticipantFactory::create($sheet);
         $package = new Package($event, 'title', new \DateTime());
@@ -100,9 +102,9 @@ class PlanningQuantityGuesserTest extends TestCase
         $package = new Package($event, 'title', new \DateTime());
         $sheet->getType()->setPackage($package);
 
-        $order = new Order($sheet, [], new \DateTime());
-        $product = Product::createPlanning($event, 'name', 100, 10);
-        $plan    = Product::createPlan($event, 'plan', '', 200, 20, 50);
+        $order = new Order($sheet, '', new \DateTime());
+        $product = Product::createPlanning($event, 'name', 100, 20, 10);
+        $plan    = Product::createPlan($event, 'plan', '', 200, 20, 20, 50);
         $plan->includeProduct($product, 1);
         $order->addRow(new Order\Row(
             $order,

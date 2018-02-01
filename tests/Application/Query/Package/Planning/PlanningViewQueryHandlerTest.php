@@ -45,6 +45,7 @@ class PlanningViewQueryHandlerTest extends TestCase
             'nameParticipant',
             'image.jpeg',
             10, // UnitPrice
+            20, //vat
             10, // $quantityMax
             5, // $availabilityCurrent
             5, // $availabilityMax
@@ -60,6 +61,7 @@ class PlanningViewQueryHandlerTest extends TestCase
             'namePlanning',
             'image.jpeg',
             10, // UnitPrice
+            20, //vat
             10, // $quantityMax
             5, // $availabilityCurrent
             5, // $availabilityMax
@@ -76,6 +78,7 @@ class PlanningViewQueryHandlerTest extends TestCase
             'namePlan',
             'image.jpeg',
             10, // UnitPrice
+            20, //vat
             10, // $quantityMax
             5, // $availabilityCurrent
             5, // $availabilityMax
@@ -91,6 +94,7 @@ class PlanningViewQueryHandlerTest extends TestCase
             'nameOption',
             'image.jpeg',
             10, // UnitPrice
+            20, //vat
             10, // $quantityMax
             5, // $availabilityCurrent
             5, // $availabilityMax
@@ -178,6 +182,7 @@ class PlanningViewQueryHandlerTest extends TestCase
             'nameParticipant',
             'image.jpeg',
             10, // UnitPrice
+            20, //vat
             10, // $quantityMax
             5, // $availabilityCurrent
             5, // $availabilityMax
@@ -193,6 +198,7 @@ class PlanningViewQueryHandlerTest extends TestCase
             'namePlanning',
             'image.jpeg',
             10, // UnitPrice
+            20, //vat
             10, // $quantityMax
             5, // $availabilityCurrent
             5, // $availabilityMax
@@ -209,6 +215,7 @@ class PlanningViewQueryHandlerTest extends TestCase
             'namePlan',
             'image.jpeg',
             10, // UnitPrice
+            20, //vat
             10, // $quantityMax
             5, // $availabilityCurrent
             5, // $availabilityMax
@@ -226,6 +233,7 @@ class PlanningViewQueryHandlerTest extends TestCase
             'nameOption',
             'image.jpeg',
             10, // UnitPrice
+            20, //vat
             10, // $quantityMax
             5, // $availabilityCurrent
             5, // $availabilityMax
@@ -313,6 +321,7 @@ class PlanningViewQueryHandlerTest extends TestCase
             'nameParticipant',
             'image.jpeg',
             10, // UnitPrice
+            20, //vat
             10, // $quantityMax
             5, // $availabilityCurrent
             5, // $availabilityMax
@@ -328,6 +337,7 @@ class PlanningViewQueryHandlerTest extends TestCase
             'namePlanning',
             'image.jpeg',
             10, // UnitPrice
+            20, //vat
             10, // $quantityMax
             5, // $availabilityCurrent
             5, // $availabilityMax
@@ -344,6 +354,7 @@ class PlanningViewQueryHandlerTest extends TestCase
             'namePlan',
             'image.jpeg',
             10, // UnitPrice
+            20, //vat
             10, // $quantityMax
             5, // $availabilityCurrent
             5, // $availabilityMax
@@ -361,6 +372,7 @@ class PlanningViewQueryHandlerTest extends TestCase
             'nameOption',
             'image.jpeg',
             10, // UnitPrice
+            20, //vat
             10, // $quantityMax
             5, // $availabilityCurrent
             5, // $availabilityMax
@@ -448,6 +460,7 @@ class PlanningViewQueryHandlerTest extends TestCase
             'nameParticipant',
             'image.jpeg',
             10, // UnitPrice
+            20, //vat
             10, // $quantityMax
             5, // $availabilityCurrent
             5, // $availabilityMax
@@ -463,6 +476,7 @@ class PlanningViewQueryHandlerTest extends TestCase
             'namePlanning',
             'image.jpeg',
             10, // UnitPrice
+            20, //vat
             10, // $quantityMax
             5, // $availabilityCurrent
             5, // $availabilityMax
@@ -479,6 +493,7 @@ class PlanningViewQueryHandlerTest extends TestCase
             'namePlan',
             'image.jpeg',
             10, // UnitPrice
+            20, //vat
             10, // $quantityMax
             5, // $availabilityCurrent
             5, // $availabilityMax
@@ -496,6 +511,7 @@ class PlanningViewQueryHandlerTest extends TestCase
             'nameOption',
             'image.jpeg',
             10, // UnitPrice
+            20, //vat
             10, // $quantityMax
             5, // $availabilityCurrent
             5, // $availabilityMax
@@ -572,6 +588,7 @@ class PlanningViewQueryHandlerTest extends TestCase
             'nameParticipant',
             'image.jpeg',
             10, // UnitPrice
+            20, //vat
             10, // $quantityMax
             5, // $availabilityCurrent
             5, // $availabilityMax
@@ -587,6 +604,7 @@ class PlanningViewQueryHandlerTest extends TestCase
             'namePlanning',
             'image.jpeg',
             10, // UnitPrice
+            20, //vat
             10, // $quantityMax
             5, // $availabilityCurrent
             5, // $availabilityMax
@@ -603,6 +621,7 @@ class PlanningViewQueryHandlerTest extends TestCase
             'namePlan',
             'image.jpeg',
             10, // UnitPrice
+            20, //vat
             10, // $quantityMax
             5, // $availabilityCurrent
             5, // $availabilityMax
@@ -620,6 +639,7 @@ class PlanningViewQueryHandlerTest extends TestCase
             'nameOption',
             'image.jpeg',
             10, // UnitPrice
+            20, //vat
             10, // $quantityMax
             5, // $availabilityCurrent
             5, // $availabilityMax
