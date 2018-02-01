@@ -57,23 +57,38 @@ class UpdatePlanHandlerTest extends TestCase
             $availabilityCurrent,
             $availabilityMax
         );
+        $expectedPlan->includeProduct($product, 2);
+        $expectedPlan->translate('fr', 'title fr', 'heading fr', 'description fr', 'addon fr', null);
+        $expectedPlan->translate('en', 'title en', 'heading en', 'description en', 'addon en', null);
 
         $updateCommand = new UpdatePlan($plan);
         $updateCommand->name = 'name plan modify';
         $updateCommand->unitPrice = 200;
         $updateCommand->vat = 19;
+        $updateCommand->translations = [
+            'fr' => [
+                'title'       => 'title fr',
+                'heading'     => 'heading fr',
+                'description' => 'description fr',
+                'addon'       => 'addon fr',
+            ],
+            'en' => [
+                'title'       => 'title en',
+                'heading'     => 'heading en',
+                'description' => 'description en',
+                'addon'       => 'addon en',
+            ],
+        ];
+        $updateCommand->productIncluded = [
+            [
+                'product' => $product,
+                'quantity' => 2,
+            ]
+        ];
 
         // Mock
-        $pacakgeRepository = $this->prophesize(ProductRepositoryInterface::class);
-        $pacakgeRepository->update(Argument::that(function (Product $givenPlan) use ($expectedPlan) {
-            return $givenPlan->getType() === $expectedPlan->getType()
-                && $givenPlan->getVat() === 19
-                && $givenPlan->getUnitPrice() === 200
-                && $givenPlan->getAvailabilityCurrent() === $expectedPlan->getAvailabilityCurrent()
-                && $givenPlan->getAvailabilityMax() === $expectedPlan->getAvailabilityMax()
-                && $givenPlan->getName() === $expectedPlan->getName()
-            ;
-        }))->shouldBeCalled();
+        $productRepository = $this->prophesize(ProductRepositoryInterface::class);
+        $productRepository->update($expectedPlan)->shouldBeCalled();
 
         $fileStorage = $this->prophesize(FileStorageInterface::class);
         $fileStorage->upload(null)->shouldBeCalled()->willReturn('Image');
@@ -83,7 +98,7 @@ class UpdatePlanHandlerTest extends TestCase
 
         // Handler
         $handler = new UpdatePlanHandler(
-            $pacakgeRepository->reveal(),
+            $productRepository->reveal(),
             $updatePriceResolver->reveal(),
             $fileStorage->reveal()
         );
