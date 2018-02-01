@@ -19,19 +19,13 @@ use Proximum\Vimeet\Domain\Repository\VideoConferenceRepositoryInterface;
 
 class RequestAccessHandler
 {
-    /**
-     * @var VideoConferenceRepositoryInterface
-     */
+    /** @var VideoConferenceRepositoryInterface */
     private $videoConferenceRepository;
 
-    /**
-     * @var VideoConferenceAdapterInterface
-     */
+    /** @var VideoConferenceAdapterInterface */
     private $videoConferenceAdapter;
 
     /**
-     * RequestAccessHandler constructor.
-     *
      * @param VideoConferenceAdapterInterface $videoConferenceAdapter
      * @param VideoConferenceRepositoryInterface $videoConferenceRepository
      */
