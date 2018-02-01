@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2016 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -87,6 +87,13 @@ class Product
     private $unitPrice;
 
     /**
+     * Vat applicable to this product
+     *
+     * @var float
+     */
+    private $vat;
+
+    /**
      * Maximum quantity a sheet can bought.
      *
      * @var int
@@ -155,6 +162,7 @@ class Product
      * @param string                  $name
      * @param string                  $image
      * @param float                   $unitPrice
+     * @param                         $vat
      * @param int                     $quantityMax
      * @param int                     $availabilityCurrent
      * @param int                     $availabilityMax
@@ -169,6 +177,7 @@ class Product
         $name,
         $image,
         $unitPrice,
+        $vat,
         $quantityMax,
         $availabilityCurrent,
         $availabilityMax,
@@ -185,6 +194,7 @@ class Product
         $this->name                  = $name;
         $this->image                 = $image;
         $this->unitPrice             = $unitPrice;
+        $this->vat                   = $vat;
         $this->quantityMax           = $quantityMax;
         $this->availabilityCurrent   = $availabilityCurrent;
         $this->availabilityMax       = $availabilityMax;
@@ -687,13 +697,14 @@ class Product
      * @param Event  $event
      * @param string $name
      * @param string $image
-     * @param int    $unitPrice
+     * @param float  $unitPrice
+     * @param float  $vat
      * @param int    $availabilityCurrent
      * @param int    $availabilityMax
      *
      * @return Product
      */
-    public static function createPlan(Event $event, $name, $image, $unitPrice, $availabilityCurrent, $availabilityMax)
+    public static function createPlan(Event $event, $name, $image, $unitPrice, $vat, $availabilityCurrent, $availabilityMax)
     {
         return new self(
             $event,
@@ -701,6 +712,7 @@ class Product
             $name,
             $image,
             $unitPrice,
+            $vat,
             1,
             (int) $availabilityCurrent,
             (int) $availabilityMax,
@@ -715,15 +727,17 @@ class Product
      * @param int         $availabilityCurrent
      * @param int         $availabilityMax
      * @param float       $unitPrice
+     * @param float       $vat
      *
      * @return Product
      */
-    public function updatePlan($name, $image, $availabilityCurrent, $availabilityMax, $unitPrice)
+    public function updatePlan($name, $image, $availabilityCurrent, $availabilityMax, $unitPrice, $vat)
     {
         $this->name                = $name;
         $this->availabilityCurrent = $availabilityCurrent;
         $this->availabilityMax     = $availabilityMax;
         $this->unitPrice           = $unitPrice;
+        $this->vat                 = $vat;
 
         if (null !== $image) {
             $this->image = $image;
@@ -735,12 +749,13 @@ class Product
     /**
      * @param Event  $event
      * @param string $name
-     * @param int    $unitPrice
+     * @param float  $unitPrice
+     * @param float  $vat
      * @param int    $quantityMax
      *
      * @return Product
      */
-    public static function createParticipant(Event $event, $name, $unitPrice, $quantityMax)
+    public static function createParticipant(Event $event, $name, $unitPrice, $vat, $quantityMax)
     {
         return new self(
             $event,
@@ -748,6 +763,7 @@ class Product
             $name,
             null,
             $unitPrice,
+            $vat,
             $quantityMax,
             null,
             null,
@@ -760,14 +776,16 @@ class Product
      * @param string $name
      * @param int    $quantityMax
      * @param float  $unitPrice
+     * @param float  $vat
      *
      * @return Product
      */
-    public function updateParticipant($name, $quantityMax, $unitPrice)
+    public function updateParticipant($name, $quantityMax, $unitPrice, $vat)
     {
-        $this->name        = $name;
+        $this->name = $name;
         $this->quantityMax = $quantityMax;
-        $this->unitPrice   = $unitPrice;
+        $this->unitPrice = $unitPrice;
+        $this->vat = $vat;
 
         return $this;
     }
@@ -775,12 +793,13 @@ class Product
     /**
      * @param Event  $event
      * @param string $name
-     * @param int    $unitPrice
+     * @param float  $unitPrice
+     * @param float  $vat
      * @param int    $quantityMax
      *
      * @return Product
      */
-    public static function createPlanning(Event $event, $name, $unitPrice, $quantityMax)
+    public static function createPlanning(Event $event, $name, $unitPrice, $vat, $quantityMax)
     {
         return new self(
             $event,
@@ -788,6 +807,7 @@ class Product
             $name,
             null,
             $unitPrice,
+            $vat,
             $quantityMax,
             null,
             null,
@@ -800,14 +820,16 @@ class Product
      * @param string $name
      * @param int    $quantityMax
      * @param float  $unitPrice
+     * @param flaot  $vat
      *
      * @return Product
      */
-    public function updatePlanning($name, $quantityMax, $unitPrice)
+    public function updatePlanning($name, $quantityMax, $unitPrice, $vat)
     {
         $this->name        = $name;
         $this->quantityMax = $quantityMax;
         $this->unitPrice   = $unitPrice;
+        $this->vat         = $vat;
 
         return $this;
     }
@@ -816,7 +838,8 @@ class Product
      * @param Event                   $event
      * @param string                  $name
      * @param string                  $image
-     * @param int                     $unitPrice
+     * @param float                   $unitPrice
+     * @param float                   $vat
      * @param int                     $quantityMax
      * @param int                     $availabilityCurrent
      * @param int                     $availabilityMax
@@ -832,6 +855,7 @@ class Product
         $name,
         $image,
         $unitPrice,
+        $vat,
         $quantityMax,
         $availabilityCurrent,
         $availabilityMax,
@@ -846,6 +870,7 @@ class Product
             $name,
             $image,
             $unitPrice,
+            $vat,
             $quantityMax,
             (int) $availabilityCurrent,
             (int) $availabilityMax,
@@ -863,10 +888,11 @@ class Product
      * @param int                     $availabilityCurrent
      * @param int                     $availabilityMax
      * @param bool                    $updatable
+     * @param float                   $unitPrice
+     * @param float                   $vat
      * @param null|\DateTimeInterface $deletableUntil
      * @param bool                    $subjectedToValidation
      * @param \DateTimeInterface      $buyableUntil
-     * @param null|float              $unitPrice
      *
      * @return Product
      */
@@ -878,6 +904,7 @@ class Product
         $availabilityMax,
         $updatable,
         $unitPrice,
+        $vat,
         \DateTimeInterface $deletableUntil = null,
         $subjectedToValidation = false,
         \DateTimeInterface $buyableUntil = null
@@ -891,6 +918,7 @@ class Product
         $this->subjectedToValidation = $subjectedToValidation;
         $this->buyableUntil          = $buyableUntil;
         $this->unitPrice             = $unitPrice;
+        $this->vat                   = $vat;
 
         if (null !== $image) {
             $this->image = $image;
@@ -1018,7 +1046,8 @@ class Product
      * @param Event                   $event
      * @param string                  $name
      * @param null|string             $image
-     * @param int                     $unitPrice
+     * @param float                   $unitPrice
+     * @param float                   $vat
      * @param int                     $quantityMax
      * @param int                     $availabilityCurrent
      * @param int                     $availabilityMax
@@ -1028,13 +1057,16 @@ class Product
      * @param \DateTimeInterface|null $buyableUntil
      *
      * @return Product
+     *
+     * @throws \InvalidArgumentException
      */
     public static function createProductFromType(
         string $type,
         Event $event,
         string $name,
         string $image = null,
-        int $unitPrice,
+        float $unitPrice,
+        float $vat,
         int $quantityMax = null,
         int $availabilityCurrent = null,
         int $availabilityMax = null,
@@ -1042,13 +1074,14 @@ class Product
         \DateTimeInterface $deletableUntil = null,
         bool $subjectedToValidation = false,
         \DateTimeInterface $buyableUntil = null
-    ) {
+    ): Product {
         if ($type === self::TYPE_OPTION) {
             return self::createOption(
                 $event,
                 $name,
                 $image,
                 $unitPrice,
+                $vat,
                 $quantityMax,
                 $availabilityCurrent,
                 $availabilityMax,
@@ -1058,18 +1091,21 @@ class Product
                 $buyableUntil
             );
         } elseif ($type === self::TYPE_PARTICIPANT) {
-            return self::createParticipant($event, $name, $unitPrice, $quantityMax);
+            return self::createParticipant($event, $name, $unitPrice, $vat, $quantityMax);
         } elseif ($type === self::TYPE_PLAN) {
             return self::createPlan(
                 $event,
                 $name,
                 $image,
                 $unitPrice,
+                $vat,
                 $availabilityCurrent,
                 $availabilityMax
             );
         } elseif ($type === self::TYPE_PLANNING) {
-            return self::createPlanning($event, $name, $unitPrice, $quantityMax);
+            return self::createPlanning($event, $name, $unitPrice, $vat, $quantityMax);
         }
+
+        throw new \InvalidArgumentException('The given type does not exist');
     }
 }
