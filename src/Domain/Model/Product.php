@@ -828,7 +828,7 @@ class Product
      * @param string $name
      * @param int    $quantityMax
      * @param float  $unitPrice
-     * @param flaot  $vat
+     * @param float  $vat
      *
      * @return Product
      */
