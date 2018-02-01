@@ -64,7 +64,7 @@ class PlanningViewQueryHandler
     /** @var array */
     private $masses = [];
 
-    /** @var array of Unavailability[] indexed by User id */
+    /** @var array of Unavailability[] indexed by Event id and User id */
     private $unavailabilities = [];
 
     /** @var array */
