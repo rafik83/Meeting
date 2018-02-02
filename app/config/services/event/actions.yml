@@ -1,0 +1,16 @@
+services:
+    #
+    # Package
+    #
+    Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Package\SummaryAction:
+        arguments:
+            - '@adapter.authorization_checker'
+            - '@cart_cleaner'
+            - '@package.funnel.funnel_factory'
+            - '@adapter.router'
+            - '@repository.billing_info_repository'
+            - '@session.flash_bag'
+            - '@form.factory'
+            - '@Proximum\Vimeet\Infrastructure\Adapter\CommandBus'
+            - '@Proximum\Vimeet\Infrastructure\Adapter\QueryBus'
+            - '@templating'

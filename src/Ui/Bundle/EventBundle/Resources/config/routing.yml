@@ -590,10 +590,9 @@ event_package_remove_participant:
 
 event_package_summary:
     path: /sheet/{sheet}/package/summary
-    defaults: { _controller: EventBundle:Package:summary }
+    defaults: { _controller: Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Package\SummaryAction }
     requirements:
         sheet: \d+
-        step: \d+
     methods: [GET, POST]
 
 event_package_summary_fill_billing_info:

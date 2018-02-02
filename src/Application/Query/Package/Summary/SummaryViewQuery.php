@@ -3,37 +3,30 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2016 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
 
 namespace Proximum\Vimeet\Application\Query\Package\Summary;
 
+use Proximum\Vimeet\Application\Query\Query;
 use Proximum\Vimeet\Domain\Cart\Cart;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Package\Funnel\Funnel;
 
-class SummaryViewQuery
+class SummaryViewQuery implements Query
 {
-    /**
-     * @var Sheet
-     */
+    /** @var Sheet */
     public $sheet;
 
-    /**
-     * @var Funnel
-     */
+    /** @var Funnel */
     public $funnel;
 
-    /**
-     * @var Cart
-     */
+    /** @var Cart */
     public $cart;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     public $locale;
 
     /**
