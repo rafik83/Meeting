@@ -15,9 +15,11 @@ use Proximum\Vimeet\Application\Components\Sheet\SheetInfoGuesser;
 use Proximum\Vimeet\Application\Components\Sheet\Template\Tag;
 use Proximum\Vimeet\Application\Components\User\UserInfoGuesser;
 use Proximum\Vimeet\Application\Exception\Sheet\SheetNotFoundException;
+use Proximum\Vimeet\Application\ThirdParty\LENI\LeniConstants;
 use Proximum\Vimeet\Application\ThirdParty\LENI\View\LeniPlanningDayView;
 use Proximum\Vimeet\Application\ThirdParty\LENI\View\LeniPlanningView;
 use Proximum\Vimeet\Application\ThirdParty\LENI\View\LeniUserView;
+use Proximum\Vimeet\Domain\Model\Sheet\ExtraData;
 use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
 use Proximum\Vimeet\Domain\Service\Category\CategoryNameResolver;
 use Proximum\Vimeet\Domain\Service\SheetsGroup\GroupNameResolver;
@@ -135,7 +137,24 @@ class LeniUserViewQueryHandler
             $userInfo['mobile'],
             $country,
             $query->user->getLocale(),
-            $leniPlanning
+            $leniPlanning,
+            $this->getPreviousLeniUserId($query)
         );
+    }
+
+    /**
+     * @param LeniUserViewQuery $query
+     *
+     * @return null|string
+     */
+    private function getPreviousLeniUserId(LeniUserViewQuery $query): ?string
+    {
+        if (!$query->previousExtraData instanceof ExtraData) {
+            return null;
+        }
+
+        $previousData = unserialize($query->previousExtraData->getValue(), ['allowed_classes' => false]);
+
+        return $previousData[LeniConstants::LENI_COL_USER_ID] ?? null;
     }
 }

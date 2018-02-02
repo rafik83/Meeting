@@ -12,6 +12,7 @@ namespace Proximum\Vimeet\Application\ThirdParty\LENI\Query;
 
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\User;
+use Proximum\Vimeet\Domain\Model\User\Event\ExtraData;
 
 class LeniUserViewQuery
 {
@@ -21,13 +22,18 @@ class LeniUserViewQuery
     /** @var User */
     public $user;
 
+    /** @var null|ExtraData */
+    public $previousExtraData;
+
     /**
-     * @param Event $event
-     * @param User  $user
+     * @param Event          $event
+     * @param User           $user
+     * @param null|ExtraData $previousExtraData
      */
-    public function __construct(Event $event, User $user)
+    public function __construct(Event $event, User $user, ?ExtraData $previousExtraData = null)
     {
         $this->event = $event;
         $this->user  = $user;
+        $this->previousExtraData = $previousExtraData;
     }
 }

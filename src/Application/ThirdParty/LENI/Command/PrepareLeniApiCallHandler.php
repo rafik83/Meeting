@@ -134,16 +134,14 @@ class PrepareLeniApiCallHandler
                 }
 
                 try {
-                    $leniUserView = $this->leniUserViewQueryHandler->handle(new LeniUserViewQuery($event, $user));
+                    $leniUserView = $this->leniUserViewQueryHandler->handle(
+                        new LeniUserViewQuery($event, $user, $previousUserExtraData)
+                    );
                 } catch (SheetNotFoundException $sheetNotFoundException) {
                     continue;
                 }
 
-                $leniUserData = $this->serializerAdapter->normalize(
-                    $leniUserView,
-                    null,
-                    ['previousUserExtraData' => $previousUserExtraData]
-                );
+                $leniUserData = $this->serializerAdapter->normalize($leniUserView);
                 $fingerPrint = serialize($leniUserData);
 
                 // User data did not changed, skip

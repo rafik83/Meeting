@@ -54,6 +54,9 @@ class LeniUserView
     /** @var LeniPlanningView */
     public $planning;
 
+    /** @var null|string */
+    public $leniId;
+
     /**
      * @param int              $id
      * @param string|null      $sheetName
@@ -69,6 +72,7 @@ class LeniUserView
      * @param string           $country
      * @param string           $locale
      * @param LeniPlanningView $planning
+     * @param null|string      $leniId
      */
     public function __construct(
         int $id,
@@ -84,7 +88,8 @@ class LeniUserView
         string $mobile,
         string $country,
         string $locale,
-        LeniPlanningView $planning
+        LeniPlanningView $planning,
+        ?string $leniId
     ) {
         $this->id = $id;
         $this->sheetName = $sheetName;
@@ -100,5 +105,6 @@ class LeniUserView
         $this->planning = $planning;
         $this->country = $country;
         $this->locale = $locale;
+        $this->leniId = $leniId;
     }
 }

@@ -12,7 +12,6 @@ namespace Proximum\Vimeet\Application\ThirdParty\LENI\Normalizer;
 
 use Proximum\Vimeet\Application\ThirdParty\LENI\LeniConstants;
 use Proximum\Vimeet\Application\ThirdParty\LENI\View\LeniUserView;
-use Proximum\Vimeet\Domain\Model\User\Event\ExtraData;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 
 class LeniUserViewNormalizer implements NormalizerInterface
@@ -54,12 +53,8 @@ class LeniUserViewNormalizer implements NormalizerInterface
 
         // Set the previous LENI user id
         // Warning: always on end of the returned array
-        if ($context['previousUserExtraData'] instanceof ExtraData) {
-            $previousData = unserialize($context['previousUserExtraData']->getValue(), ['allowed_classes' => false]);
-
-            if (isset($previousData[LeniConstants::LENI_COL_USER_ID])) {
-                $data[LeniConstants::LENI_COL_USER_ID] = $previousData[LeniConstants::LENI_COL_USER_ID];
-            }
+        if (null !== $userView->leniId) {
+            $data[LeniConstants::LENI_COL_USER_ID] = $userView->leniId;
         }
 
         return $data;
