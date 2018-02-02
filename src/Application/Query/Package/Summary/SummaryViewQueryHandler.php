@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2016 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -15,19 +15,13 @@ use Proximum\Vimeet\Domain\Package\Specification\VatApplicable;
 
 class SummaryViewQueryHandler
 {
-    /**
-     * @var GroupsViewQueryHandler
-     */
+    /** @var GroupsViewQueryHandler */
     public $groupsViewQueryHandler;
 
-    /**
-     * @var VatApplicable
-     */
+    /** @var VatApplicable */
     public $vatApplicable;
 
-    /**
-     * @var PromotionCodeQueryHandler
-     */
+    /** @var PromotionCodeQueryHandler */
     public $promotionCodeQueryHandler;
 
     /**
@@ -50,7 +44,7 @@ class SummaryViewQueryHandler
      *
      * @return SummaryView
      */
-    public function handle(SummaryViewQuery $summaryViewQuery)
+    public function handle(SummaryViewQuery $summaryViewQuery): SummaryView
     {
         $groups = $this->groupsViewQueryHandler->handle(new GroupsViewQuery(
             $summaryViewQuery->sheet,

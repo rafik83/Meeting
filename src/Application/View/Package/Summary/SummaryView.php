@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2016 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -109,8 +109,8 @@ class SummaryView
      *
      * @return bool
      */
-    public function isEmpty()
+    public function isEmpty(): bool
     {
-        return count($this->funnel->getCart()->getRows()) === 0;
+        return \count($this->funnel->getCart()->getRows()) === 0;
     }
 }
