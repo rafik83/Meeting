@@ -22,17 +22,9 @@ use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
 use Proximum\Vimeet\Domain\Service\Category\CategoryNameResolver;
 use Proximum\Vimeet\Domain\Service\SheetsGroup\GroupNameResolver;
 use Proximum\Vimeet\Domain\Service\Type\TypeNameResolver;
-use Proximum\Vimeet\Domain\Template\TemplateObject\Gender;
 
 class LeniUserViewQueryHandler
 {
-    const GENDER_MAPPING = [
-        Gender::MAN => 'M',
-        Gender::WOMAN => 'MME',
-    ];
-
-    CONST ATTENDANCE = 'Inscrit';
-
     /** @var ParticipantPlanningFormatter */
     private $participantPlanningFormatter;
 
@@ -50,6 +42,7 @@ class LeniUserViewQueryHandler
 
     /** @var SheetRepositoryInterface */
     private $sheetRepository;
+
     /** @var SheetInfoGuesser */
     private $sheetInfoGuesser;
 
@@ -121,11 +114,11 @@ class LeniUserViewQueryHandler
         $type = $this->typeNameResolver->resolveTypeWithPreloadedSheets($sheets);
         $category = $this->categoryNameResolver->resolveCategoryForPreloadSheets($sheets);
 
-        $gender = self::GENDER_MAPPING[$userInfo['gender']] ?? '';
+        $country = $userInfo['country'];
 
-        if ('' === $userInfo['country']) {
+        if ('' === $country) {
             $sheetInfos = $this->sheetInfoGuesser->guessSheetInfos($firstSheet);
-            $userInfo['country'] = $sheetInfos[Tag::SHEET_COUNTRY] ?? '';
+            $country = $sheetInfos[Tag::SHEET_COUNTRY] ?? '';
         }
 
         return new LeniUserView(
@@ -134,14 +127,13 @@ class LeniUserViewQueryHandler
             $type->getId(),
             $category !== null ? $category->getId() : null,
             $query->user->getEmail(),
-            $gender,
+            $userInfo['gender'],
             $userInfo['firstName'],
             $userInfo['lastName'],
             $userInfo['position'],
             $userInfo['phone'],
             $userInfo['mobile'],
-            $userInfo['country'],
-            self::ATTENDANCE,
+            $country,
             $query->user->getLocale(),
             $leniPlanning
         );

@@ -49,9 +49,6 @@ class LeniUserView
     public $country;
 
     /** @var string */
-    public $attendance;
-
-    /** @var string */
     public $locale;
 
     /** @var LeniPlanningView */
@@ -70,7 +67,6 @@ class LeniUserView
      * @param string           $phone
      * @param string           $mobile
      * @param string           $country
-     * @param string           $attendance
      * @param string           $locale
      * @param LeniPlanningView $planning
      */
@@ -87,24 +83,22 @@ class LeniUserView
         string $phone,
         string $mobile,
         string $country,
-        string $attendance,
         string $locale,
         LeniPlanningView $planning
     ) {
-        $this->id         = $id;
-        $this->sheetName  = $sheetName;
-        $this->typeId     = $typeId;
+        $this->id = $id;
+        $this->sheetName = $sheetName;
+        $this->typeId = $typeId;
         $this->categoryId = $categoryId;
-        $this->email      = $email;
-        $this->gender     = $gender;
-        $this->firstName  = $firstName;
-        $this->lastName   = $lastName;
-        $this->position   = $position;
-        $this->phone      = $phone;
-        $this->mobile     = $mobile;
-        $this->planning   = $planning;
-        $this->country    = $country;
-        $this->attendance = $attendance;
-        $this->locale     = $locale;
+        $this->email = $email;
+        $this->gender = $gender;
+        $this->firstName = $firstName;
+        $this->lastName = $lastName;
+        $this->position = $position;
+        $this->phone = $phone;
+        $this->mobile = $mobile;
+        $this->planning = $planning;
+        $this->country = $country;
+        $this->locale = $locale;
     }
 }
