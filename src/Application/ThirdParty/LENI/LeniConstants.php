@@ -53,6 +53,13 @@ class LeniConstants
     public const LENI_COL_ATTENDANCE = 'Inscrit';
     public const LENI_COL_LOCALE = 'Langue';
 
+    public const LENI_COL_ENABLED = 'ZL_ACTIF';
+
+    public const ENABLED_MAPPING = [
+        true => 'ACTI',
+        false => 'INAC',
+    ];
+
     public const LENI_COLUMNS = [
         self::LENI_COL_USER_ID,
         self::LENI_COL_CAB_2,

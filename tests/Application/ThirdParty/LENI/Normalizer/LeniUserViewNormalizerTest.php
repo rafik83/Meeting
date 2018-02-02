@@ -34,6 +34,7 @@ class LeniUserViewNormalizerTest extends TestCase
     {
         $leniUserView = new LeniUserView(
             1337,
+            true,
             'Star Fleet',
             369,
             963,
@@ -73,6 +74,7 @@ class LeniUserViewNormalizerTest extends TestCase
             'Pays' => 'US',
             'Inscrit' => 'Inscrit',
             'Langue' => 'en',
+            'ZL_ACTIF' => 'ACTI',
             'ZL_JOURNEE1' => 'Planning day one',
             'ZL_JOURNEE2' => 'Planning day two',
         ];
@@ -86,6 +88,7 @@ class LeniUserViewNormalizerTest extends TestCase
     {
         $leniUserView = new LeniUserView(
             1337,
+            false,
             'Star Fleet',
             369,
             963,
@@ -125,6 +128,7 @@ class LeniUserViewNormalizerTest extends TestCase
             'Pays' => 'US',
             'Inscrit' => 'Inscrit',
             'Langue' => 'en',
+            'ZL_ACTIF' => 'INAC',
             'ZL_JOURNEE1' => 'Planning day one',
             'ZL_JOURNEE2' => 'Planning day two',
             'Id' => '25b850a8-aed5-e711-80e0-0cc47a4c19cf',

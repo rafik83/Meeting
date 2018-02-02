@@ -19,7 +19,10 @@ use Proximum\Vimeet\Application\ThirdParty\LENI\LeniConstants;
 use Proximum\Vimeet\Application\ThirdParty\LENI\View\LeniPlanningDayView;
 use Proximum\Vimeet\Application\ThirdParty\LENI\View\LeniPlanningView;
 use Proximum\Vimeet\Application\ThirdParty\LENI\View\LeniUserView;
+use Proximum\Vimeet\Domain\Model\Event;
+use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\Sheet\ExtraData;
+use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
 use Proximum\Vimeet\Domain\Service\Category\CategoryNameResolver;
 use Proximum\Vimeet\Domain\Service\SheetsGroup\GroupNameResolver;
@@ -83,7 +86,7 @@ class LeniUserViewQueryHandler
      */
     public function handle(LeniUserViewQuery $query): LeniUserView
     {
-        $sheets = $this->sheetRepository->getSheetsByUserAndEvent($query->user, $query->event);
+        $sheets = $this->getSheets($query->user, $query->event);
 
         $firstSheet = reset($sheets);
 
@@ -125,6 +128,7 @@ class LeniUserViewQueryHandler
 
         return new LeniUserView(
             $query->user->getId(),
+            $firstSheet->isEnabled(),
             $this->groupNameResolver->resolve($query->event, $query->user, $sheets),
             $type->getId(),
             $category !== null ? $category->getId() : null,
@@ -140,6 +144,29 @@ class LeniUserViewQueryHandler
             $leniPlanning,
             $this->getPreviousLeniUserId($query)
         );
+    }
+
+    /**
+     * @param User  $user
+     * @param Event $event
+     *
+     * @return Sheet[]
+     */
+    private function getSheets(User $user, Event $event): array
+    {
+        $sheets = $this->sheetRepository->getAllSheetsByUserAndEvent($user, $event);
+
+        $enabledSheets = \array_filter($sheets, function (Sheet $sheet) {
+            return $sheet->isEnabled();
+        });
+
+        // if there is at least one enabled sheet, return only enabled sheets list
+        if (\count($enabledSheets) > 0) {
+            return $enabledSheets;
+        }
+
+        // else return all sheets
+        return $sheets;
     }
 
     /**

@@ -41,6 +41,7 @@ class LeniUserViewNormalizer implements NormalizerInterface
             LeniConstants::LENI_COL_COUNTRY => $userView->country,
             LeniConstants::LENI_COL_ATTENDANCE => LeniConstants::ATTENDANCE,
             LeniConstants::LENI_COL_LOCALE => $userView->locale,
+            LeniConstants::LENI_COL_ENABLED => LeniConstants::ENABLED_MAPPING[$userView->enabled],
         ];
 
         $dayNumber = 1;
