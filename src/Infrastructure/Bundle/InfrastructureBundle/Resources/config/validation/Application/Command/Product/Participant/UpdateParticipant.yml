@@ -5,6 +5,14 @@ Proximum\Vimeet\Application\Command\Product\Participant\UpdateParticipant:
         quantityMax:
             - Range:
                 min: 0
+        unitPrice:
+            - NotBlank: ~
+            - Range:
+                min: 0
+        vat:
+            - NotBlank: ~
+            - Range:
+                min: 0
         translations:
             - All:
                 - Collection:

@@ -7,6 +7,14 @@ Proximum\Vimeet\Application\Command\Product\Option\UpdateOption:
         quantityMax:
             - Range:
                 min: 0
+        unitPrice:
+            - NotBlank: ~
+            - Range:
+                min: 0
+        vat:
+            - NotBlank: ~
+            - Range:
+                min: 0
         availabilityCurrent:
             - Range:
                 min: 0
