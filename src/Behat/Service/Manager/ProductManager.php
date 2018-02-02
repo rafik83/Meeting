@@ -64,7 +64,7 @@ class ProductManager
      *
      * @return Product
      */
-    public function createPlan(Event $event, string $title = 'Formule', float $unitPrice = 567, float $vat= 20): Product
+    public function createPlan(Event $event, string $title = 'Formule', float $unitPrice = 567, float $vat = 20): Product
     {
         $product = Product::createPlan($event, $title, '', $unitPrice, $vat, 15, 30);
 
