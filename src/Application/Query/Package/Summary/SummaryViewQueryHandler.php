@@ -10,39 +10,43 @@
 
 namespace Proximum\Vimeet\Application\Query\Package\Summary;
 
+use Proximum\Vimeet\Application\Query\Package\Vat\VatListViewQuery;
+use Proximum\Vimeet\Application\Query\Package\Vat\VatListViewQueryHandler;
 use Proximum\Vimeet\Application\View\Package\Summary\SummaryView;
-use Proximum\Vimeet\Domain\Package\Specification\VatApplicable;
+use Proximum\Vimeet\Domain\Package\Exception\MissingBillingInfoException;
 
 class SummaryViewQueryHandler
 {
     /** @var GroupsViewQueryHandler */
     public $groupsViewQueryHandler;
 
-    /** @var VatApplicable */
-    public $vatApplicable;
-
     /** @var PromotionCodeQueryHandler */
     public $promotionCodeQueryHandler;
 
+    /** @var VatListViewQueryHandler */
+    public $vatListViewQueryHandler;
+
     /**
      * @param GroupsViewQueryHandler    $groupsViewQueryHandler
-     * @param VatApplicable             $vatApplicable
      * @param PromotionCodeQueryHandler $promotionCodeQueryHandler
+     * @param VatListViewQueryHandler   $vatListViewQueryHandler
      */
     public function __construct(
         GroupsViewQueryHandler $groupsViewQueryHandler,
-        VatApplicable $vatApplicable,
-        PromotionCodeQueryHandler $promotionCodeQueryHandler
+        PromotionCodeQueryHandler $promotionCodeQueryHandler,
+        VatListViewQueryHandler $vatListViewQueryHandler
     ) {
         $this->groupsViewQueryHandler    = $groupsViewQueryHandler;
-        $this->vatApplicable             = $vatApplicable;
         $this->promotionCodeQueryHandler = $promotionCodeQueryHandler;
+        $this->vatListViewQueryHandler = $vatListViewQueryHandler;
     }
 
     /**
      * @param SummaryViewQuery $summaryViewQuery
      *
      * @return SummaryView
+     *
+     * @throws MissingBillingInfoException
      */
     public function handle(SummaryViewQuery $summaryViewQuery): SummaryView
     {
@@ -60,6 +64,10 @@ class SummaryViewQueryHandler
 
         $total = $groups->getTotal() + $promoCodes->getTotal();
 
+        $vatListView = $this->vatListViewQueryHandler->handle(
+            new VatListViewQuery($summaryViewQuery->sheet, $groups, $promoCodes)
+        );
+
         return new SummaryView(
             $summaryViewQuery->funnel,
             $groups,
@@ -68,7 +76,7 @@ class SummaryViewQueryHandler
             $summaryViewQuery->sheet->getEvent()->getVat(),
             $total,
             $summaryViewQuery->sheet->getEvent()->getCurrency(),
-            $this->vatApplicable->onSheet($summaryViewQuery->sheet)
+            $vatListView->vatApplicable
         );
     }
 }

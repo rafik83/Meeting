@@ -22,23 +22,32 @@ class VatView
     public $total;
 
     /** @var float */
-    public $totalWithVat;
+    public $totalVat;
 
     /**
      * @param float  $vatRate
      * @param string $vatMode
      * @param float  $total
-     * @param float  $totalWithVat
+     * @param float  $totalVat
      */
     public function __construct(
         float $vatRate,
         string $vatMode,
         float $total,
-        float $totalWithVat
+        float $totalVat
     ) {
         $this->vatRate = $vatRate;
         $this->vatMode = $vatMode;
         $this->total = $total;
-        $this->totalWithVat = $totalWithVat;
+        $this->totalVat = $totalVat;
+    }
+
+    /**
+     * @param float $price
+     */
+    public function addToTotal(float $price): void
+    {
+        $this->total += $price;
+        $this->totalVat = (\round($this->total) * $this->vatRate) / 100;
     }
 }

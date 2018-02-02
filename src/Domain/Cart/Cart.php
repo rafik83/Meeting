@@ -406,6 +406,47 @@ class Cart
     }
 
     /**
+     * Get product discount for a specific promotion code
+     *
+     * @param PromotionCode $promotionCode
+     * @param Product       $product
+     *
+     * @return float
+     */
+    public function getDiscountForProduct(PromotionCode $promotionCode, Product $product): float
+    {
+        $cartRow = $this->getCartRowForProduct($product);
+
+        if (null === $cartRow) {
+            return 0;
+        }
+
+        $total = 0;
+
+        foreach ($promotionCode->getPromotions() as $promotion) {
+            if ($promotion->getProduct() !== $product) {
+                continue;
+            }
+
+            // don't apply promo code on cart row negative quantity
+            if ($cartRow->getQuantity() < 0) {
+                continue;
+            }
+
+            // don't use promotion quantity max if promotion type value off
+            if (Promotion::TYPE_VALUE_OFF === $promotion->getType()) {
+                $total -= $promotion->getDiscount();
+            } elseif ($cartRow->getQuantity() < $promotion->getQuantityMax()) {
+                $total -= $cartRow->getQuantity() * $promotion->getDiscount();
+            } else {
+                $total -= $promotion->getQuantityMax() * $promotion->getDiscount();
+            }
+        }
+
+        return $total;
+    }
+
+    /**
      * Get total discount for a specific promotion code
      *
      * @param PromotionCode $promotionCode
@@ -426,9 +467,7 @@ class Cart
                 // don't use promotion quantity max if promotion type value off
                 if (Promotion::TYPE_VALUE_OFF === $promotion->getType()) {
                     $total -= $promotion->getDiscount();
-                } elseif ($cartRow->getQuantity() < $promotion->getQuantityMax()
-                    || null === $promotion->getQuantityMax()
-                ) {
+                } elseif ($cartRow->getQuantity() < $promotion->getQuantityMax()) {
                     $total -= $cartRow->getQuantity() * $promotion->getDiscount();
                 } else {
                     $total -= $promotion->getQuantityMax() * $promotion->getDiscount();

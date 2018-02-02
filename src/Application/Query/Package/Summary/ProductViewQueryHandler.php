@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2016 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -37,6 +37,7 @@ class ProductViewQueryHandler
             $cartRow->getQuantity(), // quantity
             $productViewQuery->product->getUnitPrice() * $cartRow->getQuantity(), // total
             $productViewQuery->sheet->getEvent()->getMode(),
+            $productViewQuery->product->getVat(),
             $productViewQuery->sheet->getEvent()->getCurrency()
         );
 
