@@ -136,6 +136,14 @@ class ParticipantPlanningFormatter
     }
 
     /**
+     * @param $event
+     */
+    public function resetPlanningHandlerForEvent($event)
+    {
+        $this->planningViewQueryHandler->resetForEvent($event);
+    }
+
+    /**
      * @param User[] $users
      * @param Event  $event
      */
