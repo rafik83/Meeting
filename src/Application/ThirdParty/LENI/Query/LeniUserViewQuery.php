@@ -30,10 +30,10 @@ class LeniUserViewQuery
      * @param User           $user
      * @param null|ExtraData $previousExtraData
      */
-    public function __construct(Event $event, User $user, ?ExtraData $previousExtraData = null)
+    public function __construct(Event $event, User $user, ?ExtraData $previousExtraData)
     {
         $this->event = $event;
-        $this->user  = $user;
+        $this->user = $user;
         $this->previousExtraData = $previousExtraData;
     }
 }
