@@ -3,10 +3,15 @@
 {% set config = {
     label: { (locale): 'template.object.country'|trans },
     type: 'titre',
-    style: ''
+    style: '',
+    placeholder: { (locale): '' },
+    hideLabel: false,
+    required: false,
+    tag: null,
+    tags: []
 }|merge(config|default({})) %}
 
-<div class="object" data-object="text" data-uid="{{ uid|default('__UID__') }}" data-config="{{ config|json_encode }}">
+<div class="object" data-object="country" data-uid="{{ uid|default('__UID__') }}" data-config="{{ config|json_encode }}">
     <ul class="block-buttons list-inline">
         <li class="object-title">{{ 'template.object.country'|trans }}</li>
         <li>
@@ -23,9 +28,61 @@
             <button class="btn btn-link configure-button">
                 <i class="glyphicon glyphicon-cog"></i>
             </button>
-            <div class="modal fade configure-modal" tabindex="-1" role="dialog">
-            </div>
         </li>
     </ul>
     <div data-bind="label">{{ config.label[locale] }}</div>
+    <div class="modal fade configure-modal" tabindex="-1" role="dialog">
+        <form action="#" method="GET">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title">{{ 'template.object.country'|trans }}</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <label class="form-label">{{ 'template.label.title'|trans }}</label>
+                            <input class="form-control" type="text" name="label" />
+                            {% if fallback|default(false) and locale != fallback %}
+                                <div class="help-block">{{ fallback|locale }} : {{ config.label[fallback] }}</div>
+                            {% endif %}
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">{{ 'template.placeholder.title'|trans }}</label>
+                            <textarea class="form-control" name="placeholder"></textarea>
+                            {% if fallback|default(false) and locale != fallback %}
+                                <div class="help-block">{{ fallback|locale }} : {{ config.placeholder[fallback] }}</div>
+                            {% endif %}
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">
+                                <input type="checkbox" name="required" />
+                                {{ 'template.required.title'|trans }}
+                            </label>
+                        </div>
+                        {% if isRegistrationTemplate is defined and registrationTemplateTagView is defined %}
+                            {{ include('AdminBundle:RegistrationTemplate:tagsSelect.html.twig', {
+                                'config': config,
+                                'registrationTemplateTagView': registrationTemplateTagView,
+                            }, false) }}
+                        {% else %}
+                            <div class="form-group">
+                                <label class="form-label">{{ 'template.object.tag'|trans }}</label>
+                                <select class="form-control" name="tag">
+                                    <option value=""></option>
+                                    {% for tag in sheet_tags %}
+                                        <option value="{{ tag }}">{{ ('template.tag.' ~ tag)|trans }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        {% endif %}
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">{{ 'template.action.close'|trans }}</button>
+                        <button type="button" class="btn btn-primary save-configuration">{{ 'template.action.save'|trans }}</button>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
 </div>
