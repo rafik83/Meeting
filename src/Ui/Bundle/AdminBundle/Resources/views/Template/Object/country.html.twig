@@ -60,22 +60,10 @@
                                 {{ 'template.required.title'|trans }}
                             </label>
                         </div>
-                        {% if isRegistrationTemplate is defined and registrationTemplateTagView is defined %}
-                            {{ include('AdminBundle:RegistrationTemplate:tagsSelect.html.twig', {
-                                'config': config,
-                                'registrationTemplateTagView': registrationTemplateTagView,
-                            }, false) }}
-                        {% else %}
-                            <div class="form-group">
-                                <label class="form-label">{{ 'template.object.tag'|trans }}</label>
-                                <select class="form-control" name="tag">
-                                    <option value=""></option>
-                                    {% for tag in sheet_tags %}
-                                        <option value="{{ tag }}">{{ ('template.tag.' ~ tag)|trans }}</option>
-                                    {% endfor %}
-                                </select>
-                            </div>
-                        {% endif %}
+                        {{ include('AdminBundle:RegistrationTemplate:tagsSelect.html.twig', {
+                            'config': config,
+                            'registrationTemplateTagView': registrationTemplateTagView,
+                        }, false) }}
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-default" data-dismiss="modal">{{ 'template.action.close'|trans }}</button>
