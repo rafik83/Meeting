@@ -10,11 +10,16 @@ account.update.avatar.title: 'Profile picture'
 account.update.company.title: 'Company / Organization'
 account.update.profile.title: Profile
 account.update.title: 'Edit my Account'
+agenda.availability.available_sheets: '{1} See available participant|]1,Inf[ See %availableSheets% available participants'
+agenda.availability.available_sheets_with_proposition: '{1}see a meeting request|]1,Inf[ see the %availableSheets% meeting requests'
+agenda.meeting.details: Details
+agenda.participant.view: 'Schedule of %participant%'
 agenda.title: 'My schedule'
 agenda.unavailability.add: 'Add an unavailability'
 agenda.unavailability.back: Back
 agenda.unavailability.confirmRemove: 'Confirm your absence'
 agenda.unavailability.remove: Remove
+availability.confirmation.action.add_unavailability: 'Add an unavailability'
 availability.confirmation.explanation.title: 'In order to have access to your meeting requests, please confirm your availability on your schedule.'
 availability.confirmation.title: 'Confirm your availabilities'
 'Bad credentials.': 'Bad credentials.'
@@ -25,6 +30,7 @@ catalog.action.meeting.request.approve: 'Received proposal'
 catalog.action.meeting.request.approved: 'Accepted request'
 catalog.action.meeting.request.back: Back
 catalog.action.meeting.request.create: 'Request a meeting'
+catalog.action.meeting.request.discussion: discussions
 catalog.action.meeting.request.pending: 'Pending request'
 catalog.action.meeting.request.refuse: 'Received proposal'
 catalog.action.meeting.request.show.refuse: 'Refused request'
@@ -47,8 +53,11 @@ catalog.mobile.filters.title: 'Participants'' catalogue'
 catalog.noResult: 'No result'
 catalog.noVisibleCategories: 'You can''t access to any participant''s category'
 catalog.noVisibleTypes: 'You can''t access to any participant''s type'
+catalog.preview.participant_positions_see_more: 'see more'
 catalog.search.no-filter-to-refine: 'No result'
 catalog.seeMore: 'See more'
+catalog.sheet.export.csv: Export
+catalog.sheet.result.total: '{0} No result {1} 1 result|]1,Inf[ %total% results'
 catalog.title: Catalogue
 common.backToPackage: 'Back to package'
 common.backToSheet: 'Back to sheet'
@@ -56,17 +65,59 @@ common.need_help: 'Need help'
 common.next: Next
 common.update: Modify
 common.validate: Validate
+error.403.content: 'Your are not allowed to reach this content.'
+error.403.title: 'Not allowed'
+error.404.content: 'This content is not available or not available any more.'
+error.404.title: 'This page cannot be found'
+error.500.content: 'We have been notified of it and we do all our best to correct it.'
+error.500.title: 'An error has occured'
+event.activateAccount.expired.explanation: 'Your invitation has expired, click on the button below to receive a new invitation'
+event.activateAccount.expired.resend: 'Receive a new invitation by email'
+event.activateAccount.expired.title: 'Your invitation has expired'
+event.activateAccount.resendToken.explanation: 'A new invitation has been sent to you by email. You can click on the included link to activate your account'
+event.activateAccount.resendToken.title: 'A new invitation has been sent'
+event.content.title: 'Terms of sale'
+event.happening.invitationCode.label: 'The event acces is subjected to invitation. Thank you for entering your invitation code.'
 event.info.close: Close
 event.info.contact: 'Useful information'
+event.invisible.label: Invisible
+event.meeting.listRequest.contact.export: 'Download my contacts'
 event.meeting.listRequest.filter.all: All
 event.meeting.listRequest.filter.propositions: 'Requests received only'
 event.meeting.listRequest.filter.requests: 'My requests'
+event.meeting.request.answering.closed: 'The answering to the meetings requests is closed'
 event.meeting.request.closed: 'The meeting requests are now closed'
+event.meeting.request.locked: 'Planning processing - the meetings requests are locked'
+event.meeting.request.transformIntoMeeting.error: 'The meeting cannot be schedule for lack of common availabilities'
+event.meeting.request.transformIntoMeeting.success: 'The meeting is scheduled for %participants% on the %date% at %time% : %spot%.'
+event.registration_closed: 'Registrations are closed. If you are registered please connect to your account.'
+event.registration_not_open: 'Registrations are not opened yet.'
+event.sheet.export.fields.event_name: 'Event name'
+event.sheet.export.fields.participant_email: 'Participant email'
+event.sheet.export.fields.participant_firstname: Firstname
+event.sheet.export.fields.participant_genre: gender
+event.sheet.export.fields.participant_lastname: lastname
+event.sheet.export.fields.participant_phone: 'phone number'
+event.sheet.export.fields.participant_position: Position
+event.sheet.export.fields.sheet_address: Adress
+event.sheet.export.fields.sheet_category: 'Category (SME, midcap company, start-up...)'
+event.sheet.export.fields.sheet_city: City
+event.sheet.export.fields.sheet_country: Country
+event.sheet.export.fields.sheet_employees: 'number of employees'
+event.sheet.export.fields.sheet_name: 'Sheet name ( Company/Organism)'
+event.sheet.export.fields.sheet_turnover: turnover
 event.sheet.export.fields.sheet_type: Type
+event.sheet.export.fields.sheet_website: website
+event.sheet.export.fields.sheet_zipcode: Zipcode
 event.sms.meeting_request.receive: '%event%: You have received a meeting request, see %link%'
 event.sms.receive_meeting_request.approved: '%event%: Your meeting request with %sheet% has been accepted. Meeting scheduled the %date% at %time% : %spot%, See %link%'
 event.sms.reminder.pending_meeting_request: '%eventTitle% : You have received %countPendingMeetingRequest% meeting requests, See %meetingRequestManagementUrl%'
 event.sms.sent_meeting_request.approved: '%event%: The meeting request with %sheet% has been accepted. Meeting scheduled the %date% at %time% : %spot%, See %link%'
+event.user_event_phone.validate.explanation: 'You will receive a four number code by sms to validate your phone number.'
+event.user_event_phone.validate.ignore: Ignore
+event.user_event_phone.validate.returnToPhone: 'Update my phone number'
+event.user_event_phone.validate.success: 'Your phone number is successfully confirmed'
+event.user_event_phone.validate.title: 'phone number validation'
 gender.man: Mr
 gender.woman: Mrs
 group.home.link.create_sheet: 'Create a profile'
