@@ -2,7 +2,7 @@ var Form = require('./../_Form'),
   TemplateTaggableObject = require('./../_TemplateTaggableObject');
 
 /**
- * PhoneObject
+ * CountryObject
  *
  * @param element
  * @param locale
