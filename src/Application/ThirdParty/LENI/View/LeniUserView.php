@@ -60,6 +60,9 @@ class LeniUserView
     /** @var bool */
     public $enabled;
 
+    /** @var bool */
+    public $paid;
+
     /**
      * @param int              $id
      * @param bool             $enabled
@@ -77,6 +80,7 @@ class LeniUserView
      * @param string           $locale
      * @param LeniPlanningView $planning
      * @param null|string      $leniId
+     * @param bool             $paid
      */
     public function __construct(
         int $id,
@@ -94,7 +98,8 @@ class LeniUserView
         string $country,
         string $locale,
         LeniPlanningView $planning,
-        ?string $leniId
+        ?string $leniId,
+        bool $paid
     ) {
         $this->id = $id;
         $this->sheetName = $sheetName;
@@ -112,5 +117,6 @@ class LeniUserView
         $this->locale = $locale;
         $this->leniId = $leniId;
         $this->enabled = $enabled;
+        $this->paid = $paid;
     }
 }

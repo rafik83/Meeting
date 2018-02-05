@@ -23,6 +23,7 @@ use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Model\User\Event\ExtraData;
+use Proximum\Vimeet\Domain\Order\Balance;
 use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
 use Proximum\Vimeet\Domain\Service\Category\CategoryNameResolver;
 use Proximum\Vimeet\Domain\Service\SheetsGroup\GroupNameResolver;
@@ -51,6 +52,9 @@ class LeniUserViewQueryHandler
     /** @var SheetInfoGuesser */
     private $sheetInfoGuesser;
 
+    /** @var Balance */
+    private $balance;
+
     /**
      * @param UserInfoGuesser              $userInfoGuesser
      * @param SheetInfoGuesser             $sheetInfoGuesser
@@ -59,6 +63,7 @@ class LeniUserViewQueryHandler
      * @param CategoryNameResolver         $categoryNameResolver
      * @param GroupNameResolver            $groupNameResolver
      * @param SheetRepositoryInterface     $sheetRepository
+     * @param Balance                      $balance
      */
     public function __construct(
         UserInfoGuesser $userInfoGuesser,
@@ -67,15 +72,17 @@ class LeniUserViewQueryHandler
         TypeNameResolver $typeNameResolver,
         CategoryNameResolver $categoryNameResolver,
         GroupNameResolver $groupNameResolver,
-        SheetRepositoryInterface $sheetRepository
+        SheetRepositoryInterface $sheetRepository,
+        Balance $balance
     ) {
-        $this->userInfoGuesser              = $userInfoGuesser;
-        $this->sheetInfoGuesser             = $sheetInfoGuesser;
+        $this->userInfoGuesser = $userInfoGuesser;
+        $this->sheetInfoGuesser = $sheetInfoGuesser;
         $this->participantPlanningFormatter = $participantPlanningFormatter;
-        $this->typeNameResolver             = $typeNameResolver;
-        $this->categoryNameResolver         = $categoryNameResolver;
-        $this->groupNameResolver            = $groupNameResolver;
-        $this->sheetRepository              = $sheetRepository;
+        $this->typeNameResolver = $typeNameResolver;
+        $this->categoryNameResolver = $categoryNameResolver;
+        $this->groupNameResolver = $groupNameResolver;
+        $this->sheetRepository = $sheetRepository;
+        $this->balance = $balance;
     }
 
     /**
@@ -142,7 +149,8 @@ class LeniUserViewQueryHandler
             $country,
             $query->user->getLocale(),
             $leniPlanning,
-            $this->getPreviousLeniUserId($query)
+            $this->getPreviousLeniUserId($query),
+            $this->isPaid($firstSheet)
         );
     }
 
@@ -183,5 +191,23 @@ class LeniUserViewQueryHandler
         $previousData = unserialize($query->previousExtraData->getValue(), ['allowed_classes' => false]);
 
         return $previousData[LeniConstants::LENI_COL_USER_ID] ?? null;
+    }
+
+    /**
+     * @param Sheet $sheet
+     *
+     * @return bool
+     */
+    private function isPaid(Sheet $sheet): bool
+    {
+        if (!$sheet->getPackage()->isPassable()) {
+            return true;
+        }
+
+        if (!$sheet->hasNotCancelledOrders()) {
+            return false;
+        }
+
+        return 0 === $this->balance->getRemainingToPay($sheet);
     }
 }

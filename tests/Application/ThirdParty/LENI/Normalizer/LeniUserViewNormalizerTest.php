@@ -56,7 +56,8 @@ class LeniUserViewNormalizerTest extends TestCase
                 ],
                 'Unallocated: Klingon'
             ),
-            null
+            null,
+            true
         );
 
         $expectedLeniUserViewSerialized = [
@@ -110,7 +111,8 @@ class LeniUserViewNormalizerTest extends TestCase
                 ],
                 'Unallocated: Klingon'
             ),
-            '25b850a8-aed5-e711-80e0-0cc47a4c19cf'
+            '25b850a8-aed5-e711-80e0-0cc47a4c19cf',
+            false
         );
 
         $expectedLeniUserViewSerialized = [

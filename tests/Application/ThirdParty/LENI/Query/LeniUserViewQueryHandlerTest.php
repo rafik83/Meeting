@@ -22,10 +22,12 @@ use Proximum\Vimeet\Application\ThirdParty\LENI\View\LeniPlanningView;
 use Proximum\Vimeet\Application\ThirdParty\LENI\View\LeniUserView;
 use Proximum\Vimeet\Domain\Model\Category;
 use Proximum\Vimeet\Domain\Model\Event;
+use Proximum\Vimeet\Domain\Model\Package;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\Type;
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Model\User\Event\ExtraData;
+use Proximum\Vimeet\Domain\Order\Balance;
 use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
 use Proximum\Vimeet\Domain\Service\Category\CategoryNameResolver;
 use Proximum\Vimeet\Domain\Service\SheetsGroup\GroupNameResolver;
@@ -61,6 +63,14 @@ class LeniUserViewQueryHandlerTest extends TestCase
         $groupNameResolver = $this->prophesize(GroupNameResolver::class);
         $categoryNameResolver = $this->prophesize(CategoryNameResolver::class);
         $sheetInfoGuesser = $this->prophesize(SheetInfoGuesser::class);
+        $balance = $this->prophesize(Balance::class);
+
+        $balance->getRemainingToPay($sheet1->reveal())->shouldBeCalled()->willReturn(0);
+
+        $package = $this->prophesize(Package::class);
+        $sheet1->getPackage()->shouldBeCalled()->willReturn($package->reveal());
+        $package->isPassable()->shouldBeCalled()->willReturn(true);
+        $sheet1->hasNotCancelledOrders()->shouldBeCalled()->willReturn(true);
 
         $sheetInfoGuesser->guessSheetInfos($sheet1->reveal())->shouldBeCalled()->willReturn(['sheet_country' => 'FR']);
 
@@ -111,7 +121,8 @@ class LeniUserViewQueryHandlerTest extends TestCase
             $typeNameResolver->reveal(),
             $categoryNameResolver->reveal(),
             $groupNameResolver->reveal(),
-            $sheetRepository->reveal()
+            $sheetRepository->reveal(),
+            $balance->reveal()
         );
         $result = $handler->handle(new LeniUserViewQuery($event->reveal(), $user->reveal(), null));
 
@@ -137,7 +148,8 @@ class LeniUserViewQueryHandlerTest extends TestCase
                 ],
                 'unallocated'
             ),
-            null
+            null,
+            true
         );
 
         $this->assertEquals($expected, $result);
@@ -167,6 +179,14 @@ class LeniUserViewQueryHandlerTest extends TestCase
         $groupNameResolver = $this->prophesize(GroupNameResolver::class);
         $categoryNameResolver = $this->prophesize(CategoryNameResolver::class);
         $sheetInfoGuesser = $this->prophesize(SheetInfoGuesser::class);
+        $balance = $this->prophesize(Balance::class);
+
+        $balance->getRemainingToPay($sheet1->reveal())->shouldBeCalled()->willReturn(999);
+
+        $package = $this->prophesize(Package::class);
+        $sheet1->getPackage()->shouldBeCalled()->willReturn($package->reveal());
+        $package->isPassable()->shouldBeCalled()->willReturn(true);
+        $sheet1->hasNotCancelledOrders()->shouldBeCalled()->willReturn(true);
 
         $sheetInfoGuesser->guessSheetInfos($sheet1->reveal())->shouldNotBeCalled();
 
@@ -217,7 +237,8 @@ class LeniUserViewQueryHandlerTest extends TestCase
             $typeNameResolver->reveal(),
             $categoryNameResolver->reveal(),
             $groupNameResolver->reveal(),
-            $sheetRepository->reveal()
+            $sheetRepository->reveal(),
+            $balance->reveal()
         );
 
         $extraData = new ExtraData(
@@ -252,7 +273,8 @@ class LeniUserViewQueryHandlerTest extends TestCase
                 ],
                 'unallocated'
             ),
-            'f93a5b28-12b0-e711-80e1-0cc47a02bf5b'
+            'f93a5b28-12b0-e711-80e1-0cc47a02bf5b',
+            false
         );
 
         $this->assertEquals($expected, $result);
