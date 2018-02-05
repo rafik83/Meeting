@@ -127,13 +127,13 @@ class PrepareLeniApiCallHandlerTest extends TestCase
         $user2FromEvent1->getId()->shouldBeCalled()->willReturn(12);
 
         $this->userRepository
-            ->findByEvent($this->event1->reveal())
+            ->findWithSheetByEvent($this->event1->reveal())
             ->shouldBeCalled()
             ->willReturn([$user1FromEvent1->reveal(), $user2FromEvent1->reveal()])
         ;
 
         $this->userRepository
-            ->findByEvent($this->event2->reveal())
+            ->findWithSheetByEvent($this->event2->reveal())
             ->shouldBeCalled()
             ->willReturn([])
         ;

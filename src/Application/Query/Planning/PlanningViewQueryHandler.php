@@ -258,7 +258,7 @@ class PlanningViewQueryHandler
         $this->assignAssignmentByUser($event, $this->assignmentRepository->findEnabledByEvent($event));
         $this->assignUnavailabilitiesByUser($event, $this->unavailabilityRepository->getByEvent($event));
         $this->assignHappeningsByUser($event, $this->happeningParticipationRepository->getByEvent($event));
-        $this->addEmptyForUsers($event, $this->userRepository->findByEvent($event));
+        $this->addEmptyForUsers($event, $this->userRepository->findWithEnabledSheetByEvent($event));
     }
 
     /**

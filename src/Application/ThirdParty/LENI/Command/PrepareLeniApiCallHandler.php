@@ -118,7 +118,7 @@ class PrepareLeniApiCallHandler
             }
 
             $this->participantPlanningFormatter->preloadPlanningHandlerForEvent($event);
-            $users = $this->userRepository->findByEvent($event);
+            $users = $this->userRepository->findWithSheetByEvent($event);
             $usersExtraData = $this->extraDataRepository->getExtraDataForEventAndName(
                 $event,
                 ExtraDataType::LENI_FINGERPRINT

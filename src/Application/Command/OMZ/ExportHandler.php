@@ -83,7 +83,7 @@ class ExportHandler
 
         $this->participantPlanningFormatter->preloadPlanningHandlerForEvent($event);
 
-        foreach ($this->userRepository->findByEvent($event) as $user) {
+        foreach ($this->userRepository->findWithEnabledSheetByEvent($event) as $user) {
             $userLocale = $event->getAvailableLocale($user->getLocale());
             $userSheets = $this->sheetRepository->getSheetsByUserAndEvent($user, $event);
 

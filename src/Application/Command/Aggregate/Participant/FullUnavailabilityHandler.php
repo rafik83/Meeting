@@ -41,7 +41,7 @@ class FullUnavailabilityHandler
         if ($fullUnavailability->onlyCatalog) {
             $users = $this->userRepository->findByEventAndInCatalog($fullUnavailability->event);
         } else {
-            $users = $this->userRepository->findByEvent($fullUnavailability->event);
+            $users = $this->userRepository->findWithEnabledSheetByEvent($fullUnavailability->event);
         }
 
         foreach ($users as $user) {

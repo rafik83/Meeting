@@ -101,7 +101,7 @@ class ExportHandlerTest extends TestCase
 
         $participantPlanningFormatter->preloadPlanningHandlerForEvent($event)->shouldBeCalled();
 
-        $userRepository->findByEvent($event)->shouldBeCalled()->willReturn([$user]);
+        $userRepository->findWithEnabledSheetByEvent($event)->shouldBeCalled()->willReturn([$user]);
 
         $participantPlanningFormatter->formatPlanningFromUserAndEventWithUnallocated($user, $event, $locale)
             ->shouldBeCalled()
