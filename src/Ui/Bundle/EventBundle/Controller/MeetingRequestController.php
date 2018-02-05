@@ -472,7 +472,6 @@ class MeetingRequestController extends Controller
      * Refuse a meeting request
      *
      * @param Request        $request
-     * @param EventDomain    $eventDomain
      * @param Sheet          $sheet
      * @param MeetingRequest $meetingRequest
      *
@@ -480,7 +479,6 @@ class MeetingRequestController extends Controller
      */
     public function refuseRequestAction(
         Request $request,
-        EventDomain $eventDomain,
         Sheet $sheet,
         MeetingRequest $meetingRequest
     ) {
@@ -519,11 +517,7 @@ class MeetingRequestController extends Controller
                 $this->renderView('EventBundle:MeetingRequest\Button:refusedProposition.html.twig', [
                     'sheet'          => $sheet,
                     'meetingRequest' => $meetingRequest,
-                    'isPhoneValidationRequired' => false,
-                    'isMeetingRequestUpdateLocked' => $eventDomain
-                        ->getEvent()
-                        ->getConfiguration()
-                        ->isMeetingRequestUpdateLocked(),
+                    'isPhoneValidationRequired' => false
                 ])
             ));
         } elseif ($isSubmitted && !$form->isValid()) {
