@@ -588,6 +588,7 @@ admin.product.availabilityCurrentMax: 'Disponibilité courante / max'
 admin.product.bought: 'Nombre achetés'
 admin.product.buyableUntil: 'Achetable jusqu''au'
 admin.product.deletableUntil: 'Supprimable jusqu''au'
+admin.product.id: Id
 admin.product.link: 'Catalogue de produits'
 admin.product.name: Nom
 admin.product.quantityMax: 'Qté max'
