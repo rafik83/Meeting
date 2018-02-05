@@ -1,12 +1,14 @@
 {% trans_default_domain 'templates' %}
 
 {% set config = {
+    type: 'titre',
+    style: '',
     label: { (locale): 'template.object.telephone'|trans },
     placeholder: { (locale): '' },
     hideLabel: false,
     required: false,
     tag: null,
-    tags: [],
+    tags: []
 }|merge(config|default({})) %}
 
 <div class="object" data-object="telephone" data-uid="{{ uid|default('__UID__') }}" data-config="{{ config|json_encode }}">
