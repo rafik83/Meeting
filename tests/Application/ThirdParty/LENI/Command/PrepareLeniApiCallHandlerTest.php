@@ -116,7 +116,10 @@ class PrepareLeniApiCallHandlerTest extends TestCase
         ;
 
         $this->participantPlanningFormatter->preloadPlanningHandlerForEvent($this->event1->reveal())->shouldBeCalled();
+        $this->participantPlanningFormatter->resetPlanningHandlerForEvent($this->event1->reveal())->shouldBeCalled();
+
         $this->participantPlanningFormatter->preloadPlanningHandlerForEvent($this->event2->reveal())->shouldBeCalled();
+        $this->participantPlanningFormatter->resetPlanningHandlerForEvent($this->event2->reveal())->shouldBeCalled();
 
         $user1FromEvent1 = $this->prophesize(User::class);
         $user1FromEvent1->getId()->shouldBeCalled()->willReturn(11);
