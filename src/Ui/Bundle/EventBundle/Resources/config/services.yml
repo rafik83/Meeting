@@ -363,7 +363,6 @@ services:
     event_listener.submit_sheet_mail_event_subscriber:
         class: Proximum\Vimeet\Ui\Bundle\MailBundle\EventListener\SubmitSheetMailEventSubscriber
         arguments:
-            - '@vimeet_infrastructure.application.components.sheet.sheet_info_guesser'
             - '@template.participant_info_guesser'
             - '@repository.admin_repository'
             - '@adapter.mailer_adapter'

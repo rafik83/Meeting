@@ -56,7 +56,8 @@ Proximum\Vimeet\Domain\Model\Sheet:
                 default: 'none_confirmed'
         commercialStatus:
             type: string
-            nullable: true
+            options:
+                default: 'none'
     manyToOne:
         event:
             targetEntity: Proximum\Vimeet\Domain\Model\Event
