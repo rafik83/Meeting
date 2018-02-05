@@ -1,5 +1,4 @@
-var Form = require('./../_Form'),
-  TemplateTaggableObject = require('./../_TemplateTaggableObject');
+var Form = require('./../_Form');
 
 /**
  * TextObject
@@ -23,7 +22,6 @@ TextObject.prototype.fill = function ()
     this.form.set('content', this.config.content[this.locale]);
     this.form.bind('content', this.config.content[this.locale]);
   }
-
   this.form.set('type', this.config.type);
 
 };
