@@ -362,6 +362,7 @@ package.summary.seeTermsOfSale: 'Voir les conditions générales de vente'
 package.summary.title: Récapitulatif
 package.summary.total.title: 'Forfait de participation'
 package.summary.totalOfSummary: Total
+package.summary.totalSubjetToVat: 'Total assujetti à %vat%%'
 package.summary.totalPlusVat: 'Total à régler'
 package.summary.totalVat: '+ TVA applicable de %vat%%'
 package.title: 'Forfait de participation'

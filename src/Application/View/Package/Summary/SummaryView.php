@@ -11,97 +11,69 @@
 namespace Proximum\Vimeet\Application\View\Package\Summary;
 
 
+use Proximum\Vimeet\Application\View\Package\Vat\VatListView;
 use Proximum\Vimeet\Domain\Package\Funnel\Funnel;
 
 class SummaryView
 {
-    /**
-     * @var GroupsView
-     */
+    /** @var GroupsView */
     public $groups;
 
-    /**
-     * @var PromotionCodesView
-     */
+    /** @var PromotionCodesView */
     public $promotionCodes;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     public $vatMode;
 
-    /**
-     * @var float
-     */
-    public $vat;
-
-    /**
-     * @var float
-     */
+    /** @var float */
     public $total;
 
-    /**
-     * @var float
-     */
-    public $totalVat = 0;
-
-    /**
-     * @var float
-     */
+    /** @var float */
     public $totalPlusVat;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     public $currency;
 
-    /**
-     * @var Funnel
-     */
+    /** @var Funnel */
     public $funnel;
 
-    /**
-     * @var bool
-     */
+    /** @var bool */
     public $mustPayVat;
+
+    /** @var VatListView */
+    public $vatListView;
 
     /**
      * @param Funnel             $funnel
      * @param GroupsView         $groupsView
      * @param PromotionCodesView $promotionCodesView
      * @param string             $vatMode
-     * @param float              $vat
      * @param float              $total
+     * @param float              $totalPlusVat
      * @param string             $currency
      * @param bool               $mustPayVat
+     * @param VatListView        $vatListView
      */
     public function __construct(
         Funnel $funnel,
         GroupsView $groupsView,
         PromotionCodesView $promotionCodesView,
         $vatMode,
-        $vat,
-        $total,
+        float $total,
+        float $totalPlusVat,
         $currency,
-        $mustPayVat
+        $mustPayVat,
+        VatListView $vatListView
     ) {
-        $this->funnel     = $funnel;
-        $this->groups     = $groupsView;
-        $this->vatMode    = $vatMode;
-        $this->vat        = $vat;
-        $this->total      = $total;
+        $this->funnel = $funnel;
+        $this->groups = $groupsView;
+        $this->vatMode = $vatMode;
+        $this->total = $total;
         $this->mustPayVat = $mustPayVat;
-        $this->currency   = $currency;
-
-        if ($mustPayVat) {
-            $this->totalVat     = ($total * $vat) / 100;
-            $this->totalPlusVat = $total + $this->totalVat;
-        } else {
-            $this->totalVat     = 0;
-            $this->totalPlusVat = $total;
-        }
-
+        $this->currency = $currency;
         $this->promotionCodes = $promotionCodesView;
+        $this->totalPlusVat = $totalPlusVat;
+        $this->vatListView = $vatListView;
     }
 
     /**

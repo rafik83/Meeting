@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2016 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -26,34 +26,22 @@ use Proximum\Vimeet\Domain\Repository\PromotionCodeRowRepositoryInterface;
  */
 class Converter
 {
-    /**
-     * @var OrderRepositoryInterface
-     */
+    /** @var OrderRepositoryInterface */
     private $orderRepository;
 
-    /**
-     * @var CartRowRepositoryInterface
-     */
+    /** @var CartRowRepositoryInterface */
     private $cartRowRepository;
 
-    /**
-     * @var \DateTimeInterface
-     */
+    /** @var \DateTimeInterface */
     private $datetime;
 
-    /**
-     * @var CartStepRepositoryInterface
-     */
+    /** @var CartStepRepositoryInterface */
     private $cartStepRepository;
 
-    /**
-     * @var PromotionCodeRowRepositoryInterface
-     */
+    /** @var PromotionCodeRowRepositoryInterface */
     private $promotionCodeRowRepository;
 
-    /**
-     * @var PromotionCodeRepositoryInterface
-     */
+    /** @var PromotionCodeRepositoryInterface */
     private $promotionCodeRepository;
 
     /**
@@ -85,10 +73,9 @@ class Converter
      *
      * @return Order
      */
-    public function toOrder(Cart $cart)
+    public function toOrder(Cart $cart): Order
     {
         $sheet = $cart->getSheet();
-
         $groupsData = $sheet->getPackage()->serializeData();
 
         $order = new Order(

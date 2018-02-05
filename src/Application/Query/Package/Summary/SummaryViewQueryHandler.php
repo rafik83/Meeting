@@ -73,10 +73,11 @@ class SummaryViewQueryHandler
             $groups,
             $promoCodes,
             $summaryViewQuery->sheet->getEvent()->getMode(),
-            $summaryViewQuery->sheet->getEvent()->getVat(),
             $total,
+            $vatListView->totalWithVat,
             $summaryViewQuery->sheet->getEvent()->getCurrency(),
-            $vatListView->vatApplicable
+            $vatListView->vatApplicable,
+            $vatListView
         );
     }
 }
