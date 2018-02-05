@@ -181,7 +181,8 @@ class PrepareLeniApiCallHandlerTest extends TestCase
                 'Unallocated'
             ),
             null,
-            true
+            true,
+            1337
         );
 
         $this
@@ -249,7 +250,8 @@ class PrepareLeniApiCallHandlerTest extends TestCase
                 'No unallocated'
             ),
             'whatever-id',
-            true
+            true,
+            null
         );
 
         $this

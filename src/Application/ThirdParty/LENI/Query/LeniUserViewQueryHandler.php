@@ -150,7 +150,8 @@ class LeniUserViewQueryHandler
             $query->user->getLocale(),
             $leniPlanning,
             $this->getPreviousLeniUserId($query),
-            $this->isPaid($firstSheet)
+            $this->isPaid($firstSheet),
+            $this->getParticipantProductId($query->user, $sheets)
         );
     }
 
@@ -209,5 +210,24 @@ class LeniUserViewQueryHandler
         }
 
         return 0 === $this->balance->getRemainingToPay($sheet);
+    }
+
+    /**
+     * @param User    $user
+     * @param Sheet[] $sheets
+     *
+     * @return int|null
+     */
+    private function getParticipantProductId(User $user, array $sheets): ?int
+    {
+        foreach ($sheets as $sheet) {
+            $participant = $sheet->getUserParticipant($user);
+
+            if (null !== $participant && null !== $participant->getParticipantProduct()) {
+                return $participant->getParticipantProduct()->getId();
+            }
+        }
+
+        return null;
     }
 }

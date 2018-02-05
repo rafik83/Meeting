@@ -23,6 +23,8 @@ use Proximum\Vimeet\Application\ThirdParty\LENI\View\LeniUserView;
 use Proximum\Vimeet\Domain\Model\Category;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Package;
+use Proximum\Vimeet\Domain\Model\Participant;
+use Proximum\Vimeet\Domain\Model\Product;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\Type;
 use Proximum\Vimeet\Domain\Model\User;
@@ -114,6 +116,12 @@ class LeniUserViewQueryHandlerTest extends TestCase
             ->shouldBeCalled()
             ->willReturn(new FormattedPlanningView(['day1', 'day2'], 'unallocated'));
 
+        $participant = $this->prophesize(Participant::class);
+        $participantProduct = $this->prophesize(Product::class);
+        $participantProduct->getId()->shouldBeCalled()->willReturn(1337);
+        $participant->getParticipantProduct()->willReturn($participantProduct->reveal());
+        $sheet1->getUserParticipant($user->reveal())->shouldBeCalled()->willReturn($participant->reveal());
+
         $handler = new LeniUserViewQueryHandler(
             $userInfoGuesser->reveal(),
             $sheetInfoGuesser->reveal(),
@@ -149,7 +157,8 @@ class LeniUserViewQueryHandlerTest extends TestCase
                 'unallocated'
             ),
             null,
-            true
+            true,
+            1337
         );
 
         $this->assertEquals($expected, $result);
@@ -230,6 +239,10 @@ class LeniUserViewQueryHandlerTest extends TestCase
             ->shouldBeCalled()
             ->willReturn(new FormattedPlanningView(['day1', 'day2'], 'unallocated'));
 
+        $participant = $this->prophesize(Participant::class);
+        $participant->getParticipantProduct()->willReturn(null);
+        $sheet1->getUserParticipant($user->reveal())->shouldBeCalled()->willReturn($participant->reveal());
+
         $handler = new LeniUserViewQueryHandler(
             $userInfoGuesser->reveal(),
             $sheetInfoGuesser->reveal(),
@@ -274,7 +287,8 @@ class LeniUserViewQueryHandlerTest extends TestCase
                 'unallocated'
             ),
             'f93a5b28-12b0-e711-80e1-0cc47a02bf5b',
-            false
+            false,
+            null
         );
 
         $this->assertEquals($expected, $result);
