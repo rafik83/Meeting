@@ -37,15 +37,15 @@ class MergerTest extends TestCase
         $participant = Product::createParticipant($event, 'participant', 1250, 20, 20);
         $option      = Product::createOption($event, 'option', '', 99, 20, 50, 10, 20, true);
 
-
         // Setup
         $orderOne = new Order($sheet, '[]', $datetime->modify('-5 day'));
-        $row = new Order\Row($orderOne, 1, $plan);
+        $row = new Order\Row($orderOne, 1, 20, $plan);
         $orderOne->addRow($row);
-        $orderOne->addRow(new Order\Row($orderOne, 2, $participant));
-        $orderOne->addRow(new Order\Row($orderOne, 1, $option));
+        $orderOne->addRow(new Order\Row($orderOne, 2, 20, $participant));
+        $orderOne->addRow(new Order\Row($orderOne, 1, 20, $option));
 
         $rowToRemove = $this->prophesize(Row::class);
+        $rowToRemove->getVatRate()->shouldBeCalled()->willReturn(20);
         $rowToRemove->getQuantity()->shouldBeCalled()->willReturn(0);
         $rowToRemove->hasParentRow()->shouldBeCalled()->willReturn(true);
         $rowToRemove->getParentRow()->shouldBeCalled()->willReturn($row);
@@ -62,8 +62,8 @@ class MergerTest extends TestCase
         $sheet->addOrder($orderOne);
 
         $orderTwo = new Order($sheet, '[]', $datetime->modify('-2 day'));
-        $orderTwo->addRow(new Order\Row($orderTwo, -1, $participant));
-        $orderTwo->addRow(new Order\Row($orderTwo, 3, $option));
+        $orderTwo->addRow(new Order\Row($orderTwo, -1, 20, $participant));
+        $orderTwo->addRow(new Order\Row($orderTwo, 3, 20, $option));
         $sheet->addOrder($orderTwo);
 
         $orderMerger = new Merger();

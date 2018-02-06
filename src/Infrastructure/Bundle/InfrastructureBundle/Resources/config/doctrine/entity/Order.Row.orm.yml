@@ -20,6 +20,8 @@ Proximum\Vimeet\Domain\Model\Order\Row:
             nullable: true
         price:
             type: float
+        vatRate:
+            type: float
     manyToOne:
         order:
             targetEntity: Proximum\Vimeet\Domain\Model\Order

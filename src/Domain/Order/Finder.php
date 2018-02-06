@@ -20,7 +20,7 @@ class Finder
      *
      * @return bool
      */
-    public static function isAllowedToFind(Admin $admin)
+    public static function isAllowedToFind(Admin $admin): bool
     {
         return !$admin->isPartner();
     }
@@ -31,7 +31,7 @@ class Finder
      *
      * @return bool
      */
-    public static function isAllowedToAccess(Admin $admin, Order $order)
+    public static function isAllowedToAccess(Admin $admin, Order $order): bool
     {
         if (!self::isAllowedToFind($admin)) {
             return false;

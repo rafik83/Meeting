@@ -90,9 +90,12 @@ class Converter
         }
 
         foreach ($cart->getPromotionCodeRows() as $promotionCodeRow) {
-            $order->addPromotionCode(
-                $this->convertToPromotionCode($order, $cart, $promotionCodeRow)
-            );
+            $promotionCodeRows = $this->convertToPromotionCode($order, $cart, $promotionCodeRow);
+
+            foreach ($promotionCodeRows as $promotionCodeRow) {
+                $order->addPromotionCode($promotionCodeRow);
+            }
+
             $this->decrementStockPromotionCode($promotionCodeRow->getPromotionCode());
         }
 
@@ -108,7 +111,7 @@ class Converter
      *
      * @return Order\Row
      */
-    private function convertToRow(Order $order, CartRow $cartRow)
+    private function convertToRow(Order $order, CartRow $cartRow): Order\Row
     {
         $group   = $order->getSheet()->getPackage()->getGroupOfProduct($cartRow->getProduct());
         $groupId = null;
@@ -127,6 +130,7 @@ class Converter
         return new Order\Row(
             $order,
             $cartRow->getQuantity(),
+            $cartRow->getProduct()->getVat(),
             $cartRow->getProduct(),
             $groupId
         );
@@ -137,23 +141,31 @@ class Converter
      * @param Cart             $cart
      * @param PromotionCodeRow $promotionCodeRow
      *
-     * @return Order\PromotionCode
+     * @return Order\PromotionCode[]
      */
-    private function convertToPromotionCode(Order $order, Cart $cart, PromotionCodeRow $promotionCodeRow)
+    private function convertToPromotionCode(Order $order, Cart $cart, PromotionCodeRow $promotionCodeRow): array
     {
-        $discount = $cart->getDiscount($promotionCodeRow->getPromotionCode());
+        $promotionCodeRows = [];
+        foreach ($promotionCodeRow->getPromotionCode()->getPromotions() as $promotion) {
+            $discount = $cart->getDiscountForProduct($promotionCodeRow->getPromotionCode(), $promotion->getProduct());
 
-        return new Order\PromotionCode(
-            $order,
-            $promotionCodeRow->getPromotionCode(),
-            $discount
-        );
+            if ($discount < 0) {
+                $promotionCodeRows[] =  new Order\PromotionCode(
+                    $order,
+                    $promotionCodeRow->getPromotionCode(),
+                    $discount,
+                    $promotion->getProduct()->getVat()
+                );
+            }
+        }
+
+        return $promotionCodeRows;
     }
 
     /**
      * @param Cart $cart
      */
-    private function emptyCart(Cart $cart)
+    private function emptyCart(Cart $cart): void
     {
         $this->cartRowRepository->deleteForSheet($cart->getSheet());
         $this->cartStepRepository->deleteForSheet($cart->getSheet());
@@ -163,7 +175,7 @@ class Converter
     /**
      * @param PromotionCode $promotionCode
      */
-    private function decrementStockPromotionCode(PromotionCode $promotionCode)
+    private function decrementStockPromotionCode(PromotionCode $promotionCode): void
     {
         $stock = $promotionCode->getStock();
 

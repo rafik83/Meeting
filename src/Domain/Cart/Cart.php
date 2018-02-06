@@ -380,7 +380,7 @@ class Cart
      *
      * @return bool
      */
-    public function isCartRowPositive(PromotionCode $promotionCode)
+    public function isCartRowPositive(PromotionCode $promotionCode): bool
     {
         foreach ($promotionCode->getPromotions() as $promotion) {
             if ($cartRow = $this->getCartRowForProduct($promotion->getProduct())) {

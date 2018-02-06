@@ -13,6 +13,7 @@ namespace Proximum\Vimeet\Tests\Application\Query\Order\OrderVat;
 use PHPUnit\Framework\TestCase;
 use Proximum\Vimeet\Application\Query\Order\OrderVat\OrderVatViewQuery;
 use Proximum\Vimeet\Application\Query\Order\OrderVat\OrderVatViewQueryHandler;
+use Proximum\Vimeet\Application\View\Package\Vat\VatListView;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Order;
 use Proximum\Vimeet\Domain\Model\Sheet;
@@ -58,6 +59,7 @@ class OrderVatViewQueryHandlerTest extends TestCase
             100000,
             20000,
             120000,
+            $vatListView,
             $now,
             null
         );

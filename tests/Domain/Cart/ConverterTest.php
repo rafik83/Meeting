@@ -80,9 +80,9 @@ class ConverterTest extends TestCase
 
         $groupsData    = '';
         $order         = new Order($sheet, $groupsData, $datetime);
-        $planOrderRow  = new Order\Row($order, 1, $plan);
-        $chairOrderRow = new Order\Row($order, 2, $chair);
-        $promotionCodeOrderRow = new Order\PromotionCode($order, $promotionCode, -100);
+        $planOrderRow  = new Order\Row($order, 1, 20, $plan);
+        $chairOrderRow = new Order\Row($order, 2, 20, $chair);
+        $promotionCodeOrderRow = new Order\PromotionCode($order, $promotionCode, -100, 20);
         $order->addRow($planOrderRow);
         $order->addRow($chairOrderRow);
         $order->addPromotionCode($promotionCodeOrderRow);

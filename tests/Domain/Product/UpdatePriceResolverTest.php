@@ -117,14 +117,11 @@ class UpdatePriceResolverTest extends TestCase
         $cartRowRepository  = $this->prophesize(CartRowRepositoryInterface::class);
         $cartRowRepository->findByProduct($product)->shouldBeCalled()->willReturn([]);
         $orderRowRepository = $this->prophesize(RowRepositoryInterface::class);
-        $orderRowRepository->findByProduct($product)->shouldBeCalled()->willReturn([new Row(
-            $order,
-            2,
-            $product,
-            1,
-            'label',
-            100
-        )]);
+        $orderRowRepository
+            ->findByProduct($product)
+            ->shouldBeCalled()
+            ->willReturn([new Row($order, 2, 20, $product, 1, 'label', 100)])
+        ;
 
         // Resolve
         $updatePriceResolver = new UpdatePriceResolver(

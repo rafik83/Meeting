@@ -119,7 +119,7 @@ class AgendaSheetViewQueryHandler
 
         $agendaSheetIndicatorView = new AgendaSheetIndicatorView(
             $indicatorView->maxMeetingAvailable,
-            count($meetings)
+            \count($meetings)
         );
 
         $participants = [];

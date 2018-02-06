@@ -53,5 +53,6 @@ Proximum\Vimeet\Domain\Model\Order\Row:
         order: '@order_invoiced'
         quantity: 1
         price: 1690
+        vatRate: 20
         data: '{"id":10,"type":"plan","translations":{"fr":{"title":"Formule B2B Meeting","heading":"Pas de stand","description":"Vous changez de lieu \u00e0 chaque rendez-vous.","addon":""},"en":{"title":"B2B Meeting Formula","heading":"No booth","description":"You have to move at each appointment.","addon":""}},"productsIncluded":[{"quantity":2,"included":{"id":12,"type":"participant","translations":{"fr":{"title":"Participant suppl\u00e9mentaire","heading":"","description":"Accompagnant le premier sur un m\u00eame agenda incluant une entr\u00e9e \u00e0 la convention d\u2019affaire, acc\u00e8s illimit\u00e9 \u00e0 la pause caf\u00e9 et aux conf\u00e9rences.","addon":""},"en":{"title":"Extra participant","heading":"","description":"Accompanying the first one on the same agenda including an entry to selected business conventions and unlimited access to coffee breaks and conferences.","addon":""}},"productsIncluded":[]}}]}'
         product: '@product_plan_1_rdv_carnot'

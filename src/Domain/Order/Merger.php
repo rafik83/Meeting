@@ -1,9 +1,9 @@
 <?php
 
 /*
- * This file is part of the vimeet project.
+ * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2016 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -23,20 +23,20 @@ class Merger
      *
      * @throws OrderMergerException
      */
-    public function merge(array $orders)
+    public function merge(array $orders): Order
     {
-        if (count($orders) === 0) {
-            throw new OrderMergerException();
+        if (\count($orders) === 0) {
+            throw new OrderMergerException('There is no order to merge');
         }
 
         /** @var Order|false $firstOrder */
         $firstOrder = reset($orders);
 
         if (false === $firstOrder) {
-            throw new OrderMergerException();
+            throw new OrderMergerException('There is no order to merge');
         }
 
-        if (count($orders) === 1) {
+        if (\count($orders) === 1) {
             return $firstOrder;
         }
 
@@ -66,12 +66,14 @@ class Merger
      * @param Sheet $sheet
      *
      * @return null|Order
+     *
+     * @throws OrderMergerException
      */
     public function getMergedOrders(Sheet $sheet): ?Order
     {
         $orders = $sheet->getNotCancelledOrders();
 
-        if (0 === count($orders)) {
+        if (0 === \count($orders)) {
             return null;
         }
 
@@ -82,7 +84,7 @@ class Merger
      * @param Order $orderMerged
      * @param Order $order
      */
-    private function mergeProduct(Order $orderMerged, Order $order)
+    private function mergeProduct(Order $orderMerged, Order $order): void
     {
         foreach ($order->getRowsWithoutParent() as $row) {
             $orderMergedRow = $orderMerged->getRowForProduct($row->getProduct());
@@ -105,7 +107,8 @@ class Merger
                     $parentRow,
                     $row->getLabel(),
                     $row->getQuantity(),
-                    $row->getPrice()
+                    $row->getPrice(),
+                    $row->getVatRate()
                 );
                 $orderMerged->addRow($cloneRow);
             }
@@ -116,7 +119,7 @@ class Merger
      * @param Order $orderMerged
      * @param Order $order
      */
-    private function mergePromotionCode(Order $orderMerged, Order $order)
+    private function mergePromotionCode(Order $orderMerged, Order $order): void
     {
         foreach ($order->getPromotionCodes() as $promotionCode) {
             if (!$orderMerged->hasPromotionCode($promotionCode)) {

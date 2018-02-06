@@ -39,11 +39,11 @@ class DiscountCalculatorTest extends TestCase
         $promotionCode->setPromotion($product2, Promotion::TYPE_PERCENT_OFF, 50, null);
         $promotionCode->setPromotion($product3, Promotion::TYPE_VALUE_OFF, 100, null);
         $order = new Order($sheet->reveal(), '', $dateTime);
-        $row1 = new Order\Row($order, 1, $product1, null, null, 120, null);
-        $row2 = new Order\Row($order, 2, $product2, null, null, 200, null);
-        $row3 = new Order\Row($order, 1, $product3, null, null, 150, null);
-        $row4 = new Order\Row($order, 2, $product4, null, null, 160, null);
-        $promotionCodeRow = new Order\PromotionCode($order, $promotionCode, 100);
+        $row1 = new Order\Row($order, 1, 20, $product1, null, null, 120, null);
+        $row2 = new Order\Row($order, 2, 20, $product2, null, null, 200, null);
+        $row3 = new Order\Row($order, 1, 20, $product3, null, null, 150, null);
+        $row4 = new Order\Row($order, 2, 20, $product4, null, null, 160, null);
+        $promotionCodeRow = new Order\PromotionCode($order, $promotionCode, -100, 20);
         $order->addRow($row1);
         $order->addRow($row2);
         $order->addRow($row3);

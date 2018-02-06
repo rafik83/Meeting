@@ -88,7 +88,7 @@ class IndicatorCalculator
             $this->slots = $this->slotRepository->findByEvent($sheet->getEvent());
         }
 
-        $participantsCount       = $sheet->countParticipant();
+        $participantsCount       = $sheet->countParticipants();
         $pendingPropositionCount = $this->requestRepository->countPendingPropositionReceivedBySheet($sheet);
         $planningQuantity        = $this->planningQuantityGuesser->guess($sheet);
         $unavailabilities        = [];
@@ -130,10 +130,10 @@ class IndicatorCalculator
             }
         }
 
-        $unavailabilitiesCount = count($unavailabilities);
+        $unavailabilitiesCount = \count($unavailabilities);
 
         return new IndicatorView(
-            count($this->slotsUsable),
+            \count($this->slotsUsable),
             $participantsCount,
             $unavailabilitiesCount,
             $planningQuantity,

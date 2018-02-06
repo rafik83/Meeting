@@ -14,9 +14,7 @@ use Proximum\Vimeet\Domain\Model\Order;
 
 class AddRowToGroup extends AbstractAddRow
 {
-    /**
-     * @var int
-     */
+    /** @var int */
     public $groupId;
 
     /**

@@ -470,6 +470,7 @@ admin.order_edit.remove_custom_row: ''
 admin.order_edit.total.withoutVAT: 'Total HT'
 admin.order_edit.total.withVAT: 'Total TTC'
 admin.order_edit.update_line: 'Modifier une ligne'
+admin.order_edit.totalByVAT: 'Total assujetti à %vat%%'
 admin.order_edit.VAT: TVA
 admin.order.cancelled: Annulée
 admin.order.createdAt: 'Créée le'

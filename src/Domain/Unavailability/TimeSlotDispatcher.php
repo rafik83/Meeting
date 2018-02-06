@@ -79,7 +79,7 @@ class TimeSlotDispatcher
         $users = $this->userRepository->findByEventWithoutDispatch($mass->getEvent(), $mass);
 
         foreach ($users as $index => $user) {
-            $timeSlot   = $timeSlots[$index % count($timeSlots)];
+            $timeSlot   = $timeSlots[$index % \count($timeSlots)];
             $assignment = new MassAssignment(
                 $mass,
                 $user,
