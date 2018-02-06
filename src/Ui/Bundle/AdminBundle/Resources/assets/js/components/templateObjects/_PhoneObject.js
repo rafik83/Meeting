@@ -26,7 +26,6 @@ PhoneObject.prototype.fill = function ()
   this.form.set('label', this.config.label[this.locale]);
   this.form.set('placeholder', this.config.placeholder[this.locale]);
   this.form.set('required', this.config.required);
-  this.form.set('tag', this.config.tag);
   this.form.set('tags', this.config.tags);
 
   this.form.bind('label', this.config.label[this.locale]);
@@ -41,7 +40,6 @@ PhoneObject.prototype.save = function ()
   this.config.label[this.locale]       = this.form.get('label');
   this.config.placeholder[this.locale] = this.form.get('placeholder');
   this.config.required                 = this.form.get('required');
-  this.config.tag                      = this.form.get('tag');
   this.config.tags                     = this.form.get('tags');
 
   this.form.bind('label', this.config.label[this.locale]);
