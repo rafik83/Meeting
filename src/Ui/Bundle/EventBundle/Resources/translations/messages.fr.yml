@@ -427,6 +427,7 @@ summary.promotionCode.free: Offert
 summary.promotionCode.title: 'Offres de réductions'
 summary.total: 'Total de la commande'
 summary.totalToPay: 'Total à régler'
+summary.totalByVat: 'Total assujetti à %vatRate%%'
 summary.vatRate: 'TVA applicable %vatRate%%'
 unavailability.title: Indisponible
 user_event.confirm.agenda.already_confirmed: 'Agenda déjà confirmé'

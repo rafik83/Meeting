@@ -12,8 +12,6 @@ namespace Proximum\Vimeet\Application\Query\Order\OrderVat;
 
 use Proximum\Vimeet\Application\View\Package\Vat\VatListView;
 use Proximum\Vimeet\Application\View\Package\Vat\VatView;
-use Proximum\Vimeet\Domain\Model\Order\PromotionCode;
-use Proximum\Vimeet\Domain\Model\Order\Row;
 use Proximum\Vimeet\Domain\Money\AmountFormatter;
 use Proximum\Vimeet\Domain\Package\Exception\MissingBillingInfoException;
 use Proximum\Vimeet\Domain\Package\Specification\VatApplicable;
@@ -48,11 +46,21 @@ class OrderVatViewQueryHandler
 
         $vatViews = [];
         foreach ($order->getRows() as $row) {
-            $this->addToVatViews($vatViews, $row, $order->getVatMode());
+            $this->addToVatViews(
+                $vatViews,
+                $row->getVatRate(),
+                $row->getPrice() * $row->getQuantity(),
+                $order->getVatMode()
+            );
         }
 
         foreach ($order->getPromotionCodes() as $promotionCodeRow) {
-            $this->addToVatViews($vatViews, $promotionCodeRow, $order->getVatMode());
+            $this->addToVatViews(
+                $vatViews,
+                $promotionCodeRow->getVatRate(),
+                $promotionCodeRow->getPrice(),
+                $order->getVatMode()
+            );
         }
 
         $vatAmount = 0;
@@ -90,18 +98,18 @@ class OrderVatViewQueryHandler
     }
 
     /**
-     * @param array             $vatViews
-     * @param Row|PromotionCode $row
-     * @param string            $vatMode
+     * @param array  $vatViews
+     * @param float  $vatRate
+     * @param float  $price
+     * @param string $vatMode
      */
-    private function addToVatViews(array &$vatViews, $row, string $vatMode): void
+    private function addToVatViews(array &$vatViews, float $vatRate, float $price, string $vatMode): void
     {
-        $index = 'vat_' . $row->getVatRate();
+        $index = 'vat_' . $vatRate;
         if (!isset($vatViews[$index])) {
-            $vatViews[$index] = new VatView($row->getVatRate(), $vatMode, 0, 0);
+            $vatViews[$index] = new VatView($vatRate, $vatMode, 0, 0);
         }
 
-        $price = AmountFormatter::decimalToCentsAmount($row->getPrice());
-        $vatViews[$index]->addToTotal($price);
+        $vatViews[$index]->addToTotal(AmountFormatter::decimalToCentsAmount($price));
     }
 }

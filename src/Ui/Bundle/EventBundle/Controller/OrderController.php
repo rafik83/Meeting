@@ -20,6 +20,7 @@ use Proximum\Vimeet\Domain\Payment\Mode;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\ParamConverter\EventDomain;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Security\SheetVoter;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -48,7 +49,7 @@ class OrderController extends Controller
             ->handle(new PaymentConditionsViewQuery($sheet))
         ;
 
-        $canPayIfRemaining = in_array(Mode::PAYMENT_PAYPAL, $paymentConditionsView->paymentModes, true);
+        $canPayIfRemaining = \in_array(Mode::PAYMENT_PAYPAL, $paymentConditionsView->paymentModes, true);
 
         return $this->render('EventBundle:Order:list.html.twig', [
             'event'             => $eventDomain->getEvent(),
