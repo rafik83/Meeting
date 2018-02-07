@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2016 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -25,6 +25,7 @@ use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Payment\PaymentChoiceType;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Payment\PaymentChoiceWithDepositType;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\ParamConverter\EventDomain;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Security\SheetVoter;
+use Proximum\Vimeet\Ui\Bundle\EventBundle\ValueResolver\UserDomain;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -36,19 +37,26 @@ class PaymentController extends Controller
      * @param Request     $request
      * @param EventDomain $eventDomain
      * @param Sheet       $sheet
+     * @param UserDomain  $userDomain
      *
      * @return Response
+     * @throws \Proximum\Vimeet\Domain\Package\Exception\MissingBillingInfoException
      */
-    public function paymentChoiceAction(Request $request, EventDomain $eventDomain, Sheet $sheet)
-    {
+    public function paymentChoiceAction(
+        Request $request,
+        EventDomain $eventDomain,
+        Sheet $sheet,
+        UserDomain $userDomain
+    ): Response {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
         $this->denyAccessUnlessGranted(SheetVoter::EDIT, $sheet);
 
         $authorize = $this->hasPackageCompletedPaymentFlash();
         $funnel    = $this->get('package.funnel.funnel_factory')->create($sheet, $request->getLocale());
+        $user = $userDomain->getUser();
 
         if ($eventDomain->getEvent() !== $sheet->getEvent()
-            || !$sheet->hasUser($this->getUser())
+            || !$sheet->hasUser($user)
             || !$sheet->getPackage()->isPassable()
         ) {
             throw $this->createNotFoundException('This page is not accessible by this user');
@@ -64,7 +72,7 @@ class PaymentController extends Controller
 
         // If nothing to pay, create the order
         if ($total <= 0) {
-            $create = new Create($sheet, $this->getUser());
+            $create = new Create($sheet, $user);
             $this->get('tactician.commandbus')->handle($create);
 
             return $this->redirectToRoute('event_order_list', [
@@ -81,7 +89,7 @@ class PaymentController extends Controller
 
         //Create order from cart and redirect if total payment is negative or zero
         if ($total <= 0) {
-            $this->get('tactician.commandbus')->handle(new Create($sheet, $this->getUser()));
+            $this->get('tactician.commandbus')->handle(new Create($sheet, $user));
 
             return $this->redirectToRoute('event_order_list', [
                 'sheet' => $sheet->getId(),
@@ -89,12 +97,12 @@ class PaymentController extends Controller
         }
 
         if ($depositAllowed) {
-            $paymentChoice = new ChoiceWithDeposit($sheet, $this->getUser());
+            $paymentChoice = new ChoiceWithDeposit($sheet, $user);
             $form          = $this->createForm(PaymentChoiceWithDepositType::class, $paymentChoice, [
                 'paymentConditionsView' => $paymentConditionsView,
             ]);
         } else {
-            $paymentChoice = new Choice($sheet, $this->getUser());
+            $paymentChoice = new Choice($sheet, $user);
             $form          = $this->createForm(PaymentChoiceType::class, $paymentChoice, [
                 'paymentConditionsView' => $paymentConditionsView,
             ]);

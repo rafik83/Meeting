@@ -43,30 +43,31 @@ class OrderVatViewQueryHandler
 
         $isVatApplicable = $this->vatApplicable->onSheet($order->getSheet());
         $totalWithoutVat = AmountFormatter::decimalToCentsAmount($order->getTotalWithoutVat());
-
-        $vatViews = [];
-        foreach ($order->getRows() as $row) {
-            $this->addToVatViews(
-                $vatViews,
-                $row->getVatRate(),
-                $row->getPrice() * $row->getQuantity(),
-                $order->getVatMode()
-            );
-        }
-
-        foreach ($order->getPromotionCodes() as $promotionCodeRow) {
-            $this->addToVatViews(
-                $vatViews,
-                $promotionCodeRow->getVatRate(),
-                $promotionCodeRow->getPrice(),
-                $order->getVatMode()
-            );
-        }
-
         $vatAmount = 0;
 
-        foreach ($vatViews as $vatView) {
-            $vatAmount += $vatView->totalVat;
+        $vatViews = [];
+        if (true === $isVatApplicable) {
+            foreach ($order->getRows() as $row) {
+                $this->addToVatViews(
+                    $vatViews,
+                    $row->getVatRate(),
+                    $row->getPrice() * $row->getQuantity(),
+                    $order->getVatMode()
+                );
+            }
+
+            foreach ($order->getPromotionCodes() as $promotionCodeRow) {
+                $this->addToVatViews(
+                    $vatViews,
+                    $promotionCodeRow->getVatRate(),
+                    $promotionCodeRow->getPrice(),
+                    $order->getVatMode()
+                );
+            }
+
+            foreach ($vatViews as $vatView) {
+                $vatAmount += $vatView->totalVat;
+            }
         }
 
         $totalWithVat = $vatAmount + $totalWithoutVat;

@@ -670,7 +670,7 @@ event_order_summary_total:
     requirements:
         sheet: \d+
     methods: [GET]
-    defaults: { _controller: EventBundle:Order:summaryTotal }
+    defaults: { _controller: Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Order\SummaryTotalAction }
 
 # This route is available publicly, without authentication
 event_invoice_show:

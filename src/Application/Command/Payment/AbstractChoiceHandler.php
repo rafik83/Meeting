@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2016 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -15,7 +15,6 @@ use Proximum\Vimeet\Application\Event\Order\OrderConfirmEvent;
 use Proximum\Vimeet\Application\Event\Transaction\TransactionCreatedEvent;
 use Proximum\Vimeet\Domain\Cart;
 use Proximum\Vimeet\Domain\Model\Transaction;
-use Proximum\Vimeet\Domain\Package\Exception\MissingBillingInfoException;
 use Proximum\Vimeet\Domain\Payment\Mode;
 use Proximum\Vimeet\Domain\Payment\TotalToPay;
 use Proximum\Vimeet\Domain\Repository\TransactionRepositoryInterface;
@@ -23,34 +22,22 @@ use Proximum\Vimeet\Infrastructure\Adapter\DelayedEventDispatcher;
 
 abstract class AbstractChoiceHandler
 {
-    /**
-     * @var Cart\Converter
-     */
+    /** @var Cart\Converter */
     protected $converter;
 
-    /**
-     * @var Cart\CartManager
-     */
+    /** @var Cart\CartManager */
     protected $cartManager;
 
-    /**
-     * @var TotalToPay
-     */
+    /** @var TotalToPay */
     protected $totalToPay;
 
-    /**
-     * @var \DateTimeInterface
-     */
+    /** @var \DateTimeInterface */
     protected $datetime;
 
-    /**
-     * @var TransactionRepositoryInterface
-     */
+    /** @var TransactionRepositoryInterface */
     protected $transactionRepository;
 
-    /**
-     * @var DelayedEventDispatcher
-     */
+    /** @var DelayedEventDispatcher */
     protected $eventDispatcher;
 
     /**
@@ -82,9 +69,8 @@ abstract class AbstractChoiceHandler
      * @param float          $total
      *
      * @return Transaction
-     * @throws MissingBillingInfoException
      */
-    protected function handleChoice(AbstractChoice $choice, $total)
+    protected function handleChoice(AbstractChoice $choice, $total): Transaction
     {
         // Convert cart to order
         $order = $this->converter->toOrder($this->cartManager->getCart($choice->sheet));

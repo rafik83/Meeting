@@ -1,9 +1,9 @@
 <?php
 
 /*
- * This file is part of the vimeet project.
+ * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2016 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -15,14 +15,10 @@ use Proximum\Vimeet\Domain\Order\Balance;
 
 class DashboardTransactionViewQueryHandler
 {
-    /**
-     * @var Balance
-     */
+    /** @var Balance */
     private $balance;
 
     /**
-     * DashboardViewQueryHandler constructor.
-     *
      * @param Balance $balance
      */
     public function __construct(Balance $balance)
@@ -35,7 +31,7 @@ class DashboardTransactionViewQueryHandler
      *
      * @return DashboardTransactionView
      */
-    public function handle(DashboardTransactionViewQuery $query)
+    public function handle(DashboardTransactionViewQuery $query): DashboardTransactionView
     {
         $this->balance->loadAllForEvent($query->event);
 

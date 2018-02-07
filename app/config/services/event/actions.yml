@@ -14,3 +14,13 @@ services:
             - '@Proximum\Vimeet\Infrastructure\Adapter\CommandBus'
             - '@Proximum\Vimeet\Infrastructure\Adapter\QueryBus'
             - '@templating'
+
+    #
+    # Order
+    #
+    Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Order\SummaryTotalAction:
+        arguments:
+            - '@adapter.authorization_checker'
+            - '@order.merger'
+            - '@Proximum\Vimeet\Infrastructure\Adapter\QueryBus'
+            - '@templating'

@@ -66,6 +66,7 @@ Proximum\Vimeet\Domain\Model\Order\Row:
         order: '@order_1'
         quantity: 2
         price: 9
+        vatRate: 20
         data: '{"id":15,"type":"option","translations":{"fr":{"title":"Chaise","heading":"","description":"","addon":""},"en":{"title":"Chair","heading":"","description":"","addon":""}},"productsIncluded":[]}'
         product: '@product_option_2_asddays'
         groupId: 4

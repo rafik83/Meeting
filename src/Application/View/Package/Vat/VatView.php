@@ -21,7 +21,7 @@ class VatView
     /** @var float */
     public $total;
 
-    /** @var float */
+    /** @var float the value of the vat*/
     public $totalVat;
 
     /**

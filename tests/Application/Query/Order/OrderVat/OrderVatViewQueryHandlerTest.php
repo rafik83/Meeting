@@ -14,6 +14,7 @@ use PHPUnit\Framework\TestCase;
 use Proximum\Vimeet\Application\Query\Order\OrderVat\OrderVatViewQuery;
 use Proximum\Vimeet\Application\Query\Order\OrderVat\OrderVatViewQueryHandler;
 use Proximum\Vimeet\Application\View\Package\Vat\VatListView;
+use Proximum\Vimeet\Application\View\Package\Vat\VatView;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Order;
 use Proximum\Vimeet\Domain\Model\Sheet;
@@ -39,13 +40,38 @@ class OrderVatViewQueryHandlerTest extends TestCase
         $order->isCancelled()->shouldBeCalled()->willReturn(false);
         $order->getCreatedAt()->shouldBeCalled()->willReturn($now);
         $order->getInvoice()->shouldBeCalled()->willReturn(null);
-        $order->getTotalWithoutVat()->shouldBeCalled()->willReturn(1000);
+        $order->getTotalWithoutVat()->shouldBeCalled()->willReturn(750);
+
+        $row1 = $this->prophesize(Order\Row::class);
+        $row2 = $this->prophesize(Order\Row::class);
+        $row3 = $this->prophesize(Order\Row::class);
+        $row1->getVatRate()->willReturn(20);
+        $row2->getVatRate()->willReturn(20);
+        $row3->getVatRate()->willReturn(10);
+        $row1->getPrice()->willReturn(100);
+        $row2->getPrice()->willReturn(200);
+        $row3->getPrice()->willReturn(300);
+        $row1->getQuantity()->willReturn(1);
+        $row2->getQuantity()->willReturn(2);
+        $row3->getQuantity()->willReturn(1);
+        $promotionCodeRow = $this->prophesize(Order\PromotionCode::class);
+        $promotionCodeRow->getVatRate()->willReturn(10);
+        $promotionCodeRow->getPrice()->willReturn(-50);
+
+        $order->getRows()->willReturn([$row1->reveal(), $row2->reveal(), $row3->reveal()]);
+        $order->getPromotionCodes()->willReturn([$promotionCodeRow->reveal()]);
 
         $vatApplicable = $this->prophesize(VatApplicable::class);
         $vatApplicable->onSheet($sheet->reveal())->shouldBeCalled()->willReturn(true);
 
         $orderVatViewQueryHandler = new OrderVatViewQueryHandler($vatApplicable->reveal());
         $orderVatView = $orderVatViewQueryHandler->handle(new OrderVatViewQuery($order->reveal()));
+
+        $vatViews = [
+            'vat_20' => new VatView(20, Event::VAT_MODE_ATI, 50000, 10000),
+            'vat_10' => new VatView(10, Event::VAT_MODE_ATI, 25000, 2500),
+        ];
+        $vatListView = new VatListView(75000, 87500.0, true, Event::VAT_MODE_ATI, $vatViews);
 
         $expectedOrderVatView = new OrderVatView(
             '1-34-109',
@@ -56,9 +82,9 @@ class OrderVatViewQueryHandlerTest extends TestCase
             Event::VAT_MODE_ATI,
             'EUR',
             false,
-            100000,
-            20000,
-            120000,
+            75000,
+            12500.0,
+            87500.0,
             $vatListView,
             $now,
             null
@@ -92,6 +118,9 @@ class OrderVatViewQueryHandlerTest extends TestCase
         $orderVatViewQueryHandler = new OrderVatViewQueryHandler($vatApplicable->reveal());
         $orderVatView = $orderVatViewQueryHandler->handle(new OrderVatViewQuery($order->reveal()));
 
+        $vatViews = [];
+        $vatListView = new VatListView(100000, 100000, false, Event::VAT_MODE_ATI, $vatViews);
+
         $expectedOrderVatView = new OrderVatView(
             '1-34-109',
             109,
@@ -104,6 +133,7 @@ class OrderVatViewQueryHandlerTest extends TestCase
             100000,
             0,
             100000,
+            $vatListView,
             $now,
             null
         );

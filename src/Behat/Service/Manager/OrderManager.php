@@ -56,8 +56,12 @@ class OrderManager
      * @return Order
      * @throws \Exception
      */
-    public function createOrderOfGivenTotal(Event $event, $total, $isVatApplicable, Sheet $sheet = null)
-    {
+    public function createOrderOfGivenTotal(
+        Event $event,
+        $total,
+        bool $isVatApplicable,
+        Sheet $sheet = null
+    ): Order {
         if (null === $sheet) {
             $sheet = $this->sheetManager->create($event);
 
@@ -73,7 +77,7 @@ class OrderManager
         }
 
         $order = new Order($sheet, '', $this->dateTime);
-        $this->createOrderRow($order, 'My product label', $total, 1);
+        $this->createOrderRow($order, 'My product label', $total, 1, $sheet->getEvent()->getVat());
         $this->orderRepository->add($order);
 
         return $order;
@@ -84,12 +88,13 @@ class OrderManager
      * @param string $label
      * @param float  $price
      * @param int    $quantity
+     * @param float  $vatRate
      *
      * @return Order\Row
      */
-    public function createOrderRow(Order $order, $label, $price, $quantity)
+    public function createOrderRow(Order $order, string $label, float $price, int $quantity, float $vatRate): Order\Row
     {
-        $orderRow = new Order\Row($order, $quantity, null, null, $label, $price);
+        $orderRow = new Order\Row($order, $quantity, $vatRate, null, null, $label, $price);
         $order->addRow($orderRow);
 
         return $orderRow;
