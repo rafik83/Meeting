@@ -236,8 +236,9 @@ class ProductController extends Controller
         }
 
         return $this->render('AdminBundle:Product:updateParticipant.html.twig', [
-            'event' => $event,
-            'form'  => $form->createView(),
+            'event'   => $event,
+            'form'    => $form->createView(),
+            'product' => $product,
         ]);
     }
 
