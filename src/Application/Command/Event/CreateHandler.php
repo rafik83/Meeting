@@ -104,7 +104,8 @@ class CreateHandler
             $create->emailTeam,
             $create->invoicePrefix,
             $create->visible,
-            $create->duplicatedFrom
+            $create->duplicatedFrom,
+            $create->welcomeEnabled
         );
 
         $event->getConfiguration()->setColors(

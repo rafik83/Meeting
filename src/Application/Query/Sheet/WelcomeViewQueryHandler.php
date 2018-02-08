@@ -10,39 +10,48 @@
 
 namespace Proximum\Vimeet\Application\Query\Sheet;
 
+use Proximum\Vimeet\Application\Adapter\SessionInterface;
 use Proximum\Vimeet\Application\View\Sheet\WelcomeView;
 use Proximum\Vimeet\Domain\KeyDates\Checker\HappeningsAccessChecker;
 
 class WelcomeViewQueryHandler
 {
-    /**
-     * @var HappeningsAccessChecker
-     */
+    /** @var HappeningsAccessChecker */
     private $happeningsAccessChecker;
+
+    /** @var SessionInterface */
+    private $session;
 
     /**
      * @param HappeningsAccessChecker $happeningsAccessChecker
+     * @param SessionInterface        $session
      */
-    public function __construct(HappeningsAccessChecker $happeningsAccessChecker)
+    public function __construct(HappeningsAccessChecker $happeningsAccessChecker, SessionInterface $session)
     {
         $this->happeningsAccessChecker = $happeningsAccessChecker;
+        $this->session = $session;
     }
 
     /**
      * @param WelcomeViewQuery $welcomeViewQuery
      *
-     * @return WelcomeView
+     * @return null|WelcomeView
      */
-    public function handle(WelcomeViewQuery $welcomeViewQuery)
+    public function handle(WelcomeViewQuery $welcomeViewQuery): ?WelcomeView
     {
-        $welcomeView = new WelcomeView();
-        $sheet       = $welcomeViewQuery->sheet;
+        if (!\in_array(true, $this->session->getFromFlashBag('first_registration'), true)) {
+            return null;
+        }
 
-        $welcomeView->hasPackage = null !== $sheet->getPackage()
-            && $sheet->getPackage()->isPassable();
+        if (!$welcomeViewQuery->sheet->getEvent()->isWelcomeEnabled()) {
+            return null;
+        }
 
-        $welcomeView->hasProgram = $this->happeningsAccessChecker->allowedToAccess($sheet->getEvent());
+        $hasPackage = null !== $welcomeViewQuery->sheet->getPackage()
+            && $welcomeViewQuery->sheet->getPackage()->isPassable();
 
-        return $welcomeView;
+        $hasProgram = $this->happeningsAccessChecker->allowedToAccess($welcomeViewQuery->sheet->getEvent());
+
+        return new WelcomeView($hasPackage, $hasProgram);
     }
 }

@@ -158,6 +158,8 @@ class PrepareLeniApiCallHandler
                 // Create a job for calling LENI API
                 $this->leniApiCallJobQueue->createJob($userExtraDataPendingFingerprint);
             }
+
+            $this->participantPlanningFormatter->resetPlanningHandlerForEvent($event);
         }
     }
 

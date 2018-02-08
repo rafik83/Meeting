@@ -1,9 +1,9 @@
 <?php
 
 /*
- * This file is part of the vimeet project.
+ * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2016 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -11,7 +11,6 @@
 namespace Proximum\Vimeet\Ui\Bundle\MailBundle\EventListener;
 
 use Proximum\Vimeet\Application\Adapter\MailerInterface;
-use Proximum\Vimeet\Application\Components\Sheet\SheetInfoGuesser;
 use Proximum\Vimeet\Application\Event\Events;
 use Proximum\Vimeet\Application\Event\Sheet\SheetSubmittedEvent;
 use Proximum\Vimeet\Domain\Model\Admin;
@@ -26,40 +25,22 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
  */
 class SubmitSheetMailEventSubscriber implements EventSubscriberInterface
 {
-    /**
-     * @var MailerInterface
-     */
+    /** @var MailerInterface */
     private $mailer;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     private $sender;
 
-    /**
-     * @var SheetInfoGuesser
-     */
-    private $sheetInfoGuesser;
-
-    /**
-     * @var AdminRepositoryInterface
-     */
+    /** @var AdminRepositoryInterface */
     private $adminRepository;
 
-    /**
-     * @var ParticipantInfoGuesser
-     */
+    /** @var ParticipantInfoGuesser */
     private $participantInfoGuesser;
 
-    /**
-     * @var \DateTimeInterface
-     */
+    /** @var \DateTimeInterface */
     private $datetime;
 
     /**
-     * MailEventSubscriber constructor.
-     *
-     * @param SheetInfoGuesser         $sheetInfoGuesser
      * @param ParticipantInfoGuesser   $participantInfoGuesser
      * @param AdminRepositoryInterface $adminRepository
      * @param MailerInterface          $mailer
@@ -67,18 +48,16 @@ class SubmitSheetMailEventSubscriber implements EventSubscriberInterface
      * @param \DateTimeInterface       $datetime
      */
     public function __construct(
-        SheetInfoGuesser $sheetInfoGuesser,
         ParticipantInfoGuesser $participantInfoGuesser,
         AdminRepositoryInterface $adminRepository,
         MailerInterface $mailer,
         $sender,
         \DateTimeInterface $datetime
     ) {
+        $this->participantInfoGuesser = $participantInfoGuesser;
+        $this->adminRepository        = $adminRepository;
         $this->mailer                 = $mailer;
         $this->sender                 = $sender;
-        $this->sheetInfoGuesser       = $sheetInfoGuesser;
-        $this->adminRepository        = $adminRepository;
-        $this->participantInfoGuesser = $participantInfoGuesser;
         $this->datetime               = $datetime;
     }
 
@@ -91,11 +70,7 @@ class SubmitSheetMailEventSubscriber implements EventSubscriberInterface
         $follower = $event->getSheet()->getFollower();
         $locale   = $event->getSheet()->getEvent()->getFallback();
 
-        $sheetName = $this->sheetInfoGuesser->guessSheetName(
-            $event->getSheet(),
-            $locale
-        );
-
+        $sheetName = $event->getSheet()->getTitle();
         $participant = $event->getSheet()->getUserParticipant($event->getUser());
 
         if ($participant === null) {
@@ -123,7 +98,7 @@ class SubmitSheetMailEventSubscriber implements EventSubscriberInterface
                 $event->getSheet()->getEvent(),
                 $this->sender,
                 $admin->getEmail(),
-                $locale,
+                $admin->getLocale(),
                 $event->getSheet(),
                 $admin,
                 $this->datetime,
@@ -139,7 +114,7 @@ class SubmitSheetMailEventSubscriber implements EventSubscriberInterface
     /**
      * {@inheritdoc}
      */
-    public static function getSubscribedEvents()
+    public static function getSubscribedEvents(): array
     {
         return [
             Events::SHEET_VALIDATION_PENDING => 'onSheetSubmittedValidation',

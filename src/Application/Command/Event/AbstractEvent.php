@@ -110,4 +110,7 @@ abstract class AbstractEvent
 
     /** @var bool */
     public $isBackgroundImageToRemove = false;
+
+    /** @var bool */
+    public $welcomeEnabled;
 }
