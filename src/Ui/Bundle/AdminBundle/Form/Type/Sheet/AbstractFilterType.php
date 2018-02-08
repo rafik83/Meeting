@@ -134,15 +134,14 @@ abstract class AbstractFilterType extends AbstractType
             ])
             ->add(Constant::ORDER_STATUS, ChoiceType::class, [
                 'choices'     => [
-                    'form.sheet_filter.children.order.no.label'             => Constant::ORDER_STATUS_NO_ORDER,
+                    'form.sheet_filter.children.order.no.label'                => Constant::ORDER_STATUS_NO_ORDER,
                     'form.sheet_filter.children.order.totalSuperiorZero.label' => Constant::ORDER_STATUS_TOTAL_ORDER_SUPERIOR_ZERO,
                     'form.sheet_filter.children.order.totalEqualZero.label'    => Constant::ORDER_STATUS_TOTAL_ORDER_EQUAL_ZERO,
                 ],
-                'multiple'    => false,
+                'multiple'    => true,
                 'expanded'    => true,
                 'label'       => 'form.sheet_filter.children.orderStatus.label',
                 'required'    => false,
-                'placeholder' => 'form.sheet_filter.children.order.noPreference.label',
             ])
             ->add(Constant::HAS_CART, ChoiceType::class, [
                 'choices'     => [

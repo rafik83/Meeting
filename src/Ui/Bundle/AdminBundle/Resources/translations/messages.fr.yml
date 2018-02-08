@@ -1178,6 +1178,10 @@ event.sheet.update_product.title: 'Modifier un produit commandé'
 event.sheet.validationState.draft: Brouillon
 event.sheet.validationState.pending: 'Soumise à validation'
 event.sheet.validationState.validated: Validée
+form.sheet_filter.children.order.no.label: Sans
+form.sheet_filter.children.order.noPreference.label: 'Peu importe'
+form.sheet_filter.children.order.totalSuperiorZero.label: 'Total supérieur à zéro'
+form.sheet_filter.children.order.totalEqualZero.label: 'Total égal à zéro'
 gdr.user.agenda.version.modal.button.notify: 'Notifier par SMS'
 gdr.user.agenda.version.modal.button.purge: 'Cacher différence sans notifier'
 gdr.user.agenda.version.modal.no_diff: 'Il n''y a pas de modification dans l''agenda de cette personne'

@@ -24,6 +24,7 @@ class SheetFilterType extends AbstractFilterType
         return [
             'enabled' => true,
             'orderBy' => Constant::ORDER_BY_CREATED_AT,
+            self::getOrderStatusDefaultFilters()
         ];
     }
 
@@ -63,5 +64,16 @@ class SheetFilterType extends AbstractFilterType
     public function getBlockPrefix()
     {
         return 'sheet_filter';
+    }
+
+    public static function getOrderStatusDefaultFilters(): array
+    {
+        return [
+            'order_status' => [
+                Constant::ORDER_STATUS_NO_ORDER,
+                Constant::ORDER_STATUS_TOTAL_ORDER_SUPERIOR_ZERO,
+                Constant::ORDER_STATUS_TOTAL_ORDER_EQUAL_ZERO,
+            ]
+        ];
     }
 }
