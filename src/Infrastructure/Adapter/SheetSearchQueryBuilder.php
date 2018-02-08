@@ -166,7 +166,7 @@ class SheetSearchQueryBuilder
         }
 
         if (isset($filters[Constant::NO_ORDER]) && true === $filters[Constant::NO_ORDER]) {
-            $this->filterHasOrder(false);
+            $this->filterOrderStatus(Constant::ORDER_STATUS_NO_ORDER);
         }
 
         if (isset($filters['boolean_filters'])) {
@@ -177,8 +177,8 @@ class SheetSearchQueryBuilder
             $this->filterByObjective($filters[SearchFields::FILTER_OBJECTIVE]);
         }
 
-        if (isset($filters[Constant::HAS_ORDER])) {
-            $this->filterHasOrder($filters[Constant::HAS_ORDER]);
+        if (isset($filters[Constant::ORDER_STATUS])) {
+            $this->filterOrderStatus($filters[Constant::ORDER_STATUS]);
         }
 
         if (isset($filters[Constant::HAS_CART])) {
@@ -322,7 +322,7 @@ class SheetSearchQueryBuilder
     protected function filterByState(array &$filters)
     {
         /** @var array|string $filters ['state'] */
-        if (!isset($filters['state']) || is_array($filters['state']) && empty($filters['state'])) {
+        if (!isset($filters['state']) || (\is_array($filters['state']) && empty($filters['state']))) {
             return;
         }
 
@@ -951,14 +951,14 @@ class SheetSearchQueryBuilder
     }
 
     /**
-     * @param bool $hasOrder
+     * @param string $orderStatus
      */
-    private function filterHasOrder($hasOrder)
+    private function filterOrderStatus(string $orderStatus)
     {
-        $matchHasOrder = new Term();
-        $matchHasOrder->setTerm('hasOrder', $hasOrder);
+        $matchOrderStatus = new Term();
+        $matchOrderStatus->setTerm('orderStatus', $orderStatus);
 
-        $this->query->addMust($matchHasOrder);
+        $this->query->addMust($matchOrderStatus);
     }
 
     /**

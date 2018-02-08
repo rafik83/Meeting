@@ -132,14 +132,15 @@ abstract class AbstractFilterType extends AbstractType
                     'data-associated-label' => json_encode(CommercialStatus::STATUS_WITH_LABEL),
                 ],
             ])
-            ->add(Constant::HAS_ORDER, ChoiceType::class, [
+            ->add(Constant::ORDER_STATUS, ChoiceType::class, [
                 'choices'     => [
-                    'form.sheet_filter.children.order.yes.label' => true,
-                    'form.sheet_filter.children.order.no.label'  => false,
+                    'form.sheet_filter.children.order.no.label'             => Constant::ORDER_STATUS_NO_ORDER,
+                    'form.sheet_filter.children.order.totalSuperiorZero.label' => Constant::ORDER_STATUS_TOTAL_ORDER_SUPERIOR_ZERO,
+                    'form.sheet_filter.children.order.totalEqualZero.label'    => Constant::ORDER_STATUS_TOTAL_ORDER_EQUAL_ZERO,
                 ],
                 'multiple'    => false,
                 'expanded'    => true,
-                'label'       => 'form.sheet_filter.children.hasOrder.label',
+                'label'       => 'form.sheet_filter.children.orderStatus.label',
                 'required'    => false,
                 'placeholder' => 'form.sheet_filter.children.order.noPreference.label',
             ])

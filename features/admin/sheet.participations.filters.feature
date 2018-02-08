@@ -147,7 +147,7 @@ Feature: Sheet participations list filters
     Then I should see "Hello World Company"
     And I should see "Aanera"
     And I should see "World Company Inc"
-    When I check the "form.sheet_filter.children.order.yes.label" radio
+    When I check the "form.sheet_filter.children.order.totalSuperiorZero.label" radio
     And I press "form.admin.sheet.filter.children.submit.label"
     Then I should not see "World Company Inc"
     And I should not see "Hello World Company"
