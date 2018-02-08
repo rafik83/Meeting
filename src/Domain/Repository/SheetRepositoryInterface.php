@@ -13,6 +13,7 @@ namespace Proximum\Vimeet\Domain\Repository;
 use Proximum\Vimeet\Domain\Model\Admin;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\EventInterface;
+use Proximum\Vimeet\Domain\Model\MeetingSlot;
 use Proximum\Vimeet\Domain\Model\PaginatedResult;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\Sheet\Group;
@@ -86,13 +87,19 @@ interface SheetRepositoryInterface
     public function getSheetsInCatalogByEvent(Event $event, array $excludedSheets = []): array;
 
     /**
-     * @param Event   $event
-     * @param Type[]  $types
-     * @param Sheet[] $excludedSheets
+     * @param Event       $event
+     * @param Type[]      $types
+     * @param MeetingSlot $slot
+     * @param Sheet[]     $excludedSheets
      *
-     * @return Sheet[]
+     * @return int
      */
-    public function getSheetsInCatalogWithTypesByEvent(Event $event, array $types = [], array $excludedSheets = []): array;
+    public function countAvailableSheetsInCatalogWithTypesByEvent(
+        Event $event,
+        array $types = [],
+        MeetingSlot $slot,
+        array $excludedSheets = []
+    ): int;
 
     /**
      * @param Event $event
