@@ -21,11 +21,10 @@ class SheetFilterType extends AbstractFilterType
      */
     public static function getDefaultFilters()
     {
-        return [
+        return \array_merge([
             'enabled' => true,
             'orderBy' => Constant::ORDER_BY_CREATED_AT,
-            self::getOrderStatusDefaultFilters()
-        ];
+        ], self::getOrderStatusDefaultFilters());
     }
 
     /**
