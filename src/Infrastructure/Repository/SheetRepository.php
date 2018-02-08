@@ -210,7 +210,9 @@ class SheetRepository implements SheetRepositoryInterface
             ->select('sheet')
             ->from(Sheet::class, 'sheet')
             ->where('sheet.event = :event AND sheet != :sheet AND EXISTS (
-                   SELECT request.id FROM Entity:Meeting\Request request WHERE (
+                   SELECT request.id FROM Entity:Meeting\Request request WHERE
+                   request.event = :event AND 
+                   (
                         request.from = :sheet AND request.to = sheet
                         OR request.to = :sheet AND request.from = sheet
                    )
