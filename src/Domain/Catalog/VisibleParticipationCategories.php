@@ -47,7 +47,7 @@ class VisibleParticipationCategories
         }
 
         foreach ($filteredRules as $rule) {
-            if (null !== $rule->getSeeableCategory()->getId()) {
+            if (null !== $rule->getSeeableCategory()) {
                 $visibleCategories[$rule->getSeeableCategory()->getId()] = $rule->getSeeableCategory();
             }
         }
