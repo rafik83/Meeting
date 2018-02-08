@@ -11,26 +11,18 @@
 namespace Proximum\Vimeet\Application\Query\Agenda\MeetingPropositionFromAvailableSheets;
 
 use Proximum\Vimeet\Domain\Repository\Meeting\RequestRepositoryInterface;
-use Proximum\Vimeet\Domain\Repository\ParticipantRepositoryInterface;
 
 class MeetingPropositionFromAvailableSheetsQueryHandler
 {
     /** @var RequestRepositoryInterface */
     private $requestRepository;
 
-    /** @var ParticipantRepositoryInterface */
-    private $participantRepository;
-
     /**
-     * @param RequestRepositoryInterface     $requestRepository
-     * @param ParticipantRepositoryInterface $participantRepository
+     * @param RequestRepositoryInterface $requestRepository
      */
-    public function __construct(
-        RequestRepositoryInterface $requestRepository,
-        ParticipantRepositoryInterface $participantRepository
-    ) {
+    public function __construct(RequestRepositoryInterface $requestRepository)
+    {
         $this->requestRepository = $requestRepository;
-        $this->participantRepository = $participantRepository;
     }
 
     /**
@@ -40,30 +32,9 @@ class MeetingPropositionFromAvailableSheetsQueryHandler
      */
     public function handle(MeetingPropositionFromAvailableSheetsQuery $meetingPropositionFromAvailableSheetsQuery): int
     {
-        $pendingMeetingRequests = $this->requestRepository->getPendingPropositionReceivedBySheet(
-            $meetingPropositionFromAvailableSheetsQuery->sheet
+        return $this->requestRepository->countPendingPropositionReceivedBySheetWithAvailableFromSheet(
+            $meetingPropositionFromAvailableSheetsQuery->sheet,
+            [$meetingPropositionFromAvailableSheetsQuery->meetingSlot->getId()]
         );
-
-        $participants = [];
-
-        foreach ($pendingMeetingRequests as $pendingMeetingRequest) {
-            foreach ($pendingMeetingRequest->getFromSheet()->getParticipants() as $participant) {
-                $participants[] = $participant;
-            }
-        }
-
-        $availableParticipants = $this->participantRepository->getAvailableParticipants(
-            $participants,
-            $meetingPropositionFromAvailableSheetsQuery->meetingSlot->getBegin(),
-            $meetingPropositionFromAvailableSheetsQuery->meetingSlot->getEnd()
-        );
-
-        $filteredAvailableSheets = [];
-
-        foreach ($availableParticipants as $availableParticipant) {
-            $filteredAvailableSheets[$availableParticipant->getSheet()->getId()] = $availableParticipant->getSheet();
-        }
-
-        return count($filteredAvailableSheets);
     }
 }
