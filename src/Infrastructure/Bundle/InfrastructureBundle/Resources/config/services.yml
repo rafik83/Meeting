@@ -3598,7 +3598,6 @@ services:
         class: Proximum\Vimeet\Application\Query\Agenda\MeetingPropositionFromAvailableSheets\MeetingPropositionFromAvailableSheetsQueryHandler
         arguments:
             - '@vimeet_infrastructure.repository.meeting.request_repository'
-            - '@vimeet_infrastructure.repository.participant_repository'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Agenda\MeetingPropositionFromAvailableSheets\MeetingPropositionFromAvailableSheetsQuery }
 
@@ -3623,7 +3622,6 @@ services:
         class: Proximum\Vimeet\Application\Query\Agenda\AvailableSheets\SheetsAvailableBySlotQueryHandler
         arguments:
             - '@vimeet_infrastructure.repository.sheet_repository'
-            - '@vimeet_infrastructure.repository.participant_repository'
             - '@catalog.visible_participation_types'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Agenda\AvailableSheets\SheetsAvailableBySlotQuery }
@@ -3643,13 +3641,6 @@ services:
             - '@datetime'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Agenda\AvailableSheets\AvailableSlotsByParticipantQuery }
-    query.agenda.admin.indicator.sheet_indicators_lazy_load_view_query_handler:
-        class: Proximum\Vimeet\Application\Query\Agenda\Admin\Indicator\SheetIndicatorsLazyLoadViewQueryHandler
-        arguments:
-            - '@vimeet_infrastructure.repository.sheet_repository'
-            - '@query.agenda.admin.indicator.sheet_indicators_view_query_handler'
-        tags:
-            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Agenda\Admin\Indicator\SheetIndicatorsLazyLoadViewQuery }
     query.agenda.agenda_sheet_view_query_handler:
         class: Proximum\Vimeet\Application\Query\Agenda\Admin\AgendaSheetViewQueryHandler
         arguments:

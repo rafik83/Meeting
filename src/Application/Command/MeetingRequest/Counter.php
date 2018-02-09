@@ -12,6 +12,7 @@ namespace Proximum\Vimeet\Application\Command\MeetingRequest;
 
 use Proximum\Vimeet\Application\Query\Agenda\AvailableSheets\AvailableSlotsByParticipantQuery;
 use Proximum\Vimeet\Application\Query\Agenda\AvailableSheets\AvailableSlotsByParticipantQueryHandler;
+use Proximum\Vimeet\Application\View\Agenda\Slot\AvailableSlotView;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Repository\Meeting\RequestRepositoryInterface;
@@ -50,9 +51,16 @@ class Counter
             new AvailableSlotsByParticipantQuery($sheet->getEvent(), $participant)
         );
 
-        return $this->requestRepository->countPendingPropositionWithMetSheetAvailableForSheet(
-            $sheet,
+        $slotIds = array_map(
+            function (AvailableSlotView $availableSlotView) {
+                return $availableSlotView->id;
+            },
             $slotAvailableViews
+        );
+
+        return $this->requestRepository->countPendingPropositionReceivedBySheetWithAvailableToSheet(
+            $sheet,
+            $slotIds
         );
     }
 }

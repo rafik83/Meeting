@@ -18,6 +18,7 @@ use Proximum\Vimeet\Domain\Model\Admin;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\EventInterface;
 use Proximum\Vimeet\Domain\Model\Meeting\Request;
+use Proximum\Vimeet\Domain\Model\MeetingSlot;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\Sheet\Group;
 use Proximum\Vimeet\Domain\Model\Template\RegistrationTemplate;
@@ -127,29 +128,35 @@ class SheetRepository implements SheetRepositoryInterface
     /**
      * {@inheritdoc}
      */
-    public function getSheetsInCatalogWithTypesByEvent(Event $event, array $types = [], array $excludedSheets = []): array
-    {
+    public function countAvailableSheetsInCatalogWithTypesByEvent(
+        Event $event,
+        array $types = [],
+        MeetingSlot $slot,
+        array $excludedSheets = []
+    ): int {
         $queryBuilder = $this
             ->entityManager
             ->createQueryBuilder()
-            ->select('sheet, participants')
+            ->select('count(sheet.id)')
             ->from(Sheet::class, 'sheet')
             ->join(
-                'sheet.participants',
-                'participants',
+                'sheet.availableSlots',
+                'availableSlot',
                 'WITH',
-                'sheet.event = :event AND sheet.inCatalog = true AND sheet.enable = true AND sheet.type IN (:types)'
+                'availableSlot.slot = :slot AND sheet.event = :event
+                AND sheet.inCatalog = true AND sheet.enable = true AND sheet.type IN (:types) AND sheet.attend = true'
             )
+            ->setParameter('slot', $slot)
             ->setParameter('types', $types)
-            ->setParameter('event', $event);
-
+            ->setParameter('event', $event)
+        ;
 
         if (!empty($excludedSheets)) {
             $queryBuilder->andWhere('sheet NOT IN (:excludedSheets)');
             $queryBuilder->setParameter('excludedSheets', $excludedSheets);
         }
 
-        return $queryBuilder->getQuery()->getResult();
+        return (int) $queryBuilder->getQuery()->getSingleScalarResult();
     }
 
     /**
@@ -203,7 +210,9 @@ class SheetRepository implements SheetRepositoryInterface
             ->select('sheet')
             ->from(Sheet::class, 'sheet')
             ->where('sheet.event = :event AND sheet != :sheet AND EXISTS (
-                   SELECT request.id FROM Entity:Meeting\Request request WHERE (
+                   SELECT request.id FROM Entity:Meeting\Request request WHERE
+                   request.event = :event AND 
+                   (
                         request.from = :sheet AND request.to = sheet
                         OR request.to = :sheet AND request.from = sheet
                    )
