@@ -1,0 +1,29 @@
+{% extends 'AdminBundle:Common:form_layout.html.twig' %}
+
+{% block title 'admin.event.sheet.index.title'|trans %}
+
+{% block content %}
+    <h1 class="page-header">
+        {{ event.title }}: {{ 'admin.event.sheet.index.title'|trans }}
+    </h1>
+
+    <div class="col-sm-offset-4 col-sm-4">
+        <div class="text-center">
+            {{ form_start(form, { 'attr': { 'class': 'with-submit-section' } }) }}
+            {{ form_errors(form) }}
+            {{ form_rest(form) }}
+            {{ form_end(form) }}
+        </div>
+    </div>
+
+    {% block submit_section %}
+        <div class="form-group submit-section">
+            <div class="col-sm-3">
+                <a href="{{ path('admin_event_list') }}" class="btn btn-link">
+                    <span class="glyphicon glyphicon-arrow-left"></span>
+                    {{ 'admin.goback.link'|trans }}
+                </a>
+            </div>
+        </div>
+    {% endblock submit_section %}
+{% endblock %}

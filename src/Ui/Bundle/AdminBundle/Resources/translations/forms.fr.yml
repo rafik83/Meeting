@@ -332,6 +332,7 @@ form.happening_update.children.types.label: 'Types ayant accès'
 form.import_mapping.children.submit.label: Importer
 form.import_products_and_template.children.event.label: 'Evénement à importer'
 form.import_products_and_template.children.submit.label: Importer
+form.index.children.submit.label: 'Ré-indexer'
 form.invoice_export.children.beginDate.label: 'Date de début'
 form.invoice_export.children.endDate.label: 'Date de fin'
 form.invoice_export.children.submit.label: 'Exporter les factures'

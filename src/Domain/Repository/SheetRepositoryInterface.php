@@ -75,7 +75,7 @@ interface SheetRepositoryInterface
      *
      * @return Sheet[]
      */
-    public function getByEvent(Event $event);
+    public function getByEvent(Event $event): array;
 
     /**
      * @param Event   $event
