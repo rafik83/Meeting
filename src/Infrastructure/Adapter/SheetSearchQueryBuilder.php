@@ -948,11 +948,12 @@ class SheetSearchQueryBuilder
      */
     private function filterByOrderStatus(array $filters)
     {
-        if (!isset($filters['order_status']) || empty($filters['order_status'])) {
+        if (empty($filters[Constant::ORDER_STATUS])) {
             return;
         }
 
-        $orderStatuses = $filters['order_status'];
+        /** @var array $orderStatuses */
+        $orderStatuses = $filters[Constant::ORDER_STATUS];
 
         $orderStatusQuery = new BoolQuery();
 
