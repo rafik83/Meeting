@@ -142,14 +142,13 @@ Feature: Sheet participations list filters
     Given I am logged with "test@test.com" on admin
     And I go to "/fr/event/1/sheet?orderBy=created_at&orderBy=created_at&order_status%5B0%5D=no_order&order_status%5B1%5D=total_order_superior_zero&order_status%5B2%5D=total_order_equal_zero"
     And I should see "admin.sheet.list.filters.label"
-    And I check the "form.sheet_filter.children.order.no.label" radio
+    And I check "form.sheet_filter.children.order.no.label"
     When I press "form.admin.sheet.filter.children.submit.label"
     Then I should see "Hello World Company"
     And I should see "Aanera"
     And I should see "World Company Inc"
-    When I uncheck "form.sheet_filter.children.order.totalEqualZero.label"
-    And I uncheck "form.sheet_filter.children.order.no.label"
-    And the "form.sheet_filter.children.order.totalSuperiorZero.label" checkbox should be checked
+    When I uncheck "form.sheet_filter.children.order.no.label"
+    And I check "form.sheet_filter.children.order.totalSuperiorZero.label"
     And I press "form.admin.sheet.filter.children.submit.label"
     Then I should not see "World Company Inc"
     And I should not see "Hello World Company"
