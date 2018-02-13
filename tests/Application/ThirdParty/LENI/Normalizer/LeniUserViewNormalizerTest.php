@@ -79,6 +79,8 @@ class LeniUserViewNormalizerTest extends TestCase
             'Inscrit' => 'Inscrit',
             'Langue' => 'en',
             'ZL_ACTIF' => 'ACTI',
+            'ZL_ETATDEPAIEMENT' => 'PA',
+            'ZL_IDPRODUITPARTICIPANT' => 971,
             'ZL_JOURNEE1' => 'Planning day one',
             'ZL_JOURNEE2' => 'Planning day two',
         ];
@@ -114,7 +116,7 @@ class LeniUserViewNormalizerTest extends TestCase
             ),
             '25b850a8-aed5-e711-80e0-0cc47a4c19cf',
             false,
-            963
+            null
         );
 
         $expectedLeniUserViewSerialized = [
@@ -135,6 +137,8 @@ class LeniUserViewNormalizerTest extends TestCase
             'Inscrit' => 'Inscrit',
             'Langue' => 'en',
             'ZL_ACTIF' => 'INAC',
+            'ZL_ETATDEPAIEMENT' => 'PP',
+            'ZL_IDPRODUITPARTICIPANT' => null,
             'ZL_JOURNEE1' => 'Planning day one',
             'ZL_JOURNEE2' => 'Planning day two',
             'Id' => '25b850a8-aed5-e711-80e0-0cc47a4c19cf',

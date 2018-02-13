@@ -41,13 +41,15 @@ class LeniUserViewNormalizer implements NormalizerInterface
             LeniConstants::LENI_COL_COUNTRY => $userView->country,
             LeniConstants::LENI_COL_ATTENDANCE => LeniConstants::ATTENDANCE,
             LeniConstants::LENI_COL_LOCALE => $userView->locale,
-            LeniConstants::LENI_COL_ENABLED => LeniConstants::ENABLED_MAPPING[$userView->enabled],
+            LeniConstants::LENI_COL_ENABLED => LeniConstants::LENI_ENABLED_MAPPING[$userView->enabled],
+            LeniConstants::LENI_COL_IS_PAID => LeniConstants::LENI_IS_PAID_MAPPING[$userView->paid],
+            LeniConstants::LENI_COL_PARTICIPANT_PRODUCT_ID => $userView->participantProductId,
         ];
 
         $dayNumber = 1;
 
         foreach ($userView->planning->days as $day) {
-            $data[LeniConstants::LENI_COL_DAY . $dayNumber] = $day->planning;
+            $data[sprintf(LeniConstants::LENI_COL_DAY_FORMAT, $dayNumber)] = $day->planning;
 
             $dayNumber++;
         }

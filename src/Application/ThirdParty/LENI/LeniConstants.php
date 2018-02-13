@@ -48,16 +48,25 @@ class LeniConstants
     public const LENI_COL_EMAIL = 'Email';
     public const LENI_COL_MOBILE_PHONE = 'TelephoneMobile';
     public const LENI_COL_UNALLOCATED = 'ZL_RDVNONORGANISES';
-    public const LENI_COL_DAY = 'ZL_JOURNEE';
+    public const LENI_COL_DAY_FORMAT = 'ZL_JOURNEE%d';
     public const LENI_COL_COUNTRY = 'Pays';
     public const LENI_COL_ATTENDANCE = 'Inscrit';
     public const LENI_COL_LOCALE = 'Langue';
 
+    public const LENI_COL_PARTICIPANT_PRODUCT_ID = 'ZL_IDPRODUITPARTICIPANT';
+
     public const LENI_COL_ENABLED = 'ZL_ACTIF';
 
-    public const ENABLED_MAPPING = [
+    public const LENI_ENABLED_MAPPING = [
         true => 'ACTI',
         false => 'INAC',
+    ];
+
+    public const LENI_COL_IS_PAID = 'ZL_ETATDEPAIEMENT';
+
+    public const LENI_IS_PAID_MAPPING = [
+        true => 'PA',
+        false => 'PP',
     ];
 
     public const LENI_COLUMNS = [
@@ -75,9 +84,11 @@ class LeniConstants
         self::LENI_COL_EMAIL,
         self::LENI_COL_MOBILE_PHONE,
         self::LENI_COL_UNALLOCATED,
-        self::LENI_COL_DAY,
         self::LENI_COL_COUNTRY,
         self::LENI_COL_ATTENDANCE,
         self::LENI_COL_LOCALE,
+        self::LENI_COL_PARTICIPANT_PRODUCT_ID,
+        self::LENI_COL_ENABLED,
+        self::LENI_COL_IS_PAID,
     ];
 }
