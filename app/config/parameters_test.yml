@@ -4,3 +4,4 @@ parameters:
     feature_event_dates_to_current_date_enabled: true
     feature_dday_enabled: true
     feature_availability_confirmation_enabled: false
+    feature_product_vat_enabled: true
