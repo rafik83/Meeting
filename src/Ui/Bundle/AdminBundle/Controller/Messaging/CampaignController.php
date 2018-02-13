@@ -49,7 +49,7 @@ class CampaignController extends Controller
 
         $locale = $event->getAvailableLocale($request->getLocale());
 
-        $filterForm = $this->createForm(TargetFilterType::class, SheetFilterType::getOrderStatusDefaultFilters(), [
+        $filterForm = $this->createForm(TargetFilterType::class, [], [
             'event'           => $event,
             'locale'          => $locale,
             'user'            => $this->getUser(),
