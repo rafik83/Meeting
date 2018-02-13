@@ -9,8 +9,8 @@
 
 ### Requirements
 
-* [Vagrant 1.8.4](http://www.vagrantup.com/downloads.html)
-* [VirtualBox 5.0.32](http://download.virtualbox.org/virtualbox/5.0.32/)
+* [Vagrant 2.0.1](https://www.vagrantup.com/downloads.html)
+* [VirtualBox 5.2.4](https://www.virtualbox.org/wiki/Downloads)
 * [Vagrant Landrush 1.2.0](https://github.com/phinze/landrush)
 
 ### Setup
