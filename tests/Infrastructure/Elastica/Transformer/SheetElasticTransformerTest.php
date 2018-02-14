@@ -62,8 +62,8 @@ class SheetElasticTransformerTest extends TestCase
         $templateDataFactory->createFromSheet($sheet, $locale)->shouldBeCalled()->willReturn($sheetTemplateData);
 
         $balance = $this->prophesize(Balance::class);
+        $balance->getNotCancelledOrderVatViews($sheet)->shouldBeCalled();
         $balance->getRemainingToPay($sheet)->shouldBeCalled();
-        $balance->getTotalWithoutVat($sheet)->shouldBeCalled();
 
         $meetingRepository = $this->prophesize(MeetingRepositoryInterface::class);
         $meetingRepository->hasScheduledMeeting($sheet)->shouldBeCalled();

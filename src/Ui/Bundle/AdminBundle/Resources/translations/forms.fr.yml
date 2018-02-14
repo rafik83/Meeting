@@ -733,7 +733,6 @@ form.sheet_filter.children.hasGroup.label: 'Appartenant à une entité'
 form.sheet_filter.children.hasHappeningParticipation.label: 'Inscription à une conférence'
 form.sheet_filter.children.hasInvoice.label: 'A au moins une facture'
 form.sheet_filter.children.hasNoMeetingRequest.label: 'Pas de demande de RDV effectuée par la fiche'
-form.sheet_filter.children.hasOrder.label: Commande
 form.sheet_filter.children.hasPendingMeetingPropositions.label: 'Propositions de RDV en attente de validation'
 form.sheet_filter.children.hasRemainingToPay.label: 'Solde restant dû > 0'
 form.sheet_filter.children.hasRemainingToPay.no.label: Non
@@ -746,8 +745,10 @@ form.sheet_filter.children.imported.label: Importé
 form.sheet_filter.children.inCatalog.label: 'Au catalogue'
 form.sheet_filter.children.order.no.label: Sans
 form.sheet_filter.children.order.noPreference.label: 'Peu importe'
-form.sheet_filter.children.order.yes.label: Avec
+form.sheet_filter.children.order.totalSuperiorZero.label: 'Total supérieur à zéro'
+form.sheet_filter.children.order.totalEqualZero.label: 'Total égal à zéro'
 form.sheet_filter.children.orderBy.label: 'Trier par'
+form.sheet_filter.children.orderStatus.label: Commande
 form.sheet_filter.children.phoneValidationStatus.choice.all: 'Peu importe'
 form.sheet_filter.children.phoneValidationStatus.choice.all_confirmed: Confirmé
 form.sheet_filter.children.phoneValidationStatus.choice.none_confirmed: 'Non confirmé'
