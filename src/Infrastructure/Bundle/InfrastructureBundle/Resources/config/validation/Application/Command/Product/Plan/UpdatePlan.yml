@@ -10,6 +10,14 @@ Proximum\Vimeet\Application\Command\Product\Plan\UpdatePlan:
         availabilityMax:
             - Range:
                 min: 0
+        unitPrice:
+            - NotBlank: ~
+            - Range:
+                min: 0
+        vat:
+            - NotBlank: ~
+            - Range:
+                min: 0
         translations:
             - All:
                 - Collection:

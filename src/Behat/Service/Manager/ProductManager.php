@@ -33,15 +33,18 @@ class ProductManager
      * @param float  $unitPrice
      * @param int    $quantity
      *
+     * @param float  $vat
+     *
      * @return Product
      */
     public function createParticipant(
         Event $event,
         string $title = 'Produit Participant',
         float $unitPrice = 100,
-        int $quantity = 2
+        int $quantity = 2,
+        float $vat = 20
     ): Product {
-        $product = Product::createParticipant($event, $title, $unitPrice, $quantity);
+        $product = Product::createParticipant($event, $title, $unitPrice, $vat, $quantity);
 
         foreach ($event->getLocales() as $locale) {
             $product->translate($locale, $title, '', '', '', '');
@@ -57,11 +60,13 @@ class ProductManager
      * @param string $title
      * @param float  $unitPrice
      *
+     * @param float  $vat
+     *
      * @return Product
      */
-    public function createPlan(Event $event, string $title = 'Formule', float $unitPrice = 567): Product
+    public function createPlan(Event $event, string $title = 'Formule', float $unitPrice = 567, float $vat = 20): Product
     {
-        $product = Product::createPlan($event, $title, '', $unitPrice, 15, 30);
+        $product = Product::createPlan($event, $title, '', $unitPrice, $vat, 15, 30);
 
         foreach ($event->getLocales() as $locale) {
             $product->translate($locale, $title, '', '', '', '');
@@ -92,13 +97,14 @@ class ProductManager
      * @param Event  $event
      * @param string $title
      * @param float  $unitPrice
+     * @param float  $vat
      * @param int    $quantity
      *
      * @return Product
      */
-    public function createPlanning(Event $event, string $title, float $unitPrice, int $quantity = 2): Product
+    public function createPlanning(Event $event, string $title, float $unitPrice, float $vat = 20, int $quantity = 2): Product
     {
-        $product = Product::createPlanning($event, $title, $unitPrice, $quantity);
+        $product = Product::createPlanning($event, $title, $unitPrice, $vat, $quantity);
 
         foreach ($event->getLocales() as $locale) {
             $product->translate($locale, $title, '', '', '', '');

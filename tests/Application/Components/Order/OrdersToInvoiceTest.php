@@ -1,9 +1,9 @@
 <?php
 
 /*
- * This file is part of the vimeet project.
+ * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2016 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -37,9 +37,9 @@ class OrdersToInvoiceTest extends TestCase
         $owner = new User('test@test.fr', '__SALT__', '__PASSWORD__', 'fr');
         $sheet = new Sheet($event, $type, [], $owner, $datetime);
 
-        $plan        = Product::createPlan($event, 'plan', '', 99, 20, 100);
-        $participant = Product::createParticipant($event, 'participant', 1789, 20);
-        $option      = Product::createOption($event, 'option', '', 169, 50, 10, 20, true);
+        $plan        = Product::createPlan($event, 'plan', '', 99, 20, 20, 100);
+        $participant = Product::createParticipant($event, 'participant', 1789, 20, 20);
+        $option      = Product::createOption($event, 'option', '', 169, 20, 50, 10, 20, true);
 
         $orderOne = new Order($sheet, '[]', $datetime->modify('-5 day'));
         $orderOne->addRow(new Order\Row($orderOne, 1, $plan));
@@ -62,7 +62,7 @@ class OrdersToInvoiceTest extends TestCase
 
         $orderToInvoice = new OrdersToInvoice(
             $orderRepository->reveal(),
-            new Merger($vatApplicable->reveal()),
+            new Merger(),
             $invoiceDataQueryHandler->reveal(),
             $vatApplicable->reveal(),
             $this->prophesize(SerializerAdapterInterface::class)->reveal()
@@ -94,7 +94,7 @@ class OrdersToInvoiceTest extends TestCase
 
         $orderToInvoice = new OrdersToInvoice(
             $orderRepository->reveal(),
-            new Merger($vatApplicable->reveal()),
+            new Merger(),
             $invoiceDataQueryHandler->reveal(),
             $vatApplicable->reveal(),
             $this->prophesize(SerializerAdapterInterface::class)->reveal()
@@ -115,7 +115,7 @@ class OrdersToInvoiceTest extends TestCase
         $owner = new User('test@test.fr', '__SALT__', '__PASSWORD__', 'fr');
         $sheet = new Sheet($event, $type, [], $owner, $datetime);
 
-        $option = Product::createOption($event, 'option', '', 169, 50, 10, 20, true);
+        $option = Product::createOption($event, 'option', '', 169, 20, 50, 10, 20, true);
 
         $orderNegative = new Order($sheet, '[]', $datetime->modify('-5 day'));
         $orderNegative->addRow(new Order\Row($orderNegative, -1, $option));
@@ -130,7 +130,7 @@ class OrdersToInvoiceTest extends TestCase
 
         $orderToInvoice = new OrdersToInvoice(
             $orderRepository->reveal(),
-            new Merger($vatApplicable->reveal()),
+            new Merger(),
             $invoiceDataQueryHandler->reveal(),
             $vatApplicable->reveal(),
             $this->prophesize(SerializerAdapterInterface::class)->reveal()
@@ -151,9 +151,9 @@ class OrdersToInvoiceTest extends TestCase
         $owner = new User('test@test.fr', '__SALT__', '__PASSWORD__', 'fr');
         $sheet = new Sheet($event, $type, [], $owner, $datetime);
 
-        $plan        = Product::createPlan($event, 'plan', '', 99, 20, 100);
-        $participant = Product::createParticipant($event, 'participant', 1789, 20);
-        $option      = Product::createOption($event, 'option', '', 169, 50, 10, 20, true);
+        $plan        = Product::createPlan($event, 'plan', '', 99, 20, 20, 100);
+        $participant = Product::createParticipant($event, 'participant', 1789, 20, 20);
+        $option      = Product::createOption($event, 'option', '', 169, 20, 50, 10, 20, true);
 
         $groupId = 99;
         $groupsData = json_encode(
@@ -198,7 +198,7 @@ class OrdersToInvoiceTest extends TestCase
 
         $orderToInvoice = new OrdersToInvoice(
             $orderRepository->reveal(),
-            new Merger($vatApplicable->reveal()),
+            new Merger(),
             $invoiceDataQueryHandler->reveal(),
             $vatApplicable->reveal(),
             $this->prophesize(SerializerAdapterInterface::class)->reveal()

@@ -3,13 +3,12 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2016 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
 
 namespace Proximum\Vimeet\Application\Command\Product\Option;
-
 
 use Proximum\Vimeet\Application\Command\Product\AbstractHandler;
 
@@ -20,6 +19,7 @@ class UpdateOptionHandler extends AbstractHandler
      */
     public function handle(UpdateOption $updateOption)
     {
+        $canUpdatePriceAndVat = $this->updatePriceResolver->resolve($updateOption->product);
         $product = $updateOption->product->updateOption(
             $updateOption->name,
             $this->fileStorageInterface->upload($updateOption->file),
@@ -27,9 +27,8 @@ class UpdateOptionHandler extends AbstractHandler
             $updateOption->availabilityCurrent,
             $updateOption->availabilityMax,
             $updateOption->updatable,
-            $this->updatePriceResolver->resolve($updateOption->product) ?
-                $updateOption->unitPrice :
-                $updateOption->product->getUnitPrice(),
+            $canUpdatePriceAndVat ? $updateOption->unitPrice : $updateOption->product->getUnitPrice(),
+            $canUpdatePriceAndVat ? $updateOption->vat : $updateOption->product->getVat(),
             $updateOption->deletableUntil,
             $updateOption->subjectedToValidation,
             $updateOption->buyableUntil

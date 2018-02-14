@@ -27,6 +27,7 @@ Feature: Handle Product
       | product_create_option_translations_fr_title           | Titre fr     |
       | product_create_option_translations_en_title           | Titre en     |
       | form.product_create_option.children.unitPrice.label   | 20           |
+      | form.product_create_option.children.vat.label         | 19           |
       | form.product_create_option.children.quantityMax.label | 4            |
     And I press "form.product_create_option.children.submit.label"
     Then I should be on this page "/fr/event/1/product"

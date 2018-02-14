@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C)a Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -59,8 +59,8 @@ class ParticipantProductViewQueryHandlerTest extends TestCase
 
         $event = EventFactory::createEvent();
 
-        $plan = Product::createPlan($event, 'My plan', '', 99, 0, 0);
-        $participantProduct = Product::createParticipant($event, 'My participant product', 49, 2);
+        $plan = Product::createPlan($event, 'My plan', '', 99, 20, 0, 0);
+        $participantProduct = Product::createParticipant($event, 'My participant product', 49, 20, 2);
         $this->setPropertyValue($participantProduct, 'id', 1337);
         $participantIncludedProductTranslationFr = new ProductTranslation(
             $participantProduct,
@@ -143,8 +143,8 @@ class ParticipantProductViewQueryHandlerTest extends TestCase
 
         $event = EventFactory::createEvent();
 
-        $plan = Product::createPlan($event, 'My plan', '', 99, 0, 0);
-        $participantProduct = Product::createParticipant($event, 'Paying participant product', 79, 2);
+        $plan = Product::createPlan($event, 'My plan', '', 99, 20, 0, 0);
+        $participantProduct = Product::createParticipant($event, 'Paying participant product', 79, 20, 2);
         $this->setPropertyValue($participantProduct, 'id', 1337);
         $participantProductTranslationFr = new ProductTranslation(
             $participantProduct,
@@ -196,7 +196,7 @@ class ParticipantProductViewQueryHandlerTest extends TestCase
             ->willReturn(
                 [
                     1337 => new IncludedParticipantView(
-                        Product::createParticipant($event, 'My participant product', 49, 2),
+                        Product::createParticipant($event, 'My participant product', 49, 20, 2),
                         1
                     )
                 ]
@@ -231,8 +231,8 @@ class ParticipantProductViewQueryHandlerTest extends TestCase
 
         $event = EventFactory::createEvent();
 
-        $plan = Product::createPlan($event, 'My plan', '', 99, 0, 0);
-        $participantProduct = Product::createParticipant($event, 'Paying participant product', 79, 2);
+        $plan = Product::createPlan($event, 'My plan', '', 99, 20, 0, 0);
+        $participantProduct = Product::createParticipant($event, 'Paying participant product', 79, 20, 2);
         $this->setPropertyValue($participantProduct, 'id', 1337);
         $participantProductTranslationFr = new ProductTranslation(
             $participantProduct,
@@ -288,7 +288,7 @@ class ParticipantProductViewQueryHandlerTest extends TestCase
             ->willReturn(
                 [
                     1337 => new IncludedParticipantView(
-                        Product::createParticipant($event, 'My participant product', 49, 2),
+                        Product::createParticipant($event, 'My participant product', 49, 20, 2),
                         1
                     )
                 ]
@@ -315,7 +315,7 @@ class ParticipantProductViewQueryHandlerTest extends TestCase
 
     private function setPropertyValue($object, $field, $value)
     {
-        $reflection = new \ReflectionClass(get_class($object));
+        $reflection = new \ReflectionClass(\get_class($object));
         $property = $reflection->getProperty($field);
         $property->setAccessible(true);
         $property->setValue($object, $value);

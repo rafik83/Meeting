@@ -154,7 +154,7 @@ class ProductController extends Controller
      *
      * @return RedirectResponse|Response
      */
-    public function updatePlanAction(Request $request, Event $event, Product $product)
+    public function updatePlanAction(Request $request, Event $event, Product $product): Response
     {
         $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
 
@@ -186,7 +186,7 @@ class ProductController extends Controller
      *
      * @return RedirectResponse|Response
      */
-    public function createParticipantAction(Request $request, Event $event)
+    public function createParticipantAction(Request $request, Event $event): Response
     {
         $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
 
@@ -217,7 +217,7 @@ class ProductController extends Controller
      *
      * @return RedirectResponse|Response
      */
-    public function updateParticipantAction(Request $request, Event $event, Product $product)
+    public function updateParticipantAction(Request $request, Event $event, Product $product): Response
     {
         $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
 
@@ -236,8 +236,9 @@ class ProductController extends Controller
         }
 
         return $this->render('AdminBundle:Product:updateParticipant.html.twig', [
-            'event' => $event,
-            'form'  => $form->createView(),
+            'event'   => $event,
+            'form'    => $form->createView(),
+            'product' => $product,
         ]);
     }
 
@@ -247,7 +248,7 @@ class ProductController extends Controller
      *
      * @return RedirectResponse|Response
      */
-    public function createPlanningAction(Request $request, Event $event)
+    public function createPlanningAction(Request $request, Event $event): Response
     {
         $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
 
@@ -278,7 +279,7 @@ class ProductController extends Controller
      *
      * @return RedirectResponse|Response
      */
-    public function updatePlanningAction(Request $request, Event $event, Product $product)
+    public function updatePlanningAction(Request $request, Event $event, Product $product): Response
     {
         $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
 
@@ -308,9 +309,9 @@ class ProductController extends Controller
      * @param Request $request
      * @param Event   $event
      *
-     * @return Response
+     * @return RedirectResponse|Response
      */
-    public function importAction(Request $request, Event $event)
+    public function importAction(Request $request, Event $event): Response
     {
         $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
 

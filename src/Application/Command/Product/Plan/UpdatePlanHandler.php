@@ -19,14 +19,14 @@ class UpdatePlanHandler extends AbstractHandler
      */
     public function handle(UpdatePlan $updatePlan)
     {
+        $canUpdatePriceAndVat = $this->updatePriceResolver->resolve($updatePlan->product);
         $updatePlan->product->updatePlan(
             $updatePlan->name,
             $this->fileStorageInterface->upload($updatePlan->file),
             $updatePlan->availabilityCurrent,
             $updatePlan->availabilityMax,
-            $this->updatePriceResolver->resolve($updatePlan->product) ?
-                $updatePlan->unitPrice :
-                $updatePlan->product->getUnitPrice()
+            $canUpdatePriceAndVat ? $updatePlan->unitPrice : $updatePlan->product->getUnitPrice(),
+            $canUpdatePriceAndVat ? $updatePlan->vat : $updatePlan->product->getVat()
         );
 
         foreach ($updatePlan->translations as $locale => $translation) {

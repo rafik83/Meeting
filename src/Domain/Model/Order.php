@@ -62,7 +62,7 @@ class Order
     private $groupsData;
 
     /**
-     * @var boolean
+     * @var bool
      */
     private $cancelled = false;
 
@@ -88,7 +88,6 @@ class Order
         $this->vatRate        = $sheet->getEvent()->getVat();
         $this->rows           = new ArrayCollection();
         $this->promotionCodes = new ArrayCollection();
-        $this->cancelled      = false;
     }
 
     /**

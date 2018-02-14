@@ -26,11 +26,11 @@ class PackageTest extends TestCase
 
         $package = new Package($event, 'my event', $dateTime);
 
-        $option1 = Product::createOption($event, 'option 1', 'option1.jpg', 100, 1, 1, 1, true);
-        $option2 = Product::createOption($event, 'option 2', 'option2.jpg', 100, 1, 1, 1, true);
-        $option3 = Product::createOption($event, 'option 3', 'option3.jpg', 100, 1, 1, 1, true);
-        $option4 = Product::createOption($event, 'option 4', 'option4.jpg', 100, 1, 1, 1, true);
-        $option5 = Product::createOption($event, 'option 5', 'option5.jpg', 100, 1, 1, 1, true);
+        $option1 = Product::createOption($event, 'option 1', 'option1.jpg', 100, 20, 1, 1, 1, true);
+        $option2 = Product::createOption($event, 'option 2', 'option2.jpg', 100, 20, 1, 1, 1, true);
+        $option3 = Product::createOption($event, 'option 3', 'option3.jpg', 100, 20, 1, 1, 1, true);
+        $option4 = Product::createOption($event, 'option 4', 'option4.jpg', 100, 20, 1, 1, 1, true);
+        $option5 = Product::createOption($event, 'option 5', 'option5.jpg', 100, 20, 1, 1, 1, true);
 
         $package->setGroups([
             [$option1, $option3],

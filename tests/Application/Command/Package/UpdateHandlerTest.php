@@ -31,15 +31,15 @@ class UpdateHandlerTest extends TestCase
         $event->setLocales(['fr', 'en']);
         $package  = new Package($event, 'Lorem ipsum', $dateTime);
 
-        $plan1       = Product::createPlan($event, 'Plan 1', 'plan1.jpg', 100, 1, 1);
-        $plan2       = Product::createPlan($event, 'Plan 2', 'plan2.jpg', 400, 1, 1);
-        $plan3       = Product::createPlan($event, 'Plan 3', 'plan3.jpg', 800, 1, 1);
-        $participant = Product::createParticipant($event, 'Participant', 300, 5);
-        $planning    = Product::createPlanning($event, 'Planning', 200, 5);
-        $option1     = Product::createOption($event, 'A', 'a.jpg', 250, 4, 1, 4, true, $dateTime);
-        $option2     = Product::createOption($event, 'B', 'b.jpg', 300, 2, 10, 10, true, $dateTime);
-        $option3     = Product::createOption($event, 'C', 'c.jpg', 500, 10, 5, 9, true, $dateTime);
-        $option4     = Product::createOption($event, 'D', 'd.jpg', 999, 1, 1, 1, true, $dateTime);
+        $plan1       = Product::createPlan($event, 'Plan 1', 'plan1.jpg', 100, 20, 1, 1);
+        $plan2       = Product::createPlan($event, 'Plan 2', 'plan2.jpg', 400, 20, 1, 1);
+        $plan3       = Product::createPlan($event, 'Plan 3', 'plan3.jpg', 800, 20, 1, 1);
+        $participant = Product::createParticipant($event, 'Participant', 300, 20, 5);
+        $planning    = Product::createPlanning($event, 'Planning', 200, 20, 5);
+        $option1     = Product::createOption($event, 'A', 'a.jpg', 250, 20, 4, 1, 4, true, $dateTime);
+        $option2     = Product::createOption($event, 'B', 'b.jpg', 300, 20, 2, 10, 10, true, $dateTime);
+        $option3     = Product::createOption($event, 'C', 'c.jpg', 500, 20, 10, 5, 9, true, $dateTime);
+        $option4     = Product::createOption($event, 'D', 'd.jpg', 999, 20, 1, 1, 1, true, $dateTime);
 
         $expected = new Package($event, 'Foobar', $dateTime);
         $expected->translate('fr', 'Plans fr', 'P&P fr', 'Options fr');
@@ -77,7 +77,7 @@ class UpdateHandlerTest extends TestCase
             $this->assertEquals($expected->isPlansEnabled(), $package->isPlansEnabled());
             $this->assertEquals($expected->isParticipantAndPlanningEnabled(), $package->isParticipantAndPlanningEnabled());
             $this->assertEquals($expected->isOptionsEnabled(), $package->isOptionsEnabled());
-            $this->assertEquals($expected->getParticipant(), $package->getParticipant());
+            $this->assertEquals($expected->getParticipants(), $package->getParticipants());
             $this->assertEquals($expected->getPlanning(), $package->getPlanning());
 
             return true;

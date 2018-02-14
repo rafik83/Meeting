@@ -1,9 +1,9 @@
 <?php
 
 /*
- * This file is part of the vimeet project.
+ * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2016 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -72,7 +72,7 @@ class AddHandlerTest extends TestCase
         $this->user     = new User('email@email.com', 'salt', 'password', 'fr');
         $this->datetime = new \DateTimeImmutable();
         $this->sheet    = new Sheet($this->event, $this->type, [], $this->user, $this->datetime);
-        $this->product  = Product::createOption($this->event, 'Option A', 'a.jpg', 100, 2, 4, 3, false);
+        $this->product  = Product::createOption($this->event, 'Option A', 'a.jpg', 100, 20, 2, 4, 3, false);
     }
 
     public function testHandle()
@@ -227,7 +227,7 @@ class AddHandlerTest extends TestCase
             $this->datetime->modify('+1 month'));
         $promotionCode->setPromotion($this->product, Promotion::TYPE_PERCENT_OFF, 50);
 
-        $otherProductNotConcerned = Product::createOption($this->event, 'Option B', 'a.jpg', 100, 2, 4, 3, false);
+        $otherProductNotConcerned = Product::createOption($this->event, 'Option B', 'a.jpg', 100, 20, 2, 4, 3, false);
 
         $planRow      = new CartRow($this->sheet, $otherProductNotConcerned, 5);
         $actualCart   = new Cart($this->sheet, [$planRow], [], 1);
