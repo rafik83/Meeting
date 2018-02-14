@@ -211,6 +211,7 @@ admin.extraParameter.list.column.value: Value
 admin.extraParameter.list.create: Add
 admin.extraParameter.list.empty: 'No setting'
 admin.extraParameter.list.title: 'Event extra settings list'
+admin.extraParameter.type.comexposium_event: 'Comexposium event reference'
 admin.extraParameter.type.leni_event: 'LENI event code'
 admin.extraParameter.type.leni_user: 'LENI user code'
 admin.extraParameter.type.vianeo_concerned_types_id: 'Vianeo concerned types id'
