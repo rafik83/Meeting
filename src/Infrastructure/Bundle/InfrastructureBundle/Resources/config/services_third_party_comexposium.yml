@@ -5,7 +5,17 @@ services:
         tags:
             - { name: console.command }
 
+    Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\ThirdParty\Comexposium\Webservice\ComexposiumGetRegistrationCommand:
+        arguments:
+            - '@vimeet_infrastructure.repository.event_repository'
+        tags:
+            - { name: console.command }
+
     Proximum\Vimeet\Application\ThirdParty\Comexposium\Webservice\Handler\ComexposiumWebservice:
         arguments:
             $username: '%comexposium_username%'
             $password: '%comexposium_password%'
+
+    Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Adapter\ThirdParty\Comexposium\ComexposiumJobQueue:
+        arguments:
+            - '@doctrine.orm.entity_manager'
