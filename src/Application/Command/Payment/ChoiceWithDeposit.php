@@ -12,8 +12,6 @@ namespace Proximum\Vimeet\Application\Command\Payment;
 
 class ChoiceWithDeposit extends AbstractChoice
 {
-    /**
-     * @var bool
-     */
+    /** @var bool */
     public $deposit;
 }

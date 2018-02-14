@@ -20,6 +20,7 @@ use Proximum\Vimeet\Domain\Payment\Mode;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\ParamConverter\EventDomain;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Security\SheetVoter;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -31,7 +32,7 @@ class OrderController extends Controller
      *
      * @return Response
      */
-    public function listAction(EventDomain $eventDomain, Sheet $sheet)
+    public function listAction(EventDomain $eventDomain, Sheet $sheet): Response
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
         $this->denyAccessUnlessGranted(SheetVoter::EDIT, $sheet);
@@ -48,7 +49,7 @@ class OrderController extends Controller
             ->handle(new PaymentConditionsViewQuery($sheet))
         ;
 
-        $canPayIfRemaining = in_array(Mode::PAYMENT_PAYPAL, $paymentConditionsView->paymentModes, true);
+        $canPayIfRemaining = \in_array(Mode::PAYMENT_PAYPAL, $paymentConditionsView->paymentModes, true);
 
         return $this->render('EventBundle:Order:list.html.twig', [
             'event'             => $eventDomain->getEvent(),
@@ -71,12 +72,12 @@ class OrderController extends Controller
      *
      * @return Response
      */
-    public function proFormaAction(Request $request, EventDomain $eventDomain, Sheet $sheet, Order $order)
+    public function proFormaAction(Request $request, EventDomain $eventDomain, Sheet $sheet, Order $order): Response
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
         $this->denyAccessUnlessGranted(SheetVoter::EDIT, $sheet);
 
-        if (!$sheet->getPackage()->isPassable() || $order->getSheet() !== $sheet) {
+        if ($order->getSheet() !== $sheet || !$sheet->getPackage()->isPassable()) {
             throw $this->createNotFoundException('This page is not accessible by this user');
         }
 
@@ -103,14 +104,14 @@ class OrderController extends Controller
      *
      * @return Response
      */
-    public function summaryTotalAction(Request $request, EventDomain $eventDomain, Sheet $sheet)
+    public function summaryTotalAction(Request $request, EventDomain $eventDomain, Sheet $sheet): Response
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
         $this->denyAccessUnlessGranted(SheetVoter::EDIT, $sheet);
 
         $orders = $sheet->getNotCancelledOrders();
 
-        if (!$sheet->getPackage()->isPassable() || count($orders) === 0) {
+        if (!$sheet->getPackage()->isPassable() || \count($orders) === 0) {
             throw $this->createNotFoundException('This page is not accessible by this user');
         }
 

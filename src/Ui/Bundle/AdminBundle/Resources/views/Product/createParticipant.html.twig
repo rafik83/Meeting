@@ -8,7 +8,9 @@
     {{ form_row(form.name) }}
     {{ form_row(form.translations) }}
     {{ form_row(form.unitPrice) }}
-    {{ form_row(form.vat) }}
+    {% if form.vat is defined %}
+        {{ form_row(form.vat) }}
+    {% endif %}
     {{ form_row(form.quantityMax) }}
 {% endblock %}
 

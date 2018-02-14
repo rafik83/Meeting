@@ -19,7 +19,7 @@ use Proximum\Vimeet\Domain\Repository\OrderRepositoryInterface;
 use Proximum\Vimeet\Infrastructure\Adapter\DelayedEventDispatcher;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
 
-class AddRowToProductTest extends TestCase
+class AddRowToProductHandlerTest extends TestCase
 {
     public function testHandle()
     {
@@ -28,9 +28,11 @@ class AddRowToProductTest extends TestCase
 
         $orderRepository = $this->prophesize(OrderRepositoryInterface::class);
         $order           = $this->prophesize(Order::class);
+        $order->getVatRate()->willReturn(20);
         $parentRow = new Order\Row(
             $order->reveal(),
             1,
+            20,
             $product,
             5,
             "label",
@@ -42,14 +44,20 @@ class AddRowToProductTest extends TestCase
             $parentRow,
             "label",
             1,
-            12.5
+            12.5,
+            20
         );
 
+        $order->addCustomRow($row)->shouldBeCalled();
         $orderRepository->set($order->reveal())->shouldBeCalled();
 
         $eventDispatcher = $this->prophesize(DelayedEventDispatcher::class);
 
-        $add = new AddRowToProduct($order->reveal(), $row);
+        $add = new AddRowToProduct($order->reveal(), $parentRow);
+        $add->price = 12.5;
+        $add->label = 'label';
+        $add->quantity = 1;
+
 
         // Handler
         $handler = new AddRowToProductHandler($orderRepository->reveal(), $eventDispatcher->reveal());

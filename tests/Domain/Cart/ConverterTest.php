@@ -62,7 +62,7 @@ class ConverterTest extends TestCase
         $plan = Product::createPlan($event, 'plan', '', 200, 20, 20, 100);
         $plan->translate('fr', 'plan', '', '', '', '');
         $plan->translate('en', 'plan', '', '', '', '');
-        $chair = Product::createOption($event, 'chair', '', 100, 20, 2, 20,100, true, null, null, null);
+        $chair = Product::createOption($event, 'chair', '', 100, 20, 2, 20,100, true);
         $chair->translate('fr', 'chair', '', '', '', '');
         $chair->translate('en', 'chair', '', '', '', '');
 
@@ -80,9 +80,9 @@ class ConverterTest extends TestCase
 
         $groupsData    = '';
         $order         = new Order($sheet, $groupsData, $datetime);
-        $planOrderRow  = new Order\Row($order, 1, $plan);
-        $chairOrderRow = new Order\Row($order, 2, $chair);
-        $promotionCodeOrderRow = new Order\PromotionCode($order, $promotionCode, -100);
+        $planOrderRow  = new Order\Row($order, 1, 20, $plan);
+        $chairOrderRow = new Order\Row($order, 2, 20, $chair);
+        $promotionCodeOrderRow = new Order\PromotionCode($order, $promotionCode, -100, 20);
         $order->addRow($planOrderRow);
         $order->addRow($chairOrderRow);
         $order->addPromotionCode($promotionCodeOrderRow);
@@ -95,7 +95,9 @@ class ConverterTest extends TestCase
         $promotionCodeRepository    = $this->prophesize(PromotionCodeRepositoryInterface::class);
 
         $orderRepository->add(Argument::that(function (Order $givenOrder) use ($order) {
-            return count($givenOrder->getRows()) === count($order->getRows()) && $givenOrder->getTotalWithoutVat() == $order->getTotalWithoutVat() && count($givenOrder->getPromotionCodes()) === count($order->getPromotionCodes());
+            return \count($givenOrder->getRows()) === \count($order->getRows())
+                && (float) $givenOrder->getTotalWithoutVat() === (float) $order->getTotalWithoutVat()
+                && \count($givenOrder->getPromotionCodes()) === \count($order->getPromotionCodes());
         }))->shouldBeCalled();
 
         $cartRowRepository->deleteForSheet($sheet)->shouldBeCalled();

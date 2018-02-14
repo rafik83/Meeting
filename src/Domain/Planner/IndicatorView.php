@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2017 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -136,6 +136,6 @@ class IndicatorView
         $this->availableSlotsCount      = $this->slotsParticipantsCount - $unavailabilitiesCount;
         $this->possibleMeetingsQuantity = max(0, min($meetingRequestsCount, $this->slotCount, $this->availableSlotsCount));
         $this->usableSlots              = max(0, min($this->slotCount, $this->availableSlotsCount));
-        $this->maxMeetingAvailable      = $sheetsPlanningQuantity * ($slotTotal - $massUnavaibilitiesCount);
+        $this->maxMeetingAvailable      = max(0, $sheetsPlanningQuantity * ($slotTotal - $massUnavaibilitiesCount));
     }
 }

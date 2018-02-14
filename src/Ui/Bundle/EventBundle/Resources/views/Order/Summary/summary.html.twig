@@ -13,16 +13,20 @@
     {{ include('EventBundle:Order/Summary:promotion_codes.html.twig', {promotionCodes: summary.promotionCodes}) }}
 
     {% if summary.vatApplicable %}
-        <tr>
-            <td colspan="2"></td>
-            <td><strong>{{ 'summary.total'|trans }}</strong></td>
-            <td class="text-center">{{ summary.totalWithoutVat|format_amount|localizedcurrency(summary.currency) }} {{ ('package.vatMode.' ~ summary.vatMode)|trans }}</td>
-        </tr>
-        <tr>
-            <td colspan="2"></td>
-            <td><strong>{{ 'summary.vatRate'|trans({'%vatRate%': summary.vatRate }) }}</strong></td>
-            <td class="text-center">{{ summary.vatAmount|format_amount|localizedcurrency(summary.currency) }}</td>
-        </tr>
+        {% for vatView in summary.vatListView.vatViews %}
+            <tr>
+                <td colspan="2"></td>
+                <td><strong>{{ 'summary.totalByVat'|trans({'%vatRate%': vatView.vatRate}) }}</strong></td>
+                <td class="text-center">{{ vatView.total|format_amount|localizedcurrency(summary.currency) }} {{ ('package.vatMode.' ~ vatView.vatMode)|trans }}</td>
+            </tr>
+        {% endfor %}
+        {% for vatView in summary.vatListView.vatViews %}
+            <tr>
+                <td colspan="2"></td>
+                <td><strong>{{ 'summary.vatRate'|trans({'%vatRate%': vatView.vatRate }) }}</strong></td>
+                <td class="text-center">{{ vatView.totalVat|format_amount|localizedcurrency(summary.currency) }}</td>
+            </tr>
+        {% endfor %}
     {% endif %}
 
     <tr>

@@ -32,6 +32,7 @@ class UpdateRowHandlerTest extends TestCase
         $parentRow = new Order\Row(
             $order->reveal(),
             1,
+            20,
             $product,
             5,
             "label",
@@ -43,7 +44,8 @@ class UpdateRowHandlerTest extends TestCase
             $parentRow,
             "label",
             1,
-            12.5
+            12.5,
+            20
         );
 
         $rowRepository->set($row)->shouldBeCalled();

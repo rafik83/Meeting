@@ -19,7 +19,7 @@ class Generator
      *
      * @return string
      */
-    public static function generate(Order $order)
+    public static function generate(Order $order): string
     {
         return sprintf(
             '%s-%s-%s',

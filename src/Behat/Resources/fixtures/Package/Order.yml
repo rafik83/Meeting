@@ -33,6 +33,7 @@ Proximum\Vimeet\Domain\Model\Order\Row:
         order: '@order_1'
         quantity: 1
         price: 1690
+        vatRate: 20
         data: '{"id":10,"type":"plan","translations":{"fr":{"title":"Formule B2B Meeting","heading":"Pas de stand","description":"Vous changez de lieu \\u00e0 chaque rendez-vous.","addon":null},"en":{"title":"B2B Meeting Formula","heading":"No booth","description":"You have to move at each appointment.","addon":null}},"productsIncluded":[{"quantity":2,"included":{"id":12,"type":"participant","translations":{"fr":{"title":"Participant suppl\\u00e9mentaire","heading":"","description":"Accompagnant le premier sur un m\\u00eame agenda incluant une entr\\u00e9e \\u00e0 la convention d\\u2019affaire, acc\\u00e8s illimit\\u00e9 \\u00e0 la pause caf\\u00e9 et aux conf\\u00e9rences.","addon":""},"en":{"title":"Extra participant","heading":"","description":"Accompanying the first one on the same agenda including an entry to selected business conventions and unlimited access to coffee breaks and conferences.","addon":""}},"productsIncluded":[]}},{"quantity":1,"included":{"id":13,"type":"planning","translations":{"fr":{"title":"Packs de rendez-vous","heading":"","description":"Description du pack de rendez-vous","addon":""},"en":{"title":"Extra planning","heading":"","description":"Description extra planning","addon":""}},"productsIncluded":[]}},{"quantity":2,"included":{"id":15,"type":"option","translations":{"fr":{"title":"Chaise","heading":"","description":"","addon":""},"en":{"title":"Chair","heading":"","description":"","addon":""}},"productsIncluded":[]}}]}'
         product: '@product_plan_1_asddays'
     order_1_row_2:
@@ -40,6 +41,7 @@ Proximum\Vimeet\Domain\Model\Order\Row:
         order: '@order_1'
         quantity: 1
         price: 195
+        vatRate: 20
         data: '{"id":12,"type":"participant","translations":{"fr":{"title":"Participant suppl\\u00e9mentaire","heading":"","description":"Accompagnant le premier sur un m\\u00eame agenda incluant une entr\\u00e9e \\u00e0 la convention d\\u2019affaire, acc\\u00e8s illimit\\u00e9 \\u00e0 la pause caf\\u00e9 et aux conf\\u00e9rences.","addon":""},"en":{"title":"Extra participant","heading":"","description":"Accompanying the first one on the same agenda including an entry to selected business conventions and unlimited access to coffee breaks and conferences.","addon":""}},"productsIncluded\":[]}'
         product: '@product_participant_1_asddays'
     order_1_row_3:
@@ -47,6 +49,7 @@ Proximum\Vimeet\Domain\Model\Order\Row:
         order: '@order_1'
         quantity: 1
         price: 495
+        vatRate: 20
         data: '{"id":13,"type":"planning","translations":{"fr":{"title":"Packs de rendez-vous","heading":"","description":"Description du pack de rendez-vous","addon":""},"en":{"title":"Extra planning","heading":"","description":"Description extra planning","addon":""}},"productsIncluded":[]}'
         product: '@product_planning_1_asddays'
     order_1_row_4:
@@ -54,6 +57,7 @@ Proximum\Vimeet\Domain\Model\Order\Row:
         order: '@order_1'
         quantity: 1
         price: 990
+        vatRate: 20
         data: '{"id":14,"type":"option","translations":{"fr":{"title":"Option 4m\\u00b2 suppl\\u00e9mentaires","heading":"","description":"Option valable uniquement en compl\\u00e9ment des formules Exposant et Parrain.","addon":""},"en":{"title":"Add booth option (4 sqm)","heading":"","description":"Option available in addition with exhibitor and sponsor formula only.","addon":""}},"productsIncluded":[]}'
         product: '@product_option_1_asddays'
         groupId: 4
@@ -62,6 +66,7 @@ Proximum\Vimeet\Domain\Model\Order\Row:
         order: '@order_1'
         quantity: 2
         price: 9
+        vatRate: 20
         data: '{"id":15,"type":"option","translations":{"fr":{"title":"Chaise","heading":"","description":"","addon":""},"en":{"title":"Chair","heading":"","description":"","addon":""}},"productsIncluded":[]}'
         product: '@product_option_2_asddays'
         groupId: 4
@@ -70,6 +75,7 @@ Proximum\Vimeet\Domain\Model\Order\Row:
         order: '@order_1'
         quantity: 4
         price: 199
+        vatRate: 20
         data: '{"id":20,"type":"option","translations":{"fr":{"title":"Option E","heading":"","description":"Description option E","addon":""},"en":{"title":"Option E","heading":"","description":"Description Option E","addon":""}},"productsIncluded":[]}'
         product: '@product_option_7_asddays'
         groupId: 6
@@ -78,6 +84,7 @@ Proximum\Vimeet\Domain\Model\Order\Row:
         order: '@order_1'
         quantity: 1
         price: 29
+        vatRate: 20
         data: '{"id":16,"type":"option","translations":{"fr":{"title":"Option A","heading":"","description":"Description option A","addon":"Au lieu de 999\\u20ac"},"en":{"title":"Option A","heading":"","description":"","addon":""}},"productsIncluded":[]}'
         product: '@product_option_3_asddays'
         groupId: 5

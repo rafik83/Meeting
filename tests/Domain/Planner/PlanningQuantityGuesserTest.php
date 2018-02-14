@@ -106,16 +106,8 @@ class PlanningQuantityGuesserTest extends TestCase
         $product = Product::createPlanning($event, 'name', 100, 20, 10);
         $plan    = Product::createPlan($event, 'plan', '', 200, 20, 20, 50);
         $plan->includeProduct($product, 1);
-        $order->addRow(new Order\Row(
-            $order,
-            2,
-            $product
-        ));
-        $order->addRow(new Order\Row(
-            $order,
-            1,
-            $plan
-        ));
+        $order->addRow(new Order\Row($order, 2, 20, $product));
+        $order->addRow(new Order\Row($order, 1, 20, $plan));
 
         $this->orderRepository->findNotCancelledBySheet($sheet)->shouldBeCalled()->willReturn([$order]);
         $this->orderMerger->merge([$order])->shouldBeCalled()->willReturn($order);

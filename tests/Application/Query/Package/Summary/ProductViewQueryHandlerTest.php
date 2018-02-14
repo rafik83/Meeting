@@ -49,6 +49,7 @@ class ProductViewQueryHandlerTest extends TestCase
             1, // cartrow quantity
             25, // total
             $event->getMode(),
+            20,
             $event->getCurrency()
         );
 

@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2016 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -17,6 +17,17 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 abstract class AbstractCreateType extends AbstractProductType
 {
+    /** @var bool */
+    private $vatEnabled;
+
+    /**
+     * @param bool $vatEnabled
+     */
+    public function __construct(bool $vatEnabled)
+    {
+        $this->vatEnabled = $vatEnabled;
+    }
+
     /**
      * {@inheritdoc}
      */
@@ -30,12 +41,16 @@ abstract class AbstractCreateType extends AbstractProductType
                     'min' => 0,
                 ],
             ])
-            ->add('vat', NumberType::class, [
-                'attr' => [
-                    'min' => 0,
-                ],
-            ])
         ;
+        if (true === $this->vatEnabled) {
+            $builder
+                ->add('vat', NumberType::class, [
+                    'attr' => [
+                        'min' => 0,
+                    ],
+                ])
+            ;
+        }
     }
 
     /**

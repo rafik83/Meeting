@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2016 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -18,29 +18,19 @@ use Proximum\Vimeet\Domain\Model\Product;
  */
 class Row
 {
-    /**
-     * @var int
-     */
+    /** @var int */
     private $id;
 
-    /**
-     * @var Order
-     */
+    /** @var Order */
     private $order;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     private $data = '';
 
-    /**
-     * @var null|Product
-     */
+    /** @var null|Product */
     private $product;
 
-    /**
-     * @var int
-     */
+    /** @var int */
     private $quantity;
 
     /**
@@ -51,26 +41,22 @@ class Row
      */
     private $price;
 
-    /**
-     * @var null|int
-     */
+    /** @var null|int */
     private $groupId;
 
-    /**
-     * @var null|Row
-     */
+    /** @var null|Row */
     private $parentRow;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     private $label;
 
+    /** @var float */
+    private $vatRate;
+
     /**
-     * Row constructor.
-     *
      * @param Order        $order
      * @param int          $quantity
+     * @param float        $vatRate
      * @param null|Product $product
      * @param null|int     $groupId
      * @param string       $label
@@ -80,10 +66,11 @@ class Row
     public function __construct(
         Order $order,
         $quantity,
+        float $vatRate,
         Product $product = null,
         $groupId = null,
         $label = null,
-        $price = null,
+        float $price = null,
         $parentRow = null
     ) {
         $this->order       = $order;
@@ -91,6 +78,7 @@ class Row
         $this->groupId     = $groupId;
         $this->label       = $label;
         $this->price       = $price;
+        $this->vatRate     = $vatRate;
         $this->parentRow   = $parentRow;
 
         if (null !== $product) {
@@ -111,7 +99,7 @@ class Row
     /**
      * @return Order
      */
-    public function getOrder()
+    public function getOrder(): Order
     {
         return $this->order;
     }
@@ -121,7 +109,7 @@ class Row
      *
      * @return Order\Row
      */
-    public function setOrder(Order $order)
+    public function setOrder(Order $order): Row
     {
         $this->order = $order;
 
@@ -129,7 +117,7 @@ class Row
     }
 
     /**
-     * @return Product
+     * @return null|Product
      */
     public function getProduct()
     {
@@ -139,7 +127,7 @@ class Row
     /**
      * @return int
      */
-    public function getQuantity()
+    public function getQuantity(): int
     {
         return $this->quantity;
     }
@@ -149,7 +137,7 @@ class Row
      *
      * @return Row
      */
-    public function setQuantity($quantity)
+    public function setQuantity($quantity): Row
     {
         $this->quantity = $quantity;
 
@@ -159,7 +147,7 @@ class Row
     /**
      * @return float
      */
-    public function getPrice()
+    public function getPrice(): int
     {
         return $this->price;
     }
@@ -246,7 +234,7 @@ class Row
     /**
      * @return null|Row
      */
-    public function getParentRow()
+    public function getParentRow(): ?Row
     {
         return $this->parentRow;
     }
@@ -254,9 +242,17 @@ class Row
     /**
      * @return bool
      */
-    public function hasParentRow()
+    public function hasParentRow(): bool
     {
         return null !== $this->parentRow;
+    }
+
+    /**
+     * @return float
+     */
+    public function getVatRate(): float
+    {
+        return $this->vatRate;
     }
 
     /**
@@ -265,6 +261,7 @@ class Row
      * @param null|int $groupId
      * @param string   $label
      * @param float    $price
+     * @param float    $vatRate
      *
      * @return Row
      */
@@ -273,11 +270,13 @@ class Row
         $quantity,
         $groupId,
         $label,
-        $price
-    ) {
+        $price,
+        float $vatRate
+    ): Row {
         return new self(
             $order,
             $quantity,
+            $vatRate,
             null,
             $groupId,
             $label,
@@ -291,6 +290,7 @@ class Row
      * @param string $label
      * @param int    $quantity
      * @param float  $price
+     * @param float  $vatRate
      *
      * @return Row
      */
@@ -299,11 +299,13 @@ class Row
         Row $parentRow,
         $label,
         $quantity,
-        $price
-    ) {
+        $price,
+        float $vatRate
+    ): Row {
         return new self(
             $order,
             $quantity,
+            $vatRate,
             null,
             $parentRow->getGroupId(),
             $label,

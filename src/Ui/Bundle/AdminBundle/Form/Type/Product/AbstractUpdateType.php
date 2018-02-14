@@ -21,12 +21,17 @@ class AbstractUpdateType extends AbstractProductType
     /** @var UpdatePriceResolver */
     private $updatePriceResolver;
 
+    /** @var bool */
+    private $vatEnabled;
+
     /**
      * @param UpdatePriceResolver $updatePriceResolver
+     * @param bool                $vatEnabled
      */
-    public function __construct(UpdatePriceResolver $updatePriceResolver)
+    public function __construct(UpdatePriceResolver $updatePriceResolver, bool $vatEnabled)
     {
         $this->updatePriceResolver = $updatePriceResolver;
+        $this->vatEnabled = $vatEnabled;
     }
 
     /**
@@ -42,11 +47,14 @@ class AbstractUpdateType extends AbstractProductType
                     'min' => 0,
                 ],
             ]);
-            $builder->add('vat', NumberType::class, [
-                'attr' => [
-                    'min' => 0,
-                ],
-            ]);
+
+            if (true === $this->vatEnabled) {
+                $builder->add('vat', NumberType::class, [
+                    'attr' => [
+                        'min' => 0,
+                    ],
+                ]);
+            }
         }
     }
 

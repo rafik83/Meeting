@@ -3,14 +3,13 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2016 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
 
 namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Controller;
 
-use Proximum\Vimeet\Application\Command\Package\PromotionCode\Add;
 use Proximum\Vimeet\Application\Command\Package\PromotionCode\Remove;
 use Proximum\Vimeet\Application\Command\Package\Step\AbstractStep;
 use Proximum\Vimeet\Application\Command\Participant\Add as AddParticipant;
@@ -21,21 +20,15 @@ use Proximum\Vimeet\Application\Exception\Participant\CanNotRemoveAllParticipant
 use Proximum\Vimeet\Application\Exception\Sheet\ParticipantAlreadyExistException;
 use Proximum\Vimeet\Application\Query\Package\PackageViewQuery;
 use Proximum\Vimeet\Application\Query\Package\Participant\ParticipantProductViewQuery;
-use Proximum\Vimeet\Application\Query\Package\Summary\SummaryViewQuery;
 use Proximum\Vimeet\Application\Query\Participant\CardListViewQuery;
 use Proximum\Vimeet\Domain\Model\PromotionCodeRow;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Package\Funnel\Step as FunnelStep;
-use Proximum\Vimeet\Domain\Package\Summary\PromotionCode;
-use Proximum\Vimeet\Domain\Package\Summary\TermsOfSale;
-use Proximum\Vimeet\Domain\Promotion\Exception\PromotionCodeException;
 use Proximum\Vimeet\Domain\Event\ContactInfoGuesser;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Package\OptionsType;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Package\ParticipantAndPlanningType;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Package\PlansType;
-use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Package\Summary\PromotionCodeType;
-use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Package\Summary\TermsOfSaleType;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Participant\AddType;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Participant\RemoveType;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\ParamConverter\EventDomain;
@@ -347,79 +340,6 @@ class PackageController extends Controller
     }
 
     /**
-     * @param Request     $request
-     * @param EventDomain $eventDomain
-     * @param Sheet       $sheet
-     *
-     * @return RedirectResponse|Response
-     */
-    public function summaryAction(Request $request, EventDomain $eventDomain, Sheet $sheet)
-    {
-        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
-        $this->denyAccessUnlessGranted(SheetVoter::EDIT, $sheet);
-        $this->authorizeAccess($eventDomain, $sheet);
-
-        $this->get('cart_cleaner')->handle($sheet);
-        $funnel = $this->get('package.funnel.funnel_factory')->create($sheet, $request->getLocale());
-
-        if (!$funnel->isCompleted()) {
-            return $this->redirectToRoute('event_package_step', [
-                'sheet' => $sheet->getId(),
-                'step'  => (null !== $funnel->getCartStep()) ? $funnel->getCartStep()->getCurrentStep() : 1,
-            ]);
-        }
-
-        $billingInfo = $this->get('repository.billing_info_repository')->getBySheet($sheet);
-
-        // Redirect to the billing info action if the billing info are not completed
-        if (null === $billingInfo || !$billingInfo->isCompleted()) {
-            $this->addFlash('package_complete_billing_info', $sheet->getId());
-            $this->addFlash('package_funnel_billing_info', true);
-
-            return $this->redirectToRoute('event_billing_info', [
-                'sheet' => $sheet->getId(),
-            ]);
-        }
-
-        $termsOfSale     = new TermsOfSale();
-        $formTermsOfSale = $this->createForm(TermsOfSaleType::class, $termsOfSale);
-
-        $promotionCode     = new PromotionCode();
-        $formPromotionCode = $this->createForm(PromotionCodeType::class, $promotionCode);
-
-        if ($formTermsOfSale->handleRequest($request)->isSubmitted() && $formTermsOfSale->isValid()) {
-            $this->addFlash('package_completed_payment', $sheet->getId());
-
-            return $this->redirectToRoute('event_package_payment', [
-                'sheet' => $sheet->getId(),
-            ]);
-        }
-
-        if ($formPromotionCode->handleRequest($request)->isSubmitted() && $formPromotionCode->isValid()) {
-            $this->validatePromotionCode($sheet, $promotionCode);
-
-            return $this->redirect($this->generateUrl('event_package_summary', ['sheet' => $sheet->getId()]) . '#summary-promo-code-row');
-        }
-
-        $view = $this->get('tactician.commandbus.query')->handle(
-            new SummaryViewQuery(
-                $sheet,
-                $funnel,
-                $funnel->getCart(),
-                $request->getLocale()
-            )
-        );
-
-        return $this->render('EventBundle:Package:summary.html.twig', [
-            'event'             => $eventDomain->getEvent(),
-            'formTermsOfSale'   => $formTermsOfSale->createView(),
-            'formPromotionCode' => $formPromotionCode->createView(),
-            'sheet'             => $sheet,
-            'view'              => $view,
-        ]);
-    }
-
-    /**
      * @param EventDomain      $eventDomain
      * @param Sheet            $sheet
      * @param PromotionCodeRow $promotionCodeRow
@@ -440,21 +360,6 @@ class PackageController extends Controller
         $this->addFlash('success', 'flash.package.promotion.delete.success');
 
         return $this->redirectToRoute('event_package_summary', ['sheet' => $sheet->getId()]);
-    }
-
-    /**
-     * @param Sheet         $sheet
-     * @param PromotionCode $promotionCode
-     */
-    private function validatePromotionCode(Sheet $sheet, PromotionCode $promotionCode)
-    {
-        $command = new Add($sheet, $promotionCode->promotionCode);
-
-        try {
-            $this->get('tactician.commandbus')->handle($command);
-        } catch (PromotionCodeException $exception) {
-            $this->addFlash('package_promotion_code_error', $exception->getFlash());
-        }
     }
 
     /**

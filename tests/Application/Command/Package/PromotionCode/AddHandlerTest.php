@@ -91,7 +91,8 @@ class AddHandlerTest extends TestCase
         $promotionCodeRepository = $this->prophesize(PromotionCodeRepositoryInterface::class);
         $orderMerger             = $this->prophesize(Merger::class);
 
-        $add = new Add($this->sheet, 'PROMOCODE50');
+        $add = new Add($this->sheet);
+        $add->promotionCode = 'PROMOCODE50';
 
         $cartManager->getCart($this->sheet)->shouldBeCalled()->willReturn($actualCart);
 
@@ -124,7 +125,8 @@ class AddHandlerTest extends TestCase
         $promotionCodeRepository = $this->prophesize(PromotionCodeRepositoryInterface::class);
         $orderMerger             = $this->prophesize(Merger::class);
 
-        $add = new Add($this->sheet, 'PROMO_CODE_NOT_EXIST');
+        $add = new Add($this->sheet);
+        $add->promotionCode = 'PROMO_CODE_NOT_EXIST';
 
         $cartManager->getCart($this->sheet)->shouldBeCalled()->willReturn($actualCart);
         $cartManager->save($expectedCart)->shouldNotBeCalled();
@@ -160,7 +162,8 @@ class AddHandlerTest extends TestCase
         $promotionCodeRepository = $this->prophesize(PromotionCodeRepositoryInterface::class);
         $orderMerger             = $this->prophesize(Merger::class);
 
-        $add = new Add($this->sheet, 'PROMOCODE50');
+        $add = new Add($this->sheet);
+        $add->promotionCode = 'PROMOCODE50';
 
         $cartManager->getCart($this->sheet)->shouldBeCalled()->willReturn($actualCart);
 
@@ -198,7 +201,8 @@ class AddHandlerTest extends TestCase
         $promotionCodeRepository = $this->prophesize(PromotionCodeRepositoryInterface::class);
         $orderMerger             = $this->prophesize(Merger::class);
 
-        $add = new Add($this->sheet, 'PROMOCODE50');
+        $add = new Add($this->sheet);
+        $add->promotionCode = 'PROMOCODE50';
 
         $cartManager->getCart($this->sheet)->shouldBeCalled()->willReturn($actualCart);
 
@@ -237,7 +241,8 @@ class AddHandlerTest extends TestCase
         $promotionCodeRepository = $this->prophesize(PromotionCodeRepositoryInterface::class);
         $orderMerger             = $this->prophesize(Merger::class);
 
-        $add = new Add($this->sheet, 'PROMOCODE50');
+        $add = new Add($this->sheet);
+        $add->promotionCode = 'PROMOCODE50';
 
         $cartManager->getCart($this->sheet)->shouldBeCalled()->willReturn($actualCart);
 
@@ -279,7 +284,8 @@ class AddHandlerTest extends TestCase
         $promotionCodeRepository = $this->prophesize(PromotionCodeRepositoryInterface::class);
         $orderMerger             = $this->prophesize(Merger::class);
 
-        $add = new Add($this->sheet, 'PROMOCODE10');
+        $add = new Add($this->sheet);
+        $add->promotionCode = 'PROMOCODE10';
 
         $cartManager->getCart($this->sheet)->shouldBeCalled()->willReturn($actualCart);
 

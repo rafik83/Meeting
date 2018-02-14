@@ -118,9 +118,9 @@ class PlanningViewQueryHandlerTest extends TestCase
             '',
             $now
         );
-        $rowPlan        = new Order\Row($order, 1, $planProduct);
-        $rowParticipant = new Order\Row($order, 1, $participantProduct);
-        $rowPlanning    = new Order\Row($order, 1, $planningProduct);
+        $rowPlan        = new Order\Row($order, 1, 20, $planProduct);
+        $rowParticipant = new Order\Row($order, 1, 20, $participantProduct);
+        $rowPlanning    = new Order\Row($order, 1, 20, $planningProduct);
         $order->addRow($rowPlan);
         $order->addRow($rowParticipant);
         $order->addRow($rowPlanning);
@@ -257,9 +257,9 @@ class PlanningViewQueryHandlerTest extends TestCase
             '',
             $now
         );
-        $rowPlan        = new Order\Row($order, 1, $planProduct);
-        $rowParticipant = new Order\Row($order, 1, $participantProduct);
-        $rowPlanning    = new Order\Row($order, 1, $planningProduct);
+        $rowPlan        = new Order\Row($order, 1, 20, $planProduct);
+        $rowParticipant = new Order\Row($order, 1, 20, $participantProduct);
+        $rowPlanning    = new Order\Row($order, 1, 20, $planningProduct);
         $order->addRow($rowPlan);
         $order->addRow($rowParticipant);
         $order->addRow($rowPlanning);
@@ -396,9 +396,9 @@ class PlanningViewQueryHandlerTest extends TestCase
             '',
             $now
         );
-        $rowPlan        = new Order\Row($order, 1, $planProduct);
-        $rowParticipant = new Order\Row($order, 1, $participantProduct);
-        $rowPlanning    = new Order\Row($order, 1, $planningProduct);
+        $rowPlan        = new Order\Row($order, 1, 20, $planProduct);
+        $rowParticipant = new Order\Row($order, 1, 20, $participantProduct);
+        $rowPlanning    = new Order\Row($order, 1, 20, $planningProduct);
         $order->addRow($rowPlan);
         $order->addRow($rowParticipant);
         $order->addRow($rowPlanning);

@@ -3,31 +3,26 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2016 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
 
 namespace Proximum\Vimeet\Application\Query\Order;
 
+use Proximum\Vimeet\Application\Query\Query;
 use Proximum\Vimeet\Domain\Model\Order;
 use Proximum\Vimeet\Domain\Model\Sheet;
 
-class SummaryQuery
+class SummaryQuery implements Query
 {
-    /**
-     * @var Sheet
-     */
+    /** @var Sheet */
     public $sheet;
 
-    /**
-     * @var Order
-     */
+    /** @var Order */
     public $order;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     public $locale;
 
     /**
