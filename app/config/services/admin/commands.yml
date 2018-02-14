@@ -113,3 +113,19 @@ services:
             - '@datetime'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Tip\Event\Update }
+
+    #
+    # Event / Sheet
+    #
+    Proximum\Vimeet\Application\Command\Event\Sheet\IndexHandler:
+        arguments:
+            - '@vimeet_infrastructure.repository.sheet_repository'
+            - '@adapter.sheet_indexer'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Event\Sheet\Index }
+
+    Proximum\Vimeet\Application\Command\Event\Sheet\PrepareSheetsIndexHandler:
+        arguments:
+            - '@adapter.job_queue_adapter'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Event\Sheet\PrepareSheetsIndex }

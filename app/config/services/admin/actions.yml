@@ -40,6 +40,15 @@ services:
             - '@Proximum\Vimeet\Infrastructure\Adapter\QueryBus'
             - '@templating'
 
+    Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Event\Sheet\IndexAction:
+        arguments:
+            - '@adapter.authorization_checker'
+            - '@form.factory'
+            - '@Proximum\Vimeet\Infrastructure\Adapter\CommandBus'
+            - '@templating'
+            - '@session.flash_bag'
+            - '@adapter.router'
+
     #
     # Registration Template
     #

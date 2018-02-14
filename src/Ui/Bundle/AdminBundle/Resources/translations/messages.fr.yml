@@ -177,6 +177,7 @@ admin.event.search_facets.link: 'Filtres catalogue'
 admin.event.see_on_front.link: 'Voir le site'
 admin.event.see.link: Voir
 admin.event.settings.link: 'Paramétrages de l''évènement'
+admin.event.sheet.index.title: 'Ré-indexer les fiches de l''événement'
 admin.event.template.link: Templates
 admin.event.template.package: 'Forfait de participation'
 admin.event.template.registration: Inscription

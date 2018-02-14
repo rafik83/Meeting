@@ -170,4 +170,9 @@ interface JobQueueInterface
      * @param $event
      */
     public function generateMeetingSolutionAnalytic(Event $event);
+
+    /**
+     * @param $event
+     */
+    public function indexSheetsByEvent(Event $event): void;
 }
