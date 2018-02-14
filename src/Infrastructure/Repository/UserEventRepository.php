@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2016 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -67,12 +67,9 @@ class UserEventRepository implements UserEventRepositoryInterface
     }
 
     /**
-     * @param User  $user
-     * @param Event $event
-     *
-     * @return UserEvent
+     * {@inheritdoc}
      */
-    public function getUserEvent(User $user, Event $event)
+    public function getUserEvent(User $user, Event $event): ?UserEvent
     {
         $queryBuilder = $this
             ->entityManager
@@ -82,7 +79,9 @@ class UserEventRepository implements UserEventRepositoryInterface
             ->where('user_event.user = :user')
             ->andWhere('user_event.event = :event')
             ->setParameter('user', $user)
-            ->setParameter('event', $event);
+            ->setParameter('event', $event)
+            ->setMaxResults(1)
+        ;
 
         return $queryBuilder->getQuery()->getOneOrNullResult();
     }
