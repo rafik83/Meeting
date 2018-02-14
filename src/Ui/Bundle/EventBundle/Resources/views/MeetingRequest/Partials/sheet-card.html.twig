@@ -22,7 +22,7 @@
                 </div>
             {% endif %}
 
-            <div class="buttons-zone {% if meetingRequestView.isAnsweringMeetingRequestClosed == true or meetingRequestView.isMeetingRequestUpdateLocked == true %}{% else %}button{% endif %}">
+            <div class="buttons-zone">
                 {{ include('EventBundle:MeetingRequest:buttons.html.twig', {
                     'allowedToCreate': false,
                     'meetingRequest': meetingRequestView.meetingRequest,
