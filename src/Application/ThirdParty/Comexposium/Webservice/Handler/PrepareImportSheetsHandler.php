@@ -11,6 +11,8 @@
 namespace Proximum\Vimeet\Application\ThirdParty\Comexposium\Webservice\Handler;
 
 use Proximum\Vimeet\Application\Adapter\ThirdParty\Comexposium\ComexposiumJobQueueInterface;
+use Proximum\Vimeet\Domain\Event\ExtraParameter\Type;
+use Proximum\Vimeet\Domain\Model\Event\ExtraParameter;
 use Proximum\Vimeet\Domain\Repository\Event\ExtraParameterRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\EventRepositoryInterface;
 
@@ -40,8 +42,27 @@ class PrepareImportSheetsHandler
         $this->comexposiumJobQueue = $comexposiumJobQueue;
     }
 
-    public function handle()
+    public function handle(): void
     {
+        $events = $this->eventRepository->findEventWithParameters([Type::TYPE_COMEXPOSIUM_EVENT]);
 
+        foreach ($events as $event) {
+            $eventReferenceExtraParameter = $this->extraParameterRepository->findByEventAndType(
+                $event,
+                Type::TYPE_COMEXPOSIUM_EVENT
+            );
+
+            if (!$eventReferenceExtraParameter instanceof ExtraParameter) {
+                continue;
+            }
+
+            $registrationReferences = $this->comexposiumWebservice->getRegistrationsReference(
+                $eventReferenceExtraParameter->getValue()
+            );
+
+            foreach ($registrationReferences as $registrationReference) {
+                $this->comexposiumJobQueue->getRegistration($event, $registrationReference);
+            }
+        }
     }
 }

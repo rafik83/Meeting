@@ -1,7 +1,16 @@
 services:
+    #
+    # Command
+    #
     Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\ThirdParty\Comexposium\Webservice\ComexposiumWebserviceCallCommand:
         arguments:
             - '@Proximum\Vimeet\Application\ThirdParty\Comexposium\Webservice\Handler\ComexposiumWebservice'
+        tags:
+            - { name: console.command }
+
+    Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\ThirdParty\Comexposium\Webservice\ComexposiumPrepareImportSheetsCommand:
+        arguments:
+            - '@Proximum\Vimeet\Application\ThirdParty\Comexposium\Webservice\Handler\PrepareImportSheetsHandler'
         tags:
             - { name: console.command }
 
@@ -10,6 +19,16 @@ services:
             - '@vimeet_infrastructure.repository.event_repository'
         tags:
             - { name: console.command }
+
+    #
+    # Handler
+    #
+    Proximum\Vimeet\Application\ThirdParty\Comexposium\Webservice\Handler\PrepareImportSheetsHandler:
+        arguments:
+            - '@vimeet_infrastructure.repository.event_repository'
+            - '@repository.event.extra_parameter_repository'
+            - '@Proximum\Vimeet\Application\ThirdParty\Comexposium\Webservice\Handler\ComexposiumWebservice'
+            - '@Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Adapter\ThirdParty\Comexposium\ComexposiumJobQueue'
 
     Proximum\Vimeet\Application\ThirdParty\Comexposium\Webservice\Handler\ComexposiumWebservice:
         arguments:

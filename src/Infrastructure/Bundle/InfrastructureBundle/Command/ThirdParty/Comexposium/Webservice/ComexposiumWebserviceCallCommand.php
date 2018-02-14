@@ -48,12 +48,8 @@ class ComexposiumWebserviceCallCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $response = $this->comexposiumWebservice->getEventParameters('13389');
-        foreach ($response->nomenclatureManifestation as $nomenclature) {
-            if ('26930' == $nomenclature->reference) {
-                dump($nomenclature);
-            }
-        }
-        //dump($response->nomenclatureManifestation[418]);
+        //$response = $this->comexposiumWebservice->getRegistration('13389', '2262768');
+        $response = $this->comexposiumWebservice->getRegistrationsReference('13389');
+        dump($response);
     }
 }
