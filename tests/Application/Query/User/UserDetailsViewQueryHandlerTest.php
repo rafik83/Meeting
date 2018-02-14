@@ -14,6 +14,7 @@ use Proximum\Vimeet\Application\Query\User\UserDetailsViewQuery;
 use Proximum\Vimeet\Application\Query\User\UserDetailsViewQueryHandler;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Sheet;
+use Proximum\Vimeet\Domain\Model\UserEvent;
 use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\UserEventRepositoryInterface;
 use Proximum\Vimeet\Domain\UserEvent\Exception\UserEventMissingException;
@@ -55,7 +56,8 @@ class UserDetailsViewQueryHandlerTest extends TestCase
         $userEventRepository = $this->prophesize(UserEventRepositoryInterface::class);
         $sheetRepository = $this->prophesize(SheetRepositoryInterface::class);
 
-        $userEventRepository->getUserEvent($user, $event)->shouldBeCalled()->willReturn(true);
+        $userEvent = $this->prophesize(UserEvent::class);
+        $userEventRepository->getUserEvent($user, $event)->shouldBeCalled()->willReturn($userEvent->reveal());
         $sheetRepository->getByUser($user)->shouldBeCalled()->willReturn([$sheet1, $sheet2, $sheet3]);
 
         $handler = new UserDetailsViewQueryHandler(
