@@ -18,10 +18,6 @@ class ComexposiumWebservice
     private const PLATFORM_EVENT_PARAMETERS_WSDL = 'http://webservices.comexposium-admin.com/catalogue-ws-v2/parametragecataloguews.wsdl';
     private const PLATFORM_REGISTRATIONS_WSDL = 'http://webservices.comexposium-admin.com/catalogue-ws-v2/inscriptionclientws.wsdl';
 
-    private const OPERATION_GET_PARAMETERS = 'getParametrages';
-    private const OPERATION_GET_EVENTS = 'getManifestations';
-    private const OPERATION_GET_REGISTRATIONS = 'getInscriptions';
-
     /** @var string */
     private $username;
 
@@ -46,7 +42,7 @@ class ComexposiumWebservice
     {
         $client = $this->getClient(self::PLATFORM_PARAMETERS_WSDL);
 
-        return $client->call(self::OPERATION_GET_EVENTS, []);
+        return $client->call('getManifestations', []);
     }
 
     /**
@@ -57,18 +53,7 @@ class ComexposiumWebservice
     {
         $client = $this->getClient(self::PLATFORM_PARAMETERS_WSDL);
 
-        return $client->call(self::OPERATION_GET_PARAMETERS, []);
-    }
-
-    /**
-     * @return mixed
-     * @throws \SoapFault
-     */
-    public function getRegistrations()
-    {
-        $client = $this->getClient(self::PLATFORM_REGISTRATIONS_WSDL);
-
-        return $client->call(self::OPERATION_GET_REGISTRATIONS, []);
+        return $client->call('getParametrages', []);
     }
 
     /**
