@@ -16,7 +16,6 @@ final class Constant
     const CREATED_THIS_WEEK    = 'created_this_week';
     const NO_ORDER             = 'no_order';
     const HAS_CART             = 'has_cart';
-    const HAS_ORDER            = 'has_order';
     const HAS_REMAINING_TO_PAY = 'hasRemainingToPay';
     const BOOLEAN_FILTER       = 'boolean_filters';
 
@@ -31,4 +30,9 @@ final class Constant
     const NOT_IMPORTED                = 'not_imported';
 
     const FILTER_IMPORTED = 'imported';
+
+    const ORDER_STATUS                           = 'order_status';
+    const ORDER_STATUS_NO_ORDER                  = 'no_order';
+    const ORDER_STATUS_TOTAL_ORDER_EQUAL_ZERO    = 'total_order_equal_zero';
+    const ORDER_STATUS_TOTAL_ORDER_SUPERIOR_ZERO = 'total_order_superior_zero';
 }

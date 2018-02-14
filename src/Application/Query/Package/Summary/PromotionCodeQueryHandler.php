@@ -1,9 +1,9 @@
 <?php
 
 /*
- * This file is part of the vimeet project.
+ * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2016 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -41,7 +41,12 @@ class PromotionCodeQueryHandler
                         $promotion->getProduct()->getTitle($promotionCodeQuery->locale),
                         $promotion->getType(),
                         $promotion->getValue(),
-                        $promotion->getQuantityForCartRow($cartRow)
+                        $promotion->getQuantityForCartRow($cartRow),
+                        $promotion->getProduct()->getVat(),
+                        $cart->getDiscountForProduct(
+                            $promotionCodeRow->getPromotionCode(),
+                            $promotion->getProduct()
+                        )
                     );
                 }
             }

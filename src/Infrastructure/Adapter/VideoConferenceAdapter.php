@@ -1,9 +1,9 @@
 <?php
 
 /*
- * This file is part of the vimeet project.
+ * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2017 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -65,7 +65,7 @@ class VideoConferenceAdapter implements VideoConferenceAdapterInterface
             $sessionEndDate = new \DateTime($endDateTime->format('Y-m-d H:i:s.u'));
 
             if (false === $sessionEndDate->modify(self::DELAY_AFTER_END_TIME)) {
-                throw new \LogicException('Imposible do modify a date');
+                throw new \LogicException('Impossible to modify the date');
             }
 
             $options['expireTime'] = $sessionEndDate->getTimeStamp();

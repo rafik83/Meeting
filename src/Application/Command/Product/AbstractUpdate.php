@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2016 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -14,25 +14,14 @@ use Proximum\Vimeet\Domain\Model\Product;
 
 abstract class AbstractUpdate extends AbstractProduct
 {
-    /**
-     * @var Product
-     */
+    /** @var Product */
     public $product;
 
-    /**
-     * @var float
-     */
+    /** @var float */
     public $unitPrice;
 
-    /**
-     * @var int
-     */
-    public $availabilityCurrent;
-
-    /**
-     * @var int
-     */
-    public $availabilityMax;
+    /** @var float */
+    public $vat;
 
     /**
      * @param Product $product
@@ -44,6 +33,7 @@ abstract class AbstractUpdate extends AbstractProduct
         $this->name                = $product->getName();
         $this->quantityMax         = $product->getQuantityMax();
         $this->unitPrice           = $product->getUnitPrice();
+        $this->vat                 = $product->getVat();
         $this->availabilityCurrent = $product->getAvailabilityCurrent();
         $this->availabilityMax     = $product->getAvailabilityMax();
 

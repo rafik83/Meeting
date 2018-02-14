@@ -786,4 +786,15 @@ class Event implements EventInterface, TraceableInterface
     {
         return $this->welcomeEnabled;
     }
+
+    /**
+     * @param \DateTimeInterface $datetime
+     *
+     * @return bool
+     * @throws DayNotDefinedException
+     */
+    public function isFinished(\DateTimeInterface $datetime): bool
+    {
+        return $this->getLastDay()->getEndTime() < $datetime;
+    }
 }

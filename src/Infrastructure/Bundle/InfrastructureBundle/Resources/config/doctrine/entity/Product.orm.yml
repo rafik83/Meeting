@@ -16,6 +16,8 @@ Proximum\Vimeet\Domain\Model\Product:
             nullable: true
         unitPrice:
             type: float
+        vat:
+            type: float
         quantityMax:
             type: integer
             nullable: true

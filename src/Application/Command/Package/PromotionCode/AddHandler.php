@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2016 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -21,29 +21,19 @@ use Proximum\Vimeet\Domain\Repository\PromotionCodeRepositoryInterface;
 
 class AddHandler
 {
-    /**
-     * @var CartManager
-     */
+    /** @var CartManager */
     private $cartManager;
 
-    /**
-     * @var PromotionCodeRepositoryInterface
-     */
+    /** @var PromotionCodeRepositoryInterface */
     private $promotionCodeRepository;
 
-    /**
-     * @var \DateTimeInterface
-     */
+    /** @var \DateTimeInterface */
     private $datetime;
 
-    /**
-     * @var Merger
-     */
+    /** @var Merger */
     private $orderMerger;
 
     /**
-     * AddHandler constructor.
-     *
      * @param CartManager                      $cartManager
      * @param PromotionCodeRepositoryInterface $promotionCodeRepository
      * @param \DateTimeInterface               $datetime
@@ -80,14 +70,14 @@ class AddHandler
         );
 
         if (null === $promotionCode) {
-            throw new PromotionCodeNotFoundException();
+            throw new PromotionCodeNotFoundException('The promotion code is not found');
         }
 
         if ($add->sheet->hasNotCancelledOrders()) {
             $order = $this->orderMerger->merge($add->sheet->getNotCancelledOrders());
 
             if ($order->hasPromotionCode($promotionCode)) {
-                throw new PromotionCodeAlreadyExistException();
+                throw new PromotionCodeAlreadyExistException('This promotion code is already used');
             }
         }
 

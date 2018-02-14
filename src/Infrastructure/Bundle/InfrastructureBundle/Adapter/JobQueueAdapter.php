@@ -28,6 +28,7 @@ use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\Aggregate
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\Aggregate\Sheet\AvailableSlotCalculatorCommand;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\Aggregate\Sheet\Phone\PhoneValidationStatusCalculatorCommand;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\Analytic\MeetingSolution\GenerateMeetingSolutionCommand;
+use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\Event\Sheet\IndexSheetsByEventCommand;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\Event\User\Agenda\Version\GenerateVersionsCommand;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\GenerateInvoiceCommand;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\IndexSheetsCommand;
@@ -309,6 +310,15 @@ class JobQueueAdapter extends AbstractJobQueueAdapter implements JobQueueInterfa
     public function generateMeetingSolutionAnalytic(Event $event)
     {
         $job = new Job(GenerateMeetingSolutionCommand::NAME, [$event->getId()]);
+        $this->setJob($job);
+    }
+
+    /**
+     * @param Event $event
+     */
+    public function indexSheetsByEvent(Event $event): void
+    {
+        $job = new Job(IndexSheetsByEventCommand::NAME, [$event->getId(), '--no-debug']);
         $this->setJob($job);
     }
 

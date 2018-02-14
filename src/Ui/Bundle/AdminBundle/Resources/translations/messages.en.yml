@@ -44,43 +44,132 @@ admin.agenda.filters.hasScheduledMeeting.yes: 'yes'
 admin.agenda.filters.hasSentMeetingRequest.all: 'no matter'
 admin.agenda.filters.hasSentMeetingRequest.label: 'has sent meetings requests.'
 admin.agenda.filters.hasSentMeetingRequest.no: No.
+admin.agenda.filters.hasSentMeetingRequest.yes: 'Yes'
+admin.agenda.filters.hasValidatedRequestNotScheduled.label: 'Still has unscheduled validated resquests'
+admin.agenda.filters.indicators.label: Indicators
+admin.agenda.filters.reset.label: Reset
+admin.agenda.filters.search: Search
 admin.agenda.filters.submit.label: 'Filter profiles'
+admin.agenda.filters.title.label: 'Sheet filter'
 admin.agenda.filters.type: 'Participation type'
+admin.agenda.indicators-caption: 'Indicators caption'
+admin.agenda.indicators-help: 'Hover the cursor on icons'
 admin.agenda.link: 'My meetings'
+admin.agenda.mass_assignment.enabled.label: Activated
+admin.agenda.mass_assignment.submit.label: Validate
+admin.agenda.mass_assignment.title.label: 'Update mass assignment'
+admin.agenda.meeting.mass_assignment.update: 'Update the mass meeting assignement'
+admin.agenda.meeting.move: 'Move the meeting.'
+admin.agenda.meeting.selectSlot: 'Select this slot'
+admin.agenda.meeting.transformIntoMeeting.selectedSpotNotExists: 'The selected slot doesn''t exist'
+admin.agenda.meeting.update: 'Update the meeting'
+admin.agenda.meeting.updateMassAssignment.dateFormat: 'Incorrect type of date'
+admin.agenda.meeting.updateMassAssignment.meetingOrHappeningOnSlot: 'Meeting or conference on the slot'
+admin.agenda.meeting.updateMassAssignment.missingData: 'Impossible to update mass assignement, missing datas'
+admin.agenda.meeting.updateMassAssignment.outOfMassSlot: 'Update mass assignment out of mass slots'
+admin.agenda.meeting.updateSlot.blockedSpotNotAvailableForThisMeetingAndSlot: 'This meeting has a blocked spot which is not available for the selected slot'
+admin.agenda.meeting.updateSlot.error: 'Impossible to update the meeting slot.'
+admin.agenda.meeting.updateSlot.meetingIsBlockedSlot: 'Impossible to move the meeting : blocked slot.'
+admin.agenda.meeting.updateSlot.noSpotsAvailableForThisSlotAndMeeting: 'There is no available spot for the selected slot.'
+admin.agenda.meeting.updateSlot.slotNotAvailableForThisMeeting: 'The selected slot is not available any more.'
+admin.agenda.meeting.updateSpot.blockedSlot: 'Blocked slot'
+admin.agenda.meeting.updateSpot.blockedSpot: 'Blocked spot.'
+admin.agenda.meeting.updateSpot.error: 'Impossible to update this meeting'
+admin.agenda.meeting.updateSpot.isBlockedSpot: 'This is not possible to update this blocked meeting spot'
 admin.agenda.meeting.updateSpot.save: Save
+admin.agenda.meeting.updateSpot.selectedSpotNotExists: 'The selected slot doesn''t exist'
+admin.agenda.meeting.updateSpot.spot: Spot
+admin.agenda.meeting.updateSpot.spotNotAvailableForThisMeeting: 'The spot you selected is not available for this meeting'
+admin.agenda.meeting.updateSpot.title: 'Update the meeting'
+admin.agenda.meeting.updateSpot.visio: Visio
 admin.agenda.noPreference: 'No preferences'
+admin.agenda.possibleMeetingQuantity: 'Number of available slots'
 admin.agenda.remove.confirm: 'Are you sure you want to delete this meeting ?'
+admin.agenda.request.transformIntoMeeting.cancel: 'Cancel the action transform into meeting'
+admin.agenda.request.transformIntoMeeting.error: 'Impossible to transform into meeting'
+admin.agenda.request.transformIntoMeeting.label: 'Transform into meeting'
+admin.agenda.request.transformIntoMeeting.noSlotAvailable: 'No slot available for transforming into meeting'
+admin.agenda.request.transformIntoMeeting.noSpotAvailable: 'No spot available for transforming into meeting'
+admin.agenda.request.updateParticipant.invalidArguments: 'the sent arguments are not complete.'
+admin.agenda.request.updateParticipant.label: 'Update participants label.'
+admin.agenda.request.updateParticipant.submit.label: Update
+admin.agenda.request.updateParticipant.title.label: 'Update the meeting request participants label'
 admin.agenda.requestsList.noPreference: 'No preferences'
 admin.agenda.requestsList.title: 'Validated meetings'
+admin.agenda.requestsList.zeroResult: 'No result'
+admin.agenda.sheet.attend: 'Update sheet attendance'
+admin.agenda.sheet.loader: 'sheets loading'
 admin.agenda.sheet.see: 'See the presentation sheet'
 admin.agenda.sort.accepted_request.label: Approved
+admin.agenda.sort.alphabetical.label: Alphabetical
+admin.agenda.sort.asc.label: 'ascending order'
+admin.agenda.sort.desc.label: 'Decreasing order'
 admin.agenda.sort.pending_request.label: 'Number of proposals waiting for validation'
+admin.agenda.sort.request.label: 'Number of requests'
+admin.agenda.sort.scheduled_meeting.label: 'Number of scheduled meetings'
 admin.agenda.sort.submit.label: 'Sort profiles'
 admin.agenda.sort.title.label: 'Sort by'
+admin.agenda.spot.loader: 'Spots loading'
+admin.agenda.stopSMS: 'Stop SMS'
 admin.agenda.tab.sheet.title.label: Profile
+admin.agenda.tab.spot.title.label: Spots
 admin.agenda.title: 'Meetings planner'
+admin.agenda.usableSlots: 'available slots'
+admin.batch_actions.confirm: 'Confirm the action ?'
+admin.batch_actions.generateInvoice.confirm: 'Do you confirm the action of generating  invoices with the following formula : %prefix% ?'
 admin.batch_actions.plural: 'Batch actions on %count% items'
 admin.batch_actions.single: 'Batch actions on one item'
 admin.cancel: Cancel
 admin.category.add: Add
+admin.category.column.id: Id
+admin.category.column.title: Title
+admin.category.create.title: 'Create a category title of participation'
 admin.category.link: 'Participation categories'
+admin.category.title: 'Categories of participations'
 admin.category.update: Update
+admin.category.update.title: 'Udatecategories of participation'
 admin.check-all: 'Check all'
 admin.common.close: Close
+admin.common.export.no: 'No'
+admin.common.export.yes: 'Yes'
 admin.create_admin.title: 'Create a new backoffice user'
 admin.dashboard.link: Dashboard
 admin.event.archive.link: Archiving
+admin.event.archive.title: 'Event archive %eventTitle%'
 admin.event.billing.configuration.link: 'Billing information'
+admin.event.billing.configuration.title: 'Configuration of billing informations'
+admin.event.catalog.external.configure: 'External catalogue configuration'
+admin.event.configuration.isMeetingRequestLocked: 'Locking meeting requests'
 admin.event.configuration.key_dates.title: 'Key date of the event'
 admin.event.configure_dates: 'Key dates'
+admin.event.create.from.title: 'create an event from'
 admin.event.create.title: 'Create an event'
 admin.event.dashboard.title: Dashboard
+admin.event.days: 'Event days'
+admin.event.duplicate.title: 'Create an event from'
+admin.event.external_catalog_configure: 'External catalogue'
+admin.event.extra_parameter.link: 'Extra settings'
+admin.event.fallback: Default
 admin.event.languages: Language
+admin.event.list.archived.title: 'archived events'
 admin.event.list.currents.title: 'Current events'
+admin.event.list.pasts.title: 'Closed events'
+admin.event.page.invoice.link: Invoices
 admin.event.page.invoice.title: Invoices
 admin.event.page.list.title: 'List of my events'
+admin.event.page.orderFinder.explanation: 'Find the matching sheet with the number of order'
+admin.event.page.orderFinder.title: 'Search order'
+admin.event.page.orderInvoiceFinder.explanation: 'Find the matching sheet with the number of order or number of invoice'
+admin.event.page.orderInvoiceFinder.multipleSheetFound.explanation: 'Several sheets with the %numero% invoice number have been found'
+admin.event.page.orderInvoiceFinder.title: 'Order or invoice finder'
+admin.event.page.transactions.link: Transactions
+admin.event.page.transactions.title: 'Transactions download'
+admin.event.paymentConditions.link: 'payment conditions'
+admin.event.paymentConditions.typeWithSpecificPaymentConditions: 'Participants type with specific payment conditions'
+admin.event.paymentConditions.update.title: 'Update payment conditions'
 admin.event.practicalInfo.link: 'Practical informations'
 admin.event.practicalInfo.update.title: 'Update practical informations'
+admin.event.registration.template_builder.remove_confirm: 'Do you confirm this template removal ?'
 admin.event.search_facet.enabled.label: Activated
 admin.event.search_facet.title: 'Catalog filters'
 admin.event.search_facets.link: 'Catalog filters'
@@ -92,38 +181,149 @@ admin.event.template.package: 'Package of participation'
 admin.event.template.registration: Registration
 admin.event.template.sheet: Presentation
 admin.event.title: Title
+admin.event.trace.participant_imported: 'Imported participants the %at% par %by%'
+admin.event.unArchive.title: 'Unarchive event %eventTitle%'
 admin.event.update.link: Update
+admin.event.update.origin: 'Event origin'
 admin.event.update.title: 'Update the event'
 admin.event.vatMode.ati: VAT
+admin.event.vatMode.et: 'excluding VAT'
 admin.events.link: 'My events'
+admin.export.transaction.column.billing_contact.country: 'Billing contact country'
+admin.export.transaction.column.billing_contact.vat_number: 'VAT number'
+admin.export.transaction.column.event.id: 'Event Id'
+admin.export.transaction.column.event.name: 'Event name'
+admin.export.transaction.column.sheet.id: 'Sheet Id'
+admin.export.transaction.column.sheet.owner.id: 'Id sheet owner'
+admin.export.transaction.column.society.name: 'Company name'
+admin.export.transaction.column.transaction_amount: 'transaction amount'
+admin.export.transaction.column.transaction_date: Date
+admin.export.transaction.column.transaction_reference: Reference
 admin.export.transaction.column.transaction_type: Type
+admin.extraParameter.create.title: 'Creation of an extra setting'
+admin.extraParameter.list.action.remove: Remove
+admin.extraParameter.list.action.removeConfirm: 'Are you sure to remove this setting ?'
+admin.extraParameter.list.action.update: Update
+admin.extraParameter.list.column.actions: Actions
+admin.extraParameter.list.column.name: Name
+admin.extraParameter.list.column.type: 'Setting type'
+admin.extraParameter.list.column.value: Value
+admin.extraParameter.list.create: Add
+admin.extraParameter.list.empty: 'No setting'
+admin.extraParameter.list.title: 'Event extra settings list'
+admin.extraParameter.type.leni_event: 'LENI event code'
+admin.extraParameter.type.leni_user: 'LENI user code'
+admin.extraParameter.type.vianeo_concerned_types_id: 'Vianeo concerned types id'
+admin.extraParameter.type.vianeo_endpoint: 'Vianeo endpoint'
+admin.extraParameter.update.title: 'Extra %type% setting update'
 admin.filter: Filter
 admin.filter_by: 'Filter by'
 admin.filters.all: All
 admin.filters.reset: 'Reset all the filters'
+admin.global_nomenclature.title: 'global namings'
 admin.global_settings.title: 'Global settings'
 admin.goback.link: Back
 admin.happening_category.add: Add
+admin.happening_category.addTitle: 'Add a conference category'
+admin.happening_category.button.happening: 'Organize conferences'
+admin.happening_category.button.speaker: 'Manage speakers'
+admin.happening_category.link: 'Conferences categories'
 admin.happening_category.table.column.color: Color
 admin.happening_category.table.column.picto: Picto
+admin.happening_category.table.column.position: Position
+admin.happening_category.table.column.rank: Position
 admin.happening_category.table.column.title: Title
+admin.happening_category.title: 'Conferences categories'
 admin.happening_category.update: Update
+admin.happening_category.updateTitle: 'Update a conference category'
+admin.happening_speaker.action.confirmDelete: 'Confirm the delete action ?'
 admin.happening_speaker.action.delete: Delete
 admin.happening_speaker.action.edit: Modify
 admin.happening_speaker.action.see: See
 admin.happening_speaker.add: Add
 admin.happening_speaker.addTitle: 'Add Speaker'
+admin.happening_speaker.button.happening: 'Handle conferences'
+admin.happening_speaker.button.happening_category: 'Handle conferences categories'
+admin.happening_speaker.happenings: Conferences
 admin.happening_speaker.link: Speakers
-admin.happening_speaker.table.column.function: 'Job title'
+admin.happening_speaker.no-result: 'No speaker'
+admin.happening_speaker.speakerName: 'Speaker %name%'
+admin.happening_speaker.table.column.company: Company
+admin.happening_speaker.table.column.function: Position
+admin.happening_speaker.table.column.logoCompany: 'Company logo'
+admin.happening_speaker.table.column.name: Name
 admin.happening_speaker.table.column.photo: 'Speaker picture'
+admin.happening_speaker.table.column.subEvent: 'Sub events'
+admin.happening_speaker.title: Speakers
 admin.happening_speaker.update: Modify
+admin.happening_speaker.updateTitle: 'Speaker update'
 admin.happening.add: Add
+admin.happening.addTitle: 'Add a conference'
+admin.happening.button.category: 'categories set up'
+admin.happening.button.export: 'participants download'
+admin.happening.button.speaker: 'Speakers management'
+admin.happening.export.fields.happening_begin_hour: 'Beginning hour'
+admin.happening.export.fields.happening_day: Day
+admin.happening.export.fields.happening_end_hour: 'Ending hour'
+admin.happening.export.fields.happening_id: 'Conference Id'
+admin.happening.export.fields.happening_name: 'Conference title'
+admin.happening.export.fields.participant_email: Email
+admin.happening.export.fields.participant_firstname: Firstname
+admin.happening.export.fields.participant_id: 'Participant ID'
+admin.happening.export.fields.participant_lastname: lastname
+admin.happening.export.fields.participant_position: Position
+admin.happening.export.fields.question: Question
+admin.happening.export.fields.sheet_id: 'Sheet ID'
+admin.happening.export.fields.sheet_name: 'Sheet title'
 admin.happening.link: Conferences
+admin.happening.list.begin: Beginning
+admin.happening.list.category: Category
+admin.happening.list.end: End
+admin.happening.list.limit: Max
+admin.happening.list.no-limit: 'No limit.'
+admin.happening.list.participation: Participants.
+admin.happening.list.question: Question
+admin.happening.list.speaker: speakers
+admin.happening.list.title: Title
 admin.happening.menu.link: Programme
+admin.happening.private: Private
+admin.happening.title: Conferences
 admin.happening.update: Modify
+admin.happening.updateTitle: 'Conference update'
+admin.invoice.column.date: 'Date of creation'
+admin.invoice.column.link: Link
+admin.invoice.column.number: 'Invoice number'
+admin.invoice.column.orders: 'concerned orders'
+admin.invoice.column.total: 'Excluding VAT Total'
+admin.invoice.create.button: 'New prefix'
+admin.invoice.create.title: 'Add a new prefix'
+admin.invoice.export.fields.analytic_code: 'Analytic code'
+admin.invoice.export.fields.balance: 'balance amount'
+admin.invoice.export.fields.billing_contact_country: 'billing contact''s country'
+admin.invoice.export.fields.event_id: 'Event ID'
+admin.invoice.export.fields.event_name: 'Event''s name'
+admin.invoice.export.fields.invoice_date: 'Invoicing date'
+admin.invoice.export.fields.invoice_number: 'invoice number'
+admin.invoice.export.fields.owner_id: 'sheet owner ''s user ID'
+admin.invoice.export.fields.sheet_id: 'Sheet ID'
+admin.invoice.export.fields.sheet_title: 'Company name'
+admin.invoice.export.fields.total: 'Excluding VAT amount'
+admin.invoice.export.fields.total_with_vat: 'With VAT amount'
+admin.invoice.export.fields.vat_amount: 'VAT amount'
+admin.invoice.export.fields.vat_number: 'VAT amount'
 admin.invoice.link: Invoicing
+admin.invoice.list.isDefault: default
+admin.invoice.list.prefix: prefix
+admin.invoice.list.title: 'backoffice name'
 admin.invoice.pdf: 'View final invoice'
+admin.invoice.show: show
+admin.invoice.title: 'prefix of invoices numbers list'
 admin.login.logged_as: '%firstname% %lastname% (%role%)'
+admin.meeting_request_sheets_list.link: 'participation sheet request'
+admin.meeting_request.action.export: Download
+admin.meeting_request.action.lock: 'Lock requests'
+admin.meeting_request.createdAt: 'date of creation'
+admin.meeting_request.details: details
 admin.meeting_request.from: From
 admin.meeting_request.link: 'Meeting requests'
 admin.meeting_request.set_a_meeting: 'Organise a meeting'
@@ -132,19 +332,76 @@ admin.meeting_request.state.cancelled: Cancelled
 admin.meeting_request.state.planned: Planned
 admin.meeting_request.state.refused: Refused
 admin.meeting_request.state.sent: sent
+admin.meeting_request.stateUpdatedAt: 'State update'
+admin.meeting_request.title: '{0}  no meeting request|{1} meeting request |]1,Inf[ %count% meeting requests'
 admin.meeting_request.to: To
+admin.meeting.action.deleteAll.confirm: 'Are you sure you xant to delete the whole meetings ?'
+admin.meeting.action.deleteAll.title: 'Delete all meetings'
+admin.meeting.action.remove.confirm: 'Are you sure you want to remove this meeting ?'
+admin.meeting.action.remove.link: remove
+admin.meeting.export.fields.day: Day
+admin.meeting.export.fields.from_sheet_id: 'Sollicitor ID'
+admin.meeting.export.fields.from_sheet_participant_fullname: 'sollicitor''s fullname'
+admin.meeting.export.fields.from_sheet_participants: 'sollicitor participants'
+admin.meeting.export.fields.from_sheet_title: 'sollicitor '' sheet ID'
+admin.meeting.export.fields.from_user_ids: 'sollicitor users ID'
+admin.meeting.export.fields.hour_begin: 'beginning hour'
+admin.meeting.export.fields.hour_end: Ending
+admin.meeting.export.fields.meeting_id: 'Meeting ID'
+admin.meeting.export.fields.spot: Spot
+admin.meeting.export.fields.to_sheet_id: 'ID needed'
+admin.meeting.export.fields.to_sheet_name: 'Sheet title needed'
+admin.meeting.export.fields.to_sheet_participant_fullname: 'Participants fullname needed'
+admin.meeting.export.fields.to_sheet_participants: 'participants needed'
 admin.meeting.link: Meetings
+admin.meeting.list.column.head.createdAt: 'Created at'
+admin.meeting.list.column.head.isCreatedByParticipants: 'Created by participants'
+admin.meeting.list.column.head.slot: Slot
+admin.meeting.list.column.head.to: To
+admin.meeting.list.details: details
 admin.menu.link: Menu
+admin.messaging_campaign.recipients.participants: 'All participants of the sheet'
+admin.messaging_campaign.recipients.sheet_owner: 'Sheet owner'
+admin.messaging.campaign.list.columns.createdAt: 'Created at'
+admin.messaging.campaign.list.columns.sentAt: 'sent at'
+admin.messaging.campaign.list.columns.title: Title
+admin.messaging.campaign.list.no_data: 'No existing campaign for the current event'
+admin.messaging.campaign.list.title: 'emailing campaign'
+admin.messaging.campaign.menu.create.title: 'Create a new campaign'
+admin.messaging.campaign.menu.list.title: 'Campaigns list'
 admin.messaging.campaign.message_preview.content: Content
 admin.messaging.campaign.message_preview.subject: Subject
 admin.messaging.campaign.message_preview.title: Preview
+admin.messaging.campaign.message.title: 'Message choice'
+admin.messaging.campaign.no_message_preview: 'Choose a message for a preview'
+admin.messaging.campaign.recipients.title: Recipients
+admin.messaging.campaign.selected_filters: 'selected filters'
+admin.messaging.campaign.selected_sheets: 'Selected sheets'
 admin.messaging.campaign.send.title: Send
+admin.messaging.campaign.sheet_list.columns.name: 'sheet name'
+admin.messaging.campaign.sheet_list.columns.ownerEmail: 'Owner email'
+admin.messaging.campaign.sheet_list.no_data: 'No participation has been found for the current filters'
+admin.messaging.campaign.sheet_list.success: 'Your selection has been successfully registered'
+admin.messaging.campaign.sheet_list.title: 'Create my selection'
 admin.messaging.link: Emailing
+admin.messaging.menu.title: messaging
+admin.messaging.message.compose.links.activateAccount: 'Activate Account'
 admin.messaging.message.compose.links.agenda: Planning
 admin.messaging.message.compose.links.catalog: Catalogue
+admin.messaging.message.compose.links.exportMeetingSheet: 'Download my contacts'
+admin.messaging.message.compose.links.label: 'Personalized links'
 admin.messaging.message.compose.links.meetingRequest: 'My Meetings'
+admin.messaging.message.compose.links.orders: 'Orders list'
+admin.messaging.message.compose.links.package: Package
 admin.messaging.message.compose.links.program: Programme
+admin.messaging.message.compose.links.sheet: 'presentation sheet'
+admin.messaging.message.compose.links.validateMobilePhone: 'Validate your phone number'
+admin.messaging.message.compose.tags.cta.agendaConfirmation: 'CTA link agenda confirmation'
+admin.messaging.message.compose.tags.eventName: 'Event name'
+admin.messaging.message.compose.tags.label: Tags
+admin.messaging.message.compose.tags.participant: 'Participant fullname'
 admin.messaging.message.compose.tags.participationType: 'Participation type'
+admin.messaging.message.compose.tags.sheetPlanning: 'Participation planning'
 admin.messaging.message.content: Content
 admin.messaging.message.create.title: 'Create a new message'
 admin.messaging.message.createdAt: 'Created at'
@@ -154,21 +411,96 @@ admin.messaging.message.list.edit_link: Edit
 admin.messaging.message.name: 'Name emailing'
 admin.messaging.message.subject: Subject
 admin.new.link: admin.new.link
+admin.nomenclature.action.confirmDelete: 'Are you sure you want to delete this naming ?'
+admin.nomenclature.assign.modal.title: 'Assign to an event'
+admin.nomenclature.create.button: 'New naming'
 admin.nomenclature.create.modal.close: Close
+admin.nomenclature.create.modal.title: 'Create a nomenclature'
+admin.nomenclature.link: Nomenclatures
+admin.nomenclature.read.assign.button: 'Assign to an event'
+admin.nomenclature.read.configuration.title: Configuration
+admin.nomenclature.read.export.button: Export
+admin.nomenclature.read.export.help: 'Downloaded datas have a key for each line of datas. The update of one of these lines will update the corresponding element. The add of a line without a key will create a new element. The removal is not possible anymore if there are participants at the event.'
+admin.nomenclature.read.export.title: Export
+admin.nomenclature.read.import.button: Import
+admin.nomenclature.read.import.title: Import
+admin.nomenclature.remove.link: Remove
+admin.nomenclature.removeUnAvailable.title: 'Unavailable removal of the nomenclature being used'
+admin.nomenclature.table.depth: '%depth% level|%depth% levels'
 admin.nomenclature.table.read: See
+admin.nomenclature.table.title: Title
+admin.nomenclature.title: Nomenclatures
+admin.operator_list.action.create: 'create a new collaborator'
+admin.operator_list.action.create.partner: 'Create a new partner'
+admin.operator_list.filter.empty_filter: 'empty filters'
+admin.operator_list.link: 'Collaborators list'
 admin.operator_list.table.content.admin.events.none: None
 admin.operator_list.table.content.update: Edit
+admin.operator_list.table.title.actions: Actions
+admin.operator_list.table.title.email: Email
+admin.operator_list.table.title.events: Events
+admin.operator_list.table.title.firstname: firstname
+admin.operator_list.table.title.lastLoginAt: 'Last login at'
+admin.operator_list.table.title.lastname: lastname
+admin.operator_list.title: 'Collaborators list'
+admin.operator.create.title: 'Create a new collaborator'
 admin.operator.update.title: 'Edit collaborater'
+admin.order_edit.add_line: 'Add a line'
+admin.order_edit.after: After
+admin.order_edit.columns.product: Product
 admin.order_edit.columns.quantity: Quantity
+admin.order_edit.columns.total: Total
 admin.order_edit.columns.unitPrice: 'Unit price'
+admin.order_edit.command_name: 'N°%id% of %sheetName%'
+admin.order_edit.includedProduct: Included
 admin.order_edit.link: Modify
+admin.order_edit.list_command.label: orders
+admin.order_edit.promotionCodes: 'Promotion codes'
+admin.order_edit.total.withoutVAT: 'Total without VAT'
+admin.order_edit.total.withVAT: 'Total with VAT'
+admin.order_edit.update_line: 'Update a line'
 admin.order_edit.VAT: VAT
 admin.order.cancelled: Cancelled
+admin.order.createdAt: 'Created at'
+admin.order.edit: 'Modification of order'
+admin.order.export.button.label: 'Export orders'
+admin.order.follower: 'Commercial follow-up'
+admin.order.id: Id
+admin.order.invoiceNumber: 'Invoice number'
+admin.order.link: Orders
+admin.order.sheet: sheet
 admin.order.title: 'Order list'
+admin.order.total: Total
+admin.order.totalWithoutVat: 'Total without VAT'
 admin.order.type: 'Participation type'
+admin.organizer_template_list.table.column.action: Action
+admin.organizer_template_list.table.column.date: 'Created at'
+admin.organizer_template_list.table.column.locales: Languages
+admin.organizer_template_list.table.column.title: Title
+admin.package.create: 'Create a template'
+admin.package.duplicate: Duplicate
+admin.package.duplicate.title: 'Duplicate the package %title%'
+admin.package.import.link: 'Import packages and products catalogue'
+admin.package.import.title: 'Import packages and products catalogue of an event'
 admin.package.link: 'Package of participation template'
+admin.package.steps.step1.label: packages
+admin.package.steps.step2.label: 'Participants and plannings'
+admin.package.steps.step3.label: options
+admin.package.table.column.event: Event
+admin.package.table.column.title: Title
 admin.package.title: 'Package of participation template'
 admin.package.update: Modify
+admin.participant_import_mapping.title: 'Compliance between columns of the file and fields of the registration'
+admin.participant_import_result.created_sheets: 'Number of imported sheets'
+admin.participant_import_result.created_users: 'Number of imported users'
+admin.participant_import_result.database_participations: 'participations datas'
+admin.participant_import_result.errors: 'Errors list in the file'
+admin.participant_import_result.file_participations: 'Number of participations in the file'
+admin.participant_import_result.title.label: 'Participants import result'
+admin.participant_import.title: 'Import participants'
+admin.participant.export.fields.happening_subscriber: 'Sub event inscription'
+admin.participant.export.fields.participant_created_at: 'participant created at'
+admin.participant.export.fields.participant_email: 'Participant email'
 admin.participant.export.fields.participant_type: 'Participation type'
 admin.participant.export.fields.planning.meeting: '%spotRef% - %sheetMet%'
 admin.participant.export.fields.planning.unallocated_meetings: 'List of validated meeting requests which have not been planned due to availability conflicts.'
@@ -179,6 +511,9 @@ admin.participant.export.no: 'No'
 admin.plan.unitPrice: 'Unit price'
 admin.planner.analytics.sheet.table.column.type: Type
 admin.planner.analytics.sheet.title: Profile
+admin.planner.import.alert.meetingDelation: 'Beware, the import of a new solution deletes the whole programmed meetings of the event'
+admin.planner.pendingPlannerJob.details: 'A planification of the (%solutionType%) meetings has been asked by %adminFirstname% %adminLastname% le %createdAt%.'
+admin.product.removeUnAvailable.title: 'The product cannot be removed, it is used in a formula, in a package or in an order.'
 admin.product.unitPrice: 'Unit price'
 admin.product.update.action: Modify
 admin.promotion_code.action.close: Close
@@ -186,8 +521,12 @@ admin.promotion_code.table.action.edit: Modify
 admin.rule.link: 'Who see who'
 admin.rule.list.content.type: Type
 admin.schedule.link: Planning
+admin.schedule.slot.remove.confirm: 'Are you sure you want to remove this slot ?'
 admin.schedule.title: Planning
+admin.sheet.assign.spot.exception: 'An error has occurred'
 admin.sheet.assign.spot.numberOfSheet: '%count% profile'
+admin.sheet.attend.danger.numberOfMeetings: 'Beware, the cancelling of this sheet will suppress %numberOfMeetings% meetings'
+admin.sheet.batch.selectionAll.label: 'Select the <strong>%allSheets%</strong> sheets corresponding to your filters'
 admin.sheet.change.type.link: Change
 admin.sheet.change.type.title: 'Change the type of participation'
 admin.sheet.dashboard.totalSheetType: 'Total profiles per type'
@@ -199,11 +538,13 @@ admin.sheet.details.meeting.request.pending: 'Pending requests'
 admin.sheet.details.meeting.request.refused: 'Refused requests'
 admin.sheet.details.meeting.request.title: 'Meeting requests'
 admin.sheet.details.owner.mobile: Mobile
+admin.sheet.details.participant.tooltip.not_concerned: 'This user is not concerned, she/he hasn''t programmed meetings or does not attend to a sub event'
 admin.sheet.details.transactions: Transactions
 admin.sheet.export.fields.status: 'Profile status'
 admin.sheet.export.fields.type: Type
 admin.sheet.export.invoice.button.label: 'Export Invoices'
 admin.sheet.export.no: 'No'
+admin.sheet.impersonateAs: '%adminFullname% (%adminEmail%)connected as %userEmail%'
 admin.sheet.link: 'Participation sheets'
 admin.sheet.read: See
 admin.sheet.state: State
@@ -218,6 +559,7 @@ admin.spot.createSpot.title: 'Add a spot'
 admin.spot.delete: Delete
 admin.spot.disable: Disable
 admin.spot.enable: Enable
+admin.spot.import.notAvailable: 'The spots import is not available, meetings are already scheduled'
 admin.spot.link: Spots
 admin.spot.list.checkbox: Checkbox
 admin.spot.listSpot.active: Active
@@ -235,6 +577,7 @@ admin.template.registration.table.column.eventType: Event/Type
 admin.template.registration.table.content.edit: Modify
 admin.template.registration.table.content.editJson: 'Modify JSON'
 admin.template.sheet.table.column.eventType: Event/Type
+admin.tip.column.visible.onConfirmationPhone: 'Planning and phone number confirmation (condition of the display of the phone number validation form)'
 admin.tip.event.affect.link: 'Assign a help message'
 admin.tip.event.create.button: 'Create a help message'
 admin.tip.event.create.title: 'Create a help message for %eventTitle%'
@@ -259,9 +602,32 @@ admin.type.create.link: Add
 admin.type.link: 'Participation types'
 admin.type.update.link: Modify
 admin.unavailability.category.table.content.update: Modify
+admin.unavailability.mass.create: 'Creation of a mass unavailability'
+admin.unavailability.mass.link: 'Mass unavailability'
+admin.unavailability.mass.table.column.begin: beginning
+admin.unavailability.mass.table.column.category: Category
+admin.unavailability.mass.table.column.end: End
+admin.unavailability.mass.table.column.name: 'Back office name'
+admin.unavailability.mass.table.column.title: Title
 admin.unavailability.mass.table.content.update: Modify
+admin.unavailability.mass.title: 'Mass unavailability'
+admin.unavailability.mass.update: 'Modification of a mass unavailability'
+admin.update_admin.title: 'Updatef a back office user'
+admin.update_content.terms-of-sale.link: 'terms of sale'
+admin.update_content.terms-of-sale.title: 'Modification of the terms of sale'
+admin.user.company-information: 'Company informations'
+admin.user.contact-information: 'Contact informations'
+admin.user.events: Events
 admin.users.details: 'View the account'
+admin.users.email: Email
+admin.users.firstName: Firstname
+admin.users.lastName: Name
+admin.users.link: Users
 admin.users.see-sheet: 'See the participation'
+admin.users.title: Users
+admin.users.type: 'Users type'
+admin.users.withoutSheet: 'without sheet'
+admin.users.withSheet: 'with sheet'
 admin.zero-result: 'No result'
 and: and
 and_more: 'and %count% other|and %count% others'
@@ -285,9 +651,15 @@ event.meeting.approvedRequest.label: 'From %fromName% to %toName%'
 event.meeting.approvedRequest.title: 'Accept received proposal'
 event.meeting.cancelRequest.label: 'From %fromName% to %toName%'
 event.meeting.cancelRequest.title: 'Cancel my request'
+event.meeting.createRequest.destination: 'For%toName% with the sheet %fromName%'
 event.meeting.createRequest.title: 'Meeting request'
+event.meeting.details.createdAt: 'created at'
+event.meeting.details.request: Request
+event.meeting.details.title: 'meeting details'
+event.meeting.editRequest.destination: 'For %toName% with the sheet %fromName%'
 event.meeting.editRequest.title: 'Edit my request'
 event.meeting.listProposition.accept: Accept
+event.meeting.listProposition.actions: Actions
 event.meeting.listProposition.createdAt: 'Received on'
 event.meeting.listProposition.description: Description
 event.meeting.listProposition.edit: 'Edit received proposal'
@@ -299,6 +671,7 @@ event.meeting.listProposition.show: Show
 event.meeting.listProposition.state: States
 event.meeting.listProposition.title: 'Meetings requests'
 event.meeting.listProposition.yourParticipants: 'Your participants'
+event.meeting.listRequest.actions: Actions
 event.meeting.listRequest.cancel: Cancel
 event.meeting.listRequest.createdAt: 'Sending on'
 event.meeting.listRequest.edit: Modify
@@ -307,8 +680,16 @@ event.meeting.listRequest.participants: 'The participants'
 event.meeting.listRequest.show: See
 event.meeting.listRequest.state: States
 event.meeting.listRequest.title: 'List of you meeting requests'
+event.meeting.listRequest.to: For
 event.meeting.refusedRequest.label: 'From %fromName% to %toName%'
 event.meeting.refusedRequest.title: 'Refuse the meeting proposal'
+event.meeting.request.details.createdAt: 'Created at'
+event.meeting.request.details.from: From
+event.meeting.request.details.fromParticipant: 'Participants origin'
+event.meeting.request.details.message: 'exchange of messages'
+event.meeting.request.details.state: Status
+event.meeting.request.details.title: 'Details of the meeting request'
+event.meeting.request.details.to: To
 event.meeting.request.details.updatedAt: 'Change status'
 event.meeting.request.state.from.approved: Approved
 event.meeting.request.state.from.cancelled: Cancelled
@@ -324,8 +705,12 @@ event.meeting.showDetailsRequest.participants: Participants
 event.meeting.showDetailsRequest.state: States
 event.meeting.showDetailsRequest.title: 'Details request for appointment'
 event.meeting.showDetailsRequest.to: To
+event.schedule.columns.happening.title: 'sub event'
 event.schedule.columns.meeting.title: Meeting
+event.schedule.columns.unavailability.title: Unavailabilities
 event.sheet.add_participant.title: 'Add participant'
+event.sheet.attend.cancel: 'Cancelled his attendance'
+event.sheet.attend.present: Present
 event.sheet.billing.title: Billing
 event.sheet.block.add_participant.title: 'Fill this participant'
 event.sheet.block.buy_participant.option: Option
@@ -338,16 +723,26 @@ event.sheet.cart.column.product: Product
 event.sheet.cart.column.quantity: Quantity
 event.sheet.cart.column.total: Total
 event.sheet.cart.column.unitPrice: 'Unit Price'
+event.sheet.cart.empty: 'The package is empty.'
 event.sheet.cart.include: '{0} Inclued with %product% |]0,Inf[ %count% inclued with %product%'
 event.sheet.cart.includeTitle: 'Inclued with %product%'
 event.sheet.cart.label.billingStep: 'Go to the billing step'
 event.sheet.cart.label.totalPrice: Total
 event.sheet.cart.title: 'Package summary'
 event.sheet.cart.totalWithoutTaxes: 'Total excl. Tax'
+event.sheet.completed.all: 'no matter'
 event.sheet.completed.complete: Complete
 event.sheet.completed.incomplete: Incomplete
+event.sheet.enableState.disabled: 'Not activated'
+event.sheet.enableState.enabled: Activated
+event.sheet.imported.imported_with_connection.label: 'Imported with connection'
+event.sheet.imported.imported_without_connection.label: 'Imported without connection'
+event.sheet.imported.imported.label: 'All imports'
+event.sheet.imported.not_imported.label: 'Not imported'
 event.sheet.listOrders.proForma: 'View proforma'
 event.sheet.listOrders.title: 'My orders'
+event.sheet.order.alphabetic: aphabetical
+event.sheet.order.createdAt: 'created at'
 event.sheet.package.column.choices: Choices
 event.sheet.package.column.description: Description
 event.sheet.package.column.label: Title
@@ -356,6 +751,7 @@ event.sheet.package.column.unitPrice: 'Unit price'
 event.sheet.package.include: 'Included in your formula'
 event.sheet.package.includeQuantity: '{0} Included in your formula|{1} %count% Included in your formula|]1,Inf[ %count% Included in your formula'
 event.sheet.package.participant.boughtNumber: '{0}|{1} You have already add %count% participant to your sheet|]1,Inf[ You have already add %count% participants to your sheet'
+event.sheet.package.products.title: 'Select products to add to my sheet'
 event.sheet.package.step.next: 'Choose your package'
 event.sheet.participant.already_exists: 'This participant has already been added'
 event.sheet.participant.email: Email
@@ -365,7 +761,9 @@ event.sheet.payment.description: 'Choose your mode of payment'
 event.sheet.payment.title: 'Mode of payment'
 event.sheet.state.accepted: Accepted
 event.sheet.state.pending: Pending
+event.sheet.state.refused: refused
 event.sheet.state.validated: Validated
+event.sheet.summary.action: Action
 event.sheet.summary.product: Option
 event.sheet.summary.quantity: Quantity
 event.sheet.summary.title: 'Package summary'
@@ -374,6 +772,7 @@ event.sheet.summary.unit_price: 'Unit price'
 event.sheet.summary.update_product: 'Update my participation'
 event.sheet.update_product.title: 'Modify an ordered item'
 event.sheet.validationState.draft: Draft
+event.sheet.validationState.pending: 'Validation state pending'
 event.sheet.validationState.validated: Validated
 gdr.user.agenda.version.modal.no_phone: 'The user has not accepted to receive notifications'
 help.link: Help

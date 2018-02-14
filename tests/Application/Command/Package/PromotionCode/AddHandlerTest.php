@@ -1,9 +1,9 @@
 <?php
 
 /*
- * This file is part of the vimeet project.
+ * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2016 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -72,7 +72,7 @@ class AddHandlerTest extends TestCase
         $this->user     = new User('email@email.com', 'salt', 'password', 'fr');
         $this->datetime = new \DateTimeImmutable();
         $this->sheet    = new Sheet($this->event, $this->type, [], $this->user, $this->datetime);
-        $this->product  = Product::createOption($this->event, 'Option A', 'a.jpg', 100, 2, 4, 3, false);
+        $this->product  = Product::createOption($this->event, 'Option A', 'a.jpg', 100, 20, 2, 4, 3, false);
     }
 
     public function testHandle()
@@ -91,7 +91,8 @@ class AddHandlerTest extends TestCase
         $promotionCodeRepository = $this->prophesize(PromotionCodeRepositoryInterface::class);
         $orderMerger             = $this->prophesize(Merger::class);
 
-        $add = new Add($this->sheet, 'PROMOCODE50');
+        $add = new Add($this->sheet);
+        $add->promotionCode = 'PROMOCODE50';
 
         $cartManager->getCart($this->sheet)->shouldBeCalled()->willReturn($actualCart);
 
@@ -124,7 +125,8 @@ class AddHandlerTest extends TestCase
         $promotionCodeRepository = $this->prophesize(PromotionCodeRepositoryInterface::class);
         $orderMerger             = $this->prophesize(Merger::class);
 
-        $add = new Add($this->sheet, 'PROMO_CODE_NOT_EXIST');
+        $add = new Add($this->sheet);
+        $add->promotionCode = 'PROMO_CODE_NOT_EXIST';
 
         $cartManager->getCart($this->sheet)->shouldBeCalled()->willReturn($actualCart);
         $cartManager->save($expectedCart)->shouldNotBeCalled();
@@ -160,7 +162,8 @@ class AddHandlerTest extends TestCase
         $promotionCodeRepository = $this->prophesize(PromotionCodeRepositoryInterface::class);
         $orderMerger             = $this->prophesize(Merger::class);
 
-        $add = new Add($this->sheet, 'PROMOCODE50');
+        $add = new Add($this->sheet);
+        $add->promotionCode = 'PROMOCODE50';
 
         $cartManager->getCart($this->sheet)->shouldBeCalled()->willReturn($actualCart);
 
@@ -198,7 +201,8 @@ class AddHandlerTest extends TestCase
         $promotionCodeRepository = $this->prophesize(PromotionCodeRepositoryInterface::class);
         $orderMerger             = $this->prophesize(Merger::class);
 
-        $add = new Add($this->sheet, 'PROMOCODE50');
+        $add = new Add($this->sheet);
+        $add->promotionCode = 'PROMOCODE50';
 
         $cartManager->getCart($this->sheet)->shouldBeCalled()->willReturn($actualCart);
 
@@ -227,7 +231,7 @@ class AddHandlerTest extends TestCase
             $this->datetime->modify('+1 month'));
         $promotionCode->setPromotion($this->product, Promotion::TYPE_PERCENT_OFF, 50);
 
-        $otherProductNotConcerned = Product::createOption($this->event, 'Option B', 'a.jpg', 100, 2, 4, 3, false);
+        $otherProductNotConcerned = Product::createOption($this->event, 'Option B', 'a.jpg', 100, 20, 2, 4, 3, false);
 
         $planRow      = new CartRow($this->sheet, $otherProductNotConcerned, 5);
         $actualCart   = new Cart($this->sheet, [$planRow], [], 1);
@@ -237,7 +241,8 @@ class AddHandlerTest extends TestCase
         $promotionCodeRepository = $this->prophesize(PromotionCodeRepositoryInterface::class);
         $orderMerger             = $this->prophesize(Merger::class);
 
-        $add = new Add($this->sheet, 'PROMOCODE50');
+        $add = new Add($this->sheet);
+        $add->promotionCode = 'PROMOCODE50';
 
         $cartManager->getCart($this->sheet)->shouldBeCalled()->willReturn($actualCart);
 
@@ -279,7 +284,8 @@ class AddHandlerTest extends TestCase
         $promotionCodeRepository = $this->prophesize(PromotionCodeRepositoryInterface::class);
         $orderMerger             = $this->prophesize(Merger::class);
 
-        $add = new Add($this->sheet, 'PROMOCODE10');
+        $add = new Add($this->sheet);
+        $add->promotionCode = 'PROMOCODE10';
 
         $cartManager->getCart($this->sheet)->shouldBeCalled()->willReturn($actualCart);
 

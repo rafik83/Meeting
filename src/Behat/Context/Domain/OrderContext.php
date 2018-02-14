@@ -49,8 +49,10 @@ class OrderContext implements Context
     /**
      * @param float $total
      * @param bool  $isVatApplicable
+     *
+     * @throws \Exception
      */
-    private function createOrder($total, $isVatApplicable = true)
+    private function createOrder(float $total, bool $isVatApplicable = true)
     {
         $event = $this->orderContextProxy->getStorage()->get('event');
 

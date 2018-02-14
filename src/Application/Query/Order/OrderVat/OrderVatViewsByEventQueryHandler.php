@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Application\Query\Order\OrderVat;
 
+use Proximum\Vimeet\Domain\Package\Exception\MissingBillingInfoException;
 use Proximum\Vimeet\Domain\Repository\OrderRepositoryInterface;
 use Proximum\Vimeet\Domain\View\OrderVatView;
 
@@ -35,6 +36,8 @@ class OrderVatViewsByEventQueryHandler
      * @param OrderVatViewsByEventQuery $orderVatViewsByEventQuery
      *
      * @return OrderVatView[]
+     *
+     * @throws MissingBillingInfoException
      */
     public function handle(OrderVatViewsByEventQuery $orderVatViewsByEventQuery)
     {

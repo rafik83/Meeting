@@ -1,3 +1,5 @@
+alphabetical: Alphabetical
+created_at: 'Created at'
 form.activate_account_password.children.password.children.first.label: 'New password'
 form.activate_account_password.children.password.children.second.label: 'Confirm password'
 form.activate_account_password.children.submit.label: Submit

@@ -10,55 +10,12 @@
 
 namespace Proximum\Vimeet\Application\ThirdParty\LENI\Normalizer;
 
+use Proximum\Vimeet\Application\ThirdParty\LENI\LeniConstants;
 use Proximum\Vimeet\Application\ThirdParty\LENI\View\LeniUserView;
-use Proximum\Vimeet\Domain\Model\User\Event\ExtraData;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 
 class LeniUserViewNormalizer implements NormalizerInterface
 {
-    const LONG_FIELD = 255;
-    const SHORT_FIELD = 50;
-
-    const LENI_COL_USER_ID      = 'Id';
-    const LENI_COL_CAB_2        = 'Cab2';
-    const LENI_COL_EXTERNAL_KEY = 'CleExterne';
-    const LENI_COL_COMPANY_NAME = 'Societe';
-    const LENI_COL_TYPE         = 'ZL_SOUSCATEGORIE';
-    const LENI_COL_CATEGORY     = 'CategorieIndividuEvt';
-    const LENI_COL_TITLE        = 'Civilite';
-    const LENI_COL_FIRST_NAME   = 'Prenom';
-    const LENI_COL_LAST_NAME    = 'Nom';
-    const LENI_COL_POSITION     = 'Fonction';
-    const LENI_COL_PHONE_NUMBER = 'TelephoneFixe';
-    const LENI_COL_EMAIL        = 'Email';
-    const LENI_COL_MOBILE_PHONE = 'TelephoneMobile';
-    const LENI_COL_UNALLOCATED  = 'ZL_RDVNONORGANISES';
-    const LENI_COL_DAY          = 'ZL_JOURNEE';
-    const LENI_COL_COUNTRY      = 'Pays';
-    const LENI_COL_ATTENDANCE   = 'Inscrit';
-    const LENI_COL_LOCALE       = 'Langue';
-
-    const LENI_COLUMNS = [
-        self::LENI_COL_USER_ID,
-        self::LENI_COL_CAB_2,
-        self::LENI_COL_EXTERNAL_KEY,
-        self::LENI_COL_COMPANY_NAME,
-        self::LENI_COL_TYPE,
-        self::LENI_COL_CATEGORY,
-        self::LENI_COL_TITLE,
-        self::LENI_COL_FIRST_NAME,
-        self::LENI_COL_LAST_NAME,
-        self::LENI_COL_POSITION,
-        self::LENI_COL_PHONE_NUMBER,
-        self::LENI_COL_EMAIL,
-        self::LENI_COL_MOBILE_PHONE,
-        self::LENI_COL_UNALLOCATED,
-        self::LENI_COL_DAY,
-        self::LENI_COL_COUNTRY,
-        self::LENI_COL_ATTENDANCE,
-        self::LENI_COL_LOCALE,
-    ];
-
     /**
      * {@inheritdoc}
      */
@@ -68,40 +25,39 @@ class LeniUserViewNormalizer implements NormalizerInterface
         $userView = $object;
 
         $data = [
-            self::LENI_COL_CAB_2        => (string) $userView->id,
-            self::LENI_COL_EXTERNAL_KEY => $userView->id,
-            self::LENI_COL_COMPANY_NAME => mb_substr($userView->sheetName, 0, self::LONG_FIELD),
-            self::LENI_COL_CATEGORY     => (string) $userView->categoryId,
-            self::LENI_COL_TYPE         => (string) $userView->typeId,
-            self::LENI_COL_TITLE        => $userView->gender,
-            self::LENI_COL_FIRST_NAME   => mb_substr($userView->firstName, 0, self::LONG_FIELD),
-            self::LENI_COL_LAST_NAME    => mb_substr($userView->lastName, 0, self::LONG_FIELD),
-            self::LENI_COL_POSITION     => mb_substr($userView->position, 0, self::SHORT_FIELD),
-            self::LENI_COL_EMAIL        => mb_substr($userView->email, 0, self::LONG_FIELD),
-            self::LENI_COL_MOBILE_PHONE => mb_substr($userView->mobile, 0, self::LONG_FIELD),
-            self::LENI_COL_PHONE_NUMBER => mb_substr($userView->phone, 0, self::LONG_FIELD),
-            self::LENI_COL_UNALLOCATED  => $userView->planning->unallocated,
-            self::LENI_COL_COUNTRY      => $userView->country,
-            self::LENI_COL_ATTENDANCE   => $userView->attendance,
-            self::LENI_COL_LOCALE       => $userView->locale,
+            LeniConstants::LENI_COL_CAB_2 => (string) $userView->id,
+            LeniConstants::LENI_COL_EXTERNAL_KEY => $userView->id,
+            LeniConstants::LENI_COL_COMPANY_NAME => mb_substr($userView->sheetName, 0, LeniConstants::LONG_FIELD),
+            LeniConstants::LENI_COL_CATEGORY => (string) $userView->categoryId,
+            LeniConstants::LENI_COL_TYPE => (string) $userView->typeId,
+            LeniConstants::LENI_COL_TITLE => LeniConstants::GENDER_MAPPING[$userView->gender] ?? '',
+            LeniConstants::LENI_COL_FIRST_NAME => mb_substr($userView->firstName, 0, LeniConstants::LONG_FIELD),
+            LeniConstants::LENI_COL_LAST_NAME => mb_substr($userView->lastName, 0, LeniConstants::LONG_FIELD),
+            LeniConstants::LENI_COL_POSITION => mb_substr($userView->position, 0, LeniConstants::SHORT_FIELD),
+            LeniConstants::LENI_COL_EMAIL => mb_substr($userView->email, 0, LeniConstants::LONG_FIELD),
+            LeniConstants::LENI_COL_MOBILE_PHONE => mb_substr($userView->mobile, 0, LeniConstants::LONG_FIELD),
+            LeniConstants::LENI_COL_PHONE_NUMBER => mb_substr($userView->phone, 0, LeniConstants::LONG_FIELD),
+            LeniConstants::LENI_COL_UNALLOCATED => $userView->planning->unallocated,
+            LeniConstants::LENI_COL_COUNTRY => $userView->country,
+            LeniConstants::LENI_COL_ATTENDANCE => LeniConstants::ATTENDANCE,
+            LeniConstants::LENI_COL_LOCALE => $userView->locale,
+            LeniConstants::LENI_COL_ENABLED => LeniConstants::LENI_ENABLED_MAPPING[$userView->enabled],
+            LeniConstants::LENI_COL_IS_PAID => LeniConstants::LENI_IS_PAID_MAPPING[$userView->paid],
+            LeniConstants::LENI_COL_PARTICIPANT_PRODUCT_ID => $userView->participantProductId,
         ];
 
         $dayNumber = 1;
 
         foreach ($userView->planning->days as $day) {
-            $data[self::LENI_COL_DAY . $dayNumber] = $day->planning;
+            $data[sprintf(LeniConstants::LENI_COL_DAY_FORMAT, $dayNumber)] = $day->planning;
 
             $dayNumber++;
         }
 
         // Set the previous LENI user id
         // Warning: always on end of the returned array
-        if ($context['previousUserExtraData'] instanceof ExtraData) {
-            $previousData = unserialize($context['previousUserExtraData']->getValue());
-
-            if (isset($previousData[self::LENI_COL_USER_ID])) {
-                $data[self::LENI_COL_USER_ID] = $previousData[self::LENI_COL_USER_ID];
-            }
+        if (null !== $userView->leniId) {
+            $data[LeniConstants::LENI_COL_USER_ID] = $userView->leniId;
         }
 
         return $data;

@@ -50,7 +50,7 @@ class GroupsViewQueryHandler
      *
      * @return GroupsView
      */
-    public function handle(GroupsViewQuery $groupsViewQuery)
+    public function handle(GroupsViewQuery $groupsViewQuery): GroupsView
     {
         $groupViewQueryHandler = $this->groupViewQueryHandler;
         $cart = $groupsViewQuery->cart;
@@ -70,7 +70,7 @@ class GroupsViewQueryHandler
         }
 
         if ($package->isParticipantAndPlanningEnabled()
-            && (count($cart->getParticipantRows()) || null !== $cart->getPlanningRow())
+            && (\count($cart->getParticipantRows()) || null !== $cart->getPlanningRow())
         ) {
             $participantAndPlanningGroupView = $this->participantAndPlanningGroupViewQueryHandler->handle(
                 new ParticipantAndPlanningGroupViewQuery(

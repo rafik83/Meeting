@@ -156,27 +156,6 @@ class RequestQueryBuilder extends QueryBuilder
     }
 
     /**
-     * @param array $availableSlots
-     *
-     * @return RequestQueryBuilder
-     */
-    public function isToAvailable(array $availableSlots)
-    {
-        $this->join('request.to', 'toSheet')
-            ->join('toSheet.availableSlots', 'availableSlot', 'WITH', 'availableSlot.slot IN (:availableSlots)')
-            ->setParameter('availableSlots', array_map(function ($slot) {
-                    if ($slot instanceof AvailableSlotView) {
-                        return $slot->id;
-                    }
-
-                    return null;
-                }, $availableSlots)
-            )
-        ;
-        return $this;
-    }
-
-    /**
      * @param Event $event
      *
      * @return RequestQueryBuilder

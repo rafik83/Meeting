@@ -590,10 +590,9 @@ event_package_remove_participant:
 
 event_package_summary:
     path: /sheet/{sheet}/package/summary
-    defaults: { _controller: EventBundle:Package:summary }
+    defaults: { _controller: Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Package\SummaryAction }
     requirements:
         sheet: \d+
-        step: \d+
     methods: [GET, POST]
 
 event_package_summary_fill_billing_info:
@@ -671,7 +670,7 @@ event_order_summary_total:
     requirements:
         sheet: \d+
     methods: [GET]
-    defaults: { _controller: EventBundle:Order:summaryTotal }
+    defaults: { _controller: Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Order\SummaryTotalAction }
 
 # This route is available publicly, without authentication
 event_invoice_show:

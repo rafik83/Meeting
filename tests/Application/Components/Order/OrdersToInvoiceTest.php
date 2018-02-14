@@ -1,9 +1,9 @@
 <?php
 
 /*
- * This file is part of the vimeet project.
+ * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2016 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -37,19 +37,19 @@ class OrdersToInvoiceTest extends TestCase
         $owner = new User('test@test.fr', '__SALT__', '__PASSWORD__', 'fr');
         $sheet = new Sheet($event, $type, [], $owner, $datetime);
 
-        $plan        = Product::createPlan($event, 'plan', '', 99, 20, 100);
-        $participant = Product::createParticipant($event, 'participant', 1789, 20);
-        $option      = Product::createOption($event, 'option', '', 169, 50, 10, 20, true);
+        $plan        = Product::createPlan($event, 'plan', '', 99, 20, 20, 100);
+        $participant = Product::createParticipant($event, 'participant', 1789, 20, 20);
+        $option      = Product::createOption($event, 'option', '', 169, 20, 50, 10, 20, true);
 
         $orderOne = new Order($sheet, '[]', $datetime->modify('-5 day'));
-        $orderOne->addRow(new Order\Row($orderOne, 1, $plan));
-        $orderOne->addRow(new Order\Row($orderOne, 2, $participant));
-        $orderOne->addRow(new Order\Row($orderOne, 1, $option));
+        $orderOne->addRow(new Order\Row($orderOne, 1, 20, $plan));
+        $orderOne->addRow(new Order\Row($orderOne, 2, 20, $participant));
+        $orderOne->addRow(new Order\Row($orderOne, 1, 20, $option));
         $sheet->addOrder($orderOne);
 
         $orderTwo = new Order($sheet, '[]', $datetime->modify('-2 day'));
-        $orderTwo->addRow(new Order\Row($orderTwo, -1, $participant));
-        $orderTwo->addRow(new Order\Row($orderTwo, 3, $option));
+        $orderTwo->addRow(new Order\Row($orderTwo, -1, 20, $participant));
+        $orderTwo->addRow(new Order\Row($orderTwo, 3, 20, $option));
         $sheet->addOrder($orderTwo);
         
         $orderRepository = $this->prophesize(OrderRepositoryInterface::class);
@@ -62,7 +62,7 @@ class OrdersToInvoiceTest extends TestCase
 
         $orderToInvoice = new OrdersToInvoice(
             $orderRepository->reveal(),
-            new Merger($vatApplicable->reveal()),
+            new Merger(),
             $invoiceDataQueryHandler->reveal(),
             $vatApplicable->reveal(),
             $this->prophesize(SerializerAdapterInterface::class)->reveal()
@@ -94,7 +94,7 @@ class OrdersToInvoiceTest extends TestCase
 
         $orderToInvoice = new OrdersToInvoice(
             $orderRepository->reveal(),
-            new Merger($vatApplicable->reveal()),
+            new Merger(),
             $invoiceDataQueryHandler->reveal(),
             $vatApplicable->reveal(),
             $this->prophesize(SerializerAdapterInterface::class)->reveal()
@@ -115,10 +115,10 @@ class OrdersToInvoiceTest extends TestCase
         $owner = new User('test@test.fr', '__SALT__', '__PASSWORD__', 'fr');
         $sheet = new Sheet($event, $type, [], $owner, $datetime);
 
-        $option = Product::createOption($event, 'option', '', 169, 50, 10, 20, true);
+        $option = Product::createOption($event, 'option', '', 169, 20, 50, 10, 20, true);
 
         $orderNegative = new Order($sheet, '[]', $datetime->modify('-5 day'));
-        $orderNegative->addRow(new Order\Row($orderNegative, -1, $option));
+        $orderNegative->addRow(new Order\Row($orderNegative, -1, 20, $option));
         $sheet->addOrder($orderNegative);
 
         $orderRepository = $this->prophesize(OrderRepositoryInterface::class);
@@ -130,7 +130,7 @@ class OrdersToInvoiceTest extends TestCase
 
         $orderToInvoice = new OrdersToInvoice(
             $orderRepository->reveal(),
-            new Merger($vatApplicable->reveal()),
+            new Merger(),
             $invoiceDataQueryHandler->reveal(),
             $vatApplicable->reveal(),
             $this->prophesize(SerializerAdapterInterface::class)->reveal()
@@ -151,9 +151,9 @@ class OrdersToInvoiceTest extends TestCase
         $owner = new User('test@test.fr', '__SALT__', '__PASSWORD__', 'fr');
         $sheet = new Sheet($event, $type, [], $owner, $datetime);
 
-        $plan        = Product::createPlan($event, 'plan', '', 99, 20, 100);
-        $participant = Product::createParticipant($event, 'participant', 1789, 20);
-        $option      = Product::createOption($event, 'option', '', 169, 50, 10, 20, true);
+        $plan        = Product::createPlan($event, 'plan', '', 99, 20, 20, 100);
+        $participant = Product::createParticipant($event, 'participant', 1789, 20, 20);
+        $option      = Product::createOption($event, 'option', '', 169, 20, 50, 10, 20, true);
 
         $groupId = 99;
         $groupsData = json_encode(
@@ -169,22 +169,22 @@ class OrdersToInvoiceTest extends TestCase
         );
 
         $orderOne = new Order($sheet, $groupsData, $datetime->modify('-5 day'));
-        $orderOne->addRow(new Order\Row($orderOne, 1, $plan));
-        $orderOne->addRow(new Order\Row($orderOne, 2, $participant));
-        $orderOne->addRow(new Order\Row($orderOne, 1, $option, $groupId));
+        $orderOne->addRow(new Order\Row($orderOne, 1, 20, $plan));
+        $orderOne->addRow(new Order\Row($orderOne, 2, 20, $participant));
+        $orderOne->addRow(new Order\Row($orderOne, 1, 20, $option, $groupId));
         $sheet->addOrder($orderOne);
 
         $orderTwo = new Order($sheet, $groupsData, $datetime->modify('-2 day'));
-        $orderTwo->addRow(new Order\Row($orderTwo, -1, $participant));
+        $orderTwo->addRow(new Order\Row($orderTwo, -1, 20, $participant));
 
-        $optionRow = new Order\Row($orderTwo, 3, $option, $groupId);
+        $optionRow = new Order\Row($orderTwo, 3, 20, $option, $groupId);
         $orderTwo->addRow($optionRow);
 
         // Add custom row attached to parent row
-        $orderTwo->addRow(new Order\Row($orderTwo, 1, null, $groupId, 'Remise', -100, $optionRow));
+        $orderTwo->addRow(new Order\Row($orderTwo, 1, 20, null, $groupId, 'Remise', -100, $optionRow));
 
         // Add custom row only attached to groupId
-        $orderTwo->addRow(new Order\Row($orderTwo, 1, null, $groupId, 'Product XYZ', 239));
+        $orderTwo->addRow(new Order\Row($orderTwo, 1, 20, null, $groupId, 'Product XYZ', 239));
 
         $sheet->addOrder($orderTwo);
 
@@ -198,7 +198,7 @@ class OrdersToInvoiceTest extends TestCase
 
         $orderToInvoice = new OrdersToInvoice(
             $orderRepository->reveal(),
-            new Merger($vatApplicable->reveal()),
+            new Merger(),
             $invoiceDataQueryHandler->reveal(),
             $vatApplicable->reveal(),
             $this->prophesize(SerializerAdapterInterface::class)->reveal()

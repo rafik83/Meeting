@@ -56,7 +56,10 @@ class PromotionCodeQueryHandlerTest extends TestCase
             $product->getTitle($locale),
             Promotion::TYPE_VALUE_OFF,
             20,
-            1
+            1,
+            20,
+            -20
+
         );
 
         $promotionCodeView = new PromotionCodeView(

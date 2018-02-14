@@ -42,7 +42,7 @@ class FullUnavailabilityHandlerTest extends TestCase
         ;
 
         $userRepository
-            ->findByEvent($event->reveal())
+            ->findWithEnabledSheetByEvent($event->reveal())
             ->shouldNotBeCalled();
 
         $participantFullUnavailabilityAggregator = $this->prophesize(ParticipantUnavailableAggregator::class);
@@ -77,7 +77,7 @@ class FullUnavailabilityHandlerTest extends TestCase
         $userRepository = $this->prophesize(UserRepositoryInterface::class);
 
         $userRepository
-            ->findByEvent($event->reveal())
+            ->findWithEnabledSheetByEvent($event->reveal())
             ->shouldBeCalled()
             ->willReturn(
                 [

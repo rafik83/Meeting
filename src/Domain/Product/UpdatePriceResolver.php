@@ -3,7 +3,7 @@
 /*
  * This file is part of the vimeet project.
  *
- * Copyright (C) 2016 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -16,19 +16,13 @@ use Proximum\Vimeet\Domain\Repository\Order\RowRepositoryInterface;
 
 class UpdatePriceResolver
 {
-    /**
-     * @var CartRowRepositoryInterface
-     */
+    /** @var CartRowRepositoryInterface */
     private $cartRowRepository;
 
-    /**
-     * @var RowRepositoryInterface
-     */
+    /** @var RowRepositoryInterface */
     private $orderRowRepository;
 
     /**
-     * UpdatePriceResolver constructor.
-     *
      * @param CartRowRepositoryInterface $cartRowRepository
      * @param RowRepositoryInterface     $orderRowRepository
      */
@@ -52,6 +46,6 @@ class UpdatePriceResolver
         $cartRows  = $this->cartRowRepository->findByProduct($product);
         $orderRows = $this->orderRowRepository->findByProduct($product);
 
-        return count($cartRows) === 0 && count($orderRows) === 0;
+        return \count($cartRows) === 0 && \count($orderRows) === 0;
     }
 }

@@ -1,9 +1,9 @@
 <?php
 
 /*
- * This file is part of the vimeet project.
+ * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2016 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -19,39 +19,25 @@ class PromotionCodeView
      */
     public $id;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     public $title;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     public $description;
 
-    /**
-     * @var float
-     */
+    /** @var float */
     public $total;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     public $currency;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     public $vatMode;
 
-    /**
-     * @var PromotionProductRowView[]
-     */
+    /** @var PromotionProductRowView[] */
     public $promotionProductRowViews;
 
     /**
-     * PromotionCodeView constructor.
-     *
      * @param int                       $id
      * @param string                    $title
      * @param string                    $description
@@ -60,8 +46,15 @@ class PromotionCodeView
      * @param string                    $vatMode
      * @param PromotionProductRowView[] $promotionProductRowViews
      */
-    public function __construct($id, $title, $description, $total, $currency, $vatMode, $promotionProductRowViews)
-    {
+    public function __construct(
+        $id,
+        $title,
+        $description,
+        $total,
+        $currency,
+        $vatMode,
+        array $promotionProductRowViews
+    ) {
         $this->id                       = $id;
         $this->title                    = $title;
         $this->description              = $description;

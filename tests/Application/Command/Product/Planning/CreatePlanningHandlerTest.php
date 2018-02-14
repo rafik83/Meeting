@@ -21,6 +21,7 @@ class CreatePlanningHandlerTest extends TestCase
         $name                = 'Name';
         $unitPrice           = 100;
         $quantityMax         = 4;
+        $vat                 = 20;
         $availabilityCurrent = 10;
         $availabilityMax     = 50;
         $updatable           = true;
@@ -29,6 +30,7 @@ class CreatePlanningHandlerTest extends TestCase
         $create                      = new CreatePlanning($event);
         $create->name                = $name;
         $create->unitPrice           = $unitPrice;
+        $create->vat                 = $vat;
         $create->quantityMax         = $quantityMax;
         $create->availabilityCurrent = $availabilityCurrent;
         $create->availabilityMax     = $availabilityMax;
@@ -41,6 +43,7 @@ class CreatePlanningHandlerTest extends TestCase
             $event,
             $name,
             $unitPrice,
+            $vat,
             $quantityMax
         );
 

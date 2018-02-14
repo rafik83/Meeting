@@ -76,8 +76,24 @@ interface UserRepositoryInterface
      * @param Event $event
      *
      * @return User[]
+     *
+     * @deprecated use findWithEnabledSheetByEvent()
      */
     public function findByEvent(Event $event);
+
+    /**
+     * @param Event $event
+     *
+     * @return User[]
+     */
+    public function findWithEnabledSheetByEvent(Event $event): array;
+
+    /**
+     * @param Event $event
+     *
+     * @return User[]
+     */
+    public function findWithSheetByEvent(Event $event): array;
 
     /**
      * @param Event $event

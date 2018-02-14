@@ -223,12 +223,57 @@ class RequestRepository implements RequestRepositoryInterface
     /**
      * {@inheritdoc}
      */
-    public function countPendingPropositionWithMetSheetAvailableForSheet(Sheet $sheet, array $availableSlots): int
+    public function countPendingPropositionReceivedBySheetWithAvailableFromSheet(Sheet $toSheet, array $slotIds): int
     {
-        $queryBuilder = new RequestQueryBuilder($this->entityManager);
-        $queryBuilder->receivedBy($sheet)->pending()->isEnabled()->isFromAttending()->isToAvailable($availableSlots);
+        return $this->countPendingPropositionReceivedBySheetWithAvailability($toSheet, $slotIds, true);
+    }
 
-        return count($queryBuilder->getQuery()->getResult());
+    /**
+     * {@inheritdoc}
+     */
+    public function countPendingPropositionReceivedBySheetWithAvailableToSheet(Sheet $toSheet, array $slotIds): int
+    {
+        return $this->countPendingPropositionReceivedBySheetWithAvailability($toSheet, $slotIds, false);
+    }
+
+    /**
+     * @param Sheet $toSheet
+     * @param array $slotIds
+     * @param bool  $checkFromSheetAvailability
+     *
+     * @return int
+     */
+    private function countPendingPropositionReceivedBySheetWithAvailability(
+        Sheet $toSheet,
+        array $slotIds,
+        bool $checkFromSheetAvailability
+    ): int {
+        $queryBuilder = $this->entityManager
+            ->createQueryBuilder()
+            ->select('count(DISTINCT request.id)')
+            ->from(Request::class, 'request')
+            ->join(
+                'request.from',
+                'sheetFrom',
+                'WITH',
+                'request.to = :toSheet AND request.state = :pending AND request.disabled = false
+                AND sheetFrom.attend = true'
+            )
+            ->join(
+                Sheet\AvailableSlot::class,
+                'availableSlot',
+                'WITH',
+                sprintf(
+                    'availableSlot.sheet = request.%s AND availableSlot.slot IN (:slotIds)',
+                    $checkFromSheetAvailability ? 'from' : 'to'
+                )
+            )
+            ->setParameter('pending', Request::STATE_SENT)
+            ->setParameter('toSheet', $toSheet)
+            ->setParameter('slotIds', $slotIds)
+        ;
+
+        return (int) $queryBuilder->getQuery()->getSingleScalarResult();
     }
 
     /**

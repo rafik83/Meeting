@@ -15,6 +15,7 @@ use Proximum\Vimeet\Application\Exception\Payment\DepositNotAvailableException;
 use Proximum\Vimeet\Application\Query\Payment\PaymentConditionsViewQuery;
 use Proximum\Vimeet\Domain\Cart;
 use Proximum\Vimeet\Domain\Model\Transaction;
+use Proximum\Vimeet\Domain\Package\Exception\MissingBillingInfoException;
 use Proximum\Vimeet\Domain\Payment\DepositApplicable;
 use Proximum\Vimeet\Domain\Payment\TotalToPay;
 use Proximum\Vimeet\Domain\Repository\TransactionRepositoryInterface;
@@ -53,6 +54,7 @@ class ChoiceWithDepositHandler extends AbstractChoiceHandler
      *
      * @return Transaction
      * @throws DepositNotAvailableException
+     * @throws MissingBillingInfoException
      */
     public function handle(ChoiceWithDeposit $choice)
     {
@@ -63,7 +65,7 @@ class ChoiceWithDepositHandler extends AbstractChoiceHandler
             $totalDeposit = DepositApplicable::calculateDeposit($paymentConditionsView, $this->datetime, $total);
 
             if ($total === $totalDeposit) {
-                throw new DepositNotAvailableException();
+                throw new DepositNotAvailableException('The deposit is equal to the total');
             }
 
             $total = $totalDeposit;

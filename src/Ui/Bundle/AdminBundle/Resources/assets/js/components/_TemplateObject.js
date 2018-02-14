@@ -9,6 +9,7 @@ var $ = require('jquery'),
   NomenclatureObject = require('./templateObjects/_NomenclatureObject'),
   MediaObject = require('./templateObjects/_MediaObject'),
   TagsObject = require('./templateObjects/_TagsObject'),
+  PhoneObject = require('./templateObjects/_PhoneObject'),
   CountryObject = require('./templateObjects/_CountryObject');
 
 /**
@@ -62,6 +63,8 @@ function TemplateObject(element, locale)
     this.object = new MediaObject(this.element, this.locale);
   } else if (this.type === 'tags') {
     this.object = new TagsObject(this.uid, this.element, this.locale)
+  } else if (this.type === 'telephone') {
+    this.object = new PhoneObject(this.element, this.locale)
   } else if (this.type === 'country') {
     this.object = new CountryObject(this.element, this.locale)
   }

@@ -169,6 +169,10 @@ class TransformRequestIntoMeetingHandler
             }
         }
 
+        if (!$transformableMeeting->spot instanceof Spot) {
+            throw new \LogicException('Spot is required');
+        }
+
         $meeting = new Meeting(
             $query->request,
             $transformableMeeting->slot,
@@ -431,12 +435,15 @@ class TransformRequestIntoMeetingHandler
             }
 
             $spot = $this->getSpotForAvailableMeeting($availableMeeting);
-            $availableMeeting->spot = $spot;
 
-            if (!$availableMeeting->spot instanceof Spot) {
+            if (!$spot instanceof Spot) {
                 // this meeting can not have a spot, remove it
                 unset($availableMeetings[$index]);
+
+                continue;
             }
+
+            $availableMeeting->spot = $spot;
 
             // The both side have a phone validated
             if (true === $availableMeeting->fromParticipantIsPhoneValidated

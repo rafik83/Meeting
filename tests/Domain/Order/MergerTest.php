@@ -1,9 +1,9 @@
 <?php
 
 /*
- * This file is part of the vimeet project.
+ * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2016 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -18,7 +18,6 @@ use Proximum\Vimeet\Domain\Model\Product;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\Type;
 use Proximum\Vimeet\Domain\Model\User;
-use Proximum\Vimeet\Domain\Package\Specification\VatApplicable;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
 use PHPUnit\Framework\TestCase;
 
@@ -34,19 +33,19 @@ class MergerTest extends TestCase
         $owner = new User('test@test.fr', '__SALT__', '__PASSWORD__', 'fr');
         $sheet = new Sheet($event, $type, [], $owner, $datetime);
 
-        $plan        = Product::createPlan($event, 'plan', '', 200, 20, 100);
-        $participant = Product::createParticipant($event, 'participant', 1250, 20);
-        $option      = Product::createOption($event, 'option', '', 99, 50, 10, 20, true);
-
+        $plan        = Product::createPlan($event, 'plan', '', 200, 20, 20, 100);
+        $participant = Product::createParticipant($event, 'participant', 1250, 20, 20);
+        $option      = Product::createOption($event, 'option', '', 99, 20, 50, 10, 20, true);
 
         // Setup
         $orderOne = new Order($sheet, '[]', $datetime->modify('-5 day'));
-        $row = new Order\Row($orderOne, 1, $plan);
+        $row = new Order\Row($orderOne, 1, 20, $plan);
         $orderOne->addRow($row);
-        $orderOne->addRow(new Order\Row($orderOne, 2, $participant));
-        $orderOne->addRow(new Order\Row($orderOne, 1, $option));
+        $orderOne->addRow(new Order\Row($orderOne, 2, 20, $participant));
+        $orderOne->addRow(new Order\Row($orderOne, 1, 20, $option));
 
         $rowToRemove = $this->prophesize(Row::class);
+        $rowToRemove->getVatRate()->shouldBeCalled()->willReturn(20);
         $rowToRemove->getQuantity()->shouldBeCalled()->willReturn(0);
         $rowToRemove->hasParentRow()->shouldBeCalled()->willReturn(true);
         $rowToRemove->getParentRow()->shouldBeCalled()->willReturn($row);
@@ -63,8 +62,8 @@ class MergerTest extends TestCase
         $sheet->addOrder($orderOne);
 
         $orderTwo = new Order($sheet, '[]', $datetime->modify('-2 day'));
-        $orderTwo->addRow(new Order\Row($orderTwo, -1, $participant));
-        $orderTwo->addRow(new Order\Row($orderTwo, 3, $option));
+        $orderTwo->addRow(new Order\Row($orderTwo, -1, 20, $participant));
+        $orderTwo->addRow(new Order\Row($orderTwo, 3, 20, $option));
         $sheet->addOrder($orderTwo);
 
         $orderMerger = new Merger();

@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2016 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -62,7 +62,7 @@ class SheetListViewQueryHandlerTest extends TestCase
         $participantInfoGuesser = $this->prophesize(ParticipantInfoGuesser::class);
         $meetingRepository->countMeetingsOfEvent($event)->shouldBeCalled()->willReturn([12 => ['countMeetings' => 10]]);
 
-        $product = new Product($event, 'plan', 'name', 'img.png', 10, 1, 1, 1, true);
+        $product = new Product($event, 'plan', 'name', 'img.png', 10, 20, 1, 1, 1, true);
         $sheet->getPackage()->setPlans([$product]);
 
         $sheetRepository->getSheetsInCatalogByEvent($event)->shouldBeCalled()->willReturn([$sheet]);
@@ -131,7 +131,7 @@ class SheetListViewQueryHandlerTest extends TestCase
         $participantInfoGuesser = $this->prophesize(ParticipantInfoGuesser::class);
         $meetingRepository->countMeetingsOfEvent($event)->shouldBeCalled()->willReturn([12 => ['countMeetings' => 10]]);
 
-        $product = new Product($event, 'plan', 'name', 'img.png', 10, 1, 1, 1, true);
+        $product = new Product($event, 'plan', 'name', 'img.png', 10, 20, 1, 1, 1, true);
         $sheet->getPackage()->setPlans([$product]);
 
         $sheetRepository->getSheetsInCatalogByEvent($event)->shouldBeCalled()->willReturn([$sheet]);
@@ -182,7 +182,7 @@ class SheetListViewQueryHandlerTest extends TestCase
      */
     public function createParticipantMock(Sheet $sheet, User $user, $id)
     {
-        $participant = new Participant($sheet, $user, [], false, true);
+        $participant = new Participant($sheet, $user, [], false);
         $reflection  = new \ReflectionClass(Participant::class);
 
         $property = $reflection->getProperty('id');
