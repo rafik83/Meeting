@@ -52,7 +52,7 @@
         "sendgrid/sendgrid": "^5.1",
         "egulias/email-validator": "~2.1",
         "jms/job-queue-bundle": "^1.4.2",
-        "sentry/sentry-symfony": "^0.7.1",
+        "sentry/sentry-symfony": "~2.0.1",
         "behat/behat": "^3.3.1",
         "opentok/opentok": "^3.0",
         "twig/twig": "~1.35",
