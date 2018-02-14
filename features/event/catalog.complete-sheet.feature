@@ -20,9 +20,9 @@ Feature: Display complete sheet from catalog
     And elastica is populate
     When I am logged with "user_asddays_3@proximum.com" on event "http://asddays-2016.vimeet.proximum"
     And I go to this page "/fr"
-    And print current URL
     Then I should be on this page "/fr/sheet/3"
     When I follow "navigation.links.catalog.available_date"
+    Then I should be on this page "/fr/sheet/3/catalog"
     Then I should see "Aanera"
     When I go to this page "/fr/sheet/3/catalog/display/1"
     Then I should see "Aanera"
