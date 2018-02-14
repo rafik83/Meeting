@@ -37,6 +37,7 @@
     <table class="table table-hover">
         <thead>
         <tr>
+            <th>{{ 'admin.product.id'|trans }}</th>
             <th>{{ 'admin.product.name'|trans }}</th>
             <th class="text-center col-md-1">{{ 'admin.product.bought'|trans }}</th>
             <th class="text-center col-md-1">{{ 'admin.product.availabilityCurrentMax'|trans }}</th>
@@ -56,13 +57,14 @@
             {% if currentType is null or currentType != product.type %}
                 {% set currentType = product.type %}
                 <tr class="info">
-                    <th colspan="9">
+                    <th colspan="10">
                         <i class="glyphicon glyphicon-product-{{ product.type }}"></i>
                         {{ ('admin.product.type.' ~ product.type)|trans }}
                     </th>
                 </tr>
             {% endif %}
             <tr>
+                <td>{{ product.id }}</td>
                 <td>
                     <i class="glyphicon glyphicon-product-{{ product.type }}"></i>
                     {{ product.name }}
@@ -141,7 +143,7 @@
             </tr>
         {% else %}
             <tr>
-                <td colspan="9" class="text-danger text-center">{{ 'admin.zero-result'|trans }}</td>
+                <td colspan="10" class="text-danger text-center">{{ 'admin.zero-result'|trans }}</td>
             </tr>
         {% endfor %}
         </tbody>
