@@ -72,6 +72,10 @@
                             'locale': locale,
                             'registrationTemplateTagView': registrationTemplateTagView,
                         }, false) }}
+                        {{ include('AdminBundle:Template/Object:telephone.html.twig', {
+                            'locale': locale,
+                            'registrationTemplateTagView': registrationTemplateTagView,
+                        }, false) }}
 
                         {#{{ include('AdminBundle:Template/Object:button-link.html.twig', { 'locale': locale }, false) }}#}
                         {#{{ include('AdminBundle:Template/Object:participant.html.twig', { 'locale': locale }, false) }}#}
