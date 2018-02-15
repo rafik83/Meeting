@@ -15,24 +15,16 @@ use Proximum\Vimeet\Domain\Model\Type;
 
 class ExportPlanningJobCreator
 {
-    /**
-     * @var Type[]
-     */
+    /** @var Type[] */
     public $types;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     public $orderBy;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     public $locale;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     public $emailToNotify;
 
     /**

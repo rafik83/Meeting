@@ -14,9 +14,7 @@ use Proximum\Vimeet\Application\Adapter\JobQueueInterface;
 
 class ExportPlanningJobCreatorHandler
 {
-    /**
-     * @var JobQueueInterface
-     */
+    /** @var JobQueueInterface */
     private $jobQueue;
 
     /**
