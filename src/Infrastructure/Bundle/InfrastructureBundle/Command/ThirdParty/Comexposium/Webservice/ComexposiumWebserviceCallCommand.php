@@ -49,7 +49,8 @@ class ComexposiumWebserviceCallCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         //$response = $this->comexposiumWebservice->getRegistration('13389', '2262768');
-        $response = $this->comexposiumWebservice->getRegistrationsReference('13389');
+        //$response = $this->comexposiumWebservice->getRegistrationsReference('13389');
+        $response = $this->comexposiumWebservice->getRegistrations('13389', ['2201249', '2276270']);
         dump($response);
     }
 }

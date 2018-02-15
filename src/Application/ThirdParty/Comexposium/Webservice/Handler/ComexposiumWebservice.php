@@ -100,24 +100,26 @@ class ComexposiumWebservice
 
     /**
      * @param string $eventReference
-     * @param string $registrationReference
+     * @param array  $registrationReferences
      *
-     * @return mixed
+     * @return array of \stdClass
      * @throws \SoapFault
      */
-    public function getRegistration(string $eventReference, string $registrationReference)
+    public function getRegistrations(string $eventReference, array $registrationReferences): array
     {
         $client = $this->getClient(self::PLATFORM_REGISTRATIONS_WSDL);
 
-        return $client->call(
+        $response = $client->call(
             'getInscriptions',
             [
                 'getInscriptionsRequest' => [
                     'referenceManifestation' => $eventReference,
-                    'referenceInscription' => $registrationReference,
+                    'referenceInscription' => $registrationReferences,
                 ],
             ]
         );
+
+        return \is_array($response->inscription) ? $response->inscription : [$response->inscription];
     }
 
     /**

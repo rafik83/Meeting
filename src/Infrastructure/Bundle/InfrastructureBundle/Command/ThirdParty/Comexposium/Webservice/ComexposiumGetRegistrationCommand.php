@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\ThirdParty\Comexposium\Webservice;
 
+use Proximum\Vimeet\Application\ThirdParty\Comexposium\Webservice\Handler\ImportSheetHandler;
 use Proximum\Vimeet\Domain\Repository\EventRepositoryInterface;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
@@ -21,16 +22,20 @@ class ComexposiumGetRegistrationCommand extends Command
     public const NAME = 'vimeet:comexposium:get-registration';
 
     private const EVENT_ID = 'eventId';
-    private const REGISTRATION_REFERENCE = 'registrationReference';
+    private const REGISTRATION_REFERENCES = 'registrationReferences';
 
     /** @var EventRepositoryInterface */
     private $eventRepository;
 
-    public function __construct(EventRepositoryInterface $eventRepository)
+    /** @var ImportSheetHandler */
+    private $importSheetHandler;
+
+    public function __construct(EventRepositoryInterface $eventRepository, ImportSheetHandler $importSheetHandler)
     {
         parent::__construct(self::NAME);
 
         $this->eventRepository = $eventRepository;
+        $this->importSheetHandler = $importSheetHandler;
     }
 
     /**
@@ -42,7 +47,11 @@ class ComexposiumGetRegistrationCommand extends Command
             ->setName(self::NAME)
             ->setDescription('Get Comexposium Registration')
             ->addArgument(self::EVENT_ID, InputArgument::REQUIRED, 'Event id')
-            ->addArgument(self::REGISTRATION_REFERENCE, InputArgument::REQUIRED, 'Registration reference');
+            ->addArgument(
+                self::REGISTRATION_REFERENCES,
+                InputArgument::REQUIRED,
+                'Registration references separated by a comma'
+            )
         ;
     }
 
@@ -57,6 +66,6 @@ class ComexposiumGetRegistrationCommand extends Command
             throw new \InvalidArgumentException('Event not found');
         }
 
-        // @todo: getRegistration->handle($event, $registrationReference)
+        $this->importSheetHandler->handle($event, explode(',', $input->getArgument(self::REGISTRATION_REFERENCES)));
     }
 }

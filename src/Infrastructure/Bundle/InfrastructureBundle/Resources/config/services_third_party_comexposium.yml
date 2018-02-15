@@ -17,6 +17,7 @@ services:
     Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\ThirdParty\Comexposium\Webservice\ComexposiumGetRegistrationCommand:
         arguments:
             - '@vimeet_infrastructure.repository.event_repository'
+            - '@Proximum\Vimeet\Application\ThirdParty\Comexposium\Webservice\Handler\ImportSheetHandler'
         tags:
             - { name: console.command }
 
@@ -29,6 +30,11 @@ services:
             - '@repository.event.extra_parameter_repository'
             - '@Proximum\Vimeet\Application\ThirdParty\Comexposium\Webservice\Handler\ComexposiumWebservice'
             - '@Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Adapter\ThirdParty\Comexposium\ComexposiumJobQueue'
+
+    Proximum\Vimeet\Application\ThirdParty\Comexposium\Webservice\Handler\ImportSheetHandler:
+        arguments:
+            - '@Proximum\Vimeet\Application\ThirdParty\Comexposium\Webservice\Handler\ComexposiumWebservice'
+            - '@repository.event.extra_parameter_repository'
 
     Proximum\Vimeet\Application\ThirdParty\Comexposium\Webservice\Handler\ComexposiumWebservice:
         arguments:
