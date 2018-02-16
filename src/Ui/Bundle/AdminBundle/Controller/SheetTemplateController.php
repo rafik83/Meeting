@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2016 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -25,12 +25,14 @@ use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Sheet\Template\CreateType;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Sheet\Template\DuplicateForEventType;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Sheet\Template\FilterSheetTemplateOrganizerType;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Sheet\Template\UpdateType;
+use Proximum\Vimeet\Ui\Bundle\AdminBundle\ValueResolver\AdminDomain;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 class SheetTemplateController extends Controller
 {
@@ -51,16 +53,17 @@ class SheetTemplateController extends Controller
     }
 
     /**
-     * @param Request $request
+     * @param Request     $request
+     * @param AdminDomain $adminDomain
      *
      * @return RedirectResponse|Response
      */
-    public function listAction(Request $request)
+    public function listAction(Request $request, AdminDomain $adminDomain): Response
     {
         $this->denyAccessUnlessGranted('ROLE_SUPER_ADMIN');
 
         $baseTemplates   = $this->get('repository.template.sheet_template_repository')->getBaseTemplates();
-        $events          = $this->get('vimeet_infrastructure.repository.event_repository')->getListByAdmin($this->getUser());
+        $events          = $this->get('vimeet_infrastructure.repository.event_repository')->getListByAdmin($adminDomain->getAdmin());
         $eventsTemplates = $this->get('repository.template.sheet_template_repository')->getTemplateForGivenEvents($events);
 
         $create = new Create($request->getLocale());
@@ -83,17 +86,20 @@ class SheetTemplateController extends Controller
     }
 
     /**
-     * @param Request $request
+     * @param Request     $request
+     * @param AdminDomain $adminDomain
      *
      * @return RedirectResponse|Response
+     *
+     * @throws AccessDeniedException
      */
-    public function listOrganizerTemplateAction(Request $request)
+    public function listOrganizerTemplateAction(Request $request, AdminDomain $adminDomain): Response
     {
         $this->denyAccessUnlessGranted('ROLE_ALLOWED_TO_ORGANIZE');
 
         $filters    = [];
         $filterForm = $this->createFilterForm(FilterSheetTemplateOrganizerType::class, $filters, [
-            'admin' => $this->getUser()
+            'admin' => $adminDomain->getAdmin(),
         ]);
         $filtered   = $filterForm->handleRequest($request)->isSubmitted() && $filterForm->isValid();
 
@@ -111,7 +117,7 @@ class SheetTemplateController extends Controller
         $create = new CreateForEvent();
         $form   = $this->createForm(CreateForEventType::class, $create, [
             'submit' => true,
-            'admin'  => $this->getUser(),
+            'admin'  => $adminDomain->getAdmin(),
         ]);
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
@@ -135,10 +141,13 @@ class SheetTemplateController extends Controller
     /**
      * @param Request       $request
      * @param SheetTemplate $template
+     * @param AdminDomain   $adminDomain
      *
      * @return RedirectResponse|Response
+     *
+     * @throws AccessDeniedException
      */
-    public function duplicateAction(Request $request, SheetTemplate $template)
+    public function duplicateAction(Request $request, SheetTemplate $template, AdminDomain $adminDomain): Response
     {
         $this->denyAccessUnlessGranted('ROLE_ALLOWED_TO_ORGANIZE');
         $this->denyAccessUnlessGranted(AdminTemplateAccessVoter::PERMISSION_TEMPLATE_EDIT, $template);
@@ -148,7 +157,7 @@ class SheetTemplateController extends Controller
             'action' => $this->generateUrl('admin_template_sheet_duplicate', [
                 'template' => $template->getId()
             ]),
-            'admin'  => $this->getUser(),
+            'admin'  => $adminDomain->getAdmin(),
             'submit' => true,
         ]);
 
@@ -170,10 +179,13 @@ class SheetTemplateController extends Controller
     /**
      * @param Request       $request
      * @param SheetTemplate $template
+     * @param AdminDomain   $adminDomain
      *
      * @return RedirectResponse|Response
+     *
+     * @throws AccessDeniedException
      */
-    public function duplicateOrganizerTemplateAction(Request $request, SheetTemplate $template)
+    public function duplicateOrganizerTemplateAction(Request $request, SheetTemplate $template, AdminDomain $adminDomain): Response
     {
         $this->denyAccessUnlessGranted('ROLE_ALLOWED_TO_ORGANIZE');
         $this->denyAccessUnlessGranted(AdminTemplateAccessVoter::PERMISSION_TEMPLATE_EDIT, $template);
@@ -185,7 +197,7 @@ class SheetTemplateController extends Controller
                 'template' => $template->getId()
             ]),
             'submit' => true,
-            'admin'  => $this->getUser(),
+            'admin'  => $adminDomain->getAdmin(),
         ]);
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
@@ -208,8 +220,10 @@ class SheetTemplateController extends Controller
      * @param string        $locale
      *
      * @return Response
+     *
+     * @throws AccessDeniedException
      */
-    public function builderAction(SheetTemplate $template, $locale)
+    public function builderAction(SheetTemplate $template, $locale): Response
     {
         $this->denyAccessUnlessGranted('ROLE_ALLOWED_TO_ORGANIZE');
         $this->denyAccessUnlessGranted(AdminTemplateAccessVoter::PERMISSION_TEMPLATE_EDIT, $template);
@@ -243,7 +257,7 @@ class SheetTemplateController extends Controller
         $productRepository      = $this->get('vimeet_infrastructure.repository.product_repository');
         $completeness           = $this->get('sheet.template.completeness_calculator')->compute($template);
 
-        $incompletes = array_keys(array_filter($completeness, function ($percent) {
+        $incomplete = array_keys(array_filter($completeness, function ($percent) {
             return $percent < 100;
         }));
 
@@ -255,21 +269,22 @@ class SheetTemplateController extends Controller
             $productRepository->findOptionsByEvent($template->getEvent()) :
             null;
 
-        // Add warning if some locales translations are incompletes
-        if (!empty($incompletes)) {
+        // Add warning if some locales translations are incomplete
+        if (!empty($incomplete)) {
             $this->addFlash('warning', 'flash.template.incomplete_translations.warning');
         }
 
         return $this->render('AdminBundle:SheetTemplate:builder.html.twig', [
-            'template'        => $template,
-            'locale'          => $locale,
-            'update_form'     => $updateForm->createView(),
             'add_locale_form' => $addLocaleForm ? $addLocaleForm->createView() : null,
-            'completeness'    => $completeness,
-            'nomenclatures'   => $nomenclatures,
-            'products'        => $products,
-            'sheet_tags'      => Tag::getSheetAndGenericTags(),
-            'event'           => $template->getEvent(),
+            'completeness' => $completeness,
+            'event' => $template->getEvent(),
+            'locale' => $locale,
+            'nomenclatures' => $nomenclatures,
+            'products' => $products,
+            'sheet_tags' => Tag::getSheetAndGenericTags(),
+            'sheet_template_tags' => Tag::getGenericSheetTemplateTags(),
+            'template'  => $template,
+            'update_form' => $updateForm->createView(),
         ]);
     }
 
@@ -278,8 +293,10 @@ class SheetTemplateController extends Controller
      * @param SheetTemplate $template
      *
      * @return RedirectResponse
+     *
+     * @throws AccessDeniedException
      */
-    public function addLocaleAction(Request $request, SheetTemplate $template)
+    public function addLocaleAction(Request $request, SheetTemplate $template): RedirectResponse
     {
         $this->denyAccessUnlessGranted('ROLE_SUPER_ADMIN');
         $this->denyAccessUnlessGranted(AdminTemplateAccessVoter::PERMISSION_TEMPLATE_EDIT, $template);
@@ -316,8 +333,10 @@ class SheetTemplateController extends Controller
      * @param string        $locale
      *
      * @return JsonResponse
+     *
+     * @throws AccessDeniedException
      */
-    public function saveAction(Request $request, SheetTemplate $template, $locale)
+    public function saveAction(Request $request, SheetTemplate $template, $locale): JsonResponse
     {
         $this->denyAccessUnlessGranted('ROLE_ALLOWED_TO_ORGANIZE');
         $this->denyAccessUnlessGranted(AdminTemplateAccessVoter::PERMISSION_TEMPLATE_EDIT, $template);
@@ -338,8 +357,10 @@ class SheetTemplateController extends Controller
      * @param string        $locale
      *
      * @return RedirectResponse
+     *
+     * @throws AccessDeniedException
      */
-    public function updateAction(Request $request, SheetTemplate $template, $locale)
+    public function updateAction(Request $request, SheetTemplate $template, $locale): RedirectResponse
     {
         $this->denyAccessUnlessGranted('ROLE_ALLOWED_TO_ORGANIZE');
         $this->denyAccessUnlessGranted(AdminTemplateAccessVoter::PERMISSION_TEMPLATE_EDIT, $template);

@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2015 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -14,74 +14,74 @@ use Proximum\Vimeet\Domain\Template\Registration\RegistrationTemplateTagView;
 
 final class Tag
 {
-    const GENERIC_TAGS_NUMBER = 99;
+    private const GENERIC_TAGS_NUMBER = 99;
 
     // Getter
-    const PARTICIPANT_FIRSTNAME       = 'participant_firstname';
-    const PARTICIPANT_LASTNAME        = 'participant_lastname';
-    const PARTICIPANT_AVATAR          = 'participant_avatar';
-    const PARTICIPANT_POSITION        = 'participant_position';
-    const PARTICIPANT_PHONE           = 'participant_phone';
-    const PARTICIPANT_MOBILE          = 'participant_mobile';
-    const PARTICIPANT_ADDRESS         = 'participant_address';
-    const PARTICIPANT_ZIPCODE         = 'participant_zipcode';
-    const PARTICIPANT_CITY            = 'participant_city';
-    const PARTICIPANT_COUNTRY         = 'participant_country';
-    const PARTICIPANT_WEBSITE         = 'participant_website';
-    const PARTICIPANT_GENDER          = 'participant_gender';
-    const BILLING_NAME                = 'billing_name';
-    const BILLING_ADDRESS             = 'billing_address';
-    const BILLING_CITY                = 'billing_city';
-    const BILLING_ZIPCODE             = 'billing_zipcode';
-    const BILLING_COUNTRY             = 'billing_country';
-    const BILLING_PHONE               = 'billing_phone';
-    const BILLING_EMAIL               = 'billing_email';
-    const BILLING_ORGANIZATION        = 'billing_organization';
-    const BILLING_VAT_NUMBER          = 'billing_vat_number';
-    const BILLING_EXTRA               = 'billing_extra';
-    const SHEET_TITLE                 = 'sheet_title';
-    const SHEET_ORGANIZATION          = 'sheet_organization';
-    const SHEET_ORGANIZATION_CATEGORY = 'sheet_organization_category';
-    const SHEET_ORGANIZATION_TURNOVER = 'sheet_organization_turnover';
-    const SHEET_ORGANIZATION_STAFF    = 'sheet_organization_staff';
-    const SHEET_ADDRESS               = 'sheet_address';
-    const SHEET_ZIPCODE               = 'sheet_zipcode';
-    const SHEET_CITY                  = 'sheet_city';
-    const SHEET_COUNTRY               = 'sheet_country';
-    const SHEET_WEBSITE               = 'sheet_website';
-    const SHEET_PHONE                 = 'sheet_phone';
+    public const PARTICIPANT_FIRSTNAME       = 'participant_firstname';
+    public const PARTICIPANT_LASTNAME        = 'participant_lastname';
+    public const PARTICIPANT_AVATAR          = 'participant_avatar';
+    public const PARTICIPANT_POSITION        = 'participant_position';
+    public const PARTICIPANT_PHONE           = 'participant_phone';
+    public const PARTICIPANT_MOBILE          = 'participant_mobile';
+    public const PARTICIPANT_ADDRESS         = 'participant_address';
+    public const PARTICIPANT_ZIPCODE         = 'participant_zipcode';
+    public const PARTICIPANT_CITY            = 'participant_city';
+    public const PARTICIPANT_COUNTRY         = 'participant_country';
+    public const PARTICIPANT_WEBSITE         = 'participant_website';
+    public const PARTICIPANT_GENDER          = 'participant_gender';
+    public const BILLING_NAME                = 'billing_name';
+    public const BILLING_ADDRESS             = 'billing_address';
+    public const BILLING_CITY                = 'billing_city';
+    public const BILLING_ZIPCODE             = 'billing_zipcode';
+    public const BILLING_COUNTRY             = 'billing_country';
+    public const BILLING_PHONE               = 'billing_phone';
+    public const BILLING_EMAIL               = 'billing_email';
+    public const BILLING_ORGANIZATION        = 'billing_organization';
+    public const BILLING_VAT_NUMBER          = 'billing_vat_number';
+    public const BILLING_EXTRA               = 'billing_extra';
+    public const SHEET_TITLE                 = 'sheet_title';
+    public const SHEET_ORGANIZATION          = 'sheet_organization';
+    public const SHEET_ORGANIZATION_CATEGORY = 'sheet_organization_category';
+    public const SHEET_ORGANIZATION_TURNOVER = 'sheet_organization_turnover';
+    public const SHEET_ORGANIZATION_STAFF    = 'sheet_organization_staff';
+    public const SHEET_ADDRESS               = 'sheet_address';
+    public const SHEET_ZIPCODE               = 'sheet_zipcode';
+    public const SHEET_CITY                  = 'sheet_city';
+    public const SHEET_COUNTRY               = 'sheet_country';
+    public const SHEET_WEBSITE               = 'sheet_website';
+    public const SHEET_PHONE                 = 'sheet_phone';
 
     // Setter
-    const PARTICIPANT_DATA = 'participant_data';
-    const SHEET_DATA       = 'sheet_data';
+    public const PARTICIPANT_DATA = 'participant_data';
+    public const SHEET_DATA       = 'sheet_data';
 
     /**
      * @return array
      */
-    public static function getAll()
+    public static function getAll(): array
     {
         return array_merge(
-            Tag::getParticipantTags(),
-            Tag::getBillingTags(),
-            Tag::getSheetTags()
+            self::getParticipantTags(),
+            self::getBillingTags(),
+            self::getSheetTags()
         );
     }
 
     /**
      * @return array
      */
-    public static function getSetters()
+    public static function getSetters(): array
     {
         return [
-            Tag::PARTICIPANT_DATA,
-            Tag::SHEET_DATA,
+            self::PARTICIPANT_DATA,
+            self::SHEET_DATA,
         ];
     }
 
     /**
      * @return array
      */
-    public static function getParticipantIdentityTags()
+    public static function getParticipantIdentityTags(): array
     {
         return [
             self::PARTICIPANT_FIRSTNAME,
@@ -92,7 +92,7 @@ final class Tag
     /**
      * @return array
      */
-    public static function getParticipantTags()
+    public static function getParticipantTags(): array
     {
         return [
             self::PARTICIPANT_FIRSTNAME,
@@ -113,7 +113,7 @@ final class Tag
     /**
      * @return array
      */
-    public static function getBillingTags()
+    public static function getBillingTags(): array
     {
         return [
             self::BILLING_NAME,
@@ -132,7 +132,7 @@ final class Tag
     /**
      * @return array
      */
-    public static function getSheetTags()
+    public static function getSheetTags(): array
     {
         return [
             self::SHEET_ORGANIZATION,
@@ -152,7 +152,7 @@ final class Tag
     /**
      * @return array
      */
-    public static function getSeeableTags()
+    public static function getSeeableTags(): array
     {
         return [
             self::SHEET_ORGANIZATION,
@@ -173,7 +173,7 @@ final class Tag
     /**
      * @return array
      */
-    public static function getGenericSheetTags()
+    public static function getGenericSheetTags(): array
     {
         $genericTags = [];
 
@@ -185,9 +185,25 @@ final class Tag
     }
 
     /**
+     * Theses tags are used on the sheet to populate info from outside of the registration to the sheet
+     *
      * @return array
      */
-    public static function getSheetAndGenericTags()
+    public static function getGenericSheetTemplateTags(): array
+    {
+        $genericSheetTemplateTags = [];
+
+        for ($i = 1; $i <= self::GENERIC_TAGS_NUMBER; $i++) {
+            $genericSheetTemplateTags[] = 'sheet_template_generic_tag_' . $i;
+        }
+
+        return $genericSheetTemplateTags;
+    }
+
+    /**
+     * @return array
+     */
+    public static function getSheetAndGenericTags(): array
     {
         return array_merge(self::getSheetTags(), self::getGenericSheetTags());
     }
@@ -195,7 +211,7 @@ final class Tag
     /**
      * @return array
      */
-    public static function getSheetParticipantGenericAndSettersTags()
+    public static function getSheetParticipantGenericAndSettersTags(): array
     {
         return array_merge(
             self::getSheetTags(),
