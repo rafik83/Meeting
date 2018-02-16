@@ -14,6 +14,7 @@ use PHPUnit\Framework\TestCase;
 use Proximum\Vimeet\Application\ThirdParty\Comexposium\Webservice\Converter\RawRegistrationToRegistrationViewConverter;
 use Proximum\Vimeet\Application\ThirdParty\Comexposium\Webservice\Handler\ComexposiumWebservice;
 use Proximum\Vimeet\Application\ThirdParty\Comexposium\Webservice\Handler\ImportSheetHandler;
+use Proximum\Vimeet\Application\ThirdParty\Comexposium\Webservice\View\ParticipantPositionView;
 use Proximum\Vimeet\Application\ThirdParty\Comexposium\Webservice\View\ParticipantView;
 use Proximum\Vimeet\Application\ThirdParty\Comexposium\Webservice\View\RegistrationView;
 use Proximum\Vimeet\Domain\Event\ExtraParameter\Type;
@@ -31,17 +32,29 @@ class ImportSheetHandlerTest extends TestCase
         $expectedResponse = [$expectedRawRegistration];
 
         $expectedRegistrationView = new RegistrationView(
-            '9996666',
+            '5556666',
             'Nintendo',
             'VALIDE',
-            'Yoshi road',
-            '315135',
-            'Tokyo',
-            'JP',
-            '0 000 16534046',
-            'http://www.nintendo.com',
-            new ParticipantView(),
-            ['20020', '20021']
+            '61 rue de l\'Odyssée',
+            '75008',
+            'Paris',
+            'FR',
+            '33 (0)1 40 69 80 00',
+            'https://www.nintendo.com',
+            new ParticipantView(
+                'man',
+                'Takashi',
+                'Kitano',
+                'takashi.kitano@nintendo.com',
+                'fr',
+                null,
+                'Nintendo Europe',
+                [
+                    new ParticipantPositionView('Directeur Export', 'fr'),
+                    new ParticipantPositionView('Export Director', 'en'),
+                ]
+            ),
+            ['666', '777', '88898']
         );
 
         $rawRegistrationToRegistrationViewConverter = $this->prophesize(RawRegistrationToRegistrationViewConverter::class);

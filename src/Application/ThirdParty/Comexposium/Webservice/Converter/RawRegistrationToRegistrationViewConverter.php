@@ -11,11 +11,19 @@
 namespace Proximum\Vimeet\Application\ThirdParty\Comexposium\Webservice\Converter;
 
 use League\ISO3166\ISO3166;
+use Proximum\Vimeet\Application\ThirdParty\Comexposium\Webservice\View\ParticipantPositionView;
 use Proximum\Vimeet\Application\ThirdParty\Comexposium\Webservice\View\ParticipantView;
 use Proximum\Vimeet\Application\ThirdParty\Comexposium\Webservice\View\RegistrationView;
+use Proximum\Vimeet\Domain\Template\TemplateObject\Gender;
 
 class RawRegistrationToRegistrationViewConverter
 {
+    private const GENDER_MAPPING = [
+        '1' => Gender::WOMAN, // Mademoiselle
+        '21' => Gender::WOMAN, // Madame
+        '22' => Gender::MAN, // Monsieur
+    ];
+
     /**
      * @see registration wsdl: http://webservices.comexposium-admin.com/catalogue-ws-v2/inscriptionclientws.wsdl
      *
@@ -33,10 +41,55 @@ class RawRegistrationToRegistrationViewConverter
             $registration->codePostal,
             $registration->ville,
             $this->convertAlpha3ToAlpha2CodeCountry($registration->referencePays),
-            $registration->telephone,
-            $registration->siteInternet,
-            new ParticipantView(),
+            $registration->telephone ?? null,
+            $registration->siteInternet ?? null,
+            $this->getParticipantView($registration),
             $this->convertToArray($registration->referenceNomenclatureManifestation)
+        );
+    }
+
+    /**
+     * @param \stdClass $registration
+     *
+     * @return ParticipantView
+     */
+    private function getParticipantView(\stdClass $registration): ParticipantView
+    {
+        $user = $registration->responsableSalon;
+
+        return new ParticipantView(
+            $this->getUserGender($user),
+            $user->prenom,
+            $user->nom,
+            $user->email,
+            $this->convertLocale($user->referenceLangueResponsableSalon),
+            $user->telephone ?? null,
+            $user->raisonSociale ?? null,
+            $this->getParticipantPositionViews($user)
+        );
+    }
+
+    /**
+     * @param \stdClass $user
+     *
+     * @return ParticipantPositionView[]
+     */
+    private function getParticipantPositionViews(\stdClass $user): array
+    {
+        if (!isset($user->contactTitreTrad)) {
+            return [];
+        }
+
+        $positions = $this->convertToArray($user->contactTitreTrad);
+
+        return array_map(
+            function (\stdClass $position) {
+                return new ParticipantPositionView(
+                    $position->traduction,
+                    $this->convertLocale($position->referenceLangue)
+                );
+            },
+            $positions
         );
     }
 
@@ -63,5 +116,29 @@ class RawRegistrationToRegistrationViewConverter
     private function convertToArray($data): array
     {
         return \is_array($data) ? $data : [$data];
+    }
+
+    /**
+     * @param string $language
+     *
+     * @return string
+     */
+    private function convertLocale(string $language): string
+    {
+        return $language === 'FRA' ? 'fr' : 'en';
+    }
+
+    /**
+     * @param \stdClass $user
+     *
+     * @return null|string
+     */
+    private function getUserGender(\stdClass $user): ?string
+    {
+        if (!isset($user->referenceCivilite)) {
+            return null;
+        }
+
+        return self::GENDER_MAPPING[$user->referenceCivilite] ?? null;
     }
 }

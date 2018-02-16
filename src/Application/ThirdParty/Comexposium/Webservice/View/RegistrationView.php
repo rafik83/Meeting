@@ -33,10 +33,10 @@ class RegistrationView
     /** @var null|string ISO 3166-1 alpha-2 country code */
     public $country;
 
-    /** @var string */
+    /** @var null|string */
     public $companyPhone;
 
-    /** @var string */
+    /** @var null|string */
     public $webSite;
 
     /** @var ParticipantView */
@@ -53,8 +53,8 @@ class RegistrationView
         string $zipCode,
         string $city,
         ?string $country,
-        string $companyPhone,
-        string $webSite,
+        ?string $companyPhone,
+        ?string $webSite,
         ParticipantView $participantView,
         array $nomenclatureReferences
     ) {

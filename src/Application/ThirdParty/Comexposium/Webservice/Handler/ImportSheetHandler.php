@@ -11,7 +11,6 @@
 namespace Proximum\Vimeet\Application\ThirdParty\Comexposium\Webservice\Handler;
 
 use Proximum\Vimeet\Application\ThirdParty\Comexposium\Webservice\Converter\RawRegistrationToRegistrationViewConverter;
-use Proximum\Vimeet\Application\ThirdParty\Comexposium\Webservice\Converter\RegistrationToSheetConverter;
 use Proximum\Vimeet\Application\ThirdParty\Comexposium\Webservice\View\RegistrationView;
 use Proximum\Vimeet\Domain\Event\ExtraParameter\Type;
 use Proximum\Vimeet\Domain\Model\Event;
@@ -68,6 +67,9 @@ class ImportSheetHandler
             if (!$this->isRegistrationHasAWhiteListedStatus($registrationView)) {
                 continue;
             }
+
+
+
         }
     }
 
@@ -78,6 +80,6 @@ class ImportSheetHandler
      */
     private function isRegistrationHasAWhiteListedStatus(RegistrationView $registrationView): bool
     {
-        return !\in_array($registrationView->status, self::STATUS_WHITE_LIST, true);
+        return \in_array($registrationView->status, self::STATUS_WHITE_LIST, true);
     }
 }
