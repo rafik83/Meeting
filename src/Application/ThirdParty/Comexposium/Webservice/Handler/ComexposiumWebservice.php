@@ -60,6 +60,7 @@ class ComexposiumWebservice
      * @param string $eventReference
      *
      * @return string[] array of registration reference
+     * @throws \DomainException
      * @throws \SoapFault
      */
     public function getRegistrationsReference(string $eventReference): array
@@ -74,6 +75,16 @@ class ComexposiumWebservice
                 ],
             ]
         );
+
+        if (true === $response->avecErreur) {
+            throw new \DomainException(
+                sprintf(
+                    'getReferenceInscriptions with "%s" $eventReference return errors with response : %s',
+                    $eventReference,
+                    json_encode($response)
+                )
+            );
+        }
 
         return (array) ($response->referenceInscription ?? []);
     }
@@ -103,6 +114,7 @@ class ComexposiumWebservice
      * @param array  $registrationReferences
      *
      * @return array of \stdClass
+     * @throws \DomainException
      * @throws \SoapFault
      */
     public function getRegistrations(string $eventReference, array $registrationReferences): array
@@ -118,6 +130,17 @@ class ComexposiumWebservice
                 ],
             ]
         );
+
+        if (true === $response->avecErreur) {
+            throw new \DomainException(
+                sprintf(
+                    'getInscriptions with "%s" eventReference and "%s" registrationReferences return errors with response : %s',
+                    $eventReference,
+                    $registrationReferences,
+                    json_encode($response)
+                )
+            );
+        }
 
         return \is_array($response->inscription) ? $response->inscription : [$response->inscription];
     }

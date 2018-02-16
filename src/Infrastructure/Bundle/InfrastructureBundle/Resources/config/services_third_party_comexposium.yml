@@ -35,12 +35,21 @@ services:
         arguments:
             - '@Proximum\Vimeet\Application\ThirdParty\Comexposium\Webservice\Handler\ComexposiumWebservice'
             - '@repository.event.extra_parameter_repository'
+            - '@Proximum\Vimeet\Application\ThirdParty\Comexposium\Webservice\Converter\RawRegistrationToRegistrationViewConverter'
 
     Proximum\Vimeet\Application\ThirdParty\Comexposium\Webservice\Handler\ComexposiumWebservice:
         arguments:
             $username: '%comexposium_username%'
             $password: '%comexposium_password%'
 
+    #
+    # Converter
+    #
+    Proximum\Vimeet\Application\ThirdParty\Comexposium\Webservice\Converter\RawRegistrationToRegistrationViewConverter: ~
+
+    #
+    # JobQueue
+    #
     Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Adapter\ThirdParty\Comexposium\ComexposiumJobQueue:
         arguments:
             - '@doctrine.orm.entity_manager'
