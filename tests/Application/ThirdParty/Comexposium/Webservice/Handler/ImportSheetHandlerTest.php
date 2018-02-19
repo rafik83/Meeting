@@ -11,11 +11,17 @@ namespace Proximum\Vimeet\Tests\Application\ThirdParty\Comexposium\Webservice\Ha
 
 use PHPUnit\Framework\TestCase;
 use Proximum\Vimeet\Application\ThirdParty\Comexposium\Webservice\Handler\ImportSheetHandler;
+use Proximum\Vimeet\Application\ThirdParty\Comexposium\Webservice\Sheet\SheetExtraDataType;
 use Proximum\Vimeet\Application\ThirdParty\Comexposium\Webservice\View\ParticipantPositionView;
 use Proximum\Vimeet\Application\ThirdParty\Comexposium\Webservice\View\ParticipantView;
 use Proximum\Vimeet\Application\ThirdParty\Comexposium\Webservice\View\RegistrationView;
 use Proximum\Vimeet\Domain\Model\Event;
+use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\Type;
+use Proximum\Vimeet\Domain\Model\User;
+use Proximum\Vimeet\Domain\Repository\Sheet\ExtraDataRepositoryInterface as SheetExtraDataRepositoryInterface;
+use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
+use Proximum\Vimeet\Domain\Repository\User\Event\ExtraDataRepositoryInterface as UserEventExtraDataRepositoryInterface;
 
 class ImportSheetHandlerTest extends TestCase
 {
@@ -51,7 +57,32 @@ class ImportSheetHandlerTest extends TestCase
             ['666', '777', '88898']
         );
 
-        $importSheetHandler = new ImportSheetHandler($dateTime);
+        $expectedUser = new User('takashi.kitano@nintendo.com', '', '', 'fr');
+        $expectedSheet = new Sheet($event->reveal(), $type->reveal(), [], $expectedUser, $dateTime);
+
+        $sheetRepository = $this->prophesize(SheetRepositoryInterface::class);
+        $sheetRepository->add($expectedSheet)->shouldBeCalled();
+
+        $sheetExtraDataRepository = $this->prophesize(SheetExtraDataRepositoryInterface::class);
+        $sheetExtraDataRepository
+            ->add(new Sheet\ExtraData($expectedSheet, 'comexposium_registration_reference', '5556666', $dateTime))
+            ->shouldBeCalled()
+        ;
+
+        $userEventExtraDataRepository = $this->prophesize(UserEventExtraDataRepositoryInterface::class);
+        $userEventExtraDataRepository
+            ->add(
+                new User\Event\ExtraData($expectedUser, $event->reveal(), 'imported_from_comexposium', null, $dateTime)
+            )
+            ->shouldBeCalled()
+        ;
+
+        $importSheetHandler = new ImportSheetHandler(
+            $sheetRepository->reveal(),
+            $sheetExtraDataRepository->reveal(),
+            $userEventExtraDataRepository->reveal(),
+            $dateTime
+        );
         $importSheetHandler->handle($event->reveal(), $type->reveal(), $registrationView);
     }
 }
