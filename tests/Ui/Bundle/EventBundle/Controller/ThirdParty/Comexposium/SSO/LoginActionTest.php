@@ -15,14 +15,13 @@ use Prophecy\Prophecy\ObjectProphecy;
 use Proximum\Vimeet\Application\Adapter\AuthenticationManagerInterface;
 use Proximum\Vimeet\Application\Adapter\AuthorizationCheckerAdapterInterface;
 use Proximum\Vimeet\Application\Adapter\QueryBusInterface;
-use Proximum\Vimeet\Application\Adapter\RouterInterface;
 use Proximum\Vimeet\Application\ThirdParty\Comexposium\SSO\Application\Query\SSOChecker;
 use Proximum\Vimeet\Application\ThirdParty\Comexposium\SSO\Exception\ComboEmailUserNotValidException;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\ThirdParty\Comexposium\SSO\LoginAction;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\ParamConverter\EventDomain;
-use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface;
 
@@ -41,9 +40,6 @@ class LoginActionTest extends TestCase
     private $flashBag;
 
     /** @var ObjectProphecy */
-    private $router;
-
-    /** @var ObjectProphecy */
     private $event;
 
     public function setUp()
@@ -52,7 +48,6 @@ class LoginActionTest extends TestCase
         $this->authenticationManager = $this->prophesize(AuthenticationManagerInterface::class);
         $this->queryBus = $this->prophesize(QueryBusInterface::class);
         $this->flashBag = $this->prophesize(FlashBagInterface::class);
-        $this->router = $this->prophesize(RouterInterface::class);
         $this->event = $this->prophesize(Event::class);
     }
 
@@ -69,19 +64,18 @@ class LoginActionTest extends TestCase
             ->willReturn($user->reveal())
         ;
         $this->authenticationManager->authenticate($user->reveal(), 'main')->shouldBeCalled();
-        $this->router->generate('event')->shouldBeCalled()->willReturn('/event');
 
         $action = new LoginAction(
             $this->authorizationCheckerAdapter->reveal(),
             $this->authenticationManager->reveal(),
             $this->queryBus->reveal(),
-            $this->flashBag->reveal(),
-            $this->router->reveal()
+            $this->flashBag->reveal()
         );
 
         $result = $action($request, new EventDomain($this->event->reveal()));
 
-        $this->assertInstanceOf(RedirectResponse::class, $result);
+        $this->assertInstanceOf(JsonResponse::class, $result);
+        $this->assertEquals(json_encode(['isLogged' => true]), $result->getContent());
     }
 
     public function testInvokeError()
@@ -95,19 +89,18 @@ class LoginActionTest extends TestCase
             ->shouldBeCalled()
             ->willThrow(ComboEmailUserNotValidException::class)
         ;
-        $this->router->generate('event')->shouldBeCalled()->willReturn('/event');
         $this->flashBag->add('error', 'flash.sso.comexposium.error')->shouldBeCalled();
 
         $action = new LoginAction(
             $this->authorizationCheckerAdapter->reveal(),
             $this->authenticationManager->reveal(),
             $this->queryBus->reveal(),
-            $this->flashBag->reveal(),
-            $this->router->reveal()
+            $this->flashBag->reveal()
         );
 
         $result = $action($request, new EventDomain($this->event->reveal()));
 
-        $this->assertInstanceOf(RedirectResponse::class, $result);
+        $this->assertInstanceOf(JsonResponse::class, $result);
+        $this->assertEquals(json_encode(['isLogged' => false]), $result->getContent());
     }
 }

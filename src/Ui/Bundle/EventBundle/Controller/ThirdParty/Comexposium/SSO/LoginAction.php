@@ -13,11 +13,10 @@ namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\ThirdParty\Comexposiu
 use Proximum\Vimeet\Application\Adapter\AuthenticationManagerInterface;
 use Proximum\Vimeet\Application\Adapter\AuthorizationCheckerAdapterInterface;
 use Proximum\Vimeet\Application\Adapter\QueryBusInterface;
-use Proximum\Vimeet\Application\Adapter\RouterInterface;
 use Proximum\Vimeet\Application\ThirdParty\Comexposium\SSO\Application\Query\SSOChecker;
 use Proximum\Vimeet\Application\ThirdParty\Comexposium\SSO\Exception\SSOException;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\ParamConverter\EventDomain;
-use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface;
 
@@ -32,9 +31,6 @@ class LoginAction
     /** @var FlashBagInterface */
     private $flashBag;
 
-    /** @var RouterInterface */
-    private $router;
-
     /** @var AuthenticationManagerInterface */
     private $authenticationManager;
 
@@ -43,19 +39,16 @@ class LoginAction
      * @param AuthenticationManagerInterface       $authenticationManager
      * @param QueryBusInterface                    $queryBus
      * @param FlashBagInterface                    $flashBag
-     * @param RouterInterface                      $router
      */
     public function __construct(
         AuthorizationCheckerAdapterInterface $authorizationCheckerAdapter,
         AuthenticationManagerInterface $authenticationManager,
         QueryBusInterface $queryBus,
-        FlashBagInterface $flashBag,
-        RouterInterface $router
+        FlashBagInterface $flashBag
     ) {
         $this->authorizationCheckerAdapter = $authorizationCheckerAdapter;
         $this->queryBus = $queryBus;
         $this->flashBag = $flashBag;
-        $this->router = $router;
         $this->authenticationManager = $authenticationManager;
     }
 
@@ -63,9 +56,9 @@ class LoginAction
      * @param Request     $request
      * @param EventDomain $eventDomain
      *
-     * @return RedirectResponse
+     * @return JsonResponse
      */
-    public function __invoke(Request $request, EventDomain $eventDomain): RedirectResponse
+    public function __invoke(Request $request, EventDomain $eventDomain): JsonResponse
     {
         if ($this->authorizationCheckerAdapter->isGranted('AUTHENTICATED_REMEMBERED')) {
             $this->authenticationManager->disconnect();
@@ -78,10 +71,12 @@ class LoginAction
             $user = $this->queryBus->handle(new SSOChecker($eventDomain->getEvent(), $email, $token));
 
             $this->authenticationManager->authenticate($user, 'main');
+
+            return new JsonResponse(['isLogged' => true]);
         } catch (SSOException $exception) {
             $this->flashBag->add('error', 'flash.sso.comexposium.error');
-        }
 
-        return new RedirectResponse($this->router->generate('event'));
+            return new JsonResponse(['isLogged' => false]);
+        }
     }
 }

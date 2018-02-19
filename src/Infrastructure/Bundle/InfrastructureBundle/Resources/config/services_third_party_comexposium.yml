@@ -10,7 +10,6 @@ services:
             - '@adapter.authentication_manager'
             - '@Proximum\Vimeet\Infrastructure\Adapter\QueryBus'
             - '@session.flash_bag'
-            - '@adapter.router'
 
     Proximum\Vimeet\Application\ThirdParty\Comexposium\SSO\Application\Query\SSOCheckerHandler:
         arguments:
