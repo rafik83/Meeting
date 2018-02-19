@@ -838,3 +838,11 @@ event_video_conference_access_session_test:
         sessionId: .*
     methods: [GET]
     defaults: { _controller: EventBundle:VideoConference:accessSessionVideoTest }
+
+#
+# Third Party Comexposium
+#
+event_comexposium_sso_checker:
+    path: /login/sso/comexposium
+    methods: [POST]
+    defaults: { _controller: Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\ThirdParty\Comexposium\SSO\LoginAction }

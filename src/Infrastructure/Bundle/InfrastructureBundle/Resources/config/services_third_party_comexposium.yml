@@ -3,3 +3,19 @@ services:
         arguments:
             - '@adapter.http_adapter'
             - '%comexposium_sso_validator_endpoint%'
+
+    Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\ThirdParty\Comexposium\SSO\LoginAction:
+        arguments:
+            - '@adapter.authorization_checker'
+            - '@adapter.authentication_manager'
+            - '@Proximum\Vimeet\Infrastructure\Adapter\QueryBus'
+            - '@session.flash_bag'
+            - '@adapter.router'
+
+    Proximum\Vimeet\Application\ThirdParty\Comexposium\SSO\Application\Query\SSOCheckerHandler:
+        arguments:
+            - '@vimeet_infrastructure.repository.user_repository'
+            - '@vimeet_infrastructure.repository.sheet_repository'
+            - '@Proximum\Vimeet\Application\ThirdParty\Comexposium\SSO\TokenChecker'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\ThirdParty\Comexposium\SSO\Application\Query\SSOChecker }

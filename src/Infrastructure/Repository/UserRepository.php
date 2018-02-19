@@ -82,7 +82,7 @@ class UserRepository implements UserRepositoryInterface
     /**
      * {@inheritdoc}
      */
-    public function findByEmail($email)
+    public function findByEmail($email): ?User
     {
         $queryBuilder = $this
             ->entityManager
