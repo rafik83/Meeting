@@ -1,37 +1,31 @@
 <?php
 
-/*
- * This file is part of the Proximum Vimeet project.
- *
- * Copyright (C) Proximum
- *
- * @author Elao <contact@elao.com>
+/**
+ * Created by PhpStorm.
+ * User: richard
+ * Date: 19/02/2018
+ * Time: 11:46
  */
 
 namespace Proximum\Vimeet\Tests\Application\ThirdParty\Comexposium\Webservice\Handler;
 
 use PHPUnit\Framework\TestCase;
-use Proximum\Vimeet\Application\ThirdParty\Comexposium\Webservice\Converter\RawRegistrationToRegistrationViewConverter;
-use Proximum\Vimeet\Application\ThirdParty\Comexposium\Webservice\Handler\ComexposiumWebservice;
 use Proximum\Vimeet\Application\ThirdParty\Comexposium\Webservice\Handler\ImportSheetHandler;
 use Proximum\Vimeet\Application\ThirdParty\Comexposium\Webservice\View\ParticipantPositionView;
 use Proximum\Vimeet\Application\ThirdParty\Comexposium\Webservice\View\ParticipantView;
 use Proximum\Vimeet\Application\ThirdParty\Comexposium\Webservice\View\RegistrationView;
-use Proximum\Vimeet\Domain\Event\ExtraParameter\Type;
 use Proximum\Vimeet\Domain\Model\Event;
-use Proximum\Vimeet\Domain\Model\Event\ExtraParameter;
-use Proximum\Vimeet\Domain\Repository\Event\ExtraParameterRepositoryInterface;
+use Proximum\Vimeet\Domain\Model\Type;
 
 class ImportSheetHandlerTest extends TestCase
 {
     public function testHandle()
     {
+        $dateTime = new \DateTime();
         $event = $this->prophesize(Event::class);
+        $type = $this->prophesize(Type::class);
 
-        $expectedRawRegistration = new \stdClass();
-        $expectedResponse = [$expectedRawRegistration];
-
-        $expectedRegistrationView = new RegistrationView(
+        $registrationView = new RegistrationView(
             '5556666',
             'Nintendo',
             'VALIDE',
@@ -57,32 +51,7 @@ class ImportSheetHandlerTest extends TestCase
             ['666', '777', '88898']
         );
 
-        $rawRegistrationToRegistrationViewConverter = $this->prophesize(RawRegistrationToRegistrationViewConverter::class);
-        $rawRegistrationToRegistrationViewConverter
-            ->convert($expectedRawRegistration)
-            ->shouldBeCalled()
-            ->willReturn($expectedRegistrationView)
-        ;
-
-        $extraParameter = $this->prophesize(ExtraParameter::class);
-        $extraParameter->getValue()->shouldBeCalled()->willReturn('999666');
-
-        $extraParameterRepository = $this->prophesize(ExtraParameterRepositoryInterface::class);
-        $extraParameterRepository
-            ->findByEventAndType($event->reveal(), Type::TYPE_COMEXPOSIUM_EVENT)
-            ->shouldBeCalled()
-            ->willReturn($extraParameter->reveal())
-        ;
-
-        $comexposiumWebservice = $this->prophesize(ComexposiumWebservice::class);
-        $comexposiumWebservice->getRegistrations('999666', ['111222333'])->shouldBeCalled()->willReturn($expectedResponse);
-
-        $importSheetHandler = new ImportSheetHandler(
-            $comexposiumWebservice->reveal(),
-            $extraParameterRepository->reveal(),
-            $rawRegistrationToRegistrationViewConverter->reveal()
-        );
-
-        $importSheetHandler->handle($event->reveal(), ['111222333']);
+        $importSheetHandler = new ImportSheetHandler($dateTime);
+        $importSheetHandler->handle($event->reveal(), $type->reveal(), $registrationView);
     }
 }

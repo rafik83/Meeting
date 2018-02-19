@@ -10,76 +10,31 @@
 
 namespace Proximum\Vimeet\Application\ThirdParty\Comexposium\Webservice\Handler;
 
-use Proximum\Vimeet\Application\ThirdParty\Comexposium\Webservice\Converter\RawRegistrationToRegistrationViewConverter;
 use Proximum\Vimeet\Application\ThirdParty\Comexposium\Webservice\View\RegistrationView;
-use Proximum\Vimeet\Domain\Event\ExtraParameter\Type;
 use Proximum\Vimeet\Domain\Model\Event;
-use Proximum\Vimeet\Domain\Model\Event\ExtraParameter;
-use Proximum\Vimeet\Domain\Repository\Event\ExtraParameterRepositoryInterface;
+use Proximum\Vimeet\Domain\Model\Sheet;
+use Proximum\Vimeet\Domain\Model\Type;
+use Proximum\Vimeet\Domain\Model\User;
+use Proximum\Vimeet\Domain\User\Event\ExtraData\Type as ExtraDataType;
 
 class ImportSheetHandler
 {
-    private CONST STATUS_WHITE_LIST = ['VALIDE', 'INSTANCE'];
-
-    /** @var ComexposiumWebservice */
-    private $comexposiumWebservice;
-
-    /** @var ExtraParameterRepositoryInterface */
-    private $extraParameterRepository;
-
-    /** @var RawRegistrationToRegistrationViewConverter */
-    private $rawRegistrationToRegistrationViewConverter;
+    /** @var \DateTimeInterface */
+    private $dateTime;
 
     public function __construct(
-        ComexposiumWebservice $comexposiumWebservice,
-        ExtraParameterRepositoryInterface $extraParameterRepository,
-        RawRegistrationToRegistrationViewConverter $rawRegistrationToRegistrationViewConverter
+        \DateTimeInterface $dateTime
     ) {
-        $this->comexposiumWebservice = $comexposiumWebservice;
-        $this->extraParameterRepository = $extraParameterRepository;
-        $this->rawRegistrationToRegistrationViewConverter = $rawRegistrationToRegistrationViewConverter;
+        $this->dateTime = $dateTime;
     }
 
     /**
-     * @param Event $event
-     * @param array $registrationReferences
-     *
-     * @throws \SoapFault
-     */
-    public function handle(Event $event, array $registrationReferences): void
-    {
-        $eventReferenceExtraParameter = $this->extraParameterRepository->findByEventAndType(
-            $event,
-            Type::TYPE_COMEXPOSIUM_EVENT
-        );
-
-        if (!$eventReferenceExtraParameter instanceof ExtraParameter) {
-            return;
-        }
-
-        $eventReference = $eventReferenceExtraParameter->getValue();
-
-        $rawRegistrations = $this->comexposiumWebservice->getRegistrations($eventReference, $registrationReferences);
-
-        foreach ($rawRegistrations as $rawRegistration) {
-            $registrationView = $this->rawRegistrationToRegistrationViewConverter->convert($rawRegistration);
-
-            if (!$this->isRegistrationHasAWhiteListedStatus($registrationView)) {
-                continue;
-            }
-
-
-
-        }
-    }
-
-    /**
+     * @param Event            $event
+     * @param Type             $type
      * @param RegistrationView $registrationView
-     *
-     * @return bool
      */
-    private function isRegistrationHasAWhiteListedStatus(RegistrationView $registrationView): bool
+    public function handle(Event $event, Type $type, RegistrationView $registrationView): void
     {
-        return \in_array($registrationView->status, self::STATUS_WHITE_LIST, true);
+
     }
 }

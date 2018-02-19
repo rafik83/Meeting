@@ -10,7 +10,7 @@
 
 namespace Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\ThirdParty\Comexposium\Webservice;
 
-use Proximum\Vimeet\Application\ThirdParty\Comexposium\Webservice\Handler\ImportSheetHandler;
+use Proximum\Vimeet\Application\ThirdParty\Comexposium\Webservice\Handler\ImportSheetsHandler;
 use Proximum\Vimeet\Domain\Repository\EventRepositoryInterface;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
@@ -28,14 +28,14 @@ class ComexposiumGetRegistrationCommand extends Command
     private $eventRepository;
 
     /** @var ImportSheetHandler */
-    private $importSheetHandler;
+    private $importSheetsHandler;
 
-    public function __construct(EventRepositoryInterface $eventRepository, ImportSheetHandler $importSheetHandler)
+    public function __construct(EventRepositoryInterface $eventRepository, ImportSheetsHandler $importSheetsHandler)
     {
         parent::__construct(self::NAME);
 
         $this->eventRepository = $eventRepository;
-        $this->importSheetHandler = $importSheetHandler;
+        $this->importSheetsHandler = $importSheetsHandler;
     }
 
     /**
@@ -66,6 +66,6 @@ class ComexposiumGetRegistrationCommand extends Command
             throw new \InvalidArgumentException('Event not found');
         }
 
-        $this->importSheetHandler->handle($event, explode(',', $input->getArgument(self::REGISTRATION_REFERENCES)));
+        $this->importSheetsHandler->handle($event, explode(',', $input->getArgument(self::REGISTRATION_REFERENCES)));
     }
 }

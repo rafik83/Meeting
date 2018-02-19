@@ -32,4 +32,7 @@ final class Type
      * State to ignore the display of the phone confirmation
      */
     const PHONE_CONFIRMATION_IGNORED = 'phone_confirmation_ignored';
+
+    // User imported from Comexposium. Need to use the Comexposium SSO to login
+    const IMPORTED_FROM_COMEXPOSIUM = 'imported_from_comexposium';
 }

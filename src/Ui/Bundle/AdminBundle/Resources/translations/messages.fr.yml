@@ -213,7 +213,8 @@ admin.extraParameter.list.column.value: Valeur
 admin.extraParameter.list.create: Ajouter
 admin.extraParameter.list.empty: 'Aucun paramètre'
 admin.extraParameter.list.title: 'Liste des paramètres supplémentaires de l''événement'
-admin.extraParameter.type.comexposium_event: 'Référence manifestation Comexposium'
+admin.extraParameter.type.comexposium_concerned_type_id: 'Comexposium : Id du type de participation concerné'
+admin.extraParameter.type.comexposium_event: 'Comexposium : Référence manifestation'
 admin.extraParameter.type.leni_event: 'Code Event LENI'
 admin.extraParameter.type.leni_user: 'Code Utilisateur LENI'
 admin.extraParameter.type.vianeo_concerned_types_id: 'Vianeo : Ids des types de participation concernés'
