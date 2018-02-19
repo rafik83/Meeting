@@ -25,6 +25,7 @@ use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\User\Event\ExtraDataRepositoryInterface as UserEventExtraDataRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\UserEventRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\UserRepositoryInterface;
+use Proximum\Vimeet\Domain\Template\TemplateData;
 use Proximum\Vimeet\Domain\User\Event\ExtraData\Type as ExtraDataType;
 
 class ImportSheetHandler
@@ -73,10 +74,16 @@ class ImportSheetHandler
      * @param Type             $type
      * @param RegistrationView $registrationView
      *
+     * @param TemplateData     $templateData
+     *
      * @return Sheet
      */
-    public function handle(Event $event, Type $type, RegistrationView $registrationView): Sheet
-    {
+    public function handle(
+        Event $event,
+        Type $type,
+        RegistrationView $registrationView,
+        TemplateData $templateData
+    ): Sheet {
         $email = StringHelper::trimSpacesAndNonBreakSpaces($registrationView->participantView->email);
 
         $user = $this->userRepository->findByEmail($email);
@@ -85,7 +92,7 @@ class ImportSheetHandler
             $user = $this->createUser($event, $email, $registrationView->participantView->locale);
         }
 
-        return $this->createSheet($event, $type, $user, $registrationView);
+        return $this->createSheet($event, $type, $user, $registrationView, $templateData);
     }
 
     /**
@@ -97,12 +104,8 @@ class ImportSheetHandler
      */
     private function createUser(Event $event, string $email, string $locale): User
     {
-        $user = new User(
-            $email,
-            '',
-            '',
-            $locale
-        );
+        $user = new User($email, '', '', $locale);
+        $user->setAccount(new User\Account());
         $user->welcome();
 
         $this->userRepository->add($user);
@@ -121,11 +124,17 @@ class ImportSheetHandler
      * @param Type             $type
      * @param User             $user
      * @param RegistrationView $registrationView
+     * @param TemplateData     $templateData
      *
      * @return Sheet
      */
-    private function createSheet(Event $event, Type $type, User $user, RegistrationView $registrationView): Sheet
-    {
+    private function createSheet(
+        Event $event,
+        Type $type,
+        User $user,
+        RegistrationView $registrationView,
+        TemplateData $templateData
+    ): Sheet {
         // todo
         $data = [];
 
@@ -137,6 +146,7 @@ class ImportSheetHandler
         $participantData = [];
 
         $participant = new Participant($sheet, $user, $participantData, false);
+        $participant->setImported(true);
         $this->participantRepository->add($participant);
 
         $this->sheetExtraDataRepository->add(

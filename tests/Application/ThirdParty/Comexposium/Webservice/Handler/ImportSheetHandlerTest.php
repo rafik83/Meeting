@@ -26,6 +26,7 @@ use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\User\Event\ExtraDataRepositoryInterface as UserEventExtraDataRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\UserEventRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\UserRepositoryInterface;
+use Proximum\Vimeet\Domain\Template\TemplateData;
 
 class ImportSheetHandlerTest extends TestCase
 {
@@ -63,9 +64,13 @@ class ImportSheetHandlerTest extends TestCase
 
         $expectedUser = new User('takashi.kitano@nintendo.com', '', '', 'fr');
         $expectedUser->welcome();
+        $expectedUser->setAccount(new User\Account());
 
         $expectedSheet = new Sheet($event->reveal(), $type->reveal(), [], $expectedUser, $dateTime);
         $expectedSheet->setImported(true);
+
+        $expectedParticipant = new Participant($expectedSheet, $expectedUser, [], false);
+        $expectedParticipant->setImported(true);
 
         $sheetRepository = $this->prophesize(SheetRepositoryInterface::class);
         $sheetRepository->add($expectedSheet)->shouldBeCalled();
@@ -92,7 +97,9 @@ class ImportSheetHandlerTest extends TestCase
         $userEventRepository->add(new UserEvent($expectedUser, $event->reveal(), $type->reveal()))->shouldBeCalled();
 
         $participantRepository = $this->prophesize(ParticipantRepositoryInterface::class);
-        $participantRepository->add(new Participant($expectedSheet, $expectedUser, [], false));
+        $participantRepository->add($expectedParticipant);
+
+        $templateData = $this->prophesize(TemplateData::class);
 
         $importSheetHandler = new ImportSheetHandler(
             $userRepository->reveal(),
@@ -103,6 +110,6 @@ class ImportSheetHandlerTest extends TestCase
             $userEventRepository->reveal(),
             $dateTime
         );
-        $importSheetHandler->handle($event->reveal(), $type->reveal(), $registrationView);
+        $importSheetHandler->handle($event->reveal(), $type->reveal(), $registrationView, $templateData->reveal());
     }
 }

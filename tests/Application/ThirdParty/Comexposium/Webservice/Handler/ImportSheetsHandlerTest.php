@@ -24,6 +24,8 @@ use Proximum\Vimeet\Domain\Model\Event\ExtraParameter;
 use Proximum\Vimeet\Domain\Model\Type;
 use Proximum\Vimeet\Domain\Repository\Event\ExtraParameterRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\TypeRepositoryInterface;
+use Proximum\Vimeet\Domain\Template\TemplateData;
+use Proximum\Vimeet\Domain\Template\TemplateDataFactory;
 
 class ImportSheetsHandlerTest extends TestCase
 {
@@ -94,15 +96,28 @@ class ImportSheetsHandlerTest extends TestCase
         $comexposiumWebservice = $this->prophesize(ComexposiumWebservice::class);
         $comexposiumWebservice->getRegistrations('999666', ['111222333'])->shouldBeCalled()->willReturn($expectedResponse);
 
+        $templateData = $this->prophesize(TemplateData::class);
+
+        $templateDataFactory = $this->prophesize(TemplateDataFactory::class);
+        $templateDataFactory
+            ->createRegistrationFromType($type->reveal(), null)
+            ->shouldBeCalled()
+            ->willReturn($templateData->reveal())
+        ;
+
         $importSheetHandler = $this->prophesize(ImportSheetHandler::class);
-        $importSheetHandler->handle($event->reveal(), $type->reveal(), $expectedRegistrationView)->shouldBeCalled();
+        $importSheetHandler
+            ->handle($event->reveal(), $type->reveal(), $expectedRegistrationView, $templateData->reveal())
+            ->shouldBeCalled()
+        ;
 
         $importSheetsHandler = new ImportSheetsHandler(
             $comexposiumWebservice->reveal(),
             $extraParameterRepository->reveal(),
             $typeRepository->reveal(),
             $rawRegistrationToRegistrationViewConverter->reveal(),
-            $importSheetHandler->reveal()
+            $importSheetHandler->reveal(),
+            $templateDataFactory->reveal()
         );
 
         $importSheetsHandler->handle($event->reveal(), ['111222333']);

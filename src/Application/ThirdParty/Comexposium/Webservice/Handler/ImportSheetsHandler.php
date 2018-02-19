@@ -18,6 +18,7 @@ use Proximum\Vimeet\Domain\Model\Event\ExtraParameter;
 use Proximum\Vimeet\Domain\Model\Type;
 use Proximum\Vimeet\Domain\Repository\Event\ExtraParameterRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\TypeRepositoryInterface;
+use Proximum\Vimeet\Domain\Template\TemplateDataFactory;
 
 class ImportSheetsHandler
 {
@@ -38,25 +39,31 @@ class ImportSheetsHandler
     /** @var ImportSheetHandler */
     private $importSheetHandler;
 
+    /** @var TemplateDataFactory */
+    private $templateDataFactory;
+
     /**
      * @param ComexposiumWebservice                      $comexposiumWebservice
      * @param ExtraParameterRepositoryInterface          $extraParameterRepository
      * @param TypeRepositoryInterface                    $typeRepository
      * @param RawRegistrationToRegistrationViewConverter $rawRegistrationToRegistrationViewConverter
      * @param ImportSheetHandler                         $importSheetHandler
+     * @param TemplateDataFactory                        $templateDataFactory
      */
     public function __construct(
         ComexposiumWebservice $comexposiumWebservice,
         ExtraParameterRepositoryInterface $extraParameterRepository,
         TypeRepositoryInterface $typeRepository,
         RawRegistrationToRegistrationViewConverter $rawRegistrationToRegistrationViewConverter,
-        ImportSheetHandler $importSheetHandler
+        ImportSheetHandler $importSheetHandler,
+        TemplateDataFactory $templateDataFactory
     ) {
         $this->comexposiumWebservice = $comexposiumWebservice;
         $this->extraParameterRepository = $extraParameterRepository;
         $this->typeRepository = $typeRepository;
         $this->rawRegistrationToRegistrationViewConverter = $rawRegistrationToRegistrationViewConverter;
         $this->importSheetHandler = $importSheetHandler;
+        $this->templateDataFactory = $templateDataFactory;
     }
 
     /**
@@ -91,6 +98,8 @@ class ImportSheetsHandler
 
         $eventReference = $eventReferenceExtraParameter->getValue();
 
+        $registrationTemplate = $this->templateDataFactory->createRegistrationFromType($type, null);
+
         $rawRegistrations = $this->comexposiumWebservice->getRegistrations($eventReference, $registrationReferences);
 
         foreach ($rawRegistrations as $rawRegistration) {
@@ -100,7 +109,8 @@ class ImportSheetsHandler
                 continue;
             }
 
-            $this->importSheetHandler->handle($event, $type, $registrationView);
+            $this->importSheetHandler->handle($event, $type, $registrationView, $registrationTemplate);
+            $registrationTemplate->clear();
         }
     }
 

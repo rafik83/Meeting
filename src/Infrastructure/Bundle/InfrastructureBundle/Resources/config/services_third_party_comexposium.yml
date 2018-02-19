@@ -38,6 +38,7 @@ services:
             - '@vimeet_infrastructure.repository.type_repository'
             - '@Proximum\Vimeet\Application\ThirdParty\Comexposium\Webservice\Converter\RawRegistrationToRegistrationViewConverter'
             - '@Proximum\Vimeet\Application\ThirdParty\Comexposium\Webservice\Handler\ImportSheetHandler'
+            - '@template.template_data_factory'
 
     Proximum\Vimeet\Application\ThirdParty\Comexposium\Webservice\Handler\ImportSheetHandler:
         arguments:
