@@ -11,17 +11,21 @@ namespace Proximum\Vimeet\Tests\Application\ThirdParty\Comexposium\Webservice\Ha
 
 use PHPUnit\Framework\TestCase;
 use Proximum\Vimeet\Application\ThirdParty\Comexposium\Webservice\Handler\ImportSheetHandler;
-use Proximum\Vimeet\Application\ThirdParty\Comexposium\Webservice\Sheet\SheetExtraDataType;
 use Proximum\Vimeet\Application\ThirdParty\Comexposium\Webservice\View\ParticipantPositionView;
 use Proximum\Vimeet\Application\ThirdParty\Comexposium\Webservice\View\ParticipantView;
 use Proximum\Vimeet\Application\ThirdParty\Comexposium\Webservice\View\RegistrationView;
 use Proximum\Vimeet\Domain\Model\Event;
+use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\Type;
 use Proximum\Vimeet\Domain\Model\User;
+use Proximum\Vimeet\Domain\Model\UserEvent;
+use Proximum\Vimeet\Domain\Repository\ParticipantRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\Sheet\ExtraDataRepositoryInterface as SheetExtraDataRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\User\Event\ExtraDataRepositoryInterface as UserEventExtraDataRepositoryInterface;
+use Proximum\Vimeet\Domain\Repository\UserEventRepositoryInterface;
+use Proximum\Vimeet\Domain\Repository\UserRepositoryInterface;
 
 class ImportSheetHandlerTest extends TestCase
 {
@@ -58,7 +62,10 @@ class ImportSheetHandlerTest extends TestCase
         );
 
         $expectedUser = new User('takashi.kitano@nintendo.com', '', '', 'fr');
+        $expectedUser->welcome();
+
         $expectedSheet = new Sheet($event->reveal(), $type->reveal(), [], $expectedUser, $dateTime);
+        $expectedSheet->setImported(true);
 
         $sheetRepository = $this->prophesize(SheetRepositoryInterface::class);
         $sheetRepository->add($expectedSheet)->shouldBeCalled();
@@ -77,10 +84,23 @@ class ImportSheetHandlerTest extends TestCase
             ->shouldBeCalled()
         ;
 
+        $userRepository = $this->prophesize(UserRepositoryInterface::class);
+        $userRepository->findByEmail('takashi.kitano@nintendo.com')->shouldBeCalled()->willReturn(null);
+        $userRepository->add($expectedUser)->shouldBeCalled();
+
+        $userEventRepository = $this->prophesize(UserEventRepositoryInterface::class);
+        $userEventRepository->add(new UserEvent($expectedUser, $event->reveal(), $type->reveal()))->shouldBeCalled();
+
+        $participantRepository = $this->prophesize(ParticipantRepositoryInterface::class);
+        $participantRepository->add(new Participant($expectedSheet, $expectedUser, [], false));
+
         $importSheetHandler = new ImportSheetHandler(
+            $userRepository->reveal(),
             $sheetRepository->reveal(),
+            $participantRepository->reveal(),
             $sheetExtraDataRepository->reveal(),
             $userEventExtraDataRepository->reveal(),
+            $userEventRepository->reveal(),
             $dateTime
         );
         $importSheetHandler->handle($event->reveal(), $type->reveal(), $registrationView);

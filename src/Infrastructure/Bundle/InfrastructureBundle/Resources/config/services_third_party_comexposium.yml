@@ -41,9 +41,12 @@ services:
 
     Proximum\Vimeet\Application\ThirdParty\Comexposium\Webservice\Handler\ImportSheetHandler:
         arguments:
+            - '@vimeet_infrastructure.repository.user_repository'
             - '@vimeet_infrastructure.repository.sheet_repository'
+            - '@vimeet_infrastructure.repository.participant_repository'
             - '@repository.sheet.extra_data_repository'
             - '@repository.user.event.extra_data_repository'
+            - '@vimeet_infrastructure.repository.user_event_repository'
             - '@datetime'
 
     Proximum\Vimeet\Application\ThirdParty\Comexposium\Webservice\Handler\ComexposiumWebservice:
