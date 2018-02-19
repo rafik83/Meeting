@@ -1,10 +1,11 @@
 <?php
 
-/**
- * Created by PhpStorm.
- * User: richard
- * Date: 19/02/2018
- * Time: 11:46
+/*
+ * This file is part of the Proximum Vimeet project.
+ *
+ * Copyright (C) Proximum
+ *
+ * @author Elao <contact@elao.com>
  */
 
 namespace Proximum\Vimeet\Tests\Application\ThirdParty\Comexposium\Webservice\Handler;
