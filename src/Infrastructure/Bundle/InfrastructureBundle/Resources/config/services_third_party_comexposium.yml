@@ -48,6 +48,7 @@ services:
             - '@repository.sheet.extra_data_repository'
             - '@repository.user.event.extra_data_repository'
             - '@vimeet_infrastructure.repository.user_event_repository'
+            - '@account.synchronizer'
             - '@datetime'
 
     Proximum\Vimeet\Application\ThirdParty\Comexposium\Webservice\Handler\ComexposiumWebservice:

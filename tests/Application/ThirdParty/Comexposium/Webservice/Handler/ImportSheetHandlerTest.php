@@ -15,6 +15,7 @@ use Proximum\Vimeet\Application\ThirdParty\Comexposium\Webservice\Handler\Import
 use Proximum\Vimeet\Application\ThirdParty\Comexposium\Webservice\View\ParticipantPositionView;
 use Proximum\Vimeet\Application\ThirdParty\Comexposium\Webservice\View\ParticipantView;
 use Proximum\Vimeet\Application\ThirdParty\Comexposium\Webservice\View\RegistrationView;
+use Proximum\Vimeet\Domain\Account\Synchronizer;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Sheet;
@@ -102,6 +103,9 @@ class ImportSheetHandlerTest extends TestCase
 
         $templateData = $this->prophesize(TemplateData::class);
 
+        $synchronizer = $this->prophesize(Synchronizer::class);
+        $synchronizer->set($templateData->reveal(), $expectedUser)->shouldBeCalled();
+
         $importSheetHandler = new ImportSheetHandler(
             $userRepository->reveal(),
             $sheetRepository->reveal(),
@@ -109,6 +113,7 @@ class ImportSheetHandlerTest extends TestCase
             $sheetExtraDataRepository->reveal(),
             $userEventExtraDataRepository->reveal(),
             $userEventRepository->reveal(),
+            $synchronizer->reveal(),
             $dateTime
         );
         $importSheetHandler->handle($event->reveal(), $type->reveal(), $registrationView, $templateData->reveal());

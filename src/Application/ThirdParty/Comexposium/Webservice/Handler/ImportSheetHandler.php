@@ -12,6 +12,7 @@ namespace Proximum\Vimeet\Application\ThirdParty\Comexposium\Webservice\Handler;
 
 use Proximum\Vimeet\Application\ThirdParty\Comexposium\Webservice\Sheet\SheetExtraDataType;
 use Proximum\Vimeet\Application\ThirdParty\Comexposium\Webservice\View\RegistrationView;
+use Proximum\Vimeet\Domain\Account\Synchronizer;
 use Proximum\Vimeet\Domain\Helper\StringHelper;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Participant;
@@ -48,6 +49,9 @@ class ImportSheetHandler
     /** @var UserEventRepositoryInterface */
     private $userEventRepository;
 
+    /** @var Synchronizer */
+    private $synchronizer;
+
     /** @var \DateTimeInterface */
     private $dateTime;
 
@@ -58,22 +62,23 @@ class ImportSheetHandler
         SheetExtraDataRepositoryInterface $sheetExtraDataRepository,
         UserEventExtraDataRepositoryInterface $userEventExtraDataRepository,
         UserEventRepositoryInterface $userEventRepository,
+        Synchronizer $synchronizer,
         \DateTimeInterface $dateTime
     ) {
-        $this->dateTime = $dateTime;
+        $this->userRepository = $userRepository;
         $this->sheetRepository = $sheetRepository;
+        $this->participantRepository = $participantRepository;
         $this->sheetExtraDataRepository = $sheetExtraDataRepository;
         $this->userEventExtraDataRepository = $userEventExtraDataRepository;
-        $this->userRepository = $userRepository;
         $this->userEventRepository = $userEventRepository;
-        $this->participantRepository = $participantRepository;
+        $this->synchronizer = $synchronizer;
+        $this->dateTime = $dateTime;
     }
 
     /**
      * @param Event            $event
      * @param Type             $type
      * @param RegistrationView $registrationView
-     *
      * @param TemplateData     $templateData
      *
      * @return Sheet
@@ -92,7 +97,11 @@ class ImportSheetHandler
             $user = $this->createUser($event, $email, $registrationView->participantView->locale);
         }
 
-        return $this->createSheet($event, $type, $user, $registrationView, $templateData);
+        $sheet = $this->createSheet($event, $type, $user, $registrationView, $templateData);
+
+        $this->synchronizer->set($templateData, $user);
+
+        return $sheet;
     }
 
     /**
