@@ -1,0 +1,5 @@
+services:
+    Proximum\Vimeet\Application\ThirdParty\Comexposium\SSO\TokenChecker:
+        arguments:
+            - '@adapter.http_adapter'
+            - '%comexposium_sso_validator_endpoint%'
