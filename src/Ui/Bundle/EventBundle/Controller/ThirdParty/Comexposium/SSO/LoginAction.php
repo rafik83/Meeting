@@ -15,10 +15,13 @@ use Proximum\Vimeet\Application\Adapter\AuthorizationCheckerAdapterInterface;
 use Proximum\Vimeet\Application\Adapter\QueryBusInterface;
 use Proximum\Vimeet\Application\ThirdParty\Comexposium\SSO\Application\Query\SSOChecker;
 use Proximum\Vimeet\Application\ThirdParty\Comexposium\SSO\Exception\SSOException;
+use Proximum\Vimeet\Domain\Event\ExtraParameter\Type;
+use Proximum\Vimeet\Domain\Repository\Event\ExtraParameterRepositoryInterface;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\ParamConverter\EventDomain;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface;
+use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 class LoginAction
 {
@@ -34,15 +37,20 @@ class LoginAction
     /** @var AuthenticationManagerInterface */
     private $authenticationManager;
 
+    /** @var ExtraParameterRepositoryInterface */
+    private $extraParameterRepository;
+
     /**
      * @param AuthorizationCheckerAdapterInterface $authorizationCheckerAdapter
      * @param AuthenticationManagerInterface       $authenticationManager
+     * @param ExtraParameterRepositoryInterface    $extraParameterRepository
      * @param QueryBusInterface                    $queryBus
      * @param FlashBagInterface                    $flashBag
      */
     public function __construct(
         AuthorizationCheckerAdapterInterface $authorizationCheckerAdapter,
         AuthenticationManagerInterface $authenticationManager,
+        ExtraParameterRepositoryInterface $extraParameterRepository,
         QueryBusInterface $queryBus,
         FlashBagInterface $flashBag
     ) {
@@ -50,6 +58,7 @@ class LoginAction
         $this->queryBus = $queryBus;
         $this->flashBag = $flashBag;
         $this->authenticationManager = $authenticationManager;
+        $this->extraParameterRepository = $extraParameterRepository;
     }
 
     /**
@@ -57,9 +66,15 @@ class LoginAction
      * @param EventDomain $eventDomain
      *
      * @return JsonResponse
+     *
+     * @throws AccessDeniedException
      */
     public function __invoke(Request $request, EventDomain $eventDomain): JsonResponse
     {
+        if (null === $this->extraParameterRepository->findByEventAndType($eventDomain->getEvent(), Type::TYPE_COMEXPOSIUM_SSO_ENABLED)) {
+            throw new AccessDeniedException('The sso for Comexposium is not enabled on this event');
+        }
+
         if ($this->authorizationCheckerAdapter->isGranted('AUTHENTICATED_REMEMBERED')) {
             $this->authenticationManager->disconnect();
         }

@@ -78,7 +78,7 @@ parameters:
 
     jenkins_phantomjs_sheet_pdf_print_build_name: 'PhantomJsSheetPrintPdfBuild'
 
-    comexposium_sso_validator_endpoint: ""
+    comexposium_check_user_token_endpoint: ""
 
     # Features flag
     feature_video_conference_enabled: false

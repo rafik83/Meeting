@@ -2,12 +2,13 @@ services:
     Proximum\Vimeet\Application\ThirdParty\Comexposium\SSO\TokenChecker:
         arguments:
             - '@adapter.http_adapter'
-            - '%comexposium_sso_validator_endpoint%'
+            - '%comexposium_check_user_token_endpoint%'
 
     Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\ThirdParty\Comexposium\SSO\LoginAction:
         arguments:
             - '@adapter.authorization_checker'
             - '@adapter.authentication_manager'
+            - '@repository.event.extra_parameter_repository'
             - '@Proximum\Vimeet\Infrastructure\Adapter\QueryBus'
             - '@session.flash_bag'
 
