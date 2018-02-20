@@ -15,6 +15,7 @@ use Proximum\Vimeet\Application\ThirdParty\Comexposium\Webservice\Converter\RawR
 use Proximum\Vimeet\Application\ThirdParty\Comexposium\Webservice\Handler\ComexposiumWebservice;
 use Proximum\Vimeet\Application\ThirdParty\Comexposium\Webservice\Handler\ImportSheetHandler;
 use Proximum\Vimeet\Application\ThirdParty\Comexposium\Webservice\Handler\ImportSheetsHandler;
+use Proximum\Vimeet\Application\ThirdParty\Comexposium\Webservice\Handler\RemoveAlreadyImportedReferences;
 use Proximum\Vimeet\Application\ThirdParty\Comexposium\Webservice\View\ParticipantPositionView;
 use Proximum\Vimeet\Application\ThirdParty\Comexposium\Webservice\View\ParticipantView;
 use Proximum\Vimeet\Application\ThirdParty\Comexposium\Webservice\View\RegistrationView;
@@ -111,15 +112,23 @@ class ImportSheetsHandlerTest extends TestCase
             ->shouldBeCalled()
         ;
 
+        $removeAlreadyImportedReferences = $this->prophesize(RemoveAlreadyImportedReferences::class);
+        $removeAlreadyImportedReferences
+            ->handle($event->reveal(), ['111222333', '3334444'])
+            ->shouldBeCalled()
+            ->willReturn(['111222333'])
+        ;
+
         $importSheetsHandler = new ImportSheetsHandler(
             $comexposiumWebservice->reveal(),
             $extraParameterRepository->reveal(),
             $typeRepository->reveal(),
             $rawRegistrationToRegistrationViewConverter->reveal(),
             $importSheetHandler->reveal(),
-            $templateDataFactory->reveal()
+            $templateDataFactory->reveal(),
+            $removeAlreadyImportedReferences->reveal()
         );
 
-        $importSheetsHandler->handle($event->reveal(), ['111222333']);
+        $importSheetsHandler->handle($event->reveal(), ['111222333', '3334444']);
     }
 }

@@ -42,6 +42,9 @@ class ImportSheetsHandler
     /** @var TemplateDataFactory */
     private $templateDataFactory;
 
+    /** @var RemoveAlreadyImportedReferences */
+    private $removeAlreadyImportedReferences;
+
     /**
      * @param ComexposiumWebservice                      $comexposiumWebservice
      * @param ExtraParameterRepositoryInterface          $extraParameterRepository
@@ -49,6 +52,7 @@ class ImportSheetsHandler
      * @param RawRegistrationToRegistrationViewConverter $rawRegistrationToRegistrationViewConverter
      * @param ImportSheetHandler                         $importSheetHandler
      * @param TemplateDataFactory                        $templateDataFactory
+     * @param RemoveAlreadyImportedReferences            $removeAlreadyImportedReferences
      */
     public function __construct(
         ComexposiumWebservice $comexposiumWebservice,
@@ -56,7 +60,8 @@ class ImportSheetsHandler
         TypeRepositoryInterface $typeRepository,
         RawRegistrationToRegistrationViewConverter $rawRegistrationToRegistrationViewConverter,
         ImportSheetHandler $importSheetHandler,
-        TemplateDataFactory $templateDataFactory
+        TemplateDataFactory $templateDataFactory,
+        RemoveAlreadyImportedReferences $removeAlreadyImportedReferences
     ) {
         $this->comexposiumWebservice = $comexposiumWebservice;
         $this->extraParameterRepository = $extraParameterRepository;
@@ -64,6 +69,7 @@ class ImportSheetsHandler
         $this->rawRegistrationToRegistrationViewConverter = $rawRegistrationToRegistrationViewConverter;
         $this->importSheetHandler = $importSheetHandler;
         $this->templateDataFactory = $templateDataFactory;
+        $this->removeAlreadyImportedReferences = $removeAlreadyImportedReferences;
     }
 
     /**
@@ -93,6 +99,12 @@ class ImportSheetsHandler
         $type = $this->typeRepository->getById((int) $typeIdExtraParameter->getValue());
 
         if (!$type instanceof Type || $type->getEvent()->getId() !== $event->getId()) {
+            return;
+        }
+
+        $registrationReferences = $this->removeAlreadyImportedReferences->handle($event, $registrationReferences);
+
+        if (empty($registrationReferences)) {
             return;
         }
 
