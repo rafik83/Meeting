@@ -285,13 +285,15 @@
                         </div>
                     {% endif %}
                     {% if sheet.hasReminderDate %}
-                        {{ macro.state_label(
+                        <div>
+                            {{ macro.state_label(
                             sheet.reminderDate|localizeddate('medium', 'short', app.request.locale, event.timeZone),
                             'default',
                             {
                                 'default': 'primary'
                             }
-                        )}}
+                            )}}
+                        </div>
                     {% endif %}
                 </td>
                 <td class="text-right">

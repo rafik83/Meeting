@@ -56,7 +56,7 @@ class AddComment implements Command
             return true;
         }
 
-        if (null !== $this->reminderDate) {
+        if ($this->sheet->getReminderDate() !== $this->reminderDate) {
             return true;
         }
 
