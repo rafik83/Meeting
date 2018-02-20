@@ -1167,6 +1167,7 @@ event.sheet.participant.guest: Invité
 event.sheet.participant.owner: Propriétaire
 event.sheet.payment.description: 'Choisissez votre mode de paiement'
 event.sheet.payment.title: 'Mode de paiement'
+event.sheet.reminderDate.today_reminder_date: 'Aujourd''hui'
 event.sheet.state.accepted: Acceptée
 event.sheet.state.pending: 'En attente'
 event.sheet.state.refused: Refusée
