@@ -69,6 +69,7 @@ class ImportSheetHandler
         Synchronizer $synchronizer,
         \DateTimeInterface $dateTime
     ) {
+        $this->sheetAndParticipantTemplateDataHandler = $sheetAndParticipantTemplateDataHandler;
         $this->userRepository = $userRepository;
         $this->sheetRepository = $sheetRepository;
         $this->participantRepository = $participantRepository;
@@ -77,7 +78,6 @@ class ImportSheetHandler
         $this->userEventRepository = $userEventRepository;
         $this->synchronizer = $synchronizer;
         $this->dateTime = $dateTime;
-        $this->sheetAndParticipantTemplateDataHandler = $sheetAndParticipantTemplateDataHandler;
     }
 
     /**
