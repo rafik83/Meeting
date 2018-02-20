@@ -280,9 +280,18 @@
                 <td>{{ sheet.follower }}</td>
                 <td>
                     {% if sheet.hasCommercialStatus %}
-                        <span class="label label-{{ sheet.getCommercialStatusLabel }}">
+                        <div class="label label-{{ sheet.getCommercialStatusLabel }}">
                             {{ ('admin.sheet.details.crm.record.trace.set_commercial_status.' ~ sheet.commercialStatus)|trans }}
-                        </span>
+                        </div>
+                    {% endif %}
+                    {% if sheet.hasReminderDate %}
+                        {{ macro.state_label(
+                            sheet.reminderDate|localizeddate('medium', 'short', app.request.locale, event.timeZone),
+                            'default',
+                            {
+                                'default': 'primary'
+                            }
+                        )}}
                     {% endif %}
                 </td>
                 <td class="text-right">

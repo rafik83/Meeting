@@ -75,5 +75,10 @@ class AddCommentHandler
                 new CommercialStatusChanged($addComment->sheet, $addComment->author, $this->dateTime)
             );
         }
+
+        if ($addComment->reminderDate !== $addComment->sheet->getReminderDate()) {
+            $addComment->sheet->setReminderDate($addComment->reminderDate);
+            $this->sheetRepository->set($addComment->sheet);
+        }
     }
 }

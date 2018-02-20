@@ -58,6 +58,9 @@ Proximum\Vimeet\Domain\Model\Sheet:
             type: string
             options:
                 default: 'none'
+        reminderDate:
+            type: datetime
+            nullable: true
     manyToOne:
         event:
             targetEntity: Proximum\Vimeet\Domain\Model\Event

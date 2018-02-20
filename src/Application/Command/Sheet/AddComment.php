@@ -28,6 +28,9 @@ class AddComment implements Command
     /** @var null|string */
     public $commercialStatus;
 
+    /** @var null|\DateTimeInterface */
+    public $reminderDate;
+
     /**
      * @param Sheet $sheet
      * @param Admin $author
@@ -37,18 +40,23 @@ class AddComment implements Command
         $this->sheet = $sheet;
         $this->author = $author;
         $this->commercialStatus = $sheet->getCommercialStatus();
+        $this->reminderDate = $sheet->getReminderDate();
     }
 
     /**
      * @return bool
      */
-    public function commercialStatusChangeOrCommentNotEmpty(): bool
+    public function commercialStatusChangeOrCommentNotEmptyOrReminderDateNotEmpty(): bool
     {
         if ($this->sheet->getCommercialStatus() !== $this->commercialStatus) {
             return true;
         }
 
         if (!empty($this->text)) {
+            return true;
+        }
+
+        if (null !== $this->reminderDate) {
             return true;
         }
 

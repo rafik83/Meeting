@@ -51,6 +51,7 @@ class AddCommentHandlerTest extends TestCase
         $this->author = $this->prophesize(Admin::class);
         $this->sheet = $this->prophesize(Sheet::class);
         $this->sheet->getCommercialStatus()->willReturn(CommercialStatus::STATUS_DO_NOT_CALL);
+        $this->sheet->getReminderDate()->shouldBeCalled()->willReturn($this->dateTime);
 
         $this->commentRepository = $this->prophesize(CommentRepositoryInterface::class);
         $this->sheetRepository = $this->prophesize(SheetRepositoryInterface::class);

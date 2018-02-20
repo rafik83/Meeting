@@ -115,6 +115,8 @@ class PaginatedSheetListViewQueryHandlerTest extends TestCase
         $sheet2->isValidated()->willReturn(false);
         $sheet1->getCommercialStatus()->willReturn(CommercialStatus::STATUS_INTEREST);
         $sheet2->getCommercialStatus()->willReturn(CommercialStatus::STATUS_DO_NOT_CALL);
+        $sheet1->getReminderDate()->willReturn($datetime1);
+        $sheet2->getReminderDate()->willReturn($datetime1);
 
         $paginatedResult = new PaginatedResult([$sheet1->reveal(), $sheet2->reveal()], 1, 20, 2);
         $sheetSearchAdapter = $this->prophesize(SheetSearchAdapterInterface::class);
@@ -176,6 +178,7 @@ class PaginatedSheetListViewQueryHandlerTest extends TestCase
             CommercialStatus::STATUS_INTEREST,
             $datetime1,
             $datetime1,
+            $datetime1,
             'token1',
             1,
             true,
@@ -197,6 +200,7 @@ class PaginatedSheetListViewQueryHandlerTest extends TestCase
             new SheetParticipantView('truc', 'muche', 'email2@sheet.fr'),
             '',
             CommercialStatus::STATUS_DO_NOT_CALL,
+            $datetime1,
             $datetime2,
             $datetime2,
             'token2',
