@@ -31,6 +31,9 @@ use Proximum\Vimeet\Domain\User\Event\ExtraData\Type as ExtraDataType;
 
 class ImportSheetHandler
 {
+    /** @var SheetAndParticipantTemplateDataHandler */
+    private $sheetAndParticipantTemplateDataHandler;
+
     /** @var UserRepositoryInterface */
     private $userRepository;
 
@@ -56,6 +59,7 @@ class ImportSheetHandler
     private $dateTime;
 
     public function __construct(
+        SheetAndParticipantTemplateDataHandler $sheetAndParticipantTemplateDataHandler,
         UserRepositoryInterface $userRepository,
         SheetRepositoryInterface $sheetRepository,
         ParticipantRepositoryInterface $participantRepository,
@@ -73,6 +77,7 @@ class ImportSheetHandler
         $this->userEventRepository = $userEventRepository;
         $this->synchronizer = $synchronizer;
         $this->dateTime = $dateTime;
+        $this->sheetAndParticipantTemplateDataHandler = $sheetAndParticipantTemplateDataHandler;
     }
 
     /**
@@ -97,7 +102,7 @@ class ImportSheetHandler
             $user = $this->createUser($event, $email, $registrationView->participantView->locale);
         }
 
-        $sheet = $this->createSheet($event, $type, $user, $registrationView, $templateData);
+        $sheet = $this->createSheetAndParticipant($event, $type, $user, $registrationView, $templateData);
 
         $this->synchronizer->set($templateData, $user);
 
@@ -137,38 +142,89 @@ class ImportSheetHandler
      *
      * @return Sheet
      */
-    private function createSheet(
+    private function createSheetAndParticipant(
         Event $event,
         Type $type,
         User $user,
         RegistrationView $registrationView,
         TemplateData $templateData
     ): Sheet {
-        // todo
-        $data = [];
+        $sheetAndParticipantTemplateDataView = $this->sheetAndParticipantTemplateDataHandler->handle(
+            $registrationView,
+            $templateData
+        );
 
-        $sheet = new Sheet($event, $type, $data, $user, $this->dateTime);
+        $sheet = $this->createSheet(
+            $registrationView->reference,
+            $event,
+            $type,
+            $user,
+            $sheetAndParticipantTemplateDataView->sheetTemplateData
+        );
+
+        $this->createParticipant($sheet, $user, $sheetAndParticipantTemplateDataView->participantTemplateData);
+
+        return $sheet;
+    }
+
+    /**
+     * @param string $reference Comexposium reference
+     * @param Event  $event
+     * @param Type   $type
+     * @param User   $user
+     * @param array  $sheetTemplateData
+     *
+     * @return Sheet
+     */
+    private function createSheet(
+        string $reference,
+        Event $event,
+        Type $type,
+        User $user,
+        array $sheetTemplateData
+    ): Sheet {
+        $sheet = new Sheet(
+            $event,
+            $type,
+            $sheetTemplateData,
+            $user,
+            $this->dateTime
+        );
         $sheet->setImported(true);
         $this->sheetRepository->add($sheet);
-
-        // todo
-        $participantData = [];
-
-        $participant = new Participant($sheet, $user, $participantData, false);
-        $participant->setImported(true);
-        $this->participantRepository->add($participant);
 
         $this->sheetExtraDataRepository->add(
             new Sheet\ExtraData(
                 $sheet,
                 SheetExtraDataType::COMEXPOSIUM_REGISTRATION_REFERENCE,
-                $registrationView->reference,
+                $reference,
                 $this->dateTime
             )
         );
 
-        $this->userEventRepository->add(new UserEvent($user, $event, $type));
-
         return $sheet;
+    }
+
+    /**
+     * @param Sheet $sheet
+     * @param User  $user
+     * @param array $participantTemplateData
+     *
+     * @return Participant
+     */
+    private function createParticipant(Sheet $sheet, User $user, array $participantTemplateData): Participant
+    {
+        $participant = new Participant(
+            $sheet,
+            $user,
+            $participantTemplateData,
+            false
+        );
+        $participant->setImported(true);
+        $this->participantRepository->add($participant);
+
+        $this->userEventRepository->add(new UserEvent($user, $sheet->getEvent(), $sheet->getType()));
+
+        return $participant;
     }
 }

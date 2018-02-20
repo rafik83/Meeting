@@ -12,9 +12,11 @@ namespace Proximum\Vimeet\Tests\Application\ThirdParty\Comexposium\Webservice\Ha
 
 use PHPUnit\Framework\TestCase;
 use Proximum\Vimeet\Application\ThirdParty\Comexposium\Webservice\Handler\ImportSheetHandler;
+use Proximum\Vimeet\Application\ThirdParty\Comexposium\Webservice\Handler\SheetAndParticipantTemplateDataHandler;
 use Proximum\Vimeet\Application\ThirdParty\Comexposium\Webservice\View\ParticipantPositionView;
 use Proximum\Vimeet\Application\ThirdParty\Comexposium\Webservice\View\ParticipantView;
 use Proximum\Vimeet\Application\ThirdParty\Comexposium\Webservice\View\RegistrationView;
+use Proximum\Vimeet\Application\ThirdParty\Comexposium\Webservice\View\SheetAndParticipantTemplateDataView;
 use Proximum\Vimeet\Domain\Account\Synchronizer;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Participant;
@@ -68,10 +70,18 @@ class ImportSheetHandlerTest extends TestCase
         $expectedUser->welcome();
         $expectedUser->setAccount(new User\Account());
 
-        $expectedSheet = new Sheet($event->reveal(), $type->reveal(), [], $expectedUser, $dateTime);
+        $expectedSheet = new Sheet(
+            $event->reveal(),
+            $type->reveal(),
+            ['whateverSheetTemplateData'],
+            $expectedUser,
+            $dateTime
+        );
         $expectedSheet->setImported(true);
 
-        $expectedParticipant = new Participant($expectedSheet, $expectedUser, [], false);
+        $expectedParticipant = new Participant(
+            $expectedSheet, $expectedUser, ['whateverParticipantTemplateData'], false
+        );
         $expectedParticipant->setImported(true);
 
         $sheetRepository = $this->prophesize(SheetRepositoryInterface::class);
@@ -106,7 +116,20 @@ class ImportSheetHandlerTest extends TestCase
         $synchronizer = $this->prophesize(Synchronizer::class);
         $synchronizer->set($templateData->reveal(), $expectedUser)->shouldBeCalled();
 
+        $sheetAndParticipantTemplateDataHandler = $this->prophesize(SheetAndParticipantTemplateDataHandler::class);
+        $sheetAndParticipantTemplateDataHandler
+            ->handle($registrationView, $templateData->reveal())
+            ->shouldBeCalled()
+            ->willReturn(
+                new SheetAndParticipantTemplateDataView(
+                    ['whateverSheetTemplateData'],
+                    ['whateverParticipantTemplateData']
+                )
+            )
+        ;
+
         $importSheetHandler = new ImportSheetHandler(
+            $sheetAndParticipantTemplateDataHandler->reveal(),
             $userRepository->reveal(),
             $sheetRepository->reveal(),
             $participantRepository->reveal(),
