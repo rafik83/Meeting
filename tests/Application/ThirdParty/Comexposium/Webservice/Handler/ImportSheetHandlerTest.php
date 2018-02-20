@@ -73,10 +73,11 @@ class ImportSheetHandlerTest extends TestCase
         $expectedSheet = new Sheet(
             $event->reveal(),
             $type->reveal(),
-            ['whateverSheetTemplateData'],
+            [],
             $expectedUser,
             $dateTime
         );
+        $expectedSheet->setRegistrationData(['whateverSheetTemplateData']);
         $expectedSheet->setImported(true);
 
         $expectedParticipant = new Participant(

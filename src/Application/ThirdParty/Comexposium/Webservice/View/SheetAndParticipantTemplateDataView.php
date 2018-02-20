@@ -13,14 +13,14 @@ namespace Proximum\Vimeet\Application\ThirdParty\Comexposium\Webservice\View;
 class SheetAndParticipantTemplateDataView
 {
     /** @var array */
-    public $sheetTemplateData;
+    public $sheetRegistrationData;
 
     /** @var array */
-    public $participantTemplateData;
+    public $participantRegistrationData;
 
-    public function __construct(array $sheetTemplateData, array $participantTemplateData)
+    public function __construct(array $sheetRegistrationData, array $participantRegistrationData)
     {
-        $this->sheetTemplateData = $sheetTemplateData;
-        $this->participantTemplateData = $participantTemplateData;
+        $this->sheetRegistrationData = $sheetRegistrationData;
+        $this->participantRegistrationData = $participantRegistrationData;
     }
 }

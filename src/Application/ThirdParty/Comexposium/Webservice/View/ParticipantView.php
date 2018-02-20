@@ -55,4 +55,12 @@ class ParticipantView
         $this->participantPositionViews = $participantPositionViews;
         $this->userCompanyName = $userCompanyName;
     }
+
+    /**
+     * @return string
+     */
+    public function getFullName(): string
+    {
+        return sprintf('%s %s', $this->firstName, $this->lastName);
+    }
 }

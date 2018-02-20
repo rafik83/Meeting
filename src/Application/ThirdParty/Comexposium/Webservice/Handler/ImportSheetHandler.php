@@ -84,7 +84,7 @@ class ImportSheetHandler
      * @param Event            $event
      * @param Type             $type
      * @param RegistrationView $registrationView
-     * @param TemplateData     $templateData
+     * @param TemplateData     $registrationTemplateData
      *
      * @return Sheet
      */
@@ -92,7 +92,7 @@ class ImportSheetHandler
         Event $event,
         Type $type,
         RegistrationView $registrationView,
-        TemplateData $templateData
+        TemplateData $registrationTemplateData
     ): Sheet {
         $email = StringHelper::trimSpacesAndNonBreakSpaces($registrationView->participantView->email);
 
@@ -102,9 +102,8 @@ class ImportSheetHandler
             $user = $this->createUser($event, $email, $registrationView->participantView->locale);
         }
 
-        $sheet = $this->createSheetAndParticipant($event, $type, $user, $registrationView, $templateData);
-
-        $this->synchronizer->set($templateData, $user);
+        $sheet = $this->createSheetAndParticipant($event, $type, $user, $registrationView, $registrationTemplateData);
+        $this->synchronizer->set($registrationTemplateData, $user);
 
         return $sheet;
     }
@@ -138,7 +137,7 @@ class ImportSheetHandler
      * @param Type             $type
      * @param User             $user
      * @param RegistrationView $registrationView
-     * @param TemplateData     $templateData
+     * @param TemplateData     $registrationTemplateData
      *
      * @return Sheet
      */
@@ -147,11 +146,11 @@ class ImportSheetHandler
         Type $type,
         User $user,
         RegistrationView $registrationView,
-        TemplateData $templateData
+        TemplateData $registrationTemplateData
     ): Sheet {
         $sheetAndParticipantTemplateDataView = $this->sheetAndParticipantTemplateDataHandler->handle(
             $registrationView,
-            $templateData
+            $registrationTemplateData
         );
 
         $sheet = $this->createSheet(
@@ -159,10 +158,10 @@ class ImportSheetHandler
             $event,
             $type,
             $user,
-            $sheetAndParticipantTemplateDataView->sheetTemplateData
+            $sheetAndParticipantTemplateDataView->sheetRegistrationData
         );
 
-        $this->createParticipant($sheet, $user, $sheetAndParticipantTemplateDataView->participantTemplateData);
+        $this->createParticipant($sheet, $user, $sheetAndParticipantTemplateDataView->participantRegistrationData);
 
         return $sheet;
     }
@@ -172,7 +171,7 @@ class ImportSheetHandler
      * @param Event  $event
      * @param Type   $type
      * @param User   $user
-     * @param array  $sheetTemplateData
+     * @param array  $sheetRegistrationData
      *
      * @return Sheet
      */
@@ -181,15 +180,16 @@ class ImportSheetHandler
         Event $event,
         Type $type,
         User $user,
-        array $sheetTemplateData
+        array &$sheetRegistrationData
     ): Sheet {
         $sheet = new Sheet(
             $event,
             $type,
-            $sheetTemplateData,
+            [],
             $user,
             $this->dateTime
         );
+        $sheet->setRegistrationData($sheetRegistrationData);
         $sheet->setImported(true);
         $this->sheetRepository->add($sheet);
 
@@ -208,16 +208,16 @@ class ImportSheetHandler
     /**
      * @param Sheet $sheet
      * @param User  $user
-     * @param array $participantTemplateData
+     * @param array $participantRegistrationData
      *
      * @return Participant
      */
-    private function createParticipant(Sheet $sheet, User $user, array $participantTemplateData): Participant
+    private function createParticipant(Sheet $sheet, User $user, array &$participantRegistrationData): Participant
     {
         $participant = new Participant(
             $sheet,
             $user,
-            $participantTemplateData,
+            $participantRegistrationData,
             false
         );
         $participant->setImported(true);

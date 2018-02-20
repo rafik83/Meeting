@@ -11,19 +11,23 @@
 namespace Proximum\Vimeet\Tests\Application\ThirdParty\Comexposium\Webservice\Handler;
 
 use PHPUnit\Framework\TestCase;
+use Proximum\Vimeet\Application\Components\Sheet\Template\Tag;
 use Proximum\Vimeet\Application\ThirdParty\Comexposium\Webservice\Handler\SheetAndParticipantTemplateDataHandler;
 use Proximum\Vimeet\Application\ThirdParty\Comexposium\Webservice\View\ParticipantPositionView;
 use Proximum\Vimeet\Application\ThirdParty\Comexposium\Webservice\View\ParticipantView;
 use Proximum\Vimeet\Application\ThirdParty\Comexposium\Webservice\View\RegistrationView;
 use Proximum\Vimeet\Application\ThirdParty\Comexposium\Webservice\View\SheetAndParticipantTemplateDataView;
+use Proximum\Vimeet\Domain\Template\Block;
 use Proximum\Vimeet\Domain\Template\TemplateData;
+use Proximum\Vimeet\Domain\Template\TemplateObject\Country;
+use Proximum\Vimeet\Domain\Template\TemplateObject\EditableText;
+use Proximum\Vimeet\Domain\Template\TemplateObject\Gender;
+use Proximum\Vimeet\Domain\Template\TemplateObject\Text;
 
 class SheetAndParticipantTemplateDataHandlerTest extends TestCase
 {
     public function testHandle()
     {
-        $templateData = $this->prophesize(TemplateData::class);
-
         $registrationView = new RegistrationView(
             '5556666',
             'Nintendo',
@@ -50,10 +54,48 @@ class SheetAndParticipantTemplateDataHandlerTest extends TestCase
             ['666', '777', '88898']
         );
 
-        $sheetAndParticipantTemplateDataHandler = new SheetAndParticipantTemplateDataHandler();
-        $result = $sheetAndParticipantTemplateDataHandler->handle($registrationView, $templateData->reveal());
+        $notEditableObject = new Text('not-editable-key', 'gender', [], 'fr', 'fr');
+        $genderObject = new Gender(
+            'gender-key', 'gender', ['tags' => ['participant_gender', 'participant_data']], 'fr', 'fr'
+        );
+        $firstNameObject = new EditableText(
+            'firstname-key', 'editable-text', ['tags' => ['participant_firstname', 'participant_data']], 'fr', 'fr'
+        );
+        $companyNameObject = new EditableText(
+            'company-key', 'editable-text', ['tags' => ['sheet_organization', 'sheet_title', 'sheet_data']], 'fr', 'fr'
+        );
+        $companyCountryObject = new Country(
+            'sheet-country-key', 'country', ['tags' => ['sheet_country', 'sheet_data']], 'fr', 'fr'
+        );
+        $countryObject = new Country(
+            'participant-country-key', 'country', ['tags' => ['participant_country', 'participant_data']], 'fr', 'fr'
+        );
 
-        $expectedResult = new SheetAndParticipantTemplateDataView([], []);
+        $block = new Block('12', [], 'fr', 'fr');
+        $block->addChild(1, '111', $firstNameObject);
+        $block->addChild(1, '222', $companyNameObject);
+        $block->addChild(1, '333', $notEditableObject);
+        $block->addChild(1, '444', $countryObject);
+        $block->addChild(1, '555', $companyCountryObject);
+        $block->addChild(1, '666', $genderObject);
+
+        $registrationTemplateData = new TemplateData('root', [], 'fr', 'fr');
+        $registrationTemplateData->addChild(0, '67019e4a', $block);
+
+        $sheetAndParticipantTemplateDataHandler = new SheetAndParticipantTemplateDataHandler();
+        $result = $sheetAndParticipantTemplateDataHandler->handle($registrationView, $registrationTemplateData);
+
+        $expectedResult = new SheetAndParticipantTemplateDataView(
+            [
+                'company-key' => ['text' => 'Nintendo'],
+                'sheet-country-key' => ['country' => 'FR'],
+            ],
+            [
+                'gender-key' => ['gender' => 'man'],
+                'firstname-key' => ['text' => 'Takashi'],
+                'participant-country-key' => ['country' => 'FR'],
+            ]
+        );
 
         $this->assertEquals($expectedResult, $result);
     }
