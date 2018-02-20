@@ -17,5 +17,10 @@ interface SheetIndexerInterface
     /**
      * @param Sheet[] $sheets
      */
-    public function updateSheets(array $sheets);
+    public function reindexSheets(array $sheets): void;
+
+    /**
+     * @param Sheet[] $sheets
+     */
+    public function updateSheets(array $sheets): void;
 }

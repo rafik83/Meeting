@@ -38,7 +38,7 @@ class IndexHandlerTest extends TestCase
             $sheet4->reveal(),
         ];
         $sheetRepository->getByEvent($event->reveal())->shouldBeCalled()->willReturn($sheets);
-        $sheetIndexer->updateSheets($sheets)->shouldBeCalled();
+        $sheetIndexer->reindexSheets($sheets)->shouldBeCalled();
 
         $handler = new IndexHandler(
             $sheetRepository->reveal(),
