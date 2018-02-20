@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2016 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -15,44 +15,37 @@ use Proximum\Vimeet\Domain\Model\Order;
 
 class PromotionCode
 {
-    /**
-     * @var int
-     */
+    /** @var int */
     private $id;
 
-    /**
-     * @var Order
-     */
+    /** @var Order */
     private $order;
 
-    /**
-     * @var Model\PromotionCode
-     */
+    /** @var Model\PromotionCode */
     private $promotionCode;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     private $data;
 
-    /**
-     * @var float
-     */
+    /** @var float */
     private $price;
 
+    /** @var float */
+    private $vatRate;
+
     /**
-     * PromotionCode constructor.
-     *
      * @param Order               $order
      * @param Model\PromotionCode $promotionCode
      * @param float               $price
+     * @param float               $vatRate
      */
-    public function __construct(Order $order, Model\PromotionCode $promotionCode, $price)
+    public function __construct(Order $order, Model\PromotionCode $promotionCode, float $price, float $vatRate)
     {
-        $this->order         = $order;
+        $this->order = $order;
         $this->promotionCode = $promotionCode;
-        $this->data          = $promotionCode->getSerializedData();
-        $this->price         = $price;
+        $this->data = $promotionCode->getSerializedData();
+        $this->price = $price;
+        $this->vatRate = $vatRate;
     }
 
     /**
@@ -66,7 +59,7 @@ class PromotionCode
     /**
      * @return Order
      */
-    public function getOrder()
+    public function getOrder(): Order
     {
         return $this->order;
     }
@@ -76,7 +69,7 @@ class PromotionCode
      *
      * @return PromotionCode
      */
-    public function setOrder($order)
+    public function setOrder($order): PromotionCode
     {
         $this->order = $order;
 
@@ -86,7 +79,7 @@ class PromotionCode
     /**
      * @return string
      */
-    public function getData()
+    public function getData(): string
     {
         return $this->data;
     }
@@ -94,15 +87,23 @@ class PromotionCode
     /**
      * @return float
      */
-    public function getPrice()
+    public function getPrice(): float
     {
         return $this->price;
     }
 
     /**
+     * @return float
+     */
+    public function getVatRate(): float
+    {
+        return $this->vatRate;
+    }
+
+    /**
      * @return Model\PromotionCode
      */
-    public function getPromotionCode()
+    public function getPromotionCode(): Model\PromotionCode
     {
         return $this->promotionCode;
     }
@@ -113,7 +114,7 @@ class PromotionCode
      *
      * @return string
      */
-    public function getLabel($locale, $fallback = null)
+    public function getLabel($locale, $fallback = null): string
     {
         return $this->getTranslatedValueOfData('label', $locale, $fallback);
     }
@@ -124,7 +125,7 @@ class PromotionCode
      *
      * @return string
      */
-    public function getDescription($locale, $fallback = null)
+    public function getDescription($locale, $fallback = null): string
     {
         return $this->getTranslatedValueOfData('description', $locale, $fallback);
     }
@@ -136,7 +137,7 @@ class PromotionCode
      *
      * @return string
      */
-    private function getTranslatedValueOfData($value, $locale, $fallback = null)
+    private function getTranslatedValueOfData($value, $locale, $fallback = null): string
     {
         $data = json_decode($this->data, true);
 

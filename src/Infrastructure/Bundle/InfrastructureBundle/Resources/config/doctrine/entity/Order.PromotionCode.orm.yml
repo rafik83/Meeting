@@ -11,6 +11,8 @@ Proximum\Vimeet\Domain\Model\Order\PromotionCode:
             type: json_array
         price:
             type: float
+        vatRate:
+            type: float
     manyToOne:
         order:
             targetEntity: Proximum\Vimeet\Domain\Model\Order

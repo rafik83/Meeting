@@ -85,7 +85,7 @@ class StepParticipantAndPlanningTest extends TestCase
             ->shouldBeCalled()
             ->willReturn($orderMerged);
         $order = $this->prophesize(Order::class);
-        $orderRow = new Order\Row($order->reveal(), 2, $planning->reveal(), null, 'label', 123, null);
+        $orderRow = new Order\Row($order->reveal(), 2, 20, $planning->reveal(), null, 'label', 123, null);
         $orderMerged->getRowForProduct($planning)->shouldBeCalled()->willReturn($orderRow);
 
         $stepParticipantAndPlanning = new StepParticipantAndPlanning(
@@ -141,7 +141,7 @@ class StepParticipantAndPlanningTest extends TestCase
             ->shouldBeCalled()
             ->willReturn($orderMerged);
         $order = $this->prophesize(Order::class);
-        $orderRow = new Order\Row($order->reveal(), 2, $planning->reveal(), null, 'label', 123, null);
+        $orderRow = new Order\Row($order->reveal(), 2, 20, $planning->reveal(), null, 'label', 123, null);
         $orderMerged->getRowForProduct($planning)->shouldBeCalled()->willReturn($orderRow);
 
         $stepParticipantAndPlanning = new StepParticipantAndPlanning(

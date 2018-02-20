@@ -3,7 +3,7 @@
 /*
  * This file is part of the vimeet project.
  *
- * Copyright (C) 2016 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -34,6 +34,7 @@ class UpdatePriceResolverTest extends TestCase
             'name',
             'image',
             10,
+            20,
             10,
             10,
             10,
@@ -66,6 +67,7 @@ class UpdatePriceResolverTest extends TestCase
             'name',
             'image',
             10,
+            20,
             10,
             10,
             10,
@@ -99,6 +101,7 @@ class UpdatePriceResolverTest extends TestCase
             'name',
             'image',
             10,
+            20,
             10,
             10,
             10,
@@ -114,14 +117,11 @@ class UpdatePriceResolverTest extends TestCase
         $cartRowRepository  = $this->prophesize(CartRowRepositoryInterface::class);
         $cartRowRepository->findByProduct($product)->shouldBeCalled()->willReturn([]);
         $orderRowRepository = $this->prophesize(RowRepositoryInterface::class);
-        $orderRowRepository->findByProduct($product)->shouldBeCalled()->willReturn([new Row(
-            $order,
-            2,
-            $product,
-            1,
-            'label',
-            100
-        )]);
+        $orderRowRepository
+            ->findByProduct($product)
+            ->shouldBeCalled()
+            ->willReturn([new Row($order, 2, 20, $product, 1, 'label', 100)])
+        ;
 
         // Resolve
         $updatePriceResolver = new UpdatePriceResolver(

@@ -140,11 +140,36 @@ services:
         tags:
             - { name: form.type }
 
+    Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Product\AbstractCreateType:
+        abstract: true
+        arguments:
+            - '%feature_product_vat_enabled%'
+    Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Product\Option\CreateOptionType:
+        parent: Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Product\AbstractCreateType
+        tags:
+            - { name: form.type, alias: Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Product\Option\CreateOptionType }
+
+    Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Product\Planning\CreatePlanningType:
+        parent: Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Product\AbstractCreateType
+        tags:
+            - { name: form.type, alias: Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Product\Planning\CreatePlanningType }
+
+    Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Product\Plan\CreatePlanType:
+        parent: Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Product\AbstractCreateType
+        tags:
+            - { name: form.type, alias: Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Product\Plan\CreatePlanType }
+
+    Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Product\Participant\CreateParticipantType:
+        parent: Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Product\AbstractCreateType
+        tags:
+            - { name: form.type, alias: Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Product\Participant\CreateParticipantType }
+
     form_type_product.abstract_update_type:
         class: Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Product\AbstractUpdateType
         abstract: true
         arguments:
             - '@domain.product.update_price_resolver'
+            - '%feature_product_vat_enabled%'
     form_type_product.option_update_type:
         class: Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Product\Option\UpdateOptionType
         parent: form_type_product.abstract_update_type

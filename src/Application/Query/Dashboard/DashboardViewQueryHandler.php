@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2016 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -14,19 +14,13 @@ use Proximum\Vimeet\Application\View\Dashboard\DashboardView;
 
 class DashboardViewQueryHandler
 {
-    /**
-     * @var DashboardTransactionViewQueryHandler
-     */
+    /** @var DashboardTransactionViewQueryHandler */
     private $dashboardTransactionViewQueryHandler;
 
-    /**
-     * @var DashboardSheetViewQueryHandler
-     */
+    /** @var DashboardSheetViewQueryHandler */
     private $dashboardSheetViewQueryHandler;
 
     /**
-     * DashboardViewQueryHandler constructor.
-     *
      * @param DashboardTransactionViewQueryHandler $dashboardTransactionViewQueryHandler
      * @param DashboardSheetViewQueryHandler       $dashboardSheetViewQueryHandler
      */
@@ -43,7 +37,7 @@ class DashboardViewQueryHandler
      *
      * @return DashboardView
      */
-    public function handle(DashboardViewQuery $dashboardViewQuery)
+    public function handle(DashboardViewQuery $dashboardViewQuery): DashboardView
     {
         $dashboardTransactionView = $this->dashboardTransactionViewQueryHandler->handle(
             new DashboardTransactionViewQuery($dashboardViewQuery->event)

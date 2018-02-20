@@ -9,8 +9,8 @@
 
 ### Requirements
 
-* [Vagrant 1.8.4](http://www.vagrantup.com/downloads.html)
-* [VirtualBox 5.0.32](http://download.virtualbox.org/virtualbox/5.0.32/)
+* [Vagrant 2.0.1](https://www.vagrantup.com/downloads.html)
+* [VirtualBox 5.2.4](https://www.virtualbox.org/wiki/Downloads)
 * [Vagrant Landrush 1.2.0](https://github.com/phinze/landrush)
 
 ### Setup
@@ -49,9 +49,9 @@ Enable/Disable php xdebug
 
         ⇒ manala_php_xdebug [on|off]
 
-* *Supervisor*: http://vimeet.proximum.dev:9001
-* *phpMyAdmin*: http://vimeet.proximum.dev:1979
-* *ElasticSearch HEAD*: http://vimeet.proximum.dev:9200/_plugin/head/
+* *Supervisor*: http://vimeet.proximum:9001
+* *phpMyAdmin*: http://vimeet.proximum:1979
+* *ElasticSearch HEAD*: http://vimeet.proximum:9200/_plugin/head/
 
 ### Yarn
 
@@ -168,8 +168,8 @@ Importer un fichier prod.sql placé sur le root du projet :
 
 ### Jobs Queue
 
-* [Interface supervisord](http://vimeet.proximum.dev:9001/)
-* [Liste des jobs](http://admin.vimeet.proximum.dev/app_dev.php/fr/jobs/)
+* [Interface supervisord](http://vimeet.proximum:9001/)
+* [Liste des jobs](http://admin.vimeet.proximum/app_dev.php/fr/jobs/)
 
 Pour démarrer le worker de la job queue, aller sur l'interface de supervisord et start le process `jms-job-queue`
 

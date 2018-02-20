@@ -315,7 +315,7 @@ elastica-populate@prod:
 	ssh vimeet-prod1 "cd ${REMOTE_INSTALL_DIR} && bin/console fos:elastica:populate --env=prod --no-reset --no-debug"
 
 # next targets must be run in VM
-ifeq ($(HOST), vimeet.proximum)
+ifeq ($(HOST), vimeet)
 
 get-preprod-db@vm:
 	read -p "You are about to dump then download preprod db, please confirm (y/n)?" CONFIRM; \

@@ -9,4 +9,6 @@ services:
         arguments:
             - '@datetime'
 
-    Proximum\Vimeet\Domain\Sheet\Participant\AddParticipantChecker:
+    Proximum\Vimeet\Domain\Sheet\Participant\AddParticipantChecker: ~
+
+    Proximum\Vimeet\Domain\Order\DiscountCalculator: ~

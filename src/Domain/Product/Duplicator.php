@@ -72,6 +72,7 @@ class Duplicator
             $fromProduct->getName(),
             $image,
             $fromProduct->getUnitPrice(),
+            $fromProduct->getVat(),
             $fromProduct->getRawQuantityMax(),
             $fromProduct->getAvailabilityCurrent(),
             $fromProduct->getAvailabilityMax(),
@@ -111,7 +112,7 @@ class Duplicator
      * @param Product $fromPlan
      * @param Product $toPlan
      */
-    private function handlePlan(array &$toProducts, Product $fromPlan, Product $toPlan)
+    private function handlePlan(array &$toProducts, Product $fromPlan, Product $toPlan): void
     {
         foreach ($fromPlan->getIncludedProducts() as $includedProduct) {
             $toPlan->includeProduct(

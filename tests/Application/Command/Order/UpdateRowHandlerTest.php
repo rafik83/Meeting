@@ -24,7 +24,7 @@ class UpdateRowHandlerTest extends TestCase
     public function testHandle()
     {
         $event   = EventFactory::createEvent();
-        $product = Product::createOption($event, 'Option A', 'a.jpg', 100, 2, 4, 3, false);
+        $product = Product::createOption($event, 'Option A', 'a.jpg', 100, 20, 2, 4, 3, false);
 
         $rowRepository = $this->prophesize(RowRepositoryInterface::class);
         $order         = $this->prophesize(Order::class);
@@ -32,6 +32,7 @@ class UpdateRowHandlerTest extends TestCase
         $parentRow = new Order\Row(
             $order->reveal(),
             1,
+            20,
             $product,
             5,
             "label",
@@ -43,7 +44,8 @@ class UpdateRowHandlerTest extends TestCase
             $parentRow,
             "label",
             1,
-            12.5
+            12.5,
+            20
         );
 
         $rowRepository->set($row)->shouldBeCalled();

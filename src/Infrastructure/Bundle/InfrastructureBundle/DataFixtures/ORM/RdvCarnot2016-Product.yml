@@ -1,18 +1,18 @@
 Proximum\Vimeet\Domain\Model\Product:
     # plans
     product_plan_1_rdv_carnot:
-        __construct: { createPlan: ['@event_rdv_carnot_2016', 'Formule B2B Meeting', 0, 1690, 0, 0] }
+        __construct: { createPlan: ['@event_rdv_carnot_2016', 'Formule B2B Meeting', 0, 1690, 20, 0, 0] }
         quantityMax: 1
         updatable: false
         deletableUntil: ~
     product_plan_2_rdv_carnot:
-        __construct: { createPlan: [ '@event_rdv_carnot_2016', 'Formule Exposant', 0, 2880, 0, 0 ] }
+        __construct: { createPlan: [ '@event_rdv_carnot_2016', 'Formule Exposant', 0, 2880, 20, 0, 0 ] }
         quantityMax: 1
         updatable: false
         deletableUntil: ~
     # participants
     product_participant_1_rdv_carnot:
-        __construct: { createParticipant: [ '@event_rdv_carnot_2016', 'Participant supplémentaire Fournisseur', 195, 10 ] }
+        __construct: { createParticipant: [ '@event_rdv_carnot_2016', 'Participant supplémentaire Fournisseur', 195, 20, 10 ] }
         image: ~
         availabilityCurrent: ~
         availabilityMax: ~
@@ -21,28 +21,28 @@ Proximum\Vimeet\Domain\Model\Product:
         deletableUntil: ~
     # plannings
     product_planning_1_rdv_carnot:
-        __construct: { createPlanning: [ '@event_rdv_carnot_2016', 'Planning supplémentaire Fournisseur', 495, 10 ] }
+        __construct: { createPlanning: [ '@event_rdv_carnot_2016', 'Planning supplémentaire Fournisseur', 495, 20, 10 ] }
         availabilityCurrent: 0
         availabilityMax: 0
         updatable: false
         deletableUntil: ~
     # options
     product_option_1_rdv_carnot:
-        __construct: { createOption: ['@event_rdv_carnot_2016', 'Option 4m² supplémentaires Fournisseur', 0, 990, 1, 0, 0, true, null] }
+        __construct: { createOption: ['@event_rdv_carnot_2016', 'Option 4m² supplémentaires Fournisseur', 0, 990, 20, 1, 0, 0, true, null] }
     product_option_2_rdv_carnot:
-        __construct: { createOption: ['@event_rdv_carnot_2016', 'Option chaise', 0, 9, 10, 0, 0, true, null] }
+        __construct: { createOption: ['@event_rdv_carnot_2016', 'Option chaise', 0, 9, 20, 10, 0, 0, true, null] }
     product_option_3_rdv_carnot:
-        __construct: { createOption: ['@event_rdv_carnot_2016', 'Option A', 0, 9, 10, 0, 0, true, null] }
+        __construct: { createOption: ['@event_rdv_carnot_2016', 'Option A', 0, 9, 20, 10, 0, 0, true, null] }
     product_option_4_rdv_carnot:
-        __construct: { createOption: ['@event_rdv_carnot_2016', 'Option B', 0, 9, 10, 0, 0, true, null] }
+        __construct: { createOption: ['@event_rdv_carnot_2016', 'Option B', 0, 9, 20, 10, 0, 0, true, null] }
     product_option_5_rdv_carnot:
-        __construct: { createOption: ['@event_rdv_carnot_2016', 'Option C', 0, 9, 10, 0, 0, true, null] }
+        __construct: { createOption: ['@event_rdv_carnot_2016', 'Option C', 0, 9, 20, 10, 0, 0, true, null] }
     product_option_6_rdv_carnot:
-        __construct: { createOption: ['@event_rdv_carnot_2016', 'Logo', 0, 20, 10, 0, 0, true, null] }
+        __construct: { createOption: ['@event_rdv_carnot_2016', 'Logo', 0, 20, 20, 10, 0, 0, true, null] }
     product_option_7_rdv_carnot:
-        __construct: { createOption: ['@event_rdv_carnot_2016', 'Pack pub', 0, 75, 10, 0, 0, true, null] }
+        __construct: { createOption: ['@event_rdv_carnot_2016', 'Pack pub', 0, 75, 20, 10, 0, 0, true, null] }
     product_option_8_rdv_carnot:
-        __construct: { createOption: ['@event_rdv_carnot_2016', 'Pack visibilité', 0, 35, 10, 0, 0, true, null] }
+        __construct: { createOption: ['@event_rdv_carnot_2016', 'Pack visibilité', 0, 35, 20, 10, 0, 0, true, null] }
 
 Proximum\Vimeet\Domain\Model\ProductTranslation:
     product_plan_1_rdv_carnot_fr:

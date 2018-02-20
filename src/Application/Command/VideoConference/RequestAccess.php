@@ -1,9 +1,9 @@
 <?php
 
 /*
- * This file is part of the vimeet project.
+ * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2017 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -15,19 +15,13 @@ use Proximum\Vimeet\Domain\Model\User;
 
 class RequestAccess
 {
-    /**
-     * @var Meeting
-     */
+    /** @var Meeting */
     public $meeting;
 
-    /**
-     * @var User
-     */
+    /** @var User */
     public $user;
 
     /**
-     * RequestAccess constructor.
-     *
      * @param Meeting $meeting
      * @param User    $user
      */

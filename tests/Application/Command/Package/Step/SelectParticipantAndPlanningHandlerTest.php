@@ -36,9 +36,9 @@ class SelectParticipantAndPlanningHandlerTest extends TestCase
         $datetime = new \DateTime();
         $event = $this->prophesize(Event::class);
 
-        $planProduct = Product::createPlan($event->reveal(), 'plan', '', 100, 10, 40);
-        $planningProduct = Product::createPlanning($event->reveal(), 'planning', 50, 10);
-        $participantProduct = Product::createParticipant($event->reveal(), 'participant', 50, 10);
+        $planProduct = Product::createPlan($event->reveal(), 'plan', '', 100, 20, 10, 40);
+        $planningProduct = Product::createPlanning($event->reveal(), 'planning', 50, 20, 10);
+        $participantProduct = Product::createParticipant($event->reveal(), 'participant', 50, 20, 10);
 
         $package = new Package($event->reveal(), 'My package', $datetime);
         $package->enable(true, true, true);
@@ -125,8 +125,8 @@ class SelectParticipantAndPlanningHandlerTest extends TestCase
         $datetime = new \DateTime();
         $event = $this->prophesize(Event::class);
 
-        $planProduct = Product::createPlan($event->reveal(), 'plan', '', 100, 10, 40);
-        $planningProduct = Product::createPlanning($event->reveal(), 'planning', 50, 10);
+        $planProduct = Product::createPlan($event->reveal(), 'plan', '', 100, 20, 10, 40);
+        $planningProduct = Product::createPlanning($event->reveal(), 'planning', 50, 20, 10);
 
         $participantProduct1 = $this->prophesize(Product::class);
         $participantProduct1->getId()->willReturn(1111);

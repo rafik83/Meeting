@@ -49,16 +49,26 @@ class LeniUserView
     public $country;
 
     /** @var string */
-    public $attendance;
-
-    /** @var string */
     public $locale;
 
     /** @var LeniPlanningView */
     public $planning;
 
+    /** @var null|string */
+    public $leniId;
+
+    /** @var bool */
+    public $enabled;
+
+    /** @var bool */
+    public $paid;
+
+    /** @var int|null */
+    public $participantProductId;
+
     /**
      * @param int              $id
+     * @param bool             $enabled
      * @param string|null      $sheetName
      * @param int|null         $typeId
      * @param int|null         $categoryId
@@ -70,12 +80,15 @@ class LeniUserView
      * @param string           $phone
      * @param string           $mobile
      * @param string           $country
-     * @param string           $attendance
      * @param string           $locale
      * @param LeniPlanningView $planning
+     * @param null|string      $leniId
+     * @param bool             $paid
+     * @param int|null         $participantProductId
      */
     public function __construct(
         int $id,
+        bool $enabled,
         string $sheetName = null,
         int $typeId = null,
         int $categoryId = null,
@@ -87,24 +100,29 @@ class LeniUserView
         string $phone,
         string $mobile,
         string $country,
-        string $attendance,
         string $locale,
-        LeniPlanningView $planning
+        LeniPlanningView $planning,
+        ?string $leniId,
+        bool $paid,
+        ?int $participantProductId
     ) {
-        $this->id         = $id;
-        $this->sheetName  = $sheetName;
-        $this->typeId     = $typeId;
+        $this->id = $id;
+        $this->sheetName = $sheetName;
+        $this->typeId = $typeId;
         $this->categoryId = $categoryId;
-        $this->email      = $email;
-        $this->gender     = $gender;
-        $this->firstName  = $firstName;
-        $this->lastName   = $lastName;
-        $this->position   = $position;
-        $this->phone      = $phone;
-        $this->mobile     = $mobile;
-        $this->planning   = $planning;
-        $this->country    = $country;
-        $this->attendance = $attendance;
-        $this->locale     = $locale;
+        $this->email = $email;
+        $this->gender = $gender;
+        $this->firstName = $firstName;
+        $this->lastName = $lastName;
+        $this->position = $position;
+        $this->phone = $phone;
+        $this->mobile = $mobile;
+        $this->planning = $planning;
+        $this->country = $country;
+        $this->locale = $locale;
+        $this->leniId = $leniId;
+        $this->enabled = $enabled;
+        $this->paid = $paid;
+        $this->participantProductId = $participantProductId;
     }
 }

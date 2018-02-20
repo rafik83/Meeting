@@ -1,5 +1,13 @@
 <?php
 
+/*
+ * This file is part of the Proximum Vimeet project.
+ *
+ * Copyright (C) Proximum
+ *
+ * @author Elao <contact@elao.com>
+ */
+
 namespace Proximum\Vimeet\Tests\Application\Command\Product\Participant;
 
 use Prophecy\Argument;
@@ -21,6 +29,7 @@ class CreateParticipantHandlerTest extends TestCase
 
         $name = 'Name';
         $unitPrice = 100;
+        $vat = 20;
         $quantityMax = 4;
         $availabilityCurrent = 10;
         $availabilityMax = 50;
@@ -44,6 +53,7 @@ class CreateParticipantHandlerTest extends TestCase
         $create = new CreateParticipant($event);
         $create->name = $name;
         $create->unitPrice = $unitPrice;
+        $create->vat = $vat;
         $create->quantityMax = $quantityMax;
         $create->availabilityCurrent = $availabilityCurrent;
         $create->availabilityMax = $availabilityMax;
@@ -57,6 +67,7 @@ class CreateParticipantHandlerTest extends TestCase
             $event,
             $name,
             $unitPrice,
+            $vat,
             $quantityMax
         );
 

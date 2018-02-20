@@ -24,6 +24,7 @@ class CreatePlanningHandler extends AbstractHandler
             $createPlanning->event,
             $createPlanning->name,
             $createPlanning->unitPrice,
+            $createPlanning->vat,
             $createPlanning->quantityMax
         );
 

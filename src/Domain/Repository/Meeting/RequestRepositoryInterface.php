@@ -264,12 +264,20 @@ interface RequestRepositoryInterface
     public function getPendingPropositionReceivedBySheet(Sheet $sheet);
 
     /**
-     * @param Sheet $sheet
-     * @param array $availableSlots
+     * @param Sheet $toSheet
+     * @param int[] $slotIds array of MeetingSlot id
      *
      * @return int
      */
-    public function countPendingPropositionWithMetSheetAvailableForSheet(Sheet $sheet, array $availableSlots): int;
+    public function countPendingPropositionReceivedBySheetWithAvailableFromSheet(Sheet $toSheet, array $slotIds): int;
+
+    /**
+     * @param Sheet $toSheet
+     * @param array $slotIds
+     *
+     * @return int
+     */
+    public function countPendingPropositionReceivedBySheetWithAvailableToSheet(Sheet $toSheet, array $slotIds): int;
 
     /**
      * @param Sheet $sheet

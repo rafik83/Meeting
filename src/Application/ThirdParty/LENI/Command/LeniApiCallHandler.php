@@ -16,6 +16,7 @@ use Proximum\Vimeet\Application\ThirdParty\LENI\Exception\LeniApiServerException
 use Proximum\Vimeet\Application\ThirdParty\LENI\Exception\MissingIdException;
 use Proximum\Vimeet\Application\ThirdParty\LENI\Exception\NotValidApiCallException;
 use Proximum\Vimeet\Application\ThirdParty\LENI\Exception\WarningApiCallException;
+use Proximum\Vimeet\Application\ThirdParty\LENI\LeniConstants;
 use Proximum\Vimeet\Application\ThirdParty\LENI\Normalizer\LeniUserViewNormalizer;
 use Proximum\Vimeet\Domain\Event\ExtraParameter\Type;
 use Proximum\Vimeet\Domain\Model\Event;
@@ -124,16 +125,6 @@ use Proximum\Vimeet\Domain\User\Event\ExtraData\Type as ExtraDataType;
  */
 class LeniApiCallHandler
 {
-    const LENI_ENDPOINT = 'https://gateway.svc.exhibis.net/proximum/domain/IndividuEvt/Save/';
-    const LENI_HOST = 'gateway.svc.exhibis.net';
-    const LENI_APP = 'O';
-    const LENI_MODE = 'MessageAndModifiedData';
-
-    const LENI_IS_VALID = 'IsValid';
-    const LENI_FIELD_INFO = 'Info';
-    const LENI_FIELD_VALUE = 'Value';
-    const LENI_FIELD_HAS_WARNING = 'HasWarning';
-
     /** @var HttpAdapterInterface */
     private $httpAdapter;
 
@@ -192,35 +183,35 @@ class LeniApiCallHandler
             );
         }
 
-        $data = unserialize($pendingExtraData->getValue());
+        $data = unserialize($pendingExtraData->getValue(), ['allowed_classes' => false]);
 
         // remove data userId when null
-        if (array_key_exists(LeniUserViewNormalizer::LENI_COL_USER_ID, $data)
-            && null === $data[LeniUserViewNormalizer::LENI_COL_USER_ID]
+        if (array_key_exists(LeniConstants::LENI_COL_USER_ID, $data)
+            && null === $data[LeniConstants::LENI_COL_USER_ID]
         ) {
-            unset($data[LeniUserViewNormalizer::LENI_COL_USER_ID]);
+            unset($data[LeniConstants::LENI_COL_USER_ID]);
         }
 
         $body = json_encode(
             [
                 'idEvt'  => $leniEventParameter->getValue(),
                 'idUser' => $leniUserParameter->getValue(),
-                'mode'   => self::LENI_MODE,
-                'app'    => self::LENI_APP,
+                'mode'   => LeniConstants::LENI_MODE,
+                'app'    => LeniConstants::LENI_APP,
                 'data'   => $data
             ]
         );
 
         $headers = [
             'Authorization'  => 'Basic ' . base64_encode($leniUserParameter->getValue()),
-            'Host'           => self::LENI_HOST,
+            'Host'           => LeniConstants::LENI_HOST,
             'Content-Type'   => 'application/json',
             'Content-Length' => mb_strlen($body),
             'Connection'     => 'Close',
         ];
 
         try {
-            $jsonResponse = $this->httpAdapter->post(self::LENI_ENDPOINT, $headers, $body);
+            $jsonResponse = $this->httpAdapter->post(LeniConstants::LENI_ENDPOINT, $headers, $body);
         } catch (ServerErrorException $exception) {
             throw new LeniApiServerException($exception);
         }
@@ -235,33 +226,32 @@ class LeniApiCallHandler
         );
 
         // Call not valid
-        if (!isset($response[self::LENI_IS_VALID]) || $response[self::LENI_IS_VALID] !== true) {
+        if (!isset($response[LeniConstants::LENI_IS_VALID]) || $response[LeniConstants::LENI_IS_VALID] !== true) {
             throw new NotValidApiCallException($apiCallLog);
         }
 
-        $hasNotUserId = !isset($data[LeniUserViewNormalizer::LENI_COL_USER_ID])
-            || null === $data[LeniUserViewNormalizer::LENI_COL_USER_ID];
+        $hasNotUserId = !isset($data[LeniConstants::LENI_COL_USER_ID])
+            || null === $data[LeniConstants::LENI_COL_USER_ID];
 
         // When inserting user (first call) we must retrieve the LENI user id
         if ($hasNotUserId
             && (
-                !isset($response[self::LENI_FIELD_INFO])
-                || !isset($response[self::LENI_FIELD_INFO][LeniUserViewNormalizer::LENI_COL_USER_ID])
-                || !isset($response[self::LENI_FIELD_INFO][LeniUserViewNormalizer::LENI_COL_USER_ID][self::LENI_FIELD_VALUE])
+                !isset($response[LeniConstants::LENI_FIELD_INFO])
+                || !isset($response[LeniConstants::LENI_FIELD_INFO][LeniConstants::LENI_COL_USER_ID])
+                || !isset($response[LeniConstants::LENI_FIELD_INFO][LeniConstants::LENI_COL_USER_ID][LeniConstants::LENI_FIELD_VALUE])
             )
         ) {
             throw new MissingIdException($apiCallLog);
         }
 
         // Call has warnings
-        if (isset($response[self::LENI_FIELD_HAS_WARNING])
-            && $response[self::LENI_FIELD_HAS_WARNING] === true
-            && isset($response[self::LENI_FIELD_INFO])
+        if (isset($response[LeniConstants::LENI_FIELD_HAS_WARNING], $response[LeniConstants::LENI_FIELD_INFO])
+            && $response[LeniConstants::LENI_FIELD_HAS_WARNING] === true
         ) {
             $warnings = [];
 
-            foreach ($response[self::LENI_FIELD_INFO] as $key => $info) {
-                if (in_array($key, LeniUserViewNormalizer::LENI_COLUMNS, true)) {
+            foreach ($response[LeniConstants::LENI_FIELD_INFO] as $key => $info) {
+                if (\in_array($key, LeniConstants::LENI_COLUMNS, true)) {
                     $warnings[] = $key;
                 }
             }
@@ -273,13 +263,13 @@ class LeniApiCallHandler
 
         // Get and save the LENI user Id when it is the first call (insert user into LENI)
         if ($hasNotUserId) {
-            $leniUserId = $response[self::LENI_FIELD_INFO][LeniUserViewNormalizer::LENI_COL_USER_ID][self::LENI_FIELD_VALUE];
+            $leniUserId = $response[LeniConstants::LENI_FIELD_INFO][LeniConstants::LENI_COL_USER_ID][LeniConstants::LENI_FIELD_VALUE];
 
             if (null === $leniUserId) {
                 throw new \LogicException('LENI returned a null user id: ' . $apiCallLog);
             }
 
-            $data[LeniUserViewNormalizer::LENI_COL_USER_ID] = $leniUserId;
+            $data[LeniConstants::LENI_COL_USER_ID] = $leniUserId;
         }
 
         $this->addOrUpdateFingerprint($pendingExtraData->getEvent(), $pendingExtraData->getUser(), serialize($data));

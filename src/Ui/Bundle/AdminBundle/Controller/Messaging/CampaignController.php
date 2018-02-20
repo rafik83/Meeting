@@ -23,6 +23,7 @@ use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Messaging\Campaign\CreateCam
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Messaging\Campaign\SelectMessageType;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Messaging\Campaign\SelectRecipientsType;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Messaging\Campaign\TargetFilterType;
+use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Sheet\SheetFilterType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\HttpFoundation\RedirectResponse;

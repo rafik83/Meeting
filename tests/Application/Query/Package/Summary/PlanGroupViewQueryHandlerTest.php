@@ -52,6 +52,7 @@ class PlanGroupViewQueryHandlerTest extends TestCase
             1, // quantity
             25, // total
             $event->getMode(),
+            20,
             $event->getCurrency()
         );
 

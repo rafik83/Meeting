@@ -10,7 +10,7 @@
 
 namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Package\Summary;
 
-use Proximum\Vimeet\Domain\Package\Summary\PromotionCode;
+use Proximum\Vimeet\Application\Command\Package\PromotionCode\Add;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -38,7 +38,7 @@ class PromotionCodeType extends AbstractType
     public function configureOptions(OptionsResolver $optionsResolver)
     {
         $optionsResolver->setDefaults([
-            'data_class' => PromotionCode::class,
+            'data_class' => Add::class,
         ]);
     }
 

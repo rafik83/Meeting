@@ -362,6 +362,7 @@ package.summary.seeTermsOfSale: 'Voir les conditions générales de vente'
 package.summary.title: Récapitulatif
 package.summary.total.title: 'Forfait de participation'
 package.summary.totalOfSummary: Total
+package.summary.totalSubjetToVat: 'Total assujetti à %vat%%'
 package.summary.totalPlusVat: 'Total à régler'
 package.summary.totalVat: '+ TVA applicable de %vat%%'
 package.title: 'Forfait de participation'
@@ -426,6 +427,7 @@ summary.promotionCode.free: Offert
 summary.promotionCode.title: 'Offres de réductions'
 summary.total: 'Total de la commande'
 summary.totalToPay: 'Total à régler'
+summary.totalByVat: 'Total assujetti à %vatRate%%'
 summary.vatRate: 'TVA applicable %vatRate%%'
 unavailability.title: Indisponible
 user_event.confirm.agenda.already_confirmed: 'Agenda déjà confirmé'

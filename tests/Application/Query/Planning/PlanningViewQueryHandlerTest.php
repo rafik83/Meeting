@@ -99,7 +99,7 @@ class PlanningViewQueryHandlerTest extends TestCase
             ->willReturn([$meeting->reveal()]);
 
         $userRepository = $this->prophesize(UserRepositoryInterface::class);
-        $userRepository->findByEvent($event)->shouldNotBeCalled();
+        $userRepository->findWithEnabledSheetByEvent($event)->shouldNotBeCalled();
 
         $sheetRepository = $this->prophesize(SheetRepositoryInterface::class);
         $sheetRepository->isUserParticipantMultipleSheetsInEvent($user->reveal(), $event)->shouldBeCalled()->willReturn(true);
@@ -247,7 +247,7 @@ class PlanningViewQueryHandlerTest extends TestCase
             ->willReturn([$meeting->reveal()]);
 
         $userRepository = $this->prophesize(UserRepositoryInterface::class);
-        $userRepository->findByEvent($event)->shouldNotBeCalled();
+        $userRepository->findWithEnabledSheetByEvent($event)->shouldNotBeCalled();
 
         $sheetRepository = $this->prophesize(SheetRepositoryInterface::class);
         $sheetRepository->isUserParticipantMultipleSheetsInEvent($user->reveal(), $event)->shouldBeCalled()->willReturn(true);
@@ -385,7 +385,7 @@ class PlanningViewQueryHandlerTest extends TestCase
         $meetingRepository->getAllByEvent($event)->shouldBeCalled()->willReturn([$meeting->reveal()]);
 
         $userRepository = $this->prophesize(UserRepositoryInterface::class);
-        $userRepository->findByEvent($event)->shouldBeCalled()->willReturn([$user1]);
+        $userRepository->findWithEnabledSheetByEvent($event)->shouldBeCalled()->willReturn([$user1]);
 
         $sheetRepository = $this->prophesize(SheetRepositoryInterface::class);
         $sheetRepository->isUserParticipantMultipleSheetsInEvent($user1->reveal(), $event)->shouldBeCalled()->willReturn(false);

@@ -104,7 +104,7 @@ class PrepareLeniApiCallHandler
         $events = $this->eventRepository->findEventWithParameters([Type::TYPE_LENI_USER, Type::TYPE_LENI_EVENT]);
 
         foreach ($events as $event) {
-            if (!$event->hasDay() || $event->getLastDay()->getEndTime() < $this->dateTime) {
+            if (!$event->hasDay() || $event->isFinished($this->dateTime)) {
                 continue;
             }
 
@@ -118,7 +118,7 @@ class PrepareLeniApiCallHandler
             }
 
             $this->participantPlanningFormatter->preloadPlanningHandlerForEvent($event);
-            $users = $this->userRepository->findByEvent($event);
+            $users = $this->userRepository->findWithSheetByEvent($event);
             $usersExtraData = $this->extraDataRepository->getExtraDataForEventAndName(
                 $event,
                 ExtraDataType::LENI_FINGERPRINT
@@ -134,16 +134,14 @@ class PrepareLeniApiCallHandler
                 }
 
                 try {
-                    $leniUserView = $this->leniUserViewQueryHandler->handle(new LeniUserViewQuery($event, $user));
+                    $leniUserView = $this->leniUserViewQueryHandler->handle(
+                        new LeniUserViewQuery($event, $user, $previousUserExtraData)
+                    );
                 } catch (SheetNotFoundException $sheetNotFoundException) {
                     continue;
                 }
 
-                $leniUserData = $this->serializerAdapter->normalize(
-                    $leniUserView,
-                    null,
-                    ['previousUserExtraData' => $previousUserExtraData]
-                );
+                $leniUserData = $this->serializerAdapter->normalize($leniUserView);
                 $fingerPrint = serialize($leniUserData);
 
                 // User data did not changed, skip

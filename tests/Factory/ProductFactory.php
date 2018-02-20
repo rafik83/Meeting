@@ -30,6 +30,7 @@ class ProductFactory
             'productName',
             'image',
             25.0, // unitPrice
+            20, // vat
             5, // quantityMax
             5, // availabilityCurrent
             2, // availabilityMax

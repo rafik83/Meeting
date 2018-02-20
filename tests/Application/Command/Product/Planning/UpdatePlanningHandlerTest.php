@@ -1,8 +1,16 @@
 <?php
 
+/*
+ * This file is part of the Proximum Vimeet project.
+ *
+ * Copyright (C) Proximum
+ *
+ * @author Elao <contact@elao.com>
+ */
+
 namespace Proximum\Vimeet\Tests\Application\Command\Product\Planning;
 
-use Proximum\Vimeet\Application\Adapter\FileStorageInterface;
+use Prophecy\Argument;
 use Proximum\Vimeet\Application\Command\Product\Planning\UpdatePlanning;
 use Proximum\Vimeet\Application\Command\Product\Planning\UpdatePlanningHandler;
 use Proximum\Vimeet\Domain\Product\UpdatePriceResolver;
@@ -21,11 +29,13 @@ class UpdatePlanningHandlerTest extends TestCase
         $name        = 'Name';
         $unitPrice   = 100;
         $quantityMax = 4;
+        $vat = 20;
 
         $planning = Product::createPlanning(
             $event,
             $name,
             $unitPrice,
+            $vat,
             $quantityMax
         );
 
@@ -33,6 +43,7 @@ class UpdatePlanningHandlerTest extends TestCase
             $event,
             'my planning updated',
             $unitPrice,
+            19,
             $quantityMax
         );
 
@@ -44,15 +55,23 @@ class UpdatePlanningHandlerTest extends TestCase
         // Command
         $updatePlanningCommand       = new UpdatePlanning($planning);
         $updatePlanningCommand->name = 'my planning updated';
+        $updatePlanningCommand->unitPrice = $unitPrice;
+        $updatePlanningCommand->vat = 19;
 
         // Mock
         $productRepository = $this->prophesize(ProductRepositoryInterface::class);
-        $productRepository->update($expectedPlanning)->shouldBeCalled();
+        $productRepository->update(Argument::that(function (Product $givenPlanning) use ($expectedPlanning) {
+            return $givenPlanning->getType() === $expectedPlanning->getType()
+                && $givenPlanning->getVat() === $expectedPlanning->getVat()
+                && $givenPlanning->getUnitPrice() === $expectedPlanning->getUnitPrice()
+                && $givenPlanning->getAvailabilityCurrent() === $expectedPlanning->getAvailabilityCurrent()
+                && $givenPlanning->getAvailabilityMax() === $expectedPlanning->getAvailabilityMax()
+                && $givenPlanning->getName() === $expectedPlanning->getName()
+                ;
+        }))->shouldBeCalled();
 
         $updatePriceResolver = $this->prophesize(UpdatePriceResolver::class);
-        $updatePriceResolver->resolve($planning)->shouldBeCalled();
-
-        $fileStorage         = $this->prophesize(FileStorageInterface::class);
+        $updatePriceResolver->resolve($planning)->shouldBeCalled()->willReturn(true);
 
         // Handler
         $handler = new UpdatePlanningHandler(

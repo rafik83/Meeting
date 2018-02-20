@@ -1664,3 +1664,13 @@ admin_sheet_participant_update_agenda_confirmation:
         participant: \d+
     methods: [GET, POST]
     defaults: { _controller: AdminBundle:Participant\AgendaConfirmation:updateAgendaConfirmation }
+
+#
+# Reindex sheets
+#
+admin_event_sheet_index:
+    path: /event/{event}/sheets/index
+    requirements:
+        event: \d+
+    methods: [GET, POST]
+    defaults: { _controller: Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Event\Sheet\IndexAction }

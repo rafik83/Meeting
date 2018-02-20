@@ -14,15 +14,14 @@ use Proximum\Vimeet\Domain\Model\Event;
 
 abstract class AbstractCreate extends AbstractProduct
 {
-    /**
-     * @var Event
-     */
+    /** @var Event */
     public $event;
 
-    /**
-     * @var float
-     */
+    /** @var float */
     public $unitPrice;
+
+    /** @var float */
+    public $vat;
 
     /**
      * @param Event $event
@@ -30,6 +29,7 @@ abstract class AbstractCreate extends AbstractProduct
     public function __construct(Event $event)
     {
         $this->event = $event;
+        $this->vat = $event->getVat();
 
         foreach ($event->getLocales() as $locale) {
             $this->translations[$locale] = [

@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2016 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -18,27 +18,20 @@ use Proximum\Vimeet\Application\Query\Order\Summary\PromotionCodesViewQuery;
 use Proximum\Vimeet\Application\Query\Order\Summary\PromotionCodesViewQueryHandler;
 use Proximum\Vimeet\Application\View\Order\SummaryView;
 use Proximum\Vimeet\Domain\Order\Balance;
+use Proximum\Vimeet\Domain\Package\Exception\MissingBillingInfoException;
 
 class SummaryQueryHandler
 {
-    /**
-     * @var GroupsViewQueryHandler
-     */
+    /** @var GroupsViewQueryHandler */
     private $groupsViewQueryHandler;
 
-    /**
-     * @var PromotionCodesViewQueryHandler
-     */
+    /** @var PromotionCodesViewQueryHandler */
     private $promotionCodesViewQueryHandler;
 
-    /**
-     * @var Balance
-     */
+    /** @var Balance */
     private $balance;
 
-    /**
-     * @var OrderVatViewQueryHandler
-     */
+    /** @var OrderVatViewQueryHandler */
     private $orderVatViewQueryHandler;
 
     /**
@@ -63,8 +56,10 @@ class SummaryQueryHandler
      * @param SummaryQuery $summaryQuery
      *
      * @return SummaryView
+     *
+     * @throws MissingBillingInfoException
      */
-    public function handle(SummaryQuery $summaryQuery)
+    public function handle(SummaryQuery $summaryQuery): SummaryView
     {
         $orderVatView = $this->orderVatViewQueryHandler->handle(new OrderVatViewQuery($summaryQuery->order));
 
@@ -88,6 +83,7 @@ class SummaryQueryHandler
             $orderVatView->vatMode,
             $orderVatView->totalWithoutVat,
             $orderVatView->totalWithVat,
+            $orderVatView->vatListView,
             $summaryQuery->order->getCurrency(),
             $this->balance->getRemainingToPay($summaryQuery->sheet),
             $summaryQuery->sheet

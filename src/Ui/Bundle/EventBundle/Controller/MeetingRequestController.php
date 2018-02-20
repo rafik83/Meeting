@@ -475,7 +475,7 @@ class MeetingRequestController extends Controller
      * @param Sheet          $sheet
      * @param MeetingRequest $meetingRequest
      *
-     * @return Response|JsonResponse
+     * @return JsonResponse|Response
      */
     public function refuseRequestAction(
         Request $request,

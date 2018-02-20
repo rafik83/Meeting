@@ -18,19 +18,20 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class AbstractUpdateType extends AbstractProductType
 {
-    /**
-     * @var UpdatePriceResolver
-     */
+    /** @var UpdatePriceResolver */
     private $updatePriceResolver;
 
+    /** @var bool */
+    private $vatEnabled;
+
     /**
-     * AbstractUpdateType constructor.
-     *
      * @param UpdatePriceResolver $updatePriceResolver
+     * @param bool                $vatEnabled
      */
-    public function __construct(UpdatePriceResolver $updatePriceResolver)
+    public function __construct(UpdatePriceResolver $updatePriceResolver, bool $vatEnabled)
     {
         $this->updatePriceResolver = $updatePriceResolver;
+        $this->vatEnabled = $vatEnabled;
     }
 
     /**
@@ -41,7 +42,19 @@ class AbstractUpdateType extends AbstractProductType
         parent::buildForm($builder, $options);
 
         if (true === $this->updatePriceResolver->resolve($options['product'])) {
-            $builder->add('unitPrice', NumberType::class);
+            $builder->add('unitPrice', NumberType::class, [
+                'attr' => [
+                    'min' => 0,
+                ],
+            ]);
+
+            if (true === $this->vatEnabled) {
+                $builder->add('vat', NumberType::class, [
+                    'attr' => [
+                        'min' => 0,
+                    ],
+                ]);
+            }
         }
     }
 

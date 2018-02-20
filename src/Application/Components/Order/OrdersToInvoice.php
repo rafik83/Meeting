@@ -67,7 +67,7 @@ class OrdersToInvoice
     {
         $orders = $this->orderRepository->findNotCancelledAndNotInvoicedBySheet($sheet);
 
-        if (0 === count($orders)) {
+        if (0 === \count($orders)) {
             return null;
         }
 

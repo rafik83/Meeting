@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2016 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -29,6 +29,7 @@ class CreateOptionHandlerTest extends TestCase
         $name                = 'Name';
         $image               = 'Image';
         $unitPrice           = 100;
+        $vat                 = 20;
         $quantityMax         = 4;
         $availabilityCurrent = 10;
         $availabilityMax     = 50;
@@ -51,6 +52,7 @@ class CreateOptionHandlerTest extends TestCase
 
         $create                      = new CreateOption($event);
         $create->name                = $name;
+        $create->vat                 = 20;
         $create->unitPrice           = $unitPrice;
         $create->quantityMax         = $quantityMax;
         $create->availabilityCurrent = $availabilityCurrent;
@@ -67,6 +69,7 @@ class CreateOptionHandlerTest extends TestCase
             $name,
             $image,
             $unitPrice,
+            $vat,
             $quantityMax,
             $availabilityCurrent,
             $availabilityMax,
@@ -105,6 +108,7 @@ class CreateOptionHandlerTest extends TestCase
         $image = 'Image';
         $unitPrice = 100;
         $quantityMax = 4;
+        $vat = 20;
         $availabilityCurrent = 10;
         $availabilityMax = 50;
         $updatable = true;
@@ -116,6 +120,7 @@ class CreateOptionHandlerTest extends TestCase
             $name,
             $image,
             $unitPrice,
+            $vat,
             $quantityMax,
             $availabilityCurrent,
             $availabilityMax,

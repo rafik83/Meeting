@@ -26,6 +26,7 @@ use Proximum\Vimeet\Ui\Bundle\EventBundle\Handler\Unavailability\CreateForm;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Handler\Unavailability\CreateFormView;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\ParamConverter\EventDomain;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Security\SheetVoter;
+use Proximum\Vimeet\Ui\Bundle\EventBundle\ValueResolver\UserDomain;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -39,18 +40,24 @@ class UnavailabilityController extends Controller
      * @param EventDomain $eventDomain
      * @param Participant $participant
      * @param Sheet       $sheet
+     * @param UserDomain  $userDomain
      *
      * @return RedirectResponse|Response
      */
-    public function createAction(Request $request, EventDomain $eventDomain, Participant $participant, Sheet $sheet)
-    {
+    public function createAction(
+        Request $request,
+        EventDomain $eventDomain,
+        Participant $participant,
+        Sheet $sheet,
+        UserDomain $userDomain
+    ): Response {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
         $this->denyAccessUnlessGranted(SheetVoter::UNAVAILABILITY_ADD, $sheet);
         $this->denyAccessUnlessGranted(AgendaAccessVoter::PERMISSION, $eventDomain->getEvent());
         $this->checkSheetHasParticipant($sheet, $participant);
 
         $event = $eventDomain->getEvent();
-        $user  = $this->getUser();
+        $user  = $userDomain->getUser();
 
         $actionUrl = $this->generateUrl('event_unavailability_create', [
             'participant' => $participant->getId(),
@@ -102,7 +109,7 @@ class UnavailabilityController extends Controller
      * @param Request       $request
      * @param EventDomain   $eventDomain
      * @param Sheet         $sheet
-     * @param UserInterface $user
+     * @param UserDomain    $userDomain
      *
      * @return Response
      */
@@ -110,7 +117,7 @@ class UnavailabilityController extends Controller
         Request $request,
         EventDomain $eventDomain,
         Sheet $sheet,
-        UserInterface $user
+        UserDomain $userDomain
     ): Response {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
         $this->denyAccessUnlessGranted(SheetVoter::UNAVAILABILITY_ADD, $sheet);
@@ -124,7 +131,7 @@ class UnavailabilityController extends Controller
 
         /** @var CreateFormView $createFormView */
         $createFormView = $this->get('handler.unavailability.create_form_handler')->handle(
-            new CreateForm($request, $event, $sheet, $user, $actionUrl)
+            new CreateForm($request, $event, $sheet, $userDomain->getUser(), $actionUrl)
         );
 
         if ($createFormView->isXmlHttpRequest()) {
@@ -140,7 +147,7 @@ class UnavailabilityController extends Controller
             ]);
         }
 
-        $availabilityConfirmation = new Confirmation($eventDomain->getEvent(), $user);
+        $availabilityConfirmation = new Confirmation($eventDomain->getEvent(), $userDomain->getUser());
         $form = $this->createForm(ConfirmationType::class, $availabilityConfirmation, [
             'action' => $this->generateUrl('event_availability_confirmation', [
                 'sheet' => $sheet->getId(),

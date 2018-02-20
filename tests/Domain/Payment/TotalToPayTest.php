@@ -35,10 +35,10 @@ class TotalToPayTest extends TestCase
         $sheet    = new Sheet($event, $type, [], $owner, $datetime);
         $type->setPackage($package);
 
-        $plan = Product::createPlan($event, 'plan', '', 200, 20, 100);
+        $plan = Product::createPlan($event, 'plan', '', 200, 20, 20, 100);
         $plan->translate('fr', 'plan', '', '', '', '');
         $plan->translate('en', 'plan', '', '', '', '');
-        $chair = Product::createOption($event, 'chair', '', 100, 2, 20,100, true, null, null, null);
+        $chair = Product::createOption($event, 'chair', '', 100, 20, 2, 20,100, true, null, null, null);
         $chair->translate('fr', 'chair', '', '', '', '');
         $chair->translate('en', 'chair', '', '', '', '');
 

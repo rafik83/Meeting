@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2016 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -36,7 +36,7 @@ class SelectPlanHandlerTest extends TestCase
         $datetime = new \DateTime();
         $user     = new User('email@email.com', 'salt', 'password', 'fr');
         $sheet    = new Sheet($event, $type, [], $user, $datetime);
-        $product  = Product::createPlan($event, 'plan', '', 100, 10, 40);
+        $product  = Product::createPlan($event, 'plan', '', 100, 20, 10, 40);
 
         $emptyCart    = new Cart($sheet, [], [], 1);
         $expectedCart = new Cart($sheet, [new CartRow($sheet, $product, 1)], [], 1);
@@ -67,8 +67,8 @@ class SelectPlanHandlerTest extends TestCase
         $event    = EventFactory::createEvent();
         $type     = new Type($event);
         $datetime = new \DateTime();
-        $product1 = Product::createPlan($event, 'plan1', '', 100, 10, 40);
-        $product2 = Product::createPlan($event, 'plan2', '', 50, 10, 50);
+        $product1 = Product::createPlan($event, 'plan1', '', 100, 20, 10, 40);
+        $product2 = Product::createPlan($event, 'plan2', '', 50, 20, 10, 50);
         $user     = new User('email@email.com', 'salt', 'password', 'fr');
         $sheet    = new Sheet($event, $type, [], $user, $datetime);
 

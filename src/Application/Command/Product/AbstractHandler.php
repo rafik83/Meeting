@@ -16,19 +16,13 @@ use Proximum\Vimeet\Domain\Repository\ProductRepositoryInterface;
 
 abstract class AbstractHandler
 {
-    /**
-     * @var ProductRepositoryInterface
-     */
+    /** @var ProductRepositoryInterface */
     protected $productRepository;
 
-    /**
-     * @var FileStorageInterface
-     */
+    /** @var FileStorageInterface */
     protected $fileStorageInterface;
 
-    /**
-     * @var UpdatePriceResolver
-     */
+    /** @var UpdatePriceResolver */
     protected $updatePriceResolver;
 
     /**

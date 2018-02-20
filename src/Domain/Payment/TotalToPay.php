@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2016 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -12,18 +12,15 @@ namespace Proximum\Vimeet\Domain\Payment;
 
 use Proximum\Vimeet\Domain\Cart\CartManager;
 use Proximum\Vimeet\Domain\Model\Sheet;
+use Proximum\Vimeet\Domain\Package\Exception\MissingBillingInfoException;
 use Proximum\Vimeet\Domain\Package\Specification\VatApplicable;
 
 class TotalToPay
 {
-    /**
-     * @var CartManager
-     */
+    /** @var CartManager */
     private $cartManager;
 
-    /**
-     * @var VatApplicable
-     */
+    /** @var VatApplicable */
     private $vatApplicable;
 
     /**
@@ -39,11 +36,11 @@ class TotalToPay
     /**
      * @param Sheet $sheet
      *
-     * @throws \Proximum\Vimeet\Domain\Package\Exception\MissingBillingInfoException
+     * @throws MissingBillingInfoException
      *
      * @return float
      */
-    public function getTotal(Sheet $sheet)
+    public function getTotal(Sheet $sheet): float
     {
         $cart          = $this->cartManager->getCart($sheet);
         $vatApplicable = $this->vatApplicable->onSheet($sheet);
@@ -55,7 +52,26 @@ class TotalToPay
         }
 
         if ($vatApplicable) {
-            $vatToPay = ($total * $cart->getSheet()->getEvent()->getVat()) / 100;
+            foreach ($cart->getRows() as $row) {
+                if ($row->getProduct()->getVat() === 0) {
+                    continue;
+                }
+
+                $vatToPay += ($row->getProduct()->getUnitPrice() * $row->getQuantity() * $row->getProduct()->getVat()) / 100;
+            }
+
+            foreach ($cart->getPromotionCodeRows() as $promotionCodeRow) {
+                foreach ($promotionCodeRow->getPromotionCode()->getPromotions() as $promotion) {
+                    $product = $promotion->getProduct();
+                    $discount = $cart->getDiscountForProduct($promotionCodeRow->getPromotionCode(), $product);
+
+                    if ($discount === 0) {
+                        continue;
+                    }
+
+                    $vatToPay += ($discount  * $product->getVat()) / 100;
+                }
+            }
         }
 
         return $total + $vatToPay;

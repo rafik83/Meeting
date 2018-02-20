@@ -15,24 +15,22 @@ use Proximum\Vimeet\Application\Components\Sheet\SheetInfoGuesser;
 use Proximum\Vimeet\Application\Components\Sheet\Template\Tag;
 use Proximum\Vimeet\Application\Components\User\UserInfoGuesser;
 use Proximum\Vimeet\Application\Exception\Sheet\SheetNotFoundException;
+use Proximum\Vimeet\Application\ThirdParty\LENI\LeniConstants;
 use Proximum\Vimeet\Application\ThirdParty\LENI\View\LeniPlanningDayView;
 use Proximum\Vimeet\Application\ThirdParty\LENI\View\LeniPlanningView;
 use Proximum\Vimeet\Application\ThirdParty\LENI\View\LeniUserView;
+use Proximum\Vimeet\Domain\Model\Event;
+use Proximum\Vimeet\Domain\Model\Sheet;
+use Proximum\Vimeet\Domain\Model\User;
+use Proximum\Vimeet\Domain\Model\User\Event\ExtraData;
+use Proximum\Vimeet\Domain\Order\Balance;
 use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
 use Proximum\Vimeet\Domain\Service\Category\CategoryNameResolver;
 use Proximum\Vimeet\Domain\Service\SheetsGroup\GroupNameResolver;
 use Proximum\Vimeet\Domain\Service\Type\TypeNameResolver;
-use Proximum\Vimeet\Domain\Template\TemplateObject\Gender;
 
 class LeniUserViewQueryHandler
 {
-    const GENDER_MAPPING = [
-        Gender::MAN => 'M',
-        Gender::WOMAN => 'MME',
-    ];
-
-    CONST ATTENDANCE = 'Inscrit';
-
     /** @var ParticipantPlanningFormatter */
     private $participantPlanningFormatter;
 
@@ -50,8 +48,12 @@ class LeniUserViewQueryHandler
 
     /** @var SheetRepositoryInterface */
     private $sheetRepository;
+
     /** @var SheetInfoGuesser */
     private $sheetInfoGuesser;
+
+    /** @var Balance */
+    private $balance;
 
     /**
      * @param UserInfoGuesser              $userInfoGuesser
@@ -61,6 +63,7 @@ class LeniUserViewQueryHandler
      * @param CategoryNameResolver         $categoryNameResolver
      * @param GroupNameResolver            $groupNameResolver
      * @param SheetRepositoryInterface     $sheetRepository
+     * @param Balance                      $balance
      */
     public function __construct(
         UserInfoGuesser $userInfoGuesser,
@@ -69,15 +72,17 @@ class LeniUserViewQueryHandler
         TypeNameResolver $typeNameResolver,
         CategoryNameResolver $categoryNameResolver,
         GroupNameResolver $groupNameResolver,
-        SheetRepositoryInterface $sheetRepository
+        SheetRepositoryInterface $sheetRepository,
+        Balance $balance
     ) {
-        $this->userInfoGuesser              = $userInfoGuesser;
-        $this->sheetInfoGuesser             = $sheetInfoGuesser;
+        $this->userInfoGuesser = $userInfoGuesser;
+        $this->sheetInfoGuesser = $sheetInfoGuesser;
         $this->participantPlanningFormatter = $participantPlanningFormatter;
-        $this->typeNameResolver             = $typeNameResolver;
-        $this->categoryNameResolver         = $categoryNameResolver;
-        $this->groupNameResolver            = $groupNameResolver;
-        $this->sheetRepository              = $sheetRepository;
+        $this->typeNameResolver = $typeNameResolver;
+        $this->categoryNameResolver = $categoryNameResolver;
+        $this->groupNameResolver = $groupNameResolver;
+        $this->sheetRepository = $sheetRepository;
+        $this->balance = $balance;
     }
 
     /**
@@ -88,7 +93,7 @@ class LeniUserViewQueryHandler
      */
     public function handle(LeniUserViewQuery $query): LeniUserView
     {
-        $sheets = $this->sheetRepository->getSheetsByUserAndEvent($query->user, $query->event);
+        $sheets = $this->getSheets($query->user, $query->event);
 
         $firstSheet = reset($sheets);
 
@@ -121,29 +126,108 @@ class LeniUserViewQueryHandler
         $type = $this->typeNameResolver->resolveTypeWithPreloadedSheets($sheets);
         $category = $this->categoryNameResolver->resolveCategoryForPreloadSheets($sheets);
 
-        $gender = self::GENDER_MAPPING[$userInfo['gender']] ?? '';
+        $country = $userInfo['country'];
 
-        if ('' === $userInfo['country']) {
+        if ('' === $country) {
             $sheetInfos = $this->sheetInfoGuesser->guessSheetInfos($firstSheet);
-            $userInfo['country'] = $sheetInfos[Tag::SHEET_COUNTRY] ?? '';
+            $country = $sheetInfos[Tag::SHEET_COUNTRY] ?? '';
         }
 
         return new LeniUserView(
             $query->user->getId(),
+            $firstSheet->isEnabled(),
             $this->groupNameResolver->resolve($query->event, $query->user, $sheets),
             $type->getId(),
             $category !== null ? $category->getId() : null,
             $query->user->getEmail(),
-            $gender,
+            $userInfo['gender'],
             $userInfo['firstName'],
             $userInfo['lastName'],
             $userInfo['position'],
             $userInfo['phone'],
             $userInfo['mobile'],
-            $userInfo['country'],
-            self::ATTENDANCE,
+            $country,
             $query->user->getLocale(),
-            $leniPlanning
+            $leniPlanning,
+            $this->getPreviousLeniUserId($query),
+            $this->isPaid($firstSheet),
+            $this->getParticipantProductId($query->user, $sheets)
         );
+    }
+
+    /**
+     * @param User  $user
+     * @param Event $event
+     *
+     * @return Sheet[]
+     */
+    private function getSheets(User $user, Event $event): array
+    {
+        $sheets = $this->sheetRepository->getAllSheetsByUserAndEvent($user, $event);
+
+        $enabledSheets = \array_filter($sheets, function (Sheet $sheet) {
+            return $sheet->isEnabled();
+        });
+
+        // if there is at least one enabled sheet, return only enabled sheets list
+        if (\count($enabledSheets) > 0) {
+            return $enabledSheets;
+        }
+
+        // else return all sheets
+        return $sheets;
+    }
+
+    /**
+     * @param LeniUserViewQuery $query
+     *
+     * @return null|string
+     */
+    private function getPreviousLeniUserId(LeniUserViewQuery $query): ?string
+    {
+        if (!$query->previousExtraData instanceof ExtraData) {
+            return null;
+        }
+
+        $previousData = unserialize($query->previousExtraData->getValue(), ['allowed_classes' => false]);
+
+        return $previousData[LeniConstants::LENI_COL_USER_ID] ?? null;
+    }
+
+    /**
+     * @param Sheet $sheet
+     *
+     * @return bool
+     */
+    private function isPaid(Sheet $sheet): bool
+    {
+        if (!$sheet->getPackage()->isPassable()) {
+            return true;
+        }
+
+        if (!$sheet->hasNotCancelledOrders()) {
+            return false;
+        }
+
+        return 0 === $this->balance->getRemainingToPay($sheet);
+    }
+
+    /**
+     * @param User    $user
+     * @param Sheet[] $sheets
+     *
+     * @return int|null
+     */
+    private function getParticipantProductId(User $user, array $sheets): ?int
+    {
+        foreach ($sheets as $sheet) {
+            $participant = $sheet->getUserParticipant($user);
+
+            if (null !== $participant && null !== $participant->getParticipantProduct()) {
+                return $participant->getParticipantProduct()->getId();
+            }
+        }
+
+        return null;
     }
 }

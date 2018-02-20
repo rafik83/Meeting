@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of the vimeet project.
+ * This file is part of the Proximum Vimeet project.
  *
  * Copyright (C) Proximum
  *
@@ -38,7 +38,7 @@ class RequestTestAccessHandler
      * @return VideoConferenceView
      * @throws InvalidTokenGeneratorArgumentsException
      */
-    public function handle(RequestTestAccess $requestTestAccess)
+    public function handle(RequestTestAccess $requestTestAccess): VideoConferenceView
     {
         $session = $this->videoConferenceAdapter->getSession($requestTestAccess->sessionId);
 

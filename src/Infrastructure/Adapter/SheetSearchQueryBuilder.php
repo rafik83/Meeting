@@ -160,13 +160,10 @@ class SheetSearchQueryBuilder
         $this->filterByCanceledAttendance($filters);
         $this->filterByHasGroup($filters);
         $this->filterByHasSpot($filters);
+        $this->filterByOrderStatus($filters);
 
         if (isset($filters[Constant::HAS_CART]) && true === $filters[Constant::HAS_CART]) {
             $this->filterHasCart(true);
-        }
-
-        if (isset($filters[Constant::NO_ORDER]) && true === $filters[Constant::NO_ORDER]) {
-            $this->filterHasOrder(false);
         }
 
         if (isset($filters['boolean_filters'])) {
@@ -175,10 +172,6 @@ class SheetSearchQueryBuilder
 
         if (isset($filters[SearchFields::FILTER_OBJECTIVE])) {
             $this->filterByObjective($filters[SearchFields::FILTER_OBJECTIVE]);
-        }
-
-        if (isset($filters[Constant::HAS_ORDER])) {
-            $this->filterHasOrder($filters[Constant::HAS_ORDER]);
         }
 
         if (isset($filters[Constant::HAS_CART])) {
@@ -322,7 +315,7 @@ class SheetSearchQueryBuilder
     protected function filterByState(array &$filters)
     {
         /** @var array|string $filters ['state'] */
-        if (!isset($filters['state']) || is_array($filters['state']) && empty($filters['state'])) {
+        if (!isset($filters['state']) || (\is_array($filters['state']) && empty($filters['state']))) {
             return;
         }
 
@@ -951,15 +944,27 @@ class SheetSearchQueryBuilder
     }
 
     /**
-     * @param bool $hasOrder
+     * @param array $filters
      */
-    private function filterHasOrder($hasOrder)
+    private function filterByOrderStatus(array $filters)
     {
-        $matchHasOrder = new Term();
-        $matchHasOrder->setTerm('hasOrder', $hasOrder);
+        if (empty($filters[Constant::ORDER_STATUS])) {
+            return;
+        }
 
-        $this->query->addMust($matchHasOrder);
-    }
+        /** @var array $orderStatuses */
+        $orderStatuses = $filters[Constant::ORDER_STATUS];
+
+        $orderStatusQuery = new BoolQuery();
+
+        foreach ($orderStatuses as $orderStatus) {
+            $matchStatus = new Term();
+            $matchStatus->setTerm('orderStatus', $orderStatus);
+            $orderStatusQuery->addShould($matchStatus);
+        }
+
+        $this->query->addMust($orderStatusQuery);
+     }
 
     /**
      * @param string $agendaConfirmedStatus
