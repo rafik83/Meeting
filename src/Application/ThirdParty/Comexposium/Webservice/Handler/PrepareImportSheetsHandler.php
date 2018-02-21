@@ -32,16 +32,21 @@ class PrepareImportSheetsHandler
     /** @var ComexposiumJobQueueInterface */
     private $comexposiumJobQueue;
 
+    /** @var RemoveAlreadyImportedReferences */
+    private $removeAlreadyImportedReferences;
+
     public function __construct(
         EventRepositoryInterface $eventRepository,
         ExtraParameterRepositoryInterface $extraParameterRepository,
         ComexposiumWebservice $comexposiumWebservice,
-        ComexposiumJobQueueInterface $comexposiumJobQueue
+        ComexposiumJobQueueInterface $comexposiumJobQueue,
+        RemoveAlreadyImportedReferences $removeAlreadyImportedReferences
     ) {
         $this->eventRepository = $eventRepository;
         $this->extraParameterRepository = $extraParameterRepository;
         $this->comexposiumWebservice = $comexposiumWebservice;
         $this->comexposiumJobQueue = $comexposiumJobQueue;
+        $this->removeAlreadyImportedReferences = $removeAlreadyImportedReferences;
     }
 
     public function handle(): void
@@ -61,6 +66,8 @@ class PrepareImportSheetsHandler
             $registrationReferences = $this->comexposiumWebservice->getRegistrationsReference(
                 $eventReferenceExtraParameter->getValue()
             );
+
+            $registrationReferences = $this->removeAlreadyImportedReferences->handle($event, $registrationReferences);
 
             if (empty($registrationReferences)) {
                 continue;

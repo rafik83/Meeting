@@ -14,6 +14,7 @@ use PHPUnit\Framework\TestCase;
 use Proximum\Vimeet\Application\Adapter\ThirdParty\Comexposium\ComexposiumJobQueueInterface;
 use Proximum\Vimeet\Application\ThirdParty\Comexposium\Webservice\Handler\ComexposiumWebservice;
 use Proximum\Vimeet\Application\ThirdParty\Comexposium\Webservice\Handler\PrepareImportSheetsHandler;
+use Proximum\Vimeet\Application\ThirdParty\Comexposium\Webservice\Handler\RemoveAlreadyImportedReferences;
 use Proximum\Vimeet\Domain\Event\ExtraParameter\Type;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Repository\Event\ExtraParameterRepositoryInterface;
@@ -46,17 +47,25 @@ class PrepareImportSheetsHandlerTest extends TestCase
         $comexposiumWebservice
             ->getRegistrationsReference('111222333')
             ->shouldBeCalled()
-            ->willReturn(['987654', '1337'])
+            ->willReturn(['987654', '7909', '1337'])
         ;
 
         $comexposiumJobQueue = $this->prophesize(ComexposiumJobQueueInterface::class);
         $comexposiumJobQueue->getRegistrations($event->reveal(), ['987654', '1337'])->shouldBeCalled();
 
+        $removeAlreadyImportedReferences = $this->prophesize(RemoveAlreadyImportedReferences::class);
+        $removeAlreadyImportedReferences
+            ->handle($event->reveal(), ['987654', '7909', '1337'])
+            ->shouldBeCalled()
+            ->willReturn(['987654', '1337'])
+        ;
+
         $prepareImportSheetsHandler = new PrepareImportSheetsHandler(
             $eventRepository->reveal(),
             $extraParameterRepository->reveal(),
             $comexposiumWebservice->reveal(),
-            $comexposiumJobQueue->reveal()
+            $comexposiumJobQueue->reveal(),
+            $removeAlreadyImportedReferences->reveal()
         );
         $prepareImportSheetsHandler->handle();
     }
