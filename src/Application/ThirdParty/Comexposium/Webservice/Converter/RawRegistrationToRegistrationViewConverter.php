@@ -62,7 +62,9 @@ class RawRegistrationToRegistrationViewConverter
             $registration->telephone ?? null,
             $registration->siteInternet ?? null,
             $participantView,
-            $this->convertToArray($registration->referenceNomenclatureManifestation)
+            isset($registration->referenceNomenclatureManifestation)
+                ? $this->convertToArray($registration->referenceNomenclatureManifestation)
+                : []
         );
     }
 
