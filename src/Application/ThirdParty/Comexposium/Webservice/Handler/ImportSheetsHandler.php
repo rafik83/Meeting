@@ -22,8 +22,6 @@ use Proximum\Vimeet\Domain\Template\TemplateDataFactory;
 
 class ImportSheetsHandler
 {
-    private CONST STATUS_WHITE_LIST = ['VALIDE', 'INSTANCE'];
-
     /** @var ComexposiumWebservice */
     private $comexposiumWebservice;
 
@@ -121,22 +119,8 @@ class ImportSheetsHandler
                 continue;
             }
 
-            if (!$this->isRegistrationHasAWhiteListedStatus($registrationView)) {
-                continue;
-            }
-
             $this->convertRegistrationViewToSheet->handle($event, $type, $registrationView, $registrationTemplate);
             $registrationTemplate->clear();
         }
-    }
-
-    /**
-     * @param RegistrationView $registrationView
-     *
-     * @return bool
-     */
-    private function isRegistrationHasAWhiteListedStatus(RegistrationView $registrationView): bool
-    {
-        return \in_array($registrationView->status, self::STATUS_WHITE_LIST, true);
     }
 }

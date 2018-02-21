@@ -18,6 +18,8 @@ use Proximum\Vimeet\Domain\Template\TemplateObject\Gender;
 
 class RawRegistrationToRegistrationViewConverter
 {
+    private CONST STATUS_WHITE_LIST = ['VALIDE', 'INSTANCE'];
+
     private const GENDER_MAPPING = [
         '1' => Gender::WOMAN, // Mademoiselle
         '21' => Gender::WOMAN, // Madame
@@ -34,6 +36,10 @@ class RawRegistrationToRegistrationViewConverter
     public function convert(\stdClass $registration): ?RegistrationView
     {
         if (!isset($registration->reference, $registration->etatExposant)) {
+            return null;
+        }
+
+        if (!$this->isRegistrationHasAWhiteListedStatus($registration->etatExposant)) {
             return null;
         }
 
@@ -156,5 +162,15 @@ class RawRegistrationToRegistrationViewConverter
         }
 
         return self::GENDER_MAPPING[$user->referenceCivilite] ?? null;
+    }
+
+    /**
+     * @param string $status
+     *
+     * @return bool
+     */
+    private function isRegistrationHasAWhiteListedStatus(string $status): bool
+    {
+        return \in_array($status, self::STATUS_WHITE_LIST, true);
     }
 }
