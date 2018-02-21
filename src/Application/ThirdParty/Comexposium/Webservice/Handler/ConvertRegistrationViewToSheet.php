@@ -29,7 +29,7 @@ use Proximum\Vimeet\Domain\Repository\UserRepositoryInterface;
 use Proximum\Vimeet\Domain\Template\TemplateData;
 use Proximum\Vimeet\Domain\User\Event\ExtraData\Type as ExtraDataType;
 
-class ImportSheetHandler
+class ConvertRegistrationViewToSheet
 {
     /** @var SheetAndParticipantTemplateDataHandler */
     private $sheetAndParticipantTemplateDataHandler;
@@ -155,6 +155,7 @@ class ImportSheetHandler
 
         $sheet = $this->createSheet(
             $registrationView->reference,
+            $sheetAndParticipantTemplateDataView->sheetTitle,
             $event,
             $type,
             $user,
@@ -168,6 +169,7 @@ class ImportSheetHandler
 
     /**
      * @param string $reference Comexposium reference
+     * @param string $sheetTitle
      * @param Event  $event
      * @param Type   $type
      * @param User   $user
@@ -177,6 +179,7 @@ class ImportSheetHandler
      */
     private function createSheet(
         string $reference,
+        string $sheetTitle,
         Event $event,
         Type $type,
         User $user,
@@ -190,6 +193,7 @@ class ImportSheetHandler
             $this->dateTime
         );
         $sheet->setRegistrationData($sheetRegistrationData);
+        $sheet->setTitle($sheetTitle);
         $sheet->setImported(true);
         $this->sheetRepository->add($sheet);
 

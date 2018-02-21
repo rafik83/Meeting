@@ -13,7 +13,7 @@ namespace Proximum\Vimeet\Tests\Application\ThirdParty\Comexposium\Webservice\Ha
 use PHPUnit\Framework\TestCase;
 use Proximum\Vimeet\Application\ThirdParty\Comexposium\Webservice\Converter\RawRegistrationToRegistrationViewConverter;
 use Proximum\Vimeet\Application\ThirdParty\Comexposium\Webservice\Handler\ComexposiumWebservice;
-use Proximum\Vimeet\Application\ThirdParty\Comexposium\Webservice\Handler\ImportSheetHandler;
+use Proximum\Vimeet\Application\ThirdParty\Comexposium\Webservice\Handler\ConvertRegistrationViewToSheet;
 use Proximum\Vimeet\Application\ThirdParty\Comexposium\Webservice\Handler\ImportSheetsHandler;
 use Proximum\Vimeet\Application\ThirdParty\Comexposium\Webservice\Handler\RemoveAlreadyImportedReferences;
 use Proximum\Vimeet\Application\ThirdParty\Comexposium\Webservice\View\ParticipantPositionView;
@@ -63,7 +63,9 @@ class ImportSheetsHandlerTest extends TestCase
             ['666', '777', '88898']
         );
 
-        $rawRegistrationToRegistrationViewConverter = $this->prophesize(RawRegistrationToRegistrationViewConverter::class);
+        $rawRegistrationToRegistrationViewConverter = $this->prophesize(
+            RawRegistrationToRegistrationViewConverter::class
+        );
         $rawRegistrationToRegistrationViewConverter
             ->convert($expectedRawRegistration)
             ->shouldBeCalled()
@@ -95,7 +97,11 @@ class ImportSheetsHandlerTest extends TestCase
         $typeRepository->getById(113)->shouldBeCalled()->willReturn($type->reveal());
 
         $comexposiumWebservice = $this->prophesize(ComexposiumWebservice::class);
-        $comexposiumWebservice->getRegistrations('999666', ['111222333'])->shouldBeCalled()->willReturn($expectedResponse);
+        $comexposiumWebservice
+            ->getRegistrations('999666', ['111222333'])
+            ->shouldBeCalled()
+            ->willReturn($expectedResponse)
+        ;
 
         $templateData = $this->prophesize(TemplateData::class);
 
@@ -106,8 +112,8 @@ class ImportSheetsHandlerTest extends TestCase
             ->willReturn($templateData->reveal())
         ;
 
-        $importSheetHandler = $this->prophesize(ImportSheetHandler::class);
-        $importSheetHandler
+        $convertRegistrationViewToSheet = $this->prophesize(ConvertRegistrationViewToSheet::class);
+        $convertRegistrationViewToSheet
             ->handle($event->reveal(), $type->reveal(), $expectedRegistrationView, $templateData->reveal())
             ->shouldBeCalled()
         ;
@@ -124,7 +130,7 @@ class ImportSheetsHandlerTest extends TestCase
             $extraParameterRepository->reveal(),
             $typeRepository->reveal(),
             $rawRegistrationToRegistrationViewConverter->reveal(),
-            $importSheetHandler->reveal(),
+            $convertRegistrationViewToSheet->reveal(),
             $templateDataFactory->reveal(),
             $removeAlreadyImportedReferences->reveal()
         );

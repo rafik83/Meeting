@@ -12,22 +12,22 @@ namespace Proximum\Vimeet\Application\ThirdParty\Comexposium\Webservice\View;
 
 class RegistrationView
 {
-    /** @var string */
+    /** @var null|string */
     public $reference;
 
-    /** @var string */
+    /** @var null|string */
     public $companyName;
 
-    /** @var string */
+    /** @var null|string */
     public $status;
 
-    /** @var string */
+    /** @var null|string */
     public $address;
 
-    /** @var string */
+    /** @var null|string */
     public $zipCode;
 
-    /** @var string */
+    /** @var null|string */
     public $city;
 
     /** @var null|string ISO 3166-1 alpha-2 country code */
@@ -46,12 +46,12 @@ class RegistrationView
     public $nomenclatureReferences;
 
     public function __construct(
-        string $reference,
-        string $companyName,
-        string $status,
-        string $address,
-        string $zipCode,
-        string $city,
+        ?string $reference,
+        ?string $companyName,
+        ?string $status,
+        ?string $address,
+        ?string $zipCode,
+        ?string $city,
         ?string $country,
         ?string $companyPhone,
         ?string $webSite,

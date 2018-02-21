@@ -49,7 +49,11 @@ class SheetAndParticipantTemplateDataHandler
             }
         }
 
-        return new SheetAndParticipantTemplateDataView($sheetRegistrationData, $participantRegistrationData);
+        return new SheetAndParticipantTemplateDataView(
+            $sheetData[Tag::SHEET_TITLE],
+            $sheetRegistrationData,
+            $participantRegistrationData
+        );
     }
 
     /**

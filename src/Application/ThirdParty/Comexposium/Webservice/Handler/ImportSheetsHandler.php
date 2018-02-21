@@ -36,8 +36,8 @@ class ImportSheetsHandler
     /** @var RawRegistrationToRegistrationViewConverter */
     private $rawRegistrationToRegistrationViewConverter;
 
-    /** @var ImportSheetHandler */
-    private $importSheetHandler;
+    /** @var ConvertRegistrationViewToSheet */
+    private $convertRegistrationViewToSheet;
 
     /** @var TemplateDataFactory */
     private $templateDataFactory;
@@ -50,7 +50,7 @@ class ImportSheetsHandler
      * @param ExtraParameterRepositoryInterface          $extraParameterRepository
      * @param TypeRepositoryInterface                    $typeRepository
      * @param RawRegistrationToRegistrationViewConverter $rawRegistrationToRegistrationViewConverter
-     * @param ImportSheetHandler                         $importSheetHandler
+     * @param ConvertRegistrationViewToSheet             $convertRegistrationViewToSheet
      * @param TemplateDataFactory                        $templateDataFactory
      * @param RemoveAlreadyImportedReferences            $removeAlreadyImportedReferences
      */
@@ -59,7 +59,7 @@ class ImportSheetsHandler
         ExtraParameterRepositoryInterface $extraParameterRepository,
         TypeRepositoryInterface $typeRepository,
         RawRegistrationToRegistrationViewConverter $rawRegistrationToRegistrationViewConverter,
-        ImportSheetHandler $importSheetHandler,
+        ConvertRegistrationViewToSheet $convertRegistrationViewToSheet,
         TemplateDataFactory $templateDataFactory,
         RemoveAlreadyImportedReferences $removeAlreadyImportedReferences
     ) {
@@ -67,7 +67,7 @@ class ImportSheetsHandler
         $this->extraParameterRepository = $extraParameterRepository;
         $this->typeRepository = $typeRepository;
         $this->rawRegistrationToRegistrationViewConverter = $rawRegistrationToRegistrationViewConverter;
-        $this->importSheetHandler = $importSheetHandler;
+        $this->convertRegistrationViewToSheet = $convertRegistrationViewToSheet;
         $this->templateDataFactory = $templateDataFactory;
         $this->removeAlreadyImportedReferences = $removeAlreadyImportedReferences;
     }
@@ -96,7 +96,7 @@ class ImportSheetsHandler
             return;
         }
 
-        $type = $this->typeRepository->getById((int) $typeIdExtraParameter->getValue());
+        $type = $this->typeRepository->getById((int)$typeIdExtraParameter->getValue());
 
         if (!$type instanceof Type || $type->getEvent()->getId() !== $event->getId()) {
             return;
@@ -121,7 +121,7 @@ class ImportSheetsHandler
                 continue;
             }
 
-            $this->importSheetHandler->handle($event, $type, $registrationView, $registrationTemplate);
+            $this->convertRegistrationViewToSheet->handle($event, $type, $registrationView, $registrationTemplate);
             $registrationTemplate->clear();
         }
     }

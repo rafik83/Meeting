@@ -86,6 +86,7 @@ class SheetAndParticipantTemplateDataHandlerTest extends TestCase
         $result = $sheetAndParticipantTemplateDataHandler->handle($registrationView, $registrationTemplateData);
 
         $expectedResult = new SheetAndParticipantTemplateDataView(
+            'Nintendo',
             [
                 'company-key' => ['text' => 'Nintendo'],
                 'sheet-country-key' => ['country' => 'FR'],

@@ -15,10 +15,10 @@ class ParticipantView
     /** @var null|string */
     public $gender;
 
-    /** @var string */
+    /** @var null|string */
     public $firstName;
 
-    /** @var string */
+    /** @var null|string */
     public $lastName;
 
     /** @var string */
@@ -38,8 +38,8 @@ class ParticipantView
 
     public function __construct(
         ?string $gender,
-        string $firstName,
-        string $lastName,
+        ?string $firstName,
+        ?string $lastName,
         string $email,
         string $locale,
         ?string $phone,
@@ -61,6 +61,6 @@ class ParticipantView
      */
     public function getFullName(): string
     {
-        return sprintf('%s %s', $this->firstName, $this->lastName);
+        return trim(sprintf('%s %s', (string) $this->firstName, (string) $this->lastName));
     }
 }

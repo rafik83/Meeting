@@ -11,7 +11,7 @@
 namespace Proximum\Vimeet\Tests\Application\ThirdParty\Comexposium\Webservice\Handler;
 
 use PHPUnit\Framework\TestCase;
-use Proximum\Vimeet\Application\ThirdParty\Comexposium\Webservice\Handler\ImportSheetHandler;
+use Proximum\Vimeet\Application\ThirdParty\Comexposium\Webservice\Handler\ConvertRegistrationViewToSheet;
 use Proximum\Vimeet\Application\ThirdParty\Comexposium\Webservice\Handler\SheetAndParticipantTemplateDataHandler;
 use Proximum\Vimeet\Application\ThirdParty\Comexposium\Webservice\View\ParticipantPositionView;
 use Proximum\Vimeet\Application\ThirdParty\Comexposium\Webservice\View\ParticipantView;
@@ -32,7 +32,7 @@ use Proximum\Vimeet\Domain\Repository\UserEventRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\UserRepositoryInterface;
 use Proximum\Vimeet\Domain\Template\TemplateData;
 
-class ImportSheetHandlerTest extends TestCase
+class ConvertRegistrationViewToSheetTest extends TestCase
 {
     public function testHandle()
     {
@@ -78,6 +78,7 @@ class ImportSheetHandlerTest extends TestCase
             $dateTime
         );
         $expectedSheet->setRegistrationData(['whateverSheetTemplateData']);
+        $expectedSheet->setTitle('Nintendo');
         $expectedSheet->setImported(true);
 
         $expectedParticipant = new Participant(
@@ -123,13 +124,14 @@ class ImportSheetHandlerTest extends TestCase
             ->shouldBeCalled()
             ->willReturn(
                 new SheetAndParticipantTemplateDataView(
+                    'Nintendo',
                     ['whateverSheetTemplateData'],
                     ['whateverParticipantTemplateData']
                 )
             )
         ;
 
-        $importSheetHandler = new ImportSheetHandler(
+        $importSheetHandler = new ConvertRegistrationViewToSheet(
             $sheetAndParticipantTemplateDataHandler->reveal(),
             $userRepository->reveal(),
             $sheetRepository->reveal(),
