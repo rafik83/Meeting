@@ -285,8 +285,10 @@
                         </div>
                     {% endif %}
                     {% if sheet.hasReminderDate %}
-                        <div class="label label-primary" data-toggle="tooltip" title="{{ 'form.sheet_comment.children.reminderDate.label'|trans({}, 'forms') }}">
-                            {{ sheet.reminderDate|localizeddate('medium', 'short', app.request.locale, event.timeZone) }}
+                        <div data-toggle="tooltip" title="{{ 'form.sheet_comment.children.reminderDate.label'|trans({}, 'forms') }}">
+                            <span class="label label-primary" >
+                                {{ sheet.reminderDate|localizeddate('medium', 'short', app.request.locale, event.timeZone) }}
+                            </span>
                         </div>
                     {% endif %}
                 </td>
