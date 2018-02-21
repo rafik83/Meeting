@@ -10,7 +10,6 @@
 
 namespace Proximum\Vimeet\Application\ThirdParty\Comexposium\Webservice\Handler;
 
-use Proximum\Vimeet\Application\Adapter\DelayedEventDispatcherInterface;
 use Proximum\Vimeet\Application\Event\Events;
 use Proximum\Vimeet\Application\Event\Sheet\SheetUpdatedEvent;
 use Proximum\Vimeet\Application\ThirdParty\Comexposium\Webservice\Sheet\SheetExtraDataType;
@@ -31,6 +30,7 @@ use Proximum\Vimeet\Domain\Repository\UserEventRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\UserRepositoryInterface;
 use Proximum\Vimeet\Domain\Template\TemplateData;
 use Proximum\Vimeet\Domain\User\Event\ExtraData\Type as ExtraDataType;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 class ConvertRegistrationViewToSheet
 {
@@ -58,8 +58,8 @@ class ConvertRegistrationViewToSheet
     /** @var Synchronizer */
     private $synchronizer;
 
-    /** @var DelayedEventDispatcherInterface */
-    private $delayedEventDispatcher;
+    /** @var EventDispatcherInterface */
+    private $eventDispatcher;
 
     /** @var \DateTimeInterface */
     private $dateTime;
@@ -73,7 +73,7 @@ class ConvertRegistrationViewToSheet
         UserEventExtraDataRepositoryInterface $userEventExtraDataRepository,
         UserEventRepositoryInterface $userEventRepository,
         Synchronizer $synchronizer,
-        DelayedEventDispatcherInterface $delayedEventDispatcher,
+        EventDispatcherInterface $eventDispatcher,
         \DateTimeInterface $dateTime
     ) {
         $this->sheetAndParticipantTemplateDataHandler = $sheetAndParticipantTemplateDataHandler;
@@ -84,7 +84,7 @@ class ConvertRegistrationViewToSheet
         $this->userEventExtraDataRepository = $userEventExtraDataRepository;
         $this->userEventRepository = $userEventRepository;
         $this->synchronizer = $synchronizer;
-        $this->delayedEventDispatcher = $delayedEventDispatcher;
+        $this->eventDispatcher = $eventDispatcher;
         $this->dateTime = $dateTime;
     }
 
@@ -115,7 +115,7 @@ class ConvertRegistrationViewToSheet
         $this->synchronizer->set($registrationTemplateData, $user);
 
         $sheetUpdatedEvent = new SheetUpdatedEvent($sheet);
-        $this->delayedEventDispatcher->dispatch(Events::SHEET_UPDATED, $sheetUpdatedEvent);
+        $this->eventDispatcher->dispatch(Events::SHEET_UPDATED, $sheetUpdatedEvent);
 
         return $sheet;
     }
@@ -166,7 +166,6 @@ class ConvertRegistrationViewToSheet
         );
 
         $sheet = $this->createSheet(
-            $registrationView->reference,
             $sheetAndParticipantTemplateDataView->sheetTitle,
             $event,
             $type,
@@ -174,13 +173,14 @@ class ConvertRegistrationViewToSheet
             $sheetAndParticipantTemplateDataView->sheetRegistrationData
         );
 
-        $this->createParticipant($sheet, $user, $sheetAndParticipantTemplateDataView->participantRegistrationData);
+        $participant = $this->createParticipant($sheet, $user, $sheetAndParticipantTemplateDataView->participantRegistrationData);
+
+        $this->save($registrationView->reference, $sheet, $participant);
 
         return $sheet;
     }
 
     /**
-     * @param string $reference Comexposium reference
      * @param string $sheetTitle
      * @param Event  $event
      * @param Type   $type
@@ -190,7 +190,6 @@ class ConvertRegistrationViewToSheet
      * @return Sheet
      */
     private function createSheet(
-        string $reference,
         string $sheetTitle,
         Event $event,
         Type $type,
@@ -207,6 +206,17 @@ class ConvertRegistrationViewToSheet
         $sheet->setRegistrationData($sheetRegistrationData);
         $sheet->setTitle($sheetTitle);
         $sheet->setImported(true);
+
+        return $sheet;
+    }
+
+    /**
+     * @param string      $reference Comexposium reference
+     * @param Sheet       $sheet
+     * @param Participant $participant
+     */
+    private function save(string $reference, Sheet $sheet, Participant $participant): void
+    {
         $this->sheetRepository->add($sheet);
 
         $this->sheetExtraDataRepository->add(
@@ -218,7 +228,8 @@ class ConvertRegistrationViewToSheet
             )
         );
 
-        return $sheet;
+        $this->participantRepository->add($participant);
+        $this->userEventRepository->add(new UserEvent($participant->getUser(), $sheet->getEvent(), $sheet->getType()));
     }
 
     /**
@@ -237,9 +248,6 @@ class ConvertRegistrationViewToSheet
             false
         );
         $participant->setImported(true);
-        $this->participantRepository->add($participant);
-
-        $this->userEventRepository->add(new UserEvent($user, $sheet->getEvent(), $sheet->getType()));
 
         return $participant;
     }

@@ -11,7 +11,6 @@
 namespace Proximum\Vimeet\Tests\Application\ThirdParty\Comexposium\Webservice\Handler;
 
 use PHPUnit\Framework\TestCase;
-use Proximum\Vimeet\Application\Adapter\DelayedEventDispatcherInterface;
 use Proximum\Vimeet\Application\Event\Events;
 use Proximum\Vimeet\Application\Event\Sheet\SheetUpdatedEvent;
 use Proximum\Vimeet\Application\ThirdParty\Comexposium\Webservice\Handler\ConvertRegistrationViewToSheet;
@@ -34,6 +33,7 @@ use Proximum\Vimeet\Domain\Repository\User\Event\ExtraDataRepositoryInterface as
 use Proximum\Vimeet\Domain\Repository\UserEventRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\UserRepositoryInterface;
 use Proximum\Vimeet\Domain\Template\TemplateData;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 class ConvertRegistrationViewToSheetTest extends TestCase
 {
@@ -121,8 +121,8 @@ class ConvertRegistrationViewToSheetTest extends TestCase
         $synchronizer = $this->prophesize(Synchronizer::class);
         $synchronizer->set($templateData->reveal(), $expectedUser)->shouldBeCalled();
 
-        $delayedEventDispatcher = $this->prophesize(DelayedEventDispatcherInterface::class);
-        $delayedEventDispatcher
+        $eventDispatcher = $this->prophesize(EventDispatcherInterface::class);
+        $eventDispatcher
             ->dispatch(Events::SHEET_UPDATED, new SheetUpdatedEvent($expectedSheet))
             ->shouldBeCalled()
         ;
@@ -149,7 +149,7 @@ class ConvertRegistrationViewToSheetTest extends TestCase
             $userEventExtraDataRepository->reveal(),
             $userEventRepository->reveal(),
             $synchronizer->reveal(),
-            $delayedEventDispatcher->reveal(),
+            $eventDispatcher->reveal(),
             $dateTime
         );
         $importSheetHandler->handle($event->reveal(), $type->reveal(), $registrationView, $templateData->reveal());

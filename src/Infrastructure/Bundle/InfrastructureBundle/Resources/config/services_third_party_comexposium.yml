@@ -52,7 +52,7 @@ services:
             - '@repository.user.event.extra_data_repository'
             - '@vimeet_infrastructure.repository.user_event_repository'
             - '@account.synchronizer'
-            - '@vimeet_infrastructure.adapter.delayed_event_dispatcher'
+            - '@event_dispatcher'
             - '@datetime'
 
     Proximum\Vimeet\Application\ThirdParty\Comexposium\Webservice\Handler\SheetAndParticipantTemplateDataHandler: ~
