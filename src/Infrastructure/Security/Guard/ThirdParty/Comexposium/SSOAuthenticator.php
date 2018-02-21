@@ -171,7 +171,7 @@ final class SSOAuthenticator extends AbstractGuardAuthenticator
     {
         $this->flashBag->add('error', 'flash.sso.comexposium.error');
 
-        return new RedirectResponse($this->router->generate('event'));
+        return new RedirectResponse($this->router->generate('event_login'));
     }
 
     /**
