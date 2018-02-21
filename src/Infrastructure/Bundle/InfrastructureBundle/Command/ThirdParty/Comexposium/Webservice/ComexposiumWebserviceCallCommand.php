@@ -15,6 +15,10 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
+/**
+ * This command is for development purpose
+ * I'll like to remove it, remove it.
+ */
 class ComexposiumWebserviceCallCommand extends Command
 {
     const NAME = 'vimeet:comexposium:call';
@@ -48,10 +52,6 @@ class ComexposiumWebserviceCallCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $response = $this->comexposiumWebservice->getRegistrationsReference('13389');
-        //$response = $this->comexposiumWebservice->getEventParameters('13389');
-        //$response = $this->comexposiumWebservice->getParameters();
-        //$response = $this->comexposiumWebservice->getRegistrations('13389', ['2201249', '2276270']);
-        dump($response);
+        $this->comexposiumWebservice->getRegistrationsReference('13389');
     }
 }
