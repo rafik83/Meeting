@@ -42,7 +42,7 @@ interface JobQueueInterface
      * @param string $emailToNotify
      * @param string $locale
      */
-    public function printPlanning(array $types, $orderBy, $emailToNotify, $locale);
+    public function printPlanning(array $types, string $orderBy, $emailToNotify, $locale) :void;
 
     /**
      * @param Event  $event
@@ -50,8 +50,6 @@ interface JobQueueInterface
      * @param string $emailToNotify
      * @param string $locale
      * @param string $orderBy
-     *
-     * @return
      */
     public function printSheetsPdf(
         Event $event,
