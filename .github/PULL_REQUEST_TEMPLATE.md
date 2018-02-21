@@ -24,5 +24,5 @@ Definition of Done:
 - [ ] 10. Copy/Paste all new translations keys in the corresponding user story on Jira
 - [ ] 11. To be reviewed (have at least one "approve") in order to pass the feature to "preprod"
 
-*Cross out unrelevant item of the DoD (items 1 to 5 only), example:*
+*Cross out unrelevant item of the DoD, example:*
 - ~~Generate DB migration if the structure changes~~
