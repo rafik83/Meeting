@@ -10,6 +10,9 @@
 
 namespace Proximum\Vimeet\Application\ThirdParty\Comexposium\Webservice\Handler;
 
+use Proximum\Vimeet\Application\Adapter\DelayedEventDispatcherInterface;
+use Proximum\Vimeet\Application\Event\Events;
+use Proximum\Vimeet\Application\Event\Sheet\SheetUpdatedEvent;
 use Proximum\Vimeet\Application\ThirdParty\Comexposium\Webservice\Sheet\SheetExtraDataType;
 use Proximum\Vimeet\Application\ThirdParty\Comexposium\Webservice\View\RegistrationView;
 use Proximum\Vimeet\Domain\Account\Synchronizer;
@@ -55,6 +58,9 @@ class ConvertRegistrationViewToSheet
     /** @var Synchronizer */
     private $synchronizer;
 
+    /** @var DelayedEventDispatcherInterface */
+    private $delayedEventDispatcher;
+
     /** @var \DateTimeInterface */
     private $dateTime;
 
@@ -67,6 +73,7 @@ class ConvertRegistrationViewToSheet
         UserEventExtraDataRepositoryInterface $userEventExtraDataRepository,
         UserEventRepositoryInterface $userEventRepository,
         Synchronizer $synchronizer,
+        DelayedEventDispatcherInterface $delayedEventDispatcher,
         \DateTimeInterface $dateTime
     ) {
         $this->sheetAndParticipantTemplateDataHandler = $sheetAndParticipantTemplateDataHandler;
@@ -77,6 +84,7 @@ class ConvertRegistrationViewToSheet
         $this->userEventExtraDataRepository = $userEventExtraDataRepository;
         $this->userEventRepository = $userEventRepository;
         $this->synchronizer = $synchronizer;
+        $this->delayedEventDispatcher = $delayedEventDispatcher;
         $this->dateTime = $dateTime;
     }
 
@@ -103,7 +111,11 @@ class ConvertRegistrationViewToSheet
         }
 
         $sheet = $this->createSheetAndParticipant($event, $type, $user, $registrationView, $registrationTemplateData);
+
         $this->synchronizer->set($registrationTemplateData, $user);
+
+        $sheetUpdatedEvent = new SheetUpdatedEvent($sheet);
+        $this->delayedEventDispatcher->dispatch(Events::SHEET_UPDATED, $sheetUpdatedEvent);
 
         return $sheet;
     }
