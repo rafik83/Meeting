@@ -92,6 +92,9 @@ security:
                 secret:   '%secret%'
                 lifetime: 2592000
                 path:     /
+            guard:
+                authenticators:
+                    - Proximum\Vimeet\Infrastructure\Security\Guard\ThirdParty\Comexposium\SSOAuthenticator
             logout:
                 path: event_logout
                 target: event

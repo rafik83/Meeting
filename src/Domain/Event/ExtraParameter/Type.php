@@ -24,12 +24,18 @@ class Type
     const TYPE_VIANEO_CONCERNED_TYPES_ID = 'vianeo_concerned_types_id';
 
     public const TYPE_COMEXPOSIUM_SSO_ENABLED = 'comexposium_sso_enabled';
+    public const TYPE_COMEXPOSIUM_SSO_SALON = 'comexposium_sso_salon';
+    public const TYPE_COMEXPOSIUM_SSO_SESSION_SALON = 'comexposium_sso_session_salon';
+    public const TYPE_COMEXPOSIUM_SSO_APPLICATION = 'comexposium_sso_application';
 
-    const TYPES = [
+    public const TYPES = [
         self::TYPE_LENI_USER,
         self::TYPE_LENI_EVENT,
         self::TYPE_VIANEO_ENDPOINT,
         self::TYPE_VIANEO_CONCERNED_TYPES_ID,
         self::TYPE_COMEXPOSIUM_SSO_ENABLED,
+        self::TYPE_COMEXPOSIUM_SSO_SALON,
+        self::TYPE_COMEXPOSIUM_SSO_SESSION_SALON,
+        self::TYPE_COMEXPOSIUM_SSO_APPLICATION,
     ];
 }

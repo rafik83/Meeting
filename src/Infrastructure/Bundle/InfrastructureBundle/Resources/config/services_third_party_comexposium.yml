@@ -4,14 +4,6 @@ services:
             - '@adapter.http_adapter'
             - '%comexposium_check_user_token_endpoint%'
 
-    Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\ThirdParty\Comexposium\SSO\LoginAction:
-        arguments:
-            - '@adapter.authorization_checker'
-            - '@adapter.authentication_manager'
-            - '@repository.event.extra_parameter_repository'
-            - '@Proximum\Vimeet\Infrastructure\Adapter\QueryBus'
-            - '@session.flash_bag'
-
     Proximum\Vimeet\Application\ThirdParty\Comexposium\SSO\Application\Query\SSOCheckerHandler:
         arguments:
             - '@vimeet_infrastructure.repository.user_repository'
@@ -19,3 +11,23 @@ services:
             - '@Proximum\Vimeet\Application\ThirdParty\Comexposium\SSO\TokenChecker'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\ThirdParty\Comexposium\SSO\Application\Query\SSOChecker }
+
+    Proximum\Vimeet\Application\ThirdParty\Comexposium\SSO\Application\Query\SSOComexposiumViewQueryHandler:
+        arguments:
+            - '@repository.event.extra_parameter_repository'
+            - '@adapter.router'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\ThirdParty\Comexposium\SSO\Application\Query\SSOComexposiumViewQuery }
+
+    Proximum\Vimeet\Infrastructure\Security\Guard\ThirdParty\Comexposium\SSOAuthenticator:
+        arguments:
+            - '@Proximum\Vimeet\Application\ThirdParty\Comexposium\SSO\Application\Query\SSOCheckerHandler'
+            - '@Proximum\Vimeet\Domain\Event\EventByHostResolver'
+            - '@repository.event.extra_parameter_repository'
+            - '@session.flash_bag'
+            - '@adapter.router'
+            - '@Proximum\Vimeet\Infrastructure\Security\Guard\ThirdParty\Comexposium\SSOAuthenticationSuccessHandler'
+
+    Proximum\Vimeet\Infrastructure\Security\Guard\ThirdParty\Comexposium\SSOAuthenticationSuccessHandler:
+        arguments:
+            - '@security.http_utils'
