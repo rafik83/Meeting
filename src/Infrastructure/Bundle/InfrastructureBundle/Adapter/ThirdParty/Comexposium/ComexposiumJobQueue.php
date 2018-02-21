@@ -21,12 +21,12 @@ class ComexposiumJobQueue extends AbstractJobQueueAdapter implements Comexposium
     /**
      * {@inheritdoc}
      */
-    public function getRegistrations(Event $event, string $registrationReferences): void
+    public function getRegistrations(Event $event, array $registrationReferences): void
     {
         $job = new Job(ComexposiumGetRegistrationsCommand::NAME,
             [
                 $event->getId(),
-                $registrationReferences,
+                implode(',', $registrationReferences),
             ],
             true,
             Job::DEFAULT_QUEUE,

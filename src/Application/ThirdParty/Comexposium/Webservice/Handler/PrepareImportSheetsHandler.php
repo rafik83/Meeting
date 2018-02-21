@@ -18,6 +18,8 @@ use Proximum\Vimeet\Domain\Repository\EventRepositoryInterface;
 
 class PrepareImportSheetsHandler
 {
+    private const CHUNK_SIZE = 100;
+
     /** @var EventRepositoryInterface */
     private $eventRepository;
 
@@ -60,8 +62,12 @@ class PrepareImportSheetsHandler
                 $eventReferenceExtraParameter->getValue()
             );
 
-            foreach ($registrationReferences as $registrationReference) {
-                $this->comexposiumJobQueue->getRegistrations($event, $registrationReference);
+            if (empty($registrationReferences)) {
+                continue;
+            }
+
+            foreach (\array_chunk($registrationReferences, self::CHUNK_SIZE, false) as $registrationReferencesChunk) {
+                $this->comexposiumJobQueue->getRegistrations($event, $registrationReferencesChunk);
             }
         }
     }

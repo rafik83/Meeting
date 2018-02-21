@@ -50,8 +50,7 @@ class PrepareImportSheetsHandlerTest extends TestCase
         ;
 
         $comexposiumJobQueue = $this->prophesize(ComexposiumJobQueueInterface::class);
-        $comexposiumJobQueue->getRegistrations($event->reveal(), '987654')->shouldBeCalled();
-        $comexposiumJobQueue->getRegistrations($event->reveal(), '1337')->shouldBeCalled();
+        $comexposiumJobQueue->getRegistrations($event->reveal(), ['987654', '1337'])->shouldBeCalled();
 
         $prepareImportSheetsHandler = new PrepareImportSheetsHandler(
             $eventRepository->reveal(),

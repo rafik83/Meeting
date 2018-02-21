@@ -15,8 +15,8 @@ use Proximum\Vimeet\Domain\Model\Event;
 interface ComexposiumJobQueueInterface
 {
     /**
-     * @param Event  $event
-     * @param string $registrationReferences separated by a comma
+     * @param Event    $event
+     * @param string[] $registrationReferences
      */
-    public function getRegistrations(Event $event, string $registrationReferences): void;
+    public function getRegistrations(Event $event, array $registrationReferences): void;
 }
