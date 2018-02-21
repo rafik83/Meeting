@@ -44,12 +44,12 @@ class PrepareImportSheetsHandler
 
     public function handle(): void
     {
-        $events = $this->eventRepository->findEventWithParameters([Type::TYPE_COMEXPOSIUM_EVENT]);
+        $events = $this->eventRepository->findEventWithParameters([Type::TYPE_COMEXPOSIUM_EVENT_REFERENCE]);
 
         foreach ($events as $event) {
             $eventReferenceExtraParameter = $this->extraParameterRepository->findByEventAndType(
                 $event,
-                Type::TYPE_COMEXPOSIUM_EVENT
+                Type::TYPE_COMEXPOSIUM_EVENT_REFERENCE
             );
 
             if (!$eventReferenceExtraParameter instanceof ExtraParameter) {
@@ -61,7 +61,7 @@ class PrepareImportSheetsHandler
             );
 
             foreach ($registrationReferences as $registrationReference) {
-                $this->comexposiumJobQueue->getRegistration($event, $registrationReference);
+                $this->comexposiumJobQueue->getRegistrations($event, $registrationReference);
             }
         }
     }

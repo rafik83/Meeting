@@ -27,7 +27,7 @@ class PrepareImportSheetsHandlerTest extends TestCase
 
         $eventRepository = $this->prophesize(EventRepositoryInterface::class);
         $eventRepository
-            ->findEventWithParameters([Type::TYPE_COMEXPOSIUM_EVENT])
+            ->findEventWithParameters([Type::TYPE_COMEXPOSIUM_EVENT_REFERENCE])
             ->shouldBeCalled()
             ->willReturn([$event->reveal()])
         ;
@@ -37,7 +37,7 @@ class PrepareImportSheetsHandlerTest extends TestCase
 
         $extraParameterRepository = $this->prophesize(ExtraParameterRepositoryInterface::class);
         $extraParameterRepository
-            ->findByEventAndType($event->reveal(), Type::TYPE_COMEXPOSIUM_EVENT)
+            ->findByEventAndType($event->reveal(), Type::TYPE_COMEXPOSIUM_EVENT_REFERENCE)
             ->shouldBeCalled()
             ->willReturn($extraParameter->reveal())
         ;
@@ -50,8 +50,8 @@ class PrepareImportSheetsHandlerTest extends TestCase
         ;
 
         $comexposiumJobQueue = $this->prophesize(ComexposiumJobQueueInterface::class);
-        $comexposiumJobQueue->getRegistration($event->reveal(), '987654')->shouldBeCalled();
-        $comexposiumJobQueue->getRegistration($event->reveal(), '1337')->shouldBeCalled();
+        $comexposiumJobQueue->getRegistrations($event->reveal(), '987654')->shouldBeCalled();
+        $comexposiumJobQueue->getRegistrations($event->reveal(), '1337')->shouldBeCalled();
 
         $prepareImportSheetsHandler = new PrepareImportSheetsHandler(
             $eventRepository->reveal(),

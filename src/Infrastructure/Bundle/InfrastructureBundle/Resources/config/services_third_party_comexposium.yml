@@ -14,7 +14,7 @@ services:
         tags:
             - { name: console.command }
 
-    Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\ThirdParty\Comexposium\Webservice\ComexposiumGetRegistrationCommand:
+    Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\ThirdParty\Comexposium\Webservice\ComexposiumGetRegistrationsCommand:
         arguments:
             - '@vimeet_infrastructure.repository.event_repository'
             - '@Proximum\Vimeet\Application\ThirdParty\Comexposium\Webservice\Handler\ImportSheetsHandler'

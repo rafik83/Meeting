@@ -80,12 +80,12 @@ class ImportSheetsHandlerTest extends TestCase
 
         $extraParameterRepository = $this->prophesize(ExtraParameterRepositoryInterface::class);
         $extraParameterRepository
-            ->findByEventAndType($event->reveal(), ExtraParameterType::TYPE_COMEXPOSIUM_EVENT)
+            ->findByEventAndType($event->reveal(), ExtraParameterType::TYPE_COMEXPOSIUM_EVENT_REFERENCE)
             ->shouldBeCalled()
             ->willReturn($eventReferenceExtraParameter->reveal())
         ;
         $extraParameterRepository
-            ->findByEventAndType($event->reveal(), ExtraParameterType::TYPE_COMEXPOSIUM_TYPE_ID)
+            ->findByEventAndType($event->reveal(), ExtraParameterType::TYPE_COMEXPOSIUM_EXHIBITOR_TYPE_ID)
             ->shouldBeCalled()
             ->willReturn($typeIdExtraParameter->reveal())
         ;

@@ -14,19 +14,19 @@ use JMS\JobQueueBundle\Entity\Job;
 use Proximum\Vimeet\Application\Adapter\ThirdParty\Comexposium\ComexposiumJobQueueInterface;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Adapter\AbstractJobQueueAdapter;
-use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\ThirdParty\Comexposium\Webservice\ComexposiumGetRegistrationCommand;
+use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\ThirdParty\Comexposium\Webservice\ComexposiumGetRegistrationsCommand;
 
 class ComexposiumJobQueue extends AbstractJobQueueAdapter implements ComexposiumJobQueueInterface
 {
     /**
      * {@inheritdoc}
      */
-    public function getRegistration(Event $event, string $registrationReference): void
+    public function getRegistrations(Event $event, string $registrationReferences): void
     {
-        $job = new Job(ComexposiumGetRegistrationCommand::NAME,
+        $job = new Job(ComexposiumGetRegistrationsCommand::NAME,
             [
                 $event->getId(),
-                $registrationReference,
+                $registrationReferences,
             ],
             true,
             Job::DEFAULT_QUEUE,

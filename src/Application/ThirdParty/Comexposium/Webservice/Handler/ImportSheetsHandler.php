@@ -82,12 +82,12 @@ class ImportSheetsHandler
     {
         $eventReferenceExtraParameter = $this->extraParameterRepository->findByEventAndType(
             $event,
-            ExtraParameterType::TYPE_COMEXPOSIUM_EVENT
+            ExtraParameterType::TYPE_COMEXPOSIUM_EVENT_REFERENCE
         );
 
         $typeIdExtraParameter = $this->extraParameterRepository->findByEventAndType(
             $event,
-            ExtraParameterType::TYPE_COMEXPOSIUM_TYPE_ID
+            ExtraParameterType::TYPE_COMEXPOSIUM_EXHIBITOR_TYPE_ID
         );
 
         if (!$eventReferenceExtraParameter instanceof ExtraParameter

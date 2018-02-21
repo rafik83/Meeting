@@ -16,7 +16,7 @@ interface ComexposiumJobQueueInterface
 {
     /**
      * @param Event  $event
-     * @param string $registrationReference
+     * @param string $registrationReferences separated by a comma
      */
-    public function getRegistration(Event $event, string $registrationReference): void;
+    public function getRegistrations(Event $event, string $registrationReferences): void;
 }

@@ -17,9 +17,9 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class ComexposiumGetRegistrationCommand extends Command
+class ComexposiumGetRegistrationsCommand extends Command
 {
-    public const NAME = 'vimeet:comexposium:get-registration';
+    public const NAME = 'vimeet:comexposium:get-registrations';
 
     private const EVENT_ID = 'eventId';
     private const REGISTRATION_REFERENCES = 'registrationReferences';
@@ -27,7 +27,7 @@ class ComexposiumGetRegistrationCommand extends Command
     /** @var EventRepositoryInterface */
     private $eventRepository;
 
-    /** @var ImportSheetHandler */
+    /** @var ImportSheetsHandler */
     private $importSheetsHandler;
 
     public function __construct(EventRepositoryInterface $eventRepository, ImportSheetsHandler $importSheetsHandler)
