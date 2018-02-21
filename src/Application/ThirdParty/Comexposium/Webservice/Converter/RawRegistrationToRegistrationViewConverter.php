@@ -69,8 +69,8 @@ class RawRegistrationToRegistrationViewConverter
 
         return new ParticipantView(
             $this->getUserGender($user),
-            $user->prenom,
-            $user->nom,
+            $user->prenom ?? '',
+            $user->nom ?? '',
             $user->email,
             $this->convertLocale($user->referenceLangueResponsableSalon),
             $user->telephone ?? null,
