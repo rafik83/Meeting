@@ -117,6 +117,10 @@ class ImportSheetsHandler
         foreach ($rawRegistrations as $rawRegistration) {
             $registrationView = $this->rawRegistrationToRegistrationViewConverter->convert($rawRegistration);
 
+            if (!$registrationView instanceof RegistrationView) {
+                continue;
+            }
+
             if (!$this->isRegistrationHasAWhiteListedStatus($registrationView)) {
                 continue;
             }

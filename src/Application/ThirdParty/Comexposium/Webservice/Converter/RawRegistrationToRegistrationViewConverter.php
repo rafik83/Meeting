@@ -29,10 +29,16 @@ class RawRegistrationToRegistrationViewConverter
      *
      * @param \stdClass $registration
      *
-     * @return RegistrationView
+     * @return null|RegistrationView
      */
-    public function convert(\stdClass $registration): RegistrationView
+    public function convert(\stdClass $registration): ?RegistrationView
     {
+        $participantView = $this->getParticipantView($registration);
+
+        if (!$participantView instanceof ParticipantView) {
+            return null;
+        }
+
         return new RegistrationView(
             $registration->reference,
             $registration->raisonSociale,
@@ -43,7 +49,7 @@ class RawRegistrationToRegistrationViewConverter
             $this->convertAlpha3ToAlpha2CodeCountry($registration->referencePays),
             $registration->telephone ?? null,
             $registration->siteInternet ?? null,
-            $this->getParticipantView($registration),
+            $participantView,
             $this->convertToArray($registration->referenceNomenclatureManifestation)
         );
     }
@@ -51,10 +57,14 @@ class RawRegistrationToRegistrationViewConverter
     /**
      * @param \stdClass $registration
      *
-     * @return ParticipantView
+     * @return null|ParticipantView
      */
-    private function getParticipantView(\stdClass $registration): ParticipantView
+    private function getParticipantView(\stdClass $registration): ?ParticipantView
     {
+        if (!isset($registration->responsableSalon)) {
+            return null;
+        }
+
         $user = $registration->responsableSalon;
 
         return new ParticipantView(
