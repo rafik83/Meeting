@@ -40,6 +40,6 @@ class IndexHandler
     {
         $sheets = $this->sheetRepository->getByEvent($command->event);
 
-        $this->sheetIndexer->updateSheets($sheets);
+        $this->sheetIndexer->reindexSheets($sheets);
     }
 }
