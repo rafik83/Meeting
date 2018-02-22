@@ -247,6 +247,9 @@ fos_elastica:
                             type: boolean
                         hasGroup:
                             type: boolean
+                        reminderDate:
+                            type: date
+                            nullable: true
                         organizationCategory:
                             type: string
                             index: "not_analyzed"
