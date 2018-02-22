@@ -23,7 +23,11 @@ class NomenclatureView
         $this->nomenclatureItemViews = $nomenclatureItemViews;
     }
 
-    public function getTree($parentReference = null, $padding = 0)
+    /**
+     * @param null $parentReference
+     * @param int  $padding
+     */
+    public function showTree($parentReference = null, $padding = 0): void
     {
         if ($padding > 2) {
             return;
@@ -39,7 +43,7 @@ class NomenclatureView
                     $nomenclatureItemView->nomenclatureItemTranslationViews['en']->label
                 );
 
-                $this->getTree($nomenclatureItemView->reference, $padding + 1);
+                $this->showTree($nomenclatureItemView->reference, $padding + 1);
             }
         }
     }

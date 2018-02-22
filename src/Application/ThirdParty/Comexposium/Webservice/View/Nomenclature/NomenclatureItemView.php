@@ -21,6 +21,9 @@ class NomenclatureItemView
     /** @var NomenclatureItemTranslationView[] */
     public $nomenclatureItemTranslationViews;
 
+    /** @var null|NomenclatureItemView */
+    public $parentNomenclatureItemView;
+
     /**
      * @param string                            $reference
      * @param null|string                       $parentReference
@@ -34,5 +37,13 @@ class NomenclatureItemView
         $this->reference = $reference;
         $this->parentReference = $parentReference;
         $this->nomenclatureItemTranslationViews = $nomenclatureItemTranslationViews;
+    }
+
+    /**
+     * @param NomenclatureItemView $parentNomenclatureItemView
+     */
+    public function setParentNomenclatureItemView(NomenclatureItemView $parentNomenclatureItemView): void
+    {
+        $this->parentNomenclatureItemView = $parentNomenclatureItemView;
     }
 }

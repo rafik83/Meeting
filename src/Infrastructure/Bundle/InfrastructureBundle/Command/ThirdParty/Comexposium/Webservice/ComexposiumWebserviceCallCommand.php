@@ -11,6 +11,7 @@
 namespace Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\ThirdParty\Comexposium\Webservice;
 
 use Proximum\Vimeet\Application\ThirdParty\Comexposium\Webservice\Handler\ComexposiumWebservice;
+use Proximum\Vimeet\Application\ThirdParty\Comexposium\Webservice\Handler\PrepareNomenclatureHandler;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -26,14 +27,18 @@ class ComexposiumWebserviceCallCommand extends Command
     /** @var ComexposiumWebservice */
     private $comexposiumWebservice;
 
+    /** @var PrepareNomenclatureHandler */
+    private $prepareNomenclatureHandler;
+
     /**
      * @param ComexposiumWebservice $comexposiumWebservice
      */
-    public function __construct(ComexposiumWebservice $comexposiumWebservice)
+    public function __construct(ComexposiumWebservice $comexposiumWebservice, PrepareNomenclatureHandler $prepareNomenclatureHandler)
     {
         parent::__construct(self::NAME);
 
         $this->comexposiumWebservice = $comexposiumWebservice;
+        $this->prepareNomenclatureHandler = $prepareNomenclatureHandler;
     }
 
     /**
@@ -52,6 +57,6 @@ class ComexposiumWebserviceCallCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $this->comexposiumWebservice->getRegistrationsReference('13389');
+        $this->prepareNomenclatureHandler->handle('13389');
     }
 }
