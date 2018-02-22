@@ -701,6 +701,7 @@ form.sheet_comment.children.commercialStatus.status.refused_by_organizer: 'Refus
 form.sheet_comment.children.commercialStatus.status.registered: Inscrit
 form.sheet_comment.children.commercialStatus.status.verbal_agreement: 'Accord verbal'
 form.sheet_comment.children.filter.label: Filtrer
+form.sheet_comment.children.reminderDate.label: 'Date rappel'
 form.sheet_comment.children.submit.label: Enregistrer
 form.sheet_comment.children.text.placeholder: 'Écrire un commentaire'
 form.sheet_filter.children.agendaConfirmedStatus.choice.all: 'Peu importe'

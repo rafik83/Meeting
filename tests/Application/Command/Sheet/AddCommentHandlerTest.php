@@ -51,6 +51,7 @@ class AddCommentHandlerTest extends TestCase
         $this->author = $this->prophesize(Admin::class);
         $this->sheet = $this->prophesize(Sheet::class);
         $this->sheet->getCommercialStatus()->willReturn(CommercialStatus::STATUS_DO_NOT_CALL);
+        $this->sheet->getReminderDate()->shouldBeCalled()->willReturn($this->dateTime);
 
         $this->commentRepository = $this->prophesize(CommentRepositoryInterface::class);
         $this->sheetRepository = $this->prophesize(SheetRepositoryInterface::class);
@@ -113,6 +114,37 @@ class AddCommentHandlerTest extends TestCase
                 )
             )
             ->shouldBeCalled();
+
+        $command = new AddCommentHandler(
+            $this->sheetRepository->reveal(),
+            $this->commentRepository->reveal(),
+            $this->eventDispatcher->reveal(),
+            $this->dateTime
+        );
+
+        $command->handle($addComment);
+    }
+
+    public function testReminderDate()
+    {
+        $reminderDate = new \DateTime('2000-01-01');
+        $addComment = new AddComment($this->sheet->reveal(), $this->author->reveal());
+        $addComment->text = null;
+        $addComment->reminderDate = $reminderDate;
+
+        // expected
+        $expectedComment = new Comment(
+            $this->sheet->reveal(),
+            $this->author->reveal(),
+            'text',
+            $this->dateTime
+        );
+
+        // mock
+        $this->sheet->setReminderDate($reminderDate)->shouldBeCalled();
+        $this->sheet->setCommercialStatus('foo')->shouldNotBeCalled();
+        $this->commentRepository->add($expectedComment)->shouldNotBeCalled();
+        $this->sheetRepository->set($this->sheet->reveal())->shouldBeCalled();
 
         $command = new AddCommentHandler(
             $this->sheetRepository->reveal(),

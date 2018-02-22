@@ -184,6 +184,9 @@ class Sheet implements TraceableInterface
     /** @var string */
     private $commercialStatus = CommercialStatus::STATUS_NONE;
 
+    /** @var null|DateTimeInterface */
+    private $reminderDate;
+
     /**
      * Sheet constructor.
      *
@@ -1111,5 +1114,21 @@ class Sheet implements TraceableInterface
     public function setCommercialStatus(string $commercialStatus): void
     {
         $this->commercialStatus = $commercialStatus;
+    }
+
+    /**
+     * @return DateTimeInterface|null
+     */
+    public function getReminderDate(): ?DateTimeInterface
+    {
+        return $this->reminderDate;
+    }
+
+    /**
+     * @param DateTimeInterface|null $reminderDate
+     */
+    public function setReminderDate($reminderDate): void
+    {
+        $this->reminderDate = $reminderDate;
     }
 }
