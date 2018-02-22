@@ -15,7 +15,6 @@ services:
     Proximum\Vimeet\Application\ThirdParty\Comexposium\SSO\Application\Query\SSOComexposiumViewQueryHandler:
         arguments:
             - '@repository.event.extra_parameter_repository'
-            - '@adapter.router'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\ThirdParty\Comexposium\SSO\Application\Query\SSOComexposiumViewQuery }
 

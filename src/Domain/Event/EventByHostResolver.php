@@ -24,9 +24,8 @@ class EventByHostResolver
     /**
      * @param EventRepositoryInterface $eventRepository
      */
-    public function __construct(
-        EventRepositoryInterface $eventRepository
-    ) {
+    public function __construct(EventRepositoryInterface $eventRepository)
+    {
         $this->eventRepository = $eventRepository;
     }
 

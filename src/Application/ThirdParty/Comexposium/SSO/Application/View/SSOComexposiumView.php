@@ -25,9 +25,6 @@ class SSOComexposiumView
     public $locale;
 
     /** @var string */
-    public $referer;
-
-    /** @var string */
     public $email;
 
     public function __construct(
@@ -35,14 +32,12 @@ class SSOComexposiumView
         string $sessionSalon,
         string $application,
         string $locale,
-        string $referer,
         string $email
     ) {
         $this->salon = $salon;
         $this->sessionSalon = $sessionSalon;
         $this->application = $application;
         $this->locale = $locale;
-        $this->referer = $referer;
         $this->email = $email;
     }
 }

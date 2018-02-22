@@ -18,6 +18,7 @@ use Proximum\Vimeet\Domain\Event\EventByHostResolver;
 use Proximum\Vimeet\Domain\Event\ExtraParameter\Type;
 use Proximum\Vimeet\Domain\Exception\Event\EventException;
 use Proximum\Vimeet\Domain\Repository\Event\ExtraParameterRepositoryInterface;
+use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Route\Route;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -33,8 +34,6 @@ use Symfony\Component\Security\Guard\AbstractGuardAuthenticator;
 
 final class SSOAuthenticator extends AbstractGuardAuthenticator
 {
-    private const CHECK_PATH = 'event_login_check';
-
     /** @var SSOCheckerHandler */
     private $SSOCheckerHandler;
 
@@ -82,7 +81,7 @@ final class SSOAuthenticator extends AbstractGuardAuthenticator
      */
     public function supports(Request $request)
     {
-        return self::CHECK_PATH === $request->attributes->get('_route')
+        return Route::EVENT_LOGIN_CHECK === $request->attributes->get('_route')
             && $request->getMethod() === 'GET'
             && (bool) $request->query->get('comexposium_sso') === true
         ;
@@ -132,7 +131,6 @@ final class SSOAuthenticator extends AbstractGuardAuthenticator
      */
     public function getUser($credentials, UserProviderInterface $userProvider)
     {
-
         try {
             return $this->SSOCheckerHandler->handle(
                 new SSOChecker(
@@ -181,7 +179,6 @@ final class SSOAuthenticator extends AbstractGuardAuthenticator
     {
         return $this->SSOAuthenticationSuccessHandler->onAuthenticationSuccess($request, $token);
     }
-
 
     /**
      * {@inheritdoc}

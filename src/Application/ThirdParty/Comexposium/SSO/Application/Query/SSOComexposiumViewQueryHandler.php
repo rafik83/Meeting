@@ -10,25 +10,18 @@
 
 namespace Proximum\Vimeet\Application\ThirdParty\Comexposium\SSO\Application\Query;
 
-use Proximum\Vimeet\Application\Adapter\RouterInterface;
 use Proximum\Vimeet\Application\ThirdParty\Comexposium\SSO\Application\View\SSOComexposiumView;
 use Proximum\Vimeet\Domain\Event\ExtraParameter\Type;
 use Proximum\Vimeet\Domain\Repository\Event\ExtraParameterRepositoryInterface;
 
 class SSOComexposiumViewQueryHandler
 {
-    private const DEFAULT_ROUTE = 'event';
-
     /** @var ExtraParameterRepositoryInterface */
     private $extraParameterRepository;
 
-    /** @var RouterInterface */
-    private $router;
-
-    public function __construct(ExtraParameterRepositoryInterface $extraParameterRepository, RouterInterface $router)
+    public function __construct(ExtraParameterRepositoryInterface $extraParameterRepository)
     {
         $this->extraParameterRepository = $extraParameterRepository;
-        $this->router = $router;
     }
 
     public function handle(SSOComexposiumViewQuery $query): ?SSOComexposiumView
@@ -52,7 +45,6 @@ class SSOComexposiumViewQueryHandler
             $sessionSalon->getValue(),
             $application->getValue(),
             $query->locale === 'fr' ? 'fre-FR' : 'eng-GB',
-            $query->referer ?? $this->router->generate(self::DEFAULT_ROUTE),
             $query->email
         );
     }
