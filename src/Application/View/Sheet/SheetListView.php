@@ -121,28 +121,32 @@ class SheetListView
     /** @var bool */
     public $attend;
 
+    /** @var null|\DateTimeInterface */
+    public $reminderDate;
+
     /**
-     * @param int                  $id
-     * @param string               $title
-     * @param string               $state
-     * @param string               $validationState
-     * @param int                  $completeness
-     * @param bool                 $enabled
-     * @param bool                 $inCatalog
-     * @param bool                 $attend
-     * @param array                $categories
-     * @param string               $type
-     * @param SheetParticipantView $owner
-     * @param string               $follower
-     * @param string|null          $commercialStatus
-     * @param \DateTimeInterface   $createdAt
-     * @param \DateTimeInterface   $lastLoginAt
-     * @param string               $impersonationToken
-     * @param int                  $countParticipant
-     * @param bool                 $hasGroup
-     * @param string|null          $groupTitle
-     * @param string|null          $spotReference
-     * @param Trace|null           $trace
+     * @param int                     $id
+     * @param string                  $title
+     * @param string                  $state
+     * @param string                  $validationState
+     * @param int                     $completeness
+     * @param bool                    $enabled
+     * @param bool                    $inCatalog
+     * @param bool                    $attend
+     * @param array                   $categories
+     * @param string                  $type
+     * @param SheetParticipantView    $owner
+     * @param string                  $follower
+     * @param string|null             $commercialStatus
+     * @param \DateTimeInterface|null $reminderDate
+     * @param \DateTimeInterface      $createdAt
+     * @param \DateTimeInterface      $lastLoginAt
+     * @param string                  $impersonationToken
+     * @param int                     $countParticipant
+     * @param bool                    $hasGroup
+     * @param string|null             $groupTitle
+     * @param string|null             $spotReference
+     * @param Trace|null              $trace
      */
     public function __construct(
         $id,
@@ -158,6 +162,7 @@ class SheetListView
         SheetParticipantView $owner,
         $follower,
         ?string $commercialStatus = null,
+        ?\DateTimeInterface $reminderDate = null,
         \DateTimeInterface $createdAt,
         \DateTimeInterface $lastLoginAt = null,
         $impersonationToken,
@@ -180,6 +185,7 @@ class SheetListView
         $this->owner              = $owner;
         $this->follower           = $follower;
         $this->commercialStatus   = $commercialStatus;
+        $this->reminderDate       = $reminderDate;
         $this->createdAt          = $createdAt;
         $this->lastLoginAt        = $lastLoginAt;
         $this->impersonationToken = $impersonationToken;
@@ -225,6 +231,14 @@ class SheetListView
     public function hasCommercialStatus(): bool
     {
         return $this->commercialStatus !== null;
+    }
+
+    /**
+     * @return bool
+     */
+    public function hasReminderDate(): bool
+    {
+        return $this->reminderDate !== null;
     }
 
     /**

@@ -17,6 +17,7 @@ use Proximum\Vimeet\Application\Query\Tip\TipTranslationViewQueryHandler;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\File;
 use Proximum\Vimeet\Domain\Model\Participant;
+use Proximum\Vimeet\Domain\Model\Spot;
 use Proximum\Vimeet\Domain\Planning\PlanningOrderedBy;
 use Proximum\Vimeet\Domain\Planning\PlanningPrint;
 use Proximum\Vimeet\Domain\Repository\FileRepositoryInterface;
@@ -121,7 +122,7 @@ class ExportPlanningHandler
     {
         $participants = $this->participantRepository->getParticipantsWithSheetInCatalogAndActiveByTypeIds($exportPlanning->typeIds);
 
-        if (count($participants) === 0) {
+        if (\count($participants) === 0) {
             return;
         }
 
@@ -161,6 +162,7 @@ class ExportPlanningHandler
                 $event->getTitle(), // Event Title
                 $event->getDescription($event->getAvailableLocale($participant->getLocale())), // Event description
                 $event->getDomain(), // Domain
+                $participant->getSheet()->getSpot() instanceof Spot ? $participant->getSheet()->getSpot()->getReference() : null,
                 $event->getLogo(), // Event logo
                 $event->getConfiguration()->getOrganiserWebsite(), // Organiser website
                 $event->getConfiguration()->getContactFirstName(), // event contact first name
@@ -203,7 +205,7 @@ class ExportPlanningHandler
      * @param ExportPlanning $exportPlanning
      * @param File           $file
      */
-    private function notifyCreationOfFile(Event $event, ExportPlanning $exportPlanning, File $file)
+    private function notifyCreationOfFile(Event $event, ExportPlanning $exportPlanning, File $file): void
     {
         $types = $this->typeRepository->getTypeViewsByIds($exportPlanning->typeIds, $event->getAvailableLocale($exportPlanning->locale));
 
@@ -224,7 +226,7 @@ class ExportPlanningHandler
      * @param string        $orderBy
      * @param Participant[] $participants
      */
-    private function orderParticipant(Event $event, $orderBy, array &$participants)
+    private function orderParticipant(Event $event, $orderBy, array &$participants): void
     {
         if ($orderBy === PlanningOrderedBy::ORDER_BY_PARTICIPANT_LAST_NAME) {
             // Load cache for the participant last name to avoid error in the usort
@@ -249,6 +251,30 @@ class ExportPlanningHandler
                 $right = $this->sheetInfoGuesserCache->guessSheetTitle($participantRight->getSheet(), $event->getFallback());
 
                 return strcasecmp($left, $right);
+            });
+        } elseif ($orderBy === PlanningOrderedBy::ORDER_BY_SPOT_REFERENCE) {
+            usort($participants, function (Participant $participantLeft, Participant $participantRight) use ($event) {
+                $spotLeftReference = '';
+                $spotRightReference = '';
+                $spotLeft =  $participantLeft->getSheet()->getSpot();
+                $spotRight = $participantRight->getSheet()->getSpot();
+
+                if ($spotLeft instanceof Spot) {
+                    $spotLeftReference = $spotLeft->getReference();
+                }
+
+                if ($spotRight instanceof Spot) {
+                    $spotRightReference = $spotRight->getReference();
+                }
+
+                if ($spotLeftReference === $spotRightReference) {
+                    $left  = $this->sheetInfoGuesserCache->guessSheetTitle($participantLeft->getSheet(), $event->getFallback());
+                    $right = $this->sheetInfoGuesserCache->guessSheetTitle($participantRight->getSheet(), $event->getFallback());
+
+                    return strcasecmp($left, $right);
+                }
+
+                return strcasecmp($spotLeftReference, $spotRightReference);
             });
         }
     }

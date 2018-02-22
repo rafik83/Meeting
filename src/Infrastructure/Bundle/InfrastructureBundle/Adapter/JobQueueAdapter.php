@@ -35,6 +35,7 @@ use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\IndexShee
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\Order\ExportOrderCommand;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\Planner\ExportPlannerCommand;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\Planner\ImportPlannerCommand;
+use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\Planning\GeneratePlanningCommand;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\SendEmailingCommand;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\Sheet\PrintPdfCommand;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\Sheet\Index\IndexInCatalogSheetsByEventCommand;
@@ -57,14 +58,14 @@ class JobQueueAdapter extends AbstractJobQueueAdapter implements JobQueueInterfa
     /**
      * {@inheritdoc}
      */
-    public function printPlanning(array $types, $orderBy, $emailToNotify, $locale)
+    public function printPlanning(array $types, string $orderBy, $emailToNotify, $locale): void
     {
         $typeOptions = array_map(function (Type $type) {
             return sprintf('--types=%s', $type->getId());
         }, $types);
 
         $job = new Job(
-            'vimeet:planning:generate',
+            GeneratePlanningCommand::NAME,
             array_merge(
                 $typeOptions,
                 [

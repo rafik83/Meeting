@@ -247,6 +247,9 @@ fos_elastica:
                             type: boolean
                         hasGroup:
                             type: boolean
+                        reminderDate:
+                            type: date
+                            nullable: true
                         organizationCategory:
                             type: string
                             index: "not_analyzed"
@@ -423,7 +426,8 @@ payum:
 # Sentry configuration (Data source name)
 sentry:
     dsn: "%sentry_dsn%"
-    environment: "%kernel.environment%"
+    options:
+        environment: "%kernel.environment%"
 
 coop_tilleuls_ovh:
     endpoint_name:      "%ovh_endpoint_name%"

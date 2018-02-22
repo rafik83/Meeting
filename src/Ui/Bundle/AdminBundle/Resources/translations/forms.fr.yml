@@ -17,6 +17,7 @@ form.admin_activate_account_password.children.password.children.second.label: 'R
 form.admin_activate_account_password.children.submit.label: Envoyer
 form.admin_export_planning.children.orderBy.choice.participant_last_name: 'Par nom de famille du participant'
 form.admin_export_planning.children.orderBy.choice.sheet_title: 'Par nom de société'
+form.admin_export_planning.children.orderBy.choice.spot_reference: 'Par lieux, noms de société'
 form.admin_export_planning.children.orderBy.label: 'Ordre de l''export des plannings'
 form.admin_export_planning.children.submit.label: Exporter
 form.admin_export_planning.children.types.label: Types
@@ -702,6 +703,7 @@ form.sheet_comment.children.commercialStatus.status.refused_by_organizer: 'Refus
 form.sheet_comment.children.commercialStatus.status.registered: Inscrit
 form.sheet_comment.children.commercialStatus.status.verbal_agreement: 'Accord verbal'
 form.sheet_comment.children.filter.label: Filtrer
+form.sheet_comment.children.reminderDate.label: 'Date rappel'
 form.sheet_comment.children.submit.label: Enregistrer
 form.sheet_comment.children.text.placeholder: 'Écrire un commentaire'
 form.sheet_filter.children.agendaConfirmedStatus.choice.all: 'Peu importe'
@@ -756,6 +758,7 @@ form.sheet_filter.children.phoneValidationStatus.choice.all_confirmed: Confirmé
 form.sheet_filter.children.phoneValidationStatus.choice.none_confirmed: 'Non confirmé'
 form.sheet_filter.children.phoneValidationStatus.choice.partly_confirmed: 'Partiellement confirmé'
 form.sheet_filter.children.phoneValidationStatus.label: 'A confirmé son portable'
+form.sheet_filter.children.reminderDate.label: 'Date rappel'
 form.sheet_filter.children.state.label: Etat
 form.sheet_filter.children.text_search.label: 'Titre de la fiche, nom ou email de participant'
 form.sheet_filter.children.type.label: Type

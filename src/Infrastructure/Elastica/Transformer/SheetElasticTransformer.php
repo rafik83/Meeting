@@ -209,6 +209,7 @@ class SheetElasticTransformer implements ModelToElasticaTransformerInterface
                 'hasGroup'                     => $sheet->hasGroup(),
                 'hasSpot'                      => $sheet->getSpot() !== null,
                 'availableSlotIds'             => $this->buildAvailableSlots($sheet),
+                'reminderDate'                 => null !== $sheet->getReminderDate() ? $sheet->getReminderDate()->format('c') : null
             ],
             $contentByLocale
         ));
