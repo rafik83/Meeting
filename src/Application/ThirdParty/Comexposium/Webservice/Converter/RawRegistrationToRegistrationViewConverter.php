@@ -10,13 +10,12 @@
 
 namespace Proximum\Vimeet\Application\ThirdParty\Comexposium\Webservice\Converter;
 
-use League\ISO3166\ISO3166;
 use Proximum\Vimeet\Application\ThirdParty\Comexposium\Webservice\View\ParticipantPositionView;
 use Proximum\Vimeet\Application\ThirdParty\Comexposium\Webservice\View\ParticipantView;
 use Proximum\Vimeet\Application\ThirdParty\Comexposium\Webservice\View\RegistrationView;
 use Proximum\Vimeet\Domain\Template\TemplateObject\Gender;
 
-class RawRegistrationToRegistrationViewConverter
+class RawRegistrationToRegistrationViewConverter extends ComexposiumConverter
 {
     private CONST STATUS_WHITE_LIST = ['VALIDE', 'INSTANCE'];
 
@@ -115,41 +114,6 @@ class RawRegistrationToRegistrationViewConverter
             },
             $positions
         );
-    }
-
-    /**
-     * @param string $countryAlpha3Code
-     *
-     * @return null|string
-     */
-    private function convertAlpha3ToAlpha2CodeCountry(string $countryAlpha3Code): ?string
-    {
-        try {
-            $country = (new ISO3166)->alpha3($countryAlpha3Code);
-            return $country[ISO3166::KEY_ALPHA2];
-        } catch (\Exception $exception) {}
-
-        return null;
-    }
-
-    /**
-     * @param array|\stdClass $data
-     *
-     * @return array
-     */
-    private function convertToArray($data): array
-    {
-        return \is_array($data) ? $data : [$data];
-    }
-
-    /**
-     * @param string $language
-     *
-     * @return string
-     */
-    private function convertLocale(string $language): string
-    {
-        return $language === 'FRA' ? 'fr' : 'en';
     }
 
     /**
