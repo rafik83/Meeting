@@ -130,7 +130,6 @@ class SecurityController extends Controller
         $ssoComexposiumView = $this->get(QueryBus::class)->handle(
             new SSOComexposiumViewQuery(
                 $eventDomain->getEvent(),
-                $request->headers->get('Referer'),
                 $request->getLocale(),
                 $email
             )
