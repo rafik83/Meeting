@@ -428,6 +428,7 @@ sentry:
     dsn: "%sentry_dsn%"
     options:
         environment: "%kernel.environment%"
+        error_types: E_ALL & ~E_WARNING & ~E_DEPRECATED & ~E_USER_DEPRECATED & ~E_USER_NOTICE & ~E_USER_WARNING & ~E_NOTICE & ~E_COMPILE_WARNING & ~E_CORE_WARNING
 
 coop_tilleuls_ovh:
     endpoint_name:      "%ovh_endpoint_name%"
