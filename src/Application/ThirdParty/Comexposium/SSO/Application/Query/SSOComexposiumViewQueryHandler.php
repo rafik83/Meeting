@@ -19,9 +19,19 @@ class SSOComexposiumViewQueryHandler
     /** @var ExtraParameterRepositoryInterface */
     private $extraParameterRepository;
 
-    public function __construct(ExtraParameterRepositoryInterface $extraParameterRepository)
-    {
+    /** @var null|string */
+    private $comexposiumSSOLoaderLibEndpoint;
+
+    /**
+     * @param ExtraParameterRepositoryInterface $extraParameterRepository
+     * @param null|string                       $comexposiumSSOLoaderLibEndpoint
+     */
+    public function __construct(
+        ExtraParameterRepositoryInterface $extraParameterRepository,
+        ?string $comexposiumSSOLoaderLibEndpoint
+    ) {
         $this->extraParameterRepository = $extraParameterRepository;
+        $this->comexposiumSSOLoaderLibEndpoint = $comexposiumSSOLoaderLibEndpoint;
     }
 
     public function handle(SSOComexposiumViewQuery $query): ?SSOComexposiumView
@@ -45,7 +55,8 @@ class SSOComexposiumViewQueryHandler
             $sessionSalon->getValue(),
             $application->getValue(),
             $query->locale === 'fr' ? 'fre-FR' : 'eng-GB',
-            $query->email
+            $query->email,
+            $this->comexposiumSSOLoaderLibEndpoint
         );
     }
 }

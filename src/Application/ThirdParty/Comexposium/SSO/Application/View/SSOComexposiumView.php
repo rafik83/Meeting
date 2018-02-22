@@ -27,17 +27,22 @@ class SSOComexposiumView
     /** @var string */
     public $email;
 
+    /** @var null|string */
+    public $comexposiumSSOLoaderLibEndpoint;
+
     public function __construct(
         string $salon,
         string $sessionSalon,
         string $application,
         string $locale,
-        string $email
+        string $email,
+        ?string $comexposiumSSOLoaderLibEndpoint
     ) {
         $this->salon = $salon;
         $this->sessionSalon = $sessionSalon;
         $this->application = $application;
         $this->locale = $locale;
         $this->email = $email;
+        $this->comexposiumSSOLoaderLibEndpoint = $comexposiumSSOLoaderLibEndpoint;
     }
 }
