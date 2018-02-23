@@ -119,6 +119,18 @@
                                             {% endfor %}
                                         </select>
                                     </div>
+                                    <div class="form-group">
+                                        <label class="form-label" for="tags">
+                                            {{ 'template.sheet_template.tags'|trans }}
+                                        </label>
+                                        <select class="form-control select2-builder" name="tags[{{ index|default('__TAGS__') }}][tag]" multiple="multiple">
+                                            {% for tag in sheet_template_tags|default([]) %}
+                                                <option value="{{ tag }}" {% if tag in config.tags %}selected="selected"{% endif %}>
+                                                    {{ ('template.tag.' ~ tag)|trans({}, 'templates') }}
+                                                </option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
                                 {% endif %}
                             </div>
                             <div class="modal-footer">
