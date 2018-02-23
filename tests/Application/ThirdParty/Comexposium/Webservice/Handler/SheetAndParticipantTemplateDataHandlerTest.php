@@ -33,12 +33,15 @@ class SheetAndParticipantTemplateDataHandlerTest extends TestCase
     {
         $aloneNomenclatureItemView = new NomenclatureItemView('999', null, []);
         $parentNomenclatureItemView = new NomenclatureItemView('88898', null, []);
-        $childNomenclatureItemView = new NomenclatureItemView('666', '88898', []);
-        $childNomenclatureItemView->setParentNomenclatureItemView($parentNomenclatureItemView);
+        $childNomenclatureItemView1 = new NomenclatureItemView('666', '88898', []);
+        $childNomenclatureItemView1->setParentNomenclatureItemView($parentNomenclatureItemView);
+        $childNomenclatureItemView2 = new NomenclatureItemView('1337', '88898', []);
+        $childNomenclatureItemView2->setParentNomenclatureItemView($parentNomenclatureItemView);
 
         $nomenclatureItemViews = [
             $aloneNomenclatureItemView,
-            $childNomenclatureItemView,
+            $childNomenclatureItemView1,
+            $childNomenclatureItemView2,
         ];
 
         $registrationView = new RegistrationView(

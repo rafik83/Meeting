@@ -61,7 +61,9 @@ class SheetAndParticipantTemplateDataHandler
         $data = [];
 
         foreach ($editableObjects as $editableObject) {
-            $data[$editableObject->getKey()] = $editableObject->getData();
+            if (!empty($editableObject->getData())) {
+                $data[$editableObject->getKey()] = $editableObject->getData();
+            }
         }
 
         return $data;
@@ -141,7 +143,7 @@ class SheetAndParticipantTemplateDataHandler
                 }
             }
 
-            $nomenclatureObject->setItems($availableKeys);
+            $nomenclatureObject->setItems(array_values(array_unique($availableKeys)));
 
             return;
         }
