@@ -21,10 +21,50 @@ class SheetAndParticipantTemplateDataHandler
     /**
      * @param RegistrationView $registrationView
      * @param TemplateData     $registrationTemplateData
+     * @param TemplateData     $sheetTemplateData
      *
      * @return SheetAndParticipantTemplateDataView
      */
     public function handle(
+        RegistrationView $registrationView,
+        TemplateData $registrationTemplateData,
+        TemplateData $sheetTemplateData
+    ): SheetAndParticipantTemplateDataView {
+        $sheetAndParticipantTemplateDataView = $this->getSheetAndParticipantTemplateDataView(
+            $registrationView,
+            $registrationTemplateData
+        );
+
+        $sheetAndParticipantTemplateDataView->setSheetTemplateData(
+            $this->getSheetTemplateData($registrationView, $sheetTemplateData)
+        );
+
+        return $sheetAndParticipantTemplateDataView;
+    }
+
+    /**
+     * @param RegistrationView $registrationView
+     * @param TemplateData     $sheetTemplateData
+     *
+     * @return array
+     */
+    private function getSheetTemplateData(RegistrationView $registrationView, TemplateData $sheetTemplateData): array
+    {
+        $editableObjects = $sheetTemplateData->getEditableObjects();
+
+        $sheetTemplateTaggedData = $this->getSheetTemplateTaggedData($registrationView);
+        $this->setData($editableObjects, $sheetTemplateTaggedData);
+
+        return [];
+    }
+
+    /**
+     * @param RegistrationView $registrationView
+     * @param TemplateData     $registrationTemplateData
+     *
+     * @return SheetAndParticipantTemplateDataView
+     */
+    private function getSheetAndParticipantTemplateDataView(
         RegistrationView $registrationView,
         TemplateData $registrationTemplateData
     ): SheetAndParticipantTemplateDataView {
@@ -33,11 +73,11 @@ class SheetAndParticipantTemplateDataHandler
 
         $editableObjects = $registrationTemplateData->getEditableObjects();
 
-        $sheetData = $this->getSheetData($registrationView);
-        $this->setData($editableObjects, $sheetData);
+        $sheetTaggedData = $this->getSheetTaggedData($registrationView);
+        $this->setData($editableObjects, $sheetTaggedData);
 
-        $participantData = $this->getParticipantData($registrationView);
-        $this->setData($editableObjects, $participantData);
+        $participantTaggedData = $this->getParticipantTaggedData($registrationView);
+        $this->setData($editableObjects, $participantTaggedData);
 
         foreach ($editableObjects as $editableObject) {
             if ($editableObject->hasTag(Tag::SHEET_DATA)) {
@@ -50,7 +90,7 @@ class SheetAndParticipantTemplateDataHandler
         }
 
         return new SheetAndParticipantTemplateDataView(
-            $sheetData[Tag::SHEET_TITLE],
+            $sheetTaggedData[Tag::SHEET_TITLE] ?? '',
             $sheetRegistrationData,
             $participantRegistrationData
         );
@@ -66,6 +106,11 @@ class SheetAndParticipantTemplateDataHandler
             foreach ($editableObjects as $editableObject) {
                 if ($editableObject->hasTag($tag) && $editableObject instanceof TemplateObject\ContentObjectInterface) {
                     if ($editableObject instanceof TemplateObject\Nomenclature) {
+                        if (is_array($value)) {
+                            // todo
+                            continue;
+                        }
+
                         $nomenclatureKey = $editableObject->getKeyForLabel($value);
                         $editableObject->setContentValue($nomenclatureKey);
                     } else {
@@ -81,7 +126,7 @@ class SheetAndParticipantTemplateDataHandler
      *
      * @return array
      */
-    private function getSheetData(RegistrationView $registrationView): array
+    private function getSheetTaggedData(RegistrationView $registrationView): array
     {
         return [
             Tag::SHEET_TITLE => $registrationView->companyName ?: $registrationView->participantView->getFullName(),
@@ -100,7 +145,7 @@ class SheetAndParticipantTemplateDataHandler
      *
      * @return array
      */
-    private function getParticipantData(RegistrationView $registrationView): array
+    private function getParticipantTaggedData(RegistrationView $registrationView): array
     {
         return [
             Tag::PARTICIPANT_GENDER => $registrationView->participantView->gender,
@@ -111,6 +156,18 @@ class SheetAndParticipantTemplateDataHandler
             Tag::PARTICIPANT_ZIPCODE => $registrationView->zipCode,
             Tag::PARTICIPANT_CITY => $registrationView->city,
             Tag::PARTICIPANT_COUNTRY => $registrationView->country,
+        ];
+    }
+
+    /**
+     * @param RegistrationView $registrationView
+     *
+     * @return array
+     */
+    private function getSheetTemplateTaggedData(RegistrationView $registrationView): array
+    {
+        return [
+            'sheet_template_generic_tag_1' => $registrationView->nomenclatureItemViews,
         ];
     }
 }

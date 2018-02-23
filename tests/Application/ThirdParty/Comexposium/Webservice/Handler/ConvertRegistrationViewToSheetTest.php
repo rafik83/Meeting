@@ -116,10 +116,11 @@ class ConvertRegistrationViewToSheetTest extends TestCase
         $participantRepository = $this->prophesize(ParticipantRepositoryInterface::class);
         $participantRepository->add($expectedParticipant);
 
-        $templateData = $this->prophesize(TemplateData::class);
+        $registrationTemplateData = $this->prophesize(TemplateData::class);
+        $sheetTemplateData = $this->prophesize(TemplateData::class);
 
         $synchronizer = $this->prophesize(Synchronizer::class);
-        $synchronizer->set($templateData->reveal(), $expectedUser)->shouldBeCalled();
+        $synchronizer->set($registrationTemplateData->reveal(), $expectedUser)->shouldBeCalled();
 
         $eventDispatcher = $this->prophesize(EventDispatcherInterface::class);
         $eventDispatcher
@@ -129,7 +130,7 @@ class ConvertRegistrationViewToSheetTest extends TestCase
 
         $sheetAndParticipantTemplateDataHandler = $this->prophesize(SheetAndParticipantTemplateDataHandler::class);
         $sheetAndParticipantTemplateDataHandler
-            ->handle($registrationView, $templateData->reveal())
+            ->handle($registrationView, $registrationTemplateData->reveal(), $sheetTemplateData->reveal())
             ->shouldBeCalled()
             ->willReturn(
                 new SheetAndParticipantTemplateDataView(
@@ -152,6 +153,12 @@ class ConvertRegistrationViewToSheetTest extends TestCase
             $eventDispatcher->reveal(),
             $dateTime
         );
-        $importSheetHandler->handle($event->reveal(), $type->reveal(), $registrationView, $templateData->reveal());
+        $importSheetHandler->handle(
+            $event->reveal(),
+            $type->reveal(),
+            $registrationView,
+            $registrationTemplateData->reveal(),
+            $sheetTemplateData->reveal()
+        );
     }
 }

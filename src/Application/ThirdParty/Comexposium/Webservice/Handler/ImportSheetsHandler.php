@@ -117,6 +117,7 @@ class ImportSheetsHandler
         $nomenclatureView = $this->prepareNomenclatureHandler->handle($eventReference);
 
         $registrationTemplate = $this->templateDataFactory->createRegistrationFromType($type, null);
+        $sheetTemplate = $this->templateDataFactory->createSheetTemplateFromType($type);
 
         $rawRegistrations = $this->comexposiumWebservice->getRegistrations($eventReference, $registrationReferences);
 
@@ -130,8 +131,17 @@ class ImportSheetsHandler
                 continue;
             }
 
-            $this->convertRegistrationViewToSheet->handle($event, $type, $registrationView, $registrationTemplate);
+            $this->convertRegistrationViewToSheet->handle(
+                $event,
+                $type,
+                $registrationView,
+                $registrationTemplate,
+                $sheetTemplate
+            );
+
+            // clear data in templates to be reused
             $registrationTemplate->clear();
+            $sheetTemplate->clear();
         }
     }
 }

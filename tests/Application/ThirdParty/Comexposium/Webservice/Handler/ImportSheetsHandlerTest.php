@@ -114,18 +114,30 @@ class ImportSheetsHandlerTest extends TestCase
             ->willReturn($expectedResponse)
         ;
 
-        $templateData = $this->prophesize(TemplateData::class);
+        $registrationTemplateData = $this->prophesize(TemplateData::class);
+        $sheetTemplateData = $this->prophesize(TemplateData::class);
 
         $templateDataFactory = $this->prophesize(TemplateDataFactory::class);
         $templateDataFactory
             ->createRegistrationFromType($type->reveal(), null)
             ->shouldBeCalled()
-            ->willReturn($templateData->reveal())
+            ->willReturn($registrationTemplateData->reveal())
+        ;
+        $templateDataFactory
+            ->createSheetTemplateFromType($type->reveal())
+            ->shouldBeCalled()
+            ->willReturn($sheetTemplateData->reveal())
         ;
 
         $convertRegistrationViewToSheet = $this->prophesize(ConvertRegistrationViewToSheet::class);
         $convertRegistrationViewToSheet
-            ->handle($event->reveal(), $type->reveal(), $expectedRegistrationView, $templateData->reveal())
+            ->handle(
+                $event->reveal(),
+                $type->reveal(),
+                $expectedRegistrationView,
+                $registrationTemplateData->reveal(),
+                $sheetTemplateData->reveal()
+            )
             ->shouldBeCalled()
         ;
 

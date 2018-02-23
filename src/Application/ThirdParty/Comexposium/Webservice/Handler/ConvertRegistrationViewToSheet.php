@@ -93,6 +93,7 @@ class ConvertRegistrationViewToSheet
      * @param Type             $type
      * @param RegistrationView $registrationView
      * @param TemplateData     $registrationTemplateData
+     * @param TemplateData     $sheetTemplateData
      *
      * @return Sheet
      */
@@ -100,7 +101,8 @@ class ConvertRegistrationViewToSheet
         Event $event,
         Type $type,
         RegistrationView $registrationView,
-        TemplateData $registrationTemplateData
+        TemplateData $registrationTemplateData,
+        TemplateData $sheetTemplateData
     ): Sheet {
         $email = StringHelper::trimSpacesAndNonBreakSpaces($registrationView->participantView->email);
 
@@ -110,7 +112,14 @@ class ConvertRegistrationViewToSheet
             $user = $this->createUser($event, $email, $registrationView->participantView->locale);
         }
 
-        $sheet = $this->createSheetAndParticipant($event, $type, $user, $registrationView, $registrationTemplateData);
+        $sheet = $this->createSheetAndParticipant(
+            $event,
+            $type,
+            $user,
+            $registrationView,
+            $registrationTemplateData,
+            $sheetTemplateData
+        );
 
         $this->synchronizer->set($registrationTemplateData, $user);
 
@@ -150,6 +159,7 @@ class ConvertRegistrationViewToSheet
      * @param User             $user
      * @param RegistrationView $registrationView
      * @param TemplateData     $registrationTemplateData
+     * @param TemplateData     $sheetTemplateData
      *
      * @return Sheet
      */
@@ -158,11 +168,13 @@ class ConvertRegistrationViewToSheet
         Type $type,
         User $user,
         RegistrationView $registrationView,
-        TemplateData $registrationTemplateData
+        TemplateData $registrationTemplateData,
+        TemplateData $sheetTemplateData
     ): Sheet {
         $sheetAndParticipantTemplateDataView = $this->sheetAndParticipantTemplateDataHandler->handle(
             $registrationView,
-            $registrationTemplateData
+            $registrationTemplateData,
+            $sheetTemplateData
         );
 
         $sheet = $this->createSheet(
@@ -173,7 +185,11 @@ class ConvertRegistrationViewToSheet
             $sheetAndParticipantTemplateDataView->sheetRegistrationData
         );
 
-        $participant = $this->createParticipant($sheet, $user, $sheetAndParticipantTemplateDataView->participantRegistrationData);
+        $participant = $this->createParticipant(
+            $sheet,
+            $user,
+            $sheetAndParticipantTemplateDataView->participantRegistrationData
+        );
 
         $this->save($registrationView->reference, $sheet, $participant);
 

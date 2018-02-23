@@ -13,15 +13,18 @@ namespace Proximum\Vimeet\Tests\Application\ThirdParty\Comexposium\Webservice\Ha
 use PHPUnit\Framework\TestCase;
 use Proximum\Vimeet\Application\Components\Sheet\Template\Tag;
 use Proximum\Vimeet\Application\ThirdParty\Comexposium\Webservice\Handler\SheetAndParticipantTemplateDataHandler;
+use Proximum\Vimeet\Application\ThirdParty\Comexposium\Webservice\View\Nomenclature\NomenclatureItemView;
 use Proximum\Vimeet\Application\ThirdParty\Comexposium\Webservice\View\ParticipantPositionView;
 use Proximum\Vimeet\Application\ThirdParty\Comexposium\Webservice\View\ParticipantView;
 use Proximum\Vimeet\Application\ThirdParty\Comexposium\Webservice\View\RegistrationView;
 use Proximum\Vimeet\Application\ThirdParty\Comexposium\Webservice\View\SheetAndParticipantTemplateDataView;
+use Proximum\Vimeet\Domain\Model\Nomenclature as NomenclatureModel;
 use Proximum\Vimeet\Domain\Template\Block;
 use Proximum\Vimeet\Domain\Template\TemplateData;
 use Proximum\Vimeet\Domain\Template\TemplateObject\Country;
 use Proximum\Vimeet\Domain\Template\TemplateObject\EditableText;
 use Proximum\Vimeet\Domain\Template\TemplateObject\Gender;
+use Proximum\Vimeet\Domain\Template\TemplateObject\Nomenclature;
 use Proximum\Vimeet\Domain\Template\TemplateObject\Text;
 
 class SheetAndParticipantTemplateDataHandlerTest extends TestCase
@@ -51,9 +54,15 @@ class SheetAndParticipantTemplateDataHandlerTest extends TestCase
                     new ParticipantPositionView('Export Director', 'en'),
                 ]
             ),
-            ['666', '777', '88898']
+            [
+                new NomenclatureItemView('666', null, []),
+                new NomenclatureItemView('88898', null, []),
+            ]
         );
 
+        /*
+         * Registration Template
+         */
         $notEditableObject = new Text('not-editable-key', 'gender', [], 'fr', 'fr');
         $genderObject = new Gender(
             'gender-key', 'gender', ['tags' => ['participant_gender', 'participant_data']], 'fr', 'fr'
@@ -71,19 +80,46 @@ class SheetAndParticipantTemplateDataHandlerTest extends TestCase
             'participant-country-key', 'country', ['tags' => ['participant_country', 'participant_data']], 'fr', 'fr'
         );
 
-        $block = new Block('12', [], 'fr', 'fr');
-        $block->addChild(1, '111', $firstNameObject);
-        $block->addChild(1, '222', $companyNameObject);
-        $block->addChild(1, '333', $notEditableObject);
-        $block->addChild(1, '444', $countryObject);
-        $block->addChild(1, '555', $companyCountryObject);
-        $block->addChild(1, '666', $genderObject);
-
+        $registrationTemplateBlock = new Block('12', [], 'fr', 'fr');
+        $registrationTemplateBlock->addChild(1, '111', $firstNameObject);
+        $registrationTemplateBlock->addChild(1, '222', $companyNameObject);
+        $registrationTemplateBlock->addChild(1, '333', $notEditableObject);
+        $registrationTemplateBlock->addChild(1, '444', $countryObject);
+        $registrationTemplateBlock->addChild(1, '555', $companyCountryObject);
+        $registrationTemplateBlock->addChild(1, '666', $genderObject);
         $registrationTemplateData = new TemplateData('root', [], 'fr', 'fr');
-        $registrationTemplateData->addChild(0, '67019e4a', $block);
+        $registrationTemplateData->addChild(0, '67019e4a', $registrationTemplateBlock);
 
+        /*
+         * Sheet Template
+         */
+        $nomenclatureModel = $this->prophesize(NomenclatureModel::class);
+        $nomenclatureObject = new Nomenclature(
+            'nomenclature-key',
+            'nomenclature',
+            [
+                'tags' => ['sheet_template_generic_tag_1'],
+                'mode' => 'checkboxes',
+            ],
+            'fr',
+            'fr'
+        );
+        $nomenclatureObject->setNomenclature($nomenclatureModel->reveal());
+
+        $sheetTemplateBlock = new Block('12', [], 'fr', 'fr');
+        $sheetTemplateBlock->addChild(1, '111', $nomenclatureObject);
+        $sheetTemplateData = new TemplateData('root', [], 'fr', 'fr');
+        $sheetTemplateData->addChild(0, '67019e4a', $sheetTemplateBlock);
+
+        /*
+         * Handler
+         */
         $sheetAndParticipantTemplateDataHandler = new SheetAndParticipantTemplateDataHandler();
-        $result = $sheetAndParticipantTemplateDataHandler->handle($registrationView, $registrationTemplateData);
+        $result = $sheetAndParticipantTemplateDataHandler->handle(
+            $registrationView,
+            $registrationTemplateData,
+            $sheetTemplateData
+        );
 
         $expectedResult = new SheetAndParticipantTemplateDataView(
             'Nintendo',
