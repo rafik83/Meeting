@@ -170,6 +170,9 @@ interface JobQueueInterface
     public function generateMeetingSolutionAnalytic(Event $event);
 
     /**
+     * This method re-index all the sheets of a given event
+     * It does not reset ES
+     *
      * @param $event
      */
     public function indexSheetsByEvent(Event $event): void;

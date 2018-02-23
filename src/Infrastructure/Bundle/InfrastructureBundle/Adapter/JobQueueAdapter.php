@@ -315,7 +315,7 @@ class JobQueueAdapter extends AbstractJobQueueAdapter implements JobQueueInterfa
     }
 
     /**
-     * @param Event $event
+     * {@inheritdoc}
      */
     public function indexSheetsByEvent(Event $event): void
     {

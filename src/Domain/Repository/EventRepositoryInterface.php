@@ -47,6 +47,11 @@ interface EventRepositoryInterface
     public function getEventsWithDaysByAdmin(Admin $admin);
 
     /**
+     * @return Event[]
+     */
+    public function getEventsOrderByIdDesc(): array;
+
+    /**
      * @return EventListView[]
      */
     public function getList();

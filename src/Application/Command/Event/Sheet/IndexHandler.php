@@ -40,6 +40,8 @@ class IndexHandler
     {
         $sheets = $this->sheetRepository->getByEvent($command->event);
 
-        $this->sheetIndexer->reindexSheets($sheets);
+        foreach (array_chunk($sheets, 100, false) as $chunkSheets) {
+            $this->sheetIndexer->reindexSheets($chunkSheets);
+        }
     }
 }
