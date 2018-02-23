@@ -223,10 +223,6 @@ class CsvImporter implements ImporterInterface
             throw new FileNotFoundException('File not found.');
         }
 
-        if (!ini_get("auto_detect_line_endings")) {
-            ini_set("auto_detect_line_endings", '1');
-        }
-
         $filename = Charset::convert($filename, $charset, Charset::UTF_8);
         $file     = new \SplFileObject($filename);
         $file->setFlags(\SplFileObject::READ_CSV | \SplFileObject::SKIP_EMPTY | \SplFileObject::DROP_NEW_LINE);
