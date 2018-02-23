@@ -173,6 +173,7 @@ form.delete_participant.children.submit.label: Supprimer
 form.dont_see_what.children.participant.label: Participant
 form.dont_see_what.children.sheet.label: Fiche
 form.dont_see_what.children.submit.label: Enregistrer
+form.elasticsearch_index.children.submit.label: 'Ré-indexer tous les événements'
 form.event_billing_configuration.children.invoiceLogo.label: 'Logo affiché sur pro forma et facture'
 form.event_billing_configuration.children.legalInfo.label: 'Informations légales'
 form.event_billing_configuration.children.submit.label: Enregistrer

@@ -176,4 +176,10 @@ interface JobQueueInterface
      * @param $event
      */
     public function indexSheetsByEvent(Event $event): void;
+
+    /**
+     * This method re-index all the events
+     * It does reset ES
+     */
+    public function indexEventFromScratch(): void;
 }
