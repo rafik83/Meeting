@@ -76,16 +76,16 @@ class ConvertRegistrationViewToSheetTest extends TestCase
         $expectedSheet = new Sheet(
             $event->reveal(),
             $type->reveal(),
-            [],
+            ['whateverSheetTemplateData'],
             $expectedUser,
             $dateTime
         );
-        $expectedSheet->setRegistrationData(['whateverSheetTemplateData']);
+        $expectedSheet->setRegistrationData(['whateverRegistrationSheetData']);
         $expectedSheet->setTitle('Nintendo');
         $expectedSheet->setImported(true);
 
         $expectedParticipant = new Participant(
-            $expectedSheet, $expectedUser, ['whateverParticipantTemplateData'], false
+            $expectedSheet, $expectedUser, ['whateverRegistrationParticipantData'], false
         );
         $expectedParticipant->setImported(true);
 
@@ -128,17 +128,18 @@ class ConvertRegistrationViewToSheetTest extends TestCase
             ->shouldBeCalled()
         ;
 
+        $expectedSheetAndParticipantTemplateDataView = new SheetAndParticipantTemplateDataView(
+            'Nintendo',
+            ['whateverRegistrationSheetData'],
+            ['whateverRegistrationParticipantData']
+        );
+        $expectedSheetAndParticipantTemplateDataView->setSheetTemplateData(['whateverSheetTemplateData']);
+
         $sheetAndParticipantTemplateDataHandler = $this->prophesize(SheetAndParticipantTemplateDataHandler::class);
         $sheetAndParticipantTemplateDataHandler
             ->handle($registrationView, $registrationTemplateData->reveal(), $sheetTemplateData->reveal())
             ->shouldBeCalled()
-            ->willReturn(
-                new SheetAndParticipantTemplateDataView(
-                    'Nintendo',
-                    ['whateverSheetTemplateData'],
-                    ['whateverParticipantTemplateData']
-                )
-            )
+            ->willReturn($expectedSheetAndParticipantTemplateDataView)
         ;
 
         $importSheetHandler = new ConvertRegistrationViewToSheet(

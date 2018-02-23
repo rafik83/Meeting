@@ -14,6 +14,7 @@ use Proximum\Vimeet\Application\Event\Events;
 use Proximum\Vimeet\Application\Event\Sheet\SheetUpdatedEvent;
 use Proximum\Vimeet\Application\ThirdParty\Comexposium\Webservice\Sheet\SheetExtraDataType;
 use Proximum\Vimeet\Application\ThirdParty\Comexposium\Webservice\View\RegistrationView;
+use Proximum\Vimeet\Application\ThirdParty\Comexposium\Webservice\View\SheetAndParticipantTemplateDataView;
 use Proximum\Vimeet\Domain\Account\Synchronizer;
 use Proximum\Vimeet\Domain\Helper\StringHelper;
 use Proximum\Vimeet\Domain\Model\Event;
@@ -178,11 +179,10 @@ class ConvertRegistrationViewToSheet
         );
 
         $sheet = $this->createSheet(
-            $sheetAndParticipantTemplateDataView->sheetTitle,
             $event,
             $type,
             $user,
-            $sheetAndParticipantTemplateDataView->sheetRegistrationData
+            $sheetAndParticipantTemplateDataView
         );
 
         $participant = $this->createParticipant(
@@ -197,30 +197,28 @@ class ConvertRegistrationViewToSheet
     }
 
     /**
-     * @param string $sheetTitle
-     * @param Event  $event
-     * @param Type   $type
-     * @param User   $user
-     * @param array  $sheetRegistrationData
+     * @param Event                               $event
+     * @param Type                                $type
+     * @param User                                $user
+     * @param SheetAndParticipantTemplateDataView $sheetAndParticipantTemplateDataView
      *
      * @return Sheet
      */
     private function createSheet(
-        string $sheetTitle,
         Event $event,
         Type $type,
         User $user,
-        array &$sheetRegistrationData
+        SheetAndParticipantTemplateDataView $sheetAndParticipantTemplateDataView
     ): Sheet {
         $sheet = new Sheet(
             $event,
             $type,
-            [],
+            $sheetAndParticipantTemplateDataView->sheetTemplateData,
             $user,
             $this->dateTime
         );
-        $sheet->setRegistrationData($sheetRegistrationData);
-        $sheet->setTitle($sheetTitle);
+        $sheet->setRegistrationData($sheetAndParticipantTemplateDataView->sheetRegistrationData);
+        $sheet->setTitle($sheetAndParticipantTemplateDataView->sheetTitle);
         $sheet->setImported(true);
 
         return $sheet;

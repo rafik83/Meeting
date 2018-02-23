@@ -11,6 +11,7 @@
 namespace Proximum\Vimeet\Application\ThirdParty\Comexposium\Webservice\Handler;
 
 use Proximum\Vimeet\Application\Components\Sheet\Template\Tag;
+use Proximum\Vimeet\Application\ThirdParty\Comexposium\Webservice\View\Nomenclature\NomenclatureItemView;
 use Proximum\Vimeet\Application\ThirdParty\Comexposium\Webservice\View\RegistrationView;
 use Proximum\Vimeet\Application\ThirdParty\Comexposium\Webservice\View\SheetAndParticipantTemplateDataView;
 use Proximum\Vimeet\Domain\Template\TemplateData;
@@ -18,6 +19,8 @@ use Proximum\Vimeet\Domain\Template\TemplateObject;
 
 class SheetAndParticipantTemplateDataHandler
 {
+    private const NOMENCLATURE_KEY_SUFFIX = 'cmxp_';
+
     /**
      * @param RegistrationView $registrationView
      * @param TemplateData     $registrationTemplateData
@@ -55,7 +58,13 @@ class SheetAndParticipantTemplateDataHandler
         $sheetTemplateTaggedData = $this->getSheetTemplateTaggedData($registrationView);
         $this->setData($editableObjects, $sheetTemplateTaggedData);
 
-        return [];
+        $data = [];
+
+        foreach ($editableObjects as $editableObject) {
+            $data[$editableObject->getKey()] = $editableObject->getData();
+        }
+
+        return $data;
     }
 
     /**
@@ -106,19 +115,69 @@ class SheetAndParticipantTemplateDataHandler
             foreach ($editableObjects as $editableObject) {
                 if ($editableObject->hasTag($tag) && $editableObject instanceof TemplateObject\ContentObjectInterface) {
                     if ($editableObject instanceof TemplateObject\Nomenclature) {
-                        if (is_array($value)) {
-                            // todo
-                            continue;
-                        }
-
-                        $nomenclatureKey = $editableObject->getKeyForLabel($value);
-                        $editableObject->setContentValue($nomenclatureKey);
+                        $this->handleNomenclatureObject($editableObject, $value);
                     } else {
                         $editableObject->setContentValue($value);
                     }
                 }
             }
         }
+    }
+
+    /**
+     * @param TemplateObject\Nomenclature $nomenclatureObject
+     * @param null|string|array           $value
+     */
+    private function handleNomenclatureObject(TemplateObject\Nomenclature $nomenclatureObject, $value): void
+    {
+        if (\is_array($value)) {
+            $availableKeys = [];
+
+            foreach ($value as $item) {
+                $foundKey = $this->handleNomenclatureItemView($nomenclatureObject, $item);
+
+                if (null !== $foundKey) {
+                    $availableKeys[] = $foundKey;
+                }
+            }
+
+            $nomenclatureObject->setItems($availableKeys);
+
+            return;
+        }
+
+        $nomenclatureKey = $nomenclatureObject->getKeyForLabel($value);
+        $nomenclatureObject->setContentValue($nomenclatureKey);
+    }
+
+    /**
+     * @param TemplateObject\Nomenclature $nomenclatureObject
+     * @param NomenclatureItemView        $nomenclatureItemView
+     *
+     * @return null|string
+     */
+    private function handleNomenclatureItemView(
+        TemplateObject\Nomenclature $nomenclatureObject,
+        NomenclatureItemView $nomenclatureItemView
+    ): ?string {
+        if (!$nomenclatureItemView instanceof NomenclatureItemView) {
+            return null;
+        }
+
+        $key = sprintf('%s%s', self::NOMENCLATURE_KEY_SUFFIX, $nomenclatureItemView->reference);
+
+        if ($nomenclatureObject->hasKey($key)) {
+            return $key;
+        }
+
+        if ($nomenclatureItemView->parentNomenclatureItemView instanceof NomenclatureItemView) {
+            return $this->handleNomenclatureItemView(
+                $nomenclatureObject,
+                $nomenclatureItemView->parentNomenclatureItemView
+            );
+        }
+
+        return null;
     }
 
     /**

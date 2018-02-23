@@ -11,7 +11,6 @@
 namespace Proximum\Vimeet\Tests\Application\ThirdParty\Comexposium\Webservice\Handler;
 
 use PHPUnit\Framework\TestCase;
-use Proximum\Vimeet\Application\Components\Sheet\Template\Tag;
 use Proximum\Vimeet\Application\ThirdParty\Comexposium\Webservice\Handler\SheetAndParticipantTemplateDataHandler;
 use Proximum\Vimeet\Application\ThirdParty\Comexposium\Webservice\View\Nomenclature\NomenclatureItemView;
 use Proximum\Vimeet\Application\ThirdParty\Comexposium\Webservice\View\ParticipantPositionView;
@@ -19,6 +18,7 @@ use Proximum\Vimeet\Application\ThirdParty\Comexposium\Webservice\View\Participa
 use Proximum\Vimeet\Application\ThirdParty\Comexposium\Webservice\View\RegistrationView;
 use Proximum\Vimeet\Application\ThirdParty\Comexposium\Webservice\View\SheetAndParticipantTemplateDataView;
 use Proximum\Vimeet\Domain\Model\Nomenclature as NomenclatureModel;
+use Proximum\Vimeet\Domain\Model\NomenclatureItem;
 use Proximum\Vimeet\Domain\Template\Block;
 use Proximum\Vimeet\Domain\Template\TemplateData;
 use Proximum\Vimeet\Domain\Template\TemplateObject\Country;
@@ -31,6 +31,16 @@ class SheetAndParticipantTemplateDataHandlerTest extends TestCase
 {
     public function testHandle()
     {
+        $aloneNomenclatureItemView = new NomenclatureItemView('999', null, []);
+        $parentNomenclatureItemView = new NomenclatureItemView('88898', null, []);
+        $childNomenclatureItemView = new NomenclatureItemView('666', '88898', []);
+        $childNomenclatureItemView->setParentNomenclatureItemView($parentNomenclatureItemView);
+
+        $nomenclatureItemViews = [
+            $aloneNomenclatureItemView,
+            $childNomenclatureItemView,
+        ];
+
         $registrationView = new RegistrationView(
             '5556666',
             'Nintendo',
@@ -54,10 +64,7 @@ class SheetAndParticipantTemplateDataHandlerTest extends TestCase
                     new ParticipantPositionView('Export Director', 'en'),
                 ]
             ),
-            [
-                new NomenclatureItemView('666', null, []),
-                new NomenclatureItemView('88898', null, []),
-            ]
+            $nomenclatureItemViews
         );
 
         /*
@@ -94,6 +101,18 @@ class SheetAndParticipantTemplateDataHandlerTest extends TestCase
          * Sheet Template
          */
         $nomenclatureModel = $this->prophesize(NomenclatureModel::class);
+        $nomenclatureModel->getId()->shouldBeCalled()->willReturn(1969);
+        $nomenclatureModel
+            ->getLastLevel()
+            ->shouldBeCalled()
+            ->willReturn([
+                'cmxp_111' => new NomenclatureItem('cmxp_111', []),
+                'cmxp_999' => new NomenclatureItem('cmxp_999', []),
+                'cmxp_7777' => new NomenclatureItem('cmxp_7777', []),
+                'cmxp_88898' => new NomenclatureItem('cmxp_88898', []),
+            ])
+        ;
+
         $nomenclatureObject = new Nomenclature(
             'nomenclature-key',
             'nomenclature',
@@ -133,6 +152,9 @@ class SheetAndParticipantTemplateDataHandlerTest extends TestCase
                 'participant-country-key' => ['country' => 'FR'],
             ]
         );
+        $expectedResult->setSheetTemplateData([
+            'nomenclature-key' => ['items' => ['cmxp_999', 'cmxp_88898']],
+        ]);
 
         $this->assertEquals($expectedResult, $result);
     }
