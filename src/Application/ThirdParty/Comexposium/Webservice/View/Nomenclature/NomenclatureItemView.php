@@ -36,6 +36,7 @@ class NomenclatureItemView
     ) {
         $this->reference = $reference;
         $this->parentReference = $parentReference;
+        $this->parentNomenclatureItemView = null;
         $this->nomenclatureItemTranslationViews = $nomenclatureItemTranslationViews;
     }
 

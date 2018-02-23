@@ -42,6 +42,7 @@ services:
             - '@Proximum\Vimeet\Application\ThirdParty\Comexposium\Webservice\Handler\ConvertRegistrationViewToSheet'
             - '@template.template_data_factory'
             - '@Proximum\Vimeet\Application\ThirdParty\Comexposium\Webservice\Handler\RemoveAlreadyImportedReferences'
+            - '@Proximum\Vimeet\Application\ThirdParty\Comexposium\Webservice\Handler\PrepareNomenclatureHandler'
 
     Proximum\Vimeet\Application\ThirdParty\Comexposium\Webservice\Handler\ConvertRegistrationViewToSheet:
         arguments:

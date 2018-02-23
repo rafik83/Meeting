@@ -10,6 +10,8 @@
 
 namespace Proximum\Vimeet\Application\ThirdParty\Comexposium\Webservice\Converter;
 
+use Proximum\Vimeet\Application\ThirdParty\Comexposium\Webservice\View\Nomenclature\NomenclatureItemView;
+use Proximum\Vimeet\Application\ThirdParty\Comexposium\Webservice\View\Nomenclature\NomenclatureView;
 use Proximum\Vimeet\Application\ThirdParty\Comexposium\Webservice\View\ParticipantPositionView;
 use Proximum\Vimeet\Application\ThirdParty\Comexposium\Webservice\View\ParticipantView;
 use Proximum\Vimeet\Application\ThirdParty\Comexposium\Webservice\View\RegistrationView;
@@ -28,11 +30,12 @@ class RawRegistrationToRegistrationViewConverter extends ComexposiumConverter
     /**
      * @see registration wsdl: http://webservices.comexposium-admin.com/catalogue-ws-v2/inscriptionclientws.wsdl
      *
-     * @param \stdClass $registration
+     * @param \stdClass        $registration
+     * @param NomenclatureView $nomenclatureView
      *
      * @return null|RegistrationView
      */
-    public function convert(\stdClass $registration): ?RegistrationView
+    public function convert(\stdClass $registration, NomenclatureView $nomenclatureView): ?RegistrationView
     {
         if (!isset($registration->reference, $registration->etatExposant)) {
             return null;
@@ -62,7 +65,7 @@ class RawRegistrationToRegistrationViewConverter extends ComexposiumConverter
             $registration->siteInternet ?? null,
             $participantView,
             isset($registration->referenceNomenclatureManifestation)
-                ? $this->convertToArray($registration->referenceNomenclatureManifestation)
+                ? $this->getNomenclatureItemViews($registration->referenceNomenclatureManifestation, $nomenclatureView)
                 : []
         );
     }
@@ -138,5 +141,27 @@ class RawRegistrationToRegistrationViewConverter extends ComexposiumConverter
     private function isRegistrationHasAWhiteListedStatus(string $status): bool
     {
         return \in_array($status, self::STATUS_WHITE_LIST, true);
+    }
+
+    /**
+     * @param array|\stdClass  $nomenclatureReferences
+     * @param NomenclatureView $nomenclatureView
+     *
+     * @return array
+     */
+    private function getNomenclatureItemViews($nomenclatureReferences, NomenclatureView $nomenclatureView): array
+    {
+        $nomenclatureItemViews = [];
+        $nomenclatureReferences = $this->convertToArray($nomenclatureReferences);
+
+        foreach ($nomenclatureReferences as $nomenclatureReference) {
+            $nomenclatureItemView = $nomenclatureView->getNomenclatureItemViewByReference($nomenclatureReference);
+
+            if ($nomenclatureItemView instanceof NomenclatureItemView) {
+                $nomenclatureItemViews[] = $nomenclatureItemView;
+            }
+        }
+
+        return $nomenclatureItemViews;
     }
 }

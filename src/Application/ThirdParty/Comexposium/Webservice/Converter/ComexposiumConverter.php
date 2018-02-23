@@ -14,8 +14,6 @@ use League\ISO3166\ISO3166;
 
 abstract class ComexposiumConverter
 {
-    abstract public function convert(\stdClass $object);
-
     /**
      * @param string $countryAlpha3Code
      *
