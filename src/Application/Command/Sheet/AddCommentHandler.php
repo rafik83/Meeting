@@ -65,15 +65,26 @@ class AddCommentHandler
             );
         }
 
-        if ($addComment->commercialStatus !== $addComment->sheet->getCommercialStatus()) {
-            $addComment->sheet->setCommercialStatus($addComment->commercialStatus);
+        $isReminderDateUpdated     = $addComment->reminderDate !== $addComment->sheet->getReminderDate();
+        $isCommercialStatusUpdated = $addComment->commercialStatus !== $addComment->sheet->getCommercialStatus();
+
+        if ($isReminderDateUpdated || $isCommercialStatusUpdated) {
+            if ($isReminderDateUpdated) {
+                $addComment->sheet->setReminderDate($addComment->reminderDate);
+            }
+
+            if ($isCommercialStatusUpdated) {
+                $addComment->sheet->setCommercialStatus($addComment->commercialStatus);
+            }
 
             $this->sheetRepository->set($addComment->sheet);
 
-            $this->eventDispatcher->dispatch(
-                Events::SHEET_SET_COMMERCIAL_STATUS,
-                new CommercialStatusChanged($addComment->sheet, $addComment->author, $this->dateTime)
-            );
+            if ($isCommercialStatusUpdated) {
+                $this->eventDispatcher->dispatch(
+                    Events::SHEET_SET_COMMERCIAL_STATUS,
+                    new CommercialStatusChanged($addComment->sheet, $addComment->author, $this->dateTime)
+                );
+            }
         }
     }
 }

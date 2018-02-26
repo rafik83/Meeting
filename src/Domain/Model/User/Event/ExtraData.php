@@ -24,7 +24,7 @@ class ExtraData
     /** @var Event */
     private $event;
 
-    /** @var string */
+    /** @var string one of Proximum\Vimeet\Domain\User\Event\ExtraData\Type */
     private $name;
 
     /** @var string|null */

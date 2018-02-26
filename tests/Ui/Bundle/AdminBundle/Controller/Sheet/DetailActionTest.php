@@ -146,6 +146,7 @@ class DetailActionTest extends TestCase
         ;
 
         $this->sheet->getCommercialStatus()->willReturn(CommercialStatus::STATUS_NONE);
+        $this->sheet->getReminderDate()->willReturn(new \DateTime());
 
         $this->typeRepository->countByEvent($this->event->reveal())->shouldBeCalled()->willReturn(4);
         $this->invoiceRepository->isSheetInvoiced($this->sheet->reveal())->shouldBeCalled()->willReturn(null);
@@ -225,6 +226,7 @@ class DetailActionTest extends TestCase
         ;
 
         $this->sheet->getCommercialStatus()->willReturn(CommercialStatus::STATUS_NONE);
+        $this->sheet->getReminderDate()->willReturn(new \DateTime());
 
         $this->typeRepository->countByEvent($this->event->reveal())->shouldBeCalled()->willReturn(4);
         $this->invoiceRepository->isSheetInvoiced($this->sheet->reveal())->shouldBeCalled()->willReturn(null);

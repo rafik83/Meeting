@@ -162,6 +162,7 @@ class PaginatedSheetListViewQueryHandler
             ),
             $sheet->getFollower() !== null ? $sheet->getFollower()->getDisplayName() : '',
             $sheet->getCommercialStatus(),
+            $sheet->getReminderDate(),
             $sheet->getCreatedAt(),
             $sheet->getLastLoginAt(),
             $this->impersonate->getEncodedToken($admin, $sheet->getOwner()),

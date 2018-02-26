@@ -161,6 +161,7 @@ class SheetSearchQueryBuilder
         $this->filterByHasGroup($filters);
         $this->filterByHasSpot($filters);
         $this->filterByOrderStatus($filters);
+        $this->filterByReminderDate($filters);
 
         if (isset($filters[Constant::HAS_CART]) && true === $filters[Constant::HAS_CART]) {
             $this->filterHasCart(true);
@@ -533,6 +534,22 @@ class SheetSearchQueryBuilder
     }
 
     /**
+     * Handle the reminderDate filter ("Today's reminder date")
+     *
+     * @param array $filters
+     */
+    protected function filterByReminderDate(array &$filters)
+    {
+        if (isset($filters['reminderDate'])) {
+            if (\in_array(Constant::TODAY_REMINDER_DATE, $filters['reminderDate'], true)) {
+                $this->filterTodayReminderDate();
+
+                return;
+            }
+        }
+    }
+
+    /**
      * @param array $filters
      */
     protected function filterByCompleted(array &$filters)
@@ -632,6 +649,23 @@ class SheetSearchQueryBuilder
             ->addField('createdAt', ['gte' => (new \DateTime())->setTime(0, 0, 0)->format('c')]);
         $rangePredefinedDateEnd
             ->addField('createdAt', ['lte' => (new \DateTime())->setTime(23, 59, 59)->format('c')]);
+
+        $this->query->addMust($rangePredefinedDateBegin);
+        $this->query->addMust($rangePredefinedDateEnd);
+    }
+
+    /**
+     * totay's reminder date filter
+     */
+    protected function filterTodayReminderDate()
+    {
+        $rangePredefinedDateBegin = new Range();
+        $rangePredefinedDateEnd   = new Range();
+
+        $rangePredefinedDateBegin
+            ->addField('reminderDate', ['gte' => (new \DateTime())->setTime(0, 0, 0)->format('c')]);
+        $rangePredefinedDateEnd
+            ->addField('reminderDate', ['lte' => (new \DateTime())->setTime(23, 59, 59)->format('c')]);
 
         $this->query->addMust($rangePredefinedDateBegin);
         $this->query->addMust($rangePredefinedDateEnd);

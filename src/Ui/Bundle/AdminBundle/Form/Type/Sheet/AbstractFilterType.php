@@ -20,6 +20,7 @@ use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Messaging\Campaign\ImportedC
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\TypeChoiceType;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\YesNoType;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -118,6 +119,12 @@ abstract class AbstractFilterType extends AbstractType
                 'required'   => false,
                 'multiple'   => true,
                 'expanded'   => true,
+            ])
+            ->add('reminderDate', ReminderDateChoiceType::class, [
+                'label'    => 'form.sheet_filter.children.reminderDate.label',
+                'required' => false,
+                'multiple' => true,
+                'expanded' => true,
             ])
             ->add('commercialStatus', CommercialStatusChoiceType::class, [
                 'required'     => false,

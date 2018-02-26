@@ -7,7 +7,7 @@
     {% endfor %}
 {% endif %}
 <div class="participant-name">
-    <h1>{{ planning.sheetTitle }}</h1>
+    <h1>{{ planning.sheetTitle }} {% if planning.spotReference is not null %} - {{ planning.spotReference }}{% endif %}</h1>
     <h2>{{ planning.participantName }}</h2>
 </div>
 <div class="planning">

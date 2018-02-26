@@ -214,6 +214,8 @@ admin.extraParameter.list.column.value: Valeur
 admin.extraParameter.list.create: Ajouter
 admin.extraParameter.list.empty: 'Aucun paramètre'
 admin.extraParameter.list.title: 'Liste des paramètres supplémentaires de l''événement'
+admin.extraParameter.type.comexposium_event_reference: 'Comexposium : Référence manifestation'
+admin.extraParameter.type.comexposium_exhibitor_type_id: 'Comexposium : Id du type de participation Exposant concerné'
 admin.extraParameter.type.comexposium_sso_application: 'Comexposium SSO Application'
 admin.extraParameter.type.comexposium_sso_enabled: 'Comexposium SSO Activé'
 admin.extraParameter.type.comexposium_sso_salon: 'Comexposium SSO Salon'
@@ -1171,6 +1173,7 @@ event.sheet.participant.guest: Invité
 event.sheet.participant.owner: Propriétaire
 event.sheet.payment.description: 'Choisissez votre mode de paiement'
 event.sheet.payment.title: 'Mode de paiement'
+event.sheet.reminderDate.today_reminder_date: 'Aujourd''hui'
 event.sheet.state.accepted: Acceptée
 event.sheet.state.pending: 'En attente'
 event.sheet.state.refused: Refusée

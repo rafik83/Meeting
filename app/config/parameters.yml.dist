@@ -50,8 +50,6 @@ parameters:
     phantomjs_http_user:     'phantomjs'
     phantomjs_http_password: '7DSJD2sm8YpzfjmnXeethPuybb'
 
-    assets_version: 1
-
     user_activate_account_token_expiration: 'P7D'
 
     sentry_dsn: ~
@@ -80,6 +78,8 @@ parameters:
 
     comexposium_check_user_token_endpoint: ""
     comexposium_sso_loader_lib_endpoint: ""
+    comexposium_username: comexposiumUsername
+    comexposium_password: comexposiumPassword
 
     # Features flag
     feature_video_conference_enabled: false

@@ -1,4 +1,86 @@
 services:
+    #
+    # Command
+    #
+    Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\ThirdParty\Comexposium\Webservice\ComexposiumWebserviceCallCommand:
+        arguments:
+            - '@Proximum\Vimeet\Application\ThirdParty\Comexposium\Webservice\Handler\ComexposiumWebservice'
+        tags:
+            - { name: console.command }
+
+    Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\ThirdParty\Comexposium\Webservice\ComexposiumPrepareImportSheetsCommand:
+        arguments:
+            - '@Proximum\Vimeet\Application\ThirdParty\Comexposium\Webservice\Handler\PrepareImportSheetsHandler'
+        tags:
+            - { name: console.command }
+
+    Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\ThirdParty\Comexposium\Webservice\ComexposiumGetRegistrationsCommand:
+        arguments:
+            - '@vimeet_infrastructure.repository.event_repository'
+            - '@Proximum\Vimeet\Application\ThirdParty\Comexposium\Webservice\Handler\ImportSheetsHandler'
+        tags:
+            - { name: console.command }
+
+    #
+    # Handler
+    #
+    Proximum\Vimeet\Application\ThirdParty\Comexposium\Webservice\Handler\PrepareImportSheetsHandler:
+        arguments:
+            - '@vimeet_infrastructure.repository.event_repository'
+            - '@repository.event.extra_parameter_repository'
+            - '@Proximum\Vimeet\Application\ThirdParty\Comexposium\Webservice\Handler\ComexposiumWebservice'
+            - '@Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Adapter\ThirdParty\Comexposium\ComexposiumJobQueue'
+            - '@Proximum\Vimeet\Application\ThirdParty\Comexposium\Webservice\Handler\RemoveAlreadyImportedReferences'
+
+    Proximum\Vimeet\Application\ThirdParty\Comexposium\Webservice\Handler\ImportSheetsHandler:
+        arguments:
+            - '@Proximum\Vimeet\Application\ThirdParty\Comexposium\Webservice\Handler\ComexposiumWebservice'
+            - '@repository.event.extra_parameter_repository'
+            - '@vimeet_infrastructure.repository.type_repository'
+            - '@Proximum\Vimeet\Application\ThirdParty\Comexposium\Webservice\Converter\RawRegistrationToRegistrationViewConverter'
+            - '@Proximum\Vimeet\Application\ThirdParty\Comexposium\Webservice\Handler\ConvertRegistrationViewToSheet'
+            - '@template.template_data_factory'
+            - '@Proximum\Vimeet\Application\ThirdParty\Comexposium\Webservice\Handler\RemoveAlreadyImportedReferences'
+
+    Proximum\Vimeet\Application\ThirdParty\Comexposium\Webservice\Handler\ConvertRegistrationViewToSheet:
+        arguments:
+            - '@Proximum\Vimeet\Application\ThirdParty\Comexposium\Webservice\Handler\SheetAndParticipantTemplateDataHandler'
+            - '@vimeet_infrastructure.repository.user_repository'
+            - '@vimeet_infrastructure.repository.sheet_repository'
+            - '@vimeet_infrastructure.repository.participant_repository'
+            - '@repository.sheet.extra_data_repository'
+            - '@repository.user.event.extra_data_repository'
+            - '@vimeet_infrastructure.repository.user_event_repository'
+            - '@account.synchronizer'
+            - '@event_dispatcher'
+            - '@datetime'
+
+    Proximum\Vimeet\Application\ThirdParty\Comexposium\Webservice\Handler\SheetAndParticipantTemplateDataHandler: ~
+
+    Proximum\Vimeet\Application\ThirdParty\Comexposium\Webservice\Handler\RemoveAlreadyImportedReferences:
+        arguments:
+            - '@repository.sheet.extra_data_repository'
+
+    Proximum\Vimeet\Application\ThirdParty\Comexposium\Webservice\Handler\ComexposiumWebservice:
+        arguments:
+            $username: '%comexposium_username%'
+            $password: '%comexposium_password%'
+
+    #
+    # Converter
+    #
+    Proximum\Vimeet\Application\ThirdParty\Comexposium\Webservice\Converter\RawRegistrationToRegistrationViewConverter: ~
+
+    #
+    # JobQueue
+    #
+    Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Adapter\ThirdParty\Comexposium\ComexposiumJobQueue:
+        arguments:
+            - '@doctrine.orm.entity_manager'
+
+    #
+    # SSO
+    #
     Proximum\Vimeet\Application\ThirdParty\Comexposium\SSO\TokenChecker:
         arguments:
             - '@adapter.http_adapter'
@@ -19,6 +101,9 @@ services:
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\ThirdParty\Comexposium\SSO\Application\Query\SSOComexposiumViewQuery }
 
+    #
+    # Guard
+    #
     Proximum\Vimeet\Infrastructure\Security\Guard\ThirdParty\Comexposium\SSOAuthenticator:
         arguments:
             - '@Proximum\Vimeet\Application\ThirdParty\Comexposium\SSO\Application\Query\SSOCheckerHandler'
@@ -31,3 +116,4 @@ services:
     Proximum\Vimeet\Infrastructure\Security\Guard\ThirdParty\Comexposium\SSOAuthenticationSuccessHandler:
         arguments:
             - '@security.http_utils'
+

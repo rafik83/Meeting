@@ -1,5 +1,5 @@
 Proximum\Vimeet\Application\Command\Sheet\AddComment:
     constraints:
         - Expression:
-            expression: "this.commercialStatusChangeOrCommentNotEmpty()"
+            expression: "this.commercialStatusChangeOrCommentNotEmptyOrReminderDateNotEmpty()"
             message: "validators.sheet.commentCommercialStatus"

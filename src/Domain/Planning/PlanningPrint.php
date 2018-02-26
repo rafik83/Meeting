@@ -62,6 +62,9 @@ class PlanningPrint
     /** @var TipTranslationView[] */
     public $tipTranslationViews;
 
+    /** @var null|string */
+    public $spotReference;
+
     /**
      * @param string $sheetTitle
      * @param string $participantName
@@ -72,6 +75,7 @@ class PlanningPrint
      * @param string $eventTitle
      * @param string $eventDescription
      * @param string $eventDomain
+     * @param string|null $spotReference
      * @param string|null $eventLogo
      * @param string|null $organiserWebsite
      * @param string|null $contactFirstName
@@ -90,6 +94,7 @@ class PlanningPrint
         $eventTitle,
         $eventDescription,
         $eventDomain,
+        ?string $spotReference = null,
         $eventLogo = null,
         $organiserWebsite = null,
         $contactFirstName = null,
@@ -108,6 +113,7 @@ class PlanningPrint
         $this->eventDescription  = $eventDescription;
         $this->organiserWebsite  = $organiserWebsite;
         $this->eventDomain       = $eventDomain;
+        $this->spotReference     = $spotReference;
         $this->eventLogo         = $eventLogo;
         $this->contactFirstName  = $contactFirstName;
         $this->contactLastName   = $contactLastName;

@@ -122,6 +122,7 @@ app_patterns:
     - zip
     # App
     - imagick
+    - soap
 
   php_applications: []
 

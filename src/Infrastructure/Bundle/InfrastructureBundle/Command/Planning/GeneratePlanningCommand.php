@@ -21,9 +21,7 @@ class GeneratePlanningCommand extends Command
 {
     const NAME = 'vimeet:planning:generate';
 
-    /**
-     * @var ExportPlanningHandler
-     */
+    /** @var ExportPlanningHandler */
     private $exportPlanningHandler;
 
     /**

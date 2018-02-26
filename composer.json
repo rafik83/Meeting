@@ -56,7 +56,8 @@
         "behat/behat": "^3.3.1",
         "opentok/opentok": "^3.0",
         "twig/twig": "~1.35",
-        "tilleuls/ovh-bundle": "^1.0.1"
+        "tilleuls/ovh-bundle": "^1.0.1",
+        "league/iso3166": "^2.1"
     },
     "require-dev": {
         "sensio/generator-bundle": "~3.0",
