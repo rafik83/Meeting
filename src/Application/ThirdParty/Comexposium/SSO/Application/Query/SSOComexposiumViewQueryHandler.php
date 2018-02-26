@@ -13,6 +13,10 @@ namespace Proximum\Vimeet\Application\ThirdParty\Comexposium\SSO\Application\Que
 use Proximum\Vimeet\Application\ThirdParty\Comexposium\SSO\Application\View\SSOComexposiumView;
 use Proximum\Vimeet\Domain\Event\ExtraParameter\Type;
 use Proximum\Vimeet\Domain\Repository\Event\ExtraParameterRepositoryInterface;
+use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
+use Proximum\Vimeet\Domain\Repository\User\Event\ExtraDataRepositoryInterface;
+use Proximum\Vimeet\Domain\Repository\UserRepositoryInterface;
+use Proximum\Vimeet\Domain\User\Event\ExtraData\Type as ExtraDataType;
 
 class SSOComexposiumViewQueryHandler
 {
@@ -22,16 +26,34 @@ class SSOComexposiumViewQueryHandler
     /** @var null|string */
     private $comexposiumSSOLoaderLibEndpoint;
 
+    /** @var UserRepositoryInterface */
+    private $userRepository;
+
+    /** @var SheetRepositoryInterface */
+    private $sheetRepository;
+
+    /** @var ExtraDataRepositoryInterface */
+    private $extraDataRepository;
+
     /**
      * @param ExtraParameterRepositoryInterface $extraParameterRepository
+     * @param UserRepositoryInterface           $userRepository
+     * @param SheetRepositoryInterface          $sheetRepository
+     * @param ExtraDataRepositoryInterface      $extraDataRepository
      * @param null|string                       $comexposiumSSOLoaderLibEndpoint
      */
     public function __construct(
         ExtraParameterRepositoryInterface $extraParameterRepository,
+        UserRepositoryInterface $userRepository,
+        SheetRepositoryInterface $sheetRepository,
+        ExtraDataRepositoryInterface $extraDataRepository,
         ?string $comexposiumSSOLoaderLibEndpoint
     ) {
         $this->extraParameterRepository = $extraParameterRepository;
         $this->comexposiumSSOLoaderLibEndpoint = $comexposiumSSOLoaderLibEndpoint;
+        $this->userRepository = $userRepository;
+        $this->sheetRepository = $sheetRepository;
+        $this->extraDataRepository = $extraDataRepository;
     }
 
     public function handle(SSOComexposiumViewQuery $query): ?SSOComexposiumView
@@ -48,6 +70,24 @@ class SSOComexposiumViewQueryHandler
 
         if ($salon === null || $sessionSalon === null || $application === null) {
             return null;
+        }
+
+        $user = $this->userRepository->findByEmail($query->email);
+
+        if ($user !== null) {
+            $sheets = $this->sheetRepository->getSheetsByUserAndEvent($user, $query->event);
+
+            if (!empty($sheets)) {
+                $extraData = $this->extraDataRepository->getExtraDataForEventNameAndUser(
+                    $query->event,
+                    ExtraDataType::IMPORTED_FROM_COMEXPOSIUM,
+                    $user
+                );
+
+                if ($extraData === null) {
+                    return null;
+                }
+            }
         }
 
         return new SSOComexposiumView(
