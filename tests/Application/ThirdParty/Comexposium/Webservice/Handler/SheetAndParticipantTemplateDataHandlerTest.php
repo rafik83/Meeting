@@ -107,6 +107,19 @@ class SheetAndParticipantTemplateDataHandlerTest extends TestCase
             'fr',
             'fr'
         );
+        $positionObject = new EditableText(
+            'position-key',
+            'editable-text',
+            [
+                'translatable' => true,
+                'tags' => [
+                    'participant_position',
+                    'participant_data',
+                ],
+            ],
+            'fr',
+            'fr'
+        );
 
         $registrationTemplateBlock = new Block('12', [], 'fr', 'fr');
         $registrationTemplateBlock->addChild(1, '111', $firstNameObject);
@@ -116,6 +129,7 @@ class SheetAndParticipantTemplateDataHandlerTest extends TestCase
         $registrationTemplateBlock->addChild(1, '555', $companyCountryObject);
         $registrationTemplateBlock->addChild(1, '666', $genderObject);
         $registrationTemplateBlock->addChild(1, '777', $descriptionObject);
+        $registrationTemplateBlock->addChild(1, '888', $positionObject);
 
         $registrationTemplateData = new TemplateData('root', [], 'fr', 'fr');
         $registrationTemplateData->addChild(0, '67019e4a', $registrationTemplateBlock);
@@ -179,6 +193,12 @@ class SheetAndParticipantTemplateDataHandlerTest extends TestCase
                 'gender-key' => ['gender' => 'man'],
                 'firstname-key' => ['text' => 'Takashi'],
                 'participant-country-key' => ['country' => 'FR'],
+                'position-key' => [
+                    'text' => [
+                        'fr' => 'Directeur Export',
+                        'en' => 'Export Director',
+                    ],
+                ],
             ]
         );
         $expectedResult->setSheetTemplateData([

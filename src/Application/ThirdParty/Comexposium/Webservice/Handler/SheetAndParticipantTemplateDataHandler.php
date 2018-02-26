@@ -226,6 +226,12 @@ class SheetAndParticipantTemplateDataHandler
      */
     private function getParticipantTaggedData(RegistrationView $registrationView): array
     {
+        $positionTranslations = [];
+
+        foreach ($registrationView->participantView->participantPositionViews as $participantPositionView) {
+            $positionTranslations[$participantPositionView->locale] = $participantPositionView->label;
+        }
+
         return [
             Tag::PARTICIPANT_GENDER => $registrationView->participantView->gender,
             Tag::PARTICIPANT_FIRSTNAME => $registrationView->participantView->firstName,
@@ -235,6 +241,7 @@ class SheetAndParticipantTemplateDataHandler
             Tag::PARTICIPANT_ZIPCODE => $registrationView->zipCode,
             Tag::PARTICIPANT_CITY => $registrationView->city,
             Tag::PARTICIPANT_COUNTRY => $registrationView->country,
+            Tag::PARTICIPANT_POSITION => $positionTranslations,
         ];
     }
 
