@@ -16,6 +16,7 @@ use Proximum\Vimeet\Application\ThirdParty\Comexposium\Webservice\View\Nomenclat
 use Proximum\Vimeet\Application\ThirdParty\Comexposium\Webservice\View\Nomenclature\NomenclatureView;
 use Proximum\Vimeet\Application\ThirdParty\Comexposium\Webservice\View\ParticipantPositionView;
 use Proximum\Vimeet\Application\ThirdParty\Comexposium\Webservice\View\ParticipantView;
+use Proximum\Vimeet\Application\ThirdParty\Comexposium\Webservice\View\RegistrationDescriptionView;
 use Proximum\Vimeet\Application\ThirdParty\Comexposium\Webservice\View\RegistrationView;
 
 class RawRegistrationToRegistrationViewConverterTest extends TestCase
@@ -65,6 +66,18 @@ class RawRegistrationToRegistrationViewConverterTest extends TestCase
 
         $rawRegistration->responsableSalon = $responsableSalon;
 
+        $descriptionTrad1 = new \stdClass();
+        $descriptionTrad1->referenceLangue = 'GBR';
+        $descriptionTrad1->traduction = 'Scrap iron recycling machines';
+        $descriptionTrad1->inscriptionChamp = 'DESCRIPTION';
+
+        $descriptionTrad2 = new \stdClass();
+        $descriptionTrad2->referenceLangue = 'FRA';
+        $descriptionTrad2->traduction = 'Whatever description';
+        $descriptionTrad2->inscriptionChamp = 'WHATEVER-ELSE';
+
+        $rawRegistration->inscriptionTrad = [$descriptionTrad1, $descriptionTrad2];
+
         $nomenclatureView = new NomenclatureView([
             '666' => new NomenclatureItemView('666', null, []),
             '88898' => new NomenclatureItemView('88898', null, []),
@@ -99,6 +112,9 @@ class RawRegistrationToRegistrationViewConverterTest extends TestCase
             [
                 new NomenclatureItemView('666', null, []),
                 new NomenclatureItemView('88898', null, []),
+            ],
+            [
+                new RegistrationDescriptionView('Scrap iron recycling machines', 'en')
             ]
         );
 

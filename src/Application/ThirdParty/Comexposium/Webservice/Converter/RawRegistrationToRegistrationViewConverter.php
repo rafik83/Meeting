@@ -14,12 +14,15 @@ use Proximum\Vimeet\Application\ThirdParty\Comexposium\Webservice\View\Nomenclat
 use Proximum\Vimeet\Application\ThirdParty\Comexposium\Webservice\View\Nomenclature\NomenclatureView;
 use Proximum\Vimeet\Application\ThirdParty\Comexposium\Webservice\View\ParticipantPositionView;
 use Proximum\Vimeet\Application\ThirdParty\Comexposium\Webservice\View\ParticipantView;
+use Proximum\Vimeet\Application\ThirdParty\Comexposium\Webservice\View\RegistrationDescriptionView;
 use Proximum\Vimeet\Application\ThirdParty\Comexposium\Webservice\View\RegistrationView;
 use Proximum\Vimeet\Domain\Template\TemplateObject\Gender;
 
 class RawRegistrationToRegistrationViewConverter extends ComexposiumConverter
 {
     private CONST STATUS_WHITE_LIST = ['VALIDE', 'INSTANCE'];
+
+    private CONST REGISTRATION_DESCRIPTION_FIELD = 'DESCRIPTION';
 
     private const GENDER_MAPPING = [
         '1' => Gender::WOMAN, // Mademoiselle
@@ -66,6 +69,9 @@ class RawRegistrationToRegistrationViewConverter extends ComexposiumConverter
             $participantView,
             isset($registration->referenceNomenclatureManifestation)
                 ? $this->getNomenclatureItemViews($registration->referenceNomenclatureManifestation, $nomenclatureView)
+                : [],
+            isset($registration->inscriptionTrad)
+                ? $this->getRegistrationDescriptionViews($registration->inscriptionTrad)
                 : []
         );
     }
@@ -163,5 +169,29 @@ class RawRegistrationToRegistrationViewConverter extends ComexposiumConverter
         }
 
         return $nomenclatureItemViews;
+    }
+
+    /**
+     * @param \stdClass|\stdClass[] $registrationTranslatedData
+     *
+     * @return RegistrationDescriptionView[]
+     */
+    private function getRegistrationDescriptionViews($registrationTranslatedData): array
+    {
+        $registrationTranslatedData = $this->convertToArray($registrationTranslatedData);
+        $registrationDescriptionViews = [];
+
+        foreach ($registrationTranslatedData as $data) {
+            if (isset($data->inscriptionChamp, $data->referenceLangue, $data->traduction)
+                && self::REGISTRATION_DESCRIPTION_FIELD === $data->inscriptionChamp
+            ) {
+                $registrationDescriptionViews[] = new RegistrationDescriptionView(
+                    $data->traduction,
+                    $this->convertLocale($data->referenceLangue)
+                );
+            }
+        }
+
+        return $registrationDescriptionViews;
     }
 }

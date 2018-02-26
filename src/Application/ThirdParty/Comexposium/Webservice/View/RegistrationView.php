@@ -47,6 +47,9 @@ class RegistrationView
     /** @var NomenclatureItemView[] */
     public $nomenclatureItemViews;
 
+    /** @var RegistrationDescriptionView[] */
+    public $registrationDescriptionViews;
+
     public function __construct(
         ?string $reference,
         ?string $companyName,
@@ -58,7 +61,8 @@ class RegistrationView
         ?string $companyPhone,
         ?string $webSite,
         ParticipantView $participantView,
-        array $nomenclatureItemViews
+        array $nomenclatureItemViews,
+        array $registrationDescriptionViews
     ) {
         $this->reference = $reference;
         $this->companyName = $companyName;
@@ -71,5 +75,6 @@ class RegistrationView
         $this->webSite = $webSite;
         $this->participantView = $participantView;
         $this->nomenclatureItemViews = $nomenclatureItemViews;
+        $this->registrationDescriptionViews = $registrationDescriptionViews;
     }
 }

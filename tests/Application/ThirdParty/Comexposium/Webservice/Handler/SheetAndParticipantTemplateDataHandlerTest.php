@@ -67,7 +67,8 @@ class SheetAndParticipantTemplateDataHandlerTest extends TestCase
                     new ParticipantPositionView('Export Director', 'en'),
                 ]
             ),
-            $nomenclatureItemViews
+            $nomenclatureItemViews,
+            []
         );
 
         /*

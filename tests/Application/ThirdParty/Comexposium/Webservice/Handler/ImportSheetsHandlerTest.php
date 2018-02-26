@@ -63,15 +63,10 @@ class ImportSheetsHandlerTest extends TestCase
                 'fr',
                 null,
                 'Nintendo Europe',
-                [
-                    new ParticipantPositionView('Directeur Export', 'fr'),
-                    new ParticipantPositionView('Export Director', 'en'),
-                ]
+                []
             ),
-            [
-                new NomenclatureItemView('666', null, []),
-                new NomenclatureItemView('88898', null, []),
-            ]
+            [],
+            []
         );
 
         $rawRegistrationToRegistrationViewConverter = $this->prophesize(

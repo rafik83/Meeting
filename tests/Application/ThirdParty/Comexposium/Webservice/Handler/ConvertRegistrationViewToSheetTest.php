@@ -61,12 +61,10 @@ class ConvertRegistrationViewToSheetTest extends TestCase
                 'fr',
                 null,
                 'Nintendo Europe',
-                [
-                    new ParticipantPositionView('Directeur Export', 'fr'),
-                    new ParticipantPositionView('Export Director', 'en'),
-                ]
+                []
             ),
-            ['666', '777', '88898']
+            [],
+            []
         );
 
         $expectedUser = new User('takashi.kitano@nintendo.com', '', '', 'fr');
