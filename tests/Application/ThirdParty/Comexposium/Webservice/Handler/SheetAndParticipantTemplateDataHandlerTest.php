@@ -15,6 +15,7 @@ use Proximum\Vimeet\Application\ThirdParty\Comexposium\Webservice\Handler\SheetA
 use Proximum\Vimeet\Application\ThirdParty\Comexposium\Webservice\View\Nomenclature\NomenclatureItemView;
 use Proximum\Vimeet\Application\ThirdParty\Comexposium\Webservice\View\ParticipantPositionView;
 use Proximum\Vimeet\Application\ThirdParty\Comexposium\Webservice\View\ParticipantView;
+use Proximum\Vimeet\Application\ThirdParty\Comexposium\Webservice\View\RegistrationDescriptionView;
 use Proximum\Vimeet\Application\ThirdParty\Comexposium\Webservice\View\RegistrationView;
 use Proximum\Vimeet\Application\ThirdParty\Comexposium\Webservice\View\SheetAndParticipantTemplateDataView;
 use Proximum\Vimeet\Domain\Model\Nomenclature as NomenclatureModel;
@@ -68,7 +69,10 @@ class SheetAndParticipantTemplateDataHandlerTest extends TestCase
                 ]
             ),
             $nomenclatureItemViews,
-            []
+            [
+                new RegistrationDescriptionView('Ma description en français', 'fr'),
+                new RegistrationDescriptionView('My english description', 'en'),
+            ]
         );
 
         /*
@@ -90,6 +94,19 @@ class SheetAndParticipantTemplateDataHandlerTest extends TestCase
         $countryObject = new Country(
             'participant-country-key', 'country', ['tags' => ['participant_country', 'participant_data']], 'fr', 'fr'
         );
+        $descriptionObject = new EditableText(
+            'description-key',
+            'editable-text',
+            [
+                'translatable' => true,
+                'tags' => [
+                    'sheet_description',
+                    'sheet_data',
+                ],
+            ],
+            'fr',
+            'fr'
+        );
 
         $registrationTemplateBlock = new Block('12', [], 'fr', 'fr');
         $registrationTemplateBlock->addChild(1, '111', $firstNameObject);
@@ -98,6 +115,8 @@ class SheetAndParticipantTemplateDataHandlerTest extends TestCase
         $registrationTemplateBlock->addChild(1, '444', $countryObject);
         $registrationTemplateBlock->addChild(1, '555', $companyCountryObject);
         $registrationTemplateBlock->addChild(1, '666', $genderObject);
+        $registrationTemplateBlock->addChild(1, '777', $descriptionObject);
+
         $registrationTemplateData = new TemplateData('root', [], 'fr', 'fr');
         $registrationTemplateData->addChild(0, '67019e4a', $registrationTemplateBlock);
 
@@ -149,6 +168,12 @@ class SheetAndParticipantTemplateDataHandlerTest extends TestCase
             [
                 'company-key' => ['text' => 'Nintendo'],
                 'sheet-country-key' => ['country' => 'FR'],
+                'description-key' => [
+                    'text' => [
+                        'fr' => 'Ma description en français',
+                        'en' => 'My english description',
+                    ],
+                ],
             ],
             [
                 'gender-key' => ['gender' => 'man'],

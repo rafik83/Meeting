@@ -118,9 +118,20 @@ class SheetAndParticipantTemplateDataHandler
                 if ($editableObject->hasTag($tag) && $editableObject instanceof TemplateObject\ContentObjectInterface) {
                     if ($editableObject instanceof TemplateObject\Nomenclature) {
                         $this->handleNomenclatureObject($editableObject, $value);
-                    } else {
-                        $editableObject->setContentValue($value);
+
+                        continue;
                     }
+
+                    if ($editableObject instanceof TemplateObject\EditableText
+                        && $editableObject->isTranslatable()
+                        && \is_array($value)
+                    ) {
+                        $editableObject->setTranslations($value);
+
+                        continue;
+                    }
+
+                    $editableObject->setContentValue($value);
                 }
             }
         }
@@ -189,6 +200,12 @@ class SheetAndParticipantTemplateDataHandler
      */
     private function getSheetTaggedData(RegistrationView $registrationView): array
     {
+        $descriptionTranslations = [];
+
+        foreach ($registrationView->registrationDescriptionViews as $registrationDescriptionView) {
+            $descriptionTranslations[$registrationDescriptionView->locale] = $registrationDescriptionView->label;
+        }
+
         return [
             Tag::SHEET_TITLE => $registrationView->companyName ?: $registrationView->participantView->getFullName(),
             Tag::SHEET_ORGANIZATION => $registrationView->companyName,
@@ -198,6 +215,7 @@ class SheetAndParticipantTemplateDataHandler
             Tag::SHEET_COUNTRY => $registrationView->country,
             Tag::SHEET_PHONE => $registrationView->companyPhone,
             Tag::SHEET_WEBSITE => $registrationView->webSite,
+            Tag::SHEET_DESCRIPTION => $descriptionTranslations,
         ];
     }
 

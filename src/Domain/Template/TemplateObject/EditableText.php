@@ -262,16 +262,21 @@ class EditableText extends EditableObject implements ContentObjectInterface, Sea
     }
 
     /**
-     * @param array $translations "['fr' => ['content' => 'content_here']]"
+     * @param array $translations "['fr' => 'contenu', 'en' => 'content']"
      *
      * @see EditableTextTranslationType
+     * @throws \LogicException
      */
-    public function setTranslationsInput(array $translations = [])
+    public function setTranslations(array $translations = [])
     {
+        if (!$this->isTranslatable()) {
+            throw new \LogicException(sprintf('Object %s is not translatable', $this->getKey()));
+        }
+
         $this->data['text'] = []; // erase previous untranslatable value
 
         foreach ($translations as $locale => $translation) {
-            $this->data['text'][$locale] = $translation['content'];
+            $this->data['text'][$locale] = $translation;
         }
     }
 }
