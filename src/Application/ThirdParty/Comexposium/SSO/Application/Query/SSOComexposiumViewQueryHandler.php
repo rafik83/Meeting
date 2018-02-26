@@ -14,9 +14,7 @@ use Proximum\Vimeet\Application\ThirdParty\Comexposium\SSO\Application\View\SSOC
 use Proximum\Vimeet\Domain\Event\ExtraParameter\Type;
 use Proximum\Vimeet\Domain\Repository\Event\ExtraParameterRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
-use Proximum\Vimeet\Domain\Repository\User\Event\ExtraDataRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\UserRepositoryInterface;
-use Proximum\Vimeet\Domain\User\Event\ExtraData\Type as ExtraDataType;
 
 class SSOComexposiumViewQueryHandler
 {
@@ -32,28 +30,22 @@ class SSOComexposiumViewQueryHandler
     /** @var SheetRepositoryInterface */
     private $sheetRepository;
 
-    /** @var ExtraDataRepositoryInterface */
-    private $extraDataRepository;
-
     /**
      * @param ExtraParameterRepositoryInterface $extraParameterRepository
      * @param UserRepositoryInterface           $userRepository
      * @param SheetRepositoryInterface          $sheetRepository
-     * @param ExtraDataRepositoryInterface      $extraDataRepository
      * @param null|string                       $comexposiumSSOLoaderLibEndpoint
      */
     public function __construct(
         ExtraParameterRepositoryInterface $extraParameterRepository,
         UserRepositoryInterface $userRepository,
         SheetRepositoryInterface $sheetRepository,
-        ExtraDataRepositoryInterface $extraDataRepository,
         ?string $comexposiumSSOLoaderLibEndpoint
     ) {
         $this->extraParameterRepository = $extraParameterRepository;
         $this->comexposiumSSOLoaderLibEndpoint = $comexposiumSSOLoaderLibEndpoint;
         $this->userRepository = $userRepository;
         $this->sheetRepository = $sheetRepository;
-        $this->extraDataRepository = $extraDataRepository;
     }
 
     public function handle(SSOComexposiumViewQuery $query): ?SSOComexposiumView
@@ -74,20 +66,42 @@ class SSOComexposiumViewQueryHandler
 
         $user = $this->userRepository->findByEmail($query->email);
 
+        $hasSheetImported = false;
+        $hasSheets = false;
+        $hasParticipantImported = false;
+        $isOwner = false;
+
         if ($user !== null) {
             $sheets = $this->sheetRepository->getSheetsByUserAndEvent($user, $query->event);
 
             if (!empty($sheets)) {
-                $extraData = $this->extraDataRepository->getExtraDataForEventNameAndUser(
-                    $query->event,
-                    ExtraDataType::IMPORTED_FROM_COMEXPOSIUM,
-                    $user
-                );
+                $hasSheets = true;
 
-                if ($extraData === null) {
-                    return null;
+                foreach ($sheets as $sheet) {
+                    if (true === $sheet->isImported()) {
+                        $hasSheetImported = true;
+                    }
+
+                    $participant = $sheet->getUserParticipant($user);
+
+                    if ($participant !== null && $participant->isImported()) {
+                        $hasParticipantImported = true;
+                    }
+
+                    if ($sheet->isOwner($user)) {
+                        $isOwner = true;
+                    }
                 }
             }
+        }
+
+        // We do not allow SSO for user not imported on a sheet imported
+        if ($hasParticipantImported === false && $hasSheetImported === true && $isOwner === false) {
+            return null;
+        }
+
+        if (true === $hasSheets && $hasSheetImported === false) {
+            return null;
         }
 
         return new SSOComexposiumView(

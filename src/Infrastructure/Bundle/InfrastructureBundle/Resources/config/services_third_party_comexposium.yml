@@ -99,7 +99,6 @@ services:
             - '@repository.event.extra_parameter_repository'
             - '@vimeet_infrastructure.repository.user_repository'
             - '@vimeet_infrastructure.repository.sheet_repository'
-            - '@repository.user.event.extra_data_repository'
             - '%comexposium_sso_loader_lib_endpoint%'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\ThirdParty\Comexposium\SSO\Application\Query\SSOComexposiumViewQuery }
