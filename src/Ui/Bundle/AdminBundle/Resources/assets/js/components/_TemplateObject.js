@@ -10,7 +10,9 @@ var $ = require('jquery'),
   MediaObject = require('./templateObjects/_MediaObject'),
   TagsObject = require('./templateObjects/_TagsObject'),
   PhoneObject = require('./templateObjects/_PhoneObject'),
-  CountryObject = require('./templateObjects/_CountryObject');
+  CountryObject = require('./templateObjects/_CountryObject'),
+  UrlObject = require('./templateObjects/_UrlObject')
+;
 
 /**
  * Template Object
@@ -67,6 +69,8 @@ function TemplateObject(element, locale)
     this.object = new PhoneObject(this.element, this.locale)
   } else if (this.type === 'country') {
     this.object = new CountryObject(this.element, this.locale)
+  } else if (this.type === 'url') {
+    this.object = new UrlObject(this.element, this.locale);
   }
 
   this.object.fill();
