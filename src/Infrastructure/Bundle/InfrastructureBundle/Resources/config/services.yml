@@ -2494,6 +2494,11 @@ services:
           - '%feature_video_conference_date_security_enabled%'
           - '%feature_video_conference_enabled%'
 
+    Proximum\Vimeet\Application\Components\Security\LoginSecondStepAccessChecker:
+        arguments:
+          - '@vimeet_infrastructure.repository.user_repository'
+          - '@repository.event.extra_parameter_repository'
+
     #
     # Guideline Component
     #

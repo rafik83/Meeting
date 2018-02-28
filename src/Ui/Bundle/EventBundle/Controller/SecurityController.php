@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Controller;
 
+use Proximum\Vimeet\Application\Components\Security\LoginSecondStepAccessChecker;
 use Proximum\Vimeet\Application\Query\User\UserImpersonateViewQuery;
 use Proximum\Vimeet\Application\ThirdParty\Comexposium\SSO\Application\Query\SSOComexposiumViewQuery;
 use Proximum\Vimeet\Domain\Model\Event;
@@ -44,6 +45,8 @@ class SecurityController extends Controller
             return $this->redirectToRoute('event');
         }
 
+        $event = $eventDomain->getEvent();
+
         // Clean register type for potential next step
         $this->get('session')->getFlashBag()->get('register_type');
 
@@ -51,7 +54,7 @@ class SecurityController extends Controller
         $form  = $this->createForm(EmailType::class, $email);
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
-            if ($this->get('vimeet_infrastructure.repository.user_repository')->emailExists($email->email)) {
+            if ($this->get(LoginSecondStepAccessChecker::class)->allowedToAccess($event, $email->email)) {
                 // clear potential previous email before setting new one
                 $this->get('session')->getFlashBag()->get('login_email');
                 $this->addFlash('login_email', $email->email);
@@ -74,7 +77,7 @@ class SecurityController extends Controller
             [];
 
         return $this->render('EventBundle:Security:login_first_step.html.twig', [
-            'event' => $eventDomain->getEvent(),
+            'event' => $event,
             'form'  => $form->createView(),
             'users' => $users,
         ]);
@@ -91,6 +94,8 @@ class SecurityController extends Controller
         if ($this->isGranted('IS_AUTHENTICATED_REMEMBERED')) {
             return $this->redirectToRoute('event');
         }
+
+        $event = $eventDomain->getEvent();
 
         $typeFlashBag = $this->get('session')->getFlashBag()->get('register_type');
         $typeId       = array_shift($typeFlashBag);
@@ -112,7 +117,7 @@ class SecurityController extends Controller
         $email = $this->get('session')->getFlashBag()->get('login_email');
 
         if (empty($email) || null === ($email = array_shift($email))
-            || !$this->get('vimeet_infrastructure.repository.user_repository')->emailExists($email)
+            || !$this->get(LoginSecondStepAccessChecker::class)->allowedToAccess($event, $email)
         ) {
             return $this->redirectToRoute('event_login');
         }
@@ -129,19 +134,19 @@ class SecurityController extends Controller
 
         $ssoComexposiumView = $this->get(QueryBus::class)->handle(
             new SSOComexposiumViewQuery(
-                $eventDomain->getEvent(),
+                $event,
                 $request->getLocale(),
                 $email
             )
         );
 
         return $this->render('EventBundle:Security:login_second_step.html.twig', [
-            'event'    => $eventDomain->getEvent(),
-            'form'     => $form->createView(),
+            'event' => $event,
+            'form' => $form->createView(),
             'username' => $email,
-            'error'    => $error,
-            'typeId'   => $typeId,
-            'type'     => $type,
+            'error' => $error,
+            'typeId' => $typeId,
+            'type' => $type,
             'ssoComexposiumView' => $ssoComexposiumView,
         ]);
     }
