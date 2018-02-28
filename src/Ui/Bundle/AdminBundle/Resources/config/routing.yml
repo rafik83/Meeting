@@ -1666,6 +1666,14 @@ admin_sheet_participant_update_agenda_confirmation:
     defaults: { _controller: AdminBundle:Participant\AgendaConfirmation:updateAgendaConfirmation }
 
 #
+# Reindex all events
+#
+admin_elasticsearch_index:
+    path: /event/elasticsearch/index
+    methods: [GET, POST]
+    defaults: { _controller: Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Event\IndexAction }
+
+#
 # Reindex sheets
 #
 admin_event_sheet_index:

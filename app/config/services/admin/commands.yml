@@ -115,6 +115,20 @@ services:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Tip\Event\Update }
 
     #
+    # Event
+    #
+    Proximum\Vimeet\Application\Command\Event\Index\IndexHandler:
+        arguments:
+            - '@vimeet_infrastructure.repository.event_repository'
+            - '@adapter.job_queue_adapter'
+
+    Proximum\Vimeet\Application\Command\Event\PrepareIndexHandler:
+        arguments:
+            - '@adapter.job_queue_adapter'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Event\PrepareIndex }
+
+    #
     # Event / Sheet
     #
     Proximum\Vimeet\Application\Command\Event\Sheet\IndexHandler:
