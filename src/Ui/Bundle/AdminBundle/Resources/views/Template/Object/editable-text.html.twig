@@ -123,7 +123,7 @@
                                         <label class="form-label" for="tags">
                                             {{ 'template.sheet_template.tags'|trans }}
                                         </label>
-                                        <select class="form-control select2-builder" name="tags[{{ index|default('__TAGS__') }}][tag]" multiple="multiple">
+                                        <select class="form-control select2-builder" name="tags" multiple="multiple">
                                             {% for tag in sheet_template_tags|default([]) %}
                                                 <option value="{{ tag }}" {% if tag in config.tags %}selected="selected"{% endif %}>
                                                     {{ ('template.tag.' ~ tag)|trans({}, 'templates') }}

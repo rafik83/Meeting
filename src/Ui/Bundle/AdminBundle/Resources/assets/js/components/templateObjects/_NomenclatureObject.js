@@ -24,6 +24,7 @@ NomenclatureObject.prototype.fill = function ()
   this.form.set('mode', this.config.mode);
   this.form.set('objective', this.config.objective);
   this.form.set('required', this.config.required);
+  this.form.set('tags', this.config.tags);
 
   this.form.bind('label', this.config.label[this.locale]);
 };
@@ -37,6 +38,7 @@ NomenclatureObject.prototype.save = function ()
   this.config.mode               = this.form.get('mode');
   this.config.objective          = this.form.get('objective');
   this.config.required           = this.form.get('required');
+  this.config.tags               = this.form.get('tags');
 
   this.form.bind('label', this.config.label[this.locale]);
 
