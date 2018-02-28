@@ -14,7 +14,6 @@ use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\QueryBuilder;
 use Proximum\Vimeet\Application\Components\Paginator\Paginator;
 use Proximum\Vimeet\Domain\Model\Event;
-use Proximum\Vimeet\Domain\Model\Meeting\Request;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Unavailability\Mass;
 use Proximum\Vimeet\Domain\Model\Unavailability\MassAssignment;
@@ -82,7 +81,7 @@ class UserRepository implements UserRepositoryInterface
     /**
      * {@inheritdoc}
      */
-    public function findByEmail($email)
+    public function findByEmail($email): ?User
     {
         $queryBuilder = $this
             ->entityManager

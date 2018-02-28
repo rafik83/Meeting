@@ -16,7 +16,6 @@ use Proximum\Vimeet\Application\Components\Sheet\Template\Tag;
 use Proximum\Vimeet\Application\Serializer\Denormalizer\Exception\InvalidObjectContentException;
 use Proximum\Vimeet\Domain\Account\EmailValidator;
 use Proximum\Vimeet\Domain\Account\Synchronizer;
-use Proximum\Vimeet\Domain\Email\EmailHelper;
 use Proximum\Vimeet\Domain\Helper\StringHelper;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Sheet;

@@ -38,9 +38,9 @@ interface UserRepositoryInterface
     /**
      * @param string $email
      *
-     * @return User
+     * @return null|User
      */
-    public function findByEmail($email);
+    public function findByEmail($email): ?User;
 
     /**
      * @return User[]

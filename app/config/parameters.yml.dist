@@ -76,6 +76,9 @@ parameters:
 
     jenkins_phantomjs_sheet_pdf_print_build_name: 'PhantomJsSheetPrintPdfBuild'
 
+    comexposium_username: comexposiumUsername
+    comexposium_password: comexposiumPassword
+
     # Features flag
     feature_video_conference_enabled: false
     feature_video_conference_date_security_enabled: false
