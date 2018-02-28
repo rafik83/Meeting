@@ -1,0 +1,71 @@
+var Form = require('./../_Form'),
+    TemplateTaggableObject = require('./../_TemplateTaggableObject')
+;
+
+/**
+ * BooleanObject
+ *
+ * @param element
+ * @param locale
+ *
+ * @constructor
+ */
+function BooleanObject(element, locale)
+{
+    this.element = element;
+    this.locale = locale;
+    this.form = new Form(element);
+    this.config = JSON.parse(this.element.getAttribute('data-config'));
+    this.templateTaggableObject = null;
+
+    if (element.querySelector('[data-template-tags-select]')) {
+        this.templateTaggableObject = new TemplateTaggableObject(element);
+    }
+
+    this.filterActive = this.element.querySelector('input[name="filter[active]"');
+    this.filterLabel = this.element.querySelector('[data-boolean-filter-label]');
+    this.filterActive.onchange = this.handleFilterActiveChanged.bind(this);
+}
+
+BooleanObject.prototype.fill = function ()
+{
+    this.form.set('style', this.config.style);
+    this.form.set('label', this.config.label[this.locale]);
+    this.form.set('required', this.config.required);
+    this.form.set('tags', this.config.tags);
+    this.form.set('filter[active]', this.config.filter.active);
+    this.form.set('filter[label]', this.config.filter.label);
+    this.toggleDisplayLabelFilter(this.config.filter.active);
+
+    this.form.bind('label', this.config.label[this.locale]);
+};
+
+BooleanObject.prototype.save = function ()
+{
+    if (this.templateTaggableObject && !this.templateTaggableObject.save()) {
+        return false;
+    }
+
+    this.config.style              = this.form.get('style');
+    this.config.label[this.locale] = this.form.get('label');
+    this.config.required           = this.form.get('required');
+    this.config.tags               = this.form.get('tags');
+    this.config.filter.label       = this.form.get('filter[label]');
+    this.config.filter.active      = this.form.get('filter[active]');
+
+    this.form.bind('label', this.config.label[this.locale]);
+
+    return true;
+};
+
+BooleanObject.prototype.handleFilterActiveChanged = function (event)
+{
+    this.toggleDisplayLabelFilter(event.target.checked);
+};
+
+BooleanObject.prototype.toggleDisplayLabelFilter = function (displayed)
+{
+    this.filterLabel.style.display = displayed ? 'block' : 'none';
+};
+
+module.exports = BooleanObject;

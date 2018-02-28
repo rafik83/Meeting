@@ -1,5 +1,7 @@
 template.action.close: Fermer
 template.action.save: Enregistrer
+template.boolean.filter.active: 'Activer le filtre'
+template.boolean.filter.label: 'Libellé du filtre'
 template.block.configure: Configurer
 template.block.remove_confirm: 'Confirmez vous la suppression de cet élément ?'
 template.collection.title: 'Champs collection activés'

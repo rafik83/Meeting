@@ -10,7 +10,9 @@ var $ = require('jquery'),
   MediaObject = require('./templateObjects/_MediaObject'),
   TagsObject = require('./templateObjects/_TagsObject'),
   PhoneObject = require('./templateObjects/_PhoneObject'),
-  CountryObject = require('./templateObjects/_CountryObject');
+  CountryObject = require('./templateObjects/_CountryObject'),
+  BooleanObject = require('./templateObjects/_BooleanObject')
+;
 
 /**
  * Template Object
@@ -62,11 +64,13 @@ function TemplateObject(element, locale)
   } else if (this.type === 'media') {
     this.object = new MediaObject(this.element, this.locale);
   } else if (this.type === 'tags') {
-    this.object = new TagsObject(this.uid, this.element, this.locale)
+    this.object = new TagsObject(this.uid, this.element, this.locale);
   } else if (this.type === 'telephone') {
-    this.object = new PhoneObject(this.element, this.locale)
+    this.object = new PhoneObject(this.element, this.locale);
   } else if (this.type === 'country') {
-    this.object = new CountryObject(this.element, this.locale)
+    this.object = new CountryObject(this.element, this.locale);
+  } else if (this.type === 'boolean') {
+    this.object = new BooleanObject(this.element, this.locale);
   }
 
   this.object.fill();
