@@ -11,10 +11,12 @@
 namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Controller;
 
 use Proximum\Vimeet\Application\Query\User\UserImpersonateViewQuery;
+use Proximum\Vimeet\Application\ThirdParty\Comexposium\SSO\Application\Query\SSOComexposiumViewQuery;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\Sheet\Group;
 use Proximum\Vimeet\Domain\Model\User;
+use Proximum\Vimeet\Infrastructure\Adapter\QueryBus;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Model\Email;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Common\EmailType;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Login\LoginType;
@@ -95,7 +97,7 @@ class SecurityController extends Controller
         $type         = null;
 
         if (null !== $typeId) {
-            if (is_int($typeId) && $type = $this->get('vimeet_infrastructure.repository.type_repository')
+            if (\is_int($typeId) && $type = $this->get('vimeet_infrastructure.repository.type_repository')
                     ->getTypeViewById($typeId, $request->getLocale())
             ) {
                 $this->addFlash('register_type', $typeId);
@@ -125,6 +127,14 @@ class SecurityController extends Controller
             $form->get('password')->addError(new FormError($error->getMessage()));
         }
 
+        $ssoComexposiumView = $this->get(QueryBus::class)->handle(
+            new SSOComexposiumViewQuery(
+                $eventDomain->getEvent(),
+                $request->getLocale(),
+                $email
+            )
+        );
+
         return $this->render('EventBundle:Security:login_second_step.html.twig', [
             'event'    => $eventDomain->getEvent(),
             'form'     => $form->createView(),
@@ -132,6 +142,7 @@ class SecurityController extends Controller
             'error'    => $error,
             'typeId'   => $typeId,
             'type'     => $type,
+            'ssoComexposiumView' => $ssoComexposiumView,
         ]);
     }
 

@@ -3,14 +3,15 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2015 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
 
 namespace Proximum\Vimeet\Ui\Bundle\EventBundle\ParamConverter;
 
-use Proximum\Vimeet\Domain\Repository\EventRepositoryInterface;
+use Proximum\Vimeet\Domain\Event\EventByHostResolver;
+use Proximum\Vimeet\Domain\Exception\Event\EventException;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Sensio\Bundle\FrameworkExtraBundle\Request\ParamConverter\ParamConverterInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -18,36 +19,28 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class EventDomainParamConverter implements ParamConverterInterface
 {
-    /**
-     * @var EventRepositoryInterface
-     */
-    private $eventRepository;
+    /** @var EventByHostResolver */
+    private $eventByHostResolver;
 
     /**
-     * @param EventRepositoryInterface $eventRepository
+     * @param EventByHostResolver $eventByHostResolver
      */
-    public function __construct(EventRepositoryInterface $eventRepository)
+    public function __construct(EventByHostResolver $eventByHostResolver)
     {
-        $this->eventRepository = $eventRepository;
+        $this->eventByHostResolver = $eventByHostResolver;
     }
 
     /**
      * {@inheritdoc}
+     *
+     * @throws NotFoundHttpException
      */
     public function apply(Request $request, ParamConverter $configuration)
     {
-        $event = $this->eventRepository->getEventByDomain($request->getHost());
-
-        if (null === $event) {
-            throw new NotFoundHttpException('Event not found');
-        }
-
-        if (!$event->isVisible()) {
-            throw new NotFoundHttpException('Event not visible');
-        }
-
-        if (!$event->hasLocale($request->getLocale())) {
-            throw new NotFoundHttpException('Locale not found');
+        try {
+            $event = $this->eventByHostResolver->resolveEventFromHostAndLocale($request->getHost(), $request->getLocale());
+        } catch (EventException $exception) {
+            throw new NotFoundHttpException($exception->getMessage());
         }
 
         $request->attributes->set($configuration->getName(), new EventDomain($event));

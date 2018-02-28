@@ -42,5 +42,5 @@ interface ExtraParameterRepositoryInterface
      *
      * @return null|Event\ExtraParameter
      */
-    public function findByEventAndType(Event $event, string $type);
+    public function findByEventAndType(Event $event, string $type): ?Event\ExtraParameter;
 }

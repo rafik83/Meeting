@@ -5,7 +5,7 @@ services:
     vimeet_app.param_converter.event_domain_param_converter:
         class: Proximum\Vimeet\Ui\Bundle\EventBundle\ParamConverter\EventDomainParamConverter
         arguments:
-            - '@vimeet_infrastructure.repository.event_repository'
+            - '@Proximum\Vimeet\Domain\Event\EventByHostResolver'
         tags:
             - { name: 'request.param_converter', priority: -1, converter: 'event_domain_param_converter' }
     vimeet_app.param_converter.participant_type_view_param_converter:
