@@ -73,14 +73,17 @@
                             'registrationTemplateTagView': registrationTemplateTagView,
                         }, false) }}
                         {{ include('AdminBundle:Template/Object:telephone.html.twig', {
+                            'isRegistrationTemplate': true,
                             'locale': locale,
                             'registrationTemplateTagView': registrationTemplateTagView,
                         }, false) }}
                         {{ include('AdminBundle:Template/Object:country.html.twig', {
+                            'isRegistrationTemplate': true,
                             'locale': locale,
                             'registrationTemplateTagView': registrationTemplateTagView,
                         }, false) }}
                         {{ include('AdminBundle:Template/Object:url.html.twig', {
+                            'isRegistrationTemplate': true,
                             'locale': locale,
                             'registrationTemplateTagView': registrationTemplateTagView,
                         }, false) }}
@@ -89,7 +92,13 @@
                         {#{{ include('AdminBundle:Template/Object:image.html.twig', { 'locale': locale,'products': products }, false) }}#}
                         {#{{ include('AdminBundle:Template/Object:tag.html.twig', { 'locale': locale, 'sheet_tags': sheet_tags }, false) }}#}
                         {#{{ include('AdminBundle:Template/Object:collection.html.twig', { 'locale': locale }, false) }}#}
-                        {#{{ include('AdminBundle:Template/Object:nomenclature.html.twig', { 'locale': locale, 'nomenclatures': nomenclatures }, false) }}#}
+                        {{ include('AdminBundle:Template/Object:nomenclature.html.twig', {
+                            'isRegistrationTemplate': true,
+                            'locale': locale,
+                            'nomenclatures': nomenclatures,
+                            'registrationTemplateTagView': registrationTemplateTagView,
+                        }, false)
+                        }}
                         {#{{ include('AdminBundle:Template/Object:media.html.twig', { 'locale': locale, 'products': products}, false) }}#}
                         {#{{ include('AdminBundle:Template/Object:tags.html.twig', { 'locale': locale, 'sheet_tags': sheet_tags }, false) }}#}
                     </div>

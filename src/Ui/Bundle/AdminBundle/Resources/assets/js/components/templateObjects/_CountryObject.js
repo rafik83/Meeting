@@ -6,14 +6,17 @@ var Form = require('./../_Form'),
  *
  * @param element
  * @param locale
+ * @param builderType
+ *
  * @constructor
  */
-function CountryObject(element, locale)
+function CountryObject(element, locale, builderType)
 {
   this.element = element;
   this.locale = locale;
   this.form = new Form(element);
   this.config = JSON.parse(this.element.getAttribute('data-config'));
+  this.builderType = builderType;
   this.templateTaggableObject = null;
 
   if (element.querySelector('[data-template-tags-select]')) {

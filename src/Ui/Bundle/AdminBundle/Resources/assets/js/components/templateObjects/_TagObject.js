@@ -7,15 +7,17 @@ var $ = require('jquery'),
  * @param uid
  * @param element
  * @param locale
+ * @param builderType
  * @constructor
  */
-function TagObject(uid, element, locale)
+function TagObject(uid, element, locale, builderType)
 {
-  this.uid     = uid;
+  this.uid = uid;
   this.element = element;
-  this.locale  = locale;
-  this.form    = new Form(element);
-  this.config  = JSON.parse(this.element.getAttribute('data-config'));
+  this.locale = locale;
+  this.form = new Form(element);
+  this.config = JSON.parse(this.element.getAttribute('data-config'));
+  this.builderType = builderType;
 
   [].forEach.call(this.element.querySelectorAll('[data-collection-bind]'), function (element) {
     element.setAttribute('data-collection', element.getAttribute('data-collection-bind'));
