@@ -10,15 +10,19 @@
 
 namespace Proximum\Vimeet\Application\ThirdParty\Comexposium\Webservice\Converter;
 
-use League\ISO3166\ISO3166;
+use Proximum\Vimeet\Application\ThirdParty\Comexposium\Webservice\View\Nomenclature\NomenclatureItemView;
+use Proximum\Vimeet\Application\ThirdParty\Comexposium\Webservice\View\Nomenclature\NomenclatureView;
 use Proximum\Vimeet\Application\ThirdParty\Comexposium\Webservice\View\ParticipantPositionView;
 use Proximum\Vimeet\Application\ThirdParty\Comexposium\Webservice\View\ParticipantView;
+use Proximum\Vimeet\Application\ThirdParty\Comexposium\Webservice\View\RegistrationDescriptionView;
 use Proximum\Vimeet\Application\ThirdParty\Comexposium\Webservice\View\RegistrationView;
 use Proximum\Vimeet\Domain\Template\TemplateObject\Gender;
 
-class RawRegistrationToRegistrationViewConverter
+class RawRegistrationToRegistrationViewConverter extends ComexposiumConverter
 {
     private CONST STATUS_WHITE_LIST = ['VALIDE', 'INSTANCE'];
+
+    private CONST REGISTRATION_DESCRIPTION_FIELD = 'DESCRIPTION';
 
     private const GENDER_MAPPING = [
         '1' => Gender::WOMAN, // Mademoiselle
@@ -29,11 +33,12 @@ class RawRegistrationToRegistrationViewConverter
     /**
      * @see registration wsdl: http://webservices.comexposium-admin.com/catalogue-ws-v2/inscriptionclientws.wsdl
      *
-     * @param \stdClass $registration
+     * @param \stdClass        $registration
+     * @param NomenclatureView $nomenclatureView
      *
      * @return null|RegistrationView
      */
-    public function convert(\stdClass $registration): ?RegistrationView
+    public function convert(\stdClass $registration, NomenclatureView $nomenclatureView): ?RegistrationView
     {
         if (!isset($registration->reference, $registration->etatExposant)) {
             return null;
@@ -63,7 +68,10 @@ class RawRegistrationToRegistrationViewConverter
             $registration->siteInternet ?? null,
             $participantView,
             isset($registration->referenceNomenclatureManifestation)
-                ? $this->convertToArray($registration->referenceNomenclatureManifestation)
+                ? $this->getNomenclatureItemViews($registration->referenceNomenclatureManifestation, $nomenclatureView)
+                : [],
+            isset($registration->inscriptionTrad)
+                ? $this->getRegistrationDescriptionViews($registration->inscriptionTrad)
                 : []
         );
     }
@@ -118,41 +126,6 @@ class RawRegistrationToRegistrationViewConverter
     }
 
     /**
-     * @param string $countryAlpha3Code
-     *
-     * @return null|string
-     */
-    private function convertAlpha3ToAlpha2CodeCountry(string $countryAlpha3Code): ?string
-    {
-        try {
-            $country = (new ISO3166)->alpha3($countryAlpha3Code);
-            return $country[ISO3166::KEY_ALPHA2];
-        } catch (\Exception $exception) {}
-
-        return null;
-    }
-
-    /**
-     * @param array|\stdClass $data
-     *
-     * @return array
-     */
-    private function convertToArray($data): array
-    {
-        return \is_array($data) ? $data : [$data];
-    }
-
-    /**
-     * @param string $language
-     *
-     * @return string
-     */
-    private function convertLocale(string $language): string
-    {
-        return $language === 'FRA' ? 'fr' : 'en';
-    }
-
-    /**
      * @param \stdClass $user
      *
      * @return null|string
@@ -174,5 +147,51 @@ class RawRegistrationToRegistrationViewConverter
     private function isRegistrationHasAWhiteListedStatus(string $status): bool
     {
         return \in_array($status, self::STATUS_WHITE_LIST, true);
+    }
+
+    /**
+     * @param array|\stdClass  $nomenclatureReferences
+     * @param NomenclatureView $nomenclatureView
+     *
+     * @return array
+     */
+    private function getNomenclatureItemViews($nomenclatureReferences, NomenclatureView $nomenclatureView): array
+    {
+        $nomenclatureItemViews = [];
+        $nomenclatureReferences = $this->convertToArray($nomenclatureReferences);
+
+        foreach ($nomenclatureReferences as $nomenclatureReference) {
+            $nomenclatureItemView = $nomenclatureView->getNomenclatureItemViewByReference($nomenclatureReference);
+
+            if ($nomenclatureItemView instanceof NomenclatureItemView) {
+                $nomenclatureItemViews[] = $nomenclatureItemView;
+            }
+        }
+
+        return $nomenclatureItemViews;
+    }
+
+    /**
+     * @param \stdClass|\stdClass[] $registrationTranslatedData
+     *
+     * @return RegistrationDescriptionView[]
+     */
+    private function getRegistrationDescriptionViews($registrationTranslatedData): array
+    {
+        $registrationTranslatedData = $this->convertToArray($registrationTranslatedData);
+        $registrationDescriptionViews = [];
+
+        foreach ($registrationTranslatedData as $data) {
+            if (isset($data->inscriptionChamp, $data->referenceLangue, $data->traduction)
+                && self::REGISTRATION_DESCRIPTION_FIELD === $data->inscriptionChamp
+            ) {
+                $registrationDescriptionViews[] = new RegistrationDescriptionView(
+                    $data->traduction,
+                    $this->convertLocale($data->referenceLangue)
+                );
+            }
+        }
+
+        return $registrationDescriptionViews;
     }
 }

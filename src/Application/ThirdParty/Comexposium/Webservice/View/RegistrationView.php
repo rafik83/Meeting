@@ -10,6 +10,8 @@
 
 namespace Proximum\Vimeet\Application\ThirdParty\Comexposium\Webservice\View;
 
+use Proximum\Vimeet\Application\ThirdParty\Comexposium\Webservice\View\Nomenclature\NomenclatureItemView;
+
 class RegistrationView
 {
     /** @var null|string */
@@ -42,8 +44,11 @@ class RegistrationView
     /** @var ParticipantView */
     public $participantView;
 
-    /** @var array */
-    public $nomenclatureReferences;
+    /** @var NomenclatureItemView[] */
+    public $nomenclatureItemViews;
+
+    /** @var RegistrationDescriptionView[] */
+    public $registrationDescriptionViews;
 
     public function __construct(
         ?string $reference,
@@ -56,7 +61,8 @@ class RegistrationView
         ?string $companyPhone,
         ?string $webSite,
         ParticipantView $participantView,
-        array $nomenclatureReferences
+        array $nomenclatureItemViews,
+        array $registrationDescriptionViews
     ) {
         $this->reference = $reference;
         $this->companyName = $companyName;
@@ -68,6 +74,7 @@ class RegistrationView
         $this->companyPhone = $companyPhone;
         $this->webSite = $webSite;
         $this->participantView = $participantView;
-        $this->nomenclatureReferences = $nomenclatureReferences;
+        $this->nomenclatureItemViews = $nomenclatureItemViews;
+        $this->registrationDescriptionViews = $registrationDescriptionViews;
     }
 }

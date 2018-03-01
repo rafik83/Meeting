@@ -129,6 +129,18 @@ class Nomenclature extends EditableObject implements ContentObjectInterface, Sea
     }
 
     /**
+     * @param string $key
+     *
+     * @return bool
+     */
+    public function hasKey(string $key): bool
+    {
+        $lastLevel = $this->nomenclature->getLastLevel();
+
+        return isset($lastLevel[$key]);
+    }
+
+    /**
      * @param string $givenKey
      * @param string $locale
      *

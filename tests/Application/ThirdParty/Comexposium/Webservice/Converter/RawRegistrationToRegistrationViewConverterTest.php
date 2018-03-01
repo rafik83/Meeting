@@ -12,8 +12,11 @@ namespace Proximum\Vimeet\Tests\Application\ThirdParty\Comexposium\Webservice\Co
 
 use PHPUnit\Framework\TestCase;
 use Proximum\Vimeet\Application\ThirdParty\Comexposium\Webservice\Converter\RawRegistrationToRegistrationViewConverter;
+use Proximum\Vimeet\Application\ThirdParty\Comexposium\Webservice\View\Nomenclature\NomenclatureItemView;
+use Proximum\Vimeet\Application\ThirdParty\Comexposium\Webservice\View\Nomenclature\NomenclatureView;
 use Proximum\Vimeet\Application\ThirdParty\Comexposium\Webservice\View\ParticipantPositionView;
 use Proximum\Vimeet\Application\ThirdParty\Comexposium\Webservice\View\ParticipantView;
+use Proximum\Vimeet\Application\ThirdParty\Comexposium\Webservice\View\RegistrationDescriptionView;
 use Proximum\Vimeet\Application\ThirdParty\Comexposium\Webservice\View\RegistrationView;
 
 class RawRegistrationToRegistrationViewConverterTest extends TestCase
@@ -63,8 +66,25 @@ class RawRegistrationToRegistrationViewConverterTest extends TestCase
 
         $rawRegistration->responsableSalon = $responsableSalon;
 
+        $descriptionTrad1 = new \stdClass();
+        $descriptionTrad1->referenceLangue = 'GBR';
+        $descriptionTrad1->traduction = 'Scrap iron recycling machines';
+        $descriptionTrad1->inscriptionChamp = 'DESCRIPTION';
+
+        $descriptionTrad2 = new \stdClass();
+        $descriptionTrad2->referenceLangue = 'FRA';
+        $descriptionTrad2->traduction = 'Whatever description';
+        $descriptionTrad2->inscriptionChamp = 'WHATEVER-ELSE';
+
+        $rawRegistration->inscriptionTrad = [$descriptionTrad1, $descriptionTrad2];
+
+        $nomenclatureView = new NomenclatureView([
+            '666' => new NomenclatureItemView('666', null, []),
+            '88898' => new NomenclatureItemView('88898', null, []),
+        ]);
+
         $rawRegistrationToRegistrationViewConverter = new RawRegistrationToRegistrationViewConverter();
-        $result = $rawRegistrationToRegistrationViewConverter->convert($rawRegistration);
+        $result = $rawRegistrationToRegistrationViewConverter->convert($rawRegistration, $nomenclatureView);
 
         $expectedResult = new RegistrationView(
             '5556666',
@@ -89,7 +109,13 @@ class RawRegistrationToRegistrationViewConverterTest extends TestCase
                     new ParticipantPositionView('Export Director', 'en'),
                 ]
             ),
-            ['666', '777', '88898']
+            [
+                new NomenclatureItemView('666', null, []),
+                new NomenclatureItemView('88898', null, []),
+            ],
+            [
+                new RegistrationDescriptionView('Scrap iron recycling machines', 'en')
+            ]
         );
 
         $this->assertEquals($expectedResult, $result);
