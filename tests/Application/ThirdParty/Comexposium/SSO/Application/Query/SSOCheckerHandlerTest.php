@@ -59,26 +59,33 @@ class SSOCheckerHandlerTest extends TestCase
         $this->expectException(UserNotFoundException::class);
         $this->userRepository->findByEmail('email@example.net')->shouldBeCalled()->willReturn(null);
 
-        $command = new SSOChecker($this->event->reveal(), 'email@example.net', 'token');
+        $command = new SSOChecker($this->event->reveal(), 'email@example.net', 'token', true);
         $this->handler->handle($command);
     }
 
     public function testNoUserOnThisEvent()
     {
         $this->expectException(UserNotOnEventException::class);
+
         $user = $this->prophesize(User::class);
+        $user->getEmail()->willReturn('email@example.net');
+
         $this->userRepository->findByEmail('email@example.net')->shouldBeCalled()->willReturn($user->reveal());
         $this->sheetRepository->getSheetsByUserAndEvent($user->reveal(), $this->event->reveal())->willReturn([]);
 
-        $command = new SSOChecker($this->event->reveal(), 'email@example.net', 'token');
+        $command = new SSOChecker($this->event->reveal(), 'email@example.net', 'token', true);
         $this->handler->handle($command);
     }
 
     public function testComboEmailTokenNotValid()
     {
         $this->expectException(ComboEmailUserNotValidException::class);
+
         $user = $this->prophesize(User::class);
+        $user->getEmail()->willReturn('email@example.net');
+
         $sheet = $this->prophesize(Sheet::class);
+
         $this->userRepository->findByEmail('email@example.net')->shouldBeCalled()->willReturn($user->reveal());
         $this->sheetRepository
             ->getSheetsByUserAndEvent($user->reveal(), $this->event->reveal())
@@ -88,14 +95,17 @@ class SSOCheckerHandlerTest extends TestCase
 
         $this->tokenChecker->isMailTokenComboValid('email@example.net', 'token')->shouldBeCalled()->willReturn(false);
 
-        $command = new SSOChecker($this->event->reveal(), 'email@example.net', 'token');
+        $command = new SSOChecker($this->event->reveal(), 'email@example.net', 'token', true);
         $this->handler->handle($command);
     }
 
     public function testHandle()
     {
         $user = $this->prophesize(User::class);
+        $user->getEmail()->willReturn('email@example.net');
+
         $sheet = $this->prophesize(Sheet::class);
+
         $this->userRepository->findByEmail('email@example.net')->shouldBeCalled()->willReturn($user->reveal());
         $this->sheetRepository
             ->getSheetsByUserAndEvent($user->reveal(), $this->event->reveal())
@@ -105,9 +115,23 @@ class SSOCheckerHandlerTest extends TestCase
 
         $this->tokenChecker->isMailTokenComboValid('email@example.net', 'token')->shouldBeCalled()->willReturn(true);
 
-        $command = new SSOChecker($this->event->reveal(), 'email@example.net', 'token');
+        $command = new SSOChecker($this->event->reveal(), 'email@example.net', 'token', true);
         $result = $this->handler->handle($command);
 
         $this->assertEquals($user->reveal(), $result);
+    }
+
+    public function testHandleNotKnownVisitorLogin()
+    {
+        $this->event->getFallback()->willReturn('en');
+        $this->userRepository->findByEmail('email@example.net')->shouldBeCalled()->willReturn(null);
+
+        $this->tokenChecker->isMailTokenComboValid('email@example.net', 'token')->shouldBeCalled()->willReturn(true);
+
+        $command = new SSOChecker($this->event->reveal(), 'email@example.net', 'token', false);
+        $result = $this->handler->handle($command);
+
+        $expectedUser = new User('email@example.net', '', '', 'en');
+        $this->assertEquals($expectedUser, $result);
     }
 }

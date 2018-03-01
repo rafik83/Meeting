@@ -103,9 +103,13 @@ final class SSOAuthenticator extends AbstractGuardAuthenticator
             throw new BadRequestHttpException('Missing request parameter "token".');
         }
 
-        $email = $request->query->get('email');
+        if (!$request->query->has('isExhibitor')) {
+            throw new BadRequestHttpException('Missing request parameter "token".');
+        }
 
+        $email = $request->query->get('email');
         $token = $request->query->get('token');
+        $isExhibitor = (bool) $request->query->get('isExhibitor');
 
         try {
             $event = $this->eventByHostResolver->resolveEventFromHostAndLocale($request->getHost(), $request->getLocale());
@@ -121,6 +125,7 @@ final class SSOAuthenticator extends AbstractGuardAuthenticator
             'email' => $email,
             'token' => $token,
             'event' => $event,
+            'isExhibitor' => $isExhibitor,
         ];
     }
 
@@ -136,7 +141,8 @@ final class SSOAuthenticator extends AbstractGuardAuthenticator
                 new SSOChecker(
                     $credentials['event'],
                     $credentials['email'],
-                    $credentials['token']
+                    $credentials['token'],
+                    $credentials['isExhibitor']
                 )
             );
         } catch (SSOException $exception) {
