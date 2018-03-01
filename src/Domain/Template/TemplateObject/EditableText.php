@@ -68,6 +68,28 @@ class EditableText extends EditableObject implements ContentObjectInterface, Sea
     }
 
     /**
+     * @return bool
+     */
+    public function isEmpty(): bool
+    {
+        if (!isset($this->data['text'])) {
+            return true;
+        }
+
+        if ($this->isTranslatable()) {
+            foreach ($this->data['text'] as $translatedText) {
+                if ('' !== trim($translatedText)) {
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
+        return '' === trim($this->data['text']);
+    }
+
+    /**
      * {@inheritdoc}
      */
     public function getContentValueLocalize($locale = null)
