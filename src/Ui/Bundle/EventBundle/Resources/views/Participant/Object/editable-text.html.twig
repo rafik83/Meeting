@@ -1,8 +1,9 @@
 {% set objectTags = object.getTags %}
 {% if 'participant_firstname' not in objectTags and 'participant_lastname' not in objectTags and not object.isTextarea %}
+
     {% if 'sheet_organization' in objectTags %}
-        <strong>{{ object.content }}</strong>
+        <strong>{{ object.contentValueLocalize }}</strong>
     {% else %}
-        {{ object.content }}
+        {{ object.contentValueLocalize }}
     {% endif %}
 {% endif %}
