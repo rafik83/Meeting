@@ -261,7 +261,7 @@ class EditableText extends EditableObject implements ContentObjectInterface, Sea
         $translations = [];
 
         foreach ($this->data['text'] as $locale => $content) {
-            $translations[$locale]['content'] = $content;
+            $translations[$locale]['content'] = $content['content'] ?? $content;
         }
 
         return $translations;
@@ -292,7 +292,7 @@ class EditableText extends EditableObject implements ContentObjectInterface, Sea
         $this->data['text'] = []; // erase previous untranslatable value
 
         foreach ($translations as $locale => $translation) {
-            $this->data['text'][$locale] = $translation;
+            $this->data['text'][$locale] = $translation['content'] ?? $translation;
         }
     }
 }
