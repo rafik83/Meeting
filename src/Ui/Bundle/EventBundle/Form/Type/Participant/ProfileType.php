@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2016 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -14,6 +14,7 @@ use Proximum\Vimeet\Domain\Template;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Sheet\Data\BooleanDataType;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Sheet\Data\CountryDataType;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Sheet\Data\EditableTextInputDataType;
+use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Sheet\Data\EditableTextTranslationType;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Sheet\Data\GenderDataType;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Sheet\Data\NomenclatureDataType;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Sheet\Data\TelephoneDataType;
@@ -34,7 +35,7 @@ class ProfileType extends AbstractType
 
         foreach ($template->getProfileObjects() as $key => $object) {
             if ($object instanceof Template\TemplateObject\EditableText) {
-                $this->addText($key, $builder, $object, $options['locale']);
+                $this->addText($key, $builder, $object, $options['locale'], $options['locales']);
             } elseif ($object instanceof Template\TemplateObject\Gender) {
                 $this->addGender($key, $builder, $object, $options['locale']);
             } elseif ($object instanceof Template\TemplateObject\Nomenclature) {
@@ -62,23 +63,33 @@ class ProfileType extends AbstractType
         ]);
         $resolver->setRequired(['template', 'locale', 'country']);
         $resolver->setAllowedTypes('locale', 'string');
+        $resolver->setAllowedTypes('locales', 'array');
         $resolver->setAllowedTypes('country', 'string');
         $resolver->setAllowedTypes('template', Template\TemplateData::class);
     }
 
     /**
-     * @param string               $key
-     * @param FormBuilderInterface $builder
-     * @param Template\TemplateObject      $object
-     * @param string               $locale
+     * @param string                  $key
+     * @param FormBuilderInterface    $builder
+     * @param Template\TemplateObject $object
+     * @param string                  $locale
+     * @param array                   $locales
      */
-    private function addText($key, FormBuilderInterface $builder, Template\TemplateObject $object, $locale)
+    private function addText($key, FormBuilderInterface $builder, Template\TemplateObject $object, $locale, array $locales)
     {
-        $builder->add($key, EditableTextInputDataType::class, [
-            'label'  => false,
-            'locale' => $locale,
-            'object' => $object,
-        ]);
+        if ($object->isTranslatable()) {
+            $builder->add($key, EditableTextTranslationType::class, [
+                'locales' => $locales,
+                'object'  => $object,
+                'label'   => $object->getOption('label', $locale),
+            ]);
+        } else {
+            $builder->add($key, EditableTextInputDataType::class, [
+                'label'  => false,
+                'locale' => $locale,
+                'object' => $object,
+            ]);
+        }
     }
 
     /**
