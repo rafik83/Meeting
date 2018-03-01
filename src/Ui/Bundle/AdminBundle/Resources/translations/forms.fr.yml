@@ -340,7 +340,7 @@ form.happening_update.children.types.label: 'Types ayant accès'
 form.import_mapping.children.submit.label: Importer
 form.import_products_and_template.children.event.label: 'Evénement à importer'
 form.import_products_and_template.children.submit.label: Importer
-form.index.children.submit.label: 'Ré-indexer'
+form.index.children.submit.label: Ré-indexer
 form.invoice_export.children.beginDate.label: 'Date de début'
 form.invoice_export.children.endDate.label: 'Date de fin'
 form.invoice_export.children.submit.label: 'Exporter les factures'
@@ -574,14 +574,14 @@ form.product_update_option.children.translations.prototype.children.subjectedToV
 form.product_update_option.children.translations.prototype.children.title.label: Titre
 form.product_update_option.children.unitPrice.label: 'Prix unitaire (HT)'
 form.product_update_option.children.updatable.label: 'Produit supprimable'
-form.product_update_option.children.vat.label: 'TVA'
+form.product_update_option.children.vat.label: TVA
 form.product_update_participant.children.name.label: 'Nom backoffice du participant'
 form.product_update_participant.children.quantityMax.label: 'Quantité max'
 form.product_update_participant.children.submit.label: Enregistrer
 form.product_update_participant.children.translations.prototype.children.description.label: Description
 form.product_update_participant.children.translations.prototype.children.title.label: Titre
 form.product_update_participant.children.unitPrice.label: 'Prix unitaire (HT)'
-form.product_update_participant.children.vat.label: 'TVA'
+form.product_update_participant.children.vat.label: TVA
 form.product_update_plan.children.availabilityCurrent.label: 'Stock actuel'
 form.product_update_plan.children.availabilityMax.label: 'Stock Max'
 form.product_update_plan.children.features.label: 'Prestations incluses avec cette formule'
@@ -605,14 +605,14 @@ form.product_update_plan.children.translations.prototype.children.description.la
 form.product_update_plan.children.translations.prototype.children.heading.label: 'Titre de la description'
 form.product_update_plan.children.translations.prototype.children.title.label: 'Titre de la formule'
 form.product_update_plan.children.unitPrice.label: 'Prix unitaire (HT)'
-form.product_update_plan.children.vat.label: 'TVA'
+form.product_update_plan.children.vat.label: TVA
 form.product_update_planning.children.name.label: 'Nom backoffice du planning'
 form.product_update_planning.children.quantityMax.label: 'Quantité max'
 form.product_update_planning.children.submit.label: Enregistrer
 form.product_update_planning.children.translations.prototype.children.description.label: Description
 form.product_update_planning.children.translations.prototype.children.title.label: Titre
 form.product_update_planning.children.unitPrice.label: 'Prix unitaire (HT)'
-form.product_update_planning.children.vat.label: 'TVA'
+form.product_update_planning.children.vat.label: TVA
 form.promotion_code_create.children.code.label: Code
 form.promotion_code_create.children.promotions.label: Promotions
 form.promotion_code_create.children.promotions.label_add: Ajouter
@@ -742,6 +742,7 @@ form.sheet_filter.children.hasGroup.label: 'Appartenant à une entité'
 form.sheet_filter.children.hasHappeningParticipation.label: 'Inscription à une conférence'
 form.sheet_filter.children.hasInvoice.label: 'A au moins une facture'
 form.sheet_filter.children.hasNoMeetingRequest.label: 'Pas de demande de RDV effectuée par la fiche'
+form.sheet_filter.children.hasOrder.label: Commande
 form.sheet_filter.children.hasPendingMeetingPropositions.label: 'Propositions de RDV en attente de validation'
 form.sheet_filter.children.hasRemainingToPay.label: 'Solde restant dû > 0'
 form.sheet_filter.children.hasRemainingToPay.no.label: Non
@@ -754,8 +755,9 @@ form.sheet_filter.children.imported.label: Importé
 form.sheet_filter.children.inCatalog.label: 'Au catalogue'
 form.sheet_filter.children.order.no.label: Sans
 form.sheet_filter.children.order.noPreference.label: 'Peu importe'
-form.sheet_filter.children.order.totalSuperiorZero.label: 'Total supérieur à zéro'
 form.sheet_filter.children.order.totalEqualZero.label: 'Total égal à zéro'
+form.sheet_filter.children.order.totalSuperiorZero.label: 'Total supérieur à zéro'
+form.sheet_filter.children.order.yes.label: Avec
 form.sheet_filter.children.orderBy.label: 'Trier par'
 form.sheet_filter.children.orderStatus.label: Commande
 form.sheet_filter.children.phoneValidationStatus.choice.all: 'Peu importe'
