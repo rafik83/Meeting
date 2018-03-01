@@ -57,7 +57,7 @@ catalog.preview.participant_positions_see_more: 'see more'
 catalog.search.no-filter-to-refine: 'No result'
 catalog.seeMore: 'See more'
 catalog.sheet.export.csv: Export
-catalog.sheet.result.total: '{0} No result {1} 1 result|]1,Inf[ %total% results'
+catalog.sheet.result.total: '{0} No result|{1} 1 result|]1,Inf[ %total% results'
 catalog.title: Catalogue
 common.backToPackage: 'Back to package'
 common.backToSheet: 'Back to sheet'

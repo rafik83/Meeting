@@ -1,3 +1,4 @@
+admin.sheet.follower.un-assigned: unassigned
 alphabetical: Alphabetical
 created_at: 'Created at'
 form.activate_account_password.children.password.children.first.label: 'New password'
@@ -10,12 +11,40 @@ form.add_unavailability.children.submit.label: Add
 form.admin_activate_account_password.children.password.children.first.label: 'New password'
 form.admin_activate_account_password.children.password.children.second.label: 'Confirm new password'
 form.admin_activate_account_password.children.submit.label: Submit
+form.admin_export_planning.children.orderBy.choice.participant_last_name: 'choose with the particpant last name'
+form.admin_export_planning.children.orderBy.choice.sheet_title: 'choose with the company name'
+form.admin_export_planning.children.orderBy.label: 'plannings export order'
+form.admin_export_planning.children.submit.label: Export
+form.admin_export_planning.children.types.label: Types
 form.admin_lib_add.children.submit.label: Add
+form.admin_lib_choice.children.choices.label: choices
 form.admin_lib_choice.children.choices.label_add: 'Add item'
 form.admin_lib_choice.children.choices.label_delete: 'Delete item'
+form.admin_lib_choice.children.choices.prototype.label: label
+form.admin_lib_choice.children.placeholder.help: 'for exemple : "select an item"'
+form.admin_lib_choice.children.placeholder.label: placeholder
+form.admin_lib_text.children.translatable.label: translatable
+form.admin_lib_text.children.translationRequired.label: 'required traduction'
+form.admin_lib.children.label.label: 'title of the field'
+form.admin_lib.children.private.label: private
+form.admin_lib.children.required.label: required
 form.admin_lib.children.submit.label: Save
+form.admin_lib.children.tags.label: tags
+form.admin_schedule_days.children.days.label: 'days of the event'
+form.admin_schedule_days.children.days.label_add: 'add a day'
+form.admin_schedule_days.children.days.label_delete: 'delete this day'
+form.admin_schedule_days.children.days.prototype.children.day.label: day
+form.admin_schedule_days.children.days.prototype.children.endTime.label: 'ending time'
+form.admin_schedule_days.children.days.prototype.children.startTime.label: 'starting time'
+form.admin_schedule_days.children.submit.label: validate
+form.admin.picto.Cafe_1: 'coffee time'
+form.admin.picto.Cocktail: Cocktail
+form.admin.picto.Conference: microphone
+form.admin.picto.Dejeuner: lunch
+form.admin.picto.PresFlash_2: flash
 form.admin.picto.RDV: Meeting
 form.admin.sheet.filter.children.submit.label: Filter
+form.admin.sheet.follower.un-assigned: unassigned
 form.billing_info_update.children.city.label: City
 form.billing_info_update.children.company.label: Company
 form.billing_info_update.children.country.label: Country
@@ -71,6 +100,7 @@ form.create_admin.children.role.label: 'Participant type'
 form.create_admin.children.submit.label: Send
 form.create_admin.role.operator: Collaborater
 form.create_admin.role.organizer: Organizer
+form.create_admin.role.partner: partner
 form.create_admin.role.super_admin: Administrator
 form.create_operator.children.email.label: Email
 form.create_operator.children.firstname.label: 'First Name'
@@ -121,6 +151,12 @@ form.event_update.children.submit.label: Save
 form.event_update.children.vat.label: 'VAT (%)'
 form.field.private: 'Private field'
 form.filter_admin.children.submit.label: Filter
+form.filter_admin.event.all: 'all events'
+form.filter_admin.role.all: 'all types'
+form.filter_admin.role.operator: collaborator
+form.filter_admin.role.organizer: organizer
+form.filter_admin.role.partner: partner
+form.filter_admin.role.super_admin: Admin
 form.filter_operator.children.submit.label: Filter
 form.filter_spot_type.children.filters.all.label: All
 form.filter_spot_type.children.filters.no.label: 'No'
@@ -340,9 +376,15 @@ form.unavailability_mass_update.children.submit.label: Save
 form.unavailability.mass.children.blocking.answer.false: 'No'
 form.unavailability.mass.children.blocking.answer.true: 'Yes'
 form.update_admin.children.email.label: Email
+form.update_admin.children.events.label: Events
+form.update_admin.children.firstname.label: Firstname
+form.update_admin.children.lastname.label: lastname
 form.update_admin.children.password.label: Password
 form.update_admin.children.role.label: Type
 form.update_admin.children.submit.label: Send
+form.update_admin.role.operator: collaborator
+form.update_admin.role.organizer: organizer
+form.update_admin.role.super_admin: Admin
 form.update_block.children.data.label: 'Edit the information'
 form.update_block.children.submit.label: Send
 form.update_operator.children.submit.label: Send
