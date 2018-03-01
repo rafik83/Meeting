@@ -53,7 +53,7 @@ mail.sheet.submitted.body: "The presentation sheet of %sheetName% has been final
 mail.sheet.submitted.end: 'Regards,'
 mail.sheet.submitted.link: 'View sheet'
 mail.sheet.submitted.subject: 'Sheet %sheetName% finalized'
-mail.sheet.validated.body: "%firstname% %lastname%,\n\nWe are pleased to confirm your participation in the event %event% and we thank you for your confidence.\n\nOur entire team will be at your disposal to make your participation a success."
+mail.sheet.validated.body: "%firstname% %lastname%,\n\nWe are pleased to confirm your participation in the event %event% and we thank you for your trust.\n\nOur entire team will be at your disposal to make your participation a success."
 mail.sheet.validated.subject: 'Your registration as %participationType% for %event% is validated'
 mail.sheet.validation.draft.body: 'Dear %firstname% %lastname%, your presentation sheet as a %participationType% has been changed to draft mode because it''s incomplete. Please fill out your form.'
 mail.sheet.validation.draft.subject: 'Presentation sheet in draft mode'

@@ -380,7 +380,7 @@ event_login_second_step:
 
 event_login_check:
     path:     /login_check
-    methods:  [POST]
+    methods:  [GET, POST]
 
 event_logout_confirmation:
     path:     /logout-confirmation

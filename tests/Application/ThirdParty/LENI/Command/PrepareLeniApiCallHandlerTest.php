@@ -93,26 +93,30 @@ class PrepareLeniApiCallHandlerTest extends TestCase
         $this->event2->hasDay()->shouldBeCalled()->willReturn(true);
         $this->event2->isFinished($this->dateTime)->shouldBeCalled()->willReturn(false);
 
+        $extraParam1 = $this->prophesize(Event\ExtraParameter::class);
+        $extraParam2 = $this->prophesize(Event\ExtraParameter::class);
+        $extraParam3 = $this->prophesize(Event\ExtraParameter::class);
+        $extraParam4 = $this->prophesize(Event\ExtraParameter::class);
         $this->extraParameterRepository
             ->findByEventAndType($this->event1->reveal(), 'leni_user')
             ->shouldBeCalled()
-            ->willReturn('leni user 1')
+            ->willReturn($extraParam1->reveal())
         ;
         $this->extraParameterRepository
             ->findByEventAndType($this->event1->reveal(), 'leni_event')
             ->shouldBeCalled()
-            ->willReturn('leni event 1')
+            ->willReturn($extraParam2->reveal())
         ;
 
         $this->extraParameterRepository
             ->findByEventAndType($this->event2->reveal(), 'leni_user')
             ->shouldBeCalled()
-            ->willReturn('leni user 2')
+            ->willReturn($extraParam3->reveal())
         ;
         $this->extraParameterRepository
             ->findByEventAndType($this->event2->reveal(), 'leni_event')
             ->shouldBeCalled()
-            ->willReturn('leni event 2')
+            ->willReturn($extraParam4->reveal())
         ;
 
         $this->participantPlanningFormatter->preloadPlanningHandlerForEvent($this->event1->reveal())->shouldBeCalled();

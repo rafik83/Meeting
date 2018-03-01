@@ -76,6 +76,8 @@ parameters:
 
     jenkins_phantomjs_sheet_pdf_print_build_name: 'PhantomJsSheetPrintPdfBuild'
 
+    comexposium_check_user_token_endpoint: ""
+    comexposium_sso_loader_lib_endpoint: ""
     comexposium_username: comexposiumUsername
     comexposium_password: comexposiumPassword
 

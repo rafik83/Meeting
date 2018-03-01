@@ -59,7 +59,7 @@ class ExtraParameterRepository implements ExtraParameterRepositoryInterface
     /**
      * {@inheritdoc}
      */
-    public function findByEventAndType(Event $event, string $type)
+    public function findByEventAndType(Event $event, string $type): ?ExtraParameter
     {
         $queryBuilder = $this->entityManager
             ->createQueryBuilder()

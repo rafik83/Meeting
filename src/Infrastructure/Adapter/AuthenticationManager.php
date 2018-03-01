@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2015 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -23,24 +23,16 @@ use Symfony\Component\Security\Core\Exception\AuthenticationException;
 
 class AuthenticationManager implements AuthenticationManagerInterface
 {
-    /**
-     * @var TokenStorageInterface
-     */
+    /** @var TokenStorageInterface */
     private $tokenStorage;
 
-    /**
-     * @var SessionInterface
-     */
+    /** @var SessionInterface */
     private $session;
 
-    /**
-     * @var EventDispatcherInterface
-     */
+    /** @var EventDispatcherInterface */
     private $eventDispatcher;
 
     /**
-     * AuthenticationManager constructor.
-     *
      * @param TokenStorageInterface    $tokenStorage
      * @param SessionInterface         $session
      * @param EventDispatcherInterface $eventDispatcher

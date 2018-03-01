@@ -14,6 +14,11 @@ final class Route
 {
     const EVENT = 'event';
     const DEFAULT_EVENT = 'default_event';
-    const LOGIN = 'event_login';
     const EXTERNAL_CATALOG = 'event_catalog_external_index';
+
+    /**
+     * Event login
+     */
+    public const LOGIN = 'event_login';
+    public const EVENT_LOGIN_CHECK = 'event_login_check';
 }
