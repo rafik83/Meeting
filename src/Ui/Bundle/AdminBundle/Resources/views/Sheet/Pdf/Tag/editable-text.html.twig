@@ -1,8 +1,1 @@
-{% set hideLinkToEdit = not (maskLinkToEdit is defined and maskLinkToEdit == true) %}
-{% if taggedDataView.translatable == true %}
-    {% if taggedDataView.translations[locale] is defined %}
-        {{ taggedDataView.translations[locale] }}
-    {% endif %}
-{% else %}
-    {{ taggedDataView.content }}
-{% endif %}
+{{ taggedDataView.content }}

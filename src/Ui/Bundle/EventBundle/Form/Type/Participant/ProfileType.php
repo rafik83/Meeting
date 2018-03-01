@@ -61,7 +61,7 @@ class ProfileType extends AbstractType
             'data_class'        => Template\TemplateData::class,
             'validation_groups' => ['Default', 'profile'],
         ]);
-        $resolver->setRequired(['template', 'locale', 'country']);
+        $resolver->setRequired(['template', 'locale', 'country', 'locales']);
         $resolver->setAllowedTypes('locale', 'string');
         $resolver->setAllowedTypes('locales', 'array');
         $resolver->setAllowedTypes('country', 'string');

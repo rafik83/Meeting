@@ -81,6 +81,7 @@ class Synchronizer
                 foreach ($tags as $tag) {
                     if (isset($this->tagMapping[$tag])) {
                         $method = 'get' . $this->tagMapping[$tag];
+
                         if ($object instanceof TemplateObject\Nomenclature) {
                             $object->setContentValue($object->getKeyForLabel($account->$method(), $templateData->getLocale()));
                         } else {
@@ -105,7 +106,7 @@ class Synchronizer
         $account = $user->getAccount();
 
         foreach ($templateData->getEditableObjects() as $object) {
-            if ($object instanceof ContentObjectInterface && '' !== $object->getContentValue()) {
+            if ($object instanceof ContentObjectInterface && '' !== $object->getContentValueLocalize()) {
                 $tags = $object->getTags();
 
                 foreach ($tags as $tag) {
@@ -113,9 +114,9 @@ class Synchronizer
                         $method = 'set' . $this->tagMapping[$tag];
 
                         if ($object instanceof TemplateObject\Nomenclature) {
-                            $account->$method($object->getLabelForKey($object->getContentValue(), $templateData->getLocale()));
+                            $account->$method($object->getLabelForKey($object->getContentValueLocalize(), $templateData->getLocale()));
                         } else {
-                            $account->$method($object->getContentValue());
+                            $account->$method($object->getContentValueLocalize());
                         }
                     }
                 }

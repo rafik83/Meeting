@@ -123,7 +123,7 @@ class TaggedDataFactory
                 if ($object instanceof TemplateObject\Nomenclature) {
                     $value = $object->getNomenclatureLabel();
                 } else {
-                    $value = $object->getContentValue();
+                    $value = $object->getContentValueLocalize();
                 }
 
                 $taggedDataView = new TaggedDataView(
