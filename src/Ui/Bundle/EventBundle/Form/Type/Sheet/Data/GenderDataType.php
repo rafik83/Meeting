@@ -34,6 +34,7 @@ class GenderDataType extends AbstractType
                 'choice_label' => function ($value) {
                     return sprintf('gender.%s', $value);
                 },
+                'placeholder'  => 'gender.none',
                 'expanded'     => true,
                 'multiple'     => false,
                 'label'        => $gender->getOption('label', $locale),

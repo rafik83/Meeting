@@ -12,7 +12,8 @@ var $ = require('jquery'),
   PhoneObject = require('./templateObjects/_PhoneObject'),
   CountryObject = require('./templateObjects/_CountryObject'),
   UrlObject = require('./templateObjects/_UrlObject'),
-  BooleanObject = require('./templateObjects/_BooleanObject')
+  BooleanObject = require('./templateObjects/_BooleanObject'),
+  GenderObject = require('./templateObjects/_GenderObject')
 ;
 
 /**
@@ -77,6 +78,8 @@ function TemplateObject(element, locale, builderType)
     this.object = new UrlObject(this.element, this.locale, this.builderType);
   } else if (this.type === 'boolean') {
     this.object = new BooleanObject(this.element, this.locale, this.builderType);
+  } else if (this.type === 'gender') {
+    this.object = new GenderObject(this.element, this.locale, this.builderType);
   }
 
   this.object.fill();

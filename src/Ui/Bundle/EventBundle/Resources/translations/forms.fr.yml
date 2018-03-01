@@ -149,3 +149,4 @@ form.user_event_phone_validate_code.children.code.label: 'Code de confirmation r
 form.user_event_phone_validate_code.children.confirm.label: Confirmer
 gender.man: Monsieur
 gender.woman: Madame
+gender.none: 'Aucun'
