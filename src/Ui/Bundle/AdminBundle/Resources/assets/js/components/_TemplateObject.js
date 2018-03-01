@@ -11,7 +11,8 @@ var $ = require('jquery'),
   TagsObject = require('./templateObjects/_TagsObject'),
   PhoneObject = require('./templateObjects/_PhoneObject'),
   CountryObject = require('./templateObjects/_CountryObject'),
-  UrlObject = require('./templateObjects/_UrlObject')
+  UrlObject = require('./templateObjects/_UrlObject'),
+  BooleanObject = require('./templateObjects/_BooleanObject')
 ;
 
 /**
@@ -74,6 +75,8 @@ function TemplateObject(element, locale, builderType)
     this.object = new CountryObject(this.element, this.locale, this.builderType);
   } else if (this.type === 'url') {
     this.object = new UrlObject(this.element, this.locale, this.builderType);
+  } else if (this.type === 'boolean') {
+    this.object = new BooleanObject(this.element, this.locale, this.builderType);
   }
 
   this.object.fill();
