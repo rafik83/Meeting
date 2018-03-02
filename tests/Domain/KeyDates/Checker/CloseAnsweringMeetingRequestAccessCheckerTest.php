@@ -14,7 +14,7 @@ use PHPUnit\Framework\TestCase;
 use Proximum\Vimeet\Domain\KeyDates\Checker\AnsweringMeetingRequestAccessChecker;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
 
-class AnsweringMeetingRequestAccessCheckerTest extends TestCase
+class CloseAnsweringMeetingRequestAccessCheckerTest extends TestCase
 {
     public function testAllowedToAccessTrueAsDateIsNull()
     {

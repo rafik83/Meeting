@@ -21,7 +21,7 @@ use Proximum\Vimeet\Domain\Repository\UnavailabilityRepositoryInterface;
 use Proximum\Vimeet\Infrastructure\Adapter\DelayedEventDispatcher;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
 
-class RemoveTestHandler extends TestCase
+class RemoveHandlerTest extends TestCase
 {
     public function testHandle()
     {

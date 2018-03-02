@@ -18,7 +18,7 @@ use Proximum\Vimeet\Domain\Catalog\TaggedNomenclatureFilterGetter;
 use Proximum\Vimeet\Domain\View\Catalog\OrganizationCategoryView;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
 
-class OrganisationCategoryViewQueryHandlerTest extends TestCase
+class OrganizationCategoryViewQueryHandlerTest extends TestCase
 {
     public function testHandle()
     {
