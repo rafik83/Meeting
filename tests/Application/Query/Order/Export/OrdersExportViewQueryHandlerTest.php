@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Tests\Application\Query\Order\Export;
 
+use PHPUnit\Framework\TestCase;
 use Proximum\Vimeet\Application\Query\Order\Export\CustomRowViewQuery;
 use Proximum\Vimeet\Application\Query\Order\Export\CustomRowViewQueryHandler;
 use Proximum\Vimeet\Application\Query\Order\Export\OrdersExportViewQuery;
@@ -28,7 +29,6 @@ use Proximum\Vimeet\Application\View\Order\Export\OrderView;
 use Proximum\Vimeet\Application\View\Order\Export\ProductView;
 use Proximum\Vimeet\Application\View\Order\Export\PromotionCodeView;
 use Proximum\Vimeet\Application\View\Order\Export\SharedColumnsTranslationView;
-use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Order;
 use Proximum\Vimeet\Domain\Model\Product;
 use Proximum\Vimeet\Domain\Model\PromotionCode;
@@ -36,7 +36,6 @@ use Proximum\Vimeet\Domain\Repository\OrderRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\ProductRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\PromotionCodeRepositoryInterface;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
-use PHPUnit\Framework\TestCase;
 
 class OrdersExportViewQueryHandlerTest extends TestCase
 {

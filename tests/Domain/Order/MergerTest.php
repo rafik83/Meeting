@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Domain\Order;
 
+use PHPUnit\Framework\TestCase;
 use Proximum\Vimeet\Domain\Exception\Order\OrderMergerException;
 use Proximum\Vimeet\Domain\Model\Order;
 use Proximum\Vimeet\Domain\Model\Order\Row;
@@ -19,7 +20,6 @@ use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\Type;
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
-use PHPUnit\Framework\TestCase;
 
 class MergerTest extends TestCase
 {
@@ -49,7 +49,7 @@ class MergerTest extends TestCase
         $rowToRemove->getQuantity()->shouldBeCalled()->willReturn(0);
         $rowToRemove->hasParentRow()->shouldBeCalled()->willReturn(true);
         $rowToRemove->getParentRow()->shouldBeCalled()->willReturn($row);
-        $rowToRemove->getLabel()->shouldBeCalled()->willReturn("label row to remove");
+        $rowToRemove->getLabel()->shouldBeCalled()->willReturn('label row to remove');
         $rowToRemove->getPrice()->shouldBeCalled()->willReturn(10);
 
         $rowWithoutIdWithQuantity = $this->prophesize(Row::class);

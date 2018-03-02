@@ -77,8 +77,8 @@ class TemplateRemoveFieldTest extends TestCase
                             'component' => 'object',
                             'type'      => 'telephone',
                             'config'    => [
-                                'tags' => ['participant_mobile']
-                            ]
+                                'tags' => ['participant_mobile'],
+                            ],
                         ],
                         '12345' => [
                             'component' => 'object',
@@ -86,13 +86,13 @@ class TemplateRemoveFieldTest extends TestCase
                             'config'    => [
                                 'products' => [],
                             ],
-                        ]
-                    ]
-                ]
-            ]
+                        ],
+                    ],
+                ],
+            ],
         ];
 
-        $this->assertEquals($expected, $templater->remove($this->sheetTemplate, 'products',[]));
+        $this->assertEquals($expected, $templater->remove($this->sheetTemplate, 'products', []));
     }
 
     public function testRemoveTags()
@@ -119,8 +119,8 @@ class TemplateRemoveFieldTest extends TestCase
                             'component' => 'object',
                             'type'      => 'telephone',
                             'config'    => [
-                                'tags' => []
-                            ]
+                                'tags' => [],
+                            ],
                         ],
                         '12345' => [
                             'component' => 'object',
@@ -131,12 +131,12 @@ class TemplateRemoveFieldTest extends TestCase
                                     1 => 2,
                                 ],
                             ],
-                        ]
-                    ]
-                ]
-            ]
+                        ],
+                    ],
+                ],
+            ],
         ];
 
-        $this->assertEquals($expected, $templater->remove($this->sheetTemplate, 'tags',[]));
+        $this->assertEquals($expected, $templater->remove($this->sheetTemplate, 'tags', []));
     }
 }

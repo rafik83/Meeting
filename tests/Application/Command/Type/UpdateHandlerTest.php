@@ -3,13 +3,14 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2015 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
 
 namespace Proximum\Vimeet\Tests\Application\Command\Type;
 
+use PHPUnit\Framework\TestCase;
 use Proximum\Vimeet\Application\Command\Type\Update;
 use Proximum\Vimeet\Application\Command\Type\UpdateHandler;
 use Proximum\Vimeet\Application\Template\Registration\RegistrationTemplateCloner;
@@ -18,7 +19,6 @@ use Proximum\Vimeet\Domain\Model\Type;
 use Proximum\Vimeet\Domain\Model\TypeTranslation;
 use Proximum\Vimeet\Domain\Repository\TypeRepositoryInterface;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
-use PHPUnit\Framework\TestCase;
 
 class UpdateHandlerTest extends TestCase
 {

@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2016 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -135,7 +135,7 @@ class CreateHandlerTest extends TestCase
 
         $contentRepository = $this->prophesize(ContentRepositoryInterface::class);
         $contentRepository->add(Argument::that(function (Event\Content $content) use ($expectedEvent) {
-            return $content->getType() === Event\Content::TYPE_TERMS_OF_SALE;
+            return Event\Content::TYPE_TERMS_OF_SALE === $content->getType();
         }))->shouldBeCalled();
 
         $duplicator = $this->prophesize(Duplicator::class);
@@ -252,7 +252,7 @@ class CreateHandlerTest extends TestCase
 
         $contentRepository = $this->prophesize(ContentRepositoryInterface::class);
         $contentRepository->add(Argument::that(function (Event\Content $content) use ($expectedEvent) {
-            return $content->getType() === Event\Content::TYPE_TERMS_OF_SALE;
+            return Event\Content::TYPE_TERMS_OF_SALE === $content->getType();
         }))->shouldBeCalled();
 
         $duplicator = $this->prophesize(Duplicator::class);
@@ -362,7 +362,7 @@ class CreateHandlerTest extends TestCase
 
         $contentRepository = $this->prophesize(ContentRepositoryInterface::class);
         $contentRepository->add(Argument::that(function (Event\Content $content) use ($expectedEvent) {
-            return $content->getType() === Event\Content::TYPE_TERMS_OF_SALE;
+            return Event\Content::TYPE_TERMS_OF_SALE === $content->getType();
         }))->shouldNotBeCalled();
 
         $duplicator = $this->prophesize(Duplicator::class);
@@ -433,7 +433,7 @@ class CreateHandlerTest extends TestCase
         $fileStorage->getExtension(Argument::type(UploadedFile::class))->shouldNotBeCalled();
 
         $contentRepository->add(Argument::that(function (Event\Content $content) use ($event) {
-            return $content->getType() === Event\Content::TYPE_TERMS_OF_SALE;
+            return Event\Content::TYPE_TERMS_OF_SALE === $content->getType();
         }))->shouldBeCalled();
 
         $duplicator->duplicate(Argument::that(function (Event $expectedEvent) use ($event) {

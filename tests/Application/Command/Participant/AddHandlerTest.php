@@ -131,7 +131,6 @@ class AddHandlerTest extends TestCase
         );
         $expectedSheet->addParticipant($expectedParticipant);
 
-
         $this->userRepository->findByEmail('test@test.com')->shouldBeCalled()->willReturn(null);
         $this->userRepository->add($expectedUser)->shouldBeCalled();
 

@@ -3,13 +3,14 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2017 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
 
 namespace Proximum\Vimeet\Tests\Application\Query\Planner;
 
+use PHPUnit\Framework\TestCase;
 use Proximum\Vimeet\Application\Query\Planner\ParticipantViewQuery;
 use Proximum\Vimeet\Application\Query\Planner\ParticipantViewQueryHandler;
 use Proximum\Vimeet\Application\View\Planner\Day;
@@ -29,7 +30,6 @@ use Proximum\Vimeet\Domain\Repository\ParticipantRepositoryInterface;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
 use Proximum\Vimeet\Tests\Factory\ParticipantFactory;
 use Proximum\Vimeet\Tests\Factory\SheetFactory;
-use PHPUnit\Framework\TestCase;
 
 class ParticipantViewQueryHandlerTest extends TestCase
 {

@@ -39,7 +39,7 @@ class OrderVatViewsBySheetQueryHandlerTest extends TestCase
         $orderRepositoryInterface->findBySheet($sheet)->shouldBeCalled()->willReturn(
             [
                 $order1,
-                $order2
+                $order2,
             ]
         );
 

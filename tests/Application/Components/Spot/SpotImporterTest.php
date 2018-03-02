@@ -89,14 +89,14 @@ class SpotImporterTest extends TestCase
             $expectedImportedDenormalizedSpot2,
             $expectedImportedDenormalizedSpot3,
             $expectedImportedDenormalizedSpot4,
-            $expectedImportedDenormalizedSpot5
+            $expectedImportedDenormalizedSpot5,
         ];
 
         $this
             ->serializerAdapter
             ->deserialize(Argument::type('string'), Import::class, 'csv', [
                 'csv_delimiter' => ';',
-                'event' => $this->event
+                'event' => $this->event,
             ])
             ->shouldBeCalled()
             ->willReturn($expectedDenormalizedResults);
@@ -118,7 +118,7 @@ class SpotImporterTest extends TestCase
         $this->sheetRepository->getSheetViewByEventAndId($this->event, 16566)->shouldBeCalled()->willReturn($sheetView4);
 
         $this->translatorAdapter
-            ->trans("validators.spot.reference.affected", [], "validators", "fr")
+            ->trans('validators.spot.reference.affected', [], 'validators', 'fr')
             ->shouldBeCalledTimes(2)
             ->willReturn('validators.spot.reference.affected');
 
@@ -150,8 +150,6 @@ class SpotImporterTest extends TestCase
             ->willReturn([]);
 
         $this->sheetRepository->getSheetViewByEventAndId($this->event, 16562)->shouldBeCalled()->willReturn($sheetView6);
-
-
 
         $spotImporter = new SpotImporter(
             $this->sheetRepository->reveal(),

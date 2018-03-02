@@ -27,7 +27,6 @@ use Proximum\Vimeet\Domain\User\Event\AgendaConfirmation\Constant;
 
 class UpdateAgendaConfirmationHandlerTest extends TestCase
 {
-
     /** @var ObjectProphecy */
     private $event;
 

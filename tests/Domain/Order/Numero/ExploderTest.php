@@ -3,17 +3,17 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2016 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
 
 namespace Proximum\Vimeet\Tests\Domain\Order\Numero;
 
+use PHPUnit\Framework\TestCase;
 use Proximum\Vimeet\Domain\Exception\Order\Numero\CanNotExplodeNotValidNumeroOrderException;
 use Proximum\Vimeet\Domain\Order\Numero\Exploder;
 use Proximum\Vimeet\Domain\Order\Numero\OrderNumeroView;
-use PHPUnit\Framework\TestCase;
 
 class ExploderTest extends TestCase
 {
@@ -24,15 +24,15 @@ class ExploderTest extends TestCase
     {
         $this->expectException(CanNotExplodeNotValidNumeroOrderException::class);
 
-        Exploder::explode("test");
+        Exploder::explode('test');
     }
 
     public function testExplode()
     {
-        $this->assertEquals(new OrderNumeroView(1,1,1), Exploder::explode('01-01-01'));
-        $this->assertEquals(new OrderNumeroView(12,1,1), Exploder::explode('12-01-01'));
-        $this->assertEquals(new OrderNumeroView(1,12,1), Exploder::explode('01-12-01'));
-        $this->assertEquals(new OrderNumeroView(1,1,12), Exploder::explode('01-01-12'));
-        $this->assertEquals(new OrderNumeroView(12,12,12), Exploder::explode('12-12-12'));
+        $this->assertEquals(new OrderNumeroView(1, 1, 1), Exploder::explode('01-01-01'));
+        $this->assertEquals(new OrderNumeroView(12, 1, 1), Exploder::explode('12-01-01'));
+        $this->assertEquals(new OrderNumeroView(1, 12, 1), Exploder::explode('01-12-01'));
+        $this->assertEquals(new OrderNumeroView(1, 1, 12), Exploder::explode('01-01-12'));
+        $this->assertEquals(new OrderNumeroView(12, 12, 12), Exploder::explode('12-12-12'));
     }
 }

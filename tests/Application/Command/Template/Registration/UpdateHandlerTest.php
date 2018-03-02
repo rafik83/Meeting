@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2016 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -32,20 +32,20 @@ class UpdateHandlerTest extends TestCase
         $dateTime = new \DateTime();
         $array    = [
             '811f6edf' => [
-                'component' => "block",
-                'type'      => "12",
+                'component' => 'block',
+                'type'      => '12',
                 'config'    => [
                     'style' => 'style-1',
                 ],
                 'children'  => [
                     'dded0597' => [
-                        'component' => "object",
-                        'type'      => "text",
+                        'component' => 'object',
+                        'type'      => 'text',
                         'config'     =>[
                             'content' => [
-                                'fr' => "Profil"
+                                'fr' => 'Profil',
                             ],
-                            'type' => "titre",
+                            'type' => 'titre',
                         ],
                     ],
                 ],
@@ -99,20 +99,20 @@ class UpdateHandlerTest extends TestCase
         $dateTime = new \DateTime();
         $array    = [
             '811f6edf' => [
-                'component' => "block",
-                'type'      => "12",
+                'component' => 'block',
+                'type'      => '12',
                 'config'    => [
                     'style' => 'style-1',
                 ],
                 'children'  => [
                     'dded0597' => [
-                        'component' => "object",
-                        'type'      => "text",
+                        'component' => 'object',
+                        'type'      => 'text',
                         'config'     =>[
                             'content' => [
-                                'fr' => "Profil"
+                                'fr' => 'Profil',
                             ],
-                            'type' => "titre",
+                            'type' => 'titre',
                         ],
                     ],
                 ],

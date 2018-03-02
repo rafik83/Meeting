@@ -25,8 +25,8 @@ class SheetInfoQueryHandlerTest extends TestCase
     {
         $taggedData = [
             Tag::SHEET_TITLE => [
-                'Aanera'
-            ]
+                'Aanera',
+            ],
         ];
         $locale = 'fr';
         $fallback = 'de';

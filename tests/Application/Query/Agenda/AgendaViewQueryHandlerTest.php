@@ -3,13 +3,14 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2016 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
 
 namespace Proximum\Vimeet\Tests\Application\Query\Agenda;
 
+use PHPUnit\Framework\TestCase;
 use Proximum\Vimeet\Application\Query\Agenda\AgendaViewQuery;
 use Proximum\Vimeet\Application\Query\Agenda\AgendaViewQueryHandler;
 use Proximum\Vimeet\Application\Query\Agenda\DayViewQuery;
@@ -33,13 +34,12 @@ use Proximum\Vimeet\Domain\Repository\MeetingRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\Unavailability\MassRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\UnavailabilityRepositoryInterface;
-use Proximum\Vimeet\Domain\User\Event\ExtraData\Type;
 use Proximum\Vimeet\Domain\User\Agenda\Phone\ValidationRequiredChecker;
+use Proximum\Vimeet\Domain\User\Event\ExtraData\Type;
 use Proximum\Vimeet\Infrastructure\Repository\User\Event\ExtraDataRepository;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
 use Proximum\Vimeet\Tests\Factory\ParticipantFactory;
 use Proximum\Vimeet\Tests\Factory\SheetFactory;
-use PHPUnit\Framework\TestCase;
 
 class AgendaViewQueryHandlerTest extends TestCase
 {
@@ -84,7 +84,7 @@ class AgendaViewQueryHandlerTest extends TestCase
 
         $happeningParticipationRepository = $this->prophesize(HappeningParticipationRepositoryInterface::class);
         $happeningParticipationRepository->findByUser($user, $event, ['disabled' => false])->shouldBeCalled()->willReturn([
-            $happeningParticipation
+            $happeningParticipation,
         ]);
 
         $this->validationRequiredChecker->handle($sheet, $user)->shouldBeCalled()->willReturn(true);
@@ -185,7 +185,7 @@ class AgendaViewQueryHandlerTest extends TestCase
             ->findByUser($user2, $event, ['disabled' => false])
             ->shouldBeCalled()
             ->willReturn([
-                $happeningParticipation
+                $happeningParticipation,
             ])
         ;
 

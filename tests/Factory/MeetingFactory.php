@@ -1,9 +1,9 @@
 <?php
 
 /*
- * This file is part of the vimeet project.
+ * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2017 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -28,8 +28,8 @@ class MeetingFactory
         $createdAt = new \DateTime();
         $user      = UserFactory::create();
 
-        $fromSheet = $fromSheetParameter !== null ? $fromSheetParameter : SheetFactory::create($event);
-        $toSheet   = $toSheetParameter !== null ? $toSheetParameter : SheetFactory::create($event);
+        $fromSheet = null !== $fromSheetParameter ? $fromSheetParameter : SheetFactory::create($event);
+        $toSheet   = null !== $toSheetParameter ? $toSheetParameter : SheetFactory::create($event);
 
         $request = new Meeting\Request(
             $fromSheet,
@@ -64,7 +64,7 @@ class MeetingFactory
         $slot      = SlotFactory::createSlot();
         $createdAt = new \DateTime();
         $spot      = SpotFactory::create();
-        $event = ($event === null ? EventFactory::createEvent() : $event);
+        $event = (null === $event ? EventFactory::createEvent() : $event);
 
         $meeting = new Meeting(
             $request,

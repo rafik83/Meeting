@@ -3,15 +3,15 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2016 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
 
 namespace Proximum\Vimeet\Tests\Domain\Order\Numero;
 
-use Proximum\Vimeet\Domain\Order\Numero\Validator;
 use PHPUnit\Framework\TestCase;
+use Proximum\Vimeet\Domain\Order\Numero\Validator;
 
 class ValidatorTest extends TestCase
 {
@@ -40,7 +40,6 @@ class ValidatorTest extends TestCase
         $this->assertEquals(false, Validator::isValid(2.2));
         $class = new \DateTime();
         $this->assertEquals(false, Validator::isValid($class));
-
 
         // Check that correct numero are valid
         $this->assertEquals(true, Validator::isValid('1-1-1'));

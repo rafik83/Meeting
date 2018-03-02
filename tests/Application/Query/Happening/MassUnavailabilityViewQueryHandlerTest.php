@@ -3,19 +3,19 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2016 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
 
 namespace Proximum\Vimeet\Tests\Application\Query\Happening;
 
+use PHPUnit\Framework\TestCase;
 use Proximum\Vimeet\Application\Query\Happening\MassUnavailabilityViewQuery;
 use Proximum\Vimeet\Application\Query\Happening\MassUnavailabilityViewQueryHandler;
 use Proximum\Vimeet\Application\View\Happening\MassUnavailabilityView;
 use Proximum\Vimeet\Domain\Model\Unavailability;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
-use PHPUnit\Framework\TestCase;
 
 class MassUnavailabilityViewQueryHandlerTest extends TestCase
 {

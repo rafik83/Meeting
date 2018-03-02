@@ -90,7 +90,7 @@ class AffectActionTest extends TestCase
             $this->formFactory->reveal(),
             $this->engine->reveal(),
             $this->flashBag->reveal(),
-            $this->authorizationCheckerAdapter ->reveal()
+            $this->authorizationCheckerAdapter->reveal()
         );
 
         $action($this->request->reveal(), $this->event->reveal(), $this->admin->reveal());
@@ -118,7 +118,7 @@ class AffectActionTest extends TestCase
             $this->formFactory->reveal(),
             $this->engine->reveal(),
             $this->flashBag->reveal(),
-            $this->authorizationCheckerAdapter ->reveal()
+            $this->authorizationCheckerAdapter->reveal()
         );
 
         $action($this->request->reveal(), $this->event->reveal(), $this->admin->reveal());
@@ -160,7 +160,7 @@ class AffectActionTest extends TestCase
         $this->engine
             ->renderResponse(AffectAction::TEMPLATE, [
                 'event' => $this->event->reveal(),
-                'form' => $formView->reveal()
+                'form' => $formView->reveal(),
             ])
             ->shouldBeCalled()
             ->willReturn($response)
@@ -176,7 +176,7 @@ class AffectActionTest extends TestCase
             $this->formFactory->reveal(),
             $this->engine->reveal(),
             $this->flashBag->reveal(),
-            $this->authorizationCheckerAdapter ->reveal()
+            $this->authorizationCheckerAdapter->reveal()
         );
 
         $result = $action($this->request->reveal(), $this->event->reveal(), $this->admin->reveal());
@@ -228,7 +228,7 @@ class AffectActionTest extends TestCase
             $this->formFactory->reveal(),
             $this->engine->reveal(),
             $this->flashBag->reveal(),
-            $this->authorizationCheckerAdapter ->reveal()
+            $this->authorizationCheckerAdapter->reveal()
         );
 
         $result = $action($this->request->reveal(), $this->event->reveal(), $this->admin->reveal());

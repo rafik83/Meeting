@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Tests\Domain\Order;
 
+use PHPUnit\Framework\TestCase;
 use Proximum\Vimeet\Application\Query\Order\OrderVat\OrderVatViewsByEventQuery;
 use Proximum\Vimeet\Application\Query\Order\OrderVat\OrderVatViewsByEventQueryHandler;
 use Proximum\Vimeet\Application\Query\Order\OrderVat\OrderVatViewsBySheetIdsQueryHandler;
@@ -24,7 +25,6 @@ use Proximum\Vimeet\Domain\Repository\TransactionRepositoryInterface;
 use Proximum\Vimeet\Domain\View\OrderVatView;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
 use Proximum\Vimeet\Tests\Factory\SheetFactory;
-use PHPUnit\Framework\TestCase;
 
 class BalanceTest extends TestCase
 {
@@ -201,8 +201,8 @@ class BalanceTest extends TestCase
             ->shouldBeCalled()
             ->willReturn(
                 [
-                    new OrderVatView('Order1', 1, 1, true, 20, 'ati', 'EUR', false, 2000, 400, 2400, $vatListView1,$now),
-                    new OrderVatView('Order2', 1, 1, true, 20, 'ati', 'EUR', false, 1000, 200, 1200, $vatListView2,$now),
+                    new OrderVatView('Order1', 1, 1, true, 20, 'ati', 'EUR', false, 2000, 400, 2400, $vatListView1, $now),
+                    new OrderVatView('Order2', 1, 1, true, 20, 'ati', 'EUR', false, 1000, 200, 1200, $vatListView2, $now),
                     new OrderVatView('Order2', 1, 1, true, 20, 'ati', 'EUR', true, 2000, 400, 2400, $vatListView3, $now),
                 ]
             );

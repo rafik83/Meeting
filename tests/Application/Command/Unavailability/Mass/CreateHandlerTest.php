@@ -3,13 +3,14 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2016 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
 
 namespace Proximum\Vimeet\Tests\Application\Command\Unavailability\Mass;
 
+use PHPUnit\Framework\TestCase;
 use Proximum\Vimeet\Application\Adapter\JobQueueInterface;
 use Proximum\Vimeet\Application\Command\Unavailability\Mass\Create;
 use Proximum\Vimeet\Application\Command\Unavailability\Mass\CreateHandler;
@@ -18,7 +19,6 @@ use Proximum\Vimeet\Domain\Model\Unavailability\Category;
 use Proximum\Vimeet\Domain\Model\Unavailability\Mass;
 use Proximum\Vimeet\Domain\Repository\Unavailability\MassRepositoryInterface;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
-use PHPUnit\Framework\TestCase;
 
 class CreateHandlerTest extends TestCase
 {
@@ -40,7 +40,6 @@ class CreateHandlerTest extends TestCase
         );
         $expected->createTranslation('fr', 'titre', 'description');
         $expected->createTranslation('en', 'title', 'description');
-
 
         // Mock
         $massRepository = $this->prophesize(MassRepositoryInterface::class);
@@ -64,7 +63,7 @@ class CreateHandlerTest extends TestCase
             'en' => [
                 'title'       => 'title',
                 'description' => 'description',
-            ]
+            ],
         ];
 
         // Handler
@@ -94,7 +93,6 @@ class CreateHandlerTest extends TestCase
         $expected->createTranslation('fr', 'titre', 'description');
         $expected->createTranslation('en', 'title', 'description');
 
-
         // Mock
         $massRepository = $this->prophesize(MassRepositoryInterface::class);
         $massRepository->create($expected)->shouldBeCalled();
@@ -118,7 +116,7 @@ class CreateHandlerTest extends TestCase
             'en' => [
                 'title'       => 'title',
                 'description' => 'description',
-            ]
+            ],
         ];
 
         // Handler
@@ -175,7 +173,7 @@ class CreateHandlerTest extends TestCase
             'en' => [
                 'title'       => 'title',
                 'description' => 'description',
-            ]
+            ],
         ];
 
         $create->dispatch = true;
@@ -251,7 +249,7 @@ class CreateHandlerTest extends TestCase
             'en' => [
                 'title'       => 'title',
                 'description' => 'description',
-            ]
+            ],
         ];
 
         $create->dispatch = true;

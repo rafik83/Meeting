@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Tests\Application\Query\Package\Summary;
 
+use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
 use Proximum\Vimeet\Application\Query\Package\Summary\GroupsViewQuery;
 use Proximum\Vimeet\Application\Query\Package\Summary\GroupsViewQueryHandler;
@@ -36,7 +37,6 @@ use Proximum\Vimeet\Domain\Package\Funnel\Funnel;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
 use Proximum\Vimeet\Tests\Factory\ProductFactory;
 use Proximum\Vimeet\Tests\Factory\SheetFactory;
-use PHPUnit\Framework\TestCase;
 
 class SummaryViewQueryHandlerTest extends TestCase
 {
@@ -66,7 +66,7 @@ class SummaryViewQueryHandlerTest extends TestCase
         $productView2 = new ProductView(1, 'label1', 80, 1, 80, Event::VAT_MODE_ATI, 20, 'EUR');
         $groupView = new GroupView(
             'label',
-            [$productView1,$productView2],
+            [$productView1, $productView2],
             100
         );
         $groupsView         = new GroupsView(null, null, [$groupView]);
@@ -77,7 +77,6 @@ class SummaryViewQueryHandlerTest extends TestCase
 
         $promotionCodeQueryHandler->handle(Argument::type(PromotionCodeQuery::class))->shouldBeCalled()
             ->willReturn($promotionCodesView);
-
 
         $vatView1 = new VatView(20, Event::VAT_MODE_ATI, 100, 120);
         $vatListView = new VatListView(100, 120, true, Event::VAT_MODE_ATI, [$vatView1]);

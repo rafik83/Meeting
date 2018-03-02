@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2016 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -74,7 +74,6 @@ class UpdateHandlerTest extends TestCase
         $starTime3 = new \DateTime('26-12-2016 12:30:00.000');
         $endTime3  = new \DateTime('26-12-2016 20:45:00.000');
 
-
         // Expected
         $expectedDay1 = new Day(
             $event,
@@ -135,7 +134,6 @@ class UpdateHandlerTest extends TestCase
         $starTime3 = new \DateTime('26-12-2016 12:30:00.000');
         $endTime3  = new \DateTime('26-12-2016 20:45:00.000');
 
-
         // Expected
         $expectedDay1 = new Day(
             $event,
@@ -193,7 +191,6 @@ class UpdateHandlerTest extends TestCase
         $handler = new UpdateHandler($dayRepository->reveal(), $meetingSlotRepository->reveal());
         $handler->handle($update);
     }
-
 
     /**
      *  Remove all the days of the event

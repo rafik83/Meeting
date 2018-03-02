@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2017 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -23,7 +23,7 @@ class SelectMessageHandlerTest extends TestCase
     public function testHandle()
     {
         // Input context
-        
+
         $event     = EventFactory::createEvent();
         $createdAt = new \DateTime();
         $message   = new Message($event, $createdAt, 'test', 'test subject', 'test content');
