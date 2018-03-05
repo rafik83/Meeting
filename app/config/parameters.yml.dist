@@ -76,8 +76,12 @@ parameters:
 
     jenkins_phantomjs_sheet_pdf_print_build_name: 'PhantomJsSheetPrintPdfBuild'
 
-    comexposium_check_user_token_endpoint: ""
-    comexposium_sso_loader_lib_endpoint: ""
+    comexposium_check_user_token_endpoint: "https://comexposium-host/_plugin/Comexposium/user/checkUserToken"
+    comexposium_login_endpoint: "https://comexposium-host/_login/local"
+    comexposium_get_user_endpoint: "https://comexposium-host/_plugin/Comexposium/thirdParty/getUser/%%email%%?appToken=%%appToken%%"
+    comexposium_sso_loader_lib_endpoint: "https://comexposium-cdn/js/loader.min.js"
+    comexposium_sso_username: informatique@proximumgroup.com
+    comexposium_sso_password: password
     comexposium_username: comexposiumUsername
     comexposium_password: comexposiumPassword
 

@@ -94,6 +94,23 @@ services:
             - '@adapter.http_adapter'
             - '%comexposium_check_user_token_endpoint%'
 
+    Proximum\Vimeet\Application\ThirdParty\Comexposium\SSO\LoginHandler:
+        arguments:
+            - '@adapter.http_adapter'
+            - '%comexposium_login_endpoint%'
+            - '%comexposium_sso_username%'
+            - '%comexposium_sso_password%'
+
+    Proximum\Vimeet\Application\ThirdParty\Comexposium\SSO\UserInformationGetter:
+        arguments:
+            - '@Proximum\Vimeet\Application\ThirdParty\Comexposium\SSO\LoginHandler'
+            - '@Proximum\Vimeet\Application\ThirdParty\Comexposium\SSO\Converter\RawUserDataToUserInformationViewConverter'
+            - '@adapter.http_adapter'
+            - '@repository.event.extra_parameter_repository'
+            - '%comexposium_get_user_endpoint%'
+
+    Proximum\Vimeet\Application\ThirdParty\Comexposium\SSO\Converter\RawUserDataToUserInformationViewConverter: ~
+
     Proximum\Vimeet\Application\ThirdParty\Comexposium\SSO\Application\Query\SSOCheckerHandler:
         arguments:
             - '@vimeet_infrastructure.repository.user_repository'
