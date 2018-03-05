@@ -1,15 +1,16 @@
 <?php
 
 /*
- * This file is part of the vimeet project.
+ * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2016 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
 
 namespace Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Validator\Constraint\Template\TemplateObject;
 
+use Proximum\Vimeet\Domain\Model\Product;
 use Proximum\Vimeet\Domain\Package\Product\TemplateProductGuesser;
 use Proximum\Vimeet\Domain\Template\TemplateObject;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Validator\Constraint\Template\TemplateObjectValidator;
@@ -29,8 +30,6 @@ class ImageValidator extends TemplateObjectValidator
     private $buyableIncludedProductGuesser;
 
     /**
-     * ImageValidator constructor.
-     *
      * @param TemplateProductGuesser                       $templateProductGuesser
      * @param TemplateObject\BuyableIncludedProductGuesser $buyableIncludedProductGuesser
      */
@@ -75,14 +74,22 @@ class ImageValidator extends TemplateObjectValidator
      */
     protected function checkHasPayableOption(TemplateObject $object)
     {
-         if ($this->templateProductGuesser->hasPayableOption($object)
-             && !$this->buyableIncludedProductGuesser->hasBuyableIncludedProduct($object)
-         ) {
+        if ($this->templateProductGuesser->hasPayableOption($object)
+            && !$this->buyableIncludedProductGuesser->hasBuyableIncludedProduct($object)
+        ) {
             $this->context
                 ->getValidator()
                 ->inContext($this->context)
                 ->atPath('selectedProduct')
                 ->validate($object->getSelectedProduct(), new NotBlank());
+
+            $productIds = array_map(function (Product $product) {
+                return $product->getId();
+            }, $object->getBuyableProducts());
+
+            if (!\in_array($object->getSelectedProduct(), $productIds, true)) {
+                $this->context->buildViolation('validators.sheet.object.productNotValid')->atPath('selectedProduct')->addViolation();
+            }
         }
     }
 }

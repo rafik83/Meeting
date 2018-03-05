@@ -1,15 +1,16 @@
 <?php
 
 /*
- * This file is part of the vimeet project.
+ * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2016 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
 
 namespace Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Validator\Constraint\Template\TemplateObject;
 
+use Proximum\Vimeet\Domain\Model\Product;
 use Proximum\Vimeet\Domain\Package\Product\TemplateProductGuesser;
 use Proximum\Vimeet\Domain\Template\TemplateObject;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Validator\Constraint\Template\TemplateObjectValidator;
@@ -29,8 +30,6 @@ class MediaCollectionValidator extends TemplateObjectValidator
     private $buyableIncludedProductGuesser;
 
     /**
-     * ImageValidator constructor.
-     *
      * @param TemplateProductGuesser                       $templateProductGuesser
      * @param TemplateObject\BuyableIncludedProductGuesser $buyableIncludedProductGuesser
      */
@@ -75,7 +74,7 @@ class MediaCollectionValidator extends TemplateObjectValidator
      */
     protected function checkHasPayableOption(TemplateObject\MediaCollection $object)
     {
-        if (count($object->getNotEmptyMedias()) > 0
+        if (\count($object->getNotEmptyMedias()) > 0
             && $this->templateProductGuesser->hasPayableOption($object)
             && !$this->buyableIncludedProductGuesser->hasBuyableIncludedProduct($object)
         ) {
@@ -84,6 +83,14 @@ class MediaCollectionValidator extends TemplateObjectValidator
                 ->inContext($this->context)
                 ->atPath('selectedProduct')
                 ->validate($object->getSelectedProduct(), new NotBlank());
+
+            $productIds = array_map(function (Product $product) {
+                return $product->getId();
+            }, $object->getBuyableProducts());
+
+            if (null !== $object->getSelectedProduct() && !\in_array($object->getSelectedProduct(), $productIds, true)) {
+                $this->context->buildViolation('validators.sheet.object.productNotValid')->atPath('selectedProduct')->addViolation();
+            }
         }
     }
 }
