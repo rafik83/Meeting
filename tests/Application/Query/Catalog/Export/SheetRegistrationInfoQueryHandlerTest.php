@@ -57,7 +57,7 @@ class SheetRegistrationInfoQueryHandlerTest extends TestCase
         $object1->getExportableContent([], 'fr')->willReturn(Gender::WOMAN);
         $object2->getExportableContent([], 'fr')->willReturn('Aanera');
         $object3->getExportableContent([], 'fr')->willReturn('Boulon rose');
-        $object4->getExportableContent([], 'fr')->willReturn('FR');
+        $object4->getExportableContent([], 'fr')->willReturn('France');
         $object5->getExportableContent([], 'fr')->willReturn(true);
 
         $templateData = $this->prophesize(TemplateData::class);
@@ -78,14 +78,10 @@ class SheetRegistrationInfoQueryHandlerTest extends TestCase
 
         $translator->trans('gender.woman', [], 'exports', 'fr')->shouldBeCalled()->willReturn('woman');
         $translator->trans('boolean.yes', [], 'exports', 'fr')->shouldBeCalled()->willReturn('yes');
-        $intl->getCountryName('FR', 'fr')->shouldBeCalled()->willReturn('France');
 
         $query = new SheetRegistrationInfoQuery($templateData->reveal(), 'fr', 'de');
 
-        $handler = new SheetRegistrationInfoQueryHandler(
-            $translator->reveal(),
-            $intl->reveal()
-        );
+        $handler = new SheetRegistrationInfoQueryHandler($translator->reveal());
         $result = $handler->handle($query);
 
         $expected = [

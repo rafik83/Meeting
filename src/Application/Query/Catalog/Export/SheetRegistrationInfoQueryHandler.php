@@ -10,7 +10,6 @@
 
 namespace Proximum\Vimeet\Application\Query\Catalog\Export;
 
-use Proximum\Vimeet\Application\Adapter\IntlInterface;
 use Proximum\Vimeet\Application\Adapter\TranslatorInterface;
 use Proximum\Vimeet\Application\Components\Sheet\Template\Tag;
 use Proximum\Vimeet\Domain\Template\TemplateObject;
@@ -26,17 +25,12 @@ class SheetRegistrationInfoQueryHandler
     /** @var array of sheet registration fields key => label */
     private $sheetRegistrationFields = [];
 
-    /** @var IntlInterface */
-    private $intl;
-
     /**
      * @param TranslatorInterface $translator
-     * @param IntlInterface       $intl
      */
-    public function __construct(TranslatorInterface $translator, IntlInterface $intl)
+    public function __construct(TranslatorInterface $translator)
     {
         $this->translator = $translator;
-        $this->intl = $intl;
     }
 
     /**
