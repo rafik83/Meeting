@@ -178,6 +178,24 @@ class SecurityController extends Controller
     }
 
     /**
+     * @param Request     $request
+     * @param EventDomain $eventDomain
+     *
+     * @return Response|RedirectResponse
+     */
+    public function logoutSuccessAction(Request $request, EventDomain $eventDomain)
+    {
+        if ($this->isGranted('IS_AUTHENTICATED_REMEMBERED')) {
+            return $this->redirectToRoute('event_logout_confirmation');
+        }
+
+        return $this->render('EventBundle:Security:logout_success.html.twig', [
+            'event'  => $eventDomain->getEvent(),
+            'locale' => $request->getLocale(),
+        ]);
+    }
+
+    /**
      * @param User $user
      *
      * @return RedirectResponse
