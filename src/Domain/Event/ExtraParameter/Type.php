@@ -13,7 +13,7 @@ namespace Proximum\Vimeet\Domain\Event\ExtraParameter;
 /**
  * All the types used for the $type of Event\ExtraParameter
  *
- * @see Proximum\Vimeet\Domain\Model\Event\ExtraParameter
+ * @see ExtraParameter
  */
 class Type
 {
@@ -22,7 +22,7 @@ class Type
     const TYPE_LENI_MODE = 'leni_mode';
 
     const TYPE_LENI_MODE_SAVE_VALUE = 'save';
-    const TYPE_LENI_MODE_GET_VALUE = 'receive';
+    const TYPE_LENI_MODE_GET_VALUE = 'get';
     const TYPE_LENI_MODE_BOTH_VALUE = 'both';
 
     // Event Reference in Comexposium
