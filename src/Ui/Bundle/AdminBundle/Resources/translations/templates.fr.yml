@@ -282,3 +282,7 @@ template.type.title: Type
 template.upload.crypted: 'Chiffré'
 template.upload.filter.active: 'Activer le filtre'
 template.upload.filter.label: 'Libellé du filtre'
+template.upload.formats.title: 'Formats autorisés pour l''upload'
+template.upload.formats.choice.image: 'Image'
+template.upload.formats.choice.pdf: 'Pdf'
+template.upload.formats.choice.ppt: 'Powerpoint'
