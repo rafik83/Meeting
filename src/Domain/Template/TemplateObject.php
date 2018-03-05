@@ -191,6 +191,14 @@ class TemplateObject extends AbstractChild
     }
 
     /**
+     * @return bool
+     */
+    public function isEmpty(): bool
+    {
+        return empty($this->getData());
+    }
+
+    /**
      * @return mixed
      */
     public function getValue()
