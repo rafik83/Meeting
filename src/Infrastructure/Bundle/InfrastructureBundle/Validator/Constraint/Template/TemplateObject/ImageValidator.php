@@ -87,7 +87,7 @@ class ImageValidator extends TemplateObjectValidator
                 return $product->getId();
             }, $object->getBuyableProducts());
 
-            if (!\in_array($object->getSelectedProduct(), $productIds, true)) {
+            if (null !== $object->getSelectedProduct() && !\in_array($object->getSelectedProduct(), $productIds, true)) {
                 $this->context->buildViolation('validators.sheet.object.productNotValid')->atPath('selectedProduct')->addViolation();
             }
         }
