@@ -8,7 +8,7 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Proximum\Vimeet\Application\ThirdParty\LENI\Query;
+namespace Proximum\Vimeet\Application\ThirdParty\LENI\Save\Query;
 
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\User;

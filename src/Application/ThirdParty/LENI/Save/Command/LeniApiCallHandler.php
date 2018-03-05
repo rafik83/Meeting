@@ -8,7 +8,7 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Proximum\Vimeet\Application\ThirdParty\LENI\Command;
+namespace Proximum\Vimeet\Application\ThirdParty\LENI\Save\Command;
 
 use Proximum\Vimeet\Application\Adapter\HttpAdapterInterface;
 use Proximum\Vimeet\Application\Exception\Adapter\Http\ServerErrorException;
@@ -17,7 +17,6 @@ use Proximum\Vimeet\Application\ThirdParty\LENI\Exception\MissingIdException;
 use Proximum\Vimeet\Application\ThirdParty\LENI\Exception\NotValidApiCallException;
 use Proximum\Vimeet\Application\ThirdParty\LENI\Exception\WarningApiCallException;
 use Proximum\Vimeet\Application\ThirdParty\LENI\LeniConstants;
-use Proximum\Vimeet\Application\ThirdParty\LENI\Normalizer\LeniUserViewNormalizer;
 use Proximum\Vimeet\Domain\Event\ExtraParameter\Type;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\User;

@@ -8,7 +8,7 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Proximum\Vimeet\Application\ThirdParty\LENI\Command;
+namespace Proximum\Vimeet\Application\ThirdParty\LENI\Save\Command;
 
 use Proximum\Vimeet\Domain\Model\User\Event\ExtraData;
 

@@ -10,8 +10,8 @@
 
 namespace Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\ThirdParty\LENI;
 
-use Proximum\Vimeet\Application\ThirdParty\LENI\Command\PrepareLeniApiCall;
-use Proximum\Vimeet\Application\ThirdParty\LENI\Command\PrepareLeniApiCallHandler;
+use Proximum\Vimeet\Application\ThirdParty\LENI\Save\Command\PrepareLeniApiCall;
+use Proximum\Vimeet\Application\ThirdParty\LENI\Save\Command\PrepareLeniApiCallHandler;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;

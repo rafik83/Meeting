@@ -10,10 +10,9 @@
 
 namespace Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\ThirdParty\LENI;
 
-use Proximum\Vimeet\Application\ThirdParty\LENI\Command\LeniApiCall;
-use Proximum\Vimeet\Application\ThirdParty\LENI\Command\LeniApiCallHandler;
+use Proximum\Vimeet\Application\ThirdParty\LENI\Save\Command\LeniApiCall;
+use Proximum\Vimeet\Application\ThirdParty\LENI\Save\Command\LeniApiCallHandler;
 use Proximum\Vimeet\Application\ThirdParty\LENI\Exception\LeniException;
-use Proximum\Vimeet\Domain\Exception\DomainException;
 use Proximum\Vimeet\Domain\Repository\User\Event\ExtraDataRepositoryInterface;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;

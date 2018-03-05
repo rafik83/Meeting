@@ -1,6 +1,6 @@
 services:
     command.third_party.leni.prepare_leni_api_handler:
-        class: Proximum\Vimeet\Application\ThirdParty\LENI\Command\PrepareLeniApiCallHandler
+        class: Proximum\Vimeet\Application\ThirdParty\LENI\Save\Command\PrepareLeniApiCallHandler
         arguments:
             - '@vimeet_infrastructure.repository.event_repository'
             - '@repository.event.extra_parameter_repository'
@@ -12,10 +12,10 @@ services:
             - '@adapter.leni_api_call_job_queue'
             - '@datetime'
         tags:
-            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\ThirdParty\LENI\PrepareLeniApiCall }
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\ThirdParty\LENI\Save\Command\PrepareLeniApiCall }
 
     command.third_party.leni.leni_api_call_handler:
-        class: Proximum\Vimeet\Application\ThirdParty\LENI\Command\LeniApiCallHandler
+        class: Proximum\Vimeet\Application\ThirdParty\LENI\Save\Command\LeniApiCallHandler
         arguments:
             - '@adapter.http_adapter'
             - '@repository.event.extra_parameter_repository'
@@ -43,6 +43,6 @@ services:
             - { name: console.command }
 
     serializer.normalizer.api.leni.leni_user_view_normalizer:
-        class: Proximum\Vimeet\Application\ThirdParty\LENI\Normalizer\LeniUserViewNormalizer
+        class: Proximum\Vimeet\Application\ThirdParty\LENI\Save\Normalizer\LeniUserViewNormalizer
         tags:
             - { name: serializer.normalizer }

@@ -8,15 +8,15 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Proximum\Vimeet\Tests\Application\ThirdParty\LENI\Command;
+namespace Proximum\Vimeet\Tests\Application\ThirdParty\LENI\Command\Send;
 
 use PHPUnit\Framework\TestCase;
 use Prophecy\Prophecy\ObjectProphecy;
 use Proximum\Vimeet\Application\Adapter\SerializerAdapterInterface;
-use Proximum\Vimeet\Application\Adapter\ThirdParty\LENI\LeniApiCallJobQueueInterface;
+use Proximum\Vimeet\Application\Adapter\ThirdParty\LENI\Save\LeniApiCallJobQueueInterface;
 use Proximum\Vimeet\Application\Components\Planning\Formatter\ParticipantPlanningFormatter;
-use Proximum\Vimeet\Application\ThirdParty\LENI\Command\PrepareLeniApiCall;
-use Proximum\Vimeet\Application\ThirdParty\LENI\Command\PrepareLeniApiCallHandler;
+use Proximum\Vimeet\Application\ThirdParty\LENI\Save\Command\PrepareLeniApiCall;
+use Proximum\Vimeet\Application\ThirdParty\LENI\Save\Command\PrepareLeniApiCallHandler;
 use Proximum\Vimeet\Application\ThirdParty\LENI\Query\LeniUserViewQuery;
 use Proximum\Vimeet\Application\ThirdParty\LENI\Query\LeniUserViewQueryHandler;
 use Proximum\Vimeet\Application\ThirdParty\LENI\View\LeniPlanningDayView;

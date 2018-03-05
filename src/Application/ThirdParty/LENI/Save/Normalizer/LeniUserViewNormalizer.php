@@ -8,7 +8,7 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Proximum\Vimeet\Application\ThirdParty\LENI\Normalizer;
+namespace Proximum\Vimeet\Application\ThirdParty\LENI\Save\Normalizer;
 
 use Proximum\Vimeet\Application\ThirdParty\LENI\LeniConstants;
 use Proximum\Vimeet\Application\ThirdParty\LENI\View\LeniUserView;

@@ -44,7 +44,7 @@ services:
     # API
     #
     query.api.leni.leni_user_view_query_handler:
-        class: Proximum\Vimeet\Application\ThirdParty\LENI\Query\LeniUserViewQueryHandler
+        class: Proximum\Vimeet\Application\ThirdParty\LENI\Save\Query\LeniUserViewQueryHandler
         arguments:
             - '@components.user.user_info_guesser'
             - '@vimeet_infrastructure.application.components.sheet.sheet_info_guesser'
