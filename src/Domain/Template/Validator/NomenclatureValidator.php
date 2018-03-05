@@ -20,6 +20,10 @@ class NomenclatureValidator implements ObjectValidatorInterface
      */
     public function validate($data, array $options = [])
     {
+        if (empty($data)) {
+            return new NomenclatureError($data, true);
+        }
+
         /** @var Nomenclature $nomenclature */
         $nomenclature = $options['object'];
         $items        = $nomenclature->getNomenclatureModel()->getLastLevel();
