@@ -43,9 +43,17 @@ class HomeController extends Controller
             return $response;
         }
 
+        $typeViews = $this
+            ->get('vimeet_infrastructure.repository.type_repository')
+            ->getVisibleTypesViewsByEvent($event, $locale)
+        ;
+
+        if (empty($typeViews)) {
+            return $this->redirectToRoute('event_login');
+        }
+
         $form = $this->createForm(TypeChoiceType::class, null, [
-            'locale' => $locale,
-            'event'  => $event,
+            'typeViews' => $typeViews,
         ]);
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {

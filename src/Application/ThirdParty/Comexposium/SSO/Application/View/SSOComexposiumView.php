@@ -24,19 +24,23 @@ class SSOComexposiumView
     /** @var string */
     public $locale;
 
-    /** @var string */
+    /** @var null|string */
     public $email;
 
     /** @var null|string */
     public $comexposiumSSOLoaderLibEndpoint;
+
+    /** @var bool */
+    public $showLogin;
 
     public function __construct(
         string $salon,
         string $sessionSalon,
         string $application,
         string $locale,
-        string $email,
-        ?string $comexposiumSSOLoaderLibEndpoint
+        ?string $email,
+        ?string $comexposiumSSOLoaderLibEndpoint,
+        bool $showLogin
     ) {
         $this->salon = $salon;
         $this->sessionSalon = $sessionSalon;
@@ -44,5 +48,6 @@ class SSOComexposiumView
         $this->locale = $locale;
         $this->email = $email;
         $this->comexposiumSSOLoaderLibEndpoint = $comexposiumSSOLoaderLibEndpoint;
+        $this->showLogin = $showLogin;
     }
 }

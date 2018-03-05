@@ -12,10 +12,11 @@
 
     $(document).ready(function () {
         $(document).on('comexposiumConnectLoaded', function () {
-            vimeet_cmxp_login();
+            {% if ssoComexposiumView.showLogin %}vimeet_cmxp_login();{% endif %}
 
             window.cxpm.jQuery(document).on('comexposiumConnectLogged', function (event, email, token, isExhibitor) {
                 sendDataToSSOChecker(email, token);
+                $('#login-form').html('<div class="text-center"><span class="glyphicon glyphicon-refresh spin"></span></div>');
             });
         });
     });

@@ -387,6 +387,11 @@ event_logout_confirmation:
     methods:  [GET]
     defaults: { _controller: EventBundle:Security:logoutConfirmation }
 
+event_logout_success:
+    path:     /logout-success
+    methods:  [GET]
+    defaults: { _controller: EventBundle:Security:logoutSuccess }
+
 event_logout:
     path:     /logout
     methods:  [GET]
