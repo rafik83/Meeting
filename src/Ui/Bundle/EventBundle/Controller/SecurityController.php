@@ -183,7 +183,7 @@ class SecurityController extends Controller
      *
      * @return Response|RedirectResponse
      */
-    public function logoutSuccessAction(Request $request, EventDomain $eventDomain)
+    public function logoutSuccessAction(Request $request, EventDomain $eventDomain): Response
     {
         if ($this->isGranted('IS_AUTHENTICATED_REMEMBERED')) {
             return $this->redirectToRoute('event_logout_confirmation');
