@@ -64,17 +64,23 @@ class EditableText extends EditableObject implements ContentObjectInterface, Sea
      */
     public function getContentValue()
     {
-        return $this->getContent() ? $this->getContent() : '';
+        return $this->getContentValueLocalize();
     }
 
     /**
      * {@inheritdoc}
      */
-    public function getContentValueLocalize($locale)
+    public function getContentValueLocalize($locale = null)
     {
+        if (null === $locale) {
+            $locale = $this->getLocale();
+        }
+
         $data = $this->getContent($locale);
 
-        return $data !== null ? $data : '';
+        return $data !== null
+            ? ($this->isTranslatable() && isset($data['content']) ? $data['content'] : $data)
+            : '';
     }
 
     /**
@@ -255,23 +261,38 @@ class EditableText extends EditableObject implements ContentObjectInterface, Sea
         $translations = [];
 
         foreach ($this->data['text'] as $locale => $content) {
-            $translations[$locale]['content'] = $content;
+            $translations[$locale]['content'] = $content['content'] ?? $content;
         }
 
         return $translations;
     }
 
     /**
-     * @param array $translations "['fr' => ['content' => 'content_here']]"
+     * @param array $translations "['fr' => ['content' => 'Contenu fr'], 'en' => ['content' => 'En content']]"
      *
      * @see EditableTextTranslationType
+     * @throws \LogicException
      */
     public function setTranslationsInput(array $translations = [])
     {
+        $this->setTranslations($translations);
+    }
+
+    /**
+     * @param array $translations "['fr' => 'contenu', 'en' => 'content']"
+     *
+     * @throws \LogicException
+     */
+    public function setTranslations(array $translations = [])
+    {
+        if (!$this->isTranslatable()) {
+            throw new \LogicException(sprintf('Object %s is not translatable', $this->getKey()));
+        }
+
         $this->data['text'] = []; // erase previous untranslatable value
 
         foreach ($translations as $locale => $translation) {
-            $this->data['text'][$locale] = $translation['content'];
+            $this->data['text'][$locale] = $translation['content'] ?? $translation;
         }
     }
 }

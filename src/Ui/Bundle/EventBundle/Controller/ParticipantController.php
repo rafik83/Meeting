@@ -106,6 +106,7 @@ class ParticipantController extends Controller
 
         $form = $this->createForm(ProfileType::class, $profileTemplate, [
             'locale'   => $locale,
+            'locales'  => $eventDomain->getEvent()->getLocales(),
             'template' => $profileTemplate,
             'country'  => $eventDomain->getEvent()->getCountry(),
         ]);

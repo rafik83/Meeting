@@ -39,7 +39,23 @@ class VianeoSheetInfoGuesser
     {
         $infos    = [];
         $template = $sheet->getType()->getRegistrationTemplate();
-        $tags     = array_merge(Tag::getSheetTags(), VianeoTemplateTag::getAllTags());
+
+        $tags = array_merge(
+            [
+                Tag::SHEET_ORGANIZATION,
+                Tag::SHEET_TITLE,
+                Tag::SHEET_ORGANIZATION_CATEGORY,
+                Tag::SHEET_ORGANIZATION_TURNOVER,
+                Tag::SHEET_ORGANIZATION_STAFF,
+                Tag::SHEET_ADDRESS,
+                Tag::SHEET_ZIPCODE,
+                Tag::SHEET_CITY,
+                Tag::SHEET_COUNTRY,
+                Tag::SHEET_WEBSITE,
+                Tag::SHEET_PHONE,
+            ],
+            VianeoTemplateTag::getAllTags()
+        );
 
         foreach ($tags as $tag) {
             $infos[$tag] = $this->taggedInfoGuesser->guessFirst(

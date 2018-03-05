@@ -57,7 +57,7 @@ class Gender extends EditableObject implements ContentObjectInterface, Exportabl
     /**
      * {@inheritdoc}
      */
-    public function getContentValueLocalize($locale)
+    public function getContentValueLocalize($locale = null)
     {
         return $this->getContentValue();
     }

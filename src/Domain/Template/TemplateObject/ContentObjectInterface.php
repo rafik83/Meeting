@@ -22,7 +22,7 @@ interface ContentObjectInterface
      *
      * @return string|null
      */
-    public function getContentValueLocalize($locale);
+    public function getContentValueLocalize($locale = null);
 
     /**
      * @return string

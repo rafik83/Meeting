@@ -366,7 +366,7 @@ admin.meeting.export.fields.to_sheet_name: 'Nom fiche demandé'
 admin.meeting.export.fields.to_sheet_participant_fullname: 'Prénom Nom utilisateurs demandés'
 admin.meeting.export.fields.to_sheet_participants: 'Participants demandé'
 admin.meeting.export.fields.to_sheet_title: 'Titre fiche demandé'
-admin.meeting.export.fields.to_user_ids: 'ids des utilisateurs demandeurs'
+admin.meeting.export.fields.to_user_ids: 'ids des utilisateurs demandés'
 admin.meeting.link: Rendez-vous
 admin.meeting.list.column.head.createdAt: 'Créé le'
 admin.meeting.list.column.head.from: De
@@ -478,8 +478,8 @@ admin.order_edit.promotionCodes: 'Codes Promo'
 admin.order_edit.remove_custom_row: ''
 admin.order_edit.total.withoutVAT: 'Total HT'
 admin.order_edit.total.withVAT: 'Total TTC'
-admin.order_edit.update_line: 'Modifier une ligne'
 admin.order_edit.totalByVAT: 'Total assujetti à %vat%%'
+admin.order_edit.update_line: 'Modifier une ligne'
 admin.order_edit.VAT: TVA
 admin.order.cancelled: Annulée
 admin.order.createdAt: 'Créée le'
@@ -1193,8 +1193,8 @@ event.sheet.validationState.pending: 'Soumise à validation'
 event.sheet.validationState.validated: Validée
 form.sheet_filter.children.order.no.label: Sans
 form.sheet_filter.children.order.noPreference.label: 'Peu importe'
-form.sheet_filter.children.order.totalSuperiorZero.label: 'Total supérieur à zéro'
 form.sheet_filter.children.order.totalEqualZero.label: 'Total égal à zéro'
+form.sheet_filter.children.order.totalSuperiorZero.label: 'Total supérieur à zéro'
 gdr.user.agenda.version.modal.button.notify: 'Notifier par SMS'
 gdr.user.agenda.version.modal.button.purge: 'Cacher différence sans notifier'
 gdr.user.agenda.version.modal.no_diff: 'Il n''y a pas de modification dans l''agenda de cette personne'
@@ -1207,6 +1207,8 @@ login.link.label: 'Se connecter'
 login.title: Connexion
 logout.confirmation: 'Êtes vous sûr de vouloir vous déconnecter de votre compte ?'
 logout.link: Déconnecter
+logout.relogin: 'Se re-connecter'
+logout.success: 'Vous êtes maintenant déconnecté'
 logout.title: Déconnecter
 meeting_request_filter.order_by.options.created_at_asc: 'Date de création croissante'
 meeting_request_filter.order_by.options.created_at_desc: 'Date de création décroissante'

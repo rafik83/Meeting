@@ -84,7 +84,7 @@ class Nomenclature extends EditableObject implements ContentObjectInterface, Sea
     /**
      * {@inheritdoc}
      */
-    public function getContentValueLocalize($locale)
+    public function getContentValueLocalize($locale = null)
     {
         return $this->getContentValue();
     }
@@ -126,6 +126,18 @@ class Nomenclature extends EditableObject implements ContentObjectInterface, Sea
         }
 
         return null;
+    }
+
+    /**
+     * @param string $key
+     *
+     * @return bool
+     */
+    public function hasKey(string $key): bool
+    {
+        $lastLevel = $this->nomenclature->getLastLevel();
+
+        return isset($lastLevel[$key]);
     }
 
     /**

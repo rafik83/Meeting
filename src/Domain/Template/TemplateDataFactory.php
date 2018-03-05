@@ -136,6 +136,17 @@ class TemplateDataFactory
     }
 
     /**
+     * @param Type        $type
+     * @param null|string $locale
+     *
+     * @return TemplateData
+     */
+    public function createSheetTemplateFromType(Type $type, ?string $locale = null): TemplateData
+    {
+        return $this->createFromTemplate($type->getSheetTemplate(), [], $locale);
+    }
+
+    /**
      * @param Sheet       $sheet
      * @param string|null $locale
      *

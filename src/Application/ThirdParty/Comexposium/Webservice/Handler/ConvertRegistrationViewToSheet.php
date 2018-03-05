@@ -14,6 +14,7 @@ use Proximum\Vimeet\Application\Event\Events;
 use Proximum\Vimeet\Application\Event\Sheet\SheetUpdatedEvent;
 use Proximum\Vimeet\Application\ThirdParty\Comexposium\Webservice\Sheet\SheetExtraDataType;
 use Proximum\Vimeet\Application\ThirdParty\Comexposium\Webservice\View\RegistrationView;
+use Proximum\Vimeet\Application\ThirdParty\Comexposium\Webservice\View\SheetAndParticipantTemplateDataView;
 use Proximum\Vimeet\Domain\Account\Synchronizer;
 use Proximum\Vimeet\Domain\Helper\StringHelper;
 use Proximum\Vimeet\Domain\Model\Event;
@@ -93,6 +94,7 @@ class ConvertRegistrationViewToSheet
      * @param Type             $type
      * @param RegistrationView $registrationView
      * @param TemplateData     $registrationTemplateData
+     * @param TemplateData     $sheetTemplateData
      *
      * @return Sheet
      */
@@ -100,7 +102,8 @@ class ConvertRegistrationViewToSheet
         Event $event,
         Type $type,
         RegistrationView $registrationView,
-        TemplateData $registrationTemplateData
+        TemplateData $registrationTemplateData,
+        TemplateData $sheetTemplateData
     ): Sheet {
         $email = StringHelper::trimSpacesAndNonBreakSpaces($registrationView->participantView->email);
 
@@ -110,7 +113,14 @@ class ConvertRegistrationViewToSheet
             $user = $this->createUser($event, $email, $registrationView->participantView->locale);
         }
 
-        $sheet = $this->createSheetAndParticipant($event, $type, $user, $registrationView, $registrationTemplateData);
+        $sheet = $this->createSheetAndParticipant(
+            $event,
+            $type,
+            $user,
+            $registrationView,
+            $registrationTemplateData,
+            $sheetTemplateData
+        );
 
         $this->synchronizer->set($registrationTemplateData, $user);
 
@@ -150,6 +160,7 @@ class ConvertRegistrationViewToSheet
      * @param User             $user
      * @param RegistrationView $registrationView
      * @param TemplateData     $registrationTemplateData
+     * @param TemplateData     $sheetTemplateData
      *
      * @return Sheet
      */
@@ -158,22 +169,27 @@ class ConvertRegistrationViewToSheet
         Type $type,
         User $user,
         RegistrationView $registrationView,
-        TemplateData $registrationTemplateData
+        TemplateData $registrationTemplateData,
+        TemplateData $sheetTemplateData
     ): Sheet {
         $sheetAndParticipantTemplateDataView = $this->sheetAndParticipantTemplateDataHandler->handle(
             $registrationView,
-            $registrationTemplateData
+            $registrationTemplateData,
+            $sheetTemplateData
         );
 
         $sheet = $this->createSheet(
-            $sheetAndParticipantTemplateDataView->sheetTitle,
             $event,
             $type,
             $user,
-            $sheetAndParticipantTemplateDataView->sheetRegistrationData
+            $sheetAndParticipantTemplateDataView
         );
 
-        $participant = $this->createParticipant($sheet, $user, $sheetAndParticipantTemplateDataView->participantRegistrationData);
+        $participant = $this->createParticipant(
+            $sheet,
+            $user,
+            $sheetAndParticipantTemplateDataView->participantRegistrationData
+        );
 
         $this->save($registrationView->reference, $sheet, $participant);
 
@@ -181,30 +197,28 @@ class ConvertRegistrationViewToSheet
     }
 
     /**
-     * @param string $sheetTitle
-     * @param Event  $event
-     * @param Type   $type
-     * @param User   $user
-     * @param array  $sheetRegistrationData
+     * @param Event                               $event
+     * @param Type                                $type
+     * @param User                                $user
+     * @param SheetAndParticipantTemplateDataView $sheetAndParticipantTemplateDataView
      *
      * @return Sheet
      */
     private function createSheet(
-        string $sheetTitle,
         Event $event,
         Type $type,
         User $user,
-        array &$sheetRegistrationData
+        SheetAndParticipantTemplateDataView $sheetAndParticipantTemplateDataView
     ): Sheet {
         $sheet = new Sheet(
             $event,
             $type,
-            [],
+            $sheetAndParticipantTemplateDataView->sheetTemplateData,
             $user,
             $this->dateTime
         );
-        $sheet->setRegistrationData($sheetRegistrationData);
-        $sheet->setTitle($sheetTitle);
+        $sheet->setRegistrationData($sheetAndParticipantTemplateDataView->sheetRegistrationData);
+        $sheet->setTitle($sheetAndParticipantTemplateDataView->sheetTitle);
         $sheet->setImported(true);
 
         return $sheet;

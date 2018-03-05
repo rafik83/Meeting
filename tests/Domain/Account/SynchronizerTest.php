@@ -109,13 +109,13 @@ class SynchronizerTest extends TestCase
             $object6->reveal(),
         ];
         $templateData->getEditableObjects()->willReturn($objects);
-        $object->getContentValue()->willReturn('');
-        $object1->getContentValue()->willReturn('Last Name');
-        $object2->getContentValue()->willReturn('Woman');
-        $object3->getContentValue()->willReturn('First Name');
-        $object4->getContentValue()->willReturn('Sheet title');
-        $object5->getContentValue()->willReturn('Participant Phone');
-        $object6->getContentValue()->willReturn('key1');
+        $object->getContentValueLocalize()->willReturn('');
+        $object1->getContentValueLocalize()->willReturn('Last Name');
+        $object2->getContentValueLocalize()->willReturn('Woman');
+        $object3->getContentValueLocalize()->willReturn('First Name');
+        $object4->getContentValueLocalize()->willReturn('Sheet title');
+        $object5->getContentValueLocalize()->willReturn('Participant Phone');
+        $object6->getContentValueLocalize()->willReturn('key1');
         $templateData->getLocale()->willReturn('fr');
 
         //Expected

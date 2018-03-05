@@ -76,10 +76,24 @@ class SecurityController extends Controller
             $this->get('vimeet_infrastructure.repository.user_repository')->all() :
             [];
 
+        $hasError = 0 < \count($form->getErrors(true)) || $this->get('session')->getFlashBag()->has('error');
+
+        $ssoComexposiumView = !$hasError
+            ? $this->get(QueryBus::class)->handle(
+                new SSOComexposiumViewQuery(
+                    $event,
+                    $request->getLocale(),
+                    null,
+                    false
+                )
+            )
+            : null;
+
         return $this->render('EventBundle:Security:login_first_step.html.twig', [
             'event' => $event,
-            'form'  => $form->createView(),
+            'form' => $form->createView(),
             'users' => $users,
+            'ssoComexposiumView' => $ssoComexposiumView,
         ]);
     }
 
@@ -136,7 +150,8 @@ class SecurityController extends Controller
             new SSOComexposiumViewQuery(
                 $event,
                 $request->getLocale(),
-                $email
+                $email,
+                true
             )
         );
 
@@ -162,6 +177,24 @@ class SecurityController extends Controller
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
 
         return $this->render('EventBundle:Security:logout_confirmation.html.twig', [
+            'event'  => $eventDomain->getEvent(),
+            'locale' => $request->getLocale(),
+        ]);
+    }
+
+    /**
+     * @param Request     $request
+     * @param EventDomain $eventDomain
+     *
+     * @return Response|RedirectResponse
+     */
+    public function logoutSuccessAction(Request $request, EventDomain $eventDomain): Response
+    {
+        if ($this->isGranted('IS_AUTHENTICATED_REMEMBERED')) {
+            return $this->redirectToRoute('event_logout_confirmation');
+        }
+
+        return $this->render('EventBundle:Security:logout_success.html.twig', [
             'event'  => $eventDomain->getEvent(),
             'locale' => $request->getLocale(),
         ]);

@@ -43,6 +43,9 @@ class ImportSheetsHandler
     /** @var RemoveAlreadyImportedReferences */
     private $removeAlreadyImportedReferences;
 
+    /** @var PrepareNomenclatureHandler */
+    private $prepareNomenclatureHandler;
+
     /**
      * @param ComexposiumWebservice                      $comexposiumWebservice
      * @param ExtraParameterRepositoryInterface          $extraParameterRepository
@@ -51,6 +54,7 @@ class ImportSheetsHandler
      * @param ConvertRegistrationViewToSheet             $convertRegistrationViewToSheet
      * @param TemplateDataFactory                        $templateDataFactory
      * @param RemoveAlreadyImportedReferences            $removeAlreadyImportedReferences
+     * @param PrepareNomenclatureHandler                 $prepareNomenclatureHandler
      */
     public function __construct(
         ComexposiumWebservice $comexposiumWebservice,
@@ -59,7 +63,8 @@ class ImportSheetsHandler
         RawRegistrationToRegistrationViewConverter $rawRegistrationToRegistrationViewConverter,
         ConvertRegistrationViewToSheet $convertRegistrationViewToSheet,
         TemplateDataFactory $templateDataFactory,
-        RemoveAlreadyImportedReferences $removeAlreadyImportedReferences
+        RemoveAlreadyImportedReferences $removeAlreadyImportedReferences,
+        PrepareNomenclatureHandler $prepareNomenclatureHandler
     ) {
         $this->comexposiumWebservice = $comexposiumWebservice;
         $this->extraParameterRepository = $extraParameterRepository;
@@ -68,6 +73,7 @@ class ImportSheetsHandler
         $this->convertRegistrationViewToSheet = $convertRegistrationViewToSheet;
         $this->templateDataFactory = $templateDataFactory;
         $this->removeAlreadyImportedReferences = $removeAlreadyImportedReferences;
+        $this->prepareNomenclatureHandler = $prepareNomenclatureHandler;
     }
 
     /**
@@ -108,19 +114,34 @@ class ImportSheetsHandler
 
         $eventReference = $eventReferenceExtraParameter->getValue();
 
+        $nomenclatureView = $this->prepareNomenclatureHandler->handle($eventReference);
+
         $registrationTemplate = $this->templateDataFactory->createRegistrationFromType($type, null);
+        $sheetTemplate = $this->templateDataFactory->createSheetTemplateFromType($type);
 
         $rawRegistrations = $this->comexposiumWebservice->getRegistrations($eventReference, $registrationReferences);
 
         foreach ($rawRegistrations as $rawRegistration) {
-            $registrationView = $this->rawRegistrationToRegistrationViewConverter->convert($rawRegistration);
+            $registrationView = $this->rawRegistrationToRegistrationViewConverter->convert(
+                $rawRegistration,
+                $nomenclatureView
+            );
 
             if (!$registrationView instanceof RegistrationView) {
                 continue;
             }
 
-            $this->convertRegistrationViewToSheet->handle($event, $type, $registrationView, $registrationTemplate);
+            $this->convertRegistrationViewToSheet->handle(
+                $event,
+                $type,
+                $registrationView,
+                $registrationTemplate,
+                $sheetTemplate
+            );
+
+            // clear data in templates to be reused
             $registrationTemplate->clear();
+            $sheetTemplate->clear();
         }
     }
 }
