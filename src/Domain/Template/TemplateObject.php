@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2016 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -296,11 +296,11 @@ class TemplateObject extends AbstractChild
     }
 
     /**
-     * @param Product $selectedProduct
+     * @param Product|null $selectedProduct
      */
-    public function setSelectedProduct(Product $selectedProduct)
+    public function setSelectedProduct(Product $selectedProduct = null)
     {
-        $this->data['product'] = $selectedProduct->getId();
+        $this->data['product'] = $selectedProduct instanceof Product ? $selectedProduct->getId() : null;
     }
 
     /**
