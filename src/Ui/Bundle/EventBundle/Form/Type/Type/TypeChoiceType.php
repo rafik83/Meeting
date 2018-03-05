@@ -3,15 +3,13 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2015 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
 
 namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Type;
 
-use Proximum\Vimeet\Domain\Model\Event;
-use Proximum\Vimeet\Domain\Repository\TypeRepositoryInterface;
 use Proximum\Vimeet\Domain\View\TypeView;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Service\Markdown;
 use Symfony\Component\Form\AbstractType;
@@ -22,23 +20,16 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 class TypeChoiceType extends AbstractType
 {
     /**
-     * @var TypeRepositoryInterface
-     */
-    private $typeRepository;
-
-    /**
      * @var Markdown
      */
     private $markdown;
 
     /**
-     * @param TypeRepositoryInterface $typeRepository
-     * @param Markdown                $markdown
+     * @param Markdown $markdown
      */
-    public function __construct(TypeRepositoryInterface $typeRepository, Markdown $markdown)
+    public function __construct(Markdown $markdown)
     {
-        $this->typeRepository = $typeRepository;
-        $this->markdown       = $markdown;
+        $this->markdown = $markdown;
     }
 
     /**
