@@ -266,6 +266,7 @@ form.extra_parameter_create.children.type.choices.comexposium_sso_enabled: 'Acti
 form.extra_parameter_create.children.type.choices.comexposium_sso_salon: 'Comexposium SSO Salon'
 form.extra_parameter_create.children.type.choices.comexposium_sso_session_salon: 'Comexposium SSO Session Salon'
 form.extra_parameter_create.children.type.choices.leni_event: 'Code Event LENI'
+form.extra_parameter_create.children.type.choices.leni_mode: 'Mode LENI'
 form.extra_parameter_create.children.type.choices.leni_user: 'Code Utilisateur LENI'
 form.extra_parameter_create.children.type.choices.vianeo_concerned_types_id: 'Vianeo : Ids des types de participation concernés (séparés par une virgule)'
 form.extra_parameter_create.children.type.choices.vianeo_endpoint: 'Vianeo endpoint'

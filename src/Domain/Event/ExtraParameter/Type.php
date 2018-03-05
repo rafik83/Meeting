@@ -19,6 +19,11 @@ class Type
 {
     const TYPE_LENI_USER = 'leni_user';
     const TYPE_LENI_EVENT = 'leni_event';
+    const TYPE_LENI_MODE = 'leni_mode';
+
+    const TYPE_LENI_MODE_SAVE_VALUE = 'save';
+    const TYPE_LENI_MODE_GET_VALUE = 'receive';
+    const TYPE_LENI_MODE_BOTH_VALUE = 'both';
 
     // Event Reference in Comexposium
     const TYPE_COMEXPOSIUM_EVENT_REFERENCE = 'comexposium_event_reference';
@@ -37,6 +42,7 @@ class Type
     public const TYPES = [
         self::TYPE_LENI_USER,
         self::TYPE_LENI_EVENT,
+        self::TYPE_LENI_MODE,
         self::TYPE_COMEXPOSIUM_EVENT_REFERENCE,
         self::TYPE_COMEXPOSIUM_EXHIBITOR_TYPE_ID,
         self::TYPE_VIANEO_ENDPOINT,
