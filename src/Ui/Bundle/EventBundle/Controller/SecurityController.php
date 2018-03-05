@@ -73,14 +73,18 @@ class SecurityController extends Controller
             $this->get('vimeet_infrastructure.repository.user_repository')->all() :
             [];
 
-        $ssoComexposiumView = $this->get(QueryBus::class)->handle(
-            new SSOComexposiumViewQuery(
-                $eventDomain->getEvent(),
-                $request->getLocale(),
-                null,
-                false
+        $hasError = 0 < \count($form->getErrors(true)) || $this->get('session')->getFlashBag()->has('error');
+
+        $ssoComexposiumView = !$hasError
+            ? $this->get(QueryBus::class)->handle(
+                new SSOComexposiumViewQuery(
+                    $eventDomain->getEvent(),
+                    $request->getLocale(),
+                    null,
+                    false
+                )
             )
-        );
+            : null;
 
         return $this->render('EventBundle:Security:login_first_step.html.twig', [
             'event' => $eventDomain->getEvent(),
