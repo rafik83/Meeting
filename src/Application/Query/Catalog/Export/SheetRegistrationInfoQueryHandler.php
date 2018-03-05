@@ -70,8 +70,6 @@ class SheetRegistrationInfoQueryHandler
                     'exports',
                     $query->locale
                 );
-            } elseif ($object instanceof TemplateObject\Country) {
-                $content = $this->intl->getCountryName($content, $query->locale);
             } elseif ($object instanceof TemplateObject\BooleanObject) {
                 $content = $this->translator->trans(
                     sprintf(self::TRANS_BOOLEAN, $content ? 'yes' : 'no'),
