@@ -8,14 +8,14 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Proximum\Vimeet\Tests\Application\ThirdParty\LENI\Normalizer;
+namespace Proximum\Vimeet\Tests\Application\ThirdParty\LENI\Save\Normalizer;
 
 use PHPUnit\Framework\TestCase;
 use Prophecy\Prophecy\ObjectProphecy;
 use Proximum\Vimeet\Application\ThirdParty\LENI\Save\Normalizer\LeniUserViewNormalizer;
-use Proximum\Vimeet\Application\ThirdParty\LENI\View\LeniPlanningDayView;
-use Proximum\Vimeet\Application\ThirdParty\LENI\View\LeniPlanningView;
-use Proximum\Vimeet\Application\ThirdParty\LENI\View\LeniUserView;
+use Proximum\Vimeet\Application\ThirdParty\LENI\Save\View\LeniPlanningDayView;
+use Proximum\Vimeet\Application\ThirdParty\LENI\Save\View\LeniPlanningView;
+use Proximum\Vimeet\Application\ThirdParty\LENI\Save\View\LeniUserView;
 use Proximum\Vimeet\Domain\Model\User\Event\ExtraData;
 
 class LeniUserViewNormalizerTest extends TestCase

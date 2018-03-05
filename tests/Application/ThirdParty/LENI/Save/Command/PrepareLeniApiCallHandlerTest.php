@@ -8,7 +8,7 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Proximum\Vimeet\Tests\Application\ThirdParty\LENI\Command\Send;
+namespace Proximum\Vimeet\Tests\Application\ThirdParty\LENI\Save\Command;
 
 use PHPUnit\Framework\TestCase;
 use Prophecy\Prophecy\ObjectProphecy;
@@ -17,11 +17,11 @@ use Proximum\Vimeet\Application\Adapter\ThirdParty\LENI\Save\LeniApiCallJobQueue
 use Proximum\Vimeet\Application\Components\Planning\Formatter\ParticipantPlanningFormatter;
 use Proximum\Vimeet\Application\ThirdParty\LENI\Save\Command\PrepareLeniApiCall;
 use Proximum\Vimeet\Application\ThirdParty\LENI\Save\Command\PrepareLeniApiCallHandler;
-use Proximum\Vimeet\Application\ThirdParty\LENI\Query\LeniUserViewQuery;
-use Proximum\Vimeet\Application\ThirdParty\LENI\Query\LeniUserViewQueryHandler;
-use Proximum\Vimeet\Application\ThirdParty\LENI\View\LeniPlanningDayView;
-use Proximum\Vimeet\Application\ThirdParty\LENI\View\LeniPlanningView;
-use Proximum\Vimeet\Application\ThirdParty\LENI\View\LeniUserView;
+use Proximum\Vimeet\Application\ThirdParty\LENI\Save\Query\LeniUserViewQuery;
+use Proximum\Vimeet\Application\ThirdParty\LENI\Save\Query\LeniUserViewQueryHandler;
+use Proximum\Vimeet\Application\ThirdParty\LENI\Save\View\LeniPlanningDayView;
+use Proximum\Vimeet\Application\ThirdParty\LENI\Save\View\LeniPlanningView;
+use Proximum\Vimeet\Application\ThirdParty\LENI\Save\View\LeniUserView;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Model\User\Event\ExtraData;
@@ -97,6 +97,10 @@ class PrepareLeniApiCallHandlerTest extends TestCase
         $extraParam2 = $this->prophesize(Event\ExtraParameter::class);
         $extraParam3 = $this->prophesize(Event\ExtraParameter::class);
         $extraParam4 = $this->prophesize(Event\ExtraParameter::class);
+
+        $extraParam1->getValue()->shouldBeCalled()->willReturn('save');
+        $extraParam2->getValue()->shouldBeCalled()->willReturn('save');
+
         $this->extraParameterRepository
             ->findByEventAndType($this->event1->reveal(), 'leni_user')
             ->shouldBeCalled()
@@ -117,6 +121,16 @@ class PrepareLeniApiCallHandlerTest extends TestCase
             ->findByEventAndType($this->event2->reveal(), 'leni_event')
             ->shouldBeCalled()
             ->willReturn($extraParam4->reveal())
+        ;
+        $this->extraParameterRepository
+            ->findByEventAndType($this->event1->reveal(), 'leni_mode')
+            ->shouldBeCalled()
+            ->willReturn($extraParam1->reveal())
+        ;
+        $this->extraParameterRepository
+            ->findByEventAndType($this->event2->reveal(), 'leni_mode')
+            ->shouldBeCalled()
+            ->willReturn($extraParam2->reveal())
         ;
 
         $this->participantPlanningFormatter->preloadPlanningHandlerForEvent($this->event1->reveal())->shouldBeCalled();

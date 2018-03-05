@@ -23,7 +23,7 @@ services:
             - '@datetime'
 
     adapter.leni_api_call_job_queue:
-        class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Adapter\ThirdParty\LENI\LeniApiCallJobQueue
+        class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Adapter\ThirdParty\LENI\Save\LeniApiCallJobQueue
         arguments:
             - '@doctrine.orm.entity_manager'
 
