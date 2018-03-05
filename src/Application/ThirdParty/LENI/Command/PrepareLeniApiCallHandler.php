@@ -112,10 +112,17 @@ class PrepareLeniApiCallHandler
             $leniUserParameter  = $this->extraParameterRepository->findByEventAndType($event, Type::TYPE_LENI_USER);
             $leniEventParameter = $this->extraParameterRepository->findByEventAndType($event, Type::TYPE_LENI_EVENT);
             $leniModeParameter = $this->extraParameterRepository->findByEventAndType($event, Type::TYPE_LENI_MODE);
-            $sendModeEnabled = $leniModeParameter === Type::TYPE_LENI_MODE_SAVE_VALUE
-                               || $leniModeParameter === Type::TYPE_LENI_MODE_BOTH_VALUE;
 
-            if (!$sendModeEnabled || null === $leniUserParameter || null === $leniEventParameter) {
+            $saveModeEnabled = false;
+
+            if ($leniModeParameter !== null
+                && ($leniModeParameter->getValue() === Type::TYPE_LENI_MODE_SAVE_VALUE
+                    || $leniModeParameter->getValue() === Type::TYPE_LENI_MODE_BOTH_VALUE)
+            ) {
+                $saveModeEnabled = true;
+            }
+
+            if (!$saveModeEnabled || null === $leniUserParameter || null === $leniEventParameter) {
                 throw new \LogicException(
                     'Can not call PrepareLeniApiCallHandler if send mode is not enabled or event has not LENI_USER and LENI_EVENT'
                 );
