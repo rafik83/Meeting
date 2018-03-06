@@ -272,18 +272,22 @@ class EditableText extends EditableObject implements ContentObjectInterface, Sea
      */
     public function getTranslationsInput()
     {
-        if (!is_array($this->data) || !isset($this->data['text'])) {
+        if (!\is_array($this->data) || !isset($this->data['text'])) {
             return [];
         }
 
-        if (!$this->isTranslatable() || !is_array($this->data['text'])) {
+        if (!$this->isTranslatable() || !\is_array($this->data['text'])) {
             return [];
         }
 
         $translations = [];
 
         foreach ($this->data['text'] as $locale => $content) {
-            $translations[$locale]['content'] = $content['content'] ?? $content;
+            if (\is_array($content) && array_key_exists('content', $content)) {
+                $translations[$locale]['content'] = $content['content'];
+            } else {
+                $translations[$locale]['content'] = $content;
+            }
         }
 
         return $translations;
@@ -314,7 +318,12 @@ class EditableText extends EditableObject implements ContentObjectInterface, Sea
         $this->data['text'] = []; // erase previous untranslatable value
 
         foreach ($translations as $locale => $translation) {
-            $this->data['text'][$locale] = $translation['content'] ?? $translation;
+            if (\is_array($translation) && array_key_exists('content', $translation)) {
+                $this->data['text'][$locale] = $translation['content'];
+
+            } else {
+                $this->data['text'][$locale] = $translation;
+            }
         }
     }
 }
