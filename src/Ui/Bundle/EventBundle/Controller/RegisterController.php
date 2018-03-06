@@ -244,7 +244,7 @@ class RegisterController extends Controller
 
     /**
      * @param Request     $request
-     * @param EventDomain   $eventDomain
+     * @param EventDomain $eventDomain
      * @param Participant $participant
      * @param int         $step
      *
@@ -274,7 +274,7 @@ class RegisterController extends Controller
             $participant->setData($preFillUserDataView->templateData->getData());
         }
 
-        $participantBlock = $registrationTemplate->getBlock(intval($step));
+        $participantBlock = $registrationTemplate->getBlock((int) $step);
 
         if (null === $participantBlock) {
             throw $this->createNotFoundException('Unknown step');
