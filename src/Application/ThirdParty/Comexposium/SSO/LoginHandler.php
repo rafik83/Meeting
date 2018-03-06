@@ -60,11 +60,11 @@ class LoginHandler
                 [
                     'username' => $this->comexposiumSsoUsername,
                     'password' => $this->comexposiumSsoPassword,
-                    'expiresIn' => '1h',
+                    'expiresIn' => '12h',
                 ]
             );
 
-            if ($response->statusCode !== 200) {
+            if (200 !== $response->statusCode) {
                 return null;
             }
 
