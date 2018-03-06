@@ -1233,7 +1233,7 @@ admin_event_template_sheet:
 admin_event_template_package:
     path: /event/{event}/template/package
     defaults: { _controller: AdminBundle:EventTemplate:packageTemplate }
-    methods: [GET]
+    methods: [GET, POST]
     requirements:
         event: \d+
 
