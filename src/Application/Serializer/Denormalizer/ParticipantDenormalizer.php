@@ -133,7 +133,7 @@ class ParticipantDenormalizer implements DenormalizerInterface
             }
         }
 
-        $this->importLogger->init(count($data));
+        $this->importLogger->init(\count($data));
 
         $mappingGuesser = new MappingGuesser($context['mappings']);
 
@@ -301,7 +301,7 @@ class ParticipantDenormalizer implements DenormalizerInterface
                     $column = $this->denormalizerPhoneNumber($column);
                 }
 
-                $validator      = ObjectValidatorFactory::create($templateObject);
+                $validator = ObjectValidatorFactory::create($templateObject);
                 $validatorError = $validator->validate($column, [
                     'locale' => $context['locale'],
                     'object' => $templateObject,
@@ -332,7 +332,6 @@ class ParticipantDenormalizer implements DenormalizerInterface
             }
 
             if ($templateObject->hasTag(Tag::SHEET_ORGANIZATION) && !empty($templateObject->getContentValue())) {
-
                 $sheetTitle = $column;
             }
 

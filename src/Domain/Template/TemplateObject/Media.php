@@ -52,9 +52,9 @@ class Media
 
         // If the object is translatable but data is not translated, make an array for the fallback locale
         // If the object isn't translatable but data is translated, get the fallback data if exist, the first data else
-        if ($translatable && !is_array($this->title)) {
+        if ($translatable && !\is_array($this->title)) {
             $this->title = [$fallback => $this->title];
-        } elseif (!$translatable && is_array($this->title)) {
+        } elseif (!$translatable && \is_array($this->title)) {
             $this->title = isset($this->title[$fallback]) ? $this->title[$fallback] : reset($this->title);
         }
     }
@@ -76,7 +76,7 @@ class Media
      */
     public function getFallbackTitle()
     {
-        if ($this->collection->isTranslatable() && is_array($this->title) || is_array($this->title)) {
+        if ($this->collection->isTranslatable() && \is_array($this->title) || \is_array($this->title)) {
             return isset($this->title[$this->collection->getFallback()])
                 ? $this->title[$this->collection->getFallback()]
                 : null;
@@ -92,7 +92,7 @@ class Media
      */
     public function getTitle()
     {
-        if ($this->collection->isTranslatable() && is_array($this->title) || is_array($this->title)) {
+        if ($this->collection->isTranslatable() && \is_array($this->title) || \is_array($this->title)) {
             return isset($this->title[$this->collection->getLocale()])
                 ? $this->title[$this->collection->getLocale()]
                 : null;
@@ -106,12 +106,12 @@ class Media
      *
      * @param string $title
      *
-     * @return Item
+     * @return Media
      */
     public function setTitle($title)
     {
         if ($this->collection->isTranslatable()) {
-            if (!is_array($this->title)) {
+            if (!\is_array($this->title)) {
                 $this->title = [];
             }
 
@@ -138,8 +138,8 @@ class Media
     /**
      * @return bool
      */
-    public function isEmpty()
+    public function isEmpty(): bool
     {
-        return $this->title === null || is_array($this->title) && count(array_filter($this->title)) === 0;
+        return $this->title === null || (\is_array($this->title) && \count(array_filter($this->title)) === 0);
     }
 }
