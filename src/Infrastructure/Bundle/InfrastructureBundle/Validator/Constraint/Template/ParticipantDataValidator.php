@@ -23,7 +23,7 @@ abstract class ParticipantDataValidator extends ConstraintValidator
         'collection'    => TemplateObjectConstraint::class,
         'editable-text' => TemplateObject\EditableTextConstraint::class,
         'gender'        => TemplateObject\GenderConstraint::class,
-        'image'         => TemplateObjectConstraint::class,
+        'image'         => TemplateObject\ImageConstraint::class,
         'media'         => TemplateObjectConstraint::class,
         'nomenclature'  => TemplateObject\NomenclatureConstraint::class,
         'participant'   => TemplateObjectConstraint::class,

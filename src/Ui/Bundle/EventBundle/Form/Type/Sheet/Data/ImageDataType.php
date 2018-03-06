@@ -64,7 +64,6 @@ class ImageDataType extends AbstractType
         $builder->add('file', FileType::class, [
             'label'       => $options['label'],
             'required'    => $image->getOption('required'),
-            'mapped'      => false,
             'attr'        => [
                 'accept' => implode(', ', TemplateObject\Image::supportedMimeType()),
             ],
