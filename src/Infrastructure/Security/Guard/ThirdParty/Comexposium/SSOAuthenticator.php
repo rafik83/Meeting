@@ -13,6 +13,7 @@ namespace Proximum\Vimeet\Infrastructure\Security\Guard\ThirdParty\Comexposium;
 use Proximum\Vimeet\Application\Adapter\RouterInterface;
 use Proximum\Vimeet\Application\ThirdParty\Comexposium\SSO\Application\Query\SSOChecker;
 use Proximum\Vimeet\Application\ThirdParty\Comexposium\SSO\Application\Query\SSOCheckerHandler;
+use Proximum\Vimeet\Application\ThirdParty\Comexposium\SSO\Application\Query\SSORedirectionAfterLoginResolver;
 use Proximum\Vimeet\Application\ThirdParty\Comexposium\SSO\Exception\SSOException;
 use Proximum\Vimeet\Domain\Event\EventByHostResolver;
 use Proximum\Vimeet\Domain\Event\ExtraParameter\Type;
@@ -52,6 +53,9 @@ final class SSOAuthenticator extends AbstractGuardAuthenticator
     /** @var ExtraParameterRepositoryInterface */
     private $extraParameterRepository;
 
+    /** @var SSORedirectionAfterLoginResolver */
+    private $SSORedirectionAfterLoginResolver;
+
     /**
      * @param SSOCheckerHandler                 $SSOCheckerHandler
      * @param EventByHostResolver               $eventByHostResolver
@@ -59,6 +63,7 @@ final class SSOAuthenticator extends AbstractGuardAuthenticator
      * @param FlashBagInterface                 $flashBag
      * @param RouterInterface                   $router
      * @param SSOAuthenticationSuccessHandler   $SSOAuthenticationSuccessHandler
+     * @param SSORedirectionAfterLoginResolver  $SSORedirectionAfterLoginResolver
      */
     public function __construct(
         SSOCheckerHandler $SSOCheckerHandler,
@@ -66,7 +71,8 @@ final class SSOAuthenticator extends AbstractGuardAuthenticator
         ExtraParameterRepositoryInterface $extraParameterRepository,
         FlashBagInterface $flashBag,
         RouterInterface $router,
-        SSOAuthenticationSuccessHandler $SSOAuthenticationSuccessHandler
+        SSOAuthenticationSuccessHandler $SSOAuthenticationSuccessHandler,
+        SSORedirectionAfterLoginResolver $SSORedirectionAfterLoginResolver
     ) {
         $this->SSOCheckerHandler = $SSOCheckerHandler;
         $this->eventByHostResolver = $eventByHostResolver;
@@ -74,6 +80,7 @@ final class SSOAuthenticator extends AbstractGuardAuthenticator
         $this->flashBag = $flashBag;
         $this->router = $router;
         $this->SSOAuthenticationSuccessHandler = $SSOAuthenticationSuccessHandler;
+        $this->SSORedirectionAfterLoginResolver = $SSORedirectionAfterLoginResolver;
     }
 
     /**
@@ -149,7 +156,7 @@ final class SSOAuthenticator extends AbstractGuardAuthenticator
                 )
             );
         } catch (SSOException $exception) {
-            throw new AuthenticationException('SSO not possible');
+            throw new AuthenticationException('SSO not possible', $exception->getCode(), $exception);
         }
     }
 
@@ -183,9 +190,26 @@ final class SSOAuthenticator extends AbstractGuardAuthenticator
 
     /**
      * {@inheritdoc}
+     * @throws \InvalidArgumentException
+     * @throws BadRequestHttpException
      */
     public function onAuthenticationSuccess(Request $request, TokenInterface $token, $providerKey)
     {
+        try {
+            $event = $this->eventByHostResolver->resolveEventFromHostAndLocale(
+                $request->getHost(),
+                $request->getLocale()
+            );
+        } catch (EventException $exception) {
+            throw new BadRequestHttpException('Missing host for "event".');
+        }
+
+        $generatedUrl = $this->SSORedirectionAfterLoginResolver->handle($event, $token->getUser());
+
+        if (null !== $generatedUrl) {
+            return new RedirectResponse($generatedUrl);
+        }
+
         return $this->SSOAuthenticationSuccessHandler->onAuthenticationSuccess($request, $token);
     }
 

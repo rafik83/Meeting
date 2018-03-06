@@ -69,13 +69,13 @@ class EmailToUserConverter
         $userInformationView = $this->userInformationGetter->handle($event, $email, $locale);
 
         if ($userInformationView instanceof UserInformationView) {
-            return $this->createUser($event, $userInformationView);
+            return $this->createUser($event, $type, $userInformationView);
         }
 
         return null;
     }
 
-    private function createUser(Event $event, UserInformationView $userInformationView): User
+    private function createUser(Event $event, Type $type, UserInformationView $userInformationView): User
     {
         $user = new User($userInformationView->email, '', '', $userInformationView->locale);
         $user->welcome();
