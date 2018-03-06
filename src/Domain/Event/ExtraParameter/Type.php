@@ -26,6 +26,9 @@ class Type
     // Vimeet Participation Type Id for imported Comexposium exhibitors
     const TYPE_COMEXPOSIUM_EXHIBITOR_TYPE_ID = 'comexposium_exhibitor_type_id';
 
+    // Vimeet Participation Type Id for Comexposium visitor
+    const TYPE_COMEXPOSIUM_VISITOR_TYPE_ID = 'comexposium_visitor_type_id';
+
     const TYPE_VIANEO_ENDPOINT = 'vianeo_endpoint';
     const TYPE_VIANEO_CONCERNED_TYPES_ID = 'vianeo_concerned_types_id';
 
@@ -37,10 +40,11 @@ class Type
     public const TYPES = [
         self::TYPE_LENI_USER,
         self::TYPE_LENI_EVENT,
-        self::TYPE_COMEXPOSIUM_EVENT_REFERENCE,
-        self::TYPE_COMEXPOSIUM_EXHIBITOR_TYPE_ID,
         self::TYPE_VIANEO_ENDPOINT,
         self::TYPE_VIANEO_CONCERNED_TYPES_ID,
+        self::TYPE_COMEXPOSIUM_EVENT_REFERENCE,
+        self::TYPE_COMEXPOSIUM_EXHIBITOR_TYPE_ID,
+        self::TYPE_COMEXPOSIUM_VISITOR_TYPE_ID,
         self::TYPE_COMEXPOSIUM_SSO_ENABLED,
         self::TYPE_COMEXPOSIUM_SSO_SALON,
         self::TYPE_COMEXPOSIUM_SSO_SESSION_SALON,
