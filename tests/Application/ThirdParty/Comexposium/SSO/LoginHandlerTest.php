@@ -1,10 +1,11 @@
 <?php
 
-/**
- * Created by PhpStorm.
- * User: richard
- * Date: 06/03/2018
- * Time: 10:53
+/*
+ * This file is part of the Proximum Vimeet project.
+ *
+ * Copyright (C) Proximum
+ *
+ * @author Elao <contact@elao.com>
  */
 
 namespace Proximum\Vimeet\Tests\Application\ThirdParty\Comexposium\SSO;
