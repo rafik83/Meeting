@@ -132,7 +132,7 @@ class LeniApiCaller
         $this->leniEventParameter = $this->extraParameterRepository
             ->findByEventAndType($this->event, Type::TYPE_LENI_EVENT);
         $this->leniModeParameter = $this->extraParameterRepository
-            ->findByEventAndType($this->event, Type::TYPE_LENI_EVENT);
+            ->findByEventAndType($this->event, Type::TYPE_LENI_MODE);
 
         return $this;
     }
