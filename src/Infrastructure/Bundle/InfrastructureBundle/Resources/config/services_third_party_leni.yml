@@ -17,10 +17,12 @@ services:
     command.third_party.leni.leni_api_call_handler:
         class: Proximum\Vimeet\Application\ThirdParty\LENI\Save\Command\LeniApiCallHandler
         arguments:
-            - '@adapter.http_adapter'
-            - '@repository.event.extra_parameter_repository'
             - '@repository.user.event.extra_data_repository'
             - '@datetime'
+            - '@service.third_party.leni.leni_api'
+            - '@service.third_party.leni.user_extra_data_fingerprint_manager'
+
+        UserExtraDataFingerprintManager $userExtraDataFingerprintManager
 
     adapter.leni_api_call_job_queue:
         class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Adapter\ThirdParty\LENI\Save\LeniApiCallJobQueue
@@ -46,3 +48,18 @@ services:
         class: Proximum\Vimeet\Application\ThirdParty\LENI\Save\Normalizer\LeniUserViewNormalizer
         tags:
             - { name: serializer.normalizer }
+
+    service.third_party.leni.leni_api:
+        class: Proximum\Vimeet\Application\ThirdParty\LENI\LeniApiCaller
+        arguments:
+            - '@adapter.http_adapter'
+            - '@repository.event.extra_parameter_repository'
+
+        ExtraDataRepositoryInterface $extraDataRepository,
+        \DateTimeInterface $dateTime
+
+    service.third_party.leni.user_extra_data_fingerprint_manager:
+        class: Proximum\Vimeet\Application\ThirdParty\LENI\UserExtraDataFingerprintManager
+        arguments:
+            - '@repository.user.event.extra_data_repository'
+            - '@datetime'

@@ -14,7 +14,8 @@ use Proximum\Vimeet\Domain\Template\TemplateObject\Gender;
 
 class LeniConstants
 {
-    public const LENI_ENDPOINT = 'https://gateway.svc.exhibis.net/proximum/domain/IndividuEvt/Save/';
+    public const LENI_SAVE_ENDPOINT = 'https://gateway.svc.exhibis.net/proximum/domain/IndividuEvt/Save/';
+    public const LENI_GET_ENDPOINT = 'https://gateway.svc.exhibis.net/proximum/domain/IndividuEvt/Save/';
     public const LENI_HOST = 'gateway.svc.exhibis.net';
     public const LENI_APP = 'O';
     public const LENI_MODE = 'MessageAndModifiedData';

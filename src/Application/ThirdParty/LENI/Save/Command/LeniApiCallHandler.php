@@ -10,18 +10,13 @@
 
 namespace Proximum\Vimeet\Application\ThirdParty\LENI\Save\Command;
 
-use Proximum\Vimeet\Application\Adapter\HttpAdapterInterface;
-use Proximum\Vimeet\Application\Exception\Adapter\Http\ServerErrorException;
 use Proximum\Vimeet\Application\ThirdParty\LENI\Exception\LeniApiServerException;
 use Proximum\Vimeet\Application\ThirdParty\LENI\Exception\MissingIdException;
 use Proximum\Vimeet\Application\ThirdParty\LENI\Exception\NotValidApiCallException;
 use Proximum\Vimeet\Application\ThirdParty\LENI\Exception\WarningApiCallException;
+use Proximum\Vimeet\Application\ThirdParty\LENI\LeniApiCaller;
 use Proximum\Vimeet\Application\ThirdParty\LENI\LeniConstants;
-use Proximum\Vimeet\Domain\Event\ExtraParameter\Type;
-use Proximum\Vimeet\Domain\Model\Event;
-use Proximum\Vimeet\Domain\Model\User;
-use Proximum\Vimeet\Domain\Model\User\Event\ExtraData;
-use Proximum\Vimeet\Domain\Repository\Event\ExtraParameterRepositoryInterface;
+use Proximum\Vimeet\Application\ThirdParty\LENI\UserExtraDataFingerprintManager;
 use Proximum\Vimeet\Domain\Repository\User\Event\ExtraDataRepositoryInterface;
 use Proximum\Vimeet\Domain\User\Event\ExtraData\Type as ExtraDataType;
 
@@ -124,34 +119,34 @@ use Proximum\Vimeet\Domain\User\Event\ExtraData\Type as ExtraDataType;
  */
 class LeniApiCallHandler
 {
-    /** @var HttpAdapterInterface */
-    private $httpAdapter;
-
-    /** @var ExtraParameterRepositoryInterface */
-    private $extraParameterRepository;
-
     /** @var ExtraDataRepositoryInterface */
     private $extraDataRepository;
 
     /** @var \DateTimeInterface */
     private $dateTime;
 
+    /** @var LeniApiCaller */
+    private $leniApi;
+
+    /** @var UserExtraDataFingerprintManager */
+    private $userExtraDataFingerprintManager;
+
     /**
-     * @param HttpAdapterInterface              $httpAdapter
-     * @param ExtraParameterRepositoryInterface $extraParameterRepository
-     * @param ExtraDataRepositoryInterface      $extraDataRepository
-     * @param \DateTimeInterface                $dateTime
+     * @param ExtraDataRepositoryInterface    $extraDataRepository
+     * @param \DateTimeInterface              $dateTime
+     * @param LeniApiCaller                   $leniApi
+     * @param UserExtraDataFingerprintManager $userExtraDataFingerprintManager
      */
     public function __construct(
-        HttpAdapterInterface $httpAdapter,
-        ExtraParameterRepositoryInterface $extraParameterRepository,
         ExtraDataRepositoryInterface $extraDataRepository,
-        \DateTimeInterface $dateTime
+        \DateTimeInterface $dateTime,
+        LeniApiCaller $leniApi,
+        UserExtraDataFingerprintManager $userExtraDataFingerprintManager
     ) {
-        $this->httpAdapter = $httpAdapter;
-        $this->extraParameterRepository = $extraParameterRepository;
         $this->extraDataRepository = $extraDataRepository;
         $this->dateTime = $dateTime;
+        $this->leniApi = $leniApi;
+        $this->userExtraDataFingerprintManager = $userExtraDataFingerprintManager;
     }
 
     /**
@@ -173,15 +168,6 @@ class LeniApiCallHandler
 
         $event = $pendingExtraData->getEvent();
 
-        $leniUserParameter  = $this->extraParameterRepository->findByEventAndType($event, Type::TYPE_LENI_USER);
-        $leniEventParameter = $this->extraParameterRepository->findByEventAndType($event, Type::TYPE_LENI_EVENT);
-
-        if (null === $leniUserParameter || null === $leniEventParameter) {
-            throw new \LogicException(
-                'Can not call PrepareLeniApiCallHandler if event has not LENI_USER and LENI_EVENT'
-            );
-        }
-
         $data = unserialize($pendingExtraData->getValue(), ['allowed_classes' => false]);
 
         // remove data userId when null
@@ -191,37 +177,13 @@ class LeniApiCallHandler
             unset($data[LeniConstants::LENI_COL_USER_ID]);
         }
 
-        $body = json_encode(
-            [
-                'idEvt'  => $leniEventParameter->getValue(),
-                'idUser' => $leniUserParameter->getValue(),
-                'mode'   => LeniConstants::LENI_MODE,
-                'app'    => LeniConstants::LENI_APP,
-                'data'   => $data
-            ]
-        );
-
-        $headers = [
-            'Authorization'  => 'Basic ' . base64_encode($leniUserParameter->getValue()),
-            'Host'           => LeniConstants::LENI_HOST,
-            'Content-Type'   => 'application/json',
-            'Content-Length' => mb_strlen($body),
-            'Connection'     => 'Close',
-        ];
-
-        try {
-            $jsonResponse = $this->httpAdapter->post(LeniConstants::LENI_ENDPOINT, $headers, $body);
-        } catch (ServerErrorException $exception) {
-            throw new LeniApiServerException($exception);
-        }
-
-        $response = json_decode($jsonResponse->body, true);
+        $response = $this->leniApi->save($event, $data);
 
         $apiCallLog = sprintf(
             "Headers: %s;\nRequest: %s;\nResponse: %s;",
-            json_encode($headers),
-            $body,
-            $jsonResponse->body
+            json_encode($this->leniApi->getHeaders()),
+            $this->leniApi->getBody(),
+            json_encode($response)
         );
 
         // Call not valid
@@ -271,39 +233,11 @@ class LeniApiCallHandler
             $data[LeniConstants::LENI_COL_USER_ID] = $leniUserId;
         }
 
-        $this->addOrUpdateFingerprint($pendingExtraData->getEvent(), $pendingExtraData->getUser(), serialize($data));
-        $this->extraDataRepository->remove($pendingExtraData);
-    }
-
-    /**
-     * @param Event  $event
-     * @param User   $user
-     * @param string $fingerPrint
-     *
-     * @return ExtraData
-     */
-    private function addOrUpdateFingerprint(Event $event, User $user, string $fingerPrint): ExtraData
-    {
-        $userExtraDataFingerprint = $this->extraDataRepository->getExtraDataForEventNameAndUser(
-            $event,
-            ExtraDataType::LENI_FINGERPRINT,
-            $user
+        $this->userExtraDataFingerprintManager->addOrUpdateFingerprint(
+            $pendingExtraData->getEvent(),
+            $pendingExtraData->getUser(),
+            serialize($data)
         );
-
-        if ($userExtraDataFingerprint instanceof ExtraData) {
-            $userExtraDataFingerprint->update($fingerPrint, $this->dateTime);
-            $this->extraDataRepository->set($userExtraDataFingerprint);
-        } else {
-            $userExtraDataFingerprint = new ExtraData(
-                $user,
-                $event,
-                ExtraDataType::LENI_FINGERPRINT,
-                $fingerPrint,
-                $this->dateTime
-            );
-            $this->extraDataRepository->add($userExtraDataFingerprint);
-        }
-
-        return $userExtraDataFingerprint;
+        $this->extraDataRepository->remove($pendingExtraData);
     }
 }
