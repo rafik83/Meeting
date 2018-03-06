@@ -16,7 +16,7 @@ class UserInformationView
     public $email;
 
     /** @var null|string */
-    public $civility;
+    public $gender;
 
     /** @var null|string */
     public $firstname;
@@ -30,19 +30,24 @@ class UserInformationView
     /** @var null|string */
     public $country;
 
+    /** @var string */
+    public $locale;
+
     public function __construct(
         string $email,
-        ?string $civility,
+        ?string $gender,
         ?string $firstname,
         ?string $lastname,
         ?string $mobilePhone,
-        ?string $country
+        ?string $country,
+        string $locale
     ) {
-        $this->civility = $civility;
+        $this->gender = $gender;
         $this->firstname = $firstname;
         $this->lastname = $lastname;
         $this->mobilePhone = $mobilePhone;
         $this->country = $country;
         $this->email = $email;
+        $this->locale = $locale;
     }
 }

@@ -59,11 +59,11 @@ class UserInformationGetter
     /**
      * @param Event  $event
      * @param string $email
+     * @param string $locale
      *
      * @return null|UserInformationView
-     * @throws \LogicException
      */
-    public function handle(Event $event, string $email): ?UserInformationView
+    public function handle(Event $event, string $email, string $locale): ?UserInformationView
     {
         $jwtToken = $this->loginHandler->loginAndGetJwtToken();
 
@@ -113,7 +113,7 @@ class UserInformationGetter
                 return null;
             }
 
-            return $this->rawUserDataToUserInformationViewConverter->convert($email, $data);
+            return $this->rawUserDataToUserInformationViewConverter->convert($email, $locale, $data);
         } catch (ServerErrorException $serverErrorException) {
             return null;
         }

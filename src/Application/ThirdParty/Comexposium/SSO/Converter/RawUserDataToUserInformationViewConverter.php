@@ -20,11 +20,12 @@ class RawUserDataToUserInformationViewConverter
 
     /**
      * @param string $email
+     * @param string $locale
      * @param array  $data
      *
      * @return UserInformationView
      */
-    public function convert(string $email, array $data): UserInformationView
+    public function convert(string $email, string $locale, array $data): UserInformationView
     {
         return new UserInformationView(
             $email,
@@ -34,7 +35,8 @@ class RawUserDataToUserInformationViewConverter
             isset($data['mobilephone:indicatif'], $data['mobilephone:content'])
                 ? $this->convertPhone($data['mobilephone:indicatif'], $data['mobilephone:content'])
                 : null,
-            isset($data['country']) ? $this->convertAlpha3ToAlpha2CodeCountry($data['country']) : null
+            isset($data['country']) ? $this->convertAlpha3ToAlpha2CodeCountry($data['country']) : null,
+            $locale
         );
     }
 

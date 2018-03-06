@@ -111,11 +111,19 @@ services:
 
     Proximum\Vimeet\Application\ThirdParty\Comexposium\SSO\Converter\RawUserDataToUserInformationViewConverter: ~
 
+    Proximum\Vimeet\Application\ThirdParty\Comexposium\SSO\Converter\EmailToUserConverter:
+        arguments:
+            - '@Proximum\Vimeet\Application\ThirdParty\Comexposium\SSO\UserInformationGetter'
+            - '@vimeet_infrastructure.repository.user_repository'
+            - '@repository.user.event.extra_data_repository'
+            - '@datetime'
+
     Proximum\Vimeet\Application\ThirdParty\Comexposium\SSO\Application\Query\SSOCheckerHandler:
         arguments:
             - '@vimeet_infrastructure.repository.user_repository'
             - '@vimeet_infrastructure.repository.sheet_repository'
             - '@Proximum\Vimeet\Application\ThirdParty\Comexposium\SSO\TokenChecker'
+            - '@Proximum\Vimeet\Application\ThirdParty\Comexposium\SSO\Converter\EmailToUserConverter'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\ThirdParty\Comexposium\SSO\Application\Query\SSOChecker }
 

@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Application\ThirdParty\Comexposium\SSO\Application\Query;
 
+use Proximum\Vimeet\Application\ThirdParty\Comexposium\SSO\Converter\EmailToUserConverter;
 use Proximum\Vimeet\Application\ThirdParty\Comexposium\SSO\Exception\ComboEmailUserNotValidException;
 use Proximum\Vimeet\Application\ThirdParty\Comexposium\SSO\Exception\UserNotFoundException;
 use Proximum\Vimeet\Application\ThirdParty\Comexposium\SSO\Exception\UserNotOnEventException;
@@ -30,19 +31,19 @@ class SSOCheckerHandler
     /** @var TokenChecker */
     private $tokenChecker;
 
-    /**
-     * @param UserRepositoryInterface  $userRepository
-     * @param SheetRepositoryInterface $sheetRepository
-     * @param TokenChecker             $tokenChecker
-     */
+    /** @var EmailToUserConverter */
+    private $emailToUserConverter;
+
     public function __construct(
         UserRepositoryInterface $userRepository,
         SheetRepositoryInterface $sheetRepository,
-        TokenChecker $tokenChecker
+        TokenChecker $tokenChecker,
+        EmailToUserConverter $emailToUserConverter
     ) {
         $this->userRepository = $userRepository;
         $this->sheetRepository = $sheetRepository;
         $this->tokenChecker = $tokenChecker;
+        $this->emailToUserConverter = $emailToUserConverter;
     }
 
     /**
@@ -64,7 +65,7 @@ class SSOCheckerHandler
                 throw new UserNotFoundException(sprintf('User with mail %s not found', $query->email));
             }
 
-            return $this->handleNotKnownVisitorLogin($query->event, $query->email, $query->token);
+            return $this->handleNotKnownVisitorLogin($query->event, $query->email, $query->token, $query->locale);
         }
 
         return $this->handleKnownUserLogin($query->event, $user, $query->token, $query->isExhibitor);
@@ -84,21 +85,14 @@ class SSOCheckerHandler
     {
         $sheets = $this->sheetRepository->getSheetsByUserAndEvent($user, $event);
 
-        if (empty($sheets)) {
-            if ($isExhibitor) {
-                throw new UserNotOnEventException(
-                    sprintf(
-                        'User with mail %s not found on Event %d',
-                        $user->getEmail(),
-                        $event->getId()
-                    )
-                );
-            }
-
-            $this->checkEmailAndToken($user->getEmail(), $token);
-            $this->createSheetAndParticipantForUser($event, $user);
-
-            return $user;
+        if (empty($sheets) && $isExhibitor) {
+            throw new UserNotOnEventException(
+                sprintf(
+                    'User with mail %s not found on Event %d',
+                    $user->getEmail(),
+                    $event->getId()
+                )
+            );
         }
 
         $this->checkEmailAndToken($user->getEmail(), $token);
@@ -111,26 +105,22 @@ class SSOCheckerHandler
      * @param string $email
      * @param string $token
      *
+     * @param string $locale
+     *
      * @return User
      * @throws ComboEmailUserNotValidException
      */
-    private function handleNotKnownVisitorLogin(Event $event, string $email, string $token): User
+    private function handleNotKnownVisitorLogin(Event $event, string $email, string $token, string $locale): User
     {
         $this->checkEmailAndToken($email, $token);
 
-        $user = new User($email, '', '', $event->getFallback());
-        $this->createSheetAndParticipantForUser($event, $user);
+        $user = $this->emailToUserConverter->handle($event, $email, $locale);
+
+        if (!$user instanceof User) {
+            throw new \LogicException('Do a custom error please');
+        }
 
         return $user;
-    }
-
-    /**
-     * @param Event $event
-     * @param User  $user
-     */
-    private function createSheetAndParticipantForUser(Event $event, User $user): void
-    {
-
     }
 
     /**

@@ -21,6 +21,7 @@ class RawUserDataToUserInformationViewConverterTest extends TestCase
         $rawUserDataToUserInformationViewConverter = new RawUserDataToUserInformationViewConverter();
         $userInformationView = $rawUserDataToUserInformationViewConverter->convert(
             'myemail@example.com',
+            'fr',
             [
                 'civility' => '0',
                 'firstname' => 'Bruce',
@@ -37,7 +38,8 @@ class RawUserDataToUserInformationViewConverterTest extends TestCase
             'Bruce',
             'Willis',
             '+33699887766',
-            'FR'
+            'FR',
+            'fr'
         );
 
         $this->assertEquals($expectedUserInformationView, $userInformationView);
@@ -48,6 +50,7 @@ class RawUserDataToUserInformationViewConverterTest extends TestCase
         $rawUserDataToUserInformationViewConverter = new RawUserDataToUserInformationViewConverter();
         $userInformationView = $rawUserDataToUserInformationViewConverter->convert(
             'myemail@example.com',
+            'fr',
             [
                 'civility' => '2',
                 'firstname' => 'Bruce',
@@ -61,7 +64,8 @@ class RawUserDataToUserInformationViewConverterTest extends TestCase
             'Bruce',
             'Willis',
             null,
-            null
+            null,
+            'fr'
         );
 
         $this->assertEquals($expectedUserInformationView, $userInformationView);

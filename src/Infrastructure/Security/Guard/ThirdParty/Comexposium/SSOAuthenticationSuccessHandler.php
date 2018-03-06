@@ -10,6 +10,8 @@
 
 namespace Proximum\Vimeet\Infrastructure\Security\Guard\ThirdParty\Comexposium;
 
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Http\Authentication\DefaultAuthenticationSuccessHandler;
 use Symfony\Component\Security\Http\HttpUtils;
 

@@ -28,6 +28,9 @@ class UserInformationGetterTest extends TestCase
     private $email;
 
     /** @var string */
+    private $locale;
+
+    /** @var string */
     private $comexposiumGetUserEndpoint;
 
     /** @var ObjectProphecy */
@@ -58,6 +61,7 @@ class UserInformationGetterTest extends TestCase
         $this->extraParameterRepository = $this->prophesize(ExtraParameterRepositoryInterface::class);
 
         $this->email = 'bruce.willis@example.net';
+        $this->locale = 'fr';
     }
 
     public function testJwtTokenIsNullHandle()
@@ -72,7 +76,7 @@ class UserInformationGetterTest extends TestCase
             $this->extraParameterRepository->reveal(),
             $this->comexposiumGetUserEndpoint
         );
-        $userInformationGetter->handle($this->event->reveal(), $this->email);
+        $userInformationGetter->handle($this->event->reveal(), $this->email, $this->locale);
     }
 
     public function testExtraParameterIsNullHandle()
@@ -95,7 +99,7 @@ class UserInformationGetterTest extends TestCase
             $this->extraParameterRepository->reveal(),
             $this->comexposiumGetUserEndpoint
         );
-        $userInformationGetter->handle($this->event->reveal(), $this->email);
+        $userInformationGetter->handle($this->event->reveal(), $this->email, $this->locale);
     }
 
     public function testHandleWithNoData()
@@ -141,7 +145,7 @@ class UserInformationGetterTest extends TestCase
             $this->extraParameterRepository->reveal(),
             $this->comexposiumGetUserEndpoint
         );
-        $result = $userInformationGetter->handle($this->event->reveal(), $this->email);
+        $result = $userInformationGetter->handle($this->event->reveal(), $this->email, $this->locale);
 
         $this->assertNull($result);
     }
@@ -184,11 +188,12 @@ class UserInformationGetterTest extends TestCase
             )
         ;
 
-        $expectedResult = new UserInformationView($this->email, null, 'Bruce', 'Willis', null, null);
+        $expectedResult = new UserInformationView($this->email, null, 'Bruce', 'Willis', null, null, $this->locale);
 
         $this->rawUserDataToUserInformationViewConverter
             ->convert(
                 $this->email,
+                $this->locale,
                 [
                     'firstname' => 'Bruce',
                     'lastname' => 'Willis',
@@ -205,7 +210,7 @@ class UserInformationGetterTest extends TestCase
             $this->extraParameterRepository->reveal(),
             $this->comexposiumGetUserEndpoint
         );
-        $result = $userInformationGetter->handle($this->event->reveal(), $this->email);
+        $result = $userInformationGetter->handle($this->event->reveal(), $this->email, $this->locale);
 
         $this->assertEquals($expectedResult, $result);
     }

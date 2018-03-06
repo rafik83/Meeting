@@ -14,6 +14,7 @@ use PHPUnit\Framework\TestCase;
 use Prophecy\Prophecy\ObjectProphecy;
 use Proximum\Vimeet\Application\ThirdParty\Comexposium\SSO\Application\Query\SSOChecker;
 use Proximum\Vimeet\Application\ThirdParty\Comexposium\SSO\Application\Query\SSOCheckerHandler;
+use Proximum\Vimeet\Application\ThirdParty\Comexposium\SSO\Converter\EmailToUserConverter;
 use Proximum\Vimeet\Application\ThirdParty\Comexposium\SSO\Exception\ComboEmailUserNotValidException;
 use Proximum\Vimeet\Application\ThirdParty\Comexposium\SSO\Exception\UserNotFoundException;
 use Proximum\Vimeet\Application\ThirdParty\Comexposium\SSO\Exception\UserNotOnEventException;
@@ -38,6 +39,9 @@ class SSOCheckerHandlerTest extends TestCase
     /** @var ObjectProphecy */
     private $event;
 
+    /** @var ObjectProphecy */
+    private $emailToUserConverter;
+
     /** @var SSOCheckerHandler */
     private $handler;
 
@@ -46,10 +50,12 @@ class SSOCheckerHandlerTest extends TestCase
         $this->userRepository = $this->prophesize(UserRepositoryInterface::class);
         $this->sheetRepository = $this->prophesize(SheetRepositoryInterface::class);
         $this->tokenChecker = $this->prophesize(TokenChecker::class);
+        $this->emailToUserConverter = $this->prophesize(EmailToUserConverter::class);
         $this->handler = new SSOCheckerHandler(
             $this->userRepository->reveal(),
             $this->sheetRepository->reveal(),
-            $this->tokenChecker->reveal()
+            $this->tokenChecker->reveal(),
+            $this->emailToUserConverter->reveal()
         );
         $this->event = $this->prophesize(Event::class);
     }
@@ -59,7 +65,7 @@ class SSOCheckerHandlerTest extends TestCase
         $this->expectException(UserNotFoundException::class);
         $this->userRepository->findByEmail('email@example.net')->shouldBeCalled()->willReturn(null);
 
-        $command = new SSOChecker($this->event->reveal(), 'email@example.net', 'token', true);
+        $command = new SSOChecker($this->event->reveal(), 'email@example.net', 'token', true, 'fr');
         $this->handler->handle($command);
     }
 
@@ -73,7 +79,7 @@ class SSOCheckerHandlerTest extends TestCase
         $this->userRepository->findByEmail('email@example.net')->shouldBeCalled()->willReturn($user->reveal());
         $this->sheetRepository->getSheetsByUserAndEvent($user->reveal(), $this->event->reveal())->willReturn([]);
 
-        $command = new SSOChecker($this->event->reveal(), 'email@example.net', 'token', true);
+        $command = new SSOChecker($this->event->reveal(), 'email@example.net', 'token', true, 'fr');
         $this->handler->handle($command);
     }
 
@@ -95,7 +101,7 @@ class SSOCheckerHandlerTest extends TestCase
 
         $this->tokenChecker->isMailTokenComboValid('email@example.net', 'token')->shouldBeCalled()->willReturn(false);
 
-        $command = new SSOChecker($this->event->reveal(), 'email@example.net', 'token', true);
+        $command = new SSOChecker($this->event->reveal(), 'email@example.net', 'token', true, 'fr');
         $this->handler->handle($command);
     }
 
@@ -115,7 +121,7 @@ class SSOCheckerHandlerTest extends TestCase
 
         $this->tokenChecker->isMailTokenComboValid('email@example.net', 'token')->shouldBeCalled()->willReturn(true);
 
-        $command = new SSOChecker($this->event->reveal(), 'email@example.net', 'token', true);
+        $command = new SSOChecker($this->event->reveal(), 'email@example.net', 'token', true, 'fr');
         $result = $this->handler->handle($command);
 
         $this->assertEquals($user->reveal(), $result);
@@ -128,10 +134,16 @@ class SSOCheckerHandlerTest extends TestCase
 
         $this->tokenChecker->isMailTokenComboValid('email@example.net', 'token')->shouldBeCalled()->willReturn(true);
 
-        $command = new SSOChecker($this->event->reveal(), 'email@example.net', 'token', false);
+        $this->emailToUserConverter
+            ->handle($this->event->reveal(), 'email@example.net', 'fr')
+            ->shouldBeCalled()
+            ->willReturn(new User('email@example.net', '', '', 'fr'))
+        ;
+
+        $command = new SSOChecker($this->event->reveal(), 'email@example.net', 'token', false, 'fr');
         $result = $this->handler->handle($command);
 
-        $expectedUser = new User('email@example.net', '', '', 'en');
+        $expectedUser = new User('email@example.net', '', '', 'fr');
         $this->assertEquals($expectedUser, $result);
     }
 }
