@@ -116,6 +116,8 @@ services:
             - '@Proximum\Vimeet\Application\ThirdParty\Comexposium\SSO\UserInformationGetter'
             - '@vimeet_infrastructure.repository.user_repository'
             - '@repository.user.event.extra_data_repository'
+            - '@vimeet_infrastructure.repository.user_event_repository'
+            - '@Proximum\Vimeet\Application\ThirdParty\Comexposium\SSO\Application\Query\SSORegistrationTypeResolver'
             - '@datetime'
 
     Proximum\Vimeet\Application\ThirdParty\Comexposium\SSO\Application\Query\SSOCheckerHandler:
@@ -135,6 +137,11 @@ services:
             - '%comexposium_sso_loader_lib_endpoint%'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\ThirdParty\Comexposium\SSO\Application\Query\SSOComexposiumViewQuery }
+
+    Proximum\Vimeet\Application\ThirdParty\Comexposium\SSO\Application\Query\SSORegistrationTypeResolver:
+        arguments:
+            - '@repository.event.extra_parameter_repository'
+            - '@vimeet_infrastructure.repository.type_repository'
 
     #
     # Guard
