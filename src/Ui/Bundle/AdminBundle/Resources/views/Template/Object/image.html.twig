@@ -6,7 +6,8 @@
     help: { (locale): '' },
     required: false,
     style: '',
-    products: []
+    tags: [],
+    products: [],
 }|merge(config|default({})) %}
 
 <div class="object" data-object="image" data-uid="{{ uid|default('__UID__') }}" data-config="{{ config|json_encode }}">
@@ -35,6 +36,7 @@
                                 <h4 class="modal-title">{{ 'template.object.image'|trans }}</h4>
                             </div>
                             <div class="modal-body">
+                                {% if isRegistrationTemplate is not defined %}
                                 <div class="form-group">
                                     <label class="form-label">{{ 'template.style.title'|trans }}</label>
                                     <select class="form-control" name="style" title="Style">
@@ -42,6 +44,7 @@
                                     </select>
                                 </div>
                                 <hr />
+                                {% endif %}
                                 <div class="form-group">
                                     <label class="form-label">{{ 'template.label.title'|trans }}</label>
                                     <input class="form-control" type="text" name="label" />
@@ -49,6 +52,7 @@
                                         <div class="help-block">{{ fallback|locale }} : {{ config.label[fallback] }}</div>
                                     {% endif %}
                                 </div>
+                                {% if isRegistrationTemplate is not defined %}
                                 <div class="form-group">
                                     <label class="form-label">{{ 'template.placeholder.title'|trans }}</label>
                                     <textarea class="form-control" name="placeholder"></textarea>
@@ -63,21 +67,31 @@
                                         <div class="help-block">{{ fallback|locale }} : {{ config.help[fallback] }}</div>
                                     {% endif %}
                                 </div>
+                                {% endif %}
                                 <div class="form-group">
                                     <label class="form-label">{{ 'template.required.title'|trans }}</label>
                                     <input type="checkbox" name="required" />
                                 </div>
-                                {% if products is defined and products is not empty %}
-                                    <div class="form-group">
-                                        <label class="form-label">{{ 'template.products.title'|trans }}</label>
-                                        <select class="form-control select2-builder" name="products" multiple="multiple">
-                                            {% for product in products %}
-                                                <option value="{{ product.id }}" {% if product.id in config.products %}selected="selected"{% endif %}>
-                                                    {{ product.name }}
-                                                </option>
-                                            {% endfor %}
-                                        </select>
-                                    </div>
+                                {% if isRegistrationTemplate is not defined %}
+                                    {% if products is defined and products is not empty %}
+                                        <div class="form-group">
+                                            <label class="form-label">{{ 'template.products.title'|trans }}</label>
+                                            <select class="form-control select2-builder" name="products" multiple="multiple">
+                                                {% for product in products %}
+                                                    <option value="{{ product.id }}" {% if product.id in config.products %}selected="selected"{% endif %}>
+                                                        {{ product.name }}
+                                                    </option>
+                                                {% endfor %}
+                                            </select>
+                                        </div>
+                                    {% endif %}
+                                {% endif %}
+                                {% if isRegistrationTemplate is defined and isRegistrationTemplate == true and registrationTemplateTagView is defined %}
+                                    <hr/>
+                                    {{ include('AdminBundle:RegistrationTemplate:tagsSelect.html.twig', {
+                                        'config': config,
+                                        'registrationTemplateTagView': registrationTemplateTagView,
+                                    }, false) }}
                                 {% endif %}
                             </div>
                             <div class="modal-footer">
