@@ -11,12 +11,13 @@
 namespace Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\EventListener;
 
 use Doctrine\ORM\EntityManager;
-use Proximum\Vimeet\Application\Command\Admin\UpdateLastLogin;
-use Proximum\Vimeet\Application\Command\Admin\UpdateLastLoginHandler;
+use Proximum\Vimeet\Application\Command\Admin\UpdateLastLogin as AdminUpdateLastLogin;
+use Proximum\Vimeet\Application\Command\Admin\UpdateLastLoginHandler as AdminUpdateLastLoginHandler;
+use Proximum\Vimeet\Application\Command\Sheet\LastLogin\UpdateLastLogin as SheetUpdateLastLogin;
+use Proximum\Vimeet\Application\Command\Sheet\LastLogin\UpdateLastLoginHandler as SheetUpdateLastLoginHandler;
 use Proximum\Vimeet\Domain\Model\Admin;
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Repository\EventRepositoryInterface;
-use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Security\Core\Event\AuthenticationEvent;
 
@@ -28,46 +29,35 @@ class LoginEventListener
     private $eventRepository;
 
     /**
-     * @var SheetRepositoryInterface
-     */
-    private $sheetRepository;
-
-    /**
      * @var RequestStack
      */
     private $requestStack;
 
     /**
-     * @var UpdateLastLoginHandler
+     * @var AdminUpdateLastLoginHandler
      */
-    private $updateLastLoginHandler;
+    private $adminUpdateLastLoginHandler;
 
     /**
      * @var EntityManager
      */
     private $entityManager;
 
-    /**
-     * LoginEventListener constructor.
-     *
-     * @param EventRepositoryInterface $eventRepository
-     * @param SheetRepositoryInterface $sheetRepository
-     * @param RequestStack             $requestStack
-     * @param UpdateLastLoginHandler   $updateLastLoginHandler
-     * @param EntityManager            $entityManager
-     */
+    /** @var SheetUpdateLastLoginHandler */
+    private $sheetUpdateLastLoginHandler;
+
     public function __construct(
         EventRepositoryInterface $eventRepository,
-        SheetRepositoryInterface $sheetRepository,
         RequestStack $requestStack,
-        UpdateLastLoginHandler $updateLastLoginHandler,
-        EntityManager $entityManager
+        AdminUpdateLastLoginHandler $adminUpdateLastLoginHandler,
+        EntityManager $entityManager,
+        SheetUpdateLastLoginHandler $sheetUpdateLastLoginHandler
     ) {
-        $this->eventRepository        = $eventRepository;
-        $this->sheetRepository        = $sheetRepository;
-        $this->requestStack           = $requestStack;
-        $this->updateLastLoginHandler = $updateLastLoginHandler;
-        $this->entityManager          = $entityManager;
+        $this->eventRepository = $eventRepository;
+        $this->requestStack = $requestStack;
+        $this->adminUpdateLastLoginHandler = $adminUpdateLastLoginHandler;
+        $this->entityManager = $entityManager;
+        $this->sheetUpdateLastLoginHandler = $sheetUpdateLastLoginHandler;
     }
 
     /**
@@ -78,30 +68,22 @@ class LoginEventListener
     public function onLoginSuccess(AuthenticationEvent $authenticationEvent)
     {
         $user = $authenticationEvent->getAuthenticationToken()->getUser();
-        $host = $this->requestStack->getMasterRequest()->getHost();
-
-        $event = $this->eventRepository->getEventByDomain($host);
 
         if (!$user instanceof User) {
-
             if ($user instanceof Admin) {
                 $this->entityManager->detach($user);
 
-                $this->updateLastLoginHandler->handle(
-                    new UpdateLastLogin(
-                        $user->getEmail(),
-                        new \DateTime()
-                    )
+                $this->adminUpdateLastLoginHandler->handle(
+                    new AdminUpdateLastLogin($user->getEmail())
                 );
             }
 
             return;
         }
 
-        $sheets = $this->sheetRepository->getSheetsByUserAndEvent($user, $event);
+        $host = $this->requestStack->getMasterRequest()->getHost();
+        $event = $this->eventRepository->getEventByDomain($host);
 
-        foreach ($sheets as $sheet) {
-            $this->sheetRepository->set($sheet->setLastLoginAt(new \DateTime()));
-        }
+        $this->sheetUpdateLastLoginHandler->handle(new SheetUpdateLastLogin($event, $user));
     }
 }

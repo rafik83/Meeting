@@ -1139,6 +1139,13 @@ services:
             tags:
                 - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Sheet\Group\SearchUser }
 
+    Proximum\Vimeet\Application\Command\Sheet\LastLogin\UpdateLastLoginHandler:
+        arguments:
+            - '@vimeet_infrastructure.repository.sheet_repository'
+            - '@datetime'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Sheet\LastLogin\UpdateLastLogin }
+
     command.register.register_new_user_handler:
         class: Proximum\Vimeet\Application\Command\Register\RegisterNewUserHandler
         arguments:
