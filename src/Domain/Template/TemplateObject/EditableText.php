@@ -101,7 +101,7 @@ class EditableText extends EditableObject implements ContentObjectInterface, Sea
         $data = $this->getContent($locale);
 
         return $data !== null
-            ? ($this->isTranslatable() && isset($data['content']) ? $data['content'] : $data)
+            ? ($this->isTranslatable() && \is_array($data) && \array_key_exists('content', $data) ? $data['content'] : $data)
             : '';
     }
 
