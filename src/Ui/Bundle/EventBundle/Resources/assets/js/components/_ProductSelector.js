@@ -1,5 +1,5 @@
 /**
- * Batch component
+ * ProductSelector component
  *
  * @param element
  * @constructor

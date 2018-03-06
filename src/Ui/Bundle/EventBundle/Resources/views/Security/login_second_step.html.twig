@@ -27,7 +27,7 @@
                 }, false) }}
             </div>
         {% else %}
-            <div class="main__content">
+            <div class="main__content" id="login-form">
                 {{ form_start(form, {attr: {class: 'styled-form'}}) }}
                 {% if typeId %}
                     <a href="{{ path('event_register', {'typeView': typeId}) }}" class="back"><i class="icon-Retour"></i></a>
@@ -76,6 +76,7 @@
 
 {% block javascripts %}
     {{ parent() }}
+
     {% if ssoComexposiumView is defined and ssoComexposiumView is not null %}
         {{ include('EventBundle:ThirdParty/Comexposium/SSO:comexposium_sso_js.html.twig', {
             'ssoComexposiumView': ssoComexposiumView

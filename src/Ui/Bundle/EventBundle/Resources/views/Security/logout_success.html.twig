@@ -1,0 +1,23 @@
+{% extends 'EventBundle:Register:base.html.twig' %}
+
+{% block title 'logout.title'|trans %}
+
+{% block content %}
+    <section class="main">
+        <header>
+            <h1><i class="icon-Clef"></i> {{ 'logout.title'|trans }}</h1>
+        </header>
+
+        <div class="main__content">
+            <ul class="inputs">
+                <li>
+                    {{ 'logout.success'|trans }}
+                </li>
+
+                <li class="validation">
+                    <a href="{{ path('event_login') }}" class="btn btn-primary">{{ 'logout.relogin'|trans }}</a>
+                </li>
+            </ul>
+        </div>
+    </section>
+{% endblock %}

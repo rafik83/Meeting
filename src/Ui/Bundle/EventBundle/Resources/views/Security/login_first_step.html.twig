@@ -10,7 +10,7 @@
             <h1><i class="icon-Clef"></i> {{ 'login.connection'|trans }} <span>"{{ 'login.memberArea'|trans }}"</span></h1>
         </header>
 
-        <div class="main__content">
+        <div class="main__content" id="login-form">
             {{ form_start(form, {attr: {class: 'styled-form'}}) }}
             <div class="inputs">
                 <div>
@@ -26,6 +26,14 @@
                 </div>
             </div>
             {{ form_end(form) }}
+
+            {% if ssoComexposiumView is defined and ssoComexposiumView is not null %}
+                <div class="main__content">
+                    {{ include('EventBundle:ThirdParty/Comexposium/SSO:comexposium_sso.html.twig', {
+                        'ssoComexposiumView': ssoComexposiumView
+                    }, false) }}
+                </div>
+            {% endif %}
         </div>
     </section>
 
@@ -42,5 +50,15 @@
                 <li><a href="{{ path('event_login_user', { 'user': user.id }) }}">{{ user.username }}</a></li>
             {% endfor %}
         </ul>
+    {% endif %}
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+
+    {% if ssoComexposiumView is defined and ssoComexposiumView is not null %}
+        {{ include('EventBundle:ThirdParty/Comexposium/SSO:comexposium_sso_js.html.twig', {
+            'ssoComexposiumView': ssoComexposiumView
+        }, false) }}
     {% endif %}
 {% endblock %}

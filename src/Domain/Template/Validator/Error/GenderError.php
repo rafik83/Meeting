@@ -1,9 +1,9 @@
 <?php
 
 /*
- * This file is part of the vimeet project.
+ * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2017 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -18,10 +18,10 @@ class GenderError extends ValidatorError
      * GenderError constructor.
      *
      * @param string $data
-     * @param bool   $error
+     * @param bool   $hasNoError
      */
-    public function __construct($data, $error)
+    public function __construct($data, $hasNoError)
     {
-        parent::__construct(self::MESSAGE, $data, $error);
+        parent::__construct(self::MESSAGE, $data, $hasNoError);
     }
 }

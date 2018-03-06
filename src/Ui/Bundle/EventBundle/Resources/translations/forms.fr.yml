@@ -77,7 +77,7 @@ form.payment_choice.children.mode.label: 'Choisissez votre mode de paiement'
 form.payment_choice.children.paymentMode.bank_card: 'Carte bancaire'
 form.payment_choice.children.paymentMode.bank_check: Chèque
 form.payment_choice.children.paymentMode.bank_transfer: Transfert
-form.payment_choice.children.paymentMode.paypal: 'Paypal ou Carte bancaire'
+form.payment_choice.children.paymentMode.paypal: 'Carte bancaire ou Paypal'
 form.register.newUser.password.placeholder: 'Choisissez votre mot de passe'
 form.register.newUser.repeatedPassword.placeholder: 'Confirmer votre mot de passe'
 form.search.autocomplete.atLeastThreeChars: 'Saisir au moins 3 caractères'

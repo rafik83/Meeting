@@ -162,7 +162,6 @@ services:
     vimeet_app.form_type_participant.type_choice:
         class: Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Type\TypeChoiceType
         arguments:
-            - '@vimeet_infrastructure.repository.type_repository'
             - '@markdown'
         tags:
             - { name: 'form.type' }

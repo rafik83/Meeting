@@ -19,6 +19,6 @@ class GenderValidator implements ObjectValidatorInterface
      */
     public function validate($data, array $options = [])
     {
-        return new GenderError($data, in_array($data, Gender::getGenders(), true));
+        return new GenderError($data, \in_array($data, Gender::getGenders(), true));
     }
 }

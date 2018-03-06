@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2015 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -23,29 +23,19 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class MediaCollectionDataType extends AbstractType
 {
-    /**
-     * @var IdToProductTransformer
-     */
+    /** @var IdToProductTransformer */
     private $idToProductTransformer;
 
-    /**
-     * @var TemplateProductGuesser
-     */
+    /** @var TemplateProductGuesser */
     private $templateProductGuesser;
 
-    /**
-     * @var BuyableObjectResolver
-     */
+    /** @var BuyableObjectResolver */
     private $buyableObjectResolver;
 
-    /**
-     * @var BuyableIncludedProductGuesser
-     */
+    /** @var BuyableIncludedProductGuesser */
     private $buyableIncludedProductGuesser;
 
     /**
-     * ImageDataType constructor.
-     *
      * @param IdToProductTransformer        $idToProductTransformer
      * @param TemplateProductGuesser        $templateProductGuesser
      * @param BuyableObjectResolver         $buyableObjectResolver
@@ -91,18 +81,15 @@ class MediaCollectionDataType extends AbstractType
         ) {
             $selectedRadio = $this->buyableObjectResolver->getSelectedProduct($media);
 
-            $builder
-                ->add('selectedProduct', ChoiceType::class, [
-                    'expanded'    => true,
-                    'multiple'    => false,
-                    'choice_name' => 'id',
-                    'choices'     => $media->getBuyableProducts(),
-                    'required'    => true,
-                    'data'        => $selectedRadio,
-                ]);
-
-            $builder->get('selectedProduct')
-                ->addModelTransformer($this->idToProductTransformer);
+            $builder->add('selectedProduct', ChoiceType::class, [
+                'expanded'    => true,
+                'multiple'    => false,
+                'choice_name' => 'id',
+                'choices'     => $media->getBuyableProducts(),
+                'required'    => true,
+                'data'        => $selectedRadio,
+            ]);
+            $builder->get('selectedProduct')->addModelTransformer($this->idToProductTransformer);
         }
     }
 
@@ -117,7 +104,7 @@ class MediaCollectionDataType extends AbstractType
             'placeholder' => null,
             'help'        => null,
             'attr'        => [
-                'data-product-selector' => (int)true,
+                'data-product-selector' => (int) true,
             ],
         ]);
     }

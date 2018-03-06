@@ -35,7 +35,7 @@ class EditableTextValidator extends TemplateObjectValidator
     protected function checkRequired(TemplateObject $object, Constraint $constraint)
     {
         if ($constraint instanceof EditableTextConstraint && $object instanceof TemplateObject\EditableText && true === $object->isRequired()) {
-            $this->validateAt($constraint->getPath(), $object->getContentValue(), new NotBlank());
+            $this->validateAt($constraint->getPath(), $object->getContentValueLocalize(), new NotBlank());
         }
     }
 
@@ -47,7 +47,7 @@ class EditableTextValidator extends TemplateObjectValidator
         if ($constraint instanceof EditableTextConstraint
             && $object instanceof TemplateObject\EditableText && $object->hasMinLength()
         ) {
-            $this->validateAt($constraint->getPath(), $object->getContentValue(), new Length([
+            $this->validateAt($constraint->getPath(), $object->getContentValueLocalize(), new Length([
                 'min' => $object->getMinLength(),
             ]));
         }
@@ -61,7 +61,7 @@ class EditableTextValidator extends TemplateObjectValidator
         if ($constraint instanceof EditableTextConstraint
             && $object instanceof TemplateObject\EditableText && $object->hasMaxLength()
         ) {
-            $this->validateAt($constraint->getPath(), $object->getContentValue(), new Length([
+            $this->validateAt($constraint->getPath(), $object->getContentValueLocalize(), new Length([
                 'max' => $object->getMaxLength(),
             ]));
         }

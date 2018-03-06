@@ -417,7 +417,7 @@ class Block extends AbstractChild
                         if ($block instanceof TemplateObject\Nomenclature) {
                             $tagged[] = $block->getNomenclatureLabel();
                         } else {
-                            $tagged[] = $block->getContentValue();
+                            $tagged[] = $block->getContentValueLocalize();
                         }
                     }
                 }
@@ -479,7 +479,7 @@ class Block extends AbstractChild
         return $objects->filter(function (TemplateObject $object) use ($tag) {
             return $object instanceof TemplateObject\ContentObjectInterface && $object->hasTag($tag);
         })->map(function (TemplateObject\ContentObjectInterface $object) {
-            return $object->getContentValue();
+            return $object->getContentValueLocalize();
         })->first();
     }
 
