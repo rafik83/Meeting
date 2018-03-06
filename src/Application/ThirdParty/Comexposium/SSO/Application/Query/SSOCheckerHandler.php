@@ -11,6 +11,7 @@
 namespace Proximum\Vimeet\Application\ThirdParty\Comexposium\SSO\Application\Query;
 
 use Proximum\Vimeet\Application\ThirdParty\Comexposium\SSO\Converter\EmailToUserConverter;
+use Proximum\Vimeet\Application\ThirdParty\Comexposium\SSO\Exception\CanNotCreateUserException;
 use Proximum\Vimeet\Application\ThirdParty\Comexposium\SSO\Exception\ComboEmailUserNotValidException;
 use Proximum\Vimeet\Application\ThirdParty\Comexposium\SSO\Exception\UserNotFoundException;
 use Proximum\Vimeet\Application\ThirdParty\Comexposium\SSO\Exception\UserNotOnEventException;
@@ -108,6 +109,7 @@ class SSOCheckerHandler
      * @param string $locale
      *
      * @return User
+     * @throws CanNotCreateUserException
      * @throws ComboEmailUserNotValidException
      */
     private function handleNotKnownVisitorLogin(Event $event, string $email, string $token, string $locale): User
@@ -117,7 +119,7 @@ class SSOCheckerHandler
         $user = $this->emailToUserConverter->handle($event, $email, $locale);
 
         if (!$user instanceof User) {
-            throw new \LogicException('Do a custom error please');
+            throw new CanNotCreateUserException(sprintf('Can not create user for email "%s"', $email));
         }
 
         return $user;
