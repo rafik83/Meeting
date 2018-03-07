@@ -22,7 +22,6 @@
     });
 
     function sendDataToSSOChecker(email, token, isExhibitor) {
-      console.log(email, token, isExhibitor);
         window.location = '{{ url('event_login_check') }}'
           + '?comexposium_sso=true'
           + '&email=' + encodeURIComponent(email)
