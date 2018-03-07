@@ -105,7 +105,6 @@ class SSOCheckerHandler
      * @param Event  $event
      * @param string $email
      * @param string $token
-     *
      * @param string $locale
      *
      * @return User
