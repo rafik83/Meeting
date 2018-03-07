@@ -105,22 +105,23 @@ class TaggedDataFactory
         foreach ($objects as $object) {
             $tags = $object->getTags();
 
-            if (count($tags) === 0) {
+            if (\count($tags) === 0) {
                 continue;
             }
 
             // Filter only the object with SHEET_DATA setter,
             // as they are the only one that can be display on the sheet
-            if (!in_array(Tag::SHEET_DATA, $tags)) {
+            if (!\in_array(Tag::SHEET_DATA, $tags, true)) {
                 continue;
             }
 
             foreach ($tags as $tag) {
-                if (in_array($tag, Tag::getSetters())) {
+                if (\in_array($tag, Tag::getSetters(), true)) {
                     continue;
                 }
 
                 if ($object instanceof TemplateObject\Nomenclature) {
+                    // This only works for single nomenclature on registration template
                     $value = $object->getNomenclatureLabel();
                 } else {
                     $value = $object->getContentValueLocalize();

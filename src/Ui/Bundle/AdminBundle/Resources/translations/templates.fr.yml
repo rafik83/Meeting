@@ -1,5 +1,7 @@
 template.action.close: Fermer
 template.action.save: Enregistrer
+template.boolean.filter.active: 'Activer le filtre'
+template.boolean.filter.label: 'Libellé du filtre'
 template.block.configure: Configurer
 template.block.remove_confirm: 'Confirmez vous la suppression de cet élément ?'
 template.collection.title: 'Champs collection activés'
@@ -34,6 +36,7 @@ template.object.tag: 'Contenu affiché par défaut'
 template.object.tags: 'Multi tag'
 template.object.telephone: Téléphone
 template.object.text: 'Texte non modifiable'
+template.object.upload: 'Upload de fichier'
 template.object.url: Lien
 template.participant.display: 'Nombre de participants affichés sur la fiche'
 template.participant.title: 'Les participants'
@@ -276,3 +279,10 @@ template.tag.sheet_zipcode: 'Code postal de fiche'
 template.tags.title: Tags
 template.translatable.title: Traduisible
 template.type.title: Type
+template.upload.crypted: 'Chiffré'
+template.upload.filter.active: 'Activer le filtre'
+template.upload.filter.label: 'Libellé du filtre'
+template.upload.formats.title: 'Formats autorisés pour l''upload'
+template.upload.formats.choice.image: 'Image'
+template.upload.formats.choice.pdf: 'Pdf'
+template.upload.formats.choice.ppt: 'Powerpoint'

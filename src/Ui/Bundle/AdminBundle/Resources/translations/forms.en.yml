@@ -239,6 +239,9 @@ form.package_update.children.templateData.children.blocks.prototype.label: 'Step
 form.participant_create.children.data.label: Participation
 form.participant_create.children.submit.label: Submit
 form.participant_import.children.type.label: Type
+form.participant_update_agenda_confirmation_status.children.status.choice.confirmed: Confirmed
+form.participant_update_agenda_confirmation_status.children.status.choice.not_confirmed: 'Not confirmed'
+form.participant_update_agenda_confirmation_status.children.status.label: 'Confirmation of schedule'
 form.participant_update.children.data.label: Participation
 form.participant_update.children.submit.label: Submit
 form.participate_happening.children.submit.label: Attend
@@ -301,10 +304,14 @@ form.sheet_batch.children.pending.label: Pending
 form.sheet_comment.children.filter.label: Filter
 form.sheet_comment.children.submit.label: Save
 form.sheet_comment.children.text.placeholder: 'Add comment'
+form.sheet_filter.children.availabilityConfirmationStatus.choice.all_confirmed: Confirmed
+form.sheet_filter.children.availabilityConfirmationStatus.choice.none_confirmed: 'Not confirmed'
 form.sheet_filter.children.enabledState.label: 'Profile status'
 form.sheet_filter.children.hasPendingMeetingPropositions.label: 'Meeting proposals pending validation'
 form.sheet_filter.children.hasScheduledMeeting.label: 'Has at least 1 shceduled meeting'
 form.sheet_filter.children.orderBy.label: 'Sort by'
+form.sheet_filter.children.phoneValidationStatus.choice.all_confirmed: Confirmed
+form.sheet_filter.children.phoneValidationStatus.choice.none_confirmed: 'Not confirmed'
 form.sheet_filter.children.state.label: State
 form.sheet_filter.children.text_search.label: 'Title of the presentation sheet, name or participant''s email'
 form.sheet_filter.children.type.label: Type

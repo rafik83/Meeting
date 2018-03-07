@@ -1,9 +1,9 @@
 <?php
 
 /*
- * This file is part of the vimeet project.
+ * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2017 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -25,20 +25,20 @@ abstract class ValidatorError
     /**
      * @var bool
      */
-    protected $error = false;
+    protected $hasNoError = false;
 
     /**
      * ValidatorError constructor.
      *
      * @param string $message
      * @param mixed  $data
-     * @param bool   $error
+     * @param bool   $hasNoError
      */
-    public function __construct($message, $data, $error)
+    public function __construct($message, $data, $hasNoError)
     {
         $this->message = $message;
-        $this->data    = $data;
-        $this->error   = $error;
+        $this->data = $data;
+        $this->hasNoError = $hasNoError;
     }
 
     /**
@@ -62,6 +62,6 @@ abstract class ValidatorError
      */
     public function hasError()
     {
-        return $this->error === false;
+        return $this->hasNoError === false;
     }
 }

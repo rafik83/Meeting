@@ -27,6 +27,7 @@ abstract class AbstractChild
     const TEMPLATE_OBJECT_TYPE_TAGS          = 'tags';
     const TEMPLATE_OBJECT_TYPE_GENDER        = 'gender';
     const TEMPLATE_OBJECT_TYPE_BOOLEAN       = 'boolean';
+    const TEMPLATE_OBJECT_TYPE_UPLOAD        = 'upload';
 
     /**
      * @var string
@@ -49,7 +50,7 @@ abstract class AbstractChild
     protected $fallback;
 
     /**
-     * AbstactChild constructor.
+     * AbstractChild constructor.
      *
      * @param string $type
      * @param array  $config

@@ -1,15 +1,21 @@
 {% trans_default_domain 'templates' %}
 
 {% set config = {
-    label: { (locale): 'template.object.url'|trans },
-    placeholder: { (locale): '' },
+    label: { (locale): 'template.object.upload'|trans },
     required: false,
+    crypted: false,
+    help: { (locale): '' },
     tags: [],
+    formats: [],
+    filter: {
+        'active': false,
+        'label': ''
+    }
 }|merge(config|default({})) %}
 
-<div class="object" data-object="url" data-uid="{{ uid|default('__UID__') }}" data-config="{{ config|json_encode }}">
+<div class="object" data-object="upload" data-uid="{{ uid|default('__UID__') }}" data-config="{{ config|json_encode }}">
     <ul class="block-buttons list-inline">
-        <li class="object-title">{{ 'template.object.url'|trans }}</li>
+        <li class="object-title">{{ 'template.object.upload'|trans }}</li>
         <li>
             <span class="btn btn-link move-button">
                 <i class="glyphicon glyphicon-move"></i>
@@ -30,21 +36,14 @@
                         <div class="modal-content">
                             <div class="modal-header">
                                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                                <h4 class="modal-title">{{ 'template.object.url'|trans }}</h4>
+                                <h4 class="modal-title">{{ 'template.object.upload'|trans }}</h4>
                             </div>
                             <div class="modal-body">
                                 <div class="form-group">
                                     <label class="form-label">{{ 'template.label.title'|trans }}</label>
-                                    <input class="form-control" type="text" name="label" />
+                                    <input class="form-control" type="text" name="label"/>
                                     {% if fallback|default(false) and locale != fallback %}
                                         <div class="help-block">{{ fallback|locale }} : {{ config.label[fallback] }}</div>
-                                    {% endif %}
-                                </div>
-                                <div class="form-group">
-                                    <label class="form-label">{{ 'template.placeholder.title'|trans }}</label>
-                                    <textarea class="form-control" name="placeholder"></textarea>
-                                    {% if fallback|default(false) and locale != fallback %}
-                                        <div class="help-block">{{ fallback|locale }} : {{ config.placeholder[fallback] }}</div>
                                     {% endif %}
                                 </div>
                                 <div class="form-group">
@@ -52,6 +51,31 @@
                                         <input type="checkbox" name="required" />
                                         {{ 'template.required.title'|trans }}
                                     </label>
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">
+                                        <input type="checkbox" name="crypted" />
+                                        {{ 'template.upload.crypted'|trans }}
+                                    </label>
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">{{ 'template.upload.formats.title'|trans }}</label>
+                                    <select class="form-control select2-builder" name="formats" title="Formats" multiple="multiple">
+                                        {% for format in uploadFormats %}
+                                            <option value="{{ format }}">{{ ('template.upload.formats.choice.' ~ format)|trans }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                                <hr/>
+                                <div class="form-group">
+                                    <label class="form-label">
+                                        <input type="checkbox" name="filter[active]" />
+                                        {{ 'template.upload.filter.active'|trans }}
+                                    </label>
+                                </div>
+                                <div class="form-group" data-upload-filter-label>
+                                    <label class="form-label">{{ 'template.upload.filter.label'|trans }}</label>
+                                    <input class="form-control" type="text" name="filter[label]" />
                                 </div>
                                 {{ include('AdminBundle:RegistrationTemplate:tagsSelect.html.twig', {
                                     'config': config,

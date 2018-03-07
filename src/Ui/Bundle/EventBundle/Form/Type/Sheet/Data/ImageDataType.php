@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2016 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -23,29 +23,19 @@ use Symfony\Component\Validator\Constraints\Image;
 
 class ImageDataType extends AbstractType
 {
-    /**
-     * @var IdToProductTransformer
-     */
+    /** @var IdToProductTransformer */
     private $idToProductTransformer;
 
-    /**
-     * @var TemplateProductGuesser
-     */
+    /** @var TemplateProductGuesser */
     private $templateProductGuesser;
 
-    /**
-     * @var BuyableObjectResolver
-     */
+    /** @var BuyableObjectResolver */
     private $buyableObjectResolver;
 
-    /**
-     * @var TemplateObject\BuyableIncludedProductGuesser
-     */
+    /** @var TemplateObject\BuyableIncludedProductGuesser */
     private $buyableIncludedProductGuesser;
 
     /**
-     * ImageDataType constructor.
-     *
      * @param IdToProductTransformer                       $idToProductTransformer
      * @param TemplateProductGuesser                       $templateProductGuesser
      * @param BuyableObjectResolver                        $buyableObjectResolver
@@ -88,18 +78,15 @@ class ImageDataType extends AbstractType
         ) {
             $selectedRadio = $this->buyableObjectResolver->getSelectedProduct($image);
 
-            $builder
-                ->add('selectedProduct', ChoiceType::class, [
-                    'expanded'    => true,
-                    'multiple'    => false,
-                    'choice_name' => 'id',
-                    'choices'     => $image->getBuyableProducts(),
-                    'required'    => true,
-                    'data'        => $selectedRadio,
-                ]);
-
-            $builder->get('selectedProduct')
-                ->addModelTransformer($this->idToProductTransformer);
+            $builder->add('selectedProduct', ChoiceType::class, [
+                'expanded'    => true,
+                'multiple'    => false,
+                'choice_name' => 'id',
+                'choices'     => $image->getBuyableProducts(),
+                'required'    => true,
+                'data'        => $selectedRadio,
+            ]);
+            $builder->get('selectedProduct')->addModelTransformer($this->idToProductTransformer);
         }
     }
 

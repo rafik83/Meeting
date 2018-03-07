@@ -106,5 +106,6 @@ form.sheet_media_collection_data.children.medias.label_add: Add
 form.sheet_media_collection_data.children.medias.prototype.children.type.label: Type
 form.sheet_media_collection_data.children.submit.label: Save
 form.user_availability_confirmation.children.confirm.label: 'Confirm your avaibilities'
+form.user_event_phone_validate_code.children.confirm.label: Confirmed
 gender.man: Mr
 gender.woman: Mrs
