@@ -55,21 +55,21 @@ class SSOCheckerHandler
      * @throws UserNotFoundException
      * @throws UserNotOnEventException
      * @throws ComboEmailUserNotValidException
+     * @throws CanNotCreateUserException
      */
     public function handle(SSOChecker $query): User
     {
         $user = $this->userRepository->findByEmail($query->email);
 
-        // Check existence of User
-        if (!$user instanceof User) {
-            if ($query->isExhibitor) {
-                throw new UserNotFoundException(sprintf('User with mail %s not found', $query->email));
-            }
-
-            return $this->handleNotKnownVisitorLogin($query->event, $query->email, $query->token, $query->locale);
+        if ($user instanceof User) {
+            return $this->handleKnownUserLogin($query->event, $user, $query->token, $query->isExhibitor);
         }
 
-        return $this->handleKnownUserLogin($query->event, $user, $query->token, $query->isExhibitor);
+        if ($query->isExhibitor) {
+            throw new UserNotFoundException(sprintf('User with mail %s not found', $query->email));
+        }
+
+        return $this->handleNotKnownVisitorLogin($query->event, $query->email, $query->token, $query->locale);
     }
 
     /**
