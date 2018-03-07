@@ -210,7 +210,7 @@ class SSOAuthenticator extends AbstractGuardAuthenticator
             return new RedirectResponse($generatedUrl);
         }
 
-        // if user is redirected (see previous lines) we consider that the user has not sheet
+        // if user is redirected (see previous lines) we consider that the user has no sheet
         // so, update sheet(s) last login only for not redirected user
         $this->updateLastLoginHandler->handle(new UpdateLastLogin($event, $user));
 
