@@ -5,14 +5,16 @@ var Form = require('./../_Form');
  *
  * @param element
  * @param locale
+ * @param builderType
  * @constructor
  */
-function TextObject(element, locale)
+function TextObject(element, locale, builderType)
 {
   this.element = element;
   this.locale  = locale;
   this.form    = new Form(element);
   this.config  = JSON.parse(this.element.getAttribute('data-config'));
+  this.builderType = builderType;
 }
 
 TextObject.prototype.fill = function ()
