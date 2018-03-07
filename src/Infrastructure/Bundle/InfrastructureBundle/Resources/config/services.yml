@@ -2121,6 +2121,13 @@ services:
             - '@event_dispatcher'
             - '@datetime'
 
+    Proximum\Vimeet\Application\Command\Event\ExtraData\AddOrUpdateHandler:
+        arguments:
+            - '@Proximum\Vimeet\Infrastructure\Repository\Event\ExtraDataRepository'
+            - '@datetime'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Event\ExtraData\AddOrUpdate }
+
     #
     # Security
     #

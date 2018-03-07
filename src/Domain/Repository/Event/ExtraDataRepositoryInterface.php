@@ -29,7 +29,7 @@ interface ExtraDataRepositoryInterface
      * @param Event  $event
      * @param string $name
      *
-     * @return ExtraData
+     * @return null|ExtraData
      */
-    public function getExtraDataForEvent(Event $event, string $name): ExtraData;
+    public function getExtraDataForEvent(Event $event, string $name): ?ExtraData;
 }

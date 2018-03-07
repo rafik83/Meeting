@@ -48,7 +48,7 @@ class ExtraDataRepository implements ExtraDataRepositoryInterface
     /**
      * {@inheritdoc}
      */
-    public function getExtraDataForEvent(Event $event, string $name): ExtraData
+    public function getExtraDataForEvent(Event $event, string $name): ?ExtraData
     {
         return $this
             ->entityManager
