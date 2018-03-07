@@ -27,12 +27,6 @@ class LoginHandler
     /** @var string */
     private $comexposiumSsoPassword;
 
-    /**
-     * @param HttpAdapterInterface              $httpAdapter
-     * @param string                            $comexposiumLoginEndpoint
-     * @param string                            $comexposiumSsoUsername
-     * @param string                            $comexposiumSsoPassword
-     */
     public function __construct(
         HttpAdapterInterface $httpAdapter,
         string $comexposiumLoginEndpoint,

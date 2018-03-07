@@ -107,6 +107,8 @@ services:
             - '@Proximum\Vimeet\Application\ThirdParty\Comexposium\SSO\Converter\RawUserDataToUserInformationViewConverter'
             - '@adapter.http_adapter'
             - '@repository.event.extra_parameter_repository'
+            - '@Proximum\Vimeet\Infrastructure\Repository\Event\ExtraDataRepository'
+            - '@Proximum\Vimeet\Application\Command\Event\ExtraData\AddOrUpdateHandler'
             - '%comexposium_get_user_endpoint%'
 
     Proximum\Vimeet\Application\ThirdParty\Comexposium\SSO\Converter\RawUserDataToUserInformationViewConverter: ~
