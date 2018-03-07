@@ -94,4 +94,14 @@ class ExtraData
     {
         return $this->updatedAt;
     }
+
+    /**
+     * @param null|string        $value
+     * @param \DateTimeInterface $updatedAt
+     */
+    public function update(?string $value, \DateTimeInterface $updatedAt): void
+    {
+        $this->value = $value;
+        $this->updatedAt = $updatedAt;
+    }
 }
