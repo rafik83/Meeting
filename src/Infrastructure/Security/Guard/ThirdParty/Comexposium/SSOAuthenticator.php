@@ -11,6 +11,8 @@
 namespace Proximum\Vimeet\Infrastructure\Security\Guard\ThirdParty\Comexposium;
 
 use Proximum\Vimeet\Application\Adapter\RouterInterface;
+use Proximum\Vimeet\Application\Command\Sheet\LastLogin\UpdateLastLogin;
+use Proximum\Vimeet\Application\Command\Sheet\LastLogin\UpdateLastLoginHandler;
 use Proximum\Vimeet\Application\ThirdParty\Comexposium\SSO\Application\Query\SSOChecker;
 use Proximum\Vimeet\Application\ThirdParty\Comexposium\SSO\Application\Query\SSOCheckerHandler;
 use Proximum\Vimeet\Application\ThirdParty\Comexposium\SSO\Application\Query\SSORedirectionAfterLoginResolver;
@@ -33,7 +35,7 @@ use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Core\User\UserProviderInterface;
 use Symfony\Component\Security\Guard\AbstractGuardAuthenticator;
 
-final class SSOAuthenticator extends AbstractGuardAuthenticator
+class SSOAuthenticator extends AbstractGuardAuthenticator
 {
     /** @var SSOCheckerHandler */
     private $SSOCheckerHandler;
@@ -56,15 +58,9 @@ final class SSOAuthenticator extends AbstractGuardAuthenticator
     /** @var SSORedirectionAfterLoginResolver */
     private $SSORedirectionAfterLoginResolver;
 
-    /**
-     * @param SSOCheckerHandler                 $SSOCheckerHandler
-     * @param EventByHostResolver               $eventByHostResolver
-     * @param ExtraParameterRepositoryInterface $extraParameterRepository
-     * @param FlashBagInterface                 $flashBag
-     * @param RouterInterface                   $router
-     * @param SSOAuthenticationSuccessHandler   $SSOAuthenticationSuccessHandler
-     * @param SSORedirectionAfterLoginResolver  $SSORedirectionAfterLoginResolver
-     */
+    /** @var UpdateLastLoginHandler */
+    private $updateLastLoginHandler;
+
     public function __construct(
         SSOCheckerHandler $SSOCheckerHandler,
         EventByHostResolver $eventByHostResolver,
@@ -72,7 +68,8 @@ final class SSOAuthenticator extends AbstractGuardAuthenticator
         FlashBagInterface $flashBag,
         RouterInterface $router,
         SSOAuthenticationSuccessHandler $SSOAuthenticationSuccessHandler,
-        SSORedirectionAfterLoginResolver $SSORedirectionAfterLoginResolver
+        SSORedirectionAfterLoginResolver $SSORedirectionAfterLoginResolver,
+        UpdateLastLoginHandler $updateLastLoginHandler
     ) {
         $this->SSOCheckerHandler = $SSOCheckerHandler;
         $this->eventByHostResolver = $eventByHostResolver;
@@ -81,6 +78,7 @@ final class SSOAuthenticator extends AbstractGuardAuthenticator
         $this->router = $router;
         $this->SSOAuthenticationSuccessHandler = $SSOAuthenticationSuccessHandler;
         $this->SSORedirectionAfterLoginResolver = $SSORedirectionAfterLoginResolver;
+        $this->updateLastLoginHandler = $updateLastLoginHandler;
     }
 
     /**
@@ -204,11 +202,17 @@ final class SSOAuthenticator extends AbstractGuardAuthenticator
             throw new BadRequestHttpException('Missing host for "event".');
         }
 
-        $generatedUrl = $this->SSORedirectionAfterLoginResolver->handle($event, $token->getUser());
+        $user = $token->getUser();
+
+        $generatedUrl = $this->SSORedirectionAfterLoginResolver->handle($event, $user);
 
         if (null !== $generatedUrl) {
             return new RedirectResponse($generatedUrl);
         }
+
+        // if user is redirected (see previous lines) we consider that the user has not sheet
+        // so, update sheet(s) last login only for not redirected user
+        $this->updateLastLoginHandler->handle(new UpdateLastLogin($event, $user));
 
         return $this->SSOAuthenticationSuccessHandler->onAuthenticationSuccess($request, $token);
     }

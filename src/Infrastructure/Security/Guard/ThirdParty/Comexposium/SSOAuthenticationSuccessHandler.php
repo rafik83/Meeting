@@ -13,7 +13,7 @@ namespace Proximum\Vimeet\Infrastructure\Security\Guard\ThirdParty\Comexposium;
 use Symfony\Component\Security\Http\Authentication\DefaultAuthenticationSuccessHandler;
 use Symfony\Component\Security\Http\HttpUtils;
 
-final class SSOAuthenticationSuccessHandler extends DefaultAuthenticationSuccessHandler
+class SSOAuthenticationSuccessHandler extends DefaultAuthenticationSuccessHandler
 {
     /**
      * @param HttpUtils $httpUtils

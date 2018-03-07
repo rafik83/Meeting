@@ -161,6 +161,7 @@ services:
             - '@adapter.router'
             - '@Proximum\Vimeet\Infrastructure\Security\Guard\ThirdParty\Comexposium\SSOAuthenticationSuccessHandler'
             - '@Proximum\Vimeet\Application\ThirdParty\Comexposium\SSO\Application\Query\SSORedirectionAfterLoginResolver'
+            - '@Proximum\Vimeet\Application\Command\Sheet\LastLogin\UpdateLastLoginHandler'
 
     Proximum\Vimeet\Infrastructure\Security\Guard\ThirdParty\Comexposium\SSOAuthenticationSuccessHandler:
         arguments:
