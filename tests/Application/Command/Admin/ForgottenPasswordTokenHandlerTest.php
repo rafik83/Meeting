@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2016 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -18,8 +18,8 @@ use Proximum\Vimeet\Application\Components\Token\AdminForgottenPasswordTokenGene
 use Proximum\Vimeet\Application\Event\Admin\ResetPasswordEvent;
 use Proximum\Vimeet\Application\Event\Events;
 use Proximum\Vimeet\Application\Exception\User\EmailDoesNotExistException;
-use Proximum\Vimeet\Domain\Model\Admin\ForgottenPasswordToken;
 use Proximum\Vimeet\Domain\Model\Admin;
+use Proximum\Vimeet\Domain\Model\Admin\ForgottenPasswordToken;
 use Proximum\Vimeet\Domain\Repository\Admin\ForgottenPasswordTokenRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\AdminRepositoryInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;

@@ -3,13 +3,12 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2016 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
 
 namespace Proximum\Vimeet\Tests\Application\Command\Participant;
-
 
 use PHPUnit\Framework\TestCase;
 use Proximum\Vimeet\Application\Command\Participant\UpdateVisio;

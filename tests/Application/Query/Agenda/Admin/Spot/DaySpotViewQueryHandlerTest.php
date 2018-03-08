@@ -1,9 +1,9 @@
 <?php
 
 /*
- * This file is part of the vimeet project.
+ * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2017 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -12,9 +12,9 @@ namespace Proximum\Vimeet\Tests\Application\Query\Agenda\Admin\Spot;
 
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
-use Proximum\Vimeet\Application\Query\Agenda\Admin\Spot\SlotViewQuery;
 use Proximum\Vimeet\Application\Query\Agenda\Admin\Spot\DaySpotViewQuery;
 use Proximum\Vimeet\Application\Query\Agenda\Admin\Spot\DaySpotViewQueryHandler;
+use Proximum\Vimeet\Application\Query\Agenda\Admin\Spot\SlotViewQuery;
 use Proximum\Vimeet\Application\Query\Agenda\Admin\Spot\SlotViewQueryHandler;
 use Proximum\Vimeet\Application\View\Agenda\AgendaDayView;
 use Proximum\Vimeet\Application\View\Agenda\Slot\SpotSlotView;

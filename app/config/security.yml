@@ -97,7 +97,7 @@ security:
                     - Proximum\Vimeet\Infrastructure\Security\Guard\ThirdParty\Comexposium\SSOAuthenticator
             logout:
                 path: event_logout
-                target: event
+                target: event_logout_success
             switch_user:
                 parameter: _switchto
 

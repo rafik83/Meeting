@@ -64,17 +64,45 @@ class EditableText extends EditableObject implements ContentObjectInterface, Sea
      */
     public function getContentValue()
     {
-        return $this->getContent() ? $this->getContent() : '';
+        return $this->getContentValueLocalize();
+    }
+
+    /**
+     * @return bool
+     */
+    public function isEmpty(): bool
+    {
+        if (!isset($this->data['text'])) {
+            return true;
+        }
+
+        if ($this->isTranslatable()) {
+            foreach ($this->data['text'] as $translatedText) {
+                if ('' !== trim($translatedText)) {
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
+        return '' === trim($this->data['text']);
     }
 
     /**
      * {@inheritdoc}
      */
-    public function getContentValueLocalize($locale)
+    public function getContentValueLocalize($locale = null)
     {
+        if (null === $locale) {
+            $locale = $this->getLocale();
+        }
+
         $data = $this->getContent($locale);
 
-        return $data !== null ? $data : '';
+        return $data !== null
+            ? ($this->isTranslatable() && \is_array($data) && \array_key_exists('content', $data) ? $data['content'] : $data)
+            : '';
     }
 
     /**
@@ -244,34 +272,58 @@ class EditableText extends EditableObject implements ContentObjectInterface, Sea
      */
     public function getTranslationsInput()
     {
-        if (!is_array($this->data) || !isset($this->data['text'])) {
+        if (!\is_array($this->data) || !isset($this->data['text'])) {
             return [];
         }
 
-        if (!$this->isTranslatable() || !is_array($this->data['text'])) {
+        if (!$this->isTranslatable() || !\is_array($this->data['text'])) {
             return [];
         }
 
         $translations = [];
 
         foreach ($this->data['text'] as $locale => $content) {
-            $translations[$locale]['content'] = $content;
+            if (\is_array($content) && array_key_exists('content', $content)) {
+                $translations[$locale]['content'] = $content['content'];
+            } else {
+                $translations[$locale]['content'] = $content;
+            }
         }
 
         return $translations;
     }
 
     /**
-     * @param array $translations "['fr' => ['content' => 'content_here']]"
+     * @param array $translations "['fr' => ['content' => 'Contenu fr'], 'en' => ['content' => 'En content']]"
      *
      * @see EditableTextTranslationType
+     * @throws \LogicException
      */
     public function setTranslationsInput(array $translations = [])
     {
+        $this->setTranslations($translations);
+    }
+
+    /**
+     * @param array $translations "['fr' => 'contenu', 'en' => 'content']"
+     *
+     * @throws \LogicException
+     */
+    public function setTranslations(array $translations = [])
+    {
+        if (!$this->isTranslatable()) {
+            throw new \LogicException(sprintf('Object %s is not translatable', $this->getKey()));
+        }
+
         $this->data['text'] = []; // erase previous untranslatable value
 
         foreach ($translations as $locale => $translation) {
-            $this->data['text'][$locale] = $translation['content'];
+            if (\is_array($translation) && array_key_exists('content', $translation)) {
+                $this->data['text'][$locale] = $translation['content'];
+
+            } else {
+                $this->data['text'][$locale] = $translation;
+            }
         }
     }
 }

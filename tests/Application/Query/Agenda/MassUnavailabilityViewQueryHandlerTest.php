@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2016 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -140,7 +140,6 @@ class MassUnavailabilityViewQueryHandlerTest extends TestCase
         $participant->getUser()->willReturn($user->reveal());
         $participant->getSheet()->willReturn($sheet);
         $massAssignment = new Unavailability\MassAssignment($mass, $user->reveal(), $begin, $end2);
-
 
         $reflection = new \ReflectionClass(Unavailability\Mass::class);
         $property   = $reflection->getProperty('id');

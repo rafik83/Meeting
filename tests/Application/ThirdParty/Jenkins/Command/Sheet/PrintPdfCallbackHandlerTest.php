@@ -58,36 +58,36 @@ class PrintPdfCallbackHandlerTest extends TestCase
     public function testHandle()
     {
         $data = [
-            "name" => "trusted_name",
-            "display_name" => "trusted_name",
-            "url" =>  "job/trusted_name/",
-            "build" =>  [
-                "full_url" =>  "http://host/job/trusted_name/10/",
-                "number" =>  10,
-                "queue_id" =>  116,
-                "timestamp" =>  1505481815678,
-                "phase" =>  "FINALIZED",
-                "status" =>  "SUCCESS",
-                "url" =>  "job/trusted_name/10/",
-                "scm" =>  [],
-                "parameters" =>  [
-                    "INPUT" => "/tmp/input/my_file.html",
-                    "OUTPUT" => "/tmp/output/my_file.pdf",
-                    "EVENTID" => "8",
-                    "EMAIL" => "email@example.net",
-                    "LOCALE" => "fr",
-                    "INPUT_FILE_ID" => "14",
+            'name' => 'trusted_name',
+            'display_name' => 'trusted_name',
+            'url' =>  'job/trusted_name/',
+            'build' =>  [
+                'full_url' =>  'http://host/job/trusted_name/10/',
+                'number' =>  10,
+                'queue_id' =>  116,
+                'timestamp' =>  1505481815678,
+                'phase' =>  'FINALIZED',
+                'status' =>  'SUCCESS',
+                'url' =>  'job/trusted_name/10/',
+                'scm' =>  [],
+                'parameters' =>  [
+                    'INPUT' => '/tmp/input/my_file.html',
+                    'OUTPUT' => '/tmp/output/my_file.pdf',
+                    'EVENTID' => '8',
+                    'EMAIL' => 'email@example.net',
+                    'LOCALE' => 'fr',
+                    'INPUT_FILE_ID' => '14',
                 ],
-                "log" => "",
-                "artifacts" => [],
+                'log' => '',
+                'artifacts' => [],
             ],
         ];
 
         $this->mailer->send(Argument::that(function (PrintPdfMail $mail) {
             return $mail->event === $this->event->reveal()
-                && $mail->getSender() === 'sender@vimeet.dev'
+                && 'sender@vimeet.dev' === $mail->getSender()
                 && $mail->getReceivers() === ['email@example.net']
-                && $mail->getLocale() === 'fr'
+                && 'fr' === $mail->getLocale()
             ;
         }))->shouldBeCalled();
 
@@ -118,28 +118,28 @@ class PrintPdfCallbackHandlerTest extends TestCase
         $this->expectException(PrintPdfErrorException::class);
 
         $data = [
-            "name" => "trusted_name",
-            "display_name" => "trusted_name",
-            "url" =>  "job/trusted_name/",
-            "build" =>  [
-                "full_url" =>  "http://host/job/trusted_name/10/",
-                "number" =>  10,
-                "queue_id" =>  116,
-                "timestamp" =>  1505481815678,
-                "phase" =>  "FINALIZED",
-                "status" =>  "FAILURE",
-                "url" =>  "job/trusted_name/10/",
-                "scm" =>  [],
-                "parameters" =>  [
-                    "INPUT" => "/tmp/input/my_file.html",
-                    "OUTPUT" => "/tmp/output/my_file.pdf",
-                    "EVENTID" => "8",
-                    "EMAIL" => "email@example.net",
-                    "LOCALE" => "fr",
-                    "INPUT_FILE_ID" => "14",
+            'name' => 'trusted_name',
+            'display_name' => 'trusted_name',
+            'url' =>  'job/trusted_name/',
+            'build' =>  [
+                'full_url' =>  'http://host/job/trusted_name/10/',
+                'number' =>  10,
+                'queue_id' =>  116,
+                'timestamp' =>  1505481815678,
+                'phase' =>  'FINALIZED',
+                'status' =>  'FAILURE',
+                'url' =>  'job/trusted_name/10/',
+                'scm' =>  [],
+                'parameters' =>  [
+                    'INPUT' => '/tmp/input/my_file.html',
+                    'OUTPUT' => '/tmp/output/my_file.pdf',
+                    'EVENTID' => '8',
+                    'EMAIL' => 'email@example.net',
+                    'LOCALE' => 'fr',
+                    'INPUT_FILE_ID' => '14',
                 ],
-                "log" => "",
-                "artifacts" => [],
+                'log' => '',
+                'artifacts' => [],
             ],
         ];
 

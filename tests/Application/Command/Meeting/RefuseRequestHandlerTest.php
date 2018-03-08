@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2015 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -11,6 +11,7 @@
 namespace Proximum\Vimeet\Tests\Application\Command\Meeting;
 
 use DateTime;
+use PHPUnit\Framework\TestCase;
 use Proximum\Vimeet\Application\Command\Meeting\RefuseRequest;
 use Proximum\Vimeet\Application\Command\Meeting\RefuseRequestHandler;
 use Proximum\Vimeet\Application\Event\MeetingRequest\RefusedRequestEvent;
@@ -23,7 +24,6 @@ use Proximum\Vimeet\Domain\Repository\Meeting\MessageRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\Meeting\RequestRepositoryInterface;
 use Proximum\Vimeet\Infrastructure\Adapter\DelayedEventDispatcher;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
-use PHPUnit\Framework\TestCase;
 
 class RefuseRequestHandlerTest extends TestCase
 {

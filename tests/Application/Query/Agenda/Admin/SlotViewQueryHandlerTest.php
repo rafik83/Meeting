@@ -1,9 +1,9 @@
 <?php
 
 /*
- * This file is part of the vimeet project.
+ * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2017 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -59,7 +59,7 @@ class SlotViewQueryHandlerTest extends TestCase
     private $locale;
 
     /** @var array */
-    private $happenings ;
+    private $happenings;
 
     /** @var array */
     private $unavailabilities;
@@ -110,9 +110,8 @@ class SlotViewQueryHandlerTest extends TestCase
         $this->meetingSlotRepository = $this->prophesize(MeetingSlotRepositoryInterface::class);
         $this->slotAvailability      = $this->prophesize(SlotAvailability::class);
         $this->sheetInfoGuesser      = $this->prophesize(SheetInfoGuesser::class);
-
     }
-    
+
     public function testHandle()
     {
         $slotAvailabilityView = new SlotAvailabilityView(SlotAvailability::UNAVAILABILITY);
@@ -150,7 +149,7 @@ class SlotViewQueryHandlerTest extends TestCase
 
         $this->assertEquals($expected, $result);
     }
-    
+
     public function testSheetNotAttendHandle()
     {
         $this->sheet->setAttendance(false);
@@ -324,7 +323,7 @@ class SlotViewQueryHandlerTest extends TestCase
 
         $this->assertEquals($expected, $result);
     }
-    
+
     public function testMeetingOnOthersheet()
     {
         $slotAvailabilityView = new SlotAvailabilityView(

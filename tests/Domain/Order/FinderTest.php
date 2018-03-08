@@ -3,19 +3,19 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2016 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
 
 namespace Proximum\Vimeet\Tests\Domain\Order;
 
+use PHPUnit\Framework\TestCase;
 use Proximum\Vimeet\Domain\Model\Admin;
 use Proximum\Vimeet\Domain\Model\Order;
 use Proximum\Vimeet\Domain\Order\Finder;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
 use Proximum\Vimeet\Tests\Factory\SheetFactory;
-use PHPUnit\Framework\TestCase;
 
 class FinderTest extends TestCase
 {

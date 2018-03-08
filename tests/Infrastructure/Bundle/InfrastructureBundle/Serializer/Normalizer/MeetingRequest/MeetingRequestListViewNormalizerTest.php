@@ -27,7 +27,7 @@ class MeetingRequestListViewNormalizerTest extends TestCase
     public function testNormalization()
     {
         $date = new \DateTime('2017-10-10 10:00:00');
-        $fromSheet1 = new SheetView(15, 'sheet title 1', 'type title 1', 'category title 1', [8,9], ['toto', 'tata']);
+        $fromSheet1 = new SheetView(15, 'sheet title 1', 'type title 1', 'category title 1', [8, 9], ['toto', 'tata']);
         $fromSheet2 = new SheetView(16, 'sheet title 2', 'type title 2', null, [], []);
         $toSheet1 = new SheetView(17, 'sheet title 3', 'type title 3', null, [11], ['jean']);
         $toSheet2 = new SheetView(18, 'sheet title 4', 'type title 1', 'category title 1', [91], ['Paul']);
@@ -192,7 +192,7 @@ class MeetingRequestListViewNormalizerTest extends TestCase
     public function testNormalize()
     {
         $date = new \DateTime('2017-10-10 10:00:00');
-        $fromSheet1 = new SheetView(15, 'sheet title 1', 'type title 1', 'category title 1', [8,9], ['toto', 'tata']);
+        $fromSheet1 = new SheetView(15, 'sheet title 1', 'type title 1', 'category title 1', [8, 9], ['toto', 'tata']);
         $fromSheet2 = new SheetView(16, 'sheet title 2', 'type title 2', null, [], []);
         $toSheet1 = new SheetView(17, 'sheet title 3', 'type title 3', null, [11], ['jean']);
         $toSheet2 = new SheetView(18, 'sheet title 4', 'type title 1', 'category title 1', [91], ['Paul']);
@@ -216,7 +216,7 @@ class MeetingRequestListViewNormalizerTest extends TestCase
                 new ObjectNormalizer(),
             ],
             [
-                new CsvEncoder()
+                new CsvEncoder(),
             ]
         );
 

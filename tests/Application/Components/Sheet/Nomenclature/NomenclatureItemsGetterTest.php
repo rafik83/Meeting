@@ -30,13 +30,13 @@ class NomenclatureItemsGetterTest extends TestCase
         $object2->getObjective()->willReturn('needs');
         $object3->getObjective()->willReturn('supply');
         $object1->getData()->willReturn([
-            'items' => ["57f257fc436e4","57f257fc43c70"],
+            'items' => ['57f257fc436e4', '57f257fc43c70'],
         ]);
         $object2->getData()->willReturn([
-            'items' => ["57fce88291663", "57fce88292bbe"],
+            'items' => ['57fce88291663', '57fce88292bbe'],
         ]);
         $object3->getData()->willReturn([
-            'items' => ["57fcf1ed417b3"],
+            'items' => ['57fcf1ed417b3'],
         ]);
         $templateData = $this->prophesize(TemplateData::class);
         $templateData
@@ -59,9 +59,9 @@ class NomenclatureItemsGetterTest extends TestCase
         $result = $nomenclatureItemsGetter->getNomenclatureItems($sheet->reveal(), 'fr');
 
         $expected = [
-            'none'   => ["57f257fc436e4", "57f257fc43c70"],
-            'supply' => ["57fcf1ed417b3"],
-            'needs'  => ["57fce88291663", "57fce88292bbe"]
+            'none'   => ['57f257fc436e4', '57f257fc43c70'],
+            'supply' => ['57fcf1ed417b3'],
+            'needs'  => ['57fce88291663', '57fce88292bbe'],
         ];
 
         $this->assertEquals($expected, $result);

@@ -13,7 +13,6 @@ namespace Proximum\Vimeet\Tests\Application\Components\Spot\Denormalizer;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Prophecy\ObjectProphecy;
 use Proximum\Vimeet\Application\Components\Spot\Denormalizer\SpotDenormalizer;
-use Proximum\Vimeet\Application\Exception\Spot\Import\InvalidImportHeaderFileFormatException;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Spot;
 use Proximum\Vimeet\Domain\Spot\Import;
@@ -99,7 +98,7 @@ class SpotDenormalizerTest extends TestCase
             $expectedImportedDenormalizedSpot1,
             $expectedImportedDenormalizedSpot2,
             $expectedImportedDenormalizedSpot3,
-            $expectedImportedDenormalizedSpot4
+            $expectedImportedDenormalizedSpot4,
         ];
 
         $result = $this

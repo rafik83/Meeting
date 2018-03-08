@@ -84,7 +84,7 @@ class Nomenclature extends EditableObject implements ContentObjectInterface, Sea
     /**
      * {@inheritdoc}
      */
-    public function getContentValueLocalize($locale)
+    public function getContentValueLocalize($locale = null)
     {
         return $this->getContentValue();
     }
@@ -129,6 +129,18 @@ class Nomenclature extends EditableObject implements ContentObjectInterface, Sea
     }
 
     /**
+     * @param string $key
+     *
+     * @return bool
+     */
+    public function hasKey(string $key): bool
+    {
+        $lastLevel = $this->nomenclature->getLastLevel();
+
+        return isset($lastLevel[$key]);
+    }
+
+    /**
      * @param string $givenKey
      * @param string $locale
      *
@@ -140,9 +152,9 @@ class Nomenclature extends EditableObject implements ContentObjectInterface, Sea
             if ($nomenclatureItem->getKey() === $givenKey) {
                 if (null !== $locale) {
                     return $nomenclatureItem->getLabel($locale);
-                } else {
-                    return $nomenclatureItem->getLabel($this->getLocale());
                 }
+
+                return $nomenclatureItem->getLabel($this->getLocale());
             }
         }
 
@@ -199,27 +211,7 @@ class Nomenclature extends EditableObject implements ContentObjectInterface, Sea
      */
     public function getNomenclatureLabel()
     {
-        $labels = $this->getNomenclatureLabels();
-
-        if (isset($labels[$this->getItem()])) {
-            return $labels[$this->getItem()];
-        }
-
-        foreach ($labels as $values) {
-            if (!is_array($values)) {
-                continue;
-            }
-
-            if (null !== $this->getItem()) {
-                if (in_array($this->getItem(), $values, true)) {
-                    return $this->getItem();
-                } elseif (isset($values[$this->getItem()])) {
-                    return $values[$this->getItem()];
-                }
-            }
-        }
-
-        return null;
+        return $this->getLabelForKey($this->getItem());
     }
 
     /**

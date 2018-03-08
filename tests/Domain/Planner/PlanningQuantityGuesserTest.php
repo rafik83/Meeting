@@ -30,7 +30,7 @@ class PlanningQuantityGuesserTest extends TestCase
     private $orderMerger;
 
     /**
-     * @var ObjectProphecy  Prophecy of OrderRepositoryInterface
+     * @var ObjectProphecy Prophecy of OrderRepositoryInterface
      */
     private $orderRepository;
 

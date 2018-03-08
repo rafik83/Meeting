@@ -72,7 +72,7 @@ class CreateHandlerTest extends TestCase
             'en' => [
                 'title' => 'title en',
                 'content' => 'content en',
-            ]
+            ],
         ];
 
         $handler = new CreateHandler($tipRepository->reveal(), $eventDispatcher->reveal(), $dateTime);

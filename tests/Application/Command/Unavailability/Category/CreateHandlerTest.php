@@ -3,19 +3,19 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2016 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
 
 namespace Proximum\Vimeet\Tests\Application\Command\Unavailability\Category;
 
+use PHPUnit\Framework\TestCase;
 use Proximum\Vimeet\Application\Command\Unavailability\Category\Create;
 use Proximum\Vimeet\Application\Command\Unavailability\Category\CreateHandler;
 use Proximum\Vimeet\Domain\Model\Unavailability\Category;
 use Proximum\Vimeet\Domain\Repository\Unavailability\CategoryRepositoryInterface;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
-use PHPUnit\Framework\TestCase;
 
 class CreateHandlerTest extends TestCase
 {

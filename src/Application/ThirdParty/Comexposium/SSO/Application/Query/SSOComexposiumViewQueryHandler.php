@@ -12,6 +12,8 @@ namespace Proximum\Vimeet\Application\ThirdParty\Comexposium\SSO\Application\Que
 
 use Proximum\Vimeet\Application\ThirdParty\Comexposium\SSO\Application\View\SSOComexposiumView;
 use Proximum\Vimeet\Domain\Event\ExtraParameter\Type;
+use Proximum\Vimeet\Domain\Model\Event;
+use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Repository\Event\ExtraParameterRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\UserRepositoryInterface;
@@ -64,43 +66,7 @@ class SSOComexposiumViewQueryHandler
             return null;
         }
 
-        $user = $this->userRepository->findByEmail($query->email);
-
-        $hasSheetImported = false;
-        $hasSheets = false;
-        $hasParticipantImported = false;
-        $isOwner = false;
-
-        if ($user !== null) {
-            $sheets = $this->sheetRepository->getSheetsByUserAndEvent($user, $query->event);
-
-            if (!empty($sheets)) {
-                $hasSheets = true;
-
-                foreach ($sheets as $sheet) {
-                    if (true === $sheet->isImported()) {
-                        $hasSheetImported = true;
-                    }
-
-                    $participant = $sheet->getUserParticipant($user);
-
-                    if ($participant !== null && $participant->isImported()) {
-                        $hasParticipantImported = true;
-                    }
-
-                    if ($sheet->isOwner($user)) {
-                        $isOwner = true;
-                    }
-                }
-            }
-        }
-
-        // We do not allow SSO for user not imported on a sheet imported
-        if ($hasParticipantImported === false && $hasSheetImported === true && $isOwner === false) {
-            return null;
-        }
-
-        if (true === $hasSheets && $hasSheetImported === false) {
+        if (!$this->enableSSOForEmail($query->event, $query->email)) {
             return null;
         }
 
@@ -110,7 +76,66 @@ class SSOComexposiumViewQueryHandler
             $application->getValue(),
             $query->locale === 'fr' ? 'fre-FR' : 'eng-GB',
             $query->email,
-            $this->comexposiumSSOLoaderLibEndpoint
+            $this->comexposiumSSOLoaderLibEndpoint,
+            $query->showLogin
         );
+    }
+
+    /**
+     * @param Event       $event
+     * @param null|string $email
+     *
+     * @return bool
+     */
+    private function enableSSOForEmail(Event $event, ?string $email): bool
+    {
+        if (null === $email) {
+            return true;
+        }
+
+        $user = $this->userRepository->findByEmail($email);
+
+        if (!$user instanceof User) {
+            return true;
+        }
+
+        $hasSheetImported = false;
+        $hasParticipantImported = false;
+        $isOwner = false;
+
+        $sheets = $this->sheetRepository->getSheetsByUserAndEvent($user, $event);
+
+        $hasSheets = !empty($sheets);
+
+        if (!$hasSheets) {
+            return true;
+        }
+
+        foreach ($sheets as $sheet) {
+            if (true === $sheet->isImported()) {
+                $hasSheetImported = true;
+            }
+
+            $participant = $sheet->getUserParticipant($user);
+
+            if ($participant !== null && $participant->isImported()) {
+                $hasParticipantImported = true;
+            }
+
+            if ($sheet->isOwner($user)) {
+                $isOwner = true;
+            }
+        }
+
+        // We do not allow SSO for user not imported on a sheet imported
+        if ($hasParticipantImported === false && $hasSheetImported === true && $isOwner === false) {
+            return false;
+        }
+
+        if ($hasSheetImported === false) {
+            return false;
+        }
+
+        return true;
     }
 }

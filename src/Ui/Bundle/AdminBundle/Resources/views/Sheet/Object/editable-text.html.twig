@@ -2,7 +2,7 @@
     <b>{{ object.getDefaultLabel }}:</b>
     <ul>
     {% for locale, translation in object.translations %}
-        <li><i>{{ locale|locale }}:</i> {{ translation|nl2br }}</li>
+        <li><i>{{ locale|locale }}:</i> {{ object.contentValueLocalize(locale)|nl2br }}</li>
     {% endfor %}
     </ul>
 {% else %}

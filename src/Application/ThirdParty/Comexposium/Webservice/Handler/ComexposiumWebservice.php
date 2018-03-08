@@ -111,6 +111,19 @@ class ComexposiumWebservice
 
     /**
      * @param string $eventReference
+     *
+     * @return array
+     * @throws \SoapFault
+     */
+    public function getEventNomenclatures(string $eventReference): array
+    {
+        $response = $this->getEventParameters($eventReference);
+
+        return (array) $response->nomenclatureManifestation;
+    }
+
+    /**
+     * @param string $eventReference
      * @param array  $registrationReferences
      *
      * @return array of \stdClass

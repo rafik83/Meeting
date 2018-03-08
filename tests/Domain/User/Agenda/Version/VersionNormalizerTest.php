@@ -11,9 +11,9 @@
 namespace Proximum\Vimeet\Tests\Domain\User\Agenda\Version;
 
 use PHPUnit\Framework\TestCase;
+use Proximum\Vimeet\Domain\Model\Meeting\Request;
 use Proximum\Vimeet\Domain\User\Agenda\Version\RequestVersionNormalizer;
 use Proximum\Vimeet\Domain\User\Agenda\Version\VersionNormalizer;
-use Proximum\Vimeet\Domain\Model\Meeting\Request;
 
 class VersionNormalizerTest extends TestCase
 {

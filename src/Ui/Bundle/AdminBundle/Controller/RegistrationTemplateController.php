@@ -30,7 +30,7 @@ class RegistrationTemplateController extends Controller
     /**
      * @return Response
      */
-    public function listAction()
+    public function listAction(): Response
     {
         $this->denyAccessUnlessGranted('ROLE_SUPER_ADMIN');
 

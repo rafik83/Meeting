@@ -3,20 +3,20 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2016 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
 
 namespace Proximum\Vimeet\Tests\Application\Command\Sheet\Template;
 
+use PHPUnit\Framework\TestCase;
 use Proximum\Vimeet\Application\Command\Sheet\Template\CreateForEvent;
 use Proximum\Vimeet\Application\Command\Sheet\Template\CreateForEventHandler;
 use Proximum\Vimeet\Application\Command\Sheet\Template\CreateResult;
 use Proximum\Vimeet\Domain\Model\Template\SheetTemplate;
 use Proximum\Vimeet\Domain\Repository\Template\SheetTemplateRepositoryInterface;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
-use PHPUnit\Framework\TestCase;
 
 class CreateForEventHandlerTest extends TestCase
 {

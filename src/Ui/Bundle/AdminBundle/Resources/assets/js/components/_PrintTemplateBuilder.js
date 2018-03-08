@@ -2,7 +2,8 @@ var guidGenerator = require('./_GuidGenerator'),
     LoadingButton = require('./_LoadingButton'),
     normalizeTemplate = require('./_NormalizeTemplate'),
     Sortable      = require('./_Sortable'),
-    TemplateBlock = require('./_TemplateBlock');
+    TemplateBlock = require('./_TemplateBlock')
+;
 
 /**
  * PrintTemplateBuilder

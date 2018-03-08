@@ -15,7 +15,6 @@ use Proximum\Vimeet\Application\Event\Events;
 use Proximum\Vimeet\Application\Event\Sheet\SheetUpdatedEvent;
 use Proximum\Vimeet\Application\ThirdParty\Comexposium\Webservice\Handler\ConvertRegistrationViewToSheet;
 use Proximum\Vimeet\Application\ThirdParty\Comexposium\Webservice\Handler\SheetAndParticipantTemplateDataHandler;
-use Proximum\Vimeet\Application\ThirdParty\Comexposium\Webservice\View\ParticipantPositionView;
 use Proximum\Vimeet\Application\ThirdParty\Comexposium\Webservice\View\ParticipantView;
 use Proximum\Vimeet\Application\ThirdParty\Comexposium\Webservice\View\RegistrationView;
 use Proximum\Vimeet\Application\ThirdParty\Comexposium\Webservice\View\SheetAndParticipantTemplateDataView;
@@ -61,12 +60,10 @@ class ConvertRegistrationViewToSheetTest extends TestCase
                 'fr',
                 null,
                 'Nintendo Europe',
-                [
-                    new ParticipantPositionView('Directeur Export', 'fr'),
-                    new ParticipantPositionView('Export Director', 'en'),
-                ]
+                []
             ),
-            ['666', '777', '88898']
+            [],
+            []
         );
 
         $expectedUser = new User('takashi.kitano@nintendo.com', '', '', 'fr');
@@ -76,16 +73,16 @@ class ConvertRegistrationViewToSheetTest extends TestCase
         $expectedSheet = new Sheet(
             $event->reveal(),
             $type->reveal(),
-            [],
+            ['whateverSheetTemplateData'],
             $expectedUser,
             $dateTime
         );
-        $expectedSheet->setRegistrationData(['whateverSheetTemplateData']);
+        $expectedSheet->setRegistrationData(['whateverRegistrationSheetData']);
         $expectedSheet->setTitle('Nintendo');
         $expectedSheet->setImported(true);
 
         $expectedParticipant = new Participant(
-            $expectedSheet, $expectedUser, ['whateverParticipantTemplateData'], false
+            $expectedSheet, $expectedUser, ['whateverRegistrationParticipantData'], false
         );
         $expectedParticipant->setImported(true);
 
@@ -116,10 +113,11 @@ class ConvertRegistrationViewToSheetTest extends TestCase
         $participantRepository = $this->prophesize(ParticipantRepositoryInterface::class);
         $participantRepository->add($expectedParticipant);
 
-        $templateData = $this->prophesize(TemplateData::class);
+        $registrationTemplateData = $this->prophesize(TemplateData::class);
+        $sheetTemplateData = $this->prophesize(TemplateData::class);
 
         $synchronizer = $this->prophesize(Synchronizer::class);
-        $synchronizer->set($templateData->reveal(), $expectedUser)->shouldBeCalled();
+        $synchronizer->set($registrationTemplateData->reveal(), $expectedUser)->shouldBeCalled();
 
         $eventDispatcher = $this->prophesize(EventDispatcherInterface::class);
         $eventDispatcher
@@ -127,17 +125,18 @@ class ConvertRegistrationViewToSheetTest extends TestCase
             ->shouldBeCalled()
         ;
 
+        $expectedSheetAndParticipantTemplateDataView = new SheetAndParticipantTemplateDataView(
+            'Nintendo',
+            ['whateverRegistrationSheetData'],
+            ['whateverRegistrationParticipantData']
+        );
+        $expectedSheetAndParticipantTemplateDataView->setSheetTemplateData(['whateverSheetTemplateData']);
+
         $sheetAndParticipantTemplateDataHandler = $this->prophesize(SheetAndParticipantTemplateDataHandler::class);
         $sheetAndParticipantTemplateDataHandler
-            ->handle($registrationView, $templateData->reveal())
+            ->handle($registrationView, $registrationTemplateData->reveal(), $sheetTemplateData->reveal())
             ->shouldBeCalled()
-            ->willReturn(
-                new SheetAndParticipantTemplateDataView(
-                    'Nintendo',
-                    ['whateverSheetTemplateData'],
-                    ['whateverParticipantTemplateData']
-                )
-            )
+            ->willReturn($expectedSheetAndParticipantTemplateDataView)
         ;
 
         $importSheetHandler = new ConvertRegistrationViewToSheet(
@@ -152,6 +151,12 @@ class ConvertRegistrationViewToSheetTest extends TestCase
             $eventDispatcher->reveal(),
             $dateTime
         );
-        $importSheetHandler->handle($event->reveal(), $type->reveal(), $registrationView, $templateData->reveal());
+        $importSheetHandler->handle(
+            $event->reveal(),
+            $type->reveal(),
+            $registrationView,
+            $registrationTemplateData->reveal(),
+            $sheetTemplateData->reveal()
+        );
     }
 }

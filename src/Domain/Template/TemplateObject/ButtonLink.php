@@ -43,7 +43,7 @@ class ButtonLink extends EditableObject implements ContentObjectInterface
     /**
      * {@inheritdoc}
      */
-    public function getContentValueLocalize($locale)
+    public function getContentValueLocalize($locale = null)
     {
         return $this->getContentValue();
     }

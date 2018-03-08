@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Tests\Application\Query\Group\Participant;
 
+use PHPUnit\Framework\TestCase;
 use Proximum\Vimeet\Application\Query\Group\Participant\UsersParticipantViewQuery;
 use Proximum\Vimeet\Application\Query\Group\Participant\UsersParticipantViewQueryHandler;
 use Proximum\Vimeet\Application\View\Group\Participant\UserParticipantView;
@@ -18,7 +19,6 @@ use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\Sheet\Group;
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Repository\ParticipantRepositoryInterface;
-use PHPUnit\Framework\TestCase;
 
 class UsersParticipantViewQueryHandlerTest extends TestCase
 {

@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2015 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -11,6 +11,7 @@
 namespace Proximum\Vimeet\Tests\Application\Command\Meeting\Admin;
 
 use DateTime;
+use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
 use Prophecy\Prophecy\ObjectProphecy;
 use Proximum\Vimeet\Application\Adapter\DelayedEventDispatcherInterface;
@@ -39,22 +40,21 @@ use Proximum\Vimeet\Tests\Factory\SheetFactory;
 use Proximum\Vimeet\Tests\Factory\SlotFactory;
 use Proximum\Vimeet\Tests\Factory\SpotFactory;
 use Proximum\Vimeet\Tests\Factory\UserFactory;
-use PHPUnit\Framework\TestCase;
 
 class UpdateSlotHandlerTest extends TestCase
 {
     /** @var \DateTimeInterface */
     private $dateTime;
-    
+
     /** @var Event */
     private $event;
-    
+
     /** @var User */
     private $fromUser;
-    
+
     /** @var Sheet */
     private $fromSheet;
-    
+
     /** @var Participant */
     private $fromParticipant;
 
@@ -66,7 +66,7 @@ class UpdateSlotHandlerTest extends TestCase
 
     /** @var Participant */
     private $toParticipant;
-    
+
     /** @var Request */
     private $request;
 

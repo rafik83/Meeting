@@ -1,15 +1,16 @@
 <?php
 
 /*
- * This file is part of the vimeet project.
+ * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2017 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
 
 namespace Proximum\Vimeet\Application\Query\Navigation\Submenu;
 
+use PHPUnit\Framework\TestCase;
 use Proximum\Vimeet\Application\Components\Navigation\Category;
 use Proximum\Vimeet\Application\View\Navigation\SubmenuButtonView;
 use Proximum\Vimeet\Domain\Model\Order;
@@ -20,7 +21,6 @@ use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Navigation\NavigationBuilderInterface;
 use Proximum\Vimeet\Domain\Repository\CartRowRepositoryInterface;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
-use PHPUnit\Framework\TestCase;
 
 class PackageSubmenuButtonViewQueryHandlerTest extends TestCase
 {
@@ -53,7 +53,7 @@ class PackageSubmenuButtonViewQueryHandlerTest extends TestCase
         );
 
         $navigationBuilder
-            ->getRoute('event_package_redirect_depending_on_context', ["sheet" => null])
+            ->getRoute('event_package_redirect_depending_on_context', ['sheet' => null])
             ->shouldBeCalled()
             ->willReturn('event_package.link');
         $cartRowRepository->hasProducts($sheet)->shouldBeCalled()->willReturn(false);
@@ -102,7 +102,7 @@ class PackageSubmenuButtonViewQueryHandlerTest extends TestCase
         );
 
         $navigationBuilder
-            ->getRoute('event_package_redirect_depending_on_context', ["sheet" => null])
+            ->getRoute('event_package_redirect_depending_on_context', ['sheet' => null])
             ->shouldBeCalled()
             ->willReturn('event_package.link');
         $cartRowRepository->hasProducts($sheet)->shouldBeCalled()->willReturn(true);

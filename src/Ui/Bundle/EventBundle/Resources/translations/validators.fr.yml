@@ -18,6 +18,7 @@ validators.participant.canNotRemoveAllParticipants: 'Vous ne pouvez pas supprime
 validators.participant.mustSelectProduct: 'Vous devez sélectionner un produit pour ajouter ce participant à votre fiche'
 validators.participant.remove.hasMeeting: '{1} Vous ne pouvez pas supprimer le participant %participantName% car il a des rendez-vous. Pour demander sa suppression merci de contacter: %contactInfo% |]1, Inf[ Vous ne pouvez pas supprimer les participants %participantName% car ils ont des rendez-vous. Pour demander leur suppression merci de contacter: %contactInfo%'
 validators.send_code.error.invalidReceiver: 'Le numéro de téléphone ne semble pas valide.'
+validators.sheet.object.productNotValid: 'Ce produit n''est pas valide'
 validators.type.required: 'Un type de participation est requis'
 validators.unavailability.participantsNotSelected: 'Un participant au moins doit être sélectionné'
 validators.unavailability.participantsWithConflict: '{1} %participants% participe à un évènement ou un rendez-vous pendant la période sélectionnée, veuillez le désincrire avant de pouvoir poser cette indisponibilité pour lui|]1,Inf[ %participants% participent à un évènement ou un rendez-vous pendant la période sélectionnée, veuillez les désincrire avant de pouvoir poser cette indisponibilité pour eux'

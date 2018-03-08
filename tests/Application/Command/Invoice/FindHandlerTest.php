@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Tests\Application\Command\Invoice;
 
+use PHPUnit\Framework\TestCase;
 use Proximum\Vimeet\Application\Command\Invoice\Find;
 use Proximum\Vimeet\Application\Command\Invoice\FindHandler;
 use Proximum\Vimeet\Application\Command\Invoice\FindResult;
@@ -22,7 +23,6 @@ use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Invoice\Invoice;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Repository\Invoice\InvoiceRepositoryInterface;
-use PHPUnit\Framework\TestCase;
 
 class FindHandlerTest extends TestCase
 {
@@ -81,7 +81,6 @@ class FindHandlerTest extends TestCase
         $admin->isPartner()->willReturn(false);
         $admin->hasAccessToAllEvent()->willReturn(false);
 
-
         $invoiceNumeroView = new InvoiceNumeroView('Vi', 2017, 1234);
         $invoice1 = $this->prophesize(Invoice::class);
         $sheet1   = $this->prophesize(Sheet::class);
@@ -116,7 +115,6 @@ class FindHandlerTest extends TestCase
         $admin = $this->prophesize(Admin::class);
         $admin->isPartner()->willReturn(false);
         $admin->hasAccessToAllEvent()->willReturn(false);
-
 
         $invoiceNumeroView = new InvoiceNumeroView('Vi', 2017, 1234);
         $invoice1 = $this->prophesize(Invoice::class);

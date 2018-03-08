@@ -3,18 +3,18 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2015 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
 
 namespace Proximum\Vimeet\Tests\Domain\Template;
 
+use PHPUnit\Framework\TestCase;
 use Proximum\Vimeet\Domain\Repository\NomenclatureRepositoryInterface;
 use Proximum\Vimeet\Domain\Template\TemplateDataFactory;
 use Proximum\Vimeet\Domain\Template\TemplateObject\EditableText;
 use Proximum\Vimeet\Domain\Template\TemplateObject\Text;
-use PHPUnit\Framework\TestCase;
 
 class TemplateDataFactoryTest extends TestCase
 {
@@ -25,7 +25,7 @@ class TemplateDataFactoryTest extends TestCase
                 'component' => 'object',
                 'type'      => 'text',
                 'config'    => [
-                    'content' => ['fr' => 'Lorem ipsum']
+                    'content' => ['fr' => 'Lorem ipsum'],
                 ],
             ],
             '211b2168' => [
@@ -43,8 +43,8 @@ class TemplateDataFactoryTest extends TestCase
                                 'help'        => ['fr' => 'Ici le titre'],
                                 'length'      => 100,
                                 'required'    => true,
-                                'translatable' => true
-                            ]
+                                'translatable' => true,
+                            ],
                         ],
                         'azerty' => [
                             'component' => 'object',
@@ -52,14 +52,13 @@ class TemplateDataFactoryTest extends TestCase
                             'config'    => [
                                 'nomenclature' => null,
                                 'objective'    => 'supply',
-                                'required'     => true
+                                'required'     => true,
                             ],
-                        ]
+                        ],
                     ],
                     [
-
-                    ]
-                ]
+                    ],
+                ],
             ],
         ];
 
@@ -70,7 +69,7 @@ class TemplateDataFactoryTest extends TestCase
             '0aea62b2' => [
                 'text' => ['fr' => 'Lorem ipsum 0aea62b2 fr', 'en' => 'Lorem ipsum 0aea62b2 en'],
             ],
-            'azerty' => []
+            'azerty' => [],
         ];
 
         $nomenclatureRepository = $this->prophesize(NomenclatureRepositoryInterface::class);
@@ -124,7 +123,7 @@ class TemplateDataFactoryTest extends TestCase
                 'component' => 'object',
                 'type'      => 'text',
                 'config'    => [
-                    'content' => ['fr' => 'Lorem ipsum']
+                    'content' => ['fr' => 'Lorem ipsum'],
                 ],
             ],
         ];

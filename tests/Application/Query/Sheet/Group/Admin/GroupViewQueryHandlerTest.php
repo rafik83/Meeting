@@ -1,9 +1,9 @@
 <?php
 
 /*
- * This file is part of the vimeet project.
+ * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2017 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -12,7 +12,6 @@ namespace Application\Query\Sheet\Group\Admin;
 
 use PHPUnit\Framework\TestCase;
 use Proximum\Vimeet\Application\Adapter\ImpersonateUrlGeneratorInterface;
-use Proximum\Vimeet\Application\Components\Sheet\SheetInfoGuesser;
 use Proximum\Vimeet\Application\Query\Sheet\Group\Admin\AdminGroupViewQuery;
 use Proximum\Vimeet\Application\Query\Sheet\Group\Admin\AdminGroupViewQueryHandler;
 use Proximum\Vimeet\Application\View\Sheet\Group\Admin\GroupView;

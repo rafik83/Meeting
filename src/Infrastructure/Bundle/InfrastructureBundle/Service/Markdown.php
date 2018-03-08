@@ -34,8 +34,8 @@ class Markdown implements MarkdownAdapterInterface
      */
     public function toHtml($text)
     {
-        $html = $this->parser->text($text);
+        $this->parser->setSafeMode(true);
 
-        return $html;
+        return $this->parser->text($text);
     }
 }

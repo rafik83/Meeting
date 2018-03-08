@@ -1,9 +1,9 @@
 <?php
 
 /*
- * This file is part of the vimeet project.
+ * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2016 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -11,6 +11,7 @@
 namespace Proximum\Vimeet\Domain\Model\Sheet;
 
 use DateTime;
+use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Sheet;
@@ -26,7 +27,6 @@ use Proximum\Vimeet\Domain\Template\TemplateObject;
 use Proximum\Vimeet\Domain\Template\TemplateObject\EditableText;
 use Proximum\Vimeet\Infrastructure\Adapter\DelayedEventDispatcher;
 use Proximum\Vimeet\Tests\Factory\SheetFactory;
-use PHPUnit\Framework\TestCase;
 
 class CompletenessCalculatorTest extends TestCase
 {

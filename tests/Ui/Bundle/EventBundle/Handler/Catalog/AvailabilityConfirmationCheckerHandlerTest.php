@@ -65,7 +65,7 @@ class AvailabilityConfirmationCheckerHandlerTest extends TestCase
         $this->flashBag = $this->prophesize(FlashBagInterface::class);
         $this->extraDataRepository = $this->prophesize(ExtraDataRepositoryInterface::class);
         $this->router = $this->prophesize(RouterInterface::class);
-        $this->featureAvailabilityConfirmationActivated = "1";
+        $this->featureAvailabilityConfirmationActivated = '1';
     }
 
     public function testHandleFeatureFlagDisabled()
@@ -81,7 +81,7 @@ class AvailabilityConfirmationCheckerHandlerTest extends TestCase
             $this->flashBag->reveal(),
             $this->extraDataRepository->reveal(),
             $this->router->reveal(),
-            ""
+            ''
         );
         $result = $handler->handle(
             new AvailabilityConfirmationChecker(

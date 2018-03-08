@@ -1,15 +1,16 @@
 <?php
 
 /*
- * This file is part of the vimeet project.
+ * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2017 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
 
 namespace Proximum\Vimeet\Tests\Infrastructure\Adapter;
 
+use PHPUnit\Framework\TestCase;
 use Proximum\Vimeet\Domain\Model\Admin;
 use Proximum\Vimeet\Domain\Model\Event\EventUrlGeneratorInterface;
 use Proximum\Vimeet\Infrastructure\Adapter\ImpersonateUrlGeneratorAdapter;
@@ -17,7 +18,6 @@ use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Security\Imperson
 use Proximum\Vimeet\Tests\Factory\EventFactory;
 use Proximum\Vimeet\Tests\Factory\UserFactory;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
-use PHPUnit\Framework\TestCase;
 
 class ImpersonateUrlGeneratorAdapterTest extends TestCase
 {

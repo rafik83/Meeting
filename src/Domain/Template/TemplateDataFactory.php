@@ -47,6 +47,7 @@ class TemplateDataFactory
         'tags'                  => TemplateObject\TagsCollection::class,
         'gender'                => TemplateObject\Gender::class,
         'boolean'               => TemplateObject\BooleanObject::class,
+        'upload'                => TemplateObject\UploadObject::class,
     ];
 
     /**
@@ -133,6 +134,17 @@ class TemplateDataFactory
     public function createRegistrationFromType(Type $type, ?string $locale): TemplateData
     {
         return $this->createRegistrationFromTemplate($type->getRegistrationTemplate(), $locale);
+    }
+
+    /**
+     * @param Type        $type
+     * @param null|string $locale
+     *
+     * @return TemplateData
+     */
+    public function createSheetTemplateFromType(Type $type, ?string $locale = null): TemplateData
+    {
+        return $this->createFromTemplate($type->getSheetTemplate(), [], $locale);
     }
 
     /**

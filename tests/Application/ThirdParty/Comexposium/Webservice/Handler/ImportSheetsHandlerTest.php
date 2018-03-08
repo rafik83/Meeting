@@ -15,8 +15,10 @@ use Proximum\Vimeet\Application\ThirdParty\Comexposium\Webservice\Converter\RawR
 use Proximum\Vimeet\Application\ThirdParty\Comexposium\Webservice\Handler\ComexposiumWebservice;
 use Proximum\Vimeet\Application\ThirdParty\Comexposium\Webservice\Handler\ConvertRegistrationViewToSheet;
 use Proximum\Vimeet\Application\ThirdParty\Comexposium\Webservice\Handler\ImportSheetsHandler;
+use Proximum\Vimeet\Application\ThirdParty\Comexposium\Webservice\Handler\PrepareNomenclatureHandler;
 use Proximum\Vimeet\Application\ThirdParty\Comexposium\Webservice\Handler\RemoveAlreadyImportedReferences;
-use Proximum\Vimeet\Application\ThirdParty\Comexposium\Webservice\View\ParticipantPositionView;
+use Proximum\Vimeet\Application\ThirdParty\Comexposium\Webservice\View\Nomenclature\NomenclatureItemView;
+use Proximum\Vimeet\Application\ThirdParty\Comexposium\Webservice\View\Nomenclature\NomenclatureView;
 use Proximum\Vimeet\Application\ThirdParty\Comexposium\Webservice\View\ParticipantView;
 use Proximum\Vimeet\Application\ThirdParty\Comexposium\Webservice\View\RegistrationView;
 use Proximum\Vimeet\Domain\Event\ExtraParameter\Type as ExtraParameterType;
@@ -37,6 +39,11 @@ class ImportSheetsHandlerTest extends TestCase
         $expectedRawRegistration = new \stdClass();
         $expectedResponse = [$expectedRawRegistration];
 
+        $expectedNomenclatureView = new NomenclatureView([
+            '666' => new NomenclatureItemView('666', null, []),
+            '88898' => new NomenclatureItemView('88898', null, []),
+        ]);
+
         $expectedRegistrationView = new RegistrationView(
             '5556666',
             'Nintendo',
@@ -55,19 +62,17 @@ class ImportSheetsHandlerTest extends TestCase
                 'fr',
                 null,
                 'Nintendo Europe',
-                [
-                    new ParticipantPositionView('Directeur Export', 'fr'),
-                    new ParticipantPositionView('Export Director', 'en'),
-                ]
+                []
             ),
-            ['666', '777', '88898']
+            [],
+            []
         );
 
         $rawRegistrationToRegistrationViewConverter = $this->prophesize(
             RawRegistrationToRegistrationViewConverter::class
         );
         $rawRegistrationToRegistrationViewConverter
-            ->convert($expectedRawRegistration)
+            ->convert($expectedRawRegistration, $expectedNomenclatureView)
             ->shouldBeCalled()
             ->willReturn($expectedRegistrationView)
         ;
@@ -103,18 +108,30 @@ class ImportSheetsHandlerTest extends TestCase
             ->willReturn($expectedResponse)
         ;
 
-        $templateData = $this->prophesize(TemplateData::class);
+        $registrationTemplateData = $this->prophesize(TemplateData::class);
+        $sheetTemplateData = $this->prophesize(TemplateData::class);
 
         $templateDataFactory = $this->prophesize(TemplateDataFactory::class);
         $templateDataFactory
             ->createRegistrationFromType($type->reveal(), null)
             ->shouldBeCalled()
-            ->willReturn($templateData->reveal())
+            ->willReturn($registrationTemplateData->reveal())
+        ;
+        $templateDataFactory
+            ->createSheetTemplateFromType($type->reveal())
+            ->shouldBeCalled()
+            ->willReturn($sheetTemplateData->reveal())
         ;
 
         $convertRegistrationViewToSheet = $this->prophesize(ConvertRegistrationViewToSheet::class);
         $convertRegistrationViewToSheet
-            ->handle($event->reveal(), $type->reveal(), $expectedRegistrationView, $templateData->reveal())
+            ->handle(
+                $event->reveal(),
+                $type->reveal(),
+                $expectedRegistrationView,
+                $registrationTemplateData->reveal(),
+                $sheetTemplateData->reveal()
+            )
             ->shouldBeCalled()
         ;
 
@@ -125,6 +142,13 @@ class ImportSheetsHandlerTest extends TestCase
             ->willReturn(['111222333'])
         ;
 
+        $prepareNomenclatureHandler = $this->prophesize(PrepareNomenclatureHandler::class);
+        $prepareNomenclatureHandler
+            ->handle('999666')
+            ->shouldBeCalled()
+            ->willReturn($expectedNomenclatureView)
+        ;
+
         $importSheetsHandler = new ImportSheetsHandler(
             $comexposiumWebservice->reveal(),
             $extraParameterRepository->reveal(),
@@ -132,7 +156,8 @@ class ImportSheetsHandlerTest extends TestCase
             $rawRegistrationToRegistrationViewConverter->reveal(),
             $convertRegistrationViewToSheet->reveal(),
             $templateDataFactory->reveal(),
-            $removeAlreadyImportedReferences->reveal()
+            $removeAlreadyImportedReferences->reveal(),
+            $prepareNomenclatureHandler->reveal()
         );
 
         $importSheetsHandler->handle($event->reveal(), ['111222333', '3334444']);

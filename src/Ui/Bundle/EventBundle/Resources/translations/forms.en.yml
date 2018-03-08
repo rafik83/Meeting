@@ -63,7 +63,7 @@ form.payment_choice.children.mode.label: 'Choose your mode of payment'
 form.payment_choice.children.paymentMode.bank_card: 'Bank card'
 form.payment_choice.children.paymentMode.bank_check: Cheque
 form.payment_choice.children.paymentMode.bank_transfer: Transfer
-form.payment_choice.children.paymentMode.paypal: 'Paypal or Bank card'
+form.payment_choice.children.paymentMode.paypal: 'Bank card or Paypal'
 form.register.newUser.password.placeholder: 'Choose your password'
 form.register.newUser.repeatedPassword.placeholder: 'confirm password'
 form.search.localization.search.placeholder: '69, Lyon, France'
@@ -105,5 +105,7 @@ form.sheet_item_collection_data.children.submit.label: Save
 form.sheet_media_collection_data.children.medias.label_add: Add
 form.sheet_media_collection_data.children.medias.prototype.children.type.label: Type
 form.sheet_media_collection_data.children.submit.label: Save
+form.user_availability_confirmation.children.confirm.label: 'Confirm your avaibilities'
+form.user_event_phone_validate_code.children.confirm.label: Confirmed
 gender.man: Mr
 gender.woman: Mrs
