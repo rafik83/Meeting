@@ -10,11 +10,11 @@
 
 namespace Proximum\Vimeet\Tests\Application\Query\Order\Export;
 
+use PHPUnit\Framework\TestCase;
 use Proximum\Vimeet\Application\Query\Order\Export\CustomRowBoughtViewQuery;
 use Proximum\Vimeet\Application\Query\Order\Export\CustomRowBoughtViewQueryHandler;
 use Proximum\Vimeet\Application\View\Order\Export\CustomRowBoughtView;
 use Proximum\Vimeet\Domain\Model\Order\Row;
-use PHPUnit\Framework\TestCase;
 
 class CustomRowBoughtViewQueryHandlerTest extends TestCase
 {

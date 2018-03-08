@@ -3,7 +3,10 @@ var LoadingButton = require('./_LoadingButton'),
     guidGenerator = require('./_GuidGenerator'),
     normalizeTemplate = require('./_NormalizeTemplate'),
     Sortable = require('./_Sortable'),
-    TemplateObject = require('./_TemplateObject');
+    TemplateObject = require('./_TemplateObject')
+;
+
+var builderType = 'registration';
 
 /**
  * TemplateBuilder
@@ -108,7 +111,7 @@ RegistrationTemplateBuilder.prototype.block = function (element) {
 };
 
 RegistrationTemplateBuilder.prototype.object = function (element) {
-  element.templateObject = new TemplateObject(element, this.locale);
+  element.templateObject = new TemplateObject(element, this.locale, builderType);
 };
 
 RegistrationTemplateBuilder.prototype.inners = function (item) {

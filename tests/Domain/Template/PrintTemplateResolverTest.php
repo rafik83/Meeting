@@ -94,9 +94,9 @@ class PrintTemplateResolverTest extends TestCase
                 'Macd4Md3ab',
                 AbstractChild::TEMPLATE_OBJECT_TYPE_TAG,
                 [
-                    "label" => [
-                        "en" => "Location",
-                        "fr" => "Localisation",
+                    'label' => [
+                        'en' => 'Location',
+                        'fr' => 'Localisation',
                     ],
                 ],
                 $locale,
@@ -113,9 +113,9 @@ class PrintTemplateResolverTest extends TestCase
                 'Med1eM86eb',
                 AbstractChild::TEMPLATE_OBJECT_TYPE_NOMENCLATURE,
                 [
-                    "label" => [
-                        "en" => "Skills",
-                        "fr" => "Compétences",
+                    'label' => [
+                        'en' => 'Skills',
+                        'fr' => 'Compétences',
                     ],
                 ],
                 $locale,
@@ -125,9 +125,9 @@ class PrintTemplateResolverTest extends TestCase
                 '1adc1873',
                 AbstractChild::TEMPLATE_OBJECT_TYPE_COLLECTION,
                 [
-                    "label" => [
-                        "en" => "References",
-                        "fr" => "Clients de référence",
+                    'label' => [
+                        'en' => 'References',
+                        'fr' => 'Clients de référence',
                     ],
                 ],
                 $locale,
@@ -137,9 +137,9 @@ class PrintTemplateResolverTest extends TestCase
                 'Mf3e2Ma2f7',
                 AbstractChild::TEMPLATE_OBJECT_TYPE_COLLECTION,
                 [
-                    "label" => [
-                        "en" => "Innovative projects",
-                        "fr" => "Projets innovants",
+                    'label' => [
+                        'en' => 'Innovative projects',
+                        'fr' => 'Projets innovants',
                     ],
                 ],
                 $locale,
@@ -149,9 +149,9 @@ class PrintTemplateResolverTest extends TestCase
                 'MdaceM0e5c',
                 AbstractChild::TEMPLATE_OBJECT_TYPE_COLLECTION,
                 [
-                    "label" => [
-                        "en" => "Equipments, technologies and processes",
-                        "fr" => "Equipements, technologies et process utilisés",
+                    'label' => [
+                        'en' => 'Equipments, technologies and processes',
+                        'fr' => 'Equipements, technologies et process utilisés',
                     ],
                 ],
                 $locale,
@@ -161,9 +161,9 @@ class PrintTemplateResolverTest extends TestCase
                 'Ma903M43a3',
                 AbstractChild::TEMPLATE_OBJECT_TYPE_NOMENCLATURE,
                 [
-                    "label" => [
-                        "en" => "Application fields",
-                        "fr" => "Domaines d'application",
+                    'label' => [
+                        'en' => 'Application fields',
+                        'fr' => "Domaines d'application",
                     ],
                 ],
                 $locale,
@@ -173,9 +173,9 @@ class PrintTemplateResolverTest extends TestCase
                 'd6fa1ac7',
                 AbstractChild::TEMPLATE_OBJECT_TYPE_NOMENCLATURE,
                 [
-                    "label" => [
-                        "en" => "Landmarks",
-                        "fr" => "Eléments clés",
+                    'label' => [
+                        'en' => 'Landmarks',
+                        'fr' => 'Eléments clés',
                     ],
                 ],
                 $locale,
@@ -185,9 +185,9 @@ class PrintTemplateResolverTest extends TestCase
                 'a9271999',
                 AbstractChild::TEMPLATE_OBJECT_TYPE_COLLECTION,
                 [
-                    "label" => [
-                        "en" => "Group / Member of",
-                        "fr" => "Groupe / Membre",
+                    'label' => [
+                        'en' => 'Group / Member of',
+                        'fr' => 'Groupe / Membre',
                     ],
                 ],
                 $locale,
@@ -197,9 +197,9 @@ class PrintTemplateResolverTest extends TestCase
                 'a23a2f5d',
                 AbstractChild::TEMPLATE_OBJECT_TYPE_COLLECTION,
                 [
-                    "label" => [
-                        "en" => "Certifications",
-                        "fr" => "Certifications",
+                    'label' => [
+                        'en' => 'Certifications',
+                        'fr' => 'Certifications',
                     ],
                 ],
                 $locale,
@@ -209,11 +209,11 @@ class PrintTemplateResolverTest extends TestCase
                 'bef61d39',
                 AbstractChild::TEMPLATE_OBJECT_TYPE_PARTICIPANT,
                 [
-                    "label"                    => [
-                        "en" => "Participants",
-                        "fr" => "Participants",
+                    'label'                    => [
+                        'en' => 'Participants',
+                        'fr' => 'Participants',
                     ],
-                    "numberOfParticipantShown" => 3,
+                    'numberOfParticipantShown' => 3,
                 ],
                 $locale,
                 $locale
@@ -222,9 +222,9 @@ class PrintTemplateResolverTest extends TestCase
                 '211efd1f',
                 AbstractChild::TEMPLATE_OBJECT_TYPE_MEDIA,
                 [
-                    "label" => [
-                        "en" => "Medias",
-                        "fr" => "Médias",
+                    'label' => [
+                        'en' => 'Medias',
+                        'fr' => 'Médias',
                     ],
                 ],
                 $locale,
@@ -234,9 +234,9 @@ class PrintTemplateResolverTest extends TestCase
                 '27db4a35',
                 AbstractChild::TEMPLATE_OBJECT_TYPE_TEXT,
                 [
-                    "content" => [
-                        "en" => "Objectives",
-                        "fr" => "Objectifs de participation",
+                    'content' => [
+                        'en' => 'Objectives',
+                        'fr' => 'Objectifs de participation',
                     ],
                 ],
                 $locale,
@@ -246,9 +246,9 @@ class PrintTemplateResolverTest extends TestCase
                 'd927a04b',
                 AbstractChild::TEMPLATE_OBJECT_TYPE_EDITABLE_TEXT,
                 [
-                    "label" => [
-                        "en" => "Description",
-                        "fr" => "Description",
+                    'label' => [
+                        'en' => 'Description',
+                        'fr' => 'Description',
                     ],
                 ],
                 $locale,
@@ -258,9 +258,9 @@ class PrintTemplateResolverTest extends TestCase
                 'Mca61M421a',
                 AbstractChild::TEMPLATE_OBJECT_TYPE_NOMENCLATURE,
                 [
-                    "label" => [
-                        "en" => "Offers",
-                        "fr" => "Offres",
+                    'label' => [
+                        'en' => 'Offers',
+                        'fr' => 'Offres',
                     ],
                 ],
                 $locale,
@@ -270,9 +270,9 @@ class PrintTemplateResolverTest extends TestCase
                 'M0c23M9c66',
                 AbstractChild::TEMPLATE_OBJECT_TYPE_NOMENCLATURE,
                 [
-                    "label" => [
-                        "en" => "Needs",
-                        "fr" => "Besoins",
+                    'label' => [
+                        'en' => 'Needs',
+                        'fr' => 'Besoins',
                     ],
                 ],
                 $locale,
@@ -294,7 +294,7 @@ class PrintTemplateResolverTest extends TestCase
             ->willReturn($templateData->reveal())
         ;
 
-       $expectedPrintTemplateObjects = [
+        $expectedPrintTemplateObjects = [
            'M58cfMcae8' => new Tag(
                'M58cfMcae8',
                AbstractChild::TEMPLATE_OBJECT_TYPE_TAG,
@@ -311,9 +311,9 @@ class PrintTemplateResolverTest extends TestCase
                'Macd4Md3ab',
                AbstractChild::TEMPLATE_OBJECT_TYPE_TAG,
                [
-                   "label" => [
-                       "en" => "Location",
-                       "fr" => "Localisation",
+                   'label' => [
+                       'en' => 'Location',
+                       'fr' => 'Localisation',
                    ],
                ],
                $locale,
@@ -323,9 +323,9 @@ class PrintTemplateResolverTest extends TestCase
                'Med1eM86eb',
                AbstractChild::TEMPLATE_OBJECT_TYPE_NOMENCLATURE,
                [
-                   "label" => [
-                       "en" => "Skills",
-                       "fr" => "Compétences",
+                   'label' => [
+                       'en' => 'Skills',
+                       'fr' => 'Compétences',
                    ],
                ],
                $locale,
@@ -335,9 +335,9 @@ class PrintTemplateResolverTest extends TestCase
                'Mf3e2Ma2f7',
                AbstractChild::TEMPLATE_OBJECT_TYPE_COLLECTION,
                [
-                   "label" => [
-                       "en" => "Innovative projects",
-                       "fr" => "Projets innovants",
+                   'label' => [
+                       'en' => 'Innovative projects',
+                       'fr' => 'Projets innovants',
                    ],
                ],
                $locale,
@@ -347,9 +347,9 @@ class PrintTemplateResolverTest extends TestCase
                'Ma903M43a3',
                AbstractChild::TEMPLATE_OBJECT_TYPE_NOMENCLATURE,
                [
-                   "label" => [
-                       "en" => "Application fields",
-                       "fr" => "Domaines d'application",
+                   'label' => [
+                       'en' => 'Application fields',
+                       'fr' => "Domaines d'application",
                    ],
                ],
                $locale,
@@ -359,9 +359,9 @@ class PrintTemplateResolverTest extends TestCase
                'a23a2f5d',
                AbstractChild::TEMPLATE_OBJECT_TYPE_COLLECTION,
                [
-                   "label" => [
-                       "en" => "Certifications",
-                       "fr" => "Certifications",
+                   'label' => [
+                       'en' => 'Certifications',
+                       'fr' => 'Certifications',
                    ],
                ],
                $locale,
@@ -371,9 +371,9 @@ class PrintTemplateResolverTest extends TestCase
                '211efd1f',
                AbstractChild::TEMPLATE_OBJECT_TYPE_MEDIA,
                [
-                   "label" => [
-                       "en" => "Medias",
-                       "fr" => "Médias",
+                   'label' => [
+                       'en' => 'Medias',
+                       'fr' => 'Médias',
                    ],
                ],
                $locale,
@@ -383,9 +383,9 @@ class PrintTemplateResolverTest extends TestCase
                'd927a04b',
                AbstractChild::TEMPLATE_OBJECT_TYPE_EDITABLE_TEXT,
                [
-                   "label" => [
-                       "en" => "Description",
-                       "fr" => "Description",
+                   'label' => [
+                       'en' => 'Description',
+                       'fr' => 'Description',
                    ],
                ],
                $locale,
@@ -395,9 +395,9 @@ class PrintTemplateResolverTest extends TestCase
                'Mca61M421a',
                AbstractChild::TEMPLATE_OBJECT_TYPE_NOMENCLATURE,
                [
-                   "label" => [
-                       "en" => "Offers",
-                       "fr" => "Offres",
+                   'label' => [
+                       'en' => 'Offers',
+                       'fr' => 'Offres',
                    ],
                ],
                $locale,
@@ -407,9 +407,9 @@ class PrintTemplateResolverTest extends TestCase
                'M0c23M9c66',
                AbstractChild::TEMPLATE_OBJECT_TYPE_NOMENCLATURE,
                [
-                   "label" => [
-                       "en" => "Needs",
-                       "fr" => "Besoins",
+                   'label' => [
+                       'en' => 'Needs',
+                       'fr' => 'Besoins',
                    ],
                ],
                $locale,
@@ -443,9 +443,9 @@ class PrintTemplateResolverTest extends TestCase
                 'component' => 'object',
                 'type'      => 'collection',
                 'config'    => [
-                    "label" => [
-                        "en" => "References",
-                        "fr" => "Clients de référence",
+                    'label' => [
+                        'en' => 'References',
+                        'fr' => 'Clients de référence',
                     ],
                 ],
             ],
@@ -453,9 +453,9 @@ class PrintTemplateResolverTest extends TestCase
                 'component' => 'object',
                 'type'      => 'collection',
                 'config'    => [
-                    "label" => [
-                        "en" => "Equipments, technologies and processes",
-                        "fr" => "Equipements, technologies et process utilisés",
+                    'label' => [
+                        'en' => 'Equipments, technologies and processes',
+                        'fr' => 'Equipements, technologies et process utilisés',
                     ],
                 ],
             ],
@@ -463,9 +463,9 @@ class PrintTemplateResolverTest extends TestCase
                 'component' => 'object',
                 'type'      => 'nomenclature',
                 'config'    => [
-                    "label" => [
-                        "en" => "Landmarks",
-                        "fr" => "Eléments clés",
+                    'label' => [
+                        'en' => 'Landmarks',
+                        'fr' => 'Eléments clés',
                     ],
                 ],
             ],
@@ -473,9 +473,9 @@ class PrintTemplateResolverTest extends TestCase
                 'component' => 'object',
                 'type'      => 'collection',
                 'config'    => [
-                    "label" => [
-                        "en" => "Group / Member of",
-                        "fr" => "Groupe / Membre",
+                    'label' => [
+                        'en' => 'Group / Member of',
+                        'fr' => 'Groupe / Membre',
                     ],
                 ],
             ],
@@ -494,9 +494,9 @@ class PrintTemplateResolverTest extends TestCase
                 'component' => 'object',
                 'type'      => 'text',
                 'config'    => [
-                    "content" => [
-                        "en" => "Objectives",
-                        "fr" => "Objectifs de participation",
+                    'content' => [
+                        'en' => 'Objectives',
+                        'fr' => 'Objectifs de participation',
                     ],
                 ],
             ],

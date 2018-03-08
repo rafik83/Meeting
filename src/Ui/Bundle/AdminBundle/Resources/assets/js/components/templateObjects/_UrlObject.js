@@ -1,0 +1,55 @@
+var Form = require('./../_Form'),
+    TemplateTaggableObject = require('./../_TemplateTaggableObject')
+;
+
+/**
+ * UrlObject
+ *
+ * @param element
+ * @param locale
+ * @param builderType
+ *
+ * @constructor
+ */
+function UrlObject(element, locale, builderType)
+{
+    this.element = element;
+    this.locale = locale;
+    this.form = new Form(element);
+    this.config = JSON.parse(this.element.getAttribute('data-config'));
+    this.templateTaggableObject = null;
+    this.builderType = builderType;
+
+    if (element.querySelector('[data-template-tags-select]')) {
+        this.templateTaggableObject = new TemplateTaggableObject(element);
+    }
+}
+
+UrlObject.prototype.fill = function ()
+{
+    this.form.set('label', this.config.label[this.locale]);
+    this.form.set('placeholder', this.config.placeholder[this.locale]);
+    this.form.set('required', this.config.required);
+    this.form.set('tags', this.config.tags);
+
+    this.form.bind('label', this.config.label[this.locale]);
+};
+
+UrlObject.prototype.save = function ()
+{
+    if (this.templateTaggableObject && !this.templateTaggableObject.save()) {
+        return false;
+    }
+
+    this.config.style                    = this.form.get('style');
+    this.config.label[this.locale]       = this.form.get('label');
+    this.config.placeholder[this.locale] = this.form.get('placeholder');
+    this.config.required                 = this.form.get('required');
+    this.config.tags                     = this.form.get('tags');
+
+    this.form.bind('label', this.config.label[this.locale]);
+
+    return true;
+};
+
+module.exports = UrlObject;

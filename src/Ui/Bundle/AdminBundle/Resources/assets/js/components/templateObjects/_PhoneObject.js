@@ -6,15 +6,18 @@ var Form = require('./../_Form'),
  *
  * @param element
  * @param locale
+ * @param builderType
+ *
  * @constructor
  */
-function PhoneObject(element, locale)
+function PhoneObject(element, locale, builderType)
 {
   this.element = element;
   this.locale = locale;
   this.form = new Form(element);
   this.config = JSON.parse(this.element.getAttribute('data-config'));
   this.templateTaggableObject = null;
+  this.builderType = builderType;
 
   if (element.querySelector('[data-template-tags-select]')) {
     this.templateTaggableObject = new TemplateTaggableObject(element);

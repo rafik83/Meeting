@@ -3,13 +3,14 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2015 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
 
 namespace Proximum\Vimeet\Tests\Application\Command\Spot;
 
+use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
 use Proximum\Vimeet\Application\Command\Spot\BatchCreate;
 use Proximum\Vimeet\Application\Command\Spot\BatchCreateHandler;
@@ -18,7 +19,6 @@ use Proximum\Vimeet\Application\Command\Spot\CreateHandler;
 use Proximum\Vimeet\Application\Components\Spot\Recipe;
 use Proximum\Vimeet\Application\Components\Spot\ReferenceFactory;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
-use PHPUnit\Framework\TestCase;
 
 class BatchCreateHandlerTest extends TestCase
 {
@@ -41,19 +41,19 @@ class BatchCreateHandlerTest extends TestCase
         //Mock
         $referenceFactory = $this->prophesize(ReferenceFactory::class);
         $referenceFactory->createFromRecipes($recipes)->shouldBeCalled()->willReturn([
-            'A1', 'A2', 'A3', 'B1', 'B2', 'B3'
+            'A1', 'A2', 'A3', 'B1', 'B2', 'B3',
         ]);
 
         $createHandler = $this->prophesize(CreateHandler::class);
         $createHandler->handle(Argument::that(function (Create $create) {
             return
                 in_array($create->reference, ['A1', 'A2', 'A3', 'B1', 'B2', 'B3']) &&
-                $create->size === 3 &&
-                $create->meetingCapacity === 1 &&
-                $create->seatCapacity === 2 &&
-                $create->active === true &&
-                $create->visio === true &&
-                $create->priority === 10;
+                3 === $create->size &&
+                1 === $create->meetingCapacity &&
+                2 === $create->seatCapacity &&
+                true === $create->active &&
+                true === $create->visio &&
+                10 === $create->priority;
         }))->shouldBeCalled();
 
         //Handler

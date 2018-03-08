@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Tests\Application\Command\Product\Import;
 
+use PHPUnit\Framework\TestCase;
 use Proximum\Vimeet\Application\Command\Product\Import\Import;
 use Proximum\Vimeet\Application\Command\Product\Import\ImportHandler;
 use Proximum\Vimeet\Domain\Model\Package;
@@ -19,7 +20,6 @@ use Proximum\Vimeet\Domain\Product\Duplicator;
 use Proximum\Vimeet\Domain\Repository\PackageRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\ProductRepositoryInterface;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
-use PHPUnit\Framework\TestCase;
 
 class ImportHandlerTest extends TestCase
 {

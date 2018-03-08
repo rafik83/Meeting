@@ -10,11 +10,10 @@
 
 namespace Proximum\Vimeet\Tests\Factory;
 
+use Proximum\Vimeet\Domain\Exception\Invoice\CanNotExplodeNotValidNumeroInvoiceException;
 use Proximum\Vimeet\Domain\Invoice\Numero\Exploder;
 use Proximum\Vimeet\Domain\Model\Invoice\Invoice;
-use Proximum\Vimeet\Domain\Model\Order;
 use Proximum\Vimeet\Domain\Model\Sheet;
-use Proximum\Vimeet\Domain\Exception\Invoice\CanNotExplodeNotValidNumeroInvoiceException;
 
 class InvoiceFactory
 {
@@ -22,12 +21,13 @@ class InvoiceFactory
      * @param string     $numero
      * @param Sheet|null $sheet
      *
-     * @return Invoice
      * @throws CanNotExplodeNotValidNumeroInvoiceException
+     *
+     * @return Invoice
      */
     public static function create($numero, Sheet $sheet = null)
     {
-        if ($sheet === null) {
+        if (null === $sheet) {
             $sheet = SheetFactory::create();
         }
 

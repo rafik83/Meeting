@@ -3,14 +3,14 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2016 Proximum Vimeet
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
 
-
 namespace Proximum\Vimeet\Tests\Application\Template\Sheet;
 
+use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
 use Proximum\Vimeet\Application\Nomenclature\NomenclatureCloner;
 use Proximum\Vimeet\Application\Template\Sheet\SheetTemplateCloner;
@@ -20,11 +20,9 @@ use Proximum\Vimeet\Domain\Repository\Template\SheetTemplateRepositoryInterface;
 use Proximum\Vimeet\Domain\Template\Block;
 use Proximum\Vimeet\Domain\Template\TemplateData;
 use Proximum\Vimeet\Domain\Template\TemplateDataFactory;
-use Proximum\Vimeet\Domain\Template\TemplateObject\EditableText;
 use Proximum\Vimeet\Domain\Template\TemplateObject\Nomenclature as NomenclatureObject;
 use Proximum\Vimeet\Domain\Template\TemplateRemoveField;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
-use PHPUnit\Framework\TestCase;
 
 class SheetTemplateClonerTest extends TestCase
 {
@@ -43,10 +41,10 @@ class SheetTemplateClonerTest extends TestCase
                             'component' => 'object',
                             'type'      => 'editable-text',
                             'config'    => [],
-                        ]
+                        ],
                     ],
-                ]
-            ]
+                ],
+            ],
         ], ['fr'], 'fr', $dateTime, [], $event);
 
         $sheetTemplateRepository = $this->prophesize(SheetTemplateRepositoryInterface::class);
@@ -73,10 +71,10 @@ class SheetTemplateClonerTest extends TestCase
                             'component' => 'object',
                             'type'      => 'editable-text',
                             'config'    => [],
-                        ]
+                        ],
                     ],
-                ]
-            ]
+                ],
+            ],
         ], ['fr'], 'fr', $dateTime, [], $event);
 
         $templateRemoveField->remove()->shouldNotBeCalled();
@@ -89,9 +87,6 @@ class SheetTemplateClonerTest extends TestCase
         $this->assertEquals($clone, $cloner->duplicate($sheetTemplate, $event, 'clone'));
     }
 
-    /**
-     *
-     */
     public function testDuplicateWithNomenclature()
     {
         $event         = EventFactory::createEvent();
@@ -107,12 +102,12 @@ class SheetTemplateClonerTest extends TestCase
                             'component' => 'object',
                             'type'      => 'nomenclature',
                             'config'    => [
-                                'nomenclature' => 1
+                                'nomenclature' => 1,
                             ],
-                        ]
+                        ],
                     ],
-                ]
-            ]
+                ],
+            ],
         ], ['fr'], 'fr', $dateTime);
 
         $nomenclature = new Nomenclature('nomenclature', 1, [], true);
@@ -142,12 +137,12 @@ class SheetTemplateClonerTest extends TestCase
                             'component' => 'object',
                             'type'      => 'nomenclature',
                             'config'    => [
-                                'nomenclature' => null
+                                'nomenclature' => null,
                             ],
-                        ]
+                        ],
                     ],
-                ]
-            ]
+                ],
+            ],
         ], ['fr'], 'fr', $dateTime);
         $clone->setEvent($event);
 
@@ -175,12 +170,12 @@ class SheetTemplateClonerTest extends TestCase
                             'component' => 'object',
                             'type'      => 'nomenclature',
                             'config'    => [
-                                'nomenclature' => null
+                                'nomenclature' => null,
                             ],
-                        ]
+                        ],
                     ],
-                ]
-            ]
+                ],
+            ],
         ]);
 
         $nomenclatureCloner->duplicate()->shouldNotBeCalled();

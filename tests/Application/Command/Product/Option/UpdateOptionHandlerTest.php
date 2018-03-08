@@ -10,14 +10,14 @@
 
 namespace Proximum\Vimeet\Tests\Application\Command\Product\Option;
 
+use PHPUnit\Framework\TestCase;
 use Proximum\Vimeet\Application\Adapter\FileStorageInterface;
 use Proximum\Vimeet\Application\Command\Product\Option\UpdateOption;
 use Proximum\Vimeet\Application\Command\Product\Option\UpdateOptionHandler;
-use Proximum\Vimeet\Domain\Product\UpdatePriceResolver;
 use Proximum\Vimeet\Domain\Model\Product;
+use Proximum\Vimeet\Domain\Product\UpdatePriceResolver;
 use Proximum\Vimeet\Domain\Repository\ProductRepositoryInterface;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
-use PHPUnit\Framework\TestCase;
 
 class UpdateOptionHandlerTest extends TestCase
 {
@@ -80,7 +80,7 @@ class UpdateOptionHandlerTest extends TestCase
 
         $updatePriceResolver = $this->prophesize(UpdatePriceResolver::class);
         $updatePriceResolver->resolve($option)->shouldBeCalled()->willReturn(true);
-        
+
         // Handler
         $handler = new UpdateOptionHandler(
             $productRepository->reveal(),

@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Tests\Domain\Unavailability;
 
+use PHPUnit\Framework\TestCase;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\MeetingSlot;
 use Proximum\Vimeet\Domain\Model\Participant;
@@ -18,7 +19,6 @@ use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Repository\MeetingSlotRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\ParticipantRepositoryInterface;
 use Proximum\Vimeet\Domain\Unavailability\ParticipantUnavailableAggregator;
-use PHPUnit\Framework\TestCase;
 
 class ParticipantUnavailableAggregatorTest extends TestCase
 {

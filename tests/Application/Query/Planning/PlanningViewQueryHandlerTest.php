@@ -30,10 +30,10 @@ use Proximum\Vimeet\Domain\Repository\Event\DayRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\HappeningParticipationRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\MeetingRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
-use Proximum\Vimeet\Domain\Repository\UserRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\Unavailability\MassAssignmentRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\Unavailability\MassRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\UnavailabilityRepositoryInterface;
+use Proximum\Vimeet\Domain\Repository\UserRepositoryInterface;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
 
 class PlanningViewQueryHandlerTest extends TestCase
@@ -65,7 +65,6 @@ class PlanningViewQueryHandlerTest extends TestCase
         $happening       = $this->prophesize(HappeningParticipation::class);
         $unavailability1 = $this->prophesize(Unavailability::class);
         $unavailability2 = $this->prophesize(Unavailability::class);
-
 
         // Mock
         $dayRepository = $this->prophesize(DayRepositoryInterface::class);

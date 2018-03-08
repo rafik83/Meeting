@@ -1,9 +1,9 @@
 <?php
 
 /*
- * This file is part of the vimeet project.
+ * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2017 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -29,8 +29,6 @@ use Proximum\Vimeet\Domain\Model\Type;
 use Proximum\Vimeet\Domain\Repository\ParticipantImportRepositoryInterface;
 use Proximum\Vimeet\Infrastructure\Adapter\DelayedEventDispatcher;
 use Proximum\Vimeet\Infrastructure\Adapter\LocalFileStorageAdapter;
-use Proximum\Vimeet\Infrastructure\Adapter\TranslatorAdapter;
-use Proximum\Vimeet\Tests\Factory\EventFactory;
 
 class ImportMappingHandlerTest extends TestCase
 {

@@ -1,9 +1,9 @@
 <?php
 
 /*
- * This file is part of the vimeet project.
+ * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2016 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -24,49 +24,48 @@ class UpdatePreviewHandlerTest extends TestCase
     {
         $dateTime      = new \DateTime();
         $templateValue = [
-            "69b3cde1" =>
-                [
-                    "component" => "object",
-                    "type"      => "image",
-                    "config"    => [
-                        "label"       => ["fr" => "Image"],
-                        "placeholder" => ["fr" => ""],
-                        "help"        => ["fr" => ""],
-                        "required"    => false,
-                        "style"       => "",
-                        "products"    => null,
+            '69b3cde1' => [
+                    'component' => 'object',
+                    'type'      => 'image',
+                    'config'    => [
+                        'label'       => ['fr' => 'Image'],
+                        'placeholder' => ['fr' => ''],
+                        'help'        => ['fr' => ''],
+                        'required'    => false,
+                        'style'       => '',
+                        'products'    => null,
                     ],
                 ],
-            "69b3cde2" => [
-                "component" => "object",
-                "type"      => "editable-text",
-                "config"    => [
-                    "label"        => ["fr" => "Texte modifiable"],
-                    "placeholder"  => ["fr" => ""],
-                    "hideLabel"    => false,
-                    "help"         => ["fr" => ""],
-                    "maxLength"    => "",
-                    "required"     => false,
-                    "type"         => "title",
-                    "style"        => "",
-                    "translatable" => false,
-                    "tag"          => "",
+            '69b3cde2' => [
+                'component' => 'object',
+                'type'      => 'editable-text',
+                'config'    => [
+                    'label'        => ['fr' => 'Texte modifiable'],
+                    'placeholder'  => ['fr' => ''],
+                    'hideLabel'    => false,
+                    'help'         => ['fr' => ''],
+                    'maxLength'    => '',
+                    'required'     => false,
+                    'type'         => 'title',
+                    'style'        => '',
+                    'translatable' => false,
+                    'tag'          => '',
                 ],
             ],
-            "69b3cde3" => [
-                "component" => "object",
-                "type"      => "editable-text",
-                "config"    => [
-                    "label"        => ["fr" => "Texte modifiable"],
-                    "placeholder"  => ["fr" => ""],
-                    "hideLabel"    => false,
-                    "help"         => ["fr" => ""],
-                    "maxLength"    => "",
-                    "required"     => false,
-                    "type"         => "title",
-                    "style"        => "",
-                    "translatable" => false,
-                    "tag"          => "",
+            '69b3cde3' => [
+                'component' => 'object',
+                'type'      => 'editable-text',
+                'config'    => [
+                    'label'        => ['fr' => 'Texte modifiable'],
+                    'placeholder'  => ['fr' => ''],
+                    'hideLabel'    => false,
+                    'help'         => ['fr' => ''],
+                    'maxLength'    => '',
+                    'required'     => false,
+                    'type'         => 'title',
+                    'style'        => '',
+                    'translatable' => false,
+                    'tag'          => '',
                 ],
             ],
         ];

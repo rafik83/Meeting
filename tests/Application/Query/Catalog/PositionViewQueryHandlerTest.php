@@ -1,22 +1,22 @@
 <?php
 
 /*
- * This file is part of the vimeet project.
+ * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2016 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
 
 namespace Proximum\Vimeet\Tests\Application\Query\Catalog;
 
+use PHPUnit\Framework\TestCase;
 use Proximum\Vimeet\Application\Components\Sheet\Template\Tag;
 use Proximum\Vimeet\Application\Query\Catalog\PositionViewQuery;
 use Proximum\Vimeet\Application\Query\Catalog\PositionViewQueryHandler;
 use Proximum\Vimeet\Application\View\Catalog\PositionView;
 use Proximum\Vimeet\Domain\Catalog\TaggedNomenclatureFilterGetter;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
-use PHPUnit\Framework\TestCase;
 
 class PositionViewQueryHandlerTest extends TestCase
 {
@@ -40,9 +40,9 @@ class PositionViewQueryHandlerTest extends TestCase
             Tag::PARTICIPANT_POSITION,
             'fr'
         )->shouldBeCalled()->willReturn([
-            "position1" => "Assistant commercial",
-            "position2" => "Assistant export",
-            "position3" => "Chef de publicité",
+            'position1' => 'Assistant commercial',
+            'position2' => 'Assistant export',
+            'position3' => 'Chef de publicité',
         ]);
 
         $handler        = new PositionViewQueryHandler($taggedNomenclatureFilterGetter->reveal());

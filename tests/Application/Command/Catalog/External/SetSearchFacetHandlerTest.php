@@ -134,13 +134,12 @@ class SetSearchFacetHandlerTest extends TestCase
         $expectedFacetTwo->translate('fr', 'Type', '');
         $expectedFacetThree->translate('en', 'Keywords', 'Keywords placeholder en');
         $expectedFacetThree->translate('fr', 'Keywords', 'Keywords placeholder fr');
-        $expectedFacetOther1->translate('en', 'Category' ,'');
-        $expectedFacetOther1->translate('fr', 'Category' ,'');
-        $expectedFacetOther2->translate('en', 'Localization' ,'Localization placeholder en');
-        $expectedFacetOther2->translate('fr', 'Localization' ,'Localization placeholder fr');
-        $expectedFacetOther3->translate('en', 'Position' ,'Position placeholder en');
-        $expectedFacetOther3->translate('fr', 'Position' ,'Position placeholder fr');
-
+        $expectedFacetOther1->translate('en', 'Category', '');
+        $expectedFacetOther1->translate('fr', 'Category', '');
+        $expectedFacetOther2->translate('en', 'Localization', 'Localization placeholder en');
+        $expectedFacetOther2->translate('fr', 'Localization', 'Localization placeholder fr');
+        $expectedFacetOther3->translate('en', 'Position', 'Position placeholder en');
+        $expectedFacetOther3->translate('fr', 'Position', 'Position placeholder fr');
 
         $searchFacetRepository = $this->prophesize(SearchFacetRepositoryInterface::class);
         $searchFacetRepository->set(Argument::that(function (SearchFacet $searchFacet) use ($expectedFacetOne) {

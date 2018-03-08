@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Tests\Application\Query\MultipleSheets\Request;
 
+use PHPUnit\Framework\TestCase;
 use Proximum\Vimeet\Application\Query\MultipleSheets\Request\ParticipantViewQuery;
 use Proximum\Vimeet\Application\Query\MultipleSheets\Request\ParticipantViewQueryHandler;
 use Proximum\Vimeet\Application\Query\MultipleSheets\Request\RequestViewQuery;
@@ -19,7 +20,6 @@ use Proximum\Vimeet\Application\View\MultipleSheets\Request\RequestView;
 use Proximum\Vimeet\Domain\Model\Meeting\Request;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Sheet;
-use PHPUnit\Framework\TestCase;
 
 class RequestViewQueryHandlerTest extends TestCase
 {
@@ -75,7 +75,7 @@ class RequestViewQueryHandlerTest extends TestCase
         $request->getSheetMet($sheet->reveal())->willReturn($sheetMet);
         $request->getParticipantsOfSheetInRequest($sheetMet->reveal())->willReturn([
             $participant1->reveal(),
-            $participant2->reveal()
+            $participant2->reveal(),
         ]);
         $request->hasMeeting()->willReturn(true);
         $participantViewQueryHandler = $this->prophesize(ParticipantViewQueryHandler::class);

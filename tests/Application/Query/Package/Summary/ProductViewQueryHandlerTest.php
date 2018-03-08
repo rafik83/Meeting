@@ -1,25 +1,24 @@
 <?php
 
 /*
- * This file is part of the vimeet project.
+ * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2017 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
 
 namespace Proximum\Vimeet\Tests\Application\Query\Package\Summary;
 
+use PHPUnit\Framework\TestCase;
 use Proximum\Vimeet\Application\Query\Package\Summary\ProductViewQuery;
 use Proximum\Vimeet\Application\Query\Package\Summary\ProductViewQueryHandler;
 use Proximum\Vimeet\Application\View\Package\Summary\ProductView;
 use Proximum\Vimeet\Domain\Cart\Cart;
 use Proximum\Vimeet\Domain\Model\CartRow;
-use Proximum\Vimeet\Domain\Model\ProductTranslation;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
 use Proximum\Vimeet\Tests\Factory\ProductFactory;
 use Proximum\Vimeet\Tests\Factory\SheetFactory;
-use PHPUnit\Framework\TestCase;
 
 class ProductViewQueryHandlerTest extends TestCase
 {

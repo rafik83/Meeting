@@ -68,7 +68,7 @@ class DiffVerbalizerTest extends TestCase
         );
         $result = $diffVerbalizer->verbalizeDiff($lastVersion->reveal(), $currentVersion, $locale);
 
-        $this->assertEquals("", $result);
+        $this->assertEquals('', $result);
     }
 
     public function testVerbalizeDiffDeletion()
@@ -201,9 +201,9 @@ class DiffVerbalizerTest extends TestCase
                 DiffVerbalizer::TRANSLATION_MEETING_ADDED,
                 [
                     '%sheetTitle%' => 'sheet title given 1',
-                    "%day%" => "10/10/2017",
-                    "%hour%" => "12:00",
-                    '%spotRef%' => 'Spot Ref'
+                    '%day%' => '10/10/2017',
+                    '%hour%' => '12:00',
+                    '%spotRef%' => 'Spot Ref',
                 ],
                 DiffVerbalizer::TRANSLATION_DOMAIN,
                 $locale
@@ -215,9 +215,9 @@ class DiffVerbalizerTest extends TestCase
         $this->spotRepository->getSpotsByIds([14 => 14])->shouldBeCalled()->willReturn([14 => $spot->reveal()]);
         $this->diffChecker
             ->checkTwoVersion(
-                [ 1 => ["request" => 1, "fromSheet" => 2, "toSheet" => 3, "slot" => 9, "spot" => 8], 2 => ["request" => 2, "fromSheet" => 2, "toSheet" => 4, "slot" => 12, "spot" => 14]],
+                [1 => ['request' => 1, 'fromSheet' => 2, 'toSheet' => 3, 'slot' => 9, 'spot' => 8], 2 => ['request' => 2, 'fromSheet' => 2, 'toSheet' => 4, 'slot' => 12, 'spot' => 14]],
                 1,
-                ["request" => 1, "fromSheet" => 2, "toSheet" => 3, "slot" => 9, "spot" => 8]
+                ['request' => 1, 'fromSheet' => 2, 'toSheet' => 3, 'slot' => 9, 'spot' => 8]
             )->shouldBeCalled()
             ->willReturn(false)
         ;
@@ -232,7 +232,7 @@ class DiffVerbalizerTest extends TestCase
         $result = $diffVerbalizer->verbalizeDiff($lastVersion->reveal(), $currentVersion, $locale);
 
         $this->assertEquals(
-            "Meeting added with sheet title given 1 the 10/10/2017 at 12:00 in Spot Ref",
+            'Meeting added with sheet title given 1 the 10/10/2017 at 12:00 in Spot Ref',
             $result
         );
     }
@@ -305,9 +305,9 @@ class DiffVerbalizerTest extends TestCase
                 DiffVerbalizer::TRANSLATION_MEETING_MOVED,
                 [
                     '%sheetTitle%' => 'sheet title given 1',
-                    "%day%" => "10/10/2017",
-                    "%hour%" => "12:00",
-                    '%spotRef%' => 'Spot Ref 1'
+                    '%day%' => '10/10/2017',
+                    '%hour%' => '12:00',
+                    '%spotRef%' => 'Spot Ref 1',
                 ],
                 DiffVerbalizer::TRANSLATION_DOMAIN,
                 $locale
@@ -319,9 +319,9 @@ class DiffVerbalizerTest extends TestCase
                 DiffVerbalizer::TRANSLATION_MEETING_MOVED,
                 [
                     '%sheetTitle%' => 'sheet title given 2',
-                    "%day%" => "10/10/2017",
-                    "%hour%" => "16:30",
-                    '%spotRef%' => 'Spot Ref 2'
+                    '%day%' => '10/10/2017',
+                    '%hour%' => '16:30',
+                    '%spotRef%' => 'Spot Ref 2',
                 ],
                 DiffVerbalizer::TRANSLATION_DOMAIN,
                 $locale
@@ -342,18 +342,18 @@ class DiffVerbalizerTest extends TestCase
 
         $this->diffChecker
             ->checkTwoVersion(
-                [1 => ["request" => 1, "fromSheet" => 2, "toSheet" => 3, "slot" => 9, "spot" => 8], 2 => ["request" => 2, "fromSheet" => 2, "toSheet" => 4, "slot" => 12, "spot" => 14]],
+                [1 => ['request' => 1, 'fromSheet' => 2, 'toSheet' => 3, 'slot' => 9, 'spot' => 8], 2 => ['request' => 2, 'fromSheet' => 2, 'toSheet' => 4, 'slot' => 12, 'spot' => 14]],
                 1,
-                ["request" => 1, "fromSheet" => 2, "toSheet" => 3, "slot" => 10, "spot" => 8]
+                ['request' => 1, 'fromSheet' => 2, 'toSheet' => 3, 'slot' => 10, 'spot' => 8]
             )->shouldBeCalled()
             ->willReturn(true)
         ;
 
         $this->diffChecker
             ->checkTwoVersion(
-                [ 1 => ["request" => 1, "fromSheet" => 2, "toSheet" => 3, "slot" => 9, "spot" => 8], 2 => ["request" => 2, "fromSheet" => 2, "toSheet" => 4, "slot" => 12, "spot" => 14]],
+                [1 => ['request' => 1, 'fromSheet' => 2, 'toSheet' => 3, 'slot' => 9, 'spot' => 8], 2 => ['request' => 2, 'fromSheet' => 2, 'toSheet' => 4, 'slot' => 12, 'spot' => 14]],
                 2,
-                ["request" => 2, "fromSheet" => 2, "toSheet" => 4, "slot" => 12, "spot" => 16]
+                ['request' => 2, 'fromSheet' => 2, 'toSheet' => 4, 'slot' => 12, 'spot' => 16]
             )->shouldBeCalled()
             ->willReturn(true)
         ;
@@ -443,9 +443,9 @@ class DiffVerbalizerTest extends TestCase
                 DiffVerbalizer::TRANSLATION_MEETING_MOVED,
                 [
                     '%sheetTitle%' => 'sheet title given 1',
-                    "%day%" => "10/10/2017",
-                    "%hour%" => "12:00",
-                    '%spotRef%' => 'Spot Ref 1'
+                    '%day%' => '10/10/2017',
+                    '%hour%' => '12:00',
+                    '%spotRef%' => 'Spot Ref 1',
                 ],
                 DiffVerbalizer::TRANSLATION_DOMAIN,
                 $locale
@@ -457,9 +457,9 @@ class DiffVerbalizerTest extends TestCase
                 DiffVerbalizer::TRANSLATION_MEETING_ADDED,
                 [
                     '%sheetTitle%' => 'sheet title given 2',
-                    "%day%" => "10/10/2017",
-                    "%hour%" => "16:30",
-                    '%spotRef%' => 'Spot Ref 2'
+                    '%day%' => '10/10/2017',
+                    '%hour%' => '16:30',
+                    '%spotRef%' => 'Spot Ref 2',
                 ],
                 DiffVerbalizer::TRANSLATION_DOMAIN,
                 $locale
@@ -489,9 +489,9 @@ class DiffVerbalizerTest extends TestCase
 
         $this->diffChecker
             ->checkTwoVersion(
-                [1 => ["request" => 1, "fromSheet" => 2, "toSheet" => 3, "slot" => 9, "spot" => 8], 4 => ["request" => 4, "fromSheet" => 2, "toSheet" => 4, "slot" => 12, "spot" => 14]],
+                [1 => ['request' => 1, 'fromSheet' => 2, 'toSheet' => 3, 'slot' => 9, 'spot' => 8], 4 => ['request' => 4, 'fromSheet' => 2, 'toSheet' => 4, 'slot' => 12, 'spot' => 14]],
                 1,
-                ["request" => 1, "fromSheet" => 2, "toSheet" => 3, "slot" => 10, "spot" => 8]
+                ['request' => 1, 'fromSheet' => 2, 'toSheet' => 3, 'slot' => 10, 'spot' => 8]
             )->shouldBeCalled()
             ->willReturn(true)
         ;

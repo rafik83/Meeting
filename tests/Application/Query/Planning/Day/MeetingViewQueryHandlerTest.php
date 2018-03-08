@@ -14,9 +14,9 @@ use PHPUnit\Framework\TestCase;
 use Proximum\Vimeet\Application\Query\Planning\Day\MeetingViewQuery;
 use Proximum\Vimeet\Application\Query\Planning\Day\MeetingViewQueryHandler;
 use Proximum\Vimeet\Application\View\Planning\Day\MeetingView;
+use Proximum\Vimeet\Domain\Model\Meeting;
 use Proximum\Vimeet\Domain\Model\MeetingSlot;
 use Proximum\Vimeet\Domain\Model\Sheet;
-use Proximum\Vimeet\Domain\Model\Meeting;
 use Proximum\Vimeet\Domain\Model\Spot;
 use Proximum\Vimeet\Domain\Model\User;
 

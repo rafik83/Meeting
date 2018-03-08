@@ -3,13 +3,14 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2017 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
 
 namespace Proximum\Vimeet\Tests\Application\Query\Planner;
 
+use PHPUnit\Framework\TestCase;
 use Proximum\Vimeet\Application\Query\Planner\SpotViewQuery;
 use Proximum\Vimeet\Application\Query\Planner\SpotViewQueryHandler;
 use Proximum\Vimeet\Application\View\Planner\Day;
@@ -25,7 +26,6 @@ use Proximum\Vimeet\Domain\Repository\SpotRepositoryInterface;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
 use Proximum\Vimeet\Tests\Factory\SheetFactory;
 use Proximum\Vimeet\Tests\Factory\SlotFactory;
-use PHPUnit\Framework\TestCase;
 
 class SpotViewQueryHandlerTest extends TestCase
 {

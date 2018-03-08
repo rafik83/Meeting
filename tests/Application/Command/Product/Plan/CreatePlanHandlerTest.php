@@ -10,15 +10,15 @@
 
 namespace Proximum\Vimeet\Tests\Application\Command\Product\Plan;
 
+use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
 use Proximum\Vimeet\Application\Adapter\FileStorageInterface;
 use Proximum\Vimeet\Application\Command\Product\Plan\CreatePlan;
 use Proximum\Vimeet\Application\Command\Product\Plan\CreatePlanHandler;
-use Proximum\Vimeet\Domain\Product\UpdatePriceResolver;
 use Proximum\Vimeet\Domain\Model\Product;
+use Proximum\Vimeet\Domain\Product\UpdatePriceResolver;
 use Proximum\Vimeet\Domain\Repository\ProductRepositoryInterface;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
-use PHPUnit\Framework\TestCase;
 
 class CreatePlanHandlerTest extends TestCase
 {
@@ -62,7 +62,7 @@ class CreatePlanHandlerTest extends TestCase
             [
                 'product'  => $product,
                 'quantity' => 2,
-            ]
+            ],
         ];
 
         // Expected
@@ -138,15 +138,15 @@ class CreatePlanHandlerTest extends TestCase
             [
                 'product'  => $product,
                 'quantity' => 2,
-            ]
+            ],
         ];
         $create->features = [
             [
                 'translations' => [
                     'fr' => ['title' => 'Titre', 'description' => 'Description'],
                     'en' => ['title' => 'Titre', 'description' => 'Description'],
-                ]
-            ]
+                ],
+            ],
         ];
 
         // Expected

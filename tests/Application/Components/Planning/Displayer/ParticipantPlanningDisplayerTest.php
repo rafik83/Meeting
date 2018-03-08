@@ -25,7 +25,7 @@ class ParticipantPlanningDisplayerTest extends TestCase
         $user = $this->prophesize(User::class);
         $locale = 'fr';
         $planningMarkdown = "Planning:\n**Jeudi Y Janvier**\n\n- 10:00 13:00 - TABLE A01 - Truc Muche\n";
-        $planningHtml = "<div>Planning:<br><b>Jeudi Y Janvier</b><br><br>- 10:00 13:00 - TABLE A01 - Truc Muche</div>";
+        $planningHtml = '<div>Planning:<br><b>Jeudi Y Janvier</b><br><br>- 10:00 13:00 - TABLE A01 - Truc Muche</div>';
 
         // Mock
         $participantPlanningFormatter = $this->prophesize(ParticipantPlanningFormatter::class);

@@ -18,7 +18,6 @@ use Proximum\Vimeet\Application\Command\Spot\Import\SpotImport;
 use Proximum\Vimeet\Application\Command\Spot\Import\SpotImportHandler;
 use Proximum\Vimeet\Domain\Model\File;
 use Proximum\Vimeet\Domain\Repository\FileRepositoryInterface;
-use Proximum\Vimeet\Infrastructure\Adapter\LocalFileStorageAdapter;
 
 class SpotImportHandlerTest extends TestCase
 {
@@ -52,13 +51,13 @@ class SpotImportHandlerTest extends TestCase
             ->shouldBeCalled()
             ->willReturn('/path/to/file')
         ;
-        
+
         $this
             ->fileRepository
             ->add($file)
             ->shouldBeCalled()
         ;
-        
+
         $command = new SpotImport();
         $command->file = $this->importDir;
         $handler = new SpotImportHandler(
@@ -67,7 +66,7 @@ class SpotImportHandlerTest extends TestCase
             $this->importDir,
             $this->dateTime
         );
-        
+
         $handler->handle($command);
     }
 }

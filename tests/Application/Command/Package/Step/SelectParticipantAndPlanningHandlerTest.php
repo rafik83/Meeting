@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Tests\Application\Command\Package\Step;
 
+use PHPUnit\Framework\TestCase;
 use Proximum\Vimeet\Application\Command\Package\Step\SelectParticipantAndPlanning;
 use Proximum\Vimeet\Application\Command\Package\Step\SelectParticipantAndPlanningHandler;
 use Proximum\Vimeet\Application\Event\Events;
@@ -27,7 +28,6 @@ use Proximum\Vimeet\Domain\Model\PromotionCodeRow;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Order\Merger;
 use Proximum\Vimeet\Infrastructure\Adapter\DelayedEventDispatcher;
-use PHPUnit\Framework\TestCase;
 
 class SelectParticipantAndPlanningHandlerTest extends TestCase
 {

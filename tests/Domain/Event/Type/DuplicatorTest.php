@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2017 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -11,8 +11,6 @@
 namespace Proximum\Vimeet\Tests\Domain\Event\Type;
 
 use PHPUnit\Framework\TestCase;
-use Proximum\Vimeet\Application\Template\Registration\RegistrationTemplateCloner;
-use Proximum\Vimeet\Application\Template\Sheet\SheetTemplateCloner;
 use Proximum\Vimeet\Domain\Event\DuplicatorDataStorage;
 use Proximum\Vimeet\Domain\Event\Type\Duplicator;
 use Proximum\Vimeet\Domain\Model\Event;
@@ -59,7 +57,7 @@ class DuplicatorTest extends TestCase
         $this->event           = EventFactory::createEvent(
             'event',
             EventFactory::FALLBACK_LOCALE_DEFAULT,
-            ['fr', 'en',],
+            ['fr', 'en'],
             Event::VAT_MODE_ET,
             $this->eventDuplicated
         );

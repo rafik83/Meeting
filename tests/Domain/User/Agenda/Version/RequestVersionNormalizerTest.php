@@ -11,12 +11,12 @@
 namespace Proximum\Vimeet\Tests\Domain\User\Agenda\Version;
 
 use PHPUnit\Framework\TestCase;
-use Proximum\Vimeet\Domain\User\Agenda\Version\RequestVersionNormalizer;
 use Proximum\Vimeet\Domain\Model\Meeting;
 use Proximum\Vimeet\Domain\Model\Meeting\Request;
 use Proximum\Vimeet\Domain\Model\MeetingSlot;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\Spot;
+use Proximum\Vimeet\Domain\User\Agenda\Version\RequestVersionNormalizer;
 
 class RequestVersionNormalizerTest extends TestCase
 {

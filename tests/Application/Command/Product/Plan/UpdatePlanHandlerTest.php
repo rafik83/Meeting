@@ -10,15 +10,14 @@
 
 namespace Proximum\Vimeet\Tests\Application\Command\Product\Plan;
 
-use Prophecy\Argument;
+use PHPUnit\Framework\TestCase;
 use Proximum\Vimeet\Application\Adapter\FileStorageInterface;
 use Proximum\Vimeet\Application\Command\Product\Plan\UpdatePlan;
 use Proximum\Vimeet\Application\Command\Product\Plan\UpdatePlanHandler;
-use Proximum\Vimeet\Domain\Product\UpdatePriceResolver;
 use Proximum\Vimeet\Domain\Model\Product;
+use Proximum\Vimeet\Domain\Product\UpdatePriceResolver;
 use Proximum\Vimeet\Domain\Repository\ProductRepositoryInterface;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
-use PHPUnit\Framework\TestCase;
 
 class UpdatePlanHandlerTest extends TestCase
 {
@@ -83,7 +82,7 @@ class UpdatePlanHandlerTest extends TestCase
             [
                 'product' => $product,
                 'quantity' => 2,
-            ]
+            ],
         ];
 
         // Mock

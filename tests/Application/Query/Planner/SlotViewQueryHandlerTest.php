@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2017 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -11,6 +11,7 @@
 namespace Proximum\Vimeet\Tests\Application\Query\Planner;
 
 use PHPUnit\Framework\TestCase;
+use Prophecy\Prophecy\ObjectProphecy;
 use Proximum\Vimeet\Application\Exception\Planner\SlotNotConfiguredException;
 use Proximum\Vimeet\Application\Query\Planner\SlotViewQuery;
 use Proximum\Vimeet\Application\Query\Planner\SlotViewQueryHandler;
@@ -18,7 +19,6 @@ use Proximum\Vimeet\Application\View\Planner\Day;
 use Proximum\Vimeet\Application\View\Planner\SlotView;
 use Proximum\Vimeet\Domain\Model\MeetingSlot;
 use Proximum\Vimeet\Domain\Repository\MeetingSlotRepositoryInterface;
-use Prophecy\Prophecy\ObjectProphecy;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
 
 class SlotViewQueryHandlerTest extends TestCase

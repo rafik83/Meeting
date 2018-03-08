@@ -1,9 +1,9 @@
 <?php
 
 /*
- * This file is part of the vimeet project.
+ * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2017 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -31,9 +31,9 @@ class GroupFactory
         DateTime $dateTime = null,
         $title = null
     ) {
-        $user     = ($user !== null) ? $user : UserFactory::create();
-        $dateTime = ($dateTime !== null) ? $dateTime : new DateTime();
-        $title    = ($title !== null) ? $title : 'GroupTitle';
+        $user     = (null !== $user) ? $user : UserFactory::create();
+        $dateTime = (null !== $dateTime) ? $dateTime : new DateTime();
+        $title    = (null !== $title) ? $title : 'GroupTitle';
 
         return new Group($event, $user, $title, $dateTime);
     }

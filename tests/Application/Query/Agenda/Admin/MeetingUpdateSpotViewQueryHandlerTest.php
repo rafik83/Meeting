@@ -1,9 +1,9 @@
 <?php
 
 /*
- * This file is part of the vimeet project.
+ * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2017 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -83,7 +83,7 @@ class MeetingUpdateSpotViewQueryHandlerTest extends TestCase
 
         $expectedMeetingUpdateSpotView = new MeetingUpdateSpotView(3, 100, true, false, [
             new SpotView(100, 'Box001'),
-            new SpotView(101, 'Box002 - Whatever company name')
+            new SpotView(101, 'Box002 - Whatever company name'),
         ]);
 
         $this->assertEquals($meetingUpdateSpotView, $expectedMeetingUpdateSpotView);
