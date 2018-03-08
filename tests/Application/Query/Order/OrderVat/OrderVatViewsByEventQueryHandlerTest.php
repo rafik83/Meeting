@@ -45,7 +45,7 @@ class OrderVatViewsByEventQueryHandlerTest extends TestCase
         $orderRepositoryInterface->findByEventAndEnabledSheets($event)->shouldBeCalled()->willReturn(
             [
                 $order1,
-                $order2
+                $order2,
             ]
         );
 

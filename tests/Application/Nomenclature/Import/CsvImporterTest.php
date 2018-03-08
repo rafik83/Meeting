@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2015 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -12,10 +12,10 @@ namespace Proximum\Vimeet\Tests\Application\Nomenclature;
 
 use PHPUnit\Framework\TestCase;
 use Proximum\Vimeet\Application\Adapter\IntlInterface;
+use Proximum\Vimeet\Application\Nomenclature\Import\CsvImporter;
 use Proximum\Vimeet\Application\Nomenclature\Import\Exception\InvalidLocaleException;
 use Proximum\Vimeet\Application\Nomenclature\Import\Exception\LocalesMustCorrespondToThoseOfTheEventException;
 use Proximum\Vimeet\Application\Serializer\Charset;
-use Proximum\Vimeet\Application\Nomenclature\Import\CsvImporter;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Nomenclature;
 use Proximum\Vimeet\Tests\Application\Nomenclature\Id\StaticIdGenerator;
@@ -126,7 +126,7 @@ class CsvImporterTest extends TestCase
             ],
         ]);
 
-        $importer->import($nomenclature, __DIR__.'/offres_besoins.csv', Charset::UTF_8);
+        $importer->import($nomenclature, __DIR__ . '/offres_besoins.csv', Charset::UTF_8);
 
         $this->assertEquals($expected, $nomenclature);
     }
@@ -305,25 +305,25 @@ class CsvImporterTest extends TestCase
                                 'label' => [
                                     'fr' => 'Accompagnement technique industriel (CTI)',
                                     'en' => 'Industrial technical support',
-                                ]
+                                ],
                             ],
                             'aaaaaz' => [
                                 'label' => [
                                     'fr' => 'Bureau d\'études',
                                     'en' => 'Design office',
-                                ]
+                                ],
                             ],
                             'aaaaba' => [
                                 'label' => [
                                     'fr' => 'Co-développement',
                                     'en' => 'Co-development',
-                                ]
+                                ],
                             ],
                             'aaaabb' => [
                                 'label' => [
                                     'fr' => 'Crédit impôt recherche',
                                     'en' => 'Research tax credit',
-                                ]
+                                ],
                             ],
                         ],
                     ],
@@ -331,7 +331,7 @@ class CsvImporterTest extends TestCase
             ],
         ]);
 
-        $importer->import($nomenclature, __DIR__.'/competences.csv', Charset::UTF_8);
+        $importer->import($nomenclature, __DIR__ . '/competences.csv', Charset::UTF_8);
 
         $this->assertEquals($expected, $nomenclature);
     }
@@ -510,25 +510,25 @@ class CsvImporterTest extends TestCase
                                 'label' => [
                                     'fr' => 'Accompagnement technique industriel (CTI)',
                                     'en' => 'Industrial technical support',
-                                ]
+                                ],
                             ],
                             'aaaaaz' => [
                                 'label' => [
                                     'fr' => 'Bureau d’études',
                                     'en' => 'Design office',
-                                ]
+                                ],
                             ],
                             'aaaaba' => [
                                 'label' => [
                                     'fr' => 'Co-développement',
                                     'en' => 'Co-development',
-                                ]
+                                ],
                             ],
                             'aaaabb' => [
                                 'label' => [
                                     'fr' => 'Crédit impôt recherche',
                                     'en' => 'Research tax credit',
-                                ]
+                                ],
                             ],
                         ],
                     ],
@@ -536,7 +536,7 @@ class CsvImporterTest extends TestCase
             ],
         ]);
 
-        $importer->import($nomenclature, __DIR__.'/competences_windows1252.csv', Charset::WINDOWS_1252);
+        $importer->import($nomenclature, __DIR__ . '/competences_windows1252.csv', Charset::WINDOWS_1252);
 
         $this->assertEquals($expected, $nomenclature);
     }
@@ -714,25 +714,25 @@ class CsvImporterTest extends TestCase
                                 'label' => [
                                     'fr' => 'Accompagnement technique industriel (CTI)',
                                     'en' => 'Industrial technical support',
-                                ]
+                                ],
                             ],
                             '5770ec482e8ff' => [
                                 'label' => [
                                     'fr' => 'Bureau d\'études',
                                     'en' => 'Design office',
-                                ]
+                                ],
                             ],
                             '5770ec4872d29' => [
                                 'label' => [
                                     'fr' => 'Co-développement',
                                     'en' => 'Co-development',
-                                ]
+                                ],
                             ],
                             '5770ec48bdee6' => [
                                 'label' => [
                                     'fr' => 'Crédit impôt recherche',
                                     'en' => 'Research tax credit',
-                                ]
+                                ],
                             ],
                         ],
                     ],
@@ -901,31 +901,31 @@ class CsvImporterTest extends TestCase
                                 'label' => [
                                     'fr' => 'Accompagnement technique industriel (CTI)',
                                     'en' => 'Industrial technical support',
-                                ]
+                                ],
                             ],
                             '5770ec482e8ff' => [
                                 'label' => [
                                     'fr' => 'Bureau d\'études',
                                     'en' => 'Design office',
-                                ]
+                                ],
                             ],
                             '5770ec4872d29' => [
                                 'label' => [
                                     'fr' => 'Co-développement',
                                     'en' => 'Co-development',
-                                ]
+                                ],
                             ],
                             '5770ec48bdee6' => [
                                 'label' => [
                                     'fr' => 'Crédit impôt recherche',
                                     'en' => 'Research tax credit',
-                                ]
+                                ],
                             ],
                             'aaaaaa' => [
                                 'label' => [
                                     'fr' => 'foobar',
                                     'en' => 'barfoo',
-                                ]
+                                ],
                             ],
                         ],
                     ],
@@ -933,7 +933,7 @@ class CsvImporterTest extends TestCase
             ],
         ]);
 
-        $importer->import($nomenclature, __DIR__.'/competences_update.csv', Charset::UTF_8);
+        $importer->import($nomenclature, __DIR__ . '/competences_update.csv', Charset::UTF_8);
 
         $this->assertEquals($expected, $nomenclature);
     }
@@ -946,7 +946,7 @@ class CsvImporterTest extends TestCase
         $importer  = new CsvImporter($this->prophesize(StaticIdGenerator::class)->reveal(), $intl->reveal());
 
         $this->expectException(InvalidLocaleException::class);
-        $importer->import(new Nomenclature('Nomenclature title'), __DIR__.'/wrong-locale.csv', Charset::UTF_8);
+        $importer->import(new Nomenclature('Nomenclature title'), __DIR__ . '/wrong-locale.csv', Charset::UTF_8);
     }
 
     public function testLocalesCorrespondingToThoseOfTheEvent()
@@ -965,7 +965,7 @@ class CsvImporterTest extends TestCase
         $intl->getLocales()->shouldBeCalled()->willReturn(['en', 'fr']);
 
         $importer = new CsvImporter($generator, $intl->reveal());
-        $importer->import(new Nomenclature('Nomenclature title', 3), __DIR__.'/competences.csv', Charset::UTF_8);
+        $importer->import(new Nomenclature('Nomenclature title', 3), __DIR__ . '/competences.csv', Charset::UTF_8);
     }
 
     public function testLocalesMustCorrespondToThoseOfTheEventException()

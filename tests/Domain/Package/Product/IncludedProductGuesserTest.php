@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Tests\Domain\Package\Product;
 
+use PHPUnit\Framework\TestCase;
 use Proximum\Vimeet\Domain\Cart\Cart;
 use Proximum\Vimeet\Domain\Cart\CartManager;
 use Proximum\Vimeet\Domain\Model\CartRow;
@@ -19,7 +20,6 @@ use Proximum\Vimeet\Domain\Package\Product\IncludedProductGuesser;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
 use Proximum\Vimeet\Tests\Factory\ParticipantFactory;
 use Proximum\Vimeet\Tests\Factory\SheetFactory;
-use PHPUnit\Framework\TestCase;
 
 class IncludedProductGuesserTest extends TestCase
 {

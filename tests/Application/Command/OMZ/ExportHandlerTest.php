@@ -12,17 +12,14 @@ namespace Application\Command\OMZ;
 
 use PHPUnit\Framework\TestCase;
 use Proximum\Vimeet\Application\Adapter\SerializerAdapterInterface;
-use Proximum\Vimeet\Application\Adapter\TranslatorInterface;
 use Proximum\Vimeet\Application\Command\OMZ\Export;
 use Proximum\Vimeet\Application\Command\OMZ\ExportHandler;
 use Proximum\Vimeet\Application\Components\Planning\Formatter\ParticipantPlanningFormatter;
-use Proximum\Vimeet\Application\Components\Sheet\Template\Tag;
 use Proximum\Vimeet\Application\Components\User\UserInfoGuesser;
 use Proximum\Vimeet\Application\Serializer\Charset;
 use Proximum\Vimeet\Application\Serializer\Normalizer\OMZ\OmzUserNormalizer;
 use Proximum\Vimeet\Application\View\OMZ\OmzUserListView;
 use Proximum\Vimeet\Application\View\OMZ\OmzUserView;
-use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\UserRepositoryInterface;
 use Proximum\Vimeet\Domain\Service\SheetsGroup\GroupNameResolver;
@@ -67,7 +64,7 @@ class ExportHandlerTest extends TestCase
             ])
         ;
 
-        $expectedPlanning = "normalizer@elao.com";
+        $expectedPlanning = 'normalizer@elao.com';
         $omzUserView = new OmzUserView(
             null,
             'group name',
@@ -79,14 +76,14 @@ class ExportHandlerTest extends TestCase
             '',
             null,
             'phone',
-            "normalizer@elao.com",
+            'normalizer@elao.com',
             null,
             'mobile',
             $expectedPlanning
         );
         $omzUserListView = new OmzUserListView([$omzUserView]);
 
-        $expectedNormalizedDatas = "normalizer@elao.com";
+        $expectedNormalizedDatas = 'normalizer@elao.com';
 
         $command = new Export($event);
         $handler = new ExportHandler(
@@ -111,7 +108,6 @@ class ExportHandlerTest extends TestCase
 
         $groupNameResolver->resolve($event, $user, [$sheet])->shouldBeCalled()->willReturn('group name');
         $typeNameResolver->resolveWithPreloadedSheets([$sheet], 'fr')->shouldBeCalled()->willReturn('type name');
-
 
         $serializer->serialize($omzUserListView, 'csv', ['csv_delimiter' => ';', 'charset' => 'Windows-1252'])
             ->shouldBeCalled()
@@ -147,7 +143,7 @@ class ExportHandlerTest extends TestCase
             'position',
             null,
             'phone',
-            "normalizer@elao.com",
+            'normalizer@elao.com',
             null,
             'mobile',
             "**Dimanche 1 janvier 2017**\n\n- 11:10 - 11:30 : mass title\n- 13:00 - 14:00 : unavailability title\n- 14:15 - 14:45 : assignment mass title\n- 17:00 - 18:00 : happening title\n- 18:30 - 18:45 : spot reference - user sheet title - sheet met title\n\n\n\n\n\n\nunallocated: sheet met 1"

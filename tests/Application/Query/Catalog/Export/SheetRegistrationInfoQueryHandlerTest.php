@@ -34,7 +34,6 @@ class SheetRegistrationInfoQueryHandlerTest extends TestCase
         $object5 = $this->prophesize(BooleanObject::class);
         $object6 = $this->prophesize(EditableText::class);
 
-
         $object1->getKey()->willReturn('wxcvbn456');
         $object2->getKey()->willReturn('123azerty');
         $object3->getKey()->willReturn('ytreza321');

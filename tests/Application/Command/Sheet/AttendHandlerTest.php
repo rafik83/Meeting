@@ -17,7 +17,6 @@ use Proximum\Vimeet\Application\Components\Sheet\HappeningParticipation\EnableDi
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Repository\MeetingRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
-use Proximum\Vimeet\Tests\Factory\SheetFactory;
 
 class AttendHandlerTest extends TestCase
 {

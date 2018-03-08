@@ -70,7 +70,7 @@ class StepParticipantAndPlanningTest extends TestCase
         $participantProducts = [
             123 => null,
             45 => $product1->reveal(),
-            67 => $product2->reveal()
+            67 => $product2->reveal(),
         ];
 
         $this->productByParticipantGetter
@@ -126,7 +126,7 @@ class StepParticipantAndPlanningTest extends TestCase
         $participantProducts = [
             123 => null,
             45 => $product1->reveal(),
-            67 => $product2->reveal()
+            67 => $product2->reveal(),
         ];
 
         $this->productByParticipantGetter
@@ -183,7 +183,7 @@ class StepParticipantAndPlanningTest extends TestCase
         $participantProducts = [
             123 => null,
             45 => $product1->reveal(),
-            67 => $product2->reveal()
+            67 => $product2->reveal(),
         ];
 
         $this->productByParticipantGetter

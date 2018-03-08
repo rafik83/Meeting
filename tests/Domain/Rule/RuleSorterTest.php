@@ -3,19 +3,19 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2016 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
 
 namespace Proximum\Vimeet\Tests\Application\Components\Rule;
 
-use Proximum\Vimeet\Domain\Rule\RuleSorter;
+use PHPUnit\Framework\TestCase;
 use Proximum\Vimeet\Domain\Model\Category;
 use Proximum\Vimeet\Domain\Model\Rule;
 use Proximum\Vimeet\Domain\Model\Type;
+use Proximum\Vimeet\Domain\Rule\RuleSorter;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
-use PHPUnit\Framework\TestCase;
 
 class RuleSorterTest extends TestCase
 {

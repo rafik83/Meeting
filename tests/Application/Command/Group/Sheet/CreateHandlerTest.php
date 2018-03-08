@@ -34,7 +34,7 @@ class CreateHandlerTest extends TestCase
 {
     public function testHandle()
     {
-        $newTitle = "new title";
+        $newTitle = 'new title';
         $originalSheet = $this->prophesize(Sheet::class);
         $event = $this->prophesize(Event::class);
         $type = $this->prophesize(Type::class);
@@ -92,30 +92,30 @@ class CreateHandlerTest extends TestCase
         $participantRepository->add(Argument::that(function (Participant $input) use ($user1) {
             return $input->getData() === ['6789' => ['content' => 'data1']]
                 && $input->getUser() === $user1->reveal()
-                && $input->isVisio() === true
-                && $input->getRegistrationStep() === 2
-                && $input->isRegistrationComplete() === true;
+                && true === $input->isVisio()
+                && 2 === $input->getRegistrationStep()
+                && true === $input->isRegistrationComplete();
         }))->shouldBeCalled();
         $participantRepository->add(Argument::that(function (Participant $input) use ($user2) {
             return $input->getData() === ['6789' => ['content' => 'data2']]
             && $input->getUser() === $user2->reveal()
-            && $input->isVisio() === false
-            && $input->getRegistrationStep() === 1
-            && $input->isRegistrationComplete() === false;
+            && false === $input->isVisio()
+            && 1 === $input->getRegistrationStep()
+            && false === $input->isRegistrationComplete();
         }))->shouldBeCalled();
 
         $delayedEventDispatcher = $this->prophesize(DelayedEventDispatcherInterface::class);
         $delayedEventDispatcher->dispatch(
             Events::SHEET_UPDATED,
-            Argument::that(function ($input) {return $input instanceof SheetUpdatedEvent;})
+            Argument::that(function ($input) {return $input instanceof SheetUpdatedEvent; })
         )->shouldBeCalled();
         $delayedEventDispatcher->dispatch(
             Events::MUST_SELECT_PACKAGE,
-            Argument::that(function ($input) {return $input instanceof MustSelectPackageEvent;})
+            Argument::that(function ($input) {return $input instanceof MustSelectPackageEvent; })
         )->shouldBeCalled();
         $delayedEventDispatcher->dispatch(
             Events::SHEET_CREATE_BY_GROUP_MANAGER,
-            Argument::that(function ($input) {return $input instanceof SheetCreatedByManagerEvent;})
+            Argument::that(function ($input) {return $input instanceof SheetCreatedByManagerEvent; })
         )->shouldBeCalled();
 
         // Handler

@@ -8,6 +8,7 @@
  * @author Elao <contact@elao.com>
  */
 
+use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
 use Proximum\Vimeet\Application\Command\Messaging\Campaign\ReceiverView;
 use Proximum\Vimeet\Domain\Messaging\SendGridApiClient;
@@ -19,7 +20,6 @@ use Proximum\Vimeet\Tests\Factory\EventFactory;
 use Proximum\Vimeet\Ui\Bundle\MailBundle\Mail\Messaging\MessageContentMail;
 use SendGrid\Mail;
 use SendGrid\Response;
-use PHPUnit\Framework\TestCase;
 
 class SendGridApiAdapterTest extends TestCase
 {

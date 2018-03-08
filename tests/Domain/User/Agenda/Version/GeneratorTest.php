@@ -11,12 +11,12 @@
 namespace Proximum\Vimeet\Tests\Domain\User\Agenda\Version;
 
 use PHPUnit\Framework\TestCase;
-use Proximum\Vimeet\Domain\User\Agenda\Version\Generator;
-use Proximum\Vimeet\Domain\User\Agenda\Version\VersionNormalizer;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Meeting\Request;
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Repository\Meeting\RequestRepositoryInterface;
+use Proximum\Vimeet\Domain\User\Agenda\Version\Generator;
+use Proximum\Vimeet\Domain\User\Agenda\Version\VersionNormalizer;
 
 class GeneratorTest extends TestCase
 {

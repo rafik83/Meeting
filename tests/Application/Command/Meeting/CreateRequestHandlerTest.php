@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2015 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -11,6 +11,7 @@
 namespace Proximum\Vimeet\Tests\Application\Command\Meeting;
 
 use DateTime;
+use PHPUnit\Framework\TestCase;
 use Proximum\Vimeet\Application\Command\Meeting\CreateRequest;
 use Proximum\Vimeet\Application\Command\Meeting\CreateRequestHandler;
 use Proximum\Vimeet\Application\Command\Meeting\CreateRequestResult;
@@ -24,7 +25,6 @@ use Proximum\Vimeet\Domain\Repository\Meeting\MessageRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\Meeting\RequestRepositoryInterface;
 use Proximum\Vimeet\Infrastructure\Adapter\DelayedEventDispatcher;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
-use PHPUnit\Framework\TestCase;
 
 class CreateRequestHandlerTest extends TestCase
 {
@@ -44,7 +44,7 @@ class CreateRequestHandlerTest extends TestCase
         $sheetFrom->getParticipants()->add($participant1);
         $sheetFrom->getParticipants()->add($participant2);
 
-        $dateTime     = new DateTime;
+        $dateTime     = new DateTime();
 
         // Command
         $createRequest = new CreateRequest($event, $sheetFrom, $sheetTo, $user1);
@@ -80,7 +80,7 @@ class CreateRequestHandlerTest extends TestCase
 
     /**
      * @param Sheet $sheet
-     * @param User $user
+     * @param User  $user
      * @param $id
      *
      * @return Participant

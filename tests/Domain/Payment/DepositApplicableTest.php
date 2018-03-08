@@ -10,10 +10,10 @@
 
 namespace Proximum\Vimeet\Tests\Domain\Payment;
 
+use PHPUnit\Framework\TestCase;
 use Proximum\Vimeet\Domain\Payment\DepositApplicable;
 use Proximum\Vimeet\Domain\Payment\Mode;
 use Proximum\Vimeet\Domain\Payment\PaymentConditionsView;
-use PHPUnit\Framework\TestCase;
 
 class DepositApplicableTest extends TestCase
 {
@@ -28,7 +28,6 @@ class DepositApplicableTest extends TestCase
         );
         $now   = new \DateTime();
         $total = 2000;
-
 
         $depositApplicable = new DepositApplicable();
         $this->assertFalse($depositApplicable->isApplicable($paymentConditionsView, $now, $total));
@@ -46,7 +45,6 @@ class DepositApplicableTest extends TestCase
         $now   = new \DateTime();
         $total = 100;
 
-
         $depositApplicable = new DepositApplicable();
         $this->assertFalse($depositApplicable->isApplicable($paymentConditionsView, $now, $total));
     }
@@ -63,7 +61,6 @@ class DepositApplicableTest extends TestCase
         $now   = new \DateTime();
         $total = 100;
 
-
         $depositApplicable = new DepositApplicable();
         $this->assertFalse($depositApplicable->isApplicable($paymentConditionsView, $now, $total));
     }
@@ -79,7 +76,6 @@ class DepositApplicableTest extends TestCase
         );
         $now   = new \DateTime('2017-10-10 10:10:10');
         $total = 2000;
-
 
         $depositApplicable = new DepositApplicable();
         $this->assertTrue($depositApplicable->isApplicable($paymentConditionsView, $now, $total));

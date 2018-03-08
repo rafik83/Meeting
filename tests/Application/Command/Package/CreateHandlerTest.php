@@ -3,13 +3,14 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2016 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
 
 namespace Proximum\Vimeet\Tests\Application\Command\Package;
 
+use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
 use Proximum\Vimeet\Application\Command\Package\Create;
 use Proximum\Vimeet\Application\Command\Package\CreateHandler;
@@ -17,7 +18,6 @@ use Proximum\Vimeet\Application\Command\Package\CreateResult;
 use Proximum\Vimeet\Domain\Model\Package;
 use Proximum\Vimeet\Domain\Repository\PackageRepositoryInterface;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
-use PHPUnit\Framework\TestCase;
 
 class CreateHandlerTest extends TestCase
 {

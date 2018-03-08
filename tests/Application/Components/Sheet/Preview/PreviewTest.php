@@ -11,32 +11,29 @@
 namespace Proximum\Vimeet\Tests\Application\Components\Sheet\Preview;
 
 use Doctrine\Common\Collections\ArrayCollection;
+use PHPUnit\Framework\TestCase;
 use Proximum\Vimeet\Application\Adapter\TranslatorInterface;
 use Proximum\Vimeet\Application\Components\Sheet\Preview\Preview;
 use Proximum\Vimeet\Application\Components\Sheet\Preview\Resolver\ParticipantsPositionResolver;
 use Proximum\Vimeet\Application\Components\Sheet\Preview\Resolver\ParticipantsResolver;
+use Proximum\Vimeet\Application\Components\Sheet\Template\Tag as TemplateTag;
 use Proximum\Vimeet\Application\Query\Participant\CardViewQuery;
 use Proximum\Vimeet\Application\Query\Participant\CardViewQueryHandler;
-use Proximum\Vimeet\Application\View\Participant\CardView;
 use Proximum\Vimeet\Application\View\Sheet\Preview\PreviewView;
 use Proximum\Vimeet\Application\View\Sheet\Preview\TagView;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Participant;
-use Proximum\Vimeet\Domain\Model\Rule;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\Template\SheetTemplate;
-use Proximum\Vimeet\Domain\Rule\Applyer;
 use Proximum\Vimeet\Domain\Rule\ComposedRule;
 use Proximum\Vimeet\Domain\Template\AbstractChild;
+use Proximum\Vimeet\Domain\Template\Exception\ObjectNotFoundException;
 use Proximum\Vimeet\Domain\Template\TaggedDataFactory;
 use Proximum\Vimeet\Domain\Template\TemplateData;
-use Proximum\Vimeet\Domain\Template\Exception\ObjectNotFoundException;
 use Proximum\Vimeet\Domain\Template\TemplateObject\EditableText;
 use Proximum\Vimeet\Domain\Template\TemplateObject\Participant as ParticipantObject;
 use Proximum\Vimeet\Domain\Template\TemplateObject\Tag;
 use Proximum\Vimeet\Domain\View\Template\TaggedDataView;
-use \Proximum\Vimeet\Application\Components\Sheet\Template\Tag as TemplateTag;
-use PHPUnit\Framework\TestCase;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
 
 class PreviewTest extends TestCase

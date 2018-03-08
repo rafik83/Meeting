@@ -82,7 +82,6 @@ class ListActionTest extends TestCase
             ->handle(new HappeningListViewQuery($this->event->reveal(), 'fr'))
             ->shouldBeCalled()
             ->willReturn($list->reveal());
-        ;
 
         $this->engine
             ->renderResponse(ListAction::TEMPLATE, [
@@ -91,7 +90,6 @@ class ListActionTest extends TestCase
             ])
             ->shouldBeCalled()
             ->willReturn(new Response());
-        ;
 
         $action = new ListAction(
             $this->authorizationAccessChecker->reveal(),

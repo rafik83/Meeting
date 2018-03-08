@@ -97,7 +97,7 @@ class RecordViewsQueryHandlerTest extends TestCase
                 $date6,
                 CommercialStatus::STATUS_INTEREST,
                 $this->admin->reveal()
-            )
+            ),
         ];
 
         $this->commentRepository

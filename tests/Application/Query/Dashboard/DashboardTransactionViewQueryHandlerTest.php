@@ -1,19 +1,19 @@
 <?php
 
 /*
- * This file is part of the vimeet project.
+ * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2016 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
 
 namespace Proximum\Vimeet\Application\Query\Dashboard;
 
+use PHPUnit\Framework\TestCase;
 use Proximum\Vimeet\Application\View\Dashboard\DashboardTransactionView;
 use Proximum\Vimeet\Domain\Order\Balance;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
-use PHPUnit\Framework\TestCase;
 
 class DashboardTransactionViewQueryHandlerTest extends TestCase
 {

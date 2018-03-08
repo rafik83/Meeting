@@ -126,7 +126,7 @@ class ParticipantPlanningFormatterTest extends TestCase
             $unavailability,
             $happeningParticipation,
             $meeting,
-            $assignment
+            $assignment,
         ]);
         $day->getDay()->willReturn($dayBegin);
         $view = new PlanningView([$day->reveal()], 'Europe/Paris', true);
@@ -167,10 +167,10 @@ class ParticipantPlanningFormatterTest extends TestCase
             'fr'
         )->shouldBeCalled()->willReturn('14:15 - 14:45 : ');
         $this->translator->trans(
-            "planning.participant.meeting_multiple_sheet",
-            ["%userSheet%" => "user sheet title", "%sheetMet%" => "sheet met title", "%spotRef%" => "spot reference"],
-            "messages",
-            "fr"
+            'planning.participant.meeting_multiple_sheet',
+            ['%userSheet%' => 'user sheet title', '%sheetMet%' => 'sheet met title', '%spotRef%' => 'spot reference'],
+            'messages',
+            'fr'
         )->shouldBeCalled()->willReturn('spot reference - user sheet title - sheet met title');
 
         $formatter = new ParticipantPlanningFormatter(
@@ -219,10 +219,10 @@ class ParticipantPlanningFormatterTest extends TestCase
             'fr'
         )->shouldBeCalled()->willReturn('18:30 - 18:45 : ');
         $this->translator->trans(
-            "planning.participant.meeting",
-            ["%sheetMet%" => "sheet met title", "%spotRef%" => "spot reference"],
-            "messages",
-            "fr"
+            'planning.participant.meeting',
+            ['%sheetMet%' => 'sheet met title', '%spotRef%' => 'spot reference'],
+            'messages',
+            'fr'
         )->shouldBeCalled()->willReturn('spot reference - sheet met title');
 
         $formatter = new ParticipantPlanningFormatter(
@@ -280,7 +280,7 @@ class ParticipantPlanningFormatterTest extends TestCase
             $unavailability,
             $happeningParticipation,
             $meeting,
-            $assignment
+            $assignment,
         ]);
         $day->getDay()->willReturn($dayBegin);
         $view = new PlanningView([$day->reveal()], 'Europe/Paris', true);
@@ -321,10 +321,10 @@ class ParticipantPlanningFormatterTest extends TestCase
             'fr'
         )->shouldBeCalled()->willReturn('14:15 - 14:45 : ');
         $this->translator->trans(
-            "planning.participant.meeting_multiple_sheet",
-            ["%userSheet%" => "user sheet title", "%sheetMet%" => "sheet met title", "%spotRef%" => "spot reference"],
-            "messages",
-            "fr"
+            'planning.participant.meeting_multiple_sheet',
+            ['%userSheet%' => 'user sheet title', '%sheetMet%' => 'sheet met title', '%spotRef%' => 'spot reference'],
+            'messages',
+            'fr'
         )->shouldBeCalled()->willReturn('spot reference - user sheet title - sheet met title');
 
         $this->unallocatedFormatter

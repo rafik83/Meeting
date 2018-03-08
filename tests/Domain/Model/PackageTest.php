@@ -3,18 +3,18 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2015 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
 
 namespace Proximum\Vimeet\Tests\Domain\Model;
 
+use PHPUnit\Framework\TestCase;
 use Proximum\Vimeet\Domain\Model\Package;
 use Proximum\Vimeet\Domain\Model\PackageGroup;
 use Proximum\Vimeet\Domain\Model\Product;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
-use PHPUnit\Framework\TestCase;
 
 class PackageTest extends TestCase
 {
@@ -34,7 +34,7 @@ class PackageTest extends TestCase
 
         $package->setGroups([
             [$option1, $option3],
-            [$option2, $option5, $option4]
+            [$option2, $option5, $option4],
         ], [
             ['fr' => 'Group 1'],
             ['fr' => 'Group 2'],

@@ -3,13 +3,14 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2017 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
 
 namespace Proximum\Vimeet\Tests\Application\Command\Meeting\Admin;
 
+use PHPUnit\Framework\TestCase;
 use Proximum\Vimeet\Application\Adapter\TranslatorInterface;
 use Proximum\Vimeet\Application\Command\Meeting\Admin\RemoveMeeting;
 use Proximum\Vimeet\Application\Command\Meeting\Admin\RemoveMeetingHandler;
@@ -26,7 +27,6 @@ use Proximum\Vimeet\Infrastructure\Adapter\DelayedEventDispatcher;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
 use Proximum\Vimeet\Tests\Factory\SheetFactory;
 use Proximum\Vimeet\Tests\Factory\UserFactory;
-use PHPUnit\Framework\TestCase;
 
 class RemoveMeetingHandlerTest extends TestCase
 {
@@ -63,7 +63,7 @@ class RemoveMeetingHandlerTest extends TestCase
                 Events::MEETING_REMOVED,
                 new MeetingRemovedEvent([
                     $meeting->getFromSheet(),
-                    $meeting->getToSheet()
+                    $meeting->getToSheet(),
                 ])
             )->shouldBeCalled();
 

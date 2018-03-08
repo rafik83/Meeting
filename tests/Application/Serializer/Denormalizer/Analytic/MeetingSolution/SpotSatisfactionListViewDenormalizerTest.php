@@ -22,7 +22,7 @@ class SpotSatisfactionListViewDenormalizerTest extends TestCase
 {
     public function testDenormalize()
     {
-        $data = json_decode("[{\"spotId\":301,\"reference\":\"MTable A01\",\"shared\":true,\"visio\":false,\"satisfaction\":92},{\"spotId\":302,\"reference\":\"MTable A02\",\"shared\":true,\"visio\":false,\"satisfaction\":100},{\"spotId\":303,\"reference\":\"MTable A03\",\"shared\":true,\"visio\":false,\"satisfaction\":92},{\"spotId\":310,\"reference\":\"MTable B01\",\"shared\":false,\"visio\":false,\"satisfaction\":57},{\"spotId\":311,\"reference\":\"MTable B02\",\"shared\":true,\"visio\":false,\"satisfaction\":71},{\"spotId\":312,\"reference\":\"MTable B03\",\"shared\":true,\"visio\":true,\"satisfaction\":71}]", true);
+        $data = json_decode('[{"spotId":301,"reference":"MTable A01","shared":true,"visio":false,"satisfaction":92},{"spotId":302,"reference":"MTable A02","shared":true,"visio":false,"satisfaction":100},{"spotId":303,"reference":"MTable A03","shared":true,"visio":false,"satisfaction":92},{"spotId":310,"reference":"MTable B01","shared":false,"visio":false,"satisfaction":57},{"spotId":311,"reference":"MTable B02","shared":true,"visio":false,"satisfaction":71},{"spotId":312,"reference":"MTable B03","shared":true,"visio":true,"satisfaction":71}]', true);
 
         $serializer = new Serializer(
             [
@@ -30,7 +30,7 @@ class SpotSatisfactionListViewDenormalizerTest extends TestCase
                 new SpotSatisfactionViewDenormalizer(),
             ],
             [
-                new JsonEncoder()
+                new JsonEncoder(),
             ]
         );
 

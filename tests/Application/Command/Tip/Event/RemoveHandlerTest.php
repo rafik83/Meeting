@@ -10,6 +10,7 @@
 
 namespace Application\Command\Tip\Event;
 
+use PHPUnit\Framework\TestCase;
 use Proximum\Vimeet\Application\Adapter\DelayedEventDispatcherInterface;
 use Proximum\Vimeet\Application\Command\Tip\Event\Remove;
 use Proximum\Vimeet\Application\Command\Tip\Event\RemoveHandler;
@@ -18,7 +19,6 @@ use Proximum\Vimeet\Application\Event\Tip\RemovedEvent;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Tip\Tip;
 use Proximum\Vimeet\Domain\Repository\TipRepositoryInterface;
-use PHPUnit\Framework\TestCase;
 
 class RemoveHandlerTest extends TestCase
 {

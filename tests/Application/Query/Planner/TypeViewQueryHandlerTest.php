@@ -3,20 +3,20 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2017 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
 
 namespace Proximum\Vimeet\Tests\Application\Query\Planner;
 
+use PHPUnit\Framework\TestCase;
 use Proximum\Vimeet\Application\Query\Planner\TypeViewQuery;
 use Proximum\Vimeet\Application\Query\Planner\TypeViewQueryHandler;
 use Proximum\Vimeet\Application\View\Planner\TypeView;
 use Proximum\Vimeet\Domain\Model\Type;
 use Proximum\Vimeet\Domain\Repository\TypeRepositoryInterface;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
-use PHPUnit\Framework\TestCase;
 
 class TypeViewQueryHandlerTest extends TestCase
 {

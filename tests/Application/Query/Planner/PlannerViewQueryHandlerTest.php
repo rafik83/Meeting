@@ -3,13 +3,14 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2017 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
 
 namespace Proximum\Vimeet\Tests\Application\Query\Planner;
 
+use PHPUnit\Framework\TestCase;
 use Proximum\Vimeet\Application\Query\Planner\DayViewQuery;
 use Proximum\Vimeet\Application\Query\Planner\DayViewQueryHandler;
 use Proximum\Vimeet\Application\Query\Planner\MeetingViewQuery;
@@ -37,9 +38,8 @@ use Proximum\Vimeet\Application\View\Planner\SlotView;
 use Proximum\Vimeet\Application\View\Planner\SpotView;
 use Proximum\Vimeet\Application\View\Planner\TypePriorityView;
 use Proximum\Vimeet\Application\View\Planner\TypeView;
-use Proximum\Vimeet\Tests\Factory\EventFactory;
 use Proximum\Vimeet\Domain\Model\Event;
-use PHPUnit\Framework\TestCase;
+use Proximum\Vimeet\Tests\Factory\EventFactory;
 
 class PlannerViewQueryHandlerTest extends TestCase
 {

@@ -11,6 +11,7 @@
 namespace Proximum\Vimeet\Tests\Application\Query\Agenda;
 
 use DateTime;
+use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
 use Proximum\Vimeet\Application\Adapter\RouterInterface;
 use Proximum\Vimeet\Application\Components\Sheet\SheetInfoGuesser;
@@ -32,7 +33,6 @@ use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
 use Proximum\Vimeet\Domain\Template\ParticipantInfoGuesser;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
 use Proximum\Vimeet\Tests\Factory\SheetFactory;
-use PHPUnit\Framework\TestCase;
 
 class SheetListViewQueryHandlerTest extends TestCase
 {

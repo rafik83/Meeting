@@ -1,15 +1,16 @@
 <?php
 
 /*
- * This file is part of the vimeet project.
+ * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2017 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
 
 namespace Proximum\Vimeet\Tests\Application\Query\User;
 
+use PHPUnit\Framework\TestCase;
 use Proximum\Vimeet\Application\Adapter\ImpersonateUrlGeneratorInterface;
 use Proximum\Vimeet\Application\Query\User\UserImpersonateViewQuery;
 use Proximum\Vimeet\Application\Query\User\UserImpersonateViewQueryHandler;
@@ -18,7 +19,6 @@ use Proximum\Vimeet\Application\View\User\UserView;
 use Proximum\Vimeet\Domain\Model\User\Account;
 use Proximum\Vimeet\Tests\Factory\AdminFactory;
 use Proximum\Vimeet\Tests\Factory\UserFactory;
-use PHPUnit\Framework\TestCase;
 
 class UserImpersonateViewQueryHandlerTest extends TestCase
 {

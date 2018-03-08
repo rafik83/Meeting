@@ -3,16 +3,16 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2015 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
 
 namespace Proximum\Vimeet\Tests\Application\Components\Spot;
 
+use PHPUnit\Framework\TestCase;
 use Proximum\Vimeet\Application\Components\Spot\Recipe;
 use Proximum\Vimeet\Application\Components\Spot\ReferenceFactory;
-use PHPUnit\Framework\TestCase;
 
 class ReferenceFactoryTest extends TestCase
 {
@@ -80,7 +80,7 @@ class ReferenceFactoryTest extends TestCase
             ],
             [
                 [new Recipe('A', 1, 4), new Recipe('B', 5, 10)],
-                ['A1', 'A2', 'A3', 'A4','B05', 'B06', 'B07', 'B08', 'B09', 'B10'],
+                ['A1', 'A2', 'A3', 'A4', 'B05', 'B06', 'B07', 'B08', 'B09', 'B10'],
             ],
         ];
     }

@@ -142,7 +142,6 @@ class SheetViewQueryHandlerTest extends TestCase
         ;
         $this->applyer->applyRuleForTemplate($this->template->reveal(), [$rule1->reveal()])->shouldBeCalled();
 
-
         $composedRule = $this->prophesize(ComposedRule::class);
         $composedRule->isPresent(Tag::PARTICIPANT_POSITION)->shouldBeCalled()->willReturn(true);
         $this->composer->compose([$rule1->reveal()])->shouldBeCalled()->willReturn($composedRule->reveal());

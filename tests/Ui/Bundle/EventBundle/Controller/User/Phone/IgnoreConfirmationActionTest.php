@@ -1,9 +1,9 @@
 <?php
 
 /*
- * This file is part of the vimeet project.
+ * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) vimeet
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -81,6 +81,5 @@ class IgnoreConfirmationActionTest extends TestCase
         $response = $action(SheetFactory::create($this->event, $this->participant->getUser()), $this->participant);
 
         $this->assertEquals($expectedResponse, $response);
-
     }
 }

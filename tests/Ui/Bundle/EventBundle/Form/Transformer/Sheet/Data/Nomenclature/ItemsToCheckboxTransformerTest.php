@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2015 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -11,9 +11,9 @@
 namespace Proximum\Vimeet\Tests\Ui\Bundle\EventBundle\Form\Transformer\Sheet\Data\Nomenclature;
 
 use PHPUnit\Framework\TestCase;
+use Proximum\Vimeet\Domain\Model\Nomenclature;
 use Proximum\Vimeet\Domain\Model\NomenclatureItem;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Transformer\Sheet\Data\Nomenclature\ItemsToCheckboxTransformer;
-use Proximum\Vimeet\Domain\Model\Nomenclature;
 
 class ItemsToCheckboxTransformerTest extends TestCase
 {

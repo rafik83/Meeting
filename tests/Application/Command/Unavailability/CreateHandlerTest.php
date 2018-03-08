@@ -13,9 +13,9 @@ namespace Proximum\Vimeet\Tests\Application\Command\Unavailability;
 use PHPUnit\Framework\TestCase;
 use Proximum\Vimeet\Application\Command\Unavailability\Create;
 use Proximum\Vimeet\Application\Command\Unavailability\CreateHandler;
-use Proximum\Vimeet\Application\Exception\Unavailability\CanNotCreateUnavailabilityException;
 use Proximum\Vimeet\Application\Event\Events;
 use Proximum\Vimeet\Application\Event\Unavailability\AddUnavailabilityEvent;
+use Proximum\Vimeet\Application\Exception\Unavailability\CanNotCreateUnavailabilityException;
 use Proximum\Vimeet\Application\Exception\Unavailability\NoParticipantSelectedException;
 use Proximum\Vimeet\Application\Exception\Unavailability\ParticipantsSelectedWithMeetingOrHappeningException;
 use Proximum\Vimeet\Application\Exception\Unavailability\TimeOutOfRangeException;
@@ -338,7 +338,7 @@ class CreateHandlerTest extends TestCase
         $reflection = new \ReflectionClass(CreateHandler::class);
         $method     = $reflection->getMethod('prepareBeginAndEnd');
         $method->setAccessible(true);
-        list ($begin, $end) = $method->invokeArgs($handler, [$create]);
+        list($begin, $end) = $method->invokeArgs($handler, [$create]);
 
         $this->assertEquals($expectedBegin, $begin);
         $this->assertEquals($expectedEnd, $end);
@@ -391,7 +391,7 @@ class CreateHandlerTest extends TestCase
         $reflection = new \ReflectionClass(CreateHandler::class);
         $method     = $reflection->getMethod('prepareBeginAndEnd');
         $method->setAccessible(true);
-        list ($begin, $end) = $method->invokeArgs($handler, [$create]);
+        list($begin, $end) = $method->invokeArgs($handler, [$create]);
 
         $this->assertEquals($expectedBegin, $begin);
         $this->assertEquals($expectedEnd, $end);
@@ -444,7 +444,7 @@ class CreateHandlerTest extends TestCase
         $reflection = new \ReflectionClass(CreateHandler::class);
         $method     = $reflection->getMethod('prepareBeginAndEnd');
         $method->setAccessible(true);
-        list ($begin, $end) = $method->invokeArgs($handler, [$create]);
+        list($begin, $end) = $method->invokeArgs($handler, [$create]);
 
         $this->assertEquals($expectedBegin, $begin);
         $this->assertEquals($expectedEnd, $end);
@@ -480,7 +480,7 @@ class CreateHandlerTest extends TestCase
         $reflection = new \ReflectionClass(CreateHandler::class);
         $method     = $reflection->getMethod('prepareBeginAndEnd');
         $method->setAccessible(true);
-        list ($begin, $end) = $method->invokeArgs($handler, [$create]);
+        list($begin, $end) = $method->invokeArgs($handler, [$create]);
 
         $this->assertEquals($expectedBegin, $begin);
         $this->assertEquals($expectedEnd, $end);
@@ -516,7 +516,7 @@ class CreateHandlerTest extends TestCase
         $reflection = new \ReflectionClass(CreateHandler::class);
         $method     = $reflection->getMethod('prepareBeginAndEnd');
         $method->setAccessible(true);
-        list ($begin, $end) = $method->invokeArgs($handler, [$create]);
+        list($begin, $end) = $method->invokeArgs($handler, [$create]);
 
         $this->assertEquals($expectedBegin, $begin);
         $this->assertEquals($expectedEnd, $end);
@@ -569,7 +569,7 @@ class CreateHandlerTest extends TestCase
         $reflection = new \ReflectionClass(CreateHandler::class);
         $method     = $reflection->getMethod('prepareBeginAndEnd');
         $method->setAccessible(true);
-        list ($begin, $end) = $method->invokeArgs($handler, [$create]);
+        list($begin, $end) = $method->invokeArgs($handler, [$create]);
 
         $this->assertEquals($expectedBegin, $begin);
         $this->assertEquals($expectedEnd, $end);
@@ -622,7 +622,7 @@ class CreateHandlerTest extends TestCase
         $reflection = new \ReflectionClass(CreateHandler::class);
         $method     = $reflection->getMethod('prepareBeginAndEnd');
         $method->setAccessible(true);
-        list ($begin, $end) = $method->invokeArgs($handler, [$create]);
+        list($begin, $end) = $method->invokeArgs($handler, [$create]);
 
         $this->assertEquals($expectedBegin, $begin);
         $this->assertEquals($expectedEnd, $end);

@@ -10,25 +10,25 @@
 
 namespace Application\Command\Tip\Event;
 
+use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
 use Prophecy\Prophecy\ObjectProphecy;
 use Proximum\Vimeet\Application\Adapter\DelayedEventDispatcherInterface;
+use Proximum\Vimeet\Application\Command\Tip\Event\Affect;
+use Proximum\Vimeet\Application\Command\Tip\Event\AffectHandler;
 use Proximum\Vimeet\Application\Event\Events;
 use Proximum\Vimeet\Application\Event\Tip\AssignedEvent;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Tip\Tip;
-use Proximum\Vimeet\Domain\Repository\TypeRepositoryInterface;
-use Proximum\Vimeet\Application\Command\Tip\Event\Affect;
-use Proximum\Vimeet\Application\Command\Tip\Event\AffectHandler;
 use Proximum\Vimeet\Domain\Model\Type;
 use Proximum\Vimeet\Domain\Repository\TipRepositoryInterface;
-use PHPUnit\Framework\TestCase;
+use Proximum\Vimeet\Domain\Repository\TypeRepositoryInterface;
 
 class AffectHandlerTest extends TestCase
 {
     /** @var ObjectProphecy */
     private $tipRepository;
-    
+
     /** @var ObjectProphecy */
     private $typeRepository;
 
@@ -37,7 +37,7 @@ class AffectHandlerTest extends TestCase
 
     /** @var ObjectProphecy */
     private $event;
-    
+
     public function setUp()
     {
         $this->event           = $this->prophesize(Event::class);
@@ -86,16 +86,16 @@ class AffectHandlerTest extends TestCase
         $tip->setType($type->reveal());
 
         $this->tipRepository->add(Argument::that(function (Tip $tip) use ($type) {
-            return $tip->getTitle() === 'adminTitle'
-                && $tip->isOnMeetingManagement() === true
-                && $tip->isOnCatalog() === false
-                && $tip->isOnPrintPlanning() ===  true
-                && $tip->isOnSheet() === false
-                && $tip->isOnAgenda() === true
-                && $tip->isOnProgram() === false
-                && $tip->isOnConfirmationPhone() === true
-                && $tip->getTranslationTitle('fr') === 'title'
-                && $tip->getTranslationContent('fr') === 'content'
+            return 'adminTitle' === $tip->getTitle()
+                && true === $tip->isOnMeetingManagement()
+                && false === $tip->isOnCatalog()
+                && true ===  $tip->isOnPrintPlanning()
+                && false === $tip->isOnSheet()
+                && true === $tip->isOnAgenda()
+                && false === $tip->isOnProgram()
+                && true === $tip->isOnConfirmationPhone()
+                && 'title' === $tip->getTranslationTitle('fr')
+                && 'content' === $tip->getTranslationContent('fr')
                 && in_array($type->reveal(), $tip->getTypes(), true)
             ;
         }))->shouldBeCalled();
@@ -104,8 +104,8 @@ class AffectHandlerTest extends TestCase
                 Events::TIP_ASSIGNED,
                 Argument::that(function (AssignedEvent $event) {
                     return $event->getEvent() === $this->event->reveal()
-                        && $event->getTip()->getTitle() === 'adminTitle';
-                    })
+                        && 'adminTitle' === $event->getTip()->getTitle();
+                })
             )->shouldBeCalled();
 
         $command        = new Affect($this->event->reveal());
