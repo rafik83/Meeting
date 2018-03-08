@@ -117,7 +117,7 @@ class EventListQueryHandlerTest extends TestCase
                 'fr',
                 true,
                 [new DayView($startTimeThree, $endTimeThree)]
-            )
+            ),
         ]);
 
         $this->eventRepository
@@ -166,7 +166,7 @@ class EventListQueryHandlerTest extends TestCase
                 'fr',
                 true,
                 [new DayView($startTimeThree, $endTimeThree)]
-            )
+            ),
         ]);
 
         $this->eventRepository

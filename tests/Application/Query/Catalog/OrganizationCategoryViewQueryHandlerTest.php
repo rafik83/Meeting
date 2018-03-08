@@ -1,24 +1,24 @@
 <?php
 
 /*
- * This file is part of the vimeet project.
+ * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2016 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
 
 namespace Proximum\Vimeet\Tests\Application\Query\Catalog;
 
+use PHPUnit\Framework\TestCase;
 use Proximum\Vimeet\Application\Components\Sheet\Template\Tag;
 use Proximum\Vimeet\Application\Query\Catalog\OrganizationCategoryViewQuery;
 use Proximum\Vimeet\Application\Query\Catalog\OrganizationCategoryViewQueryHandler;
 use Proximum\Vimeet\Domain\Catalog\TaggedNomenclatureFilterGetter;
 use Proximum\Vimeet\Domain\View\Catalog\OrganizationCategoryView;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
-use PHPUnit\Framework\TestCase;
 
-class OrganisationCategoryViewQueryHandlerTest extends TestCase
+class OrganizationCategoryViewQueryHandlerTest extends TestCase
 {
     public function testHandle()
     {
@@ -40,9 +40,9 @@ class OrganisationCategoryViewQueryHandlerTest extends TestCase
             Tag::SHEET_ORGANIZATION_CATEGORY,
             'fr'
         )->shouldBeCalled()->willReturn([
-            "category8"  => "Association",
-            "category5"  => "ETI",
-            "category10" => "Expert",
+            'category8'  => 'Association',
+            'category5'  => 'ETI',
+            'category10' => 'Expert',
         ]);
 
         $handler         = new OrganizationCategoryViewQueryHandler($taggedNomenclatureFilterGetter->reveal());

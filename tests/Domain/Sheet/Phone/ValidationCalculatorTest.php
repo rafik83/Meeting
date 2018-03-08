@@ -78,7 +78,7 @@ class ValidationCalculatorTest extends TestCase
             ->willReturn(new ArrayCollection([
                 $participant1->reveal(),
                 $participant2->reveal(),
-                $participant3->reveal()
+                $participant3->reveal(),
             ]))
         ;
 

@@ -32,7 +32,7 @@ class AvailableSlotCalculatorTest extends TestCase
         $participants = [
             $participant1->reveal(),
             $participant2->reveal(),
-            $participant3->reveal()
+            $participant3->reveal(),
         ];
         $sheet = $this->prophesize(Sheet::class);
         $sheet->getEvent()->willReturn($event->reveal());
@@ -55,12 +55,12 @@ class AvailableSlotCalculatorTest extends TestCase
         $slotRepository
             ->findAvailableSlotsByParticipants($event->reveal(), [$participant1->reveal()])
             ->shouldBeCalled()
-            ->willReturn([$slot1->reveal(), $slot2->reveal(),])
+            ->willReturn([$slot1->reveal(), $slot2->reveal()])
         ;
         $slotRepository
             ->findAvailableSlotsByParticipants($event->reveal(), [$participant2->reveal()])
             ->shouldBeCalled()
-            ->willReturn([$slot1->reveal(), $slot3->reveal(), $slot4->reveal(),])
+            ->willReturn([$slot1->reveal(), $slot3->reveal(), $slot4->reveal()])
         ;
         $slotRepository
             ->findAvailableSlotsByParticipants($event->reveal(), [$participant3->reveal()])

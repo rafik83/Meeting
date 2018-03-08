@@ -32,17 +32,17 @@ class SpotFillingRateViewDenormalizerTest extends TestCase
                 new SpotFillingRateViewDenormalizer(),
                 new SpotFillingRateDayViewDenormalizer(),
                 new SpotFillingRateSlotViewDenormalizer(),
-                new DateTimeNormalizer()
+                new DateTimeNormalizer(),
             ],
             [
-                new JsonEncoder()
+                new JsonEncoder(),
             ]
         );
         $result = $serializer->denormalize($data, SpotFillingRateDayListView::class, 'json');
 
         $expected = new SpotFillingRateDayListView();
         $spotFillingRateDayView = new SpotFillingRateDayView(
-            new \DateTime("2017-02-01T09:00:00+00:00"),
+            new \DateTime('2017-02-01T09:00:00+00:00'),
             'Europe/Paris'
         );
         $slotFillingRateView1 = new SpotFillingRateSlotView(

@@ -11,7 +11,6 @@
 namespace Proximum\Vimeet\Tests\Domain\Product;
 
 use PHPUnit\Framework\TestCase;
-use Prophecy\Argument;
 use Proximum\Vimeet\Application\Adapter\FileStorageInterface;
 use Proximum\Vimeet\Domain\Model\Product;
 use Proximum\Vimeet\Domain\Product\Duplicator;

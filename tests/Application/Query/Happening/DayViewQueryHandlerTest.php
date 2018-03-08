@@ -3,13 +3,14 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2016 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
 
 namespace Proximum\Vimeet\Tests\Application\Query\Happening;
 
+use PHPUnit\Framework\TestCase;
 use Proximum\Vimeet\Application\Query\Happening\DayViewQuery;
 use Proximum\Vimeet\Application\Query\Happening\DayViewQueryHandler;
 use Proximum\Vimeet\Application\Query\Happening\HappeningViewQuery;
@@ -20,14 +21,13 @@ use Proximum\Vimeet\Application\View\Happening\DayView;
 use Proximum\Vimeet\Application\View\Happening\HappeningCategoryView;
 use Proximum\Vimeet\Application\View\Happening\HappeningView;
 use Proximum\Vimeet\Application\View\Happening\MassUnavailabilityView;
+use Proximum\Vimeet\Domain\Model\Event\Day;
 use Proximum\Vimeet\Domain\Model\Happening;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\Type;
 use Proximum\Vimeet\Domain\Model\Unavailability;
 use Proximum\Vimeet\Domain\Repository\HappeningRepositoryInterface;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
-use Proximum\Vimeet\Domain\Model\Event\Day;
-use PHPUnit\Framework\TestCase;
 
 class DayViewQueryHandlerTest extends TestCase
 {
@@ -127,7 +127,6 @@ class DayViewQueryHandlerTest extends TestCase
             [
                 $happeningView1,
                 $happeningView2,
-
             ],
             [
                 $massView,
@@ -166,7 +165,6 @@ class DayViewQueryHandlerTest extends TestCase
             ->handle(new MassUnavailabilityViewQuery($mass, $event, 'fr'))
             ->shouldBeCalled()
             ->willReturn($massView);
-
 
         $handler = new DayViewQueryHandler(
             $happeningRepository->reveal(),

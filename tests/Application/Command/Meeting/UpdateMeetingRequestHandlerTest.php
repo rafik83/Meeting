@@ -3,13 +3,14 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2015 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
 
 namespace Proximum\Vimeet\Tests\Application\Command\Meeting;
 
+use PHPUnit\Framework\TestCase;
 use Proximum\Vimeet\Application\Command\Meeting\UpdateMeetingRequest;
 use Proximum\Vimeet\Application\Command\Meeting\UpdateMeetingRequestHandler;
 use Proximum\Vimeet\Application\Components\Meeting\RequestPermissionManager;
@@ -24,7 +25,6 @@ use Proximum\Vimeet\Domain\Repository\Meeting\MessageRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\Meeting\RequestRepositoryInterface;
 use Proximum\Vimeet\Infrastructure\Adapter\DelayedEventDispatcher;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
-use PHPUnit\Framework\TestCase;
 
 class UpdateMeetingRequestHandlerTest extends TestCase
 {
@@ -220,7 +220,6 @@ class UpdateMeetingRequestHandlerTest extends TestCase
         $sheetTo->addParticipant($participant2);
         $sheetTo->addParticipant($participant3);
 
-
         //Actual
         $request = new Request($sheetFrom, [], $sheetTo, [$participant1, $participant2], $datetime, $user1, $event);
         $request->approve($datetime);
@@ -279,7 +278,6 @@ class UpdateMeetingRequestHandlerTest extends TestCase
         $sheetTo->addParticipant($participant2);
         $sheetTo->addParticipant($participant3);
 
-
         //Actual
         $request = new Request($sheetFrom, [], $sheetTo, [$participant1, $participant2], $datetime, $user1, $event);
         $request->approve($datetime);
@@ -319,7 +317,7 @@ class UpdateMeetingRequestHandlerTest extends TestCase
 
     /**
      * @param Sheet $sheet
-     * @param User $user
+     * @param User  $user
      * @param $id
      *
      * @return Participant

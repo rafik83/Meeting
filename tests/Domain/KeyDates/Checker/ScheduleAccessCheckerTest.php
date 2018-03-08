@@ -3,16 +3,16 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2016 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
 
 namespace Proximum\Vimeet\Tests\Domain\KeyDates\Checker;
 
+use PHPUnit\Framework\TestCase;
 use Proximum\Vimeet\Domain\KeyDates\Checker\ScheduleAccessChecker;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
-use PHPUnit\Framework\TestCase;
 
 class ScheduleAccessCheckerTest extends TestCase
 {

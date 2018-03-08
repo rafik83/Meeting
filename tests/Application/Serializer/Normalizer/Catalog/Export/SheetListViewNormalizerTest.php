@@ -209,12 +209,11 @@ class SheetListViewNormalizerTest extends TestCase
             false
         );
 
-
         $serializer = new Serializer(
             [
                 new SheetListViewNormalizer(),
                 new SheetViewNormalizer(),
-                new ObjectNormalizer()
+                new ObjectNormalizer(),
             ],
             [
                 new CsvEncoder(),

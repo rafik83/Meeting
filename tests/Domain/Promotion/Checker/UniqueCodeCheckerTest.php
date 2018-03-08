@@ -1,9 +1,9 @@
 <?php
 
 /*
- * This file is part of the vimeet project.
+ * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2017 vimeet
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -20,10 +20,10 @@ use Proximum\Vimeet\Tests\Factory\PromotionFactory;
 
 class UniqueCodeCheckerTest extends TestCase
 {
-    /** @var  Event */
+    /** @var Event */
     private $event;
 
-    /** @var  PromotionCode */
+    /** @var PromotionCode */
     private $promotionCodeRepository;
 
     public function setUp()

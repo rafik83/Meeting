@@ -1,9 +1,9 @@
 <?php
 
 /*
- * This file is part of the vimeet project.
+ * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2016 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -24,16 +24,15 @@ class SheetFactory
      * @param DateTime|null $datetime
      * @param Type|null     $type
      *
-     *
      * @return Sheet
      */
     public static function create(Event $event = null, User $user = null, DateTime $datetime = null, Type $type = null)
     {
-        $event = ($event !== null) ? $event : EventFactory::createEvent();
+        $event = (null !== $event) ? $event : EventFactory::createEvent();
 
-        $type     = $type !== null ? $type : new Type($event);
-        $user     = ($user !== null) ? $user : new User('user@vimeet.com', 'salt', 'password', 'fr');
-        $datetime = ($datetime !== null) ? $datetime : new DateTime();
+        $type     = null !== $type ? $type : new Type($event);
+        $user     = (null !== $user) ? $user : new User('user@vimeet.com', 'salt', 'password', 'fr');
+        $datetime = (null !== $datetime) ? $datetime : new DateTime();
 
         $sheet = new Sheet(
             $event,

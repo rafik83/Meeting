@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Tests\Application\Command\Messaging\Batch;
 
+use PHPUnit\Framework\TestCase;
 use Proximum\Vimeet\Application\Adapter\SendGridApiAdapterInterface;
 use Proximum\Vimeet\Application\Command\Messaging\Batch\Process;
 use Proximum\Vimeet\Application\Command\Messaging\Batch\ProcessHandler;
@@ -21,7 +22,6 @@ use Proximum\Vimeet\Domain\Model\Messaging\Message;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Repository\BillingInfoRepositoryInterface;
-use PHPUnit\Framework\TestCase;
 
 class ProcessHandlerTest extends TestCase
 {

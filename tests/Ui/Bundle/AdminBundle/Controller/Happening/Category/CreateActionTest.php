@@ -1,9 +1,9 @@
 <?php
 
 /*
- * This file is part of the vimeet project.
+ * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) vimeet
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -161,7 +161,7 @@ class CreateActionTest extends TestCase
 
         $this->engine->renderResponse(Argument::any())->shouldNotBeCalled();
         $this->commandBus->handle($create)->shouldBeCalled();
-        $this->flashBag->add("success", "flash.admin.happening.category.create.success")->shouldBeCalled();
+        $this->flashBag->add('success', 'flash.admin.happening.category.create.success')->shouldBeCalled();
 
         $this->router->generate('admin_happening_category_list', ['event' => 12])->shouldBeCalled()->willReturn('/route');
 

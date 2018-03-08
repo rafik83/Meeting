@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\tests\Infrastructure\Bundle\InfrastructureBundle\EventListener;
 
+use PHPUnit\Framework\TestCase;
 use Proximum\Vimeet\Application\Exception\Sheet\SheetNotFoundException;
 use Proximum\Vimeet\Domain\Repository\EventRepositoryInterface;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\EventListener\SheetNotFoundExceptionListener;
@@ -19,7 +20,6 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Event\GetResponseForExceptionEvent;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
 use Symfony\Component\Routing\RouterInterface;
-use PHPUnit\Framework\TestCase;
 
 class SheetNotFoundExceptionListenerTest extends TestCase
 {

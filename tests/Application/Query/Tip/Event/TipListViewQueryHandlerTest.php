@@ -1,21 +1,21 @@
 <?php
 
 /*
- * This file is part of the vimeet project.
+ * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2017 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
 
 namespace Application\Query\Tip\Event;
 
+use PHPUnit\Framework\TestCase;
 use Proximum\Vimeet\Application\Query\Tip\Event\TipListViewQuery;
 use Proximum\Vimeet\Application\Query\Tip\Event\TipListViewQueryHandler;
 use Proximum\Vimeet\Application\View\Tip\Event\TipView;
 use Proximum\Vimeet\Domain\Repository\TipRepositoryInterface;
 use Proximum\Vimeet\Tests\Factory\TipFactory;
-use PHPUnit\Framework\TestCase;
 
 class TipListViewQueryHandlerTest extends TestCase
 {

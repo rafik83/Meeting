@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Tests\Application\Command\Messaging\Batch;
 
+use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
 use Proximum\Vimeet\Application\Adapter\TranslatorInterface;
 use Proximum\Vimeet\Application\Command\Messaging\Batch\CreateMessage;
@@ -17,7 +18,6 @@ use Proximum\Vimeet\Application\Command\Messaging\Batch\CreateMessageHandler;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Messaging\Message;
 use Proximum\Vimeet\Ui\Bundle\MailBundle\Mail\Messaging\MessageContentMail;
-use PHPUnit\Framework\TestCase;
 
 class CreateMessageHandlerTest extends TestCase
 {
@@ -40,7 +40,7 @@ class CreateMessageHandlerTest extends TestCase
             ->render(Argument::that(function ($input) {
                 return isset($input['mail'])
                 && $input['mail'] instanceof MessageContentMail
-                && $input['mail']->getLocale() === 'fr';
+                && 'fr' === $input['mail']->getLocale();
             }))
             ->shouldBeCalled()
             ->willReturn('<html><body>content fr</body></html>')
@@ -49,7 +49,7 @@ class CreateMessageHandlerTest extends TestCase
             ->render(Argument::that(function ($input) {
                 return isset($input['mail'])
                 && $input['mail'] instanceof MessageContentMail
-                && $input['mail']->getLocale() === 'en';
+                && 'en' === $input['mail']->getLocale();
             }))
             ->shouldBeCalled()
             ->willReturn('<html><body>content en</body></html>')

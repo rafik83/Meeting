@@ -1,14 +1,22 @@
 <?php
 
+/*
+ * This file is part of the Proximum Vimeet project.
+ *
+ * Copyright (C) Proximum
+ *
+ * @author Elao <contact@elao.com>
+ */
+
 namespace Proximum\Vimeet\Tests\Application\Query\Group\Participant;
 
+use PHPUnit\Framework\TestCase;
 use Proximum\Vimeet\Application\Query\Group\Participant\SlotViewsQuery;
 use Proximum\Vimeet\Application\Query\Group\Participant\SlotViewsQueryHandler;
 use Proximum\Vimeet\Domain\Model\Event\Day;
 use Proximum\Vimeet\Domain\Model\MeetingSlot;
 use Proximum\Vimeet\Domain\Repository\MeetingSlotRepositoryInterface;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
-use PHPUnit\Framework\TestCase;
 
 class SlotViewsQueryHandlerTest extends TestCase
 {

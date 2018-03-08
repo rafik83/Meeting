@@ -1,15 +1,16 @@
 <?php
 
 /*
- * This file is part of the vimeet project.
+ * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2017 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
 
 namespace Proximum\Vimeet\Tests\Domain\Meeting\Slot;
 
+use PHPUnit\Framework\TestCase;
 use Proximum\Vimeet\Domain\Meeting\Slot\SlotAvailability;
 use Proximum\Vimeet\Domain\Meeting\Slot\SlotAvailabilityView;
 use Proximum\Vimeet\Domain\Model\Event;
@@ -33,7 +34,6 @@ use Proximum\Vimeet\Tests\Factory\ParticipantFactory;
 use Proximum\Vimeet\Tests\Factory\SheetFactory;
 use Proximum\Vimeet\Tests\Factory\SpotFactory;
 use Proximum\Vimeet\Tests\Factory\UserFactory;
-use PHPUnit\Framework\TestCase;
 
 class SlotAvailabilityTest extends TestCase
 {
@@ -113,7 +113,6 @@ class SlotAvailabilityTest extends TestCase
         $end   = new \DateTime('2016-10-12 10:00:00.000');
         $slot  = new MeetingSlot($this->event, $begin, $end);
 
-
         $result = $slotAvailability->isAvailable($slot, $this->participant);
 
         // Expected
@@ -151,7 +150,6 @@ class SlotAvailabilityTest extends TestCase
         $begin = new \DateTime('2016-10-12 09:00:00.000');
         $end   = new \DateTime('2016-10-12 10:00:00.000');
         $slot  = new MeetingSlot($this->event, $begin, $end);
-
 
         $result = $slotAvailability->isAvailable($slot, $this->participant);
 
@@ -229,7 +227,6 @@ class SlotAvailabilityTest extends TestCase
         $end   = new \DateTime('2016-10-12 10:00:00.000');
         $slot  = new MeetingSlot($this->event, $begin, $end);
 
-
         $result = $slotAvailability->isAvailable($slot, $this->participant);
 
         // Expected
@@ -267,7 +264,6 @@ class SlotAvailabilityTest extends TestCase
         $begin = new \DateTime('2016-10-12 09:00:00.000');
         $end   = new \DateTime('2016-10-12 10:00:00.000');
         $slot  = new MeetingSlot($this->event, $begin, $end);
-
 
         $result = $slotAvailability->isAvailable($slot, $this->participant);
 
@@ -320,7 +316,6 @@ class SlotAvailabilityTest extends TestCase
         $begin = new \DateTime('2016-10-12 09:00:00.000');
         $end   = new \DateTime('2016-10-12 10:00:00.000');
         $slot  = new MeetingSlot($this->event, $begin, $end);
-
 
         $result = $slotAvailability->isAvailable($slot, $this->participant);
 
@@ -850,7 +845,6 @@ class SlotAvailabilityTest extends TestCase
             $this->massAssignmentRepository->reveal()
         );
 
-
         $result = $slotAvailability->isAvailable($slot, $this->participant);
 
         // Expected
@@ -905,7 +899,6 @@ class SlotAvailabilityTest extends TestCase
             $this->massAssignmentRepository->reveal()
         );
 
-
         $result = $slotAvailability->isAvailable($slot, $this->participant);
 
         // Expected
@@ -958,7 +951,6 @@ class SlotAvailabilityTest extends TestCase
             $this->meetingRepository->reveal(),
             $this->massAssignmentRepository->reveal()
         );
-
 
         $result = $slotAvailability->isAvailable($slot, $this->participant);
 

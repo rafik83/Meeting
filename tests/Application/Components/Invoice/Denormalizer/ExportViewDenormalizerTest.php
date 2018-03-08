@@ -3,13 +3,15 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2017 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
 
 namespace Proximum\Vimeet\Tests\Application\Components\Invoice\Denormalizer;
 
+use IntlDateFormatter;
+use PHPUnit\Framework\TestCase;
 use Proximum\Vimeet\Application\Command\Planning\SheetInfoGuesserCache;
 use Proximum\Vimeet\Application\Components\Invoice\Denormalizer\ExportViewDenormalizer;
 use Proximum\Vimeet\Application\View\Invoice\BillingInfosView;
@@ -20,9 +22,7 @@ use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Order\Balance;
 use Proximum\Vimeet\Domain\View\Invoice\ExportView;
-use IntlDateFormatter;
 use Symfony\Component\Serializer\Serializer;
-use PHPUnit\Framework\TestCase;
 
 class ExportViewDenormalizerTest extends TestCase
 {

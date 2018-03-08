@@ -10,12 +10,12 @@
 
 namespace Proximum\Vimeet\Tests\Domain\Invoice\Numero;
 
+use PHPUnit\Framework\TestCase;
 use Proximum\Vimeet\Domain\Invoice\Finder;
 use Proximum\Vimeet\Domain\Model\Admin;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Invoice\Invoice;
 use Proximum\Vimeet\Domain\Model\Sheet;
-use PHPUnit\Framework\TestCase;
 
 class FinderTest extends TestCase
 {
