@@ -129,7 +129,7 @@ class UserInformationGetter
                 ]
             );
 
-            if ($response->statusCode === 403) { // @todo : try it / get the correct invalid status code
+            if (401 === $response->statusCode) {
                 if (!$retry) {
                     throw new \LogicException(
                         sprintf('Can not get user information from Comexposium for email : %s', $email)
@@ -141,7 +141,7 @@ class UserInformationGetter
                 return $this->getUserInformation($event, $endpoint, $jwtToken, $ssoApplication, $email, $locale, false);
             }
 
-            if ($response->statusCode !== 200) {
+            if (200 !== $response->statusCode) {
                 return null;
             }
 

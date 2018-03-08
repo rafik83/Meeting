@@ -449,7 +449,7 @@ class UserInformationGetterTest extends TestCase
             )
             ->shouldBeCalled()
             ->willReturn(
-                new Response(403, '{}')
+                new Response(401, '{}')
             )
         ;
 
