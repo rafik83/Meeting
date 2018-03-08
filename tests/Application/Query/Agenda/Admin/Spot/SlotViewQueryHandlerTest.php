@@ -1,15 +1,16 @@
 <?php
 
 /*
- * This file is part of the vimeet project.
+ * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2017 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
 
 namespace Proximum\Vimeet\Tests\Application\Query\Agenda\Admin\Spot;
 
+use PHPUnit\Framework\TestCase;
 use Proximum\Vimeet\Application\Query\Agenda\Admin\Spot\MeetingSlotViewQueryHandler;
 use Proximum\Vimeet\Application\Query\Agenda\Admin\Spot\SlotViewQuery;
 use Proximum\Vimeet\Application\Query\Agenda\Admin\Spot\SlotViewQueryHandler;
@@ -24,7 +25,6 @@ use Proximum\Vimeet\Domain\Repository\SpotUnavailabilityRepositoryInterface;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
 use Proximum\Vimeet\Tests\Factory\SlotFactory;
 use Proximum\Vimeet\Tests\Factory\SpotFactory;
-use PHPUnit\Framework\TestCase;
 
 class SlotViewQueryHandlerTest extends TestCase
 {
@@ -48,7 +48,7 @@ class SlotViewQueryHandlerTest extends TestCase
         $meetingSlotViewQueryHandler  = $this->prophesize(MeetingSlotViewQueryHandler::class);
 
         $spotUnavailabilityRepository->findBySpot($spot)->shouldBeCalled()->willReturn([
-            $spotUnavailability
+            $spotUnavailability,
         ]);
 
         $meetingSlotRepository->findByEventAndDay($event, $day)->shouldBeCalled()->willReturn([

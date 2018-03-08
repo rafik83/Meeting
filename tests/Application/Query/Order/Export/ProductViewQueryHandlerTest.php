@@ -10,12 +10,12 @@
 
 namespace Proximum\Vimeet\Tests\Application\Query\Order\Export;
 
+use PHPUnit\Framework\TestCase;
 use Proximum\Vimeet\Application\Adapter\TranslatorInterface;
 use Proximum\Vimeet\Application\Query\Order\Export\ProductViewQuery;
 use Proximum\Vimeet\Application\Query\Order\Export\ProductViewQueryHandler;
 use Proximum\Vimeet\Application\View\Order\Export\ProductView;
 use Proximum\Vimeet\Domain\Model\Product;
-use PHPUnit\Framework\TestCase;
 
 class ProductViewQueryHandlerTest extends TestCase
 {

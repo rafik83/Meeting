@@ -52,6 +52,5 @@ class TipTranslationViewQueryHandlerTest extends TestCase
 
         $views = $handler->handle($query);
         $this->assertEquals($expectedViews, $views);
-
     }
 }

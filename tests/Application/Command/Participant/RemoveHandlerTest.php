@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2016 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -169,7 +169,7 @@ class RemoveHandlerTest extends TestCase
         $remove = new Remove($sheet, $locale);
         $remove->participants = [
             $participant1,
-            $participant2
+            $participant2,
         ];
 
         // Handle

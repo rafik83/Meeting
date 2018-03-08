@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of the vimeet project.
+ * This file is part of the Proximum Vimeet project.
  *
  * Copyright (C) Proximum
  *
@@ -25,7 +25,7 @@ class RegistrationAccessCheckerTest extends TestCase
     /** @var \DateTimeInterface */
     private $dateTime;
 
-    /** @var  RegistrationAccessChecker */
+    /** @var RegistrationAccessChecker */
     private $registrationAccessChecker;
 
     /** @var RegistrationOpenDateAccessChecker */

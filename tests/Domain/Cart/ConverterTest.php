@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Tests\Domain\Cart;
 
+use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
 use Proximum\Vimeet\Domain\Cart\Cart;
 use Proximum\Vimeet\Domain\Cart\Converter;
@@ -31,7 +32,6 @@ use Proximum\Vimeet\Domain\Repository\OrderRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\PromotionCodeRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\PromotionCodeRowRepositoryInterface;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
-use PHPUnit\Framework\TestCase;
 
 class ConverterTest extends TestCase
 {
@@ -62,7 +62,7 @@ class ConverterTest extends TestCase
         $plan = Product::createPlan($event, 'plan', '', 200, 20, 20, 100);
         $plan->translate('fr', 'plan', '', '', '', '');
         $plan->translate('en', 'plan', '', '', '', '');
-        $chair = Product::createOption($event, 'chair', '', 100, 20, 2, 20,100, true);
+        $chair = Product::createOption($event, 'chair', '', 100, 20, 2, 20, 100, true);
         $chair->translate('fr', 'chair', '', '', '', '');
         $chair->translate('en', 'chair', '', '', '', '');
 

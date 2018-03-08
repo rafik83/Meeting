@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Tests\Application\Components\Messaging;
 
+use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
 use Prophecy\Prophecy\ObjectProphecy;
 use Proximum\Vimeet\Application\Command\Messaging\Batch\CreateMessage;
@@ -17,7 +18,6 @@ use Proximum\Vimeet\Application\Command\Messaging\Batch\CreateMessageHandler;
 use Proximum\Vimeet\Application\Components\Messaging\MessageFactory;
 use Proximum\Vimeet\Application\Event\Events;
 use Proximum\Vimeet\Domain\Model\Event;
-use PHPUnit\Framework\TestCase;
 
 class MessageFactoryTest extends TestCase
 {

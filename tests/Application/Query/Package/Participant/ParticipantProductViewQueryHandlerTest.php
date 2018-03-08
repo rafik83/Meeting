@@ -11,6 +11,7 @@
 namespace Proximum\Vimeet\Tests\Application\Query\Package\Participant;
 
 use Doctrine\Common\Collections\ArrayCollection;
+use PHPUnit\Framework\TestCase;
 use Prophecy\Prophecy\ObjectProphecy;
 use Proximum\Vimeet\Application\Components\Package\ProductByParticipantGetter;
 use Proximum\Vimeet\Application\Query\Package\Participant\ParticipantProductViewQuery;
@@ -29,7 +30,6 @@ use Proximum\Vimeet\Domain\Package\Product\IncludedParticipantGuesser;
 use Proximum\Vimeet\Domain\View\Package\Product\IncludedParticipantView;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
 use Proximum\Vimeet\Tests\Factory\ParticipantFactory;
-use PHPUnit\Framework\TestCase;
 
 class ParticipantProductViewQueryHandlerTest extends TestCase
 {
@@ -198,7 +198,7 @@ class ParticipantProductViewQueryHandlerTest extends TestCase
                     1337 => new IncludedParticipantView(
                         Product::createParticipant($event, 'My participant product', 49, 20, 2),
                         1
-                    )
+                    ),
                 ]
             );
 
@@ -290,7 +290,7 @@ class ParticipantProductViewQueryHandlerTest extends TestCase
                     1337 => new IncludedParticipantView(
                         Product::createParticipant($event, 'My participant product', 49, 20, 2),
                         1
-                    )
+                    ),
                 ]
             );
 

@@ -31,7 +31,7 @@ class AvailableSlotsByParticipantAndDayQueryHandlerTest extends TestCase
         $end    = new \DateTime('11/12/2013 19:01:00');
 
         $event = EventFactory::createEvent();
-        $event->setDays([new Day($event, $begin, $end),]);
+        $event->setDays([new Day($event, $begin, $end)]);
         $day = $event->getFirstDay();
         $sheet = SheetFactory::create($event);
         $participant = ParticipantFactory::create($sheet);
@@ -124,7 +124,6 @@ class AvailableSlotsByParticipantAndDayQueryHandlerTest extends TestCase
         $event = EventFactory::createEvent();
         $event->setDays([new Day($event, $begin, $end)]);
         $day = $event->getFirstDay();
-
 
         $sheet       = SheetFactory::create($event);
         $participant = ParticipantFactory::create($sheet);

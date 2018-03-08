@@ -32,33 +32,33 @@ class FilterHandlerTest extends TestCase
         $type        = new Type($event);
         $transaction = new Transaction($sheet, 100, $dateTime, 'paypal', '42', 'paid', 'EUR');
         $command     = new Filter($admin);
-    
+
         $command->beginDate = $dateTime;
         $command->endDate   = $endDate;
-        
+
         $admin->setEvents([$event]);
         $admin->setTypeEvents([$type]);
 
         $eventRepository             = $this->prophesize(EventRepositoryInterface::class);
         $transactionRepository       = $this->prophesize(TransactionRepositoryInterface::class);
         $transactionViewQueryHandler = $this->prophesize(TransactionViewQueryHandler::class);
-        
+
         $eventRepository
             ->getEventsByAdmin($admin)
             ->shouldBeCalled()
             ->willReturn([$event]);
-    
+
         $transactionRepository
             ->getFilteredByEvents([$event], $command->beginDate, $command->endDate)
             ->shouldBeCalled()
             ->willReturn([$transaction]);
-        
+
         $filterHandler = new FilterHandler(
             $transactionRepository->reveal(),
             $eventRepository->reveal(),
             $transactionViewQueryHandler->reveal()
         );
-        
+
         $filterHandler->handle($command);
     }
 }

@@ -113,7 +113,7 @@ class UpdateHandlerTest extends TestCase
             'en' => [
                 'title' => 'title en',
                 'content' => 'content en',
-            ]
+            ],
         ];
         $handler = new UpdateHandler(
             $tipRepository->reveal(),

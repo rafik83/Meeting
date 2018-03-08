@@ -17,8 +17,6 @@ use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\File;
 use Proximum\Vimeet\Domain\Model\Spot;
 use Proximum\Vimeet\Domain\Spot\Import;
-use Proximum\Vimeet\Domain\View\Spot\Import\SheetView;
-use Proximum\Vimeet\Domain\View\Spot\Import\SpotImportView;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
 
 class SpotImportPreviewQueryHandlerTest extends TestCase
@@ -47,7 +45,7 @@ class SpotImportPreviewQueryHandlerTest extends TestCase
         $spotImportPreviewQuery = new SpotImportPreviewQuery($this->event, $file, 'fr');
 
         $expectedImportedSpot1 = new Import(new Spot('A1', $this->event, '10', '2', '33', true, '4', false), [1, 2]);
-        $expectedImportedSpot2 = new Import(new Spot('A2', $this->event, '10', '2', '33', '1', '4', '1'), [3 ,4]);
+        $expectedImportedSpot2 = new Import(new Spot('A2', $this->event, '10', '2', '33', '1', '4', '1'), [3, 4]);
         $expectedImportedSpot3 = new Import(new Spot('A3', $this->event, '10', '2', '33', '1', '4', '1'), [3]);
         $expectedImportedSpot3->errorMessages = ['La fiche ayant l\'identifiant 3 a déjà été attribuée à un lieu'];
         $expectedImportedSpot4 = new Import(new Spot('A1', $this->event, '10', '2', '33', '1', '4', '1'), [5, 6]);

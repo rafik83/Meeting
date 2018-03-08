@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Tests\Domain\Rule;
 
+use PHPUnit\Framework\TestCase;
 use Proximum\Vimeet\Application\Components\Sheet\Template\Tag;
 use Proximum\Vimeet\Application\View\Participant\CardListView;
 use Proximum\Vimeet\Application\View\Participant\CardView;
@@ -18,7 +19,6 @@ use Proximum\Vimeet\Domain\Rule\Applyer;
 use Proximum\Vimeet\Domain\Rule\ComposedRule;
 use Proximum\Vimeet\Domain\Rule\Composer;
 use Proximum\Vimeet\Domain\Rule\Exception\NoRuleException;
-use PHPUnit\Framework\TestCase;
 
 class ApplyerTest extends TestCase
 {
@@ -103,7 +103,6 @@ class ApplyerTest extends TestCase
             Tag::PARTICIPANT_FIRSTNAME,
             Tag::PARTICIPANT_AVATAR,
         ];
-
 
         $cardListView = new CardListView();
         $cardListView->cardViews = [

@@ -105,7 +105,7 @@ class DuplicatorTest extends TestCase
 
         $package->setPlans([
             $plan1->reveal(),
-            $plan2->reveal()
+            $plan2->reveal(),
         ]);
 
         $package->setParticipants([$participant->reveal()]);

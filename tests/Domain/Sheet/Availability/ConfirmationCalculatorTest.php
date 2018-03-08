@@ -51,7 +51,6 @@ class ConfirmationCalculatorTest extends TestCase
     /** @var ObjectProphecy */
     private $event;
 
-
     public function setUp()
     {
         $this->sheet = $this->prophesize(Sheet::class);

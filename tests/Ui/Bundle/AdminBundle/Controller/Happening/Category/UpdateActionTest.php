@@ -201,7 +201,7 @@ class UpdateActionTest extends TestCase
 
         $this->engine->renderResponse(Argument::any())->shouldNotBeCalled();
         $this->commandBus->handle($update)->shouldBeCalled();
-        $this->flashBag->add("success", "flash.admin.happening.category.update.success")->shouldBeCalled();
+        $this->flashBag->add('success', 'flash.admin.happening.category.update.success')->shouldBeCalled();
 
         $this->router
             ->generate('admin_happening_category_list', ['event' => 12])

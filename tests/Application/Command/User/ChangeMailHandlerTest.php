@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2015 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -28,7 +28,6 @@ use Proximum\Vimeet\Domain\Repository\UserRepositoryInterface;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
-
 class ChangeMailHandlerTest extends TestCase
 {
     /** @var ObjectProphecy */
@@ -43,13 +42,13 @@ class ChangeMailHandlerTest extends TestCase
     /** @var ObjectProphecy */
     private $eventDispatcher;
 
-    /** @var \DateTime  */
+    /** @var \DateTime */
     private $date;
 
     /** @var User */
     private $user;
 
-    /** @var  Event */
+    /** @var Event */
     private $event;
 
     public function setUp()
@@ -61,7 +60,6 @@ class ChangeMailHandlerTest extends TestCase
         $this->date                      = $date  = new DateTime();
         $this->user                      = $user  = new User('test@test.fr', '__SALT__', '__TEST__', 'fr');
         $this->event                     = $event = EventFactory::createEvent();
-
     }
 
     public function testHandle()

@@ -1,9 +1,9 @@
 <?php
 
 /*
- * This file is part of the vimeet project.
+ * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2017 vimeet
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -20,16 +20,16 @@ use Proximum\Vimeet\Domain\Template\TemplateObject\Telephone;
 
 class TaggedInfoGuesserTest extends TestCase
 {
-    /** @var  TemplateDataFactory */
+    /** @var TemplateDataFactory */
     private $templateDataFactory;
 
-    /** @var  \DateTime */
+    /** @var \DateTime */
     private $dateTime;
 
-    /** @var  RegistrationTemplate */
+    /** @var RegistrationTemplate */
     private $registrationTemplate;
 
-    /** @var  Telephone */
+    /** @var Telephone */
     private $phoneObject;
 
     public function setUp()

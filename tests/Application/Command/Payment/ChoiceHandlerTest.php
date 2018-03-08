@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Tests\Application\Command\Payment;
 
+use PHPUnit\Framework\TestCase;
 use Proximum\Vimeet\Application\Command\Payment\Choice;
 use Proximum\Vimeet\Application\Command\Payment\ChoiceHandler;
 use Proximum\Vimeet\Domain\Cart\Cart;
@@ -27,7 +28,6 @@ use Proximum\Vimeet\Domain\Payment\TotalToPay;
 use Proximum\Vimeet\Domain\Repository\TransactionRepositoryInterface;
 use Proximum\Vimeet\Infrastructure\Adapter\DelayedEventDispatcher;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
-use PHPUnit\Framework\TestCase;
 
 class ChoiceHandlerTest extends TestCase
 {
@@ -45,7 +45,7 @@ class ChoiceHandlerTest extends TestCase
         $plan = Product::createPlan($event, 'plan', '', 200, 20, 20, 100);
         $plan->translate('fr', 'plan', '', '', '', '');
         $plan->translate('en', 'plan', '', '', '', '');
-        $chair = Product::createOption($event, 'chair', '', 100, 20, 2, 20,100, true, null, null, null);
+        $chair = Product::createOption($event, 'chair', '', 100, 20, 2, 20, 100, true, null, null, null);
         $chair->translate('fr', 'chair', '', '', '', '');
         $chair->translate('en', 'chair', '', '', '', '');
 

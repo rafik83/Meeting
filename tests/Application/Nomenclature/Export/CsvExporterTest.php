@@ -3,17 +3,17 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2016 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
 
 namespace Proximum\Vimeet\Tests\Application\Nomenclature\Export;
 
-use Proximum\Vimeet\Application\Serializer\Charset;
-use Proximum\Vimeet\Application\Nomenclature\Export\CsvExporter;
-use Proximum\Vimeet\Domain\Model\Nomenclature;
 use PHPUnit\Framework\TestCase;
+use Proximum\Vimeet\Application\Nomenclature\Export\CsvExporter;
+use Proximum\Vimeet\Application\Serializer\Charset;
+use Proximum\Vimeet\Domain\Model\Nomenclature;
 
 class CsvExporterTest extends TestCase
 {
@@ -180,25 +180,25 @@ class CsvExporterTest extends TestCase
                                 'label' => [
                                     'fr' => 'Accompagnement technique industriel (CTI)',
                                     'en' => 'Industrial technical support',
-                                ]
+                                ],
                             ],
                             '5770ec482e8ff' => [
                                 'label' => [
                                     'fr' => 'Bureau d\'études',
                                     'en' => 'Design office',
-                                ]
+                                ],
                             ],
                             '5770ec4872d29' => [
                                 'label' => [
                                     'fr' => 'Co-développement',
                                     'en' => 'Co-development',
-                                ]
+                                ],
                             ],
                             '5770ec48bdee6' => [
                                 'label' => [
                                     'fr' => 'Crédit impôt recherche',
                                     'en' => 'Research tax credit',
-                                ]
+                                ],
                             ],
                         ],
                     ],

@@ -1,10 +1,11 @@
 <?php
 
-/**
- * Created by PhpStorm.
- * User: richard
- * Date: 22/02/2018
- * Time: 21:27
+/*
+ * This file is part of the Proximum Vimeet project.
+ *
+ * Copyright (C) Proximum
+ *
+ * @author Elao <contact@elao.com>
  */
 
 namespace Proximum\Vimeet\Tests\Application\ThirdParty\Comexposium\Webservice\Handler;
@@ -59,7 +60,7 @@ class PrepareNomenclatureHandlerTest extends TestCase
 
         $expectedResult = new NomenclatureView([
             '6666' => $parentNomenclatureItem,
-            '2233' => $childNomenclatureItem
+            '2233' => $childNomenclatureItem,
         ]);
 
         $this->assertEquals($expectedResult, $result);

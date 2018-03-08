@@ -10,14 +10,14 @@
 
 namespace Proximum\Vimeet\Tests\Application\Command\Product\Option;
 
+use PHPUnit\Framework\TestCase;
 use Proximum\Vimeet\Application\Adapter\FileStorageInterface;
 use Proximum\Vimeet\Application\Command\Product\Option\CreateOption;
 use Proximum\Vimeet\Application\Command\Product\Option\CreateOptionHandler;
-use Proximum\Vimeet\Domain\Product\UpdatePriceResolver;
 use Proximum\Vimeet\Domain\Model\Product;
+use Proximum\Vimeet\Domain\Product\UpdatePriceResolver;
 use Proximum\Vimeet\Domain\Repository\ProductRepositoryInterface;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
-use PHPUnit\Framework\TestCase;
 
 class CreateOptionHandlerTest extends TestCase
 {
@@ -61,7 +61,6 @@ class CreateOptionHandlerTest extends TestCase
         $create->deletableUntil      = $deletableUntil;
         $create->translations        = $translations;
         $create->file                = null;
-
 
         // Expected
         $expectedProduct = Product::createOption(

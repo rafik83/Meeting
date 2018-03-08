@@ -1,21 +1,21 @@
 <?php
 
 /*
- * This file is part of the vimeet project.
+ * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2016 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
 
 namespace Proximum\Vimeet\Application\Query\Dashboard;
 
+use PHPUnit\Framework\TestCase;
 use Proximum\Vimeet\Application\View\Dashboard\DashboardSheetTypeView;
 use Proximum\Vimeet\Application\View\Dashboard\DashboardSheetView;
 use Proximum\Vimeet\Domain\Repository\ParticipantRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
-use PHPUnit\Framework\TestCase;
 
 class DashboardSheetViewQueryHandlerTest extends TestCase
 {
@@ -51,7 +51,7 @@ class DashboardSheetViewQueryHandlerTest extends TestCase
         $participantRepository->countByTypeWithEnabledSheet($event, $locale)->shouldBeCalled()->willReturn([
             ['id' => 1, 'total' => 100, 'title' => 'fournisseur'],
             ['id' => 2, 'total' => 50, 'title' => 'investisseur'],
-        ]);;
+        ]);
 
         $handler = new DashboardSheetViewQueryHandler(
             $sheetRepository->reveal(),

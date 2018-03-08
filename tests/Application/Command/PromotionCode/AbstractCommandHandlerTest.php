@@ -3,24 +3,21 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2016 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
 
 namespace Proximum\Vimeet\Tests\Application\Command\PromotionCode;
 
-use Doctrine\Common\Collections\ArrayCollection;
+use PHPUnit\Framework\TestCase;
 use Proximum\Vimeet\Application\Command\PromotionCode\Create;
 use Proximum\Vimeet\Application\Command\PromotionCode\CreateHandler;
-use Proximum\Vimeet\Domain\Model\Event;
-use Proximum\Vimeet\Domain\Model\PromotionCodeTranslation;
+use Proximum\Vimeet\Domain\Model\PromotionCode;
 use Proximum\Vimeet\Domain\Promotion\Checker\UniqueCodeChecker;
 use Proximum\Vimeet\Domain\Promotion\Exception\NonUniqueCodeException;
 use Proximum\Vimeet\Domain\Repository\PromotionCodeRepositoryInterface;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
-use Proximum\Vimeet\Domain\Model\PromotionCode;
-use PHPUnit\Framework\TestCase;
 
 class AbstractCommandHandlerTest extends TestCase
 {
@@ -45,7 +42,6 @@ class AbstractCommandHandlerTest extends TestCase
         $create->stock        = 10;
         $create->translations = [];
 
-
         $promotionCodeRepository = $this->prophesize(PromotionCodeRepositoryInterface::class);
         $uniqueCodeChecker       = $this->prophesize(UniqueCodeChecker::class);
 
@@ -66,12 +62,12 @@ class AbstractCommandHandlerTest extends TestCase
         $translations = [
             'fr' => [
                 'label'  => 'labelTest',
-                'description' => 'descriptionTest'
+                'description' => 'descriptionTest',
             ],
             'en' => [
                 'label'  => 'labelTestEn',
-                'description' => 'descriptionTestEn'
-            ]
+                'description' => 'descriptionTestEn',
+            ],
         ];
 
         $create = new Create($event);

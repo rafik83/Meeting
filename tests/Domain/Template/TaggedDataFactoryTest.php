@@ -1,9 +1,9 @@
 <?php
 
 /*
- * This file is part of the vimeet project.
+ * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2017 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -34,7 +34,7 @@ class TaggedDataFactoryTest extends TestCase
                 'config'    => [
                     'translatable' => true,
                     'tags'         => [Tag::SHEET_TITLE, Tag::SHEET_DATA], // registration template tags
-                    'tag'          => Tag::SHEET_TITLE // sheet template tag
+                    'tag'          => Tag::SHEET_TITLE, // sheet template tag
                 ],
             ],
             '0aea62b3' => [
@@ -43,7 +43,7 @@ class TaggedDataFactoryTest extends TestCase
                 'config'    => [
                     'translatable' => false,
                     'tags'         => ['sheet_generic_tag_1', Tag::SHEET_DATA], // registration template tags
-                    'tag'          => 'sheet_generic_tag_1' // sheet template tag
+                    'tag'          => 'sheet_generic_tag_1', // sheet template tag
                 ],
             ],
         ];
@@ -90,7 +90,7 @@ class TaggedDataFactoryTest extends TestCase
             ->shouldBeCalled()
             ->willReturn($templateData);
 
-        /** @var TemplateData $sheetTemplateData */
+        /* @var TemplateData $sheetTemplateData */
         $templateDataFactory
             ->createFromSheet($sheet, $locale)
             ->shouldBeCalled()
