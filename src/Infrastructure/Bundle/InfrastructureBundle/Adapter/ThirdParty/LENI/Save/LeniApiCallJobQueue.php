@@ -14,7 +14,7 @@ use JMS\JobQueueBundle\Entity\Job;
 use Proximum\Vimeet\Application\Adapter\ThirdParty\LENI\Save\LeniApiCallJobQueueInterface;
 use Proximum\Vimeet\Domain\Model\User\Event\ExtraData;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Adapter\AbstractJobQueueAdapter;
-use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\ThirdParty\LENI\LeniApiCallCommand;
+use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\ThirdParty\LENI\Save\LeniApiCallCommand;
 
 class LeniApiCallJobQueue extends AbstractJobQueueAdapter implements LeniApiCallJobQueueInterface
 {

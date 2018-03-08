@@ -1,5 +1,5 @@
 services:
-    command.third_party.leni.prepare_leni_api_handler:
+    command.third_party.leni.prepare_leni_api_save_handler:
         class: Proximum\Vimeet\Application\ThirdParty\LENI\Save\Command\PrepareLeniApiCallHandler
         arguments:
             - '@vimeet_infrastructure.repository.event_repository'
@@ -9,37 +9,47 @@ services:
             - '@planning.formatter.participant_planning_formatter'
             - '@query.api.leni.leni_user_view_query_handler'
             - '@adapter.serializer_adapter'
-            - '@adapter.leni_api_call_job_queue'
+            - '@adapter.leni_api_save_call_job_queue'
             - '@datetime'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\ThirdParty\LENI\Save\Command\PrepareLeniApiCall }
 
-    command.third_party.leni.leni_api_call_handler:
+    command.third_party.leni.leni_api_save_call_handler:
         class: Proximum\Vimeet\Application\ThirdParty\LENI\Save\Command\LeniApiCallHandler
         arguments:
             - '@repository.user.event.extra_data_repository'
-            - '@datetime'
-            - '@service.third_party.leni.leni_api'
+            - '@service.third_party.leni.leni_api_caller'
             - '@service.third_party.leni.user_extra_data_fingerprint_manager'
 
-        UserExtraDataFingerprintManager $userExtraDataFingerprintManager
+    command.third_party.leni.leni_api_get_call_handler:
+        class: Proximum\Vimeet\Application\ThirdParty\LENI\Get\Command\LeniApiCallHandler
+        arguments:
+            - '@service.third_party.leni.leni_api_caller'
 
-    adapter.leni_api_call_job_queue:
+    adapter.leni_api_save_call_job_queue:
         class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Adapter\ThirdParty\LENI\Save\LeniApiCallJobQueue
         arguments:
             - '@doctrine.orm.entity_manager'
 
-    command.api.prepare_leni_api_call_command:
-        class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\ThirdParty\LENI\PrepareLeniApiCallCommand
+    command.api.prepare_leni_api_save_call_command:
+        class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\ThirdParty\LENI\Save\PrepareLeniApiCallCommand
         arguments:
-            - '@command.third_party.leni.prepare_leni_api_handler'
+            - '@command.third_party.leni.prepare_leni_api_save_handler'
         tags:
             - { name: console.command }
 
-    command.api.leni_api_call_command:
-        class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\ThirdParty\LENI\LeniApiCallCommand
+    command.api.leni_api_save_call_command:
+        class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\ThirdParty\LENI\Save\LeniApiCallCommand
         arguments:
-            - '@command.third_party.leni.leni_api_call_handler'
+            - '@command.third_party.leni.leni_api_save_call_handler'
+            - '@repository.user.event.extra_data_repository'
+        tags:
+            - { name: console.command }
+
+    command.api.leni_api_get_call_command:
+        class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\ThirdParty\LENI\Get\LeniApiCallCommand
+        arguments:
+            - '@command.third_party.leni.leni_api_get_call_handler'
             - '@repository.user.event.extra_data_repository'
         tags:
             - { name: console.command }
@@ -49,14 +59,11 @@ services:
         tags:
             - { name: serializer.normalizer }
 
-    service.third_party.leni.leni_api:
+    service.third_party.leni.leni_api_caller:
         class: Proximum\Vimeet\Application\ThirdParty\LENI\LeniApiCaller
         arguments:
             - '@adapter.http_adapter'
             - '@repository.event.extra_parameter_repository'
-
-        ExtraDataRepositoryInterface $extraDataRepository,
-        \DateTimeInterface $dateTime
 
     service.third_party.leni.user_extra_data_fingerprint_manager:
         class: Proximum\Vimeet\Application\ThirdParty\LENI\UserExtraDataFingerprintManager

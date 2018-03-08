@@ -8,7 +8,7 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\ThirdParty\LENI;
+namespace Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\ThirdParty\LENI\Save;
 
 use Proximum\Vimeet\Application\ThirdParty\LENI\Save\Command\PrepareLeniApiCall;
 use Proximum\Vimeet\Application\ThirdParty\LENI\Save\Command\PrepareLeniApiCallHandler;
@@ -18,7 +18,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 class PrepareLeniApiCallCommand extends Command
 {
-    const NAME = 'vimeet:api:leni-export-data';
+    const NAME = 'vimeet:api:leni-save-export-data';
 
     /** @var PrepareLeniApiCallHandler */
     private $apiHandler;

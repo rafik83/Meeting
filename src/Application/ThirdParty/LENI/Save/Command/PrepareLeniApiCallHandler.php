@@ -19,6 +19,7 @@ use Proximum\Vimeet\Application\ThirdParty\LENI\Exception\NotValidApiCallExcepti
 use Proximum\Vimeet\Application\ThirdParty\LENI\Save\Query\LeniUserViewQuery;
 use Proximum\Vimeet\Application\ThirdParty\LENI\Save\Query\LeniUserViewQueryHandler;
 use Proximum\Vimeet\Domain\Event\ExtraParameter\Type;
+use Proximum\Vimeet\Domain\Exception\Event\DayNotDefinedException;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Model\User\Event\ExtraData;
@@ -99,6 +100,7 @@ class PrepareLeniApiCallHandler
      * @throws LeniApiServerException
      * @throws NotValidApiCallException
      * @throws \LogicException
+     * @throws DayNotDefinedException
      */
     public function handle(PrepareLeniApiCall $command): void
     {

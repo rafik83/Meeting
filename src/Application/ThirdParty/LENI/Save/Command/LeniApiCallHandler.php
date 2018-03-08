@@ -122,9 +122,6 @@ class LeniApiCallHandler
     /** @var ExtraDataRepositoryInterface */
     private $extraDataRepository;
 
-    /** @var \DateTimeInterface */
-    private $dateTime;
-
     /** @var LeniApiCaller */
     private $leniApi;
 
@@ -133,18 +130,15 @@ class LeniApiCallHandler
 
     /**
      * @param ExtraDataRepositoryInterface    $extraDataRepository
-     * @param \DateTimeInterface              $dateTime
      * @param LeniApiCaller                   $leniApi
      * @param UserExtraDataFingerprintManager $userExtraDataFingerprintManager
      */
     public function __construct(
         ExtraDataRepositoryInterface $extraDataRepository,
-        \DateTimeInterface $dateTime,
         LeniApiCaller $leniApi,
         UserExtraDataFingerprintManager $userExtraDataFingerprintManager
     ) {
         $this->extraDataRepository = $extraDataRepository;
-        $this->dateTime = $dateTime;
         $this->leniApi = $leniApi;
         $this->userExtraDataFingerprintManager = $userExtraDataFingerprintManager;
     }
@@ -152,11 +146,11 @@ class LeniApiCallHandler
     /**
      * @param LeniApiCall $leniApiCall
      *
-     * @throws \LogicException
      * @throws LeniApiServerException
+     * @throws MissingIdException
      * @throws NotValidApiCallException
      * @throws WarningApiCallException
-     * @throws MissingIdException
+     * @throws \LogicException
      */
     public function handle(LeniApiCall $leniApiCall): void
     {
@@ -177,61 +171,7 @@ class LeniApiCallHandler
             unset($data[LeniConstants::LENI_COL_USER_ID]);
         }
 
-        $response = $this->leniApi->save($event, $data);
-
-        $apiCallLog = sprintf(
-            "Headers: %s;\nRequest: %s;\nResponse: %s;",
-            json_encode($this->leniApi->getHeaders()),
-            $this->leniApi->getBody(),
-            json_encode($response)
-        );
-
-        // Call not valid
-        if (!isset($response[LeniConstants::LENI_IS_VALID]) || $response[LeniConstants::LENI_IS_VALID] !== true) {
-            throw new NotValidApiCallException($apiCallLog);
-        }
-
-        $hasNotUserId = !isset($data[LeniConstants::LENI_COL_USER_ID])
-            || null === $data[LeniConstants::LENI_COL_USER_ID];
-
-        // When inserting user (first call) we must retrieve the LENI user id
-        if ($hasNotUserId
-            && (
-                !isset($response[LeniConstants::LENI_FIELD_INFO])
-                || !isset($response[LeniConstants::LENI_FIELD_INFO][LeniConstants::LENI_COL_USER_ID])
-                || !isset($response[LeniConstants::LENI_FIELD_INFO][LeniConstants::LENI_COL_USER_ID][LeniConstants::LENI_FIELD_VALUE])
-            )
-        ) {
-            throw new MissingIdException($apiCallLog);
-        }
-
-        // Call has warnings
-        if (isset($response[LeniConstants::LENI_FIELD_HAS_WARNING], $response[LeniConstants::LENI_FIELD_INFO])
-            && $response[LeniConstants::LENI_FIELD_HAS_WARNING] === true
-        ) {
-            $warnings = [];
-
-            foreach ($response[LeniConstants::LENI_FIELD_INFO] as $key => $info) {
-                if (\in_array($key, LeniConstants::LENI_COLUMNS, true)) {
-                    $warnings[] = $key;
-                }
-            }
-
-            if (!empty($warnings)) {
-                throw new WarningApiCallException($apiCallLog);
-            }
-        }
-
-        // Get and save the LENI user Id when it is the first call (insert user into LENI)
-        if ($hasNotUserId) {
-            $leniUserId = $response[LeniConstants::LENI_FIELD_INFO][LeniConstants::LENI_COL_USER_ID][LeniConstants::LENI_FIELD_VALUE];
-
-            if (null === $leniUserId) {
-                throw new \LogicException('LENI returned a null user id: ' . $apiCallLog);
-            }
-
-            $data[LeniConstants::LENI_COL_USER_ID] = $leniUserId;
-        }
+        $this->leniApi->save($event, $data);
 
         $this->userExtraDataFingerprintManager->addOrUpdateFingerprint(
             $pendingExtraData->getEvent(),
