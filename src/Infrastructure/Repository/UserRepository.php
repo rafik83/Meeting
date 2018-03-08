@@ -81,7 +81,7 @@ class UserRepository implements UserRepositoryInterface
     /**
      * {@inheritdoc}
      */
-    public function findByEmail($email)
+    public function findByEmail($email): ?User
     {
         $queryBuilder = $this
             ->entityManager
@@ -170,7 +170,26 @@ class UserRepository implements UserRepositoryInterface
     /**
      * {@inheritdoc}
      */
-    public function findByEvent(Event $event)
+    public function findWithEnabledSheetByEvent(Event $event): array
+    {
+        return $this->getWithSheetByEvent($event, true);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function findWithSheetByEvent(Event $event): array
+    {
+        return $this->getWithSheetByEvent($event, false);
+    }
+
+    /**
+     * @param Event $event
+     * @param bool  $onlyEnabledSheets
+     *
+     * @return User[]
+     */
+    private function getWithSheetByEvent(Event $event, bool $onlyEnabledSheets): array
     {
         $queryBuilder = $this
             ->entityManager
@@ -182,12 +201,20 @@ class UserRepository implements UserRepositoryInterface
                 'participant.sheet',
                 'sheet',
                 'WITH',
-                'sheet.event = :event AND sheet.enable = true'
+                'sheet.event = :event' . ($onlyEnabledSheets ? ' AND sheet.enable = true' : '')
             )
             ->setParameter('event', $event)
         ;
 
         return $queryBuilder->getQuery()->getResult();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function findByEvent(Event $event)
+    {
+        return $this->findWithEnabledSheetByEvent($event);
     }
 
     /**

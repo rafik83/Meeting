@@ -1,7 +1,10 @@
 {% extends 'AdminBundle::base.html.twig' %}
 
+{% block title 'admin.account.title'|trans %}
+
 {% block content %}
-    <h2>{{ 'admin.account.title'|trans }}</h2>
+    <h1 class="page-header">{{ 'admin.account.title'|trans }}</h1>
+
     <ul>
         <li>
             <a href="{{ path('admin_update_password') }}">{{ 'admin.account.content.password'|trans }}</a>

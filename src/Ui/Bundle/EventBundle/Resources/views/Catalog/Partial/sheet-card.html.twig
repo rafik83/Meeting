@@ -8,11 +8,11 @@
                 </a>
             {% endif %}
             {% if catalogSheetPreviewView.isSeenByCurrentUser %}
-                <a href="{{ sheetToDisplayLink }}" class="pull-right no-underline ft-size-18 mg-left-8">
+                <a href="{{ sheetToDisplayLink }}" class="pull-right no-underline ft-size-18 mg-left-8" target="_blank">
                     <i class="icon-Voir_1 ft-bold"></i>
                 </a>
             {% endif %}
-            {{ include('EventBundle:Sheet/Card:content.html.twig', { title: catalogSheetPreviewView.title, preview: catalogSheetPreviewView.preview, isCatalog: isCatalog }, false) }}
+            {{ include('EventBundle:Sheet/Card:content.html.twig', { title: catalogSheetPreviewView.title, preview: catalogSheetPreviewView.preview, isCatalog: isCatalog, sheetToDisplayLink: sheetToDisplayLink }, false) }}
         </div>
         <footer>
             <div class="actions">
@@ -26,7 +26,7 @@
             </div>
 
             {% if not catalogSheetPreviewView.isItMySheet %}
-                <div class="buttons-zone button">
+                <div class="buttons-zone {% if meetingRequestView.isAnsweringMeetingRequestClosed is defined and meetingRequestView.isAnsweringMeetingRequestClosed == false %}button{% endif %}">
                     {{ include('EventBundle:MeetingRequest:buttons.html.twig', {
                         'allowedToCreate': catalogSheetPreviewView.isAllowedToCreateMeetingRequest,
                         'meetingRequest': catalogSheetPreviewView.meetingRequest,
@@ -36,6 +36,9 @@
                         'isMeetingRequestUpdateLocked': catalogSheetPreviewView.isMeetingRequestUpdateLocked|default(false),
                         'isMeetingRequestClosed': catalogSheetPreviewView.isMeetingRequestClosed,
                         'isAnsweringMeetingRequestClosed': catalogSheetPreviewView.isAnsweringMeetingRequestClosed,
+                        'isPhoneValidationRequired': catalogSheetPreviewView.isPhoneValidationRequired,
+                        'phoneValidationLink': catalogSheetPreviewView.validatePhoneLink,
+                        'hideMeetingRequest': hideMeetingRequest|default(false),
                     }) }}
                 </div>
             {% endif %}

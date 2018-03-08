@@ -28,6 +28,11 @@ class VideoConferenceToken
     private $token;
 
     /**
+     * @var null|string
+     */
+    private $streamId;
+
+    /**
      * @var User
      */
     private $user;
@@ -76,5 +81,21 @@ class VideoConferenceToken
     public function getUser(): User
     {
         return $this->user;
+    }
+
+    /**
+     * @return null|string
+     */
+    public function getStreamId(): ?string
+    {
+        return $this->streamId;
+    }
+
+    /**
+     * @param null|string $streamId
+     */
+    public function setStreamId(?string $streamId)
+    {
+        $this->streamId = $streamId;
     }
 }

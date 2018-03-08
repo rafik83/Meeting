@@ -110,13 +110,13 @@ Happening.prototype.validateParticipation = function (label) {
     var buttonLabel;
 
     if ('cancel' === label) {
-        buttonLabel = '<i class="icon icon-Fermer_4 happeningParticipateIcon"></i>' + this.labelCancel;
+        buttonLabel = '<i class="icon icon-Fermer_4 happeningParticipateIcon"></i> ' + this.labelCancel;
         this.happeningParticipateIcon.classList.remove('hide');
     } else if ('update' === label) {
-        buttonLabel = '<i class="icon icon-Fermer_4 happeningParticipateIcon"></i>' + this.labelUpdate;
+        buttonLabel = '<i class="icon icon-Fermer_4 happeningParticipateIcon"></i> ' + this.labelUpdate;
         this.happeningParticipateIcon.classList.remove('hide');
     } else if ('participate' === label) {
-        buttonLabel = '<i class="icon icon-Valider_4 happeningParticipateIcon"></i>' + this.labelParticipate;
+        buttonLabel = '<i class="icon icon-Valider_4 happeningParticipateIcon"></i> ' + this.labelParticipate;
         this.happeningParticipateIcon.classList.add('hide');
     }
     if (buttonLabel) {

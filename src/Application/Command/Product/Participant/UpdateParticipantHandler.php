@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2016 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -19,12 +19,12 @@ class UpdateParticipantHandler extends AbstractHandler
      */
     public function handle(UpdateParticipant $updateParticipant)
     {
+        $canUpdatePriceAndVat = $this->updatePriceResolver->resolve($updateParticipant->product);
         $product = $updateParticipant->product->updateParticipant(
             $updateParticipant->name,
             $updateParticipant->quantityMax,
-            $this->updatePriceResolver->resolve($updateParticipant->product) ?
-                $updateParticipant->unitPrice :
-                $updateParticipant->product->getUnitPrice()
+            $canUpdatePriceAndVat ? $updateParticipant->unitPrice : $updateParticipant->product->getUnitPrice(),
+            $canUpdatePriceAndVat ? $updateParticipant->vat : $updateParticipant->product->getVat()
         );
 
         foreach ($updateParticipant->translations as $locale => $translation) {

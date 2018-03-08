@@ -4,3 +4,7 @@ Proximum\Vimeet\Application\Command\Participant\Add:
             - NotBlank: ~
             - Email:
                 strict: true
+        product:
+            - Expression:
+                expression: "!this.needToSelectProduct or this.product !== null"
+                message: "validators.participant.mustSelectProduct"

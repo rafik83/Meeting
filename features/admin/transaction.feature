@@ -53,8 +53,8 @@ Feature: Admin Transaction
     And I press "form.update_transaction.children.submit.label"
     Then I should be on this page "/fr/event/1/sheet/1#sheetOrders"
     And I should see "flash.admin.transaction.update.success"
-    And the "transaction.confirm" mail should be sent to "user_asddays_1@proximum.com" from "no-reply@asddays-2016.vimeet.proximum.dev"
-    And the "transaction.confirm" mail should be sent in bcc to "team-project@example.net" from "no-reply@asddays-2016.vimeet.proximum.dev"
+    And the "transaction.confirm" mail should be sent to "user_asddays_1@proximum.com" from "no-reply@asddays-2016.vimeet.proximum"
+    And the "transaction.confirm" mail should be sent in bcc to "team-project@example.net" from "no-reply@asddays-2016.vimeet.proximum"
 
   Scenario: I can remove a transaction
     Given I am logged with "test@test.com" on admin

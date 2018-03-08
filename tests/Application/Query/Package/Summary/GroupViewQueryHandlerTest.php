@@ -1,15 +1,16 @@
 <?php
 
 /*
- * This file is part of the vimeet project.
+ * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2017 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
 
 namespace Proximum\Vimeet\Tests\Application\Query\Package\Summary;
 
+use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
 use Proximum\Vimeet\Application\Query\Package\Summary\GroupViewQuery;
 use Proximum\Vimeet\Application\Query\Package\Summary\GroupViewQueryHandler;
@@ -26,7 +27,6 @@ use Proximum\Vimeet\Domain\Model\Type;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
 use Proximum\Vimeet\Tests\Factory\ProductFactory;
 use Proximum\Vimeet\Tests\Factory\SheetFactory;
-use PHPUnit\Framework\TestCase;
 
 class GroupViewQueryHandlerTest extends TestCase
 {
@@ -58,6 +58,7 @@ class GroupViewQueryHandlerTest extends TestCase
             1, // quantity
             25, // total
             $event->getMode(),
+            20,
             $event->getCurrency()
         );
 

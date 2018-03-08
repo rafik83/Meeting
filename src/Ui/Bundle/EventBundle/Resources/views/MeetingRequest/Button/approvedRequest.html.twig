@@ -1,9 +1,30 @@
-{% if isMeetingPublished is defined and isMeetingPublished and meetingRequest.hasMeeting %}
-    <div class="btn btn-gray accept">
-        <i class="icon-Valider_4"></i> {{ 'catalog.meeting_request.request.placed'|trans }}
-    </div>
+{% set redirectPath = path('event_catalog_index', { 'sheet': sheet.id }) %}
+
+{% if isAnsweringMeetingRequestClosed is defined and isAnsweringMeetingRequestClosed == true or isMeetingRequestUpdateLocked is defined and isMeetingRequestUpdateLocked == true %}
+    {% if isMeetingPublished is defined and isMeetingPublished and meetingRequest.hasMeeting %}
+        <div class="btn btn-gray accept" disabled>
+            <i class="icon-Valider_4"></i> {{ 'catalog.meeting_request.request.placed'|trans }}
+        </div>
+    {% else %}
+        {% if isMeetingRequestUpdateLocked == true %}
+            {{ include('EventBundle:MeetingRequest/Button:lockedMeetingRequest.html.twig', {}, false) }}
+        {% endif %}
+        <div class="btn btn-gray accept" disabled>
+            <i class="icon-Valider_4"></i> {{ 'catalog.meeting_request.request.approved'|trans }}
+        </div>
+    {% endif %}
 {% else %}
-    <div class="btn btn-gray accept" data-modal-load="{{ path('event_meeting_request_edit', { 'sheet': sheet.id, 'meetingRequest': meetingRequest.id }) }}">
-        <i class="icon-Valider_4"></i> {{ 'catalog.meeting_request.request.approved'|trans }}
-    </div>
+    {% if isMeetingPublished is defined and isMeetingPublished and meetingRequest.hasMeeting %}
+        <div class="btn btn-gray accept">
+            <i class="icon-Valider_4"></i> {{ 'catalog.meeting_request.request.placed'|trans }}
+        </div>
+    {% elseif isPhoneValidationRequired and phoneValidationLink is not null %}
+        <a class="btn btn-gray accept" href="{{ phoneValidationLink }}">
+            <i class="icon-Valider_4"></i> {{ 'catalog.meeting_request.request.approved'|trans }}
+        </a>
+    {% else %}
+        <div class="btn btn-gray accept" data-modal-load="{{ path('event_meeting_request_edit', { 'sheet': sheet.id, 'meetingRequest': meetingRequest.id }) }}">
+            <i class="icon-Valider_4"></i> {{ 'catalog.meeting_request.request.approved'|trans }}
+        </div>
+    {% endif %}
 {% endif %}

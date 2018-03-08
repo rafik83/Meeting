@@ -1,13 +1,21 @@
 <?php
 
+/*
+ * This file is part of the Proximum Vimeet project.
+ *
+ * Copyright (C) Proximum
+ *
+ * @author Elao <contact@elao.com>
+ */
+
 namespace Proximum\Vimeet\Tests\Application\Command\Product\Planning;
 
 use PHPUnit\Framework\TestCase;
 use Proximum\Vimeet\Application\Adapter\FileStorageInterface;
 use Proximum\Vimeet\Application\Command\Product\Planning\CreatePlanning;
 use Proximum\Vimeet\Application\Command\Product\Planning\CreatePlanningHandler;
-use Proximum\Vimeet\Domain\Product\UpdatePriceResolver;
 use Proximum\Vimeet\Domain\Model\Product;
+use Proximum\Vimeet\Domain\Product\UpdatePriceResolver;
 use Proximum\Vimeet\Domain\Repository\ProductRepositoryInterface;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
 
@@ -21,6 +29,7 @@ class CreatePlanningHandlerTest extends TestCase
         $name                = 'Name';
         $unitPrice           = 100;
         $quantityMax         = 4;
+        $vat                 = 20;
         $availabilityCurrent = 10;
         $availabilityMax     = 50;
         $updatable           = true;
@@ -29,6 +38,7 @@ class CreatePlanningHandlerTest extends TestCase
         $create                      = new CreatePlanning($event);
         $create->name                = $name;
         $create->unitPrice           = $unitPrice;
+        $create->vat                 = $vat;
         $create->quantityMax         = $quantityMax;
         $create->availabilityCurrent = $availabilityCurrent;
         $create->availabilityMax     = $availabilityMax;
@@ -41,6 +51,7 @@ class CreatePlanningHandlerTest extends TestCase
             $event,
             $name,
             $unitPrice,
+            $vat,
             $quantityMax
         );
 

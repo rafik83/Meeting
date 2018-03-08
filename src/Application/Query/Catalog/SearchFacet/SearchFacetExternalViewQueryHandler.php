@@ -32,14 +32,13 @@ class SearchFacetExternalViewQueryHandler implements SearchFacetQueryHandlerInte
     }
     
     /**
-     * @param mixed $query
+     * @param AbstractSearchFacetViewQuery $query
      *
      * @return SearchFacetsView
      */
-    public function handle($query): SearchFacetsView
+    public function handle(AbstractSearchFacetViewQuery $query): SearchFacetsView
     {
         $searchFacets = $this->externalSearchFacetRepository->getByEvent($query->event);
-
         $searchFacetViews = [];
 
         foreach ($searchFacets as $facet) {

@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2016 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -14,10 +14,12 @@ use PHPUnit\Framework\TestCase;
 use Proximum\Vimeet\Application\Adapter\JobQueueInterface;
 use Proximum\Vimeet\Application\Command\Template\Registration\Update;
 use Proximum\Vimeet\Application\Command\Template\Registration\UpdateHandler;
+use Proximum\Vimeet\Application\Components\Registration\RegistrationTemplateValidatorTranslated;
 use Proximum\Vimeet\Application\Event\Events;
 use Proximum\Vimeet\Application\Event\Template\Registration\RegistrationTemplateUpdatedEvent;
 use Proximum\Vimeet\Domain\Model\Template\RegistrationTemplate;
 use Proximum\Vimeet\Domain\Repository\Template\RegistrationTemplateRepositoryInterface;
+use Proximum\Vimeet\Domain\Template\TemplateData;
 use Proximum\Vimeet\Domain\Template\TemplateDataFactory;
 use Proximum\Vimeet\Infrastructure\Adapter\DelayedEventDispatcher;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
@@ -30,20 +32,20 @@ class UpdateHandlerTest extends TestCase
         $dateTime = new \DateTime();
         $array    = [
             '811f6edf' => [
-                'component' => "block",
-                'type'      => "12",
+                'component' => 'block',
+                'type'      => '12',
                 'config'    => [
                     'style' => 'style-1',
                 ],
                 'children'  => [
                     'dded0597' => [
-                        'component' => "object",
-                        'type'      => "text",
+                        'component' => 'object',
+                        'type'      => 'text',
                         'config'     =>[
                             'content' => [
-                                'fr' => "Profil"
+                                'fr' => 'Profil',
                             ],
-                            'type' => "titre",
+                            'type' => 'titre',
                         ],
                     ],
                 ],
@@ -61,12 +63,28 @@ class UpdateHandlerTest extends TestCase
         $registrationTemplateRepository = $this->prophesize(RegistrationTemplateRepositoryInterface::class);
         $registrationTemplateRepository->set($expectedTemplate)->shouldBeCalled();
         $eventDispatcher = $this->prophesize(DelayedEventDispatcher::class);
+
+        $templateData = $this->prophesize(TemplateData::class);
+
         $templateDataFactory = $this->prophesize(TemplateDataFactory::class);
+        $templateDataFactory
+            ->createRegistrationFromTemplate(
+                $registrationTemplate,
+                'fr'
+            )
+            ->shouldBeCalled()
+            ->willReturn($templateData->reveal())
+        ;
+
         $jobQueue = $this->prophesize(JobQueueInterface::class);
+
+        $registrationTemplateValidatorTranslated = $this->prophesize(RegistrationTemplateValidatorTranslated::class);
+        $registrationTemplateValidatorTranslated->validate($templateData->reveal());
 
         $handler = new UpdateHandler(
             $registrationTemplateRepository->reveal(),
             $templateDataFactory->reveal(),
+            $registrationTemplateValidatorTranslated->reveal(),
             $eventDispatcher->reveal(),
             $jobQueue->reveal()
         );
@@ -81,20 +99,20 @@ class UpdateHandlerTest extends TestCase
         $dateTime = new \DateTime();
         $array    = [
             '811f6edf' => [
-                'component' => "block",
-                'type'      => "12",
+                'component' => 'block',
+                'type'      => '12',
                 'config'    => [
                     'style' => 'style-1',
                 ],
                 'children'  => [
                     'dded0597' => [
-                        'component' => "object",
-                        'type'      => "text",
+                        'component' => 'object',
+                        'type'      => 'text',
                         'config'     =>[
                             'content' => [
-                                'fr' => "Profil"
+                                'fr' => 'Profil',
                             ],
-                            'type' => "titre",
+                            'type' => 'titre',
                         ],
                     ],
                 ],
@@ -118,12 +136,24 @@ class UpdateHandlerTest extends TestCase
         $eventDispatcher
             ->dispatch(Events::REGISTRATION_TEMPLATE_UPDATED, $registrationTemplateUpdated)
             ->shouldBeCalled();
-        $templateDataFactory = $this->prophesize(TemplateDataFactory::class);
         $jobQueue = $this->prophesize(JobQueueInterface::class);
+
+        $templateData = $this->prophesize(TemplateData::class);
+
+        $templateDataFactory = $this->prophesize(TemplateDataFactory::class);
+        $templateDataFactory
+            ->createRegistrationFromTemplate($registrationTemplate, 'fr')
+            ->shouldBeCalled()
+            ->willReturn($templateData->reveal())
+        ;
+
+        $registrationTemplateValidatorTranslated = $this->prophesize(RegistrationTemplateValidatorTranslated::class);
+        $registrationTemplateValidatorTranslated->validate($templateData->reveal());
 
         $handler = new UpdateHandler(
             $registrationTemplateRepository->reveal(),
             $templateDataFactory->reveal(),
+            $registrationTemplateValidatorTranslated->reveal(),
             $eventDispatcher->reveal(),
             $jobQueue->reveal()
         );

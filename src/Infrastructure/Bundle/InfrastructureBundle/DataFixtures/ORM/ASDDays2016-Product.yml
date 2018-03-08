@@ -1,18 +1,18 @@
 Proximum\Vimeet\Domain\Model\Product:
     # plans
     product_plan_1_asddays:
-        __construct: { createPlan: ['@event_asddays_2016', 'Formule B2B Meeting', 0, 1690, 0, 0] }
+        __construct: { createPlan: ['@event_asddays_2016', 'Formule B2B Meeting', 0, 1690, 20, 0, 0] }
         quantityMax: 1
         updatable: false
         deletableUntil: ~
     product_plan_2_asddays:
-        __construct: { createPlan: [ '@event_asddays_2016', 'Formule Exposant', 0, 2880, 0, 0] }
+        __construct: { createPlan: [ '@event_asddays_2016', 'Formule Exposant', 0, 2880, 20, 0, 0] }
         quantityMax: 1
         updatable: false
         deletableUntil: ~
     # participants
     product_participant_1_asddays:
-        __construct: { createParticipant: [ '@event_asddays_2016', 'Participant supplémentaire Fournisseur', 195, 10 ] }
+        __construct: { createParticipant: [ '@event_asddays_2016', 'Participant supplémentaire Fournisseur', 195, 20, 10 ] }
         image: ~
         availabilityCurrent: 0
         availabilityMax: 0
@@ -21,29 +21,29 @@ Proximum\Vimeet\Domain\Model\Product:
         deletableUntil: ~
     # plannings
     product_planning_1_asddays:
-        __construct: { createPlanning: [ '@event_asddays_2016', 'Planning supplémentaire Fournisseur', 495, 10 ] }
+        __construct: { createPlanning: [ '@event_asddays_2016', 'Planning supplémentaire Fournisseur', 495, 20, 10 ] }
         availabilityCurrent: 0
         availabilityMax: 0
         updatable: false
         deletableUntil: ~
     # options
     product_option_1_asddays:
-        __construct: { createOption: ['@event_asddays_2016', 'Option 4m² supplémentaires Fournisseur', 0, 990, 1, 0, 0, true, null] }
+        __construct: { createOption: ['@event_asddays_2016', 'Option 4m² supplémentaires Fournisseur', 0, 990, 20, 1, 0, 0, true, null] }
         subjectedToValidation: true
     product_option_2_asddays:
-        __construct: { createOption: ['@event_asddays_2016', 'Option chaise', 0, 9, 5, 0, 0, true, null] }
+        __construct: { createOption: ['@event_asddays_2016', 'Option chaise', 0, 9, 20, 5, 0, 0, true, null] }
     product_option_3_asddays:
-        __construct: { createOption: ['@event_asddays_2016', 'Option A', 0, 29, 2, 0, 0, true, null] }
+        __construct: { createOption: ['@event_asddays_2016', 'Option A', 0, 29, 20, 2, 0, 0, true, null] }
     product_option_4_asddays:
-        __construct: { createOption: ['@event_asddays_2016', 'Option B', 0, 44, 10, 0, 0, true, null, false, "<dateTimeBetween('-10days', 'now')>"] }
+        __construct: { createOption: ['@event_asddays_2016', 'Option B', 0, 44, 20, 10, 0, 0, true, null, false, "<dateTimeBetween('-10days', 'now')>"] }
     product_option_5_asddays:
-        __construct: { createOption: ['@event_asddays_2016', 'Option C', 0, 49, 10, 50, 50, true, null] }
+        __construct: { createOption: ['@event_asddays_2016', 'Option C', 0, 49, 20, 10, 50, 50, true, null] }
     product_option_6_asddays:
-        __construct: { createOption: ['@event_asddays_2016', 'Option D', 0, 19, 3, 2, 100, true, null] }
+        __construct: { createOption: ['@event_asddays_2016', 'Option D', 0, 19, 20, 3, 2, 100, true, null] }
     product_option_7_asddays:
-        __construct: { createOption: ['@event_asddays_2016', 'Option E', 0, 199, 4, 5, 10, true, "<dateTimeBetween('-10days', 'now')>"] }
+        __construct: { createOption: ['@event_asddays_2016', 'Option E', 0, 199, 20, 4, 5, 10, true, "<dateTimeBetween('-10days', 'now')>"] }
     product_option_8_asddays:
-        __construct: { createOption: ['@event_asddays_2016', 'Option F', 0, 59, 20, 20, 20, true, null, false, null] }
+        __construct: { createOption: ['@event_asddays_2016', 'Option F', 0, 59, 20, 20, 20, 20, true, null, false, null] }
 
 Proximum\Vimeet\Domain\Model\Product\ProductIncluded:
     product_included_plan_1_asddays_fr:
@@ -381,7 +381,6 @@ Proximum\Vimeet\Domain\Model\Package:
         event: '@event_asddays_2016'
         title: "Package ASD Days"
         createdAt: "<dateTimeBetween('-10days', 'now')>"
-        participant: '@product_participant_1_asddays'
         planning: '@product_planning_1_asddays'
         plansEnabled: true
         participantAndPlanningEnabled: true
@@ -414,6 +413,13 @@ Proximum\Vimeet\Domain\Model\PackagePlanRank:
         rank: 2
         package: '@package_asd_days'
         plan: '@product_plan_2_asddays'
+
+Proximum\Vimeet\Domain\Model\PackageParticipantRank:
+    package_participant_1_rank_asd_days:
+        __construct: false
+        rank: 1
+        package: '@package_asd_days'
+        productParticipant: '@product_participant_1_asddays'
 
 Proximum\Vimeet\Domain\Model\PackageGroup:
     package_group_1_asd_days:

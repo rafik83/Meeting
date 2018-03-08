@@ -10,8 +10,8 @@
 
 namespace Proximum\Vimeet\tests\Infrastructure\Bundle\InfrastructureBundle\EventListener;
 
+use PHPUnit\Framework\TestCase;
 use Proximum\Vimeet\Application\Exception\Sheet\SheetNotFoundException;
-use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Repository\EventRepositoryInterface;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\EventListener\SheetNotFoundExceptionListener;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
@@ -20,7 +20,6 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Event\GetResponseForExceptionEvent;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
 use Symfony\Component\Routing\RouterInterface;
-use PHPUnit\Framework\TestCase;
 
 class SheetNotFoundExceptionListenerTest extends TestCase
 {
@@ -45,7 +44,11 @@ class SheetNotFoundExceptionListenerTest extends TestCase
             new SheetNotFoundException()
         );
 
-        $listener = new SheetNotFoundExceptionListener($router->reveal(), $eventRepository->reveal());
+        $listener = new SheetNotFoundExceptionListener(
+            $router->reveal(),
+            $eventRepository->reveal(),
+            'admin.vimeet.proximum.dev'
+        );
         $listener->onKernelException($kernelEvent);
 
         $this->assertInstanceOf(RedirectResponse::class, $response = $kernelEvent->getResponse());
@@ -68,7 +71,11 @@ class SheetNotFoundExceptionListenerTest extends TestCase
             new \Exception()
         );
 
-        $listener = new SheetNotFoundExceptionListener($router->reveal(), $eventRepository->reveal());
+        $listener = new SheetNotFoundExceptionListener(
+            $router->reveal(),
+            $eventRepository->reveal(),
+            'admin.vimeet.proximum.dev'
+        );
         $listener->onKernelException($kernelEvent);
 
         $this->assertNotInstanceOf(RedirectResponse::class, $kernelEvent->getResponse());
@@ -92,7 +99,11 @@ class SheetNotFoundExceptionListenerTest extends TestCase
             new SheetNotFoundException()
         );
 
-        $listener = new SheetNotFoundExceptionListener($router->reveal(), $eventRepository->reveal());
+        $listener = new SheetNotFoundExceptionListener(
+            $router->reveal(),
+            $eventRepository->reveal(),
+            'admin.vimeet.proximum.dev'
+        );
         $listener->onKernelException($kernelEvent);
 
         $this->assertNotInstanceOf(RedirectResponse::class, $kernelEvent->getResponse());

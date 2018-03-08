@@ -1,0 +1,52 @@
+{% extends 'AdminBundle::base.html.twig' %}
+
+{% block title 'admin.spot.import.preview'|trans %}
+
+{% block content %}
+    <h1 class="page-header">{{ 'admin.spot.import.preview'|trans }}</h1>
+
+    <table class="table table-hover">
+        <thead>
+            <tr>
+                <th>{{ 'admin.spot.import.column.reference'|trans }}</th>
+                <th>{{ 'admin.spot.import.column.size'|trans }}</th>
+                <th>{{ 'admin.spot.import.column.meetingCapacity'|trans }}</th>
+                <th>{{ 'admin.spot.import.column.seatCapacity'|trans }}</th>
+                <th>{{ 'admin.spot.import.column.priority'|trans }}</th>
+                <th>{{ 'admin.spot.import.column.active'|trans }}</th>
+                <th>{{ 'admin.spot.import.column.visio'|trans }}</th>
+                <th>{{ 'admin.spot.import.column.sheets'|trans }}</th>
+                <th>{{ 'admin.spot.import.column.errors'|trans }}</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for spotImport in spotImports %}
+            <tr class="{% if spotImport.errorMessages is not empty %} danger {% endif %}">
+                <td class="text-center">{{ spotImport.spot ? spotImport.spot.reference : ''}}</td>
+                <td class="text-center">{{ spotImport.spot ? spotImport.spot.size : '' }}</td>
+                <td class="text-center">{{ spotImport.spot ? spotImport.spot.meetingCapacity : '' }}</td>
+                <td class="text-center">{{ spotImport.spot ? spotImport.spot.seatCapacity : '' }}</td>
+                <td class="text-center">{{ spotImport.spot ? spotImport.spot.priority : '' }}</td>
+                <td class="text-center">{{ spotImport.spot ? (spotImport.spot.active ? 'admin.spot.active.yes'|trans : 'admin.spot.active.no'|trans) : '' }}</td>
+                <td class="text-center">{{ spotImport.spot ? (spotImport.spot.visio ? 'admin.spot.visio.yes'|trans : 'admin.spot.visio.no'|trans) : '' }}</td>
+                <td>
+                    <ul>
+                    {% for sheetView in spotImport.sheetViews %}
+                        <li>
+                            {{ sheetView.id }} - {{ sheetView.title }}
+                        </li>
+                    {% endfor %}
+                    </ul>
+                </td>
+                <td>
+                    {% if spotImport.errorMessages is not empty %}
+                       {{ include('AdminBundle:Spot/Import:spotImportErrors.html.twig', {'errors': spotImport.errorMessages}) }}
+                    {% endif %}
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    {{ form(form) }}
+{% endblock %}

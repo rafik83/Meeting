@@ -1,4 +1,13 @@
 services:
+    command.sheet.aggregate.sheets_available_slot_aggregator_handler:
+        class: Proximum\Vimeet\Application\Command\Sheet\Aggregate\SheetsAvailableSlotAggregatorHandler
+        arguments:
+            - '@vimeet_infrastructure.repository.sheet_repository'
+            - '@command.sheet.aggregate.available_slot_aggregator_handler'
+    command.sheet.aggregate.available_slot_aggregator_handler:
+        class: Proximum\Vimeet\Application\Command\Sheet\Aggregate\AvailableSlotAggregatorHandler
+        arguments:
+            - '@domain.sheet.aggregate.available_slot_calculator'
     command.analytic.meeting_solution.create_handler:
         class: Proximum\Vimeet\Application\Command\Analytic\MeetingSolution\CreateHandler
         arguments:
@@ -15,3 +24,122 @@ services:
             - '@datetime'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Analytic\MeetingSolution\Create }
+
+    #
+    # Extra Parameter
+    #
+    command.event.extra_parameter.create_handler:
+        class: Proximum\Vimeet\Application\Command\Event\ExtraParameter\CreateHandler
+        arguments:
+            - '@repository.event.extra_parameter_repository'
+            - '@datetime'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Event\ExtraParameter\Create }
+
+    command.event.extra_parameter.update_handler:
+        class: Proximum\Vimeet\Application\Command\Event\ExtraParameter\UpdateHandler
+        arguments:
+            - '@repository.event.extra_parameter_repository'
+            - '@datetime'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Event\ExtraParameter\Update }
+    command.event.extra_parameter.remove_handler:
+        class: Proximum\Vimeet\Application\Command\Event\ExtraParameter\RemoveHandler
+        arguments:
+            - '@repository.event.extra_parameter_repository'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Event\ExtraParameter\Remove }
+
+    #
+    # Sheet Phone
+    #
+    command.sheet.phone.update_phone_validation_status_handler:
+        class: Proximum\Vimeet\Application\Command\Sheet\Phone\UpdatePhoneValidationStatusHandler
+        arguments:
+            - '@vimeet_infrastructure.repository.type_repository'
+            - '@vimeet_infrastructure.repository.sheet_repository'
+            - '@domain.sheet.phone.validation_calculator'
+
+    #
+    # User Event Token
+    #
+    command.user.event.token.update_agenda_confirmation_handler:
+        class: Proximum\Vimeet\Application\Command\User\Event\Token\UpdateAgendaConfirmationHandler
+        arguments:
+            - '@vimeet_infrastructure.adapter.delayed_event_dispatcher'
+            - '@repository.token.user_event_token_repository'
+            - '@domain.token.user_event_token_generator'
+            - '@datetime'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\User\Event\Token\UpdateAgendaConfirmation }
+
+    #
+    # User Phone Ignore Confirmation
+    #
+    command.user.event.phone.ignore_confirmation:
+        class: Proximum\Vimeet\Application\Command\User\Phone\IgnoreConfirmationHandler
+        arguments:
+            - '@repository.user.event.extra_data_repository'
+            - '@datetime'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\User\Phone\IgnoreConfirmation }
+
+    #
+    # Type Payment Conditions
+    #
+    Proximum\Vimeet\Application\Command\Type\PaymentConditions\UpdateHandler:
+        arguments:
+            - '@Proximum\Vimeet\Infrastructure\Repository\Type\PaymentConditionsRepository'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Type\PaymentConditions\Update }
+
+    #
+    # Tip
+    #
+    command.tip.event.create_handler:
+        class: Proximum\Vimeet\Application\Command\Tip\Event\CreateHandler
+        arguments:
+            - '@repository.tip.repository'
+            - '@vimeet_infrastructure.adapter.delayed_event_dispatcher'
+            - '@datetime'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Tip\Event\Create }
+
+    command.tip.event.update_handler:
+        class: Proximum\Vimeet\Application\Command\Tip\Event\UpdateHandler
+        arguments:
+            - '@repository.tip.repository'
+            - '@vimeet_infrastructure.adapter.delayed_event_dispatcher'
+            - '@datetime'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Tip\Event\Update }
+
+    #
+    # Event
+    #
+    Proximum\Vimeet\Application\Command\Event\Index\IndexHandler:
+        arguments:
+            - '@vimeet_infrastructure.repository.event_repository'
+            - '@adapter.job_queue_adapter'
+
+    Proximum\Vimeet\Application\Command\Event\PrepareIndexHandler:
+        arguments:
+            - '@adapter.job_queue_adapter'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Event\PrepareIndex }
+
+    #
+    # Event / Sheet
+    #
+    Proximum\Vimeet\Application\Command\Event\Sheet\IndexHandler:
+        arguments:
+            - '@vimeet_infrastructure.repository.sheet_repository'
+            - '@adapter.sheet_indexer'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Event\Sheet\Index }
+
+    Proximum\Vimeet\Application\Command\Event\Sheet\PrepareSheetsIndexHandler:
+        arguments:
+            - '@adapter.job_queue_adapter'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Event\Sheet\PrepareSheetsIndex }

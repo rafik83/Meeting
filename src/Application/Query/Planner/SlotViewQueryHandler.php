@@ -43,17 +43,21 @@ class SlotViewQueryHandler
 
         $slots = $this->slotRepository->getAvailableSlotByEvent($query->event);
 
+        $index = 0;
+
         foreach ($slots as $slot) {
             $day = $this->getCorrespondingDay($query, $slot);
 
             if (null !== $day) {
                 $slotViews[] = new SlotView(
                     $slot->getId(),
-                    $slot->getId(), // index should be int
+                    $index,
                     $slot->getBegin()->format('G'), // 24-hour format of an hour without leading zeros
-                    intval($slot->getBegin()->format('i')), // to remove leading zero
+                    (int) $slot->getBegin()->format('i'), // to remove leading zero
                     $day
                 );
+
+                $index++;
             }
         }
 
@@ -71,12 +75,12 @@ class SlotViewQueryHandler
      *
      * @return null|Day
      */
-    public function getCorrespondingDay(SlotViewQuery $query, MeetingSlot $slot)
+    public function getCorrespondingDay(SlotViewQuery $query, MeetingSlot $slot): ?Day
     {
         foreach ($query->days as $day) {
-            if (intval($slot->getBegin()->format('d')) === $day->day
-                && intval($slot->getBegin()->format('m')) === $day->month
-                && intval($slot->getBegin()->format('Y')) === $day->year
+            if ((int) $slot->getBegin()->format('d') === $day->day
+                && (int) $slot->getBegin()->format('m') === $day->month
+                && (int) $slot->getBegin()->format('Y') === $day->year
             ) {
                 return $day;
             }

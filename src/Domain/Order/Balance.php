@@ -64,7 +64,7 @@ class Balance
     /**
      * @param Event $event
      */
-    public function loadAllTransactions(Event $event)
+    public function loadAllTransactions(Event $event): void
     {
         $transactions = $this->transactionRepository->findByEventAndEnabledSheets($event);
 
@@ -167,7 +167,7 @@ class Balance
      *
      * @return Transaction[]
      */
-    public function getTransactions(Sheet $sheet)
+    public function getTransactions(Sheet $sheet): array
     {
         if (!isset($this->transactionsBySheet[$sheet->getId()])) {
             $this->transactionsBySheet[$sheet->getId()] = $this->transactionRepository->findBySheet($sheet);
@@ -183,7 +183,7 @@ class Balance
      *
      * @return int amount in cents
      */
-    public function getTotal(Sheet $sheet)
+    public function getTotal(Sheet $sheet): int
     {
         $orderVatViews = $this->getNotCancelledOrderVatViews($sheet);
 
@@ -201,7 +201,7 @@ class Balance
      *
      * @return int amount in cents
      */
-    public function getTotalWithoutVat(Sheet $sheet)
+    public function getTotalWithoutVat(Sheet $sheet): int
     {
         $orderVatViews = $this->getNotCancelledOrderVatViews($sheet);
 
@@ -219,7 +219,7 @@ class Balance
      *
      * @return int amount in cents
      */
-    public function getBalance(Sheet $sheet)
+    public function getBalance(Sheet $sheet): int
     {
         return $this->getTotal($sheet) - $this->getTotalPaid($sheet);
     }
@@ -229,7 +229,7 @@ class Balance
      *
      * @return int amount in cents
      */
-    public function getRemainingToPay(Sheet $sheet)
+    public function getRemainingToPay(Sheet $sheet): int
     {
         $remainingToPay = $this->getBalance($sheet);
 
@@ -245,7 +245,7 @@ class Balance
      *
      * @return int amount in cents
      */
-    public function getTotalPaid(Sheet $sheet)
+    public function getTotalPaid(Sheet $sheet): int
     {
         $totalPaid    = 0;
         $transactions = $this->getTransactions($sheet);
@@ -262,7 +262,7 @@ class Balance
     /**
      * @return OrderVatView[]
      */
-    public function getNotCancelledOrderVatViewsFromEvent()
+    public function getNotCancelledOrderVatViewsFromEvent(): array
     {
         if (!isset($this->orderVatViewsBySheet) || empty($this->orderVatViewsBySheet)) {
             return [];
@@ -287,13 +287,13 @@ class Balance
     /**
      * @return int amount in cents
      */
-    public function getTransactionsTotalPaidForEvent()
+    public function getTransactionsTotalPaidForEvent(): int
     {
         $totalPaid = 0;
 
         /** @var Transaction[] $transactions */
         foreach ($this->transactionsBySheet as $transactions) {
-            if (is_array($transactions)) {
+            if (\is_array($transactions)) {
                 foreach ($transactions as $transaction) {
                     if ($transaction->isPaid()) {
                         $totalPaid += $transaction->getAmount();
@@ -310,7 +310,7 @@ class Balance
      *
      * @return int amount in cents
      */
-    public function getOrdersTotalForEvent()
+    public function getOrdersTotalForEvent(): int
     {
         $orderVatViews = $this->getNotCancelledOrderVatViewsFromEvent();
 
@@ -328,7 +328,7 @@ class Balance
      *
      * @return int amount in cents
      */
-    public function getOrdersTotalWithoutVatForEvent()
+    public function getOrdersTotalWithoutVatForEvent(): int
     {
         $orderVatViews = $this->getNotCancelledOrderVatViewsFromEvent();
 
@@ -344,7 +344,7 @@ class Balance
     /**
      * @return int amount in cents
      */
-    public function getTotalRemainingToPayForEvent()
+    public function getTotalRemainingToPayForEvent(): int
     {
         $remainingToPay = $this->getOrdersTotalForEvent() - $this->getTransactionsTotalPaidForEvent();
 

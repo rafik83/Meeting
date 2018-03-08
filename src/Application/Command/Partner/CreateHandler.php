@@ -14,6 +14,7 @@ use Proximum\Vimeet\Application\Adapter\PasswordEncoderInterface;
 use Proximum\Vimeet\Application\Adapter\SaltGeneratorInterface;
 use Proximum\Vimeet\Application\Command\Admin\AbstractCreateHandler;
 use Proximum\Vimeet\Application\Exception\User\EmailAlreadyExistsException;
+use Proximum\Vimeet\Domain\Helper\StringHelper;
 use Proximum\Vimeet\Domain\Model\Admin;
 use Proximum\Vimeet\Domain\Repository\AdminRepositoryInterface;
 
@@ -48,6 +49,8 @@ class CreateHandler extends AbstractCreateHandler
      */
     public function handle(Create $create)
     {
+        $create->email = StringHelper::trimSpacesAndNonBreakSpaces($create->email);
+
         if ($this->adminRepository->emailExists($create->email)) {
             throw new EmailAlreadyExistsException(sprintf('"%s" already exists.', $create->email));
         }

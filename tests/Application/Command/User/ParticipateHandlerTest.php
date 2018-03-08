@@ -3,13 +3,14 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2015 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
 
 namespace Proximum\Vimeet\Tests\Application\Command\User;
 
+use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
 use Proximum\Vimeet\Application\Command\User\Participate;
 use Proximum\Vimeet\Application\Command\User\ParticipateHandler;
@@ -17,6 +18,7 @@ use Proximum\Vimeet\Application\Event\Events;
 use Proximum\Vimeet\Application\Event\Package\MustSelectPackageEvent;
 use Proximum\Vimeet\Application\Event\Sheet\SheetTitleCheckEvent;
 use Proximum\Vimeet\Application\Event\Sheet\SheetUpdatedEvent;
+use Proximum\Vimeet\Application\Event\User\RegistrationEvent;
 use Proximum\Vimeet\Application\Event\User\RegistrationStepEvent;
 use Proximum\Vimeet\Domain\Account\Synchronizer;
 use Proximum\Vimeet\Domain\Event\LastEventParticipation;
@@ -33,7 +35,6 @@ use Proximum\Vimeet\Domain\Template\TemplateObject;
 use Proximum\Vimeet\Domain\UserEvent\TypeResolver;
 use Proximum\Vimeet\Infrastructure\Adapter\DelayedEventDispatcher;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
-use PHPUnit\Framework\TestCase;
 
 class ParticipateHandlerTest extends TestCase
 {
@@ -45,51 +46,40 @@ class ParticipateHandlerTest extends TestCase
         $type  = new Type($event);
 
         $template = [
-            '811f6edf' =>
-                [
+            '811f6edf' => [
                     'component' => 'block',
                     'type'      => '12',
-                    'config'    =>
-                        [
+                    'config'    => [
                             'style' => 'style-1',
                         ],
-                    'children'  =>
-                        [
+                    'children'  => [
                             [
-                                'dded0597' =>
-                                    [
+                                'dded0597' => [
                                         'component' => 'object',
                                         'type'      => 'text',
-                                        'config'    =>
-                                            [
+                                        'config'    => [
                                                 'style'   => 'style-1',
-                                                'content' =>
-                                                    [
+                                                'content' => [
                                                         'en' => null,
                                                         'fr' => 'Profil',
                                                     ],
                                                 'type'    => 'titre',
                                             ],
                                     ],
-                                '541f84d4' =>
-                                    [
+                                '541f84d4' => [
                                         'component' => 'object',
                                         'type'      => 'editable-text',
-                                        'config'    =>
-                                            [
+                                        'config'    => [
                                                 'style'        => 'style-1',
-                                                'label'        =>
-                                                    [
+                                                'label'        => [
                                                         'en' => null,
                                                         'fr' => 'Prénom',
                                                     ],
-                                                'placeholder'  =>
-                                                    [
+                                                'placeholder'  => [
                                                         'en' => null,
                                                         'fr' => 'Prénom',
                                                     ],
-                                                'help'         =>
-                                                    [
+                                                'help'         => [
                                                         'en' => null,
                                                         'fr' => 'Merci de donner votre prénom',
                                                     ],
@@ -97,28 +87,23 @@ class ParticipateHandlerTest extends TestCase
                                                 'required'     => true,
                                                 'type'         => 'text',
                                                 'translatable' => false,
-                                                'tags'         => ["participant_firstname", "participant_data"],
+                                                'tags'         => ['participant_firstname', 'participant_data'],
                                             ],
                                     ],
-                                '838197c7' =>
-                                    [
+                                '838197c7' => [
                                         'component' => 'object',
                                         'type'      => 'editable-text',
-                                        'config'    =>
-                                            [
+                                        'config'    => [
                                                 'style'        => 'style-1',
-                                                'label'        =>
-                                                    [
+                                                'label'        => [
                                                         'en' => null,
                                                         'fr' => 'Nom',
                                                     ],
-                                                'placeholder'  =>
-                                                    [
+                                                'placeholder'  => [
                                                         'en' => null,
                                                         'fr' => 'Nom',
                                                     ],
-                                                'help'         =>
-                                                    [
+                                                'help'         => [
                                                         'en' => null,
                                                         'fr' => '',
                                                     ],
@@ -126,28 +111,23 @@ class ParticipateHandlerTest extends TestCase
                                                 'required'     => true,
                                                 'type'         => 'text',
                                                 'translatable' => false,
-                                                'tags'         => ["participant_lastname", "participant_data"],
+                                                'tags'         => ['participant_lastname', 'participant_data'],
                                             ],
                                     ],
-                                '1efb9cbb' =>
-                                    [
+                                '1efb9cbb' => [
                                         'component' => 'object',
                                         'type'      => 'editable-text',
-                                        'config'    =>
-                                            [
+                                        'config'    => [
                                                 'style'        => 'style-1',
-                                                'label'        =>
-                                                    [
+                                                'label'        => [
                                                         'en' => null,
                                                         'fr' => 'Téléphone portable',
                                                     ],
-                                                'placeholder'  =>
-                                                    [
+                                                'placeholder'  => [
                                                         'en' => null,
                                                         'fr' => 'Téléphone portable',
                                                     ],
-                                                'help'         =>
-                                                    [
+                                                'help'         => [
                                                         'en' => null,
                                                         'fr' => '',
                                                     ],
@@ -155,28 +135,23 @@ class ParticipateHandlerTest extends TestCase
                                                 'required'     => true,
                                                 'type'         => 'text',
                                                 'translatable' => false,
-                                                'tags'         => ["participant_mobile", "participant_data"],
+                                                'tags'         => ['participant_mobile', 'participant_data'],
                                             ],
                                     ],
-                                '3b759fbb' =>
-                                    [
+                                '3b759fbb' => [
                                         'component' => 'object',
                                         'type'      => 'editable-text',
-                                        'config'    =>
-                                            [
+                                        'config'    => [
                                                 'style'        => 'style-1',
-                                                'label'        =>
-                                                    [
+                                                'label'        => [
                                                         'en' => null,
                                                         'fr' => 'Téléphone fixe',
                                                     ],
-                                                'placeholder'  =>
-                                                    [
+                                                'placeholder'  => [
                                                         'en' => null,
                                                         'fr' => 'Téléphone fixe',
                                                     ],
-                                                'help'         =>
-                                                    [
+                                                'help'         => [
                                                         'en' => null,
                                                         'fr' => '',
                                                     ],
@@ -184,7 +159,7 @@ class ParticipateHandlerTest extends TestCase
                                                 'required'     => true,
                                                 'type'         => 'text',
                                                 'translatable' => false,
-                                                'tags'         => ["participant_phone", "participant_data"],
+                                                'tags'         => ['participant_phone', 'participant_data'],
                                             ],
                                     ],
                             ],
@@ -214,10 +189,9 @@ class ParticipateHandlerTest extends TestCase
                 '1efb9cbb' => ['telephone' => 'phone'],
                 '3b759fbb' => ['telephone' => 'mobile'],
             ],
-            $owner = true,
-            true
+            $owner = true
         );
-        $expectedParticipant->getSheet()->setData(['user data']);
+        $expectedParticipant->getSheet()->setData([['user data']]);
 
         $lastEventParticipation
             ->getLastEventParticipation($user, $event)
@@ -342,6 +316,8 @@ class ParticipateHandlerTest extends TestCase
             }
         ))->shouldBeCalled();
 
+        $eventDispatcher->dispatch(Events::USER_REGISTRATION, new RegistrationEvent($event, $user))->shouldBeCalled();
+
         $handler->handle(
             new Participate(
                 $user,
@@ -353,7 +329,7 @@ class ParticipateHandlerTest extends TestCase
                     '838197c7'  => ['text' => 'bar'],
                     '1efb9cbb'  => ['telephone' => 'phone'],
                     '3b759fbb'  => ['telephone' => 'mobile'],
-                    'sheet1234' => ['text' => 'truc']
+                    'sheet1234' => ['text' => 'truc'],
                 ],
                 $templateData
             )

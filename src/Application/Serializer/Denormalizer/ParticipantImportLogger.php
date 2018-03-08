@@ -10,10 +10,10 @@
 
 namespace Proximum\Vimeet\Application\Serializer\Denormalizer;
 
+use Proximum\Vimeet\Application\Adapter\TranslatorInterface;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Template\Validator\Error\ValidatorError;
-use Proximum\Vimeet\Infrastructure\Adapter\TranslatorAdapter;
 
 class ParticipantImportLogger
 {
@@ -50,7 +50,7 @@ class ParticipantImportLogger
     private $errors = [];
 
     /**
-     * @var TranslatorAdapter
+     * @var TranslatorInterface
      */
     private $translatorAdapter;
 
@@ -65,11 +65,9 @@ class ParticipantImportLogger
     private $emails = [];
 
     /**
-     * ParticipantImportLogger constructor.
-     *
-     * @param TranslatorAdapter $translatorAdapter
+     * @param TranslatorInterface $translatorAdapter
      */
-    public function __construct(TranslatorAdapter $translatorAdapter)
+    public function __construct(TranslatorInterface $translatorAdapter)
     {
         $this->translatorAdapter = $translatorAdapter;
     }

@@ -1,0 +1,14 @@
+<h3 class="catalog-mobile-title">{{ 'meetingRequest.mobile.filters.availableSlot.title'|trans }}</h3>
+<ul class="catalog-mobile-available-slot-filter-list">
+    {% for child in form.children %}
+        <li class="catalog-mobile-filter"
+            data-filter-id="{{ child.vars.value }}"
+            data-catalog-mobile-available-slot-filter="catalog-mobile-available-slot-filter"
+            data-content="{{ child.vars.label|trans({}, child.vars.translation_domain) }}"
+        >
+            <a href="#" class="catalog-mobile-menu-button btn btn-primary btn-block {% if not child.vars.data %}btn-inactive{% endif %}" data-catalog-mobile-menu-button-action="catalog-mobile-menu-button-action-available-slot-filter">
+                <span>{{ child.vars.label|trans({}, child.vars.translation_domain) }}</span>
+            </a>
+        </li>
+    {% endfor %}
+</ul>

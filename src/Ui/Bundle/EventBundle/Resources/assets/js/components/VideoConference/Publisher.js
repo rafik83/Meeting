@@ -2,44 +2,73 @@
 
 var tokbox = require('@opentok/client');
 
+var STREAM_TYPE_SCREENSHARE = 'screen';
+
 /**
  * @param {Node} container
  * @constructor
  */
 function Publisher(container) {
-    this.container = container;
-    this.publisher = null;
+  this.container = container;
+  this.publisher = null;
 }
 
 /**
  * The Publisher object represents the view of a video you publish
+ *
+ * @param {null|Object} options
+ * @returns {null|Publisher}
  */
-Publisher.prototype.create = function () {
-    var publisherOptions = {
-        insertMode: 'append',
-        width: '500px',
-        height: '500px',
-        accessAllowed: true
-    };
+Publisher.prototype.create = function(options) {
+  var publisherOptions = {
+    insertMode: 'append',
+    showControls: false,
+    width: '100%',
+    height: '100%',
+  };
 
-    this.container.style.width = '500px';
-    this.container.style.height = '500px';
+  publisherOptions = Object.assign(options, publisherOptions);
 
-    this.publisher = tokbox.initPublisher(this.container.id, publisherOptions, this.handleError);
-    console.log('Publisher created', this.publisher);
+  this.publisher = tokbox.initPublisher(
+    this.container,
+    publisherOptions,
+    this.handleError
+  );
 
-    return this.publisher;
+  this.publisher.on('streamCreated', function(event) {
+    console.log('publisherSTREAM', event.stream.id);
+  });
+
+  return this.publisher;
 };
 
-Publisher.prototype.destroy = function () {
-    this.publisher.destroy();
-    console.log('Publisher destroy');
+/**
+ * Disable video stream and hide publisher element
+ */
+Publisher.prototype.disableVideo = function(publisherStream) {
+  publisherStream.publishVideo(false);
+  publisherStream.element.style.display = 'none';
 };
 
-Publisher.prototype.handleError = function (error) {
-    if (error) {
-        console.log('Publisher error:', error);
-    }
+Publisher.prototype.destroy = function() {
+  this.publisher.destroy();
+};
+
+/**
+ * @returns {boolean}
+ */
+Publisher.prototype.isScreensharing = function() {
+  if (this.publisher === null) {
+    return false;
+  }
+
+  return this.publisher.stream.videoType === STREAM_TYPE_SCREENSHARE;
+};
+
+Publisher.prototype.handleError = function(error) {
+  if (error) {
+    console.log('Publisher error:', error);
+  }
 };
 
 module.exports = Publisher;

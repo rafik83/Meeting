@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Tests\Application\Query\Transaction;
 
+use PHPUnit\Framework\TestCase;
 use Proximum\Vimeet\Application\Command\Planning\SheetInfoGuesserCache;
 use Proximum\Vimeet\Application\Query\Transaction\TransactionViewQuery;
 use Proximum\Vimeet\Application\Query\Transaction\TransactionViewQueryHandler;
@@ -22,7 +23,6 @@ use Proximum\Vimeet\Domain\Repository\BillingInfoRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\Payment\PaymentRepositoryInterface;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
 use Proximum\Vimeet\Tests\Factory\SheetFactory;
-use PHPUnit\Framework\TestCase;
 
 class TransactionViewQueryHandlerTest extends TestCase
 {
@@ -35,7 +35,7 @@ class TransactionViewQueryHandlerTest extends TestCase
         $transaction    = new Transaction($sheet, 100, $dateTime, 'paypal', '42', 'paid', 'EUR', $sheet->getOwner());
         $address        = new Address('42 rue des bonnes pratiques', '42', 'Paris', 'France');
         $billingInfos   = new BillingInfo($sheet);
-        
+
         $billingInfos->update(
             'mr',
             'atwood',
@@ -49,7 +49,7 @@ class TransactionViewQueryHandlerTest extends TestCase
             'FR42',
             'FR42'
         );
-        
+
         $sheetInfoGuesser       = $this->prophesize(SheetInfoGuesserCache::class);
         $billingInfosRepository = $this->prophesize(BillingInfoRepositoryInterface::class);
         $paymentRepository      = $this->prophesize(PaymentRepositoryInterface::class);
@@ -59,18 +59,18 @@ class TransactionViewQueryHandlerTest extends TestCase
             $event,
             $payment
         );
-        
+
         $sheetInfoGuesser->guessSheetTitle($sheet, $sheet->getEvent()->getFallback())->shouldBeCalled();
         $billingInfosRepository->getBySheet($sheet)->shouldBeCalled();
-        
+
         $queryHandler = new TransactionViewQueryHandler(
             $sheetInfoGuesser->reveal(),
             $billingInfosRepository->reveal(),
             $paymentRepository->reveal()
         );
-        
+
         $result = $queryHandler->handle($transactionViewQuery);
-        
+
         $expected = new TransactionView(
             $event,
             $sheet->getId(),
@@ -86,7 +86,7 @@ class TransactionViewQueryHandlerTest extends TestCase
             null,
             null
         );
-        
+
         $this->assertEquals($expected, $result);
     }
 }

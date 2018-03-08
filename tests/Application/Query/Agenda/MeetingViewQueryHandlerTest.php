@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2017 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -11,7 +11,6 @@
 namespace Proximum\Vimeet\Tests\Application\Query\Agenda;
 
 use PHPUnit\Framework\TestCase;
-use Prophecy\Argument;
 use Proximum\Vimeet\Application\Components\Security\VideoMeetingAccess;
 use Proximum\Vimeet\Application\Query\Agenda\Meeting\MeetingParticipantViewQuery;
 use Proximum\Vimeet\Application\Query\Agenda\Meeting\MeetingParticipantViewQueryHandler;
@@ -37,7 +36,7 @@ class MeetingViewQueryHandlerTest extends TestCase
     public function testHandleFrom()
     {
         $event        = EventFactory::createEvent();
-        $event->getConfiguration()->setColors('leftColor', 'rightColor', 'textColor');
+        $event->getConfiguration()->setColors('leftColor', 'rightColor', 'textColor', 'backgroundColor');
         $user         = UserFactory::create();
         $type         = new Type($event);
 
@@ -128,7 +127,7 @@ class MeetingViewQueryHandlerTest extends TestCase
     public function testHandleTo()
     {
         $event        = EventFactory::createEvent();
-        $event->getConfiguration()->setColors('leftColor', 'rightColor', 'textColor');
+        $event->getConfiguration()->setColors('leftColor', 'rightColor', 'textColor', 'backgroundColor');
         $user         = UserFactory::create();
         $type         = new Type($event);
         $sheet    = $this->prophesize(Sheet::class);

@@ -32,7 +32,17 @@ class SheetIndexer implements SheetIndexerInterface
     /**
      * @param Sheet[] $sheets
      */
-    public function updateSheets(array $sheets)
+    public function reindexSheets(array $sheets): void
+    {
+        if (!empty($sheets)) {
+            $this->persister->insertMany($sheets);
+        }
+    }
+
+    /**
+     * @param Sheet[] $sheets
+     */
+    public function updateSheets(array $sheets): void
     {
         if (!empty($sheets)) {
             $this->persister->replaceMany($sheets);

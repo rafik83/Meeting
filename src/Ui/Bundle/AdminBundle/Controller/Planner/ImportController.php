@@ -10,7 +10,6 @@
 
 namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Planner;
 
-use Proximum\Vimeet\Application\Command\Planner\Import;
 use Proximum\Vimeet\Application\Command\Planner\ImportJobCreator;
 use Proximum\Vimeet\Application\Exception\Planner\InvalidXmlException;
 use Proximum\Vimeet\Domain\Model\Admin;
@@ -26,8 +25,9 @@ use Symfony\Component\Security\Core\User\UserInterface;
 class ImportController extends Controller
 {
     /**
-     * @param Request $request
-     * @param Event   $event
+     * @param Request       $request
+     * @param Event         $event
+     * @param UserInterface $admin
      *
      * @return Response|RedirectResponse
      */

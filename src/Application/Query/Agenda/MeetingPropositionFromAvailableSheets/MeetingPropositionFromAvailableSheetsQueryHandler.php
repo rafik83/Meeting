@@ -1,0 +1,40 @@
+<?php
+
+/*
+ * This file is part of the Proximum Vimeet project.
+ *
+ * Copyright (C) Proximum
+ *
+ * @author Elao <contact@elao.com>
+ */
+
+namespace Proximum\Vimeet\Application\Query\Agenda\MeetingPropositionFromAvailableSheets;
+
+use Proximum\Vimeet\Domain\Repository\Meeting\RequestRepositoryInterface;
+
+class MeetingPropositionFromAvailableSheetsQueryHandler
+{
+    /** @var RequestRepositoryInterface */
+    private $requestRepository;
+
+    /**
+     * @param RequestRepositoryInterface $requestRepository
+     */
+    public function __construct(RequestRepositoryInterface $requestRepository)
+    {
+        $this->requestRepository = $requestRepository;
+    }
+
+    /**
+     * @param MeetingPropositionFromAvailableSheetsQuery $meetingPropositionFromAvailableSheetsQuery
+     *
+     * @return int
+     */
+    public function handle(MeetingPropositionFromAvailableSheetsQuery $meetingPropositionFromAvailableSheetsQuery): int
+    {
+        return $this->requestRepository->countPendingPropositionReceivedBySheetWithAvailableFromSheet(
+            $meetingPropositionFromAvailableSheetsQuery->sheet,
+            [$meetingPropositionFromAvailableSheetsQuery->meetingSlot->getId()]
+        );
+    }
+}

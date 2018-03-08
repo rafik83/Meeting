@@ -1,0 +1,14 @@
+services:
+
+    #
+    # Spot importer component
+    #
+    components.spot.spot_importer:
+        class: Proximum\Vimeet\Application\Components\Spot\SpotImporter
+        arguments:
+            - '@vimeet_infrastructure.repository.sheet_repository'
+            - '@adapter.validator_adapter'
+            - '@vimeet_infrastructure.adapter.translator_adapter'
+            - '@adapter.serializer_adapter'
+            - '%infrastructure.import_spot_path%'
+

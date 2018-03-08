@@ -1,0 +1,9 @@
+{% if item.data is defined and item.data['image'] is defined and null != item.data['image'] %}
+<div class="object object--image {{ 'style--' ~ item.style }}">
+    <div class="image-background">
+        <div class="placeholder">
+            <img class="image-print-size" src="{{ item.data['image']|imagine_filter('event_sheet_image') }}" alt="image">
+        </div>
+    </div>
+</div>
+{% endif %}

@@ -1,6 +1,6 @@
 admin.mail.activateAccount.activate: 'Activer votre compte'
 admin.mail.activateAccount.body: "Bonjour,\n\nVous avez été invité en tant que collaborateur sur Vimeet\n\nPour y accéder, cliquer sur le lien suivant et entrer un mot de passe pour activer votre compte:"
-admin.mail.activateAccount.end: 'Cordialement,'
+admin.mail.activateAccount.end: ''
 admin.mail.activateAccount.subject: 'Activer votre compte'
 admin.mail.resetPassword.body: "Bonjour,\n\nPour réinitialiser votre mot de passe, merci de cliquer sur le lien ci-dessous:"
 admin.mail.resetPassword.end: 'Bien cordialement,'
@@ -23,8 +23,8 @@ mail.completeProfile.subject: '[%event%] Invitation en tant que participant'
 mail.confirm.agenda.link: 'Confirmer mon agenda'
 mail.confirmResetPassword.body: "Bonjour %firstname% %lastname%,\n\nVotre mot de passe a bien été changé."
 mail.confirmResetPassword.subject: 'Votre mot de passe a bien été changé'
-mail.event.preregister.body: "%firstname% %lastname%,\n\nVotre demande d'inscription  \"%event%\" a bien été enregistrée et sera examinée dans les plus brefs délais par l'équipe \"%event%\".\n\nVous recevrez un mail de confirmation lorsque votre inscription aura été validée par l'organisateur."
-mail.event.preregister.end: 'Bien cordialement,'
+mail.event.preregister.body: "%firstname% %lastname%,\n\nVotre demande d'inscription au programme B2B Meetings de \"%event%\" a bien été prise en compte et sera examinée dans les plus brefs délais par nos équipes.\n\nVous recevrez un mail de confirmation lorsque votre inscription aura été validée par l'organisateur."
+mail.event.preregister.end: ''
 mail.event.preregister.link: 'Votre profil participant'
 mail.event.preregister.subject: 'Vous êtes pré-enregistré à %event%'
 mail.footer.contact: Contact
@@ -54,7 +54,7 @@ mail.planning.print.orderBy.text: 'Le fichier est trié'
 mail.planning.print.subject: 'Fichier de plannings'
 mail.register.body: "%firstname% %lastname%,\n\nFélicitations ! Votre compte d'accès à l'espace membre \"%event%\" est créé. \n\nVous pouvez dès à présent utiliser votre compte pour vous connecter à votre espace membre sur le site \"%event%\".\n\nBien cordialement,"
 mail.register.subject: 'Votre compte d''accès à l''espace membre de %event% est créé'
-mail.resetPassword.body: "Bonjour,\nVous avez fait une demande de réinitialisation de mot de passe.\nRendez-vous sur ce lien pour pouvoir créer un nouveau mot de passe :"
+mail.resetPassword.body: "Bonjour,\n\nVous avez fait une demande de réinitialisation de mot de passe.\nRendez-vous sur ce lien pour pouvoir créer un nouveau mot de passe :"
 mail.resetPassword.end: 'Cordialement,'
 mail.resetPassword.link: 'Réinitialiser le mot de passe'
 mail.resetPassword.subject: '[%event%] Mot de passe oublié'
@@ -63,6 +63,8 @@ mail.sheet.add_participant_confirmation.subject: 'Invitation envoyée'
 mail.sheet.change_type.body: "Bonjour %firstname% %lastname%,\n\nVotre participation de type %fromType% a été transformée en participation de type %toType%."
 mail.sheet.change_type.end: 'Cordialement,'
 mail.sheet.change_type.subject: '[%event%] Votre participation a changé'
+mail.sheet.generate_pdf.click: 'Télécharger les fiches en pdf'
+mail.sheet.generate_pdf.intro: "Bonjour\nLe fichier .pdf des fiches sélectionnés pour l'évenement %eventTitle% a été généré\n"
 mail.sheet.group.created.body: "Bonjour %firstname% %lastname%,\n\nVotre entité multi-fiches a été créée.\n\nVous pouvez y acceder depuis le lien ci-dessous :"
 mail.sheet.group.created.subject: 'Votre entité multi-fiches a été créée'
 mail.sheet.group.show.link: 'Accéder à l''entité multi-fiches'
@@ -70,6 +72,13 @@ mail.sheet.invoiced.body: "Bonjour %participant%,\n\nPour faire suite à votre p
 mail.sheet.invoiced.end: "Votre facture est &eacute;galement disponible dans votre espace membre par ce lien <a href=\"%ordersLink%\" target=\"_blank\">Facture et liste des commandes</a>\n\nNous vous remercions de votre participation."
 mail.sheet.invoiced.link: 'Télécharger ma facture %invoiceNumber%'
 mail.sheet.invoiced.subject: 'Téléchargez votre facture'
+mail.sheet.print.click: 'Télécharger les fiches'
+mail.sheet.print.intro: "Bonjour,\n\n Voici le PDF généré des fiches pour l'événement %eventTitle% :\n"
+mail.sheet.print.pdf.error.content: "Bonjour, \n\n Un problème est survenu lors de la génération du fichier pdf pour l'impression des fiches de l'événement %eventTitle%.\n\n"
+mail.sheet.print.pdf.error.subject: 'Erreur lors de la génération des PDF de fiches'
+mail.sheet.print.pdf.subject: 'Génération des PDF de fiches'
+mail.sheet.refused.body: "%firstname% %lastname%,\n\nAprès consultation de votre profil, nous vous informons que votre candidature au %event% en tant que \"%participationType%\" n’a pas été retenue pour l'une des raisons suivantes : \n\n- Votre société a moins de 6 mois d’existence,\n- Nous n'avons pas réussi à identifier votre activité (absence de site internet ou de description d’activités),\n- Votre activité n’est pas privilégiée au vu de la capacité des espaces\n\nSi vous souhaitez néanmoins participer en tant que visiteur libre, et avoir accès au DemoSpace et aux espaces de networking, merci d’envoyer un mail au contact indiqué ci-dessous.\n\nBien cordialement"
+mail.sheet.refused.subject: 'Votre inscription à l''événement %event% en tant que "%participationType%" est refusée'
 mail.sheet.show.link: 'Voir la fiche de présentation'
 mail.sheet.submitted.body: "La fiche de participation de %sheetName% a été finalisée le %date% par %firstname% %lastname%.\n\nPour accéder au détail de la fiche, merci de cliquer sur le lien suivant"
 mail.sheet.submitted.end: 'Cordialement,'

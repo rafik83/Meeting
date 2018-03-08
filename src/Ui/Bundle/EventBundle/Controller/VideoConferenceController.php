@@ -1,9 +1,9 @@
 <?php
 
 /*
- * This file is part of the vimeet project.
+ * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2017 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -11,43 +11,117 @@
 namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Controller;
 
 use Proximum\Vimeet\Application\Command\VideoConference\RequestAccess;
+use Proximum\Vimeet\Application\Command\VideoConference\RequestTestAccess;
 use Proximum\Vimeet\Application\Exception\VideoConference\InvalidTokenGeneratorArgumentsException;
+use Proximum\Vimeet\Application\Query\Agenda\MeetingViewQuery;
+use Proximum\Vimeet\Application\View\Agenda\MeetingView;
+use Proximum\Vimeet\Application\View\Meeting\VideoConferenceView;
 use Proximum\Vimeet\Domain\Model\Meeting;
-use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Security\Voter\HappeningAccessVoter;
-use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Security\Voter\MeetingAccessVoter;
+use Proximum\Vimeet\Domain\Model\Participant;
+use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Security\Voter\VideoMeetingAccessVoter;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\ParamConverter\EventDomain;
+use Proximum\Vimeet\Ui\Bundle\EventBundle\Security\SheetVoter;
+use Proximum\Vimeet\Ui\Bundle\EventBundle\ValueResolver\UserDomain;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 class VideoConferenceController extends Controller
 {
     /**
+     * @param Request     $request
+     * @param UserDomain  $userDomain
      * @param EventDomain $eventDomain
+     * @param Sheet       $sheet
+     * @param Participant $participant
      * @param Meeting     $meeting
      *
-     * @return JsonResponse
+     * @return Response
      */
-    public function requestAccessAction(EventDomain $eventDomain, Meeting $meeting): JsonResponse
-    {
+    public function videoMeetingAction(
+        Request $request,
+        UserDomain $userDomain,
+        EventDomain $eventDomain,
+        Sheet $sheet,
+        Participant $participant,
+        Meeting $meeting
+    ): Response {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
-        $this->denyAccessUnlessGranted(HappeningAccessVoter::PERMISSION, $eventDomain->getEvent());
-        $this->denyAccessUnlessGranted(MeetingAccessVoter::PERMISSION, $meeting);
+        $this->denyAccessUnlessGranted(SheetVoter::EDIT, $sheet);
         $this->denyAccessUnlessGranted(VideoMeetingAccessVoter::PERMISSION, $meeting);
 
         if (!$meeting->getSpot()->isVisio()) {
-            return new JsonResponse('Meeting is not visio', Response::HTTP_UNPROCESSABLE_ENTITY);
+            throw $this->createAccessDeniedException('Meeting is not visio');
         }
 
+        if (false === $sheet->hasParticipant($participant)
+            || false === $sheet->hasUser($userDomain->getUser())
+            || ($meeting->getToSheet() !== $sheet && $sheet !== $meeting->getFromSheet())
+            || (false === $meeting->hasFromParticipant($participant) && false === $meeting->hasToParticipant($participant))
+        ) {
+            throw $this->createAccessDeniedException('Meeting is not accessible');
+        }
+
+        $event = $eventDomain->getEvent();
+
+        /** @var MeetingView $meetingView */
+        $meetingView = $this->get('tactician.commandbus')->handle(
+            new MeetingViewQuery($meeting, $sheet, false, $userDomain->getUser(), $event, $request->getLocale())
+        );
+
+        /** @var VideoConferenceView $videoConferenceView */
+        $videoConferenceView = $this->get('tactician.commandbus')->handle(
+            new RequestAccess($meeting, $userDomain->getUser())
+        );
+
+        return $this->render(
+            'EventBundle:VideoConference:videoConference.html.twig',
+            [
+                'event' => $event,
+                'videoConferenceView' => $videoConferenceView,
+                'meetingView' => $meetingView,
+            ]
+        );
+    }
+
+    /**
+     * Opened page to create a session to test the Video Conference feature
+     *
+     * @param EventDomain $eventDomain
+     *
+     * @return RedirectResponse
+     */
+    public function createSessionVideoTestAction(EventDomain $eventDomain): RedirectResponse
+    {
+        $sessionId = $this->get('adapter.video_conference_adapter')->createSession();
+
+        return $this->redirectToRoute('event_video_conference_access_session_test', ['sessionId' => $sessionId]);
+    }
+
+    /**
+     * Opened page to test the Video Conference feature with a sessionId
+     *
+     * @param EventDomain $eventDomain
+     * @param string      $sessionId
+     *
+     * @return Response
+     */
+    public function accessSessionVideoTestAction(EventDomain $eventDomain, string $sessionId): Response
+    {
         try {
+            /** @var VideoConferenceView $videoConferenceView */
             $videoConferenceView = $this->get('tactician.commandbus')->handle(
-                new RequestAccess($meeting, $this->getUser())
+                new RequestTestAccess($sessionId)
             );
         } catch (InvalidTokenGeneratorArgumentsException $exception) {
-            return new JsonResponse('Invalid token generator arguments', Response::HTTP_UNPROCESSABLE_ENTITY);
+            throw $this->createNotFoundException('The sessionId is not valid');
         }
 
-        return new JsonResponse($videoConferenceView);
+        return $this->render('EventBundle:VideoConference:videoConference.html.twig', [
+            'event' => $eventDomain->getEvent(),
+            'videoConferenceView' => $videoConferenceView,
+        ]);
     }
 }

@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2016 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -19,19 +19,13 @@ use Proximum\Vimeet\Domain\Repository\HappeningRepositoryInterface;
 
 class DayViewQueryHandler
 {
-    /**
-     * @var HappeningViewQueryHandler
-     */
+    /** @var HappeningViewQueryHandler */
     private $happeningViewQueryHandler;
 
-    /**
-     * @var HappeningRepositoryInterface
-     */
+    /** @var HappeningRepositoryInterface */
     private $happeningRepository;
 
-    /**
-     * @var MassUnavailabilityViewQueryHandler
-     */
+    /** @var MassUnavailabilityViewQueryHandler */
     private $massUnavailabilityViewQueryHandler;
 
     /**
@@ -56,8 +50,9 @@ class DayViewQueryHandler
      */
     public function handle(DayViewQuery $query)
     {
-        $happenings = $this->happeningRepository->findByEventAndDayAndCategory(
+        $happenings = $this->happeningRepository->findByEventAndTypeAndDayAndCategory(
             $query->event,
+            $query->sheet->getType(),
             $query->eventDay->getDay(),
             $query->category
         );

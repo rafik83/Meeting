@@ -10,34 +10,37 @@
 
 namespace Proximum\Vimeet\Tests\Application\Query\Meeting;
 
+use PHPUnit\Framework\TestCase;
+use Proximum\Vimeet\Application\Adapter\RouterInterface;
 use Proximum\Vimeet\Application\Components\Sheet\Preview\Preview;
 use Proximum\Vimeet\Application\Components\Sheet\SheetInfoGuesser;
 use Proximum\Vimeet\Application\Query\Meeting\MeetingRequestViewQuery;
 use Proximum\Vimeet\Application\Query\Meeting\MeetingRequestViewQueryHandler;
 use Proximum\Vimeet\Application\View\Meeting\MeetingRequestView;
 use Proximum\Vimeet\Domain\Model\Meeting\Request;
+use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\Type;
 use Proximum\Vimeet\Domain\Repository\RuleRepositoryInterface;
-use Proximum\Vimeet\Domain\Repository\Sheet\SheetViewedRepositoryInterface;
 use Proximum\Vimeet\Domain\Rule\Composer;
 use Proximum\Vimeet\Tests\Factory\UserFactory;
-use PHPUnit\Framework\TestCase;
 
 class MeetingRequestViewQueryHandlerTest extends TestCase
 {
     public function testHandle()
     {
-        $locale   = 'fr';
-        $datetime = new \DateTime();
+        $locale           = 'fr';
+        $datetime         = new \DateTime();
         $sheet            = $this->prophesize(Sheet::class);
         $sheet2           = $this->prophesize(Sheet::class);
         $user             = UserFactory::create();
+        $participant      = $this->prophesize(Participant::class);
         $meetingRequest   = $this->prophesize(Request::class);
         $preview          = $this->prophesize(Preview::class);
         $sheetInfoGuesser = $this->prophesize(SheetInfoGuesser::class);
         $ruleRepository   = $this->prophesize(RuleRepositoryInterface::class);
         $ruleComposer     = $this->prophesize(Composer::class);
+        $router           = $this->prophesize(RouterInterface::class);
 
         $type1 = $this->prophesize(Type::class);
         $type2 = $this->prophesize(Type::class);
@@ -47,19 +50,34 @@ class MeetingRequestViewQueryHandlerTest extends TestCase
         $meetingRequest->getToSheet()->willReturn($sheet2->reveal());
         $meetingRequest->getState()->willReturn(Request::STATE_SENT);
         $meetingRequest->hasMessage()->willReturn(true);
+        $participant->getId()->willReturn(1);
+        $sheet->getId()->willReturn(1);
         $sheet->getType()->willReturn($type1->reveal());
+        $sheet->getUserParticipant($user)->willReturn($participant->reveal());
         $sheet2->getType()->willReturn($type2->reveal());
         $sheetInfoGuesser->guessSheetTitle($sheet2->reveal(), $locale)->willReturn('sheet name');
-        $ruleRepository->getBySeerTypeAndSeeableType($type1->reveal(), $type2->reveal())->shouldBeCalled()->willReturn([]);
+        $ruleRepository->getBySeerTypeAndSeeableType($type1->reveal(), $type2->reveal())->shouldBeCalled()
+            ->willReturn([]);
         $preview->getPreview($sheet2->reveal(), $locale, null)->shouldBeCalled()->willReturn([]);
 
         $type2->getTitle($locale)->willReturn('type');
+
+        $router->generate('event_user_phone_redirect_to_validation', [
+            'sheet'       => 1,
+            'participant' => 1,
+            'redirectTo' => 'redirectLink',
+        ])->shouldBeCalled()->willReturn('validatePhoneLink');
+
+        $router->generate('event_meeting_list_request', [
+            'sheet' => 1,
+        ])->shouldBeCalled()->willReturn('redirectLink');
 
         $handler = new MeetingRequestViewQueryHandler(
             $preview->reveal(),
             $sheetInfoGuesser->reveal(),
             $ruleRepository->reveal(),
-            $ruleComposer->reveal()
+            $ruleComposer->reveal(),
+            $router->reveal()
         );
 
         $result = $handler->handle(new MeetingRequestViewQuery(
@@ -70,7 +88,9 @@ class MeetingRequestViewQueryHandlerTest extends TestCase
             false,
             false,
             false,
-            false
+            false,
+            false,
+            true
         ));
 
         $expected = new MeetingRequestView(
@@ -86,7 +106,10 @@ class MeetingRequestViewQueryHandlerTest extends TestCase
             false,
             false,
             false,
-            true
+            true,
+            false,
+            true,
+            'validatePhoneLink'
         );
 
         $this->assertEquals($expected, $result);

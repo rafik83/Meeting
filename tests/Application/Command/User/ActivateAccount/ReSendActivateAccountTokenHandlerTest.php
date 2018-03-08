@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Tests\Application\Command\User\ActivateAccount;
 
+use PHPUnit\Framework\TestCase;
 use Proximum\Vimeet\Application\Command\User\ActivateAccount\ReSendActivateAccountToken;
 use Proximum\Vimeet\Application\Command\User\ActivateAccount\ReSendActivateAccountTokenHandler;
 use Proximum\Vimeet\Application\Components\Token\User\ActivateAccountTokenGenerator;
@@ -19,7 +20,6 @@ use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Infrastructure\Adapter\DelayedEventDispatcher;
-use PHPUnit\Framework\TestCase;
 use Proximum\Vimeet\Tests\Factory\UserFactory;
 
 class ReSendActivateAccountTokenHandlerTest extends TestCase

@@ -13,6 +13,7 @@ namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Sheet;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Sheet\Constant;
 use Proximum\Vimeet\Domain\Repository\CategoryRepositoryInterface;
+use Proximum\Vimeet\Domain\Sheet\CommercialStatus;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Service\BooleanFiltersBuilder;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\CategoryChoiceType;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Messaging\Campaign\ImportedChoiceType;
@@ -119,16 +120,35 @@ abstract class AbstractFilterType extends AbstractType
                 'multiple'   => true,
                 'expanded'   => true,
             ])
-            ->add(Constant::HAS_ORDER, ChoiceType::class, [
-                'choices'     => [
-                    'form.sheet_filter.children.order.yes.label' => true,
-                    'form.sheet_filter.children.order.no.label'  => false,
+            ->add('reminderDate', ReminderDateChoiceType::class, [
+                'label'    => 'form.sheet_filter.children.reminderDate.label',
+                'required' => false,
+                'multiple' => true,
+                'expanded' => true,
+            ])
+            ->add('commercialStatus', CommercialStatusChoiceType::class, [
+                'required'     => false,
+                'multiple'     => true,
+                'choice_label' => function ($key) {
+                    return  sprintf('admin.sheet.details.crm.record.trace.set_commercial_status.%s', $key);
+                },
+                'label'              => 'admin.sheet.commercialStatus',
+                'translation_domain' => 'messages',
+                'attr' => [
+                    'class'                 => 'commercial_status_selector',
+                    'data-associated-label' => json_encode(CommercialStatus::STATUS_WITH_LABEL),
                 ],
-                'multiple'    => false,
+            ])
+            ->add(Constant::ORDER_STATUS, ChoiceType::class, [
+                'choices'     => [
+                    'form.sheet_filter.children.order.no.label'                => Constant::ORDER_STATUS_NO_ORDER,
+                    'form.sheet_filter.children.order.totalSuperiorZero.label' => Constant::ORDER_STATUS_TOTAL_ORDER_SUPERIOR_ZERO,
+                    'form.sheet_filter.children.order.totalEqualZero.label'    => Constant::ORDER_STATUS_TOTAL_ORDER_EQUAL_ZERO,
+                ],
+                'multiple'    => true,
                 'expanded'    => true,
-                'label'       => 'form.sheet_filter.children.hasOrder.label',
+                'label'       => 'form.sheet_filter.children.orderStatus.label',
                 'required'    => false,
-                'placeholder' => 'form.sheet_filter.children.order.noPreference.label',
             ])
             ->add(Constant::HAS_CART, ChoiceType::class, [
                 'choices'     => [
@@ -181,6 +201,16 @@ abstract class AbstractFilterType extends AbstractType
             ])
             ->add('agendaConfirmedStatus', AgendaConfirmedStatusChoiceType::class, [
                 'label'    => 'form.sheet_filter.children.agendaConfirmedStatus.label',
+                'required' => false,
+                'expanded' => true,
+            ])
+            ->add('phoneValidationStatus', PhoneValidationStatusChoiceType::class, [
+                'label'    => 'form.sheet_filter.children.phoneValidationStatus.label',
+                'required' => false,
+                'expanded' => true,
+            ])
+            ->add('availabilityConfirmationStatus', AvailabilityConfirmationStatusChoiceType::class, [
+                'label'    => 'form.sheet_filter.children.availabilityConfirmationStatus.label',
                 'required' => false,
                 'expanded' => true,
             ])

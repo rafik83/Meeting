@@ -20,3 +20,9 @@ Proximum\Vimeet\Domain\Model\CartRow:
             targetEntity: Proximum\Vimeet\Domain\Model\Product
             joinColumn:
                 onDelete: CASCADE
+    oneToMany:
+        cartRowParticipants:
+            targetEntity: Proximum\Vimeet\Domain\Model\CartRowParticipant
+            cascade: ['persist', 'remove']
+            mappedBy: cartRow
+            orphanRemoval: true

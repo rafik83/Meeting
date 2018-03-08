@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2015 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -39,7 +39,7 @@ class DeleteBatchHandlerTest extends TestCase
         $spotRepository->getSpotsByIds($ids)->willReturn([$spot]);
 
         $spotRepository->hasMeeting($spot)->shouldBeCalled()->willReturn(false);
-        
+
         $spotRepository->removeBatchSpot([$spot], $event)->shouldBeCalled();
 
         //Handler
@@ -48,7 +48,7 @@ class DeleteBatchHandlerTest extends TestCase
 
         $this->assertEquals($view, $expectedView);
     }
-    
+
     public function testCannotDeleteSpotWithMeeting()
     {
         //Context

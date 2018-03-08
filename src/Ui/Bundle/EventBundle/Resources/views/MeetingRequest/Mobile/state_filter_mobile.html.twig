@@ -1,0 +1,22 @@
+<h3 class="catalog-mobile-title">{{ 'meetingRequest.mobile.filters.state.title'|trans }}</h3>
+<ul class="catalog-mobile-state-filter-list">
+    {% for child in form.children %}
+        {% set count = 0 %}
+        {% if stateListsView.byState(child.vars.value) is not null %}
+            {% set count = stateListsView.byState(child.vars.value).count %}
+        {% endif %}
+        <li class="catalog-mobile-filter {% if count == 0 %}disabled{% endif %}"
+            data-filter-id="{{ child.vars.value }}"
+            data-catalog-mobile-state-filter="catalog-mobile-state-filter"
+            data-content="{{ child.vars.label|trans({}, child.vars.translation_domain) }}"
+            data-count="{{ count }}"
+        >
+            <a href="#" class="catalog-mobile-menu-button btn btn-primary btn-block {% if not child.vars.data %}btn-inactive{% endif %} {% if count == 0 %}disabled{% endif %}" data-catalog-mobile-menu-button-action="catalog-mobile-menu-button-action-state-filter">
+                <span class="button-count">
+                    ({{ count }})
+                </span>
+                <span>{{ child.vars.label|trans({}, child.vars.translation_domain) }}</span>
+            </a>
+        </li>
+    {% endfor %}
+</ul>

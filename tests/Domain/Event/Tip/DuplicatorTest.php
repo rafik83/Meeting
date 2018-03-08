@@ -1,9 +1,9 @@
 <?php
 
 /*
- * This file is part of the vimeet project.
+ * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) vimeet
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -29,7 +29,7 @@ class DuplicatorTest extends TestCase
         $event           = EventFactory::createEvent(
             'event',
             EventFactory::FALLBACK_LOCALE_DEFAULT,
-            ['fr', 'en',],
+            ['fr', 'en'],
             Event::VAT_MODE_ET,
             $eventDuplicated
         );
@@ -45,7 +45,7 @@ class DuplicatorTest extends TestCase
         $oldTip = TipFactory::createTip('tip title');
         $oldTip->setType($oldType);
 
-        $expectedTip = TipFactory::createTip('tip title');
+        $expectedTip = TipFactory::createTip('tip title', $event);
         $expectedTip->setType($newType);
 
         $tipRepository = $this->prophesize(TipRepositoryInterface::class);

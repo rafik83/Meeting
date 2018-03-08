@@ -1,0 +1,29 @@
+services:
+    command.meeting_request.reminder_handler:
+        class: Proximum\Vimeet\Application\Command\MeetingRequest\ReminderHandler
+        arguments:
+            - '@vimeet_infrastructure.repository.event_repository'
+            - '@repository.user.event.extra_data_repository'
+            - '@repository.user.user_event_phone_repository'
+            - '@vimeet_infrastructure.repository.sheet_repository'
+            - '@datetime'
+            - '@adapter.smssender_alias'
+            - '@service.smsfactory'
+            - '@command.meeting_request.counter'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\MeetingRequest\Remind }
+
+    command.meeting_request.counter:
+        class: Proximum\Vimeet\Application\Command\MeetingRequest\Counter
+        arguments:
+            - '@query.agenda.available_sheets.available_slots_by_participant_query_handler'
+            - '@vimeet_infrastructure.repository.meeting.request_repository'
+
+    command.user.availability.confirmation_handler:
+        class: Proximum\Vimeet\Application\Command\User\Availability\ConfirmationHandler
+        arguments:
+            - '@vimeet_infrastructure.adapter.delayed_event_dispatcher'
+            - '@repository.user.event.extra_data_repository'
+            - '@datetime'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\User\Availability\Confirmation }

@@ -10,8 +10,6 @@
 
 namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Controller;
 
-use Proximum\Vimeet\Domain\Model\Event;
-use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Type\TypeChoiceType;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\ParamConverter\EventDomain;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -35,19 +33,27 @@ class HomeController extends Controller
     public function indexAction(Request $request, EventDomain $eventDomain, UserInterface $user = null)
     {
         $locale = $request->getLocale();
-        $event = $eventDomain->getEvent();
+        $event  = $eventDomain->getEvent();
 
-       $response = $this
-           ->get('infrastructure.route.home_dispatch.home_user_dispatcher')
-           ->attemptDispatchUser($event, $user);
+        $response = $this
+            ->get('infrastructure.route.home_dispatch.home_user_dispatcher')
+            ->attemptDispatchUser($event, $user);
 
         if ($response instanceof RedirectResponse) {
             return $response;
         }
 
+        $typeViews = $this
+            ->get('vimeet_infrastructure.repository.type_repository')
+            ->getVisibleTypesViewsByEvent($event, $locale)
+        ;
+
+        if (empty($typeViews)) {
+            return $this->redirectToRoute('event_login');
+        }
+
         $form = $this->createForm(TypeChoiceType::class, null, [
-            'locale' => $locale,
-            'event'  => $event,
+            'typeViews' => $typeViews,
         ]);
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {

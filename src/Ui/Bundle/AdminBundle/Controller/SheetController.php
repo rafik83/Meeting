@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2015 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -13,17 +13,14 @@ namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller;
 use Proximum\Vimeet\Application\Command\Participant\Import;
 use Proximum\Vimeet\Application\Command\Participant\ImportMapping;
 use Proximum\Vimeet\Application\Command\Participant\UpdateVisio;
-use Proximum\Vimeet\Application\Command\Sheet\AddComment;
 use Proximum\Vimeet\Application\Command\Sheet\AssignSpot;
 use Proximum\Vimeet\Application\Command\Sheet\AssignSpotResult;
 use Proximum\Vimeet\Application\Command\Sheet\Batch;
 use Proximum\Vimeet\Application\Command\Sheet\BatchResult;
-use Proximum\Vimeet\Application\Command\Sheet\ChangeType;
 use Proximum\Vimeet\Application\Exception\Paginator\UnavailableCurrentPageException;
 use Proximum\Vimeet\Application\Exception\Spot\SpotNotActiveException;
 use Proximum\Vimeet\Application\Exception\Spot\SpotNotFoundException;
 use Proximum\Vimeet\Application\Query\Participant\Import\ImportMappingViewQuery;
-use Proximum\Vimeet\Application\Query\Sheet\Detail\SheetDetailQuery;
 use Proximum\Vimeet\Application\Query\Sheet\PaginatedSheetListViewQuery;
 use Proximum\Vimeet\Application\View\Participant\ImportMappingView;
 use Proximum\Vimeet\Application\View\Sheet\SheetListView;
@@ -35,8 +32,6 @@ use Proximum\Vimeet\Domain\Model\Type;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Participant\ImportMappingType;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Participant\ImportType;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Sheet\BatchType;
-use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Sheet\ChangeTypeType;
-use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Sheet\CommentType;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Sheet\SheetFilterType;
 use Proximum\Vimeet\Ui\Flash\TranschoiceMessage;
 use Proximum\Vimeet\Ui\Flash\TransMessage;
@@ -190,6 +185,11 @@ class SheetController extends Controller
                 $batch->draft              = $batchForm->get('validationStateDraft')->isClicked();
                 $batch->validationValidate = $batchForm->get('validationStateValidate')->isClicked();
 
+                if ($this->isGranted('ROLE_ALLOWED_TO_ORGANIZE')) {
+                    $batch->refuse = $batchForm->get('refuse')->isClicked();
+                    $batch->printPdf  = $batchForm->get('printPdf')->isClicked();
+                }
+
                 if ($this->isGranted('ROLE_ALLOWED_TO_ADMIN')) {
                     $batch->enable          = $batchForm->get('enable')->isClicked();
                     $batch->disable         = $batchForm->get('disable')->isClicked();
@@ -237,93 +237,6 @@ class SheetController extends Controller
             'required'           => false,
             'allow_extra_fields' => true,
         ]));
-    }
-
-    /**
-     * @param Request $request
-     * @param Event   $event
-     * @param Sheet   $sheet
-     *
-     * @return Response
-     */
-    public function detailsAction(Request $request, Event $event, Sheet $sheet)
-    {
-        $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
-        $this->denyAccessUnlessGranted('PERMISSION_SHEET_ACCESS', $sheet);
-
-        if ($sheet->getEvent() !== $event) {
-            throw $this->createNotFoundException(
-                sprintf(
-                    'The sheet %s is not on this event %s',
-                    $sheet->getId(),
-                    $event->getId()
-                )
-            );
-        }
-
-        $locale = $event->getAvailableLocale($request->getLocale());
-
-        $sheetDetailView = $this->get('tactician.commandbus.query')->handle(new SheetDetailQuery(
-            $sheet, $locale
-        ));
-
-        $changeTypeForm = null;
-
-        if ($this->get('vimeet_infrastructure.repository.type_repository')->countByEvent($event) > 1
-            && $this->get('repository.invoice.invoice_repository')->isSheetInvoiced($sheet) === null
-        ) {
-            $changeType = new ChangeType($sheet, $sheet->getType(), $this->getUser(), $locale);
-
-            $changeTypeForm = $this->createForm(ChangeTypeType::class, $changeType, [
-                'event'  => $event,
-                'type'   => $sheet->getType(),
-                'locale' => $locale,
-                'submit' => true,
-            ]);
-
-            if ($changeTypeForm->handleRequest($request)->isSubmitted() && $changeTypeForm->isValid()) {
-                $this->get('tactician.commandbus')->handle($changeType);
-                $this->addFlash('success', 'flash.admin.sheet.change_type.success');
-
-                return $this->redirectToRoute('admin_sheet_details', [
-                    'event' => $event->getId(),
-                    'sheet' => $sheet->getId(),
-                ]);
-            }
-        }
-
-        $addComment = new AddComment($sheet, $this->getUser(), new \DateTime());
-
-        $addCommentForm = $this->createForm(CommentType::class, $addComment, [
-            'action' => $this->generateUrl('admin_sheet_details', [
-                'event' => $event->getId(),
-                'sheet' => $sheet->getId(),
-            ]),
-            'method' => 'POST',
-            'submit' => true,
-        ]);
-
-        if ($addCommentForm->handleRequest($request)->isSubmitted() && $addCommentForm->isValid()) {
-            $this->get('tactician.commandbus')->handle($addComment);
-            $this->addFlash('success', 'flash.admin.sheet.add_comment.success');
-
-            return $this->redirectToRoute('admin_sheet_details', [
-                'event' => $event->getId(),
-                'sheet' => $sheet->getId(),
-            ]);
-        }
-
-        $impersonationToken = $this->get('security.impersonate')->getEncodedToken($this->getUser(), $sheet->getOwner());
-
-        return $this->render('AdminBundle:Sheet:details.html.twig', [
-            'event'              => $event,
-            'sheet'              => $sheet,
-            'sheetTypeTitle'     => $sheet->getType()->getTitle($locale),
-            'details'            => $sheetDetailView,
-            'addCommentForm'     => $addCommentForm->createView(),
-            'changeTypeForm'     => $changeTypeForm === null ? null : $changeTypeForm->createView(),
-            'impersonationToken' => $impersonationToken,
-        ]);
     }
 
     /**
@@ -420,31 +333,35 @@ class SheetController extends Controller
         $this->checkAccess($event);
         $this->denyAccessUnlessGranted('PERMISSION_PARTICIPANT_IMPORT_ACCESS');
 
-        $availableLocale = $event->getAvailableLocale($request->getLocale());
+        $locale = $event->getAvailableLocale($request->getLocale());
 
-        $query = new ImportMappingViewQuery($type, $availableLocale);
+        $importMappingViewQuery = new ImportMappingViewQuery($type, $locale);
 
-        /** @var ImportMappingView $importMappingView */
-        $importMappingView = $this->get('tactician.commandbus.query')->handle($query);
+        try {
+            /** @var ImportMappingView $importMappingView */
+            $importMappingView = $this->get('tactician.commandbus.query')->handle($importMappingViewQuery);
+        } catch(\Exception $exception) {
+            $this->addFlash('error', 'flash.admin.sheet.participant.import.error');
 
-        $command = new ImportMapping(
+            return $this->redirectToRoute('admin_sheet_import', ['event' => $event->getId()]);
+        }
+
+        $importMapping = new ImportMapping(
             $event,
             $type,
             $this->getUser(),
-            $availableLocale,
-            $importMappingView->fieldHeaders,
-            $importMappingView->registrationHeaders
+            $locale,
+            $importMappingView
         );
 
-        $form = $this->createForm(ImportMappingType::class, $command, [
-            'locale'              => $availableLocale,
-            'registrationHeaders' => $importMappingView->registrationHeaders,
-            'csvHeaders'          => $importMappingView->fieldHeaders,
-            'submit'              => true,
+        $form = $this->createForm(ImportMappingType::class, $importMapping, [
+            'locale'            => $locale,
+            'importMappingView' => $importMappingView,
+            'submit'            => true,
         ]);
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
-            $this->get('tactician.commandbus')->handle($command);
+            $this->get('tactician.commandbus')->handle($importMapping);
 
             return $this->redirectToRoute('admin_sheet_import_result', [
                 'event' => $event->getId(),

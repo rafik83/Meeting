@@ -1,9 +1,9 @@
 <?php
 
 /*
- * This file is part of the vimeet project.
+ * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2017 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -44,7 +44,7 @@ class PaginatedSheetExternalViewQueryHandlerTest extends TestCase
         $sheetPreviewExternalViewQueryHandler = $this->prophesize(SheetPreviewExternalViewQueryHandler::class);
 
         $sheetSearchAdapter
-            ->find(
+            ->paginate(
                 $event,
                 ExternalCatalog::DEFAULT_FILTERS,
                 Sheet\Constant::ORDER_BY_ALPHABETICAL,

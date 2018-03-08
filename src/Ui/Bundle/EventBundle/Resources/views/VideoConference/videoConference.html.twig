@@ -1,0 +1,47 @@
+{% extends 'EventBundle::base.html.twig' %}
+
+{% block body %}
+    <div class="video-conference"
+         data-token="{{ videoConferenceView.token }}"
+         data-session-id="{{ videoConferenceView.sessionId }}"
+         data-api-key="{{ videoConferenceView.apiKey }}"
+         data-not-compatible-browser-message="{{ 'meeting.video.notCompatibleBrowserMessage'|trans }}"
+         data-install-screensharing-extension-message="{{ 'meeting.video.installScreenSharingExtensionMessage'|trans }}"
+         data-user-denied-media-access="{{ 'meeting.video.error.userDeniedAccess'|trans }}"
+    >
+        <div class="layout-container"></div>
+        <div class="publisher-container"></div>
+        <div class="video-helper">
+            <div><i class="icon-Alerter_1"></i> {{ 'meeting.video.waitingForParticipant'|trans }}</div>
+
+            {% if meetingView is defined %}
+                <br>
+                <h1>{{ meetingView.sheetMetTitle }}</h1>
+
+                <div class="list list--users">
+                    {% for participantView in meetingView.participants %}
+                        {{ include('EventBundle:Participant:preview.html.twig', {'participant': participantView.card}) }}
+                    {% endfor %}
+                </div>
+            {% endif %}
+        </div>
+
+        <div class="buttons-container">
+            <button id="toggle-audio" class="btn">
+                <i class="icon-Conference icon-center"></i>
+            </button>
+            <button id="toggle-video" class="btn">
+                <i class="glyphicon glyphicon glyphicon-facetime-video icon-center"></i>
+            </button>
+            <button id="start-screensharing" class="btn screensharing">
+                <i class="glyphicon glyphicon-share"></i>{{ 'meeting.video.screenshare.start'|trans }}
+            </button>
+            <button id="end-screensharing" class="btn screensharing hide">
+                <i class="glyphicon glyphicon-share"></i>{{ 'meeting.video.screenshare.end'|trans }}
+            </button>
+            <button class="btn btn-primary end-meeting">
+                <i class="icon-Disconnect"></i> {{ 'meeting.video.end'|trans }}
+            </button>
+        </div>
+    </div>
+{% endblock body %}

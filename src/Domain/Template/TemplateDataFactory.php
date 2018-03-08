@@ -10,16 +10,19 @@
 
 namespace Proximum\Vimeet\Domain\Template;
 
+use Proximum\Vimeet\Application\Components\Sheet\Preview\CustomPreviewData;
 use Proximum\Vimeet\Domain\Exception\Nomenclature\NomenclatureNotFoundException;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Nomenclature;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\Template\AbstractTemplate;
+use Proximum\Vimeet\Domain\Model\Template\RegistrationTemplate;
 use Proximum\Vimeet\Domain\Model\Type;
 use Proximum\Vimeet\Domain\Repository\NomenclatureRepositoryInterface;
 use Proximum\Vimeet\Domain\Template\Exception\BuildNotImplementedException;
 use Proximum\Vimeet\Domain\Template\Exception\ObjectNotFoundException;
+use Proximum\Vimeet\Domain\Template\TemplateObject\EditableText;
 
 class TemplateDataFactory
 {
@@ -44,6 +47,7 @@ class TemplateDataFactory
         'tags'                  => TemplateObject\TagsCollection::class,
         'gender'                => TemplateObject\Gender::class,
         'boolean'               => TemplateObject\BooleanObject::class,
+        'upload'                => TemplateObject\UploadObject::class,
     ];
 
     /**
@@ -101,21 +105,46 @@ class TemplateDataFactory
     }
 
     /**
-     * @param Type   $type
-     * @param string $locale
+     * @param RegistrationTemplate $registrationTemplate
+     * @param null|string          $locale
      *
      * @return TemplateData
      */
-    public function createRegistrationFromType(Type $type, $locale)
-    {
+    public function createRegistrationFromTemplate(
+        RegistrationTemplate $registrationTemplate,
+        ?string $locale
+    ): TemplateData {
         return $this
-            ->loadNomenclatures($type->getEvent())
+            ->loadNomenclatures($registrationTemplate->getEvent())
             ->create(
-                $type->getRegistrationTemplate()->getValue(),
+                $registrationTemplate->getValue(),
                 [],
                 $locale,
-                $type->getRegistrationTemplate()->getFallback()
-            );
+                $registrationTemplate->getFallback()
+            )
+        ;
+    }
+
+    /**
+     * @param Type        $type
+     * @param null|string $locale
+     *
+     * @return TemplateData
+     */
+    public function createRegistrationFromType(Type $type, ?string $locale): TemplateData
+    {
+        return $this->createRegistrationFromTemplate($type->getRegistrationTemplate(), $locale);
+    }
+
+    /**
+     * @param Type        $type
+     * @param null|string $locale
+     *
+     * @return TemplateData
+     */
+    public function createSheetTemplateFromType(Type $type, ?string $locale = null): TemplateData
+    {
+        return $this->createFromTemplate($type->getSheetTemplate(), [], $locale);
     }
 
     /**
@@ -124,7 +153,7 @@ class TemplateDataFactory
      *
      * @return TemplateData
      */
-    public function createRegistrationFromSheet(Sheet $sheet, $locale = null)
+    public function createRegistrationFromSheet(Sheet $sheet, ?string $locale = null): TemplateData
     {
         return $this
             ->loadNomenclatures($sheet->getEvent())
@@ -225,13 +254,50 @@ class TemplateDataFactory
 
         foreach ($data as $key => $value) {
             try {
-                $templateData->getObject($key)->setData($value ?: []);
+                $templateObject = $templateData->getObject($key);
+                $templateObject->setData($value ?: []);
+
+                if ($templateObject instanceof EditableText
+                    && empty($templateObject->getContentValueLocalize($locale))
+                    && $templateObject->isTranslatable()
+                ) {
+                    $templateObject->setContent($this->getFirstNotEmptyContent($templateObject));
+                }
+
             } catch (ObjectNotFoundException $exception) {
                 // Don't try to set data if object not found
             }
         }
 
         return $templateData;
+    }
+
+    /**
+     * @param TemplateObject $templateObject
+     *
+     * @return string|null
+     */
+    private function getFirstNotEmptyContent(TemplateObject $templateObject):? string
+    {
+        $translations = $templateObject->getTranslations();
+
+        foreach ($translations as $translation) {
+            if (!empty($translation)) {
+                return $translation;
+            }
+        }
+
+        return null;
+    }
+
+    /**
+     * @param TemplateData $templateData
+     *
+     * @return array of TemplateObject and CustomPreviewDataView
+     */
+    public function getPreviewAvailableData(TemplateData $templateData): array
+    {
+        return array_merge($templateData->getPreviewAvailableObjects(), CustomPreviewData::getCustomPreviewDataViews());
     }
 
     /**

@@ -1,9 +1,9 @@
 <?php
 
 /*
- * This file is part of the vimeet project.
+ * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2017 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -75,7 +75,7 @@ class UpdateHandlerTest extends TestCase
         $update->email = $newEmail;
 
         $expectedManager = UserFactory::create($newEmail);
-        $expectedGroup   = GroupFactory::createGroup($this->event, $expectedManager, $this->now,'SheetGroupNewTitle');
+        $expectedGroup   = GroupFactory::createGroup($this->event, $expectedManager, $this->now, 'SheetGroupNewTitle');
 
         $this->userRepository->findByEmail($newEmail)->shouldBeCalled()->willReturn($expectedManager);
 

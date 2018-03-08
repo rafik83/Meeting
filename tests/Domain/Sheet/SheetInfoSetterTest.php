@@ -24,19 +24,19 @@ class SheetInfoSetterTest extends TestCase
     {
         $result = [
             'text1' => [
-                'content' => 'did not changed'
+                'content' => 'did not changed',
             ],
             'text2' => [
-                'content' => 'sheet title'
+                'content' => 'sheet title',
             ],
             'text3' => [
-                'content' => 'did not changed'
+                'content' => 'did not changed',
             ],
             'text4' => [
-                'content' => 'sheet title'
+                'content' => 'sheet title',
             ],
             'text5' => [
-                'content' => 'did not changed'
+                'content' => 'did not changed',
             ],
         ];
         $title = 'sheet title';

@@ -12,6 +12,7 @@ namespace Proximum\Vimeet\Application\Command\Sheet;
 
 use Proximum\Vimeet\Application\Adapter\SheetSearchAdapterInterface;
 use Proximum\Vimeet\Domain\Admin\Follower\FollowerConstant;
+use Proximum\Vimeet\Domain\Model\Sheet\Constant;
 use Proximum\Vimeet\Domain\Model\Sheet\Group;
 
 class BatchHandler
@@ -24,6 +25,9 @@ class BatchHandler
 
     /** @var BatchAcceptHandler */
     private $batchAcceptHandler;
+
+    /** @var BatchRefuseHandler */
+    private $batchRefuseHandler;
 
     /** @var BatchEnableDisableHandler */
     private $batchEnableDisableHandler;
@@ -49,6 +53,9 @@ class BatchHandler
     /** @var BatchPendingHandler */
     private $batchPendingHandler;
 
+    /** @var BatchPdfJobCreatorHandler */
+    private $batchPdfJobCreatorHandler;
+
     /**
      * BatchHandler constructor.
      *
@@ -56,6 +63,7 @@ class BatchHandler
      * @param BatchValidateHandler           $batchValidateHandler
      * @param BatchAssignHandler             $batchAssignHandler
      * @param BatchAcceptHandler             $batchAcceptHandler
+     * @param BatchRefuseHandler             $batchRefuseHandler
      * @param BatchEnableDisableHandler      $batchEnableDisableHandler
      * @param BatchCatalogHandler            $batchCatalogHandler
      * @param BatchDraftHandler              $batchDraftHandler
@@ -63,31 +71,36 @@ class BatchHandler
      * @param BatchGenerateInvoiceHandler    $batchGenerateInvoiceHandler
      * @param BatchAssignToGroupHandler      $batchAssignToGroupHandler
      * @param BatchPendingHandler            $batchPendingHandler
+     * @param BatchPdfJobCreatorHandler      $batchPdfJobCreatorHandler
      */
     public function __construct(
         SheetSearchAdapterInterface $sheetSearchAdapter,
         BatchValidateHandler $batchValidateHandler,
         BatchAssignHandler $batchAssignHandler,
         BatchAcceptHandler $batchAcceptHandler,
+        BatchRefuseHandler $batchRefuseHandler,
         BatchEnableDisableHandler $batchEnableDisableHandler,
         BatchCatalogHandler $batchCatalogHandler,
         BatchDraftHandler $batchDraftHandler,
         BatchValidationValidateHandler $batchValidationValidateHandler,
         BatchGenerateInvoiceHandler $batchGenerateInvoiceHandler,
         BatchAssignToGroupHandler $batchAssignToGroupHandler,
-        BatchPendingHandler $batchPendingHandler
+        BatchPendingHandler $batchPendingHandler,
+        BatchPdfJobCreatorHandler $batchPdfJobCreatorHandler
     ) {
-        $this->sheetSearchAdapter             = $sheetSearchAdapter;
-        $this->batchValidateHandler           = $batchValidateHandler;
-        $this->batchAssignHandler             = $batchAssignHandler;
-        $this->batchAcceptHandler             = $batchAcceptHandler;
-        $this->batchEnableDisableHandler      = $batchEnableDisableHandler;
-        $this->batchCatalogHandler            = $batchCatalogHandler;
-        $this->batchDraftHandler              = $batchDraftHandler;
+        $this->sheetSearchAdapter = $sheetSearchAdapter;
+        $this->batchValidateHandler = $batchValidateHandler;
+        $this->batchAssignHandler = $batchAssignHandler;
+        $this->batchAcceptHandler = $batchAcceptHandler;
+        $this->batchRefuseHandler = $batchRefuseHandler;
+        $this->batchEnableDisableHandler = $batchEnableDisableHandler;
+        $this->batchCatalogHandler = $batchCatalogHandler;
+        $this->batchDraftHandler = $batchDraftHandler;
         $this->batchValidationValidateHandler = $batchValidationValidateHandler;
-        $this->batchGenerateInvoiceHandler    = $batchGenerateInvoiceHandler;
-        $this->batchAssignToGroupHandler      = $batchAssignToGroupHandler;
-        $this->batchPendingHandler            = $batchPendingHandler;
+        $this->batchGenerateInvoiceHandler = $batchGenerateInvoiceHandler;
+        $this->batchAssignToGroupHandler = $batchAssignToGroupHandler;
+        $this->batchPendingHandler = $batchPendingHandler;
+        $this->batchPdfJobCreatorHandler = $batchPdfJobCreatorHandler;
     }
 
     /**
@@ -119,6 +132,10 @@ class BatchHandler
 
         if ($batch->accept) {
             return $this->batchAcceptHandler->handle(new BatchAccept($batch->ids, $batch->admin));
+        }
+
+        if ($batch->refuse) {
+            return $this->batchRefuseHandler->handle(new BatchRefuse($batch->ids, $batch->admin));
         }
 
         if($batch->pending) {
@@ -179,6 +196,18 @@ class BatchHandler
             );
         }
 
-        return new BatchResult(0, $batch->getMessage() . 'no_action');
+        if ($batch->printPdf) {
+            return $this->batchPdfJobCreatorHandler->handle(
+                new BatchPdfJobCreator(
+                    $batch->event,
+                    $batch->ids,
+                    $batch->admin,
+                    $batch->locale,
+                    $batch->filters['orderBy'] ?? Constant::ORDER_BY_ALPHABETICAL
+                )
+            );
+        }
+
+        return new BatchResult([], $batch->getMessage() . 'no_action');
     }
 }

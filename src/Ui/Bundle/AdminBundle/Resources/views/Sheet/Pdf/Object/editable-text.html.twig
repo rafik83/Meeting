@@ -1,0 +1,42 @@
+{% if (item.option('type') == 'title' and (item.content(locale) is not empty or item.taggedDataViews[0] is defined))
+    or (item.option('type') == 'text' and (item.content(locale) is not empty or item.taggedDataViews is not empty))
+%}
+<section class="object object--editable-text {{ 'style--' ~ item.style }}">
+
+    {% if true != item.hideLabel|default %}
+        {% if item.option('type') == 'title' %}
+            {% if item.content(locale) is not empty %}
+                {% set label = item.content(locale) %}
+            {% elseif item.taggedDataViews[0] is defined %}
+                {% set label = item.taggedDataViews[0].content %}
+            {% else %}
+                {% set label = '' %}
+            {% endif %}
+        {% else %}
+            {% set label = item.label(locale, fallback) %}
+        {% endif %}
+
+        {% if label %}
+            <header>
+                <h2>{{ label }}</h2>
+            </header>
+        {% endif %}
+    {% endif %}
+
+    {% if item.option('type') == 'text' %}
+        {% if item.content(locale) is not empty %}
+            <p>{{ item.content(locale)|default|nl2br }}</p>
+        {% else %}
+            {% for taggedDataView in item.taggedDataViews %}
+                {{ include('AdminBundle:Sheet/Pdf/Tag:' ~ taggedDataView.type ~ '.html.twig', {
+                    'sheet': sheet,
+                    'taggedDataView': taggedDataView,
+                    'locale': locale,
+                    'label': label,
+                    'loop': loop,
+                }, false) }}
+            {% endfor %}
+        {% endif %}
+    {% endif %}
+</section>
+{% endif %}

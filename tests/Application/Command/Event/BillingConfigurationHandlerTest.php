@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2016 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -25,14 +25,14 @@ class BillingConfigurationHandlerTest extends TestCase
         // Data
         $event = EventFactory::createEvent();
 
-        $event->getConfiguration()->setColors('#FFFFFF', '#000000', '#CCCCCC');
+        $event->getConfiguration()->setColors('#FFFFFF', '#000000', '#CCCCCC', '#CCCCCC');
         $event->getTranslations()->set('fr', new EventTranslation($event, 'fr', ''));
         $event->getTranslations()->set('en', new EventTranslation($event, 'en', ''));
         $event->setLogo('toto.jpg', 'jpg');
         $event->setInvoiceLogo('toto.jpg', 'jpg');
 
         $expectedEvent = EventFactory::createEvent();
-        $expectedEvent->getConfiguration()->setColors('#FFFFFF', '#000000', '#CCCCCC');
+        $expectedEvent->getConfiguration()->setColors('#FFFFFF', '#000000', '#CCCCCC', '#CCCCCC');
         $expectedEvent->getTranslations()->set('fr',
             new EventTranslation($expectedEvent, 'fr', '', 'FR14-000', 'billing address', 'condition', 'footers'));
         $expectedEvent->getTranslations()->set('en',

@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2016 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -12,45 +12,32 @@ namespace Proximum\Vimeet\Application\View\Package\Summary;
 
 class ProductView
 {
-    /**
-     * @var int
-     */
+    /** @var int */
     public $id;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     public $title;
 
-    /**
-     * @var float
-     */
+    /** @var float */
     public $unitPrice;
 
-    /**
-     * @var int
-     */
+    /** @var int */
     public $quantity;
 
-    /**
-     * @var float
-     */
+    /** @var float */
     public $total = 0;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     public $vatMode;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     public $currency;
 
-    /**
-     * @var IncludedView[]
-     */
-    public $included;
+    /** @var IncludedView[] */
+    public $included = [];
+
+    /** @var float */
+    public $vatRate;
 
     /**
      * @param int    $id
@@ -59,6 +46,7 @@ class ProductView
      * @param int    $quantity
      * @param float  $total
      * @param string $vatMode
+     * @param float  $vatRate
      * @param string $currency
      */
     public function __construct(
@@ -68,15 +56,17 @@ class ProductView
         $quantity,
         $total,
         $vatMode,
+        float $vatRate,
         $currency
     ) {
-        $this->id        = $id;
-        $this->title     = $title;
+        $this->id = $id;
+        $this->title = $title;
         $this->unitPrice = $unitPrice;
-        $this->quantity  = $quantity;
-        $this->total     = $total;
-        $this->vatMode   = $vatMode;
-        $this->currency  = $currency;
+        $this->quantity = $quantity;
+        $this->total = $total;
+        $this->vatMode = $vatMode;
+        $this->currency = $currency;
+        $this->vatRate = $vatRate;
     }
 
     /**
@@ -84,7 +74,7 @@ class ProductView
      *
      * @return ProductView
      */
-    public function addIncludedProduct(IncludedView $included)
+    public function addIncludedProduct(IncludedView $included): ProductView
     {
         $this->included[] = $included;
 

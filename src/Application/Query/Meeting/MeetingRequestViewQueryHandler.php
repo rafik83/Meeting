@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Application\Query\Meeting;
 
+use Proximum\Vimeet\Application\Adapter\RouterInterface;
 use Proximum\Vimeet\Application\Components\Sheet\Preview\Preview;
 use Proximum\Vimeet\Application\Components\Sheet\SheetInfoGuesser;
 use Proximum\Vimeet\Application\View\Meeting\MeetingRequestView;
@@ -21,42 +22,44 @@ use Proximum\Vimeet\Domain\Rule\Composer;
 
 class MeetingRequestViewQueryHandler
 {
-    /**
-     * @var Preview
-     */
+    /** @var Preview */
     private $preview;
 
-    /**
-     * @var SheetInfoGuesser
-     */
+    /** @var SheetInfoGuesser */
     private $sheetInfoGuesser;
-    
-    /**
-     * @var RuleRepositoryInterface
-     */
+
+    /** @var RuleRepositoryInterface */
     private $ruleRepository;
 
     /** @var Composer */
     private $ruleComposer;
 
     /**
+     * @var RouterInterface
+     */
+    private $router;
+
+    /**
      * MeetingRequestViewQueryHandler constructor.
      *
-     * @param Preview                        $preview
-     * @param SheetInfoGuesser               $sheetInfoGuesser
-     * @param RuleRepositoryInterface        $ruleRepository
-     * @param Composer                       $ruleComposer
+     * @param Preview                 $preview
+     * @param SheetInfoGuesser        $sheetInfoGuesser
+     * @param RuleRepositoryInterface $ruleRepository
+     * @param Composer                $ruleComposer
+     * @param RouterInterface         $router
      */
     public function __construct(
         Preview $preview,
         SheetInfoGuesser $sheetInfoGuesser,
         RuleRepositoryInterface $ruleRepository,
-        Composer $ruleComposer
+        Composer $ruleComposer,
+        RouterInterface $router
     ) {
-        $this->preview               = $preview;
-        $this->sheetInfoGuesser      = $sheetInfoGuesser;
-        $this->ruleRepository        = $ruleRepository;
-        $this->ruleComposer          = $ruleComposer;
+        $this->preview          = $preview;
+        $this->sheetInfoGuesser = $sheetInfoGuesser;
+        $this->ruleRepository   = $ruleRepository;
+        $this->ruleComposer     = $ruleComposer;
+        $this->router           = $router;
     }
 
     /**
@@ -78,7 +81,19 @@ class MeetingRequestViewQueryHandler
         $previews = $this->preview->getPreview($sheet, $query->locale, $composedRule);
 
         $isSheetSeeable = !empty($rules);
-        
+
+        $participant = $query->sheet->getUserParticipant($query->user);
+
+        if ($participant !== null) {
+            $validatePhoneLink = $this->router->generate('event_user_phone_redirect_to_validation', [
+                'sheet'       => $query->sheet->getId(),
+                'participant' => $participant->getId(),
+                'redirectTo' => $this->router->generate('event_meeting_list_request', [
+                    'sheet' => $query->sheet->getId()
+                ])
+            ]);
+        }
+
         return new MeetingRequestView(
             $sheet,
             $this->sheetInfoGuesser->guessSheetTitle($sheet, $query->locale),
@@ -93,7 +108,9 @@ class MeetingRequestViewQueryHandler
             $query->isMeetingRequestClosed,
             $query->isAnsweringMeetingRequestClosed,
             $query->meetingRequest->hasMessage(),
-            $query->isSeenByUser
+            $query->isSeenByUser,
+            $query->isPhoneValidationRequired,
+            $validatePhoneLink ?? null
         );
     }
 

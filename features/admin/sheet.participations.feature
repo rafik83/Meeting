@@ -55,7 +55,7 @@ Feature: Edit participant status
     And I check "sheet_batch_ids_7"
     When I press "form.sheet_batch.children.addCatalog.label"
     Then I should be on this page "/fr/event/1/sheet"
-    And I should see "✓" in the "#sheet-7" element
+    And I should see "admin.sheet.inCatalog" in the "#sheet-7" element
 
   Scenario: I can put sheet participation content to validated
     Given I am logged with "test@test.com" on admin

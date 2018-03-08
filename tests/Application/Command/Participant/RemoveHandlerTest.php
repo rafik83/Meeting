@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2016 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -11,14 +11,19 @@
 namespace Proximum\Vimeet\Tests\Application\Command\Participant;
 
 use PHPUnit\Framework\TestCase;
+use Proximum\Vimeet\Application\Command\Package\Step\SelectParticipantAndPlanning;
 use Proximum\Vimeet\Application\Command\Participant\Remove;
 use Proximum\Vimeet\Application\Command\Participant\RemoveHandler;
 use Proximum\Vimeet\Application\Command\Participant\RemoveResult;
+use Proximum\Vimeet\Application\Components\Step\StepParticipantAndPlanning;
 use Proximum\Vimeet\Application\Event\Events;
+use Proximum\Vimeet\Application\Event\Participant\ParticipantRemovedEvent;
 use Proximum\Vimeet\Application\Event\Sheet\SheetUpdatedEvent;
 use Proximum\Vimeet\Application\Exception\Participant\CanNotRemoveAllParticipantsException;
+use Proximum\Vimeet\Domain\Cart\Cart;
 use Proximum\Vimeet\Domain\Cart\CartManager;
 use Proximum\Vimeet\Domain\Model\Participant;
+use Proximum\Vimeet\Domain\Model\Product;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\Type;
 use Proximum\Vimeet\Domain\Model\User;
@@ -35,40 +40,57 @@ class RemoveHandlerTest extends TestCase
         // Required
         $locale = 'fr';
         $event = EventFactory::createEvent();
-        $type  = new Type($event);
+        $type = new Type($event);
         $owner = new User('email@email.fr', 'password', 'salt', 'fr');
-        $user2 = new User('user@email.fr', 'password', 'salt', 'fr');
-        $date  = new \DateTime();
+        $date = new \DateTime();
         $sheet = new Sheet($event, $type, [], $owner, $date);
-        $participant1 = new Participant($sheet, $owner, [], true);
-        $participant2 = new Participant($sheet, $user2, [], true);
-        $sheet->addParticipant($participant1);
-        $sheet->addParticipant($participant2);
+        $participant1 = $this->prophesize(Participant::class);
+        $participant1->getId()->willReturn(1337);
+        $participant2 = $this->prophesize(Participant::class);
+        $participant2->getId()->willReturn(2059);
+        $sheet->addParticipant($participant1->reveal());
+        $sheet->addParticipant($participant2->reveal());
 
         // Mock
         $participantRepository = $this->prophesize(ParticipantRepositoryInterface::class);
         $cartManager = $this->prophesize(CartManager::class);
 
-        $eventDispatcher   = $this->prophesize(DelayedEventDispatcher::class);
+        $eventDispatcher = $this->prophesize(DelayedEventDispatcher::class);
         $sheetUpdatedEvent = new SheetUpdatedEvent($sheet);
         $eventDispatcher->dispatch(Events::SHEET_UPDATED, $sheetUpdatedEvent)->shouldBeCalled();
+        $eventDispatcher->dispatch(Events::PARTICIPANT_REMOVED, new ParticipantRemovedEvent($sheet))->shouldBeCalled();
 
-        $meetingRepository      = $this->prophesize(MeetingRepositoryInterface::class);
-        $meetingRepository->countByParticipant($participant1)->shouldBeCalled()->willReturn(0);
+        $meetingRepository = $this->prophesize(MeetingRepositoryInterface::class);
+        $meetingRepository->countByParticipant($participant1->reveal())->shouldBeCalled()->willReturn(0);
         $participantInfoGuesser = $this->prophesize(ParticipantInfoGuesser::class);
-        $participantInfoGuesser->guessParticipantCompleteName($participant1, $locale)->shouldNotBeCalled();
+        $participantInfoGuesser->guessParticipantCompleteName($participant1->reveal(), $locale)->shouldNotBeCalled();
+
+        $stepParticipantAndPlanning = $this->prophesize(StepParticipantAndPlanning::class);
 
         // Expected
         $expectedSheet = new Sheet($event, $type, [], $owner, $date);
-        $expectedSheet->addParticipant($participant2);
+        $expectedSheet->addParticipant($participant2->reveal());
 
-        $cartManager->updateParticipantsQuantity($sheet)->shouldBeCalled();
+        $product = $this->prophesize(Product::class);
+        $selectParticipantAndPlanning = new SelectParticipantAndPlanning($sheet);
+        $selectParticipantAndPlanning->participantsProduct = [2059 => $product->reveal()];
+        $stepParticipantAndPlanning->build($sheet)->shouldBeCalled()->willReturn($selectParticipantAndPlanning);
+
+        $cart = $this->prophesize(Cart::class);
+        $cartManager->getCart($sheet)->shouldBeCalled()->willReturn($cart->reveal());
+        $cartManager
+            ->updateParticipantsQuantity(
+                $cart->reveal(),
+                [2059 => $product->reveal()]
+            )
+            ->shouldBeCalled()
+            ->willReturn($cart->reveal())
+        ;
+        $cartManager->save($cart)->shouldBeCalled();
 
         // Command
         $remove = new Remove($sheet, $locale);
-        $remove->participants = [
-            $participant1
-        ];
+        $remove->participants = [$participant1->reveal()];
 
         // Handle
         $handler = new RemoveHandler(
@@ -76,9 +98,10 @@ class RemoveHandlerTest extends TestCase
             $cartManager->reveal(),
             $eventDispatcher->reveal(),
             $meetingRepository->reveal(),
-            $participantInfoGuesser->reveal()
+            $participantInfoGuesser->reveal(),
+            $stepParticipantAndPlanning->reveal()
         );
-        $result         = $handler->handle($remove);
+        $result = $handler->handle($remove);
         $expectedResult = new RemoveResult();
 
         $this->assertEquals($expectedSheet->countParticipants(), $sheet->countParticipants());
@@ -110,6 +133,7 @@ class RemoveHandlerTest extends TestCase
         $eventDispatcher   = $this->prophesize(DelayedEventDispatcher::class);
         $sheetUpdatedEvent = new SheetUpdatedEvent($sheet);
         $eventDispatcher->dispatch(Events::SHEET_UPDATED, $sheetUpdatedEvent)->shouldBeCalled();
+        $eventDispatcher->dispatch(Events::PARTICIPANT_REMOVED, new ParticipantRemovedEvent($sheet))->shouldBeCalled();
 
         $meetingRepository      = $this->prophesize(MeetingRepositoryInterface::class);
         $meetingRepository->countByParticipant($participant1)->shouldBeCalled()->willReturn(2);
@@ -117,19 +141,35 @@ class RemoveHandlerTest extends TestCase
         $participantInfoGuesser = $this->prophesize(ParticipantInfoGuesser::class);
         $participantInfoGuesser->guessParticipantCompleteName($participant1, $locale)->shouldBeCalled()->willReturn('jean paul');
 
+        $stepParticipantAndPlanning = $this->prophesize(StepParticipantAndPlanning::class);
+
         // Expected
         $expectedSheet = new Sheet($event, $type, [], $owner, $date);
         $expectedSheet->addParticipant($participant1);
         $expectedSheet->addParticipant($participant2);
         $expectedSheet->addParticipant($participant3);
 
-        $cartManager->updateParticipantsQuantity($sheet)->shouldBeCalled();
+        $selectParticipantAndPlanning = new SelectParticipantAndPlanning($sheet);
+        $selectParticipantAndPlanning->participantsProduct = [];
+        $stepParticipantAndPlanning->build($sheet)->shouldBeCalled()->willReturn($selectParticipantAndPlanning);
+
+        $cart = $this->prophesize(Cart::class);
+        $cartManager->getCart($sheet)->shouldBeCalled()->willReturn($cart->reveal());
+        $cartManager
+            ->updateParticipantsQuantity(
+                $cart->reveal(),
+                []
+            )
+            ->shouldBeCalled()
+            ->willReturn($cart->reveal())
+        ;
+        $cartManager->save($cart)->shouldBeCalled();
 
         // Command
         $remove = new Remove($sheet, $locale);
         $remove->participants = [
             $participant1,
-            $participant2
+            $participant2,
         ];
 
         // Handle
@@ -138,7 +178,8 @@ class RemoveHandlerTest extends TestCase
             $cartManager->reveal(),
             $eventDispatcher->reveal(),
             $meetingRepository->reveal(),
-            $participantInfoGuesser->reveal()
+            $participantInfoGuesser->reveal(),
+            $stepParticipantAndPlanning->reveal()
         );
         $result         = $handler->handle($remove);
         $expectedResult = new RemoveResult(['jean paul']);
@@ -154,35 +195,38 @@ class RemoveHandlerTest extends TestCase
         // Required
         $locale = 'fr';
         $event = EventFactory::createEvent();
-        $type  = new Type($event);
+        $type = new Type($event);
         $owner = new User('email@email.fr', 'password', 'salt', 'fr');
-        $user2 = new User('user@email.fr', 'password', 'salt', 'fr');
-        $date  = new \DateTime();
+        $date = new \DateTime();
         $sheet = new Sheet($event, $type, [], $owner, $date);
-        $participant1 = new Participant($sheet, $owner, [], true);
-        $participant2 = new Participant($sheet, $user2, [], true);
-        $sheet->addParticipant($participant1);
-        $sheet->addParticipant($participant2);
+        $participant1 = $this->prophesize(Participant::class);
+        $participant2 = $this->prophesize(Participant::class);
+        $sheet->addParticipant($participant1->reveal());
+        $sheet->addParticipant($participant2->reveal());
 
         // Mock
         $participantRepository = $this->prophesize(ParticipantRepositoryInterface::class);
         $cartManager = $this->prophesize(CartManager::class);
-        $eventDispatcher   = $this->prophesize(DelayedEventDispatcher::class);
-        $meetingRepository      = $this->prophesize(MeetingRepositoryInterface::class);
-        $meetingRepository->countByParticipant($participant1)->shouldNotBeCalled();
+        $eventDispatcher = $this->prophesize(DelayedEventDispatcher::class);
+        $eventDispatcher->dispatch(Events::PARTICIPANT_REMOVED, new ParticipantRemovedEvent($sheet))->shouldNotBeCalled(
+        )
+        ;
+        $meetingRepository = $this->prophesize(MeetingRepositoryInterface::class);
+        $meetingRepository->countByParticipant($participant1->reveal())->shouldNotBeCalled();
         $participantInfoGuesser = $this->prophesize(ParticipantInfoGuesser::class);
-        $participantInfoGuesser->guessParticipantCompleteName($participant1, $locale)->shouldNotBeCalled();
+        $participantInfoGuesser->guessParticipantCompleteName($participant1->reveal(), $locale)->shouldNotBeCalled();
+        $stepParticipantAndPlanning = $this->prophesize(StepParticipantAndPlanning::class);
 
         // Expected
         $expectedSheet = new Sheet($event, $type, [], $owner, $date);
-        $expectedSheet->addParticipant($participant1);
-        $expectedSheet->addParticipant($participant2);
+        $expectedSheet->addParticipant($participant1->reveal());
+        $expectedSheet->addParticipant($participant2->reveal());
 
         // Command
         $remove = new Remove($sheet, $locale);
         $remove->participants = [
-            $participant1,
-            $participant2,
+            $participant1->reveal(),
+            $participant2->reveal(),
         ];
 
         // Handle
@@ -191,7 +235,8 @@ class RemoveHandlerTest extends TestCase
             $cartManager->reveal(),
             $eventDispatcher->reveal(),
             $meetingRepository->reveal(),
-            $participantInfoGuesser->reveal()
+            $participantInfoGuesser->reveal(),
+            $stepParticipantAndPlanning->reveal()
         );
         $handler->handle($remove);
 

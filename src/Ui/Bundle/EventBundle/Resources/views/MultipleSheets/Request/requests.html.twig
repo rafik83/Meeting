@@ -5,6 +5,7 @@
     <thead>
     <tr>
         <th class="col-md-3">{{ 'multiple_sheets.request.list.table.header.otherSheet'|trans }}</th>
+        <th></th>
         <th class="col-md-2">{{ 'multiple_sheets.request.list.table.header.status'|trans }}</th>
         <th class="col-md-2">{{ 'multiple_sheets.request.list.table.header.side'|trans }}</th>
         <th class="col-md-3">{{ 'multiple_sheets.request.list.table.header.sheetConcerned'|trans }}</th>
@@ -18,6 +19,8 @@
             'isMeetingRequestUpdateLocked': sheetListView.isMeetingRequestUpdateLocked,
             'isMeetingRequestClosed': sheetListView.isMeetingRequestClosed,
             'isAnsweringMeetingRequestClosed': sheetListView.isAnsweringMeetingRequestClosed,
+            'isMultipleSheet': isMultipleSheet,
+            'hideMeetingRequest': hideMeetingRequest|default(false),
         }) }}
     {% else %}
         <tr>
@@ -30,3 +33,5 @@
 {{ include('AdminBundle:Paginator:paginate.html.twig', {'paginator': sheetListView}) }}
 
 {{ include('EventBundle:MeetingRequest:modalMeetingRequest.html.twig') }}
+
+{{ include('EventBundle:Sheet/Group/Sheet:modalDisplaySheet.html.twig') }}

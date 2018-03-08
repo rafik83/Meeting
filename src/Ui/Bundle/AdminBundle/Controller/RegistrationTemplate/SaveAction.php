@@ -1,0 +1,65 @@
+<?php
+
+/*
+ * This file is part of the Proximum Vimeet project.
+ *
+ * Copyright (C) Proximum
+ *
+ * @author Elao <contact@elao.com>
+ */
+
+namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\RegistrationTemplate;
+
+use League\Tactician\CommandBus;
+use Proximum\Vimeet\Application\Adapter\AuthorizationCheckerAdapterInterface;
+use Proximum\Vimeet\Application\Command\Template\Registration\Save;
+use Proximum\Vimeet\Domain\Model\Template\RegistrationTemplate;
+use Proximum\Vimeet\Domain\Template\Exception\RegistrationTemplateException;
+use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Security\Voter\AdminTemplateAccessVoter;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
+use Symfony\Component\Security\Core\Exception\AccessDeniedException;
+
+class SaveAction
+{
+    /** @var AuthorizationCheckerInterface */
+    private $authorizationChecker;
+
+    /** @var CommandBus */
+    private $commandBus;
+
+    public function __construct(
+        AuthorizationCheckerAdapterInterface $authorizationChecker,
+        CommandBus $commandBus
+    ) {
+        $this->authorizationChecker = $authorizationChecker;
+        $this->commandBus = $commandBus;
+    }
+
+    public function __invoke(Request $request, RegistrationTemplate $registrationTemplate, string $locale): JsonResponse
+    {
+        if (!$this->authorizationChecker->isGranted('ROLE_ALLOWED_TO_ORGANIZE')
+            || !$this->authorizationChecker->isGranted(
+                AdminTemplateAccessVoter::PERMISSION_TEMPLATE_EDIT,
+                $registrationTemplate
+            )
+        ) {
+            throw new AccessDeniedException();
+        }
+
+        if (!$registrationTemplate->hasLocale($locale)) {
+            return new JsonResponse(['error' => sprintf('Locale "%s" does not exist for this template', $locale)], 404);
+        }
+
+        $config = json_decode($request->getContent(), true);
+
+        try {
+            $this->commandBus->handle(new Save($registrationTemplate, $config));
+        } catch (RegistrationTemplateException $registrationTemplateException) {
+            return new JsonResponse(['error' => $registrationTemplateException->getMessage()], 422);
+        }
+
+        return new JsonResponse($config);
+    }
+}

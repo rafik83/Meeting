@@ -33,6 +33,9 @@ class CatalogVisibility
     /** @var bool */
     private $hasMessage;
 
+    /** @var string */
+    private $registrationUrl;
+
     /**
      * @var ArrayCollection of CatalogVisibilityTranslation
      * @see CatalogVisibilityTranslation
@@ -222,5 +225,21 @@ class CatalogVisibility
     public function getMessageTranslations()
     {
         return $this->messageTranslations;
+    }
+
+    /**
+     * @return null|string
+     */
+    public function getRegistrationUrl(): ?string
+    {
+        return $this->registrationUrl;
+    }
+
+    /**
+     * @param null|string $registrationUrl
+     */
+    public function setRegistrationUrl(?string $registrationUrl)
+    {
+        $this->registrationUrl = $registrationUrl;
     }
 }

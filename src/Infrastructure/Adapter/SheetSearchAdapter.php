@@ -31,6 +31,7 @@ use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\PaginatedResult;
 use Proximum\Vimeet\Domain\Model\Sheet\Constant;
 use Proximum\Vimeet\Domain\Template\TemplateObject\Nomenclature;
+use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Service\ForeignChar;
 
 class SheetSearchAdapter implements SheetSearchAdapterInterface
 {
@@ -53,9 +54,102 @@ class SheetSearchAdapter implements SheetSearchAdapterInterface
     }
 
     /**
+     * @param Event       $event
+     * @param array       $filters
+     * @param string|null $orderBy
+     * @param string      $locale
+     * @param array       $nomenclatureItems
+     * @param array       $availableSlotIds
+     * @param array       $sheetsToExclude
+     *
+     * @return Query
+     */
+    private function getQueryToFind(
+        Event $event,
+        array $filters,
+        string $orderBy = null,
+        string $locale,
+        array $nomenclatureItems = [],
+        array $availableSlotIds = [],
+        array $sheetsToExclude = []
+    ): Query {
+        $nomenclatureBoost = (isset($nomenclatureItems[Nomenclature::OBJECTIVE_NONE]))
+            ? count($nomenclatureItems[Nomenclature::OBJECTIVE_NONE])
+            : 1;
+
+        $builder = new SheetSearchQueryBuilder(
+            $event,
+            $filters,
+            $locale,
+            $nomenclatureBoost,
+            $nomenclatureItems,
+            $availableSlotIds,
+            $sheetsToExclude
+        );
+
+        if (Constant::ORDER_BY_DATE_ADDED_TO_CATALOG === $orderBy) {
+            $query = new Query($builder->getQuery());
+            $query->addSort(['inCatalogAt' => 'desc']);
+        } elseif (Constant::ORDER_BY_RELEVANCE === $orderBy) {
+            $builtQuery = $builder->getQuery();
+
+            if (isset($nomenclatureItems[Nomenclature::OBJECTIVE_NONE])) {
+                $functionScore = new FunctionScore();
+                $functionScore->setScoreMode(FunctionScore::SCORE_MODE_SUM);
+
+                foreach ($nomenclatureItems[Nomenclature::OBJECTIVE_NONE] as $key) {
+                    $nested = new \Elastica\Query\Nested();
+                    $nested->setQuery((new Query\Term())->setTerm('nomenclatureItems.key', $key));
+                    $nested->setPath('nomenclatureItems');
+                    $functionScore->addFunction('weight', [], $nested, self::NOMENCLATURE_ITEMS_WEIGHT);
+                }
+
+                $builtQuery = $functionScore->setQuery($builtQuery);
+            }
+
+            $query = new Query($builtQuery);
+            $query->addSort(['_score' => 'desc']);
+        } elseif (Constant::ORDER_BY_CREATED_AT === $orderBy) {
+            $query = new Query($builder->getQuery());
+            $query->addSort(['createdAt' => 'desc']);
+        } else {
+            $query = new Query($builder->getQuery());
+            $query->addSort(['sheetName.raw' => 'asc']);
+        }
+
+        return $query;
+    }
+
+    /**
      * {@inheritdoc}
      */
     public function find(
+        Event $event,
+        array $filters,
+        string $orderBy = null,
+        string $locale,
+        array $nomenclatureItems = [],
+        array $availableSlotIds = [],
+        array $sheetsToExclude = []
+    ): array {
+        $query = $this->getQueryToFind(
+            $event,
+            $filters,
+            $orderBy,
+            $locale,
+            $nomenclatureItems,
+            $availableSlotIds,
+            $sheetsToExclude
+        );
+        $options = ["size" => 100000];
+
+        return $this->searchable->search($query, $options)->getResults();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function paginate(
         Event $event,
         array $filters,
         string $orderBy = null,
@@ -63,40 +157,19 @@ class SheetSearchAdapter implements SheetSearchAdapterInterface
         int $limit,
         string $locale,
         bool $getAggregations,
-        array $nomenclatureItems = []
+        array $nomenclatureItems = [],
+        array $availableSlotIds = [],
+        array $sheetsToExclude = []
     ): PaginatedResult {
-        $nomenclatureBoost = (isset($nomenclatureItems[Nomenclature::OBJECTIVE_NONE]))
-            ? count($nomenclatureItems[Nomenclature::OBJECTIVE_NONE])
-            : 1;
-
-        $builder = new SheetSearchQueryBuilder($event, $filters, $locale, $nomenclatureBoost, $nomenclatureItems);
-
-        if (Constant::ORDER_BY_DATE_ADDED_TO_CATALOG === $orderBy) {
-            $query = new Query($builder->getQuery());
-            $query->addSort(['inCatalogAt' => 'desc']);
-        } elseif (Constant::ORDER_BY_RELEVANCE === $orderBy &&
-            isset($nomenclatureItems[Nomenclature::OBJECTIVE_NONE])
-        ) {
-            $functionScore = new FunctionScore();
-            $functionScore->setScoreMode(FunctionScore::SCORE_MODE_SUM);
-
-            foreach ($nomenclatureItems[Nomenclature::OBJECTIVE_NONE] as $key) {
-                $nested = new \Elastica\Filter\Nested();
-                $nested->setFilter((new Term())->setTerm('nomenclatureItems.key', $key));
-                $nested->setPath('nomenclatureItems');
-                $functionScore->addFunction('weight', [], $nested, self::NOMENCLATURE_ITEMS_WEIGHT);
-            }
-
-            $query = $functionScore->setQuery($builder->getQuery());
-            $query = new Query($query);
-            $query->addSort(['_score' => 'desc']);
-        } elseif (Constant::ORDER_BY_CREATED_AT === $orderBy) {
-            $query   = new Query($builder->getQuery());
-            $query->addSort(['createdAt' => 'desc']);
-        } else {
-            $query = new Query($builder->getQuery());
-            $query->addSort(['sheetName.raw' => 'asc']);
-        }
+        $query = $this->getQueryToFind(
+            $event,
+            $filters,
+            $orderBy,
+            $locale,
+            $nomenclatureItems,
+            $availableSlotIds,
+            $sheetsToExclude
+        );
 
         if (true === $getAggregations) {
             $query->addAggregation($this->getAggregation(self::ES_FIELD_TYPE));
@@ -153,6 +226,9 @@ class SheetSearchAdapter implements SheetSearchAdapterInterface
         }, $results);
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function getSheetIdsView(Event $event, array $filters, string $locale): SheetIdsView
     {
         $results = $this->getSearchResults($event, $filters, $locale);
@@ -164,6 +240,9 @@ class SheetSearchAdapter implements SheetSearchAdapterInterface
         return new SheetIdsView($sheetIds);
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function getParticipantsSheetIdsView(Event $event, array $filters, string $locale): ParticipantsSheetIdsView
     {
         $results = $this->getSearchResults($event, $filters, $locale);
@@ -175,6 +254,9 @@ class SheetSearchAdapter implements SheetSearchAdapterInterface
         return new ParticipantsSheetIdsView($sheetIds);
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function findLocalization(Event $event, string $filter, array $defaultFilters, string $locale): array
     {
         $builder = new SheetSearchQueryBuilder(
@@ -191,8 +273,12 @@ class SheetSearchAdapter implements SheetSearchAdapterInterface
         return $this->searchable->search($query)->getAggregations();
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function findKeyword(Event $event, string $filter, array $defaultFilters, string $locale): array
     {
+        $filter = ForeignChar::transliterateString($filter);
         $builder = new SheetSearchQueryBuilder(
             $event,
             $defaultFilters,
@@ -228,15 +314,34 @@ class SheetSearchAdapter implements SheetSearchAdapterInterface
 
         $query = new Query($builder->getQuery());
         $query->addAggregation($filterKeywordsEvent)
-            ->addAggregation($this->findSheetnameQuery($event, $filter))
+            ->addAggregation($this->findSheetNameQuery($event, $filter))
             ->setSize(0);
 
         return $this->searchable->search($query)->getAggregations();
     }
 
-    public function getTypeAggregations(Event $event, string $locale, array $filters, string $filterToRemove): array
-    {
-        return $this->searchAggregations($event, $locale, $filters, $filterToRemove, self::ES_FIELD_TYPE);
+    /**
+     * {@inheritdoc}
+     */
+    public function getTypeAggregations(
+        Event $event,
+        string $locale,
+        array $filters,
+        string $filterToRemove,
+        array $nomenclatureItems = [],
+        array $availableSlotIds = [],
+        array $sheetsToExclude = []
+    ): array {
+        return $this->searchAggregations(
+            $event,
+            $locale,
+            $filters,
+            $filterToRemove,
+            self::ES_FIELD_TYPE,
+            $nomenclatureItems,
+            $availableSlotIds,
+            $sheetsToExclude
+        );
     }
 
     /**
@@ -246,11 +351,26 @@ class SheetSearchAdapter implements SheetSearchAdapterInterface
         Event $event,
         string $locale,
         array $filters,
-        string $filterToRemove
+        string $filterToRemove,
+        array $nomenclatureItems = [],
+        array $availableSlotIds = [],
+        array $sheetsToExclude = []
     ): array {
-        return $this->searchAggregations($event, $locale, $filters, $filterToRemove, self::ES_FIELD_CATEGORIES);
+        return $this->searchAggregations(
+            $event,
+            $locale,
+            $filters,
+            $filterToRemove,
+            self::ES_FIELD_CATEGORIES,
+            $nomenclatureItems,
+            $availableSlotIds,
+            $sheetsToExclude
+        );
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function getOrganizationCategoryAggregations(
         Event $event,
         string $locale,
@@ -266,6 +386,9 @@ class SheetSearchAdapter implements SheetSearchAdapterInterface
         );
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function getPositionAggregations(Event $event, string $locale, array $filters, string $filterToRemove): array
     {
         return $this->searchAggregations(
@@ -296,17 +419,40 @@ class SheetSearchAdapter implements SheetSearchAdapterInterface
         return $this->searchable->search($query, $options)->getResults();
     }
 
+    /**
+     * @param Event  $event
+     * @param string $locale
+     * @param array  $filters
+     * @param string $filterToRemove
+     * @param string $elasticField
+     * @param array  $nomenclatureItems
+     * @param array  $availableSlotIds
+     * @param array  $sheetsToExclude
+     *
+     * @return array
+     */
     private function searchAggregations(
         Event $event,
         string $locale,
         array $filters,
         string $filterToRemove,
-        string $elasticField
+        string $elasticField,
+        array $nomenclatureItems = [],
+        array $availableSlotIds = [],
+        array $sheetsToExclude = []
     ): array {
         // remove filter
         unset($filters[$filterToRemove]);
 
-        $builder = new SheetSearchQueryBuilder($event, $filters, $locale);
+        $builder = new SheetSearchQueryBuilder(
+            $event,
+            $filters,
+            $locale,
+            1,
+            $nomenclatureItems,
+            $availableSlotIds,
+            $sheetsToExclude
+        );
         $query   = new Query($builder->getQuery());
 
         if ($elasticField === self::ES_FIELD_POSITION) {
@@ -324,14 +470,26 @@ class SheetSearchAdapter implements SheetSearchAdapterInterface
         return $result->getAggregations();
     }
 
+    /**
+     * @param string $field
+     *
+     * @return Terms
+     */
     private function getAggregation(string $field): Terms
     {
         $aggregation = new Terms($field);
         $aggregation->setField($field);
+        $aggregation->setSize(0);
 
         return $aggregation;
     }
 
+    /**
+     * @param string $field
+     * @param string $path
+     *
+     * @return Nested
+     */
     private function getNestedAggregation(string $field, string $path): Nested
     {
         $nested = new Nested($field, $path);
@@ -340,6 +498,12 @@ class SheetSearchAdapter implements SheetSearchAdapterInterface
         return $nested;
     }
 
+    /**
+     * @param Event  $event
+     * @param string $filter
+     *
+     * @return Filter
+     */
     private function findCityQuery(Event $event, string $filter): Filter
     {
         $matchCity = new Query\BoolQuery();
@@ -360,6 +524,13 @@ class SheetSearchAdapter implements SheetSearchAdapterInterface
         return $cities;
     }
 
+    /**
+     * @param Event  $event
+     * @param string $filter
+     * @param string $locale
+     *
+     * @return Filter
+     */
     private function findCountryQuery(Event $event, string $filter, string $locale): Filter
     {
         $filterEventQuery = new FilterQuery();
@@ -393,7 +564,13 @@ class SheetSearchAdapter implements SheetSearchAdapterInterface
         return $filterCountryEvent;
     }
 
-    private function findSheetnameQuery(Event $event, string $filter): Filter
+    /**
+     * @param Event  $event
+     * @param string $filter
+     *
+     * @return Filter
+     */
+    private function findSheetNameQuery(Event $event, string $filter): Filter
     {
         $boolQuery = new Query\BoolQuery();
         $boolQuery->addMust(new Query\Term(['sheetName.autocomplete' => $filter]));
@@ -403,9 +580,9 @@ class SheetSearchAdapter implements SheetSearchAdapterInterface
         $sheetAggregation->setField('sheetName.raw');
 
         $filterQuery     = new FilterQuery($boolQuery);
-        $filterSheetname = new Filter('sheet', $filterQuery);
-        $filterSheetname->addAggregation($sheetAggregation);
+        $filterSheetName = new Filter('sheet', $filterQuery);
+        $filterSheetName->addAggregation($sheetAggregation);
 
-        return $filterSheetname;
+        return $filterSheetName;
     }
 }

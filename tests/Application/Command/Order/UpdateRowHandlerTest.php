@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2016 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -24,7 +24,7 @@ class UpdateRowHandlerTest extends TestCase
     public function testHandle()
     {
         $event   = EventFactory::createEvent();
-        $product = Product::createOption($event, 'Option A', 'a.jpg', 100, 2, 4, 3, false);
+        $product = Product::createOption($event, 'Option A', 'a.jpg', 100, 20, 2, 4, 3, false);
 
         $rowRepository = $this->prophesize(RowRepositoryInterface::class);
         $order         = $this->prophesize(Order::class);
@@ -32,18 +32,20 @@ class UpdateRowHandlerTest extends TestCase
         $parentRow = new Order\Row(
             $order->reveal(),
             1,
+            20,
             $product,
             5,
-            "label",
+            'label',
             12.5
         );
 
         $row = Order\Row::createCustomRowToProduct(
             $order->reveal(),
             $parentRow,
-            "label",
+            'label',
             1,
-            12.5
+            12.5,
+            20
         );
 
         $rowRepository->set($row)->shouldBeCalled();

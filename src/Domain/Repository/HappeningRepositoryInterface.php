@@ -13,6 +13,7 @@ namespace Proximum\Vimeet\Domain\Repository;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Happening;
 use Proximum\Vimeet\Domain\Model\Happening\Speaker;
+use Proximum\Vimeet\Domain\Model\Type;
 
 interface HappeningRepositoryInterface
 {
@@ -50,13 +51,15 @@ interface HappeningRepositoryInterface
 
     /**
      * @param Event                   $event
+     * @param Type                    $type
      * @param \DateTimeInterface      $day
      * @param Happening\Category|null $category
      *
      * @return Happening[]
      */
-    public function findByEventAndDayAndCategory(
+    public function findByEventAndTypeAndDayAndCategory(
         Event $event,
+        Type $type,
         \DateTimeInterface $day,
         Happening\Category $category = null
     );

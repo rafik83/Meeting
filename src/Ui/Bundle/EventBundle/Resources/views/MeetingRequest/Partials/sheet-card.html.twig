@@ -1,4 +1,4 @@
-{% set sheetToDisplayLink = path('event_catalog_complete_sheet', { sheet: sheet.id, sheetToDisplay: meetingRequestView.sheet.id }) %}
+{% set sheetToDisplayLink = meetingRequestView.isSheetSeeable == true ? path('event_catalog_complete_sheet', { sheet: sheet.id, sheetToDisplay: meetingRequestView.sheet.id }) : null %}
 <div class="col-md-4" data-meeting-request="{{ meetingRequestView.meetingRequest.getTypeOfRequest(sheet) }}">
     <div class="catalog__item">
         <div class="content__sheet-card">
@@ -7,21 +7,22 @@
                     <i class="icon-Message_1 ft-bold"></i>
                 </a>
             {% endif %}
-            {% if meetingRequestView.isSeenByCurrentUser %}
+            {% if meetingRequestView.isSeenByCurrentUser and sheetToDisplayLink is not null %}
                 <a href="{{ sheetToDisplayLink }}" class="pull-right no-underline ft-size-18 mg-left-8">
                     <i class="icon-Voir_1 ft-bold"></i>
                 </a>
             {% endif %}
-            {{ include('EventBundle:Sheet/Card:content.html.twig', { title: meetingRequestView.sheetName, preview: meetingRequestView.previewViews, isCatalog: isCatalog }, false) }}
+            {{ include('EventBundle:Sheet/Card:content.html.twig', { title: meetingRequestView.sheetName, preview: meetingRequestView.previewViews, isCatalog: isCatalog, sheetToDisplayLink: sheetToDisplayLink }, false) }}
         </div>
         <footer>
-            {% if meetingRequestView.isSheetSeeable == true %}
+            {% if sheetToDisplayLink is not null %}
                 <div class="actions">
-                    <a id="complete-sheet-link-{{ meetingRequestView.sheet.id }}" href="{{ sheetToDisplayLink }}" target="_blank"><i class="icon-Document_1"></i> <span>{{ 'catalog.complete_sheet'|trans }}</span></a>
+                    <a id="complete-sheet-link-{{ meetingRequestView.sheet.id }}" href="{{ sheetToDisplayLink }}" target="_blank"><i class="icon-Document_1"></i>
+                        <span>{{ 'catalog.complete_sheet'|trans }}</span></a>
                 </div>
             {% endif %}
 
-            <div class="buttons-zone button">
+            <div class="buttons-zone">
                 {{ include('EventBundle:MeetingRequest:buttons.html.twig', {
                     'allowedToCreate': false,
                     'meetingRequest': meetingRequestView.meetingRequest,
@@ -31,6 +32,9 @@
                     'isMeetingRequestUpdateLocked': meetingRequestView.isMeetingRequestUpdateLocked|default(false),
                     'isMeetingRequestClosed': meetingRequestView.isMeetingRequestClosed,
                     'isAnsweringMeetingRequestClosed': meetingRequestView.isAnsweringMeetingRequestClosed,
+                    'isPhoneValidationRequired': meetingRequestView.isPhoneValidationRequired,
+                    'phoneValidationLink': meetingRequestView.validatePhoneLink,
+                    'hideMeetingRequest': hideMeetingRequest|default(false)
                 }) }}
             </div>
 

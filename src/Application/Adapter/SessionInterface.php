@@ -20,10 +20,18 @@ interface SessionInterface
     public function get($key);
 
     /**
+     * Gets and clears flash from the stack.
+     *
+     * @param string $type
+     * @param array  $default Default value if $type does not exist
+     *
+     * @return array
+     */
+    public function getFromFlashBag($type, array $default = []): array;
+
+    /**
      * @param string $key
      * @param mixed  $data
-     *
-     * @return
      */
     public function set($key, $data);
 

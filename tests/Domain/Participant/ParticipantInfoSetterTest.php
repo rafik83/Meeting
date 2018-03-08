@@ -1,12 +1,12 @@
 <?php
 
 /*
-* This file is part of the vimeet project.
-*
-* Copyright (C) Proximum
-*
-* @author Elao <contact@elao.com>
-*/
+ * This file is part of the Proximum Vimeet project.
+ *
+ * Copyright (C) Proximum
+ *
+ * @author Elao <contact@elao.com>
+ */
 
 namespace Proximum\Vimeet\Tests\Domain\Participant;
 
@@ -29,7 +29,7 @@ class ParticipantInfoSetterTest extends TestCase
             'phone', 'telephone', ['tags' => ['participant_mobile', 'participant_data']], 'fr', 'fr'
         );
         $phoneObject->setTelephone('+33 666 999 000');
-        $block->addChild(1, "3ad4b72f", $phoneObject);
+        $block->addChild(1, '3ad4b72f', $phoneObject);
         $templateData->addChild(0, '67019e4a', $block);
 
         $participant = $this->prophesize(Participant::class);

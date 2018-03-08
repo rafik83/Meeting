@@ -173,7 +173,7 @@ class SearchFacetExternalFactory
             }
 
             $this->categoryViewsByEvent[$event->getId()] = $this->commandBus->handle(
-                new CategoryViewQuery($event, $catalogVisibility->getTypes(), $locale)
+                new CategoryViewQuery($event, $catalogVisibility->getCategories(), $locale)
             );
         }
 

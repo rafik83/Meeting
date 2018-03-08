@@ -4,6 +4,15 @@ parameters:
 #    parameter_name: value
 
 services:
+    _defaults:
+        # automatically injects dependencies in your services
+        autowire: false
+        # automatically registers your services as commands, event subscribers, etc.
+        autoconfigure: false
+        # this means you cannot fetch services directly from the container via $container->get()
+        # if you need to do this, you can override this setting on individual services
+        public: false
+
     #
     # Twig extension
     #
@@ -28,11 +37,24 @@ services:
     form.extension.collection_type_extension:
         decorates: elao.form_translation.extension.collection_type_extension
         parent: elao.form_translation.extension.collection_type_extension
+        autowire: false
+        autoconfigure: false
+        public: false
         tags:
             - { name: form.type_extension, extended_type: Symfony\Component\Form\Extension\Core\Type\CollectionType, priority: -10 }
 
 imports:
     - { resource: services/repositories.yml }
+    - { resource: services/adapters.yml }
+    - { resource: services/domain/services.yml }
+    - { resource: services/application/services.yml }
+    - { resource: services/event/commands.yml }
+    - { resource: services/event/queries.yml }
+    - { resource: services/event/serializers.yml }
+    - { resource: services/event/actions.yml }
     - { resource: services/admin/queries.yml }
     - { resource: services/admin/commands.yml }
+    - { resource: services/admin/components.yml }
     - { resource: services/admin/serializers.yml }
+    - { resource: services/admin/actions.yml }
+    - { resource: services/infrastructure/symfony_commands.yml }

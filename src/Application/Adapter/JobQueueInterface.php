@@ -14,6 +14,8 @@ use Proximum\Vimeet\Domain\Model\Admin;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\File;
 use Proximum\Vimeet\Domain\Model\Messaging\Campaign;
+use Proximum\Vimeet\Domain\Model\PlannerJob;
+use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\Template\RegistrationTemplate;
 use Proximum\Vimeet\Domain\Model\Template\SheetTemplate;
 use Proximum\Vimeet\Domain\Model\Type;
@@ -40,7 +42,22 @@ interface JobQueueInterface
      * @param string $emailToNotify
      * @param string $locale
      */
-    public function printPlanning(array $types, $orderBy, $emailToNotify, $locale);
+    public function printPlanning(array $types, string $orderBy, $emailToNotify, $locale) :void;
+
+    /**
+     * @param Event  $event
+     * @param array  $sheetIds
+     * @param string $emailToNotify
+     * @param string $locale
+     * @param string $orderBy
+     */
+    public function printSheetsPdf(
+        Event $event,
+        array $sheetIds,
+        string $emailToNotify,
+        string $locale,
+        string $orderBy
+    );
 
     /**
      * @param Event $event
@@ -57,21 +74,38 @@ interface JobQueueInterface
     public function exportOrdersForEvent(Event $event, Admin $admin, $locale);
 
     /**
-     * @param Event  $event
-     * @param Admin  $admin
-     * @param string $locale
-     * @param string $lockMeetingRequest
-     * @param string $solutionType
+     * @param Event           $event
+     * @param Admin           $admin
+     * @param string          $locale
+     * @param bool            $lockMeetingRequest
+     * @param string          $solutionType
+     * @param bool            $isModeAuto
+     * @param null|PlannerJob $plannerJob
      */
-    public function exportPlannerForEvent(Event $event, Admin $admin, $locale, $lockMeetingRequest, $solutionType);
+    public function exportPlannerForEvent(
+        Event $event,
+        Admin $admin,
+        string $locale,
+        bool $lockMeetingRequest,
+        string $solutionType,
+        bool $isModeAuto,
+        ?PlannerJob $plannerJob
+    );
 
     /**
-     * @param File   $file
-     * @param Event  $event
-     * @param Admin  $admin
-     * @param string $locale
+     * @param File            $file
+     * @param Event           $event
+     * @param Admin           $admin
+     * @param string          $locale
+     * @param null|PlannerJob $plannerJob
      */
-    public function importPlannerForEvent(File $file, Event $event, Admin $admin, $locale);
+    public function importPlannerForEvent(
+        File $file,
+        Event $event,
+        Admin $admin,
+        $locale,
+        ?PlannerJob $plannerJob = null
+    );
 
     /**
      * @param SheetTemplate $sheetTemplate
@@ -116,7 +150,36 @@ interface JobQueueInterface
     public function aggregateParticipantAssignedToRequest(Event $event);
 
     /**
+     * @param Event $event
+     */
+    public function aggregateAvailableSlot(Event $event);
+
+    /**
+     * @param Sheet $sheet
+     */
+    public function aggregateSheetAvailableSlot(Sheet $sheet);
+
+    /**
+     * @param Event $event
+     */
+    public function aggregatePhoneValidationStatus(Event $event);
+
+    /**
      * @param $event
      */
     public function generateMeetingSolutionAnalytic(Event $event);
+
+    /**
+     * This method re-index all the sheets of a given event
+     * It does not reset ES
+     *
+     * @param $event
+     */
+    public function indexSheetsByEvent(Event $event): void;
+
+    /**
+     * This method re-index all the events
+     * It does reset ES
+     */
+    public function indexEventFromScratch(): void;
 }

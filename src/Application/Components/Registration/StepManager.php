@@ -14,6 +14,7 @@ use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Repository\ParticipantRepositoryInterface;
 use Proximum\Vimeet\Domain\Template\TemplateDataFactory;
+use Proximum\Vimeet\Domain\Template\TemplateObject;
 
 class StepManager
 {
@@ -72,22 +73,30 @@ class StepManager
      *
      * @return bool
      */
-    private function isRegistrationComplete(Participant $participant)
+    private function isRegistrationComplete(Participant $participant): bool
     {
         $registrationTemplate = $this->templateDataFactory->createRegistrationFromParticipant(
             $participant,
             $participant->getLocale()
         );
 
-        $objects = $registrationTemplate->getObjects();
+        return !$this->hasEmptyRequiredObject($registrationTemplate->getEditableObjects());
+    }
 
-        foreach ($objects as $object) {
-            if (true === $object->getRequired() && empty($object->getData())) {
-                return false;
+    /**
+     * @param TemplateObject[] $editableObjects
+     *
+     * @return bool
+     */
+    private function hasEmptyRequiredObject(array $editableObjects): bool
+    {
+        foreach ($editableObjects as $editableObject) {
+            if (true === $editableObject->getRequired() && $editableObject->isEmpty()) {
+                return true;
             }
         }
 
-        return true;
+        return false;
     }
 
     /**
@@ -95,7 +104,7 @@ class StepManager
      *
      * @return int
      */
-    private function getLastCompleteStep(Participant $participant)
+    private function getLastCompleteStep(Participant $participant): int
     {
         $registrationTemplate = $this->templateDataFactory->createRegistrationFromParticipant(
             $participant,
@@ -105,10 +114,8 @@ class StepManager
         $step = 0;
 
         foreach ($registrationTemplate->getBlocks() as $block) {
-            foreach ($block->getObjects() as $object) {
-                if (true === $object->getRequired() && empty($object->getData())) {
-                    return $step;
-                }
+            if ($this->hasEmptyRequiredObject($block->getEditableObjects())) {
+                return $step;
             }
 
             $step++;

@@ -29,13 +29,13 @@ class SpotSatisfactionViewNormalizerTest extends TestCase
                 new ObjectNormalizer(),
             ],
             [
-                new JsonEncoder()
+                new JsonEncoder(),
             ]
         );
 
         $result = $serializer->serialize($data, 'json');
 
-        $expected = "{\"spotId\":12,\"reference\":\"Reference of the spot\",\"shared\":true,\"visio\":true,\"satisfaction\":64}";
+        $expected = '{"spotId":12,"reference":"Reference of the spot","shared":true,"visio":true,"satisfaction":64}';
 
         $this->assertEquals($expected, $result);
     }

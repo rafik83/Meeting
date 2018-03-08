@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2016 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -12,15 +12,28 @@ namespace Proximum\Vimeet\Application\Query\Order\Summary;
 
 use Proximum\Vimeet\Application\View\Order\PromotionCodeView;
 use Proximum\Vimeet\Application\View\Package\Summary\PromotionProductRowView;
+use Proximum\Vimeet\Domain\Order\DiscountCalculator;
 
 class PromotionCodeViewQueryHandler
 {
+    /** @var DiscountCalculator */
+    private $discountCalculator;
+
+    /**
+     * @param DiscountCalculator $discountCalculator
+     */
+    public function __construct(
+        DiscountCalculator $discountCalculator
+    ) {
+        $this->discountCalculator = $discountCalculator;
+    }
+
     /**
      * @param PromotionCodeViewQuery $promotionCodeViewQuery
      *
      * @return PromotionCodeView
      */
-    public function handle(PromotionCodeViewQuery $promotionCodeViewQuery)
+    public function handle(PromotionCodeViewQuery $promotionCodeViewQuery): PromotionCodeView
     {
         $locale                   = $promotionCodeViewQuery->locale;
         $promotionProductRowViews = [];
@@ -35,7 +48,13 @@ class PromotionCodeViewQueryHandler
                     $promotion->getProduct()->getName(),
                     $promotion->getType(),
                     $promotion->getValue(),
-                    $orderRow->getQuantity()
+                    $orderRow->getQuantity(),
+                    $promotion->getProduct()->getVat(),
+                    $this->discountCalculator->getDiscountForProduct(
+                        $promotionCodeViewQuery->order,
+                        $promotionCodeViewQuery->promotionCode,
+                        $promotion->getProduct()
+                    )
                 );
             }
         }

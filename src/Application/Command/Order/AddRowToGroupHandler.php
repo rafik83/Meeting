@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2015 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -18,19 +18,13 @@ use Proximum\Vimeet\Infrastructure\Adapter\DelayedEventDispatcher;
 
 class AddRowToGroupHandler
 {
-    /**
-     * @var OrderRepositoryInterface
-     */
+    /** @var OrderRepositoryInterface */
     private $orderRepository;
 
-    /**
-     * @var DelayedEventDispatcher
-     */
+    /** @var DelayedEventDispatcher */
     private $eventDispatcher;
 
     /**
-     * AddRowHandler constructor.
-     *
      * @param OrderRepositoryInterface $orderRepository
      * @param DelayedEventDispatcher   $eventDispatcher
      */
@@ -43,14 +37,15 @@ class AddRowToGroupHandler
     /**
      * @param AddRowToGroup $addRow
      */
-    public function handle(AddRowToGroup $addRow)
+    public function handle(AddRowToGroup $addRow): void
     {
         $customRow = Row::createCustomRowToGroup(
             $addRow->order,
             $addRow->quantity,
             $addRow->groupId,
             $addRow->label,
-            $addRow->price
+            $addRow->price,
+            $addRow->order->getVatRate()
         );
 
         $addRow->order->addCustomRow($customRow);

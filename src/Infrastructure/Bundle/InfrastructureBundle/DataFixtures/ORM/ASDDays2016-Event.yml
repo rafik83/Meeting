@@ -39,6 +39,7 @@ Proximum\Vimeet\Domain\Model\Event\Configuration (local):
         schedulePublishDate: "<dateTimeBetween('now', '2032-07-08')>"
         contactFirstName: "Maryse"
         contactLastName: "DURAND"
+        backgroundColor: '00398C'
 
 Proximum\Vimeet\Domain\Model\EventTranslation:
     event_asddays_2016_fr:

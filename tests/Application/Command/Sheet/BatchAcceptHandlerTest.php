@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2015 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -15,41 +15,40 @@ use Proximum\Vimeet\Application\Command\Sheet\BatchAccept;
 use Proximum\Vimeet\Application\Command\Sheet\BatchAcceptHandler;
 use Proximum\Vimeet\Domain\Model\Admin;
 use Proximum\Vimeet\Domain\Model\Sheet;
-use Proximum\Vimeet\Domain\Model\Type;
-use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Adapter\BatchJobQueue\BatchAcceptJobQueue;
-use Proximum\Vimeet\Tests\Factory\EventFactory;
 
 class BatchAcceptHandlerTest extends TestCase
 {
     public function testHandle()
     {
-        $event  = EventFactory::createEvent();
-        $date   = new \DateTime();
-        $admin  = new Admin('email@email.com', 'toto', 'tata', 'fr', 'truc', 'muche', 'ROLE_SUPER_ADMIN', $date);
-        $type   = new Type($event);
-        $user1  = new User('test@test.com', 'salt', 'password', 'fr');
-        $user2  = new User('test@test.com', 'salt', 'password', 'fr');
-        $user3  = new User('test@test.com', 'salt', 'password', 'fr');
-        $sheet1 = new Sheet($event, $type, [], $user1, $date);
-        $sheet2 = new Sheet($event, $type, [], $user2, $date);
-        $sheet3 = new Sheet($event, $type, [], $user3, $date);
-        $sheet3->markAsAccepted();
+        $admin = $this->prophesize(Admin::class);
+
+        $sheet1 = $this->prophesize(Sheet::class);
+        $sheet1->getId()->shouldBeCalled()->willReturn(1);
+
+        $sheet2 = $this->prophesize(Sheet::class);
+        $sheet2->getId()->shouldBeCalled()->willReturn(2);
+
+        $sheet3 = $this->prophesize(Sheet::class);
+        $sheet3->getId()->shouldBeCalled()->willReturn(3);
 
         $sheetRepository = $this->prophesize(SheetRepositoryInterface::class);
         $batchJobQueue   = $this->prophesize(BatchAcceptJobQueue::class);
 
-        $sheetRepository->getSheetsUnacceptedById([1, 2, 3])->shouldBeCalled()->willReturn([$sheet1, $sheet2, $sheet3]);
+        $sheetRepository
+            ->getSheetsUnacceptedById([1, 2, 3])
+            ->shouldBeCalled()
+            ->willReturn([$sheet1->reveal(), $sheet2->reveal(), $sheet3->reveal()]);
 
         $sheetRepository->updateStateBySheetsId(
             [1, 2, 3],
             Sheet::STATE_ACCEPTED
         )->shouldBeCalled();
 
-        $batchJobQueue->createJob([1, 2, 3], $admin)->shouldBeCalled();
+        $batchJobQueue->createJob([1, 2, 3], $admin->reveal())->shouldBeCalled();
 
-        $command = new BatchAccept([1, 2, 3], $admin);
+        $command = new BatchAccept([1, 2, 3], $admin->reveal());
 
         $handler = new BatchAcceptHandler(
             $sheetRepository->reveal(),

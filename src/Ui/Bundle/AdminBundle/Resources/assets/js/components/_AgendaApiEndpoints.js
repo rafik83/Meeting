@@ -49,17 +49,6 @@ AgendaApiEndpoints.prototype.getSheetAgendaEndpoint = function (sheet) {
 };
 
 /**
- * Returns /admin/fr/event/{event_id}/agenda/sheets/indicators
- * or      /app_dev.php/admin/fr/event/{event_id}/agenda/sheets/indicators
- *
- * @returns {string}
- */
-AgendaApiEndpoints.prototype.getSheetsIndicatorsEndpoint = function ()
-{
-    return this.getPathname() + '/sheets/indicators';
-};
-
-/**
  * Returns /admin/fr/event/{event_id}/agenda/meeting/{meetingId}/update-spot
  * or      /app_dev.php/admin/fr/event/{event_id}/agenda/meeting/{meetingId}/update-spot
  *

@@ -10,11 +10,13 @@
 
 namespace Proximum\Vimeet\Tests\Domain\Order;
 
+use PHPUnit\Framework\TestCase;
 use Proximum\Vimeet\Application\Query\Order\OrderVat\OrderVatViewsByEventQuery;
 use Proximum\Vimeet\Application\Query\Order\OrderVat\OrderVatViewsByEventQueryHandler;
 use Proximum\Vimeet\Application\Query\Order\OrderVat\OrderVatViewsBySheetIdsQueryHandler;
 use Proximum\Vimeet\Application\Query\Order\OrderVat\OrderVatViewsBySheetQuery;
 use Proximum\Vimeet\Application\Query\Order\OrderVat\OrderVatViewsBySheetQueryHandler;
+use Proximum\Vimeet\Application\View\Package\Vat\VatListView;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\Transaction;
@@ -23,7 +25,6 @@ use Proximum\Vimeet\Domain\Repository\TransactionRepositoryInterface;
 use Proximum\Vimeet\Domain\View\OrderVatView;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
 use Proximum\Vimeet\Tests\Factory\SheetFactory;
-use PHPUnit\Framework\TestCase;
 
 class BalanceTest extends TestCase
 {
@@ -151,9 +152,12 @@ class BalanceTest extends TestCase
     public function testGetTotal()
     {
         $now = new \DateTime();
-        $orderVatView1 = new OrderVatView('Order1', 1, 1, true, 20, 'ati', 'EUR', false, 1000, 200, 1200, $now);
-        $orderVatView2 = new OrderVatView('Order2', 1, 1, true, 20, 'ati', 'EUR', false, 200, 40, 240, $now);
-        $orderVatViewCancelled = new OrderVatView('Order2', 1, 1, true, 20, 'ati', 'EUR', true, 2000, 400, 2400, $now);
+        $vatListView1 = new VatListView(1000, 1200, true, 'ati', []);
+        $vatListView2 = new VatListView(200, 240, true, 'ati', []);
+        $vatListView3 = new VatListView(2000, 2400, true, 'ati', []);
+        $orderVatView1 = new OrderVatView('Order1', 1, 1, true, 20, 'ati', 'EUR', false, 1000, 200, 1200, $vatListView1, $now);
+        $orderVatView2 = new OrderVatView('Order2', 1, 1, true, 20, 'ati', 'EUR', false, 200, 40, 240, $vatListView2, $now);
+        $orderVatViewCancelled = new OrderVatView('Order2', 1, 1, true, 20, 'ati', 'EUR', true, 2000, 400, 2400, $vatListView3, $now);
 
         $this->orderVatViewsBySheetQueryHandler
             ->handle(new OrderVatViewsBySheetQuery($this->sheet))
@@ -168,9 +172,12 @@ class BalanceTest extends TestCase
     public function testGetTotalWithoutVat()
     {
         $now = new \DateTime();
-        $orderVatView1 = new OrderVatView('Order1', 1, 1, true, 20, 'ati', 'EUR', false, 1000, 200, 1200, $now);
-        $orderVatView2 = new OrderVatView('Order2', 1, 1, true, 20, 'ati', 'EUR', false, 200, 40, 240, $now);
-        $orderVatViewCancelled = new OrderVatView('Order2', 1, 1, true, 20, 'ati', 'EUR', true, 2000, 400, 2400, $now);
+        $vatListView1 = new VatListView(1000, 1200, true, 'ati', []);
+        $vatListView2 = new VatListView(200, 240, true, 'ati', []);
+        $vatListView3 = new VatListView(2000, 2400, true, 'ati', []);
+        $orderVatView1 = new OrderVatView('Order1', 1, 1, true, 20, 'ati', 'EUR', false, 1000, 200, 1200, $vatListView1, $now);
+        $orderVatView2 = new OrderVatView('Order2', 1, 1, true, 20, 'ati', 'EUR', false, 200, 40, 240, $vatListView2, $now);
+        $orderVatViewCancelled = new OrderVatView('Order2', 1, 1, true, 20, 'ati', 'EUR', true, 2000, 400, 2400, $vatListView3, $now);
 
         $this->orderVatViewsBySheetQueryHandler
             ->handle(new OrderVatViewsBySheetQuery($this->sheet))
@@ -185,15 +192,18 @@ class BalanceTest extends TestCase
     public function testGetPositiveBalance()
     {
         $now = new \DateTime();
+        $vatListView1 = new VatListView(1000, 1200, true, 'ati', []);
+        $vatListView2 = new VatListView(200, 240, true, 'ati', []);
+        $vatListView3 = new VatListView(2000, 2400, true, 'ati', []);
 
         $this->orderVatViewsBySheetQueryHandler
             ->handle(new OrderVatViewsBySheetQuery($this->sheet))
             ->shouldBeCalled()
             ->willReturn(
                 [
-                    new OrderVatView('Order1', 1, 1, true, 20, 'ati', 'EUR', false, 2000, 400, 2400, $now),
-                    new OrderVatView('Order2', 1, 1, true, 20, 'ati', 'EUR', false, 1000, 200, 1200, $now),
-                    new OrderVatView('Order2', 1, 1, true, 20, 'ati', 'EUR', true, 2000, 400, 2400, $now),
+                    new OrderVatView('Order1', 1, 1, true, 20, 'ati', 'EUR', false, 2000, 400, 2400, $vatListView1, $now),
+                    new OrderVatView('Order2', 1, 1, true, 20, 'ati', 'EUR', false, 1000, 200, 1200, $vatListView2, $now),
+                    new OrderVatView('Order2', 1, 1, true, 20, 'ati', 'EUR', true, 2000, 400, 2400, $vatListView3, $now),
                 ]
             );
 
@@ -213,15 +223,18 @@ class BalanceTest extends TestCase
     public function testGetNegativeBalance()
     {
         $now = new \DateTime();
+        $vatListView1 = new VatListView(1000, 1200, true, 'ati', []);
+        $vatListView2 = new VatListView(200, 240, true, 'ati', []);
+        $vatListView3 = new VatListView(2000, 2400, true, 'ati', []);
 
         $this->orderVatViewsBySheetQueryHandler
             ->handle(new OrderVatViewsBySheetQuery($this->sheet))
             ->shouldBeCalled()
             ->willReturn(
                 [
-                    new OrderVatView('Order1', 1, 1, true, 20, 'ati', 'EUR', false, 2000, 400, 2400, $now),
-                    new OrderVatView('Order2', 1, 1, true, 20, 'ati', 'EUR', false, 1000, 200, 1200, $now),
-                    new OrderVatView('Order2', 1, 1, true, 20, 'ati', 'EUR', true, 2000, 400, 2400, $now),
+                    new OrderVatView('Order1', 1, 1, true, 20, 'ati', 'EUR', false, 2000, 400, 2400, $vatListView1, $now),
+                    new OrderVatView('Order2', 1, 1, true, 20, 'ati', 'EUR', false, 1000, 200, 1200, $vatListView2, $now),
+                    new OrderVatView('Order2', 1, 1, true, 20, 'ati', 'EUR', true, 2000, 400, 2400, $vatListView3, $now),
                 ]
             );
 
@@ -241,15 +254,18 @@ class BalanceTest extends TestCase
     public function testGetPositiveBalanceForRemainingToPay()
     {
         $now = new \DateTime();
+        $vatListView1 = new VatListView(1000, 1200, true, 'ati', []);
+        $vatListView2 = new VatListView(200, 240, true, 'ati', []);
+        $vatListView3 = new VatListView(2000, 2400, true, 'ati', []);
 
         $this->orderVatViewsBySheetQueryHandler
             ->handle(new OrderVatViewsBySheetQuery($this->sheet))
             ->shouldBeCalled()
             ->willReturn(
                 [
-                    new OrderVatView('Order1', 1, 1, true, 20, 'ati', 'EUR', false, 2000, 400, 2400, $now),
-                    new OrderVatView('Order2', 1, 1, true, 20, 'ati', 'EUR', false, 1000, 200, 1200, $now),
-                    new OrderVatView('Order2', 1, 1, true, 20, 'ati', 'EUR', true, 2000, 400, 2400, $now),
+                    new OrderVatView('Order1', 1, 1, true, 20, 'ati', 'EUR', false, 2000, 400, 2400, $vatListView1, $now),
+                    new OrderVatView('Order2', 1, 1, true, 20, 'ati', 'EUR', false, 1000, 200, 1200, $vatListView2, $now),
+                    new OrderVatView('Order2', 1, 1, true, 20, 'ati', 'EUR', true, 2000, 400, 2400, $vatListView3, $now),
                 ]
             );
 
@@ -269,15 +285,18 @@ class BalanceTest extends TestCase
     public function testGetNegativeBalanceForRemainingToPay()
     {
         $now = new \DateTime();
+        $vatListView1 = new VatListView(1000, 1200, true, 'ati', []);
+        $vatListView2 = new VatListView(200, 240, true, 'ati', []);
+        $vatListView3 = new VatListView(2000, 2400, true, 'ati', []);
 
         $this->orderVatViewsBySheetQueryHandler
             ->handle(new OrderVatViewsBySheetQuery($this->sheet))
             ->shouldBeCalled()
             ->willReturn(
                 [
-                    new OrderVatView('Order1', 1, 1, true, 20, 'ati', 'EUR', false, 2000, 400, 2400, $now),
-                    new OrderVatView('Order2', 1, 1, true, 20, 'ati', 'EUR', false, 1000, 200, 1200, $now),
-                    new OrderVatView('Order2', 1, 1, true, 20, 'ati', 'EUR', true, 2000, 400, 2400, $now),
+                    new OrderVatView('Order1', 1, 1, true, 20, 'ati', 'EUR', false, 2000, 400, 2400, $vatListView1, $now),
+                    new OrderVatView('Order2', 1, 1, true, 20, 'ati', 'EUR', false, 1000, 200, 1200, $vatListView2, $now),
+                    new OrderVatView('Order2', 1, 1, true, 20, 'ati', 'EUR', true, 2000, 400, 2400, $vatListView3, $now),
                 ]
             );
 
@@ -297,6 +316,9 @@ class BalanceTest extends TestCase
     public function testGetTotalPaid()
     {
         $now = new \DateTime();
+        $vatListView1 = new VatListView(1000, 1200, true, 'ati', []);
+        $vatListView2 = new VatListView(200, 240, true, 'ati', []);
+        $vatListView3 = new VatListView(2000, 2400, true, 'ati', []);
 
         $this->transactionRepository->findBySheet($this->sheet)->shouldBeCalled()->willReturn(
             [
@@ -314,15 +336,18 @@ class BalanceTest extends TestCase
     public function testGetNotCancelledOrderVatViewsFromEvent()
     {
         $now = new \DateTime();
+        $vatListView1 = new VatListView(1000, 1200, true, 'ati', []);
+        $vatListView2 = new VatListView(200, 240, true, 'ati', []);
+        $vatListView3 = new VatListView(2000, 2400, true, 'ati', []);
 
         $this->orderVatViewsByEventQueryHandler
             ->handle(new OrderVatViewsByEventQuery($this->event))
             ->shouldBeCalled()
             ->willReturn(
                 [
-                    new OrderVatView('Order1', 1, 1, true, 20, 'ati', 'EUR', false, 2000, 400, 2400, $now),
-                    new OrderVatView('Order2', 1, 1, true, 20, 'ati', 'EUR', false, 1000, 200, 1200, $now),
-                    new OrderVatView('Order2', 1, 1, true, 20, 'ati', 'EUR', true, 2000, 400, 2400, $now),
+                    new OrderVatView('Order1', 1, 1, true, 20, 'ati', 'EUR', false, 2000, 400, 2400, $vatListView1, $now),
+                    new OrderVatView('Order2', 1, 1, true, 20, 'ati', 'EUR', false, 1000, 200, 1200, $vatListView2, $now),
+                    new OrderVatView('Order2', 1, 1, true, 20, 'ati', 'EUR', true, 2000, 400, 2400, $vatListView3, $now),
                 ]
             )
         ;
@@ -332,8 +357,8 @@ class BalanceTest extends TestCase
 
         $this->assertEquals(
             [
-                new OrderVatView('Order1', 1, 1, true, 20, 'ati', 'EUR', false, 2000, 400, 2400, $now),
-                new OrderVatView('Order2', 1, 1, true, 20, 'ati', 'EUR', false, 1000, 200, 1200, $now),
+                new OrderVatView('Order1', 1, 1, true, 20, 'ati', 'EUR', false, 2000, 400, 2400, $vatListView1, $now),
+                new OrderVatView('Order2', 1, 1, true, 20, 'ati', 'EUR', false, 1000, 200, 1200, $vatListView2, $now),
             ],
             $notCancelledOrdersFromEvent
         );
@@ -360,15 +385,18 @@ class BalanceTest extends TestCase
     public function testGetOrdersTotalForEvent()
     {
         $now = new \DateTime();
+        $vatListView1 = new VatListView(1000, 1200, true, 'ati', []);
+        $vatListView2 = new VatListView(200, 240, true, 'ati', []);
+        $vatListView3 = new VatListView(2000, 2400, true, 'ati', []);
 
         $this->orderVatViewsByEventQueryHandler
             ->handle(new OrderVatViewsByEventQuery($this->event))
             ->shouldBeCalled()
             ->willReturn(
                 [
-                    new OrderVatView('Order1', 1, 1, true, 20, 'ati', 'EUR', false, 200, 40, 240, $now),
-                    new OrderVatView('Order2', 1, 1, true, 20, 'ati', 'EUR', false, 1000, 200, 1200, $now),
-                    new OrderVatView('Order2', 1, 1, true, 20, 'ati', 'EUR', true, 2000, 400, 2400, $now),
+                    new OrderVatView('Order1', 1, 1, true, 20, 'ati', 'EUR', false, 200, 40, 240, $vatListView1, $now),
+                    new OrderVatView('Order2', 1, 1, true, 20, 'ati', 'EUR', false, 1000, 200, 1200, $vatListView2, $now),
+                    new OrderVatView('Order2', 1, 1, true, 20, 'ati', 'EUR', true, 2000, 400, 2400, $vatListView3, $now),
                 ]
             )
         ;
@@ -382,15 +410,18 @@ class BalanceTest extends TestCase
     public function testGetTotalRemainingToPayForEvent()
     {
         $now = new \DateTime();
+        $vatListView1 = new VatListView(1000, 1200, true, 'ati', []);
+        $vatListView2 = new VatListView(200, 240, true, 'ati', []);
+        $vatListView3 = new VatListView(2000, 2400, true, 'ati', []);
 
         $this->orderVatViewsByEventQueryHandler
             ->handle(new OrderVatViewsByEventQuery($this->event))
             ->shouldBeCalled()
             ->willReturn(
                 [
-                    new OrderVatView('Order1', 1, 1, true, 20, 'ati', 'EUR', false, 2000, 400, 2400, $now),
-                    new OrderVatView('Order2', 1, 1, true, 20, 'ati', 'EUR', false, 1000, 200, 1200, $now),
-                    new OrderVatView('Order2', 1, 1, true, 20, 'ati', 'EUR', true, 2000, 400, 2400, $now),
+                    new OrderVatView('Order1', 1, 1, true, 20, 'ati', 'EUR', false, 2000, 400, 2400, $vatListView1, $now),
+                    new OrderVatView('Order2', 1, 1, true, 20, 'ati', 'EUR', false, 1000, 200, 1200, $vatListView2, $now),
+                    new OrderVatView('Order2', 1, 1, true, 20, 'ati', 'EUR', true, 2000, 400, 2400, $vatListView3, $now),
                 ]
             );
 

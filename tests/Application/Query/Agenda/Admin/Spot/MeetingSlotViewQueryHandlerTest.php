@@ -1,23 +1,22 @@
 <?php
 
 /*
- * This file is part of the vimeet project.
+ * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2017 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
 
 namespace Proximum\Vimeet\Tests\Application\Query\Agenda\Admin\Spot;
 
-use Prophecy\Argument;
+use PHPUnit\Framework\TestCase;
 use Proximum\Vimeet\Application\Command\Planning\SheetInfoGuesserCache;
 use Proximum\Vimeet\Application\Query\Agenda\Admin\Spot\MeetingSlotViewQuery;
 use Proximum\Vimeet\Application\Query\Agenda\Admin\Spot\MeetingSlotViewQueryHandler;
 use Proximum\Vimeet\Application\View\Agenda\Slot\SpotMeetingSlotView;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Tests\Factory\MeetingFactory;
-use PHPUnit\Framework\TestCase;
 
 class MeetingSlotViewQueryHandlerTest extends TestCase
 {

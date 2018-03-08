@@ -1,16 +1,24 @@
 <?php
 
+/*
+ * This file is part of the Proximum Vimeet project.
+ *
+ * Copyright (C) Proximum
+ *
+ * @author Elao <contact@elao.com>
+ */
+
 namespace Proximum\Vimeet\Tests\Application\Command\Product\Participant;
 
+use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
 use Proximum\Vimeet\Application\Adapter\FileStorageInterface;
 use Proximum\Vimeet\Application\Command\Product\Participant\CreateParticipant;
 use Proximum\Vimeet\Application\Command\Product\Participant\CreateParticipantHandler;
-use Proximum\Vimeet\Domain\Product\UpdatePriceResolver;
 use Proximum\Vimeet\Domain\Model\Product;
+use Proximum\Vimeet\Domain\Product\UpdatePriceResolver;
 use Proximum\Vimeet\Domain\Repository\ProductRepositoryInterface;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
-use PHPUnit\Framework\TestCase;
 
 class CreateParticipantHandlerTest extends TestCase
 {
@@ -21,6 +29,7 @@ class CreateParticipantHandlerTest extends TestCase
 
         $name = 'Name';
         $unitPrice = 100;
+        $vat = 20;
         $quantityMax = 4;
         $availabilityCurrent = 10;
         $availabilityMax = 50;
@@ -44,6 +53,7 @@ class CreateParticipantHandlerTest extends TestCase
         $create = new CreateParticipant($event);
         $create->name = $name;
         $create->unitPrice = $unitPrice;
+        $create->vat = $vat;
         $create->quantityMax = $quantityMax;
         $create->availabilityCurrent = $availabilityCurrent;
         $create->availabilityMax = $availabilityMax;
@@ -57,6 +67,7 @@ class CreateParticipantHandlerTest extends TestCase
             $event,
             $name,
             $unitPrice,
+            $vat,
             $quantityMax
         );
 

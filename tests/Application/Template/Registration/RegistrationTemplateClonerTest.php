@@ -3,14 +3,14 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2016 Proximum Vimeet
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
 
-
 namespace Proximum\Vimeet\Tests\Application\Template\Registration;
 
+use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
 use Proximum\Vimeet\Application\Nomenclature\NomenclatureCloner;
 use Proximum\Vimeet\Application\Template\Registration\RegistrationTemplateCloner;
@@ -18,13 +18,12 @@ use Proximum\Vimeet\Domain\Model\Nomenclature;
 use Proximum\Vimeet\Domain\Model\Template\RegistrationTemplate;
 use Proximum\Vimeet\Domain\Repository\Template\RegistrationTemplateRepositoryInterface;
 use Proximum\Vimeet\Domain\Template\Block;
-use Proximum\Vimeet\Domain\Template\TemplateObject\EditableText;
 use Proximum\Vimeet\Domain\Template\TemplateData;
 use Proximum\Vimeet\Domain\Template\TemplateDataFactory;
+use Proximum\Vimeet\Domain\Template\TemplateObject\EditableText;
 use Proximum\Vimeet\Domain\Template\TemplateObject\Nomenclature as NomenclatureObject;
 use Proximum\Vimeet\Infrastructure\Adapter\DelayedEventDispatcher;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
-use PHPUnit\Framework\TestCase;
 
 class RegistrationTemplateClonerTest extends TestCase
 {
@@ -43,10 +42,10 @@ class RegistrationTemplateClonerTest extends TestCase
                             'component' => 'object',
                             'type'      => 'editable-text',
                             'config'    => [],
-                        ]
+                        ],
                     ],
-                ]
-            ]
+                ],
+            ],
         ], ['fr'], 'fr', $dateTime);
 
         $sheetTemplateRepository = $this->prophesize(RegistrationTemplateRepositoryInterface::class);
@@ -73,10 +72,10 @@ class RegistrationTemplateClonerTest extends TestCase
                             'component' => 'object',
                             'type'      => 'editable-text',
                             'config'    => [],
-                        ]
+                        ],
                     ],
-                ]
-            ]
+                ],
+            ],
         ], ['fr'], 'fr', $dateTime);
         $clone->setEvent($event);
 
@@ -115,12 +114,12 @@ class RegistrationTemplateClonerTest extends TestCase
                             'component' => 'object',
                             'type'      => 'nomenclature',
                             'config'    => [
-                                'nomenclature' => 1
+                                'nomenclature' => 1,
                             ],
-                        ]
+                        ],
                     ],
-                ]
-            ]
+                ],
+            ],
         ], ['fr'], 'fr', $dateTime);
 
         $nomenclature = new Nomenclature('nomenclature', 1, [], true);
@@ -150,12 +149,12 @@ class RegistrationTemplateClonerTest extends TestCase
                             'component' => 'object',
                             'type'      => 'nomenclature',
                             'config'    => [
-                                'nomenclature' => null
+                                'nomenclature' => null,
                             ],
-                        ]
+                        ],
                     ],
-                ]
-            ]
+                ],
+            ],
         ], ['fr'], 'fr', $dateTime);
         $clone->setEvent($event);
 

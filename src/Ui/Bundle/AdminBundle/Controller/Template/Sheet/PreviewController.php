@@ -13,6 +13,7 @@ namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Template\Sheet;
 use Proximum\Vimeet\Application\Command\Sheet\Template\UpdatePreview;
 use Proximum\Vimeet\Domain\Model\Template\SheetTemplate;
 use Proximum\Vimeet\Domain\Template\Exception\TemplateException;
+use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Security\Voter\AdminTemplateAccessVoter;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Sheet\Template\PreviewType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
@@ -29,9 +30,11 @@ class PreviewController extends Controller
     public function updatePreviewAction(Request $request, SheetTemplate $template)
     {
         $this->denyAccessUnlessGranted('ROLE_ALLOWED_TO_ORGANIZE');
+        $this->denyAccessUnlessGranted(AdminTemplateAccessVoter::PERMISSION_TEMPLATE_EDIT, $template);
 
-        $templateData    = $this->get('template.template_data_factory')->createFromTemplate($template);
-        $templateObjects = $templateData->getPreviewAvailableObjects();
+        $templateDataFactory = $this->get('template.template_data_factory');
+        $templateData    = $templateDataFactory->createFromTemplate($template);
+        $templateObjects = $templateDataFactory->getPreviewAvailableData($templateData);
 
         if (null === $template->getEvent()) {
             $locale = $template->getAvailableLocale($request->getLocale());

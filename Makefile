@@ -95,7 +95,7 @@ install: install-app install-db install-db@test install-db-fixtures install-db-f
 
 install@test: install-app@test install-db@test install-db-fixtures@test install-dep build@prod
 
-install@prod: install-dep build@prod
+install@prod: install-app install-dep build@prod
 
 install-app:
 	composer --no-progress --no-interaction install
@@ -128,34 +128,32 @@ install-db-fixtures@test:
 	#bin/console doctrine:fixtures:load -n --env=test
 
 install-dep:
-	npm --no-spin install
+	yarn install
 
 #########
 # Build #
 #########
 
-## Build application
-build: build-assets
+build:
+	./node_modules/.bin/encore dev
 
-build@prod: build-assets@prod
+build@preprod:
+	./node_modules/.bin/encore production
 
-build-assets:
-	gulp --dev
+build@prod:
+	./node_modules/.bin/encore production
 
-build-assets@prod:
-	gulp
+watch:
+	./node_modules/.bin/encore dev --watch
 
-build-all-assets: build-assets
-	bin/console vimeet:event:build-guideline-asset
+build-all-assets: build
+	bin/console vimeet:event:build-guideline-asset; \
 
-build-all-assets@prod: build-assets@prod
-	bin/console vimeet:event:build-guideline-asset
+build-all-assets@preprod: build@preprod
+	bin/console vimeet:event:build-guideline-asset; \
 
-## Build with watch
-watch: watch-assets
-
-watch-assets:
-	gulp watch --dev
+build-all-assets@prod: build@prod
+	bin/console vimeet:event:build-guideline-asset; \
 
 ################
 # Translations #
@@ -195,7 +193,7 @@ test-phpunit@test:
 	stty cols 80; bin/phpunit --log-junit var/tests/junit.xml --coverage-clover var/tests/clover.xml --coverage-html var/tests/coverage
 
 test-behat:
-	bin/console ca:cl --env=test
+	bin/console ca:cl --env=test --no-warmup
 	bin/behat --format progress --no-interaction
 
 test-behat@test:
@@ -208,7 +206,8 @@ test-behat@test:
 ##########
 
 ## Deploy application (demo)
-deploy@demo: deploy-capifony@demo
+deploy@demo:
+	ansible-playbook ansible/deploy.yml --inventory-file=ansible/hosts --limit=deploy_preprod
 
 ## Deploy application (preprod)
 deploy@preprod: deploy-capifony@preprod
@@ -316,7 +315,7 @@ elastica-populate@prod:
 	ssh vimeet-prod1 "cd ${REMOTE_INSTALL_DIR} && bin/console fos:elastica:populate --env=prod --no-reset --no-debug"
 
 # next targets must be run in VM
-ifeq ($(HOST), vimeet.proximum.dev)
+ifeq ($(HOST), vimeet)
 
 get-preprod-db@vm:
 	read -p "You are about to dump then download preprod db, please confirm (y/n)?" CONFIRM; \
@@ -342,20 +341,21 @@ import-preprod-db@vm:
 	bin/console doctrine:database:drop --force
 	bin/console doctrine:database:create
 	mysql -u root proximum_vimeet < preprod.sql
-	bin/console doctrine:query:sql "UPDATE event SET domain = REPLACE(domain, '.preprod.vimeet.events', '.vimeet.proximum.dev')"
+	bin/console doctrine:query:sql "UPDATE event SET domain = REPLACE(domain, '.preprod.vimeet.events', '.vimeet.proximum')"
 	make post-import-db@vm
 
 import-prod-db@vm:
 	bin/console doctrine:database:drop --force
 	bin/console doctrine:database:create
 	mysql -u root proximum_vimeet < prod.sql
-	bin/console doctrine:query:sql "UPDATE event SET domain = REPLACE(domain, '.vimeet.events', '.vimeet.proximum.dev')"
+	bin/console doctrine:query:sql "UPDATE event SET domain = REPLACE(domain, '.vimeet.events', '.vimeet.proximum')"
 	make post-import-db@vm
 
 post-import-db@vm:
 	bin/console doctrine:query:sql "UPDATE user SET email = CONCAT(id, '@example.net')"
 	bin/console doctrine:query:sql "UPDATE billing_info SET email = CONCAT(id, '-billinginfo@example.net')"
 	bin/console doctrine:query:sql "UPDATE event SET email_team = CONCAT(id, '-emailteam@example.net')"
+	bin/console doctrine:query:sql "UPDATE user_event_phone SET phone = 'undefined'"
 	bin/console doctrine:migrations:migrate
 	bin/console vimeet:event:build-guideline-asset
 	bin/console fos:elastica:populate --env=dev --no-debug
@@ -371,5 +371,5 @@ sync-db-from-prod@preprod:
 	  scp vimeet-prod1:prod.sql prod.sql; \
 	  ssh vimeet-prod1 "rm prod.sql"; \
 	  scp prod.sql vimeet-preprod:prod.sql; \
-	  ssh vimeet-preprod "cd $(REMOTE_INSTALL_DIR) && bin/console doctrine:database:drop --force && bin/console doctrine:database:create && mysql --host localhost --port 3306 -u vimeet_preprod -p$$PREPRODDBPWD vimeet_preprod < /var/www/prod.sql && rm /var/www/prod.sql && bin/console doctrine:query:sql \"UPDATE event SET domain = REPLACE(domain, '.vimeet.events', '.preprod.vimeet.events')\" && bin/console doctrine:query:sql \"UPDATE user SET email = CONCAT(id, '@example.net')\" && bin/console doctrine:migrations:migrate && bin/console vimeet:event:build-guideline-asset && bin/console fos:elastica:populate --env=prod --no-reset --no-debug"; \
+	  ssh vimeet-preprod "cd $(REMOTE_INSTALL_DIR) && bin/console doctrine:database:drop --force && bin/console doctrine:database:create && mysql --host localhost --port 3306 -u vimeet_preprod -p$$PREPRODDBPWD vimeet_preprod < /var/www/prod.sql && rm /var/www/prod.sql && bin/console doctrine:query:sql \"UPDATE event SET domain = REPLACE(domain, '.vimeet.events', '.preprod.vimeet.events')\" && bin/console doctrine:query:sql \"UPDATE user SET email = CONCAT(id, '@example.net')\" && bin/console doctrine:query:sql \"UPDATE user_event_phone SET phone = 'undefined'\" && bin/console doctrine:migrations:migrate && bin/console vimeet:event:build-guideline-asset && bin/console fos:elastica:populate --env=prod --no-reset --no-debug"; \
 	fi

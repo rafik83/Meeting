@@ -2,23 +2,22 @@
 
 {% import 'AdminBundle:Common:list_macros.html.twig' as list_macros %}
 
+{% block title 'admin.spot.title'|trans %}
+
 {% block content %}
     <h1 class="page-header">{{ 'admin.spot.title'|trans }}</h1>
 
     {% if filtered or spotsList.hasSpot %}
-        <div class="row">
+        <div class="row well">
             {{ form_start(filter_form) }}
-                <div class="col-md-2 text-right">
-                    <strong>{{ 'admin.filter_by'|trans }}</strong>
-                </div>
-                {{ form_row(filter_form.reference, { 'group_attr': { 'class': 'col-md-2' } }) }}
-                {{ form_row(filter_form.meetingCapacity, { 'group_attr': { 'class': 'col-md-2' } }) }}
-                {{ form_row(filter_form.seatCapacity, { 'group_attr': { 'class': 'col-md-2' } }) }}
-                {{ form_row(filter_form.size, { 'group_attr': { 'class': 'col-md-2' } }) }}
-                {{ form_row(filter_form.active, { 'group_attr': { 'class': 'hide' } }) }}
-                <div class="col-md-2 filter-buttons">
+                <div class="pull-right filter-buttons">
                     {{ form_widget(filter_form.submit) }}
                 </div>
+                {{ form_row(filter_form.reference, { 'group_attr': { 'class': 'col-md-3' } }) }}
+                {{ form_row(filter_form.meetingCapacity, { 'group_attr': { 'class': 'col-md-3' } }) }}
+                {{ form_row(filter_form.seatCapacity, { 'group_attr': { 'class': 'col-md-3' } }) }}
+                {{ form_row(filter_form.size, { 'group_attr': { 'class': 'col-md-3' } }) }}
+                {{ form_row(filter_form.active, { 'group_attr': { 'class': 'hide' } }) }}
             {{ form_end(filter_form) }}
         </div>
     {% endif %}
@@ -34,6 +33,9 @@
                         </a>
                         <a href="{{ path('admin_spot_batch_create', { 'event': event.id }) }}" class="btn btn-success">
                             {{ 'admin.spot.batch_create.title'|trans }}
+                        </a>
+                        <a href="{{ path('admin_spot_import', {'event': event.id}) }}" class="btn btn-info">
+                            {{ 'admin.spot.import.title'|trans }}
                         </a>
                     {% endblock new_actions %}
 

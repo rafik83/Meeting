@@ -3,14 +3,18 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2016 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
 
 namespace Proximum\Vimeet\Application\Query\Agenda;
 
+use Proximum\Vimeet\Application\Query\Agenda\AvailableSheets\AvailableSlotsByParticipantAndDayQuery;
+use Proximum\Vimeet\Application\Query\Agenda\AvailableSheets\AvailableSlotsByParticipantAndDayQueryHandler;
+use Proximum\Vimeet\Application\Components\Agenda\AgendaCollisionManager;
 use Proximum\Vimeet\Application\View\Agenda\DayView;
+use Proximum\Vimeet\Domain\Time\TimeOverlap;
 
 class DayViewQueryHandler
 {
@@ -29,25 +33,37 @@ class DayViewQueryHandler
     /** @var CancelAttendanceUnavailabilityViewQueryHandler */
     private $cancelAttendanceUnavailabilityViewQueryHandler;
 
+    /** @var AvailableSlotsByParticipantAndDayQueryHandler */
+    private $availableSlotsByParticipantAndDayQueryHandler;
+
+    /** @var AgendaCollisionManager */
+    private $agendaCollisionManager;
+
     /**
      * @param HappeningViewQueryHandler                      $happeningHandler
      * @param UnavailabilityViewQueryHandler                 $unavailabilityHandler
      * @param MassUnavailabilityViewQueryHandler             $massHandler
      * @param MeetingViewQueryHandler                        $meetingHandler
      * @param CancelAttendanceUnavailabilityViewQueryHandler $cancelAttendanceUnavailabilityViewQueryHandler
+     * @param AvailableSlotsByParticipantAndDayQueryHandler  $availableSlotsByParticipantAndDayQueryHandler
+     * @param AgendaCollisionManager                         $agendaCollisionManager
      */
     public function __construct(
         HappeningViewQueryHandler $happeningHandler,
         UnavailabilityViewQueryHandler $unavailabilityHandler,
         MassUnavailabilityViewQueryHandler $massHandler,
         MeetingViewQueryHandler $meetingHandler,
-        CancelAttendanceUnavailabilityViewQueryHandler $cancelAttendanceUnavailabilityViewQueryHandler
+        CancelAttendanceUnavailabilityViewQueryHandler $cancelAttendanceUnavailabilityViewQueryHandler,
+        AvailableSlotsByParticipantAndDayQueryHandler $availableSlotsByParticipantAndDayQueryHandler,
+        AgendaCollisionManager $agendaCollisionManager
     ) {
         $this->happeningHandler                               = $happeningHandler;
         $this->unavailabilityHandler                          = $unavailabilityHandler;
         $this->massHandler                                    = $massHandler;
         $this->meetingHandler                                 = $meetingHandler;
         $this->cancelAttendanceUnavailabilityViewQueryHandler = $cancelAttendanceUnavailabilityViewQueryHandler;
+        $this->availableSlotsByParticipantAndDayQueryHandler  = $availableSlotsByParticipantAndDayQueryHandler;
+        $this->agendaCollisionManager                         = $agendaCollisionManager;
     }
 
     /**
@@ -55,17 +71,19 @@ class DayViewQueryHandler
      *
      * @return DayView
      */
-    public function handle(DayViewQuery $query)
+    public function handle(DayViewQuery $query): DayView
     {
+        $cancelAttendanceView = null;
         $happeningViews       = [];
         $unavailabilities     = [];
         $masses               = [];
         $meetings             = [];
+        $availableSlotViews   = [];
         $cancelAttendanceView = null;
 
         if ($query->currentSheet->attend()) {
             foreach ($query->happenings as $happening) {
-                if ($query->day->contain($happening->getHappening())) {
+                if (TimeOverlap::contains($happening->getHappening(), $query->day)) {
                     $happeningViews[] = $this->happeningHandler->handle(
                         new HappeningViewQuery(
                             $happening->getHappening(),
@@ -77,15 +95,15 @@ class DayViewQueryHandler
             }
 
             foreach ($query->unavailabilities as $unavailability) {
-                if ($query->day->contain($unavailability)) {
+                if (TimeOverlap::overlap($unavailability, $query->day)) {
                     $unavailabilities[] = $this->unavailabilityHandler->handle(
-                        new UnavailabilityViewQuery($unavailability, $query->event)
+                        new UnavailabilityViewQuery($unavailability, $query->event, $query->day)
                     );
                 }
             }
 
             foreach ($query->masses as $mass) {
-                if ($query->day->contain($mass)) {
+                if (TimeOverlap::contains($mass, $query->day)) {
                     $massView = $this->massHandler->handle(
                         new MassUnavailabilityViewQuery(
                             $mass,
@@ -102,7 +120,7 @@ class DayViewQueryHandler
             }
 
             foreach ($query->meetings as $meeting) {
-                if ($query->day->contain($meeting->getSlot())) {
+                if (TimeOverlap::contains($meeting->getSlot(), $query->day)) {
                     $meetings[] = $this->meetingHandler->handle(
                         new MeetingViewQuery(
                             $meeting,
@@ -115,20 +133,37 @@ class DayViewQueryHandler
                     );
                 }
             }
+
+            if ($query->isParticipantUserViewing() && $query->currentSheet->isInCatalog()) {
+                $availableSlotViewQuery = new AvailableSlotsByParticipantAndDayQuery(
+                    $query->event,
+                    $query->participant,
+                    $query->day
+                );
+                $availableSlotViews = $this->availableSlotsByParticipantAndDayQueryHandler->handle($availableSlotViewQuery);
+            }
         } else {
             $cancelAttendanceView = $this->cancelAttendanceUnavailabilityViewQueryHandler->handle(
                 new CancelAttendanceUnavailabilityViewQuery($query->event, $query->day)
             );
         }
 
+        $this->agendaCollisionManager->handleCollision(
+            $meetings,
+            $happeningViews,
+            $unavailabilities,
+            $masses
+        );
+
         return new DayView(
             $query->day->getStartTime(),
             $query->day->getEndTime(),
             $query->day->getEvent()->getConfiguration()->getScheduleScale(),
-            $happeningViews,
-            $unavailabilities,
-            $masses,
-            $meetings,
+            $this->agendaCollisionManager->getHappeningViews(),
+            $this->agendaCollisionManager->getUnavailabilityViews(),
+            $this->agendaCollisionManager->getMassViews(),
+            $this->agendaCollisionManager->getMeetingViews(),
+            $availableSlotViews,
             $cancelAttendanceView
         );
     }

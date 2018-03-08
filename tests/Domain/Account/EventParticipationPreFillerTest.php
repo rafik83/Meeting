@@ -1,9 +1,9 @@
 <?php
 
 /*
- * This file is part of the vimeet project.
+ * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2017 vimeet
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -107,7 +107,7 @@ class EventParticipationPreFillerTest extends TestCase
         ], 'fr', 'fr');
         $editableText1->setData(['text' => 'vincent']);
         $editableText2 = new TemplateObject\EditableText('69b3cde2', 'editable-text', [
-            'tags' => ['participant_lastname', 'participant_data'],
+            'tags' => ['participant_lastname', 'participant_data', 'sheet_data'],
         ], 'fr', 'fr');
         $editableText2->setData(['text' => 'larose']);
         $telephone1 = new TemplateObject\Telephone('69b3cde1', 'telephone', [
@@ -141,7 +141,7 @@ class EventParticipationPreFillerTest extends TestCase
             'tags' => ['participant_firstname', 'participant_data'],
         ], 'fr', 'fr');
         $currentEditableText2 = new TemplateObject\EditableText('69b3cde2', 'editable-text', [
-            'tags' => ['participant_lastname', 'participant_data'],
+            'tags' => ['participant_lastname', 'participant_data', 'sheet_data'],
         ], 'fr', 'fr');
         $currentTelephone1 = new TemplateObject\Telephone('69b3cde1', 'telephone', [
             'tags' => ['participant_phone', 'participant_data'],

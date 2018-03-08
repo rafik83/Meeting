@@ -16,3 +16,5 @@ Proximum\Vimeet\Application\Command\Spot\Create:
             - Range: { min: 2 }
         active:
             - Type: { type: boolean }
+        visio:
+            - Type: { type: boolean }

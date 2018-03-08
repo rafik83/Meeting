@@ -42,4 +42,12 @@ class BatchEnableDisable extends AbstractBatch
         $this->state = $state;
         $this->admin = $admin;
     }
+
+    /**
+     * @return array
+     */
+    public function getIds(): array
+    {
+        return $this->ids;
+    }
 }

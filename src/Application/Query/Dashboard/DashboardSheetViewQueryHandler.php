@@ -1,9 +1,9 @@
 <?php
 
 /*
- * This file is part of the vimeet project.
+ * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2016 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -17,19 +17,13 @@ use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
 
 class DashboardSheetViewQueryHandler
 {
-    /**
-     * @var SheetRepositoryInterface
-     */
+    /** @var SheetRepositoryInterface */
     private $sheetRepository;
 
-    /**
-     * @var ParticipantRepositoryInterface
-     */
+    /** @var ParticipantRepositoryInterface */
     private $participantRepository;
 
     /**
-     * DashboardSheetViewQueryHandler constructor.
-     *
      * @param SheetRepositoryInterface       $sheetRepository
      * @param ParticipantRepositoryInterface $participantRepository
      */
@@ -46,7 +40,7 @@ class DashboardSheetViewQueryHandler
      *
      * @return DashboardSheetView
      */
-    public function handle(DashboardSheetViewQuery $query)
+    public function handle(DashboardSheetViewQuery $query): DashboardSheetView
     {
         $totalEnabledSheets = $this->sheetRepository->countEnabledSheetsByEvent($query->event);
         $totalParticipants  = $this->participantRepository->countByEnabledSheet($query->event);

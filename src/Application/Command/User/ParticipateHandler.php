@@ -14,6 +14,7 @@ use Proximum\Vimeet\Application\Components\Sheet\Template\Tag;
 use Proximum\Vimeet\Application\Event\Events;
 use Proximum\Vimeet\Application\Event\Package\MustSelectPackageEvent;
 use Proximum\Vimeet\Application\Event\Sheet\SheetTitleCheckEvent;
+use Proximum\Vimeet\Application\Event\User\RegistrationEvent;
 use Proximum\Vimeet\Application\Event\User\RegistrationStepEvent;
 use Proximum\Vimeet\Application\Event\Sheet\SheetUpdatedEvent;
 use Proximum\Vimeet\Domain\Account\Synchronizer;
@@ -22,6 +23,7 @@ use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Repository\ParticipantRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
+use Proximum\Vimeet\Domain\Template\AbstractChild;
 use Proximum\Vimeet\Domain\UserEvent\TypeResolver;
 use Proximum\Vimeet\Infrastructure\Adapter\DelayedEventDispatcher;
 
@@ -104,7 +106,9 @@ class ParticipateHandler
 
         // Prefill sheet data from last user participation
         if (null !== $lastUserParticipation) {
-            $sheet->setData($lastUserParticipation->getSheet()->getData());
+            $sheet->setData(
+                $this->getSanitizedSheetData($lastUserParticipation->getSheet()->getData())
+            );
         }
 
         $this->typeResolver->resolve($participate->user, $participate->event, $participate->type);
@@ -161,5 +165,32 @@ class ParticipateHandler
 
         $sheetTitleCheckEvent = new SheetTitleCheckEvent($sheet);
         $this->eventDispatcher->dispatch(Events::SHEET_TITLE_CHECK, $sheetTitleCheckEvent);
+
+        $this->eventDispatcher->dispatch(
+            Events::USER_REGISTRATION,
+            new RegistrationEvent(
+                $participate->event,
+                $participate->user
+            )
+        );
+    }
+
+    /**
+     * This method filter image and media objects from last sheet participation of previous event
+     *
+     * @param array $sheetData
+     *
+     * @return array
+     */
+    private function getSanitizedSheetData(array $sheetData): array
+    {
+        foreach ($sheetData as $key => $datum) {
+            $sheetData[$key] = array_filter($datum, function($element) {
+                return $element !== AbstractChild::TEMPLATE_OBJECT_TYPE_IMAGE
+                       && $element !== AbstractChild::TEMPLATE_OBJECT_TYPE_MEDIA;
+            }, ARRAY_FILTER_USE_KEY);
+        }
+
+        return $sheetData;
     }
 }

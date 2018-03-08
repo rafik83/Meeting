@@ -2,9 +2,7 @@
 
 {% import 'AdminBundle::macro.html.twig' as macro %}
 
-{% block title %}
-    [{{ event.title }}] {{ 'admin.product.title'|trans }}
-{% endblock %}
+{% block title 'admin.product.title'|trans %}
 
 {% block list_title 'admin.product.title'|trans %}
 
@@ -39,6 +37,7 @@
     <table class="table table-hover">
         <thead>
         <tr>
+            <th>{{ 'admin.product.id'|trans }}</th>
             <th>{{ 'admin.product.name'|trans }}</th>
             <th class="text-center col-md-1">{{ 'admin.product.bought'|trans }}</th>
             <th class="text-center col-md-1">{{ 'admin.product.availabilityCurrentMax'|trans }}</th>
@@ -52,8 +51,20 @@
         </thead>
         <tbody>
         {% set availabilityCssClass = {'default': 'success', 'warning': 'warning', 'alert': 'danger'} %}
+        {% set currentType = null %}
+
         {% for product in products %}
+            {% if currentType is null or currentType != product.type %}
+                {% set currentType = product.type %}
+                <tr class="info">
+                    <th colspan="10">
+                        <i class="glyphicon glyphicon-product-{{ product.type }}"></i>
+                        {{ ('admin.product.type.' ~ product.type)|trans }}
+                    </th>
+                </tr>
+            {% endif %}
             <tr>
+                <td>{{ product.id }}</td>
                 <td>
                     <i class="glyphicon glyphicon-product-{{ product.type }}"></i>
                     {{ product.name }}
@@ -67,7 +78,10 @@
                     {% if product.hasIncludedProducts %}
                         <ul>
                             {% for includedProduct in product.includedProducts %}
-                                <li>{{ includedProduct.quantity }} &times; {{ includedProduct.name }}</li>
+                                <li>
+                                    <i class="glyphicon glyphicon-product-{{ includedProduct.type }}"></i>
+                                    {{ includedProduct.quantity }} &times; {{ includedProduct.name }}
+                                </li>
                             {% endfor %}
                         </ul>
                     {% endif %}
@@ -129,7 +143,7 @@
             </tr>
         {% else %}
             <tr>
-                <td colspan="9" class="text-danger text-center">{{ 'admin.zero-result'|trans }}</td>
+                <td colspan="10" class="text-danger text-center">{{ 'admin.zero-result'|trans }}</td>
             </tr>
         {% endfor %}
         </tbody>

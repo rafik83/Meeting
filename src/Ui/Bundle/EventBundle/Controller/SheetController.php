@@ -14,7 +14,6 @@ use Proximum\Vimeet\Application\Command\Sheet\RemoveImage;
 use Proximum\Vimeet\Application\Command\Sheet\SubmitValidation;
 use Proximum\Vimeet\Application\Command\Sheet\UpdateData;
 use Proximum\Vimeet\Application\Exception\Sheet\SheetNotFoundException;
-use Proximum\Vimeet\Application\Query\Package\Participant\ParticipantProductViewQuery;
 use Proximum\Vimeet\Application\Query\Sheet\SheetValidationViewQuery;
 use Proximum\Vimeet\Application\Query\Sheet\TemplateObjectViewQuery;
 use Proximum\Vimeet\Application\Query\Sheet\WelcomeViewQuery;
@@ -23,12 +22,13 @@ use Proximum\Vimeet\Application\Query\Tip\TipTranslationViewQueryHandler;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\User;
+use Proximum\Vimeet\Domain\Sheet\Participant\AddParticipantChecker;
 use Proximum\Vimeet\Domain\Template;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Sheet\Data;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\ParamConverter\EventDomain;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Security\SheetVoter;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Symfony\Component\Form\Form;
+use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -45,7 +45,7 @@ class SheetController extends Controller
      *
      * @return RedirectResponse
      */
-    public function redirectTosheetAction(Request $request, EventDomain $eventDomain, $locale = null)
+    public function redirectToSheetAction(Request $request, EventDomain $eventDomain, $locale = null)
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
 
@@ -109,18 +109,7 @@ class SheetController extends Controller
         // Build sheet template data and attach tagged data view to template object with tags
         $templateData = $this->get('template.tagged_data_factory')->buildTaggedDataView($sheet, $locale);
 
-        $participantProductView = $this->get('tactician.commandbus.query')->handle(
-            new ParticipantProductViewQuery($sheet, $locale)
-        );
-
-        $flagFirstRegistration = $this->container->get('session')->getFlashBag()->get('first_registration');
-        $isFirstRegistration   = in_array(true, $flagFirstRegistration);
-        $popinWelcome          = null;
-
-        if ($isFirstRegistration) {
-            $welcomeViewQuery = new WelcomeViewQuery($sheet);
-            $popinWelcome     = $this->get('tactician.commandbus.query')->handle($welcomeViewQuery);
-        }
+        $popinWelcome = $this->get('tactician.commandbus.query')->handle(new WelcomeViewQuery($sheet));
 
         $tipTranslationViewQuery = new TipTranslationViewQuery(
             $sheet->getType(),
@@ -129,7 +118,10 @@ class SheetController extends Controller
         );
         $tipTranslationViews = $this->get('tactician.commandbus.query')->handle($tipTranslationViewQuery);
 
+        $canAddParticipant = $this->get(AddParticipantChecker::class)->canAddParticipant($sheet);
+
         return $this->render('EventBundle:Sheet:sheet.html.twig', [
+            'canAddParticipant'       => $canAddParticipant,
             'event'                   => $eventDomain->getEvent(),
             'sheet'                   => $sheet,
             'taggedData'              => $taggedData,
@@ -139,10 +131,10 @@ class SheetController extends Controller
             'templateData'            => $templateData,
             'popinWelcome'            => $popinWelcome,
             'sheetValidationView'     => (isset($sheetValidationView)) ? $sheetValidationView : null,
-            'participantProductView'  => $participantProductView,
             'isRequestMeetingEnabled' => false,
             'isCatalog'               => false,
             'tipTranslationViews'     => $tipTranslationViews,
+            'isPhoneValidationRequired' => false,
         ]);
     }
 
@@ -213,8 +205,11 @@ class SheetController extends Controller
 
         $isCatalogAllowed = $this->get('domain.key_dates.checker.catalog_access_checker')->allowedToAccess($event);
 
-        // Build sheet template data and attach tagged data view to template object with tags
-        $templateData = $this->get('template.tagged_data_factory')->buildTaggedDataView($sheetToDisplay, $locale);
+        // Build print template data and attach tagged data view to template object with tags
+        $templateData = $this->get('template.tagged_data_factory')->buildTaggedDataViewForPrint(
+            $sheetToDisplay,
+            $locale
+        );
 
         list ($nomenclatures, $participants, $taggedData) = $this->get('sheet.infos_helper')->getInfos(
             $sheetToDisplay,
@@ -266,12 +261,16 @@ class SheetController extends Controller
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
         $this->denyAccessUnlessGranted(SheetVoter::EDIT, $sheet);
 
-        $templateObjectView = $this
-            ->get('tactician.commandbus')
-            ->handle(new TemplateObjectViewQuery($sheet, $locale, $key))
-        ;
+        try {
+            $templateObjectView = $this
+                ->get('tactician.commandbus')
+                ->handle(new TemplateObjectViewQuery($sheet, $locale, $key))
+            ;
+        } catch (Template\Exception\ObjectNotFoundException $exception) {
+            throw $this->createNotFoundException($exception->getMessage());
+        }
 
-        $form  = $this->createObjectForm($templateObjectView->templateObject, $locale, $key);
+        $form = $this->createObjectForm($templateObjectView->templateObject, $locale, $key);
 
         return $this->render('EventBundle:Sheet:form.html.twig', [
             'sheet'    => $sheet,
@@ -290,9 +289,9 @@ class SheetController extends Controller
      * @param string                  $locale
      * @param string                  $key
      *
-     * @return Form
+     * @return FormInterface
      */
-    private function createObjectForm(Template\TemplateObject $object, $locale, $key)
+    private function createObjectForm(Template\TemplateObject $object, $locale, $key): FormInterface
     {
         $types = [
             'editable-text' => Data\EditableTextDataType::class,
@@ -347,7 +346,6 @@ class SheetController extends Controller
             throw $this->createNotFoundException(sprintf('The given key %s is not found', $key));
         }
 
-
         if ($object instanceof Template\TemplateObject\Nomenclature) {
             $nomenclature = $object->getNomenclatureModel();
             $depth        = $nomenclature->getDepth();
@@ -364,6 +362,11 @@ class SheetController extends Controller
 
         $object->setBuyableProducts($products);
         $object->setSheet($sheet);
+
+        $templateObjectView = $this
+            ->get('tactician.commandbus')
+            ->handle(new TemplateObjectViewQuery($sheet, $locale, $key))
+        ;
 
         $form = $this->createObjectForm($object, $locale, $key);
 
@@ -414,7 +417,10 @@ class SheetController extends Controller
             ? 'EventBundle:Sheet:nomenclatures.html.twig'
             : 'EventBundle:Sheet:sheet.html.twig';
 
+        $canAddParticipant = $this->get('Proximum\Vimeet\Domain\Sheet\Participant\AddParticipantChecker')->canAddParticipant($sheet);
+
         return $this->render($twig, [
+            'canAddParticipant'       => $canAddParticipant,
             'event'                   => $eventDomain->getEvent(),
             'form'                    => $form->createView(),
             'label'                   => $label,
@@ -432,6 +438,8 @@ class SheetController extends Controller
             'isRequestMeetingEnabled' => false,
             'isCatalog'               => false,
             'tipTranslationViews'     => $tipTranslationViews,
+            'templateObjectView'      => $templateObjectView,
+            'isPhoneValidationRequired' => false,
         ]);
     }
 

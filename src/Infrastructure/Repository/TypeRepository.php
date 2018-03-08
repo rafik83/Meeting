@@ -521,4 +521,20 @@ class TypeRepository implements TypeRepositoryInterface
         $this->entityManager->remove($type);
         $this->entityManager->flush();
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getTypesWithPaymentConditionsByEvent(Event $event): array
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('type')
+            ->from(Type::class, 'type', 'type.id')
+            ->join('type.paymentConditions', 'paymentConditions', 'WITH', 'type.event = :event')
+            ->setParameter('event', $event);
+
+        return $queryBuilder->getQuery()->getResult();
+    }
 }

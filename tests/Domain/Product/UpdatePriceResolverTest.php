@@ -1,15 +1,16 @@
 <?php
 
 /*
- * This file is part of the vimeet project.
+ * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2016 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
 
 namespace Proximum\Vimeet\Tests\Domain\Product;
 
+use PHPUnit\Framework\TestCase;
 use Proximum\Vimeet\Domain\Model\CartRow;
 use Proximum\Vimeet\Domain\Model\Order;
 use Proximum\Vimeet\Domain\Model\Order\Row;
@@ -21,7 +22,6 @@ use Proximum\Vimeet\Domain\Product\UpdatePriceResolver;
 use Proximum\Vimeet\Domain\Repository\CartRowRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\Order\RowRepositoryInterface;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
-use PHPUnit\Framework\TestCase;
 
 class UpdatePriceResolverTest extends TestCase
 {
@@ -34,6 +34,7 @@ class UpdatePriceResolverTest extends TestCase
             'name',
             'image',
             10,
+            20,
             10,
             10,
             10,
@@ -66,6 +67,7 @@ class UpdatePriceResolverTest extends TestCase
             'name',
             'image',
             10,
+            20,
             10,
             10,
             10,
@@ -99,6 +101,7 @@ class UpdatePriceResolverTest extends TestCase
             'name',
             'image',
             10,
+            20,
             10,
             10,
             10,
@@ -114,14 +117,11 @@ class UpdatePriceResolverTest extends TestCase
         $cartRowRepository  = $this->prophesize(CartRowRepositoryInterface::class);
         $cartRowRepository->findByProduct($product)->shouldBeCalled()->willReturn([]);
         $orderRowRepository = $this->prophesize(RowRepositoryInterface::class);
-        $orderRowRepository->findByProduct($product)->shouldBeCalled()->willReturn([new Row(
-            $order,
-            2,
-            $product,
-            1,
-            'label',
-            100
-        )]);
+        $orderRowRepository
+            ->findByProduct($product)
+            ->shouldBeCalled()
+            ->willReturn([new Row($order, 2, 20, $product, 1, 'label', 100)])
+        ;
 
         // Resolve
         $updatePriceResolver = new UpdatePriceResolver(

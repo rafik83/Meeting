@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2016 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -30,7 +30,7 @@ interface UserEventRepositoryInterface
      * @param User  $user
      * @param Event $event
      *
-     * @return UserEvent
+     * @return UserEvent|null
      */
-    public function getUserEvent(User $user, Event $event);
+    public function getUserEvent(User $user, Event $event): ?UserEvent;
 }

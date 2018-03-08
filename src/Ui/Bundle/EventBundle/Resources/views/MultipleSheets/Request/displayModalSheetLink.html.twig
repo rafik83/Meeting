@@ -1,0 +1,13 @@
+{% if displaySheetRoute is not defined %}
+    {% set displaySheetRoute = 'event_sheet_group_display_sheet_for_group_manager' %}
+{% endif %}
+<a href="{{ path(displaySheetRoute, {
+    sheetGroup: requestView.sheetMet.group.id,
+    sheet: requestView.sheetMet.id,
+    sheetToDisplayId: sheetView.sheetId
+}) }}"
+   data-toggle="modal"
+   data-target="#sheet-display-modal"
+>
+    <i class="icon-Voir_1"></i>
+</a>

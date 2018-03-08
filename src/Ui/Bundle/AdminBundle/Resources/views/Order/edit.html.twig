@@ -1,8 +1,6 @@
 {% extends 'AdminBundle::base.html.twig' %}
 
-{% block title %}
-    [{{ event.title }}] {{ 'admin.order.edit'|trans }} {{ 'admin.order_edit.command_name'|trans({'%id%': order.id, '%sheetName%': sheet_info }) }}
-{% endblock %}
+{% block title 'admin.order.edit'|trans %}
 
 {% import 'AdminBundle::macro.html.twig' as macro %}
 
@@ -121,13 +119,21 @@
             </tr>
 
             {% if order_view.vatApplicable %}
-                <tr>
-                    <th colspan="2"></th>
-                    <th colspan="1">{{ 'admin.order_edit.VAT'|trans }}</th>
-                    <th colspan="1">{{ order_view.vatRate }}%</th>
-                    <th class="text-right">{{ order_view.vatAmount|format_amount|localizedcurrency(order_view.currency) }}</th>
-                    <th></th>
-                </tr>
+                {% for vatView in order_view.vatListView.vatViews %}
+                    <tr>
+                        <th colspan="2"></th>
+                        <th colspan="2">{{ 'admin.order_edit.totalByVAT'|trans({'%vat%': vatView.vatRate}) }}</th>
+                        <th class="text-right">{{ vatView.total|format_amount|localizedcurrency(order_view.currency) }}</th>
+                        <th></th>
+                    </tr>
+                    <tr>
+                        <th colspan="2"></th>
+                        <th colspan="1">{{ 'admin.order_edit.VAT'|trans }}</th>
+                        <th colspan="1">{{ vatView.vatRate }}%</th>
+                        <th class="text-right">{{ vatView.totalVat|format_amount|localizedcurrency(order_view.currency) }}</th>
+                        <th></th>
+                    </tr>
+                {% endfor %}
                 <tr>
                     <th colspan="2"></th>
                     <th colspan="2">{{ 'admin.order_edit.total.withVAT'|trans }}</th>

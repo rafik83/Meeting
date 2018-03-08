@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2016 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -14,15 +14,18 @@ use Proximum\Vimeet\Application\Command\Order\Create;
 use Proximum\Vimeet\Application\Command\Payment\Choice;
 use Proximum\Vimeet\Application\Command\Payment\ChoiceWithDeposit;
 use Proximum\Vimeet\Application\Exception\Payment\DepositNotAvailableException;
+use Proximum\Vimeet\Application\Query\Payment\PaymentConditionsViewQuery;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\Transaction;
 use Proximum\Vimeet\Domain\Money\AmountFormatter;
 use Proximum\Vimeet\Domain\Payment\DepositApplicable;
+use Proximum\Vimeet\Domain\Payment\Mode;
 use Proximum\Vimeet\Infrastructure\Payum\Paypal\CapturePayment;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Payment\PaymentChoiceType;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Payment\PaymentChoiceWithDepositType;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\ParamConverter\EventDomain;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Security\SheetVoter;
+use Proximum\Vimeet\Ui\Bundle\EventBundle\ValueResolver\UserDomain;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -34,19 +37,26 @@ class PaymentController extends Controller
      * @param Request     $request
      * @param EventDomain $eventDomain
      * @param Sheet       $sheet
+     * @param UserDomain  $userDomain
      *
      * @return Response
+     * @throws \Proximum\Vimeet\Domain\Package\Exception\MissingBillingInfoException
      */
-    public function paymentChoiceAction(Request $request, EventDomain $eventDomain, Sheet $sheet)
-    {
+    public function paymentChoiceAction(
+        Request $request,
+        EventDomain $eventDomain,
+        Sheet $sheet,
+        UserDomain $userDomain
+    ): Response {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
         $this->denyAccessUnlessGranted(SheetVoter::EDIT, $sheet);
 
         $authorize = $this->hasPackageCompletedPaymentFlash();
         $funnel    = $this->get('package.funnel.funnel_factory')->create($sheet, $request->getLocale());
+        $user = $userDomain->getUser();
 
         if ($eventDomain->getEvent() !== $sheet->getEvent()
-            || !$sheet->hasUser($this->getUser())
+            || !$sheet->hasUser($user)
             || !$sheet->getPackage()->isPassable()
         ) {
             throw $this->createNotFoundException('This page is not accessible by this user');
@@ -57,11 +67,12 @@ class PaymentController extends Controller
         }
 
         $now   = new \DateTime();
+        $this->get('cart_cleaner')->handle($sheet);
         $total = $this->get('payment.total_to_pay')->getTotal($sheet);
 
         // If nothing to pay, create the order
         if ($total <= 0) {
-            $create = new Create($sheet, $this->getUser());
+            $create = new Create($sheet, $user);
             $this->get('tactician.commandbus')->handle($create);
 
             return $this->redirectToRoute('event_order_list', [
@@ -69,12 +80,16 @@ class PaymentController extends Controller
             ]);
         }
 
-        $depositAllowed = DepositApplicable::isApplicable($eventDomain->getEvent(), $now, $total);
-        $deposit        = DepositApplicable::calculateDeposit($eventDomain->getEvent(), $now, $total);
+        $paymentConditionsView = $this
+            ->get('Proximum\Vimeet\Infrastructure\Adapter\QueryBus')
+            ->handle(new PaymentConditionsViewQuery($sheet))
+        ;
+        $depositAllowed = DepositApplicable::isApplicable($paymentConditionsView, $now, $total);
+        $deposit        = DepositApplicable::calculateDeposit($paymentConditionsView, $now, $total);
 
         //Create order from cart and redirect if total payment is negative or zero
         if ($total <= 0) {
-            $this->get('tactician.commandbus')->handle(new Create($sheet, $this->getUser()));
+            $this->get('tactician.commandbus')->handle(new Create($sheet, $user));
 
             return $this->redirectToRoute('event_order_list', [
                 'sheet' => $sheet->getId(),
@@ -82,14 +97,14 @@ class PaymentController extends Controller
         }
 
         if ($depositAllowed) {
-            $paymentChoice = new ChoiceWithDeposit($sheet, $this->getUser());
+            $paymentChoice = new ChoiceWithDeposit($sheet, $user);
             $form          = $this->createForm(PaymentChoiceWithDepositType::class, $paymentChoice, [
-                'event' => $eventDomain->getEvent(),
+                'paymentConditionsView' => $paymentConditionsView,
             ]);
         } else {
-            $paymentChoice = new Choice($sheet, $this->getUser());
+            $paymentChoice = new Choice($sheet, $user);
             $form          = $this->createForm(PaymentChoiceType::class, $paymentChoice, [
-                'event' => $eventDomain->getEvent(),
+                'paymentConditionsView' => $paymentConditionsView,
             ]);
         }
 
@@ -138,6 +153,14 @@ class PaymentController extends Controller
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
         $this->denyAccessUnlessGranted(SheetVoter::EDIT, $sheet);
+        $paymentConditionsView = $this
+            ->get('Proximum\Vimeet\Infrastructure\Adapter\QueryBus')
+            ->handle(new PaymentConditionsViewQuery($sheet))
+        ;
+
+        if (!in_array(Mode::PAYMENT_PAYPAL, $paymentConditionsView->paymentModes, true)) {
+            throw $this->createAccessDeniedException('Paypal is not accessible for this sheet');
+        }
 
         $remainingToPay = $this->get('order.balance')->getRemainingToPay($sheet);
 

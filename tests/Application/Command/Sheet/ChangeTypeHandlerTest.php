@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2016 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -14,6 +14,7 @@ use PHPUnit\Framework\TestCase;
 use Proximum\Vimeet\Application\Command\Sheet\ChangeType;
 use Proximum\Vimeet\Application\Command\Sheet\ChangeTypeHandler;
 use Proximum\Vimeet\Application\Components\Registration\StepManager;
+use Proximum\Vimeet\Application\Components\Sheet\Request\EnableDisableManager;
 use Proximum\Vimeet\Application\Event\Events;
 use Proximum\Vimeet\Application\Event\Package\MustSelectPackageEvent;
 use Proximum\Vimeet\Application\Event\Sheet\SheetChangedTypeEvent;
@@ -24,6 +25,7 @@ use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\Type;
 use Proximum\Vimeet\Domain\Model\User;
+use Proximum\Vimeet\Domain\Repository\MeetingRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\OrderRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
 use Proximum\Vimeet\Infrastructure\Adapter\DelayedEventDispatcher;
@@ -75,10 +77,14 @@ class ChangeTypeHandlerTest extends TestCase
         $translator              = $this->prophesize(TranslatorAdapter::class);
         $eventDispatcher         = $this->prophesize(DelayedEventDispatcher::class);
         $registrationStepManager = $this->prophesize(StepManager::class);
+        $meetingRepository       = $this->prophesize(MeetingRepositoryInterface::class);
+        $enableDisableManager    = $this->prophesize(EnableDisableManager::class);
 
         $handler = new ChangeTypeHandler(
             $sheetRepository->reveal(),
             $orderRepository->reveal(),
+            $meetingRepository->reveal(),
+            $enableDisableManager->reveal(),
             $translator->reveal(),
             $eventDispatcher->reveal(),
             $registrationStepManager->reveal(),
@@ -90,6 +96,8 @@ class ChangeTypeHandlerTest extends TestCase
         $expectedSheet->updateType($otherType);
 
         $sheetRepository->set($expectedSheet)->shouldBeCalled();
+        $meetingRepository->countMeetingsOfSheet($sheet)->shouldBeCalled()->willReturn(0);
+        $enableDisableManager->update($sheet, false)->shouldBeCalled();
 
         // Should be called because packages are different
         $orderRepository->findBySheet($expectedSheet)->shouldBeCalled()->willReturn([$order]);
@@ -142,10 +150,17 @@ class ChangeTypeHandlerTest extends TestCase
         $translator              = $this->prophesize(TranslatorAdapter::class);
         $eventDispatcher         = $this->prophesize(DelayedEventDispatcher::class);
         $registrationStepManager = $this->prophesize(StepManager::class);
+        $meetingRepository       = $this->prophesize(MeetingRepositoryInterface::class);
+        $enableDisableManager    = $this->prophesize(EnableDisableManager::class);
+
+        $meetingRepository->countMeetingsOfSheet($sheet)->shouldBeCalled()->willReturn(0);
+        $enableDisableManager->update($sheet, false)->shouldBeCalled();
 
         $handler = new ChangeTypeHandler(
             $sheetRepository->reveal(),
             $orderRepository->reveal(),
+            $meetingRepository->reveal(),
+            $enableDisableManager->reveal(),
             $translator->reveal(),
             $eventDispatcher->reveal(),
             $registrationStepManager->reveal(),

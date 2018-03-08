@@ -6,10 +6,18 @@
 
 {% block body_attributes 'class="grey"' %}
 
-{% form_theme searchForm '@Ui/default.html.twig' %}
+{% block header_mobile %}
+    {{ include('EventBundle::Catalog/Partial/Mobile/menu.html.twig', {searchForm: searchForm}, false) }}
+{% endblock %}
 
 {% block content %}
-    <div class="catalog catalog--advanced">
+    {% set numberOfFilterOnMobile = (searchForm.type is defined ? 1 : 0)
+        + (searchForm.categories is defined ? 1 : 0)
+        + (searchForm.availableSlot is defined ? 1 : 0)
+        + (searchForm.content is defined ? 1 : 0)
+    %}
+
+    <div class="catalog catalog--advanced {{ numberOfFilterOnMobile > 0 ? 'catalog-mobile-margin-' ~ numberOfFilterOnMobile : '' }}">
         {{ include('EventBundle:Tip:tip.html.twig', {tipTranslationViews: tipTranslationViews}) }}
         {{ include('EventBundle:Catalog:Partial/catalog.html.twig', {
             searchForm: searchForm,
@@ -20,8 +28,9 @@
             seeMoreButton: seeMoreButton,
             page: page,
             isCatalog: isCatalog,
-            tipTranslationViews: null
+            tipTranslationViews: null,
         }, false) }}
     </div>
+
     {{ include('EventBundle:MeetingRequest:modalMeetingRequest.html.twig') }}
 {% endblock %}

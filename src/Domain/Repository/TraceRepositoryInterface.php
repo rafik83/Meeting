@@ -35,4 +35,12 @@ interface TraceRepositoryInterface
      * @return Trace[]
      */
     public function getAllTracesByObject(TraceableInterface $traceable);
+
+    /**
+     * @param TraceableInterface $traceable
+     * @param string             $action
+     *
+     * @return Trace[]
+     */
+    public function getAllTracesByObjectAndAction(TraceableInterface $traceable, string $action): array;
 }

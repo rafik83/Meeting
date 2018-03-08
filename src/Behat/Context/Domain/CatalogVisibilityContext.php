@@ -41,9 +41,63 @@ class CatalogVisibilityContext implements Context
             throw new \InvalidArgumentException('Missing Event');
         }
 
-        $catalogVisibility = $this->catalogVisibilityContextProxy->getCatalogVisibilityManager()->create($event);
+        $catalogVisibility = $this->catalogVisibilityContextProxy
+            ->getCatalogVisibilityManager()
+            ->create($event);
 
         $this->catalogVisibilityContextProxy->getStorage()->set('catalogVisibility', $catalogVisibility);
 
+    }
+
+    /**
+     * @Given /^Allow all types to be visible on catalog visibility$/
+     */
+    public function allowAllTypesToBeVisible()
+    {
+        $catalogVisibility = $this->catalogVisibilityContextProxy->getStorage()->get('catalogVisibility');
+
+        if ($catalogVisibility === null) {
+            throw new \InvalidArgumentException('Missing catalog visibility');
+        }
+
+        $this->catalogVisibilityContextProxy
+            ->getCatalogVisibilityManager()
+            ->allowAllTypesToBeVisible($catalogVisibility);
+    }
+
+    /**
+     * @Given /^the catalog visibility registration url is "(?P<registrationUrl>[^"]+)"$/
+     * @param string $registrationUrl
+     */
+    public function setCatalogVisibilityRegistrationUrl(string $registrationUrl)
+    {
+        $catalogVisibility = $this->catalogVisibilityContextProxy->getStorage()->get('catalogVisibility');
+
+        if ($catalogVisibility === null) {
+            throw new \InvalidArgumentException('Missing catalog visibility');
+        }
+
+        $this->catalogVisibilityContextProxy
+            ->getCatalogVisibilityManager()
+            ->setRegistrationUrl($catalogVisibility, $registrationUrl);
+    }
+
+    /**
+     * @Given /^this type is visible in catalog$/
+     */
+    public function typeIsVisibleInCatalog()
+    {
+        $type              = $this->catalogVisibilityContextProxy->getStorage()->get('type');
+        $catalogVisibility = $this->catalogVisibilityContextProxy->getStorage()->get('catalogVisibility');
+
+        if (null === $type) {
+            throw new \InvalidArgumentException('Missing Type');
+        }
+
+        if (null === $catalogVisibility) {
+            throw new \InvalidArgumentException('Missing CatalogVisibility');
+        }
+
+        $this->catalogVisibilityContextProxy->getCatalogVisibilityManager()->setVisibleType($catalogVisibility, $type);
     }
 }

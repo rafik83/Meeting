@@ -1,5 +1,7 @@
 Proximum\Vimeet\Application\Command\Happening\Create:
     properties:
+        category:
+            - NotNull: ~
         translations:
             - All:
                 - Collection:
@@ -20,3 +22,7 @@ Proximum\Vimeet\Application\Command\Happening\Create:
             - Type: int
             - Range:
                 min: 0
+        invitationCode:
+            - Length:
+                min: 4
+                minMessage: "validators.invitationCode.length.min"

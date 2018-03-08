@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2016 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -33,7 +33,8 @@ class HappeningViewQueryHandlerTest extends TestCase
             $event,
             $beginHappening1,
             $endHappening1,
-            $categoryH1
+            $categoryH1,
+            []
         );
         $happening1->setTranslation(new Happening\HappeningTranslation($happening1, 'fr', 'title', 'description'));
 

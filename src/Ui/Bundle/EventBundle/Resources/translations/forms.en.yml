@@ -28,14 +28,32 @@ form.change_password_user.children.currentPassword.label: 'Current password'
 form.change_password_user.children.plainPassword.children.first.label: 'New password'
 form.change_password_user.children.plainPassword.children.second.label: 'Confirm new password'
 form.change_password_user.children.submit.label: Submit
+form.create_unavailability.children.participants.label: Unavailable
 form.email.placeholder: 'Enter your email'
+form.group.participant.submit: Save
 form.login.children.password.placeholder: Password
 form.login.children.rememberMe.label: 'Keep me logged in'
+form.multiple_sheet_request_filter_request_type.children.otherSheet.label: 'Other profile'
+form.multiple_sheet_request_filter_request_type.children.sheetConcerned.label: 'Selected profile'
+form.multiple_sheet_request_filter_request_type.children.state.filter.all: All
+form.multiple_sheet_request_filter_request_type.children.state.filter.approved: Approved
+form.multiple_sheet_request_filter_request_type.children.state.filter.planned: Planned
+form.multiple_sheet_request_filter_request_type.children.state.filter.refused: Refused
+form.multiple_sheet_request_filter_request_type.children.state.filter.sent: Pending
+form.multiple_sheet_request_filter_request_type.children.state.label: Status
+form.multiple_sheet_request_filter_request_type.children.submit.label: Filter
+form.multiple_sheet_request_filter_request_type.children.type.filter.proposition: 'My received proposals'
+form.multiple_sheet_request_filter_request_type.children.type.filter.request: 'My requests'
+form.multiple_sheet_request_filter_request_type.children.type.label: Type
+form.multiple_sheet_request_filter_request_type.children.user.noPreference.label: 'No preferences'
 form.nomenclature_data.children.items.label: Select
 form.nomenclature_data.children.submit.label: Save
 form.package_summary_promotion_code.children.submit.label: Validate
 form.package_summary_promotion_code.placeholder: 'Enter promotional code'
 form.package_summary_terms_of_sale.children.termsOfSale.label: 'I agree and accept the terms and the general sales conditions relating to this participation package.'
+form.participate.children.participants.unavailable: Unavailable
+form.participate.children.question.label: 'Ask a question to the speakers to prepare the workshop'
+form.participate.children.submit.label: Attend
 form.participate.children.submitUpdate.label: Edit
 form.payment_choice_with_deposit.children.deposit.label: 'Choose whether to pay the full or a deposit'
 form.payment_choice_with_deposit.children.depositMode.deposit: Deposit
@@ -45,7 +63,7 @@ form.payment_choice.children.mode.label: 'Choose your mode of payment'
 form.payment_choice.children.paymentMode.bank_card: 'Bank card'
 form.payment_choice.children.paymentMode.bank_check: Cheque
 form.payment_choice.children.paymentMode.bank_transfer: Transfer
-form.payment_choice.children.paymentMode.paypal: 'Paypal or Bank card'
+form.payment_choice.children.paymentMode.paypal: 'Bank card or Paypal'
 form.register.newUser.password.placeholder: 'Choose your password'
 form.register.newUser.repeatedPassword.placeholder: 'confirm password'
 form.search.localization.search.placeholder: '69, Lyon, France'
@@ -58,13 +76,18 @@ form.search.meeting.state.refused: Refused
 form.search.meeting.state.sent: 'Your pending requests'
 form.search.meeting.type.label: 'My meetings'
 form.search.objective.label: Objectives
-form.search.objective.need: 'Answer to my needs'
-form.search.objective.supply: 'To look for my offers'
+form.search.objective.need: 'Meet my needs'
+form.search.objective.supply: 'Search in my offers'
 form.search.orderBy.alphabetical: 'Alphabetical order'
+form.search.orderBy.createdAt: 'Chronological order'
 form.search.orderBy.dateAddedToCatalog: 'Recent registrations'
+form.search.orderBy.label: 'SORT BY'
 form.search.orderBy.relevance: Relevance
-form.search.position.label: Functions
+form.search.position.label: 'Job title'
 form.search.type.label: Participants
+form.send_code.children.accepted.label: 'I agree to receive notifications during the event'
+form.send_code.children.phone.label: 'My mobile number'
+form.send_code.children.submit.label: Save
 form.sheet_button_link_data.children.submit.label: Save
 form.sheet_button_link_data.children.url.label: URL
 form.sheet_editable_text_data.children.content.label: Text
@@ -72,11 +95,17 @@ form.sheet_editable_text_data.children.submit.label: Save
 form.sheet_editable_text_data.data.maxLength.translations.plural: 'characters remaining'
 form.sheet_editable_text_data.data.maxLength.translations.reached: 'Maximum number of characters reached'
 form.sheet_editable_text_data.data.maxLength.translations.singular: 'characters remaining'
+form.sheet_group_create_sheet.children.sheet.label: 'Select the profile to duplicate'
+form.sheet_group_create_sheet.children.submit.label: 'Create profile'
+form.sheet_group_create_sheet.children.title.label: 'Title of the new profile'
 form.sheet_image_data.children.selectedProduct.label: 'Related options'
 form.sheet_image_data.children.submit.label: save
 form.sheet_item_collection_data.children.items.label_add: Add
 form.sheet_item_collection_data.children.submit.label: Save
 form.sheet_media_collection_data.children.medias.label_add: Add
+form.sheet_media_collection_data.children.medias.prototype.children.type.label: Type
 form.sheet_media_collection_data.children.submit.label: Save
+form.user_availability_confirmation.children.confirm.label: 'Confirm your avaibilities'
+form.user_event_phone_validate_code.children.confirm.label: Confirmed
 gender.man: Mr
 gender.woman: Mrs

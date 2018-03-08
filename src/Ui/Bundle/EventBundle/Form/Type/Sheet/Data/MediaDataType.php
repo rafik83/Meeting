@@ -30,7 +30,7 @@ class MediaDataType extends AbstractType
     {
         $builder
             ->add('title', TextType::class, ['placeholder' => $options['placeholder']])
-            ->add('url', UrlType::class, ['placeholder' => 'http://'])
+            ->add('url', UrlType::class, ['placeholder' => 'https://'])
             ->add('type', ChoiceType::class, [
                 'expanded' => true,
                 'choices'  => [

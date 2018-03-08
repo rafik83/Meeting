@@ -15,6 +15,11 @@
 <div class="modal-body">
     {{ form_errors(form) }}
 
+    {% if form.invitationCode is defined %}
+        <p>{{ 'event.happening.invitationCode.label'|trans }}</p>
+        {{ form_row(form.invitationCode) }}
+    {% endif %}
+
     {% if form.participants is defined %}
         {{ form_label(form.participants) }}
         {{ form_errors(form.participants) }}

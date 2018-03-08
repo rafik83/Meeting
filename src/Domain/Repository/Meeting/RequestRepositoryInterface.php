@@ -12,6 +12,7 @@ namespace Proximum\Vimeet\Domain\Repository\Meeting;
 
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Meeting\Request;
+use Proximum\Vimeet\Domain\Model\MeetingSlot;
 use Proximum\Vimeet\Domain\Model\PaginatedResult;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Sheet;
@@ -77,17 +78,25 @@ interface RequestRepositoryInterface
     /**
      * @param Sheet $sheet
      * @param array $filters
+     * @param array $slotsToFilter
      *
      * @return Request[]
      */
-    public function getAllRequestBySheet(Sheet $sheet, array $filters = []);
+    public function getAllRequestBySheet(Sheet $sheet, array $filters = [], array $slotsToFilter = []): array;
+
+    /**
+     * @param Sheet $sheet
+     *
+     * @return Request[]
+     */
+    public function getApprovedAndRefusedRequestBySheet(Sheet $sheet): array;
 
     /**
      * @param Event $event
      *
      * @return int
      */
-    public function countAllByEvent(Event $event);
+    public function countAllByEvent(Event $event): int;
 
     /**
      * @param Event $event
@@ -106,6 +115,24 @@ interface RequestRepositoryInterface
      * @return PaginatedResult
      */
     public function findByEventAndFilterByState(Event $event, $page, $limit, $locale, array $filter = []);
+
+    /**
+     * @param Event $event
+     * @param int   $page
+     * @param int   $limit
+     *
+     * @return Request[]
+     */
+    public function findByEventWithHydratationOfElement(Event $event, int $page, int $limit): array;
+
+    /**
+     * This method is used to hydrate the participants of the requests to avoid multiple calls
+     *
+     * @param Request[] $requests
+     *
+     * @return Request[]
+     */
+    public function hydrateParticipants(array $requests): array;
 
     /**
      * @param Event $event
@@ -180,10 +207,11 @@ interface RequestRepositoryInterface
     /**
      * @param Sheet $sheet
      * @param array $filters
+     * @param array $slotsToFilter
      *
      * @return int
      */
-    public function countSheetState(Sheet $sheet, array $filters = []);
+    public function countSheetState(Sheet $sheet, array $filters = [], array $slotsToFilter = []);
 
     /**
      * @param Sheet $sheet
@@ -227,6 +255,29 @@ interface RequestRepositoryInterface
      * @return int
      */
     public function countPendingPropositionReceivedBySheet(Sheet $sheet, $attending = true);
+
+    /**
+     * @param Sheet $sheet
+     *
+     * @return Request[]
+     */
+    public function getPendingPropositionReceivedBySheet(Sheet $sheet);
+
+    /**
+     * @param Sheet $toSheet
+     * @param int[] $slotIds array of MeetingSlot id
+     *
+     * @return int
+     */
+    public function countPendingPropositionReceivedBySheetWithAvailableFromSheet(Sheet $toSheet, array $slotIds): int;
+
+    /**
+     * @param Sheet $toSheet
+     * @param array $slotIds
+     *
+     * @return int
+     */
+    public function countPendingPropositionReceivedBySheetWithAvailableToSheet(Sheet $toSheet, array $slotIds): int;
 
     /**
      * @param Sheet $sheet

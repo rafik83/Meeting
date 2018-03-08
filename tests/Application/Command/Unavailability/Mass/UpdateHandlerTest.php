@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2016 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -43,7 +43,6 @@ class UpdateHandlerTest extends TestCase
         $existing->createTranslation('fr', 'vieux titre', 'vieille description');
         $existing->createTranslation('en', 'old title', 'old description');
 
-
         // Expected
         $expected = new Mass(
             $event,
@@ -56,13 +55,13 @@ class UpdateHandlerTest extends TestCase
         $expected->createTranslation('fr', 'titre', 'description');
         $expected->createTranslation('en', 'title', 'description');
 
-
         // Mock
         $massRepository = $this->prophesize(MassRepositoryInterface::class);
         $massRepository->update($expected)->shouldBeCalled();
 
         $jobQueue = $this->prophesize(JobQueueInterface::class);
         $jobQueue->aggregateEventUsersFullUnavailability($event)->shouldBeCalled();
+        $jobQueue->aggregateAvailableSlot($event)->shouldBeCalled();
 
         // Create
         $update               = new Update($existing);
@@ -79,7 +78,7 @@ class UpdateHandlerTest extends TestCase
             'en' => [
                 'title'       => 'title',
                 'description' => 'description',
-            ]
+            ],
         ];
 
         // Handler
@@ -109,7 +108,6 @@ class UpdateHandlerTest extends TestCase
         $existing->createTranslation('fr', 'vieux titre', 'vieille description');
         $existing->createTranslation('en', 'old title', 'old description');
 
-
         // Expected
         $expected = new Mass(
             $event,
@@ -128,6 +126,7 @@ class UpdateHandlerTest extends TestCase
 
         $jobQueue = $this->prophesize(JobQueueInterface::class);
         $jobQueue->aggregateEventUsersFullUnavailability($event)->shouldNotBeCalled();
+        $jobQueue->aggregateAvailableSlot($event)->shouldNotBeCalled();
 
         // Create
         $update               = new Update($existing);
@@ -144,7 +143,7 @@ class UpdateHandlerTest extends TestCase
             'en' => [
                 'title'       => 'title',
                 'description' => 'description',
-            ]
+            ],
         ];
 
         // Handler
@@ -174,7 +173,6 @@ class UpdateHandlerTest extends TestCase
         $existing->createTranslation('fr', 'vieux titre', 'vieille description');
         $existing->createTranslation('en', 'old title', 'old description');
 
-
         // Expected
         $expected = new Mass(
             $event,
@@ -193,6 +191,7 @@ class UpdateHandlerTest extends TestCase
 
         $jobQueue = $this->prophesize(JobQueueInterface::class);
         $jobQueue->aggregateEventUsersFullUnavailability($event)->shouldBeCalled();
+        $jobQueue->aggregateAvailableSlot($event)->shouldBeCalled();
 
         // Create
         $update               = new Update($existing);
@@ -209,7 +208,7 @@ class UpdateHandlerTest extends TestCase
             'en' => [
                 'title'       => 'title',
                 'description' => 'description',
-            ]
+            ],
         ];
 
         // Handler
@@ -239,7 +238,6 @@ class UpdateHandlerTest extends TestCase
         $existing->createTranslation('fr', 'vieux titre', 'vieille description');
         $existing->createTranslation('en', 'old title', 'old description');
 
-
         // Expected
         $expected = new Mass(
             $event,
@@ -257,13 +255,13 @@ class UpdateHandlerTest extends TestCase
         $expected->createTranslation('fr', 'titre', 'description');
         $expected->createTranslation('en', 'title', 'description');
 
-
         // Mock
         $massRepository = $this->prophesize(MassRepositoryInterface::class);
         $massRepository->update($expected)->shouldBeCalled();
 
         $jobQueue = $this->prophesize(JobQueueInterface::class);
         $jobQueue->aggregateEventUsersFullUnavailability($event)->shouldBeCalled();
+        $jobQueue->aggregateAvailableSlot($event)->shouldBeCalled();
 
         // Create
         $update               = new Update($existing);
@@ -280,7 +278,7 @@ class UpdateHandlerTest extends TestCase
             'en' => [
                 'title'       => 'title',
                 'description' => 'description',
-            ]
+            ],
         ];
         $update->dispatch     = true;
         $update->timeSlots    = [

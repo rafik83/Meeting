@@ -1,6 +1,16 @@
+{% form_theme searchForm '@Ui/default.html.twig' %}
+
 {{ form_start(searchForm) }}
 
 <div class="catalog__research hidden-xs">
+    {% if searchForm.availableSlot is defined %}
+        <div class="filter">
+            <h3>{{ form_label(searchForm.availableSlot) }}</h3>
+            {{ form_errors(searchForm.availableSlot) }}
+            {{ form_widget(searchForm.availableSlot) }}
+        </div>
+    {% endif %}
+
     {% if searchForm.categories is defined %}
         {{ include('EventBundle:Catalog:Partial/checkboxes.html.twig', { form: searchForm.categories, choices: categoryViews }, false) }}
     {% endif %}
@@ -11,6 +21,7 @@
 
     {% if searchForm.objective is defined %}
         <div class="filter">
+            {# objective is the only field not customizable by admin, so let the |trans #}
             <h3>{{ searchForm.objective.vars.label|trans({}, searchForm.objective.vars.translation_domain) }}</h3>
 
             {{ form_widget(searchForm.objective) }}
@@ -27,7 +38,7 @@
 
     {% if searchForm.localization is defined %}
         <div class="filter">
-            <h3>{{ searchForm.localization.vars.label|trans({}, searchForm.localization.vars.translation_domain) }}</h3>
+            <h3>{{ searchForm.localization.vars.label }}</h3>
             {{ form_widget(searchForm.localization) }}
 
             <select multiple
@@ -46,7 +57,7 @@
 
     {% if searchForm.content is defined %}
         <div class="filter">
-            <h3>{{ searchForm.content.vars.label|trans({}, searchForm.content.vars.translation_domain) }}</h3>
+            <h3>{{ searchForm.content.vars.label }}</h3>
 
             {{ form_widget(searchForm.content) }}
 
@@ -63,42 +74,24 @@
             </select>
         </div>
     {% endif %}
-
-    {#
-    <div class="actions">
-        <ul>
-            <li><a href=""><i class="icon-Rechercher"></i> <span>Enregistrer la recherche</span></a></li>
-            <li><a href=""><i class="icon-Retard"></i> <span>Créer une alerte</span></a></li>
-            <li><a href=""><i class="icon-Inserer_2"></i> <span>Format de données .csv</span></a></li>
-            <li><a href=""><i class="icon-Document_1"></i> <span>Fiches complètes .pdf</span></a></li>
-        </ul>
-    </div>
-    #}
 </div>
 
 {{ include('EventBundle:Tip:tip.html.twig', {tipTranslationViews: tipTranslationViews}) }}
 
 <div class="catalog__filters">
-
     <div class="select-all">
-        <span class="total-result">({{ total }})</span>
-        {#
-        <label class="checkbox-inline" for="select-all-catalog">
-            <input type="checkbox" id="select-all-catalog">
-            Tout sélectionner (40)
-        </label>
-        #}
+        <span class="total-result" title="{{ total }}">
+            {{ 'catalog.sheet.result.total'|transchoice(total, {'%total%': total}) }}
+        </span>
+        {% if total > 0 %}
+        <a href="{{ path('event_catalog_export', {'sheet': sheet.id}) ~ '?' ~ app.request.query.all|url_encode }}" class="btn btn-link text-right">
+            <i class="glyphicon glyphicon-download-alt"></i> {{ 'catalog.sheet.export.csv'|trans }}
+        </a>
+        {% endif %}
     </div>
 
     <div class="sort">
         {{ include('EventBundle:Catalog:Partial/order-by-form.html.twig', { form: searchForm.orderBy }, false) }}
-
-        {#
-        <div class="btn-group" role="group">
-            <button type="button" class="btn btn-default active"><i class="icon-Mosaique"></i></button>
-            <button type="button" class="btn btn-default"><i class="icon-Liste"></i></button>
-        </div>
-        #}
     </div>
 </div>
 

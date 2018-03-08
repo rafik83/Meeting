@@ -12,7 +12,6 @@ namespace Proximum\Vimeet\Behat\Context\Domain\Proxy;
 
 use Proximum\Vimeet\Behat\Context\Storage\StorageInterface;
 use Proximum\Vimeet\Behat\Service\Manager\CatalogVisibilityManager;
-use Proximum\Vimeet\Behat\Service\Manager\Event\AccessManager;
 
 interface CatalogVisibilityContextProxyInterface
 {

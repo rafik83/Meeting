@@ -180,7 +180,7 @@ admin_event_payment_conditions:
     requirements:
         event: \d+
     methods: [GET, POST]
-    defaults: { _controller: AdminBundle:Event:paymentConditions }
+    defaults: { _controller: Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Event\PaymentConditionsAction }
 
 admin_event_configure_dates:
     path: /event/{event}/dates
@@ -249,7 +249,7 @@ admin_type_list:
     requirements:
         event: \d+
     methods: [GET]
-    defaults: { _controller: AdminBundle:Type:list }
+    defaults: { _controller: Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Type\ListAction }
 
 admin_type_create:
     path: /event/{event}/type/create
@@ -257,6 +257,7 @@ admin_type_create:
         event: \d+
     methods: [GET, POST]
     defaults: { _controller: AdminBundle:Type:create }
+
 admin_type_update:
     path: /event/{event}/type/{type}/update
     requirements:
@@ -264,13 +265,23 @@ admin_type_update:
         type: \d+
     methods: [GET, POST]
     defaults: { _controller: AdminBundle:Type:update }
+
 admin_type_remove:
-    path:  /event/{event}/type/{type}/update
+    path:  /event/{event}/type/{type}/remove
     requirements:
         event: \d+
         type: \d+
     methods: [DELETE]
-    defaults: { _controller: AdminBundle:Type:remove }
+    defaults: { _controller: Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Type\RemoveAction }
+
+admin_type_payment_conditions:
+    path: /event/{event}/type/{type}/payment-conditions
+    requirements:
+        event: \d+
+        type: \d+
+    methods: [GET, POST]
+    defaults: { _controller: Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Type\PaymentConditionsAction }
+
 #
 # Category
 #
@@ -328,13 +339,6 @@ admin_agenda_spot_detail:
         spot: \d+
     methods: [GET]
     defaults: { _controller: AdminBundle:Agenda/Agenda:spotDetail }
-
-admin_agenda_sheets_indicators:
-    path: /event/{event}/agenda/sheets/indicators
-    requirements:
-        event: \d+
-    methods: [GET]
-    defaults: { _controller: AdminBundle:Agenda/Agenda:indicators }
 
 admin_agenda_sheet:
     path: /event/{event}/agenda/sheet/{sheet}
@@ -583,6 +587,28 @@ admin_spot_update_un_visio:
     methods: [GET, POST]
     defaults: { _controller: AdminBundle:Spot:unVisio }
 
+admin_spot_import:
+    path: /event/{event}/spot/import
+    requirements:
+        event: \d+
+    methods: [GET, POST]
+    defaults: { _controller: AdminBundle:Spot\Import:import }
+
+admin_spot_import_sample:
+    path: /event/{event}/spot/sample
+    requirements:
+        event: \d+
+    methods: [GET]
+    defaults: { _controller: AdminBundle:Spot\Import:getSample }
+
+admin_spot_import_confirm:
+    path: /event/{event}/spot/{importedFile}/confirm
+    requirements:
+        event: \d+
+        importedFile: \d+
+    methods: [GET, POST]
+    defaults: { _controller: AdminBundle:Spot\Import:confirm }
+
 #
 # Meeting Request
 #
@@ -617,6 +643,14 @@ admin_meeting_request_lock_update:
     methods: [GET, POST]
     defaults: { _controller: AdminBundle:MeetingRequest:lockMeetingRequest }
 
+admin_meeting_request_export:
+    path: /event/{event}/meeting-request/export
+    methods: [GET]
+    requirements:
+        event: \d+
+    defaults: { _controller: AdminBundle:MeetingRequest/Export:export }
+
+
 #
 # Sheet
 #
@@ -632,7 +666,7 @@ admin_sheet_details:
         event: \d+
         sheet: \d+
     methods: [GET, POST]
-    defaults: { _controller: AdminBundle:Sheet:details }
+    defaults: { _controller: Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Sheet\DetailAction }
 admin_sheet_batch:
     path: /event/{event}/sheet/batch
     requirements:
@@ -769,20 +803,22 @@ admin_happening_list:
     requirements:
         event: \d+
     methods: [GET]
-    defaults: { _controller: AdminBundle:Happening:list }
+    defaults: { _controller: Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Happening\ListAction }
+
 admin_happening_create:
     path: /event/{event}/happening/create
     requirements:
         event: \d+
     methods: [GET, POST]
-    defaults: { _controller: AdminBundle:Happening:create }
+    defaults: { _controller: Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Happening\CreateAction }
+
 admin_happening_update:
     path: /event/{event}/happening/{happening}/update
     requirements:
         event: \d+
         happening: \d+
     methods: [GET, POST]
-    defaults: { _controller: AdminBundle:Happening:update }
+    defaults: { _controller: Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Happening\UpdateAction }
 
 #
 # Happening Category
@@ -792,26 +828,29 @@ admin_happening_category_list:
     requirements:
         event: \d+
     methods: [GET]
-    defaults: { _controller: AdminBundle:Happening:listCategory }
+    defaults: { _controller: Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Happening\Category\ListAction }
+
 admin_happening_category_create:
     path: /event/{event}/happening/category/create
     requirements:
         event: \d+
     methods: [GET, POST]
-    defaults: { _controller: AdminBundle:Happening:createCategory }
+    defaults: { _controller: Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Happening\Category\CreateAction }
+
 admin_happening_category_update:
     path: /event/{event}/happening/category/{category}/update
     requirements:
         event: \d+
         category: \d+
     methods: [GET, POST]
-    defaults: { _controller: AdminBundle:Happening:updateCategory }
+    defaults: { _controller: Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Happening\Category\UpdateAction }
+
 admin_happening_export:
     path: /event/{event}/happening/export
     requirements:
         event: \d+
     methods: [GET]
-    defaults: { _controller: AdminBundle:Happening:export }
+    defaults: { _controller: Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Happening\ExportAction }
 
 #
 # Happening Speaker
@@ -857,13 +896,31 @@ admin_template_registration_list:
     path: /template/registration
     defaults: { _controller: AdminBundle:RegistrationTemplate:list }
     methods: [GET]
-admin_template_registration_builder:
-    path: /template/registration/{template}/{locale}
+
+admin_template_registration_build:
+    path: /template/registration/{registrationTemplate}/{locale}/build
     methods: [GET, POST]
-    defaults: { _controller: AdminBundle:RegistrationTemplate:builder }
+    defaults: { _controller: Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\RegistrationTemplate\BuildAction }
     requirements:
-        template: \d+
+        registrationTemplate: \d+
         locale: '[a-z]{2}(_[A-Z]{2})?'
+
+admin_template_registration_save:
+    path: /template/registration/{registrationTemplate}/{locale}/save
+    defaults: { _controller: Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\RegistrationTemplate\SaveAction }
+    methods: [POST]
+    requirements:
+        registrationTemplate: \d+
+        locale: '[a-z]{2}(_[A-Z]{2})?'
+
+admin_template_registration_json:
+    path: /template/registration/{registrationTemplate}/{locale}/json
+    methods: [GET, POST]
+    defaults: { _controller: AdminBundle:RegistrationTemplate:updateJson }
+    requirements:
+        registrationTemplate: \d+
+        locale: '[a-z]{2}(_[A-Z]{2})?'
+
 admin_template_registration_add_locale:
     path: /template/registration/{template}/locale
     defaults: { _controller: AdminBundle:RegistrationTemplate:addLocale }
@@ -881,7 +938,7 @@ admin_package_list:
 
 admin_package_update:
     path: /template/package/{package}/update
-    defaults: { _controller: AdminBundle:Package:update }
+    defaults: { _controller: Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Package\UpdateAction }
     methods: [GET, POST]
     requirements:
         package: \d+
@@ -937,6 +994,21 @@ admin_template_sheet_update:
     requirements:
         template: \d+
         locale: '[a-z]{2}(_[A-Z]{2})?'
+
+admin_template_sheet_print_template_builder:
+    path: /template/sheet/{template}/print
+    defaults: { _controller: AdminBundle:Template\Sheet\PrintTemplate:builder }
+    methods: [GET]
+    requirements:
+        template: \d+
+
+admin_template_sheet_print_template_save:
+    path: /template/sheet/{template}/print/save
+    defaults: { _controller: AdminBundle:Template\Sheet\PrintTemplate:save }
+    methods: [POST]
+    requirements:
+        template: \d+
+
 #
 # Product
 #
@@ -1065,27 +1137,27 @@ admin_schedule_slots:
         event: \d+
 admin_schedule_slots_generate:
     path: /event/{event}/schedule/slots/generate
-    defaults: { _controller: AdminBundle:Schedule:generate }
+    defaults: { _controller: AdminBundle:Schedule/Slot:generate }
     methods: [GET, POST]
     requirements:
         event: \d+
 admin_schedule_slot_lock:
     path: /event/{event}/schedule/slot/{meetingSlot}/lock
-    defaults: { _controller: AdminBundle:Schedule:lock }
+    defaults: { _controller: AdminBundle:Schedule/Slot:lock }
     methods: [GET, POST]
     requirements:
         event: \d+
         meetingSlot: \d+
 admin_schedule_slot_unlock:
     path: /event/{event}/schedule/slot/{meetingSlot}/unlock
-    defaults: { _controller: AdminBundle:Schedule:unlock }
+    defaults: { _controller: AdminBundle:Schedule/Slot:unlock }
     methods: [GET, POST]
     requirements:
         event: \d+
         meetingSlot: \d+
 admin_schedule_slot_remove:
     path: /event/{event}/schedule/slot/{meetingSlot}/remove
-    defaults: { _controller: AdminBundle:Schedule:remove }
+    defaults: { _controller: AdminBundle:Schedule/Slot:remove }
     methods: [DELETE]
     requirements:
         event: \d+
@@ -1093,8 +1165,15 @@ admin_schedule_slot_remove:
 
 admin_schedule_days:
     path: /event/{event}/schedule/days
-    defaults: { _controller: AdminBundle:Schedule:day }
+    defaults: { _controller: AdminBundle:Schedule/Day:day }
     methods: [GET, POST]
+    requirements:
+        event: \d+
+
+admin_update_event_dates_to_current_date:
+    path: /event/{event}/dates/update
+    defaults: { _controller: AdminBundle:EventDates:updateEventDates }
+    methods: [GET]
     requirements:
         event: \d+
 
@@ -1321,11 +1400,12 @@ admin_planner:
     defaults: { _controller: AdminBundle:Planner/Planner:index }
 
 admin_export_planner_data:
-    path: /event/{event}/planner/export
+    path: /event/{event}/planner/export/{mode}
     requirements:
         event: \d+
+        mode: manual|auto
     methods: [GET, POST]
-    defaults: { _controller: AdminBundle:Planner/Export:export }
+    defaults: { _controller: AdminBundle:Planner/Export:export, mode: manual }
 
 admin_import_planner_data:
     path: /event/{event}/planner/import
@@ -1341,6 +1421,14 @@ admin_planner_export_file:
         file: \d+
     methods: [GET]
     defaults: { _controller: AdminBundle:Planner/Export:exportFile }
+
+admin_sheet_print_pdf:
+    path: /event/{event}/sheet/generate-pdf/{hash}z{file}
+    requirements:
+        event: \d+
+        file: \d+
+    methods: [GET]
+    defaults: { _controller: AdminBundle:Sheet\Print:generate }
 
 #
 # Invoice
@@ -1403,7 +1491,7 @@ admin_sheets_group_list:
     requirements:
         event: \d+
     methods: [GET]
-    defaults: { _controller: AdminBundle:SheetsGroup/Group:list }
+    defaults: { _controller: Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\SheetsGroup\ListAction }
 
 admin_sheets_group_pre_create:
     path: /event/{event}/sheets-group/pre-create
@@ -1445,19 +1533,26 @@ admin_sheet_attend:
 admin_tip_list:
     path: /tip/list
     methods: [GET]
-    defaults: { _controller: AdminBundle:Tip/Tip:list }
+    defaults: { _controller: Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Tip\ListAction }
 
 admin_tip_create:
     path: /tip/create
     methods: [GET, POST]
-    defaults: { _controller: AdminBundle:Tip/Tip:create }
+    defaults: { _controller: Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Tip\CreateAction }
 
 admin_tip_update:
     path: /tip/{tip}/update
     requirements:
         tip: \d+
     methods: [GET, POST]
-    defaults: { _controller: AdminBundle:Tip/Tip:update }
+    defaults: { _controller: Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Tip\UpdateAction }
+
+admin_tip_remove:
+    path: /tip/{tip}/remove
+    requirements:
+        tip: \d+
+    methods: [DELETE]
+    defaults: { _controller: Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Tip\RemoveAction }
 
 #
 # Tip on event
@@ -1467,14 +1562,14 @@ admin_tip_event_list:
     methods: [GET]
     requirements:
         event: \d+
-    defaults: { _controller: AdminBundle:Tip/TipEvent:list }
+    defaults: { _controller: Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Tip\Event\ListAction }
 
 admin_tip_event_affect:
     path: /event/{event}/tip/affect
     methods: [GET, POST]
     requirements:
         event: \d+
-    defaults: { _controller: AdminBundle:Tip/TipEvent:affect }
+    defaults: { _controller: Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Tip\Event\AffectAction }
 
 admin_tip_event_remove:
     path: /event/{event}/tip/{tip}/remove/
@@ -1482,7 +1577,7 @@ admin_tip_event_remove:
     requirements:
         event: \d+
         tip: \d+
-    defaults: { _controller: AdminBundle:Tip/TipEvent:remove }
+    defaults: { _controller: Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Tip\Event\RemoveAction }
 
 admin_tip_event_preview:
     path: /tip/{tip}/preview/{locale}
@@ -1490,7 +1585,22 @@ admin_tip_event_preview:
     requirements:
         tip: \d+
         locale: \w+
-    defaults: { _controller: AdminBundle:Tip/TipEvent:preview }
+    defaults: { _controller: Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Tip\PreviewAction }
+
+admin_tip_event_create:
+    path: /event/{event}/tip/create
+    methods: [GET, POST]
+    requirements:
+        event: \d+
+    defaults: { _controller: Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Tip\Event\CreateAction }
+
+admin_tip_event_update:
+    path: /event/{event}/tip/{tip}/update
+    methods: [GET, POST]
+    requirements:
+        event: \d+
+        tip: \d+
+    defaults: { _controller: Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Tip\Event\UpdateAction }
 
 #
 # Event Archive
@@ -1509,3 +1619,66 @@ admin_event_order_invoice_find:
     path: /event/order-invoice/find
     methods: [GET, POST]
     defaults: { _controller: AdminBundle:Event/OrderInvoiceFinder:find }
+
+#
+# Extra Parameter
+#
+admin_event_extra_parameter_list:
+    path: /event/{event}/extra/parameter/list
+    methods: [GET]
+    requirements:
+        event: \d+
+    defaults: { _controller: AdminBundle:Event/ExtraParameter/List:list }
+
+admin_event_extra_parameter_create:
+    path: /event/{event}/extra/parameter/create
+    methods: [GET, POST]
+    requirements:
+        event: \d+
+    defaults: { _controller: AdminBundle:Event/ExtraParameter/Create:create }
+
+admin_event_extra_parameter_update:
+    path: /event/{event}/extra/parameter/{extraParameter}/update
+    methods: [GET, POST]
+    requirements:
+        event: \d+
+        extraParameter: \d+
+    defaults: { _controller: AdminBundle:Event/ExtraParameter/Update:update }
+
+admin_event_extra_parameter_remove:
+    path: /event/{event}/extra/parameter/{extraParameter}/remove
+    methods: [DELETE]
+    requirements:
+        event: \d+
+        extraParameter: \d+
+    defaults: { _controller: AdminBundle:Event/ExtraParameter/Remove:remove }
+
+#
+# User Event Token
+#
+admin_sheet_participant_update_agenda_confirmation:
+    path: /event/{event}/sheet/{sheet}/details/participant/{participant}/agenda/confirmation/update
+    requirements:
+        event: \d+
+        sheet: \d+
+        participant: \d+
+    methods: [GET, POST]
+    defaults: { _controller: AdminBundle:Participant\AgendaConfirmation:updateAgendaConfirmation }
+
+#
+# Reindex all events
+#
+admin_elasticsearch_index:
+    path: /event/elasticsearch/index
+    methods: [GET, POST]
+    defaults: { _controller: Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Event\IndexAction }
+
+#
+# Reindex sheets
+#
+admin_event_sheet_index:
+    path: /event/{event}/sheets/index
+    requirements:
+        event: \d+
+    methods: [GET, POST]
+    defaults: { _controller: Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Event\Sheet\IndexAction }

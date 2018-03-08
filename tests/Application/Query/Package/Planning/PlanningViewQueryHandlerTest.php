@@ -3,13 +3,14 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2016 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
 
 namespace Proximum\Vimeet\Tests\Application\Query\Package\Planning;
 
+use PHPUnit\Framework\TestCase;
 use Proximum\Vimeet\Application\Query\Package\Planning\PlanningViewQuery;
 use Proximum\Vimeet\Application\Query\Package\Planning\PlanningViewQueryHandler;
 use Proximum\Vimeet\Application\View\Package\ProductView;
@@ -24,7 +25,6 @@ use Proximum\Vimeet\Domain\Model\Type;
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Order\Merger;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
-use PHPUnit\Framework\TestCase;
 
 class PlanningViewQueryHandlerTest extends TestCase
 {
@@ -37,7 +37,6 @@ class PlanningViewQueryHandlerTest extends TestCase
         $sheet   = new Sheet($event, $type, [], $user, $now);
         $locale  = 'fr';
 
-
         $package = new Package($event, 'package', $now);
         $participantProduct = new Product(
             $event,
@@ -45,6 +44,7 @@ class PlanningViewQueryHandlerTest extends TestCase
             'nameParticipant',
             'image.jpeg',
             10, // UnitPrice
+            20, //vat
             10, // $quantityMax
             5, // $availabilityCurrent
             5, // $availabilityMax
@@ -60,6 +60,7 @@ class PlanningViewQueryHandlerTest extends TestCase
             'namePlanning',
             'image.jpeg',
             10, // UnitPrice
+            20, //vat
             10, // $quantityMax
             5, // $availabilityCurrent
             5, // $availabilityMax
@@ -76,6 +77,7 @@ class PlanningViewQueryHandlerTest extends TestCase
             'namePlan',
             'image.jpeg',
             10, // UnitPrice
+            20, //vat
             10, // $quantityMax
             5, // $availabilityCurrent
             5, // $availabilityMax
@@ -91,6 +93,7 @@ class PlanningViewQueryHandlerTest extends TestCase
             'nameOption',
             'image.jpeg',
             10, // UnitPrice
+            20, //vat
             10, // $quantityMax
             5, // $availabilityCurrent
             5, // $availabilityMax
@@ -101,7 +104,7 @@ class PlanningViewQueryHandlerTest extends TestCase
         );
 
         $package->setPlans([$planProduct]);
-        $package->setParticipant($participantProduct);
+        $package->setParticipants([$participantProduct]);
         $package->setPlanning($planningProduct);
         $group = new PackageGroup($package, 1);
         $group->setOptions([$optionProduct]);
@@ -114,9 +117,9 @@ class PlanningViewQueryHandlerTest extends TestCase
             '',
             $now
         );
-        $rowPlan        = new Order\Row($order, 1, $planProduct);
-        $rowParticipant = new Order\Row($order, 1, $participantProduct);
-        $rowPlanning    = new Order\Row($order, 1, $planningProduct);
+        $rowPlan        = new Order\Row($order, 1, 20, $planProduct);
+        $rowParticipant = new Order\Row($order, 1, 20, $participantProduct);
+        $rowPlanning    = new Order\Row($order, 1, 20, $planningProduct);
         $order->addRow($rowPlan);
         $order->addRow($rowParticipant);
         $order->addRow($rowPlanning);
@@ -170,7 +173,6 @@ class PlanningViewQueryHandlerTest extends TestCase
         $sheet   = new Sheet($event, $type, [], $user, $now);
         $locale  = 'fr';
 
-
         $package = new Package($event, 'package', $now);
         $participantProduct = new Product(
             $event,
@@ -178,6 +180,7 @@ class PlanningViewQueryHandlerTest extends TestCase
             'nameParticipant',
             'image.jpeg',
             10, // UnitPrice
+            20, //vat
             10, // $quantityMax
             5, // $availabilityCurrent
             5, // $availabilityMax
@@ -193,6 +196,7 @@ class PlanningViewQueryHandlerTest extends TestCase
             'namePlanning',
             'image.jpeg',
             10, // UnitPrice
+            20, //vat
             10, // $quantityMax
             5, // $availabilityCurrent
             5, // $availabilityMax
@@ -209,6 +213,7 @@ class PlanningViewQueryHandlerTest extends TestCase
             'namePlan',
             'image.jpeg',
             10, // UnitPrice
+            20, //vat
             10, // $quantityMax
             5, // $availabilityCurrent
             5, // $availabilityMax
@@ -226,6 +231,7 @@ class PlanningViewQueryHandlerTest extends TestCase
             'nameOption',
             'image.jpeg',
             10, // UnitPrice
+            20, //vat
             10, // $quantityMax
             5, // $availabilityCurrent
             5, // $availabilityMax
@@ -236,7 +242,7 @@ class PlanningViewQueryHandlerTest extends TestCase
         );
 
         $package->setPlans([$planProduct]);
-        $package->setParticipant($participantProduct);
+        $package->setParticipants([$participantProduct]);
         $package->setPlanning($planningProduct);
         $group = new PackageGroup($package, 1);
         $group->setOptions([$optionProduct]);
@@ -249,9 +255,9 @@ class PlanningViewQueryHandlerTest extends TestCase
             '',
             $now
         );
-        $rowPlan        = new Order\Row($order, 1, $planProduct);
-        $rowParticipant = new Order\Row($order, 1, $participantProduct);
-        $rowPlanning    = new Order\Row($order, 1, $planningProduct);
+        $rowPlan        = new Order\Row($order, 1, 20, $planProduct);
+        $rowParticipant = new Order\Row($order, 1, 20, $participantProduct);
+        $rowPlanning    = new Order\Row($order, 1, 20, $planningProduct);
         $order->addRow($rowPlan);
         $order->addRow($rowParticipant);
         $order->addRow($rowPlanning);
@@ -305,7 +311,6 @@ class PlanningViewQueryHandlerTest extends TestCase
         $sheet   = new Sheet($event, $type, [], $user, $now);
         $locale  = 'fr';
 
-
         $package = new Package($event, 'package', $now);
         $participantProduct = new Product(
             $event,
@@ -313,6 +318,7 @@ class PlanningViewQueryHandlerTest extends TestCase
             'nameParticipant',
             'image.jpeg',
             10, // UnitPrice
+            20, //vat
             10, // $quantityMax
             5, // $availabilityCurrent
             5, // $availabilityMax
@@ -328,6 +334,7 @@ class PlanningViewQueryHandlerTest extends TestCase
             'namePlanning',
             'image.jpeg',
             10, // UnitPrice
+            20, //vat
             10, // $quantityMax
             5, // $availabilityCurrent
             5, // $availabilityMax
@@ -344,6 +351,7 @@ class PlanningViewQueryHandlerTest extends TestCase
             'namePlan',
             'image.jpeg',
             10, // UnitPrice
+            20, //vat
             10, // $quantityMax
             5, // $availabilityCurrent
             5, // $availabilityMax
@@ -361,6 +369,7 @@ class PlanningViewQueryHandlerTest extends TestCase
             'nameOption',
             'image.jpeg',
             10, // UnitPrice
+            20, //vat
             10, // $quantityMax
             5, // $availabilityCurrent
             5, // $availabilityMax
@@ -371,7 +380,7 @@ class PlanningViewQueryHandlerTest extends TestCase
         );
 
         $package->setPlans([$planProduct]);
-        $package->setParticipant($participantProduct);
+        $package->setParticipants([$participantProduct]);
         $package->setPlanning($planningProduct);
         $group = new PackageGroup($package, 1);
         $group->setOptions([$optionProduct]);
@@ -384,9 +393,9 @@ class PlanningViewQueryHandlerTest extends TestCase
             '',
             $now
         );
-        $rowPlan        = new Order\Row($order, 1, $planProduct);
-        $rowParticipant = new Order\Row($order, 1, $participantProduct);
-        $rowPlanning    = new Order\Row($order, 1, $planningProduct);
+        $rowPlan        = new Order\Row($order, 1, 20, $planProduct);
+        $rowParticipant = new Order\Row($order, 1, 20, $participantProduct);
+        $rowPlanning    = new Order\Row($order, 1, 20, $planningProduct);
         $order->addRow($rowPlan);
         $order->addRow($rowParticipant);
         $order->addRow($rowPlanning);
@@ -440,7 +449,6 @@ class PlanningViewQueryHandlerTest extends TestCase
         $sheet   = new Sheet($event, $type, [], $user, $now);
         $locale  = 'fr';
 
-
         $package = new Package($event, 'package', $now);
         $participantProduct = new Product(
             $event,
@@ -448,6 +456,7 @@ class PlanningViewQueryHandlerTest extends TestCase
             'nameParticipant',
             'image.jpeg',
             10, // UnitPrice
+            20, //vat
             10, // $quantityMax
             5, // $availabilityCurrent
             5, // $availabilityMax
@@ -463,6 +472,7 @@ class PlanningViewQueryHandlerTest extends TestCase
             'namePlanning',
             'image.jpeg',
             10, // UnitPrice
+            20, //vat
             10, // $quantityMax
             5, // $availabilityCurrent
             5, // $availabilityMax
@@ -479,6 +489,7 @@ class PlanningViewQueryHandlerTest extends TestCase
             'namePlan',
             'image.jpeg',
             10, // UnitPrice
+            20, //vat
             10, // $quantityMax
             5, // $availabilityCurrent
             5, // $availabilityMax
@@ -496,6 +507,7 @@ class PlanningViewQueryHandlerTest extends TestCase
             'nameOption',
             'image.jpeg',
             10, // UnitPrice
+            20, //vat
             10, // $quantityMax
             5, // $availabilityCurrent
             5, // $availabilityMax
@@ -506,7 +518,7 @@ class PlanningViewQueryHandlerTest extends TestCase
         );
 
         $package->setPlans([$planProduct]);
-        $package->setParticipant($participantProduct);
+        $package->setParticipants([$participantProduct]);
         $package->setPlanning($planningProduct);
         $group = new PackageGroup($package, 1);
         $group->setOptions([$optionProduct]);
@@ -553,8 +565,6 @@ class PlanningViewQueryHandlerTest extends TestCase
         $this->assertEquals($expectedPlanningView, $planningViewQueryHandler->handle($planningViewQuery));
     }
 
-
-
     public function testHandleWithMultipleIncludedFromCart()
     {
         $now     = new \DateTime();
@@ -564,7 +574,6 @@ class PlanningViewQueryHandlerTest extends TestCase
         $sheet   = new Sheet($event, $type, [], $user, $now);
         $locale  = 'fr';
 
-
         $package = new Package($event, 'package', $now);
         $participantProduct = new Product(
             $event,
@@ -572,6 +581,7 @@ class PlanningViewQueryHandlerTest extends TestCase
             'nameParticipant',
             'image.jpeg',
             10, // UnitPrice
+            20, //vat
             10, // $quantityMax
             5, // $availabilityCurrent
             5, // $availabilityMax
@@ -587,6 +597,7 @@ class PlanningViewQueryHandlerTest extends TestCase
             'namePlanning',
             'image.jpeg',
             10, // UnitPrice
+            20, //vat
             10, // $quantityMax
             5, // $availabilityCurrent
             5, // $availabilityMax
@@ -603,6 +614,7 @@ class PlanningViewQueryHandlerTest extends TestCase
             'namePlan',
             'image.jpeg',
             10, // UnitPrice
+            20, //vat
             10, // $quantityMax
             5, // $availabilityCurrent
             5, // $availabilityMax
@@ -620,6 +632,7 @@ class PlanningViewQueryHandlerTest extends TestCase
             'nameOption',
             'image.jpeg',
             10, // UnitPrice
+            20, //vat
             10, // $quantityMax
             5, // $availabilityCurrent
             5, // $availabilityMax
@@ -630,7 +643,7 @@ class PlanningViewQueryHandlerTest extends TestCase
         );
 
         $package->setPlans([$planProduct]);
-        $package->setParticipant($participantProduct);
+        $package->setParticipants([$participantProduct]);
         $package->setPlanning($planningProduct);
         $group = new PackageGroup($package, 1);
         $group->setOptions([$optionProduct]);

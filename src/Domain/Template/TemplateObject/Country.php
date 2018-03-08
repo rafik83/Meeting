@@ -61,7 +61,7 @@ class Country extends EditableObject implements ContentObjectInterface, Exportab
     /**
      * {@inheritdoc}
      */
-    public function getContentValueLocalize($locale)
+    public function getContentValueLocalize($locale = null)
     {
         return $this->getContentValue();
     }
@@ -77,7 +77,7 @@ class Country extends EditableObject implements ContentObjectInterface, Exportab
     /**
      * {@inheritdoc}
      */
-    public function getExportableContent(array $taggedData = [])
+    public function getExportableContent(array $taggedData = [], ?string $locale = null)
     {
         return $this->getContentLabel();
     }

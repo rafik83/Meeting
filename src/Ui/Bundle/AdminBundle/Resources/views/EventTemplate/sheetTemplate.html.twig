@@ -2,6 +2,8 @@
 
 {% import 'AdminBundle::macro.html.twig' as macro %}
 
+{% block title 'admin.template.sheet.link'|trans %}
+
 {% block content %}
 
     <h1 class="page-header">{{ 'admin.template.sheet.link'|trans }}</h1>
@@ -29,9 +31,6 @@
                     {% endif %}
                 </td>
                 <td class="text-right">
-                    <a class="btn btn-default btn-sm" href="{{ path('admin_template_sheet_preview_update', {
-                        'template': template.id
-                    }) }}">{{ 'admin.template.action.preview'|trans }}</a>
                     <div class="btn-group">
                         <a href="{{ path('admin_template_sheet_builder', {
                             'template': template.id, 'locale': template.fallback
@@ -42,6 +41,16 @@
                             <span class="caret"></span>
                         </button>
                         <ul class="dropdown-menu dropdown-menu-right">
+                            <li>
+                                <a href="{{ path('admin_template_sheet_preview_update', {
+                                    'template': template.id
+                                }) }}">{{ 'admin.template.action.preview'|trans }}</a>
+                            </li>
+                            <li>
+                                <a href="{{ path('admin_template_sheet_print_template_builder', {
+                                    'template': template.id
+                                }) }}">{{ 'admin.template.action.print'|trans }}</a>
+                            </li>
                             <li>
                                 <a href="{{ path('admin_organizer_template_sheet_duplicate', { 'template': template.id }) }}"
                                    data-toggle="modal" data-target="#duplicate-modal">

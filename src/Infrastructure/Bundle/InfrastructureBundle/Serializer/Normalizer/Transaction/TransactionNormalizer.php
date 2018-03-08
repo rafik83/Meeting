@@ -12,20 +12,22 @@ namespace Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Serializer\
 
 use Proximum\Vimeet\Application\Adapter\TranslatorInterface;
 use Proximum\Vimeet\Application\Query\Transaction\TransactionListViewQuery;
+use Proximum\Vimeet\Application\Serializer\Charset;
+use Proximum\Vimeet\Application\Serializer\Normalizer\AbstractNormalizer;
 use Proximum\Vimeet\Domain\Model\Event;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 
-class TransactionNormalizer implements NormalizerInterface
+class TransactionNormalizer extends AbstractNormalizer implements NormalizerInterface
 {
     const TRANSLATION_PREFIX = 'admin.export.transaction.column.';
     const TRANSLATION_DOMAIN = 'messages';
     
-    /** @var TranslatorInterface */
-    private $translator;
-    
     /** @var array */
     private $timeFormatter = [];
-    
+
+    /** @var string */
+    private $toCharset = Charset::WINDOWS_1252;
+
     /**
      * TransactionNormalizer constructor.
      *
@@ -33,7 +35,7 @@ class TransactionNormalizer implements NormalizerInterface
      */
     public function __construct(TranslatorInterface $translator)
     {
-        $this->translator = $translator;
+        parent::__construct($translator);
     }
     
     /**
@@ -41,6 +43,8 @@ class TransactionNormalizer implements NormalizerInterface
      */
     public function normalize($object, $format = null, array $context = array())
     {
+        $this->toCharset = $context['charset'] ?? $this->toCharset;
+
         $data = [];
         
         foreach ($object->transactionsView as $view) {
@@ -51,22 +55,31 @@ class TransactionNormalizer implements NormalizerInterface
             );
             
             $data[] =  [
-                $this->translate('sheet.id', $object->adminLocale) => $view->sheetId,
-                $this->translate('event.id', $object->adminLocale) => $view->eventId,
-                $this->translate('event.name', $object->adminLocale) => $view->eventName,
-                $this->translate('sheet.owner.id', $object->adminLocale) => $view->sheetOwnerId,
-                $this->translate('society.name', $object->adminLocale) => $view->companyName,
-                $this->translate('transaction_date', $object->adminLocale) => !$createdAt ? null : $createdAt,
-                $this->translate('transaction_type', $object->adminLocale) => $view->transactionType,
-                $this->translate('transaction_reference', $object->adminLocale) => $view->transactionReference,
-                $this->translate('payment.gateway', $object->adminLocale) => $view->transactionGateway,
-                $this->translate('transaction_amount', $object->adminLocale) => $view->transactionAmount,
-                $this->translate('billing_contact.country', $object->adminLocale) => $view->contactBillingInfoCountry,
-                $this->translate('billing_contact.vat_number', $object->adminLocale) => $view->vatNumber
+                $this->convert($this->translate('sheet.id', $object->adminLocale)) => $this->convert($view->sheetId),
+                $this->convert($this->translate('event.id', $object->adminLocale)) => $this->convert($view->eventId),
+                $this->convert($this->translate('event.name', $object->adminLocale)) => $this->convert($view->eventName),
+                $this->convert($this->translate('sheet.owner.id', $object->adminLocale)) => $this->convert($view->sheetOwnerId),
+                $this->convert($this->translate('society.name', $object->adminLocale)) => $this->convert($view->companyName),
+                $this->convert($this->translate('transaction_date', $object->adminLocale)) => !$createdAt ? null : $this->convert($createdAt),
+                $this->convert($this->translate('transaction_type', $object->adminLocale)) => $this->convert($view->transactionType),
+                $this->convert($this->translate('transaction_reference', $object->adminLocale)) => $this->convert($view->transactionReference),
+                $this->convert($this->translate('payment.gateway', $object->adminLocale)) => $this->convert($view->transactionGateway),
+                $this->convert($this->translate('transaction_amount', $object->adminLocale)) => $this->convert($view->transactionAmount),
+                $this->convert($this->translate('billing_contact.country', $object->adminLocale)) => $this->convert($view->contactBillingInfoCountry),
+                $this->convert($this->translate('billing_contact.vat_number', $object->adminLocale)) => $this->convert($view->vatNumber),
             ];
         }
-        
+
         return $data;
+    }
+
+    public function convert($value)
+    {
+        return $this->convertCharset(
+            $value,
+            Charset::UTF_8,
+            $this->toCharset
+        );
     }
     
     /**

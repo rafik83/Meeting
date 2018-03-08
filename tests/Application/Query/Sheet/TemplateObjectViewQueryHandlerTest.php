@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2015 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -15,7 +15,6 @@ use Proximum\Vimeet\Application\Query\Sheet\TemplateObjectViewQuery;
 use Proximum\Vimeet\Application\Query\Sheet\TemplateObjectViewQueryHandler;
 use Proximum\Vimeet\Application\View\Sheet\TemplateObjectView;
 use Proximum\Vimeet\Domain\Model\Package;
-use Proximum\Vimeet\Domain\Package\Product\IncludedProductGuesser;
 use Proximum\Vimeet\Domain\Package\Product\TemplateProductGuesser;
 use Proximum\Vimeet\Domain\Template\TemplateData;
 use Proximum\Vimeet\Domain\Template\TemplateDataFactory;

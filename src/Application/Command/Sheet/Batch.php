@@ -37,6 +37,11 @@ class Batch extends AbstractBatch
     /**
      * @var bool
      */
+    public $refuse;
+
+    /**
+     * @var bool
+     */
     public $pending;
 
     /**
@@ -120,6 +125,9 @@ class Batch extends AbstractBatch
      */
     public $generateInvoice;
 
+    /** @var bool */
+    public $printPdf;
+
     /**
      * "Assigner une fiche à un groupe/entité"
      *
@@ -132,7 +140,6 @@ class Batch extends AbstractBatch
 
     /**
      * @param Event  $event
-     * @param Admin $admin
      * @param Admin  $admin
      * @param string $locale
      * @param array  $filters

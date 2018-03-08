@@ -13,3 +13,4 @@ validators.participant.alreadyLinkedToASheet: 'This person is already registered
 validators.participant.alreadyLinkedToThisSheet: 'This person is already attached to this sheet'
 validators.participant.canNotRemoveAllParticipants: 'You can not remove all the participants of the sheet'
 validators.type.required: 'Required participation type'
+validators.userPhone.sendCode.phone.mustAccept: 'You need to check this box'

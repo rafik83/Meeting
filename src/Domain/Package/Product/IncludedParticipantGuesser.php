@@ -1,9 +1,9 @@
 <?php
 
 /*
- * This file is part of the vimeet project.
+ * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2016 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -19,41 +19,35 @@ class IncludedParticipantGuesser extends AbstractIncludedProductGuesser
     /**
      * @param Sheet $sheet
      *
-     * @return IncludedParticipantView
+     * @return IncludedParticipantView[] indexed by included product id
      */
-    public function getIncludedParticipantView(Sheet $sheet)
+    public function getIncludedParticipantViews(Sheet $sheet): array
     {
-        $product             = null;
-        $totalQuantity       = 0;
-        $participantIncluded = $this->getParticipantIncluded($sheet);
+        $includedParticipantViews = [];
 
-        if (null !== $participantIncluded) {
-            $totalQuantity = $participantIncluded->getQuantity();
-            $product       = $participantIncluded->getIncluded();
+        foreach ($this->getParticipantIncluded($sheet) as $productIncluded) {
+            $includedParticipantViews[$productIncluded->getIncluded()->getId()] = new IncludedParticipantView(
+                $productIncluded->getIncluded(),
+                $productIncluded->getQuantity()
+            );
         }
 
-        $remainingQuantity = max(0, $totalQuantity - $sheet->countParticipant());
-
-        return new IncludedParticipantView($product, $totalQuantity, $remainingQuantity);
+        return $includedParticipantViews;
     }
 
     /**
      * @param Sheet $sheet
      *
-     * @return ProductIncluded
+     * @return ProductIncluded[]
      */
-    private function getParticipantIncluded(Sheet $sheet)
+    private function getParticipantIncluded(Sheet $sheet): array
     {
         $selectedPlan = $this->getSelectedPlan($sheet);
 
-        if (null !== $selectedPlan) {
-            $participantProductIncluded = $selectedPlan->getIncludedParticipantProduct();
-
-            if ($participantProductIncluded instanceof ProductIncluded) {
-                return $participantProductIncluded;
-            }
+        if (null === $selectedPlan) {
+            return [];
         }
 
-        return null;
+        return $selectedPlan->getIncludedParticipantProducts();
     }
 }

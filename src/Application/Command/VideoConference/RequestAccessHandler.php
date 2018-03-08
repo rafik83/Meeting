@@ -19,19 +19,13 @@ use Proximum\Vimeet\Domain\Repository\VideoConferenceRepositoryInterface;
 
 class RequestAccessHandler
 {
-    /**
-     * @var VideoConferenceRepositoryInterface
-     */
+    /** @var VideoConferenceRepositoryInterface */
     private $videoConferenceRepository;
 
-    /**
-     * @var VideoConferenceAdapterInterface
-     */
+    /** @var VideoConferenceAdapterInterface */
     private $videoConferenceAdapter;
 
     /**
-     * RequestAccessHandler constructor.
-     *
      * @param VideoConferenceAdapterInterface $videoConferenceAdapter
      * @param VideoConferenceRepositoryInterface $videoConferenceRepository
      */
@@ -59,7 +53,7 @@ class RequestAccessHandler
             if ($videoConferenceToken === null) {
                 $token = $this->videoConferenceAdapter->generateAccessToken(
                     $this->videoConferenceAdapter->getSession($videoConference->getSessionId()),
-                    $requestAccess->meeting->getSlot()
+                    $requestAccess->meeting->getSlot()->getEnd()
                 );
 
                 $videoConference->setToken(
@@ -85,7 +79,7 @@ class RequestAccessHandler
         $session = $this->videoConferenceAdapter->createSession();
         $token = $this->videoConferenceAdapter->generateAccessToken(
             $session,
-            $requestAccess->meeting->getSlot()
+            $requestAccess->meeting->getSlot()->getEnd()
         );
 
         $videoConference = new VideoConference($session->getSessionId(), $requestAccess->meeting);

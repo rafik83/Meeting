@@ -37,7 +37,7 @@ final class Category
     const AGENDA_ICON = 'icon-Calendrier';
 
     const PROGRAM       = 'navigation.category.program';
-    const PROGRAM_ICON  = 'icon-Calendrier';
+    const PROGRAM_ICON  = 'icon-PresFlash_2';
 
     static public $categories = [
         self::MEMBER_SPACE,

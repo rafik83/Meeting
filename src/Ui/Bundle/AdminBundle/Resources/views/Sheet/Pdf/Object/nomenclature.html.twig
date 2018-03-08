@@ -1,0 +1,86 @@
+{% set nomenclature = nomenclatures[item.nomenclature]|default %}
+
+{% if nomenclature and nomenclature.any(item.items) %}
+<div class="object">
+    {% if nomenclature.depth == 1 %}
+        <section class="object--nomenclature {{ 'style--' ~ item.style }} section">
+            {% set label = item.label(locale, fallback) %}
+            {% if label %}
+                <header>
+                    <h2>{{ label }}</h2>
+                </header>
+            {% endif %}
+            <div class="section__content">
+                {% if nomenclature.any(item.items) %}
+                    <ul>
+                        {% for child in nomenclature.childrenSorted(locale) if child.key in item.items %}
+                            <li>{{ child.label(locale, fallback) }}</li>
+                        {% endfor %}
+                    </ul>
+                {% else %}
+                    <p class="help">{{ item.help(locale, fallback) }}</p>
+                {% endif %}
+            </div>
+        </section>
+
+    {% elseif nomenclature.depth == 2 %}
+        <section class="object--nomenclature {{ 'style--' ~ item.style }} section">
+            {% set label = item.label(locale, fallback) %}
+            {% if label %}
+                <header>
+                    <h2>{{ label }}</h2>
+                </header>
+            {% endif %}
+            <div class="section__content">
+                <ul>
+                    {% for child in nomenclature.childrenSorted(locale) if child.any(item.items) %}
+                        <li class="highlight">{{ child.label(locale, fallback) }}</li>
+                        {% for grandchild in child.childrenSorted(locale) if grandchild.key in item.items %}
+                            <li>{{ grandchild.label(locale, fallback) }}</li>
+                        {% endfor %}
+                    {% else %}
+                        <p class="help">{{ item.help(locale, fallback) }}</p>
+                    {% endfor %}
+                </ul>
+            </div>
+        </section>
+
+    {% elseif nomenclature.depth == 3 %}
+        {% if nomenclature.any(item.items) %}
+            {% for child in nomenclature.childrenSorted(locale) if child.any(item.items) %}
+                <section class="object--nomenclature {{ 'style--' ~ item.style }} section">
+                    <header>
+                        <h2>{{ item.label(locale, fallback) }} <span class="badge badge-skill">{{ child.label(locale, fallback) }}</span></h2>
+                    </header>
+
+                    <div class="section__content">
+                        <ul>
+                            {% for grandchild in child.childrenSorted(locale) if grandchild.any(item.items) %}
+                                <li class="highlight">{{ grandchild.label(locale, fallback) }}</li>
+                                {% for grandgrandchild in grandchild.childrenSorted(locale) if grandgrandchild.key in item.items %}
+                                    <li>{{ grandgrandchild.label(locale, fallback) }}</li>
+                                {% endfor %}
+                            {% else %}
+                                <p class="help">{{ item.help(locale, fallback) }}</p>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </section>
+            {% endfor %}
+        {% else %}
+            <section class="object--nomenclature {{ 'style--' ~ item.style }} section">
+                {% set label = item.label(locale, fallback) %}
+                {% if label %}
+                    <header>
+                        <h2>{{ label }}</h2>
+                    </header>
+                {% endif %}
+
+                <div class="section__content">
+                    <p class="help">{{ item.help|localize(locale, fallback) }}</p>
+                </div>
+            </section>
+        {% endif %}
+    {% endif %}
+</div>
+{% endif %}

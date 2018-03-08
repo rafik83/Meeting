@@ -53,7 +53,7 @@ class Url extends EditableObject implements ContentObjectInterface, ExportableOb
      *
      * @return string
      */
-    public function getContentValueLocalize($locale)
+    public function getContentValueLocalize($locale = null)
     {
         return $this->getContentValue();
     }
@@ -77,7 +77,7 @@ class Url extends EditableObject implements ContentObjectInterface, ExportableOb
     /**
      * {@inheritdoc}
      */
-    public function getExportableContent(array $taggedData = [])
+    public function getExportableContent(array $taggedData = [], ?string $locale = null)
     {
         $result = $this->getContentValue();
 

@@ -5,7 +5,7 @@ app_options:
   php:                   true
   php_version:           '7.1'
   nodejs:                true
-  nodejs_version:        '4'
+  nodejs_version:        '8'
   mysql:                 true
   mysql_version:         '5.6'
   elasticsearch:         true
@@ -17,7 +17,7 @@ app_patterns:
   # Timezone #
   ############
 
-  timezone_default: Etc/UTC
+  timezone_default: Europe/Paris
 
   ###############
   # Environment #
@@ -60,22 +60,22 @@ app_patterns:
       - Port:     22
 
     # Preprod
-    - Host proximum-vimeet-preprod:
+    - Host vimeet-preprod:
       - User:         www-data
-      - ProxyCommand: ssh proximum-gw nc vimeet-preprod %p
+      - Hostname:     10.11.0.83
 
     # Prod
     - Host proximum-mysql-master:
       - User:         www-data
       - ProxyCommand: ssh proximum-gw nc mysql-master %p
 
-    - Host proximum-web-apache-01:
+    - Host vimeet-prod1:
       - User:         www-data
-      - ProxyCommand: ssh proximum-gw nc web-apache-01 %p
+      - Hostname:     10.11.0.31
 
-    - Host proximum-web-apache-02:
+    - Host vimeet-prod2:
       - User:         www-data
-      - ProxyCommand: ssh proximum-gw nc web-apache-02 %p
+      - Hostname:     10.11.0.32
 
     - Host proximum-filer:
       - User:         www-data
@@ -122,6 +122,7 @@ app_patterns:
     - zip
     # App
     - imagick
+    - soap
 
   php_applications: []
 
@@ -137,6 +138,7 @@ app_patterns:
         - max_execution_time: 120
         - always_populate_raw_post_data: -1
         - max_input_vars: 10000
+        - auto_detect_line_endings: On
 
   #########
   # Nginx #

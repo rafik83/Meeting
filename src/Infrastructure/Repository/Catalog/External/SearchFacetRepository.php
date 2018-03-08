@@ -52,6 +52,7 @@ class SearchFacetRepository implements SearchFacetRepositoryInterface
         $this->entityManager->flush($searchFacet);
 
         foreach ($searchFacet->getTranslations() as $translation) {
+            $this->entityManager->persist($translation);
             $this->entityManager->flush($translation);
         }
     }

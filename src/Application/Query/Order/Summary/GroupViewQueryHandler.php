@@ -44,7 +44,7 @@ class GroupViewQueryHandler
      */
     public function handle(GroupViewQuery $groupViewQuery)
     {
-        $label      = '';
+        $label      = null;
         $locale     = $groupViewQuery->locale;
         $order      = $groupViewQuery->order;
         $products   = [];
@@ -73,10 +73,11 @@ class GroupViewQueryHandler
                 );
             }
         } else {
-            $product = $order->getProductOfType($groupViewQuery->type);
+            foreach ($order->getRowsProductOfType($groupViewQuery->type) as $product) {
+                if (null === $label) {
+                    $label = $product->getLabel($locale);
+                }
 
-            if (null !== $product) {
-                $label = $product->getLabel($locale);
                 $products[] = $this->rowViewQueryHandler->handle(
                     new RowViewQuery(
                         $order,

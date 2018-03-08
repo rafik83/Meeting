@@ -3,13 +3,14 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2016 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
 
 namespace Proximum\Vimeet\Tests\Application\Command\Package\Step;
 
+use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
 use Proximum\Vimeet\Application\Command\Package\Step\SelectPlan;
 use Proximum\Vimeet\Application\Command\Package\Step\SelectPlanHandler;
@@ -25,7 +26,6 @@ use Proximum\Vimeet\Domain\Model\Type;
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Infrastructure\Adapter\DelayedEventDispatcher;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
-use PHPUnit\Framework\TestCase;
 
 class SelectPlanHandlerTest extends TestCase
 {
@@ -36,7 +36,7 @@ class SelectPlanHandlerTest extends TestCase
         $datetime = new \DateTime();
         $user     = new User('email@email.com', 'salt', 'password', 'fr');
         $sheet    = new Sheet($event, $type, [], $user, $datetime);
-        $product  = Product::createPlan($event, 'plan', '', 100, 10, 40);
+        $product  = Product::createPlan($event, 'plan', '', 100, 20, 10, 40);
 
         $emptyCart    = new Cart($sheet, [], [], 1);
         $expectedCart = new Cart($sheet, [new CartRow($sheet, $product, 1)], [], 1);
@@ -67,8 +67,8 @@ class SelectPlanHandlerTest extends TestCase
         $event    = EventFactory::createEvent();
         $type     = new Type($event);
         $datetime = new \DateTime();
-        $product1 = Product::createPlan($event, 'plan1', '', 100, 10, 40);
-        $product2 = Product::createPlan($event, 'plan2', '', 50, 10, 50);
+        $product1 = Product::createPlan($event, 'plan1', '', 100, 20, 10, 40);
+        $product2 = Product::createPlan($event, 'plan2', '', 50, 20, 10, 50);
         $user     = new User('email@email.com', 'salt', 'password', 'fr');
         $sheet    = new Sheet($event, $type, [], $user, $datetime);
 

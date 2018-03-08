@@ -1,6 +1,10 @@
 {{ form_start(searchForm) }}
 
-<div class="catalog__research">
+<div class="catalog__research hidden-xs">
+    {% if searchForm.categories is defined %}
+        {{ include('EventBundle:Catalog:Partial/checkboxes.html.twig', { form: searchForm.categories, choices: categoryViews }, false) }}
+    {% endif %}
+
     {% if searchForm.type is defined %}
         {{ include('EventBundle:Catalog:Partial/checkboxes.html.twig', { form: searchForm.type, choices: typeViews }, false) }}
     {% endif %}

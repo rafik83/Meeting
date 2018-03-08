@@ -11,6 +11,7 @@
 namespace Proximum\Vimeet\Application\Query\Agenda;
 
 use Proximum\Vimeet\Application\View\Agenda\UnavailabilityView;
+use Proximum\Vimeet\Domain\Time\TimeOverlap;
 
 class UnavailabilityViewQueryHandler
 {
@@ -21,10 +22,13 @@ class UnavailabilityViewQueryHandler
      */
     public function handle(UnavailabilityViewQuery $query)
     {
+        $begin = TimeOverlap::ceil($query->day->getBegin(), $query->unavailability->getBegin());
+        $end = TimeOverlap::floor($query->day->getEnd(), $query->unavailability->getEnd());
+
         return new UnavailabilityView(
             $query->unavailability->getId(),
-            $query->unavailability->getBegin(),
-            $query->unavailability->getEnd(),
+            $begin,
+            $end,
             $query->event->getTimeZone(),
             $query->unavailability->getMessage()
         );

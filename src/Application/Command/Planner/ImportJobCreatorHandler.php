@@ -65,7 +65,12 @@ class ImportJobCreatorHandler
 
         $file = $this->createFile($command->event, $content);
 
-        $this->jobQueue->importPlannerForEvent($file, $command->event, $command->admin, $command->locale);
+        $this->jobQueue->importPlannerForEvent(
+            $file,
+            $command->event,
+            $command->admin,
+            $command->admin->getLocale()
+        );
     }
 
     /**

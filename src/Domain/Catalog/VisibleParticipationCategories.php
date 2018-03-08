@@ -1,9 +1,9 @@
 <?php
 
 /*
- * This file is part of the vimeet project.
+ * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) vimeet
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -47,7 +47,9 @@ class VisibleParticipationCategories
         }
 
         foreach ($filteredRules as $rule) {
-            $visibleCategories[$rule->getSeeableCategory()->getId()] = $rule->getSeeableCategory();
+            if (null !== $rule->getSeeableCategory()) {
+                $visibleCategories[$rule->getSeeableCategory()->getId()] = $rule->getSeeableCategory();
+            }
         }
 
         return $visibleCategories;

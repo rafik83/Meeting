@@ -1,8 +1,9 @@
 {% extends 'AdminBundle::base.html.twig' %}
 
-{% block content %}
+{% block title 'admin.template.sheet.title'|trans %}
 
-    <h1 class="page-header">{{ 'admin.template.sheet.link'|trans }}</h1>
+{% block content %}
+    <h1 class="page-header">{{ 'admin.template.sheet.title'|trans }}</h1>
 
     <button type="button" class="btn btn-primary btn-success" data-toggle="modal" data-target="#create-modal">
         {{ 'admin.template.action.create'|trans }}
@@ -45,9 +46,6 @@
                 <tr>
                     <td>{{ baseTemplate.title }}</td>
                     <td class="text-right">
-                        <a class="btn btn-default btn-sm" href="{{ path('admin_template_sheet_preview_update', {
-                            'template': baseTemplate.id
-                        }) }}">{{ 'admin.template.action.preview'|trans }}</a>
                         <div class="btn-group">
                             <a href="{{ path('admin_template_sheet_builder', {
                                 'template': baseTemplate.id, 'locale': baseTemplate.fallback
@@ -58,6 +56,16 @@
                                 <span class="caret"></span>
                             </button>
                             <ul class="dropdown-menu dropdown-menu-right">
+                                <li>
+                                    <a href="{{ path('admin_template_sheet_preview_update', {
+                                        'template': baseTemplate.id
+                                    }) }}">{{ 'admin.template.action.preview'|trans }}</a>
+                                </li>
+                                <li>
+                                    <a href="{{ path('admin_template_sheet_print_template_builder', {
+                                        'template': baseTemplate.id
+                                    }) }}">{{ 'admin.template.action.print'|trans }}</a>
+                                </li>
                                 <li>
                                     <a href="{{ path('admin_template_sheet_duplicate', { 'template': baseTemplate.id }) }}"
                                        data-toggle="modal" data-target="#duplicate-modal">
@@ -97,9 +105,6 @@
                     {% endif %}
                 </td>
                 <td class="text-right">
-                    <a class="btn btn-default btn-sm" href="{{ path('admin_template_sheet_preview_update', {
-                        'template': eventsTemplate.id
-                    }) }}">{{ 'admin.template.action.preview'|trans }}</a>
                     <div class="btn-group">
                         <a href="{{ path('admin_template_sheet_builder', {
                             'template': eventsTemplate.id, 'locale': eventsTemplate.fallback
@@ -110,6 +115,16 @@
                             <span class="caret"></span>
                         </button>
                         <ul class="dropdown-menu dropdown-menu-right">
+                            <li>
+                                <a href="{{ path('admin_template_sheet_preview_update', {
+                                    'template': eventsTemplate.id
+                                }) }}">{{ 'admin.template.action.preview'|trans }}</a>
+                            </li>
+                            <li>
+                                <a href="{{ path('admin_template_sheet_print_template_builder', {
+                                    'template': eventsTemplate.id
+                                }) }}">{{ 'admin.template.action.print'|trans }}</a>
+                            </li>
                             <li>
                                 <a href="{{ path('admin_template_sheet_duplicate', { 'template': eventsTemplate.id }) }}"
                                    data-toggle="modal" data-target="#duplicate-modal">

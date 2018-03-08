@@ -50,6 +50,7 @@ class Duplicator
         foreach ($tips as $tip) {
             $newTip = new Tip(
                 $tip->getTitle(),
+                $event,
                 $tip->isOnMeetingManagement(),
                 $tip->isOnCatalog(),
                 $tip->isOnPrintPlanning(),

@@ -13,9 +13,6 @@ namespace Proximum\Vimeet\Infrastructure\Repository;
 use Doctrine\ORM\EntityManager;
 use Proximum\Vimeet\Domain\Model\Admin;
 use Proximum\Vimeet\Domain\Model\Event;
-use Proximum\Vimeet\Domain\Model\Participant;
-use Proximum\Vimeet\Domain\Model\Sheet;
-use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Repository\EventRepositoryInterface;
 
 class EventRepository implements EventRepositoryInterface
@@ -131,6 +128,22 @@ class EventRepository implements EventRepositoryInterface
     /**
      * {@inheritdoc}
      */
+    public function getEventsOrderByIdDesc(): array
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('event')
+            ->from(Event::class, 'event')
+            ->addOrderBy('event.id', 'DESC')
+        ;
+
+        return $queryBuilder->getQuery()->getResult();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function getEventsByAdmin(Admin $admin)
     {
         $queryBuilder = $this
@@ -210,5 +223,54 @@ class EventRepository implements EventRepositoryInterface
             ->setMaxResults(1);
 
         return $queryBuilder->getQuery()->getOneOrNullResult();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function findEventWithParameters(array $parameters): array
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('event')
+            ->from(Event::class, 'event', 'event.id')
+        ;
+
+        foreach ($parameters as $key => $parameter) {
+            $queryBuilder
+                ->andWhere(
+                    str_replace(
+                        '%epkey%',
+                        $key,
+                        'EXISTS(SELECT ep_%epkey%.id FROM Entity:Event\ExtraParameter ep_%epkey% WHERE ep_%epkey%.event = event.id AND ep_%epkey%.type = :type_%epkey%)'
+                    )
+                )
+                ->setParameter(str_replace('%epkey%', $key, 'type_%epkey%'), $parameter)
+            ;
+        }
+
+        return $queryBuilder->getQuery()->getResult();
+    }
+    /**
+     * {@inheritdoc}
+     */
+    public function findByDay(\DateTimeInterface $dateTime): array
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('event')
+            ->from(Event::class, 'event')
+            ->join(
+                'event.days',
+                'day',
+                'WITH',
+                'day.startTime <= :datetime AND day.endTime >= :datetime'
+            )
+            ->setParameter('datetime', $dateTime)
+        ;
+
+        return $queryBuilder->getQuery()->getResult();
     }
 }

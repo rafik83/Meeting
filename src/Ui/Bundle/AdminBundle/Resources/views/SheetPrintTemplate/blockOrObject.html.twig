@@ -1,0 +1,14 @@
+{% if item.component == 'block' %}
+    {{ include('AdminBundle:SheetPrintTemplate/Block:' ~ item.type ~ '.html.twig', {
+        'uid': uid,
+        'children': item.children,
+        'config': item.config,
+        'locale': locale,
+    }, false) }}
+{% elseif item.component == 'object' %}
+    {{ include('AdminBundle:SheetPrintTemplate/Object:object.html.twig', {
+        'uid': uid,
+        'item': item,
+        'locale': locale,
+    }, false) }}
+{% endif %}

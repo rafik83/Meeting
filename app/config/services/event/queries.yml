@@ -1,0 +1,39 @@
+services:
+    Proximum\Vimeet\Application\Query\Payment\PaymentConditionsViewQueryHandler:
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Payment\PaymentConditionsViewQuery }
+
+    Proximum\Vimeet\Application\Query\Happening\Participant\ParticipantsAllowedToAccessQueryHandler:
+        arguments:
+            - '@vimeet_infrastructure.repository.sheet_repository'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Happening\Participant\ParticipantsAllowedToAccessQuery }
+
+    Proximum\Vimeet\Application\Query\Catalog\Export\SheetsViewQueryHandler:
+        arguments:
+            - '@vimeet_infrastructure.adapter.translator_adapter'
+            - '@adapter.sheet_search_adapter'
+            - '@Proximum\Vimeet\Application\Components\Sheet\Nomenclature\NomenclatureItemsGetter'
+            - '@vimeet_infrastructure.repository.sheet_repository'
+            - '@Proximum\Vimeet\Application\Query\Catalog\Export\SheetViewQueryHandler'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Catalog\Export\SheetsViewQuery }
+
+    Proximum\Vimeet\Application\Query\Catalog\Export\SheetRegistrationInfoQueryHandler:
+        arguments:
+            - '@vimeet_infrastructure.adapter.translator_adapter'
+            - '@adapter.intl_adapter'
+
+    Proximum\Vimeet\Application\Query\Catalog\Export\SheetInfoQueryHandler:
+        public: false
+
+    Proximum\Vimeet\Application\Query\Catalog\Export\SheetViewQueryHandler:
+        arguments:
+            - '@template.template_data_factory'
+            - '@template.participant_info_guesser'
+            - '@domain.service.category.category_name_resolver'
+            - '@repository.rule_repository'
+            - '@domain.rule.composer'
+            - '@domain.rule.applyer'
+            - '@Proximum\Vimeet\Application\Query\Catalog\Export\SheetInfoQueryHandler'
+            - '@Proximum\Vimeet\Application\Query\Catalog\Export\SheetRegistrationInfoQueryHandler'

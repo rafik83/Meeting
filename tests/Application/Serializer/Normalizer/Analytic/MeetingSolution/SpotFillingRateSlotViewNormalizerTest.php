@@ -32,7 +32,7 @@ class SpotFillingRateSlotViewNormalizerTest extends TestCase
         );
         $result = $serializer->serialize($data, 'json');
 
-        $expected = "{\"begin\":\"2017-06-10T10:00:00+00:00\",\"end\":\"2017-06-10T11:30:00+00:00\",\"fillingRate\":85}";
+        $expected = '{"begin":"2017-06-10T10:00:00+00:00","end":"2017-06-10T11:30:00+00:00","fillingRate":85}';
 
         $this->assertEquals($expected, $result);
     }

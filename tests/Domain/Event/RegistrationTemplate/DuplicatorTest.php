@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2017 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -18,7 +18,6 @@ use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Template\RegistrationTemplate;
 use Proximum\Vimeet\Domain\Repository\Template\RegistrationTemplateRepositoryInterface;
 use Proximum\Vimeet\Domain\Template\TemplateData;
-use Proximum\Vimeet\Domain\Template\TemplateDataFactory;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
 
 class DuplicatorTest extends TestCase
@@ -30,7 +29,7 @@ class DuplicatorTest extends TestCase
         $event                      = EventFactory::createEvent(
             'event',
             EventFactory::FALLBACK_LOCALE_DEFAULT,
-            ['fr', 'en',],
+            ['fr', 'en'],
             Event::VAT_MODE_ET,
             $eventDuplicated
         );
@@ -59,7 +58,6 @@ class DuplicatorTest extends TestCase
         $registrationTemplate->setValue($templateData->getConfig());
 
         $registrationTemplateRepository = $this->prophesize(RegistrationTemplateRepositoryInterface::class);
-        $registrationTemplateRepository->set($clonedRegistrationTemplate)->shouldBeCalled();
         $registrationTemplateRepository
             ->getTemplateForGivenEvent($eventDuplicated)
             ->shouldBeCalled()
@@ -71,15 +69,8 @@ class DuplicatorTest extends TestCase
             ->shouldBeCalled()
             ->willReturn($clonedRegistrationTemplate);
 
-        $templateDataFactory = $this->prophesize(TemplateDataFactory::class);
-        $templateDataFactory
-            ->createFromTemplate($registrationTemplate)
-            ->shouldBeCalled()
-            ->willReturn($templateData);
-
         $duplicatorDataStorage = (new Duplicator(
             $registrationTemplateRepository->reveal(),
-            $templateDataFactory->reveal(),
             $registrationTemplateCloner->reveal()
         ))->duplicate($event, new DuplicatorDataStorage());
 

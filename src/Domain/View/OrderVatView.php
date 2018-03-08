@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Domain\View;
 
+use Proximum\Vimeet\Application\View\Package\Vat\VatListView;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Invoice\Invoice;
 
@@ -54,6 +55,9 @@ class OrderVatView
     /** @var null|Invoice */
     public $invoice;
 
+    /** @var VatListView */
+    public $vatListView;
+
     /**
      * @param string             $numero
      * @param int                $orderId
@@ -64,8 +68,9 @@ class OrderVatView
      * @param string             $currency
      * @param bool               $isCancelled
      * @param int                $totalWithoutVat amount in cents
-     * @param int                $vatAmount amount in cents
-     * @param int                $totalWithVat amount in cents
+     * @param int                $vatAmount       amount in cents
+     * @param int                $totalWithVat    amount in cents
+     * @param VatListView        $vatListView
      * @param \DateTimeInterface $createdAt
      * @param Invoice|null       $invoice
      */
@@ -81,6 +86,7 @@ class OrderVatView
         $totalWithoutVat,
         $vatAmount,
         $totalWithVat,
+        VatListView $vatListView,
         \DateTimeInterface $createdAt,
         Invoice $invoice = null
     ) {
@@ -97,12 +103,13 @@ class OrderVatView
         $this->totalWithVat    = $totalWithVat;
         $this->createdAt       = $createdAt;
         $this->invoice         = $invoice;
+        $this->vatListView     = $vatListView;
     }
 
     /**
      * @return bool
      */
-    public function hasInvoice()
+    public function hasInvoice(): bool
     {
         return null !== $this->invoice;
     }
@@ -110,7 +117,7 @@ class OrderVatView
     /**
      * @return string
      */
-    public function getTotalVatMode()
+    public function getTotalVatMode(): string
     {
         return true === $this->isVatApplicable ? Event::VAT_MODE_ATI : Event::VAT_MODE_ET;
     }

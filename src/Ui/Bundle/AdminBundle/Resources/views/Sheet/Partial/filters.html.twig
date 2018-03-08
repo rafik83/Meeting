@@ -38,7 +38,7 @@
                     <hr>
 
                     {{ form_row(form.hasRemainingToPay, {'inline': true}) }}
-                    {{ form_row(form.has_order, {'inline': true}) }}
+                    {{ form_row(form.order_status, {'inline': true}) }}
                     {{ form_row(form.has_cart, {'inline': true}) }}
                     {{ form_row(form.hasInvoice, {'inline': true}) }}
 
@@ -46,11 +46,15 @@
 
                     {{ form_row(form.hasScheduledMeeting, {'inline': true}) }}
                     {{ form_row(form.agendaConfirmedStatus) }}
+                    {{ form_row(form.phoneValidationStatus) }}
+                    {{ form_row(form.availabilityConfirmationStatus) }}
                     {{ form_row(form.hasPendingMeetingPropositions, {'inline': true}) }}
                     {{ form_row(form.hasNoMeetingRequest, {'inline': true}) }}
                 </div>
                 <div class="col-md-6">
+                    {{ form_row(form.reminderDate) }}
                     {{ form_row(form.follower) }}
+                    {{ form_row(form.commercialStatus) }}
 
                     <hr>
 

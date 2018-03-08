@@ -1,9 +1,9 @@
 <?php
 
 /*
- * This file is part of the vimeet project.
+ * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2016 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -52,7 +52,6 @@ class RemoveTransactionHandlerTest extends TestCase
             Events::TRANSACTION_REMOVED,
             new TransactionRemovedEvent($transaction)
         )->shouldBeCalled();
-
 
         $handler = new RemoveHandler($transactionRepository->reveal(), $eventDispatcher->reveal());
         $handler->handle($remove);

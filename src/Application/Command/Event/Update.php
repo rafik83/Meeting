@@ -34,25 +34,27 @@ class Update extends AbstractEvent
      */
     public function __construct(Model\Event $event)
     {
-        $this->event         = $event;
-        $this->title         = $event->getTitle();
-        $this->locales       = $event->getLocales();
-        $this->fallback      = $event->getFallback();
-        $this->translations  = [];
-        $this->mode          = $event->getMode();
-        $this->domain        = $event->getDomain();
-        $this->timeZone      = $event->getTimeZone();
-        $this->country       = $event->getCountry();
-        $this->vat           = $event->getVat();
-        $this->currency      = $event->getCurrency();
-        $this->leftColor     = $event->getConfiguration()->getLeftColor();
-        $this->rightColor    = $event->getConfiguration()->getRightColor();
-        $this->textColor     = $event->getConfiguration()->getTextColor();
+        $this->event = $event;
+        $this->title = $event->getTitle();
+        $this->locales = $event->getLocales();
+        $this->fallback = $event->getFallback();
+        $this->translations = [];
+        $this->mode = $event->getMode();
+        $this->domain = $event->getDomain();
+        $this->timeZone = $event->getTimeZone();
+        $this->country = $event->getCountry();
+        $this->vat = $event->getVat();
+        $this->currency = $event->getCurrency();
+        $this->leftColor = $event->getConfiguration()->getLeftColor();
+        $this->rightColor = $event->getConfiguration()->getRightColor();
+        $this->textColor = $event->getConfiguration()->getTextColor();
         $this->organiserName = $event->getOrganiserName();
-        $this->emailTeam     = $event->getEmailTeam();
+        $this->emailTeam = $event->getEmailTeam();
         $this->invoicePrefix = $event->getInvoicePrefix();
         $this->analyticsCode = $event->getConfiguration()->getAnalyticsCode();
-        $this->visible       = $event->isVisible();
+        $this->visible = $event->isVisible();
+        $this->backgroundColor = $event->getConfiguration()->getBackgroundColor();
+        $this->welcomeEnabled = $event->isWelcomeEnabled();
 
         foreach ($event->getTranslations() as $translation) {
             $this->translations[$translation->getLocale()] = [
@@ -80,5 +82,17 @@ class Update extends AbstractEvent
         return
             $this->locales !== $this->event->getLocales() ||
             $this->fallback !== $this->event->getFallback();
+    }
+
+    /**
+     * @return bool
+     */
+    public function isBackgroundUpdated(): bool
+    {
+        $eventBackgroundImage = $this->event->getConfiguration()->getBackgroundImage();
+        $eventBackgroundColor = $this->event->getConfiguration()->getBackgroundColor();
+
+        return $this->backgroundColor !== $eventBackgroundColor
+            || ($this->backgroundImage !== null && $this->backgroundImage !== $eventBackgroundImage);
     }
 }

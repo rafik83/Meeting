@@ -10,19 +10,15 @@ $button-text-color: #FFFFFF;
 $button-bg-color-inactive: rgba(#FFFFFF, .15);
 $button-bg-color-inactive-hover: rgba(#FFFFFF, .3);
 
-$font-path: '{{ fontPath }}';
 $image-path: '{{ imagePath }}';
 $gradient-left-color: {{ gradientLeftColor }};
 $gradient-right-color: {{ gradientRightColor }};
 $color-highlighted: {{ colorHighLighted }};
 
 @import "{{ bundleGuidelinePath }}/base/mixins";
-@import "{{ bundleGuidelinePath }}/base/fonts";
 @import "{{ bundleGuidelinePath }}/base/layout";
-@import "{{ bundleGuidelinePath }}/base/responsive";
 
 @import "{{ bundleGuidelinePath }}/generic/links";
-@import "{{ bundleGuidelinePath }}/generic/titles";
 @import "{{ bundleGuidelinePath }}/generic/lists";
 @import "{{ bundleGuidelinePath }}/generic/buttons";
 @import "{{ bundleGuidelinePath }}/generic/form";
@@ -34,7 +30,6 @@ $color-highlighted: {{ colorHighLighted }};
 @import "{{ bundleGuidelinePath }}/objects/section";
 @import "{{ bundleGuidelinePath }}/objects/tabs";
 @import "{{ bundleGuidelinePath }}/objects/profile";
-@import "{{ bundleGuidelinePath }}/objects/button-link";
 @import "{{ bundleGuidelinePath }}/objects/carousel";
 @import "{{ bundleGuidelinePath }}/objects/choice";
 @import "{{ bundleGuidelinePath }}/objects/collection";
@@ -47,7 +42,6 @@ $color-highlighted: {{ colorHighLighted }};
 @import "{{ bundleGuidelinePath }}/objects/product";
 @import "{{ bundleGuidelinePath }}/objects/tunnel-step";
 @import "{{ bundleGuidelinePath }}/objects/catalog";
-@import "{{ bundleGuidelinePath }}/objects/messages";
 
 .text-highlighted {
   color: $color-highlighted;
@@ -55,4 +49,8 @@ $color-highlighted: {{ colorHighLighted }};
 
 .bg-highlighted {
   background-color: $color-highlighted !important;
+}
+
+body {
+  background: {% if backgroundImage %}url("{{ backgroundImage }}") no-repeat fixed center{% endif %} {{ backgroundColor }};
 }

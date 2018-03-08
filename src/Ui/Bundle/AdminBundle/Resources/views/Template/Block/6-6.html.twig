@@ -3,63 +3,42 @@
 }|merge(config|default({})) %}
 
 <div class="block" data-block="6-6" data-uid="{{ uid|default('__UID__') }}" data-config="{{ config|json_encode }}">
-    <div class="block-buttons">
-        <ul class="list-unstyled">
-            <li>
-                <span class="btn btn-link move-button">
-                    <i class="glyphicon glyphicon-move"></i>
-                </span>
-            </li>
-            <li>
-                <button class="btn btn-link delete-button">
-                    <i class="glyphicon glyphicon-remove"></i>
-                </button>
-            </li>
-            <li>
-                <button class="btn btn-link configure-button">
-                    <i class="glyphicon glyphicon-cog"></i>
-                </button>
-                <div class="modal fade configure-modal" tabindex="-1" role="dialog">
-                    <form action="#" method="GET">
-                        <div class="modal-dialog" role="document">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                                    <h4 class="modal-title">Configuration</h4>
-                                </div>
-                                <div class="modal-body">
-                                    <div class="form-group">
-                                        <label class="form-label">Style</label>
-                                        <select class="form-control" name="style" title="Style">
-                                            <option value="style-1">Style 1</option>
-                                            <option value="style-2">Style 2</option>
-                                            <option value="style-3">Style 3</option>
-                                        </select>
-                                    </div>
-                                </div>
-                                <div class="modal-footer">
-                                    <button type="button" class="btn btn-default" data-dismiss="modal">Fermer</button>
-                                    <button type="button" class="btn btn-primary save-configuration">Enregistrer</button>
-                                </div>
-                            </div>
-                        </div>
-                    </form>
-                </div>
-            </li>
-        </ul>
-    </div>
+    {{ include('AdminBundle:Template/Block:configure.html.twig', {}, false) }}
+
     <div class="row">
         <div class="col-md-6">
             <div class="block-inner">
                 {% for uid, item in children[0]|default([]) %}
-                    {{ include('AdminBundle:Template/' ~ item.component|capitalize ~ ':' ~ item.type ~ '.html.twig', { 'uid': uid, 'config': item.config, 'children': item.children|default([]), 'locale': locale, 'fallback': fallback|default(false), 'nomenclatures': nomenclatures, 'sheet_tags': sheet_tags, 'products': products }, false) }}
+                    {{ include('AdminBundle:Template/' ~ item.component|capitalize ~ ':' ~ item.type ~ '.html.twig', {
+                        'uid': uid,
+                        'config': item.config,
+                        'children': item.children|default([]),
+                        'locale': locale,
+                        'fallback': fallback|default(false),
+                        'nomenclatures': nomenclatures,
+                        'sheet_tags': sheet_tags,
+                        'products': products,
+                        'sheet_template_tags': sheet_template_tags|default([]),
+                        'uploadFormats': uploadFormats|default([]),
+                    }, false) }}
                 {% endfor %}
             </div>
         </div>
         <div class="col-md-6">
             <div class="block-inner">
                 {% for uid, item in children[1]|default([]) %}
-                    {{ include('AdminBundle:Template/' ~ item.component|capitalize ~ ':' ~ item.type ~ '.html.twig', { 'uid': uid, 'config': item.config, 'children': item.children|default([]), 'locale': locale, 'fallback': fallback|default(false), 'nomenclatures': nomenclatures, 'sheet_tags': sheet_tags, 'products': products }, false) }}
+                    {{ include('AdminBundle:Template/' ~ item.component|capitalize ~ ':' ~ item.type ~ '.html.twig', {
+                        'uid': uid,
+                        'config': item.config,
+                        'children': item.children|default([]),
+                        'locale': locale,
+                        'fallback': fallback|default(false),
+                        'nomenclatures': nomenclatures,
+                        'sheet_tags': sheet_tags,
+                        'products': products,
+                        'sheet_template_tags': sheet_template_tags|default([]),
+                        'uploadFormats': uploadFormats|default([]),
+                    }, false) }}
                 {% endfor %}
             </div>
         </div>

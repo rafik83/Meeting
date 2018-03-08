@@ -1,9 +1,9 @@
 <?php
 
 /*
- * This file is part of the vimeet project.
+ * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2017 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -11,41 +11,37 @@
 namespace Proximum\Vimeet\Infrastructure\Adapter;
 
 use InvalidArgumentException;
+use OpenTok\MediaMode;
 use OpenTok\OpenTok;
 use OpenTok\Role;
 use OpenTok\Session;
 use Proximum\Vimeet\Application\Adapter\VideoConferenceAdapterInterface;
 use Proximum\Vimeet\Application\Exception\VideoConference\InvalidTokenGeneratorArgumentsException;
-use Proximum\Vimeet\Domain\Model\MeetingSlot;
 
 class VideoConferenceAdapter implements VideoConferenceAdapterInterface
 {
-    /**
-     * @var string
-     */
-    private $apiKey;
+    const DELAY_AFTER_END_TIME = '+15 minutes';
+    const TOKEN_GENERATION_DEFAULT_OPTIONS = ['role' => Role::PUBLISHER];
+    const SESSION_DEFAULT_OPTIONS = ['mediaMode' => MediaMode::ROUTED];
 
-    /**
-     * @var OpenTok
-     */
+    /** @var OpenTok */
     private $openTok;
 
-    /**
-     * @var bool
-     */
+    /** @var string */
+    private $tokboxApiKey;
+
+    /** @var bool */
     private $hasSecurity;
 
     /**
-     * VideoConferenceAdapter constructor.
-     *
-     * @param string $apiKey
-     * @param string $apiSecret
-     * @param bool $hasSecurity
+     * @param OpenTok $openTok
+     * @param string  $tokboxApiKey
+     * @param bool    $hasSecurity
      */
-    public function __construct(string $apiKey, string $apiSecret, bool $hasSecurity)
+    public function __construct(OpenTok $openTok, string $tokboxApiKey, bool $hasSecurity)
     {
-        $this->apiKey = $apiKey;
-        $this->openTok = new OpenTok($apiKey, $apiSecret);
+        $this->openTok = $openTok;
+        $this->tokboxApiKey = $tokboxApiKey;
         $this->hasSecurity = $hasSecurity;
     }
 
@@ -54,29 +50,30 @@ class VideoConferenceAdapter implements VideoConferenceAdapterInterface
      */
     public function createSession(array $options = []): Session
     {
-        return $this->openTok->createSession($options);
+        return $this->openTok->createSession(array_merge(
+            self::SESSION_DEFAULT_OPTIONS,
+            $options
+        ));
     }
 
     /**
      * {@inheritdoc}
      */
-    public function generateAccessToken(Session $session, MeetingSlot $slot, array $options = []): string
+    public function generateAccessToken(Session $session, \DateTimeInterface $endDateTime, array $options = []): string
     {
-        $defaultOptions = ['role' => Role::PUBLISHER];
-
         if ($this->hasSecurity === true) {
-            /** @var \DateTime $slotEndDate */
-            $slotEndDate = clone $slot->getEnd();
-            $sessionEndDate = $slotEndDate->modify('+15 min');
+            $sessionEndDate = new \DateTime($endDateTime->format('Y-m-d H:i:s.u'));
 
-            $defaultOptions = array_merge($defaultOptions, [
-                'expireTime' => $sessionEndDate->getTimeStamp(),
-            ]);
+            if (false === $sessionEndDate->modify(self::DELAY_AFTER_END_TIME)) {
+                throw new \LogicException('Impossible to modify the date');
+            }
+
+            $options['expireTime'] = $sessionEndDate->getTimeStamp();
         }
 
         try {
             return $this->openTok->generateToken($session->getSessionId(), array_merge(
-                $defaultOptions, $options
+                self::TOKEN_GENERATION_DEFAULT_OPTIONS, $options
             ));
         } catch (InvalidArgumentException $argumentException) {
             throw new InvalidTokenGeneratorArgumentsException();
@@ -88,7 +85,7 @@ class VideoConferenceAdapter implements VideoConferenceAdapterInterface
      */
     public function getApiKey(): string
     {
-        return $this->apiKey;
+        return $this->tokboxApiKey;
     }
 
     /**

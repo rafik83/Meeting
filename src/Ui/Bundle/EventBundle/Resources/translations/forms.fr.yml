@@ -3,6 +3,7 @@ boolean.yes: Oui
 form.add_participant.children.email.placeholder: E-mail
 form.add_participant.children.firstName.placeholder: Prénom
 form.add_participant.children.lastName.placeholder: NOM
+form.add_participant.children.product.label: 'Produits liés'
 form.catalog_approve_meeting_request.children.description.label: 'Répondre à la proposition de RDV?'
 form.catalog_approve_meeting_request.children.description.placeholder: 'Ecrire un message'
 form.catalog_approve_meeting_request.children.participants.label: 'Attribuer ce RDV exclusivement à ?'
@@ -61,6 +62,8 @@ form.nomenclature_data.children.submit.label: Enregistrer
 form.package_summary_promotion_code.children.submit.label: Valider
 form.package_summary_promotion_code.placeholder: 'Saisir votre code promotionnel'
 form.package_summary_terms_of_sale.children.termsOfSale.label: 'Je reconnais avoir pris connaissance et accepter les Conditions générales de vente ainsi que les Conditions tarifaires relatives au forfait de participation que je souscris.'
+form.participantAndPlanning.participantProduct.selectAnOption: '-- Sélectionnez une option --'
+form.participate.children.invitationCode.label: 'Code d''invitation'
 form.participate.children.participants.label: 'Qui participe ?'
 form.participate.children.participants.unavailable: Indisponible
 form.participate.children.question.label: 'Posez une question aux intervenants pour préparer l''atelier'
@@ -74,25 +77,33 @@ form.payment_choice.children.mode.label: 'Choisissez votre mode de paiement'
 form.payment_choice.children.paymentMode.bank_card: 'Carte bancaire'
 form.payment_choice.children.paymentMode.bank_check: Chèque
 form.payment_choice.children.paymentMode.bank_transfer: Transfert
-form.payment_choice.children.paymentMode.paypal: 'Paypal ou Carte bancaire'
+form.payment_choice.children.paymentMode.paypal: 'Carte bancaire ou Paypal'
 form.register.newUser.password.placeholder: 'Choisissez votre mot de passe'
 form.register.newUser.repeatedPassword.placeholder: 'Confirmer votre mot de passe'
 form.search.autocomplete.atLeastThreeChars: 'Saisir au moins 3 caractères'
 form.search.autocomplete.atLeastTwoChars: 'Saisir au moins 2 caractères'
 form.search.autocomplete.searching: 'Recherche en cours...'
+form.search.availableSlot.choice.catalog_available: 'Ayant des disponibilités'
+form.search.availableSlot.choice.catalog_everyone: 'Tout le catalogue'
+form.search.availableSlot.choice.catalog_slot: 'Disponible le %day% à %time%'
+form.search.availableSlot.label: 'Qui est disponible ?'
 form.search.categories.at_least_one_checked: 'Au moins une catégorie de participant doit être sélectionnée'
 form.search.content.label: 'Mots clés'
 form.search.keywords.search.placeholder: 'Sociétés, Compétences...'
 form.search.localization.label: 'Zones géographiques'
 form.search.localization.search.placeholder: '69, Lyon, France'
+form.search.meeting.availableSlot.choice.available: 'Ayant des disponibilités'
+form.search.meeting.availableSlot.choice.everyone: Tous
+form.search.meeting.availableSlot.choice.slot: 'Disponible le %day% à %time%'
+form.search.meeting.availableSlot.label: 'Qui est disponible ?'
 form.search.meeting.state.all: 'Tous les statuts'
 form.search.meeting.state.approved: Acceptées
 form.search.meeting.state.cancelled: Annulées
-form.search.meeting.state.label: 'Gestion de RDV'
+form.search.meeting.state.label: 'Gestion RDV'
 form.search.meeting.state.receive: 'Propositions reçues'
 form.search.meeting.state.refused: Refusées
 form.search.meeting.state.sent: 'Vos demandes en attente'
-form.search.meeting.type.label: 'Gestion de RDV'
+form.search.meeting.type.label: 'Gestion RDV'
 form.search.objective.label: Objectifs
 form.search.objective.need: 'Répondre à mes besoins'
 form.search.objective.supply: 'Rechercher mes offres'
@@ -133,7 +144,9 @@ form.sheet_media_collection_data.children.selectedProduct.label: 'Produits liés
 form.sheet_media_collection_data.children.submit.label: Enregistrer
 form.sheet_media_data.children.type.document: Document
 form.sheet_media_data.children.type.video: Vidéo
+form.user_availability_confirmation.children.confirm.label: 'Confirmer vos disponibilités'
 form.user_event_phone_validate_code.children.code.label: 'Code de confirmation reçu'
 form.user_event_phone_validate_code.children.confirm.label: Confirmer
 gender.man: Monsieur
 gender.woman: Madame
+gender.none: 'Aucun'

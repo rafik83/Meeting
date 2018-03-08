@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2015 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -28,29 +28,19 @@ use Proximum\Vimeet\Domain\Promotion\Exception\PromotionCodeSoldOutException;
 
 class Cart
 {
-    /**
-     * @var Sheet
-     */
+    /** @var Sheet */
     private $sheet;
 
-    /**
-     * @var ArrayCollection of CartRow
-     */
+    /** @var ArrayCollection of CartRow */
     private $rows;
 
-    /**
-     * @var ArrayCollection of PromotionCodeRow
-     */
+    /** @var ArrayCollection of PromotionCodeRow */
     private $promotionCodeRows;
 
-    /**
-     * @var int
-     */
+    /** @var int */
     private $currentStep;
 
     /**
-     * Cart constructor.
-     *
      * @param Sheet              $sheet
      * @param CartRow[]          $rows
      * @param PromotionCodeRow[] $promotionRows
@@ -65,11 +55,9 @@ class Cart
     }
 
     /**
-     * Get sheet
-     *
      * @return Sheet
      */
-    public function getSheet()
+    public function getSheet(): Sheet
     {
         return $this->sheet;
     }
@@ -80,7 +68,7 @@ class Cart
      *
      * @return Cart
      */
-    public function setProduct(Product $product, $quantity)
+    public function setProduct(Product $product, $quantity): Cart
     {
         if ($this->hasProduct($product)) {
             $row = $this->getRow($product);
@@ -99,48 +87,23 @@ class Cart
     }
 
     /**
-     * Set additionnal participant quantity
-     *
-     * @param Order $order
-     *
-     * @return Cart
+     * @return Product\ProductIncluded[]
      */
-    public function resolveParticipantsQuantity(Order $order = null)
+    public function getIncludedParticipantProducts(): array
     {
-        $orderParticipant            = 0;
-        $includedParticipantQuantity = 0;
-
-        if (isset($order)) {
-            $orderParticipant = $order->countParticipant();
-            if ($plan = $order->getPlan()) {
-                $includedParticipantQuantity = $plan->getIncludedParticipantQuantity();
-            }
-        } else {
-            $includedParticipantQuantity = $this->getIncludedParticipantQuantity();
+        if (null === $this->getPlanRow()) {
+            return [];
         }
 
-        $participantNumber = $this->sheet->countParticipant() - ($includedParticipantQuantity + $orderParticipant);
-
-        if ($participantNumber < 0) {
-            $additionnal = $participantNumber - ($this->sheet->countParticipant() - $includedParticipantQuantity);
-        } else {
-            $additionnal = $participantNumber;
-        }
-
-        // In case of a first order, the number of participant can not be negative
-        if (null === $order && $additionnal < 0) {
-            return $this;
-        }
-
-        $this->setProduct($this->sheet->getPackageParticipant(), $additionnal);
-
-        return $this;
+        return $this->getPlanRow()->getProduct()->getIncludedParticipantProducts();
     }
 
     /**
      * Get how many participant are included.
      *
      * @return int
+     *
+     * @deprecated
      */
     public function getIncludedParticipantQuantity()
     {
@@ -166,6 +129,8 @@ class Cart
 
     /**
      * @return null|CartRow
+     *
+     * @deprecated use getParticipantRows()
      */
     public function getParticipantRow()
     {
@@ -176,6 +141,16 @@ class Cart
         }
 
         return null;
+    }
+
+    /**
+     * @return CartRow[]
+     */
+    public function getParticipantRows(): array
+    {
+        return array_filter($this->getRows(), function(CartRow $cartRow) {
+            return $cartRow->getProduct()->isParticipant();
+        });
     }
 
     /**
@@ -209,12 +184,6 @@ class Cart
      */
     public function hasProduct(Product $product)
     {
-        if ($product->isParticipant() || $product->isPlan() || $product->isPlanning()) {
-            return $this->rows->exists(function ($key, CartRow $cartRow) use ($product) {
-                return $cartRow->getProduct()->getType() === $product->getType();
-            });
-        }
-
         return $this->rows->exists(function ($key, CartRow $cartRow) use ($product) {
             return $cartRow->getProduct() === $product;
         });
@@ -256,12 +225,6 @@ class Cart
      */
     public function getRow(Product $product)
     {
-        if ($product->isParticipant() || $product->isPlan() || $product->isPlanning()) {
-            return $this->rows->filter(function (CartRow $cartRow) use ($product) {
-                return $cartRow->getProduct()->getType() === $product->getType();
-            })->first();
-        }
-
         return $this->rows->filter(function (CartRow $cartRow) use ($product) {
             return $cartRow->getProduct() === $product;
         })->first();
@@ -417,7 +380,7 @@ class Cart
      *
      * @return bool
      */
-    public function isCartRowPositive(PromotionCode $promotionCode)
+    public function isCartRowPositive(PromotionCode $promotionCode): bool
     {
         foreach ($promotionCode->getPromotions() as $promotion) {
             if ($cartRow = $this->getCartRowForProduct($promotion->getProduct())) {
@@ -428,6 +391,49 @@ class Cart
         }
 
         return false;
+    }
+
+    /**
+     * Get product discount for a specific promotion code
+     *
+     * @param PromotionCode $promotionCode
+     * @param Product       $product
+     *
+     * @return float
+     */
+    public function getDiscountForProduct(PromotionCode $promotionCode, Product $product): float
+    {
+        $cartRow = $this->getCartRowForProduct($product);
+
+        if (null === $cartRow) {
+            return 0;
+        }
+
+        $total = 0;
+
+        foreach ($promotionCode->getPromotions() as $promotion) {
+            if ($promotion->getProduct() !== $product) {
+                continue;
+            }
+
+            // don't apply promo code on cart row negative quantity
+            if ($cartRow->getQuantity() < 0) {
+                continue;
+            }
+
+            // don't use promotion quantity max if promotion type value off
+            if (Promotion::TYPE_VALUE_OFF === $promotion->getType()) {
+                $total -= $promotion->getDiscount();
+            } elseif ($cartRow->getQuantity() < $promotion->getQuantityMax()
+                || null === $promotion->getQuantityMax()
+            ) {
+                $total -= $cartRow->getQuantity() * $promotion->getDiscount();
+            } else {
+                $total -= $promotion->getQuantityMax() * $promotion->getDiscount();
+            }
+        }
+
+        return $total;
     }
 
     /**

@@ -82,7 +82,7 @@ class ProductRepository implements ProductRepositoryInterface
             ->where('product.event = :event')
             ->setParameter('event', $event)
             ->groupBy('product')
-            ->orderBy('product.name');
+            ->orderBy('product.type, product.name');
 
         return $queryBuilder->getQuery()->getResult();
     }
@@ -231,12 +231,12 @@ class ProductRepository implements ProductRepositoryInterface
                 AND NOT EXISTS(
                     SELECT package.id
                     FROM Entity:Package package
-                    LEFT JOIN package.participant participant
+                    LEFT JOIN package.participantRanks participantRank
                     LEFT JOIN package.planning planning
                     LEFT JOIN package.groups group
                     LEFT JOIN group.optionRanks optionRank 
                     LEFT JOIN package.planRanks packagePlanRank
-                    WHERE participant = product
+                    WHERE participantRank.productParticipant = product
                         OR planning = product
                         OR packagePlanRank.plan = product
                         OR optionRank.option = product

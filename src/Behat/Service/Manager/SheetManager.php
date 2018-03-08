@@ -97,4 +97,35 @@ class SheetManager
     {
         return $this->sheetRepository->getSheetByEventAndTitle($event, $sheetTitle);
     }
+
+    /**
+     * @param Sheet $sheet
+     */
+    public function setInCatalog(Sheet $sheet)
+    {
+        $sheet->setInCatalog(true);
+        $sheet->setInCatalogAt(new \DateTime());
+
+        $this->sheetRepository->set($sheet);
+    }
+
+    /**
+     * @param Sheet $sheet
+     */
+    public function setValidated(Sheet $sheet)
+    {
+        $sheet->markAsValidated();
+
+        $this->sheetRepository->set($sheet);
+    }
+
+    /**
+     * @param Sheet $sheet
+     */
+    public function setEnabled(Sheet $sheet)
+    {
+        $sheet->setEnable(true);
+
+        $this->sheetRepository->set($sheet);
+    }
 }

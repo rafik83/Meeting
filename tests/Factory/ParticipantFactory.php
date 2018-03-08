@@ -1,9 +1,9 @@
 <?php
 
 /*
- * This file is part of the vimeet project.
+ * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2016 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -24,7 +24,7 @@ class ParticipantFactory
      */
     public static function create(Sheet $sheet, User $user = null)
     {
-        $user = ($user !== null) ? $user : new User('user@vimeet.com', 'salt', 'password', 'fr');
+        $user = (null !== $user) ? $user : new User('user@vimeet.com', 'salt', 'password', 'fr');
 
         $participant = new Participant($sheet, $user, [], true);
         $sheet->addParticipant($participant);

@@ -1,0 +1,33 @@
+<?php
+
+/*
+ * This file is part of the Proximum Vimeet project.
+ *
+ * Copyright (C) Proximum
+ *
+ * @author Elao <contact@elao.com>
+ */
+
+namespace Proximum\Vimeet\Application\Command\User\Availability;
+
+use Proximum\Vimeet\Domain\Model\Event;
+use Proximum\Vimeet\Domain\Model\User;
+
+class Confirmation
+{
+    /** @var Event */
+    public $event;
+
+    /** @var User */
+    public $user;
+
+    /**
+     * @param Event $event
+     * @param User  $user
+     */
+    public function __construct(Event $event, User $user)
+    {
+        $this->event = $event;
+        $this->user = $user;
+    }
+}

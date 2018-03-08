@@ -13,6 +13,7 @@ namespace Proximum\Vimeet\Domain\Repository;
 use Proximum\Vimeet\Domain\Model\Admin;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\EventInterface;
+use Proximum\Vimeet\Domain\Model\MeetingSlot;
 use Proximum\Vimeet\Domain\Model\PaginatedResult;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\Sheet\Group;
@@ -21,6 +22,7 @@ use Proximum\Vimeet\Domain\Model\Template\SheetTemplate;
 use Proximum\Vimeet\Domain\Model\Type;
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\View\SheetView;
+use Proximum\Vimeet\Domain\View\Spot\Import\SheetView as ImportSheetView;
 
 interface SheetRepositoryInterface
 {
@@ -53,6 +55,11 @@ interface SheetRepositoryInterface
     public function updateStateBySheetsId(array $ids, $state);
 
     /**
+     * @param int[] $ids array of Sheet id
+     */
+    public function refuseBySheetsId(array $ids);
+
+    /**
      * @param int[] $ids
      * @param Admin $admin
      */
@@ -69,7 +76,30 @@ interface SheetRepositoryInterface
      *
      * @return Sheet[]
      */
-    public function getByEvent(Event $event);
+    public function getByEvent(Event $event): array;
+
+    /**
+     * @param Event   $event
+     * @param Sheet[] $excludedSheets
+     *
+     * @return Sheet[]
+     */
+    public function getSheetsInCatalogByEvent(Event $event, array $excludedSheets = []): array;
+
+    /**
+     * @param Event       $event
+     * @param Type[]      $types
+     * @param MeetingSlot $slot
+     * @param Sheet[]     $excludedSheets
+     *
+     * @return int
+     */
+    public function countAvailableSheetsInCatalogWithTypesByEvent(
+        Event $event,
+        array $types = [],
+        MeetingSlot $slot,
+        array $excludedSheets = []
+    ): int;
 
     /**
      * @param Event $event
@@ -83,14 +113,21 @@ interface SheetRepositoryInterface
      *
      * @return Sheet[]
      */
-    public function getSheetsInCatalogByEvent(Event $event);
+    public function getSheetsInCatalogWithAtLeastOneAcceptedRequestByEvent(Event $event);
 
     /**
-     * @param Event $event
+     * @param Sheet $sheet
      *
      * @return Sheet[]
      */
-    public function getSheetsInCatalogWithAtLeastOneAcceptedRequestByEvent(Event $event);
+    public function getSheetsMetBySheet(Sheet $sheet): array;
+
+    /**
+     * @param Sheet $sheet
+     *
+     * @return Sheet[]
+     */
+    public function getSheetsWithRequestWithSheet(Sheet $sheet): array;
 
     /**
      * @param Type $type
@@ -117,6 +154,14 @@ interface SheetRepositoryInterface
     public function getSheetViewsByUserAndEvent($user, $event, $locale);
 
     /**
+     * @param Event $event
+     * @param int   $sheetId
+     *
+     * @return null|ImportSheetView
+     */
+    public function getSheetViewByEventAndId(Event $event, int $sheetId):? ImportSheetView;
+
+    /**
      * Get only enabled sheet by user or user's participant
      *
      * @param User  $user
@@ -125,6 +170,16 @@ interface SheetRepositoryInterface
      * @return Sheet[]
      */
     public function getSheetsByUserAndEvent(User $user, Event $event);
+
+    /**
+     * Get only enabled sheet of users on this event
+     *
+     * @param User[] $users
+     * @param Event  $event
+     *
+     * @return Sheet[]
+     */
+    public function getSheetsByUsersAndEvent(array $users, Event $event);
 
     /**
      * Get count enabled sheet by user or user's participant
@@ -175,6 +230,14 @@ interface SheetRepositoryInterface
      * @return Sheet[]
      */
     public function getSheetsById(array $ids);
+
+    /**
+     * @param array  $ids
+     * @param string $orderBy
+     *
+     * @return Sheet[]
+     */
+    public function getSheetsByIdOrdered(array $ids, string $orderBy): array;
 
     /**
      * @param Event $event
@@ -379,4 +442,12 @@ interface SheetRepositoryInterface
      * @return Sheet|null
      */
     public function getSheetByEventAndTitle(Event $event, $title);
+
+    /**
+     * @param Type[] $types
+     * @param string $extraDataName Sheet\ExtraData name
+     *
+     * @return Sheet[]
+     */
+    public function getByTypesAndWithoutGivenExtraData(array $types, string $extraDataName): array;
 }

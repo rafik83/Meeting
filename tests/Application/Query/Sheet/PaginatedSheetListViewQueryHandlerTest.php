@@ -29,6 +29,7 @@ use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\TraceRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\TypeRepositoryInterface;
+use Proximum\Vimeet\Domain\Sheet\CommercialStatus;
 use Proximum\Vimeet\Domain\Template\ParticipantInfoGuesser;
 use Proximum\Vimeet\Domain\Trace\TraceableName;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Security\Impersonate\Impersonate;
@@ -112,10 +113,14 @@ class PaginatedSheetListViewQueryHandlerTest extends TestCase
         $sheet2->getSpot()->willReturn(null);
         $sheet2->isAccepted()->willReturn(false);
         $sheet2->isValidated()->willReturn(false);
+        $sheet1->getCommercialStatus()->willReturn(CommercialStatus::STATUS_INTEREST);
+        $sheet2->getCommercialStatus()->willReturn(CommercialStatus::STATUS_DO_NOT_CALL);
+        $sheet1->getReminderDate()->willReturn($datetime1);
+        $sheet2->getReminderDate()->willReturn($datetime1);
 
         $paginatedResult = new PaginatedResult([$sheet1->reveal(), $sheet2->reveal()], 1, 20, 2);
         $sheetSearchAdapter = $this->prophesize(SheetSearchAdapterInterface::class);
-        $sheetSearchAdapter->find($event->reveal(), [], null, 1, 20, 'fr', false)->shouldBeCalled()->willReturn($paginatedResult);
+        $sheetSearchAdapter->paginate($event->reveal(), [], null, 1, 20, 'fr', false)->shouldBeCalled()->willReturn($paginatedResult);
         $sheetInfoGuesser = $this->prophesize(SheetInfoGuesser::class);
         $sheetInfoGuesser->guessSheetTitle($sheet1->reveal(), 'fr')->shouldBeCalled()->willReturn('sheet title 1');
         $sheetInfoGuesser->guessSheetTitle($sheet2->reveal(), 'fr')->shouldBeCalled()->willReturn('sheet title 2');
@@ -170,6 +175,8 @@ class PaginatedSheetListViewQueryHandlerTest extends TestCase
             'type1',
             new SheetParticipantView('participant first name', 'participant last name', 'email1@sheet.fr'),
             'admin name',
+            CommercialStatus::STATUS_INTEREST,
+            $datetime1,
             $datetime1,
             $datetime1,
             'token1',
@@ -192,6 +199,8 @@ class PaginatedSheetListViewQueryHandlerTest extends TestCase
             'type2',
             new SheetParticipantView('truc', 'muche', 'email2@sheet.fr'),
             '',
+            CommercialStatus::STATUS_DO_NOT_CALL,
+            $datetime1,
             $datetime2,
             $datetime2,
             'token2',

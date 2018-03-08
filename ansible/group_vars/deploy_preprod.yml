@@ -10,7 +10,7 @@ manala_deploy_strategy_git_version: preprod
 # Releases #
 ############
 
-manala_deploy_releases: 1
+manala_deploy_releases: 3
 
 ###########
 # Removed #
@@ -24,8 +24,7 @@ manala_deploy_removed:
 #########
 
 manala_deploy_tasks:
-  - symfony_assets_version
   - make: install@prod
   - make: migration@prod
-  - make: build@prod
-  - command: sudo /usr/sbin/service php5.6-fpm reload
+  - command: sudo /usr/sbin/service php7.1-fpm reload
+  - command: sudo supervisorctl restart all

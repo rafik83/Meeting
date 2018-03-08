@@ -1,3 +1,4 @@
 Proximum\Vimeet\Application\Command\Package\Step\SelectParticipantAndPlanning:
     constraints:
         - Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Validator\Constraint\Package\PlanningQuantityConstraint: ~
+        - Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Validator\Constraint\Package\ParticipantsProductConstraint: ~

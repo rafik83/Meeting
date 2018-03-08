@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of the vimeet project.
+ * This file is part of the Proximum Vimeet project.
  *
  * Copyright (C) Proximum
  *
@@ -16,7 +16,7 @@ use Proximum\Vimeet\Domain\Model\Category;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Type;
 
-class Configure
+class Configure extends ConfigureSearchFacet
 {
     /** @var Event */
     public $event;
@@ -30,9 +30,6 @@ class Configure
     /** @var bool */
     public $externalCatalogEnabled;
 
-    /** @var SearchFacet[] */
-    public $searchFacets;
-
     /** @var CatalogVisibility */
     public $catalogVisibility;
 
@@ -42,9 +39,10 @@ class Configure
     /** @var array of CatalogVisibilityTranslation index by locale */
     public $messageTranslations;
 
+    /** @var null|string */
+    public $registrationUrl;
+
     /**
-     * Configure constructor.
-     *
      * @param Event             $event
      * @param CatalogVisibility $catalogVisibility
      * @param SearchFacet[]     $searchFacets
@@ -52,12 +50,6 @@ class Configure
     public function __construct(Event $event, CatalogVisibility $catalogVisibility, array $searchFacets)
     {
         $this->event                  = $event;
-        $this->catalogVisibility      = $catalogVisibility;
-        $this->searchFacets           = $searchFacets;
-        $this->externalCatalogEnabled = $event->isExternalCatalogEnabled();
-        $this->types                  = $catalogVisibility->getTypes();
-        $this->categories             = $catalogVisibility->getCategories();
-        $this->hasMessage             = $catalogVisibility->hasMessage();
 
         foreach ($event->getLocales() as $locale) {
             if (($catalogVisibilityTranslation = $catalogVisibility->getMessage($locale)) !== null) {
@@ -68,5 +60,15 @@ class Configure
                 $this->messageTranslations[$locale]['content'] = '';
             }
         }
+
+        $this->persistedSearchFacets = $searchFacets;
+        $this->catalogVisibility      = $catalogVisibility;
+        $this->externalCatalogEnabled = $event->isExternalCatalogEnabled();
+        $this->types                  = $catalogVisibility->getTypes();
+        $this->categories             = $catalogVisibility->getCategories();
+        $this->hasMessage             = $catalogVisibility->hasMessage();
+        $this->registrationUrl        = $catalogVisibility->getRegistrationUrl();
+
+        $this->prepareSearchFacetFields();
     }
 }

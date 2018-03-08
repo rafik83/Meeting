@@ -41,6 +41,14 @@ class SessionAdapter implements SessionInterface
     /**
      * {@inheritdoc}
      */
+    public function getFromFlashBag($type, array $default = []): array
+    {
+        return $this->session->getFlashBag()->get($type, $default);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function set($key, $data)
     {
         $this->session->set($key, $data);

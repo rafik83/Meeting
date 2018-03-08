@@ -16,6 +16,8 @@ use Proximum\Vimeet\Domain\Model\Admin;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\File;
 use Proximum\Vimeet\Domain\Model\Messaging\Campaign;
+use Proximum\Vimeet\Domain\Model\PlannerJob;
+use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\Template\RegistrationTemplate;
 use Proximum\Vimeet\Domain\Model\Template\SheetTemplate;
 use Proximum\Vimeet\Domain\Model\Type;
@@ -23,14 +25,20 @@ use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\Aggregate\FullUnavailability\UsersFullUnavailabilityAggregateCommand;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\Aggregate\FullUnavailability\UsersFullUnavailabilityByEventAggregateCommand;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\Aggregate\Participant\ParticipantAssignedToRequestAggregateCommand;
+use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\Aggregate\Sheet\AvailableSlotCalculatorCommand;
+use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\Aggregate\Sheet\Phone\PhoneValidationStatusCalculatorCommand;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\Analytic\MeetingSolution\GenerateMeetingSolutionCommand;
+use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\Event\IndexFromScratchCommand;
+use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\Event\Sheet\IndexSheetsByEventCommand;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\Event\User\Agenda\Version\GenerateVersionsCommand;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\GenerateInvoiceCommand;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\IndexSheetsCommand;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\Order\ExportOrderCommand;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\Planner\ExportPlannerCommand;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\Planner\ImportPlannerCommand;
+use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\Planning\GeneratePlanningCommand;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\SendEmailingCommand;
+use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\Sheet\PrintPdfCommand;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\Sheet\Index\IndexInCatalogSheetsByEventCommand;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\Sheet\Index\IndexSheetsByRegistrationTemplateCommand;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\Sheet\Index\IndexSheetsBySheetTemplateCommand;
@@ -51,14 +59,14 @@ class JobQueueAdapter extends AbstractJobQueueAdapter implements JobQueueInterfa
     /**
      * {@inheritdoc}
      */
-    public function printPlanning(array $types, $orderBy, $emailToNotify, $locale)
+    public function printPlanning(array $types, string $orderBy, $emailToNotify, $locale): void
     {
         $typeOptions = array_map(function (Type $type) {
             return sprintf('--types=%s', $type->getId());
         }, $types);
 
         $job = new Job(
-            'vimeet:planning:generate',
+            GeneratePlanningCommand::NAME,
             array_merge(
                 $typeOptions,
                 [
@@ -68,6 +76,27 @@ class JobQueueAdapter extends AbstractJobQueueAdapter implements JobQueueInterfa
                 ]
             )
         );
+
+        $this->setJob($job);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function printSheetsPdf(
+        Event $event,
+        array $sheetIds,
+        string $emailToNotify,
+        string $locale,
+        string $orderBy
+    ) {
+        $job = new Job(PrintPdfCommand::NAME, [
+            sprintf('--sheetIds=%s', implode(',', $sheetIds)),
+            sprintf('--eventId=%s', $event->getId()),
+            sprintf('--emailToNotify=%s', $emailToNotify),
+            sprintf('--locale=%s', $locale),
+            sprintf('--orderBy=%s', $orderBy)
+        ]);
 
         $this->setJob($job);
     }
@@ -99,15 +128,31 @@ class JobQueueAdapter extends AbstractJobQueueAdapter implements JobQueueInterfa
     /**
      * {@inheritdoc}
      */
-    public function exportPlannerForEvent(Event $event, Admin $admin, $locale, $lockMeetingRequest, $solutionType)
-    {
-        $job = new Job(ExportPlannerCommand::NAME, [
-            $event->getId(),
-            $admin->getEmail(),
-            $locale,
-            $solutionType,
-            $lockMeetingRequest
-        ]);
+    public function exportPlannerForEvent(
+        Event $event,
+        Admin $admin,
+        string $locale,
+        bool $lockMeetingRequest,
+        string $solutionType,
+        bool $isModeAuto,
+        ?PlannerJob $plannerJob
+    ) {
+        $job = new Job(
+            ExportPlannerCommand::NAME,
+            [
+                $event->getId(),
+                $admin->getEmail(),
+                $locale,
+                $solutionType,
+                true === $lockMeetingRequest
+                    ? ExportPlannerCommand::LOCK_MEETING_REQUEST
+                    : ExportPlannerCommand::DONT_LOCK_MEETING_REQUEST,
+                true === $isModeAuto
+                    ? ExportPlannerCommand::MODE_AUTO
+                    : ExportPlannerCommand::MODE_MANUAL,
+                null !== $plannerJob ? $plannerJob->getId() : null
+            ]
+        );
 
         $this->setJob($job);
     }
@@ -115,13 +160,19 @@ class JobQueueAdapter extends AbstractJobQueueAdapter implements JobQueueInterfa
     /**
      * {@inheritdoc}
      */
-    public function importPlannerForEvent(File $file, Event $event, Admin $admin, $locale)
-    {
+    public function importPlannerForEvent(
+        File $file,
+        Event $event,
+        Admin $admin,
+        $locale,
+        ?PlannerJob $plannerJob = null
+    ) {
         $job = new Job(ImportPlannerCommand::NAME, [
             $file->getId(),
             $event->getId(),
             $admin->getEmail(),
             $locale,
+            $plannerJob instanceof PlannerJob ? $plannerJob->getId() : null
         ]);
 
         $this->setJob($job);
@@ -218,9 +269,67 @@ class JobQueueAdapter extends AbstractJobQueueAdapter implements JobQueueInterfa
     /**
      * {@inheritdoc}
      */
+    public function aggregateAvailableSlot(Event $event)
+    {
+        $job = new Job(AvailableSlotCalculatorCommand::NAME, [
+            sprintf('--event=%s', $event->getId())
+        ]);
+        $this->setJob($job);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function aggregateSheetAvailableSlot(Sheet $sheet)
+    {
+        $job = new Job(
+            AvailableSlotCalculatorCommand::NAME,
+            [
+                sprintf('--sheet=%s', $sheet->getId()),
+            ],
+            true,
+            Job::DEFAULT_QUEUE,
+            Job::PRIORITY_LOW
+        );
+        $this->setJob($job);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function aggregatePhoneValidationStatus(Event $event)
+    {
+        $job = new Job(PhoneValidationStatusCalculatorCommand::NAME, [
+            sprintf('--event=%s', $event->getId())
+        ]);
+
+        $this->setJob($job);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function generateMeetingSolutionAnalytic(Event $event)
     {
         $job = new Job(GenerateMeetingSolutionCommand::NAME, [$event->getId()]);
+        $this->setJob($job);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function indexSheetsByEvent(Event $event): void
+    {
+        $job = new Job(IndexSheetsByEventCommand::NAME, [$event->getId(), '--no-debug']);
+        $this->setJob($job);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function indexEventFromScratch(): void
+    {
+        $job = new Job(IndexFromScratchCommand::NAME, ['--no-debug']);
         $this->setJob($job);
     }
 

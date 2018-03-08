@@ -1,15 +1,16 @@
 <?php
 
 /*
- * This file is part of the vimeet project.
+ * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2017 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
 
 namespace Proximum\Vimeet\Application\Query\Happening;
 
+use PHPUnit\Framework\TestCase;
 use Proximum\Vimeet\Application\Components\Sheet\SheetGuesser;
 use Proximum\Vimeet\Application\Exception\Happening\EmptyHappeningParticipationException;
 use Proximum\Vimeet\Application\Query\Happening\Admin\HappeningParticipantViewQuery;
@@ -22,7 +23,6 @@ use Proximum\Vimeet\Domain\Repository\HappeningRepositoryInterface;
 use Proximum\Vimeet\Domain\Service\SheetsGroup\GroupNameResolver;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
 use Proximum\Vimeet\Tests\Factory\SheetFactory;
-use PHPUnit\Framework\TestCase;
 
 class HappeningParticipantViewQueryHandlerTest extends TestCase
 {
@@ -42,7 +42,7 @@ class HappeningParticipantViewQueryHandlerTest extends TestCase
         $user->getPosition()->willReturn('ceo');
 
         $sheet     = SheetFactory::create($event, $user->reveal());
-        $happening = new Happening($event, $begin, $end, $category);
+        $happening = new Happening($event, $begin, $end, $category, []);
 
         $participation = new HappeningParticipation($happening, $user->reveal());
         $happening->setParticipations([$participation]);

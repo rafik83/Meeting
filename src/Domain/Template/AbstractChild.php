@@ -16,7 +16,7 @@ abstract class AbstractChild
     const TEMPLATE_OBJECT_TYPE_COLLECTION    = 'collection';
     const TEMPLATE_OBJECT_TYPE_EDITABLE_TEXT = 'editable-text';
     const TEMPLATE_OBJECT_TYPE_IMAGE         = 'image';
-    const TEMPLATE_OBJECT_TYPE_MEDIA         = 'media';
+    const TEMPLATE_OBJECT_TYPE_MEDIA         = 'medias';
     const TEMPLATE_OBJECT_TYPE_NOMENCLATURE  = 'nomenclature';
     const TEMPLATE_OBJECT_TYPE_PARTICIPANT   = 'participant';
     const TEMPLATE_OBJECT_TYPE_TAG           = 'tag';
@@ -27,6 +27,7 @@ abstract class AbstractChild
     const TEMPLATE_OBJECT_TYPE_TAGS          = 'tags';
     const TEMPLATE_OBJECT_TYPE_GENDER        = 'gender';
     const TEMPLATE_OBJECT_TYPE_BOOLEAN       = 'boolean';
+    const TEMPLATE_OBJECT_TYPE_UPLOAD        = 'upload';
 
     /**
      * @var string
@@ -49,7 +50,7 @@ abstract class AbstractChild
     protected $fallback;
 
     /**
-     * AbstactChild constructor.
+     * AbstractChild constructor.
      *
      * @param string $type
      * @param array  $config

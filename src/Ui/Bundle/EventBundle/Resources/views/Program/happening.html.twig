@@ -1,4 +1,4 @@
-<div class="program-happening happening has-details meet {{ happening.category.title|lower }}" data-beginHour="{{ happening.begin|date('H:i', happening.timeZone) }}" data-duration="{{ happening.duration.format('%H:%I') }}">
+<div class="program-happening happening has-details meet" data-beginHour="{{ happening.begin|date('H:i', happening.timeZone) }}" data-duration="{{ happening.duration.format('%H:%I') }}">
 
     {{ include('EventBundle:Happening:header.html.twig', {
         'leftColor': happening.category.leftColor,

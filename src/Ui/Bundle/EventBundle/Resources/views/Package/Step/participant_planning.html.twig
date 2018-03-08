@@ -7,81 +7,9 @@
 {{ form_start(form) }}
     {{ form_errors(form) }}
 
-    <section class="object object--collection object--participant style--style-1 section">
-        <p>{{ view.products.participantsView.description }}</p>
+    {{ include('EventBundle:Package/Step:participants.html.twig') }}
 
-        <div class="row">
-            {% for participant in view.products.participantsView.participants %}
-                <div class="col-md-6">
-                    <div class="user__container selected-product clearfix">
-                        <div class="list--users">
-                            {{ include('EventBundle:Participant:preview.html.twig', {participant: participant.card}) }}
-                        </div>
-
-                        <div class="user__formule">
-                            <h2>
-                                {% if participant.included %}
-                                    {{ 'package.participants.included'|trans }}
-                                {% else %}
-                                    {{ 'package.product.unitPrice'|trans({
-                                        '%price%': participant.price,
-                                        '%currency%': participant.currency|currency_symbol,
-                                        '%vatMode%': ('package.vatMode.' ~ participant.vatMode)|trans
-                                    })|html }}
-                                {% endif %}
-                            </h2>
-                        </div>
-                    </div>
-                </div>
-            {% endfor %}
-        </div>
-
-        <div class="row">
-            <div class="col-md-12">
-                {% if view.products.participantsView.participants|length > 1 %}
-                <a href="{{ path('event_package_remove_participant', { 'sheet': view.sheet.id, 'step': view.currentStep.index }) }}"  data-toggle="modal" data-target="#edit-modal" class="btn pull-left">
-                    <i class="icon-Effacer"></i> {{ 'sheet.object.action.remove'|trans }} {{ view.products.participantsView.title }}
-                </a>
-                {% endif %}
-
-                {% if view.sheet.canBuyParticipant %}
-                    <a href="{{ path('event_package_add_participant', { 'sheet': view.sheet.id, 'step': view.currentStep.index }) }}" class="btn btn-primary pull-right" data-toggle="modal" data-target="#edit-modal">
-                        <i class="icon-Profil_1"></i>{{ 'sheet.object.action.add'|trans }} {{ view.products.participantsView.title }}
-                    </a>
-                {% else %}
-                    <div class="btn btn-primary pull-right" data-toggle="tooltip" data-placement="top" title="{{ 'sheet.maxParticipantReached'|trans }}">
-                        <i class="icon-Profil_1"></i>{{ 'sheet.object.action.add'|trans }} {{ view.products.participantsView.title }}
-                    </div>
-                {% endif %}
-            </div>
-        </div>
-    </section>
-
-    <div class="content-header">
-        <h2>{{ view.products.planningView.title }}</h2>
-    </div>
-
-    <section class="object object--collection style--style-1 section">
-        <div class="form--table--head">
-            <table class="table table-striped">
-                <thead>
-                <tr>
-                    <th>{{ 'package.planning.unitPrice'|trans }}</th>
-                    <th>{{ 'package.planning.label'|trans }}</th>
-                    <th class="text-center">{{ 'package.planning.quantity'|trans }}</th>
-                    <th class="text-center">{{ 'package.planning.total'|trans }}</th>
-                </tr>
-                </thead>
-
-                <tbody>
-                {{ include('EventBundle:Package/Step:product_row.html.twig', {
-                    product: view.products.planningView,
-                    quantityForm: form.planningQuantity
-                }) }}
-                </tbody>
-            </table>
-        </div>
-    </section>
+    {{ include('EventBundle:Package/Step:planning.html.twig') }}
 
     <div class="row">
         <div class="col-md-12">
@@ -90,14 +18,5 @@
     </div>
 {{ form_end(form) }}
 
-<div class="modal fade clear-on-hidden-modal {% if displayAddParticipantForm or displayRemoveParticipantForm %}show-modal{% endif %}" id="edit-modal" tabindex="-1" role="dialog" data-placeholder="{{ '<div class="modal-body text-center"><i class="glyphicon glyphicon-refresh spin text-xl"></i></div>'|e }}">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            {% if form_add is defined and displayAddParticipantForm %}
-                {{ include('EventBundle:Participant:add.html.twig', { 'form': form_add, 'label': view.products.participantsView.title, 'sheet': sheet, 'backRoute': 'backToPackage', 'participantProductView': participantProductView }) }}
-            {% elseif form_remove is defined and displayRemoveParticipantForm %}
-                {{ include('EventBundle:Participant:removeFromPackage.html.twig', { 'form': form_remove, 'participants': participants, 'label': view.products.participantsView.title }) }}
-            {% endif %}
-        </div>
-    </div>
-</div>
+{# Leave this outside the previous form #}
+{{ include('EventBundle:Package/Step:addAndRemoveParticipant.html.twig') }}

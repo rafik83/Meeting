@@ -176,7 +176,7 @@ class PackageGroup
         // Add new option
         foreach (array_values($options) as $rank => $option) {
             if (!$this->hasOption($option)) {
-                $this->optionRanks->add(new PackageOptionRank($this, $option, $rank));
+                $this->optionRanks->set($rank, new PackageOptionRank($this, $option, $rank));
             }
         }
 
@@ -198,7 +198,7 @@ class PackageGroup
      *
      * @return bool
      */
-    protected function hasTranslation($locale)
+    protected function hasTranslation($locale): bool
     {
         return $this->translations->containsKey($locale);
     }
@@ -216,7 +216,7 @@ class PackageGroup
     /**
      * @return array
      */
-    public function getData()
+    public function getData(): array
     {
         return [
             'translations' => $this->getTranslationData(),
@@ -227,7 +227,7 @@ class PackageGroup
     /**
      * @return string
      */
-    public function serializeData()
+    public function serializeData(): string
     {
         return json_encode($this->getData());
     }
@@ -235,7 +235,7 @@ class PackageGroup
     /**
      * @return array
      */
-    public function getTranslationData()
+    public function getTranslationData(): array
     {
         $data = [];
 
@@ -249,7 +249,7 @@ class PackageGroup
     /**
      * @return string
      */
-    public function serializeTranslation()
+    public function serializeTranslation(): string
     {
         return json_encode($this->getTranslationData());
     }

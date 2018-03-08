@@ -55,7 +55,7 @@ class EmailValidatorTest extends TestCase
 
         $this->assertFalse($result);
     }
-    
+
     public function testValidate()
     {
         // Data

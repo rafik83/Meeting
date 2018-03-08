@@ -31,45 +31,34 @@ class Trace
     const PARTICIPANT_IMPORTED           = 'participant_imported';
     const SHEET_CREATED_BY_GROUP_MANAGER = 'sheet_created_by_group_manager';
     const PENDING                        = 'pending';
+    const SET_COMMERCIAL_STATUS          = 'set_commercial_status';
 
-    /**
-     * @var int
-     */
+    const ACTIONS_REQUIRED_TRANSLATION = [
+        self::SET_COMMERCIAL_STATUS,
+    ];
+
+    /** @var int */
     private $id;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     private $action;
 
-    /**
-     * @var User
-     */
+    /** @var User|null */
     private $user;
 
-    /**
-     * @var Admin
-     */
+    /** @var Admin|null */
     private $admin;
 
-    /**
-     * @var DateTimeInterface
-     */
+    /** @var DateTimeInterface */
     private $date;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     private $comment;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     private $objectType;
 
-    /**
-     * @var int
-     */
+    /** @var int */
     private $objectId;
 
     /**
@@ -105,6 +94,14 @@ class Trace
     public function getId()
     {
         return $this->id;
+    }
+
+    /**
+     * @return null|Admin
+     */
+    public function getAdmin(): ?Admin
+    {
+        return $this->admin;
     }
 
     /**
@@ -178,5 +175,13 @@ class Trace
         }
 
         return null;
+    }
+
+    /**
+     * @return bool
+     */
+    public function hasToBeTranslated(): bool
+    {
+        return in_array($this->action, self::ACTIONS_REQUIRED_TRANSLATION, true);
     }
 }

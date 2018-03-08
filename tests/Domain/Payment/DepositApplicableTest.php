@@ -3,88 +3,113 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2016 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
 
 namespace Proximum\Vimeet\Tests\Domain\Payment;
 
+use PHPUnit\Framework\TestCase;
 use Proximum\Vimeet\Domain\Payment\DepositApplicable;
 use Proximum\Vimeet\Domain\Payment\Mode;
-use Proximum\Vimeet\Tests\Factory\EventFactory;
-use PHPUnit\Framework\TestCase;
+use Proximum\Vimeet\Domain\Payment\PaymentConditionsView;
 
 class DepositApplicableTest extends TestCase
 {
-    public function testIsApplicableFalse()
+    public function testIsApplicableFalseDatePassed()
     {
-        $event = EventFactory::createEvent();
-        $event->getConfiguration()->updatePaymentConditions(
+        $paymentConditionsView = new PaymentConditionsView(
             [Mode::PAYMENT_BANK_CARD],
-            false,
-            new \DateTime('10/10/2010 10:10:10'),
+            true,
+            new \DateTime('2010-10-10 10:10:10'),
             3000,
             20
         );
         $now   = new \DateTime();
         $total = 2000;
 
-
         $depositApplicable = new DepositApplicable();
-        $this->assertFalse($depositApplicable->isApplicable($event, $now, $total));
+        $this->assertFalse($depositApplicable->isApplicable($paymentConditionsView, $now, $total));
     }
 
-
-    public function testIsApplicableTrue()
+    public function testIsApplicableFalseTotalTooLow()
     {
-        $event = EventFactory::createEvent();
-        $event->getConfiguration()->updatePaymentConditions(
+        $paymentConditionsView = new PaymentConditionsView(
             [Mode::PAYMENT_BANK_CARD],
             true,
-            new \DateTime('10/10/2020 10:10:10'),
+            new \DateTime('2010-10-10 10:10:10'),
             200,
             20
         );
         $now   = new \DateTime();
-        $total = 2000;
-
+        $total = 100;
 
         $depositApplicable = new DepositApplicable();
-        $this->assertTrue($depositApplicable->isApplicable($event, $now, $total));
+        $this->assertFalse($depositApplicable->isApplicable($paymentConditionsView, $now, $total));
+    }
+
+    public function testIsApplicableFalseDepositNotAllowed()
+    {
+        $paymentConditionsView = new PaymentConditionsView(
+            [Mode::PAYMENT_BANK_CARD],
+            false,
+            new \DateTime('2010-10-10 10:10:10'),
+            200,
+            20
+        );
+        $now   = new \DateTime();
+        $total = 100;
+
+        $depositApplicable = new DepositApplicable();
+        $this->assertFalse($depositApplicable->isApplicable($paymentConditionsView, $now, $total));
+    }
+
+    public function testIsApplicableTrue()
+    {
+        $paymentConditionsView = new PaymentConditionsView(
+            [Mode::PAYMENT_BANK_CARD],
+            true,
+            new \DateTime('2020-10-10 10:10:10'),
+            200,
+            20
+        );
+        $now   = new \DateTime('2017-10-10 10:10:10');
+        $total = 2000;
+
+        $depositApplicable = new DepositApplicable();
+        $this->assertTrue($depositApplicable->isApplicable($paymentConditionsView, $now, $total));
     }
 
     public function testCalculateDeposit()
     {
-        $event = EventFactory::createEvent();
-        $now   = new \DateTime();
+        $now   = new \DateTime('2017-10-10 10:10:10');
         $total = 2000;
-        $event->getConfiguration()->updatePaymentConditions(
+        $paymentConditionsView = new PaymentConditionsView(
             [Mode::PAYMENT_BANK_CARD],
             true,
-            new \DateTime('10/10/2020 10:10:10'),
+            new \DateTime('2020-10-10 10:10:10'),
             200,
             20
         );
 
         $depositApplicable = new DepositApplicable();
-        $this->assertEquals(400, $depositApplicable->calculateDeposit($event, $now, $total));
+        $this->assertEquals(400, $depositApplicable->calculateDeposit($paymentConditionsView, $now, $total));
     }
 
     public function testCalculateDepositWithNoDeposit()
     {
-        $event = EventFactory::createEvent();
-        $now   = new \DateTime();
+        $now   = new \DateTime('2017-10-10 10:10:10');
         $total = 2000;
-        $event->getConfiguration()->updatePaymentConditions(
+        $paymentConditionsView = new PaymentConditionsView(
             [Mode::PAYMENT_BANK_CARD],
             false,
-            new \DateTime('10/10/2020 10:10:10'),
+            new \DateTime('2020-10-10 10:10:10'),
             200,
             20
         );
 
         $depositApplicable = new DepositApplicable();
-        $this->assertEquals(2000, $depositApplicable->calculateDeposit($event, $now, $total));
+        $this->assertEquals(2000, $depositApplicable->calculateDeposit($paymentConditionsView, $now, $total));
     }
 }

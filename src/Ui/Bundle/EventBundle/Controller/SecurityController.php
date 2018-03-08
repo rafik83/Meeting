@@ -11,10 +11,12 @@
 namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Controller;
 
 use Proximum\Vimeet\Application\Query\User\UserImpersonateViewQuery;
+use Proximum\Vimeet\Application\ThirdParty\Comexposium\SSO\Application\Query\SSOComexposiumViewQuery;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\Sheet\Group;
 use Proximum\Vimeet\Domain\Model\User;
+use Proximum\Vimeet\Infrastructure\Adapter\QueryBus;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Model\Email;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Common\EmailType;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Login\LoginType;
@@ -71,10 +73,24 @@ class SecurityController extends Controller
             $this->get('vimeet_infrastructure.repository.user_repository')->all() :
             [];
 
+        $hasError = 0 < \count($form->getErrors(true)) || $this->get('session')->getFlashBag()->has('error');
+
+        $ssoComexposiumView = !$hasError
+            ? $this->get(QueryBus::class)->handle(
+                new SSOComexposiumViewQuery(
+                    $eventDomain->getEvent(),
+                    $request->getLocale(),
+                    null,
+                    false
+                )
+            )
+            : null;
+
         return $this->render('EventBundle:Security:login_first_step.html.twig', [
             'event' => $eventDomain->getEvent(),
-            'form'  => $form->createView(),
+            'form' => $form->createView(),
             'users' => $users,
+            'ssoComexposiumView' => $ssoComexposiumView,
         ]);
     }
 
@@ -95,7 +111,7 @@ class SecurityController extends Controller
         $type         = null;
 
         if (null !== $typeId) {
-            if (is_int($typeId) && $type = $this->get('vimeet_infrastructure.repository.type_repository')
+            if (\is_int($typeId) && $type = $this->get('vimeet_infrastructure.repository.type_repository')
                     ->getTypeViewById($typeId, $request->getLocale())
             ) {
                 $this->addFlash('register_type', $typeId);
@@ -125,6 +141,15 @@ class SecurityController extends Controller
             $form->get('password')->addError(new FormError($error->getMessage()));
         }
 
+        $ssoComexposiumView = $this->get(QueryBus::class)->handle(
+            new SSOComexposiumViewQuery(
+                $eventDomain->getEvent(),
+                $request->getLocale(),
+                $email,
+                true
+            )
+        );
+
         return $this->render('EventBundle:Security:login_second_step.html.twig', [
             'event'    => $eventDomain->getEvent(),
             'form'     => $form->createView(),
@@ -132,6 +157,7 @@ class SecurityController extends Controller
             'error'    => $error,
             'typeId'   => $typeId,
             'type'     => $type,
+            'ssoComexposiumView' => $ssoComexposiumView,
         ]);
     }
 
@@ -146,6 +172,24 @@ class SecurityController extends Controller
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
 
         return $this->render('EventBundle:Security:logout_confirmation.html.twig', [
+            'event'  => $eventDomain->getEvent(),
+            'locale' => $request->getLocale(),
+        ]);
+    }
+
+    /**
+     * @param Request     $request
+     * @param EventDomain $eventDomain
+     *
+     * @return Response|RedirectResponse
+     */
+    public function logoutSuccessAction(Request $request, EventDomain $eventDomain): Response
+    {
+        if ($this->isGranted('IS_AUTHENTICATED_REMEMBERED')) {
+            return $this->redirectToRoute('event_logout_confirmation');
+        }
+
+        return $this->render('EventBundle:Security:logout_success.html.twig', [
             'event'  => $eventDomain->getEvent(),
             'locale' => $request->getLocale(),
         ]);

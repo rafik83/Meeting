@@ -3,13 +3,14 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2017 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
 
 namespace Proximum\Vimeet\Tests\Application\Command\Invoice;
 
+use PHPUnit\Framework\TestCase;
 use Proximum\Vimeet\Application\Command\Invoice\Create;
 use Proximum\Vimeet\Application\Command\Invoice\CreateHandler;
 use Proximum\Vimeet\Application\Components\Order\OrdersToInvoice;
@@ -23,7 +24,6 @@ use Proximum\Vimeet\Domain\Repository\Invoice\InvoiceRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\OrderRepositoryInterface;
 use Proximum\Vimeet\Domain\View\Invoice\OrdersToInvoiceView;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
-use PHPUnit\Framework\TestCase;
 
 class CreateHandlerTest extends TestCase
 {
@@ -31,12 +31,13 @@ class CreateHandlerTest extends TestCase
     {
         $event              = EventFactory::createEvent();
         $date               = new \DateTime();
+        $currentYear        = $date->format('Y');
         $type               = new Type($event);
         $user               = new User('test@test.com', 'salt', 'password', 'fr');
         $sheet              = new Sheet($event, $type, [], $user, $date);
         $order              = new Order($sheet, 'test', $date);
         $prefix             = new Prefix('Vimeet', 'Vi');
-        $invoice            = new Invoice($event, $sheet, $prefix, 'Vi', 2017, 1, true, 'et', 20, 1000, 1200, 200, 'EUR', '[]', $date);
+        $invoice            = new Invoice($event, $sheet, $prefix, 'Vi', $currentYear, 1, true, 'et', 20, 1000, 1200, 200, 'EUR', '[]', $date);
         $orderToInvoiceView = new OrdersToInvoiceView([$order], '[]', true, 'et', 20, 1000, 200, 1200, 'EUR');
 
         $invoiceRepository = $this->prophesize(InvoiceRepositoryInterface::class);
@@ -59,6 +60,6 @@ class CreateHandlerTest extends TestCase
             $date
         );
 
-        $handler->handle(new Create($sheet, $prefix, $orderToInvoiceView));
+        $handler->handle(new Create($sheet, $prefix));
     }
 }

@@ -168,7 +168,7 @@ event_account_participant_avatar:
 event_sheet:
     path:     /sheet
     methods:  [GET]
-    defaults: { _controller: EventBundle:Sheet:redirectTosheet }
+    defaults: { _controller: EventBundle:Sheet:redirectToSheet }
 
 event_sheet_default:
     path:     /sheet/{sheet}
@@ -320,6 +320,23 @@ event_sheet_group_create_sheet:
     methods: [GET, POST]
     defaults: { _controller: EventBundle:Group/Sheet:create }
 
+event_sheet_group_display_sheet_for_group_manager:
+    path: /sheets-group/{sheetGroup}/sheet/{sheet}/display/{sheetToDisplayId}
+    requirements:
+        sheetGroup: \d+
+        sheet: \d+
+        sheetToDisplayId: \d+
+    methods: [GET]
+    defaults: { _controller: EventBundle:Group/DisplaySheet:displayForGroupManager }
+
+event_sheet_group_display_sheet_for_multisheet_user:
+    path: /sheet/{sheet}/display/{sheetToDisplayId}
+    requirements:
+        sheet: \d+
+        sheetToDisplayId: \d+
+    methods: [GET]
+    defaults: { _controller: EventBundle:Group/DisplaySheet:displayForMultisheetUser }
+
 #
 # Sheets group meeting request management
 #
@@ -363,12 +380,17 @@ event_login_second_step:
 
 event_login_check:
     path:     /login_check
-    methods:  [POST]
+    methods:  [GET, POST]
 
 event_logout_confirmation:
     path:     /logout-confirmation
     methods:  [GET]
     defaults: { _controller: EventBundle:Security:logoutConfirmation }
+
+event_logout_success:
+    path:     /logout-success
+    methods:  [GET]
+    defaults: { _controller: EventBundle:Security:logoutSuccess }
 
 event_logout:
     path:     /logout
@@ -434,6 +456,20 @@ event_catalog_meeting_request_discussion:
         meetingRequest: \d+
     methods: [GET]
     defaults: { _controller: EventBundle:MeetingRequest/Message:displayDiscussion }
+
+event_availability_confirmation:
+    path: /sheet/{sheet}/availability/confirmation
+    requirements:
+        sheet: \d+
+    methods: [GET, POST]
+    defaults: { _controller: EventBundle:Availability:confirmation }
+
+event_catalog_export:
+    path: /sheet/{sheet}/catalog/export
+    requirements:
+        sheet: \d+
+    methods: [GET]
+    defaults: { _controller: Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Catalog\ExportAction }
 
 #
 # Catalog external
@@ -512,8 +548,10 @@ event_notification_list:
 # Content
 #
 event_content_terms_of_sale:
-    path: /terms-of-sale
-    defaults: { _controller: EventBundle:Content:termsOfSale }
+    path: /sheet/{sheet}/terms-of-sale
+    requirements:
+        sheet: \d+
+    defaults: { _controller: Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Content\TermsOfSale\ShowAction }
     methods: [GET]
 
 #
@@ -557,10 +595,9 @@ event_package_remove_participant:
 
 event_package_summary:
     path: /sheet/{sheet}/package/summary
-    defaults: { _controller: EventBundle:Package:summary }
+    defaults: { _controller: Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Package\SummaryAction }
     requirements:
         sheet: \d+
-        step: \d+
     methods: [GET, POST]
 
 event_package_summary_fill_billing_info:
@@ -638,7 +675,7 @@ event_order_summary_total:
     requirements:
         sheet: \d+
     methods: [GET]
-    defaults: { _controller: EventBundle:Order:summaryTotal }
+    defaults: { _controller: Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Order\SummaryTotalAction }
 
 # This route is available publicly, without authentication
 event_invoice_show:
@@ -667,6 +704,24 @@ event_agenda_participant:
     methods: [GET]
     defaults: { _controller: EventBundle:Agenda:participant }
 
+event_agenda_count_sheets_available_by_slot:
+    path: /sheet/{sheet}/agenda/participant/{participant}/sheets-available-by-slot/{slot}
+    requirements:
+        sheet: \d+
+        participant: \d+
+        slot: \d+
+    methods: [GET]
+    defaults: { _controller: EventBundle:Agenda:countSheetsAvailableBySlot }
+
+
+event_agenda_ignore_phone_confirmation:
+    path: /sheet/{sheet}/agenda/participant/{participant}/ignore-phone-validation-popup
+    requirements:
+        sheet: \d+
+        participant: \d+
+    defaults: { _controller: Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\User\Phone\IgnoreConfirmationAction }
+
+
 happening_program:
     path: /sheet/{sheet}/program
     requirements:
@@ -692,8 +747,16 @@ event_unavailability_create:
     path: /sheet/{sheet}/agenda/participant/{participant}/unavailability/create
     requirements:
         sheet: \d+
+        participant: \d+
     methods: [GET, POST]
     defaults: { _controller: EventBundle:Unavailability:create }
+
+event_unavailability_create_from_confirmation:
+    path: /sheet/{sheet}/confirmation/unavailability/create
+    requirements:
+        sheet: \d+
+    methods: [GET, POST]
+    defaults: { _controller: EventBundle:Unavailability:createFromConfirmation }
 
 event_unavailability_remove:
     path: /sheet/{sheet}/agenda/participant/{participant}/unavailability/{unavailability}/remove
@@ -724,6 +787,14 @@ event_user_phone_validate:
         participant: \d+
     defaults: { _controller: EventBundle:User/Phone/SendCode:sendCode }
 
+event_user_phone_redirect_to_validation:
+    path: /account/sheet/{sheet}/participant/{participant}/validate/phone/redirect
+    methods: [GET]
+    requirements:
+        sheet: \d+
+        participant: \d+
+    defaults: { _controller: EventBundle:User/Phone/SendCode:redirectToSendCodeWithFlash }
+
 #
 # UserEventPhone
 #
@@ -752,10 +823,23 @@ event_user_event_phone_validate_code_success:
 #
 # VideoConference
 #
-event_video_conference_request_access:
-    path: /video/{meeting}/request/access
+event_video_video_meeting:
+    path: /sheet/{sheet}/video-meeting/{meeting}/participant/{participant}
     requirements:
+        sheet: \d+
         meeting: \d+
+        participant: \d+
     methods: [GET]
-    defaults: { _controller: EventBundle:VideoConference:requestAccess }
+    defaults: { _controller: EventBundle:VideoConference:videoMeeting }
 
+event_video_conference_create_session_test:
+    path: /video/test
+    methods: [GET]
+    defaults: { _controller: EventBundle:VideoConference:createSessionVideoTest }
+
+event_video_conference_access_session_test:
+    path: /video/test/{sessionId}
+    requirements:
+        sessionId: .*
+    methods: [GET]
+    defaults: { _controller: EventBundle:VideoConference:accessSessionVideoTest }

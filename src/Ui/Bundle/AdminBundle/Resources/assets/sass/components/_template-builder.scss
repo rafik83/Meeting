@@ -39,6 +39,10 @@
         overflow-x: hidden;
         overflow-y: scroll;
 
+        .add-block {
+            margin: 10px;
+        }
+
         .block {
 
             margin: 20px 0px;
@@ -107,6 +111,10 @@
         right: -400px;
         transition: all 0.3s ease;
 
+        .slide-menu-button {
+            margin-top: 30px;
+        }
+
         &.slide-menu-container-open {
             right: 0px;
         }
@@ -144,20 +152,44 @@
         }
 
         .object-list {
-
             .object {
-
                 border: 1px solid #ccc;
                 border-radius: 4px;
                 padding: 10px;
                 margin: 15px 0;
+                cursor: move;
 
                 .block-buttons {
                     display: none;
                 }
-
             }
+        }
 
+        .print-object-list {
+            .object {
+                border: 1px solid #ccc;
+                border-radius: 4px;
+                padding: 10px;
+                margin: 15px 0;
+                cursor: move;
+
+                div {
+                    font-weight: bold;
+                }
+
+                .block-buttons {
+                    display: block;
+                    float: right;
+
+                    li {
+                        display: none;
+                    }
+
+                    li.object-title {
+                        display: block;
+                    }
+                }
+            }
         }
 
     }

@@ -10,75 +10,53 @@
 
 namespace Proximum\Vimeet\Application\View\Order;
 
+use Proximum\Vimeet\Application\View\Package\Vat\VatListView;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Sheet;
 
 class SummaryView
 {
-    /**
-     * @var GroupsView
-     */
+    /** @var GroupsView */
     public $groups;
 
-    /**
-     * @var PromotionCodesView
-     */
+    /** @var PromotionCodesView */
     public $promotionCodes;
 
-    /**
-     * @var float
-     */
+    /** @var float */
     public $total;
 
-    /**
-     * @var float
-     */
+    /** @var float */
     public $vatRate;
 
-    /**
-     * @var bool
-     */
+    /** @var bool */
     public $vatApplicable;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     public $vatMode;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     public $currency;
 
-    /**
-     * @var Sheet
-     */
+    /** @var Sheet */
     public $sheet;
 
-    /**
-     * @var float
-     */
+    /** @var float */
     public $vatAmount;
 
-    /**
-     * @var float
-     */
+    /** @var float */
     public $totalWithoutVat;
 
-    /**
-     * @var float
-     */
+    /** @var float */
     public $totalWithVat;
 
-    /**
-     * @var float
-     */
+    /** @var float */
     public $totalPlusVat;
 
-    /**
-     * @var float
-     */
+    /** @var float */
     public $remainingToPay;
+
+    /** @var VatListView */
+    public $vatListView;
 
     /**
      * @param GroupsView         $groups
@@ -89,6 +67,7 @@ class SummaryView
      * @param string             $vatMode
      * @param float              $totalWithoutVat
      * @param float              $totalWithVat
+     * @param VatListView        $vatListView
      * @param string             $currency
      * @param float              $remainingToPay
      * @param Sheet              $sheet
@@ -102,6 +81,7 @@ class SummaryView
         $vatMode,
         $totalWithoutVat,
         $totalWithVat,
+        VatListView $vatListView,
         $currency,
         $remainingToPay,
         Sheet $sheet
@@ -114,6 +94,7 @@ class SummaryView
         $this->vatMode         = $vatMode;
         $this->totalWithoutVat = $totalWithoutVat;
         $this->totalWithVat    = $totalWithVat;
+        $this->vatListView     = $vatListView;
         $this->currency        = $currency;
         $this->sheet           = $sheet;
         $this->remainingToPay  = $remainingToPay;

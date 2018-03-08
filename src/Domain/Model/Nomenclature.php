@@ -269,23 +269,31 @@ class Nomenclature
     }
 
     /**
-     * @return NomenclatureItem[]
+     * @return NomenclatureItem[] indexed by key
      */
     public function getLastLevel()
     {
+        $nomenclatureItems = [];
+
         if ($this->depth === 1) {
-            return $this->getFirstLevel();
+            $nomenclatureItems = $this->getFirstLevel();
         }
 
         if ($this->depth === 2) {
-            return $this->getSecondLevel();
+            $nomenclatureItems = $this->getSecondLevel();
         }
 
         if ($this->depth === 3) {
-            return $this->getThirdLevel();
+            $nomenclatureItems = $this->getThirdLevel();
         }
 
-        return [];
+        $nomenclatureItemsIndexedByKey = [];
+
+        foreach ($nomenclatureItems as $nomenclatureItem) {
+            $nomenclatureItemsIndexedByKey[$nomenclatureItem->getKey()] = $nomenclatureItem;
+        }
+
+        return $nomenclatureItemsIndexedByKey;
     }
 
     /**

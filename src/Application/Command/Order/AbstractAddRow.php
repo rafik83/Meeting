@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2015 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -14,23 +14,15 @@ use Proximum\Vimeet\Domain\Model\Order;
 
 abstract class AbstractAddRow
 {
-    /**
-     * @var Order
-     */
+    /** @var Order */
     public $order;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     public $label;
 
-    /**
-     * @var float
-     */
+    /** @var float */
     public $price;
 
-    /**
-     * @var int
-     */
+    /** @var int */
     public $quantity = 1;
 }

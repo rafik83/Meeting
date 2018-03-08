@@ -10,12 +10,10 @@
 
 namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Catalog;
 
-use Proximum\Vimeet\Domain\Model\Catalog\External\CatalogVisibilityTranslation;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class CatalogVisibilityTranslationType extends AbstractType
 {

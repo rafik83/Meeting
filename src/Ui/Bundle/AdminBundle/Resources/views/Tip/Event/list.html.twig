@@ -2,16 +2,23 @@
 
 {% from 'AdminBundle::macro.html.twig' import delete_button %}
 
+{% block title '[' ~ event.title ~ '] ' ~  'admin.tip.list.title'|trans %}
+
 {% block content %}
     <h1 class="page-header">{{ 'admin.tip.list.title'|trans }}</h1>
-    <a href="{{ path('admin_tip_event_affect', { 'event': event.id }) }}" class="btn btn-primary">{{ 'admin.tip.event.affect.link'|trans }}</a>
+    <a href="{{ path('admin_tip_event_affect', { 'event': event.id }) }}" class="btn btn-primary">
+        {{ 'admin.tip.event.affect.link'|trans }}
+    </a>
+    <a href="{{ path('admin_tip_event_create', {'event': event.id}) }}" class="btn btn-success">
+        {{ 'admin.tip.event.create.button'|trans }}
+    </a>
     <table class="table table-hover">
         <thead>
             <tr>
                 <th>{{ 'admin.tip.event.title'|trans }}</th>
                 <th>{{ 'admin.tip.event.types'|trans }}</th>
                 <th>{{ 'admin.tip.event.pages'|trans }}</th>
-                <th>{{ 'admin.tip.event.actions'|trans }}</th>
+                <th class="col-md-1 text-right">{{ 'admin.tip.event.actions'|trans }}</th>
             </tr>
         </thead>
         <tbody>
@@ -36,17 +43,33 @@
                             {% endfor %}
                         </ul>
                     </td>
-                    <td>
-                        {{ delete_button(
-                            path('admin_tip_event_remove', {'event': event.id, 'tip': tip.id}),
-                            'admin.tip.event.remove.link'|trans,
-                            {'class' : 'btn btn-danger'})
-                        }}
+                    <td class="text-right">
+                        <div class="btn-group">
+                            <a href="{{ path('admin_tip_event_update', {'event': event.id, 'tip': tip.id }) }}"
+                               class="btn btn-default btn-sm"
+                            >
+                                {{ 'admin.tip.event.update.button'|trans }}
+                            </a>
+                            <button type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <span class="caret"></span>
+                            </button>
+                            <ul class="dropdown-menu dropdown-menu-right">
+                                <li>
+                                    {{ delete_button(
+                                        path('admin_tip_event_remove', {'event': event.id, 'tip': tip.id}),
+                                        'admin.tip.event.remove.link'|trans,
+                                        {'class' : 'btn btn-danger btn-sm', 'data-confirm': 'admin.tip.event.remove.action.confirm'|trans})
+                                    }}
+                                </li>
+                            </ul>
+                        </div>
                     </td>
                 </tr>
             {% else %}
                 <tr>
-                    {{ 'admin.tip.event.empty'|trans }}
+                    <td colspan="4" class="text-center">
+                        {{ 'admin.tip.event.empty'|trans }}
+                    </td>
                 </tr>
             {% endfor %}
         </tbody>

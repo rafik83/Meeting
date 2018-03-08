@@ -1,0 +1,27 @@
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" charset="utf-8"></script>
+<script src="{{ ssoComexposiumView.comexposiumSSOLoaderLibEndpoint }}"></script>
+
+<script type="text/javascript">
+    function vimeet_cmxp_login() {
+        comexposiumCap.openCap('login', 'login', function () {
+            $('.cxpmClientAccountPopinWrapper input[type="email"]').val(
+                document.getElementById('cxpmClientAccountWidget').getAttribute('data-email')
+            );
+        });
+    }
+
+    $(document).ready(function () {
+        $(document).on('comexposiumConnectLoaded', function () {
+            {% if ssoComexposiumView.showLogin %}vimeet_cmxp_login();{% endif %}
+
+            window.cxpm.jQuery(document).on('comexposiumConnectLogged', function (event, email, token, isExhibitor) {
+                sendDataToSSOChecker(email, token);
+                $('#login-form').html('<div class="text-center"><span class="glyphicon glyphicon-refresh spin"></span></div>');
+            });
+        });
+    });
+
+    function sendDataToSSOChecker(email, token) {
+        window.location = '{{ url('event_login_check') }}' + '?comexposium_sso=true&email=' + encodeURIComponent(email) + '&token=' + encodeURIComponent(token);
+    }
+</script>

@@ -11,6 +11,7 @@
 namespace Proximum\Vimeet\Behat\Service\Manager;
 
 use Proximum\Vimeet\Domain\Model\Event;
+use Proximum\Vimeet\Domain\Model\Package;
 use Proximum\Vimeet\Domain\Model\Type;
 use Proximum\Vimeet\Domain\Repository\TypeRepositoryInterface;
 
@@ -56,8 +57,24 @@ class TypeManager
         $type = new Type($event);
         $type->setSheetTemplate($this->sheetTemplateManager->create($event));
         $type->setRegistrationTemplate($this->registrationTemplateManager->create($event));
+        $package = new Package($event, 'Forfait', new \DateTime());
+        $package->enable(false, false, false);
+        $type->setPackage($package);
+        $type->translate('fr', 'Type 1', 'Description du type');
+
         $this->typeRepository->add($type);
 
         return $type;
+    }
+
+    /**
+     * @param Type    $type
+     * @param Package $package
+     */
+    public function assignPackageToType(Type $type, Package $package)
+    {
+        $type->setPackage($package);
+
+        $this->typeRepository->set($type);
     }
 }

@@ -1,0 +1,71 @@
+<?php
+
+/*
+ * This file is part of the Proximum Vimeet project.
+ *
+ * Copyright (C) Proximum
+ *
+ * @author Elao <contact@elao.com>
+ */
+
+namespace Proximum\Vimeet\Application\Command\Spot\Import;
+
+use Proximum\Vimeet\Application\Adapter\FileStorageInterface;
+use Proximum\Vimeet\Domain\Model\File;
+use Proximum\Vimeet\Domain\Repository\FileRepositoryInterface;
+
+class SpotImportHandler
+{
+    /** @var FileRepositoryInterface */
+    private $fileRepository;
+
+    /** @var FileStorageInterface */
+    private $fileStorage;
+
+    /** @var string */
+    private $importDir;
+
+    /** @var \DateTimeInterface */
+    private $dateTime;
+
+    /**
+     * @param FileRepositoryInterface $fileRepository
+     * @param FileStorageInterface    $fileStorage
+     * @param string                  $importDir
+     * @param \DateTimeInterface      $dateTime
+     */
+    public function __construct(
+        FileRepositoryInterface $fileRepository,
+        FileStorageInterface $fileStorage,
+        string $importDir,
+        \DateTimeInterface $dateTime
+    ) {
+        $this->fileRepository = $fileRepository;
+        $this->fileStorage = $fileStorage;
+        $this->importDir = $importDir;
+        $this->dateTime = $dateTime;
+    }
+
+    /**
+     * @param SpotImport $spotImport
+     *
+     * @return File
+     */
+    public function handle(SpotImport $spotImport): File
+    {
+        $fileContent = file_get_contents($spotImport->file);
+
+        $filePath = $this
+            ->fileStorage
+            ->create(
+                $fileContent,
+                basename($spotImport->file),
+                $this->importDir
+            );
+
+        $file = new File($filePath, $this->dateTime);
+        $this->fileRepository->add($file);
+
+        return $file;
+    }
+}

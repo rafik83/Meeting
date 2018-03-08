@@ -1,9 +1,9 @@
 <?php
 
 /*
- * This file is part of the vimeet project.
+ * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2017 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -12,10 +12,10 @@ namespace Application\Command\OMZ;
 
 use PHPUnit\Framework\TestCase;
 use Proximum\Vimeet\Application\Adapter\SerializerAdapterInterface;
-use Proximum\Vimeet\Application\Adapter\TranslatorInterface;
 use Proximum\Vimeet\Application\Command\OMZ\Export;
 use Proximum\Vimeet\Application\Command\OMZ\ExportHandler;
 use Proximum\Vimeet\Application\Components\Planning\Formatter\ParticipantPlanningFormatter;
+use Proximum\Vimeet\Application\Components\User\UserInfoGuesser;
 use Proximum\Vimeet\Application\Serializer\Charset;
 use Proximum\Vimeet\Application\Serializer\Normalizer\OMZ\OmzUserNormalizer;
 use Proximum\Vimeet\Application\View\OMZ\OmzUserListView;
@@ -43,34 +43,47 @@ class ExportHandlerTest extends TestCase
         $locale = 'fr';
 
         // Mock
-        $translator                   = $this->prophesize(TranslatorInterface::class);
         $userRepository               = $this->prophesize(UserRepositoryInterface::class);
         $sheetRepository              = $this->prophesize(SheetRepositoryInterface::class);
         $groupNameResolver            = $this->prophesize(GroupNameResolver::class);
         $typeNameResolver             = $this->prophesize(TypeNameResolver::class);
         $serializer                   = $this->prophesize(SerializerAdapterInterface::class);
         $participantPlanningFormatter = $this->prophesize(ParticipantPlanningFormatter::class);
+        $userInfoGuesser              = $this->prophesize(UserInfoGuesser::class);
 
-        $expectedPlanning = "normalizer@elao.com";
+        $userInfoGuesser
+            ->getUserInfoFromParticipant($user, $locale, [$sheet])
+            ->shouldBeCalled()
+            ->willReturn([
+                'gender'    => 'Woman',
+                'firstName' => 'first Name',
+                'lastName'  => 'last Name',
+                'position'  => '',
+                'phone'     => 'phone',
+                'mobile'    => 'mobile',
+            ])
+        ;
+
+        $expectedPlanning = 'normalizer@elao.com';
         $omzUserView = new OmzUserView(
             null,
             'group name',
             null,
             'type name',
+            'Woman',
+            'first Name',
+            'last Name',
+            '',
             null,
+            'phone',
+            'normalizer@elao.com',
             null,
-            null,
-            null,
-            null,
-            null,
-            "normalizer@elao.com",
-            null,
-            null,
+            'mobile',
             $expectedPlanning
         );
         $omzUserListView = new OmzUserListView([$omzUserView]);
 
-        $expectedNormalizedDatas = "normalizer@elao.com";
+        $expectedNormalizedDatas = 'normalizer@elao.com';
 
         $command = new Export($event);
         $handler = new ExportHandler(
@@ -78,14 +91,14 @@ class ExportHandlerTest extends TestCase
             $sheetRepository->reveal(),
             $groupNameResolver->reveal(),
             $typeNameResolver->reveal(),
+            $userInfoGuesser->reveal(),
             $participantPlanningFormatter->reveal(),
-            $serializer->reveal(),
-            $translator->reveal()
+            $serializer->reveal()
         );
 
         $participantPlanningFormatter->preloadPlanningHandlerForEvent($event)->shouldBeCalled();
 
-        $userRepository->findByEvent($event)->shouldBeCalled()->willReturn([$user]);
+        $userRepository->findWithEnabledSheetByEvent($event)->shouldBeCalled()->willReturn([$user]);
 
         $participantPlanningFormatter->formatPlanningFromUserAndEventWithUnallocated($user, $event, $locale)
             ->shouldBeCalled()
@@ -96,7 +109,7 @@ class ExportHandlerTest extends TestCase
         $groupNameResolver->resolve($event, $user, [$sheet])->shouldBeCalled()->willReturn('group name');
         $typeNameResolver->resolveWithPreloadedSheets([$sheet], 'fr')->shouldBeCalled()->willReturn('type name');
 
-        $serializer->serialize($omzUserListView, 'csv', ["charset" => "Windows-1252"])
+        $serializer->serialize($omzUserListView, 'csv', ['csv_delimiter' => ';', 'charset' => 'Windows-1252'])
             ->shouldBeCalled()
             ->willReturn($expectedNormalizedDatas);
 
@@ -130,7 +143,7 @@ class ExportHandlerTest extends TestCase
             'position',
             null,
             'phone',
-            "normalizer@elao.com",
+            'normalizer@elao.com',
             null,
             'mobile',
             "**Dimanche 1 janvier 2017**\n\n- 11:10 - 11:30 : mass title\n- 13:00 - 14:00 : unavailability title\n- 14:15 - 14:45 : assignment mass title\n- 17:00 - 18:00 : happening title\n- 18:30 - 18:45 : spot reference - user sheet title - sheet met title\n\n\n\n\n\n\nunallocated: sheet met 1"
@@ -138,7 +151,8 @@ class ExportHandlerTest extends TestCase
         $omzUserListView = new OmzUserListView([$omzUserView]);
 
         $result = $serializer->serialize($omzUserListView, 'csv', [
-            'charset' => Charset::WINDOWS_1252,
+            'csv_delimiter' => ',',
+            'charset' => 'Windows-1252',
         ]);
 
         $expected = "participantId,companyName,description,type,title,firstName,lastName,position,phonePrefix,phoneNumber,email,mobilePhonePrefix,mobilePhone,planning\n1,\"group name\",,\"type name\",woman,\"first name\",\"last name\",position,,phone,normalizer@elao.com,,mobile,\"**Dimanche 1 janvier 2017**\n\n- 11:10 - 11:30 : mass title\n- 13:00 - 14:00 : unavailability title\n- 14:15 - 14:45 : assignment mass title\n- 17:00 - 18:00 : happening title\n- 18:30 - 18:45 : spot reference - user sheet title - sheet met title\n\n\n\n\n\n\nunallocated: sheet met 1\"\n";

@@ -2,15 +2,7 @@
 {% if not isCatalog and not taggedDataView.isTextarea and hideLinkToEdit %}
     <a href="{{ path('event_account_participant_company', {'sheet': sheet.id }) ~ '#field_' ~ taggedDataView.tag }}">
 {% endif %}
-
-{% if taggedDataView.translatable == true %}
-    {% if taggedDataView.translations[locale] is defined %}
-        {{ taggedDataView.translations[locale] }}
-    {% endif %}
-{% else %}
     {{ taggedDataView.content }}
-{% endif %}
-
 {% if not isCatalog and not taggedDataView.isTextarea %}
     </a>
 {% endif %}

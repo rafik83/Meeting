@@ -32,18 +32,18 @@ class ValidatorAdapter implements ValidatorInterface
     }
 
     /**
-     * @param mixed  $data
-     * @param string $constraintType
+     * @param mixed       $data
+     * @param null|string $constraintType
      *
      * @return mixed
      */
-    public function validate($data, $constraintType)
+    public function validate($data, $constraintType = null)
     {
         switch ($constraintType) {
             case self::VALIDATOR_EMAIL_TYPE:
                 return $this->validator->validate($data, [new NotBlank(), new Email(['strict' => true])]);
             default:
-                break;
+                return $this->validator->validate($data);
         }
     }
 }

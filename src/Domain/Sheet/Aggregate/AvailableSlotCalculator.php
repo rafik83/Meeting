@@ -1,0 +1,73 @@
+<?php
+
+/*
+ * This file is part of the Proximum Vimeet project.
+ *
+ * Copyright (C) Proximum
+ *
+ * @author Elao <contact@elao.com>
+ */
+
+namespace Proximum\Vimeet\Domain\Sheet\Aggregate;
+
+use Proximum\Vimeet\Application\Adapter\SheetIndexerInterface;
+use Proximum\Vimeet\Domain\Model\Sheet;
+use Proximum\Vimeet\Domain\Repository\MeetingSlotRepositoryInterface;
+use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
+
+class AvailableSlotCalculator
+{
+    /** @var MeetingSlotRepositoryInterface */
+    private $slotRepository;
+
+    /** @var SheetRepositoryInterface */
+    private $sheetRepository;
+
+    /** @var SheetIndexerInterface */
+    private $sheetIndexer;
+
+    /**
+     * @param MeetingSlotRepositoryInterface $slotRepository
+     * @param SheetRepositoryInterface       $sheetRepository
+     * @param SheetIndexerInterface          $sheetIndexer
+     */
+    public function __construct(
+        MeetingSlotRepositoryInterface $slotRepository,
+        SheetRepositoryInterface $sheetRepository,
+        SheetIndexerInterface $sheetIndexer
+    ) {
+        $this->slotRepository = $slotRepository;
+        $this->sheetRepository = $sheetRepository;
+        $this->sheetIndexer = $sheetIndexer;
+    }
+
+    /**
+     * @param Sheet $sheet
+     */
+    public function calculateAvailableSlotForSheet(Sheet $sheet)
+    {
+        $slots = [];
+
+        foreach ($sheet->getParticipants()->toArray() as $participant) {
+            $slotsOfParticipant = $this->slotRepository->findAvailableSlotsByParticipants(
+                $sheet->getEvent(),
+                [$participant]
+            );
+
+            foreach ($slotsOfParticipant as $slot) {
+                $slots[$slot->getId()] = $slot;
+            }
+        }
+
+        $availableSlots = [];
+
+        foreach ($slots as $slot) {
+            $availableSlots[] = new Sheet\AvailableSlot($sheet, $slot);
+        }
+
+        $sheet->setAvailableSlots($availableSlots);
+
+        $this->sheetRepository->set($sheet);
+        $this->sheetIndexer->updateSheets([$sheet]);
+    }
+}

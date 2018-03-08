@@ -13,7 +13,7 @@
         paginatedResult: paginatedResult,
         'viewer': sheet,
         'page': page,
-        isCatalog: isCatalog
+        isCatalog: isCatalog,
     }, false) }}
 </div>
 
@@ -22,3 +22,10 @@
         <div class="btn btn-primary see-more" data-page="{{ paginatedResult.page }}">{{ 'catalog.seeMore'|trans }}</div>
     </div>
 {% endif %}
+
+{{ include('EventBundle:Catalog:Partial/Mobile/search.html.twig', {
+    sheet: sheet,
+    searchForm: searchForm,
+    typeViews: typeViews,
+    categoryViews: categoryViews
+}, false) }}

@@ -17,41 +17,36 @@ use Proximum\Vimeet\Domain\Model\User;
 
 class ApproveRequest
 {
-    /**
-     * @var Request
-     */
+    /** @var Request */
     public $request;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     public $description;
 
-    /**
-     * @var Participant[]
-     */
+    /** @var Participant[] */
     public $participants;
 
-    /**
-     * @var User
-     */
+    /** @var User */
     public $editor;
 
-    /**
-     * @var Sheet
-     */
+    /** @var Sheet */
     public $sheet;
+
+    /** @var string */
+    public $locale;
 
     /**
      * @param User    $editor
      * @param Request $request
      * @param Sheet   $sheet
+     * @param string  $locale
      */
-    public function __construct(User $editor, Request $request, Sheet $sheet)
+    public function __construct(User $editor, Request $request, Sheet $sheet, string $locale)
     {
         $this->request      = $request;
         $this->participants = $request->getToParticipants()->toArray();
         $this->editor       = $editor;
         $this->sheet        = $sheet;
+        $this->locale       = $locale;
     }
 }

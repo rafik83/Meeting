@@ -3,7 +3,7 @@ Proximum\Vimeet\Domain\Model\Catalog\Internal\SearchFacet:
         __construct:
             - '@event_asddays_2016'
             - 'category'
-            - true
+            - false
     search_facet_type:
         __construct:
             - '@event_asddays_2016'

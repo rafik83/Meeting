@@ -1,4 +1,4 @@
-{% for type, mappedType in { success: 'success', info: 'info', warning: 'warning', error: 'fail' } %}
+{% for type, mappedType in { success: 'success', info: 'info', warning: 'warning', error: 'fail', confirm: 'confirm' } %}
     {% for message in app.session.flashbag.get(type) %}
         <section class="important {{ mappedType }}">
             <p>

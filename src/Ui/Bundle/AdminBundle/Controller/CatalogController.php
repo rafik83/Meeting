@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of the vimeet project.
+ * This file is part of the Proximum Vimeet project.
  *
  * Copyright (C) Proximum
  *
@@ -12,7 +12,7 @@ namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller;
 
 use Proximum\Vimeet\Application\Command\Catalog\External\Configure;
 use Proximum\Vimeet\Application\Query\Catalog\External\CatalogVisibilityQuery;
-use Proximum\Vimeet\Application\Query\Catalog\External\SearchFacetQuery;
+use Proximum\Vimeet\Domain\Model\Catalog\External\SearchFacet;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Catalog\ConfigureType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -35,8 +35,7 @@ class CatalogController extends Controller
 
         $locale = $event->getAvailableLocale($request->getLocale());
 
-        $searchFacetQuery = new SearchFacetQuery($event);
-        $searchFacets = $this->get('query.catalog.external.search_facet_query')->handle($searchFacetQuery);
+        $searchFacets = $this->get('vimeet_infrastructure.repository.catalog.external.search_facet')->getByEvent($event);
 
         $catalogVisibility = $this
             ->get('query.catalog.external.catalog_visibility_view_query_handler')
@@ -45,10 +44,10 @@ class CatalogController extends Controller
         $configure = new Configure($event, $catalogVisibility, $searchFacets);
 
         $configureForm = $this->createForm(ConfigureType::class, $configure, [
-            'user' => $user,
-            'event' => $event,
+            'user'   => $user,
+            'event'  => $event,
             'locale' => $locale,
-            'types' => $searchFacetQuery->types,
+            'types'  => SearchFacet::getAllTypes(),
         ]);
 
         if ($configureForm->handleRequest($request)->isSubmitted() && $configureForm->isValid()) {

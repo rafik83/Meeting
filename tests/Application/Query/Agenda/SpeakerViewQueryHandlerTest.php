@@ -3,19 +3,19 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2016 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
 
 namespace Proximum\Vimeet\Tests\Application\Query\Agenda;
 
+use PHPUnit\Framework\TestCase;
 use Proximum\Vimeet\Application\Query\Agenda\SpeakerViewQuery;
 use Proximum\Vimeet\Application\Query\Agenda\SpeakerViewQueryHandler;
 use Proximum\Vimeet\Application\View\Agenda\SpeakerView;
 use Proximum\Vimeet\Domain\Model\Happening;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
-use PHPUnit\Framework\TestCase;
 
 class SpeakerViewQueryHandlerTest extends TestCase
 {
@@ -26,7 +26,7 @@ class SpeakerViewQueryHandlerTest extends TestCase
         $begin     = new \DateTime();
         $end       = new \DateTime();
         $category  = new Happening\Category($event, '', 1, '#aaa', '#bbb');
-        $happening = new Happening($event, $begin, $end, $category);
+        $happening = new Happening($event, $begin, $end, $category, []);
 
         $speaker1            = new Happening\Speaker($event, 'john', 'doh', 'google', '', '');
         $speaker1Translation = new Happening\SpeakerTranslation($speaker1, $locale, 'developer');

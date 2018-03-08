@@ -3,16 +3,18 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2015 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
 
 namespace Proximum\Vimeet\Application\Command\Participant;
 
+use Proximum\Vimeet\Application\Components\Package\ProductByParticipantGetter;
 use Proximum\Vimeet\Application\Components\Sheet\Template\Tag;
 use Proximum\Vimeet\Application\Components\Token\User\ActivateAccountTokenGenerator;
 use Proximum\Vimeet\Application\Event\Events;
+use Proximum\Vimeet\Application\Event\Participant\ParticipantAddedEvent;
 use Proximum\Vimeet\Application\Event\Sheet\SheetAddParticipantEvent;
 use Proximum\Vimeet\Application\Event\Sheet\SheetUpdatedEvent;
 use Proximum\Vimeet\Application\Event\User\ActivateAccountEvent;
@@ -22,6 +24,7 @@ use Proximum\Vimeet\Application\Exception\Participant\EmailCanNotBeNullException
 use Proximum\Vimeet\Application\Exception\Sheet\ParticipantAlreadyExistException;
 use Proximum\Vimeet\Domain\Account\Synchronizer;
 use Proximum\Vimeet\Domain\Cart\CartManager;
+use Proximum\Vimeet\Domain\Helper\StringHelper;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Repository\ParticipantRepositoryInterface;
@@ -33,63 +36,43 @@ use Proximum\Vimeet\Infrastructure\Adapter\DelayedEventDispatcher;
 
 class AddHandler
 {
-    /**
-     * @var UserRepositoryInterface
-     */
+    /** @var UserRepositoryInterface */
     private $userRepository;
 
-    /**
-     * @var ParticipantRepositoryInterface
-     */
+    /** @var ParticipantRepositoryInterface */
     private $participantRepository;
 
-    /**
-     * @var SheetRepositoryInterface
-     */
+    /** @var SheetRepositoryInterface */
     private $sheetRepository;
 
-    /**
-     * @var TemplateDataFactory
-     */
+    /** @var TemplateDataFactory */
     private $templateDataFactory;
 
-    /**
-     * @var ActivateAccountTokenGenerator
-     */
+    /** @var ActivateAccountTokenGenerator */
     private $activateAccountTokenGenerator;
 
-    /**
-     * @var DelayedEventDispatcher
-     */
+    /** @var DelayedEventDispatcher */
     private $eventDispatcher;
 
-    /**
-     * @var CartManager
-     */
-    private $cartManager;
-
-    /**
-     * @var TypeResolver
-     */
+    /** @var TypeResolver */
     private $typeResolver;
 
-    /**
-     * @var Synchronizer
-     */
+    /** @var Synchronizer */
     private $accountSynchronizer;
 
+    /** @var UpdateParticipantProductQuantityHandler */
+    private $updateParticipantProductQuantityHandler;
+
     /**
-     * AddHandler constructor.
-     *
-     * @param UserRepositoryInterface        $userRepository
-     * @param ParticipantRepositoryInterface $participantRepository
-     * @param SheetRepositoryInterface       $sheetRepository
-     * @param TemplateDataFactory            $templateDataFactory
-     * @param ActivateAccountTokenGenerator  $activateAccountTokenGenerator
-     * @param DelayedEventDispatcher         $eventDispatcher
-     * @param CartManager                    $cartManager
-     * @param TypeResolver                   $typeResolver
-     * @param Synchronizer                   $accountSynchronizer
+     * @param UserRepositoryInterface                 $userRepository
+     * @param ParticipantRepositoryInterface          $participantRepository
+     * @param SheetRepositoryInterface                $sheetRepository
+     * @param TemplateDataFactory                     $templateDataFactory
+     * @param ActivateAccountTokenGenerator           $activateAccountTokenGenerator
+     * @param DelayedEventDispatcher                  $eventDispatcher
+     * @param UpdateParticipantProductQuantityHandler $updateParticipantProductQuantityHandler
+     * @param TypeResolver                            $typeResolver
+     * @param Synchronizer                            $accountSynchronizer
      */
     public function __construct(
         UserRepositoryInterface $userRepository,
@@ -98,19 +81,19 @@ class AddHandler
         TemplateDataFactory $templateDataFactory,
         ActivateAccountTokenGenerator $activateAccountTokenGenerator,
         DelayedEventDispatcher $eventDispatcher,
-        CartManager $cartManager,
+        UpdateParticipantProductQuantityHandler $updateParticipantProductQuantityHandler,
         TypeResolver $typeResolver,
         Synchronizer $accountSynchronizer
     ) {
-        $this->userRepository                = $userRepository;
-        $this->participantRepository         = $participantRepository;
-        $this->sheetRepository               = $sheetRepository;
-        $this->templateDataFactory           = $templateDataFactory;
+        $this->userRepository = $userRepository;
+        $this->participantRepository = $participantRepository;
+        $this->sheetRepository = $sheetRepository;
+        $this->templateDataFactory = $templateDataFactory;
         $this->activateAccountTokenGenerator = $activateAccountTokenGenerator;
-        $this->eventDispatcher               = $eventDispatcher;
-        $this->cartManager                   = $cartManager;
-        $this->typeResolver                  = $typeResolver;
-        $this->accountSynchronizer           = $accountSynchronizer;
+        $this->eventDispatcher = $eventDispatcher;
+        $this->typeResolver = $typeResolver;
+        $this->accountSynchronizer = $accountSynchronizer;
+        $this->updateParticipantProductQuantityHandler = $updateParticipantProductQuantityHandler;
     }
 
     /**
@@ -126,6 +109,8 @@ class AddHandler
         if ($add->email === null) {
             throw new EmailCanNotBeNullException();
         }
+
+        $add->email = StringHelper::trimSpacesAndNonBreakSpaces($add->email);
 
         $user = $this->userRepository->findByEmail($add->email);
         $isNewUser = false;
@@ -151,7 +136,11 @@ class AddHandler
         $participant = $this->createAndFillParticipant($add, $user, $isNewUser);
 
         // Update cart
-        $this->cartManager->updateParticipantsQuantity($add->sheet);
+        if ($add->needToSelectProduct) {
+            $this->updateParticipantProductQuantityHandler->handle(
+                new UpdateParticipantProductQuantity($add->sheet, $participant, $add->product->id)
+            );
+        }
 
         if (!$add->sheet->isOwner($user)) {
             // send to the guest
@@ -170,6 +159,7 @@ class AddHandler
 
         $sheetUpdated = new SheetUpdatedEvent($add->sheet);
         $this->eventDispatcher->dispatch(Events::SHEET_UPDATED, $sheetUpdated);
+        $this->eventDispatcher->dispatch(Events::PARTICIPANT_ADDED, new ParticipantAddedEvent($participant));
 
         return new AddResult($participant);
     }

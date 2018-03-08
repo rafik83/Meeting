@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2017 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -41,20 +41,20 @@ class PlanningQuantityGuesser
      *
      * @return int
      */
-    public function guess(Sheet $sheet)
+    public function guess(Sheet $sheet): int
     {
         // If the sheet has no package, the number of planning is equal to the number of participant
         if (!$sheet->getPackage()->isPassable()) {
-            return $sheet->countParticipant();
-        } else {
-            // Otherwise, the number of planning is equal to the number of planning bought by the sheet
-            $orders = $this->orderRepository->findNotCancelledBySheet($sheet);
+            return $sheet->countParticipants();
+        }
 
-            if (0 < count($orders)) {
-                $orderMerged = $this->orderMerger->merge($orders);
+        // Otherwise, the number of planning is equal to the number of planning bought by the sheet
+        $orders = $this->orderRepository->findNotCancelledBySheet($sheet);
 
-                return $orderMerged->countPlanning();
-            }
+        if (0 < \count($orders)) {
+            $orderMerged = $this->orderMerger->merge($orders);
+
+            return $orderMerged->countPlanning();
         }
 
         return 0;

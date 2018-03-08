@@ -21,7 +21,11 @@
                 {{ 'admin.sheet.trace.auto'|trans }}
             {% endif %}
             {% if trace.comment != '' %}
-                {{ 'admin.sheet.trace.comment'|trans({'%comment%': trace.comment}) }}
+                {% if trace.hasToBeTranslated %}
+                    : {{ ('admin.sheet.details.crm.record.trace.' ~ trace.action ~ '.' ~ trace.comment)|trans }}
+                {% else %}
+                    {{ 'admin.sheet.trace.comment'|trans({'%comment%': trace.comment}) }}
+                {% endif %}
             {% endif %}
             <span class="badge">{{ trace.date|localizeddate('medium', 'short', app.request.locale, event.timeZone) }}</span>
         </li>

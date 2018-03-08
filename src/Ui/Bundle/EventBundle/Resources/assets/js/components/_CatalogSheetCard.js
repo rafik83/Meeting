@@ -1,19 +1,17 @@
-var $                               = require('jquery'),
-    CatalogSheetCardButton          = require('./_CatalogSheetCardButton'),
+var $ = require('jquery'),
+    CatalogSheetCardButton = require('./_CatalogSheetCardButton'),
     CatalogSheetCardRequestCheckbox = require('./_CatalogSheetCardRequestCheckbox');
 
-function CatalogSheetCard(element, modal)
-{
-    this.element      = element;
+function CatalogSheetCard(element, modal) {
+    this.element = element;
     this.buttonsZones = element.querySelectorAll('.buttons-zone');
-    this.buttons      = [];
-    this.modal        = modal;
+    this.buttons = [];
+    this.modal = modal;
 
     this.identifyButtons();
 }
 
-CatalogSheetCard.prototype.identifyButtons = function ()
-{
+CatalogSheetCard.prototype.identifyButtons = function () {
     this.buttons = [];
 
     [].forEach.call(this.element.querySelectorAll('.buttons-zone .btn'), function (element) {
@@ -26,8 +24,7 @@ CatalogSheetCard.prototype.identifyButtons = function ()
     }.bind(this));
 };
 
-CatalogSheetCard.prototype.onButtonClick = function(button)
-{
+CatalogSheetCard.prototype.onButtonClick = function (button) {
     if (button.link !== null) {
         // Add the possible placeholder (eg: spinning arrow)
         var placeholder = this.modal.getAttribute('data-placeholder');
@@ -45,21 +42,18 @@ CatalogSheetCard.prototype.onButtonClick = function(button)
     }
 };
 
-CatalogSheetCard.prototype.displayErrorLoading = function ()
-{
+CatalogSheetCard.prototype.displayErrorLoading = function () {
     var errorMessage = this.modal.getAttribute('data-loading-error');
-    $(this.modal).find(".modal-content").html(errorMessage);
+    this.replaceModalContent(errorMessage);
 };
 
-CatalogSheetCard.prototype.updateParticipantsHtml = function (participantsHtml)
-{
+CatalogSheetCard.prototype.updateParticipantsHtml = function (participantsHtml) {
     if ('' !== participantsHtml) {
         $(this.element).find('.participants-list').html(participantsHtml);
     }
 };
 
-CatalogSheetCard.prototype.putListenerOnRequestForm = function ()
-{
+CatalogSheetCard.prototype.putListenerOnRequestForm = function () {
     if (this.modal.querySelector('[data-participants-checkbox]') !== null) {
         new CatalogSheetCardRequestCheckbox(this.modal.querySelector('[data-participants-checkbox]'));
     }
@@ -73,35 +67,53 @@ CatalogSheetCard.prototype.putListenerOnRequestForm = function ()
     }.bind(this));
 };
 
-CatalogSheetCard.prototype.handleRequestForm = function (form)
-{
+/**
+ * @param {String} html
+ */
+CatalogSheetCard.prototype.replaceButtonsZone = function(html) {
+    [].forEach.call(this.buttonsZones, function (buttonZone) {
+        $(buttonZone).html(html)
+    });
+};
+
+/**
+ * @param {String} html
+ */
+CatalogSheetCard.prototype.replaceModalContent = function(html) {
+    $(this.modal).find(".modal-content").html(html);
+};
+
+CatalogSheetCard.prototype.handleRequestForm = function (form) {
     var action = $(form).attr('action');
-    var data   = $(form).serialize();
+    var data = $(form).serialize();
 
     // Put the placeholder during the ajax call to avoid mistake of the user
     var placeholder = this.modal.getAttribute('data-placeholder');
-    $(this.modal).find(".modal-content").html(placeholder);
+    this.replaceModalContent(placeholder);
 
     // Update sheets list
-    $.post(action, data, function(response) {
+    $.post(action, data, function (response) {
         if (response.close === true) {
             if (response.status === 'ok') {
-                [].forEach.call(this.buttonsZones, function (buttonZone) {
-                    $(buttonZone).html(response.html)
-                });
+                this.replaceButtonsZone(response.html);
                 $(this.modal).modal('hide');
                 this.identifyButtons();
                 this.updateParticipantsHtml(response.participantsHtml);
             }
         } else {
             if (response.status === 'ok') {
-                $(this.modal).find(".modal-content").html(response.html);
-                this.updateParticipantsHtml(response.participantsHtml);
+                if (response.flashMessage !== undefined) {
+                    this.replaceModalContent(response.flashMessage);
+                    this.replaceButtonsZone(response.html);
+                } else {
+                    this.replaceModalContent(response.html);
+                    this.updateParticipantsHtml(response.participantsHtml);
+                }
             }
         }
 
         if (response.status === 'error') {
-            $(this.modal).find(".modal-content").html(response.html);
+            this.replaceModalContent(response.html);
             this.putListenerOnRequestForm();
         }
     }.bind(this)).fail(function () {

@@ -1,9 +1,9 @@
 <?php
 
 /*
- * This file is part of the vimeet project.
+ * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2017 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -66,5 +66,49 @@ class PreUpdateHandlerTest extends TestCase
         $preUpdateView = $handler->handle($query);
 
         $this->assertEquals(PreUpdateHandler::MOBILE_VALIDATION_NEEDED, $preUpdateView->preUpdateState);
+        $this->assertEquals('010203040506', $preUpdateView->currentMobile);
+    }
+
+    public function testTemplateWithoutTelephoneObject()
+    {
+        $user          = UserFactory::create();
+        $event         = EventFactory::createEvent();
+        $sheet         = SheetFactory::create($event);
+        $participant   = ParticipantFactory::create($sheet, $user);
+        $locale        = 'fr';
+
+        $templateData = new TemplateData('root', [], 'fr', 'fr');
+        $data         = ['69b3cde1' => []]; // no telephone object
+
+        $block         = new Block('12', [], 'fr', 'fr');
+        $editableText1 = new EditableText('69b3cde1', 'editable-text', [
+            'tags' => ['participant_mobile', 'participant_data'],
+        ], 'fr', 'fr');
+        $block->addChild(1, '541f84d4', $editableText1);
+        $templateData->addChild(1, '811f6edf', $block);
+
+        // Mock
+        $validateMobileProcessAccessChecker = $this->prophesize(ValidateMobileProcessAccessChecker::class);
+        $participantInfoGuesser             = $this->prophesize(ParticipantInfoGuesser::class);
+
+        $validateMobileProcessAccessChecker->allowToAccess($event, $user, $locale)
+            ->shouldBeCalled()->willReturn(true);
+
+        $participantInfoGuesser
+            ->guessParticipantMobile($participant, $locale)
+            ->shouldBeCalled()
+            ->willReturn('01000000000');
+
+        $query = new PreUpdate($user, $participant, $event, $data, $templateData, $locale);
+
+        $handler = new PreUpdateHandler(
+            $validateMobileProcessAccessChecker->reveal(),
+            $participantInfoGuesser->reveal()
+        );
+
+        $preUpdateView = $handler->handle($query);
+
+        $this->assertEquals(PreUpdateHandler::MOBILE_VALIDATION_NOT_NEED, $preUpdateView->preUpdateState);
+        $this->assertEquals(null, $preUpdateView->currentMobile);
     }
 }

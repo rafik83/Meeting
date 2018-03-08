@@ -1,0 +1,17 @@
+{% set config = {
+    style: null
+}|merge(config|default({})) %}
+
+<div class="block" data-block="12" data-uid="{{ uid|default('__UID__') }}" data-config="{{ config|json_encode }}">
+    {{ include('AdminBundle:Template/Block:configure.html.twig', {}, false) }}
+
+    <div class="row">
+        <div class="col-md-12">
+            <div class="block-inner">
+                {% for uid, item in children[0]|default([]) %}
+                    {{ include('AdminBundle:SheetPrintTemplate:blockOrObject.html.twig', { uid: uid, item: item, locale: locale }, false) }}
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>

@@ -39,6 +39,12 @@ class CatalogSheetPreviewView extends AbstractSheetPreviewView
     /** @var bool */
     public $isSeenByCurrentUser;
 
+    /** @var bool */
+    public $isPhoneValidationRequired;
+
+    /** @var string|null */
+    public $validatePhoneLink;
+
     /**
      * @param int             $id
      * @param Sheet           $sheet
@@ -53,6 +59,8 @@ class CatalogSheetPreviewView extends AbstractSheetPreviewView
      * @param bool            $isAnsweringMeetingRequestClosed
      * @param bool            $hasMessage
      * @param bool            $isSeenByCurrentUser
+     * @param bool            $isPhoneValidationRequired
+     * @param null            $validatePhoneLink
      */
     public function __construct(
         int $id,
@@ -67,9 +75,11 @@ class CatalogSheetPreviewView extends AbstractSheetPreviewView
         $isMeetingRequestClosed = false,
         $isAnsweringMeetingRequestClosed = false,
         $hasMessage = false,
-        $isSeenByCurrentUser = false
+        $isSeenByCurrentUser = false,
+        $isPhoneValidationRequired = false,
+        $validatePhoneLink = null
     ) {
-        parent::__construct($id,$title, $type, $preview, $sheet);
+        parent::__construct($id, $title, $type, $preview, $sheet);
 
         $this->meetingRequest                  = $meetingRequest;
         $this->isItMySheet                     = $isItMySheet;
@@ -79,6 +89,8 @@ class CatalogSheetPreviewView extends AbstractSheetPreviewView
         $this->isAnsweringMeetingRequestClosed = $isAnsweringMeetingRequestClosed;
         $this->hasMessage                      = $hasMessage;
         $this->isSeenByCurrentUser             = $isSeenByCurrentUser;
+        $this->isPhoneValidationRequired       = $isPhoneValidationRequired;
+        $this->validatePhoneLink               = $validatePhoneLink;
     }
 
     /**

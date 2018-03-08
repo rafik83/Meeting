@@ -15,7 +15,7 @@ parameters:
     mailer_user:       ~
     mailer_password:   ~
     mailer_port:       ~
-    mailer_sender:     ~
+    mailer_sender:     "vimeet@proximum.com"
     mailer_encryption: ~
     mailer_error_transport: smtp
     mailer_error_host:      127.0.0.1
@@ -30,8 +30,8 @@ parameters:
 
     sendgrid_api_key: ~
 
-    domain: vimeet.proximum.dev
-    admin_domain: admin.vimeet.proximum.dev
+    domain: vimeet.proximum
+    admin_domain: admin.vimeet.proximum
     scheme: http
 
     timezone_default: Europe/Paris
@@ -50,8 +50,6 @@ parameters:
     phantomjs_http_user:     'phantomjs'
     phantomjs_http_password: '7DSJD2sm8YpzfjmnXeethPuybb'
 
-    assets_version: 1
-
     user_activate_account_token_expiration: 'P7D'
 
     sentry_dsn: ~
@@ -68,6 +66,26 @@ parameters:
     tokbox_api_key: ~
     tokbox_api_secret: ~
 
+    planner_files_path: '%kernel.root_dir%/../var/planner'
+    planner_command: 'curl -v -X POST http://optaplanner:8080/job/NameOfTheBuildYouShouldChangeIt/build --user vimeet:PasswordYouShouldChangeIt --data-urlencode json=''{"parameter": [{"name":"INPUT", "value":"%%filename%%"}]}'''
+    planner_trusted_name: 'NameOfTheBuildYouShouldChangeIt'
+
+    jenkins_user: vimeet
+    jenkins_password: PasswordYouShouldChangeIt
+    jenkins_command: 'curl -v -X POST http://optaplanner:8080/job/%%buildName%%/build --user %%jenkinsUser%%:%%jenkinsPassword%% --data-urlencode json=''{"parameter": %%jenkinsParameters%%}'''
+
+    jenkins_phantomjs_sheet_pdf_print_build_name: 'PhantomJsSheetPrintPdfBuild'
+
+    comexposium_check_user_token_endpoint: ""
+    comexposium_sso_loader_lib_endpoint: ""
+    comexposium_username: comexposiumUsername
+    comexposium_password: comexposiumPassword
+
     # Features flag
     feature_video_conference_enabled: false
     feature_video_conference_date_security_enabled: false
+    feature_event_dates_to_current_date_enabled: false
+    feature_dday_enabled: false
+    feature_availability_confirmation_enabled: true
+    feature_registration_template_builder_enabled: false
+    feature_product_vat_enabled: false

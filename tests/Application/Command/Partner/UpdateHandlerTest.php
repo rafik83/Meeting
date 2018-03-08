@@ -1,20 +1,22 @@
 <?php
 
 /*
- * This file is part of the vimeet project.
+ * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2016 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
 
-namespace Proximum\Vimeet\Application\Command\Partner;
+namespace Proximum\Vimeet\Tests\Application\Command\Partner;
 
+use PHPUnit\Framework\TestCase;
+use Proximum\Vimeet\Application\Command\Partner\Update;
+use Proximum\Vimeet\Application\Command\Partner\UpdateHandler;
 use Proximum\Vimeet\Domain\Model\Admin;
 use Proximum\Vimeet\Domain\Model\Type;
 use Proximum\Vimeet\Domain\Repository\AdminRepositoryInterface;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
-use PHPUnit\Framework\TestCase;
 
 class UpdateHandlerTest extends TestCase
 {

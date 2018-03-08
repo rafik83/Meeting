@@ -1,15 +1,16 @@
 <?php
 
 /*
- * This file is part of the vimeet project.
+ * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2016 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
 
 namespace Proximum\Vimeet\Application\Query\Navigation;
 
+use PHPUnit\Framework\TestCase;
 use Proximum\Vimeet\Application\Components\Navigation\Category;
 use Proximum\Vimeet\Application\Query\Navigation\Submenu\AgendaSubmenuViewQuery;
 use Proximum\Vimeet\Application\Query\Navigation\Submenu\AgendaSubmenuViewQueryHandler;
@@ -26,7 +27,6 @@ use Proximum\Vimeet\Domain\Model\Type;
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Navigation\NavigationBuilderInterface;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
-use PHPUnit\Framework\TestCase;
 
 class SubmenuViewQueryHandlerTest extends TestCase
 {
@@ -75,7 +75,7 @@ class SubmenuViewQueryHandlerTest extends TestCase
         // Mock
         $navigationBuilder = $this->prophesize(NavigationBuilderInterface::class);
 
-        $navigationBuilder->getRoute('event_catalog_index', ["sheet" => 1])->shouldBeCalled()
+        $navigationBuilder->getRoute('event_catalog_index', ['sheet' => 1])->shouldBeCalled()
             ->willReturn('navigation.category.catalog.link');
 
         $navigationBuilder->getRoute('event_meeting_list_request', ['sheet' => 1])->shouldBeCalled()
@@ -119,7 +119,7 @@ class SubmenuViewQueryHandlerTest extends TestCase
         // Mock
         $navigationBuilder = $this->prophesize(NavigationBuilderInterface::class);
 
-        $navigationBuilder->getRoute('event_sheet_default', ["sheet" => 2])->shouldBeCalled()
+        $navigationBuilder->getRoute('event_sheet_default', ['sheet' => 2])->shouldBeCalled()
             ->willReturn('sheet.title.link');
 
         $handler = new SheetSubmenuViewQueryHandler($navigationBuilder->reveal());
@@ -158,7 +158,7 @@ class SubmenuViewQueryHandlerTest extends TestCase
                 true
             ),
             new SubmenuButtonView(
-                Category::PLANNING_ICON,
+                Category::PROGRAM_ICON,
                 'program.title',
                 'program.title.link',
                 false,

@@ -88,7 +88,7 @@ class PaginatedSheetListViewQueryHandler
             $query->filters['type'] = $this->typeRepository->getAllowedTypesByEvent($query->admin, $query->event);
         }
 
-        $sheets = $this->sheetSearchAdapter->find(
+        $sheets = $this->sheetSearchAdapter->paginate(
             $query->event,
             $query->filters,
             isset($query->filters['orderBy']) ? $query->filters['orderBy'] : null,
@@ -161,6 +161,8 @@ class PaginatedSheetListViewQueryHandler
                 $sheet->getOwner()->getEmail()
             ),
             $sheet->getFollower() !== null ? $sheet->getFollower()->getDisplayName() : '',
+            $sheet->getCommercialStatus(),
+            $sheet->getReminderDate(),
             $sheet->getCreatedAt(),
             $sheet->getLastLoginAt(),
             $this->impersonate->getEncodedToken($admin, $sheet->getOwner()),

@@ -1,58 +1,59 @@
 // Import all bootstrap css except Print
 
 // Core variables and mixins
-@import "bootstrap-sass/assets/stylesheets/bootstrap/variables";
-@import "bootstrap-sass/assets/stylesheets/bootstrap/mixins";
+@import "~bootstrap-sass/assets/stylesheets/bootstrap/variables";
+@import "~bootstrap-sass/assets/stylesheets/bootstrap/mixins";
 
 // Reset and dependencies
-@import "bootstrap-sass/assets/stylesheets/bootstrap/normalize";
-@import "bootstrap-sass/assets/stylesheets/bootstrap/glyphicons";
+@import "~bootstrap-sass/assets/stylesheets/bootstrap/normalize";
+@import "~bootstrap-sass/assets/stylesheets/bootstrap/glyphicons";
 
 // Core CSS
-@import "bootstrap-sass/assets/stylesheets/bootstrap/scaffolding";
-@import "bootstrap-sass/assets/stylesheets/bootstrap/type";
-@import "bootstrap-sass/assets/stylesheets/bootstrap/code";
-@import "bootstrap-sass/assets/stylesheets/bootstrap/grid";
-@import "bootstrap-sass/assets/stylesheets/bootstrap/tables";
-@import "bootstrap-sass/assets/stylesheets/bootstrap/forms";
-@import "bootstrap-sass/assets/stylesheets/bootstrap/buttons";
+@import "~bootstrap-sass/assets/stylesheets/bootstrap/scaffolding";
+@import "~bootstrap-sass/assets/stylesheets/bootstrap/type";
+@import "~bootstrap-sass/assets/stylesheets/bootstrap/code";
+@import "~bootstrap-sass/assets/stylesheets/bootstrap/grid";
+@import "~bootstrap-sass/assets/stylesheets/bootstrap/tables";
+@import "~bootstrap-sass/assets/stylesheets/bootstrap/forms";
+@import "~bootstrap-sass/assets/stylesheets/bootstrap/buttons";
 
 // Components
-@import "bootstrap-sass/assets/stylesheets/bootstrap/component-animations";
-@import "bootstrap-sass/assets/stylesheets/bootstrap/dropdowns";
-@import "bootstrap-sass/assets/stylesheets/bootstrap/button-groups";
-@import "bootstrap-sass/assets/stylesheets/bootstrap/input-groups";
-@import "bootstrap-sass/assets/stylesheets/bootstrap/navs";
-@import "bootstrap-sass/assets/stylesheets/bootstrap/navbar";
-@import "bootstrap-sass/assets/stylesheets/bootstrap/breadcrumbs";
-@import "bootstrap-sass/assets/stylesheets/bootstrap/pagination";
-@import "bootstrap-sass/assets/stylesheets/bootstrap/pager";
-@import "bootstrap-sass/assets/stylesheets/bootstrap/labels";
-@import "bootstrap-sass/assets/stylesheets/bootstrap/badges";
-@import "bootstrap-sass/assets/stylesheets/bootstrap/jumbotron";
-@import "bootstrap-sass/assets/stylesheets/bootstrap/thumbnails";
-@import "bootstrap-sass/assets/stylesheets/bootstrap/alerts";
-@import "bootstrap-sass/assets/stylesheets/bootstrap/progress-bars";
-@import "bootstrap-sass/assets/stylesheets/bootstrap/media";
-@import "bootstrap-sass/assets/stylesheets/bootstrap/list-group";
-@import "bootstrap-sass/assets/stylesheets/bootstrap/panels";
-@import "bootstrap-sass/assets/stylesheets/bootstrap/responsive-embed";
-@import "bootstrap-sass/assets/stylesheets/bootstrap/wells";
-@import "bootstrap-sass/assets/stylesheets/bootstrap/close";
+@import "~bootstrap-sass/assets/stylesheets/bootstrap/component-animations";
+@import "~bootstrap-sass/assets/stylesheets/bootstrap/dropdowns";
+@import "~bootstrap-sass/assets/stylesheets/bootstrap/button-groups";
+@import "~bootstrap-sass/assets/stylesheets/bootstrap/input-groups";
+@import "~bootstrap-sass/assets/stylesheets/bootstrap/navs";
+@import "~bootstrap-sass/assets/stylesheets/bootstrap/navbar";
+@import "~bootstrap-sass/assets/stylesheets/bootstrap/breadcrumbs";
+@import "~bootstrap-sass/assets/stylesheets/bootstrap/pagination";
+@import "~bootstrap-sass/assets/stylesheets/bootstrap/pager";
+@import "~bootstrap-sass/assets/stylesheets/bootstrap/labels";
+@import "~bootstrap-sass/assets/stylesheets/bootstrap/badges";
+@import "~bootstrap-sass/assets/stylesheets/bootstrap/jumbotron";
+@import "~bootstrap-sass/assets/stylesheets/bootstrap/thumbnails";
+@import "~bootstrap-sass/assets/stylesheets/bootstrap/alerts";
+@import "~bootstrap-sass/assets/stylesheets/bootstrap/progress-bars";
+@import "~bootstrap-sass/assets/stylesheets/bootstrap/media";
+@import "~bootstrap-sass/assets/stylesheets/bootstrap/list-group";
+@import "~bootstrap-sass/assets/stylesheets/bootstrap/panels";
+@import "~bootstrap-sass/assets/stylesheets/bootstrap/responsive-embed";
+@import "~bootstrap-sass/assets/stylesheets/bootstrap/wells";
+@import "~bootstrap-sass/assets/stylesheets/bootstrap/close";
 
 // Components w/ JavaScript
-@import "bootstrap-sass/assets/stylesheets/bootstrap/modals";
-@import "bootstrap-sass/assets/stylesheets/bootstrap/tooltip";
-@import "bootstrap-sass/assets/stylesheets/bootstrap/popovers";
-@import "bootstrap-sass/assets/stylesheets/bootstrap/carousel";
+@import "~bootstrap-sass/assets/stylesheets/bootstrap/modals";
+@import "~bootstrap-sass/assets/stylesheets/bootstrap/tooltip";
+@import "~bootstrap-sass/assets/stylesheets/bootstrap/popovers";
+@import "~bootstrap-sass/assets/stylesheets/bootstrap/carousel";
 
 // Utility classes
-@import "bootstrap-sass/assets/stylesheets/bootstrap/utilities";
-@import "bootstrap-sass/assets/stylesheets/bootstrap/responsive-utilities";
+@import "~bootstrap-sass/assets/stylesheets/bootstrap/utilities";
+@import "~bootstrap-sass/assets/stylesheets/bootstrap/responsive-utilities";
 
 // End of Bootstrap importing
 
 @import "base/_vars";
+@import "base/_fonts";
 @import "base/_layout";
 @import "base/_mixins";
 @import "base/_responsive";
@@ -62,15 +63,18 @@
 
 @import "objects/_agenda";
 @import "objects/_program";
+@import "objects/_catalog-mobile-filters";
 @import "objects/_tip";
+@import "objects/_messages";
 
+@import "generic/_titles";
 @import "generic/_buttons";
 @import "generic/_table";
 @import "generic/_lists";
 
 @import "print/_print";
 
-@import "intl-tel-input/build/css/intlTelInput";
+@import "~intl-tel-input/build/css/intlTelInput";
 
 .radio .required:after {
   content: '';
@@ -214,6 +218,11 @@
     background: $bg-warning-color;
     color: #333;
   }
+  &.confirm {
+    text-align: center;
+    background: $bg-success-color;
+    color: #ffffff;
+  }
 }
 
 .white {
@@ -229,7 +238,7 @@
 }
 
 .product-limite {
-  font-family: 'OpenSans';
+  font-family: OpenSans, Helvetica, sans-serif;
   background: #F2E63D;
   display: inline-block;
   padding: 8px;
@@ -286,4 +295,16 @@
 
 .error-title {
   font-size: 25px;
+}
+
+.OT_root:-webkit-full-screen  {
+  width: 100% !important;
+  height: 100% !important;
+  left: 0 !important;;
+  top: 0 !important;
+}
+
+.terms-of-sale-content {
+  background: #ffffff;
+  padding: 25px;
 }

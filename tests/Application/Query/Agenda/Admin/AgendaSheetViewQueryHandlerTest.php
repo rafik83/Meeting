@@ -1,9 +1,9 @@
 <?php
 
 /*
- * This file is part of the vimeet project.
+ * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2017 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -73,7 +73,7 @@ class AgendaSheetViewQueryHandlerTest extends TestCase
         $unavailability         = new Unavailability($user, $event, $begin, $end);
 
         $happeningParticipation = new HappeningParticipation(
-            new Happening($event, $begin, $end, $happeningCategory),
+            new Happening($event, $begin, $end, $happeningCategory, []),
             $user
         );
 

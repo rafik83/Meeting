@@ -1,15 +1,16 @@
 <?php
 
 /*
- * This file is part of the vimeet project.
+ * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2017 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
 
 namespace Proximum\Vimeet\Tests\Application\Query\Package\Summary;
 
+use PHPUnit\Framework\TestCase;
 use Proximum\Vimeet\Application\Query\Package\Summary\PromotionCodeQuery;
 use Proximum\Vimeet\Application\Query\Package\Summary\PromotionCodeQueryHandler;
 use Proximum\Vimeet\Application\View\Package\Summary\PromotionCodesView;
@@ -25,7 +26,6 @@ use Proximum\Vimeet\Domain\Model\Type;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
 use Proximum\Vimeet\Tests\Factory\ProductFactory;
 use Proximum\Vimeet\Tests\Factory\SheetFactory;
-use PHPUnit\Framework\TestCase;
 
 class PromotionCodeQueryHandlerTest extends TestCase
 {
@@ -53,10 +53,12 @@ class PromotionCodeQueryHandlerTest extends TestCase
         // Expected
         $promotionCodeRowView = new PromotionProductRowView(
             $promotion,
-            $product->getName(),
+            $product->getTitle($locale),
             Promotion::TYPE_VALUE_OFF,
             20,
-            1
+            1,
+            20,
+            -20
         );
 
         $promotionCodeView = new PromotionCodeView(

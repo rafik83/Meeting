@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2016 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -11,12 +11,11 @@
 namespace Proximum\Vimeet\Application\Components\Sheet\Preview;
 
 use Proximum\Vimeet\Application\Adapter\TranslatorInterface;
-use Proximum\Vimeet\Application\Query\Participant\CardViewQuery;
-use Proximum\Vimeet\Application\Query\Participant\CardViewQueryHandler;
+use Proximum\Vimeet\Application\Components\Sheet\Preview\Resolver\ParticipantsPositionResolver;
+use Proximum\Vimeet\Application\Components\Sheet\Preview\Resolver\ParticipantsResolver;
 use Proximum\Vimeet\Application\View\Sheet\Preview\PreviewView;
 use Proximum\Vimeet\Application\View\Sheet\Preview\TagView;
 use Proximum\Vimeet\Domain\Model\Sheet;
-use Proximum\Vimeet\Domain\Rule\Applyer;
 use Proximum\Vimeet\Domain\Rule\ComposedRule;
 use Proximum\Vimeet\Domain\Template\AbstractChild;
 use Proximum\Vimeet\Domain\Template\Exception\ObjectNotFoundException;
@@ -26,34 +25,34 @@ use Proximum\Vimeet\Domain\View\Template\TaggedDataView;
 
 class Preview
 {
-    /** @var Applyer */
-    private $applyer;
-
-    /** @var CardViewQueryHandler */
-    private $cardViewQueryHandler;
-
     /** @var TaggedDataFactory */
     private $taggedDataFactory;
 
     /** @var TranslatorInterface */
     private $translator;
 
+    /** @var ParticipantsResolver */
+    private $participantsResolver;
+
+    /** @var ParticipantsPositionResolver */
+    private $participantsPositionResolver;
+
     /**
-     * @param TaggedDataFactory    $taggedDataFactory
-     * @param CardViewQueryHandler $cardViewQueryHandler
-     * @param Applyer              $applyer
-     * @param TranslatorInterface  $translator
+     * @param TaggedDataFactory            $taggedDataFactory
+     * @param TranslatorInterface          $translator
+     * @param ParticipantsResolver         $participantsResolver
+     * @param ParticipantsPositionResolver $participantsPositionResolver
      */
     public function __construct(
         TaggedDataFactory $taggedDataFactory,
-        CardViewQueryHandler $cardViewQueryHandler,
-        Applyer $applyer,
-        TranslatorInterface $translator
+        TranslatorInterface $translator,
+        ParticipantsResolver $participantsResolver,
+        ParticipantsPositionResolver $participantsPositionResolver
     ) {
-        $this->taggedDataFactory    = $taggedDataFactory;
-        $this->applyer              = $applyer;
-        $this->cardViewQueryHandler = $cardViewQueryHandler;
-        $this->translator           = $translator;
+        $this->taggedDataFactory            = $taggedDataFactory;
+        $this->translator                   = $translator;
+        $this->participantsResolver         = $participantsResolver;
+        $this->participantsPositionResolver = $participantsPositionResolver;
     }
 
     /**
@@ -63,9 +62,8 @@ class Preview
      *
      * @return PreviewView[]
      */
-    public function getPreview(Sheet $sheet, $locale, ComposedRule $composedRule = null)
+    public function getPreview(Sheet $sheet, string $locale, ComposedRule $composedRule = null)
     {
-        $cardViews         = [];
         $previewObjects    = [];
         $previewObjectKeys = $sheet->getTypeSheetTemplate()->getPreview();
         $rules             = null !== $composedRule ? [$composedRule->rule] : [];
@@ -73,54 +71,115 @@ class Preview
 
         foreach ($previewObjectKeys as $key) {
             try {
-                $object = $templateData->getObject($key);
+                // Manage custom preview data
+                if (CustomPreviewData::PARTICIPANTS_POSITION === $key) {
+                    $customPreviewView = $this->participantsPositionResolver->handle($sheet, $locale);
 
-                if (empty($cardViews) && $object instanceof TemplateObject\Participant) {
-                    $participants       = $sheet->getParticipants()->toArray();
-                    $numberParticipants = $object->getNumberOfParticipantShown();
-
-                    // Create card view for each participant limited by the number of participant shown
-                    for ($index = 0; $index < $numberParticipants && isset($participants[$index]); $index++) {
-                        $cardView = $this->cardViewQueryHandler->handle(new CardViewQuery($participants[$index], $locale));
-
-                        if (null !== $composedRule && null !== $composedRule->rule) {
-                            $this->applyer->applyRuleForParticipantCard($cardView, $rules);
-                        }
-
-                        $cardViews[] = $cardView;
+                    if ($customPreviewView instanceof PreviewView) {
+                        $previewObjects[] = $customPreviewView;
                     }
+
+                    continue;
                 }
 
-                $previewView = new PreviewView($object->getKey(), '', $object->getType(), $cardViews);
+                // then manage template object data
+                $templateObject = $templateData->getObject($key);
 
-                if ($object instanceof TemplateObject\ContentObjectInterface) {
-                    if ($object instanceof TemplateObject\EditableText && $object->isTitle()) {
-                        $previewView->strong = true;
-                    }
+                // Participant object
+                if ($templateObject instanceof TemplateObject\Participant) {
+                    $previewObjects[] = $this->participantsResolver->handle($sheet, $locale, $templateObject, $rules);
 
-                    if ($object->getContentValue() === '' && $object->getTag() !== null) {
-                        // In EditableText there is only one tag therefore it is not useful to add a comma
-                        foreach ($object->getTaggedDataViews() as $taggedDataView) {
-                            $previewView->content = $this->getTaggedDataViewContent($taggedDataView, $locale);
-                        }
-                    } else {
-                        $previewView->content = $object->getContentValue();
-                    }
-                } elseif ($object instanceof TemplateObject\Tag) {
-                    foreach ($object->getTaggedDataViews() as $taggedDataView) {
-                        $previewView->addTagView(
-                            new TagView($taggedDataView->type, $object->getLabel($locale), $taggedDataView->content)
-                        );
-                    }
+                    continue;
                 }
 
-                $previewObjects[] = $previewView;
+                // Other remplate objects
+                $previewObjects[] = $this->resolveTemplateObject(
+                    $templateObject,
+                    $locale,
+                    $sheet->getEvent()->getLocales()
+                );
+
             } catch (ObjectNotFoundException $exception) {
                 continue;
             }
         }
 
+        $this->removeTitleWhenSheetHasNotImage($sheet, $previewObjects);
+
         return $previewObjects;
+    }
+
+    /**
+     * @param TemplateObject $templateObject
+     * @param string         $locale
+     * @param array          $eventLocales
+     *
+     * @return PreviewView
+     */
+    private function resolveTemplateObject(TemplateObject $templateObject, string $locale, array $eventLocales)
+    {
+        $previewView = new PreviewView($templateObject->getKey(), '', $templateObject->getType());
+
+        if ($templateObject instanceof TemplateObject\ContentObjectInterface) {
+            if ($templateObject instanceof TemplateObject\EditableText && $templateObject->isTitle()) {
+                $previewView->strong = true;
+            }
+
+            if ($templateObject->getContentValue() === '' && !empty($templateObject->getTag())) {
+                // In EditableText there is only one tag therefore it is not useful to add a comma
+                foreach ($templateObject->getTaggedDataViews() as $taggedDataView) {
+                    $previewView->content = $this->getTaggedDataViewContent($taggedDataView, $locale);
+                }
+            } else {
+                $previewView->content = $this->getContentValue($templateObject, $eventLocales);
+            }
+
+            $previewView->populatedFromTag = $templateObject->getTag();
+
+            return $previewView;
+        }
+
+        if ($templateObject instanceof TemplateObject\Tag) {
+            foreach ($templateObject->getTaggedDataViews() as $taggedDataView) {
+                $previewView->addTagView(
+                    new TagView(
+                        $taggedDataView->type,
+                        $templateObject->getLabel($locale),
+                        $taggedDataView->content
+                    )
+                );
+            }
+        }
+
+        return $previewView;
+    }
+
+    /**
+     * Sheet title is removed when sheet has not image/logo because missing image is already replaced by the sheet title
+     *
+     * @param Sheet         $sheet
+     * @param PreviewView[] $previewObjects
+     */
+    private function removeTitleWhenSheetHasNotImage(Sheet $sheet, array &$previewObjects)
+    {
+        $hasEmptyImage = false;
+
+        foreach ($previewObjects as $previewObject) {
+            if ($previewObject->isImage() && $previewObject->content === '') {
+                $hasEmptyImage = true;
+                break;
+            }
+        }
+
+        if ($hasEmptyImage) {
+            foreach ($previewObjects as $previewObjectKey => $previewObjectValue) {
+                if ($previewObjectValue->isPopulatedFromTagSheetOrganization()
+                    && $previewObjectValue->content === $sheet->getTitle()
+                ) {
+                    unset($previewObjects[$previewObjectKey]);
+                }
+            }
+        }
     }
 
     /**
@@ -141,5 +200,24 @@ class Preview
         }
 
         return $taggedDataView->content;
+    }
+
+    /**
+     * @param TemplateObject\ContentObjectInterface $templateObject
+     * @param array                                 $eventLocales
+     *
+     * @return string
+     */
+    private function getContentValue(TemplateObject\ContentObjectInterface $templateObject, array $eventLocales): string
+    {
+        if (empty($templateObject->getContentValue())) {
+            foreach ($eventLocales as $locale) {
+                if (!empty($templateObject->getContentValueLocalize($locale))) {
+                    return $templateObject->getContentValueLocalize($locale);
+                }
+            }
+        }
+
+        return $templateObject->getContentValue();
     }
 }

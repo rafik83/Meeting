@@ -30,10 +30,10 @@ use Proximum\Vimeet\Domain\Repository\Event\DayRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\HappeningParticipationRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\MeetingRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
-use Proximum\Vimeet\Domain\Repository\UserRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\Unavailability\MassAssignmentRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\Unavailability\MassRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\UnavailabilityRepositoryInterface;
+use Proximum\Vimeet\Domain\Repository\UserRepositoryInterface;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
 
 class PlanningViewQueryHandlerTest extends TestCase
@@ -42,7 +42,7 @@ class PlanningViewQueryHandlerTest extends TestCase
     {
         $event     = EventFactory::createEvent();
         $user      = $this->prophesize(User::class);
-        $locale    = 'fr';
+        $locale    = 'de';
         $beginDay1 = new \DateTime('2016-10-12 10:00');
         $endDay1   = new \DateTime('2016-10-12 18:00');
         $beginDay2 = new \DateTime('2016-10-13 10:00');
@@ -65,7 +65,6 @@ class PlanningViewQueryHandlerTest extends TestCase
         $happening       = $this->prophesize(HappeningParticipation::class);
         $unavailability1 = $this->prophesize(Unavailability::class);
         $unavailability2 = $this->prophesize(Unavailability::class);
-
 
         // Mock
         $dayRepository = $this->prophesize(DayRepositoryInterface::class);
@@ -99,7 +98,7 @@ class PlanningViewQueryHandlerTest extends TestCase
             ->willReturn([$meeting->reveal()]);
 
         $userRepository = $this->prophesize(UserRepositoryInterface::class);
-        $userRepository->findByEvent($event)->shouldNotBeCalled();
+        $userRepository->findWithEnabledSheetByEvent($event)->shouldNotBeCalled();
 
         $sheetRepository = $this->prophesize(SheetRepositoryInterface::class);
         $sheetRepository->isUserParticipantMultipleSheetsInEvent($user->reveal(), $event)->shouldBeCalled()->willReturn(true);
@@ -111,7 +110,7 @@ class PlanningViewQueryHandlerTest extends TestCase
                 new DayViewQuery(
                     $user->reveal(),
                     $day1,
-                    $locale,
+                    'fr',
                     [$unavailability1->reveal(), $unavailability2->reveal()],
                     [$happening->reveal()],
                     [$mass1, $mass2],
@@ -127,7 +126,7 @@ class PlanningViewQueryHandlerTest extends TestCase
                 new DayViewQuery(
                     $user->reveal(),
                     $day2,
-                    $locale,
+                    'fr',
                     [$unavailability1->reveal(), $unavailability2->reveal()],
                     [$happening->reveal()],
                     [$mass1, $mass2],
@@ -247,7 +246,7 @@ class PlanningViewQueryHandlerTest extends TestCase
             ->willReturn([$meeting->reveal()]);
 
         $userRepository = $this->prophesize(UserRepositoryInterface::class);
-        $userRepository->findByEvent($event)->shouldNotBeCalled();
+        $userRepository->findWithEnabledSheetByEvent($event)->shouldNotBeCalled();
 
         $sheetRepository = $this->prophesize(SheetRepositoryInterface::class);
         $sheetRepository->isUserParticipantMultipleSheetsInEvent($user->reveal(), $event)->shouldBeCalled()->willReturn(true);
@@ -385,7 +384,7 @@ class PlanningViewQueryHandlerTest extends TestCase
         $meetingRepository->getAllByEvent($event)->shouldBeCalled()->willReturn([$meeting->reveal()]);
 
         $userRepository = $this->prophesize(UserRepositoryInterface::class);
-        $userRepository->findByEvent($event)->shouldBeCalled()->willReturn([$user1]);
+        $userRepository->findWithEnabledSheetByEvent($event)->shouldBeCalled()->willReturn([$user1]);
 
         $sheetRepository = $this->prophesize(SheetRepositoryInterface::class);
         $sheetRepository->isUserParticipantMultipleSheetsInEvent($user1->reveal(), $event)->shouldBeCalled()->willReturn(false);

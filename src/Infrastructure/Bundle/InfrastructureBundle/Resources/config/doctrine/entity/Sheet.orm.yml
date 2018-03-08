@@ -46,6 +46,21 @@ Proximum\Vimeet\Domain\Model\Sheet:
             type: string
             options:
                 default: 'agenda_not_concerned'
+        phoneValidationStatus:
+            type: string
+            options:
+                default: 'phone_not_concerned'
+        availabilityConfirmationStatus:
+            type: string
+            options:
+                default: 'none_confirmed'
+        commercialStatus:
+            type: string
+            options:
+                default: 'none'
+        reminderDate:
+            type: datetime
+            nullable: true
     manyToOne:
         event:
             targetEntity: Proximum\Vimeet\Domain\Model\Event
@@ -80,3 +95,8 @@ Proximum\Vimeet\Domain\Model\Sheet:
         orders:
             targetEntity: Proximum\Vimeet\Domain\Model\Order
             mappedBy: sheet
+        availableSlots:
+            targetEntity: Proximum\Vimeet\Domain\Model\Sheet\AvailableSlot
+            cascade: ['persist', 'remove']
+            mappedBy: sheet
+            orphanRemoval: true

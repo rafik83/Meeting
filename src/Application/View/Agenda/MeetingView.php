@@ -29,12 +29,6 @@ class MeetingView extends AbstractTimeEntityView
     /** @var MeetingParticipantView[] */
     public $participants;
 
-    /** @var \DateTimeInterface */
-    public $begin;
-
-    /** @var \DateTimeInterface */
-    public $end;
-
     /** @var string */
     public $sheetMetTitle;
 
@@ -132,5 +126,13 @@ class MeetingView extends AbstractTimeEntityView
     public function isVisioAvailable(): bool
     {
         return $this->isVisioAvailable;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isVisioAndAvailable(): bool
+    {
+        return $this->isVisio && $this->isVisioAvailable;
     }
 }

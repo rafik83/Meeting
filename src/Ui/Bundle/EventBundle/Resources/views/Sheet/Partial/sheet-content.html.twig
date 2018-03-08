@@ -1,6 +1,7 @@
+{% set link = phoneValidationLink is defined and phoneValidationLink is not null ? phoneValidationLink : null %}
+
 <section class="main {% if isRequestMeetingEnabled %}catalog__sheet{% endif %}">
     <header class="sheet-header">
-
         <h1>
             <i class="icon-Document_1"></i> {{ 'sheet.title'|trans }}
         </h1>
@@ -20,6 +21,9 @@
                         'isMeetingRequestUpdateLocked': isMeetingRequestUpdateLocked|default(false),
                         'isMeetingRequestClosed': isMeetingRequestClosed|default(false),
                         'isAnsweringMeetingRequestClosed': isAnsweringMeetingRequestClosed|default(false),
+                        'isPhoneValidationRequired': isPhoneValidationRequired,
+                        'phoneValidationLink': link,
+                        'hideMeetingRequest': hideMeetingRequest|default(false),
                     }, false) }}
                 {% endif %}
             {% else %}
@@ -64,6 +68,10 @@
                 'isMeetingRequestUpdateLocked': isMeetingRequestUpdateLocked|default(false),
                 'isMeetingRequestClosed': isMeetingRequestClosed|default(false),
                 'isAnsweringMeetingRequestClosed': isAnsweringMeetingRequestClosed|default(false),
+                'isPhoneValidationRequired': isPhoneValidationRequired|default(false),
+                'phoneValidationLink': link,
+                'hideMeetingRequest': hideMeetingRequest|default(false),
+                'canAddParticipant': canAddParticipant|default(false),
             }, false) }}
         {% endfor %}
     </div>
@@ -75,7 +83,7 @@
             {% if form is defined %}
                 {{ include('EventBundle:Sheet:form.html.twig', { 'form': form, 'label': label, 'uid': uid, 'type': form.vars.data.type }) }}
             {% elseif form_participant is defined %}
-                {{ include('EventBundle:Participant:add.html.twig', { 'form': form_participant, 'label': label, 'sheet': sheet, 'backRoute': 'backToSheet', 'participantProductView': participantProductView }) }}
+                {{ include('EventBundle:Participant:add.html.twig', { 'form': form_participant, 'sheet': sheet, 'backRoute': 'backToSheet', 'participantProductViews': participantProductViews }) }}
             {% elseif form_remove is defined %}
                 {{ include('EventBundle:Participant:remove.html.twig', { 'form': form_remove, 'participants': participants, 'label': label }) }}
             {% endif %}

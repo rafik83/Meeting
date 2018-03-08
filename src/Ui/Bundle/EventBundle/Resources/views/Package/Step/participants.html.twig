@@ -1,0 +1,62 @@
+<section class="object object--collection object--participant style--style-1 section">
+    <div class="form--table--head">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th></th>
+                    <th>{{ 'package.planning.label'|trans }}</th>
+                    <th class="text-center">{{ 'package.planning.unitPrice'|trans }}</th>
+                </tr>
+            </thead>
+
+            <tbody data-serialized-participant-products="{{ view.products.participantsView.serializedParticipantProductViews }}"
+                   data-participants-included-label="{{ 'package.participants.included'|trans }}"
+            >
+            {% for participantView in view.products.participantsView.participantViews %}
+                <tr class="selected-line">
+                    <td>
+                        <div class="list--users">
+                            {{ include('EventBundle:Participant:preview.html.twig', {participant: participantView.card}) }}
+                        </div>
+                    </td>
+                    <td class="col-md-6">
+                        <h3 data-product-title class="hidden"><a href="#"><span data-product-title-text></span> <span class="icon-Editer_1"></span></a></h3>
+                        <p data-product-description class="hidden"></p>
+
+                        {{ form_widget(form[participantView.id], { attr: { class: 'participant-product' } }) }}
+                        {{ form_errors(form[participantView.id]) }}
+                    </td>
+
+                    <td class="col-md-2">
+                        <div class="product">
+                            <span class="product-price text-center hidden" data-product-price>
+                            </span>
+                        </div>
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+
+    <div class="row">
+        <div class="col-md-12">
+            {% if view.products.participantsView.participantViews|length > 1 %}
+                <a href="{{ path('event_package_remove_participant', { 'sheet': view.sheet.id, 'step': view.currentStep.index }) }}"  data-toggle="modal" data-target="#edit-modal" class="btn pull-left">
+                    <i class="icon-Effacer"></i> {{ 'package.participant.delete'|trans }}
+                </a>
+            {% endif %}
+
+            {% if view.canAddParticipant %}
+                <a href="{{ path('event_package_add_participant', { 'sheet': view.sheet.id, 'step': view.currentStep.index }) }}" class="btn btn-primary pull-right" data-toggle="modal" data-target="#edit-modal">
+                    <i class="icon-Profil_1"></i>{{ 'package.participant.add'|trans }}
+                </a>
+            {% else %}
+                <div class="btn btn-primary pull-right" data-toggle="tooltip" data-placement="top" title="{{ 'sheet.maxParticipantReached'|trans }}">
+                    <i class="icon-Profil_1"></i>{{ 'package.participant.add'|trans }}
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</section>

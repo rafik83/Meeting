@@ -2,6 +2,8 @@
 
 {% import 'AdminBundle::macro.html.twig' as macro %}
 
+{% block title 'admin.sheet.title'|trans %}
+
 {% block content %}
     <h1 class="page-header">
         {{ 'admin.sheet.title.count'|transchoice(sheets.total, {'%count%': sheets.total}) }}
@@ -66,7 +68,9 @@
                             {{ 'admin.sheet.validate'|trans }}
                         </a>
                     </li>
+                    <li>{{ form_widget(batch_form.refuse, { 'attr': { 'data-confirm': 'admin.batch_actions.confirm'|trans } }) }}</li>
                     <li role="separator" class="divider"></li>
+
                     <li>
                         <a href="#" data-toggle="modal" data-target="#commercial-follow-up">
                             {{ 'admin.sheet.commercialFollowUp'|trans }}
@@ -122,6 +126,11 @@
                         <li role="separator" class="divider"></li>
                         <li>{{ form_widget(batch_form.generateInvoice, { 'attr': { 'data-confirm': 'admin.batch_actions.generateInvoice.confirm'|trans({'%prefix%': event.invoicePrefix.prefixExample}) } }) }}</li>
                     {% endif %}
+
+                    {% if batch_form.printPdf is defined %}
+                        <li role="separator" class="divider"></li>
+                        <li>{{ form_widget(batch_form.printPdf) }}</li>
+                    {% endif %}
                 {% endblock actions %}
             {% endembed %}
         </div>
@@ -173,17 +182,14 @@
                 {{ 'form.sheet_filter.children.validationState.label'|trans({}, 'forms') }}
             </th>
             <th nowrap="nowrap">
-                {{ 'form.sheet_filter.children.completed.label'|trans({}, 'forms') }}
-            </th>
-            <th nowrap="nowrap">
                 {{ 'form.sheet_filter.children.state.label'|trans({}, 'forms') }}
             </th>
-            <th nowrap="nowrap">{{ 'admin.sheet.inCatalog'|trans }}</th>
             <th>{{ 'admin.sheet.createdAt'|trans }}</th>
             <th>{{ 'admin.sheet.spot'|trans }}</th>
             <th nowrap="nowrap">
                 {{ 'form.sheet_batch.children.follower.label'|trans({}, 'forms') }}
             </th>
+            <th>{{ 'admin.sheet.commercialStatus'|trans() }}</th>
             <th class="col-md-1"></th>
         </tr>
         </thead>
@@ -233,27 +239,32 @@
                         'validated': 'success'
                     }
                     ) }}
-                </td>
-                <td>
-                    <div class="progress">
+                    <div class="progress progress-completeness" data-toggle="tooltip" title="{{ 'form.sheet_filter.children.completed.label'|trans({}, 'forms') }}">
                         <div class="progress-bar progress-bar-{{ sheet.completenessStatus }}" role="progressbar" aria-valuenow="{{ sheet.completeness }}" aria-valuemin="0" aria-valuemax="100" style="width: {{ sheet.completeness }}%;">
                             {{ sheet.completeness }}%
                         </div>
                     </div>
                 </td>
                 <td>
-                    {{ macro.state_label(
-                    ('event.sheet.state.' ~ sheet.state)|trans,
-                    sheet.state,
-                    {
-                        'pending': 'default',
-                        'accepted': 'warning',
-                        'validated': 'success'
-                    },
-                    sheet.hasTraceLabel ? ('admin.sheet.trace.' ~ sheet.traceAction)|trans({'%at%': sheet.traceAt|localizeddate('medium', 'short', app.request.locale, event.timeZone)}) ~ ' ' ~ (sheet.traceBy != null ? 'admin.sheet.trace.author'|trans({'%by%': sheet.traceBy}) : 'admin.sheet.trace.auto'|trans) : ''
-                    ) }}
+                    <div>
+                        {{ macro.state_label(
+                        ('event.sheet.state.' ~ sheet.state)|trans,
+                        sheet.state,
+                        {
+                            'pending': 'default',
+                            'accepted': 'warning',
+                            'validated': 'success',
+                            'refused': 'danger',
+                        },
+                        sheet.hasTraceLabel ? ('admin.sheet.trace.' ~ sheet.traceAction)|trans({'%at%': sheet.traceAt|localizeddate('medium', 'short', app.request.locale, event.timeZone)}) ~ ' ' ~ (sheet.traceBy != null ? 'admin.sheet.trace.author'|trans({'%by%': sheet.traceBy}) : 'admin.sheet.trace.auto'|trans) : ''
+                        ) }}
+                    </div>
+                    {% if sheet.isInCatalog %}
+                        <div class="label label-info">
+                            {{ 'admin.sheet.inCatalog'|trans }}
+                        </div>
+                    {% endif %}
                 </td>
-                <td class="text-center">{{ sheet.isInCatalog ? '✓' : '' }}</td>
                 <td>
                     <small>
                         {{ sheet.createdAt|localizeddate('medium', 'short', app.request.locale, event.timeZone) }}
@@ -267,6 +278,20 @@
                     </div>
                 </td>
                 <td>{{ sheet.follower }}</td>
+                <td>
+                    {% if sheet.hasCommercialStatus %}
+                        <div class="label label-{{ sheet.getCommercialStatusLabel }}">
+                            {{ ('admin.sheet.details.crm.record.trace.set_commercial_status.' ~ sheet.commercialStatus)|trans }}
+                        </div>
+                    {% endif %}
+                    {% if sheet.hasReminderDate %}
+                        <div data-toggle="tooltip" title="{{ 'form.sheet_comment.children.reminderDate.label'|trans({}, 'forms') }}">
+                            <span class="label label-primary" >
+                                {{ sheet.reminderDate|localizeddate('medium', 'short', app.request.locale, event.timeZone) }}
+                            </span>
+                        </div>
+                    {% endif %}
+                </td>
                 <td class="text-right">
                     {{ macro.btnGroupAndRightMenuDropdown({
                         ('admin.sheet.read'|trans): path('admin_sheet_details', { 'event': event.id, 'sheet': sheet.id }),
@@ -276,7 +301,7 @@
             </tr>
         {% else %}
             <tr>
-                <td colspan="{{ hasCategories ? 11 : 12 }}" class="text-danger text-center">{{ 'admin.zero-result'|trans }}</td>
+                <td colspan="{{ hasCategories ? 10 : 11 }}" class="text-danger text-center">{{ 'admin.zero-result'|trans }}</td>
             </tr>
         {% endfor %}
         </tbody>
@@ -308,13 +333,13 @@
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span></button>
-                    <h4 class="modal-title">Valider les fiches</h4>
+                    <h4 class="modal-title">{{ 'admin.sheet.validateSheets'|trans }}</h4>
                 </div>
                 <div class="modal-body">
                     {{ form_row(batch_form.validateComment) }}
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Annuler</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">{{ 'admin.cancel'|trans }}</button>
                     {{ form_widget(batch_form.validate) }}
                 </div>
             </div>

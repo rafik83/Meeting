@@ -86,6 +86,11 @@ class Meeting implements MessageSubjectInterface
     private $blockedSlot = false;
 
     /**
+     * @var bool
+     */
+    private $isCreatedByParticipants = false;
+
+    /**
      * Meeting constructor.
      *
      * @param Request            $request
@@ -401,6 +406,24 @@ class Meeting implements MessageSubjectInterface
         }
 
         return [];
+    }
+
+    /**
+     * @return Meeting
+     */
+    public function setCreatedByParticipant()
+    {
+        $this->isCreatedByParticipants = true;
+
+        return $this;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isCreatedByParticipants(): bool
+    {
+        return $this->isCreatedByParticipants;
     }
 
     /**

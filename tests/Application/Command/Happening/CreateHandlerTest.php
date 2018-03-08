@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2015 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -16,6 +16,7 @@ use Proximum\Vimeet\Application\Command\Happening\CreateHandler;
 use Proximum\Vimeet\Domain\Model\Happening;
 use Proximum\Vimeet\Domain\Model\Happening\Category;
 use Proximum\Vimeet\Domain\Model\Happening\CategoryTranslation;
+use Proximum\Vimeet\Domain\Model\Type;
 use Proximum\Vimeet\Domain\Repository\HappeningRepositoryInterface;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
 
@@ -35,9 +36,10 @@ class CreateHandlerTest extends TestCase
         $catTranslation2 = new CategoryTranslation($category, 'en', 'trac');
         $category->setTranslation($catTranslation1);
         $category->setTranslation($catTranslation2);
+        $type = $this->prophesize(Type::class);
 
         // Expected
-        $expectedSubEvent     = new Happening($event, $begin, $end, $category, true, 10);
+        $expectedSubEvent     = new Happening($event, $begin, $end, $category, [$type->reveal()], true, 10, 'toto');
         $expectedTranslation  = new Happening\HappeningTranslation($expectedSubEvent, 'fr', 'truc', 'bidule');
         $expectedTranslation2 = new Happening\HappeningTranslation($expectedSubEvent, 'en', 'trac', 'machin');
 
@@ -55,6 +57,7 @@ class CreateHandlerTest extends TestCase
         $create->category         = $category;
         $create->end              = $end;
         $create->limitParticipant = 10;
+        $create->types            = [$type->reveal()];
         $create->translations     = [
             'fr' => [
                 'title'       => 'truc',
@@ -65,6 +68,7 @@ class CreateHandlerTest extends TestCase
                 'description' => 'machin',
             ],
         ];
+        $create->invitationCode = 'toto';
 
         $handler = new CreateHandler($happeningRepository->reveal());
         $handler->handle($create);

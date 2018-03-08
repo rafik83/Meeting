@@ -3,20 +3,20 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2016 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
 
 namespace Proximum\Vimeet\Tests\Domain\Cart;
 
+use PHPUnit\Framework\TestCase;
 use Proximum\Vimeet\Domain\Cart\Cart;
 use Proximum\Vimeet\Domain\Model\Product;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\Type;
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
-use PHPUnit\Framework\TestCase;
 
 class CartTest extends TestCase
 {
@@ -28,8 +28,8 @@ class CartTest extends TestCase
         $user     = new User('john.doe@example.net', '_salt_', '_password_', 'fr');
         $sheet    = new Sheet($event, $type, [], $user, $datetime);
 
-        $optionA = Product::createOption($event, 'Option A', 'optionA.jpg', 100, 3, 3, 3, true);
-        $optionB = Product::createOption($event, 'Option B', 'optionB.jpg', 100, 3, 3, 3, true);
+        $optionA = Product::createOption($event, 'Option A', 'optionA.jpg', 100, 20, 3, 3, 3, true);
+        $optionB = Product::createOption($event, 'Option B', 'optionB.jpg', 100, 20, 3, 3, 3, true);
 
         $cart = new Cart($sheet, [], []);
         $cart->setProduct($optionA, 1);

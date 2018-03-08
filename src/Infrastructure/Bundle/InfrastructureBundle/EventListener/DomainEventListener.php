@@ -40,7 +40,7 @@ class DomainEventListener extends AbstractRedirectToEventListener
      */
     public function onKernelRequest(GetResponseEvent $getResponseEvent)
     {
-        return $this->handleRedirect($getResponseEvent);
+        $this->handleRedirect($getResponseEvent);
     }
 
     /**

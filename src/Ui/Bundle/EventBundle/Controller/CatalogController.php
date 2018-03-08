@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2015 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -12,14 +12,10 @@ namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Controller;
 
 use Proximum\Vimeet\Application\Command\Sheet\SheetViewed\Add;
 use Proximum\Vimeet\Application\Exception\Paginator\UnavailableCurrentPageException;
-use Proximum\Vimeet\Application\Query\Catalog\CategoryViewQuery;
+use Proximum\Vimeet\Application\Query\Catalog\CatalogAvailableSlotIdsViewQuery;
 use Proximum\Vimeet\Application\Query\Catalog\FilteredFieldsQuery;
 use Proximum\Vimeet\Application\Query\Catalog\KeywordViewQuery;
 use Proximum\Vimeet\Application\Query\Catalog\LocalizationViewQuery;
-use Proximum\Vimeet\Application\Query\Catalog\OrganizationCategoryViewQuery;
-use Proximum\Vimeet\Application\Query\Catalog\PositionViewQuery;
-use Proximum\Vimeet\Application\Query\Catalog\TypeViewQuery;
-use Proximum\Vimeet\Application\Query\Participant\CardListViewQuery;
 use Proximum\Vimeet\Application\Query\Sheet\PaginatedCatalogSheetPreviewViewQuery;
 use Proximum\Vimeet\Application\Query\Tip\TipTranslationViewQuery;
 use Proximum\Vimeet\Application\Query\Tip\TipTranslationViewQueryHandler;
@@ -27,17 +23,25 @@ use Proximum\Vimeet\Application\View\Catalog\FilteredFieldsView;
 use Proximum\Vimeet\Application\View\Catalog\PositionView;
 use Proximum\Vimeet\Domain\Catalog\Catalog;
 use Proximum\Vimeet\Domain\Catalog\SearchFields;
+use Proximum\Vimeet\Domain\Model\Catalog\Internal\CatalogConstant;
+use Proximum\Vimeet\Domain\Exception\Sheet\AccessDeniedException;
 use Proximum\Vimeet\Domain\Model\Event;
+use Proximum\Vimeet\Domain\Model\MeetingSlot;
 use Proximum\Vimeet\Domain\Model\PaginatedResult;
 use Proximum\Vimeet\Domain\Model\Sheet;
-use Proximum\Vimeet\Domain\Model\User;
+use Proximum\Vimeet\Domain\View\Catalog\CategoryView;
 use Proximum\Vimeet\Domain\View\Catalog\OrganizationCategoryView;
 use Proximum\Vimeet\Domain\View\Catalog\TypeView;
-use Proximum\Vimeet\Domain\View\Catalog\CategoryView;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\EventListener\Security\CatalogAccessEventListener;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Catalog\SearchType;
+use Proximum\Vimeet\Ui\Bundle\EventBundle\Handler\Catalog\AvailabilityConfirmationChecker;
+use Proximum\Vimeet\Ui\Bundle\EventBundle\Handler\Catalog\CategoryTypeOrganizationAndPositionViews;
+use Proximum\Vimeet\Ui\Bundle\EventBundle\Handler\Catalog\CategoryTypeOrganizationAndPositionViewsHandler;
+use Proximum\Vimeet\Ui\Bundle\EventBundle\Handler\Catalog\FilterAvailableSlotAndSpecificSlotChecker;
+use Proximum\Vimeet\Ui\Bundle\EventBundle\Handler\Catalog\FilterAvailableSlotAndSpecificSlotCheckerHandler;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\ParamConverter\EventDomain;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Security\SheetVoter;
+use Proximum\Vimeet\Ui\Bundle\EventBundle\ValueResolver\UserDomain;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -75,54 +79,65 @@ class CatalogController extends Controller
     }
 
     /**
-     * @param Request       $request
-     * @param EventDomain   $eventDomain
-     * @param Sheet         $sheet
-     * @param UserInterface $user
+     * @param Request     $request
+     * @param EventDomain $eventDomain
+     * @param Sheet       $sheet
+     * @param UserDomain  $userDomain
      *
      * @return Response
      *
      * @throws NotFoundHttpException
      */
-    public function indexAction(Request $request, EventDomain $eventDomain, Sheet $sheet, UserInterface $user)
+    public function indexAction(Request $request, EventDomain $eventDomain, Sheet $sheet, UserDomain $userDomain)
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
         $this->denyAccessUnlessGranted(SheetVoter::EDIT, $sheet);
-
         $event  = $eventDomain->getEvent();
         $locale = $request->getLocale();
+        $user   = $userDomain->getUser();
+
+        $availabilityConfirmation = $this->get('handler.catalog.availability_confirmation_checker_handler')
+            ->handle(new AvailabilityConfirmationChecker(
+                $event,
+                $sheet,
+                $user,
+                AvailabilityConfirmationChecker::ORIGIN_CATALOG
+            ))
+        ;
+
+        if (!$availabilityConfirmation->isAllowedToAccess()) {
+            return $this->redirect($availabilityConfirmation->redirectRoute);
+        }
 
         if (!$sheet->isInCatalog()) {
             throw $this->createAccessDeniedException('Sheet not in catalog');
         }
 
-        $visibleTypes = $this->get('catalog.visible_participation_types')->getAllowedTypesList($sheet);
-        $visibleCategories = $this
-            ->get('catalog.visible_participation_categories')
-            ->getAllowedCategoriesList($sheet);
+        $categoryTypeOrganizationPositionViews = $this
+            ->get(CategoryTypeOrganizationAndPositionViewsHandler::class)
+            ->handle(new CategoryTypeOrganizationAndPositionViews($event, $sheet, $locale))
+        ;
 
-        if (empty($visibleTypes)) {
-            return $this->render(
-                'EventBundle:Catalog:no-visible-type.html.twig',
-                ['event' => $event, 'sheet' => $sheet]
-            );
+        if ($categoryTypeOrganizationPositionViews->hasEmptyCategoryOrType()) {
+            return $categoryTypeOrganizationPositionViews->response;
         }
 
-        $typeViews = $this->get('tactician.commandbus.query')->handle(
-            new TypeViewQuery($event, $visibleTypes, $locale)
-        );
+        $categoryViews             = $categoryTypeOrganizationPositionViews->categoryViews;
+        $typeViews                 = $categoryTypeOrganizationPositionViews->typeViews;
+        $organizationCategoryViews = $categoryTypeOrganizationPositionViews->organizationCategoryViews;
+        $positionViews             = $categoryTypeOrganizationPositionViews->positionViews;
+        $sheetsToExclude           = [];
+        $availableSlotsIds         = [];
 
-        $categoryViews = $this->get('tactician.commandbus.query')->handle(
-            new CategoryViewQuery($event, $visibleCategories, $locale)
-        );
-
-        $organizationCategoryViews = $this->get('tactician.commandbus.query')->handle(
-            new OrganizationCategoryViewQuery($event, $locale)
-        );
-
-        $positionViews = $this->get('tactician.commandbus.query')->handle(
-            new PositionViewQuery($event, $locale)
-        );
+        $filterAvailableSlotAndSpecificSlotChecker = $this
+            ->get(FilterAvailableSlotAndSpecificSlotCheckerHandler::class)
+            ->handle(new FilterAvailableSlotAndSpecificSlotChecker(
+                $event,
+                $sheet,
+                $user,
+                $request->query->get('slot_id')
+            ))
+        ;
 
         $filters = $this->getDefaultFilters($typeViews, $categoryViews);
 
@@ -134,7 +149,9 @@ class CatalogController extends Controller
             $positionViews,
             $event,
             $sheet,
-            $locale
+            $locale,
+            $filterAvailableSlotAndSpecificSlotChecker->filterAvailableSlot,
+            $filterAvailableSlotAndSpecificSlotChecker->specificSlot
         );
 
         if ($searchForm->handleRequest($request)->isSubmitted() && $searchForm->isValid()) {
@@ -144,9 +161,20 @@ class CatalogController extends Controller
             if (empty($filters[SearchFields::FILTER_TYPE])) {
                 $filters[SearchFields::FILTER_TYPE] = $typeViews;
             }
+
             if (empty($filters[SearchFields::FILTER_CATEGORY])) {
                 $filters[SearchFields::FILTER_CATEGORY] = $categoryViews;
             }
+        }
+
+        if ($filterAvailableSlotAndSpecificSlotChecker->filterAvailableSlot) {
+            $catalogAvailableSlotView = $this
+                ->get('tactician.commandbus.query')
+                ->handle(new CatalogAvailableSlotIdsViewQuery($event, $sheet, $user, $filters))
+            ;
+
+            $availableSlotsIds = $catalogAvailableSlotView->availableSlotIds;
+            $sheetsToExclude = $catalogAvailableSlotView->sheetsToExclude;
         }
 
         $page = $request->query->getInt('page', 1);
@@ -163,7 +191,9 @@ class CatalogController extends Controller
                     48,
                     $locale,
                     $sheet,
-                    $user
+                    $user,
+                    $availableSlotsIds,
+                    $sheetsToExclude
                 )
             );
         } catch (UnavailableCurrentPageException $exception) {
@@ -185,7 +215,11 @@ class CatalogController extends Controller
             $typeViews,
             $categoryViews,
             $organizationCategoryViews,
-            $positionViews
+            $positionViews,
+            $filterAvailableSlotAndSpecificSlotChecker->filterAvailableSlot,
+            $filterAvailableSlotAndSpecificSlotChecker->specificSlot,
+            $availableSlotsIds,
+            $sheetsToExclude
         );
 
         if ($request->isXmlHttpRequest()) {
@@ -247,10 +281,16 @@ class CatalogController extends Controller
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
         $this->denyAccessUnlessGranted(SheetVoter::EDIT, $sheet);
 
+        $query = $request->get('query');
+
+        if (null === $query) {
+            return new JsonResponse([]);
+        }
+
         $localizationView = $this->get('tactician.commandbus.query')->handle(
             new LocalizationViewQuery(
                 $eventDomain->getEvent(),
-                $request->get('query'),
+                $query,
                 Catalog::DEFAULT_FILTERS,
                 $request->getLocale()
             )
@@ -346,13 +386,19 @@ class CatalogController extends Controller
             throw $this->createNotFoundException('You do not have the right to see this sheet');
         }
 
-        list ($nomenclatures, $participants, $taggedData) = $this->sheetInfos(
-            $eventDomain->getEvent(),
-            $sheet,
-            $sheetToDisplay,
-            $user,
-            $locale
-        );
+        try {
+            list ($nomenclatures, $participants, $taggedData) = $this
+                ->get('template.sheet.sheet_info_getter')
+                ->sheetInfos(
+                    $eventDomain->getEvent(),
+                    $sheet,
+                    $sheetToDisplay,
+                    $user,
+                    $locale
+                );
+        } catch (AccessDeniedException $exception) {
+            throw $this->createAccessDeniedException();
+        }
 
         // Build sheet template data and attach tagged data view to template object with tags
         $templateData = $this->get('template.tagged_data_factory')
@@ -389,9 +435,28 @@ class CatalogController extends Controller
             ;
         }
 
+        $isPhoneValidationRequired = $this->get('domain.user.phone.validation_required_checker')
+            ->handle($sheet, $user, $locale);
+
+        if ($isPhoneValidationRequired === true) {
+            $participant = $sheet->getUserParticipant($user);
+
+            if ($participant !== null) {
+                $phoneValidationLink = $this->generateUrl('event_user_phone_redirect_to_validation', [
+                    'sheet'       => $sheet->getId(),
+                    'participant' => $participant->getId(),
+                    'redirectTo'  => $this->generateUrl('event_catalog_complete_sheet', [
+                        'sheet'          => $sheet->getId(),
+                        'sheetToDisplay' => $sheetToDisplay->getId(),
+                    ]),
+                ]);
+            }
+        }
+
         return $this->render('EventBundle:Catalog:displaySheet.html.twig', [
             'event'                           => $event,
             'sheet'                           => $sheet,
+            'participant'                     => $sheet->getUserParticipant($user),
             'sheetToDisplay'                  => $sheetToDisplay,
             'taggedData'                      => $taggedData,
             'locale'                          => $locale,
@@ -403,37 +468,11 @@ class CatalogController extends Controller
             'isMeetingRequestUpdateLocked'    => $isMeetingRequestUpdateLocked,
             'isMeetingRequestClosed'          => $isMeetingRequestClosed,
             'isAnsweringMeetingRequestClosed' => $isAnsweringMeetingRequestClosed,
+            'isPhoneValidationRequired'       => $isPhoneValidationRequired,
+            'phoneValidationLink'             => $phoneValidationLink ?? null,
             'isRequestMeetingEnabled'         => $sheet !== $sheetToDisplay,
             'isCatalog'                       => true,
         ]);
-    }
-
-    /**
-     * @param Event  $event
-     * @param Sheet  $sheet
-     * @param Sheet  $sheetToDisplay
-     * @param User   $user
-     * @param string $locale
-     *
-     * @return array
-     */
-    private function sheetInfos(Event $event, Sheet $sheet, Sheet $sheetToDisplay, User $user, $locale)
-    {
-        if (!$this->get('catalog.sheet_access_checker')->checkAccess($sheet, $sheetToDisplay)) {
-            throw $this->createAccessDeniedException();
-        }
-
-        $nomenclatures     = $this->get('repository.nomenclature_repository')->findByEvent($event);
-        $cardListViewQuery = new CardListViewQuery($sheetToDisplay, $user, $locale);
-        $participants      = $this->get('tactician.commandbus.query')->handle($cardListViewQuery);
-
-        $registrationTemplateData = $this
-            ->get('template.template_data_factory')
-            ->createRegistrationFromSheet($sheetToDisplay, $locale);
-
-        $taggedData = $registrationTemplateData->getAllTaggedDatas();
-
-        return [$nomenclatures, $participants, $taggedData];
     }
 
     /**
@@ -445,9 +484,10 @@ class CatalogController extends Controller
     private function getDefaultFilters(array $typeViews, array $categoryViews): array
     {
         $filters = [
-            SearchFields::ORDER_BY        => Sheet\Constant::ORDER_BY_RELEVANCE,
-            SearchFields::FILTER_TYPE     => $typeViews,
-            SearchFields::FILTER_CATEGORY => $categoryViews,
+            SearchFields::ORDER_BY                  => Sheet\Constant::ORDER_BY_RELEVANCE,
+            SearchFields::FILTER_TYPE               => $typeViews,
+            SearchFields::FILTER_CATEGORY           => $categoryViews,
+            SearchFields::FILTER_AVAILABLE_SLOT_IDS => CatalogConstant::AVAILABLE_SLOT_IDS_FILTER_EVERYONE,
         ];
 
         return $filters;
@@ -462,8 +502,11 @@ class CatalogController extends Controller
      * @param Event                      $event
      * @param Sheet                      $sheet
      * @param string                     $locale
+     * @param bool                       $filterAvailableSlotIds
+     * @param MeetingSlot|null           $specificSlot
      *
      * @return FormInterface
+     *
      */
     private function getSearchForm(
         array $filters,
@@ -473,7 +516,9 @@ class CatalogController extends Controller
         array $positionViews,
         Event $event,
         Sheet $sheet,
-        $locale
+        $locale,
+        bool $filterAvailableSlotIds = false,
+        MeetingSlot $specificSlot = null
     ) {
         return $this->get('form.factory')->createNamed('', SearchType::class, $filters, [
             'action'                    => $this->generateUrl('event_catalog_index', ['sheet' => $sheet->getId()]),
@@ -483,6 +528,9 @@ class CatalogController extends Controller
             'positionViews'             => $positionViews,
             'event'                     => $event,
             'locale'                    => $locale,
+            'filterByAvailableSlotIds'  => $filterAvailableSlotIds,
+            'filterBySpecificSlot'      => $specificSlot !== null,
+            'specificSlot'              => $specificSlot,
         ]);
     }
 
@@ -493,9 +541,13 @@ class CatalogController extends Controller
      * @param array                      $filters
      * @param array                      $currentAggregations
      * @param TypeView[]                 $typeViews
-     * @param CategoryView[]                 $categoryViews
+     * @param CategoryView[]             $categoryViews
      * @param OrganizationCategoryView[] $organizationCategoryViews
      * @param PositionView[]             $positionViews
+     * @param bool                       $filterAvailableSlotIds
+     * @param MeetingSlot|null           $specificSlot
+     * @param array                      $availableSlotsIds
+     * @param array                      $sheetsToExclude
      *
      * @return FormInterface
      */
@@ -508,7 +560,11 @@ class CatalogController extends Controller
         array $typeViews,
         array $categoryViews,
         array $organizationCategoryViews,
-        array $positionViews
+        array $positionViews,
+        bool $filterAvailableSlotIds = false,
+        MeetingSlot $specificSlot = null,
+        array $availableSlotsIds = [],
+        array $sheetsToExclude = []
     ) {
         /** @var FilteredFieldsView $filteredFieldsView */
         $filteredFieldsView = $this->get('tactician.commandbus.query')->handle(
@@ -520,7 +576,9 @@ class CatalogController extends Controller
                 $categoryViews,
                 $organizationCategoryViews,
                 $positionViews,
-                $locale
+                $locale,
+                $availableSlotsIds,
+                $sheetsToExclude
             )
         );
 
@@ -532,7 +590,9 @@ class CatalogController extends Controller
             $filteredFieldsView->positionViews,
             $event,
             $sheet,
-            $locale
+            $locale,
+            $filterAvailableSlotIds,
+            $specificSlot
         );
     }
 }

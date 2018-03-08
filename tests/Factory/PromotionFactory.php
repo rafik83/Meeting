@@ -1,9 +1,9 @@
 <?php
 
 /*
- * This file is part of the vimeet project.
+ * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2017 vimeet
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -25,7 +25,7 @@ class PromotionFactory
     public static function createPromotion($title = 'Promo Title', $code = 'PROMOCODE')
     {
         $event   = EventFactory::createEvent();
-        $product = new Product($event, 'options', 'MyOptions', 'images', 1.3, 2, 4, 6, true, new \DateTime(), false);
+        $product = new Product($event, 'options', 'MyOptions', 'images', 1.3, 20, 2, 4, 6, true, new \DateTime(), false);
 
         return new Promotion(new PromotionCode($event, $title, $code), $product, 'test', 1.4);
     }

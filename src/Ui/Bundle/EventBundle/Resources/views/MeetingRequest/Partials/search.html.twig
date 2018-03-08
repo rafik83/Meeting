@@ -1,12 +1,33 @@
+{% form_theme searchForm '@Ui/default.html.twig' %}
+
 {{ form_start(searchForm) }}
 
-<div class="catalog__research">
+<div class="catalog__research hidden-xs">
     {% if isEventOpen == true %}
         <div style="margin-bottom: 15px">
             <a href="{{ path('event_meeting_request_export_contact', {sheet: sheet.id}) }}" class="btn btn-primary">
                 <i class="glyphicon glyphicon-download-alt"></i>
                 {{ 'event.meeting.listRequest.contact.export'|trans }}
             </a>
+        </div>
+    {% endif %}
+
+    {% if searchForm.availableSlot is defined %}
+        <div class="filter">
+            <h3>{{ form_label(searchForm.availableSlot) }}</h3>
+            {{ form_errors(searchForm.availableSlot) }}
+            <ul class="radio">
+                {% for availableSlotChoice in searchForm.children.availableSlot %}
+                    <li class="filter__item">
+                        <label class="checkbox-inline">
+                        <span class="filter-label">
+                            {{ form_widget(availableSlotChoice) }}
+                            {{ availableSlotChoice.vars.label }}
+                        </span>
+                        </label>
+                    </li>
+                {% endfor %}
+            </ul>
         </div>
     {% endif %}
 
@@ -47,11 +68,37 @@
 
         </div>
     {% endif %}
+
+    {% if searchForm.category is defined %}
+        <div class="filter">
+            <h3>{{ searchForm.category.vars.label|trans({}, searchForm.vars.translation_domain) }}</h3>
+
+            <ul data-message-at-least-one-checked="{{ ('form.search.' ~ searchForm.category.vars.name  ~ '.at_least_one_checked')|trans({}, 'forms') }}">
+                {% for child in searchForm.category.children %}
+                    <li>
+                        <label class="checkbox-inline">
+                            <span class="filter-label">{{ form_widget(child) }}{{ child.vars.label|trans({}, child.vars.translation_domain) }}</span>
+                        </label>
+                    </li>
+                {% endfor %}
+            </ul>
+
+        </div>
+    {% endif %}
 </div>
 
 {{ include('EventBundle:Tip:tip.html.twig', {tipTranslationViews: tipTranslationViews}) }}
 
 {% if hasResults %}
+    {% if isEventOpen == true %}
+        <div class="visible-xs-block">
+            <a href="{{ path('event_meeting_request_export_contact', {sheet: sheet.id}) }}" class="btn btn-primary">
+                <i class="glyphicon glyphicon-download-alt"></i>
+                {{ 'event.meeting.listRequest.contact.export'|trans }}
+            </a>
+            <br /><br />
+        </div>
+    {% endif %}
     <div class="catalog__filters">
         <div class="select-all">
             {% if filterRequestProposition == true %}

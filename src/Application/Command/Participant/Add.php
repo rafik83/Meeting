@@ -3,63 +3,78 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2015 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
 
 namespace Proximum\Vimeet\Application\Command\Participant;
 
+use Proximum\Vimeet\Application\View\Package\ParticipantProductView;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\User;
 
 class Add
 {
-    /**
-     * @var Sheet
-     */
+    /** @var Sheet */
     public $sheet;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     public $locale;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     public $firstName;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     public $lastName;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     public $email;
 
-    /**
-     * @var bool
-     */
+    /** @var bool */
     public $owner;
 
-    /**
-     * @var User
-     */
+    /** @var User */
     public $adder;
 
     /**
-     * @param User   $adder
-     * @param Sheet  $sheet
-     * @param string $locale
+     * ParticipantProductView selected to add the new participant
+     * This product can be null as the package is not always passable
+     *
+     * @var ParticipantProductView|null
      */
-    public function __construct(Sheet $sheet, $locale, User $adder)
-    {
+    public $product;
+
+    /** @var bool */
+    public $needToSelectProduct;
+
+    /**
+     * @param Sheet                   $sheet
+     * @param string                  $locale
+     * @param User                    $adder
+     * @param ParticipantProductView[] $products
+     */
+    public function __construct(
+        Sheet $sheet,
+        $locale,
+        User $adder,
+        array $products = []
+    ) {
         $this->sheet  = $sheet;
         $this->locale = $locale;
         $this->owner  = false;
         $this->adder  = $adder;
+
+        $productSelected = null;
+        if (count($products) === 1) {
+            $product = reset($products);
+
+            if (false !== $product && $product->isBuyable) {
+                $productSelected = $product;
+            }
+        }
+
+        $this->product = $productSelected;
+        $this->needToSelectProduct = count($products) >= 1;
     }
 }

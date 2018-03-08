@@ -14,14 +14,10 @@ use Proximum\Vimeet\Domain\Repository\PackageRepositoryInterface;
 
 class UpdateHandler
 {
-    /**
-     * @var PackageRepositoryInterface
-     */
+    /** @var PackageRepositoryInterface */
     private $packageRepository;
 
     /**
-     * UpdateHandler constructor.
-     *
      * @param PackageRepositoryInterface $packageRepository
      */
     public function __construct(PackageRepositoryInterface $packageRepository)
@@ -37,14 +33,13 @@ class UpdateHandler
         $update->package
             ->setTitle($update->title)
             ->enable($update->plans->enabled, $update->participantAndPlanning->enabled, $update->options->enabled)
+            ->setMaxParticipant($update->participantAndPlanning->maxParticipant)
             ->setPlans(array_values($update->plans->plans))
-            ->setParticipant($update->participantAndPlanning->participant)
+            ->setParticipants($update->participantAndPlanning->participants)
             ->setGroups($update->options->getGroupOptions(), $update->options->getGroupLabels())
         ;
 
-        if (null !== $update->participantAndPlanning->planning) {
-           $update->package->setPlanning($update->participantAndPlanning->planning);
-        }
+        $update->package->setPlanning($update->participantAndPlanning->planning);
 
         foreach ($update->package->getEvent()->getLocales() as $locale) {
             $update->package->translate(

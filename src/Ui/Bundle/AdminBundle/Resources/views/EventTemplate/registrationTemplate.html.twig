@@ -1,5 +1,7 @@
 {% extends 'AdminBundle::base.html.twig' %}
 
+{% block title 'admin.template.registration.link'|trans %}
+
 {% block content %}
     <h1 class="page-header">{{ 'admin.template.registration.title'|trans }}</h1>
 
@@ -17,7 +19,21 @@
                 <td>{{ template.title }}</td>
                 <td>{{ template.createdAt|localizeddate('medium', 'short', app.request.locale) }}</td>
                 <td class="text-right">
-                    <a href="{{ path('admin_template_registration_builder', { 'template': template.id, 'locale': template.fallback }) }}" class="btn btn-primary btn-sm">{{ 'admin.template.registration.table.content.edit'|trans }}</a>
+                    <div class="btn-group">
+                        <a href="{{ path('admin_template_registration_build', { 'registrationTemplate': template.id, 'locale': template.fallback }) }}" class="btn btn-default btn-sm">
+                            {{ 'admin.template.registration.table.content.edit'|trans }}
+                        </a>
+                        <button type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <span class="caret"></span>
+                        </button>
+                        <ul class="dropdown-menu dropdown-menu-right">
+                            <li>
+                                <a href="{{ path('admin_template_registration_json', { 'registrationTemplate': template.id, 'locale': template.fallback }) }}" class="btn-sm">
+                                    {{ 'admin.template.registration.table.content.editJson'|trans }}
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
                 </td>
             </tr>
         {% endfor %}

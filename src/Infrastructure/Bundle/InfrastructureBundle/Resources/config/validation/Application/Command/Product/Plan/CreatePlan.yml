@@ -6,6 +6,10 @@ Proximum\Vimeet\Application\Command\Product\Plan\CreatePlan:
             - NotBlank: ~
             - Range:
                 min: 0
+        vat:
+            - NotBlank: ~
+            - Range:
+                min: 0
         file:
             - Image: ~
         availabilityCurrent:

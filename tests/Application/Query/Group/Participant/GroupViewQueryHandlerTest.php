@@ -1,7 +1,16 @@
 <?php
 
+/*
+ * This file is part of the Proximum Vimeet project.
+ *
+ * Copyright (C) Proximum
+ *
+ * @author Elao <contact@elao.com>
+ */
+
 namespace Proximum\Vimeet\Tests\Application\Query\Group\Participant;
 
+use PHPUnit\Framework\TestCase;
 use Proximum\Vimeet\Application\Query\Group\Participant\GroupViewQuery;
 use Proximum\Vimeet\Application\Query\Group\Participant\GroupViewQueryHandler;
 use Proximum\Vimeet\Application\Query\Group\Participant\SheetsViewQuery;
@@ -14,7 +23,6 @@ use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
 use Proximum\Vimeet\Tests\Factory\SheetFactory;
 use Proximum\Vimeet\Tests\Factory\UserFactory;
-use PHPUnit\Framework\TestCase;
 
 class GroupViewQueryHandlerTest extends TestCase
 {

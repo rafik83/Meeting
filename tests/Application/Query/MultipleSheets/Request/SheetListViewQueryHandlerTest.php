@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Tests\Application\Query\Group\Request;
 
+use PHPUnit\Framework\TestCase;
 use Proximum\Vimeet\Application\Query\MultipleSheets\Request\FilterRequestView;
 use Proximum\Vimeet\Application\Query\MultipleSheets\Request\RequestViewQuery;
 use Proximum\Vimeet\Application\Query\MultipleSheets\Request\RequestViewQueryHandler;
@@ -23,20 +24,20 @@ use Proximum\Vimeet\Application\View\MultipleSheets\Request\SheetView;
 use Proximum\Vimeet\Domain\KeyDates\Checker\AnsweringMeetingRequestAccessChecker;
 use Proximum\Vimeet\Domain\KeyDates\Checker\MeetingRequestAccessChecker;
 use Proximum\Vimeet\Domain\Model\Event;
+use Proximum\Vimeet\Domain\Model\Event\Configuration;
 use Proximum\Vimeet\Domain\Model\Meeting\Request;
 use Proximum\Vimeet\Domain\Model\PaginatedResult;
 use Proximum\Vimeet\Domain\Model\Sheet;
-use Proximum\Vimeet\Domain\Model\Event\Configuration;
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Repository\Meeting\RequestRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
-use PHPUnit\Framework\TestCase;
 
 class SheetListViewQueryHandlerTest extends TestCase
 {
     public function testHandle()
     {
-        $event  = $this->prophesize(Event::class);
+        $user          = $this->prophesize(User::class);
+        $event         = $this->prophesize(Event::class);
         $configuration = $this->prophesize(Configuration::class);
         $event->getConfiguration()->shouldBeCalled()->willReturn($configuration->reveal());
         $configuration->isMeetingRequestUpdateLocked()->shouldBeCalled()->willReturn(false);
@@ -69,22 +70,20 @@ class SheetListViewQueryHandlerTest extends TestCase
         $page   = 1;
         $limit  = 4; // To ease test
 
-        $sheetRepository = $this->prophesize(SheetRepositoryInterface::class);
-        $requestRepository = $this->prophesize(RequestRepositoryInterface::class);
-        $sheetViewQueryHandler = $this->prophesize(SheetViewQueryHandler::class);
+        $sheetRepository         = $this->prophesize(SheetRepositoryInterface::class);
+        $requestRepository       = $this->prophesize(RequestRepositoryInterface::class);
+        $sheetViewQueryHandler   = $this->prophesize(SheetViewQueryHandler::class);
         $requestViewQueryHandler = $this->prophesize(RequestViewQueryHandler::class);
 
         $sheetRepository
             ->getSheetsMetBySheetsPaginated($event->reveal(), $multipleSheets, 1, 4, null, null, null)
             ->shouldBeCalled()
-            ->willReturn(new PaginatedResult($sheetsMet, 1, 4, 5, []))
-        ;
+            ->willReturn(new PaginatedResult($sheetsMet, 1, 4, 5, []));
 
         $sheetRepository
             ->getSheetsMetBySheets($event->reveal(), $multipleSheets, null, null, null)
             ->shouldBeCalled()
-            ->willReturn($sheetsMet)
-        ;
+            ->willReturn($sheetsMet);
 
         $request1 = $this->prophesize(Request::class);
         $request1->getFromSheet()->shouldBeCalled()->willReturn($sheetMet1->reveal());
@@ -114,8 +113,7 @@ class SheetListViewQueryHandlerTest extends TestCase
                     $request2->reveal(),
                     $request3->reveal(),
                 ]
-            )
-        ;
+            );
 
         $requestView1 = $this->prophesize(RequestView::class);
         $requestView2 = $this->prophesize(RequestView::class);
@@ -140,19 +138,19 @@ class SheetListViewQueryHandlerTest extends TestCase
         $sheetView4 = new SheetView(2, 'D', $sheet2->reveal());
 
         $sheetViewQueryHandler
-            ->handle(new SheetViewQuery($sheetMet1->reveal(), $locale))
+            ->handle(new SheetViewQuery($sheetMet1->reveal(), $user->reveal(), $locale))
             ->shouldBeCalled()
             ->willReturn($sheetView1);
         $sheetViewQueryHandler
-            ->handle(new SheetViewQuery($sheetMet2->reveal(), $locale))
+            ->handle(new SheetViewQuery($sheetMet2->reveal(), $user->reveal(), $locale))
             ->shouldBeCalled()
             ->willReturn($sheetView2);
         $sheetViewQueryHandler
-            ->handle(new SheetViewQuery($sheet1->reveal(), $locale))
+            ->handle(new SheetViewQuery($sheet1->reveal(), $user->reveal(), $locale))
             ->shouldBeCalled()
             ->willReturn($sheetView3);
         $sheetViewQueryHandler
-            ->handle(new SheetViewQuery($sheet2->reveal(), $locale))
+            ->handle(new SheetViewQuery($sheet2->reveal(), $user->reveal(), $locale))
             ->shouldBeCalled()
             ->willReturn($sheetView4);
 
@@ -165,7 +163,7 @@ class SheetListViewQueryHandlerTest extends TestCase
         $expectedSheetView3 = new SheetView(1, 'C', $sheet1->reveal());
         $expectedSheetView3->addRequest($requestView3->reveal());
 
-        $meetingRequestAccessChecker = $this->prophesize(MeetingRequestAccessChecker::class);
+        $meetingRequestAccessChecker          = $this->prophesize(MeetingRequestAccessChecker::class);
         $answeringMeetingRequestAccessChecker = $this->prophesize(AnsweringMeetingRequestAccessChecker::class);
         $meetingRequestAccessChecker->allowedToAccess($event->reveal())->shouldBeCalled()->willReturn(true);
         $answeringMeetingRequestAccessChecker->allowedToAccess($event->reveal())->shouldBeCalled()->willReturn(true);
@@ -180,8 +178,7 @@ class SheetListViewQueryHandlerTest extends TestCase
                 null
             )
             ->shouldBeCalled()
-            ->willReturn(12)
-        ;
+            ->willReturn(12);
 
         $handler = new SheetListViewQueryHandler(
             $sheetRepository->reveal(),
@@ -193,8 +190,11 @@ class SheetListViewQueryHandlerTest extends TestCase
         );
 
         $filterRequestView = new FilterRequestView();
-        $result = $handler->handle(
-            new SheetListViewQuery([1 => $sheet1->reveal(), 2 => $sheet2->reveal()], $locale, $page, $limit, $filterRequestView)
+        $result            = $handler->handle(
+            new SheetListViewQuery($user->reveal(), [
+                1 => $sheet1->reveal(),
+                2 => $sheet2->reveal(),
+            ], $locale, $page, $limit, $filterRequestView)
         );
 
         $expected = new SheetListView(
@@ -212,7 +212,8 @@ class SheetListViewQueryHandlerTest extends TestCase
 
     public function testHandleWithOtherSheet()
     {
-        $event  = $this->prophesize(Event::class);
+        $user          = $this->prophesize(User::class);
+        $event         = $this->prophesize(Event::class);
         $configuration = $this->prophesize(Configuration::class);
         $event->getConfiguration()->shouldBeCalled()->willReturn($configuration->reveal());
         $configuration->isMeetingRequestUpdateLocked()->shouldBeCalled()->willReturn(false);
@@ -238,20 +239,18 @@ class SheetListViewQueryHandlerTest extends TestCase
         $page   = 1;
         $limit  = 4; // To ease test
 
-        $sheetRepository = $this->prophesize(SheetRepositoryInterface::class);
-        $requestRepository = $this->prophesize(RequestRepositoryInterface::class);
-        $sheetViewQueryHandler = $this->prophesize(SheetViewQueryHandler::class);
+        $sheetRepository         = $this->prophesize(SheetRepositoryInterface::class);
+        $requestRepository       = $this->prophesize(RequestRepositoryInterface::class);
+        $sheetViewQueryHandler   = $this->prophesize(SheetViewQueryHandler::class);
         $requestViewQueryHandler = $this->prophesize(RequestViewQueryHandler::class);
 
         $sheetRepository
             ->getSheetsMetBySheetsPaginated($event->reveal(), $multipleSheets, 1, 4, null, null, null)
-            ->shouldNotBeCalled()
-        ;
+            ->shouldNotBeCalled();
 
         $sheetRepository
             ->getSheetsMetBySheets($event->reveal(), $multipleSheets, null, null, null)
-            ->shouldNotBeCalled()
-        ;
+            ->shouldNotBeCalled();
 
         $request1 = $this->prophesize(Request::class);
         $request1->getFromSheet()->shouldBeCalled()->willReturn($sheetMet1->reveal());
@@ -267,8 +266,7 @@ class SheetListViewQueryHandlerTest extends TestCase
                 null
             )
             ->shouldBeCalled()
-            ->willReturn([$request1->reveal()])
-        ;
+            ->willReturn([$request1->reveal()]);
 
         $requestRepository
             ->countRequestOfSheetsWithSheets(
@@ -280,8 +278,7 @@ class SheetListViewQueryHandlerTest extends TestCase
                 null
             )
             ->shouldBeCalled()
-            ->willReturn(12)
-        ;
+            ->willReturn(12);
 
         $requestView1 = $this->prophesize(RequestView::class);
 
@@ -293,14 +290,14 @@ class SheetListViewQueryHandlerTest extends TestCase
         $sheetView1 = new SheetView(3, 'A', $sheetMet1->reveal());
 
         $sheetViewQueryHandler
-            ->handle(new SheetViewQuery($sheetMet1->reveal(), $locale))
+            ->handle(new SheetViewQuery($sheetMet1->reveal(), $user->reveal(), $locale))
             ->shouldBeCalled()
             ->willReturn($sheetView1);
 
         $expectedSheetView1 = new SheetView(3, 'A', $sheetMet1->reveal());
         $expectedSheetView1->addRequest($requestView1->reveal());
 
-        $meetingRequestAccessChecker = $this->prophesize(MeetingRequestAccessChecker::class);
+        $meetingRequestAccessChecker          = $this->prophesize(MeetingRequestAccessChecker::class);
         $answeringMeetingRequestAccessChecker = $this->prophesize(AnsweringMeetingRequestAccessChecker::class);
         $meetingRequestAccessChecker->allowedToAccess($event->reveal())->shouldBeCalled()->willReturn(true);
         $answeringMeetingRequestAccessChecker->allowedToAccess($event->reveal())->shouldBeCalled()->willReturn(true);
@@ -314,10 +311,15 @@ class SheetListViewQueryHandlerTest extends TestCase
             $answeringMeetingRequestAccessChecker->reveal()
         );
 
-        $filterRequestView = new FilterRequestView();
+        $filterRequestView             = new FilterRequestView();
         $filterRequestView->otherSheet = $sheetMet1->reveal();
-        $result = $handler->handle(
-            new SheetListViewQuery([1 => $sheet1->reveal(), 2 => $sheet2->reveal()], $locale, $page, $limit, $filterRequestView)
+        $result                        = $handler->handle(
+            new SheetListViewQuery(
+                $user->reveal(),
+                [
+                    1 => $sheet1->reveal(),
+                    2 => $sheet2->reveal(),
+                ], $locale, $page, $limit, $filterRequestView)
         );
 
         $expected = new SheetListView(
@@ -335,7 +337,8 @@ class SheetListViewQueryHandlerTest extends TestCase
 
     public function testHandleWithType()
     {
-        $event  = $this->prophesize(Event::class);
+        $user          = $this->prophesize(User::class);
+        $event         = $this->prophesize(Event::class);
         $configuration = $this->prophesize(Configuration::class);
         $event->getConfiguration()->shouldBeCalled()->willReturn($configuration->reveal());
         $configuration->isMeetingRequestUpdateLocked()->shouldBeCalled()->willReturn(false);
@@ -368,22 +371,20 @@ class SheetListViewQueryHandlerTest extends TestCase
         $page   = 1;
         $limit  = 4; // To ease test
 
-        $sheetRepository = $this->prophesize(SheetRepositoryInterface::class);
-        $requestRepository = $this->prophesize(RequestRepositoryInterface::class);
-        $sheetViewQueryHandler = $this->prophesize(SheetViewQueryHandler::class);
+        $sheetRepository         = $this->prophesize(SheetRepositoryInterface::class);
+        $requestRepository       = $this->prophesize(RequestRepositoryInterface::class);
+        $sheetViewQueryHandler   = $this->prophesize(SheetViewQueryHandler::class);
         $requestViewQueryHandler = $this->prophesize(RequestViewQueryHandler::class);
 
         $sheetRepository
             ->getSheetsMetBySheetsPaginated($event->reveal(), $multipleSheets, 1, 4, null, Request::TYPE_REQUEST, null)
             ->shouldBeCalled()
-            ->willReturn(new PaginatedResult($sheetsMet, 1, 4, 5, []))
-        ;
+            ->willReturn(new PaginatedResult($sheetsMet, 1, 4, 5, []));
 
         $sheetRepository
             ->getSheetsMetBySheets($event->reveal(), $multipleSheets, null, Request::TYPE_REQUEST, null)
             ->shouldBeCalled()
-            ->willReturn($sheetsMet)
-        ;
+            ->willReturn($sheetsMet);
 
         $request1 = $this->prophesize(Request::class);
         $request1->getFromSheet()->shouldBeCalled()->willReturn($sheetMet1->reveal());
@@ -413,8 +414,7 @@ class SheetListViewQueryHandlerTest extends TestCase
                     $request2->reveal(),
                     $request3->reveal(),
                 ]
-            )
-        ;
+            );
 
         $requestView1 = $this->prophesize(RequestView::class);
         $requestView2 = $this->prophesize(RequestView::class);
@@ -439,19 +439,19 @@ class SheetListViewQueryHandlerTest extends TestCase
         $sheetView4 = new SheetView(2, 'D', $sheet2->reveal());
 
         $sheetViewQueryHandler
-            ->handle(new SheetViewQuery($sheetMet1->reveal(), $locale))
+            ->handle(new SheetViewQuery($sheetMet1->reveal(), $user->reveal(), $locale))
             ->shouldBeCalled()
             ->willReturn($sheetView1);
         $sheetViewQueryHandler
-            ->handle(new SheetViewQuery($sheetMet2->reveal(), $locale))
+            ->handle(new SheetViewQuery($sheetMet2->reveal(), $user->reveal(), $locale))
             ->shouldBeCalled()
             ->willReturn($sheetView2);
         $sheetViewQueryHandler
-            ->handle(new SheetViewQuery($sheet1->reveal(), $locale))
+            ->handle(new SheetViewQuery($sheet1->reveal(), $user->reveal(), $locale))
             ->shouldBeCalled()
             ->willReturn($sheetView3);
         $sheetViewQueryHandler
-            ->handle(new SheetViewQuery($sheet2->reveal(), $locale))
+            ->handle(new SheetViewQuery($sheet2->reveal(), $user->reveal(), $locale))
             ->shouldBeCalled()
             ->willReturn($sheetView4);
 
@@ -464,7 +464,7 @@ class SheetListViewQueryHandlerTest extends TestCase
         $expectedSheetView3 = new SheetView(1, 'C', $sheet1->reveal());
         $expectedSheetView3->addRequest($requestView3->reveal());
 
-        $meetingRequestAccessChecker = $this->prophesize(MeetingRequestAccessChecker::class);
+        $meetingRequestAccessChecker          = $this->prophesize(MeetingRequestAccessChecker::class);
         $answeringMeetingRequestAccessChecker = $this->prophesize(AnsweringMeetingRequestAccessChecker::class);
         $meetingRequestAccessChecker->allowedToAccess($event->reveal())->shouldBeCalled()->willReturn(true);
         $answeringMeetingRequestAccessChecker->allowedToAccess($event->reveal())->shouldBeCalled()->willReturn(true);
@@ -479,8 +479,7 @@ class SheetListViewQueryHandlerTest extends TestCase
                 null
             )
             ->shouldBeCalled()
-            ->willReturn(12)
-        ;
+            ->willReturn(12);
 
         $handler = new SheetListViewQueryHandler(
             $sheetRepository->reveal(),
@@ -491,10 +490,15 @@ class SheetListViewQueryHandlerTest extends TestCase
             $answeringMeetingRequestAccessChecker->reveal()
         );
 
-        $filterRequestView = new FilterRequestView();
+        $filterRequestView       = new FilterRequestView();
         $filterRequestView->type = Request::TYPE_REQUEST;
-        $result = $handler->handle(
-            new SheetListViewQuery([1 => $sheet1->reveal(), 2 => $sheet2->reveal()], $locale, $page, $limit, $filterRequestView)
+        $result                  = $handler->handle(
+            new SheetListViewQuery(
+                $user->reveal(),
+                [
+                    1 => $sheet1->reveal(),
+                    2 => $sheet2->reveal(),
+                ], $locale, $page, $limit, $filterRequestView)
         );
 
         $expected = new SheetListView(
@@ -512,8 +516,9 @@ class SheetListViewQueryHandlerTest extends TestCase
 
     public function testHandleWithTypeStateAndUser()
     {
-        $user = $this->prophesize(User::class);
-        $event  = $this->prophesize(Event::class);
+        $loggedUser    = $this->prophesize(User::class);
+        $user          = $this->prophesize(User::class);
+        $event         = $this->prophesize(Event::class);
         $configuration = $this->prophesize(Configuration::class);
         $event->getConfiguration()->shouldBeCalled()->willReturn($configuration->reveal());
         $configuration->isMeetingRequestUpdateLocked()->shouldBeCalled()->willReturn(false);
@@ -546,22 +551,20 @@ class SheetListViewQueryHandlerTest extends TestCase
         $page   = 1;
         $limit  = 4; // To ease test
 
-        $sheetRepository = $this->prophesize(SheetRepositoryInterface::class);
-        $requestRepository = $this->prophesize(RequestRepositoryInterface::class);
-        $sheetViewQueryHandler = $this->prophesize(SheetViewQueryHandler::class);
+        $sheetRepository         = $this->prophesize(SheetRepositoryInterface::class);
+        $requestRepository       = $this->prophesize(RequestRepositoryInterface::class);
+        $sheetViewQueryHandler   = $this->prophesize(SheetViewQueryHandler::class);
         $requestViewQueryHandler = $this->prophesize(RequestViewQueryHandler::class);
 
         $sheetRepository
             ->getSheetsMetBySheetsPaginated($event->reveal(), $multipleSheets, 1, 4, Request::STATE_SENT, Request::TYPE_REQUEST, $user->reveal())
             ->shouldBeCalled()
-            ->willReturn(new PaginatedResult($sheetsMet, 1, 4, 5, []))
-        ;
+            ->willReturn(new PaginatedResult($sheetsMet, 1, 4, 5, []));
 
         $sheetRepository
             ->getSheetsMetBySheets($event->reveal(), $multipleSheets, Request::STATE_SENT, Request::TYPE_REQUEST, $user->reveal())
             ->shouldBeCalled()
-            ->willReturn($sheetsMet)
-        ;
+            ->willReturn($sheetsMet);
 
         $request1 = $this->prophesize(Request::class);
         $request1->getFromSheet()->shouldBeCalled()->willReturn($sheetMet1->reveal());
@@ -591,8 +594,7 @@ class SheetListViewQueryHandlerTest extends TestCase
                     $request2->reveal(),
                     $request3->reveal(),
                 ]
-            )
-        ;
+            );
 
         $requestRepository
             ->countRequestOfSheetsWithSheets(
@@ -604,8 +606,7 @@ class SheetListViewQueryHandlerTest extends TestCase
                 $user->reveal()
             )
             ->shouldBeCalled()
-            ->willReturn(12)
-        ;
+            ->willReturn(12);
 
         $requestView1 = $this->prophesize(RequestView::class);
         $requestView2 = $this->prophesize(RequestView::class);
@@ -630,19 +631,19 @@ class SheetListViewQueryHandlerTest extends TestCase
         $sheetView4 = new SheetView(2, 'D', $sheet2->reveal());
 
         $sheetViewQueryHandler
-            ->handle(new SheetViewQuery($sheetMet1->reveal(), $locale))
+            ->handle(new SheetViewQuery($sheetMet1->reveal(), $loggedUser->reveal(), $locale))
             ->shouldBeCalled()
             ->willReturn($sheetView1);
         $sheetViewQueryHandler
-            ->handle(new SheetViewQuery($sheetMet2->reveal(), $locale))
+            ->handle(new SheetViewQuery($sheetMet2->reveal(), $loggedUser->reveal(), $locale))
             ->shouldBeCalled()
             ->willReturn($sheetView2);
         $sheetViewQueryHandler
-            ->handle(new SheetViewQuery($sheet1->reveal(), $locale))
+            ->handle(new SheetViewQuery($sheet1->reveal(), $loggedUser->reveal(), $locale))
             ->shouldBeCalled()
             ->willReturn($sheetView3);
         $sheetViewQueryHandler
-            ->handle(new SheetViewQuery($sheet2->reveal(), $locale))
+            ->handle(new SheetViewQuery($sheet2->reveal(), $loggedUser->reveal(), $locale))
             ->shouldBeCalled()
             ->willReturn($sheetView4);
 
@@ -655,7 +656,7 @@ class SheetListViewQueryHandlerTest extends TestCase
         $expectedSheetView3 = new SheetView(1, 'C', $sheet1->reveal());
         $expectedSheetView3->addRequest($requestView3->reveal());
 
-        $meetingRequestAccessChecker = $this->prophesize(MeetingRequestAccessChecker::class);
+        $meetingRequestAccessChecker          = $this->prophesize(MeetingRequestAccessChecker::class);
         $answeringMeetingRequestAccessChecker = $this->prophesize(AnsweringMeetingRequestAccessChecker::class);
         $meetingRequestAccessChecker->allowedToAccess($event->reveal())->shouldBeCalled()->willReturn(true);
         $answeringMeetingRequestAccessChecker->allowedToAccess($event->reveal())->shouldBeCalled()->willReturn(true);
@@ -669,13 +670,18 @@ class SheetListViewQueryHandlerTest extends TestCase
             $answeringMeetingRequestAccessChecker->reveal()
         );
 
-        $filterRequestView = new FilterRequestView();
-        $filterRequestView->type = Request::TYPE_REQUEST;
+        $filterRequestView        = new FilterRequestView();
+        $filterRequestView->type  = Request::TYPE_REQUEST;
         $filterRequestView->state = Request::STATE_SENT;
-        $filterRequestView->user = $user->reveal();
+        $filterRequestView->user  = $user->reveal();
 
         $result = $handler->handle(
-            new SheetListViewQuery([1 => $sheet1->reveal(), 2 => $sheet2->reveal()], $locale, $page, $limit, $filterRequestView)
+            new SheetListViewQuery(
+                $loggedUser->reveal(),
+                [
+                    1 => $sheet1->reveal(),
+                    2 => $sheet2->reveal(),
+                ], $locale, $page, $limit, $filterRequestView)
         );
 
         $expected = new SheetListView(
@@ -693,8 +699,9 @@ class SheetListViewQueryHandlerTest extends TestCase
 
     public function testHandleWithTypeStateAndUserAndSheetConcerned()
     {
-        $user = $this->prophesize(User::class);
-        $event  = $this->prophesize(Event::class);
+        $loggedUser    = $this->prophesize(User::class);
+        $user          = $this->prophesize(User::class);
+        $event         = $this->prophesize(Event::class);
         $configuration = $this->prophesize(Configuration::class);
         $event->getConfiguration()->shouldBeCalled()->willReturn($configuration->reveal());
         $configuration->isMeetingRequestUpdateLocked()->shouldBeCalled()->willReturn(false);
@@ -721,22 +728,20 @@ class SheetListViewQueryHandlerTest extends TestCase
         $page   = 1;
         $limit  = 4; // To ease test
 
-        $sheetRepository = $this->prophesize(SheetRepositoryInterface::class);
-        $requestRepository = $this->prophesize(RequestRepositoryInterface::class);
-        $sheetViewQueryHandler = $this->prophesize(SheetViewQueryHandler::class);
+        $sheetRepository         = $this->prophesize(SheetRepositoryInterface::class);
+        $requestRepository       = $this->prophesize(RequestRepositoryInterface::class);
+        $sheetViewQueryHandler   = $this->prophesize(SheetViewQueryHandler::class);
         $requestViewQueryHandler = $this->prophesize(RequestViewQueryHandler::class);
 
         $sheetRepository
             ->getSheetsMetBySheetsPaginated($event->reveal(), [1 => $sheet1->reveal()], 1, 4, Request::STATE_SENT, Request::TYPE_REQUEST, $user->reveal())
             ->shouldBeCalled()
-            ->willReturn(new PaginatedResult($sheetsMet, 1, 4, 5, []))
-        ;
+            ->willReturn(new PaginatedResult($sheetsMet, 1, 4, 5, []));
 
         $sheetRepository
             ->getSheetsMetBySheets($event->reveal(), [1 => $sheet1->reveal()], Request::STATE_SENT, Request::TYPE_REQUEST, $user->reveal())
             ->shouldBeCalled()
-            ->willReturn($sheetsMet)
-        ;
+            ->willReturn($sheetsMet);
 
         $request1 = $this->prophesize(Request::class);
         $request1->getFromSheet()->shouldBeCalled()->willReturn($sheetMet1->reveal());
@@ -766,8 +771,7 @@ class SheetListViewQueryHandlerTest extends TestCase
                     $request2->reveal(),
                     $request3->reveal(),
                 ]
-            )
-        ;
+            );
 
         $requestRepository
             ->countRequestOfSheetsWithSheets(
@@ -779,8 +783,7 @@ class SheetListViewQueryHandlerTest extends TestCase
                 $user->reveal()
             )
             ->shouldBeCalled()
-            ->willReturn(12)
-        ;
+            ->willReturn(12);
 
         $requestView1 = $this->prophesize(RequestView::class);
         $requestView2 = $this->prophesize(RequestView::class);
@@ -804,15 +807,15 @@ class SheetListViewQueryHandlerTest extends TestCase
         $sheetView4 = new SheetView(2, 'D', $sheet2->reveal());
 
         $sheetViewQueryHandler
-            ->handle(new SheetViewQuery($sheetMet1->reveal(), $locale))
+            ->handle(new SheetViewQuery($sheetMet1->reveal(), $loggedUser->reveal(), $locale))
             ->shouldBeCalled()
             ->willReturn($sheetView1);
         $sheetViewQueryHandler
-            ->handle(new SheetViewQuery($sheetMet2->reveal(), $locale))
+            ->handle(new SheetViewQuery($sheetMet2->reveal(), $loggedUser->reveal(), $locale))
             ->shouldBeCalled()
             ->willReturn($sheetView2);
         $sheetViewQueryHandler
-            ->handle(new SheetViewQuery($sheet2->reveal(), $locale))
+            ->handle(new SheetViewQuery($sheet2->reveal(), $loggedUser->reveal(), $locale))
             ->shouldBeCalled()
             ->willReturn($sheetView4);
 
@@ -825,7 +828,7 @@ class SheetListViewQueryHandlerTest extends TestCase
         $expectedSheetView3 = new SheetView(2, 'D', $sheet2->reveal());
         $expectedSheetView3->addRequest($requestView3->reveal());
 
-        $meetingRequestAccessChecker = $this->prophesize(MeetingRequestAccessChecker::class);
+        $meetingRequestAccessChecker          = $this->prophesize(MeetingRequestAccessChecker::class);
         $answeringMeetingRequestAccessChecker = $this->prophesize(AnsweringMeetingRequestAccessChecker::class);
         $meetingRequestAccessChecker->allowedToAccess($event->reveal())->shouldBeCalled()->willReturn(true);
         $answeringMeetingRequestAccessChecker->allowedToAccess($event->reveal())->shouldBeCalled()->willReturn(true);
@@ -839,14 +842,19 @@ class SheetListViewQueryHandlerTest extends TestCase
             $answeringMeetingRequestAccessChecker->reveal()
         );
 
-        $filterRequestView = new FilterRequestView();
-        $filterRequestView->type = Request::TYPE_REQUEST;
-        $filterRequestView->state = Request::STATE_SENT;
-        $filterRequestView->user = $user->reveal();
+        $filterRequestView                 = new FilterRequestView();
+        $filterRequestView->type           = Request::TYPE_REQUEST;
+        $filterRequestView->state          = Request::STATE_SENT;
+        $filterRequestView->user           = $user->reveal();
         $filterRequestView->sheetConcerned = $sheet1->reveal();
 
         $result = $handler->handle(
-            new SheetListViewQuery([1 => $sheet1->reveal(), 2 => $sheet2->reveal()], $locale, $page, $limit, $filterRequestView)
+            new SheetListViewQuery(
+                $loggedUser->reveal(),
+                [
+                    1 => $sheet1->reveal(),
+                    2 => $sheet2->reveal(),
+                ], $locale, $page, $limit, $filterRequestView)
         );
 
         $expected = new SheetListView(

@@ -16,6 +16,7 @@ use Proximum\Vimeet\Application\Components\Sheet\Template\Tag;
 use Proximum\Vimeet\Application\Serializer\Denormalizer\Exception\InvalidObjectContentException;
 use Proximum\Vimeet\Domain\Account\EmailValidator;
 use Proximum\Vimeet\Domain\Account\Synchronizer;
+use Proximum\Vimeet\Domain\Helper\StringHelper;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\User;
@@ -132,7 +133,7 @@ class ParticipantDenormalizer implements DenormalizerInterface
             }
         }
 
-        $this->importLogger->init(count($data));
+        $this->importLogger->init(\count($data));
 
         $mappingGuesser = new MappingGuesser($context['mappings']);
 
@@ -150,7 +151,7 @@ class ParticipantDenormalizer implements DenormalizerInterface
                 continue;
             }
 
-            $email = $row[$mappedMailCsvColumn];
+            $email = StringHelper::trimSpacesAndNonBreakSpaces($row[$mappedMailCsvColumn]);
 
             if ($this->emailValidator->validate($email) === false) {
                 $this->importLogger->addError($key, new EmailError($email, true), $email, $context['locale']);
@@ -202,7 +203,7 @@ class ParticipantDenormalizer implements DenormalizerInterface
      */
     public function supportsDenormalization($data, $type, $format = null)
     {
-        return $format === self::FORMAT;
+        return $type === Participant::class && $format === self::FORMAT;
     }
 
     /**
@@ -264,6 +265,7 @@ class ParticipantDenormalizer implements DenormalizerInterface
      *
      * @return array of sheetData, participantData and sheetTitle
      * @throws InvalidObjectContentException
+     * @throws \Exception
      */
     private function handleRow(
         array $row,
@@ -279,6 +281,7 @@ class ParticipantDenormalizer implements DenormalizerInterface
         $registrationTemplate->clear();
 
         foreach ($row as $key => $column) {
+            $column = trim($column);
             $registrationObjectKey = $mappingGuesser->getMappedOutKey($key);
 
             if ($registrationObjectKey === false
@@ -298,7 +301,7 @@ class ParticipantDenormalizer implements DenormalizerInterface
                     $column = $this->denormalizerPhoneNumber($column);
                 }
 
-                $validator      = ObjectValidatorFactory::create($templateObject);
+                $validator = ObjectValidatorFactory::create($templateObject);
                 $validatorError = $validator->validate($column, [
                     'locale' => $context['locale'],
                     'object' => $templateObject,
@@ -332,7 +335,8 @@ class ParticipantDenormalizer implements DenormalizerInterface
                 $sheetTitle = $column;
             }
 
-            if ('' === $sheetTitle && $templateObject->hasTag(Tag::SHEET_TITLE)
+            if ('' === $sheetTitle
+                && $templateObject->hasTag(Tag::SHEET_TITLE)
                 && !empty($templateObject->getContentValue())
             ) {
                 $sheetTitle = $column;
@@ -373,7 +377,7 @@ class ParticipantDenormalizer implements DenormalizerInterface
         $user = $this->hasUserAccount($email, $users);
 
         if ($user === false) {
-            $user = new User(strtolower($email), '', '', $context['locale']);
+            $user = new User($email, '', '', $context['locale']);
             $user->setAccount(new User\Account());
 
             $this->userRepository->add($user);
@@ -385,12 +389,11 @@ class ParticipantDenormalizer implements DenormalizerInterface
         $sheetTitle = !empty(trim($sheetTitle)) ? $sheetTitle : $user->getFullname();
         $sheetTitle = !empty(trim($sheetTitle)) ? $sheetTitle : $user->getEmail();
         $sheet->setTitle($sheetTitle);
+        $sheet->setRegistrationData($sheetData);
+        $this->sheetRepository->add($sheet);
 
         $participant = new Participant($sheet, $user, $participantData, false);
         $participant->setImported(true);
-
-        $sheet->setRegistrationData($sheetData);
-        $this->sheetRepository->add($sheet);
         $this->participantRepository->add($participant);
         $sheet->addParticipant($participant); // required to have participant in array sheet array collection
 

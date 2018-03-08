@@ -151,6 +151,7 @@ class SheetListViewQueryHandler
 
         $sheetViews = $this->getSheetViewsWithRequest(
             $event,
+            $query->user,
             $multipleSheets,
             $sheets->results,
             $query->locale,
@@ -186,6 +187,7 @@ class SheetListViewQueryHandler
      * Creates the SheetViews and returns them with there requests
      *
      * @param Event            $event
+     * @param User             $loggedUser
      * @param Sheet[]          $multipleSheets
      * @param Sheet[]          $sheetsMet
      * @param string           $locale
@@ -197,6 +199,7 @@ class SheetListViewQueryHandler
      */
     private function getSheetViewsWithRequest(
         Event $event,
+        User $loggedUser,
         array &$multipleSheets,
         array &$sheetsMet,
         string $locale,
@@ -209,7 +212,7 @@ class SheetListViewQueryHandler
 
         foreach ($sheetsMet as $sheetMet) {
             $sheetViews[$sheetMet->getId()] = $this->sheetViewQueryHandler->handle(
-                new SheetViewQuery($sheetMet, $locale)
+                new SheetViewQuery($sheetMet, $loggedUser, $locale)
             );
         }
 

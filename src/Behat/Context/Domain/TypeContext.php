@@ -40,4 +40,23 @@ class TypeContext implements Context
         $type = $this->typeContextProxy->getTypeManager()->create($event);
         $this->typeContextProxy->getStorage()->set('type', $type);
     }
+
+    /**
+     * @Given /^this package is assigned to this type$/
+     */
+    public function assignPackage()
+    {
+        $type = $this->typeContextProxy->getStorage()->get('type');
+        $package = $this->typeContextProxy->getStorage()->get('package');
+
+        if (null === $type) {
+            throw new \InvalidArgumentException('Missing Type');
+        }
+
+        if (null === $package) {
+            throw new \InvalidArgumentException('Missing Package');
+        }
+
+        $this->typeContextProxy->getTypeManager()->assignPackageToType($type, $package);
+    }
 }

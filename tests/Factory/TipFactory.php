@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of the vimeet project.
+ * This file is part of the Proximum Vimeet project.
  *
  * Copyright (C) Proximum
  *
@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Tests\Factory;
 
+use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Tip\Tip;
 
 class TipFactory
@@ -25,14 +26,16 @@ class TipFactory
     const LOCALES = ['fr', 'en'];
 
     /**
-     * @param string $tipTitle
-     * @param array  $pages
-     * @param array $locales
+     * @param string     $tipTitle
+     * @param Event|null $event
+     * @param array      $pages
+     * @param array      $locales
      *
      * @return Tip
      */
     public static function createTip(
         $tipTitle,
+        Event $event = null,
         array $pages = [
             self::ON_MEETING_MANAGEMENT => true,
             self::ON_CATALOG            => true,
@@ -48,6 +51,7 @@ class TipFactory
 
         $tip = new Tip(
             $tipTitle,
+            $event,
             isset($pages[self::ON_MEETING_MANAGEMENT]) ? $pages[self::ON_MEETING_MANAGEMENT] : false,
             isset($pages[self::ON_CATALOG]) ? $pages[self::ON_CATALOG] : false,
             isset($pages[self::ON_PRINT_PLANNING]) ? $pages[self::ON_PRINT_PLANNING] : false,
@@ -59,7 +63,7 @@ class TipFactory
         );
 
         foreach ($locales as $locale) {
-            $tip->setTranslation($locale, $tipTitle . ' ('.$locale.')', 'content_' . $locale, $dateTime);
+            $tip->setTranslation($locale, $tipTitle . ' (' . $locale . ')', 'content_' . $locale, $dateTime);
         }
 
         return $tip;

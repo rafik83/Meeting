@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2017 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -20,26 +20,29 @@ use Proximum\Vimeet\Tests\Factory\EventFactory;
 
 class ParticipationCountTest extends TestCase
 {
-    /**
-     * @var Event
-     */
+    /** @var Event */
     private $event;
 
-    /**
-     * @var Happening
-     */
+    /** @var Happening */
     private $happening;
 
     /**
-     * @var HappeningParticipationRepositoryInterface
+     * @var ObjectProphecy
      */
     private $happeningParticipationRepository;
 
     public function setUp()
     {
-        $this->event                            = EventFactory::createEvent();
-        $category                               = new Happening\Category($this->event, '', 0, '', '');
-        $this->happening                        = new Happening($this->event, new \DateTime(), new \DateTime(), $category);
+        $this->event     = EventFactory::createEvent();
+        $category        = new Happening\Category($this->event, '', 0, '', '');
+        $this->happening = new Happening(
+            $this->event,
+            new \DateTime(),
+            new \DateTime(),
+            $category,
+            []
+        );
+
         $this->happeningParticipationRepository = $this->prophesize(HappeningParticipationRepositoryInterface::class);
     }
 

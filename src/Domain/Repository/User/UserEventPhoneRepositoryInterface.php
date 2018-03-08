@@ -57,4 +57,12 @@ interface UserEventPhoneRepositoryInterface
      * @param array $blackList
      */
     public function unsetFromBlackList(array $blackList);
+
+    /**
+     * @param Event $event
+     * @param int[] $usersId
+     *
+     * @return UserEventPhone[]
+     */
+    public function findValidatedByEventAndUsers(Event $event, array $usersId): array;
 }

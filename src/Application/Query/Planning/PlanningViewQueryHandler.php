@@ -56,15 +56,15 @@ class PlanningViewQueryHandler
     private $sheetRepository;
 
     /** @var array */
-    private $eventDays;
+    private $eventDays = [];
 
     /** @var array */
     private $meetings = [];
 
-    /** @var null|array */
-    private $masses = null;
+    /** @var array */
+    private $masses = [];
 
-    /** @var array of Unavailability[] indexed by User id */
+    /** @var array of Unavailability[] indexed by Event id and User id */
     private $unavailabilities = [];
 
     /** @var array */
@@ -111,31 +111,34 @@ class PlanningViewQueryHandler
      *
      * @return PlanningView
      */
-    public function handle(PlanningViewQuery $query)
+    public function handle(PlanningViewQuery $query): PlanningView
     {
-        if ($this->eventDays === null) {
-            $this->eventDays = $this->dayRepository->findByEvent($query->event);
+        $eventId = $query->event->getId();
+
+        if (!isset($this->eventDays[$eventId])) {
+            $this->eventDays[$eventId] = $this->dayRepository->findByEvent($query->event);
         }
 
-        if (empty($this->eventDays)) {
+        if (empty($this->eventDays[$eventId])) {
             return new PlanningView([], $query->event->getTimeZone());
         }
 
         $this->loadData($query->event, $query->user);
 
         $days = [];
+        $userAvailableLocale = $query->event->getAvailableLocale($query->locale);
 
-        foreach ($this->eventDays as $day) {
+        foreach ($this->eventDays[$eventId] as $day) {
             $days[] = $this->dayViewQueryHandler->handle(
                 new DayViewQuery(
                     $query->user,
                     $day,
-                    $query->locale,
-                    $this->unavailabilities[$query->user->getId()],
-                    $this->happeningParticipations[$query->user->getId()],
-                    $this->masses,
-                    $this->assignments[$query->user->getId()],
-                    $this->meetings[$query->user->getId()]
+                    $userAvailableLocale,
+                    $this->unavailabilities[$eventId][$query->user->getId()],
+                    $this->happeningParticipations[$eventId][$query->user->getId()],
+                    $this->masses[$eventId],
+                    $this->assignments[$eventId][$query->user->getId()],
+                    $this->meetings[$eventId][$query->user->getId()]
                 )
             );
         }
@@ -149,26 +152,36 @@ class PlanningViewQueryHandler
      * @param Event $event
      * @param User $user
      */
-    private function loadData(Event $event, User $user)
+    private function loadData(Event $event, User $user): void
     {
-        if ($this->masses === null) {
-            $this->masses = $this->massUnavailabilityRepository->findNotDispatchedByEvent($event);
+        $eventId = $event->getId();
+
+        if (!isset($this->masses[$eventId])) {
+            $this->masses[$eventId] = $this->massUnavailabilityRepository->findNotDispatchedByEvent($event);
         }
 
-        if (!isset($this->assignments[$user->getId()])) {
-            $this->assignments[$user->getId()] = $this->assignmentRepository->findEnabledByUserAndEvent($user, $event);
+        if (!isset($this->assignments[$eventId][$user->getId()])) {
+            $this->assignments[$eventId][$user->getId()] = $this->assignmentRepository
+                ->findEnabledByUserAndEvent($user, $event)
+            ;
         }
 
-        if (!isset($this->meetings[$user->getId()])) {
-            $this->meetings[$user->getId()] = $this->meetingRepository->findByUserAndEvent($user, $event);
+        if (!isset($this->meetings[$eventId][$user->getId()])) {
+            $this->meetings[$eventId][$user->getId()] = $this->meetingRepository
+                ->findByUserAndEvent($user, $event)
+            ;
         }
 
-        if (!isset($this->unavailabilities[$user->getId()])) {
-            $this->unavailabilities[$user->getId()] = $this->unavailabilityRepository->findByUserAndEvent($user, $event);
+        if (!isset($this->unavailabilities[$eventId][$user->getId()])) {
+            $this->unavailabilities[$eventId][$user->getId()] = $this->unavailabilityRepository
+                ->findByUserAndEvent($user, $event)
+            ;
         }
 
-        if (!isset($this->happeningParticipations[$user->getId()])) {
-            $this->happeningParticipations[$user->getId()] = $this->happeningParticipationRepository->findByUser($user, $event);
+        if (!isset($this->happeningParticipations[$eventId][$user->getId()])) {
+            $this->happeningParticipations[$eventId][$user->getId()] = $this->happeningParticipationRepository
+                ->findByUser($user, $event)
+            ;
         }
     }
 
@@ -176,95 +189,115 @@ class PlanningViewQueryHandler
      * @param Event  $event
      * @param User[] $users
      */
-    public function preloadForEventAndUsers(Event $event, array &$users)
+    public function preloadForEventAndUsers(Event $event, array &$users): void
     {
         if (!empty($users)) {
-            $this->masses = $this->massUnavailabilityRepository->findNotDispatchedByEvent($event);
+            $this->masses[$event->getId()] = $this->massUnavailabilityRepository->findNotDispatchedByEvent($event);
 
-            $this->assignAssignmentByUser($this->assignmentRepository->findEnabledByEventAndUsers($event, $users));
-            $this->assignMeetingByParticipant($this->meetingRepository->findByEventAndUsers($event, $users));
-            $this->assignUnavailabilitiesByUser($this->unavailabilityRepository->findByEventAndUsers($event, $users));
-            $this->assignHappeningsByUser($this->happeningParticipationRepository->findByEventAndUsers($event, $users));
-            $this->addEmptyForUsers($users);
+            $this->assignAssignmentByUser($event, $this->assignmentRepository->findEnabledByEventAndUsers($event, $users));
+            $this->assignMeetingByParticipant($event, $this->meetingRepository->findByEventAndUsers($event, $users));
+            $this->assignUnavailabilitiesByUser($event, $this->unavailabilityRepository->findByEventAndUsers($event, $users));
+            $this->assignHappeningsByUser($event, $this->happeningParticipationRepository->findByEventAndUsers($event, $users));
+            $this->addEmptyForUsers($event, $users);
         }
     }
 
     /**
+     * @param Event     $event
      * @param Meeting[] $meetings
      */
-    private function assignMeetingByParticipant(array $meetings)
+    private function assignMeetingByParticipant(Event $event, array $meetings)
     {
         foreach ($meetings as $meeting) {
             foreach ($meeting->getAllParticipants() as $participant) {
-                $this->meetings[$participant->getUser()->getId()][] = $meeting;
+                $this->meetings[$event->getId()][$participant->getUser()->getId()][] = $meeting;
             }
         }
     }
 
     /**
+     * @param Event            $event
      * @param MassAssignment[] $assignments
      */
-    private function assignAssignmentByUser(array $assignments)
+    private function assignAssignmentByUser(Event $event, array $assignments): void
     {
         foreach ($assignments as $assignment) {
-            $this->assignments[$assignment->getUser()->getId()][] = $assignment;
+            $this->assignments[$event->getId()][$assignment->getUser()->getId()][] = $assignment;
         }
     }
 
     /**
+     * @param Event            $event
      * @param Unavailability[] $unavailabilities
      */
-    private function assignUnavailabilitiesByUser(array $unavailabilities)
+    private function assignUnavailabilitiesByUser(Event $event, array $unavailabilities): void
     {
         foreach ($unavailabilities as $unavailability) {
-            $this->unavailabilities[$unavailability->getUser()->getId()][] = $unavailability;
+            $this->unavailabilities[$event->getId()][$unavailability->getUser()->getId()][] = $unavailability;
         }
     }
 
     /**
+     * @param Event                    $event
      * @param HappeningParticipation[] $happenings
      */
-    private function assignHappeningsByUser(array $happenings)
+    private function assignHappeningsByUser(Event $event, array $happenings): void
     {
         foreach ($happenings as $happening) {
-            $this->happeningParticipations[$happening->getUser()->getId()][] = $happening;
+            $this->happeningParticipations[$event->getId()][$happening->getUser()->getId()][] = $happening;
         }
     }
 
     /**
      * @param Event $event
      */
-    public function preloadForEvent(Event $event)
+    public function preloadForEvent(Event $event): void
     {
-        $this->masses = $this->massUnavailabilityRepository->findNotDispatchedByEvent($event);
-        $this->assignMeetingByParticipant($this->meetingRepository->getAllByEvent($event));
-        $this->assignAssignmentByUser($this->assignmentRepository->findEnabledByEvent($event));
-        $this->assignUnavailabilitiesByUser($this->unavailabilityRepository->getByEvent($event));
-        $this->assignHappeningsByUser($this->happeningParticipationRepository->getByEvent($event));
-        $this->addEmptyForUsers($this->userRepository->findByEvent($event));
+        $this->masses[$event->getId()] = $this->massUnavailabilityRepository->findNotDispatchedByEvent($event);
+        $this->assignMeetingByParticipant($event, $this->meetingRepository->getAllByEvent($event));
+        $this->assignAssignmentByUser($event, $this->assignmentRepository->findEnabledByEvent($event));
+        $this->assignUnavailabilitiesByUser($event, $this->unavailabilityRepository->getByEvent($event));
+        $this->assignHappeningsByUser($event, $this->happeningParticipationRepository->getByEvent($event));
+        $this->addEmptyForUsers($event, $this->userRepository->findWithEnabledSheetByEvent($event));
+    }
+
+    /**
+     * @param Event $event
+     */
+    public function resetForEvent(Event $event): void
+    {
+        $this->masses[$event->getId()]                  = [];
+        $this->assignments[$event->getId()]             = [];
+        $this->meetings[$event->getId()]                = [];
+        $this->unavailabilities[$event->getId()]        = [];
+        $this->happeningParticipations[$event->getId()] = [];
     }
 
     /**
      * This method is use to set an empty array for user without mass/unavailability/assignment/etc...
+     *
+     * @param Event $event
      * @param array $users
      */
-    private function addEmptyForUsers(array $users)
+    private function addEmptyForUsers(Event $event, array $users): void
     {
+        $eventId = $event->getId();
+
         foreach ($users as $user) {
-            if (!isset($this->assignments[$user->getId()])) {
-                $this->assignments[$user->getId()] = [];
+            if (!isset($this->assignments[$eventId][$user->getId()])) {
+                $this->assignments[$eventId][$user->getId()] = [];
             }
 
-            if (!isset($this->meetings[$user->getId()])) {
-                $this->meetings[$user->getId()] = [];
+            if (!isset($this->meetings[$eventId][$user->getId()])) {
+                $this->meetings[$eventId][$user->getId()] = [];
             }
 
-            if (!isset($this->unavailabilities[$user->getId()])) {
-                $this->unavailabilities[$user->getId()] = [];
+            if (!isset($this->unavailabilities[$eventId][$user->getId()])) {
+                $this->unavailabilities[$eventId][$user->getId()] = [];
             }
 
-            if (!isset($this->happeningParticipations[$user->getId()])) {
-                $this->happeningParticipations[$user->getId()] = [];
+            if (!isset($this->happeningParticipations[$eventId][$user->getId()])) {
+                $this->happeningParticipations[$eventId][$user->getId()] = [];
             }
         }
     }

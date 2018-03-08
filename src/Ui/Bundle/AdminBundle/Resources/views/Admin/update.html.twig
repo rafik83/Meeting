@@ -1,7 +1,9 @@
 {% extends 'AdminBundle::base.html.twig' %}
 
+{% block title 'admin.update_admin.title'|trans %}
+
 {% block content %}
-    <h2>{{ 'admin.update_admin.title'|trans }}</h2>
+    <h1 class="page-header">{{ 'admin.update_admin.title'|trans }}</h1>
 
     {{ form(form) }}
 {% endblock %}

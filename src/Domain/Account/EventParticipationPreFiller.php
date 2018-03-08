@@ -1,15 +1,16 @@
 <?php
 
 /*
- * This file is part of the vimeet project.
+ * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2017 vimeet
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
 
 namespace Proximum\Vimeet\Domain\Account;
 
+use Proximum\Vimeet\Application\Components\Sheet\Template\Tag;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Template\Exception\ObjectNotFoundException;
 use Proximum\Vimeet\Domain\Template\TemplateData;
@@ -58,7 +59,7 @@ class EventParticipationPreFiller
         }
 
         // pre fill old tagged data in new template
-        $templateData->setTaggedData($previousTaggedData);
+        $templateData->setTaggedDataIfEmpty($previousTaggedData);
 
         return $templateData;
     }
@@ -68,11 +69,18 @@ class EventParticipationPreFiller
      * @param string $locale
      * @param array $previousTaggedData
      */
-    private function preFillByTags(ContentObjectInterface $templateObject, string $locale, array &$previousTaggedData)
-    {
+    private function preFillByTags(
+        ContentObjectInterface $templateObject,
+        string $locale,
+        array &$previousTaggedData
+    ) {
         $tags = $templateObject->getTags();
 
         foreach ($tags as $tag) {
+            if ($tag === Tag::SHEET_DATA || $tag === Tag::PARTICIPANT_DATA) {
+                continue;
+            }
+
             $content = $templateObject->getContentValueLocalize($locale);
             if (empty($previousTaggedData[$tag]) && !empty($content)) {
                 $previousTaggedData[$tag] = $content;

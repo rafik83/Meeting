@@ -27,13 +27,13 @@ Feature: See and update search facet
     And I should see "admin.event.search_facet.title"
     And I should see "français"
     When I fill in the following:
-      | search_facet_update_searchFacets_0_translations_fr_label | Catégorie |
-      | search_facet_update_searchFacets_0_translations_en_label | Category  |
-    And I check "search_facet_update_searchFacets_0_enabled"
+      | search_facet_update_searchFacets_category_translations_fr_label | Catégorie |
+      | search_facet_update_searchFacets_category_translations_en_label | Category  |
+    And I check "search_facet_update_searchFacets_category_enabled"
     And I press "search_facet_update_submit"
     Then I should see "flash.admin.event.filter_facet.update.success"
-    And the "search_facet_update_searchFacets_0_translations_fr_label" field should contain "Catégorie"
-    And the "search_facet_update_searchFacets_0_translations_en_label" field should contain "Category"
+    And the "search_facet_update_searchFacets_category_translations_fr_label" field should contain "Catégorie"
+    And the "search_facet_update_searchFacets_category_translations_en_label" field should contain "Category"
 
   Scenario: I can enable search type facet and see them in the catalog
     Given I am logged with "test@test.com" on admin
@@ -41,14 +41,14 @@ Feature: See and update search facet
     When I follow "admin.event.search_facets.link"
     Then the response status code should be 200
     When I fill in the following:
-      | search_facet_update_searchFacets_1_translations_fr_label | Participants |
-      | search_facet_update_searchFacets_1_translations_en_label | Participants |
-    And I check "search_facet_update_searchFacets_0_enabled"
+      | search_facet_update_searchFacets_type_translations_fr_label | Participants |
+      | search_facet_update_searchFacets_type_translations_en_label | Participants |
+    And I check "search_facet_update_searchFacets_type_enabled"
     And I press "search_facet_update_submit"
     Then I should see "flash.admin.event.filter_facet.update.success"
 
   Scenario: I can see search type in catalog
-    When I am logged with "test@elao.com" on event "http://rdv-carnot-2016.vimeet.proximum.dev"
+    When I am logged with "test@elao.com" on event "http://rdv-carnot-2016.vimeet.proximum"
     And I go to this page "/fr"
     Then I should be on this page "/fr/sheet/1"
     And I should see "Les rendez-vous CARNOT 2016"

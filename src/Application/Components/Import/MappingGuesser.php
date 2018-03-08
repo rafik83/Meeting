@@ -36,9 +36,7 @@ class MappingGuesser
      */
     public function getMappedInKey($mappedOutKey)
     {
-        $mappedInKey = array_search($mappedOutKey, $this->mappings);
-
-        return $mappedInKey;
+        return array_search($mappedOutKey, $this->mappings);
     }
 
     /**
@@ -48,10 +46,6 @@ class MappingGuesser
      */
     public function getMappedOutKey($mappedInKey)
     {
-        if (!array_key_exists($mappedInKey, $this->mappings)) {
-            return false;
-        }
-
-        return $this->mappings[$mappedInKey];
+        return $this->mappings[$mappedInKey] ?? false;
     }
 }

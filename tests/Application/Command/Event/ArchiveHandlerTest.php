@@ -67,13 +67,13 @@ class ArchiveHandlerTest extends TestCase
         $event = EventFactory::createEvent();
         $day = new Day($event, $begin, $end);
         $event->setDays([$day]);
-        $event->setDomain('super-event-2017.vimeet.proximum.dev');
+        $event->setDomain('super-event-2017.vimeet.proximum');
 
         // Expected
         $expectedEvent = EventFactory::createEvent();
         $day = new Day($expectedEvent, $begin, $end);
         $expectedEvent->setDays([$day]);
-        $expectedEvent->setDomain('super-event-2017.vimeet.proximum.dev');
+        $expectedEvent->setDomain('super-event-2017.vimeet.proximum');
         $expectedEvent->archive();
 
         // Mock
@@ -98,7 +98,7 @@ class ArchiveHandlerTest extends TestCase
         $expectedEvent = EventFactory::createEvent();
         $day = new Day($expectedEvent, $begin, $end);
         $expectedEvent->setDays([$day]);
-        $expectedEvent->setDomain('super-event-2017.vimeet.proximum.dev');
+        $expectedEvent->setDomain('super-event-2017.vimeet.proximum');
         $expectedEvent->archive();
 
         // Mock

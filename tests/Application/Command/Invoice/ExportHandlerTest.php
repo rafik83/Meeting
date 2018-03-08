@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2017 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -11,6 +11,7 @@
 namespace Proximum\Vimeet\Tests\Application\Command\Invoice;
 
 use IntlDateFormatter;
+use PHPUnit\Framework\TestCase;
 use Proximum\Vimeet\Application\Adapter\SerializerAdapterInterface;
 use Proximum\Vimeet\Application\Command\Invoice\Export;
 use Proximum\Vimeet\Application\Command\Invoice\ExportHandler;
@@ -24,7 +25,6 @@ use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Repository\EventRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\Invoice\InvoiceRepositoryInterface;
 use Proximum\Vimeet\Domain\View\Invoice\ExportView;
-use PHPUnit\Framework\TestCase;
 
 class ExportHandlerTest extends TestCase
 {
@@ -93,7 +93,7 @@ class ExportHandlerTest extends TestCase
                     'invoice'                 => $invoice,
                     'locale'                  => 'fr',
                     'dateFormatter'           => $dateFormatter,
-                    'billingInfosViewOfSheet' => $billingInfoView
+                    'billingInfosViewOfSheet' => $billingInfoView,
                 ]
             )
             ->shouldBeCalled()

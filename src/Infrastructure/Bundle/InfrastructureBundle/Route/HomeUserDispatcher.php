@@ -61,14 +61,14 @@ class HomeUserDispatcher
      */
     public function attemptDispatchUser(Event $event, UserInterface $user = null): ?RedirectResponse
     {
-        if (null !== $response = $this->attemptDispatchAnonymousUser($event)) {
-            return $response;
-        }
-
         if ($this->authorizationChecker->isGranted('IS_AUTHENTICATED_REMEMBERED') && $user instanceof User) {
             if (null !== $response = $this->attemptDispatchLoggedUser($event, $user)) {
                 return $response;
             }
+        }
+
+        if (null !== $response = $this->attemptDispatchAnonymousUser($event)) {
+            return $response;
         }
 
         return null;

@@ -76,10 +76,11 @@ class TypeNameResolverTest extends TestCase
         $this->expectException(\InvalidArgumentException::class);
 
         $typeNameResolver = new TypeNameResolver($this->typeRepository->reveal());
-        $typeNameResolver->resolveWithPreloadedSheets([], 'fr');
+        $sheets = [];
+        $typeNameResolver->resolveWithPreloadedSheets($sheets, 'fr');
     }
 
-    public function testResolveWithPreloadedSheets()
+    public function testResolveWithPreloadedSheetsWithTypePosition()
     {
         // Context
         $sheet1 = $this->prophesize(Sheet::class);
@@ -92,19 +93,49 @@ class TypeNameResolverTest extends TestCase
         $sheet3->getType()->willReturn($type1->reveal());
 
         // Expected
-        $type1->getTitle('fr')->shouldBeCalled()->willReturn('not the title we want');
         $type2->getTitle('fr')->shouldBeCalled()->willReturn('type title in fr');
+        $type1->getTitle('fr')->shouldNotBeCalled();
         $type1->getPosition()->shouldBeCalled()->willReturn(4);
         $type2->getPosition()->shouldBeCalled()->willReturn(1);
 
         $typeNameResolver = new TypeNameResolver($this->typeRepository->reveal());
+        $sheets = [$sheet1->reveal(), $sheet2->reveal(), $sheet3->reveal()];
+
         $result = $typeNameResolver
-            ->resolveWithPreloadedSheets([$sheet1->reveal(), $sheet2->reveal(), $sheet3->reveal()], 'fr')
+            ->resolveWithPreloadedSheets($sheets, 'fr')
         ;
 
         $expected = 'type title in fr';
 
         $this->assertEquals($expected, $result);
+    }
 
+    public function testResolveWithPreloadedSheetsWithoutTypePosition()
+    {
+        // Context
+        $sheet1 = $this->prophesize(Sheet::class);
+        $sheet2 = $this->prophesize(Sheet::class);
+        $sheet3 = $this->prophesize(Sheet::class);
+        $type1 = $this->prophesize(Type::class);
+        $type2 = $this->prophesize(Type::class);
+        $sheet1->getType()->willReturn($type1->reveal());
+        $sheet2->getType()->willReturn($type2->reveal());
+        $sheet3->getType()->willReturn($type1->reveal());
+
+        // Expected
+        $type1->getTitle('fr')->shouldBeCalled()->willReturn('Type 1');
+        $type2->getTitle('fr')->shouldNotBeCalled()->willReturn('Type 2');
+        $type1->getPosition()->shouldBeCalled()->willReturn(null);
+        $type1->getId()->shouldBeCalled()->willReturn(200);
+        $type2->getId()->shouldBeCalled()->willReturn(300);
+
+        $typeNameResolver = new TypeNameResolver($this->typeRepository->reveal());
+        $sheets = [$sheet1->reveal(), $sheet2->reveal(), $sheet3->reveal()];
+
+        $result = $typeNameResolver
+            ->resolveWithPreloadedSheets($sheets, 'fr')
+        ;
+
+        $this->assertEquals('Type 1', $result);
     }
 }

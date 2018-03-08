@@ -112,4 +112,15 @@ class AccessManager
 
         $this->eventRepository->set($event);
     }
+
+    /**
+     * @param Event     $event
+     * @param \DateTime $datetime
+     */
+    public function openCatalog(Event $event, \DateTime $datetime)
+    {
+        $event->getConfiguration()->setDates($datetime);
+
+        $this->eventRepository->set($event);
+    }
 }

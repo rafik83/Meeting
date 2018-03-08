@@ -1,18 +1,25 @@
 <?php
 
+/*
+ * This file is part of the Proximum Vimeet project.
+ *
+ * Copyright (C) Proximum
+ *
+ * @author Elao <contact@elao.com>
+ */
+
 namespace Proximum\Vimeet\Tests\Domain\Package\Product;
 
+use PHPUnit\Framework\TestCase;
 use Proximum\Vimeet\Domain\Cart\Cart;
 use Proximum\Vimeet\Domain\Cart\CartManager;
 use Proximum\Vimeet\Domain\Model\CartRow;
 use Proximum\Vimeet\Domain\Model\Product;
 use Proximum\Vimeet\Domain\Order\Merger;
 use Proximum\Vimeet\Domain\Package\Product\IncludedProductGuesser;
-use Proximum\Vimeet\Domain\Package\Specification\VatApplicable;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
 use Proximum\Vimeet\Tests\Factory\ParticipantFactory;
 use Proximum\Vimeet\Tests\Factory\SheetFactory;
-use PHPUnit\Framework\TestCase;
 
 class IncludedProductGuesserTest extends TestCase
 {
@@ -22,12 +29,11 @@ class IncludedProductGuesserTest extends TestCase
         $sheet = SheetFactory::create($event);
         ParticipantFactory::create($sheet);
 
-        $cartManager   = $this->prophesize(CartManager::class);
-        $vatApplicable = $this->prophesize(VatApplicable::class);
+        $cartManager = $this->prophesize(CartManager::class);
 
-        $orderMerger = new Merger($vatApplicable->reveal());
+        $orderMerger = new Merger();
 
-        $plan = Product::createPlan($event, 'My plan', '', 99, 0, 0);
+        $plan = Product::createPlan($event, 'My plan', '', 99, 20, 0, 0);
         $product = $this->prophesize(Product::class);
         $product->getId()->shouldbeCalled()->willReturn(5);
         $product->getData()->shouldbeCalled()->willReturn([]);

@@ -22,24 +22,25 @@ use Symfony\Component\Routing\RouterInterface;
  */
 abstract class AbstractRedirectToEventListener
 {
-    /**
-     * @var RouterInterface
-     */
+    /** @var RouterInterface */
     private $router;
 
-    /**
-     * @var EventRepositoryInterface
-     */
+    /** @var EventRepositoryInterface */
     private $eventRepository;
+
+    /** @var string */
+    private $adminDomain;
 
     /**
      * @param RouterInterface          $router
      * @param EventRepositoryInterface $eventRepository
+     * @param string                   $adminDomain
      */
-    public function __construct(RouterInterface $router, EventRepositoryInterface $eventRepository)
+    public function __construct(RouterInterface $router, EventRepositoryInterface $eventRepository, string $adminDomain)
     {
         $this->router          = $router;
         $this->eventRepository = $eventRepository;
+        $this->adminDomain     = $adminDomain;
     }
 
     /**
@@ -54,13 +55,19 @@ abstract class AbstractRedirectToEventListener
         }
 
         $request = $getResponseEvent->getRequest();
-        $route   = $request->attributes->get('_route');
+        $host = $request->getHost();
+
+        if ($this->adminDomain === $host) {
+            return;
+        }
+
+        $route = $request->attributes->get('_route');
 
         if ($this->isIgnoredRoute($route)) {
             return;
         }
 
-        $event = $this->eventRepository->getEventByDomain($request->getHost());
+        $event = $this->eventRepository->getEventByDomain($host);
 
         if (null === $event) {
             return;
@@ -100,14 +107,19 @@ abstract class AbstractRedirectToEventListener
      * @param Event       $event
      * @param string      $route
      * @param null|string $locale
+     * @param array       $parameters route parameters
      *
      * @return RedirectResponse
      */
-    protected function createRedirectResponse(Request $request, Event $event, $route, $locale = null)
+    protected function createRedirectResponse(Request $request, Event $event, $route, $locale = null, array $parameters = [])
     {
         $path = $this->router->generate(
             $route,
-            array_merge($request->attributes->get('_route_params', []), ['_locale' => $locale ?: $event->getFallback()])
+            array_merge(
+                $request->attributes->get('_route_params', []),
+                ['_locale' => $locale ?: $event->getFallback()],
+                $parameters
+            )
         );
 
         return new RedirectResponse($path);

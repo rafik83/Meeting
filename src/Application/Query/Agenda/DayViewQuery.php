@@ -18,37 +18,29 @@ use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\Unavailability;
 use Proximum\Vimeet\Domain\Model\Unavailability\Mass;
+use Proximum\Vimeet\Domain\Model\User;
 
 class DayViewQuery
 {
-    /**
-     * @var Day
-     */
+    /** @var Day */
     public $day;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     public $locale;
 
-    /**
-     * @var HappeningParticipation[]
-     */
+    /** @var HappeningParticipation[] */
     public $happenings;
 
-    /**
-     * @var Participant
-     */
+    /** @var Participant */
     public $participant;
 
-    /**
-     * @var Unavailability[]
-     */
+    /** @var User */
+    public $userViewing;
+
+    /** @var Unavailability[] */
     public $unavailabilities;
 
-    /**
-     * @var Mass[]
-     */
+    /** @var Mass[] */
     public $masses;
 
     /** @var Meeting[] */
@@ -64,22 +56,24 @@ class DayViewQuery
     public $isUserParticipantMultipleSheet;
 
     /**
-     * @param Day                      $day
-     * @param Sheet                    $currentSheet
-     * @param Event                    $event
-     * @param Participant              $participant
-     * @param bool                     $isUserParticipantMultipleSheet
-     * @param string                   $locale
+     * @param Day $day
+     * @param Sheet $currentSheet
+     * @param Event $event
+     * @param Participant $participant
+     * @param User $userViewing
+     * @param bool $isUserParticipantMultipleSheet
+     * @param string $locale
      * @param HappeningParticipation[] $happenings
-     * @param Unavailability[]         $unavailabilities
-     * @param Mass[]                   $masses
-     * @param Meeting[]                $meetings
+     * @param Unavailability[] $unavailabilities
+     * @param Mass[] $masses
+     * @param Meeting[] $meetings
      */
     public function __construct(
         Day $day,
         Sheet $currentSheet,
         Event $event,
         Participant $participant,
+        User $userViewing,
         $isUserParticipantMultipleSheet,
         $locale,
         array $happenings = [],
@@ -87,15 +81,24 @@ class DayViewQuery
         array $masses = [],
         array $meetings = []
     ) {
-        $this->day              = $day;
-        $this->currentSheet     = $currentSheet;
-        $this->event            = $event;
-        $this->participant      = $participant;
+        $this->day = $day;
+        $this->currentSheet = $currentSheet;
+        $this->event = $event;
+        $this->participant = $participant;
+        $this->userViewing = $userViewing;
         $this->isUserParticipantMultipleSheet = $isUserParticipantMultipleSheet;
-        $this->locale           = $locale;
-        $this->happenings       = $happenings;
+        $this->locale = $locale;
+        $this->happenings = $happenings;
         $this->unavailabilities = $unavailabilities;
-        $this->masses           = $masses;
-        $this->meetings         = $meetings;
+        $this->masses = $masses;
+        $this->meetings = $meetings;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isParticipantUserViewing(): bool
+    {
+        return $this->participant->getUser() === $this->userViewing;
     }
 }

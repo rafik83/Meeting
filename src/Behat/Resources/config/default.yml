@@ -3,8 +3,9 @@ default:
         Behat\Symfony2Extension:
             kernel:
                env: test
+               bootstrap: 'vendor/autoload.php'
         Behat\MinkExtension:
-            base_url:  'http://admin.vimeet.proximum.dev/app_test.php'
+            base_url:  'http://admin.vimeet.proximum/app_test.php'
             sessions:
                 default:
                     symfony2: ~
@@ -13,7 +14,7 @@ default:
             files_path: %paths.base%/src/Behat/Resources/fixtures/Files
         Fidry\AliceBundleExtension\Extension:
             fixtures_base_path: %paths.base%/src/Behat/Resources/fixtures
-        Sanpi\Behatch\Extension: ~
+        Behatch\Extension: ~
         FriendsOfBehat\PerformanceExtension: ~
     suites:
         default:
@@ -65,10 +66,11 @@ default:
                     - '@behat_proxy.invoice.prefix_context'
                 - Proximum\Vimeet\Behat\Context\Domain\Event\ContentContext:
                     - '@behat_proxy.event.content_context'
-                - behatch:json
-                - behatch:rest
-#                - behatch:browser
-#                - behatch:debug
-#                - behatch:system
-#                - behatch:table
-#                - behatch:xml
+                - Proximum\Vimeet\Behat\Context\Domain\RuleContext:
+                    - '@behat.proxy.rule_context'
+                - Proximum\Vimeet\Behat\Context\Domain\Package\PackageContext:
+                    - '@Proximum\Vimeet\Behat\Proxy\PackageContextProxy'
+                - Proximum\Vimeet\Behat\Context\Domain\Product\ProductContext:
+                    - '@Proximum\Vimeet\Behat\Proxy\ProductContextProxy'
+                - behatch:context:json
+                - behatch:context:rest

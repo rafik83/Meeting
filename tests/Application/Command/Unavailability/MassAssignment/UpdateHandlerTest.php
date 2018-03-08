@@ -1,15 +1,16 @@
 <?php
 
 /*
- * This file is part of the vimeet project.
+ * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2017 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
 
 namespace Application\Command\Unavailability\MassAssignment;
 
+use PHPUnit\Framework\TestCase;
 use Proximum\Vimeet\Application\Command\Unavailability\MassAssignment\Update;
 use Proximum\Vimeet\Application\Command\Unavailability\MassAssignment\UpdateHandler;
 use Proximum\Vimeet\Application\Event\Events;
@@ -29,7 +30,6 @@ use Proximum\Vimeet\Infrastructure\Adapter\DelayedEventDispatcher;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
 use Proximum\Vimeet\Tests\Factory\SheetFactory;
 use Proximum\Vimeet\Tests\Factory\UserFactory;
-use PHPUnit\Framework\TestCase;
 
 class UpdateHandlerTest extends TestCase
 {
@@ -39,7 +39,7 @@ class UpdateHandlerTest extends TestCase
     /** @var User */
     public $user;
 
-    /** @var  Sheet */
+    /** @var Sheet */
     public $sheet;
 
     /** @var Category */

@@ -1,4 +1,4 @@
-@import "select2/dist/css/select2";
+@import "~select2/dist/css/select2";
 
 .select2-container--default .select2-selection--single, .select2-container--default .select2-selection--multiple {
   border-radius: 0;
@@ -25,4 +25,22 @@
 .select2-container--default .select2-selection--multiple .select2-selection__choice {
   border: none;
   padding: 4px 8px;
+}
+
+// Fix placeholder width on select2 input
+// see issue https://github.com/select2/select2/issues/291
+.select2-selection--multiple .select2-search--inline .select2-search__field {
+  width: auto !important;
+}
+
+// change input content style on mobile only
+@media screen and (max-width: 767px) {
+  .select2-search__field {
+    font-family: OpenSans, Helvetica, sans-serif;
+    font-size: 15px;
+    text-transform: uppercase;
+  }
+  .select2-selection__choice, .select2-selection {
+    color: #333;
+  }
 }

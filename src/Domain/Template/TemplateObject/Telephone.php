@@ -43,7 +43,7 @@ class Telephone extends EditableObject implements ContentObjectInterface, Export
     /**
      * {@inheritdoc}
      */
-    public function getContentValueLocalize($locale)
+    public function getContentValueLocalize($locale = null)
     {
         return $this->getContentValue();
     }
@@ -75,7 +75,7 @@ class Telephone extends EditableObject implements ContentObjectInterface, Export
     /**
      * {@inheritdoc}
      */
-    public function getExportableContent(array $taggedData = [])
+    public function getExportableContent(array $taggedData = [], ?string $locale = null)
     {
         $result = $this->getContentValue();
 

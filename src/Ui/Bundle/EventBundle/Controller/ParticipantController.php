@@ -106,6 +106,7 @@ class ParticipantController extends Controller
 
         $form = $this->createForm(ProfileType::class, $profileTemplate, [
             'locale'   => $locale,
+            'locales'  => $eventDomain->getEvent()->getLocales(),
             'template' => $profileTemplate,
             'country'  => $eventDomain->getEvent()->getCountry(),
         ]);
@@ -202,7 +203,7 @@ class ParticipantController extends Controller
                 $this->get('tactician.commandbus')->handle($updateAvatar);
 
                 if (null !== $imagePath) {
-                    $fileStorage->remove($imagePath);
+                    $fileStorage->remove($imagePath, true);
                 }
 
                 return $this->redirectToRoute('event_account_participant', [

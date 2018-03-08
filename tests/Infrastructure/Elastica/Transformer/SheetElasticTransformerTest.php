@@ -3,13 +3,14 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2017 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
 
 namespace Proximum\Vimeet\Tests\Infrastructure\Elastica\Transformer;
 
+use PHPUnit\Framework\TestCase;
 use Proximum\Vimeet\Application\Components\Sheet\SheetInfoGuesser;
 use Proximum\Vimeet\Domain\Order\Balance;
 use Proximum\Vimeet\Domain\Repository\CartRowRepositoryInterface;
@@ -23,7 +24,6 @@ use Proximum\Vimeet\Domain\Template\TemplateDataFactory;
 use Proximum\Vimeet\Infrastructure\Elastica\Transformer\SheetElasticTransformer;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
 use Proximum\Vimeet\Tests\Factory\SheetFactory;
-use PHPUnit\Framework\TestCase;
 
 class SheetElasticTransformerTest extends TestCase
 {
@@ -62,8 +62,8 @@ class SheetElasticTransformerTest extends TestCase
         $templateDataFactory->createFromSheet($sheet, $locale)->shouldBeCalled()->willReturn($sheetTemplateData);
 
         $balance = $this->prophesize(Balance::class);
+        $balance->getNotCancelledOrderVatViews($sheet)->shouldBeCalled();
         $balance->getRemainingToPay($sheet)->shouldBeCalled();
-        $balance->getTotalWithoutVat($sheet)->shouldBeCalled();
 
         $meetingRepository = $this->prophesize(MeetingRepositoryInterface::class);
         $meetingRepository->hasScheduledMeeting($sheet)->shouldBeCalled();

@@ -17,6 +17,7 @@ form.admin_activate_account_password.children.password.children.second.label: 'R
 form.admin_activate_account_password.children.submit.label: Envoyer
 form.admin_export_planning.children.orderBy.choice.participant_last_name: 'Par nom de famille du participant'
 form.admin_export_planning.children.orderBy.choice.sheet_title: 'Par nom de société'
+form.admin_export_planning.children.orderBy.choice.spot_reference: 'Par lieux, noms de société'
 form.admin_export_planning.children.orderBy.label: 'Ordre de l''export des plannings'
 form.admin_export_planning.children.submit.label: Exporter
 form.admin_export_planning.children.types.label: Types
@@ -108,6 +109,8 @@ form.configure.children.hasMessage.label: 'Message activé'
 form.configure.children.messageTranslations.label: Message
 form.configure.children.messageTranslations.prototype.children.content.label: Contenu
 form.configure.children.messageTranslations.prototype.children.title.label: Titre
+form.configure.children.registrationUrl.label: 'Url d''inscription'
+form.configure.children.registrationUrl.placeholder: 'Exemple: https://nom-evenement.vimeet.events'
 form.configure.children.searchFacets.category.help: ''
 form.configure.children.searchFacets.category.label: Catégorie
 form.configure.children.searchFacets.keywords.help: 'Nom de la fiche, texte, objets collections et nomenclatures sur la fiche de participation'
@@ -170,6 +173,7 @@ form.delete_participant.children.submit.label: Supprimer
 form.dont_see_what.children.participant.label: Participant
 form.dont_see_what.children.sheet.label: Fiche
 form.dont_see_what.children.submit.label: Enregistrer
+form.elasticsearch_index.children.submit.label: 'Ré-indexer tous les événements'
 form.event_billing_configuration.children.invoiceLogo.label: 'Logo affiché sur pro forma et facture'
 form.event_billing_configuration.children.legalInfo.label: 'Informations légales'
 form.event_billing_configuration.children.submit.label: Enregistrer
@@ -189,6 +193,8 @@ form.event_configure_date.children.registrationOpenDate.label: 'Date d''ouvertur
 form.event_configure_date.children.schedulePublishDate.label: 'Publication des agendas définitifs (RDV)'
 form.event_configure_date.children.smsActivationDate.label: 'Date d''activation des notifications SMS'
 form.event_configure_date.children.submit.label: Enregistrer
+form.event_create.children.backgroundColor.label: 'Couleur de fond'
+form.event_create.children.backgroundImage.label: 'Image de fond'
 form.event_create.children.country.label: Pays
 form.event_create.children.currency.label: Devise
 form.event_create.children.currency.placeholder: '-- Choisir une devise pour l''événement --'
@@ -209,6 +215,7 @@ form.event_create.children.timeZone.label: 'Fuseau horaire'
 form.event_create.children.title.label: Titre
 form.event_create.children.vat.label: TVA
 form.event_create.children.visible.label: Visible
+form.event_create.children.welcomeEnabled.label: 'Popup de bienvenue'
 form.event_duplicate.children.event.label: Événement
 form.event_duplicate.children.submit.label: Créer
 form.event_payment_conditions_update.children.allowDeposit.label: 'Activer le paiement en acompte'
@@ -225,6 +232,8 @@ form.event_practical_info_update.children.organiserPhone.label: 'Téléphone de 
 form.event_practical_info_update.children.organiserWebsite.label: 'Site internet'
 form.event_practical_info_update.children.submit.label: Enregistrer
 form.event_update.children.analyticsCode.label: 'Code analytique'
+form.event_update.children.backgroundColor.label: 'Couleur de fond'
+form.event_update.children.backgroundImage.label: 'Image de fond'
 form.event_update.children.country.label: Pays
 form.event_update.children.currency.label: Devise
 form.event_update.children.currency.placeholder: '-- Choisir une devise pour l''événement --'
@@ -232,6 +241,7 @@ form.event_update.children.domain.label: 'Domaine (complet)'
 form.event_update.children.emailTeam.label: 'Email de réception des notifications en copie cachée'
 form.event_update.children.fallback.label: 'Langue par défaut'
 form.event_update.children.invoicePrefix.label: 'Préfixe de facturation'
+form.event_update.children.isBackgroundImageToRemove.label: 'Supprimer l''image de fond actuelle'
 form.event_update.children.leftColor.label: 'Couleur habillage de gauche'
 form.event_update.children.locales.label: Langues
 form.event_update.children.logo.label: Logo
@@ -245,7 +255,25 @@ form.event_update.children.title.label: Titre
 form.event_update.children.translations.prototype.children.description.label: 'Entête de page'
 form.event_update.children.vat.label: TVA
 form.event_update.children.visible.label: Visible
+form.event_update.children.welcomeEnabled.label: 'Popup de bienvenue'
 form.event.children.invoicePrefix.help.label: 'Changer de préfixe ? Nous contacter'
+form.extra_parameter_create.children.name.label: Nom
+form.extra_parameter_create.children.submit.label: Enregistrer
+form.extra_parameter_create.children.type.choices.comexposium_event_reference: 'Comexposium : Référence manifestation'
+form.extra_parameter_create.children.type.choices.comexposium_exhibitor_type_id: 'Comexposium : Id du type de participation Exposant concerné'
+form.extra_parameter_create.children.type.choices.comexposium_sso_application: 'Comexposium SSO Application'
+form.extra_parameter_create.children.type.choices.comexposium_sso_enabled: 'Activer le SSO Comexposium'
+form.extra_parameter_create.children.type.choices.comexposium_sso_salon: 'Comexposium SSO Salon'
+form.extra_parameter_create.children.type.choices.comexposium_sso_session_salon: 'Comexposium SSO Session Salon'
+form.extra_parameter_create.children.type.choices.leni_event: 'Code Event LENI'
+form.extra_parameter_create.children.type.choices.leni_user: 'Code Utilisateur LENI'
+form.extra_parameter_create.children.type.choices.vianeo_concerned_types_id: 'Vianeo : Ids des types de participation concernés (séparés par une virgule)'
+form.extra_parameter_create.children.type.choices.vianeo_endpoint: 'Vianeo endpoint'
+form.extra_parameter_create.children.type.label: Type
+form.extra_parameter_create.children.value.label: Valeur
+form.extra_parameter_update.children.name.label: Nom
+form.extra_parameter_update.children.submit.label: Enregistrer
+form.extra_parameter_update.children.value.label: Valeur
 form.field.private: 'Champ privé'
 form.filter_admin.children.submit.label: Filtrer
 form.filter_admin.event.all: 'Tous les événements'
@@ -279,6 +307,7 @@ form.generate_slot.children.submit.label: Enregistrer
 form.happening_create.children.begin.label: 'Date de début'
 form.happening_create.children.category.label: Catégorie
 form.happening_create.children.end.label: 'Date de fin'
+form.happening_create.children.invitationCode.label: 'Code d''invitation'
 form.happening_create.children.limitParticipant.help: 'Pas de limite si vide'
 form.happening_create.children.limitParticipant.label: 'Limite du nombre de participants'
 form.happening_create.children.questionAllowed.answer.false: Non
@@ -292,9 +321,11 @@ form.happening_create.children.talkings.prototype.children.position.label: Posit
 form.happening_create.children.talkings.prototype.children.speaker.label: Intervenant
 form.happening_create.children.translations.prototype.children.description.label: Description
 form.happening_create.children.translations.prototype.children.title.label: Titre
+form.happening_create.children.types.label: 'Types ayant accès'
 form.happening_update.children.begin.label: 'Date de début'
 form.happening_update.children.category.label: Catégorie
 form.happening_update.children.end.label: 'Date de fin'
+form.happening_update.children.invitationCode.label: 'Code d''invitation'
 form.happening_update.children.limitParticipant.label: 'Limite du nombre de participants'
 form.happening_update.children.questionAllowed.label: 'Question des participants'
 form.happening_update.children.submit.label: Envoyer
@@ -305,9 +336,11 @@ form.happening_update.children.talkings.prototype.children.position.label: Posit
 form.happening_update.children.talkings.prototype.children.speaker.label: Intervenant
 form.happening_update.children.translations.prototype.children.description.label: Description
 form.happening_update.children.translations.prototype.children.title.label: Titre
+form.happening_update.children.types.label: 'Types ayant accès'
 form.import_mapping.children.submit.label: Importer
 form.import_products_and_template.children.event.label: 'Evénement à importer'
 form.import_products_and_template.children.submit.label: Importer
+form.index.children.submit.label: Ré-indexer
 form.invoice_export.children.beginDate.label: 'Date de début'
 form.invoice_export.children.endDate.label: 'Date de fin'
 form.invoice_export.children.submit.label: 'Exporter les factures'
@@ -415,7 +448,12 @@ form.package_update.children.options.children.groups.prototype.children.item.chi
 form.package_update.children.options.children.labels.label: 'Libellé de l''étape'
 form.package_update.children.participantAndPlanning.children.enabled.label: Activé
 form.package_update.children.participantAndPlanning.children.labels.label: 'Libellé de l''étape'
+form.package_update.children.participantAndPlanning.children.maxParticipant.help: 'Si vide, pas de limite'
+form.package_update.children.participantAndPlanning.children.maxParticipant.label: 'Nombre maximum de participant'
 form.package_update.children.participantAndPlanning.children.participant.label: Participant
+form.package_update.children.participantAndPlanning.children.participants.label: 'Produit(s) Participant'
+form.package_update.children.participantAndPlanning.children.participants.label_add: 'Ajouter un produit participant'
+form.package_update.children.participantAndPlanning.children.participants.label_delete: '&times;'
 form.package_update.children.participantAndPlanning.children.planning.label: Planning
 form.package_update.children.plans.children.enabled.label: Activé
 form.package_update.children.plans.children.labels.label: 'Libellé de l''étape'
@@ -434,6 +472,10 @@ form.participant_import.children.submit.label: Importer
 form.participant_import.children.type.label: Type
 form.participant_import.field.ignore: Ignorer
 form.participant_import.field.mail: Email
+form.participant_update_agenda_confirmation_status.children.status.choice.confirmed: Confirmé
+form.participant_update_agenda_confirmation_status.children.status.choice.not_confirmed: 'Non confirmé'
+form.participant_update_agenda_confirmation_status.children.status.label: 'Confirmation d''agenda'
+form.participant_update_agenda_confirmation_status.children.submit.label: Enregistrer
 form.participant_update.children.data.label: Participation
 form.participant_update.children.submit.label: Envoyer
 form.participate_happening.children.participants.label: 'Participants concernés'
@@ -477,12 +519,14 @@ form.product_create_option.children.translations.prototype.children.subjectedToV
 form.product_create_option.children.translations.prototype.children.title.label: Titre
 form.product_create_option.children.unitPrice.label: 'Prix unitaire (HT)'
 form.product_create_option.children.updatable.label: 'Produit supprimable'
+form.product_create_option.children.vat.label: TVA
 form.product_create_participant.children.name.label: 'Nom backoffice du participant'
 form.product_create_participant.children.quantityMax.label: 'Quantité max'
 form.product_create_participant.children.submit.label: Enregistrer
 form.product_create_participant.children.translations.prototype.children.description.label: Description
 form.product_create_participant.children.translations.prototype.children.title.label: Titre
 form.product_create_participant.children.unitPrice.label: 'Prix unitaire (HT)'
+form.product_create_participant.children.vat.label: TVA
 form.product_create_plan.children.availabilityCurrent.label: 'Stock actuel'
 form.product_create_plan.children.availabilityMax.label: 'Stock Max'
 form.product_create_plan.children.features.label: 'Prestations incluses avec cette formule'
@@ -506,12 +550,14 @@ form.product_create_plan.children.translations.prototype.children.description.la
 form.product_create_plan.children.translations.prototype.children.heading.label: 'Titre de la description'
 form.product_create_plan.children.translations.prototype.children.title.label: 'Titre de la formule'
 form.product_create_plan.children.unitPrice.label: 'Prix unitaire (HT)'
+form.product_create_plan.children.vat.label: TVA
 form.product_create_planning.children.name.label: 'Nom backoffice du planning'
 form.product_create_planning.children.quantityMax.label: 'Quantité max'
 form.product_create_planning.children.submit.label: Enregistrer
 form.product_create_planning.children.translations.prototype.children.description.label: Description
 form.product_create_planning.children.translations.prototype.children.title.label: Titre
 form.product_create_planning.children.unitPrice.label: 'Prix unitaire (HT)'
+form.product_create_planning.children.vat.label: TVA
 form.product_update_option.children.availabilityCurrent.label: 'Stock actuel'
 form.product_update_option.children.availabilityMax.label: 'Stock max'
 form.product_update_option.children.buyableUntil.label: 'Achetable jusqu''aù'
@@ -528,12 +574,14 @@ form.product_update_option.children.translations.prototype.children.subjectedToV
 form.product_update_option.children.translations.prototype.children.title.label: Titre
 form.product_update_option.children.unitPrice.label: 'Prix unitaire (HT)'
 form.product_update_option.children.updatable.label: 'Produit supprimable'
+form.product_update_option.children.vat.label: TVA
 form.product_update_participant.children.name.label: 'Nom backoffice du participant'
 form.product_update_participant.children.quantityMax.label: 'Quantité max'
 form.product_update_participant.children.submit.label: Enregistrer
 form.product_update_participant.children.translations.prototype.children.description.label: Description
 form.product_update_participant.children.translations.prototype.children.title.label: Titre
 form.product_update_participant.children.unitPrice.label: 'Prix unitaire (HT)'
+form.product_update_participant.children.vat.label: TVA
 form.product_update_plan.children.availabilityCurrent.label: 'Stock actuel'
 form.product_update_plan.children.availabilityMax.label: 'Stock Max'
 form.product_update_plan.children.features.label: 'Prestations incluses avec cette formule'
@@ -557,12 +605,14 @@ form.product_update_plan.children.translations.prototype.children.description.la
 form.product_update_plan.children.translations.prototype.children.heading.label: 'Titre de la description'
 form.product_update_plan.children.translations.prototype.children.title.label: 'Titre de la formule'
 form.product_update_plan.children.unitPrice.label: 'Prix unitaire (HT)'
+form.product_update_plan.children.vat.label: TVA
 form.product_update_planning.children.name.label: 'Nom backoffice du planning'
 form.product_update_planning.children.quantityMax.label: 'Quantité max'
 form.product_update_planning.children.submit.label: Enregistrer
 form.product_update_planning.children.translations.prototype.children.description.label: Description
 form.product_update_planning.children.translations.prototype.children.title.label: Titre
 form.product_update_planning.children.unitPrice.label: 'Prix unitaire (HT)'
+form.product_update_planning.children.vat.label: TVA
 form.promotion_code_create.children.code.label: Code
 form.promotion_code_create.children.promotions.label: Promotions
 form.promotion_code_create.children.promotions.label_add: Ajouter
@@ -637,25 +687,47 @@ form.sheet_batch.children.follower.label: Collaborateur
 form.sheet_batch.children.generateInvoice.label: 'Générer facture'
 form.sheet_batch.children.group.label: Entité
 form.sheet_batch.children.pending.label: 'En attente'
+form.sheet_batch.children.printPdf.label: 'Imprimer en PDF'
+form.sheet_batch.children.refuse.label: Refuser
 form.sheet_batch.children.removeCatalog.label: 'Enlever du catalogue'
 form.sheet_batch.children.validate.label: Valider
 form.sheet_batch.children.validateComment.label: 'Laisser un commentaire (optionnel)'
 form.sheet_batch.children.validationStateDraft.label: 'Remettre la fiche en brouillon'
 form.sheet_batch.children.validationStateValidate.label: 'Valider le contenu de la fiche'
+form.sheet_comment.children.commercialStatus.label: 'Statut commercial'
+form.sheet_comment.children.commercialStatus.status.canceled: Annulation
+form.sheet_comment.children.commercialStatus.status.do_not_call: 'Ne pas appeler'
+form.sheet_comment.children.commercialStatus.status.followed: Suivi
+form.sheet_comment.children.commercialStatus.status.hot: Chaud
+form.sheet_comment.children.commercialStatus.status.hot_stall: 'Chaud stand'
+form.sheet_comment.children.commercialStatus.status.interest: Intérêt
+form.sheet_comment.children.commercialStatus.status.interest_next_edition: 'Intérêt N+1'
+form.sheet_comment.children.commercialStatus.status.no_interest: 'Pas intéressé'
+form.sheet_comment.children.commercialStatus.status.none: 'Pas de statut'
+form.sheet_comment.children.commercialStatus.status.refused_by_organizer: 'Refus organisateur'
+form.sheet_comment.children.commercialStatus.status.registered: Inscrit
+form.sheet_comment.children.commercialStatus.status.verbal_agreement: 'Accord verbal'
 form.sheet_comment.children.filter.label: Filtrer
-form.sheet_comment.children.submit.label: Envoyer
+form.sheet_comment.children.reminderDate.label: 'Date rappel'
+form.sheet_comment.children.submit.label: Enregistrer
 form.sheet_comment.children.text.placeholder: 'Écrire un commentaire'
 form.sheet_filter.children.agendaConfirmedStatus.choice.all: 'Peu importe'
 form.sheet_filter.children.agendaConfirmedStatus.choice.all_confirmed: Validé
 form.sheet_filter.children.agendaConfirmedStatus.choice.none_confirmed: 'Non validé'
 form.sheet_filter.children.agendaConfirmedStatus.choice.partly_confirmed: 'Partiellement validé (au moins 1 participant n''ayant pas validé)'
 form.sheet_filter.children.agendaConfirmedStatus.label: 'A validé son agenda'
+form.sheet_filter.children.availabilityConfirmationStatus.choice.all: 'Peu importe'
+form.sheet_filter.children.availabilityConfirmationStatus.choice.all_confirmed: Confirmé
+form.sheet_filter.children.availabilityConfirmationStatus.choice.none_confirmed: 'Non confirmé'
+form.sheet_filter.children.availabilityConfirmationStatus.choice.partly_confirmed: 'Confirmé partiellement'
+form.sheet_filter.children.availabilityConfirmationStatus.label: 'Confirmation des disponibilités'
 form.sheet_filter.children.booleanFilters.noPreference.label: 'Peu importe'
 form.sheet_filter.children.cancelAttendance.label: 'Annuler sa venue'
 form.sheet_filter.children.cart.no.label: Sans
 form.sheet_filter.children.cart.noPreference.label: 'Peu importe'
 form.sheet_filter.children.cart.yes.label: Avec
 form.sheet_filter.children.category.label: Catégorie
+form.sheet_filter.children.commercialStatus.label: 'Statut commercial'
 form.sheet_filter.children.completed.label: Complétude
 form.sheet_filter.children.creation_interval.label: Inscription
 form.sheet_filter.children.enabled.label: Participation
@@ -683,8 +755,17 @@ form.sheet_filter.children.imported.label: Importé
 form.sheet_filter.children.inCatalog.label: 'Au catalogue'
 form.sheet_filter.children.order.no.label: Sans
 form.sheet_filter.children.order.noPreference.label: 'Peu importe'
+form.sheet_filter.children.order.totalEqualZero.label: 'Total égal à zéro'
+form.sheet_filter.children.order.totalSuperiorZero.label: 'Total supérieur à zéro'
 form.sheet_filter.children.order.yes.label: Avec
 form.sheet_filter.children.orderBy.label: 'Trier par'
+form.sheet_filter.children.orderStatus.label: Commande
+form.sheet_filter.children.phoneValidationStatus.choice.all: 'Peu importe'
+form.sheet_filter.children.phoneValidationStatus.choice.all_confirmed: Confirmé
+form.sheet_filter.children.phoneValidationStatus.choice.none_confirmed: 'Non confirmé'
+form.sheet_filter.children.phoneValidationStatus.choice.partly_confirmed: 'Partiellement confirmé'
+form.sheet_filter.children.phoneValidationStatus.label: 'A confirmé son portable'
+form.sheet_filter.children.reminderDate.label: 'Date rappel'
 form.sheet_filter.children.state.label: Etat
 form.sheet_filter.children.text_search.label: 'Titre de la fiche, nom ou email de participant'
 form.sheet_filter.children.type.label: Type
@@ -702,6 +783,7 @@ form.sheet_template_preview.children.previewObjects.label_add: 'Ajouter un objet
 form.sheet_template_preview.children.previewObjects.label_delete: 'Supprimer l''objet'
 form.sheet_template_preview.children.previewObjects.prototype.label: Objet
 form.sheet_template_preview.children.submit.label: 'Mettre à jour l''aperçu'
+form.sheet_template_preview.custom_preview_data_participant_position: 'Fonctions des participants'
 form.sheet_template_update.children.close.label: Annuler
 form.sheet_template_update.children.fallback.label: 'Langue par defaut'
 form.sheet_template_update.children.submit.label: Enregistrer
@@ -726,6 +808,7 @@ form.spot_batch_create.children.size.label: 'Taille en m²'
 form.spot_batch_create.children.submit.label: Enregistrer
 form.spot_batch_create.children.visio.label: Visio
 form.spot_batch_unavailability.children.submit.label: 'Créer les indisponibilités'
+form.spot_confirm.children.submit.label: 'Confirmer l''import des lieux'
 form.spot_create.children.active.label: Actif
 form.spot_create.children.filters.all.label: Tous
 form.spot_create.children.filters.no.label: Non
@@ -737,6 +820,12 @@ form.spot_create.children.seatCapacity.label: 'Nombre de places assises'
 form.spot_create.children.size.label: 'Taille en m²'
 form.spot_create.children.submit.label: Enregistrer
 form.spot_create.children.visio.label: Visio
+form.spot_import.children.charset.label: 'Encodage du fichier'
+form.spot_import.children.file.label: 'Fichier des lieux'
+form.spot_import.children.submit.label: 'Importer les lieux'
+form.spot.import.confirm: 'L''import de nouveaux lieux supprimera les lieux existants sur cet événement. Voulez vous importer les lieux ?'
+form.template_add_locale.children.locale.label: Langue
+form.template_add_locale.children.submit.label: Valider
 form.template_registration_update.children.submit.label: Enregistrer
 form.template_registration_update.children.title.label: 'Titre du template'
 form.template_registration_update.children.value.label: 'Contenu du template'
@@ -764,6 +853,38 @@ form.tip_event_affect.children.preview.label: 'Aperçu du message'
 form.tip_event_affect.children.submit.label: Affecter
 form.tip_event_affect.children.tip.label: 'Message d''aide'
 form.tip_event_affect.children.types.label: 'Types de participation'
+form.tip_event_create.children.onAgenda.label: 'Visible sur l''agenda'
+form.tip_event_create.children.onCatalog.label: 'Visible sur le catalogue'
+form.tip_event_create.children.onConfirmationPhone.label: 'Confirmation de planning et de téléphone (conditionne l''affichage du formulaire de validation du numéro de téléphone)'
+form.tip_event_create.children.onMeetingManagement.label: 'Visible sur la gestion des rendez-vous'
+form.tip_event_create.children.onPrintPlanning.label: 'Visible sur l''impression des plannings'
+form.tip_event_create.children.onProgram.label: 'Visible sur le programme'
+form.tip_event_create.children.onSheet.label: 'Visible sur la fiche de présentation'
+form.tip_event_create.children.submit.label: Sauvegarder
+form.tip_event_create.children.title.label: 'Libellé back office'
+form.tip_event_create.children.translations.label_add: 'Ajouter une traduction'
+form.tip_event_create.children.translations.label_delete: 'Supprimer la traduction'
+form.tip_event_create.children.translations.prototype.children.content.label: Contenu
+form.tip_event_create.children.translations.prototype.children.locale.label: Langue
+form.tip_event_create.children.translations.prototype.children.title.label: Libellé
+form.tip_event_create.children.translations.prototype.label: Traductions
+form.tip_event_create.children.types.label: 'Types assignés'
+form.tip_event_update.children.onAgenda.label: 'Visible sur l''agenda'
+form.tip_event_update.children.onCatalog.label: 'Visible sur le catalogue'
+form.tip_event_update.children.onConfirmationPhone.label: 'Confirmation de planning et de téléphone (conditionne l''affichage du formulaire de validation du numéro de téléphone)'
+form.tip_event_update.children.onMeetingManagement.label: 'Visible sur la gestion des rendez-vous'
+form.tip_event_update.children.onPrintPlanning.label: 'Visible sur l''impression des plannings'
+form.tip_event_update.children.onProgram.label: 'Visible sur le programme'
+form.tip_event_update.children.onSheet.label: 'Visible sur la fiche de présentation'
+form.tip_event_update.children.submit.label: 'Mettre à jour'
+form.tip_event_update.children.title.label: 'Libellé back office'
+form.tip_event_update.children.translations.label_add: 'Ajouter une traduction'
+form.tip_event_update.children.translations.label_delete: 'Supprimer la traduction'
+form.tip_event_update.children.translations.prototype.children.content.label: Contenu
+form.tip_event_update.children.translations.prototype.children.locale.label: Langue
+form.tip_event_update.children.translations.prototype.children.title.label: Libellé
+form.tip_event_update.children.translations.prototype.label: Traductions
+form.tip_event_update.children.types.label: 'Types assignés'
 form.tip_update.children.onAgenda.label: 'Visible sur l''agenda'
 form.tip_update.children.onCatalog.label: 'Visible sur le catalogue'
 form.tip_update.children.onConfirmationPhone.label: 'Confirmation de planning et de téléphone (conditionne l''affichage du formulaire de validation du numéro de téléphone)'
@@ -802,6 +923,13 @@ form.type_create.children.translations.prototype.children.description.label: Des
 form.type_create.children.translations.prototype.children.title.label: Titre
 form.type_create.children.validationCriteria.children.sheetAccepted.label: 'Fiche acceptée'
 form.type_create.children.validationCriteria.label: 'Critère de validation automatique des fiches de présentation'
+form.type_payment_conditions_update.children.allowDeposit.label: 'Activer le paiement en acompte'
+form.type_payment_conditions_update.children.deposit.label: 'Pourcentage de l''acompte'
+form.type_payment_conditions_update.children.depositUntil.label: 'Date limite d''acceptation des acomptes'
+form.type_payment_conditions_update.children.minimumForDeposit.label: 'Somme total à partir duquel l''acompte est applicable'
+form.type_payment_conditions_update.children.paymentModes.label: 'Moyens de paiement'
+form.type_payment_conditions_update.children.specificPaymentConditions.label: 'Définir des conditions spécifiques de paiement pour ce type'
+form.type_payment_conditions_update.children.submit.label: Enregistrer
 form.type_template_field_update_lib_choice.children.choices.label: Choix
 form.type_template_field_update_lib_choice.children.choices.label_add: Ajouter
 form.type_template_field_update_lib_choice.children.choices.label_delete: Supprimer

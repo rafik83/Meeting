@@ -1,0 +1,63 @@
+{% extends '@Admin/base.html.twig' %}
+
+{% from 'AdminBundle::macro.html.twig' import delete_button %}
+
+{% block title %}
+    [{{ event.title }}] {{ 'admin.extraParameter.list.title'|trans }}
+{% endblock %}
+
+{% block content %}
+    <h1 class="page-header">
+        {{ 'admin.extraParameter.list.title'|trans }}
+        <div class="pull-right">
+            <a href="{{ path('admin_event_extra_parameter_create', {'event': event.id}) }}" class="btn btn-primary">
+                {{ 'admin.extraParameter.list.create'|trans }}
+            </a>
+        </div>
+    </h1>
+
+    {% if extraParameters is not empty %}
+    <table class="table table-hover">
+        <thead>
+            <tr>
+                <th>{{ 'admin.extraParameter.list.column.type'|trans }}</th>
+                <th>{{ 'admin.extraParameter.list.column.name'|trans }}</th>
+                <th>{{ 'admin.extraParameter.list.column.value'|trans }}</th>
+                <th class="text-right">{{ 'admin.extraParameter.list.column.actions'|trans }}</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for extraParameter in extraParameters %}
+                <tr>
+                    <td>{{ ('admin.extraParameter.type.' ~ extraParameter.type)|trans }}</td>
+                    <td>{{ extraParameter.name }}</td>
+                    <td>{{ extraParameter.value }}</td>
+                    <td class="text-right">
+                        <div class="btn-group">
+                            <a class="btn btn-default btn-sm" href="{{ path('admin_event_extra_parameter_update', { 'event': event.id, 'extraParameter': extraParameter.id }) }}">
+                                {{ 'admin.extraParameter.list.action.update'|trans }}
+                            </a>
+                            <button type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <span class="caret"></span>
+                            </button>
+                            <ul class="dropdown-menu dropdown-menu-right">
+                                <li>
+                                    {{ delete_button(
+                                        path('admin_event_extra_parameter_remove', { 'event': event.id, 'extraParameter': extraParameter.id }),
+                                        'admin.extraParameter.list.action.remove'|trans,
+                                        { 'class': 'btn btn-default btn-sm', 'data-confirm': 'admin.extraParameter.list.action.removeConfirm'|trans })
+                                    }}
+                                </li>
+                            </ul>
+                        </div>
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+        <div class="alert alert-info">
+            <p class="center">{{ 'admin.extraParameter.list.empty'|trans }}</p>
+        </div>
+    {% endif %}
+{% endblock %}

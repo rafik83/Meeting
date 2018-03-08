@@ -17,6 +17,7 @@ use Proximum\Vimeet\Application\Exception\User\EmailAlreadyExistsException;
 use Proximum\Vimeet\Application\Query\Participant\CardViewQuery;
 use Proximum\Vimeet\Application\Query\Register\PreFillUserData;
 use Proximum\Vimeet\Application\View\Register\PreFillUserDataView;
+use Proximum\Vimeet\Domain\Helper\StringHelper;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\User;
@@ -53,10 +54,19 @@ class RegisterController extends Controller
             return $this->redirectToRoute('event');
         }
 
+        $response = $this
+            ->get('infrastructure.route.home_dispatch.home_user_dispatcher')
+            ->attemptDispatchUser($eventDomain->getEvent(), $this->getUser());
+
+        if ($response instanceof RedirectResponse) {
+            return $response;
+        }
+
         $command = new Email();
         $form    = $this->createForm(EmailType::class, $command, ['action' => $request->getUri()]);
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
+            $command->email = StringHelper::trimSpacesAndNonBreakSpaces($command->email);
             $user = $this->get('vimeet_infrastructure.repository.user_repository')->findByEmail($command->email);
 
             if ($user) {
@@ -96,13 +106,13 @@ class RegisterController extends Controller
     public function registerNewUserAction(Request $request, EventDomain $eventDomain, TypeView $typeView)
     {
         $command = new RegisterNewUser(
-            $this->getFlashEmail(),
+            StringHelper::trimSpacesAndNonBreakSpaces($this->getFlashEmail()),
             $request->getLocale(),
             $eventDomain->getEvent(),
             $typeView
         );
 
-        if ($command->email === null || $this->emailExists($command->email)) {
+        if ($command->email === '' || $this->emailExists($command->email)) {
             return $this->redirectToRoute('event_register', ['typeView' => $typeView->id]);
         }
 
@@ -145,6 +155,14 @@ class RegisterController extends Controller
         $event = $eventDomain->getEvent();
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
         $this->hasUserAlreadyCreatedParticipant($event, $this->getUser());
+
+        $response = $this
+            ->get('infrastructure.route.home_dispatch.home_user_dispatcher')
+            ->attemptDispatchUser($event, $this->getUser());
+
+        if ($response instanceof RedirectResponse) {
+            return $response;
+        }
 
         $locale = $request->getLocale();
 
@@ -242,7 +260,8 @@ class RegisterController extends Controller
             ->createRegistrationFromParticipant($participant, $locale);
 
         // pre-fill user participation data and update registration template with data
-        $this->get('tactician.commandbus.query')->handle(
+        /** @var PreFillUserDataView $preFillUserDataView */
+        $preFillUserDataView = $this->get('tactician.commandbus.query')->handle(
             new PreFillUserData(
                 $participant->getUser(),
                 $eventDomain->getEvent(),
@@ -250,6 +269,10 @@ class RegisterController extends Controller
                 $locale
             )
         );
+
+        if ($preFillUserDataView->isParticipationDataPreFilled()) {
+            $participant->setData($preFillUserDataView->templateData->getData());
+        }
 
         $participantBlock = $registrationTemplate->getBlock(intval($step));
 
@@ -373,13 +396,15 @@ class RegisterController extends Controller
     }
 
     /**
-     * @return string|null
+     * @return string
      */
-    private function getFlashEmail()
+    private function getFlashEmail(): string
     {
         $emails = $this->container->get('session')->getFlashBag()->get('register_email');
 
-        return array_shift($emails);
+        $email = array_shift($emails);
+
+        return $email ?? '';
     }
 
     /**

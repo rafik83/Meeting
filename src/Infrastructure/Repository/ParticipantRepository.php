@@ -374,6 +374,7 @@ class ParticipantRepository implements ParticipantRepositoryInterface
                     WHERE
                         " . (null !== $exceptedHappening ? 'h != :exceptedHappening' : '1=1') . "
                         AND hp.user = user
+                        AND hp.disabled = false
                         AND (
                             h.begin >= :begin AND h.begin < :end
                             OR h.end > :begin AND h.end <= :end

@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2015 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -23,80 +23,64 @@ use Proximum\Vimeet\Domain\Time\TimeRangeInterface;
  */
 class Happening implements TimeRangeInterface
 {
-    /**
-     * @var int
-     */
+    /** @var int */
     private $id;
 
-    /**
-     * @var Event
-     */
+    /** @var Event */
     private $event;
 
-    /**
-     * @var CategoryHappening
-     */
+    /** @var CategoryHappening */
     private $category;
 
-    /**
-     * @var \DateTimeInterface
-     */
+    /** @var \DateTimeInterface */
     private $begin;
 
-    /**
-     * @var \DateTimeInterface
-     */
+    /** @var \DateTimeInterface */
     private $end;
 
-    /**
-     * @var ArrayCollection
-     */
+    /** @var ArrayCollection of HappeningTranslation */
     private $translations;
 
-    /**
-     * @var ArrayCollection
-     */
+    /** @var ArrayCollection */
     private $talkings;
 
-    /**
-     * @var bool
-     */
+    /** @var bool */
     private $questionAllowed = false;
 
-    /**
-     * @var int|null
-     */
+    /** @var int|null */
     private $limitParticipant;
 
-    /**
-     * array of HappeningParticipation
-     *
-     * @var ArrayCollection
-     */
+    /** @var ArrayCollection of HappeningParticipation */
     private $participations;
 
-    /**
-     * @var ArrayCollection of Question
-     */
+    /** @var ArrayCollection of Question */
     private $questions;
 
+    /** @var ArrayCollection of Type that can access this Happening */
+    private $types;
+
+    /** @var null|string */
+    private $invitationCode;
+
     /**
-     * Happening constructor.
-     *
      * @param Event              $event
      * @param \DateTimeInterface $begin
      * @param \DateTimeInterface $end
      * @param CategoryHappening  $category
+     * @param array              $types
      * @param bool               $questionAllowed
      * @param int|null           $limitParticipant
+     * @param null|string        $invitationCode
      */
     public function __construct(
         Event $event,
         \DateTimeInterface $begin,
         \DateTimeInterface $end,
         CategoryHappening $category,
-        $questionAllowed = false,
-        $limitParticipant = null
+        array $types,
+        bool $questionAllowed = false,
+        ?int $limitParticipant = null,
+        ?string $invitationCode = null
     ) {
         $this->event            = $event;
         $this->begin            = $begin;
@@ -106,8 +90,10 @@ class Happening implements TimeRangeInterface
         $this->talkings         = new ArrayCollection();
         $this->participations   = new ArrayCollection();
         $this->questions        = new ArrayCollection();
+        $this->types            = new ArrayCollection($types);
         $this->questionAllowed  = $questionAllowed;
         $this->limitParticipant = $limitParticipant;
+        $this->invitationCode   = $invitationCode;
     }
 
     /**
@@ -218,21 +204,27 @@ class Happening implements TimeRangeInterface
      * @param \DateTimeInterface $begin
      * @param \DateTimeInterface $end
      * @param CategoryHappening  $category
+     * @param array              $types
      * @param bool               $questionAllowed
      * @param int|null           $limitParticipant
+     * @param null|string        $invitationCode
      */
     public function update(
         \DateTimeInterface $begin,
         \DateTimeInterface $end,
         CategoryHappening $category,
-        $questionAllowed,
-        $limitParticipant
+        array $types,
+        bool $questionAllowed,
+        ?int $limitParticipant,
+        ?string $invitationCode = null
     ) {
         $this->begin            = $begin;
         $this->end              = $end;
+        $this->types            = new ArrayCollection($types);
         $this->category         = $category;
         $this->questionAllowed  = $questionAllowed;
         $this->limitParticipant = $limitParticipant;
+        $this->invitationCode   = $invitationCode;
     }
 
     /**
@@ -356,5 +348,45 @@ class Happening implements TimeRangeInterface
     public function setParticipations(array $participations)
     {
         $this->participations = new ArrayCollection($participations);
+    }
+
+    /**
+     * @return Type[]
+     */
+    public function getTypes(): array
+    {
+        return $this->types->toArray();
+    }
+
+    /**
+     * @return null|string
+     */
+    public function getInvitationCode(): ?string
+    {
+        return $this->invitationCode;
+    }
+
+    /**
+     * @return bool
+     */
+    public function hasInvitationCode(): bool
+    {
+        return null !== $this->invitationCode;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isPrivate(): bool
+    {
+        return $this->hasInvitationCode();
+    }
+
+    /**
+     * @param string $invitationCode
+     */
+    public function setInvitationCode(string $invitationCode)
+    {
+        $this->invitationCode = $invitationCode;
     }
 }

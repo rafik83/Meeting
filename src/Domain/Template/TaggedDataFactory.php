@@ -3,7 +3,7 @@
 /*
  * This file is part of the vimeet project.
  *
- * Copyright (C) 2017 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -19,33 +19,33 @@ use Proximum\Vimeet\Domain\View\Template\TaggedDataView;
 
 class TaggedDataFactory
 {
-    /**
-     * @var TemplateDataFactory
-     */
+    /** @var TemplateDataFactory */
     private $templateDataFactory;
 
-    /**
-     * @var TaggedDataView[]
-     */
+    /** @var TaggedDataView[] */
     private $taggedDataViews = [];
 
-    /**
-     * @var Applyer
-     */
+    /** @var Applyer */
     private $applyer;
+
+    /** @var PrintTemplateResolver */
+    private $printTemplateResolver;
 
     /**
      * TaggedDataFactory constructor.
      *
-     * @param TemplateDataFactory $templateDataFactory
-     * @param Applyer             $applyer
+     * @param TemplateDataFactory   $templateDataFactory
+     * @param PrintTemplateResolver $printTemplateResolver
+     * @param Applyer               $applyer
      */
     public function __construct(
         TemplateDataFactory $templateDataFactory,
+        PrintTemplateResolver $printTemplateResolver,
         Applyer $applyer
     ) {
         $this->templateDataFactory = $templateDataFactory;
         $this->applyer             = $applyer;
+        $this->printTemplateResolver = $printTemplateResolver;
     }
 
     /**
@@ -68,6 +68,25 @@ class TaggedDataFactory
     }
 
     /**
+     * Get tagged data from registration template and build TaggedDataView into printTemplate
+     *
+     * @param Sheet  $sheet
+     * @param string $locale
+     * @param array  $rules Current user rules
+     *
+     * @see RuleRepositoryInterface::getBySeerTypeAndSeeableType
+     *
+     * @return TemplateData sheetTemplate
+     */
+    public function buildTaggedDataViewForPrint(Sheet $sheet, string $locale, array $rules = [])
+    {
+        $this->createTaggedDataView($sheet, $locale);
+        $printTemplateData = $this->attachTaggedDataViewOnPrintTemplate($sheet, $locale, $rules);
+
+        return $printTemplateData;
+    }
+
+    /**
      * Build taggedDataView for all registration template objects
      *
      * @param Sheet  $sheet
@@ -86,25 +105,26 @@ class TaggedDataFactory
         foreach ($objects as $object) {
             $tags = $object->getTags();
 
-            if (count($tags) === 0) {
+            if (\count($tags) === 0) {
                 continue;
             }
 
             // Filter only the object with SHEET_DATA setter,
             // as they are the only one that can be display on the sheet
-            if (!in_array(Tag::SHEET_DATA, $tags)) {
+            if (!\in_array(Tag::SHEET_DATA, $tags, true)) {
                 continue;
             }
 
             foreach ($tags as $tag) {
-                if (in_array($tag, Tag::getSetters())) {
+                if (\in_array($tag, Tag::getSetters(), true)) {
                     continue;
                 }
 
                 if ($object instanceof TemplateObject\Nomenclature) {
+                    // This only works for single nomenclature on registration template
                     $value = $object->getNomenclatureLabel();
                 } else {
-                    $value = $object->getContentValue();
+                    $value = $object->getContentValueLocalize();
                 }
 
                 $taggedDataView = new TaggedDataView(
@@ -126,16 +146,42 @@ class TaggedDataFactory
      * @param string $locale
      * @param array  $rules
      *
+     * @return TemplateData
+     */
+    private function attachTaggedDataView(Sheet $sheet, $locale, array $rules = []): TemplateData
+    {
+        $sheetTemplateData = $this->templateDataFactory->createFromSheet($sheet, $locale);
+
+        return $this->attachTaggedData($sheetTemplateData, $sheet, $rules);
+    }
+
+    /**
+     * @param Sheet  $sheet
+     * @param string $locale
+     * @param array  $rules
+     *
+     * @return TemplateData
+     */
+    private function attachTaggedDataViewOnPrintTemplate(Sheet $sheet, string $locale, array $rules = []): TemplateData
+    {
+        $sheetTemplateData = $this->printTemplateResolver->resolvePrintTemplate($sheet, $locale);
+
+        return $this->attachTaggedData($sheetTemplateData, $sheet, $rules);
+    }
+
+    /**
+     * @param TemplateData $templateData
+     * @param Sheet        $sheet
+     * @param array        $rules
+     *
      * @see RuleRepositoryInterface::getBySeerTypeAndSeeableType
      *
      * @return TemplateData
      */
-    private function attachTaggedDataView(Sheet $sheet, $locale, array $rules = [])
+    private function attachTaggedData(TemplateData $templateData, Sheet $sheet, array $rules): TemplateData
     {
-        $sheetTemplateData = $this->templateDataFactory->createFromSheet($sheet, $locale);
-
         if (!empty($rules)) {
-            $this->applyer->applyRuleForTemplate($sheetTemplateData, $rules);
+            $this->applyer->applyRuleForTemplate($templateData, $rules);
         }
 
         $tags = [];
@@ -143,9 +189,9 @@ class TaggedDataFactory
             $tags = $this->taggedDataViews[$sheet->getId()];
         }
 
-        $sheetTemplateData->setTaggedDataViews($tags);
+        $templateData->setTaggedDataViews($tags);
 
-        return $sheetTemplateData;
+        return $templateData;
     }
 
     /**

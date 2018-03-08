@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2016 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -25,10 +25,10 @@ class TemplateObject extends AbstractChild
     /**
      * @var Product[]
      */
-    protected $buyableProducts;
+    protected $buyableProducts = [];
 
     /**
-     * @var Sheet
+     * @var null|Sheet
      */
     protected $sheet;
 
@@ -135,6 +135,22 @@ class TemplateObject extends AbstractChild
     }
 
     /**
+     * @return bool
+     */
+    public function hasAtLeastOneSetterTag(): bool
+    {
+        $tagSetters = Tag::getSetters();
+
+        foreach ($this->getTags() as $tag) {
+            if (in_array($tag, $tagSetters, true)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
      * @param string $keyTag
      */
     public function removeTag($keyTag)
@@ -172,6 +188,14 @@ class TemplateObject extends AbstractChild
     public function isTranslatable()
     {
         return $this->getOption('translatable') === true;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isEmpty(): bool
+    {
+        return empty($this->getData());
     }
 
     /**
@@ -250,15 +274,15 @@ class TemplateObject extends AbstractChild
     /**
      * @return Product[]
      */
-    public function getBuyableProducts()
+    public function getBuyableProducts(): array
     {
         return $this->buyableProducts;
     }
 
     /**
-     * @param Product []
+     * @param Product[]
      */
-    public function setBuyableProducts($products)
+    public function setBuyableProducts(array $products)
     {
         $this->buyableProducts = $products;
     }
@@ -272,11 +296,11 @@ class TemplateObject extends AbstractChild
     }
 
     /**
-     * @param Product $selectedProduct
+     * @param Product|null $selectedProduct
      */
-    public function setSelectedProduct(Product $selectedProduct)
+    public function setSelectedProduct(Product $selectedProduct = null)
     {
-        $this->data['product'] = $selectedProduct->getId();
+        $this->data['product'] = $selectedProduct instanceof Product ? $selectedProduct->getId() : null;
     }
 
     /**

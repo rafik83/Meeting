@@ -85,7 +85,9 @@ class MeetingRepository implements MeetingRepositoryInterface
             ->from(Meeting::class, 'meeting', 'meeting.id')
             ->join('meeting.fromSheet', 'fromSheet', 'WITH', 'fromSheet.event = :event')
             ->join('meeting.toSheet', 'toSheet', 'WITH', 'toSheet.event = :event')
-            ->setParameter('event', $event);
+            ->setParameter('event', $event)
+            ->orderBy('meeting.createdAt', 'DESC')
+        ;
 
         $pagination = $this->paginator->paginate($queryBuilder, $page, $limit, 'meeting', 'id');
 
@@ -98,7 +100,8 @@ class MeetingRepository implements MeetingRepositoryInterface
                 $this->sheetInfoGuesser->guessSheetTitle($meeting->getToSheet(), $locale),
                 $meeting->getCreatedAt(),
                 $meeting->getSlot()->getBegin(),
-                $meeting->getSlot()->getEnd()
+                $meeting->getSlot()->getEnd(),
+                $meeting->isCreatedByParticipants()
             );
         }, $pagination->results);
 
@@ -656,6 +659,25 @@ class MeetingRepository implements MeetingRepositoryInterface
             ->setParameter('state', Meeting::STATE_SCHEDULED);
 
         return (int) $queryBuilder->getQuery()->getSingleScalarResult();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function hasMeeting(Event $event): bool
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('meeting.id')
+            ->from(Meeting::class, 'meeting')
+            ->where('meeting.event = :event')
+            ->andWhere('meeting.state = :state')
+            ->setMaxResults(1)
+            ->setParameter('event', $event)
+            ->setParameter('state', Meeting::STATE_SCHEDULED);
+
+        return null !== $queryBuilder->getQuery()->getOneOrNullResult();
     }
 
     /**

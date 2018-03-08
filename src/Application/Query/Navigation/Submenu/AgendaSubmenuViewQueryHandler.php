@@ -73,7 +73,7 @@ class AgendaSubmenuViewQueryHandler
 
         if ($this->happeningsAccessChecker->allowedToAccess($query->event)) {
             $buttonViews[] = new SubmenuButtonView(
-                Category::PLANNING_ICON,
+                Category::PROGRAM_ICON,
                 'program.title',
                 $this->navigationBuilder->getRoute('happening_program', ['sheet' => $query->sheet->getId()]),
                 Route::isProgram($query->route),

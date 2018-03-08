@@ -11,7 +11,6 @@
 namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\User\Phone;
 
 use Proximum\Vimeet\Application\Command\User\Phone\ValidateCode;
-use Proximum\Vimeet\Application\Event\User\ValidationCode\CodeValidatedEvent;
 use Proximum\Vimeet\Application\Exception\User\Phone\CodeAlreadyValidatedException;
 use Proximum\Vimeet\Application\Exception\User\Phone\CodeNotValidException;
 use Proximum\Vimeet\Domain\Model\Event;
@@ -21,14 +20,13 @@ use Proximum\Vimeet\Domain\Model\Token\UserEventToken;
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Security\Voter\ValidateMobileAccessVoter;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\User\Phone\ValidateCodeType;
-use Proximum\Vimeet\Ui\Bundle\EventBundle\Handler\User\Profile\PreUpdateHandler;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\ParamConverter\EventDomain;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Form\FormError;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 class ValidateController extends Controller
 {
@@ -59,7 +57,7 @@ class ValidateController extends Controller
         }
 
         $validate = new ValidateCode($userEventPhone);
-        $form = $this->createForm(ValidateCodeType::class, $validate);
+        $form     = $this->createForm(ValidateCodeType::class, $validate);
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
             try {
@@ -95,41 +93,54 @@ class ValidateController extends Controller
      *
      * @return RedirectResponse|Response
      */
-    public function validateAction(Request $request, EventDomain $eventDomain, UserInterface $user, Sheet $sheet, Participant $participant)
-    {
+    public function validateAction(
+        Request $request,
+        EventDomain $eventDomain,
+        UserInterface $user = null,
+        Sheet $sheet,
+        Participant $participant
+    ) {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
         $this->denyAccessUnlessGranted(ValidateMobileAccessVoter::PERMISSION_NAME, $eventDomain->getEvent());
-        
+
         $userEventPhone = $this
             ->get('repository.user.user_event_phone_repository')
             ->find($user, $eventDomain->getEvent())
         ;
 
         $validate = new ValidateCode($userEventPhone);
-        $form = $this->createForm(ValidateCodeType::class, $validate);
+        $form     = $this->createForm(ValidateCodeType::class, $validate);
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
             try {
                 $this->get('tactician.commandbus')->handle($validate);
-                $this->addFlash('success', 'flash.event.user_event_phone.validate.success');
+                $this->addFlash('confirm', 'flash.event.user_event_phone.validate.success');
+
+                if ($redirectTo = $this->container->get('session')->getFlashBag()->get('redirectTo')) {
+                    return $this->redirect($redirectTo[0]);
+                }
 
                 return $this->redirectToRoute('event_account_participant_profile', [
-                    'sheet' => $sheet->getId(), 'participant' => $participant->getId(),
+                    'sheet'       => $sheet->getId(),
+                    'participant' => $participant->getId(),
                 ]);
             } catch (CodeNotValidException $exception) {
                 $form->get('code')->addError(new FormError(
                     $this->get('translator')->trans('validators.userPhone.validateCode.codeNotValid')
                 ));
             } catch (CodeAlreadyValidatedException $exception) {
-                return $this->redirectToRoute('event_user_phone_validate');
+                return $this->redirectToRoute('event_user_phone_validate', [
+                    'sheet'       => $sheet->getId(),
+                    'participant' => $participant->getId(),
+                ]);
             }
         }
 
         return $this->render('EventBundle:User/Phone:validateCode.html.twig', [
-            'event' => $eventDomain->getEvent(),
-            'form'  => $form->createView(),
-            'sheet' => $sheet,
-            'participant' => $participant
+            'event'       => $eventDomain->getEvent(),
+            'form'        => $form->createView(),
+            'sheet'       => $sheet,
+            'participant' => $participant,
         ]);
     }
 
@@ -151,8 +162,7 @@ class ValidateController extends Controller
 
         $userEventPhone = $this
             ->get('repository.user.user_event_phone_repository')
-            ->find($userEventToken->getUser(), $userEventToken->getEvent())
-        ;
+            ->find($userEventToken->getUser(), $userEventToken->getEvent());
 
         if (null === $userEventPhone) {
             throw $this->createNotFoundException(

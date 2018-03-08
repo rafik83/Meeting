@@ -1,9 +1,9 @@
 <?php
 
 /*
- * This file is part of the vimeet project.
+ * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2017 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -17,7 +17,6 @@ class ProductFactory
 {
     /**
      * @param Event  $event
-     *
      * @param string $type
      *
      * @return Product
@@ -26,10 +25,11 @@ class ProductFactory
     {
         return new Product(
             $event,
-            $type !== null ? $type : 'option',
+            null !== $type ? $type : 'option',
             'productName',
             'image',
             25.0, // unitPrice
+            20, // vat
             5, // quantityMax
             5, // availabilityCurrent
             2, // availabilityMax

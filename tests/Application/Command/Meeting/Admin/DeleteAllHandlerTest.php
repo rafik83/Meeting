@@ -3,13 +3,14 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2017 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
 
 namespace Proximum\Vimeet\Tests\Application\Command\Meeting\Admin;
 
+use PHPUnit\Framework\TestCase;
 use Proximum\Vimeet\Application\Adapter\JobQueueInterface;
 use Proximum\Vimeet\Application\Command\Meeting\Admin\DeleteAll;
 use Proximum\Vimeet\Application\Command\Meeting\Admin\DeleteAllHandler;
@@ -17,7 +18,6 @@ use Proximum\Vimeet\Application\Exception\Meeting\NotAllowedToDeleteAllMeetingsE
 use Proximum\Vimeet\Domain\KeyDates\Checker\MeetingPublishedAccessChecker;
 use Proximum\Vimeet\Domain\Repository\MeetingRepositoryInterface;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
-use PHPUnit\Framework\TestCase;
 
 class DeleteAllHandlerTest extends TestCase
 {
@@ -61,6 +61,7 @@ class DeleteAllHandlerTest extends TestCase
 
         $jobQueue = $this->prophesize(JobQueueInterface::class);
         $jobQueue->indexInCatalogSheetsByEvent($event)->shouldBeCalled();
+        $jobQueue->aggregatePhoneValidationStatus($event)->shouldBeCalled();
 
         // Handler
         $handler = new DeleteAllHandler(

@@ -20,14 +20,15 @@ Feature: See, create and update event
     And I should be on this page "/en/event/create"
     And I check "form.event_create.children.visible.label"
     And I fill in the following:
-      | form.event_create.children.title.label         | Alternative Event                     |
-      | form.event_create.children.domain.label        | alternative-event.vimeet.proximum.dev |
-      | form.event_create.children.vat.label           | 20                                    |
-      | form.event_create.children.leftColor.label     | #123456                               |
-      | form.event_create.children.rightColor.label    | #123456                               |
-      | form.event_create.children.textColor.label     | #123456                               |
-      | form.event_create.children.organiserName.label | Proximum                              |
-      | form.event_create.children.emailTeam.label     | team-project@example.net              |
+      | form.event_create.children.title.label           | Alternative Event                 |
+      | form.event_create.children.domain.label          | alternative-event.vimeet.proximum |
+      | form.event_create.children.vat.label             | 20                                |
+      | form.event_create.children.leftColor.label       | #123456                           |
+      | form.event_create.children.rightColor.label      | #123456                           |
+      | form.event_create.children.textColor.label       | #123456                           |
+      | form.event_create.children.backgroundColor.label | #123456                           |
+      | form.event_create.children.organiserName.label   | Proximum                          |
+      | form.event_create.children.emailTeam.label       | team-project@example.net          |
     And I select "Europe/Paris" from "form.event_create.children.timeZone.label"
     And I select "fr" from "form.event_create.children.fallback.label"
     And I select "fr" from "form.event_create.children.locales.label"
@@ -53,7 +54,7 @@ Feature: See, create and update event
       | event_update_translations_en_description | In 7 editions, les Rendez-vous CARNOT became the major R&D event for innotion. |
       | event_update_emailTeam                   | team-event@example.net                                                         |
       | event_update_analyticsCode               | analyticsCode                                                                  |
-      | event_update_domain                      | rdv-carnot-2016.vimeet.proximum.dev                                            |
+      | event_update_domain                      | rdv-carnot-2016.vimeet.proximum                                                |
     And I select "fr" from "event_update_fallback"
     And I select "EUR" from "event_update_currency"
     And I press "form.event_update.children.submit.label"
@@ -63,10 +64,10 @@ Feature: See, create and update event
     And the "event_update_analyticsCode" field should contain "analyticsCode"
     When I go to "/fr/event"
     Then I should see "Other event"
-    When I go to "http://rdv-carnot-2016.vimeet.proximum.dev/app_test.php/fr"
+    When I go to "http://rdv-carnot-2016.vimeet.proximum/app_test.php/fr"
     Then the response status code should be 200
     And I should see "LES RENDEZ-VOUS DE LA R&D POUR LES ENTREPRISE"
-    Then I go to "http://rdv-carnot-2016.vimeet.proximum.dev/app_test.php/en"
+    Then I go to "http://rdv-carnot-2016.vimeet.proximum/app_test.php/en"
     And I should see "In 7 editions, les Rendez-vous CARNOT became the major R&D event for innotion."
 
   Scenario: update invoice prefix on event
@@ -91,7 +92,7 @@ Feature: See, create and update event
     And I press "form.event_update.children.submit.label"
     Then I go to this page "/en/event"
     And I should see "Invisible"
-    Then this event page "http://super-event.vimeet.proximum.dev/app_test.php/fr" returns 404
+    Then this event page "http://super-event.vimeet.proximum/app_test.php/fr" returns 404
 
   Scenario: I can duplicate an event
     Given I am logged with "test@test.com" on admin

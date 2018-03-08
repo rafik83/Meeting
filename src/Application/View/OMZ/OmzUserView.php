@@ -33,13 +33,13 @@ class OmzUserView
     /** @var string */
     public $lastname;
 
-    /** @var int */
+    /** @var string */
     public $position;
 
     /** @var string */
     public $phonePrefix;
 
-    /** @var int */
+    /** @var string */
     public $phoneNumber;
 
     /** @var string */
@@ -48,7 +48,7 @@ class OmzUserView
     /** @var string */
     public $mobilePhonePrefix;
 
-    /** @var int */
+    /** @var string */
     public $mobilePhoneNumber;
 
     /** @var string */
@@ -64,12 +64,12 @@ class OmzUserView
      * @param string $gender
      * @param string $firstname
      * @param string $lastname
-     * @param int    $position
+     * @param string $position
      * @param string $phonePrefix
-     * @param int    $phoneNumber
+     * @param string $phoneNumber
      * @param string $email
      * @param string $mobilePhonePrefix
-     * @param int    $mobilePhoneNumber
+     * @param string $mobilePhoneNumber
      * @param string $planning
      */
     public function __construct(

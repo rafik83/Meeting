@@ -1,0 +1,24 @@
+Proximum\Vimeet\Domain\Model\Sheet\ExtraData:
+    type:  entity
+    table: sheet_extra_data
+    id:
+        id:
+            type: integer
+            generator:
+                strategy: AUTO
+    fields:
+        name:
+            type: string
+        value:
+            type: text
+            nullable: true
+        createdAt:
+            type: datetime
+        updatedAt:
+            type: datetime
+    manyToOne:
+        sheet:
+            targetEntity: Proximum\Vimeet\Domain\Model\Sheet
+            joinColumn:
+                nullable: false
+                onDelete: CASCADE

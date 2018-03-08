@@ -3,21 +3,21 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2016 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
 
 namespace Proximum\Vimeet\Tests\Application\Command\Product\Option;
 
+use PHPUnit\Framework\TestCase;
 use Proximum\Vimeet\Application\Adapter\FileStorageInterface;
 use Proximum\Vimeet\Application\Command\Product\Option\CreateOption;
 use Proximum\Vimeet\Application\Command\Product\Option\CreateOptionHandler;
-use Proximum\Vimeet\Domain\Product\UpdatePriceResolver;
 use Proximum\Vimeet\Domain\Model\Product;
+use Proximum\Vimeet\Domain\Product\UpdatePriceResolver;
 use Proximum\Vimeet\Domain\Repository\ProductRepositoryInterface;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
-use PHPUnit\Framework\TestCase;
 
 class CreateOptionHandlerTest extends TestCase
 {
@@ -29,6 +29,7 @@ class CreateOptionHandlerTest extends TestCase
         $name                = 'Name';
         $image               = 'Image';
         $unitPrice           = 100;
+        $vat                 = 20;
         $quantityMax         = 4;
         $availabilityCurrent = 10;
         $availabilityMax     = 50;
@@ -51,6 +52,7 @@ class CreateOptionHandlerTest extends TestCase
 
         $create                      = new CreateOption($event);
         $create->name                = $name;
+        $create->vat                 = 20;
         $create->unitPrice           = $unitPrice;
         $create->quantityMax         = $quantityMax;
         $create->availabilityCurrent = $availabilityCurrent;
@@ -60,13 +62,13 @@ class CreateOptionHandlerTest extends TestCase
         $create->translations        = $translations;
         $create->file                = null;
 
-
         // Expected
         $expectedProduct = Product::createOption(
             $event,
             $name,
             $image,
             $unitPrice,
+            $vat,
             $quantityMax,
             $availabilityCurrent,
             $availabilityMax,
@@ -105,6 +107,7 @@ class CreateOptionHandlerTest extends TestCase
         $image = 'Image';
         $unitPrice = 100;
         $quantityMax = 4;
+        $vat = 20;
         $availabilityCurrent = 10;
         $availabilityMax = 50;
         $updatable = true;
@@ -116,6 +119,7 @@ class CreateOptionHandlerTest extends TestCase
             $name,
             $image,
             $unitPrice,
+            $vat,
             $quantityMax,
             $availabilityCurrent,
             $availabilityMax,

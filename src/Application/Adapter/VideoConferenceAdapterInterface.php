@@ -1,9 +1,9 @@
 <?php
 
 /*
- * This file is part of the vimeet project.
+ * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2017 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -12,7 +12,6 @@ namespace Proximum\Vimeet\Application\Adapter;
 
 use OpenTok\Session;
 use Proximum\Vimeet\Application\Exception\VideoConference\InvalidTokenGeneratorArgumentsException;
-use Proximum\Vimeet\Domain\Model\MeetingSlot;
 
 interface VideoConferenceAdapterInterface
 {
@@ -31,14 +30,15 @@ interface VideoConferenceAdapterInterface
     public function getSession(string $sessionId): Session;
 
     /**
-     * @param Session     $session
-     * @param MeetingSlot $slot
-     * @param array       $options
-     * @throws InvalidTokenGeneratorArgumentsException
-     *        
+     * @param Session            $session
+     * @param \DateTimeInterface $endDateTime
+     * @param array              $options
+     *
      * @return string
+     *
+     * @throws InvalidTokenGeneratorArgumentsException
      */
-    public function generateAccessToken(Session $session, MeetingSlot $slot, array $options = []): string;
+    public function generateAccessToken(Session $session, \DateTimeInterface $endDateTime, array $options = []): string;
 
     /**
      * @return string

@@ -14,10 +14,12 @@ use Elastica\Document;
 use FOS\ElasticaBundle\Transformer\ModelToElasticaTransformerInterface;
 use Proximum\Vimeet\Application\Components\Sheet\SheetInfoGuesser;
 use Proximum\Vimeet\Application\Components\Sheet\Template\Tag;
+use Proximum\Vimeet\Domain\Catalog\SearchFields;
 use Proximum\Vimeet\Domain\Model\Admin;
 use Proximum\Vimeet\Domain\Model\Category;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Sheet;
+use Proximum\Vimeet\Domain\Model\Sheet\Constant;
 use Proximum\Vimeet\Domain\Order\Balance;
 use Proximum\Vimeet\Domain\Repository\CartRowRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\HappeningParticipationRepositoryInterface;
@@ -166,12 +168,15 @@ class SheetElasticTransformer implements ModelToElasticaTransformerInterface
                 'sheetName'               => $this->sheetInfoGuesser->guessSheetTitle($sheet, $locale),
                 'state'                   => $sheet->getState(),
                 'validationState'         => $sheet->getValidationState(),
-                'agendaConfirmedStatus'   => $sheet->getAgendaConfirmedStatus(),
+                'agendaConfirmedStatus'          => $sheet->getAgendaConfirmedStatus(),
+                'phoneValidationStatus'          => $sheet->getPhoneValidationStatus(),
+                'availabilityConfirmationStatus' => $sheet->getAvailabilityConfirmationStatus(),
                 'enabled'                 => $sheet->isEnabled(),
                 'completed'               => $sheet->isCompleted(),
                 'type'                    => $sheet->getType()->getId(),
                 'categories'              => $categories,
                 'followUp'                => $sheet->getFollower() instanceof Admin ? $sheet->getFollower()->getId() : null,
+                'commercialStatus'        => $sheet->getCommercialStatus(),
                 'participantNumber'       => count($sheet->getParticipants()),
                 'participants'            => $participants,
                 'event'                   => $sheet->getEvent()->getId(),
@@ -184,7 +189,7 @@ class SheetElasticTransformer implements ModelToElasticaTransformerInterface
                 'inCatalog'               => $sheet->isInCatalog(),
                 'inCatalogAt'             => null !== $sheet->getInCatalogAt() ? $sheet->getInCatalogAt()->format('c') : null,
                 'booleanFilter'           => $filtersValue,
-                'hasOrder'                => $this->orderBalance->getTotalWithoutVat($sheet) > 0,
+                'orderStatus'             => $this->getOrderStatus($sheet),
                 'hasCart'                 => $hasCart,
                 'organizationCategory'    => in_array($organizationCategory, [false, '']) ? null : $organizationCategory,
                 'content'                 => implode(' ', $content),
@@ -200,9 +205,11 @@ class SheetElasticTransformer implements ModelToElasticaTransformerInterface
                 'hasPendingMeetingProposition' => $this->meetingRequestRepository->hasPendingPropositionReceivedBySheet($sheet),
                 'hasScheduledMeeting'          => $this->meetingRepository->hasScheduledMeeting($sheet),
                 'hasInvoice'                   => $this->invoiceRepository->hasInvoice($sheet),
-                'attend'   => $sheet->attend(),
-                'hasGroup' => $sheet->hasGroup(),
-                'hasSpot'  => $sheet->getSpot() !== null,
+                'attend'                       => $sheet->attend(),
+                'hasGroup'                     => $sheet->hasGroup(),
+                'hasSpot'                      => $sheet->getSpot() !== null,
+                'availableSlotIds'             => $this->buildAvailableSlots($sheet),
+                'reminderDate'                 => null !== $sheet->getReminderDate() ? $sheet->getReminderDate()->format('c') : null
             ],
             $contentByLocale
         ));
@@ -414,5 +421,36 @@ class SheetElasticTransformer implements ModelToElasticaTransformerInterface
         }
 
         return $nomenclatureItems;
+    }
+
+    /**
+     * @param Sheet $sheet
+     *
+     * @return array
+     */
+    private function buildAvailableSlots(Sheet $sheet)
+    {
+        $ids = array_map(function (Sheet\AvailableSlot $availableSlot) {
+            return ['id' => $availableSlot->getSlot()->getId()];
+        }, $sheet->getAvailableSlots());
+
+        return $ids;
+    }
+
+    private function getOrderStatus(Sheet $sheet): string
+    {
+        $orderVatViews = $this->orderBalance->getNotCancelledOrderVatViews($sheet);
+
+        if (empty($orderVatViews)) {
+            return Constant::ORDER_STATUS_NO_ORDER;
+        }
+
+        $totalWithoutVat = $this->orderBalance->getTotalWithoutVat($sheet);
+
+        if ($totalWithoutVat > 0) {
+            return Constant::ORDER_STATUS_TOTAL_ORDER_SUPERIOR_ZERO;
+        }
+
+        return Constant::ORDER_STATUS_TOTAL_ORDER_EQUAL_ZERO;
     }
 }

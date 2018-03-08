@@ -1,17 +1,17 @@
 <?php
 
 /*
- * This file is part of the vimeet project.
+ * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2017 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
 
 namespace Proximum\Vimeet\Tests\Application\Command\Sheet\PostBatch;
 
+use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
-use Proximum\Vimeet\Application\Adapter\SheetIndexerInterface;
 use Proximum\Vimeet\Application\Command\Sheet\PostBatch\PostBatchValidate;
 use Proximum\Vimeet\Application\Command\Sheet\PostBatch\PostBatchValidateHandler;
 use Proximum\Vimeet\Application\Event\Events;
@@ -20,7 +20,6 @@ use Proximum\Vimeet\Domain\Model\Admin;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
 use Proximum\Vimeet\Tests\Factory\SheetFactory;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
-use PHPUnit\Framework\TestCase;
 
 class PostBatchValidateHandlerTest extends TestCase
 {

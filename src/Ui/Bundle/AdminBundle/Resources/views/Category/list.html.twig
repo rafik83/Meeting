@@ -1,18 +1,17 @@
 {% extends 'AdminBundle::base.html.twig' %}
 
-{% block title 'Catégories de types de participation' %}
+{% block title 'admin.category.title'|trans %}
 
 {% block content %}
-    <h1><a href="{{ path('admin_event_read', {event: event.id}) }}">{{ event.title }}</a></h1>
-
-    <h2>Catégories de types de participation</h2>
+    <h1 class="page-header">{{ 'admin.category.title'|trans }}</h1>
 
     <table class="table">
         <thead>
         <tr>
-            <th>Titre</th>
+            <th>{{ 'admin.category.column.id'|trans }}</th>
+            <th>{{ 'admin.category.column.title'|trans }}</th>
             <th>
-                <a href="{{ path('admin_category_create', { 'event': event.id }) }}" class="btn btn-success btn-sm">
+                <a href="{{ path('admin_category_create', { 'event': event.id }) }}" class="btn btn-success btn-sm pull-right">
                     {{ 'admin.category.add'|trans }}
                 </a>
             </th>
@@ -21,9 +20,10 @@
         <tbody>
         {% for category in categories.results %}
             <tr>
+                <td>{{ category.id }}</td>
                 <td>{{ category.title }}</td>
                 <td>
-                    <a href="{{ path('admin_category_update', { 'event': event.id, 'category': category.id }) }}" class="btn btn-primary btn-sm">
+                    <a href="{{ path('admin_category_update', { 'event': event.id, 'category': category.id }) }}" class="btn btn-primary btn-sm pull-right">
                         {{ 'admin.category.update'|trans }}
                     </a>
                 </td>
@@ -35,6 +35,6 @@
     {{ include('AdminBundle:Paginator:paginate.html.twig', {'paginator': categories}) }}
 
     <div class="text-left">
-        <a href="{{ path('admin_event_list') }}" class="btn btn-link">&larr; Retour aux événements</a>
+        <a href="{{ path('admin_event_list') }}" class="btn btn-link">&larr;</a>
     </div>
 {% endblock %}

@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of the vimeet project.
+ * This file is part of the Proximum Vimeet project.
  *
  * Copyright (C) Proximum
  *
@@ -19,6 +19,7 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormView;
@@ -34,6 +35,10 @@ class ConfigureType extends AbstractType
     {
         $builder
             ->add('externalCatalogEnabled', CheckboxType::class, ['required' => false])
+            ->add('registrationUrl', TextType::class, [
+                'required' => false,
+                'placeholder' => 'form.configure.children.registrationUrl.placeholder'
+            ])
             ->add('hasMessage', CheckboxType::class, ['required' => false])
             ->add('messageTranslations', CollectionType::class, [
                 'entry_type' => CatalogVisibilityTranslationType::class,

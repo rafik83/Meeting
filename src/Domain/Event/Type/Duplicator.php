@@ -3,15 +3,13 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (©) 2017 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
 
 namespace Proximum\Vimeet\Domain\Event\Type;
 
-use Proximum\Vimeet\Application\Template\Registration\RegistrationTemplateCloner;
-use Proximum\Vimeet\Application\Template\Sheet\SheetTemplateCloner;
 use Proximum\Vimeet\Domain\Event\DuplicatorDataStorage;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Type;
@@ -19,14 +17,10 @@ use Proximum\Vimeet\Domain\Repository\TypeRepositoryInterface;
 
 class Duplicator
 {
-    /**
-     * @var TypeRepositoryInterface
-     */
+    /** @var TypeRepositoryInterface */
     private $typeRepository;
 
     /**
-     * Duplicator constructor.
-     *
      * @param TypeRepositoryInterface $typeRepository
      */
     public function __construct(TypeRepositoryInterface $typeRepository)
@@ -35,7 +29,7 @@ class Duplicator
     }
 
     /**
-     * @param Event $event
+     * @param Event                 $event
      * @param DuplicatorDataStorage $duplicatorDataStorage
      *
      * @return DuplicatorDataStorage
@@ -48,7 +42,6 @@ class Duplicator
             $newType = new Type($event);
             $newType->setPosition($type->getPosition());
             $newType->setHidden($type->isHidden());
-            $newType->setPackage($type->getPackage());
             $newType
                 ->getValidationCriteria()
                 ->setSheetAccepted($type->getValidationCriteria()->isSheetAccepted());

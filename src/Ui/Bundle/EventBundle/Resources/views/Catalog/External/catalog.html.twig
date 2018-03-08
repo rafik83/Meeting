@@ -1,4 +1,8 @@
-{{ include('EventBundle::Catalog/External/search.html.twig', { searchForm: searchForm, typeViews: typeViews }, false) }}
+{{ include('EventBundle::Catalog/External/search.html.twig', {
+    searchForm: searchForm,
+    typeViews: typeViews,
+    categoryViews: categoryViews
+}, false) }}
 
 <div class="catalog__filters">
     <div class="select-all">
@@ -18,3 +22,9 @@
         <div class="btn btn-primary see-more" data-page="{{ paginatedResult.page }}">{{ 'catalog.seeMore'|trans }}</div>
     </div>
 {% endif %}
+
+{{ include('EventBundle:Catalog:Partial/Mobile/search.html.twig', {
+    searchForm: searchForm,
+    typeViews: typeViews,
+    categoryViews: categoryViews
+}, false) }}

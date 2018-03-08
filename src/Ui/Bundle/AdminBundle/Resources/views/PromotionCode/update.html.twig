@@ -1,7 +1,9 @@
 {% extends 'AdminBundle::base.html.twig' %}
 
+{% block title 'admin.promotion_code.update'|trans %}
+
 {% block content %}
-    <h1 class="page-header">{{ promotion_code.title }}</h1>
+    <h1 class="page-header">{{ 'admin.promotion_code.update'|trans }} : {{ promotion_code.title }}</h1>
 
     {{ form_start(form, { 'attr': { 'class': 'with-submit-section' } }) }}
         {{ form_errors(form) }}

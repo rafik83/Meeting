@@ -19,7 +19,7 @@ Feature: Meeting Request / Proposition
       | @InfrastructureBundle/DataFixtures/ORM/User.yml                          |
       | @InfrastructureBundle/DataFixtures/ORM/RdvCarnot2016-Sheet.yml           |
       | @InfrastructureBundle/DataFixtures/ORM/Meeting/RdvCarnot2016-Request.yml |
-    And I am logged with "test@elao.com" on event "http://rdv-carnot-2016.vimeet.proximum.dev"
+    And I am logged with "test@elao.com" on event "http://rdv-carnot-2016.vimeet.proximum"
     And I go to this page "/fr"
     When I go to this page "/fr/sheet/1/meeting/request"
     Then I should see "form.search.meeting.state.label"
@@ -49,7 +49,7 @@ Feature: Meeting Request / Proposition
     And I should see "Exposant"
 
   Scenario: I can filter by participant type (not see Exposant type)
-    Given I am logged with "test@elao.com" on event "http://rdv-carnot-2016.vimeet.proximum.dev"
+    Given I am logged with "test@elao.com" on event "http://rdv-carnot-2016.vimeet.proximum"
     And I go to this page "/fr"
     When I go to this page "/fr/sheet/1/meeting/request"
     Then I uncheck "type_2"

@@ -60,7 +60,7 @@ class EventListQueryHandlerTest extends TestCase
         $currentEvent1 = new EventListView(
             null,
             'event1',
-            'super-event.vimeet.proximum.dev',
+            'super-event.vimeet.proximum',
             ['fr', 'en'],
             'fr',
             true,
@@ -70,7 +70,7 @@ class EventListQueryHandlerTest extends TestCase
         $currentEvent2 = new EventListView(
             null,
             'event2',
-            'super-event.vimeet.proximum.dev',
+            'super-event.vimeet.proximum',
             ['fr', 'en'],
             'fr',
             true,
@@ -112,12 +112,12 @@ class EventListQueryHandlerTest extends TestCase
             new EventListView(
                 null,
                 'event3',
-                'super-event.vimeet.proximum.dev',
+                'super-event.vimeet.proximum',
                 ['fr', 'en'],
                 'fr',
                 true,
                 [new DayView($startTimeThree, $endTimeThree)]
-            )
+            ),
         ]);
 
         $this->eventRepository
@@ -152,7 +152,7 @@ class EventListQueryHandlerTest extends TestCase
             new EventListView(
                 null,
                 'event1',
-                'super-event.vimeet.proximum.dev',
+                'super-event.vimeet.proximum',
                 ['fr', 'en'],
                 'fr',
                 true,
@@ -161,12 +161,12 @@ class EventListQueryHandlerTest extends TestCase
             new EventListView(
                 null,
                 'event3',
-                'super-event.vimeet.proximum.dev',
+                'super-event.vimeet.proximum',
                 ['fr', 'en'],
                 'fr',
                 true,
                 [new DayView($startTimeThree, $endTimeThree)]
-            )
+            ),
         ]);
 
         $this->eventRepository

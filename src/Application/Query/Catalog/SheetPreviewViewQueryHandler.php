@@ -10,9 +10,10 @@
 
 namespace Proximum\Vimeet\Application\Query\Catalog;
 
+use Proximum\Vimeet\Application\Adapter\RouterInterface;
+use Proximum\Vimeet\Application\Components\Sheet\Preview\Preview;
 use Proximum\Vimeet\Application\Components\Sheet\SheetInfoGuesser;
 use Proximum\Vimeet\Application\View\Sheet\Catalog\CatalogSheetPreviewView;
-use Proximum\Vimeet\Application\Components\Sheet\Preview\Preview;
 use Proximum\Vimeet\Domain\KeyDates\Checker\MeetingPublishedAccessChecker;
 use Proximum\Vimeet\Domain\Repository\Meeting\RequestRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\RuleRepositoryInterface;
@@ -51,12 +52,18 @@ class SheetPreviewViewQueryHandler
     private $meetingPublishedAccessChecker;
 
     /**
-     * @param SheetInfoGuesser               $sheetInfoGuesser
-     * @param Composer                       $ruleComposer
-     * @param Preview                        $preview
-     * @param RuleRepositoryInterface        $ruleRepository
-     * @param RequestRepositoryInterface     $meetingRequestRepository
-     * @param MeetingPublishedAccessChecker  $meetingPublishedAccessChecker
+     * @var RouterInterface
+     */
+    private $router;
+
+    /**
+     * @param SheetInfoGuesser              $sheetInfoGuesser
+     * @param Composer                      $ruleComposer
+     * @param Preview                       $preview
+     * @param RuleRepositoryInterface       $ruleRepository
+     * @param RequestRepositoryInterface    $meetingRequestRepository
+     * @param MeetingPublishedAccessChecker $meetingPublishedAccessChecker
+     * @param RouterInterface               $router
      */
     public function __construct(
         SheetInfoGuesser $sheetInfoGuesser,
@@ -64,7 +71,8 @@ class SheetPreviewViewQueryHandler
         Preview $preview,
         RuleRepositoryInterface $ruleRepository,
         RequestRepositoryInterface $meetingRequestRepository,
-        MeetingPublishedAccessChecker $meetingPublishedAccessChecker
+        MeetingPublishedAccessChecker $meetingPublishedAccessChecker,
+        RouterInterface $router
     ) {
         $this->sheetInfoGuesser              = $sheetInfoGuesser;
         $this->ruleComposer                  = $ruleComposer;
@@ -72,6 +80,7 @@ class SheetPreviewViewQueryHandler
         $this->ruleRepository                = $ruleRepository;
         $this->meetingRequestRepository      = $meetingRequestRepository;
         $this->meetingPublishedAccessChecker = $meetingPublishedAccessChecker;
+        $this->router                        = $router;
     }
 
     /**
@@ -96,7 +105,21 @@ class SheetPreviewViewQueryHandler
         $meetingRequest   = $this->meetingRequestRepository->getRequestBetweenSheets($viewer, $sheet);
         $meetingPublished = $this->meetingPublishedAccessChecker->allowedToAccess($catalogSheetPreviewViewQuery->event);
 
-        $isMeetingRequestUpdateLocked = $catalogSheetPreviewViewQuery->event->getConfiguration()->isMeetingRequestUpdateLocked();
+        $isMeetingRequestUpdateLocked = $catalogSheetPreviewViewQuery->event->getConfiguration()
+            ->isMeetingRequestUpdateLocked();
+
+        $participant = $catalogSheetPreviewViewQuery->viewer
+            ->getUserParticipant($catalogSheetPreviewViewQuery->user);
+
+        if ($participant !== null) {
+            $validatePhoneLink = $this->router->generate('event_user_phone_redirect_to_validation', [
+                'sheet'       => $catalogSheetPreviewViewQuery->viewer->getId(),
+                'participant' => $participant->getId(),
+                'redirectTo' => $this->router->generate('event_catalog_index', [
+                    'sheet' => $catalogSheetPreviewViewQuery->viewer->getId(),
+                ]),
+            ]);
+        }
 
         return new CatalogSheetPreviewView(
             $sheet->getId(),
@@ -111,7 +134,9 @@ class SheetPreviewViewQueryHandler
             $catalogSheetPreviewViewQuery->isMeetingRequestClosed,
             $catalogSheetPreviewViewQuery->isAnsweringMeetingRequestClosed,
             $meetingRequest !== null ? $meetingRequest->hasMessage() : false,
-            $catalogSheetPreviewViewQuery->isSeenByCurrentUser
+            $catalogSheetPreviewViewQuery->isSeenByCurrentUser,
+            $catalogSheetPreviewViewQuery->isMobileValidationRequired,
+            $validatePhoneLink ?? null
         );
     }
 }

@@ -1,6 +1,6 @@
 {% extends 'AdminBundle:Common:form_layout.html.twig' %}
 
-{% block form_title 'admin.planner.export.title'|trans %}
+{% block form_title (isModeAuto ? 'admin.planner.run.title' : 'admin.planner.export.title'|trans)|trans %}
 
 {% block form_content %}
 {% endblock form_content %}

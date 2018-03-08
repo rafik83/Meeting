@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2015 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -11,53 +11,13 @@
 namespace Proximum\Vimeet\Application\Command\Happening;
 
 use Proximum\Vimeet\Domain\Model\Happening;
-use Proximum\Vimeet\Domain\Model\Happening\Category;
 
-class Update
+class Update extends AbstractHappeningCommand
 {
-    /**
-     * @var Happening
-     */
+    /** @var Happening */
     public $happening;
 
     /**
-     * @var Category
-     */
-    public $category;
-
-    /**
-     * @var \DateTimeInterface
-     */
-    public $begin;
-
-    /**
-     * @var \DateTimeInterface
-     */
-    public $end;
-
-    /**
-     * @var array
-     */
-    public $translations = [];
-
-    /**
-     * @var array
-     */
-    public $talkings = [];
-
-    /**
-     * @var bool
-     */
-    public $questionAllowed;
-
-    /**
-     * @var int|null
-     */
-    public $limitParticipant;
-
-    /**
-     * Update constructor.
-     *
      * @param Happening $happening
      */
     public function __construct(Happening $happening)
@@ -68,6 +28,7 @@ class Update
         $this->end              = $happening->getEnd();
         $this->questionAllowed  = $happening->isQuestionAllowed();
         $this->limitParticipant = $happening->getLimitParticipant();
+        $this->invitationCode   = $happening->getInvitationCode();
 
         foreach ($happening->getEvent()->getLocales() as $locale) {
             if ($happening->getTranslations()->containsKey($locale)) {
@@ -91,5 +52,7 @@ class Update
                 'position' => $position,
             ];
         }
+
+        $this->types = $happening->getTypes();
     }
 }

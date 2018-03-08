@@ -1,0 +1,65 @@
+{% trans_default_domain 'templates' %}
+
+<div data-template-tags-select
+     data-participant-tag="{{ registrationTemplateTagView.participantDataTag }}"
+     data-sheet-tag="{{ registrationTemplateTagView.sheetDataTag }}"
+     data-at-least-one-data-field-must-be-checked-message="{{ 'template.registration.atLeastOneDataFieldMustBeChecked'|trans }}"
+>
+    <select name="tags" multiple="multiple" class="hidden">
+        {% for tag in registrationTemplateTagView.allTags %}
+            <option value="{{ tag }}" {% if tag in config.tags %}selected="selected"{% endif %}>{{ ('template.tag.' ~ tag)|trans }}</option>
+        {% endfor %}
+    </select>
+
+    <div class="form-group">
+        <div class="form-group">
+            <label class="form-label">{{ 'template.registration.dataType'|trans }}</label>
+        </div>
+
+        <div class="form-group">
+            <label class="form-label">
+                <input
+                    type="checkbox"
+                    name="{{ registrationTemplateTagView.sheetDataTag }}"
+                    {% if registrationTemplateTagView.sheetDataTag in config.tags %}checked="checked"{% endif %}
+                />
+                {{ 'template.registration.sheetData'|trans }}
+            </label>
+        </div>
+
+        <div class="form-group" data-sheet-node>
+            <label class="form-label" for="sheet_tags">
+                {{ 'template.registration.sheetTags'|trans }}
+                <span class="label label-default">{{ 'template.registration.optional'|trans }}</span>
+            </label>
+            <select class="form-control select2-builder" name="sheet_tags" multiple="multiple">
+                {% for tag in registrationTemplateTagView.sheetTags %}
+                    <option value="{{ tag }}" {% if tag in config.tags %}selected="selected"{% endif %}>{{ ('template.tag.' ~ tag)|trans }}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label class="form-label">
+                <input
+                    type="checkbox"
+                    name="{{ registrationTemplateTagView.participantDataTag }}"
+                    {% if registrationTemplateTagView.participantDataTag in config.tags %}checked="checked"{% endif %}
+                />
+                {{ 'template.registration.participantData'|trans }}
+            </label>
+        </div>
+
+        <div class="form-group" data-participant-node>
+            <label class="form-label" for="participant_tags">
+                {{ 'template.registration.participantTags'|trans }}
+                <span class="label label-default">{{ 'template.registration.optional'|trans }}</span>
+            </label>
+            <select class="form-control select2-builder" name="participant_tags" multiple="multiple">
+                {% for tag in registrationTemplateTagView.participantTags %}
+                    <option value="{{ tag }}" {% if tag in config.tags %}selected="selected"{% endif %}>{{ ('template.tag.' ~ tag)|trans }}</option>
+                {% endfor %}
+            </select>
+        </div>
+    </div>
+</div>

@@ -118,6 +118,31 @@ class Block extends AbstractChild
     }
 
     /**
+     * This function returns all the tags present on the block's children
+     * @return array
+     */
+    public function getTags(): array
+    {
+        $tags = [];
+
+        foreach ($this->getObjects() as $child) {
+            $tag = $child->getTag();
+
+            if ($tag !== null) {
+                $tags[$tag] = $tag;
+            }
+
+            foreach ($child->getTags() as $tagInfo) {
+                if (isset($tagInfo['tag'])) {
+                    $tags[$tagInfo['tag']] = $tagInfo['tag'];
+                }
+            }
+        }
+
+        return $tags;
+    }
+
+    /**
      * Get first levels blocks
      *
      * @return Block[]
@@ -169,6 +194,24 @@ class Block extends AbstractChild
 
             return $carry;
         }, []);
+    }
+
+    /**
+     * @param string $key
+     */
+    public function removeObject(string $key)
+    {
+        foreach ($this->children as $columnKey => $column) {
+            foreach ($column as $childKey => $child) {
+                if ($child instanceof Block) {
+                    $child->removeObject($key);
+                } elseif ($childKey === $key) {
+                    unset($this->children[$columnKey][$childKey]);
+
+                    return;
+                }
+            }
+        }
     }
 
     /**
@@ -374,7 +417,7 @@ class Block extends AbstractChild
                         if ($block instanceof TemplateObject\Nomenclature) {
                             $tagged[] = $block->getNomenclatureLabel();
                         } else {
-                            $tagged[] = $block->getContentValue();
+                            $tagged[] = $block->getContentValueLocalize();
                         }
                     }
                 }
@@ -436,7 +479,7 @@ class Block extends AbstractChild
         return $objects->filter(function (TemplateObject $object) use ($tag) {
             return $object instanceof TemplateObject\ContentObjectInterface && $object->hasTag($tag);
         })->map(function (TemplateObject\ContentObjectInterface $object) {
-            return $object->getContentValue();
+            return $object->getContentValueLocalize();
         })->first();
     }
 
@@ -573,6 +616,27 @@ class Block extends AbstractChild
         foreach ($this->getObjects() as $object) {
             foreach ($data as $tag => $value) {
                 if ($object->hasTag($tag) && $object instanceof TemplateObject\ContentObjectInterface) {
+                    $object->setContentValue($value);
+                }
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param array $data
+     *
+     * @return Block
+     */
+    public function setTaggedDataIfEmpty(array $data)
+    {
+        foreach ($this->getObjects() as $object) {
+            foreach ($data as $tag => $value) {
+                if ($object->hasTag($tag)
+                    && $object instanceof TemplateObject\ContentObjectInterface
+                    && empty($object->getContentValue())
+                ) {
                     $object->setContentValue($value);
                 }
             }

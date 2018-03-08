@@ -1,3 +1,11 @@
-<div class="btn btn-primary" data-modal-load="{{ path('event_catalog_sheet_meeting_request', { 'sheet': sheet.id, 'toSheet': toSheet.id }) }}">
-    <i class="icon-DemandeRDV"></i> {{ 'catalog.meeting_request.create'|trans }}
-</div>
+{% set redirectPath = path('event_catalog_index', { 'sheet': sheet.id }) %}
+
+{% if isPhoneValidationRequired and phoneValidationLink is not null %}
+    <a class="btn btn-primary" href="{{ phoneValidationLink }}">
+        <i class="icon-DemandeRDV"></i> {{ 'catalog.meeting_request.create'|trans }}
+    </a>
+{% else %}
+    <div class="btn btn-primary" data-modal-load="{{ path('event_catalog_sheet_meeting_request', { 'sheet': sheet.id, 'toSheet': toSheet.id }) }}">
+        <i class="icon-DemandeRDV"></i> {{ 'catalog.meeting_request.create'|trans }}
+    </div>
+{% endif %}

@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Tests\Application\Components\Invoice\Denormalizer;
 
+use PHPUnit\Framework\TestCase;
 use Proximum\Vimeet\Application\Components\Invoice\Denormalizer\BillingInfosViewDenormalizer;
 use Proximum\Vimeet\Application\Components\Invoice\Denormalizer\GroupsViewDenormalizer;
 use Proximum\Vimeet\Application\Components\Invoice\Denormalizer\GroupViewDenormalizer;
@@ -38,7 +39,6 @@ use Proximum\Vimeet\Tests\Factory\SheetFactory;
 use Symfony\Component\Serializer\Encoder\JsonEncoder;
 use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
 use Symfony\Component\Serializer\Serializer;
-use PHPUnit\Framework\TestCase;
 
 /**
  * WARNING:
@@ -119,7 +119,7 @@ class InvoiceViewDenormalizerTest extends TestCase
             'json',
             [
                 'invoice'                 => $invoice,
-                'billingInfosViewOfSheet' => $billingInfosViewOfSheet
+                'billingInfosViewOfSheet' => $billingInfosViewOfSheet,
             ]
         );
 
@@ -249,7 +249,6 @@ class InvoiceViewDenormalizerTest extends TestCase
                                     'free',
                                     0,
                                     1
-
                                 ),
                                 new PromotionProductRowView(
                                     'Participant supplémentaire - PO\/SR',

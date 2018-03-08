@@ -134,39 +134,23 @@ class AbstractSearchFacet
     public static function getAllTypes(): array
     {
         return [
-            self::TYPE_CATEGORY,
-            self::TYPE_TYPE,
-            self::TYPE_POSITION,
-            self::TYPE_ORGANIZATION_CATEGORY,
-            self::TYPE_KEYWORDS,
-            self::TYPE_LOCALIZATION,
+            self::TYPE_CATEGORY              => self::TYPE_CATEGORY,
+            self::TYPE_TYPE                  => self::TYPE_TYPE,
+            self::TYPE_POSITION              => self::TYPE_POSITION,
+            self::TYPE_ORGANIZATION_CATEGORY => self::TYPE_ORGANIZATION_CATEGORY,
+            self::TYPE_KEYWORDS              => self::TYPE_KEYWORDS,
+            self::TYPE_LOCALIZATION          => self::TYPE_LOCALIZATION,
         ];
     }
 
     /**
-     * @param string $locale
-     * @param string $label
-     * @param string $placeholder
+     * @param string $type
      *
-     * @return AbstractSearchFacet
-     */
-    public function translate($locale, $label, $placeholder): AbstractSearchFacet
-    {
-        foreach ($this->translations as $translation) {
-            if ($translation->getLocale() === $locale) {
-                $translation->update($label, $placeholder);
-            }
-        }
-
-        return $this;
-    }
-
-    /**
      * @return bool
      */
-    public function hasPlaceholder(): bool
+    public static function hasPlaceholder(string $type): bool
     {
-        return !in_array($this->type, [self::TYPE_TYPE, self::TYPE_CATEGORY]);
+        return !in_array($type, [self::TYPE_TYPE, self::TYPE_CATEGORY], true);
     }
 
     /**
@@ -187,5 +171,15 @@ class AbstractSearchFacet
     public function getPlaceholder($locale)
     {
         return $this->translations->containsKey($locale) ? $this->translations->get($locale)->getPlaceholder() : '';
+    }
+
+    /**
+     * @param string $locale
+     *
+     * @return bool
+     */
+    public function hasTranslation(string $locale): bool
+    {
+        return $this->translations->containsKey($locale);
     }
 }

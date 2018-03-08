@@ -26,10 +26,6 @@
                         ({{ 'admin.sheet.details.owner.title'|trans }})
                     {% endif %}
 
-                    {% include 'AdminBundle:Sheet/Partial:is_agenda_confirmed.html.twig' with {
-                        'agendaConfirmationStatus': participant.agendaConfirmationStatus
-                    } %}
-
                     <div class="pull-right">
                         <form class="form-participant-visio" action="{{ path('admin_sheet_update_participant_visio', {
                                     'event': event.id,
@@ -48,6 +44,15 @@
                     {% endfor %}
                     <b>{{ 'admin.sheet.details.participant.email'|trans }}: </b>{{ participant.email }}
                     <br/>
+                    <b>{{ 'admin.sheet.details.participant.phoneValidationStatus.title'|trans }}: </b><span class="label label-{{ participant.phoneValidationStatusView.indicator }}">{{ participant.phoneValidationStatusView.message|trans }}</span>
+                    <br/>
+                    {% include 'AdminBundle:Sheet/Partial:is_agenda_confirmed.html.twig' with {
+                        'agendaConfirmationStatus': participant.agendaConfirmationStatus
+                    } %}
+                    <br/>
+                    <b>{{ 'admin.sheet.details.participant.availability_confirmation.title'|trans }}: </b><span class="label label-{{ participant.availabilityConfirmationView.indicator }}">{{ participant.availabilityConfirmationView.message|trans }}</span>
+                    <br/>
+
                     {% if participant.isOwner %}
                         <a href="{{ impersonationUrl }}" class="btn btn-default btn-sm">{{ 'admin.sheet.impersonate'|trans }}</a>
                     {% endif %}

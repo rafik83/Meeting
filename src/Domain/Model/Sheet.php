@@ -13,8 +13,12 @@ namespace Proximum\Vimeet\Domain\Model;
 use DateTimeInterface;
 use Doctrine\Common\Collections\ArrayCollection;
 use Proximum\Vimeet\Domain\Exception\Sheet\SheetException;
+use Proximum\Vimeet\Domain\Model\Sheet\AvailableSlot;
 use Proximum\Vimeet\Domain\Model\Sheet\Group;
 use Proximum\Vimeet\Domain\Model\Template\SheetTemplate;
+use Proximum\Vimeet\Domain\Sheet\Availability\ConfirmationStatus;
+use Proximum\Vimeet\Domain\Sheet\CommercialStatus;
+use Proximum\Vimeet\Domain\Sheet\Phone\ValidationStatus;
 use Proximum\Vimeet\Domain\Trace\TraceableName;
 
 /**
@@ -22,15 +26,16 @@ use Proximum\Vimeet\Domain\Trace\TraceableName;
  */
 class Sheet implements TraceableInterface
 {
-    const STATE_PENDING   = 'pending';
+    const STATE_PENDING = 'pending';
     const STATE_VALIDATED = 'validated';
-    const STATE_ACCEPTED  = 'accepted';
+    const STATE_ACCEPTED = 'accepted';
+    const STATE_REFUSED = 'refused';
 
     /**
      * "Etat de validation de la fiche"
      */
-    const STATE_VALIDATION_DRAFT     = 'draft';
-    const STATE_VALIDATION_PENDING   = 'pending';
+    const STATE_VALIDATION_DRAFT = 'draft';
+    const STATE_VALIDATION_PENDING = 'pending';
     const STATE_VALIDATION_VALIDATED = 'validated';
 
     /**
@@ -167,6 +172,21 @@ class Sheet implements TraceableInterface
     /** @var string */
     private $agendaConfirmedStatus = self::AGENDA_NOT_CONCERNED;
 
+    /** @var string */
+    private $phoneValidationStatus = ValidationStatus::NOT_CONCERNED;
+
+    /** @var ArrayCollection */
+    private $availableSlots;
+
+    /** @var string */
+    private $availabilityConfirmationStatus = ConfirmationStatus::NONE_CONFIRMED;
+
+    /** @var string */
+    private $commercialStatus = CommercialStatus::STATUS_NONE;
+
+    /** @var null|DateTimeInterface */
+    private $reminderDate;
+
     /**
      * Sheet constructor.
      *
@@ -196,6 +216,7 @@ class Sheet implements TraceableInterface
         $this->state        = self::STATE_PENDING;
         $this->completeness = 0;
         $this->group        = $group;
+        $this->availableSlots = new ArrayCollection();
     }
 
     /**
@@ -207,6 +228,7 @@ class Sheet implements TraceableInterface
             self::STATE_ACCEPTED,
             self::STATE_PENDING,
             self::STATE_VALIDATED,
+            self::STATE_REFUSED,
         ];
     }
 
@@ -232,10 +254,12 @@ class Sheet implements TraceableInterface
 
     /**
      * @return bool
+     *
+     * @deprecated This method is deprecated as the participants now also depend of the max quantity of the product
      */
     public function canBuyParticipant()
     {
-        return $this->getMaxParticipant() > $this->countParticipant();
+        return $this->getMaxParticipant() > $this->countParticipants();
     }
 
     /**
@@ -287,6 +311,14 @@ class Sheet implements TraceableInterface
     }
 
     /**
+     * @return Participant[]
+     */
+    public function getParticipantsArray(): array
+    {
+        return $this->participants->toArray();
+    }
+
+    /**
      * @return Participant
      *
      * @throws SheetException
@@ -303,6 +335,7 @@ class Sheet implements TraceableInterface
     }
 
     /**
+     * @deprecated use countParticipants()
      * @return int
      */
     public function countParticipant()
@@ -408,14 +441,6 @@ class Sheet implements TraceableInterface
     public function getPackage()
     {
         return $this->getType()->getPackage();
-    }
-
-    /**
-     * @return Product
-     */
-    public function getPackageParticipant()
-    {
-        return $this->getPackage()->getParticipant();
     }
 
     /**
@@ -662,6 +687,14 @@ class Sheet implements TraceableInterface
     public function isAccepted()
     {
         return self::STATE_ACCEPTED === $this->state;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isRefused()
+    {
+        return self::STATE_REFUSED === $this->state;
     }
 
     /**
@@ -987,5 +1020,115 @@ class Sheet implements TraceableInterface
     public function setAgendaConfirmedStatus(string $agendaConfirmedStatus)
     {
         $this->agendaConfirmedStatus = $agendaConfirmedStatus;
+    }
+
+    /**
+     * @param string $phoneValidationStatus
+     */
+    public function setPhoneValidationStatus(string $phoneValidationStatus)
+    {
+        $this->phoneValidationStatus = $phoneValidationStatus;
+    }
+
+    /**
+     * @param AvailableSlot[] $availableSlots
+     */
+    public function setAvailableSlots(array $availableSlots)
+    {
+        foreach ($availableSlots as $newAvailableSlot) {
+            $found = false;
+
+            foreach ($this->availableSlots as $oldAvailableSlot) {
+                if ($newAvailableSlot->getSlot()->getId() === $oldAvailableSlot->getSlot()->getId()) {
+                    $found = true;
+
+                    break;
+                }
+            }
+
+            if ($found === false) {
+                $this->availableSlots->add($newAvailableSlot);
+            }
+        }
+
+        foreach ($this->availableSlots as $key => $oldAvailableSlot) {
+            $found = false;
+
+            foreach ($availableSlots as $newAvailableSlot) {
+                if ($newAvailableSlot->getSlot()->getId() === $oldAvailableSlot->getSlot()->getId()) {
+                    $found = true;
+
+                    break;
+                }
+            }
+
+            if ($found === false) {
+                $this->availableSlots->remove($key);
+            }
+        }
+    }
+
+    /**
+     * @return array
+     */
+    public function getAvailableSlots(): array
+    {
+        return $this->availableSlots->toArray();
+    }
+
+    /**
+     * @return string
+     */
+    public function getPhoneValidationStatus(): string
+    {
+        return $this->phoneValidationStatus;
+    }
+
+    /**
+     * @return string
+     */
+    public function getAvailabilityConfirmationStatus(): string
+    {
+        return $this->availabilityConfirmationStatus;
+    }
+
+    /**
+     * @param string $availabilityConfirmationStatus
+     */
+    public function setAvailabilityConfirmationStatus(string $availabilityConfirmationStatus): void
+    {
+        $this->availabilityConfirmationStatus = $availabilityConfirmationStatus;
+    }
+
+    /**
+     * @return string
+     */
+    public function getCommercialStatus(): string
+    {
+        return $this->commercialStatus;
+    }
+
+    /**
+     * @param string $commercialStatus
+     */
+    public function setCommercialStatus(string $commercialStatus): void
+    {
+        $this->commercialStatus = $commercialStatus;
+    }
+
+    /**
+     * @return DateTimeInterface|null
+     */
+    public function getReminderDate(): ?DateTimeInterface
+    {
+        return $this->reminderDate;
+    }
+
+    /**
+     * @param DateTimeInterface|null $reminderDate
+     */
+    public function setReminderDate($reminderDate): void
+    {
+        $this->reminderDate = $reminderDate;
     }
 }

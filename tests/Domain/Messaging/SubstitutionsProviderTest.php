@@ -1,9 +1,9 @@
 <?php
 
 /*
- * This file is part of the Proximum Vimeet website.
+ * This file is part of the Proximum Vimeet project.
  *
- * Copyright © Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -25,9 +25,6 @@ use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Template\ParticipantInfoGuesser;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
-use Proximum\Vimeet\Tests\Factory\ParticipantFactory;
-use Proximum\Vimeet\Tests\Factory\SheetFactory;
-use Proximum\Vimeet\Tests\Factory\UserFactory;
 
 class SubstitutionsProviderTest extends TestCase
 {
@@ -79,11 +76,11 @@ class SubstitutionsProviderTest extends TestCase
         return [
             [
                 sprintf('%s %s %s', Compose::TAG_EVENT_NAME, Compose::LINK_PACKAGE, Compose::LINK_AGENDA),
-                [Compose::TAG_EVENT_NAME, Compose::LINK_AGENDA, Compose::LINK_PACKAGE]
+                [Compose::TAG_EVENT_NAME, Compose::LINK_AGENDA, Compose::LINK_PACKAGE],
             ],
             [
                 sprintf('%s %s', Compose::LINK_SHEET, Compose::TAG_PARTICIPANT),
-                [Compose::TAG_PARTICIPANT, Compose::LINK_SHEET]
+                [Compose::TAG_PARTICIPANT, Compose::LINK_SHEET],
             ],
         ];
     }
@@ -98,7 +95,7 @@ class SubstitutionsProviderTest extends TestCase
         $event     = $this->prophesize(Event::class);
         $sheet->getEvent()->willReturn($event);
 
-        $placeholders = [Compose::TAG_EVENT_NAME, "%INVALID-PLACEHOLDER%"];
+        $placeholders = [Compose::TAG_EVENT_NAME, '%INVALID-PLACEHOLDER%'];
 
         $this->substitutionProvider->getSubstitutions($recipient, $sheet->reveal(), $locale, $placeholders);
     }
@@ -147,7 +144,7 @@ class SubstitutionsProviderTest extends TestCase
             [
                 Compose::TAG_PARTICIPANT    => 'Henri Désiré Landru',
                 Compose::LINK_AGENDA        => 'url-to-event-agenda',
-                Compose::TAG_SHEET_PLANNING => '<p>PLANNING</p>'
+                Compose::TAG_SHEET_PLANNING => '<p>PLANNING</p>',
             ],
             $this->substitutionProvider->getSubstitutions($recipient->reveal(), $sheet->reveal(), $locale, $placeholders)
         );

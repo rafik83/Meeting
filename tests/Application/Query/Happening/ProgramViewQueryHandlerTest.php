@@ -3,13 +3,14 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2016 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
 
 namespace Proximum\Vimeet\Tests\Application\Query\Happening;
 
+use PHPUnit\Framework\TestCase;
 use Proximum\Vimeet\Application\Exception\Happening\MissingEventDayConfigurationException;
 use Proximum\Vimeet\Application\Query\Happening\DayViewQuery;
 use Proximum\Vimeet\Application\Query\Happening\DayViewQueryHandler;
@@ -26,7 +27,6 @@ use Proximum\Vimeet\Domain\Repository\Event\DayRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\Unavailability\MassRepositoryInterface;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
 use Proximum\Vimeet\Tests\Factory\SheetFactory;
-use PHPUnit\Framework\TestCase;
 
 class ProgramViewQueryHandlerTest extends TestCase
 {
@@ -84,19 +84,20 @@ class ProgramViewQueryHandlerTest extends TestCase
         $dayView2 = new DayView($startTime2, $endTime2, $event->getConfiguration()->getScheduleScale(), []);
 
         $expected = new ProgramView([
-            $dayView1, $dayView2
+            $dayView1, $dayView2,
         ], null, null);
 
         // Mock
         $dayRepository = $this->prophesize(DayRepositoryInterface::class);
         $dayRepository->findByEvent($event)->shouldBeCalled()->willReturn([
             $eventDay1,
-            $eventDay2
+            $eventDay2,
         ]);
 
         $dayViewQueryHandler = $this->prophesize(DayViewQueryHandler::class);
         $dayViewQueryHandler->handle(new DayViewQuery(
             $event,
+            $sheet,
             $eventDay1,
              'fr',
             null,
@@ -104,6 +105,7 @@ class ProgramViewQueryHandlerTest extends TestCase
         ))->shouldBeCalled()->willReturn($dayView1);
         $dayViewQueryHandler->handle(new DayViewQuery(
             $event,
+            $sheet,
             $eventDay2,
             'fr',
             null,

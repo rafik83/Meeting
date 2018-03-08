@@ -12,7 +12,7 @@ namespace Proximum\Vimeet\Domain\Template\TemplateObject;
 
 use Proximum\Vimeet\Domain\Template\TemplateObject;
 
-class ItemCollection extends TemplateObject implements SearchableObjectInterface, IndexableObjectInterface, ExportableObjectInterface
+class ItemCollection extends TemplateObject implements SearchableObjectInterface, ExportableObjectInterface
 {
     /**
      * @var Item[]
@@ -181,7 +181,7 @@ class ItemCollection extends TemplateObject implements SearchableObjectInterface
     /**
      * {@inheritdoc}
      */
-    public function getExportableContent(array $taggedData = [])
+    public function getExportableContent(array $taggedData = [], ?string $locale = null)
     {
         $exportableContents = array_map(function ($content) {
             return str_replace(";", ",", $content);

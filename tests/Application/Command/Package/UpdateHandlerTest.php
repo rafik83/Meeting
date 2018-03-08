@@ -3,13 +3,14 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2016 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
 
 namespace Proximum\Vimeet\Tests\Application\Command\Package;
 
+use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
 use Proximum\Vimeet\Application\Command\Package\Model\Group;
 use Proximum\Vimeet\Application\Command\Package\Update;
@@ -18,7 +19,6 @@ use Proximum\Vimeet\Domain\Model\Package;
 use Proximum\Vimeet\Domain\Model\Product;
 use Proximum\Vimeet\Domain\Repository\PackageRepositoryInterface;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
-use PHPUnit\Framework\TestCase;
 
 class UpdateHandlerTest extends TestCase
 {
@@ -31,22 +31,23 @@ class UpdateHandlerTest extends TestCase
         $event->setLocales(['fr', 'en']);
         $package  = new Package($event, 'Lorem ipsum', $dateTime);
 
-        $plan1       = Product::createPlan($event, 'Plan 1', 'plan1.jpg', 100, 1, 1);
-        $plan2       = Product::createPlan($event, 'Plan 2', 'plan2.jpg', 400, 1, 1);
-        $plan3       = Product::createPlan($event, 'Plan 3', 'plan3.jpg', 800, 1, 1);
-        $participant = Product::createParticipant($event, 'Participant', 300, 5);
-        $planning    = Product::createPlanning($event, 'Planning', 200, 5);
-        $option1     = Product::createOption($event, 'A', 'a.jpg', 250, 4, 1, 4, true, $dateTime);
-        $option2     = Product::createOption($event, 'B', 'b.jpg', 300, 2, 10, 10, true, $dateTime);
-        $option3     = Product::createOption($event, 'C', 'c.jpg', 500, 10, 5, 9, true, $dateTime);
-        $option4     = Product::createOption($event, 'D', 'd.jpg', 999, 1, 1, 1, true, $dateTime);
+        $plan1       = Product::createPlan($event, 'Plan 1', 'plan1.jpg', 100, 20, 1, 1);
+        $plan2       = Product::createPlan($event, 'Plan 2', 'plan2.jpg', 400, 20, 1, 1);
+        $plan3       = Product::createPlan($event, 'Plan 3', 'plan3.jpg', 800, 20, 1, 1);
+        $participant = Product::createParticipant($event, 'Participant', 300, 20, 5);
+        $planning    = Product::createPlanning($event, 'Planning', 200, 20, 5);
+        $option1     = Product::createOption($event, 'A', 'a.jpg', 250, 20, 4, 1, 4, true, $dateTime);
+        $option2     = Product::createOption($event, 'B', 'b.jpg', 300, 20, 2, 10, 10, true, $dateTime);
+        $option3     = Product::createOption($event, 'C', 'c.jpg', 500, 20, 10, 5, 9, true, $dateTime);
+        $option4     = Product::createOption($event, 'D', 'd.jpg', 999, 20, 1, 1, 1, true, $dateTime);
 
         $expected = new Package($event, 'Foobar', $dateTime);
         $expected->translate('fr', 'Plans fr', 'P&P fr', 'Options fr');
         $expected->translate('en', 'Plans en', 'P&P en', 'Options en');
         $expected->setPlans([$plan1, $plan3, $plan2]);
-        $expected->setParticipant($participant);
+        $expected->setParticipants([$participant]);
         $expected->setPlanning($planning);
+        $expected->setMaxParticipant(12);
         $expected->setGroups([
             [$option4, $option1],
             [$option2, $option3],
@@ -65,6 +66,7 @@ class UpdateHandlerTest extends TestCase
             $this->assertEquals($expected->getOptionsLabel('en'), $package->getOptionsLabel('en'));
             $this->assertEquals($expected->getPlans(), $package->getPlans());
             $this->assertEquals($expected->getGroups(), $package->getGroups());
+            $this->assertEquals($expected->getMaxParticipant(), $package->getMaxParticipant());
 
             $groups = $expected->getGroups();
 
@@ -75,20 +77,21 @@ class UpdateHandlerTest extends TestCase
             $this->assertEquals($expected->isPlansEnabled(), $package->isPlansEnabled());
             $this->assertEquals($expected->isParticipantAndPlanningEnabled(), $package->isParticipantAndPlanningEnabled());
             $this->assertEquals($expected->isOptionsEnabled(), $package->isOptionsEnabled());
-            $this->assertEquals($expected->getParticipant(), $package->getParticipant());
+            $this->assertEquals($expected->getParticipants(), $package->getParticipants());
             $this->assertEquals($expected->getPlanning(), $package->getPlanning());
 
             return true;
         }))->shouldBeCalled();
 
-        $command                                      = new Update($package);
-        $command->title                               = 'Foobar';
-        $command->plans->labels                       = ['fr' => 'Plans fr', 'en' => 'Plans en'];
-        $command->participantAndPlanning->labels      = ['fr' => 'P&P fr', 'en' => 'P&P en'];
-        $command->options->labels                     = ['fr' => 'Options fr', 'en' => 'Options en'];
-        $command->plans->plans                        = [$plan1, $plan3, $plan2];
-        $command->participantAndPlanning->participant = $participant;
-        $command->participantAndPlanning->planning    = $planning;
+        $command = new Update($package);
+        $command->title = 'Foobar';
+        $command->plans->labels = ['fr' => 'Plans fr', 'en' => 'Plans en'];
+        $command->participantAndPlanning->labels = ['fr' => 'P&P fr', 'en' => 'P&P en'];
+        $command->options->labels = ['fr' => 'Options fr', 'en' => 'Options en'];
+        $command->plans->plans = [$plan1, $plan3, $plan2];
+        $command->participantAndPlanning->participants = [$participant];
+        $command->participantAndPlanning->planning = $planning;
+        $command->participantAndPlanning->maxParticipant = 12;
         $command->options->groups = [
             new Group(['fr' => 'AAAA', 'en' => 'AAAA'], [$option4, $option1]),
             new Group(['fr' => 'BBBB', 'en' => 'BBBB'], [$option2, $option3]),

@@ -1,0 +1,16 @@
+<section class="main">
+    <div class="main__container">
+        {% for uid, child in templateData.column(0) %}
+            {{ include('AdminBundle:Sheet/Pdf/' ~ child.component|capitalize ~ ':' ~ child.type ~ '.html.twig', {
+                'sheet': sheet,
+                'uid': uid,
+                'item': child,
+                'locale': templateData.locale,
+                'fallback': templateData.fallback,
+                'taggedData': taggedData,
+                'nomenclatures': nomenclatures,
+                'participants': participants,
+            }, false) }}
+        {% endfor %}
+    </div>
+</section>

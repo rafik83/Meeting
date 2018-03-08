@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2015 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -11,10 +11,15 @@
 namespace Proximum\Vimeet\Tests\Application\Command\Meeting;
 
 use DateTime;
+use PHPUnit\Framework\TestCase;
+use Prophecy\Argument;
 use Proximum\Vimeet\Application\Command\Meeting\ApproveRequest;
 use Proximum\Vimeet\Application\Command\Meeting\ApproveRequestHandler;
+use Proximum\Vimeet\Application\Command\Meeting\Event\TransformRequestIntoMeetingHandler;
 use Proximum\Vimeet\Application\Components\Meeting\RequestPermissionManager;
 use Proximum\Vimeet\Application\Exception\MeetingRequest\IsNotAllowedToApproveMeetingRequestException;
+use Proximum\Vimeet\Application\Query\Meeting\MeetingDDayViewQueryHandler;
+use Proximum\Vimeet\Domain\Event\Day\DDayGuesser;
 use Proximum\Vimeet\Domain\Model\Meeting\Message;
 use Proximum\Vimeet\Domain\Model\Meeting\Request;
 use Proximum\Vimeet\Domain\Model\Participant;
@@ -23,9 +28,9 @@ use Proximum\Vimeet\Domain\Model\Type;
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Repository\Meeting\MessageRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\Meeting\RequestRepositoryInterface;
+use Proximum\Vimeet\Domain\User\Phone\ValidationRequiredChecker;
 use Proximum\Vimeet\Infrastructure\Adapter\DelayedEventDispatcher;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
-use PHPUnit\Framework\TestCase;
 
 class ApproveRequestHandlerTest extends TestCase
 {
@@ -56,7 +61,7 @@ class ApproveRequestHandlerTest extends TestCase
         $expectedRequest = new Request($sheetFrom, [], $sheetTo, $participants, $dateTime, $user1, $event, false, true);
         $expectedRequest->approve($dateTime);
 
-        $approveRequest = new ApproveRequest($user3, $request, $sheetTo);
+        $approveRequest = new ApproveRequest($user3, $request, $sheetTo, 'fr');
         $approveRequest->participants = [$toParticipant3, $toParticipant4];
         $approveRequest->description = 'content';
 
@@ -71,12 +76,26 @@ class ApproveRequestHandlerTest extends TestCase
         $permissionManager->isAllowedToApprove($request, $sheetTo)->shouldBeCalled()->willReturn(true);
 
         $eventDispatcher = $this->prophesize(DelayedEventDispatcher::class);
+        $validationRequiredChecker = $this->prophesize(ValidationRequiredChecker::class);
+        $transformMeetingIntoRequestHandler = $this->prophesize(TransformRequestIntoMeetingHandler::class);
+        $ddayGuesser = $this->prophesize(DDayGuesser::class);
+        $meetingDDayViewQueryHandler = $this->prophesize(MeetingDDayViewQueryHandler::class);
+
+        $ddayGuesser->isItDDayAndFeatureEnabled($event)->shouldBeCalled()->willReturn(false);
+
+        $validationRequiredChecker
+            ->handle(Argument::type(Sheet::class), Argument::type(User::class))
+            ->shouldNotBeCalled();
 
         $handler = new ApproveRequestHandler(
             $requestRepository->reveal(),
             $messageRepository->reveal(),
             $permissionManager->reveal(),
             $eventDispatcher->reveal(),
+            $validationRequiredChecker->reveal(),
+            $transformMeetingIntoRequestHandler->reveal(),
+            $ddayGuesser->reveal(),
+            $meetingDDayViewQueryHandler->reveal(),
             $dateTime
         );
         $handler->handle($approveRequest);
@@ -111,7 +130,7 @@ class ApproveRequestHandlerTest extends TestCase
         $expectedRequest = new Request($sheetFrom, [], $sheetTo, $participants, $dateTime, $user1, $event);
         $expectedRequest->approve($dateTime);
 
-        $approveRequest = new ApproveRequest($user3, $request, $sheetTo);
+        $approveRequest = new ApproveRequest($user3, $request, $sheetTo, 'fr');
         $approveRequest->participants = [$toParticipant3, $toParticipant4];
         $approveRequest->description = 'content';
 
@@ -126,12 +145,26 @@ class ApproveRequestHandlerTest extends TestCase
         $permissionManager->isAllowedToApprove($request, $sheetTo)->shouldBeCalled()->willReturn(false);
 
         $eventDispatcher = $this->prophesize(DelayedEventDispatcher::class);
+        $validationRequiredChecker = $this->prophesize(ValidationRequiredChecker::class);
+        $transformMeetingIntoRequestHandler = $this->prophesize(TransformRequestIntoMeetingHandler::class);
+        $ddayGuesser = $this->prophesize(DDayGuesser::class);
+        $meetingDDayViewQueryHandler = $this->prophesize(MeetingDDayViewQueryHandler::class);
+
+        $validationRequiredChecker
+            ->handle(Argument::type(Sheet::class), Argument::type(User::class))
+            ->shouldNotBeCalled();
+
+        $ddayGuesser->isItDDay($event)->shouldNotBeCalled();
 
         $handler = new ApproveRequestHandler(
             $requestRepository->reveal(),
             $messageRepository->reveal(),
             $permissionManager->reveal(),
             $eventDispatcher->reveal(),
+            $validationRequiredChecker->reveal(),
+            $transformMeetingIntoRequestHandler->reveal(),
+            $ddayGuesser->reveal(),
+            $meetingDDayViewQueryHandler->reveal(),
             $dateTime
         );
         $handler->handle($approveRequest);
@@ -139,14 +172,14 @@ class ApproveRequestHandlerTest extends TestCase
 
     /**
      * @param Sheet $sheet
-     * @param User $user
+     * @param User  $user
      * @param $id
      *
      * @return Participant
      */
     public function createParticipantMock(Sheet $sheet, User $user, $id)
     {
-        $participant = new Participant($sheet, $user, [], false, true);
+        $participant = new Participant($sheet, $user, [], false);
         $reflection  = new \ReflectionClass(Participant::class);
 
         $property = $reflection->getProperty('id');

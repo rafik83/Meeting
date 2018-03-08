@@ -3,30 +3,31 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2017 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
 
 namespace Proximum\Vimeet\Tests\Application\Query\User;
 
+use PHPUnit\Framework\TestCase;
 use Proximum\Vimeet\Application\Query\User\UserDetailsViewQuery;
 use Proximum\Vimeet\Application\Query\User\UserDetailsViewQueryHandler;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Sheet;
+use Proximum\Vimeet\Domain\Model\UserEvent;
 use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\UserEventRepositoryInterface;
 use Proximum\Vimeet\Domain\UserEvent\Exception\UserEventMissingException;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
 use Proximum\Vimeet\Tests\Factory\UserFactory;
-use PHPUnit\Framework\TestCase;
 
 class UserDetailsViewQueryHandlerTest extends TestCase
 {
     public function testHandle()
     {
         $event = EventFactory::createEvent();
-        $user = UserFactory::create("toto@toto.com");
+        $user = UserFactory::create('toto@toto.com');
 
         $mockedEvent1 = $this->prophesize(Event::class);
         $mockedEvent1->getId()->willReturn(1);
@@ -55,7 +56,8 @@ class UserDetailsViewQueryHandlerTest extends TestCase
         $userEventRepository = $this->prophesize(UserEventRepositoryInterface::class);
         $sheetRepository = $this->prophesize(SheetRepositoryInterface::class);
 
-        $userEventRepository->getUserEvent($user, $event)->shouldBeCalled()->willReturn(true);
+        $userEvent = $this->prophesize(UserEvent::class);
+        $userEventRepository->getUserEvent($user, $event)->shouldBeCalled()->willReturn($userEvent->reveal());
         $sheetRepository->getByUser($user)->shouldBeCalled()->willReturn([$sheet1, $sheet2, $sheet3]);
 
         $handler = new UserDetailsViewQueryHandler(
@@ -79,7 +81,7 @@ class UserDetailsViewQueryHandlerTest extends TestCase
         $this->expectException(UserEventMissingException::class);
 
         $event = EventFactory::createEvent();
-        $user = UserFactory::create("toto@toto.com");
+        $user = UserFactory::create('toto@toto.com');
 
         $userEventRepository = $this->prophesize(UserEventRepositoryInterface::class);
         $sheetRepository = $this->prophesize(SheetRepositoryInterface::class);

@@ -1,0 +1,23 @@
+{% extends 'AdminBundle::base.html.twig' %}
+
+{% block title 'admin.template.registration.update'|trans %}
+
+{% block content %}
+    <h1 class="page-header">{{ 'admin.template.registration.update'|trans }}</h1>
+
+    {{ include('AdminBundle:RegistrationTemplate:addLocale.html.twig', {
+        template: template,
+        locale: locale,
+        add_locale_form: add_locale_form,
+        completeness: completeness,
+        routeName: 'admin_template_registration_json',
+    }, false) }}
+
+    {{ form_start(form) }}
+    {{ form_row(form.title) }}
+    {{ form_row(form.value, {'attr' : {'rows': 30}}) }}
+    {{ form_row(form.submit) }}
+
+    {{ form_rest(form) }}
+    {{ form_end(form) }}
+{% endblock %}

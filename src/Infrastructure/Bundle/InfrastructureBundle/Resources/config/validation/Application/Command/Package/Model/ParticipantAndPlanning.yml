@@ -8,6 +8,12 @@ Proximum\Vimeet\Application\Command\Package\Model\ParticipantAndPlanning:
                     - Type: { type: string }
         enabled:
             - Type: { type: boolean }
-        participant:
-            - NotBlank: ~
-        planning: []
+        participants:
+            - Valid: ~
+            - Type: { type: array }
+            - Count: { min: 1 }
+            - All:
+                - NotBlank: ~
+        planning:
+            - Expression:
+                expression: "!this.enabled || this.enabled && null !== this.planning"

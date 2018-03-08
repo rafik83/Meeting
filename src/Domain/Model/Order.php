@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2016 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -21,54 +21,34 @@ use Proximum\Vimeet\Domain\Order\Numero\Generator as NumeroGenerator;
  */
 class Order
 {
-    /**
-     * @var int
-     */
+    /** @var int */
     private $id;
 
-    /**
-     * @var Sheet
-     */
+    /** @var Sheet */
     private $sheet;
 
-    /**
-     * @var \DateTimeInterface
-     */
+    /** @var \DateTimeInterface */
     private $createdAt;
 
-    /**
-     * @var float
-     */
+    /** @var float */
     private $vatRate;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     private $currency;
 
-    /**
-     * @var ArrayCollection Order\Row
-     */
+    /** @var ArrayCollection Order\Row */
     private $rows = [];
 
-    /**
-     * @var ArrayCollection of Order\PromotionCode
-     */
+    /** @var ArrayCollection of Order\PromotionCode */
     private $promotionCodes = [];
 
-    /**
-     * @var string
-     */
+    /** @var string */
     private $groupsData;
 
-    /**
-     * @var boolean
-     */
+    /** @var bool */
     private $cancelled = false;
 
-    /**
-     * @var Invoice|null
-     */
+    /** @var Invoice|null */
     private $invoice;
 
     /**
@@ -88,7 +68,6 @@ class Order
         $this->vatRate        = $sheet->getEvent()->getVat();
         $this->rows           = new ArrayCollection();
         $this->promotionCodes = new ArrayCollection();
-        $this->cancelled      = false;
     }
 
     /**
@@ -102,7 +81,7 @@ class Order
     /**
      * @return string
      */
-    public function getNumero()
+    public function getNumero(): string
     {
         return NumeroGenerator::generate($this);
     }
@@ -110,21 +89,9 @@ class Order
     /**
      * @return Sheet
      */
-    public function getSheet()
+    public function getSheet(): Sheet
     {
         return $this->sheet;
-    }
-
-    /**
-     * Get vat
-     *
-     * @return float
-     *
-     * @deprecated Use getVatRate instead
-     */
-    public function getVat()
-    {
-        return $this->getVatRate();
     }
 
     /**
@@ -132,7 +99,7 @@ class Order
      *
      * @return string
      */
-    public function getVatMode()
+    public function getVatMode(): string
     {
         return $this->getSheet()->getEvent()->getMode();
     }
@@ -164,22 +131,6 @@ class Order
     }
 
     /**
-     * @deprecated use OrderVatView::isVatApplicable
-     */
-    public function isVatApplicable()
-    {
-        throw new \Exception('Order::isVatApplicable() is a deprecated method');
-    }
-
-    /**
-     * @deprecated
-     */
-    public function getTotalVatMode()
-    {
-        throw new \Exception('Order::getTotalVatMode() is a deprecated method');
-    }
-
-    /**
      * @return string
      */
     public function getGroupsData()
@@ -190,7 +141,7 @@ class Order
     /**
      * @return Row[]
      */
-    public function getRows()
+    public function getRows(): array
     {
         return $this->rows->toArray();
     }
@@ -212,7 +163,7 @@ class Order
      *
      * @return Order
      */
-    public function addPromotionCode(Order\PromotionCode $promotionCode)
+    public function addPromotionCode(Order\PromotionCode $promotionCode): Order
     {
         $this->promotionCodes->add($promotionCode);
 
@@ -224,7 +175,7 @@ class Order
      *
      * @return Order
      */
-    public function addCustomRow(Row $customRow)
+    public function addCustomRow(Row $customRow): Order
     {
         $this->rows->add($customRow);
 
@@ -236,12 +187,11 @@ class Order
      *
      * @return self
      */
-    public function removeRow(Row $rowToRemove)
+    public function removeRow(Row $rowToRemove): Order
     {
         foreach ($this->rows as $key => $row) {
-            if ($row->getId() === $rowToRemove->getId()) {
+            if ($row->getId() === $rowToRemove->getId() && $row->getQuantity() === 0) {
                 $this->rows->remove($key);
-
                 return $this;
             }
         }
@@ -254,7 +204,7 @@ class Order
      *
      * @return self
      */
-    public function removeCustomRow(Row $customRow)
+    public function removeCustomRow(Row $customRow): Order
     {
         return $this->removeRow($customRow);
     }
@@ -262,12 +212,12 @@ class Order
     /**
      * @return float
      */
-    public function getTotalWithoutVat()
+    public function getTotalWithoutVat(): float
     {
         $total = 0;
 
         /** @var Row $row */
-        foreach ($this->rows->toArray() as $row) {
+        foreach ($this->getRows() as $row) {
             $total += $row->getQuantity() * $row->getPrice();
         }
 
@@ -277,30 +227,6 @@ class Order
         }
 
         return $total;
-    }
-
-    /**
-     * @deprecated use OrderVatView::vatAmount
-     */
-    public function getVatAmount()
-    {
-        throw new \Exception('Order::getVatAmount() is a deprecated method');
-    }
-
-    /**
-     * @deprecated use OrderVatView::totalWithVat
-     */
-    public function getTotalWithVat()
-    {
-        throw new \Exception('Order::getTotalWithVat() is a deprecated method');
-    }
-
-    /**
-     * @deprecated use OrderVatView::totalWithVat
-     */
-    public function getTotal()
-    {
-        throw new \Exception('Order::getTotal() is a deprecated method');
     }
 
     /**
@@ -349,7 +275,7 @@ class Order
     /**
      * @return array
      */
-    public function getGroupsIds()
+    public function getGroupsIds(): array
     {
         return array_keys(json_decode($this->groupsData, true));
     }
@@ -361,7 +287,7 @@ class Order
      */
     public function getProductRowsForGroupId($groupId)
     {
-        return array_filter($this->rows->toArray(), function (Order\Row $row) use ($groupId) {
+        return array_filter($this->getRows(), function (Order\Row $row) use ($groupId) {
             return $row->isProduct() && $row->getGroupId() === $groupId;
         });
     }
@@ -373,7 +299,7 @@ class Order
      */
     public function getCustomRowsForGroupId($groupId)
     {
-        return array_filter($this->rows->toArray(), function (Order\Row $row) use ($groupId) {
+        return array_filter($this->getRows(), function (Order\Row $row) use ($groupId) {
             return !$row->isProduct() && $row->getGroupId() === $groupId && !$row->hasParentRow();
         });
     }
@@ -385,7 +311,7 @@ class Order
      */
     public function getCustomRowsForProduct(Row $parentRow)
     {
-        return array_filter($this->rows->toArray(), function (Order\Row $row) use ($parentRow) {
+        return array_filter($this->getRows(), function (Order\Row $row) use ($parentRow) {
             return !$row->isProduct() && null !== $row->getParentRow() && $parentRow->getId() === $row->getParentRow()->getId();
         });
     }
@@ -395,7 +321,7 @@ class Order
      */
     public function getRowsWithoutParent()
     {
-        return array_filter($this->rows->toArray(), function (Order\Row $row) {
+        return array_filter($this->getRows(), function (Order\Row $row) {
             return !$row->hasParentRow();
         });
     }
@@ -405,7 +331,7 @@ class Order
      */
     public function getRowsWithParent()
     {
-        return array_filter($this->rows->toArray(), function (Order\Row $row) {
+        return array_filter($this->getRows(), function (Order\Row $row) {
             return $row->hasParentRow();
         });
     }
@@ -455,23 +381,27 @@ class Order
      */
     public function hasType($type)
     {
-        return null !== $this->getProductOfType($type) ? true : false;
+        return \count($this->getRowsProductOfType($type));
     }
 
     /**
-     * @param $type
+     * @param string $type
      *
-     * @return null|Order\Row
+     * @return Order\Row[]
      */
-    public function getProductOfType($type)
+    public function getRowsProductOfType(string $type): array
     {
-        foreach ($this->rows->toArray() as $row) {
-            if ($row->getType() === $type) {
-                return $row;
-            }
-        }
+        return array_filter($this->getRows(), function (Order\Row $row) use ($type) {
+            return $type === $row->getType();
+        });
+    }
 
-        return null;
+    /**
+     * @return Order\Row[]
+     */
+    public function getRowsProductOfParticipantType(): array
+    {
+        return $this->getRowsProductOfType(Product::TYPE_PARTICIPANT);
     }
 
     /**
@@ -524,7 +454,7 @@ class Order
     /**
      * @return int
      */
-    public function countPlanning()
+    public function countPlanning(): int
     {
         $planning = 0;
 
@@ -580,9 +510,21 @@ class Order
     }
 
     /**
-     * @return boolean
+     * @return Product\ProductIncluded[]
      */
-    public function isCancelled()
+    public function getIncludedParticipantProducts(): array
+    {
+        if (null === $this->getPlan()) {
+            return [];
+        }
+
+        return $this->getPlan()->getIncludedParticipantProducts();
+    }
+
+    /**
+     * @return bool
+     */
+    public function isCancelled(): bool
     {
         return $this->cancelled;
     }
@@ -590,7 +532,7 @@ class Order
     /**
      * Set cancelled
      */
-    public function cancel()
+    public function cancel(): void
     {
         $this->cancelled = true;
     }
@@ -606,17 +548,17 @@ class Order
     /**
      * @param Invoice $invoice
      */
-    public function setInvoice(Invoice $invoice)
+    public function setInvoice(Invoice $invoice): void
     {
         $this->invoice = $invoice;
     }
-    
+
     /**
      * @return bool
      */
-    public function hasInvoice()
+    public function hasInvoice(): bool
     {
-        return $this->getInvoice() === null ? false : true;
+        return $this->getInvoice() !== null;
     }
 
     /**
@@ -625,7 +567,7 @@ class Order
      *
      * @return Order
      */
-    public static function createFromSheet(Sheet $sheet, \DateTimeInterface $dateTime)
+    public static function createFromSheet(Sheet $sheet, \DateTimeInterface $dateTime): Order
     {
         return new self(
             $sheet,

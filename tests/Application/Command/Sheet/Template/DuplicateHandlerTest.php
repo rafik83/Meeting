@@ -3,23 +3,20 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2016 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
 
 namespace Proximum\Vimeet\Tests\Application\Command\Sheet\Template;
 
+use PHPUnit\Framework\TestCase;
 use Proximum\Vimeet\Application\Command\Sheet\Template\Duplicate;
 use Proximum\Vimeet\Application\Command\Sheet\Template\DuplicateHandler;
 use Proximum\Vimeet\Application\Command\Sheet\Template\DuplicateResult;
 use Proximum\Vimeet\Application\Template\Sheet\SheetTemplateCloner;
-use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Template\SheetTemplate;
-use Proximum\Vimeet\Domain\Repository\Template\SheetTemplateRepositoryInterface;
-use Proximum\Vimeet\Domain\Template\TemplateRemoveField;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
-use PHPUnit\Framework\TestCase;
 
 class DuplicateHandlerTest extends TestCase
 {
@@ -88,36 +85,32 @@ class DuplicateHandlerTest extends TestCase
 
         $dateTime = new \DateTime();
         $template = new SheetTemplate('Toto', [
-            "ee4f2281" =>
-                [
-                    "component" => "object",
-                    "type"      => "image",
-                    "config"    =>
-                        [
-                            "label"       => ["en" => null, "fr" => "Image"],
-                            "placeholder" => ["en" => null, "fr" => ""],
-                            "help"        => ["en" => null, "fr" => ""],
-                            "required"    => false,
-                            "style"       => "",
-                            "products"    => ["1", "2"],
+            'ee4f2281' => [
+                    'component' => 'object',
+                    'type'      => 'image',
+                    'config'    => [
+                            'label'       => ['en' => null, 'fr' => 'Image'],
+                            'placeholder' => ['en' => null, 'fr' => ''],
+                            'help'        => ['en' => null, 'fr' => ''],
+                            'required'    => false,
+                            'style'       => '',
+                            'products'    => ['1', '2'],
                         ],
                 ],
         ], ['fr'], 'fr', $dateTime, [], $event);
 
         //expected
         $expectedTemplate = new SheetTemplate('DuplicateWithoutProduct', [
-            "ee4f2281" =>
-                [
-                    "component" => "object",
-                    "type"      => "image",
-                    "config"    =>
-                        [
-                            "label"       => ["en" => null, "fr" => "Image"],
-                            "placeholder" => ["en" => null, "fr" => ""],
-                            "help"        => ["en" => null, "fr" => ""],
-                            "required"    => false,
-                            "style"       => "",
-                            "products"    => [],
+            'ee4f2281' => [
+                    'component' => 'object',
+                    'type'      => 'image',
+                    'config'    => [
+                            'label'       => ['en' => null, 'fr' => 'Image'],
+                            'placeholder' => ['en' => null, 'fr' => ''],
+                            'help'        => ['en' => null, 'fr' => ''],
+                            'required'    => false,
+                            'style'       => '',
+                            'products'    => [],
                         ],
                 ],
         ], ['fr'], 'fr', $dateTime, [], $eventTo);
