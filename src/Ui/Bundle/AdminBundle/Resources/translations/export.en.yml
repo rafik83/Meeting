@@ -21,7 +21,31 @@ export.meeting_request.state.refused: Refused
 export.meeting_request.state.sent: Sent
 gender.man: Mr
 gender.woman: Mrs
+order.column.billing_info_city: city
+order.column.billing_info_company: company
+order.column.billing_info_country: country
+order.column.billing_info_email: email
+order.column.billing_info_first_name: firstname
+order.column.billing_info_gender: gender
+order.column.billing_info_last_name: name
+order.column.billing_info_mobile: 'mobile phone'
+order.column.billing_info_phone: 'phone number'
+order.column.billing_info_position: position
+order.column.billing_info_reference: 'accounting reference'
+order.column.billing_info_street: adress
+order.column.billing_info_vat_number: 'VAT number'
+order.column.billing_info_zip_code: 'zip code'
+order.column.customRow.quantity: 'additional line %customRowIndex% quantity'
+order.column.customRow.title: 'additional line %customRowIndex% title'
+order.column.customRow.total: 'additional line %customRowIndex% total amount (tax free)'
+order.column.customRow.unitPrice: 'additional line %customRowIndex% unit price (tax free)'
+order.column.invoice_date: 'invoice date'
+order.column.invoice_number: 'invoice number'
+order.column.order_id: 'order ID'
 order.column.product.quantity: '%productTitle% : quantity (excl. tax)'
 order.column.product.total: '%productTitle% : calculated price (excl. tax)'
 order.column.product.unitPrice: '%productTitle% : unit price (excl. tax)'
+order.column.promotionCode.quantity: '%promotionCodeTitle% : quantity'
 order.column.promotionCode.total: '%promotionCodeTitle% : Total (excl. tax)'
+order.column.sheet_id: 'sheet Id'
+order.column.sheet_title: 'sheet title'

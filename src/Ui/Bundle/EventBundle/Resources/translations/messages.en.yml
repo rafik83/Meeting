@@ -124,43 +124,69 @@ group.home.link.create_sheet: 'Create a profile'
 group.home.link.participant_update: 'Manage participants'
 group.home.link.participants: 'Participants per profile'
 group.home.link.request: 'Manage meetings'
+group.participant_update.list.email: Email
+group.participant_update.list.participant: Participant
 group.participant_update.list.sheets: Profile
 group.participant_update.title: 'Manage participants'
 group.participants_list.caption.available.label: 'Available for meetings'
 group.participants_list.caption.unavailable.label: Unavailable
+group.participants_list.day.label: day
+group.participants_list.participant: Participant
+group.participants_list.slot.tooltip: slot
 group.participants.title: 'Participants per profile'
+group.request.list.link.home: 'back to managing my entity'
 group.request.list.no-preference: 'No preferences'
 group.request.list.state.approved: Approved
 group.request.list.state.planned: 'Meeting planned'
 group.request.list.state.refused: Refused
 group.request.list.state.sent: Pending
 group.request.list.table.header.otherSheet: 'Other profiles'
+group.request.list.table.header.participants: Participants
 group.request.list.table.header.sheetConcerned: 'My profiles'
 group.request.list.table.header.status: Status
 group.request.list.table.no-result: 'No meeting requests'
+group.request.title: 'Management of the entity meetings'
 group.sheet.create.title: 'Create a new profile'
 happening.participate.action: Attend
+happening.participate.detail: detail
+happening.participate.full: full
+happening.participate.noParticipantSelected: 'no participant selected'
+happening.participate.notEnoughtRemainingParticipations: '{0} no more available place|{1} one available place remaining|]1,Inf[ there are only %remaining% places available'
+happening.participate.participantNotAvailable: 'At least one of the selected participants is not available'
+happening.participate.participantNotFound: 'participant not found'
+happening.participate.wrongInvitationCode: 'wrong invitation code'
 happening.participate.youAreNotAvailable: 'You are not available to attend'
 happening.participationCancel.action: Cancel
 happening.participationUpdate.action: Edit
+invoice.list.column.date: Date
 invoice.list.column.number: 'N° invoice'
 invoice.list.column.totalExcludeTaxes: 'Total excl. tax'
 invoice.list.column.totalIncludeTaxes: 'Total incl. VAT'
 invoice.list.title: 'Your invoices'
 invoice.no-result: 'No invoice available'
 invoice.show: 'View final invoice (pdf)'
+login.comexposium_sso.connect: 'Login via ComexposiumConnect'
 login.connect: Login
 login.connection: Connexion
+login.error.sheetDisabled: 'Your participation has been disabled.'
 login.forgot_password: 'Forgotten password?'
 login.forgotPassword: 'Forgotten password?'
 login.memberArea: 'Member area'
 meeting.video.end: 'End call'
+meeting.video.error.userDeniedAccess: 'You have denied access to your audio/video devices or canceled the launch of the screen share. For video conferencing to work properly, please allow access to your devices or the launch of screen sharing.'
+meeting.video.installScreenSharingExtensionMessage: 'Thank you for setting our screen sharing extension.'
+meeting.video.notCompatibleBrowserMessage: 'Your browser is not compatible. Thank you for using Chrome or Firefox'
 meeting.video.screenshare: Screenshare
+meeting.video.screenshare.end: 'stop the screenshare'
+meeting.video.screenshare.start: 'share my screen'
+meeting.video.start: 'start the meeting'
 meeting.video.waitingForParticipant: 'Waiting for participant'
+meetingRequest.mobile.filters.availableSlot.title: 'who is available ?'
 meetingRequest.mobile.filters.state.title: 'My meetings'
 modal.back: Back
 modal.close: Close
 modal.loading.error: 'A problem occurred while loading, you can close the modal'
+multiple_sheets.modal.close: close
 multiple_sheets.request.filter.reset: 'Reset all the filters'
 multiple_sheets.request.list.no-preference: 'No preferences'
 multiple_sheets.request.list.state.approved: Approved
@@ -168,9 +194,13 @@ multiple_sheets.request.list.state.planned: 'Meeting planned'
 multiple_sheets.request.list.state.refused: Refused
 multiple_sheets.request.list.state.sent: Pending
 multiple_sheets.request.list.table.header.otherSheet: 'Other profiles'
+multiple_sheets.request.list.table.header.participants: Participants
 multiple_sheets.request.list.table.header.sheetConcerned: 'My profiles'
 multiple_sheets.request.list.table.header.status: Status
 multiple_sheets.request.list.table.no-result: 'No meeting requests'
+multiple_sheets.request.list.totalRequest: '{0} No meeting request |{1} one meeting request |]1,Inf[ %totalRequest% meeting requests'
+multiple_sheets.request.title: 'meetings management'
+multiple_sheets.select_sheet: 'select a sheet'
 multiple_sheets.title: 'My profiles'
 navigation.category.billing: Billing
 navigation.category.catalog: Catalogue
@@ -209,6 +239,7 @@ navigation.links.package.order_list: 'My orders'
 navigation.links.package.order_summary_total: 'Global summary'
 navigation.links.package.payment: Payment
 navigation.links.package.summary: 'Order summary'
+navigation.links.package.terms_of_sale: 'terms of sale'
 navigation.links.planning.all_schedule: 'All meeting schedules'
 navigation.links.planning.available_date: 'Available on'
 navigation.links.planning.conference: Conferences
@@ -241,6 +272,7 @@ notification.link.label: See
 notification.list.title.label: Notifications
 notification.package.noOrder: 'You must chose a package of participation'
 notification.sheet.completeTranslation: 'Complete your presentation sheet in %locale%'
+notification.transaction.paid: 'The payment of %amount% has been received'
 notification.transaction.pending: 'The payment of %amount% is pending'
 order.list.cancelled: Cancelled
 order.list.column.date: Date
@@ -271,6 +303,7 @@ package.funnel.summary: 'Summary & billing details'
 package.options.included: Included
 package.participant_planning.validate: Validate
 package.participant.add: 'Add participant'
+package.participant.delete: 'delete a participant'
 package.participants.add: 'Add participants'
 package.participants.delete: 'Remove participants'
 package.participants.included: Included
@@ -331,6 +364,7 @@ package.summary.title: Summary
 package.summary.total.title: 'Package of participation'
 package.summary.totalOfSummary: Total
 package.summary.totalPlusVat: 'Total to pay'
+package.summary.totalSubjetToVat: 'Total subjected to %vat%%'
 package.summary.totalVat: '+ %vat%% VAT'
 package.title: 'Package of participation'
 package.vatMode.ati: 'incl. VAT'
@@ -338,10 +372,12 @@ package.vatMode.et: 'excl. VAT'
 pro_forma.bankInfo.title: 'Bank details'
 pro_forma.date.title: 'Date:'
 pro_forma.number.title: 'Proforma N°:'
+pro_forma.reference.title: 'your reference'
 pro_forma.title: 'Proforma - %date%'
 pro_forma.vatNumber.title: 'VAT number'
 program.title: Programme
 register.already_registered: 'Already registered?'
+register.connect: validate
 register.finalize: Complete
 register.photo: "Why should you publish a photo?\n- Let potential business partners “put a face to a name” \n- Reinforce your professional network\n- Help contacts identify you more easily, and vice-versa\n- Complete digital business cards available to everyone\n- Easily identify each participant’s schedule"
 register.privacy_policies: 'Privacy protection: In accordance with the French law on Information Technology and Civil Liberties of January 6, 1978, amended in 2004, you have the right to access and correct personal data/information about you by sending us an e-mail at cnil@vi-meet.com.'
@@ -355,9 +391,12 @@ sheet.object.action.add: Add
 sheet.object.action.backToSheet: 'Back to sheet'
 sheet.object.action.edit: Edit
 sheet.object.action.remove: Delete
+sheet.object.boolean.false: 'No'
+sheet.object.boolean.true: 'yes'
 sheet.object.image.label: 'Your current image'
 sheet.object.image.remove: 'Delete image'
 sheet.object.option.buyable.label: 'Chargeable option'
+sheet.object.product.included: included
 sheet.object.showLess.title: 'See more'
 sheet.object.showMore.title: 'See less'
 sheet.participant.remove: 'Remove from the sheet'
@@ -377,6 +416,7 @@ sheet.welcome.programContent: 'Choose your conferences'
 sheet.welcome.sheetContent: "Complete your presentation sheet.\n\nThen\n\nSubmit it for validation"
 sheet.welcome.subtitle: 'To finalise your request you need to'
 sheet.welcome.title: 'TO FINALISE YOUR REQUEST:'
+sheetGroup.impersonateAs: '%fromEmail% connected as %toFullname% (%toEmail%)'
 sheetGroup.quitImpersonation: Leave
 summary.column.quantity: Quantity
 summary.column.title: Title
@@ -387,9 +427,11 @@ summary.product.included: Included
 summary.promotionCode.free: Free
 summary.promotionCode.title: 'Offers of discounts'
 summary.total: Total
+summary.totalByVat: 'Total subjected to %vatRate%%'
 summary.totalToPay: 'Total to pay'
 summary.vatRate: '%vatRate%% VAT'
 unavailability.title: Unavailable
 user_event.confirm.agenda.already_confirmed: 'Schedule already confirmed'
 user_event.confirm.agenda.success: 'Thank you for confirming your schedule'
 user_event.confirm.agenda.title: 'Schedule confirmation'
+user.phone.confirmationCode.message: 'Enter the following code to confirm : %code%'
