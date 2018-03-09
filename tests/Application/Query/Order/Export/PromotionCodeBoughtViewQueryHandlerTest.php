@@ -10,12 +10,12 @@
 
 namespace Proximum\Vimeet\Tests\Application\Query\Order\Export;
 
+use PHPUnit\Framework\TestCase;
 use Proximum\Vimeet\Application\Query\Order\Export\PromotionCodeBoughtViewQuery;
 use Proximum\Vimeet\Application\Query\Order\Export\PromotionCodeBoughtViewQueryHandler;
 use Proximum\Vimeet\Application\View\Order\Export\PromotionCodeBoughtView;
 use Proximum\Vimeet\Domain\Model\Order\PromotionCode;
 use Proximum\Vimeet\Domain\Model\PromotionCode as PromotionCodeModel;
-use PHPUnit\Framework\TestCase;
 
 class PromotionCodeBoughtViewQueryHandlerTest extends TestCase
 {

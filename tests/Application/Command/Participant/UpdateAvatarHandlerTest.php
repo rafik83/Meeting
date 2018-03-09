@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2016 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -24,8 +24,8 @@ use Proximum\Vimeet\Domain\Model\Type;
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Repository\ParticipantRepositoryInterface;
 use Proximum\Vimeet\Domain\Template\Block;
-use Proximum\Vimeet\Domain\Template\TemplateObject;
 use Proximum\Vimeet\Domain\Template\TemplateData;
+use Proximum\Vimeet\Domain\Template\TemplateObject;
 use Proximum\Vimeet\Infrastructure\Adapter\DelayedEventDispatcher;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
 
@@ -39,36 +39,28 @@ class UpdateAvatarHandlerTest extends TestCase
         $type  = new Type($event);
 
         $template = [
-            '811f6edf' =>
-                [
+            '811f6edf' => [
                     'component' => 'block',
                     'type'      => '12',
-                    'config'    =>
-                        [
+                    'config'    => [
                             'style' => 'style-1',
                         ],
-                    'children'  =>
-                        [
+                    'children'  => [
                             [
-                                '541f84d4' =>
-                                    [
+                                '541f84d4' => [
                                         'component' => 'object',
                                         'type'      => 'editable-text',
-                                        'config'    =>
-                                            [
+                                        'config'    => [
                                                 'style'        => 'style-1',
-                                                'label'        =>
-                                                    [
+                                                'label'        => [
                                                         'en' => null,
                                                         'fr' => 'Prénom',
                                                     ],
-                                                'placeholder'  =>
-                                                    [
+                                                'placeholder'  => [
                                                         'en' => null,
                                                         'fr' => 'Prénom',
                                                     ],
-                                                'help'         =>
-                                                    [
+                                                'help'         => [
                                                         'en' => null,
                                                         'fr' => 'Merci de donner votre prénom',
                                                     ],
@@ -76,25 +68,25 @@ class UpdateAvatarHandlerTest extends TestCase
                                                 'required'     => true,
                                                 'type'         => 'text',
                                                 'translatable' => false,
-                                                'tags'         => ["participant_firstname", "participant_data"],
+                                                'tags'         => ['participant_firstname', 'participant_data'],
                                             ],
                                     ],
                                 'cb66008e' => [
-                                    'component' => "object",
-                                    'type'      => "image",
+                                    'component' => 'object',
+                                    'type'      => 'image',
                                     'config'    => [
-                                        'style' => "style-1",
+                                        'style' => 'style-1',
                                         'label' => [
-                                            'fr' => "Photo",
+                                            'fr' => 'Photo',
                                         ],
                                         'placeholder' => [
-                                            'fr' => "Photo",
+                                            'fr' => 'Photo',
                                         ],
                                         'help' => [
-                                            'fr' => "",
+                                            'fr' => '',
                                         ],
                                         'required' => false,
-                                        'tags'     => ["participant_avatar", "participant_data"],
+                                        'tags'     => ['participant_avatar', 'participant_data'],
                                     ],
                                 ],
                             ],
@@ -117,7 +109,6 @@ class UpdateAvatarHandlerTest extends TestCase
             true
         );
 
-
         // Mock
         $participantRepository = $this->prophesize(ParticipantRepositoryInterface::class);
         $accountSynchronizer   = $this->prophesize(Synchronizer::class);
@@ -137,7 +128,7 @@ class UpdateAvatarHandlerTest extends TestCase
 
         $participantRepository->set($expectedParticipant)->shouldBeCalled();
         $eventDispatcher->dispatch(Events::SHEET_UPDATED, Argument::that(
-            function(SheetUpdatedEvent $sheetUpdatedEvent){
+            function (SheetUpdatedEvent $sheetUpdatedEvent) {
                 return true;
             }
         ))->shouldBeCalled();
@@ -158,7 +149,6 @@ class UpdateAvatarHandlerTest extends TestCase
             'tags' => ['participant_avatar', 'participant_data'],
         ], 'fr', 'fr');
         $image->setContentValue('path/to/file');
-
 
         $block->addChild(1, '541f84d4', $editableText1);
         $block->addChild(1, 'cb66008e', $image);
@@ -185,36 +175,28 @@ class UpdateAvatarHandlerTest extends TestCase
         $type  = new Type($event);
 
         $template = [
-            '811f6edf' =>
-                [
+            '811f6edf' => [
                     'component' => 'block',
                     'type'      => '12',
-                    'config'    =>
-                        [
+                    'config'    => [
                             'style' => 'style-1',
                         ],
-                    'children'  =>
-                        [
+                    'children'  => [
                             [
-                                '541f84d4' =>
-                                    [
+                                '541f84d4' => [
                                         'component' => 'object',
                                         'type'      => 'editable-text',
-                                        'config'    =>
-                                            [
+                                        'config'    => [
                                                 'style'        => 'style-1',
-                                                'label'        =>
-                                                    [
+                                                'label'        => [
                                                         'en' => null,
                                                         'fr' => 'Prénom',
                                                     ],
-                                                'placeholder'  =>
-                                                    [
+                                                'placeholder'  => [
                                                         'en' => null,
                                                         'fr' => 'Prénom',
                                                     ],
-                                                'help'         =>
-                                                    [
+                                                'help'         => [
                                                         'en' => null,
                                                         'fr' => 'Merci de donner votre prénom',
                                                     ],
@@ -222,25 +204,25 @@ class UpdateAvatarHandlerTest extends TestCase
                                                 'required'     => true,
                                                 'type'         => 'text',
                                                 'translatable' => false,
-                                                'tags'         => ["participant_firstname", "participant_data"],
+                                                'tags'         => ['participant_firstname', 'participant_data'],
                                             ],
                                     ],
                                 'cb66008e' => [
-                                    'component' => "object",
-                                    'type'      => "image",
+                                    'component' => 'object',
+                                    'type'      => 'image',
                                     'config'    => [
-                                        'style' => "style-1",
+                                        'style' => 'style-1',
                                         'label' => [
-                                            'fr' => "Photo",
+                                            'fr' => 'Photo',
                                         ],
                                         'placeholder' => [
-                                            'fr' => "Photo",
+                                            'fr' => 'Photo',
                                         ],
                                         'help' => [
-                                            'fr' => "",
+                                            'fr' => '',
                                         ],
                                         'required' => false,
-                                        'tags'     => ["participant_avatar", "participant_data"],
+                                        'tags'     => ['participant_avatar', 'participant_data'],
                                     ],
                                 ],
                             ],
@@ -263,7 +245,6 @@ class UpdateAvatarHandlerTest extends TestCase
             true
         );
 
-
         // Mock
         $participantRepository = $this->prophesize(ParticipantRepositoryInterface::class);
         $accountSynchronizer   = $this->prophesize(Synchronizer::class);
@@ -284,7 +265,7 @@ class UpdateAvatarHandlerTest extends TestCase
         $participantRepository->set($expectedParticipant)->shouldBeCalled();
 
         $eventDispatcher->dispatch(Events::SHEET_UPDATED, Argument::that(
-            function(SheetUpdatedEvent $sheetUpdatedEvent){
+            function (SheetUpdatedEvent $sheetUpdatedEvent) {
                 return true;
             }
         ))->shouldBeCalled();
@@ -305,7 +286,6 @@ class UpdateAvatarHandlerTest extends TestCase
             'tags' => ['participant_avatar', 'participant_data'],
         ], 'fr', 'fr');
         $image->setContentValue('path/to/file');
-
 
         $block->addChild(1, '541f84d4', $editableText1);
         $block->addChild(1, 'cb66008e', $image);

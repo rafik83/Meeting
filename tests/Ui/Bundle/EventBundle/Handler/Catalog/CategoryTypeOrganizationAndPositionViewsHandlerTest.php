@@ -150,12 +150,12 @@ class CategoryTypeOrganizationAndPositionViewsHandlerTest extends TestCase
             $positionView1->reveal(),
             $positionView2->reveal(),
         ];
-         $this->queryBus
+        $this->queryBus
              ->handle(new OrganizationCategoryViewQuery($this->event->reveal(), 'fr'))
              ->shouldBeCalled()
              ->willReturn($organizationCategoryViews)
          ;
-         $this->queryBus
+        $this->queryBus
              ->handle(new PositionViewQuery($this->event->reveal(), 'fr'))
              ->shouldBeCalled()
              ->willReturn($positionViews)

@@ -163,7 +163,7 @@ class PaymentConditionsActionTest extends TestCase
                 'locale' => 'de',
                 'event'  => $this->event->reveal(),
                 'type'   => $this->type->reveal(),
-                'form'   => $formView->reveal()
+                'form'   => $formView->reveal(),
             ])
             ->shouldBeCalled()
             ->willReturn(new Response())

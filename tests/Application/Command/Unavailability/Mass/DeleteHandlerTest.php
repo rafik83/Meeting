@@ -1,15 +1,16 @@
 <?php
 
 /*
- * This file is part of the vimeet project.
+ * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2016 vimeet
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
 
 namespace Proximum\Vimeet\Tests\Application\Command\Unavailability\Mass;
 
+use PHPUnit\Framework\TestCase;
 use Proximum\Vimeet\Application\Adapter\JobQueueInterface;
 use Proximum\Vimeet\Application\Command\Unavailability\Mass\Delete;
 use Proximum\Vimeet\Application\Command\Unavailability\Mass\DeleteHandler;
@@ -17,7 +18,6 @@ use Proximum\Vimeet\Domain\Model\Unavailability\Category;
 use Proximum\Vimeet\Domain\Model\Unavailability\Mass;
 use Proximum\Vimeet\Domain\Repository\Unavailability\MassRepositoryInterface;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
-use PHPUnit\Framework\TestCase;
 
 class DeleteHandlerTest extends TestCase
 {

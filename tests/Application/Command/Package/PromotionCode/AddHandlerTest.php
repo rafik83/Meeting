@@ -10,6 +10,7 @@
 
 namespace Application\Command\Package\PromotionCode;
 
+use PHPUnit\Framework\TestCase;
 use Proximum\Vimeet\Application\Command\Package\PromotionCode\Add;
 use Proximum\Vimeet\Application\Command\Package\PromotionCode\AddHandler;
 use Proximum\Vimeet\Domain\Cart\Cart;
@@ -31,7 +32,6 @@ use Proximum\Vimeet\Domain\Promotion\Exception\PromotionCodeNotUsedException;
 use Proximum\Vimeet\Domain\Promotion\Exception\PromotionCodeOutDatedException;
 use Proximum\Vimeet\Domain\Repository\PromotionCodeRepositoryInterface;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
-use PHPUnit\Framework\TestCase;
 
 class AddHandlerTest extends TestCase
 {

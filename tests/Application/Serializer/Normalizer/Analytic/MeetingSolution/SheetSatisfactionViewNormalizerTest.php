@@ -29,12 +29,12 @@ class SheetSatisfactionViewNormalizerTest extends TestCase
                 new ObjectNormalizer(),
             ],
             [
-                new JsonEncoder()
+                new JsonEncoder(),
             ]
         );
         $result = $serializer->serialize($data, 'json');
 
-        $expected = "{\"sheetId\":86,\"sheetTitle\":\"Test Title\",\"typeId\":9,\"typeTitle\":\"Fournisseur\",\"satisfaction\":100}";
+        $expected = '{"sheetId":86,"sheetTitle":"Test Title","typeId":9,"typeTitle":"Fournisseur","satisfaction":100}';
 
         $this->assertEquals($expected, $result);
     }

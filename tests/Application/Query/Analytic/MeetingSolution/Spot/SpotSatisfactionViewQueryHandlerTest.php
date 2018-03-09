@@ -59,19 +59,19 @@ class SpotSatisfactionViewQueryHandlerTest extends TestCase
                 7,
                 10,
                 [1, 2],
-                new SpotSatisfactionView(1, 'ref', true, true, 100)
+                new SpotSatisfactionView(1, 'ref', true, true, 100),
             ],
             [
                 7,
                 0,
                 [1, 2, 3],
-                new SpotSatisfactionView(1, 'ref', true, true, 0)
+                new SpotSatisfactionView(1, 'ref', true, true, 0),
             ],
             [
                 0,
                 10,
                 [],
-                new SpotSatisfactionView(1, 'ref', true, true, 500)
+                new SpotSatisfactionView(1, 'ref', true, true, 500),
             ],
         ];
     }

@@ -10,14 +10,14 @@
 
 namespace Proximum\Vimeet\Tests\Application\Command\Product\Planning;
 
+use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
 use Proximum\Vimeet\Application\Command\Product\Planning\UpdatePlanning;
 use Proximum\Vimeet\Application\Command\Product\Planning\UpdatePlanningHandler;
-use Proximum\Vimeet\Domain\Product\UpdatePriceResolver;
 use Proximum\Vimeet\Domain\Model\Product;
+use Proximum\Vimeet\Domain\Product\UpdatePriceResolver;
 use Proximum\Vimeet\Domain\Repository\ProductRepositoryInterface;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
-use PHPUnit\Framework\TestCase;
 
 class UpdatePlanningHandlerTest extends TestCase
 {

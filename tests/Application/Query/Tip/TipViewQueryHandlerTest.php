@@ -10,13 +10,13 @@
 
 namespace Proximum\Vimeet\Tests\Application\Query\Tip;
 
+use PHPUnit\Framework\TestCase;
 use Proximum\Vimeet\Application\Query\Tip\TipViewQuery;
 use Proximum\Vimeet\Application\Query\Tip\TipViewQueryHandler;
 use Proximum\Vimeet\Application\View\Tip\PaginatedTipView;
 use Proximum\Vimeet\Domain\Model\PaginatedResult;
 use Proximum\Vimeet\Domain\Model\Tip\Tip;
 use Proximum\Vimeet\Domain\Repository\TipRepositoryInterface;
-use PHPUnit\Framework\TestCase;
 
 class TipViewQueryHandlerTest extends TestCase
 {

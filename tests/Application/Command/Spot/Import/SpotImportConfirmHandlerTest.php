@@ -103,7 +103,7 @@ class SpotImportConfirmHandlerTest extends TestCase
             $expectedImportedDenormalizedSpot1,
             $expectedImportedDenormalizedSpot2,
             $expectedImportedDenormalizedSpot3,
-            $expectedImportedDenormalizedSpot4
+            $expectedImportedDenormalizedSpot4,
         ];
 
         $expectedExistentSpots = [
@@ -165,7 +165,7 @@ class SpotImportConfirmHandlerTest extends TestCase
             ->shouldBeCalled()
             ->willReturn([$sheet1, $sheet2, $sheet3, $sheet4])
         ;
-        
+
         $this
             ->sheetRepository
             ->set($sheet1)
@@ -190,16 +190,14 @@ class SpotImportConfirmHandlerTest extends TestCase
             ->shouldBeCalled()
         ;
 
-
-
         $command = new SpotImportConfirm($this->event, $this->filename, 'fr');
-        
+
         $handler = new SpotImportConfirmHandler(
             $this->spotImporter->reveal(),
             $this->spotRepository->reveal(),
             $this->sheetRepository->reveal()
         );
-        
+
         $handler->handle($command);
     }
 }

@@ -22,7 +22,7 @@ class CreateHandlerTest extends TestCase
     public function testHandle()
     {
         $dateTime = new \DateTime();
-        $command = new Create(['fr' ,'en']);
+        $command = new Create(['fr', 'en']);
         $command->onCatalog = true;
         $command->onMeetingManagement = true;
         $command->onPrintPlanning = true;
@@ -42,9 +42,9 @@ class CreateHandlerTest extends TestCase
 
         $tipRepository->add(Argument::that(function (Tip $tip) {
             return
-                $tip->getTranslationTitle('locale_1') === 'title_1'
+                'title_1' === $tip->getTranslationTitle('locale_1')
                 &&
-                $tip->getTranslationContent('locale_1') === 'content_1';
+                'content_1' === $tip->getTranslationContent('locale_1');
         }))
         ->shouldBeCalled();
 

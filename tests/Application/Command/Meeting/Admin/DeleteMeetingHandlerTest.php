@@ -3,13 +3,14 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2017 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
 
 namespace Proximum\Vimeet\Tests\Application\Command\Meeting\Admin;
 
+use PHPUnit\Framework\TestCase;
 use Proximum\Vimeet\Application\Command\Meeting\Admin\DeleteMeeting;
 use Proximum\Vimeet\Application\Command\Meeting\Admin\DeleteMeetingHandler;
 use Proximum\Vimeet\Application\Event\Events;
@@ -22,7 +23,6 @@ use Proximum\Vimeet\Tests\Factory\SheetFactory;
 use Proximum\Vimeet\Tests\Factory\SlotFactory;
 use Proximum\Vimeet\Tests\Factory\SpotFactory;
 use Proximum\Vimeet\Tests\Factory\UserFactory;
-use PHPUnit\Framework\TestCase;
 
 class DeleteMeetingHandlerTest extends TestCase
 {

@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Tests\Application\Query\Event\Find;
 
+use PHPUnit\Framework\TestCase;
 use Proximum\Vimeet\Application\Components\Sheet\SheetInfoGuesser;
 use Proximum\Vimeet\Application\Query\Event\Find\MultipleSheetFoundViewQuery;
 use Proximum\Vimeet\Application\Query\Event\Find\MultipleSheetFoundViewQueryHandler;
@@ -17,7 +18,6 @@ use Proximum\Vimeet\Application\View\Event\Find\MultipleSheetsFoundView;
 use Proximum\Vimeet\Application\View\Event\Find\SheetFoundView;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Sheet;
-use PHPUnit\Framework\TestCase;
 
 class MultipleSheetFoundViewQueryHandlerTest extends TestCase
 {

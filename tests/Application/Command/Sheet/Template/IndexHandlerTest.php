@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of the vimeet project.
+ * This file is part of the Proximum Vimeet project.
  *
  * Copyright (C) Proximum
  *
@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Tests\Application\Command\Sheet\Template;
 
+use PHPUnit\Framework\TestCase;
 use Proximum\Vimeet\Application\Adapter\SheetIndexerInterface;
 use Proximum\Vimeet\Application\Command\Sheet\Template\Index;
 use Proximum\Vimeet\Application\Command\Sheet\Template\IndexHandler;
@@ -17,7 +18,6 @@ use Proximum\Vimeet\Domain\Model\Template\SheetTemplate;
 use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
 use Proximum\Vimeet\Tests\Factory\SheetFactory;
-use PHPUnit\Framework\TestCase;
 
 class IndexHandlerTest extends TestCase
 {

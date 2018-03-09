@@ -3,13 +3,14 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2016 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
 
 namespace Proximum\Vimeet\Tests\Application\Query\Navigation\Category;
 
+use PHPUnit\Framework\TestCase;
 use Proximum\Vimeet\Application\Query\Navigation\Category\ProgramViewQuery;
 use Proximum\Vimeet\Application\Query\Navigation\Category\ProgramViewQueryHandler;
 use Proximum\Vimeet\Application\View\Navigation\CategoryView;
@@ -22,7 +23,6 @@ use Proximum\Vimeet\Domain\Navigation\NavigationBuilderInterface;
 use Proximum\Vimeet\Domain\Repository\HappeningRepositoryInterface;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
 use Proximum\Vimeet\Tests\Factory\SheetFactory;
-use PHPUnit\Framework\TestCase;
 
 class ProgramViewQueryHandlerTest extends TestCase
 {
@@ -48,7 +48,7 @@ class ProgramViewQueryHandlerTest extends TestCase
 
         $happenings = [
             new Happening($event, new \DateTime(), new \DateTime(), $happeningCategoryTwo, []),
-            new Happening($event, new \DateTime(), new \DateTime(), $happeningCategoryOne, [])
+            new Happening($event, new \DateTime(), new \DateTime(), $happeningCategoryOne, []),
         ];
 
         //Expected
@@ -65,7 +65,7 @@ class ProgramViewQueryHandlerTest extends TestCase
         $navigationBuilder = $this->prophesize(NavigationBuilderInterface::class);
 
         $happeningsAccessChecker->allowedToAccess($event)->shouldBeCalled()->willReturn(true);
-        $happeningRepository->findListByEvent($event, "fr")->shouldBeCalled()->willReturn($happenings);
+        $happeningRepository->findListByEvent($event, 'fr')->shouldBeCalled()->willReturn($happenings);
 
         $programViewQueryHandler = new ProgramViewQueryHandler(
             $navigationBuilder->reveal(),

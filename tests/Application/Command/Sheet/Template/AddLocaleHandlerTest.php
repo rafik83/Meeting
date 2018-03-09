@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2015 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -13,9 +13,9 @@ namespace Proximum\Vimeet\Tests\Application\Command\Sheet\Template;
 use PHPUnit\Framework\TestCase;
 use Proximum\Vimeet\Application\Command\Sheet\Template\AddLocale;
 use Proximum\Vimeet\Application\Command\Sheet\Template\AddLocaleHandler;
+use Proximum\Vimeet\Application\Components\Sheet\Template\Exception\TemplateException;
 use Proximum\Vimeet\Domain\Model\Template\SheetTemplate;
 use Proximum\Vimeet\Domain\Repository\Template\SheetTemplateRepositoryInterface;
-use Proximum\Vimeet\Application\Components\Sheet\Template\Exception\TemplateException;
 
 class AddLocaleHandlerTest extends TestCase
 {
@@ -28,7 +28,7 @@ class AddLocaleHandlerTest extends TestCase
                 'component' => 'object',
                 'type'      => 'text',
                 'config'    => [
-                    'content' => ['fr' => 'Lorem ipsum']
+                    'content' => ['fr' => 'Lorem ipsum'],
                 ],
             ],
             '211b2168' => [
@@ -46,13 +46,12 @@ class AddLocaleHandlerTest extends TestCase
                                 'help'        => ['fr' => 'Ici le titre'],
                                 'length'      => 100,
                                 'required'    => true,
-                            ]
-                        ]
+                            ],
+                        ],
                     ],
                     [
-
-                    ]
-                ]
+                    ],
+                ],
             ],
         ], ['fr'], 'fr', $createdAt);
 
@@ -79,13 +78,12 @@ class AddLocaleHandlerTest extends TestCase
                                 'help'        => ['en' => null, 'fr' => 'Ici le titre'],
                                 'length'      => 100,
                                 'required'    => true,
-                            ]
-                        ]
+                            ],
+                        ],
                     ],
                     [
-
-                    ]
-                ]
+                    ],
+                ],
             ],
         ], ['fr', 'en'], 'fr', $createdAt);
 
@@ -108,7 +106,7 @@ class AddLocaleHandlerTest extends TestCase
                 'component' => 'object',
                 'type'      => 'text',
                 'config'    => [
-                    'content' => ['fr' => 'Lorem ipsum']
+                    'content' => ['fr' => 'Lorem ipsum'],
                 ],
             ],
             '211b2168' => [
@@ -126,13 +124,12 @@ class AddLocaleHandlerTest extends TestCase
                                 'help'        => ['fr' => 'Ici le titre'],
                                 'length'      => 100,
                                 'required'    => true,
-                            ]
-                        ]
+                            ],
+                        ],
                     ],
                     [
-
-                    ]
-                ]
+                    ],
+                ],
             ],
         ], ['fr'], 'fr', new \DateTime());
 

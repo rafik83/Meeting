@@ -10,7 +10,6 @@
 
 namespace Proximum\Vimeet\Tests\Domain\Product;
 
-use function Clue\StreamFilter\remove;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Prophecy\ObjectProphecy;
 use Proximum\Vimeet\Domain\Model\Event;

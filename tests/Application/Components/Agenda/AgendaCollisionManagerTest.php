@@ -170,7 +170,7 @@ class AgendaCollisionManagerTest extends TestCase
             2 => $massView3->reveal(),
             3 => $massView4->reveal(),
             4 => $massView5->reveal(),
-            5 => $massView6->reveal()
+            5 => $massView6->reveal(),
         ];
         $expectedMassViews = [
             0 => $massView1->reveal(),

@@ -3,20 +3,20 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2016 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
 
 namespace Proximum\Vimeet\Tests\Domain\Model\Account;
 
+use PHPUnit\Framework\TestCase;
 use Proximum\Vimeet\Domain\Account\Synchronizer;
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Repository\UserRepositoryInterface;
 use Proximum\Vimeet\Domain\Template\Block;
-use Proximum\Vimeet\Domain\Template\TemplateObject;
 use Proximum\Vimeet\Domain\Template\TemplateData;
-use PHPUnit\Framework\TestCase;
+use Proximum\Vimeet\Domain\Template\TemplateObject;
 
 class SynchronizerTest extends TestCase
 {

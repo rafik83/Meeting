@@ -83,7 +83,6 @@ class UserEventTokenGeneratorTest extends TestCase
         );
         $result = $generator->getUserEventTokenForConfirmAgenda($this->event->reveal(), $this->user->reveal(), $type);
 
-
         $this->assertEquals($userEventToken, $result);
     }
 

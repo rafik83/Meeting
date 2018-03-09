@@ -3,17 +3,17 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2015 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
 
 namespace Proximum\Vimeet\Tests\Domain\Template;
 
+use PHPUnit\Framework\TestCase;
 use Proximum\Vimeet\Domain\Template\Block;
 use Proximum\Vimeet\Domain\Template\Exception\ObjectNotFoundException;
 use Proximum\Vimeet\Domain\Template\TemplateObject\EditableText;
-use PHPUnit\Framework\TestCase;
 
 class BlockTest extends TestCase
 {

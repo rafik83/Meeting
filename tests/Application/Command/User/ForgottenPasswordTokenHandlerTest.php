@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2015 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -11,19 +11,19 @@
 namespace Proximum\Vimeet\Tests\Application\Command\User;
 
 use DateTime;
+use PHPUnit\Framework\TestCase;
 use Proximum\Vimeet\Application\Command\User\ForgottenPassword;
 use Proximum\Vimeet\Application\Command\User\ForgottenPasswordHandler;
 use Proximum\Vimeet\Application\Components\Token\UserForgottenPasswordTokenGenerator;
 use Proximum\Vimeet\Application\Event\Events;
 use Proximum\Vimeet\Application\Event\User\ResetPasswordEvent;
 use Proximum\Vimeet\Application\Exception\User\EmailDoesNotExistException;
-use Proximum\Vimeet\Domain\Model\User\ForgottenPasswordToken;
 use Proximum\Vimeet\Domain\Model\User;
+use Proximum\Vimeet\Domain\Model\User\ForgottenPasswordToken;
 use Proximum\Vimeet\Domain\Repository\User\ForgottenPasswordTokenRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\UserRepositoryInterface;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
-use PHPUnit\Framework\TestCase;
 
 class ForgottenPasswordTokenHandlerTest extends TestCase
 {

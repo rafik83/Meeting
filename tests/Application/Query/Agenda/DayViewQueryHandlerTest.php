@@ -3,17 +3,18 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2016 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
 
 namespace Proximum\Vimeet\Tests\Application\Query\Agenda;
 
+use PHPUnit\Framework\TestCase;
 use Prophecy\Prophecy\ObjectProphecy;
+use Proximum\Vimeet\Application\Components\Agenda\AgendaCollisionManager;
 use Proximum\Vimeet\Application\Query\Agenda\AvailableSheets\AvailableSlotsByParticipantAndDayQuery;
 use Proximum\Vimeet\Application\Query\Agenda\AvailableSheets\AvailableSlotsByParticipantAndDayQueryHandler;
-use Proximum\Vimeet\Application\Components\Agenda\AgendaCollisionManager;
 use Proximum\Vimeet\Application\Query\Agenda\CancelAttendanceUnavailabilityViewQuery;
 use Proximum\Vimeet\Application\Query\Agenda\CancelAttendanceUnavailabilityViewQueryHandler;
 use Proximum\Vimeet\Application\Query\Agenda\DayViewQuery;
@@ -50,7 +51,6 @@ use Proximum\Vimeet\Tests\Factory\EventFactory;
 use Proximum\Vimeet\Tests\Factory\ParticipantFactory;
 use Proximum\Vimeet\Tests\Factory\SheetFactory;
 use Proximum\Vimeet\Tests\Factory\UserFactory;
-use PHPUnit\Framework\TestCase;
 
 class DayViewQueryHandlerTest extends TestCase
 {
@@ -190,7 +190,7 @@ class DayViewQueryHandlerTest extends TestCase
         $this->availableSlotsByParticipantAndDayQueryHandler = $this->prophesize(AvailableSlotsByParticipantAndDayQueryHandler::class);
         $this->cancelAttendanceUnavailabilityViewQueryHandler = $this->prophesize(CancelAttendanceUnavailabilityViewQueryHandler::class);
     }
-    
+
     public function testHandle()
     {
         // Mock
@@ -277,7 +277,6 @@ class DayViewQueryHandlerTest extends TestCase
             ->shouldBeCalled()
             ->willReturn([]);
 
-
         $result = $handler->handle(new DayViewQuery(
             $this->day,
             $this->sheet,
@@ -329,7 +328,6 @@ class DayViewQueryHandlerTest extends TestCase
             [$availableSlotViews],
             null
         );
-
 
         // Mock
         $happeningViewQueryHandler = $this->prophesize(HappeningViewQueryHandler::class);

@@ -3,13 +3,14 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2016 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
 
 namespace Proximum\Vimeet\Tests\Domain\Transaction;
 
+use PHPUnit\Framework\TestCase;
 use Proximum\Vimeet\Application\Event\Events;
 use Proximum\Vimeet\Application\Event\Transaction\TransactionConfirmedEvent;
 use Proximum\Vimeet\Domain\Model\Sheet;
@@ -21,7 +22,6 @@ use Proximum\Vimeet\Domain\Repository\TransactionRepositoryInterface;
 use Proximum\Vimeet\Domain\Transaction\TransactionManager;
 use Proximum\Vimeet\Infrastructure\Adapter\DelayedEventDispatcher;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
-use PHPUnit\Framework\TestCase;
 
 class TransactionManagerTest extends TestCase
 {

@@ -10,12 +10,12 @@
 
 namespace Application\Command\Package;
 
+use PHPUnit\Framework\TestCase;
 use Proximum\Vimeet\Application\Command\Package\Duplicate;
 use Proximum\Vimeet\Application\Command\Package\DuplicateHandler;
 use Proximum\Vimeet\Domain\Model\Package;
 use Proximum\Vimeet\Domain\Package\Duplicator;
 use Proximum\Vimeet\Domain\Repository\PackageRepositoryInterface;
-use PHPUnit\Framework\TestCase;
 
 class DuplicateHandlerTest extends TestCase
 {

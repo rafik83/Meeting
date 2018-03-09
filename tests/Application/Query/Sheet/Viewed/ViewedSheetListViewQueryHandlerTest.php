@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of the vimeet project.
+ * This file is part of the Proximum Vimeet project.
  *
  * Copyright (C) Proximum
  *
@@ -10,13 +10,13 @@
 
 namespace Application\Query\Sheet\Viewed;
 
+use PHPUnit\Framework\TestCase;
 use Proximum\Vimeet\Application\Query\Sheet\Viewed\ViewedSheetListViewQuery;
 use Proximum\Vimeet\Application\Query\Sheet\Viewed\ViewedSheetListViewQueryHandler;
 use Proximum\Vimeet\Domain\Model\Sheet\SheetViewed;
 use Proximum\Vimeet\Domain\Repository\Sheet\SheetViewedRepositoryInterface;
 use Proximum\Vimeet\Tests\Factory\SheetFactory;
 use Proximum\Vimeet\Tests\Factory\UserFactory;
-use PHPUnit\Framework\TestCase;
 
 class ViewedSheetListViewQueryHandlerTest extends TestCase
 {

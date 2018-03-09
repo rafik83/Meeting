@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2017 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -37,12 +37,11 @@ class InvoiceNumberGeneratorTest extends TestCase
      * @var InvoiceNumberGenerator
      */
     private $invoiceNumberGenerator;
-    
+
     /**
      * @var InvoiceRepositoryInterface
      */
     private $invoiceRepository;
-
 
     public function setUp()
     {
@@ -59,7 +58,7 @@ class InvoiceNumberGeneratorTest extends TestCase
         $this->assertEquals(
             $expectedInvoiceIncrement,
             $invoiceNumber,
-            "Invoice increment should be :" . $expectedInvoiceIncrement
+            'Invoice increment should be :' . $expectedInvoiceIncrement
         );
     }
 
@@ -85,12 +84,12 @@ class InvoiceNumberGeneratorTest extends TestCase
             'some-data',
             $this->datetime
         );
-        $expectedInvoiceIncrement = "0889";
+        $expectedInvoiceIncrement = '0889';
         $invoiceIncrement = $this->invoiceNumberGenerator->generate($invoice);
         $this->assertEquals(
             $expectedInvoiceIncrement,
             $invoiceIncrement,
-            "Invoice increment should be :" . $expectedInvoiceIncrement
+            'Invoice increment should be :' . $expectedInvoiceIncrement
         );
     }
 
@@ -98,13 +97,13 @@ class InvoiceNumberGeneratorTest extends TestCase
     {
         $prefix  = new Prefix('Asddays', 'As');
         $invoice = $this->invoiceRepository->getLastInvoiceForEventPrefix($prefix, 2017);
-    
-        $expectedInvoiceIncrement = "0001";
+
+        $expectedInvoiceIncrement = '0001';
         $invoiceNumber            = $this->invoiceNumberGenerator->generate($invoice);
         $this->assertEquals(
             $expectedInvoiceIncrement,
             $invoiceNumber,
-            "Invoice number should be :" . $expectedInvoiceIncrement
+            'Invoice number should be :' . $expectedInvoiceIncrement
         );
     }
 }

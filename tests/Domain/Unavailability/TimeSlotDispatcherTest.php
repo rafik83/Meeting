@@ -3,13 +3,14 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2016 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
 
 namespace Proximum\Vimeet\Tests\Domain\Unavailability;
 
+use PHPUnit\Framework\TestCase;
 use Proximum\Vimeet\Application\Adapter\JobQueueInterface;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Invoice\Prefix;
@@ -22,7 +23,6 @@ use Proximum\Vimeet\Domain\Repository\Unavailability\MassRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\UserRepositoryInterface;
 use Proximum\Vimeet\Domain\Unavailability\Exception\UnableToDispatchException;
 use Proximum\Vimeet\Domain\Unavailability\TimeSlotDispatcher;
-use PHPUnit\Framework\TestCase;
 
 class TimeSlotDispatcherTest extends TestCase
 {

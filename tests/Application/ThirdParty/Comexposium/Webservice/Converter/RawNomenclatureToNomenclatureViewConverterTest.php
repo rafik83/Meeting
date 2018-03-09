@@ -1,10 +1,11 @@
 <?php
 
-/**
- * Created by PhpStorm.
- * User: richard
- * Date: 22/02/2018
- * Time: 21:16
+/*
+ * This file is part of the Proximum Vimeet project.
+ *
+ * Copyright (C) Proximum
+ *
+ * @author Elao <contact@elao.com>
  */
 
 namespace Proximum\Vimeet\Tests\Application\ThirdParty\Comexposium\Webservice\Converter;
@@ -36,10 +37,10 @@ class RawNomenclatureToNomenclatureViewConverterTest extends TestCase
         $nomenclatureLibTradEn->traduction = 'Vibrating rollers';
 
         $rawNomenclature = new \stdClass();
-        $rawNomenclature->reference = "21300";
-        $rawNomenclature->code = "21300";
+        $rawNomenclature->reference = '21300';
+        $rawNomenclature->code = '21300';
         $rawNomenclature->supprime = false;
-        $rawNomenclature->referenceNomenclatureManifestationParent = "999";
+        $rawNomenclature->referenceNomenclatureManifestationParent = '999';
         $rawNomenclature->nomenclatureLibTrad = [$nomenclatureLibTradFr, $nomenclatureLibTradEn];
 
         $rawNomenclatureToNomenclatureViewConverter = new RawNomenclatureToNomenclatureViewConverter();

@@ -1,15 +1,16 @@
 <?php
 
 /*
- * This file is part of the vimeet project.
+ * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2017 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
 
 namespace Proximum\Vimeet\Tests\Domain\Service\SheetsGroup;
 
+use PHPUnit\Framework\TestCase;
 use Proximum\Vimeet\Application\Exception\Sheet\SheetNotFoundException;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Sheet;
@@ -20,16 +21,15 @@ use Proximum\Vimeet\Domain\Service\SheetsGroup\GroupNameResolver;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
 use Proximum\Vimeet\Tests\Factory\GroupFactory;
 use Proximum\Vimeet\Tests\Factory\UserFactory;
-use PHPUnit\Framework\TestCase;
 
 class GroupNameResolverTest extends TestCase
 {
     /** @var Event $event */
     public $event;
-    
+
     /** @var User $user */
     public $user;
-    
+
     /** @var \DateTimeInterface */
     public $dateTime;
 
@@ -41,8 +41,7 @@ class GroupNameResolverTest extends TestCase
 
     /** @var GroupNameResolver */
     public $resolver;
-    
-    
+
     public function setUp()
     {
         $this->event    = EventFactory::createEvent();
@@ -56,7 +55,7 @@ class GroupNameResolverTest extends TestCase
             $this->sheetRepository->reveal()
         );
     }
-    
+
     public function testResolveForGroup()
     {
         $event      = $this->event;
@@ -100,7 +99,7 @@ class GroupNameResolverTest extends TestCase
 
         $this->resolver->resolve($event, $user);
     }
-    
+
     public function testResolveWithPreloadedSheets()
     {
         $sheet      = $this->prophesize(Sheet::class);

@@ -21,9 +21,9 @@ class UserFactory
      */
     public static function create($email = null)
     {
-        $email = $email === null ? 'email@email.com' : $email;
+        $email = null === $email ? 'email@email.com' : $email;
 
         // p@ssw0rd
-        return new User($email, "0D/UTZan1ZbStvnSEBj6flRGgQ59fyeSV9dnIT+5", "q5sEATy5kfjoDYZqxBP7vNVJwqQ=", 'fr');
+        return new User($email, '0D/UTZan1ZbStvnSEBj6flRGgQ59fyeSV9dnIT+5', 'q5sEATy5kfjoDYZqxBP7vNVJwqQ=', 'fr');
     }
 }

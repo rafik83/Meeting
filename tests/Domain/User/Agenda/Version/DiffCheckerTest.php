@@ -197,7 +197,7 @@ class DiffCheckerTest extends TestCase
         return [
             [$version, 1, ['request' => 1, 'slot' => 11, 'spot' => 10], true],
             [$version, 2, ['request' => 2, 'slot' => 90, 'spot' => 12], true],
-            [$version, 3, ['request' => 3, 'slot' => 1123, 'spot' => 667], false]
+            [$version, 3, ['request' => 3, 'slot' => 1123, 'spot' => 667], false],
         ];
     }
 }

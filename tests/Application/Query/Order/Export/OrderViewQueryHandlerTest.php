@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Tests\Application\Query\Order\Export;
 
+use PHPUnit\Framework\TestCase;
 use Proximum\Vimeet\Application\Command\Planning\SheetInfoGuesserCache;
 use Proximum\Vimeet\Application\Query\Order\Export\BillingInfoViewQuery;
 use Proximum\Vimeet\Application\Query\Order\Export\BillingInfoViewQueryHandler;
@@ -31,8 +32,6 @@ use Proximum\Vimeet\Domain\Model\Invoice\Prefix;
 use Proximum\Vimeet\Domain\Model\Order;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
-use Proximum\Vimeet\Tests\Factory\InvoiceFactory;
-use PHPUnit\Framework\TestCase;
 
 class OrderViewQueryHandlerTest extends TestCase
 {

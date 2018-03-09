@@ -114,7 +114,7 @@ class RawRegistrationToRegistrationViewConverterTest extends TestCase
                 new NomenclatureItemView('88898', null, []),
             ],
             [
-                new RegistrationDescriptionView('Scrap iron recycling machines', 'en')
+                new RegistrationDescriptionView('Scrap iron recycling machines', 'en'),
             ]
         );
 

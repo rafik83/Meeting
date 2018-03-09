@@ -75,10 +75,10 @@ class SheetViewNormalizerTest extends TestCase
         $serializer = new Serializer(
             [
                 new SheetViewNormalizer(),
-                new ObjectNormalizer()
+                new ObjectNormalizer(),
             ],
             [
-                new CsvEncoder()
+                new CsvEncoder(),
             ]
         );
 

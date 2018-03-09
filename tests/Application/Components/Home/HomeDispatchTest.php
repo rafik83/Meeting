@@ -10,6 +10,8 @@
 
 namespace Proximum\Vimeet\Tests\Application\Components\Home;
 
+use PHPUnit\Framework\TestCase;
+use Prophecy\Prophecy\ObjectProphecy;
 use Proximum\Vimeet\Application\Components\Home\HomeDispatch;
 use Proximum\Vimeet\Application\View\Home\HomeDispatchView;
 use Proximum\Vimeet\Domain\Model\Event;
@@ -18,8 +20,6 @@ use Proximum\Vimeet\Domain\Model\Sheet\Group;
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Repository\Sheet\GroupRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
-use Prophecy\Prophecy\ObjectProphecy;
-use PHPUnit\Framework\TestCase;
 
 class HomeDispatchTest extends TestCase
 {

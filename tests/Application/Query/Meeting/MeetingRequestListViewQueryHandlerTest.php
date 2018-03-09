@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of the vimeet project.
+ * This file is part of the Proximum Vimeet project.
  *
  * Copyright (C) Proximum
  *
@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Tests\Application\Query\Meeting;
 
+use PHPUnit\Framework\TestCase;
 use Proximum\Vimeet\Application\Query\Meeting\MeetingRequestListViewQuery;
 use Proximum\Vimeet\Application\Query\Meeting\MeetingRequestListViewQueryHandler;
 use Proximum\Vimeet\Application\Query\Meeting\MeetingRequestViewQuery;
@@ -29,7 +30,6 @@ use Proximum\Vimeet\Domain\Model\Type;
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Repository\Meeting\RequestRepositoryInterface;
 use Proximum\Vimeet\Domain\User\Phone\ValidationRequiredChecker;
-use PHPUnit\Framework\TestCase;
 
 class MeetingRequestListViewQueryHandlerTest extends TestCase
 {

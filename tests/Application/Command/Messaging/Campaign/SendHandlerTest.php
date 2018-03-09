@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Tests\Application\Command\Messaging\Campaign;
 
+use PHPUnit\Framework\TestCase;
 use Proximum\Vimeet\Application\Adapter\JobQueueInterface;
 use Proximum\Vimeet\Application\Command\Messaging\Campaign\Send;
 use Proximum\Vimeet\Application\Command\Messaging\Campaign\SendHandler;
@@ -19,7 +20,6 @@ use Proximum\Vimeet\Domain\Model\Messaging\Message;
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
 use Proximum\Vimeet\Tests\Factory\SheetFactory;
-use PHPUnit\Framework\TestCase;
 
 class SendHandlerTest extends TestCase
 {

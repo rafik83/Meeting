@@ -3,15 +3,15 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2015 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
 
 namespace Proximum\Vimeet\Tests\Domain\Model;
 
-use Proximum\Vimeet\Domain\Model\Nomenclature;
 use PHPUnit\Framework\TestCase;
+use Proximum\Vimeet\Domain\Model\Nomenclature;
 
 class NomenclatureTest extends TestCase
 {
@@ -22,28 +22,28 @@ class NomenclatureTest extends TestCase
                 'label' => ['fr' => 'Compétences Aéronautiques', 'en' => 'Aeronautical skills'],
                 'children' => [
                     'ecc44d0d' => [
-                        'label' => [ 'fr' => 'Ingénierie & Bureau d\'études', 'en' => 'Engineering and Engineering consulting firm' ],
+                        'label' => ['fr' => 'Ingénierie & Bureau d\'études', 'en' => 'Engineering and Engineering consulting firm'],
                         'children' => [
-                            'c93def9a' => [ 'label' => [ 'fr' => 'Modélisation et calculs', 'en' => 'Modelling and calculations' ] ],
-                            '34eab90c' => [ 'label' => [ 'fr' => 'Expérimentation & réalisation de prototypes', 'en' => 'Experiment and realization of prototypes' ] ],
+                            'c93def9a' => ['label' => ['fr' => 'Modélisation et calculs', 'en' => 'Modelling and calculations']],
+                            '34eab90c' => ['label' => ['fr' => 'Expérimentation & réalisation de prototypes', 'en' => 'Experiment and realization of prototypes']],
                         ],
                     ],
                     '32ef03cc' => [
-                        'label' => [ 'fr' => 'Informatique', 'en' => 'Computing' ],
+                        'label' => ['fr' => 'Informatique', 'en' => 'Computing'],
                         'children' => [
-                            'cab0332d' => [ 'label' => [ 'en' => 'Modelling and simulation' ] ]
+                            'cab0332d' => ['label' => ['en' => 'Modelling and simulation']],
                         ],
                     ],
                     '2ec033da' => [
-                        'label' => [ 'fr' => 'Instrumentation Appareils de mesures scientifiques in-situ', 'en' => 'Instrumentation in situ scientific Measuring devices' ],
+                        'label' => ['fr' => 'Instrumentation Appareils de mesures scientifiques in-situ', 'en' => 'Instrumentation in situ scientific Measuring devices'],
                         'children' => [
-                            'aaa34eb9' => [ 'label' => [ 'fr' => 'Appareils de mesures scientifiques in-situ', 'en' => 'In situ scientific measuring devices' ] ],
-                            'bdec99a0' => [ 'label' => [ 'fr' => 'Prototypage', 'en' => 'Prototypage' ] ],
-                            'b35ae9c7' => [ 'label' => [ 'fr' => 'Technologie laser', 'en' => 'Laser technology' ] ],
-                        ]
-                    ]
-                ]
-            ]
+                            'aaa34eb9' => ['label' => ['fr' => 'Appareils de mesures scientifiques in-situ', 'en' => 'In situ scientific measuring devices']],
+                            'bdec99a0' => ['label' => ['fr' => 'Prototypage', 'en' => 'Prototypage']],
+                            'b35ae9c7' => ['label' => ['fr' => 'Technologie laser', 'en' => 'Laser technology']],
+                        ],
+                    ],
+                ],
+            ],
         ]);
 
         // Existing label

@@ -3,15 +3,15 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2015 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
 
 namespace Proximum\Vimeet\Tests\Domain\Model\Sheet;
 
-use Proximum\Vimeet\Domain\Model\Template\SheetTemplate;
 use PHPUnit\Framework\TestCase;
+use Proximum\Vimeet\Domain\Model\Template\SheetTemplate;
 
 class TemplateTest extends TestCase
 {
@@ -23,7 +23,7 @@ class TemplateTest extends TestCase
                 'component' => 'object',
                 'type'      => 'text',
                 'config'    => [
-                    'content' => ['fr' => 'Lorem ipsum']
+                    'content' => ['fr' => 'Lorem ipsum'],
                 ],
             ],
             '211b2168' => [
@@ -41,13 +41,12 @@ class TemplateTest extends TestCase
                                 'help'        => ['fr' => 'Ici le titre'],
                                 'length'      => 100,
                                 'required'    => true,
-                            ]
-                        ]
+                            ],
+                        ],
                     ],
                     [
-
-                    ]
-                ]
+                    ],
+                ],
             ],
         ], ['fr'], 'fr', $createdAt);
 
@@ -74,13 +73,12 @@ class TemplateTest extends TestCase
                                 'help'        => ['en' => null, 'fr' => 'Ici le titre'],
                                 'length'      => 100,
                                 'required'    => true,
-                            ]
-                        ]
+                            ],
+                        ],
                     ],
                     [
-
-                    ]
-                ]
+                    ],
+                ],
             ],
         ], ['fr', 'en'], 'fr', $createdAt);
 
