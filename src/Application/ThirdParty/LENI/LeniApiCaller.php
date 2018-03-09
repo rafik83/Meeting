@@ -85,17 +85,20 @@ class LeniApiCaller
      * @param Event $event
      * @param mixed $data
      *
-     * @return Object
+     * @return array
      *
      * @throws \LogicException
      * @throws LeniApiServerException
      */
-    public function get(Event $event, mixed $data): Object
+    public function get(?Event $event, ?mixed $data): array
     {
         $authorizedModes = [Type::TYPE_LENI_MODE_GET_VALUE, Type::TYPE_LENI_MODE_BOTH_VALUE];
-        $leniUserParameter  = $this->extraParameterRepository->findByEventAndType($event, Type::TYPE_LENI_USER);
-        $leniEventParameter = $this->extraParameterRepository->findByEventAndType($event, Type::TYPE_LENI_EVENT);
-        $leniModeParameter  = $this->extraParameterRepository->findByEventAndType($event, Type::TYPE_LENI_MODE);
+//        $leniUserParameter  = $this->extraParameterRepository->findByEventAndType($event, Type::TYPE_LENI_USER);
+//        $leniEventParameter = $this->extraParameterRepository->findByEventAndType($event, Type::TYPE_LENI_EVENT);
+//        $leniModeParameter  = $this->extraParameterRepository->findByEventAndType($event, Type::TYPE_LENI_MODE);
+        $leniUserParameter  = 'preneron@vi-meet.com:apreneron';
+        $leniEventParameter = '2ff82e18-9105-4025-9407-8cf2274416a7';
+        $leniModeParameter  = 'get';
 
         $isAuthorizedMode = $leniModeParameter !== null && \in_array($leniModeParameter, $authorizedModes, true);
 
@@ -105,8 +108,8 @@ class LeniApiCaller
             );
         }
 
-        $body    = $this->getBody($leniEventParameter->getValue(), $leniUserParameter->getValue(), $data);
-        $headers = $this->getHeaders($leniUserParameter->getValue(), $body);
+        $body    = $this->getBody($leniEventParameter, $data);
+        $headers = $this->getHeaders($leniUserParameter, $body);
 
         try {
             $jsonResponse = $this->httpAdapter->post(LeniConstants::LENI_GET_ENDPOINT, $headers, $body);
@@ -117,14 +120,12 @@ class LeniApiCaller
         return json_decode($jsonResponse->body, true);
     }
 
-    private function getBody(string $idEvt, string $idUser, mixed $data): string
+    private function getBody(string $idEvt, ?mixed $data): string
     {
-        // @todo en dur pour tester
+        // En dur pour les tests
         return json_encode(
             [
                 'idEvt'  => $idEvt,
-                'lang' => ['fr'],
-                'app' => "B",
                 'filters' => [
                     [
                         'selectedFieldId' => 'Inscrit',
