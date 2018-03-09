@@ -10,8 +10,6 @@
 
 namespace Proximum\Vimeet\Application\Command\Admin;
 
-use DateTimeInterface;
-
 class UpdateLastLogin
 {
     /**
@@ -20,17 +18,10 @@ class UpdateLastLogin
     public $email;
 
     /**
-     * @var DateTimeInterface
+     * @param string $email
      */
-    public $date;
-
-    /**
-     * @param string            $email
-     * @param DateTimeInterface $date
-     */
-    public function __construct($email, DateTimeInterface $date)
+    public function __construct($email)
     {
         $this->email = $email;
-        $this->date  = $date;
     }
 }

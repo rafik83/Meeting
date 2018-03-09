@@ -339,10 +339,10 @@ services:
         class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\EventListener\LoginEventListener
         arguments:
             - '@vimeet_infrastructure.repository.event_repository'
-            - '@vimeet_infrastructure.repository.sheet_repository'
             - '@request_stack'
             - '@command.admin.update_last_login_handler'
             - '@doctrine.orm.entity_manager'
+            - '@Proximum\Vimeet\Application\Command\Sheet\LastLogin\UpdateLastLoginHandler'
         tags:
             - { name: kernel.event_listener, event: security.authentication.success, method: onLoginSuccess }
     event_listener.registration_step_event_subscriber:

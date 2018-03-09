@@ -92,9 +92,9 @@ interface TypeRepositoryInterface
     /**
      * @param int $id
      *
-     * @return Type
+     * @return null|Type
      */
-    public function getById($id);
+    public function getById($id): ?Type;
 
     /**
      * @param int[] $ids

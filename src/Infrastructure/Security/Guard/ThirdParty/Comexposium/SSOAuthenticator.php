@@ -11,8 +11,11 @@
 namespace Proximum\Vimeet\Infrastructure\Security\Guard\ThirdParty\Comexposium;
 
 use Proximum\Vimeet\Application\Adapter\RouterInterface;
+use Proximum\Vimeet\Application\Command\Sheet\LastLogin\UpdateLastLogin;
+use Proximum\Vimeet\Application\Command\Sheet\LastLogin\UpdateLastLoginHandler;
 use Proximum\Vimeet\Application\ThirdParty\Comexposium\SSO\Application\Query\SSOChecker;
 use Proximum\Vimeet\Application\ThirdParty\Comexposium\SSO\Application\Query\SSOCheckerHandler;
+use Proximum\Vimeet\Application\ThirdParty\Comexposium\SSO\Application\Query\SSORedirectionAfterLoginResolver;
 use Proximum\Vimeet\Application\ThirdParty\Comexposium\SSO\Exception\SSOException;
 use Proximum\Vimeet\Domain\Event\EventByHostResolver;
 use Proximum\Vimeet\Domain\Event\ExtraParameter\Type;
@@ -32,7 +35,7 @@ use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Core\User\UserProviderInterface;
 use Symfony\Component\Security\Guard\AbstractGuardAuthenticator;
 
-final class SSOAuthenticator extends AbstractGuardAuthenticator
+class SSOAuthenticator extends AbstractGuardAuthenticator
 {
     /** @var SSOCheckerHandler */
     private $SSOCheckerHandler;
@@ -52,21 +55,21 @@ final class SSOAuthenticator extends AbstractGuardAuthenticator
     /** @var ExtraParameterRepositoryInterface */
     private $extraParameterRepository;
 
-    /**
-     * @param SSOCheckerHandler                 $SSOCheckerHandler
-     * @param EventByHostResolver               $eventByHostResolver
-     * @param ExtraParameterRepositoryInterface $extraParameterRepository
-     * @param FlashBagInterface                 $flashBag
-     * @param RouterInterface                   $router
-     * @param SSOAuthenticationSuccessHandler   $SSOAuthenticationSuccessHandler
-     */
+    /** @var SSORedirectionAfterLoginResolver */
+    private $SSORedirectionAfterLoginResolver;
+
+    /** @var UpdateLastLoginHandler */
+    private $updateLastLoginHandler;
+
     public function __construct(
         SSOCheckerHandler $SSOCheckerHandler,
         EventByHostResolver $eventByHostResolver,
         ExtraParameterRepositoryInterface $extraParameterRepository,
         FlashBagInterface $flashBag,
         RouterInterface $router,
-        SSOAuthenticationSuccessHandler $SSOAuthenticationSuccessHandler
+        SSOAuthenticationSuccessHandler $SSOAuthenticationSuccessHandler,
+        SSORedirectionAfterLoginResolver $SSORedirectionAfterLoginResolver,
+        UpdateLastLoginHandler $updateLastLoginHandler
     ) {
         $this->SSOCheckerHandler = $SSOCheckerHandler;
         $this->eventByHostResolver = $eventByHostResolver;
@@ -74,6 +77,8 @@ final class SSOAuthenticator extends AbstractGuardAuthenticator
         $this->flashBag = $flashBag;
         $this->router = $router;
         $this->SSOAuthenticationSuccessHandler = $SSOAuthenticationSuccessHandler;
+        $this->SSORedirectionAfterLoginResolver = $SSORedirectionAfterLoginResolver;
+        $this->updateLastLoginHandler = $updateLastLoginHandler;
     }
 
     /**
@@ -103,12 +108,17 @@ final class SSOAuthenticator extends AbstractGuardAuthenticator
             throw new BadRequestHttpException('Missing request parameter "token".');
         }
 
-        $email = $request->query->get('email');
+        if (!$request->query->has('isExhibitor')) {
+            throw new BadRequestHttpException('Missing request parameter "isExhibitor".');
+        }
 
+        $email = $request->query->get('email');
         $token = $request->query->get('token');
+        $isExhibitor = (bool) $request->query->get('isExhibitor');
+        $locale = $request->getLocale();
 
         try {
-            $event = $this->eventByHostResolver->resolveEventFromHostAndLocale($request->getHost(), $request->getLocale());
+            $event = $this->eventByHostResolver->resolveEventFromHostAndLocale($request->getHost(), $locale);
         } catch (EventException $exception) {
             throw new BadRequestHttpException('Missing host for "event".');
         }
@@ -121,6 +131,8 @@ final class SSOAuthenticator extends AbstractGuardAuthenticator
             'email' => $email,
             'token' => $token,
             'event' => $event,
+            'isExhibitor' => $isExhibitor,
+            'locale' => $locale,
         ];
     }
 
@@ -136,11 +148,13 @@ final class SSOAuthenticator extends AbstractGuardAuthenticator
                 new SSOChecker(
                     $credentials['event'],
                     $credentials['email'],
-                    $credentials['token']
+                    $credentials['token'],
+                    $credentials['isExhibitor'],
+                    $credentials['locale']
                 )
             );
         } catch (SSOException $exception) {
-            throw new AuthenticationException('SSO not possible');
+            throw new AuthenticationException('SSO not possible', $exception->getCode(), $exception);
         }
     }
 
@@ -174,9 +188,32 @@ final class SSOAuthenticator extends AbstractGuardAuthenticator
 
     /**
      * {@inheritdoc}
+     * @throws \InvalidArgumentException
+     * @throws BadRequestHttpException
      */
     public function onAuthenticationSuccess(Request $request, TokenInterface $token, $providerKey)
     {
+        try {
+            $event = $this->eventByHostResolver->resolveEventFromHostAndLocale(
+                $request->getHost(),
+                $request->getLocale()
+            );
+        } catch (EventException $exception) {
+            throw new BadRequestHttpException('Missing host for "event".');
+        }
+
+        $user = $token->getUser();
+
+        $generatedUrl = $this->SSORedirectionAfterLoginResolver->handle($event, $user);
+
+        if (null !== $generatedUrl) {
+            return new RedirectResponse($generatedUrl);
+        }
+
+        // if user is redirected (see previous lines) we consider that the user has no sheet
+        // so, update sheet(s) last login only for not redirected user
+        $this->updateLastLoginHandler->handle(new UpdateLastLogin($event, $user));
+
         return $this->SSOAuthenticationSuccessHandler->onAuthenticationSuccess($request, $token);
     }
 

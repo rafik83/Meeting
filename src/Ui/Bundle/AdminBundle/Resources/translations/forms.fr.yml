@@ -261,6 +261,7 @@ form.extra_parameter_create.children.name.label: Nom
 form.extra_parameter_create.children.submit.label: Enregistrer
 form.extra_parameter_create.children.type.choices.comexposium_event_reference: 'Comexposium : Référence manifestation'
 form.extra_parameter_create.children.type.choices.comexposium_exhibitor_type_id: 'Comexposium : Id du type de participation Exposant concerné'
+form.extra_parameter_create.children.type.choices.comexposium_visitor_type_id: 'Comexposium : Id du type de participation Visiteur concerné'
 form.extra_parameter_create.children.type.choices.comexposium_sso_application: 'Comexposium SSO Application'
 form.extra_parameter_create.children.type.choices.comexposium_sso_enabled: 'Activer le SSO Comexposium'
 form.extra_parameter_create.children.type.choices.comexposium_sso_salon: 'Comexposium SSO Salon'
