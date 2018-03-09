@@ -148,5 +148,5 @@ form.user_availability_confirmation.children.confirm.label: 'Confirmer vos dispo
 form.user_event_phone_validate_code.children.code.label: 'Code de confirmation reçu'
 form.user_event_phone_validate_code.children.confirm.label: Confirmer
 gender.man: Monsieur
+gender.none: Aucun
 gender.woman: Madame
-gender.none: 'Aucun'

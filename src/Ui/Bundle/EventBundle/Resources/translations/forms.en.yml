@@ -3,6 +3,7 @@ boolean.yes: 'Yes'
 form.add_participant.children.email.placeholder: E-mail
 form.add_participant.children.firstName.placeholder: 'First name'
 form.add_participant.children.lastName.placeholder: 'Last Name'
+form.add_participant.children.product.label: 'Linked products'
 form.catalog_approve_meeting_request.children.description.label: 'Respond to the meeting request?'
 form.catalog_approve_meeting_request.children.description.placeholder: 'Write a message'
 form.catalog_approve_meeting_request.children.participants.label: 'Assign this meeting exclusively to?'
@@ -28,7 +29,15 @@ form.change_password_user.children.currentPassword.label: 'Current password'
 form.change_password_user.children.plainPassword.children.first.label: 'New password'
 form.change_password_user.children.plainPassword.children.second.label: 'Confirm new password'
 form.change_password_user.children.submit.label: Submit
+form.create_unavailability.children.day.label: 'On the'
+form.create_unavailability.children.message.label: comment
 form.create_unavailability.children.participants.label: Unavailable
+form.create_unavailability.children.submit.label: Add
+form.create_unavailability.children.time.children.begin.label: from
+form.create_unavailability.children.time.children.end.label: to
+form.create_unavailability.data.maxLength.translations.plural: 'remaining characters'
+form.create_unavailability.data.maxLength.translations.reached: 'max number of characters reached'
+form.create_unavailability.data.maxLength.translations.singular: 'remaining character'
 form.email.placeholder: 'Enter your email'
 form.group.participant.submit: Save
 form.login.children.password.placeholder: Password
@@ -42,15 +51,20 @@ form.multiple_sheet_request_filter_request_type.children.state.filter.refused: R
 form.multiple_sheet_request_filter_request_type.children.state.filter.sent: Pending
 form.multiple_sheet_request_filter_request_type.children.state.label: Status
 form.multiple_sheet_request_filter_request_type.children.submit.label: Filter
+form.multiple_sheet_request_filter_request_type.children.type.filter.all: all
 form.multiple_sheet_request_filter_request_type.children.type.filter.proposition: 'My received proposals'
 form.multiple_sheet_request_filter_request_type.children.type.filter.request: 'My requests'
 form.multiple_sheet_request_filter_request_type.children.type.label: Type
+form.multiple_sheet_request_filter_request_type.children.user.label: Participant
 form.multiple_sheet_request_filter_request_type.children.user.noPreference.label: 'No preferences'
 form.nomenclature_data.children.items.label: Select
 form.nomenclature_data.children.submit.label: Save
 form.package_summary_promotion_code.children.submit.label: Validate
 form.package_summary_promotion_code.placeholder: 'Enter promotional code'
 form.package_summary_terms_of_sale.children.termsOfSale.label: 'I agree and accept the terms and the general sales conditions relating to this participation package.'
+form.participantAndPlanning.participantProduct.selectAnOption: 'select an option'
+form.participate.children.invitationCode.label: 'invitation code'
+form.participate.children.participants.label: 'who participates ?'
 form.participate.children.participants.unavailable: Unavailable
 form.participate.children.question.label: 'Ask a question to the speakers to prepare the workshop'
 form.participate.children.submit.label: Attend
@@ -66,7 +80,22 @@ form.payment_choice.children.paymentMode.bank_transfer: Transfer
 form.payment_choice.children.paymentMode.paypal: 'Bank card or Paypal'
 form.register.newUser.password.placeholder: 'Choose your password'
 form.register.newUser.repeatedPassword.placeholder: 'confirm password'
+form.search.autocomplete.atLeastThreeChars: 'type at least 3 characters'
+form.search.autocomplete.atLeastTwoChars: 'type at least 2 characters'
+form.search.autocomplete.searching: searching...
+form.search.availableSlot.choice.catalog_available: 'having available slots'
+form.search.availableSlot.choice.catalog_everyone: 'all the catalog'
+form.search.availableSlot.choice.catalog_slot: 'available on the %day% at %time%'
+form.search.availableSlot.label: 'who is available ?'
+form.search.categories.at_least_one_checked: 'At least one participant''s category must be selected'
+form.search.content.label: keywords
+form.search.keywords.search.placeholder: 'companies, skills...'
+form.search.localization.label: localization
 form.search.localization.search.placeholder: '69, Lyon, France'
+form.search.meeting.availableSlot.choice.available: 'having availabilities'
+form.search.meeting.availableSlot.choice.everyone: All
+form.search.meeting.availableSlot.choice.slot: 'available on the %day% at %time%'
+form.search.meeting.availableSlot.label: 'who is available ?'
 form.search.meeting.state.all: 'All states'
 form.search.meeting.state.approved: Approved
 form.search.meeting.state.cancelled: Cancelled
@@ -83,7 +112,9 @@ form.search.orderBy.createdAt: 'Chronological order'
 form.search.orderBy.dateAddedToCatalog: 'Recent registrations'
 form.search.orderBy.label: 'SORT BY'
 form.search.orderBy.relevance: Relevance
+form.search.organizationCategory.label: organization
 form.search.position.label: 'Job title'
+form.search.type.at_least_one_checked: 'At least one participant''s type must be selected'
 form.search.type.label: Participants
 form.send_code.children.accepted.label: 'I agree to receive notifications during the event'
 form.send_code.children.phone.label: 'My mobile number'
@@ -101,11 +132,20 @@ form.sheet_group_create_sheet.children.title.label: 'Title of the new profile'
 form.sheet_image_data.children.selectedProduct.label: 'Related options'
 form.sheet_image_data.children.submit.label: save
 form.sheet_item_collection_data.children.items.label_add: Add
+form.sheet_item_collection_data.children.items.label_delete: '&times;'
+form.sheet_item_collection_data.children.items.prototype.children.title.label: title
 form.sheet_item_collection_data.children.submit.label: Save
 form.sheet_media_collection_data.children.medias.label_add: Add
+form.sheet_media_collection_data.children.medias.label_delete: '&times;'
+form.sheet_media_collection_data.children.medias.prototype.children.title.label: title
 form.sheet_media_collection_data.children.medias.prototype.children.type.label: Type
+form.sheet_media_collection_data.children.medias.prototype.children.url.label: Link
+form.sheet_media_collection_data.children.selectedProduct.label: 'linked products'
 form.sheet_media_collection_data.children.submit.label: Save
+form.sheet_media_data.children.type.document: Document
+form.sheet_media_data.children.type.video: video
 form.user_availability_confirmation.children.confirm.label: 'Confirm your avaibilities'
+form.user_event_phone_validate_code.children.code.label: 'validation code received'
 form.user_event_phone_validate_code.children.confirm.label: Confirmed
 gender.man: Mr
 gender.woman: Mrs
