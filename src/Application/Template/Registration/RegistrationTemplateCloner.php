@@ -78,7 +78,9 @@ class RegistrationTemplateCloner extends TemplateCloner
             $template->getEvent()
         );
 
-        $this->switchEvent($event, $clone);
+        if ($event !== $template->getEvent()) {
+            $this->switchEvent($event, $clone);
+        }
 
         $this->registrationTemplateRepository->add($clone);
 

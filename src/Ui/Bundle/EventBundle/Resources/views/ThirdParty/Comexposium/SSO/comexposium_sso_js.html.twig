@@ -15,13 +15,17 @@
             {% if ssoComexposiumView.showLogin %}vimeet_cmxp_login();{% endif %}
 
             window.cxpm.jQuery(document).on('comexposiumConnectLogged', function (event, email, token, isExhibitor) {
-                sendDataToSSOChecker(email, token);
+                sendDataToSSOChecker(email, token, isExhibitor);
                 $('#login-form').html('<div class="text-center"><span class="glyphicon glyphicon-refresh spin"></span></div>');
             });
         });
     });
 
-    function sendDataToSSOChecker(email, token) {
-        window.location = '{{ url('event_login_check') }}' + '?comexposium_sso=true&email=' + encodeURIComponent(email) + '&token=' + encodeURIComponent(token);
+    function sendDataToSSOChecker(email, token, isExhibitor) {
+        window.location = '{{ url('event_login_check') }}'
+          + '?comexposium_sso=true'
+          + '&email=' + encodeURIComponent(email)
+          + '&token=' + encodeURIComponent(token)
+          + '&isExhibitor=' + (isExhibitor ? 1 : 0);
     }
 </script>

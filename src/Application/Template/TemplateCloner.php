@@ -14,7 +14,6 @@ namespace Proximum\Vimeet\Application\Template;
 use Proximum\Vimeet\Application\Nomenclature\NomenclatureCloner;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Template\AbstractTemplate;
-use Proximum\Vimeet\Domain\Template\TemplateData;
 use Proximum\Vimeet\Domain\Template\TemplateDataFactory;
 
 abstract class TemplateCloner
@@ -44,10 +43,8 @@ abstract class TemplateCloner
     /**
      * @param Event            $event
      * @param AbstractTemplate $template
-     *
-     * @return TemplateData
      */
-    private function cloneNomenclatures(Event $event, AbstractTemplate $template)
+    private function cloneNomenclatures(Event $event, AbstractTemplate $template): void
     {
         $templateData = $this->templateDataFactory->createFromTemplate($template);
         $objects      = $templateData->getNomenclatureObjects();

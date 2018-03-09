@@ -221,7 +221,7 @@ class TypeRepository implements TypeRepositoryInterface
     /**
      * {@inheritdoc}
      */
-    public function getById($id)
+    public function getById($id): ?Type
     {
         $queryBuilder = $this
             ->entityManager

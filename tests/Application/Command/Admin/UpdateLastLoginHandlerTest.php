@@ -23,13 +23,13 @@ class UpdateLastLoginHandlerTest extends TestCase
         $date = new \DateTime('2017-08-08 08:08:08.000');
         $email = 'test@email.com';
 
-        $command = new UpdateLastLogin($email, $date);
+        $command = new UpdateLastLogin($email);
 
         $adminRepository = $this->prophesize(AdminRepositoryInterface::class);
         $adminRepository->findByEmail($email)->shouldBeCalled()->willReturn(null);
         $adminRepository->set()->shouldNotBeCalled();
 
-        $handler = new UpdateLastLoginHandler($adminRepository->reveal());
+        $handler = new UpdateLastLoginHandler($adminRepository->reveal(), $date);
         $handler->handle($command);
     }
 
@@ -40,7 +40,7 @@ class UpdateLastLoginHandlerTest extends TestCase
         $email = 'toto@toto.fr';
         $date = new \DateTime('2017-08-08 08:08:08.000');
 
-        $command = new UpdateLastLogin($email, $date);
+        $command = new UpdateLastLogin($email);
 
         $admin = new Admin(
             'test@test.com',
@@ -69,7 +69,7 @@ class UpdateLastLoginHandlerTest extends TestCase
         $adminRepository->findByEmail($email)->shouldBeCalled()->willReturn($admin);
         $adminRepository->set($expectedAdmin)->shouldBeCalled();
 
-        $handler = new UpdateLastLoginHandler($adminRepository->reveal());
+        $handler = new UpdateLastLoginHandler($adminRepository->reveal(), $date);
         $handler->handle($command);
     }
 }

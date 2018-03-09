@@ -1075,6 +1075,7 @@ services:
         class: Proximum\Vimeet\Application\Command\Admin\UpdateLastLoginHandler
         arguments:
             - '@repository.admin_repository'
+            - '@datetime'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Admin\UpdateLastLogin }
 
@@ -1142,6 +1143,13 @@ services:
                 - '@user_to_group_manager_checker'
             tags:
                 - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Sheet\Group\SearchUser }
+
+    Proximum\Vimeet\Application\Command\Sheet\LastLogin\UpdateLastLoginHandler:
+        arguments:
+            - '@vimeet_infrastructure.repository.sheet_repository'
+            - '@datetime'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Sheet\LastLogin\UpdateLastLogin }
 
     command.register.register_new_user_handler:
         class: Proximum\Vimeet\Application\Command\Register\RegisterNewUserHandler
@@ -1230,6 +1238,7 @@ services:
         arguments:
             - '@vimeet_infrastructure.repository.sheet_repository'
             - '@vimeet_infrastructure.repository.order_repository'
+            - '@cart_manager'
             - '@vimeet_infrastructure.repository.meeting_repository'
             - '@sheet.request.enable_disable_manager'
             - '@vimeet_infrastructure.adapter.translator_adapter'
@@ -2504,6 +2513,11 @@ services:
           - '@datetime'
           - '%feature_video_conference_date_security_enabled%'
           - '%feature_video_conference_enabled%'
+
+    Proximum\Vimeet\Application\Components\Security\LoginSecondStepAccessChecker:
+        arguments:
+          - '@vimeet_infrastructure.repository.user_repository'
+          - '@repository.event.extra_parameter_repository'
 
     #
     # Guideline Component

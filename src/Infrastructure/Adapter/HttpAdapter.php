@@ -30,17 +30,15 @@ class HttpAdapter implements HttpAdapterInterface
         try {
             $guzzleResponse = $client->send($resource);
 
-            $response = new Response($guzzleResponse->getStatusCode(), (string) $guzzleResponse->getBody());
+            return new Response($guzzleResponse->getStatusCode(), (string) $guzzleResponse->getBody());
         } catch (ServerErrorResponseException $exception) {
-            throw new ServerErrorException($exception->getMessage());
+            throw new ServerErrorException($exception->getMessage(), $exception->getCode(), $exception);
         } catch (ClientErrorResponseException $clientErrorResponseException) {
-            $response = new Response(
+            return new Response(
                 $clientErrorResponseException->getResponse()->getStatusCode(),
                 (string) $clientErrorResponseException->getResponse()->getBody()
             );
         }
-
-        return $response;
     }
 
     /**
@@ -53,10 +51,15 @@ class HttpAdapter implements HttpAdapterInterface
 
         try {
             $guzzleResponse = $client->send($resource);
-        } catch (ServerErrorResponseException $exception) {
-            throw new ServerErrorException($exception->getMessage());
-        }
 
-        return new Response($guzzleResponse->getStatusCode(), (string) $guzzleResponse->getBody());
+            return new Response($guzzleResponse->getStatusCode(), (string) $guzzleResponse->getBody());
+        } catch (ServerErrorResponseException $exception) {
+            throw new ServerErrorException($exception->getMessage(), $exception->getCode(), $exception);
+        } catch (ClientErrorResponseException $clientErrorResponseException) {
+            return new Response(
+                $clientErrorResponseException->getResponse()->getStatusCode(),
+                (string) $clientErrorResponseException->getResponse()->getBody()
+            );
+        }
     }
 }

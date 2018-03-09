@@ -18,6 +18,7 @@ use Proximum\Vimeet\Application\Components\Sheet\Request\EnableDisableManager;
 use Proximum\Vimeet\Application\Event\Events;
 use Proximum\Vimeet\Application\Event\Package\MustSelectPackageEvent;
 use Proximum\Vimeet\Application\Event\Sheet\SheetChangedTypeEvent;
+use Proximum\Vimeet\Domain\Cart\CartManager;
 use Proximum\Vimeet\Domain\Model\Admin;
 use Proximum\Vimeet\Domain\Model\Order;
 use Proximum\Vimeet\Domain\Model\Package;
@@ -74,6 +75,7 @@ class ChangeTypeHandlerTest extends TestCase
 
         $sheetRepository         = $this->prophesize(SheetRepositoryInterface::class);
         $orderRepository         = $this->prophesize(OrderRepositoryInterface::class);
+        $cartManager             = $this->prophesize(CartManager::class);
         $translator              = $this->prophesize(TranslatorAdapter::class);
         $eventDispatcher         = $this->prophesize(DelayedEventDispatcher::class);
         $registrationStepManager = $this->prophesize(StepManager::class);
@@ -83,6 +85,7 @@ class ChangeTypeHandlerTest extends TestCase
         $handler = new ChangeTypeHandler(
             $sheetRepository->reveal(),
             $orderRepository->reveal(),
+            $cartManager->reveal(),
             $meetingRepository->reveal(),
             $enableDisableManager->reveal(),
             $translator->reveal(),
@@ -101,6 +104,7 @@ class ChangeTypeHandlerTest extends TestCase
 
         // Should be called because packages are different
         $orderRepository->findBySheet($expectedSheet)->shouldBeCalled()->willReturn([$order]);
+        $cartManager->emptyCart($sheet)->shouldBeCalled();
 
         $registrationStepManager->resetRegistrationStep($participant)->shouldBeCalled();
 
@@ -147,6 +151,7 @@ class ChangeTypeHandlerTest extends TestCase
 
         $sheetRepository         = $this->prophesize(SheetRepositoryInterface::class);
         $orderRepository         = $this->prophesize(OrderRepositoryInterface::class);
+        $cartManager             = $this->prophesize(CartManager::class);
         $translator              = $this->prophesize(TranslatorAdapter::class);
         $eventDispatcher         = $this->prophesize(DelayedEventDispatcher::class);
         $registrationStepManager = $this->prophesize(StepManager::class);
@@ -159,6 +164,7 @@ class ChangeTypeHandlerTest extends TestCase
         $handler = new ChangeTypeHandler(
             $sheetRepository->reveal(),
             $orderRepository->reveal(),
+            $cartManager->reveal(),
             $meetingRepository->reveal(),
             $enableDisableManager->reveal(),
             $translator->reveal(),
@@ -175,6 +181,7 @@ class ChangeTypeHandlerTest extends TestCase
 
         // Should not be called
         $orderRepository->findBySheet($expectedSheet)->shouldNotBeCalled();
+        $cartManager->emptyCart($sheet)->shouldNotBeCalled();
 
         $registrationStepManager->resetRegistrationStep($participant)->shouldBeCalled();
 

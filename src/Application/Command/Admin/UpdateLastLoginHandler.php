@@ -10,21 +10,21 @@
 
 namespace Proximum\Vimeet\Application\Command\Admin;
 
+use Proximum\Vimeet\Domain\Model\Admin;
 use Proximum\Vimeet\Domain\Repository\AdminRepositoryInterface;
 
 class UpdateLastLoginHandler
 {
-    /**
-     * @var AdminRepositoryInterface
-     */
+    /** @var AdminRepositoryInterface */
     private $adminRepository;
 
-    /**
-     * @param AdminRepositoryInterface $adminRepository
-     */
-    public function __construct(AdminRepositoryInterface $adminRepository)
+    /** @var \DateTimeInterface */
+    private $dateTime;
+
+    public function __construct(AdminRepositoryInterface $adminRepository, \DateTimeInterface $dateTime)
     {
         $this->adminRepository = $adminRepository;
+        $this->dateTime = $dateTime;
     }
 
     /**
@@ -34,8 +34,8 @@ class UpdateLastLoginHandler
     {
         $admin = $this->adminRepository->findByEmail($updateLastLogin->email);
 
-        if (null !== $admin) {
-            $admin->setLastLoginAt($updateLastLogin->date);
+        if ($admin instanceof Admin) {
+            $admin->setLastLoginAt($this->dateTime);
             $this->adminRepository->set($admin);
         }
     }
