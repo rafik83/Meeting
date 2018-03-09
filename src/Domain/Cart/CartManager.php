@@ -349,4 +349,13 @@ class CartManager
     {
         $this->cartStepRepository->deleteForSheet($cart->getSheet());
     }
+
+    /**
+     * @param Sheet $sheet
+     */
+    public function emptyCart(Sheet $sheet): void
+    {
+        $this->cartStepRepository->deleteForSheet($sheet);
+        $this->cartRowRepository->deleteForSheet($sheet);
+    }
 }
