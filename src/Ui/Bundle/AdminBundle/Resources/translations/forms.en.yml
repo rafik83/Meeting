@@ -110,7 +110,7 @@ form.configure.children.messageTranslations.label: Message
 form.configure.children.messageTranslations.prototype.children.content.label: Content
 form.configure.children.messageTranslations.prototype.children.title.label: Title
 form.configure.children.registrationUrl.label: 'registration Url'
-form.configure.children.registrationUrl.placeholder: 'Exemple: https://name-events.vimeet.events'
+form.configure.children.registrationUrl.placeholder: 'Example: https://name-events.vimeet.events'
 form.configure.children.searchFacets.category.label: Category
 form.configure.children.searchFacets.keywords.help: 'Name of the sheet, wording, objects, collection and nomenclatures on the participation sheet'
 form.configure.children.searchFacets.keywords.label: keywords
@@ -883,7 +883,7 @@ form.tip_event_update.children.translations.prototype.label: Translations
 form.tip_event_update.children.types.label: 'Assigned types'
 form.tip_update.children.onAgenda.label: 'visible on the planning'
 form.tip_update.children.onCatalog.label: 'visible on the catalog'
-form.tip_update.children.onConfirmationPhone.label: 'planning and phone number confirmation ( necessaryto display the phone number validation form)'
+form.tip_update.children.onConfirmationPhone.label: 'planning and phone number confirmation (necessary to display the phone number validation form)'
 form.tip_update.children.onMeetingManagement.label: 'visible on the meetings management'
 form.tip_update.children.onPrintPlanning.label: 'visible on the plannings printing'
 form.tip_update.children.onProgram.label: 'visible on the program'
