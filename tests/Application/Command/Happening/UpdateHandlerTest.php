@@ -3,13 +3,14 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2015 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
 
 namespace Proximum\Vimeet\Tests\Application\Command\Happening;
 
+use PHPUnit\Framework\TestCase;
 use Proximum\Vimeet\Application\Adapter\DelayedEventDispatcherInterface;
 use Proximum\Vimeet\Application\Command\Happening\Update;
 use Proximum\Vimeet\Application\Command\Happening\UpdateHandler;
@@ -22,7 +23,6 @@ use Proximum\Vimeet\Domain\Model\Happening\CategoryTranslation;
 use Proximum\Vimeet\Domain\Model\Type;
 use Proximum\Vimeet\Domain\Repository\HappeningRepositoryInterface;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
-use PHPUnit\Framework\TestCase;
 
 class UpdateHandlerTest extends TestCase
 {

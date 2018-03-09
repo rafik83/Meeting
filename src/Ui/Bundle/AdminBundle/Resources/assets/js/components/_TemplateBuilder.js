@@ -3,7 +3,10 @@ var guidGenerator = require('./_GuidGenerator'),
     normalizeTemplate = require('./_NormalizeTemplate'),
     Sortable      = require('./_Sortable'),
     TemplateBlock = require('./_TemplateBlock'),
-    TemplateObject = require('./_TemplateObject');
+    TemplateObject = require('./_TemplateObject')
+;
+
+var builderType = 'sheet';
 
 /**
  * TemplateBuilder
@@ -172,7 +175,7 @@ TemplateBuilder.prototype.block = function (element)
 TemplateBuilder.prototype.object = function (element)
 {
     // Create object
-    element.templateObject = new TemplateObject(element, this.locale);
+    element.templateObject = new TemplateObject(element, this.locale, builderType);
 };
 
 TemplateBuilder.prototype.save = function ()

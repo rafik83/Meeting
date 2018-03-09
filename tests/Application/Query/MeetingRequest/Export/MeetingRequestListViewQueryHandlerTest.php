@@ -84,7 +84,7 @@ class MeetingRequestListViewQueryHandlerTest extends TestCase
             [
                 $requestView1->reveal(),
                 $requestView2->reveal(),
-                $requestView3->reveal()
+                $requestView3->reveal(),
             ],
             'Europe/Paris',
             'fr'

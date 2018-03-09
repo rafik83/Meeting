@@ -1,22 +1,22 @@
 <?php
 
 /*
- * This file is part of the vimeet project.
+ * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2016 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
 
 namespace Proximum\Vimeet\Tests\Application\Query\Catalog;
 
+use PHPUnit\Framework\TestCase;
 use Proximum\Vimeet\Application\Query\Catalog\TypeViewQuery;
 use Proximum\Vimeet\Application\Query\Catalog\TypeViewQueryHandler;
 use Proximum\Vimeet\Domain\Model\Type;
 use Proximum\Vimeet\Domain\Repository\TypeRepositoryInterface;
 use Proximum\Vimeet\Domain\View\Catalog\TypeView;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
-use PHPUnit\Framework\TestCase;
 
 class TypeViewQueryHandlerTest extends TestCase
 {
@@ -52,7 +52,7 @@ class TypeViewQueryHandlerTest extends TestCase
 
         $handler   = new TypeViewQueryHandler($typeRepository->reveal());
         $typeViews = $handler->handle($query);
-        
+
         $exceptedTypeViews = [
             '1' => new TypeView(1, 'type1', 0),
             '2' => new TypeView(2, 'type2', 0),

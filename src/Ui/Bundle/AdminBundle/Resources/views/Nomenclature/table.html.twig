@@ -12,7 +12,7 @@
     {% for nomenclature in nomenclatures %}
         <tr>
             <td>
-                <a href="{{ path('admin_nomenclature_read', { 'nomenclature': nomenclature.id }) }}">
+                <a href="{{ nomenclature.event ? path('admin_nomenclature_event_read', { 'event': nomenclature.event.id, 'nomenclature': nomenclature.id }) : path('admin_nomenclature_read', { 'nomenclature': nomenclature.id }) }}">
                     {{ nomenclature.title }}
                 </a>
             </td>

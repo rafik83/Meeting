@@ -3,11 +3,10 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2016 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
-
 
 namespace Proximum\Vimeet\Tests\Application\Command\Nomenclature;
 
@@ -15,8 +14,8 @@ use PHPUnit\Framework\TestCase;
 use Proximum\Vimeet\Application\Command\Nomenclature\Exception\MissingKeysException;
 use Proximum\Vimeet\Application\Command\Nomenclature\Import;
 use Proximum\Vimeet\Application\Command\Nomenclature\ImportHandler;
-use Proximum\Vimeet\Application\Serializer\Charset;
 use Proximum\Vimeet\Application\Nomenclature\Import\ImporterInterface;
+use Proximum\Vimeet\Application\Serializer\Charset;
 use Proximum\Vimeet\Domain\Event\HasSheet;
 use Proximum\Vimeet\Domain\Model\Nomenclature;
 use Proximum\Vimeet\Domain\Repository\NomenclatureRepositoryInterface;

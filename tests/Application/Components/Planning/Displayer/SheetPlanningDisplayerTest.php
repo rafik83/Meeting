@@ -26,7 +26,7 @@ class SheetPlanningDisplayerTest extends TestCase
         $currentParticipant = $this->prophesize(Participant::class);
 
         $planningMarkdown = "Planning:\n\n**Patrick Sebastien**\n\n**Jeudi Y Janvier**\n\n- 10:00 13:00 - TABLE A01 - Truc Muche\n";
-        $planningHtml = "<div>Planning:<br><b>Patrick Sebastien</b><br><br><b>Jeudi Y Janvier</b><br><br>- 10:00 13:00 - TABLE A01 - Truc Muche</div>";
+        $planningHtml = '<div>Planning:<br><b>Patrick Sebastien</b><br><br><b>Jeudi Y Janvier</b><br><br>- 10:00 13:00 - TABLE A01 - Truc Muche</div>';
 
         // Mock
         $sheetPlanningFormatter = $this->prophesize(SheetPlanningFormatter::class);

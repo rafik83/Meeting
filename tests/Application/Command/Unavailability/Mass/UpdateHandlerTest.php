@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2016 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -43,7 +43,6 @@ class UpdateHandlerTest extends TestCase
         $existing->createTranslation('fr', 'vieux titre', 'vieille description');
         $existing->createTranslation('en', 'old title', 'old description');
 
-
         // Expected
         $expected = new Mass(
             $event,
@@ -55,7 +54,6 @@ class UpdateHandlerTest extends TestCase
         );
         $expected->createTranslation('fr', 'titre', 'description');
         $expected->createTranslation('en', 'title', 'description');
-
 
         // Mock
         $massRepository = $this->prophesize(MassRepositoryInterface::class);
@@ -80,7 +78,7 @@ class UpdateHandlerTest extends TestCase
             'en' => [
                 'title'       => 'title',
                 'description' => 'description',
-            ]
+            ],
         ];
 
         // Handler
@@ -109,7 +107,6 @@ class UpdateHandlerTest extends TestCase
         );
         $existing->createTranslation('fr', 'vieux titre', 'vieille description');
         $existing->createTranslation('en', 'old title', 'old description');
-
 
         // Expected
         $expected = new Mass(
@@ -146,7 +143,7 @@ class UpdateHandlerTest extends TestCase
             'en' => [
                 'title'       => 'title',
                 'description' => 'description',
-            ]
+            ],
         ];
 
         // Handler
@@ -175,7 +172,6 @@ class UpdateHandlerTest extends TestCase
         );
         $existing->createTranslation('fr', 'vieux titre', 'vieille description');
         $existing->createTranslation('en', 'old title', 'old description');
-
 
         // Expected
         $expected = new Mass(
@@ -212,7 +208,7 @@ class UpdateHandlerTest extends TestCase
             'en' => [
                 'title'       => 'title',
                 'description' => 'description',
-            ]
+            ],
         ];
 
         // Handler
@@ -242,7 +238,6 @@ class UpdateHandlerTest extends TestCase
         $existing->createTranslation('fr', 'vieux titre', 'vieille description');
         $existing->createTranslation('en', 'old title', 'old description');
 
-
         // Expected
         $expected = new Mass(
             $event,
@@ -259,7 +254,6 @@ class UpdateHandlerTest extends TestCase
         );
         $expected->createTranslation('fr', 'titre', 'description');
         $expected->createTranslation('en', 'title', 'description');
-
 
         // Mock
         $massRepository = $this->prophesize(MassRepositoryInterface::class);
@@ -284,7 +278,7 @@ class UpdateHandlerTest extends TestCase
             'en' => [
                 'title'       => 'title',
                 'description' => 'description',
-            ]
+            ],
         ];
         $update->dispatch     = true;
         $update->timeSlots    = [

@@ -51,6 +51,7 @@ class CatalogAvailableSlotIdsViewQueryHandlerTest extends TestCase
         $this->sheetRepository = $this->prophesize(SheetRepositoryInterface::class);
         $this->availableSlotsByParticipantQueryHandler = $this->prophesize(AvailableSlotsByParticipantQueryHandler::class);
     }
+
     public function testHandleNoFilter()
     {
         $this->sheet->hasUserParticipant($this->user->reveal())->shouldBeCalled()->willReturn(true);

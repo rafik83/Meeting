@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Tests\Application\Components\Order;
 
+use PHPUnit\Framework\TestCase;
 use Proximum\Vimeet\Application\Adapter\SerializerAdapterInterface;
 use Proximum\Vimeet\Application\Components\Order\OrdersToInvoice;
 use Proximum\Vimeet\Application\Query\Invoice\InvoiceDataQueryHandler;
@@ -23,7 +24,6 @@ use Proximum\Vimeet\Domain\Package\Specification\VatApplicable;
 use Proximum\Vimeet\Domain\Repository\OrderRepositoryInterface;
 use Proximum\Vimeet\Domain\View\Invoice\OrdersToInvoiceView;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
-use PHPUnit\Framework\TestCase;
 
 class OrdersToInvoiceTest extends TestCase
 {
@@ -51,10 +51,10 @@ class OrdersToInvoiceTest extends TestCase
         $orderTwo->addRow(new Order\Row($orderTwo, -1, 20, $participant));
         $orderTwo->addRow(new Order\Row($orderTwo, 3, 20, $option));
         $sheet->addOrder($orderTwo);
-        
+
         $orderRepository = $this->prophesize(OrderRepositoryInterface::class);
         $orderRepository->findNotCancelledAndNotInvoicedBySheet($sheet)->shouldBeCalled()->willReturn([$orderOne, $orderTwo]);
-        
+
         $invoiceDataQueryHandler = $this->prophesize(InvoiceDataQueryHandler::class);
 
         $vatApplicable = $this->prophesize(VatApplicable::class);
@@ -87,7 +87,7 @@ class OrdersToInvoiceTest extends TestCase
 
         $orderRepository = $this->prophesize(OrderRepositoryInterface::class);
         $orderRepository->findNotCancelledAndNotInvoicedBySheet($sheet)->shouldBeCalled()->willReturn([]);
-    
+
         $invoiceDataQueryHandler = $this->prophesize(InvoiceDataQueryHandler::class);
 
         $vatApplicable = $this->prophesize(VatApplicable::class);
@@ -123,7 +123,7 @@ class OrdersToInvoiceTest extends TestCase
 
         $orderRepository = $this->prophesize(OrderRepositoryInterface::class);
         $orderRepository->findNotCancelledAndNotInvoicedBySheet($sheet)->shouldBeCalled()->willReturn([$orderNegative]);
-    
+
         $invoiceDataQueryHandler = $this->prophesize(InvoiceDataQueryHandler::class);
 
         $vatApplicable = $this->prophesize(VatApplicable::class);
@@ -163,8 +163,8 @@ class OrdersToInvoiceTest extends TestCase
                     'translations' => [
                         'en' => ['label' => 'English label'],
                         'fr' => ['label' => 'French label'],
-                    ]
-                ]
+                    ],
+                ],
             ]
         );
 
@@ -190,7 +190,7 @@ class OrdersToInvoiceTest extends TestCase
 
         $orderRepository = $this->prophesize(OrderRepositoryInterface::class);
         $orderRepository->findNotCancelledAndNotInvoicedBySheet($sheet)->shouldBeCalled()->willReturn([$orderOne, $orderTwo]);
-    
+
         $invoiceDataQueryHandler = $this->prophesize(InvoiceDataQueryHandler::class);
 
         $vatApplicable = $this->prophesize(VatApplicable::class);

@@ -3,13 +3,14 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2016 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
 
 namespace Proximum\Vimeet\Tests\Application\Query\Sheet;
 
+use PHPUnit\Framework\TestCase;
 use Proximum\Vimeet\Application\Query\Dashboard\DashboardSheetViewQuery;
 use Proximum\Vimeet\Application\Query\Dashboard\DashboardSheetViewQueryHandler;
 use Proximum\Vimeet\Application\Query\Dashboard\DashboardTransactionViewQuery;
@@ -20,7 +21,6 @@ use Proximum\Vimeet\Application\View\Dashboard\DashboardSheetView;
 use Proximum\Vimeet\Application\View\Dashboard\DashboardTransactionView;
 use Proximum\Vimeet\Application\View\Dashboard\DashboardView;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
-use PHPUnit\Framework\TestCase;
 
 class DashboardViewQueryHandlerTest extends TestCase
 {

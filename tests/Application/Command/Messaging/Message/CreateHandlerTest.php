@@ -3,20 +3,19 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2016 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
 
 namespace Proximum\Vimeet\tests\Application\Command\Messaging\Message;
 
+use PHPUnit\Framework\TestCase;
 use Proximum\Vimeet\Application\Command\Messaging\Message\Create;
 use Proximum\Vimeet\Application\Command\Messaging\Message\CreateHandler;
 use Proximum\Vimeet\Domain\Model\Messaging\Message;
-use Proximum\Vimeet\Domain\Model\Messaging\MessageTranslation;
 use Proximum\Vimeet\Domain\Repository\Messaging\MessageRepositoryInterface;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
-use PHPUnit\Framework\TestCase;
 
 class CreateHandlerTest extends TestCase
 {

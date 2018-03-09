@@ -22,9 +22,7 @@ use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Repository\Event\ExtraParameterRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
-use Proximum\Vimeet\Domain\Repository\User\Event\ExtraDataRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\UserRepositoryInterface;
-use Proximum\Vimeet\Domain\User\Event\ExtraData\Type as ExtraDataType;
 
 class SSOComexposiumViewQueryHandlerTest extends TestCase
 {
@@ -67,7 +65,9 @@ class SSOComexposiumViewQueryHandlerTest extends TestCase
             $this->comexposiumSSOLoaderLibEndpoint
         );
 
-        $result = $handler->handle(new SSOComexposiumViewQuery($this->event->reveal(), 'fr', 'email@example.net'));
+        $result = $handler->handle(
+            new SSOComexposiumViewQuery($this->event->reveal(), 'fr', 'email@example.net', true)
+        );
 
         $this->assertEquals(null, $result);
     }
@@ -108,7 +108,9 @@ class SSOComexposiumViewQueryHandlerTest extends TestCase
             $this->comexposiumSSOLoaderLibEndpoint
         );
 
-        $result = $handler->handle(new SSOComexposiumViewQuery($this->event->reveal(), 'fr', 'email@example.net'));
+        $result = $handler->handle(
+            new SSOComexposiumViewQuery($this->event->reveal(), 'fr', 'email@example.net', true)
+        );
 
         $this->assertEquals(null, $result);
     }
@@ -156,14 +158,18 @@ class SSOComexposiumViewQueryHandlerTest extends TestCase
         $extraParameter3->getValue()->willReturn('salon');
         $extraParameter4->getValue()->willReturn('sessionSalon');
 
-        $result = $handler->handle(new SSOComexposiumViewQuery($this->event->reveal(), 'en', 'email@example.net'));
+        $result = $handler->handle(
+            new SSOComexposiumViewQuery($this->event->reveal(), 'en', 'email@example.net', true)
+        );
+
         $expected = new SSOComexposiumView(
             'salon',
             'sessionSalon',
             'application123',
             'eng-GB',
             'email@example.net',
-            $this->comexposiumSSOLoaderLibEndpoint
+            $this->comexposiumSSOLoaderLibEndpoint,
+            true
         );
 
         $this->assertEquals($expected, $result);
@@ -217,14 +223,18 @@ class SSOComexposiumViewQueryHandlerTest extends TestCase
         $extraParameter3->getValue()->willReturn('salon');
         $extraParameter4->getValue()->willReturn('sessionSalon');
 
-        $result = $handler->handle(new SSOComexposiumViewQuery($this->event->reveal(), 'fr', 'email@example.net'));
+        $result = $handler->handle(
+            new SSOComexposiumViewQuery($this->event->reveal(), 'fr', 'email@example.net', true)
+        );
+
         $expected = new SSOComexposiumView(
             'salon',
             'sessionSalon',
             'application123',
             'fre-FR',
             'email@example.net',
-            $this->comexposiumSSOLoaderLibEndpoint
+            $this->comexposiumSSOLoaderLibEndpoint,
+            true
         );
 
         $this->assertEquals($expected, $result);
@@ -283,14 +293,15 @@ class SSOComexposiumViewQueryHandlerTest extends TestCase
         $extraParameter3->getValue()->willReturn('salon');
         $extraParameter4->getValue()->willReturn('sessionSalon');
 
-        $result = $handler->handle(new SSOComexposiumViewQuery($this->event->reveal(), 'fr', 'email@example.net'));
+        $result = $handler->handle(new SSOComexposiumViewQuery($this->event->reveal(), 'fr', 'email@example.net', true));
         $expected = new SSOComexposiumView(
             'salon',
             'sessionSalon',
             'application123',
             'fre-FR',
             'email@example.net',
-            $this->comexposiumSSOLoaderLibEndpoint
+            $this->comexposiumSSOLoaderLibEndpoint,
+            true
         );
 
         $this->assertEquals($expected, $result);
@@ -351,14 +362,17 @@ class SSOComexposiumViewQueryHandlerTest extends TestCase
         $extraParameter3->getValue()->willReturn('salon');
         $extraParameter4->getValue()->willReturn('sessionSalon');
 
-        $result = $handler->handle(new SSOComexposiumViewQuery($this->event->reveal(), 'fr', 'email@example.net'));
+        $result = $handler->handle(
+            new SSOComexposiumViewQuery($this->event->reveal(), 'fr', 'email@example.net', true)
+        );
         $expected = new SSOComexposiumView(
             'salon',
             'sessionSalon',
             'application123',
             'fre-FR',
             'email@example.net',
-            $this->comexposiumSSOLoaderLibEndpoint
+            $this->comexposiumSSOLoaderLibEndpoint,
+            true
         );
 
         $this->assertEquals($expected, $result);
@@ -419,7 +433,9 @@ class SSOComexposiumViewQueryHandlerTest extends TestCase
         $extraParameter3->getValue()->willReturn('salon');
         $extraParameter4->getValue()->willReturn('sessionSalon');
 
-        $result = $handler->handle(new SSOComexposiumViewQuery($this->event->reveal(), 'fr', 'email@example.net'));
+        $result = $handler->handle(
+            new SSOComexposiumViewQuery($this->event->reveal(), 'fr', 'email@example.net', true)
+        );
 
         $this->assertEquals(null, $result);
     }
@@ -479,8 +495,68 @@ class SSOComexposiumViewQueryHandlerTest extends TestCase
         $extraParameter3->getValue()->willReturn('salon');
         $extraParameter4->getValue()->willReturn('sessionSalon');
 
-        $result = $handler->handle(new SSOComexposiumViewQuery($this->event->reveal(), 'fr', 'email@example.net'));
+        $result = $handler->handle(
+            new SSOComexposiumViewQuery($this->event->reveal(), 'fr', 'email@example.net', true)
+        );
 
         $this->assertEquals(null, $result);
+    }
+
+    public function testHandleNoEmail()
+    {
+        $extraParameter1 = $this->prophesize(Event\ExtraParameter::class);
+        $extraParameter2 = $this->prophesize(Event\ExtraParameter::class);
+        $extraParameter3 = $this->prophesize(Event\ExtraParameter::class);
+        $extraParameter4 = $this->prophesize(Event\ExtraParameter::class);
+        $this->extraParameterRepository
+            ->findByEventAndType($this->event->reveal(), Type::TYPE_COMEXPOSIUM_SSO_ENABLED)
+            ->shouldBeCalled()
+            ->willReturn($extraParameter1->reveal())
+        ;
+
+        $this->extraParameterRepository
+            ->findByEventAndType($this->event->reveal(), Type::TYPE_COMEXPOSIUM_SSO_APPLICATION)
+            ->shouldBeCalled()
+            ->willReturn($extraParameter2->reveal())
+        ;
+
+        $this->extraParameterRepository
+            ->findByEventAndType($this->event->reveal(), Type::TYPE_COMEXPOSIUM_SSO_SALON)
+            ->shouldBeCalled()
+            ->willReturn($extraParameter3->reveal())
+        ;
+
+        $this->extraParameterRepository
+            ->findByEventAndType($this->event->reveal(), Type::TYPE_COMEXPOSIUM_SSO_SESSION_SALON)
+            ->shouldBeCalled()
+            ->willReturn($extraParameter4->reveal())
+        ;
+
+        $handler = new SSOComexposiumViewQueryHandler(
+            $this->extraParameterRepository->reveal(),
+            $this->userRepository->reveal(),
+            $this->sheetRepository->reveal(),
+            $this->comexposiumSSOLoaderLibEndpoint
+        );
+
+        $extraParameter2->getValue()->willReturn('application123');
+        $extraParameter3->getValue()->willReturn('salon');
+        $extraParameter4->getValue()->willReturn('sessionSalon');
+
+        $result = $handler->handle(
+            new SSOComexposiumViewQuery($this->event->reveal(), 'fr', null, false)
+        );
+
+        $expected = new SSOComexposiumView(
+            'salon',
+            'sessionSalon',
+            'application123',
+            'fre-FR',
+            null,
+            $this->comexposiumSSOLoaderLibEndpoint,
+            false
+        );
+
+        $this->assertEquals($expected, $result);
     }
 }

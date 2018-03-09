@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of the vimeet project.
+ * This file is part of the Proximum Vimeet project.
  *
  * Copyright (C) Proximum
  *
@@ -35,14 +35,14 @@ class AddRowToProductHandlerTest extends TestCase
             20,
             $product,
             5,
-            "label",
+            'label',
             12.5
         );
 
         $row = Order\Row::createCustomRowToProduct(
             $order->reveal(),
             $parentRow,
-            "label",
+            'label',
             1,
             12.5,
             20
@@ -57,7 +57,6 @@ class AddRowToProductHandlerTest extends TestCase
         $add->price = 12.5;
         $add->label = 'label';
         $add->quantity = 1;
-
 
         // Handler
         $handler = new AddRowToProductHandler($orderRepository->reveal(), $eventDispatcher->reveal());

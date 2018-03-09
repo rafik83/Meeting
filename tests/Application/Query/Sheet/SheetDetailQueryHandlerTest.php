@@ -113,7 +113,7 @@ class SheetDetailQueryHandlerTest extends TestCase
             $this->prophesize(Transaction::class)->reveal(),
         ];
         $invoiceViews = [
-            $this->prophesize(InvoiceView::class)->reveal()
+            $this->prophesize(InvoiceView::class)->reveal(),
         ];
 
         $this->balance->getOrderVatViews($this->sheet->reveal())->shouldBeCalled()->willReturn($orderVatViews);
@@ -139,7 +139,6 @@ class SheetDetailQueryHandlerTest extends TestCase
             ->shouldBeCalled()
             ->willReturn([])
         ;
-
 
         $query = new SheetDetailQuery($this->sheet->reveal(), 'fr');
         $handler = new SheetDetailQueryHandler(

@@ -91,7 +91,7 @@ class StepManager
     private function hasEmptyRequiredObject(array $editableObjects): bool
     {
         foreach ($editableObjects as $editableObject) {
-            if (true === $editableObject->getRequired() && empty($editableObject->getData())) {
+            if (true === $editableObject->getRequired() && $editableObject->isEmpty()) {
                 return true;
             }
         }

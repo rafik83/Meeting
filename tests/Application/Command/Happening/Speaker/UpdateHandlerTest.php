@@ -3,13 +3,14 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2016 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
 
 namespace Proximum\Vimeet\Tests\Application\Command\Happening\Speaker;
 
+use PHPUnit\Framework\TestCase;
 use Proximum\Vimeet\Application\Adapter\FileStorageInterface;
 use Proximum\Vimeet\Application\Command\Happening\Speaker\Update;
 use Proximum\Vimeet\Application\Command\Happening\Speaker\UpdateHandler;
@@ -17,7 +18,6 @@ use Proximum\Vimeet\Domain\Model\Happening\Speaker;
 use Proximum\Vimeet\Domain\Model\Happening\SpeakerTranslation;
 use Proximum\Vimeet\Domain\Repository\Happening\SpeakerRepositoryInterface;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
-use PHPUnit\Framework\TestCase;
 
 class UpdateHandlerTest extends TestCase
 {
@@ -51,7 +51,7 @@ class UpdateHandlerTest extends TestCase
             ],
             'en' => [
                 'position' => 'DEF',
-            ]
+            ],
         ];
 
         //Mock

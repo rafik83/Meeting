@@ -1,9 +1,9 @@
 <?php
 
 /*
- * This file is part of the vimeet project.
+ * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2016 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -80,9 +80,9 @@ class BatchCatalogHandlerTest extends TestCase
 
         $meetingRepository->countMeetingsOfSheetByIds([1, 2, 3])->shouldBeCalled();
 
-        $sheetRepository->updateInCatalogBySheetsId([1,2,3], true)->shouldBeCalled();
+        $sheetRepository->updateInCatalogBySheetsId([1, 2, 3], true)->shouldBeCalled();
 
-        $batchJobQueue->createJob([1, 2 ,3], $admin, ['state' => BatchCatalogHandler::ADD_CATALOG])->shouldBeCalled();
+        $batchJobQueue->createJob([1, 2, 3], $admin, ['state' => BatchCatalogHandler::ADD_CATALOG])->shouldBeCalled();
 
         // Command
         $command = new BatchCatalog([1, 2, 3], true, $admin);
@@ -153,7 +153,7 @@ class BatchCatalogHandlerTest extends TestCase
                 3 => 0,
             ]);
 
-        $sheetInfoGuesser->guessSheetTitle($sheet2, 'fr')->shouldBeCalled()->willReturn("SheetName");
+        $sheetInfoGuesser->guessSheetTitle($sheet2, 'fr')->shouldBeCalled()->willReturn('SheetName');
 
         $sheetRepository->updateInCatalogBySheetsId([1 => 1, 3 => 3], false)->shouldBeCalled();
 
@@ -170,7 +170,7 @@ class BatchCatalogHandlerTest extends TestCase
 
         $result = $handler->handle($command);
         $this->assertEquals(3, $result->count);
-        $this->assertEquals("SheetName", $result->ignoredSheetsMessage);
+        $this->assertEquals('SheetName', $result->ignoredSheetsMessage);
     }
 
     public function testHandleAddToCatalogWithIgnoredSheets()
@@ -209,9 +209,9 @@ class BatchCatalogHandlerTest extends TestCase
 
         $sheetRepository->getSheetsById([1 => 1, 2 => 2])->shouldBeCalled()->willReturn([
             1 => $sheet1,
-            2 => $sheet2
+            2 => $sheet2,
         ]);
-        $sheetInfoGuesser->guessSheetTitle($sheet1, 'fr')->shouldBeCalled()->willReturn("SheetName");
+        $sheetInfoGuesser->guessSheetTitle($sheet1, 'fr')->shouldBeCalled()->willReturn('SheetName');
 
         $sheetRepository->updateInCatalogBySheetsId([2 => 2], true)->shouldBeCalled();
 
@@ -228,6 +228,6 @@ class BatchCatalogHandlerTest extends TestCase
 
         $result = $handler->handle($command);
         $this->assertEquals(2, $result->count);
-        $this->assertEquals("SheetName", $result->ignoredSheetsMessage);
+        $this->assertEquals('SheetName', $result->ignoredSheetsMessage);
     }
 }

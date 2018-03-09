@@ -19,7 +19,7 @@ class DigitCodeGeneratorTest extends TestCase
     {
         $generator = new DigitCodeGenerator();
 
-        for ($i = 0; $i < 100; $i++) {
+        for ($i = 0; $i < 100; ++$i) {
             $code4chars = $generator->generateCode(4);
             $code9chars = $generator->generateCode(9);
 

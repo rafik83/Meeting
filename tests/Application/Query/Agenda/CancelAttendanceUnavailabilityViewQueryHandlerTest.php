@@ -10,12 +10,12 @@
 
 namespace Proximum\Vimeet\Tests\Application\Query\Agenda;
 
+use PHPUnit\Framework\TestCase;
 use Proximum\Vimeet\Application\Query\Agenda\CancelAttendanceUnavailabilityViewQuery;
 use Proximum\Vimeet\Application\Query\Agenda\CancelAttendanceUnavailabilityViewQueryHandler;
 use Proximum\Vimeet\Application\View\Agenda\CancelAttendanceUnavailabilityView;
 use Proximum\Vimeet\Domain\Model\Event\Day;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
-use PHPUnit\Framework\TestCase;
 
 class CancelAttendanceUnavailabilityViewQueryHandlerTest extends TestCase
 {

@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2015 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -57,7 +57,6 @@ class SheetTest extends TestCase
         $participant1 = new Participant($sheet, new User('user1@test.com', '', '', 'fr'), [], true, true);
         $participant2 = new Participant($sheet, new User('user2@test.com', '', '', 'fr'), [], true, true);
         $participant3 = new Participant($sheet, new User('user3@test.com', '', '', 'fr'), [], true, true);
-
 
         $sheet->addParticipant($participant1);
         $sheet->addParticipant($participant2);

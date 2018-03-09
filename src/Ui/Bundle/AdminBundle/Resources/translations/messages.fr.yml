@@ -1208,6 +1208,8 @@ login.link.label: 'Se connecter'
 login.title: Connexion
 logout.confirmation: 'Êtes vous sûr de vouloir vous déconnecter de votre compte ?'
 logout.link: Déconnecter
+logout.relogin: 'Se re-connecter'
+logout.success: 'Vous êtes maintenant déconnecté'
 logout.title: Déconnecter
 meeting_request_filter.order_by.options.created_at_asc: 'Date de création croissante'
 meeting_request_filter.order_by.options.created_at_desc: 'Date de création décroissante'

@@ -96,7 +96,7 @@ class RemoveAuthorizationCheckerTest extends TestCase
         $templateData2
             ->getNomenclatureObjects()
             ->shouldBeCalled()
-            ->willReturn([ $object3->reveal()])
+            ->willReturn([$object3->reveal()])
         ;
 
         // Checker

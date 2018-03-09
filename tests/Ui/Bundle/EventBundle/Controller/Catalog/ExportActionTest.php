@@ -315,7 +315,7 @@ class ExportActionTest extends TestCase
         $this->formFactory->createNamed(
                 '',
                 SearchType::class,
-                ["type" => [], "categories" => [], "availableSlot" => "catalog_everyone"],
+                ['type' => [], 'categories' => [], 'availableSlot' => 'catalog_everyone'],
                 [
                     'typeViews'                 => $typeViews,
                     'categoryViews'             => [],
@@ -435,7 +435,7 @@ class ExportActionTest extends TestCase
         $this->formFactory->createNamed(
             '',
             SearchType::class,
-            ["type" => [], "categories" => [], "availableSlot" => "catalog_everyone"],
+            ['type' => [], 'categories' => [], 'availableSlot' => 'catalog_everyone'],
             [
                 'typeViews'                 => $typeViews,
                 'categoryViews'             => [],

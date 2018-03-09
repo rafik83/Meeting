@@ -3,16 +3,16 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2015 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
 
 namespace Proximum\Vimeet\Tests\Application\Components\Sheet\Template;
 
+use PHPUnit\Framework\TestCase;
 use Proximum\Vimeet\Application\Components\Sheet\Template\CompletenessCalculator;
 use Proximum\Vimeet\Domain\Model\Template\SheetTemplate;
-use PHPUnit\Framework\TestCase;
 
 class CompletenessCalculatorTest extends TestCase
 {
@@ -44,20 +44,19 @@ class CompletenessCalculatorTest extends TestCase
                                         'help'        => ['en' => null, 'fr' => 'Ici le titre'],
                                         'length'      => 100,
                                         'required'    => true,
-                                    ]
-                                ]
+                                    ],
+                                ],
                             ],
                             [
-
-                            ]
-                        ]
-                    ]
+                            ],
+                        ],
+                    ],
                 ], ['fr', 'en'], 'fr', new \DateTime()),
                 // Expected
                 [
                     'fr' => 100,
                     'en' => 0,
-                ]
+                ],
             ],
             [
                 // Template
@@ -84,20 +83,19 @@ class CompletenessCalculatorTest extends TestCase
                                         'help'        => ['en' => null, 'fr' => 'Ici le titre'],
                                         'length'      => 100,
                                         'required'    => true,
-                                    ]
-                                ]
+                                    ],
+                                ],
                             ],
                             [
-
-                            ]
-                        ]
-                    ]
+                            ],
+                        ],
+                    ],
                 ], ['fr', 'en'], 'fr', new \DateTime()),
                 // Expected
                 [
                     'fr' => 100,
                     'en' => 25,
-                ]
+                ],
             ],
             [
                 // Template
@@ -131,20 +129,19 @@ class CompletenessCalculatorTest extends TestCase
                                         'help'        => ['en' => null, 'fr' => 'Ici le titre'],
                                         'length'      => 100,
                                         'required'    => true,
-                                    ]
-                                ]
+                                    ],
+                                ],
                             ],
                             [
-
-                            ]
-                        ]
-                    ]
+                            ],
+                        ],
+                    ],
                 ], ['fr', 'en'], 'fr', new \DateTime()),
                 // Expected
                 [
                     'fr' => 80,
                     'en' => 40,
-                ]
+                ],
             ],
         ];
     }

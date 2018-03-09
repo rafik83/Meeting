@@ -1,9 +1,9 @@
 <?php
 
 /*
- * This file is part of the vimeet project.
+ * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2017 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -20,8 +20,6 @@ use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Model\VideoConference;
 use Proximum\Vimeet\Domain\Model\VideoConferenceToken;
 use Proximum\Vimeet\Domain\Repository\VideoConferenceRepositoryInterface;
-use Proximum\Vimeet\Tests\Factory\MeetingFactory;
-use Proximum\Vimeet\Tests\Factory\UserFactory;
 
 class RequestAccessHandlerTest extends TestCase
 {

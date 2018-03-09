@@ -98,7 +98,7 @@ class SheetsViewQueryHandlerTest extends TestCase
         $sheet2 = $this->prophesize(Sheet::class);
         $sheets = [
             $sheet1->reveal(),
-            $sheet2->reveal()
+            $sheet2->reveal(),
         ];
 
         $this->sheetRepository

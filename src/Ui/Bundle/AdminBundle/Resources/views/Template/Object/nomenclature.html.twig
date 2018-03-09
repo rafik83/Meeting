@@ -37,15 +37,17 @@
                                 <h4 class="modal-title">{{ 'template.object.nomenclature'|trans }}</h4>
                             </div>
                             <div class="modal-body">
-                                <div class="form-group">
-                                    <label class="form-label">{{ 'template.style.title'|trans }}</label>
-                                    <select class="form-control" name="style" title="Style">
-                                        <option value="style-1">Style 1</option>
-                                        <option value="style-2">Style 2</option>
-                                        <option value="style-3">Style 3</option>
-                                    </select>
-                                </div>
-                                <hr />
+                                {% if isRegistrationTemplate is not defined %}
+                                    <div class="form-group">
+                                        <label class="form-label">{{ 'template.style.title'|trans }}</label>
+                                        <select class="form-control" name="style" title="Style">
+                                            <option value="style-1">Style 1</option>
+                                            <option value="style-2">Style 2</option>
+                                            <option value="style-3">Style 3</option>
+                                        </select>
+                                    </div>
+                                    <hr />
+                                {% endif %}
                                 <div class="form-group">
                                     <label class="form-label">{{ 'template.label.title'|trans }}</label>
                                     <input class="form-control" type="text" name="label" />
@@ -53,6 +55,7 @@
                                         <div class="help-block">{{ fallback|locale }} : {{ config.label[fallback] }}</div>
                                     {% endif %}
                                 </div>
+                                {% if isRegistrationTemplate is not defined %}
                                 <div class="form-group">
                                     <label class="form-label">{{ 'template.help.title'|trans }}</label>
                                     <textarea class="form-control" name="help"></textarea>
@@ -60,6 +63,7 @@
                                         <div class="help-block">{{ fallback|locale }} : {{ config.help[fallback] }}</div>
                                     {% endif %}
                                 </div>
+                                {% endif %}
                                 <div class="form-group">
                                     <label class="form-label">{{ 'template.nomenclature.title'|trans }}</label>
                                     <select class="form-control" name="nomenclature">
@@ -71,6 +75,11 @@
                                     </select>
                                 </div>
                                 <div class="form-group">
+                                    <label class="form-label">{{ 'template.required.title'|trans }}</label>
+                                    <input type="checkbox" name="required" />
+                                </div>
+                                {% if isRegistrationTemplate is not defined %}
+                                <div class="form-group">
                                     <div class="radio">
                                         <label>
                                             <input type="radio" name="mode" value="checkboxes">
@@ -79,7 +88,7 @@
                                     </div>
                                     <div class="radio">
                                         <label>
-                                            <input type="radio" name="mode" value="singles">
+                                            <input type="radio" name="mode" value="singles" {% if isRegistrationTemplate is defined %}checked{% endif %}>
                                             {{ 'template.nomenclature.choice.singles'|trans }}
                                         </label>
                                     </div>
@@ -106,10 +115,6 @@
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <label class="form-label">{{ 'template.required.title'|trans }}</label>
-                                    <input type="checkbox" name="required" />
-                                </div>
-                                <div class="form-group">
                                     <label class="form-label" for="tags">
                                         {{ 'template.sheet_template.tags'|trans }}
                                     </label>
@@ -121,6 +126,13 @@
                                         {% endfor %}
                                     </select>
                                 </div>
+                                {% endif %}
+                                {% if isRegistrationTemplate is defined and registrationTemplateTagView is defined %}
+                                    {{ include('AdminBundle:RegistrationTemplate:tagsSelect.html.twig', {
+                                        'config': config,
+                                        'registrationTemplateTagView': registrationTemplateTagView,
+                                    }, false) }}
+                                {% endif %}
                             </div>
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-default" data-dismiss="modal">{{ 'template.action.close'|trans }}</button>

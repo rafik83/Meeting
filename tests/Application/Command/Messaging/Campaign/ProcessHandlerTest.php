@@ -3,13 +3,14 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2017 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
 
 namespace Proximum\Vimeet\Tests\Application\Command\Messaging\Campaign;
 
+use PHPUnit\Framework\TestCase;
 use Proximum\Vimeet\Application\Command\Messaging\Campaign\Process;
 use Proximum\Vimeet\Application\Command\Messaging\Campaign\ProcessHandler;
 use Proximum\Vimeet\Domain\Messaging\SendGridApiClient;
@@ -24,7 +25,6 @@ use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Service\EventSend
 use Proximum\Vimeet\Tests\Factory\EventFactory;
 use Proximum\Vimeet\Tests\Factory\SheetFactory;
 use Proximum\Vimeet\Ui\Bundle\MailBundle\Mail\Messaging\MessageContentMail;
-use PHPUnit\Framework\TestCase;
 
 class ProcessHandlerTest extends TestCase
 {

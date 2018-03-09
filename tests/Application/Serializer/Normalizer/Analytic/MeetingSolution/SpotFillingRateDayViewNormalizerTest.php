@@ -45,7 +45,7 @@ class SpotFillingRateDayViewNormalizerTest extends TestCase
                 new ObjectNormalizer(),
             ],
             [
-                new JsonEncoder()
+                new JsonEncoder(),
             ]
         );
         $result = $serializer->serialize($data, 'json');

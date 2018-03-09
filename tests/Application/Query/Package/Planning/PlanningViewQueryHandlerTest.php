@@ -3,13 +3,14 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2016 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
 
 namespace Proximum\Vimeet\Tests\Application\Query\Package\Planning;
 
+use PHPUnit\Framework\TestCase;
 use Proximum\Vimeet\Application\Query\Package\Planning\PlanningViewQuery;
 use Proximum\Vimeet\Application\Query\Package\Planning\PlanningViewQueryHandler;
 use Proximum\Vimeet\Application\View\Package\ProductView;
@@ -24,7 +25,6 @@ use Proximum\Vimeet\Domain\Model\Type;
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Order\Merger;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
-use PHPUnit\Framework\TestCase;
 
 class PlanningViewQueryHandlerTest extends TestCase
 {
@@ -36,7 +36,6 @@ class PlanningViewQueryHandlerTest extends TestCase
         $user    = new User('email@email.com', 'salt', 'password', 'fr');
         $sheet   = new Sheet($event, $type, [], $user, $now);
         $locale  = 'fr';
-
 
         $package = new Package($event, 'package', $now);
         $participantProduct = new Product(
@@ -173,7 +172,6 @@ class PlanningViewQueryHandlerTest extends TestCase
         $user    = new User('email@email.com', 'salt', 'password', 'fr');
         $sheet   = new Sheet($event, $type, [], $user, $now);
         $locale  = 'fr';
-
 
         $package = new Package($event, 'package', $now);
         $participantProduct = new Product(
@@ -313,7 +311,6 @@ class PlanningViewQueryHandlerTest extends TestCase
         $sheet   = new Sheet($event, $type, [], $user, $now);
         $locale  = 'fr';
 
-
         $package = new Package($event, 'package', $now);
         $participantProduct = new Product(
             $event,
@@ -452,7 +449,6 @@ class PlanningViewQueryHandlerTest extends TestCase
         $sheet   = new Sheet($event, $type, [], $user, $now);
         $locale  = 'fr';
 
-
         $package = new Package($event, 'package', $now);
         $participantProduct = new Product(
             $event,
@@ -569,8 +565,6 @@ class PlanningViewQueryHandlerTest extends TestCase
         $this->assertEquals($expectedPlanningView, $planningViewQueryHandler->handle($planningViewQuery));
     }
 
-
-
     public function testHandleWithMultipleIncludedFromCart()
     {
         $now     = new \DateTime();
@@ -579,7 +573,6 @@ class PlanningViewQueryHandlerTest extends TestCase
         $user    = new User('email@email.com', 'salt', 'password', 'fr');
         $sheet   = new Sheet($event, $type, [], $user, $now);
         $locale  = 'fr';
-
 
         $package = new Package($event, 'package', $now);
         $participantProduct = new Product(
