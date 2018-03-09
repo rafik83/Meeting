@@ -18,6 +18,7 @@ use Proximum\Vimeet\Application\Event\Package\MustSelectPackageEvent;
 use Proximum\Vimeet\Application\Event\Sheet\SheetChangedTypeEvent;
 use Proximum\Vimeet\Application\Exception\Sheet\InvoicedSheetException;
 use Proximum\Vimeet\Application\Exception\Sheet\SheetWithMeetingsException;
+use Proximum\Vimeet\Domain\Cart\CartManager;
 use Proximum\Vimeet\Domain\Model\Order;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Repository\MeetingRepositoryInterface;
@@ -51,9 +52,13 @@ class ChangeTypeHandler
     /** @var EnableDisableManager */
     private $enableDisableManager;
 
+    /** @var CartManager */
+    private $cartManager;
+
     /**
      * @param SheetRepositoryInterface   $sheetRepository
      * @param OrderRepositoryInterface   $orderRepository
+     * @param CartManager                $cartManager
      * @param MeetingRepositoryInterface $meetingRepository
      * @param EnableDisableManager       $enableDisableManager
      * @param TranslatorInterface        $translator
@@ -64,6 +69,7 @@ class ChangeTypeHandler
     public function __construct(
         SheetRepositoryInterface $sheetRepository,
         OrderRepositoryInterface $orderRepository,
+        CartManager $cartManager,
         MeetingRepositoryInterface $meetingRepository,
         EnableDisableManager $enableDisableManager,
         TranslatorInterface $translator,
@@ -73,6 +79,7 @@ class ChangeTypeHandler
     ) {
         $this->sheetRepository         = $sheetRepository;
         $this->orderRepository         = $orderRepository;
+        $this->cartManager             = $cartManager;
         $this->translator              = $translator;
         $this->eventDispatcher         = $eventDispatcher;
         $this->datetime                = $datetime;
@@ -113,7 +120,7 @@ class ChangeTypeHandler
         if ($previousPackage !== $currentPackage) {
             $orders = $this->orderRepository->findBySheet($changeType->sheet);
 
-            if (count($orders)) {
+            if (\count($orders)) {
                 array_map(
                     function (Order $order) {
                         $order->cancel();
@@ -122,6 +129,8 @@ class ChangeTypeHandler
                     $orders
                 );
             }
+
+            $this->cartManager->emptyCart($changeType->sheet);
         }
 
         // reset registration step to redirect participant on registration

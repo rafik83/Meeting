@@ -1230,6 +1230,7 @@ services:
         arguments:
             - '@vimeet_infrastructure.repository.sheet_repository'
             - '@vimeet_infrastructure.repository.order_repository'
+            - '@cart_manager'
             - '@vimeet_infrastructure.repository.meeting_repository'
             - '@sheet.request.enable_disable_manager'
             - '@vimeet_infrastructure.adapter.translator_adapter'
