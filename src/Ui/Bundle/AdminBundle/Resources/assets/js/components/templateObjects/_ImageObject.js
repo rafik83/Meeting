@@ -1,4 +1,6 @@
-var Form = require('./../_Form');
+var Form = require('./../_Form'),
+    TemplateTaggableObject = require('./../_TemplateTaggableObject')
+;
 
 /**
  * ImageObject
@@ -15,6 +17,10 @@ function ImageObject(element, locale, builderType)
   this.form = new Form(element);
   this.config = JSON.parse(this.element.getAttribute('data-config'));
   this.builderType = builderType;
+
+  if (element.querySelector('[data-template-tags-select]')) {
+    this.templateTaggableObject = new TemplateTaggableObject(element);
+  }
 }
 
 ImageObject.prototype.fill = function ()
@@ -25,18 +31,24 @@ ImageObject.prototype.fill = function ()
   this.form.set('help', this.config.help[this.locale]);
   this.form.set('required', this.config.required);
   this.form.set('products', this.config.products);
+  this.form.set('tags', this.config.tags);
 
   this.form.bind('label', this.config.label[this.locale]);
 };
 
 ImageObject.prototype.save = function ()
 {
+  if (this.templateTaggableObject && !this.templateTaggableObject.save()) {
+    return false;
+  }
+
   this.config.style                    = this.form.get('style');
   this.config.label[this.locale]       = this.form.get('label');
   this.config.placeholder[this.locale] = this.form.get('placeholder');
   this.config.help[this.locale]        = this.form.get('help');
   this.config.required                 = this.form.get('required');
   this.config.products                 = this.form.get('products');
+  this.config.tags                     = this.form.get('tags');
 
   this.form.bind('label', this.config.label[this.locale]);
 

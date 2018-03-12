@@ -3,15 +3,20 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2016 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
 
 namespace Proximum\Vimeet\Domain\Template\TemplateObject;
 
+use Symfony\Component\HttpFoundation\File\UploadedFile;
+
 class Image extends EditableObject implements ContentObjectInterface
 {
+    /** @var null|UploadedFile */
+    public $file;
+
     /**
      * @return string
      */
@@ -30,6 +35,22 @@ class Image extends EditableObject implements ContentObjectInterface
         $this->data['image'] = $image;
 
         return $this;
+    }
+
+    /**
+     * @param null|UploadedFile $file
+     */
+    public function setFile($file)
+    {
+        $this->file = $file;
+    }
+
+    /**
+     * @return null|UploadedFile
+     */
+    public function getFile()
+    {
+        return $this->file;
     }
 
     /**
