@@ -37,7 +37,7 @@ form.create_unavailability.children.time.children.begin.label: de
 form.create_unavailability.children.time.children.end.label: à
 form.create_unavailability.data.maxLength.translations.plural: 'caractères restants'
 form.create_unavailability.data.maxLength.translations.reached: 'Nombre de caractères maximum atteint'
-form.create_unavailability.data.maxLength.translations.singular: 'caractère restant'
+form.create_unavailability.data.maxLength.translations.singular: 'caractères restants'
 form.email.placeholder: 'Saisissez votre adresse e-mail'
 form.group.participant.submit: Enregistrer
 form.login.children.password.placeholder: 'Mot de passe'

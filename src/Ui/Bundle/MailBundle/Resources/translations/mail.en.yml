@@ -77,7 +77,7 @@ mail.sheet.print.intro: 'Hello, here is the PDFsheets generated file for event %
 mail.sheet.print.pdf.error.content: 'Hello, a problem occurred when generating the PDF file to print the %eventTitle% event sheets'
 mail.sheet.print.pdf.error.subject: 'an error occurred when generating the PDF file'
 mail.sheet.print.pdf.subject: 'generating sheets PDFs'
-mail.sheet.refused.body: '%firstname% %lastname%, after consulting your profile, we inform you that your application to %event% as  "%participationType% " has not been selected for one of the following reasons:-your company has less than 6 months of existence,-we could''nt identify your activity (no website or activity description),-your activity is not privileged in view of the capacity of the spaces ; if you wish nevertheless to participate as a free visitor, and have access to the DemoSpace and to the networking spaces, please send an email to the contact indicated below. Best regards'
+mail.sheet.refused.body: "%firstname% %lastname%, after consulting your profile, we inform you that your application to %event% as  \"%participationType% \" has not been selected for one of the following reasons:\n\n- Your activity does not correspond to the event topic\n-  We could not identify your activity (no website nor activity description)\n- The registrations are closed.\n\nDo not hesitate to contact us, if you require further information."
 mail.sheet.refused.subject: 'your registration to the %event% event as "%participationType%" is refused'
 mail.sheet.show.link: 'See the presentation sheet'
 mail.sheet.submitted.body: "The presentation sheet of %sheetName% has been finalised on %date% by %firstname% %lastname%. \n\nTo access the details of the presentation sheet, please click on the link below"
