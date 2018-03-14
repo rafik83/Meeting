@@ -46,3 +46,7 @@ services:
         class: Proximum\Vimeet\Application\ThirdParty\LENI\Normalizer\LeniUserViewNormalizer
         tags:
             - { name: serializer.normalizer }
+
+    Proximum\Vimeet\Application\ThirdParty\LENI\Common\ExtraParameter\TypesMapping:
+        arguments:
+            - '@repository.event.extra_parameter_repository'
