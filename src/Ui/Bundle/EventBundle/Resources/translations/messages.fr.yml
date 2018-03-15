@@ -165,7 +165,7 @@ invoice.list.column.totalIncludeTaxes: 'Total TTC'
 invoice.list.title: 'Liste de vos factures'
 invoice.no-result: 'Aucune facture disponible'
 invoice.show: 'Voir la facture (pdf)'
-login.comexposium_sso.connect: 'Se connecter via ComexposiumConnect'
+login.comexposium_sso.connect: 'Se connecter'
 login.connect: 'Se connecter'
 login.connection: Connexion
 login.error.sheetDisabled: 'Votre participation a été désactivée'
