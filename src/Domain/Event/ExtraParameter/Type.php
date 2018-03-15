@@ -20,6 +20,8 @@ class Type
     public const TYPE_LENI_USER = 'leni_user';
     public const TYPE_LENI_EVENT = 'leni_event';
     public const TYPE_LENI_TYPES_MAPPING = 'leni_participation_types_mapping';
+    public const TYPE_LENI_SAVE_ENDPOINT = 'leni_save_endpoint';
+    public const TYPE_LENI_GET_ENDPOINT = 'leni_get_endpoint';
 
     public const TYPE_LENI_MODE = 'leni_mode';
     public const VALUE_LENI_MODE_SAVE = 'save';
@@ -47,6 +49,8 @@ class Type
         self::TYPE_LENI_USER,
         self::TYPE_LENI_EVENT,
         self::TYPE_LENI_MODE,
+        self::TYPE_LENI_SAVE_ENDPOINT,
+        self::TYPE_LENI_GET_ENDPOINT,
         self::TYPE_LENI_TYPES_MAPPING,
         self::TYPE_VIANEO_ENDPOINT,
         self::TYPE_VIANEO_CONCERNED_TYPES_ID,
