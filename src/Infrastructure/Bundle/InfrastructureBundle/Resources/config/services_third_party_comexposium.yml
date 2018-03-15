@@ -136,8 +136,6 @@ services:
     Proximum\Vimeet\Application\ThirdParty\Comexposium\SSO\Application\Query\SSOComexposiumViewQueryHandler:
         arguments:
             - '@repository.event.extra_parameter_repository'
-            - '@vimeet_infrastructure.repository.user_repository'
-            - '@vimeet_infrastructure.repository.sheet_repository'
             - '@Proximum\Vimeet\Application\ThirdParty\Comexposium\SSO\Converter\LocaleConverter'
             - '%comexposium_sso_loader_lib_endpoint%'
         tags:

@@ -21,23 +21,13 @@ class SSOComexposiumViewQuery implements Query
     /** @var string */
     public $locale;
 
-    /** @var null|string */
-    public $email;
-
-    /** @var bool */
-    public $showLogin;
-
     /**
-     * @param Event       $event
-     * @param string      $locale
-     * @param null|string $email
-     * @param bool        $showLogin
+     * @param Event  $event
+     * @param string $locale
      */
-    public function __construct(Event $event, string $locale, ?string $email, bool $showLogin)
+    public function __construct(Event $event, string $locale)
     {
         $this->event = $event;
         $this->locale = $locale;
-        $this->email = $email;
-        $this->showLogin = $showLogin;
     }
 }

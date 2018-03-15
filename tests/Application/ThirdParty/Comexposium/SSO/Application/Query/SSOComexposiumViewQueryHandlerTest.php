@@ -18,23 +18,12 @@ use Proximum\Vimeet\Application\ThirdParty\Comexposium\SSO\Application\View\SSOC
 use Proximum\Vimeet\Application\ThirdParty\Comexposium\SSO\Converter\LocaleConverter;
 use Proximum\Vimeet\Domain\Event\ExtraParameter\Type;
 use Proximum\Vimeet\Domain\Model\Event;
-use Proximum\Vimeet\Domain\Model\Participant;
-use Proximum\Vimeet\Domain\Model\Sheet;
-use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Repository\Event\ExtraParameterRepositoryInterface;
-use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
-use Proximum\Vimeet\Domain\Repository\UserRepositoryInterface;
 
 class SSOComexposiumViewQueryHandlerTest extends TestCase
 {
     /** @var ObjectProphecy */
     private $extraParameterRepository;
-
-    /** @var ObjectProphecy */
-    private $userRepository;
-
-    /** @var ObjectProphecy */
-    private $sheetRepository;
 
     /** @var ObjectProphecy */
     private $event;
@@ -48,8 +37,6 @@ class SSOComexposiumViewQueryHandlerTest extends TestCase
     public function setUp()
     {
         $this->extraParameterRepository = $this->prophesize(ExtraParameterRepositoryInterface::class);
-        $this->userRepository = $this->prophesize(UserRepositoryInterface::class);
-        $this->sheetRepository = $this->prophesize(SheetRepositoryInterface::class);
         $this->localeConverter = $this->prophesize(LocaleConverter::class);
         $this->comexposiumSSOLoaderLibEndpoint = 'https://example.net/endpoint';
         $this->event = $this->prophesize(Event::class);
@@ -66,15 +53,11 @@ class SSOComexposiumViewQueryHandlerTest extends TestCase
 
         $handler = new SSOComexposiumViewQueryHandler(
             $this->extraParameterRepository->reveal(),
-            $this->userRepository->reveal(),
-            $this->sheetRepository->reveal(),
             $this->localeConverter->reveal(),
             $this->comexposiumSSOLoaderLibEndpoint
         );
 
-        $result = $handler->handle(
-            new SSOComexposiumViewQuery($this->event->reveal(), 'fr', 'email@example.net', true)
-        );
+        $result = $handler->handle(new SSOComexposiumViewQuery($this->event->reveal(), 'fr'));
 
         $this->assertEquals(null, $result);
     }
@@ -111,20 +94,16 @@ class SSOComexposiumViewQueryHandlerTest extends TestCase
 
         $handler = new SSOComexposiumViewQueryHandler(
             $this->extraParameterRepository->reveal(),
-            $this->userRepository->reveal(),
-            $this->sheetRepository->reveal(),
             $this->localeConverter->reveal(),
             $this->comexposiumSSOLoaderLibEndpoint
         );
 
-        $result = $handler->handle(
-            new SSOComexposiumViewQuery($this->event->reveal(), 'fr', 'email@example.net', true)
-        );
+        $result = $handler->handle(new SSOComexposiumViewQuery($this->event->reveal(), 'fr'));
 
         $this->assertEquals(null, $result);
     }
 
-    public function testHandleNoUser()
+    public function testHandle()
     {
         $extraParameter1 = $this->prophesize(Event\ExtraParameter::class);
         $extraParameter2 = $this->prophesize(Event\ExtraParameter::class);
@@ -154,13 +133,10 @@ class SSOComexposiumViewQueryHandlerTest extends TestCase
             ->willReturn($extraParameter4->reveal())
         ;
 
-        $this->userRepository->findByEmail('email@example.net')->shouldBeCalled()->willReturn(null);
         $this->localeConverter->formatLocale('en')->shouldBeCalled()->willReturn('eng-GB');
 
         $handler = new SSOComexposiumViewQueryHandler(
             $this->extraParameterRepository->reveal(),
-            $this->userRepository->reveal(),
-            $this->sheetRepository->reveal(),
             $this->localeConverter->reveal(),
             $this->comexposiumSSOLoaderLibEndpoint
         );
@@ -170,7 +146,7 @@ class SSOComexposiumViewQueryHandlerTest extends TestCase
         $extraParameter4->getValue()->willReturn('sessionSalon');
 
         $result = $handler->handle(
-            new SSOComexposiumViewQuery($this->event->reveal(), 'en', 'email@example.net', true)
+            new SSOComexposiumViewQuery($this->event->reveal(), 'en')
         );
 
         $expected = new SSOComexposiumView(
@@ -178,408 +154,7 @@ class SSOComexposiumViewQueryHandlerTest extends TestCase
             'sessionSalon',
             'application123',
             'eng-GB',
-            'email@example.net',
-            $this->comexposiumSSOLoaderLibEndpoint,
-            true
-        );
-
-        $this->assertEquals($expected, $result);
-    }
-
-    public function testHandleNoSheet()
-    {
-        $extraParameter1 = $this->prophesize(Event\ExtraParameter::class);
-        $extraParameter2 = $this->prophesize(Event\ExtraParameter::class);
-        $extraParameter3 = $this->prophesize(Event\ExtraParameter::class);
-        $extraParameter4 = $this->prophesize(Event\ExtraParameter::class);
-        $this->extraParameterRepository
-            ->findByEventAndType($this->event->reveal(), Type::TYPE_COMEXPOSIUM_SSO_ENABLED)
-            ->shouldBeCalled()
-            ->willReturn($extraParameter1->reveal())
-        ;
-
-        $this->extraParameterRepository
-            ->findByEventAndType($this->event->reveal(), Type::TYPE_COMEXPOSIUM_SSO_APPLICATION)
-            ->shouldBeCalled()
-            ->willReturn($extraParameter2->reveal())
-        ;
-
-        $this->extraParameterRepository
-            ->findByEventAndType($this->event->reveal(), Type::TYPE_COMEXPOSIUM_SSO_SALON)
-            ->shouldBeCalled()
-            ->willReturn($extraParameter3->reveal())
-        ;
-
-        $this->extraParameterRepository
-            ->findByEventAndType($this->event->reveal(), Type::TYPE_COMEXPOSIUM_SSO_SESSION_SALON)
-            ->shouldBeCalled()
-            ->willReturn($extraParameter4->reveal())
-        ;
-
-        $user = $this->prophesize(User::class);
-        $this->userRepository->findByEmail('email@example.net')->shouldBeCalled()->willReturn($user->reveal());
-        $this->sheetRepository->getSheetsByUserAndEvent($user->reveal(), $this->event->reveal())
-            ->shouldBeCalled()
-            ->willReturn([])
-        ;
-
-        $this->localeConverter->formatLocale('fr')->shouldBeCalled()->willReturn('fre-FR');
-
-        $handler = new SSOComexposiumViewQueryHandler(
-            $this->extraParameterRepository->reveal(),
-            $this->userRepository->reveal(),
-            $this->sheetRepository->reveal(),
-            $this->localeConverter->reveal(),
             $this->comexposiumSSOLoaderLibEndpoint
-        );
-
-        $extraParameter2->getValue()->willReturn('application123');
-        $extraParameter3->getValue()->willReturn('salon');
-        $extraParameter4->getValue()->willReturn('sessionSalon');
-
-        $result = $handler->handle(
-            new SSOComexposiumViewQuery($this->event->reveal(), 'fr', 'email@example.net', true)
-        );
-
-        $expected = new SSOComexposiumView(
-            'salon',
-            'sessionSalon',
-            'application123',
-            'fre-FR',
-            'email@example.net',
-            $this->comexposiumSSOLoaderLibEndpoint,
-            true
-        );
-
-        $this->assertEquals($expected, $result);
-    }
-
-    public function testHandleWithSheetImportedAndOwner()
-    {
-        $extraParameter1 = $this->prophesize(Event\ExtraParameter::class);
-        $extraParameter2 = $this->prophesize(Event\ExtraParameter::class);
-        $extraParameter3 = $this->prophesize(Event\ExtraParameter::class);
-        $extraParameter4 = $this->prophesize(Event\ExtraParameter::class);
-        $this->extraParameterRepository
-            ->findByEventAndType($this->event->reveal(), Type::TYPE_COMEXPOSIUM_SSO_ENABLED)
-            ->shouldBeCalled()
-            ->willReturn($extraParameter1->reveal())
-        ;
-
-        $this->extraParameterRepository
-            ->findByEventAndType($this->event->reveal(), Type::TYPE_COMEXPOSIUM_SSO_APPLICATION)
-            ->shouldBeCalled()
-            ->willReturn($extraParameter2->reveal())
-        ;
-
-        $this->extraParameterRepository
-            ->findByEventAndType($this->event->reveal(), Type::TYPE_COMEXPOSIUM_SSO_SALON)
-            ->shouldBeCalled()
-            ->willReturn($extraParameter3->reveal())
-        ;
-
-        $this->extraParameterRepository
-            ->findByEventAndType($this->event->reveal(), Type::TYPE_COMEXPOSIUM_SSO_SESSION_SALON)
-            ->shouldBeCalled()
-            ->willReturn($extraParameter4->reveal())
-        ;
-
-        $user = $this->prophesize(User::class);
-        $sheet = $this->prophesize(Sheet::class);
-        $this->userRepository->findByEmail('email@example.net')->shouldBeCalled()->willReturn($user->reveal());
-        $this->sheetRepository->getSheetsByUserAndEvent($user->reveal(), $this->event->reveal())
-            ->shouldBeCalled()
-            ->willReturn([$sheet])
-        ;
-
-        $sheet->isImported()->shouldBeCalled()->willReturn(true);
-        $sheet->getUserParticipant($user->reveal())->shouldBeCalled()->willReturn(null);
-        $sheet->isOwner($user->reveal())->shouldBeCalled()->willReturn(true);
-        $this->localeConverter->formatLocale('fr')->shouldBeCalled()->willReturn('fre-FR');
-
-        $handler = new SSOComexposiumViewQueryHandler(
-            $this->extraParameterRepository->reveal(),
-            $this->userRepository->reveal(),
-            $this->sheetRepository->reveal(),
-            $this->localeConverter->reveal(),
-            $this->comexposiumSSOLoaderLibEndpoint
-        );
-
-        $extraParameter2->getValue()->willReturn('application123');
-        $extraParameter3->getValue()->willReturn('salon');
-        $extraParameter4->getValue()->willReturn('sessionSalon');
-
-        $result = $handler->handle(new SSOComexposiumViewQuery($this->event->reveal(), 'fr', 'email@example.net', true));
-        $expected = new SSOComexposiumView(
-            'salon',
-            'sessionSalon',
-            'application123',
-            'fre-FR',
-            'email@example.net',
-            $this->comexposiumSSOLoaderLibEndpoint,
-            true
-        );
-
-        $this->assertEquals($expected, $result);
-    }
-
-    public function testHandleWithSheetImportedAndParticipantImported()
-    {
-        $extraParameter1 = $this->prophesize(Event\ExtraParameter::class);
-        $extraParameter2 = $this->prophesize(Event\ExtraParameter::class);
-        $extraParameter3 = $this->prophesize(Event\ExtraParameter::class);
-        $extraParameter4 = $this->prophesize(Event\ExtraParameter::class);
-        $this->extraParameterRepository
-            ->findByEventAndType($this->event->reveal(), Type::TYPE_COMEXPOSIUM_SSO_ENABLED)
-            ->shouldBeCalled()
-            ->willReturn($extraParameter1->reveal())
-        ;
-
-        $this->extraParameterRepository
-            ->findByEventAndType($this->event->reveal(), Type::TYPE_COMEXPOSIUM_SSO_APPLICATION)
-            ->shouldBeCalled()
-            ->willReturn($extraParameter2->reveal())
-        ;
-
-        $this->extraParameterRepository
-            ->findByEventAndType($this->event->reveal(), Type::TYPE_COMEXPOSIUM_SSO_SALON)
-            ->shouldBeCalled()
-            ->willReturn($extraParameter3->reveal())
-        ;
-
-        $this->extraParameterRepository
-            ->findByEventAndType($this->event->reveal(), Type::TYPE_COMEXPOSIUM_SSO_SESSION_SALON)
-            ->shouldBeCalled()
-            ->willReturn($extraParameter4->reveal())
-        ;
-
-        $user = $this->prophesize(User::class);
-        $sheet = $this->prophesize(Sheet::class);
-        $this->userRepository->findByEmail('email@example.net')->shouldBeCalled()->willReturn($user->reveal());
-        $this->sheetRepository->getSheetsByUserAndEvent($user->reveal(), $this->event->reveal())
-            ->shouldBeCalled()
-            ->willReturn([$sheet])
-        ;
-
-        $sheet->isImported()->shouldBeCalled()->willReturn(true);
-        $participant = $this->prophesize(Participant::class);
-        $participant->isImported()->shouldBeCalled()->willReturn(true);
-        $sheet->getUserParticipant($user->reveal())->shouldBeCalled()->willReturn($participant);
-        $sheet->isOwner($user->reveal())->shouldBeCalled()->willReturn(false);
-        $this->localeConverter->formatLocale('fr')->shouldBeCalled()->willReturn('fre-FR');
-
-        $handler = new SSOComexposiumViewQueryHandler(
-            $this->extraParameterRepository->reveal(),
-            $this->userRepository->reveal(),
-            $this->sheetRepository->reveal(),
-            $this->localeConverter->reveal(),
-            $this->comexposiumSSOLoaderLibEndpoint
-        );
-
-        $extraParameter2->getValue()->willReturn('application123');
-        $extraParameter3->getValue()->willReturn('salon');
-        $extraParameter4->getValue()->willReturn('sessionSalon');
-
-        $result = $handler->handle(
-            new SSOComexposiumViewQuery($this->event->reveal(), 'fr', 'email@example.net', true)
-        );
-        $expected = new SSOComexposiumView(
-            'salon',
-            'sessionSalon',
-            'application123',
-            'fre-FR',
-            'email@example.net',
-            $this->comexposiumSSOLoaderLibEndpoint,
-            true
-        );
-
-        $this->assertEquals($expected, $result);
-    }
-
-    public function testHandleWithSheetImportedParticipantNotImportedAndNotOwner()
-    {
-        $extraParameter1 = $this->prophesize(Event\ExtraParameter::class);
-        $extraParameter2 = $this->prophesize(Event\ExtraParameter::class);
-        $extraParameter3 = $this->prophesize(Event\ExtraParameter::class);
-        $extraParameter4 = $this->prophesize(Event\ExtraParameter::class);
-        $this->extraParameterRepository
-            ->findByEventAndType($this->event->reveal(), Type::TYPE_COMEXPOSIUM_SSO_ENABLED)
-            ->shouldBeCalled()
-            ->willReturn($extraParameter1->reveal())
-        ;
-
-        $this->extraParameterRepository
-            ->findByEventAndType($this->event->reveal(), Type::TYPE_COMEXPOSIUM_SSO_APPLICATION)
-            ->shouldBeCalled()
-            ->willReturn($extraParameter2->reveal())
-        ;
-
-        $this->extraParameterRepository
-            ->findByEventAndType($this->event->reveal(), Type::TYPE_COMEXPOSIUM_SSO_SALON)
-            ->shouldBeCalled()
-            ->willReturn($extraParameter3->reveal())
-        ;
-
-        $this->extraParameterRepository
-            ->findByEventAndType($this->event->reveal(), Type::TYPE_COMEXPOSIUM_SSO_SESSION_SALON)
-            ->shouldBeCalled()
-            ->willReturn($extraParameter4->reveal())
-        ;
-
-        $user = $this->prophesize(User::class);
-        $sheet = $this->prophesize(Sheet::class);
-        $this->userRepository->findByEmail('email@example.net')->shouldBeCalled()->willReturn($user->reveal());
-        $this->sheetRepository->getSheetsByUserAndEvent($user->reveal(), $this->event->reveal())
-            ->shouldBeCalled()
-            ->willReturn([$sheet])
-        ;
-
-        $sheet->isImported()->shouldBeCalled()->willReturn(true);
-        $participant = $this->prophesize(Participant::class);
-        $participant->isImported()->shouldBeCalled()->willReturn(false);
-        $sheet->getUserParticipant($user->reveal())->shouldBeCalled()->willReturn($participant);
-        $sheet->isOwner($user->reveal())->shouldBeCalled()->willReturn(false);
-        $this->localeConverter->formatLocale('fr')->shouldNotBeCalled();
-
-        $handler = new SSOComexposiumViewQueryHandler(
-            $this->extraParameterRepository->reveal(),
-            $this->userRepository->reveal(),
-            $this->sheetRepository->reveal(),
-            $this->localeConverter->reveal(),
-            $this->comexposiumSSOLoaderLibEndpoint
-        );
-
-        $extraParameter2->getValue()->willReturn('application123');
-        $extraParameter3->getValue()->willReturn('salon');
-        $extraParameter4->getValue()->willReturn('sessionSalon');
-
-        $result = $handler->handle(
-            new SSOComexposiumViewQuery($this->event->reveal(), 'fr', 'email@example.net', true)
-        );
-
-        $this->assertEquals(null, $result);
-    }
-
-    public function testHandleWithSheetNotImported()
-    {
-        $extraParameter1 = $this->prophesize(Event\ExtraParameter::class);
-        $extraParameter2 = $this->prophesize(Event\ExtraParameter::class);
-        $extraParameter3 = $this->prophesize(Event\ExtraParameter::class);
-        $extraParameter4 = $this->prophesize(Event\ExtraParameter::class);
-        $this->extraParameterRepository
-            ->findByEventAndType($this->event->reveal(), Type::TYPE_COMEXPOSIUM_SSO_ENABLED)
-            ->shouldBeCalled()
-            ->willReturn($extraParameter1->reveal())
-        ;
-
-        $this->extraParameterRepository
-            ->findByEventAndType($this->event->reveal(), Type::TYPE_COMEXPOSIUM_SSO_APPLICATION)
-            ->shouldBeCalled()
-            ->willReturn($extraParameter2->reveal())
-        ;
-
-        $this->extraParameterRepository
-            ->findByEventAndType($this->event->reveal(), Type::TYPE_COMEXPOSIUM_SSO_SALON)
-            ->shouldBeCalled()
-            ->willReturn($extraParameter3->reveal())
-        ;
-
-        $this->extraParameterRepository
-            ->findByEventAndType($this->event->reveal(), Type::TYPE_COMEXPOSIUM_SSO_SESSION_SALON)
-            ->shouldBeCalled()
-            ->willReturn($extraParameter4->reveal())
-        ;
-
-        $user = $this->prophesize(User::class);
-        $sheet = $this->prophesize(Sheet::class);
-        $this->userRepository->findByEmail('email@example.net')->shouldBeCalled()->willReturn($user->reveal());
-        $this->sheetRepository->getSheetsByUserAndEvent($user->reveal(), $this->event->reveal())
-            ->shouldBeCalled()
-            ->willReturn([$sheet])
-        ;
-
-        $sheet->isImported()->shouldBeCalled()->willReturn(false);
-        $participant = $this->prophesize(Participant::class);
-        $participant->isImported()->shouldBeCalled()->willReturn(false);
-        $sheet->getUserParticipant($user->reveal())->shouldBeCalled()->willReturn($participant);
-        $sheet->isOwner($user->reveal())->shouldBeCalled()->willReturn(false);
-        $this->localeConverter->formatLocale('fr')->shouldNotBeCalled();
-
-        $handler = new SSOComexposiumViewQueryHandler(
-            $this->extraParameterRepository->reveal(),
-            $this->userRepository->reveal(),
-            $this->sheetRepository->reveal(),
-            $this->localeConverter->reveal(),
-            $this->comexposiumSSOLoaderLibEndpoint
-        );
-
-        $extraParameter2->getValue()->willReturn('application123');
-        $extraParameter3->getValue()->willReturn('salon');
-        $extraParameter4->getValue()->willReturn('sessionSalon');
-
-        $result = $handler->handle(
-            new SSOComexposiumViewQuery($this->event->reveal(), 'fr', 'email@example.net', true)
-        );
-
-        $this->assertEquals(null, $result);
-    }
-
-    public function testHandleNoEmail()
-    {
-        $extraParameter1 = $this->prophesize(Event\ExtraParameter::class);
-        $extraParameter2 = $this->prophesize(Event\ExtraParameter::class);
-        $extraParameter3 = $this->prophesize(Event\ExtraParameter::class);
-        $extraParameter4 = $this->prophesize(Event\ExtraParameter::class);
-        $this->extraParameterRepository
-            ->findByEventAndType($this->event->reveal(), Type::TYPE_COMEXPOSIUM_SSO_ENABLED)
-            ->shouldBeCalled()
-            ->willReturn($extraParameter1->reveal())
-        ;
-
-        $this->extraParameterRepository
-            ->findByEventAndType($this->event->reveal(), Type::TYPE_COMEXPOSIUM_SSO_APPLICATION)
-            ->shouldBeCalled()
-            ->willReturn($extraParameter2->reveal())
-        ;
-
-        $this->extraParameterRepository
-            ->findByEventAndType($this->event->reveal(), Type::TYPE_COMEXPOSIUM_SSO_SALON)
-            ->shouldBeCalled()
-            ->willReturn($extraParameter3->reveal())
-        ;
-
-        $this->extraParameterRepository
-            ->findByEventAndType($this->event->reveal(), Type::TYPE_COMEXPOSIUM_SSO_SESSION_SALON)
-            ->shouldBeCalled()
-            ->willReturn($extraParameter4->reveal())
-        ;
-
-        $this->localeConverter->formatLocale('fr')->shouldBeCalled()->willReturn('fre-FR');
-
-        $handler = new SSOComexposiumViewQueryHandler(
-            $this->extraParameterRepository->reveal(),
-            $this->userRepository->reveal(),
-            $this->sheetRepository->reveal(),
-            $this->localeConverter->reveal(),
-            $this->comexposiumSSOLoaderLibEndpoint
-        );
-
-        $extraParameter2->getValue()->willReturn('application123');
-        $extraParameter3->getValue()->willReturn('salon');
-        $extraParameter4->getValue()->willReturn('sessionSalon');
-
-        $result = $handler->handle(
-            new SSOComexposiumViewQuery($this->event->reveal(), 'fr', null, false)
-        );
-
-        $expected = new SSOComexposiumView(
-            'salon',
-            'sessionSalon',
-            'application123',
-            'fre-FR',
-            null,
-            $this->comexposiumSSOLoaderLibEndpoint,
-            false
         );
 
         $this->assertEquals($expected, $result);

@@ -3,16 +3,12 @@
 
 <script type="text/javascript">
     function vimeet_cmxp_login() {
-        comexposiumCap.openCap('login', 'login', function () {
-            $('.cxpmClientAccountPopinWrapper input[type="email"]').val(
-                document.getElementById('cxpmClientAccountWidget').getAttribute('data-email')
-            );
-        });
+        comexposiumCap.openCap('login', 'login');
     }
 
     $(document).ready(function () {
         $(document).on('comexposiumConnectLoaded', function () {
-            {% if ssoComexposiumView.showLogin %}vimeet_cmxp_login();{% endif %}
+            vimeet_cmxp_login();
 
             window.cxpm.jQuery(document).on('comexposiumConnectLogged', function (event, email, token, isExhibitor) {
                 sendDataToSSOChecker(email, token, isExhibitor);

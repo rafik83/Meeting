@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2015 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -79,14 +79,7 @@ class SecurityController extends Controller
         $hasError = 0 < \count($form->getErrors(true)) || $this->get('session')->getFlashBag()->has('error');
 
         $ssoComexposiumView = !$hasError
-            ? $this->get(QueryBus::class)->handle(
-                new SSOComexposiumViewQuery(
-                    $event,
-                    $request->getLocale(),
-                    null,
-                    false
-                )
-            )
+            ? $this->get(QueryBus::class)->handle(new SSOComexposiumViewQuery($event, $request->getLocale()))
             : null;
 
         return $this->render('EventBundle:Security:login_first_step.html.twig', [
@@ -146,15 +139,6 @@ class SecurityController extends Controller
             $form->get('password')->addError(new FormError($error->getMessage()));
         }
 
-        $ssoComexposiumView = $this->get(QueryBus::class)->handle(
-            new SSOComexposiumViewQuery(
-                $event,
-                $request->getLocale(),
-                $email,
-                true
-            )
-        );
-
         return $this->render('EventBundle:Security:login_second_step.html.twig', [
             'event' => $event,
             'form' => $form->createView(),
@@ -162,7 +146,6 @@ class SecurityController extends Controller
             'error' => $error,
             'typeId' => $typeId,
             'type' => $type,
-            'ssoComexposiumView' => $ssoComexposiumView,
         ]);
     }
 
