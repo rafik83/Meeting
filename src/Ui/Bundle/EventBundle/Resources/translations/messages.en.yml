@@ -165,7 +165,7 @@ invoice.list.column.totalIncludeTaxes: 'Total incl. VAT'
 invoice.list.title: 'Your invoices'
 invoice.no-result: 'No invoice available'
 invoice.show: 'View final invoice (pdf)'
-login.comexposium_sso.connect: 'Login via ComexposiumConnect'
+login.comexposium_sso.connect: Login
 login.connect: Login
 login.connection: Connexion
 login.error.sheetDisabled: 'Your participation has been disabled.'
