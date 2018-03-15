@@ -113,6 +113,8 @@ services:
 
     Proximum\Vimeet\Application\ThirdParty\Comexposium\SSO\Converter\RawUserDataToUserInformationViewConverter: ~
 
+    Proximum\Vimeet\Application\ThirdParty\Comexposium\SSO\Converter\LocaleConverter: ~
+
     Proximum\Vimeet\Application\ThirdParty\Comexposium\SSO\Converter\EmailToUserConverter:
         arguments:
             - '@Proximum\Vimeet\Application\ThirdParty\Comexposium\SSO\UserInformationGetter'
@@ -150,6 +152,14 @@ services:
         arguments:
             - '@repository.event.extra_parameter_repository'
             - '@vimeet_infrastructure.repository.type_repository'
+
+
+    Proximum\Vimeet\Application\ThirdParty\Comexposium\SSO\Application\Command\User\CreateHandler:
+        arguments:
+            - '@adapter.http_adapter'
+            - '@repository.event.extra_parameter_repository'
+            - '%comexposium_create_user_endpoint%'
+            - '@Proximum\Vimeet\Application\ThirdParty\Comexposium\SSO\Converter\LocaleConverter'
 
     #
     # Guard
