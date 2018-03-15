@@ -10,13 +10,13 @@
 
 namespace Proximum\Vimeet\Application\ThirdParty\LENI\Save\Command;
 
+use Proximum\Vimeet\Application\ThirdParty\LENI\Common\Api\LeniApiCaller;
+use Proximum\Vimeet\Application\ThirdParty\LENI\Common\UserExtraData\UserExtraDataFingerprintManager;
 use Proximum\Vimeet\Application\ThirdParty\LENI\Exception\LeniApiServerException;
 use Proximum\Vimeet\Application\ThirdParty\LENI\Exception\MissingIdException;
 use Proximum\Vimeet\Application\ThirdParty\LENI\Exception\NotValidApiCallException;
 use Proximum\Vimeet\Application\ThirdParty\LENI\Exception\WarningApiCallException;
-use Proximum\Vimeet\Application\ThirdParty\LENI\LeniApiCaller;
 use Proximum\Vimeet\Application\ThirdParty\LENI\LeniConstants;
-use Proximum\Vimeet\Application\ThirdParty\LENI\UserExtraDataFingerprintManager;
 use Proximum\Vimeet\Domain\Repository\User\Event\ExtraDataRepositoryInterface;
 use Proximum\Vimeet\Domain\User\Event\ExtraData\Type as ExtraDataType;
 

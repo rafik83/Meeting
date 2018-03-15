@@ -14,8 +14,6 @@ use Proximum\Vimeet\Application\Adapter\SerializerAdapterInterface;
 use Proximum\Vimeet\Application\Adapter\ThirdParty\LENI\Save\LeniApiCallJobQueueInterface;
 use Proximum\Vimeet\Application\Components\Planning\Formatter\ParticipantPlanningFormatter;
 use Proximum\Vimeet\Application\Exception\Sheet\SheetNotFoundException;
-use Proximum\Vimeet\Application\ThirdParty\LENI\Exception\LeniApiServerException;
-use Proximum\Vimeet\Application\ThirdParty\LENI\Exception\NotValidApiCallException;
 use Proximum\Vimeet\Application\ThirdParty\LENI\Save\Query\LeniUserViewQuery;
 use Proximum\Vimeet\Application\ThirdParty\LENI\Save\Query\LeniUserViewQueryHandler;
 use Proximum\Vimeet\Domain\Event\ExtraParameter\Type;

@@ -10,8 +10,8 @@
 
 namespace Proximum\Vimeet\Application\ThirdParty\LENI\Get\Command;
 
+use Proximum\Vimeet\Application\ThirdParty\LENI\Common\Api\LeniApiCaller;
 use Proximum\Vimeet\Application\ThirdParty\LENI\Exception\LeniApiServerException;
-use Proximum\Vimeet\Application\ThirdParty\LENI\LeniApiCaller;
 use Proximum\Vimeet\Domain\Event\ExtraParameter\Type;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Repository\EventRepositoryInterface;
