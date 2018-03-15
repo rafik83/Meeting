@@ -53,28 +53,39 @@ class LeniApiCaller
      */
     public function save(Event $event, mixed $data): Object
     {
-        $authorizedModes = [
-            Type::VALUE_LENI_MODE_SAVE,
-            Type::VALUE_LENI_MODE_BOTH,
-        ];
-
         $leniUserParameter = $this->extraParameterRepository->findByEventAndType($event, Type::TYPE_LENI_USER);
         $leniEventParameter = $this->extraParameterRepository->findByEventAndType($event, Type::TYPE_LENI_EVENT);
         $leniModeParameter = $this->extraParameterRepository->findByEventAndType($event, Type::TYPE_LENI_MODE);
+        $leniEndpointParameter = $this->extraParameterRepository->findByEventAndType(
+            $event,
+            Type::TYPE_LENI_SAVE_ENDPOINT
+        );
 
-        $isAuthorizedMode = $leniModeParameter !== null && \in_array($leniModeParameter, $authorizedModes, true);
+        $isAuthorizedMode = $leniModeParameter !== null
+            && \in_array(
+                $leniModeParameter->getValue(),
+                [
+                    Type::VALUE_LENI_MODE_SAVE,
+                    Type::VALUE_LENI_MODE_BOTH,
+                ],
+                true
+            );
 
-        if (!$isAuthorizedMode || null === $leniUserParameter || null === $leniEventParameter) {
+        if (!$isAuthorizedMode
+            || null === $leniUserParameter
+            || null === $leniEventParameter
+            || null === $leniEndpointParameter
+        ) {
             throw new \LogicException(
-                'Can not call LeniApiCaller if event has not LENI_USER and LENI_EVENT and LENI_MODE'
+                'Can not call LeniApiCaller because event has not LENI_USER, LENI_EVENT, valid LENI_MODE or LENI Save endpoint'
             );
         }
 
-        $body = $this->getBody($leniEventParameter->getValue(), $leniUserParameter->getValue(), $data);
+        $body = $this->getBody($leniEventParameter->getValue());
         $headers = $this->getHeaders($leniUserParameter->getValue(), $body);
 
         try {
-            $jsonResponse = $this->httpAdapter->post(LeniConstants::LENI_SAVE_ENDPOINT, $headers, $body);
+            $jsonResponse = $this->httpAdapter->post($leniEndpointParameter->getValue(), $headers, $body);
         } catch (ServerErrorException $exception) {
             throw new LeniApiServerException($exception);
         }
@@ -94,25 +105,30 @@ class LeniApiCaller
      */
     public function get(Event $event): array
     {
-        $authorizedModes = [
-            Type::VALUE_LENI_MODE_GET,
-            Type::VALUE_LENI_MODE_BOTH,
-        ];
-
         $leniUserParameter = $this->extraParameterRepository->findByEventAndType($event, Type::TYPE_LENI_USER);
         $leniEventParameter = $this->extraParameterRepository->findByEventAndType($event, Type::TYPE_LENI_EVENT);
         $leniModeParameter = $this->extraParameterRepository->findByEventAndType($event, Type::TYPE_LENI_MODE);
+        $leniEndpointParameter = $this->extraParameterRepository->findByEventAndType(
+            $event,
+            Type::TYPE_LENI_GET_ENDPOINT
+        );
 
         $isAuthorizedMode = $leniModeParameter !== null
-            && \in_array(
-                $leniModeParameter->getValue(),
-                $authorizedModes,
+            && \in_array($leniModeParameter->getValue(),
+                [
+                    Type::VALUE_LENI_MODE_GET,
+                    Type::VALUE_LENI_MODE_BOTH,
+                ],
                 true
             );
 
-        if (!$isAuthorizedMode || null === $leniUserParameter || null === $leniEventParameter) {
+        if (!$isAuthorizedMode
+            || null === $leniUserParameter
+            || null === $leniEventParameter
+            || null === $leniEndpointParameter
+        ) {
             throw new \LogicException(
-                'Can not call LeniApiCaller if event has not LENI_USER and LENI_EVENT and LENI_MODE'
+                'Can not call LeniApiCaller because event has not LENI_USER, LENI_EVENT, valid LENI_MODE or LENI Get endpoint'
             );
         }
 
@@ -120,7 +136,7 @@ class LeniApiCaller
         $headers = $this->getHeaders($leniUserParameter->getValue(), $body);
 
         try {
-            $jsonResponse = $this->httpAdapter->post(LeniConstants::LENI_GET_ENDPOINT, $headers, $body);
+            $jsonResponse = $this->httpAdapter->post($leniEndpointParameter->getValue(), $headers, $body);
         } catch (ServerErrorException $exception) {
             throw new LeniApiServerException($exception);
         }
