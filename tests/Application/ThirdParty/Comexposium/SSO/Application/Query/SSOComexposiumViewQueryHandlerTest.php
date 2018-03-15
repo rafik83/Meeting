@@ -15,6 +15,7 @@ use Prophecy\Prophecy\ObjectProphecy;
 use Proximum\Vimeet\Application\ThirdParty\Comexposium\SSO\Application\Query\SSOComexposiumViewQuery;
 use Proximum\Vimeet\Application\ThirdParty\Comexposium\SSO\Application\Query\SSOComexposiumViewQueryHandler;
 use Proximum\Vimeet\Application\ThirdParty\Comexposium\SSO\Application\View\SSOComexposiumView;
+use Proximum\Vimeet\Application\ThirdParty\Comexposium\SSO\Converter\LocaleConverter;
 use Proximum\Vimeet\Domain\Event\ExtraParameter\Type;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Participant;
@@ -41,11 +42,15 @@ class SSOComexposiumViewQueryHandlerTest extends TestCase
     /** @var string */
     private $comexposiumSSOLoaderLibEndpoint;
 
+    /** @var ObjectProphecy */
+    private $localeConverter;
+
     public function setUp()
     {
         $this->extraParameterRepository = $this->prophesize(ExtraParameterRepositoryInterface::class);
         $this->userRepository = $this->prophesize(UserRepositoryInterface::class);
         $this->sheetRepository = $this->prophesize(SheetRepositoryInterface::class);
+        $this->localeConverter = $this->prophesize(LocaleConverter::class);
         $this->comexposiumSSOLoaderLibEndpoint = 'https://example.net/endpoint';
         $this->event = $this->prophesize(Event::class);
     }
@@ -57,11 +62,13 @@ class SSOComexposiumViewQueryHandlerTest extends TestCase
             ->shouldBeCalled()
             ->willReturn(null)
         ;
+        $this->localeConverter->formatLocale('fr')->shouldNotBeCalled();
 
         $handler = new SSOComexposiumViewQueryHandler(
             $this->extraParameterRepository->reveal(),
             $this->userRepository->reveal(),
             $this->sheetRepository->reveal(),
+            $this->localeConverter->reveal(),
             $this->comexposiumSSOLoaderLibEndpoint
         );
 
@@ -100,11 +107,13 @@ class SSOComexposiumViewQueryHandlerTest extends TestCase
             ->shouldBeCalled()
             ->willReturn(null)
         ;
+        $this->localeConverter->formatLocale('fr')->shouldNotBeCalled();
 
         $handler = new SSOComexposiumViewQueryHandler(
             $this->extraParameterRepository->reveal(),
             $this->userRepository->reveal(),
             $this->sheetRepository->reveal(),
+            $this->localeConverter->reveal(),
             $this->comexposiumSSOLoaderLibEndpoint
         );
 
@@ -146,11 +155,13 @@ class SSOComexposiumViewQueryHandlerTest extends TestCase
         ;
 
         $this->userRepository->findByEmail('email@example.net')->shouldBeCalled()->willReturn(null);
+        $this->localeConverter->formatLocale('en')->shouldBeCalled()->willReturn('eng-GB');
 
         $handler = new SSOComexposiumViewQueryHandler(
             $this->extraParameterRepository->reveal(),
             $this->userRepository->reveal(),
             $this->sheetRepository->reveal(),
+            $this->localeConverter->reveal(),
             $this->comexposiumSSOLoaderLibEndpoint
         );
 
@@ -212,10 +223,13 @@ class SSOComexposiumViewQueryHandlerTest extends TestCase
             ->willReturn([])
         ;
 
+        $this->localeConverter->formatLocale('fr')->shouldBeCalled()->willReturn('fre-FR');
+
         $handler = new SSOComexposiumViewQueryHandler(
             $this->extraParameterRepository->reveal(),
             $this->userRepository->reveal(),
             $this->sheetRepository->reveal(),
+            $this->localeConverter->reveal(),
             $this->comexposiumSSOLoaderLibEndpoint
         );
 
@@ -281,11 +295,13 @@ class SSOComexposiumViewQueryHandlerTest extends TestCase
         $sheet->isImported()->shouldBeCalled()->willReturn(true);
         $sheet->getUserParticipant($user->reveal())->shouldBeCalled()->willReturn(null);
         $sheet->isOwner($user->reveal())->shouldBeCalled()->willReturn(true);
+        $this->localeConverter->formatLocale('fr')->shouldBeCalled()->willReturn('fre-FR');
 
         $handler = new SSOComexposiumViewQueryHandler(
             $this->extraParameterRepository->reveal(),
             $this->userRepository->reveal(),
             $this->sheetRepository->reveal(),
+            $this->localeConverter->reveal(),
             $this->comexposiumSSOLoaderLibEndpoint
         );
 
@@ -350,11 +366,13 @@ class SSOComexposiumViewQueryHandlerTest extends TestCase
         $participant->isImported()->shouldBeCalled()->willReturn(true);
         $sheet->getUserParticipant($user->reveal())->shouldBeCalled()->willReturn($participant);
         $sheet->isOwner($user->reveal())->shouldBeCalled()->willReturn(false);
+        $this->localeConverter->formatLocale('fr')->shouldBeCalled()->willReturn('fre-FR');
 
         $handler = new SSOComexposiumViewQueryHandler(
             $this->extraParameterRepository->reveal(),
             $this->userRepository->reveal(),
             $this->sheetRepository->reveal(),
+            $this->localeConverter->reveal(),
             $this->comexposiumSSOLoaderLibEndpoint
         );
 
@@ -421,11 +439,13 @@ class SSOComexposiumViewQueryHandlerTest extends TestCase
         $participant->isImported()->shouldBeCalled()->willReturn(false);
         $sheet->getUserParticipant($user->reveal())->shouldBeCalled()->willReturn($participant);
         $sheet->isOwner($user->reveal())->shouldBeCalled()->willReturn(false);
+        $this->localeConverter->formatLocale('fr')->shouldNotBeCalled();
 
         $handler = new SSOComexposiumViewQueryHandler(
             $this->extraParameterRepository->reveal(),
             $this->userRepository->reveal(),
             $this->sheetRepository->reveal(),
+            $this->localeConverter->reveal(),
             $this->comexposiumSSOLoaderLibEndpoint
         );
 
@@ -483,11 +503,13 @@ class SSOComexposiumViewQueryHandlerTest extends TestCase
         $participant->isImported()->shouldBeCalled()->willReturn(false);
         $sheet->getUserParticipant($user->reveal())->shouldBeCalled()->willReturn($participant);
         $sheet->isOwner($user->reveal())->shouldBeCalled()->willReturn(false);
+        $this->localeConverter->formatLocale('fr')->shouldNotBeCalled();
 
         $handler = new SSOComexposiumViewQueryHandler(
             $this->extraParameterRepository->reveal(),
             $this->userRepository->reveal(),
             $this->sheetRepository->reveal(),
+            $this->localeConverter->reveal(),
             $this->comexposiumSSOLoaderLibEndpoint
         );
 
@@ -532,10 +554,13 @@ class SSOComexposiumViewQueryHandlerTest extends TestCase
             ->willReturn($extraParameter4->reveal())
         ;
 
+        $this->localeConverter->formatLocale('fr')->shouldBeCalled()->willReturn('fre-FR');
+
         $handler = new SSOComexposiumViewQueryHandler(
             $this->extraParameterRepository->reveal(),
             $this->userRepository->reveal(),
             $this->sheetRepository->reveal(),
+            $this->localeConverter->reveal(),
             $this->comexposiumSSOLoaderLibEndpoint
         );
 

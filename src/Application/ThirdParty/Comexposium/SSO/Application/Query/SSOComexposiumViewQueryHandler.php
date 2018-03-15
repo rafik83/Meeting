@@ -11,6 +11,7 @@
 namespace Proximum\Vimeet\Application\ThirdParty\Comexposium\SSO\Application\Query;
 
 use Proximum\Vimeet\Application\ThirdParty\Comexposium\SSO\Application\View\SSOComexposiumView;
+use Proximum\Vimeet\Application\ThirdParty\Comexposium\SSO\Converter\LocaleConverter;
 use Proximum\Vimeet\Domain\Event\ExtraParameter\Type;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\User;
@@ -32,22 +33,28 @@ class SSOComexposiumViewQueryHandler
     /** @var SheetRepositoryInterface */
     private $sheetRepository;
 
+    /** @var LocaleConverter */
+    private $localeConverter;
+
     /**
      * @param ExtraParameterRepositoryInterface $extraParameterRepository
      * @param UserRepositoryInterface           $userRepository
      * @param SheetRepositoryInterface          $sheetRepository
+     * @param LocaleConverter                   $localeConverter
      * @param null|string                       $comexposiumSSOLoaderLibEndpoint
      */
     public function __construct(
         ExtraParameterRepositoryInterface $extraParameterRepository,
         UserRepositoryInterface $userRepository,
         SheetRepositoryInterface $sheetRepository,
+        LocaleConverter $localeConverter,
         ?string $comexposiumSSOLoaderLibEndpoint
     ) {
         $this->extraParameterRepository = $extraParameterRepository;
         $this->comexposiumSSOLoaderLibEndpoint = $comexposiumSSOLoaderLibEndpoint;
         $this->userRepository = $userRepository;
         $this->sheetRepository = $sheetRepository;
+        $this->localeConverter = $localeConverter;
     }
 
     public function handle(SSOComexposiumViewQuery $query): ?SSOComexposiumView
@@ -74,7 +81,7 @@ class SSOComexposiumViewQueryHandler
             $salon->getValue(),
             $sessionSalon->getValue(),
             $application->getValue(),
-            $query->locale === 'fr' ? 'fre-FR' : 'eng-GB',
+            $this->localeConverter->formatLocale($query->locale),
             $query->email,
             $this->comexposiumSSOLoaderLibEndpoint,
             $query->showLogin
