@@ -348,13 +348,19 @@ services:
             - '@vimeet_infrastructure.repository.participant_repository'
             - '@vimeet_infrastructure.repository.sheet_repository'
             - '@template.template_data_factory'
-            - '@components.token.user.activate_account_token_generator'
             - '@vimeet_infrastructure.adapter.delayed_event_dispatcher'
             - '@Proximum\Vimeet\Application\Command\Participant\UpdateParticipantProductQuantityHandler'
             - '@components.user.type_resolver'
             - '@account.synchronizer'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Participant\Add }
+
+    Proximum\Vimeet\Application\Command\Participant\Add\OnParticipantAddedHandler:
+        arguments:
+            - '@event_dispatcher' #Do not use the delayed event dispatcher as it is already call by a delayed event
+            - '@components.token.user.activate_account_token_generator'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Participant\Add\OnParticipantAdded }
 
     Proximum\Vimeet\Application\Command\Participant\UpdateParticipantProductQuantityHandler:
         arguments:

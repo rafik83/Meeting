@@ -378,3 +378,9 @@ services:
             - '@domain.user_event.user_event_phone_checker'
         tags:
             - { name: kernel.event_subscriber }
+
+    Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\EventListener\Participant\ParticipantEventSubscriber:
+        arguments:
+            - '@Proximum\Vimeet\Infrastructure\Adapter\CommandBus'
+        tags:
+            - { name: kernel.event_subscriber }

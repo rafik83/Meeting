@@ -18,12 +18,9 @@ use Proximum\Vimeet\Application\Command\Participant\AddHandler;
 use Proximum\Vimeet\Application\Command\Participant\AddResult;
 use Proximum\Vimeet\Application\Command\Participant\UpdateParticipantProductQuantity;
 use Proximum\Vimeet\Application\Command\Participant\UpdateParticipantProductQuantityHandler;
-use Proximum\Vimeet\Application\Components\Token\User\ActivateAccountTokenGenerator;
 use Proximum\Vimeet\Application\Event\Events;
 use Proximum\Vimeet\Application\Event\Participant\ParticipantAddedEvent;
-use Proximum\Vimeet\Application\Event\Sheet\SheetAddParticipantEvent;
 use Proximum\Vimeet\Application\Event\Sheet\SheetUpdatedEvent;
-use Proximum\Vimeet\Application\Event\User\ActivateAccountEvent;
 use Proximum\Vimeet\Application\Exception\Sheet\ParticipantAlreadyExistException;
 use Proximum\Vimeet\Application\View\Package\ParticipantProductView;
 use Proximum\Vimeet\Domain\Account\Synchronizer;
@@ -33,7 +30,6 @@ use Proximum\Vimeet\Domain\Model\Product;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\Type;
 use Proximum\Vimeet\Domain\Model\User;
-use Proximum\Vimeet\Domain\Model\User\ActivateAccountToken;
 use Proximum\Vimeet\Domain\Repository\ParticipantRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\UserRepositoryInterface;
@@ -49,9 +45,6 @@ class AddHandlerTest extends TestCase
 
     /** @var ObjectProphecy */
     private $templateDataFactory;
-
-    /** @var ObjectProphecy */
-    private $activateAccountTokenGenerator;
 
     /** @var ObjectProphecy */
     private $eventDispatcher;
@@ -77,7 +70,6 @@ class AddHandlerTest extends TestCase
         $this->participantRepository = $this->prophesize(ParticipantRepositoryInterface::class);
         $this->sheetRepository = $this->prophesize(SheetRepositoryInterface::class);
         $this->templateDataFactory = $this->prophesize(Template\TemplateDataFactory::class);
-        $this->activateAccountTokenGenerator = $this->prophesize(ActivateAccountTokenGenerator::class);
         $this->eventDispatcher = $this->prophesize(DelayedEventDispatcher::class);
         $this->typeResolver = $this->prophesize(TypeResolver::class);
         $this->accountSynchronizer = $this->prophesize(Synchronizer::class);
@@ -142,43 +134,10 @@ class AddHandlerTest extends TestCase
             )
         )->shouldBeCalled();
 
-        $expectedActivateAccountToken = new ActivateAccountToken(
-            $expectedUser,
-            'STRING',
-            $sheet,
-            $now
-        );
-
-        $activateAccountEvent = new ActivateAccountEvent(
-            $expectedUser,
-            $user,
-            $event,
-            $expectedActivateAccountToken,
-            $sheet
-        );
-
-        $sheetAddConfirmationEvent = new SheetAddParticipantEvent(
-            $expectedSheet,
-            $expectedParticipant,
-            $user
-        );
-
-        $this->activateAccountTokenGenerator
-            ->generate($expectedUser, $sheet)
-            ->shouldBeCalled()
-            ->willReturn(
-                $expectedActivateAccountToken
-            );
-
-        $this->eventDispatcher->dispatch(
-            Events::SHEET_ADD_PARTICIPANT_CONFIRMATION,
-            $sheetAddConfirmationEvent
-        )->shouldBeCalled();
         $this->eventDispatcher->dispatch(
             Events::PARTICIPANT_ADDED,
-            new ParticipantAddedEvent($expectedParticipant)
+            new ParticipantAddedEvent($expectedParticipant, $user)
         )->shouldBeCalled();
-        $this->eventDispatcher->dispatch(Events::USER_ACCOUNT_ACTIVATED, $activateAccountEvent)->shouldBeCalled();
         $sheetUpdatedEvent = new SheetUpdatedEvent($sheet);
         $this->eventDispatcher->dispatch(Events::SHEET_UPDATED, $sheetUpdatedEvent)->shouldBeCalled();
 
@@ -223,7 +182,6 @@ class AddHandlerTest extends TestCase
             $this->participantRepository->reveal(),
             $this->sheetRepository->reveal(),
             $this->templateDataFactory->reveal(),
-            $this->activateAccountTokenGenerator->reveal(),
             $this->eventDispatcher->reveal(),
             $this->updateParticipantProductQuantityHandler->reveal(),
             $this->typeResolver->reveal(),
@@ -293,7 +251,6 @@ class AddHandlerTest extends TestCase
             $this->participantRepository->reveal(),
             $this->sheetRepository->reveal(),
             $this->templateDataFactory->reveal(),
-            $this->activateAccountTokenGenerator->reveal(),
             $this->eventDispatcher->reveal(),
             $this->updateParticipantProductQuantityHandler->reveal(),
             $this->typeResolver->reveal(),
