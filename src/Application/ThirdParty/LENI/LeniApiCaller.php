@@ -47,11 +47,10 @@ class LeniApiCaller
      *
      * @throws \LogicException
      * @throws LeniApiServerException
-     * @throws MissingIdException
      * @throws NotValidApiCallException
      * @throws WarningApiCallException
      */
-    public function save(Event $event, mixed $data): Object
+    public function save(Event $event, array $data): Object
     {
         $leniUserParameter = $this->extraParameterRepository->findByEventAndType($event, Type::TYPE_LENI_USER);
         $leniEventParameter = $this->extraParameterRepository->findByEventAndType($event, Type::TYPE_LENI_EVENT);
@@ -81,7 +80,16 @@ class LeniApiCaller
             );
         }
 
-        $body = $this->getBody($leniEventParameter->getValue());
+        $body = json_encode(
+            [
+                'idEvt' => $leniEventParameter->getValue(),
+                'idUser' => $leniUserParameter->getValue(),
+                'mode' => LeniConstants::LENI_MODE,
+                'app' => LeniConstants::LENI_APP,
+                'data' => $data,
+            ]
+        );
+
         $headers = $this->getHeaders($leniUserParameter->getValue(), $body);
 
         try {
@@ -90,9 +98,40 @@ class LeniApiCaller
             throw new LeniApiServerException($exception);
         }
 
-        $this->debugApiSaveCallErrors(json_decode($jsonResponse->body, true), $headers, $body, $data);
+        $response = json_decode($jsonResponse->body, true);
 
-        return json_decode($jsonResponse->body, true);
+        $apiCallLog = sprintf(
+            "Headers: %s;\nRequest: %s;\nResponse: %s;",
+            json_encode($headers),
+            $body,
+            $response
+        );
+
+        // Call not valid
+        if (!isset($response[LeniConstants::LENI_IS_VALID]) || $response[LeniConstants::LENI_IS_VALID] !== true) {
+            throw new NotValidApiCallException($apiCallLog);
+        }
+
+        // Call has warnings
+        if (isset($response[LeniConstants::LENI_FIELD_HAS_WARNING], $response[LeniConstants::LENI_FIELD_INFO])
+            && $response[LeniConstants::LENI_FIELD_HAS_WARNING] === true
+        ) {
+            $warnings = [];
+
+            if (\is_array($response[LeniConstants::LENI_FIELD_INFO])) {
+                foreach ($response[LeniConstants::LENI_FIELD_INFO] as $key => $info) {
+                    if (\in_array($key, LeniConstants::LENI_COLUMNS, true)) {
+                        $warnings[] = $key;
+                    }
+                }
+            }
+
+            if (!empty($warnings)) {
+                throw new WarningApiCallException($apiCallLog);
+            }
+        }
+
+        return $data;
     }
 
     /**
@@ -211,68 +250,5 @@ class LeniApiCaller
             'Content-Length' => mb_strlen($body),
             'Connection' => self::CLOSE_CONNECTION,
         ];
-    }
-
-    /**
-     * @throws MissingIdException
-     * @throws NotValidApiCallException
-     * @throws WarningApiCallException
-     */
-    public function debugApiSaveCallErrors(array $response, array $headers, string $body, array $data): void
-    {
-        $apiCallLog = sprintf(
-            "Headers: %s;\nRequest: %s;\nResponse: %s;",
-            json_encode($headers),
-            $body,
-            $response
-        );
-
-        // Call not valid
-        if (!isset($response[LeniConstants::LENI_IS_VALID]) || $response[LeniConstants::LENI_IS_VALID] !== true) {
-            throw new NotValidApiCallException($apiCallLog);
-        }
-
-        $hasNotUserId = !isset($data[LeniConstants::LENI_COL_USER_ID])
-            || null === $data[LeniConstants::LENI_COL_USER_ID];
-
-        // When inserting user (first call) we must retrieve the LENI user id
-        if ($hasNotUserId
-            && (
-                !isset($response[LeniConstants::LENI_FIELD_INFO])
-                || !isset($response[LeniConstants::LENI_FIELD_INFO][LeniConstants::LENI_COL_USER_ID])
-                || !isset($response[LeniConstants::LENI_FIELD_INFO][LeniConstants::LENI_COL_USER_ID][LeniConstants::LENI_FIELD_VALUE])
-            )
-        ) {
-            throw new MissingIdException($apiCallLog);
-        }
-
-        // Call has warnings
-        if (isset($response[LeniConstants::LENI_FIELD_HAS_WARNING], $response[LeniConstants::LENI_FIELD_INFO])
-            && $response[LeniConstants::LENI_FIELD_HAS_WARNING] === true
-        ) {
-            $warnings = [];
-
-            foreach ($response[LeniConstants::LENI_FIELD_INFO] as $key => $info) {
-                if (\in_array($key, LeniConstants::LENI_COLUMNS, true)) {
-                    $warnings[] = $key;
-                }
-            }
-
-            if (!empty($warnings)) {
-                throw new WarningApiCallException($apiCallLog);
-            }
-        }
-
-        // Get and save the LENI user Id when it is the first call (insert user into LENI)
-        if ($hasNotUserId) {
-            $leniUserId = $response[LeniConstants::LENI_FIELD_INFO][LeniConstants::LENI_COL_USER_ID][LeniConstants::LENI_FIELD_VALUE];
-
-            if (null === $leniUserId) {
-                throw new \LogicException('LENI returned a null user id: ' . $apiCallLog);
-            }
-
-            // todo: need to return this in get method
-            $data[LeniConstants::LENI_COL_USER_ID] = $leniUserId;
-        }
     }
 }

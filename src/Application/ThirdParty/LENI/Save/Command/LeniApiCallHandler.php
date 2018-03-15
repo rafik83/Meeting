@@ -171,7 +171,25 @@ class LeniApiCallHandler
             unset($data[LeniConstants::LENI_COL_USER_ID]);
         }
 
-        $this->leniApi->save($event, $data);
+        $response = $this->leniApi->save($event, $data);
+
+        $hasNotUserId = !isset($data[LeniConstants::LENI_COL_USER_ID]);
+
+        // When inserting user (first call) we must retrieve the LENI user id
+        if ($hasNotUserId) {
+            if (!isset($response[LeniConstants::LENI_FIELD_INFO][LeniConstants::LENI_COL_USER_ID][LeniConstants::LENI_FIELD_VALUE])) {
+                throw new MissingIdException('Missing LENI userId');
+            }
+
+            // Get and save the LENI user Id when it is the first call (insert user into LENI)
+            $leniUserId = $response[LeniConstants::LENI_FIELD_INFO][LeniConstants::LENI_COL_USER_ID][LeniConstants::LENI_FIELD_VALUE];
+
+            if (null === $leniUserId) {
+                throw new MissingIdException('LENI returned a null user id');
+            }
+
+            $data[LeniConstants::LENI_COL_USER_ID] = $leniUserId;
+        }
 
         $this->userExtraDataFingerprintManager->addOrUpdateFingerprint(
             $pendingExtraData->getEvent(),
