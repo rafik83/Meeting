@@ -97,8 +97,6 @@ class PrepareLeniApiCallHandler
     /**
      * @param PrepareLeniApiCall $command
      *
-     * @throws LeniApiServerException
-     * @throws NotValidApiCallException
      * @throws \LogicException
      * @throws DayNotDefinedException
      */
