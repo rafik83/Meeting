@@ -18,7 +18,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 class PrepareLeniApiCallCommand extends Command
 {
-    const NAME = 'vimeet:api:leni-save-export-data';
+    const NAME = 'vimeet:api:leni-export-data';
 
     /** @var PrepareLeniApiCallHandler */
     private $apiHandler;
