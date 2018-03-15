@@ -91,7 +91,7 @@ flash.admin.sheet_batch.pending.success: '{0} no pending sheet.|{1} one sheet is
 flash.admin.sheet_batch.printPdf.success: '{0} No selected participation|{1} Print to pdf is programmed for one participation.|]1,Inf[ Print to PDF is programmed for %count% participations.'
 flash.admin.sheet_batch.refuse.success: '{0} No refused sheet.|{1} one sheet has been refused]1,Inf[ %count% sheets have been refused'
 flash.admin.sheet_batch.refuse.warning: 'The following sheets : %sheets% cannot be refused, meetings are scheduled. The action is valid for the sheets that are not impacted by this case.'
-flash.admin.sheet_batch.unassign.success: '{0} no unassigned sheet.|{1} one sheet has been unassigned]1,Inf[ %count% sheets have been unassigned'
+flash.admin.sheet_batch.unassign.success: '{0} no unassigned sheet.|{1} one sheet has been unassigned|]1,Inf[ %count% sheets have been unassigned'
 flash.admin.sheet_batch.unassignFromGroup.ignoredSheets: 'the following sheets cannot be unssigned from a group : %sheets%'
 flash.admin.sheet_batch.unassignFromGroup.sheetCannotBeRemoved: '%sheets% include an owner or a participant who also is the group manager|]1,Inf[ %sheets% include an owner or a participant who also is a group manager'
 flash.admin.sheet_batch.unassignFromGroup.sheetNotHaveGroup: '%sheets% is not assigned to a group|]1,Inf[ %sheets% are not assigned to a group'
