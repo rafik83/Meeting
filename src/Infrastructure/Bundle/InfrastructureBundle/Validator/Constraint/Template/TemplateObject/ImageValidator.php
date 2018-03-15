@@ -61,11 +61,17 @@ class ImageValidator extends TemplateObjectValidator
             && true === $object->getOption('required')
             && $object instanceof TemplateObject\ContentObjectInterface
         ) {
+            $content = $object->getImage();
+
+            if ($content === null) {
+                $content = $object->getFile();
+            }
+
             $this->context
                 ->getValidator()
                 ->inContext($this->context)
                 ->atPath($constraint->key)
-                ->validate($object->getImage(), new NotBlank());
+                ->validate($content, new NotBlank());
         }
     }
 

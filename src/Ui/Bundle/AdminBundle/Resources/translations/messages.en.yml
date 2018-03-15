@@ -134,6 +134,7 @@ admin.common.export.no: 'No'
 admin.common.export.yes: 'Yes'
 admin.create_admin.title: 'Create a new backoffice user'
 admin.dashboard.link: Dashboard
+admin.elasticsearch.index.confirm: 'You are about to re-index all the events. do you confirm the action ?'
 admin.event.archive.link: Archiving
 admin.event.archive.title: 'Event archive %eventTitle%'
 admin.event.billing.configuration.link: 'Billing information'
@@ -150,6 +151,7 @@ admin.event.duplicate.title: 'Create an event from'
 admin.event.external_catalog_configure: 'External catalogue'
 admin.event.extra_parameter.link: 'Extra settings'
 admin.event.fallback: Default
+admin.event.index.title: 'Re- index all the events'
 admin.event.languages: Language
 admin.event.list.archived.title: 'archived events'
 admin.event.list.currents.title: 'Current events'
@@ -176,6 +178,7 @@ admin.event.search_facets.link: 'Catalog filters'
 admin.event.see_on_front.link: 'See on front'
 admin.event.see.link: See
 admin.event.settings.link: 'Event settings'
+admin.event.sheet.index.title: 'Re-index the event sheets'
 admin.event.template.link: Templates
 admin.event.template.package: 'Package of participation'
 admin.event.template.registration: Registration
@@ -214,8 +217,13 @@ admin.extraParameter.list.empty: 'No setting'
 admin.extraParameter.list.title: 'Event extra settings list'
 admin.extraParameter.type.comexposium_event_reference: 'Comexposium event reference'
 admin.extraParameter.type.comexposium_exhibitor_type_id: 'Comexposium: concerned Exhibitor participation type id'
+admin.extraParameter.type.comexposium_sso_application: 'Comexposium SSO Application'
+admin.extraParameter.type.comexposium_sso_enabled: 'Comexposium SSO enabled'
+admin.extraParameter.type.comexposium_sso_salon: 'Comexposium SSO event'
+admin.extraParameter.type.comexposium_sso_session_salon: 'Comexposium SSO event session'
 admin.extraParameter.type.comexposium_visitor_type_id: 'Comexposium: concerned Visitor participation type id'
 admin.extraParameter.type.leni_event: 'LENI event code'
+admin.extraParameter.type.leni_participation_types_mapping: 'LENI participation types mapping'
 admin.extraParameter.type.leni_user: 'LENI user code'
 admin.extraParameter.type.vianeo_concerned_types_id: 'Vianeo concerned types id'
 admin.extraParameter.type.vianeo_endpoint: 'Vianeo endpoint'
@@ -469,6 +477,7 @@ admin.order_edit.list_command.label: orders
 admin.order_edit.promotionCodes: 'Promotion codes'
 admin.order_edit.total.withoutVAT: 'Total without VAT'
 admin.order_edit.total.withVAT: 'Total with VAT'
+admin.order_edit.totalByVAT: 'Total amount subject to VAT'
 admin.order_edit.update_line: 'Update a line'
 admin.order_edit.VAT: VAT
 admin.order.cancelled: Cancelled
@@ -551,6 +560,7 @@ admin.planner.analytics.table.column.meetings: 'meetings number'
 admin.planner.analytics.table.column.ratio: 'requests/scheduled meetings ratio'
 admin.planner.analytics.table.column.requests: 'number of requests'
 admin.planner.export: Export
+admin.planner.export.heading: admin.planner.export.heading
 admin.planner.export.title: 'Export of a solution for the meetings planning'
 admin.planner.heading.export: 'datas export for the algorithm'
 admin.planner.heading.import: 'Import a solution from the algorithm'
@@ -577,6 +587,7 @@ admin.product_create.option.title: 'Add a product'
 admin.product_create.participant.title: 'Add a participant product'
 admin.product_create.plan.title: 'Add a package'
 admin.product_create.planning.title: 'Add a planning product'
+admin.product_update.info.vat: VAT
 admin.product_update.option.title: 'Update a product'
 admin.product_update.participant.title: 'Participant update'
 admin.product_update.plan.title: 'Update a package'
@@ -587,6 +598,7 @@ admin.product.availabilityCurrentMax: 'Current/max availability'
 admin.product.bought: 'number of bought products'
 admin.product.buyableUntil: 'Buyable until'
 admin.product.deletableUntil: 'deletable until'
+admin.product.id: Id
 admin.product.link: 'Products catalogue'
 admin.product.name: Name
 admin.product.quantityMax: 'max quantity'
@@ -1092,6 +1104,7 @@ event.meeting.request.details.message: 'exchange of messages'
 event.meeting.request.details.state: Status
 event.meeting.request.details.title: 'Details of the meeting request'
 event.meeting.request.details.to: To
+event.meeting.request.details.toParticipant: 'meeting request details to participant'
 event.meeting.request.details.updatedAt: 'Change status'
 event.meeting.request.state.from.approved: Approved
 event.meeting.request.state.from.cancelled: Cancelled
@@ -1161,6 +1174,7 @@ event.sheet.participant.guest: Guest
 event.sheet.participant.owner: Owner
 event.sheet.payment.description: 'Choose your mode of payment'
 event.sheet.payment.title: 'Mode of payment'
+event.sheet.reminderDate.today_reminder_date: Today
 event.sheet.state.accepted: Accepted
 event.sheet.state.pending: Pending
 event.sheet.state.refused: refused
@@ -1176,26 +1190,44 @@ event.sheet.update_product.title: 'Modify an ordered item'
 event.sheet.validationState.draft: Draft
 event.sheet.validationState.pending: 'Validation state pending'
 event.sheet.validationState.validated: Validated
+form.sheet_filter.children.order.no.label: without
+form.sheet_filter.children.order.noPreference.label: 'no preference'
+form.sheet_filter.children.order.totalEqualZero.label: 'total equal to zero'
+form.sheet_filter.children.order.totalSuperiorZero.label: 'Total Superior to zero'
+gdr.user.agenda.version.modal.button.notify: 'notify by sms'
+gdr.user.agenda.version.modal.button.purge: 'hyde the difference whitout notifying'
+gdr.user.agenda.version.modal.no_diff: 'there''s no modification in this person''s planning'
 gdr.user.agenda.version.modal.no_phone: 'The user has not accepted to receive notifications'
+gdr.user.agenda.version.modal.title: 'Notify the planning modifications'
 help.link: Help
 login.forgotPassword: 'Forgotten password?'
 login.link: Login
+login.link.label: login
 login.title: Login
 logout.confirmation: 'Are you sure you want to logout of your account?'
 logout.link: Logout
+logout.relogin: relogin
+logout.success: 'you are now logged out'
 logout.title: Logout
+meeting_request_filter.order_by.options.created_at_asc: 'increasing sorting of the date of creation'
+meeting_request_filter.order_by.options.created_at_desc: 'decreasing sorting of the date of creation'
 meeting_request_filter.order_by.options.state_updated_at_asc: 'Modification of the ascending order of status'
 meeting_request_filter.order_by.options.state_updated_at_desc: 'Modification of the descending order of status'
 message.admin.order.remove_row.confirm: 'confirm the removal'
 message.admin.transaction.remove.confirm: 'confirm the removal'
 new_password.title: 'Create a new password'
 notification.meeting_request.canceled.action: 'Cancelled meeting request'
+notification.meeting_request.canceled.withMessage: 'meeting request canceled by %sheetName% for the following reason : "%message%"'
+notification.meeting_request.canceled.withoutMessage: 'meeting request canceled by %sheetName%'
+notification.meeting_request.participant.added.message: 'Participant added by %sheetName% for the following reason : "%message%"'
+notification.meeting_request.participant.removed.message: 'participant removed by %sheetName% for the following reason: "%message%"'
 notification.meeting_request.refused.action: 'Refused meeting request'
 notification.meeting_request.refused.withMessage: 'Request refused by %sheetName% for the following reason : "%message%"'
 notification.meeting_request.refused.withoutMessage: 'Request refused by %sheetName%'
 notification.participant.added.action: 'Participant added'
 notification.participant.removed.action: 'Participant removed'
 planning.participant.meeting: '%spotRef% - %sheetMet%'
+planning.participant.meeting_multiple_sheet: '%spotRef% - %userSheet% - %sheetMet%'
 planning.participant.time: '%beginHour% - %endHour%: '
 planning.participant.unallocated_meetings: 'List of validated meeting requests which have not been planned due to availability conflicts.'
 planning.participant.unavailability: Unavailable
@@ -1205,4 +1237,6 @@ user.agenda.version.agendaModified: 'Your schedule has been changed:'
 user.agenda.version.meetingAdded: 'You have a new meeting with %sheetTitle% on %day% at %hour% at %spotRef%.'
 user.agenda.version.meetingDeleted: 'The meeting with %sheetTitle% has been cancelled.'
 user.agenda.version.meetingMoved: 'The meeting with %sheetTitle% was moved to %day% at %hour% at %spotRef%.'
+who.see_who_but_dont_see: '%seer% sees %seeable% and sees:'
+who.the.category: 'the category'
 who.the.type: 'the type'

@@ -94,10 +94,10 @@ class BlockType extends AbstractType
     private function addImage($key, FormBuilderInterface $builder, Template\TemplateObject $object, $locale)
     {
         $builder->add($key, ImageDataType::class, [
-            'label'  => $object->getOption('label', $locale),
-            'locale' => $locale,
-            'object' => $object,
-            'attr' => [
+            'showLabel' => true,
+            'locale'    => $locale,
+            'object'    => $object,
+            'attr'      => [
                 'image-preview' => $object->hasTag(Tag::PARTICIPANT_AVATAR),
             ]
         ]);

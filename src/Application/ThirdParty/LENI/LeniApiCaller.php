@@ -22,7 +22,7 @@ use Proximum\Vimeet\Domain\Repository\Event\ExtraParameterRepositoryInterface;
 
 class LeniApiCaller
 {
-    private const CONTENT_TYPE = 'application/json';
+    private const CONTENT_TYPE_APPLICATION_JSON = 'application/json';
     private const CLOSE_CONNECTION = 'Close';
 
     /** @var HttpAdapterInterface */
@@ -53,11 +53,14 @@ class LeniApiCaller
      */
     public function save(Event $event, mixed $data): Object
     {
-        $authorizedModes = [Type::TYPE_LENI_MODE_SAVE_VALUE, Type::TYPE_LENI_MODE_BOTH_VALUE];
+        $authorizedModes = [
+            Type::VALUE_LENI_MODE_SAVE,
+            Type::VALUE_LENI_MODE_BOTH,
+        ];
 
-        $leniUserParameter  = $this->extraParameterRepository->findByEventAndType($event, Type::TYPE_LENI_USER);
+        $leniUserParameter = $this->extraParameterRepository->findByEventAndType($event, Type::TYPE_LENI_USER);
         $leniEventParameter = $this->extraParameterRepository->findByEventAndType($event, Type::TYPE_LENI_EVENT);
-        $leniModeParameter  = $this->extraParameterRepository->findByEventAndType($event, Type::TYPE_LENI_MODE);
+        $leniModeParameter = $this->extraParameterRepository->findByEventAndType($event, Type::TYPE_LENI_MODE);
 
         $isAuthorizedMode = $leniModeParameter !== null && \in_array($leniModeParameter, $authorizedModes, true);
 
@@ -67,7 +70,7 @@ class LeniApiCaller
             );
         }
 
-        $body    = $this->getBody($leniEventParameter->getValue(), $leniUserParameter->getValue(), $data);
+        $body = $this->getBody($leniEventParameter->getValue(), $leniUserParameter->getValue(), $data);
         $headers = $this->getHeaders($leniUserParameter->getValue(), $body);
 
         try {
@@ -83,24 +86,29 @@ class LeniApiCaller
 
     /**
      * @param Event $event
-     * @param mixed $data
      *
      * @return array
      *
      * @throws \LogicException
      * @throws LeniApiServerException
      */
-    public function get(?Event $event, ?mixed $data): array
+    public function get(Event $event): array
     {
-        $authorizedModes = [Type::TYPE_LENI_MODE_GET_VALUE, Type::TYPE_LENI_MODE_BOTH_VALUE];
-//        $leniUserParameter  = $this->extraParameterRepository->findByEventAndType($event, Type::TYPE_LENI_USER);
-//        $leniEventParameter = $this->extraParameterRepository->findByEventAndType($event, Type::TYPE_LENI_EVENT);
-//        $leniModeParameter  = $this->extraParameterRepository->findByEventAndType($event, Type::TYPE_LENI_MODE);
-        $leniUserParameter  = 'preneron@vi-meet.com:apreneron';
-        $leniEventParameter = '2ff82e18-9105-4025-9407-8cf2274416a7';
-        $leniModeParameter  = 'get';
+        $authorizedModes = [
+            Type::VALUE_LENI_MODE_GET,
+            Type::VALUE_LENI_MODE_BOTH,
+        ];
 
-        $isAuthorizedMode = $leniModeParameter !== null && \in_array($leniModeParameter, $authorizedModes, true);
+        $leniUserParameter = $this->extraParameterRepository->findByEventAndType($event, Type::TYPE_LENI_USER);
+        $leniEventParameter = $this->extraParameterRepository->findByEventAndType($event, Type::TYPE_LENI_EVENT);
+        $leniModeParameter = $this->extraParameterRepository->findByEventAndType($event, Type::TYPE_LENI_MODE);
+
+        $isAuthorizedMode = $leniModeParameter !== null
+            && \in_array(
+                $leniModeParameter->getValue(),
+                $authorizedModes,
+                true
+            );
 
         if (!$isAuthorizedMode || null === $leniUserParameter || null === $leniEventParameter) {
             throw new \LogicException(
@@ -108,8 +116,8 @@ class LeniApiCaller
             );
         }
 
-        $body    = $this->getBody($leniEventParameter, $data);
-        $headers = $this->getHeaders($leniUserParameter, $body);
+        $body = $this->getBody($leniEventParameter->getValue());
+        $headers = $this->getHeaders($leniUserParameter->getValue(), $body);
 
         try {
             $jsonResponse = $this->httpAdapter->post(LeniConstants::LENI_GET_ENDPOINT, $headers, $body);
@@ -120,23 +128,22 @@ class LeniApiCaller
         return json_decode($jsonResponse->body, true);
     }
 
-    private function getBody(string $idEvt, ?mixed $data): string
+    private function getBody(string $idEvt): string
     {
-        // En dur pour les tests
         return json_encode(
             [
-                'idEvt'  => $idEvt,
+                'idEvt' => $idEvt,
                 'filters' => [
                     [
                         'selectedFieldId' => 'Inscrit',
                         'selectedOperator' => 'EQUAL',
-                        'value' => 'Inscrit'
+                        'value' => 'Inscrit',
                     ],
                     [
                         'selectedFieldId' => 'CategorieIndividuEvt',
                         'selectedOperator' => 'IN',
-                        'value' => 'VISITEUR'
-                    ]
+                        'value' => 'VISITEUR',
+                    ],
                 ],
                 'fields' => [
                     'Id',
@@ -171,7 +178,7 @@ class LeniApiCaller
                     'ZL_THEMATIQUES',
                     'CodeMarketing',
                     'Inscrit',
-                    'CategorieIndividuEvt'
+                    'CategorieIndividuEvt',
                 ],
                 'start' => 0,
                 'take' => 20,
@@ -182,11 +189,11 @@ class LeniApiCaller
     private function getHeaders(string $authorizedUser, string $body): array
     {
         return [
-            'Authorization'  => 'Basic ' . base64_encode($authorizedUser),
-            'Host'           => LeniConstants::LENI_HOST,
-            'Content-Type'   => self::CONTENT_TYPE,
+            'Authorization' => 'Basic ' . base64_encode($authorizedUser),
+            'Host' => LeniConstants::LENI_HOST,
+            'Content-Type' => self::CONTENT_TYPE_APPLICATION_JSON,
             'Content-Length' => mb_strlen($body),
-            'Connection'     => self::CLOSE_CONNECTION,
+            'Connection' => self::CLOSE_CONNECTION,
         ];
     }
 
@@ -195,7 +202,7 @@ class LeniApiCaller
      * @throws NotValidApiCallException
      * @throws WarningApiCallException
      */
-    public function debugApiSaveCallErrors(array $response, array $headers, string $body, mixed $data): void
+    public function debugApiSaveCallErrors(array $response, array $headers, string $body, array $data): void
     {
         $apiCallLog = sprintf(
             "Headers: %s;\nRequest: %s;\nResponse: %s;",
@@ -210,7 +217,7 @@ class LeniApiCaller
         }
 
         $hasNotUserId = !isset($data[LeniConstants::LENI_COL_USER_ID])
-                        || null === $data[LeniConstants::LENI_COL_USER_ID];
+            || null === $data[LeniConstants::LENI_COL_USER_ID];
 
         // When inserting user (first call) we must retrieve the LENI user id
         if ($hasNotUserId
@@ -248,6 +255,7 @@ class LeniApiCaller
                 throw new \LogicException('LENI returned a null user id: ' . $apiCallLog);
             }
 
+            // todo: need to return this in get method
             $data[LeniConstants::LENI_COL_USER_ID] = $leniUserId;
         }
     }

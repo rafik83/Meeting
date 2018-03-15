@@ -12,31 +12,47 @@ namespace Proximum\Vimeet\Application\ThirdParty\LENI\Get\Command;
 
 use Proximum\Vimeet\Application\ThirdParty\LENI\Exception\LeniApiServerException;
 use Proximum\Vimeet\Application\ThirdParty\LENI\LeniApiCaller;
+use Proximum\Vimeet\Domain\Event\ExtraParameter\Type;
+use Proximum\Vimeet\Domain\Model\Event;
+use Proximum\Vimeet\Domain\Repository\EventRepositoryInterface;
 
 class LeniApiCallHandler
 {
     /** @var LeniApiCaller */
     private $leniApi;
 
+    /** @var EventRepositoryInterface */
+    private $eventRepository;
+
     public function __construct(
-        LeniApiCaller $leniApi
+        LeniApiCaller $leniApi,
+        EventRepositoryInterface $eventRepository
     ) {
         $this->leniApi = $leniApi;
+        $this->eventRepository = $eventRepository;
     }
 
     /**
-     * @param LeniApiCall $command
+     * @param LeniApiCall $leniApiCall
      *
      * @throws LeniApiServerException
-     * @throws \LogicException
      */
-    public function handle(LeniApiCall $command)
+    public function handle(LeniApiCall $leniApiCall): void
     {
-//        $event = $command->getEvent();
+        $events = $this->eventRepository->findEventWithParameters([Type::TYPE_LENI_USER, Type::TYPE_LENI_EVENT]);
 
-        $event = null;
-        $data = null;
+        foreach ($events as $event) {
+            $this->getEventUsers($event);
+        }
+    }
 
-        $users = $this->leniApi->get($event, $data);
+    /**
+     * @param Event $event
+     *
+     * @throws LeniApiServerException
+     */
+    private function getEventUsers(Event $event)
+    {
+        $this->leniApi->get($event);
     }
 }

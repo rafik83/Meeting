@@ -1,0 +1,81 @@
+<?php
+
+/*
+ * This file is part of the Proximum Vimeet project.
+ *
+ * Copyright (C) Proximum
+ *
+ * @author Elao <contact@elao.com>
+ */
+
+namespace Proximum\Vimeet\Tests\Application\ThirdParty\LENI\Common\ExtraParameter;
+
+use PHPUnit\Framework\TestCase;
+use Proximum\Vimeet\Application\ThirdParty\LENI\Common\ExtraParameter\TypesMapping;
+use Proximum\Vimeet\Domain\Event\ExtraParameter\Type;
+use Proximum\Vimeet\Domain\Model\Event;
+use Proximum\Vimeet\Domain\Repository\Event\ExtraParameterRepositoryInterface;
+
+class TypesMappingTest extends TestCase
+{
+    public function testGetTypesMapping()
+    {
+        $event = $this->prophesize(Event::class);
+
+        $extraParameterRepository = $this->prophesize(ExtraParameterRepositoryInterface::class);
+        $extraParameterRepository
+            ->findByEventAndType(
+                $event,
+                Type::TYPE_LENI_TYPES_MAPPING
+            )
+            ->shouldBeCalled()
+            ->willReturn(
+                new Event\ExtraParameter(
+                    $event->reveal(),
+                    Type::TYPE_LENI_TYPES_MAPPING,
+                    'mapping',
+                    '{"327": {"CategorieIndividuEvt": "VISITEUR", "ZL_PROFIL": "SALON" }, "328": {"CategorieIndividuEvt": "VISITEUR", "ZL_PROFIL": "PROSPECT"}, "329": {"CategorieIndividuEvt": "PROSPECT", "ZL_PROFIL": null}}',
+                    new \DateTime()
+                )
+            )
+        ;
+
+        $typesMapping = new TypesMapping($extraParameterRepository->reveal());
+        $result = $typesMapping->getTypesMapping($event->reveal());
+
+        $expectedResult = [
+            '327' => [
+                'CategorieIndividuEvt' => 'VISITEUR',
+                'ZL_PROFIL' => 'SALON',
+            ],
+            '328' => [
+                'CategorieIndividuEvt' => 'VISITEUR',
+                'ZL_PROFIL' => 'PROSPECT',
+            ],
+            '329' => [
+                'CategorieIndividuEvt' => 'PROSPECT',
+                'ZL_PROFIL' => null,
+            ],
+        ];
+
+        $this->assertEquals($expectedResult, $result);
+    }
+
+    public function testGetTypesMappingIsNull()
+    {
+        $event = $this->prophesize(Event::class);
+
+        $extraParameterRepository = $this->prophesize(ExtraParameterRepositoryInterface::class);
+        $extraParameterRepository
+            ->findByEventAndType(
+                $event,
+                Type::TYPE_LENI_TYPES_MAPPING
+            )
+            ->shouldBeCalled()
+            ->willReturn(null)
+        ;
+
+        $typesMapping = new TypesMapping($extraParameterRepository->reveal());
+        $this->assertNull($typesMapping->getTypesMapping($event->reveal()));
+    }
+}

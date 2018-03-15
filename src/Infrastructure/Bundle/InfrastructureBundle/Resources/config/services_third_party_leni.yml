@@ -25,6 +25,7 @@ services:
         class: Proximum\Vimeet\Application\ThirdParty\LENI\Get\Command\LeniApiCallHandler
         arguments:
             - '@service.third_party.leni.leni_api_caller'
+            - '@vimeet_infrastructure.repository.event_repository'
 
     adapter.leni_api_save_call_job_queue:
         class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Adapter\ThirdParty\LENI\Save\LeniApiCallJobQueue
@@ -70,3 +71,7 @@ services:
         arguments:
             - '@repository.user.event.extra_data_repository'
             - '@datetime'
+
+    Proximum\Vimeet\Application\ThirdParty\LENI\Common\ExtraParameter\TypesMapping:
+        arguments:
+            - '@repository.event.extra_parameter_repository'

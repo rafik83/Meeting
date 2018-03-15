@@ -22,7 +22,6 @@ services:
     Proximum\Vimeet\Application\Query\Catalog\Export\SheetRegistrationInfoQueryHandler:
         arguments:
             - '@vimeet_infrastructure.adapter.translator_adapter'
-            - '@adapter.intl_adapter'
 
     Proximum\Vimeet\Application\Query\Catalog\Export\SheetInfoQueryHandler:
         public: false

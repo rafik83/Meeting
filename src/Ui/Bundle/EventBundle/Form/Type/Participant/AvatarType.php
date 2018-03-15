@@ -32,10 +32,11 @@ class AvatarType extends AbstractType
         $avatar   = $template->getObject($key);
 
         $builder->add($key, ImageDataType::class, [
-            'locale' => $locale,
-            'label'  => $avatar->getOption('label', $locale),
-            'object' => $avatar,
-            'attr'   => [
+            'locale'    => $locale,
+            'label'     => $avatar->getOption('label', $locale),
+            'showLabel' => true,
+            'object'    => $avatar,
+            'attr'      => [
                 'image-preview' => $avatar->hasTag(Tag::PARTICIPANT_AVATAR),
             ]
         ]);

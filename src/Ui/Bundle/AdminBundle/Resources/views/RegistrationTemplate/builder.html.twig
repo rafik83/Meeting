@@ -101,17 +101,17 @@
                             'uploadFormats': uploadFormats|default([]),
                             'registrationTemplateTagView': registrationTemplateTagView,
                         }, false) }}
-                        {#{{ include('AdminBundle:Template/Object:button-link.html.twig', { 'locale': locale }, false) }}#}
-                        {#{{ include('AdminBundle:Template/Object:image.html.twig', { 'locale': locale,'products': products }, false) }}#}
-                        {#{{ include('AdminBundle:Template/Object:tag.html.twig', { 'locale': locale, 'sheet_tags': sheet_tags }, false) }}#}
+                        {{ include('AdminBundle:Template/Object:image.html.twig', {
+                            'locale': locale,
+                            'isRegistrationTemplate': true,
+                            'registrationTemplateTagView': registrationTemplateTagView,
+                        }, false) }}
                         {{ include('AdminBundle:Template/Object:nomenclature.html.twig', {
                             'isRegistrationTemplate': true,
                             'locale': locale,
                             'nomenclatures': nomenclatures,
                             'registrationTemplateTagView': registrationTemplateTagView,
-                        }, false)
-                        }}
-                        {#{{ include('AdminBundle:Template/Object:tags.html.twig', { 'locale': locale, 'sheet_tags': sheet_tags }, false) }}#}
+                        }, false) }}
                     </div>
                 </div>
             </div>
