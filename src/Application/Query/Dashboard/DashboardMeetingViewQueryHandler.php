@@ -43,7 +43,7 @@ class DashboardMeetingViewQueryHandler
             );
         }
 
-        $meetingCreatedBuParticipant = $this->meetingRepository->countCreatedByParticipantByEvent($query->event);
+        $meetingCreatedByParticipant = $this->meetingRepository->countCreatedByParticipantByEvent($query->event);
 
         $approvedRequest = $this->requestRepository->countApprovedByEvent($query->event);
         $pendingRequest = $this->requestRepository->countPendingByEvent($query->event);
@@ -52,7 +52,7 @@ class DashboardMeetingViewQueryHandler
         return new DashboardMeetingView(
             $allMeetings,
             $meetingCreatedDayD,
-            $meetingCreatedBuParticipant,
+            $meetingCreatedByParticipant,
             $approvedRequest,
             $pendingRequest,
             $refusedRequest
