@@ -26,11 +26,10 @@ class TypeConverter
     public function convert(Type $type, array $mapping): array
     {
         foreach ($mapping as $typeId => $mappedType) {
-            if ($typeId === $type->getId()) {
-
+            if ((int) $typeId === $type->getId()) {
                 $typeMapping = [];
 
-                if (!is_array($mappedType)) {
+                if (!\is_array($mappedType)) {
                     return [];
                 }
 
