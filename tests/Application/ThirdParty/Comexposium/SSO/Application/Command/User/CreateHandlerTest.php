@@ -18,6 +18,7 @@ use Proximum\Vimeet\Application\Exception\Adapter\Http\ServerErrorException;
 use Proximum\Vimeet\Application\ThirdParty\Comexposium\SSO\Application\Command\User\Create;
 use Proximum\Vimeet\Application\ThirdParty\Comexposium\SSO\Application\Command\User\CreateHandler;
 use Proximum\Vimeet\Application\ThirdParty\Comexposium\SSO\Converter\LocaleConverter;
+use Proximum\Vimeet\Application\View\Adapter\Http\Response;
 use Proximum\Vimeet\Domain\Event\ExtraParameter\Type;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Repository\Event\ExtraParameterRepositoryInterface;
@@ -78,7 +79,9 @@ class CreateHandlerTest extends TestCase
             $this->localeConverter->reveal()
         );
 
-        $handler->handle(new Create($this->event->reveal(), 'email@example.net', 'fr'));
+        $result = $handler->handle(new Create($this->event->reveal(), 'email@example.net', 'fr'));
+
+        $this->assertEquals(CreateHandler::RESPONSE_MISSING_PARAMETERS, $result);
     }
 
     public function testHandle()
@@ -114,11 +117,19 @@ class CreateHandlerTest extends TestCase
             'language' => 'fre-FR',
             'fromThirdParty' => 'application123',
         ];
+
+        $response = new Response(200, json_encode([
+            'result' => [
+                'statusCode' => 0
+            ]
+        ]));
+
         $this->httpAdapter->post(
             $this->comexposiumSsoCreateUserEndPoint,
             [],
             json_encode($payload)
-        )->shouldBeCalled();
+        )->shouldBeCalled()
+        ->willReturn($response);
         $this->localeConverter->formatLocale('fr')->shouldBeCalled()->willReturn('fre-FR');
 
         $handler = new CreateHandler(
@@ -128,7 +139,135 @@ class CreateHandlerTest extends TestCase
             $this->localeConverter->reveal()
         );
 
-        $handler->handle(new Create($this->event->reveal(), 'email@example.net', 'fr'));
+        $result = $handler->handle(new Create($this->event->reveal(), 'email@example.net', 'fr'));
+
+        $this->assertEquals(CreateHandler::RESPONSE_CREATED, $result);
+    }
+
+    public function testHandleAlreadyCreated()
+    {
+        $extraParameterSalon = $this->prophesize(Event\ExtraParameter::class);
+        $extraParameterSessionSalon = $this->prophesize(Event\ExtraParameter::class);
+        $extraParameterApplication = $this->prophesize(Event\ExtraParameter::class);
+
+        $extraParameterSalon->getValue()->willReturn('salon');
+        $extraParameterSessionSalon->getValue()->willReturn('sessionSalon');
+        $extraParameterApplication->getValue()->willReturn('application123');
+
+        $this->extraParameterRepository
+            ->findByEventAndType($this->event->reveal(), Type::TYPE_COMEXPOSIUM_SSO_APPLICATION)
+            ->shouldBeCalled()
+            ->willReturn($extraParameterApplication)
+        ;
+        $this->extraParameterRepository
+            ->findByEventAndType($this->event->reveal(), Type::TYPE_COMEXPOSIUM_SSO_SALON)
+            ->shouldBeCalled()
+            ->willReturn($extraParameterSalon->reveal())
+        ;
+        $this->extraParameterRepository
+            ->findByEventAndType($this->event->reveal(), Type::TYPE_COMEXPOSIUM_SSO_SESSION_SALON)
+            ->shouldBeCalled()
+            ->willReturn($extraParameterSessionSalon->reveal())
+        ;
+
+        $payload = [
+            'email' => 'email@example.net',
+            'fromSalon' => 'salon',
+            'fromSessionSalon' => 'sessionSalon',
+            'language' => 'fre-FR',
+            'fromThirdParty' => 'application123',
+        ];
+
+        $response = new Response(200, json_encode([
+            'result' => [
+                'statusCode' => 143
+            ]
+        ]));
+
+        $this->httpAdapter
+            ->post(
+                $this->comexposiumSsoCreateUserEndPoint,
+                [],
+                json_encode($payload)
+            )
+            ->shouldBeCalled()
+            ->willReturn($response)
+        ;
+        $this->localeConverter->formatLocale('fr')->shouldBeCalled()->willReturn('fre-FR');
+
+        $handler = new CreateHandler(
+            $this->httpAdapter->reveal(),
+            $this->extraParameterRepository->reveal(),
+            $this->comexposiumSsoCreateUserEndPoint,
+            $this->localeConverter->reveal()
+        );
+
+        $result = $handler->handle(new Create($this->event->reveal(), 'email@example.net', 'fr'));
+
+        $this->assertEquals(CreateHandler::RESPONSE_ALREADY_CREATED, $result);
+    }
+
+    public function testHandleError()
+    {
+        $extraParameterSalon = $this->prophesize(Event\ExtraParameter::class);
+        $extraParameterSessionSalon = $this->prophesize(Event\ExtraParameter::class);
+        $extraParameterApplication = $this->prophesize(Event\ExtraParameter::class);
+
+        $extraParameterSalon->getValue()->willReturn('salon');
+        $extraParameterSessionSalon->getValue()->willReturn('sessionSalon');
+        $extraParameterApplication->getValue()->willReturn('application123');
+
+        $this->extraParameterRepository
+            ->findByEventAndType($this->event->reveal(), Type::TYPE_COMEXPOSIUM_SSO_APPLICATION)
+            ->shouldBeCalled()
+            ->willReturn($extraParameterApplication)
+        ;
+        $this->extraParameterRepository
+            ->findByEventAndType($this->event->reveal(), Type::TYPE_COMEXPOSIUM_SSO_SALON)
+            ->shouldBeCalled()
+            ->willReturn($extraParameterSalon->reveal())
+        ;
+        $this->extraParameterRepository
+            ->findByEventAndType($this->event->reveal(), Type::TYPE_COMEXPOSIUM_SSO_SESSION_SALON)
+            ->shouldBeCalled()
+            ->willReturn($extraParameterSessionSalon->reveal())
+        ;
+
+        $payload = [
+            'email' => 'email@example.net',
+            'fromSalon' => 'salon',
+            'fromSessionSalon' => 'sessionSalon',
+            'language' => 'fre-FR',
+            'fromThirdParty' => 'application123',
+        ];
+
+        $response = new Response(200, json_encode([
+            'result' => [
+                'statusCode' => 123
+            ]
+        ]));
+
+        $this->httpAdapter
+            ->post(
+                $this->comexposiumSsoCreateUserEndPoint,
+                [],
+                json_encode($payload)
+            )
+            ->shouldBeCalled()
+            ->willReturn($response)
+        ;
+        $this->localeConverter->formatLocale('fr')->shouldBeCalled()->willReturn('fre-FR');
+
+        $handler = new CreateHandler(
+            $this->httpAdapter->reveal(),
+            $this->extraParameterRepository->reveal(),
+            $this->comexposiumSsoCreateUserEndPoint,
+            $this->localeConverter->reveal()
+        );
+
+        $result = $handler->handle(new Create($this->event->reveal(), 'email@example.net', 'fr'));
+
+        $this->assertEquals(CreateHandler::RESPONSE_ERROR, $result);
     }
 
     public function testHandleException()
@@ -179,6 +318,8 @@ class CreateHandlerTest extends TestCase
             $this->localeConverter->reveal()
         );
 
-        $handler->handle(new Create($this->event->reveal(), 'email@example.net', 'fr'));
+        $result = $handler->handle(new Create($this->event->reveal(), 'email@example.net', 'fr'));
+
+        $this->assertEquals(CreateHandler::RESPONSE_ERROR, $result);
     }
 }
