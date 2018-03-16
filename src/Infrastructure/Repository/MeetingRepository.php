@@ -757,4 +757,42 @@ class MeetingRepository implements MeetingRepositoryInterface
 
         return null !== $queryBuilder->getQuery()->getOneOrNullResult();
     }
+
+    public function countBetweenDatesByEvent(Event $event, \DateTimeInterface $begin, \DateTimeInterface $end): int
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('COUNT(meeting.id)')
+            ->from(Meeting::class, 'meeting')
+            ->where('meeting.event = :event')
+            ->andWhere('meeting.createdAt BETWEEN :begin AND :end')
+            ->andWhere('meeting.isCreatedByParticipants = FALSE')
+            ->andWhere('meeting.state = :state')
+            ->setParameter('event', $event)
+            ->setParameter('begin', $begin)
+            ->setParameter('end', $end)
+            ->setParameter('state', Meeting::STATE_SCHEDULED);
+
+        return (int) $queryBuilder->getQuery()->getSingleScalarResult();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function countCreatedByParticipantByEvent(Event $event): int
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('COUNT(meeting.id)')
+            ->from(Meeting::class, 'meeting')
+            ->where('meeting.event = :event')
+            ->andWhere('meeting.isCreatedByParticipants = TRUE')
+            ->andWhere('meeting.state = :state')
+            ->setParameter('event', $event)
+            ->setParameter('state', Meeting::STATE_SCHEDULED);
+
+        return (int) $queryBuilder->getQuery()->getSingleScalarResult();
+    }
 }

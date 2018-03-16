@@ -403,14 +403,34 @@ class RequestRepository implements RequestRepositoryInterface
     }
 
     /**
-     * @param Event $event
-     *
-     * @return int
+     * {@inheritdoc}
      */
     public function countApprovedByEvent(Event $event): int
     {
         $queryBuilder = new RequestQueryBuilder($this->entityManager);
         $queryBuilder->count()->fromEvent($event)->approved()->isEnabled();
+
+        return (int) $queryBuilder->getQuery()->getSingleScalarResult();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function countPendingByEvent(Event $event): int
+    {
+        $queryBuilder = new RequestQueryBuilder($this->entityManager);
+        $queryBuilder->count()->fromEvent($event)->pending()->isEnabled();
+
+        return (int) $queryBuilder->getQuery()->getSingleScalarResult();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function countRefusedByEvent(Event $event): int
+    {
+        $queryBuilder = new RequestQueryBuilder($this->entityManager);
+        $queryBuilder->count()->fromEvent($event)->refused()->isEnabled();
 
         return (int) $queryBuilder->getQuery()->getSingleScalarResult();
     }
