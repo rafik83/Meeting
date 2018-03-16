@@ -221,7 +221,7 @@ form.event_duplicate.children.submit.label: Créer
 form.event_payment_conditions_update.children.allowDeposit.label: 'Activer le paiement en acompte'
 form.event_payment_conditions_update.children.deposit.label: 'Pourcentage de l''acompte'
 form.event_payment_conditions_update.children.depositUntil.label: 'Date limite d''acceptation des acomptes'
-form.event_payment_conditions_update.children.minimumForDeposit.label: 'Somme total à partir duquel l''acompte est applicable'
+form.event_payment_conditions_update.children.minimumForDeposit.label: 'Somme totale à partir duquel l''acompte est applicable'
 form.event_payment_conditions_update.children.paymentModes.label: 'Moyens de paiement'
 form.event_payment_conditions_update.children.submit.label: Enregistrer
 form.event_practical_info_update.children.contactFirstName.label: 'Prénom du contact'

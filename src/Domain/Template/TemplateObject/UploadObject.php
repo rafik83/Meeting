@@ -17,11 +17,13 @@ class UploadObject extends TemplateObject
     public const FORMAT_IMAGE = 'image';
     public const FORMAT_PDF = 'pdf';
     public const FORMAT_PPT = 'ppt';
+    public const FORMAT_CSV = 'csv';
 
     public const ALLOWED_FORMATS = [
         self::FORMAT_IMAGE,
         self::FORMAT_PDF,
         self::FORMAT_PPT,
+        self::FORMAT_CSV,
     ];
 
     /**

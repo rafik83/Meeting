@@ -35,7 +35,7 @@ admin.agenda.filters.follower.label: 'Suivi commercial'
 admin.agenda.filters.follower.unassigned.label: 'Non assigné'
 admin.agenda.filters.hasAvailableSlot.label: 'A des créneaux disponibles'
 admin.agenda.filters.hasMeetingToApprove.label: 'A des rendez-vous à valider'
-admin.agenda.filters.hasNotEnoughtAvailableSlot.label: 'Pas assez de créneaux disponible'
+admin.agenda.filters.hasNotEnoughtAvailableSlot.label: 'Pas assez de créneaux disponibles'
 admin.agenda.filters.hasParticipantUnavailableWithMeetingRequest.label: 'Au moins 1 participant est totalement indisponible avec au moins une demande de rendez-vous attribuée'
 admin.agenda.filters.hasScheduledMeeting.all: 'Peu importe'
 admin.agenda.filters.hasScheduledMeeting.label: 'A des rendez-vous positionnés'
@@ -59,17 +59,17 @@ admin.agenda.mass_assignment.begin.label: ''
 admin.agenda.mass_assignment.enabled.label: Activé
 admin.agenda.mass_assignment.submit.label: Valider
 admin.agenda.mass_assignment.title.label: 'Modifier l''indispo de masse dispatchée'
-admin.agenda.meeting.mass_assignment.update: 'Modifier l''indisponibilité de masse dispacthée'
+admin.agenda.meeting.mass_assignment.update: 'Modifier l''indisponibilité de masse dispatchée'
 admin.agenda.meeting.move: 'Déplacer le RDV'
 admin.agenda.meeting.selectSlot: 'Sélectionner ce créneau'
 admin.agenda.meeting.transformIntoMeeting.selectedSpotNotExists: 'Le créneau sélectionné n''existe pas'
 admin.agenda.meeting.update: 'Modifier le RDV'
 admin.agenda.meeting.updateMassAssignment.dateFormat: 'Format de date incorrect'
 admin.agenda.meeting.updateMassAssignment.meetingOrHappeningOnSlot: 'Rendez-vous ou conférence sur le créneau'
-admin.agenda.meeting.updateMassAssignment.missingData: 'Impossible de modifier l''indisponibilité de masse dispatché, données manquantes'
-admin.agenda.meeting.updateMassAssignment.outOfMassSlot: 'Indisponibilité de masse dispatché en dehors de l''indisponibilité de masse'
+admin.agenda.meeting.updateMassAssignment.missingData: 'Impossible de modifier l''indisponibilité de masse dispatchée, données manquantes'
+admin.agenda.meeting.updateMassAssignment.outOfMassSlot: 'Indisponibilité de masse dispatchée en dehors de l''indisponibilité de masse'
 admin.agenda.meeting.updateSlot.blockedSpotNotAvailableForThisMeetingAndSlot: 'Ce rendez-vous a un lieu bloqué et ce lieu n''est pas disponible pour le créneau sélectionné'
-admin.agenda.meeting.updateSlot.error: 'Impossible de modifier le créneau ce rendez-vous'
+admin.agenda.meeting.updateSlot.error: 'Impossible de modifier le créneau de rendez-vous'
 admin.agenda.meeting.updateSlot.meetingIsBlockedSlot: 'Impossible de déplacer ce rendez-vous : il a un créneau bloqué.'
 admin.agenda.meeting.updateSlot.noSpotsAvailableForThisSlotAndMeeting: 'Aucun lieu n''est disponible pour le créneau sélectionné'
 admin.agenda.meeting.updateSlot.slotNotAvailableForThisMeeting: 'Le créneau sélectionné n''est plus disponible.'
@@ -83,7 +83,7 @@ admin.agenda.meeting.updateSpot.spot: Lieu
 admin.agenda.meeting.updateSpot.spotNotAvailableForThisMeeting: 'Le lieu que vous avez sélectionné n''est pas ou plus disponible pour ce rendez-vous'
 admin.agenda.meeting.updateSpot.title: 'Modifier rendez-vous'
 admin.agenda.meeting.updateSpot.visio: Visio
-admin.agenda.noPreference: 'Pas de préférences'
+admin.agenda.noPreference: 'Pas de préférence'
 admin.agenda.possibleMeetingQuantity: 'Nombre de slots utilisables'
 admin.agenda.remove.confirm: 'Etes-vous sûr de vouloir supprimer ce RDV ?'
 admin.agenda.request.transformIntoMeeting.cancel: 'Annuler l''action de placer en RDV'
@@ -142,7 +142,7 @@ admin.event.billing.configuration.link: 'Information facturation'
 admin.event.billing.configuration.title: 'Configuration des informations de facturation'
 admin.event.catalog.external.configure: 'Configuration du catalogue public'
 admin.event.configuration.isMeetingRequestLocked: 'Verrouillage des demandes de rendez-vous'
-admin.event.configuration.key_dates.title: 'Date clé de l''événement'
+admin.event.configuration.key_dates.title: 'Dates clés de l''événement'
 admin.event.configure_dates: 'Dates clés'
 admin.event.create.from.title: 'Créer un événement à partir de'
 admin.event.create.title: 'Créer un événement'
@@ -172,13 +172,13 @@ admin.event.paymentConditions.typeWithSpecificPaymentConditions: 'Liste des type
 admin.event.paymentConditions.update.title: 'Modifier les conditions de paiement'
 admin.event.practicalInfo.link: 'Informations Pratiques'
 admin.event.practicalInfo.update.title: 'Modifier les informations pratiques'
-admin.event.registration.template_builder.remove_confirm: 'Confirmez vous la suppression de cet élément ?'
+admin.event.registration.template_builder.remove_confirm: 'Confirmez-vous la suppression de cet élément ?'
 admin.event.search_facet.enabled.label: Activé
 admin.event.search_facet.title: 'Filtres du catalogue'
 admin.event.search_facets.link: 'Filtres catalogue'
 admin.event.see_on_front.link: 'Voir le site'
 admin.event.see.link: Voir
-admin.event.settings.link: 'Paramétrages de l''évènement'
+admin.event.settings.link: 'Paramètrages de l''événement'
 admin.event.sheet.index.title: 'Ré-indexer les fiches de l''événement'
 admin.event.template.link: Templates
 admin.event.template.package: 'Forfait de participation'
@@ -189,14 +189,14 @@ admin.event.trace.participant_imported: 'Participants importés le %at% par %by%
 admin.event.unArchive.title: 'Désarchiver l''événement %eventTitle%'
 admin.event.update.link: Modifier
 admin.event.update.origin: 'Événement créé à partir de : '
-admin.event.update.title: 'Modifier l''évènement'
+admin.event.update.title: 'Modifier l''événement'
 admin.event.vatMode.ati: TTC
 admin.event.vatMode.et: HT
-admin.events.link: 'Mes évènements'
+admin.events.link: 'Mes événements'
 admin.export.transaction.column.billing_contact.country: 'Pays contact facturation'
 admin.export.transaction.column.billing_contact.vat_number: 'Numéro de TVA intracommunautaire'
-admin.export.transaction.column.event.id: 'Id évènement'
-admin.export.transaction.column.event.name: 'Nom évènement'
+admin.export.transaction.column.event.id: 'Id événement'
+admin.export.transaction.column.event.name: 'Nom événement'
 admin.export.transaction.column.payment.gateway: 'N° transaction gateway'
 admin.export.transaction.column.sheet.id: 'Id Fiche'
 admin.export.transaction.column.sheet.owner.id: 'Id propriétaire fiche'
@@ -339,7 +339,7 @@ admin.meeting_request_sheets_list.link: 'Par fiche de participation'
 admin.meeting_request.action.export: Exporter
 admin.meeting_request.action.lock: 'Verrouiller les demandes'
 admin.meeting_request.createdAt: 'Date de création'
-admin.meeting_request.details: Détail
+admin.meeting_request.details: Détails
 admin.meeting_request.from: De
 admin.meeting_request.link: 'Demandes de rendez-vous'
 admin.meeting_request.set_a_meeting: 'Placer un RDV'
@@ -351,15 +351,15 @@ admin.meeting_request.state.sent: Envoyé
 admin.meeting_request.stateUpdatedAt: 'Modification de l''état'
 admin.meeting_request.title: '{0} Aucune demande de rendez-vous|{1} 1 demande de rendez-vous|]1,Inf[ %count% demandes de rendez-vous'
 admin.meeting_request.to: À
-admin.meeting.action.deleteAll.confirm: 'Êtes vous sûr de vouloir supprimer l''ensemble des rendez-vous'
+admin.meeting.action.deleteAll.confirm: 'Êtes-vous sûr de vouloir supprimer l''ensemble des rendez-vous ?'
 admin.meeting.action.deleteAll.title: 'Supprimer l''ensemble des rendez-vous'
-admin.meeting.action.remove.confirm: 'Êtes vous sûr de vouloir supprimer ce rendez-vous?'
+admin.meeting.action.remove.confirm: 'Êtes-vous sûr de vouloir supprimer ce rendez-vous ?'
 admin.meeting.action.remove.link: Supprimer
 admin.meeting.export.fields.day: Jour
 admin.meeting.export.fields.from_sheet_id: 'ID demandeur'
 admin.meeting.export.fields.from_sheet_name: 'Nom fiche demandeur'
 admin.meeting.export.fields.from_sheet_participant_fullname: 'Prénom Nom utilisateurs demandeurs'
-admin.meeting.export.fields.from_sheet_participants: 'Participants demandeur'
+admin.meeting.export.fields.from_sheet_participants: 'Participants demandeurs'
 admin.meeting.export.fields.from_sheet_title: 'Titre fiche demandeur'
 admin.meeting.export.fields.from_user_ids: 'ids des utilisateurs demandeurs'
 admin.meeting.export.fields.hour_begin: 'Heure début'
@@ -369,8 +369,8 @@ admin.meeting.export.fields.spot: Lieu
 admin.meeting.export.fields.to_sheet_id: 'ID demandé'
 admin.meeting.export.fields.to_sheet_name: 'Nom fiche demandé'
 admin.meeting.export.fields.to_sheet_participant_fullname: 'Prénom Nom utilisateurs demandés'
-admin.meeting.export.fields.to_sheet_participants: 'Participants demandé'
-admin.meeting.export.fields.to_sheet_title: 'Titre fiche demandé'
+admin.meeting.export.fields.to_sheet_participants: 'Participants demandés'
+admin.meeting.export.fields.to_sheet_title: 'Titre fiche demandée'
 admin.meeting.export.fields.to_user_ids: 'ids des utilisateurs demandés'
 admin.meeting.link: Rendez-vous
 admin.meeting.list.column.head.createdAt: 'Créé le'
@@ -524,8 +524,8 @@ admin.participant_import_result.errors: 'Liste des erreurs dans le fichier'
 admin.participant_import_result.file_participations: 'Nombre de participations dans le fichier'
 admin.participant_import_result.title.label: 'Resultat de l''importation des participants'
 admin.participant_import.title: 'Importer les participants'
-admin.participant.export.fields.happening_subscriber: 'Inscris sous-évènement'
-admin.participant.export.fields.participant_created_at: 'Creation Participant'
+admin.participant.export.fields.happening_subscriber: 'Inscrit sous-évènement'
+admin.participant.export.fields.participant_created_at: 'Création Participant'
 admin.participant.export.fields.participant_email: 'Email Participant'
 admin.participant.export.fields.participant_id: 'ID Participant'
 admin.participant.export.fields.participant_type: 'Type Participant'
@@ -567,12 +567,12 @@ admin.planner.analytics.table.column.ratio: 'Ratio RDVs/Demandes'
 admin.planner.analytics.table.column.requests: 'Nombre de demandes'
 admin.planner.export: Exporter
 admin.planner.export.heading: admin.planner.export.heading
-admin.planner.export.title: 'Export d''une solution pour la plannification des RDVs'
+admin.planner.export.title: 'Export d''une solution pour la planification des RDVs'
 admin.planner.heading.export: 'Exporter les données pour l''algorithme'
 admin.planner.heading.import: 'Importer une solution depuis l''algorithme'
 admin.planner.import.alert.meetingDelation: 'Attention, l''import d''une nouvelle solution supprime l''ensemble des rendez-vous positionnés sur cet événement'
 admin.planner.import.link: Importer
-admin.planner.import.title: 'Importation d''une solution'
+admin.planner.import.title: 'Import d''une solution'
 admin.planner.index: Planification
 admin.planner.notAvailable: 'La planification n''est plus disponible car l''évènement a commencé'
 admin.planner.pendingPlannerJob.details: 'Une planification des RDVs (%solutionType%) a été demandée par %adminFirstname% %adminLastname% le %createdAt%.'
@@ -586,7 +586,7 @@ admin.planner.pendingPlannerJob.status.queued: 'Planification en fil d''attente'
 admin.planner.pendingPlannerJob.status.started: 'Planification démarrée'
 admin.planner.pendingPlannerJob.status.success: 'Planification réalisée, création des RDV en cours'
 admin.planner.run: 'Lancer la planification'
-admin.planner.run.title: 'Lancer la planification de RDVs'
+admin.planner.run.title: 'Lancer la planification des RDVs'
 admin.planning.export.link: Exporter
 admin.planning.export.title: 'Export des plannings en pdf'
 admin.product_create.option.title: 'Ajouter un produit'
@@ -601,7 +601,7 @@ admin.product_update.planning.title: 'Modifier un planning'
 admin.product.action.confirmDelete: 'Êtes vous sûr de vouloir supprimer ce produit?'
 admin.product.actions: Actions
 admin.product.availabilityCurrentMax: 'Disponibilité courante / max'
-admin.product.bought: 'Nombre achetés'
+admin.product.bought: 'Nombre de produits achetés'
 admin.product.buyableUntil: 'Achetable jusqu''au'
 admin.product.deletableUntil: 'Supprimable jusqu''au'
 admin.product.id: Id
@@ -672,13 +672,13 @@ admin.schedule.slots.table.end: à
 admin.schedule.slots.title: 'Créneaux de rendez-vous'
 admin.schedule.title: Agenda
 admin.sheet.acceptedAt: 'Acceptée le %at% par %by%'
-admin.sheet.assign.spot.exception: 'Une erreur est survenu'
+admin.sheet.assign.spot.exception: 'Une erreur est survenue'
 admin.sheet.assign.spot.notActive: 'Ce lieu n''est pas actif'
 admin.sheet.assign.spot.notFound: 'Ce lieu n''existe pas'
 admin.sheet.assign.spot.numberOfSheet: '%count% fiches'
 admin.sheet.assignToGroup: 'Assigner à une entité'
 admin.sheet.attend.danger.numberOfMeetings: 'Attention, l''annulation de cette fiche supprimera %numberOfMeetings% rendez-vous'
-admin.sheet.attend.info.numberOfMeetings: 'Pas de rendez-vous sont positionnés sur cette fiche'
+admin.sheet.attend.info.numberOfMeetings: 'Pas de rendez-vous positionnés sur cette fiche'
 admin.sheet.attend.title: 'Modifier la venue de la fiche %sheetTitle%'
 admin.sheet.batch.allSelected.label: 'Toutes les <strong>%sheets%</strong> fiches de l''évenement sont seléctionnées.'
 admin.sheet.batch.cancelSelection.label: 'Annuler la sélection complète'
@@ -837,7 +837,7 @@ admin.sheets_group.column.title: Titre
 admin.sheets_group.create: 'Nouvelle entité multi-fiches'
 admin.sheets_group.create.title: 'Création d''une entité muti-fiches'
 admin.sheets_group.index: Multi-fiches
-admin.sheets_group.no_result: 'Aucuns résultats'
+admin.sheets_group.no_result: 'Aucun résultats'
 admin.sheets_group.title: Multi-fiches
 admin.sheets_group.update: 'Modification de l''entité'
 admin.sheets_group.update.link: Modifier
@@ -990,7 +990,7 @@ admin.type.package: Forfait
 admin.type.paymentConditions.event.info.allowDeposit: 'Activer le paiement en acompte:'
 admin.type.paymentConditions.event.info.deposit: 'Pourcentage de l''acompte:'
 admin.type.paymentConditions.event.info.depositUntil: 'Date limite d''acceptation des acomptes:'
-admin.type.paymentConditions.event.info.minimumForDeposit: 'Somme total à partir duquel l''acompte est applicable:'
+admin.type.paymentConditions.event.info.minimumForDeposit: 'Somme totale à partir duquel l''acompte est applicable:'
 admin.type.paymentConditions.event.info.paymentModes: 'Moyens de paiement:'
 admin.type.paymentConditions.event.info.paymentModes.none: Aucun
 admin.type.paymentConditions.event.info.title: 'Conditions de paiement de l''événement:'
@@ -1008,10 +1008,10 @@ admin.type.update.title: 'Modifier le type de participation'
 admin.unavailability.button.category: 'Catégorie d''indisponibilité de masse'
 admin.unavailability.button.dispatch: Dispatcher
 admin.unavailability.button.dispatch_confirm: 'Êtes vous sûr de vouloir dispatcher les indisponbilités de masse?'
-admin.unavailability.button.mass: 'Indisponibilité de masse'
+admin.unavailability.button.mass: 'Indisponibilités de masse'
 admin.unavailability.category.add: Ajouter
-admin.unavailability.category.create: 'Création d''une catégorie d''indisponibilité de masse'
-admin.unavailability.category.link: 'Catégorie d''indisponibilité de masse'
+admin.unavailability.category.create: 'Création d''une catégorie d''indisponibilités de masse'
+admin.unavailability.category.link: 'Catégorie d''indisponibilités de masse'
 admin.unavailability.category.table.column.color: Couleur
 admin.unavailability.category.table.column.picto: Picto
 admin.unavailability.category.table.column.title: Titre
@@ -1023,7 +1023,7 @@ admin.unavailability.mass.action.delete: Supprimer
 admin.unavailability.mass.add: Ajouter
 admin.unavailability.mass.create: 'Création d''une indisponibilité de masse'
 admin.unavailability.mass.link: 'Indisponibilité de masse'
-admin.unavailability.mass.table.column.begin: Debut
+admin.unavailability.mass.table.column.begin: Début
 admin.unavailability.mass.table.column.category: Catégorie
 admin.unavailability.mass.table.column.dispatch: 'Créneaux de dispatchs'
 admin.unavailability.mass.table.column.end: Fin
@@ -1037,7 +1037,7 @@ admin.update_content.terms-of-sale.link: 'Conditions générales de vente'
 admin.update_content.terms-of-sale.title: 'Modifier les conditions générales de vente'
 admin.user.company-information: 'Informations de société'
 admin.user.contact-information: Coordonnées
-admin.user.events: Evenements
+admin.user.events: Evénements
 admin.users.details: 'Voir le compte'
 admin.users.email: Email
 admin.users.firstName: Prénom
@@ -1158,7 +1158,7 @@ event.sheet.enableState.disabled: 'Non active'
 event.sheet.enableState.enabled: Active
 event.sheet.imported.imported_with_connection.label: 'Importées avec connexion'
 event.sheet.imported.imported_without_connection.label: 'Importées sans connexion'
-event.sheet.imported.imported.label: 'Tous les importées'
+event.sheet.imported.imported.label: 'Tous les imports'
 event.sheet.imported.not_imported.label: 'Pas importées'
 event.sheet.listOrders.proForma: 'Visualiser la pro-forma'
 event.sheet.listOrders.title: 'Liste de vos commandes'

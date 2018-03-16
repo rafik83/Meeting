@@ -153,10 +153,16 @@ class CatalogExternalController extends Controller
             throw $this->createAccessDeniedException();
         }
 
+        $query = $request->get('query');
+
+        if (null === $query) {
+            return new JsonResponse([]);
+        }
+
         $localizationView = $this->get('tactician.commandbus.query')->handle(
             new LocalizationViewQuery(
                 $eventDomain->getEvent(),
-                $request->get('query'),
+                $query,
                 ExternalCatalog::DEFAULT_FILTERS,
                 $request->getLocale()
             )
@@ -186,7 +192,7 @@ class CatalogExternalController extends Controller
         $keywordView = $this->get('tactician.commandbus.query')->handle(
             new KeywordViewQuery(
                 $eventDomain->getEvent(),
-                $request->get('query'),
+                $query,
                 ExternalCatalog::DEFAULT_FILTERS,
                 $request->getLocale()
             )
