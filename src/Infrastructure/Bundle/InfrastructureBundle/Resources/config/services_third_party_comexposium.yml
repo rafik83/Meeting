@@ -163,8 +163,15 @@ services:
     Proximum\Vimeet\Application\ThirdParty\Comexposium\SSO\Application\Command\Participant\OnParticipantAddedHandler:
         arguments:
             - '@Proximum\Vimeet\Application\ThirdParty\Comexposium\SSO\Application\Command\User\CreateHandler'
+            - '@Proximum\Vimeet\Application\ThirdParty\Comexposium\SSO\Application\Command\Participant\NotifyParticipantAddedHandler'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\ThirdParty\Comexposium\SSO\Application\Command\Participant\OnParticipantAdded }
+
+    Proximum\Vimeet\Application\ThirdParty\Comexposium\SSO\Application\Command\Participant\NotifyParticipantAddedHandler:
+        arguments:
+            - '@adapter.mailer_adapter'
+            - '@query.mail.participant_mail_view_query_handler'
+            - '@event_sender'
 
     #
     # Guard

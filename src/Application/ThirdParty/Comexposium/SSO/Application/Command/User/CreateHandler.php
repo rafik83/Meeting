@@ -18,6 +18,11 @@ use Proximum\Vimeet\Domain\Repository\Event\ExtraParameterRepositoryInterface;
 
 class CreateHandler
 {
+    public const RESPONSE_MISSING_PARAMETERS = 'missing_parameters';
+    public const RESPONSE_ERROR = 'error';
+    public const RESPONSE_ALREADY_CREATED = 'already_created';
+    public const RESPONSE_CREATED = 'created';
+
     /** @var HttpAdapterInterface */
     private $httpAdapter;
 
@@ -42,14 +47,14 @@ class CreateHandler
         $this->extraParameterRepository = $extraParameterRepository;
     }
 
-    public function handle(Create $command): void
+    public function handle(Create $command): string
     {
         $salon = $this->extraParameterRepository->findByEventAndType($command->event, Type::TYPE_COMEXPOSIUM_SSO_SALON);
         $sessionSalon = $this->extraParameterRepository->findByEventAndType($command->event, Type::TYPE_COMEXPOSIUM_SSO_SESSION_SALON);
         $application = $this->extraParameterRepository->findByEventAndType($command->event, Type::TYPE_COMEXPOSIUM_SSO_APPLICATION);
 
         if ($salon === null || $sessionSalon === null || $application === null) {
-            return;
+            return self::RESPONSE_MISSING_PARAMETERS;
         }
 
         /**
@@ -73,9 +78,51 @@ class CreateHandler
         ];
 
         try {
-            $this->httpAdapter->post($this->comexposiumSsoCreateUserEndPoint, [], json_encode($payload));
+            $response = $this->httpAdapter->post($this->comexposiumSsoCreateUserEndPoint, [], json_encode($payload));
+
+            if ($response->statusCode !== 200) {
+                return self::RESPONSE_ERROR;
+            }
+
+            /**
+             * Example of response:
+             * {
+             *     "requestId":"802d6330-29e8-4318-9747-eefd43d0df78",
+             *     "status":200,
+             *     "error":null,
+             *     "controller":"Comexposium/AuthController",
+             *     "action":"createUser",
+             *     "collection":null,
+             *     "index":null,
+             *     "volatile":null,
+             *     "result":{
+             *         "statusCode":143,
+             *         "message":"create_user_already_exist"
+             *     }
+             * }
+             *
+             * result.statusCode:
+             *     0     => user created
+             *     143   => user already exist
+             *     1-187 => errors
+             */
+            $body = json_decode($response->body, true);
+
+            if (isset($body['result']['statusCode'])) {
+                $statusCode = $body['result']['statusCode'];
+
+                if (0 === (int) $statusCode) {
+                    return self::RESPONSE_CREATED;
+                }
+
+                if (143 === (int) $statusCode) {
+                    return self::RESPONSE_ALREADY_CREATED;
+                }
+            }
+
+            return self::RESPONSE_ERROR;
         } catch (ServerErrorException $exception) {
-            return;
+            return self::RESPONSE_ERROR;
         }
     }
 }
