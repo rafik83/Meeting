@@ -160,6 +160,12 @@ services:
             - '%comexposium_create_user_endpoint%'
             - '@Proximum\Vimeet\Application\ThirdParty\Comexposium\SSO\Converter\LocaleConverter'
 
+    Proximum\Vimeet\Application\ThirdParty\Comexposium\SSO\Application\Command\Participant\OnParticipantAddedHandler:
+        arguments:
+            - '@Proximum\Vimeet\Application\ThirdParty\Comexposium\SSO\Application\Command\User\CreateHandler'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\ThirdParty\Comexposium\SSO\Application\Command\Participant\OnParticipantAdded }
+
     #
     # Guard
     #

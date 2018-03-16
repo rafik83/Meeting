@@ -359,6 +359,8 @@ services:
         arguments:
             - '@event_dispatcher' #Do not use the delayed event dispatcher as it is already call by a delayed event
             - '@components.token.user.activate_account_token_generator'
+            - '@repository.event.extra_parameter_repository'
+            - '@Proximum\Vimeet\Infrastructure\Adapter\CommandBus'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Participant\Add\OnParticipantAdded }
 

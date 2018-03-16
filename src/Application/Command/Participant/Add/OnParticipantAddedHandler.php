@@ -10,15 +10,19 @@
 
 namespace Proximum\Vimeet\Application\Command\Participant\Add;
 
+use Proximum\Vimeet\Application\Adapter\CommandBusInterface;
 use Proximum\Vimeet\Application\Event\Events;
 use Proximum\Vimeet\Application\Event\Sheet\SheetAddParticipantEvent;
 use Proximum\Vimeet\Application\Event\User\ActivateAccountEvent;
 use Proximum\Vimeet\Application\Event\User\CompleteProfileEvent;
 use Proximum\Vimeet\Application\Components\Token\User\ActivateAccountTokenGenerator;
+use Proximum\Vimeet\Application\ThirdParty\Comexposium\SSO\Application\Command\Participant\OnParticipantAdded as ComexposiumOnParticipantAdded;
+use Proximum\Vimeet\Domain\Event\ExtraParameter\Type;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\User;
+use Proximum\Vimeet\Domain\Repository\Event\ExtraParameterRepositoryInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
@@ -36,16 +40,28 @@ class OnParticipantAddedHandler
     /** @var ActivateAccountTokenGenerator */
     private $activateAccountTokenGenerator;
 
+    /** @var ExtraParameterRepositoryInterface */
+    private $extraParameterRepository;
+
+    /** @var CommandBusInterface */
+    private $commandBus;
+
     /**
-     * @param EventDispatcherInterface      $eventDispatcher
-     * @param ActivateAccountTokenGenerator $activateAccountTokenGenerator
+     * @param EventDispatcherInterface          $eventDispatcher
+     * @param ActivateAccountTokenGenerator     $activateAccountTokenGenerator
+     * @param ExtraParameterRepositoryInterface $extraParameterRepository
+     * @param CommandBusInterface               $commandBus
      */
     public function __construct(
         EventDispatcherInterface $eventDispatcher,
-        ActivateAccountTokenGenerator $activateAccountTokenGenerator
+        ActivateAccountTokenGenerator $activateAccountTokenGenerator,
+        ExtraParameterRepositoryInterface $extraParameterRepository,
+        CommandBusInterface $commandBus
     ) {
         $this->eventDispatcher = $eventDispatcher;
         $this->activateAccountTokenGenerator = $activateAccountTokenGenerator;
+        $this->extraParameterRepository = $extraParameterRepository;
+        $this->commandBus = $commandBus;
     }
 
     public function handle(OnParticipantAdded $command): void
@@ -55,11 +71,19 @@ class OnParticipantAddedHandler
         $user = $command->participant->getUser();
 
         if (!$sheet->isOwner($user)) {
-            // send to the guest
-            if ($user->isActive()) {
-                $this->sendCompleteProfileEvent($event, $user, $command->participant);
+            // Check that an SSO is activated for the event
+            $ssoEnabled = $this->extraParameterRepository->findByEventAndType($event, Type::TYPE_COMEXPOSIUM_SSO_ENABLED);
+
+            if ($ssoEnabled === null) {
+                // If sso is not enabled, we send the event to warn the user
+                // send to the guest
+                if ($user->isActive()) {
+                    $this->sendCompleteProfileEvent($event, $user, $command->participant);
+                } else {
+                    $this->sendActivationEvent($command->adder, $sheet, $user);
+                }
             } else {
-                $this->sendActivationEvent($command->adder, $sheet, $user);
+                $this->commandBus->handle(new ComexposiumOnParticipantAdded($event, $command->participant));
             }
 
             // send to the adder

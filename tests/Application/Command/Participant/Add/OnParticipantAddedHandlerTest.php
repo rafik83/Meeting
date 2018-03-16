@@ -13,6 +13,7 @@ namespace Proximum\Vimeet\Tests\Application\Command\Participant\Add;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
 use Prophecy\Prophecy\ObjectProphecy;
+use Proximum\Vimeet\Application\Adapter\CommandBusInterface;
 use Proximum\Vimeet\Application\Command\Participant\Add\OnParticipantAdded;
 use Proximum\Vimeet\Application\Command\Participant\Add\OnParticipantAddedHandler;
 use Proximum\Vimeet\Application\Components\Token\User\ActivateAccountTokenGenerator;
@@ -20,10 +21,13 @@ use Proximum\Vimeet\Application\Event\Events;
 use Proximum\Vimeet\Application\Event\Sheet\SheetAddParticipantEvent;
 use Proximum\Vimeet\Application\Event\User\ActivateAccountEvent;
 use Proximum\Vimeet\Application\Event\User\CompleteProfileEvent;
+use Proximum\Vimeet\Application\ThirdParty\Comexposium\SSO\Application\Command\Participant\OnParticipantAdded as ComexposiumOnParticipantAdded;
+use Proximum\Vimeet\Domain\Event\ExtraParameter\Type;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\User;
+use Proximum\Vimeet\Domain\Repository\Event\ExtraParameterRepositoryInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 class OnParticipantAddedHandlerTest extends TestCase
@@ -49,6 +53,12 @@ class OnParticipantAddedHandlerTest extends TestCase
     /** @var ObjectProphecy */
     private $activateAccountTokenGenerator;
 
+    /** @var ObjectProphecy */
+    private $extraParameterRepository;
+
+    /** @var ObjectProphecy */
+    private $commandBus;
+
     public function setUp()
     {
         $this->user = $this->prophesize(User::class);
@@ -56,8 +66,12 @@ class OnParticipantAddedHandlerTest extends TestCase
         $this->participant = $this->prophesize(Participant::class);
         $this->event = $this->prophesize(Event::class);
         $this->adder = $this->prophesize(User::class);
+
         $this->eventDispatcher = $this->prophesize(EventDispatcherInterface::class);
         $this->activateAccountTokenGenerator = $this->prophesize(ActivateAccountTokenGenerator::class);
+        $this->extraParameterRepository = $this->prophesize(ExtraParameterRepositoryInterface::class);
+        $this->commandBus = $this->prophesize(CommandBusInterface::class);
+
         $this->participant->getSheet()->willReturn($this->sheet->reveal());
         $this->participant->getUser()->willReturn($this->user->reveal());
         $this->sheet->getEvent()->willReturn($this->event->reveal());
@@ -67,12 +81,18 @@ class OnParticipantAddedHandlerTest extends TestCase
     {
         $this->eventDispatcher->dispatch(Argument::any(), Argument::any())->shouldNotBeCalled();
         $this->activateAccountTokenGenerator->generate(Argument::any(), Argument::any())->shouldNotBeCalled();
+        $this->extraParameterRepository
+            ->findByEventAndType($this->event->reveal(), Type::TYPE_COMEXPOSIUM_SSO_ENABLED)
+            ->shouldNotBeCalled()
+        ;
 
         $this->sheet->isOwner($this->user->reveal())->shouldBeCalled()->willReturn(true);
 
         $handler = new OnParticipantAddedHandler(
             $this->eventDispatcher->reveal(),
-            $this->activateAccountTokenGenerator->reveal()
+            $this->activateAccountTokenGenerator->reveal(),
+            $this->extraParameterRepository->reveal(),
+            $this->commandBus->reveal()
         );
 
         $handler->handle(new OnParticipantAdded($this->participant->reveal(), $this->adder->reveal()));
@@ -108,12 +128,19 @@ class OnParticipantAddedHandlerTest extends TestCase
             ->shouldBeCalled()
         ;
         $this->activateAccountTokenGenerator->generate(Argument::any(), Argument::any())->shouldNotBeCalled();
+        $this->extraParameterRepository
+            ->findByEventAndType($this->event->reveal(), Type::TYPE_COMEXPOSIUM_SSO_ENABLED)
+            ->shouldBeCalled()
+            ->willReturn(null)
+        ;
 
         $this->sheet->isOwner($this->user->reveal())->shouldBeCalled()->willReturn(false);
 
         $handler = new OnParticipantAddedHandler(
             $this->eventDispatcher->reveal(),
-            $this->activateAccountTokenGenerator->reveal()
+            $this->activateAccountTokenGenerator->reveal(),
+            $this->extraParameterRepository->reveal(),
+            $this->commandBus->reveal()
         );
 
         $handler->handle(new OnParticipantAdded($this->participant->reveal(), $this->adder->reveal()));
@@ -151,12 +178,59 @@ class OnParticipantAddedHandlerTest extends TestCase
             ->shouldBeCalled()
         ;
         $this->activateAccountTokenGenerator->generate($this->user->reveal(), $this->sheet->reveal())->shouldBeCalled()->willReturn($token->reveal());
+        $this->extraParameterRepository
+            ->findByEventAndType($this->event->reveal(), Type::TYPE_COMEXPOSIUM_SSO_ENABLED)
+            ->shouldBeCalled()
+            ->willReturn(null)
+        ;
 
         $this->sheet->isOwner($this->user->reveal())->shouldBeCalled()->willReturn(false);
 
         $handler = new OnParticipantAddedHandler(
             $this->eventDispatcher->reveal(),
-            $this->activateAccountTokenGenerator->reveal()
+            $this->activateAccountTokenGenerator->reveal(),
+            $this->extraParameterRepository->reveal(),
+            $this->commandBus->reveal()
+        );
+
+        $handler->handle(new OnParticipantAdded($this->participant->reveal(), $this->adder->reveal()));
+    }
+
+    public function testHandleSSO()
+    {
+        $extraParameter = $this->prophesize(Event\ExtraParameter::class);
+        $this->user->getLocale()->willReturn('fr');
+        $this->user->isActive()->willReturn(false);
+
+        $this->eventDispatcher
+            ->dispatch(
+                Events::SHEET_ADD_PARTICIPANT_CONFIRMATION,
+                new SheetAddParticipantEvent(
+                    $this->sheet->reveal(),
+                    $this->participant->reveal(),
+                    $this->adder->reveal()
+                )
+            )
+            ->shouldBeCalled()
+        ;
+        $this->activateAccountTokenGenerator->generate(Argument::any(), Argument::any())->shouldNotBeCalled();
+        $this->extraParameterRepository
+            ->findByEventAndType($this->event->reveal(), Type::TYPE_COMEXPOSIUM_SSO_ENABLED)
+            ->shouldBeCalled()
+            ->willReturn($extraParameter->reveal())
+        ;
+        $this->commandBus
+            ->handle(new ComexposiumOnParticipantAdded($this->event->reveal(), $this->participant->reveal()))
+            ->shouldBeCalled()
+        ;
+
+        $this->sheet->isOwner($this->user->reveal())->shouldBeCalled()->willReturn(false);
+
+        $handler = new OnParticipantAddedHandler(
+            $this->eventDispatcher->reveal(),
+            $this->activateAccountTokenGenerator->reveal(),
+            $this->extraParameterRepository->reveal(),
+            $this->commandBus->reveal()
         );
 
         $handler->handle(new OnParticipantAdded($this->participant->reveal(), $this->adder->reveal()));
