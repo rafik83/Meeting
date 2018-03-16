@@ -14,7 +14,6 @@ use Proximum\Vimeet\Application\Adapter\HttpAdapterInterface;
 use Proximum\Vimeet\Application\Exception\Adapter\Http\ServerErrorException;
 use Proximum\Vimeet\Application\ThirdParty\LENI\Exception\LeniApiServerException;
 use Proximum\Vimeet\Application\ThirdParty\LENI\Exception\NotValidApiCallException;
-use Proximum\Vimeet\Application\ThirdParty\LENI\Exception\WarningApiCallException;
 use Proximum\Vimeet\Application\ThirdParty\LENI\LeniConstants;
 use Proximum\Vimeet\Domain\Event\ExtraParameter\Type;
 use Proximum\Vimeet\Domain\Model\Event;
@@ -40,17 +39,11 @@ class LeniApiCaller
     }
 
     /**
-     * @param Event $event
-     * @param mixed $data
-     *
-     * @return Object
-     *
      * @throws \LogicException
      * @throws LeniApiServerException
      * @throws NotValidApiCallException
-     * @throws WarningApiCallException
      */
-    public function save(Event $event, array $data): Object
+    public function save(Event $event, array $data): array
     {
         $leniUserParameter = $this->extraParameterRepository->findByEventAndType($event, Type::TYPE_LENI_USER);
         $leniEventParameter = $this->extraParameterRepository->findByEventAndType($event, Type::TYPE_LENI_EVENT);
