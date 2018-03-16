@@ -100,38 +100,16 @@ class LeniApiCaller
 
         $response = json_decode($jsonResponse->body, true);
 
-        $apiCallLog = sprintf(
-            "Headers: %s;\nRequest: %s;\nResponse: %s;",
-            json_encode($headers),
-            $body,
-            $response
-        );
-
-        // Call not valid
         if (!isset($response[LeniConstants::LENI_IS_VALID]) || $response[LeniConstants::LENI_IS_VALID] !== true) {
-            throw new NotValidApiCallException($apiCallLog);
+            throw new NotValidApiCallException(sprintf(
+                "Headers: %s;\nRequest: %s;\nResponse: %s;",
+                json_encode($headers),
+                $body,
+                $jsonResponse->body
+            ));
         }
 
-        // Call has warnings
-        if (isset($response[LeniConstants::LENI_FIELD_HAS_WARNING], $response[LeniConstants::LENI_FIELD_INFO])
-            && $response[LeniConstants::LENI_FIELD_HAS_WARNING] === true
-        ) {
-            $warnings = [];
-
-            if (\is_array($response[LeniConstants::LENI_FIELD_INFO])) {
-                foreach ($response[LeniConstants::LENI_FIELD_INFO] as $key => $info) {
-                    if (\in_array($key, LeniConstants::LENI_COLUMNS, true)) {
-                        $warnings[] = $key;
-                    }
-                }
-            }
-
-            if (!empty($warnings)) {
-                throw new WarningApiCallException($apiCallLog);
-            }
-        }
-
-        return $data;
+        return $response;
     }
 
     /**

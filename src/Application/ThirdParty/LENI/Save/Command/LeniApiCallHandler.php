@@ -197,5 +197,14 @@ class LeniApiCallHandler
             serialize($data)
         );
         $this->extraDataRepository->remove($pendingExtraData);
+
+        // Call has warnings
+        if (isset($response[LeniConstants::LENI_FIELD_HAS_WARNING], $response[LeniConstants::LENI_FIELD_INFO])
+            && $response[LeniConstants::LENI_FIELD_HAS_WARNING] === true
+        ) {
+            throw new WarningApiCallException(
+                sprintf('Data : %s ; Response : %s', json_encode($data), json_encode($response))
+            );
+        }
     }
 }
