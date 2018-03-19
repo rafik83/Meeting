@@ -25,6 +25,7 @@ services:
         arguments:
             - '@Proximum\Vimeet\Application\ThirdParty\LENI\Common\Api\LeniApiCaller'
             - '@vimeet_infrastructure.repository.event_repository'
+            - '@repository.user.event.extra_data_repository'
 
     #
     # Job

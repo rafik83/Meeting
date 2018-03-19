@@ -219,7 +219,7 @@ class LeniApiCallerTest extends TestCase
         $body = json_encode(
             [
                 'idEvt' => 'leni_event',
-                'filters' => [],
+                'filters' => ['myfilter' => 'value'],
                 'fields' => [
                     'Id',
                     'CategorieIndividuEvt',
@@ -265,7 +265,7 @@ class LeniApiCallerTest extends TestCase
         ;
 
         $leniApiCaller = new LeniApiCaller($this->httpAdapter->reveal(), $this->extraParameterRepository->reveal());
-        $response = $leniApiCaller->get($this->event->reveal(), 0, 1);
+        $response = $leniApiCaller->get($this->event->reveal(), ['myfilter' => 'value'], 0, 1);
 
         $this->assertEquals(['whatever' => 'data'], $response);
     }

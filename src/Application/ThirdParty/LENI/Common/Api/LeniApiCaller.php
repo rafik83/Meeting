@@ -105,15 +105,15 @@ class LeniApiCaller
 
     /**
      * @param Event $event
+     * @param array $filters
      * @param int   $start
      * @param int   $limit
      *
      * @return array
      *
-     * @throws \LogicException
      * @throws LeniApiServerException
      */
-    public function get(Event $event, int $start = 0, int $limit = 1): array
+    public function get(Event $event, array $filters, int $start = 0, int $limit = 1): array
     {
         $leniUserParameter = $this->extraParameterRepository->findByEventAndType($event, Type::TYPE_LENI_USER);
         $leniEventParameter = $this->extraParameterRepository->findByEventAndType($event, Type::TYPE_LENI_EVENT);
@@ -137,7 +137,7 @@ class LeniApiCaller
             );
         }
 
-        $body = $this->getGetCallBody($leniEventParameter->getValue(), $start, $limit);
+        $body = $this->getGetCallBody($leniEventParameter->getValue(), $filters, $start, $limit);
         $jsonEncodedBody = json_encode($body);
         $headers = $this->getHeaders($leniUserParameter->getValue(), $jsonEncodedBody);
 
@@ -150,11 +150,11 @@ class LeniApiCaller
         return json_decode($jsonResponse->body, true);
     }
 
-    private function getGetCallBody(string $idEvt, int $start, int $limit): array
+    private function getGetCallBody(string $idEvt, array $filters, int $start, int $limit): array
     {
         return [
             'idEvt' => $idEvt,
-            'filters' => [],
+            'filters' => $filters,
             'fields' => LeniConstants::LENI_GET_FIELDS,
             'start' => $start,
             'take' => $limit,
