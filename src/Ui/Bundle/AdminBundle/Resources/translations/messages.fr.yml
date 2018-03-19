@@ -226,6 +226,7 @@ admin.extraParameter.type.comexposium_visitor_type_id: 'Comexposium : Id du type
 admin.extraParameter.type.leni_event: 'LENI Code Event'
 admin.extraParameter.type.leni_get_endpoint: 'LENI Get endpoint'
 admin.extraParameter.type.leni_mode: 'LENI Mode'
+admin.extraParameter.type.leni_participation_data_mapping: 'LENI mapping des champs'
 admin.extraParameter.type.leni_participation_types_mapping: 'LENI mapping des types de participation'
 admin.extraParameter.type.leni_save_endpoint: 'LENI Save endpoint'
 admin.extraParameter.type.leni_user: 'Code Utilisateur LENI'

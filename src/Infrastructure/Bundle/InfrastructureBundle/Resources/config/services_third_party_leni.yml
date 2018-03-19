@@ -32,7 +32,6 @@ services:
         arguments:
             - '@doctrine.orm.entity_manager'
 
-
     #
     # Command
     #
@@ -62,7 +61,6 @@ services:
         tags:
             - { name: serializer.normalizer }
 
-
     #
     # Common services
     #
@@ -76,6 +74,6 @@ services:
             - '@repository.user.event.extra_data_repository'
             - '@datetime'
 
-    Proximum\Vimeet\Application\ThirdParty\LENI\Common\ExtraParameter\TypesMapping:
+    Proximum\Vimeet\Application\ThirdParty\LENI\Common\EventExtraParameter\MappingGetter:
         arguments:
             - '@repository.event.extra_parameter_repository'
