@@ -81,3 +81,23 @@ services:
     Proximum\Vimeet\Application\ThirdParty\LENI\Common\ExtraParameter\TypesMapping:
         arguments:
             - '@repository.event.extra_parameter_repository'
+
+    #
+    # Queries
+    #
+    Proximum\Vimeet\Application\ThirdParty\LENI\Save\Query\PrepareLeaderDataHandler:
+        arguments:
+            - '@repository.user.event.extra_data_repository'
+
+    query.api.leni.leni_user_view_query_handler:
+        class: Proximum\Vimeet\Application\ThirdParty\LENI\Save\Query\LeniUserViewQueryHandler
+        arguments:
+            - '@components.user.user_info_guesser'
+            - '@vimeet_infrastructure.application.components.sheet.sheet_info_guesser'
+            - '@planning.formatter.participant_planning_formatter'
+            - '@domain.service.sheets_group.type_name_resolver'
+            - '@domain.service.category.category_name_resolver'
+            - '@domain.service.sheets_group.group_name_resolver'
+            - '@vimeet_infrastructure.repository.sheet_repository'
+            - '@order.balance'
+            - '@Proximum\Vimeet\Application\ThirdParty\LENI\Save\Query\PrepareLeaderDataHandler'

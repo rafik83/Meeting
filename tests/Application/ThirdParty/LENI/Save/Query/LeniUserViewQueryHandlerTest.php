@@ -17,6 +17,9 @@ use Proximum\Vimeet\Application\Components\Sheet\SheetInfoGuesser;
 use Proximum\Vimeet\Application\Components\User\UserInfoGuesser;
 use Proximum\Vimeet\Application\ThirdParty\LENI\Save\Query\LeniUserViewQuery;
 use Proximum\Vimeet\Application\ThirdParty\LENI\Save\Query\LeniUserViewQueryHandler;
+use Proximum\Vimeet\Application\ThirdParty\LENI\Save\Query\PrepareLeaderData;
+use Proximum\Vimeet\Application\ThirdParty\LENI\Save\Query\PrepareLeaderDataHandler;
+use Proximum\Vimeet\Application\ThirdParty\LENI\Save\View\LeaderView;
 use Proximum\Vimeet\Application\ThirdParty\LENI\Save\View\LeniPlanningDayView;
 use Proximum\Vimeet\Application\ThirdParty\LENI\Save\View\LeniPlanningView;
 use Proximum\Vimeet\Application\ThirdParty\LENI\Save\View\LeniUserView;
@@ -66,6 +69,7 @@ class LeniUserViewQueryHandlerTest extends TestCase
         $categoryNameResolver = $this->prophesize(CategoryNameResolver::class);
         $sheetInfoGuesser = $this->prophesize(SheetInfoGuesser::class);
         $balance = $this->prophesize(Balance::class);
+        $prepareLeaderDatahandler = $this->prophesize(PrepareLeaderDataHandler::class);
 
         $balance->getRemainingToPay($sheet1->reveal())->shouldBeCalled()->willReturn(0);
 
@@ -122,6 +126,12 @@ class LeniUserViewQueryHandlerTest extends TestCase
         $participant->getParticipantProduct()->willReturn($participantProduct->reveal());
         $sheet1->getUserParticipant($user->reveal())->shouldBeCalled()->willReturn($participant->reveal());
 
+        $prepareLeaderDatahandler
+            ->handle(new PrepareLeaderData($sheet1->reveal(), $user->reveal()))
+            ->shouldBeCalled()
+            ->willReturn(null)
+        ;
+
         $handler = new LeniUserViewQueryHandler(
             $userInfoGuesser->reveal(),
             $sheetInfoGuesser->reveal(),
@@ -130,7 +140,8 @@ class LeniUserViewQueryHandlerTest extends TestCase
             $categoryNameResolver->reveal(),
             $groupNameResolver->reveal(),
             $sheetRepository->reveal(),
-            $balance->reveal()
+            $balance->reveal(),
+            $prepareLeaderDatahandler->reveal()
         );
         $result = $handler->handle(new LeniUserViewQuery($event->reveal(), $user->reveal(), null));
 
@@ -149,6 +160,7 @@ class LeniUserViewQueryHandlerTest extends TestCase
             'mobile',
             'FR',
             'en',
+            null,
             new LeniPlanningView(
                 [
                     new LeniPlanningDayView('day1'),
@@ -189,6 +201,7 @@ class LeniUserViewQueryHandlerTest extends TestCase
         $categoryNameResolver = $this->prophesize(CategoryNameResolver::class);
         $sheetInfoGuesser = $this->prophesize(SheetInfoGuesser::class);
         $balance = $this->prophesize(Balance::class);
+        $prepareLeaderDatahandler = $this->prophesize(PrepareLeaderDataHandler::class);
 
         $balance->getRemainingToPay($sheet1->reveal())->shouldBeCalled()->willReturn(999);
 
@@ -243,6 +256,13 @@ class LeniUserViewQueryHandlerTest extends TestCase
         $participant->getParticipantProduct()->willReturn(null);
         $sheet1->getUserParticipant($user->reveal())->shouldBeCalled()->willReturn($participant->reveal());
 
+        $leaderView = new LeaderView('123-321', 'email@example.net', 'firstName', 'lastName', 'sheetName');
+        $prepareLeaderDatahandler
+            ->handle(new PrepareLeaderData($sheet1->reveal(), $user->reveal()))
+            ->shouldBeCalled()
+            ->willReturn($leaderView)
+        ;
+
         $handler = new LeniUserViewQueryHandler(
             $userInfoGuesser->reveal(),
             $sheetInfoGuesser->reveal(),
@@ -251,7 +271,8 @@ class LeniUserViewQueryHandlerTest extends TestCase
             $categoryNameResolver->reveal(),
             $groupNameResolver->reveal(),
             $sheetRepository->reveal(),
-            $balance->reveal()
+            $balance->reveal(),
+            $prepareLeaderDatahandler->reveal()
         );
 
         $extraData = new ExtraData(
@@ -279,6 +300,7 @@ class LeniUserViewQueryHandlerTest extends TestCase
             'mobile',
             'FR',
             'en',
+            $leaderView,
             new LeniPlanningView(
                 [
                     new LeniPlanningDayView('day1'),

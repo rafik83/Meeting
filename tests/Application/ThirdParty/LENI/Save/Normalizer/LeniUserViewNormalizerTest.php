@@ -13,6 +13,7 @@ namespace Proximum\Vimeet\Tests\Application\ThirdParty\LENI\Save\Normalizer;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Prophecy\ObjectProphecy;
 use Proximum\Vimeet\Application\ThirdParty\LENI\Save\Normalizer\LeniUserViewNormalizer;
+use Proximum\Vimeet\Application\ThirdParty\LENI\Save\View\LeaderView;
 use Proximum\Vimeet\Application\ThirdParty\LENI\Save\View\LeniPlanningDayView;
 use Proximum\Vimeet\Application\ThirdParty\LENI\Save\View\LeniPlanningView;
 use Proximum\Vimeet\Application\ThirdParty\LENI\Save\View\LeniUserView;
@@ -49,6 +50,7 @@ class LeniUserViewNormalizerTest extends TestCase
             '+888999666',
             'US',
             'en',
+            null,
             new LeniPlanningView(
                 [
                     new LeniPlanningDayView('Planning day one'),
@@ -92,6 +94,13 @@ class LeniUserViewNormalizerTest extends TestCase
 
     public function testNormalizeWithPreviousId()
     {
+        $leaderView = new LeaderView(
+            '123-321',
+            'email@example.net',
+            'George Samuel',
+            'Kirk',
+            'Star Fleet'
+        );
         $leniUserView = new LeniUserView(
             1337,
             false,
@@ -107,6 +116,7 @@ class LeniUserViewNormalizerTest extends TestCase
             '+888999666',
             'US',
             'en',
+            $leaderView,
             new LeniPlanningView(
                 [
                     new LeniPlanningDayView('Planning day one'),
@@ -141,6 +151,11 @@ class LeniUserViewNormalizerTest extends TestCase
             'ZL_IDPRODUITPARTICIPANT' => null,
             'ZL_JOURNEE1' => 'Planning day one',
             'ZL_JOURNEE2' => 'Planning day two',
+            'ZL_LEADER_ID' => '123-321',
+            'ZL_LEADER_SOCIETE' => 'Star Fleet',
+            'ZL_LEADER_EMAIL' => 'email@example.net',
+            'ZL_LEADER_NOM' => 'Kirk',
+            'ZL_LEADER_PRENOM' => 'George Samuel',
             'Id' => '25b850a8-aed5-e711-80e0-0cc47a4c19cf',
         ];
 

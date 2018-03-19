@@ -54,6 +54,14 @@ class LeniUserViewNormalizer implements NormalizerInterface
             $dayNumber++;
         }
 
+        if ($userView->leaderView !== null) {
+            $data[LeniConstants::LENI_LEADER_ID] = $userView->leaderView->leniUserId;
+            $data[LeniConstants::LENI_LEADER_SHEET_NAME] = mb_substr($userView->leaderView->sheetName, 0, LeniConstants::LONG_FIELD);
+            $data[LeniConstants::LENI_LEADER_EMAIL] = mb_substr($userView->leaderView->email, 0, LeniConstants::LONG_FIELD);
+            $data[LeniConstants::LENI_LEADER_LAST_NAME] = mb_substr($userView->leaderView->lastName, 0, LeniConstants::LONG_FIELD);
+            $data[LeniConstants::LENI_LEADER_FIRST_NAME] = mb_substr($userView->leaderView->firstName, 0, LeniConstants::LONG_FIELD);
+        }
+
         // Set the previous LENI user id
         // Warning: always on end of the returned array
         if (null !== $userView->leniId) {

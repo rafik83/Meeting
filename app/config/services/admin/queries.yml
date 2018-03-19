@@ -41,21 +41,6 @@ services:
             - '@vimeet_infrastructure.repository.meeting_repository'
 
     #
-    # API
-    #
-    query.api.leni.leni_user_view_query_handler:
-        class: Proximum\Vimeet\Application\ThirdParty\LENI\Save\Query\LeniUserViewQueryHandler
-        arguments:
-            - '@components.user.user_info_guesser'
-            - '@vimeet_infrastructure.application.components.sheet.sheet_info_guesser'
-            - '@planning.formatter.participant_planning_formatter'
-            - '@domain.service.sheets_group.type_name_resolver'
-            - '@domain.service.category.category_name_resolver'
-            - '@domain.service.sheets_group.group_name_resolver'
-            - '@vimeet_infrastructure.repository.sheet_repository'
-            - '@order.balance'
-
-    #
     # Meeting Request Export
     #
     query.meeting_request.export.sheet_view_query_handler:
