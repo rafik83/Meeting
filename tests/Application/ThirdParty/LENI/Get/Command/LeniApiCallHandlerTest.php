@@ -26,8 +26,8 @@ class LeniApiCallHandlerTest extends TestCase
         $event2 = $this->prophesize(Event::class);
 
         $leniApi = $this->prophesize(LeniApiCaller::class);
-        $leniApi->get($event1->reveal())->shouldBeCalled();
-        $leniApi->get($event2->reveal())->shouldBeCalled();
+        $leniApi->get($event1->reveal(), 0, 100)->shouldBeCalled();
+        $leniApi->get($event2->reveal(), 0, 100)->shouldBeCalled();
 
         $eventRepository = $this->prophesize(EventRepositoryInterface::class);
         $eventRepository

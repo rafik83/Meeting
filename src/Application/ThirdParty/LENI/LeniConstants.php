@@ -45,12 +45,20 @@ class LeniConstants
     public const LENI_COL_POSITION = 'Fonction';
     public const LENI_COL_PHONE_NUMBER = 'TelephoneFixe';
     public const LENI_COL_EMAIL = 'Email';
+    public const LENI_COL_ADDRESS = 'Adresse1';
+    public const LENI_COL_ZIPCODE = 'CodePostal';
+    public const LENI_COL_CITY = 'Ville';
+    public const LENI_COL_MOBILE = 'Mobile';
     public const LENI_COL_MOBILE_PHONE = 'TelephoneMobile';
+    public const LENI_COL_EVENT_POSITION = 'EvenementFonction';
+    public const LENI_COL_EVENT_ORIGIN = 'EvenementOrigine';
     public const LENI_COL_UNALLOCATED = 'ZL_RDVNONORGANISES';
     public const LENI_COL_DAY_FORMAT = 'ZL_JOURNEE%d';
     public const LENI_COL_COUNTRY = 'Pays';
     public const LENI_COL_ATTENDANCE = 'Inscrit';
     public const LENI_COL_LOCALE = 'Langue';
+    public const LENI_COL_CREATED_AT = 'CreeLe';
+    public const LENI_COL_UPDATED_AT = 'ModifieLe';
 
     public const LENI_COL_PARTICIPANT_PRODUCT_ID = 'ZL_IDPRODUITPARTICIPANT';
 
@@ -68,26 +76,31 @@ class LeniConstants
         false => 'PP',
     ];
 
-    public const LENI_COLUMNS = [
+    /**
+     * Fields used in the GET Api
+     */
+    public const LENI_GET_FIELDS = [
         self::LENI_COL_USER_ID,
-        self::LENI_COL_CAB_2,
-        self::LENI_COL_EXTERNAL_KEY,
+        self::LENI_COL_CATEGORY,
+        self::LENI_COL_EVENT_ORIGIN,
         self::LENI_COL_COMPANY_NAME,
         self::LENI_COL_TYPE,
-        self::LENI_COL_CATEGORY,
         self::LENI_COL_TITLE,
         self::LENI_COL_FIRST_NAME,
         self::LENI_COL_LAST_NAME,
         self::LENI_COL_POSITION,
-        self::LENI_COL_PHONE_NUMBER,
+        self::LENI_COL_EVENT_POSITION,
         self::LENI_COL_EMAIL,
+        self::LENI_COL_PHONE_NUMBER,
+        self::LENI_COL_MOBILE,
         self::LENI_COL_MOBILE_PHONE,
-        self::LENI_COL_UNALLOCATED,
+        self::LENI_COL_ADDRESS,
+        self::LENI_COL_ZIPCODE,
+        self::LENI_COL_CITY,
         self::LENI_COL_COUNTRY,
         self::LENI_COL_ATTENDANCE,
         self::LENI_COL_LOCALE,
-        self::LENI_COL_PARTICIPANT_PRODUCT_ID,
-        self::LENI_COL_ENABLED,
-        self::LENI_COL_IS_PAID,
+        self::LENI_COL_CREATED_AT,
+        self::LENI_COL_UPDATED_AT,
     ];
 }

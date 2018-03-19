@@ -52,7 +52,6 @@ services:
     Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\ThirdParty\LENI\Get\LeniApiCallCommand:
         arguments:
             - '@Proximum\Vimeet\Application\ThirdParty\LENI\Get\Command\LeniApiCallHandler'
-            - '@repository.user.event.extra_data_repository'
         tags:
             - { name: console.command }
 

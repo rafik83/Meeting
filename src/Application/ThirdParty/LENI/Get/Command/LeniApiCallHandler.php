@@ -18,6 +18,8 @@ use Proximum\Vimeet\Domain\Repository\EventRepositoryInterface;
 
 class LeniApiCallHandler
 {
+    private const BATCH_LENGTH = 100;
+
     /** @var LeniApiCaller */
     private $leniApi;
 
@@ -53,6 +55,6 @@ class LeniApiCallHandler
      */
     private function getEventUsers(Event $event)
     {
-        $this->leniApi->get($event);
+        $this->leniApi->get($event, 0, self::BATCH_LENGTH);
     }
 }
