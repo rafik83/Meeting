@@ -25,7 +25,28 @@ services:
         arguments:
             - '@Proximum\Vimeet\Application\ThirdParty\LENI\Common\Api\LeniApiCaller'
             - '@vimeet_infrastructure.repository.event_repository'
+            - '@vimeet_infrastructure.repository.type_repository'
             - '@repository.user.event.extra_data_repository'
+            - '@Proximum\Vimeet\Application\ThirdParty\LENI\Common\EventExtraParameter\MappingGetter'
+            - '@Proximum\Vimeet\Application\ThirdParty\LENI\Get\Converter\TypeConverter'
+            - '@Proximum\Vimeet\Application\ThirdParty\LENI\Get\Converter\ConvertToParticipant'
+            - '@datetime'
+
+    #
+    # Converter
+    #
+    Proximum\Vimeet\Application\ThirdParty\LENI\Get\Converter\ConvertToParticipant:
+        arguments:
+            - '@vimeet_infrastructure.repository.user_repository'
+            - '@vimeet_infrastructure.repository.sheet_repository'
+            - '@vimeet_infrastructure.repository.participant_repository'
+            - '@repository.user.event.extra_data_repository'
+            - '@vimeet_infrastructure.repository.user_event_repository'
+            - '@account.synchronizer'
+            - '@event_dispatcher'
+            - '@datetime'
+
+    Proximum\Vimeet\Application\ThirdParty\LENI\Get\Converter\TypeConverter: ~
 
     #
     # Job
