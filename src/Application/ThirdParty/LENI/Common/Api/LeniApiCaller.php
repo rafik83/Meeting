@@ -138,10 +138,11 @@ class LeniApiCaller
         }
 
         $body = $this->getGetCallBody($leniEventParameter->getValue(), $start, $limit);
-        $headers = $this->getHeaders($leniUserParameter->getValue(), $body);
+        $jsonEncodedBody = json_encode($body);
+        $headers = $this->getHeaders($leniUserParameter->getValue(), $jsonEncodedBody);
 
         try {
-            $jsonResponse = $this->httpAdapter->post($leniEndpointParameter->getValue(), $headers, $body);
+            $jsonResponse = $this->httpAdapter->post($leniEndpointParameter->getValue(), $headers, $jsonEncodedBody);
         } catch (ServerErrorException $exception) {
             throw new LeniApiServerException($exception);
         }
@@ -149,17 +150,15 @@ class LeniApiCaller
         return json_decode($jsonResponse->body, true);
     }
 
-    private function getGetCallBody(string $idEvt, int $start, int $limit): string
+    private function getGetCallBody(string $idEvt, int $start, int $limit): array
     {
-        return json_encode(
-            [
-                'idEvt' => $idEvt,
-                'filters' => [],
-                'fields' => LeniConstants::LENI_GET_FIELDS,
-                'start' => $start,
-                'take' => $limit,
-            ]
-        );
+        return [
+            'idEvt' => $idEvt,
+            'filters' => [],
+            'fields' => LeniConstants::LENI_GET_FIELDS,
+            'start' => $start,
+            'take' => $limit,
+        ];
     }
 
     private function getHeaders(string $authorizedUser, string $body): array
