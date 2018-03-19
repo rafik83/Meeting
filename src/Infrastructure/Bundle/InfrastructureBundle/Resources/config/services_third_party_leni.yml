@@ -47,6 +47,6 @@ services:
         tags:
             - { name: serializer.normalizer }
 
-    Proximum\Vimeet\Application\ThirdParty\LENI\Common\ExtraParameter\TypesMapping:
+    Proximum\Vimeet\Application\ThirdParty\LENI\Common\EventExtraParameter\MappingGetter:
         arguments:
             - '@repository.event.extra_parameter_repository'

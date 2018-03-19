@@ -20,6 +20,7 @@ class Type
     const TYPE_LENI_USER = 'leni_user';
     const TYPE_LENI_EVENT = 'leni_event';
     const TYPE_LENI_TYPES_MAPPING = 'leni_participation_types_mapping';
+    const TYPE_LENI_DATA_MAPPING = 'leni_participation_data_mapping';
 
     // Event Reference in Comexposium
     const TYPE_COMEXPOSIUM_EVENT_REFERENCE = 'comexposium_event_reference';
@@ -42,6 +43,7 @@ class Type
         self::TYPE_LENI_USER,
         self::TYPE_LENI_EVENT,
         self::TYPE_LENI_TYPES_MAPPING,
+        self::TYPE_LENI_DATA_MAPPING,
         self::TYPE_VIANEO_ENDPOINT,
         self::TYPE_VIANEO_CONCERNED_TYPES_ID,
         self::TYPE_COMEXPOSIUM_EVENT_REFERENCE,

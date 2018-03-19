@@ -8,17 +8,22 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Proximum\Vimeet\Application\ThirdParty\LENI\Common\ExtraParameter;
+namespace Proximum\Vimeet\Application\ThirdParty\LENI\Common\EventExtraParameter;
 
 use Proximum\Vimeet\Domain\Event\ExtraParameter\Type;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Repository\Event\ExtraParameterRepositoryInterface;
 
 /**
- * Get Participation Types mapping from Event Extra Parameter
+ * Get mapping from Event Extra Parameter
  */
-class TypesMapping
+class MappingGetter
 {
+    private const ALLOWED_EVENT_EXTRA_PARAMETER_TYPE = [
+        Type::TYPE_LENI_TYPES_MAPPING,
+        Type::TYPE_LENI_DATA_MAPPING,
+    ];
+
     /** @var ExtraParameterRepositoryInterface */
     private $extraParameterRepository;
 
@@ -27,11 +32,24 @@ class TypesMapping
         $this->extraParameterRepository = $extraParameterRepository;
     }
 
-    public function getTypesMapping(Event $event): ?array
+    /**
+     * @param Event  $event
+     * @param string $eventExtraParameterType
+     *
+     * @return array|null
+     * @throws \InvalidArgumentException
+     */
+    public function getMapping(Event $event, string $eventExtraParameterType): ?array
     {
+        if (!\in_array($eventExtraParameterType, self::ALLOWED_EVENT_EXTRA_PARAMETER_TYPE, true)) {
+            throw new \InvalidArgumentException(
+                sprintf('$eventExtraParameterType "%s" argument is not valid', $eventExtraParameterType)
+            );
+        }
+
         $typesMappingExtraParameter = $this->extraParameterRepository->findByEventAndType(
             $event,
-            Type::TYPE_LENI_TYPES_MAPPING
+            $eventExtraParameterType
         );
 
         if (!$typesMappingExtraParameter instanceof Event\ExtraParameter) {
