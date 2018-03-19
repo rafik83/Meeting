@@ -21,6 +21,7 @@ use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Model\User\Event\ExtraData;
 use Proximum\Vimeet\Domain\Repository\User\Event\ExtraDataRepositoryInterface;
+use Proximum\Vimeet\Domain\User\Event\ExtraData\Type;
 
 class LeniApiCallHandlerTest extends TestCase
 {
@@ -80,13 +81,19 @@ class LeniApiCallHandlerTest extends TestCase
             ->shouldBeCalled()
         ;
 
+        $dateTime = new \DateTime();
         $extraDataRepository = $this->prophesize(ExtraDataRepositoryInterface::class);
         $extraDataRepository->remove($extraData)->shouldBeCalled();
+        $extraDataRepository
+            ->add(new ExtraData($user->reveal(), $event->reveal(), Type::LENI_USER_ID, '294b141a-2329', $dateTime))
+            ->shouldBeCalled()
+        ;
 
         $leniApiCallHandler = new LeniApiCallHandler(
             $extraDataRepository->reveal(),
             $leniApi->reveal(),
-            $userExtraDataFingerprintManager->reveal()
+            $userExtraDataFingerprintManager->reveal(),
+            $dateTime
         );
 
         $leniApiCallHandler->handle(new LeniApiCall($extraData));
@@ -152,10 +159,13 @@ class LeniApiCallHandlerTest extends TestCase
         $extraDataRepository = $this->prophesize(ExtraDataRepositoryInterface::class);
         $extraDataRepository->remove($extraData)->shouldBeCalled();
 
+        $dateTime = new \DateTime();
+
         $leniApiCallHandler = new LeniApiCallHandler(
             $extraDataRepository->reveal(),
             $leniApi->reveal(),
-            $userExtraDataFingerprintManager->reveal()
+            $userExtraDataFingerprintManager->reveal(),
+            $dateTime
         );
 
         $leniApiCallHandler->handle(new LeniApiCall($extraData));
@@ -184,10 +194,12 @@ class LeniApiCallHandlerTest extends TestCase
         $userExtraDataFingerprintManager = $this->prophesize(UserExtraDataFingerprintManager::class);
         $extraDataRepository = $this->prophesize(ExtraDataRepositoryInterface::class);
 
+        $dateTime = new \DateTime();
         $leniApiCallHandler = new LeniApiCallHandler(
             $extraDataRepository->reveal(),
             $leniApi->reveal(),
-            $userExtraDataFingerprintManager->reveal()
+            $userExtraDataFingerprintManager->reveal(),
+            $dateTime
         );
 
         $leniApiCallHandler->handle(new LeniApiCall($extraData));
@@ -252,13 +264,19 @@ class LeniApiCallHandlerTest extends TestCase
             ->shouldBeCalled()
         ;
 
+        $dateTime = new \DateTime();
         $extraDataRepository = $this->prophesize(ExtraDataRepositoryInterface::class);
         $extraDataRepository->remove($extraData)->shouldBeCalled();
+        $extraDataRepository
+            ->add(new ExtraData($user->reveal(), $event->reveal(), Type::LENI_USER_ID, '294b141a-2329', $dateTime))
+            ->shouldBeCalled()
+        ;
 
         $leniApiCallHandler = new LeniApiCallHandler(
             $extraDataRepository->reveal(),
             $leniApi->reveal(),
-            $userExtraDataFingerprintManager->reveal()
+            $userExtraDataFingerprintManager->reveal(),
+            $dateTime
         );
 
         $leniApiCallHandler->handle(new LeniApiCall($extraData));

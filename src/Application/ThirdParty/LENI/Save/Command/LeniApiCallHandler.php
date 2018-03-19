@@ -17,8 +17,10 @@ use Proximum\Vimeet\Application\ThirdParty\LENI\Exception\MissingIdException;
 use Proximum\Vimeet\Application\ThirdParty\LENI\Exception\NotValidApiCallException;
 use Proximum\Vimeet\Application\ThirdParty\LENI\Exception\WarningApiCallException;
 use Proximum\Vimeet\Application\ThirdParty\LENI\LeniConstants;
+use Proximum\Vimeet\Domain\Model\User\Event\ExtraData;
 use Proximum\Vimeet\Domain\Repository\User\Event\ExtraDataRepositoryInterface;
 use Proximum\Vimeet\Domain\User\Event\ExtraData\Type as ExtraDataType;
+use Proximum\Vimeet\Domain\User\Event\ExtraData\Type;
 
 /**
  * LENI EXHIBIS Api call handler
@@ -128,19 +130,25 @@ class LeniApiCallHandler
     /** @var UserExtraDataFingerprintManager */
     private $userExtraDataFingerprintManager;
 
+    /** @var \DateTimeInterface */
+    private $dateTime;
+
     /**
      * @param ExtraDataRepositoryInterface    $extraDataRepository
      * @param LeniApiCaller                   $leniApi
      * @param UserExtraDataFingerprintManager $userExtraDataFingerprintManager
+     * @param \DateTimeInterface              $dateTime
      */
     public function __construct(
         ExtraDataRepositoryInterface $extraDataRepository,
         LeniApiCaller $leniApi,
-        UserExtraDataFingerprintManager $userExtraDataFingerprintManager
+        UserExtraDataFingerprintManager $userExtraDataFingerprintManager,
+        \DateTimeInterface $dateTime
     ) {
         $this->extraDataRepository = $extraDataRepository;
         $this->leniApi = $leniApi;
         $this->userExtraDataFingerprintManager = $userExtraDataFingerprintManager;
+        $this->dateTime = $dateTime;
     }
 
     /**
@@ -189,6 +197,16 @@ class LeniApiCallHandler
             }
 
             $data[LeniConstants::LENI_COL_USER_ID] = $leniUserId;
+
+            $this->extraDataRepository->add(
+                new ExtraData(
+                    $leniApiCall->extraData->getUser(),
+                    $leniApiCall->extraData->getEvent(),
+                    Type::LENI_USER_ID,
+                    $leniUserId,
+                    $this->dateTime
+                )
+            );
         }
 
         $this->userExtraDataFingerprintManager->addOrUpdateFingerprint(
