@@ -223,7 +223,6 @@ class LeniApiCallerTest extends TestCase
                 'fields' => [
                     'Id',
                     'CategorieIndividuEvt',
-                    'EvenementOrigine',
                     'Societe',
                     'ZL_SOUSCATEGORIE',
                     'Civilite',

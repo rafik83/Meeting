@@ -51,7 +51,6 @@ class LeniConstants
     public const LENI_COL_MOBILE = 'Mobile';
     public const LENI_COL_MOBILE_PHONE = 'TelephoneMobile';
     public const LENI_COL_EVENT_POSITION = 'EvenementFonction';
-    public const LENI_COL_EVENT_ORIGIN = 'EvenementOrigine';
     public const LENI_COL_UNALLOCATED = 'ZL_RDVNONORGANISES';
     public const LENI_COL_DAY_FORMAT = 'ZL_JOURNEE%d';
     public const LENI_COL_COUNTRY = 'Pays';
@@ -59,6 +58,9 @@ class LeniConstants
     public const LENI_COL_LOCALE = 'Langue';
     public const LENI_COL_CREATED_AT = 'CreeLe';
     public const LENI_COL_UPDATED_AT = 'ModifieLe';
+
+    public const LENI_COL_EVENT_ORIGIN = 'EvenementOrigine';
+    public const NEW_USER_EVENT_ORIGIN = 'API';
 
     public const LENI_COL_PARTICIPANT_PRODUCT_ID = 'ZL_IDPRODUITPARTICIPANT';
 
@@ -82,7 +84,6 @@ class LeniConstants
     public const LENI_GET_FIELDS = [
         self::LENI_COL_USER_ID,
         self::LENI_COL_CATEGORY,
-        self::LENI_COL_EVENT_ORIGIN,
         self::LENI_COL_COMPANY_NAME,
         self::LENI_COL_TYPE,
         self::LENI_COL_TITLE,
