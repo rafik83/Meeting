@@ -97,3 +97,12 @@ services:
             - '@vimeet_infrastructure.repository.type_repository'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Type\TypesWithPaymentConditionsViewQuery }
+
+    #
+    # Availability Time Range
+    #
+    Proximum\Vimeet\Application\Query\AvailabilityTimeRange\ListViewQueryHandler:
+        arguments:
+            - '@Proximum\Vimeet\Infrastructure\Repository\AvailabilityTimeRangeRepository'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\AvailabilityTimeRange\ListViewQuery }

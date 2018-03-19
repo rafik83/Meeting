@@ -47,6 +47,7 @@ class AvailabilityTimeRangeRepository implements AvailabilityTimeRangeRepository
             ->from(AvailabilityTimeRange::class, 'availabilityTimeRange')
             ->where('availabilityTimeRange.event = :event')
             ->orderBy('availabilityTimeRange.begin')
+            ->addOrderBy('availabilityTimeRange.end')
             ->setParameter('event', $event)
         ;
 

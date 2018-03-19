@@ -1682,3 +1682,13 @@ admin_event_sheet_index:
         event: \d+
     methods: [GET, POST]
     defaults: { _controller: Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Event\Sheet\IndexAction }
+
+#
+# Availability Time Range
+#
+admin_event_availability_time_range_list:
+    path: /event/{event}/availability-time-range
+    requirements:
+        event: \d+
+    methods: [GET]
+    defaults: { _controller: Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\AvailabilityTimeRange\ListAction }

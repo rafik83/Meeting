@@ -116,6 +116,10 @@ admin.agenda.tab.sheet.title.label: Fiches
 admin.agenda.tab.spot.title.label: Lieux
 admin.agenda.title: 'Gestion des rendez-vous'
 admin.agenda.usableSlots: 'Créneaux utilisables'
+admin.availabilityTimeRange.list.column.begin: 'Début'
+admin.availabilityTimeRange.list.column.end: 'Fin'
+admin.availabilityTimeRange.list.column.name: 'Libellé backoffice'
+admin.availabilityTimeRange.list.title: 'Liste des plages de disponibilités'
 admin.batch_actions.confirm: 'Êtes-vous sûr de vouloir faire cette action ?'
 admin.batch_actions.generateInvoice.confirm: 'Confirmez-vous la génération des factures avec le préfixe suivant : %prefix% ?'
 admin.batch_actions.plural: 'Actions batch sur %count% éléments'
