@@ -12,6 +12,11 @@ namespace Proximum\Vimeet\Domain\Model;
 
 use Doctrine\Common\Collections\ArrayCollection;
 
+/**
+ * Plage de disponibilités
+ *
+ * @see docs/AvailabilityTimeRange.md
+ */
 class AvailabilityTimeRange
 {
     /** @var null|int */
