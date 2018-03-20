@@ -20,16 +20,22 @@ class DashboardViewQueryHandler
     /** @var DashboardSheetViewQueryHandler */
     private $dashboardSheetViewQueryHandler;
 
+    /** @var DashboardMeetingViewQueryHandler */
+    private $dashboardMeetingViewQueryHandler;
+
     /**
      * @param DashboardTransactionViewQueryHandler $dashboardTransactionViewQueryHandler
      * @param DashboardSheetViewQueryHandler       $dashboardSheetViewQueryHandler
+     * @param DashboardMeetingViewQueryHandler     $dashboardMeetingViewQueryHandler
      */
     public function __construct(
         DashboardTransactionViewQueryHandler $dashboardTransactionViewQueryHandler,
-        DashboardSheetViewQueryHandler $dashboardSheetViewQueryHandler
+        DashboardSheetViewQueryHandler $dashboardSheetViewQueryHandler,
+        DashboardMeetingViewQueryHandler $dashboardMeetingViewQueryHandler
     ) {
         $this->dashboardTransactionViewQueryHandler = $dashboardTransactionViewQueryHandler;
         $this->dashboardSheetViewQueryHandler       = $dashboardSheetViewQueryHandler;
+        $this->dashboardMeetingViewQueryHandler = $dashboardMeetingViewQueryHandler;
     }
 
     /**
@@ -47,6 +53,10 @@ class DashboardViewQueryHandler
             new DashboardSheetViewQuery($dashboardViewQuery->event, $dashboardViewQuery->locale)
         );
 
-        return new DashboardView($dashboardTransactionView, $dashboardSheetView);
+        $dashboardMeetingView = $this->dashboardMeetingViewQueryHandler->handle(
+            new DashboardMeetingViewQuery($dashboardViewQuery->event)
+        );
+
+        return new DashboardView($dashboardTransactionView, $dashboardSheetView, $dashboardMeetingView);
     }
 }

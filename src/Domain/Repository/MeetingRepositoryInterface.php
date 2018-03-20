@@ -264,4 +264,24 @@ interface MeetingRepositoryInterface
      *  ]
      */
     public function getAllCompleteByEvent(Event $event);
+
+    /**
+     * Meetings created between theses dates
+     *
+     * @param Event              $event
+     * @param \DateTimeInterface $begin
+     * @param \DateTimeInterface $end
+     *
+     * @return int
+     */
+    public function countBetweenDatesByEvent(Event $event, \DateTimeInterface $begin, \DateTimeInterface $end): int;
+
+    /**
+     * Meetings created on event by the participants
+     *
+     * @param Event $event
+     *
+     * @return int
+     */
+    public function countCreatedByParticipantByEvent(Event $event): int;
 }
