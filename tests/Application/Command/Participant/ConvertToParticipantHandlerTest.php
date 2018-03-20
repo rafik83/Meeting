@@ -1,0 +1,225 @@
+<?php
+
+/*
+ * This file is part of the Proximum Vimeet project.
+ *
+ * Copyright (C) Proximum
+ *
+ * @author Elao <contact@elao.com>
+ */
+
+namespace Proximum\Vimeet\Tests\Application\Command\Participant;
+
+use PHPUnit\Framework\TestCase;
+use Proximum\Vimeet\Application\Command\Participant\ConvertToParticipant;
+use Proximum\Vimeet\Application\Command\Participant\ConvertToParticipantHandler;
+use Proximum\Vimeet\Domain\Account\Synchronizer;
+use Proximum\Vimeet\Domain\Model\Event;
+use Proximum\Vimeet\Domain\Model\Participant;
+use Proximum\Vimeet\Domain\Model\Sheet;
+use Proximum\Vimeet\Domain\Model\Type;
+use Proximum\Vimeet\Domain\Model\User;
+use Proximum\Vimeet\Domain\Model\User\Event\ExtraData;
+use Proximum\Vimeet\Domain\Model\UserEvent;
+use Proximum\Vimeet\Domain\Repository\ParticipantRepositoryInterface;
+use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
+use Proximum\Vimeet\Domain\Repository\User\Event\ExtraDataRepositoryInterface;
+use Proximum\Vimeet\Domain\Repository\UserEventRepositoryInterface;
+use Proximum\Vimeet\Domain\Repository\UserRepositoryInterface;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+
+class ConvertToParticipantHandlerTest extends TestCase
+{
+    private $userRepository;
+    private $sheetRepository;
+    private $participantRepository;
+    private $userEventExtraDataRepository;
+    private $userEventRepository;
+    private $synchronizer;
+    private $eventDispatcher;
+    private $dateTime;
+
+    public function setUp()
+    {
+        $this->userRepository = $this->prophesize(UserRepositoryInterface::class);
+        $this->sheetRepository = $this->prophesize(SheetRepositoryInterface::class);
+        $this->participantRepository = $this->prophesize(ParticipantRepositoryInterface::class);
+        $this->userEventExtraDataRepository = $this->prophesize(ExtraDataRepositoryInterface::class);
+        $this->userEventRepository = $this->prophesize(UserEventRepositoryInterface::class);
+        $this->synchronizer = $this->prophesize(Synchronizer::class);
+        $this->eventDispatcher = $this->prophesize(EventDispatcherInterface::class);
+        $this->dateTime = new \DateTime();
+    }
+
+    public function testHandleNotKnownUser()
+    {
+        $email = 'korben@dallas.us';
+        $dataIndexedByTag = [];
+
+        $event = $this->prophesize(Event::class);
+        $event->getAvailableLocale('en')->shouldBeCalled()->willReturn('fr');
+        $type = $this->prophesize(Type::class);
+
+        $this->userRepository->findByEmail($email)->shouldBeCalled()->willReturn(null);
+        $user = new User($email, '', '', 'fr');
+        $user->setAccount(new User\Account());
+        $this->userRepository->add($user)->shouldBeCalled();
+
+        $sheet = new Sheet(
+            $event->reveal(),
+            $type->reveal(),
+            [],
+            $user,
+            $this->dateTime
+        );
+        $sheet->setRegistrationData([]);
+        $sheet->setTitle('');
+        $sheet->setImported(true);
+
+        $participant = new Participant($sheet, $user, [], false);
+        $participant->setImported(true);
+
+        $this->sheetRepository->add($sheet)->shouldBeCalled();
+        $this->participantRepository->add($participant)->shouldBeCalled();
+        $this
+            ->userEventRepository
+            ->add(new UserEvent($user, $event->reveal(), $type->reveal()))
+            ->shouldBeCalled()
+        ;
+
+        $convertToParticipantHandler = new ConvertToParticipantHandler(
+            $this->userRepository->reveal(),
+            $this->sheetRepository->reveal(),
+            $this->participantRepository->reveal(),
+            $this->userEventExtraDataRepository->reveal(),
+            $this->userEventRepository->reveal(),
+            $this->synchronizer->reveal(),
+            $this->eventDispatcher->reveal(),
+            $this->dateTime
+        );
+
+        $result = $convertToParticipantHandler->handle(
+            new ConvertToParticipant(
+                $event->reveal(),
+                $type->reveal(),
+                $email,
+                'en',
+                $dataIndexedByTag
+            )
+        );
+
+        $this->assertEquals($participant, $result);
+    }
+
+    public function testHandleKnownUserWithNoExtraData()
+    {
+        $email = 'korben@dallas.us';
+        $dataIndexedByTag = [];
+
+        $user = $this->prophesize(User::class);
+
+        $event = $this->prophesize(Event::class);
+        $type = $this->prophesize(Type::class);
+
+        $this->userRepository->findByEmail($email)->shouldBeCalled()->willReturn($user->reveal());
+
+        $this
+            ->userEventExtraDataRepository
+            ->getExtraDataForEventNameAndUser($event->reveal(), 'whatever-extra-data', $user->reveal())
+            ->shouldBeCalled()
+            ->willReturn(null)
+        ;
+
+        $sheet = new Sheet(
+            $event->reveal(),
+            $type->reveal(),
+            [],
+            $user->reveal(),
+            $this->dateTime
+        );
+        $sheet->setRegistrationData([]);
+        $sheet->setTitle('');
+        $sheet->setImported(true);
+
+        $participant = new Participant($sheet, $user->reveal(), [], false);
+        $participant->setImported(true);
+
+        $this->sheetRepository->add($sheet)->shouldBeCalled();
+        $this->participantRepository->add($participant)->shouldBeCalled();
+        $this
+            ->userEventRepository
+            ->add(new UserEvent($user->reveal(), $event->reveal(), $type->reveal()))
+            ->shouldBeCalled()
+        ;
+
+        $convertToParticipantHandler = new ConvertToParticipantHandler(
+            $this->userRepository->reveal(),
+            $this->sheetRepository->reveal(),
+            $this->participantRepository->reveal(),
+            $this->userEventExtraDataRepository->reveal(),
+            $this->userEventRepository->reveal(),
+            $this->synchronizer->reveal(),
+            $this->eventDispatcher->reveal(),
+            $this->dateTime
+        );
+
+        $result = $convertToParticipantHandler->handle(
+            new ConvertToParticipant(
+                $event->reveal(),
+                $type->reveal(),
+                $email,
+                'en',
+                $dataIndexedByTag,
+                'whatever-extra-data'
+            )
+        );
+
+        $this->assertEquals($participant, $result);
+    }
+
+    public function testHandleKnownUserWithExtraData()
+    {
+        $email = 'korben@dallas.us';
+        $dataIndexedByTag = [];
+
+        $user = $this->prophesize(User::class);
+
+        $event = $this->prophesize(Event::class);
+        $type = $this->prophesize(Type::class);
+
+        $this->userRepository->findByEmail($email)->shouldBeCalled()->willReturn($user->reveal());
+
+        $whateverExtraData = $this->prophesize(ExtraData::class);
+
+        $this
+            ->userEventExtraDataRepository
+            ->getExtraDataForEventNameAndUser($event->reveal(), 'whatever-extra-data', $user->reveal())
+            ->shouldBeCalled()
+            ->willReturn($whateverExtraData->reveal())
+        ;
+
+        $convertToParticipantHandler = new ConvertToParticipantHandler(
+            $this->userRepository->reveal(),
+            $this->sheetRepository->reveal(),
+            $this->participantRepository->reveal(),
+            $this->userEventExtraDataRepository->reveal(),
+            $this->userEventRepository->reveal(),
+            $this->synchronizer->reveal(),
+            $this->eventDispatcher->reveal(),
+            $this->dateTime
+        );
+
+        $result = $convertToParticipantHandler->handle(
+            new ConvertToParticipant(
+                $event->reveal(),
+                $type->reveal(),
+                $email,
+                'en',
+                $dataIndexedByTag,
+                'whatever-extra-data'
+            )
+        );
+
+        $this->assertNull($result);
+    }
+}

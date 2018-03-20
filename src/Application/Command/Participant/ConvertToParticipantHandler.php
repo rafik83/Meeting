@@ -83,16 +83,16 @@ class ConvertToParticipantHandler
         $email = StringHelper::trimSpacesAndNonBreakSpaces($convertToParticipant->email);
         $user = $this->userRepository->findByEmail($email);
 
-        if (true === $this->ignoreIfExistsUserEventExtraDataForType(
-                $convertToParticipant->event,
-                $user,
-                $convertToParticipant->userEventExtraDataType
-            )
-        ) {
-            return null;
-        }
-
-        if (!$user instanceof User) {
+        if ($user instanceof User) {
+            if (true === $this->ignoreIfExistsUserEventExtraDataForType(
+                    $convertToParticipant->event,
+                    $user,
+                    $convertToParticipant->userEventExtraDataType
+                )
+            ) {
+                return null;
+            }
+        } else {
             $locale = $convertToParticipant->event->getAvailableLocale($convertToParticipant->locale);
             $user = $this->createUser($email, $locale);
         }

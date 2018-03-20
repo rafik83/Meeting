@@ -39,7 +39,7 @@ class ConvertToParticipant
         string $email,
         string $locale,
         array $dataIndexedByTag,
-        ?string $userEventExtraDataType
+        ?string $userEventExtraDataType = null
     ) {
         $this->event = $event;
         $this->type = $type;
