@@ -1,0 +1,17 @@
+Proximum\Vimeet\Application\Command\AvailabilityTimeRange\Create:
+    properties:
+        name:
+            - NotBlank: ~
+            - Length:
+                max: 255
+        begin:
+            - NotBlank: ~
+        end:
+            - NotBlank: ~
+    constraints:
+        - Expression:
+            expression: "this.begin < this.end"
+            message: "validators.availabilityTimeRange.beginBeforeEnd"
+        - Expression:
+            expression: "this.checkBeginAndEndAreBetweenEventDates()"
+            message: "validators.availabilityTimeRange.datesInEventDays"

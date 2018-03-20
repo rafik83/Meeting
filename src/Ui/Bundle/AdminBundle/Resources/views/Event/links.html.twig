@@ -113,10 +113,24 @@
             </li>
         </ul>
     </li>
-    <li>
+    <li class="dropdown-submenu">
         <a href="{{ path('admin_schedule_slots', { 'event': event.id }) }}">
             {{ 'admin.schedule.link'|trans }}
         </a>
+        <ul class="dropdown-menu">
+            <li>
+                <a href="{{ path('admin_schedule_slots', { 'event': event.id }) }}">
+                    {{ 'admin.schedule.link'|trans }}
+                </a>
+            </li>
+            {% if is_granted('ROLE_ALLOWED_TO_ORGANIZE') %}
+                <li>
+                    <a href="{{ path('admin_event_availability_time_range_list', { 'event': event.id }) }}">
+                        {{ 'admin.event.availability_time_range.list.link'|trans }}
+                    </a>
+                </li>
+            {% endif %}
+        </ul>
     </li>
     <li>
         <a href="{{ path('admin_nomenclature_event', { 'event': event.id }) }}">
