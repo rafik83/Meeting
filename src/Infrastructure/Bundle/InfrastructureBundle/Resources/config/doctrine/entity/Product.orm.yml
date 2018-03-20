@@ -59,3 +59,10 @@ Proximum\Vimeet\Domain\Model\Product:
             targetEntity: Proximum\Vimeet\Domain\Model\Event
             joinColumn:
                 onDelete: CASCADE
+    manyToMany:
+        availabilityTimeRanges:
+            targetEntity: Proximum\Vimeet\Domain\Model\AvailabilityTimeRange
+            inversedBy: products
+            mappedBy: products
+            joinTable:
+                name: availability_time_ranges_products
