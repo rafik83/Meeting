@@ -144,6 +144,7 @@ admin.dashboard.link: 'Tableau de bord'
 admin.elasticsearch.index.confirm: 'Vous êtes sur le point de réindexer l''ensemble des événements. Êtes vous sur de vouloir réaliser cette action?'
 admin.event.archive.link: Archivage
 admin.event.archive.title: 'Archiver l''événement %eventTitle%'
+admin.event.availability_time_range.list.link: 'Plages de disponibilités'
 admin.event.billing.configuration.link: 'Information facturation'
 admin.event.billing.configuration.title: 'Configuration des informations de facturation'
 admin.event.catalog.external.configure: 'Configuration du catalogue public'
