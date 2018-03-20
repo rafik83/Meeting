@@ -210,4 +210,12 @@ interface SheetSearchAdapterInterface
         array $filters,
         string $filterToRemove
     ): array;
+
+    /**
+     * @param Event  $event
+     * @param string $locale
+     *
+     * @return array
+     */
+    public function getCountries(Event $event, string $locale): array;
 }

@@ -733,6 +733,7 @@ form.sheet_filter.children.category.label: Catégorie
 form.sheet_filter.children.commercialStatus.label: 'Statut commercial'
 form.sheet_filter.children.completed.label: Complétude
 form.sheet_filter.children.creation_interval.label: Inscription
+form.sheet_filter.children.country.label: Pays
 form.sheet_filter.children.enabled.label: Participation
 form.sheet_filter.children.enabledState.all.label: Toutes
 form.sheet_filter.children.enabledState.disabled.label: 'Non active'

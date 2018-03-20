@@ -49,6 +49,12 @@ services:
             - '@repository.admin_repository'
         tags:
             - { name: form.type }
+    Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Sheet\CountryChoiceType:
+        class: Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Sheet\CountryChoiceType
+        arguments:
+            - '@Proximum\Vimeet\Application\Query\Sheet\CountryViewQueryHandler'
+        tags:
+            - { name: form.type }
     form_type.sheet.change_type_type:
         class: Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Sheet\ChangeTypeType
         arguments:

@@ -276,6 +276,61 @@ class SheetSearchAdapter implements SheetSearchAdapterInterface
     /**
      * {@inheritdoc}
      */
+    public function getCountries(Event $event, string $locale): array
+    {
+        $builder = new SheetSearchQueryBuilder(
+            $event,
+            [],
+            $locale
+        );
+
+        $query = new Query($builder->getQuery());
+        $query->addAggregation($this->getCountriesQuery($event, $locale))
+            ->setSize(0);
+
+        return $this->searchable->search($query)->getAggregations();
+    }
+
+    /**
+     * @param Event  $event
+     * @param string $locale
+     *
+     * @return Filter
+     */
+    public function getCountriesQuery(Event $event, string $locale)
+    {
+        $filterEventQuery = new FilterQuery();
+        $filterEventQuery->setQuery(new Query\Match('event', $event->getId()));
+
+        // country
+        $matchLocale  = new Query\Match('country.locale', $locale);
+
+        $boolQuery = new Query\BoolQuery();
+        $boolQuery->addMust($matchLocale);
+
+        $filterCountryQuery = new FilterQuery();
+        $filterCountryQuery->setQuery($boolQuery);
+
+        $countryAggregations = new Terms('countries');
+        $countryAggregations->setField('country.label');
+        $countryAggregations->setSize(10);
+
+        $filterCountries = new Filter('countries_filter');
+        $filterCountries->addAggregation($countryAggregations);
+        $filterCountries->setFilter($filterCountryQuery);
+
+        $nestedCountryAggregations = new Nested('countries', 'country');
+        $nestedCountryAggregations->addAggregation($filterCountries);
+
+        $filterCountryEvent = new Filter('countries_aggs', $filterEventQuery);
+        $filterCountryEvent->addAggregation($nestedCountryAggregations);
+
+        return $filterCountryEvent;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function findKeyword(Event $event, string $filter, array $defaultFilters, string $locale): array
     {
         $filter = ForeignChar::transliterateString($filter);

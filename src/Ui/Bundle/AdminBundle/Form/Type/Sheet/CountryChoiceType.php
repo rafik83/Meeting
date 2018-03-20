@@ -1,0 +1,59 @@
+<?php
+
+/*
+ * This file is part of the vimeet project.
+ *
+ * Copyright (C) vimeet
+ *
+ * @author Elao <contact@elao.com>
+ */
+
+namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Sheet;
+
+use Proximum\Vimeet\Application\Query\Sheet\CountryViewQuery;
+use Proximum\Vimeet\Application\Query\Sheet\CountryViewQueryHandler;
+use Proximum\Vimeet\Application\View\Sheet\CountryView;
+use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\OptionsResolver\Options;
+use Symfony\Component\OptionsResolver\OptionsResolver;
+
+class CountryChoiceType extends AbstractType
+{
+    /** @var CountryViewQueryHandler */
+    private $countryViewQueryHandler;
+
+    public function __construct(CountryViewQueryHandler $countryViewQueryHandler)
+    {
+        $this->countryViewQueryHandler = $countryViewQueryHandler;
+    }
+
+    /**
+     * {@inheritdoc}
+     *
+     * @throws \Symfony\Component\OptionsResolver\Exception\AccessException
+     */
+    public function configureOptions(OptionsResolver $resolver)
+    {
+        $resolver->setRequired(['event', 'locale']);
+        $resolver->setDefaults([
+            'choices' => function (Options $options) {
+                return $this->countryViewQueryHandler->handle(new CountryViewQuery($options['event'], $options['locale']));
+            },
+            'choice_label' => function (CountryView $countryView) {
+                return $countryView->name;
+            },
+            'choice_value' => function (CountryView $countryView) {
+                return $countryView->id;
+            },
+        ]);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getParent()
+    {
+        return ChoiceType::class;
+    }
+}
