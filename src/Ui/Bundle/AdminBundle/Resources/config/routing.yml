@@ -1692,3 +1692,10 @@ admin_event_availability_time_range_list:
         event: \d+
     methods: [GET]
     defaults: { _controller: Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\AvailabilityTimeRange\ListAction }
+
+admin_event_availability_time_range_create:
+    path: /event/{event}/availability-time-range/create
+    requirements:
+        event: \d+
+    methods: [GET, POST]
+    defaults: { _controller: Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\AvailabilityTimeRange\CreateAction }

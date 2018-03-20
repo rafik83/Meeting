@@ -3,9 +3,12 @@
 {% block title 'admin.availabilityTimeRange.list.title'|trans %}
 
 {% block content %}
-    <h1 class="content-header">
-        {{ 'admin.availabilityTimeRange.list.title'|trans }}
-    </h1>
+        <h1 class="page-header">
+            {{ 'admin.availabilityTimeRange.list.title'|trans }}
+        </h1>
+        <a href="{{ path('admin_event_availability_time_range_create', {'event': event.id}) }}" class="btn btn-primary pull-right">
+            {{ 'admin.availabilityTimeRange.create.title'|trans }}
+        </a>
 
     <table class="table table-striped table-condensed">
         <thead>

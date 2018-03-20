@@ -143,3 +143,12 @@ services:
             - '@adapter.job_queue_adapter'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Event\Sheet\PrepareSheetsIndex }
+
+    #
+    # Availability Time Range
+    #
+    Proximum\Vimeet\Application\Command\AvailabilityTimeRange\CreateHandler:
+        arguments:
+            - '@Proximum\Vimeet\Infrastructure\Repository\AvailabilityTimeRangeRepository'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\AvailabilityTimeRange\Create }
