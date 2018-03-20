@@ -8,26 +8,26 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Proximum\Vimeet\Application\ThirdParty\Comexposium\SSO\Application\Query;
+namespace Proximum\Vimeet\Application\ThirdParty\Comexposium\SSO\Application\Command\User;
 
-use Proximum\Vimeet\Application\Query\Query;
+use Proximum\Vimeet\Application\Command\Command;
 use Proximum\Vimeet\Domain\Model\Event;
 
-class SSOComexposiumViewQuery implements Query
+class Create implements Command
 {
     /** @var Event */
     public $event;
 
     /** @var string */
+    public $email;
+
+    /** @var string */
     public $locale;
 
-    /**
-     * @param Event  $event
-     * @param string $locale
-     */
-    public function __construct(Event $event, string $locale)
+    public function __construct(Event $event, string $email, string $locale)
     {
         $this->event = $event;
+        $this->email = $email;
         $this->locale = $locale;
     }
 }

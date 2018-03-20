@@ -10,20 +10,14 @@
 
 namespace Proximum\Vimeet\Application\Command\Participant;
 
-use Proximum\Vimeet\Application\Components\Package\ProductByParticipantGetter;
 use Proximum\Vimeet\Application\Components\Sheet\Template\Tag;
-use Proximum\Vimeet\Application\Components\Token\User\ActivateAccountTokenGenerator;
 use Proximum\Vimeet\Application\Event\Events;
 use Proximum\Vimeet\Application\Event\Participant\ParticipantAddedEvent;
-use Proximum\Vimeet\Application\Event\Sheet\SheetAddParticipantEvent;
 use Proximum\Vimeet\Application\Event\Sheet\SheetUpdatedEvent;
-use Proximum\Vimeet\Application\Event\User\ActivateAccountEvent;
-use Proximum\Vimeet\Application\Event\User\CompleteProfileEvent;
 use Proximum\Vimeet\Application\Exception\Participant\AlreadyLinkedToASheetOfThisEventException;
 use Proximum\Vimeet\Application\Exception\Participant\EmailCanNotBeNullException;
 use Proximum\Vimeet\Application\Exception\Sheet\ParticipantAlreadyExistException;
 use Proximum\Vimeet\Domain\Account\Synchronizer;
-use Proximum\Vimeet\Domain\Cart\CartManager;
 use Proximum\Vimeet\Domain\Helper\StringHelper;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\User;
@@ -48,9 +42,6 @@ class AddHandler
     /** @var TemplateDataFactory */
     private $templateDataFactory;
 
-    /** @var ActivateAccountTokenGenerator */
-    private $activateAccountTokenGenerator;
-
     /** @var DelayedEventDispatcher */
     private $eventDispatcher;
 
@@ -68,7 +59,6 @@ class AddHandler
      * @param ParticipantRepositoryInterface          $participantRepository
      * @param SheetRepositoryInterface                $sheetRepository
      * @param TemplateDataFactory                     $templateDataFactory
-     * @param ActivateAccountTokenGenerator           $activateAccountTokenGenerator
      * @param DelayedEventDispatcher                  $eventDispatcher
      * @param UpdateParticipantProductQuantityHandler $updateParticipantProductQuantityHandler
      * @param TypeResolver                            $typeResolver
@@ -79,7 +69,6 @@ class AddHandler
         ParticipantRepositoryInterface $participantRepository,
         SheetRepositoryInterface $sheetRepository,
         TemplateDataFactory $templateDataFactory,
-        ActivateAccountTokenGenerator $activateAccountTokenGenerator,
         DelayedEventDispatcher $eventDispatcher,
         UpdateParticipantProductQuantityHandler $updateParticipantProductQuantityHandler,
         TypeResolver $typeResolver,
@@ -89,7 +78,6 @@ class AddHandler
         $this->participantRepository = $participantRepository;
         $this->sheetRepository = $sheetRepository;
         $this->templateDataFactory = $templateDataFactory;
-        $this->activateAccountTokenGenerator = $activateAccountTokenGenerator;
         $this->eventDispatcher = $eventDispatcher;
         $this->typeResolver = $typeResolver;
         $this->accountSynchronizer = $accountSynchronizer;
@@ -142,74 +130,14 @@ class AddHandler
             );
         }
 
-        if (!$add->sheet->isOwner($user)) {
-            // send to the guest
-            if ($user->isActive()) {
-                $this->sendCompleteProfileEvent($add, $user, $participant);
-            } else {
-                $this->sendActivationEvent($add, $user);
-            }
-
-            // send to the adder
-            $this->sendActivationConfirmEvent($add, $participant);
-        }
-
         // Add UserEvent to new user
         $this->typeResolver->resolve($user, $add->sheet->getEvent(), $add->sheet->getType());
 
         $sheetUpdated = new SheetUpdatedEvent($add->sheet);
         $this->eventDispatcher->dispatch(Events::SHEET_UPDATED, $sheetUpdated);
-        $this->eventDispatcher->dispatch(Events::PARTICIPANT_ADDED, new ParticipantAddedEvent($participant));
+        $this->eventDispatcher->dispatch(Events::PARTICIPANT_ADDED, new ParticipantAddedEvent($participant, $add->adder));
 
         return new AddResult($participant);
-    }
-
-    /**
-     * Send activation email to the guest with activation link
-     *
-     * @param Add  $add
-     * @param User $user
-     */
-    private function sendActivationEvent(Add $add, User $user)
-    {
-        $token = $this->activateAccountTokenGenerator->generate($user, $add->sheet);
-        $event = new ActivateAccountEvent(
-            $user,
-            $add->adder,
-            $add->sheet->getEvent(),
-            $token,
-            $add->sheet
-        );
-
-        $this->eventDispatcher->dispatch(Events::USER_ACCOUNT_ACTIVATED, $event);
-    }
-
-    /**
-     * Send confirm invitation email send to the adder
-     *
-     * @param Add         $add
-     * @param Participant $guest
-     */
-    private function sendActivationConfirmEvent(Add $add, Participant $guest)
-    {
-        $event = new SheetAddParticipantEvent($add->sheet, $guest, $add->adder);
-        $this->eventDispatcher->dispatch(Events::SHEET_ADD_PARTICIPANT_CONFIRMATION, $event);
-    }
-
-    /**
-     * @param Add         $add
-     * @param User        $user
-     * @param Participant $participant
-     */
-    private function sendCompleteProfileEvent(Add $add, User $user, Participant $participant)
-    {
-        $event = new CompleteProfileEvent(
-            $user,
-            $add->sheet->getEvent(),
-            $participant,
-            $add->locale
-        );
-        $this->eventDispatcher->dispatch(Events::USER_PROFILE_COMPLETED, $event);
     }
 
     /**

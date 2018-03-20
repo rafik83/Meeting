@@ -1,0 +1,57 @@
+<?php
+
+/*
+ * This file is part of the Proximum Vimeet project.
+ *
+ * Copyright (C) Proximum
+ *
+ * @author Elao <contact@elao.com>
+ */
+
+namespace Proximum\Vimeet\Ui\Bundle\MailBundle\Mail\ThirdParty\Comexposium\SSO\Participant;
+
+use Proximum\Vimeet\Application\Components\Mail\UserMail;
+use Proximum\Vimeet\Application\View\Participant\ParticipantInfoView;
+use Proximum\Vimeet\Domain\Model\Event;
+
+class ParticipantAddedMail extends UserMail
+{
+    /** @var string */
+    protected $subject = 'mail.thirdParty.comexposium.sso.participantAdded.subject';
+
+    /** @var string */
+    protected $template = 'MailBundle:Mail:ThirdParty/Comexposium/SSO/Participant/participantAdded.html.twig';
+
+    /** @var string */
+    protected $messageId = 'comexposium.sso.participant_added';
+
+    /** @var bool */
+    protected $sendToEmailTeam = false;
+
+    /**
+     * @param Event               $event
+     * @param string              $sender
+     * @param string              $receiver
+     * @param string              $locale
+     * @param ParticipantInfoView $participantInfoView
+     */
+    public function __construct(
+        Event $event,
+        $sender,
+        $receiver,
+        $locale,
+        ParticipantInfoView $participantInfoView
+    ) {
+        parent::__construct($sender, $receiver, $locale, $event, $participantInfoView);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getSubjectParameters()
+    {
+        return [
+            '%event%' => $this->getEvent()->getTitle(),
+        ];
+    }
+}
