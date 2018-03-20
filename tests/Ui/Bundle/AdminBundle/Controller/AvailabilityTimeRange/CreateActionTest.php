@@ -121,6 +121,7 @@ class CreateActionTest extends TestCase
     {
         $this->authorizationChecker->isGranted('ROLE_ALLOWED_TO_ORGANIZE')->shouldBeCalled()->willReturn(true);
         $this->event->hasDay()->willReturn(true);
+        $this->event->getTimeZone()->willReturn('Europe/Paris');
 
         $this->flashBag->add(Argument::any())->shouldNotBeCalled();
         $this->router->generate(Argument::any())->shouldNotBeCalled();
@@ -134,7 +135,7 @@ class CreateActionTest extends TestCase
         $create = new Create($this->event->reveal());
 
         $form = $this->prophesize(Form::class);
-        $this->formFactory->create(CreateType::class, $create, ['submit' => true])
+        $this->formFactory->create(CreateType::class, $create, ['timezone' => 'Europe/Paris', 'submit' => true])
             ->shouldBeCalled()
             ->willReturn($form->reveal())
         ;
@@ -174,6 +175,7 @@ class CreateActionTest extends TestCase
         $this->authorizationChecker->isGranted('ROLE_ALLOWED_TO_ORGANIZE')->shouldBeCalled()->willReturn(true);
         $this->event->hasDay()->willReturn(true);
         $this->event->getId()->willReturn(1);
+        $this->event->getTimeZone()->willReturn('Europe/Paris');
 
         $begin = new \DateTime('2017-10-10 10:00:00.000');
         $end = new \DateTime('2017-10-10 10:00:00.000');
@@ -183,7 +185,7 @@ class CreateActionTest extends TestCase
 
         $create = new Create($this->event->reveal());
         $form = $this->prophesize(Form::class);
-        $this->formFactory->create(CreateType::class, $create, ['submit' => true])
+        $this->formFactory->create(CreateType::class, $create, ['timezone' => 'Europe/Paris', 'submit' => true])
             ->shouldBeCalled()
             ->willReturn($form->reveal())
         ;

@@ -29,10 +29,12 @@ class CreateType extends AbstractType
                'required' => true,
             ])
             ->add('begin', DateTimePickerType::class, [
-                'required' => true,
+                'required'      => true,
+                'view_timezone' => $options['timezone'],
             ])
             ->add('end', DateTimePickerType::class, [
-                'required' => true,
+                'required'      => true,
+                'view_timezone' => $options['timezone'],
             ])
         ;
     }
@@ -42,6 +44,7 @@ class CreateType extends AbstractType
      */
     public function configureOptions(OptionsResolver $resolver)
     {
+        $resolver->setRequired(['timezone']);
         $resolver->setDefaults([
             'data_class' => Create::class,
         ]);

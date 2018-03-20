@@ -86,6 +86,7 @@ class CreateAction
 
         $create = new Create($event);
         $form = $this->formFactory->create(CreateType::class, $create, [
+            'timezone' => $event->getTimeZone(),
             'submit' => true,
         ]);
 
