@@ -126,7 +126,7 @@ abstract class AbstractFilterType extends AbstractType
                 'locale'     => $options['locale'],
                 'required'   => false,
                 'multiple'   => true,
-                'expanded'   => true,
+                'select2'    => true
             ])
             ->add('reminderDate', ReminderDateChoiceType::class, [
                 'label'    => 'form.sheet_filter.children.reminderDate.label',
