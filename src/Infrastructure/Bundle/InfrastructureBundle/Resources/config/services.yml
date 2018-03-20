@@ -356,6 +356,19 @@ services:
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Participant\Add }
 
+    Proximum\Vimeet\Application\Command\Participant\ConvertToParticipantHandler:
+        arguments:
+            - '@vimeet_infrastructure.repository.user_repository'
+            - '@vimeet_infrastructure.repository.sheet_repository'
+            - '@vimeet_infrastructure.repository.participant_repository'
+            - '@repository.user.event.extra_data_repository'
+            - '@vimeet_infrastructure.repository.user_event_repository'
+            - '@account.synchronizer'
+            - '@event_dispatcher'
+            - '@datetime'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Participant\ConvertToParticipant }
+
     Proximum\Vimeet\Application\Command\Participant\UpdateParticipantProductQuantityHandler:
         arguments:
             - '@cart_manager'

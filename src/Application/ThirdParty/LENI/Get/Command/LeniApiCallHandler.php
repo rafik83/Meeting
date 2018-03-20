@@ -10,10 +10,11 @@
 
 namespace Proximum\Vimeet\Application\ThirdParty\LENI\Get\Command;
 
+use Proximum\Vimeet\Application\Command\Participant\ConvertToParticipant;
+use Proximum\Vimeet\Application\Command\Participant\ConvertToParticipantHandler;
 use Proximum\Vimeet\Application\ThirdParty\LENI\Common\Api\LeniApiCaller;
 use Proximum\Vimeet\Application\ThirdParty\LENI\Common\EventExtraParameter\MappingGetter;
 use Proximum\Vimeet\Application\ThirdParty\LENI\Exception\LeniApiServerException;
-use Proximum\Vimeet\Application\ThirdParty\LENI\Get\Converter\ConvertToParticipant;
 use Proximum\Vimeet\Application\ThirdParty\LENI\Get\Converter\TypeConverter;
 use Proximum\Vimeet\Application\ThirdParty\LENI\LeniConstants;
 use Proximum\Vimeet\Domain\Event\ExtraParameter\Type as EventExtraParameterType;
@@ -49,8 +50,8 @@ class LeniApiCallHandler
     /** @var TypeConverter */
     private $typeConverter;
 
-    /** @var ConvertToParticipant */
-    private $convertToParticipant;
+    /** @var ConvertToParticipantHandler */
+    private $convertToParticipantHandler;
 
     /** @var \DateTimeInterface */
     private $dateTime;
@@ -62,7 +63,7 @@ class LeniApiCallHandler
         ExtraDataRepositoryInterface $extraDataRepository,
         MappingGetter $mappingGetter,
         TypeConverter $typeConverter,
-        ConvertToParticipant $convertToParticipant,
+        ConvertToParticipantHandler $convertToParticipantHandler,
         \DateTimeInterface $dateTime
     ) {
         $this->leniApi = $leniApi;
@@ -70,7 +71,7 @@ class LeniApiCallHandler
         $this->typeRepository = $typeRepository;
         $this->extraDataRepository = $extraDataRepository;
         $this->mappingGetter = $mappingGetter;
-        $this->convertToParticipant = $convertToParticipant;
+        $this->convertToParticipantHandler = $convertToParticipantHandler;
         $this->typeConverter = $typeConverter;
         $this->dateTime = $dateTime;
     }
@@ -176,7 +177,19 @@ class LeniApiCallHandler
             return;
         }
 
-        $participant = $this->convertToParticipant->handle($event, $type, $rawUser);
+        // @todo: set data for each tag
+        $dataIndexedByTag = [];
+
+        $participant = $this->convertToParticipantHandler->handle(
+            new ConvertToParticipant(
+                $event,
+                $type,
+                $rawUser[LeniConstants::LENI_COL_EMAIL],
+                $rawUser[LeniConstants::LENI_COL_LOCALE],
+                $dataIndexedByTag,
+                UserEventExtraDataType::LENI_USER_ID
+            )
+        );
 
         if ($participant instanceof Participant) {
             $this->addLeniUserIdInUserEventExtraData(

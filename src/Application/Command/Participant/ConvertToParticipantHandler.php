@@ -8,11 +8,10 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Proximum\Vimeet\Application\ThirdParty\LENI\Get\Converter;
+namespace Proximum\Vimeet\Application\Command\Participant;
 
 use Proximum\Vimeet\Application\Event\Events;
 use Proximum\Vimeet\Application\Event\Sheet\SheetUpdatedEvent;
-use Proximum\Vimeet\Application\ThirdParty\LENI\LeniConstants;
 use Proximum\Vimeet\Domain\Account\Synchronizer;
 use Proximum\Vimeet\Domain\Helper\StringHelper;
 use Proximum\Vimeet\Domain\Model\Event;
@@ -26,10 +25,9 @@ use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\User\Event\ExtraDataRepositoryInterface as UserEventExtraDataRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\UserEventRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\UserRepositoryInterface;
-use Proximum\Vimeet\Domain\User\Event\ExtraData\Type as ExtraDataType;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
-class ConvertToParticipant
+class ConvertToParticipantHandler
 {
     /** @var UserRepositoryInterface */
     private $userRepository;
@@ -76,35 +74,32 @@ class ConvertToParticipant
     }
 
     /**
-     * @param Event $event
-     * @param Type  $type
-     * @param array $rawUser
+     * @param ConvertToParticipant $convertToParticipant
      *
-     * @return Participant
+     * @return null|Participant
      */
-    public function handle(Event $event, Type $type, array &$rawUser): ?Participant
+    public function handle(ConvertToParticipant $convertToParticipant): ?Participant
     {
-        $email = StringHelper::trimSpacesAndNonBreakSpaces($rawUser[LeniConstants::LENI_COL_EMAIL]);
-
+        $email = StringHelper::trimSpacesAndNonBreakSpaces($convertToParticipant->email);
         $user = $this->userRepository->findByEmail($email);
 
-        if (null !== $this->userEventExtraDataRepository->getExtraDataForEventNameAndUser(
-                $event,
-                ExtraDataType::LENI_USER_ID,
-                $user
+        if (true === $this->ignoreIfExistsUserEventExtraDataForType(
+                $convertToParticipant->event,
+                $user,
+                $convertToParticipant->userEventExtraDataType
             )
         ) {
             return null;
         }
 
         if (!$user instanceof User) {
-            $locale = $event->getAvailableLocale($rawUser[LeniConstants::LENI_COL_LOCALE]);
+            $locale = $convertToParticipant->event->getAvailableLocale($convertToParticipant->locale);
             $user = $this->createUser($email, $locale);
         }
 
         $participant = $this->createSheetAndParticipant(
-            $event,
-            $type,
+            $convertToParticipant->event,
+            $convertToParticipant->type,
             $user
         );
 
@@ -113,6 +108,31 @@ class ConvertToParticipant
         $this->eventDispatcher->dispatch(Events::SHEET_UPDATED, new SheetUpdatedEvent($participant->getSheet()));
 
         return $participant;
+    }
+
+    /**
+     * @param Event       $event
+     * @param User        $user
+     * @param null|string $extraDataType
+     *
+     * @return bool
+     */
+    private function ignoreIfExistsUserEventExtraDataForType(Event $event, User $user, ?string $extraDataType): bool
+    {
+        if (null === $extraDataType) {
+            return false;
+        }
+
+        if (null === $this->userEventExtraDataRepository->getExtraDataForEventNameAndUser(
+                $event,
+                $extraDataType,
+                $user
+            )
+        ) {
+            return false;
+        }
+
+        return true;
     }
 
     /**
