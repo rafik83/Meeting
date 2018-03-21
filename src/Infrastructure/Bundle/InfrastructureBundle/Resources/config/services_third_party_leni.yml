@@ -30,12 +30,15 @@ services:
             - '@Proximum\Vimeet\Application\ThirdParty\LENI\Common\EventExtraParameter\MappingGetter'
             - '@Proximum\Vimeet\Application\ThirdParty\LENI\Get\Converter\TypeConverter'
             - '@Proximum\Vimeet\Application\Command\Participant\ConvertToParticipantHandler'
+            - '@template.template_data_factory'
             - '@datetime'
 
     #
     # Converter
     #
     Proximum\Vimeet\Application\ThirdParty\LENI\Get\Converter\TypeConverter: ~
+
+    Proximum\Vimeet\Application\ThirdParty\LENI\Get\Converter\MainDataConverter: ~
 
     #
     # Job

@@ -27,6 +27,7 @@ use Proximum\Vimeet\Domain\Model\User\Event\ExtraData;
 use Proximum\Vimeet\Domain\Repository\EventRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\TypeRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\User\Event\ExtraDataRepositoryInterface;
+use Proximum\Vimeet\Domain\Template\TemplateDataFactory;
 
 class LeniApiCallHandlerTest extends TestCase
 {
@@ -54,8 +55,13 @@ class LeniApiCallHandlerTest extends TestCase
         $event2 = $this->prophesize(Event::class);
 
         $event1type1 = $this->prophesize(Type::class);
+        $event1type1->getId()->willReturn(111);
+
         $event1type2 = $this->prophesize(Type::class);
+        $event1type2->getId()->willReturn(222);
+
         $event2type1 = $this->prophesize(Type::class);
+        $event2type1->getId()->willReturn(333);
 
         $typeRepository = $this->prophesize(TypeRepositoryInterface::class);
         $typeRepository
@@ -178,6 +184,12 @@ class LeniApiCallHandlerTest extends TestCase
             ->willReturn([$event1->reveal(), $event2->reveal()])
         ;
 
+        $templateDataFactory = $this->prophesize(TemplateDataFactory::class);
+        $templateDataFactory->createRegistrationFromType($event1type1->reveal(), null)->shouldBeCalled();
+        $templateDataFactory->createRegistrationFromType($event1type2->reveal(), null)->shouldBeCalled();
+        $templateDataFactory->createSheetTemplateFromType($event1type1->reveal())->shouldBeCalled();
+        $templateDataFactory->createSheetTemplateFromType($event1type2->reveal())->shouldBeCalled();
+
         $leniApiCallHandler = new LeniApiCallHandler(
             $leniApi->reveal(),
             $eventRepository->reveal(),
@@ -186,6 +198,7 @@ class LeniApiCallHandlerTest extends TestCase
             $mappingGetter->reveal(),
             $typeConverter->reveal(),
             $convertToParticipantHandler->reveal(),
+            $templateDataFactory->reveal(),
             $datetime
         );
         $leniApiCallHandler->handle(new LeniApiCall());

@@ -104,4 +104,26 @@ class LeniConstants
         self::LENI_COL_CREATED_AT,
         self::LENI_COL_UPDATED_AT,
     ];
+
+    public const LENI_FIELDS_MAPPING = [
+        self::LENI_COL_COMPANY_NAME,
+        self::LENI_COL_TYPE,
+        self::LENI_COL_TITLE,
+        self::LENI_COL_FIRST_NAME,
+        self::LENI_COL_LAST_NAME,
+        self::LENI_COL_POSITION,
+        self::LENI_COL_EVENT_POSITION,
+        self::LENI_COL_EMAIL,
+        self::LENI_COL_PHONE_NUMBER,
+        self::LENI_COL_MOBILE,
+        self::LENI_COL_MOBILE_PHONE,
+        self::LENI_COL_ADDRESS,
+        self::LENI_COL_ZIPCODE,
+        self::LENI_COL_CITY,
+        self::LENI_COL_COUNTRY,
+        self::LENI_COL_ATTENDANCE,
+        self::LENI_COL_LOCALE,
+        self::LENI_COL_CREATED_AT,
+        self::LENI_COL_UPDATED_AT,
+    ];
 }

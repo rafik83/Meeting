@@ -26,6 +26,8 @@ use Proximum\Vimeet\Domain\Model\User\Event\ExtraData;
 use Proximum\Vimeet\Domain\Repository\EventRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\TypeRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\User\Event\ExtraDataRepositoryInterface;
+use Proximum\Vimeet\Domain\Template\TemplateData;
+use Proximum\Vimeet\Domain\Template\TemplateDataFactory;
 use Proximum\Vimeet\Domain\User\Event\ExtraData\Type as UserEventExtraDataType;
 
 class LeniApiCallHandler
@@ -53,8 +55,17 @@ class LeniApiCallHandler
     /** @var ConvertToParticipantHandler */
     private $convertToParticipantHandler;
 
+    /** @var TemplateDataFactory */
+    private $templateDataFactory;
+
     /** @var \DateTimeInterface */
     private $dateTime;
+
+    /** @var TemplateData[] indexed by Type id */
+    private $registrationTemplateByType = [];
+
+    /** @var TemplateData[] indexed by Type id */
+    private $sheetTemplateByType = [];
 
     public function __construct(
         LeniApiCaller $leniApi,
@@ -64,6 +75,7 @@ class LeniApiCallHandler
         MappingGetter $mappingGetter,
         TypeConverter $typeConverter,
         ConvertToParticipantHandler $convertToParticipantHandler,
+        TemplateDataFactory $templateDataFactory,
         \DateTimeInterface $dateTime
     ) {
         $this->leniApi = $leniApi;
@@ -73,6 +85,7 @@ class LeniApiCallHandler
         $this->mappingGetter = $mappingGetter;
         $this->convertToParticipantHandler = $convertToParticipantHandler;
         $this->typeConverter = $typeConverter;
+        $this->templateDataFactory = $templateDataFactory;
         $this->dateTime = $dateTime;
     }
 
@@ -177,6 +190,9 @@ class LeniApiCallHandler
             return;
         }
 
+        $registrationTemplateData = $this->getRegistrationTemplateData($type);
+        $sheetTemplateData = $this->getSheetTemplateData($type);
+
         // @todo: set data for each tag
         $dataIndexedByTag = [];
 
@@ -198,6 +214,46 @@ class LeniApiCallHandler
                 $rawUser[LeniConstants::LENI_COL_USER_ID]
             );
         }
+    }
+
+    /**
+     * @param Type $type
+     *
+     * @return TemplateData
+     */
+    private function getRegistrationTemplateData(Type $type): TemplateData
+    {
+        if (isset($this->registrationTemplateByType[$type->getId()])) {
+            $registrationTemplateData = $this->registrationTemplateByType[$type->getId()];
+            $registrationTemplateData->clear();
+
+            return $registrationTemplateData;
+        }
+
+        $registrationTemplateData = $this->templateDataFactory->createRegistrationFromType($type, null);
+        $this->registrationTemplateByType[$type->getId()] = $registrationTemplateData;
+
+        return $registrationTemplateData;
+    }
+
+    /**
+     * @param Type $type
+     *
+     * @return TemplateData
+     */
+    private function getSheetTemplateData(Type $type): TemplateData
+    {
+        if (isset($this->sheetTemplateByType[$type->getId()])) {
+            $sheetTemplateData = $this->sheetTemplateByType[$type->getId()];
+            $sheetTemplateData->clear();
+
+            return $sheetTemplateData;
+        }
+
+        $sheetTemplateData = $this->templateDataFactory->createSheetTemplateFromType($type);
+        $this->sheetTemplateByType[$type->getId()] = $sheetTemplateData;
+
+        return $sheetTemplateData;
     }
 
     /**
