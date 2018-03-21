@@ -116,12 +116,12 @@ admin.agenda.tab.sheet.title.label: Fiches
 admin.agenda.tab.spot.title.label: Lieux
 admin.agenda.title: 'Gestion des rendez-vous'
 admin.agenda.usableSlots: 'Créneaux utilisables'
-admin.availabilityTimeRange.list.column.begin: 'Début'
-admin.availabilityTimeRange.list.column.end: 'Fin'
-admin.availabilityTimeRange.list.column.name: 'Libellé backoffice'
-admin.availabilityTimeRange.list.title: 'Liste des plages de disponibilités'
 admin.availabilityTimeRange.create.eventDaysInfo: 'Les jours de l''événement :'
 admin.availabilityTimeRange.create.title: 'Créer une plage de disponbilités'
+admin.availabilityTimeRange.list.column.begin: Début
+admin.availabilityTimeRange.list.column.end: Fin
+admin.availabilityTimeRange.list.column.name: 'Libellé backoffice'
+admin.availabilityTimeRange.list.title: 'Liste des plages de disponibilités'
 admin.batch_actions.confirm: 'Êtes-vous sûr de vouloir faire cette action ?'
 admin.batch_actions.generateInvoice.confirm: 'Confirmez-vous la génération des factures avec le préfixe suivant : %prefix% ?'
 admin.batch_actions.plural: 'Actions batch sur %count% éléments'
@@ -360,14 +360,14 @@ admin.meeting.action.deleteAll.confirm: 'Êtes-vous sûr de vouloir supprimer l'
 admin.meeting.action.deleteAll.title: 'Supprimer l''ensemble des rendez-vous'
 admin.meeting.action.remove.confirm: 'Êtes-vous sûr de vouloir supprimer ce rendez-vous ?'
 admin.meeting.action.remove.link: Supprimer
-admin.meeting.dashboard.approvedRequest: 'Acceptées'
-admin.meeting.dashboard.createdDayD: 'Créés le jour de l''événément'
+admin.meeting.dashboard.approvedRequest: Acceptées
 admin.meeting.dashboard.createdByParticipant: 'Créés par les participants'
+admin.meeting.dashboard.createdDayD: 'Créés le jour de l''événément'
 admin.meeting.dashboard.liveMeeting: 'Rendez-vous live'
-admin.meeting.dashboard.meeting: 'Rendez-vous'
+admin.meeting.dashboard.meeting: Rendez-vous
 admin.meeting.dashboard.pendingRequest: 'En attentes'
 admin.meeting.dashboard.plannedMeeting: 'Positionnés en amont'
-admin.meeting.dashboard.refusedRequest: 'Refusées'
+admin.meeting.dashboard.refusedRequest: Refusées
 admin.meeting.dashboard.request: 'Demandes de rendez-vous'
 admin.meeting.export.fields.day: Jour
 admin.meeting.export.fields.from_sheet_id: 'ID demandeur'
