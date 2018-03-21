@@ -291,13 +291,7 @@ class SheetSearchAdapter implements SheetSearchAdapterInterface
         return $this->searchable->search($query)->getAggregations();
     }
 
-    /**
-     * @param Event  $event
-     * @param string $locale
-     *
-     * @return Filter
-     */
-    public function getCountriesQuery(Event $event, string $locale)
+    public function getCountriesQuery(Event $event, string $locale): Filter
     {
         $filterEventQuery = new FilterQuery();
         $filterEventQuery->setQuery(new Query\Match('event', $event->getId()));
