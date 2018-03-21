@@ -97,4 +97,14 @@ class AvailabilityTimeRange
     {
         return $this->products->toArray();
     }
+
+    public function addProduct(Product $product): void
+    {
+        $this->products->add($product);
+    }
+
+    public function removeProduct(Product $product): void
+    {
+        $this->products->removeElement($product);
+    }
 }

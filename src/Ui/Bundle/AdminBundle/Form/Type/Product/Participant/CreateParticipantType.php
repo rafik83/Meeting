@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2016 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -11,7 +11,9 @@
 namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Product\Participant;
 
 use Proximum\Vimeet\Application\Command\Product\Participant\CreateParticipant;
+use Proximum\Vimeet\Domain\Model\AvailabilityTimeRange;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Product\AbstractCreateType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -38,6 +40,36 @@ class CreateParticipantType extends AbstractCreateType
                 ],
             ])
         ;
+
+        if (!empty($options['availabilityTimeRanges'])) {
+            $formatter = new \IntlDateFormatter(
+                $options['locale'],
+                \IntlDateFormatter::SHORT,
+                \IntlDateFormatter::SHORT,
+                $options['event']->getTimeZone()
+            );
+
+            $builder
+                ->add('availabilityTimeRanges', ChoiceType::class, [
+                    'required'     => false,
+                    'select2'      => true,
+                    'choice_label' => function (AvailabilityTimeRange $availabilityTimeRange = null) use ($formatter) {
+                        if (null === $availabilityTimeRange) {
+                            return '';
+                        }
+
+                        return sprintf(
+                            '%s (%s - %s)',
+                            $availabilityTimeRange->getName(),
+                            $formatter->format($availabilityTimeRange->getBegin()),
+                            $formatter->format($availabilityTimeRange->getEnd())
+                        );
+                    },
+                    'choices' => $options['availabilityTimeRanges'],
+                    'multiple' => true,
+                ])
+            ;
+        }
     }
 
     /**
@@ -46,6 +78,12 @@ class CreateParticipantType extends AbstractCreateType
     public function configureOptions(OptionsResolver $resolver)
     {
         parent::configureOptions($resolver);
+
+        $resolver->setRequired([
+            'event',
+            'locale',
+            'availabilityTimeRanges'
+        ]);
 
         $resolver->setDefaults([
             'data_class' => CreateParticipant::class,

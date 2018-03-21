@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2016 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -12,7 +12,9 @@ namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Product\Participant;
 
 
 use Proximum\Vimeet\Application\Command\Product\Participant\UpdateParticipant;
+use Proximum\Vimeet\Domain\Model\AvailabilityTimeRange;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Product\AbstractUpdateType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -39,6 +41,36 @@ class UpdateParticipantType extends AbstractUpdateType
                 'label'      => false,
             ])
         ;
+
+        if (!empty($options['availabilityTimeRanges'])) {
+            $formatter = new \IntlDateFormatter(
+                $options['locale'],
+                \IntlDateFormatter::SHORT,
+                \IntlDateFormatter::SHORT,
+                $options['event']->getTimeZone()
+            );
+
+            $builder
+                ->add('availabilityTimeRanges', ChoiceType::class, [
+                    'required'     => false,
+                    'select2'      => true,
+                    'choice_label' => function (AvailabilityTimeRange $availabilityTimeRange = null) use ($formatter) {
+                        if (null === $availabilityTimeRange) {
+                            return '';
+                        }
+
+                        return sprintf(
+                            '%s (%s - %s)',
+                            $availabilityTimeRange->getName(),
+                            $formatter->format($availabilityTimeRange->getBegin()),
+                            $formatter->format($availabilityTimeRange->getEnd())
+                        );
+                    },
+                    'choices' => $options['availabilityTimeRanges'],
+                    'multiple' => true,
+                ])
+            ;
+        }
     }
 
     /**
@@ -48,6 +80,11 @@ class UpdateParticipantType extends AbstractUpdateType
     {
         parent::configureOptions($resolver);
 
+        $resolver->setRequired([
+            'event',
+            'locale',
+            'availabilityTimeRanges'
+        ]);
         $resolver->setDefaults([
             'data_class' => UpdateParticipant::class,
         ]);

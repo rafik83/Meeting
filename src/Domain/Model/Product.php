@@ -1139,4 +1139,28 @@ class Product
     {
         return !$this->availabilityTimeRanges->isEmpty();
     }
+
+    /**
+     * @param AvailabilityTimeRange[] $availabilityTimeRanges
+     */
+    public function setAvailabilityTimeRanges(array $availabilityTimeRanges): void
+    {
+        $previousAvailabilityTimeRanges = $this->availabilityTimeRanges;
+
+        foreach ($availabilityTimeRanges as $availabilityTimeRange) {
+            if ($this->availabilityTimeRanges->contains($availabilityTimeRange)) {
+                continue;
+            }
+
+            $this->availabilityTimeRanges->add($availabilityTimeRange);
+            $availabilityTimeRange->addProduct($this);
+        }
+
+        foreach ($previousAvailabilityTimeRanges as $availabilityTimeRange) {
+            if (!\in_array($availabilityTimeRange, $availabilityTimeRanges, true)) {
+                $this->availabilityTimeRanges->removeElement($availabilityTimeRange);
+                $availabilityTimeRange->removeProduct($this);
+            }
+        }
+    }
 }

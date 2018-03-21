@@ -10,9 +10,10 @@
 
 namespace Proximum\Vimeet\Application\Command\Product;
 
+use Proximum\Vimeet\Application\Command\Command;
 use Proximum\Vimeet\Domain\Model\Product;
 
-abstract class AbstractUpdate extends AbstractProduct
+abstract class AbstractUpdate extends AbstractProduct implements Command
 {
     /** @var Product */
     public $product;

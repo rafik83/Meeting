@@ -62,7 +62,7 @@ Proximum\Vimeet\Domain\Model\Product:
     manyToMany:
         availabilityTimeRanges:
             targetEntity: Proximum\Vimeet\Domain\Model\AvailabilityTimeRange
-            inversedBy: products
             mappedBy: products
+            cascade: ["persist"]
             joinTable:
                 name: availability_time_ranges_products

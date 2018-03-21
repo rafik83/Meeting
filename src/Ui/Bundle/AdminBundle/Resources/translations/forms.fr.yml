@@ -527,6 +527,7 @@ form.product_create_option.children.translations.prototype.children.title.label:
 form.product_create_option.children.unitPrice.label: 'Prix unitaire (HT)'
 form.product_create_option.children.updatable.label: 'Produit supprimable'
 form.product_create_option.children.vat.label: TVA
+form.product_create_participant.children.availabilityTimeRanges.label: 'Plages de disponibilités liées'
 form.product_create_participant.children.name.label: 'Nom backoffice du participant'
 form.product_create_participant.children.quantityMax.label: 'Quantité max'
 form.product_create_participant.children.submit.label: Enregistrer
@@ -582,6 +583,7 @@ form.product_update_option.children.translations.prototype.children.title.label:
 form.product_update_option.children.unitPrice.label: 'Prix unitaire (HT)'
 form.product_update_option.children.updatable.label: 'Produit supprimable'
 form.product_update_option.children.vat.label: TVA
+form.product_update_participant.children.availabilityTimeRanges.label: 'Plages de disponibilités liées'
 form.product_update_participant.children.name.label: 'Nom backoffice du participant'
 form.product_update_participant.children.quantityMax.label: 'Quantité max'
 form.product_update_participant.children.submit.label: Enregistrer

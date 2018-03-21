@@ -73,6 +73,9 @@ class ProductsViewQueryHandlerTest extends TestCase
         $product1->getDeletableUntil()->willReturn(null);
         $product2->getDeletableUntil()->willReturn(null);
         $product3->getDeletableUntil()->willReturn($date);
+        $product1->hasAvailabilityTimeRanges()->willReturn(false);
+        $product2->hasAvailabilityTimeRanges()->willReturn(true);
+        $product3->hasAvailabilityTimeRanges()->willReturn(false);
 
         $productRepository = $this->prophesize(ProductRepositoryInterface::class);
         $removeAuthorizationChecker = $this->prophesize(RemoveAuthorizationChecker::class);
@@ -117,7 +120,8 @@ class ProductsViewQueryHandlerTest extends TestCase
                 null,
                 23,
                 $date,
-                null
+                null,
+                false
             ),
             new ProductView(
                 2,
@@ -135,7 +139,8 @@ class ProductsViewQueryHandlerTest extends TestCase
                 null,
                 null,
                 null,
-                null
+                null,
+                true
             ),
             new ProductView(
                 3,
@@ -153,7 +158,8 @@ class ProductsViewQueryHandlerTest extends TestCase
                 8,
                 123123,
                 null,
-                $date
+                $date,
+                false
             ),
         ];
 
