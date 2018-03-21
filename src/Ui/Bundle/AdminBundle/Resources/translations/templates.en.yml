@@ -2,6 +2,8 @@ template.action.close: Close
 template.action.save: Save
 template.block.configure: configure
 template.block.remove_confirm: 'Do you confirm the remove of this element ?'
+template.boolean.filter.active: 'Activate the filter'
+template.boolean.filter.label: 'Filter label'
 template.collection.title: 'collection fields enabled'
 template.content.title: content
 template.defaultElement.title: 'element by default'
@@ -34,6 +36,7 @@ template.object.tag: 'content displayed by default'
 template.object.tags: 'Multi tag'
 template.object.telephone: Phone
 template.object.text: 'non modifiable text'
+template.object.upload: 'File upload'
 template.object.url: Link
 template.participant.display: 'Number of participants showed on profile'
 template.participant.title: 'the participants'
@@ -276,3 +279,11 @@ template.tag.sheet_zipcode: 'sheet zipcode'
 template.tags.title: Tags
 template.translatable.title: Translatable
 template.type.title: Type
+template.upload.crypted: Encrypted
+template.upload.filter.active: 'Activate the filter'
+template.upload.filter.label: 'Fliter label'
+template.upload.formats.choice.csv: Csv
+template.upload.formats.choice.image: Image
+template.upload.formats.choice.pdf: Pdf
+template.upload.formats.choice.ppt: Powerpoint
+template.upload.formats.title: 'Allowed formats for upload'
