@@ -25,7 +25,7 @@ class MainDataConverter
     /**
      * @param array $rawUser
      *
-     * @return array
+     * @return array indexed by tag
      */
     public function convert(array $rawUser): array
     {

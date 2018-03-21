@@ -38,6 +38,8 @@ services:
     #
     Proximum\Vimeet\Application\ThirdParty\LENI\Get\Converter\TypeConverter: ~
 
+    Proximum\Vimeet\Application\ThirdParty\LENI\Get\Converter\DataConverter: ~
+
     Proximum\Vimeet\Application\ThirdParty\LENI\Get\Converter\MainDataConverter: ~
 
     #
