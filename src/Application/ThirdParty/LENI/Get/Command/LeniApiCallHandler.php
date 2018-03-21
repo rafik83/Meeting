@@ -196,9 +196,6 @@ class LeniApiCallHandler
             return;
         }
 
-        $registrationTemplateData = $this->getRegistrationTemplateData($type);
-        $sheetTemplateData = $this->getSheetTemplateData($type);
-
         // @todo: set data for each tag
         $dataIndexedByTag = [];
 
@@ -209,6 +206,8 @@ class LeniApiCallHandler
                 $rawUser[LeniConstants::LENI_COL_EMAIL],
                 $rawUser[LeniConstants::LENI_COL_LOCALE],
                 $dataIndexedByTag,
+                $this->getRegistrationTemplateData($type),
+                $this->getSheetTemplateData($type),
                 UserEventExtraDataType::LENI_USER_ID
             )
         );

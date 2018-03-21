@@ -13,6 +13,8 @@ namespace Proximum\Vimeet\Tests\Application\Command\Participant;
 use PHPUnit\Framework\TestCase;
 use Proximum\Vimeet\Application\Command\Participant\ConvertToParticipant;
 use Proximum\Vimeet\Application\Command\Participant\ConvertToParticipantHandler;
+use Proximum\Vimeet\Application\Command\Participant\SheetAndParticipantTemplateDataHandler;
+use Proximum\Vimeet\Application\View\Participant\SheetAndParticipantTemplateDataView;
 use Proximum\Vimeet\Domain\Account\Synchronizer;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Participant;
@@ -26,6 +28,7 @@ use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\User\Event\ExtraDataRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\UserEventRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\UserRepositoryInterface;
+use Proximum\Vimeet\Domain\Template\TemplateData;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 class ConvertToParticipantHandlerTest extends TestCase
@@ -38,6 +41,9 @@ class ConvertToParticipantHandlerTest extends TestCase
     private $synchronizer;
     private $eventDispatcher;
     private $dateTime;
+    private $registrationTemplateData;
+    private $sheetTemplateData;
+    private $sheetAndParticipantTemplateDataHandler;
 
     public function setUp()
     {
@@ -48,13 +54,20 @@ class ConvertToParticipantHandlerTest extends TestCase
         $this->userEventRepository = $this->prophesize(UserEventRepositoryInterface::class);
         $this->synchronizer = $this->prophesize(Synchronizer::class);
         $this->eventDispatcher = $this->prophesize(EventDispatcherInterface::class);
+        $this->sheetAndParticipantTemplateDataHandler = $this->prophesize(
+            SheetAndParticipantTemplateDataHandler::class
+        );
+
+        $this->registrationTemplateData = $this->prophesize(TemplateData::class);
+        $this->sheetTemplateData = $this->prophesize(TemplateData::class);
+
         $this->dateTime = new \DateTime();
     }
 
     public function testHandleNotKnownUser()
     {
         $email = 'korben@dallas.us';
-        $dataIndexedByTag = [];
+        $dataIndexedByTag = ['whatever-data'];
 
         $event = $this->prophesize(Event::class);
         $event->getAvailableLocale('en')->shouldBeCalled()->willReturn('fr');
@@ -68,15 +81,15 @@ class ConvertToParticipantHandlerTest extends TestCase
         $sheet = new Sheet(
             $event->reveal(),
             $type->reveal(),
-            [],
+            ['sheetTemplateData'],
             $user,
             $this->dateTime
         );
-        $sheet->setRegistrationData([]);
-        $sheet->setTitle('');
+        $sheet->setRegistrationData(['sheetRegistrationData']);
+        $sheet->setTitle('Korben Dallas Taxi Cie');
         $sheet->setImported(true);
 
-        $participant = new Participant($sheet, $user, [], false);
+        $participant = new Participant($sheet, $user, ['participantRegistrationData'], false);
         $participant->setImported(true);
 
         $this->sheetRepository->add($sheet)->shouldBeCalled();
@@ -87,12 +100,32 @@ class ConvertToParticipantHandlerTest extends TestCase
             ->shouldBeCalled()
         ;
 
+        $this
+            ->sheetAndParticipantTemplateDataHandler->handle(
+                $dataIndexedByTag,
+                $this->registrationTemplateData->reveal(),
+                $this->sheetTemplateData->reveal()
+            )
+            ->shouldBeCalled()
+            ->willReturn(
+                new SheetAndParticipantTemplateDataView(
+                    'Korben Dallas Taxi Cie',
+                    ['sheetRegistrationData'],
+                    ['participantRegistrationData'],
+                    ['sheetTemplateData']
+                )
+            )
+        ;
+
+        $this->synchronizer->set($this->registrationTemplateData->reveal(), $user)->shouldBeCalled();
+
         $convertToParticipantHandler = new ConvertToParticipantHandler(
             $this->userRepository->reveal(),
             $this->sheetRepository->reveal(),
             $this->participantRepository->reveal(),
             $this->userEventExtraDataRepository->reveal(),
             $this->userEventRepository->reveal(),
+            $this->sheetAndParticipantTemplateDataHandler->reveal(),
             $this->synchronizer->reveal(),
             $this->eventDispatcher->reveal(),
             $this->dateTime
@@ -104,7 +137,9 @@ class ConvertToParticipantHandlerTest extends TestCase
                 $type->reveal(),
                 $email,
                 'en',
-                $dataIndexedByTag
+                $dataIndexedByTag,
+                $this->registrationTemplateData->reveal(),
+                $this->sheetTemplateData->reveal()
             )
         );
 
@@ -133,15 +168,15 @@ class ConvertToParticipantHandlerTest extends TestCase
         $sheet = new Sheet(
             $event->reveal(),
             $type->reveal(),
-            [],
+            ['sheetTemplateData'],
             $user->reveal(),
             $this->dateTime
         );
-        $sheet->setRegistrationData([]);
-        $sheet->setTitle('');
+        $sheet->setRegistrationData(['sheetRegistrationData']);
+        $sheet->setTitle('Korben Dallas Taxi Cie');
         $sheet->setImported(true);
 
-        $participant = new Participant($sheet, $user->reveal(), [], false);
+        $participant = new Participant($sheet, $user->reveal(), ['participantRegistrationData'], false);
         $participant->setImported(true);
 
         $this->sheetRepository->add($sheet)->shouldBeCalled();
@@ -152,12 +187,32 @@ class ConvertToParticipantHandlerTest extends TestCase
             ->shouldBeCalled()
         ;
 
+        $this
+            ->sheetAndParticipantTemplateDataHandler->handle(
+                $dataIndexedByTag,
+                $this->registrationTemplateData->reveal(),
+                $this->sheetTemplateData->reveal()
+            )
+            ->shouldBeCalled()
+            ->willReturn(
+                new SheetAndParticipantTemplateDataView(
+                    'Korben Dallas Taxi Cie',
+                    ['sheetRegistrationData'],
+                    ['participantRegistrationData'],
+                    ['sheetTemplateData']
+                )
+            )
+        ;
+
+        $this->synchronizer->set($this->registrationTemplateData->reveal(), $user->reveal())->shouldBeCalled();
+
         $convertToParticipantHandler = new ConvertToParticipantHandler(
             $this->userRepository->reveal(),
             $this->sheetRepository->reveal(),
             $this->participantRepository->reveal(),
             $this->userEventExtraDataRepository->reveal(),
             $this->userEventRepository->reveal(),
+            $this->sheetAndParticipantTemplateDataHandler->reveal(),
             $this->synchronizer->reveal(),
             $this->eventDispatcher->reveal(),
             $this->dateTime
@@ -170,6 +225,8 @@ class ConvertToParticipantHandlerTest extends TestCase
                 $email,
                 'en',
                 $dataIndexedByTag,
+                $this->registrationTemplateData->reveal(),
+                $this->sheetTemplateData->reveal(),
                 'whatever-extra-data'
             )
         );
@@ -204,6 +261,7 @@ class ConvertToParticipantHandlerTest extends TestCase
             $this->participantRepository->reveal(),
             $this->userEventExtraDataRepository->reveal(),
             $this->userEventRepository->reveal(),
+            $this->sheetAndParticipantTemplateDataHandler->reveal(),
             $this->synchronizer->reveal(),
             $this->eventDispatcher->reveal(),
             $this->dateTime
@@ -216,6 +274,8 @@ class ConvertToParticipantHandlerTest extends TestCase
                 $email,
                 'en',
                 $dataIndexedByTag,
+                $this->registrationTemplateData->reveal(),
+                $this->sheetTemplateData->reveal(),
                 'whatever-extra-data'
             )
         );

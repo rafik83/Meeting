@@ -25,6 +25,7 @@ use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\User\Event\ExtraDataRepositoryInterface as UserEventExtraDataRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\UserEventRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\UserRepositoryInterface;
+use Proximum\Vimeet\Domain\Template\TemplateData;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 class ConvertToParticipantHandler
@@ -44,6 +45,9 @@ class ConvertToParticipantHandler
     /** @var UserEventRepositoryInterface */
     private $userEventRepository;
 
+    /** @var SheetAndParticipantTemplateDataHandler */
+    private $sheetAndParticipantTemplateDataHandler;
+
     /** @var Synchronizer */
     private $synchronizer;
 
@@ -59,6 +63,7 @@ class ConvertToParticipantHandler
         ParticipantRepositoryInterface $participantRepository,
         UserEventExtraDataRepositoryInterface $userEventExtraDataRepository,
         UserEventRepositoryInterface $userEventRepository,
+        SheetAndParticipantTemplateDataHandler $sheetAndParticipantTemplateDataHandler,
         Synchronizer $synchronizer,
         EventDispatcherInterface $eventDispatcher,
         \DateTimeInterface $dateTime
@@ -68,6 +73,7 @@ class ConvertToParticipantHandler
         $this->participantRepository = $participantRepository;
         $this->userEventExtraDataRepository = $userEventExtraDataRepository;
         $this->userEventRepository = $userEventRepository;
+        $this->sheetAndParticipantTemplateDataHandler = $sheetAndParticipantTemplateDataHandler;
         $this->synchronizer = $synchronizer;
         $this->eventDispatcher = $eventDispatcher;
         $this->dateTime = $dateTime;
@@ -100,10 +106,13 @@ class ConvertToParticipantHandler
         $participant = $this->createSheetAndParticipant(
             $convertToParticipant->event,
             $convertToParticipant->type,
-            $user
+            $user,
+            $convertToParticipant->dataIndexedByTag,
+            $convertToParticipant->registrationTemplateData,
+            $convertToParticipant->sheetTemplateData
         );
 
-        //$this->synchronizer->set($registrationTemplateData, $user);
+        $this->synchronizer->set($convertToParticipant->registrationTemplateData, $user);
 
         $this->eventDispatcher->dispatch(Events::SHEET_UPDATED, new SheetUpdatedEvent($participant->getSheet()));
 
@@ -151,32 +160,43 @@ class ConvertToParticipantHandler
     }
 
     /**
-     * @param Event $event
-     * @param Type  $type
-     * @param User  $user
+     * @param Event        $event
+     * @param Type         $type
+     * @param User         $user
+     * @param array        $dataIndexedByTag
+     * @param TemplateData $registrationTemplateData
+     * @param TemplateData $sheetTemplateData
      *
      * @return Participant
      */
     private function createSheetAndParticipant(
         Event $event,
         Type $type,
-        User $user
+        User $user,
+        array $dataIndexedByTag,
+        TemplateData $registrationTemplateData,
+        TemplateData $sheetTemplateData
     ): Participant {
-        $sheetTitle = '';
-        $sheetTemplateData = [];
-        $sheetRegistrationData = [];
-        $participantRegistrationData = [];
+        $sheetAndParticipantTemplateDataView = $this->sheetAndParticipantTemplateDataHandler->handle(
+            $dataIndexedByTag,
+            $registrationTemplateData,
+            $sheetTemplateData
+        );
 
         $sheet = $this->createSheet(
             $event,
             $type,
             $user,
-            $sheetTitle,
-            $sheetTemplateData,
-            $sheetRegistrationData
+            $sheetAndParticipantTemplateDataView->sheetTitle,
+            $sheetAndParticipantTemplateDataView->sheetTemplateData,
+            $sheetAndParticipantTemplateDataView->sheetRegistrationData
         );
 
-        $participant = $this->createParticipant($sheet, $user, $participantRegistrationData);
+        $participant = $this->createParticipant(
+            $sheet,
+            $user,
+            $sheetAndParticipantTemplateDataView->participantRegistrationData
+        );
 
         $this->save($sheet, $participant);
 

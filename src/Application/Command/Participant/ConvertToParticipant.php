@@ -12,6 +12,7 @@ namespace Proximum\Vimeet\Application\Command\Participant;
 
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Type;
+use Proximum\Vimeet\Domain\Template\TemplateData;
 
 class ConvertToParticipant
 {
@@ -30,6 +31,12 @@ class ConvertToParticipant
     /** @var array */
     public $dataIndexedByTag;
 
+    /** @var TemplateData */
+    public $registrationTemplateData;
+
+    /** @var TemplateData */
+    public $sheetTemplateData;
+
     /** @var null|string */
     public $userEventExtraDataType;
 
@@ -39,6 +46,8 @@ class ConvertToParticipant
         string $email,
         string $locale,
         array $dataIndexedByTag,
+        TemplateData $registrationTemplateData,
+        TemplateData $sheetTemplateData,
         ?string $userEventExtraDataType = null
     ) {
         $this->event = $event;
@@ -46,6 +55,8 @@ class ConvertToParticipant
         $this->email = $email;
         $this->locale = $locale;
         $this->dataIndexedByTag = $dataIndexedByTag;
+        $this->registrationTemplateData = $registrationTemplateData;
+        $this->sheetTemplateData = $sheetTemplateData;
         $this->userEventExtraDataType = $userEventExtraDataType;
     }
 }

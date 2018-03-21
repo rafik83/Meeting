@@ -28,6 +28,7 @@ use Proximum\Vimeet\Domain\Model\User\Event\ExtraData;
 use Proximum\Vimeet\Domain\Repository\EventRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\TypeRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\User\Event\ExtraDataRepositoryInterface;
+use Proximum\Vimeet\Domain\Template\TemplateData;
 use Proximum\Vimeet\Domain\Template\TemplateDataFactory;
 
 class LeniApiCallHandlerTest extends TestCase
@@ -99,6 +100,11 @@ class LeniApiCallHandlerTest extends TestCase
             ->willReturn($event1type1->reveal())
         ;
 
+        $registrationTemplateDataEvent1type1 = $this->prophesize(TemplateData::class);
+        $registrationTemplateDataEvent1type2 = $this->prophesize(TemplateData::class);
+        $sheetTemplateDataEvent1type1 = $this->prophesize(TemplateData::class);
+        $sheetTemplateDataEvent1type2 = $this->prophesize(TemplateData::class);
+
         $convertToParticipantHandler = $this->prophesize(ConvertToParticipantHandler::class);
         $convertToParticipantHandler
             ->handle(
@@ -108,6 +114,8 @@ class LeniApiCallHandlerTest extends TestCase
                     'bruce@willis.usa',
                     'fr',
                     [],
+                    $registrationTemplateDataEvent1type2->reveal(),
+                    $sheetTemplateDataEvent1type2->reveal(),
                     'leni_user_id'
                 )
             )
@@ -122,6 +130,8 @@ class LeniApiCallHandlerTest extends TestCase
                     'ronald@macdonald.food',
                     'en',
                     [],
+                    $registrationTemplateDataEvent1type1->reveal(),
+                    $sheetTemplateDataEvent1type1->reveal(),
                     'leni_user_id'
                 )
             )
@@ -191,10 +201,26 @@ class LeniApiCallHandlerTest extends TestCase
         ;
 
         $templateDataFactory = $this->prophesize(TemplateDataFactory::class);
-        $templateDataFactory->createRegistrationFromType($event1type1->reveal(), null)->shouldBeCalled();
-        $templateDataFactory->createRegistrationFromType($event1type2->reveal(), null)->shouldBeCalled();
-        $templateDataFactory->createSheetTemplateFromType($event1type1->reveal())->shouldBeCalled();
-        $templateDataFactory->createSheetTemplateFromType($event1type2->reveal())->shouldBeCalled();
+        $templateDataFactory
+            ->createRegistrationFromType($event1type1->reveal(), null)
+            ->shouldBeCalled()
+            ->willReturn($registrationTemplateDataEvent1type1->reveal())
+        ;
+        $templateDataFactory
+            ->createRegistrationFromType($event1type2->reveal(), null)
+            ->shouldBeCalled()
+            ->willReturn($registrationTemplateDataEvent1type2->reveal())
+        ;
+        $templateDataFactory
+            ->createSheetTemplateFromType($event1type1->reveal())
+            ->shouldBeCalled()
+            ->willReturn($sheetTemplateDataEvent1type1->reveal())
+        ;
+        $templateDataFactory
+            ->createSheetTemplateFromType($event1type2->reveal())
+            ->shouldBeCalled()
+            ->willReturn($sheetTemplateDataEvent1type2->reveal())
+        ;
 
         $leniApiCallHandler = new LeniApiCallHandler(
             $leniApi->reveal(),
