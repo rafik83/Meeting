@@ -56,7 +56,7 @@ form.archive_un_archive.confirm.submit.label: 'Êtes-vous sûr de vouloir réali
 form.availability_time_range_create.children.begin.label: 'Début de la plage'
 form.availability_time_range_create.children.end.label: 'Fin de la plage'
 form.availability_time_range_create.children.name.label: 'Nom backoffice'
-form.availability_time_range_create.children.submit.label: 'Enregistrer'
+form.availability_time_range_create.children.submit.label: Enregistrer
 form.billing_info_update.children.city.label: Ville
 form.billing_info_update.children.company.label: Société
 form.billing_info_update.children.country.label: Pays
