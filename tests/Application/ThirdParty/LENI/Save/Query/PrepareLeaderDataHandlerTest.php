@@ -34,6 +34,12 @@ class PrepareLeaderDataHandlerTest extends TestCase
     private $participant;
 
     /** @var ObjectProphecy */
+    private $participant2;
+
+    /** @var ObjectProphecy */
+    private $participant3;
+
+    /** @var ObjectProphecy */
     private $sheet;
 
     public function setUp()
@@ -41,6 +47,8 @@ class PrepareLeaderDataHandlerTest extends TestCase
         $this->extraDataRepository = $this->prophesize(ExtraDataRepositoryInterface::class);
         $this->sheet = $this->prophesize(Sheet::class);
         $this->participant = $this->prophesize(Participant::class);
+        $this->participant2 = $this->prophesize(Participant::class);
+        $this->participant3 = $this->prophesize(Participant::class);
         $this->user = $this->prophesize(User::class);
         $this->participant->getUser()->willReturn($this->user->reveal());
     }
@@ -60,18 +68,15 @@ class PrepareLeaderDataHandlerTest extends TestCase
 
     public function testHandleIsFirstParticipant()
     {
-        $participant2 = $this->prophesize(Participant::class);
-        $participant3 = $this->prophesize(Participant::class);
-
         $this->participant->getId()->willReturn(1);
-        $participant2->getId()->willReturn(9);
-        $participant3->getId()->willReturn(4);
+        $this->participant2->getId()->willReturn(9);
+        $this->participant3->getId()->willReturn(4);
         $this->sheet->getUserParticipant($this->user->reveal())->shouldBeCalled()->willReturn($this->participant->reveal());
 
         $participants = [
             $this->participant->reveal(),
-            $participant2->reveal(),
-            $participant3->reveal(),
+            $this->participant2->reveal(),
+            $this->participant3->reveal(),
         ];
         $this->sheet->isOwner($this->user->reveal())->shouldBeCalled()->willReturn(false);
         $this->sheet->getParticipantsArray()->willReturn($participants);
@@ -90,19 +95,16 @@ class PrepareLeaderDataHandlerTest extends TestCase
         $event = $this->prophesize(Event::class);
         $user2 = $this->prophesize(User::class);
 
-        $participant2 = $this->prophesize(Participant::class);
-        $participant3 = $this->prophesize(Participant::class);
-
         $this->participant->getId()->willReturn(12);
-        $participant2->getId()->willReturn(9);
-        $participant3->getId()->willReturn(4);
+        $this->participant2->getId()->willReturn(9);
+        $this->participant3->getId()->willReturn(4);
         $this->sheet->getEvent()->willReturn($event->reveal());
-        $participant3->getUser()->willReturn($user2->reveal());
+        $this->participant3->getUser()->willReturn($user2->reveal());
 
         $participants = [
             $this->participant->reveal(),
-            $participant2->reveal(),
-            $participant3->reveal(),
+            $this->participant2->reveal(),
+            $this->participant3->reveal(),
         ];
         $this->sheet->isOwner($this->user->reveal())->shouldBeCalled()->willReturn(false);
         $this->sheet->getParticipantsArray()->willReturn($participants);
@@ -130,24 +132,22 @@ class PrepareLeaderDataHandlerTest extends TestCase
     {
         $event = $this->prophesize(Event::class);
         $user2 = $this->prophesize(User::class);
-        $participant2 = $this->prophesize(Participant::class);
-        $participant3 = $this->prophesize(Participant::class);
 
         $this->participant->getId()->willReturn(12);
-        $participant2->getId()->willReturn(9);
-        $participant3->getId()->willReturn(4);
+        $this->participant2->getId()->willReturn(9);
+        $this->participant3->getId()->willReturn(4);
         $this->sheet->getEvent()->willReturn($event->reveal());
 
-        $participant3->getUser()->willReturn($user2->reveal());
+        $this->participant3->getUser()->willReturn($user2->reveal());
         $user2->getFirstName()->willReturn('firstName');
         $user2->getLastName()->willReturn('lastName');
-        $participant3->getEmail()->willReturn('email@example.net');
+        $this->participant3->getEmail()->willReturn('email@example.net');
         $this->sheet->getTitle()->willReturn('sheetName');
 
         $participants = [
             $this->participant->reveal(),
-            $participant2->reveal(),
-            $participant3->reveal(),
+            $this->participant2->reveal(),
+            $this->participant3->reveal(),
         ];
         $this->sheet->isOwner($this->user->reveal())->shouldBeCalled()->willReturn(false);
         $this->sheet->getParticipantsArray()->willReturn($participants);

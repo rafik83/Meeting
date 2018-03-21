@@ -38,6 +38,10 @@ class PrepareLeaderDataHandler
 
         $userParticipant = $command->sheet->getUserParticipant($command->user);
 
+        if (!$userParticipant instanceof Participant) {
+            return null;
+        }
+
         $participantsSortedById = $command->sheet->getParticipantsArray();
         usort($participantsSortedById, function (Participant $participantA, Participant $participantB) {
            return $participantA->getId()  > $participantB->getId();
@@ -45,11 +49,7 @@ class PrepareLeaderDataHandler
 
         $firstParticipant = reset($participantsSortedById);
 
-        if ($firstParticipant === false
-            || !$firstParticipant instanceof Participant
-            || !$userParticipant instanceof Participant
-            || $firstParticipant->getId() === $userParticipant->getId()
-        ) {
+        if (!$firstParticipant instanceof Participant || $firstParticipant->getId() === $userParticipant->getId()) {
             return null;
         }
 
