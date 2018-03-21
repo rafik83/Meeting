@@ -18,6 +18,7 @@ use Proximum\Vimeet\Application\ThirdParty\LENI\Common\EventExtraParameter\Mappi
 use Proximum\Vimeet\Application\ThirdParty\LENI\Get\Command\LeniApiCall;
 use Proximum\Vimeet\Application\ThirdParty\LENI\Get\Command\LeniApiCallHandler;
 use Proximum\Vimeet\Application\ThirdParty\LENI\Get\Converter\TypeConverter;
+use Proximum\Vimeet\Application\ThirdParty\LENI\LeniConstants;
 use Proximum\Vimeet\Domain\Event\ExtraParameter\Type as ExtraParameterType;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Participant;
@@ -156,10 +157,15 @@ class LeniApiCallHandlerTest extends TestCase
         ;
 
         $leniApi = $this->prophesize(LeniApiCaller::class);
-        $leniApi->get($event1->reveal(), [], 0, 100)->shouldBeCalled()->willReturn([$rawDataUser1, $rawDataUser2]);
+        $leniApi
+            ->get($event1->reveal(), LeniConstants::LENI_GET_FIELDS, [], 0, 100)
+            ->shouldBeCalled()
+            ->willReturn([$rawDataUser1, $rawDataUser2])
+        ;
         $leniApi
             ->get(
                 $event2->reveal(),
+                LeniConstants::LENI_GET_FIELDS,
                 [
                     [
                         'selectedFieldId' => 'Id',

@@ -123,7 +123,13 @@ class LeniApiCallHandler
 
         $types = $this->typeRepository->getTypesByEvent($event);
 
-        $rawUsers = $this->leniApi->get($event, $this->getFilters($event), 0, self::BATCH_LENGTH);
+        $rawUsers = $this->leniApi->get(
+            $event,
+            LeniConstants::LENI_GET_FIELDS,
+            $this->getFilters($event),
+            0,
+            self::BATCH_LENGTH
+        );
 
         foreach ($rawUsers as $rawUser) {
             $this->convertRawDataToParticipant($event, $types, $typesMapping, $rawUser);
