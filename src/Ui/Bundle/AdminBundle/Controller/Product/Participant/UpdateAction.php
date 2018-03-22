@@ -86,11 +86,11 @@ class UpdateAction
         $availabilityTimeRanges = $this->availabilityTimeRangeRepository->findByEvent($event);
         $update = new UpdateParticipant($product);
         $form = $this->formFactory->create(UpdateParticipantType::class, $update, [
-            'submit'  => true,
-            'product' => $product,
-            'event'   => $event,
             'availabilityTimeRanges' => $availabilityTimeRanges,
-            'locale'  => $event->getAvailableLocale($request->getLocale()),
+            'event' => $event,
+            'locale' => $event->getAvailableLocale($request->getLocale()),
+            'product' => $product,
+            'submit' => true,
         ]);
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
