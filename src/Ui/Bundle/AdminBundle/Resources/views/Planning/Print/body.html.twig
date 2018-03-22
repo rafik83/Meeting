@@ -2,7 +2,7 @@
     {% for translation in planning.tipTranslationViews %}
         <div class="tip-message">
             <p>{{ translation.title }}</p>
-            <p>{{ translation.content }}</p>
+            <p>{{ translation.content|html }}</p>
         </div>
     {% endfor %}
 {% endif %}
