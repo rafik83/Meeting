@@ -27,7 +27,7 @@ class AvailabilityTimeRangeChoiceType extends AbstractType
         $resolver
             ->setDefaults([
                 'select2'      => true,
-                'dateFormatter' => function (Options $options) {
+                'availabilityTimeRangeDateFormatter' => function (Options $options) {
                     return new \IntlDateFormatter(
                         $options['locale'],
                         \IntlDateFormatter::SHORT,
@@ -36,7 +36,7 @@ class AvailabilityTimeRangeChoiceType extends AbstractType
                     );
                 },
                 'choice_label' => function (Options $options) {
-                    $formatter = $options['dateFormatter'];
+                    $formatter = $options['availabilityTimeRangeDateFormatter'];
 
                     return function (AvailabilityTimeRange $availabilityTimeRange = null) use ($formatter) {
                         if (null === $availabilityTimeRange) {
