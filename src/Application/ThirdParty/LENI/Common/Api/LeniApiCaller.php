@@ -148,7 +148,9 @@ class LeniApiCaller
             throw new LeniApiServerException($exception);
         }
 
-        return json_decode($jsonResponse->body, true);
+        $response = json_decode($jsonResponse->body, true);
+
+        return $response[LeniConstants::LENI_RESULTS] ?? [];
     }
 
     /**

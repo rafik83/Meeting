@@ -18,6 +18,8 @@ class LeniConstants
     public const LENI_APP = 'O';
     public const LENI_MODE = 'MessageAndModifiedData';
 
+    public const LENI_RESULTS = 'results';
+
     public const LENI_IS_VALID = 'IsValid';
     public const LENI_FIELD_INFO = 'Info';
     public const LENI_FIELD_VALUE = 'Value';

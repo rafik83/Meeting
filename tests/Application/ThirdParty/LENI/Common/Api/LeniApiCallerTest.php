@@ -239,7 +239,7 @@ class LeniApiCallerTest extends TestCase
                 $body
             )
             ->shouldBeCalled()
-            ->willReturn(new Response(200, '{"whatever": "data"}'))
+            ->willReturn(new Response(200, '{"results": {"whatever": "data"}}'))
         ;
 
         $leniApiCaller = new LeniApiCaller($this->httpAdapter->reveal(), $this->extraParameterRepository->reveal());
