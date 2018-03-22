@@ -203,7 +203,7 @@ class LeniApiCallHandler
                 $event,
                 $type,
                 $rawUser[LeniConstants::LENI_COL_EMAIL],
-                $rawUser[LeniConstants::LENI_COL_LOCALE],
+                $rawUser[LeniConstants::LENI_COL_LOCALE] ?? $event->getFallback(),
                 $dataIndexedByTag,
                 $this->participationTypeTemplateDataGetter->getRegistrationTemplateDataByType($type),
                 $this->participationTypeTemplateDataGetter->getSheetTemplateDataByType($type),
