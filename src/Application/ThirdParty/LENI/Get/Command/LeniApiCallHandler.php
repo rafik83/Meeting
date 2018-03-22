@@ -10,20 +10,13 @@
 
 namespace Proximum\Vimeet\Application\ThirdParty\LENI\Get\Command;
 
-use Proximum\Vimeet\Application\Command\Participant\ConvertToParticipant;
-use Proximum\Vimeet\Application\Command\Participant\ConvertToParticipantHandler;
 use Proximum\Vimeet\Application\ThirdParty\LENI\Common\Api\LeniApiCaller;
 use Proximum\Vimeet\Application\ThirdParty\LENI\Common\EventExtraParameter\MappingGetter;
-use Proximum\Vimeet\Application\ThirdParty\LENI\Common\TemplateData\ParticipationTypeTemplateDataGetter;
 use Proximum\Vimeet\Application\ThirdParty\LENI\Exception\LeniApiServerException;
-use Proximum\Vimeet\Application\ThirdParty\LENI\Get\Converter\DataConverter;
-use Proximum\Vimeet\Application\ThirdParty\LENI\Get\Converter\TypeConverter;
+use Proximum\Vimeet\Application\ThirdParty\LENI\Get\Converter\RawDataToParticipantConverter;
 use Proximum\Vimeet\Application\ThirdParty\LENI\LeniConstants;
 use Proximum\Vimeet\Domain\Event\ExtraParameter\Type as EventExtraParameterType;
 use Proximum\Vimeet\Domain\Model\Event;
-use Proximum\Vimeet\Domain\Model\Participant;
-use Proximum\Vimeet\Domain\Model\Type;
-use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Model\User\Event\ExtraData;
 use Proximum\Vimeet\Domain\Repository\EventRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\TypeRepositoryInterface;
@@ -49,20 +42,8 @@ class LeniApiCallHandler
     /** @var MappingGetter */
     private $mappingGetter;
 
-    /** @var TypeConverter */
-    private $typeConverter;
-
-    /** @var ConvertToParticipantHandler */
-    private $convertToParticipantHandler;
-
-    /** @var ParticipationTypeTemplateDataGetter */
-    private $participationTypeTemplateDataGetter;
-
-    /** @var DataConverter */
-    private $dataConverter;
-
-    /** @var \DateTimeInterface */
-    private $dateTime;
+    /** @var RawDataToParticipantConverter */
+    private $rawDataToParticipantConverter;
 
     public function __construct(
         LeniApiCaller $leniApi,
@@ -70,22 +51,14 @@ class LeniApiCallHandler
         TypeRepositoryInterface $typeRepository,
         ExtraDataRepositoryInterface $extraDataRepository,
         MappingGetter $mappingGetter,
-        TypeConverter $typeConverter,
-        ConvertToParticipantHandler $convertToParticipantHandler,
-        ParticipationTypeTemplateDataGetter $participationTypeTemplateDataGetter,
-        DataConverter $dataConverter,
-        \DateTimeInterface $dateTime
+        RawDataToParticipantConverter $rawDataToParticipantConverter
     ) {
         $this->leniApi = $leniApi;
         $this->eventRepository = $eventRepository;
         $this->typeRepository = $typeRepository;
         $this->extraDataRepository = $extraDataRepository;
         $this->mappingGetter = $mappingGetter;
-        $this->convertToParticipantHandler = $convertToParticipantHandler;
-        $this->typeConverter = $typeConverter;
-        $this->participationTypeTemplateDataGetter = $participationTypeTemplateDataGetter;
-        $this->dataConverter = $dataConverter;
-        $this->dateTime = $dateTime;
+        $this->rawDataToParticipantConverter = $rawDataToParticipantConverter;
     }
 
     /**
@@ -122,7 +95,7 @@ class LeniApiCallHandler
 
         $types = $this->typeRepository->getTypesByEvent($event);
 
-        $rawUsers = $this->leniApi->get(
+        $rawUsersData = $this->leniApi->get(
             $event,
             LeniConstants::LENI_GET_FIELDS,
             $this->getFilters($event),
@@ -130,8 +103,8 @@ class LeniApiCallHandler
             self::BATCH_LENGTH
         );
 
-        foreach ($rawUsers as $rawUser) {
-            $this->convertRawDataToParticipant($event, $types, $typesMapping, $rawUser);
+        foreach ($rawUsersData as $rawUserData) {
+            $this->rawDataToParticipantConverter->convert($event, $types, $typesMapping, $rawUserData);
         }
     }
 
@@ -175,78 +148,5 @@ class LeniApiCallHandler
                 'value' => $usersId,
             ]
         ];
-    }
-
-    /**
-     * @param Event  $event
-     * @param Type[] $types
-     * @param array  $typesMapping
-     * @param array  $rawUser
-     */
-    private function convertRawDataToParticipant(
-        Event $event,
-        array &$types,
-        array &$typesMapping,
-        array &$rawUser
-    ): void {
-        $type = $this->convertType($types, $typesMapping, $rawUser);
-
-        if (!$type instanceof Type) {
-            return;
-        }
-
-        // Set data for each tag
-        $dataIndexedByTag = $this->dataConverter->convert($type, $rawUser);
-
-        $participant = $this->convertToParticipantHandler->handle(
-            new ConvertToParticipant(
-                $event,
-                $type,
-                $rawUser[LeniConstants::LENI_COL_EMAIL],
-                $rawUser[LeniConstants::LENI_COL_LOCALE] ?? $event->getFallback(),
-                $dataIndexedByTag,
-                $this->participationTypeTemplateDataGetter->getRegistrationTemplateDataByType($type),
-                $this->participationTypeTemplateDataGetter->getSheetTemplateDataByType($type),
-                UserEventExtraDataType::LENI_USER_ID
-            )
-        );
-
-        if ($participant instanceof Participant) {
-            $this->addLeniUserIdInUserEventExtraData(
-                $event,
-                $participant->getUser(),
-                $rawUser[LeniConstants::LENI_COL_USER_ID]
-            );
-        }
-    }
-
-    /**
-     * @param Event  $event
-     * @param User   $user
-     * @param string $leniId
-     */
-    private function addLeniUserIdInUserEventExtraData(Event $event, User $user, string $leniId): void
-    {
-        $this->extraDataRepository->add(
-            new ExtraData(
-                $user,
-                $event,
-                UserEventExtraDataType::LENI_USER_ID,
-                $leniId,
-                $this->dateTime
-            )
-        );
-    }
-
-    /**
-     * @param Type[] $types
-     * @param array  $typesMapping
-     * @param array  $rawUser
-     *
-     * @return null|Type
-     */
-    private function convertType(array &$types, array &$typesMapping, array &$rawUser): ?Type
-    {
-        return $this->typeConverter->convert($types, $typesMapping, $rawUser);
     }
 }

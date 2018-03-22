@@ -28,11 +28,7 @@ services:
             - '@vimeet_infrastructure.repository.type_repository'
             - '@repository.user.event.extra_data_repository'
             - '@Proximum\Vimeet\Application\ThirdParty\LENI\Common\EventExtraParameter\MappingGetter'
-            - '@Proximum\Vimeet\Application\ThirdParty\LENI\Get\Converter\TypeConverter'
-            - '@Proximum\Vimeet\Application\Command\Participant\ConvertToParticipantHandler'
-            - '@Proximum\Vimeet\Application\ThirdParty\LENI\Common\TemplateData\ParticipationTypeTemplateDataGetter'
-            - '@Proximum\Vimeet\Application\ThirdParty\LENI\Get\Converter\DataConverter'
-            - '@datetime'
+            - '@Proximum\Vimeet\Application\ThirdParty\LENI\Get\Converter\RawDataToParticipantConverter'
 
     #
     # Converter
@@ -44,6 +40,15 @@ services:
             - '@Proximum\Vimeet\Application\ThirdParty\LENI\Get\Converter\MainDataConverter'
 
     Proximum\Vimeet\Application\ThirdParty\LENI\Get\Converter\MainDataConverter: ~
+
+    Proximum\Vimeet\Application\ThirdParty\LENI\Get\Converter\RawDataToParticipantConverter:
+        arguments:
+            - '@Proximum\Vimeet\Application\Command\Participant\ConvertToParticipantHandler'
+            - '@Proximum\Vimeet\Application\ThirdParty\LENI\Get\Converter\TypeConverter'
+            - '@Proximum\Vimeet\Application\ThirdParty\LENI\Get\Converter\DataConverter'
+            - '@Proximum\Vimeet\Application\ThirdParty\LENI\Common\TemplateData\ParticipationTypeTemplateDataGetter'
+            - '@repository.user.event.extra_data_repository'
+            - '@datetime'
 
     #
     # Job
