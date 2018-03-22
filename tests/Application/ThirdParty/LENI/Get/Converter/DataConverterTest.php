@@ -13,7 +13,7 @@ namespace Proximum\Vimeet\Tests\Application\ThirdParty\LENI\Get\Converter;
 use PHPUnit\Framework\TestCase;
 use Proximum\Vimeet\Application\ThirdParty\LENI\Get\Converter\DataConverter;
 use Proximum\Vimeet\Application\ThirdParty\LENI\Get\Converter\MainDataConverter;
-use Proximum\Vimeet\Domain\Model\Event;
+use Proximum\Vimeet\Domain\Model\Type;
 
 class DataConverterTest extends TestCase
 {
@@ -26,7 +26,7 @@ class DataConverterTest extends TestCase
             'participant_lastname' => 'Willis',
         ];
 
-        $event = $this->prophesize(Event::class);
+        $type = $this->prophesize(Type::class);
         $mainDataConverter = $this->prophesize(MainDataConverter::class);
         $mainDataConverter
             ->convert($rawData)
@@ -40,6 +40,6 @@ class DataConverterTest extends TestCase
         ;
 
         $dataConverter = new DataConverter($mainDataConverter->reveal());
-        $this->assertEquals($expectedResult, $dataConverter->convert($event->reveal(), $rawData));
+        $this->assertEquals($expectedResult, $dataConverter->convert($type->reveal(), $rawData));
     }
 }

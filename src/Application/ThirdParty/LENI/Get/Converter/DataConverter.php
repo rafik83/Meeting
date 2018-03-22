@@ -10,7 +10,7 @@
 
 namespace Proximum\Vimeet\Application\ThirdParty\LENI\Get\Converter;
 
-use Proximum\Vimeet\Domain\Model\Event;
+use Proximum\Vimeet\Domain\Model\Type;
 
 /**
  * Merge all LENI to Vimeet data indexed by tag with main and custom data converters
@@ -26,12 +26,12 @@ class DataConverter
     }
 
     /**
-     * @param Event $event
+     * @param Type  $type
      * @param array $rawUser
      *
      * @return array indexed by tag
      */
-    public function convert(Event $event, array $rawUser): array
+    public function convert(Type $type, array $rawUser): array
     {
         $dataIndexedByTag = $this->mainDataConverter->convert($rawUser);
 

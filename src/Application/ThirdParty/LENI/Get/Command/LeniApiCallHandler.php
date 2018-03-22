@@ -16,6 +16,7 @@ use Proximum\Vimeet\Application\ThirdParty\LENI\Common\Api\LeniApiCaller;
 use Proximum\Vimeet\Application\ThirdParty\LENI\Common\EventExtraParameter\MappingGetter;
 use Proximum\Vimeet\Application\ThirdParty\LENI\Common\TemplateData\ParticipationTypeTemplateDataGetter;
 use Proximum\Vimeet\Application\ThirdParty\LENI\Exception\LeniApiServerException;
+use Proximum\Vimeet\Application\ThirdParty\LENI\Get\Converter\DataConverter;
 use Proximum\Vimeet\Application\ThirdParty\LENI\Get\Converter\TypeConverter;
 use Proximum\Vimeet\Application\ThirdParty\LENI\LeniConstants;
 use Proximum\Vimeet\Domain\Event\ExtraParameter\Type as EventExtraParameterType;
@@ -57,6 +58,9 @@ class LeniApiCallHandler
     /** @var ParticipationTypeTemplateDataGetter */
     private $participationTypeTemplateDataGetter;
 
+    /** @var DataConverter */
+    private $dataConverter;
+
     /** @var \DateTimeInterface */
     private $dateTime;
 
@@ -69,6 +73,7 @@ class LeniApiCallHandler
         TypeConverter $typeConverter,
         ConvertToParticipantHandler $convertToParticipantHandler,
         ParticipationTypeTemplateDataGetter $participationTypeTemplateDataGetter,
+        DataConverter $dataConverter,
         \DateTimeInterface $dateTime
     ) {
         $this->leniApi = $leniApi;
@@ -79,6 +84,7 @@ class LeniApiCallHandler
         $this->convertToParticipantHandler = $convertToParticipantHandler;
         $this->typeConverter = $typeConverter;
         $this->participationTypeTemplateDataGetter = $participationTypeTemplateDataGetter;
+        $this->dataConverter = $dataConverter;
         $this->dateTime = $dateTime;
     }
 
@@ -189,8 +195,8 @@ class LeniApiCallHandler
             return;
         }
 
-        // @todo: set data for each tag
-        $dataIndexedByTag = [];
+        // Set data for each tag
+        $dataIndexedByTag = $this->dataConverter->convert($type, $rawUser);
 
         $participant = $this->convertToParticipantHandler->handle(
             new ConvertToParticipant(

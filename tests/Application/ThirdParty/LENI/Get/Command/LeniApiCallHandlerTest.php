@@ -18,6 +18,7 @@ use Proximum\Vimeet\Application\ThirdParty\LENI\Common\EventExtraParameter\Mappi
 use Proximum\Vimeet\Application\ThirdParty\LENI\Common\TemplateData\ParticipationTypeTemplateDataGetter;
 use Proximum\Vimeet\Application\ThirdParty\LENI\Get\Command\LeniApiCall;
 use Proximum\Vimeet\Application\ThirdParty\LENI\Get\Command\LeniApiCallHandler;
+use Proximum\Vimeet\Application\ThirdParty\LENI\Get\Converter\DataConverter;
 use Proximum\Vimeet\Application\ThirdParty\LENI\Get\Converter\TypeConverter;
 use Proximum\Vimeet\Application\ThirdParty\LENI\LeniConstants;
 use Proximum\Vimeet\Domain\Event\ExtraParameter\Type as ExtraParameterType;
@@ -105,6 +106,18 @@ class LeniApiCallHandlerTest extends TestCase
         $sheetTemplateDataEvent1type1 = $this->prophesize(TemplateData::class);
         $sheetTemplateDataEvent1type2 = $this->prophesize(TemplateData::class);
 
+        $dataConverter = $this->prophesize(DataConverter::class);
+        $dataConverter
+            ->convert($event1type2->reveal(), $rawDataUser1)
+            ->shouldBeCalled()
+            ->willReturn(['user1-data-indexed-by-tag' => 'whatever'])
+        ;
+        $dataConverter
+            ->convert($event1type1->reveal(), $rawDataUser2)
+            ->shouldBeCalled()
+            ->willReturn(['user2-data-indexed-by-tag' => 'whatever'])
+        ;
+
         $convertToParticipantHandler = $this->prophesize(ConvertToParticipantHandler::class);
         $convertToParticipantHandler
             ->handle(
@@ -113,7 +126,7 @@ class LeniApiCallHandlerTest extends TestCase
                     $event1type2->reveal(),
                     'bruce@willis.usa',
                     'fr',
-                    [],
+                    ['user1-data-indexed-by-tag' => 'whatever'],
                     $registrationTemplateDataEvent1type2->reveal(),
                     $sheetTemplateDataEvent1type2->reveal(),
                     'leni_user_id'
@@ -129,7 +142,7 @@ class LeniApiCallHandlerTest extends TestCase
                     $event1type1->reveal(),
                     'ronald@macdonald.food',
                     'en',
-                    [],
+                    ['user2-data-indexed-by-tag' => 'whatever'],
                     $registrationTemplateDataEvent1type1->reveal(),
                     $sheetTemplateDataEvent1type1->reveal(),
                     'leni_user_id'
@@ -231,6 +244,7 @@ class LeniApiCallHandlerTest extends TestCase
             $typeConverter->reveal(),
             $convertToParticipantHandler->reveal(),
             $participationTypeTemplateDataGetter->reveal(),
+            $dataConverter->reveal(),
             $datetime
         );
         $leniApiCallHandler->handle(new LeniApiCall());

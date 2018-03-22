@@ -105,6 +105,7 @@ class LeniConstants
         self::LENI_COL_LOCALE,
         self::LENI_COL_CREATED_AT,
         self::LENI_COL_UPDATED_AT,
+        'ZL_PROFIL', // @todo: remove it from here; it is a custom field used in Type Mapping
     ];
 
     public const LENI_FIELDS_MAPPING = [

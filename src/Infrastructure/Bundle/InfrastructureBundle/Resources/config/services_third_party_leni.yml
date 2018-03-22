@@ -31,6 +31,7 @@ services:
             - '@Proximum\Vimeet\Application\ThirdParty\LENI\Get\Converter\TypeConverter'
             - '@Proximum\Vimeet\Application\Command\Participant\ConvertToParticipantHandler'
             - '@Proximum\Vimeet\Application\ThirdParty\LENI\Common\TemplateData\ParticipationTypeTemplateDataGetter'
+            - '@Proximum\Vimeet\Application\ThirdParty\LENI\Get\Converter\DataConverter'
             - '@datetime'
 
     #
@@ -38,7 +39,9 @@ services:
     #
     Proximum\Vimeet\Application\ThirdParty\LENI\Get\Converter\TypeConverter: ~
 
-    Proximum\Vimeet\Application\ThirdParty\LENI\Get\Converter\DataConverter: ~
+    Proximum\Vimeet\Application\ThirdParty\LENI\Get\Converter\DataConverter:
+        arguments:
+            - '@Proximum\Vimeet\Application\ThirdParty\LENI\Get\Converter\MainDataConverter'
 
     Proximum\Vimeet\Application\ThirdParty\LENI\Get\Converter\MainDataConverter: ~
 
