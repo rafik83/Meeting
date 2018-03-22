@@ -10,7 +10,6 @@
 
 namespace Proximum\Vimeet\Tests\Application\Serializer\Denormalizer\Participant;
 
-use Doctrine\Common\Collections\ArrayCollection;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
 use Proximum\Vimeet\Application\Adapter\TranslatorInterface;
@@ -48,12 +47,6 @@ class ParticipantDenormalizerTest extends TestCase
         $locale = 'fr';
         $filename = __DIR__ . '/import_participants.csv';
 
-        $ownerOfSheetAlreadyExists = $this->prophesize(User::class);
-        $ownerOfSheetAlreadyExists->getEmail()->willReturn('martine@gmail.com');
-        $sheetAlreadyExists = $this->prophesize(Sheet::class);
-        $sheetAlreadyExists->getParticipants()->willReturn(new ArrayCollection());
-        $sheetAlreadyExists->getOwner()->willReturn($ownerOfSheetAlreadyExists);
-
         $userAlreadyExists = $this->prophesize(User::class);
         $userAlreadyExists->getEmail()->willReturn('julie@gmail.com');
 
@@ -65,6 +58,9 @@ class ParticipantDenormalizerTest extends TestCase
         $emailValidator = $this->prophesize(EmailValidator::class);
         $synchronizer = $this->prophesize(Synchronizer::class);
         $translatorAdapter = $this->prophesize(TranslatorInterface::class);
+
+        $userRepository->findByEmail('julie@gmail.com')->shouldBeCalled()->willReturn($userAlreadyExists->reveal());
+        $userRepository->findByEmail('jean@gmail.com')->shouldBeCalled()->willReturn(null);
 
         $errorMessages = [
             'validators.admin.sheet.import_participant.error.country',
@@ -81,8 +77,15 @@ class ParticipantDenormalizerTest extends TestCase
 
         $participantLogger = new ParticipantImportLogger($translatorAdapter->reveal());
 
-        $sheetRepository->getByEventWithParticipantsAndOwner($event->reveal())->willReturn([$sheetAlreadyExists]);
-        $userRepository->all()->shouldBeCalled()->willReturn([$userAlreadyExists, $ownerOfSheetAlreadyExists]);
+        $sheetRepository
+            ->getOwnerEmails($event->reveal())
+            ->shouldBeCalled()
+            ->willReturn([
+                1 => [
+                    'email' => 'martine@gmail.com'
+                ]
+            ])
+        ;
 
         $templateData = new TemplateData('root', [], 'fr', 'fr');
 
@@ -169,8 +172,6 @@ class ParticipantDenormalizerTest extends TestCase
             ->shouldBeCalled()
         ;
 
-        $participantRepository->add($participant1);
-
         $userEventRepository->add(new UserEvent($userAlreadyExists->reveal(), $event->reveal(), $type->reveal()));
         $taggedData1 = [
             'participant_firstname' => 'Julie',
@@ -213,6 +214,25 @@ class ParticipantDenormalizerTest extends TestCase
             'sheet_organization' => 'Ma Petite Tribu',
         ];
         $synchronizer->set($templateData->setTaggedData($taggedData2), $user2)->shouldBeCalled();
+
+        $participantRepository
+            ->getParticipantEmailsForEvent($event->reveal())
+            ->shouldBeCalled()
+            ->willReturn([
+                1 => [
+                    'email' => 'email-not-used@gmail.com',
+                ]
+            ])
+        ;
+
+        $participantRepository
+            ->add(Argument::that(function(Participant $participant) {
+                return $participant->getEmail() === 'jean@gmail.com'
+                    || $participant->getEmail() === 'julie@gmail.com'
+                ;
+            }))
+            ->shouldBeCalled()
+        ;
 
         // Configure Serializer
         $serializer = new Serializer(

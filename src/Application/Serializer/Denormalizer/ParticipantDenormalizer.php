@@ -104,19 +104,20 @@ class ParticipantDenormalizer implements DenormalizerInterface
      */
     public function denormalize($data, $class, $format = null, array $context = [])
     {
-        $sheets = $this->sheetRepository->getByEventWithParticipantsAndOwner($context['event']);
+        $event = $context['event'];
+        $ownerEmails = $this->sheetRepository->getOwnerEmails($event);
+        $participantEmails = $this->participantRepository->getParticipantEmailsForEvent($event);
 
         // Owners and Participant indexed by email
         $participants = [];
         $owners       = [];
 
-        foreach ($sheets as $sheet) {
-            foreach ($sheet->getParticipants()->toArray() as $participant) {
-                $participants[strtolower($participant->getUser()->getEmail())] = $participant;
-            }
+        foreach ($participantEmails as $participantEmail) {
+            $participants[strtolower($participantEmail['email'])] = $participantEmail['email'];
+        }
 
-            $owner = $sheet->getOwner();
-            $owners[strtolower($owner->getEmail())] = $owner;
+        foreach ($ownerEmails as $ownerEmail) {
+            $owners[strtolower($ownerEmail['email'])] = $ownerEmail['email'];
         }
 
         $this->importLogger->init(\count($data));
