@@ -25,6 +25,17 @@ services:
         arguments:
             - '@Proximum\Vimeet\Application\ThirdParty\LENI\Common\Api\LeniApiCaller'
             - '@vimeet_infrastructure.repository.event_repository'
+            - '@vimeet_infrastructure.repository.type_repository'
+            - '@repository.user.event.extra_data_repository'
+            - '@Proximum\Vimeet\Application\ThirdParty\LENI\Common\EventExtraParameter\MappingGetter'
+            - '@Proximum\Vimeet\Application\ThirdParty\LENI\Get\Converter\TypeConverter'
+            - '@Proximum\Vimeet\Application\Command\Participant\ConvertToParticipantHandler'
+            - '@datetime'
+
+    #
+    # Converter
+    #
+    Proximum\Vimeet\Application\ThirdParty\LENI\Get\Converter\TypeConverter: ~
 
     #
     # Job
@@ -32,7 +43,6 @@ services:
     Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Adapter\ThirdParty\LENI\Save\LeniApiCallJobQueue:
         arguments:
             - '@doctrine.orm.entity_manager'
-
 
     #
     # Command
@@ -53,7 +63,6 @@ services:
     Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\ThirdParty\LENI\Get\LeniApiCallCommand:
         arguments:
             - '@Proximum\Vimeet\Application\ThirdParty\LENI\Get\Command\LeniApiCallHandler'
-            - '@repository.user.event.extra_data_repository'
         tags:
             - { name: console.command }
 
@@ -63,7 +72,6 @@ services:
     Proximum\Vimeet\Application\ThirdParty\LENI\Save\Normalizer\LeniUserViewNormalizer:
         tags:
             - { name: serializer.normalizer }
-
 
     #
     # Common services
@@ -78,7 +86,7 @@ services:
             - '@repository.user.event.extra_data_repository'
             - '@datetime'
 
-    Proximum\Vimeet\Application\ThirdParty\LENI\Common\ExtraParameter\TypesMapping:
+    Proximum\Vimeet\Application\ThirdParty\LENI\Common\EventExtraParameter\MappingGetter:
         arguments:
             - '@repository.event.extra_parameter_repository'
 

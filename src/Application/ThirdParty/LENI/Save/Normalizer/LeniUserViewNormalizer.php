@@ -66,6 +66,8 @@ class LeniUserViewNormalizer implements NormalizerInterface
         // Warning: always on end of the returned array
         if (null !== $userView->leniId) {
             $data[LeniConstants::LENI_COL_USER_ID] = $userView->leniId;
+        } else {
+            $data[LeniConstants::LENI_COL_EVENT_ORIGIN] = LeniConstants::NEW_USER_EVENT_ORIGIN;
         }
 
         return $data;

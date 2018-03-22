@@ -8,15 +8,15 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Proximum\Vimeet\Tests\Application\ThirdParty\LENI\Common\ExtraParameter;
+namespace Proximum\Vimeet\Tests\Application\ThirdParty\LENI\Common\EventExtraParameter;
 
 use PHPUnit\Framework\TestCase;
-use Proximum\Vimeet\Application\ThirdParty\LENI\Common\ExtraParameter\TypesMapping;
+use Proximum\Vimeet\Application\ThirdParty\LENI\Common\EventExtraParameter\MappingGetter;
 use Proximum\Vimeet\Domain\Event\ExtraParameter\Type;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Repository\Event\ExtraParameterRepositoryInterface;
 
-class TypesMappingTest extends TestCase
+class MappingGetterTest extends TestCase
 {
     public function testGetTypesMapping()
     {
@@ -40,8 +40,8 @@ class TypesMappingTest extends TestCase
             )
         ;
 
-        $typesMapping = new TypesMapping($extraParameterRepository->reveal());
-        $result = $typesMapping->getTypesMapping($event->reveal());
+        $typesMapping = new MappingGetter($extraParameterRepository->reveal());
+        $result = $typesMapping->getMapping($event->reveal(), Type::TYPE_LENI_TYPES_MAPPING);
 
         $expectedResult = [
             '327' => [
@@ -75,7 +75,7 @@ class TypesMappingTest extends TestCase
             ->willReturn(null)
         ;
 
-        $typesMapping = new TypesMapping($extraParameterRepository->reveal());
-        $this->assertNull($typesMapping->getTypesMapping($event->reveal()));
+        $typesMapping = new MappingGetter($extraParameterRepository->reveal());
+        $this->assertNull($typesMapping->getMapping($event->reveal(), Type::TYPE_LENI_TYPES_MAPPING));
     }
 }

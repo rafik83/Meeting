@@ -56,12 +56,10 @@ class LeniApiCaller
         $isAuthorizedMode = $leniModeParameter !== null
             && \in_array(
                 $leniModeParameter->getValue(),
-                [
-                    Type::VALUE_LENI_MODE_SAVE,
-                    Type::VALUE_LENI_MODE_BOTH,
-                ],
+                [Type::VALUE_LENI_MODE_SAVE, Type::VALUE_LENI_MODE_BOTH],
                 true
-            );
+            )
+        ;
 
         if (!$isAuthorizedMode
             || null === $leniUserParameter
@@ -107,13 +105,15 @@ class LeniApiCaller
 
     /**
      * @param Event $event
+     * @param array $filters
+     * @param int   $start
+     * @param int   $limit
      *
      * @return array
      *
-     * @throws \LogicException
      * @throws LeniApiServerException
      */
-    public function get(Event $event): array
+    public function get(Event $event, array $filters, int $start = 0, int $limit = 1): array
     {
         $leniUserParameter = $this->extraParameterRepository->findByEventAndType($event, Type::TYPE_LENI_USER);
         $leniEventParameter = $this->extraParameterRepository->findByEventAndType($event, Type::TYPE_LENI_EVENT);
@@ -124,13 +124,8 @@ class LeniApiCaller
         );
 
         $isAuthorizedMode = $leniModeParameter !== null
-            && \in_array($leniModeParameter->getValue(),
-                [
-                    Type::VALUE_LENI_MODE_GET,
-                    Type::VALUE_LENI_MODE_BOTH,
-                ],
-                true
-            );
+            && \in_array($leniModeParameter->getValue(), [Type::VALUE_LENI_MODE_GET, Type::VALUE_LENI_MODE_BOTH], true)
+        ;
 
         if (!$isAuthorizedMode
             || null === $leniUserParameter
@@ -142,11 +137,12 @@ class LeniApiCaller
             );
         }
 
-        $body = $this->getBody($leniEventParameter->getValue());
-        $headers = $this->getHeaders($leniUserParameter->getValue(), $body);
+        $body = $this->getGetCallBody($leniEventParameter->getValue(), $filters, $start, $limit);
+        $jsonEncodedBody = json_encode($body);
+        $headers = $this->getHeaders($leniUserParameter->getValue(), $jsonEncodedBody);
 
         try {
-            $jsonResponse = $this->httpAdapter->post($leniEndpointParameter->getValue(), $headers, $body);
+            $jsonResponse = $this->httpAdapter->post($leniEndpointParameter->getValue(), $headers, $jsonEncodedBody);
         } catch (ServerErrorException $exception) {
             throw new LeniApiServerException($exception);
         }
@@ -154,52 +150,15 @@ class LeniApiCaller
         return json_decode($jsonResponse->body, true);
     }
 
-    private function getBody(string $idEvt): string
+    private function getGetCallBody(string $idEvt, array $filters, int $start, int $limit): array
     {
-        return json_encode(
-            [
-                'idEvt' => $idEvt,
-                'filters' => [],
-                'fields' => [
-                    'Id',
-                    'Cab1',
-                    'Adresse1',
-                    'Adresse3',
-                    'Societe',
-                    'Adresse2',
-                    'CodePostal',
-                    'Ville',
-                    'Pays',
-                    'Civilite',
-                    'Nom',
-                    'Prenom',
-                    'EvenementFonction',
-                    'TelephoneFixe',
-                    'Email',
-                    'Mobile',
-                    'Inscrit',
-                    'CategorieIndividuEvt',
-                    'ZL_PROFIL',
-                    'ZL_ACTIVITE',
-                    'ZL_TypePrestation',
-                    'ZL_AUTREPRESTATION',
-                    'ZL_Effectif',
-                    'ZL_Commerce',
-                    'ZL_Emplacement',
-                    'ZL_NombreHabitant',
-                    'ZL_AUTRE_FONTION',
-                    'ZL_Age',
-                    'ZL_ConnuSalon',
-                    'ZL_CONFIRMATION',
-                    'ZL_ATTENTES',
-                    'ZL_THEMATIQUES',
-                    'CreeLe',
-                    'ModifieLe',
-                ],
-                'start' => 0,
-                'take' => 1,
-            ]
-        );
+        return [
+            'idEvt' => $idEvt,
+            'filters' => $filters,
+            'fields' => LeniConstants::LENI_GET_FIELDS,
+            'start' => $start,
+            'take' => $limit,
+        ];
     }
 
     private function getHeaders(string $authorizedUser, string $body): array

@@ -13,7 +13,6 @@ namespace Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\Thi
 use Proximum\Vimeet\Application\ThirdParty\LENI\Exception\LeniException;
 use Proximum\Vimeet\Application\ThirdParty\LENI\Get\Command\LeniApiCall;
 use Proximum\Vimeet\Application\ThirdParty\LENI\Get\Command\LeniApiCallHandler;
-use Proximum\Vimeet\Domain\Repository\User\Event\ExtraDataRepositoryInterface;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Exception\InvalidArgumentException;
 use Symfony\Component\Console\Input\InputInterface;
@@ -22,28 +21,18 @@ use Symfony\Component\Console\Output\OutputInterface;
 class LeniApiCallCommand extends Command
 {
     const NAME = 'vimeet:api:leni-get-call';
-    const EXTRA_DATA_ID = 'extraDataId';
 
     /** @var LeniApiCallHandler */
     private $leniApiCallHandler;
 
-    /** @var ExtraDataRepositoryInterface */
-    private $extraDataRepository;
-
     /**
-     * @param LeniApiCallHandler           $leniApiCallHandler
-     * @param ExtraDataRepositoryInterface $extraDataRepository
-     *
-     * @throws \LogicException
+     * @param LeniApiCallHandler $leniApiCallHandler
      */
-    public function __construct(
-        LeniApiCallHandler $leniApiCallHandler,
-        ExtraDataRepositoryInterface $extraDataRepository
-    ) {
+    public function __construct(LeniApiCallHandler $leniApiCallHandler)
+    {
         parent::__construct(self::NAME);
 
         $this->leniApiCallHandler = $leniApiCallHandler;
-        $this->extraDataRepository = $extraDataRepository;
     }
 
     /**
