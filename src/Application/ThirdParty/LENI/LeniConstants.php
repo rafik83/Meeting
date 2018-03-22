@@ -78,6 +78,12 @@ class LeniConstants
         false => 'PP',
     ];
 
+    public const LENI_LEADER_ID = 'ZL_LEADER_ID';
+    public const LENI_LEADER_SHEET_NAME = 'ZL_LEADER_SOCIETE';
+    public const LENI_LEADER_EMAIL = 'ZL_LEADER_EMAIL';
+    public const LENI_LEADER_LAST_NAME = 'ZL_LEADER_NOM';
+    public const LENI_LEADER_FIRST_NAME = 'ZL_LEADER_PRENOM';
+  
     /**
      * Fields used in the GET Api
      */

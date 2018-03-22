@@ -55,6 +55,9 @@ class LeniUserViewQueryHandler
     /** @var Balance */
     private $balance;
 
+    /** @var PrepareLeaderDataHandler */
+    private $prepareLeaderDataHandler;
+
     /**
      * @param UserInfoGuesser              $userInfoGuesser
      * @param SheetInfoGuesser             $sheetInfoGuesser
@@ -64,6 +67,7 @@ class LeniUserViewQueryHandler
      * @param GroupNameResolver            $groupNameResolver
      * @param SheetRepositoryInterface     $sheetRepository
      * @param Balance                      $balance
+     * @param PrepareLeaderDataHandler     $prepareLeaderDataHandler
      */
     public function __construct(
         UserInfoGuesser $userInfoGuesser,
@@ -73,7 +77,8 @@ class LeniUserViewQueryHandler
         CategoryNameResolver $categoryNameResolver,
         GroupNameResolver $groupNameResolver,
         SheetRepositoryInterface $sheetRepository,
-        Balance $balance
+        Balance $balance,
+        PrepareLeaderDataHandler $prepareLeaderDataHandler
     ) {
         $this->userInfoGuesser = $userInfoGuesser;
         $this->sheetInfoGuesser = $sheetInfoGuesser;
@@ -83,6 +88,7 @@ class LeniUserViewQueryHandler
         $this->groupNameResolver = $groupNameResolver;
         $this->sheetRepository = $sheetRepository;
         $this->balance = $balance;
+        $this->prepareLeaderDataHandler = $prepareLeaderDataHandler;
     }
 
     /**
@@ -133,6 +139,9 @@ class LeniUserViewQueryHandler
             $country = $sheetInfos[Tag::SHEET_COUNTRY] ?? '';
         }
 
+
+        $leaderView = $this->prepareLeaderDataHandler->handle(new PrepareLeaderData($firstSheet, $query->user));
+
         return new LeniUserView(
             $query->user->getId(),
             $firstSheet->isEnabled(),
@@ -148,6 +157,7 @@ class LeniUserViewQueryHandler
             $userInfo['mobile'],
             $country,
             $query->user->getLocale(),
+            $leaderView,
             $leniPlanning,
             $this->getPreviousLeniUserId($query),
             $this->isPaid($firstSheet),

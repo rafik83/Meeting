@@ -191,6 +191,7 @@ class PrepareLeniApiCallHandlerTest extends TestCase
             '+33565675778',
             'FR',
             'fr',
+            null,
             new LeniPlanningView(
                 [
                     new LeniPlanningDayView('day one'),
@@ -260,6 +261,7 @@ class PrepareLeniApiCallHandlerTest extends TestCase
             '+999999999',
             'US',
             'en',
+            null,
             new LeniPlanningView(
                 [
                     new LeniPlanningDayView('day one'),
