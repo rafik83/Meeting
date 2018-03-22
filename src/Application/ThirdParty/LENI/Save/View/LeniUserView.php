@@ -66,6 +66,9 @@ class LeniUserView
     /** @var int|null */
     public $participantProductId;
 
+    /** @var null|LeaderView */
+    public $leaderView;
+
     /**
      * @param int              $id
      * @param bool             $enabled
@@ -81,6 +84,7 @@ class LeniUserView
      * @param string           $mobile
      * @param string           $country
      * @param string           $locale
+     * @param null|LeaderView  $leaderView
      * @param LeniPlanningView $planning
      * @param null|string      $leniId
      * @param bool             $paid
@@ -101,6 +105,7 @@ class LeniUserView
         string $mobile,
         string $country,
         string $locale,
+        ?LeaderView $leaderView,
         LeniPlanningView $planning,
         ?string $leniId,
         bool $paid,
@@ -124,5 +129,6 @@ class LeniUserView
         $this->enabled = $enabled;
         $this->paid = $paid;
         $this->participantProductId = $participantProductId;
+        $this->leaderView = $leaderView;
     }
 }
