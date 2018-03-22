@@ -94,3 +94,7 @@ services:
     Proximum\Vimeet\Application\ThirdParty\LENI\Common\EventExtraParameter\MappingGetter:
         arguments:
             - '@repository.event.extra_parameter_repository'
+
+    Proximum\Vimeet\Application\ThirdParty\LENI\Common\TemplateData\ParticipationTypeTemplateDataGetter:
+        arguments:
+            - '@template.template_data_factory'
