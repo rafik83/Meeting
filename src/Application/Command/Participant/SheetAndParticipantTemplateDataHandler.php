@@ -128,11 +128,8 @@ class SheetAndParticipantTemplateDataHandler
                     continue;
                 }
 
-                if (\is_array($value)
-                    && $editableObject instanceof TemplateObject\EditableText
-                    && $editableObject->isTranslatable()
-                ) {
-                    $editableObject->setTranslations($value);
+                if ($editableObject instanceof TemplateObject\EditableText) {
+                    $this->handleEditableText($editableObject, $value);
 
                     continue;
                 }
@@ -143,11 +140,30 @@ class SheetAndParticipantTemplateDataHandler
     }
 
     /**
+     * @param TemplateObject\EditableText $editableText
+     * @param mixed                       $value
+     */
+    private function handleEditableText(TemplateObject\EditableText $editableText, $value): void
+    {
+        if (\is_array($value) && $editableText->isTranslatable()) {
+            $editableText->setTranslations($value);
+
+            return;
+        }
+
+        $editableText->setContentValue($value);
+    }
+
+    /**
      * @param TemplateObject\Nomenclature $nomenclatureObject
      * @param null|string|array           $value
      */
     private function handleNomenclatureObject(TemplateObject\Nomenclature $nomenclatureObject, $value): void
     {
+        if (null === $value) {
+            return;
+        }
+
         if (\is_array($value)) {
             $availableKeys = [];
 
