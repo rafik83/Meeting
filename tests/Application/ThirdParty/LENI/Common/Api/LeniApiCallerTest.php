@@ -220,29 +220,7 @@ class LeniApiCallerTest extends TestCase
             [
                 'idEvt' => 'leni_event',
                 'filters' => ['myfilter' => 'value'],
-                'fields' => [
-                    'Id',
-                    'CategorieIndividuEvt',
-                    'Societe',
-                    'ZL_SOUSCATEGORIE',
-                    'Civilite',
-                    'Prenom',
-                    'Nom',
-                    'Fonction',
-                    'EvenementFonction',
-                    'Email',
-                    'TelephoneFixe',
-                    'Mobile',
-                    'TelephoneMobile',
-                    'Adresse1',
-                    'CodePostal',
-                    'Ville',
-                    'Pays',
-                    'Inscrit',
-                    'Langue',
-                    'CreeLe',
-                    'ModifieLe',
-                ],
+                'fields' => ['field1', 'field2', 'field3'],
                 'start' => 0,
                 'take' => 1,
             ]
@@ -261,11 +239,21 @@ class LeniApiCallerTest extends TestCase
                 $body
             )
             ->shouldBeCalled()
-            ->willReturn(new Response(200, '{"whatever": "data"}'))
+            ->willReturn(new Response(200, '{"results": {"whatever": "data"}}'))
         ;
 
         $leniApiCaller = new LeniApiCaller($this->httpAdapter->reveal(), $this->extraParameterRepository->reveal());
-        $response = $leniApiCaller->get($this->event->reveal(), ['myfilter' => 'value'], 0, 1);
+        $response = $leniApiCaller->get(
+            $this->event->reveal(),
+            [
+                'field1',
+                'field2',
+                'field3',
+            ],
+            ['myfilter' => 'value'],
+            0,
+            1
+        );
 
         $this->assertEquals(['whatever' => 'data'], $response);
     }

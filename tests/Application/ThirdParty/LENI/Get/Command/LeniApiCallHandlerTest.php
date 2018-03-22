@@ -11,18 +11,15 @@
 namespace Proximum\Vimeet\Tests\Application\ThirdParty\LENI\Get\Command;
 
 use PHPUnit\Framework\TestCase;
-use Proximum\Vimeet\Application\Command\Participant\ConvertToParticipant;
-use Proximum\Vimeet\Application\Command\Participant\ConvertToParticipantHandler;
 use Proximum\Vimeet\Application\ThirdParty\LENI\Common\Api\LeniApiCaller;
 use Proximum\Vimeet\Application\ThirdParty\LENI\Common\EventExtraParameter\MappingGetter;
 use Proximum\Vimeet\Application\ThirdParty\LENI\Get\Command\LeniApiCall;
 use Proximum\Vimeet\Application\ThirdParty\LENI\Get\Command\LeniApiCallHandler;
-use Proximum\Vimeet\Application\ThirdParty\LENI\Get\Converter\TypeConverter;
+use Proximum\Vimeet\Application\ThirdParty\LENI\Get\Converter\RawDataToParticipantConverter;
+use Proximum\Vimeet\Application\ThirdParty\LENI\LeniConstants;
 use Proximum\Vimeet\Domain\Event\ExtraParameter\Type as ExtraParameterType;
 use Proximum\Vimeet\Domain\Model\Event;
-use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Type;
-use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Model\User\Event\ExtraData;
 use Proximum\Vimeet\Domain\Repository\EventRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\TypeRepositoryInterface;
@@ -32,8 +29,6 @@ class LeniApiCallHandlerTest extends TestCase
 {
     public function testHandle()
     {
-        $datetime = new \DateTime();
-
         $rawDataUser1 = [
             'Id' => 'user-id-1',
             'Email' => 'bruce@willis.usa',
@@ -46,16 +41,17 @@ class LeniApiCallHandlerTest extends TestCase
             'Langue' => 'en'
         ];
 
-        $user2 = $this->prophesize(User::class);
-        $participantForUser2 = $this->prophesize(Participant::class);
-        $participantForUser2->getUser()->shouldBeCalled()->willReturn($user2->reveal());
-
         $event1 = $this->prophesize(Event::class);
         $event2 = $this->prophesize(Event::class);
 
         $event1type1 = $this->prophesize(Type::class);
+        $event1type1->getId()->willReturn(111);
+
         $event1type2 = $this->prophesize(Type::class);
+        $event1type2->getId()->willReturn(222);
+
         $event2type1 = $this->prophesize(Type::class);
+        $event2type1->getId()->willReturn(333);
 
         $typeRepository = $this->prophesize(TypeRepositoryInterface::class);
         $typeRepository
@@ -80,48 +76,6 @@ class LeniApiCallHandlerTest extends TestCase
             ->willReturn($typeMappingEvent2)
         ;
 
-        $typeConverter = $this->prophesize(TypeConverter::class);
-        $typeConverter
-            ->convert([$event1type1->reveal(), $event1type2->reveal()], $typeMappingEvent1, $rawDataUser1)
-            ->shouldBeCalled()
-            ->willReturn($event1type2->reveal())
-        ;
-        $typeConverter
-            ->convert([$event1type1->reveal(), $event1type2->reveal()], $typeMappingEvent1, $rawDataUser2)
-            ->shouldBeCalled()
-            ->willReturn($event1type1->reveal())
-        ;
-
-        $convertToParticipantHandler = $this->prophesize(ConvertToParticipantHandler::class);
-        $convertToParticipantHandler
-            ->handle(
-                new ConvertToParticipant(
-                    $event1->reveal(),
-                    $event1type2->reveal(),
-                    'bruce@willis.usa',
-                    'fr',
-                    [],
-                    'leni_user_id'
-                )
-            )
-            ->shouldBeCalled()
-            ->willReturn(null)
-        ;
-        $convertToParticipantHandler
-            ->handle(
-                new ConvertToParticipant(
-                    $event1->reveal(),
-                    $event1type1->reveal(),
-                    'ronald@macdonald.food',
-                    'en',
-                    [],
-                    'leni_user_id'
-                )
-            )
-            ->shouldBeCalled()
-            ->willReturn($participantForUser2->reveal())
-        ;
-
         $extraDataRepository = $this->prophesize(ExtraDataRepositoryInterface::class);
         $extraDataRepository
             ->getExtraDataForEventAndName($event1->reveal(), 'leni_user_id')
@@ -144,16 +98,16 @@ class LeniApiCallHandlerTest extends TestCase
             )
         ;
 
-        $extraDataRepository
-            ->add(new ExtraData($user2->reveal(), $event1->reveal(), 'leni_user_id', 'user-id-2', $datetime))
-            ->shouldBeCalled()
-        ;
-
         $leniApi = $this->prophesize(LeniApiCaller::class);
-        $leniApi->get($event1->reveal(), [], 0, 100)->shouldBeCalled()->willReturn([$rawDataUser1, $rawDataUser2]);
+        $leniApi
+            ->get($event1->reveal(), LeniConstants::LENI_GET_FIELDS, [], 0, 100)
+            ->shouldBeCalled()
+            ->willReturn([$rawDataUser1, $rawDataUser2])
+        ;
         $leniApi
             ->get(
                 $event2->reveal(),
+                LeniConstants::LENI_GET_FIELDS,
                 [
                     [
                         'selectedFieldId' => 'Id',
@@ -178,15 +132,33 @@ class LeniApiCallHandlerTest extends TestCase
             ->willReturn([$event1->reveal(), $event2->reveal()])
         ;
 
+        $rawDataToParticipantConverter = $this->prophesize(RawDataToParticipantConverter::class);
+        $rawDataToParticipantConverter
+            ->convert(
+                $event1->reveal(),
+                [$event1type1->reveal(), $event1type2->reveal()],
+                ['type-mapping-event-1'],
+                $rawDataUser1
+            )
+            ->shouldBeCalled()
+        ;
+        $rawDataToParticipantConverter
+            ->convert(
+                $event1->reveal(),
+                [$event1type1->reveal(), $event1type2->reveal()],
+                ['type-mapping-event-1'],
+                $rawDataUser2
+            )
+            ->shouldBeCalled()
+        ;
+
         $leniApiCallHandler = new LeniApiCallHandler(
             $leniApi->reveal(),
             $eventRepository->reveal(),
             $typeRepository->reveal(),
             $extraDataRepository->reveal(),
             $mappingGetter->reveal(),
-            $typeConverter->reveal(),
-            $convertToParticipantHandler->reveal(),
-            $datetime
+            $rawDataToParticipantConverter->reveal()
         );
         $leniApiCallHandler->handle(new LeniApiCall());
     }

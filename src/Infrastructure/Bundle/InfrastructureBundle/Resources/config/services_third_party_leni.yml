@@ -9,7 +9,7 @@ services:
             - '@repository.user.event.extra_data_repository'
             - '@vimeet_infrastructure.repository.user_repository'
             - '@planning.formatter.participant_planning_formatter'
-            - '@query.api.leni.leni_user_view_query_handler'
+            - '@Proximum\Vimeet\Application\ThirdParty\LENI\Save\Query\LeniUserViewQueryHandler'
             - '@adapter.serializer_adapter'
             - '@Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Adapter\ThirdParty\LENI\Save\LeniApiCallJobQueue'
             - '@datetime'
@@ -28,14 +28,27 @@ services:
             - '@vimeet_infrastructure.repository.type_repository'
             - '@repository.user.event.extra_data_repository'
             - '@Proximum\Vimeet\Application\ThirdParty\LENI\Common\EventExtraParameter\MappingGetter'
-            - '@Proximum\Vimeet\Application\ThirdParty\LENI\Get\Converter\TypeConverter'
-            - '@Proximum\Vimeet\Application\Command\Participant\ConvertToParticipantHandler'
-            - '@datetime'
+            - '@Proximum\Vimeet\Application\ThirdParty\LENI\Get\Converter\RawDataToParticipantConverter'
 
     #
     # Converter
     #
     Proximum\Vimeet\Application\ThirdParty\LENI\Get\Converter\TypeConverter: ~
+
+    Proximum\Vimeet\Application\ThirdParty\LENI\Get\Converter\DataConverter:
+        arguments:
+            - '@Proximum\Vimeet\Application\ThirdParty\LENI\Get\Converter\MainDataConverter'
+
+    Proximum\Vimeet\Application\ThirdParty\LENI\Get\Converter\MainDataConverter: ~
+
+    Proximum\Vimeet\Application\ThirdParty\LENI\Get\Converter\RawDataToParticipantConverter:
+        arguments:
+            - '@Proximum\Vimeet\Application\Command\Participant\ConvertToParticipantHandler'
+            - '@Proximum\Vimeet\Application\ThirdParty\LENI\Get\Converter\TypeConverter'
+            - '@Proximum\Vimeet\Application\ThirdParty\LENI\Get\Converter\DataConverter'
+            - '@Proximum\Vimeet\Application\ThirdParty\LENI\Common\TemplateData\ParticipationTypeTemplateDataGetter'
+            - '@repository.user.event.extra_data_repository'
+            - '@datetime'
 
     #
     # Job
@@ -90,6 +103,10 @@ services:
         arguments:
             - '@repository.event.extra_parameter_repository'
 
+    Proximum\Vimeet\Application\ThirdParty\LENI\Common\TemplateData\ParticipationTypeTemplateDataGetter:
+        arguments:
+            - '@template.template_data_factory'
+
     #
     # Queries
     #
@@ -97,8 +114,7 @@ services:
         arguments:
             - '@repository.user.event.extra_data_repository'
 
-    query.api.leni.leni_user_view_query_handler:
-        class: Proximum\Vimeet\Application\ThirdParty\LENI\Save\Query\LeniUserViewQueryHandler
+    Proximum\Vimeet\Application\ThirdParty\LENI\Save\Query\LeniUserViewQueryHandler:
         arguments:
             - '@components.user.user_info_guesser'
             - '@vimeet_infrastructure.application.components.sheet.sheet_info_guesser'
