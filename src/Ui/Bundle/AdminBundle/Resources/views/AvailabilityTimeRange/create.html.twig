@@ -1,0 +1,21 @@
+{% extends 'AdminBundle:Common:form_layout.html.twig' %}
+
+{% block form_title 'admin.availabilityTimeRange.create.title'|trans %}
+
+{% block form_content %}
+    <div class="well">
+        <h4>{{ 'admin.availabilityTimeRange.create.eventDaysInfo'|trans }}</h4>
+        <ul>
+            {% if event.hasDay %}
+                {% for day in event.days %}
+                    <li>
+                        {{ day.begin|localizeddate('medium', 'short', app.request.locale, event.timeZone) }} - {{ day.end|localizeddate('medium', 'short', app.request.locale, event.timeZone) }}
+                    </li>
+                {% endfor %}
+            {% endif %}
+        </ul>
+    </div>
+    <hr>
+{% endblock %}
+
+{% block goback_link path('admin_event_availability_time_range_list', {'event': event.id}) %}

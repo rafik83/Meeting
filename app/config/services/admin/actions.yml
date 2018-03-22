@@ -289,3 +289,22 @@ services:
             - '@templating'
             - '@adapter.router'
             - '@security.impersonate'
+
+    #
+    # Availability Time Range
+    #
+    Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\AvailabilityTimeRange\ListAction:
+        arguments:
+            - '@adapter.authorization_checker'
+            - '@Proximum\Vimeet\Infrastructure\Adapter\QueryBus'
+            - '@templating'
+
+
+    Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\AvailabilityTimeRange\CreateAction:
+        arguments:
+            - '@adapter.authorization_checker'
+            - '@templating'
+            - '@adapter.router'
+            - '@form.factory'
+            - '@Proximum\Vimeet\Infrastructure\Adapter\CommandBus'
+            - '@session.flash_bag'

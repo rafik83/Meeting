@@ -106,6 +106,20 @@ interface RequestRepositoryInterface
     public function countApprovedByEvent(Event $event): int;
 
     /**
+     * @param Event $event
+     *
+     * @return int
+     */
+    public function countPendingByEvent(Event $event): int;
+
+    /**
+     * @param Event $event
+     *
+     * @return int
+     */
+    public function countRefusedByEvent(Event $event): int;
+
+    /**
      * @param Event  $event
      * @param int    $page
      * @param int    $limit

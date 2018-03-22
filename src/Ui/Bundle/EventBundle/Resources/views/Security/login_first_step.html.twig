@@ -11,28 +11,28 @@
         </header>
 
         <div class="main__content" id="login-form">
-            {{ form_start(form, {attr: {class: 'styled-form'}}) }}
-            <div class="inputs">
-                <div>
-                    <div class="avatar">
-                        <img src="{{ asset('assets/images/dummy/default-user.svg') }}">
-                    </div>
-                </div>
-
-                {{ form_row(form.email, {label: false}) }}
-
-                <div class="validation">
-                    <button type="submit" class="btn btn-primary"><i class="icon-Suivant_3"></i> {{ 'common.next'|trans }}</button>
-                </div>
-            </div>
-            {{ form_end(form) }}
-
             {% if ssoComexposiumView is defined and ssoComexposiumView is not null %}
                 <div class="main__content">
                     {{ include('EventBundle:ThirdParty/Comexposium/SSO:comexposium_sso.html.twig', {
                         'ssoComexposiumView': ssoComexposiumView
                     }, false) }}
                 </div>
+            {% else %}
+                {{ form_start(form, {attr: {class: 'styled-form'}}) }}
+                <div class="inputs">
+                    <div>
+                        <div class="avatar">
+                            <img src="{{ asset('assets/images/dummy/default-user.svg') }}">
+                        </div>
+                    </div>
+
+                    {{ form_row(form.email, {label: false}) }}
+
+                    <div class="validation">
+                        <button type="submit" class="btn btn-primary"><i class="icon-Suivant_3"></i> {{ 'common.next'|trans }}</button>
+                    </div>
+                </div>
+                {{ form_end(form) }}
             {% endif %}
         </div>
     </section>

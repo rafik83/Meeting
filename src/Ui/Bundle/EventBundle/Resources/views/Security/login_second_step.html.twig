@@ -20,66 +20,48 @@
             {% endif %}
         </header>
 
-        {% if ssoComexposiumView is defined and ssoComexposiumView is not null %}
-            <div class="main__content">
-                {{ include('EventBundle:ThirdParty/Comexposium/SSO:comexposium_sso.html.twig', {
-                    'ssoComexposiumView': ssoComexposiumView
-                }, false) }}
-            </div>
-        {% else %}
-            <div class="main__content" id="login-form">
-                {{ form_start(form, {attr: {class: 'styled-form'}}) }}
-                {% if typeId %}
-                    <a href="{{ path('event_register', {'typeView': typeId}) }}" class="back"><i class="icon-Retour"></i></a>
-                {% else %}
-                    <a href="{{ path('event_login') }}" class="back"><i class="icon-Retour"></i></a>
-                {% endif %}
-                <div class="inputs">
-                    <div class="identity">
-                        <div class="avatar">
-                            <img src="{{ asset('assets/images/dummy/default-user.svg') }}">
-                        </div>
-                        <p>{{ username }}</p>
+        <div class="main__content" id="login-form">
+            {{ form_start(form, {attr: {class: 'styled-form'}}) }}
+            {% if typeId %}
+                <a href="{{ path('event_register', {'typeView': typeId}) }}" class="back"><i class="icon-Retour"></i></a>
+            {% else %}
+                <a href="{{ path('event_login') }}" class="back"><i class="icon-Retour"></i></a>
+            {% endif %}
+            <div class="inputs">
+                <div class="identity">
+                    <div class="avatar">
+                        <img src="{{ asset('assets/images/dummy/default-user.svg') }}">
                     </div>
-
-                    {{ form_row(form.username) }}
-
-                    {{ form_row(form.password, {label: false}) }}
-
-                    <div class="validation">
-                        <button type="submit" class="btn btn-primary"><i class="icon-Valider_3"></i> {% if typeId %}{{ 'register.connect'|trans }}{% else %}{{ 'login.connect'|trans }}{% endif %}</button>
-                    </div>
-                    {% if typeId %}
-                        <input type="hidden" name="_target_path" value="{{ url('event_participate', {'typeView': typeId}) }}" />
-                    {% endif %}
-
-                    {{ form_widget(form.rememberMe) }}
-                    {{ form_label(form.rememberMe) }}
+                    <p>{{ username }}</p>
                 </div>
-                {{ form_end(form) }}
-            </div>
 
-            <div class="sub-form">
-                <a href="{{ path('event_forgotten_password') }}" class="btn key">
-                    {{ 'login.forgot_password'|trans }}
-                </a>
+                {{ form_row(form.username) }}
+
+                {{ form_row(form.password, {label: false}) }}
+
+                <div class="validation">
+                    <button type="submit" class="btn btn-primary"><i class="icon-Valider_3"></i> {% if typeId %}{{ 'register.connect'|trans }}{% else %}{{ 'login.connect'|trans }}{% endif %}</button>
+                </div>
+                {% if typeId %}
+                    <input type="hidden" name="_target_path" value="{{ url('event_participate', {'typeView': typeId}) }}" />
+                {% endif %}
+
+                {{ form_widget(form.rememberMe) }}
+                {{ form_label(form.rememberMe) }}
             </div>
-        {% endif %}
+            {{ form_end(form) }}
+        </div>
+
+        <div class="sub-form">
+            <a href="{{ path('event_forgotten_password') }}" class="btn key">
+                {{ 'login.forgot_password'|trans }}
+            </a>
+        </div>
     </section>
 
     {% if error %}
         <section class="important fail">
             <p>{{ error.message|trans }}</p>
         </section>
-    {% endif %}
-{% endblock %}
-
-{% block javascripts %}
-    {{ parent() }}
-
-    {% if ssoComexposiumView is defined and ssoComexposiumView is not null %}
-        {{ include('EventBundle:ThirdParty/Comexposium/SSO:comexposium_sso_js.html.twig', {
-            'ssoComexposiumView': ssoComexposiumView
-        }, false) }}
     {% endif %}
 {% endblock %}

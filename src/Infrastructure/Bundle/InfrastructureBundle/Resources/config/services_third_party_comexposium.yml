@@ -113,6 +113,8 @@ services:
 
     Proximum\Vimeet\Application\ThirdParty\Comexposium\SSO\Converter\RawUserDataToUserInformationViewConverter: ~
 
+    Proximum\Vimeet\Application\ThirdParty\Comexposium\SSO\Converter\LocaleConverter: ~
+
     Proximum\Vimeet\Application\ThirdParty\Comexposium\SSO\Converter\EmailToUserConverter:
         arguments:
             - '@Proximum\Vimeet\Application\ThirdParty\Comexposium\SSO\UserInformationGetter'
@@ -134,8 +136,7 @@ services:
     Proximum\Vimeet\Application\ThirdParty\Comexposium\SSO\Application\Query\SSOComexposiumViewQueryHandler:
         arguments:
             - '@repository.event.extra_parameter_repository'
-            - '@vimeet_infrastructure.repository.user_repository'
-            - '@vimeet_infrastructure.repository.sheet_repository'
+            - '@Proximum\Vimeet\Application\ThirdParty\Comexposium\SSO\Converter\LocaleConverter'
             - '%comexposium_sso_loader_lib_endpoint%'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\ThirdParty\Comexposium\SSO\Application\Query\SSOComexposiumViewQuery }
@@ -150,6 +151,27 @@ services:
         arguments:
             - '@repository.event.extra_parameter_repository'
             - '@vimeet_infrastructure.repository.type_repository'
+
+
+    Proximum\Vimeet\Application\ThirdParty\Comexposium\SSO\Application\Command\User\CreateHandler:
+        arguments:
+            - '@adapter.http_adapter'
+            - '@repository.event.extra_parameter_repository'
+            - '%comexposium_create_user_endpoint%'
+            - '@Proximum\Vimeet\Application\ThirdParty\Comexposium\SSO\Converter\LocaleConverter'
+
+    Proximum\Vimeet\Application\ThirdParty\Comexposium\SSO\Application\Command\Participant\OnParticipantAddedHandler:
+        arguments:
+            - '@Proximum\Vimeet\Application\ThirdParty\Comexposium\SSO\Application\Command\User\CreateHandler'
+            - '@Proximum\Vimeet\Application\ThirdParty\Comexposium\SSO\Application\Command\Participant\NotifyParticipantAddedHandler'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\ThirdParty\Comexposium\SSO\Application\Command\Participant\OnParticipantAdded }
+
+    Proximum\Vimeet\Application\ThirdParty\Comexposium\SSO\Application\Command\Participant\NotifyParticipantAddedHandler:
+        arguments:
+            - '@adapter.mailer_adapter'
+            - '@query.mail.participant_mail_view_query_handler'
+            - '@event_sender'
 
     #
     # Guard

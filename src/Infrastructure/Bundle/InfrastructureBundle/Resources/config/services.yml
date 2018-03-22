@@ -318,6 +318,10 @@ services:
         arguments:
             - '@doctrine.orm.entity_manager'
 
+    Proximum\Vimeet\Infrastructure\Repository\AvailabilityTimeRangeRepository:
+        arguments:
+            - '@doctrine.orm.entity_manager'
+
     #
     # Handlers
     #
@@ -348,7 +352,6 @@ services:
             - '@vimeet_infrastructure.repository.participant_repository'
             - '@vimeet_infrastructure.repository.sheet_repository'
             - '@template.template_data_factory'
-            - '@components.token.user.activate_account_token_generator'
             - '@vimeet_infrastructure.adapter.delayed_event_dispatcher'
             - '@Proximum\Vimeet\Application\Command\Participant\UpdateParticipantProductQuantityHandler'
             - '@components.user.type_resolver'
@@ -371,6 +374,15 @@ services:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Participant\ConvertToParticipant }
 
     Proximum\Vimeet\Application\Command\Participant\SheetAndParticipantTemplateDataHandler: ~
+
+    Proximum\Vimeet\Application\Command\Participant\Add\OnParticipantAddedHandler:
+        arguments:
+            - '@event_dispatcher' #Do not use the delayed event dispatcher as it is already call by a delayed event
+            - '@components.token.user.activate_account_token_generator'
+            - '@repository.event.extra_parameter_repository'
+            - '@Proximum\Vimeet\Infrastructure\Adapter\CommandBus'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Participant\Add\OnParticipantAdded }
 
     Proximum\Vimeet\Application\Command\Participant\UpdateParticipantProductQuantityHandler:
         arguments:
@@ -3130,6 +3142,7 @@ services:
         arguments:
             - '@query.sheet.dashboard_transaction_view_query_handler'
             - '@query.dashboard.dashboard_sheet_view_query_handler'
+            - '@Proximum\Vimeet\Application\Query\Dashboard\DashboardMeetingViewQueryHandler'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Dashboard\DashboardViewQuery }
 
@@ -3143,6 +3156,11 @@ services:
         arguments:
             - '@vimeet_infrastructure.repository.sheet_repository'
             - '@vimeet_infrastructure.repository.participant_repository'
+
+    Proximum\Vimeet\Application\Query\Dashboard\DashboardMeetingViewQueryHandler:
+        arguments:
+            - '@vimeet_infrastructure.repository.meeting_repository'
+            - '@vimeet_infrastructure.repository.meeting.request_repository'
 
     query.catalog.filtered_fields_query_handler:
         class: Proximum\Vimeet\Application\Query\Catalog\FilteredFieldsQueryHandler

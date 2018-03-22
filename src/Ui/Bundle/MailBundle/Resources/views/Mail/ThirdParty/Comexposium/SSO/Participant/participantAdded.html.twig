@@ -1,0 +1,22 @@
+{% extends 'MailBundle:Mail:base.html.twig' %}
+
+{% import "MailBundle:Mail:macros.html.twig" as macros %}
+
+{% block body %}
+    {{ 'mail.thirdParty.comexposium.sso.participantAdded.body'|trans({
+        '%event%': mail.event.title,
+        '%firstname%': mail.firstname|capitalize,
+        '%lastname%': mail.lastname|upper,
+        '%participationType%': mail.participantType
+    }, 'mail', mail.locale)|html|nl2br }}
+
+    <br>
+    <br>
+    {{ macros.button(
+        'mail.thirdParty.comexposium.sso.participantAdded.link'|trans({}, 'mail', mail.locale),
+        url('event', {})
+    ) }}
+    <br>
+
+    {{ 'mail.thirdParty.comexposium.sso.participantAdded.end'|trans({}, 'mail', mail.locale)|html|nl2br }}
+{% endblock %}

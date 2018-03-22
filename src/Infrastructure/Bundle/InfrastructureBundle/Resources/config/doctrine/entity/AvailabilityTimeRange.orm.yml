@@ -1,0 +1,20 @@
+Proximum\Vimeet\Domain\Model\AvailabilityTimeRange:
+    type:  entity
+    table: availability_time_range
+    id:
+        id:
+            type: integer
+            generator:
+                strategy: AUTO
+    fields:
+        name:
+            type: string
+        begin:
+            type: datetime
+        end:
+            type: datetime
+    manyToOne:
+        event:
+            targetEntity: Proximum\Vimeet\Domain\Model\Event
+            joinColumn:
+                onDelete: CASCADE
