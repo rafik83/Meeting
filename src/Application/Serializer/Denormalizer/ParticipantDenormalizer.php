@@ -1,9 +1,9 @@
 <?php
 
 /*
- * This file is part of the vimeet project.
+ * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2017 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -37,56 +37,36 @@ use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 
 class ParticipantDenormalizer implements DenormalizerInterface
 {
-    const FORMAT = 'csv';
+    private const FORMAT = 'csv';
 
-    /**
-     * @var ParticipantRepositoryInterface
-     */
+    /** @var ParticipantRepositoryInterface */
     private $participantRepository;
 
-    /**
-     * @var TemplateDataFactory
-     */
+    /** @var TemplateDataFactory */
     private $templateDataFactory;
 
-    /**
-     * @var Synchronizer
-     */
+    /** @var Synchronizer */
     private $synchronizer;
 
-    /**
-     * @var \DateTimeInterface
-     */
+    /** @var \DateTimeInterface */
     private $dateTime;
 
-    /**
-     * @var UserRepositoryInterface
-     */
+    /** @var UserRepositoryInterface */
     private $userRepository;
 
-    /**
-     * @var EmailValidator
-     */
+    /** @var EmailValidator */
     private $emailValidator;
 
-    /**
-     * @var ParticipantImportLogger
-     */
+    /** @var ParticipantImportLogger */
     private $importLogger;
 
-    /**
-     * @var SheetRepositoryInterface
-     */
+    /** @var SheetRepositoryInterface */
     private $sheetRepository;
 
-    /**
-     * @var UserEventRepositoryInterface
-     */
+    /** @var UserEventRepositoryInterface */
     private $userEventRepository;
 
     /**
-     * ParticipantDenormalizer constructor.
-     *
      * @param ParticipantRepositoryInterface $participantRepository
      * @param UserRepositoryInterface        $userRepository
      * @param SheetRepositoryInterface       $sheetRepository
@@ -125,12 +105,18 @@ class ParticipantDenormalizer implements DenormalizerInterface
     public function denormalize($data, $class, $format = null, array $context = [])
     {
         $sheets = $this->sheetRepository->getByEventWithParticipantsAndOwner($context['event']);
+
+        // Owners and Participant indexed by email
         $participants = [];
+        $owners       = [];
 
         foreach ($sheets as $sheet) {
             foreach ($sheet->getParticipants()->toArray() as $participant) {
-                $participants[] = $participant;
+                $participants[strtolower($participant->getUser()->getEmail())] = $participant;
             }
+
+            $owner = $sheet->getOwner();
+            $owners[strtolower($owner->getEmail())] = $owner;
         }
 
         $this->importLogger->init(\count($data));
@@ -144,14 +130,12 @@ class ParticipantDenormalizer implements DenormalizerInterface
             $context['locale']
         );
 
-        $users = $this->userRepository->all();
-
         foreach ($data as $key => $row) {
             if (!array_key_exists($mappedMailCsvColumn, $row)) {
                 continue;
             }
 
-            $email = StringHelper::trimSpacesAndNonBreakSpaces($row[$mappedMailCsvColumn]);
+            $email = strtolower(StringHelper::trimSpacesAndNonBreakSpaces($row[$mappedMailCsvColumn]));
 
             if ($this->emailValidator->validate($email) === false) {
                 $this->importLogger->addError($key, new EmailError($email, true), $email, $context['locale']);
@@ -163,7 +147,7 @@ class ParticipantDenormalizer implements DenormalizerInterface
                 continue;
             }
 
-            if ($this->isAlreadyOwner($email, $sheets) || $this->isAlreadyParticipant($email, $participants)) {
+            if ($this->isAlreadyOwner($email, $owners) || $this->isAlreadyParticipant($email, $participants)) {
                 $this->importLogger->existingParticipations();
                 continue;
             }
@@ -179,7 +163,6 @@ class ParticipantDenormalizer implements DenormalizerInterface
                 $this->createEntities(
                     $context,
                     $email,
-                    $users,
                     $sheetTitle,
                     $sheetData,
                     $participantData,
@@ -212,49 +195,30 @@ class ParticipantDenormalizer implements DenormalizerInterface
      *
      * @return bool
      */
-    private function isAlreadyParticipant($email, &$participants)
+    private function isAlreadyParticipant(string $email, array &$participants): bool
     {
-        foreach ($participants as $participant) {
-            if (strtolower($participant->getUser()->getEmail()) === strtolower($email)) {
-                return true;
-            }
-        }
-
-        return false;
-    }
-
-    /**
-     * @param string  $email
-     * @param Sheet[] $sheets
-     *
-     * @return bool
-     */
-    private function isAlreadyOwner($email, &$sheets)
-    {
-        foreach ($sheets as $sheet) {
-            if (strtolower($sheet->getOwner()->getEmail()) === strtolower($email)) {
-                return true;
-            }
-        }
-
-        return false;
+        return isset($participants[$email]);
     }
 
     /**
      * @param string $email
-     * @param User[] $users
+     * @param user[] $owners
      *
-     * @return User|false
+     * @return bool
      */
-    private function hasUserAccount($email, &$users)
+    private function isAlreadyOwner(string $email, array &$owners): bool
     {
-        foreach ($users as $user) {
-            if (strtolower($user->getEmail()) === strtolower($email)) {
-                return $user;
-            }
-        }
+        return isset($owners[$email]);
+    }
 
-        return false;
+    /**
+     * @param string $email
+     *
+     * @return User
+     */
+    private function getUser(string $email): ?User
+    {
+        return $this->userRepository->findByEmail($email);
     }
 
     /**
@@ -359,7 +323,6 @@ class ParticipantDenormalizer implements DenormalizerInterface
     /**
      * @param array        $context
      * @param string       $email
-     * @param User[]       $users
      * @param string       $sheetTitle
      * @param array        $sheetData
      * @param array        $participantData
@@ -368,15 +331,14 @@ class ParticipantDenormalizer implements DenormalizerInterface
     private function createEntities(
         array $context,
         $email,
-        &$users,
         $sheetTitle,
         $sheetData,
         $participantData,
         TemplateData $registrationTemplate
     ) {
-        $user = $this->hasUserAccount($email, $users);
+        $user = $this->getUser($email);
 
-        if ($user === false) {
+        if (!$user instanceof User) {
             $user = new User($email, '', '', $context['locale']);
             $user->setAccount(new User\Account());
 
