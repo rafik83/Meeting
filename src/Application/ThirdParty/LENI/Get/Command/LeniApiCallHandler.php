@@ -14,6 +14,7 @@ use Proximum\Vimeet\Application\Command\Participant\ConvertToParticipant;
 use Proximum\Vimeet\Application\Command\Participant\ConvertToParticipantHandler;
 use Proximum\Vimeet\Application\ThirdParty\LENI\Common\Api\LeniApiCaller;
 use Proximum\Vimeet\Application\ThirdParty\LENI\Common\EventExtraParameter\MappingGetter;
+use Proximum\Vimeet\Application\ThirdParty\LENI\Common\TemplateData\ParticipationTypeTemplateDataGetter;
 use Proximum\Vimeet\Application\ThirdParty\LENI\Exception\LeniApiServerException;
 use Proximum\Vimeet\Application\ThirdParty\LENI\Get\Converter\TypeConverter;
 use Proximum\Vimeet\Application\ThirdParty\LENI\LeniConstants;
@@ -26,8 +27,6 @@ use Proximum\Vimeet\Domain\Model\User\Event\ExtraData;
 use Proximum\Vimeet\Domain\Repository\EventRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\TypeRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\User\Event\ExtraDataRepositoryInterface;
-use Proximum\Vimeet\Domain\Template\TemplateData;
-use Proximum\Vimeet\Domain\Template\TemplateDataFactory;
 use Proximum\Vimeet\Domain\User\Event\ExtraData\Type as UserEventExtraDataType;
 
 class LeniApiCallHandler
@@ -55,17 +54,11 @@ class LeniApiCallHandler
     /** @var ConvertToParticipantHandler */
     private $convertToParticipantHandler;
 
-    /** @var TemplateDataFactory */
-    private $templateDataFactory;
+    /** @var ParticipationTypeTemplateDataGetter */
+    private $participationTypeTemplateDataGetter;
 
     /** @var \DateTimeInterface */
     private $dateTime;
-
-    /** @var TemplateData[] indexed by Type id */
-    private $registrationTemplateByType = [];
-
-    /** @var TemplateData[] indexed by Type id */
-    private $sheetTemplateByType = [];
 
     public function __construct(
         LeniApiCaller $leniApi,
@@ -75,7 +68,7 @@ class LeniApiCallHandler
         MappingGetter $mappingGetter,
         TypeConverter $typeConverter,
         ConvertToParticipantHandler $convertToParticipantHandler,
-        TemplateDataFactory $templateDataFactory,
+        ParticipationTypeTemplateDataGetter $participationTypeTemplateDataGetter,
         \DateTimeInterface $dateTime
     ) {
         $this->leniApi = $leniApi;
@@ -85,7 +78,7 @@ class LeniApiCallHandler
         $this->mappingGetter = $mappingGetter;
         $this->convertToParticipantHandler = $convertToParticipantHandler;
         $this->typeConverter = $typeConverter;
-        $this->templateDataFactory = $templateDataFactory;
+        $this->participationTypeTemplateDataGetter = $participationTypeTemplateDataGetter;
         $this->dateTime = $dateTime;
     }
 
@@ -206,8 +199,8 @@ class LeniApiCallHandler
                 $rawUser[LeniConstants::LENI_COL_EMAIL],
                 $rawUser[LeniConstants::LENI_COL_LOCALE],
                 $dataIndexedByTag,
-                $this->getRegistrationTemplateData($type),
-                $this->getSheetTemplateData($type),
+                $this->participationTypeTemplateDataGetter->getRegistrationTemplateDataByType($type),
+                $this->participationTypeTemplateDataGetter->getSheetTemplateDataByType($type),
                 UserEventExtraDataType::LENI_USER_ID
             )
         );
@@ -219,46 +212,6 @@ class LeniApiCallHandler
                 $rawUser[LeniConstants::LENI_COL_USER_ID]
             );
         }
-    }
-
-    /**
-     * @param Type $type
-     *
-     * @return TemplateData
-     */
-    private function getRegistrationTemplateData(Type $type): TemplateData
-    {
-        if (isset($this->registrationTemplateByType[$type->getId()])) {
-            $registrationTemplateData = $this->registrationTemplateByType[$type->getId()];
-            $registrationTemplateData->clear();
-
-            return $registrationTemplateData;
-        }
-
-        $registrationTemplateData = $this->templateDataFactory->createRegistrationFromType($type, null);
-        $this->registrationTemplateByType[$type->getId()] = $registrationTemplateData;
-
-        return $registrationTemplateData;
-    }
-
-    /**
-     * @param Type $type
-     *
-     * @return TemplateData
-     */
-    private function getSheetTemplateData(Type $type): TemplateData
-    {
-        if (isset($this->sheetTemplateByType[$type->getId()])) {
-            $sheetTemplateData = $this->sheetTemplateByType[$type->getId()];
-            $sheetTemplateData->clear();
-
-            return $sheetTemplateData;
-        }
-
-        $sheetTemplateData = $this->templateDataFactory->createSheetTemplateFromType($type);
-        $this->sheetTemplateByType[$type->getId()] = $sheetTemplateData;
-
-        return $sheetTemplateData;
     }
 
     /**
