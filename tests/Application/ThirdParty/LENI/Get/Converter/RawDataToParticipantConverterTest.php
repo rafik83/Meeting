@@ -11,12 +11,16 @@
 namespace Proximum\Vimeet\Tests\Application\ThirdParty\LENI\Get\Converter;
 
 use PHPUnit\Framework\TestCase;
+use Proximum\Vimeet\Application\Adapter\SerializerAdapterInterface;
 use Proximum\Vimeet\Application\Command\Participant\ConvertToParticipant;
 use Proximum\Vimeet\Application\Command\Participant\ConvertToParticipantHandler;
 use Proximum\Vimeet\Application\ThirdParty\LENI\Common\TemplateData\ParticipationTypeTemplateDataGetter;
 use Proximum\Vimeet\Application\ThirdParty\LENI\Get\Converter\DataConverter;
 use Proximum\Vimeet\Application\ThirdParty\LENI\Get\Converter\RawDataToParticipantConverter;
 use Proximum\Vimeet\Application\ThirdParty\LENI\Get\Converter\TypeConverter;
+use Proximum\Vimeet\Application\ThirdParty\LENI\Save\Query\LeniUserViewQuery;
+use Proximum\Vimeet\Application\ThirdParty\LENI\Save\Query\LeniUserViewQueryHandler;
+use Proximum\Vimeet\Application\ThirdParty\LENI\Save\View\LeniUserView;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Type;
@@ -149,12 +153,42 @@ class RawDataToParticipantConverterTest extends TestCase
             ->willReturn($sheetTemplateDataEvent1type2->reveal())
         ;
 
+        $leniUserView = $this->prophesize(LeniUserView::class);
+        $leniUserViewQueryHandler = $this->prophesize(LeniUserViewQueryHandler::class);
+        $leniUserViewQueryHandler
+            ->handle(new LeniUserViewQuery($event1->reveal(), $user2->reveal(), null))
+            ->shouldBeCalled()
+            ->willReturn($leniUserView->reveal())
+        ;
+
+        $serializerAdapter = $this->prophesize(SerializerAdapterInterface::class);
+        $serializerAdapter
+            ->normalize($leniUserView->reveal())
+            ->shouldBeCalled()
+            ->willReturn(['normalized' => 'data'])
+        ;
+
+        $extraDataRepository
+            ->add(
+                new ExtraData(
+                    $user2->reveal(),
+                    $event1->reveal(),
+                    'leni_fingerprint',
+                    'a:1:{s:10:"normalized";s:4:"data";}',
+                    $datetime
+                )
+            )
+            ->shouldBeCalled()
+        ;
+
         $rawDataToParticipantConverter = new RawDataToParticipantConverter(
             $convertToParticipantHandler->reveal(),
             $typeConverter->reveal(),
             $dataConverter->reveal(),
             $participationTypeTemplateDataGetter->reveal(),
             $extraDataRepository->reveal(),
+            $leniUserViewQueryHandler->reveal(),
+            $serializerAdapter->reveal(),
             $datetime
         );
         $rawDataToParticipantConverter->convert(

@@ -55,6 +55,8 @@ services:
             - '@Proximum\Vimeet\Application\ThirdParty\LENI\Get\Converter\DataConverter'
             - '@Proximum\Vimeet\Application\ThirdParty\LENI\Common\TemplateData\ParticipationTypeTemplateDataGetter'
             - '@repository.user.event.extra_data_repository'
+            - '@Proximum\Vimeet\Application\ThirdParty\LENI\Save\Query\LeniUserViewQueryHandler'
+            - '@adapter.serializer_adapter'
             - '@datetime'
 
     #
@@ -128,5 +130,6 @@ services:
             - '@vimeet_infrastructure.repository.sheet_repository'
             - '@order.balance'
             - '@Proximum\Vimeet\Application\ThirdParty\LENI\Save\Query\PrepareLeaderDataHandler'
+            - '@repository.user.event.extra_data_repository'
 
     Proximum\Vimeet\Application\ThirdParty\LENI\Get\Query\FieldsByEventQueryHandler: ~
