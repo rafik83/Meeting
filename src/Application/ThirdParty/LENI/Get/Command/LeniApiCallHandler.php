@@ -113,7 +113,13 @@ class LeniApiCallHandler
         );
 
         foreach ($rawUsersData as $rawUserData) {
-            $this->rawDataToParticipantConverter->convert($event, $types, $typesMapping, $rawUserData);
+            $this->rawDataToParticipantConverter->convert(
+                $event,
+                $types,
+                $typesMapping,
+                $customDataMapping,
+                $rawUserData
+            );
         }
     }
 

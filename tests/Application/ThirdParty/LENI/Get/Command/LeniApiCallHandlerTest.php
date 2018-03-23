@@ -152,6 +152,7 @@ class LeniApiCallHandlerTest extends TestCase
                 $event1->reveal(),
                 [$event1type1->reveal(), $event1type2->reveal()],
                 ['type-mapping-event-1'],
+                ['custom-data-mapping-event-1'],
                 $rawDataUser1
             )
             ->shouldBeCalled()
@@ -161,6 +162,7 @@ class LeniApiCallHandlerTest extends TestCase
                 $event1->reveal(),
                 [$event1type1->reveal(), $event1type2->reveal()],
                 ['type-mapping-event-1'],
+                ['custom-data-mapping-event-1'],
                 $rawDataUser2
             )
             ->shouldBeCalled()

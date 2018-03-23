@@ -11,22 +11,30 @@
 namespace Proximum\Vimeet\Tests\Application\ThirdParty\LENI\Get\Converter;
 
 use PHPUnit\Framework\TestCase;
+use Proximum\Vimeet\Application\ThirdParty\LENI\Get\Converter\CustomDataConverter;
 use Proximum\Vimeet\Application\ThirdParty\LENI\Get\Converter\DataConverter;
 use Proximum\Vimeet\Application\ThirdParty\LENI\Get\Converter\MainDataConverter;
-use Proximum\Vimeet\Domain\Model\Type;
 
 class DataConverterTest extends TestCase
 {
     public function testConvert()
     {
-        $rawData = ['Prenom' => 'Bruce', 'Nom' => 'Willis'];
+        $rawData = ['Prenom' => 'Bruce', 'Nom' => 'Willis', 'ZL_Effectif' => 'A1'];
+        $customDataMapping = ['sheet_organization_staff' => 'ZL_Effectif'];
 
         $expectedResult = [
             'participant_firstname' => 'Bruce',
             'participant_lastname' => 'Willis',
+            'sheet_organization_staff' => 'A1',
         ];
 
-        $type = $this->prophesize(Type::class);
+        $customDataConverter = $this->prophesize(CustomDataConverter::class);
+        $customDataConverter
+            ->convert($customDataMapping, $rawData)
+            ->shouldBeCalled()
+            ->willReturn(['sheet_organization_staff' => 'A1'])
+        ;
+
         $mainDataConverter = $this->prophesize(MainDataConverter::class);
         $mainDataConverter
             ->convert($rawData)
@@ -39,7 +47,7 @@ class DataConverterTest extends TestCase
             )
         ;
 
-        $dataConverter = new DataConverter($mainDataConverter->reveal());
-        $this->assertEquals($expectedResult, $dataConverter->convert($type->reveal(), $rawData));
+        $dataConverter = new DataConverter($mainDataConverter->reveal(), $customDataConverter->reveal());
+        $this->assertEquals($expectedResult, $dataConverter->convert($customDataMapping, $rawData));
     }
 }

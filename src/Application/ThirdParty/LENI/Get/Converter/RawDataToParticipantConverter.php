@@ -58,8 +58,13 @@ class RawDataToParticipantConverter
         $this->participationTypeTemplateDataGetter = $participationTypeTemplateDataGetter;
     }
 
-    public function convert(Event $event, array $types, array $typesMapping, array $rawUserData): ?Participant
-    {
+    public function convert(
+        Event $event,
+        array $types,
+        array $typesMapping,
+        array $customDataMapping,
+        array $rawUserData
+    ): ?Participant {
         if (!isset($rawUserData[LeniConstants::LENI_COL_EMAIL]) || empty($rawUserData[LeniConstants::LENI_COL_EMAIL])) {
             return null;
         }
@@ -70,7 +75,7 @@ class RawDataToParticipantConverter
             return null;
         }
 
-        $dataIndexedByTag = $this->dataConverter->convert($type, $rawUserData);
+        $dataIndexedByTag = $this->dataConverter->convert($customDataMapping, $rawUserData);
 
         $participant = $this->convertToParticipantHandler->handle(
             new ConvertToParticipant(
