@@ -14,6 +14,8 @@ use Proximum\Vimeet\Application\ThirdParty\LENI\Common\Api\LeniApiCaller;
 use Proximum\Vimeet\Application\ThirdParty\LENI\Common\EventExtraParameter\MappingGetter;
 use Proximum\Vimeet\Application\ThirdParty\LENI\Exception\LeniApiServerException;
 use Proximum\Vimeet\Application\ThirdParty\LENI\Get\Converter\RawDataToParticipantConverter;
+use Proximum\Vimeet\Application\ThirdParty\LENI\Get\Query\FieldsByEventQuery;
+use Proximum\Vimeet\Application\ThirdParty\LENI\Get\Query\FieldsByEventQueryHandler;
 use Proximum\Vimeet\Application\ThirdParty\LENI\LeniConstants;
 use Proximum\Vimeet\Domain\Event\ExtraParameter\Type as EventExtraParameterType;
 use Proximum\Vimeet\Domain\Model\Event;
@@ -42,6 +44,9 @@ class LeniApiCallHandler
     /** @var MappingGetter */
     private $mappingGetter;
 
+    /** @var FieldsByEventQueryHandler */
+    private $fieldsByEventQueryHandler;
+
     /** @var RawDataToParticipantConverter */
     private $rawDataToParticipantConverter;
 
@@ -51,6 +56,7 @@ class LeniApiCallHandler
         TypeRepositoryInterface $typeRepository,
         ExtraDataRepositoryInterface $extraDataRepository,
         MappingGetter $mappingGetter,
+        FieldsByEventQueryHandler $fieldsByEventQueryHandler,
         RawDataToParticipantConverter $rawDataToParticipantConverter
     ) {
         $this->leniApi = $leniApi;
@@ -58,6 +64,7 @@ class LeniApiCallHandler
         $this->typeRepository = $typeRepository;
         $this->extraDataRepository = $extraDataRepository;
         $this->mappingGetter = $mappingGetter;
+        $this->fieldsByEventQueryHandler = $fieldsByEventQueryHandler;
         $this->rawDataToParticipantConverter = $rawDataToParticipantConverter;
     }
 
@@ -97,7 +104,7 @@ class LeniApiCallHandler
 
         $rawUsersData = $this->leniApi->get(
             $event,
-            LeniConstants::LENI_GET_FIELDS,
+            $this->fieldsByEventQueryHandler->handle(new FieldsByEventQuery($typesMapping)),
             $this->getFilters($event),
             0,
             self::BATCH_LENGTH
