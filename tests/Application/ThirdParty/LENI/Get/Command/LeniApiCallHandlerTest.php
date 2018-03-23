@@ -16,6 +16,8 @@ use Proximum\Vimeet\Application\ThirdParty\LENI\Common\EventExtraParameter\Mappi
 use Proximum\Vimeet\Application\ThirdParty\LENI\Get\Command\LeniApiCall;
 use Proximum\Vimeet\Application\ThirdParty\LENI\Get\Command\LeniApiCallHandler;
 use Proximum\Vimeet\Application\ThirdParty\LENI\Get\Converter\RawDataToParticipantConverter;
+use Proximum\Vimeet\Application\ThirdParty\LENI\Get\Query\FieldsByEventQuery;
+use Proximum\Vimeet\Application\ThirdParty\LENI\Get\Query\FieldsByEventQueryHandler;
 use Proximum\Vimeet\Application\ThirdParty\LENI\LeniConstants;
 use Proximum\Vimeet\Domain\Event\ExtraParameter\Type as ExtraParameterType;
 use Proximum\Vimeet\Domain\Model\Event;
@@ -100,14 +102,14 @@ class LeniApiCallHandlerTest extends TestCase
 
         $leniApi = $this->prophesize(LeniApiCaller::class);
         $leniApi
-            ->get($event1->reveal(), LeniConstants::LENI_GET_FIELDS, [], 0, 100)
+            ->get($event1->reveal(), ['field1', 'field2'], [], 0, 100)
             ->shouldBeCalled()
             ->willReturn([$rawDataUser1, $rawDataUser2])
         ;
         $leniApi
             ->get(
                 $event2->reveal(),
-                LeniConstants::LENI_GET_FIELDS,
+                ['field1', 'field3'],
                 [
                     [
                         'selectedFieldId' => 'Id',
@@ -152,12 +154,25 @@ class LeniApiCallHandlerTest extends TestCase
             ->shouldBeCalled()
         ;
 
+        $fieldsByEventQueryHandler = $this->prophesize(FieldsByEventQueryHandler::class);
+        $fieldsByEventQueryHandler
+            ->handle(new FieldsByEventQuery(['type-mapping-event-1']))
+            ->shouldBeCalled()
+            ->willReturn(['field1', 'field2'])
+        ;
+        $fieldsByEventQueryHandler
+            ->handle(new FieldsByEventQuery(['type-mapping-event-2']))
+            ->shouldBeCalled()
+            ->willReturn(['field1', 'field3'])
+        ;
+
         $leniApiCallHandler = new LeniApiCallHandler(
             $leniApi->reveal(),
             $eventRepository->reveal(),
             $typeRepository->reveal(),
             $extraDataRepository->reveal(),
             $mappingGetter->reveal(),
+            $fieldsByEventQueryHandler->reveal(),
             $rawDataToParticipantConverter->reveal()
         );
         $leniApiCallHandler->handle(new LeniApiCall());
