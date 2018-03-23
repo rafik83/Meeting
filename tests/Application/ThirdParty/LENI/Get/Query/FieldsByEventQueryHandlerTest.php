@@ -18,7 +18,7 @@ class FieldsByEventQueryHandlerTest extends TestCase
 {
     public function testHandle()
     {
-        $mapping = [
+        $typesMapping = [
             '1337' => [
                 'CategorieIndividuEvt' => 'VISITEUR',
                 'ZL_PROFIL' => 'SALON',
@@ -33,6 +33,13 @@ class FieldsByEventQueryHandlerTest extends TestCase
             '879' => [
                 'CategorieIndividuEvt' => 'TYPE-NOT-EXISTS',
             ],
+        ];
+
+        $customDataMapping = [
+            'sheet_activity' => 'ZL_PROFIL',
+            'sheet_organization_staff' => 'ZL_Effectif',
+            'sheet_generic_tag_20' => 'ZL_ACTIVITE',
+            'sheet_template_generic_tag_10' => 'ZL_TypePrestation',
         ];
 
         $expectedResult = [
@@ -56,11 +63,14 @@ class FieldsByEventQueryHandlerTest extends TestCase
             'CreeLe',
             'ModifieLe',
             'ZL_PROFIL',
+            'ZL_Effectif',
+            'ZL_ACTIVITE',
+            'ZL_TypePrestation',
         ];
 
         $fieldsByEventQueryHandler = new FieldsByEventQueryHandler();
 
-        $result = $fieldsByEventQueryHandler->handle(new FieldsByEventQuery($mapping));
+        $result = $fieldsByEventQueryHandler->handle(new FieldsByEventQuery($typesMapping, $customDataMapping));
 
         $this->assertEquals($expectedResult, $result);
     }

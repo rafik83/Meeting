@@ -102,9 +102,11 @@ class LeniApiCallHandler
 
         $types = $this->typeRepository->getTypesByEvent($event);
 
+        $customDataMapping = $this->mappingGetter->getMapping($event, EventExtraParameterType::TYPE_LENI_DATA_MAPPING);
+
         $rawUsersData = $this->leniApi->get(
             $event,
-            $this->fieldsByEventQueryHandler->handle(new FieldsByEventQuery($typesMapping)),
+            $this->fieldsByEventQueryHandler->handle(new FieldsByEventQuery($typesMapping, $customDataMapping ?? [])),
             $this->getFilters($event),
             0,
             self::BATCH_LENGTH

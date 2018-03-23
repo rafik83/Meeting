@@ -23,7 +23,8 @@ class FieldsByEventQueryHandler
             array_unique(
                 array_merge(
                     LeniConstants::LENI_GET_FIELDS,
-                    $this->getFieldsFromTypesMapping($fieldsByEventQuery->typesMapping)
+                    $this->getFieldsFromTypesMapping($fieldsByEventQuery->typesMapping),
+                    $fieldsByEventQuery->customDataMapping
                 )
             )
         );
