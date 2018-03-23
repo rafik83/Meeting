@@ -65,6 +65,8 @@ class LeniApiCallHandlerTest extends TestCase
 
         $typeMappingEvent1 = ['type-mapping-event-1'];
         $typeMappingEvent2 = ['type-mapping-event-2'];
+        $customDataMappingEvent1 = ['custom-data-mapping-event-1'];
+        $customDataMappingEvent2 = ['custom-data-mapping-event-2'];
 
         $mappingGetter = $this->prophesize(MappingGetter::class);
         $mappingGetter
@@ -76,6 +78,16 @@ class LeniApiCallHandlerTest extends TestCase
             ->getMapping($event2->reveal(), ExtraParameterType::TYPE_LENI_TYPES_MAPPING)
             ->shouldBeCalled()
             ->willReturn($typeMappingEvent2)
+        ;
+        $mappingGetter
+            ->getMapping($event1->reveal(), ExtraParameterType::TYPE_LENI_DATA_MAPPING)
+            ->shouldBeCalled()
+            ->willReturn($customDataMappingEvent1)
+        ;
+        $mappingGetter
+            ->getMapping($event2->reveal(), ExtraParameterType::TYPE_LENI_DATA_MAPPING)
+            ->shouldBeCalled()
+            ->willReturn($customDataMappingEvent2)
         ;
 
         $extraDataRepository = $this->prophesize(ExtraDataRepositoryInterface::class);
@@ -140,6 +152,7 @@ class LeniApiCallHandlerTest extends TestCase
                 $event1->reveal(),
                 [$event1type1->reveal(), $event1type2->reveal()],
                 ['type-mapping-event-1'],
+                ['custom-data-mapping-event-1'],
                 $rawDataUser1
             )
             ->shouldBeCalled()
@@ -149,6 +162,7 @@ class LeniApiCallHandlerTest extends TestCase
                 $event1->reveal(),
                 [$event1type1->reveal(), $event1type2->reveal()],
                 ['type-mapping-event-1'],
+                ['custom-data-mapping-event-1'],
                 $rawDataUser2
             )
             ->shouldBeCalled()
@@ -156,12 +170,12 @@ class LeniApiCallHandlerTest extends TestCase
 
         $fieldsByEventQueryHandler = $this->prophesize(FieldsByEventQueryHandler::class);
         $fieldsByEventQueryHandler
-            ->handle(new FieldsByEventQuery(['type-mapping-event-1']))
+            ->handle(new FieldsByEventQuery(['type-mapping-event-1'], ['custom-data-mapping-event-1']))
             ->shouldBeCalled()
             ->willReturn(['field1', 'field2'])
         ;
         $fieldsByEventQueryHandler
-            ->handle(new FieldsByEventQuery(['type-mapping-event-2']))
+            ->handle(new FieldsByEventQuery(['type-mapping-event-2'], ['custom-data-mapping-event-2']))
             ->shouldBeCalled()
             ->willReturn(['field1', 'field3'])
         ;

@@ -43,6 +43,9 @@ class RawDataToParticipantConverterTest extends TestCase
             'Langue' => 'en'
         ];
 
+        $typeMappingEvent1 = ['type-mapping-event-1'];
+        $customDataMappingEvent1 = ['custom-data-mapping-event-1'];
+
         $user2 = $this->prophesize(User::class);
         $participantForUser2 = $this->prophesize(Participant::class);
         $participantForUser2->getUser()->shouldBeCalled()->willReturn($user2->reveal());
@@ -54,8 +57,6 @@ class RawDataToParticipantConverterTest extends TestCase
 
         $event1type2 = $this->prophesize(Type::class);
         $event1type2->getId()->willReturn(222);
-
-        $typeMappingEvent1 = ['type-mapping-event-1'];
 
         $typeConverter = $this->prophesize(TypeConverter::class);
         $typeConverter
@@ -76,12 +77,12 @@ class RawDataToParticipantConverterTest extends TestCase
 
         $dataConverter = $this->prophesize(DataConverter::class);
         $dataConverter
-            ->convert($event1type2->reveal(), $rawDataUser1)
+            ->convert($customDataMappingEvent1, $rawDataUser1)
             ->shouldBeCalled()
             ->willReturn(['user1-data-indexed-by-tag' => 'whatever'])
         ;
         $dataConverter
-            ->convert($event1type1->reveal(), $rawDataUser2)
+            ->convert($customDataMappingEvent1, $rawDataUser2)
             ->shouldBeCalled()
             ->willReturn(['user2-data-indexed-by-tag' => 'whatever'])
         ;
@@ -160,12 +161,14 @@ class RawDataToParticipantConverterTest extends TestCase
             $event1->reveal(),
             [$event1type1->reveal(), $event1type2->reveal()],
             $typeMappingEvent1,
+            $customDataMappingEvent1,
             $rawDataUser1
         );
         $rawDataToParticipantConverter->convert(
             $event1->reveal(),
             [$event1type1->reveal(), $event1type2->reveal()],
             $typeMappingEvent1,
+            $customDataMappingEvent1,
             $rawDataUser2
         );
     }
