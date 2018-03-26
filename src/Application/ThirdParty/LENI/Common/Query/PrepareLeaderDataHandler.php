@@ -8,9 +8,9 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Proximum\Vimeet\Application\ThirdParty\LENI\Save\Query;
+namespace Proximum\Vimeet\Application\ThirdParty\LENI\Common\Query;
 
-use Proximum\Vimeet\Application\ThirdParty\LENI\Save\View\LeaderView;
+use Proximum\Vimeet\Application\ThirdParty\LENI\Common\View\LeaderView;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Repository\User\Event\ExtraDataRepositoryInterface;
 use Proximum\Vimeet\Domain\User\Event\ExtraData\Type;

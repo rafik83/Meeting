@@ -8,7 +8,7 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Proximum\Vimeet\Application\ThirdParty\LENI\Save\View;
+namespace Proximum\Vimeet\Application\ThirdParty\LENI\Common\View;
 
 class LeniUserView
 {

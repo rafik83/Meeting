@@ -9,8 +9,8 @@ services:
             - '@repository.user.event.extra_data_repository'
             - '@vimeet_infrastructure.repository.user_repository'
             - '@planning.formatter.participant_planning_formatter'
-            - '@Proximum\Vimeet\Application\ThirdParty\LENI\Save\Query\LeniUserViewQueryHandler'
-            - '@adapter.serializer_adapter'
+            - '@Proximum\Vimeet\Application\ThirdParty\LENI\Common\Query\LeniUserViewQueryHandler'
+            - '@Proximum\Vimeet\Application\ThirdParty\LENI\Common\Normalizer\LeniUserViewNormalizer'
             - '@Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Adapter\ThirdParty\LENI\Save\LeniApiCallJobQueue'
             - '@datetime'
 
@@ -31,7 +31,7 @@ services:
             - '@Proximum\Vimeet\Application\ThirdParty\LENI\Get\Query\FieldsByEventQueryHandler'
             - '@Proximum\Vimeet\Application\ThirdParty\LENI\Get\Converter\RawDataToParticipantConverter'
 
-    Proximum\Vimeet\Application\ThirdParty\LENI\Save\Query\PrepareLeaderDataHandler:
+    Proximum\Vimeet\Application\ThirdParty\LENI\Common\Query\PrepareLeaderDataHandler:
         arguments:
             - '@repository.user.event.extra_data_repository'
 
@@ -55,8 +55,8 @@ services:
             - '@Proximum\Vimeet\Application\ThirdParty\LENI\Get\Converter\DataConverter'
             - '@Proximum\Vimeet\Application\ThirdParty\LENI\Common\TemplateData\ParticipationTypeTemplateDataGetter'
             - '@repository.user.event.extra_data_repository'
-            - '@Proximum\Vimeet\Application\ThirdParty\LENI\Save\Query\LeniUserViewQueryHandler'
-            - '@adapter.serializer_adapter'
+            - '@Proximum\Vimeet\Application\ThirdParty\LENI\Common\Query\LeniUserViewQueryHandler'
+            - '@Proximum\Vimeet\Application\ThirdParty\LENI\Common\Normalizer\LeniUserViewNormalizer'
             - '@datetime'
 
     #
@@ -91,9 +91,7 @@ services:
     #
     # Normalizer
     #
-    Proximum\Vimeet\Application\ThirdParty\LENI\Save\Normalizer\LeniUserViewNormalizer:
-        tags:
-            - { name: serializer.normalizer }
+    Proximum\Vimeet\Application\ThirdParty\LENI\Common\Normalizer\LeniUserViewNormalizer: ~
 
     #
     # Common services
@@ -119,7 +117,7 @@ services:
     #
     # Queries
     #
-    Proximum\Vimeet\Application\ThirdParty\LENI\Save\Query\LeniUserViewQueryHandler:
+    Proximum\Vimeet\Application\ThirdParty\LENI\Common\Query\LeniUserViewQueryHandler:
         arguments:
             - '@components.user.user_info_guesser'
             - '@vimeet_infrastructure.application.components.sheet.sheet_info_guesser'
@@ -129,7 +127,7 @@ services:
             - '@domain.service.sheets_group.group_name_resolver'
             - '@vimeet_infrastructure.repository.sheet_repository'
             - '@order.balance'
-            - '@Proximum\Vimeet\Application\ThirdParty\LENI\Save\Query\PrepareLeaderDataHandler'
+            - '@Proximum\Vimeet\Application\ThirdParty\LENI\Common\Query\PrepareLeaderDataHandler'
             - '@repository.user.event.extra_data_repository'
 
     Proximum\Vimeet\Application\ThirdParty\LENI\Get\Query\FieldsByEventQueryHandler: ~

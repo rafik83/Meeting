@@ -8,7 +8,7 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Proximum\Vimeet\Application\ThirdParty\LENI\Save\Query;
+namespace Proximum\Vimeet\Application\ThirdParty\LENI\Common\Query;
 
 use Proximum\Vimeet\Application\Components\Planning\Formatter\ParticipantPlanningFormatter;
 use Proximum\Vimeet\Application\Components\Sheet\SheetInfoGuesser;
@@ -16,9 +16,9 @@ use Proximum\Vimeet\Application\Components\Sheet\Template\Tag;
 use Proximum\Vimeet\Application\Components\User\UserInfoGuesser;
 use Proximum\Vimeet\Application\Exception\Sheet\SheetNotFoundException;
 use Proximum\Vimeet\Application\ThirdParty\LENI\LeniConstants;
-use Proximum\Vimeet\Application\ThirdParty\LENI\Save\View\LeniPlanningDayView;
-use Proximum\Vimeet\Application\ThirdParty\LENI\Save\View\LeniPlanningView;
-use Proximum\Vimeet\Application\ThirdParty\LENI\Save\View\LeniUserView;
+use Proximum\Vimeet\Application\ThirdParty\LENI\Common\View\LeniPlanningDayView;
+use Proximum\Vimeet\Application\ThirdParty\LENI\Common\View\LeniPlanningView;
+use Proximum\Vimeet\Application\ThirdParty\LENI\Common\View\LeniUserView;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\User;

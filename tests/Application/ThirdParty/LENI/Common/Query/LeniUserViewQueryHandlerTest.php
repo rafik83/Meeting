@@ -8,21 +8,21 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Proximum\Vimeet\Tests\Application\ThirdParty\LENI\Save\Query;
+namespace Proximum\Vimeet\Tests\Application\ThirdParty\LENI\Common\Query;
 
 use PHPUnit\Framework\TestCase;
 use Proximum\Vimeet\Application\Components\Planning\Formatter\FormattedPlanningView;
 use Proximum\Vimeet\Application\Components\Planning\Formatter\ParticipantPlanningFormatter;
 use Proximum\Vimeet\Application\Components\Sheet\SheetInfoGuesser;
 use Proximum\Vimeet\Application\Components\User\UserInfoGuesser;
-use Proximum\Vimeet\Application\ThirdParty\LENI\Save\Query\LeniUserViewQuery;
-use Proximum\Vimeet\Application\ThirdParty\LENI\Save\Query\LeniUserViewQueryHandler;
-use Proximum\Vimeet\Application\ThirdParty\LENI\Save\Query\PrepareLeaderData;
-use Proximum\Vimeet\Application\ThirdParty\LENI\Save\Query\PrepareLeaderDataHandler;
-use Proximum\Vimeet\Application\ThirdParty\LENI\Save\View\LeaderView;
-use Proximum\Vimeet\Application\ThirdParty\LENI\Save\View\LeniPlanningDayView;
-use Proximum\Vimeet\Application\ThirdParty\LENI\Save\View\LeniPlanningView;
-use Proximum\Vimeet\Application\ThirdParty\LENI\Save\View\LeniUserView;
+use Proximum\Vimeet\Application\ThirdParty\LENI\Common\Query\LeniUserViewQuery;
+use Proximum\Vimeet\Application\ThirdParty\LENI\Common\Query\LeniUserViewQueryHandler;
+use Proximum\Vimeet\Application\ThirdParty\LENI\Common\Query\PrepareLeaderData;
+use Proximum\Vimeet\Application\ThirdParty\LENI\Common\Query\PrepareLeaderDataHandler;
+use Proximum\Vimeet\Application\ThirdParty\LENI\Common\View\LeaderView;
+use Proximum\Vimeet\Application\ThirdParty\LENI\Common\View\LeniPlanningDayView;
+use Proximum\Vimeet\Application\ThirdParty\LENI\Common\View\LeniPlanningView;
+use Proximum\Vimeet\Application\ThirdParty\LENI\Common\View\LeniUserView;
 use Proximum\Vimeet\Domain\Model\Category;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Package;

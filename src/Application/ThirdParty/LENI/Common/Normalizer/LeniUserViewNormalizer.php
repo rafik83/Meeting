@@ -8,22 +8,15 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Proximum\Vimeet\Application\ThirdParty\LENI\Save\Normalizer;
+namespace Proximum\Vimeet\Application\ThirdParty\LENI\Common\Normalizer;
 
 use Proximum\Vimeet\Application\ThirdParty\LENI\LeniConstants;
-use Proximum\Vimeet\Application\ThirdParty\LENI\Save\View\LeniUserView;
-use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
+use Proximum\Vimeet\Application\ThirdParty\LENI\Common\View\LeniUserView;
 
-class LeniUserViewNormalizer implements NormalizerInterface
+class LeniUserViewNormalizer
 {
-    /**
-     * {@inheritdoc}
-     */
-    public function normalize($object, $format = null, array $context = [])
+    public function normalize(LeniUserView $userView): array
     {
-        /** @var LeniUserView $userView */
-        $userView = $object;
-
         $data = [
             LeniConstants::LENI_COL_CAB_2 => (string) $userView->id,
             LeniConstants::LENI_COL_EXTERNAL_KEY => $userView->id,
@@ -62,22 +55,15 @@ class LeniUserViewNormalizer implements NormalizerInterface
             $data[LeniConstants::LENI_LEADER_FIRST_NAME] = mb_substr($userView->leaderView->firstName, 0, LeniConstants::LONG_FIELD);
         }
 
-        // Set the previous LENI user id
-        // Warning: always on end of the returned array
+
         if (null !== $userView->leniId) {
+            // Set the previous LENI user id
             $data[LeniConstants::LENI_COL_USER_ID] = $userView->leniId;
         } else {
+            // User is new; Set "API" to "EvenementOrigine" field
             $data[LeniConstants::LENI_COL_EVENT_ORIGIN] = LeniConstants::NEW_USER_EVENT_ORIGIN;
         }
 
         return $data;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function supportsNormalization($data, $format = null)
-    {
-        return $data instanceof LeniUserView;
     }
 }

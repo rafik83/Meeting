@@ -10,12 +10,12 @@
 
 namespace Proximum\Vimeet\Application\ThirdParty\LENI\Save\Command;
 
-use Proximum\Vimeet\Application\Adapter\SerializerAdapterInterface;
 use Proximum\Vimeet\Application\Adapter\ThirdParty\LENI\Save\LeniApiCallJobQueueInterface;
 use Proximum\Vimeet\Application\Components\Planning\Formatter\ParticipantPlanningFormatter;
 use Proximum\Vimeet\Application\Exception\Sheet\SheetNotFoundException;
-use Proximum\Vimeet\Application\ThirdParty\LENI\Save\Query\LeniUserViewQuery;
-use Proximum\Vimeet\Application\ThirdParty\LENI\Save\Query\LeniUserViewQueryHandler;
+use Proximum\Vimeet\Application\ThirdParty\LENI\Common\Normalizer\LeniUserViewNormalizer;
+use Proximum\Vimeet\Application\ThirdParty\LENI\Common\Query\LeniUserViewQuery;
+use Proximum\Vimeet\Application\ThirdParty\LENI\Common\Query\LeniUserViewQueryHandler;
 use Proximum\Vimeet\Domain\Event\ExtraParameter\Type;
 use Proximum\Vimeet\Domain\Exception\Event\DayNotDefinedException;
 use Proximum\Vimeet\Domain\Model\Event;
@@ -50,11 +50,11 @@ class PrepareLeniApiCallHandler
     /** @var ExtraDataRepositoryInterface */
     private $extraDataRepository;
 
-    /** @var SerializerAdapterInterface */
-    private $serializerAdapter;
-
     /** @var LeniApiCallJobQueueInterface */
     private $leniApiCallJobQueue;
+
+    /** @var LeniUserViewNormalizer */
+    private $leniUserViewNormalizer;
 
     /** @var \DateTimeInterface */
     private $dateTime;
@@ -66,7 +66,7 @@ class PrepareLeniApiCallHandler
      * @param UserRepositoryInterface           $userRepository
      * @param ParticipantPlanningFormatter      $participantPlanningFormatter
      * @param LeniUserViewQueryHandler          $leniUserViewQueryHandler
-     * @param SerializerAdapterInterface        $serializerAdapter
+     * @param LeniUserViewNormalizer            $leniUserViewNormalizer
      * @param LeniApiCallJobQueueInterface      $leniApiCallJobQueue
      * @param \DateTimeInterface                $dateTime
      */
@@ -77,7 +77,7 @@ class PrepareLeniApiCallHandler
         UserRepositoryInterface $userRepository,
         ParticipantPlanningFormatter $participantPlanningFormatter,
         LeniUserViewQueryHandler $leniUserViewQueryHandler,
-        SerializerAdapterInterface $serializerAdapter,
+        LeniUserViewNormalizer $leniUserViewNormalizer,
         LeniApiCallJobQueueInterface $leniApiCallJobQueue,
         \DateTimeInterface $dateTime
     ) {
@@ -87,8 +87,8 @@ class PrepareLeniApiCallHandler
         $this->userRepository = $userRepository;
         $this->participantPlanningFormatter = $participantPlanningFormatter;
         $this->leniUserViewQueryHandler = $leniUserViewQueryHandler;
-        $this->serializerAdapter = $serializerAdapter;
         $this->leniApiCallJobQueue = $leniApiCallJobQueue;
+        $this->leniUserViewNormalizer = $leniUserViewNormalizer;
         $this->dateTime = $dateTime;
     }
 
@@ -103,88 +103,104 @@ class PrepareLeniApiCallHandler
         $events = $this->eventRepository->findEventWithParameters([Type::TYPE_LENI_USER, Type::TYPE_LENI_EVENT]);
 
         foreach ($events as $event) {
-            if (!$event->hasDay() || $event->isFinished($this->dateTime)) {
-                continue;
-            }
-
-            $leniUserParameter  = $this->extraParameterRepository->findByEventAndType($event, Type::TYPE_LENI_USER);
-            $leniEventParameter = $this->extraParameterRepository->findByEventAndType($event, Type::TYPE_LENI_EVENT);
-            $leniModeParameter = $this->extraParameterRepository->findByEventAndType($event, Type::TYPE_LENI_MODE);
-
-            $saveModeEnabled = $leniModeParameter !== null
-                && \in_array(
-                    $leniModeParameter->getValue(),
-                    [
-                        Type::VALUE_LENI_MODE_SAVE,
-                        Type::VALUE_LENI_MODE_BOTH,
-                    ],
-                    true
-                );
-
-            if (!$saveModeEnabled || null === $leniUserParameter || null === $leniEventParameter) {
-                throw new \LogicException(
-                    'Can not call PrepareLeniApiCallHandler if send mode is not enabled or event has not LENI_USER and LENI_EVENT'
-                );
-            }
-
-            $this->participantPlanningFormatter->preloadPlanningHandlerForEvent($event);
-            $users = $this->userRepository->findWithSheetByEvent($event);
-            $usersExtraData = $this->extraDataRepository->getExtraDataForEventAndName(
-                $event,
-                ExtraDataType::LENI_FINGERPRINT
-            );
-
-            $usersExtraData = $this->indexExtraDataByUserId($usersExtraData);
-
-            foreach ($users as $user) {
-                $previousUserExtraData = null;
-
-                if (isset($usersExtraData[$user->getId()])) {
-                    $previousUserExtraData = $usersExtraData[$user->getId()];
-                }
-
-                try {
-                    $leniUserView = $this->leniUserViewQueryHandler->handle(
-                        new LeniUserViewQuery($event, $user, $previousUserExtraData)
-                    );
-                } catch (SheetNotFoundException $sheetNotFoundException) {
-                    continue;
-                }
-
-                $leniUserData = $this->serializerAdapter->normalize($leniUserView);
-                $fingerPrint = serialize($leniUserData);
-
-                // User data did not changed, skip
-                if ($previousUserExtraData instanceof ExtraData
-                    && $fingerPrint === $previousUserExtraData->getValue()
-                ) {
-                    continue;
-                }
-
-                $userExtraDataPendingFingerprint = $this->addOrUpdatePendingFingerprint($event, $user, $fingerPrint);
-
-                // Create a job for calling LENI API
-                $this->leniApiCallJobQueue->createJob($userExtraDataPendingFingerprint);
-            }
-
-            $this->participantPlanningFormatter->resetPlanningHandlerForEvent($event);
+            $this->handleEvent($event);
         }
     }
 
     /**
-     * @param Event  $event
-     * @param User   $user
-     * @param string $fingerPrint
+     * @param Event $event
+     *
+     * @throws \LogicException
+     * @throws DayNotDefinedException
+     */
+    private function handleEvent(Event $event): void
+    {
+        if (!$event->hasDay() || $event->isFinished($this->dateTime)) {
+            return;
+        }
+
+        $leniUserParameter  = $this->extraParameterRepository->findByEventAndType($event, Type::TYPE_LENI_USER);
+        $leniEventParameter = $this->extraParameterRepository->findByEventAndType($event, Type::TYPE_LENI_EVENT);
+        $leniModeParameter = $this->extraParameterRepository->findByEventAndType($event, Type::TYPE_LENI_MODE);
+
+        $saveModeEnabled = $leniModeParameter !== null
+            && \in_array(
+                $leniModeParameter->getValue(),
+                [
+                    Type::VALUE_LENI_MODE_SAVE,
+                    Type::VALUE_LENI_MODE_BOTH,
+                ],
+                true
+            );
+
+        if (!$saveModeEnabled || null === $leniUserParameter || null === $leniEventParameter) {
+            throw new \LogicException(
+                'Can not call PrepareLeniApiCallHandler if send mode is not enabled or event has not LENI_USER and LENI_EVENT'
+            );
+        }
+
+        $this->participantPlanningFormatter->preloadPlanningHandlerForEvent($event);
+        $users = $this->userRepository->findWithSheetByEvent($event);
+        $usersExtraData = $this->extraDataRepository->getExtraDataForEventAndName(
+            $event,
+            ExtraDataType::LENI_FINGERPRINT
+        );
+
+        $usersExtraData = $this->indexExtraDataByUserId($usersExtraData);
+
+        foreach ($users as $user) {
+            $this->handleUser($event, $user, $usersExtraData[$user->getId()] ?? null);
+        }
+
+        $this->participantPlanningFormatter->resetPlanningHandlerForEvent($event);
+    }
+
+    /**
+     * @param Event          $event
+     * @param User           $user
+     * @param null|ExtraData $previousUserEventExtraData
+     */
+    private function handleUser(Event $event, User $user, ?ExtraData $previousUserEventExtraData): void
+    {
+        try {
+            $leniUserView = $this->leniUserViewQueryHandler->handle(
+                new LeniUserViewQuery($event, $user, $previousUserEventExtraData)
+            );
+        } catch (SheetNotFoundException $sheetNotFoundException) {
+            return;
+        }
+
+        $leniUserData = $this->leniUserViewNormalizer->normalize($leniUserView);
+
+        // User data did not changed, skip
+        if ($previousUserEventExtraData instanceof ExtraData
+            && $leniUserData ===  unserialize($previousUserEventExtraData->getValue(), ['allowed_classes' => false])
+        ) {
+            return;
+        }
+
+        $userExtraDataPendingFingerprint = $this->addOrUpdatePendingFingerprint($event, $user, $leniUserData);
+
+        // Create a job for calling LENI API
+        $this->leniApiCallJobQueue->createJob($userExtraDataPendingFingerprint);
+    }
+
+    /**
+     * @param Event $event
+     * @param User  $user
+     * @param array $leniUserData
      *
      * @return ExtraData
      */
-    private function addOrUpdatePendingFingerprint(Event $event, User $user, string $fingerPrint): ExtraData
+    private function addOrUpdatePendingFingerprint(Event $event, User $user, array &$leniUserData): ExtraData
     {
         $userExtraDataPendingFingerprint = $this->extraDataRepository->getExtraDataForEventNameAndUser(
             $event,
             ExtraDataType::LENI_FINGERPRINT_PENDING,
             $user
         );
+
+        $fingerPrint = serialize($leniUserData);
 
         if ($userExtraDataPendingFingerprint instanceof ExtraData) {
             $userExtraDataPendingFingerprint->update($fingerPrint, $this->dateTime);
@@ -208,7 +224,7 @@ class PrepareLeniApiCallHandler
      *
      * @return array
      */
-    private function indexExtraDataByUserId(array $usersExtraData): array
+    private function indexExtraDataByUserId(array &$usersExtraData): array
     {
         $userFingerPrints = [];
 
