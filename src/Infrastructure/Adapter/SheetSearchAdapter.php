@@ -288,7 +288,9 @@ class SheetSearchAdapter implements SheetSearchAdapterInterface
         $countryAggregations = new Terms('countryCodes');
         $countryAggregations->setField('countryCode');
         $countryAggregations->setSize(1000);
-        $query->addAggregation($countryAggregations);
+        $query->addAggregation($countryAggregations)
+            ->setSize(0)
+        ;
 
         return $this->searchable->search($query)->getAggregations();
     }
