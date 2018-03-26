@@ -30,12 +30,10 @@ class CountryViewQueryHandlerTest extends TestCase
         $germanyCountryName = 'Allemagne';
 
         $expectedCountries = [
-            'countryCodes_aggs' => [
-                'countryCodes' => [
-                    'buckets' => [
-                        ['key' => $franceCountryCode],
-                        ['key' => $germanyCountryCode]
-                    ]
+            'countryCodes' => [
+                'buckets' => [
+                    ['key' => $franceCountryCode],
+                    ['key' => $germanyCountryCode]
                 ]
             ]
         ];
@@ -57,7 +55,7 @@ class CountryViewQueryHandlerTest extends TestCase
 
         $this->assertCount(2, $result);
         $this->assertInstanceOf(CountryView::class, $result[0]);
-        $this->assertEquals($germanyCountryName, $result[1]->name);
-        $this->assertEquals($franceCountryCode, $result[0]->code);
+        $this->assertEquals($germanyCountryName, $result[0]->name);
+        $this->assertEquals($franceCountryCode, $result[1]->code);
     }
 }
