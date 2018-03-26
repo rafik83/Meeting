@@ -17,6 +17,8 @@ use Proximum\Vimeet\Application\ThirdParty\LENI\Exception\MissingIdException;
 use Proximum\Vimeet\Application\ThirdParty\LENI\Exception\NotValidApiCallException;
 use Proximum\Vimeet\Application\ThirdParty\LENI\Exception\WarningApiCallException;
 use Proximum\Vimeet\Application\ThirdParty\LENI\LeniConstants;
+use Proximum\Vimeet\Application\ThirdParty\LENI\Save\Query\GetCustomData;
+use Proximum\Vimeet\Application\ThirdParty\LENI\Save\Query\GetCustomDataHandler;
 use Proximum\Vimeet\Domain\Model\User\Event\ExtraData;
 use Proximum\Vimeet\Domain\Repository\User\Event\ExtraDataRepositoryInterface;
 use Proximum\Vimeet\Domain\User\Event\ExtraData\Type as ExtraDataType;
@@ -130,6 +132,9 @@ class LeniApiCallHandler
     /** @var UserExtraDataFingerprintManager */
     private $userExtraDataFingerprintManager;
 
+    /** @var GetCustomDataHandler */
+    private $getCustomDataHandler;
+
     /** @var \DateTimeInterface */
     private $dateTime;
 
@@ -137,18 +142,21 @@ class LeniApiCallHandler
      * @param ExtraDataRepositoryInterface    $extraDataRepository
      * @param LeniApiCaller                   $leniApi
      * @param UserExtraDataFingerprintManager $userExtraDataFingerprintManager
+     * @param GetCustomDataHandler            $getCustomDataHandler
      * @param \DateTimeInterface              $dateTime
      */
     public function __construct(
         ExtraDataRepositoryInterface $extraDataRepository,
         LeniApiCaller $leniApi,
         UserExtraDataFingerprintManager $userExtraDataFingerprintManager,
+        GetCustomDataHandler $getCustomDataHandler,
         \DateTimeInterface $dateTime
     ) {
         $this->extraDataRepository = $extraDataRepository;
         $this->leniApi = $leniApi;
         $this->userExtraDataFingerprintManager = $userExtraDataFingerprintManager;
         $this->dateTime = $dateTime;
+        $this->getCustomDataHandler = $getCustomDataHandler;
     }
 
     /**
@@ -179,7 +187,7 @@ class LeniApiCallHandler
             unset($data[LeniConstants::LENI_COL_USER_ID]);
         }
 
-        $response = $this->leniApi->save($event, $data);
+        $response = $this->leniApi->save($event, $this->getCustomDataHandler->handle(new GetCustomData($data)));
 
         $hasNotUserId = !isset($data[LeniConstants::LENI_COL_USER_ID]);
 
