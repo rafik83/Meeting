@@ -78,7 +78,7 @@ class GetCustomDataHandlerTest extends TestCase
             [
                 'whatever' => 'value',
                 'EvenementOrigine' => 'API',
-                'sendingRequest' => [
+                'SendingRequests' => [
                     'codeCommunication' => '5W3ORMI3',
                     'id' => '9A74DF80-1B13-9B68-74A8-1D956F54FECB',
                 ]

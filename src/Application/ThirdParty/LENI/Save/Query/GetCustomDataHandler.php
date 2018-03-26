@@ -36,12 +36,12 @@ class GetCustomDataHandler
             $data[LeniConstants::LENI_COL_EVENT_ORIGIN] = LeniConstants::NEW_USER_EVENT_ORIGIN;
         }
 
-        $sendingRequest = $this->sendingRequestDataHandler->handle(
+        $sendingRequests = $this->sendingRequestDataHandler->handle(
             new SendingRequestData($getCustomData->event, $data)
         );
 
-        if (!empty($sendingRequest)) {
-            $data['sendingRequest'] = $sendingRequest;
+        if (!empty($sendingRequests)) {
+            $data[LeniConstants::LENI_COL_SENDING_REQUEST] = $sendingRequests;
         }
 
         return $data;
