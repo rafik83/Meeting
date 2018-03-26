@@ -8,21 +8,21 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Proximum\Vimeet\Tests\Application\ThirdParty\LENI\Save\Query;
+namespace Proximum\Vimeet\Tests\Application\ThirdParty\LENI\Common\Query;
 
 use PHPUnit\Framework\TestCase;
 use Proximum\Vimeet\Application\Components\Planning\Formatter\FormattedPlanningView;
 use Proximum\Vimeet\Application\Components\Planning\Formatter\ParticipantPlanningFormatter;
 use Proximum\Vimeet\Application\Components\Sheet\SheetInfoGuesser;
 use Proximum\Vimeet\Application\Components\User\UserInfoGuesser;
-use Proximum\Vimeet\Application\ThirdParty\LENI\Save\Query\LeniUserViewQuery;
-use Proximum\Vimeet\Application\ThirdParty\LENI\Save\Query\LeniUserViewQueryHandler;
-use Proximum\Vimeet\Application\ThirdParty\LENI\Save\Query\PrepareLeaderData;
-use Proximum\Vimeet\Application\ThirdParty\LENI\Save\Query\PrepareLeaderDataHandler;
-use Proximum\Vimeet\Application\ThirdParty\LENI\Save\View\LeaderView;
-use Proximum\Vimeet\Application\ThirdParty\LENI\Save\View\LeniPlanningDayView;
-use Proximum\Vimeet\Application\ThirdParty\LENI\Save\View\LeniPlanningView;
-use Proximum\Vimeet\Application\ThirdParty\LENI\Save\View\LeniUserView;
+use Proximum\Vimeet\Application\ThirdParty\LENI\Common\Query\LeniUserViewQuery;
+use Proximum\Vimeet\Application\ThirdParty\LENI\Common\Query\LeniUserViewQueryHandler;
+use Proximum\Vimeet\Application\ThirdParty\LENI\Common\Query\PrepareLeaderData;
+use Proximum\Vimeet\Application\ThirdParty\LENI\Common\Query\PrepareLeaderDataHandler;
+use Proximum\Vimeet\Application\ThirdParty\LENI\Common\View\LeaderView;
+use Proximum\Vimeet\Application\ThirdParty\LENI\Common\View\LeniPlanningDayView;
+use Proximum\Vimeet\Application\ThirdParty\LENI\Common\View\LeniPlanningView;
+use Proximum\Vimeet\Application\ThirdParty\LENI\Common\View\LeniUserView;
 use Proximum\Vimeet\Domain\Model\Category;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Package;
@@ -34,6 +34,7 @@ use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Model\User\Event\ExtraData;
 use Proximum\Vimeet\Domain\Order\Balance;
 use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
+use Proximum\Vimeet\Domain\Repository\User\Event\ExtraDataRepositoryInterface;
 use Proximum\Vimeet\Domain\Service\Category\CategoryNameResolver;
 use Proximum\Vimeet\Domain\Service\SheetsGroup\GroupNameResolver;
 use Proximum\Vimeet\Domain\Service\Type\TypeNameResolver;
@@ -132,6 +133,17 @@ class LeniUserViewQueryHandlerTest extends TestCase
             ->willReturn(null)
         ;
 
+        $extraDataRepository = $this->prophesize(ExtraDataRepositoryInterface::class);
+        $extraDataRepository
+            ->getExtraDataForEventNameAndUser(
+                $event->reveal(),
+                'leni_user_id',
+                $user->reveal()
+            )
+            ->shouldBeCalled()
+            ->willReturn(null)
+        ;
+
         $handler = new LeniUserViewQueryHandler(
             $userInfoGuesser->reveal(),
             $sheetInfoGuesser->reveal(),
@@ -141,7 +153,8 @@ class LeniUserViewQueryHandlerTest extends TestCase
             $groupNameResolver->reveal(),
             $sheetRepository->reveal(),
             $balance->reveal(),
-            $prepareLeaderDatahandler->reveal()
+            $prepareLeaderDatahandler->reveal(),
+            $extraDataRepository->reveal()
         );
         $result = $handler->handle(new LeniUserViewQuery($event->reveal(), $user->reveal(), null));
 
@@ -176,7 +189,7 @@ class LeniUserViewQueryHandlerTest extends TestCase
         $this->assertEquals($expected, $result);
     }
 
-    public function testHandleWithPreviousUserId()
+    public function testHandleWithPreviousUserIdInFingerprint()
     {
         $event = $this->prophesize(Event::class);
         $user = $this->prophesize(User::class);
@@ -263,6 +276,17 @@ class LeniUserViewQueryHandlerTest extends TestCase
             ->willReturn($leaderView)
         ;
 
+        $extraDataRepository = $this->prophesize(ExtraDataRepositoryInterface::class);
+        $extraDataRepository
+            ->getExtraDataForEventNameAndUser(
+                $event->reveal(),
+                'leni_user_id',
+                $user->reveal()
+            )
+            ->shouldBeCalled()
+            ->willReturn(null)
+        ;
+
         $handler = new LeniUserViewQueryHandler(
             $userInfoGuesser->reveal(),
             $sheetInfoGuesser->reveal(),
@@ -272,7 +296,8 @@ class LeniUserViewQueryHandlerTest extends TestCase
             $groupNameResolver->reveal(),
             $sheetRepository->reveal(),
             $balance->reveal(),
-            $prepareLeaderDatahandler->reveal()
+            $prepareLeaderDatahandler->reveal(),
+            $extraDataRepository->reveal()
         );
 
         $extraData = new ExtraData(
@@ -309,6 +334,152 @@ class LeniUserViewQueryHandlerTest extends TestCase
                 'unallocated'
             ),
             'f93a5b28-12b0-e711-80e1-0cc47a02bf5b',
+            false,
+            null
+        );
+
+        $this->assertEquals($expected, $result);
+    }
+
+    public function testHandleWithPreviousUserIdInExtraData()
+    {
+        $event = $this->prophesize(Event::class);
+        $user = $this->prophesize(User::class);
+
+        $type = $this->prophesize(Type::class);
+        $sheet1 = $this->prophesize(Sheet::class);
+        $sheet1->isEnabled()->willReturn(true);
+        $sheets = [$sheet1->reveal()];
+
+        $event->getFallback()->willReturn('fr');
+        $user->getId()->willReturn(12);
+        $user->getEmail()->willReturn('email@email.fr');
+        $user->getLocale()->willReturn('en');
+        $event->getAvailableLocale('en')->willReturn('fr');
+        $type->getId()->willReturn(64);
+
+        // Mock
+        $userInfoGuesser = $this->prophesize(UserInfoGuesser::class);
+        $participantPlanningFormatter = $this->prophesize(ParticipantPlanningFormatter::class);
+        $typeNameResolver = $this->prophesize(TypeNameResolver::class);
+        $groupNameResolver = $this->prophesize(GroupNameResolver::class);
+        $categoryNameResolver = $this->prophesize(CategoryNameResolver::class);
+        $sheetInfoGuesser = $this->prophesize(SheetInfoGuesser::class);
+        $balance = $this->prophesize(Balance::class);
+        $prepareLeaderDatahandler = $this->prophesize(PrepareLeaderDataHandler::class);
+
+        $balance->getRemainingToPay($sheet1->reveal())->shouldBeCalled()->willReturn(999);
+
+        $package = $this->prophesize(Package::class);
+        $sheet1->getPackage()->shouldBeCalled()->willReturn($package->reveal());
+        $package->isPassable()->shouldBeCalled()->willReturn(true);
+        $sheet1->hasNotCancelledOrders()->shouldBeCalled()->willReturn(true);
+
+        $sheetInfoGuesser->guessSheetInfos($sheet1->reveal())->shouldNotBeCalled();
+
+        $sheetRepository = $this->prophesize(SheetRepositoryInterface::class);
+        $sheetRepository
+            ->getAllSheetsByUserAndEvent($user->reveal(), $event->reveal())
+            ->shouldBeCalled()
+            ->willReturn($sheets)
+        ;
+
+        $groupNameResolver
+            ->resolve($event->reveal(), $user->reveal(), $sheets)
+            ->shouldBeCalled()
+            ->willReturn('sheetName')
+        ;
+
+        $typeNameResolver->resolveTypeWithPreloadedSheets($sheets)->shouldBeCalled()->willReturn($type->reveal());
+
+        $categoryNameResolver
+            ->resolveCategoryForPreloadSheets($sheets)
+            ->shouldBeCalled()
+            ->willReturn(null)
+        ;
+
+        $userInfoGuesser
+            ->getUserInfoFromParticipant($user->reveal(), 'fr', $sheets, false)
+            ->shouldBeCalled()
+            ->willReturn([
+                'gender' => 'woman',
+                'firstName' => 'firstName',
+                'lastName' => 'lastName',
+                'position' => 'position',
+                'phone' => 'phone',
+                'mobile' => 'mobile',
+                'country' => 'FR',
+            ])
+        ;
+
+        $participantPlanningFormatter
+            ->formatPlanningByDayFromUserAndEventWithUnallocated($user->reveal(), $event->reveal(), 'fr')
+            ->shouldBeCalled()
+            ->willReturn(new FormattedPlanningView(['day1', 'day2'], 'unallocated'));
+
+        $participant = $this->prophesize(Participant::class);
+        $participant->getParticipantProduct()->willReturn(null);
+        $sheet1->getUserParticipant($user->reveal())->shouldBeCalled()->willReturn($participant->reveal());
+
+        $leaderView = new LeaderView('123-321', 'email@example.net', 'firstName', 'lastName', 'sheetName');
+        $prepareLeaderDatahandler
+            ->handle(new PrepareLeaderData($sheet1->reveal(), $user->reveal()))
+            ->shouldBeCalled()
+            ->willReturn($leaderView)
+        ;
+
+        $leniUserIdExtraData = $this->prophesize(ExtraData::class);
+        $leniUserIdExtraData->getValue()->willReturn('leni-saved-user-id');
+        $extraDataRepository = $this->prophesize(ExtraDataRepositoryInterface::class);
+        $extraDataRepository
+            ->getExtraDataForEventNameAndUser(
+                $event->reveal(),
+                'leni_user_id',
+                $user->reveal()
+            )
+            ->shouldBeCalled()
+            ->willReturn($leniUserIdExtraData->reveal())
+        ;
+
+        $handler = new LeniUserViewQueryHandler(
+            $userInfoGuesser->reveal(),
+            $sheetInfoGuesser->reveal(),
+            $participantPlanningFormatter->reveal(),
+            $typeNameResolver->reveal(),
+            $categoryNameResolver->reveal(),
+            $groupNameResolver->reveal(),
+            $sheetRepository->reveal(),
+            $balance->reveal(),
+            $prepareLeaderDatahandler->reveal(),
+            $extraDataRepository->reveal()
+        );
+
+        $result = $handler->handle(new LeniUserViewQuery($event->reveal(), $user->reveal(), null));
+
+        $expected = new LeniUserView(
+            12,
+            true,
+            'sheetName',
+            64,
+            null,
+            'email@email.fr',
+            'woman',
+            'firstName',
+            'lastName',
+            'position',
+            'phone',
+            'mobile',
+            'FR',
+            'en',
+            $leaderView,
+            new LeniPlanningView(
+                [
+                    new LeniPlanningDayView('day1'),
+                    new LeniPlanningDayView('day2'),
+                ],
+                'unallocated'
+            ),
+            'leni-saved-user-id',
             false,
             null
         );

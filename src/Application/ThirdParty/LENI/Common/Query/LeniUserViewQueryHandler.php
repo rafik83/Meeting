@@ -8,7 +8,7 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Proximum\Vimeet\Application\ThirdParty\LENI\Save\Query;
+namespace Proximum\Vimeet\Application\ThirdParty\LENI\Common\Query;
 
 use Proximum\Vimeet\Application\Components\Planning\Formatter\ParticipantPlanningFormatter;
 use Proximum\Vimeet\Application\Components\Sheet\SheetInfoGuesser;
@@ -16,18 +16,20 @@ use Proximum\Vimeet\Application\Components\Sheet\Template\Tag;
 use Proximum\Vimeet\Application\Components\User\UserInfoGuesser;
 use Proximum\Vimeet\Application\Exception\Sheet\SheetNotFoundException;
 use Proximum\Vimeet\Application\ThirdParty\LENI\LeniConstants;
-use Proximum\Vimeet\Application\ThirdParty\LENI\Save\View\LeniPlanningDayView;
-use Proximum\Vimeet\Application\ThirdParty\LENI\Save\View\LeniPlanningView;
-use Proximum\Vimeet\Application\ThirdParty\LENI\Save\View\LeniUserView;
+use Proximum\Vimeet\Application\ThirdParty\LENI\Common\View\LeniPlanningDayView;
+use Proximum\Vimeet\Application\ThirdParty\LENI\Common\View\LeniPlanningView;
+use Proximum\Vimeet\Application\ThirdParty\LENI\Common\View\LeniUserView;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Model\User\Event\ExtraData;
 use Proximum\Vimeet\Domain\Order\Balance;
 use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
+use Proximum\Vimeet\Domain\Repository\User\Event\ExtraDataRepositoryInterface;
 use Proximum\Vimeet\Domain\Service\Category\CategoryNameResolver;
 use Proximum\Vimeet\Domain\Service\SheetsGroup\GroupNameResolver;
 use Proximum\Vimeet\Domain\Service\Type\TypeNameResolver;
+use Proximum\Vimeet\Domain\User\Event\ExtraData\Type;
 
 class LeniUserViewQueryHandler
 {
@@ -58,17 +60,9 @@ class LeniUserViewQueryHandler
     /** @var PrepareLeaderDataHandler */
     private $prepareLeaderDataHandler;
 
-    /**
-     * @param UserInfoGuesser              $userInfoGuesser
-     * @param SheetInfoGuesser             $sheetInfoGuesser
-     * @param ParticipantPlanningFormatter $participantPlanningFormatter
-     * @param TypeNameResolver             $typeNameResolver
-     * @param CategoryNameResolver         $categoryNameResolver
-     * @param GroupNameResolver            $groupNameResolver
-     * @param SheetRepositoryInterface     $sheetRepository
-     * @param Balance                      $balance
-     * @param PrepareLeaderDataHandler     $prepareLeaderDataHandler
-     */
+    /** @var ExtraDataRepositoryInterface */
+    private $extraDataRepository;
+
     public function __construct(
         UserInfoGuesser $userInfoGuesser,
         SheetInfoGuesser $sheetInfoGuesser,
@@ -78,7 +72,8 @@ class LeniUserViewQueryHandler
         GroupNameResolver $groupNameResolver,
         SheetRepositoryInterface $sheetRepository,
         Balance $balance,
-        PrepareLeaderDataHandler $prepareLeaderDataHandler
+        PrepareLeaderDataHandler $prepareLeaderDataHandler,
+        ExtraDataRepositoryInterface $extraDataRepository
     ) {
         $this->userInfoGuesser = $userInfoGuesser;
         $this->sheetInfoGuesser = $sheetInfoGuesser;
@@ -89,6 +84,7 @@ class LeniUserViewQueryHandler
         $this->sheetRepository = $sheetRepository;
         $this->balance = $balance;
         $this->prepareLeaderDataHandler = $prepareLeaderDataHandler;
+        $this->extraDataRepository = $extraDataRepository;
     }
 
     /**
@@ -138,7 +134,6 @@ class LeniUserViewQueryHandler
             $sheetInfos = $this->sheetInfoGuesser->guessSheetInfos($firstSheet);
             $country = $sheetInfos[Tag::SHEET_COUNTRY] ?? '';
         }
-
 
         $leaderView = $this->prepareLeaderDataHandler->handle(new PrepareLeaderData($firstSheet, $query->user));
 
@@ -195,6 +190,16 @@ class LeniUserViewQueryHandler
      */
     private function getPreviousLeniUserId(LeniUserViewQuery $query): ?string
     {
+        $leniUserIdExtraData = $this->extraDataRepository->getExtraDataForEventNameAndUser(
+            $query->event,
+            Type::LENI_USER_ID,
+            $query->user
+        );
+
+        if ($leniUserIdExtraData instanceof ExtraData) {
+            return $leniUserIdExtraData->getValue();
+        }
+
         if (!$query->previousExtraData instanceof ExtraData) {
             return null;
         }

@@ -12,16 +12,16 @@ namespace Proximum\Vimeet\Tests\Application\ThirdParty\LENI\Save\Command;
 
 use PHPUnit\Framework\TestCase;
 use Prophecy\Prophecy\ObjectProphecy;
-use Proximum\Vimeet\Application\Adapter\SerializerAdapterInterface;
 use Proximum\Vimeet\Application\Adapter\ThirdParty\LENI\Save\LeniApiCallJobQueueInterface;
 use Proximum\Vimeet\Application\Components\Planning\Formatter\ParticipantPlanningFormatter;
+use Proximum\Vimeet\Application\ThirdParty\LENI\Common\Normalizer\LeniUserViewNormalizer;
 use Proximum\Vimeet\Application\ThirdParty\LENI\Save\Command\PrepareLeniApiCall;
 use Proximum\Vimeet\Application\ThirdParty\LENI\Save\Command\PrepareLeniApiCallHandler;
-use Proximum\Vimeet\Application\ThirdParty\LENI\Save\Query\LeniUserViewQuery;
-use Proximum\Vimeet\Application\ThirdParty\LENI\Save\Query\LeniUserViewQueryHandler;
-use Proximum\Vimeet\Application\ThirdParty\LENI\Save\View\LeniPlanningDayView;
-use Proximum\Vimeet\Application\ThirdParty\LENI\Save\View\LeniPlanningView;
-use Proximum\Vimeet\Application\ThirdParty\LENI\Save\View\LeniUserView;
+use Proximum\Vimeet\Application\ThirdParty\LENI\Common\Query\LeniUserViewQuery;
+use Proximum\Vimeet\Application\ThirdParty\LENI\Common\Query\LeniUserViewQueryHandler;
+use Proximum\Vimeet\Application\ThirdParty\LENI\Common\View\LeniPlanningDayView;
+use Proximum\Vimeet\Application\ThirdParty\LENI\Common\View\LeniPlanningView;
+use Proximum\Vimeet\Application\ThirdParty\LENI\Common\View\LeniUserView;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Model\User\Event\ExtraData;
@@ -63,7 +63,7 @@ class PrepareLeniApiCallHandlerTest extends TestCase
     private $leniUserViewQueryHandler;
 
     /** @var ObjectProphecy */
-    private $serializerAdapter;
+    private $leniUserViewNormalizer;
 
     public function setUp()
     {
@@ -80,7 +80,7 @@ class PrepareLeniApiCallHandlerTest extends TestCase
         $this->userRepository = $this->prophesize(UserRepositoryInterface::class);
         $this->participantPlanningFormatter = $this->prophesize(ParticipantPlanningFormatter::class);
         $this->leniUserViewQueryHandler = $this->prophesize(LeniUserViewQueryHandler::class);
-        $this->serializerAdapter = $this->prophesize(SerializerAdapterInterface::class);
+        $this->leniUserViewNormalizer = $this->prophesize(LeniUserViewNormalizer::class);
         $this->leniApiCallJobQueue = $this->prophesize(LeniApiCallJobQueueInterface::class);
         $this->dateTime = new \DateTime();
     }
@@ -212,7 +212,7 @@ class PrepareLeniApiCallHandlerTest extends TestCase
             ->willReturn($leniUserViewUser1)
         ;
 
-        $this->serializerAdapter
+        $this->leniUserViewNormalizer
             ->normalize($leniUserViewUser1)
             ->shouldBeCalled()
             ->willReturn(['Societe' => 'Sheet user 1'])
@@ -282,7 +282,7 @@ class PrepareLeniApiCallHandlerTest extends TestCase
             ->willReturn($leniUserViewUser2)
         ;
 
-        $this->serializerAdapter
+        $this->leniUserViewNormalizer
             ->normalize($leniUserViewUser2)
             ->shouldBeCalled()
             ->willReturn(['Societe' => 'Sheet user 2'])
@@ -314,7 +314,7 @@ class PrepareLeniApiCallHandlerTest extends TestCase
             $this->userRepository->reveal(),
             $this->participantPlanningFormatter->reveal(),
             $this->leniUserViewQueryHandler->reveal(),
-            $this->serializerAdapter->reveal(),
+            $this->leniUserViewNormalizer->reveal(),
             $this->leniApiCallJobQueue->reveal(),
             $this->dateTime
         );

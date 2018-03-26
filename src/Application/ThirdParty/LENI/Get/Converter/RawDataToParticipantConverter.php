@@ -12,8 +12,11 @@ namespace Proximum\Vimeet\Application\ThirdParty\LENI\Get\Converter;
 
 use Proximum\Vimeet\Application\Command\Participant\ConvertToParticipant;
 use Proximum\Vimeet\Application\Command\Participant\ConvertToParticipantHandler;
+use Proximum\Vimeet\Application\ThirdParty\LENI\Common\Normalizer\LeniUserViewNormalizer;
 use Proximum\Vimeet\Application\ThirdParty\LENI\Common\TemplateData\ParticipationTypeTemplateDataGetter;
 use Proximum\Vimeet\Application\ThirdParty\LENI\LeniConstants;
+use Proximum\Vimeet\Application\ThirdParty\LENI\Common\Query\LeniUserViewQuery;
+use Proximum\Vimeet\Application\ThirdParty\LENI\Common\Query\LeniUserViewQueryHandler;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Type;
@@ -39,6 +42,12 @@ class RawDataToParticipantConverter
     /** @var ExtraDataRepositoryInterface */
     private $extraDataRepository;
 
+    /** @var LeniUserViewQueryHandler */
+    private $leniUserViewQueryHandler;
+
+    /** @var LeniUserViewNormalizer */
+    private $leniUserViewNormalizer;
+
     /** @var \DateTimeInterface */
     private $dateTime;
 
@@ -48,6 +57,8 @@ class RawDataToParticipantConverter
         DataConverter $dataConverter,
         ParticipationTypeTemplateDataGetter $participationTypeTemplateDataGetter,
         ExtraDataRepositoryInterface $extraDataRepository,
+        LeniUserViewQueryHandler $leniUserViewQueryHandler,
+        LeniUserViewNormalizer $leniUserViewNormalizer,
         \DateTimeInterface $dateTime
     ) {
         $this->convertToParticipantHandler = $convertToParticipantHandler;
@@ -55,6 +66,8 @@ class RawDataToParticipantConverter
         $this->extraDataRepository = $extraDataRepository;
         $this->typeConverter = $typeConverter;
         $this->dataConverter = $dataConverter;
+        $this->leniUserViewQueryHandler = $leniUserViewQueryHandler;
+        $this->leniUserViewNormalizer = $leniUserViewNormalizer;
         $this->participationTypeTemplateDataGetter = $participationTypeTemplateDataGetter;
     }
 
@@ -96,6 +109,8 @@ class RawDataToParticipantConverter
                 $participant->getUser(),
                 $rawUserData[LeniConstants::LENI_COL_USER_ID]
             );
+
+            $this->addLeniFingerprintInUserEventExtraData($event, $participant->getUser());
         }
 
         return $participant;
@@ -114,6 +129,29 @@ class RawDataToParticipantConverter
                 $event,
                 UserEventExtraDataType::LENI_USER_ID,
                 $leniId,
+                $this->dateTime
+            )
+        );
+    }
+
+    /**
+     * @param Event $event
+     * @param User  $user
+     */
+    private function addLeniFingerprintInUserEventExtraData(Event $event, User $user): void
+    {
+        $leniUserView = $this->leniUserViewQueryHandler->handle(
+            new LeniUserViewQuery($event, $user, null)
+        );
+
+        $leniUserData = $this->leniUserViewNormalizer->normalize($leniUserView);
+
+        $this->extraDataRepository->add(
+            new ExtraData(
+                $user,
+                $event,
+                UserEventExtraDataType::LENI_FINGERPRINT,
+                serialize($leniUserData),
                 $this->dateTime
             )
         );

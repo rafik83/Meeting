@@ -8,13 +8,13 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Proximum\Vimeet\Tests\Application\ThirdParty\LENI\Save\Query;
+namespace Proximum\Vimeet\Tests\Application\ThirdParty\LENI\Common\Query;
 
 use PHPUnit\Framework\TestCase;
 use Prophecy\Prophecy\ObjectProphecy;
-use Proximum\Vimeet\Application\ThirdParty\LENI\Save\Query\PrepareLeaderData;
-use Proximum\Vimeet\Application\ThirdParty\LENI\Save\Query\PrepareLeaderDataHandler;
-use Proximum\Vimeet\Application\ThirdParty\LENI\Save\View\LeaderView;
+use Proximum\Vimeet\Application\ThirdParty\LENI\Common\Query\PrepareLeaderData;
+use Proximum\Vimeet\Application\ThirdParty\LENI\Common\Query\PrepareLeaderDataHandler;
+use Proximum\Vimeet\Application\ThirdParty\LENI\Common\View\LeaderView;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Sheet;
