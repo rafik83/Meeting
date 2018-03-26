@@ -107,6 +107,7 @@ class LeniApiCaller
      * @param Event $event
      * @param array $fields
      * @param array $filters
+     * @param array $order
      * @param int   $start
      * @param int   $limit
      *
@@ -114,8 +115,14 @@ class LeniApiCaller
      *
      * @throws LeniApiServerException
      */
-    public function get(Event $event, array $fields, array $filters, int $start = 0, int $limit = 1): array
-    {
+    public function get(
+        Event $event,
+        array $fields,
+        array $filters,
+        array $order,
+        int $start = 0,
+        int $limit = 1
+    ): array {
         $leniUserParameter = $this->extraParameterRepository->findByEventAndType($event, Type::TYPE_LENI_USER);
         $leniEventParameter = $this->extraParameterRepository->findByEventAndType($event, Type::TYPE_LENI_EVENT);
         $leniModeParameter = $this->extraParameterRepository->findByEventAndType($event, Type::TYPE_LENI_MODE);
@@ -138,7 +145,7 @@ class LeniApiCaller
             );
         }
 
-        $body = $this->getGetCallBody($leniEventParameter->getValue(), $fields, $filters, $start, $limit);
+        $body = $this->getGetCallBody($leniEventParameter->getValue(), $fields, $filters, $order, $start, $limit);
         $jsonEncodedBody = json_encode($body);
         $headers = $this->getHeaders($leniUserParameter->getValue(), $jsonEncodedBody);
 
@@ -157,19 +164,27 @@ class LeniApiCaller
      * @param string $idEvt
      * @param array  $fields
      * @param array  $filters
+     * @param array  $order
      * @param int    $start
      * @param int    $limit
      *
      * @return array
      */
-    private function getGetCallBody(string $idEvt, array $fields, array $filters, int $start, int $limit): array
-    {
+    private function getGetCallBody(
+        string $idEvt,
+        array $fields,
+        array $filters,
+        array $order,
+        int $start,
+        int $limit
+    ): array {
         return [
             'idEvt' => $idEvt,
             'filters' => $filters,
             'fields' => $fields,
             'start' => $start,
             'take' => $limit,
+            'order' => $order,
         ];
     }
 

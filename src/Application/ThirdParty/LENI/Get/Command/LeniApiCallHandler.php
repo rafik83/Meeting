@@ -107,7 +107,14 @@ class LeniApiCallHandler
         $rawUsersData = $this->leniApi->get(
             $event,
             $this->fieldsByEventQueryHandler->handle(new FieldsByEventQuery($typesMapping, $customDataMapping ?? [])),
-            $this->getFilters($event),
+            [
+                [
+                    'selectedFieldId' => LeniConstants::LENI_COL_CREATED_AT,
+                    'selectedOperator' => 'GREATER_OR_EQUAL',
+                    'value' => '/Date(1521725549000)/',
+                ]
+            ],
+            $this->getOrder(),
             0,
             self::BATCH_LENGTH
         );
@@ -163,5 +170,13 @@ class LeniApiCallHandler
                 'value' => $usersId,
             ]
         ];
+    }
+
+    /**
+     * @return array
+     */
+    private function getOrder(): array
+    {
+        return [LeniConstants::LENI_COL_CREATED_AT => 'asc'];
     }
 }
