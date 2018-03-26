@@ -215,7 +215,23 @@ interface SheetSearchAdapterInterface
      * @param Event  $event
      * @param string $locale
      *
-     * @return array
+     * @return array of aggregate with the formats:
+     * [
+     *     "countryCodes" => [
+     *         "doc_count_error_upper_bound" => 0,
+     *         "sum_other_doc_count" => 0,
+     *         "buckets" => [
+     *               [
+     *                  "key" => "fr",
+     *                  "doc_count" => 186
+     *               ],
+     *               [
+     *                   "key" => "gb",
+     *                   "doc_count" => 29
+     *               ]
+     *         ]
+     *     ]
+     * ]
      */
     public function getCountries(Event $event, string $locale): array;
 }
