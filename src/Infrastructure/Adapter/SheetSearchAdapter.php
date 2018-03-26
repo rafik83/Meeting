@@ -285,24 +285,11 @@ class SheetSearchAdapter implements SheetSearchAdapterInterface
         );
 
         $query = new Query($builder->getQuery());
-        $query->addAggregation($this->getCountriesQuery($event))
-            ->setSize(0);
-
-        return $this->searchable->search($query)->getAggregations();
-    }
-
-    public function getCountriesQuery(Event $event): Filter
-    {
-        $filterEventQuery = new FilterQuery();
-        $filterEventQuery->setQuery(new Query\Match('event', $event->getId()));
-
         $countryAggregations = new Terms('countryCodes');
         $countryAggregations->setField('countryCode');
+        $query->addAggregation($countryAggregations);
 
-        $filterCountryEvent = new Filter('countryCodes_aggs', $filterEventQuery);
-        $filterCountryEvent->addAggregation($countryAggregations);
-
-        return $filterCountryEvent;
+        return $this->searchable->search($query)->getAggregations();
     }
 
     /**

@@ -1,9 +1,9 @@
 <?php
 
 /*
- * This file is part of the vimeet project.
+ * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) vimeet
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -37,7 +37,7 @@ class CountryViewQueryHandler
     {
         $countryViews  = [];
         $localizations = $this->sheetSearchAdapter->getCountries($query->event, $query->locale);
-        $countries     = $localizations['countryCodes_aggs']['countryCodes'] ?? [];
+        $countries     = $localizations['countryCodes'] ?? [];
 
         if (!empty($countries)) {
             foreach ($countries['buckets'] as $country) {
