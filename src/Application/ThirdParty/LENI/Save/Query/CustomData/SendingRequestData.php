@@ -8,21 +8,21 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Proximum\Vimeet\Application\ThirdParty\LENI\Save\Query;
+namespace Proximum\Vimeet\Application\ThirdParty\LENI\Save\Query\CustomData;
 
 use Proximum\Vimeet\Domain\Model\Event;
 
-class GetCustomData
+class SendingRequestData
 {
-    /** @var array */
-    public $data;
-
     /** @var Event */
     public $event;
 
-    public function __construct(array $data, Event $event)
+    /** @var array */
+    public $data;
+
+    public function __construct(Event $event, array $data)
     {
-        $this->data = $data;
         $this->event = $event;
+        $this->data = $data;
     }
 }

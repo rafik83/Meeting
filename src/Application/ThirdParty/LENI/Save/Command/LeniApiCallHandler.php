@@ -187,7 +187,7 @@ class LeniApiCallHandler
             unset($data[LeniConstants::LENI_COL_USER_ID]);
         }
 
-        $response = $this->leniApi->save($event, $this->getCustomDataHandler->handle(new GetCustomData($data)));
+        $response = $this->leniApi->save($event, $this->getCustomDataHandler->handle(new GetCustomData($data, $event)));
 
         $hasNotUserId = !isset($data[LeniConstants::LENI_COL_USER_ID]);
 
