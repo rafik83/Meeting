@@ -59,9 +59,6 @@ class LeniUserViewNormalizer
         if (null !== $userView->leniId) {
             // Set the previous LENI user id
             $data[LeniConstants::LENI_COL_USER_ID] = $userView->leniId;
-        } else {
-            // User is new; Set "API" to "EvenementOrigine" field
-            $data[LeniConstants::LENI_COL_EVENT_ORIGIN] = LeniConstants::NEW_USER_EVENT_ORIGIN;
         }
 
         return $data;

@@ -85,7 +85,6 @@ class LeniUserViewNormalizerTest extends TestCase
             'ZL_IDPRODUITPARTICIPANT' => 971,
             'ZL_JOURNEE1' => 'Planning day one',
             'ZL_JOURNEE2' => 'Planning day two',
-            'EvenementOrigine' => 'API',
         ];
 
         $leniUserViewSerialized = $this->normalizer->normalize($leniUserView);

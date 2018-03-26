@@ -17,6 +17,8 @@ use Proximum\Vimeet\Application\ThirdParty\LENI\Exception\MissingIdException;
 use Proximum\Vimeet\Application\ThirdParty\LENI\Exception\WarningApiCallException;
 use Proximum\Vimeet\Application\ThirdParty\LENI\Save\Command\LeniApiCall;
 use Proximum\Vimeet\Application\ThirdParty\LENI\Save\Command\LeniApiCallHandler;
+use Proximum\Vimeet\Application\ThirdParty\LENI\Save\Query\GetCustomData;
+use Proximum\Vimeet\Application\ThirdParty\LENI\Save\Query\GetCustomDataHandler;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Model\User\Event\ExtraData;
@@ -89,10 +91,18 @@ class LeniApiCallHandlerTest extends TestCase
             ->shouldBeCalled()
         ;
 
+        $getCustomDataHandler = $this->prophesize(GetCustomDataHandler::class);
+        $getCustomDataHandler
+            ->handle(new GetCustomData($data))
+            ->shouldBeCalled()
+            ->willReturn($data)
+        ;
+
         $leniApiCallHandler = new LeniApiCallHandler(
             $extraDataRepository->reveal(),
             $leniApi->reveal(),
             $userExtraDataFingerprintManager->reveal(),
+            $getCustomDataHandler->reveal(),
             $dateTime
         );
 
@@ -161,10 +171,18 @@ class LeniApiCallHandlerTest extends TestCase
 
         $dateTime = new \DateTime();
 
+        $getCustomDataHandler = $this->prophesize(GetCustomDataHandler::class);
+        $getCustomDataHandler
+            ->handle(new GetCustomData($data))
+            ->shouldBeCalled()
+            ->willReturn($data)
+        ;
+
         $leniApiCallHandler = new LeniApiCallHandler(
             $extraDataRepository->reveal(),
             $leniApi->reveal(),
             $userExtraDataFingerprintManager->reveal(),
+            $getCustomDataHandler->reveal(),
             $dateTime
         );
 
@@ -189,16 +207,28 @@ class LeniApiCallHandlerTest extends TestCase
         );
 
         $leniApi = $this->prophesize(LeniApiCaller::class);
-        $leniApi->save($event->reveal(), ['Cab2' => '24601'])->shouldBeCalled()->willReturn($response);
+        $leniApi
+            ->save($event->reveal(), ['Cab2' => '24601', 'EvenementOrigin' => 'API'])
+            ->shouldBeCalled()
+            ->willReturn($response)
+        ;
 
         $userExtraDataFingerprintManager = $this->prophesize(UserExtraDataFingerprintManager::class);
         $extraDataRepository = $this->prophesize(ExtraDataRepositoryInterface::class);
+
+        $getCustomDataHandler = $this->prophesize(GetCustomDataHandler::class);
+        $getCustomDataHandler
+            ->handle(new GetCustomData(['Cab2' => '24601']))
+            ->shouldBeCalled()
+            ->willReturn(['Cab2' => '24601', 'EvenementOrigin' => 'API'])
+        ;
 
         $dateTime = new \DateTime();
         $leniApiCallHandler = new LeniApiCallHandler(
             $extraDataRepository->reveal(),
             $leniApi->reveal(),
             $userExtraDataFingerprintManager->reveal(),
+            $getCustomDataHandler->reveal(),
             $dateTime
         );
 
@@ -272,10 +302,18 @@ class LeniApiCallHandlerTest extends TestCase
             ->shouldBeCalled()
         ;
 
+        $getCustomDataHandler = $this->prophesize(GetCustomDataHandler::class);
+        $getCustomDataHandler
+            ->handle(new GetCustomData($data))
+            ->shouldBeCalled()
+            ->willReturn($data)
+        ;
+
         $leniApiCallHandler = new LeniApiCallHandler(
             $extraDataRepository->reveal(),
             $leniApi->reveal(),
             $userExtraDataFingerprintManager->reveal(),
+            $getCustomDataHandler->reveal(),
             $dateTime
         );
 

@@ -19,6 +19,7 @@ services:
             - '@repository.user.event.extra_data_repository'
             - '@Proximum\Vimeet\Application\ThirdParty\LENI\Common\Api\LeniApiCaller'
             - '@Proximum\Vimeet\Application\ThirdParty\LENI\Common\UserExtraData\UserExtraDataFingerprintManager'
+            - '@Proximum\Vimeet\Application\ThirdParty\LENI\Save\Query\GetCustomDataHandler'
             - '@datetime'
 
     Proximum\Vimeet\Application\ThirdParty\LENI\Get\Command\LeniApiCallHandler:
@@ -131,3 +132,5 @@ services:
             - '@repository.user.event.extra_data_repository'
 
     Proximum\Vimeet\Application\ThirdParty\LENI\Get\Query\FieldsByEventQueryHandler: ~
+
+    Proximum\Vimeet\Application\ThirdParty\LENI\Save\Query\GetCustomDataHandler: ~
