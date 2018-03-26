@@ -13,14 +13,14 @@ namespace Proximum\Vimeet\Application\View\Sheet;
 class CountryView
 {
     /** @var string */
-    public $id;
+    public $code;
 
     /** @var string */
     public $name;
 
-    public function __construct(string $name)
+    public function __construct(string $name, string $code)
     {
-        $this->id   = strtolower(str_replace(' ', '-', $name));
+        $this->code = $code;
         $this->name = $name;
     }
 }

@@ -44,7 +44,7 @@ class CountryChoiceType extends AbstractType
                 return $countryView->name;
             },
             'choice_value' => function (CountryView $countryView) {
-                return $countryView->id;
+                return $countryView->code;
             },
         ]);
     }

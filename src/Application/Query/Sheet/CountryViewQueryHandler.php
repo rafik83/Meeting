@@ -10,19 +10,22 @@
 
 namespace Proximum\Vimeet\Application\Query\Sheet;
 
+use Proximum\Vimeet\Application\Adapter\IntlInterface;
 use Proximum\Vimeet\Application\Adapter\SheetSearchAdapterInterface;
 use Proximum\Vimeet\Application\View\Sheet\CountryView;
 
 class CountryViewQueryHandler
 {
-    /**
-     * @var SheetSearchAdapterInterface
-     */
+    /** @var SheetSearchAdapterInterface */
     private $sheetSearchAdapter;
 
-    public function __construct(SheetSearchAdapterInterface $sheetSearchAdapter)
+    /** @var IntlInterface */
+    private $intl;
+
+    public function __construct(SheetSearchAdapterInterface $sheetSearchAdapter, IntlInterface $intl)
     {
         $this->sheetSearchAdapter = $sheetSearchAdapter;
+        $this->intl = $intl;
     }
 
     /**
@@ -34,11 +37,16 @@ class CountryViewQueryHandler
     {
         $countryViews  = [];
         $localizations = $this->sheetSearchAdapter->getCountries($query->event, $query->locale);
-        $countries     = $localizations['countries_aggs']['countries']['countries_filter']['countries'] ?? [];
+        $countries     = $localizations['countryCodes_aggs']['countryCodes'] ?? [];
 
         if (!empty($countries)) {
             foreach ($countries['buckets'] as $country) {
-                $countryViews[] = new CountryView($country['key']);
+                $countryCode = $country['key'];
+                $countryName = $this->intl->getCountryName($countryCode, $query->locale);
+
+                if (null !== $countryName) {
+                    $countryViews[] = new CountryView($countryName, $countryCode);
+                }
             }
         }
 

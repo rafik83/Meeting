@@ -651,16 +651,8 @@ class SheetSearchQueryBuilder
         $boolQuery = new BoolQuery();
 
         foreach ($countries as $country) {
-            $nested           = new Nested();
-            $nestedBoolQuery  = new BoolQuery();
-            $matchQuery       = new Match('country.label', $country->name);
-            $matchLocaleQuery = new Match('country.locale', $this->locale);
-
-            $nestedBoolQuery->addMust($matchQuery);
-            $nestedBoolQuery->addMust($matchLocaleQuery);
-
-            $nested->setQuery($nestedBoolQuery)->setPath('country');
-            $boolQuery->addShould($nested);
+            $matchQuery       = new Match('countryCode', $country->code);
+            $boolQuery->addShould($matchQuery);
         }
 
         $this->query->addMust($boolQuery);

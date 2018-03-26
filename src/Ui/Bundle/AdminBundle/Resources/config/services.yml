@@ -50,7 +50,6 @@ services:
         tags:
             - { name: form.type }
     Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Sheet\CountryChoiceType:
-        class: Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Sheet\CountryChoiceType
         arguments:
             - '@Proximum\Vimeet\Application\Query\Sheet\CountryViewQueryHandler'
         tags:

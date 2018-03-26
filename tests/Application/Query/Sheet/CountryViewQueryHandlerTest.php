@@ -15,6 +15,7 @@ use Proximum\Vimeet\Application\Adapter\SheetSearchAdapterInterface;
 use Proximum\Vimeet\Application\Query\Sheet\CountryViewQuery;
 use Proximum\Vimeet\Application\Query\Sheet\CountryViewQueryHandler;
 use Proximum\Vimeet\Application\View\Sheet\CountryView;
+use Proximum\Vimeet\Infrastructure\Adapter\IntlAdapter;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
 
 class CountryViewQueryHandlerTest extends TestCase
@@ -23,19 +24,17 @@ class CountryViewQueryHandlerTest extends TestCase
     {
         $event = EventFactory::createEvent();
         $locale = 'fr';
+        $franceCountryCode = 'fr';
+        $franceCountryName = 'France';
+        $germanyCountryCode = 'de';
+        $germanyCountryName = 'Allemagne';
+
         $expectedCountries = [
-            'countries_aggs' => [
-                'countries' => [
-                    'countries_filter' => [
-                        'countries' => [
-                            'buckets' =>
-                            [
-                                'key' => 'france',
-                            ],
-                            [
-                                'key' => 'allemagne'
-                            ]
-                        ]
+            'countryCodes_aggs' => [
+                'countryCodes' => [
+                    'buckets' => [
+                        ['key' => $franceCountryCode],
+                        ['key' => $germanyCountryCode]
                     ]
                 ]
             ]
@@ -44,12 +43,21 @@ class CountryViewQueryHandlerTest extends TestCase
         $sheetSearchAdapter = $this->prophesize(SheetSearchAdapterInterface::class);
         $sheetSearchAdapter->getCountries($event, $locale)->shouldBeCalled()->willReturn($expectedCountries);
 
-        $handler = new CountryViewQueryHandler($sheetSearchAdapter->reveal());
+        $intlAdapter = $this->prophesize(IntlAdapter::class);
+        $intlAdapter->getCountryName($franceCountryCode, $locale)
+            ->shouldBeCalled()
+            ->willReturn($franceCountryName);
+        $intlAdapter->getCountryName($germanyCountryCode, $locale)
+            ->shouldBeCalled()
+            ->willReturn($germanyCountryName);
+
+        $handler = new CountryViewQueryHandler($sheetSearchAdapter->reveal(), $intlAdapter->reveal());
 
         $result = $handler->handle(new CountryViewQuery($event, $locale));
 
         $this->assertCount(2, $result);
         $this->assertInstanceOf(CountryView::class, $result[0]);
-        $this->assertEquals('allemagne', $result[1]->name);
+        $this->assertEquals($germanyCountryName, $result[1]->name);
+        $this->assertEquals($franceCountryCode, $result[0]->code);
     }
 }

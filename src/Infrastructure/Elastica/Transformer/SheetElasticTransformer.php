@@ -196,6 +196,7 @@ class SheetElasticTransformer implements ModelToElasticaTransformerInterface
                 'city'                    => $this->getCity($registrationTemplateData),
                 'zipcode'                 => $this->getTwoFirstCharsOfFranceZipcode($registrationTemplateData),
                 'country'                 => $this->buildCountry($registrationTemplateData, $sheet->getEvent()->getLocales()),
+                'countryCode'             => $this->getCountryCode($registrationTemplateData),
                 'nomenclatureItems'       => $nomenclatureItems,
                 'nomenclatureItemsSupply' => $this->buildNomenclatureItems($fallbackData, Nomenclature::OBJECTIVE_SUPPLY),
                 'nomenclatureItemsNeeds'  => $this->buildNomenclatureItems($fallbackData, Nomenclature::OBJECTIVE_NEED),

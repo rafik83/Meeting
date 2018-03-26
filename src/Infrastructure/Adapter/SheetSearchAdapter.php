@@ -285,39 +285,22 @@ class SheetSearchAdapter implements SheetSearchAdapterInterface
         );
 
         $query = new Query($builder->getQuery());
-        $query->addAggregation($this->getCountriesQuery($event, $locale))
+        $query->addAggregation($this->getCountriesQuery($event))
             ->setSize(0);
 
         return $this->searchable->search($query)->getAggregations();
     }
 
-    public function getCountriesQuery(Event $event, string $locale): Filter
+    public function getCountriesQuery(Event $event): Filter
     {
         $filterEventQuery = new FilterQuery();
         $filterEventQuery->setQuery(new Query\Match('event', $event->getId()));
 
-        // country
-        $matchLocale  = new Query\Match('country.locale', $locale);
+        $countryAggregations = new Terms('countryCodes');
+        $countryAggregations->setField('countryCode');
 
-        $boolQuery = new Query\BoolQuery();
-        $boolQuery->addMust($matchLocale);
-
-        $filterCountryQuery = new FilterQuery();
-        $filterCountryQuery->setQuery($boolQuery);
-
-        $countryAggregations = new Terms('countries');
-        $countryAggregations->setField('country.label');
-        $countryAggregations->setSize(10);
-
-        $filterCountries = new Filter('countries_filter');
-        $filterCountries->addAggregation($countryAggregations);
-        $filterCountries->setFilter($filterCountryQuery);
-
-        $nestedCountryAggregations = new Nested('countries', 'country');
-        $nestedCountryAggregations->addAggregation($filterCountries);
-
-        $filterCountryEvent = new Filter('countries_aggs', $filterEventQuery);
-        $filterCountryEvent->addAggregation($nestedCountryAggregations);
+        $filterCountryEvent = new Filter('countryCodes_aggs', $filterEventQuery);
+        $filterCountryEvent->addAggregation($countryAggregations);
 
         return $filterCountryEvent;
     }
