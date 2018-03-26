@@ -55,6 +55,7 @@ class Type
         self::TYPE_LENI_GET_ENDPOINT,
         self::TYPE_LENI_TYPES_MAPPING,
         self::TYPE_LENI_DATA_MAPPING,
+        self::TYPE_LENI_SENDING_REQUEST,
         self::TYPE_VIANEO_ENDPOINT,
         self::TYPE_VIANEO_CONCERNED_TYPES_ID,
         self::TYPE_COMEXPOSIUM_EVENT_REFERENCE,
