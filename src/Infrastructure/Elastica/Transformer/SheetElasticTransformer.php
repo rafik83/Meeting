@@ -162,6 +162,12 @@ class SheetElasticTransformer implements ModelToElasticaTransformerInterface
             }
         }
 
+        $countryCode = $this->getCountryCode($registrationTemplateData);
+
+        if ($countryCode === false) {
+            $countryCode = null;
+        }
+
         return new Document($sheet->getId(), array_merge(
             [
                 'id'                      => $sheet->getId(),
@@ -196,7 +202,7 @@ class SheetElasticTransformer implements ModelToElasticaTransformerInterface
                 'city'                    => $this->getCity($registrationTemplateData),
                 'zipcode'                 => $this->getTwoFirstCharsOfFranceZipcode($registrationTemplateData),
                 'country'                 => $this->buildCountry($registrationTemplateData, $sheet->getEvent()->getLocales()),
-                'countryCode'             => $this->getCountryCode($registrationTemplateData),
+                'countryCode'             => $countryCode,
                 'nomenclatureItems'       => $nomenclatureItems,
                 'nomenclatureItemsSupply' => $this->buildNomenclatureItems($fallbackData, Nomenclature::OBJECTIVE_SUPPLY),
                 'nomenclatureItemsNeeds'  => $this->buildNomenclatureItems($fallbackData, Nomenclature::OBJECTIVE_NEED),
