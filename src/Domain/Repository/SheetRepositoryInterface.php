@@ -111,6 +111,17 @@ interface SheetRepositoryInterface
     /**
      * @param Event $event
      *
+     * @return array of owner emails with the format:
+     *  [
+     *      0 => ['email' => 'email0@example.net'],
+     *      1 => ['email' => 'email1@example.net'],
+     *  ]
+     */
+    public function getOwnerEmails(Event $event): array;
+
+    /**
+     * @param Event $event
+     *
      * @return Sheet[]
      */
     public function getSheetsInCatalogWithAtLeastOneAcceptedRequestByEvent(Event $event);
