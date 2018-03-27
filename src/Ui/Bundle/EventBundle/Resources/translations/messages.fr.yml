@@ -176,6 +176,7 @@ meeting.video.end: 'Arrêter le RDV'
 meeting.video.error.userDeniedAccess: "Vous avez refusé l'accès à vos périphériques audio/video ou annulé le lancement du partage d'écran.\nPour que la visioconférence fonctionne correctement, merci d'autoriser l'accès à vos périphériques ou le lancement du partage d'écran."
 meeting.video.installScreenSharingExtensionMessage: 'Merci d''installer notre extension de partage d''écran.'
 meeting.video.notCompatibleBrowserMessage: 'Votre navigateur n''est pas compatible. Merci d''utiliser Chrome ou Firefox.'
+meeting.video.screenshare: 'Partage d''écran'
 meeting.video.screenshare.end: 'Arrêter le partage'
 meeting.video.screenshare.start: 'Partager mon écran'
 meeting.video.start: 'Démarrer le RDV'
@@ -387,10 +388,10 @@ register.step: Etape
 select2.no_results: 'Aucun résultat'
 sheet.edit.object: 'Compléter "%label%"'
 sheet.maxParticipantReached: 'Nombre maximum de participants atteint'
-sheet.object.action.add: 'Ajouter:'
+sheet.object.action.add: 'Ajouter :'
 sheet.object.action.backToSheet: 'Retour à la fiche'
 sheet.object.action.edit: Compléter
-sheet.object.action.remove: 'Supprimer:'
+sheet.object.action.remove: 'Supprimer :'
 sheet.object.boolean.false: Non
 sheet.object.boolean.true: Oui
 sheet.object.image.label: 'Votre image actuelle'

@@ -53,6 +53,10 @@ form.admin.sheet.follower.un-assigned: unassigned
 form.archive_un_archive.children.archive.label: Archive
 form.archive_un_archive.children.unArchive.label: Unarchive
 form.archive_un_archive.confirm.submit.label: 'Do you confirm the action ?'
+form.availability_time_range_create.children.begin.label: 'Start of the range'
+form.availability_time_range_create.children.end.label: 'End of the range'
+form.availability_time_range_create.children.name.label: 'Backoffice name'
+form.availability_time_range_create.children.submit.label: Save
 form.billing_info_update.children.city.label: City
 form.billing_info_update.children.company.label: Company
 form.billing_info_update.children.country.label: Country
@@ -263,6 +267,7 @@ form.extra_parameter_create.children.type.choices.comexposium_sso_application: '
 form.extra_parameter_create.children.type.choices.comexposium_sso_enabled: 'Activate Comexposium SSO'
 form.extra_parameter_create.children.type.choices.comexposium_sso_salon: 'Comexposium event SSO'
 form.extra_parameter_create.children.type.choices.comexposium_sso_session_salon: 'Comexposium event SSO Session'
+form.extra_parameter_create.children.type.choices.comexposium_visitor_type_id: 'Id of the type of participation Visitor concerned'
 form.extra_parameter_create.children.type.choices.leni_event: 'Event LENI code'
 form.extra_parameter_create.children.type.choices.leni_participation_data_mapping: 'LENI fields mapping'
 form.extra_parameter_create.children.type.choices.leni_participation_types_mapping: 'LENI participation types mapping'

@@ -7,6 +7,8 @@ validators.admin.sheet.participant_import.telephone.error: 'unvalid phone number
 validators.admin.template.registration.update.error.nomenclatureNotFound: 'a nomenclature of the template is not correctly filled in.'
 validators.admin.template.registration.update.error.template: 'a problem occured with your template'
 validators.allowDepositMissingData: 'If you activate the deposit, you must add a minimum deposit, a date and a percentage'
+validators.availabilityTimeRange.beginBeforeEnd: 'The beginning of the range must be before the end'
+validators.availabilityTimeRange.datesInEventDays: 'The dates of the range must be included in the dates of the event'
 validators.constraint.daterange: 'The start time must be earlier than the end time'
 validators.constraint.spot_reference_recipe.range: 'The start value must be inferior to the end value'
 validators.currentPassword: 'Current password is not correct'
