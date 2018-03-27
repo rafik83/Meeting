@@ -362,7 +362,7 @@ admin.meeting.action.remove.confirm: 'Êtes-vous sûr de vouloir supprimer ce re
 admin.meeting.action.remove.link: Supprimer
 admin.meeting.dashboard.approvedRequest: Acceptées
 admin.meeting.dashboard.createdByParticipant: 'Créés par les participants'
-admin.meeting.dashboard.createdDayD: 'Créés le jour de l''événément'
+admin.meeting.dashboard.createdDayD: 'Créés le jour de l’événement par l''organisateur'
 admin.meeting.dashboard.liveMeeting: 'Rendez-vous live'
 admin.meeting.dashboard.meeting: Rendez-vous
 admin.meeting.dashboard.pendingRequest: 'En attentes'
