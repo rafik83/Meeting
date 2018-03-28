@@ -29,6 +29,8 @@ class Type
     public const VALUE_LENI_MODE_SAVE = 'save';
     public const VALUE_LENI_MODE_GET = 'get';
     public const VALUE_LENI_MODE_BOTH = 'both';
+    public const ALLOWED_LENI_MODE_FOR_GET = [self::VALUE_LENI_MODE_GET, self::VALUE_LENI_MODE_BOTH];
+    public const ALLOWED_LENI_MODE_FOR_SAVE = [self::VALUE_LENI_MODE_SAVE, self::VALUE_LENI_MODE_BOTH];
 
     // Event Reference in Comexposium
     public const TYPE_COMEXPOSIUM_EVENT_REFERENCE = 'comexposium_event_reference';

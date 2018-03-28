@@ -54,11 +54,7 @@ class LeniApiCaller
         );
 
         $isAuthorizedMode = $leniModeParameter !== null
-            && \in_array(
-                $leniModeParameter->getValue(),
-                [Type::VALUE_LENI_MODE_SAVE, Type::VALUE_LENI_MODE_BOTH],
-                true
-            )
+            && \in_array($leniModeParameter->getValue(), Type::ALLOWED_LENI_MODE_FOR_SAVE, true)
         ;
 
         if (!$isAuthorizedMode
@@ -125,7 +121,7 @@ class LeniApiCaller
         );
 
         $isAuthorizedMode = $leniModeParameter !== null
-            && \in_array($leniModeParameter->getValue(), [Type::VALUE_LENI_MODE_GET, Type::VALUE_LENI_MODE_BOTH], true)
+            && \in_array($leniModeParameter->getValue(), Type::ALLOWED_LENI_MODE_FOR_GET, true)
         ;
 
         if (!$isAuthorizedMode

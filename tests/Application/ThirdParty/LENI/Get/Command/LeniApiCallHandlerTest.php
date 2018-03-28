@@ -22,6 +22,7 @@ use Proximum\Vimeet\Domain\Event\ExtraParameter\Type as ExtraParameterType;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Type;
 use Proximum\Vimeet\Domain\Model\User\Event\ExtraData;
+use Proximum\Vimeet\Domain\Repository\Event\ExtraParameterRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\EventRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\TypeRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\User\Event\ExtraDataRepositoryInterface;
@@ -179,11 +180,30 @@ class LeniApiCallHandlerTest extends TestCase
             ->willReturn(['field1', 'field3'])
         ;
 
+        $extraParameterRepository = $this->prophesize(ExtraParameterRepositoryInterface::class);
+
+        $extraParameterEvent1 = $this->prophesize(Event\ExtraParameter::class);
+        $extraParameterEvent1->getValue()->willReturn('get');
+        $extraParameterRepository
+            ->findByEventAndType($event1->reveal(), ExtraParameterType::TYPE_LENI_MODE)
+            ->shouldBeCalled()
+            ->willReturn($extraParameterEvent1->reveal())
+        ;
+
+        $extraParameterEvent2 = $this->prophesize(Event\ExtraParameter::class);
+        $extraParameterEvent2->getValue()->willReturn('get');
+        $extraParameterRepository
+            ->findByEventAndType($event2->reveal(), ExtraParameterType::TYPE_LENI_MODE)
+            ->shouldBeCalled()
+            ->willReturn($extraParameterEvent2->reveal())
+        ;
+
         $leniApiCallHandler = new LeniApiCallHandler(
             $leniApi->reveal(),
             $eventRepository->reveal(),
             $typeRepository->reveal(),
             $extraDataRepository->reveal(),
+            $extraParameterRepository->reveal(),
             $mappingGetter->reveal(),
             $fieldsByEventQueryHandler->reveal(),
             $rawDataToParticipantConverter->reveal()
