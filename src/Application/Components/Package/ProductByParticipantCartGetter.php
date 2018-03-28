@@ -29,10 +29,14 @@ class ProductByParticipantCartGetter
 
         $sheet = $cart->getSheet();
 
+        $products = $sheet->getPackage()->getParticipants();
+
         // Get product by participant from Cart
         foreach ($cart->getParticipantRows() as $cartRow) {
             foreach ($cartRow->getParticipants() as $participant) {
-                $participantsProduct[$participant->getId()] = $cartRow->getProduct();
+                if (\in_array($cartRow->getProduct(), $products, true)) {
+                    $participantsProduct[$participant->getId()] = $cartRow->getProduct();
+                }
             }
         }
 
