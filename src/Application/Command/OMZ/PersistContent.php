@@ -10,21 +10,19 @@
 
 namespace Proximum\Vimeet\Application\Command\OMZ;
 
-use Proximum\Vimeet\Application\Command\Command;
-use Proximum\Vimeet\Domain\Model\Admin;
 use Proximum\Vimeet\Domain\Model\Event;
 
-class Export implements Command
+class PersistContent
 {
     /** @var Event */
     public $event;
 
-    /** @var Admin */
-    public $admin;
+    /** @var string */
+    public $content;
 
-    public function __construct(Event $event, Admin $admin)
+    public function __construct(Event $event, string $content)
     {
         $this->event = $event;
-        $this->admin = $admin;
+        $this->content = $content;
     }
 }

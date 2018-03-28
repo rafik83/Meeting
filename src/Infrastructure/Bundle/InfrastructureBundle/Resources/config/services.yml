@@ -5571,22 +5571,6 @@ services:
             - '%infrastructure.export_order_path%'
             - '@datetime'
 
-    #
-    # Export OMZ
-    #
-    command.omz.export_handler:
-        class: Proximum\Vimeet\Application\Command\OMZ\ExportHandler
-        arguments:
-            - '@vimeet_infrastructure.repository.user_repository'
-            - '@vimeet_infrastructure.repository.sheet_repository'
-            - '@domain.service.sheets_group.group_name_resolver'
-            - '@domain.service.sheets_group.type_name_resolver'
-            - '@components.user.user_info_guesser'
-            - '@planning.formatter.participant_planning_formatter'
-            - '@adapter.serializer_adapter'
-        tags:
-            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\OMZ\Export }
-
     # Invoice
     #
     printer.invoice_pdf_printer:
