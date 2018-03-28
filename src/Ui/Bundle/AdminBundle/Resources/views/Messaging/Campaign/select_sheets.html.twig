@@ -61,6 +61,7 @@
         <div class="col-md-6 well">
             {{ form_start(filter_form) }}
                 {{ form_row(filter_form.text) }}
+                {{ form_row(filter_form.country) }}
                 {{ form_row(filter_form.validationState, {'inline': true}) }}
                 {{ form_row(filter_form.state, {'inline': true}) }}
                 {{ form_row(filter_form.completed, {'inline': true}) }}
@@ -95,6 +96,7 @@
                 {{ form_row(filter_form.availabilityConfirmationStatus) }}
                 {{ form_row(filter_form.hasPendingMeetingPropositions, {'inline': true}) }}
                 {{ form_row(filter_form.hasNoMeetingRequest, {'inline': true}) }}
+                {{ form_row(filter_form.reminderDate) }}
 
                 {% if filter_form.boolean_filters is defined %}
                     <hr>

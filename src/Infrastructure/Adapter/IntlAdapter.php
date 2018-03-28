@@ -20,7 +20,7 @@ class IntlAdapter implements IntlInterface
      */
     public function getCountryName($countryCode, $locale = null)
     {
-        return Intl::getRegionBundle()->getCountryName($countryCode, $locale);
+        return Intl::getRegionBundle()->getCountryName(\mb_strtoupper($countryCode), $locale);
     }
 
     /**

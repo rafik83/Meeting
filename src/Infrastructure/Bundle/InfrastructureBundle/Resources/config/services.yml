@@ -3095,6 +3095,13 @@ services:
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Sheet\Catalog\PaginatedSheetExternalViewQuery }
 
+    Proximum\Vimeet\Application\Query\Sheet\CountryViewQueryHandler:
+        arguments:
+            - '@adapter.sheet_search_adapter'
+            - '@adapter.intl_adapter'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Sheet\CountryViewQuery }
+
     query.invoice.invoice_data_query_handler:
         class: Proximum\Vimeet\Application\Query\Invoice\InvoiceDataQueryHandler
         arguments:
