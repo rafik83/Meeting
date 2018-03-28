@@ -10,9 +10,10 @@
 
 namespace Proximum\Vimeet\Application\Command\Product;
 
+use Proximum\Vimeet\Application\Command\Command;
 use Proximum\Vimeet\Domain\Model\Event;
 
-abstract class AbstractCreate extends AbstractProduct
+abstract class AbstractCreate extends AbstractProduct implements Command
 {
     /** @var Event */
     public $event;

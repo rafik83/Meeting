@@ -32,6 +32,8 @@ class CreateParticipantHandler extends AbstractHandler
             $product->translate($locale, $translation['title'], null, $translation['description'], null, null);
         }
 
+        $product->setAvailabilityTimeRanges($createParticipant->availabilityTimeRanges);
+
         $this->productRepository->add($product);
     }
 }

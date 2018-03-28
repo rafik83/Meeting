@@ -173,6 +173,10 @@ services:
         arguments:
             - '@repository.package_repository'
 
+    Proximum\Vimeet\Behat\Service\Manager\AvailabilityTimeRangeManager:
+        arguments:
+            - '@Proximum\Vimeet\Infrastructure\Repository\AvailabilityTimeRangeRepository'
+
 
     #
     # Proxies
@@ -308,6 +312,11 @@ services:
         arguments:
             - '@behat_storage'
             - '@Proximum\Vimeet\Behat\Service\Manager\PackageManager'
+
+    Proximum\Vimeet\Behat\Proxy\AvailabilityTimeRangeContextProxy:
+        arguments:
+            - '@behat_storage'
+            - '@Proximum\Vimeet\Behat\Service\Manager\AvailabilityTimeRangeManager'
 
     #
     # Other services

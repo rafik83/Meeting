@@ -31,6 +31,8 @@ class UpdateParticipantHandler extends AbstractHandler
             $product->translate($locale, $translation['title'], null, $translation['description'], null, null);
         }
 
+        $product->setAvailabilityTimeRanges($updateParticipant->availabilityTimeRanges);
+
         $this->productRepository->update($product);
     }
 }
