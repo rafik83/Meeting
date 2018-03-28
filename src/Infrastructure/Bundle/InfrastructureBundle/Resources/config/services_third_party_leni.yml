@@ -133,4 +133,10 @@ services:
 
     Proximum\Vimeet\Application\ThirdParty\LENI\Get\Query\FieldsByEventQueryHandler: ~
 
-    Proximum\Vimeet\Application\ThirdParty\LENI\Save\Query\GetCustomDataHandler: ~
+    Proximum\Vimeet\Application\ThirdParty\LENI\Save\Query\CustomData\SendingRequestDataHandler:
+        arguments:
+            - '@repository.event.extra_parameter_repository'
+
+    Proximum\Vimeet\Application\ThirdParty\LENI\Save\Query\GetCustomDataHandler:
+         arguments:
+            - '@Proximum\Vimeet\Application\ThirdParty\LENI\Save\Query\CustomData\SendingRequestDataHandler'

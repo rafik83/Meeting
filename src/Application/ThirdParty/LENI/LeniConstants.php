@@ -60,6 +60,7 @@ class LeniConstants
     public const LENI_COL_LOCALE = 'Langue';
     public const LENI_COL_CREATED_AT = 'CreeLe';
     public const LENI_COL_UPDATED_AT = 'ModifieLe';
+    public const LENI_COL_SENDING_REQUEST = 'SendingRequests';
 
     public const LENI_COL_EVENT_ORIGIN = 'EvenementOrigine';
     public const NEW_USER_EVENT_ORIGIN = 'API';

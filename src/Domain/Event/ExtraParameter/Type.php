@@ -23,6 +23,7 @@ class Type
     public const TYPE_LENI_DATA_MAPPING = 'leni_participation_data_mapping';
     public const TYPE_LENI_SAVE_ENDPOINT = 'leni_save_endpoint';
     public const TYPE_LENI_GET_ENDPOINT = 'leni_get_endpoint';
+    public const TYPE_LENI_SENDING_REQUEST = 'leni_sending_request';
 
     public const TYPE_LENI_MODE = 'leni_mode';
     public const VALUE_LENI_MODE_SAVE = 'save';
@@ -54,6 +55,7 @@ class Type
         self::TYPE_LENI_GET_ENDPOINT,
         self::TYPE_LENI_TYPES_MAPPING,
         self::TYPE_LENI_DATA_MAPPING,
+        self::TYPE_LENI_SENDING_REQUEST,
         self::TYPE_VIANEO_ENDPOINT,
         self::TYPE_VIANEO_CONCERNED_TYPES_ID,
         self::TYPE_COMEXPOSIUM_EVENT_REFERENCE,

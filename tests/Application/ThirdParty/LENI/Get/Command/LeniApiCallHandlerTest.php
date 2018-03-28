@@ -18,7 +18,6 @@ use Proximum\Vimeet\Application\ThirdParty\LENI\Get\Command\LeniApiCallHandler;
 use Proximum\Vimeet\Application\ThirdParty\LENI\Get\Converter\RawDataToParticipantConverter;
 use Proximum\Vimeet\Application\ThirdParty\LENI\Get\Query\FieldsByEventQuery;
 use Proximum\Vimeet\Application\ThirdParty\LENI\Get\Query\FieldsByEventQueryHandler;
-use Proximum\Vimeet\Application\ThirdParty\LENI\LeniConstants;
 use Proximum\Vimeet\Domain\Event\ExtraParameter\Type as ExtraParameterType;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Type;
