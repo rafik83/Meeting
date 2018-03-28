@@ -15,7 +15,7 @@ Proximum\Vimeet\Domain\Model\Event\ExtraParameter:
         type:
             type: string
         value:
-            type: string
+            type: text
         name:
             type: string
         createdAt:
