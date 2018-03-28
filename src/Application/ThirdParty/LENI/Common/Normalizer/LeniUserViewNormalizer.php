@@ -55,6 +55,10 @@ class LeniUserViewNormalizer
             $data[LeniConstants::LENI_LEADER_FIRST_NAME] = mb_substr($userView->leaderView->firstName, 0, LeniConstants::LONG_FIELD);
         }
 
+        // Custom data
+        foreach ($userView->customData as $fieldName => $value) {
+            $data[$fieldName] = $value;
+        }
 
         if (null !== $userView->leniId) {
             // Set the previous LENI user id

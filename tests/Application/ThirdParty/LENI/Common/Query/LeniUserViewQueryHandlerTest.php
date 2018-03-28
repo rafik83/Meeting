@@ -15,6 +15,8 @@ use Proximum\Vimeet\Application\Components\Planning\Formatter\FormattedPlanningV
 use Proximum\Vimeet\Application\Components\Planning\Formatter\ParticipantPlanningFormatter;
 use Proximum\Vimeet\Application\Components\Sheet\SheetInfoGuesser;
 use Proximum\Vimeet\Application\Components\User\UserInfoGuesser;
+use Proximum\Vimeet\Application\ThirdParty\LENI\Common\Query\LeniUserCustomDataQuery;
+use Proximum\Vimeet\Application\ThirdParty\LENI\Common\Query\LeniUserCustomDataQueryHandler;
 use Proximum\Vimeet\Application\ThirdParty\LENI\Common\Query\LeniUserViewQuery;
 use Proximum\Vimeet\Application\ThirdParty\LENI\Common\Query\LeniUserViewQueryHandler;
 use Proximum\Vimeet\Application\ThirdParty\LENI\Common\Query\PrepareLeaderData;
@@ -144,6 +146,15 @@ class LeniUserViewQueryHandlerTest extends TestCase
             ->willReturn(null)
         ;
 
+        $leniUserCustomDataQueryHandler = $this->prophesize(LeniUserCustomDataQueryHandler::class);
+        $leniUserCustomDataQueryHandler
+            ->handle(
+                new LeniUserCustomDataQuery($event->reveal(), $user->reveal(), $type->reveal())
+            )
+            ->shouldBeCalled()
+            ->willReturn(['ZL_PROFIL' => 'VISITEUR'])
+        ;
+
         $handler = new LeniUserViewQueryHandler(
             $userInfoGuesser->reveal(),
             $sheetInfoGuesser->reveal(),
@@ -154,7 +165,8 @@ class LeniUserViewQueryHandlerTest extends TestCase
             $sheetRepository->reveal(),
             $balance->reveal(),
             $prepareLeaderDatahandler->reveal(),
-            $extraDataRepository->reveal()
+            $extraDataRepository->reveal(),
+            $leniUserCustomDataQueryHandler->reveal()
         );
         $result = $handler->handle(new LeniUserViewQuery($event->reveal(), $user->reveal(), null));
 
@@ -183,7 +195,8 @@ class LeniUserViewQueryHandlerTest extends TestCase
             ),
             null,
             true,
-            1337
+            1337,
+            ['ZL_PROFIL' => 'VISITEUR']
         );
 
         $this->assertEquals($expected, $result);
@@ -287,6 +300,15 @@ class LeniUserViewQueryHandlerTest extends TestCase
             ->willReturn(null)
         ;
 
+        $leniUserCustomDataQueryHandler = $this->prophesize(LeniUserCustomDataQueryHandler::class);
+        $leniUserCustomDataQueryHandler
+            ->handle(
+                new LeniUserCustomDataQuery($event->reveal(), $user->reveal(), $type->reveal())
+            )
+            ->shouldBeCalled()
+            ->willReturn([])
+        ;
+
         $handler = new LeniUserViewQueryHandler(
             $userInfoGuesser->reveal(),
             $sheetInfoGuesser->reveal(),
@@ -297,7 +319,8 @@ class LeniUserViewQueryHandlerTest extends TestCase
             $sheetRepository->reveal(),
             $balance->reveal(),
             $prepareLeaderDatahandler->reveal(),
-            $extraDataRepository->reveal()
+            $extraDataRepository->reveal(),
+            $leniUserCustomDataQueryHandler->reveal()
         );
 
         $extraData = new ExtraData(
@@ -335,7 +358,8 @@ class LeniUserViewQueryHandlerTest extends TestCase
             ),
             'f93a5b28-12b0-e711-80e1-0cc47a02bf5b',
             false,
-            null
+            null,
+            []
         );
 
         $this->assertEquals($expected, $result);
@@ -441,6 +465,15 @@ class LeniUserViewQueryHandlerTest extends TestCase
             ->willReturn($leniUserIdExtraData->reveal())
         ;
 
+        $leniUserCustomDataQueryHandler = $this->prophesize(LeniUserCustomDataQueryHandler::class);
+        $leniUserCustomDataQueryHandler
+            ->handle(
+                new LeniUserCustomDataQuery($event->reveal(), $user->reveal(), $type->reveal())
+            )
+            ->shouldBeCalled()
+            ->willReturn([])
+        ;
+
         $handler = new LeniUserViewQueryHandler(
             $userInfoGuesser->reveal(),
             $sheetInfoGuesser->reveal(),
@@ -451,7 +484,8 @@ class LeniUserViewQueryHandlerTest extends TestCase
             $sheetRepository->reveal(),
             $balance->reveal(),
             $prepareLeaderDatahandler->reveal(),
-            $extraDataRepository->reveal()
+            $extraDataRepository->reveal(),
+            $leniUserCustomDataQueryHandler->reveal()
         );
 
         $result = $handler->handle(new LeniUserViewQuery($event->reveal(), $user->reveal(), null));
@@ -481,7 +515,8 @@ class LeniUserViewQueryHandlerTest extends TestCase
             ),
             'leni-saved-user-id',
             false,
-            null
+            null,
+            []
         );
 
         $this->assertEquals($expected, $result);

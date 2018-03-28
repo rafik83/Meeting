@@ -60,7 +60,11 @@ class LeniUserViewNormalizerTest extends TestCase
             ),
             null,
             true,
-            971
+            971,
+            [
+                'ZL_ACTIVITE' => 'A1',
+                'ZL_PROFIL' => 'VISITEUR',
+            ]
         );
 
         $expectedLeniUserViewSerialized = [
@@ -85,6 +89,8 @@ class LeniUserViewNormalizerTest extends TestCase
             'ZL_IDPRODUITPARTICIPANT' => 971,
             'ZL_JOURNEE1' => 'Planning day one',
             'ZL_JOURNEE2' => 'Planning day two',
+            'ZL_ACTIVITE' => 'A1',
+            'ZL_PROFIL' => 'VISITEUR',
         ];
 
         $leniUserViewSerialized = $this->normalizer->normalize($leniUserView);
@@ -126,7 +132,8 @@ class LeniUserViewNormalizerTest extends TestCase
             ),
             '25b850a8-aed5-e711-80e0-0cc47a4c19cf',
             false,
-            null
+            null,
+            []
         );
 
         $expectedLeniUserViewSerialized = [
