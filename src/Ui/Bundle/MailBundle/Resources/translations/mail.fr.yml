@@ -45,7 +45,7 @@ mail.planner.import.error: "Bonjour, \n\n Une erreur s'est produite durant le tr
 mail.planner.import.intro: "Bonjour, \n\n L'import du fichier pour les planifications de l'événement %eventTitle% est terminé."
 mail.planner.import.subject: 'Import des planifications'
 mail.planner.import.subject.error: 'Erreur lors de l''import des planifications'
-mail.planning.print.intro: 'Voici le fichier de plannings demandé pour les types:'
+mail.planning.print.intro: 'Voici le fichier de plannings demandé:'
 mail.planning.print.link.click: 'Fichier de planning'
 mail.planning.print.link.intro: 'Vous pouvez imprimer les plannings en cliquant ici :'
 mail.planning.print.orderBy.participant_last_name: 'par nom de famille du participant'

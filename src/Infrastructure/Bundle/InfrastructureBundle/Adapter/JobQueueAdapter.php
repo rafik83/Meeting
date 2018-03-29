@@ -59,22 +59,16 @@ class JobQueueAdapter extends AbstractJobQueueAdapter implements JobQueueInterfa
     /**
      * {@inheritdoc}
      */
-    public function printPlanning(array $types, string $orderBy, $emailToNotify, $locale): void
+    public function printPlanning(Event\ExtraData $extraData, string $orderBy, $emailToNotify, $locale): void
     {
-        $typeOptions = array_map(function (Type $type) {
-            return sprintf('--types=%s', $type->getId());
-        }, $types);
-
         $job = new Job(
             GeneratePlanningCommand::NAME,
-            array_merge(
-                $typeOptions,
-                [
-                    sprintf('--orderBy=%s', $orderBy),
-                    sprintf('--emailToNotify=%s', $emailToNotify),
-                    sprintf('--locale=%s', $locale),
-                ]
-            )
+            [
+                sprintf('--sheetIdsExtraData=%s', $extraData->getId()),
+                sprintf('--orderBy=%s', $orderBy),
+                sprintf('--emailToNotify=%s', $emailToNotify),
+                sprintf('--locale=%s', $locale),
+            ]
         );
 
         $this->setJob($job);

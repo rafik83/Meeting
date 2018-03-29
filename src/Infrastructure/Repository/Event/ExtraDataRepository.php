@@ -63,4 +63,22 @@ class ExtraDataRepository implements ExtraDataRepositoryInterface
             ->getOneOrNullResult()
         ;
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function findById(int $sheetIdsExtraDataId): ?ExtraData
+    {
+        return $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('extraData')
+            ->from(ExtraData::class, 'extraData')
+            ->where('extraData.id = :id')
+            ->setParameter('id', $sheetIdsExtraDataId)
+            ->setMaxResults(1)
+            ->getQuery()
+            ->getOneOrNullResult()
+        ;
+    }
 }

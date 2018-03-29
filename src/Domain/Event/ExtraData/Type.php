@@ -16,4 +16,5 @@ namespace Proximum\Vimeet\Domain\Event\ExtraData;
 final class Type
 {
     public const COMEXPOSIUM_SSO_JWT_TOKEN = 'comexposium_sso_jwt_token';
+    public const ADMIN_SHEET_BATCH_IDS = 'admin_sheet_batch_ids';
 }

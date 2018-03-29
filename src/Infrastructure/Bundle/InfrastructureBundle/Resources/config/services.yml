@@ -1031,6 +1031,7 @@ services:
             - '@command.sheet.batch_assign_to_group_handler'
             - '@command.sheet.batch_pending_handler'
             - '@command.sheet.batch_pdf_job_creator_handler'
+            - '@Proximum\Vimeet\Application\Command\Sheet\Batch\PrintPlanningHandler'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Sheet\Batch }
 
@@ -1049,6 +1050,13 @@ services:
             - '@adapter_batch_job_queue.batch_accept_job_queue'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Sheet\BatchAccept }
+
+    Proximum\Vimeet\Application\Command\Sheet\Batch\PrintPlanningHandler:
+        arguments:
+            - '@adapter.job_queue_adapter'
+            - '@Proximum\Vimeet\Infrastructure\Repository\Event\ExtraDataRepository'
+            - '@datetime'
+
     command.admin.change_password_handler:
         class: Proximum\Vimeet\Application\Command\Admin\ChangePasswordHandler
         arguments:
@@ -4306,6 +4314,7 @@ services:
         class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\Planning\GeneratePlanningCommand
         arguments:
             - '@command.planning.export_planning_handler'
+            - '@Proximum\Vimeet\Infrastructure\Repository\Event\ExtraDataRepository'
         tags:
             - { name: console.command }
 
@@ -5529,7 +5538,6 @@ services:
     command.planning.export_planning_handler:
         class: Proximum\Vimeet\Application\Command\Planning\ExportPlanningHandler
         arguments:
-            - '@vimeet_infrastructure.repository.type_repository'
             - '@vimeet_infrastructure.repository.participant_repository'
             - '@command.planning.participant_info_guesser_cache'
             - '@command.planning.sheet_info_guesser_cache'

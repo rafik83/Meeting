@@ -63,7 +63,7 @@ class ParticipantPlanningDisplayer
      * @param User[] $users
      * @param Event  $event
      */
-    public function preloadForUsersAndEvent(array $users, Event $event)
+    public function preloadForUsersAndEvent(array $users, Event $event): void
     {
         $this->participantPlanningFormatter->preloadPlanningHandlerForUsersAndEvent($users, $event);
     }

@@ -37,12 +37,12 @@ interface JobQueueInterface
     public function sendEmailing(Event $event, array $sheetIds, $emailName, $sendEmailToTeam = false);
 
     /**
-     * @param Type[] $types
-     * @param string $orderBy
-     * @param string $emailToNotify
-     * @param string $locale
+     * @param Event\ExtraData $extraData which contains the value of the sheetIds
+     * @param string          $orderBy
+     * @param string          $emailToNotify
+     * @param string          $locale
      */
-    public function printPlanning(array $types, string $orderBy, $emailToNotify, $locale) :void;
+    public function printPlanning(Event\ExtraData $extraData, string $orderBy, $emailToNotify, $locale) :void;
 
     /**
      * @param Event  $event

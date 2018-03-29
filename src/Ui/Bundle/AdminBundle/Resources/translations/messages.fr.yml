@@ -701,6 +701,8 @@ admin.sheet.batch.allSelected.label: 'Toutes les <strong>%sheets%</strong> fiche
 admin.sheet.batch.cancelSelection.label: 'Annuler la sélection complète'
 admin.sheet.batch.selection.label: 'Les <strong>%sheets%</strong> fiches de cette page sont sélectionnées.'
 admin.sheet.batch.selectionAll.label: 'Sélectionner les <strong>%allSheets%</strong> fiches correspondantes à vos filtres.'
+admin.sheet.batch.printPlanning: 'Impression planning'
+admin.sheet.batch.printPlanningOrderBy: 'Ordre de l''export des plannings'
 admin.sheet.category: Catégorie
 admin.sheet.change.type.hasMeeting: 'La fiche a des RDVs et son type ne peut être changé'
 admin.sheet.change.type.link: Changer
