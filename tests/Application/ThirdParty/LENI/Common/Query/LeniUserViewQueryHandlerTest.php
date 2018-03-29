@@ -60,7 +60,7 @@ class LeniUserViewQueryHandlerTest extends TestCase
         $user->getId()->willReturn(12);
         $user->getEmail()->willReturn('email@email.fr');
         $user->getLocale()->willReturn('en');
-        $event->getAvailableLocale('en')->willReturn('fr');
+        $event->getAvailableLocale('en')->willReturn('en');
         $type->getId()->willReturn(64);
         $category->getId()->willReturn(67);
 
@@ -105,7 +105,7 @@ class LeniUserViewQueryHandlerTest extends TestCase
         ;
 
         $userInfoGuesser
-            ->getUserInfoFromParticipant($user->reveal(), 'fr', $sheets, false)
+            ->getUserInfoFromParticipant($user->reveal(), 'en', $sheets, false)
             ->shouldBeCalled()
             ->willReturn([
                 'gender' => 'woman',
@@ -119,7 +119,7 @@ class LeniUserViewQueryHandlerTest extends TestCase
         ;
 
         $participantPlanningFormatter
-            ->formatPlanningByDayFromUserAndEventWithUnallocated($user->reveal(), $event->reveal(), 'fr')
+            ->formatPlanningByDayFromUserAndEventWithUnallocated($user->reveal(), $event->reveal(), 'en')
             ->shouldBeCalled()
             ->willReturn(new FormattedPlanningView(['day1', 'day2'], 'unallocated'));
 
@@ -149,7 +149,7 @@ class LeniUserViewQueryHandlerTest extends TestCase
         $leniUserCustomDataQueryHandler = $this->prophesize(LeniUserCustomDataQueryHandler::class);
         $leniUserCustomDataQueryHandler
             ->handle(
-                new LeniUserCustomDataQuery($event->reveal(), $user->reveal(), $type->reveal())
+                new LeniUserCustomDataQuery($event->reveal(), $user->reveal(), $type->reveal(), $sheet1->reveal(), 'en')
             )
             ->shouldBeCalled()
             ->willReturn(['ZL_PROFIL' => 'VISITEUR'])
@@ -303,7 +303,7 @@ class LeniUserViewQueryHandlerTest extends TestCase
         $leniUserCustomDataQueryHandler = $this->prophesize(LeniUserCustomDataQueryHandler::class);
         $leniUserCustomDataQueryHandler
             ->handle(
-                new LeniUserCustomDataQuery($event->reveal(), $user->reveal(), $type->reveal())
+                new LeniUserCustomDataQuery($event->reveal(), $user->reveal(), $type->reveal(), $sheet1->reveal(), 'fr')
             )
             ->shouldBeCalled()
             ->willReturn([])
@@ -468,7 +468,7 @@ class LeniUserViewQueryHandlerTest extends TestCase
         $leniUserCustomDataQueryHandler = $this->prophesize(LeniUserCustomDataQueryHandler::class);
         $leniUserCustomDataQueryHandler
             ->handle(
-                new LeniUserCustomDataQuery($event->reveal(), $user->reveal(), $type->reveal())
+                new LeniUserCustomDataQuery($event->reveal(), $user->reveal(), $type->reveal(), $sheet1->reveal(), 'fr')
             )
             ->shouldBeCalled()
             ->willReturn([])

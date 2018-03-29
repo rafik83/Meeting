@@ -163,7 +163,7 @@ class LeniUserViewQueryHandler
             $this->isPaid($firstSheet),
             $this->getParticipantProductId($query->user, $sheets),
             $this->leniUserCustomDataQueryHandler->handle(
-                new LeniUserCustomDataQuery($query->event, $query->user, $type)
+                new LeniUserCustomDataQuery($query->event, $query->user, $type, $firstSheet, $userLocale)
             )
         );
     }

@@ -140,6 +140,8 @@ services:
         arguments:
             - '@Proximum\Vimeet\Application\ThirdParty\LENI\Save\Converter\TypeConverter'
             - '@Proximum\Vimeet\Application\ThirdParty\LENI\Common\EventExtraParameter\MappingGetter'
+            - '@Proximum\Vimeet\Application\ThirdParty\LENI\Save\Converter\CustomDataConverter'
+            - '@template.template_data_factory'
 
     Proximum\Vimeet\Application\ThirdParty\LENI\Get\Query\FieldsByEventQueryHandler: ~
 
