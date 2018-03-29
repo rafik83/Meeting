@@ -121,7 +121,9 @@ admin.availabilityTimeRange.create.title: 'Créer une plage de disponbilités'
 admin.availabilityTimeRange.list.column.begin: Début
 admin.availabilityTimeRange.list.column.end: Fin
 admin.availabilityTimeRange.list.column.name: 'Libellé backoffice'
+admin.availabilityTimeRange.list.column.products: 'Produits associés'
 admin.availabilityTimeRange.list.title: 'Liste des plages de disponibilités'
+admin.availabilityTimeRange.view.noProductAssigned: 'Pas de produit associé'
 admin.batch_actions.confirm: 'Êtes-vous sûr de vouloir faire cette action ?'
 admin.batch_actions.generateInvoice.confirm: 'Confirmez-vous la génération des factures avec le préfixe suivant : %prefix% ?'
 admin.batch_actions.plural: 'Actions batch sur %count% éléments'
@@ -618,6 +620,7 @@ admin.product.availabilityCurrentMax: 'Disponibilité courante / max'
 admin.product.bought: 'Nombre de produits achetés'
 admin.product.buyableUntil: 'Achetable jusqu''au'
 admin.product.deletableUntil: 'Supprimable jusqu''au'
+admin.product.hasAvailabilityTimeRanges: 'Soumis à plages de disponibilités'
 admin.product.id: Id
 admin.product.link: 'Catalogue de produits'
 admin.product.name: Nom

@@ -52,7 +52,7 @@ class StepParticipantAndPlanning
     {
         $cart = $this->cartManager->getCart($sheet, $stepIndex);
         $command = new SelectParticipantAndPlanning($sheet, $stepIndex);
-        $command->participantsProduct = $this->productByParticipantGetter->getFromCart($cart);
+        $command->participantsProduct = $this->productByParticipantGetter->handle($cart);
 
         // Get Planning quantity
         $planningRow   = $cart->getPlanningRow();

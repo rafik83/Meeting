@@ -10,7 +10,6 @@
 
 namespace Proximum\Vimeet\Application\Query\AvailabilityTimeRange;
 
-use Proximum\Vimeet\Application\View\AvailabilityTimeRange\AvailabilityTimeRangeView;
 use Proximum\Vimeet\Application\View\AvailabilityTimeRange\ListView;
 use Proximum\Vimeet\Domain\Repository\AvailabilityTimeRangeRepositoryInterface;
 
@@ -19,9 +18,15 @@ class ListViewQueryHandler
     /** @var AvailabilityTimeRangeRepositoryInterface */
     private $availabilityTimeRangeRepository;
 
-    public function __construct(AvailabilityTimeRangeRepositoryInterface $availabilityTimeRangeRepository)
-    {
+    /** @var AvailabilityTimeRangeViewQueryHandler */
+    private $availabilityTimeRangeViewQueryHandler;
+
+    public function __construct(
+        AvailabilityTimeRangeRepositoryInterface $availabilityTimeRangeRepository,
+        AvailabilityTimeRangeViewQueryHandler $availabilityTimeRangeViewQueryHandler
+    ) {
         $this->availabilityTimeRangeRepository = $availabilityTimeRangeRepository;
+        $this->availabilityTimeRangeViewQueryHandler = $availabilityTimeRangeViewQueryHandler;
     }
 
     public function handle(ListViewQuery $query): ListView
@@ -30,10 +35,8 @@ class ListViewQueryHandler
         $availabilityTimeRangeViews = [];
 
         foreach ($availabilityTimeRanges as $availabilityTimeRange) {
-            $availabilityTimeRangeViews[] = new AvailabilityTimeRangeView(
-                $availabilityTimeRange->getName(),
-                $availabilityTimeRange->getBegin(),
-                $availabilityTimeRange->getEnd()
+            $availabilityTimeRangeViews[] = $this->availabilityTimeRangeViewQueryHandler->handle(
+                new AvailabilityTimeRangeViewQuery($availabilityTimeRange)
             );
         }
 

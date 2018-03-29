@@ -157,6 +157,11 @@ class Product
     private $subjectedToValidation = false;
 
     /**
+     * @var ArrayCollection of AvailabilityTimeRange
+     */
+    private $availabilityTimeRanges;
+
+    /**
      * @param Event                   $event
      * @param string                  $type
      * @param string                  $name
@@ -202,6 +207,8 @@ class Product
         $this->deletableUntil        = $deletableUntil;
         $this->subjectedToValidation = $subjectedToValidation;
         $this->buyableUntil          = $buyableUntil;
+
+        $this->availabilityTimeRanges = new ArrayCollection();
     }
 
     /**
@@ -1115,5 +1122,45 @@ class Product
         }
 
         throw new \InvalidArgumentException('The given type does not exist');
+    }
+
+    /**
+     * @return AvailabilityTimeRange[]
+     */
+    public function getAvailabilityTimeRanges(): array
+    {
+        return $this->availabilityTimeRanges->toArray();
+    }
+
+    /**
+     * @return bool
+     */
+    public function hasAvailabilityTimeRanges(): bool
+    {
+        return !$this->availabilityTimeRanges->isEmpty();
+    }
+
+    /**
+     * @param AvailabilityTimeRange[] $availabilityTimeRanges
+     */
+    public function setAvailabilityTimeRanges(array $availabilityTimeRanges): void
+    {
+        $previousAvailabilityTimeRanges = $this->availabilityTimeRanges;
+
+        foreach ($availabilityTimeRanges as $availabilityTimeRange) {
+            if ($this->availabilityTimeRanges->contains($availabilityTimeRange)) {
+                continue;
+            }
+
+            $this->availabilityTimeRanges->add($availabilityTimeRange);
+            $availabilityTimeRange->addProduct($this);
+        }
+
+        foreach ($previousAvailabilityTimeRanges as $availabilityTimeRange) {
+            if (!\in_array($availabilityTimeRange, $availabilityTimeRanges, true)) {
+                $this->availabilityTimeRanges->removeElement($availabilityTimeRange);
+                $availabilityTimeRange->removeProduct($this);
+            }
+        }
     }
 }

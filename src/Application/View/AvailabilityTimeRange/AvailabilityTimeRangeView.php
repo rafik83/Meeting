@@ -21,10 +21,14 @@ class AvailabilityTimeRangeView
     /** @var \DateTimeInterface */
     public $end;
 
-    public function __construct(string $name, \DateTimeInterface $begin, \DateTimeInterface $end)
+    /** @var ProductView[] */
+    public $products;
+
+    public function __construct(string $name, \DateTimeInterface $begin, \DateTimeInterface $end, array $products = [])
     {
         $this->name = $name;
         $this->begin = $begin;
         $this->end = $end;
+        $this->products = $products;
     }
 }

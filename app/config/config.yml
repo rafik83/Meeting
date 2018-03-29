@@ -271,6 +271,9 @@ fos_elastica:
                         zipcode:
                             type: string
                             index: "not_analyzed"
+                        countryCode:
+                            type: string
+                            index: "not_analyzed"
                         city:
                             type: multi_field
                             fields:

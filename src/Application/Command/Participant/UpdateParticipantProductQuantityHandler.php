@@ -10,7 +10,7 @@
 
 namespace Proximum\Vimeet\Application\Command\Participant;
 
-use Proximum\Vimeet\Application\Components\Package\ProductByParticipantGetter;
+use Proximum\Vimeet\Application\Components\Package\ProductByParticipantCartGetter;
 use Proximum\Vimeet\Domain\Cart\CartManager;
 use Proximum\Vimeet\Domain\Repository\ProductRepositoryInterface;
 
@@ -19,24 +19,24 @@ class UpdateParticipantProductQuantityHandler
     /** @var CartManager */
     private $cartManager;
 
-    /** @var ProductByParticipantGetter */
-    private $productByParticipantGetter;
+    /** @var ProductByParticipantCartGetter */
+    private $productByParticipantCartGetter;
 
     /** @var ProductRepositoryInterface */
     private $productRepository;
 
     /**
-     * @param CartManager                $cartManager
-     * @param ProductByParticipantGetter $productByParticipantGetter
-     * @param ProductRepositoryInterface $productRepository
+     * @param CartManager                    $cartManager
+     * @param ProductByParticipantCartGetter $productByParticipantCartGetter
+     * @param ProductRepositoryInterface     $productRepository
      */
     public function __construct(
         CartManager $cartManager,
-        ProductByParticipantGetter $productByParticipantGetter,
+        ProductByParticipantCartGetter $productByParticipantCartGetter,
         ProductRepositoryInterface $productRepository
     ) {
         $this->cartManager = $cartManager;
-        $this->productByParticipantGetter = $productByParticipantGetter;
+        $this->productByParticipantCartGetter = $productByParticipantCartGetter;
         $this->productRepository = $productRepository;
     }
 
@@ -52,7 +52,7 @@ class UpdateParticipantProductQuantityHandler
         }
 
         $cart = $this->cartManager->getCart($command->sheet);
-        $productParticipants = $this->productByParticipantGetter->getFromCart($cart);
+        $productParticipants = $this->productByParticipantCartGetter->getFromCart($cart);
 
         $productParticipants[$command->participant->getId()] = $product;
 
