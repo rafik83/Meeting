@@ -620,6 +620,7 @@ admin.product.availabilityCurrentMax: 'Disponibilité courante / max'
 admin.product.bought: 'Nombre de produits achetés'
 admin.product.buyableUntil: 'Achetable jusqu''au'
 admin.product.deletableUntil: 'Supprimable jusqu''au'
+admin.product.hasAvailabilityTimeRanges: 'Soumis à plages de disponibilités'
 admin.product.id: Id
 admin.product.link: 'Catalogue de produits'
 admin.product.name: Nom
@@ -627,7 +628,6 @@ admin.product.quantityMax: 'Qté max'
 admin.product.remove.link: Supprimer
 admin.product.removeUnAvailable.title: 'Le produit ne peut pas être supprimé car il est utilisé dans une formule, un forfait ou une commande'
 admin.product.subjectedToValidation: 'Soumis à validation'
-admin.product.hasAvailabilityTimeRanges: 'Soumis à plages de disponibilités'
 admin.product.title: 'Catalogue de produits'
 admin.product.type.option: 'Produit / option'
 admin.product.type.participant: Participant
