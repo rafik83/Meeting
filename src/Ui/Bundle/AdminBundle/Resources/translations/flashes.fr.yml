@@ -207,4 +207,4 @@ flash.sheet.update_block.success: 'Les informations ont bien été enregistrées
 flash.sheet.update_participant.success: 'La fiche participant a bien été modifiée'
 flash.template.incomplete_translations.warning: 'Vous avez des traductions manquantes.'
 flash.template.preview.update.success: 'L''aperçu du catalogue a bien été enregistré.'
-flash.omz.export.prepare: 'L''export des données pour l''OMZ est en cours, vous receverez un email lorsque le fichier sera disponbile'
+flash.omz.export.prepare: 'L''export des données pour l''OMZ est en cours, vous recevrez un email lorsque le fichier sera disponible'
