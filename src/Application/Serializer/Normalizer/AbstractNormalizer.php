@@ -72,7 +72,7 @@ abstract class AbstractNormalizer
         }
 
         if ($inCharset !== $outCharset) {
-            return iconv($inCharset, $outCharset . "//TRANSLIT", $input);
+            return iconv($inCharset, $outCharset . "//TRANSLIT//IGNORE", $input);
         }
 
         return $input;
