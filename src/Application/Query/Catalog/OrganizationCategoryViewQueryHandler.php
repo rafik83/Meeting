@@ -46,6 +46,10 @@ class OrganizationCategoryViewQueryHandler
             $organizationCategoryViews[] = new OrganizationCategoryView($key, $title);
         }
 
+        usort($organizationCategoryViews, function (OrganizationCategoryView $first, OrganizationCategoryView $second) {
+            return strcmp($first->title, $second->title);
+        });
+
         return $organizationCategoryViews;
     }
 }
