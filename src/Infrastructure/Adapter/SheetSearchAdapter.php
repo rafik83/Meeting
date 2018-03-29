@@ -276,6 +276,29 @@ class SheetSearchAdapter implements SheetSearchAdapterInterface
     /**
      * {@inheritdoc}
      */
+    public function getCountries(Event $event, string $locale): array
+    {
+        $builder = new SheetSearchQueryBuilder(
+            $event,
+            [],
+            $locale
+        );
+
+        $query = new Query($builder->getQuery());
+
+        $countryAggregations = new Terms('countryCodes');
+        $countryAggregations->setField('countryCode');
+        $countryAggregations->setSize(1000);
+
+        $query->addAggregation($countryAggregations);
+        $query->setSize(0);
+
+        return $this->searchable->search($query)->getAggregations();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function findKeyword(Event $event, string $filter, array $defaultFilters, string $locale): array
     {
         $filter = ForeignChar::transliterateString($filter);

@@ -74,6 +74,11 @@
                             {{ 'admin.product.subjectedToValidation'|trans }}
                         </span>
                     {% endif %}
+                    {% if product.hasAvailabilityTimeRanges %}
+                        <span class="label label-default">
+                            {{ 'admin.product.hasAvailabilityTimeRanges'|trans }}
+                        </span>
+                    {% endif %}
 
                     {% if product.hasIncludedProducts %}
                         <ul>

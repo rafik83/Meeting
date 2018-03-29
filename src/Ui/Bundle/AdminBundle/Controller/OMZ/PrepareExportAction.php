@@ -48,7 +48,6 @@ class PrepareExportAction
 
     /**
      * @param Event       $event
-     *
      * @param AdminDomain $adminDomain
      *
      * @return RedirectResponse

@@ -11,8 +11,10 @@
 namespace Proximum\Vimeet\Tests\Application\Command\Product\Participant;
 
 use PHPUnit\Framework\TestCase;
+use Prophecy\Argument;
 use Proximum\Vimeet\Application\Command\Product\Participant\UpdateParticipant;
 use Proximum\Vimeet\Application\Command\Product\Participant\UpdateParticipantHandler;
+use Proximum\Vimeet\Domain\Model\AvailabilityTimeRange;
 use Proximum\Vimeet\Domain\Model\Product;
 use Proximum\Vimeet\Domain\Product\UpdatePriceResolver;
 use Proximum\Vimeet\Domain\Repository\ProductRepositoryInterface;
@@ -29,6 +31,9 @@ class UpdateParticipantHandlerTest extends TestCase
         $unitPrice = 100;
         $vat = 20;
         $quantityMax = 4;
+        $begin = new \DateTime('2017-10-10 10:00:00.000');
+        $end = new \DateTime('2017-10-10 18:00:00.000');
+        $availabilityTimeRange = new AvailabilityTimeRange($event, 'name', $begin, $end);
 
         $participant = Product::createParticipant(
             $event,
@@ -50,16 +55,30 @@ class UpdateParticipantHandlerTest extends TestCase
         foreach ($event->getLocales() as $locale) {
             $expectedParticipant->translate($locale, '', '', '', '', '');
         }
+        $expectedParticipant->setAvailabilityTimeRanges([$availabilityTimeRange]);
 
         // Command
         $updateParticipantCommand = new UpdateParticipant($participant);
         $updateParticipantCommand->name = 'my participant updated';
         $updateParticipantCommand->unitPrice = 200;
         $updateParticipantCommand->vat = 19;
+        $updateParticipantCommand->availabilityTimeRanges = [
+            $availabilityTimeRange,
+        ];
 
         // Mock
         $productRepository = $this->prophesize(ProductRepositoryInterface::class);
-        $productRepository->update($expectedParticipant)->shouldBeCalled();
+        $productRepository
+            ->update(Argument::that(function (Product $product) use ($expectedParticipant) {
+                return $product->getEvent() === $expectedParticipant->getEvent()
+                    && $product->getName() === $expectedParticipant->getName()
+                    && $product->getVat() === $expectedParticipant->getVat()
+                    && $product->getTitle('fr') === $expectedParticipant->getTitle('fr')
+                    && \count($product->getAvailabilityTimeRanges()) === \count($expectedParticipant->getAvailabilityTimeRanges())
+                    && $product->getQuantityMax() === $expectedParticipant->getQuantityMax()
+                ;
+            }))
+            ->shouldBeCalled();
 
         $updatePriceResolver = $this->prophesize(UpdatePriceResolver::class);
         $updatePriceResolver->resolve($participant)->shouldBeCalled()->willReturn(true);

@@ -56,7 +56,7 @@ class ExportUserCommand extends Command
     {
         $this
             ->setName(self::NAME)
-            ->setDescription('Build guideline asset for the events')
+            ->setDescription('Export the participants data for the OMZ')
             ->addArgument('event', InputArgument::REQUIRED, 'The event to export')
             ->addArgument('admin', InputArgument::REQUIRED, 'The admin id who requested the export');
     }

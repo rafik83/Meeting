@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2015 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -29,13 +29,18 @@ class CreateType extends AbstractType
             ->add('title', TextType::class, [
                 'required' => true,
             ])
-            ->add('event', EventChoiceType::class, [
-                'required'         => true,
-                'repositoryMethod' => function (EventRepositoryInterface $eventRepository) use ($options) {
-                    return $eventRepository->getEventsByAdmin($options['user']);
-                },
-            ])
         ;
+
+        if ($options['selectEvent'] === true) {
+            $builder
+                ->add('event', EventChoiceType::class, [
+                    'required'         => true,
+                    'repositoryMethod' => function (EventRepositoryInterface $eventRepository) use ($options) {
+                        return $eventRepository->getEventsByAdmin($options['user']);
+                    },
+                ])
+            ;
+        }
     }
 
     /**
@@ -46,6 +51,7 @@ class CreateType extends AbstractType
         $resolver->setRequired(['user']);
         $resolver->setDefaults([
             'data_class' => Create::class,
+            'selectEvent' => true,
         ]);
     }
 

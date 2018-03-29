@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2016 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -14,13 +14,14 @@ use Proximum\Vimeet\Domain\Model\Event;
 
 class Create
 {
-    /**
-     * @var string
-     */
+    /** @var string */
     public $title;
 
-    /**
-     * @var Event
-     */
+    /** @var Event */
     public $event;
+
+    public function __construct(Event $event = null)
+    {
+        $this->event = $event;
+    }
 }

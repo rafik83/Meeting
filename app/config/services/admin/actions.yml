@@ -324,3 +324,26 @@ services:
             - '@adapter.authorization_checker'
             - '@adapter.file_system_adapter'
             - '%infrastructure.export_omz_path%'
+
+    #
+    # Product
+    #
+    Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Product\Participant\CreateAction:
+        arguments:
+            - '@adapter.authorization_checker'
+            - '@Proximum\Vimeet\Infrastructure\Repository\AvailabilityTimeRangeRepository'
+            - '@Proximum\Vimeet\Infrastructure\Adapter\CommandBus'
+            - '@form.factory'
+            - '@session.flash_bag'
+            - '@adapter.router'
+            - '@templating'
+
+    Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Product\Participant\UpdateAction:
+        arguments:
+            - '@adapter.authorization_checker'
+            - '@Proximum\Vimeet\Infrastructure\Repository\AvailabilityTimeRangeRepository'
+            - '@templating'
+            - '@adapter.router'
+            - '@Proximum\Vimeet\Infrastructure\Adapter\CommandBus'
+            - '@form.factory'
+            - '@session.flash_bag'

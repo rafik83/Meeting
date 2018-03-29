@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2016 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -39,6 +39,18 @@ class UpdateParticipantType extends AbstractUpdateType
                 'label'      => false,
             ])
         ;
+
+        if (!empty($options['availabilityTimeRanges'])) {
+            $builder
+                ->add('availabilityTimeRanges', AvailabilityTimeRangeChoiceType::class, [
+                    'choices' => $options['availabilityTimeRanges'],
+                    'event' => $options['event'],
+                    'locale' => $options['locale'],
+                    'multiple' => true,
+                    'required' => false,
+                ])
+            ;
+        }
     }
 
     /**
@@ -48,6 +60,11 @@ class UpdateParticipantType extends AbstractUpdateType
     {
         parent::configureOptions($resolver);
 
+        $resolver->setRequired([
+            'event',
+            'locale',
+            'availabilityTimeRanges'
+        ]);
         $resolver->setDefaults([
             'data_class' => UpdateParticipant::class,
         ]);
