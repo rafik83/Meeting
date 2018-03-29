@@ -63,6 +63,9 @@ class ProductView
     /** @var bool */
     public $hasAvailabilityTimeRanges;
 
+    /** @var bool */
+    public $isAttributable;
+
     /**
      * @param int                     $id
      * @param string                  $name
@@ -81,6 +84,7 @@ class ProductView
      * @param \DateTimeInterface|null $buyableUntil
      * @param \DateTimeInterface|null $deletableUntil
      * @param bool                    $hasAvailabilityTimeRanges
+     * @param bool                    $isAttributable
      */
     public function __construct(
         int $id,
@@ -99,7 +103,8 @@ class ProductView
         float $availabilityMax = null,
         \DateTimeInterface $buyableUntil = null,
         \DateTimeInterface $deletableUntil = null,
-        bool $hasAvailabilityTimeRanges = false
+        bool $hasAvailabilityTimeRanges = false,
+        bool $isAttributable = false
     ) {
         $this->id = $id;
         $this->name = $name;
@@ -118,6 +123,7 @@ class ProductView
         $this->buyableUntil = $buyableUntil;
         $this->deletableUntil = $deletableUntil;
         $this->hasAvailabilityTimeRanges = $hasAvailabilityTimeRanges;
+        $this->isAttributable = $isAttributable;
     }
 
     /**

@@ -621,6 +621,7 @@ admin.product.bought: 'Nombre de produits achetés'
 admin.product.buyableUntil: 'Achetable jusqu''au'
 admin.product.deletableUntil: 'Supprimable jusqu''au'
 admin.product.hasAvailabilityTimeRanges: 'Soumis à plages de disponibilités'
+admin.product.isAttributable: 'Produit attribuable à des participants'
 admin.product.id: Id
 admin.product.link: 'Catalogue de produits'
 admin.product.name: Nom
