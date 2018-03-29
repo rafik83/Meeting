@@ -74,7 +74,7 @@ class StepParticipantAndPlanningTest extends TestCase
         ];
 
         $this->productByParticipantGetter
-            ->getFromCart($cart)
+            ->handle($cart)
             ->shouldBeCalled()
             ->willReturn($participantProducts)
         ;
@@ -130,7 +130,7 @@ class StepParticipantAndPlanningTest extends TestCase
         ];
 
         $this->productByParticipantGetter
-            ->getFromCart($cart)
+            ->handle($cart)
             ->shouldBeCalled()
             ->willReturn($participantProducts)
         ;
@@ -187,7 +187,7 @@ class StepParticipantAndPlanningTest extends TestCase
         ];
 
         $this->productByParticipantGetter
-            ->getFromCart($cart)
+            ->handle($cart)
             ->shouldBeCalled()
             ->willReturn($participantProducts)
         ;
