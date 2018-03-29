@@ -61,6 +61,7 @@ services:
             - '@Proximum\Vimeet\Application\ThirdParty\LENI\Common\Normalizer\LeniUserViewNormalizer'
             - '@datetime'
 
+    Proximum\Vimeet\Application\ThirdParty\LENI\Save\Converter\CustomDataConverter: ~
     Proximum\Vimeet\Application\ThirdParty\LENI\Save\Converter\TypeConverter: ~
 
     #
