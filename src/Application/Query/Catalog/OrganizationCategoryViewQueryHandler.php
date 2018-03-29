@@ -34,7 +34,7 @@ class OrganizationCategoryViewQueryHandler
      */
     public function handle(OrganizationCategoryViewQuery $query)
     {
-        $organizationCategoryItems = $this->taggedNomenclatureFilterGetter->getNomenclaturesItems(
+        $organizationCategoryItems = $this->taggedNomenclatureFilterGetter->getLastNomenclaturesItems(
             $query->event,
             Tag::SHEET_ORGANIZATION_CATEGORY,
             $query->locale
