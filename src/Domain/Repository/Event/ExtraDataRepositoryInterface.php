@@ -34,9 +34,9 @@ interface ExtraDataRepositoryInterface
     public function getExtraDataForEvent(Event $event, string $name): ?ExtraData;
 
     /**
-     * @param int $sheetIdsExtraDataId
+     * @param int $extraDataId
      *
      * @return null|ExtraData
      */
-    public function findById(int $sheetIdsExtraDataId): ?ExtraData;
+    public function findById(int $extraDataId): ?ExtraData;
 }

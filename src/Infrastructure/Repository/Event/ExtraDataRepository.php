@@ -67,7 +67,7 @@ class ExtraDataRepository implements ExtraDataRepositoryInterface
     /**
      * {@inheritdoc}
      */
-    public function findById(int $sheetIdsExtraDataId): ?ExtraData
+    public function findById(int $extraDataId): ?ExtraData
     {
         return $this
             ->entityManager
@@ -75,7 +75,7 @@ class ExtraDataRepository implements ExtraDataRepositoryInterface
             ->select('extraData')
             ->from(ExtraData::class, 'extraData')
             ->where('extraData.id = :id')
-            ->setParameter('id', $sheetIdsExtraDataId)
+            ->setParameter('id', $extraDataId)
             ->setMaxResults(1)
             ->getQuery()
             ->getOneOrNullResult()
