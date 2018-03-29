@@ -5552,13 +5552,6 @@ services:
             - '@query.tip.tip_translation_view_query_handler'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Planning\ExportPlanning }
-    ###### Job
-    command.planning.export_planning_job_creator_handler:
-        class: Proximum\Vimeet\Application\Command\Planning\ExportPlanningJobCreatorHandler
-        arguments:
-            - '@adapter.job_queue_adapter'
-        tags:
-            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Planning\ExportPlanningJobCreator }
 
     command.sheet.batch_pdf_job_creator_handler:
         class: Proximum\Vimeet\Application\Command\Sheet\BatchPdfJobCreatorHandler
