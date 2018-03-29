@@ -1023,14 +1023,14 @@ admin_product_create_option:
     requirements:
         event: \d+
     methods: [GET, POST]
-    defaults: { _controller: AdminBundle:Product:createOption }
+    defaults: { _controller: Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Product\Option\CreateAction }
 admin_product_update_option:
     path: /event/{event}/product/{product}/update/option
     requirements:
         event: \d+
         product: \d+
     methods: [GET, POST]
-    defaults: { _controller: AdminBundle:Product:updateOption }
+    defaults: { _controller: Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Product\Option\UpdateAction }
 admin_product_create_plan:
     path: /event/{event}/product/create/plan
     requirements:

@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2016 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -15,6 +15,9 @@ use Proximum\Vimeet\Domain\Model\Product;
 
 class UpdateOption extends AbstractUpdate
 {
+    /** @var bool */
+    public $attributable;
+
     /**
      * @param Product $product
      */
@@ -28,5 +31,6 @@ class UpdateOption extends AbstractUpdate
         $this->deletableUntil        = $product->getDeletableUntil();
         $this->buyableUntil          = $product->getBuyableUntil();
         $this->subjectedToValidation = $product->isSubjectedToValidation();
+        $this->attributable          = $product->isAttributable();
     }
 }
