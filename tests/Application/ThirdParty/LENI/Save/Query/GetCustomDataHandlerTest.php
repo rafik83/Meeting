@@ -41,7 +41,7 @@ class GetCustomDataHandlerTest extends TestCase
             ->handle(
                 new SendingRequestData(
                     $this->event->reveal(),
-                    ['whatever' => 'value', 'EvenementOrigine' => 'API']
+                    ['whatever' => 'value', 'EvenementOrigine' => 'API', 'Inscrit' => 'Inscrit']
                 )
             )
             ->shouldBeCalled()
@@ -49,7 +49,7 @@ class GetCustomDataHandlerTest extends TestCase
         ;
 
         $this->assertEquals(
-            ['whatever' => 'value', 'EvenementOrigine' => 'API'],
+            ['whatever' => 'value', 'EvenementOrigine' => 'API', 'Inscrit' => 'Inscrit'],
             $getCustomDataHandler->handle(
                 new GetCustomData(
                     ['whatever' => 'value'],
@@ -67,7 +67,7 @@ class GetCustomDataHandlerTest extends TestCase
             ->handle(
                 new SendingRequestData(
                     $this->event->reveal(),
-                    ['whatever' => 'value', 'EvenementOrigine' => 'API']
+                    ['whatever' => 'value', 'EvenementOrigine' => 'API', 'Inscrit' => 'Inscrit']
                 )
             )
             ->shouldBeCalled()
@@ -78,6 +78,7 @@ class GetCustomDataHandlerTest extends TestCase
             [
                 'whatever' => 'value',
                 'EvenementOrigine' => 'API',
+                'Inscrit' => 'Inscrit',
                 'SendingRequests' => [
                     'codeCommunication' => '5W3ORMI3',
                     'id' => '9A74DF80-1B13-9B68-74A8-1D956F54FECB',

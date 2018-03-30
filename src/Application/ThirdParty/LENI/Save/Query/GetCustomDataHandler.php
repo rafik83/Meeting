@@ -31,9 +31,10 @@ class GetCustomDataHandler
     {
         $data = $getCustomData->data;
 
-        // If User is new (No LENI id), set "API" to "EvenementOrigine" field
+        // If User is new (No LENI id), set "API" to "EvenementOrigine" field and "Inscrit" to "Inscrit"
         if (!isset($data[LeniConstants::LENI_COL_USER_ID])) {
             $data[LeniConstants::LENI_COL_EVENT_ORIGIN] = LeniConstants::NEW_USER_EVENT_ORIGIN;
+            $data[LeniConstants::LENI_COL_ATTENDANCE] = LeniConstants::ATTENDANCE;
         }
 
         $sendingRequests = $this->sendingRequestDataHandler->handle(
