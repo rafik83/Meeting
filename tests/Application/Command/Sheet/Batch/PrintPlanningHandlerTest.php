@@ -30,7 +30,7 @@ class PrintPlanningHandlerTest extends TestCase
         $admin = $this->prophesize(Admin::class);
         $admin->getEmail()->shouldBeCalled()->willReturn('email@example.net');
         $orderBy = PlanningOrderedBy::ORDER_BY_SHEET_TITLE;
-        $locale = 'fr';
+        $admin->getLocale()->willReturn('fr');
 
         $jobQueue = $this->prophesize(JobQueueInterface::class);
         $extraDataRepository = $this->prophesize(ExtraDataRepositoryInterface::class);
@@ -40,7 +40,7 @@ class PrintPlanningHandlerTest extends TestCase
         $extraDataRepository->add($extraData)->shouldBeCalled();
 
         $jobQueue
-            ->printPlanning($extraData, $orderBy, 'email@example.net', $locale)
+            ->printPlanning($extraData, $orderBy, 'email@example.net', 'fr')
             ->shouldBeCalled()
         ;
 
@@ -50,7 +50,7 @@ class PrintPlanningHandlerTest extends TestCase
             $dateTime
         );
 
-        $command = new PrintPlanning($event->reveal(), $sheetIds, $admin->reveal(), $orderBy, $locale);
+        $command = new PrintPlanning($event->reveal(), $sheetIds, $admin->reveal(), $orderBy, 'fr');
         $result = $handler->handle($command);
 
         $expected = new BatchResult($sheetIds, $command->getMessage() . 'printPlanning.success');
