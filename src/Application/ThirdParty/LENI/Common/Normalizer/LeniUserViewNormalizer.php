@@ -32,7 +32,6 @@ class LeniUserViewNormalizer
             LeniConstants::LENI_COL_PHONE_NUMBER => mb_substr($userView->phone, 0, LeniConstants::LONG_FIELD),
             LeniConstants::LENI_COL_UNALLOCATED => $userView->planning->unallocated,
             LeniConstants::LENI_COL_COUNTRY => $userView->country,
-            LeniConstants::LENI_COL_ATTENDANCE => LeniConstants::ATTENDANCE,
             LeniConstants::LENI_COL_LOCALE => $userView->locale,
             LeniConstants::LENI_COL_ENABLED => LeniConstants::LENI_ENABLED_MAPPING[$userView->enabled],
             LeniConstants::LENI_COL_IS_PAID => LeniConstants::LENI_IS_PAID_MAPPING[$userView->paid],
