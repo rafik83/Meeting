@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2016 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -14,4 +14,6 @@ use Proximum\Vimeet\Application\Command\Product\AbstractCreate;
 
 class CreateOption extends AbstractCreate
 {
+    /** @var bool */
+    public $attributable = false;
 }

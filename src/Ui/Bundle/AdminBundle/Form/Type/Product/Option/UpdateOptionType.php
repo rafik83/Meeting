@@ -54,6 +54,9 @@ class UpdateOptionType extends AbstractUpdateType
             ->add('updatable', CheckboxType::class, [
                 'required' => false,
             ])
+            ->add('attributable', CheckboxType::class, [
+                'required' => false,
+            ])
             ->add('deletableUntil', DateTimePickerType::class, [
                 'required' => false,
             ])

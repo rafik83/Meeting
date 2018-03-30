@@ -67,15 +67,18 @@ class ProductsViewQueryHandlerTest extends TestCase
         $product1->getAvailabilityMax()->willReturn(23);
         $product2->getAvailabilityMax()->willReturn(null);
         $product3->getAvailabilityMax()->willReturn(123123);
-        $product1->getBuyableUntil()->WillReturn($date);
-        $product3->getBuyableUntil()->WillReturn(null);
-        $product2->getBuyableUntil()->WillReturn(null);
+        $product1->getBuyableUntil()->willReturn($date);
+        $product3->getBuyableUntil()->willReturn(null);
+        $product2->getBuyableUntil()->willReturn(null);
         $product1->getDeletableUntil()->willReturn(null);
         $product2->getDeletableUntil()->willReturn(null);
         $product3->getDeletableUntil()->willReturn($date);
         $product1->hasAvailabilityTimeRanges()->willReturn(false);
         $product2->hasAvailabilityTimeRanges()->willReturn(true);
         $product3->hasAvailabilityTimeRanges()->willReturn(false);
+        $product1->isAttributable()->willReturn(false);
+        $product2->isAttributable()->willReturn(false);
+        $product3->isAttributable()->willReturn(true);
 
         $productRepository = $this->prophesize(ProductRepositoryInterface::class);
         $removeAuthorizationChecker = $this->prophesize(RemoveAuthorizationChecker::class);
@@ -121,6 +124,7 @@ class ProductsViewQueryHandlerTest extends TestCase
                 23,
                 $date,
                 null,
+                false,
                 false
             ),
             new ProductView(
@@ -140,7 +144,8 @@ class ProductsViewQueryHandlerTest extends TestCase
                 null,
                 null,
                 null,
-                true
+                true,
+                false
             ),
             new ProductView(
                 3,
@@ -159,7 +164,8 @@ class ProductsViewQueryHandlerTest extends TestCase
                 123123,
                 null,
                 $date,
-                false
+                false,
+                true
             ),
         ];
 

@@ -331,3 +331,21 @@ services:
             - '@Proximum\Vimeet\Infrastructure\Adapter\CommandBus'
             - '@form.factory'
             - '@session.flash_bag'
+
+    Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Product\Option\CreateAction:
+        arguments:
+            - '@adapter.authorization_checker'
+            - '@form.factory'
+            - '@Proximum\Vimeet\Infrastructure\Adapter\CommandBus'
+            - '@session.flash_bag'
+            - '@adapter.router'
+            - '@templating'
+
+    Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Product\Option\UpdateAction:
+        arguments:
+            - '@adapter.authorization_checker'
+            - '@form.factory'
+            - '@Proximum\Vimeet\Infrastructure\Adapter\CommandBus'
+            - '@session.flash_bag'
+            - '@adapter.router'
+            - '@templating'
