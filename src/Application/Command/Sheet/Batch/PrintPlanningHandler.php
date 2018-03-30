@@ -51,7 +51,7 @@ class PrintPlanningHandler
             $eventExtraDataSheetIds,
             $command->orderBy,
             $command->admin->getEmail(),
-            $command->locale
+            $command->admin->getLocale()
         );
 
         return new BatchResult(
