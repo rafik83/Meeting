@@ -174,7 +174,15 @@ class DayViewQueryHandlerTest extends TestCase
         $this->participation2 = new HappeningParticipation($this->happening2, $this->user);
         $this->unavailability = new Unavailability($this->participant->getUser(), $this->event, $this->beginHappening2, $this->endHappening2);
         $this->mass           = new Unavailability\Mass($this->event, $this->massCategory, 'name', $this->beginHappening1, $this->endHappening1, true);
-        $this->unavailabilityView = new UnavailabilityView(1, $this->beginHappening2, $this->endHappening2, 'Europe/Paris');
+        $this->unavailabilityView = new UnavailabilityView(
+            1,
+            $this->beginHappening2,
+            $this->endHappening2,
+            'Europe/Paris',
+            null,
+            true,
+            true
+        );
         $this->expectedDayView = new DayView(
             $this->startTime,
             $this->endTime,

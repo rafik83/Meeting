@@ -50,7 +50,10 @@ class UnavailabilityViewQueryHandlerTest extends TestCase
             1,
             new \DateTime('2016-10-12 12:00:00'),
             new \DateTime('2016-10-12 14:00:00'),
-            'Europe/Paris'
+            'Europe/Paris',
+            null,
+            true,
+            true
         );
 
         $this->assertEquals($expected, $result);
@@ -88,7 +91,10 @@ class UnavailabilityViewQueryHandlerTest extends TestCase
             1,
             new \DateTime('2016-10-12 10:00:00'),
             new \DateTime('2016-10-12 12:00:00'),
-            'Europe/Paris'
+            'Europe/Paris',
+            null,
+            true,
+            true
         );
 
         $this->assertEquals($expected, $result);
@@ -126,7 +132,10 @@ class UnavailabilityViewQueryHandlerTest extends TestCase
             1,
             new \DateTime('2016-10-12 16:00:00'),
             new \DateTime('2016-10-12 18:00:00'),
-            'Europe/Paris'
+            'Europe/Paris',
+            null,
+            true,
+            true
         );
 
         $this->assertEquals($expected, $result);
