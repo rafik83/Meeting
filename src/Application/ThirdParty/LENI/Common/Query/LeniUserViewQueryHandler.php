@@ -63,6 +63,9 @@ class LeniUserViewQueryHandler
     /** @var ExtraDataRepositoryInterface */
     private $extraDataRepository;
 
+    /** @var LeniUserCustomDataQueryHandler */
+    private $leniUserCustomDataQueryHandler;
+
     public function __construct(
         UserInfoGuesser $userInfoGuesser,
         SheetInfoGuesser $sheetInfoGuesser,
@@ -73,7 +76,8 @@ class LeniUserViewQueryHandler
         SheetRepositoryInterface $sheetRepository,
         Balance $balance,
         PrepareLeaderDataHandler $prepareLeaderDataHandler,
-        ExtraDataRepositoryInterface $extraDataRepository
+        ExtraDataRepositoryInterface $extraDataRepository,
+        LeniUserCustomDataQueryHandler $leniUserCustomDataQueryHandler
     ) {
         $this->userInfoGuesser = $userInfoGuesser;
         $this->sheetInfoGuesser = $sheetInfoGuesser;
@@ -85,6 +89,7 @@ class LeniUserViewQueryHandler
         $this->balance = $balance;
         $this->prepareLeaderDataHandler = $prepareLeaderDataHandler;
         $this->extraDataRepository = $extraDataRepository;
+        $this->leniUserCustomDataQueryHandler = $leniUserCustomDataQueryHandler;
     }
 
     /**
@@ -156,7 +161,10 @@ class LeniUserViewQueryHandler
             $leniPlanning,
             $this->getPreviousLeniUserId($query),
             $this->isPaid($firstSheet),
-            $this->getParticipantProductId($query->user, $sheets)
+            $this->getParticipantProductId($query->user, $sheets),
+            $this->leniUserCustomDataQueryHandler->handle(
+                new LeniUserCustomDataQuery($query->event, $query->user, $type, $firstSheet, $userLocale)
+            )
         );
     }
 

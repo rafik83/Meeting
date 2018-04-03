@@ -201,7 +201,8 @@ class PrepareLeniApiCallHandlerTest extends TestCase
             ),
             null,
             true,
-            1337
+            1337,
+            []
         );
 
         $this
@@ -271,7 +272,8 @@ class PrepareLeniApiCallHandlerTest extends TestCase
             ),
             'whatever-id',
             true,
-            null
+            null,
+            []
         );
 
         $this
