@@ -53,26 +53,9 @@ class Generator
             return;
         }
 
-        /** @var Product[] $products */
-        $products = [];
-
         /** @var Participant[] $participants */
         $participants = $this->participantRepository->getAllParticipantForUser($event, $user);
-
-        foreach ($participants as $particiapnt) {
-            // If a participant has a package that is not passable, it will not be
-            // able to buy a product that allows him to access availability time ranges
-            // Therefore, full access
-            if (!$particiapnt->getSheet()->getPackage()->isPassable()) {
-                return;
-            }
-
-            $product = $particiapnt->getParticipantProduct();
-
-            if ($product instanceof Product) {
-                $products[$product->getId()] = $product;
-            }
-        }
+        $products = $this->getProductsForParticipants($participants);
 
         if (empty($products)) {
             return;
@@ -91,16 +74,38 @@ class Generator
             $timeRanges[] = $timeRange;
         }
 
-        $timeRanges = $this->mergeOverlappedTimeRange($timeRanges);
+        $timeRangesNotAccessible = [];
+        foreach ($availabilityTimeRanges as $availabilityTimeRange) {
+            $timeRangesNotAccessible[] = new TimeRangeNotAccessibleView($availabilityTimeRange->getBegin(), $availabilityTimeRange->getEnd());
+        }
+
+        $timeRangesNotAccessible = [];//$this->mergeOverlappedTimeRange($timeRangesNotAccessible);
     }
 
     /**
-     * @var TimeRangeView[] $timeRanges
+     * @param Participant[] $participants
      *
-     * @return TimeRangeView[]
+     * @return Product[]
      */
-    private function mergeOverlappedTimeRange(array $timeRanges): array
+    private function getProductsForParticipants(array $participants): array
     {
+        $products = [];
 
+        foreach ($participants as $participant) {
+            // If a participant has a package that is not passable, it will not be
+            // able to buy a product that allows him to access availability time ranges
+            // Therefore, full access
+            if (!$participant->getSheet()->getPackage()->isPassable()) {
+                return [];
+            }
+
+            $product = $participant->getParticipantProduct();
+
+            if ($product instanceof Product) {
+                $products[$product->getId()] = $product;
+            }
+        }
+
+        return $products;
     }
 }
