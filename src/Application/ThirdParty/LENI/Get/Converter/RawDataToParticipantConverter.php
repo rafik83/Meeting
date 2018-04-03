@@ -19,6 +19,7 @@ use Proximum\Vimeet\Application\ThirdParty\LENI\Common\Query\LeniUserViewQuery;
 use Proximum\Vimeet\Application\ThirdParty\LENI\Common\Query\LeniUserViewQueryHandler;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Participant;
+use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\Type;
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Model\User\Event\ExtraData;
@@ -99,7 +100,8 @@ class RawDataToParticipantConverter
                 $dataIndexedByTag,
                 $this->participationTypeTemplateDataGetter->getRegistrationTemplateDataByType($type),
                 $this->participationTypeTemplateDataGetter->getSheetTemplateDataByType($type),
-                UserEventExtraDataType::LENI_USER_ID
+                UserEventExtraDataType::LENI_USER_ID,
+                $this->convertState($dataIndexedByTag)
             )
         );
 
@@ -114,6 +116,23 @@ class RawDataToParticipantConverter
         }
 
         return $participant;
+    }
+
+    /**
+     * @param array $dataIndexedByTag
+     *
+     * @return string
+     */
+    private function convertState(array &$dataIndexedByTag): string
+    {
+        if (!isset($dataIndexedByTag[Sheet::SHEET_STATE])) {
+            return Sheet::STATE_PENDING;
+        }
+
+        $rawState = $dataIndexedByTag[Sheet::SHEET_STATE];
+        $stateIndexedByLeniValue = array_flip(LeniConstants::SHEET_STATE_MAPPING);
+
+        return $stateIndexedByLeniValue[$rawState] ?? Sheet::STATE_PENDING;
     }
 
     /**

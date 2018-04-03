@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Application\ThirdParty\LENI;
 
+use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Template\TemplateObject\Gender;
 
 class LeniConstants
@@ -110,5 +111,12 @@ class LeniConstants
         self::LENI_COL_LOCALE,
         self::LENI_COL_CREATED_AT,
         self::LENI_COL_UPDATED_AT,
+    ];
+
+    public const SHEET_STATE_MAPPING = [
+        Sheet::STATE_PENDING => 'W',
+        Sheet::STATE_VALIDATED => 'Y',
+        Sheet::STATE_ACCEPTED => 'A',
+        Sheet::STATE_REFUSED => 'R',
     ];
 }

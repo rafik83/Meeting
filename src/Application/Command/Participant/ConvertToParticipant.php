@@ -11,6 +11,7 @@
 namespace Proximum\Vimeet\Application\Command\Participant;
 
 use Proximum\Vimeet\Domain\Model\Event;
+use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\Type;
 use Proximum\Vimeet\Domain\Template\TemplateData;
 
@@ -40,6 +41,9 @@ class ConvertToParticipant
     /** @var null|string */
     public $userEventExtraDataType;
 
+    /** @var string */
+    public $sheetState;
+
     public function __construct(
         Event $event,
         Type $type,
@@ -48,7 +52,8 @@ class ConvertToParticipant
         array $dataIndexedByTag,
         TemplateData $registrationTemplateData,
         TemplateData $sheetTemplateData,
-        ?string $userEventExtraDataType = null
+        ?string $userEventExtraDataType = null,
+        ?string $sheetState = null
     ) {
         $this->event = $event;
         $this->type = $type;
@@ -58,5 +63,15 @@ class ConvertToParticipant
         $this->registrationTemplateData = $registrationTemplateData;
         $this->sheetTemplateData = $sheetTemplateData;
         $this->userEventExtraDataType = $userEventExtraDataType;
+
+        if (null === $sheetState) {
+            $sheetState = Sheet::STATE_PENDING;
+        }
+
+        if (!\in_array($sheetState, Sheet::getAllStates(), true)) {
+            throw new \InvalidArgumentException('Invalid argument $sheetState; Must be one of Sheet\'s states');
+        }
+
+        $this->sheetState = $sheetState;
     }
 }
