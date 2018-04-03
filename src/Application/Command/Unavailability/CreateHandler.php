@@ -13,8 +13,10 @@ namespace Proximum\Vimeet\Application\Command\Unavailability;
 use Proximum\Vimeet\Application\Exception\Unavailability\CanNotCreateUnavailabilityException;
 use Proximum\Vimeet\Application\Event\Events;
 use Proximum\Vimeet\Application\Event\Unavailability\AddUnavailabilityEvent;
+use Proximum\Vimeet\Application\Exception\Unavailability\CanNotMergeUnavailabilityWithANotCreatedByUserUnavailabilityException;
 use Proximum\Vimeet\Application\Exception\Unavailability\NoParticipantSelectedException;
 use Proximum\Vimeet\Application\Exception\Unavailability\ParticipantsSelectedWithMeetingOrHappeningException;
+use Proximum\Vimeet\Application\Exception\Unavailability\ParticipantsWithUnavailabilityException;
 use Proximum\Vimeet\Application\Exception\Unavailability\TimeOutOfRangeException;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Unavailability;
@@ -62,6 +64,7 @@ class CreateHandler
      * @throws NoParticipantSelectedException
      * @throws ParticipantsSelectedWithMeetingOrHappeningException
      * @throws TimeOutOfRangeException
+     * @throws ParticipantsWithUnavailabilityException
      */
     public function handle(Create $create)
     {
@@ -82,39 +85,85 @@ class CreateHandler
 
         $this->truncateOvertime($create, $begin, $end);
 
-        // Merge overlap unavailability and Save unavailability
+        /** @var Unavailability[] $unavailabilities */
+        $unavailabilities = [];
+        $participantsWithOverlapUnavailability = [];
+
         foreach ($create->participants as $participant) {
-            $user = $participant->getUser();
-            $event = $participant->getSheet()->getEvent();
+            try {
+                $unavailabilities[] = $this->handleParticipant($participant, $begin, $end, $create->message);
+            } catch (CanNotMergeUnavailabilityWithANotCreatedByUserUnavailabilityException $canNotMergeUnavailabilityWithANotCreatedByUserUnavailabilityException) {
+                $participantsWithOverlapUnavailability[] = $participant;
+            }
+        }
 
-            $unavailability = new Unavailability(
-                $participant->getUser(),
-                $participant->getSheet()->getEvent(),
-                $begin,
-                $end,
-                $create->message
+        if (!empty($participantsWithOverlapUnavailability)) {
+            throw new ParticipantsWithUnavailabilityException(
+                $this->getParticipantsNames($participantsWithOverlapUnavailability, $locale)
             );
+        }
 
-            $this->mergeOverlapUnavailabilities($unavailability);
+        foreach ($unavailabilities as $unavailability) {
             $this->unavailabilityRepository->add($unavailability);
 
             $this->eventDispatcher->dispatch(
                 Events::UNAVAILABILITY_ADDED,
-                new AddUnavailabilityEvent($user, $event)
+                new AddUnavailabilityEvent($unavailability->getUser(), $unavailability->getEvent())
             );
         }
     }
 
     /**
-     * @param Unavailability $unavailability
+     * @param Participant        $participant
+     * @param \DateTimeInterface $begin
+     * @param \DateTimeInterface $end
+     * @param null|string        $message
+     *
+     * @return Unavailability
+     * @throws CanNotMergeUnavailabilityWithANotCreatedByUserUnavailabilityException
      */
-    private function mergeOverlapUnavailabilities(Unavailability $unavailability)
+    private function handleParticipant(
+        Participant $participant,
+        \DateTimeInterface $begin,
+        \DateTimeInterface $end,
+        ?string $message
+    ): Unavailability {
+        $unavailability = new Unavailability(
+            $participant->getUser(),
+            $participant->getSheet()->getEvent(),
+            $begin,
+            $end,
+            $message
+        );
+
+        $this->mergeOverlapUnavailabilities($unavailability);
+
+        return $unavailability;
+    }
+
+    /**
+     * @param Unavailability $unavailability
+     *
+     * @throws CanNotMergeUnavailabilityWithANotCreatedByUserUnavailabilityException
+     */
+    private function mergeOverlapUnavailabilities(Unavailability $unavailability): void
     {
         // Here clone is required because of a bug in phophecy making test impossible
         // See https://github.com/phpspec/prophecy/issues/75
         $overlapUnavailabilities = $this->unavailabilityRepository->getOverlapUnavailabilities(clone $unavailability);
 
         foreach ($overlapUnavailabilities as $overlapUnavailability) {
+            if (!$overlapUnavailability->isCreatedByUser()) {
+                $isOverlapUnavailabilitySideBySide = $overlapUnavailability->getBegin() == $unavailability->getEnd()
+                    || $overlapUnavailability->getEnd() == $unavailability->getBegin();
+
+                if (!$isOverlapUnavailabilitySideBySide) {
+                    throw new CanNotMergeUnavailabilityWithANotCreatedByUserUnavailabilityException();
+                }
+
+                continue;
+            }
+
             $unavailability->merge($overlapUnavailability);
             $this->unavailabilityRepository->remove($overlapUnavailability);
         }
@@ -159,17 +208,31 @@ class CreateHandler
         $participantWithConflict = array_filter(
             $create->participants,
             function (Participant $participant) use ($participantsWithoutConflict) {
-                return !in_array($participant, $participantsWithoutConflict);
+                return !\in_array($participant, $participantsWithoutConflict, true);
             }
         );
 
         if (count($participantWithConflict) > 0) {
             throw new ParticipantsSelectedWithMeetingOrHappeningException(
-                array_map(function (Participant $participant) use ($locale) {
-                    return $this->participantInfoGuesser->guessParticipantCompleteName($participant, $locale);
-                }, $participantWithConflict)
+                $this->getParticipantsNames($participantWithConflict, $locale)
             );
         }
+    }
+
+    /**
+     * @param Participant[] $participants
+     * @param string        $locale
+     *
+     * @return string[]
+     */
+    private function getParticipantsNames(array $participants, string $locale): array
+    {
+        return array_map(
+            function (Participant $participant) use ($locale) {
+                return $this->participantInfoGuesser->guessParticipantCompleteName($participant, $locale);
+            },
+            $participants
+        );
     }
 
     /**
