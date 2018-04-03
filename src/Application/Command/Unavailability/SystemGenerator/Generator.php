@@ -14,11 +14,11 @@ use Proximum\Vimeet\Domain\Model\AvailabilityTimeRange;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Product;
+use Proximum\Vimeet\Domain\Model\Unavailability;
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Repository\AvailabilityTimeRangeRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\ParticipantRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\UnavailabilityRepositoryInterface;
-use Proximum\Vimeet\Domain\Time\TimeOverlap;
 
 class Generator
 {
@@ -31,14 +31,24 @@ class Generator
     /** @var ParticipantRepositoryInterface */
     private $participantRepository;
 
+    /** @var OverlappedTimeRangeMerger */
+    private $overlappedTimeRangeMerger;
+
+    /** @var OverlappedTimeRangeTruncater */
+    private $overlappedTimeRangeTruncater;
+
     public function __construct(
         UnavailabilityRepositoryInterface $unavailabilityRepository,
         AvailabilityTimeRangeRepositoryInterface $availabilityTimeRangeRepository,
-        ParticipantRepositoryInterface $participantRepository
+        ParticipantRepositoryInterface $participantRepository,
+        OverlappedTimeRangeMerger $overlappedTimeRangeMerger,
+        OverlappedTimeRangeTruncater $overlappedTimeRangeTruncater
     ) {
         $this->unavailabilityRepository = $unavailabilityRepository;
         $this->availabilityTimeRangeRepository = $availabilityTimeRangeRepository;
         $this->participantRepository = $participantRepository;
+        $this->overlappedTimeRangeMerger = $overlappedTimeRangeMerger;
+        $this->overlappedTimeRangeTruncater = $overlappedTimeRangeTruncater;
     }
 
     public function generateSystemUnavailability(Event $event, User $user): void
@@ -76,10 +86,46 @@ class Generator
 
         $timeRangesNotAccessible = [];
         foreach ($availabilityTimeRanges as $availabilityTimeRange) {
-            $timeRangesNotAccessible[] = new TimeRangeNotAccessibleView($availabilityTimeRange->getBegin(), $availabilityTimeRange->getEnd());
+            if (!isset($availabilityTimeRangesBought[$availabilityTimeRange->getId()])) {
+                $timeRangesNotAccessible[] = new TimeRangeNotAccessibleView($availabilityTimeRange->getBegin(), $availabilityTimeRange->getEnd());
+            }
         }
 
-        $timeRangesNotAccessible = [];//$this->mergeOverlappedTimeRange($timeRangesNotAccessible);
+        if (empty($timeRangesNotAccessible)) {
+            return;
+        }
+
+        $this->sortTimeRange($timeRanges);
+        $timeRangesNotAccessible = $this->overlappedTimeRangeMerger->merge($timeRangesNotAccessible);
+        $unavailabilities = [];
+
+        foreach ($timeRangesNotAccessible as $timeRangeNotAccessible) {
+            $truncatedTimeRanges = $this->overlappedTimeRangeTruncater->truncate($timeRangeNotAccessible, $timeRanges);
+
+            foreach ($truncatedTimeRanges as $truncatedTimeRange) {
+                $unavailabilities[] = $truncatedTimeRange;
+            }
+        }
+
+        foreach ($unavailabilities as $unavailability) {
+            $systemUnavailability = new Unavailability(
+                $user,
+                $event,
+                $unavailability->getBegin(),
+                $unavailability->getEnd(),
+                null,
+                Unavailability::CREATED_BY_SYSTEM
+            );
+
+            $this->unavailabilityRepository->add($systemUnavailability);
+        }
+    }
+
+    private function sortTimeRange(array &$timeRanges): void
+    {
+        usort($timeRanges, function (AbstractTimeRange $timeRangeView, AbstractTimeRange $anotherTimeRangeView) {
+            return $timeRangeView->getBegin() > $anotherTimeRangeView->getBegin();
+        });
     }
 
     /**
