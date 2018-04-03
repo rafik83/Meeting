@@ -161,6 +161,11 @@ class Product
      */
     private $availabilityTimeRanges;
 
+    /**
+     * @var ArrayCollection of Happening
+     */
+    private $happenings;
+
     /** @var bool */
     private $attributable;
 
@@ -215,6 +220,7 @@ class Product
         $this->attributable          = $attributable;
 
         $this->availabilityTimeRanges = new ArrayCollection();
+        $this->happenings = new ArrayCollection();
     }
 
     /**
@@ -918,6 +924,7 @@ class Product
      * @param bool                    $subjectedToValidation
      * @param \DateTimeInterface      $buyableUntil
      * @param bool                    $attributable
+     * @param array                   $happenings
      *
      * @return Product
      */
@@ -934,7 +941,7 @@ class Product
         $subjectedToValidation = false,
         \DateTimeInterface $buyableUntil = null,
         bool $attributable = false
-    ) {
+    ): Product {
         $this->name                  = $name;
         $this->quantityMax           = $quantityMax;
         $this->availabilityCurrent   = $availabilityCurrent;
@@ -1172,6 +1179,46 @@ class Product
             if (!\in_array($availabilityTimeRange, $availabilityTimeRanges, true)) {
                 $this->availabilityTimeRanges->removeElement($availabilityTimeRange);
                 $availabilityTimeRange->removeProduct($this);
+            }
+        }
+    }
+
+    /**
+     * @return AvailabilityTimeRange[]
+     */
+    public function getHappenings(): array
+    {
+        return $this->happenings->toArray();
+    }
+
+    /**
+     * @return bool
+     */
+    public function hasHappenings(): bool
+    {
+        return !$this->happenings->isEmpty();
+    }
+
+    /**
+     * @param Happening[] $happenings
+     */
+    public function setHappenings(array $happenings): void
+    {
+        $previousHappenings = $this->happenings;
+
+        foreach ($happenings as $happening) {
+            if ($this->happenings->contains($happening)) {
+                continue;
+            }
+
+            $this->happenings->add($happening);
+            $happening->addProduct($this);
+        }
+
+        foreach ($previousHappenings as $previousHappening) {
+            if (!\in_array($previousHappening, $happenings, true)) {
+                $this->happenings->removeElement($previousHappening);
+                $previousHappening->removeProduct($this);
             }
         }
     }

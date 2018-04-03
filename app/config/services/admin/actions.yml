@@ -356,6 +356,7 @@ services:
             - '@session.flash_bag'
             - '@adapter.router'
             - '@templating'
+            - '@vimeet_infrastructure.repository.happening_repository'
 
     Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Product\Option\UpdateAction:
         arguments:
@@ -365,6 +366,7 @@ services:
             - '@session.flash_bag'
             - '@adapter.router'
             - '@templating'
+            - '@vimeet_infrastructure.repository.happening_repository'
 
     #
     # Spot

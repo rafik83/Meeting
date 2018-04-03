@@ -15,6 +15,7 @@ use Proximum\Vimeet\Application\Adapter\CommandBusInterface;
 use Proximum\Vimeet\Application\Adapter\RouterInterface;
 use Proximum\Vimeet\Application\Command\Product\Option\CreateOption;
 use Proximum\Vimeet\Domain\Model\Event;
+use Proximum\Vimeet\Domain\Repository\HappeningRepositoryInterface;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Product\Option\CreateOptionType;
 use Symfony\Bundle\FrameworkBundle\Templating\EngineInterface;
 use Symfony\Component\Form\FormFactoryInterface;
@@ -44,13 +45,17 @@ class CreateAction
     /** @var EngineInterface */
     private $engine;
 
+    /** @var HappeningRepositoryInterface */
+    private $happeningRepository;
+
     public function __construct(
         AuthorizationCheckerAdapterInterface $authorizationCheckerAdapter,
         FormFactoryInterface $formFactory,
         CommandBusInterface $commandBus,
         FlashBagInterface $flashBag,
         RouterInterface $router,
-        EngineInterface $engine
+        EngineInterface $engine,
+        HappeningRepositoryInterface $happeningRepository
     ) {
         $this->authorizationCheckerAdapter = $authorizationCheckerAdapter;
         $this->formFactory = $formFactory;
@@ -58,6 +63,7 @@ class CreateAction
         $this->flashBag = $flashBag;
         $this->router = $router;
         $this->engine = $engine;
+        $this->happeningRepository = $happeningRepository;
     }
 
     /**
@@ -74,11 +80,14 @@ class CreateAction
             throw new AccessDeniedException('Access denied for this event');
         }
 
+        $happenings = $this->happeningRepository->findByEvent($event);
+
         $create = new CreateOption($event);
         $form = $this->formFactory->create(CreateOptionType::class, $create, [
             'event'  => $event,
             'locale' => $event->getAvailableLocale($request->getLocale()),
             'submit' => true,
+            'happenings' => $happenings
         ]);
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {

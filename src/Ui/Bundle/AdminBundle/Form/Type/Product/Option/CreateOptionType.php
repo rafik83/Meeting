@@ -12,6 +12,7 @@ namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Product\Option;
 
 use Proximum\Vimeet\Application\Command\Product\Option\CreateOption;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Form\Type\DateTimePickerType;
+use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Happening\HappeningChoiceType;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Product\AbstractCreateType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
@@ -70,6 +71,13 @@ class CreateOptionType extends AbstractCreateType
             ->add('buyableUntil', DateTimePickerType::class, [
                 'required' => false,
             ])
+            ->add('happenings', HappeningChoiceType::class, [
+                'choices'  => $options['happenings'],
+                'locale'   => $options['locale'],
+                'required' => false,
+                'multiple' => true,
+                'select2'  => true,
+            ])
         ;
     }
 
@@ -79,6 +87,7 @@ class CreateOptionType extends AbstractCreateType
     public function configureOptions(OptionsResolver $resolver)
     {
         parent::configureOptions($resolver);
+        $resolver->setRequired(['locale', 'happenings']);
 
         $resolver->setDefaults([
             'data_class' => CreateOption::class,

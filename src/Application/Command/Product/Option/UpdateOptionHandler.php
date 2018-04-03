@@ -35,6 +35,8 @@ class UpdateOptionHandler extends AbstractHandler
             $updateOption->attributable
         );
 
+        $product->setHappenings($updateOption->happenings);
+
         foreach ($updateOption->translations as $locale => $translation) {
             $product->translate(
                 $locale,

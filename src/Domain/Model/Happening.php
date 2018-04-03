@@ -62,6 +62,9 @@ class Happening implements TimeRangeInterface
     /** @var null|string */
     private $invitationCode;
 
+    /** @var ArrayCollection of Product */
+    private $products;
+
     /**
      * @param Event              $event
      * @param \DateTimeInterface $begin
@@ -94,6 +97,7 @@ class Happening implements TimeRangeInterface
         $this->questionAllowed  = $questionAllowed;
         $this->limitParticipant = $limitParticipant;
         $this->invitationCode   = $invitationCode;
+        $this->products = new ArrayCollection();
     }
 
     /**
@@ -388,5 +392,23 @@ class Happening implements TimeRangeInterface
     public function setInvitationCode(string $invitationCode)
     {
         $this->invitationCode = $invitationCode;
+    }
+
+    /**
+     * @return Product[]
+     */
+    public function getProducts(): array
+    {
+        return $this->products->toArray();
+    }
+
+    public function addProduct(Product $product): void
+    {
+        $this->products->add($product);
+    }
+
+    public function removeProduct(Product $product): void
+    {
+        $this->products->removeElement($product);
     }
 }

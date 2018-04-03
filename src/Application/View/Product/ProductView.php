@@ -66,26 +66,9 @@ class ProductView
     /** @var bool */
     public $isAttributable;
 
-    /**
-     * @param int                     $id
-     * @param string                  $name
-     * @param string                  $type
-     * @param float                   $unitPrice
-     * @param bool                    $subjectedToValidation
-     * @param array                   $includedProducts
-     * @param int                     $bought
-     * @param bool                    $removable
-     * @param string                  $availabilityStatus
-     * @param bool                    $availabilityManaged
-     * @param bool                    $updatable
-     * @param float|null              $quantityMax
-     * @param float|null              $availabilityCurrent
-     * @param float|null              $availabilityMax
-     * @param \DateTimeInterface|null $buyableUntil
-     * @param \DateTimeInterface|null $deletableUntil
-     * @param bool                    $hasAvailabilityTimeRanges
-     * @param bool                    $isAttributable
-     */
+    /** @var bool */
+    public $hasHappenings;
+
     public function __construct(
         int $id,
         string $name,
@@ -104,7 +87,8 @@ class ProductView
         \DateTimeInterface $buyableUntil = null,
         \DateTimeInterface $deletableUntil = null,
         bool $hasAvailabilityTimeRanges = false,
-        bool $isAttributable = false
+        bool $isAttributable = false,
+        bool $hasHappenings = false
     ) {
         $this->id = $id;
         $this->name = $name;
@@ -124,6 +108,7 @@ class ProductView
         $this->deletableUntil = $deletableUntil;
         $this->hasAvailabilityTimeRanges = $hasAvailabilityTimeRanges;
         $this->isAttributable = $isAttributable;
+        $this->hasHappenings = $hasHappenings;
     }
 
     /**
