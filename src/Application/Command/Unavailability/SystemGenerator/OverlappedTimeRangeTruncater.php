@@ -43,7 +43,7 @@ class OverlappedTimeRangeTruncater
             }
 
             // If the needle contains a timeRange
-            // We can the needle in two, and continue the check with the second part
+            // We cut the needle in two, and continue the check with the second part
             if (TimeOverlap::contains($timeRange, $needleToCheck)) {
                 $firstNeedle = clone $needleToCheck;
                 $firstNeedle->end = $timeRange->begin;
