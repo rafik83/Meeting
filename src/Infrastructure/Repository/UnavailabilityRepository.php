@@ -91,9 +91,10 @@ class UnavailabilityRepository implements UnavailabilityRepositoryInterface
     {
         $this->entityManager->createQueryBuilder()
             ->delete(Unavailability::class, 'unavailability')
-            ->where('unavailability.user = :user AND unavailability.event = :event')
+            ->where('unavailability.user = :user AND unavailability.event = :event AND unavailability.createdBy = :createdBy')
             ->setParameter('user', $user)
             ->setParameter('event', $event)
+            ->setParameter('createdBy', Unavailability::CREATED_BY_SYSTEM)
             ->getQuery()
             ->execute();
 
