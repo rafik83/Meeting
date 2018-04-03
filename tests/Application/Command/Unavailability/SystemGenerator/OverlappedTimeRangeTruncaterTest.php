@@ -1,0 +1,146 @@
+<?php
+
+/*
+ * This file is part of the Proximum Vimeet project.
+ *
+ * Copyright (C) Proximum
+ *
+ * @author Elao <contact@elao.com>
+ */
+
+namespace Proximum\Vimeet\Tests\Application\Command\Unavailability\SystemGenerator;
+
+use PHPUnit\Framework\TestCase;
+use Proximum\Vimeet\Application\Command\Unavailability\SystemGenerator\OverlappedTimeRangeTruncater;
+use Proximum\Vimeet\Application\Command\Unavailability\SystemGenerator\TimeRangeNotAccessibleView;
+use Proximum\Vimeet\Application\Command\Unavailability\SystemGenerator\TimeRangeView;
+
+class OverlappedTimeRangeTruncaterTest extends TestCase
+{
+    public function testTruncateWithEndIn()
+    {
+        $timeRanges = [
+            new TimeRangeView(
+                new \DateTime('2017-10-10 10:00:00.000'),
+                new \DateTime('2017-10-10 12:00:00.000')
+            ),
+            new TimeRangeView(
+                new \DateTime('2017-10-10 14:00:00.000'),
+                new \DateTime('2017-10-10 17:00:00.000')
+            ),
+        ];
+
+        $needle = new TimeRangeNotAccessibleView(
+            new \DateTime('2017-10-10 09:00:00.000'),
+            new \DateTime('2017-10-10 11:00:00.000')
+        );
+
+        $truncater = new OverlappedTimeRangeTruncater();
+        $result = $truncater->truncate($needle, $timeRanges);
+
+        $expected = [
+            new TimeRangeNotAccessibleView(
+                new \DateTime('2017-10-10 09:00:00.000'),
+                new \DateTime('2017-10-10 10:00:00.000')
+            ),
+        ];
+
+        $this->assertEquals($expected, $result);
+    }
+
+    public function testTruncateWithBeginIn()
+    {
+        $timeRanges = [
+            new TimeRangeView(
+                new \DateTime('2017-10-10 10:00:00.000'),
+                new \DateTime('2017-10-10 12:00:00.000')
+            ),
+            new TimeRangeView(
+                new \DateTime('2017-10-10 14:00:00.000'),
+                new \DateTime('2017-10-10 17:00:00.000')
+            ),
+        ];
+
+        $needle = new TimeRangeNotAccessibleView(
+            new \DateTime('2017-10-10 10:00:00.000'),
+            new \DateTime('2017-10-10 13:00:00.000')
+        );
+
+        $truncater = new OverlappedTimeRangeTruncater();
+        $result = $truncater->truncate($needle, $timeRanges);
+
+        $expected = [
+            new TimeRangeNotAccessibleView(
+                new \DateTime('2017-10-10 12:00:00.000'),
+                new \DateTime('2017-10-10 13:00:00.000')
+            ),
+        ];
+
+        $this->assertEquals($expected, $result);
+    }
+
+    public function testTruncateWithContains()
+    {
+        $timeRanges = [
+            new TimeRangeView(
+                new \DateTime('2017-10-10 10:00:00.000'),
+                new \DateTime('2017-10-10 12:00:00.000')
+            ),
+            new TimeRangeView(
+                new \DateTime('2017-10-10 14:00:00.000'),
+                new \DateTime('2017-10-10 17:00:00.000')
+            ),
+        ];
+
+        $needle = new TimeRangeNotAccessibleView(
+            new \DateTime('2017-10-10 09:00:00.000'),
+            new \DateTime('2017-10-10 19:00:00.000')
+        );
+
+        $truncater = new OverlappedTimeRangeTruncater();
+        $result = $truncater->truncate($needle, $timeRanges);
+
+        $expected = [
+            new TimeRangeNotAccessibleView(
+                new \DateTime('2017-10-10 09:00:00.000'),
+                new \DateTime('2017-10-10 10:00:00.000')
+            ),
+            new TimeRangeNotAccessibleView(
+                new \DateTime('2017-10-10 12:00:00.000'),
+                new \DateTime('2017-10-10 14:00:00.000')
+            ),
+            new TimeRangeNotAccessibleView(
+                new \DateTime('2017-10-10 17:00:00.000'),
+                new \DateTime('2017-10-10 19:00:00.000')
+            ),
+        ];
+
+        $this->assertEquals($expected, $result);
+    }
+
+    public function testTruncateWithTimeRangeInside()
+    {
+        $timeRanges = [
+            new TimeRangeView(
+                new \DateTime('2017-10-10 09:00:00.000'),
+                new \DateTime('2017-10-10 12:00:00.000')
+            ),
+            new TimeRangeView(
+                new \DateTime('2017-10-10 14:00:00.000'),
+                new \DateTime('2017-10-10 17:00:00.000')
+            ),
+        ];
+
+        $needle = new TimeRangeNotAccessibleView(
+            new \DateTime('2017-10-10 10:00:00.000'),
+            new \DateTime('2017-10-10 12:00:00.000')
+        );
+
+        $truncater = new OverlappedTimeRangeTruncater();
+        $result = $truncater->truncate($needle, $timeRanges);
+
+        $expected = [];
+
+        $this->assertEquals($expected, $result);
+    }
+}
