@@ -15,6 +15,7 @@ use Proximum\Vimeet\Application\Adapter\TranslatorInterface;
 use Proximum\Vimeet\Application\Command\Unavailability\Create;
 use Proximum\Vimeet\Application\Exception\Unavailability\NoParticipantSelectedException;
 use Proximum\Vimeet\Application\Exception\Unavailability\ParticipantsSelectedWithMeetingOrHappeningException;
+use Proximum\Vimeet\Application\Exception\Unavailability\ParticipantsWithUnavailabilityException;
 use Proximum\Vimeet\Application\Exception\Unavailability\TimeOutOfRangeException;
 use Proximum\Vimeet\Domain\Event\Day\DayHelper;
 use Proximum\Vimeet\Domain\Participant\ParticipantHelper;
@@ -87,6 +88,16 @@ class CreateFormHandler
                 } else {
                     $form->addError($this->createNoParticipantSelectedExceptionError());
                 }
+            } catch (ParticipantsWithUnavailabilityException $exception) {
+                if ($form->has('participants')) {
+                    $form->get('participants')->addError(
+                        $this->participantsWithUnavailabilityExceptionError($exception)
+                    );
+                } else {
+                    $form->addError(
+                        $this->participantsWithUnavailabilityExceptionError($exception)
+                    );
+                }
             } catch (ParticipantsSelectedWithMeetingOrHappeningException $exception) {
                 if ($form->has('participants')) {
                     $form->get('participants')->addError(
@@ -144,6 +155,24 @@ class CreateFormHandler
                 'validators.unavailability.participantsWithConflict',
                 $exception->getNumberOfConflict(),
                 ['%participants%' => $exception->getListOfParticipantsName()],
+                'validators'
+            )
+        );
+    }
+
+    /**
+     * @param ParticipantsWithUnavailabilityException $participantsWithUnavailabilityException
+     *
+     * @return FormError
+     */
+    private function participantsWithUnavailabilityExceptionError(
+        ParticipantsWithUnavailabilityException $participantsWithUnavailabilityException
+    ): FormError {
+        return new FormError(
+            $this->translator->transChoice(
+                'validators.unavailability.participantsWithUnavailability',
+                \count($participantsWithUnavailabilityException->participantNames),
+                ['%participants%' => $participantsWithUnavailabilityException->getListOfParticipantsName()],
                 'validators'
             )
         );
