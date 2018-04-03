@@ -11,6 +11,7 @@
 namespace Proximum\Vimeet\Application\ThirdParty\LENI\Common\Query;
 
 use Proximum\Vimeet\Application\ThirdParty\LENI\Common\EventExtraParameter\MappingGetter;
+use Proximum\Vimeet\Application\ThirdParty\LENI\LeniConstants;
 use Proximum\Vimeet\Application\ThirdParty\LENI\Save\Converter\CustomDataConverter;
 use Proximum\Vimeet\Application\ThirdParty\LENI\Save\Converter\TypeConverter;
 use Proximum\Vimeet\Domain\Event\ExtraParameter\Type as EventExtraParameterType;
@@ -90,6 +91,7 @@ class LeniUserCustomDataQueryHandler
 
         $taggedData = [];
 
+        $this->handleSheetState($sheet, $taggedData);
         $this->getTaggedRawData($this->templateDataFactory->createFromSheet($sheet, $locale), $taggedData);
         $this->getTaggedRawData($this->templateDataFactory->createRegistrationFromSheet($sheet, $locale), $taggedData);
 
@@ -103,6 +105,11 @@ class LeniUserCustomDataQueryHandler
         }
 
         return $this->customDataConverter->convert($customDataMapping, $taggedData);
+    }
+
+    private function handleSheetState(Sheet $sheet, array &$taggedData): void
+    {
+        $taggedData[Sheet::SHEET_STATE] = LeniConstants::SHEET_STATE_MAPPING[$sheet->getState()];
     }
 
     private function getTaggedRawData(TemplateData $templateData, array &$taggedData): void
