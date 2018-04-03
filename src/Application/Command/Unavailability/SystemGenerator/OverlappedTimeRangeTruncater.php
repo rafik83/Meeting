@@ -54,6 +54,11 @@ class OverlappedTimeRangeTruncater
                 $secondNeedle->begin = $timeRange->end;
                 $needleToCheck = $secondNeedle;
             }
+
+            // If the needle is cut to nothing
+            if ($needleToCheck->getBegin() == $needleToCheck->getEnd()) {
+                return $result;
+            }
         }
 
         $result[] = $needleToCheck;
