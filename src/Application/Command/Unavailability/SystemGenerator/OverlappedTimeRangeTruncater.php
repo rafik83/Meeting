@@ -13,8 +13,8 @@ namespace Proximum\Vimeet\Application\Command\Unavailability\SystemGenerator;
 use Proximum\Vimeet\Domain\Time\TimeOverlap;
 
 /**
- * This class is used to truncate array of timeRanges that overlaps other array of timeRanges
- * The timeRange are cut of the part that overlaps the other timeRange
+ * This class is used to truncate a timeRange that overlaps other array of timeRanges
+ * The timeRange is cut of the part that overlaps the other timeRange
  */
 class OverlappedTimeRangeTruncater
 {
