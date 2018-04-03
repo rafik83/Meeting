@@ -11,6 +11,8 @@
 namespace Proximum\Vimeet\Application\ThirdParty\LENI\Save\Query;
 
 use Proximum\Vimeet\Application\ThirdParty\LENI\LeniConstants;
+use Proximum\Vimeet\Application\ThirdParty\LENI\Save\Query\CustomData\HasUserSheetStateChangedQuery;
+use Proximum\Vimeet\Application\ThirdParty\LENI\Save\Query\CustomData\HasUserSheetStateChangedQueryHandler;
 use Proximum\Vimeet\Application\ThirdParty\LENI\Save\Query\CustomData\SendingRequestData;
 use Proximum\Vimeet\Application\ThirdParty\LENI\Save\Query\CustomData\SendingRequestDataHandler;
 
@@ -22,9 +24,15 @@ class GetCustomDataHandler
     /** @var SendingRequestDataHandler */
     private $sendingRequestDataHandler;
 
-    public function __construct(SendingRequestDataHandler $sendingRequestDataHandler)
-    {
+    /** @var HasUserSheetStateChangedQueryHandler */
+    private $hasUserSheetStateChangedQueryHandler;
+
+    public function __construct(
+        SendingRequestDataHandler $sendingRequestDataHandler,
+        HasUserSheetStateChangedQueryHandler $hasUserSheetStateChangedQueryHandler
+    ) {
         $this->sendingRequestDataHandler = $sendingRequestDataHandler;
+        $this->hasUserSheetStateChangedQueryHandler = $hasUserSheetStateChangedQueryHandler;
     }
 
     public function handle(GetCustomData $getCustomData): array
@@ -37,8 +45,22 @@ class GetCustomDataHandler
             $data[LeniConstants::LENI_COL_ATTENDANCE] = LeniConstants::ATTENDANCE;
         }
 
+        $hasUserSheetStateChangedToValidated = $this->hasUserSheetStateChangedQueryHandler->handle(
+            new HasUserSheetStateChangedQuery($getCustomData->event, $getCustomData->user, $data)
+        );
+
+        if ($hasUserSheetStateChangedToValidated) {
+            // If user has sheet validated, set "Inscrit" field to "Inscrit"
+            $data[LeniConstants::LENI_COL_ATTENDANCE] = LeniConstants::ATTENDANCE;
+        }
+
         $sendingRequests = $this->sendingRequestDataHandler->handle(
-            new SendingRequestData($getCustomData->event, $data)
+            new SendingRequestData(
+                $getCustomData->event,
+                $getCustomData->user,
+                $data,
+                $hasUserSheetStateChangedToValidated
+            )
         );
 
         if (!empty($sendingRequests)) {

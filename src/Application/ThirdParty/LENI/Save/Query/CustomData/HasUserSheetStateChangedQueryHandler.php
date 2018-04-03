@@ -18,6 +18,9 @@ use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Repository\User\Event\ExtraDataRepositoryInterface;
 use Proximum\Vimeet\Domain\User\Event\ExtraData\Type;
 
+/**
+ * User state changed or there was no previous one, and new state is "validated"
+ */
 class HasUserSheetStateChangedQueryHandler
 {
     /** @var ExtraDataRepositoryInterface */

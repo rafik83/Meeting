@@ -157,3 +157,4 @@ services:
     Proximum\Vimeet\Application\ThirdParty\LENI\Save\Query\GetCustomDataHandler:
          arguments:
             - '@Proximum\Vimeet\Application\ThirdParty\LENI\Save\Query\CustomData\SendingRequestDataHandler'
+            - '@Proximum\Vimeet\Application\ThirdParty\LENI\Save\Query\CustomData\HasUserSheetStateChangedQueryHandler'
