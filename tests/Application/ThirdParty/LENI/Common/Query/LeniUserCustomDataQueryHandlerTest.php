@@ -40,9 +40,10 @@ class LeniUserCustomDataQueryHandlerTest extends TestCase
 
         $sheet = $this->prophesize(Sheet::class);
         $sheet->getUserParticipant($user->reveal())->willReturn($participant->reveal());
+        $sheet->getState()->willReturn('accepted');
 
         $typeMapping = ['whatever' => 'mapping'];
-        $dataMapping = ['sheet_template_generic_tag_1' => 'leni_field_1'];
+        $dataMapping = ['sheet_state' => 'ZL_MODERATION', 'sheet_template_generic_tag_1' => 'leni_field_1'];
 
         $typeConverter = $this->prophesize(TypeConverter::class);
         $typeConverter
@@ -68,6 +69,7 @@ class LeniUserCustomDataQueryHandlerTest extends TestCase
             ->convert(
                 $dataMapping,
                 [
+                    'sheet_state' => 'A',
                     'sheet_template_generic_tag_1' => 'A3',
                     'sheet_template_generic_tag_2' => ['B1', 'B2', 'B5'],
                     'participant_position' => 'Developper',
@@ -76,7 +78,7 @@ class LeniUserCustomDataQueryHandlerTest extends TestCase
                 ]
             )
             ->shouldBeCalled()
-            ->willReturn(['leni_field_1' => ['A1', 'A3']])
+            ->willReturn(['ZL_MODERATION' => 'A', 'leni_field_1' => ['A1', 'A3']])
         ;
 
         $sheetTemplateData = $this->prophesize(TemplateData::class);
@@ -175,6 +177,7 @@ class LeniUserCustomDataQueryHandlerTest extends TestCase
             [
                 'type_leni_field' => 'value',
                 'leni_field_1' => ['A1', 'A3'],
+                'ZL_MODERATION' => 'A',
             ],
             $leniUserCustomDataQueryHandler->handle(
                 new LeniUserCustomDataQuery($event->reveal(), $user->reveal(), $type->reveal(), $sheet->reveal(), 'fr')
