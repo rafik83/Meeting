@@ -924,7 +924,6 @@ class Product
      * @param bool                    $subjectedToValidation
      * @param \DateTimeInterface      $buyableUntil
      * @param bool                    $attributable
-     * @param array                   $happenings
      *
      * @return Product
      */
@@ -1184,7 +1183,7 @@ class Product
     }
 
     /**
-     * @return AvailabilityTimeRange[]
+     * @return Happening[]
      */
     public function getHappenings(): array
     {
