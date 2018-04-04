@@ -103,7 +103,7 @@ class LeniApiCaller
      * @param Event $event
      * @param array $fields
      * @param array $filters
-     * @param array $order
+     * @param array $sort
      * @param int   $start
      * @param int   $limit
      *
@@ -115,9 +115,9 @@ class LeniApiCaller
         Event $event,
         array $fields,
         array $filters,
-        array $order,
-        int $start = 0,
-        int $limit = 1
+        array $sort,
+        int $start,
+        int $limit
     ): array {
         $leniUserParameter = $this->extraParameterRepository->findByEventAndType($event, Type::TYPE_LENI_USER);
         $leniEventParameter = $this->extraParameterRepository->findByEventAndType($event, Type::TYPE_LENI_EVENT);
@@ -141,7 +141,7 @@ class LeniApiCaller
             );
         }
 
-        $body = $this->getGetCallBody($leniEventParameter->getValue(), $fields, $filters, $order, $start, $limit);
+        $body = $this->getGetCallBody($leniEventParameter->getValue(), $fields, $filters, $sort, $start, $limit);
         $jsonEncodedBody = json_encode($body);
         $headers = $this->getHeaders($leniUserParameter->getValue(), $jsonEncodedBody);
 
@@ -160,7 +160,7 @@ class LeniApiCaller
      * @param string $idEvt
      * @param array  $fields
      * @param array  $filters
-     * @param array  $order
+     * @param array  $sort
      * @param int    $start
      * @param int    $limit
      *
@@ -170,7 +170,7 @@ class LeniApiCaller
         string $idEvt,
         array $fields,
         array $filters,
-        array $order,
+        array $sort,
         int $start,
         int $limit
     ): array {
@@ -180,7 +180,7 @@ class LeniApiCaller
             'fields' => $fields,
             'start' => $start,
             'take' => $limit,
-            'order' => $order,
+            'sort' => $sort,
         ];
     }
 

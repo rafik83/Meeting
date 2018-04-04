@@ -122,4 +122,12 @@ class LeniConstants
 
     public const SENDING_REQUEST_NEW_USER = 'sending_request_new_user';
     public const SENDING_REQUEST_SHEET_IS_VALIDATED = 'sending_request_sheet_is_validated';
+
+    public const FILTER_FIELD = 'selectedFieldId';
+    public const FILTER_VALUE = 'value';
+    public const FILTER_OPERATOR = 'selectedOperator';
+    public const FILTER_OPERATOR_GREATER_OR_EQUAL = 'GREATER_OR_EQUAL';
+    public const FILTER_OPERATOR_IN = 'IN';
+
+    public const SORT_ASC = 'asc';
 }

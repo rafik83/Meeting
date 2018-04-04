@@ -223,6 +223,7 @@ class LeniApiCallerTest extends TestCase
                 'fields' => ['field1', 'field2', 'field3'],
                 'start' => 0,
                 'take' => 1,
+                'sort' => ['field1' => 'asc'],
             ]
         );
 
@@ -251,6 +252,7 @@ class LeniApiCallerTest extends TestCase
                 'field3',
             ],
             ['myfilter' => 'value'],
+            ['field1' => 'asc'],
             0,
             1
         );
