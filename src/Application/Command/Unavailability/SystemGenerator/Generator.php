@@ -56,8 +56,6 @@ class Generator
         $this->unavailabilityRepository->removeSystemUnavailabilityForUserAndEvent($user, $event);
 
         $availabilityTimeRanges = $this->availabilityTimeRangeRepository->findByEvent($event);
-        /** @var AvailabilityTimeRange[] $availabilityTimeRangesBought */
-        $availabilityTimeRangesBought = [];
 
         if (empty($availabilityTimeRanges)) {
             return;
@@ -71,43 +69,24 @@ class Generator
             return;
         }
 
-        foreach ($products as $product) {
-           foreach ($product->getAvailabilityTimeRanges() as $availabilityTimeRange) {
-               $availabilityTimeRangesBought[$availabilityTimeRange->getId()] = $availabilityTimeRange;
-           }
-        }
+        $availabilityTimeRangesBought = $this->getAvailabilityTimeRangeOutOfProducts($products);
 
-        $timeRanges = [];
-        foreach ($availabilityTimeRangesBought as $availabilityTimeRange) {
-            $timeRange = new TimeRangeView($availabilityTimeRange->getBegin(), $availabilityTimeRange->getEnd());
-
-            $timeRanges[] = $timeRange;
-        }
-
-        $timeRangesNotAccessible = [];
-        foreach ($availabilityTimeRanges as $availabilityTimeRange) {
-            if (!isset($availabilityTimeRangesBought[$availabilityTimeRange->getId()])) {
-                $timeRangesNotAccessible[] = new TimeRangeNotAccessibleView($availabilityTimeRange->getBegin(), $availabilityTimeRange->getEnd());
-            }
-        }
+        $timeRanges = $this->getTimeRanges($availabilityTimeRangesBought);
+        $timeRangesNotAccessible = $this->getTimeRangesNotAccessible($availabilityTimeRanges, $availabilityTimeRangesBought);
 
         if (empty($timeRangesNotAccessible)) {
             return;
         }
 
         $this->sortTimeRange($timeRanges);
+
+        // We merge the time range that overlap with each other
+        // And then cut them off the time range where the user is available to determine
+        // the period of time where the user has not right to access
         $timeRangesNotAccessible = $this->overlappedTimeRangeMerger->merge($timeRangesNotAccessible);
-        $unavailabilities = [];
+        $timeRangeOfUnavailability = $this->getUnavailabilitiesOutOfTimeRangesNotAccessible($timeRangesNotAccessible, $timeRanges);
 
-        foreach ($timeRangesNotAccessible as $timeRangeNotAccessible) {
-            $truncatedTimeRanges = $this->overlappedTimeRangeTruncater->truncate($timeRangeNotAccessible, $timeRanges);
-
-            foreach ($truncatedTimeRanges as $truncatedTimeRange) {
-                $unavailabilities[] = $truncatedTimeRange;
-            }
-        }
-
-        foreach ($unavailabilities as $unavailability) {
+        foreach ($timeRangeOfUnavailability as $unavailability) {
             $systemUnavailability = new Unavailability(
                 $user,
                 $event,
@@ -133,7 +112,7 @@ class Generator
      *
      * @return Product[]
      */
-    private function getProductsForParticipants(array $participants): array
+    private function getProductsForParticipants(array &$participants): array
     {
         $products = [];
 
@@ -153,5 +132,83 @@ class Generator
         }
 
         return $products;
+    }
+
+    /**
+     * @param AvailabilityTimeRange[] $availabilityTimeRanges
+     * @param AvailabilityTimeRange[] $availabilityTimeRangesBought
+     *
+     * @return TimeRangeNotAccessibleView[]
+     */
+    private function getTimeRangesNotAccessible(array &$availabilityTimeRanges, array &$availabilityTimeRangesBought): array
+    {
+        $timeRangesNotAccessible = [];
+
+        foreach ($availabilityTimeRanges as $availabilityTimeRange) {
+            if (!isset($availabilityTimeRangesBought[$availabilityTimeRange->getId()])) {
+                $timeRangesNotAccessible[] = new TimeRangeNotAccessibleView(
+                    $availabilityTimeRange->getBegin(),
+                    $availabilityTimeRange->getEnd()
+                );
+            }
+        }
+
+        return $timeRangesNotAccessible;
+    }
+
+    /**
+     * @param AvailabilityTimeRange[] $availabilityTimeRangesBought
+     *
+     * @return TimeRangeView[]
+     */
+    private function getTimeRanges(array &$availabilityTimeRangesBought): array
+    {
+        $timeRanges = [];
+
+        foreach ($availabilityTimeRangesBought as $availabilityTimeRange) {
+            $timeRange = new TimeRangeView($availabilityTimeRange->getBegin(), $availabilityTimeRange->getEnd());
+
+            $timeRanges[] = $timeRange;
+        }
+
+        return $timeRanges;
+    }
+
+    /**
+     * @param Product[] $products
+     *
+     * @return AvailabilityTimeRange[]
+     */
+    private function getAvailabilityTimeRangeOutOfProducts(array &$products): array
+    {
+        $availabilityTimeRangesBought = [];
+        foreach ($products as $product) {
+            foreach ($product->getAvailabilityTimeRanges() as $availabilityTimeRange) {
+                $availabilityTimeRangesBought[$availabilityTimeRange->getId()] = $availabilityTimeRange;
+            }
+        }
+
+        return $availabilityTimeRangesBought;
+    }
+
+    /**
+     * @param TimeRangeNotAccessibleView[] $timeRangesNotAccessible
+     * @param TimeRangeView[]              $timeRanges
+     *
+     * @return TimeRangeNotAccessibleView[]
+     */
+    private function getUnavailabilitiesOutOfTimeRangesNotAccessible(array &$timeRangesNotAccessible, array &$timeRanges): array
+    {
+        $timeRangesUnavailability = [];
+
+        foreach ($timeRangesNotAccessible as $timeRangeNotAccessible) {
+            $truncatedTimeRanges = $this->overlappedTimeRangeTruncater->truncate($timeRangeNotAccessible, $timeRanges);
+
+            foreach ($truncatedTimeRanges as $truncatedTimeRange) {
+                $timeRangesUnavailability[] = $truncatedTimeRange;
+            }
+        }
+
+        return $timeRangesUnavailability;
     }
 }
