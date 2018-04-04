@@ -8,12 +8,12 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Proximum\Vimeet\Application\ThirdParty\LENI\Save\Query;
+namespace Proximum\Vimeet\Application\ThirdParty\LENI\Save\Query\CustomData;
 
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\User;
 
-class GetCustomData
+class SendingRequestData
 {
     /** @var Event */
     public $event;
@@ -24,10 +24,14 @@ class GetCustomData
     /** @var array */
     public $data;
 
-    public function __construct(Event $event, User $user, array $data)
+    /** @var bool */
+    public $hasUserSheetStateChangedToValidated;
+
+    public function __construct(Event $event, User $user, array $data, bool $hasUserSheetStateChangedToValidated)
     {
         $this->event = $event;
-        $this->user = $user;
         $this->data = $data;
+        $this->user = $user;
+        $this->hasUserSheetStateChangedToValidated = $hasUserSheetStateChangedToValidated;
     }
 }

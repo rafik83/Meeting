@@ -69,6 +69,9 @@ class LeniUserView
     /** @var null|LeaderView */
     public $leaderView;
 
+    /** @var array indexed by LENI fieldName */
+    public $customData;
+
     /**
      * @param int              $id
      * @param bool             $enabled
@@ -89,6 +92,7 @@ class LeniUserView
      * @param null|string      $leniId
      * @param bool             $paid
      * @param int|null         $participantProductId
+     * @param array            $customData indexed by LENI fieldName
      */
     public function __construct(
         int $id,
@@ -109,7 +113,8 @@ class LeniUserView
         LeniPlanningView $planning,
         ?string $leniId,
         bool $paid,
-        ?int $participantProductId
+        ?int $participantProductId,
+        array $customData
     ) {
         $this->id = $id;
         $this->sheetName = $sheetName;
@@ -130,5 +135,6 @@ class LeniUserView
         $this->paid = $paid;
         $this->participantProductId = $participantProductId;
         $this->leaderView = $leaderView;
+        $this->customData = $customData;
     }
 }

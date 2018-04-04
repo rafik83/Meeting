@@ -23,11 +23,14 @@ class Type
     public const TYPE_LENI_DATA_MAPPING = 'leni_participation_data_mapping';
     public const TYPE_LENI_SAVE_ENDPOINT = 'leni_save_endpoint';
     public const TYPE_LENI_GET_ENDPOINT = 'leni_get_endpoint';
+    public const TYPE_LENI_SENDING_REQUEST = 'leni_sending_request';
 
     public const TYPE_LENI_MODE = 'leni_mode';
     public const VALUE_LENI_MODE_SAVE = 'save';
     public const VALUE_LENI_MODE_GET = 'get';
     public const VALUE_LENI_MODE_BOTH = 'both';
+    public const ALLOWED_LENI_MODE_FOR_GET = [self::VALUE_LENI_MODE_GET, self::VALUE_LENI_MODE_BOTH];
+    public const ALLOWED_LENI_MODE_FOR_SAVE = [self::VALUE_LENI_MODE_SAVE, self::VALUE_LENI_MODE_BOTH];
 
     // Event Reference in Comexposium
     public const TYPE_COMEXPOSIUM_EVENT_REFERENCE = 'comexposium_event_reference';
@@ -54,6 +57,7 @@ class Type
         self::TYPE_LENI_GET_ENDPOINT,
         self::TYPE_LENI_TYPES_MAPPING,
         self::TYPE_LENI_DATA_MAPPING,
+        self::TYPE_LENI_SENDING_REQUEST,
         self::TYPE_VIANEO_ENDPOINT,
         self::TYPE_VIANEO_CONCERNED_TYPES_ID,
         self::TYPE_COMEXPOSIUM_EVENT_REFERENCE,

@@ -206,4 +206,133 @@ class RawDataToParticipantConverterTest extends TestCase
             $rawDataUser2
         );
     }
+
+    public function testConvertWithSheetState()
+    {
+        $datetime = new \DateTime();
+
+        $rawDataUser = [
+            'Id' => 'user-id-2',
+            'Email' => 'ronald@macdonald.food',
+            'Langue' => 'en',
+            'ZL_MODERATION' => 'Y' // should be converted to "validated" sheet state
+        ];
+
+        $typeMappingEvent = ['type-mapping-event-1'];
+        $customDataMappingEvent = ['sheet_state' => 'ZL_MODERATION', 'my_tag' => 'custom-data-mapping-event-1'];
+
+        $user = $this->prophesize(User::class);
+        $participantForUser2 = $this->prophesize(Participant::class);
+        $participantForUser2->getUser()->shouldBeCalled()->willReturn($user->reveal());
+
+        $event = $this->prophesize(Event::class);
+
+        $eventType1 = $this->prophesize(Type::class);
+        $eventType1->getId()->willReturn(111);
+
+        $eventType2 = $this->prophesize(Type::class);
+        $eventType2->getId()->willReturn(222);
+
+        $typeConverter = $this->prophesize(TypeConverter::class);
+        $typeConverter
+            ->convert([$eventType1->reveal(), $eventType2->reveal()], $typeMappingEvent, $rawDataUser)
+            ->shouldBeCalled()
+            ->willReturn($eventType1->reveal())
+        ;
+
+        $registrationTemplateDataEvent1type1 = $this->prophesize(TemplateData::class);
+        $registrationTemplateDataEvent1type2 = $this->prophesize(TemplateData::class);
+        $sheetTemplateDataEvent1type1 = $this->prophesize(TemplateData::class);
+        $sheetTemplateDataEvent1type2 = $this->prophesize(TemplateData::class);
+
+        $dataConverter = $this->prophesize(DataConverter::class);
+        $dataConverter
+            ->convert($customDataMappingEvent, $rawDataUser)
+            ->shouldBeCalled()
+            ->willReturn(['user2-data-indexed-by-tag' => 'whatever', 'sheet_state' => 'Y'])
+        ;
+
+        $convertToParticipantHandler = $this->prophesize(ConvertToParticipantHandler::class);
+        $convertToParticipantHandler
+            ->handle(
+                new ConvertToParticipant(
+                    $event->reveal(),
+                    $eventType1->reveal(),
+                    'ronald@macdonald.food',
+                    'en',
+                    ['user2-data-indexed-by-tag' => 'whatever', 'sheet_state' => 'Y'],
+                    $registrationTemplateDataEvent1type1->reveal(),
+                    $sheetTemplateDataEvent1type1->reveal(),
+                    'leni_user_id',
+                    'validated' // Raw data contains "sheet_state" with "Y" which is equivalent to "validated"
+                )
+            )
+            ->shouldBeCalled()
+            ->willReturn($participantForUser2->reveal())
+        ;
+
+        $extraDataRepository = $this->prophesize(ExtraDataRepositoryInterface::class);
+        $extraDataRepository
+            ->add(new ExtraData($user->reveal(), $event->reveal(), 'leni_user_id', 'user-id-2', $datetime))
+            ->shouldBeCalled()
+        ;
+
+        $participationTypeTemplateDataGetter = $this->prophesize(ParticipationTypeTemplateDataGetter::class);
+        $participationTypeTemplateDataGetter
+            ->getRegistrationTemplateDataByType($eventType1->reveal())
+            ->shouldBeCalled()
+            ->willReturn($registrationTemplateDataEvent1type1->reveal())
+        ;
+        $participationTypeTemplateDataGetter
+            ->getSheetTemplateDataByType($eventType1->reveal())
+            ->shouldBeCalled()
+            ->willReturn($sheetTemplateDataEvent1type1->reveal())
+        ;
+
+        $leniUserView = $this->prophesize(LeniUserView::class);
+        $leniUserViewQueryHandler = $this->prophesize(LeniUserViewQueryHandler::class);
+        $leniUserViewQueryHandler
+            ->handle(new LeniUserViewQuery($event->reveal(), $user->reveal(), null))
+            ->shouldBeCalled()
+            ->willReturn($leniUserView->reveal())
+        ;
+
+        $leniUserViewNormalizer = $this->prophesize(LeniUserViewNormalizer::class);
+        $leniUserViewNormalizer
+            ->normalize($leniUserView->reveal())
+            ->shouldBeCalled()
+            ->willReturn(['normalized' => 'data'])
+        ;
+
+        $extraDataRepository
+            ->add(
+                new ExtraData(
+                    $user->reveal(),
+                    $event->reveal(),
+                    'leni_fingerprint',
+                    'a:1:{s:10:"normalized";s:4:"data";}',
+                    $datetime
+                )
+            )
+            ->shouldBeCalled()
+        ;
+
+        $rawDataToParticipantConverter = new RawDataToParticipantConverter(
+            $convertToParticipantHandler->reveal(),
+            $typeConverter->reveal(),
+            $dataConverter->reveal(),
+            $participationTypeTemplateDataGetter->reveal(),
+            $extraDataRepository->reveal(),
+            $leniUserViewQueryHandler->reveal(),
+            $leniUserViewNormalizer->reveal(),
+            $datetime
+        );
+        $rawDataToParticipantConverter->convert(
+            $event->reveal(),
+            [$eventType1->reveal(), $eventType2->reveal()],
+            $typeMappingEvent,
+            $customDataMappingEvent,
+            $rawDataUser
+        );
+    }
 }

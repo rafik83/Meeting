@@ -93,7 +93,7 @@ class LeniApiCallHandlerTest extends TestCase
 
         $getCustomDataHandler = $this->prophesize(GetCustomDataHandler::class);
         $getCustomDataHandler
-            ->handle(new GetCustomData($data))
+            ->handle(new GetCustomData($event->reveal(), $user->reveal(), $data))
             ->shouldBeCalled()
             ->willReturn($data)
         ;
@@ -173,7 +173,7 @@ class LeniApiCallHandlerTest extends TestCase
 
         $getCustomDataHandler = $this->prophesize(GetCustomDataHandler::class);
         $getCustomDataHandler
-            ->handle(new GetCustomData($data))
+            ->handle(new GetCustomData($event->reveal(), $user->reveal(), $data))
             ->shouldBeCalled()
             ->willReturn($data)
         ;
@@ -218,7 +218,7 @@ class LeniApiCallHandlerTest extends TestCase
 
         $getCustomDataHandler = $this->prophesize(GetCustomDataHandler::class);
         $getCustomDataHandler
-            ->handle(new GetCustomData(['Cab2' => '24601']))
+            ->handle(new GetCustomData($event->reveal(), $user->reveal(), ['Cab2' => '24601']))
             ->shouldBeCalled()
             ->willReturn(['Cab2' => '24601', 'EvenementOrigin' => 'API'])
         ;
@@ -304,7 +304,7 @@ class LeniApiCallHandlerTest extends TestCase
 
         $getCustomDataHandler = $this->prophesize(GetCustomDataHandler::class);
         $getCustomDataHandler
-            ->handle(new GetCustomData($data))
+            ->handle(new GetCustomData($event->reveal(), $user->reveal(), $data))
             ->shouldBeCalled()
             ->willReturn($data)
         ;

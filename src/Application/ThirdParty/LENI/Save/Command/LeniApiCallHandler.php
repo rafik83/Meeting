@@ -177,6 +177,7 @@ class LeniApiCallHandler
         }
 
         $event = $pendingExtraData->getEvent();
+        $user = $pendingExtraData->getUser();
 
         $data = unserialize($pendingExtraData->getValue(), ['allowed_classes' => false]);
 
@@ -187,7 +188,10 @@ class LeniApiCallHandler
             unset($data[LeniConstants::LENI_COL_USER_ID]);
         }
 
-        $response = $this->leniApi->save($event, $this->getCustomDataHandler->handle(new GetCustomData($data)));
+        $response = $this->leniApi->save(
+            $event,
+            $this->getCustomDataHandler->handle(new GetCustomData($event, $user, $data))
+        );
 
         $hasNotUserId = !isset($data[LeniConstants::LENI_COL_USER_ID]);
 
@@ -217,11 +221,7 @@ class LeniApiCallHandler
             );
         }
 
-        $this->userExtraDataFingerprintManager->addOrUpdateFingerprint(
-            $pendingExtraData->getEvent(),
-            $pendingExtraData->getUser(),
-            serialize($data)
-        );
+        $this->userExtraDataFingerprintManager->addOrUpdateFingerprint($event, $user, serialize($data));
         $this->extraDataRepository->remove($pendingExtraData);
 
         // Call has warnings

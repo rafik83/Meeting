@@ -20,6 +20,7 @@ use Proximum\Vimeet\Application\ThirdParty\LENI\LeniConstants;
 use Proximum\Vimeet\Domain\Event\ExtraParameter\Type as EventExtraParameterType;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\User\Event\ExtraData;
+use Proximum\Vimeet\Domain\Repository\Event\ExtraParameterRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\EventRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\TypeRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\User\Event\ExtraDataRepositoryInterface;
@@ -41,6 +42,9 @@ class LeniApiCallHandler
     /** @var ExtraDataRepositoryInterface */
     private $extraDataRepository;
 
+    /** @var ExtraParameterRepositoryInterface */
+    private $extraParameterRepository;
+
     /** @var MappingGetter */
     private $mappingGetter;
 
@@ -55,6 +59,7 @@ class LeniApiCallHandler
         EventRepositoryInterface $eventRepository,
         TypeRepositoryInterface $typeRepository,
         ExtraDataRepositoryInterface $extraDataRepository,
+        ExtraParameterRepositoryInterface $extraParameterRepository,
         MappingGetter $mappingGetter,
         FieldsByEventQueryHandler $fieldsByEventQueryHandler,
         RawDataToParticipantConverter $rawDataToParticipantConverter
@@ -63,6 +68,7 @@ class LeniApiCallHandler
         $this->eventRepository = $eventRepository;
         $this->typeRepository = $typeRepository;
         $this->extraDataRepository = $extraDataRepository;
+        $this->extraParameterRepository = $extraParameterRepository;
         $this->mappingGetter = $mappingGetter;
         $this->fieldsByEventQueryHandler = $fieldsByEventQueryHandler;
         $this->rawDataToParticipantConverter = $rawDataToParticipantConverter;
@@ -94,6 +100,17 @@ class LeniApiCallHandler
      */
     private function getEventUsers(Event $event): void
     {
+        $leniModeParameter = $this->extraParameterRepository->findByEventAndType(
+            $event,
+            EventExtraParameterType::TYPE_LENI_MODE
+        );
+
+        if ($leniModeParameter === null
+            || !\in_array($leniModeParameter->getValue(), EventExtraParameterType::ALLOWED_LENI_MODE_FOR_GET, true)
+        ) {
+            return;
+        }
+
         $typesMapping = $this->mappingGetter->getMapping($event, EventExtraParameterType::TYPE_LENI_TYPES_MAPPING);
 
         if (null === $typesMapping) {
