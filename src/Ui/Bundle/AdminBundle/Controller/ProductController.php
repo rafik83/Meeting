@@ -11,10 +11,6 @@
 namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller;
 
 use Proximum\Vimeet\Application\Command\Product\Import\Import;
-use Proximum\Vimeet\Application\Command\Product\Option\CreateOption;
-use Proximum\Vimeet\Application\Command\Product\Option\UpdateOption;
-use Proximum\Vimeet\Application\Command\Product\Participant\CreateParticipant;
-use Proximum\Vimeet\Application\Command\Product\Participant\UpdateParticipant;
 use Proximum\Vimeet\Application\Command\Product\Plan\CreatePlan;
 use Proximum\Vimeet\Application\Command\Product\Plan\UpdatePlan;
 use Proximum\Vimeet\Application\Command\Product\Planning\CreatePlanning;
@@ -23,10 +19,6 @@ use Proximum\Vimeet\Application\Query\Product\ProductsViewQuery;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Product;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Product\Import\ImportType;
-use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Product\Option\CreateOptionType;
-use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Product\Option\UpdateOptionType;
-use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Product\Participant\CreateParticipantType;
-use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Product\Participant\UpdateParticipantType;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Product\Plan\CreatePlanType;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Product\Plan\UpdatePlanType;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Product\Planning\CreatePlanningType;
@@ -52,68 +44,6 @@ class ProductController extends Controller
         return $this->render('AdminBundle:Product:list.html.twig', [
             'event'    => $event,
             'products' => $products,
-        ]);
-    }
-
-    /**
-     * @param Request $request
-     * @param Event   $event
-     *
-     * @return RedirectResponse|Response
-     */
-    public function createOptionAction(Request $request, Event $event)
-    {
-        $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
-
-        $create = new CreateOption($event);
-        $form = $this->createForm(CreateOptionType::class, $create, [
-            'event'  => $event,
-            'locale' => $event->getAvailableLocale($request->getLocale()),
-            'submit' => true,
-        ]);
-
-        if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
-            $this->get('tactician.commandbus')->handle($create);
-            $this->addFlash('success', 'flash.admin.product.create.success');
-
-            return $this->redirectToRoute('admin_product', ['event' => $event->getId()]);
-        }
-
-        return $this->render('AdminBundle:Product:createOption.html.twig', [
-            'event' => $event,
-            'form'  => $form->createView(),
-        ]);
-    }
-
-    /**
-     * @param Request $request
-     * @param Event   $event
-     * @param Product $product
-     *
-     * @return RedirectResponse|Response
-     */
-    public function updateOptionAction(Request $request, Event $event, Product $product)
-    {
-        $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
-
-        $update = new UpdateOption($product);
-        $form   = $this->createForm(UpdateOptionType::class, $update, [
-            'submit'  => true,
-            'product' => $product,
-            'locale'  => $event->getAvailableLocale($request->getLocale()),
-        ]);
-
-        if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
-            $this->get('tactician.commandbus')->handle($update);
-            $this->addFlash('success', 'flash.admin.product.update.success');
-
-            return $this->redirectToRoute('admin_product', ['event' => $event->getId()]);
-        }
-
-        return $this->render('AdminBundle:Product:updateOption.html.twig', [
-            'event'   => $event,
-            'form'    => $form->createView(),
-            'product' => $product,
         ]);
     }
 
@@ -177,68 +107,6 @@ class ProductController extends Controller
             'event' => $event,
             'form'  => $form->createView(),
             'plan'  => $product,
-        ]);
-    }
-
-    /**
-     * @param Request $request
-     * @param Event   $event
-     *
-     * @return RedirectResponse|Response
-     */
-    public function createParticipantAction(Request $request, Event $event): Response
-    {
-        $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
-
-        $create = new CreateParticipant($event);
-        $form = $this->createForm(CreateParticipantType::class, $create, [
-            'event'  => $event,
-            'locale' => $event->getAvailableLocale($request->getLocale()),
-            'submit' => true,
-        ]);
-
-        if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
-            $this->get('tactician.commandbus')->handle($create);
-            $this->addFlash('success', 'flash.admin.product.create.success');
-
-            return $this->redirectToRoute('admin_product', ['event' => $event->getId()]);
-        }
-
-        return $this->render('AdminBundle:Product:createParticipant.html.twig', [
-            'event' => $event,
-            'form'  => $form->createView(),
-        ]);
-    }
-
-    /**
-     * @param Request $request
-     * @param Event   $event
-     * @param Product $product
-     *
-     * @return RedirectResponse|Response
-     */
-    public function updateParticipantAction(Request $request, Event $event, Product $product): Response
-    {
-        $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
-
-        $update = new UpdateParticipant($product);
-        $form = $this->createForm(UpdateParticipantType::class, $update, [
-            'submit'  => true,
-            'product' => $product,
-            'locale'  => $event->getAvailableLocale($request->getLocale()),
-        ]);
-
-        if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
-            $this->get('tactician.commandbus')->handle($update);
-            $this->addFlash('success', 'flash.admin.product.update.success');
-
-            return $this->redirectToRoute('admin_product', ['event' => $event->getId()]);
-        }
-
-        return $this->render('AdminBundle:Product:updateParticipant.html.twig', [
-            'event'   => $event,
-            'form'    => $form->createView(),
-            'product' => $product,
         ]);
     }
 

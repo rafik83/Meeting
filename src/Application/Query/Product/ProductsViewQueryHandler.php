@@ -73,7 +73,9 @@ class ProductsViewQueryHandler
                 $product->getAvailabilityCurrent(),
                 $product->getAvailabilityMax(),
                 $product->getBuyableUntil(),
-                $product->getDeletableUntil()
+                $product->getDeletableUntil(),
+                $product->hasAvailabilityTimeRanges(),
+                $product->isAttributable()
             );
         }
 

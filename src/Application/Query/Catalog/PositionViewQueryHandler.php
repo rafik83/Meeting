@@ -46,6 +46,10 @@ class PositionViewQueryHandler
             $positionViews[] = new PositionView($key, $title);
         }
 
+        usort($positionViews, function (PositionView $first, PositionView $second) {
+            return strcmp($first->getTitle(), $second->getTitle());
+        });
+
         return $positionViews;
     }
 }

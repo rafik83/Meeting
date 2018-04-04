@@ -90,5 +90,9 @@ mail.sheet.validation.draft.body: 'Dear %firstname% %lastname%, your presentatio
 mail.sheet.validation.draft.subject: 'Presentation sheet in draft mode'
 mail.sheet.validation.validate.body: 'Hello %firstname% %lastname%, your presentation sheet has been validated'
 mail.sheet.validation.validate.subject: 'Presentation sheet validated'
+mail.thirdParty.comexposium.sso.participantAdded.body: 'Hello %firstname% %lastname%, You have been added by one of your colleagues to participate in business meetings on %event%.'
+mail.thirdParty.comexposium.sso.participantAdded.end: Regards
+mail.thirdParty.comexposium.sso.participantAdded.link: Login
+mail.thirdParty.comexposium.sso.participantAdded.subject: '[%event%] Activate your account'
 mail.transaction.confirm.body: "Dear %firstname% %lastname%, \n\nYour payment in the amount of %transactionTotal% has been received.\n\nRegards,"
 mail.transaction.confirm.subject: '[%event%] Your payment has been received'

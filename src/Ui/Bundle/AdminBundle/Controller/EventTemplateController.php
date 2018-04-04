@@ -1,17 +1,22 @@
 <?php
 
 /*
- * This file is part of the vimeet project.
+ * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2016 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
 
 namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller;
 
+use Proximum\Vimeet\Application\Command\Package\Create;
 use Proximum\Vimeet\Domain\Model\Event;
+use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Package\CreateType;
+use Proximum\Vimeet\Ui\Bundle\AdminBundle\ValueResolver\AdminDomain;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 class EventTemplateController extends Controller
@@ -53,17 +58,35 @@ class EventTemplateController extends Controller
     }
 
     /**
-     * @param Event $event
+     * @param Request     $request
+     * @param Event       $event
+     * @param AdminDomain $adminDomain
      *
-     * @return Response
+     * @return Response|RedirectResponse
      */
-    public function packageTemplateAction(Event $event)
+    public function packageTemplateAction(Request $request, Event $event, AdminDomain $adminDomain): Response
     {
         $this->denyAccessUnlessGranted('ROLE_ALLOWED_TO_ORGANIZE');
 
         $templates = $this->get('repository.package_repository')->findByEvent($event);
 
+        $create = new Create($event);
+        $form   = $this->createForm(CreateType::class, $create, [
+            'selectEvent' => false,
+            'submit'      => true,
+            'user'        => $adminDomain->getAdmin(),
+        ]);
+
+        if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
+            $this->get('tactician.commandbus')->handle($create);
+
+            return $this->redirectToRoute('admin_event_template_package', [
+                'event' => $event->getId(),
+            ]);
+        }
+
         return $this->render('AdminBundle:EventTemplate:packageTemplate.html.twig', [
+            'form'      => $form->createView(),
             'templates' => $templates,
             'event'     => $event,
         ]);

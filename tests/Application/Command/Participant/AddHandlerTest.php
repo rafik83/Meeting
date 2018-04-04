@@ -97,6 +97,7 @@ class AddHandlerTest extends TestCase
             5,
             1,
             true,
+            1,
             true
         );
 

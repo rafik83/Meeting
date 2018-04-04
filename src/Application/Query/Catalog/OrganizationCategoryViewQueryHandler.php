@@ -34,7 +34,7 @@ class OrganizationCategoryViewQueryHandler
      */
     public function handle(OrganizationCategoryViewQuery $query)
     {
-        $organizationCategoryItems = $this->taggedNomenclatureFilterGetter->getNomenclaturesItems(
+        $organizationCategoryItems = $this->taggedNomenclatureFilterGetter->getLastNomenclaturesItems(
             $query->event,
             Tag::SHEET_ORGANIZATION_CATEGORY,
             $query->locale
@@ -45,6 +45,10 @@ class OrganizationCategoryViewQueryHandler
         foreach ($organizationCategoryItems as $key => $title) {
             $organizationCategoryViews[] = new OrganizationCategoryView($key, $title);
         }
+
+        usort($organizationCategoryViews, function (OrganizationCategoryView $first, OrganizationCategoryView $second) {
+            return strcmp($first->title, $second->title);
+        });
 
         return $organizationCategoryViews;
     }

@@ -629,6 +629,13 @@ class Event implements EventInterface, TraceableInterface
         }
     }
 
+    public function addDay(Day $day): void
+    {
+        if (!$this->days->contains($day)) {
+            $this->days->add($day);
+        }
+    }
+
     /**
      * @return Event\Day[]
      */

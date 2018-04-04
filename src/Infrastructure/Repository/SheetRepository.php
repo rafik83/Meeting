@@ -104,6 +104,19 @@ class SheetRepository implements SheetRepositoryInterface
         return $queryBuilder->getQuery()->getResult();
     }
 
+    public function getOwnerEmails(Event $event): array
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('owner.email AS email')
+            ->from(Sheet::class, 'sheet')
+            ->join('sheet.owner', 'owner', 'WITH', 'sheet.event = :event')
+            ->setParameter('event', $event);
+
+        return $queryBuilder->getQuery()->getResult();
+    }
+
     /**
      * {@inheritdoc}
      */

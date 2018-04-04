@@ -514,6 +514,7 @@ form.product_choice.group_by.type.option: Options
 form.product_choice.group_by.type.participant: Participants
 form.product_choice.group_by.type.plan: Formules
 form.product_choice.group_by.type.planning: Plannings
+form.product_create_option.children.attributable.label: "Attribuable à un/des participant/s"
 form.product_create_option.children.availabilityCurrent.label: 'Stock actuel'
 form.product_create_option.children.availabilityMax.label: 'Stock max'
 form.product_create_option.children.buyableUntil.label: 'Achetable jusqu''aù'
@@ -531,6 +532,7 @@ form.product_create_option.children.translations.prototype.children.title.label:
 form.product_create_option.children.unitPrice.label: 'Prix unitaire (HT)'
 form.product_create_option.children.updatable.label: 'Produit supprimable'
 form.product_create_option.children.vat.label: TVA
+form.product_create_participant.children.availabilityTimeRanges.label: 'Plages de disponibilités liées'
 form.product_create_participant.children.name.label: 'Nom backoffice du participant'
 form.product_create_participant.children.quantityMax.label: 'Quantité max'
 form.product_create_participant.children.submit.label: Enregistrer
@@ -569,6 +571,7 @@ form.product_create_planning.children.translations.prototype.children.descriptio
 form.product_create_planning.children.translations.prototype.children.title.label: Titre
 form.product_create_planning.children.unitPrice.label: 'Prix unitaire (HT)'
 form.product_create_planning.children.vat.label: TVA
+form.product_update_option.children.attributable.label: "Attribuable à un/des participant/s"
 form.product_update_option.children.availabilityCurrent.label: 'Stock actuel'
 form.product_update_option.children.availabilityMax.label: 'Stock max'
 form.product_update_option.children.buyableUntil.label: 'Achetable jusqu''aù'
@@ -586,6 +589,7 @@ form.product_update_option.children.translations.prototype.children.title.label:
 form.product_update_option.children.unitPrice.label: 'Prix unitaire (HT)'
 form.product_update_option.children.updatable.label: 'Produit supprimable'
 form.product_update_option.children.vat.label: TVA
+form.product_update_participant.children.availabilityTimeRanges.label: 'Plages de disponibilités liées'
 form.product_update_participant.children.name.label: 'Nom backoffice du participant'
 form.product_update_participant.children.quantityMax.label: 'Quantité max'
 form.product_update_participant.children.submit.label: Enregistrer
@@ -740,6 +744,7 @@ form.sheet_filter.children.cart.yes.label: Avec
 form.sheet_filter.children.category.label: Catégorie
 form.sheet_filter.children.commercialStatus.label: 'Statut commercial'
 form.sheet_filter.children.completed.label: Complétude
+form.sheet_filter.children.country.label: Pays
 form.sheet_filter.children.creation_interval.label: Inscription
 form.sheet_filter.children.enabled.label: Participation
 form.sheet_filter.children.enabledState.all.label: Toutes

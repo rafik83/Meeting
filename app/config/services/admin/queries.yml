@@ -89,5 +89,8 @@ services:
     Proximum\Vimeet\Application\Query\AvailabilityTimeRange\ListViewQueryHandler:
         arguments:
             - '@Proximum\Vimeet\Infrastructure\Repository\AvailabilityTimeRangeRepository'
+            - '@Proximum\Vimeet\Application\Query\AvailabilityTimeRange\AvailabilityTimeRangeViewQueryHandler'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\AvailabilityTimeRange\ListViewQuery }
+
+    Proximum\Vimeet\Application\Query\AvailabilityTimeRange\AvailabilityTimeRangeViewQueryHandler: ~
