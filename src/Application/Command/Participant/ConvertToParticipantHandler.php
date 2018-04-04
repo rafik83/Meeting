@@ -109,7 +109,8 @@ class ConvertToParticipantHandler
             $user,
             $convertToParticipant->dataIndexedByTag,
             $convertToParticipant->registrationTemplateData,
-            $convertToParticipant->sheetTemplateData
+            $convertToParticipant->sheetTemplateData,
+            $convertToParticipant->sheetState
         );
 
         $this->synchronizer->set($convertToParticipant->registrationTemplateData, $user);
@@ -166,6 +167,7 @@ class ConvertToParticipantHandler
      * @param array        $dataIndexedByTag
      * @param TemplateData $registrationTemplateData
      * @param TemplateData $sheetTemplateData
+     * @param string       $sheetState
      *
      * @return Participant
      */
@@ -175,7 +177,8 @@ class ConvertToParticipantHandler
         User $user,
         array $dataIndexedByTag,
         TemplateData $registrationTemplateData,
-        TemplateData $sheetTemplateData
+        TemplateData $sheetTemplateData,
+        string $sheetState
     ): Participant {
         $sheetAndParticipantTemplateDataView = $this->sheetAndParticipantTemplateDataHandler->handle(
             $dataIndexedByTag,
@@ -191,6 +194,8 @@ class ConvertToParticipantHandler
             $sheetAndParticipantTemplateDataView->sheetTemplateData,
             $sheetAndParticipantTemplateDataView->sheetRegistrationData
         );
+
+        $sheet->setState($sheetState);
 
         $participant = $this->createParticipant(
             $sheet,

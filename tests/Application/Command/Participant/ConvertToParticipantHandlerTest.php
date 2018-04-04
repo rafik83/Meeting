@@ -89,6 +89,9 @@ class ConvertToParticipantHandlerTest extends TestCase
         $sheet->setTitle('Korben Dallas Taxi Cie');
         $sheet->setImported(true);
 
+        // Sheet must be created with "validated" state
+        $sheet->setState('validated');
+
         $participant = new Participant($sheet, $user, ['participantRegistrationData'], false);
         $participant->setImported(true);
 
@@ -139,7 +142,9 @@ class ConvertToParticipantHandlerTest extends TestCase
                 'en',
                 $dataIndexedByTag,
                 $this->registrationTemplateData->reveal(),
-                $this->sheetTemplateData->reveal()
+                $this->sheetTemplateData->reveal(),
+                null,
+                'validated' // sheet must be created with "validated" state
             )
         );
 

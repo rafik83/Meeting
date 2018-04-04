@@ -61,6 +61,9 @@ services:
             - '@Proximum\Vimeet\Application\ThirdParty\LENI\Common\Normalizer\LeniUserViewNormalizer'
             - '@datetime'
 
+    Proximum\Vimeet\Application\ThirdParty\LENI\Save\Converter\CustomDataConverter: ~
+    Proximum\Vimeet\Application\ThirdParty\LENI\Save\Converter\TypeConverter: ~
+
     #
     # Job
     #
@@ -131,8 +134,21 @@ services:
             - '@order.balance'
             - '@Proximum\Vimeet\Application\ThirdParty\LENI\Common\Query\PrepareLeaderDataHandler'
             - '@repository.user.event.extra_data_repository'
+            - '@Proximum\Vimeet\Application\ThirdParty\LENI\Common\Query\LeniUserCustomDataQueryHandler'
+
+    Proximum\Vimeet\Application\ThirdParty\LENI\Common\Query\LeniUserCustomDataQueryHandler:
+        arguments:
+            - '@Proximum\Vimeet\Application\ThirdParty\LENI\Save\Converter\TypeConverter'
+            - '@Proximum\Vimeet\Application\ThirdParty\LENI\Common\EventExtraParameter\MappingGetter'
+            - '@Proximum\Vimeet\Application\ThirdParty\LENI\Save\Converter\CustomDataConverter'
+            - '@template.template_data_factory'
 
     Proximum\Vimeet\Application\ThirdParty\LENI\Get\Query\FieldsByEventQueryHandler: ~
+
+    Proximum\Vimeet\Application\ThirdParty\LENI\Save\Query\CustomData\HasUserSheetStateChangedQueryHandler:
+        arguments:
+            - '@repository.user.event.extra_data_repository'
+            - '@Proximum\Vimeet\Application\ThirdParty\LENI\Common\EventExtraParameter\MappingGetter'
 
     Proximum\Vimeet\Application\ThirdParty\LENI\Save\Query\CustomData\SendingRequestDataHandler:
         arguments:
@@ -141,3 +157,4 @@ services:
     Proximum\Vimeet\Application\ThirdParty\LENI\Save\Query\GetCustomDataHandler:
          arguments:
             - '@Proximum\Vimeet\Application\ThirdParty\LENI\Save\Query\CustomData\SendingRequestDataHandler'
+            - '@Proximum\Vimeet\Application\ThirdParty\LENI\Save\Query\CustomData\HasUserSheetStateChangedQueryHandler'
