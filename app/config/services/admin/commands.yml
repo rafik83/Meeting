@@ -152,3 +152,18 @@ services:
             - '@Proximum\Vimeet\Infrastructure\Repository\AvailabilityTimeRangeRepository'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\AvailabilityTimeRange\Create }
+
+    #
+    # System Unavailability
+    #
+    Proximum\Vimeet\Application\Command\Unavailability\SystemGenerator\OverlappedTimeRangeTruncater: ~
+    Proximum\Vimeet\Application\Command\Unavailability\SystemGenerator\OverlappedTimeRangeMerger: ~
+
+    Proximum\Vimeet\Application\Command\Unavailability\SystemGenerator\Generator:
+        arguments:
+            - '@vimeet_infrastructure.repository.unavailability_repository'
+            - '@Proximum\Vimeet\Infrastructure\Repository\AvailabilityTimeRangeRepository'
+            - '@vimeet_infrastructure.repository.participant_repository'
+            - '@Proximum\Vimeet\Application\Command\Unavailability\SystemGenerator\OverlappedTimeRangeMerger'
+            - '@Proximum\Vimeet\Application\Command\Unavailability\SystemGenerator\OverlappedTimeRangeTruncater'
+            - '@vimeet_infrastructure.adapter.delayed_event_dispatcher'
