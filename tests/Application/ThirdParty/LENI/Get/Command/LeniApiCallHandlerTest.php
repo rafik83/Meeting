@@ -122,7 +122,7 @@ class LeniApiCallHandlerTest extends TestCase
                         ],
                     ],
                 ],
-                ['CreeLe' => 'asc'],
+                ['CreeLe' => 'ASC'],
                 0,
                 100
             )
@@ -130,7 +130,7 @@ class LeniApiCallHandlerTest extends TestCase
             ->willReturn([$rawDataUser1, $rawDataUser2])
         ;
         $leniApi
-            ->get($event2->reveal(), ['field1', 'field3', 'CreeLe'], [], ['CreeLe' => 'asc'], 0, 100)
+            ->get($event2->reveal(), ['field1', 'field3', 'CreeLe'], [], ['CreeLe' => 'ASC'], 0, 100)
             ->shouldBeCalled()
             ->willReturn([])
         ;

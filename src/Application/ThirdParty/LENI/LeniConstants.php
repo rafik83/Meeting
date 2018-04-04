@@ -129,5 +129,5 @@ class LeniConstants
     public const FILTER_OPERATOR_GREATER_OR_EQUAL = 'GREATER_OR_EQUAL';
     public const FILTER_OPERATOR_IN = 'IN';
 
-    public const SORT_ASC = 'asc';
+    public const SORT_ASC = 'ASC';
 }
