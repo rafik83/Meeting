@@ -119,4 +119,7 @@ class LeniConstants
         Sheet::STATE_ACCEPTED => 'A',
         Sheet::STATE_REFUSED => 'R',
     ];
+
+    public const SENDING_REQUEST_NEW_USER = 'sending_request_new_user';
+    public const SENDING_REQUEST_SHEET_IS_VALIDATED = 'sending_request_sheet_is_validated';
 }

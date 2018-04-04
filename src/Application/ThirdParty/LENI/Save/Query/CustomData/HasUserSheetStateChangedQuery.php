@@ -8,12 +8,12 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Proximum\Vimeet\Application\ThirdParty\LENI\Save\Query;
+namespace Proximum\Vimeet\Application\ThirdParty\LENI\Save\Query\CustomData;
 
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\User;
 
-class GetCustomData
+class HasUserSheetStateChangedQuery
 {
     /** @var Event */
     public $event;
@@ -27,7 +27,7 @@ class GetCustomData
     public function __construct(Event $event, User $user, array $data)
     {
         $this->event = $event;
-        $this->user = $user;
         $this->data = $data;
+        $this->user = $user;
     }
 }
