@@ -13,11 +13,14 @@ namespace Proximum\Vimeet\Tests\Application\Command\Unavailability\SystemGenerat
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
 use Prophecy\Prophecy\ObjectProphecy;
+use Proximum\Vimeet\Application\Adapter\DelayedEventDispatcherInterface;
 use Proximum\Vimeet\Application\Command\Unavailability\SystemGenerator\Generator;
 use Proximum\Vimeet\Application\Command\Unavailability\SystemGenerator\OverlappedTimeRangeMerger;
 use Proximum\Vimeet\Application\Command\Unavailability\SystemGenerator\OverlappedTimeRangeTruncater;
 use Proximum\Vimeet\Application\Command\Unavailability\SystemGenerator\TimeRangeNotAccessibleView;
 use Proximum\Vimeet\Application\Command\Unavailability\SystemGenerator\TimeRangeView;
+use Proximum\Vimeet\Application\Event\Events;
+use Proximum\Vimeet\Application\Event\Unavailability\System\SystemUnavailabilityForUserGeneratedEvent;
 use Proximum\Vimeet\Domain\Model\AvailabilityTimeRange;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Package;
@@ -53,6 +56,9 @@ class GeneratorTest extends TestCase
     /** @var ObjectProphecy */
     private $overlappedTimeRangeTruncater;
 
+    /** @var ObjectProphecy */
+    private $eventDispatcher;
+
     public function setUp()
     {
         $this->event = $this->prophesize(Event::class);
@@ -62,6 +68,7 @@ class GeneratorTest extends TestCase
         $this->participantRepository = $this->prophesize(ParticipantRepositoryInterface::class);
         $this->overlappedTimeRangeMerger = $this->prophesize(OverlappedTimeRangeMerger::class);
         $this->overlappedTimeRangeTruncater = $this->prophesize(OverlappedTimeRangeTruncater::class);
+        $this->eventDispatcher = $this->prophesize(DelayedEventDispatcherInterface::class);
     }
 
     public function testGenerateWithoutAvailabilityTimeRange(): void
@@ -94,12 +101,19 @@ class GeneratorTest extends TestCase
             ->shouldNotBeCalled()
         ;
 
+        $dispatchedEvent = new SystemUnavailabilityForUserGeneratedEvent($this->user->reveal(), $this->event->reveal());
+        $this->eventDispatcher
+            ->dispatch(Events::USER_SYSTEM_UNAVAILABILITY_GENERATED, $dispatchedEvent)
+            ->shouldBeCalled()
+        ;
+
         $generator = new Generator(
             $this->unavailabilityRepository->reveal(),
             $this->availabilityTimeRangeRepository->reveal(),
             $this->participantRepository->reveal(),
             $this->overlappedTimeRangeMerger->reveal(),
-            $this->overlappedTimeRangeTruncater->reveal()
+            $this->overlappedTimeRangeTruncater->reveal(),
+            $this->eventDispatcher->reveal()
         );
 
         $generator->generateSystemUnavailability($this->event->reveal(), $this->user->reveal());
@@ -159,12 +173,19 @@ class GeneratorTest extends TestCase
             ->shouldNotBeCalled()
         ;
 
+        $dispatchedEvent = new SystemUnavailabilityForUserGeneratedEvent($this->user->reveal(), $this->event->reveal());
+        $this->eventDispatcher
+            ->dispatch(Events::USER_SYSTEM_UNAVAILABILITY_GENERATED, $dispatchedEvent)
+            ->shouldBeCalled()
+        ;
+
         $generator = new Generator(
             $this->unavailabilityRepository->reveal(),
             $this->availabilityTimeRangeRepository->reveal(),
             $this->participantRepository->reveal(),
             $this->overlappedTimeRangeMerger->reveal(),
-            $this->overlappedTimeRangeTruncater->reveal()
+            $this->overlappedTimeRangeTruncater->reveal(),
+            $this->eventDispatcher->reveal()
         );
 
         $generator->generateSystemUnavailability($this->event->reveal(), $this->user->reveal());
@@ -228,12 +249,19 @@ class GeneratorTest extends TestCase
             ->shouldNotBeCalled()
         ;
 
+        $dispatchedEvent = new SystemUnavailabilityForUserGeneratedEvent($this->user->reveal(), $this->event->reveal());
+        $this->eventDispatcher
+            ->dispatch(Events::USER_SYSTEM_UNAVAILABILITY_GENERATED, $dispatchedEvent)
+            ->shouldBeCalled()
+        ;
+
         $generator = new Generator(
             $this->unavailabilityRepository->reveal(),
             $this->availabilityTimeRangeRepository->reveal(),
             $this->participantRepository->reveal(),
             $this->overlappedTimeRangeMerger->reveal(),
-            $this->overlappedTimeRangeTruncater->reveal()
+            $this->overlappedTimeRangeTruncater->reveal(),
+            $this->eventDispatcher->reveal()
         );
 
         $generator->generateSystemUnavailability($this->event->reveal(), $this->user->reveal());
@@ -310,12 +338,19 @@ class GeneratorTest extends TestCase
             ->shouldNotBeCalled()
         ;
 
+        $dispatchedEvent = new SystemUnavailabilityForUserGeneratedEvent($this->user->reveal(), $this->event->reveal());
+        $this->eventDispatcher
+            ->dispatch(Events::USER_SYSTEM_UNAVAILABILITY_GENERATED, $dispatchedEvent)
+            ->shouldBeCalled()
+        ;
+
         $generator = new Generator(
             $this->unavailabilityRepository->reveal(),
             $this->availabilityTimeRangeRepository->reveal(),
             $this->participantRepository->reveal(),
             $this->overlappedTimeRangeMerger->reveal(),
-            $this->overlappedTimeRangeTruncater->reveal()
+            $this->overlappedTimeRangeTruncater->reveal(),
+            $this->eventDispatcher->reveal()
         );
 
         $generator->generateSystemUnavailability($this->event->reveal(), $this->user->reveal());
@@ -464,12 +499,19 @@ class GeneratorTest extends TestCase
         $this->unavailabilityRepository->add($unavailability2)->shouldBeCalled();
         $this->unavailabilityRepository->add($unavailability3)->shouldBeCalled();
 
+        $dispatchedEvent = new SystemUnavailabilityForUserGeneratedEvent($this->user->reveal(), $this->event->reveal());
+        $this->eventDispatcher
+            ->dispatch(Events::USER_SYSTEM_UNAVAILABILITY_GENERATED, $dispatchedEvent)
+            ->shouldBeCalled()
+        ;
+
         $generator = new Generator(
             $this->unavailabilityRepository->reveal(),
             $this->availabilityTimeRangeRepository->reveal(),
             $this->participantRepository->reveal(),
             $this->overlappedTimeRangeMerger->reveal(),
-            $this->overlappedTimeRangeTruncater->reveal()
+            $this->overlappedTimeRangeTruncater->reveal(),
+            $this->eventDispatcher->reveal()
         );
 
         $generator->generateSystemUnavailability($this->event->reveal(), $this->user->reveal());

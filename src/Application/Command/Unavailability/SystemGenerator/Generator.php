@@ -10,6 +10,9 @@
 
 namespace Proximum\Vimeet\Application\Command\Unavailability\SystemGenerator;
 
+use Proximum\Vimeet\Application\Adapter\DelayedEventDispatcherInterface;
+use Proximum\Vimeet\Application\Event\Events;
+use Proximum\Vimeet\Application\Event\Unavailability\System\SystemUnavailabilityForUserGeneratedEvent;
 use Proximum\Vimeet\Domain\Model\AvailabilityTimeRange;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Participant;
@@ -37,18 +40,23 @@ class Generator
     /** @var OverlappedTimeRangeTruncater */
     private $overlappedTimeRangeTruncater;
 
+    /** @var DelayedEventDispatcherInterface */
+    private $eventDispatcher;
+
     public function __construct(
         UnavailabilityRepositoryInterface $unavailabilityRepository,
         AvailabilityTimeRangeRepositoryInterface $availabilityTimeRangeRepository,
         ParticipantRepositoryInterface $participantRepository,
         OverlappedTimeRangeMerger $overlappedTimeRangeMerger,
-        OverlappedTimeRangeTruncater $overlappedTimeRangeTruncater
+        OverlappedTimeRangeTruncater $overlappedTimeRangeTruncater,
+        DelayedEventDispatcherInterface $eventDispatcher
     ) {
         $this->unavailabilityRepository = $unavailabilityRepository;
         $this->availabilityTimeRangeRepository = $availabilityTimeRangeRepository;
         $this->participantRepository = $participantRepository;
         $this->overlappedTimeRangeMerger = $overlappedTimeRangeMerger;
         $this->overlappedTimeRangeTruncater = $overlappedTimeRangeTruncater;
+        $this->eventDispatcher = $eventDispatcher;
     }
 
     public function generateSystemUnavailability(Event $event, User $user): void
@@ -58,6 +66,7 @@ class Generator
         $availabilityTimeRanges = $this->availabilityTimeRangeRepository->findByEvent($event);
 
         if (empty($availabilityTimeRanges)) {
+            $this->dispatchSystemUnavailabilityGeneratedEvent($event, $user);
             return;
         }
 
@@ -66,6 +75,7 @@ class Generator
         $products = $this->getProductsForParticipants($participants);
 
         if (empty($products)) {
+            $this->dispatchSystemUnavailabilityGeneratedEvent($event, $user);
             return;
         }
 
@@ -75,6 +85,7 @@ class Generator
         $timeRangesNotAccessible = $this->getTimeRangesNotAccessible($availabilityTimeRanges, $availabilityTimeRangesBought);
 
         if (empty($timeRangesNotAccessible)) {
+            $this->dispatchSystemUnavailabilityGeneratedEvent($event, $user);
             return;
         }
 
@@ -98,6 +109,14 @@ class Generator
 
             $this->unavailabilityRepository->add($systemUnavailability);
         }
+
+        $this->dispatchSystemUnavailabilityGeneratedEvent($event, $user);
+    }
+
+    private function dispatchSystemUnavailabilityGeneratedEvent(Event $event, User $user): void
+    {
+        $systemUnavailabilityGeneratedEvent = new SystemUnavailabilityForUserGeneratedEvent($user, $event);
+        $this->eventDispatcher->dispatch(Events::USER_SYSTEM_UNAVAILABILITY_GENERATED, $systemUnavailabilityGeneratedEvent);
     }
 
     private function sortTimeRange(array &$timeRanges): void
