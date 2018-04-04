@@ -12,6 +12,7 @@ namespace Proximum\Vimeet\Application\Command\User\Agenda\Version;
 
 use Proximum\Vimeet\Application\Adapter\SMSSenderInterface;
 use Proximum\Vimeet\Application\Adapter\TranslatorInterface;
+use Proximum\Vimeet\Application\Exception\Messaging\SMS\FailToSendSMSException;
 use Proximum\Vimeet\Application\Exception\User\Agenda\Version\UserPhoneNotAvailableException;
 use Proximum\Vimeet\Domain\Messaging\SMS\SMS;
 use Proximum\Vimeet\Domain\Model\Event\EventUrlGeneratorInterface;
@@ -61,6 +62,7 @@ class SendNotificationHandler
     /**
      * @param SendNotification $command
      *
+     * @throws FailToSendSMSException
      * @throws UserPhoneNotAvailableException
      */
     public function handle(SendNotification $command)

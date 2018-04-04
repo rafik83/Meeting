@@ -12,6 +12,7 @@ namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Agenda\Version;
 
 use Proximum\Vimeet\Application\Command\User\Agenda\Version\Notify;
 use Proximum\Vimeet\Application\Command\User\Agenda\Version\Purge;
+use Proximum\Vimeet\Application\Exception\Messaging\SMS\FailToSendSMSException;
 use Proximum\Vimeet\Application\Exception\User\Agenda\Version\UserPhoneNotAvailableException;
 use Proximum\Vimeet\Application\Query\Agenda\Admin\Version\RetrieveUserAgendaVersion;
 use Proximum\Vimeet\Application\View\Agenda\Admin\Version\UserAgendaVersionDiffView;
@@ -80,6 +81,8 @@ class VersionController extends Controller
             );
         } catch (UserPhoneNotAvailableException $exception) {
             return $this->createErrorResponse('gdr.user.agenda.version.modal.no_phone', $request->getLocale());
+        } catch (FailToSendSMSException $exception) {
+            return $this->createErrorResponse('gdr.user.agenda.version.modal.fail_to_send_sms', $request->getLocale());
         }
 
         return new JsonResponse(null, Response::HTTP_NO_CONTENT);
