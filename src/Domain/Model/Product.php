@@ -157,6 +157,14 @@ class Product
     private $subjectedToValidation = false;
 
     /**
+     * @var ArrayCollection of AvailabilityTimeRange
+     */
+    private $availabilityTimeRanges;
+
+    /** @var bool */
+    private $attributable;
+
+    /**
      * @param Event                   $event
      * @param string                  $type
      * @param string                  $name
@@ -170,6 +178,7 @@ class Product
      * @param null|\DateTimeInterface $deletableUntil
      * @param bool                    $subjectedToValidation
      * @param null|\DateTimeInterface $buyableUntil
+     * @param bool                    $attributable
      */
     public function __construct(
         Event $event,
@@ -184,7 +193,8 @@ class Product
         $updatable,
         \DateTimeInterface $deletableUntil = null,
         $subjectedToValidation = false,
-        \DateTimeInterface $buyableUntil = null
+        \DateTimeInterface $buyableUntil = null,
+        bool $attributable = false
     ) {
         $this->translations          = new ArrayCollection();
         $this->features              = new ArrayCollection();
@@ -202,6 +212,9 @@ class Product
         $this->deletableUntil        = $deletableUntil;
         $this->subjectedToValidation = $subjectedToValidation;
         $this->buyableUntil          = $buyableUntil;
+        $this->attributable          = $attributable;
+
+        $this->availabilityTimeRanges = new ArrayCollection();
     }
 
     /**
@@ -855,6 +868,7 @@ class Product
      * @param null|\DateTimeInterface $deletableUntil
      * @param bool                    $subjectedToValidation
      * @param null|\DateTimeInterface $buyableUntil
+     * @param bool                    $attributable
      *
      * @return Product
      */
@@ -870,7 +884,8 @@ class Product
         $updatable,
         \DateTimeInterface $deletableUntil = null,
         $subjectedToValidation = false,
-        \DateTimeInterface $buyableUntil = null
+        \DateTimeInterface $buyableUntil = null,
+        bool $attributable = false
     ) {
         return new self(
             $event,
@@ -885,7 +900,8 @@ class Product
             $updatable,
             $deletableUntil,
             $subjectedToValidation,
-            $buyableUntil
+            $buyableUntil,
+            $attributable
         );
     }
 
@@ -901,6 +917,7 @@ class Product
      * @param null|\DateTimeInterface $deletableUntil
      * @param bool                    $subjectedToValidation
      * @param \DateTimeInterface      $buyableUntil
+     * @param bool                    $attributable
      *
      * @return Product
      */
@@ -915,7 +932,8 @@ class Product
         $vat,
         \DateTimeInterface $deletableUntil = null,
         $subjectedToValidation = false,
-        \DateTimeInterface $buyableUntil = null
+        \DateTimeInterface $buyableUntil = null,
+        bool $attributable = false
     ) {
         $this->name                  = $name;
         $this->quantityMax           = $quantityMax;
@@ -927,6 +945,7 @@ class Product
         $this->buyableUntil          = $buyableUntil;
         $this->unitPrice             = $unitPrice;
         $this->vat                   = $vat;
+        $this->attributable          = $attributable;
 
         if (null !== $image) {
             $this->image = $image;
@@ -1115,5 +1134,50 @@ class Product
         }
 
         throw new \InvalidArgumentException('The given type does not exist');
+    }
+
+    /**
+     * @return AvailabilityTimeRange[]
+     */
+    public function getAvailabilityTimeRanges(): array
+    {
+        return $this->availabilityTimeRanges->toArray();
+    }
+
+    /**
+     * @return bool
+     */
+    public function hasAvailabilityTimeRanges(): bool
+    {
+        return !$this->availabilityTimeRanges->isEmpty();
+    }
+
+    /**
+     * @param AvailabilityTimeRange[] $availabilityTimeRanges
+     */
+    public function setAvailabilityTimeRanges(array $availabilityTimeRanges): void
+    {
+        $previousAvailabilityTimeRanges = $this->availabilityTimeRanges;
+
+        foreach ($availabilityTimeRanges as $availabilityTimeRange) {
+            if ($this->availabilityTimeRanges->contains($availabilityTimeRange)) {
+                continue;
+            }
+
+            $this->availabilityTimeRanges->add($availabilityTimeRange);
+            $availabilityTimeRange->addProduct($this);
+        }
+
+        foreach ($previousAvailabilityTimeRanges as $availabilityTimeRange) {
+            if (!\in_array($availabilityTimeRange, $availabilityTimeRanges, true)) {
+                $this->availabilityTimeRanges->removeElement($availabilityTimeRange);
+                $availabilityTimeRange->removeProduct($this);
+            }
+        }
+    }
+
+    public function isAttributable(): bool
+    {
+        return $this->attributable;
     }
 }

@@ -15,4 +15,4 @@
     </div>
 {% endblock form_content %}
 
-{% block goback_link path('admin_package_list') %}
+{% block goback_link event is defined ? path('admin_event_template_package', {'event': event.id}) : path('admin_package_list') %}

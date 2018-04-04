@@ -38,6 +38,7 @@ class DayManager
         $day = new Event\Day($event, $begin, $end);
 
         $this->dayRepository->add($day);
+        $event->addDay($day);
 
         return $day;
     }

@@ -56,7 +56,11 @@ class UpdateOptionHandlerTest extends TestCase
             2,
             $availabilityCurrent,
             $availabilityMax,
-            $updatable
+            $updatable,
+            null,
+            false,
+            null,
+            true
         );
 
         // set translations to empty
@@ -70,6 +74,7 @@ class UpdateOptionHandlerTest extends TestCase
         $updateOptionCommand->quantityMax = 2;
         $updateOptionCommand->unitPrice = 200;
         $updateOptionCommand->vat = 19;
+        $updateOptionCommand->attributable = true;
 
         // Mock
         $productRepository = $this->prophesize(ProductRepositoryInterface::class);
@@ -125,7 +130,11 @@ class UpdateOptionHandlerTest extends TestCase
             2,
             $availabilityCurrent,
             $availabilityMax,
-            $updatable
+            $updatable,
+            null,
+            false,
+            null,
+            true
         );
 
         // set translations to empty
@@ -139,6 +148,7 @@ class UpdateOptionHandlerTest extends TestCase
         $updateOptionCommand->quantityMax = 2;
         $updateOptionCommand->unitPrice = 200;
         $updateOptionCommand->vat = 10;
+        $updateOptionCommand->attributable = true;
 
         // Mock
         $productRepository = $this->prophesize(ProductRepositoryInterface::class);

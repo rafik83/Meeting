@@ -387,7 +387,7 @@ services:
     Proximum\Vimeet\Application\Command\Participant\UpdateParticipantProductQuantityHandler:
         arguments:
             - '@cart_manager'
-            - '@components.package.product_by_participant_getter'
+            - '@Proximum\Vimeet\Application\Components\Package\ProductByParticipantCartGetter'
             - '@vimeet_infrastructure.repository.product_repository'
     vimeet_infrastructure.vimeet.application.command.participant.delete_handler:
         class: Proximum\Vimeet\Application\Command\Participant\DeleteHandler
@@ -2573,7 +2573,7 @@ services:
         arguments:
             - '@order.merger'
             - '@cart_manager'
-            - '@components.package.product_by_participant_getter'
+            - '@Proximum\Vimeet\Application\Components\Package\ProductByParticipantGetter'
     components.step.step_plan:
         class: Proximum\Vimeet\Application\Components\Step\StepPlan
         arguments:
@@ -2593,8 +2593,12 @@ services:
     #
     # Package component
     #
-    components.package.product_by_participant_getter:
-        class: Proximum\Vimeet\Application\Components\Package\ProductByParticipantGetter
+    Proximum\Vimeet\Application\Components\Package\ProductByParticipantCartGetter: ~
+
+    Proximum\Vimeet\Application\Components\Package\ProductByParticipantGetter:
+        arguments:
+            - '@Proximum\Vimeet\Application\Components\Package\ProductByParticipantCartGetter'
+            - '@query.package.participant_product_view_query_handler'
 
     #
     # DateTime
@@ -2935,7 +2939,7 @@ services:
         class: Proximum\Vimeet\Application\Query\Package\Participant\ParticipantProductViewQueryHandler
         arguments:
             - '@package.product.included_participant_guesser'
-            - '@components.package.product_by_participant_getter'
+            - '@Proximum\Vimeet\Application\Components\Package\ProductByParticipantCartGetter'
             - '@cart_manager'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Package\Participant\ParticipantProductViewQuery }
@@ -3110,6 +3114,13 @@ services:
             - '@query.catalog.sheet_preview_external_view_query_handler'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Sheet\Catalog\PaginatedSheetExternalViewQuery }
+
+    Proximum\Vimeet\Application\Query\Sheet\CountryViewQueryHandler:
+        arguments:
+            - '@adapter.sheet_search_adapter'
+            - '@adapter.intl_adapter'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Sheet\CountryViewQuery }
 
     query.invoice.invoice_data_query_handler:
         class: Proximum\Vimeet\Application\Query\Invoice\InvoiceDataQueryHandler

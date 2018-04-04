@@ -72,5 +72,7 @@ default:
                     - '@Proximum\Vimeet\Behat\Proxy\PackageContextProxy'
                 - Proximum\Vimeet\Behat\Context\Domain\Product\ProductContext:
                     - '@Proximum\Vimeet\Behat\Proxy\ProductContextProxy'
+                - Proximum\Vimeet\Behat\Context\Domain\AvailabilityTimeRangeContext:
+                    - '@Proximum\Vimeet\Behat\Proxy\AvailabilityTimeRangeContextProxy'
                 - behatch:context:json
                 - behatch:context:rest

@@ -11,6 +11,8 @@
 namespace Proximum\Vimeet\Tests\Application\Query\AvailabilityTimeRange;
 
 use PHPUnit\Framework\TestCase;
+use Proximum\Vimeet\Application\Query\AvailabilityTimeRange\AvailabilityTimeRangeViewQuery;
+use Proximum\Vimeet\Application\Query\AvailabilityTimeRange\AvailabilityTimeRangeViewQueryHandler;
 use Proximum\Vimeet\Application\Query\AvailabilityTimeRange\ListViewQuery;
 use Proximum\Vimeet\Application\Query\AvailabilityTimeRange\ListViewQueryHandler;
 use Proximum\Vimeet\Application\View\AvailabilityTimeRange\AvailabilityTimeRangeView;
@@ -35,15 +37,9 @@ class ListViewQueryHandlerTest extends TestCase
         $availabilityTimeRange2 = $this->prophesize(AvailabilityTimeRange::class);
         $availabilityTimeRange3 = $this->prophesize(AvailabilityTimeRange::class);
 
-        $availabilityTimeRange1->getName()->willReturn('name1');
-        $availabilityTimeRange2->getName()->willReturn('name2');
-        $availabilityTimeRange3->getName()->willReturn('name3');
-        $availabilityTimeRange1->getBegin()->willReturn($begin1);
-        $availabilityTimeRange2->getBegin()->willReturn($begin2);
-        $availabilityTimeRange3->getBegin()->willReturn($begin3);
-        $availabilityTimeRange1->getEnd()->willReturn($end1);
-        $availabilityTimeRange2->getEnd()->willReturn($end2);
-        $availabilityTimeRange3->getEnd()->willReturn($end3);
+        $view1 = new AvailabilityTimeRangeView('name1', $begin1, $end1, []);
+        $view2 = new AvailabilityTimeRangeView('name2', $begin2, $end2, []);
+        $view3 = new AvailabilityTimeRangeView('name3', $begin3, $end3, []);
 
         $availabilityTimeRangeRepository = $this->prophesize(AvailabilityTimeRangeRepositoryInterface::class);
         $availabilityTimeRangeRepository
@@ -52,14 +48,31 @@ class ListViewQueryHandlerTest extends TestCase
             ->willReturn([$availabilityTimeRange1->reveal(), $availabilityTimeRange2->reveal(), $availabilityTimeRange3->reveal()])
         ;
 
-        $handler = new ListViewQueryHandler($availabilityTimeRangeRepository->reveal());
+        $availabilityTimeRangeViewQueryHandler = $this->prophesize(AvailabilityTimeRangeViewQueryHandler::class);
+        $availabilityTimeRangeViewQueryHandler
+            ->handle(new AvailabilityTimeRangeViewQuery($availabilityTimeRange1->reveal()))
+            ->shouldBeCalled()
+            ->willReturn($view1)
+        ;
+
+        $availabilityTimeRangeViewQueryHandler
+            ->handle(new AvailabilityTimeRangeViewQuery($availabilityTimeRange2->reveal()))
+            ->shouldBeCalled()
+            ->willReturn($view2)
+        ;
+        $availabilityTimeRangeViewQueryHandler
+            ->handle(new AvailabilityTimeRangeViewQuery($availabilityTimeRange3->reveal()))
+            ->shouldBeCalled()
+            ->willReturn($view3)
+        ;
+
+        $handler = new ListViewQueryHandler(
+            $availabilityTimeRangeRepository->reveal(),
+            $availabilityTimeRangeViewQueryHandler->reveal()
+        );
         $result = $handler->handle(new ListViewQuery($event->reveal()));
 
-        $expectedViews = [
-            new AvailabilityTimeRangeView('name1', $begin1, $end1),
-            new AvailabilityTimeRangeView('name2', $begin2, $end2),
-            new AvailabilityTimeRangeView('name3', $begin3, $end3),
-        ];
+        $expectedViews = [$view1, $view2, $view3];
         $expected = new ListView($expectedViews);
 
         $this->assertEquals($expected, $result);

@@ -17,7 +17,7 @@ class UpdateOptionHandler extends AbstractHandler
     /**
      * @param UpdateOption $updateOption
      */
-    public function handle(UpdateOption $updateOption)
+    public function handle(UpdateOption $updateOption): void
     {
         $canUpdatePriceAndVat = $this->updatePriceResolver->resolve($updateOption->product);
         $product = $updateOption->product->updateOption(
@@ -31,7 +31,8 @@ class UpdateOptionHandler extends AbstractHandler
             $canUpdatePriceAndVat ? $updateOption->vat : $updateOption->product->getVat(),
             $updateOption->deletableUntil,
             $updateOption->subjectedToValidation,
-            $updateOption->buyableUntil
+            $updateOption->buyableUntil,
+            $updateOption->attributable
         );
 
         foreach ($updateOption->translations as $locale => $translation) {

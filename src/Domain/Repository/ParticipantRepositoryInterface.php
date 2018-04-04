@@ -242,4 +242,15 @@ interface ParticipantRepositoryInterface
      * @return null|Participant
      */
     public function getLastEventParticipation(User $user, Event $currentEvent): ?Participant;
+
+    /**
+     * @param Event $event
+     *
+     * @return array of participant email with format
+     *  [
+     *      0 => ['email' => 'email0@example.net'],
+     *      1 => ['email' => 'email1@example.net'],
+     *  ]
+     */
+    public function getParticipantEmailsForEvent(Event $event): array;
 }

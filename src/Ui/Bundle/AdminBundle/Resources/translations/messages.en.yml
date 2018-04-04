@@ -115,6 +115,12 @@ admin.agenda.tab.sheet.title.label: Profile
 admin.agenda.tab.spot.title.label: Spots
 admin.agenda.title: 'Meetings planner'
 admin.agenda.usableSlots: 'available slots'
+admin.availabilityTimeRange.create.eventDaysInfo: 'The days of the event:'
+admin.availabilityTimeRange.create.title: 'Create a range of availabilities'
+admin.availabilityTimeRange.list.column.begin: Start
+admin.availabilityTimeRange.list.column.end: End
+admin.availabilityTimeRange.list.column.name: 'Backoffice label'
+admin.availabilityTimeRange.list.title: 'List of availability ranges'
 admin.batch_actions.confirm: 'Confirm the action ?'
 admin.batch_actions.generateInvoice.confirm: 'Do you confirm the action of generating  invoices with the following formula : %prefix% ?'
 admin.batch_actions.plural: 'Batch actions on %count% items'
@@ -137,6 +143,7 @@ admin.dashboard.link: Dashboard
 admin.elasticsearch.index.confirm: 'You are about to re-index all the events. do you confirm the action ?'
 admin.event.archive.link: Archiving
 admin.event.archive.title: 'Event archive %eventTitle%'
+admin.event.availability_time_range.list.link: 'Availability ranges'
 admin.event.billing.configuration.link: 'Billing information'
 admin.event.billing.configuration.title: 'Configuration of billing informations'
 admin.event.catalog.external.configure: 'External catalogue configuration'
@@ -352,6 +359,15 @@ admin.meeting.action.deleteAll.confirm: 'Are you sure you xant to delete the who
 admin.meeting.action.deleteAll.title: 'Delete all meetings'
 admin.meeting.action.remove.confirm: 'Are you sure you want to remove this meeting ?'
 admin.meeting.action.remove.link: remove
+admin.meeting.dashboard.approvedRequest: Accepted
+admin.meeting.dashboard.createdByParticipant: 'Created by participants'
+admin.meeting.dashboard.createdDayD: 'Created by the organizer on the day of the event'
+admin.meeting.dashboard.liveMeeting: 'Live meetings'
+admin.meeting.dashboard.meeting: Meetings
+admin.meeting.dashboard.pendingRequest: 'Pending request'
+admin.meeting.dashboard.plannedMeeting: 'Pre-arranged meetings'
+admin.meeting.dashboard.refusedRequest: Refused
+admin.meeting.dashboard.request: 'Meeting requests'
 admin.meeting.export.fields.day: Day
 admin.meeting.export.fields.from_sheet_id: 'Sollicitor ID'
 admin.meeting.export.fields.from_sheet_name: 'Sollicitor sheet name'

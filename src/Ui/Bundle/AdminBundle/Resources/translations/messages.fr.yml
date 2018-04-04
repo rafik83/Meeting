@@ -121,7 +121,9 @@ admin.availabilityTimeRange.create.title: 'Créer une plage de disponbilités'
 admin.availabilityTimeRange.list.column.begin: Début
 admin.availabilityTimeRange.list.column.end: Fin
 admin.availabilityTimeRange.list.column.name: 'Libellé backoffice'
+admin.availabilityTimeRange.list.column.products: 'Produits associés'
 admin.availabilityTimeRange.list.title: 'Liste des plages de disponibilités'
+admin.availabilityTimeRange.view.noProductAssigned: 'Pas de produit associé'
 admin.batch_actions.confirm: 'Êtes-vous sûr de vouloir faire cette action ?'
 admin.batch_actions.generateInvoice.confirm: 'Confirmez-vous la génération des factures avec le préfixe suivant : %prefix% ?'
 admin.batch_actions.plural: 'Actions batch sur %count% éléments'
@@ -365,7 +367,7 @@ admin.meeting.action.remove.confirm: 'Êtes-vous sûr de vouloir supprimer ce re
 admin.meeting.action.remove.link: Supprimer
 admin.meeting.dashboard.approvedRequest: Acceptées
 admin.meeting.dashboard.createdByParticipant: 'Créés par les participants'
-admin.meeting.dashboard.createdDayD: 'Créés le jour de l''événément'
+admin.meeting.dashboard.createdDayD: 'Créés le jour de l’événement par l''organisateur'
 admin.meeting.dashboard.liveMeeting: 'Rendez-vous live'
 admin.meeting.dashboard.meeting: Rendez-vous
 admin.meeting.dashboard.pendingRequest: 'En attentes'
@@ -621,6 +623,8 @@ admin.product.availabilityCurrentMax: 'Disponibilité courante / max'
 admin.product.bought: 'Nombre de produits achetés'
 admin.product.buyableUntil: 'Achetable jusqu''au'
 admin.product.deletableUntil: 'Supprimable jusqu''au'
+admin.product.hasAvailabilityTimeRanges: 'Soumis à plages de disponibilités'
+admin.product.isAttributable: 'Produit attribuable à des participants'
 admin.product.id: Id
 admin.product.link: 'Catalogue de produits'
 admin.product.name: Nom
@@ -1219,6 +1223,7 @@ form.sheet_filter.children.order.totalEqualZero.label: 'Total égal à zéro'
 form.sheet_filter.children.order.totalSuperiorZero.label: 'Total supérieur à zéro'
 gdr.user.agenda.version.modal.button.notify: 'Notifier par SMS'
 gdr.user.agenda.version.modal.button.purge: 'Cacher différence sans notifier'
+gdr.user.agenda.version.modal.fail_to_send_sms: 'Impossible d''envoyer le SMS, le service d''OVH ne répond pas'
 gdr.user.agenda.version.modal.no_diff: 'Il n''y a pas de modification dans l''agenda de cette personne'
 gdr.user.agenda.version.modal.no_phone: 'L''utiliseur n''a pas accepté de recevoir des notifications lives'
 gdr.user.agenda.version.modal.title: 'Notifier modifications de l''agenda'
