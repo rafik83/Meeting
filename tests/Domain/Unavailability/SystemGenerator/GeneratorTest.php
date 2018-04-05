@@ -8,17 +8,17 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Proximum\Vimeet\Tests\Application\Command\Unavailability\SystemGenerator;
+namespace Proximum\Vimeet\Tests\Domain\Unavailability\SystemGenerator;
 
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
 use Prophecy\Prophecy\ObjectProphecy;
 use Proximum\Vimeet\Application\Adapter\DelayedEventDispatcherInterface;
-use Proximum\Vimeet\Application\Command\Unavailability\SystemGenerator\Generator;
-use Proximum\Vimeet\Application\Command\Unavailability\SystemGenerator\OverlappedTimeRangeMerger;
-use Proximum\Vimeet\Application\Command\Unavailability\SystemGenerator\OverlappedTimeRangeTruncater;
-use Proximum\Vimeet\Application\Command\Unavailability\SystemGenerator\TimeRangeNotAccessibleView;
-use Proximum\Vimeet\Application\Command\Unavailability\SystemGenerator\TimeRangeView;
+use Proximum\Vimeet\Domain\Unavailability\SystemGenerator\Generator;
+use Proximum\Vimeet\Domain\Unavailability\SystemGenerator\OverlappedTimeRangeMerger;
+use Proximum\Vimeet\Domain\Unavailability\SystemGenerator\OverlappedTimeRangeTruncater;
+use Proximum\Vimeet\Domain\Unavailability\SystemGenerator\TimeRangeNotAccessibleView;
+use Proximum\Vimeet\Domain\Unavailability\SystemGenerator\TimeRangeView;
 use Proximum\Vimeet\Application\Event\Events;
 use Proximum\Vimeet\Application\Event\Unavailability\System\SystemUnavailabilityForUserGeneratedEvent;
 use Proximum\Vimeet\Domain\Model\AvailabilityTimeRange;

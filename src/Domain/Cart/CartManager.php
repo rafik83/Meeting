@@ -197,7 +197,7 @@ class CartManager
 
             $productId = $participantRow->getProduct()->getId();
             $previousQuantity = $participantRow->getQuantity();
-            $newQuantity = count($participantsByProductId[$productId]);
+            $newQuantity = \count($participantsByProductId[$productId]);
             $quantityToRemove = $previousQuantity - $newQuantity;
 
             // Add a link between Participant and Product of type 'participant'

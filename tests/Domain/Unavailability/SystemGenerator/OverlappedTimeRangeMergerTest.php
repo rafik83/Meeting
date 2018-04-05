@@ -8,11 +8,11 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Proximum\Vimeet\Tests\Application\Command\Unavailability\SystemGenerator;
+namespace Proximum\Vimeet\Tests\Domain\Unavailability\SystemGenerator;
 
 use PHPUnit\Framework\TestCase;
-use Proximum\Vimeet\Application\Command\Unavailability\SystemGenerator\OverlappedTimeRangeMerger;
-use Proximum\Vimeet\Application\Command\Unavailability\SystemGenerator\TimeRangeView;
+use Proximum\Vimeet\Domain\Unavailability\SystemGenerator\OverlappedTimeRangeMerger;
+use Proximum\Vimeet\Domain\Unavailability\SystemGenerator\TimeRangeView;
 
 class OverlappedTimeRangeMergerTest extends TestCase
 {

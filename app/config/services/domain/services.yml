@@ -12,3 +12,18 @@ services:
     Proximum\Vimeet\Domain\Sheet\Participant\AddParticipantChecker: ~
 
     Proximum\Vimeet\Domain\Order\DiscountCalculator: ~
+
+    #
+    # System Unavailability
+    #
+    Proximum\Vimeet\Domain\Unavailability\SystemGenerator\OverlappedTimeRangeTruncater: ~
+    Proximum\Vimeet\Domain\Unavailability\SystemGenerator\OverlappedTimeRangeMerger: ~
+
+    Proximum\Vimeet\Domain\Unavailability\SystemGenerator\Generator:
+        arguments:
+            - '@vimeet_infrastructure.repository.unavailability_repository'
+            - '@Proximum\Vimeet\Infrastructure\Repository\AvailabilityTimeRangeRepository'
+            - '@vimeet_infrastructure.repository.participant_repository'
+            - '@Proximum\Vimeet\Domain\Unavailability\SystemGenerator\OverlappedTimeRangeMerger'
+            - '@Proximum\Vimeet\Domain\Unavailability\SystemGenerator\OverlappedTimeRangeTruncater'
+            - '@vimeet_infrastructure.adapter.delayed_event_dispatcher'
