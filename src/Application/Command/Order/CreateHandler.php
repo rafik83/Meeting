@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2016 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -19,24 +19,16 @@ use Proximum\Vimeet\Infrastructure\Adapter\DelayedEventDispatcher;
 
 class CreateHandler
 {
-    /**
-     * @var Cart\Converter
-     */
+    /** @var Cart\Converter */
     protected $converter;
 
-    /**
-     * @var Cart\CartManager
-     */
+    /** @var Cart\CartManager */
     protected $cartManager;
 
-    /**
-     * @var DelayedEventDispatcher
-     */
+    /** @var DelayedEventDispatcher */
     private $eventDispatcher;
 
-    /**
-     * @var \DateTimeInterface
-     */
+    /** @var \DateTimeInterface */
     protected $datetime;
 
     /**
