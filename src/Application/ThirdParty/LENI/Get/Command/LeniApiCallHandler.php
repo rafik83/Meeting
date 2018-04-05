@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Application\ThirdParty\LENI\Get\Command;
 
+use Proximum\Vimeet\Application\Adapter\JobQueueInterface;
 use Proximum\Vimeet\Application\Command\Event\ExtraData\AddOrUpdate as AddOrUpdateEventExtraData;
 use Proximum\Vimeet\Application\Command\Event\ExtraData\AddOrUpdateHandler as AddOrUpdateEventExtraDataHandler;
 use Proximum\Vimeet\Application\ThirdParty\LENI\Common\Api\LeniApiCaller;
@@ -22,6 +23,7 @@ use Proximum\Vimeet\Application\ThirdParty\LENI\LeniConstants;
 use Proximum\Vimeet\Domain\Event\ExtraData\Type as EventExtraDataType;
 use Proximum\Vimeet\Domain\Event\ExtraParameter\Type as EventExtraParameterType;
 use Proximum\Vimeet\Domain\Model\Event;
+use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Type;
 use Proximum\Vimeet\Domain\Repository\Event\ExtraDataRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\Event\ExtraParameterRepositoryInterface;
@@ -59,6 +61,9 @@ class LeniApiCallHandler
     /** @var AddOrUpdateEventExtraDataHandler */
     private $addOrUpdateEventExtraDataHandler;
 
+    /** @var JobQueueInterface */
+    private $jobQueue;
+
     public function __construct(
         LeniApiCaller $leniApi,
         EventRepositoryInterface $eventRepository,
@@ -68,7 +73,8 @@ class LeniApiCallHandler
         FieldsByEventQueryHandler $fieldsByEventQueryHandler,
         RawDataToParticipantConverter $rawDataToParticipantConverter,
         ExtraDataRepositoryInterface $eventExtraDataRepository,
-        AddOrUpdateEventExtraDataHandler $addOrUpdateEventExtraDataHandler
+        AddOrUpdateEventExtraDataHandler $addOrUpdateEventExtraDataHandler,
+        JobQueueInterface $jobQueue
     ) {
         $this->leniApi = $leniApi;
         $this->eventRepository = $eventRepository;
@@ -79,6 +85,7 @@ class LeniApiCallHandler
         $this->rawDataToParticipantConverter = $rawDataToParticipantConverter;
         $this->eventExtraDataRepository = $eventExtraDataRepository;
         $this->addOrUpdateEventExtraDataHandler = $addOrUpdateEventExtraDataHandler;
+        $this->jobQueue = $jobQueue;
     }
 
     /**
@@ -182,15 +189,26 @@ class LeniApiCallHandler
 
         $newLastCreatedAt = null;
 
+        $sheetIds = [];
+
         foreach ($rawUsersData as $rawUserData) {
-            $this->rawDataToParticipantConverter->convert(
+            $participant = $this->rawDataToParticipantConverter->convert(
                 $event,
                 $types,
                 $typesMapping,
                 $customDataMapping,
                 $rawUserData
             );
+
+            if ($participant instanceof Participant) {
+                $sheetIds[$participant->getSheet()->getId()] = $participant->getSheet()->getId();
+            }
+
             $newLastCreatedAt = $rawUserData[LeniConstants::LENI_COL_CREATED_AT];
+        }
+
+        if (!empty($sheetIds)) {
+            $this->jobQueue->indexSheets(array_values($sheetIds));
         }
 
         if (\count($rawUsersData) === self::BATCH_LENGTH) {

@@ -11,6 +11,7 @@
 namespace Proximum\Vimeet\Tests\Application\ThirdParty\LENI\Get\Command;
 
 use PHPUnit\Framework\TestCase;
+use Proximum\Vimeet\Application\Adapter\JobQueueInterface;
 use Proximum\Vimeet\Application\Command\Event\ExtraData\AddOrUpdate;
 use Proximum\Vimeet\Application\Command\Event\ExtraData\AddOrUpdateHandler;
 use Proximum\Vimeet\Application\ThirdParty\LENI\Common\Api\LeniApiCaller;
@@ -22,6 +23,8 @@ use Proximum\Vimeet\Application\ThirdParty\LENI\Get\Query\FieldsByEventQuery;
 use Proximum\Vimeet\Application\ThirdParty\LENI\Get\Query\FieldsByEventQueryHandler;
 use Proximum\Vimeet\Domain\Event\ExtraParameter\Type as ExtraParameterType;
 use Proximum\Vimeet\Domain\Model\Event;
+use Proximum\Vimeet\Domain\Model\Participant;
+use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\Type;
 use Proximum\Vimeet\Domain\Repository\Event\ExtraDataRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\Event\ExtraParameterRepositoryInterface;
@@ -143,6 +146,18 @@ class LeniApiCallHandlerTest extends TestCase
             ->willReturn([$event1->reveal(), $event2->reveal()])
         ;
 
+        $sheet1 = $this->prophesize(Sheet::class);
+        $sheet1->getId()->willReturn(123);
+
+        $sheet2 = $this->prophesize(Sheet::class);
+        $sheet2->getId()->willReturn(963);
+
+        $participant1 = $this->prophesize(Participant::class);
+        $participant1->getSheet()->willReturn($sheet1->reveal());
+
+        $participant2 = $this->prophesize(Participant::class);
+        $participant2->getSheet()->willReturn($sheet2->reveal());
+
         $rawDataToParticipantConverter = $this->prophesize(RawDataToParticipantConverter::class);
         $rawDataToParticipantConverter
             ->convert(
@@ -153,6 +168,7 @@ class LeniApiCallHandlerTest extends TestCase
                 $rawDataUser1
             )
             ->shouldBeCalled()
+            ->willReturn($participant1->reveal())
         ;
         $rawDataToParticipantConverter
             ->convert(
@@ -163,6 +179,7 @@ class LeniApiCallHandlerTest extends TestCase
                 $rawDataUser2
             )
             ->shouldBeCalled()
+            ->willReturn($participant2->reveal())
         ;
 
         $fieldsByEventQueryHandler = $this->prophesize(FieldsByEventQueryHandler::class);
@@ -221,6 +238,9 @@ class LeniApiCallHandlerTest extends TestCase
             ->shouldBeCalled()
         ;
 
+        $jobQueue = $this->prophesize(JobQueueInterface::class);
+        $jobQueue->indexSheets([123, 963])->shouldBeCalled();
+
         $leniApiCallHandler = new LeniApiCallHandler(
             $leniApi->reveal(),
             $eventRepository->reveal(),
@@ -230,7 +250,8 @@ class LeniApiCallHandlerTest extends TestCase
             $fieldsByEventQueryHandler->reveal(),
             $rawDataToParticipantConverter->reveal(),
             $eventExtraDataRepository->reveal(),
-            $addOrUpdateEventExtraDataHandler->reveal()
+            $addOrUpdateEventExtraDataHandler->reveal(),
+            $jobQueue->reveal()
         );
         $leniApiCallHandler->handle(new LeniApiCall());
     }
