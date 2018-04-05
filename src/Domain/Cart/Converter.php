@@ -90,10 +90,10 @@ class Converter
         }
 
         foreach ($cart->getPromotionCodeRows() as $promotionCodeRow) {
-            $promotionCodeRows = $this->convertToPromotionCode($order, $cart, $promotionCodeRow);
+            $promotionCodeOrderRows = $this->convertToPromotionCode($order, $cart, $promotionCodeRow);
 
-            foreach ($promotionCodeRows as $promotionCodeRow) {
-                $order->addPromotionCode($promotionCodeRow);
+            foreach ($promotionCodeOrderRows as $promotionCodeOrderRow) {
+                $order->addPromotionCode($promotionCodeOrderRow);
             }
 
             $this->decrementStockPromotionCode($promotionCodeRow->getPromotionCode());
