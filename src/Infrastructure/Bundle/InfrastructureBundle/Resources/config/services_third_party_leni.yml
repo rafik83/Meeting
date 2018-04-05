@@ -1,52 +1,162 @@
 services:
-    command.third_party.leni.prepare_leni_api_handler:
-        class: Proximum\Vimeet\Application\ThirdParty\LENI\Command\PrepareLeniApiCallHandler
+    #
+    # Handler
+    #
+    Proximum\Vimeet\Application\ThirdParty\LENI\Save\Command\PrepareLeniApiCallHandler:
         arguments:
             - '@vimeet_infrastructure.repository.event_repository'
             - '@repository.event.extra_parameter_repository'
             - '@repository.user.event.extra_data_repository'
             - '@vimeet_infrastructure.repository.user_repository'
             - '@planning.formatter.participant_planning_formatter'
-            - '@query.api.leni.leni_user_view_query_handler'
-            - '@adapter.serializer_adapter'
-            - '@adapter.leni_api_call_job_queue'
+            - '@Proximum\Vimeet\Application\ThirdParty\LENI\Common\Query\LeniUserViewQueryHandler'
+            - '@Proximum\Vimeet\Application\ThirdParty\LENI\Common\Normalizer\LeniUserViewNormalizer'
+            - '@Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Adapter\ThirdParty\LENI\Save\LeniApiCallJobQueue'
             - '@datetime'
-        tags:
-            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\ThirdParty\LENI\PrepareLeniApiCall }
 
-    command.third_party.leni.leni_api_call_handler:
-        class: Proximum\Vimeet\Application\ThirdParty\LENI\Command\LeniApiCallHandler
+    Proximum\Vimeet\Application\ThirdParty\LENI\Save\Command\LeniApiCallHandler:
         arguments:
-            - '@adapter.http_adapter'
-            - '@repository.event.extra_parameter_repository'
             - '@repository.user.event.extra_data_repository'
+            - '@Proximum\Vimeet\Application\ThirdParty\LENI\Common\Api\LeniApiCaller'
+            - '@Proximum\Vimeet\Application\ThirdParty\LENI\Common\UserExtraData\UserExtraDataFingerprintManager'
+            - '@Proximum\Vimeet\Application\ThirdParty\LENI\Save\Query\GetCustomDataHandler'
             - '@datetime'
 
-    adapter.leni_api_call_job_queue:
-        class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Adapter\ThirdParty\LENI\LeniApiCallJobQueue
+    Proximum\Vimeet\Application\ThirdParty\LENI\Get\Command\LeniApiCallHandler:
+        arguments:
+            - '@Proximum\Vimeet\Application\ThirdParty\LENI\Common\Api\LeniApiCaller'
+            - '@vimeet_infrastructure.repository.event_repository'
+            - '@vimeet_infrastructure.repository.type_repository'
+            - '@repository.event.extra_parameter_repository'
+            - '@Proximum\Vimeet\Application\ThirdParty\LENI\Common\EventExtraParameter\MappingGetter'
+            - '@Proximum\Vimeet\Application\ThirdParty\LENI\Get\Query\FieldsByEventQueryHandler'
+            - '@Proximum\Vimeet\Application\ThirdParty\LENI\Get\Converter\RawDataToParticipantConverter'
+            - '@Proximum\Vimeet\Infrastructure\Repository\Event\ExtraDataRepository'
+            - '@Proximum\Vimeet\Application\Command\Event\ExtraData\AddOrUpdateHandler'
+            - '@adapter.job_queue_adapter'
+
+    Proximum\Vimeet\Application\ThirdParty\LENI\Common\Query\PrepareLeaderDataHandler:
+        arguments:
+            - '@repository.user.event.extra_data_repository'
+
+    #
+    # Converter
+    #
+    Proximum\Vimeet\Application\ThirdParty\LENI\Get\Converter\TypeConverter: ~
+
+    Proximum\Vimeet\Application\ThirdParty\LENI\Get\Converter\DataConverter:
+        arguments:
+            - '@Proximum\Vimeet\Application\ThirdParty\LENI\Get\Converter\MainDataConverter'
+            - '@Proximum\Vimeet\Application\ThirdParty\LENI\Get\Converter\CustomDataConverter'
+
+    Proximum\Vimeet\Application\ThirdParty\LENI\Get\Converter\MainDataConverter: ~
+    Proximum\Vimeet\Application\ThirdParty\LENI\Get\Converter\CustomDataConverter: ~
+
+    Proximum\Vimeet\Application\ThirdParty\LENI\Get\Converter\RawDataToParticipantConverter:
+        arguments:
+            - '@Proximum\Vimeet\Application\Command\Participant\ConvertToParticipantHandler'
+            - '@Proximum\Vimeet\Application\ThirdParty\LENI\Get\Converter\TypeConverter'
+            - '@Proximum\Vimeet\Application\ThirdParty\LENI\Get\Converter\DataConverter'
+            - '@Proximum\Vimeet\Application\ThirdParty\LENI\Common\TemplateData\ParticipationTypeTemplateDataGetter'
+            - '@repository.user.event.extra_data_repository'
+            - '@Proximum\Vimeet\Application\ThirdParty\LENI\Common\Query\LeniUserViewQueryHandler'
+            - '@Proximum\Vimeet\Application\ThirdParty\LENI\Common\Normalizer\LeniUserViewNormalizer'
+            - '@datetime'
+
+    Proximum\Vimeet\Application\ThirdParty\LENI\Save\Converter\CustomDataConverter: ~
+    Proximum\Vimeet\Application\ThirdParty\LENI\Save\Converter\TypeConverter: ~
+
+    #
+    # Job
+    #
+    Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Adapter\ThirdParty\LENI\Save\LeniApiCallJobQueue:
         arguments:
             - '@doctrine.orm.entity_manager'
 
-    command.api.prepare_leni_api_call_command:
-        class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\ThirdParty\LENI\PrepareLeniApiCallCommand
+    #
+    # Command
+    #
+    Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\ThirdParty\LENI\Save\PrepareLeniApiCallCommand:
         arguments:
-            - '@command.third_party.leni.prepare_leni_api_handler'
+            - '@Proximum\Vimeet\Application\ThirdParty\LENI\Save\Command\PrepareLeniApiCallHandler'
         tags:
             - { name: console.command }
 
-    command.api.leni_api_call_command:
-        class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\ThirdParty\LENI\LeniApiCallCommand
+    Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\ThirdParty\LENI\Save\LeniApiCallCommand:
         arguments:
-            - '@command.third_party.leni.leni_api_call_handler'
+            - '@Proximum\Vimeet\Application\ThirdParty\LENI\Save\Command\LeniApiCallHandler'
             - '@repository.user.event.extra_data_repository'
         tags:
             - { name: console.command }
 
-    serializer.normalizer.api.leni.leni_user_view_normalizer:
-        class: Proximum\Vimeet\Application\ThirdParty\LENI\Normalizer\LeniUserViewNormalizer
+    Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\ThirdParty\LENI\Get\LeniApiCallCommand:
+        arguments:
+            - '@Proximum\Vimeet\Application\ThirdParty\LENI\Get\Command\LeniApiCallHandler'
         tags:
-            - { name: serializer.normalizer }
+            - { name: console.command }
+
+    #
+    # Normalizer
+    #
+    Proximum\Vimeet\Application\ThirdParty\LENI\Common\Normalizer\LeniUserViewNormalizer: ~
+
+    #
+    # Common services
+    #
+    Proximum\Vimeet\Application\ThirdParty\LENI\Common\Api\LeniApiCaller:
+        arguments:
+            - '@adapter.http_adapter'
+            - '@repository.event.extra_parameter_repository'
+
+    Proximum\Vimeet\Application\ThirdParty\LENI\Common\UserExtraData\UserExtraDataFingerprintManager:
+        arguments:
+            - '@repository.user.event.extra_data_repository'
+            - '@datetime'
 
     Proximum\Vimeet\Application\ThirdParty\LENI\Common\EventExtraParameter\MappingGetter:
         arguments:
             - '@repository.event.extra_parameter_repository'
+
+    Proximum\Vimeet\Application\ThirdParty\LENI\Common\TemplateData\ParticipationTypeTemplateDataGetter:
+        arguments:
+            - '@template.template_data_factory'
+
+    #
+    # Queries
+    #
+    Proximum\Vimeet\Application\ThirdParty\LENI\Common\Query\LeniUserViewQueryHandler:
+        arguments:
+            - '@components.user.user_info_guesser'
+            - '@vimeet_infrastructure.application.components.sheet.sheet_info_guesser'
+            - '@planning.formatter.participant_planning_formatter'
+            - '@domain.service.sheets_group.type_name_resolver'
+            - '@domain.service.category.category_name_resolver'
+            - '@domain.service.sheets_group.group_name_resolver'
+            - '@vimeet_infrastructure.repository.sheet_repository'
+            - '@order.balance'
+            - '@Proximum\Vimeet\Application\ThirdParty\LENI\Common\Query\PrepareLeaderDataHandler'
+            - '@repository.user.event.extra_data_repository'
+            - '@Proximum\Vimeet\Application\ThirdParty\LENI\Common\Query\LeniUserCustomDataQueryHandler'
+
+    Proximum\Vimeet\Application\ThirdParty\LENI\Common\Query\LeniUserCustomDataQueryHandler:
+        arguments:
+            - '@Proximum\Vimeet\Application\ThirdParty\LENI\Save\Converter\TypeConverter'
+            - '@Proximum\Vimeet\Application\ThirdParty\LENI\Common\EventExtraParameter\MappingGetter'
+            - '@Proximum\Vimeet\Application\ThirdParty\LENI\Save\Converter\CustomDataConverter'
+            - '@template.template_data_factory'
+
+    Proximum\Vimeet\Application\ThirdParty\LENI\Get\Query\FieldsByEventQueryHandler: ~
+
+    Proximum\Vimeet\Application\ThirdParty\LENI\Save\Query\CustomData\HasUserSheetStateChangedQueryHandler:
+        arguments:
+            - '@repository.user.event.extra_data_repository'
+            - '@Proximum\Vimeet\Application\ThirdParty\LENI\Common\EventExtraParameter\MappingGetter'
+
+    Proximum\Vimeet\Application\ThirdParty\LENI\Save\Query\CustomData\SendingRequestDataHandler:
+        arguments:
+            - '@repository.event.extra_parameter_repository'
+
+    Proximum\Vimeet\Application\ThirdParty\LENI\Save\Query\GetCustomDataHandler:
+         arguments:
+            - '@Proximum\Vimeet\Application\ThirdParty\LENI\Save\Query\CustomData\SendingRequestDataHandler'
+            - '@Proximum\Vimeet\Application\ThirdParty\LENI\Save\Query\CustomData\HasUserSheetStateChangedQueryHandler'

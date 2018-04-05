@@ -26,6 +26,9 @@ use Proximum\Vimeet\Domain\Trace\TraceableName;
  */
 class Sheet implements TraceableInterface
 {
+    /** Tag used to do a mapping between Sheet's state and third party value */
+    public const SHEET_STATE = 'sheet_state';
+
     const STATE_PENDING = 'pending';
     const STATE_VALIDATED = 'validated';
     const STATE_ACCEPTED = 'accepted';
@@ -628,23 +631,27 @@ class Sheet implements TraceableInterface
     }
 
     /**
-     * @return Sheet
+     * @param string $state
+     *
+     * @throws \InvalidArgumentException
      */
-    public function markAsValidated()
+    public function setState(string $state): void
     {
-        $this->state = self::STATE_VALIDATED;
+        if (!\in_array($state, self::getAllStates(), true)) {
+            throw new \InvalidArgumentException('Invalid argument $state; Must be one of Sheet\'s states');
+        }
 
-        return $this;
+        $this->state = $state;
     }
 
-    /**
-     * @return Sheet
-     */
-    public function markAsAccepted()
+    public function markAsValidated(): void
+    {
+        $this->state = self::STATE_VALIDATED;
+    }
+
+    public function markAsAccepted(): void
     {
         $this->state = self::STATE_ACCEPTED;
-
-        return $this;
     }
 
     /**
