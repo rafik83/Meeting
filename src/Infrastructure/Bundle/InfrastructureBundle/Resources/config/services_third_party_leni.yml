@@ -33,6 +33,7 @@ services:
             - '@Proximum\Vimeet\Application\ThirdParty\LENI\Get\Converter\RawDataToParticipantConverter'
             - '@Proximum\Vimeet\Infrastructure\Repository\Event\ExtraDataRepository'
             - '@Proximum\Vimeet\Application\Command\Event\ExtraData\AddOrUpdateHandler'
+            - '@adapter.job_queue_adapter'
 
     Proximum\Vimeet\Application\ThirdParty\LENI\Common\Query\PrepareLeaderDataHandler:
         arguments:

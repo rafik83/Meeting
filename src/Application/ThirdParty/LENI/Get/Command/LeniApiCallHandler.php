@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Application\ThirdParty\LENI\Get\Command;
 
+use Proximum\Vimeet\Application\Adapter\JobQueueInterface;
 use Proximum\Vimeet\Application\Command\Event\ExtraData\AddOrUpdate as AddOrUpdateEventExtraData;
 use Proximum\Vimeet\Application\Command\Event\ExtraData\AddOrUpdateHandler as AddOrUpdateEventExtraDataHandler;
 use Proximum\Vimeet\Application\ThirdParty\LENI\Common\Api\LeniApiCaller;
@@ -22,6 +23,8 @@ use Proximum\Vimeet\Application\ThirdParty\LENI\LeniConstants;
 use Proximum\Vimeet\Domain\Event\ExtraData\Type as EventExtraDataType;
 use Proximum\Vimeet\Domain\Event\ExtraParameter\Type as EventExtraParameterType;
 use Proximum\Vimeet\Domain\Model\Event;
+use Proximum\Vimeet\Domain\Model\Participant;
+use Proximum\Vimeet\Domain\Model\Type;
 use Proximum\Vimeet\Domain\Repository\Event\ExtraDataRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\Event\ExtraParameterRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\EventRepositoryInterface;
@@ -58,6 +61,9 @@ class LeniApiCallHandler
     /** @var AddOrUpdateEventExtraDataHandler */
     private $addOrUpdateEventExtraDataHandler;
 
+    /** @var JobQueueInterface */
+    private $jobQueue;
+
     public function __construct(
         LeniApiCaller $leniApi,
         EventRepositoryInterface $eventRepository,
@@ -67,7 +73,8 @@ class LeniApiCallHandler
         FieldsByEventQueryHandler $fieldsByEventQueryHandler,
         RawDataToParticipantConverter $rawDataToParticipantConverter,
         ExtraDataRepositoryInterface $eventExtraDataRepository,
-        AddOrUpdateEventExtraDataHandler $addOrUpdateEventExtraDataHandler
+        AddOrUpdateEventExtraDataHandler $addOrUpdateEventExtraDataHandler,
+        JobQueueInterface $jobQueue
     ) {
         $this->leniApi = $leniApi;
         $this->eventRepository = $eventRepository;
@@ -78,6 +85,7 @@ class LeniApiCallHandler
         $this->rawDataToParticipantConverter = $rawDataToParticipantConverter;
         $this->eventExtraDataRepository = $eventExtraDataRepository;
         $this->addOrUpdateEventExtraDataHandler = $addOrUpdateEventExtraDataHandler;
+        $this->jobQueue = $jobQueue;
     }
 
     /**
@@ -125,43 +133,102 @@ class LeniApiCallHandler
 
         $types = $this->typeRepository->getTypesByEvent($event);
 
-        $customDataMapping = $this->mappingGetter->getMapping($event, EventExtraParameterType::TYPE_LENI_DATA_MAPPING);
+        $customDataMapping = $this->mappingGetter->getMapping(
+                $event,
+                EventExtraParameterType::TYPE_LENI_DATA_MAPPING
+            ) ?? [];
 
         $lastCreatedAtExtraData = $this->eventExtraDataRepository->getExtraDataForEvent(
             $event,
             EventExtraDataType::LENI_GET_LAST_CREATED_AT
         );
 
-        $rawUsersData = $this->leniApi->get(
+        $newLastCreatedAt = $this->getBatchUserData(
             $event,
-            $this->fieldsByEventQueryHandler->handle(new FieldsByEventQuery($typesMapping, $customDataMapping ?? [])),
-            $this->getFilters(
-                $typesMapping,
-                $lastCreatedAtExtraData instanceof Event\ExtraData ? $lastCreatedAtExtraData->getValue() : null
-            ),
-            $this->getSort(),
-            0,
-            self::BATCH_LENGTH
+            $lastCreatedAtExtraData instanceof Event\ExtraData ? $lastCreatedAtExtraData->getValue() : null,
+            $types,
+            $typesMapping,
+            $customDataMapping,
+            0
         );
-
-        $newLastCreatedAt = null;
-
-        foreach ($rawUsersData as $rawUserData) {
-            $this->rawDataToParticipantConverter->convert(
-                $event,
-                $types,
-                $typesMapping,
-                $customDataMapping,
-                $rawUserData
-            );
-            $newLastCreatedAt = $rawUserData[LeniConstants::LENI_COL_CREATED_AT];
-        }
 
         if (null !== $newLastCreatedAt) {
             $this->addOrUpdateEventExtraDataHandler->handle(
                 new AddOrUpdateEventExtraData($event, EventExtraDataType::LENI_GET_LAST_CREATED_AT, $newLastCreatedAt)
             );
         }
+    }
+
+    /**
+     * @param Event       $event
+     * @param null|string $lastCreatedAt
+     * @param Type[]      $types
+     * @param array       $typesMapping
+     * @param array       $customDataMapping
+     * @param int         $start
+     *
+     * @return null|string
+     * @throws LeniApiServerException
+     */
+    private function getBatchUserData(
+        Event $event,
+        ?string $lastCreatedAt,
+        array &$types,
+        array &$typesMapping,
+        array &$customDataMapping,
+        int $start
+    ): ?string {
+        $rawUsersData = $this->leniApi->get(
+            $event,
+            $this->fieldsByEventQueryHandler->handle(new FieldsByEventQuery($typesMapping, $customDataMapping)),
+            $this->getFilters($typesMapping, $lastCreatedAt),
+            $this->getSort(),
+            $start,
+            self::BATCH_LENGTH
+        );
+
+        $newLastCreatedAt = null;
+
+        $sheetIds = [];
+
+        foreach ($rawUsersData as $rawUserData) {
+            $participant = $this->rawDataToParticipantConverter->convert(
+                $event,
+                $types,
+                $typesMapping,
+                $customDataMapping,
+                $rawUserData
+            );
+
+            if ($participant instanceof Participant) {
+                $sheetIds[$participant->getSheet()->getId()] = $participant->getSheet()->getId();
+            }
+
+            $newLastCreatedAt = $rawUserData[LeniConstants::LENI_COL_CREATED_AT];
+        }
+
+        if (!empty($sheetIds)) {
+            $this->jobQueue->indexSheets(array_values($sheetIds));
+        }
+
+        if (\count($rawUsersData) === self::BATCH_LENGTH) {
+            unset($rawUsersData);
+
+            $newLastCreatedAt = $this->getBatchUserData(
+                $event,
+                $lastCreatedAt,
+                $types,
+                $typesMapping,
+                $customDataMapping,
+                $start + self::BATCH_LENGTH
+            );
+        }
+
+        if (null === $newLastCreatedAt) {
+            return $lastCreatedAt;
+        }
+
+        return $newLastCreatedAt;
     }
 
     /**
