@@ -50,6 +50,12 @@ class RemoveHandler
         $user = $remove->unavailability->getUser();
         $event = $remove->unavailability->getEvent();
 
+        if (!$remove->unavailability->isCreatedByUser()) {
+            throw new CanNotDeleteUnavailabilityException(
+                'The unavailability can not be removed by the user, because it is not created by the user'
+            );
+        }
+
         $this->unavailabilityRepository->remove($remove->unavailability);
 
         $this->eventDispatcher->dispatch(

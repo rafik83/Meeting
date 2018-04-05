@@ -185,7 +185,7 @@ class UnavailabilityController extends Controller
         try {
             $this->get('tactician.commandbus')->handle(new Remove($unavailability));
         } catch (CanNotDeleteUnavailabilityException $exception) {
-            $this->addFlash('error', 'flash.unavailability.remove.cancelAttendance.error');
+            $this->addFlash('error', 'flash.unavailability.remove.error');
         }
 
         return $this->redirectToRoute(
