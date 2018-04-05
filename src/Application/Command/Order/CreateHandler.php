@@ -14,7 +14,6 @@ use Proximum\Vimeet\Application\Event\Events;
 use Proximum\Vimeet\Application\Event\Order\OrderConfirmEvent;
 use Proximum\Vimeet\Application\Event\Package\MustSelectPackageEvent;
 use Proximum\Vimeet\Domain\Cart;
-use Proximum\Vimeet\Domain\Package\Exception\MissingBillingInfoException;
 use Proximum\Vimeet\Infrastructure\Adapter\DelayedEventDispatcher;
 
 class CreateHandler
@@ -49,12 +48,7 @@ class CreateHandler
         $this->datetime        = $datetime;
     }
 
-    /**
-     * @param Create $create
-     *
-     * @throws MissingBillingInfoException
-     */
-    public function handle(Create $create)
+    public function handle(Create $create): void
     {
         $order = $this->converter->toOrder($this->cartManager->getCart($create->sheet));
 
