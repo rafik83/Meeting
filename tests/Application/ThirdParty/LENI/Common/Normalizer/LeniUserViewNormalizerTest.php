@@ -153,7 +153,6 @@ class LeniUserViewNormalizerTest extends TestCase
             'Langue' => 'en',
             'ZL_ACTIF' => 'INAC',
             'ZL_ETATDEPAIEMENT' => 'PP',
-            'ZL_IDPRODUITPARTICIPANT' => null,
             'ZL_JOURNEE1' => 'Planning day one',
             'ZL_JOURNEE2' => 'Planning day two',
             'ZL_LEADER_ID' => '123-321',
