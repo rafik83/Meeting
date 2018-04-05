@@ -22,6 +22,7 @@ use Proximum\Vimeet\Domain\Participant\ParticipantHelper;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Unavailability\CreateType;
 use Symfony\Component\Form\FormError;
 use Symfony\Component\Form\FormFactoryInterface;
+use Symfony\Component\Form\FormInterface;
 
 class CreateFormHandler
 {
@@ -83,29 +84,14 @@ class CreateFormHandler
 
                 return new CreateFormView(CreateFormView::HANDLER_SUCCESS, $form->createView());
             } catch (NoParticipantSelectedException $exception) {
-                if ($form->has('participants')) {
-                    $form->get('participants')->addError($this->createNoParticipantSelectedExceptionError());
-                } else {
-                    $form->addError($this->createNoParticipantSelectedExceptionError());
-                }
+                $this->handleParticipantsError($form, $this->createNoParticipantSelectedExceptionError());
             } catch (ParticipantsWithUnavailabilityException $exception) {
-                if ($form->has('participants')) {
-                    $form->get('participants')->addError(
-                        $this->participantsWithUnavailabilityExceptionError($exception)
-                    );
-                } else {
-                    $form->addError(
-                        $this->participantsWithUnavailabilityExceptionError($exception)
-                    );
-                }
+                $this->handleParticipantsError($form, $this->participantsWithUnavailabilityExceptionError($exception));
             } catch (ParticipantsSelectedWithMeetingOrHappeningException $exception) {
-                if ($form->has('participants')) {
-                    $form->get('participants')->addError(
-                        $this->createParticipantsSelectedWithMeetingOrHappeningExceptionError($exception)
-                    );
-                } else {
-                    $form->addError($this->createParticipantsSelectedWithMeetingOrHappeningExceptionError($exception));
-                }
+                $this->handleParticipantsError(
+                    $form,
+                    $this->createParticipantsSelectedWithMeetingOrHappeningExceptionError($exception)
+                );
             } catch (TimeOutOfRangeException $exception) {
                 if ($exception->isOutOfRangeAtBeginOfDay()) {
                     $form->get('time')->get('begin')->addError(
@@ -140,6 +126,19 @@ class CreateFormHandler
         }
 
         return new CreateFormView(CreateFormView::CREATE_FORM, $form->createView());
+    }
+
+    /**
+     * @param FormInterface $form
+     * @param FormError     $formError
+     */
+    private function handleParticipantsError(FormInterface $form, FormError $formError): void
+    {
+        if ($form->has('participants')) {
+            $form->get('participants')->addError($formError);
+        } else {
+            $form->addError($formError);
+        }
     }
 
     /**
