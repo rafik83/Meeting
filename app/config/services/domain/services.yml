@@ -27,3 +27,10 @@ services:
             - '@Proximum\Vimeet\Domain\Unavailability\SystemGenerator\OverlappedTimeRangeMerger'
             - '@Proximum\Vimeet\Domain\Unavailability\SystemGenerator\OverlappedTimeRangeTruncater'
             - '@vimeet_infrastructure.adapter.delayed_event_dispatcher'
+
+    #
+    # Participant
+    #
+    Proximum\Vimeet\Domain\Participant\ParticipantProductSetter:
+        arguments:
+            - '@vimeet_infrastructure.adapter.delayed_event_dispatcher'

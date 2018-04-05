@@ -17,6 +17,7 @@ use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Product;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Order\Merger;
+use Proximum\Vimeet\Domain\Participant\ParticipantProductSetter;
 use Proximum\Vimeet\Domain\Repository\CartRowRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\CartStepRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\PromotionCodeRowRepositoryInterface;
@@ -35,22 +36,28 @@ class CartManager
     /** @var Merger */
     private $orderMerger;
 
+    /** @var ParticipantProductSetter */
+    private $participantProductSetter;
+
     /**
      * @param CartRowRepositoryInterface          $cartRowRepository
      * @param CartStepRepositoryInterface         $cartStepRepository
      * @param PromotionCodeRowRepositoryInterface $promotionCodeRowRepository
      * @param Merger                              $orderMerger
+     * @param ParticipantProductSetter            $participantProductSetter
      */
     public function __construct(
         CartRowRepositoryInterface $cartRowRepository,
         CartStepRepositoryInterface $cartStepRepository,
         PromotionCodeRowRepositoryInterface $promotionCodeRowRepository,
-        Merger $orderMerger
+        Merger $orderMerger,
+        ParticipantProductSetter $participantProductSetter
     ) {
         $this->cartRowRepository          = $cartRowRepository;
         $this->cartStepRepository         = $cartStepRepository;
         $this->promotionCodeRowRepository = $promotionCodeRowRepository;
         $this->orderMerger                = $orderMerger;
+        $this->participantProductSetter = $participantProductSetter;
     }
 
     /**
@@ -125,7 +132,7 @@ class CartManager
     ) {
         foreach ($participantsByProductId as $productId => $participants) {
             $participantProduct = $availableParticipantProductsById[$productId];
-            $quantityToAdd = count($participants);
+            $quantityToAdd = \count($participants);
 
             // Take account of previous ordered Participant products
             if (null !== $order) {
@@ -151,7 +158,10 @@ class CartManager
             if ($quantityToAdd <= 0) {
                 foreach ($participants as $participant) {
                     if ($participant instanceof Participant) {
-                        $participant->setParticipantProduct($availableParticipantProductsById[$productId]);
+                        $this->participantProductSetter->setProductOnParticipant(
+                            $participant,
+                            $availableParticipantProductsById[$productId]
+                        );
                     }
                 }
             }
@@ -211,7 +221,10 @@ class CartManager
                         && isset($availableParticipantProductsById[$productId])
                         && $availableParticipantProductsById[$productId] instanceof Product
                     ) {
-                        $participant->setParticipantProduct($availableParticipantProductsById[$productId]);
+                        $this->participantProductSetter->setProductOnParticipant(
+                            $participant,
+                            $availableParticipantProductsById[$productId]
+                        );
                     }
                 }
             }

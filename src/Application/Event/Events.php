@@ -100,4 +100,5 @@ final class Events
     const TIP_REMOVED_FROM_EVENT                       = 'tip.removed_from_event';
     const TIP_EVENT_CREATED                            = 'tip.event.created';
     const TIP_EVENT_UPDATED                            = 'tip.event.updated';
+    const PARTICIPANT_PRODUCT_SET                      = 'participant.product.set';
 }

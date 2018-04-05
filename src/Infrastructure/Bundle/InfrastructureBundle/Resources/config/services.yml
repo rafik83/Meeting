@@ -4569,6 +4569,7 @@ services:
             - '@repository.cart_step_repository'
             - '@repository.promotion_code_row_repository'
             - '@order.merger'
+            - '@Proximum\Vimeet\Domain\Participant\ParticipantProductSetter'
     buyable_object_resolver:
         class: Proximum\Vimeet\Domain\Cart\BuyableObjectResolver
         arguments:
@@ -4584,6 +4585,7 @@ services:
             - '@repository.cart_step_repository'
             - '@repository.promotion_code_row_repository'
             - '@repository.promotion_code_repository'
+            - '@Proximum\Vimeet\Domain\Participant\ParticipantProductSetter'
             - '@datetime'
 
     cart_cleaner:

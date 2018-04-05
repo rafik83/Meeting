@@ -328,6 +328,8 @@ class Participant implements MailRecipientInterface
     }
 
     /**
+     * Call this method via the ParticipantProductSetter service
+     *
      * @param Product $participantProduct
      */
     public function setParticipantProduct(Product $participantProduct): void
