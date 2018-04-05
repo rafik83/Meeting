@@ -91,7 +91,7 @@ class CreateHandler
 
         foreach ($create->participants as $participant) {
             try {
-                $unavailabilities[] = $this->handleParticipant($participant, $begin, $end, $create->message);
+                $unavailabilities[] = $this->getUnavailabilityForParticipant($participant, $begin, $end, $create->message);
             } catch (CanNotMergeUnavailabilityWithANotCreatedByUserUnavailabilityException $canNotMergeUnavailabilityWithANotCreatedByUserUnavailabilityException) {
                 $participantsWithOverlapUnavailability[] = $participant;
             }
@@ -122,7 +122,7 @@ class CreateHandler
      * @return Unavailability
      * @throws CanNotMergeUnavailabilityWithANotCreatedByUserUnavailabilityException
      */
-    private function handleParticipant(
+    private function getUnavailabilityForParticipant(
         Participant $participant,
         \DateTimeInterface $begin,
         \DateTimeInterface $end,
