@@ -22,6 +22,7 @@ use Proximum\Vimeet\Application\ThirdParty\LENI\LeniConstants;
 use Proximum\Vimeet\Domain\Event\ExtraData\Type as EventExtraDataType;
 use Proximum\Vimeet\Domain\Event\ExtraParameter\Type as EventExtraParameterType;
 use Proximum\Vimeet\Domain\Model\Event;
+use Proximum\Vimeet\Domain\Model\Type;
 use Proximum\Vimeet\Domain\Repository\Event\ExtraDataRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\Event\ExtraParameterRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\EventRepositoryInterface;
@@ -125,22 +126,57 @@ class LeniApiCallHandler
 
         $types = $this->typeRepository->getTypesByEvent($event);
 
-        $customDataMapping = $this->mappingGetter->getMapping($event, EventExtraParameterType::TYPE_LENI_DATA_MAPPING);
+        $customDataMapping = $this->mappingGetter->getMapping(
+                $event,
+                EventExtraParameterType::TYPE_LENI_DATA_MAPPING
+            ) ?? [];
 
         $lastCreatedAtExtraData = $this->eventExtraDataRepository->getExtraDataForEvent(
             $event,
             EventExtraDataType::LENI_GET_LAST_CREATED_AT
         );
 
+        $newLastCreatedAt = $this->getBatchUserData(
+            $event,
+            $lastCreatedAtExtraData instanceof Event\ExtraData ? $lastCreatedAtExtraData->getValue() : null,
+            $types,
+            $typesMapping,
+            $customDataMapping,
+            0
+        );
+
+        if (null !== $newLastCreatedAt) {
+            $this->addOrUpdateEventExtraDataHandler->handle(
+                new AddOrUpdateEventExtraData($event, EventExtraDataType::LENI_GET_LAST_CREATED_AT, $newLastCreatedAt)
+            );
+        }
+    }
+
+    /**
+     * @param Event       $event
+     * @param null|string $lastCreatedAt
+     * @param Type[]      $types
+     * @param array       $typesMapping
+     * @param array       $customDataMapping
+     * @param int         $start
+     *
+     * @return null|string
+     * @throws LeniApiServerException
+     */
+    private function getBatchUserData(
+        Event $event,
+        ?string $lastCreatedAt,
+        array &$types,
+        array &$typesMapping,
+        array &$customDataMapping,
+        int $start
+    ): ?string {
         $rawUsersData = $this->leniApi->get(
             $event,
-            $this->fieldsByEventQueryHandler->handle(new FieldsByEventQuery($typesMapping, $customDataMapping ?? [])),
-            $this->getFilters(
-                $typesMapping,
-                $lastCreatedAtExtraData instanceof Event\ExtraData ? $lastCreatedAtExtraData->getValue() : null
-            ),
+            $this->fieldsByEventQueryHandler->handle(new FieldsByEventQuery($typesMapping, $customDataMapping)),
+            $this->getFilters($typesMapping, $lastCreatedAt),
             $this->getSort(),
-            0,
+            $start,
             self::BATCH_LENGTH
         );
 
@@ -157,11 +193,24 @@ class LeniApiCallHandler
             $newLastCreatedAt = $rawUserData[LeniConstants::LENI_COL_CREATED_AT];
         }
 
-        if (null !== $newLastCreatedAt) {
-            $this->addOrUpdateEventExtraDataHandler->handle(
-                new AddOrUpdateEventExtraData($event, EventExtraDataType::LENI_GET_LAST_CREATED_AT, $newLastCreatedAt)
+        if (\count($rawUsersData) === self::BATCH_LENGTH) {
+            unset($rawUsersData);
+
+            $newLastCreatedAt = $this->getBatchUserData(
+                $event,
+                $lastCreatedAt,
+                $types,
+                $typesMapping,
+                $customDataMapping,
+                $start + self::BATCH_LENGTH
             );
         }
+
+        if (null === $newLastCreatedAt) {
+            return $lastCreatedAt;
+        }
+
+        return $newLastCreatedAt;
     }
 
     /**
