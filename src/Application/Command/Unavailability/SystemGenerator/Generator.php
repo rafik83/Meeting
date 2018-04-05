@@ -72,6 +72,12 @@ class Generator
 
         /** @var Participant[] $participants */
         $participants = $this->participantRepository->getAllParticipantForUser($event, $user);
+
+        if (empty($participants)) {
+            $this->dispatchSystemUnavailabilityGeneratedEvent($event, $user);
+            return;
+        }
+
         $products = $this->getProductsForParticipants($participants);
 
         if (empty($products)) {
