@@ -26,6 +26,7 @@ use Proximum\Vimeet\Domain\Model\PromotionCodeRow;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\Type;
 use Proximum\Vimeet\Domain\Model\User;
+use Proximum\Vimeet\Domain\Participant\ParticipantProductSetter;
 use Proximum\Vimeet\Domain\Repository\CartRowRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\CartStepRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\OrderRepositoryInterface;
@@ -93,6 +94,7 @@ class ConverterTest extends TestCase
         $cartStepRepository         = $this->prophesize(CartStepRepositoryInterface::class);
         $promotionCodeRowRepository = $this->prophesize(PromotionCodeRowRepositoryInterface::class);
         $promotionCodeRepository    = $this->prophesize(PromotionCodeRepositoryInterface::class);
+        $participantProductSetter   = $this->prophesize(ParticipantProductSetter::class);
 
         $orderRepository->add(Argument::that(function (Order $givenOrder) use ($order) {
             return \count($givenOrder->getRows()) === \count($order->getRows())
@@ -111,6 +113,7 @@ class ConverterTest extends TestCase
             $cartStepRepository->reveal(),
             $promotionCodeRowRepository->reveal(),
             $promotionCodeRepository->reveal(),
+            $participantProductSetter->reveal(),
             $datetime
         );
 
