@@ -152,3 +152,12 @@ services:
             - '@Proximum\Vimeet\Infrastructure\Repository\AvailabilityTimeRangeRepository'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\AvailabilityTimeRange\Create }
+
+    #
+    # Sheet change Type
+    #
+    Proximum\Vimeet\Application\Command\Sheet\ChangeType\CancelPackageHandler:
+        arguments:
+            - '@vimeet_infrastructure.repository.order_repository'
+            - '@cart_manager'
+            - '@Proximum\Vimeet\Domain\Participant\ParticipantProductSetter'

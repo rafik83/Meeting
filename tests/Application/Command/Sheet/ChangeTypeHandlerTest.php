@@ -18,9 +18,7 @@ use Proximum\Vimeet\Application\Components\Sheet\Request\EnableDisableManager;
 use Proximum\Vimeet\Application\Event\Events;
 use Proximum\Vimeet\Application\Event\Package\MustSelectPackageEvent;
 use Proximum\Vimeet\Application\Event\Sheet\SheetChangedTypeEvent;
-use Proximum\Vimeet\Domain\Cart\CartManager;
 use Proximum\Vimeet\Domain\Model\Admin;
-use Proximum\Vimeet\Domain\Model\Order;
 use Proximum\Vimeet\Domain\Model\Package;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Sheet;
@@ -35,7 +33,7 @@ use Proximum\Vimeet\Tests\Factory\EventFactory;
 
 class ChangeTypeHandlerTest extends TestCase
 {
-    public function testHandleTypesWithDifferentPackages()
+    public function testHandleTypesWithDifferentPackages(): void
     {
         $date  = new \DateTime();
         $event = EventFactory::createEvent();
@@ -65,35 +63,16 @@ class ChangeTypeHandlerTest extends TestCase
             new \DateTime()
         );
 
-        $order = new Order(
-            $sheet,
-            '',
-            $date
-        );
-
         $changeType = new ChangeType($sheet, $otherType, $admin, 'fr');
 
         $sheetRepository         = $this->prophesize(SheetRepositoryInterface::class);
         $orderRepository         = $this->prophesize(OrderRepositoryInterface::class);
-        $cartManager             = $this->prophesize(CartManager::class);
+        $cancelPackageHandler    = $this->prophesize(ChangeType\CancelPackageHandler::class);
         $translator              = $this->prophesize(TranslatorAdapter::class);
         $eventDispatcher         = $this->prophesize(DelayedEventDispatcher::class);
         $registrationStepManager = $this->prophesize(StepManager::class);
         $meetingRepository       = $this->prophesize(MeetingRepositoryInterface::class);
         $enableDisableManager    = $this->prophesize(EnableDisableManager::class);
-
-        $handler = new ChangeTypeHandler(
-            $sheetRepository->reveal(),
-            $orderRepository->reveal(),
-            $cartManager->reveal(),
-            $meetingRepository->reveal(),
-            $enableDisableManager->reveal(),
-            $translator->reveal(),
-            $eventDispatcher->reveal(),
-            $registrationStepManager->reveal(),
-            $date
-        );
-        $handler->handle($changeType);
 
         $expectedSheet = clone $sheet;
         $expectedSheet->updateType($otherType);
@@ -102,10 +81,7 @@ class ChangeTypeHandlerTest extends TestCase
         $meetingRepository->countMeetingsOfSheet($sheet)->shouldBeCalled()->willReturn(0);
         $enableDisableManager->update($sheet, false)->shouldBeCalled();
 
-        // Should be called because packages are different
-        $orderRepository->findBySheet($expectedSheet)->shouldBeCalled()->willReturn([$order]);
-        $cartManager->emptyCart($sheet)->shouldBeCalled();
-
+        $cancelPackageHandler->handle(new ChangeType\CancelPackage($sheet))->shouldBeCalled();
         $registrationStepManager->resetRegistrationStep($participant)->shouldBeCalled();
 
         $eventDispatcher->dispatch(
@@ -117,9 +93,22 @@ class ChangeTypeHandlerTest extends TestCase
             Events::MUST_SELECT_PACKAGE,
             new MustSelectPackageEvent($expectedSheet)
         )->shouldBeCalled();
+
+        $handler = new ChangeTypeHandler(
+            $sheetRepository->reveal(),
+            $orderRepository->reveal(),
+            $cancelPackageHandler->reveal(),
+            $meetingRepository->reveal(),
+            $enableDisableManager->reveal(),
+            $translator->reveal(),
+            $eventDispatcher->reveal(),
+            $registrationStepManager->reveal(),
+            $date
+        );
+        $handler->handle($changeType);
     }
 
-    public function testHandleTypesWithSamePackage()
+    public function testHandleTypesWithSamePackage(): void
     {
         $date  = new \DateTime();
         $event = EventFactory::createEvent();
@@ -151,7 +140,7 @@ class ChangeTypeHandlerTest extends TestCase
 
         $sheetRepository         = $this->prophesize(SheetRepositoryInterface::class);
         $orderRepository         = $this->prophesize(OrderRepositoryInterface::class);
-        $cartManager             = $this->prophesize(CartManager::class);
+        $cancelPackageHandler    = $this->prophesize(ChangeType\CancelPackageHandler::class);
         $translator              = $this->prophesize(TranslatorAdapter::class);
         $eventDispatcher         = $this->prophesize(DelayedEventDispatcher::class);
         $registrationStepManager = $this->prophesize(StepManager::class);
@@ -160,11 +149,28 @@ class ChangeTypeHandlerTest extends TestCase
 
         $meetingRepository->countMeetingsOfSheet($sheet)->shouldBeCalled()->willReturn(0);
         $enableDisableManager->update($sheet, false)->shouldBeCalled();
+        $cancelPackageHandler->handle(new ChangeType\CancelPackage($sheet))->shouldNotBeCalled();
+        $expectedSheet = clone $sheet;
+        $expectedSheet->updateType($otherType);
+
+        $sheetRepository->set($expectedSheet)->shouldBeCalled();
+
+        $registrationStepManager->resetRegistrationStep($participant)->shouldBeCalled();
+
+        $eventDispatcher->dispatch(
+            Events::SHEET_CHANGED_TYPE,
+            new SheetChangedTypeEvent($expectedSheet, $admin, $date, '', '', 'fr')
+        )->shouldBeCalled();
+
+        $eventDispatcher->dispatch(
+            Events::MUST_SELECT_PACKAGE,
+            new MustSelectPackageEvent($expectedSheet)
+        )->shouldBeCalled();
 
         $handler = new ChangeTypeHandler(
             $sheetRepository->reveal(),
             $orderRepository->reveal(),
-            $cartManager->reveal(),
+            $cancelPackageHandler->reveal(),
             $meetingRepository->reveal(),
             $enableDisableManager->reveal(),
             $translator->reveal(),
@@ -173,21 +179,5 @@ class ChangeTypeHandlerTest extends TestCase
             $date
         );
         $handler->handle($changeType);
-
-        $expectedSheet = clone $sheet;
-        $expectedSheet->updateType($otherType);
-
-        $sheetRepository->set($expectedSheet)->shouldBeCalled();
-
-        // Should not be called
-        $orderRepository->findBySheet($expectedSheet)->shouldNotBeCalled();
-        $cartManager->emptyCart($sheet)->shouldNotBeCalled();
-
-        $registrationStepManager->resetRegistrationStep($participant)->shouldBeCalled();
-
-        $eventDispatcher->dispatch(
-            Events::SHEET_CHANGED_TYPE,
-            new SheetChangedTypeEvent($expectedSheet, $admin, $date, '', '', 'fr')
-        )->shouldBeCalled();
     }
 }

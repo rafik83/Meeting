@@ -27,11 +27,14 @@ class ParticipantProductSetter
         $this->eventDispatcher = $eventDispatcher;
     }
 
-    public function setProductOnParticipant(Participant $participant, Product $product): void
+    public function setProductOnParticipant(Participant $participant, ?Product $product = null): void
     {
         $previousProduct = $participant->getParticipantProduct();
 
-        if (!$previousProduct instanceof Product || $previousProduct->getId() !== $product->getId()) {
+        if (($previousProduct === null && $product !== null)
+            || ($previousProduct !== null && $product === null)
+            || ($previousProduct instanceof Product && $product instanceof Product && $previousProduct->getId() !== $product->getId())
+        ) {
             $participant->setParticipantProduct($product);
 
             $event = new ProductSetOnParticipantEvent($participant);
