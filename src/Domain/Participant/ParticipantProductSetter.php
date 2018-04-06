@@ -31,10 +31,14 @@ class ParticipantProductSetter
     {
         $previousProduct = $participant->getParticipantProduct();
 
-        if (($previousProduct === null && $product !== null)
-            || ($previousProduct !== null && $product === null)
-            || ($previousProduct instanceof Product && $product instanceof Product && $previousProduct->getId() !== $product->getId())
-        ) {
+        $hasNewProduct = $previousProduct === null && $product !== null;
+        $removeProduct = $previousProduct !== null && $product === null;
+        $newProductIsDifferent = $previousProduct instanceof Product
+            && $product instanceof Product
+            && $previousProduct->getId() !== $product->getId()
+        ;
+
+        if ($hasNewProduct || $removeProduct || $newProductIsDifferent) {
             $participant->setParticipantProduct($product);
 
             $event = new ProductSetOnParticipantEvent($participant);
