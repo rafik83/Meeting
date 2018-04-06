@@ -380,8 +380,6 @@ class MeetingRepository implements MeetingRepositoryInterface
             ->createQueryBuilder()
             ->select('meeting.id')
             ->from(Meeting::class, 'meeting')
-            ->join('meeting.fromSheet', 'fromSheet')
-            ->join('meeting.toSheet', 'toSheet')
             ->leftJoin('meeting.fromParticipants', 'fromParticipant')
             ->leftJoin('meeting.toParticipants', 'toParticipant')
             ->where('fromParticipant = :participant OR toParticipant = :participant')
