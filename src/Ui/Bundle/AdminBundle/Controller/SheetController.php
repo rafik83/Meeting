@@ -29,10 +29,12 @@ use Proximum\Vimeet\Domain\Model\PaginatedResult;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\Type;
+use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Filter\SheetFilterSubmittedDataGetter;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Participant\ImportMappingType;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Participant\ImportType;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Sheet\BatchType;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Sheet\SheetFilterType;
+use Proximum\Vimeet\Ui\Bundle\AdminBundle\ValueResolver\AdminDomain;
 use Proximum\Vimeet\Ui\Flash\TranschoiceMessage;
 use Proximum\Vimeet\Ui\Flash\TransMessage;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -52,7 +54,7 @@ class SheetController extends Controller
      *
      * @return Response
      */
-    public function listAction(Request $request, Event $event)
+    public function listAction(Request $request, Event $event, AdminDomain $adminDomain)
     {
         // Access
         $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
@@ -86,9 +88,9 @@ class SheetController extends Controller
         $filters = SheetFilterType::getDefaultFilters();
 
         $sheetFilterForm = $this->createFilterForm(SheetFilterType::class, $filters, [
-            'event'  => $event,
+            'event' => $event,
             'locale' => $event->getAvailableLocale($request->getLocale()),
-            'user'   => $this->getUser(),
+            'user' => $adminDomain->getAdmin(),
         ]);
 
         $isFiltered = $sheetFilterForm->handleRequest($request)->isSubmitted() && $sheetFilterForm->isValid();
@@ -153,23 +155,26 @@ class SheetController extends Controller
     }
 
     /**
-     * @param Request $request
-     * @param Event   $event
+     * @param Request     $request
+     * @param AdminDomain $adminDomain
+     * @param Event       $event
      *
      * @return RedirectResponse
      */
-    public function batchAction(Request $request, Event $event)
+    public function batchAction(Request $request, AdminDomain $adminDomain, Event $event)
     {
         $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
 
-        $filters = $this->get('filter.sheet_filter')->get($event);
-
-        if (null === $filters) {
-            $filters = SheetFilterType::getDefaultFilters();
-        }
+        $filters = $this->get(SheetFilterSubmittedDataGetter::class)->handle(
+            $event,
+            $adminDomain->getAdmin(),
+            $request->getLocale()
+        );
 
         $selectedSheetsPage = $request->query->getInt('page', 1);
-        $batch = new Batch($event, $this->getUser(), $event->getAvailableLocale($request->getLocale()), $filters);
+        $batch = new Batch(
+            $event, $adminDomain->getAdmin(), $event->getAvailableLocale($request->getLocale()), $filters
+        );
         $batchForm          = $this->createForm(BatchType::class, $batch, [
             'ids'    => $this->get('vimeet_infrastructure.repository.sheet_repository')->getIdsByEvent($event),
             'event'  => $event,

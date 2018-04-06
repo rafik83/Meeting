@@ -20,6 +20,7 @@ use Elastica\Query\Range;
 use Elastica\Query\Term;
 use Proximum\Vimeet\Application\View\Agenda\Slot\AvailableSlotView;
 use Proximum\Vimeet\Application\View\Catalog\PositionView;
+use Proximum\Vimeet\Application\View\Sheet\CountryView;
 use Proximum\Vimeet\Domain\Admin\Follower\FollowerConstant;
 use Proximum\Vimeet\Domain\Catalog\SearchFields;
 use Proximum\Vimeet\Domain\Exception\Nomenclature\NomenclatureNotFoundException;
@@ -651,7 +652,7 @@ class SheetSearchQueryBuilder
         $boolQuery = new BoolQuery();
 
         foreach ($countries as $country) {
-            $matchQuery       = new Match('countryCode', $country->code);
+            $matchQuery = new Match('countryCode', $country instanceof CountryView ? $country->code : $country);
             $boolQuery->addShould($matchQuery);
         }
 
