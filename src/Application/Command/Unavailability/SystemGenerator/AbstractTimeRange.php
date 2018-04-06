@@ -41,5 +41,9 @@ abstract class AbstractTimeRange implements TimeRangeInterface
     {
         $this->begin = TimeOverlap::floor($this->begin, $abstractTimeRange->begin);
         $this->end = TimeOverlap::ceil($this->end, $abstractTimeRange->end);
+
+        if ($this->end < $this->begin) {
+            $this->end = $this->begin;
+        }
     }
 }
