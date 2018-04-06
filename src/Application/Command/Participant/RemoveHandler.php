@@ -83,9 +83,9 @@ class RemoveHandler
      *
      * @throws CanNotRemoveAllParticipantsException
      */
-    public function handle(Remove $remove)
+    public function handle(Remove $remove): RemoveResult
     {
-        if (count($remove->participants) === $remove->sheet->countParticipants()) {
+        if (\count($remove->participants) === $remove->sheet->countParticipants()) {
             throw new CanNotRemoveAllParticipantsException('All participants can not be selected to be remove');
         }
 
@@ -95,9 +95,9 @@ class RemoveHandler
 
         /** @var Participant $participant */
         foreach ($remove->participants as $participant) {
-            $countmeeting = $this->meetingRepository->countByParticipant($participant);
+            $participantHasMeeting = $this->meetingRepository->hasScheduledMeetingByParticipant($participant);
 
-            if ($countmeeting !== 0) {
+            if (true === $participantHasMeeting) {
                 $hasMeeting[$participant->getId()] = $participant;
             } else {
                 $toDelete[$participant->getId()] = $participant;
@@ -105,11 +105,22 @@ class RemoveHandler
         }
 
         // Avoid delation if there is someone with the exception of meeting
-        if (empty($hasMeeting)) {
-            foreach ($toDelete as $participantToDelete) {
-                $remove->sheet->removeParticipant($participantToDelete);
-                $this->participantRepository->delete($participantToDelete);
+        if (!empty($hasMeeting)) {
+            $participantNames = [];
+
+            foreach ($hasMeeting as $participantWithMeeting) {
+                $participantNames[] = $this->participantInfoGuesser->guessParticipantCompleteName($participantWithMeeting, $remove->locale);
             }
+
+            return new RemoveResult($participantNames);
+        }
+
+        $usersRemovedFromSheet = [];
+        foreach ($toDelete as $participantToDelete) {
+            $usersRemovedFromSheet[$participantToDelete->getUser()->getId()] = $participantToDelete->getUser();
+
+            $remove->sheet->removeParticipant($participantToDelete);
+            $this->participantRepository->delete($participantToDelete);
         }
 
         // Update cart
@@ -122,14 +133,14 @@ class RemoveHandler
 
         $sheetUpdated = new SheetUpdatedEvent($remove->sheet);
         $this->eventDispatcher->dispatch(Events::SHEET_UPDATED, $sheetUpdated);
-        $this->eventDispatcher->dispatch(Events::PARTICIPANT_REMOVED, new ParticipantRemovedEvent($remove->sheet));
+        $this->eventDispatcher->dispatch(
+            Events::PARTICIPANT_REMOVED,
+            new ParticipantRemovedEvent(
+                $remove->sheet,
+                $usersRemovedFromSheet
+            )
+        );
 
-        $participantNames = [];
-
-        foreach ($hasMeeting as $participantWithMeeting) {
-            $participantNames[] = $this->participantInfoGuesser->guessParticipantCompleteName($participantWithMeeting, $remove->locale);
-        }
-
-        return new RemoveResult($participantNames);
+        return new RemoveResult();
     }
 }

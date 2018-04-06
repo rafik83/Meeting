@@ -11,6 +11,7 @@
 namespace Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\EventListener\Unavailability\System;
 
 use Proximum\Vimeet\Application\Event\Events;
+use Proximum\Vimeet\Application\Event\Participant\ParticipantRemovedEvent;
 use Proximum\Vimeet\Application\Event\Participant\ProductSetOnParticipantEvent;
 use Proximum\Vimeet\Domain\Unavailability\SystemGenerator\Generator;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
@@ -32,6 +33,7 @@ class SystemUnavailabilityEventSubscriber implements EventSubscriberInterface
     {
         return [
             Events::PARTICIPANT_PRODUCT_SET => 'onParticipantProductSet',
+            Events::PARTICIPANT_REMOVED => 'onParticipantRemoved',
         ];
     }
 
@@ -41,5 +43,17 @@ class SystemUnavailabilityEventSubscriber implements EventSubscriberInterface
             $event->participant->getSheet()->getEvent(),
             $event->participant->getUser()
         );
+    }
+
+    public function onParticipantRemoved(ParticipantRemovedEvent $event): void
+    {
+        $domainEvent = $event->sheet->getEvent();
+
+        foreach ($event->usersRemovedFromSheet as $user) {
+            $this->generator->generateSystemUnavailability(
+                $domainEvent,
+                $user
+            );
+        }
     }
 }
