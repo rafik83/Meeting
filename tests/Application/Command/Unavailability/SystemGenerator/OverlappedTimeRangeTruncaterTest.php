@@ -143,4 +143,48 @@ class OverlappedTimeRangeTruncaterTest extends TestCase
 
         $this->assertEquals($expected, $result);
     }
+
+    public function testTruncateWithTimeRangeOverlapEntirely(): void
+    {
+        $timeRanges = [
+            new TimeRangeView(
+                new \DateTime('2017-10-10 11:00:00.000'),
+                new \DateTime('2017-10-10 20:00:00.000')
+            ),
+        ];
+
+        $needle = new TimeRangeNotAccessibleView(
+            new \DateTime('2017-10-10 11:00:00.000'),
+            new \DateTime('2017-10-10 13:00:00.000')
+        );
+
+        $truncater = new OverlappedTimeRangeTruncater();
+        $result = $truncater->truncate($needle, $timeRanges);
+
+        $expected = [];
+
+        $this->assertEquals($expected, $result);
+    }
+
+    public function testTruncateWithTimeRangeOverlapEntirelyAfternoon(): void
+    {
+        $timeRanges = [
+            new TimeRangeView(
+                new \DateTime('2017-10-10 11:00:00.000'),
+                new \DateTime('2017-10-10 20:00:00.000')
+            ),
+        ];
+
+        $needle = new TimeRangeNotAccessibleView(
+            new \DateTime('2017-10-10 14:00:00.000'),
+            new \DateTime('2017-10-10 20:00:00.000')
+        );
+
+        $truncater = new OverlappedTimeRangeTruncater();
+        $result = $truncater->truncate($needle, $timeRanges);
+
+        $expected = [];
+
+        $this->assertEquals($expected, $result);
+    }
 }

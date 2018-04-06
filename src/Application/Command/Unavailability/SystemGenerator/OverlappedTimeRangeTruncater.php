@@ -19,49 +19,61 @@ use Proximum\Vimeet\Domain\Time\TimeOverlap;
 class OverlappedTimeRangeTruncater
 {
     /**
-     * @param AbstractTimeRange   $needle
-     * @param AbstractTimeRange[] $haystack
+     * @param AbstractTimeRange   $unavailability
+     * @param AbstractTimeRange[] $activatedTimeRanges
      *
      * @return AbstractTimeRange[]
      */
-    public function truncate(AbstractTimeRange $needle, array $haystack): array
+    public function truncate(AbstractTimeRange $unavailability, array $activatedTimeRanges): array
     {
         $result = [];
-        $needleToCheck = $needle;
+        $unavailabilityToCheck = $unavailability;
 
-        foreach ($haystack as $timeRange) {
-            if (TimeOverlap::beginIn($needleToCheck, $timeRange)) {
-                $needleToCheck->begin = $timeRange->end;
+        foreach ($activatedTimeRanges as $activatedTimeRange) {
+            if (TimeOverlap::contains($unavailabilityToCheck, $activatedTimeRange)) {
+                return $result;
+            }
+
+            if (TimeOverlap::beginIn($unavailabilityToCheck, $activatedTimeRange)) {
+                $unavailabilityToCheck->begin = $activatedTimeRange->end;
+
+                if ($unavailabilityToCheck->end < $unavailabilityToCheck->begin) {
+                    $unavailabilityToCheck->end = $unavailabilityToCheck->begin;
+                }
 
                 continue;
             }
 
-            if (TimeOverlap::endIn($needleToCheck, $timeRange)) {
-                $needleToCheck->end = $timeRange->begin;
+            if (TimeOverlap::endIn($unavailabilityToCheck, $activatedTimeRange)) {
+                $unavailabilityToCheck->end = $activatedTimeRange->begin;
+
+                if ($unavailabilityToCheck->end < $unavailabilityToCheck->begin) {
+                    $unavailabilityToCheck->begin = $unavailabilityToCheck->end;
+                }
 
                 continue;
             }
 
-            // If the needle contains a timeRange
-            // We cut the needle in two, and continue the check with the second part
-            if (TimeOverlap::contains($timeRange, $needleToCheck)) {
-                $firstNeedle = clone $needleToCheck;
-                $firstNeedle->end = $timeRange->begin;
+            if (TimeOverlap::contains($activatedTimeRange, $unavailabilityToCheck)) {
+                $firstNeedle = clone $unavailabilityToCheck;
+                $firstNeedle->end = $activatedTimeRange->begin;
 
-                $result[] = $firstNeedle;
+                if ($firstNeedle->end > $firstNeedle->begin && $firstNeedle->getBegin() != $firstNeedle->getEnd()) {
+                    $result[] = $firstNeedle;
+                }
 
-                $secondNeedle = clone $needleToCheck;
-                $secondNeedle->begin = $timeRange->end;
-                $needleToCheck = $secondNeedle;
+                $secondNeedle = clone $unavailabilityToCheck;
+                $secondNeedle->begin = $activatedTimeRange->end;
+                $unavailabilityToCheck = $secondNeedle;
             }
 
             // If the needle is cut to nothing
-            if ($needleToCheck->getBegin() == $needleToCheck->getEnd()) {
+            if ($unavailabilityToCheck->getBegin() == $unavailabilityToCheck->getEnd()) {
                 return $result;
             }
         }
 
-        $result[] = $needleToCheck;
+        $result[] = $unavailabilityToCheck;
 
         return $result;
     }
