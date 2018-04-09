@@ -11,28 +11,21 @@
 namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Planning;
 
 use Proximum\Vimeet\Domain\Planning\PlanningOrderedBy;
-use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\TypeChoiceType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
-use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class ExportPlanningType extends AbstractType
+class OrderByChoiceType extends AbstractType
 {
     /**
      * {@inheritdoc}
      */
-    public function buildForm(FormBuilderInterface $builder, array $options)
+    public function configureOptions(OptionsResolver $resolver): void
     {
-        $builder
-            ->add('types', TypeChoiceType::class, [
-                'event'  => $options['event'],
-                'user'   => $options['user'],
-                'locale' => $options['locale'],
-                'expanded' => true,
-                'multiple' => true,
-            ])
-            ->add('orderBy', ChoiceType::class, [
+        parent::configureOptions($resolver);
+
+        $resolver
+            ->setDefaults([
                 'choices'            => PlanningOrderedBy::getPlanningOrderByOptions(),
                 'choice_label'       => function ($label) {
                     return sprintf('form.admin_export_planning.children.orderBy.choice.%s', $label);
@@ -45,16 +38,8 @@ class ExportPlanningType extends AbstractType
     /**
      * {@inheritdoc}
      */
-    public function configureOptions(OptionsResolver $resolver)
+    public function getParent(): string
     {
-        $resolver->setRequired(['event', 'user', 'locale']);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getBlockPrefix()
-    {
-        return 'admin_export_planning';
+        return ChoiceType::class;
     }
 }

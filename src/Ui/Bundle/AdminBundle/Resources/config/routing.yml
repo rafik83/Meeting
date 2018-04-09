@@ -1458,13 +1458,6 @@ admin_invoice_export:
 #
 # Planning
 #
-admin_planning_export:
-    path: /event/{event}/planning/export
-    requirements:
-        event: \d+
-    methods: [GET, POST]
-    defaults: { _controller: AdminBundle:Planning/Export:exportPlanning }
-
 admin_planning_export_link:
     path: /event/{event}/planning/export/link/{hash}z{file}
     requirements:

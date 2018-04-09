@@ -33,6 +33,7 @@ use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Participant\ImportMappingTyp
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Participant\ImportType;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Sheet\BatchType;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Sheet\SheetFilterType;
+use Proximum\Vimeet\Ui\Bundle\AdminBundle\ValueResolver\AdminDomain;
 use Proximum\Vimeet\Ui\Flash\TranschoiceMessage;
 use Proximum\Vimeet\Ui\Flash\TransMessage;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -153,12 +154,13 @@ class SheetController extends Controller
     }
 
     /**
-     * @param Request $request
-     * @param Event   $event
+     * @param Request     $request
+     * @param Event       $event
+     * @param AdminDomain $adminDomain
      *
      * @return RedirectResponse
      */
-    public function batchAction(Request $request, Event $event)
+    public function batchAction(Request $request, Event $event, AdminDomain $adminDomain)
     {
         $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
 
@@ -169,8 +171,13 @@ class SheetController extends Controller
         }
 
         $selectedSheetsPage = $request->query->getInt('page', 1);
-        $batch = new Batch($event, $this->getUser(), $event->getAvailableLocale($request->getLocale()), $filters);
-        $batchForm          = $this->createForm(BatchType::class, $batch, [
+        $batch = new Batch(
+            $event,
+            $adminDomain->getAdmin(),
+            $event->getAvailableLocale($request->getLocale()),
+            $filters
+        );
+        $batchForm = $this->createForm(BatchType::class, $batch, [
             'ids'    => $this->get('vimeet_infrastructure.repository.sheet_repository')->getIdsByEvent($event),
             'event'  => $event,
             'action' => $this->generateUrl('admin_sheet_batch', ['event' => $event->getId()]),
@@ -188,6 +195,7 @@ class SheetController extends Controller
                 if ($this->isGranted('ROLE_ALLOWED_TO_ORGANIZE')) {
                     $batch->refuse = $batchForm->get('refuse')->isClicked();
                     $batch->printPdf  = $batchForm->get('printPdf')->isClicked();
+                    $batch->printPlanning = $batchForm->get('printPlanning')->isClicked();
                 }
 
                 if ($this->isGranted('ROLE_ALLOWED_TO_ADMIN')) {
@@ -472,7 +480,7 @@ class SheetController extends Controller
             return false;
         }
 
-        if (count($request->query->all()) === 1 && !empty($request->query->get('page'))) {
+        if (\count($request->query->all()) === 1 && !empty($request->query->get('page'))) {
             return false;
         }
 

@@ -13,80 +13,53 @@ namespace Proximum\Vimeet\Application\Command\Sheet;
 use Proximum\Vimeet\Domain\Model\Admin;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Sheet\Group;
+use Proximum\Vimeet\Domain\Planning\PlanningOrderedBy;
 
 class Batch extends AbstractBatch
 {
     const SELECTION_TYPE_PAGE = 'selection_type_page';
     const SELECTION_TYPE_ALL  = 'selection_type_all';
 
-    /**
-     * @var array
-     */
+    /** @var array */
     public $ids;
 
-    /**
-     * @var bool
-     */
+    /** @var bool */
     public $validate;
 
-    /**
-     * @var bool
-     */
+    /** @var bool */
     public $accept;
 
-    /**
-     * @var bool
-     */
+    /** @var bool */
     public $refuse;
 
-    /**
-     * @var bool
-     */
+    /** @var bool */
     public $pending;
 
-    /**
-     * @var bool
-     */
+    /** @var bool */
     public $assign;
 
-    /**
-     * @var bool
-     */
+    /** @var bool */
     public $enable;
 
-    /**
-     * @var bool
-     */
+    /** @var bool */
     public $disable;
 
-    /**
-     * @var Admin|string|null
-     */
+    /** @var Admin|string|null */
     public $follower;
 
-    /**
-     * @var Admin
-     */
+    /** @var Admin */
     public $admin;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     public $validateComment;
 
-    /**
-     * @var bool
-     */
+    /** @var bool */
     public $addCatalog;
 
-    /**
-     * @var bool
-     */
+    /** @var bool */
     public $removeCatalog;
 
-    /**
-     * @var bool
-     */
+    /** @var bool */
     public $draft;
 
     /**
@@ -103,19 +76,13 @@ class Batch extends AbstractBatch
      */
     public $filters;
 
-    /**
-     * @var Event
-     */
+    /** @var Event */
     public $event;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     public $locale;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     public $selectionType;
 
     /**
@@ -137,6 +104,12 @@ class Batch extends AbstractBatch
 
     /** @var Group|null */
     public $group;
+
+    /** @var string */
+    public $printPlanningOrderBy = PlanningOrderedBy::ORDER_BY_SHEET_TITLE;
+
+    /** @var bool */
+    public $printPlanning;
 
     /**
      * @param Event  $event

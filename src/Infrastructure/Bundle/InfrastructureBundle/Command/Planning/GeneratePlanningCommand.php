@@ -12,6 +12,8 @@ namespace Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\Pla
 
 use Proximum\Vimeet\Application\Command\Planning\ExportPlanning;
 use Proximum\Vimeet\Application\Command\Planning\ExportPlanningHandler;
+use Proximum\Vimeet\Domain\Model\Event\ExtraData;
+use Proximum\Vimeet\Domain\Repository\Event\ExtraDataRepositoryInterface;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
@@ -24,15 +26,21 @@ class GeneratePlanningCommand extends Command
     /** @var ExportPlanningHandler */
     private $exportPlanningHandler;
 
+    /** @var ExtraDataRepositoryInterface */
+    private $extraDataRepository;
+
     /**
-     * GeneratePlanningCommand constructor.
-     *
-     * @param ExportPlanningHandler $exportPlanningHandler
+     * @param ExportPlanningHandler        $exportPlanningHandler
+     * @param ExtraDataRepositoryInterface $extraDataRepository
      */
-    public function __construct(ExportPlanningHandler $exportPlanningHandler)
-    {
+    public function __construct(
+        ExportPlanningHandler $exportPlanningHandler,
+        ExtraDataRepositoryInterface $extraDataRepository
+    ) {
         parent::__construct(self::NAME);
+
         $this->exportPlanningHandler = $exportPlanningHandler;
+        $this->extraDataRepository = $extraDataRepository;
     }
 
     /**
@@ -43,7 +51,7 @@ class GeneratePlanningCommand extends Command
         $this
             ->setName(self::NAME)
             ->setDescription('Generate html for the participants plannings')
-            ->addOption('types', null, InputOption::VALUE_REQUIRED | InputOption::VALUE_IS_ARRAY, 'Type')
+            ->addOption('sheetIdsExtraData', null, InputOption::VALUE_REQUIRED, 'id of the Extra Data that contains the ids of the sheets')
             ->addOption('orderBy', null, InputOption::VALUE_REQUIRED, 'OrderBy Sheet name or participant last name')
             ->addOption('emailToNotify', null, InputOption::VALUE_REQUIRED, 'email to notify at the end of the command')
             ->addOption('locale', null, InputOption::VALUE_REQUIRED, 'locale for the mail of notification')
@@ -56,26 +64,33 @@ class GeneratePlanningCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         if ($input->getOption('orderBy') === null
-            || empty($input->getOption('types'))
+            || null === $input->getOption('sheetIdsExtraData')
             || null === $input->getOption('emailToNotify')
             || null === $input->getOption('locale')
         ) {
-            $output->writeln('<error>The orderBy, types, emailToNotify and locale options are mandatory and can not be null</error>');
+            $output->writeln('<error>The orderBy, sheetIdsExtraData, emailToNotify and locale options are mandatory and can not be null</error>');
 
             throw new \InvalidArgumentException(
                 sprintf(
-                    'The orderBy, types, emailToNotify and locale options are mandatory and can not be null, arguments passed: orderBy=%s types=%s emailToNotify=%s locale=%s',
+                    'The orderBy, sheetIdsExtraData, emailToNotify and locale options are mandatory and can not be null, arguments passed: orderBy=%s types=%s emailToNotify=%s locale=%s',
                     $input->getOption('orderBy'),
-                    join(', ', $input->getOption('types')),
+                    $input->getOption('sheetIdsExtraData'),
                     $input->getOption('emailToNotify'),
                     $input->getOption('locale')
                 )
             );
         }
 
+        $sheetIdsExtraDataId = (int) $input->getOption('sheetIdsExtraData');
+        $sheetIdsExtraData = $this->extraDataRepository->findById($sheetIdsExtraDataId);
+
+        if (!$sheetIdsExtraData instanceof ExtraData) {
+            throw new \InvalidArgumentException('The sheetIdsExtraData does not exist');
+        }
+
         $this->exportPlanningHandler->handle(
             new ExportPlanning(
-                $input->getOption('types'),
+                explode(',', $sheetIdsExtraData->getValue()),
                 $input->getOption('orderBy'),
                 $input->getOption('emailToNotify'),
                 $input->getOption('locale')

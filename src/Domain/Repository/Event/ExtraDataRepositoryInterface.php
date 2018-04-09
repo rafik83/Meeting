@@ -32,4 +32,11 @@ interface ExtraDataRepositoryInterface
      * @return null|ExtraData
      */
     public function getExtraDataForEvent(Event $event, string $name): ?ExtraData;
+
+    /**
+     * @param int $extraDataId
+     *
+     * @return null|ExtraData
+     */
+    public function findById(int $extraDataId): ?ExtraData;
 }

@@ -10,56 +10,13 @@
 
 namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Planning;
 
-use Proximum\Vimeet\Application\Command\Planning\ExportPlanningJobCreator;
-use Proximum\Vimeet\Domain\Model\Admin;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\File;
-use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Planning\ExportPlanningType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpFoundation\RedirectResponse;
-use Symfony\Component\Security\Core\User\UserInterface;
 
 class ExportController extends Controller
 {
-    /**
-     * @param Request       $request
-     * @param UserInterface $admin
-     * @param Event         $event
-     *
-     * @return Response|RedirectResponse
-     */
-    public function exportPlanningAction(Request $request, UserInterface $admin, Event $event)
-    {
-        $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
-        $this->denyAccessUnlessGranted('ROLE_ALLOWED_TO_ORGANIZE');
-
-        if (!$admin instanceof Admin) {
-            throw $this->createNotFoundException('Admin not found');
-        }
-
-        $exportPlanning = new ExportPlanningJobCreator($admin, $request->getLocale());
-        $form           = $this->createForm(ExportPlanningType::class, $exportPlanning, [
-            'event'  => $event,
-            'locale' => $event->getAvailableLocale($request->getLocale()),
-            'user'   => $admin,
-            'submit' => true,
-        ]);
-
-        if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
-            $this->get('tactician.commandbus')->handle($exportPlanning);
-            $this->addFlash('success', 'flash.admin.planning.export.success');
-
-            return $this->redirectToRoute('admin_planning_export', ['event' => $event->getId()]);
-        }
-
-        return $this->render('AdminBundle:Planning:export.html.twig', [
-            'event' => $event,
-            'form'  => $form->createView(),
-        ]);
-    }
-
     /**
      * @param Event  $event
      * @param string $hash
@@ -67,7 +24,7 @@ class ExportController extends Controller
      *
      * @return Response
      */
-    public function exportPlanningPrintAction(Event $event, $hash, File $file)
+    public function exportPlanningPrintAction(Event $event, $hash, File $file): Response
     {
         $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
         $this->denyAccessUnlessGranted('ROLE_ALLOWED_TO_ORGANIZE');
