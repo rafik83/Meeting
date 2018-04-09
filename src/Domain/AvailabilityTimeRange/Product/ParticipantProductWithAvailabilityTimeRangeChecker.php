@@ -61,6 +61,10 @@ class ParticipantProductWithAvailabilityTimeRangeChecker
             return true;
         }
 
+        if ($participantProduct->getId() === $product->getId()) {
+            return true;
+        }
+
         $currentAvailabilityTimeRanges = $participantProduct->getAvailabilityTimeRanges();
 
         // If the previous product does not have time range, therefore it is ok to set the new one
@@ -87,11 +91,12 @@ class ParticipantProductWithAvailabilityTimeRangeChecker
         );
 
         // If the new product add more or the same time range, it is ok to set it
-        if (!empty($timeRangeNotAccessibleViews)) {
+        if (empty($timeRangeNotAccessibleViews)) {
             return true;
         }
 
         $timeRangeViews = $this->overlappedTimeRangeMerger->merge($timeRangeViews);
+        $timeRangeNotAccessibleViews = $this->overlappedTimeRangeMerger->merge($timeRangeNotAccessibleViews);
 
         foreach ($timeRangeNotAccessibleViews as $timeRangeNotAccessibleView) {
             $timeRangeNotAccessibleTruncated = $this->overlappedTimeRangeTruncater->truncate(
@@ -147,11 +152,11 @@ class ParticipantProductWithAvailabilityTimeRangeChecker
                 continue;
             }
 
-            if (!$participant->getSheet()->getPackage()->isPassable()) {
+            if (!$participantToChecker->getSheet()->getPackage()->isPassable()) {
                 throw new PackageNotPassableException('Package not passable');
             }
 
-            $product = $participant->getParticipantProduct();
+            $product = $participantToChecker->getParticipantProduct();
 
             if ($product instanceof Product) {
                 foreach ($product->getAvailabilityTimeRanges() as $availabilityTimeRange) {
