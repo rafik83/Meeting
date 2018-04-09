@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of the vimeet project.
+ * This file is part of the Proximum Vimeet project.
  *
  * Copyright (C) Proximum
  *
@@ -10,20 +10,21 @@
 
 namespace Proximum\Vimeet\Application\Command\OMZ;
 
+use Proximum\Vimeet\Application\Command\Command;
+use Proximum\Vimeet\Domain\Model\Admin;
 use Proximum\Vimeet\Domain\Model\Event;
 
-class Export
+class Export implements Command
 {
     /** @var Event */
     public $event;
 
-    /**
-     * Export constructor.
-     *
-     * @param Event $event
-     */
-    public function __construct(Event $event)
+    /** @var Admin */
+    public $admin;
+
+    public function __construct(Event $event, Admin $admin)
     {
         $this->event = $event;
+        $this->admin = $admin;
     }
 }

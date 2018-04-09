@@ -22,7 +22,6 @@ use Proximum\Vimeet\Domain\Planning\PlanningOrderedBy;
 use Proximum\Vimeet\Domain\Planning\PlanningPrint;
 use Proximum\Vimeet\Domain\Repository\FileRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\ParticipantRepositoryInterface;
-use Proximum\Vimeet\Domain\Repository\TypeRepositoryInterface;
 use Proximum\Vimeet\Infrastructure\Adapter\LocalFileStorageAdapter;
 use Proximum\Vimeet\Ui\Bundle\MailBundle\Mail\Command\PrintPlanningMail;
 use Symfony\Bundle\FrameworkBundle\Templating\EngineInterface;
@@ -30,9 +29,6 @@ use Symfony\Bundle\FrameworkBundle\Templating\EngineInterface;
 class ExportPlanningHandler
 {
     const PLANNING_TEMPLATE = 'AdminBundle:Planning/Print:plannings.html.twig';
-
-    /** @var TypeRepositoryInterface */
-    private $typeRepository;
 
     /** @var ParticipantRepositoryInterface */
     private $participantRepository;
@@ -71,7 +67,6 @@ class ExportPlanningHandler
     private $tipTranslationViewQueryHandler;
 
     /**
-     * @param TypeRepositoryInterface        $typeRepository
      * @param ParticipantRepositoryInterface $participantRepository
      * @param ParticipantInfoGuesserCache    $participantInfoGuesserCache
      * @param SheetInfoGuesserCache          $sheetInfoGuesserCache
@@ -86,7 +81,6 @@ class ExportPlanningHandler
      * @param TipTranslationViewQueryHandler $tipTranslationViewQueryHandler
      */
     public function __construct(
-        TypeRepositoryInterface $typeRepository,
         ParticipantRepositoryInterface $participantRepository,
         ParticipantInfoGuesserCache $participantInfoGuesserCache,
         SheetInfoGuesserCache $sheetInfoGuesserCache,
@@ -100,7 +94,6 @@ class ExportPlanningHandler
         \DateTimeInterface $dateTime,
         TipTranslationViewQueryHandler $tipTranslationViewQueryHandler
     ) {
-        $this->typeRepository                 = $typeRepository;
         $this->participantRepository          = $participantRepository;
         $this->participantInfoGuesserCache    = $participantInfoGuesserCache;
         $this->sheetInfoGuesserCache          = $sheetInfoGuesserCache;
@@ -118,9 +111,10 @@ class ExportPlanningHandler
     /**
      * @param ExportPlanning $exportPlanning
      */
-    public function handle(ExportPlanning $exportPlanning)
+    public function handle(ExportPlanning $exportPlanning): void
     {
-        $participants = $this->participantRepository->getParticipantsWithSheetInCatalogAndActiveByTypeIds($exportPlanning->typeIds);
+        /** @var Participant[] $participants */
+        $participants = $this->participantRepository->getParticipantsBySheetIdsWithSheetAndTypeHydrated($exportPlanning->sheetIds);
 
         if (\count($participants) === 0) {
             return;
@@ -199,7 +193,7 @@ class ExportPlanningHandler
     }
 
     /**
-     * Send a mail to the emailToNotify with the summary of the types, orderBy and a link to see the file
+     * Send a mail to the emailToNotify with the summary of the orderBy and a link to see the file
      *
      * @param Event          $event
      * @param ExportPlanning $exportPlanning
@@ -207,8 +201,6 @@ class ExportPlanningHandler
      */
     private function notifyCreationOfFile(Event $event, ExportPlanning $exportPlanning, File $file): void
     {
-        $types = $this->typeRepository->getTypeViewsByIds($exportPlanning->typeIds, $event->getAvailableLocale($exportPlanning->locale));
-
         $this->mailer->send(new PrintPlanningMail(
             $event,
             $this->mailSender,
@@ -216,7 +208,6 @@ class ExportPlanningHandler
             $exportPlanning->locale,
             $file->getHash(),
             $file->getId(),
-            $types,
             $exportPlanning->orderBy
         ));
     }

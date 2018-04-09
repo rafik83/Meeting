@@ -12,7 +12,6 @@ namespace Proximum\Vimeet\Ui\Bundle\MailBundle\Mail\Command;
 
 use Proximum\Vimeet\Application\Components\Mail\AbstractMail;
 use Proximum\Vimeet\Domain\Model\Event;
-use Proximum\Vimeet\Domain\View\TypeView;
 
 class PrintPlanningMail extends AbstractMail
 {
@@ -27,9 +26,6 @@ class PrintPlanningMail extends AbstractMail
 
     /** @var string */
     public $filePath;
-
-    /** @var TypeView[] */
-    public $typeViews;
 
     /** @var string */
     public $orderBy;
@@ -50,7 +46,6 @@ class PrintPlanningMail extends AbstractMail
      * @param string     $locale
      * @param string     $fileHash
      * @param int        $fileId
-     * @param TypeView[] $typeViews
      * @param string     $orderBy
      */
     public function __construct(
@@ -60,7 +55,6 @@ class PrintPlanningMail extends AbstractMail
         $locale,
         $fileHash,
         $fileId,
-        array $typeViews = [],
         $orderBy
     ) {
         parent::__construct($sender, $receiver, $locale);
@@ -68,7 +62,6 @@ class PrintPlanningMail extends AbstractMail
         $this->event     = $event;
         $this->fileHash  = $fileHash;
         $this->fileId    = $fileId;
-        $this->typeViews = $typeViews;
         $this->orderBy   = $orderBy;
     }
 }

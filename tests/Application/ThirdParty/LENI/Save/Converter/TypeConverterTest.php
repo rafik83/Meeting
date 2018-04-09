@@ -67,6 +67,7 @@ class TypeConverterTest extends TestCase
                 $mapping,
                 [
                     'CategorieIndividuEvt' => 'PROSPECT',
+                    'ZL_PROFIL' => null,
                 ]
             ],
         ];

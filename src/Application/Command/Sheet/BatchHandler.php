@@ -11,6 +11,8 @@
 namespace Proximum\Vimeet\Application\Command\Sheet;
 
 use Proximum\Vimeet\Application\Adapter\SheetSearchAdapterInterface;
+use Proximum\Vimeet\Application\Command\Sheet\Batch\PrintPlanning;
+use Proximum\Vimeet\Application\Command\Sheet\Batch\PrintPlanningHandler;
 use Proximum\Vimeet\Domain\Admin\Follower\FollowerConstant;
 use Proximum\Vimeet\Domain\Model\Sheet\Constant;
 use Proximum\Vimeet\Domain\Model\Sheet\Group;
@@ -56,9 +58,10 @@ class BatchHandler
     /** @var BatchPdfJobCreatorHandler */
     private $batchPdfJobCreatorHandler;
 
+    /** @var PrintPlanningHandler */
+    private $printPlanningHandler;
+
     /**
-     * BatchHandler constructor.
-     *
      * @param SheetSearchAdapterInterface    $sheetSearchAdapter
      * @param BatchValidateHandler           $batchValidateHandler
      * @param BatchAssignHandler             $batchAssignHandler
@@ -72,6 +75,7 @@ class BatchHandler
      * @param BatchAssignToGroupHandler      $batchAssignToGroupHandler
      * @param BatchPendingHandler            $batchPendingHandler
      * @param BatchPdfJobCreatorHandler      $batchPdfJobCreatorHandler
+     * @param PrintPlanningHandler           $printPlanningHandler
      */
     public function __construct(
         SheetSearchAdapterInterface $sheetSearchAdapter,
@@ -86,7 +90,8 @@ class BatchHandler
         BatchGenerateInvoiceHandler $batchGenerateInvoiceHandler,
         BatchAssignToGroupHandler $batchAssignToGroupHandler,
         BatchPendingHandler $batchPendingHandler,
-        BatchPdfJobCreatorHandler $batchPdfJobCreatorHandler
+        BatchPdfJobCreatorHandler $batchPdfJobCreatorHandler,
+        PrintPlanningHandler $printPlanningHandler
     ) {
         $this->sheetSearchAdapter = $sheetSearchAdapter;
         $this->batchValidateHandler = $batchValidateHandler;
@@ -101,6 +106,7 @@ class BatchHandler
         $this->batchAssignToGroupHandler = $batchAssignToGroupHandler;
         $this->batchPendingHandler = $batchPendingHandler;
         $this->batchPdfJobCreatorHandler = $batchPdfJobCreatorHandler;
+        $this->printPlanningHandler = $printPlanningHandler;
     }
 
     /**
@@ -108,7 +114,7 @@ class BatchHandler
      *
      * @return BatchResult
      */
-    public function handle(Batch $batch)
+    public function handle(Batch $batch): BatchResult
     {
         if ($batch->selectionType === Batch::SELECTION_TYPE_ALL) {
             $batch->ids = $this->sheetSearchAdapter->getSheetIds($batch->event, $batch->filters, $batch->locale);
@@ -183,6 +189,18 @@ class BatchHandler
         if ($batch->generateInvoice) {
             return $this->batchGenerateInvoiceHandler->handle(
                 new BatchGenerateInvoice($batch->event, $batch->ids, $batch->admin)
+            );
+        }
+
+        if ($batch->printPlanning && $batch->printPlanningOrderBy !== null) {
+            return $this->printPlanningHandler->handle(
+                new PrintPlanning(
+                    $batch->event,
+                    $batch->ids,
+                    $batch->admin,
+                    $batch->printPlanningOrderBy,
+                    $batch->locale
+                )
             );
         }
 

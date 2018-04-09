@@ -45,7 +45,7 @@ mail.planner.import.error: 'Hello, an error occurred during the processing of th
 mail.planner.import.intro: 'Hello, the import of the file for the %eventTitle% event schedules is complete.'
 mail.planner.import.subject: 'planning import'
 mail.planner.import.subject.error: 'an error occurred during the plannings import'
-mail.planning.print.intro: 'Here is the requested plannings file  for the types:'
+mail.planning.print.intro: 'Here is the requested plannings file:'
 mail.planning.print.link.click: 'plannings file'
 mail.planning.print.link.intro: 'you can print the plannings by clicking here :'
 mail.planning.print.orderBy.participant_last_name: 'print order by participant''s lastname'

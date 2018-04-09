@@ -40,7 +40,7 @@ class BatchResult
     public function __construct(array $sheets, $message, $ignoredSheetsMessage = '')
     {
         $this->sheets = $sheets;
-        $this->count = count($sheets);
+        $this->count = \count($sheets);
         $this->message = $message;
         $this->ignoredSheetsMessage = $ignoredSheetsMessage;
     }

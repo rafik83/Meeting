@@ -64,6 +64,8 @@ class LeniUserViewNormalizer
             $data[LeniConstants::LENI_COL_USER_ID] = $userView->leniId;
         }
 
-        return $data;
+        return array_filter($data, function($value) {
+            return null !== $value;
+        });
     }
 }

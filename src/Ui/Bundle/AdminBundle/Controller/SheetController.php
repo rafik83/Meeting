@@ -173,9 +173,12 @@ class SheetController extends Controller
 
         $selectedSheetsPage = $request->query->getInt('page', 1);
         $batch = new Batch(
-            $event, $adminDomain->getAdmin(), $event->getAvailableLocale($request->getLocale()), $filters
+            $event,
+            $adminDomain->getAdmin(),
+            $event->getAvailableLocale($request->getLocale()),
+            $filters
         );
-        $batchForm          = $this->createForm(BatchType::class, $batch, [
+        $batchForm = $this->createForm(BatchType::class, $batch, [
             'ids'    => $this->get('vimeet_infrastructure.repository.sheet_repository')->getIdsByEvent($event),
             'event'  => $event,
             'action' => $this->generateUrl('admin_sheet_batch', ['event' => $event->getId()]),
@@ -193,6 +196,7 @@ class SheetController extends Controller
                 if ($this->isGranted('ROLE_ALLOWED_TO_ORGANIZE')) {
                     $batch->refuse = $batchForm->get('refuse')->isClicked();
                     $batch->printPdf  = $batchForm->get('printPdf')->isClicked();
+                    $batch->printPlanning = $batchForm->get('printPlanning')->isClicked();
                 }
 
                 if ($this->isGranted('ROLE_ALLOWED_TO_ADMIN')) {
@@ -477,7 +481,7 @@ class SheetController extends Controller
             return false;
         }
 
-        if (count($request->query->all()) === 1 && !empty($request->query->get('page'))) {
+        if (\count($request->query->all()) === 1 && !empty($request->query->get('page'))) {
             return false;
         }
 

@@ -34,9 +34,7 @@ class TypeConverter
                 }
 
                 foreach ($mappedType as $mappedKey => $mappedField) {
-                    if ($mappedField !== null) {
-                        $typeMapping[$mappedKey] = $mappedField;
-                    }
+                    $typeMapping[$mappedKey] = $mappedField;
                 }
 
                 return $typeMapping;

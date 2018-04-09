@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2015 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -12,6 +12,7 @@ namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Sheet;
 
 use Proximum\Vimeet\Application\Command\Sheet\Batch;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Group\GroupChoiceType;
+use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Planning\OrderByChoiceType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
@@ -23,14 +24,10 @@ use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 
 class BatchType extends AbstractType
 {
-    /**
-     * @var AuthorizationCheckerInterface
-     */
+    /** @var AuthorizationCheckerInterface */
     private $authorizationChecker;
 
     /**
-     * BatchType constructor.
-     *
      * @param AuthorizationCheckerInterface $authorizationChecker
      */
     public function __construct(AuthorizationCheckerInterface $authorizationChecker)
@@ -74,7 +71,14 @@ class BatchType extends AbstractType
         ;
 
         if ($this->authorizationChecker->isGranted('ROLE_ALLOWED_TO_ORGANIZE')) {
-            $builder->add('printPdf', SubmitType::class);
+            $builder
+                ->add('printPdf', SubmitType::class)
+                ->add('printPlanning', SubmitType::class)
+                ->add('printPlanningOrderBy', OrderByChoiceType::class, [
+                    'placeholder' => false,
+                    'required' => false,
+                ])
+            ;
         }
 
         if ($this->authorizationChecker->isGranted('ROLE_ALLOWED_TO_ADMIN')) {

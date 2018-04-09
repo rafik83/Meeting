@@ -13,7 +13,7 @@ namespace Proximum\Vimeet\Application\Command\Planning;
 class ExportPlanning
 {
     /** @var array */
-    public $typeIds;
+    public $sheetIds;
 
     /** @var string */
     public $orderBy;
@@ -25,14 +25,14 @@ class ExportPlanning
     public $locale;
 
     /**
-     * @param array  $typeIds
+     * @param array  $sheetIds
      * @param string $orderBy
      * @param string $emailToNotify
      * @param string $locale
      */
-    public function __construct(array $typeIds, $orderBy, $emailToNotify, $locale)
+    public function __construct(array $sheetIds, $orderBy, $emailToNotify, $locale)
     {
-        $this->typeIds       = $typeIds;
+        $this->sheetIds      = $sheetIds;
         $this->orderBy       = $orderBy;
         $this->emailToNotify = $emailToNotify;
         $this->locale        = $locale;

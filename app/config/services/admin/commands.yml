@@ -152,3 +152,42 @@ services:
             - '@Proximum\Vimeet\Infrastructure\Repository\AvailabilityTimeRangeRepository'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\AvailabilityTimeRange\Create }
+
+    #
+    # Export OMZ
+    #
+    Proximum\Vimeet\Application\Command\OMZ\ScheduleExportHandler:
+        arguments:
+            - '@adapter.job_queue_adapter'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\OMZ\ScheduleExport }
+
+    Proximum\Vimeet\Application\Command\OMZ\PrepareContentHandler:
+        arguments:
+            - '@vimeet_infrastructure.repository.user_repository'
+            - '@vimeet_infrastructure.repository.sheet_repository'
+            - '@domain.service.sheets_group.group_name_resolver'
+            - '@domain.service.sheets_group.type_name_resolver'
+            - '@components.user.user_info_guesser'
+            - '@planning.formatter.participant_planning_formatter'
+            - '@adapter.serializer_adapter'
+
+    Proximum\Vimeet\Application\Command\OMZ\NotifyHandler:
+        arguments:
+            - '@adapter.mailer_adapter'
+            - '%mailer_sender%'
+
+    Proximum\Vimeet\Application\Command\OMZ\PersistContentHandler:
+        arguments:
+            - '@adapter.local_file_storage'
+            - '@repository.file_repository'
+            - '%infrastructure.export_omz_path%'
+            - '@datetime'
+
+    Proximum\Vimeet\Application\Command\OMZ\ExportHandler:
+        arguments:
+            - '@Proximum\Vimeet\Application\Command\OMZ\PrepareContentHandler'
+            - '@Proximum\Vimeet\Application\Command\OMZ\PersistContentHandler'
+            - '@Proximum\Vimeet\Application\Command\OMZ\NotifyHandler'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\OMZ\Export }

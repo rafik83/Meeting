@@ -19,7 +19,7 @@ framework:
         strict_requirements: ~
     form:            ~
     csrf_protection: ~
-    validation:      { enable_annotations: true }
+    validation:      { enable_annotations: false }
     serializer:      { enable_annotations: false }
     templating:
         engines: ['twig']
@@ -349,6 +349,7 @@ infrastructure:
     export_planner_path: '%kernel.project_dir%/web/uploads/export_planner'
     import_planner_path: '%kernel.project_dir%/web/uploads/import_planner'
     import_spot_path: '%kernel.project_dir%/web/uploads/import_spots/'
+    export_omz_path: '%kernel.project_dir%/web/uploads/export_omz'
     package:
         default_labels:
             plans:
