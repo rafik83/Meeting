@@ -19,7 +19,7 @@ Clone the project in your workspace, and launch setup
 
         $ make setup
 
-You should access the project via http://admin.vimeet.proximum.dev/app_dev.php/fr/event
+You should access the project via http://admin.vimeet.proximum/app_dev.php/fr/event
 
 Load Vimeet fixtures:
 
