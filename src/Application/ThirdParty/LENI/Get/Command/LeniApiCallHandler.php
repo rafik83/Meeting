@@ -143,9 +143,19 @@ class LeniApiCallHandler
             EventExtraDataType::LENI_GET_LAST_CREATED_AT
         );
 
+        $lastCreatedAt = $lastCreatedAtExtraData instanceof Event\ExtraData
+            ? $lastCreatedAtExtraData->getValue()
+            : null;
+        $fields = $this->fieldsByEventQueryHandler->handle(new FieldsByEventQuery($typesMapping, $customDataMapping));
+        $filters = $this->getFilters($typesMapping, $lastCreatedAt);
+        $sort = $this->getSort();
+
         $newLastCreatedAt = $this->getBatchUserData(
             $event,
-            $lastCreatedAtExtraData instanceof Event\ExtraData ? $lastCreatedAtExtraData->getValue() : null,
+            $lastCreatedAt,
+            $fields,
+            $filters,
+            $sort,
             $types,
             $typesMapping,
             $customDataMapping,
@@ -162,6 +172,9 @@ class LeniApiCallHandler
     /**
      * @param Event       $event
      * @param null|string $lastCreatedAt
+     * @param array       $fields
+     * @param array       $filters
+     * @param array       $sort
      * @param Type[]      $types
      * @param array       $typesMapping
      * @param array       $customDataMapping
@@ -173,6 +186,9 @@ class LeniApiCallHandler
     private function getBatchUserData(
         Event $event,
         ?string $lastCreatedAt,
+        array &$fields,
+        array &$filters,
+        array &$sort,
         array &$types,
         array &$typesMapping,
         array &$customDataMapping,
@@ -180,9 +196,9 @@ class LeniApiCallHandler
     ): ?string {
         $rawUsersData = $this->leniApi->get(
             $event,
-            $this->fieldsByEventQueryHandler->handle(new FieldsByEventQuery($typesMapping, $customDataMapping)),
-            $this->getFilters($typesMapping, $lastCreatedAt),
-            $this->getSort(),
+            $fields,
+            $filters,
+            $sort,
             $start,
             self::BATCH_LENGTH
         );
@@ -212,11 +228,14 @@ class LeniApiCallHandler
         }
 
         if (\count($rawUsersData) === self::BATCH_LENGTH) {
-            unset($rawUsersData);
+            unset($rawUsersData, $sheetIds);
 
             $newLastCreatedAt = $this->getBatchUserData(
                 $event,
                 $lastCreatedAt,
+                $fields,
+                $filters,
+                $sort,
                 $types,
                 $typesMapping,
                 $customDataMapping,
