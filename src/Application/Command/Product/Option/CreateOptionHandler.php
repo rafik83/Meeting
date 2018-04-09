@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2016 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -18,7 +18,7 @@ class CreateOptionHandler extends AbstractHandler
     /**
      * @param CreateOption $createOption
      */
-    public function handle(CreateOption $createOption)
+    public function handle(CreateOption $createOption): void
     {
         $product = Product::createOption(
             $createOption->event,
@@ -31,7 +31,9 @@ class CreateOptionHandler extends AbstractHandler
             $createOption->availabilityMax,
             $createOption->updatable,
             $createOption->deletableUntil,
-            $createOption->subjectedToValidation
+            $createOption->subjectedToValidation,
+            $createOption->buyableUntil,
+            $createOption->attributable
         );
 
         foreach ($createOption->translations as $locale => $translation) {

@@ -17,6 +17,10 @@ use Proximum\Vimeet\Domain\Time\TimeRangeInterface;
  */
 class Unavailability implements TimeRangeInterface
 {
+    const CREATED_BY_USER = 'user';
+    const CREATED_BY_SYSTEM = 'system';
+    const CREATED_BY_VALUES = [self::CREATED_BY_USER, self::CREATED_BY_SYSTEM];
+
     /**
      * @var int
      */
@@ -47,25 +51,38 @@ class Unavailability implements TimeRangeInterface
      */
     private $message;
 
+    /** @var string one of self::CREATED_BY_VALUES */
+    private $createdBy;
+
     /**
      * @param User               $user
      * @param Event              $event
      * @param \DateTimeInterface $begin
      * @param \DateTimeInterface $end
      * @param string|null        $message
+     * @param string             $createdBy one of self::CREATED_BY_VALUES
+     *
+     * @throws \InvalidArgumentException
      */
     public function __construct(
         User $user,
         Event $event,
         \DateTimeInterface $begin,
         \DateTimeInterface $end,
-        $message = null
+        $message = null,
+        $createdBy = self::CREATED_BY_USER
     ) {
         $this->user    = $user;
         $this->event   = $event;
         $this->begin   = $begin;
         $this->end     = $end;
         $this->message = $message;
+
+        if (!\in_array($createdBy, self::CREATED_BY_VALUES, true)) {
+            throw new \InvalidArgumentException('Unavailability\'s createdBy is invalid');
+        }
+
+        $this->createdBy = $createdBy;
     }
 
     /**

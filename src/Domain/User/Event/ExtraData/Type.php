@@ -18,6 +18,9 @@ final class Type
     // Fingerprint of the payload pending to be sent to LENI
     const LENI_FINGERPRINT_PENDING = 'leni_fingerprint_pending';
 
+    // Id of the user retrieved from the api
+    const LENI_USER_ID = 'leni_user_id';
+
     /**
      * DateTime of the last notification sent to user
      */

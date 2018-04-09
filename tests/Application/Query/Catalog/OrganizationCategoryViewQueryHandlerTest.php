@@ -35,7 +35,7 @@ class OrganizationCategoryViewQueryHandlerTest extends TestCase
         // Mock
         $taggedNomenclatureFilterGetter = $this->prophesize(TaggedNomenclatureFilterGetter::class);
 
-        $taggedNomenclatureFilterGetter->getNomenclaturesItems(
+        $taggedNomenclatureFilterGetter->getLastNomenclaturesItems(
             $event,
             Tag::SHEET_ORGANIZATION_CATEGORY,
             'fr'

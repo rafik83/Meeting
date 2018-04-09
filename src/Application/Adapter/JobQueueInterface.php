@@ -178,6 +178,14 @@ interface JobQueueInterface
     public function indexSheetsByEvent(Event $event): void;
 
     /**
+     * Export the users' data for the OMZ
+     * 
+     * @param Event $event
+     * @param Admin $admin
+     */
+    public function exportOmzUser(Event $event, Admin $admin): void;
+
+    /**
      * This method re-index all the events
      * It does reset ES
      */

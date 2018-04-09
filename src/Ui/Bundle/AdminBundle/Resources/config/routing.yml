@@ -385,7 +385,15 @@ admin_agenda_export_participant_export:
     requirements:
         event: \d+
     methods: [GET]
-    defaults: { _controller: AdminBundle:Agenda/ExportParticipant:exportParticipantSchedules }
+    defaults: { _controller: Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\OMZ\PrepareExportAction }
+
+admin_omz_export_download:
+    path: /event/{event}/omz/export/download/{hash}z{file}
+    requirements:
+        event: \d+
+        file: \d+
+    methods: [GET]
+    defaults: { _controller: Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\OMZ\DownloadAction }
 
 admin_agenda_meeting_update_spot:
     path: /event/{event}/agenda/meeting/{meeting}/update-spot
@@ -1023,14 +1031,14 @@ admin_product_create_option:
     requirements:
         event: \d+
     methods: [GET, POST]
-    defaults: { _controller: AdminBundle:Product:createOption }
+    defaults: { _controller: Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Product\Option\CreateAction }
 admin_product_update_option:
     path: /event/{event}/product/{product}/update/option
     requirements:
         event: \d+
         product: \d+
     methods: [GET, POST]
-    defaults: { _controller: AdminBundle:Product:updateOption }
+    defaults: { _controller: Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Product\Option\UpdateAction }
 admin_product_create_plan:
     path: /event/{event}/product/create/plan
     requirements:

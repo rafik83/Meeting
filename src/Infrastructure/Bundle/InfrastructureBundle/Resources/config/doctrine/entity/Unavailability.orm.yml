@@ -14,6 +14,11 @@ Proximum\Vimeet\Domain\Model\Unavailability:
         message:
             type: string
             nullable: true
+        createdBy:
+            type: string
+            nullable: false
+            options:
+                default: 'user'
     manyToOne:
         user:
             targetEntity: Proximum\Vimeet\Domain\Model\User

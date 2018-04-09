@@ -60,6 +60,7 @@ class CreateOptionHandlerTest extends TestCase
         $create->updatable           = $updatable;
         $create->deletableUntil      = $deletableUntil;
         $create->translations        = $translations;
+        $create->attributable        = true;
         $create->file                = null;
 
         // Expected
@@ -73,7 +74,10 @@ class CreateOptionHandlerTest extends TestCase
             $availabilityCurrent,
             $availabilityMax,
             $updatable,
-            $deletableUntil
+            $deletableUntil,
+            false,
+            null,
+            true
         );
         $expectedProduct->translate('fr', 'foo', null, 'bar', 'optional', '');
         $expectedProduct->translate('en', 'enfoo', null, 'enbar', 'enoptional', '');
