@@ -28,6 +28,9 @@ mail.event.preregister.end: ''
 mail.event.preregister.link: 'Votre profil participant'
 mail.event.preregister.subject: 'Vous êtes pré-enregistré à %event%'
 mail.footer.contact: Contact
+mail.omz.export.intro: "Bonjour,\n\n Voici l'export OMZ pour l'événement %eventTitle% :\n"
+mail.omz.export.link.click: 'Télécharger le fichier participant OMZ'
+mail.omz.export.subject: 'Fichier d''export OMZ'
 mail.order.export.intro: "Bonjour,\n\n Voici l'export des commandes pour l'événement %eventTitle% :\n"
 mail.order.export.link.click: 'Télécharger les commandes'
 mail.order.export.subject: 'Fichier d''export des commandes'
@@ -45,7 +48,7 @@ mail.planner.import.error: "Bonjour, \n\n Une erreur s'est produite durant le tr
 mail.planner.import.intro: "Bonjour, \n\n L'import du fichier pour les planifications de l'événement %eventTitle% est terminé."
 mail.planner.import.subject: 'Import des planifications'
 mail.planner.import.subject.error: 'Erreur lors de l''import des planifications'
-mail.planning.print.intro: 'Voici le fichier de plannings demandé pour les types:'
+mail.planning.print.intro: 'Voici le fichier de plannings demandé:'
 mail.planning.print.link.click: 'Fichier de planning'
 mail.planning.print.link.intro: 'Vous pouvez imprimer les plannings en cliquant ici :'
 mail.planning.print.orderBy.participant_last_name: 'par nom de famille du participant'

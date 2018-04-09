@@ -385,7 +385,15 @@ admin_agenda_export_participant_export:
     requirements:
         event: \d+
     methods: [GET]
-    defaults: { _controller: AdminBundle:Agenda/ExportParticipant:exportParticipantSchedules }
+    defaults: { _controller: Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\OMZ\PrepareExportAction }
+
+admin_omz_export_download:
+    path: /event/{event}/omz/export/download/{hash}z{file}
+    requirements:
+        event: \d+
+        file: \d+
+    methods: [GET]
+    defaults: { _controller: Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\OMZ\DownloadAction }
 
 admin_agenda_meeting_update_spot:
     path: /event/{event}/agenda/meeting/{meeting}/update-spot
@@ -1450,13 +1458,6 @@ admin_invoice_export:
 #
 # Planning
 #
-admin_planning_export:
-    path: /event/{event}/planning/export
-    requirements:
-        event: \d+
-    methods: [GET, POST]
-    defaults: { _controller: AdminBundle:Planning/Export:exportPlanning }
-
 admin_planning_export_link:
     path: /event/{event}/planning/export/link/{hash}z{file}
     requirements:

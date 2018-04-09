@@ -2,11 +2,6 @@
 <html>
 <body>
 {{ 'mail.planning.print.intro'|trans({}, 'mail', mail.locale)|html|nl2br }}
-<ul>
-    {% for typeView in mail.typeViews %}
-        <li>{{ typeView.title }}</li>
-    {% endfor %}
-</ul>
 <br>
 {{ 'mail.planning.print.orderBy.text'|trans({}, 'mail', mail.locale)|html|nl2br }}
 {{ ('mail.planning.print.orderBy.' ~ mail.orderBy)|trans({}, 'mail', mail.locale)|html|nl2br }}

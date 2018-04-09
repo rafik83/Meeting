@@ -33,6 +33,7 @@ use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\Event\She
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\Event\User\Agenda\Version\GenerateVersionsCommand;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\GenerateInvoiceCommand;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\IndexSheetsCommand;
+use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\OMZ\ExportUserCommand;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\Order\ExportOrderCommand;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\Planner\ExportPlannerCommand;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\Planner\ImportPlannerCommand;
@@ -59,22 +60,16 @@ class JobQueueAdapter extends AbstractJobQueueAdapter implements JobQueueInterfa
     /**
      * {@inheritdoc}
      */
-    public function printPlanning(array $types, string $orderBy, $emailToNotify, $locale): void
+    public function printPlanning(Event\ExtraData $extraData, string $orderBy, $emailToNotify, $locale): void
     {
-        $typeOptions = array_map(function (Type $type) {
-            return sprintf('--types=%s', $type->getId());
-        }, $types);
-
         $job = new Job(
             GeneratePlanningCommand::NAME,
-            array_merge(
-                $typeOptions,
-                [
-                    sprintf('--orderBy=%s', $orderBy),
-                    sprintf('--emailToNotify=%s', $emailToNotify),
-                    sprintf('--locale=%s', $locale),
-                ]
-            )
+            [
+                sprintf('--sheetIdsExtraData=%s', $extraData->getId()),
+                sprintf('--orderBy=%s', $orderBy),
+                sprintf('--emailToNotify=%s', $emailToNotify),
+                sprintf('--locale=%s', $locale),
+            ]
         );
 
         $this->setJob($job);
@@ -321,6 +316,15 @@ class JobQueueAdapter extends AbstractJobQueueAdapter implements JobQueueInterfa
     public function indexSheetsByEvent(Event $event): void
     {
         $job = new Job(IndexSheetsByEventCommand::NAME, [$event->getId(), '--no-debug']);
+        $this->setJob($job);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function exportOmzUser(Event $event, Admin $admin): void
+    {
+        $job = new Job(ExportUserCommand::NAME, [$event->getId(), $admin->getId()]);
         $this->setJob($job);
     }
 
