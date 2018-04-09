@@ -100,19 +100,19 @@ Feature: Edit participant status
   Scenario: I should see a warning message on remove from catalog batch when some sheets have scheduled meetings
     Given I am logged with "test@test.com" on admin
     And I am on this page "/fr/event"
-    When I go to "/fr/event/2/sheet?text=aanera&enabled=1&state=&completed=&category=&type=&follower=&predefined=&validationState=&orderBy=created_at"
+    When I go to "/fr/event/2/sheet?text=aanera&enabled=1&orderBy=created_at"
     And I check "sheet_batch_ids_22"
     And I press "form.sheet_batch.children.removeCatalog"
-    Then I should be on this page "/fr/event/2/sheet?text=aanera&enabled=1&state=&completed=&category=&type=&follower=&predefined=&validationState=&orderBy=created_at"
+    Then I should be on this page "/fr/event/2/sheet?text=aanera&enabled=1&orderBy=created_at"
     And I should see "flash.admin.sheet_batch.catalog.remove.warning"
 
   Scenario: I should see a warning message on disable batch when some sheets have scheduled meetings
     Given I am logged with "test@test.com" on admin
     And I am on this page "/fr/event"
-    When I go to "/fr/event/2/sheet?text=aanera&enabled=1&state=&completed=&category=&type=&follower=&predefined=&validationState=&orderBy=created_at"
+    When I go to "/fr/event/2/sheet?text=aanera&enabled=1&orderBy=created_at"
     And I check "sheet_batch_ids_22"
     And I press "form.sheet_batch.children.disable"
-    Then I should be on this page "/fr/event/2/sheet?text=aanera&enabled=1&state=&completed=&category=&type=&follower=&predefined=&validationState=&orderBy=created_at"
+    Then I should be on this page "/fr/event/2/sheet?text=aanera&enabled=1&orderBy=created_at"
     And I should see "flash.admin.sheet_batch.disable.warning"
 
   Scenario: I should see a warning message on add to catalog batch when some sheets are disabled
