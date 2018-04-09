@@ -310,6 +310,22 @@ services:
             - '@session.flash_bag'
 
     #
+    # OMZ
+    #
+    Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\OMZ\PrepareExportAction:
+        arguments:
+            - '@adapter.authorization_checker'
+            - '@Proximum\Vimeet\Infrastructure\Adapter\CommandBus'
+            - '@session.flash_bag'
+            - '@adapter.router'
+
+    Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\OMZ\DownloadAction:
+        arguments:
+            - '@adapter.authorization_checker'
+            - '@adapter.file_system_adapter'
+            - '%infrastructure.export_omz_path%'
+
+    #
     # Product
     #
     Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Product\Participant\CreateAction:

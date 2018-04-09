@@ -14,7 +14,7 @@ use Proximum\Vimeet\Application\Command\Command;
 use Proximum\Vimeet\Domain\Model\Admin;
 use Proximum\Vimeet\Domain\Model\Event;
 
-class Export implements Command
+class ScheduleExport implements Command
 {
     /** @var Event */
     public $event;
