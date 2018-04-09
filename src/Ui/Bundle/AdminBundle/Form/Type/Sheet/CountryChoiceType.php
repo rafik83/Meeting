@@ -40,11 +40,19 @@ class CountryChoiceType extends AbstractType
             'choices' => function (Options $options) {
                 return $this->countryViewQueryHandler->handle(new CountryViewQuery($options['event'], $options['locale']));
             },
-            'choice_label' => function (CountryView $countryView) {
-                return $countryView->name;
+            'choice_label' => function ($countryView) {
+                if ($countryView instanceof CountryView) {
+                    return $countryView->name;
+                }
+
+                return null;
             },
-            'choice_value' => function (CountryView $countryView) {
-                return $countryView->code;
+            'choice_value' => function ($countryView) {
+                if ($countryView instanceof CountryView) {
+                    return $countryView->code;
+                }
+
+                return null;
             },
         ]);
     }

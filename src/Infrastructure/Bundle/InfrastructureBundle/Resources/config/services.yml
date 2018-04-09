@@ -5057,6 +5057,12 @@ services:
         arguments:
             - '@session'
 
+
+    Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Filter\SheetFilterSubmittedDataGetter:
+        arguments:
+            - '@filter.sheet_filter'
+            - '@form.factory'
+
     #
     # Happening
     #

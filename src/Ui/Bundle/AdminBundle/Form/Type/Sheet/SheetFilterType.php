@@ -12,7 +12,6 @@ namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Sheet;
 
 use Proximum\Vimeet\Domain\Model\Sheet\Constant;
 use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class SheetFilterType extends AbstractFilterType
 {
@@ -45,16 +44,6 @@ class SheetFilterType extends AbstractFilterType
                 'label' => 'form.sheet_filter.children.orderBy.label',
             ])
         ;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function configureOptions(OptionsResolver $resolver)
-    {
-        parent::configureOptions($resolver);
-
-        $resolver->setRequired(['event', 'locale', 'user']);
     }
 
     /**
