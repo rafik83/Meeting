@@ -12,11 +12,20 @@ namespace Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Validator\C
 
 use Proximum\Vimeet\Application\Command\Package\Step\SelectParticipantAndPlanning;
 use Proximum\Vimeet\Domain\Model\Product;
+use Proximum\Vimeet\Domain\Repository\AvailabilityTimeRangeRepositoryInterface;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\ConstraintValidator;
 
 class ParticipantsProductValidator extends ConstraintValidator
 {
+    /** @var AvailabilityTimeRangeRepositoryInterface */
+    private $availabilityTimeRangeRepository;
+
+    public function __construct(AvailabilityTimeRangeRepositoryInterface $availabilityTimeRangeRepository)
+    {
+        $this->availabilityTimeRangeRepository = $availabilityTimeRangeRepository;
+    }
+
     /**
      * @param SelectParticipantAndPlanning $selectParticipantAndPlanning
      * @param Constraint                   $constraint
@@ -24,6 +33,8 @@ class ParticipantsProductValidator extends ConstraintValidator
     public function validate($selectParticipantAndPlanning, Constraint $constraint)
     {
         $quantityIndexedByProductId = [];
+        $event = $selectParticipantAndPlanning->sheet->getEvent();
+        $availabilityTimeRanges = $this->availabilityTimeRangeRepository->findByEvent($event);
 
         foreach ($selectParticipantAndPlanning->participantsProduct as $participantId => $product) {
             if (!$product instanceof Product) {
@@ -50,6 +61,9 @@ class ParticipantsProductValidator extends ConstraintValidator
                     ->atPath($participantId)
                     ->addViolation()
                 ;
+            }
+
+            if (!empty($availabilityTimeRanges)) {
             }
         }
     }

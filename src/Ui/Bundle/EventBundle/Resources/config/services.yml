@@ -621,6 +621,8 @@ services:
 
     validator.package.participants_product_validator:
         class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Validator\Constraint\Package\ParticipantsProductValidator
+        arguments:
+            - '@Proximum\Vimeet\Infrastructure\Repository\AvailabilityTimeRangeRepository'
         tags:
             - { name: validator.constraint_validator }
 
