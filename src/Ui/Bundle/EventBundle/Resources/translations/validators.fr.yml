@@ -3,6 +3,7 @@ account.profile.updateAvatar.error: 'Une erreur s''est produite lors du téléch
 login.error.sheetDisabled: 'Votre participation a été désactivée.'
 package.participantsProduct.productMustBeSelected: 'Un produit doit être sélectionné'
 package.participantsProduct.quantityMaxReached: 'Quantité maximum atteinte pour le produit sélectionné'
+package.participantsProduct.participantHasMeetingOrHappeningOnPreviousAvailabilityTimeRange: 'Ce participant participe à des rendez-vous et/ou des conférences dans des plages de temps qui ne lui seront plus accessibles si vous changez ce produit'
 package.planning.quantity: 'La quantité doit être comprise entre %min% et %max%'
 package.plans.notBlank: 'Vous devez sélectionner une formule.'
 package.product.notAvailable: 'Ce produit n''est plus disponible'

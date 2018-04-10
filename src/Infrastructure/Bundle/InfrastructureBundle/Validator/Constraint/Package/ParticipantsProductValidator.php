@@ -11,6 +11,7 @@
 namespace Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Validator\Constraint\Package;
 
 use Proximum\Vimeet\Application\Command\Package\Step\SelectParticipantAndPlanning;
+use Proximum\Vimeet\Domain\AvailabilityTimeRange\Product\ParticipantProductWithAvailabilityTimeRangeChecker;
 use Proximum\Vimeet\Domain\Model\Product;
 use Proximum\Vimeet\Domain\Repository\AvailabilityTimeRangeRepositoryInterface;
 use Symfony\Component\Validator\Constraint;
@@ -21,9 +22,15 @@ class ParticipantsProductValidator extends ConstraintValidator
     /** @var AvailabilityTimeRangeRepositoryInterface */
     private $availabilityTimeRangeRepository;
 
-    public function __construct(AvailabilityTimeRangeRepositoryInterface $availabilityTimeRangeRepository)
-    {
+    /** @var ParticipantProductWithAvailabilityTimeRangeChecker */
+    private $participantProductWithAvailabilityTimeRangeChecker;
+
+    public function __construct(
+        AvailabilityTimeRangeRepositoryInterface $availabilityTimeRangeRepository,
+        ParticipantProductWithAvailabilityTimeRangeChecker $participantProductWithAvailabilityTimeRangeChecker
+    ) {
         $this->availabilityTimeRangeRepository = $availabilityTimeRangeRepository;
+        $this->participantProductWithAvailabilityTimeRangeChecker = $participantProductWithAvailabilityTimeRangeChecker;
     }
 
     /**
@@ -35,6 +42,13 @@ class ParticipantsProductValidator extends ConstraintValidator
         $quantityIndexedByProductId = [];
         $event = $selectParticipantAndPlanning->sheet->getEvent();
         $availabilityTimeRanges = $this->availabilityTimeRangeRepository->findByEvent($event);
+
+        $participants = $selectParticipantAndPlanning->sheet->getParticipantsArray();
+        $participantsById = [];
+
+        foreach ($participants as $participant) {
+            $participantsById[$participant->getId()] = $participant;
+        }
 
         foreach ($selectParticipantAndPlanning->participantsProduct as $participantId => $product) {
             if (!$product instanceof Product) {
@@ -63,7 +77,22 @@ class ParticipantsProductValidator extends ConstraintValidator
                 ;
             }
 
-            if (!empty($availabilityTimeRanges)) {
+            if (!empty($availabilityTimeRanges) && isset($participantsById[$participantId])) {
+                $canSetProduct = $this->participantProductWithAvailabilityTimeRangeChecker
+                    ->canSetProduct(
+                        $participantsById[$participantId],
+                        $product
+                    )
+                ;
+
+                if (false === $canSetProduct) {
+                    $this
+                        ->context
+                        ->buildViolation('package.participantsProduct.participantHasMeetingOrHappeningOnPreviousAvailabilityTimeRange')
+                        ->atPath($participantId)
+                        ->addViolation()
+                    ;
+                }
             }
         }
     }

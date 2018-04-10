@@ -623,6 +623,7 @@ services:
         class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Validator\Constraint\Package\ParticipantsProductValidator
         arguments:
             - '@Proximum\Vimeet\Infrastructure\Repository\AvailabilityTimeRangeRepository'
+            - '@Proximum\Vimeet\Domain\AvailabilityTimeRange\Product\ParticipantProductWithAvailabilityTimeRangeChecker'
         tags:
             - { name: validator.constraint_validator }
 
