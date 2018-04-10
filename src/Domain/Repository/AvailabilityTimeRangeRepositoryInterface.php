@@ -26,4 +26,6 @@ interface AvailabilityTimeRangeRepositoryInterface
      * @return AvailabilityTimeRange[]
      */
     public function findByEvent(Event $event): array;
+
+    public function hasByEvent(Event $event): bool;
 }

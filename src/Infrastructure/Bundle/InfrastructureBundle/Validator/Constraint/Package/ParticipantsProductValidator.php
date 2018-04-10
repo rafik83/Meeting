@@ -41,7 +41,7 @@ class ParticipantsProductValidator extends ConstraintValidator
     {
         $quantityIndexedByProductId = [];
         $event = $selectParticipantAndPlanning->sheet->getEvent();
-        $availabilityTimeRanges = $this->availabilityTimeRangeRepository->findByEvent($event);
+        $hasAvailabilityTimeRanges = $this->availabilityTimeRangeRepository->hasByEvent($event);
 
         $participants = $selectParticipantAndPlanning->sheet->getParticipantsArray();
         $participantsById = [];
@@ -75,9 +75,11 @@ class ParticipantsProductValidator extends ConstraintValidator
                     ->atPath($participantId)
                     ->addViolation()
                 ;
+
+                continue;
             }
 
-            if (!empty($availabilityTimeRanges) && isset($participantsById[$participantId])) {
+            if (true === $hasAvailabilityTimeRanges && isset($participantsById[$participantId])) {
                 $canSetProduct = $this->participantProductWithAvailabilityTimeRangeChecker
                     ->canSetProduct(
                         $participantsById[$participantId],
