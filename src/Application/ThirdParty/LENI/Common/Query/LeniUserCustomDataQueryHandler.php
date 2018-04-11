@@ -11,6 +11,7 @@
 namespace Proximum\Vimeet\Application\ThirdParty\LENI\Common\Query;
 
 use Proximum\Vimeet\Application\ThirdParty\LENI\Common\EventExtraParameter\MappingGetter;
+use Proximum\Vimeet\Application\ThirdParty\LENI\Exception\TypeDoesNotMatchException;
 use Proximum\Vimeet\Application\ThirdParty\LENI\LeniConstants;
 use Proximum\Vimeet\Application\ThirdParty\LENI\Save\Converter\CustomDataConverter;
 use Proximum\Vimeet\Application\ThirdParty\LENI\Save\Converter\TypeConverter;
@@ -49,6 +50,9 @@ class LeniUserCustomDataQueryHandler
         $this->templateDataFactory = $templateDataFactory;
     }
 
+    /**
+     * @throws TypeDoesNotMatchException
+     */
     public function handle(LeniUserCustomDataQuery $leniUserCustomDataQuery): array
     {
         $data = $this->handleType($leniUserCustomDataQuery->event, $leniUserCustomDataQuery->type);
@@ -67,6 +71,9 @@ class LeniUserCustomDataQueryHandler
         return $data;
     }
 
+    /**
+     * @throws TypeDoesNotMatchException
+     */
     private function handleType(Event $event, Type $type): array
     {
         $typesMapping = $this->mappingGetter->getMapping(
@@ -78,7 +85,13 @@ class LeniUserCustomDataQueryHandler
             return [];
         }
 
-        return $this->typeConverter->convert($type, $typesMapping);
+        $data = $this->typeConverter->convert($type, $typesMapping);
+
+        if ([] === $data) {
+            throw new TypeDoesNotMatchException();
+        }
+
+        return $data;
     }
 
     private function handleCustomData(Event $event, Sheet $sheet, User $user, string $locale): array

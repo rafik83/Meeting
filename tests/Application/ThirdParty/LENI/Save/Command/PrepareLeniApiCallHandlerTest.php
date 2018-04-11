@@ -11,10 +11,12 @@
 namespace Proximum\Vimeet\Tests\Application\ThirdParty\LENI\Save\Command;
 
 use PHPUnit\Framework\TestCase;
+use Prophecy\Argument;
 use Prophecy\Prophecy\ObjectProphecy;
 use Proximum\Vimeet\Application\Adapter\ThirdParty\LENI\Save\LeniApiCallJobQueueInterface;
 use Proximum\Vimeet\Application\Components\Planning\Formatter\ParticipantPlanningFormatter;
 use Proximum\Vimeet\Application\ThirdParty\LENI\Common\Normalizer\LeniUserViewNormalizer;
+use Proximum\Vimeet\Application\ThirdParty\LENI\Exception\TypeDoesNotMatchException;
 use Proximum\Vimeet\Application\ThirdParty\LENI\Save\Command\PrepareLeniApiCall;
 use Proximum\Vimeet\Application\ThirdParty\LENI\Save\Command\PrepareLeniApiCallHandler;
 use Proximum\Vimeet\Application\ThirdParty\LENI\Common\Query\LeniUserViewQuery;
@@ -93,44 +95,47 @@ class PrepareLeniApiCallHandlerTest extends TestCase
         $this->event2->hasDay()->shouldBeCalled()->willReturn(true);
         $this->event2->isFinished($this->dateTime)->shouldBeCalled()->willReturn(false);
 
-        $extraParam1 = $this->prophesize(Event\ExtraParameter::class);
-        $extraParam2 = $this->prophesize(Event\ExtraParameter::class);
-        $extraParam3 = $this->prophesize(Event\ExtraParameter::class);
-        $extraParam4 = $this->prophesize(Event\ExtraParameter::class);
+        $extraParamUser1 = $this->prophesize(Event\ExtraParameter::class);
+        $extraParamUser2 = $this->prophesize(Event\ExtraParameter::class);
+        $extraParamEvent1 = $this->prophesize(Event\ExtraParameter::class);
+        $extraParamEvent2 = $this->prophesize(Event\ExtraParameter::class);
 
-        $extraParam1->getValue()->shouldBeCalled()->willReturn('save');
-        $extraParam2->getValue()->shouldBeCalled()->willReturn('save');
+        $extraParamMode1 = $this->prophesize(Event\ExtraParameter::class);
+        $extraParamMode1->getValue()->shouldBeCalled()->willReturn('save');
+
+        $extraParamMode2 = $this->prophesize(Event\ExtraParameter::class);
+        $extraParamMode2->getValue()->shouldBeCalled()->willReturn('save');
 
         $this->extraParameterRepository
             ->findByEventAndType($this->event1->reveal(), 'leni_user')
             ->shouldBeCalled()
-            ->willReturn($extraParam1->reveal())
+            ->willReturn($extraParamUser1->reveal())
         ;
         $this->extraParameterRepository
             ->findByEventAndType($this->event1->reveal(), 'leni_event')
             ->shouldBeCalled()
-            ->willReturn($extraParam2->reveal())
+            ->willReturn($extraParamEvent1->reveal())
         ;
 
         $this->extraParameterRepository
             ->findByEventAndType($this->event2->reveal(), 'leni_user')
             ->shouldBeCalled()
-            ->willReturn($extraParam3->reveal())
+            ->willReturn($extraParamUser2->reveal())
         ;
         $this->extraParameterRepository
             ->findByEventAndType($this->event2->reveal(), 'leni_event')
             ->shouldBeCalled()
-            ->willReturn($extraParam4->reveal())
+            ->willReturn($extraParamEvent2->reveal())
         ;
         $this->extraParameterRepository
             ->findByEventAndType($this->event1->reveal(), 'leni_mode')
             ->shouldBeCalled()
-            ->willReturn($extraParam1->reveal())
+            ->willReturn($extraParamMode1->reveal())
         ;
         $this->extraParameterRepository
             ->findByEventAndType($this->event2->reveal(), 'leni_mode')
             ->shouldBeCalled()
-            ->willReturn($extraParam2->reveal())
+            ->willReturn($extraParamMode2->reveal())
         ;
 
         $this->participantPlanningFormatter->preloadPlanningHandlerForEvent($this->event1->reveal())->shouldBeCalled();
@@ -306,6 +311,92 @@ class PrepareLeniApiCallHandlerTest extends TestCase
 
         $this->leniApiCallJobQueue
             ->createJob($extraDataUser2)
+            ->shouldNotBeCalled()
+        ;
+
+        $prepareLeniApiCallHandler = new PrepareLeniApiCallHandler(
+            $this->eventRepository->reveal(),
+            $this->extraParameterRepository->reveal(),
+            $this->extraDataRepository->reveal(),
+            $this->userRepository->reveal(),
+            $this->participantPlanningFormatter->reveal(),
+            $this->leniUserViewQueryHandler->reveal(),
+            $this->leniUserViewNormalizer->reveal(),
+            $this->leniApiCallJobQueue->reveal(),
+            $this->dateTime
+        );
+
+        $prepareLeniApiCallHandler->handle(new PrepareLeniApiCall());
+    }
+
+    public function testTypeDoesNotMatchException()
+    {
+        $this->event1->hasDay()->shouldBeCalled()->willReturn(true);
+        $this->event1->isFinished($this->dateTime)->shouldBeCalled()->willReturn(false);
+
+        $extraParamUser1 = $this->prophesize(Event\ExtraParameter::class);
+        $extraParamEvent1 = $this->prophesize(Event\ExtraParameter::class);
+
+        $extraParamMode1 = $this->prophesize(Event\ExtraParameter::class);
+        $extraParamMode1->getValue()->shouldBeCalled()->willReturn('save');
+
+        $this->extraDataRepository
+            ->getExtraDataForEventAndName($this->event1->reveal(), 'leni_fingerprint')
+            ->shouldBeCalled()
+            ->willReturn([])
+        ;
+
+        $this->extraParameterRepository
+            ->findByEventAndType($this->event1->reveal(), 'leni_user')
+            ->shouldBeCalled()
+            ->willReturn($extraParamUser1->reveal())
+        ;
+        $this->extraParameterRepository
+            ->findByEventAndType($this->event1->reveal(), 'leni_event')
+            ->shouldBeCalled()
+            ->willReturn($extraParamEvent1->reveal())
+        ;
+        $this->extraParameterRepository
+            ->findByEventAndType($this->event1->reveal(), 'leni_mode')
+            ->shouldBeCalled()
+            ->willReturn($extraParamMode1->reveal())
+        ;
+
+        $this->participantPlanningFormatter->preloadPlanningHandlerForEvent($this->event1->reveal())->shouldBeCalled();
+        $this->participantPlanningFormatter->resetPlanningHandlerForEvent($this->event1->reveal())->shouldBeCalled();
+
+        $user1FromEvent1 = $this->prophesize(User::class);
+        $user1FromEvent1->getId()->shouldBeCalled()->willReturn(11);
+
+        $this->userRepository
+            ->findWithSheetByEvent($this->event1->reveal())
+            ->shouldBeCalled()
+            ->willReturn([$user1FromEvent1->reveal()])
+        ;
+
+        $this
+            ->leniUserViewQueryHandler->handle(
+                new LeniUserViewQuery($this->event1->reveal(), $user1FromEvent1->reveal(), null)
+            )
+            ->shouldBeCalled()
+            ->willThrow(TypeDoesNotMatchException::class)
+        ;
+
+        $this
+            ->leniUserViewNormalizer
+            ->normalize(Argument::any())
+            ->shouldNotBeCalled()
+        ;
+
+        $this
+            ->extraDataRepository
+            ->add(Argument::any())
+            ->shouldNotBeCalled()
+        ;
+
+        $this
+            ->leniApiCallJobQueue
+            ->createJob(Argument::any())
             ->shouldNotBeCalled()
         ;
 
