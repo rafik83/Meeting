@@ -242,11 +242,11 @@ class ParticipantProductWithAvailabilityTimeRangeCheckerTest extends TestCase
         $timeRangeView6 = new TimeRangeView($begin6, $end6);
         $timeRangeNotAccessibleView = new TimeRangeNotAccessibleView($begin1, $end1);
         $timeRangeViews = [
-            $timeRangeView2,
-            $timeRangeView4,
-            $timeRangeView5,
-            $timeRangeView6,
-            $timeRangeView3,
+            222 => $timeRangeView2,
+            224 => $timeRangeView4,
+            225 => $timeRangeView5,
+            226 => $timeRangeView6,
+            223 => $timeRangeView3,
         ];
 
         $this->overlappedTimeRangeMerger->merge($timeRangeViews)->shouldBeCalled()->willReturn($timeRangeViews);
@@ -362,11 +362,11 @@ class ParticipantProductWithAvailabilityTimeRangeCheckerTest extends TestCase
         $timeRangeView6 = new TimeRangeView($begin6, $end6);
         $timeRangeNotAccessibleView = new TimeRangeNotAccessibleView($begin1, $end1);
         $timeRangeViews = [
-            $timeRangeView2,
-            $timeRangeView4,
-            $timeRangeView5,
-            $timeRangeView6,
-            $timeRangeView3,
+            222 => $timeRangeView2,
+            224 => $timeRangeView4,
+            225 => $timeRangeView5,
+            226 => $timeRangeView6,
+            223 => $timeRangeView3,
         ];
 
         $this->overlappedTimeRangeMerger->merge($timeRangeViews)->shouldBeCalled()->willReturn($timeRangeViews);

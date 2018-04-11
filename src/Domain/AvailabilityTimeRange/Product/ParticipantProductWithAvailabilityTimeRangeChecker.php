@@ -84,13 +84,14 @@ class ParticipantProductWithAvailabilityTimeRangeChecker
 
         $newAvailabilityTimeRanges = $product->getAvailabilityTimeRanges();
 
-        list ($timeRangeViews, $timeRangeNotAccessibleViews) = $this->getTimeRangeAccessibleAndNotAccessible(
-            $newAvailabilityTimeRanges,
-            $othersAvailabilityTimeRanges,
-            $currentAvailabilityTimeRanges
+        $timeRangeViews = $this->getTimeRangeViewsOutOfNewAvailabilityTimeRanges($newAvailabilityTimeRanges);
+        $timeRangeViews = $this->getTimeRangeViewsOutOfOtherAvailabilityTimeRanges($othersAvailabilityTimeRanges, $timeRangeViews);
+        $timeRangeNotAccessibleViews = $this->getTimeRangeNotAccessibleViews(
+            $currentAvailabilityTimeRanges,
+            $timeRangeViews
         );
 
-        // If the new product add more or the same time range, it is ok to set it
+        // If the new product add more or the same time range, it is ok to set the product checked
         if (empty($timeRangeNotAccessibleViews)) {
             return true;
         }
@@ -169,48 +170,64 @@ class ParticipantProductWithAvailabilityTimeRangeChecker
     }
 
     /**
-     * @param array $newAvailabilityTimeRanges
-     * @param array $othersAvailabilityTimeRanges
-     * @param array $currentAvailabilityTimeRanges
+     * @param AvailabilityTimeRange[] $newAvailabilityTimeRanges
      *
-     * @return array of [
-     *    TimeRangeView[],
-     *    TimeRangeNotAccessibleView[],
-     * ]
+     * @return TimeRangeView[]
      */
-    private function getTimeRangeAccessibleAndNotAccessible(
-        array $newAvailabilityTimeRanges,
-        array $othersAvailabilityTimeRanges,
-        array $currentAvailabilityTimeRanges
+    private function getTimeRangeViewsOutOfNewAvailabilityTimeRanges(
+        array &$newAvailabilityTimeRanges
     ): array {
-        $newAvailabilityTimeRangesById = [];
         $timeRangeViews = [];
-        $timeRangeNotAccessibleViews = [];
 
         foreach ($newAvailabilityTimeRanges as $newAvailabilityTimeRange) {
-            if (!isset($newAvailabilityTimeRangesById[$newAvailabilityTimeRange->getId()])) {
-                $newAvailabilityTimeRangesById[$newAvailabilityTimeRange->getId()] = $newAvailabilityTimeRange;
-
-                $timeRangeViews[] = new TimeRangeView(
+            if (!isset($timeRangeViews[$newAvailabilityTimeRange->getId()])) {
+                $timeRangeViews[$newAvailabilityTimeRange->getId()] = new TimeRangeView(
                     $newAvailabilityTimeRange->getBegin(),
                     $newAvailabilityTimeRange->getEnd()
                 );
             }
         }
 
-        foreach ($othersAvailabilityTimeRanges as $othersAvailabilityTimeRange) {
-            if (!isset($newAvailabilityTimeRangesById[$othersAvailabilityTimeRange->getId()])) {
-                $newAvailabilityTimeRangesById[$othersAvailabilityTimeRange->getId()] = $othersAvailabilityTimeRange;
+        return $timeRangeViews;
+    }
 
-                $timeRangeViews[] = new TimeRangeView(
+    /**
+     * @param AvailabilityTimeRange[] $othersAvailabilityTimeRanges
+     * @param TimeRangeView[]         $timeRangeViews
+     *
+     * @return TimeRangeView[]
+     */
+    private function getTimeRangeViewsOutOfOtherAvailabilityTimeRanges(
+        array &$othersAvailabilityTimeRanges,
+        array $timeRangeViews
+    ): array {
+        foreach ($othersAvailabilityTimeRanges as $othersAvailabilityTimeRange) {
+            if (!isset($timeRangeViews[$othersAvailabilityTimeRange->getId()])) {
+
+                $timeRangeViews[$othersAvailabilityTimeRange->getId()] = new TimeRangeView(
                     $othersAvailabilityTimeRange->getBegin(),
                     $othersAvailabilityTimeRange->getEnd()
                 );
             }
         }
 
+        return $timeRangeViews;
+    }
+
+    /**
+     * @param AvailabilityTimeRange[] $currentAvailabilityTimeRanges
+     * @param TimeRangeView[]         $timeRangeViews
+     *
+     * @return TimeRangeNotAccessibleView[]
+     */
+    private function getTimeRangeNotAccessibleViews(
+        array &$currentAvailabilityTimeRanges,
+        array &$timeRangeViews
+    ): array {
+        $timeRangeNotAccessibleViews = [];
+
         foreach ($currentAvailabilityTimeRanges as $currentAvailabilityTimeRange) {
-            if (!isset($newAvailabilityTimeRangesById[$currentAvailabilityTimeRange->getId()])) {
+            if (!isset($timeRangeViews[$currentAvailabilityTimeRange->getId()])) {
                 $removedAvailabilityTimeRanges[$currentAvailabilityTimeRange->getId()] = $currentAvailabilityTimeRange;
 
                 $timeRangeNotAccessibleViews[] = new TimeRangeNotAccessibleView(
@@ -220,9 +237,6 @@ class ParticipantProductWithAvailabilityTimeRangeChecker
             }
         }
 
-        return [
-            $timeRangeViews,
-            $timeRangeNotAccessibleViews
-        ];
+        return $timeRangeNotAccessibleViews;
     }
 }
