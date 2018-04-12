@@ -149,7 +149,7 @@ class ComexposiumWebservice
                 sprintf(
                     'getInscriptions with "%s" eventReference and "%s" registrationReferences return errors with response : %s',
                     $eventReference,
-                    $registrationReferences,
+                    implode(', ', $registrationReferences),
                     json_encode($response)
                 )
             );
