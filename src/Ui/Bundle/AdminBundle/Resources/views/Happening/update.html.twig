@@ -7,16 +7,16 @@
 {% block form_content %}
     {% if products is not empty %}
         <div class="well">
-                <h4>
-                    {{ 'admin.happening.products'|trans }}
-                </h4>
-                <ul>
-                    {% for product in products %}
-                        <li>
-                            {{ product.name }}
-                        </li>
-                    {% endfor %}
-                </ul>
+            <h4>
+                {{ 'admin.happening.products'|trans }}
+            </h4>
+            <ul>
+                {% for product in products %}
+                    <li>
+                        {{ product.name }}
+                    </li>
+                {% endfor %}
+            </ul>
         </div>
         <hr>
     {% endif %}
