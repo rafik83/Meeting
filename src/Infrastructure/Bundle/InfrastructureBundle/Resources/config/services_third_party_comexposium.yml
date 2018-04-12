@@ -72,6 +72,12 @@ services:
             - '@Proximum\Vimeet\Application\ThirdParty\Comexposium\Webservice\Handler\ComexposiumWebservice'
             - '@Proximum\Vimeet\Application\ThirdParty\Comexposium\Webservice\Converter\RawNomenclatureToNomenclatureViewConverter'
 
+    Proximum\Vimeet\Application\ThirdParty\Comexposium\Webservice\Handler\GetKnownRegistrationsHandler:
+        arguments:
+            - '@repository.sheet.extra_data_repository'
+            - '@repository.event.extra_parameter_repository'
+            - '@Proximum\Vimeet\Application\ThirdParty\Comexposium\Webservice\Handler\ComexposiumWebservice'
+
     #
     # Converter
     #
