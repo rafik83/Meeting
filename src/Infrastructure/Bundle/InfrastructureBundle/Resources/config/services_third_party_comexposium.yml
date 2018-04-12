@@ -197,3 +197,9 @@ services:
         arguments:
             - '@security.http_utils'
 
+    #
+    # Get Spots
+    #
+    Proximum\Vimeet\Application\ThirdParty\Comexposium\Webservice\Spot\PrepareSpotsContentHandler:
+        arguments:
+            - '@adapter.serializer_adapter'
