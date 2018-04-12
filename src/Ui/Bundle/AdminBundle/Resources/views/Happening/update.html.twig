@@ -6,11 +6,10 @@
 
 {% block form_content %}
     {% if products is not empty %}
-        <div class="row">
-            <div class="col-sm-3">
-            </div>
-            <div class="col-sm-3">
-                {{ 'admin.happening.products'|trans }}
+        <div class="well">
+                <h4>
+                    {{ 'admin.happening.products'|trans }}
+                </h4>
                 <ul>
                     {% for product in products %}
                         <li>
@@ -18,9 +17,8 @@
                         </li>
                     {% endfor %}
                 </ul>
-            </div>
         </div>
-        </br>
+        <hr>
     {% endif %}
     {{ form_row(form.category, {widget_columns: 3}) }}
     {{ form_row(form.translations) }}
