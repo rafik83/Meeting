@@ -350,6 +350,7 @@ infrastructure:
     import_planner_path: '%kernel.project_dir%/web/uploads/import_planner'
     import_spot_path: '%kernel.project_dir%/web/uploads/import_spots/'
     export_omz_path: '%kernel.project_dir%/web/uploads/export_omz'
+    export_spot_path: '%kernel.project_dir%/web/uploads/export_spot'
     package:
         default_labels:
             plans:

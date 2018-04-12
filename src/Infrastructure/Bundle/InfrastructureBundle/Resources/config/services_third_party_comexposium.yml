@@ -203,3 +203,10 @@ services:
     Proximum\Vimeet\Application\ThirdParty\Comexposium\Webservice\Spot\PrepareSpotsContentHandler:
         arguments:
             - '@adapter.serializer_adapter'
+
+    Proximum\Vimeet\Application\ThirdParty\Comexposium\Webservice\Spot\CreateFileHandler:
+        arguments:
+            - '@adapter.local_file_storage'
+            - '@repository.file_repository'
+            - '@datetime'
+            - '%infrastructure.export_spot_path%'
