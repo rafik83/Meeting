@@ -112,6 +112,9 @@ class SheetSearchAdapter implements SheetSearchAdapterInterface
         } elseif (Constant::ORDER_BY_CREATED_AT === $orderBy) {
             $query = new Query($builder->getQuery());
             $query->addSort(['createdAt' => 'desc']);
+        } elseif (Constant::ORDER_BY_COMPLETENESS === $orderBy) {
+            $query = new Query($builder->getQuery());
+            $query->addSort(['completeness' => 'asc']);
         } else {
             $query = new Query($builder->getQuery());
             $query->addSort(['sheetName.raw' => 'asc']);

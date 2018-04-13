@@ -180,6 +180,8 @@ fos_elastica:
                             type: boolean
                         completed:
                             type: boolean
+                        completeness:
+                            type: integer
                         categories:
                             type: nested
                         booleanFilter:

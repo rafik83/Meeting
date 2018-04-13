@@ -179,6 +179,7 @@ class SheetElasticTransformer implements ModelToElasticaTransformerInterface
                 'availabilityConfirmationStatus' => $sheet->getAvailabilityConfirmationStatus(),
                 'enabled'                 => $sheet->isEnabled(),
                 'completed'               => $sheet->isCompleted(),
+                'completeness'            => $sheet->getCompleteness(),
                 'type'                    => $sheet->getType()->getId(),
                 'categories'              => $categories,
                 'followUp'                => $sheet->getFollower() instanceof Admin ? $sheet->getFollower()->getId() : null,

@@ -1174,6 +1174,7 @@ event.sheet.imported.not_imported.label: 'Not imported'
 event.sheet.listOrders.proForma: 'View proforma'
 event.sheet.listOrders.title: 'My orders'
 event.sheet.order.alphabetic: aphabetical
+event.sheet.order.completeness: completeness
 event.sheet.order.createdAt: 'created at'
 event.sheet.package.column.choices: Choices
 event.sheet.package.column.description: Description
