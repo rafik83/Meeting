@@ -231,8 +231,8 @@ services:
         arguments:
             - '@adapter.local_file_storage'
             - '@repository.file_repository'
-            - '@datetime'
             - '%infrastructure.export_spot_path%'
+            - '@datetime'
 
     Proximum\Vimeet\Application\ThirdParty\Comexposium\Webservice\Spot\NotifyHandler:
         arguments:
