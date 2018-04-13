@@ -26,6 +26,7 @@ use Proximum\Vimeet\Application\Exception\Spot\SpotNotFoundException;
 use Proximum\Vimeet\Application\Exception\Spot\UniqueReferenceViolationException;
 use Proximum\Vimeet\Application\Query\Spot\ListViewQuery;
 use Proximum\Vimeet\Application\Query\Spot\SpotUnavailabilityQuery;
+use Proximum\Vimeet\Application\ThirdParty\Comexposium\Webservice\Query\HasEventReferenceQuery;
 use Proximum\Vimeet\Application\View\Spot\Batch\DeleteBatchView;
 use Proximum\Vimeet\Application\View\Spot\SpotUnavailabilityView;
 use Proximum\Vimeet\Domain\Model\Spot;
@@ -78,10 +79,13 @@ class SpotController extends Controller
 
         $spotsList = $this->get('tactician.commandbus.query')->handle(new ListViewQuery($event, $locale, $filters));
 
+        $canExport = $this->get('tactician.commandbus.query')->handle(new HasEventReferenceQuery($event));
+
         $filterFormView = $filterForm->createView();
 
         return $this->render('AdminBundle:Spot:list.html.twig', [
             'spotsList'       => $spotsList,
+            'canExport'       => $canExport,
             'event'           => $event,
             'filter_form'     => $filterForm->createView(),
             'filters_summary' => $this->get('filter_summary')->getFilters($filterFormView, $filters, $locale),

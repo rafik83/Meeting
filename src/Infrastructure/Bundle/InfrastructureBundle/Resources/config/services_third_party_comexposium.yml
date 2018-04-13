@@ -90,6 +90,12 @@ services:
         arguments:
             - '@repository.event.extra_parameter_repository'
 
+    Proximum\Vimeet\Application\ThirdParty\Comexposium\Webservice\Query\HasEventReferenceQueryHandler:
+        arguments:
+            - '@Proximum\Vimeet\Application\ThirdParty\Comexposium\Webservice\Handler\GetEventReferenceHandler'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\ThirdParty\Comexposium\Webservice\Query\HasEventReferenceQuery }
+
     #
     # Converter
     #
