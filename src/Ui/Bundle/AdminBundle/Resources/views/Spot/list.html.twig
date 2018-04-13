@@ -1,6 +1,7 @@
 {% extends 'AdminBundle::base.html.twig' %}
 
 {% import 'AdminBundle:Common:list_macros.html.twig' as list_macros %}
+{% import '@Admin/macro.html.twig' as form_macros %}
 
 {% block title 'admin.spot.title'|trans %}
 
@@ -8,10 +9,14 @@
 
     <h1 class="page-header">{{ 'admin.spot.title'|trans }}</h1>
 
-    {% if true %} {# todo: check access to this feature: event must have Comexposium Reference #}
-        <form action="{{ path('admin_spot_schedule_export', { 'event': event.id }) }}" method="POST" class="alert alert-info text-center">
-            <input type="submit" class="btn btn-info" value="{{ 'admin.spot.commexposium.export.title'|trans }}" />
-        </form>
+    {% if canAccessExportButton %}
+        {{ form_macros.button(
+            path('admin_spot_schedule_export', { 'event': event.id }),
+            'POST',
+            'admin.spot.commexposium.export.title'|trans,
+            {'class': 'btn btn-info'},
+            {'class': 'alert alert-info text-center'}
+        ) }}
     {% endif %}
 
     {% if filtered or spotsList.hasSpot %}

@@ -11,7 +11,9 @@
 namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Spot;
 
 use Proximum\Vimeet\Application\Adapter\AuthorizationCheckerAdapterInterface;
+use Proximum\Vimeet\Application\Adapter\QueryBusInterface;
 use Proximum\Vimeet\Application\Adapter\RouterInterface;
+use Proximum\Vimeet\Application\ThirdParty\Comexposium\Webservice\Query\HasEventReferenceQuery;
 use Proximum\Vimeet\Application\ThirdParty\Comexposium\Webservice\Spot\ScheduleExport;
 use Proximum\Vimeet\Application\ThirdParty\Comexposium\Webservice\Spot\ScheduleExportHandler;
 use Proximum\Vimeet\Domain\Model\Event;
@@ -34,16 +36,21 @@ class ScheduleExportAction
     /** @var ScheduleExportHandler */
     private $scheduleExportHandler;
 
+    /** @var QueryBusInterface */
+    private $queryBus;
+
     public function __construct(
         AuthorizationCheckerAdapterInterface $authorizationCheckerAdapter,
         FlashBagInterface $flashBag,
         RouterInterface $router,
-        ScheduleExportHandler $scheduleExportHandler
+        ScheduleExportHandler $scheduleExportHandler,
+        QueryBusInterface $queryBus
     ) {
         $this->authorizationCheckerAdapter = $authorizationCheckerAdapter;
         $this->flashBag = $flashBag;
         $this->router = $router;
         $this->scheduleExportHandler = $scheduleExportHandler;
+        $this->queryBus = $queryBus;
     }
 
     /**
@@ -56,6 +63,7 @@ class ScheduleExportAction
     {
         if (!$this->authorizationCheckerAdapter->isGranted('ROLE_ALLOWED_TO_ORGANIZE')
             || !$this->authorizationCheckerAdapter->isGranted('PERMISSION_EVENT_ACCESS', $event)
+            || false === $this->queryBus->handle(new HasEventReferenceQuery($event))
         ) {
             throw new AccessDeniedException('Access denied to the spots export');
         }
