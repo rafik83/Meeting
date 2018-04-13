@@ -8,9 +8,11 @@
 
     <h1 class="page-header">{{ 'admin.spot.title'|trans }}</h1>
 
-    <form action="{{ path('admin_spot_schedule_export', { 'event': event.id }) }}" method="POST" class="alert alert-info text-center">
-        <input type="submit" class="btn btn-info" value="{{ 'admin.spot.commexposium.export.title'|trans }}" />
-    </form>
+    {% if true %} {# todo: check access to this feature: event must have Comexposium Reference #}
+        <form action="{{ path('admin_spot_schedule_export', { 'event': event.id }) }}" method="POST" class="alert alert-info text-center">
+            <input type="submit" class="btn btn-info" value="{{ 'admin.spot.commexposium.export.title'|trans }}" />
+        </form>
+    {% endif %}
 
     {% if filtered or spotsList.hasSpot %}
         <div class="row well">
