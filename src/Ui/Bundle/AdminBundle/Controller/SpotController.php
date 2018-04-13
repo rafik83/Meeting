@@ -79,18 +79,18 @@ class SpotController extends Controller
 
         $spotsList = $this->get('tactician.commandbus.query')->handle(new ListViewQuery($event, $locale, $filters));
 
-        $canAccessExportButton = $this->get('tactician.commandbus.query')->handle(new HasEventReferenceQuery($event));
+        $canExport = $this->get('tactician.commandbus.query')->handle(new HasEventReferenceQuery($event));
 
         $filterFormView = $filterForm->createView();
 
         return $this->render('AdminBundle:Spot:list.html.twig', [
-            'spotsList'             => $spotsList,
-            'canAccessExportButton' => $canAccessExportButton,
-            'event'                 => $event,
-            'filter_form'           => $filterForm->createView(),
-            'filters_summary'       => $this->get('filter_summary')->getFilters($filterFormView, $filters, $locale),
-            'filtered'              => $filterForm->isSubmitted() && $filterForm->isValid(),
-            'update_url'            => $this->generateUrl('admin_spot_update', ['event' => $event->getId()]),
+            'spotsList'       => $spotsList,
+            'canExport'       => $canExport,
+            'event'           => $event,
+            'filter_form'     => $filterForm->createView(),
+            'filters_summary' => $this->get('filter_summary')->getFilters($filterFormView, $filters, $locale),
+            'filtered'        => $filterForm->isSubmitted() && $filterForm->isValid(),
+            'update_url'      => $this->generateUrl('admin_spot_update', ['event' => $event->getId()]),
         ]);
     }
 

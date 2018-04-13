@@ -9,7 +9,7 @@
 
     <h1 class="page-header">{{ 'admin.spot.title'|trans }}</h1>
 
-    {% if canAccessExportButton %}
+    {% if canExport %}
         {{ form_macros.button(
             path('admin_spot_schedule_export', { 'event': event.id }),
             'POST',

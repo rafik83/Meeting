@@ -15,9 +15,7 @@ use Proximum\Vimeet\Application\ThirdParty\Comexposium\Webservice\Handler\GetEve
 
 class HasEventReferenceQueryHandler
 {
-    /**
-     * @var GetEventReferenceHandler
-     */
+    /** @var GetEventReferenceHandler */
     private $eventReferenceHandler;
 
     public function __construct(GetEventReferenceHandler $eventReferenceHandler)
