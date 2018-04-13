@@ -17,7 +17,6 @@ use Proximum\Vimeet\Application\Command\Spot\Create;
 use Proximum\Vimeet\Application\Command\Spot\DeleteBatch;
 use Proximum\Vimeet\Application\Command\Spot\DisableBatch;
 use Proximum\Vimeet\Application\Command\Spot\EnableBatch;
-use Proximum\Vimeet\Application\Command\Spot\SpotImport;
 use Proximum\Vimeet\Application\Command\Spot\UnavailabilityBatch;
 use Proximum\Vimeet\Application\Command\Spot\UnavailabilityBatchResult;
 use Proximum\Vimeet\Application\Command\Spot\Update;
@@ -35,7 +34,6 @@ use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Spot\BatchUnavailabilityType
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Spot\FilterSpotType;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Spot\SpotCreateType;
 use Proximum\Vimeet\Domain\Model\Event;
-use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Spot\SpotImportType;
 use Proximum\Vimeet\Ui\Flash\TransMessage;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;

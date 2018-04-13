@@ -870,6 +870,7 @@ admin.spot.active.no: Non
 admin.spot.active.yes: Oui
 admin.spot.batch_create.title: 'Créer des lieux par lot'
 admin.spot.batch_unavailability.title: 'Créer des indisponibilités de lieu'
+admin.spot.commexposium.export.title: 'Récupérer et exporter au format .csv les lieux Comexposium'
 admin.spot.configure_dates: 'Dates clés'
 admin.spot.createSpot.title: 'Créer un lieu'
 admin.spot.delete: Supprimer
