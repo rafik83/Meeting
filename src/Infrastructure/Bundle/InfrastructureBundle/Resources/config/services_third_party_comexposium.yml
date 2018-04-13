@@ -21,6 +21,14 @@ services:
         tags:
             - { name: console.command }
 
+    Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\ThirdParty\Comexposium\Webservice\ComexposiumExportSpotCommand:
+        arguments:
+            - '@vimeet_infrastructure.repository.event_repository'
+            - '@repository.admin_repository'
+            - '@Proximum\Vimeet\Application\ThirdParty\Comexposium\Webservice\Spot\ExportHandler'
+        tags:
+            - { name: console.command }
+
     #
     # Handler
     #
@@ -204,6 +212,17 @@ services:
     #
     # Get Spots
     #
+    Proximum\Vimeet\Application\ThirdParty\Comexposium\Webservice\Spot\ExportHandler:
+        arguments:
+            - '@Proximum\Vimeet\Application\ThirdParty\Comexposium\Webservice\Handler\GetKnownRegistrationsHandler'
+            - '@Proximum\Vimeet\Application\ThirdParty\Comexposium\Webservice\Spot\PrepareSpotsContentHandler'
+            - '@Proximum\Vimeet\Application\ThirdParty\Comexposium\Webservice\Spot\CreateFileHandler'
+            - '@Proximum\Vimeet\Application\ThirdParty\Comexposium\Webservice\Spot\NotifyHandler'
+
+    Proximum\Vimeet\Application\ThirdParty\Comexposium\Webservice\Spot\ScheduleExportHandler:
+        arguments:
+            - '@Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Adapter\ThirdParty\Comexposium\ComexposiumJobQueue'
+
     Proximum\Vimeet\Application\ThirdParty\Comexposium\Webservice\Spot\PrepareSpotsContentHandler:
         arguments:
             - '@adapter.serializer_adapter'
@@ -214,3 +233,8 @@ services:
             - '@repository.file_repository'
             - '@datetime'
             - '%infrastructure.export_spot_path%'
+
+    Proximum\Vimeet\Application\ThirdParty\Comexposium\Webservice\Spot\NotifyHandler:
+        arguments:
+            - '@adapter.mailer_adapter'
+            - '%mailer_sender%'

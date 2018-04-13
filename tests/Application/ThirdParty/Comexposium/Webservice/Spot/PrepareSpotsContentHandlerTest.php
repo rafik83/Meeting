@@ -59,21 +59,13 @@ class PrepareSpotsContentHandlerTest extends TestCase
         $rawData3 = new \stdClass();
         $rawData3->reference = 777;
 
-        // reference not known
-        $rawData4 = new \stdClass();
-        $rawData4->reference = 888;
-        $rawData4->stand = new \stdClass();
-        $rawData4->stand->reference = 'StandA';
-
         $prepareSpotsContentHandler = new PrepareSpotsContentHandler($serializerAdapter->reveal());
         $result = $prepareSpotsContentHandler->handle(
             new PrepareSpotsContent(
-                [1337 => 13, 666 => 27, 777 => 89],
                 [
-                    $rawData1,
-                    $rawData2,
-                    $rawData3,
-                    $rawData4,
+                    13 => $rawData1,
+                    27 => $rawData2,
+                    777 => $rawData3,
                 ]
             )
         );
