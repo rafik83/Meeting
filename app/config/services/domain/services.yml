@@ -27,6 +27,7 @@ services:
             - '@Proximum\Vimeet\Domain\Unavailability\SystemGenerator\OverlappedTimeRangeMerger'
             - '@Proximum\Vimeet\Domain\Unavailability\SystemGenerator\OverlappedTimeRangeTruncater'
             - '@vimeet_infrastructure.adapter.delayed_event_dispatcher'
+            - '@Proximum\Vimeet\Infrastructure\Repository\CartRowParticipantRepository'
 
     #
     # Participant

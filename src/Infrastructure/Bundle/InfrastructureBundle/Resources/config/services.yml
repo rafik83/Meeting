@@ -4570,6 +4570,7 @@ services:
             - '@repository.promotion_code_row_repository'
             - '@order.merger'
             - '@Proximum\Vimeet\Domain\Participant\ParticipantProductSetter'
+            - '@vimeet_infrastructure.adapter.delayed_event_dispatcher'
     buyable_object_resolver:
         class: Proximum\Vimeet\Domain\Cart\BuyableObjectResolver
         arguments:
