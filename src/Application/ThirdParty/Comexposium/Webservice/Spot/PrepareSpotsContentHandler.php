@@ -27,7 +27,7 @@ class PrepareSpotsContentHandler
     {
         $spots = [];
 
-        foreach ($prepareSpotsContent->rawRegistrations as $rawData) {
+        foreach ($prepareSpotsContent->rawRegistrationDataIndexedBySheetId as $sheetId => $rawData) {
             if (!isset($rawData->stand)) {
                 continue;
             }
@@ -35,12 +35,8 @@ class PrepareSpotsContentHandler
             $rawSpots = $this->convertToArray($rawData->stand);
 
             foreach ($rawSpots as $rawSpot) {
-                if (!isset($prepareSpotsContent->sheetIdByReference[$rawData->reference])) {
-                    continue;
-                }
-
                 $spots[] = array_merge(
-                    ['sheet_id' => $prepareSpotsContent->sheetIdByReference[$rawData->reference]],
+                    ['sheet_id' => $sheetId],
                     (array) $rawSpot
                 );
             }

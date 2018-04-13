@@ -13,20 +13,14 @@ namespace Proximum\Vimeet\Application\ThirdParty\Comexposium\Webservice\Spot;
 class PrepareSpotsContent
 {
     /** @var array */
-    public $sheetIdByReference;
-
-    /** @var array */
-    public $rawRegistrations;
+    public $rawRegistrationDataIndexedBySheetId;
 
     /**
-     * @param array $sheetIdByReference example: [1337 => 678], 1337 is Comexposium reference and 678 is Vimeet
-     *     reference.
-     * @param array $rawRegistrations raw "inscription" data from Comexposium ;
+     * @param array $rawRegistrationDataIndexedBySheetId raw "inscription" data from Comexposium indexed by Sheet id
      *     See http://webservices.comexposium-admin.com/catalogue-ws-v2/inscriptionclientws.wsdl
      */
-    public function __construct(array $sheetIdByReference, array $rawRegistrations)
+    public function __construct(array $rawRegistrationDataIndexedBySheetId)
     {
-        $this->sheetIdByReference = $sheetIdByReference;
-        $this->rawRegistrations = $rawRegistrations;
+        $this->rawRegistrationDataIndexedBySheetId = $rawRegistrationDataIndexedBySheetId;
     }
 }
