@@ -365,3 +365,12 @@ services:
             - '@session.flash_bag'
             - '@adapter.router'
             - '@templating'
+
+    #
+    # Spot
+    #
+    Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Spot\DownloadAction:
+        arguments:
+            - '@adapter.authorization_checker'
+            - '@adapter.file_system_adapter'
+            - '%infrastructure.export_spot_path%'
