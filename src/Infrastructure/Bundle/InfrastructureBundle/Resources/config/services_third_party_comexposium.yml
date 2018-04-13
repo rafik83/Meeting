@@ -78,6 +78,10 @@ services:
             - '@repository.event.extra_parameter_repository'
             - '@Proximum\Vimeet\Application\ThirdParty\Comexposium\Webservice\Handler\ComexposiumWebservice'
 
+    Proximum\Vimeet\Application\ThirdParty\Comexposium\Webservice\Handler\GetEventReferenceHandler:
+        arguments:
+            - '@repository.event.extra_parameter_repository'
+
     #
     # Converter
     #
