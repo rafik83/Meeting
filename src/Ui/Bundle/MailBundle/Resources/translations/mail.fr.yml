@@ -93,6 +93,9 @@ mail.sheet.validation.draft.body: "Bonjour %firstname% %lastname%,\n\nVotre fich
 mail.sheet.validation.draft.subject: 'Fiche remise en brouillon'
 mail.sheet.validation.validate.body: "Bonjour %firstname% %lastname%,\n\nVotre fiche de présentation de type %participationType% a été validée"
 mail.sheet.validation.validate.subject: 'Fiche validée'
+mail.spot.export.intro: "Bonjour,\n\n Voici l'export des lieux pour l'événement %eventTitle% :\n"
+mail.spot.export.link.click: 'Télécharger'
+mail.spot.export.subject: 'Fichier d''export des lieux'
 mail.thirdParty.comexposium.sso.participantAdded.body: "Bonjour %firstname% %lastname%,\n\nVous avez été ajouté par un de vos collaborateurs pour participer aux rendez-vous d'affaire sur %event%.\n"
 mail.thirdParty.comexposium.sso.participantAdded.end: "Cordialement,\n"
 mail.thirdParty.comexposium.sso.participantAdded.link: Connectez-vous
