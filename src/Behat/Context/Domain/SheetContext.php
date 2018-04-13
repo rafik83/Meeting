@@ -67,7 +67,7 @@ class SheetContext implements Context
             throw new \LogicException('Missing sheet');
         }
 
-        $this->sheetContextProxy->getSheetManager()->updateCompletness($sheet, $completeness);
+        $this->sheetContextProxy->getSheetManager()->updateCompleteness($sheet, $completeness);
         $this->sheetContextProxy->getStorage()->set('sheet', $sheet);
     }
 
