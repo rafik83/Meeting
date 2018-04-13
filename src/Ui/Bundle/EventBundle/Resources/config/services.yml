@@ -447,7 +447,7 @@ services:
         class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\EventListener\Sheet\Aggregate\SheetAggregateEventSubscriber
         arguments:
             - '@vimeet_infrastructure.repository.sheet_repository'
-            - '@domain.sheet.aggregate.available_slot_calculator'
+            - '@Proximum\Vimeet\Domain\Sheet\Aggregate\AvailableSlotCalculator'
             - '@adapter.job_queue_adapter'
         tags:
             - { name: kernel.event_subscriber }

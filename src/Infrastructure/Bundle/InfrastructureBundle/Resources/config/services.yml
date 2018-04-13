@@ -5706,12 +5706,16 @@ services:
         arguments:
             - '@vimeet_infrastructure.repository.meeting_slot_repository'
             - '@vimeet_infrastructure.repository.participant_repository'
-    domain.sheet.aggregate.available_slot_calculator:
-        class: Proximum\Vimeet\Domain\Sheet\Aggregate\AvailableSlotCalculator
+    Proximum\Vimeet\Domain\Sheet\Aggregate\AvailableSlotCalculator:
         arguments:
             - '@vimeet_infrastructure.repository.meeting_slot_repository'
             - '@vimeet_infrastructure.repository.sheet_repository'
             - '@adapter.sheet_indexer'
+
+    Proximum\Vimeet\Domain\Sheet\Aggregate\AvailableSlotCalculatorDecorator:
+        decorates: Proximum\Vimeet\Domain\Sheet\Aggregate\AvailableSlotCalculator
+        arguments:
+            - '@Proximum\Vimeet\Domain\Sheet\Aggregate\AvailableSlotCalculatorDecorator.inner'
 
     #
     # Command Aggregator
