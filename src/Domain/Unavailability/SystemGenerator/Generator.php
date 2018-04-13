@@ -164,16 +164,25 @@ class Generator
                 continue;
             }
 
-            $cartRowParticipant = $this->cartRowParticipantRepository->findByParticipant($participant);
+            $product = $this->getProductOutOfCartRowParticipantForParticipant($participant);
 
-            if ($cartRowParticipant instanceof CartRowParticipant) {
-                $product = $cartRowParticipant->getCartRow()->getProduct();
-
+            if ($product instanceof Product) {
                 $products[$product->getId()] = $product;
             }
         }
 
         return $products;
+    }
+
+    private function getProductOutOfCartRowParticipantForParticipant(Participant $participant): ?Product
+    {
+        $cartRowParticipant = $this->cartRowParticipantRepository->findByParticipant($participant);
+
+        if ($cartRowParticipant instanceof CartRowParticipant) {
+            return $cartRowParticipant->getCartRow()->getProduct();
+        }
+
+        return null;
     }
 
     /**
