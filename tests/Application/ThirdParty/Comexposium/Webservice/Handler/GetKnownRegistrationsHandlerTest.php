@@ -12,13 +12,13 @@ namespace Proximum\Vimeet\Tests\Application\ThirdParty\Comexposium\Webservice\Ha
 
 use PHPUnit\Framework\TestCase;
 use Proximum\Vimeet\Application\ThirdParty\Comexposium\Webservice\Handler\ComexposiumWebservice;
+use Proximum\Vimeet\Application\ThirdParty\Comexposium\Webservice\Handler\Exception\EventHasNotComexposiumReferenceException;
+use Proximum\Vimeet\Application\ThirdParty\Comexposium\Webservice\Handler\GetEventReferenceHandler;
 use Proximum\Vimeet\Application\ThirdParty\Comexposium\Webservice\Handler\GetKnownRegistrationsHandler;
 use Proximum\Vimeet\Application\ThirdParty\Comexposium\Webservice\Sheet\SheetExtraDataType;
-use Proximum\Vimeet\Domain\Event\ExtraParameter\Type as ExtraParameterType;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\Sheet\ExtraData;
-use Proximum\Vimeet\Domain\Repository\Event\ExtraParameterRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\Sheet\ExtraDataRepositoryInterface;
 
 class GetKnownRegistrationsHandlerTest extends TestCase
@@ -30,21 +30,15 @@ class GetKnownRegistrationsHandlerTest extends TestCase
         $event = $this->prophesize(Event::class);
         $sheetExtraDataRepository = $this->prophesize(ExtraDataRepositoryInterface::class);
 
-        $extraParameterRepository = $this->prophesize(ExtraParameterRepositoryInterface::class);
-        $extraParameterRepository
-            ->findByEventAndType(
-                $event,
-                ExtraParameterType::TYPE_COMEXPOSIUM_EVENT_REFERENCE
-            )
-            ->willReturn(null)
-        ;
+        $getEventReferenceHandler = $this->prophesize(GetEventReferenceHandler::class);
+        $getEventReferenceHandler->handle($event->reveal())->willThrow(EventHasNotComexposiumReferenceException::class);
 
         $comexposiumWebservice = $this->prophesize(ComexposiumWebservice::class);
 
         $getKnownRegistrationsHandler = new GetKnownRegistrationsHandler(
+            $comexposiumWebservice->reveal(),
             $sheetExtraDataRepository->reveal(),
-            $extraParameterRepository->reveal(),
-            $comexposiumWebservice->reveal()
+            $getEventReferenceHandler->reveal()
         );
         $getKnownRegistrationsHandler->handle($event->reveal());
     }
@@ -61,22 +55,15 @@ class GetKnownRegistrationsHandlerTest extends TestCase
             ->willReturn([])
         ;
 
-        $extraParameter = $this->prophesize(Event\ExtraParameter::class);
-        $extraParameterRepository = $this->prophesize(ExtraParameterRepositoryInterface::class);
-        $extraParameterRepository
-            ->findByEventAndType(
-                $event,
-                ExtraParameterType::TYPE_COMEXPOSIUM_EVENT_REFERENCE
-            )
-            ->willReturn($extraParameter->reveal())
-        ;
+        $getEventReferenceHandler = $this->prophesize(GetEventReferenceHandler::class);
+        $getEventReferenceHandler->handle($event->reveal())->willReturn('expected-reference');
 
         $comexposiumWebservice = $this->prophesize(ComexposiumWebservice::class);
 
         $getKnownRegistrationsHandler = new GetKnownRegistrationsHandler(
+            $comexposiumWebservice->reveal(),
             $sheetExtraDataRepository->reveal(),
-            $extraParameterRepository->reveal(),
-            $comexposiumWebservice->reveal()
+            $getEventReferenceHandler->reveal()
         );
         $this->assertEquals([], $getKnownRegistrationsHandler->handle($event->reveal()));
     }
@@ -111,37 +98,35 @@ class GetKnownRegistrationsHandlerTest extends TestCase
             ->willReturn([$extraData1->reveal(), $extraData2->reveal(), $extraData3->reveal()])
         ;
 
-        $extraParameter = $this->prophesize(Event\ExtraParameter::class);
-        $extraParameter->getValue()->shouldBeCalled()->willReturn(1337);
+        $getEventReferenceHandler = $this->prophesize(GetEventReferenceHandler::class);
+        $getEventReferenceHandler->handle($event->reveal())->willReturn('expected-reference');
 
-        $extraParameterRepository = $this->prophesize(ExtraParameterRepositoryInterface::class);
-        $extraParameterRepository
-            ->findByEventAndType(
-                $event,
-                ExtraParameterType::TYPE_COMEXPOSIUM_EVENT_REFERENCE
-            )
-            ->willReturn($extraParameter->reveal())
-        ;
+        $sheet1data = new \stdClass();
+        $sheet1data->reference = 999;
+        $sheet2data = new \stdClass();
+        $sheet2data->reference = 888;
+        $sheet3data = new \stdClass();
+        $sheet3data->reference = 777;
 
         $comexposiumWebservice = $this->prophesize(ComexposiumWebservice::class);
         $comexposiumWebservice
-            ->getRegistrations(1337, [999, 888])
+            ->getRegistrations('expected-reference', [999, 888])
             ->shouldBeCalled()
-            ->willReturn([['sheet1' => 'whatever-data'], ['sheet2' => 'another-data']])
+            ->willReturn([$sheet1data, $sheet2data])
         ;
         $comexposiumWebservice
-            ->getRegistrations(1337, [777])
+            ->getRegistrations('expected-reference', [777])
             ->shouldBeCalled()
-            ->willReturn([['sheet3' => 'any-data']])
+            ->willReturn([$sheet3data])
         ;
 
         $getKnownRegistrationsHandler = new GetKnownRegistrationsHandler(
+            $comexposiumWebservice->reveal(),
             $sheetExtraDataRepository->reveal(),
-            $extraParameterRepository->reveal(),
-            $comexposiumWebservice->reveal()
+            $getEventReferenceHandler->reveal()
         );
         $this->assertEquals(
-            [['sheet1' => 'whatever-data'], ['sheet2' => 'another-data'], ['sheet3' => 'any-data']],
+            [111 => $sheet1data, 222 => $sheet2data, 333 => $sheet3data],
             $getKnownRegistrationsHandler->handle($event->reveal(), 2)
         );
     }

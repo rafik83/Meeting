@@ -10,11 +10,9 @@
 
 namespace Proximum\Vimeet\Application\ThirdParty\Comexposium\Webservice\Handler;
 
+use Proximum\Vimeet\Application\ThirdParty\Comexposium\Webservice\Handler\Exception\EventHasNotComexposiumReferenceException;
 use Proximum\Vimeet\Application\ThirdParty\Comexposium\Webservice\Sheet\SheetExtraDataType;
-use Proximum\Vimeet\Domain\Event\ExtraParameter\Type as ExtraParameterType;
 use Proximum\Vimeet\Domain\Model\Event;
-use Proximum\Vimeet\Domain\Model\Event\ExtraParameter;
-use Proximum\Vimeet\Domain\Repository\Event\ExtraParameterRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\Sheet\ExtraDataRepositoryInterface;
 
 class GetKnownRegistrationsHandler
@@ -24,34 +22,29 @@ class GetKnownRegistrationsHandler
     /** @var ExtraDataRepositoryInterface */
     private $sheetExtraDataRepository;
 
-    /** @var ExtraParameterRepositoryInterface */
-    private $extraParameterRepository;
-
     /** @var ComexposiumWebservice */
     private $comexposiumWebservice;
 
+    /** @var GetEventReferenceHandler */
+    private $getEventReferenceHandler;
+
     public function __construct(
+        ComexposiumWebservice $comexposiumWebservice,
         ExtraDataRepositoryInterface $sheetExtraDataRepository,
-        ExtraParameterRepositoryInterface $extraParameterRepository,
-        ComexposiumWebservice $comexposiumWebservice
+        GetEventReferenceHandler $getEventReferenceHandler
     ) {
-        $this->sheetExtraDataRepository = $sheetExtraDataRepository;
-        $this->extraParameterRepository = $extraParameterRepository;
         $this->comexposiumWebservice = $comexposiumWebservice;
+        $this->sheetExtraDataRepository = $sheetExtraDataRepository;
+        $this->getEventReferenceHandler = $getEventReferenceHandler;
     }
 
+    /**
+     * @return array of registration data indexed by Sheet id
+     * @throws EventHasNotComexposiumReferenceException
+     */
     public function handle(Event $event, int $chunkSize = self::CHUNK_SIZE): array
     {
-        $eventReferenceExtraParameter = $this->extraParameterRepository->findByEventAndType(
-            $event,
-            ExtraParameterType::TYPE_COMEXPOSIUM_EVENT_REFERENCE
-        );
-
-        if (!$eventReferenceExtraParameter instanceof ExtraParameter) {
-            throw new \LogicException(
-                'Not allowed to call this GetSpotsHandler if event has not Comexposium event reference'
-            );
-        }
+        $eventReference = $this->getEventReferenceHandler->handle($event);
 
         $registrationReferencesExtraData = $this->sheetExtraDataRepository->getExtraDataByNameAndEvent(
             $event,
@@ -70,17 +63,18 @@ class GetKnownRegistrationsHandler
             $registrationReferences[] = $extraData->getValue();
         }
 
-        $rawRegistrations = [];
+        $rawRegistrationDataIndexedBySheetId = [];
 
-        foreach (\array_chunk($registrationReferences, $chunkSize, false) as $registrationReferencesChunk) {
-            foreach ($this->comexposiumWebservice->getRegistrations(
-                $eventReferenceExtraParameter->getValue(),
-                $registrationReferencesChunk
-            ) as $rawData) {
-                $rawRegistrations[] = $rawData;
+        foreach (\array_chunk($registrationReferences, $chunkSize, false) as $referencesChunk) {
+            foreach ($this->comexposiumWebservice->getRegistrations($eventReference, $referencesChunk) as $rawData) {
+                if (!isset($rawData->reference, $sheetIdByReference[$rawData->reference])) {
+                    continue;
+                }
+
+                $rawRegistrationDataIndexedBySheetId[$sheetIdByReference[$rawData->reference]] = $rawData;
             }
         }
 
-        return $rawRegistrations;
+        return $rawRegistrationDataIndexedBySheetId;
     }
 }
