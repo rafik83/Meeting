@@ -14,6 +14,7 @@ use PHPUnit\Framework\TestCase;
 use Proximum\Vimeet\Application\ThirdParty\LENI\Common\EventExtraParameter\MappingGetter;
 use Proximum\Vimeet\Application\ThirdParty\LENI\Common\Query\LeniUserCustomDataQuery;
 use Proximum\Vimeet\Application\ThirdParty\LENI\Common\Query\LeniUserCustomDataQueryHandler;
+use Proximum\Vimeet\Application\ThirdParty\LENI\Exception\TypeDoesNotMatchException;
 use Proximum\Vimeet\Application\ThirdParty\LENI\Save\Converter\CustomDataConverter;
 use Proximum\Vimeet\Application\ThirdParty\LENI\Save\Converter\TypeConverter;
 use Proximum\Vimeet\Domain\Event\ExtraParameter\Type as EventExtraParameterType;
@@ -182,6 +183,46 @@ class LeniUserCustomDataQueryHandlerTest extends TestCase
             $leniUserCustomDataQueryHandler->handle(
                 new LeniUserCustomDataQuery($event->reveal(), $user->reveal(), $type->reveal(), $sheet->reveal(), 'fr')
             )
+        );
+    }
+
+    public function testTypeDoesNotMatchException()
+    {
+        $this->expectException(TypeDoesNotMatchException::class);
+
+        $event = $this->prophesize(Event::class);
+        $sheet = $this->prophesize(Sheet::class);
+        $user = $this->prophesize(User::class);
+        $type = $this->prophesize(Type::class);
+
+        $typeMapping = ['whatever' => 'mapping'];
+
+        $typeConverter = $this->prophesize(TypeConverter::class);
+        $typeConverter
+            ->convert($type->reveal(), $typeMapping)
+            ->shouldBeCalled()
+            ->willReturn([]) // an empty array from the TypeConverter throws the exception
+        ;
+
+        $mappingGetter = $this->prophesize(MappingGetter::class);
+        $mappingGetter
+            ->getMapping($event->reveal(), EventExtraParameterType::TYPE_LENI_TYPES_MAPPING)
+            ->shouldBeCalled()
+            ->willReturn($typeMapping)
+        ;
+
+        $customDataConverter = $this->prophesize(CustomDataConverter::class);
+        $templateDataFactory = $this->prophesize(TemplateDataFactory::class);
+
+        $leniUserCustomDataQueryHandler = new LeniUserCustomDataQueryHandler(
+            $typeConverter->reveal(),
+            $mappingGetter->reveal(),
+            $customDataConverter->reveal(),
+            $templateDataFactory->reveal()
+        );
+
+        $leniUserCustomDataQueryHandler->handle(
+            new LeniUserCustomDataQuery($event->reveal(), $user->reveal(), $type->reveal(), $sheet->reveal(), 'fr')
         );
     }
 }

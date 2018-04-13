@@ -16,6 +16,7 @@ use Proximum\Vimeet\Application\Exception\Sheet\SheetNotFoundException;
 use Proximum\Vimeet\Application\ThirdParty\LENI\Common\Normalizer\LeniUserViewNormalizer;
 use Proximum\Vimeet\Application\ThirdParty\LENI\Common\Query\LeniUserViewQuery;
 use Proximum\Vimeet\Application\ThirdParty\LENI\Common\Query\LeniUserViewQueryHandler;
+use Proximum\Vimeet\Application\ThirdParty\LENI\Exception\TypeDoesNotMatchException;
 use Proximum\Vimeet\Domain\Event\ExtraParameter\Type;
 use Proximum\Vimeet\Domain\Exception\Event\DayNotDefinedException;
 use Proximum\Vimeet\Domain\Model\Event;
@@ -167,6 +168,8 @@ class PrepareLeniApiCallHandler
                 new LeniUserViewQuery($event, $user, $previousUserEventExtraData)
             );
         } catch (SheetNotFoundException $sheetNotFoundException) {
+            return;
+        } catch (TypeDoesNotMatchException $typeDoesNotMatchException) {
             return;
         }
 

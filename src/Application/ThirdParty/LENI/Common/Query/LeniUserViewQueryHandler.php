@@ -15,6 +15,7 @@ use Proximum\Vimeet\Application\Components\Sheet\SheetInfoGuesser;
 use Proximum\Vimeet\Application\Components\Sheet\Template\Tag;
 use Proximum\Vimeet\Application\Components\User\UserInfoGuesser;
 use Proximum\Vimeet\Application\Exception\Sheet\SheetNotFoundException;
+use Proximum\Vimeet\Application\ThirdParty\LENI\Exception\TypeDoesNotMatchException;
 use Proximum\Vimeet\Application\ThirdParty\LENI\LeniConstants;
 use Proximum\Vimeet\Application\ThirdParty\LENI\Common\View\LeniPlanningDayView;
 use Proximum\Vimeet\Application\ThirdParty\LENI\Common\View\LeniPlanningView;
@@ -97,6 +98,7 @@ class LeniUserViewQueryHandler
      *
      * @return LeniUserView
      * @throws SheetNotFoundException
+     * @throws TypeDoesNotMatchException
      */
     public function handle(LeniUserViewQuery $query): LeniUserView
     {
