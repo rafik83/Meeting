@@ -12,6 +12,7 @@ namespace Proximum\Vimeet\Behat\Context;
 
 use Behat\Behat\Context\SnippetAcceptingContext;
 use Behat\Mink\Driver\BrowserKitDriver;
+use Behat\Mink\Element\NodeElement;
 use Behat\MinkExtension\Context\MinkContext;
 use Behat\Symfony2Extension\Context\KernelAwareContext;
 use Proximum\Vimeet\Application\Adapter\FileSystemAdapterInterface;
@@ -397,6 +398,29 @@ class FeatureContext extends MinkContext implements KernelAwareContext, SnippetA
         }
 
         throw new \Exception('Radio button not found');
+    }
+
+    /**
+     * @Then the index :index of the table should contain :title
+     */
+    public function theGivenIndexShouldContain(int $index = 1, string $title)
+    {
+        $tables = $this->getSession()->getPage()->findAll('css', 'table');
+
+        /** @var NodeElement $table */
+        $table = reset($tables);
+
+        $trs = $table->findAll('css', sprintf('tbody > tr:nth-child(%d)', $index));
+
+        $tr = reset($trs);
+
+        if (false === $tr) {
+            throw new \Exception(sprintf('The element of index %d does not exist', $index));
+        }
+
+        if (false === strpos($tr->getHtml(), $title)) {
+            throw new \Exception(sprintf('The element of index %d does not contain %s', $index, $title));
+        }
     }
 
     /**

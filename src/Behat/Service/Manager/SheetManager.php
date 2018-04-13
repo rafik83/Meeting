@@ -128,4 +128,11 @@ class SheetManager
 
         $this->sheetRepository->set($sheet);
     }
+
+    public function updateCompletness(Sheet $sheet, int $completeness): void
+    {
+        $sheet->setCompleteness($completeness);
+
+        $this->sheetRepository->set($sheet);
+    }
 }
