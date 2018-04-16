@@ -46,12 +46,15 @@ class OptionsType extends AbstractType
         foreach ($products as $product) {
             $builder->add(
                 $product->getId(),
-                QuantityType::class,
+                QuantityAndParticipantsType::class,
                 [
-                    'label'      => false,
-                    'max'        => $this->quantityMaxGuesser->getMaxByProduct($sheet, $product),
+                    'label' => false,
+                    'max' => $this->quantityMaxGuesser->getMaxByProduct($sheet, $product),
                     'minMessage' => 'package.product.quantityMin',
                     'maxMessage' => 'package.product.quantityMax',
+                    'sheet' => $options['sheet'],
+                    'locale' => $options['locale'],
+                    'isAttributable' => $product->isAttributable(),
                 ]
             );
         }
@@ -62,7 +65,7 @@ class OptionsType extends AbstractType
      */
     public function configureOptions(OptionsResolver $optionsResolver)
     {
-        $optionsResolver->setRequired(['sheet']);
+        $optionsResolver->setRequired(['sheet', 'locale']);
         $optionsResolver->addAllowedTypes('sheet', Sheet::class);
         $optionsResolver->setDefaults(
             [

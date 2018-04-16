@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2015 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -38,6 +38,8 @@ class ParticipantChoiceType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
+            'isMultiple' => false,
+            'isSelect2' => false,
             'choice_label' => function (Options $options) {
                 return function (Participant $participant) use ($options) {
                     return $this->participantInfoGuesser
@@ -46,6 +48,12 @@ class ParticipantChoiceType extends AbstractType
             },
             'choices'      => function (Options $options) {
                 return $options['sheet']->getParticipants();
+            },
+            'multiple' => function (Options $options) {
+                return $options['isMultiple'] ?? false;
+            },
+            'select2' => function (Options $options) {
+               return $options['isSelect2'] ?? false;
             },
         ]);
         $resolver->setRequired(['sheet', 'locale']);

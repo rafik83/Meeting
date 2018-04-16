@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Application\Components\Step;
 
+use Proximum\Vimeet\Application\Command\Package\Step\OptionRow;
 use Proximum\Vimeet\Application\Command\Package\Step\SelectOptions;
 use Proximum\Vimeet\Domain\Cart\CartManager;
 use Proximum\Vimeet\Domain\Model\CartRow;
@@ -73,7 +74,12 @@ class StepOption
         $availableOptions = $command->sheet->getPackage()->getAvailablesOptions(new \DateTime());
 
         foreach ($availableOptions as $option) {
-            $options[$option->getId()] = $this->getOptionQuantity($option, $cartRows, $orderMerged);
+            // @todo: second arguments must have previously selected participants
+            $options[$option->getId()] = new OptionRow(
+                $this->getOptionQuantity($option, $cartRows, $orderMerged),
+                [],
+                $option->isAttributable()
+            );
         }
 
         $command->options = $options;

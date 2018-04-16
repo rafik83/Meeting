@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2016 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -12,32 +12,19 @@ namespace Proximum\Vimeet\Application\Command\Package\Step;
 
 class SelectOptions extends AbstractStep
 {
-    /**
-     * @var array of product id => quantity
-     */
+    /** @var OptionRow[] indexed by product id */
     public $options;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     public $locale;
 
-    /**
-     * @param int $id
-     *
-     * @return int
-     */
-    public function __get($id)
+    public function __get(int $id): OptionRow
     {
         return $this->options[$id];
     }
 
-    /**
-     * @param int $id
-     * @param int $quantity
-     */
-    public function __set($id, $quantity)
+    public function __set(int $id, OptionRow $optionRow): void
     {
-        $this->options[$id] = $quantity;
+        $this->options[$id] = $optionRow;
     }
 }

@@ -1,4 +1,9 @@
-<tr class="{{ product.isOutOfStock or not product.isBuyable ? '': 'row-quantity' }} {{ product.included > 0 or quantityForm is not null and quantityForm.vars.value > 0 ? 'selected-line' : '' }}">
+{% form_theme form '@Ui/default.html.twig' %}
+
+{# @todo: get count assigned participants if no quantity field #}
+{% set quantity = quantityForm.quantity is defined ? quantityForm.quantity.vars.value : 0 %}
+
+<tr class="{{ product.isOutOfStock or not product.isBuyable ? '': 'row-quantity' }} {{ product.included > 0 or quantityForm is not null and quantity > 0 ? 'selected-line' : '' }}">
     <td class="col-md-2">
         <div class="product">
             <span class="product-price">
@@ -36,6 +41,14 @@
                 </i>
             </p>
         {% endif %}
+
+        {% if quantityForm.participants is defined %}
+            {{ form_widget(quantityForm.participants, {attr: {
+                'data-selected-line-class': 'selected-line',
+                'data-unit-price': product.unitPrice,
+                'data-included': product.included
+            }}) }}
+        {% endif %}
     </td>
     <td class="col-md-2">
         {% if product.included %}
@@ -48,11 +61,13 @@
         {% elseif not product.isBuyable %}
             <h3 class="out-of-stock text-center">{{ 'package.product.unavailable'|trans }}</h3>
         {% elseif quantityForm is defined and quantityForm != null %}
-            {{ form_widget(quantityForm, {attr: {
-                'data-selected-line-class': 'selected-line',
-                'data-unit-price': product.unitPrice,
-                'data-included': product.included
-            }}) }}
+            {% if quantityForm.quantity is defined %}
+                {{ form_widget(quantityForm.quantity, {attr: {
+                    'data-selected-line-class': 'selected-line',
+                    'data-unit-price': product.unitPrice,
+                    'data-included': product.included
+                }}) }}
+            {% endif %}
 
             <div class="message-error text-danger text-center">
                 {{ form_errors(quantityForm) }}
@@ -69,7 +84,7 @@
             <span class="product-price text-center">
                 {% if quantityForm is not null %}
                     {{ 'package.product.totalPrice'|trans({
-                        '%price%': quantityForm.vars.value * product.unitPrice,
+                        '%price%': quantity * product.unitPrice,
                         '%currency%': product.currency|currency_symbol,
                         '%vatMode%': ('package.vatMode.' ~ product.vatMode)|trans
                     })|html }}

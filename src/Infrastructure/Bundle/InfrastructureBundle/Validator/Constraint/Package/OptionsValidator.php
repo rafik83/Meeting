@@ -89,6 +89,8 @@ class OptionsValidator extends ConstraintValidator
         $order   = null;
         $cart    = $this->cartManager->getCart($selectOptions->sheet);
         $options = $selectOptions->sheet->getPackage()->getAvailablesOptions($this->now);
+
+        /** @var Product[] $options indexed by ProductId */
         $options = array_combine(
             array_map(
                 function (Product $product) {
@@ -103,8 +105,8 @@ class OptionsValidator extends ConstraintValidator
             $order = $this->merger->merge($selectOptions->sheet->getNotCancelledOrders());
         }
 
-        foreach ($selectOptions->options as $id => $quantity) {
-            if (!isset($options[$id])) {
+        foreach ($selectOptions->options as $id => $optionRow) {
+            if (!isset($options[$id]) && !$options[$id] instanceof Product) {
                 $this
                     ->context
                     ->buildViolation('package.product.notAvailable')
@@ -113,11 +115,13 @@ class OptionsValidator extends ConstraintValidator
                 continue;
             }
 
+            $quantity = $optionRow->getQuantity();
+
             $quantityMin = $this->getQuantityMin(
                 $selectOptions->sheet,
                 $options,
                 $id,
-                (int) $quantity,
+                $quantity,
                 $cart,
                 $order
             );

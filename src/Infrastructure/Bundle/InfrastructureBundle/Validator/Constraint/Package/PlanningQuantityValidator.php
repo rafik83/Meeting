@@ -36,7 +36,7 @@ class PlanningQuantityValidator extends ConstraintValidator
      */
     public function validate($selectParticipantAndPlanning, Constraint $constraint)
     {
-        $quantity    = $selectParticipantAndPlanning->planningQuantity;
+        $quantity    = $selectParticipantAndPlanning->planningQuantity->getQuantity();
         $sheet       = $selectParticipantAndPlanning->sheet;
         $quantityMax = $this->quantityMaxGuesser->getMaxPlanning($sheet);
 

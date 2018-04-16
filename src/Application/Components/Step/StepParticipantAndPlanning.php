@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Application\Components\Step;
 
+use Proximum\Vimeet\Application\Command\Package\Step\OptionRow;
 use Proximum\Vimeet\Application\Command\Package\Step\SelectParticipantAndPlanning;
 use Proximum\Vimeet\Application\Components\Package\ProductByParticipantGetter;
 use Proximum\Vimeet\Domain\Cart\CartManager;
@@ -73,7 +74,7 @@ class StepParticipantAndPlanning
             $cartQuantity = $planningRow->getQuantity();
         }
 
-        $command->planningQuantity = $orderQuantity + $cartQuantity;
+        $command->planningQuantity = new OptionRow($orderQuantity + $cartQuantity);
 
         return $command;
     }

@@ -333,6 +333,7 @@ class PackageController extends Controller
             return $this->createForm(OptionsType::class, $command, [
                 'action' => $action,
                 'sheet' => $command->sheet,
+                'locale' => $locale,
             ]);
         }
 

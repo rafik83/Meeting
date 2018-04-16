@@ -80,7 +80,7 @@ class SelectOptionsHandler
             $orderMerged = $this->merger->merge($sheet->getNotCancelledOrders());
         }
 
-        foreach ($selectOptions->options as $id => $quantity) {
+        foreach ($selectOptions->options as $id => $optionRow) {
             $orderQuantity = 0;
 
             // handle new order
@@ -90,7 +90,7 @@ class SelectOptionsHandler
                 }
             }
 
-            $cart->setProduct($options[$id], $quantity - $orderQuantity);
+            $cart->setProduct($options[$id], $optionRow->getQuantity() - $orderQuantity);
         }
 
         $this->cartManager->save($cart);
