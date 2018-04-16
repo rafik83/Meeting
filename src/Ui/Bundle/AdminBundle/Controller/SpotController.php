@@ -79,7 +79,8 @@ class SpotController extends Controller
 
         $spotsList = $this->get('tactician.commandbus.query')->handle(new ListViewQuery($event, $locale, $filters));
 
-        $canExport = $this->get('tactician.commandbus.query')->handle(new HasEventReferenceQuery($event));
+        $canExport = $this->isGranted('ROLE_ALLOWED_TO_ORGANIZE')
+            && $this->get('tactician.commandbus.query')->handle(new HasEventReferenceQuery($event));
 
         $filterFormView = $filterForm->createView();
 
