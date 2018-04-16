@@ -36,6 +36,11 @@ interface ExtraDataRepositoryInterface
     public function getExtraDataValuesForEvent(Event $event, string $name, array $values): array;
 
     /**
+     * @return ExtraData[]
+     */
+    public function getExtraDataByEventAndName(Event $event, string $name): array;
+
+    /**
      * @param Sheet  $sheet
      * @param string $name
      *

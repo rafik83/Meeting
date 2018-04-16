@@ -206,6 +206,7 @@ flash.sheet.template.preview.non_unique_exception: 'Vous ne pouvez pas utiliser 
 flash.sheet.update_billing.success: 'Les informations de facturation ont bien été enregistrées'
 flash.sheet.update_block.success: 'Les informations ont bien été enregistrées'
 flash.sheet.update_participant.success: 'La fiche participant a bien été modifiée'
+flash.spot.export.scheduled: 'La récupération et l''export des lieux des fiches Comexposium est en cours ; vous recevrez un email lorsque le fichier sera disponible.'
 flash.template.incomplete_translations.warning: 'Vous avez des traductions manquantes.'
 flash.template.preview.update.success: 'L''aperçu du catalogue a bien été enregistré.'
 flash.omz.export.prepare: 'L''export des données pour l''OMZ est en cours, vous recevrez un email lorsque le fichier sera disponible'

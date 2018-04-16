@@ -1,11 +1,23 @@
 {% extends 'AdminBundle::base.html.twig' %}
 
 {% import 'AdminBundle:Common:list_macros.html.twig' as list_macros %}
+{% import '@Admin/macro.html.twig' as form_macros %}
 
 {% block title 'admin.spot.title'|trans %}
 
 {% block content %}
+
     <h1 class="page-header">{{ 'admin.spot.title'|trans }}</h1>
+
+    {% if canExport %}
+        {{ form_macros.button(
+            path('admin_spot_schedule_export', { 'event': event.id }),
+            'POST',
+            'admin.spot.commexposium.export.title'|trans,
+            {'class': 'btn btn-info'},
+            {'class': 'alert alert-info text-center'}
+        ) }}
+    {% endif %}
 
     {% if filtered or spotsList.hasSpot %}
         <div class="row well">

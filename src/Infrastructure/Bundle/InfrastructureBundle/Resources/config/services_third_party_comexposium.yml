@@ -21,6 +21,14 @@ services:
         tags:
             - { name: console.command }
 
+    Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\ThirdParty\Comexposium\Webservice\ComexposiumExportSpotCommand:
+        arguments:
+            - '@vimeet_infrastructure.repository.event_repository'
+            - '@repository.admin_repository'
+            - '@Proximum\Vimeet\Application\ThirdParty\Comexposium\Webservice\Spot\ExportHandler'
+        tags:
+            - { name: console.command }
+
     #
     # Handler
     #
@@ -71,6 +79,22 @@ services:
         arguments:
             - '@Proximum\Vimeet\Application\ThirdParty\Comexposium\Webservice\Handler\ComexposiumWebservice'
             - '@Proximum\Vimeet\Application\ThirdParty\Comexposium\Webservice\Converter\RawNomenclatureToNomenclatureViewConverter'
+
+    Proximum\Vimeet\Application\ThirdParty\Comexposium\Webservice\Handler\GetKnownRegistrationsHandler:
+        arguments:
+            - '@Proximum\Vimeet\Application\ThirdParty\Comexposium\Webservice\Handler\ComexposiumWebservice'
+            - '@repository.sheet.extra_data_repository'
+            - '@Proximum\Vimeet\Application\ThirdParty\Comexposium\Webservice\Handler\GetEventReferenceHandler'
+
+    Proximum\Vimeet\Application\ThirdParty\Comexposium\Webservice\Handler\GetEventReferenceHandler:
+        arguments:
+            - '@repository.event.extra_parameter_repository'
+
+    Proximum\Vimeet\Application\ThirdParty\Comexposium\Webservice\Query\HasEventReferenceQueryHandler:
+        arguments:
+            - '@Proximum\Vimeet\Application\ThirdParty\Comexposium\Webservice\Handler\GetEventReferenceHandler'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\ThirdParty\Comexposium\Webservice\Query\HasEventReferenceQuery }
 
     #
     # Converter
@@ -191,3 +215,33 @@ services:
         arguments:
             - '@security.http_utils'
 
+    #
+    # Get Spots
+    #
+    Proximum\Vimeet\Application\ThirdParty\Comexposium\Webservice\Spot\ExportHandler:
+        arguments:
+            - '@Proximum\Vimeet\Application\ThirdParty\Comexposium\Webservice\Handler\GetKnownRegistrationsHandler'
+            - '@Proximum\Vimeet\Application\ThirdParty\Comexposium\Webservice\Spot\PrepareSpotsContentHandler'
+            - '@Proximum\Vimeet\Application\ThirdParty\Comexposium\Webservice\Spot\CreateFileHandler'
+            - '@Proximum\Vimeet\Application\ThirdParty\Comexposium\Webservice\Spot\NotifyHandler'
+
+    Proximum\Vimeet\Application\ThirdParty\Comexposium\Webservice\Spot\ScheduleExportHandler:
+        arguments:
+            - '@Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Adapter\ThirdParty\Comexposium\ComexposiumJobQueue'
+            - '@Proximum\Vimeet\Application\ThirdParty\Comexposium\Webservice\Handler\GetEventReferenceHandler'
+
+    Proximum\Vimeet\Application\ThirdParty\Comexposium\Webservice\Spot\PrepareSpotsContentHandler:
+        arguments:
+            - '@adapter.serializer_adapter'
+
+    Proximum\Vimeet\Application\ThirdParty\Comexposium\Webservice\Spot\CreateFileHandler:
+        arguments:
+            - '@adapter.local_file_storage'
+            - '@repository.file_repository'
+            - '%infrastructure.export_spot_path%'
+            - '@datetime'
+
+    Proximum\Vimeet\Application\ThirdParty\Comexposium\Webservice\Spot\NotifyHandler:
+        arguments:
+            - '@adapter.mailer_adapter'
+            - '%mailer_sender%'

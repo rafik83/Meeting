@@ -74,6 +74,29 @@ class ExtraDataRepository implements ExtraDataRepositoryInterface
     /**
      * {@inheritdoc}
      */
+    public function getExtraDataByEventAndName(Event $event, string $name): array
+    {
+        return $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('extraData')
+            ->from(ExtraData::class, 'extraData')
+            ->join(
+                'extraData.sheet',
+                'sheet',
+                'WITH',
+                'sheet.event = :event AND extraData.name = :name'
+            )
+            ->setParameter('event', $event)
+            ->setParameter('name', $name)
+            ->getQuery()
+            ->getResult()
+        ;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function hasExtraDataForSheet(Sheet $sheet, string $name): bool
     {
         return null !== $this

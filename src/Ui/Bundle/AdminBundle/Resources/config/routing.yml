@@ -617,6 +617,22 @@ admin_spot_import_confirm:
     methods: [GET, POST]
     defaults: { _controller: AdminBundle:Spot\Import:confirm }
 
+admin_spot_schedule_export:
+    path: /event/{event}/spot/export
+    requirements:
+        event: \d+
+    methods: [POST]
+    defaults: { _controller: Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Spot\ScheduleExportAction }
+
+admin_spot_export_download:
+    path: /event/{event}/spot/download/{hash}z{file}
+    requirements:
+        event: \d+
+        hash: \w+
+        file: \w+
+    methods: [GET]
+    defaults: { _controller: Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Spot\DownloadAction }
+
 #
 # Meeting Request
 #

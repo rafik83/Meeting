@@ -17,7 +17,6 @@ use Proximum\Vimeet\Application\Command\Spot\Create;
 use Proximum\Vimeet\Application\Command\Spot\DeleteBatch;
 use Proximum\Vimeet\Application\Command\Spot\DisableBatch;
 use Proximum\Vimeet\Application\Command\Spot\EnableBatch;
-use Proximum\Vimeet\Application\Command\Spot\SpotImport;
 use Proximum\Vimeet\Application\Command\Spot\UnavailabilityBatch;
 use Proximum\Vimeet\Application\Command\Spot\UnavailabilityBatchResult;
 use Proximum\Vimeet\Application\Command\Spot\Update;
@@ -27,6 +26,7 @@ use Proximum\Vimeet\Application\Exception\Spot\SpotNotFoundException;
 use Proximum\Vimeet\Application\Exception\Spot\UniqueReferenceViolationException;
 use Proximum\Vimeet\Application\Query\Spot\ListViewQuery;
 use Proximum\Vimeet\Application\Query\Spot\SpotUnavailabilityQuery;
+use Proximum\Vimeet\Application\ThirdParty\Comexposium\Webservice\Query\HasEventReferenceQuery;
 use Proximum\Vimeet\Application\View\Spot\Batch\DeleteBatchView;
 use Proximum\Vimeet\Application\View\Spot\SpotUnavailabilityView;
 use Proximum\Vimeet\Domain\Model\Spot;
@@ -35,7 +35,6 @@ use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Spot\BatchUnavailabilityType
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Spot\FilterSpotType;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Spot\SpotCreateType;
 use Proximum\Vimeet\Domain\Model\Event;
-use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Spot\SpotImportType;
 use Proximum\Vimeet\Ui\Flash\TransMessage;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
@@ -80,10 +79,14 @@ class SpotController extends Controller
 
         $spotsList = $this->get('tactician.commandbus.query')->handle(new ListViewQuery($event, $locale, $filters));
 
+        $canExport = $this->isGranted('ROLE_ALLOWED_TO_ORGANIZE')
+            && $this->get('tactician.commandbus.query')->handle(new HasEventReferenceQuery($event));
+
         $filterFormView = $filterForm->createView();
 
         return $this->render('AdminBundle:Spot:list.html.twig', [
             'spotsList'       => $spotsList,
+            'canExport'       => $canExport,
             'event'           => $event,
             'filter_form'     => $filterForm->createView(),
             'filters_summary' => $this->get('filter_summary')->getFilters($filterFormView, $filters, $locale),
