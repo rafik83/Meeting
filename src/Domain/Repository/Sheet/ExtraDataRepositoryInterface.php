@@ -38,7 +38,7 @@ interface ExtraDataRepositoryInterface
     /**
      * @return ExtraData[]
      */
-    public function getExtraDataByNameAndEvent(Event $event, string $name): array;
+    public function getExtraDataByEventAndName(Event $event, string $name): array;
 
     /**
      * @param Sheet  $sheet

@@ -48,7 +48,7 @@ class GetKnownRegistrationsHandlerTest extends TestCase
         $event = $this->prophesize(Event::class);
         $sheetExtraDataRepository = $this->prophesize(ExtraDataRepositoryInterface::class);
         $sheetExtraDataRepository
-            ->getExtraDataByNameAndEvent(
+            ->getExtraDataByEventAndName(
                 $event,
                 SheetExtraDataType::COMEXPOSIUM_REGISTRATION_REFERENCE
             )
@@ -91,7 +91,7 @@ class GetKnownRegistrationsHandlerTest extends TestCase
         $event = $this->prophesize(Event::class);
         $sheetExtraDataRepository = $this->prophesize(ExtraDataRepositoryInterface::class);
         $sheetExtraDataRepository
-            ->getExtraDataByNameAndEvent(
+            ->getExtraDataByEventAndName(
                 $event,
                 SheetExtraDataType::COMEXPOSIUM_REGISTRATION_REFERENCE
             )

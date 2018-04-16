@@ -46,7 +46,7 @@ class GetKnownRegistrationsHandler
     {
         $eventReference = $this->getEventReferenceHandler->handle($event);
 
-        $registrationReferencesExtraData = $this->sheetExtraDataRepository->getExtraDataByNameAndEvent(
+        $registrationReferencesExtraData = $this->sheetExtraDataRepository->getExtraDataByEventAndName(
             $event,
             SheetExtraDataType::COMEXPOSIUM_REGISTRATION_REFERENCE
         );
