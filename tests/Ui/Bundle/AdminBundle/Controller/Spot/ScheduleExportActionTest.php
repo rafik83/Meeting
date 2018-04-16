@@ -12,7 +12,9 @@ namespace Proximum\Vimeet\Tests\Ui\Bundle\AdminBundle\Controller\Spot;
 
 use PHPUnit\Framework\TestCase;
 use Proximum\Vimeet\Application\Adapter\AuthorizationCheckerAdapterInterface;
+use Proximum\Vimeet\Application\Adapter\QueryBusInterface;
 use Proximum\Vimeet\Application\Adapter\RouterInterface;
+use Proximum\Vimeet\Application\ThirdParty\Comexposium\Webservice\Query\HasEventReferenceQuery;
 use Proximum\Vimeet\Application\ThirdParty\Comexposium\Webservice\Spot\ScheduleExport;
 use Proximum\Vimeet\Application\ThirdParty\Comexposium\Webservice\Spot\ScheduleExportHandler;
 use Proximum\Vimeet\Domain\Model\Admin;
@@ -47,11 +49,15 @@ class ScheduleExportActionTest extends TestCase
         $scheduleExportHandler = $this->prophesize(ScheduleExportHandler::class);
         $scheduleExportHandler->handle(new ScheduleExport($event->reveal(), $admin->reveal()))->shouldBeCalled();
 
+        $queryBus = $this->prophesize(QueryBusInterface::class);
+        $queryBus->handle(new HasEventReferenceQuery($event->reveal()))->shouldBeCalled()->willReturn(true);
+
         $scheduleExportAction = new ScheduleExportAction(
             $authorizationCheckerAdapter->reveal(),
             $flashBag->reveal(),
             $router->reveal(),
-            $scheduleExportHandler->reveal()
+            $scheduleExportHandler->reveal(),
+            $queryBus->reveal()
         );
         $result = $scheduleExportAction($event->reveal(), $adminDomain->reveal());
 
@@ -76,12 +82,42 @@ class ScheduleExportActionTest extends TestCase
         $flashBag = $this->prophesize(FlashBagInterface::class);
         $router = $this->prophesize(RouterInterface::class);
         $scheduleExportHandler = $this->prophesize(ScheduleExportHandler::class);
+        $queryBus = $this->prophesize(QueryBusInterface::class);
 
         $scheduleExportAction = new ScheduleExportAction(
             $authorizationCheckerAdapter->reveal(),
             $flashBag->reveal(),
             $router->reveal(),
-            $scheduleExportHandler->reveal()
+            $scheduleExportHandler->reveal(),
+            $queryBus->reveal()
+        );
+        $scheduleExportAction($event->reveal(), $adminDomain->reveal());
+    }
+
+    public function testEventHasNotReference()
+    {
+        $this->expectException(AccessDeniedException::class);
+
+        $event = $this->prophesize(Event::class);
+        $adminDomain = $this->prophesize(AdminDomain::class);
+
+        $authorizationCheckerAdapter = $this->prophesize(AuthorizationCheckerAdapterInterface::class);
+        $authorizationCheckerAdapter->isGranted('ROLE_ALLOWED_TO_ORGANIZE')->willReturn(true);
+        $authorizationCheckerAdapter->isGranted('PERMISSION_EVENT_ACCESS', $event->reveal())->willReturn(true);
+
+        $queryBus = $this->prophesize(QueryBusInterface::class);
+        $queryBus->handle(new HasEventReferenceQuery($event->reveal()))->shouldBeCalled()->willReturn(false);
+
+        $flashBag = $this->prophesize(FlashBagInterface::class);
+        $router = $this->prophesize(RouterInterface::class);
+        $scheduleExportHandler = $this->prophesize(ScheduleExportHandler::class);
+
+        $scheduleExportAction = new ScheduleExportAction(
+            $authorizationCheckerAdapter->reveal(),
+            $flashBag->reveal(),
+            $router->reveal(),
+            $scheduleExportHandler->reveal(),
+            $queryBus->reveal()
         );
         $scheduleExportAction($event->reveal(), $adminDomain->reveal());
     }
