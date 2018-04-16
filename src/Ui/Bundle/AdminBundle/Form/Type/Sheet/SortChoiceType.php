@@ -26,6 +26,7 @@ class SortChoiceType extends AbstractType
             'choices' => [
                 'event.sheet.order.createdAt'  => Constant::ORDER_BY_CREATED_AT,
                 'event.sheet.order.alphabetic' => Constant::ORDER_BY_ALPHABETICAL,
+                'event.sheet.order.completeness' => Constant::ORDER_BY_COMPLETENESS,
             ],
         ]);
     }

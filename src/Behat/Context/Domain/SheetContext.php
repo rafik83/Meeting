@@ -13,6 +13,7 @@ namespace Proximum\Vimeet\Behat\Context\Domain;
 use Behat\Behat\Context\Context;
 use Proximum\Vimeet\Behat\Context\Domain\Proxy\SheetContextProxyInterface;
 use Proximum\Vimeet\Domain\Model\Event;
+use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\Type;
 
 class SheetContext implements Context
@@ -50,6 +51,23 @@ class SheetContext implements Context
         }
 
         $sheet = $this->sheetContextProxy->getSheetManager()->create($event, null, $type);
+        $this->sheetContextProxy->getStorage()->set('sheet', $sheet);
+    }
+
+    /**
+     * @Given /^this sheet has "(?P<completeness>[^"]+)" as completeness$/
+     *
+     * @param int $completeness
+     */
+    public function thisSheetHasCompleteness(int $completeness = 50)
+    {
+        $sheet = $this->sheetContextProxy->getStorage()->get('sheet');
+
+        if (!$sheet instanceof Sheet) {
+            throw new \LogicException('Missing sheet');
+        }
+
+        $this->sheetContextProxy->getSheetManager()->updateCompleteness($sheet, $completeness);
         $this->sheetContextProxy->getStorage()->set('sheet', $sheet);
     }
 

@@ -1188,6 +1188,7 @@ event.sheet.imported.not_imported.label: 'Pas importées'
 event.sheet.listOrders.proForma: 'Visualiser la pro-forma'
 event.sheet.listOrders.title: 'Liste de vos commandes'
 event.sheet.order.alphabetic: Alphabétique
+event.sheet.order.completeness: Complétude
 event.sheet.order.createdAt: 'Date d''inscription'
 event.sheet.package.column.choices: Choix
 event.sheet.package.column.description: Description
