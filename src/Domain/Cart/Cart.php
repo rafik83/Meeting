@@ -178,6 +178,14 @@ class Cart
     }
 
     /**
+     * @return CartRow[]
+     */
+    public function getOptionsRowArray(): array
+    {
+        return $this->getOptionsRow()->toArray();
+    }
+
+    /**
      * @param Product $product
      *
      * @return bool

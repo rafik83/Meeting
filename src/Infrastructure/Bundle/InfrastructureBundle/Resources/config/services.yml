@@ -2576,6 +2576,7 @@ services:
         arguments:
             - '@order.merger'
             - '@cart_manager'
+            - '@datetime'
     components.step.step_participant:
         class: Proximum\Vimeet\Application\Components\Step\StepParticipantAndPlanning
         arguments:

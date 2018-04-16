@@ -21,15 +21,14 @@ use Proximum\Vimeet\Domain\Order\Merger;
 
 class StepOption
 {
-    /**
-     * @var Merger
-     */
+    /** @var Merger */
     private $orderMerger;
 
-    /**
-     * @var CartManager
-     */
+    /** @var CartManager */
     private $cartManager;
+
+    /** @var \DateTimeInterface */
+    private $dateTime;
 
     /**
      * StepOption constructor.
@@ -37,10 +36,11 @@ class StepOption
      * @param Merger      $orderMerger
      * @param CartManager $cartManager
      */
-    public function __construct(Merger $orderMerger, CartManager $cartManager)
+    public function __construct(Merger $orderMerger, CartManager $cartManager, \DateTimeInterface $dateTime)
     {
         $this->orderMerger = $orderMerger;
         $this->cartManager = $cartManager;
+        $this->dateTime = $dateTime;
     }
 
     /**
@@ -65,13 +65,13 @@ class StepOption
                 function (CartRow $cartRow) {
                     return $cartRow->getProduct()->getId();
                 },
-                $cart->getOptionsRow()->toArray()
+                $cart->getOptionsRowArray()
             ),
-            $cart->getOptionsRow()->toArray()
+            $cart->getOptionsRowArray()
         );
 
         $options          = [];
-        $availableOptions = $command->sheet->getPackage()->getAvailablesOptions(new \DateTime());
+        $availableOptions = $command->sheet->getPackage()->getAvailablesOptions($this->dateTime);
 
         foreach ($availableOptions as $option) {
             // @todo: second arguments must have previously selected participants
@@ -89,31 +89,25 @@ class StepOption
 
     /**
      * @param Product    $option
-     * @param array      $cartRows
+     * @param CartRow[]  $cartRows
      * @param null|Order $order
      *
      * @return int
      */
-    private function getOptionQuantity(Product $option, array $cartRows = [], Order $order = null)
+    private function getOptionQuantity(Product $option, array $cartRows = [], Order $order = null): int
     {
-        $cartQuantity = 0;
-        $cartRow      = $this->getCartRowFromOption($option, $cartRows);
+        $optionQuantity = 0;
+        $cartRow = $this->getCartRowFromOption($option, $cartRows);
 
         if (null !== $cartRow) {
-            $cartQuantity = $cartRow->getQuantity();
-        }
-        $optionQuantity = $cartQuantity;
-
-        if (isset($order) && $product = $order->getRowForProduct($option)) {
-            $orderQuantity  = $product->getQuantity();
-            $optionQuantity = $orderQuantity;
-
-            if (null !== $cartRow) {
-                $optionQuantity = $orderQuantity + $cartQuantity;
-            }
+            $optionQuantity = $cartRow->getQuantity();
         }
 
-        return $optionQuantity;
+        if (!$order instanceof Order || !$orderRow = $order->getRowForProduct($option)) {
+            return $optionQuantity;
+        }
+
+        return $orderRow->getQuantity() + $optionQuantity;
     }
 
     /**
