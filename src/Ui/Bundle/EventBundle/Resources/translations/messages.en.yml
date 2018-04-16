@@ -239,7 +239,7 @@ navigation.links.package.order_list: 'My orders'
 navigation.links.package.order_summary_total: 'Global summary'
 navigation.links.package.payment: Payment
 navigation.links.package.summary: 'Order summary'
-navigation.links.package.terms_of_sale: 'terms of sale'
+navigation.links.package.terms_of_sale: 'Terms of sale'
 navigation.links.planning.all_schedule: 'All meeting schedules'
 navigation.links.planning.available_date: 'Available on'
 navigation.links.planning.conference: Conferences
@@ -380,7 +380,7 @@ register.already_registered: 'Already registered?'
 register.connect: validate
 register.finalize: Complete
 register.photo: "Why should you publish a photo?\n- Let potential business partners “put a face to a name” \n- Reinforce your professional network\n- Help contacts identify you more easily, and vice-versa\n- Complete digital business cards available to everyone\n- Easily identify each participant’s schedule"
-register.privacy_policies: 'Privacy protection: In accordance with the French law on Information Technology and Civil Liberties of January 6, 1978, amended in 2004, you have the right to access and correct personal data/information about you by sending us an e-mail at cnil@vi-meet.com.'
+register.privacy_policies: "The data collected in this form will be registered with Vimeet, and is needed for your participation at this event. \n\nThe data will be stored safely and confidentially and will be kept for two years. \n\nAccording  to the European Union data protection and freedom of information laws, you have the right to access, rectify, modify and delete all data concerning you. You may do so by contacting cnil@vi-meet.com"
 register.register: Registration
 register.register_as: 'Register as:'
 register.step: Step

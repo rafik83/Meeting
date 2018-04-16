@@ -187,7 +187,7 @@ admin.event.see.link: See
 admin.event.settings.link: 'Event settings'
 admin.event.sheet.index.title: 'Re-index the event sheets'
 admin.event.template.link: Templates
-admin.event.template.package: 'Package of participation'
+admin.event.template.package: 'Registration package'
 admin.event.template.registration: Registration
 admin.event.template.sheet: Presentation
 admin.event.title: Title
@@ -982,7 +982,7 @@ admin.transaction.edit: Modify
 admin.transaction.mode.bank_card: 'credit card'
 admin.transaction.mode.bank_cash: cash
 admin.transaction.mode.bank_check: Cheque
-admin.transaction.mode.bank_transfer: Transfer
+admin.transaction.mode.bank_transfer: 'Wire transfer'
 admin.transaction.mode.paypal: Paypal
 admin.transaction.remove: remove
 admin.transaction.state.cancelled: Cancelled
@@ -1044,7 +1044,7 @@ admin.unavailability.mass.table.content.update: Modify
 admin.unavailability.mass.title: 'Mass unavailability'
 admin.unavailability.mass.update: 'Modification of a mass unavailability'
 admin.update_admin.title: 'Updatef a back office user'
-admin.update_content.terms-of-sale.link: 'terms of sale'
+admin.update_content.terms-of-sale.link: 'Terms of sale'
 admin.update_content.terms-of-sale.title: 'Modification of the terms of sale'
 admin.user.company-information: 'Company informations'
 admin.user.contact-information: 'Contact informations'

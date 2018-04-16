@@ -514,7 +514,7 @@ form.product_choice.group_by.type.option: Options
 form.product_choice.group_by.type.participant: Participants
 form.product_choice.group_by.type.plan: Formules
 form.product_choice.group_by.type.planning: Plannings
-form.product_create_option.children.attributable.label: "Attribuable à un/des participant/s"
+form.product_create_option.children.attributable.label: 'Attribuable à un/des participant/s'
 form.product_create_option.children.availabilityCurrent.label: 'Stock actuel'
 form.product_create_option.children.availabilityMax.label: 'Stock max'
 form.product_create_option.children.buyableUntil.label: 'Achetable jusqu''aù'
@@ -571,7 +571,7 @@ form.product_create_planning.children.translations.prototype.children.descriptio
 form.product_create_planning.children.translations.prototype.children.title.label: Titre
 form.product_create_planning.children.unitPrice.label: 'Prix unitaire (HT)'
 form.product_create_planning.children.vat.label: TVA
-form.product_update_option.children.attributable.label: "Attribuable à un/des participant/s"
+form.product_update_option.children.attributable.label: 'Attribuable à un/des participant/s'
 form.product_update_option.children.availabilityCurrent.label: 'Stock actuel'
 form.product_update_option.children.availabilityMax.label: 'Stock max'
 form.product_update_option.children.buyableUntil.label: 'Achetable jusqu''aù'
@@ -703,7 +703,7 @@ form.sheet_batch.children.generateInvoice.label: 'Générer facture'
 form.sheet_batch.children.group.label: Entité
 form.sheet_batch.children.pending.label: 'En attente'
 form.sheet_batch.children.printPdf.label: 'Imprimer en PDF'
-form.sheet_batch.children.printPlanning.label: 'Imprimer'
+form.sheet_batch.children.printPlanning.label: Imprimer
 form.sheet_batch.children.printPlanningOrderBy.label: 'Ordre de l''export'
 form.sheet_batch.children.refuse.label: Refuser
 form.sheet_batch.children.removeCatalog.label: 'Enlever du catalogue'
