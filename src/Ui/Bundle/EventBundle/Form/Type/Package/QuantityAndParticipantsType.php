@@ -47,8 +47,12 @@ class QuantityAndParticipantsType extends AbstractType
                         'sheet' => $options['sheet'],
                         'locale' => $options['locale'],
                         'isMultiple' => true,
-                        'isSelect2' => true,
                         'required' => false,
+                        'attr' => [
+                            'data-max' => $options['max'],
+                            'data-min-message' => $options['minMessage'],
+                            'data-max-message' => $options['maxMessage'],
+                        ]
                     ]
                 );
         }

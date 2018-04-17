@@ -52,9 +52,6 @@ class ParticipantChoiceType extends AbstractType
             'multiple' => function (Options $options) {
                 return $options['isMultiple'] ?? false;
             },
-            'select2' => function (Options $options) {
-               return $options['isSelect2'] ?? false;
-            },
         ]);
         $resolver->setRequired(['sheet', 'locale']);
     }
