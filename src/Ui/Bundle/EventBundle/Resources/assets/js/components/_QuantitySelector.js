@@ -24,7 +24,12 @@ function QuantitySelector(element)
         this.addQuantityEventListener();
     } else {
         this.updateTotalPriceFromSelectParticipants();
-        $(this.selectParticipants).select2({ placeholder: this.selectParticipants.getAttribute('data-placeholder') });
+
+        $(this.selectParticipants).select2({
+            placeholder: this.selectParticipants.getAttribute('data-placeholder'),
+            maximumSelectionLength: this.max ? this.max : 0
+        });
+
         $(this.selectParticipants).on('select2:close', this.updateTotalPriceFromSelectParticipants.bind(this));
     }
 }
