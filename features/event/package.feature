@@ -32,7 +32,7 @@ Feature: Complete my package
     When I am on this page "/fr/sheet/1/package/step/2"
     Then I should see "Participant supplémentaire"
     And I should see "package.product.unitPrice"
-    When I fill in "participant_and_planning[planningQuantity]" with "1"
+    When I fill in "participant_and_planning[planningQuantity][quantity]" with "1"
     And I press "package.participant_planning.validate"
     Then I should be on this page "/fr/sheet/1/package/step/3"
 
@@ -43,7 +43,7 @@ Feature: Complete my package
     And I should see "package.participant_planning.validate"
     And I should see "package.product.unitPrice"
     And I should see "package.product.totalPrice"
-    When I fill in "participant_and_planning[planningQuantity]" with "1"
+    When I fill in "participant_and_planning[planningQuantity][quantity]" with "1"
     And I press "package.participant_planning.validate"
     Then I should be on this page "/fr/sheet/1/package/step/3"
 
@@ -55,20 +55,20 @@ Feature: Complete my package
     And I should see "Options de communication"
     And I should see "package.product.subjectedToValidationHelp"
     When I fill in the following:
-      | options_10 | 1  |
-      | options_11 | 10 |
+      | options[10][quantity] | 1  |
+      | options[11][quantity] | 10 |
     And I press "package.product.validate"
     Then I should be on this page "/fr/sheet/1/package/step/3"
     And I should see "package.product.quantityNotMatch"
     And I should see "package.product.unavailable"
     When I fill in the following:
-      | options_10 | 1 |
-      | options_11 | 3 |
+      | options[10][quantity] | 1 |
+      | options[11][quantity] | 3 |
     And I press "package.product.validate"
     Then I should be on this page "/fr/sheet/1/billing-info"
     When I go to this page "/fr/sheet/1/package/step/3"
-    Then the "options_10" field should contain "1"
-    Then the "options_11" field should contain "3"
+    Then the "options[10][quantity]" field should contain "1"
+    Then the "options[11][quantity]" field should contain "3"
 
   Scenario: I can add a participant at step 2
     Given I am logged with "user_asddays_1@proximum.com" on event "http://asddays-2016.vimeet.proximum"
