@@ -79,6 +79,8 @@
                         {{ form_errors(quantityForm.quantity) }}
                     </div>
                 {% endif %}
+            {% else %}
+                <div class="text-center highlight ft-size-26" data-quantity-text>0</div>
             {% endif %}
 
             <div class="message-error text-danger text-center">
