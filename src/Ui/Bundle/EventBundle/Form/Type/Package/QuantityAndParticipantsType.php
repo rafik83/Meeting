@@ -43,10 +43,12 @@ class QuantityAndParticipantsType extends AbstractType
                     'participants',
                     ParticipantChoiceType::class,
                     [
+                        'label' => 'form.options.selectParticipants.label',
                         'sheet' => $options['sheet'],
                         'locale' => $options['locale'],
                         'isMultiple' => true,
                         'isSelect2' => true,
+                        'required' => false,
                     ]
                 );
         }

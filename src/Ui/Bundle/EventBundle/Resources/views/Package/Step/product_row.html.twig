@@ -43,12 +43,11 @@
         {% endif %}
 
         {% if quantityForm.participants is defined %}
-            {{ form_widget(quantityForm.participants, {attr: {
+            {{ form_row(quantityForm.participants, {attr: {
                 'data-selected-line-class': 'selected-line',
                 'data-unit-price': product.unitPrice,
                 'data-included': product.included
             }}) }}
-
 
             {% if not quantityForm.participants.vars.valid %}
                 <div class="message-error text-danger text-center">
