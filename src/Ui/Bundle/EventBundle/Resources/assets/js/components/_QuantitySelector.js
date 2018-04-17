@@ -4,6 +4,7 @@ function QuantitySelector(element)
 
     this.input = element.querySelector('input.qty');
     this.selectParticipants = element.querySelector('[data-select-participants]');
+    this.quantityText = element.querySelector('[data-quantity-text]');
 
     this.unitPrice = parseFloat(element.getAttribute('data-unit-price'));
     this.included = parseInt(element.getAttribute('data-included'));
@@ -22,9 +23,16 @@ function QuantitySelector(element)
     if (this.input) {
         this.addQuantityEventListener();
     } else {
-        $(this.selectParticipants).select2();
+        this.updateTotalPriceFromSelectParticipants();
+        $(this.selectParticipants).select2({ placeholder: this.selectParticipants.getAttribute('data-placeholder') });
+        $(this.selectParticipants).on('select2:close', this.updateTotalPriceFromSelectParticipants.bind(this));
     }
 }
+
+QuantitySelector.prototype.updateTotalPriceFromSelectParticipants = function ()
+{
+    this.updateTotalPrice($(this.selectParticipants).val() ? $(this.selectParticipants).val().length : 0);
+};
 
 QuantitySelector.prototype.addQuantityEventListener = function ()
 {
@@ -74,7 +82,6 @@ QuantitySelector.prototype.updateTotalPrice = function (value)
         }
     }
 
-
     if (null !== this.selectedLineClass && 0 === this.included) {
         if (0 === newValue) {
             this.element.classList.remove('selected-line');
@@ -83,7 +90,14 @@ QuantitySelector.prototype.updateTotalPrice = function (value)
         }
     }
 
-    this.input.value = newValue;
+    if (this.input) {
+        this.input.value = newValue;
+    }
+
+    if (this.quantityText) {
+        this.quantityText.innerHTML = newValue;
+    }
+
     this.totalPrice.innerHTML = this.unitPrice * newValue;
 };
 
