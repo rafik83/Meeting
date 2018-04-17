@@ -2,7 +2,7 @@
 
 {% set quantity = quantityForm.quantity is defined
     ? quantityForm.quantity.vars.value
-    : max(0, quantityForm.participants.vars.value|length - product.included)
+    : quantityForm.participants is defined ? max(0, quantityForm.participants.vars.value|length - product.included) : 0
 %}
 
 <tr
