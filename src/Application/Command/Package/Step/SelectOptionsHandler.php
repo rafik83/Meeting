@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2016 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -19,23 +19,16 @@ use Proximum\Vimeet\Infrastructure\Adapter\DelayedEventDispatcher;
 
 class SelectOptionsHandler
 {
-    /**
-     * @var CartManager
-     */
+    /** @var CartManager */
     private $cartManager;
-    /**
-     * @var \DateTimeInterface
-     */
+
+    /** @var \DateTimeInterface */
     private $now;
 
-    /**
-     * @var Merger
-     */
+    /** @var Merger */
     private $merger;
 
-    /**
-     * @var DelayedEventDispatcher
-     */
+    /** @var DelayedEventDispatcher */
     private $eventDispatcher;
 
     /**
@@ -59,7 +52,7 @@ class SelectOptionsHandler
     /**
      * @param SelectOptions $selectOptions
      */
-    public function handle(SelectOptions $selectOptions)
+    public function handle(SelectOptions $selectOptions): void
     {
         $sheet   = $selectOptions->sheet;
         $package = $sheet->getPackage();
