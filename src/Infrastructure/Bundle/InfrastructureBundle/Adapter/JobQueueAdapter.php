@@ -313,9 +313,16 @@ class JobQueueAdapter extends AbstractJobQueueAdapter implements JobQueueInterfa
     /**
      * {@inheritdoc}
      */
-    public function indexSheetsByEvent(Event $event): void
+    public function indexSheetsByEvent(Event $event, bool $reset = false): void
     {
-        $job = new Job(IndexSheetsByEventCommand::NAME, [$event->getId(), '--no-debug']);
+        $job = new Job(
+            IndexSheetsByEventCommand::NAME,
+            [
+                $event->getId(),
+                $reset ? IndexSheetsByEventCommand::RESET : IndexSheetsByEventCommand::NO_RESET,
+                '--no-debug',
+            ]
+        );
         $this->setJob($job);
     }
 

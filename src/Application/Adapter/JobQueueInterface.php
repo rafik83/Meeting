@@ -171,11 +171,12 @@ interface JobQueueInterface
 
     /**
      * This method re-index all the sheets of a given event
-     * It does not reset ES
+     * If the reset parameter is true, it removes all the entries of the given event first
      *
-     * @param $event
+     * @param Event $event
+     * @param bool  $reset
      */
-    public function indexSheetsByEvent(Event $event): void;
+    public function indexSheetsByEvent(Event $event, bool $reset = false): void;
 
     /**
      * Export the users' data for the OMZ

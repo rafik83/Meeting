@@ -30,6 +30,6 @@ class PrepareSheetsIndexHandler
      */
     public function handle(PrepareSheetsIndex $command): void
     {
-        $this->jobQueue->indexSheetsByEvent($command->event);
+        $this->jobQueue->indexSheetsByEvent($command->event, $command->reset);
     }
 }

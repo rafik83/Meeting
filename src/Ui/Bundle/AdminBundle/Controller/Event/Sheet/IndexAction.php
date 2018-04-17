@@ -82,7 +82,7 @@ class IndexAction
             throw new AccessDeniedException('Only the super admin can access this page');
         }
 
-        $command = new PrepareSheetsIndex($event);
+        $command = new PrepareSheetsIndex($event, true);
         $form = $this->formFactory->create(IndexType::class, $command);
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
