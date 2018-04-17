@@ -9,6 +9,7 @@
  */
 
 namespace Proximum\Vimeet\Domain\Model;
+
 use Proximum\Vimeet\Domain\Model\Order\Row;
 
 /**
@@ -40,33 +41,21 @@ class ProductAttributedToParticipant
         $this->orderRow = $orderRow;
     }
 
-    /**
-     * @return Product
-     */
     public function getProduct(): Product
     {
         return $this->product;
     }
 
-    /**
-     * @return Participant
-     */
     public function getParticipant(): Participant
     {
         return $this->participant;
     }
 
-    /**
-     * @return \DateTimeInterface
-     */
     public function getCreatedAt(): \DateTimeInterface
     {
         return $this->createdAt;
     }
 
-    /**
-     * @return null|Row
-     */
     public function getOrderRow(): ?Row
     {
         return $this->orderRow;
