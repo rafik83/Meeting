@@ -52,8 +52,8 @@ Feature: Select payable option in sheet
     And I should see "Participants & plannings"
     When I press "package.participant_planning.validate"
     Then I should be on this page "/fr/sheet/1/package/step/3"
-    And the "options[6]" field should contain "1"
-    And the "options[11]" field should contain "1"
+    And the "options[6][quantity]" field should contain "1"
+    And the "options[11][quantity]" field should contain "1"
 
   Scenario: I can't remove "Option Chaise" or "Option E" from my package because their are payable option
     Given I am logged with "user_asddays_1@proximum.com" on event "http://asddays-2016.vimeet.proximum"
@@ -61,7 +61,7 @@ Feature: Select payable option in sheet
     Then I should be on this page "/fr/sheet/1"
     When I go to this page "/fr/sheet/1/package/step/3"
     Then I should see "package.product.selectOptions"
-    And I fill in "options[6]" with "0"
+    And I fill in "options[6][quantity]" with "0"
     When I press "package.product.validate"
     Then I should be on this page "/fr/sheet/1/package/step/3"
     And I should see "package.product.quantityMinPayableOption"
@@ -93,8 +93,8 @@ Feature: Select payable option in sheet
     When I go to this page "/fr/sheet/1/package/step/3"
     Then I should see "package.product.selectOptions"
     And I should see "package.options.included"
-    And the "options[5]" field should contain "0"
-    And the "options[12]" field should contain "0"
+    And the "options[5][quantity]" field should contain "0"
+    And the "options[12][quantity]" field should contain "0"
 
   Scenario: I can remove my payable option in image object
     Given I am logged with "user_asddays_1@proximum.com" on event "http://asddays-2016.vimeet.proximum"
