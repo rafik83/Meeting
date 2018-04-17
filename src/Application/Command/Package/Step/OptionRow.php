@@ -21,7 +21,7 @@ class OptionRow
     private $participants;
 
     /** @var bool */
-    private $isAttributable;
+    public $isAttributable;
 
     public function __construct(int $quantity, array $participants = [], bool $isAttributable = false)
     {

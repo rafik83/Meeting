@@ -48,6 +48,13 @@
                 'data-unit-price': product.unitPrice,
                 'data-included': product.included
             }}) }}
+
+
+            {% if not quantityForm.participants.vars.valid %}
+                <div class="message-error text-danger text-center">
+                    {{ form_errors(quantityForm.participants) }}
+                </div>
+            {% endif %}
         {% endif %}
     </td>
     <td class="col-md-2">
@@ -67,6 +74,12 @@
                     'data-unit-price': product.unitPrice,
                     'data-included': product.included
                 }}) }}
+
+                {% if not quantityForm.quantity.vars.valid %}
+                    <div class="message-error text-danger text-center">
+                        {{ form_errors(quantityForm.quantity) }}
+                    </div>
+                {% endif %}
             {% endif %}
 
             <div class="message-error text-danger text-center">

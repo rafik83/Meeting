@@ -1,9 +1,9 @@
 <?php
 
 /*
- * This file is part of the vimeet project.
+ * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2016 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -26,34 +26,22 @@ use Symfony\Component\Validator\ConstraintValidator;
 
 class OptionsValidator extends ConstraintValidator
 {
-    /**
-     * @var QuantityMaxGuesser
-     */
+    /** @var QuantityMaxGuesser */
     private $quantityMaxGuesser;
 
-    /**
-     * @var \DateTimeInterface
-     */
+    /** @var \DateTimeInterface */
     private $now;
 
-    /**
-     * @var QuantityMinGuesser
-     */
+    /** @var QuantityMinGuesser */
     private $quantityMinGuesser;
 
-    /**
-     * @var Merger
-     */
+    /** @var Merger */
     private $merger;
 
-    /**
-     * @var TemplateProductGuesser
-     */
+    /** @var TemplateProductGuesser */
     private $templateProductGuesser;
 
-    /**
-     * @var CartManager
-     */
+    /** @var CartManager */
     private $cartManager;
 
     /**
@@ -84,7 +72,7 @@ class OptionsValidator extends ConstraintValidator
      * @param SelectOptions $selectOptions
      * @param Constraint    $constraint
      */
-    public function validate($selectOptions, Constraint $constraint)
+    public function validate($selectOptions, Constraint $constraint): void
     {
         $order   = null;
         $cart    = $this->cartManager->getCart($selectOptions->sheet);
@@ -140,7 +128,13 @@ class OptionsValidator extends ConstraintValidator
                 }
             }
 
-            $this->validateQuantity($quantity, $quantityMin, $quantityMax, $id);
+            $this->validateQuantity(
+                $quantity,
+                $quantityMin,
+                $quantityMax,
+                $id,
+                $optionRow->isAttributable
+            );
         }
     }
 
@@ -216,19 +210,25 @@ class OptionsValidator extends ConstraintValidator
     /**
      * Validate minimum and maximum quantity violation
      *
-     * @param int $quantity
-     * @param int $quantityMin
-     * @param int $quantityMax
-     * @param int $fieldId
+     * @param int  $quantity
+     * @param int  $quantityMin
+     * @param int  $quantityMax
+     * @param int  $fieldId
+     * @param bool $isAttributable
      */
-    private function validateQuantity($quantity, $quantityMin, $quantityMax, $fieldId)
-    {
+    private function validateQuantity(
+        $quantity,
+        $quantityMin,
+        $quantityMax,
+        $fieldId,
+        bool $isAttributable = false
+    ): void {
         if ($quantity < $quantityMin || $quantity > $quantityMax) {
             $this
                 ->context
                 ->buildViolation('package.product.quantityNotMatch')
                 ->setParameters(['%min%' => 0, '%max%' => $quantityMax])
-                ->atPath($fieldId)
+                ->atPath(sprintf('%s.%s', $fieldId, $isAttributable ? 'participants' : 'quantity'))
                 ->addViolation();
         }
     }
