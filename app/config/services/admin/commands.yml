@@ -4,6 +4,7 @@ services:
         arguments:
             - '@vimeet_infrastructure.repository.sheet_repository'
             - '@command.sheet.aggregate.available_slot_aggregator_handler'
+            - '@adapter.sheet_indexer'
     command.sheet.aggregate.available_slot_aggregator_handler:
         class: Proximum\Vimeet\Application\Command\Sheet\Aggregate\AvailableSlotAggregatorHandler
         arguments:

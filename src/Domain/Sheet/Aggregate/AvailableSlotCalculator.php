@@ -43,8 +43,9 @@ class AvailableSlotCalculator
 
     /**
      * @param Sheet $sheet
+     * @param bool  $indexSheet
      */
-    public function calculateAvailableSlotForSheet(Sheet $sheet)
+    public function calculateAvailableSlotForSheet(Sheet $sheet, bool $indexSheet = true): void
     {
         $slots = [];
 
@@ -68,6 +69,9 @@ class AvailableSlotCalculator
         $sheet->setAvailableSlots($availableSlots);
 
         $this->sheetRepository->set($sheet);
-        $this->sheetIndexer->updateSheets([$sheet]);
+
+        if (true === $indexSheet) {
+            $this->sheetIndexer->updateSheets([$sheet]);
+        }
     }
 }

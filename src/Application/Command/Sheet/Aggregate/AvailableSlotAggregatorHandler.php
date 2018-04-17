@@ -28,8 +28,8 @@ class AvailableSlotAggregatorHandler
     /**
      * @param AvailableSlotAggregator $command
      */
-    public function handle(AvailableSlotAggregator $command)
+    public function handle(AvailableSlotAggregator $command): void
     {
-        $this->availableSlotCalculator->calculateAvailableSlotForSheet($command->sheet);
+        $this->availableSlotCalculator->calculateAvailableSlotForSheet($command->sheet, $command->indexSheet);
     }
 }
