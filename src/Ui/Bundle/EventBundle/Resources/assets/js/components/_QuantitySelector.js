@@ -1,37 +1,55 @@
 function QuantitySelector(element)
 {
-    this.element           = element;
-    this.input             = element.querySelector('input.qty');
-    this.messageArea       = element.querySelector('.message-error');
-    this.max               = parseInt(this.input.getAttribute('data-max'));
-    this.maxMessage        = this.input.getAttribute('data-max-message');
-    this.min               = parseInt(this.input.getAttribute('data-min'));
-    this.minMessage        = this.input.getAttribute('data-min-message');
-    this.included          = parseInt(this.input.getAttribute('data-included'));
-    this.selectedLineClass = this.input.getAttribute('data-selected-line-class');
-    this.min               = null !== this.min ? this.min : 0;
-    this.unitPrice         = parseFloat(this.input.getAttribute('data-unit-price'));
-    this.totalPrice        = element.querySelector('.product-total-price');
+    this.element = element;
 
-    element.querySelector('.qtyminus').addEventListener('click', function () {
+    this.input = element.querySelector('input.qty');
+    this.selectParticipants = element.querySelector('[data-select-participants]');
+
+    this.unitPrice = parseFloat(element.getAttribute('data-unit-price'));
+    this.included = parseInt(element.getAttribute('data-included'));
+    this.selectedLineClass = element.getAttribute('data-selected-line-class');
+    this.totalPrice = element.querySelector('.product-total-price');
+    this.messageArea = element.querySelector('.message-error');
+
+    var inputElement = this.input ? this.input : this.selectParticipants;
+
+    this.max = parseInt(inputElement.getAttribute('data-max'));
+    this.maxMessage = inputElement.getAttribute('data-max-message');
+    this.min = parseInt(inputElement.getAttribute('data-min'));
+    this.minMessage = inputElement.getAttribute('data-min-message');
+    this.min = null !== this.min ? this.min : 0;
+
+    if (this.input) {
+        this.addQuantityEventListener();
+    } else {
+        $(this.selectParticipants).select2();
+    }
+}
+
+QuantitySelector.prototype.addQuantityEventListener = function ()
+{
+    this.element.querySelector('.qtyminus').addEventListener('click', function () {
         this.input.value--;
-        this.updateTotalPrice();
+        this.updateTotalPriceFromQuantityInput();
     }.bind(this));
 
-    element.querySelector('.qtyplus').addEventListener('click', function () {
+    this.element.querySelector('.qtyplus').addEventListener('click', function () {
         this.input.value++;
-        this.updateTotalPrice();
+        this.updateTotalPriceFromQuantityInput();
     }.bind(this));
 
     this.input.addEventListener('change', function () {
-        this.updateTotalPrice();
+        this.updateTotalPriceFromQuantityInput();
     }.bind(this));
-}
+};
 
-QuantitySelector.prototype.updateTotalPrice = function ()
+QuantitySelector.prototype.updateTotalPriceFromQuantityInput = function ()
 {
-    var value = parseInt(this.input.value);
+    this.updateTotalPrice(parseInt(this.input.value));
+};
 
+QuantitySelector.prototype.updateTotalPrice = function (value)
+{
     if (isNaN(value)) {
         value = 0;
     }

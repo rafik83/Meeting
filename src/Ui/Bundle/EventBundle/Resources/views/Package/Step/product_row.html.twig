@@ -3,7 +3,12 @@
 {# @todo: get count assigned participants if no quantity field #}
 {% set quantity = quantityForm.quantity is defined ? quantityForm.quantity.vars.value : 0 %}
 
-<tr class="{{ product.isOutOfStock or not product.isBuyable ? '': 'row-quantity' }} {{ product.included > 0 or quantityForm is not null and quantity > 0 ? 'selected-line' : '' }}">
+<tr
+    class="{{ product.isOutOfStock or not product.isBuyable ? '': 'row-quantity' }} {{ product.included > 0 or quantityForm is not null and quantity > 0 ? 'selected-line' : '' }}"
+    data-selected-line-class="selected-line"
+    data-unit-price="{{ product.unitPrice }}"
+    data-included="{{ product.included }}"
+>
     <td class="col-md-2">
         <div class="product">
             <span class="product-price">
@@ -43,11 +48,7 @@
         {% endif %}
 
         {% if quantityForm.participants is defined %}
-            {{ form_row(quantityForm.participants, {attr: {
-                'data-selected-line-class': 'selected-line',
-                'data-unit-price': product.unitPrice,
-                'data-included': product.included
-            }}) }}
+            {{ form_row(quantityForm.participants, {attr: {'data-select-participants': ''}}) }}
 
             {% if not quantityForm.participants.vars.valid %}
                 <div class="message-error text-danger text-center">
@@ -68,11 +69,7 @@
             <h3 class="out-of-stock text-center">{{ 'package.product.unavailable'|trans }}</h3>
         {% elseif quantityForm is defined and quantityForm != null %}
             {% if quantityForm.quantity is defined %}
-                {{ form_widget(quantityForm.quantity, {attr: {
-                    'data-selected-line-class': 'selected-line',
-                    'data-unit-price': product.unitPrice,
-                    'data-included': product.included
-                }}) }}
+                {{ form_widget(quantityForm.quantity) }}
 
                 {% if not quantityForm.quantity.vars.valid %}
                     <div class="message-error text-danger text-center">
