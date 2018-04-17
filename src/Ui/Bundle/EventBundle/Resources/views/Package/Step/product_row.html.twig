@@ -1,7 +1,9 @@
 {% form_theme form '@Ui/default.html.twig' %}
 
-{# @todo: get count assigned participants if no quantity field #}
-{% set quantity = quantityForm.quantity is defined ? quantityForm.quantity.vars.value : 0 %}
+{% set quantity = quantityForm.quantity is defined
+    ? quantityForm.quantity.vars.value
+    : max(0, quantityForm.participants.vars.value|length - product.included)
+%}
 
 <tr
     class="{{ product.isOutOfStock or not product.isBuyable ? '': 'row-quantity' }} {{ product.included > 0 or quantityForm is not null and quantity > 0 ? 'selected-line' : '' }}"
@@ -47,8 +49,6 @@
             </p>
         {% endif %}
 
-
-
         {% if quantityForm.participants is defined %}
             {{ form_row(
                 quantityForm.participants,
@@ -87,7 +87,7 @@
                     </div>
                 {% endif %}
             {% else %}
-                <div class="text-center highlight ft-size-26" data-quantity-text>0</div>
+                <h2 class="text-center highlight" data-quantity-text>{{ quantity }}</h2>
             {% endif %}
 
             <div class="message-error text-danger text-center">

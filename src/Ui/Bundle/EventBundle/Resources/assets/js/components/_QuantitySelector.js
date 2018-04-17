@@ -22,9 +22,9 @@ function QuantitySelector(element)
 
     if (this.input) {
         this.addQuantityEventListener();
-    } else {
-        this.updateTotalPriceFromSelectParticipants();
+    }
 
+    if (this.selectParticipants) {
         $(this.selectParticipants).select2({
             placeholder: this.selectParticipants.getAttribute('data-placeholder'),
             maximumSelectionLength: this.max ? this.max : 0
@@ -36,7 +36,8 @@ function QuantitySelector(element)
 
 QuantitySelector.prototype.updateTotalPriceFromSelectParticipants = function ()
 {
-    this.updateTotalPrice($(this.selectParticipants).val() ? $(this.selectParticipants).val().length : 0);
+    var participantsNumber = $(this.selectParticipants).val() ? $(this.selectParticipants).val().length : 0;
+    this.updateTotalPrice(Math.max(0, participantsNumber - this.included));
 };
 
 QuantitySelector.prototype.addQuantityEventListener = function ()
