@@ -47,8 +47,18 @@
             </p>
         {% endif %}
 
+
+
         {% if quantityForm.participants is defined %}
-            {{ form_row(quantityForm.participants, {attr: {'data-select-participants': ''}}) }}
+            {{ form_row(
+                quantityForm.participants,
+                {
+                    attr: {
+                        'data-select-participants': '',
+                        'data-placeholder': 'form.options.selectParticipants.placeholder'|trans({}, 'forms')
+                    }
+                }
+            ) }}
 
             {% if not quantityForm.participants.vars.valid %}
                 <div class="message-error text-danger text-center">
