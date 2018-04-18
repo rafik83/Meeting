@@ -89,7 +89,6 @@ class CartManager
     /***
      * @param Cart       $cart
      * @param OptionRow  $optionRow
-     *
      * @param Product    $product
      * @param null|Order $order
      * @param array      $attributableOptionsIncludedByProductId
@@ -122,6 +121,8 @@ class CartManager
             $optionRowQuantity -= $includedQuantity;
         }
 
+        //@todo saveNeededAttributableOptionsToCart
+        //@todo removeUnNeededAttributableOptionsToCart
         $cart->setProduct($product, $optionRowQuantity - $orderQuantity, $optionRowParticipants);
 
         return $cart;
