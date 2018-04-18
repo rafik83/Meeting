@@ -101,4 +101,5 @@ final class Events
     const TIP_EVENT_CREATED                            = 'tip.event.created';
     const TIP_EVENT_UPDATED                            = 'tip.event.updated';
     const PARTICIPANT_PRODUCT_SET                      = 'participant.product.set';
+    const PARTICIPANT_CART_ROW_ADDED                   = 'participant.cart.row.added';
 }

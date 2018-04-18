@@ -14,12 +14,14 @@ use Proximum\Vimeet\Application\Adapter\DelayedEventDispatcherInterface;
 use Proximum\Vimeet\Application\Event\Events;
 use Proximum\Vimeet\Application\Event\Unavailability\System\SystemUnavailabilityForUserGeneratedEvent;
 use Proximum\Vimeet\Domain\Model\AvailabilityTimeRange;
+use Proximum\Vimeet\Domain\Model\CartRowParticipant;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Product;
 use Proximum\Vimeet\Domain\Model\Unavailability;
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Repository\AvailabilityTimeRangeRepositoryInterface;
+use Proximum\Vimeet\Domain\Repository\CartRowParticipantRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\ParticipantRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\UnavailabilityRepositoryInterface;
 
@@ -43,13 +45,17 @@ class Generator
     /** @var DelayedEventDispatcherInterface */
     private $eventDispatcher;
 
+    /** @var CartRowParticipantRepositoryInterface */
+    private $cartRowParticipantRepository;
+
     public function __construct(
         UnavailabilityRepositoryInterface $unavailabilityRepository,
         AvailabilityTimeRangeRepositoryInterface $availabilityTimeRangeRepository,
         ParticipantRepositoryInterface $participantRepository,
         OverlappedTimeRangeMerger $overlappedTimeRangeMerger,
         OverlappedTimeRangeTruncater $overlappedTimeRangeTruncater,
-        DelayedEventDispatcherInterface $eventDispatcher
+        DelayedEventDispatcherInterface $eventDispatcher,
+        CartRowParticipantRepositoryInterface $cartRowParticipantRepository
     ) {
         $this->unavailabilityRepository = $unavailabilityRepository;
         $this->availabilityTimeRangeRepository = $availabilityTimeRangeRepository;
@@ -57,6 +63,7 @@ class Generator
         $this->overlappedTimeRangeMerger = $overlappedTimeRangeMerger;
         $this->overlappedTimeRangeTruncater = $overlappedTimeRangeTruncater;
         $this->eventDispatcher = $eventDispatcher;
+        $this->cartRowParticipantRepository = $cartRowParticipantRepository;
     }
 
     public function generateSystemUnavailability(Event $event, User $user): void
@@ -153,10 +160,29 @@ class Generator
 
             if ($product instanceof Product) {
                 $products[$product->getId()] = $product;
+
+                continue;
+            }
+
+            $product = $this->getProductOutOfCartRowParticipantForParticipant($participant);
+
+            if ($product instanceof Product) {
+                $products[$product->getId()] = $product;
             }
         }
 
         return $products;
+    }
+
+    private function getProductOutOfCartRowParticipantForParticipant(Participant $participant): ?Product
+    {
+        $cartRowParticipant = $this->cartRowParticipantRepository->findByParticipant($participant);
+
+        if ($cartRowParticipant instanceof CartRowParticipant) {
+            return $cartRowParticipant->getCartRow()->getProduct();
+        }
+
+        return null;
     }
 
     /**

@@ -14,6 +14,9 @@ use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
 use Prophecy\Prophecy\ObjectProphecy;
 use Proximum\Vimeet\Application\Adapter\DelayedEventDispatcherInterface;
+use Proximum\Vimeet\Domain\Model\CartRow;
+use Proximum\Vimeet\Domain\Model\CartRowParticipant;
+use Proximum\Vimeet\Domain\Repository\CartRowParticipantRepositoryInterface;
 use Proximum\Vimeet\Domain\Unavailability\SystemGenerator\Generator;
 use Proximum\Vimeet\Domain\Unavailability\SystemGenerator\OverlappedTimeRangeMerger;
 use Proximum\Vimeet\Domain\Unavailability\SystemGenerator\OverlappedTimeRangeTruncater;
@@ -59,6 +62,9 @@ class GeneratorTest extends TestCase
     /** @var ObjectProphecy */
     private $eventDispatcher;
 
+    /** @var ObjectProphecy */
+    private $cartRowParticipantRepository;
+
     public function setUp()
     {
         $this->event = $this->prophesize(Event::class);
@@ -69,6 +75,7 @@ class GeneratorTest extends TestCase
         $this->overlappedTimeRangeMerger = $this->prophesize(OverlappedTimeRangeMerger::class);
         $this->overlappedTimeRangeTruncater = $this->prophesize(OverlappedTimeRangeTruncater::class);
         $this->eventDispatcher = $this->prophesize(DelayedEventDispatcherInterface::class);
+        $this->cartRowParticipantRepository = $this->prophesize(CartRowParticipantRepositoryInterface::class);
     }
 
     public function testGenerateWithoutAvailabilityTimeRange(): void
@@ -113,7 +120,8 @@ class GeneratorTest extends TestCase
             $this->participantRepository->reveal(),
             $this->overlappedTimeRangeMerger->reveal(),
             $this->overlappedTimeRangeTruncater->reveal(),
-            $this->eventDispatcher->reveal()
+            $this->eventDispatcher->reveal(),
+            $this->cartRowParticipantRepository->reveal()
         );
 
         $generator->generateSystemUnavailability($this->event->reveal(), $this->user->reveal());
@@ -185,7 +193,8 @@ class GeneratorTest extends TestCase
             $this->participantRepository->reveal(),
             $this->overlappedTimeRangeMerger->reveal(),
             $this->overlappedTimeRangeTruncater->reveal(),
-            $this->eventDispatcher->reveal()
+            $this->eventDispatcher->reveal(),
+            $this->cartRowParticipantRepository->reveal()
         );
 
         $generator->generateSystemUnavailability($this->event->reveal(), $this->user->reveal());
@@ -261,7 +270,8 @@ class GeneratorTest extends TestCase
             $this->participantRepository->reveal(),
             $this->overlappedTimeRangeMerger->reveal(),
             $this->overlappedTimeRangeTruncater->reveal(),
-            $this->eventDispatcher->reveal()
+            $this->eventDispatcher->reveal(),
+            $this->cartRowParticipantRepository->reveal()
         );
 
         $generator->generateSystemUnavailability($this->event->reveal(), $this->user->reveal());
@@ -350,7 +360,8 @@ class GeneratorTest extends TestCase
             $this->participantRepository->reveal(),
             $this->overlappedTimeRangeMerger->reveal(),
             $this->overlappedTimeRangeTruncater->reveal(),
-            $this->eventDispatcher->reveal()
+            $this->eventDispatcher->reveal(),
+            $this->cartRowParticipantRepository->reveal()
         );
 
         $generator->generateSystemUnavailability($this->event->reveal(), $this->user->reveal());
@@ -389,6 +400,7 @@ class GeneratorTest extends TestCase
 
         $sheet1 = $this->prophesize(Sheet::class);
         $sheet2 = $this->prophesize(Sheet::class);
+        $sheet3 = $this->prophesize(Sheet::class);
 
         $package1 = $this->prophesize(Package::class);
         $package2 = $this->prophesize(Package::class);
@@ -397,18 +409,32 @@ class GeneratorTest extends TestCase
 
         $sheet1->getPackage()->willReturn($package1->reveal());
         $sheet2->getPackage()->willReturn($package2->reveal());
+        $sheet3->getPackage()->willReturn($package2->reveal());
 
         $participant1 = $this->prophesize(Participant::class);
         $participant2 = $this->prophesize(Participant::class);
+        $participant3 = $this->prophesize(Participant::class);
 
         $participant1->getSheet()->willReturn($sheet1->reveal());
         $participant2->getSheet()->willReturn($sheet2->reveal());
+        $participant3->getSheet()->willReturn($sheet3->reveal());
 
         $product = $this->prophesize(Product::class);
         $product->getId()->willReturn(12);
         $product->getAvailabilityTimeRanges()->willReturn([$availabilityTimeRange2->reveal()]);
-        $participant1->getParticipantProduct()->willReturn($product);
-        $participant2->getParticipantProduct()->willReturn($product);
+        $participant1->getParticipantProduct()->willReturn($product->reveal());
+        $participant2->getParticipantProduct()->willReturn($product->reveal());
+        $participant3->getParticipantProduct()->willReturn(null);
+
+        $cartRow = $this->prophesize(CartRow::class);
+        $cartRowParticipant = $this->prophesize(CartRowParticipant::class);
+        $cartRowParticipant->getCartRow()->willReturn($cartRow->reveal());
+        $cartRow->getProduct()->willReturn($product);
+        $this->cartRowParticipantRepository
+            ->findByParticipant($participant3->reveal())
+            ->shouldBeCalled()
+            ->willReturn($cartRowParticipant->reveal())
+        ;
 
         $availabilityTimeRanges = [
             $availabilityTimeRange1->reveal(),
@@ -429,6 +455,7 @@ class GeneratorTest extends TestCase
         $participants = [
             $participant1->reveal(),
             $participant2->reveal(),
+            $participant3->reveal(),
         ];
 
         $this->unavailabilityRepository
@@ -511,7 +538,8 @@ class GeneratorTest extends TestCase
             $this->participantRepository->reveal(),
             $this->overlappedTimeRangeMerger->reveal(),
             $this->overlappedTimeRangeTruncater->reveal(),
-            $this->eventDispatcher->reveal()
+            $this->eventDispatcher->reveal(),
+            $this->cartRowParticipantRepository->reveal()
         );
 
         $generator->generateSystemUnavailability($this->event->reveal(), $this->user->reveal());

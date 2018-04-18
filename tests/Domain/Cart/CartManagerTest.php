@@ -13,6 +13,9 @@ namespace Proximum\Vimeet\Tests\Domain\Cart;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
 use Prophecy\Prophecy\ObjectProphecy;
+use Proximum\Vimeet\Application\Adapter\DelayedEventDispatcherInterface;
+use Proximum\Vimeet\Application\Event\Cart\ParticipantCartRowAddedEvent;
+use Proximum\Vimeet\Application\Event\Events;
 use Proximum\Vimeet\Domain\Cart\Cart;
 use Proximum\Vimeet\Domain\Cart\CartManager;
 use Proximum\Vimeet\Domain\Model\CartRow;
@@ -46,6 +49,9 @@ class CartManagerTest extends TestCase
     /** @var ObjectProphecy */
     private $participantProductSetter;
 
+    /** @var ObjectProphecy */
+    private $eventDispatcher;
+
     public function setUp()
     {
         $this->cartRowRepository = $this->prophesize(CartRowRepositoryInterface::class);
@@ -53,6 +59,7 @@ class CartManagerTest extends TestCase
         $this->promotionCodeRowRepository = $this->prophesize(PromotionCodeRowRepositoryInterface::class);
         $this->orderMerger = $this->prophesize(Merger::class);
         $this->participantProductSetter = $this->prophesize(ParticipantProductSetter::class);
+        $this->eventDispatcher = $this->prophesize(DelayedEventDispatcherInterface::class);
     }
 
     public function testDeleteCartStep()
@@ -70,7 +77,8 @@ class CartManagerTest extends TestCase
             $this->cartStepRepository->reveal(),
             $this->promotionCodeRowRepository->reveal(),
             $this->orderMerger->reveal(),
-            $this->participantProductSetter->reveal()
+            $this->participantProductSetter->reveal(),
+            $this->eventDispatcher->reveal()
         );
 
         $cartManager->deleteCartStep($cart->reveal());
@@ -93,7 +101,8 @@ class CartManagerTest extends TestCase
             $this->cartStepRepository->reveal(),
             $this->promotionCodeRowRepository->reveal(),
             $this->orderMerger->reveal(),
-            $this->participantProductSetter->reveal()
+            $this->participantProductSetter->reveal(),
+            $this->eventDispatcher->reveal()
         );
 
         $result = $cartManager->getCart($sheet->reveal(), 3);
@@ -131,6 +140,13 @@ class CartManagerTest extends TestCase
 
         $participant1 = $this->prophesize(Participant::class);
         $participant1->getId()->shouldBeCalled()->willReturn(963);
+        $participant1->hasParticipantProduct()->willReturn(false);
+
+        $participantCartRowAddedEvent = new ParticipantCartRowAddedEvent($participant1->reveal(), false, false);
+        $this->eventDispatcher
+            ->dispatch(Events::PARTICIPANT_CART_ROW_ADDED, $participantCartRowAddedEvent)
+            ->shouldBeCalled()
+        ;
         $this->participantProductSetter->setProductOnParticipant($participant1, Argument::any())->shouldNotBeCalled();
 
         $participant2 = $this->prophesize(Participant::class);
@@ -172,7 +188,8 @@ class CartManagerTest extends TestCase
             $this->cartStepRepository->reveal(),
             $this->promotionCodeRowRepository->reveal(),
             $this->orderMerger->reveal(),
-            $this->participantProductSetter->reveal()
+            $this->participantProductSetter->reveal(),
+            $this->eventDispatcher->reveal()
         );
 
         $result = $cartManager->updateParticipantsQuantity($cart, $productByParticipantId);

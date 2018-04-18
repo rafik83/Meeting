@@ -92,7 +92,7 @@ class AddHandler
      * @throws EmailCanNotBeNullException
      * @throws ParticipantAlreadyExistException
      */
-    public function handle(Add $add)
+    public function handle(Add $add): AddResult
     {
         if ($add->email === null) {
             throw new EmailCanNotBeNullException();
@@ -147,7 +147,7 @@ class AddHandler
      *
      * @return Participant
      */
-    protected function createAndFillParticipant(Add $add, User $user, $isNewUser)
+    protected function createAndFillParticipant(Add $add, User $user, $isNewUser): Participant
     {
         $templateData = $this->templateDataFactory->createRegistrationFromType($add->sheet->getType(), $add->locale);
         $templateData->setTaggedData([
