@@ -1,0 +1,27 @@
+Proximum\Vimeet\Domain\Model\ProductAttributedToParticipant:
+    type:  entity
+    table: product_attributed_to_participant
+    id:
+        product:
+             associationKey: true
+        participant:
+             associationKey: true
+    fields:
+        createdAt:
+            type: datetime
+    manyToOne:
+        product:
+            targetEntity: Proximum\Vimeet\Domain\Model\Product
+            joinColumn:
+                onDelete: CASCADE
+                nullable: false
+        participant:
+            targetEntity: Proximum\Vimeet\Domain\Model\Participant
+            joinColumn:
+                onDelete: CASCADE
+                nullable: false
+        orderRow:
+            targetEntity: Proximum\Vimeet\Domain\Model\Order\Row
+            joinColumn:
+                onDelete: SET NULL
+                nullable: true
