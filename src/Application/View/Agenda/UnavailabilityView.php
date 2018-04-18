@@ -21,25 +21,28 @@ class UnavailabilityView extends AbstractTimeEntityView
     /** @var null|string */
     public $message;
 
-    /**
-     * @param int                $id
-     * @param \DateTimeInterface $begin
-     * @param \DateTimeInterface $end
-     * @param string             $timeZone
-     * @param string|null        $message
-     */
+    /** @var bool */
+    public $isCreatedByUser;
+
+    /** @var bool */
+    public $isDeletableByUser;
+
     public function __construct(
-        $id,
+        int $id,
         \DateTimeInterface $begin,
         \DateTimeInterface $end,
-        $timeZone,
-        $message = null
+        string $timeZone,
+        ?string $message,
+        bool $isCreatedByUser,
+        bool $isDeletableByUser
     ) {
-        $this->id       = $id;
-        $this->begin    = $begin;
-        $this->end      = $end;
+        $this->id = $id;
+        $this->begin = $begin;
+        $this->end = $end;
         $this->timeZone = $timeZone;
-        $this->message  = $message;
+        $this->message = $message;
+        $this->isCreatedByUser = $isCreatedByUser;
+        $this->isDeletableByUser = $isDeletableByUser;
     }
 
     /**

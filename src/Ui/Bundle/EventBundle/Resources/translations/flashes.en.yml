@@ -23,3 +23,4 @@ flash.register.participationData.prefilled: 'you have participated to the %event
 flash.sso.comexposium.error: 'An error has occurred, you can not login with your Comexposium Connect credentials'
 flash.unavailability.add.success: 'The unavailability has been added'
 flash.unavailability.remove.cancelAttendance.error: 'you cannot remove this unavailability, you cancelled your attendance.'
+flash.unavailability.remove.error: 'You cannot remove this unavailability.'

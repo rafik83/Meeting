@@ -39,7 +39,7 @@ class RemoveResult
      */
     public function countParticipants()
     {
-        return count($this->participants);
+        return \count($this->participants);
     }
 
     /**

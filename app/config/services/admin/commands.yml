@@ -7,7 +7,7 @@ services:
     command.sheet.aggregate.available_slot_aggregator_handler:
         class: Proximum\Vimeet\Application\Command\Sheet\Aggregate\AvailableSlotAggregatorHandler
         arguments:
-            - '@domain.sheet.aggregate.available_slot_calculator'
+            - '@Proximum\Vimeet\Domain\Sheet\Aggregate\AvailableSlotCalculator'
     command.analytic.meeting_solution.create_handler:
         class: Proximum\Vimeet\Application\Command\Analytic\MeetingSolution\CreateHandler
         arguments:
@@ -152,6 +152,15 @@ services:
             - '@Proximum\Vimeet\Infrastructure\Repository\AvailabilityTimeRangeRepository'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\AvailabilityTimeRange\Create }
+
+    #
+    # Sheet change Type
+    #
+    Proximum\Vimeet\Application\Command\Sheet\ChangeType\CancelPackageHandler:
+        arguments:
+            - '@vimeet_infrastructure.repository.order_repository'
+            - '@cart_manager'
+            - '@Proximum\Vimeet\Domain\Participant\ParticipantProductSetter'
 
     #
     # Export OMZ
