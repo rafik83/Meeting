@@ -24,6 +24,7 @@ use Proximum\Vimeet\Domain\Order\Merger;
 use Proximum\Vimeet\Domain\Participant\ParticipantProductSetter;
 use Proximum\Vimeet\Domain\Repository\CartRowRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\CartStepRepositoryInterface;
+use Proximum\Vimeet\Domain\Repository\ProductAttributedToParticipantRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\PromotionCodeRowRepositoryInterface;
 
 class CartManager
@@ -46,13 +47,17 @@ class CartManager
     /** @var DelayedEventDispatcherInterface */
     private $delayedEventDispatcher;
 
+    /** @var ProductAttributedToParticipantRepositoryInterface */
+    private $productAttributedToParticipantRepository;
+
     /**
-     * @param CartRowRepositoryInterface          $cartRowRepository
-     * @param CartStepRepositoryInterface         $cartStepRepository
-     * @param PromotionCodeRowRepositoryInterface $promotionCodeRowRepository
-     * @param Merger                              $orderMerger
-     * @param ParticipantProductSetter            $participantProductSetter
-     * @param DelayedEventDispatcherInterface     $delayedEventDispatcher
+     * @param CartRowRepositoryInterface                        $cartRowRepository
+     * @param CartStepRepositoryInterface                       $cartStepRepository
+     * @param PromotionCodeRowRepositoryInterface               $promotionCodeRowRepository
+     * @param Merger                                            $orderMerger
+     * @param ParticipantProductSetter                          $participantProductSetter
+     * @param ProductAttributedToParticipantRepositoryInterface $productAttributedToParticipantRepository
+     * @param DelayedEventDispatcherInterface                   $delayedEventDispatcher
      */
     public function __construct(
         CartRowRepositoryInterface $cartRowRepository,
@@ -60,6 +65,7 @@ class CartManager
         PromotionCodeRowRepositoryInterface $promotionCodeRowRepository,
         Merger $orderMerger,
         ParticipantProductSetter $participantProductSetter,
+        ProductAttributedToParticipantRepositoryInterface $productAttributedToParticipantRepository,
         DelayedEventDispatcherInterface $delayedEventDispatcher
     ) {
         $this->cartRowRepository          = $cartRowRepository;
@@ -68,6 +74,7 @@ class CartManager
         $this->orderMerger                = $orderMerger;
         $this->participantProductSetter = $participantProductSetter;
         $this->delayedEventDispatcher = $delayedEventDispatcher;
+        $this->productAttributedToParticipantRepository = $productAttributedToParticipantRepository;
     }
 
     /**
@@ -113,12 +120,38 @@ class CartManager
             }
         }
 
-        $optionRowQuantity = $optionRow->getQuantity();
+        $includedQuantity = 0;
+        $optionRowQuantity = $optionRow->getQuantity() - $orderQuantity;
         $optionRowParticipants = $optionRow->getParticipants();
 
         if ($product->isAttributable()) {
             $includedQuantity = $attributableOptionsIncludedByProductId[$product->getId()] ?? 0;
             $optionRowQuantity -= $includedQuantity;
+        }
+
+        $productAttributedToParticipants = $this->productAttributedToParticipantRepository->findByProductAndParticipants($product, $optionRow->getParticipants());
+
+        $productAttributedToParticipantsIndexByParticipantId = [];
+
+        foreach ($productAttributedToParticipants as $productAttributedToParticipant) {
+            $productAttributedToParticipantsIndexByParticipantId[$productAttributedToParticipant->getParticipant()->getId()] = $productAttributedToParticipant;
+        }
+
+        // Product bought
+        if ($optionRowQuantity > 0) {
+            $cart->setProduct($product, $optionRowQuantity, $optionRowParticipants);
+
+            return $cart;
+        }
+
+        // Product with the same quantity
+        // We must check the previous ProductAttributedToParticipant
+        // If something changed
+        if ($optionRowQuantity === 0) {
+        }
+
+        // Product decreased
+        if ($optionRowQuantity < 0) {
         }
 
         //@todo saveNeededAttributableOptionsToCart
