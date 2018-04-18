@@ -15,6 +15,7 @@ use Proximum\Vimeet\Application\Command\Package\Step\SelectOptions;
 use Proximum\Vimeet\Domain\Cart\CartManager;
 use Proximum\Vimeet\Domain\Model\CartRow;
 use Proximum\Vimeet\Domain\Model\Order;
+use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Product;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Order\Merger;
@@ -78,10 +79,9 @@ class StepOption
         $availableOptions = $sheet->getPackage()->getAvailablesOptions($this->dateTime);
 
         foreach ($availableOptions as $option) {
-            // @todo: second arguments must have previously selected participants
             $options[$option->getId()] = new OptionRow(
                 $this->getOptionQuantity($option, $cartRows, $orderMerged),
-                [],
+                $this->getOptionParticipant($option, $cartRows),
                 $option->isAttributable()
             );
         }
@@ -106,6 +106,27 @@ class StepOption
         }
 
         return $this->getQuantityFromOrder($order, $option) + $optionQuantity;
+    }
+
+    /**
+     * @param Product   $option
+     * @param CartRow[] $cartRows
+     *
+     * @return Participant[]
+     */
+    private function getOptionParticipant(Product $option, array $cartRows = []): array
+    {
+        if (!$option->isAttributable()) {
+            return [];
+        }
+
+        $cartRow = $this->getCartRowFromOption($option, $cartRows);
+
+        if (null !== $cartRow) {
+            return $cartRow->getParticipants();
+        }
+
+        return [];
     }
 
     /**

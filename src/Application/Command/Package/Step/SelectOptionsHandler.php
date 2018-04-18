@@ -69,6 +69,7 @@ class SelectOptionsHandler
 
         $cart->clearOptions();
 
+        $orderMerged = null;
         if ($sheet->hasNotCancelledOrders()) {
             $orderMerged = $this->merger->merge($sheet->getNotCancelledOrders());
         }
@@ -77,13 +78,15 @@ class SelectOptionsHandler
             $orderQuantity = 0;
 
             // handle new order
-            if (isset($orderMerged)) {
-                if ($product = $orderMerged->getRowByProductId($id)) {
-                    $orderQuantity = $product->getQuantity();
+            if (null !== $orderMerged) {
+                $orderRow = $orderMerged->getRowByProductId($id);
+
+                if (null !== $orderRow) {
+                    $orderQuantity = $orderRow->getQuantity();
                 }
             }
 
-            $cart->setProduct($options[$id], $optionRow->getQuantity() - $orderQuantity);
+            $cart->setProduct($options[$id], $optionRow->getQuantity() - $orderQuantity, $optionRow->getParticipants());
         }
 
         $this->cartManager->save($cart);

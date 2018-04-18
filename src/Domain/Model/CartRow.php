@@ -150,7 +150,7 @@ class CartRow
     /**
      * @param CartRowParticipant $cartRowParticipant
      */
-    public function addCartRowParticipant(CartRowParticipant $cartRowParticipant)
+    public function addCartRowParticipant(CartRowParticipant $cartRowParticipant): void
     {
         $this->cartRowParticipants->add($cartRowParticipant);
     }
