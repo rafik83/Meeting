@@ -202,7 +202,7 @@ class OptionsValidator extends ConstraintValidator
 
         $orderRow = $order->getRowForProduct($option);
 
-        if ($quantity < $orderRow->getQuantity()) {
+        if ($orderRow instanceof Order\Row && $quantity < $orderRow->getQuantity()) {
             $this
                 ->context
                 ->buildViolation('package.product.productNotDeletable')
