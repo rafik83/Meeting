@@ -615,7 +615,7 @@ services:
         class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Validator\Constraint\Package\PlanningQuantityValidator
         arguments:
             - '@package.planning.quantity_max_guesser'
-            - '@package.planning.quantity_min_guesser'
+            - '@Proximum\Vimeet\Domain\Package\Product\ConflictBetweenChoosenQuantityAndPreviouslyUsedPromotionCode'
         tags:
             - { name: validator.constraint_validator }
 
@@ -628,7 +628,7 @@ services:
         class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Validator\Constraint\Package\OptionsValidator
         arguments:
             - '@package.planning.quantity_max_guesser'
-            - '@package.planning.quantity_min_guesser'
+            - '@Proximum\Vimeet\Domain\Package\Product\ConflictBetweenChoosenQuantityAndPreviouslyUsedPromotionCode'
             - '@package.product.template_product_guesser'
             - '@datetime'
             - '@order.merger'

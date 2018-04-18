@@ -20,8 +20,8 @@ use Proximum\Vimeet\Domain\Model\Package;
 use Proximum\Vimeet\Domain\Model\Product;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Order\Merger;
+use Proximum\Vimeet\Domain\Package\Product\ConflictBetweenChoosenQuantityAndPreviouslyUsedPromotionCode;
 use Proximum\Vimeet\Domain\Package\Product\QuantityMaxGuesser;
-use Proximum\Vimeet\Domain\Package\Product\QuantityMinGuesser;
 use Proximum\Vimeet\Domain\Package\Product\TemplateProductGuesser;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Validator\Constraint\Package\OptionsValidator;
 use Symfony\Component\Validator\Constraint;
@@ -60,6 +60,9 @@ class OptionsValidatorTest extends TestCase
             ->getId()
             ->shouldBeCalled()
             ->willReturn(111);
+        $this->product
+            ->isAttributable()
+            ->willReturn(false);
 
         $this->package = $this->prophesize(Package::class);
         $this->package
@@ -97,11 +100,11 @@ class OptionsValidatorTest extends TestCase
             ->shouldBeCalled()
             ->willReturn(null);
 
-        $quantityMinGuesser = $this->prophesize(QuantityMinGuesser::class);
-        $quantityMinGuesser
-            ->getMinProduct($this->sheet->reveal(), $this->product->reveal(), 1)
+        $conflictBetweenChoosenQuantityAndPreviouslyUsedPromotionCode = $this->prophesize(ConflictBetweenChoosenQuantityAndPreviouslyUsedPromotionCode::class);
+        $conflictBetweenChoosenQuantityAndPreviouslyUsedPromotionCode
+            ->hasConflict(null, $this->sheet->reveal(), $this->product->reveal(), 1)
             ->shouldBeCalled()
-            ->willReturn(false);
+            ->willReturn(true);
 
         $constraintViolationBuilder1 = $this->prophesize(ConstraintViolationBuilderInterface::class);
         $this->executionContext
@@ -109,7 +112,7 @@ class OptionsValidatorTest extends TestCase
             ->shouldBeCalled()
             ->willReturn($constraintViolationBuilder1->reveal());
         $constraintViolationBuilder1
-            ->atPath(111)
+            ->atPath('111.quantity')
             ->shouldBeCalled()
             ->willReturn($constraintViolationBuilder1->reveal());
         $constraintViolationBuilder1
@@ -129,7 +132,7 @@ class OptionsValidatorTest extends TestCase
 
         $optionValidator = new OptionsValidator(
             $quantityMaxGuesser->reveal(),
-            $quantityMinGuesser->reveal(),
+            $conflictBetweenChoosenQuantityAndPreviouslyUsedPromotionCode->reveal(),
             $templateProductGuesser->reveal(),
             $this->dateTime,
             $this->prophesize(Merger::class)->reveal(),
@@ -152,11 +155,14 @@ class OptionsValidatorTest extends TestCase
             ->shouldBeCalled()
             ->willReturn(null);
 
-        $quantityMinGuesser = $this->prophesize(QuantityMinGuesser::class);
-        $quantityMinGuesser
-            ->getMinProduct($this->sheet->reveal(), $this->product->reveal(), 1)
+        $conflictBetweenChoosenQuantityAndPreviouslyUsedPromotionCode = $this->prophesize(
+            ConflictBetweenChoosenQuantityAndPreviouslyUsedPromotionCode::class
+        );
+        $conflictBetweenChoosenQuantityAndPreviouslyUsedPromotionCode
+            ->hasConflict(null, $this->sheet->reveal(), $this->product->reveal(), 3)
             ->shouldBeCalled()
-            ->willReturn(2);
+            ->willReturn(false)
+        ;
 
         $constraintViolationBuilder1 = $this->prophesize(ConstraintViolationBuilderInterface::class);
         $this->executionContext
@@ -183,12 +189,12 @@ class OptionsValidatorTest extends TestCase
 
         $selectOptions = new SelectOptions($this->sheet->reveal(), 3);
         $selectOptions->options = [
-            111 => new OptionRow(1, [], false),
+            111 => new OptionRow(3, [], false),
         ];
 
         $optionValidator = new OptionsValidator(
             $quantityMaxGuesser->reveal(),
-            $quantityMinGuesser->reveal(),
+            $conflictBetweenChoosenQuantityAndPreviouslyUsedPromotionCode->reveal(),
             $templateProductGuesser->reveal(),
             $this->dateTime,
             $this->prophesize(Merger::class)->reveal(),
@@ -235,11 +241,14 @@ class OptionsValidatorTest extends TestCase
             ->shouldBeCalled()
             ->willReturn(null);
 
-        $quantityMinGuesser = $this->prophesize(QuantityMinGuesser::class);
-        $quantityMinGuesser
-            ->getMinProduct($this->sheet->reveal(), $this->product->reveal(), 1)
+        $conflictBetweenChoosenQuantityAndPreviouslyUsedPromotionCode = $this->prophesize(
+            ConflictBetweenChoosenQuantityAndPreviouslyUsedPromotionCode::class
+        );
+        $conflictBetweenChoosenQuantityAndPreviouslyUsedPromotionCode
+            ->hasConflict($order->reveal(), $this->sheet->reveal(), $this->product->reveal(), 1)
             ->shouldBeCalled()
-            ->willReturn(1);
+            ->willReturn(false)
+        ;
 
         $constraintViolationBuilder1 = $this->prophesize(ConstraintViolationBuilderInterface::class);
         $this->executionContext
@@ -247,7 +256,7 @@ class OptionsValidatorTest extends TestCase
             ->shouldBeCalled()
             ->willReturn($constraintViolationBuilder1->reveal());
         $constraintViolationBuilder1
-            ->atPath(111)
+            ->atPath('111.quantity')
             ->shouldBeCalled()
             ->willReturn($constraintViolationBuilder1->reveal());
         $constraintViolationBuilder1
@@ -267,7 +276,7 @@ class OptionsValidatorTest extends TestCase
 
         $optionValidator = new OptionsValidator(
             $quantityMaxGuesser->reveal(),
-            $quantityMinGuesser->reveal(),
+            $conflictBetweenChoosenQuantityAndPreviouslyUsedPromotionCode->reveal(),
             $templateProductGuesser->reveal(),
             $this->dateTime,
             $orderMerger->reveal(),
@@ -320,11 +329,14 @@ class OptionsValidatorTest extends TestCase
             ->shouldBeCalled()
             ->willReturn($linkedProduct->reveal());
 
-        $quantityMinGuesser = $this->prophesize(QuantityMinGuesser::class);
-        $quantityMinGuesser
-            ->getMinProduct($this->sheet->reveal(), $this->product->reveal(), 0)
+        $conflictBetweenChoosenQuantityAndPreviouslyUsedPromotionCode = $this->prophesize(
+            ConflictBetweenChoosenQuantityAndPreviouslyUsedPromotionCode::class
+        );
+        $conflictBetweenChoosenQuantityAndPreviouslyUsedPromotionCode
+            ->hasConflict($order->reveal(), $this->sheet->reveal(), $this->product->reveal(), 0)
             ->shouldBeCalled()
-            ->willReturn(0);
+            ->willReturn(0)
+        ;
 
         $constraintViolationBuilder1 = $this->prophesize(ConstraintViolationBuilderInterface::class);
         $this->executionContext
@@ -332,7 +344,7 @@ class OptionsValidatorTest extends TestCase
             ->shouldBeCalled()
             ->willReturn($constraintViolationBuilder1->reveal());
         $constraintViolationBuilder1
-            ->atPath(111)
+            ->atPath('111.quantity')
             ->shouldBeCalled()
             ->willReturn($constraintViolationBuilder1->reveal());
         $constraintViolationBuilder1
@@ -352,7 +364,7 @@ class OptionsValidatorTest extends TestCase
 
         $optionValidator = new OptionsValidator(
             $quantityMaxGuesser->reveal(),
-            $quantityMinGuesser->reveal(),
+            $conflictBetweenChoosenQuantityAndPreviouslyUsedPromotionCode->reveal(),
             $templateProductGuesser->reveal(),
             $this->dateTime,
             $orderMerger->reveal(),
