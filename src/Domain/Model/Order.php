@@ -522,6 +522,18 @@ class Order
     }
 
     /**
+     * @return Product\ProductIncluded[]
+     */
+    public function getIncludedAttributableOptionProducts(): array
+    {
+        if (null === $this->getPlan()) {
+            return [];
+        }
+
+        return $this->getPlan()->getIncludedAttributableOptionProducts();
+    }
+
+    /**
      * @return bool
      */
     public function isCancelled(): bool

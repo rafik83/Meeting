@@ -65,6 +65,7 @@ class SelectOptionsHandler
             $package->getAvailablesOptions($this->now)
         );
 
+        /** @var Product[] $options */
         $options = array_combine($ids, $package->getAvailablesOptions($this->now));
 
         $cart->clearOptions();
@@ -74,7 +75,10 @@ class SelectOptionsHandler
             $orderMerged = $this->merger->merge($sheet->getNotCancelledOrders());
         }
 
+        $attributableOptionsIncludedByProductId = $this->cartManager->getAttributableOptionsIncludedByProductId($cart, $orderMerged);
+
         foreach ($selectOptions->options as $id => $optionRow) {
+            $product = $options[$id];
             $orderQuantity = 0;
 
             // handle new order
@@ -86,7 +90,15 @@ class SelectOptionsHandler
                 }
             }
 
-            $cart->setProduct($options[$id], $optionRow->getQuantity() - $orderQuantity, $optionRow->getParticipants());
+            $optionRowQuantity = $optionRow->getQuantity();
+            $optionRowParticipants = $optionRow->getParticipants();
+
+            if ($product->isAttributable()) {
+                $includedQuantity = $attributableOptionsIncludedByProductId[$product->getId()] ?? 0;
+                $optionRowQuantity -= $includedQuantity;
+            }
+
+            $cart->setProduct($product, $optionRowQuantity - $orderQuantity, $optionRowParticipants);
         }
 
         $this->cartManager->save($cart);

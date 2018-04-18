@@ -667,6 +667,17 @@ class Product
     }
 
     /**
+     * @return ProductIncluded[]
+     */
+    public function getIncludedAttributableOptionProducts(): array
+    {
+        return $this->productIncluded->filter(function (ProductIncluded $productIncluded) {
+            $included = $productIncluded->getIncluded();
+            return $included->isOption() && $included->isAttributable();
+        })->toArray();
+    }
+
+    /**
      * @param int $productId
      *
      * @return null|ProductIncluded

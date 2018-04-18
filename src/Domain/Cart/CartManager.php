@@ -283,6 +283,29 @@ class CartManager
     }
 
     /**
+     * @param Cart  $cart
+     * @param Order $order
+     *
+     * @return array of quantity indexed by Attributable Option Product id
+     */
+    public function getAttributableOptionsIncludedByProductId(Cart $cart, ?Order $order = null): array
+    {
+        if (null !== $order) {
+            $includedAttributableOptionProducts = $order->getIncludedAttributableOptionProducts();
+        } else {
+            $includedAttributableOptionProducts = $cart->getIncludedAttributableOptionProducts();
+        }
+
+        $optionsAttributableIncludedByProductId = [];
+
+        foreach ($includedAttributableOptionProducts as $includedAttributableOptionProduct) {
+            $optionsAttributableIncludedByProductId[$includedAttributableOptionProduct->getIncluded()->getId()] = $includedAttributableOptionProduct->getQuantity();
+        }
+
+        return $optionsAttributableIncludedByProductId;
+    }
+
+    /**
      * @param Sheet $sheet
      *
      * @return array

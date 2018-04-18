@@ -115,6 +115,18 @@ class Cart
     }
 
     /**
+     * @return Product\ProductIncluded[]
+     */
+    public function getIncludedAttributableOptionProducts(): array
+    {
+        if (null === $this->getPlanRow()) {
+            return [];
+        }
+
+        return $this->getPlanRow()->getProduct()->getIncludedAttributableOptionProducts();
+    }
+
+    /**
      * Get how many participant are included.
      *
      * @return int

@@ -10,9 +10,19 @@
 
 namespace Proximum\Vimeet\Domain\Repository;
 
+use Proximum\Vimeet\Domain\Model\Participant;
+use Proximum\Vimeet\Domain\Model\Product;
 use Proximum\Vimeet\Domain\Model\ProductAttributedToParticipant;
 
 interface ProductAttributedToParticipantRepositoryInterface
 {
     public function add(ProductAttributedToParticipant $productAttributedToParticipant): void;
+
+    /**
+     * @param Product       $product
+     * @param Participant[] $participants
+     *
+     * @return ProductAttributedToParticipant[]
+     */
+    public function findByProductAndParticipants(Product $product, array $participants): array;
 }
