@@ -3,7 +3,7 @@
 /*
  * This file is part of the vimeet project.
  *
- * Copyright (C) 2016 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -30,12 +30,6 @@ class StepOption
     /** @var \DateTimeInterface */
     private $dateTime;
 
-    /**
-     * StepOption constructor.
-     *
-     * @param Merger      $orderMerger
-     * @param CartManager $cartManager
-     */
     public function __construct(Merger $orderMerger, CartManager $cartManager, \DateTimeInterface $dateTime)
     {
         $this->orderMerger = $orderMerger;
@@ -49,10 +43,20 @@ class StepOption
      *
      * @return SelectOptions
      */
-    public function build(Sheet $sheet, $stepIndex)
+    public function build(Sheet $sheet, int $stepIndex): SelectOptions
     {
-        $command     = new SelectOptions($sheet, $stepIndex);
-        $cart        = $this->cartManager->getCart($command->sheet, $command->currentStep);
+        $command = new SelectOptions($sheet, $stepIndex);
+        $command->options = $this->buildOptions($sheet, $stepIndex);
+
+        return $command;
+    }
+
+    /**
+     * @return OptionRow[] indexed by Product id
+     */
+    private function buildOptions(Sheet $sheet, int $stepIndex): array
+    {
+        $cart = $this->cartManager->getCart($sheet, $stepIndex);
         $orderMerged = null;
 
         if ($sheet->hasNotCancelledOrders()) {
@@ -70,8 +74,8 @@ class StepOption
             $cart->getOptionsRowArray()
         );
 
-        $options          = [];
-        $availableOptions = $command->sheet->getPackage()->getAvailablesOptions($this->dateTime);
+        $options = [];
+        $availableOptions = $sheet->getPackage()->getAvailablesOptions($this->dateTime);
 
         foreach ($availableOptions as $option) {
             // @todo: second arguments must have previously selected participants
@@ -82,9 +86,7 @@ class StepOption
             );
         }
 
-        $command->options = $options;
-
-        return $command;
+        return $options;
     }
 
     /**
@@ -103,20 +105,31 @@ class StepOption
             $optionQuantity = $cartRow->getQuantity();
         }
 
-        if (!$order instanceof Order || !$orderRow = $order->getRowForProduct($option)) {
-            return $optionQuantity;
-        }
-
-        return $orderRow->getQuantity() + $optionQuantity;
+        return $this->getQuantityFromOrder($order, $option) + $optionQuantity;
     }
 
     /**
-     * @param Product $option
-     * @param array   $cartRows
+     * @param Order|null $order
+     * @param Product    $option
+     *
+     * @return int
+     */
+    private function getQuantityFromOrder(Order $order = null, Product $option): int
+    {
+        if (!$order instanceof Order || !$orderRow = $order->getRowForProduct($option)) {
+            return 0;
+        }
+
+        return $orderRow->getQuantity();
+    }
+
+    /**
+     * @param Product   $option
+     * @param CartRow[] $cartRows
      *
      * @return CartRow|null
      */
-    private function getCartRowFromOption(Product $option, array $cartRows)
+    private function getCartRowFromOption(Product $option, array $cartRows): ?CartRow
     {
         if (isset($cartRows[$option->getId()])) {
             return $cartRows[$option->getId()];

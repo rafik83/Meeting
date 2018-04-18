@@ -1,9 +1,16 @@
 {% form_theme form '@Ui/default.html.twig' %}
 
-{# @todo: get count assigned participants if no quantity field #}
-{% set quantity = quantityForm.quantity is defined ? quantityForm.quantity.vars.value : 0 %}
+{% set quantity = quantityForm.quantity is defined
+    ? quantityForm.quantity.vars.value
+    : quantityForm.participants is defined ? max(0, quantityForm.participants.vars.value|length - product.included) : 0
+%}
 
-<tr class="{{ product.isOutOfStock or not product.isBuyable ? '': 'row-quantity' }} {{ product.included > 0 or quantityForm is not null and quantity > 0 ? 'selected-line' : '' }}">
+<tr
+    class="{{ product.isOutOfStock or not product.isBuyable ? '': 'row-quantity' }} {{ product.included > 0 or quantityForm is not null and quantity > 0 ? 'selected-line' : '' }}"
+    data-selected-line-class="selected-line"
+    data-unit-price="{{ product.unitPrice }}"
+    data-included="{{ product.included }}"
+>
     <td class="col-md-2">
         <div class="product">
             <span class="product-price">
@@ -43,11 +50,15 @@
         {% endif %}
 
         {% if quantityForm.participants is defined %}
-            {{ form_row(quantityForm.participants, {attr: {
-                'data-selected-line-class': 'selected-line',
-                'data-unit-price': product.unitPrice,
-                'data-included': product.included
-            }}) }}
+            {{ form_row(
+                quantityForm.participants,
+                {
+                    attr: {
+                        'data-select-participants': '',
+                        'data-placeholder': 'form.options.selectParticipants.placeholder'|trans({}, 'forms')
+                    }
+                }
+            ) }}
 
             {% if not quantityForm.participants.vars.valid %}
                 <div class="message-error text-danger text-center">
@@ -68,11 +79,7 @@
             <h3 class="out-of-stock text-center">{{ 'package.product.unavailable'|trans }}</h3>
         {% elseif quantityForm is defined and quantityForm != null %}
             {% if quantityForm.quantity is defined %}
-                {{ form_widget(quantityForm.quantity, {attr: {
-                    'data-selected-line-class': 'selected-line',
-                    'data-unit-price': product.unitPrice,
-                    'data-included': product.included
-                }}) }}
+                {{ form_widget(quantityForm.quantity) }}
 
                 {% if not quantityForm.quantity.vars.valid %}
                     <div class="message-error text-danger text-center">
@@ -80,7 +87,7 @@
                     </div>
                 {% endif %}
             {% else %}
-                <div class="text-center highlight ft-size-26" data-quantity-text>0</div>
+                <h2 class="text-center highlight" data-quantity-text>{{ quantity }}</h2>
             {% endif %}
 
             <div class="message-error text-danger text-center">
