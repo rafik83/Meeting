@@ -46,7 +46,7 @@ class SheetsAvailableSlotAggregatorHandler
     {
         $sheets = $this->sheetRepository->getSheetsInCatalogByEvent($command->event);
 
-        foreach ($sheets as $key => $sheet) {
+        foreach ($sheets as $sheet) {
             $this->availableSlotAggregatorHandler->handle(new AvailableSlotAggregator($sheet, false));
         }
 
