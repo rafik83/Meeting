@@ -80,24 +80,6 @@ class OptionsValidator extends ConstraintValidator
         }
     }
 
-    /**
-     * @return Product[] indexed by Product id
-     */
-    private function getAvailableOptionsIndexedByProductId(Sheet $sheet): array
-    {
-        $options = $sheet->getPackage()->getAvailablesOptions($this->now);
-
-        return array_combine(
-            array_map(
-                function (Product $product) {
-                    return $product->getId();
-                },
-                $options
-            ),
-            $options
-        );
-    }
-
     private function validateOption(
         array &$options,
         SelectOptions $selectOptions,
@@ -114,70 +96,25 @@ class OptionsValidator extends ConstraintValidator
         $quantity = $optionRow->getQuantity();
 
         $this->validateNoConflictBetweenChoosenQuantityAndPreviouslyUsedPromotionCode(
-            $order,
             $selectOptions->sheet,
             $option,
-            $quantity
+            $quantity,
+            $order
         );
 
         $this->validateProductNotDeletable($order, $option, $quantity);
 
-        $quantityMin = $this->getQuantityMin(
-            $selectOptions->sheet,
-            $option,
-            $quantity,
-            $cart,
-            $order
-        );
-
-        $this->validateQuantityMinPayableOption($option, $quantityMin);
+        $this->validateQuantityMinPayableOption($selectOptions->sheet, $option, $quantity, $cart, $order);
 
         $quantityMax = $this->quantityMaxGuesser->getMaxByProduct($selectOptions->sheet, $option);
-
         $this->validateQuantity(
             $quantity,
-            $quantityMin,
             $quantityMax,
             $option
         );
     }
 
-    /**
-     * Validate minimum and maximum quantity violation
-     *
-     * @param int     $quantity
-     * @param int     $quantityMin
-     * @param float   $quantityMax int or INF
-     * @param Product $option
-     */
-    private function validateQuantity(
-        int $quantity,
-        int $quantityMin,
-        float $quantityMax,
-        Product $option
-    ): void {
-        if ($quantity < $quantityMin || $quantity > $quantityMax) {
-            $this
-                ->context
-                ->buildViolation('package.product.quantityNotMatch')
-                ->setParameters(['%min%' => 0, '%max%' => $quantityMax])
-                ->atPath($this->getPathForOption($option))
-                ->addViolation();
-        }
-    }
-
-    private function validateQuantityMinPayableOption(Product $option, int $quantityMin)
-    {
-        if ($quantityMin < BuyableObjectResolver::PAYABLE_OPTION_QUANTITY) {
-            $this
-                ->context
-                ->buildViolation('package.product.quantityMinPayableOption')
-                ->atPath($this->getPathForOption($option))
-                ->addViolation();
-        }
-    }
-
-    private function validateProductIsAvailable(array &$options, $optionId)
+    private function validateProductIsAvailable(array &$options, $optionId): bool
     {
         if (!isset($options[$optionId]) && !$options[$optionId] instanceof Product) {
             $this
@@ -191,17 +128,63 @@ class OptionsValidator extends ConstraintValidator
         return true;
     }
 
-    private function validateNoConflictBetweenChoosenQuantityAndPreviouslyUsedPromotionCode(
-        ?Order $order,
+    /**
+     * Validate minimum and maximum quantity violation
+     *
+     * @param int     $quantity
+     * @param float   $quantityMax int or INF
+     * @param Product $option
+     */
+    private function validateQuantity(
+        int $quantity,
+        float $quantityMax,
+        Product $option
+    ): void {
+        if ($quantity < 0 || $quantity > $quantityMax) {
+            $this
+                ->context
+                ->buildViolation('package.product.quantityNotMatch')
+                ->setParameters(['%min%' => 0, '%max%' => $quantityMax])
+                ->atPath($this->getPathForOption($option))
+                ->addViolation();
+        }
+    }
+
+    private function validateQuantityMinPayableOption(
         Sheet $sheet,
         Product $option,
-        int $quantity
+        int $quantity,
+        Cart $cart,
+        ?Order $order
+    ): void {
+        $linkedProduct = $this->templateProductGuesser->guessProduct($sheet, $option);
+
+        if (null === $linkedProduct) {
+            return;
+        }
+
+        $quantityMin = $this->resolveQuantityMinWithLinkedProduct($quantity, $linkedProduct, $cart, $order);
+
+        if ($quantityMin < BuyableObjectResolver::PAYABLE_OPTION_QUANTITY) {
+            $this
+                ->context
+                ->buildViolation('package.product.quantityMinPayableOption')
+                ->atPath($this->getPathForOption($option))
+                ->addViolation();
+        }
+    }
+
+    private function validateNoConflictBetweenChoosenQuantityAndPreviouslyUsedPromotionCode(
+        Sheet $sheet,
+        Product $option,
+        int $quantity,
+        ?Order $order
     ): void {
         if ($this->conflictBetweenChoosenQuantityAndPreviouslyUsedPromotionCode->hasConflict(
-            $order,
             $sheet,
             $option,
-            $quantity
+            $quantity,
+            $order
         )) {
             $this
                 ->context
@@ -211,41 +194,37 @@ class OptionsValidator extends ConstraintValidator
         }
     }
 
-    private function validateProductNotDeletable(?Order $order, Product $option, int $quantity)
+    private function validateProductNotDeletable(?Order $order, Product $option, int $quantity): void
     {
-        if ($order instanceof Order
-            && !$option->isDeletable($this->now)
-            && $orderRow = $order->getRowForProduct($option)
-        ) {
-            if ($quantity < $orderRow->getQuantity()) {
-                $this
-                    ->context
-                    ->buildViolation('package.product.productNotDeletable')
-                    ->atPath($this->getPathForOption($option))
-                    ->addViolation();
-            }
+        if (!$order instanceof Order || $option->isDeletable($this->now)) {
+            return;
+        }
+
+        $orderRow = $order->getRowForProduct($option);
+
+        if ($quantity < $orderRow->getQuantity()) {
+            $this
+                ->context
+                ->buildViolation('package.product.productNotDeletable')
+                ->atPath($this->getPathForOption($option))
+                ->addViolation();
         }
     }
 
-    private function getQuantityMin(
-        Sheet $sheet,
-        Product $option,
-        int $quantity,
-        Cart $cart,
-        ?Order $order
-    ): int {
-        $linkedProduct = $this->templateProductGuesser->guessProduct($sheet, $option);
+    /**
+     * @return Product[] indexed by Product id
+     */
+    private function getAvailableOptionsIndexedByProductId(Sheet $sheet): array
+    {
+        $options = $sheet->getPackage()->getAvailablesOptions($this->now);
 
-        if (null === $linkedProduct) {
-            return 0;
+        $optionsIndexedByProductId = [];
+
+        foreach ($options as $option) {
+            $optionsIndexedByProductId[$option->getId()] = $option;
         }
 
-        return $this->resolveQuantityMinWithLinkedProduct($quantity, $linkedProduct, $cart, $order);
-    }
-
-    private function getPathForOption(Product $option): string
-    {
-        return sprintf('%s.%s', $option->getId(), $option->isAttributable() ? 'participants' : 'quantity');
+        return $optionsIndexedByProductId;
     }
 
     /**
@@ -283,5 +262,10 @@ class OptionsValidator extends ConstraintValidator
         }
 
         return null;
+    }
+
+    private function getPathForOption(Product $option): string
+    {
+        return sprintf('%s.%s', $option->getId(), $option->isAttributable() ? 'participants' : 'quantity');
     }
 }

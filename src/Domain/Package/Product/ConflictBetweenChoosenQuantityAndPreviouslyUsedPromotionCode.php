@@ -25,7 +25,7 @@ class ConflictBetweenChoosenQuantityAndPreviouslyUsedPromotionCode
         $this->merger = $merger;
     }
 
-    public function hasConflict(?Order $order, Sheet $sheet, Product $product, int $quantity): bool
+    public function hasConflict(Sheet $sheet, Product $product, int $quantity, ?Order $order = null): bool
     {
         if (null === $order) {
             if (!$sheet->hasNotCancelledOrders()) {

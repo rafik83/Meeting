@@ -87,6 +87,23 @@ class UnavailabilityRepository implements UnavailabilityRepositoryInterface
     /**
      * {@inheritdoc}
      */
+    public function removeSystemUnavailabilityForUserAndEvent(User $user, Event $event): void
+    {
+        $this->entityManager->createQueryBuilder()
+            ->delete(Unavailability::class, 'unavailability')
+            ->where('unavailability.user = :user AND unavailability.event = :event AND unavailability.createdBy = :createdBy')
+            ->setParameter('user', $user)
+            ->setParameter('event', $event)
+            ->setParameter('createdBy', Unavailability::CREATED_BY_SYSTEM)
+            ->getQuery()
+            ->execute();
+
+        $this->entityManager->flush();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function findByParticipants(array $participants)
     {
         /** @var Participant|false $firstParticipant */

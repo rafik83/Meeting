@@ -306,16 +306,22 @@ event-build-guideline-asset@preprod:
 event-build-guideline-asset@prod:
 	ssh vimeet-prod1 "cd ${REMOTE_INSTALL_DIR} && bin/console vimeet:event:build-guideline-asset"
 
-# Elastica populate
-
-elastica-populate@preprod:
-	ssh vimeet-preprod "cd ${REMOTE_INSTALL_DIR} && bin/console fos:elastica:populate --env=prod --no-reset --no-debug"
-
-elastica-populate@prod:
-	ssh vimeet-prod1 "cd ${REMOTE_INSTALL_DIR} && bin/console fos:elastica:populate --env=prod --no-reset --no-debug"
-
 # next targets must be run in VM
 ifeq ($(HOST), vimeet)
+
+# Cache clear
+
+clear-cache@prod:
+	ssh vimeet-prod1 "cd ${REMOTE_INSTALL_DIR} && bin/console cache:clear --env=prod --no-debug"
+	ssh vimeet-prod2 "cd ${REMOTE_INSTALL_DIR} && bin/console cache:clear --env=prod --no-debug"
+
+# Elasticsearch Reindex
+
+elasticsearch-reindex@preprod:
+	ssh vimeet-preprod "cd ${REMOTE_INSTALL_DIR} && bin/console vimeet:elasticsearch:index --env=prod --no-debug"
+
+elasticsearch-reindex@prod:
+	ssh vimeet-prod1 "cd ${REMOTE_INSTALL_DIR} && bin/console vimeet:elasticsearch:index --env=prod --no-debug"
 
 get-preprod-db@vm:
 	read -p "You are about to dump then download preprod db, please confirm (y/n)?" CONFIRM; \
@@ -360,8 +366,6 @@ post-import-db@vm:
 	bin/console vimeet:event:build-guideline-asset
 	bin/console fos:elastica:populate --env=dev --no-debug
 
-endif
-
 sync-db-from-prod@preprod:
 	read -p "You are about to sync preprod DB from prod db, please confirm (y/n)?" CONFIRM; \
 	if [ "$$CONFIRM" = "y" ]; then \
@@ -373,3 +377,5 @@ sync-db-from-prod@preprod:
 	  scp prod.sql vimeet-preprod:prod.sql; \
 	  ssh vimeet-preprod "cd $(REMOTE_INSTALL_DIR) && bin/console doctrine:database:drop --force && bin/console doctrine:database:create && mysql --host localhost --port 3306 -u vimeet_preprod -p$$PREPRODDBPWD vimeet_preprod < /var/www/prod.sql && rm /var/www/prod.sql && bin/console doctrine:query:sql \"UPDATE event SET domain = REPLACE(domain, '.vimeet.events', '.preprod.vimeet.events')\" && bin/console doctrine:query:sql \"UPDATE user SET email = CONCAT(id, '@example.net')\" && bin/console doctrine:query:sql \"UPDATE user_event_phone SET phone = 'undefined'\" && bin/console doctrine:migrations:migrate && bin/console vimeet:event:build-guideline-asset && bin/console fos:elastica:populate --env=prod --no-reset --no-debug"; \
 	fi
+
+endif

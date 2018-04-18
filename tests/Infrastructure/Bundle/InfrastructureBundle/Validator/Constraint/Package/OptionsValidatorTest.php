@@ -100,11 +100,14 @@ class OptionsValidatorTest extends TestCase
             ->shouldBeCalled()
             ->willReturn(null);
 
-        $conflictBetweenChoosenQuantityAndPreviouslyUsedPromotionCode = $this->prophesize(ConflictBetweenChoosenQuantityAndPreviouslyUsedPromotionCode::class);
+        $conflictBetweenChoosenQuantityAndPreviouslyUsedPromotionCode = $this->prophesize(
+            ConflictBetweenChoosenQuantityAndPreviouslyUsedPromotionCode::class
+        );
         $conflictBetweenChoosenQuantityAndPreviouslyUsedPromotionCode
-            ->hasConflict(null, $this->sheet->reveal(), $this->product->reveal(), 1)
+            ->hasConflict($this->sheet->reveal(), $this->product->reveal(), 1, null)
             ->shouldBeCalled()
-            ->willReturn(true);
+            ->willReturn(true)
+        ;
 
         $constraintViolationBuilder1 = $this->prophesize(ConstraintViolationBuilderInterface::class);
         $this->executionContext
@@ -159,7 +162,7 @@ class OptionsValidatorTest extends TestCase
             ConflictBetweenChoosenQuantityAndPreviouslyUsedPromotionCode::class
         );
         $conflictBetweenChoosenQuantityAndPreviouslyUsedPromotionCode
-            ->hasConflict(null, $this->sheet->reveal(), $this->product->reveal(), 3)
+            ->hasConflict($this->sheet->reveal(), $this->product->reveal(), 3, null)
             ->shouldBeCalled()
             ->willReturn(false)
         ;
@@ -245,7 +248,7 @@ class OptionsValidatorTest extends TestCase
             ConflictBetweenChoosenQuantityAndPreviouslyUsedPromotionCode::class
         );
         $conflictBetweenChoosenQuantityAndPreviouslyUsedPromotionCode
-            ->hasConflict($order->reveal(), $this->sheet->reveal(), $this->product->reveal(), 1)
+            ->hasConflict($this->sheet->reveal(), $this->product->reveal(), 1, $order->reveal())
             ->shouldBeCalled()
             ->willReturn(false)
         ;
@@ -309,6 +312,7 @@ class OptionsValidatorTest extends TestCase
         $orderMerger->merge([$order->reveal()])
             ->shouldBeCalled()
             ->willReturn($order->reveal());
+
         $order->getPlan()
             ->shouldBeCalled()
             ->willReturn($this->product->reveal());
@@ -333,9 +337,9 @@ class OptionsValidatorTest extends TestCase
             ConflictBetweenChoosenQuantityAndPreviouslyUsedPromotionCode::class
         );
         $conflictBetweenChoosenQuantityAndPreviouslyUsedPromotionCode
-            ->hasConflict($order->reveal(), $this->sheet->reveal(), $this->product->reveal(), 0)
+            ->hasConflict($this->sheet->reveal(), $this->product->reveal(), 0, $order->reveal())
             ->shouldBeCalled()
-            ->willReturn(0)
+            ->willReturn(false)
         ;
 
         $constraintViolationBuilder1 = $this->prophesize(ConstraintViolationBuilderInterface::class);

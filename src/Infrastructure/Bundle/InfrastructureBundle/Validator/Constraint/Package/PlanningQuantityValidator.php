@@ -35,7 +35,6 @@ class PlanningQuantityValidator extends ConstraintValidator
         $quantityMax = $this->quantityMaxGuesser->getMaxPlanning($sheet);
 
         if ($this->conflictBetweenChoosenQuantityAndPreviouslyUsedPromotionCode->hasConflict(
-            null,
             $selectParticipantAndPlanning->sheet,
             $sheet->getPackage()->getPlanning(),
             $quantity

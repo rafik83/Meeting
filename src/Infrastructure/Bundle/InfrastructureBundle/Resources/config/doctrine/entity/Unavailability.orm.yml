@@ -19,6 +19,9 @@ Proximum\Vimeet\Domain\Model\Unavailability:
             nullable: false
             options:
                 default: 'user'
+    indexes:
+        createdByIndex:
+            columns: [ created_by ]
     manyToOne:
         user:
             targetEntity: Proximum\Vimeet\Domain\Model\User

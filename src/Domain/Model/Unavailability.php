@@ -162,4 +162,20 @@ class Unavailability implements TimeRangeInterface
         $this->begin = $begin;
         $this->end   = $end;
     }
+
+    /**
+     * @return bool
+     */
+    public function isDeletableByUser(): bool
+    {
+        return $this->isCreatedByUser();
+    }
+
+    /**
+     * @return bool
+     */
+    public function isCreatedByUser(): bool
+    {
+        return self::CREATED_BY_USER === $this->createdBy;
+    }
 }

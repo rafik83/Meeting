@@ -30,7 +30,9 @@ class UnavailabilityViewQueryHandler
             $begin,
             $end,
             $query->event->getTimeZone(),
-            $query->unavailability->getMessage()
+            $query->unavailability->getMessage(),
+            $query->unavailability->isCreatedByUser(),
+            $query->unavailability->isDeletableByUser()
         );
     }
 }

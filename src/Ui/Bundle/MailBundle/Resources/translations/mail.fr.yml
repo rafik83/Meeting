@@ -48,7 +48,7 @@ mail.planner.import.error: "Bonjour, \n\n Une erreur s'est produite durant le tr
 mail.planner.import.intro: "Bonjour, \n\n L'import du fichier pour les planifications de l'événement %eventTitle% est terminé."
 mail.planner.import.subject: 'Import des planifications'
 mail.planner.import.subject.error: 'Erreur lors de l''import des planifications'
-mail.planning.print.intro: 'Voici le fichier de plannings demandé:'
+mail.planning.print.intro: 'Voici le fichier de plannings demandé'
 mail.planning.print.link.click: 'Fichier de planning'
 mail.planning.print.link.intro: 'Vous pouvez imprimer les plannings en cliquant ici :'
 mail.planning.print.orderBy.participant_last_name: 'par nom de famille du participant'
@@ -94,7 +94,7 @@ mail.sheet.validation.draft.subject: 'Fiche remise en brouillon'
 mail.sheet.validation.validate.body: "Bonjour %firstname% %lastname%,\n\nVotre fiche de présentation de type %participationType% a été validée"
 mail.sheet.validation.validate.subject: 'Fiche validée'
 mail.spot.export.intro: "Bonjour,\n\n Voici l'export des lieux pour l'événement %eventTitle% :\n"
-mail.spot.export.link.click: 'Télécharger'
+mail.spot.export.link.click: Télécharger
 mail.spot.export.subject: 'Fichier d''export des lieux'
 mail.thirdParty.comexposium.sso.participantAdded.body: "Bonjour %firstname% %lastname%,\n\nVous avez été ajouté par un de vos collaborateurs pour participer aux rendez-vous d'affaire sur %event%.\n"
 mail.thirdParty.comexposium.sso.participantAdded.end: "Cordialement,\n"

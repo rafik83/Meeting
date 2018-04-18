@@ -10,6 +10,9 @@
 
 namespace Proximum\Vimeet\Domain\Cart;
 
+use Proximum\Vimeet\Application\Adapter\DelayedEventDispatcherInterface;
+use Proximum\Vimeet\Application\Event\Cart\ParticipantCartRowAddedEvent;
+use Proximum\Vimeet\Application\Event\Events;
 use Proximum\Vimeet\Domain\Model\CartRowParticipant;
 use Proximum\Vimeet\Domain\Model\CartStep;
 use Proximum\Vimeet\Domain\Model\Order;
@@ -17,6 +20,7 @@ use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Product;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Order\Merger;
+use Proximum\Vimeet\Domain\Participant\ParticipantProductSetter;
 use Proximum\Vimeet\Domain\Repository\CartRowRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\CartStepRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\PromotionCodeRowRepositoryInterface;
@@ -35,22 +39,34 @@ class CartManager
     /** @var Merger */
     private $orderMerger;
 
+    /** @var ParticipantProductSetter */
+    private $participantProductSetter;
+
+    /** @var DelayedEventDispatcherInterface */
+    private $delayedEventDispatcher;
+
     /**
      * @param CartRowRepositoryInterface          $cartRowRepository
      * @param CartStepRepositoryInterface         $cartStepRepository
      * @param PromotionCodeRowRepositoryInterface $promotionCodeRowRepository
      * @param Merger                              $orderMerger
+     * @param ParticipantProductSetter            $participantProductSetter
+     * @param DelayedEventDispatcherInterface     $delayedEventDispatcher
      */
     public function __construct(
         CartRowRepositoryInterface $cartRowRepository,
         CartStepRepositoryInterface $cartStepRepository,
         PromotionCodeRowRepositoryInterface $promotionCodeRowRepository,
-        Merger $orderMerger
+        Merger $orderMerger,
+        ParticipantProductSetter $participantProductSetter,
+        DelayedEventDispatcherInterface $delayedEventDispatcher
     ) {
         $this->cartRowRepository          = $cartRowRepository;
         $this->cartStepRepository         = $cartStepRepository;
         $this->promotionCodeRowRepository = $promotionCodeRowRepository;
         $this->orderMerger                = $orderMerger;
+        $this->participantProductSetter = $participantProductSetter;
+        $this->delayedEventDispatcher = $delayedEventDispatcher;
     }
 
     /**
@@ -80,11 +96,6 @@ class CartManager
         $sheet = $cart->getSheet();
 
         $participantsByProductId = $this->getParticipantsByProductId($sheet, $productByParticipantId);
-
-        // Reset cart row for participant product
-        foreach($cart->getParticipantRows() as $participantCartRow) {
-            $cart->removeRow($participantCartRow);
-        }
 
         $availableParticipantProductsById = $this->getAvailableParticipantProductsById($sheet);
 
@@ -122,10 +133,17 @@ class CartManager
         array &$availableParticipantProductsById,
         array &$participantsByProductId,
         array &$participantsIncludedByProductId
-    ) {
+    ): void {
+        $previousCartProductByParticipantId = $this->getPreviousCartProductByParticipantId($cart);
+        $this->removeCartRowForParticipantProduct($cart);
+
         foreach ($participantsByProductId as $productId => $participants) {
+            if (!isset($availableParticipantProductsById[$productId])) {
+                continue;
+            }
+
             $participantProduct = $availableParticipantProductsById[$productId];
-            $quantityToAdd = count($participants);
+            $quantityToAdd = \count($participants);
 
             // Take account of previous ordered Participant products
             if (null !== $order) {
@@ -151,7 +169,10 @@ class CartManager
             if ($quantityToAdd <= 0) {
                 foreach ($participants as $participant) {
                     if ($participant instanceof Participant) {
-                        $participant->setParticipantProduct($availableParticipantProductsById[$productId]);
+                        $this->participantProductSetter->setProductOnParticipant(
+                            $participant,
+                            $availableParticipantProductsById[$productId]
+                        );
                     }
                 }
             }
@@ -160,10 +181,22 @@ class CartManager
         // Add link between participant and participant product added to the cart
         foreach ($cart->getParticipantRows() as $participantCartRow) {
             if (isset($participantsByProductId[$participantCartRow->getProduct()->getId()])) {
+                /** @var Participant $participant */
                 foreach ($participantsByProductId[$participantCartRow->getProduct()->getId()] as $participant) {
                     $participantCartRow->addCartRowParticipant(
                         new CartRowParticipant($participantCartRow, $participant)
                     );
+
+                    $event = new ParticipantCartRowAddedEvent(
+                        $participant,
+                        $participant->hasParticipantProduct(),
+                        (
+                            isset($previousCartProductByParticipantId[$participant->getId()])
+                            && $previousCartProductByParticipantId[$participant->getId()] === $participantCartRow->getProduct()
+                        )
+                    );
+
+                    $this->delayedEventDispatcher->dispatch(Events::PARTICIPANT_CART_ROW_ADDED, $event);
                 }
             }
         }
@@ -180,7 +213,7 @@ class CartManager
         ?Order $order = null,
         array &$availableParticipantProductsById,
         array &$participantsByProductId
-    ) {
+    ): void {
         if (null === $order) {
             return;
         }
@@ -197,7 +230,7 @@ class CartManager
 
             $productId = $participantRow->getProduct()->getId();
             $previousQuantity = $participantRow->getQuantity();
-            $newQuantity = count($participantsByProductId[$productId]);
+            $newQuantity = \count($participantsByProductId[$productId]);
             $quantityToRemove = $previousQuantity - $newQuantity;
 
             // Add a link between Participant and Product of type 'participant'
@@ -211,7 +244,10 @@ class CartManager
                         && isset($availableParticipantProductsById[$productId])
                         && $availableParticipantProductsById[$productId] instanceof Product
                     ) {
-                        $participant->setParticipantProduct($availableParticipantProductsById[$productId]);
+                        $this->participantProductSetter->setProductOnParticipant(
+                            $participant,
+                            $availableParticipantProductsById[$productId]
+                        );
                     }
                 }
             }
@@ -299,7 +335,7 @@ class CartManager
     /**
      * @param Cart $cart
      */
-    public function save(Cart $cart)
+    public function save(Cart $cart): void
     {
         // Save / add rows
         foreach ($cart->getRows() as $row) {
@@ -357,5 +393,35 @@ class CartManager
     {
         $this->cartStepRepository->deleteForSheet($sheet);
         $this->cartRowRepository->deleteForSheet($sheet);
+    }
+
+    /**
+     * This methods return an array indexed by participant id of the product in cart for this participant before
+     *
+     * @param Cart $cart
+     *
+     * @return array of [ 1(participantId) => Product]
+     */
+    private function getPreviousCartProductByParticipantId(Cart $cart): array
+    {
+        $previousProductInCartByParticipantId = [];
+
+        foreach ($cart->getParticipantRows() as $participantRow) {
+            foreach ($participantRow->getParticipants() as $participant) {
+                $previousProductInCartByParticipantId[$participant->getId()] = $participantRow->getProduct();
+            }
+        }
+
+        return $previousProductInCartByParticipantId;
+    }
+
+    /**
+     * @param Cart $cart
+     */
+    private function removeCartRowForParticipantProduct(Cart $cart): void
+    {
+        foreach ($cart->getParticipantRows() as $participantCartRow) {
+            $cart->removeRow($participantCartRow);
+        }
     }
 }

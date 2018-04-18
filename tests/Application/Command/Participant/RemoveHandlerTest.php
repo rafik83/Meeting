@@ -11,6 +11,7 @@
 namespace Proximum\Vimeet\Tests\Application\Command\Participant;
 
 use PHPUnit\Framework\TestCase;
+use Prophecy\Argument;
 use Proximum\Vimeet\Application\Command\Package\Step\SelectParticipantAndPlanning;
 use Proximum\Vimeet\Application\Command\Participant\Remove;
 use Proximum\Vimeet\Application\Command\Participant\RemoveHandler;
@@ -44,8 +45,11 @@ class RemoveHandlerTest extends TestCase
         $owner = new User('email@email.fr', 'password', 'salt', 'fr');
         $date = new \DateTime();
         $sheet = new Sheet($event, $type, [], $owner, $date);
+        $user = $this->prophesize(User::class);
+        $user->getId()->willReturn(1999);
         $participant1 = $this->prophesize(Participant::class);
         $participant1->getId()->willReturn(1337);
+        $participant1->getUser()->willReturn($user->reveal());
         $participant2 = $this->prophesize(Participant::class);
         $participant2->getId()->willReturn(2059);
         $sheet->addParticipant($participant1->reveal());
@@ -58,10 +62,13 @@ class RemoveHandlerTest extends TestCase
         $eventDispatcher = $this->prophesize(DelayedEventDispatcher::class);
         $sheetUpdatedEvent = new SheetUpdatedEvent($sheet);
         $eventDispatcher->dispatch(Events::SHEET_UPDATED, $sheetUpdatedEvent)->shouldBeCalled();
-        $eventDispatcher->dispatch(Events::PARTICIPANT_REMOVED, new ParticipantRemovedEvent($sheet))->shouldBeCalled();
+        $eventDispatcher
+            ->dispatch(Events::PARTICIPANT_REMOVED, new ParticipantRemovedEvent($sheet, [1999 => $user->reveal()]))
+            ->shouldBeCalled()
+        ;
 
         $meetingRepository = $this->prophesize(MeetingRepositoryInterface::class);
-        $meetingRepository->countByParticipant($participant1->reveal())->shouldBeCalled()->willReturn(0);
+        $meetingRepository->hasScheduledMeetingByParticipant($participant1->reveal())->shouldBeCalled()->willReturn(false);
         $participantInfoGuesser = $this->prophesize(ParticipantInfoGuesser::class);
         $participantInfoGuesser->guessParticipantCompleteName($participant1->reveal(), $locale)->shouldNotBeCalled();
 
@@ -131,13 +138,12 @@ class RemoveHandlerTest extends TestCase
         $cartManager = $this->prophesize(CartManager::class);
 
         $eventDispatcher   = $this->prophesize(DelayedEventDispatcher::class);
-        $sheetUpdatedEvent = new SheetUpdatedEvent($sheet);
-        $eventDispatcher->dispatch(Events::SHEET_UPDATED, $sheetUpdatedEvent)->shouldBeCalled();
-        $eventDispatcher->dispatch(Events::PARTICIPANT_REMOVED, new ParticipantRemovedEvent($sheet))->shouldBeCalled();
+        $eventDispatcher->dispatch(Argument::any())->shouldNotBeCalled();
+        $eventDispatcher->dispatch(Argument::any())->shouldNotBeCalled();
 
         $meetingRepository      = $this->prophesize(MeetingRepositoryInterface::class);
-        $meetingRepository->countByParticipant($participant1)->shouldBeCalled()->willReturn(2);
-        $meetingRepository->countByParticipant($participant2)->shouldBeCalled()->willReturn(0);
+        $meetingRepository->hasScheduledMeetingByParticipant($participant1)->shouldBeCalled()->willReturn(true);
+        $meetingRepository->hasScheduledMeetingByParticipant($participant2)->shouldBeCalled()->willReturn(false);
         $participantInfoGuesser = $this->prophesize(ParticipantInfoGuesser::class);
         $participantInfoGuesser->guessParticipantCompleteName($participant1, $locale)->shouldBeCalled()->willReturn('jean paul');
 
@@ -149,21 +155,11 @@ class RemoveHandlerTest extends TestCase
         $expectedSheet->addParticipant($participant2);
         $expectedSheet->addParticipant($participant3);
 
-        $selectParticipantAndPlanning = new SelectParticipantAndPlanning($sheet);
-        $selectParticipantAndPlanning->participantsProduct = [];
-        $stepParticipantAndPlanning->build($sheet)->shouldBeCalled()->willReturn($selectParticipantAndPlanning);
+        $stepParticipantAndPlanning->build(Argument::any())->shouldNotBeCalled();
 
-        $cart = $this->prophesize(Cart::class);
-        $cartManager->getCart($sheet)->shouldBeCalled()->willReturn($cart->reveal());
-        $cartManager
-            ->updateParticipantsQuantity(
-                $cart->reveal(),
-                []
-            )
-            ->shouldBeCalled()
-            ->willReturn($cart->reveal())
-        ;
-        $cartManager->save($cart)->shouldBeCalled();
+        $cartManager->getCart($sheet)->shouldNotBeCalled();
+        $cartManager->updateParticipantsQuantity(Argument::any())->shouldNotBeCalled();
+        $cartManager->save(Argument::any())->shouldNotBeCalled();
 
         // Command
         $remove = new Remove($sheet, $locale);
@@ -208,11 +204,10 @@ class RemoveHandlerTest extends TestCase
         $participantRepository = $this->prophesize(ParticipantRepositoryInterface::class);
         $cartManager = $this->prophesize(CartManager::class);
         $eventDispatcher = $this->prophesize(DelayedEventDispatcher::class);
-        $eventDispatcher->dispatch(Events::PARTICIPANT_REMOVED, new ParticipantRemovedEvent($sheet))->shouldNotBeCalled(
-        )
-        ;
+        $eventDispatcher->dispatch(Argument::any())->shouldNotBeCalled();
+
         $meetingRepository = $this->prophesize(MeetingRepositoryInterface::class);
-        $meetingRepository->countByParticipant($participant1->reveal())->shouldNotBeCalled();
+        $meetingRepository->hasScheduledMeetingByParticipant($participant1->reveal())->shouldNotBeCalled();
         $participantInfoGuesser = $this->prophesize(ParticipantInfoGuesser::class);
         $participantInfoGuesser->guessParticipantCompleteName($participant1->reveal(), $locale)->shouldNotBeCalled();
         $stepParticipantAndPlanning = $this->prophesize(StepParticipantAndPlanning::class);

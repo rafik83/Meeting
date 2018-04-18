@@ -14,6 +14,7 @@ use Proximum\Vimeet\Domain\Model\CartRow;
 use Proximum\Vimeet\Domain\Model\Order;
 use Proximum\Vimeet\Domain\Model\PromotionCode;
 use Proximum\Vimeet\Domain\Model\PromotionCodeRow;
+use Proximum\Vimeet\Domain\Participant\ParticipantProductSetter;
 use Proximum\Vimeet\Domain\Repository\CartRowRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\CartStepRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\OrderRepositoryInterface;
@@ -44,12 +45,16 @@ class Converter
     /** @var PromotionCodeRepositoryInterface */
     private $promotionCodeRepository;
 
+    /** @var ParticipantProductSetter */
+    private $participantProductSetter;
+
     /**
      * @param OrderRepositoryInterface            $orderRepository
      * @param CartRowRepositoryInterface          $cartRowRepository
      * @param CartStepRepositoryInterface         $cartStepRepository
      * @param PromotionCodeRowRepositoryInterface $promotionCodeRowRepository
      * @param PromotionCodeRepositoryInterface    $promotionCodeRepository
+     * @param ParticipantProductSetter            $participantProductSetter
      * @param \DateTimeInterface                  $datetime
      */
     public function __construct(
@@ -58,6 +63,7 @@ class Converter
         CartStepRepositoryInterface $cartStepRepository,
         PromotionCodeRowRepositoryInterface $promotionCodeRowRepository,
         PromotionCodeRepositoryInterface $promotionCodeRepository,
+        ParticipantProductSetter $participantProductSetter,
         \DateTimeInterface $datetime
     ) {
         $this->orderRepository            = $orderRepository;
@@ -65,6 +71,7 @@ class Converter
         $this->cartStepRepository         = $cartStepRepository;
         $this->promotionCodeRowRepository = $promotionCodeRowRepository;
         $this->promotionCodeRepository    = $promotionCodeRepository;
+        $this->participantProductSetter   = $participantProductSetter;
         $this->datetime                   = $datetime;
     }
 
@@ -123,7 +130,7 @@ class Converter
         // Add a link between Participant and Product of type 'participant'
         if ($cartRow->getProduct()->isParticipant()) {
             foreach ($cartRow->getParticipants() as $participant) {
-                $participant->setParticipantProduct($cartRow->getProduct());
+                $this->participantProductSetter->setProductOnParticipant($participant, $cartRow->getProduct());
             }
         }
 
