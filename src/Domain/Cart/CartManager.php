@@ -11,6 +11,7 @@
 namespace Proximum\Vimeet\Domain\Cart;
 
 use Proximum\Vimeet\Application\Adapter\DelayedEventDispatcherInterface;
+use Proximum\Vimeet\Application\Command\Package\Step\OptionRow;
 use Proximum\Vimeet\Application\Event\Cart\ParticipantCartRowAddedEvent;
 use Proximum\Vimeet\Application\Event\Events;
 use Proximum\Vimeet\Domain\Model\CartRowParticipant;
@@ -83,6 +84,47 @@ class CartManager
             $this->promotionCodeRowRepository->findBySheet($sheet),
             $currentStep
         );
+    }
+
+    /***
+     * @param Cart       $cart
+     * @param OptionRow  $optionRow
+     *
+     * @param Product    $product
+     * @param null|Order $order
+     * @param array      $attributableOptionsIncludedByProductId
+     *
+     * @return Cart
+     */
+    public function updateOptionsQuantity(
+        Cart $cart,
+        OptionRow $optionRow,
+        Product $product,
+        ?Order $order,
+        array $attributableOptionsIncludedByProductId = []
+    ): Cart {
+        $orderQuantity = 0;
+
+        // handle new order
+        if (null !== $order) {
+            $orderRow = $order->getRowByProductId($product->getId());
+
+            if (null !== $orderRow) {
+                $orderQuantity = $orderRow->getQuantity();
+            }
+        }
+
+        $optionRowQuantity = $optionRow->getQuantity();
+        $optionRowParticipants = $optionRow->getParticipants();
+
+        if ($product->isAttributable()) {
+            $includedQuantity = $attributableOptionsIncludedByProductId[$product->getId()] ?? 0;
+            $optionRowQuantity -= $includedQuantity;
+        }
+
+        $cart->setProduct($product, $optionRowQuantity - $orderQuantity, $optionRowParticipants);
+
+        return $cart;
     }
 
     /***
