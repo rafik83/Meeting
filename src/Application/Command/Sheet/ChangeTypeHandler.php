@@ -11,6 +11,8 @@
 namespace Proximum\Vimeet\Application\Command\Sheet;
 
 use Proximum\Vimeet\Application\Adapter\TranslatorInterface;
+use Proximum\Vimeet\Application\Command\Sheet\ChangeType\CancelPackage;
+use Proximum\Vimeet\Application\Command\Sheet\ChangeType\CancelPackageHandler;
 use Proximum\Vimeet\Application\Components\Registration\StepManager;
 use Proximum\Vimeet\Application\Components\Sheet\Request\EnableDisableManager;
 use Proximum\Vimeet\Application\Event\Events;
@@ -18,8 +20,6 @@ use Proximum\Vimeet\Application\Event\Package\MustSelectPackageEvent;
 use Proximum\Vimeet\Application\Event\Sheet\SheetChangedTypeEvent;
 use Proximum\Vimeet\Application\Exception\Sheet\InvoicedSheetException;
 use Proximum\Vimeet\Application\Exception\Sheet\SheetWithMeetingsException;
-use Proximum\Vimeet\Domain\Cart\CartManager;
-use Proximum\Vimeet\Domain\Model\Order;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Repository\MeetingRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\OrderRepositoryInterface;
@@ -30,9 +30,6 @@ class ChangeTypeHandler
 {
     /** @var SheetRepositoryInterface */
     private $sheetRepository;
-
-    /** @var OrderRepositoryInterface */
-    private $orderRepository;
 
     /** @var DelayedEventDispatcher */
     private $eventDispatcher;
@@ -52,13 +49,16 @@ class ChangeTypeHandler
     /** @var EnableDisableManager */
     private $enableDisableManager;
 
-    /** @var CartManager */
-    private $cartManager;
+    /** @var CancelPackageHandler */
+    private $cancelPackageHandler;
+
+    /** @var OrderRepositoryInterface */
+    private $orderRepository;
 
     /**
      * @param SheetRepositoryInterface   $sheetRepository
      * @param OrderRepositoryInterface   $orderRepository
-     * @param CartManager                $cartManager
+     * @param CancelPackageHandler       $cancelPackageHandler
      * @param MeetingRepositoryInterface $meetingRepository
      * @param EnableDisableManager       $enableDisableManager
      * @param TranslatorInterface        $translator
@@ -69,7 +69,7 @@ class ChangeTypeHandler
     public function __construct(
         SheetRepositoryInterface $sheetRepository,
         OrderRepositoryInterface $orderRepository,
-        CartManager $cartManager,
+        CancelPackageHandler $cancelPackageHandler,
         MeetingRepositoryInterface $meetingRepository,
         EnableDisableManager $enableDisableManager,
         TranslatorInterface $translator,
@@ -79,7 +79,7 @@ class ChangeTypeHandler
     ) {
         $this->sheetRepository         = $sheetRepository;
         $this->orderRepository         = $orderRepository;
-        $this->cartManager             = $cartManager;
+        $this->cancelPackageHandler    = $cancelPackageHandler;
         $this->translator              = $translator;
         $this->eventDispatcher         = $eventDispatcher;
         $this->datetime                = $datetime;
@@ -90,6 +90,9 @@ class ChangeTypeHandler
 
     /**
      * @param ChangeType $changeType
+     *
+     * @throws SheetWithMeetingsException
+     * @throws InvoicedSheetException
      */
     public function handle(ChangeType $changeType)
     {
@@ -118,19 +121,7 @@ class ChangeTypeHandler
 
         // if previous package different of new one, cancel orders
         if ($previousPackage !== $currentPackage) {
-            $orders = $this->orderRepository->findBySheet($changeType->sheet);
-
-            if (\count($orders)) {
-                array_map(
-                    function (Order $order) {
-                        $order->cancel();
-                        $this->orderRepository->set($order);
-                    },
-                    $orders
-                );
-            }
-
-            $this->cartManager->emptyCart($changeType->sheet);
+            $this->cancelPackageHandler->handle(new CancelPackage($changeType->sheet));
         }
 
         // reset registration step to redirect participant on registration
@@ -167,7 +158,7 @@ class ChangeTypeHandler
      *
      * @throws InvoicedSheetException
      */
-    private function denyAccessIfAtLeastOneOrderIsInvoiced(Sheet $sheet)
+    private function denyAccessIfAtLeastOneOrderIsInvoiced(Sheet $sheet): void
     {
         if ($this->orderRepository->hasInvoice($sheet) === true) {
             throw new InvoicedSheetException('Sheet type cannot be changed');
@@ -179,7 +170,7 @@ class ChangeTypeHandler
      *
      * @throws SheetWithMeetingsException
      */
-    private function denyAccessIfAtLeastOneMeeting(Sheet $sheet)
+    private function denyAccessIfAtLeastOneMeeting(Sheet $sheet): void
     {
         if (0 < $this->meetingRepository->countMeetingsOfSheet($sheet)) {
             throw new SheetWithMeetingsException('Sheet type cannot be changed as Sheet has meetings');

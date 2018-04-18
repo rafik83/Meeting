@@ -95,8 +95,11 @@ final class Events
     const SLOT_DELETED                                 = 'slot.deleted';
     const USER_PHONE_VALIDATED                         = 'user.phone_validated';
     const USER_AVAILABILITY_CONFIRMED                  = 'user.availability.confirmed';
+    const USER_SYSTEM_UNAVAILABILITY_GENERATED         = 'user.unavailability.system.generated';
     const TIP_ASSIGNED                                 = 'tip.assigned';
     const TIP_REMOVED_FROM_EVENT                       = 'tip.removed_from_event';
     const TIP_EVENT_CREATED                            = 'tip.event.created';
     const TIP_EVENT_UPDATED                            = 'tip.event.updated';
+    const PARTICIPANT_PRODUCT_SET                      = 'participant.product.set';
+    const PARTICIPANT_CART_ROW_ADDED                   = 'participant.cart.row.added';
 }

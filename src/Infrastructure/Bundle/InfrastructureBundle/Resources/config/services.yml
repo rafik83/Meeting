@@ -1278,7 +1278,7 @@ services:
         arguments:
             - '@vimeet_infrastructure.repository.sheet_repository'
             - '@vimeet_infrastructure.repository.order_repository'
-            - '@cart_manager'
+            - '@Proximum\Vimeet\Application\Command\Sheet\ChangeType\CancelPackageHandler'
             - '@vimeet_infrastructure.repository.meeting_repository'
             - '@sheet.request.enable_disable_manager'
             - '@vimeet_infrastructure.adapter.translator_adapter'
@@ -4582,6 +4582,8 @@ services:
             - '@repository.cart_step_repository'
             - '@repository.promotion_code_row_repository'
             - '@order.merger'
+            - '@Proximum\Vimeet\Domain\Participant\ParticipantProductSetter'
+            - '@vimeet_infrastructure.adapter.delayed_event_dispatcher'
     buyable_object_resolver:
         class: Proximum\Vimeet\Domain\Cart\BuyableObjectResolver
         arguments:
@@ -4597,6 +4599,7 @@ services:
             - '@repository.cart_step_repository'
             - '@repository.promotion_code_row_repository'
             - '@repository.promotion_code_repository'
+            - '@Proximum\Vimeet\Domain\Participant\ParticipantProductSetter'
             - '@datetime'
 
     cart_cleaner:
@@ -5699,12 +5702,16 @@ services:
         arguments:
             - '@vimeet_infrastructure.repository.meeting_slot_repository'
             - '@vimeet_infrastructure.repository.participant_repository'
-    domain.sheet.aggregate.available_slot_calculator:
-        class: Proximum\Vimeet\Domain\Sheet\Aggregate\AvailableSlotCalculator
+    Proximum\Vimeet\Domain\Sheet\Aggregate\AvailableSlotCalculator:
         arguments:
             - '@vimeet_infrastructure.repository.meeting_slot_repository'
             - '@vimeet_infrastructure.repository.sheet_repository'
             - '@adapter.sheet_indexer'
+
+    Proximum\Vimeet\Domain\Sheet\Aggregate\AvailableSlotCalculatorDecorator:
+        decorates: Proximum\Vimeet\Domain\Sheet\Aggregate\AvailableSlotCalculator
+        arguments:
+            - '@Proximum\Vimeet\Domain\Sheet\Aggregate\AvailableSlotCalculatorDecorator.inner'
 
     #
     # Command Aggregator
