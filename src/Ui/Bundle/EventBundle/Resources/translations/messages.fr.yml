@@ -299,6 +299,7 @@ order.transaction.paypal.description: '%eventId%-%sheetId% : Participation de %s
 order.transaction.state.cancelled: Annulé
 order.transaction.state.paid: Réglé
 order.transaction.state.pending: 'En attente'
+package.funnel.error: 'Une erreur s''est produite. Merci de vérifier le détail des erreurs dans le formulaire ci-dessous.'
 package.funnel.payment: Paiement
 package.funnel.summary: 'Récapitulatif & Facturation'
 package.options.included: inclus
