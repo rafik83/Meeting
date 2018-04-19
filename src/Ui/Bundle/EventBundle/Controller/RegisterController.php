@@ -22,6 +22,7 @@ use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Template\TemplateData;
+use Proximum\Vimeet\Domain\Template\TemplateObject\UploadObject;
 use Proximum\Vimeet\Domain\View\TypeView;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Model\Email;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Common\EmailType;
@@ -367,16 +368,17 @@ class RegisterController extends Controller
     {
         $data = array_filter($data, function ($value) { return null !== $value; });
 
-        $imageObjects = $registrationTemplate->getImageObjects();
-        $fileStorage  = $this->get('adapter.local_file_storage');
+        $uploadedAndImageObjects = $registrationTemplate->getUploadedAndImageObjects();
+        $fileStorage = $this->get('adapter.local_file_storage');
 
-        foreach ($imageObjects as $key => $object) {
+        foreach ($uploadedAndImageObjects as $key => $object) {
             if ($form->has($key) && $form->get($key)->get('file')->getData() !== null) {
                 $file = $form->get($key)->get('file')->getData();
+                $fileType = $object instanceof UploadObject ? 'file' : 'image';
 
                 if ($file instanceof UploadedFile) {
                     try {
-                        $data[$key]['image'] = $fileStorage->upload($file);
+                        $data[$key][$fileType] = $fileStorage->upload($file);
                         $fileStorage->remove($object->getContentValue());
                     } catch (\Exception $exception) {
                         $form->get($key)->get('file')->addError(
@@ -386,7 +388,7 @@ class RegisterController extends Controller
 
                 } else {
                     $form->get($key)->get('file')->addError(
-                        new FormError('validators.field.notValid.image')
+                        new FormError(sprintf('validators.field.notValid.%s', $fileType))
                     );
                 }
             }

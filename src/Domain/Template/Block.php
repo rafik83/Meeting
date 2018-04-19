@@ -482,14 +482,17 @@ class Block extends AbstractChild
             return $object->getContentValueLocalize();
         })->first();
     }
-
+    
     /**
-     * @return TemplateObject\Image[]
+     * @return TemplateObject\UploadObject[]
      */
-    public function getImageObjects()
+    public function getUploadedAndImageObjects(): array
     {
         return array_filter($this->getObjects(), function (TemplateObject $object) {
-            return $object instanceof TemplateObject\Image;
+            return
+                $object instanceof TemplateObject\UploadObject ||
+                $object instanceof TemplateObject\Image
+            ;
         });
     }
 

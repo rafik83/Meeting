@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Domain\Template\TemplateObject;
 
+use Proximum\Vimeet\Domain\MimeType\MimeType;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 class Image extends EditableObject implements ContentObjectInterface
@@ -98,13 +99,7 @@ class Image extends EditableObject implements ContentObjectInterface
      */
     public static function supportedMimeType()
     {
-        return [
-            "image/gif",
-            "image/jpeg",
-            "image/pjpeg",
-            "image/png",
-            "image/x-png",
-        ];
+        return MimeType::getMimeTypesByFormats([MimeType::FORMAT_IMAGE]);
     }
 
     /**

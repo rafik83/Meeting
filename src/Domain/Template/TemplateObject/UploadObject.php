@@ -10,21 +10,21 @@
 
 namespace Proximum\Vimeet\Domain\Template\TemplateObject;
 
+use Proximum\Vimeet\Domain\MimeType\MimeType;
 use Proximum\Vimeet\Domain\Template\TemplateObject;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 class UploadObject extends TemplateObject
 {
-    public const FORMAT_IMAGE = 'image';
-    public const FORMAT_PDF = 'pdf';
-    public const FORMAT_PPT = 'ppt';
-    public const FORMAT_CSV = 'csv';
-
     public const ALLOWED_FORMATS = [
-        self::FORMAT_IMAGE,
-        self::FORMAT_PDF,
-        self::FORMAT_PPT,
-        self::FORMAT_CSV,
+        MimeType::FORMAT_IMAGE,
+        MimeType::FORMAT_PDF,
+        MimeType::FORMAT_PPT,
+        MimeType::FORMAT_CSV,
     ];
+
+    /** @var null|UploadedFile */
+    private $file;
 
     /**
      * @return bool
@@ -56,5 +56,25 @@ class UploadObject extends TemplateObject
         return null !== $filter
         && isset($filter['label'])
         && null !== $filter['label'] ? $filter['label'] : '';
+    }
+
+    public function getFile(): ?UploadedFile
+    {
+        return $this->file;
+    }
+
+    public function setFile(?UploadedFile $file): void
+    {
+        $this->file = $file;
+    }
+
+    public function isEditable(): bool
+    {
+        return true;
+    }
+
+    public function getContentValue(): ?string
+    {
+        return $this->getFile() ? $this->getFile()->getPath() : null;
     }
 }
