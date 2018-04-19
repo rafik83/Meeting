@@ -231,8 +231,45 @@ class CartManager
         // The included quantity is less than the selected quantity
         // The quantity is positive
         // No previous order
+        $productAttributedToParticipants = $this->getProductAttributedToParticipants($optionRow, $product);
 
+        if (\count($productAttributedToParticipants) === $includedQuantity) {
+            $notFound = false;
 
+            foreach ($productAttributedToParticipants as $participantId => $productAttributedToParticipant) {
+                if (!isset($optionRowParticipantsIndexedByParticipantId[$participantId])) {
+                    $notFound = true;
+                }
+            }
+
+            // Nothing to change
+            if (false === $notFound) {
+                $cart->setProduct(
+                    $product,
+                    $quantity - $includedQuantity,
+                    $optionRowParticipants
+                );
+
+                return $cart;
+            }
+        }
+
+        $this->productAttributedToParticipantRepository->remove($productAttributedToParticipants);
+
+        $participantToProductAttributedToParticipantsToCreate = \array_slice($optionRowParticipants, 0, $includedQuantity);
+        foreach ($participantToProductAttributedToParticipantsToCreate as $participant) {
+            $this->productAttributedToParticipantRepository->add(new ProductAttributedToParticipant(
+                $product,
+                $participant,
+                new \DateTime()
+            ));
+        }
+
+        $cart->setProduct(
+            $product,
+            $quantity - $includedQuantity,
+            $optionRowParticipants
+        );
 
         return $cart;
     }
