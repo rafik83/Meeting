@@ -59,12 +59,6 @@
                     }
                 }
             ) }}
-
-            {% if not quantityForm.participants.vars.valid %}
-                <div class="message-error text-danger text-center">
-                    {{ form_errors(quantityForm.participants) }}
-                </div>
-            {% endif %}
         {% endif %}
     </td>
     <td class="col-md-2">
