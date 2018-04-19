@@ -148,101 +148,77 @@ class CartManager
 
             // No quantity selected but with included product, we need to check
             // if there is ProductAttributedToParticipant already created to remove them
-            if ($includedQuantity > 0 && $orderQuantity === 0) {
+            if ($includedQuantity > 0 && $orderQuantity === 0 && \count($productAttributedToParticipants) > 0) {
                 $this->productAttributedToParticipantRepository->remove($productAttributedToParticipants);
             }
+        }
 
-            // If there is a previous order quantity, we create a cartRow with this negative quantity
-            if ($orderQuantity !== 0) {
-                if ($includedQuantity > 0) {
-                    if ($includedQuantity >= \count($productAttributedToParticipants)) {
-                        $this->productAttributedToParticipantRepository->remove($productAttributedToParticipants);
-
-                        $productAttributedToParticipants = [];
-                    } else {
-                        $productToRemove = \array_slice(
-                            $productAttributedToParticipants,
-                            0,
-                            $includedQuantity
-                        );
-                        $productForCartRow = \array_slice(
-                            $productAttributedToParticipants,
-                            $includedQuantity,
-                            \count($productAttributedToParticipants)
-                        );
-
-                        $this->productAttributedToParticipantRepository->remove($productToRemove);
-
-                        $productAttributedToParticipants = $productForCartRow;
-                    }
-                }
-
-                $cart->setProduct(
-                    $product,
-                    - $orderQuantity,
-                    array_map(function (ProductAttributedToParticipant $productAttributedToParticipant) {
-                        return $productAttributedToParticipant->getParticipant();
-                    }, $productAttributedToParticipants)
-                );
-            }
+        // If the orderedQuantity is higher than 0
+        // Then we do not change anything, we just set the new cartRow with the selected participant
+        // The cart Converter will do the work to convert the new ProductAttributedToParticipant
+        if ($orderQuantity > 0) {
+            $cart->setProduct(
+                $product,
+                $quantity - $orderQuantity - $includedQuantity,
+                $optionRowParticipants
+            );
 
             return $cart;
         }
 
         // If we decrement the quantity
-        if ($quantity <= ($orderQuantity + $includedQuantity)) {
+        if ($quantity <= $includedQuantity) {
             $productAttributedToParticipants = $this->getProductAttributedToParticipants($optionRow, $product);
 
             // If nothing has change in term of quantity
             // We just check if the participant need to be reassigned
-            if ($quantity === ($orderQuantity + $includedQuantity)) {
-                $this->reAssignProductAttributedToParticipant(
-                    $product,
-                    $productAttributedToParticipants,
-                    $optionRowParticipantsIndexedByParticipantId
-                );
-
-                return $cart;
-            }
-
             // If the included quantity is higher than the selected quantity
-            if ($includedQuantity >= $quantity) {
-                // we need to check if the participants have changed
-                $this->reAssignProductAttributedToParticipant(
-                    $product,
-                    $productAttributedToParticipants,
-                    $optionRowParticipantsIndexedByParticipantId
-                );
-
-                // If no quantity ordered
-                if ($orderQuantity === 0) {
-                    return $cart;
-                }
-
-                // In this case, the included quantity is equal or higher and there is previous order Row to remove
-                // And no participant need to be removed
-                $cart->setProduct(
-                    $product,
-                    - $orderQuantity,
-                    []
-                );
-
-                return $cart;
-            }
-
-            // If we reach here, it means that the quantity is less than
-            // the ordered quantity and the included product
-            // And the included product is less than the quantity
-            // Therefore, we need remove the participant with a ProductAttributedToParticipant
-            // And not anymore in the selected participant
-            $cart->setProduct(
+            // And no quantity ordered
+            $this->reAssignProductAttributedToParticipant(
                 $product,
-                - $orderQuantity,
-                []
+                $productAttributedToParticipants,
+                $optionRowParticipantsIndexedByParticipantId
             );
 
             return $cart;
         }
+
+        // No previous ordered quantity
+        // no included quantity
+        // we just set the quantity selected to the cartRow
+        if ($includedQuantity === 0) {
+            $cart->setProduct(
+                $product,
+                $quantity,
+                $optionRowParticipants
+            );
+
+            return $cart;
+        }
+
+        // If there is a previous order
+        // And the included quantity is not null
+        // But the quantity is higher
+        // We do not modify anything
+        // we will let the Cart Converter do it stuff
+        // We just create the cartRow
+        if ($order !== null) {
+            $cart->setProduct(
+                $product,
+                $quantity - $includedQuantity,
+                $optionRowParticipants
+            );
+
+            return $cart;
+        }
+
+        // If we reach here, it means that
+        // There is no previous orderedQuantity
+        // The included quantity is less than the selected quantity
+        // The quantity is positive
+        // No previous order
+
+
 
         return $cart;
     }
@@ -618,7 +594,10 @@ class CartManager
      */
     private function getProductAttributedToParticipants(OptionRow $optionRow, Product $product): array
     {
-        $productAttributedToParticipants = $this->productAttributedToParticipantRepository->findByProductAndParticipants($product, $optionRow->getParticipants());
+        $productAttributedToParticipants = $this->productAttributedToParticipantRepository->findByProductAndParticipants(
+            $product,
+            $optionRow->getParticipants()
+        );
 
         $productAttributedToParticipantsIndexByParticipantId = [];
 
