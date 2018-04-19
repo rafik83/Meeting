@@ -87,7 +87,6 @@ class Converter
             $groupsData,
             $this->datetime
         );
-        $sheet->addOrder($order);
 
         foreach ($cart->getRows() as $cartRow) {
             $order->addRow($this->convertToRow($order, $cartRow));
@@ -103,6 +102,7 @@ class Converter
             $this->decrementStockPromotionCode($promotionCodeRow->getPromotionCode());
         }
 
+        $sheet->addOrder($order);
         $this->orderRepository->add($order);
         $this->emptyCart($cart);
 
@@ -131,7 +131,7 @@ class Converter
             }
         }
 
-        // Attibute Product to Participant
+        // Attribute Product to Participant
         if ($cartRow->getProduct()->isAttributable()) {
             foreach ($cartRow->getParticipants() as $participant) {
                 $this->productAttributedToParticipantSetter->attributeProductToParticipant(
