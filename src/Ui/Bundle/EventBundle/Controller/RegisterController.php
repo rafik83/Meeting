@@ -326,7 +326,7 @@ class RegisterController extends Controller
         $participantCard = $this->get('tactician.commandbus.query')->handle(
             new CardViewQuery($participant, $locale)
         );
-
+        
         return $this->render('EventBundle:Register:participateStep.html.twig', [
             'event'           => $eventDomain->getEvent(),
             'form'            => $form->createView(),
@@ -337,6 +337,7 @@ class RegisterController extends Controller
                 ->toHtml($participantBlock->getDescription($locale)),
             'participant'     => $participant,
             'participantCard' => $participantCard,
+            'test' => $registrationTemplate->getBlocks()
         ]);
     }
 
@@ -374,21 +375,24 @@ class RegisterController extends Controller
         foreach ($uploadedAndImageObjects as $key => $object) {
             if ($form->has($key) && $form->get($key)->get('file')->getData() !== null) {
                 $file = $form->get($key)->get('file')->getData();
-                $fileType = $object instanceof UploadObject ? 'file' : 'image';
+                $storageKey = $object instanceof UploadObject ? 'path' : 'image';
+                $translationKey = $object instanceof UploadObject ? 'uploadObject' : 'image';
 
                 if ($file instanceof UploadedFile) {
                     try {
-                        $data[$key][$fileType] = $fileStorage->upload($file);
+                        $data[$key][$storageKey] = $fileStorage->upload($file);
+                        if ($object instanceof UploadObject) {
+                            $data[$key]['extension'] = $file->getClientOriginalExtension();
+                        }
                         $fileStorage->remove($object->getContentValue());
                     } catch (\Exception $exception) {
                         $form->get($key)->get('file')->addError(
                             new FormError('account.profile.updateAvatar.error')
                         );
                     }
-
                 } else {
                     $form->get($key)->get('file')->addError(
-                        new FormError(sprintf('validators.field.notValid.%s', $fileType))
+                        new FormError(sprintf('validators.field.notValid.%s', $translationKey))
                     );
                 }
             }

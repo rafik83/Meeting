@@ -37,7 +37,10 @@ class FileDataType extends AbstractType
                 'accept' => implode(', ', $mimeTypes),
             ],
             'constraints' => [
-                new File(['mimeTypes' => $mimeTypes]),
+                new File([
+                    'mimeTypes' => $mimeTypes,
+                    'mimeTypesMessage' => 'validators.field.notValid.uploadObject',
+                ]),
             ],
         ]);
     }

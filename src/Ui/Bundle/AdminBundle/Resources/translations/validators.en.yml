@@ -23,7 +23,7 @@ validators.event.extraParameter.alreadyExistForThisTypeAndEvent: 'An external pa
 validators.event.unArchive.notArchived: 'The event cannot be unarchived, it is not archived'
 validators.event.update.invoicePrefix.disabled.label: 'You can not edit the invoicing prefix'
 validators.fallbackInLocales: 'the language by default has to be included in the languages list'
-validators.field.notValid.file: 'The file format is not valid.'
+validators.field.notValid.uploadObject: 'The file format is not valid.'
 validators.field.notValid.image: 'The image format is not valid, authorized formats are jpeg, png and gif'
 validators.field.notValid.telephone: 'The format of the phone field is invalid'
 validators.field.notValid.url: 'The format of the url field is invalid'

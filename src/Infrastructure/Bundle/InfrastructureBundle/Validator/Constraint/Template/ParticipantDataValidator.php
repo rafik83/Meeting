@@ -31,6 +31,6 @@ abstract class ParticipantDataValidator extends ConstraintValidator
         'telephone'     => TemplateObject\TelephoneConstraint::class,
         'text'          => TemplateObjectConstraint::class,
         'url'           => TemplateObject\UrlConstraint::class,
-        'upload'        => TemplateObjectConstraint::class,
+        'upload'        => TemplateObject\UploadObjectConstraint::class,
     ];
 }
