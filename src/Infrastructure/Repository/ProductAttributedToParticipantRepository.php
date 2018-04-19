@@ -47,4 +47,21 @@ class ProductAttributedToParticipantRepository implements ProductAttributedToPar
 
         return $queryBuilder->getQuery()->getResult();
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function remove(array $productAttributedToParticipants): void
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->delete()
+            ->from(ProductAttributedToParticipant::class, 'productAttributedToParticipant')
+            ->where('productAttributedToParticipant IN (:productAttributedToParticipants)')
+            ->setParameter('productAttributedToParticipants', $productAttributedToParticipants)
+        ;
+
+        $queryBuilder->getQuery()->execute();
+    }
 }

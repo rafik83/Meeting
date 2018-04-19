@@ -25,4 +25,9 @@ interface ProductAttributedToParticipantRepositoryInterface
      * @return ProductAttributedToParticipant[]
      */
     public function findByProductAndParticipants(Product $product, array $participants): array;
+
+    /**
+     * @param ProductAttributedToParticipant[] $productAttributedToParticipants
+     */
+    public function remove(array $productAttributedToParticipants): void;
 }
