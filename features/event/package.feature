@@ -55,18 +55,23 @@ Feature: Complete my package
     And I should see "Options de communication"
     And I should see "package.product.subjectedToValidationHelp"
     When I fill in the following:
+    # Chaise
+      | options[6][quantity]  | 1  |
+    # Option D
       | options[10][quantity] | 1  |
+    # Option E
       | options[11][quantity] | 10 |
     And I press "package.product.validate"
     Then I should be on this page "/fr/sheet/1/package/step/3"
     And I should see "package.product.quantityNotMatch"
     And I should see "package.product.unavailable"
     When I fill in the following:
-      | options[10][quantity] | 1 |
+    # Option E
       | options[11][quantity] | 3 |
     And I press "package.product.validate"
     Then I should be on this page "/fr/sheet/1/billing-info"
     When I go to this page "/fr/sheet/1/package/step/3"
+    Then the "options[6][quantity]" field should contain "1"
     Then the "options[10][quantity]" field should contain "1"
     Then the "options[11][quantity]" field should contain "3"
 
@@ -116,6 +121,7 @@ Feature: Complete my package
     And I should see "Packs de rendez-vous"
     And I should see "Option D"
     And I should see "Option E"
+    And I should see "Chaise"
     And I should see "package.summary.pay"
     Then I check "form.package_summary_terms_of_sale.children.termsOfSale.label"
     And I press "package.summary.pay"
@@ -178,6 +184,26 @@ Feature: Complete my package
     And I am on this page "/fr/sheet"
     When I follow "navigation.links.package.order_list"
     Then I should be on this page "/fr/sheet/1/orders"
+    # Order total
+    And I should see "3 066,00 €"
+    # Remaining to pay
+    And I should see "2 816,00 €"
     And I should see "order.list.remainingToPay"
-    And I should see "2 811,20 €"
     And I should see "order.list.pay_remaining"
+
+  Scenario: I can not delete option assigned to previously used promotion code
+    Given I am logged with "user_asddays_1@proximum.com" on event "http://asddays-2016.vimeet.proximum"
+    When I am on this page "/fr/sheet/1/package/step/2"
+    Then I should see "Chaise"
+    # Chaise
+    And the "options[6][quantity]" field should contain "1"
+    When I fill in the following:
+      | options[6][quantity] | 0 |
+    And I press "package.product.validate"
+    Then I should be on this page "/fr/sheet/1/package/step/2"
+    And I should see "package.product.quantityMinPromotionCode"
+    When I fill in the following:
+      | options[6][quantity] | 2 |
+    And I press "package.product.validate"
+    Then I should be on this page "/fr/sheet/1/package/summary"
+    And I should see "Chaise"
