@@ -1,4 +1,12 @@
 services:
+    #
+    # Product
+    #
+    Proximum\Vimeet\Domain\ProductAttributedToParticipant\ParticipantWithAttributedProductGetter:
+        arguments:
+            - '@Proximum\Vimeet\Infrastructure\Repository\ProductAttributedToParticipant\ParticipantWithAttributedProductToRepository'
+            - '@template.participant_info_guesser'
+
     domain.product.duplicator:
         class: Proximum\Vimeet\Domain\Product\Duplicator
         arguments:
