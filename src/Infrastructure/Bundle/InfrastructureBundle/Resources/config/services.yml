@@ -326,6 +326,10 @@ services:
         arguments:
             - '@doctrine.orm.entity_manager'
 
+    Proximum\Vimeet\Infrastructure\Repository\ProductAttributedToParticipant\ParticipantWithAttributedProductToRepository:
+        arguments:
+            - '@doctrine.orm.entity_manager'
+
     #
     # Handlers
     #
