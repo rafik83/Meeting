@@ -65,15 +65,11 @@ class StepOption
         }
 
         /** @var CartRow[] $optionRows */
-        $cartRows = array_combine(
-            array_map(
-                function (CartRow $cartRow) {
-                    return $cartRow->getProduct()->getId();
-                },
-                $cart->getOptionsRowArray()
-            ),
-            $cart->getOptionsRowArray()
-        );
+        $cartRows = [];
+
+        foreach ($cart->getOptionsRowArray() as $optionRow) {
+            $cartRows[$optionRow->getProduct()->getId()] = $optionRow;
+        }
 
         $options = [];
         $availableOptions = $sheet->getPackage()->getAvailablesOptions($this->dateTime);
