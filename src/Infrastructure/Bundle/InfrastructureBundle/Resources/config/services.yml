@@ -2977,6 +2977,7 @@ services:
         arguments:
             - '@cart_manager'
             - '@order.merger'
+            - '@Proximum\Vimeet\Domain\ProductAttributedToParticipant\ParticipantWithAttributedProductGetter'
             - '@datetime'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Package\Option\OptionViewQuery }
