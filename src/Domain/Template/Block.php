@@ -486,7 +486,7 @@ class Block extends AbstractChild
     /**
      * @return TemplateObject\UploadObject[]
      */
-    public function getUploadedAndImageObjects(): array
+    public function getUploadAndImageObjects(): array
     {
         return array_filter($this->getObjects(), function (TemplateObject $object) {
             return

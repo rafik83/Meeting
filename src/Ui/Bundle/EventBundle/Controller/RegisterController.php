@@ -326,7 +326,7 @@ class RegisterController extends Controller
         $participantCard = $this->get('tactician.commandbus.query')->handle(
             new CardViewQuery($participant, $locale)
         );
-        
+
         return $this->render('EventBundle:Register:participateStep.html.twig', [
             'event'           => $eventDomain->getEvent(),
             'form'            => $form->createView(),
@@ -337,7 +337,6 @@ class RegisterController extends Controller
                 ->toHtml($participantBlock->getDescription($locale)),
             'participant'     => $participant,
             'participantCard' => $participantCard,
-            'test' => $registrationTemplate->getBlocks()
         ]);
     }
 
@@ -369,14 +368,13 @@ class RegisterController extends Controller
     {
         $data = array_filter($data, function ($value) { return null !== $value; });
 
-        $uploadedAndImageObjects = $registrationTemplate->getUploadedAndImageObjects();
+        $uploadedAndImageObjects = $registrationTemplate->getUploadAndImageObjects();
         $fileStorage = $this->get('adapter.local_file_storage');
 
         foreach ($uploadedAndImageObjects as $key => $object) {
             if ($form->has($key) && $form->get($key)->get('file')->getData() !== null) {
                 $file = $form->get($key)->get('file')->getData();
                 $storageKey = $object instanceof UploadObject ? 'path' : 'image';
-                $translationKey = $object instanceof UploadObject ? 'uploadObject' : 'image';
 
                 if ($file instanceof UploadedFile) {
                     try {
@@ -387,12 +385,22 @@ class RegisterController extends Controller
                         $fileStorage->remove($object->getContentValue());
                     } catch (\Exception $exception) {
                         $form->get($key)->get('file')->addError(
-                            new FormError('account.profile.updateAvatar.error')
+                            new FormError(
+                                sprintf(
+                                    'account.profile.%s.error',
+                                    $object instanceof UploadObject ? 'uploadedObject' : 'updateAvatar'
+                                )
+                            )
                         );
                     }
                 } else {
                     $form->get($key)->get('file')->addError(
-                        new FormError(sprintf('validators.field.notValid.%s', $translationKey))
+                        new FormError(
+                            sprintf(
+                                'validators.field.notValid.%s',
+                                $object instanceof UploadObject ? 'uploadObject' : 'image'
+                            )
+                        )
                     );
                 }
             }

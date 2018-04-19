@@ -19,7 +19,7 @@ class UploadObjectValidator extends TemplateObjectValidator
 {
     public function validate($value, Constraint $constraint): void
     {
-        if ($value instanceof TemplateObject\Image) {
+        if ($value instanceof TemplateObject\UploadObject) {
             $this->checkRequired($value, $constraint);
         }
     }

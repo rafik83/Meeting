@@ -112,7 +112,7 @@ class BlockType extends AbstractType
      * @param Template\TemplateObject $object
      * @param string                  $locale
      */
-    private function addFile($key, FormBuilderInterface $builder, Template\TemplateObject $object, $locale): void
+    private function addFile(string $key, FormBuilderInterface $builder, Template\TemplateObject $object, string $locale): void
     {
         $builder->add($key, FileDataType::class, [
             'showLabel' => true,
