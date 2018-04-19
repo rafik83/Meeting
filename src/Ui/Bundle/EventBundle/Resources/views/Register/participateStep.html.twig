@@ -32,16 +32,10 @@
                                 </div>
                             </div>
                             {{ form_row(child.file, { 'attr': { 'data-image-preview': '#' ~ child.vars.id ~ '_preview' } }) }}
-                        {% elseif child.vars.data.path is defined and child.file is defined %}
-                            {{ form_row(child.file) }}
-                            {% if child.vars.data.extension in ['jpeg', 'jpg', 'png', 'gif'] %}
-                                <img src="{{ asset(child.vars.data.path)|imagine_filter('user_avatar') }}"/>
-                            {% else %}
-                                <a href="{{ asset(child.vars.data.path) }}" download>Télécharger</a>
-                            {% endif %}
                         {% else %}
                             {{ form_row(child) }}
                         {% endif %}
+                        {% include '@Event/uploadedObjectPreview.html.twig' with {'child': child} only %}
                     {% endfor %}
 
                     <div class="validation">

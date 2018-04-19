@@ -1,0 +1,7 @@
+{% if child.vars.data.path is defined and child.file is defined %}
+    {% if child.vars.data.extension in constant('Proximum\\Vimeet\\Domain\\MimeType\\MimeType::IMAGE_EXTENSIONS') %}
+        <img src="{{ asset(child.vars.data.path)|imagine_filter('user_avatar') }}"/>
+    {% else %}
+        <a href="{{ asset(child.vars.data.path) }}" download>{{ 'common.download'|trans }}</a>
+    {% endif %}
+{% endif %}

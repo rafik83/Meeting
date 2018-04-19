@@ -32,6 +32,13 @@ final class MimeType
         'image/x-png',
     ];
 
+    public const IMAGE_EXTENSIONS = [
+        'jpeg',
+        'jpg',
+        'png',
+        'gif',
+    ];
+
     public const PDF_MIME_TYPES = [
         'application/pdf',
     ];

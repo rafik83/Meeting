@@ -24,6 +24,7 @@
                             {% endfor %}
                         {% endif %}
                         {{ form_row(child) }}
+                        {% include '@Event/uploadedObjectPreview.html.twig' with {'child': child} only %}
                     {% endfor %}
 
                     <div class="validation">

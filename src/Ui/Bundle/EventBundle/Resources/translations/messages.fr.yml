@@ -65,6 +65,7 @@ common.need_help: 'Besoin d''aide'
 common.next: Suivant
 common.update: Modifier
 common.validate: Valider
+common.download: Télécharger
 error.403.content: 'Vous n''êtes pas autorisé à accéder à ce contenu.'
 error.403.title: 'Non autorisé'
 error.404.content: 'Ce contenu n''est pas ou plus accessible.'
