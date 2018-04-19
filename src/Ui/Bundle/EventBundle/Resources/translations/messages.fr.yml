@@ -339,6 +339,7 @@ package.product.quantity: Quantité
 package.product.quantityMax: 'Quantité maximum atteinte'
 package.product.quantityMaxInformation: 'Max : %quantityMax%'
 package.product.quantityMin: 'Quantité minimum atteinte'
+package.product.selectedParticipants: 'Participants sélectionnés :'
 package.product.selectOptions: 'Sélectionner vos options'
 package.product.subjectedToValidationHelp: 'Sous réserve de validation'
 package.product.total: Total
