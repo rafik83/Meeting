@@ -75,7 +75,7 @@ class SelectOptionsHandler
         $attributableOptionsIncludedByProductId = $this->cartManager->getAttributableOptionsIncludedByProductId($cart, $orderMerged);
 
         foreach ($selectOptions->options as $id => $optionRow) {
-            $this->cartManager->updateOptionsQuantity($cart, $optionRow, $options[$id], $orderMerged, $attributableOptionsIncludedByProductId);
+            $this->cartManager->updateOptionsQuantity($cart, $optionRow, $optionsById[$id], $orderMerged, $attributableOptionsIncludedByProductId);
         }
 
         $this->cartManager->save($cart);

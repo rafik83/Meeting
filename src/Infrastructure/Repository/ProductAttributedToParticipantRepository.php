@@ -51,17 +51,21 @@ class ProductAttributedToParticipantRepository implements ProductAttributedToPar
     /**
      * {@inheritdoc}
      */
-    public function remove(array $productAttributedToParticipants): void
+    public function removeBatch(array $productAttributedToParticipants): void
     {
-        $queryBuilder = $this
-            ->entityManager
-            ->createQueryBuilder()
-            ->delete()
-            ->from(ProductAttributedToParticipant::class, 'productAttributedToParticipant')
-            ->where('productAttributedToParticipant IN (:productAttributedToParticipants)')
-            ->setParameter('productAttributedToParticipants', $productAttributedToParticipants)
-        ;
+        foreach ($productAttributedToParticipants as $productAttributedToParticipant) {
+            $this->entityManager->remove($productAttributedToParticipant);
+        }
 
-        $queryBuilder->getQuery()->execute();
+        $this->entityManager->flush($productAttributedToParticipants);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function remove(ProductAttributedToParticipant $productAttributedToParticipant): void
+    {
+        $this->entityManager->remove($productAttributedToParticipant);
+        $this->entityManager->flush($productAttributedToParticipant);
     }
 }

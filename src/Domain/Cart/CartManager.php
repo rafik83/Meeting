@@ -144,19 +144,25 @@ class CartManager
                 return $cart;
             }
 
-            $productAttributedToParticipants = $this->getProductAttributedToParticipants($optionRow, $product);
+            $productAttributedToParticipants = $this->getProductAttributedToParticipants(
+                $cart->getSheet()->getParticipantsArray(),
+                $product
+            );
 
             // No quantity selected but with included product, we need to check
             // if there is ProductAttributedToParticipant already created to remove them
             if ($includedQuantity > 0 && $orderQuantity === 0 && \count($productAttributedToParticipants) > 0) {
-                $this->productAttributedToParticipantRepository->remove($productAttributedToParticipants);
+                $this->productAttributedToParticipantRepository->removeBatch($productAttributedToParticipants);
             }
 
             return $cart;
         }
 
         if (($quantity - $orderQuantity - $includedQuantity) === 0) {
-            $productAttributedToParticipants = $this->getProductAttributedToParticipants($optionRow, $product);
+            $productAttributedToParticipants = $this->getProductAttributedToParticipants(
+                $cart->getSheet()->getParticipantsArray(),
+                $product
+            );
 
             $this->reAssignProductAttributedToParticipant(
                 $product,
@@ -182,7 +188,10 @@ class CartManager
 
         // If we decrement the quantity
         if ($quantity <= $includedQuantity) {
-            $productAttributedToParticipants = $this->getProductAttributedToParticipants($optionRow, $product);
+            $productAttributedToParticipants = $this->getProductAttributedToParticipants(
+                $cart->getSheet()->getParticipantsArray(),
+                $product
+            );
 
             // If nothing has change in term of quantity
             // We just check if the participant need to be reassigned
@@ -231,7 +240,10 @@ class CartManager
         // The included quantity is less than the selected quantity
         // The quantity is positive
         // No previous order
-        $productAttributedToParticipants = $this->getProductAttributedToParticipants($optionRow, $product);
+        $productAttributedToParticipants = $this->getProductAttributedToParticipants(
+            $cart->getSheet()->getParticipantsArray(),
+            $product
+        );
 
         if (\count($productAttributedToParticipants) === $includedQuantity) {
             $notFound = false;
@@ -254,7 +266,7 @@ class CartManager
             }
         }
 
-        $this->productAttributedToParticipantRepository->remove($productAttributedToParticipants);
+        $this->productAttributedToParticipantRepository->removeBatch($productAttributedToParticipants);
 
         $participantToProductAttributedToParticipantsToCreate = \array_slice($optionRowParticipants, 0, $includedQuantity);
         foreach ($participantToProductAttributedToParticipantsToCreate as $participant) {
@@ -638,16 +650,16 @@ class CartManager
     }
 
     /**
-     * @param OptionRow $optionRow
-     * @param Product   $product
+     * @param Participant[] $participants
+     * @param Product       $product
      *
      * @return ProductAttributedToParticipant[] indexed by Participant id
      */
-    private function getProductAttributedToParticipants(OptionRow $optionRow, Product $product): array
+    private function getProductAttributedToParticipants(array $participants, Product $product): array
     {
         $productAttributedToParticipants = $this->productAttributedToParticipantRepository->findByProductAndParticipants(
             $product,
-            $optionRow->getParticipants()
+            $participants
         );
 
         $productAttributedToParticipantsIndexByParticipantId = [];
@@ -683,7 +695,7 @@ class CartManager
             $this->productAttributedToParticipantRepository->add($productAttributedToParticipantToCreate);
         }
 
-        $this->productAttributedToParticipantRepository->remove($productAttributedToParticipantsToRemove);
+        $this->productAttributedToParticipantRepository->removeBatch($productAttributedToParticipantsToRemove);
     }
 
     /**

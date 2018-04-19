@@ -29,5 +29,7 @@ interface ProductAttributedToParticipantRepositoryInterface
     /**
      * @param ProductAttributedToParticipant[] $productAttributedToParticipants
      */
-    public function remove(array $productAttributedToParticipants): void;
+    public function removeBatch(array $productAttributedToParticipants): void;
+
+    public function remove(ProductAttributedToParticipant $productAttributedToParticipant): void;
 }
