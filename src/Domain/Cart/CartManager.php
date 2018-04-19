@@ -151,6 +151,20 @@ class CartManager
             if ($includedQuantity > 0 && $orderQuantity === 0 && \count($productAttributedToParticipants) > 0) {
                 $this->productAttributedToParticipantRepository->remove($productAttributedToParticipants);
             }
+
+            return $cart;
+        }
+
+        if (($quantity - $orderQuantity - $includedQuantity) === 0) {
+            $productAttributedToParticipants = $this->getProductAttributedToParticipants($optionRow, $product);
+
+            $this->reAssignProductAttributedToParticipant(
+                $product,
+                $productAttributedToParticipants,
+                $optionRowParticipantsIndexedByParticipantId
+            );
+
+            return $cart;
         }
 
         // If the orderedQuantity is higher than 0
