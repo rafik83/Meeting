@@ -1,4 +1,12 @@
 services:
+    #
+    # Product
+    #
+    Proximum\Vimeet\Domain\ProductAttributedToParticipant\ProductAttributedToParticipantSetter:
+        arguments:
+            - '@Proximum\Vimeet\Infrastructure\Repository\ProductAttributedToParticipantRepository'
+            - '@datetime'
+
     domain.product.duplicator:
         class: Proximum\Vimeet\Domain\Product\Duplicator
         arguments:

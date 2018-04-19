@@ -15,6 +15,7 @@ use Proximum\Vimeet\Domain\Model\Order;
 use Proximum\Vimeet\Domain\Model\PromotionCode;
 use Proximum\Vimeet\Domain\Model\PromotionCodeRow;
 use Proximum\Vimeet\Domain\Participant\ParticipantProductSetter;
+use Proximum\Vimeet\Domain\ProductAttributedToParticipant\ProductAttributedToParticipantSetter;
 use Proximum\Vimeet\Domain\Repository\CartRowRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\CartStepRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\OrderRepositoryInterface;
@@ -48,15 +49,9 @@ class Converter
     /** @var ParticipantProductSetter */
     private $participantProductSetter;
 
-    /**
-     * @param OrderRepositoryInterface            $orderRepository
-     * @param CartRowRepositoryInterface          $cartRowRepository
-     * @param CartStepRepositoryInterface         $cartStepRepository
-     * @param PromotionCodeRowRepositoryInterface $promotionCodeRowRepository
-     * @param PromotionCodeRepositoryInterface    $promotionCodeRepository
-     * @param ParticipantProductSetter            $participantProductSetter
-     * @param \DateTimeInterface                  $datetime
-     */
+    /** @var ProductAttributedToParticipantSetter */
+    private $productAttributedToParticipantSetter;
+
     public function __construct(
         OrderRepositoryInterface $orderRepository,
         CartRowRepositoryInterface $cartRowRepository,
@@ -64,15 +59,17 @@ class Converter
         PromotionCodeRowRepositoryInterface $promotionCodeRowRepository,
         PromotionCodeRepositoryInterface $promotionCodeRepository,
         ParticipantProductSetter $participantProductSetter,
+        ProductAttributedToParticipantSetter $productAttributedToParticipantSetter,
         \DateTimeInterface $datetime
     ) {
-        $this->orderRepository            = $orderRepository;
-        $this->cartRowRepository          = $cartRowRepository;
-        $this->cartStepRepository         = $cartStepRepository;
+        $this->orderRepository = $orderRepository;
+        $this->cartRowRepository = $cartRowRepository;
+        $this->cartStepRepository = $cartStepRepository;
         $this->promotionCodeRowRepository = $promotionCodeRowRepository;
-        $this->promotionCodeRepository    = $promotionCodeRepository;
-        $this->participantProductSetter   = $participantProductSetter;
-        $this->datetime                   = $datetime;
+        $this->promotionCodeRepository = $promotionCodeRepository;
+        $this->participantProductSetter = $participantProductSetter;
+        $this->productAttributedToParticipantSetter = $productAttributedToParticipantSetter;
+        $this->datetime = $datetime;
     }
 
     /**
@@ -131,6 +128,16 @@ class Converter
         if ($cartRow->getProduct()->isParticipant()) {
             foreach ($cartRow->getParticipants() as $participant) {
                 $this->participantProductSetter->setProductOnParticipant($participant, $cartRow->getProduct());
+            }
+        }
+
+        // Attibute Product to Participant
+        if ($cartRow->getProduct()->isAttributable()) {
+            foreach ($cartRow->getParticipants() as $participant) {
+                $this->productAttributedToParticipantSetter->attributeProductToParticipant(
+                    $cartRow->getProduct(),
+                    $participant
+                );
             }
         }
 
