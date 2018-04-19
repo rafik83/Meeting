@@ -18,9 +18,14 @@ use Proximum\Vimeet\Application\Event\Unavailability\AddUnavailabilityEvent;
 use Proximum\Vimeet\Application\Exception\Unavailability\CanNotCreateUnavailabilityException;
 use Proximum\Vimeet\Application\Exception\Unavailability\NoParticipantSelectedException;
 use Proximum\Vimeet\Application\Exception\Unavailability\ParticipantsSelectedWithMeetingOrHappeningException;
+use Proximum\Vimeet\Application\Exception\Unavailability\ParticipantsWithUnavailabilityException;
 use Proximum\Vimeet\Application\Exception\Unavailability\TimeOutOfRangeException;
+use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Event\Day;
+use Proximum\Vimeet\Domain\Model\Participant;
+use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\Unavailability;
+use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Repository\ParticipantRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\UnavailabilityRepositoryInterface;
 use Proximum\Vimeet\Domain\Template\ParticipantInfoGuesser;
@@ -873,6 +878,168 @@ class CreateHandlerTest extends TestCase
         $this->unavailabilityRepository
             ->add($expectedUnavailability)
             ->shouldNotBeCalled();
+
+        $handler = new CreateHandler(
+            $this->unavailabilityRepository->reveal(),
+            $this->participantRepository->reveal(),
+            $this->paticipantInfoGuesser->reveal(),
+            $this->eventDispatcher->reveal()
+        );
+        $handler->handle($create);
+    }
+
+    public function testHandleSystemUnavailabilityAlreadyExistsSideToNewOne()
+    {
+        $day = $this->prophesize(Day::class);
+        $day->getDay()->willReturn(new \DateTime('2018-04-02 08:00:00.000'));
+        $day->getStartTime()->willReturn(new \DateTime('2018-04-02 08:00:00.000'));
+        $day->getEndTime()->willReturn(new \DateTime('2018-04-02 18:00:00.000'));
+
+        $event = $this->prophesize(Event::class);
+        $event->getFirstDay()->willReturn($day->reveal());
+        $event->getTimeZone()->willReturn('UTC');
+
+        $sheet = $this->prophesize(Sheet::class);
+        $sheet->attend()->willReturn(true);
+        $sheet->getEvent()->willReturn($event->reveal());
+
+        $user = $this->prophesize(User::class);
+        $participant = $this->prophesize(Participant::class);
+        $participant->getUser()->willReturn($user->reveal());
+        $participant->getSheet()->willReturn($sheet->reveal());
+
+        $sheet->getUserParticipant($user->reveal())->willReturn($participant->reveal());
+
+        $create = new Create($event->reveal(), $sheet->reveal(), $user->reveal(), 'fr');
+        $create->participants = [$participant->reveal()];
+        $create->time = [
+            'begin' => [
+                'hour' => 10,
+                'minute' => 30,
+            ],
+            'end' => [
+                'hour' => 11,
+                'minute' => 00,
+            ]
+        ];
+
+        $expectedBegin = new \DateTime('2018-04-02 10:30:00.000');
+        $expectedEnd = new \DateTime('2018-04-02 11:00:00.000');
+        $expectedUnavailability = new Unavailability($user->reveal(), $event->reveal(), $expectedBegin, $expectedEnd);
+
+        $overlapNotUserUnavailability1 = new Unavailability(
+            $user->reveal(),
+            $event->reveal(),
+            new \DateTime('2018-04-02 09:30:00.000'),
+            new \DateTime('2018-04-02 10:30:00.000'), // System unavailability ends when new Unavailability begins
+            null,
+            Unavailability::CREATED_BY_SYSTEM
+        );
+        $overlapNotUserUnavailability2 = new Unavailability(
+            $user->reveal(),
+            $event->reveal(),
+            new \DateTime('2018-04-02 11:00:00.000'), // System unavailability begins when new Unavailability ends
+            new \DateTime('2018-04-02 11:10:00.000'),
+            null,
+            Unavailability::CREATED_BY_SYSTEM
+        );
+        $this
+            ->unavailabilityRepository
+            ->getOverlapUnavailabilities($expectedUnavailability)
+            ->shouldBeCalled()
+            ->willReturn([$overlapNotUserUnavailability1, $overlapNotUserUnavailability2])
+        ;
+
+        $this
+            ->participantRepository
+            ->getParticipantsWithoutMeetingAndHappening([$participant->reveal()], $expectedBegin, $expectedEnd)
+            ->shouldBeCalled()
+            ->willReturn([$participant->reveal()])
+        ;
+
+        $this
+            ->unavailabilityRepository
+            ->add($expectedUnavailability)
+            ->shouldBeCalled()
+        ;
+
+        $handler = new CreateHandler(
+            $this->unavailabilityRepository->reveal(),
+            $this->participantRepository->reveal(),
+            $this->paticipantInfoGuesser->reveal(),
+            $this->eventDispatcher->reveal()
+        );
+        $handler->handle($create);
+    }
+
+    public function testParticipantsWithUnavailabilityException()
+    {
+        $this->expectException(ParticipantsWithUnavailabilityException::class);
+
+        $day = $this->prophesize(Day::class);
+        $day->getDay()->willReturn(new \DateTime('2018-04-02 08:00:00.000'));
+        $day->getStartTime()->willReturn(new \DateTime('2018-04-02 08:00:00.000'));
+        $day->getEndTime()->willReturn(new \DateTime('2018-04-02 18:00:00.000'));
+
+        $event = $this->prophesize(Event::class);
+        $event->getFirstDay()->willReturn($day->reveal());
+        $event->getTimeZone()->willReturn('UTC');
+
+        $sheet = $this->prophesize(Sheet::class);
+        $sheet->attend()->willReturn(true);
+        $sheet->getEvent()->willReturn($event->reveal());
+
+        $user = $this->prophesize(User::class);
+        $participant = $this->prophesize(Participant::class);
+        $participant->getUser()->willReturn($user->reveal());
+        $participant->getSheet()->willReturn($sheet->reveal());
+
+        $sheet->getUserParticipant($user->reveal())->willReturn($participant->reveal());
+
+        $create = new Create($event->reveal(), $sheet->reveal(), $user->reveal(), 'fr');
+        $create->participants = [$participant->reveal()];
+        $create->time = [
+            'begin' => [
+                'hour' => 10,
+                'minute' => 30,
+            ],
+            'end' => [
+                'hour' => 11,
+                'minute' => 00,
+            ]
+        ];
+
+        $expectedBegin = new \DateTime('2018-04-02 10:30:00.000');
+        $expectedEnd = new \DateTime('2018-04-02 11:00:00.000');
+        $expectedUnavailability = new Unavailability($user->reveal(), $event->reveal(), $expectedBegin, $expectedEnd);
+
+        $overlapNotUserUnavailability = new Unavailability(
+            $user->reveal(),
+            $event->reveal(),
+            new \DateTime('2018-04-02 10:45:00.000'),
+            new \DateTime('2018-04-02 11:10:00.000'),
+            null,
+            Unavailability::CREATED_BY_SYSTEM
+        );
+        $this
+            ->unavailabilityRepository
+            ->getOverlapUnavailabilities($expectedUnavailability)
+            ->shouldBeCalled()
+            ->willReturn([$overlapNotUserUnavailability])
+        ;
+
+        $this
+            ->participantRepository
+            ->getParticipantsWithoutMeetingAndHappening([$participant->reveal()], $expectedBegin, $expectedEnd)
+            ->shouldBeCalled()
+            ->willReturn([$participant->reveal()])
+        ;
+
+        $this
+            ->unavailabilityRepository
+            ->add($expectedUnavailability)
+            ->shouldNotBeCalled()
+        ;
 
         $handler = new CreateHandler(
             $this->unavailabilityRepository->reveal(),

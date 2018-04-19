@@ -53,4 +53,20 @@ class AvailabilityTimeRangeRepository implements AvailabilityTimeRangeRepository
 
         return $queryBuilder->getQuery()->getResult();
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function hasByEvent(Event $event): bool
+    {
+        $queryBuilder = $this->entityManager->createQueryBuilder()
+            ->select('availabilityTimeRange.id')
+            ->from(AvailabilityTimeRange::class, 'availabilityTimeRange')
+            ->where('availabilityTimeRange.event = :event')
+            ->setParameter('event', $event)
+            ->setMaxResults(1)
+        ;
+
+        return null !== $queryBuilder->getQuery()->getOneOrNullResult();
+    }
 }

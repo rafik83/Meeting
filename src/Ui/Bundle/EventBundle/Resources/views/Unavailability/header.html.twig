@@ -2,13 +2,20 @@
     <div class="content">
         <span class="prefix"><i class="icon icon-Verouiller_1"></i></span>
         <p class="title col-xs-12">
-            {{ unavailability.begin|date('H:i', unavailability.timeZone) ~ ' - ' ~ unavailability.end|date('H:i', unavailability.timeZone) }}
-            - {{ 'unavailability.title'|trans }} -
+            {{
+                unavailability.begin|date('H:i', unavailability.timeZone)
+                ~ ' - '
+                ~ unavailability.end|date('H:i', unavailability.timeZone)
+                ~ ' - '
+                ~ 'unavailability.title'|trans
+            }}
+
             {% if unavailability.hasMessage %}
-                {{ unavailability.message }}
+                {{ ' - ' ~ unavailability.message }}
             {% endif %}
         </p>
-        {% if participantId is defined %}
+
+        {% if participantId is defined and unavailability.isDeletableByUser %}
             <form action="{{ path('event_unavailability_remove', { 'unavailability': unavailability.id, 'participant': participantId, 'sheet': sheetId }) }}" method="POST" class="pull-right" data-confirm="{{ 'agenda.unavailability.confirmRemove'|trans }}">
                 <input type="hidden" name="_method" value="DELETE">
                 <button name="cancelUnavailability" type="submit" class="btn btn-primary btn-sm btn-inactive">

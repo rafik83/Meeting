@@ -22,13 +22,13 @@ use Proximum\Vimeet\Application\Event\Slot\AbstractSlotEvent;
 use Proximum\Vimeet\Application\Event\Unavailability\AbstractUnavailabilityEvent;
 use Proximum\Vimeet\Application\Event\User\RegistrationEvent;
 use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
-use Proximum\Vimeet\Domain\Sheet\Aggregate\AvailableSlotCalculator;
+use Proximum\Vimeet\Domain\Sheet\Aggregate\AvailableSlotCalculatorInterface;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Adapter\JobQueueAdapter;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 class SheetAggregateEventSubscriber implements EventSubscriberInterface
 {
-    /** @var AvailableSlotCalculator */
+    /** @var AvailableSlotCalculatorInterface */
     private $availableSlotCalculator;
 
     /** @var JobQueueAdapter */
@@ -38,13 +38,13 @@ class SheetAggregateEventSubscriber implements EventSubscriberInterface
     private $sheetRepository;
 
     /**
-     * @param SheetRepositoryInterface $sheetRepository
-     * @param AvailableSlotCalculator  $availableSlotCalculator
-     * @param JobQueueAdapter          $jobQueueAdapter
+     * @param SheetRepositoryInterface         $sheetRepository
+     * @param AvailableSlotCalculatorInterface $availableSlotCalculator
+     * @param JobQueueAdapter                  $jobQueueAdapter
      */
     public function __construct(
         SheetRepositoryInterface $sheetRepository,
-        AvailableSlotCalculator $availableSlotCalculator,
+        AvailableSlotCalculatorInterface $availableSlotCalculator,
         JobQueueAdapter $jobQueueAdapter
     ) {
         $this->availableSlotCalculator = $availableSlotCalculator;

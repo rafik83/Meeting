@@ -10,17 +10,17 @@
 
 namespace Proximum\Vimeet\Application\Command\Sheet\Aggregate;
 
-use Proximum\Vimeet\Domain\Sheet\Aggregate\AvailableSlotCalculator;
+use Proximum\Vimeet\Domain\Sheet\Aggregate\AvailableSlotCalculatorInterface;
 
 class AvailableSlotAggregatorHandler
 {
-    /** @var AvailableSlotCalculator */
+    /** @var AvailableSlotCalculatorInterface */
     private $availableSlotCalculator;
 
     /**
-     * @param AvailableSlotCalculator $availableSlotCalculator
+     * @param AvailableSlotCalculatorInterface $availableSlotCalculator
      */
-    public function __construct(AvailableSlotCalculator $availableSlotCalculator)
+    public function __construct(AvailableSlotCalculatorInterface $availableSlotCalculator)
     {
         $this->availableSlotCalculator = $availableSlotCalculator;
     }

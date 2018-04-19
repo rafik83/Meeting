@@ -15,12 +15,14 @@ use Proximum\Vimeet\Application\Adapter\TranslatorInterface;
 use Proximum\Vimeet\Application\Command\Unavailability\Create;
 use Proximum\Vimeet\Application\Exception\Unavailability\NoParticipantSelectedException;
 use Proximum\Vimeet\Application\Exception\Unavailability\ParticipantsSelectedWithMeetingOrHappeningException;
+use Proximum\Vimeet\Application\Exception\Unavailability\ParticipantsWithUnavailabilityException;
 use Proximum\Vimeet\Application\Exception\Unavailability\TimeOutOfRangeException;
 use Proximum\Vimeet\Domain\Event\Day\DayHelper;
 use Proximum\Vimeet\Domain\Participant\ParticipantHelper;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Unavailability\CreateType;
 use Symfony\Component\Form\FormError;
 use Symfony\Component\Form\FormFactoryInterface;
+use Symfony\Component\Form\FormInterface;
 
 class CreateFormHandler
 {
@@ -82,19 +84,14 @@ class CreateFormHandler
 
                 return new CreateFormView(CreateFormView::HANDLER_SUCCESS, $form->createView());
             } catch (NoParticipantSelectedException $exception) {
-                if ($form->has('participants')) {
-                    $form->get('participants')->addError($this->createNoParticipantSelectedExceptionError());
-                } else {
-                    $form->addError($this->createNoParticipantSelectedExceptionError());
-                }
+                $this->handleParticipantsError($form, $this->createNoParticipantSelectedExceptionError());
+            } catch (ParticipantsWithUnavailabilityException $exception) {
+                $this->handleParticipantsError($form, $this->participantsWithUnavailabilityExceptionError($exception));
             } catch (ParticipantsSelectedWithMeetingOrHappeningException $exception) {
-                if ($form->has('participants')) {
-                    $form->get('participants')->addError(
-                        $this->createParticipantsSelectedWithMeetingOrHappeningExceptionError($exception)
-                    );
-                } else {
-                    $form->addError($this->createParticipantsSelectedWithMeetingOrHappeningExceptionError($exception));
-                }
+                $this->handleParticipantsError(
+                    $form,
+                    $this->createParticipantsSelectedWithMeetingOrHappeningExceptionError($exception)
+                );
             } catch (TimeOutOfRangeException $exception) {
                 if ($exception->isOutOfRangeAtBeginOfDay()) {
                     $form->get('time')->get('begin')->addError(
@@ -132,6 +129,19 @@ class CreateFormHandler
     }
 
     /**
+     * @param FormInterface $form
+     * @param FormError     $formError
+     */
+    private function handleParticipantsError(FormInterface $form, FormError $formError): void
+    {
+        if ($form->has('participants')) {
+            $form->get('participants')->addError($formError);
+        } else {
+            $form->addError($formError);
+        }
+    }
+
+    /**
      * @param ParticipantsSelectedWithMeetingOrHappeningException $exception
      *
      * @return FormError
@@ -144,6 +154,24 @@ class CreateFormHandler
                 'validators.unavailability.participantsWithConflict',
                 $exception->getNumberOfConflict(),
                 ['%participants%' => $exception->getListOfParticipantsName()],
+                'validators'
+            )
+        );
+    }
+
+    /**
+     * @param ParticipantsWithUnavailabilityException $participantsWithUnavailabilityException
+     *
+     * @return FormError
+     */
+    private function participantsWithUnavailabilityExceptionError(
+        ParticipantsWithUnavailabilityException $participantsWithUnavailabilityException
+    ): FormError {
+        return new FormError(
+            $this->translator->transChoice(
+                'validators.unavailability.participantsWithUnavailability',
+                \count($participantsWithUnavailabilityException->participantNames),
+                ['%participants%' => $participantsWithUnavailabilityException->getListOfParticipantsName()],
                 'validators'
             )
         );

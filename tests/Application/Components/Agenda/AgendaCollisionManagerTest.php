@@ -60,7 +60,15 @@ class AgendaCollisionManagerTest extends TestCase
             false
         );
 
-        $unavailabilityView = new UnavailabilityView(1, $beginHappening2, $endHappening2, 'Europe/Paris');
+        $unavailabilityView = new UnavailabilityView(
+            1,
+            $beginHappening2,
+            $endHappening2,
+            'Europe/Paris',
+            null,
+            true,
+            true
+        );
 
         $expected = [[$meetingView], [], [$unavailabilityView], []];
 

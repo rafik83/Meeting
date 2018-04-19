@@ -328,10 +328,18 @@ class Participant implements MailRecipientInterface
     }
 
     /**
-     * @param Product $participantProduct
+     * Call this method via the ParticipantProductSetter service
+     *
+     * @param Product|null $participantProduct
      */
-    public function setParticipantProduct(Product $participantProduct): void
+    public function setParticipantProduct(?Product $participantProduct = null): void
     {
+        if (!$participantProduct instanceof Product) {
+            $this->participantProduct = null;
+
+            return;
+        }
+
         if (!$participantProduct->isParticipant()) {
             throw new \InvalidArgumentException('Product assigned to Participant must be of type Participant');
         }

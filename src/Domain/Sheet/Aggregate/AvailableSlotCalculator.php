@@ -15,7 +15,7 @@ use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Repository\MeetingSlotRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
 
-class AvailableSlotCalculator
+class AvailableSlotCalculator implements AvailableSlotCalculatorInterface
 {
     /** @var MeetingSlotRepositoryInterface */
     private $slotRepository;
@@ -42,8 +42,7 @@ class AvailableSlotCalculator
     }
 
     /**
-     * @param Sheet $sheet
-     * @param bool  $indexSheet
+     * {@inheritdoc}
      */
     public function calculateAvailableSlotForSheet(Sheet $sheet, bool $indexSheet = true): void
     {
