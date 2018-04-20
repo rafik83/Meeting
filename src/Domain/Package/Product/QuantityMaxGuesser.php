@@ -86,12 +86,11 @@ class QuantityMaxGuesser
      */
     public function getMaxByProduct(Sheet $sheet, Product $product)
     {
-        $cart              = $this->cartManager->getCart($sheet);
-        $remainingQuantity = INF;
-        $selectedPlan      = null;
-
-        if (null !== $cart->getPlanRow()) {
-            $selectedPlan = $cart->getPlanRow()->getProduct();
+        if ($product->isAttributable()) {
+            return min(
+                $product->getQuantityMax(),
+                $product->getAvailability()
+            );
         }
 
         // handle new order
