@@ -3,31 +3,25 @@
 namespace Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Validator\Constraint\Package;
 
 use Proximum\Vimeet\Application\Command\Package\Step\SelectParticipantAndPlanning;
+use Proximum\Vimeet\Domain\Package\Product\ConflictBetweenChoosenQuantityAndPreviouslyUsedPromotionCode;
 use Proximum\Vimeet\Domain\Package\Product\QuantityMaxGuesser;
-use Proximum\Vimeet\Domain\Package\Product\QuantityMinGuesser;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\ConstraintValidator;
 
 class PlanningQuantityValidator extends ConstraintValidator
 {
-    /**
-     * @var QuantityMaxGuesser
-     */
+    /** @var QuantityMaxGuesser */
     private $quantityMaxGuesser;
 
-    /**
-     * @var QuantityMinGuesser
-     */
-    private $quantityMinGuesser;
+    /** @var ConflictBetweenChoosenQuantityAndPreviouslyUsedPromotionCode */
+    private $conflictBetweenChoosenQuantityAndPreviouslyUsedPromotionCode;
 
-    /**
-     * @param QuantityMaxGuesser $quantityMaxGuesser
-     * @param QuantityMinGuesser $quantityMinGuesser
-     */
-    public function __construct(QuantityMaxGuesser $quantityMaxGuesser,  QuantityMinGuesser $quantityMinGuesser)
-    {
+    public function __construct(
+        QuantityMaxGuesser $quantityMaxGuesser,
+        ConflictBetweenChoosenQuantityAndPreviouslyUsedPromotionCode $conflictBetweenChoosenQuantityAndPreviouslyUsedPromotionCode
+    ) {
         $this->quantityMaxGuesser = $quantityMaxGuesser;
-        $this->quantityMinGuesser = $quantityMinGuesser;
+        $this->conflictBetweenChoosenQuantityAndPreviouslyUsedPromotionCode = $conflictBetweenChoosenQuantityAndPreviouslyUsedPromotionCode;
     }
 
     /**
@@ -36,31 +30,36 @@ class PlanningQuantityValidator extends ConstraintValidator
      */
     public function validate($selectParticipantAndPlanning, Constraint $constraint)
     {
-        $quantity    = $selectParticipantAndPlanning->planningQuantity->getQuantity();
-        $sheet       = $selectParticipantAndPlanning->sheet;
+        $quantity = $selectParticipantAndPlanning->planningQuantity->getQuantity();
+        $sheet = $selectParticipantAndPlanning->sheet;
         $quantityMax = $this->quantityMaxGuesser->getMaxPlanning($sheet);
 
-        $quantityMin = $this->quantityMinGuesser->getMinProduct(
+        if ($this->conflictBetweenChoosenQuantityAndPreviouslyUsedPromotionCode->hasConflict(
             $selectParticipantAndPlanning->sheet,
             $sheet->getPackage()->getPlanning(),
             $quantity
-        );
-
-        if (false === $quantityMin) {
+        )) {
             $this
                 ->context
                 ->buildViolation('package.product.quantityMinPromotionCode')
-                ->atPath('planningQuantity')
-                ->addViolation();
+                ->atPath('planningQuantity.quantity')
+                ->addViolation()
+            ;
         }
 
-        if ($quantity < $quantityMin || $quantity > $quantityMax) {
+        if ($quantity < 0 || $quantity > $quantityMax) {
             $this
                 ->context
                 ->buildViolation('package.planning.quantity')
-                ->setParameters(['%min%' => 0, '%max%' => $quantityMax])
-                ->atPath('planningQuantity')
-                ->addViolation();
+                ->setParameters(
+                    [
+                        '%min%' => 0,
+                        '%max%' => $quantityMax,
+                    ]
+                )
+                ->atPath('planningQuantity.quantity')
+                ->addViolation()
+            ;
         }
     }
 }
