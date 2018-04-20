@@ -66,6 +66,7 @@ common.next: Suivant
 common.update: Modifier
 common.validate: Valider
 common.download: Télécharger
+common.required_formats: '{1} Le format requis est : %format%|[1, Inf[Les formats requis sont : %format%'
 error.403.content: 'Vous n''êtes pas autorisé à accéder à ce contenu.'
 error.403.title: 'Non autorisé'
 error.404.content: 'Ce contenu n''est pas ou plus accessible.'

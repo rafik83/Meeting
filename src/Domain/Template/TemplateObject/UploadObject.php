@@ -107,4 +107,9 @@ class UploadObject extends EditableObject implements UploadableObjectInterface
     {
         $this->setPath($value);
     }
+
+    public function getFormats(): ?array
+    {
+        return $this->getOption('formats');
+    }
 }

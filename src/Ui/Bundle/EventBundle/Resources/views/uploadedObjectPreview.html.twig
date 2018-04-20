@@ -1,7 +1,15 @@
-{% if child.vars.data.path is defined and child.vars.data.path is not empty and child.file is defined %}
-    {% if child.vars.data.extension in constant('Proximum\\Vimeet\\Domain\\MimeType\\MimeType::IMAGE_EXTENSIONS') %}
-        <img src="{{ asset(child.vars.data.path)|imagine_filter('user_avatar') }}"/>
-    {% else %}
-        <a href="{{ asset(child.vars.data.path) }}" download>{{ 'common.download'|trans }}</a>
+{% set uploadObject = child.vars.value %}
+{% if uploadObject.data.path is defined and uploadObject.file is defined %}
+    {% if uploadObject.formats is not empty %}
+        <div>
+            {{ 'common.required_formats'|transchoice(uploadObject.formats|length, {'%format%': uploadObject.formats|join(', ')}) }}
+        </div>
+    {% endif %}
+    {% if uploadObject.data.path is not empty %}
+        {% if uploadObject.data.extension in constant('Proximum\\Vimeet\\Domain\\MimeType\\MimeType::IMAGE_EXTENSIONS') %}
+            <img src="{{ asset(uploadObject.data.path)|imagine_filter('user_avatar') }}"/>
+        {% else %}
+            <a href="{{ asset(uploadObject.data.path) }}" download>{{ 'common.download'|trans }}</a>
+        {% endif %}
     {% endif %}
 {% endif %}
