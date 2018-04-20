@@ -12,6 +12,7 @@ namespace Proximum\Vimeet\Domain\Cart;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Proximum\Vimeet\Domain\Model\CartRow;
+use Proximum\Vimeet\Domain\Model\CartRowParticipant;
 use Proximum\Vimeet\Domain\Model\Order;
 use Proximum\Vimeet\Domain\Model\Product;
 use Proximum\Vimeet\Domain\Model\Promotion;
@@ -65,10 +66,11 @@ class Cart
     /**
      * @param Product $product
      * @param int     $quantity
+     * @param array   $participants
      *
      * @return Cart
      */
-    public function setProduct(Product $product, $quantity): Cart
+    public function setProduct(Product $product, int $quantity, array $participants = []): Cart
     {
         if ($this->hasProduct($product)) {
             $row = $this->getRow($product);
@@ -77,10 +79,24 @@ class Cart
                 $this->rows->removeElement($row);
             } else {
                 $row->setProduct($product)->setQuantity($quantity);
+
+                if (true === $product->isAttributable()) {
+                    foreach ($participants as $participant) {
+                        $row->addCartRowParticipant(new CartRowParticipant($row, $participant));
+                    }
+                }
             }
 
         } elseif (0 !== $quantity) {
-            $this->rows[] = new CartRow($this->sheet, $product, $quantity);
+            $cartRow = new CartRow($this->sheet, $product, $quantity);
+
+            if (true === $product->isAttributable()) {
+                foreach ($participants as $participant) {
+                    $cartRow->addCartRowParticipant(new CartRowParticipant($cartRow, $participant));
+                }
+            }
+
+            $this->rows[] = $cartRow;
         }
 
         return $this;
@@ -96,6 +112,18 @@ class Cart
         }
 
         return $this->getPlanRow()->getProduct()->getIncludedParticipantProducts();
+    }
+
+    /**
+     * @return Product\ProductIncluded[]
+     */
+    public function getIncludedAttributableOptionProducts(): array
+    {
+        if (null === $this->getPlanRow()) {
+            return [];
+        }
+
+        return $this->getPlanRow()->getProduct()->getIncludedAttributableOptionProducts();
     }
 
     /**
@@ -265,7 +293,7 @@ class Cart
     /**
      * Clear the cart
      */
-    public function clearOptions()
+    public function clearOptions(): void
     {
         foreach ($this->getOptionsRow() as $row) {
             $this->rows->removeElement($row);

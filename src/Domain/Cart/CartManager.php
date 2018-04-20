@@ -11,6 +11,7 @@
 namespace Proximum\Vimeet\Domain\Cart;
 
 use Proximum\Vimeet\Application\Adapter\DelayedEventDispatcherInterface;
+use Proximum\Vimeet\Application\Command\Package\Step\OptionRow;
 use Proximum\Vimeet\Application\Event\Cart\ParticipantCartRowAddedEvent;
 use Proximum\Vimeet\Application\Event\Events;
 use Proximum\Vimeet\Domain\Model\CartRowParticipant;
@@ -18,11 +19,13 @@ use Proximum\Vimeet\Domain\Model\CartStep;
 use Proximum\Vimeet\Domain\Model\Order;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Product;
+use Proximum\Vimeet\Domain\Model\ProductAttributedToParticipant;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Order\Merger;
 use Proximum\Vimeet\Domain\Participant\ParticipantProductSetter;
 use Proximum\Vimeet\Domain\Repository\CartRowRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\CartStepRepositoryInterface;
+use Proximum\Vimeet\Domain\Repository\ProductAttributedToParticipantRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\PromotionCodeRowRepositoryInterface;
 
 class CartManager
@@ -45,13 +48,17 @@ class CartManager
     /** @var DelayedEventDispatcherInterface */
     private $delayedEventDispatcher;
 
+    /** @var ProductAttributedToParticipantRepositoryInterface */
+    private $productAttributedToParticipantRepository;
+
     /**
-     * @param CartRowRepositoryInterface          $cartRowRepository
-     * @param CartStepRepositoryInterface         $cartStepRepository
-     * @param PromotionCodeRowRepositoryInterface $promotionCodeRowRepository
-     * @param Merger                              $orderMerger
-     * @param ParticipantProductSetter            $participantProductSetter
-     * @param DelayedEventDispatcherInterface     $delayedEventDispatcher
+     * @param CartRowRepositoryInterface                        $cartRowRepository
+     * @param CartStepRepositoryInterface                       $cartStepRepository
+     * @param PromotionCodeRowRepositoryInterface               $promotionCodeRowRepository
+     * @param Merger                                            $orderMerger
+     * @param ParticipantProductSetter                          $participantProductSetter
+     * @param ProductAttributedToParticipantRepositoryInterface $productAttributedToParticipantRepository
+     * @param DelayedEventDispatcherInterface                   $delayedEventDispatcher
      */
     public function __construct(
         CartRowRepositoryInterface $cartRowRepository,
@@ -59,6 +66,7 @@ class CartManager
         PromotionCodeRowRepositoryInterface $promotionCodeRowRepository,
         Merger $orderMerger,
         ParticipantProductSetter $participantProductSetter,
+        ProductAttributedToParticipantRepositoryInterface $productAttributedToParticipantRepository,
         DelayedEventDispatcherInterface $delayedEventDispatcher
     ) {
         $this->cartRowRepository          = $cartRowRepository;
@@ -67,6 +75,7 @@ class CartManager
         $this->orderMerger                = $orderMerger;
         $this->participantProductSetter = $participantProductSetter;
         $this->delayedEventDispatcher = $delayedEventDispatcher;
+        $this->productAttributedToParticipantRepository = $productAttributedToParticipantRepository;
     }
 
     /**
@@ -83,6 +92,198 @@ class CartManager
             $this->promotionCodeRowRepository->findBySheet($sheet),
             $currentStep
         );
+    }
+
+    /***
+     * @param Cart       $cart
+     * @param OptionRow  $optionRow
+     * @param Product    $product
+     * @param null|Order $order
+     * @param array      $attributableOptionsIncludedByProductId
+     *
+     * @return Cart
+     */
+    public function updateOptionsQuantity(
+        Cart $cart,
+        OptionRow $optionRow,
+        Product $product,
+        ?Order $order,
+        array $attributableOptionsIncludedByProductId = []
+    ): Cart {
+        if (!$product->isAttributable()) {
+            $cart->setProduct($product, $optionRow->getQuantity());
+
+            return $cart;
+        }
+
+        $orderQuantity = 0;
+        $includedQuantity = $attributableOptionsIncludedByProductId[$product->getId()] ?? 0;
+        $optionRowParticipants = $optionRow->getParticipants();
+        $optionRowParticipantsIndexedByParticipantId = [];
+
+        foreach ($optionRowParticipants as $participant) {
+            $optionRowParticipantsIndexedByParticipantId[$participant->getId()] = $participant;
+        }
+
+        // handle new order
+        if (null !== $order) {
+            $orderRow = $order->getRowByProductId($product->getId());
+
+            if (null !== $orderRow) {
+                $orderQuantity = $orderRow->getQuantity();
+            }
+        }
+
+        $quantity = $optionRow->getQuantity();
+
+        // Quantity not changed on first run
+        // Or quantity reset to 0
+        if ($quantity === 0) {
+            // No quantity selected, no previous order and no included quantity, nothing to do
+            if ($orderQuantity === 0 && $includedQuantity === 0) {
+                return $cart;
+            }
+
+            $productAttributedToParticipants = $this->getProductAttributedToParticipants(
+                $cart->getSheet()->getParticipantsArray(),
+                $product
+            );
+
+            // No quantity selected but with included product, we need to check
+            // if there is ProductAttributedToParticipant already created to remove them
+            if ($includedQuantity > 0 && $orderQuantity === 0 && \count($productAttributedToParticipants) > 0) {
+                $this->productAttributedToParticipantRepository->removeBatch($productAttributedToParticipants);
+            }
+
+            return $cart;
+        }
+
+        if (($quantity - $orderQuantity - $includedQuantity) === 0) {
+            $productAttributedToParticipants = $this->getProductAttributedToParticipants(
+                $cart->getSheet()->getParticipantsArray(),
+                $product
+            );
+
+            $this->reAssignProductAttributedToParticipant(
+                $product,
+                $productAttributedToParticipants,
+                $optionRowParticipantsIndexedByParticipantId
+            );
+
+            return $cart;
+        }
+
+        // If the orderedQuantity is higher than 0
+        // Then we do not change anything, we just set the new cartRow with the selected participant
+        // The cart Converter will do the work to convert the new ProductAttributedToParticipant
+        if ($orderQuantity > 0) {
+            $cart->setProduct(
+                $product,
+                $quantity - $orderQuantity - $includedQuantity,
+                $optionRowParticipants
+            );
+
+            return $cart;
+        }
+
+        // If we decrement the quantity
+        if ($quantity <= $includedQuantity) {
+            $productAttributedToParticipants = $this->getProductAttributedToParticipants(
+                $cart->getSheet()->getParticipantsArray(),
+                $product
+            );
+
+            // If nothing has change in term of quantity
+            // We just check if the participant need to be reassigned
+            // If the included quantity is higher than the selected quantity
+            // And no quantity ordered
+            $this->reAssignProductAttributedToParticipant(
+                $product,
+                $productAttributedToParticipants,
+                $optionRowParticipantsIndexedByParticipantId
+            );
+
+            return $cart;
+        }
+
+        // No previous ordered quantity
+        // no included quantity
+        // we just set the quantity selected to the cartRow
+        if ($includedQuantity === 0) {
+            $cart->setProduct(
+                $product,
+                $quantity,
+                $optionRowParticipants
+            );
+
+            return $cart;
+        }
+
+        // If there is a previous order
+        // And the included quantity is not null
+        // But the quantity is higher
+        // We do not modify anything
+        // we will let the Cart Converter do it stuff
+        // We just create the cartRow
+        if ($order !== null) {
+            $cart->setProduct(
+                $product,
+                $quantity - $includedQuantity,
+                $optionRowParticipants
+            );
+
+            return $cart;
+        }
+
+        // If we reach here, it means that
+        // There is no previous orderedQuantity
+        // The included quantity is less than the selected quantity
+        // The quantity is positive
+        // No previous order
+        $productAttributedToParticipants = $this->getProductAttributedToParticipants(
+            $cart->getSheet()->getParticipantsArray(),
+            $product
+        );
+
+        if (\count($productAttributedToParticipants) === $includedQuantity) {
+            $notFound = false;
+
+            foreach ($productAttributedToParticipants as $participantId => $productAttributedToParticipant) {
+                if (!isset($optionRowParticipantsIndexedByParticipantId[$participantId])) {
+                    $notFound = true;
+                }
+            }
+
+            // Nothing to change
+            if (false === $notFound) {
+                $cart->setProduct(
+                    $product,
+                    $quantity - $includedQuantity,
+                    $optionRowParticipants
+                );
+
+                return $cart;
+            }
+        }
+
+        $this->productAttributedToParticipantRepository->removeBatch($productAttributedToParticipants);
+
+        $participantToProductAttributedToParticipantsToCreate = \array_slice($optionRowParticipants, 0, $includedQuantity);
+        foreach ($participantToProductAttributedToParticipantsToCreate as $participant) {
+            $this->productAttributedToParticipantRepository->add(new ProductAttributedToParticipant(
+                $product,
+                $participant,
+                new \DateTime()
+            ));
+        }
+
+        $cart->setProduct(
+            $product,
+            $quantity - $includedQuantity,
+            $optionRowParticipants
+        );
+
+        return $cart;
     }
 
     /***
@@ -283,6 +484,29 @@ class CartManager
     }
 
     /**
+     * @param Cart  $cart
+     * @param Order $order
+     *
+     * @return array of quantity indexed by Attributable Option Product id
+     */
+    public function getAttributableOptionsIncludedByProductId(Cart $cart, ?Order $order = null): array
+    {
+        if (null !== $order) {
+            $includedAttributableOptionProducts = $order->getIncludedAttributableOptionProducts();
+        } else {
+            $includedAttributableOptionProducts = $cart->getIncludedAttributableOptionProducts();
+        }
+
+        $optionsAttributableIncludedByProductId = [];
+
+        foreach ($includedAttributableOptionProducts as $includedAttributableOptionProduct) {
+            $optionsAttributableIncludedByProductId[$includedAttributableOptionProduct->getIncluded()->getId()] = $includedAttributableOptionProduct->getQuantity();
+        }
+
+        return $optionsAttributableIncludedByProductId;
+    }
+
+    /**
      * @param Sheet $sheet
      *
      * @return array
@@ -423,5 +647,108 @@ class CartManager
         foreach ($cart->getParticipantRows() as $participantCartRow) {
             $cart->removeRow($participantCartRow);
         }
+    }
+
+    /**
+     * @param Participant[] $participants
+     * @param Product       $product
+     *
+     * @return ProductAttributedToParticipant[] indexed by Participant id
+     */
+    private function getProductAttributedToParticipants(array $participants, Product $product): array
+    {
+        $productAttributedToParticipants = $this->productAttributedToParticipantRepository->findByProductAndParticipants(
+            $product,
+            $participants
+        );
+
+        $productAttributedToParticipantsIndexByParticipantId = [];
+
+        foreach ($productAttributedToParticipants as $productAttributedToParticipant) {
+            $productAttributedToParticipantsIndexByParticipantId[$productAttributedToParticipant->getParticipant()->getId()] = $productAttributedToParticipant;
+        }
+
+        return $productAttributedToParticipantsIndexByParticipantId;
+    }
+
+    /**
+     * @param Product                          $product
+     * @param ProductAttributedToParticipant[] $productAttributedToParticipants
+     * @param Participant[]                    $optionRowParticipantsIndexedByParticipantId
+     */
+    private function reAssignProductAttributedToParticipant(
+        Product $product,
+        array $productAttributedToParticipants,
+        array $optionRowParticipantsIndexedByParticipantId
+    ): void {
+        $productAttributedToParticipantsToCreate = $this->getProductAttributedToParticipantToCreate(
+            $product,
+            $productAttributedToParticipants,
+            $optionRowParticipantsIndexedByParticipantId
+        );
+        $productAttributedToParticipantsToRemove = $this->getProductAttributedToParticipantToRemove(
+            $productAttributedToParticipants,
+            $optionRowParticipantsIndexedByParticipantId
+        );
+
+        foreach ($productAttributedToParticipantsToCreate as $productAttributedToParticipantToCreate) {
+            $this->productAttributedToParticipantRepository->add($productAttributedToParticipantToCreate);
+        }
+
+        $this->productAttributedToParticipantRepository->removeBatch($productAttributedToParticipantsToRemove);
+    }
+
+    /**
+     * @param ProductAttributedToParticipant[] $productAttributedToParticipants
+     * @param Participant[]                    $optionRowParticipantsIndexedByParticipantId
+     *
+     * @return ProductAttributedToParticipant[]
+     */
+    private function getProductAttributedToParticipantToRemove(
+        array $productAttributedToParticipants,
+        array $optionRowParticipantsIndexedByParticipantId
+    ): array {
+        $productAttributedToParticipantsToRemove = [];
+
+        foreach ($productAttributedToParticipants as $participantId => $productAttributedToParticipant) {
+            if (!isset($optionRowParticipantsIndexedByParticipantId[$participantId])) {
+                $productAttributedToParticipantsToRemove[$participantId] = $productAttributedToParticipant;
+            }
+        }
+
+        return $productAttributedToParticipantsToRemove;
+    }
+
+    /**
+     * @param Product                          $product
+     * @param ProductAttributedToParticipant[] $productAttributedToParticipants
+     * @param Participant[]                    $optionRowParticipants
+     *
+     * @return ProductAttributedToParticipant[]
+     */
+    private function getProductAttributedToParticipantToCreate(
+        Product $product,
+        array $productAttributedToParticipants,
+        array $optionRowParticipants
+    ): array {
+        $productAttributedToParticipantsToCreate = [];
+
+        foreach ($optionRowParticipants as $participant) {
+            // Already set
+            if (isset($productAttributedToParticipants[$participant->getId()])) {
+                continue;
+            }
+
+            // Not set
+            if (!isset($productAttributedToParticipants[$participant->getId()])) {
+                $productAttributedToParticipantsToCreate[$participant->getId()] = new ProductAttributedToParticipant(
+                    $product,
+                    $participant,
+                    new \DateTime() //@todo inject $dateTime
+                );
+            }
+        }
+
+        return $productAttributedToParticipantsToCreate;
     }
 }
