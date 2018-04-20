@@ -13,6 +13,7 @@ namespace Proximum\Vimeet\Domain\Repository;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Product;
 use Proximum\Vimeet\Domain\Model\ProductAttributedToParticipant;
+use Proximum\Vimeet\Domain\Model\Sheet;
 
 interface ProductAttributedToParticipantRepositoryInterface
 {
@@ -32,4 +33,6 @@ interface ProductAttributedToParticipantRepositoryInterface
     public function removeBatch(array $productAttributedToParticipants): void;
 
     public function remove(ProductAttributedToParticipant $productAttributedToParticipant): void;
+
+    public function removeForSheet(Sheet $sheet): void;
 }
