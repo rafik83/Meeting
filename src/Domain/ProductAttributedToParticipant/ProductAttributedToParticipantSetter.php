@@ -37,4 +37,110 @@ class ProductAttributedToParticipantSetter
             new ProductAttributedToParticipant($product, $participant, $this->dateTime)
         );
     }
+
+    /**
+     * @param Product       $product
+     * @param Participant[] $sheetParticipants
+     * @param Participant[] $participantsWithAttributedProduct
+     */
+    public function attributeProductToParticipantsAndRemoveThoseNoLongerNeeded(
+        Product $product,
+        array $sheetParticipants,
+        array $participantsWithAttributedProduct
+    ): void {
+        $productAttributedToParticipantsIndexedByParticipantId = $this
+            ->getProductAttributedToParticipantsIndexedByParticipantId($product, $sheetParticipants);
+
+        $this->addProductAttributedToParticipants(
+            $product,
+            $participantsWithAttributedProduct,
+            $productAttributedToParticipantsIndexedByParticipantId
+        );
+
+        $this->removeNoLongerNeededProductAttributedToParticipant(
+            $participantsWithAttributedProduct,
+            $productAttributedToParticipantsIndexedByParticipantId
+        );
+    }
+
+    /**
+     * @param Product                          $product
+     * @param Participant[]                    $participantsWithAttributedProduct
+     * @param ProductAttributedToParticipant[] $productAttributedToParticipantsIndexedByParticipantId
+     */
+    private function addProductAttributedToParticipants(
+        Product $product,
+        array &$participantsWithAttributedProduct,
+        array &$productAttributedToParticipantsIndexedByParticipantId
+    ): void {
+        foreach ($participantsWithAttributedProduct as $participant) {
+            if (array_key_exists($participant->getId(), $productAttributedToParticipantsIndexedByParticipantId)) {
+                continue;
+            }
+
+            $this->attributeProductToParticipant($product, $participant);
+        }
+    }
+
+    /**
+     * @param Participant[] $participantsWithAttributedProduct
+     * @param array         $productAttributedToParticipantsIndexedByParticipantId
+     */
+    private function removeNoLongerNeededProductAttributedToParticipant(
+        array &$participantsWithAttributedProduct,
+        array &$productAttributedToParticipantsIndexedByParticipantId
+    ): void {
+        $productAttributedToParticipantsToRemove = [];
+
+        foreach ($productAttributedToParticipantsIndexedByParticipantId as $participantId => $productAttributedToParticipant) {
+            if (!$this->hasParticipantId($participantId, $participantsWithAttributedProduct)) {
+                $productAttributedToParticipantsToRemove[] = $productAttributedToParticipant;
+            }
+        }
+
+        if (!empty($productAttributedToParticipantsToRemove)) {
+            $this->productAttributedToParticipantRepository->removeBatch($productAttributedToParticipantsToRemove);
+        }
+    }
+
+    /**
+     * @param int           $participantId
+     * @param Participant[] $participantsWithAttributedProduct
+     *
+     * @return bool
+     */
+    private function hasParticipantId(int $participantId, array &$participantsWithAttributedProduct): bool
+    {
+        foreach ($participantsWithAttributedProduct as $participant) {
+            if ($participantId === $participant->getId()) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * @param Product $product
+     * @param array   $participants
+     *
+     * @return ProductAttributedToParticipant[] indexed by Participant id
+     */
+    private function getProductAttributedToParticipantsIndexedByParticipantId(
+        Product $product,
+        array &$participants
+    ): array {
+        $productAttributedToParticipants = $this
+            ->productAttributedToParticipantRepository
+            ->findByProductAndParticipants($product, $participants);
+
+        $productAttributedToParticipantsIndexedByParticipantId = [];
+
+        foreach ($productAttributedToParticipants as $productAttributedToParticipant) {
+            $participantId = $productAttributedToParticipant->getParticipant()->getId();
+            $productAttributedToParticipantsIndexedByParticipantId[$participantId] = $productAttributedToParticipant;
+        }
+
+        return $productAttributedToParticipantsIndexedByParticipantId;
+    }
 }
