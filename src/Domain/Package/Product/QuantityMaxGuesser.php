@@ -42,7 +42,7 @@ class QuantityMaxGuesser
      *
      * @return int
      */
-    public function getMaxPlanning(Sheet $sheet)
+    public function getMaxPlanning(Sheet $sheet): int
     {
         $planning = $sheet->getPackage()->getPlanning();
 
@@ -53,7 +53,7 @@ class QuantityMaxGuesser
         $cart              = $this->cartManager->getCart($sheet);
         $selectedPlan      = ($cart->getPlanRow() !== null) ? $cart->getPlanRow()->getProduct() : null;
         $countParticipants = $sheet->getParticipants()->count();
-        $remainingQuantity = INF;
+        $remainingQuantity = $countParticipants;
 
         if ($sheet->hasNotCancelledOrders()) {
             $order        = $this->merger->merge($sheet->getNotCancelledOrders());
@@ -82,9 +82,9 @@ class QuantityMaxGuesser
      * @param Sheet   $sheet
      * @param Product $product
      *
-     * @return int
+     * @return float int or INF
      */
-    public function getMaxByProduct(Sheet $sheet, Product $product)
+    public function getMaxByProduct(Sheet $sheet, Product $product): float
     {
         if ($product->isAttributable()) {
             return min(
@@ -93,11 +93,8 @@ class QuantityMaxGuesser
             );
         }
 
-        // handle new order
-        if ($sheet->hasNotCancelledOrders()) {
-            $orderMerged  = $this->merger->merge($sheet->getNotCancelledOrders());
-            $selectedPlan = $orderMerged->getPlan();
-        }
+        $remainingQuantity = INF;
+        $selectedPlan = $this->getSelectedPlan($sheet);
 
         if ($selectedPlan) {
             $includedProduct = $selectedPlan->getIncludedProduct($product);
@@ -107,12 +104,31 @@ class QuantityMaxGuesser
             }
         }
 
-        $max = min(
-            $remainingQuantity,
-            $product->getQuantityMax(),
-            $product->getAvailability()
+        return max(
+            0,
+            min(
+                $remainingQuantity,
+                $product->getQuantityMax(),
+                $product->getAvailability()
+            )
         );
+    }
 
-        return $max < 0 ? 0 : $max;
+    public function getSelectedPlan(Sheet $sheet): ?Product
+    {
+        $cart = $this->cartManager->getCart($sheet);
+
+        if (null !== $cart->getPlanRow()) {
+            return $cart->getPlanRow()->getProduct();
+        }
+
+        // handle new order
+        if ($sheet->hasNotCancelledOrders()) {
+            $orderMerged = $this->merger->merge($sheet->getNotCancelledOrders());
+
+            return $orderMerged->getPlan();
+        }
+
+        return null;
     }
 }
