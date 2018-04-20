@@ -44,11 +44,12 @@ class ConverterTest extends TestCase
         $package = $this->prophesize(Package::class);
         $package->serializeData()->shouldBeCalled()->willReturn('Package serialized data');
 
+        $participant1 = $this->prophesize(Participant::class);
+
         $sheet = $this->prophesize(Sheet::class);
+        $sheet->getParticipantsArray()->shouldBeCalled()->willReturn([$participant1->reveal()]);
         $sheet->getEvent()->shouldBeCalled()->willReturn($event->reveal());
         $sheet->getPackage()->shouldBeCalled()->willReturn($package->reveal());
-
-        $participant1 = $this->prophesize(Participant::class);
 
         $plan = $this->prophesize(Product::class);
         $plan->isParticipant()->shouldBeCalled()->willReturn(false);
@@ -151,9 +152,10 @@ class ConverterTest extends TestCase
 
         $productAttributedToParticipantSetter = $this->prophesize(ProductAttributedToParticipantSetter::class);
         $productAttributedToParticipantSetter
-            ->attributeProductToParticipant(
+            ->attributeProductToParticipantsAndRemoveThoseNoLongerNeeded(
                 $attributableOption->reveal(),
-                $participant1->reveal()
+                [$participant1->reveal()],
+                [$participant1->reveal()]
             )
             ->shouldBeCalled()
         ;

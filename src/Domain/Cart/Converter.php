@@ -133,12 +133,11 @@ class Converter
 
         // Attribute Product to Participant
         if ($cartRow->getProduct()->isAttributable()) {
-            foreach ($cartRow->getParticipants() as $participant) {
-                $this->productAttributedToParticipantSetter->attributeProductToParticipant(
-                    $cartRow->getProduct(),
-                    $participant
-                );
-            }
+            $this->productAttributedToParticipantSetter->attributeProductToParticipantsAndRemoveThoseNoLongerNeeded(
+                $cartRow->getProduct(),
+                $cartRow->getSheet()->getParticipantsArray(),
+                $cartRow->getParticipants()
+            );
         }
 
         return new Order\Row(
