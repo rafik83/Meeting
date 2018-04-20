@@ -1133,6 +1133,23 @@ Proximum\Vimeet\Domain\Model\Template\RegistrationTemplate:
                                 type: "text"
                                 translatable: false
                                 tags: ["sheet_organization", "sheet_title", "sheet_data"]
+                        dd66008e:
+                            component: "object"
+                            type: "upload"
+                            config:
+                                style: "style-1"
+                                label:
+                                    fr: "Upload de fichier"
+                                placeholder:
+                                    fr: "Upload de fichier"
+                                help:
+                                    fr: ""
+                                required: false
+                                crypted: false
+                                formats:
+                                    - csv
+                                    - image
+                                tags: ["participant_data", "sheet_data"]
                         97ed778d:
                             component: "object"
                             type: "nomenclature"
