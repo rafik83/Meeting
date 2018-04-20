@@ -755,4 +755,22 @@ class CartManager
 
         return $productAttributedToParticipantsToCreate;
     }
+
+    public function emptyIncludedProductAttributedToParticipant(Cart $cart): void
+    {
+        $plan = $cart->getPlanRow();
+
+        if ($plan === null) {
+            return;
+        }
+
+        foreach ($plan->getProduct()->getIncludedAttributableOptionProducts() as $attributableProduct) {
+            $productAttributedToParticipants = $this->productAttributedToParticipantRepository->findByProductAndParticipants(
+                $attributableProduct->getProduct(),
+                $cart->getSheet()->getParticipantsArray()
+            );
+
+            $this->productAttributedToParticipantRepository->removeBatch($productAttributedToParticipants);
+        }
+    }
 }
