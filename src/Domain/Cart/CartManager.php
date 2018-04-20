@@ -51,6 +51,9 @@ class CartManager
     /** @var ProductAttributedToParticipantRepositoryInterface */
     private $productAttributedToParticipantRepository;
 
+    /** @var \DateTimeInterface */
+    private $dateTime;
+
     /**
      * @param CartRowRepositoryInterface                        $cartRowRepository
      * @param CartStepRepositoryInterface                       $cartStepRepository
@@ -59,6 +62,7 @@ class CartManager
      * @param ParticipantProductSetter                          $participantProductSetter
      * @param ProductAttributedToParticipantRepositoryInterface $productAttributedToParticipantRepository
      * @param DelayedEventDispatcherInterface                   $delayedEventDispatcher
+     * @param \DateTimeInterface                                $dateTime
      */
     public function __construct(
         CartRowRepositoryInterface $cartRowRepository,
@@ -67,15 +71,17 @@ class CartManager
         Merger $orderMerger,
         ParticipantProductSetter $participantProductSetter,
         ProductAttributedToParticipantRepositoryInterface $productAttributedToParticipantRepository,
-        DelayedEventDispatcherInterface $delayedEventDispatcher
+        DelayedEventDispatcherInterface $delayedEventDispatcher,
+        \DateTimeInterface $dateTime
     ) {
-        $this->cartRowRepository          = $cartRowRepository;
-        $this->cartStepRepository         = $cartStepRepository;
+        $this->cartRowRepository = $cartRowRepository;
+        $this->cartStepRepository = $cartStepRepository;
         $this->promotionCodeRowRepository = $promotionCodeRowRepository;
-        $this->orderMerger                = $orderMerger;
+        $this->orderMerger = $orderMerger;
         $this->participantProductSetter = $participantProductSetter;
         $this->delayedEventDispatcher = $delayedEventDispatcher;
         $this->productAttributedToParticipantRepository = $productAttributedToParticipantRepository;
+        $this->dateTime = $dateTime;
     }
 
     /**
@@ -109,11 +115,11 @@ class CartManager
         Product $product,
         ?Order $order,
         array $attributableOptionsIncludedByProductId = []
-    ): Cart {
+    ): void {
         if (!$product->isAttributable()) {
             $cart->setProduct($product, $optionRow->getQuantity());
 
-            return $cart;
+            return;
         }
 
         $orderQuantity = 0;
@@ -141,7 +147,7 @@ class CartManager
         if ($quantity === 0) {
             // No quantity selected, no previous order and no included quantity, nothing to do
             if ($orderQuantity === 0 && $includedQuantity === 0) {
-                return $cart;
+                return;
             }
 
             $productAttributedToParticipants = $this->getProductAttributedToParticipants(
@@ -155,7 +161,7 @@ class CartManager
                 $this->productAttributedToParticipantRepository->removeBatch($productAttributedToParticipants);
             }
 
-            return $cart;
+            return;
         }
 
         if (($quantity - $orderQuantity - $includedQuantity) === 0) {
@@ -170,7 +176,7 @@ class CartManager
                 $optionRowParticipantsIndexedByParticipantId
             );
 
-            return $cart;
+            return;
         }
 
         // If the orderedQuantity is higher than 0
@@ -183,7 +189,7 @@ class CartManager
                 $optionRowParticipants
             );
 
-            return $cart;
+            return;
         }
 
         // If we decrement the quantity
@@ -203,7 +209,7 @@ class CartManager
                 $optionRowParticipantsIndexedByParticipantId
             );
 
-            return $cart;
+            return;
         }
 
         // No previous ordered quantity
@@ -216,7 +222,7 @@ class CartManager
                 $optionRowParticipants
             );
 
-            return $cart;
+            return;
         }
 
         // If there is a previous order
@@ -232,7 +238,7 @@ class CartManager
                 $optionRowParticipants
             );
 
-            return $cart;
+            return;
         }
 
         // If we reach here, it means that
@@ -262,7 +268,7 @@ class CartManager
                     $optionRowParticipants
                 );
 
-                return $cart;
+                return;
             }
         }
 
@@ -273,7 +279,7 @@ class CartManager
             $this->productAttributedToParticipantRepository->add(new ProductAttributedToParticipant(
                 $product,
                 $participant,
-                new \DateTime()
+                $this->dateTime
             ));
         }
 
@@ -282,8 +288,6 @@ class CartManager
             $quantity - $includedQuantity,
             $optionRowParticipants
         );
-
-        return $cart;
     }
 
     /***
@@ -744,7 +748,7 @@ class CartManager
                 $productAttributedToParticipantsToCreate[$participant->getId()] = new ProductAttributedToParticipant(
                     $product,
                     $participant,
-                    new \DateTime() //@todo inject $dateTime
+                    $this->dateTime
                 );
             }
         }
