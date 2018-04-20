@@ -17,8 +17,10 @@ use Proximum\Vimeet\Domain\Model\CartRow;
 use Proximum\Vimeet\Domain\Model\Order;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Product;
+use Proximum\Vimeet\Domain\Model\ProductAttributedToParticipant;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Order\Merger;
+use Proximum\Vimeet\Domain\Repository\ProductAttributedToParticipantRepositoryInterface;
 
 class StepOption
 {
@@ -31,10 +33,18 @@ class StepOption
     /** @var \DateTimeInterface */
     private $dateTime;
 
-    public function __construct(Merger $orderMerger, CartManager $cartManager, \DateTimeInterface $dateTime)
-    {
+    /** @var ProductAttributedToParticipantRepositoryInterface */
+    private $productAttributedToParticipantRepository;
+
+    public function __construct(
+        Merger $orderMerger,
+        CartManager $cartManager,
+        ProductAttributedToParticipantRepositoryInterface $productAttributedToParticipantRepository,
+        \DateTimeInterface $dateTime
+    ) {
         $this->orderMerger = $orderMerger;
         $this->cartManager = $cartManager;
+        $this->productAttributedToParticipantRepository = $productAttributedToParticipantRepository;
         $this->dateTime = $dateTime;
     }
 
@@ -77,7 +87,7 @@ class StepOption
         foreach ($availableOptions as $option) {
             $options[$option->getId()] = new OptionRow(
                 $this->getOptionQuantity($option, $cartRows, $orderMerged),
-                $this->getOptionParticipant($option, $cartRows),
+                $this->getOptionParticipant($sheet, $option, $cartRows),
                 $option->isAttributable()
             );
         }
@@ -105,12 +115,13 @@ class StepOption
     }
 
     /**
+     * @param Sheet     $sheet
      * @param Product   $option
      * @param CartRow[] $cartRows
      *
      * @return Participant[]
      */
-    private function getOptionParticipant(Product $option, array $cartRows = []): array
+    private function getOptionParticipant(Sheet $sheet, Product $option, array $cartRows = []): array
     {
         if (!$option->isAttributable()) {
             return [];
@@ -122,7 +133,14 @@ class StepOption
             return $cartRow->getParticipants();
         }
 
-        return [];
+        $productAttributedToParticipants = $this->productAttributedToParticipantRepository->findByProductAndParticipants(
+            $option,
+            $sheet->getParticipantsArray()
+        );
+
+        return array_map(function (ProductAttributedToParticipant $productAttributedToParticipant) {
+            return $productAttributedToParticipant->getParticipant();
+        }, $productAttributedToParticipants);
     }
 
     /**
