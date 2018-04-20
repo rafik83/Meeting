@@ -50,15 +50,10 @@ class QuantityMaxGuesser
             return 0;
         }
 
-        $cart              = $this->cartManager->getCart($sheet);
-        $selectedPlan      = ($cart->getPlanRow() !== null) ? $cart->getPlanRow()->getProduct() : null;
-        $countParticipants = $sheet->getParticipants()->count();
+        $countParticipants = $sheet->countParticipants();
         $remainingQuantity = $countParticipants;
 
-        if ($sheet->hasNotCancelledOrders()) {
-            $order        = $this->merger->merge($sheet->getNotCancelledOrders());
-            $selectedPlan = $order->getPlan();
-        }
+        $selectedPlan = $this->getSelectedPlan($sheet);
 
         if ($selectedPlan) {
             $includedPlanningProduct = $selectedPlan->getIncludedPlanningProduct();
@@ -114,7 +109,7 @@ class QuantityMaxGuesser
         );
     }
 
-    public function getSelectedPlan(Sheet $sheet): ?Product
+    private function getSelectedPlan(Sheet $sheet): ?Product
     {
         $cart = $this->cartManager->getCart($sheet);
 
@@ -122,7 +117,6 @@ class QuantityMaxGuesser
             return $cart->getPlanRow()->getProduct();
         }
 
-        // handle new order
         if ($sheet->hasNotCancelledOrders()) {
             $orderMerged = $this->merger->merge($sheet->getNotCancelledOrders());
 
