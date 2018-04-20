@@ -23,6 +23,7 @@ class MimeTypeTest extends TestCase
         $pptMimeTypes = MimeType::getMimeTypesByFormats(['ppt']);
         $imageAndPdfMimeTypes = MimeType::getMimeTypesByFormats(['image', 'pdf', 'ppt']);
         $emptyFormatMimeTypes = MimeType::getMimeTypesByFormats();
+        $badFormatMimeTypes = MimeType::getMimeTypesByFormats(['bad-format']);
 
         $this->assertSame($imageMimeTypes, MimeType::IMAGE_MIME_TYPES);
         $this->assertSame($csvMimeTypes, MimeType::CSV_MIME_TYPES);
@@ -37,5 +38,6 @@ class MimeTypeTest extends TestCase
             )
         );
         $this->assertEmpty($emptyFormatMimeTypes);
+        $this->assertEmpty($badFormatMimeTypes);
     }
 }

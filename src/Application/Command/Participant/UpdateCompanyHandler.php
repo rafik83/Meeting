@@ -10,44 +10,49 @@
 
 namespace Proximum\Vimeet\Application\Command\Participant;
 
+use Proximum\Vimeet\Application\Command\Participant\Upload\UploadFile;
+use Proximum\Vimeet\Application\Command\Participant\Upload\UploadFileException;
+use Proximum\Vimeet\Application\Command\Participant\Upload\UploadFileHandler;
 use Proximum\Vimeet\Application\Components\Sheet\Template\Tag;
 use Proximum\Vimeet\Application\Event\Events;
 use Proximum\Vimeet\Application\Event\Sheet\SheetUpdatedEvent;
 use Proximum\Vimeet\Domain\Account\Synchronizer;
 use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
 use Proximum\Vimeet\Domain\Template\TemplateObject\ContentObjectInterface;
+use Proximum\Vimeet\Domain\Template\TemplateObject\UploadObject;
 use Proximum\Vimeet\Infrastructure\Adapter\DelayedEventDispatcher;
 
 class UpdateCompanyHandler
 {
-    /**
-     * @var Synchronizer
-     */
+    /** @var Synchronizer */
     private $accountSynchronizer;
 
-    /**
-     * @var SheetRepositoryInterface
-     */
+    /** @var SheetRepositoryInterface */
     private $sheetRepository;
 
-    /**
-     * @var DelayedEventDispatcher
-     */
+    /** @var DelayedEventDispatcher */
     private $eventDispatcher;
 
+    /** @var UploadFileHandler */
+    private $uploadFileHandler;
+
     /**
-     * @param SheetRepositoryInterface $sheetRepository
-     * @param Synchronizer             $accountSynchronizer
-     * @param DelayedEventDispatcher   $eventDispatcher
+     * @param SheetRepositoryInterface  $sheetRepository
+     * @param Synchronizer              $accountSynchronizer
+     * @param DelayedEventDispatcher    $eventDispatcher
+     * @param UploadFileHandler         $uploadFileHandler
      */
     public function __construct(
         SheetRepositoryInterface $sheetRepository,
         Synchronizer $accountSynchronizer,
-        DelayedEventDispatcher $eventDispatcher
-    ) {
-        $this->sheetRepository     = $sheetRepository;
+        DelayedEventDispatcher $eventDispatcher,
+        UploadFileHandler $uploadFileHandler
+    )
+    {
+        $this->sheetRepository = $sheetRepository;
         $this->accountSynchronizer = $accountSynchronizer;
-        $this->eventDispatcher     = $eventDispatcher;
+        $this->eventDispatcher = $eventDispatcher;
+        $this->uploadFileHandler = $uploadFileHandler;
     }
 
     /**
@@ -55,13 +60,23 @@ class UpdateCompanyHandler
      */
     public function handle(UpdateCompany $updateCompany)
     {
-        $participant  = $updateCompany->participant;
-        $sheet        = $updateCompany->sheet;
-        $companyData  = $sheet->getRegistrationData();
+        $participant = $updateCompany->participant;
+        $sheet = $updateCompany->sheet;
+        $companyData = $sheet->getRegistrationData();
         $templateData = $updateCompany->templateData;
 
         foreach ($updateCompany->data as $key => $value) {
             $templateObject = $templateData->getObject($key);
+
+            if ($templateObject instanceof UploadObject) {
+                try {
+                    $companyData = $this->uploadFileHandler
+                        ->handle(new UploadFile($templateObject, $companyData));
+                } catch (UploadFileException $exception) {
+                }
+
+                continue;
+            }
 
             if ($templateObject->hasTag(Tag::SHEET_DATA)) {
                 $companyData = array_merge($companyData, [$key => $value]);

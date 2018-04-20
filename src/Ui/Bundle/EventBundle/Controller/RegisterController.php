@@ -10,6 +10,8 @@
 
 namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Controller;
 
+use Proximum\Vimeet\Application\Command\Participant\Upload\UploadFile;
+use Proximum\Vimeet\Application\Command\Participant\Upload\UploadFileException;
 use Proximum\Vimeet\Application\Command\Register\ParticipantStep;
 use Proximum\Vimeet\Application\Command\Register\RegisterNewUser;
 use Proximum\Vimeet\Application\Command\User\Participate;
@@ -369,29 +371,16 @@ class RegisterController extends Controller
         $data = array_filter($data, function ($value) { return null !== $value; });
 
         $uploadedAndImageObjects = $registrationTemplate->getUploadAndImageObjects();
-        $fileStorage = $this->get('adapter.local_file_storage');
 
         foreach ($uploadedAndImageObjects as $key => $object) {
             if ($form->has($key) && $form->get($key)->get('file')->getData() !== null) {
                 $file = $form->get($key)->get('file')->getData();
-                $storageKey = $object instanceof UploadObject ? 'path' : 'image';
 
                 if ($file instanceof UploadedFile) {
                     try {
-                        $data[$key][$storageKey] = $fileStorage->upload($file);
-                        if ($object instanceof UploadObject) {
-                            $data[$key]['extension'] = $file->getClientOriginalExtension();
-                        }
-                        $fileStorage->remove($object->getContentValue());
-                    } catch (\Exception $exception) {
-                        $form->get($key)->get('file')->addError(
-                            new FormError(
-                                sprintf(
-                                    'account.profile.%s.error',
-                                    $object instanceof UploadObject ? 'uploadedObject' : 'updateAvatar'
-                                )
-                            )
-                        );
+                        $data = $this->get('tactician.commandbus')->handle(new UploadFile($object, $data));
+                    } catch (UploadFileException $exception) {
+                        $form->get($key)->get('file')->addError(new FormError($exception->getMessage()));
                     }
                 } else {
                     $form->get($key)->get('file')->addError(

@@ -13,6 +13,7 @@ namespace Proximum\Vimeet\Domain\Template;
 use Doctrine\Common\Collections\ArrayCollection;
 use Proximum\Vimeet\Application\Components\Sheet\Template\Tag;
 use Proximum\Vimeet\Domain\Template\Exception\ObjectNotFoundException;
+use Proximum\Vimeet\Domain\Template\TemplateObject\UploadableObjectInterface;
 
 class Block extends AbstractChild
 {
@@ -484,15 +485,12 @@ class Block extends AbstractChild
     }
     
     /**
-     * @return TemplateObject\UploadObject[]
+     * @return TemplateObject\UploadableObjectInterface[]
      */
     public function getUploadAndImageObjects(): array
     {
         return array_filter($this->getObjects(), function (TemplateObject $object) {
-            return
-                $object instanceof TemplateObject\UploadObject ||
-                $object instanceof TemplateObject\Image
-            ;
+            return $object instanceof UploadableObjectInterface;
         });
     }
 

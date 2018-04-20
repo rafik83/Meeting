@@ -14,7 +14,7 @@ use Proximum\Vimeet\Domain\MimeType\MimeType;
 use Proximum\Vimeet\Domain\Template\TemplateObject;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
-class UploadObject extends EditableObject implements ContentObjectInterface
+class UploadObject extends EditableObject implements UploadableObjectInterface
 {
     public const ALLOWED_FORMATS = [
         MimeType::FORMAT_IMAGE,
@@ -81,6 +81,11 @@ class UploadObject extends EditableObject implements ContentObjectInterface
     public function getExtension(): ?string
     {
         return $this->data['extension'] ?? null;
+    }
+
+    public function setExtension(string $extension): void
+    {
+        $this->data['extension'] = $extension;
     }
 
     public function getContentValue(): string
