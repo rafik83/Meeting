@@ -7,6 +7,12 @@
 <section class="section product">
     <div class="object object--collection style--style-1"></div>
     {{ form_start(form, {'attr': {'class': 'form--table--head', 'data-product-selector': true }}) }}
+        {% if not form.vars.valid %}
+            <div class="message-error text-danger">
+                {{ 'package.funnel.error'|trans }}
+            </div>
+        {% endif %}
+
         {{ form_errors(form) }}
         {{ form_errors(form.plan) }}
         <table class="table table-striped form-group">

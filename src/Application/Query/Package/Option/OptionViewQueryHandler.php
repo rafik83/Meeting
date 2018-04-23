@@ -12,37 +12,35 @@ namespace Proximum\Vimeet\Application\Query\Package\Option;
 
 use Proximum\Vimeet\Application\View\Package\ProductView;
 use Proximum\Vimeet\Domain\Cart\CartManager;
+use Proximum\Vimeet\Domain\Model\Participant;
+use Proximum\Vimeet\Domain\Model\Product;
 use Proximum\Vimeet\Domain\Order\Merger;
+use Proximum\Vimeet\Domain\ProductAttributedToParticipant\ParticipantWithAttributedProductGetter;
 
 class OptionViewQueryHandler
 {
-    /**
-     * @var CartManager
-     */
+    /** @var CartManager */
     private $cartManager;
-    /**
-     * @var \DateTimeInterface
-     */
-    private $now;
 
-    /**
-     * @var Merger
-     */
+    /** @var Merger */
     private $merger;
 
-    /**
-     * @param CartManager        $cartManager
-     * @param Merger             $merger
-     * @param \DateTimeInterface $now
-     */
+    /** @var ParticipantWithAttributedProductGetter */
+    private $participantWithAttributedProductGetter;
+
+    /** @var \DateTimeInterface */
+    private $now;
+
     public function __construct(
         CartManager $cartManager,
         Merger $merger,
+        ParticipantWithAttributedProductGetter $participantWithAttributedProductGetter,
         \DateTimeInterface $now
     ) {
         $this->cartManager = $cartManager;
-        $this->now         = $now;
-        $this->merger      = $merger;
+        $this->merger = $merger;
+        $this->participantWithAttributedProductGetter = $participantWithAttributedProductGetter;
+        $this->now = $now;
     }
 
     /**
@@ -50,7 +48,7 @@ class OptionViewQueryHandler
      *
      * @return ProductView
      */
-    public function handle(OptionViewQuery $optionViewQuery)
+    public function handle(OptionViewQuery $optionViewQuery): ProductView
     {
         $cart         = $this->cartManager->getCart($optionViewQuery->sheet);
         $selectedPlan = null;
@@ -90,7 +88,34 @@ class OptionViewQueryHandler
             $optionViewQuery->product->getSubjectedToValidationHelp($optionViewQuery->locale),
             $optionViewQuery->product->isSubjectedToValidation(),
             $included,
-            $optionViewQuery->product->isBuyable($this->now)
+            $optionViewQuery->product->isBuyable($this->now),
+            $this->getParticipantsCompleteNameByAttributedProduct(
+                $optionViewQuery->sheet->getParticipantsArray(),
+                $optionViewQuery->product
+            )
         );
+    }
+
+    /**
+     * @param Participant[] $participants
+     * @param Product       $product
+     *
+     * @return string[]
+     */
+    private function getParticipantsCompleteNameByAttributedProduct(array $participants, Product $product): array
+    {
+        if (!$this->isAttributableButNoLongerBuyable($product)) {
+            return [];
+        }
+
+        return $this->participantWithAttributedProductGetter->getParticipantsCompleteNameByAttributedProduct(
+            $participants,
+            $product
+        );
+    }
+
+    private function isAttributableButNoLongerBuyable(Product $product): bool
+    {
+        return $product->isAttributable() && !$product->isBuyable($this->now);
     }
 }

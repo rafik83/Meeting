@@ -49,6 +49,15 @@
             </p>
         {% endif %}
 
+        {% if product.participantsCompleteNameWithAttributedProduct is not empty %}
+            <label>{{ 'package.product.selectedParticipants'|trans }}</label>
+            <select class="select2 col-md-12" data-disallow-clear="true" multiple disabled>
+                {% for participantsCompleteName in product.participantsCompleteNameWithAttributedProduct %}
+                    <option selected>{{ participantsCompleteName }}</option>
+                {% endfor %}
+            </select>
+        {% endif %}
+
         {% if quantityForm.participants is defined %}
             {{ form_row(
                 quantityForm.participants,
@@ -59,12 +68,6 @@
                     }
                 }
             ) }}
-
-            {% if not quantityForm.participants.vars.valid %}
-                <div class="message-error text-danger text-center">
-                    {{ form_errors(quantityForm.participants) }}
-                </div>
-            {% endif %}
         {% endif %}
     </td>
     <td class="col-md-2">

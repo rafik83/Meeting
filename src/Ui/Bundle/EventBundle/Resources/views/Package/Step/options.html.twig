@@ -1,7 +1,14 @@
 {% form_theme form '@Ui/default.html.twig' %}
 
 {{ form_start(form, {attr: {class: 'form--table--head'}}) }}
+    {% if not form.vars.valid %}
+        <div class="message-error text-danger">
+            {{ 'package.funnel.error'|trans }}
+        </div>
+    {% endif %}
+
     {{ form_errors(form) }}
+
     {% for group in view.products.groups %}
         <div class="content-header clearfix">
             <h2 class="pull-left">{{ 'package.product.selectOptions'|trans }}</h2>

@@ -326,6 +326,10 @@ services:
         arguments:
             - '@doctrine.orm.entity_manager'
 
+    Proximum\Vimeet\Infrastructure\Repository\ProductAttributedToParticipant\ParticipantWithAttributedProductToRepository:
+        arguments:
+            - '@doctrine.orm.entity_manager'
+
     #
     # Handlers
     #
@@ -2974,6 +2978,7 @@ services:
         arguments:
             - '@cart_manager'
             - '@order.merger'
+            - '@Proximum\Vimeet\Domain\ProductAttributedToParticipant\ParticipantWithAttributedProductGetter'
             - '@datetime'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Package\Option\OptionViewQuery }
@@ -4550,8 +4555,7 @@ services:
             - '@transformer.product.id_to_product_transformer'
             - '@datetime'
             - '%locale%'
-    package.planning.quantity_min_guesser:
-        class: Proximum\Vimeet\Domain\Package\Product\QuantityMinGuesser
+    Proximum\Vimeet\Domain\Package\Product\ConflictBetweenChoosenQuantityAndPreviouslyUsedPromotionCode:
         arguments:
             - '@order.merger'
     package.product.included_participant_guesser:
