@@ -13,7 +13,10 @@
             <ul>
                 {% for product in products %}
                     <li>
-                        {{ product.name }}
+                        <a href="{{ path('admin_product_update_option', {
+                            event: event.id,
+                            product: product.id,
+                        }) }}">{{ product.name }}</a>
                     </li>
                 {% endfor %}
             </ul>
