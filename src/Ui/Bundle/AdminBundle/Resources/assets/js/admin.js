@@ -17,7 +17,8 @@ var $ = require('jquery'),
     ParticipantVisio = require('./components/_ParticipantVisio'),
     TipPreview = require('./components/_TipPreview'),
     ToggleVisibility = require('./components/_ToggleVisibility'),
-    CommercialStatusSelect = require('./components/_CommercialStatusSelect')
+    CommercialStatusSelect = require('./components/_CommercialStatusSelect'),
+    AttributableProductToggleHappening = require('./components/_AttributableProductToggleHappening')
 ;
 
 require('bootstrap');
@@ -154,7 +155,11 @@ function init(target) {
 
     [].forEach.call(target.querySelectorAll('[data-toggle-visibility]'), function (element) {
         new ToggleVisibility(element, target);
-    })
+    });
+
+    [].forEach.call(target.querySelectorAll('[data-attributable-product-toggle-happening]'), function (element) {
+        new AttributableProductToggleHappening(element, target);
+    });
 }
 
 // Call init function when element is added to DOM

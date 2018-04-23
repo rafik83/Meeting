@@ -33,12 +33,12 @@
     {{ form_row(form.quantityMax) }}
     {{ form_row(form.availabilityCurrent) }}
     {{ form_row(form.availabilityMax) }}
-    {{ form_row(form.attributable) }}
     {{ form_row(form.updatable) }}<br>
     {{ form_row(form.buyableUntil) }}
     {{ form_row(form.deletableUntil) }}
     {{ form_row(form.subjectedToValidation) }}<br>
-    <div id="happenings-block" {% if not product.attributable %}style="display: none"{% endif %}>
+    {{ form_row(form.attributable) }}<br>
+    <div id="happenings-block">
         {{ form_row(form.happenings) }}
     </div>
     <br>

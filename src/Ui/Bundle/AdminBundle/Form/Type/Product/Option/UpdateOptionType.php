@@ -58,7 +58,7 @@ class UpdateOptionType extends AbstractUpdateType
             ->add('attributable', CheckboxType::class, [
                 'required' => false,
                 'attr' => [
-                    'data-toggle-visibility' => true,
+                    'data-attributable-product-toggle-happening' => true,
                     'data-element-id-to-hide' => 'happenings-block',
                 ],
             ])
