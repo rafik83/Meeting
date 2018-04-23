@@ -33,7 +33,7 @@ class ParticipantWithAttributedProductGetterTest extends TestCase
             ParticipantWithAttributedProductRepositoryInterface::class
         );
         $participantWithAttributedProductRepository
-            ->getParticipantsWithAttributedProduct(
+            ->getParticipantsWithAttributedProductForProduct(
                 [
                     $participant1->reveal(),
                     $participant2->reveal(),

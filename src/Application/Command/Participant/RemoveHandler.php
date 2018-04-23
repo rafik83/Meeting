@@ -3,13 +3,15 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2016 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
 
 namespace Proximum\Vimeet\Application\Command\Participant;
 
+use Proximum\Vimeet\Application\Components\Participant\Remove\ParticipantConflictView;
+use Proximum\Vimeet\Application\Components\Participant\Remove\ProductAttributedToParticipantConflictChecker;
 use Proximum\Vimeet\Application\Components\Step\StepParticipantAndPlanning;
 use Proximum\Vimeet\Application\Event\Events;
 use Proximum\Vimeet\Application\Event\Participant\ParticipantRemovedEvent;
@@ -42,13 +44,17 @@ class RemoveHandler
     /** @var StepParticipantAndPlanning */
     private $stepParticipantAndPlanning;
 
+    /** @var ProductAttributedToParticipantConflictChecker */
+    private $productAttributedToParticipantConflictChecker;
+
     /**
-     * @param ParticipantRepositoryInterface $participantRepository
-     * @param CartManager                    $cartManager
-     * @param DelayedEventDispatcher         $eventDispatcher
-     * @param MeetingRepositoryInterface     $meetingRepository
-     * @param ParticipantInfoGuesser         $participantInfoGuesser
-     * @param StepParticipantAndPlanning     $stepParticipantAndPlanning
+     * @param ParticipantRepositoryInterface                $participantRepository
+     * @param CartManager                                   $cartManager
+     * @param DelayedEventDispatcher                        $eventDispatcher
+     * @param MeetingRepositoryInterface                    $meetingRepository
+     * @param ParticipantInfoGuesser                        $participantInfoGuesser
+     * @param StepParticipantAndPlanning                    $stepParticipantAndPlanning
+     * @param ProductAttributedToParticipantConflictChecker $productAttributedToParticipantConflictChecker
      */
     public function __construct(
         ParticipantRepositoryInterface $participantRepository,
@@ -56,7 +62,8 @@ class RemoveHandler
         DelayedEventDispatcher $eventDispatcher,
         MeetingRepositoryInterface $meetingRepository,
         ParticipantInfoGuesser $participantInfoGuesser,
-        StepParticipantAndPlanning $stepParticipantAndPlanning
+        StepParticipantAndPlanning $stepParticipantAndPlanning,
+        ProductAttributedToParticipantConflictChecker $productAttributedToParticipantConflictChecker
     ) {
         $this->participantRepository = $participantRepository;
         $this->cartManager = $cartManager;
@@ -64,6 +71,7 @@ class RemoveHandler
         $this->meetingRepository = $meetingRepository;
         $this->participantInfoGuesser = $participantInfoGuesser;
         $this->stepParticipantAndPlanning = $stepParticipantAndPlanning;
+        $this->productAttributedToParticipantConflictChecker = $productAttributedToParticipantConflictChecker;
     }
 
     /**
@@ -79,34 +87,42 @@ class RemoveHandler
             throw new CanNotRemoveAllParticipantsException('All participants can not be selected to be remove');
         }
 
-        // Array of participant with meeting
-        $hasMeeting = [];
-        $toDelete   = [];
+        $participantsWithMeeting = [];
 
         /** @var Participant $participant */
         foreach ($remove->participants as $participant) {
             $participantHasMeeting = $this->meetingRepository->hasScheduledMeetingByParticipant($participant);
 
             if (true === $participantHasMeeting) {
-                $hasMeeting[$participant->getId()] = $participant;
-            } else {
-                $toDelete[$participant->getId()] = $participant;
+                $participantsWithMeeting[$participant->getId()] = $participant;
             }
         }
 
         // Avoid deletion if there is someone with the exception of meeting
-        if (!empty($hasMeeting)) {
-            $participantNames = [];
+        if (!empty($participantsWithMeeting)) {
+            return new RemoveResult(
+                $this->getArrayOfParticipantsName($participantsWithMeeting, $remove->locale),
+                true
+            );
+        }
 
-            foreach ($hasMeeting as $participantWithMeeting) {
-                $participantNames[] = $this->participantInfoGuesser->guessParticipantCompleteName($participantWithMeeting, $remove->locale);
-            }
+        $conflictView = $this->productAttributedToParticipantConflictChecker
+            ->getParticipantsWithConflictOnProductAttributed($remove->participants, $remove->locale)
+        ;
 
-            return new RemoveResult($participantNames, true);
+        if ($conflictView->hasConflict()) {
+            return new RemoveResult(
+                array_map(function (ParticipantConflictView $participantConflictView) {
+                    return $participantConflictView->participantName;
+                }, $conflictView->participantConflicts),
+                false,
+                true
+            );
         }
 
         $usersRemovedFromSheet = [];
-        foreach ($toDelete as $participantToDelete) {
+
+        foreach ($remove->participants as $participantToDelete) {
             $participantUser = $participantToDelete->getUser();
             $usersRemovedFromSheet[$participantUser->getId()] = $participantUser;
 
@@ -133,5 +149,18 @@ class RemoveHandler
         );
 
         return new RemoveResult();
+    }
+
+    /**
+     * @param Participant[] $participants
+     * @param string        $locale
+     *
+     * @return string[]
+     */
+    private function getArrayOfParticipantsName(array $participants, string $locale): array
+    {
+        return array_map(function (Participant $participant) use ($locale) {
+            return $this->participantInfoGuesser->guessParticipantCompleteName($participant, $locale);
+        }, $participants);
     }
 }

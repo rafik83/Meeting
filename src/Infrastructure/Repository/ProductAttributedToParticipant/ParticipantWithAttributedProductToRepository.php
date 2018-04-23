@@ -29,7 +29,7 @@ class ParticipantWithAttributedProductToRepository implements ParticipantWithAtt
     /**
      * {@inheritdoc}
      */
-    public function getParticipantsWithAttributedProduct(array $participants, Product $product): array
+    public function getParticipantsWithAttributedProductForProduct(array $participants, Product $product): array
     {
         return $this
             ->entityManager
@@ -45,6 +45,28 @@ class ParticipantWithAttributedProductToRepository implements ParticipantWithAtt
                 AND productAttributedToParticipant.product = :product'
             )
             ->setParameter('product', $product)
+            ->setParameter('participants', $participants)
+            ->getQuery()
+            ->getResult()
+        ;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getParticipantsWithAttributedProduct(array $participants): array
+    {
+        return $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('participant')
+            ->from(Participant::class, 'participant')
+            ->join(
+                ProductAttributedToParticipant::class,
+                'productAttributedToParticipant',
+                'WITH',
+                'participant IN (:participants) AND productAttributedToParticipant.participant = participant'
+            )
             ->setParameter('participants', $participants)
             ->getQuery()
             ->getResult()

@@ -47,6 +47,11 @@ class RemoveResult
         return !empty($this->participants) && $this->hasParticipantWithMeeting;
     }
 
+    public function hasParticipantWithAttributedProduct(): bool
+    {
+        return !empty($this->participants) && $this->hasParticipantWithAttributedProduct;
+    }
+
     /**
      * @return int
      */

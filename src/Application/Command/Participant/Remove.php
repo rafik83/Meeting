@@ -3,37 +3,32 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2016 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
 
 namespace Proximum\Vimeet\Application\Command\Participant;
 
+use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Sheet;
 
 class Remove
 {
-    /**
-     * @var Sheet
-     */
+    /** @var Sheet */
     public $sheet;
 
-    /**
-     * @var array
-     */
+    /** @var Participant[] */
     public $participants = [];
 
-    /**
-     * @var string
-     */
+    /** @var string */
     public $locale;
 
     /**
      * @param Sheet  $sheet
      * @param string $locale
      */
-    public function __construct(Sheet $sheet, $locale)
+    public function __construct(Sheet $sheet, string $locale)
     {
         $this->sheet  = $sheet;
         $this->locale = $locale;

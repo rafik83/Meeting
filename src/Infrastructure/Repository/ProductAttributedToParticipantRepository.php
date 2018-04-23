@@ -70,6 +70,9 @@ class ProductAttributedToParticipantRepository implements ProductAttributedToPar
         $this->entityManager->flush($productAttributedToParticipant);
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function removeForSheet(Sheet $sheet): void
     {
         $productAttributedToParticipants = $this->entityManager
@@ -83,5 +86,20 @@ class ProductAttributedToParticipantRepository implements ProductAttributedToPar
         ;
 
         $this->removeBatch($productAttributedToParticipants);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function findByParticipants(array $participants): array
+    {
+        $queryBuilder = $this->entityManager->createQueryBuilder()
+            ->select('productAttributedToParticipant')
+            ->from(ProductAttributedToParticipant::class, 'productAttributedToParticipant')
+            ->where('productAttributedToParticipant.participant IN (:participants)')
+            ->setParameter('participants', $participants)
+        ;
+
+        return $queryBuilder->getQuery()->getResult();
     }
 }

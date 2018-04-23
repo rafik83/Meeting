@@ -36,7 +36,7 @@ use Proximum\Vimeet\Tests\Factory\EventFactory;
 
 class RemoveHandlerTest extends TestCase
 {
-    public function testHandle()
+    public function testHandle(): void
     {
         // Required
         $locale = 'fr';
@@ -85,11 +85,9 @@ class RemoveHandlerTest extends TestCase
 
         $cart = $this->prophesize(Cart::class);
         $cartManager->getCart($sheet)->shouldBeCalled()->willReturn($cart->reveal());
+        $products = [2059 => $product->reveal()];
         $cartManager
-            ->updateParticipantsQuantity(
-                $cart->reveal(),
-                [2059 => $product->reveal()]
-            )
+            ->updateParticipantsQuantity($cart->reveal(), $products)
             ->shouldBeCalled()
             ->willReturn($cart->reveal())
         ;
@@ -115,7 +113,7 @@ class RemoveHandlerTest extends TestCase
         $this->assertEquals($expectedResult, $result);
     }
 
-    public function testHandleWithMeeting()
+    public function testHandleWithMeeting(): void
     {
         // Required
         $locale = 'fr';
@@ -129,6 +127,9 @@ class RemoveHandlerTest extends TestCase
         $participant1 = new Participant($sheet, $owner, [], true);
         $participant2 = new Participant($sheet, $user2, [], true);
         $participant3 = new Participant($sheet, $user3, [], true);
+        $this->setIdToParticipantMock($participant1, 11);
+        $this->setIdToParticipantMock($participant2, 12);
+        $this->setIdToParticipantMock($participant3, 13);
         $sheet->addParticipant($participant1);
         $sheet->addParticipant($participant2);
         $sheet->addParticipant($participant3);
@@ -178,13 +179,13 @@ class RemoveHandlerTest extends TestCase
             $stepParticipantAndPlanning->reveal()
         );
         $result         = $handler->handle($remove);
-        $expectedResult = new RemoveResult(['jean paul']);
+        $expectedResult = new RemoveResult([11 => 'jean paul'], true);
 
         $this->assertEquals($expectedSheet->countParticipants(), $sheet->countParticipants());
         $this->assertEquals($expectedResult, $result);
     }
 
-    public function testHandleException()
+    public function testHandleException(): void
     {
         $this->expectException(CanNotRemoveAllParticipantsException::class);
 
@@ -236,5 +237,18 @@ class RemoveHandlerTest extends TestCase
         $handler->handle($remove);
 
         $this->assertEquals($expectedSheet, $sheet);
+    }
+
+    /**
+     * @param Participant $participant
+     * @param int         $id
+     */
+    private function setIdToParticipantMock(Participant $participant, $id): void
+    {
+        $reflection  = new \ReflectionClass(Participant::class);
+        $property = $reflection->getProperty('id');
+        $property->setAccessible(true);
+        $property->setValue($participant, $id);
+        $property->setAccessible(false);
     }
 }
