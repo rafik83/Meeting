@@ -73,7 +73,7 @@ validators.schedule_day.startTimeMustBeBeforeEndTime: 'the start time must be be
 validators.schedule.slot.recipes.slotOutOfDay: 'Theslot on the %day% from %begin% to %end% out of the hours of the event days, change the affected range, or change the event dates'
 validators.searchFacet.translations.label.empty: 'you must fill in the missing translations'
 validators.sheet.commentCommercialStatus: 'if you don''t change the commercial status, you must fill in the comment field'
-validators.sheet.messaging_campaign.create.name: 'please enter a title for your targeting'
+validators.sheet.messaging_campaign.create.name: 'Please enter a title for your targeting'
 validators.sheet.messaging_campaign.create.sheetIds: 'please select at least one sheet'
 validators.sheet.messaging_campaign.message: 'please select a message'
 validators.sheet.messaging_campaign.recipients: 'please selct at least one recipient'

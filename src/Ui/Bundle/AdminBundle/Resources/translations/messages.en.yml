@@ -305,7 +305,7 @@ admin.happening.list.participation: Participants.
 admin.happening.list.question: Question
 admin.happening.list.speaker: speakers
 admin.happening.list.title: Title
-admin.happening.menu.link: Programme
+admin.happening.menu.link: Program
 admin.happening.private: Private
 admin.happening.title: Conferences
 admin.happening.update: Modify
@@ -429,7 +429,7 @@ admin.messaging.message.compose.links.label: 'Personalized links'
 admin.messaging.message.compose.links.meetingRequest: 'My Meetings'
 admin.messaging.message.compose.links.orders: 'Orders list'
 admin.messaging.message.compose.links.package: Package
-admin.messaging.message.compose.links.program: Programme
+admin.messaging.message.compose.links.program: Program
 admin.messaging.message.compose.links.sheet: 'presentation sheet'
 admin.messaging.message.compose.links.validateMobilePhone: 'Validate your phone number'
 admin.messaging.message.compose.tags.cta.agendaConfirmation: 'CTA link agenda confirmation'
@@ -844,7 +844,7 @@ admin.sheet.validateSheets: 'validate sheets'
 admin.sheets_group.column.created_at: 'created at'
 admin.sheets_group.column.email_manager: 'manager''s email'
 admin.sheets_group.column.sheet_list: 'sheets list'
-admin.sheets_group.column.title: title
+admin.sheets_group.column.title: Title
 admin.sheets_group.create: 'new multi-sheets group'
 admin.sheets_group.create.title: 'creation of a new multi-sheets group'
 admin.sheets_group.index: multi-sheets
@@ -918,7 +918,7 @@ admin.template.registration.link: 'registration template'
 admin.template.registration.table.column.action: Action
 admin.template.registration.table.column.createdAt: 'created at'
 admin.template.registration.table.column.eventType: Event/Type
-admin.template.registration.table.column.title: title
+admin.template.registration.table.column.title: Title
 admin.template.registration.table.content.edit: Modify
 admin.template.registration.table.content.editJson: 'Modify JSON'
 admin.template.registration.title: 'registration templates'
@@ -927,7 +927,7 @@ admin.template.registration.update: 'registration template update'
 admin.template.sheet.link: 'template of presentation'
 admin.template.sheet.table.column.action: Action
 admin.template.sheet.table.column.eventType: Event/Type
-admin.template.sheet.table.column.title: title
+admin.template.sheet.table.column.title: Title
 admin.template.sheet.title: 'template of presentation'
 admin.template.sheet.titleBase: 'global templates'
 admin.template.sheet.titleEvent: 'assigned templates'
@@ -939,7 +939,7 @@ admin.tip.column.visible.catalog: catalog
 admin.tip.column.visible.meeting_management: 'meetings management'
 admin.tip.column.visible.onAgenda: agenda
 admin.tip.column.visible.onConfirmationPhone: 'Planning and phone number confirmation (condition of the display of the phone number validation form)'
-admin.tip.column.visible.onProgram: programm
+admin.tip.column.visible.onProgram: program
 admin.tip.column.visible.onSheet: 'presentation sheet'
 admin.tip.column.visible.print_planning: 'plannings printing'
 admin.tip.create.link: new
@@ -1013,7 +1013,7 @@ admin.type.registration.template: 'registration template'
 admin.type.remove.link: remove
 admin.type.sheet.template: 'presentation template'
 admin.type.specificPaymentConditions: 'specific payment conditions'
-admin.type.title: title
+admin.type.title: Title
 admin.type.update.link: Modify
 admin.type.update.title: 'update the participation type'
 admin.unavailability.button.category: 'mass unavailability category'
@@ -1025,7 +1025,7 @@ admin.unavailability.category.create: 'creation of a mass unavailability categor
 admin.unavailability.category.link: 'mass unavailability category'
 admin.unavailability.category.table.column.color: color
 admin.unavailability.category.table.column.picto: picto
-admin.unavailability.category.table.column.title: title
+admin.unavailability.category.table.column.title: Title
 admin.unavailability.category.table.content.update: Modify
 admin.unavailability.category.title: 'mass unavailability category'
 admin.unavailability.category.update: 'update of a mass unavailability category'
