@@ -401,6 +401,10 @@ liip_imagine:
                 thumbnail: { size: [160, 160], mode: outbound }
                 # fix orientation issue for example for iOS photo
                 auto_rotate: ~
+        upload_object:
+            quality: 100
+            filters:
+                thumbnail: { size: [160, 160], mode: inset }
         program_company_logo:
             quality: 100
             filters:
