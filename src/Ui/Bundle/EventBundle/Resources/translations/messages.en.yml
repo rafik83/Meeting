@@ -209,7 +209,7 @@ navigation.category.meeting: 'My meetings'
 navigation.category.member_space: 'Member area'
 navigation.category.package: 'Package of participation'
 navigation.category.planning: 'Planning & Attendance'
-navigation.category.program: Programme
+navigation.category.program: Program
 navigation.category.sheet: 'Presentation Sheet'
 navigation.close: Close
 navigation.links.billing.billing_info: 'Billing information'
@@ -375,7 +375,7 @@ pro_forma.number.title: 'Proforma N°:'
 pro_forma.reference.title: 'your reference'
 pro_forma.title: 'Proforma - %date%'
 pro_forma.vatNumber.title: 'VAT number'
-program.title: Programme
+program.title: Program
 register.already_registered: 'Already registered?'
 register.connect: validate
 register.finalize: Complete
@@ -409,7 +409,7 @@ sheet.submit.validation: 'Submit for validation'
 sheet.submit.validation.moreInfoOnPending: 'Submit your presentation sheet to validation'
 sheet.submit.validation.pending: 'Awaiting validation'
 sheet.title: 'Presentation sheet'
-sheet.validation.complete.message: 'Once your presentation sheet has been completed, you need to submit it before publication in the BtoB plateform of the participants. You will still be able to modify it later on'
+sheet.validation.complete.message: 'Once your presentation sheet has been completed, you need to submit it before publication in the BtoB plateform of the participants. Your presentation form will be validated within 48 hours. You will still be able to modify it later on'
 sheet.validation.uncomplete.message: 'Warning, you have not completed the mandatory feedls marked with an asterisk.'
 sheet.welcome.packageContent: 'Choose the formula of participation.'
 sheet.welcome.programContent: 'Choose your conferences'

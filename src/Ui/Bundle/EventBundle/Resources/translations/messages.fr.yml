@@ -29,7 +29,7 @@ catalog.action.meeting.proposition.show.refuse: 'Proposition refusée'
 catalog.action.meeting.request.approve: 'Proposition reçue'
 catalog.action.meeting.request.approved: 'Demande acceptée'
 catalog.action.meeting.request.back: Retour
-catalog.action.meeting.request.create: 'Demander en RDV'
+catalog.action.meeting.request.create: 'Demander un RDV'
 catalog.action.meeting.request.discussion: Echanges
 catalog.action.meeting.request.pending: 'Demande en attente'
 catalog.action.meeting.request.refuse: 'Proposition reçue'
@@ -410,7 +410,7 @@ sheet.submit.validation: 'Soumettre pour validation'
 sheet.submit.validation.moreInfoOnPending: 'Vous avez soumis le contenu de votre fiche à validation'
 sheet.submit.validation.pending: 'En attente de validation'
 sheet.title: 'Fiche de présentation'
-sheet.validation.complete.message: "Une fois votre fiche de présentation complétée vous devez la soumettre à validation avant publication sur la plateforme des participants aux rendez-vous BtoB.\n\nVous pourrez toujours la modifier ultérieurement"
+sheet.validation.complete.message: "Une fois votre fiche de présentation complétée vous devez la soumettre à validation avant publication sur la plateforme des participants aux rendez-vous BtoB. Votre fiche de présentation sera validée dans les 48h.\n\nVous pourrez toujours la modifier ultérieurement"
 sheet.validation.uncomplete.message: 'Attention vous n’avez pas rempli les champs obligatoires signalés par un astérisque.'
 sheet.welcome.packageContent: 'CHOISISSEZ VOTRE FORMULE'
 sheet.welcome.programContent: 'CHOISISSEZ VOS CONFÉRENCES'
