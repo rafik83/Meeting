@@ -135,6 +135,7 @@ services:
         arguments:
             - '@vimeet_infrastructure.repository.sheet_repository'
             - '@adapter.sheet_indexer'
+            - '@adapter.sheet_search_adapter'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Event\Sheet\Index }
 

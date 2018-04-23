@@ -18,11 +18,16 @@ class PrepareSheetsIndex implements Command
     /** @var Event */
     public $event;
 
+    /** @var bool */
+    public $reset;
+
     /**
      * @param Event $event
+     * @param bool  $reset
      */
-    public function __construct(Event $event)
+    public function __construct(Event $event, bool $reset = false)
     {
         $this->event = $event;
+        $this->reset = $reset;
     }
 }
