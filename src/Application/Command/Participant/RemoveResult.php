@@ -18,26 +18,39 @@ class RemoveResult
      */
     private $participants;
 
+    /** @var bool */
+    private $hasParticipantWithMeeting;
+
+    /** @var bool */
+    private $hasParticipantWithAttributedProduct;
+
     /**
      * @param array $participants
+     * @param bool  $hasParticipantWithMeeting
+     * @param bool  $hasParticipantWithAttributedProduct
      */
-    public function __construct(array $participants = [])
-    {
+    public function __construct(
+        array $participants = [],
+        bool $hasParticipantWithMeeting = false,
+        bool $hasParticipantWithAttributedProduct = false
+    ) {
         $this->participants = $participants;
+        $this->hasParticipantWithMeeting = $hasParticipantWithMeeting;
+        $this->hasParticipantWithAttributedProduct = $hasParticipantWithAttributedProduct;
     }
 
     /**
      * @return bool
      */
-    public function hasParticipantWithMeeting()
+    public function hasParticipantWithMeeting(): bool
     {
-        return !empty($this->participants);
+        return !empty($this->participants) && $this->hasParticipantWithMeeting;
     }
 
     /**
      * @return int
      */
-    public function countParticipants()
+    public function countParticipants(): int
     {
         return \count($this->participants);
     }
@@ -45,7 +58,7 @@ class RemoveResult
     /**
      * @return string
      */
-    public function getParticipantsName()
+    public function getParticipantsName(): string
     {
         return implode(', ', $this->participants);
     }

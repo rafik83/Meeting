@@ -24,29 +24,19 @@ use Proximum\Vimeet\Infrastructure\Adapter\DelayedEventDispatcher;
 
 class RemoveHandler
 {
-    /**
-     * @var ParticipantRepositoryInterface
-     */
+    /** @var ParticipantRepositoryInterface */
     private $participantRepository;
 
-    /**
-     * @var CartManager
-     */
+    /** @var CartManager */
     private $cartManager;
 
-    /**
-     * @var DelayedEventDispatcher
-     */
+    /** @var DelayedEventDispatcher */
     private $eventDispatcher;
 
-    /**
-     * @var MeetingRepositoryInterface
-     */
+    /** @var MeetingRepositoryInterface */
     private $meetingRepository;
 
-    /**
-     * @var ParticipantInfoGuesser
-     */
+    /** @var ParticipantInfoGuesser */
     private $participantInfoGuesser;
 
     /** @var StepParticipantAndPlanning */
@@ -104,7 +94,7 @@ class RemoveHandler
             }
         }
 
-        // Avoid delation if there is someone with the exception of meeting
+        // Avoid deletion if there is someone with the exception of meeting
         if (!empty($hasMeeting)) {
             $participantNames = [];
 
@@ -112,12 +102,13 @@ class RemoveHandler
                 $participantNames[] = $this->participantInfoGuesser->guessParticipantCompleteName($participantWithMeeting, $remove->locale);
             }
 
-            return new RemoveResult($participantNames);
+            return new RemoveResult($participantNames, true);
         }
 
         $usersRemovedFromSheet = [];
         foreach ($toDelete as $participantToDelete) {
-            $usersRemovedFromSheet[$participantToDelete->getUser()->getId()] = $participantToDelete->getUser();
+            $participantUser = $participantToDelete->getUser();
+            $usersRemovedFromSheet[$participantUser->getId()] = $participantUser;
 
             $remove->sheet->removeParticipant($participantToDelete);
             $this->participantRepository->delete($participantToDelete);
