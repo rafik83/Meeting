@@ -18,14 +18,14 @@ use Proximum\Vimeet\Domain\Sheet\Aggregate\AvailableSlotCalculator;
 
 class AvailableSlotAggregatorHandlerTest extends TestCase
 {
-    public function testHandle()
+    public function testHandle(): void
     {
         $availableSlotCalculator = $this->prophesize(AvailableSlotCalculator::class);
         $sheet = $this->prophesize(Sheet::class);
 
-        $availableSlotCalculator->calculateAvailableSlotForSheet($sheet->reveal())->shouldBeCalled();
+        $availableSlotCalculator->calculateAvailableSlotForSheet($sheet->reveal(), false)->shouldBeCalled();
 
         $handler = new AvailableSlotAggregatorHandler($availableSlotCalculator->reveal());
-        $handler->handle(new AvailableSlotAggregator($sheet->reveal()));
+        $handler->handle(new AvailableSlotAggregator($sheet->reveal(), false));
     }
 }

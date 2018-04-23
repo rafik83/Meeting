@@ -44,7 +44,7 @@ class AvailableSlotCalculator implements AvailableSlotCalculatorInterface
     /**
      * {@inheritdoc}
      */
-    public function calculateAvailableSlotForSheet(Sheet $sheet): void
+    public function calculateAvailableSlotForSheet(Sheet $sheet, bool $indexSheet = true): void
     {
         $slots = [];
 
@@ -68,6 +68,9 @@ class AvailableSlotCalculator implements AvailableSlotCalculatorInterface
         $sheet->setAvailableSlots($availableSlots);
 
         $this->sheetRepository->set($sheet);
-        $this->sheetIndexer->updateSheets([$sheet]);
+
+        if (true === $indexSheet) {
+            $this->sheetIndexer->updateSheets([$sheet]);
+        }
     }
 }
