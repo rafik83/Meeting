@@ -50,6 +50,8 @@ final class MimeType
 
     public const CSV_MIME_TYPES = [
         'text/csv',
+        'text/plain',
+        'application/csv',
     ];
 
     public static function getMimeTypesByFormats(array $formats = []): array
