@@ -411,4 +411,9 @@ class Happening implements TimeRangeInterface
     {
         $this->products->removeElement($product);
     }
+
+    public function hasProducts(): bool
+    {
+        return !$this->products->isEmpty();
+    }
 }

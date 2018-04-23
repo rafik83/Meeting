@@ -57,6 +57,10 @@ class UpdateOptionType extends AbstractUpdateType
             ])
             ->add('attributable', CheckboxType::class, [
                 'required' => false,
+                'attr' => [
+                    'data-toggle-visibility' => true,
+                    'data-element-id-to-hide' => 'happenings-block',
+                ],
             ])
             ->add('deletableUntil', DateTimePickerType::class, [
                 'required' => false,

@@ -38,7 +38,10 @@
     {{ form_row(form.buyableUntil) }}
     {{ form_row(form.deletableUntil) }}
     {{ form_row(form.subjectedToValidation) }}<br>
-    {{ form_row(form.happenings) }}<br>
+    <div id="happenings-block" {% if not product.attributable %}style="display: none"{% endif %}>
+        {{ form_row(form.happenings) }}
+    </div>
+    <br>
 {% endblock %}
 
 {% block goback_link path('admin_product', {event: event.id}) %}

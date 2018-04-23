@@ -303,6 +303,7 @@ admin.happening.export.fields.question: Question
 admin.happening.export.fields.sheet_id: 'ID Fiche'
 admin.happening.export.fields.sheet_name: 'Titre fiche'
 admin.happening.link: Conférences
+admin.happening.products.tooltip: 'Lié à des produits'
 admin.happening.list.begin: Début
 admin.happening.list.category: Catégorie
 admin.happening.list.end: Fin

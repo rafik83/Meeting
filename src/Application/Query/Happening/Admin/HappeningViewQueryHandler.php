@@ -63,7 +63,8 @@ class HappeningViewQueryHandler
             $query->happening->getLimitParticipant(),
             $participation,
             $speakerView,
-            $query->happening->isPrivate()
+            $query->happening->isPrivate(),
+            $query->happening->hasProducts()
         );
     }
 }
