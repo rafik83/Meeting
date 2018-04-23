@@ -83,6 +83,7 @@ class QuantityMaxGuesser
     {
         if ($product->isAttributable()) {
             return min(
+                $sheet->countParticipants(),
                 $product->getQuantityMax(),
                 $product->getAvailability()
             );
