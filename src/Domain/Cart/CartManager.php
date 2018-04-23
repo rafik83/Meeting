@@ -765,15 +765,28 @@ class CartManager
     public function emptyIncludedProductAttributedToParticipant(Cart $cart): void
     {
         $plan = $cart->getPlanRow();
+        $participants = $cart->getSheet()->getParticipantsArray();
+        $rows = $cart->getRows();
 
-        if ($plan === null) {
-            return;
+        if ($plan !== null) {
+            foreach ($plan->getProduct()->getIncludedAttributableOptionProducts() as $attributableProduct) {
+                $productAttributedToParticipants = $this->productAttributedToParticipantRepository->findByProductAndParticipants(
+                    $attributableProduct->getProduct(),
+                    $participants
+                );
+
+                $this->productAttributedToParticipantRepository->removeBatch($productAttributedToParticipants);
+            }
         }
 
-        foreach ($plan->getProduct()->getIncludedAttributableOptionProducts() as $attributableProduct) {
+        foreach ($rows as $row) {
+            if (!$row->getProduct()->isAttributable()) {
+                continue;
+            }
+
             $productAttributedToParticipants = $this->productAttributedToParticipantRepository->findByProductAndParticipants(
-                $attributableProduct->getProduct(),
-                $cart->getSheet()->getParticipantsArray()
+                $row->getProduct(),
+                $participants
             );
 
             $this->productAttributedToParticipantRepository->removeBatch($productAttributedToParticipants);
