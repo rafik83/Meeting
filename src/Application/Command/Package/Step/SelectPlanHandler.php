@@ -61,7 +61,7 @@ class SelectPlanHandler
 
         // previous plan different from new selected plan
         if (null !== $previousPlan && $previousPlan->getProduct() !== $selectPlan->plan) {
-            $this->cartManager->emptyIncludedProductAttributedToParticipant($cart);
+            $this->cartManager->emptyProductAttributedToParticipant($cart);
             $cart->clear();
         }
 

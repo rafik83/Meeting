@@ -78,7 +78,7 @@ class SelectPlanHandlerTest extends TestCase
         // Mock
         $cartManager           = $this->prophesize(CartManager::class);
         $buyableObjectResolver = $this->prophesize(BuyableObjectResolver::class);
-        $cartManager->emptyIncludedProductAttributedToParticipant($actualCart)->shouldBeCalled();
+        $cartManager->emptyProductAttributedToParticipant($actualCart)->shouldBeCalled();
         $cartManager->getCart($sheet, 1)->shouldBeCalled()->willReturn($actualCart);
         $cartManager->deleteCartStep($actualCart)->shouldBeCalled();
         $cartManager->save(Argument::that(function (Cart $cart) use ($expectedCart) {

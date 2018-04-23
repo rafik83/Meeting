@@ -762,34 +762,8 @@ class CartManager
         return $productAttributedToParticipantsToCreate;
     }
 
-    public function emptyIncludedProductAttributedToParticipant(Cart $cart): void
+    public function emptyProductAttributedToParticipant(Cart $cart): void
     {
-        $plan = $cart->getPlanRow();
-        $participants = $cart->getSheet()->getParticipantsArray();
-        $rows = $cart->getRows();
-
-        if ($plan !== null) {
-            foreach ($plan->getProduct()->getIncludedAttributableOptionProducts() as $attributableProduct) {
-                $productAttributedToParticipants = $this->productAttributedToParticipantRepository->findByProductAndParticipants(
-                    $attributableProduct->getProduct(),
-                    $participants
-                );
-
-                $this->productAttributedToParticipantRepository->removeBatch($productAttributedToParticipants);
-            }
-        }
-
-        foreach ($rows as $row) {
-            if (!$row->getProduct()->isAttributable()) {
-                continue;
-            }
-
-            $productAttributedToParticipants = $this->productAttributedToParticipantRepository->findByProductAndParticipants(
-                $row->getProduct(),
-                $participants
-            );
-
-            $this->productAttributedToParticipantRepository->removeBatch($productAttributedToParticipants);
-        }
+        $this->productAttributedToParticipantRepository->removeForSheet($cart->getSheet());
     }
 }
