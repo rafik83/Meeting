@@ -93,13 +93,13 @@ class ParticipateHandler
         );
 
         // If not previous selected participants and 0 new selected participants
-        if (0 === count($participate->participants) && 0 === count($previousParticipants)) {
+        if (0 === \count($participate->participants) && 0 === \count($previousParticipants)) {
             throw new ParticipantRequiredException();
         }
 
         $availableParticipants = [];
 
-        if (0 < count($participate->participants)) {
+        if (0 < \count($participate->participants)) {
             $availableParticipants = $this->participantRepository->getAvailableParticipantsForHappening(
                 $participate->participants,
                 $participate->happening
@@ -108,20 +108,19 @@ class ParticipateHandler
 
         $remainingParticipations = $this->participationCount->getRemaining($participate->happening);
 
-        if (count($participate->participants) - count($previousParticipants) > $remainingParticipations) {
+        if (\count($participate->participants) - \count($previousParticipants) > $remainingParticipations) {
             throw new NotEnoughtRemainingParticipationsException($remainingParticipations);
         }
 
         foreach ($participate->participants as $participant) {
-            if (!in_array($participant, $availableParticipants)) {
+            if (!\in_array($participant, $availableParticipants, true)) {
                 throw new ParticipantNotAvailableException();
             }
         }
 
         // Add participants to happening
         foreach ($participate->participants as $participant) {
-            if (false === in_array($participant, $previousParticipants)) {
-
+            if (false === \in_array($participant, $previousParticipants, true)) {
                 $happeningParticipation = $this->happeningParticipationRepository->findByHappeningAndUser(
                     $participate->happening,
                     $participant->getUser()
@@ -146,7 +145,7 @@ class ParticipateHandler
 
         // Remove deselected participants
         foreach ($previousParticipants as $participant) {
-            if (false === in_array($participant, $participate->participants)) {
+            if (false === \in_array($participant, $participate->participants, true)) {
                 $this->happeningParticipationRepository->removeUserForHappening(
                     $participant->getUser(),
                     $participate->happening
@@ -167,7 +166,7 @@ class ParticipateHandler
             );
 
             // Add question
-            if (0 < count($participate->participants) && !empty($participate->question)) {
+            if (0 < \count($participate->participants) && null !== $participate->question) {
                 $this->questionRepository->add(
                     new Question(
                         $participate->happening,
