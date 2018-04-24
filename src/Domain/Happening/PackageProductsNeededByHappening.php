@@ -24,6 +24,10 @@ class PackageProductsNeededByHappening
      */
     public function get(Package $package, Happening $happening): array
     {
+        if (!$package->isPassable()) {
+            return [];
+        }
+
         if (!$happening->hasProducts()) {
             return [];
         }
