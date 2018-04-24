@@ -1,7 +1,7 @@
 {% form_theme form '@Ui/default.html.twig' %}
 
 {% set attrDisabled = { attr: { 'disabled': 'disabled' }} %}
-{% set attributes = noAvailableParticipants ? attrDisabled : {} %}
+{% set attributes = noAvailableParticipants or participantsCanNotParticipate ? attrDisabled : {} %}
 
 {% set infoProductsNeededByHappening = '' %}
 {% if participantsCanNotParticipate is not empty %}
