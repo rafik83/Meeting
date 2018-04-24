@@ -47,8 +47,19 @@ class PackageProductsNeededByHappeningTest extends TestCase
         $this->packageProductsNeededByHappening = new PackageProductsNeededByHappening();
     }
 
+    public function testHappeningHasNoProduct()
+    {
+        $this->happening->hasProducts()->shouldBeCalled()->willReturn(false);
+
+        $this->assertEquals(
+            [],
+            $this->packageProductsNeededByHappening->get($this->package->reveal(), $this->happening->reveal())
+        );
+    }
+
     public function testNoMatchingProduct()
     {
+        $this->happening->hasProducts()->shouldBeCalled()->willReturn(true);
         $this->happening->getProducts()->shouldBeCalled()->willReturn(
             [
                 $this->product1->reveal(),
@@ -66,6 +77,7 @@ class PackageProductsNeededByHappeningTest extends TestCase
 
     public function testMatchingProduct()
     {
+        $this->happening->hasProducts()->shouldBeCalled()->willReturn(true);
         $this->happening->getProducts()->shouldBeCalled()->willReturn(
             [
                 $this->product1->reveal(),

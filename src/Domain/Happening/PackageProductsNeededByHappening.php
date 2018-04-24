@@ -24,6 +24,10 @@ class PackageProductsNeededByHappening
      */
     public function get(Package $package, Happening $happening): array
     {
+        if (!$happening->hasProducts()) {
+            return [];
+        }
+
         $happeningProductIndexedIds = [];
 
         foreach ($happening->getProducts() as $product) {
