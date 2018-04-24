@@ -19,6 +19,7 @@ use Proximum\Vimeet\Application\Exception\Happening\ParticipantRequiredException
 use Proximum\Vimeet\Application\Exception\Happening\WrongInvitationCodeException;
 use Proximum\Vimeet\Application\Query\Happening\Participant\ParticipantsAllowedToAccessQuery;
 use Proximum\Vimeet\Application\Query\Happening\Participant\ParticipantsAllowedToAccessQueryHandler;
+use Proximum\Vimeet\Domain\Happening\PackageProductsNeededByHappening;
 use Proximum\Vimeet\Domain\Happening\ParticipateToHappeningWithProductToBuyChecker;
 use Proximum\Vimeet\Domain\Model\Happening;
 use Proximum\Vimeet\Domain\Model\Participant;
@@ -51,6 +52,9 @@ class ParticipateHandler
     /** @var ParticipateToHappeningWithProductToBuyChecker */
     private $participateToHappeningWithProductToBuyChecker;
 
+    /** @var PackageProductsNeededByHappening */
+    private $packageProductsNeededByHappening;
+
     /** @var EngineInterface */
     private $engine;
 
@@ -69,6 +73,7 @@ class ParticipateHandler
         CommandHappening\ParticipateHandler $participateHandler,
         ParticipantsAllowedToAccessQueryHandler $participantsAllowedToAccessQueryHandler,
         ParticipateToHappeningWithProductToBuyChecker $participateToHappeningWithProductToBuyChecker,
+        PackageProductsNeededByHappening $packageProductsNeededByHappening,
         EngineInterface $engine,
         FormFactoryInterface $formFactory,
         RouterInterface $router,
@@ -79,6 +84,7 @@ class ParticipateHandler
         $this->participateHandler = $participateHandler;
         $this->participantsAllowedToAccessQueryHandler = $participantsAllowedToAccessQueryHandler;
         $this->participateToHappeningWithProductToBuyChecker = $participateToHappeningWithProductToBuyChecker;
+        $this->packageProductsNeededByHappening = $packageProductsNeededByHappening;
         $this->engine = $engine;
         $this->formFactory = $formFactory;
         $this->router = $router;
@@ -286,12 +292,28 @@ class ParticipateHandler
             }
         }
 
+        $participantsCanNotParticipate = $this->getParticipantsCanNotParticipate(
+            $happening,
+            $participants
+        );
+
+        $productsNeededByHappening = empty($participantsCanNotParticipate)
+            ? []
+            : $this->packageProductsNeededByHappening->get(
+                $sheet->getPackage(),
+                $happening
+            );
+
+        $noParticipantCanParticipate = \count($participantsCanNotParticipate) === \count($participants);
+
         return new JsonResponse(
             [
                 'status' => 'show-form',
                 'html' => $this->engine->render(
                     'EventBundle:Program/Partials:participate-modal.html.twig',
                     [
+                        'event' => $sheet->getEvent(),
+                        'sheet' => $sheet,
                         'title' => $happening->getTitle($request->getLocale()),
                         'picto' => $happening->getCategory()->getPicto(),
                         'form' => $participateForm->createView(),
@@ -301,10 +323,33 @@ class ParticipateHandler
                         ),
                         'noAvailableParticipants' => 0 === count($availableParticipants),
                         'isUpdate' => $isUpdate,
+                        'participantsCanNotParticipate' => $participantsCanNotParticipate,
+                        'productsNeededByHappening' => $productsNeededByHappening,
+                        'noParticipantCanParticipate' => $noParticipantCanParticipate,
+                        'locale' => $request->getLocale(),
                     ]
                 ),
             ]
         );
+    }
+
+    /**
+     * @param Happening     $happening
+     * @param Participant[] $participants
+     *
+     * @return Participant[]
+     */
+    private function getParticipantsCanNotParticipate(Happening $happening, array &$participants): array
+    {
+        $participantsCanNotParticipate = [];
+
+        foreach ($participants as $key => $participant) {
+            if (!$this->participateToHappeningWithProductToBuyChecker->canParticipate($participant, $happening)) {
+                $participantsCanNotParticipate[$key] = $participant;
+            }
+        }
+
+        return $participantsCanNotParticipate;
     }
 
     private function getPreviousQuestionContent(Happening $happening, User $user): ?string
@@ -329,7 +374,7 @@ class ParticipateHandler
      *
      * @return Participant[]
      */
-    private function getUnavailableParticipants(array $participants, array $availableParticipants): array
+    private function getUnavailableParticipants(array &$participants, array &$availableParticipants): array
     {
         $unavailableParticipants = [];
 

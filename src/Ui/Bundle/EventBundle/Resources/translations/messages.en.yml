@@ -78,6 +78,8 @@ event.activateAccount.resendToken.explanation: 'A new invitation has been sent t
 event.activateAccount.resendToken.title: 'A new invitation has been sent'
 event.content.title: 'Terms of sale'
 event.happening.invitationCode.label: 'The event acces is subjected to invitation. Thank you for entering your invitation code.'
+event.happening.productsNeededByHappening.label: 'Please select an option in your package in order to access to this event'
+event.happening.productsNeededByHappening.order: 'Modify my package'
 event.info.close: Close
 event.info.contact: 'Useful information'
 event.invisible.label: Invisible

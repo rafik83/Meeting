@@ -700,6 +700,7 @@ services:
             - '@vimeet_infrastructure.vimeet.application.components.happening.participate_handler'
             - '@Proximum\Vimeet\Application\Query\Happening\Participant\ParticipantsAllowedToAccessQueryHandler'
             - '@Proximum\Vimeet\Domain\Happening\ParticipateToHappeningWithProductToBuyChecker'
+            - '@Proximum\Vimeet\Domain\Happening\PackageProductsNeededByHappening'
             - '@templating'
             - '@form.factory'
             - '@adapter.router'

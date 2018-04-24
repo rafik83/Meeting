@@ -78,6 +78,8 @@ event.activateAccount.resendToken.explanation: 'Une nouvelle invitation vous a �
 event.activateAccount.resendToken.title: 'Une nouvelle invitation vous a été envoyée'
 event.content.title: 'Conditions générales de vente'
 event.happening.invitationCode.label: 'L''accès à cet événement est soumis à invitation. Merci de saisir votre code invitation.'
+event.happening.productsNeededByHappening.label: 'Veuillez choisir une option dans votre forfait vous permettant d''accéder à cet événement'
+event.happening.productsNeededByHappening.order: 'Modifier mon forfait'
 event.info.close: Fermer
 event.info.contact: 'Informations pratiques'
 event.invisible.label: Invisible
