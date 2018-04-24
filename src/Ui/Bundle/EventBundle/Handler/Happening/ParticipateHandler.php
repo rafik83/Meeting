@@ -188,9 +188,9 @@ class ParticipateHandler
         Happening $happening,
         Sheet $sheet,
         User $user,
-        array $participants,
-        array $availableParticipants,
-        array $selectedParticipants
+        array &$participants,
+        array &$availableParticipants,
+        array &$selectedParticipants
     ): JsonResponse {
         $isUpdate = \count($selectedParticipants) > 0;
         $isUserAloneParticipant = ParticipantHelper::isUserAloneParticipant($user, $sheet);
@@ -199,7 +199,7 @@ class ParticipateHandler
             $happening,
             $sheet,
             $user,
-            $selectedParticipants,
+            empty($selectedParticipants) && $isUserAloneParticipant ? $participants : $selectedParticipants,
             $this->getPreviousQuestionContent($happening, $user),
             null,
             $isUpdate
