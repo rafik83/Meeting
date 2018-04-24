@@ -15,9 +15,11 @@ use Proximum\Vimeet\Application\Event\Happening\ParticipateEvent;
 use Proximum\Vimeet\Application\Event\Happening\ParticipateHappeningEvent;
 use Proximum\Vimeet\Application\Event\Happening\UnParticipateHappeningEvent;
 use Proximum\Vimeet\Application\Exception\Happening\NotEnoughtRemainingParticipationsException;
+use Proximum\Vimeet\Application\Exception\Happening\ParticipantMustHaveProductToParticipateException;
 use Proximum\Vimeet\Application\Exception\Happening\ParticipantNotAvailableException;
 use Proximum\Vimeet\Application\Exception\Happening\ParticipantRequiredException;
 use Proximum\Vimeet\Application\Exception\Happening\WrongInvitationCodeException;
+use Proximum\Vimeet\Domain\Happening\ParticipateToHappeningWithProductToBuyChecker;
 use Proximum\Vimeet\Domain\Happening\ParticipationCount;
 use Proximum\Vimeet\Domain\Model\Happening\Question;
 use Proximum\Vimeet\Domain\Model\HappeningParticipation;
@@ -37,6 +39,9 @@ class ParticipateHandler
     /** @var QuestionRepositoryInterface */
     private $questionRepository;
 
+    /** @var ParticipateToHappeningWithProductToBuyChecker */
+    private $participateToHappeningWithProductToBuyChecker;
+
     /** @var ParticipationCount */
     private $participationCount;
 
@@ -47,33 +52,37 @@ class ParticipateHandler
     private $eventDispatcher;
 
     /**
-     * @param HappeningParticipationRepositoryInterface $happeningParticipationRepository
-     * @param ParticipantRepositoryInterface            $participantRepository
-     * @param QuestionRepositoryInterface               $questionRepository
-     * @param ParticipationCount                        $participationCount
-     * @param DelayedEventDispatcher                    $eventDispatcher
-     * @param \DateTimeInterface                        $dateTime
+     * @param HappeningParticipationRepositoryInterface     $happeningParticipationRepository
+     * @param ParticipantRepositoryInterface                $participantRepository
+     * @param QuestionRepositoryInterface                   $questionRepository
+     * @param ParticipateToHappeningWithProductToBuyChecker $participateToHappeningWithProductToBuyChecker
+     * @param ParticipationCount                            $participationCount
+     * @param DelayedEventDispatcher                        $eventDispatcher
+     * @param \DateTimeInterface                            $dateTime
      */
     public function __construct(
         HappeningParticipationRepositoryInterface $happeningParticipationRepository,
         ParticipantRepositoryInterface $participantRepository,
         QuestionRepositoryInterface $questionRepository,
+        ParticipateToHappeningWithProductToBuyChecker $participateToHappeningWithProductToBuyChecker,
         ParticipationCount $participationCount,
         DelayedEventDispatcher $eventDispatcher,
         \DateTimeInterface $dateTime
     ) {
         $this->happeningParticipationRepository = $happeningParticipationRepository;
-        $this->participantRepository            = $participantRepository;
-        $this->questionRepository               = $questionRepository;
-        $this->participationCount               = $participationCount;
-        $this->eventDispatcher                  = $eventDispatcher;
-        $this->dateTime                         = $dateTime;
+        $this->participantRepository = $participantRepository;
+        $this->questionRepository = $questionRepository;
+        $this->participateToHappeningWithProductToBuyChecker = $participateToHappeningWithProductToBuyChecker;
+        $this->participationCount = $participationCount;
+        $this->eventDispatcher = $eventDispatcher;
+        $this->dateTime = $dateTime;
     }
 
     /**
      * @param Participate $participate
      *
      * @throws NotEnoughtRemainingParticipationsException
+     * @throws ParticipantMustHaveProductToParticipateException
      * @throws ParticipantNotAvailableException
      * @throws ParticipantRequiredException
      * @throws WrongInvitationCodeException
@@ -115,6 +124,17 @@ class ParticipateHandler
         foreach ($participate->participants as $participant) {
             if (!\in_array($participant, $availableParticipants, true)) {
                 throw new ParticipantNotAvailableException();
+            }
+        }
+
+        foreach ($participate->participants as $participant) {
+            if (!$this->participateToHappeningWithProductToBuyChecker->canParticipate(
+                $participant,
+                $participate->happening
+            )) {
+                throw new ParticipantMustHaveProductToParticipateException(
+                    'Participant must have product to participate'
+                );
             }
         }
 

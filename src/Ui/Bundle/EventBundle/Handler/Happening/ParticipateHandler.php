@@ -14,6 +14,7 @@ use Proximum\Vimeet\Application\Adapter\RouterInterface;
 use Proximum\Vimeet\Application\Adapter\TranslatorInterface;
 use Proximum\Vimeet\Application\Command\Happening as CommandHappening;
 use Proximum\Vimeet\Application\Exception\Happening\NotEnoughtRemainingParticipationsException;
+use Proximum\Vimeet\Application\Exception\Happening\ParticipantMustHaveProductToParticipateException;
 use Proximum\Vimeet\Application\Exception\Happening\ParticipantNotAvailableException;
 use Proximum\Vimeet\Application\Exception\Happening\ParticipantRequiredException;
 use Proximum\Vimeet\Application\Exception\Happening\WrongInvitationCodeException;
@@ -160,6 +161,8 @@ class ParticipateHandler
             $this->participateHandler->handle($participate);
         } catch (ParticipantNotAvailableException $participantNotAvailableException) {
             return $this->createJsonResponseWithError('happening.participate.youAreNotAvailable');
+        } catch (ParticipantMustHaveProductToParticipateException $participantMustHaveProductToParticipateException) {
+            return $this->createJsonResponseWithError('happening.participate.participantMustHaveProductToParticipate');
         } catch (NotEnoughtRemainingParticipationsException $notEnoughtRemainingParticipationsException) {
             $remainingParticipations = $notEnoughtRemainingParticipationsException->getRemainingParticipations();
 
@@ -286,6 +289,14 @@ class ParticipateHandler
                     new FormError(
                         $this->translator->trans(
                             'happening.participate.wrongInvitationCode'
+                        )
+                    )
+                );
+            } catch (ParticipantMustHaveProductToParticipateException $participantMustHaveProductToParticipateException) {
+                $formOrParticipantsField->addError(
+                    new FormError(
+                        $this->translator->trans(
+                            'happening.participate.participantMustHaveProductToParticipate'
                         )
                     )
                 );
