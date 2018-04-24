@@ -19,15 +19,26 @@ use Proximum\Vimeet\Domain\Cart\CartManager;
 use Proximum\Vimeet\Domain\Model\CartRow;
 use Proximum\Vimeet\Domain\Model\Order;
 use Proximum\Vimeet\Domain\Model\Package;
+use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Product;
+use Proximum\Vimeet\Domain\Model\ProductAttributedToParticipant;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Order\Merger;
+use Proximum\Vimeet\Domain\Repository\ProductAttributedToParticipantRepositoryInterface;
 
 class StepOptionTest extends TestCase
 {
     public function testBuild()
     {
         $dateTime = new \DateTime();
+        $productAttributedToParticipantRepository = $this->prophesize(ProductAttributedToParticipantRepositoryInterface::class);
+        $participant1 = $this->prophesize(Participant::class);
+        $participant2 = $this->prophesize(Participant::class);
+
+        $participants = [
+            $participant1->reveal(),
+            $participant2->reveal(),
+        ];
 
         // product not bought
         $product1 = $this->prophesize(Product::class);
@@ -38,6 +49,10 @@ class StepOptionTest extends TestCase
         $product2 = $this->prophesize(Product::class);
         $product2->getId()->shouldBeCalled()->willReturn(321);
         $product2->isAttributable()->shouldBeCalled()->willReturn(true);
+        $productAttributedToParticipantRepository
+            ->findByProductAndParticipants($product2->reveal(), $participants)
+            ->shouldBeCalled()
+            ->willReturn([]);
 
         // product with 2 elements in Order
         $product3 = $this->prophesize(Product::class);
@@ -64,11 +79,34 @@ class StepOptionTest extends TestCase
         $cartRowForProduct5->getProduct()->shouldBeCalled()->willReturn($product5->reveal());
         $cartRowForProduct5->getQuantity()->shouldBeCalled()->willReturn(2);
 
+        // product with 2 elements in cart row
+        $product6 = $this->prophesize(Product::class);
+        $product6->getId()->shouldBeCalled()->willReturn(711);
+        $product6->isAttributable()->shouldBeCalled()->willReturn(true);
+        $cartRowForProduct6 = $this->prophesize(CartRow::class);
+        $cartRowForProduct6->getProduct()->shouldBeCalled()->willReturn($product6->reveal());
+        $cartRowForProduct6->getQuantity()->shouldBeCalled()->willReturn(2);
+        $cartRowForProduct6->getParticipants()->shouldBeCalled()->willReturn($participants);
+
+        // product with no cart row but ProductAttributedToParticipant
+        $product7 = $this->prophesize(Product::class);
+        $product7->getId()->shouldBeCalled()->willReturn(811);
+        $product7->isAttributable()->shouldBeCalled()->willReturn(true);
+        $productAttributedToParticipant = $this->prophesize(ProductAttributedToParticipant::class);
+        $productAttributedToParticipant->getParticipant()->shouldBeCalled()->willReturn($participant1->reveal());
+        $productAttributedToParticipantRepository
+            ->findByProductAndParticipants($product7->reveal(), $participants)
+            ->shouldBeCalled()
+            ->willReturn([$productAttributedToParticipant->reveal()]);
+        $orderRowForProduct7 = $this->prophesize(Order\Row::class);
+        $orderRowForProduct7->getQuantity()->shouldBeCalled()->willReturn(1);
+
         $cart = $this->prophesize(Cart::class);
         $cart->getOptionsRowArray()->willReturn(
             [
                 $cartRowForProduct4->reveal(),
-                $cartRowForProduct5->reveal()
+                $cartRowForProduct5->reveal(),
+                $cartRowForProduct6->reveal(),
             ]
         );
 
@@ -78,6 +116,8 @@ class StepOptionTest extends TestCase
         $order->getRowForProduct($product3->reveal())->willReturn($orderRowForProduct3->reveal());
         $order->getRowForProduct($product4->reveal())->willReturn(null);
         $order->getRowForProduct($product5->reveal())->willReturn($orderRowForProduct5->reveal());
+        $order->getRowForProduct($product6->reveal())->willReturn(null);
+        $order->getRowForProduct($product7->reveal())->willReturn($orderRowForProduct7->reveal());
 
         $package = $this->prophesize(Package::class);
         $package
@@ -90,6 +130,8 @@ class StepOptionTest extends TestCase
                     $product3->reveal(),
                     $product4->reveal(),
                     $product5->reveal(),
+                    $product6->reveal(),
+                    $product7->reveal(),
                 ]
             )
         ;
@@ -98,6 +140,7 @@ class StepOptionTest extends TestCase
         $sheet->hasNotCancelledOrders()->shouldBeCalled()->willReturn(true);
         $sheet->getNotCancelledOrders()->shouldBeCalled()->willReturn([$order->reveal()]);
         $sheet->getPackage()->shouldBeCalled()->willReturn($package->reveal());
+        $sheet->getParticipantsArray()->shouldBeCalled()->willReturn($participants);
 
         $orderMerger = $this->prophesize(Merger::class);
         $orderMerger->merge([$order->reveal()])->shouldBeCalled()->willReturn($order->reveal());
@@ -105,7 +148,12 @@ class StepOptionTest extends TestCase
         $cartManager = $this->prophesize(CartManager::class);
         $cartManager->getCart($sheet->reveal(), 3)->shouldBeCalled()->willReturn($cart->reveal());
 
-        $stepOption = new StepOption($orderMerger->reveal(), $cartManager->reveal(), $dateTime);
+        $stepOption = new StepOption(
+            $orderMerger->reveal(),
+            $cartManager->reveal(),
+            $productAttributedToParticipantRepository->reveal(),
+            $dateTime
+        );
         $result = $stepOption->build($sheet->reveal(), 3);
 
         $expectedSelectOptions = new SelectOptions($sheet->reveal(), 3);
@@ -134,6 +182,16 @@ class StepOptionTest extends TestCase
                 5,
                 [],
                 false
+            ),
+            711 => new OptionRow(
+                2,
+                [$participant1->reveal(), $participant2->reveal()],
+                true
+            ),
+            811 => new OptionRow(
+                1,
+                [$participant1->reveal()],
+                true
             ),
         ];
 

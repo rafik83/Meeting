@@ -161,6 +161,7 @@ services:
             - '@vimeet_infrastructure.repository.order_repository'
             - '@cart_manager'
             - '@Proximum\Vimeet\Domain\Participant\ParticipantProductSetter'
+            - '@Proximum\Vimeet\Infrastructure\Repository\ProductAttributedToParticipantRepository'
 
     #
     # Export OMZ

@@ -11,7 +11,9 @@
 namespace Proximum\Vimeet\Infrastructure\Repository;
 
 use Doctrine\ORM\EntityManager;
+use Proximum\Vimeet\Domain\Model\Product;
 use Proximum\Vimeet\Domain\Model\ProductAttributedToParticipant;
+use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Repository\ProductAttributedToParticipantRepositoryInterface;
 
 class ProductAttributedToParticipantRepository implements ProductAttributedToParticipantRepositoryInterface
@@ -28,5 +30,58 @@ class ProductAttributedToParticipantRepository implements ProductAttributedToPar
     {
         $this->entityManager->persist($productAttributedToParticipant);
         $this->entityManager->flush($productAttributedToParticipant);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function findByProductAndParticipants(Product $product, array $participants): array
+    {
+        $queryBuilder = $this->entityManager->createQueryBuilder()
+            ->select('productAttributedToParticipant')
+            ->from(ProductAttributedToParticipant::class, 'productAttributedToParticipant')
+            ->where('productAttributedToParticipant.product = :product')
+            ->andWhere('productAttributedToParticipant.participant IN (:participants)')
+            ->setParameter('product', $product)
+            ->setParameter('participants', $participants)
+        ;
+
+        return $queryBuilder->getQuery()->getResult();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function removeBatch(array $productAttributedToParticipants): void
+    {
+        foreach ($productAttributedToParticipants as $productAttributedToParticipant) {
+            $this->entityManager->remove($productAttributedToParticipant);
+        }
+
+        $this->entityManager->flush($productAttributedToParticipants);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function remove(ProductAttributedToParticipant $productAttributedToParticipant): void
+    {
+        $this->entityManager->remove($productAttributedToParticipant);
+        $this->entityManager->flush($productAttributedToParticipant);
+    }
+
+    public function removeForSheet(Sheet $sheet): void
+    {
+        $productAttributedToParticipants = $this->entityManager
+            ->createQueryBuilder()
+            ->select('productAttributedToParticipant')
+            ->from(ProductAttributedToParticipant::class, 'productAttributedToParticipant')
+            ->join('productAttributedToParticipant.participant', 'participant', 'WITH', 'participant.sheet = :sheet')
+            ->setParameter('sheet', $sheet)
+            ->getQuery()
+            ->getResult()
+        ;
+
+        $this->removeBatch($productAttributedToParticipants);
     }
 }

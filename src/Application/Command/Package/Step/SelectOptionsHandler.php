@@ -58,32 +58,24 @@ class SelectOptionsHandler
         $package = $sheet->getPackage();
         $cart    = $this->cartManager->getCart($sheet, $selectOptions->currentStep);
 
-        $ids = array_map(
-            function (Product $product) {
-                return $product->getId();
-            },
-            $package->getAvailablesOptions($this->now)
-        );
+        /** @var Product[] $options */
+        $optionsById = [];
 
-        $options = array_combine($ids, $package->getAvailablesOptions($this->now));
+        foreach ($package->getAvailablesOptions($this->now) as $option) {
+            $optionsById[$option->getId()] = $option;
+        }
 
         $cart->clearOptions();
 
+        $orderMerged = null;
         if ($sheet->hasNotCancelledOrders()) {
             $orderMerged = $this->merger->merge($sheet->getNotCancelledOrders());
         }
 
+        $attributableOptionsIncludedByProductId = $this->cartManager->getAttributableOptionsIncludedByProductId($cart, $orderMerged);
+
         foreach ($selectOptions->options as $id => $optionRow) {
-            $orderQuantity = 0;
-
-            // handle new order
-            if (isset($orderMerged)) {
-                if ($product = $orderMerged->getRowByProductId($id)) {
-                    $orderQuantity = $product->getQuantity();
-                }
-            }
-
-            $cart->setProduct($options[$id], $optionRow->getQuantity() - $orderQuantity);
+            $this->cartManager->updateOptionsQuantity($cart, $optionRow, $optionsById[$id], $orderMerged, $attributableOptionsIncludedByProductId);
         }
 
         $this->cartManager->save($cart);
