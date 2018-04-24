@@ -282,7 +282,7 @@ class ParticipateHandler
                     )
                 );
             } catch (WrongInvitationCodeException $wrongInvitationCodeException) {
-                $formOrParticipantsField->addError(
+                $participateForm->get('invitationCode')->addError(
                     new FormError(
                         $this->translator->trans(
                             'happening.participate.wrongInvitationCode'
