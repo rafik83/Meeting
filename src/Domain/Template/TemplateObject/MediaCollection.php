@@ -141,6 +141,16 @@ class MediaCollection extends TemplateObject
         });
     }
 
+    public function getTitlePlaceholder(): ?string
+    {
+        return $this->getOption('titlePlaceholder', $this->locale);
+    }
+
+    public function getLinkPlaceholder(): ?string
+    {
+        return $this->getOption('linkPlaceholder', $this->locale);
+    }
+
     /**
      * @return int
      */
