@@ -19,7 +19,9 @@ use Proximum\Vimeet\Application\Exception\Happening\ParticipantRequiredException
 use Proximum\Vimeet\Application\Exception\Happening\WrongInvitationCodeException;
 use Proximum\Vimeet\Application\Query\Happening\Participant\ParticipantsAllowedToAccessQuery;
 use Proximum\Vimeet\Application\Query\Happening\Participant\ParticipantsAllowedToAccessQueryHandler;
+use Proximum\Vimeet\Domain\Happening\ParticipateToHappeningWithProductToBuyChecker;
 use Proximum\Vimeet\Domain\Model\Happening;
+use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Participant\ParticipantHelper;
@@ -46,6 +48,9 @@ class ParticipateHandler
     /** @var ParticipantsAllowedToAccessQueryHandler */
     private $participantsAllowedToAccessQueryHandler;
 
+    /** @var ParticipateToHappeningWithProductToBuyChecker */
+    private $participateToHappeningWithProductToBuyChecker;
+
     /** @var EngineInterface */
     private $engine;
 
@@ -63,6 +68,7 @@ class ParticipateHandler
         QuestionRepositoryInterface $questionRepository,
         CommandHappening\ParticipateHandler $participateHandler,
         ParticipantsAllowedToAccessQueryHandler $participantsAllowedToAccessQueryHandler,
+        ParticipateToHappeningWithProductToBuyChecker $participateToHappeningWithProductToBuyChecker,
         EngineInterface $engine,
         FormFactoryInterface $formFactory,
         RouterInterface $router,
@@ -72,6 +78,7 @@ class ParticipateHandler
         $this->questionRepository = $questionRepository;
         $this->participateHandler = $participateHandler;
         $this->participantsAllowedToAccessQueryHandler = $participantsAllowedToAccessQueryHandler;
+        $this->participateToHappeningWithProductToBuyChecker = $participateToHappeningWithProductToBuyChecker;
         $this->engine = $engine;
         $this->formFactory = $formFactory;
         $this->router = $router;
@@ -80,32 +87,13 @@ class ParticipateHandler
 
     public function handle(Request $request, Happening $happening, Sheet $sheet, User $user): JsonResponse
     {
+        $participant = $sheet->getUserParticipant($user);
         $selectedParticipants = $this->participantRepository->getParticipantsForHappening($sheet, $happening);
-
-        $previousQuestion = null;
         $isUpdate = \count($selectedParticipants) > 0;
-        $isQuestionAllowed = $happening->isQuestionAllowed();
 
-        if ($isUpdate && $happening->isQuestionAllowed()) {
-            $question = $this
-                ->questionRepository
-                ->getByUserAndHappening($user, $happening)
-            ;
-
-            if (null !== $question) {
-                $previousQuestion = $question->getContent();
-            }
-        }
-
-        $isUserAloneParticipant = ParticipantHelper::isUserAloneParticipant($user, $sheet);
-
-        $isCancelParticipationAlone = $isUserAloneParticipant && $isUpdate;
-        $isParticipationAlone = $isUserAloneParticipant && !$isUpdate;
-
-        $participants = $sheet->getParticipantsArray();
         $participants = $this
             ->participantsAllowedToAccessQueryHandler
-            ->handle(new ParticipantsAllowedToAccessQuery($happening, $participants))
+            ->handle(new ParticipantsAllowedToAccessQuery($happening, $sheet->getParticipantsArray()))
         ;
 
         $availableParticipants = $this->participantRepository->getAvailableParticipantsForHappening(
@@ -115,58 +103,104 @@ class ParticipateHandler
 
         $noAvailableParticipants = 0 === \count($availableParticipants);
 
+        $isUserAloneParticipant = ParticipantHelper::isUserAloneParticipant($user, $sheet);
+        $isCancelParticipationAlone = $isUserAloneParticipant && $isUpdate;
+        $isParticipationAlone = $isUserAloneParticipant && !$isUpdate;
+
         // Case : current user is not available for this happening, do not show modal
         if ($isParticipationAlone && $noAvailableParticipants) {
             return $this->createJsonResponseWithError('happening.participate.youAreNotAvailable');
         }
 
-        // Case : user alone in sheet and it is new participation, he is selected directly
-        if ($isParticipationAlone) {
-            $selectedParticipants = $participants;
-        // Unselect current user
-        } elseif ($isCancelParticipationAlone) {
-            $selectedParticipants = [];
+        // Case : one participant is current user and no question so no modal
+        if ($participant instanceof Participant
+            && ($isCancelParticipationAlone
+                || ($isParticipationAlone
+                    && !$happening->isPrivate()
+                    && !$happening->isQuestionAllowed()
+                    && $this->participateToHappeningWithProductToBuyChecker->canParticipate($participant, $happening)
+                )
+            )
+        ) {
+            return $this->handleParticipationWithoutShowingForm($happening, $participant, $isCancelParticipationAlone);
         }
 
-        // Case : one participant is current user and no question so no modal
-        if ($isCancelParticipationAlone || (!$happening->isPrivate() && $isParticipationAlone && !$isQuestionAllowed)) {
-            try {
-                $participate = new CommandHappening\Participate(
-                    $happening,
-                    $sheet,
-                    $user,
-                    $selectedParticipants,
-                    $previousQuestion,
-                    null,
-                    $isUpdate
-                );
-                $this->participateHandler->handle($participate);
-            } catch (ParticipantNotAvailableException $participantNotAvailableException) {
-                return $this->createJsonResponseWithError('happening.participate.youAreNotAvailable');
-            } catch (NotEnoughtRemainingParticipationsException $notEnoughtRemainingParticipationsException) {
-                $remainingParticipations = $notEnoughtRemainingParticipationsException->getRemainingParticipations();
+        return $this->handleParticipationWithShowingForm(
+            $request,
+            $happening,
+            $sheet,
+            $user,
+            $participants,
+            $availableParticipants,
+            $selectedParticipants
+        );
+    }
 
-                return $this->createJsonResponseWithError(
-                    'happening.participate.notEnoughtRemainingParticipations',
-                    ['%remaining%' => $remainingParticipations],
-                    $remainingParticipations
-                );
-            }
+    private function handleParticipationWithoutShowingForm(
+        Happening $happening,
+        Participant $participant,
+        bool $isCancel
+    ): JsonResponse {
+        try {
+            $participate = new CommandHappening\Participate(
+                $happening,
+                $participant->getSheet(),
+                $participant->getUser(),
+                $isCancel ? [] : [$participant],
+                null,
+                null,
+                $isCancel
+            );
+            $this->participateHandler->handle($participate);
+        } catch (ParticipantNotAvailableException $participantNotAvailableException) {
+            return $this->createJsonResponseWithError('happening.participate.youAreNotAvailable');
+        } catch (NotEnoughtRemainingParticipationsException $notEnoughtRemainingParticipationsException) {
+            $remainingParticipations = $notEnoughtRemainingParticipationsException->getRemainingParticipations();
 
-            return new JsonResponse(
-                [
-                    'status' => 'ok',
-                    'label' => $isCancelParticipationAlone ? 'participate' : 'cancel',
-                ]
+            return $this->createJsonResponseWithError(
+                'happening.participate.notEnoughtRemainingParticipations',
+                ['%remaining%' => $remainingParticipations],
+                $remainingParticipations
             );
         }
+
+        return new JsonResponse(
+            [
+                'status' => 'ok',
+                'label' => $isCancel ? 'participate' : 'cancel',
+            ]
+        );
+    }
+
+    /**
+     * @param Request       $request
+     * @param Happening     $happening
+     * @param Sheet         $sheet
+     * @param User          $user
+     * @param Participant[] $participants
+     * @param Participant[] $availableParticipants
+     * @param Participant[] $selectedParticipants
+     *
+     * @return JsonResponse
+     */
+    private function handleParticipationWithShowingForm(
+        Request $request,
+        Happening $happening,
+        Sheet $sheet,
+        User $user,
+        array $participants,
+        array $availableParticipants,
+        array $selectedParticipants
+    ): JsonResponse {
+        $isUpdate = \count($selectedParticipants) > 0;
+        $isUserAloneParticipant = ParticipantHelper::isUserAloneParticipant($user, $sheet);
 
         $participate = new CommandHappening\Participate(
             $happening,
             $sheet,
             $user,
             $selectedParticipants,
-            $previousQuestion,
+            $this->getPreviousQuestionContent($happening, $user),
             null,
             $isUpdate
         );
@@ -252,14 +286,6 @@ class ParticipateHandler
             }
         }
 
-        $unavailableParticipants = [];
-
-        foreach ($participants as $key => $participant) {
-            if (false === \in_array($participant, $availableParticipants, true)) {
-                $unavailableParticipants[$key] = $participant;
-            }
-        }
-
         return new JsonResponse(
             [
                 'status' => 'show-form',
@@ -269,13 +295,51 @@ class ParticipateHandler
                         'title' => $happening->getTitle($request->getLocale()),
                         'picto' => $happening->getCategory()->getPicto(),
                         'form' => $participateForm->createView(),
-                        'unavailableParticipants' => $unavailableParticipants,
-                        'noAvailableParticipants' => $noAvailableParticipants,
+                        'unavailableParticipants' => $this->getUnavailableParticipants(
+                            $participants,
+                            $availableParticipants
+                        ),
+                        'noAvailableParticipants' => 0 === count($availableParticipants),
                         'isUpdate' => $isUpdate,
                     ]
                 ),
             ]
         );
+    }
+
+    private function getPreviousQuestionContent(Happening $happening, User $user): ?string
+    {
+        if ($happening->isQuestionAllowed()) {
+            $question = $this
+                ->questionRepository
+                ->getByUserAndHappening($user, $happening)
+            ;
+
+            if (null !== $question) {
+                return $question->getContent();
+            }
+        }
+
+        return null;
+    }
+
+    /**
+     * @param Participant[] $participants
+     * @param Participant[] $availableParticipants
+     *
+     * @return Participant[]
+     */
+    private function getUnavailableParticipants(array $participants, array $availableParticipants): array
+    {
+        $unavailableParticipants = [];
+
+        foreach ($participants as $key => $participant) {
+            if (false === \in_array($participant, $availableParticipants, true)) {
+                $unavailableParticipants[$key] = $participant;
+            }
+        }
+
+        return $unavailableParticipants;
     }
 
     private function createJsonResponseWithError(

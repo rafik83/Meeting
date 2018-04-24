@@ -699,6 +699,7 @@ services:
             - '@vimeet_infrastructure.repository.happening_question_repository'
             - '@vimeet_infrastructure.vimeet.application.components.happening.participate_handler'
             - '@Proximum\Vimeet\Application\Query\Happening\Participant\ParticipantsAllowedToAccessQueryHandler'
+            - '@Proximum\Vimeet\Domain\Happening\ParticipateToHappeningWithProductToBuyChecker'
             - '@templating'
             - '@form.factory'
             - '@adapter.router'
