@@ -14,5 +14,5 @@ use Proximum\Vimeet\Domain\Model\Sheet;
 
 interface AvailableSlotCalculatorInterface
 {
-    public function calculateAvailableSlotForSheet(Sheet $sheet): void;
+    public function calculateAvailableSlotForSheet(Sheet $sheet, bool $indexSheet = true): void;
 }

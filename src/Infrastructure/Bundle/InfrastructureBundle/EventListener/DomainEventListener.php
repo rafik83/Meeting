@@ -30,6 +30,15 @@ class DomainEventListener extends AbstractRedirectToEventListener
         'payum_authorize_do',
         '_wdt',
         '_profiler',
+        '_profiler_home',
+        '_profiler_search',
+        '_profiler_search_bar',
+        '_profiler_search_results',
+        '_profiler_phpinfo',
+        '_profiler_open_file',
+        '_profiler_router',
+        '_profiler_exception',
+        '_profiler_exception_css',
         '_errors',
     ];
 

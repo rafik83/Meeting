@@ -34,7 +34,7 @@ class IndexHandler
         $events = $this->eventRepository->getEventsOrderByIdDesc();
 
         foreach ($events as $event) {
-            $this->jobQueue->indexSheetsByEvent($event);
+            $this->jobQueue->indexSheetsByEvent($event, false);
         }
     }
 }
