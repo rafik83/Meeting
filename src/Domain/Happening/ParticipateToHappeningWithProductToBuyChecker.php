@@ -11,7 +11,6 @@
 namespace Proximum\Vimeet\Domain\Happening;
 
 use Proximum\Vimeet\Domain\Model\Happening;
-use Proximum\Vimeet\Domain\Model\Package;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Repository\ProductAttributedToParticipantRepositoryInterface;
 
@@ -20,10 +19,15 @@ class ParticipateToHappeningWithProductToBuyChecker
     /** @var ProductAttributedToParticipantRepositoryInterface */
     private $productAttributedToParticipantRepository;
 
+    /** @var PackageProductsNeededByHappening */
+    private $packageProductsNeededByHappening;
+
     public function __construct(
-        ProductAttributedToParticipantRepositoryInterface $productAttributedToParticipantRepository
+        ProductAttributedToParticipantRepositoryInterface $productAttributedToParticipantRepository,
+        PackageProductsNeededByHappening $packageProductsNeededByHappening
     ) {
         $this->productAttributedToParticipantRepository = $productAttributedToParticipantRepository;
+        $this->packageProductsNeededByHappening = $packageProductsNeededByHappening;
     }
 
     public function canParticipate(Participant $participant, Happening $toHappening): bool
@@ -36,33 +40,20 @@ class ParticipateToHappeningWithProductToBuyChecker
             return true;
         }
 
-        if (!$this->packageHasAtLeastOneProductNeededByHappening(
+        $productNeededByHappening = $this->packageProductsNeededByHappening->get(
             $participant->getSheet()->getPackage(),
             $toHappening
-        )) {
+        );
+
+        $noProductInPackageCanBeBoughtToParticipateToHappening = empty($productNeededByHappening);
+
+        if ($noProductInPackageCanBeBoughtToParticipateToHappening) {
             return true;
         }
 
         return $this->productAttributedToParticipantRepository->participantHasAtLeastOneProduct(
             $participant,
-            $toHappening->getProducts()
+            $productNeededByHappening
         );
-    }
-
-    private function packageHasAtLeastOneProductNeededByHappening(Package $package, Happening $happening): bool
-    {
-        $packageOptionsIndexedIds = [];
-
-        foreach ($package->getOptions() as $option) {
-            $packageOptionsIndexedIds[$option->getId()] = true;
-        }
-
-        foreach ($happening->getProducts() as $product) {
-            if (isset($packageOptionsIndexedIds[$product->getId()])) {
-                return true;
-            }
-        }
-
-        return false;
     }
 }

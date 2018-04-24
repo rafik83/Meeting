@@ -5078,9 +5078,12 @@ services:
         arguments:
             - '@vimeet_infrastructure.repository.happening_participation_repository'
 
+    Proximum\Vimeet\Domain\Happening\PackageProductsNeededByHappening: ~
+
     Proximum\Vimeet\Domain\Happening\ParticipateToHappeningWithProductToBuyChecker:
         arguments:
             - '@Proximum\Vimeet\Infrastructure\Repository\ProductAttributedToParticipantRepository'
+            - '@Proximum\Vimeet\Domain\Happening\PackageProductsNeededByHappening'
 
     #
     # Serializer: normalizers and encoders

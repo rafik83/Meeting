@@ -11,6 +11,7 @@
 namespace Proximum\Vimeet\Tests\Domain\Happening;
 
 use PHPUnit\Framework\TestCase;
+use Proximum\Vimeet\Domain\Happening\PackageProductsNeededByHappening;
 use Proximum\Vimeet\Domain\Happening\ParticipateToHappeningWithProductToBuyChecker;
 use Proximum\Vimeet\Domain\Model\Happening;
 use Proximum\Vimeet\Domain\Model\Package;
@@ -27,21 +28,12 @@ class ParticipateToHappeningWithProductToBuyCheckerTest extends TestCase
     private $toHappening;
     private $productAttributedToParticipantRepository;
     private $participateToHappeningWithProductToBuyChecker;
-    private $product1;
-    private $product2;
-    private $product3;
+    private $packageProductsNeededByHappening;
+    private $product;
 
     public function setUp()
     {
-        $this->product1 = $this->prophesize(Product::class);
-        $this->product1->getId()->willReturn(1);
-
-        $this->product2 = $this->prophesize(Product::class);
-        $this->product2->getId()->willReturn(2);
-
-        $this->product3 = $this->prophesize(Product::class);
-        $this->product3->getId()->willReturn(3);
-
+        $this->product = $this->prophesize(Product::class);
         $this->package = $this->prophesize(Package::class);
 
         $this->sheet = $this->prophesize(Sheet::class);
@@ -56,8 +48,11 @@ class ParticipateToHappeningWithProductToBuyCheckerTest extends TestCase
             ProductAttributedToParticipantRepositoryInterface::class
         );
 
+        $this->packageProductsNeededByHappening = $this->prophesize(PackageProductsNeededByHappening::class);
+
         $this->participateToHappeningWithProductToBuyChecker = new ParticipateToHappeningWithProductToBuyChecker(
-            $this->productAttributedToParticipantRepository->reveal()
+            $this->productAttributedToParticipantRepository->reveal(),
+            $this->packageProductsNeededByHappening->reveal()
         );
     }
 
@@ -88,16 +83,14 @@ class ParticipateToHappeningWithProductToBuyCheckerTest extends TestCase
     public function testPackageHasNotAtLeastOneProductNeededByHappening()
     {
         $this->toHappening->hasProducts()->shouldBeCalled()->willReturn(true);
-        $this->toHappening->getProducts()->shouldBeCalled()->willReturn(
-            [
-                $this->product1->reveal(),
-                $this->product3->reveal(),
-            ]
-        )
-        ;
-
         $this->package->isPassable()->shouldBeCalled()->willReturn(true);
-        $this->package->getOptions()->shouldBeCalled()->willReturn([$this->product2->reveal()]);
+
+        $this
+            ->packageProductsNeededByHappening
+            ->get($this->package->reveal(), $this->toHappening->reveal())
+            ->shouldBeCalled()
+            ->willReturn([])
+        ;
 
         $this->assertTrue(
             $this->participateToHappeningWithProductToBuyChecker->canParticipate(
@@ -107,38 +100,22 @@ class ParticipateToHappeningWithProductToBuyCheckerTest extends TestCase
         );
     }
 
-    private function happeningHasProductsAndPackageHasAtLeastOneRequiredProduct()
-    {
-        $this->toHappening->hasProducts()->shouldBeCalled()->willReturn(true);
-        $this->toHappening->getProducts()->shouldBeCalled()->willReturn(
-            [
-                $this->product1->reveal(),
-                $this->product3->reveal(),
-            ]
-        )
-        ;
-
-        $this->package->isPassable()->shouldBeCalled()->willReturn(true);
-        $this->package->getOptions()->shouldBeCalled()->willReturn(
-            [
-                $this->product2->reveal(),
-                $this->product3->reveal(),
-            ]
-        )
-        ;
-    }
-
     public function testParticipantHasNotRequiredProduct()
     {
-        $this->happeningHasProductsAndPackageHasAtLeastOneRequiredProduct();
+        $this->toHappening->hasProducts()->shouldBeCalled()->willReturn(true);
+        $this->package->isPassable()->shouldBeCalled()->willReturn(true);
+
+        $this
+            ->packageProductsNeededByHappening
+            ->get($this->package->reveal(), $this->toHappening->reveal())
+            ->shouldBeCalled()
+            ->willReturn([$this->product->reveal()])
+        ;
 
         $this
             ->productAttributedToParticipantRepository->participantHasAtLeastOneProduct(
                 $this->participant,
-                [
-                    $this->product1->reveal(),
-                    $this->product3->reveal(),
-                ]
+                [$this->product->reveal()]
             )
             ->shouldBeCalled()
             ->willReturn(false)
@@ -154,14 +131,21 @@ class ParticipateToHappeningWithProductToBuyCheckerTest extends TestCase
 
     public function testParticipantHasRequiredProduct()
     {
-        $this->happeningHasProductsAndPackageHasAtLeastOneRequiredProduct();
+        $this->toHappening->hasProducts()->shouldBeCalled()->willReturn(true);
+        $this->package->isPassable()->shouldBeCalled()->willReturn(true);
+
+        $this
+            ->packageProductsNeededByHappening
+            ->get($this->package->reveal(), $this->toHappening->reveal())
+            ->shouldBeCalled()
+            ->willReturn([$this->product->reveal()])
+        ;
 
         $this
             ->productAttributedToParticipantRepository->participantHasAtLeastOneProduct(
                 $this->participant,
                 [
-                    $this->product1->reveal(),
-                    $this->product3->reveal(),
+                    $this->product->reveal(),
                 ]
             )
             ->shouldBeCalled()
