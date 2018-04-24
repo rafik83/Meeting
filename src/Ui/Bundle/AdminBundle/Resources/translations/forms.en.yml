@@ -30,7 +30,7 @@ form.admin_lib_choice.children.placeholder.help: 'for exemple : "select an item"
 form.admin_lib_choice.children.placeholder.label: placeholder
 form.admin_lib_text.children.translatable.label: translatable
 form.admin_lib_text.children.translationRequired.label: 'required traduction'
-form.admin_lib.children.label.label: 'title of the field'
+form.admin_lib.children.label.label: 'Title of the field'
 form.admin_lib.children.private.label: private
 form.admin_lib.children.required.label: required
 form.admin_lib.children.submit.label: Save
@@ -552,8 +552,8 @@ form.product_create_plan.children.productIncluded.prototype.label: 'products lin
 form.product_create_plan.children.submit.label: Save
 form.product_create_plan.children.translations.prototype.children.addon.label: 'optional text under the price'
 form.product_create_plan.children.translations.prototype.children.description.label: 'content of the description'
-form.product_create_plan.children.translations.prototype.children.heading.label: 'label of the description'
-form.product_create_plan.children.translations.prototype.children.title.label: 'label of the package'
+form.product_create_plan.children.translations.prototype.children.heading.label: 'Label of the description'
+form.product_create_plan.children.translations.prototype.children.title.label: 'Label of the package'
 form.product_create_plan.children.unitPrice.label: 'Unit price (excl. tax)'
 form.product_create_plan.children.vat.label: VAT
 form.product_create_planning.children.name.label: 'backoffice label of the planning'
@@ -576,7 +576,7 @@ form.product_update_option.children.submit.label: Save
 form.product_update_option.children.translations.prototype.children.addon.label: 'optional text under the price'
 form.product_update_option.children.translations.prototype.children.description.label: Description
 form.product_update_option.children.translations.prototype.children.subjectedToValidationHelp.label: 'Message if subjected to validation'
-form.product_update_option.children.translations.prototype.children.title.label: title
+form.product_update_option.children.translations.prototype.children.title.label: Title
 form.product_update_option.children.unitPrice.label: 'Unit price (excl. tax)'
 form.product_update_option.children.updatable.label: 'deletable product'
 form.product_update_option.children.vat.label: VAT
@@ -608,7 +608,7 @@ form.product_update_plan.children.submit.label: Save
 form.product_update_plan.children.translations.prototype.children.addon.label: 'otpional text under the price'
 form.product_update_plan.children.translations.prototype.children.description.label: 'content of the description'
 form.product_update_plan.children.translations.prototype.children.heading.label: 'Title of the description'
-form.product_update_plan.children.translations.prototype.children.title.label: 'title of the package'
+form.product_update_plan.children.translations.prototype.children.title.label: 'Title of the package'
 form.product_update_plan.children.unitPrice.label: 'Unit price (excl. tax)'
 form.product_update_plan.children.vat.label: VAT
 form.product_update_planning.children.name.label: 'backoffice name of the planning'
@@ -645,7 +645,7 @@ form.promotion_code_update.children.promotions.prototype.children.type.label: Ty
 form.promotion_code_update.children.promotions.prototype.children.value.label: value
 form.promotion_code_update.children.stock.label: Stock
 form.promotion_code_update.children.submit.label: Save
-form.promotion_code_update.children.title.label: title
+form.promotion_code_update.children.title.label: Title
 form.promotion_code_update.children.validUntil.label: 'valid until'
 form.register.children.email.label: Email
 form.register.children.password.children.first.label: Password
@@ -778,9 +778,9 @@ form.sheet_template_add_locale.children.submit.label: Add
 form.sheet_template_create.children.close.label: Cancel
 form.sheet_template_create.children.locale.label: language
 form.sheet_template_create.children.submit.label: Save
-form.sheet_template_create.children.title.label: title
+form.sheet_template_create.children.title.label: Title
 form.sheet_template_duplicate.children.submit.label: Save
-form.sheet_template_duplicate.children.title.label: title
+form.sheet_template_duplicate.children.title.label: Title
 form.sheet_template_preview.children.previewObjects.label: 'preview objects'
 form.sheet_template_preview.children.previewObjects.label_add: Add
 form.sheet_template_preview.children.previewObjects.label_delete: 'Delete item'
@@ -790,9 +790,9 @@ form.sheet_template_preview.custom_preview_data_participant_position: 'participa
 form.sheet_template_update.children.close.label: Cancel
 form.sheet_template_update.children.fallback.label: 'language by default'
 form.sheet_template_update.children.submit.label: Save
-form.sheet_template_update.children.title.label: title
+form.sheet_template_update.children.title.label: Title
 form.sheet.filter.children.template_filters.label: 'additional filters'
-form.sheet.messaging_campaign.create.name.label: 'title of the messaging campaign'
+form.sheet.messaging_campaign.create.name.label: 'Title of the messaging campaign'
 form.sheet.messaging_campaign.create.submit.label: 'End my selection'
 form.sheet.messaging_campaign.message.submit.label: End
 form.sheet.messaging_campaign.recipients.submit.label: validate
@@ -830,7 +830,7 @@ form.spot.import.confirm: 'The import of new spots will delete the previous spot
 form.template_add_locale.children.locale.label: language
 form.template_add_locale.children.submit.label: validate
 form.template_registration_update.children.submit.label: Save
-form.template_registration_update.children.title.label: 'template title'
+form.template_registration_update.children.title.label: 'Template title'
 form.template_registration_update.children.value.label: 'content of the template'
 form.template.field.type.lib_choice: choice
 form.template.field.type.lib_text: text
@@ -923,7 +923,7 @@ form.type_create.children.sheetTemplate.label: 'presentation template'
 form.type_create.children.submit.label: Save
 form.type_create.children.template.label: template
 form.type_create.children.translations.prototype.children.description.label: description
-form.type_create.children.translations.prototype.children.title.label: title
+form.type_create.children.translations.prototype.children.title.label: Title
 form.type_create.children.validationCriteria.children.sheetAccepted.label: 'Profile approved'
 form.type_create.children.validationCriteria.label: 'criteria of automatic validation of the sheets'
 form.type_payment_conditions_update.children.allowDeposit.label: 'Allow deposit'
@@ -956,19 +956,19 @@ form.type_update.children.registrationTemplate.label: 'registration template'
 form.type_update.children.sheetTemplate.label: 'sheet template'
 form.type_update.children.submit.label: Save
 form.type_update.children.translations.prototype.children.description.label: Description
-form.type_update.children.translations.prototype.children.title.label: title
+form.type_update.children.translations.prototype.children.title.label: Title
 form.type_update.children.validationCriteria.children.sheetAccepted.label: 'Profile approved'
 form.type_update.children.validationCriteria.label: 'Criteria for automatic validation of the sheets'
 form.unavailability_category_create.children.leftColor.label: 'left color'
 form.unavailability_category_create.children.picto.label: Picto
 form.unavailability_category_create.children.rightColor.label: 'right color'
 form.unavailability_category_create.children.submit.label: Save
-form.unavailability_category_create.children.title.label: 'category title'
+form.unavailability_category_create.children.title.label: 'Category title'
 form.unavailability_category_update.children.leftColor.label: 'left color'
 form.unavailability_category_update.children.picto.label: Picto
 form.unavailability_category_update.children.rightColor.label: 'right color'
 form.unavailability_category_update.children.submit.label: Save
-form.unavailability_category_update.children.title.label: 'category title'
+form.unavailability_category_update.children.title.label: 'Category title'
 form.unavailability_mass_create.children.begin.label: beginning
 form.unavailability_mass_create.children.blocking.label: blocking
 form.unavailability_mass_create.children.category.label: category
@@ -982,7 +982,7 @@ form.unavailability_mass_create.children.timeSlots.label_delete: delete
 form.unavailability_mass_create.children.timeSlots.prototype.children.from.label: beginning
 form.unavailability_mass_create.children.timeSlots.prototype.children.to.label: End
 form.unavailability_mass_create.children.translations.prototype.children.description.label: Description
-form.unavailability_mass_create.children.translations.prototype.children.title.label: title
+form.unavailability_mass_create.children.translations.prototype.children.title.label: Title
 form.unavailability_mass_update.children.begin.label: beginning
 form.unavailability_mass_update.children.blocking.label: blocking
 form.unavailability_mass_update.children.category.label: category
@@ -996,7 +996,7 @@ form.unavailability_mass_update.children.timeSlots.label_delete: delete
 form.unavailability_mass_update.children.timeSlots.prototype.children.from.label: beginning
 form.unavailability_mass_update.children.timeSlots.prototype.children.to.label: end
 form.unavailability_mass_update.children.translations.prototype.children.description.label: Description
-form.unavailability_mass_update.children.translations.prototype.children.title.label: title
+form.unavailability_mass_update.children.translations.prototype.children.title.label: Title
 form.unavailability.mass.children.blocking.answer.false: 'No'
 form.unavailability.mass.children.blocking.answer.true: 'Yes'
 form.update_admin.children.email.label: Email
@@ -1024,7 +1024,7 @@ form.update_partner.children.types.label: 'available types for this operator'
 form.update_product.children.submit.label: validate
 form.update_sheets_group.children.email.label: 'manager''s email'
 form.update_sheets_group.children.submit.label: Save
-form.update_sheets_group.children.title.label: 'entity title'
+form.update_sheets_group.children.title.label: 'Entity title'
 form.update_speaker.children.firstname.label: firstname
 form.update_speaker.children.lastname.label: lastname
 form.update_speaker.children.logo.label: 'Company logo'

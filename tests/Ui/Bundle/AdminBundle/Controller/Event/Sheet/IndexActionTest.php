@@ -67,10 +67,10 @@ class IndexActionTest extends TestCase
         $this->event = $this->prophesize(Event::class);
     }
 
-    public function testInvoke()
+    public function testInvoke(): void
     {
         $this->authorizationCheckerAdapter->isGranted('ROLE_SUPER_ADMIN')->shouldBeCalled()->willReturn(true);
-        $command = new PrepareSheetsIndex($this->event->reveal());
+        $command = new PrepareSheetsIndex($this->event->reveal(), true);
         $form = $this->prophesize(Form::class);
         $formView = $this->prophesize(FormView::class);
         $form->createView()->shouldBeCalled()->willReturn($formView->reveal());
@@ -99,10 +99,10 @@ class IndexActionTest extends TestCase
         $this->assertInstanceOf(Response::class, $result);
     }
 
-    public function testInvokeHandle()
+    public function testInvokeHandle(): void
     {
         $this->authorizationCheckerAdapter->isGranted('ROLE_SUPER_ADMIN')->shouldBeCalled()->willReturn(true);
-        $command = new PrepareSheetsIndex($this->event->reveal());
+        $command = new PrepareSheetsIndex($this->event->reveal(), true);
         $form = $this->prophesize(Form::class);
         $form->handleRequest($this->request->reveal())->shouldBeCalled()->willReturn($form->reveal());
         $form->isSubmitted()->shouldBeCalled()->willReturn(true);
