@@ -59,8 +59,7 @@ form.multiple_sheet_request_filter_request_type.children.user.label: Participant
 form.multiple_sheet_request_filter_request_type.children.user.noPreference.label: 'Pas de préférence'
 form.nomenclature_data.children.items.label: 'Sélectionnez :'
 form.nomenclature_data.children.submit.label: Enregistrer
-form.options.selectParticipants.label: 'Veuillez choisir le ou les participants'
-form.options.selectParticipants.label: 'Choisir un participant|Choisir une ou des participants'
+form.options.selectParticipants.label: 'Choisir un participant|Choisir un ou des participants'
 form.options.selectParticipants.placeholder: 'Choisir...'
 form.package_summary_promotion_code.children.submit.label: Valider
 form.package_summary_promotion_code.placeholder: 'Saisir votre code promotionnel'
