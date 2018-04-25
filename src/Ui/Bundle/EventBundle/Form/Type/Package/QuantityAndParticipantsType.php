@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Package;
 
+use Proximum\Vimeet\Application\Adapter\TranslatorInterface;
 use Proximum\Vimeet\Application\Command\Package\Step\OptionRow;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Participant\ParticipantChoiceType;
@@ -19,6 +20,14 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class QuantityAndParticipantsType extends AbstractType
 {
+    /** @var TranslatorInterface */
+    private $translator;
+
+    public function __construct(TranslatorInterface $translator)
+    {
+        $this->translator = $translator;
+    }
+
     /**
      * {@inheritdoc}
      */
@@ -43,7 +52,16 @@ class QuantityAndParticipantsType extends AbstractType
                     'participants',
                     ParticipantChoiceType::class,
                     [
-                        'label' => 'form.options.selectParticipants.label',
+                        'label' => $this->translator->transChoice(
+                            'form.options.selectParticipants.label',
+                            $options['max'],
+                            [],
+                            'forms'
+                        ),
+                        'help' => $this->getParticipantsChoiceHelp(
+                            $options['max'],
+                            $options['sheet']->countParticipants()
+                        ),
                         'sheet' => $options['sheet'],
                         'locale' => $options['locale'],
                         'isMultiple' => true,
@@ -79,6 +97,20 @@ class QuantityAndParticipantsType extends AbstractType
             [
                 'data_class' => OptionRow::class,
             ]
+        );
+    }
+
+    private function getParticipantsChoiceHelp($max, int $participantsNumber)
+    {
+        if ($max >= $participantsNumber) {
+            return false;
+        }
+
+        return $this->translator->transChoice(
+            'form.options.selectParticipantsQuantityMax.label',
+            $max,
+            ['%max%' => $max],
+            'forms'
         );
     }
 }

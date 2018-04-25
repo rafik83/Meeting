@@ -230,6 +230,12 @@ services:
         tags:
             - { name: form.type }
 
+    Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Package\QuantityAndParticipantsType:
+        arguments:
+            - '@vimeet_infrastructure.adapter.translator_adapter'
+        tags:
+            - { name: form.type }
+
     form_type_sheet_data.editable_text_input_data_type:
         class: Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Sheet\Data\EditableTextInputDataType
         arguments:

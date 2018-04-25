@@ -59,7 +59,8 @@ form.multiple_sheet_request_filter_request_type.children.user.label: Participant
 form.multiple_sheet_request_filter_request_type.children.user.noPreference.label: 'No preferences'
 form.nomenclature_data.children.items.label: Select
 form.nomenclature_data.children.submit.label: Save
-form.options.selectParticipants.label: 'Please select one or more participants'
+form.options.selectParticipants.label: 'Select one participant|Select one or more participants'
+form.options.selectParticipantsQuantityMax.label: 'Limited to 1 participant|Limited to %max% participants'
 form.options.selectParticipants.placeholder: 'Select...'
 form.package_summary_promotion_code.children.submit.label: Validate
 form.package_summary_promotion_code.placeholder: 'Enter promotional code'
