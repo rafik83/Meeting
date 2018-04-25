@@ -33,6 +33,11 @@ Feature: Handle Product
     Then I should be on this page "/fr/event/1/product"
     And I should see "admin.product.create.success"
 
+  Scenario: I see the list of products of an event
+    Given I am logged with "test2@test.com" on admin
+    And I go to this page "/fr/event/1/product"
+    Then I should see "ProductTitre"
+
   Scenario: I can update a product linked to an event
     Given the database is purged
     And the event "PWA Meetup" is created
@@ -51,8 +56,3 @@ Feature: Handle Product
     And I press "form.product_update_plan.children.submit.label"
     And I should be on this page "/fr/event/1/product"
     And I should see "Formule Full Bis"
-
-  Scenario: I see the list of products of an event
-    Given I am logged with "test2@test.com" on admin
-    And I go to this page "/fr/event/1/product"
-    Then I should see "ProductTitre"
