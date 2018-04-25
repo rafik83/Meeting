@@ -382,9 +382,11 @@ class MeetingRepository implements MeetingRepositoryInterface
             ->from(Meeting::class, 'meeting')
             ->leftJoin('meeting.fromParticipants', 'fromParticipant')
             ->leftJoin('meeting.toParticipants', 'toParticipant')
-            ->where('fromParticipant = :participant OR toParticipant = :participant')
-            ->setParameter('participant', $participant)
+            ->where('meeting.event = :event')
+            ->andWhere('fromParticipant = :participant OR toParticipant = :participant')
             ->andWhere('meeting.state = :state')
+            ->setParameter('event', $participant->getSheet()->getEvent())
+            ->setParameter('participant', $participant)
             ->setParameter('state', Meeting::STATE_SCHEDULED)
             ->setMaxResults(1)
         ;

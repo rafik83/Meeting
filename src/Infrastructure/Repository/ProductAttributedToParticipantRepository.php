@@ -11,6 +11,7 @@
 namespace Proximum\Vimeet\Infrastructure\Repository;
 
 use Doctrine\ORM\EntityManager;
+use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Product;
 use Proximum\Vimeet\Domain\Model\ProductAttributedToParticipant;
 use Proximum\Vimeet\Domain\Model\Sheet;
@@ -83,5 +84,23 @@ class ProductAttributedToParticipantRepository implements ProductAttributedToPar
         ;
 
         $this->removeBatch($productAttributedToParticipants);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function participantHasAtLeastOneProduct(Participant $participant, array $products): bool
+    {
+        return null !== $this->entityManager->createQueryBuilder()
+            ->select('productAttributedToParticipant')
+            ->from(ProductAttributedToParticipant::class, 'productAttributedToParticipant')
+            ->where('productAttributedToParticipant.product IN (:products)')
+            ->andWhere('productAttributedToParticipant.participant = :participant')
+            ->setParameter('products', $products)
+            ->setParameter('participant', $participant)
+            ->setMaxResults(1)
+            ->getQuery()
+            ->getOneOrNullResult()
+        ;
     }
 }

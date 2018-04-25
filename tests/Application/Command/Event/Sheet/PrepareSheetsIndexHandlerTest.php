@@ -18,12 +18,12 @@ use Proximum\Vimeet\Domain\Model\Event;
 
 class PrepareSheetsIndexHandlerTest extends TestCase
 {
-    public function testHandle()
+    public function testHandle(): void
     {
         $event = $this->prophesize(Event::class);
         $jobQueue = $this->prophesize(JobQueueInterface::class);
-        $jobQueue->indexSheetsByEvent($event->reveal())->shouldBeCalled();
+        $jobQueue->indexSheetsByEvent($event->reveal(), true)->shouldBeCalled();
         $handler = new PrepareSheetsIndexHandler($jobQueue->reveal());
-        $handler->handle(new PrepareSheetsIndex($event->reveal()));
+        $handler->handle(new PrepareSheetsIndex($event->reveal(), true));
     }
 }

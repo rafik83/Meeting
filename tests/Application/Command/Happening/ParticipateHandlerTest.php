@@ -18,9 +18,11 @@ use Proximum\Vimeet\Application\Event\Happening\ParticipateEvent;
 use Proximum\Vimeet\Application\Event\Happening\ParticipateHappeningEvent;
 use Proximum\Vimeet\Application\Event\Happening\UnParticipateHappeningEvent;
 use Proximum\Vimeet\Application\Exception\Happening\NotEnoughtRemainingParticipationsException;
+use Proximum\Vimeet\Application\Exception\Happening\ParticipantMustHaveProductToParticipateException;
 use Proximum\Vimeet\Application\Exception\Happening\ParticipantNotAvailableException;
 use Proximum\Vimeet\Application\Exception\Happening\ParticipantRequiredException;
 use Proximum\Vimeet\Application\Exception\Happening\WrongInvitationCodeException;
+use Proximum\Vimeet\Domain\Happening\ParticipateToHappeningWithProductToBuyChecker;
 use Proximum\Vimeet\Domain\Happening\ParticipationCount;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Happening;
@@ -72,23 +74,29 @@ class ParticipateHandlerTest extends TestCase
     private $questionRepository;
     private $participationCount;
     private $eventDispatcher;
+    private $participateToHappeningWithProductToBuyChecker;
 
     public function setUp()
     {
-        $this->event                            = EventFactory::createEvent();
-        $this->datetime                         = new \DateTime();
-        $this->user                             = new User('user@vimeet.com', 'salt', 'password', 'fr');
-        $this->sheet                            = SheetFactory::create($this->event, $this->user);
-        $this->participant                      = ParticipantFactory::create($this->sheet, $this->user);
+        $this->event = EventFactory::createEvent();
+        $this->datetime = new \DateTime();
+        $this->user = new User('user@vimeet.com', 'salt', 'password', 'fr');
+        $this->sheet = SheetFactory::create($this->event, $this->user);
+        $this->participant = ParticipantFactory::create($this->sheet, $this->user);
         $this->happeningParticipationRepository = $this->prophesize(HappeningParticipationRepositoryInterface::class);
-        $this->participantRepository            = $this->prophesize(ParticipantRepositoryInterface::class);
-        $this->questionRepository               = $this->prophesize(QuestionRepositoryInterface::class);
-        $this->participationCount               = $this->prophesize(ParticipationCount::class);
-        $this->eventDispatcher                  = $this->prophesize(DelayedEventDispatcher::class);
+        $this->participantRepository = $this->prophesize(ParticipantRepositoryInterface::class);
+        $this->questionRepository = $this->prophesize(QuestionRepositoryInterface::class);
+        $this->participationCount = $this->prophesize(ParticipationCount::class);
+        $this->eventDispatcher = $this->prophesize(DelayedEventDispatcher::class);
+        $this->participateToHappeningWithProductToBuyChecker = $this->prophesize(
+            ParticipateToHappeningWithProductToBuyChecker::class
+        );
+
         $this->handler = new ParticipateHandler(
             $this->happeningParticipationRepository->reveal(),
             $this->participantRepository->reveal(),
             $this->questionRepository->reveal(),
+            $this->participateToHappeningWithProductToBuyChecker->reveal(),
             $this->participationCount->reveal(),
             $this->eventDispatcher->reveal(),
             $this->datetime
@@ -136,11 +144,15 @@ class ParticipateHandlerTest extends TestCase
     public function testParticipantNotAvailableException()
     {
         $this->participationCount->getRemaining($this->happening)->shouldBeCalled()->willReturn(10);
-        $this->participantRepository->getParticipantsForHappening($this->sheet, $this->happening)->shouldBeCalled()->willReturn([]);
+        $this->participantRepository->getParticipantsForHappening($this->sheet, $this->happening)
+            ->shouldBeCalled()
+            ->willReturn([])
+        ;
         $this->participantRepository
             ->getAvailableParticipantsForHappening([$this->participant], $this->happening)
             ->shouldBeCalled()
-            ->willReturn([]);
+            ->willReturn([])
+        ;
 
         $this->expectException(ParticipantNotAvailableException::class);
 
@@ -163,17 +175,33 @@ class ParticipateHandlerTest extends TestCase
         $this->participantRepository
             ->getParticipantsForHappening($this->sheet, $this->happening)
             ->shouldBeCalled()
-            ->willReturn([$this->participant]);
+            ->willReturn([$this->participant])
+        ;
 
-        $this->happeningParticipationRepository->removeUserForHappening($this->user, $this->happening)->shouldBeCalled();
+        $this->happeningParticipationRepository
+            ->removeUserForHappening($this->user, $this->happening)
+            ->shouldBeCalled()
+        ;
 
         $this->questionRepository->removeQuestionFromUserForHappening()->shouldNotBeCalled();
         $this->questionRepository->add()->shouldNotBeCalled();
 
-        $this->eventDispatcher->dispatch(Events::HAPPENING_PARTICIPATED, new ParticipateEvent($this->sheet, [], $this->happening))
-            ->shouldBeCalled();
-        $this->eventDispatcher->dispatch(Events::HAPPENING_UN_PARTICIPATE, new UnParticipateHappeningEvent($this->participant))
-            ->shouldBeCalled();
+        $this
+            ->eventDispatcher
+            ->dispatch(
+                Events::HAPPENING_PARTICIPATED,
+                new ParticipateEvent($this->sheet, [], $this->happening)
+            )
+            ->shouldBeCalled()
+        ;
+        $this
+            ->eventDispatcher
+            ->dispatch(
+                Events::HAPPENING_UN_PARTICIPATE,
+                new UnParticipateHappeningEvent($this->participant)
+            )
+            ->shouldBeCalled()
+        ;
 
         $participate = $this->participate;
         $participate->participants = [];
@@ -187,30 +215,111 @@ class ParticipateHandlerTest extends TestCase
         $this->participantRepository
             ->getParticipantsForHappening($this->sheet, $this->happening)
             ->shouldBeCalled()
-            ->willReturn([]);
+            ->willReturn([])
+        ;
         $this->participantRepository
             ->getAvailableParticipantsForHappening([$this->participant], $this->happening)
             ->shouldBeCalled()
-            ->willReturn([$this->participant]);
+            ->willReturn([$this->participant])
+        ;
 
-        $this->happeningParticipationRepository->findByHappeningAndUser(
-            $this->happening,
-            $this->user
-        )->shouldBeCalled()->willReturn(null);
+        $this->happeningParticipationRepository
+            ->findByHappeningAndUser(
+                $this->happening,
+                $this->user
+            )
+            ->shouldBeCalled()
+            ->willReturn(null)
+        ;
 
-        $this->happeningParticipationRepository->add(
-            new HappeningParticipation($this->happening, $this->user)
-        )->shouldBeCalled();
+        $this->happeningParticipationRepository
+            ->add(
+                new HappeningParticipation($this->happening, $this->user)
+            )
+            ->shouldBeCalled()
+        ;
+
+        $this
+            ->participateToHappeningWithProductToBuyChecker
+            ->canParticipate($this->participant, $this->happening)
+            ->shouldBeCalled()
+            ->willReturn(true)
+        ;
 
         $this->questionRepository->removeQuestionFromUserForHappening()->shouldNotBeCalled();
         $this->questionRepository->add()->shouldNotBeCalled();
 
-        $this->eventDispatcher->dispatch(Events::HAPPENING_PARTICIPATED, new ParticipateEvent($this->sheet, [$this->participant], $this->happening))
-            ->shouldBeCalled();
-        $this->eventDispatcher->dispatch(Events::HAPPENING_PARTICIPATE, new ParticipateHappeningEvent($this->participant))
-            ->shouldBeCalled();
+        $this
+            ->eventDispatcher
+            ->dispatch(
+                Events::HAPPENING_PARTICIPATED,
+                new ParticipateEvent($this->sheet, [$this->participant], $this->happening)
+            )
+            ->shouldBeCalled()
+        ;
+        $this
+            ->eventDispatcher
+            ->dispatch(
+                Events::HAPPENING_PARTICIPATE,
+                new ParticipateHappeningEvent($this->participant)
+            )
+            ->shouldBeCalled()
+        ;
 
         $this->handler->handle($this->participate);
+    }
+
+    public function testParticipantMustHaveProductToParticipateException()
+    {
+        $this->expectException(ParticipantMustHaveProductToParticipateException::class);
+
+        $user2 = new User('user2@vimeet.com', 'salt', 'password', 'fr');
+        $participant2 = ParticipantFactory::create($this->sheet, $user2);
+
+        $this->participationCount->getRemaining($this->happening)->shouldBeCalled()->willReturn(10);
+        $this->participantRepository
+            ->getParticipantsForHappening($this->sheet, $this->happening)
+            ->shouldBeCalled()
+            ->willReturn([])
+        ;
+        $this->participantRepository
+            ->getAvailableParticipantsForHappening(
+                [
+                    $this->participant,
+                    $participant2,
+                ],
+                $this->happening
+            )
+            ->shouldBeCalled()
+            ->willReturn(
+                [
+                    $this->participant,
+                    $participant2,
+                ]
+            )
+        ;
+
+        $this
+            ->participateToHappeningWithProductToBuyChecker
+            ->canParticipate($this->participant, $this->happening)
+            ->shouldBeCalled()
+            ->willReturn(true)
+        ;
+
+        $this
+            ->participateToHappeningWithProductToBuyChecker
+            ->canParticipate($participant2, $this->happening)
+            ->shouldBeCalled()
+            ->willReturn(false)
+        ;
+
+        $participate = $this->participate;
+        $participate->participants = [
+            $this->participant,
+            $participant2,
+        ];
+
+        $this->handler->handle($participate);
     }
 
     public function testParticipateSeveralParticipants()
@@ -222,44 +331,110 @@ class ParticipateHandlerTest extends TestCase
         $this->participantRepository
             ->getParticipantsForHappening($this->sheet, $this->happening)
             ->shouldBeCalled()
-            ->willReturn([]);
+            ->willReturn([])
+        ;
         $this->participantRepository
-            ->getAvailableParticipantsForHappening([$this->participant, $participant2], $this->happening)
+            ->getAvailableParticipantsForHappening(
+                [
+                    $this->participant,
+                    $participant2,
+                ],
+                $this->happening
+            )
             ->shouldBeCalled()
-            ->willReturn([$this->participant, $participant2]);
+            ->willReturn(
+                [
+                    $this->participant,
+                    $participant2,
+                ]
+            )
+        ;
 
-        $this->happeningParticipationRepository->findByHappeningAndUser(
-            $this->happening,
-            $this->user
-        )->shouldBeCalled()->willReturn(null);
+        $this
+            ->happeningParticipationRepository
+            ->findByHappeningAndUser(
+                $this->happening,
+                $this->user
+            )
+            ->shouldBeCalled()
+            ->willReturn(null)
+        ;
 
-        $this->happeningParticipationRepository->findByHappeningAndUser(
-            $this->happening,
-            $user2
-        )->shouldBeCalled()->willReturn(null);
+        $this->happeningParticipationRepository
+            ->findByHappeningAndUser(
+                $this->happening,
+                $user2
+            )
+            ->shouldBeCalled()
+            ->willReturn(null)
+        ;
+
+        $this
+            ->participateToHappeningWithProductToBuyChecker
+            ->canParticipate($this->participant, $this->happening)
+            ->shouldBeCalled()
+            ->willReturn(true)
+        ;
+
+        $this
+            ->participateToHappeningWithProductToBuyChecker
+            ->canParticipate($participant2, $this->happening)
+            ->shouldBeCalled()
+            ->willReturn(true)
+        ;
 
         $participate = $this->participate;
-        $participate->participants = [$this->participant, $participant2];
+        $participate->participants = [
+            $this->participant,
+            $participant2,
+        ];
 
-        $this->happeningParticipationRepository->add(
-            new HappeningParticipation($this->happening, $this->user)
-        )->shouldBeCalled();
+        $this
+            ->happeningParticipationRepository
+            ->add(
+                new HappeningParticipation($this->happening, $this->user)
+            )
+            ->shouldBeCalled()
+        ;
 
-        $this->happeningParticipationRepository->add(
-            new HappeningParticipation($this->happening, $user2)
-        )->shouldBeCalled();
+        $this
+            ->happeningParticipationRepository
+            ->add(
+                new HappeningParticipation($this->happening, $user2)
+            )
+            ->shouldBeCalled()
+        ;
 
         $this->questionRepository->removeQuestionFromUserForHappening()->shouldNotBeCalled();
         $this->questionRepository->add()->shouldNotBeCalled();
 
-        $this->eventDispatcher->dispatch(Events::HAPPENING_PARTICIPATED, new ParticipateEvent($this->sheet, [
-            $this->participant,
-            $participant2,
-        ], $this->happening))->shouldBeCalled();
-        $this->eventDispatcher->dispatch(Events::HAPPENING_PARTICIPATE, new ParticipateHappeningEvent($this->participant))
-            ->shouldBeCalled();
-        $this->eventDispatcher->dispatch(Events::HAPPENING_PARTICIPATE, new ParticipateHappeningEvent($participant2))
-            ->shouldBeCalled();
+        $this
+            ->eventDispatcher
+            ->dispatch(
+                Events::HAPPENING_PARTICIPATED,
+                new ParticipateEvent(
+                    $this->sheet,
+                    [
+                        $this->participant,
+                        $participant2,
+                    ],
+                    $this->happening
+                )
+            )
+            ->shouldBeCalled()
+        ;
+        $this
+            ->eventDispatcher
+            ->dispatch(
+                Events::HAPPENING_PARTICIPATE,
+                new ParticipateHappeningEvent($this->participant)
+            )
+            ->shouldBeCalled()
+        ;
+        $this->eventDispatcher
+            ->dispatch(Events::HAPPENING_PARTICIPATE, new ParticipateHappeningEvent($participant2))
+            ->shouldBeCalled()
+        ;
 
         $this->handler->handle($participate);
     }
@@ -275,37 +450,76 @@ class ParticipateHandlerTest extends TestCase
         $this->participantRepository
             ->getParticipantsForHappening($this->sheet, $this->happening)
             ->shouldBeCalled()
-            ->willReturn([$this->participant]);
+            ->willReturn([$this->participant])
+        ;
 
         // We remove Participant1 and replace it by Participant2
         $this->participantRepository
             ->getAvailableParticipantsForHappening([$participant2], $this->happening)
             ->shouldBeCalled()
-            ->willReturn([$this->participant, $participant2]);
+            ->willReturn(
+                [
+                    $this->participant,
+                    $participant2,
+                ]
+            )
+        ;
+
+        $this
+            ->participateToHappeningWithProductToBuyChecker
+            ->canParticipate($participant2, $this->happening)
+            ->shouldBeCalled()
+            ->willReturn(true)
+        ;
 
         $participate = $this->participate;
         $participate->participants = [$participant2];
 
-        $this->happeningParticipationRepository->removeUserForHappening($this->user, $this->happening)->shouldBeCalled();
+        $this
+            ->happeningParticipationRepository
+            ->removeUserForHappening($this->user, $this->happening)
+            ->shouldBeCalled()
+        ;
 
-        $this->happeningParticipationRepository->findByHappeningAndUser(
-            $this->happening,
-            $user2
-        )->shouldBeCalled()->willReturn(null);
+        $this
+            ->happeningParticipationRepository
+            ->findByHappeningAndUser(
+                $this->happening,
+                $user2
+            )
+            ->shouldBeCalled()
+            ->willReturn(null)
+        ;
 
-        $this->happeningParticipationRepository->add(
-            new HappeningParticipation($this->happening, $user2)
-        )->shouldBeCalled();
+        $this
+            ->happeningParticipationRepository
+            ->add(
+                new HappeningParticipation($this->happening, $user2)
+            )
+            ->shouldBeCalled()
+        ;
 
         $this->questionRepository->removeQuestionFromUserForHappening()->shouldNotBeCalled();
         $this->questionRepository->add()->shouldNotBeCalled();
 
-        $this->eventDispatcher->dispatch(Events::HAPPENING_PARTICIPATED, new ParticipateEvent($this->sheet, [$participant2], $this->happening))
-            ->shouldBeCalled();
-        $this->eventDispatcher->dispatch(Events::HAPPENING_UN_PARTICIPATE, new UnParticipateHappeningEvent($this->participant))
-            ->shouldBeCalled();
-        $this->eventDispatcher->dispatch(Events::HAPPENING_PARTICIPATE, new ParticipateHappeningEvent($participant2))
-            ->shouldBeCalled();
+        $this->eventDispatcher
+            ->dispatch(
+                Events::HAPPENING_PARTICIPATED,
+                new ParticipateEvent($this->sheet, [$participant2], $this->happening)
+            )
+            ->shouldBeCalled()
+        ;
+        $this->eventDispatcher
+            ->dispatch(
+                Events::HAPPENING_UN_PARTICIPATE,
+                new UnParticipateHappeningEvent($this->participant)
+            )
+            ->shouldBeCalled()
+        ;
+        $this->eventDispatcher
+            ->dispatch(Events::HAPPENING_PARTICIPATE, new ParticipateHappeningEvent($participant2))
+            ->shouldBeCalled()
+        ;
 
         $this->handler->handle($participate);
     }
@@ -315,31 +529,62 @@ class ParticipateHandlerTest extends TestCase
         $this->happening->setQuestionAllowed(true);
 
         $this->participationCount->getRemaining($this->happening)->shouldBeCalled()->willReturn(10);
-        $this->participantRepository
+        $this
+            ->participantRepository
             ->getParticipantsForHappening($this->sheet, $this->happening)
             ->shouldBeCalled()
-            ->willReturn([]);
-        $this->participantRepository
+            ->willReturn([])
+        ;
+        $this
+            ->participantRepository
             ->getAvailableParticipantsForHappening([$this->participant], $this->happening)
             ->shouldBeCalled()
-            ->willReturn([$this->participant]);
+            ->willReturn([$this->participant])
+        ;
 
-        $this->happeningParticipationRepository->findByHappeningAndUser(
-            $this->happening,
-            $this->user
-        )->shouldBeCalled()->willReturn(null);
+        $this
+            ->participateToHappeningWithProductToBuyChecker
+            ->canParticipate($this->participant, $this->happening)
+            ->shouldBeCalled()
+            ->willReturn(true)
+        ;
 
-        $this->happeningParticipationRepository->add(
-            new HappeningParticipation($this->happening, $this->user)
-        )->shouldBeCalled();
+        $this
+            ->happeningParticipationRepository
+            ->findByHappeningAndUser(
+                $this->happening,
+                $this->user
+            )
+            ->shouldBeCalled()
+            ->willReturn(null)
+        ;
+
+        $this->happeningParticipationRepository
+            ->add(
+                new HappeningParticipation($this->happening, $this->user)
+            )
+            ->shouldBeCalled()
+        ;
 
         $this->questionRepository->removeQuestionFromUserForHappening($this->user, $this->happening)->shouldBeCalled();
         $this->questionRepository->add()->shouldNotBeCalled();
 
-        $this->eventDispatcher->dispatch(Events::HAPPENING_PARTICIPATED, new ParticipateEvent($this->sheet, [$this->participant], $this->happening))
-            ->shouldBeCalled();
-        $this->eventDispatcher->dispatch(Events::HAPPENING_PARTICIPATE, new ParticipateHappeningEvent($this->participant))
-            ->shouldBeCalled();
+        $this
+            ->eventDispatcher
+            ->dispatch(
+                Events::HAPPENING_PARTICIPATED,
+                new ParticipateEvent($this->sheet, [$this->participant], $this->happening)
+            )
+            ->shouldBeCalled()
+        ;
+        $this
+            ->eventDispatcher
+            ->dispatch(
+                Events::HAPPENING_PARTICIPATE,
+                new ParticipateHappeningEvent($this->participant)
+            )
+            ->shouldBeCalled()
+        ;
 
         $this->handler->handle($this->participate);
     }
@@ -352,36 +597,68 @@ class ParticipateHandlerTest extends TestCase
         $this->participantRepository
             ->getParticipantsForHappening($this->sheet, $this->happening)
             ->shouldBeCalled()
-            ->willReturn([]);
+            ->willReturn([])
+        ;
         $this->participantRepository
             ->getAvailableParticipantsForHappening([$this->participant], $this->happening)
             ->shouldBeCalled()
-            ->willReturn([$this->participant]);
+            ->willReturn([$this->participant])
+        ;
 
-        $this->happeningParticipationRepository->findByHappeningAndUser(
-            $this->happening,
-            $this->user
-        )->shouldBeCalled()->willReturn(null);
+        $this
+            ->participateToHappeningWithProductToBuyChecker
+            ->canParticipate($this->participant, $this->happening)
+            ->shouldBeCalled()
+            ->willReturn(true)
+        ;
 
-        $this->happeningParticipationRepository->add(
-            new HappeningParticipation($this->happening, $this->user)
-        )->shouldBeCalled();
+        $this->happeningParticipationRepository
+            ->findByHappeningAndUser(
+                $this->happening,
+                $this->user
+            )
+            ->shouldBeCalled()
+            ->willReturn(null)
+        ;
+
+        $this
+            ->happeningParticipationRepository
+            ->add(
+                new HappeningParticipation($this->happening, $this->user)
+            )
+            ->shouldBeCalled()
+        ;
 
         $this->questionRepository->removeQuestionFromUserForHappening($this->user, $this->happening)->shouldBeCalled();
-        $this->questionRepository->add(
-            new Question(
-                $this->happening,
-                $this->sheet,
-                $this->user,
-                $this->datetime,
-                'My question is...'
+        $this->questionRepository
+            ->add(
+                new Question(
+                    $this->happening,
+                    $this->sheet,
+                    $this->user,
+                    $this->datetime,
+                    'My question is...'
+                )
             )
-        )->shouldBeCalled();
+            ->shouldBeCalled()
+        ;
 
-        $this->eventDispatcher->dispatch(Events::HAPPENING_PARTICIPATED, new ParticipateEvent($this->sheet, [$this->participant], $this->happening))
-            ->shouldBeCalled();
-        $this->eventDispatcher->dispatch(Events::HAPPENING_PARTICIPATE, new ParticipateHappeningEvent($this->participant))
-            ->shouldBeCalled();
+        $this
+            ->eventDispatcher
+            ->dispatch(
+                Events::HAPPENING_PARTICIPATED,
+                new ParticipateEvent($this->sheet, [$this->participant], $this->happening)
+            )
+            ->shouldBeCalled()
+        ;
+        $this
+            ->eventDispatcher
+            ->dispatch(
+                Events::HAPPENING_PARTICIPATE,
+                new ParticipateHappeningEvent($this->participant)
+            )
+            ->shouldBeCalled()
+        ;
 
         $participate = $this->participate;
         $participate->question = 'My question is...';
@@ -397,22 +674,41 @@ class ParticipateHandlerTest extends TestCase
         $this->participantRepository
             ->getParticipantsForHappening($this->sheet, $this->happening)
             ->shouldBeCalled()
-            ->willReturn([$this->participant]);
+            ->willReturn([$this->participant])
+        ;
 
-        $this->happeningParticipationRepository->findByHappeningAndUser(
-            $this->happening,
-            $this->user
-        )->shouldNotBeCalled();
+        $this
+            ->happeningParticipationRepository
+            ->findByHappeningAndUser(
+                $this->happening,
+                $this->user
+            )
+            ->shouldNotBeCalled()
+        ;
 
-        $this->happeningParticipationRepository->removeUserForHappening($this->user, $this->happening)->shouldBeCalled();
+        $this
+            ->happeningParticipationRepository
+            ->removeUserForHappening($this->user, $this->happening)
+            ->shouldBeCalled()
+        ;
 
         $this->questionRepository->removeQuestionFromUserForHappening($this->user, $this->happening)->shouldBeCalled();
         $this->questionRepository->add()->shouldNotBeCalled();
 
-        $this->eventDispatcher->dispatch(Events::HAPPENING_PARTICIPATED, new ParticipateEvent($this->sheet, [], $this->happening))
-            ->shouldBeCalled();
-        $this->eventDispatcher->dispatch(Events::HAPPENING_UN_PARTICIPATE, new UnParticipateHappeningEvent($this->participant))
-            ->shouldBeCalled();
+        $this->eventDispatcher
+            ->dispatch(
+                Events::HAPPENING_PARTICIPATED,
+                new ParticipateEvent($this->sheet, [], $this->happening)
+            )
+            ->shouldBeCalled()
+        ;
+        $this->eventDispatcher
+            ->dispatch(
+                Events::HAPPENING_UN_PARTICIPATE,
+                new UnParticipateHappeningEvent($this->participant)
+            )
+            ->shouldBeCalled()
+        ;
 
         $participate = $this->participate;
         $participate->participants = [];

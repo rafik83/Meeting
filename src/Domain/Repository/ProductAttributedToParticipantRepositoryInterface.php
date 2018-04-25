@@ -35,4 +35,12 @@ interface ProductAttributedToParticipantRepositoryInterface
     public function remove(ProductAttributedToParticipant $productAttributedToParticipant): void;
 
     public function removeForSheet(Sheet $sheet): void;
+
+    /**
+     * @param Participant $participant
+     * @param Product[]   $products
+     *
+     * @return bool
+     */
+    public function participantHasAtLeastOneProduct(Participant $participant, array $products): bool;
 }

@@ -738,7 +738,7 @@ event_sheet_happening_participate:
         sheet: \d+
         happening: \d+
     methods:  [GET, POST]
-    defaults: { _controller: EventBundle:Happening:participate }
+    defaults: { _controller: Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Happening\HappeningParticipateAction }
 
 #
 # Unavailability

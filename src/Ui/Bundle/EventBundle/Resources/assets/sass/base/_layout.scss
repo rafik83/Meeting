@@ -23,12 +23,11 @@ body {
 
   > header {
     position: relative;
-    height: 70px;
+    min-height: 50px;
 
     h1 {
-      position: absolute;
+      display: inline-block;
       bottom: 20px;
-      left: -15px;
       line-height: 20px;
       margin: 0;
 
@@ -50,9 +49,12 @@ body {
     }
 
     .request-meeting-sheet {
-      position: absolute;
+      display: inline-block;
       bottom: 14px;
-      left: 200px;
+
+      .btn {
+        display: inline-block;
+      }
     }
 
     .tabs {

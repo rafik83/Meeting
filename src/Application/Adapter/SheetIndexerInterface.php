@@ -23,4 +23,9 @@ interface SheetIndexerInterface
      * @param Sheet[] $sheets
      */
     public function updateSheets(array $sheets): void;
+
+    /**
+     * @param int[] $sheetIds
+     */
+    public function deleteSheets(array $sheetIds): void;
 }

@@ -136,11 +136,11 @@ form.sheet_image_data.children.selectedProduct.label: 'Related options'
 form.sheet_image_data.children.submit.label: save
 form.sheet_item_collection_data.children.items.label_add: Add
 form.sheet_item_collection_data.children.items.label_delete: '&times;'
-form.sheet_item_collection_data.children.items.prototype.children.title.label: title
+form.sheet_item_collection_data.children.items.prototype.children.title.label: Title
 form.sheet_item_collection_data.children.submit.label: Save
 form.sheet_media_collection_data.children.medias.label_add: Add
 form.sheet_media_collection_data.children.medias.label_delete: '&times;'
-form.sheet_media_collection_data.children.medias.prototype.children.title.label: title
+form.sheet_media_collection_data.children.medias.prototype.children.title.label: Title
 form.sheet_media_collection_data.children.medias.prototype.children.type.label: Type
 form.sheet_media_collection_data.children.medias.prototype.children.url.label: Link
 form.sheet_media_collection_data.children.selectedProduct.label: 'linked products'

@@ -18,6 +18,7 @@ use Proximum\Vimeet\Application\Adapter\CommandBusInterface;
 use Proximum\Vimeet\Application\Adapter\RouterInterface;
 use Proximum\Vimeet\Application\Command\Product\Option\CreateOption;
 use Proximum\Vimeet\Domain\Model\Event;
+use Proximum\Vimeet\Domain\Repository\HappeningRepositoryInterface;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Product\Option\CreateAction;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Product\Option\CreateOptionType;
 use Symfony\Bundle\FrameworkBundle\Templating\EngineInterface;
@@ -56,6 +57,9 @@ class CreateActionTest extends TestCase
     /** @var ObjectProphecy */
     private $event;
 
+    /** @var HappeningRepositoryInterface */
+    private $happeningRepository;
+
     public function setUp(): void
     {
         $this->authorizationCheckerAdapter = $this->prophesize(AuthorizationCheckerAdapterInterface::class);
@@ -64,6 +68,7 @@ class CreateActionTest extends TestCase
         $this->flashBag = $this->prophesize(FlashBagInterface::class);
         $this->router = $this->prophesize(RouterInterface::class);
         $this->engine = $this->prophesize(EngineInterface::class);
+        $this->happeningRepository = $this->prophesize(HappeningRepositoryInterface::class);
 
         $this->request = new Request();
         $this->event = $this->prophesize(Event::class);
@@ -88,7 +93,8 @@ class CreateActionTest extends TestCase
             $this->commandBus->reveal(),
             $this->flashBag->reveal(),
             $this->router->reveal(),
-            $this->engine->reveal()
+            $this->engine->reveal(),
+            $this->happeningRepository->reveal()
         );
         $action($this->request, $this->event->reveal());
     }
@@ -108,6 +114,7 @@ class CreateActionTest extends TestCase
                 'event'  => $this->event->reveal(),
                 'locale' => 'fr',
                 'submit' => true,
+                'happenings' => []
             ])
             ->shouldBeCalled()
             ->willReturn($form->reveal())
@@ -128,13 +135,16 @@ class CreateActionTest extends TestCase
             ->willReturn(new Response())
         ;
 
+        $this->happeningRepository->findByEvent($this->event)->shouldBeCalled()->willReturn([]);
+
         $action = new CreateAction(
             $this->authorizationCheckerAdapter->reveal(),
             $this->formFactory->reveal(),
             $this->commandBus->reveal(),
             $this->flashBag->reveal(),
             $this->router->reveal(),
-            $this->engine->reveal()
+            $this->engine->reveal(),
+            $this->happeningRepository->reveal()
         );
         $result = $action($this->request, $this->event->reveal());
 
@@ -156,6 +166,7 @@ class CreateActionTest extends TestCase
                 'event'  => $this->event->reveal(),
                 'locale' => 'fr',
                 'submit' => true,
+                'happenings' => []
             ])
             ->shouldBeCalled()
             ->willReturn($form->reveal())
@@ -171,13 +182,16 @@ class CreateActionTest extends TestCase
         $this->router->generate('admin_product', ['event' => 1])->shouldBeCalled()->willReturn('/route/path');
         $this->engine->renderResponse(Argument::any())->shouldNotBeCalled();
 
+        $this->happeningRepository->findByEvent($this->event)->shouldBeCalled()->willReturn([]);
+
         $action = new CreateAction(
             $this->authorizationCheckerAdapter->reveal(),
             $this->formFactory->reveal(),
             $this->commandBus->reveal(),
             $this->flashBag->reveal(),
             $this->router->reveal(),
-            $this->engine->reveal()
+            $this->engine->reveal(),
+            $this->happeningRepository->reveal()
         );
         $result = $action($this->request, $this->event->reveal());
 

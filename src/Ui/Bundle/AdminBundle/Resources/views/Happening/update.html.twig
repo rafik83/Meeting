@@ -5,6 +5,24 @@
 {% block form_title 'admin.happening.updateTitle'|trans %}
 
 {% block form_content %}
+    {% if products is not empty %}
+        <div class="well">
+            <h4>
+                {{ 'admin.happening.products'|trans }}
+            </h4>
+            <ul>
+                {% for product in products %}
+                    <li>
+                        <a href="{{ path('admin_product_update_option', {
+                            event: event.id,
+                            product: product.id,
+                        }) }}">{{ product.name }}</a>
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>
+        <hr>
+    {% endif %}
     {{ form_row(form.category, {widget_columns: 3}) }}
     {{ form_row(form.translations) }}
     {{ form_row(form.begin, {widget_columns: 3}) }}

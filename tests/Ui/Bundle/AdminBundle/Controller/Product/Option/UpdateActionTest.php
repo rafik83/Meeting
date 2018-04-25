@@ -19,6 +19,7 @@ use Proximum\Vimeet\Application\Adapter\RouterInterface;
 use Proximum\Vimeet\Application\Command\Product\Option\UpdateOption;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Product;
+use Proximum\Vimeet\Domain\Repository\HappeningRepositoryInterface;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Product\Option\UpdateAction;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Product\Option\UpdateOptionType;
 use Symfony\Bundle\FrameworkBundle\Templating\EngineInterface;
@@ -60,6 +61,9 @@ class UpdateActionTest extends TestCase
     /** @var ObjectProphecy */
     private $product;
 
+    /** @var HappeningRepositoryInterface */
+    private $happeningRepository;
+
     public function setUp(): void
     {
         $this->authorizationCheckerAdapter = $this->prophesize(AuthorizationCheckerAdapterInterface::class);
@@ -68,6 +72,7 @@ class UpdateActionTest extends TestCase
         $this->flashBag = $this->prophesize(FlashBagInterface::class);
         $this->router = $this->prophesize(RouterInterface::class);
         $this->engine = $this->prophesize(EngineInterface::class);
+        $this->happeningRepository = $this->prophesize(HappeningRepositoryInterface::class);
 
         $this->request = new Request();
         $this->event = $this->prophesize(Event::class);
@@ -101,6 +106,7 @@ class UpdateActionTest extends TestCase
         $this->product->getDeletableUntil()->willReturn(null);
         $this->product->getBuyableUntil()->willReturn(null);
         $this->product->isSubjectedToValidation()->willReturn(false);
+        $this->product->getHappenings()->willReturn([]);
     }
 
     public function testIsGranted(): void
@@ -118,7 +124,8 @@ class UpdateActionTest extends TestCase
             $this->commandBus->reveal(),
             $this->flashBag->reveal(),
             $this->router->reveal(),
-            $this->engine->reveal()
+            $this->engine->reveal(),
+            $this->happeningRepository->reveal()
         );
         $action($this->request, $this->event->reveal(), $this->product->reveal());
     }
@@ -139,7 +146,8 @@ class UpdateActionTest extends TestCase
             $this->commandBus->reveal(),
             $this->flashBag->reveal(),
             $this->router->reveal(),
-            $this->engine->reveal()
+            $this->engine->reveal(),
+            $this->happeningRepository->reveal()
         );
         $action($this->request, $event->reveal(), $this->product->reveal());
     }
@@ -161,7 +169,8 @@ class UpdateActionTest extends TestCase
             $this->commandBus->reveal(),
             $this->flashBag->reveal(),
             $this->router->reveal(),
-            $this->engine->reveal()
+            $this->engine->reveal(),
+            $this->happeningRepository->reveal()
         );
         $action($this->request, $this->event->reveal(), $this->product->reveal());
     }
@@ -182,6 +191,7 @@ class UpdateActionTest extends TestCase
                 'product'  => $this->product->reveal(),
                 'locale' => 'fr',
                 'submit' => true,
+                'happenings' => []
             ])
             ->shouldBeCalled()
             ->willReturn($form->reveal())
@@ -192,6 +202,8 @@ class UpdateActionTest extends TestCase
 
         $form->handleRequest($this->request)->shouldBeCalled()->willReturn($form->reveal());
         $form->isSubmitted()->shouldBeCalled()->willReturn(false);
+
+        $this->happeningRepository->findByEvent($this->event)->shouldBeCalled()->willReturn([]);
 
         $this->engine
             ->renderResponse('AdminBundle:Product:updateOption.html.twig', [
@@ -209,7 +221,8 @@ class UpdateActionTest extends TestCase
             $this->commandBus->reveal(),
             $this->flashBag->reveal(),
             $this->router->reveal(),
-            $this->engine->reveal()
+            $this->engine->reveal(),
+            $this->happeningRepository->reveal()
         );
         $result = $action($this->request, $this->event->reveal(), $this->product->reveal());
 
@@ -232,6 +245,7 @@ class UpdateActionTest extends TestCase
                 'product'  => $this->product->reveal(),
                 'locale' => 'fr',
                 'submit' => true,
+                'happenings' => []
             ])
             ->shouldBeCalled()
             ->willReturn($form->reveal())
@@ -247,13 +261,16 @@ class UpdateActionTest extends TestCase
         $this->router->generate('admin_product', ['event' => 1])->shouldBeCalled()->willReturn('/route/path');
         $this->engine->renderResponse(Argument::any())->shouldNotBeCalled();
 
+        $this->happeningRepository->findByEvent($this->event)->shouldBeCalled()->willReturn([]);
+
         $action = new UpdateAction(
             $this->authorizationCheckerAdapter->reveal(),
             $this->formFactory->reveal(),
             $this->commandBus->reveal(),
             $this->flashBag->reveal(),
             $this->router->reveal(),
-            $this->engine->reveal()
+            $this->engine->reveal(),
+            $this->happeningRepository->reveal()
         );
         $result = $action($this->request, $this->event->reveal(), $this->product->reveal());
 

@@ -68,6 +68,9 @@
                 <td>
                     <i class="glyphicon glyphicon-product-{{ product.type }}"></i>
                     {{ product.name }}
+                    {% if product.hasHappenings %}
+                        <i class="icon-PresFlash_2" data-toggle="tooltip" title="{{ "admin.product.happenings.tooltip"|trans }}"></i>
+                    {% endif %}
 
                     {% if product.subjectedToValidation %}
                         <span class="label label-warning">
