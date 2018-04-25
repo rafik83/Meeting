@@ -47,8 +47,7 @@ class UpdateCompanyHandler
         Synchronizer $accountSynchronizer,
         DelayedEventDispatcher $eventDispatcher,
         UploadFileHandler $uploadFileHandler
-    )
-    {
+    ) {
         $this->sheetRepository = $sheetRepository;
         $this->accountSynchronizer = $accountSynchronizer;
         $this->eventDispatcher = $eventDispatcher;

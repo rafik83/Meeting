@@ -483,7 +483,7 @@ class Block extends AbstractChild
             return $object->getContentValueLocalize();
         })->first();
     }
-    
+
     /**
      * @return TemplateObject\UploadableObjectInterface[]
      */
