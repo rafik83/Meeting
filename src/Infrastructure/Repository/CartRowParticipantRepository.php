@@ -49,7 +49,7 @@ class CartRowParticipantRepository implements CartRowParticipantRepositoryInterf
     public function findCartRowOnAttributableProductForParticipants(array $participants): array
     {
         $queryBuilder = $this->entityManager->createQueryBuilder()
-            ->select('cartRowParticipant, cartRow, product')
+            ->select('cartRowParticipant')
             ->from(CartRowParticipant::class, 'cartRowParticipant')
             ->join('cartRowParticipant.participant', 'participant', 'WITH', 'participant.id IN (:participants)')
             ->join('cartRowParticipant.cartRow', 'cartRow')

@@ -17,6 +17,8 @@ use Proximum\Vimeet\Application\Event\Events;
 use Proximum\Vimeet\Application\Event\Participant\ParticipantRemovedEvent;
 use Proximum\Vimeet\Application\Event\Sheet\SheetUpdatedEvent;
 use Proximum\Vimeet\Application\Exception\Participant\CanNotRemoveAllParticipantsException;
+use Proximum\Vimeet\Application\Exception\Participant\Remove\ParticipantAttributedToProductCanNotBeRemovedException;
+use Proximum\Vimeet\Application\Exception\Participant\Remove\ParticipantWithMeetingCanNotBeRemovedException;
 use Proximum\Vimeet\Domain\Cart\CartManager;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Repository\MeetingRepositoryInterface;
@@ -77,11 +79,11 @@ class RemoveHandler
     /**
      * @param Remove $remove
      *
-     * @return RemoveResult
-     *
+     * @throws ParticipantWithMeetingCanNotBeRemovedException
+     * @throws ParticipantAttributedToProductCanNotBeRemovedException
      * @throws CanNotRemoveAllParticipantsException
      */
-    public function handle(Remove $remove): RemoveResult
+    public function handle(Remove $remove)
     {
         if (\count($remove->participants) === $remove->sheet->countParticipants()) {
             throw new CanNotRemoveAllParticipantsException('All participants can not be selected to be remove');
@@ -100,9 +102,8 @@ class RemoveHandler
 
         // Avoid deletion if there is someone with the exception of meeting
         if (!empty($participantsWithMeeting)) {
-            return new RemoveResult(
-                $this->getArrayOfParticipantsName($participantsWithMeeting, $remove->locale),
-                true
+            throw new ParticipantWithMeetingCanNotBeRemovedException(
+                $this->getArrayOfParticipantsName($participantsWithMeeting, $remove->locale)
             );
         }
 
@@ -111,12 +112,10 @@ class RemoveHandler
         ;
 
         if ($conflictView->hasConflict()) {
-            return new RemoveResult(
+            throw new ParticipantAttributedToProductCanNotBeRemovedException(
                 array_map(function (ParticipantConflictView $participantConflictView) {
                     return $participantConflictView->participantName;
-                }, $conflictView->participantConflicts),
-                false,
-                true
+                }, $conflictView->participantConflicts)
             );
         }
 
@@ -147,8 +146,6 @@ class RemoveHandler
                 $usersRemovedFromSheet
             )
         );
-
-        return new RemoveResult();
     }
 
     /**

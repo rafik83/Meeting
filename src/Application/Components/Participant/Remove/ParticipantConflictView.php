@@ -18,16 +18,11 @@ class ParticipantConflictView
     /** @var string */
     public $participantName;
 
-    /** @var string */
-    public $productTitle;
-
     public function __construct(
         int $participantId,
-        $participantName,
-        $productTitle
+        $participantName
     ) {
         $this->participantId = $participantId;
         $this->participantName = $participantName;
-        $this->productTitle = $productTitle;
     }
 }

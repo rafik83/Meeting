@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2015 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -15,6 +15,8 @@ use Proximum\Vimeet\Application\Command\Participant\Remove;
 use Proximum\Vimeet\Application\Command\Participant\RemoveResult;
 use Proximum\Vimeet\Application\Exception\Participant\AlreadyLinkedToASheetOfThisEventException;
 use Proximum\Vimeet\Application\Exception\Participant\CanNotRemoveAllParticipantsException;
+use Proximum\Vimeet\Application\Exception\Participant\Remove\ParticipantAttributedToProductCanNotBeRemovedException;
+use Proximum\Vimeet\Application\Exception\Participant\Remove\ParticipantWithMeetingCanNotBeRemovedException;
 use Proximum\Vimeet\Application\Exception\Sheet\ParticipantAlreadyExistException;
 use Proximum\Vimeet\Application\Query\Package\Participant\ParticipantProductViewQuery;
 use Proximum\Vimeet\Application\Query\Participant\CardListViewQuery;
@@ -33,6 +35,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Form\FormError;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class SheetParticipantController extends Controller
 {
@@ -208,8 +211,10 @@ class SheetParticipantController extends Controller
      * @param string      $key
      *
      * @return Response
+     *
+     * @throws NotFoundHttpException
      */
-    public function removeParticipantAction(EventDomain $eventDomain, Sheet $sheet, $locale, $key)
+    public function removeParticipantAction(EventDomain $eventDomain, Sheet $sheet, $locale, $key): Response
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
         $this->denyAccessUnlessGranted(SheetVoter::EDIT, $sheet);
@@ -245,13 +250,13 @@ class SheetParticipantController extends Controller
      *
      * @param Request     $request
      * @param EventDomain $eventDomain
+     * @param Sheet       $sheet
      * @param string      $locale
      * @param string      $key
      *
      * @return Response
-     * @throws \Exception
      */
-    public function handleRemoveParticipantAction(Request $request, EventDomain $eventDomain, Sheet $sheet, $locale, $key)
+    public function handleRemoveParticipantAction(Request $request, EventDomain $eventDomain, Sheet $sheet, $locale, $key): Response
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
         $this->denyAccessUnlessGranted(SheetVoter::EDIT, $sheet);
@@ -261,32 +266,41 @@ class SheetParticipantController extends Controller
         // Handle the form, update the object and redirect to the sheet if valid
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
             try {
-                /** @var RemoveResult $result */
-                $result = $this->get('tactician.commandbus')->handle($remove);
+                $this->get('tactician.commandbus')->handle($remove);
 
-                if (!$result->hasParticipantWithMeeting()) {
-                    return $this->redirectToRoute(
-                        'event_sheet_locale',
-                        ['sheet' => $sheet->getId(), 'locale' => $locale]
-                    );
-                } else {
-                    $form->addError(
-                        new FormError(
-                            $this->get('translator')->transChoice(
-                                'validators.participant.remove.hasMeeting',
-                                $result->countParticipants(),
-                                [
-                                    '%participantName%' => $result->getParticipantsName(),
-                                    '%contactInfo%'     => ContactInfoGuesser::getContactInfos($eventDomain->getEvent()),
-                                ],
-                                'validators'
-                            )
-                        )
-                    );
-                }
-
+                return $this->redirectToRoute(
+                    'event_sheet_locale',
+                    ['sheet' => $sheet->getId(), 'locale' => $locale]
+                );
             } catch (CanNotRemoveAllParticipantsException $exception) {
                 $form->addError(new FormError('validators.participant.canNotRemoveAllParticipants'));
+            } catch (ParticipantAttributedToProductCanNotBeRemovedException $exception) {
+                $form->addError(
+                    new FormError(
+                        $this->get('translator')->transChoice(
+                            'validators.participant.remove.hasAttributedProduct',
+                            $exception->countParticipants(),
+                            [
+                                '%participantName%' => $exception->getParticipantNames(),
+                            ],
+                            'validators'
+                        )
+                    )
+                );
+            } catch (ParticipantWithMeetingCanNotBeRemovedException $exception) {
+                $form->addError(
+                    new FormError(
+                        $this->get('translator')->transChoice(
+                            'validators.participant.remove.hasMeeting',
+                            $exception->countParticipants(),
+                            [
+                                '%participantName%' => $exception->getParticipantNames(),
+                                '%contactInfo%'     => ContactInfoGuesser::getContactInfos($eventDomain->getEvent()),
+                            ],
+                            'validators'
+                        )
+                    )
+                );
             }
         }
 
@@ -327,13 +341,13 @@ class SheetParticipantController extends Controller
     }
 
     /**
-     * @param Sheet       $sheet
-     * @param string      $locale
-     * @param string      $key
+     * @param Sheet  $sheet
+     * @param string $locale
+     * @param string $key
      *
      * @return array
      */
-    private function removeParticipantData(Sheet $sheet, $locale, $key)
+    private function removeParticipantData(Sheet $sheet, $locale, $key): array
     {
         if ($sheet->countParticipants() === 1) {
             throw $this->createNotFoundException('Impossible to remove participants from a sheet with one participant');
@@ -359,8 +373,10 @@ class SheetParticipantController extends Controller
      * @param string                $key
      *
      * @return Template\TemplateObject
+     *
+     * @throws NotFoundHttpException
      */
-    private function getParticipantObject(Template\TemplateData $templateData, $key)
+    private function getParticipantObject(Template\TemplateData $templateData, $key): Template\TemplateObject
     {
         try {
             $object = $templateData->getObject($key);

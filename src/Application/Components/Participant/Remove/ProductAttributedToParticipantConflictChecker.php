@@ -58,8 +58,7 @@ class ProductAttributedToParticipantConflictChecker
 
                 $participantConflictView = new ParticipantConflictView(
                     $participant->getId(),
-                    $this->participantInfoGuesser->guessParticipantCompleteName($participant, $locale),
-                    $productAttributedToParticipant->getProduct()->getTitle($locale)
+                    $this->participantInfoGuesser->guessParticipantCompleteName($participant, $locale)
                 );
 
                 $conflictsView->addConflict($participantConflictView);
@@ -82,8 +81,7 @@ class ProductAttributedToParticipantConflictChecker
             if (!isset($participantsWithConflict[$participant->getId()])) {
                 $participantConflictView = new ParticipantConflictView(
                     $participant->getId(),
-                    $this->participantInfoGuesser->guessParticipantCompleteName($participant, $locale),
-                    $cartRowParticipant->getCartRow()->getProduct()->getTitle($locale)
+                    $this->participantInfoGuesser->guessParticipantCompleteName($participant, $locale)
                 );
 
                 $conflictsView->addConflict($participantConflictView);
