@@ -103,7 +103,7 @@ class UploadObject extends EditableObject implements UploadableObjectInterface
         return $this->getContentValue();
     }
 
-    public function setContentValue($value): string
+    public function setContentValue($value): void
     {
         $this->setPath($value);
     }

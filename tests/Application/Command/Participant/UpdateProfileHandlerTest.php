@@ -14,6 +14,7 @@ use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
 use Proximum\Vimeet\Application\Command\Participant\UpdateProfile;
 use Proximum\Vimeet\Application\Command\Participant\UpdateProfileHandler;
+use Proximum\Vimeet\Application\Command\Participant\Upload\UploadFile;
 use Proximum\Vimeet\Application\Command\Participant\Upload\UploadFileHandler;
 use Proximum\Vimeet\Application\Event\Events;
 use Proximum\Vimeet\Application\Event\Sheet\SheetTitleCheckEvent;
@@ -30,6 +31,7 @@ use Proximum\Vimeet\Domain\Template\TemplateData;
 use Proximum\Vimeet\Domain\Template\TemplateObject;
 use Proximum\Vimeet\Infrastructure\Adapter\DelayedEventDispatcher;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 class UpdateProfileHandlerTest extends TestCase
 {
@@ -157,6 +159,32 @@ class UpdateProfileHandlerTest extends TestCase
                                                 'tags'         => ['participant_phone', 'participant_data'],
                                             ],
                                     ],
+                                'dd66008e' => [
+                                    'component' => 'object',
+                                    'type'      => 'upload',
+                                    'config'    => [
+                                        'style'        => 'style-1',
+                                        'label'        => [
+                                            'en' => null,
+                                            'fr' => 'Upload de fichier',
+                                        ],
+                                        'placeholder'  => [
+                                            'en' => null,
+                                            'fr' => 'Upload de fichier',
+                                        ],
+                                        'help'         => [
+                                            'en' => null,
+                                            'fr' => '',
+                                        ],
+                                        'formats' => [
+                                            'csv',
+                                            'image',
+                                        ],
+                                        'crypted'   => false,
+                                        'required'  => false,
+                                        'tags'      => ['participant_data', 'sheet_data'],
+                                    ],
+                                ],
                             ],
                         ],
                 ],
@@ -174,6 +202,10 @@ class UpdateProfileHandlerTest extends TestCase
                 '838197c7' => ['text' => 'muche'],
                 '1efb9cbb' => ['telephone' => '+11111111'],
                 '3b759fbb' => ['telephone' => '+22222222'],
+                'dd66008e' => [
+                    'path' => '/path/to/file/1',
+                    'extension' => 'png',
+                ],
             ],
             $owner = true,
             true
@@ -185,19 +217,30 @@ class UpdateProfileHandlerTest extends TestCase
         $eventDispatcher       = $this->prophesize(DelayedEventDispatcher::class);
         $uploadFileHandler     = $this->prophesize(UploadFileHandler::class);
 
+        $resultParticipant = [
+            '541f84d4' => ['text' => 'foo'],
+            '838197c7' => ['text' => 'bar'],
+            '1efb9cbb' => ['telephone' => 'phone'],
+            '3b759fbb' => ['telephone' => 'mobile'],
+            'dd66008e' => [
+                'path' => '/path/to/file/2',
+                'extension' => 'jpg',
+            ],
+        ];
+
         $sheetWithParticipant = new Sheet($event, $type, [], $user, $now);
         $expectedParticipant  = new Participant(
             $sheetWithParticipant,
             $user,
-            [
-                '541f84d4' => ['text' => 'foo'],
-                '838197c7' => ['text' => 'bar'],
-                '1efb9cbb' => ['telephone' => 'phone'],
-                '3b759fbb' => ['telephone' => 'mobile'],
-            ],
+            $resultParticipant,
             $owner = true,
             true
         );
+
+        $uploadFileHandler
+            ->handle(Argument::any())
+            ->shouldBeCalled()
+            ->willReturn($resultParticipant);
 
         $participantRepository->set($expectedParticipant)->shouldBeCalled();
 
@@ -239,12 +282,18 @@ class UpdateProfileHandlerTest extends TestCase
             'tags' => ['participant_mobile', 'participant_data'],
         ], 'fr', 'fr');
         $telephone2->setContentValue('+22222222');
+        $uploadObject = new TemplateObject\UploadObject('69b3cde2', 'upload', [
+            'tags' => ['participant_data', 'sheet_data'],
+        ], 'fr', 'fr');
+        $uploadObject->setContentValue('path/to/file/2');
+        $uploadObject->setExtension('jpg');
 
         $block->addChild(1, 'dded0597', $text);
         $block->addChild(1, '541f84d4', $editableText1);
         $block->addChild(1, '838197c7', $editableText2);
         $block->addChild(1, '1efb9cbb', $telephone1);
         $block->addChild(1, '3b759fbb', $telephone2);
+        $block->addChild(1, 'dd66008e', $uploadObject);
         $templateData->addChild(0, '811f6edf', $block);
 
         // Expected
@@ -267,12 +316,18 @@ class UpdateProfileHandlerTest extends TestCase
             'tags' => ['participant_mobile', 'participant_data'],
         ], 'fr', 'fr');
         $exTelephone2->setContentValue('mobile');
+        $exUploadObject = new TemplateObject\UploadObject('69b3cde2', 'upload', [
+            'tags' => ['participant_data', 'sheet_data'],
+        ], 'fr', 'fr');
+        $exUploadObject->setContentValue('path/to/file/2');
+        $exUploadObject->setExtension('jpg');
 
         $expectedBlock->addChild(1, 'dded0597', $expectedText);
         $expectedBlock->addChild(1, '541f84d4', $exEditableText1);
         $expectedBlock->addChild(1, '838197c7', $exEditableText2);
         $expectedBlock->addChild(1, '1efb9cbb', $exTelephone1);
         $expectedBlock->addChild(1, '3b759fbb', $exTelephone2);
+        $expectedBlock->addChild(1, 'dd66008e', $exUploadObject);
         $expectedTemplateData->addChild(0, '811f6edf', $expectedBlock);
 
         $accountSynchronizer->set($expectedTemplateData, $user)->shouldBeCalled();
@@ -282,12 +337,7 @@ class UpdateProfileHandlerTest extends TestCase
                 $templateData,
                 $participant,
                 'fr',
-                [
-                    '541f84d4' => ['text' => 'foo'],
-                    '838197c7' => ['text' => 'bar'],
-                    '1efb9cbb' => ['telephone' => 'phone'],
-                    '3b759fbb' => ['telephone' => 'mobile'],
-                ],
+                $resultParticipant,
                 $user
             )
         );
