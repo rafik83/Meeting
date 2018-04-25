@@ -2,6 +2,7 @@
 
 {% set attrDisabled = { attr: { 'disabled': 'disabled' }} %}
 {% set attributes = noAvailableParticipants or participantsCanNotParticipate ? attrDisabled : {} %}
+{% set event_package_url = path('event_package_step', { sheet: sheet.id, step: 1 }) %}
 
 {% set infoProductsNeededByHappening = '' %}
 {% if participantsCanNotParticipate is not empty %}
@@ -29,7 +30,7 @@
                     <li>{{ product.title(locale) }}</li>
                 </ul>
             {% endfor %}
-            <p class="text-right"><a href="{{ path('event_package_step', { event: event.id, sheet: sheet.id, step: 1 }) }}" class="btn btn-default">{{ 'event.happening.productsNeededByHappening.order'|trans }}</a></p>
+            <p class="text-right"><a href="{{ event_package_url }}" class="btn btn-default">{{ 'event.happening.productsNeededByHappening.order'|trans }}</a></p>
         </div>
         <br>
     {% endif %}
@@ -54,7 +55,7 @@
                         {% if unavailableParticipants[key] is defined %}
                             <span class="label label-default">{{ 'form.participate.children.participants.unavailable'|trans({}, 'forms') }}</span>
                         {% elseif not noParticipantCanParticipate and participantsCanNotParticipate[key] is defined %}
-                            <a href="{{ path('event_package_step', { event: event.id, sheet: sheet.id, step: 1 }) }}" class="btn btn-default btn-sm" title="{{ infoProductsNeededByHappening }}">{{ 'event.happening.productsNeededByHappening.order'|trans }}</a>
+                            <a href="{{ event_package_url }}" class="btn btn-default btn-sm" title="{{ infoProductsNeededByHappening }}">{{ 'event.happening.productsNeededByHappening.order'|trans }}</a>
                         {% endif %}
                     </label>
                 </div>
