@@ -1,7 +1,16 @@
 {% form_theme form '@Ui/default.html.twig' %}
 
 {% set attrDisabled = { attr: { 'disabled': 'disabled' }} %}
-{% set attributes = noAvailableParticipants ? attrDisabled : {} %}
+{% set attributes = noAvailableParticipants or participantsCanNotParticipate ? attrDisabled : {} %}
+{% set event_package_url = path('event_package_step', { sheet: sheet.id, step: 1 }) %}
+
+{% set infoProductsNeededByHappening = '' %}
+{% if participantsCanNotParticipate is not empty %}
+    {% set infoProductsNeededByHappening = 'event.happening.productsNeededByHappening.label'|trans ~ ': ' %}
+    {% for product in productsNeededByHappening %}
+        {% set infoProductsNeededByHappening = infoProductsNeededByHappening ~ product.title(locale) ~ (loop.last ? '' : ', ') %}
+    {% endfor %}
+{% endif %}
 
 <div class="modal-header">
     <h4 class="modal-title" id="myModalLabel">
@@ -13,6 +22,19 @@
 {{ form_start(form) }}
 
 <div class="modal-body">
+    {% if noParticipantCanParticipate %}
+        <div class="important text-highlighted">
+            <p>{{ 'event.happening.productsNeededByHappening.label'|trans }}</p>
+            {% for product in productsNeededByHappening %}
+                <ul>
+                    <li>{{ product.title(locale) }}</li>
+                </ul>
+            {% endfor %}
+            <p class="text-right"><a href="{{ event_package_url }}" class="btn btn-default">{{ 'event.happening.productsNeededByHappening.order'|trans }}</a></p>
+        </div>
+        <br>
+    {% endif %}
+
     {{ form_errors(form) }}
 
     {% if form.invitationCode is defined %}
@@ -25,12 +47,16 @@
         {{ form_errors(form.participants) }}
 
         {% for key, participant in form.participants %}
-            {% if unavailableParticipants[key] is defined %}
+            {% if unavailableParticipants[key] is defined or participantsCanNotParticipate[key] is defined %}
                 <div class="checkbox">
                     <label class="control-label disabled">
                         {{ form_widget(participant, attrDisabled) }}
                         {{ participant.vars.label }}
-                        <span class="label label-default">{{ 'form.participate.children.participants.unavailable'|trans({}, 'forms') }}</span>
+                        {% if unavailableParticipants[key] is defined %}
+                            <span class="label label-default">{{ 'form.participate.children.participants.unavailable'|trans({}, 'forms') }}</span>
+                        {% elseif not noParticipantCanParticipate and participantsCanNotParticipate[key] is defined %}
+                            <a href="{{ event_package_url }}" class="btn btn-default btn-sm" title="{{ infoProductsNeededByHappening }}">{{ 'event.happening.productsNeededByHappening.order'|trans }}</a>
+                        {% endif %}
                     </label>
                 </div>
             {% else %}
@@ -47,8 +73,11 @@
     <button type="button" class="btn btn-gray pull-left" data-dismiss="modal">
         <i class="icon-Retour"></i>{{ 'modal.back'|trans }}
     </button>
-    <button type="submit" class="btn btn-primary pull-right" {{ noAvailableParticipants ? 'disabled' : '' }}>
-        <i class="icon-Valider_3"></i> {{ (isUpdate ? 'form.participate.children.submitUpdate.label' : 'form.participate.children.submit.label')|trans({}, 'forms') }}
-    </button>
+
+    {% if not noParticipantCanParticipate %}
+        <button type="submit" class="btn btn-primary pull-right" {{ noAvailableParticipants ? 'disabled' : '' }}>
+            <i class="icon-Valider_3"></i> {{ (isUpdate ? 'form.participate.children.submitUpdate.label' : 'form.participate.children.submit.label')|trans({}, 'forms') }}
+        </button>
+    {% endif %}
 </div>
 {{ form_end(form) }}

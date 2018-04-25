@@ -296,6 +296,7 @@ admin.happening.export.fields.question: Question
 admin.happening.export.fields.sheet_id: 'Sheet ID'
 admin.happening.export.fields.sheet_name: 'Sheet title'
 admin.happening.link: Conferences
+admin.happening.products.tooltip: 'Link to products'
 admin.happening.list.begin: Beginning
 admin.happening.list.category: Category
 admin.happening.list.end: End

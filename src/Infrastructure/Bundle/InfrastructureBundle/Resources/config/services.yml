@@ -601,6 +601,7 @@ services:
             - '@vimeet_infrastructure.repository.happening_participation_repository'
             - '@vimeet_infrastructure.repository.participant_repository'
             - '@vimeet_infrastructure.repository.happening_question_repository'
+            - '@Proximum\Vimeet\Domain\Happening\ParticipateToHappeningWithProductToBuyChecker'
             - '@domain.happening.participation_count'
             - '@vimeet_infrastructure.adapter.delayed_event_dispatcher'
             - '@datetime'
@@ -5077,6 +5078,13 @@ services:
         class:  Proximum\Vimeet\Domain\Happening\ParticipationCount
         arguments:
             - '@vimeet_infrastructure.repository.happening_participation_repository'
+
+    Proximum\Vimeet\Domain\Happening\PackageProductsNeededByHappening: ~
+
+    Proximum\Vimeet\Domain\Happening\ParticipateToHappeningWithProductToBuyChecker:
+        arguments:
+            - '@Proximum\Vimeet\Infrastructure\Repository\ProductAttributedToParticipantRepository'
+            - '@Proximum\Vimeet\Domain\Happening\PackageProductsNeededByHappening'
 
     #
     # Serializer: normalizers and encoders

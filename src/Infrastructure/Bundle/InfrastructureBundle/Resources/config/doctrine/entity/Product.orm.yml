@@ -70,3 +70,9 @@ Proximum\Vimeet\Domain\Model\Product:
             cascade: ["persist"]
             joinTable:
                 name: availability_time_ranges_products
+        happenings:
+            targetEntity: Proximum\Vimeet\Domain\Model\Happening
+            mappedBy: products
+            cascade: ["persist"]
+            joinTable:
+                name: happenings_products

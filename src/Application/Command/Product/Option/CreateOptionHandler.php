@@ -36,6 +36,8 @@ class CreateOptionHandler extends AbstractHandler
             $createOption->attributable
         );
 
+        $product->setHappenings($createOption->happenings);
+
         foreach ($createOption->translations as $locale => $translation) {
             $product->translate($locale, $translation['title'], null, $translation['description'],
                 $translation['addon'], $translation['subjectedToValidationHelp']);
