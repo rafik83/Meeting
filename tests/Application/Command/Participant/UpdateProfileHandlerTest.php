@@ -14,6 +14,7 @@ use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
 use Proximum\Vimeet\Application\Command\Participant\UpdateProfile;
 use Proximum\Vimeet\Application\Command\Participant\UpdateProfileHandler;
+use Proximum\Vimeet\Application\Command\Participant\Upload\UploadFileHandler;
 use Proximum\Vimeet\Application\Event\Events;
 use Proximum\Vimeet\Application\Event\Sheet\SheetTitleCheckEvent;
 use Proximum\Vimeet\Application\Event\Sheet\SheetUpdatedEvent;
@@ -182,6 +183,7 @@ class UpdateProfileHandlerTest extends TestCase
         $participantRepository = $this->prophesize(ParticipantRepositoryInterface::class);
         $accountSynchronizer   = $this->prophesize(Synchronizer::class);
         $eventDispatcher       = $this->prophesize(DelayedEventDispatcher::class);
+        $uploadFileHandler     = $this->prophesize(UploadFileHandler::class);
 
         $sheetWithParticipant = new Sheet($event, $type, [], $user, $now);
         $expectedParticipant  = new Participant(
@@ -214,7 +216,8 @@ class UpdateProfileHandlerTest extends TestCase
         $handler = new UpdateProfileHandler(
             $participantRepository->reveal(),
             $accountSynchronizer->reveal(),
-            $eventDispatcher->reveal()
+            $eventDispatcher->reveal(),
+            $uploadFileHandler->reveal()
         );
 
         $templateData  = new TemplateData('root', [], 'fr', 'fr');
@@ -441,6 +444,7 @@ class UpdateProfileHandlerTest extends TestCase
         $participantRepository = $this->prophesize(ParticipantRepositoryInterface::class);
         $accountSynchronizer   = $this->prophesize(Synchronizer::class);
         $eventDispatcher       = $this->prophesize(DelayedEventDispatcher::class);
+        $uploadFileHandler     = $this->prophesize(UploadFileHandler::class);
 
         $sheetWithParticipant = new Sheet($event, $type, [], $user, $now);
         $expectedParticipant  = new Participant(
@@ -473,7 +477,8 @@ class UpdateProfileHandlerTest extends TestCase
         $handler = new UpdateProfileHandler(
             $participantRepository->reveal(),
             $accountSynchronizer->reveal(),
-            $eventDispatcher->reveal()
+            $eventDispatcher->reveal(),
+            $uploadFileHandler->reveal()
         );
 
         $templateData  = new TemplateData('root', [], 'fr', 'fr');
