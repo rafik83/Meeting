@@ -58,14 +58,10 @@ class QuantityAndParticipantsType extends AbstractType
                             [],
                             'forms'
                         ),
-                        'help' => !$options['max'] || $options['max'] >= $options['sheet']->countParticipants()
-                            ? false
-                            : $this->translator->transChoice(
-                                'form.options.selectParticipantsQuantityMax.label',
-                                $options['max'],
-                                ['%max%' => $options['max']],
-                                'forms'
-                            ),
+                        'help' => $this->getParticipantsChoiceHelp(
+                            $options['max'],
+                            $options['sheet']->countParticipants()
+                        ),
                         'sheet' => $options['sheet'],
                         'locale' => $options['locale'],
                         'isMultiple' => true,
@@ -101,6 +97,20 @@ class QuantityAndParticipantsType extends AbstractType
             [
                 'data_class' => OptionRow::class,
             ]
+        );
+    }
+
+    private function getParticipantsChoiceHelp($max, int $participantsNumber)
+    {
+        if ($max >= $participantsNumber) {
+            return false;
+        }
+
+        return $this->translator->transChoice(
+            'form.options.selectParticipantsQuantityMax.label',
+            $max,
+            ['%max%' => $max],
+            'forms'
         );
     }
 }
