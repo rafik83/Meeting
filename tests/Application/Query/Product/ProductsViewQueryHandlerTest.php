@@ -34,6 +34,9 @@ class ProductsViewQueryHandlerTest extends TestCase
         $product1->getId()->willReturn(1);
         $product2->getId()->willReturn(2);
         $product3->getId()->willReturn(3);
+        $product1->hasHappenings()->willReturn(false);
+        $product2->hasHappenings()->willReturn(false);
+        $product3->hasHappenings()->willReturn(true);
         $product1->getName()->willReturn('name 1');
         $product2->getName()->willReturn('name 2');
         $product3->getName()->willReturn('name 3');
@@ -125,6 +128,7 @@ class ProductsViewQueryHandlerTest extends TestCase
                 $date,
                 null,
                 false,
+                false,
                 false
             ),
             new ProductView(
@@ -145,6 +149,7 @@ class ProductsViewQueryHandlerTest extends TestCase
                 null,
                 null,
                 true,
+                false,
                 false
             ),
             new ProductView(
@@ -165,6 +170,7 @@ class ProductsViewQueryHandlerTest extends TestCase
                 null,
                 $date,
                 false,
+                true,
                 true
             ),
         ];

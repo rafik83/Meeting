@@ -22,6 +22,9 @@ class IndexSheetsByEventCommand extends Command
 {
     const NAME = 'vimeet:event:index-sheets';
 
+    public const RESET = 'reset';
+    public const NO_RESET = 'no-reset';
+
     /** @var EventRepositoryInterface */
     private $eventRepository;
 
@@ -55,7 +58,13 @@ class IndexSheetsByEventCommand extends Command
                 'eventId',
                 InputArgument::REQUIRED,
                 'The id of the event which the sheets will be re-index for'
-            );
+            )
+            ->addArgument(
+                'reset',
+                InputArgument::REQUIRED,
+                'Argument to reset all the entries of the event first'
+            )
+        ;
     }
 
     /**
@@ -64,18 +73,20 @@ class IndexSheetsByEventCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $event = $this->eventRepository->getById($input->getArgument('eventId'));
+        $reset = $input->getArgument('reset') === self::RESET;
 
         if (null === $event) {
             throw new \Exception('Event not found.');
         }
 
         $output->writeln(sprintf(
-            'Start the indexation of the sheets of the event %d %s.',
+            'Start the indexation of the sheets of the event %d %s%s',
             $event->getId(),
-            $event->getTitle()
+            $event->getTitle(),
+            $reset ? ' with reset of the event first.' : '.'
         ));
 
-        $this->commandBus->handle(new Index($event));
+        $this->commandBus->handle(new Index($event, $reset));
 
         $output->writeln('Indexation finished.');
     }

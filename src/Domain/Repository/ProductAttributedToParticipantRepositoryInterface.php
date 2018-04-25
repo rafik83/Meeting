@@ -42,4 +42,12 @@ interface ProductAttributedToParticipantRepositoryInterface
      * @return ProductAttributedToParticipant[]
      */
     public function findByParticipants(array $participants): array;
+
+    /**
+     * @param Participant $participant
+     * @param Product[]   $products
+     *
+     * @return bool
+     */
+    public function participantHasAtLeastOneProduct(Participant $participant, array $products): bool;
 }

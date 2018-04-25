@@ -43,6 +43,9 @@ class HappeningView
     /** @var bool */
     public $isPrivate;
 
+    /** @var bool */
+    public $hasProducts;
+
     /**
      * @param int                $id
      * @param string             $title
@@ -54,6 +57,7 @@ class HappeningView
      * @param int                $participations
      * @param SpeakerView[]      $speakers
      * @param bool               $isPrivate
+     * @param bool               $hasProducts
      */
     public function __construct(
         int $id,
@@ -65,7 +69,8 @@ class HappeningView
         ?int $limit = null,
         int $participations,
         array $speakers = [],
-        bool $isPrivate
+        bool $isPrivate,
+        bool $hasProducts = false
     ) {
         $this->id              = $id;
         $this->title           = $title;
@@ -77,6 +82,7 @@ class HappeningView
         $this->participations  = $participations;
         $this->speakers        = $speakers;
         $this->isPrivate       = $isPrivate;
+        $this->hasProducts     = $hasProducts;
     }
 
     /**

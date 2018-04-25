@@ -4,6 +4,7 @@ services:
         arguments:
             - '@vimeet_infrastructure.repository.sheet_repository'
             - '@command.sheet.aggregate.available_slot_aggregator_handler'
+            - '@adapter.sheet_indexer'
     command.sheet.aggregate.available_slot_aggregator_handler:
         class: Proximum\Vimeet\Application\Command\Sheet\Aggregate\AvailableSlotAggregatorHandler
         arguments:
@@ -135,6 +136,7 @@ services:
         arguments:
             - '@vimeet_infrastructure.repository.sheet_repository'
             - '@adapter.sheet_indexer'
+            - '@adapter.sheet_search_adapter'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Event\Sheet\Index }
 

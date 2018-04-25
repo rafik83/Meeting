@@ -28,13 +28,13 @@ class AvailableSlotCalculatorDecorator implements AvailableSlotCalculatorInterfa
     /**
      * {@inheritdoc}
      */
-    public function calculateAvailableSlotForSheet(Sheet $sheet): void
+    public function calculateAvailableSlotForSheet(Sheet $sheet, bool $indexSheet = true): void
     {
         if (isset($this->processedSheets[$sheet->getId()])) {
             return;
         }
 
-        $this->calculator->calculateAvailableSlotForSheet($sheet);
+        $this->calculator->calculateAvailableSlotForSheet($sheet, $indexSheet);
 
         $this->processedSheets[$sheet->getId()] = $sheet->getId();
     }

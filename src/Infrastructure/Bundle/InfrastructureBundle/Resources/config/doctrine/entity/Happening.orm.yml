@@ -52,3 +52,8 @@ Proximum\Vimeet\Domain\Model\Happening:
     manyToMany:
         types:
             targetEntity: Proximum\Vimeet\Domain\Model\Type
+        products:
+            targetEntity: Proximum\Vimeet\Domain\Model\Product
+            inversedBy: happenings
+            joinTable:
+                name: happenings_products

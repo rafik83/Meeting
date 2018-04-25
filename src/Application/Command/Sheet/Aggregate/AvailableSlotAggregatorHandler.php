@@ -30,6 +30,6 @@ class AvailableSlotAggregatorHandler
      */
     public function handle(AvailableSlotAggregator $command): void
     {
-        $this->availableSlotCalculator->calculateAvailableSlotForSheet($command->sheet);
+        $this->availableSlotCalculator->calculateAvailableSlotForSheet($command->sheet, $command->indexSheet);
     }
 }

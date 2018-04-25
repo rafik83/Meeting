@@ -120,6 +120,7 @@ class UpdateActionTest extends TestCase
 
         $event = $this->prophesize(Event::class);
         $this->happening->getEvent()->willReturn($event->reveal());
+        $this->happening->getProducts()->willReturn([]);
 
         $action = new UpdateAction(
             $this->authorizationCheckerAdapter->reveal(),
@@ -141,6 +142,7 @@ class UpdateActionTest extends TestCase
             ->willReturn(true)
         ;
         $this->happening->getEvent()->willReturn($this->event->reveal());
+        $this->happening->getProducts()->willReturn([]);
         $category = $this->prophesize(Happening\Category::class);
         $this->happening->getCategory()->willReturn($category->reveal());
         $this->happening->getBegin()->willReturn(new \DateTime());
@@ -175,7 +177,14 @@ class UpdateActionTest extends TestCase
         $form->isSubmitted()->shouldBeCalled()->willReturn(false);
 
         $this->engine
-            ->renderResponse(UpdateAction::TEMPLATE, ['event' => $this->event->reveal(), 'form' => $formView->reveal()])
+            ->renderResponse(
+                UpdateAction::TEMPLATE,
+                [
+                    'event' => $this->event->reveal(),
+                    'form' => $formView->reveal(),
+                    'products' => []
+                ]
+            )
             ->shouldBeCalled()
             ->willReturn(new Response())
         ;
@@ -202,6 +211,7 @@ class UpdateActionTest extends TestCase
             ->willReturn(true)
         ;
         $this->happening->getEvent()->willReturn($this->event->reveal());
+        $this->happening->getProducts()->willReturn([]);
         $category = $this->prophesize(Happening\Category::class);
         $this->happening->getCategory()->willReturn($category->reveal());
         $this->happening->getBegin()->willReturn(new \DateTime());

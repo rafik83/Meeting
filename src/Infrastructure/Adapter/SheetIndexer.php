@@ -48,4 +48,14 @@ class SheetIndexer implements SheetIndexerInterface
             $this->persister->replaceMany($sheets);
         }
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function deleteSheets(array $sheetIds): void
+    {
+        if (!empty($sheetIds)) {
+            $this->persister->deleteManyByIdentifiers($sheetIds);
+        }
+    }
 }

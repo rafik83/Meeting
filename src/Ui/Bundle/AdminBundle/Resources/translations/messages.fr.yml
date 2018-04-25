@@ -303,6 +303,7 @@ admin.happening.export.fields.question: Question
 admin.happening.export.fields.sheet_id: 'ID Fiche'
 admin.happening.export.fields.sheet_name: 'Titre fiche'
 admin.happening.link: Conférences
+admin.happening.products.tooltip: 'Lié à des produits'
 admin.happening.list.begin: Début
 admin.happening.list.category: Catégorie
 admin.happening.list.end: Fin
@@ -314,6 +315,7 @@ admin.happening.list.speaker: Intervenants
 admin.happening.list.title: Titre
 admin.happening.menu.link: Programme
 admin.happening.private: Privé
+admin.happening.products: 'Ce sous-évènement est lié aux produits suivants'
 admin.happening.title: Conférences
 admin.happening.update: Modifier
 admin.happening.updateTitle: 'Modifier une conférence'
@@ -624,6 +626,7 @@ admin.product.availabilityCurrentMax: 'Disponibilité courante / max'
 admin.product.bought: 'Nombre de produits achetés'
 admin.product.buyableUntil: 'Achetable jusqu''au'
 admin.product.deletableUntil: 'Supprimable jusqu''au'
+admin.product.happenings.tooltip: 'Lié à des sous évènements'
 admin.product.hasAvailabilityTimeRanges: 'Soumis à plages de disponibilités'
 admin.product.id: Id
 admin.product.isAttributable: 'Produit attribuable à des participants'

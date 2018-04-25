@@ -6,13 +6,13 @@
             <i class="icon-Document_1"></i> {{ 'sheet.title'|trans }}
         </h1>
 
-        <div class="buttons-zone button request-meeting-sheet">
-            {% if isRequestMeetingEnabled %}
-                {% if meetingRequest is defined and meetingRequest is null and isMeetingRequestClosed is defined and isMeetingRequestClosed == true %}
-                    {# Hide buttons if the meetingRequests are closed #}
-                {% elseif meetingRequest is defined and meetingRequest is not null and isAnsweringMeetingRequestClosed is defined and isAnsweringMeetingRequestClosed == true %}
-                    {# Hide buttons if the meetingRequests answering are closed #}
-                {% else %}
+        {% if isRequestMeetingEnabled %}
+            {% if meetingRequest is defined and meetingRequest is null and isMeetingRequestClosed is defined and isMeetingRequestClosed == true %}
+                {# Hide buttons if the meetingRequests are closed #}
+            {% elseif meetingRequest is defined and meetingRequest is not null and isAnsweringMeetingRequestClosed is defined and isAnsweringMeetingRequestClosed == true %}
+                {# Hide buttons if the meetingRequests answering are closed #}
+            {% else %}
+                <div class="buttons-zone button request-meeting-sheet">
                     {{ include('EventBundle:Sheet/Partial:meetingRequestButtons.html.twig', {
                         'sheet': sheet,
                         'userSheet': userSheet,
@@ -25,12 +25,13 @@
                         'phoneValidationLink': link,
                         'hideMeetingRequest': hideMeetingRequest|default(false),
                     }, false) }}
-                {% endif %}
-            {% else %}
-                {{ include('EventBundle:Sheet/Partial:validationButton.html.twig', {'sheet': sheet}, false) }}
+                </div>
             {% endif %}
-            <a href="{{ path('event_sheet_generate_pdf', { sheet: userSheet is defined ? userSheet.id : sheet.id, sheetToDisplay: sheet.id, locale: locale }) }}" class="btn btn-gray"><span class="glyphicon glyphicon-print"></span>Pdf</a>
-        </div>
+        {% else %}
+            {{ include('EventBundle:Sheet/Partial:validationButton.html.twig', {'sheet': sheet}, false) }}
+        {% endif %}
+
+        <a href="{{ path('event_sheet_generate_pdf', { sheet: userSheet is defined ? userSheet.id : sheet.id, sheetToDisplay: sheet.id, locale: locale }) }}" class="btn btn-gray"><span class="glyphicon glyphicon-print"></span>Pdf</a>
 
         {% if isCatalog is not defined or isCatalog == false %}
             <ul class="tabs">

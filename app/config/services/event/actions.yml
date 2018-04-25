@@ -24,3 +24,11 @@ services:
             - '@order.merger'
             - '@Proximum\Vimeet\Infrastructure\Adapter\QueryBus'
             - '@templating'
+
+    #
+    # Happening
+    #
+    Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\Happening\HappeningParticipateAction:
+        arguments:
+            - '@adapter.authorization_checker'
+            - '@Proximum\Vimeet\Ui\Bundle\EventBundle\Handler\Happening\ParticipateHandler'
