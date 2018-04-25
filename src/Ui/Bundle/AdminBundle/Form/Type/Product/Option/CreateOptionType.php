@@ -64,6 +64,10 @@ class CreateOptionType extends AbstractCreateType
             ])
             ->add('attributable', CheckboxType::class, [
                 'required' => false,
+                'attr' => [
+                    'data-attributable-product-toggle-happening' => true,
+                    'data-element-id-to-hide' => 'happenings-block',
+                ],
             ])
             ->add('deletableUntil', DateTimePickerType::class, [
                 'required' => false,
