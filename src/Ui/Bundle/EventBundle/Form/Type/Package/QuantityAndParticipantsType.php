@@ -58,6 +58,14 @@ class QuantityAndParticipantsType extends AbstractType
                             [],
                             'forms'
                         ),
+                        'help' => !$options['max'] || $options['max'] >= $options['sheet']->countParticipants()
+                            ? false
+                            : $this->translator->transChoice(
+                                'form.options.selectParticipantsQuantityMax.label',
+                                $options['max'],
+                                ['%max%' => $options['max']],
+                                'forms'
+                            ),
                         'sheet' => $options['sheet'],
                         'locale' => $options['locale'],
                         'isMultiple' => true,
