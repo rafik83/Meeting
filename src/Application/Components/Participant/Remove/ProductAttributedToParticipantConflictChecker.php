@@ -43,11 +43,8 @@ class ProductAttributedToParticipantConflictChecker
         $this->productAttributedToParticipantRepository = $productAttributedToParticipantRepository;
     }
 
-    public function getParticipantsWithConflictOnProductAttributed(array $participants, string $locale): ConflictsView
+    private function getConflictViewForProductAttributed(ConflictsView $conflictsView, array &$participants, string $locale): void
     {
-        $conflictsView = new ConflictsView();
-        $participantsWithConflict = [];
-
         $productAttributedToParticipants = $this->productAttributedToParticipantRepository->findByParticipants($participants);
 
         foreach ($productAttributedToParticipants as $productAttributedToParticipant) {
@@ -64,16 +61,11 @@ class ProductAttributedToParticipantConflictChecker
                 $conflictsView->addConflict($participantConflictView);
             }
         }
+    }
 
-        if (!empty($participantsWithConflict)) {
-            return $conflictsView;
-        }
-
+    private function getConflictViewForCartRowParticipant(ConflictsView $conflictsView, array &$participants, string $locale): void
+    {
         $cartRows = $this->cartRowParticipantRepository->findCartRowOnAttributableProductForParticipants($participants);
-
-        if (empty($cartRows)) {
-            return $conflictsView;
-        }
 
         foreach ($cartRows as $cartRowParticipant) {
             $participant = $cartRowParticipant->getParticipant();
@@ -89,6 +81,19 @@ class ProductAttributedToParticipantConflictChecker
                 $participantsWithConflict[$participant->getId()] = $participant;
             }
         }
+    }
+
+    public function getParticipantsWithConflictOnProductAttributed(array $participants, string $locale): ConflictsView
+    {
+        $conflictsView = new ConflictsView();
+
+        $this->getConflictViewForProductAttributed($conflictsView, $participants, $locale);
+
+        if ($conflictsView->hasConflict()) {
+            return $conflictsView;
+        }
+
+        $this->getConflictViewForCartRowParticipant($conflictsView, $participants, $locale);
 
         return $conflictsView;
     }
