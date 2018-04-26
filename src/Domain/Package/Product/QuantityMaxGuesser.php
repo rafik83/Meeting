@@ -11,21 +11,21 @@
 namespace Proximum\Vimeet\Domain\Package\Product;
 
 use Proximum\Vimeet\Domain\Cart\CartManager;
+use Proximum\Vimeet\Domain\Model\Order;
 use Proximum\Vimeet\Domain\Model\Product;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Order\Merger;
 
 class QuantityMaxGuesser
 {
-    /**
-     * @var CartManager
-     */
+    /** @var CartManager */
     private $cartManager;
 
-    /**
-     * @var Merger
-     */
+    /** @var Merger */
     private $merger;
+
+    /** @var Order[] indexed by Sheet Id */
+    private $cachedMergedOrderBySheetId = [];
 
     /**
      * @param CartManager $cartManager
@@ -34,7 +34,7 @@ class QuantityMaxGuesser
     public function __construct(CartManager $cartManager, Merger $merger)
     {
         $this->cartManager = $cartManager;
-        $this->merger      = $merger;
+        $this->merger = $merger;
     }
 
     /**
@@ -67,7 +67,7 @@ class QuantityMaxGuesser
             $remainingQuantity,
             $countParticipants,
             $planning->getQuantityMax(),
-            $planning->getAvailability()
+            $planning->getAvailability() + $this->getPreviousOrderedQuantity($sheet, $planning)
         );
 
         return $max < 0 ? 0 : $max;
@@ -105,7 +105,7 @@ class QuantityMaxGuesser
             min(
                 $remainingQuantity,
                 $product->getQuantityMax(),
-                $product->getAvailability()
+                $product->getAvailability() + $this->getPreviousOrderedQuantity($sheet, $product)
             )
         );
     }
@@ -118,12 +118,45 @@ class QuantityMaxGuesser
             return $cart->getPlanRow()->getProduct();
         }
 
-        if ($sheet->hasNotCancelledOrders()) {
-            $orderMerged = $this->merger->merge($sheet->getNotCancelledOrders());
+        $orderMerged = $this->getMergedOrder($sheet);
 
+        if ($orderMerged instanceof Order) {
             return $orderMerged->getPlan();
         }
 
         return null;
+    }
+
+    private function getMergedOrder(Sheet $sheet): ?Order
+    {
+        if (isset($this->cachedMergedOrderBySheetId[$sheet->getId()])) {
+            return $this->cachedMergedOrderBySheetId[$sheet->getId()];
+        }
+
+        if ($sheet->hasNotCancelledOrders()) {
+            $order = $this->merger->merge($sheet->getNotCancelledOrders());
+            $this->cachedMergedOrderBySheetId[$sheet->getId()] = $order;
+
+            return $order;
+        }
+
+        return null;
+    }
+
+    private function getPreviousOrderedQuantity(Sheet $sheet, Product $product): int
+    {
+        $orderMerged = $this->getMergedOrder($sheet);
+
+        if (!$orderMerged instanceof Order) {
+            return 0;
+        }
+
+        $row = $orderMerged->getRowForProduct($product);
+
+        if (!$row instanceof Order\Row) {
+            return 0;
+        }
+
+        return $row->getQuantity();
     }
 }
