@@ -30,22 +30,22 @@ Proximum\Vimeet\Domain\Model\Product:
         deletableUntil: ~
     # options
     product_option_1_asddays:
-        __construct: { createOption: ['@event_asddays_2016', 'Option 4m² supplémentaires Fournisseur', 0, 990, 20, 1, 0, 0, true, null] }
+        __construct: { createOption: ['@event_asddays_2016', 'Option 4m² supplémentaires Fournisseur', 0, 990, 20, null, 0, 0, true, null] }
         subjectedToValidation: true
     product_option_2_asddays:
-        __construct: { createOption: ['@event_asddays_2016', 'Option chaise', 0, 9, 20, 5, 0, 0, true, null] }
+        __construct: { createOption: ['@event_asddays_2016', 'Option chaise', 0, 9, 20, null, 0, 0, true, null] }
     product_option_3_asddays:
-        __construct: { createOption: ['@event_asddays_2016', 'Option A', 0, 29, 20, 2, 0, 0, true, null] }
+        __construct: { createOption: ['@event_asddays_2016', 'Option A', 0, 29, 20, null, 0, 0, true, null] }
     product_option_4_asddays:
-        __construct: { createOption: ['@event_asddays_2016', 'Option B', 0, 44, 20, 10, 0, 0, true, null, false, "<dateTimeBetween('-10days', 'now')>"] }
+        __construct: { createOption: ['@event_asddays_2016', 'Option B', 0, 44, 20, null, 0, 0, true, null, false, "<dateTimeBetween('-10days', 'now')>"] }
     product_option_5_asddays:
-        __construct: { createOption: ['@event_asddays_2016', 'Option C', 0, 49, 20, 10, 50, 50, true, null] }
+        __construct: { createOption: ['@event_asddays_2016', 'Option C', 0, 49, 20, null, 50, 50, true, null] }
     product_option_6_asddays:
-        __construct: { createOption: ['@event_asddays_2016', 'Option D', 0, 19, 20, 3, 2, 100, true, null] }
+        __construct: { createOption: ['@event_asddays_2016', 'Option D', 0, 19, 20, null, 2, 100, true, null] }
     product_option_7_asddays:
-        __construct: { createOption: ['@event_asddays_2016', 'Option E', 0, 199, 20, 4, 5, 10, true, "<dateTimeBetween('-10days', 'now')>"] }
+        __construct: { createOption: ['@event_asddays_2016', 'Option E', 0, 199, 20, 9, 5, 10, true, "<dateTimeBetween('-10days', 'now')>"] }
     product_option_8_asddays:
-        __construct: { createOption: ['@event_asddays_2016', 'Option F', 0, 59, 20, 20, 20, 20, true, null, false, null] }
+        __construct: { createOption: ['@event_asddays_2016', 'Option F', 0, 59, 20, null, null, null, true, null, false, null] }
     # other participant (keep this fixture here because behat tests use products db id)
     product_participant_2_asddays:
         __construct: { createParticipant: [ '@event_asddays_2016', 'Participant autre', 299, 20, 2 ] }
