@@ -100,21 +100,6 @@ class CartManager
         );
     }
 
-    private function getPreviousOrderedQuantity(?Order $order, Product $product): int
-    {
-        if (null === $order) {
-            return 0;
-        }
-
-        $orderRow = $order->getRowByProductId($product->getId());
-
-        if (null === $orderRow) {
-            return 0;
-        }
-
-        return $orderRow->getQuantity();
-    }
-
     /***
      * @param Cart       $cart
      * @param OptionRow  $optionRow
@@ -332,6 +317,21 @@ class CartManager
         );
 
         return $cart;
+    }
+
+    private function getPreviousOrderedQuantity(?Order $order, Product $product): int
+    {
+        if (null === $order) {
+            return 0;
+        }
+
+        $orderRow = $order->getRowByProductId($product->getId());
+
+        if (null === $orderRow) {
+            return 0;
+        }
+
+        return $orderRow->getQuantity();
     }
 
     /**
