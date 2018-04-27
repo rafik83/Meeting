@@ -1,9 +1,9 @@
 <?php
 
 /*
- * This file is part of the vimeet project.
+ * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2017 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -44,11 +44,11 @@ class ImportPlannerCommand extends Command
     /**
      * ImportPlannerCommand constructor.
      *
-     * @param ImportHandler                 $importPlannerHandler
-     * @param MailerInterface               $mailer
-     * @param EventRepositoryInterface      $eventRepository
-     * @param FileRepositoryInterface       $fileRepository
-     * @param string                        $mailSender
+     * @param ImportHandler            $importPlannerHandler
+     * @param MailerInterface          $mailer
+     * @param EventRepositoryInterface $eventRepository
+     * @param FileRepositoryInterface  $fileRepository
+     * @param string                   $mailSender
      */
     public function __construct(
         ImportHandler $importPlannerHandler,
@@ -97,8 +97,8 @@ class ImportPlannerCommand extends Command
         $event = $this->eventRepository->getById($arguments['event']);
         $file  = $this->fileRepository->getById($arguments['file']);
 
-        if ($event === null || $file === null) {
-            $object = ($event === null) ? 'event' : 'file';
+        if (null === $event || null === $file) {
+            $object = (null === $event) ? 'event' : 'file';
             $this->notifyAdminAboutError(sprintf('%s %s not found', $object, $arguments[$object]), $errorMailOptions);
 
             return;

@@ -26,8 +26,8 @@ class EventUpdatedEventSubscriber implements EventSubscriberInterface
     private $jobQueueAdapter;
 
     /**
-     * @param JobRepositoryAdapterInterface   $jobRepository
-     * @param JobQueueAdapter $jobQueueAdapter
+     * @param JobRepositoryAdapterInterface $jobRepository
+     * @param JobQueueAdapter               $jobQueueAdapter
      */
     public function __construct(JobRepositoryAdapterInterface $jobRepository, JobQueueAdapter $jobQueueAdapter)
     {
@@ -62,7 +62,7 @@ class EventUpdatedEventSubscriber implements EventSubscriberInterface
             return;
         }
 
-        if ($job === null && null === $smsActivationDate) {
+        if (null === $job && null === $smsActivationDate) {
             return;
         }
 
@@ -88,7 +88,7 @@ class EventUpdatedEventSubscriber implements EventSubscriberInterface
     public static function getSubscribedEvents()
     {
         return [
-            Events::EVENT_KEY_DATES_UPDATED => 'onKeyDateUpdate'
+            Events::EVENT_KEY_DATES_UPDATED => 'onKeyDateUpdate',
         ];
     }
 }

@@ -1,9 +1,9 @@
 <?php
 
 /*
- * This file is part of the Proximum Vimeet website.
+ * This file is part of the Proximum Vimeet project.
  *
- * Copyright © Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -29,7 +29,7 @@ class MessageEntityType extends AbstractType
 
     /**
      * @param MessageRepositoryInterface $messageRepository
-     * @param UrlGeneratorInterface $urlGenerator
+     * @param UrlGeneratorInterface      $urlGenerator
      */
     public function __construct(MessageRepositoryInterface $messageRepository, UrlGeneratorInterface $urlGenerator)
     {
@@ -50,7 +50,7 @@ class MessageEntityType extends AbstractType
                 return $this->messageRepository->findByEvent($options['event']);
             },
             'choice_label' => 'name',
-            'choice_attr'  => function(Message $message) {
+            'choice_attr'  => function (Message $message) {
                 return [
                     'data-preview-url'     => $this->urlGenerator->generate('admin_messaging_message_preview', [
                         'message' => $message->getId(),

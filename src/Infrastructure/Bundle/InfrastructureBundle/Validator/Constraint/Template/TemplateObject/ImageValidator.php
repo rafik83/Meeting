@@ -63,7 +63,7 @@ class ImageValidator extends TemplateObjectValidator
         ) {
             $content = $object->getImage();
 
-            if ($content === null) {
+            if (null === $content) {
                 $content = $object->getFile();
             }
 

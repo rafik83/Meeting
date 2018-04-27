@@ -89,9 +89,9 @@ class SheetTemplateController extends Controller
      * @param Request     $request
      * @param AdminDomain $adminDomain
      *
-     * @return RedirectResponse|Response
-     *
      * @throws AccessDeniedException
+     *
+     * @return RedirectResponse|Response
      */
     public function listOrganizerTemplateAction(Request $request, AdminDomain $adminDomain): Response
     {
@@ -143,9 +143,9 @@ class SheetTemplateController extends Controller
      * @param SheetTemplate $template
      * @param AdminDomain   $adminDomain
      *
-     * @return RedirectResponse|Response
-     *
      * @throws AccessDeniedException
+     *
+     * @return RedirectResponse|Response
      */
     public function duplicateAction(Request $request, SheetTemplate $template, AdminDomain $adminDomain): Response
     {
@@ -155,7 +155,7 @@ class SheetTemplateController extends Controller
         $duplicate = new Duplicate($template, new \DateTime());
         $form      = $this->createForm(DuplicateForEventType::class, $duplicate, [
             'action' => $this->generateUrl('admin_template_sheet_duplicate', [
-                'template' => $template->getId()
+                'template' => $template->getId(),
             ]),
             'admin'  => $adminDomain->getAdmin(),
             'submit' => true,
@@ -181,9 +181,9 @@ class SheetTemplateController extends Controller
      * @param SheetTemplate $template
      * @param AdminDomain   $adminDomain
      *
-     * @return RedirectResponse|Response
-     *
      * @throws AccessDeniedException
+     *
+     * @return RedirectResponse|Response
      */
     public function duplicateOrganizerTemplateAction(Request $request, SheetTemplate $template, AdminDomain $adminDomain): Response
     {
@@ -194,7 +194,7 @@ class SheetTemplateController extends Controller
 
         $form = $this->createForm(DuplicateForEventType::class, $duplicate, [
             'action' => $this->generateUrl('admin_organizer_template_sheet_duplicate', [
-                'template' => $template->getId()
+                'template' => $template->getId(),
             ]),
             'submit' => true,
             'admin'  => $adminDomain->getAdmin(),
@@ -219,9 +219,9 @@ class SheetTemplateController extends Controller
      * @param SheetTemplate $template
      * @param string        $locale
      *
-     * @return Response
-     *
      * @throws AccessDeniedException
+     *
+     * @return Response
      */
     public function builderAction(SheetTemplate $template, $locale): Response
     {
@@ -235,7 +235,7 @@ class SheetTemplateController extends Controller
         // Update form
         $updateForm = $this->createForm(UpdateType::class, new Update($template), [
             'action'   => $this->generateUrl('admin_template_sheet_update', [
-                'template' => $template->getId(), 'locale' => $locale
+                'template' => $template->getId(), 'locale' => $locale,
             ]),
             'submit'   => true,
             'template' => $template,
@@ -292,9 +292,9 @@ class SheetTemplateController extends Controller
      * @param Request       $request
      * @param SheetTemplate $template
      *
-     * @return RedirectResponse
-     *
      * @throws AccessDeniedException
+     *
+     * @return RedirectResponse
      */
     public function addLocaleAction(Request $request, SheetTemplate $template): RedirectResponse
     {
@@ -317,7 +317,7 @@ class SheetTemplateController extends Controller
                     'locale'   => $addLocale->locale,
                 ]);
             } else {
-                $this->addFlash('error', (string)$addLocaleForm->getErrors(true));
+                $this->addFlash('error', (string) $addLocaleForm->getErrors(true));
             }
         }
 
@@ -332,9 +332,9 @@ class SheetTemplateController extends Controller
      * @param SheetTemplate $template
      * @param string        $locale
      *
-     * @return JsonResponse
-     *
      * @throws AccessDeniedException
+     *
+     * @return JsonResponse
      */
     public function saveAction(Request $request, SheetTemplate $template, $locale): JsonResponse
     {
@@ -356,9 +356,9 @@ class SheetTemplateController extends Controller
      * @param SheetTemplate $template
      * @param string        $locale
      *
-     * @return RedirectResponse
-     *
      * @throws AccessDeniedException
+     *
+     * @return RedirectResponse
      */
     public function updateAction(Request $request, SheetTemplate $template, $locale): RedirectResponse
     {
@@ -368,7 +368,7 @@ class SheetTemplateController extends Controller
         $command = new Update($template);
         $form    = $this->createForm(UpdateType::class, $command, [
             'action'   => $this->generateUrl('admin_template_sheet_update', [
-                'template' => $template->getId(), 'locale' => $locale
+                'template' => $template->getId(), 'locale' => $locale,
             ]),
             'submit'   => true,
             'template' => $template,

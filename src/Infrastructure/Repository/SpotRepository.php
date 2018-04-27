@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2015 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -70,7 +70,7 @@ class SpotRepository implements SpotRepositoryInterface
             ->setParameter('id', $id)
             ->setMaxResults(1);
 
-        if ($visio === true) {
+        if (true === $visio) {
             $queryBuilder
                 ->andWhere('spot.visio = :visio')
                 ->setParameter('visio', $visio);
@@ -204,8 +204,8 @@ class SpotRepository implements SpotRepositoryInterface
             ->setParameter('event', $event)
             ->andWhere('spot.id IN (:ids)')
             ->setParameter('ids', array_map(function (Spot $spot) {
-                    return $spot->getId();
-                }, $spots)
+                return $spot->getId();
+            }, $spots)
             );
 
         $queryBuilder->getQuery()->execute();
@@ -292,7 +292,7 @@ class SpotRepository implements SpotRepositoryInterface
             ->setMaxResults(1)
         ;
 
-        return (int) $queryBuilder->getQuery()->getSingleScalarResult() === 0 ? false : true;
+        return 0 === (int) $queryBuilder->getQuery()->getSingleScalarResult() ? false : true;
     }
 
     /**
@@ -347,9 +347,9 @@ class SpotRepository implements SpotRepositoryInterface
      * @param MeetingSlot $slot
      * @param $participantsQuantity
      * @param Meeting|null $exceptMeeting
-     * @param Sheet|null $fromSheet
-     * @param Sheet|null $toSheet
-     * @param bool $visio
+     * @param Sheet|null   $fromSheet
+     * @param Sheet|null   $toSheet
+     * @param bool         $visio
      *
      * @return SpotQueryBuilder
      */
@@ -402,13 +402,13 @@ class SpotRepository implements SpotRepositoryInterface
                 ->setParameter('exceptMeeting', $exceptMeeting)
             ;
 
-            if ($fromSheet === null && $toSheet === null) {
+            if (null === $fromSheet && null === $toSheet) {
                 $fromSheet = $exceptMeeting->getFromSheet();
                 $toSheet   = $exceptMeeting->getToSheet();
             }
         }
 
-        if ($fromSheet !== null && $toSheet !== null) {
+        if (null !== $fromSheet && null !== $toSheet) {
             $queryBuilder->meetingSheets($fromSheet, $toSheet);
         }
 

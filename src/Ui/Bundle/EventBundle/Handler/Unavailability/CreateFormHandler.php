@@ -113,7 +113,7 @@ class CreateFormHandler
                                 'validators.unavailability.timeOutOfRange.end',
                                 [
                                     '%day%' => DayHelper::getFormatter($request->getLocale(), $event->getTimeZone())
-                                        ->format($exception->day->getDay())
+                                        ->format($exception->day->getDay()),
                                 ],
                                 'validators'
                             )

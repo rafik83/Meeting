@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2015 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -117,23 +117,23 @@ class SheetMeetingsListViewFactory
         $propositionsNumber,
         $availableSlots
     ) {
-        $requestsTransformation = $meetingsRequestsNumber === 0
+        $requestsTransformation = 0 === $meetingsRequestsNumber
             ? 0
             : 100 * $meetingsRequestsNumber / $requestsNumber;
 
-        $propositionsTransformation = $meetingsPropositionsNumber === 0
+        $propositionsTransformation = 0 === $meetingsPropositionsNumber
             ? 0
             : 100 * $meetingsPropositionsNumber / $propositionsNumber;
 
-        $transformationTotal = $requestsNumber + $propositionsNumber === 0
+        $transformationTotal = 0 === $requestsNumber + $propositionsNumber
             ? 0
             : 100 * ($meetingsRequestsNumber + $meetingsPropositionsNumber) / ($requestsNumber + $propositionsNumber);
 
-        $requestsPropositionsTransformation = $requestsNumber + $propositionsNumber === 0
+        $requestsPropositionsTransformation = 0 === $requestsNumber + $propositionsNumber
             ? 0
             : 100 * $meetingsRequestsNumber / ($requestsNumber + $propositionsNumber);
 
-        $filling = $availableSlots === 0
+        $filling = 0 === $availableSlots
             ? 0
             : 100 * ($meetingsRequestsNumber + $meetingsPropositionsNumber) / $availableSlots;
 

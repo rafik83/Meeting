@@ -10,10 +10,10 @@
 
 namespace Proximum\Vimeet\Domain\Model;
 
-use Proximum\Vimeet\Domain\Model\Invoice\Invoice;
-use Proximum\Vimeet\Domain\Model\PromotionCode as ModelPromotionCode;
 use Doctrine\Common\Collections\ArrayCollection;
+use Proximum\Vimeet\Domain\Model\Invoice\Invoice;
 use Proximum\Vimeet\Domain\Model\Order\Row;
+use Proximum\Vimeet\Domain\Model\PromotionCode as ModelPromotionCode;
 use Proximum\Vimeet\Domain\Order\Numero\Generator as NumeroGenerator;
 
 /**
@@ -190,8 +190,9 @@ class Order
     public function removeRow(Row $rowToRemove): Order
     {
         foreach ($this->rows as $key => $row) {
-            if ($row->getId() === $rowToRemove->getId() && $row->getQuantity() === 0) {
+            if ($row->getId() === $rowToRemove->getId() && 0 === $row->getQuantity()) {
                 $this->rows->remove($key);
+
                 return $this;
             }
         }
@@ -442,7 +443,7 @@ class Order
         $participant = 0;
         foreach ($this->rows as $orderRow) {
             if (null !== $orderRow->getProduct()
-                && $orderRow->getProduct()->getType() === Product::TYPE_PARTICIPANT
+                && Product::TYPE_PARTICIPANT === $orderRow->getProduct()->getType()
             ) {
                 $participant += $orderRow->getQuantity();
             }
@@ -461,7 +462,7 @@ class Order
         /** @var Row $orderRow */
         foreach ($this->rows as $orderRow) {
             if (null !== $orderRow->getProduct()
-                && $orderRow->getProduct()->getType() === Product::TYPE_PLANNING
+                && Product::TYPE_PLANNING === $orderRow->getProduct()->getType()
             ) {
                 $planning += $orderRow->getQuantity();
             }
@@ -469,7 +470,7 @@ class Order
 
         $plan = $this->getPlan();
 
-        if ($plan instanceof Product && $plan->getType() === Product::TYPE_PLAN) {
+        if ($plan instanceof Product && Product::TYPE_PLAN === $plan->getType()) {
             $planning += $plan->getIncludedPlanningQuantity();
         }
 
@@ -501,7 +502,7 @@ class Order
     public function getPlan()
     {
         foreach ($this->rows as $row) {
-            if ($row->getType() === Product::TYPE_PLAN) {
+            if (Product::TYPE_PLAN === $row->getType()) {
                 return $row->getProduct();
             }
         }
@@ -558,7 +559,7 @@ class Order
      */
     public function hasInvoice(): bool
     {
-        return $this->getInvoice() !== null;
+        return null !== $this->getInvoice();
     }
 
     /**

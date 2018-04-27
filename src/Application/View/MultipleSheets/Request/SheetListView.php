@@ -36,7 +36,7 @@ class SheetListView
     /**
      * @param SheetView[] $sheetViews
      * @param int         $page
-     * @param int         $pages Number of pages
+     * @param int         $pages                           Number of pages
      * @param int         $totalRequest
      * @param bool        $isMeetingRequestUpdateLocked
      * @param bool        $isMeetingRequestClosed

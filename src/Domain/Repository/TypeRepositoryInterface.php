@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2015 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -143,8 +143,8 @@ interface TypeRepositoryInterface
     public function getTypesTitleByEventAndLocale(Event $event, $locale, array $types = null);
 
     /**
-     * @param Event  $event
-     * @param User   $user
+     * @param Event $event
+     * @param User  $user
      *
      * @return Type|null
      */

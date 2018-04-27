@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2015 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -51,7 +51,7 @@ class TypeChoiceType extends AbstractType
                 };
             },
             'choice_value' => function ($type) {
-                if($type instanceof Type) {
+                if ($type instanceof Type) {
                     return $type->getId();
                 }
 

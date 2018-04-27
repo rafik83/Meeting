@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2016 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -36,11 +36,11 @@ class FindHandler
     /**
      * @param Find $find
      *
-     * @return FindResult
-     *
      * @throws IsNotAllowedToFindOrderException
      * @throws InvalidNumeroOrderException
      * @throws OrderNotFoundException
+     *
+     * @return FindResult
      */
     public function handle(Find $find)
     {
@@ -62,7 +62,7 @@ class FindHandler
 
         $order = $this->orderRepository->findByNumero($orderNumeroView);
 
-        if ($order === null || !Finder::isAllowedToAccess($find->admin, $order)) {
+        if (null === $order || !Finder::isAllowedToAccess($find->admin, $order)) {
             throw new OrderNotFoundException(
                 sprintf('The order with numero %s does not exist', $numero)
             );

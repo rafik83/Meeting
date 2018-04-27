@@ -1,4 +1,5 @@
 <?php
+
 /*
  * This file is part of the Proximum Vimeet project.
  *
@@ -18,11 +19,11 @@ class TelephoneValidator implements ObjectValidatorInterface
      */
     public function validate($data, array $options = [])
     {
-        if (empty($data) || $data === null) {
+        if (empty($data) || null === $data) {
             return new TelephoneError($data, true);
         }
 
-        $validation = preg_match('#^\+(?!(?:\d*-){5,})(?!(?:\d* ){5,})[\d- /.]+$#', $data) !== 0;
+        $validation = 0 !== preg_match('#^\+(?!(?:\d*-){5,})(?!(?:\d* ){5,})[\d- /.]+$#', $data);
 
         return new TelephoneError($data, $validation);
     }

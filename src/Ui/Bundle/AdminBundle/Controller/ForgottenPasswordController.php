@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2015 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -13,9 +13,9 @@ namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller;
 use Proximum\Vimeet\Application\Command\Admin\ForgottenPassword;
 use Proximum\Vimeet\Application\Command\Admin\NewPassword;
 use Proximum\Vimeet\Application\Exception\User\EmailDoesNotExistException;
+use Proximum\Vimeet\Domain\Model\Admin\ForgottenPasswordToken;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Admin\ForgottenPasswordType;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Admin\NewPasswordType;
-use Proximum\Vimeet\Domain\Model\Admin\ForgottenPasswordToken;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -24,7 +24,7 @@ use Symfony\Component\HttpFoundation\Response;
 class ForgottenPasswordController extends Controller
 {
     /**
-     * @param Request   $request
+     * @param Request $request
      *
      * @return RedirectResponse|Response
      */
@@ -67,6 +67,7 @@ class ForgottenPasswordController extends Controller
     {
         if ($forgottenPasswordToken->isExpired(new \DateTime())) {
             $this->addFlash('error', 'flash.admin.reset_password_token.expired');
+
             return $this->redirectToRoute('admin_forgot_password');
         }
 

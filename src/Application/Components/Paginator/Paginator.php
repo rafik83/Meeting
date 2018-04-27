@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2016 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -31,7 +31,7 @@ class Paginator
         $idsQueryBuilder    = clone $queryBuilder;
         $select = $selector . '.' . $element;
 
-        $countQueryBuilder->select('COUNT(DISTINCT ' . $select .')');
+        $countQueryBuilder->select('COUNT(DISTINCT ' . $select . ')');
         $total = (int) $countQueryBuilder->getQuery()->getSingleScalarResult();
 
         $idsQueryBuilder
@@ -61,7 +61,7 @@ class Paginator
      */
     public function paginate(QueryBuilder $queryBuilder, $page, $limit, $selector, $element = 'id')
     {
-        list ($results, $total) = $this->getResultsAndTotal($queryBuilder, $page, $limit, $selector, $element);
+        list($results, $total) = $this->getResultsAndTotal($queryBuilder, $page, $limit, $selector, $element);
 
         return new PaginatedResult($results, $page, $limit, $total);
     }

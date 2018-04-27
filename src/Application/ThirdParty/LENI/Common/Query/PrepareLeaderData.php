@@ -9,6 +9,7 @@
  */
 
 namespace Proximum\Vimeet\Application\ThirdParty\LENI\Common\Query;
+
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\User;
 

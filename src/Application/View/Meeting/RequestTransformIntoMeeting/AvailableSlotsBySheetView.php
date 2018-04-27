@@ -1,9 +1,9 @@
 <?php
 
 /*
- * This file is part of the vimeet project.
+ * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2017 vimeet
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -17,7 +17,7 @@ use Proximum\Vimeet\Domain\Model\Sheet;
 class AvailableSlotsBySheetView
 {
     /**
-     * @var Sheet $sheet
+     * @var Sheet
      */
     public $sheet;
 

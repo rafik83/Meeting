@@ -3,13 +3,15 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2016 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
 
 namespace Proximum\Vimeet\Application\Command\Operator;
 
+use Proximum\Vimeet\Application\Adapter\PasswordEncoderInterface;
+use Proximum\Vimeet\Application\Adapter\SaltGeneratorInterface;
 use Proximum\Vimeet\Application\Command\Admin\AbstractCreateHandler;
 use Proximum\Vimeet\Application\Components\Token\Admin\ActivateAccountTokenGenerator;
 use Proximum\Vimeet\Application\Event\Admin\ActivateAccountEvent;
@@ -17,8 +19,6 @@ use Proximum\Vimeet\Application\Event\Events;
 use Proximum\Vimeet\Application\Exception\User\EmailAlreadyExistsException;
 use Proximum\Vimeet\Domain\Helper\StringHelper;
 use Proximum\Vimeet\Domain\Model\Admin;
-use Proximum\Vimeet\Application\Adapter\PasswordEncoderInterface;
-use Proximum\Vimeet\Application\Adapter\SaltGeneratorInterface;
 use Proximum\Vimeet\Domain\Repository\AdminRepositoryInterface;
 use Proximum\Vimeet\Infrastructure\Adapter\DelayedEventDispatcher;
 
@@ -35,11 +35,11 @@ class CreateHandler extends AbstractCreateHandler
     private $eventDispatcher;
 
     /**
-     * @param AdminRepositoryInterface                $adminRepository
-     * @param PasswordEncoderInterface                $encoder
-     * @param SaltGeneratorInterface                  $saltGenerator
-     * @param ActivateAccountTokenGenerator           $activateAccountTokenGenerator
-     * @param DelayedEventDispatcher                $eventDispatcher
+     * @param AdminRepositoryInterface      $adminRepository
+     * @param PasswordEncoderInterface      $encoder
+     * @param SaltGeneratorInterface        $saltGenerator
+     * @param ActivateAccountTokenGenerator $activateAccountTokenGenerator
+     * @param DelayedEventDispatcher        $eventDispatcher
      */
     public function __construct(
         AdminRepositoryInterface $adminRepository,
@@ -56,6 +56,7 @@ class CreateHandler extends AbstractCreateHandler
 
     /**
      * @param Create $create
+     *
      * @throws EmailAlreadyExistsException
      */
     public function handle(Create $create)

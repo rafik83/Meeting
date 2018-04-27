@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2016 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -56,7 +56,7 @@ class CreateHandler
 
         $this->massRepository->create($mass);
 
-        if ($create->blocking === true) {
+        if (true === $create->blocking) {
             $this->jobQueueAdapter->aggregateEventUsersFullUnavailability($create->event);
             $this->jobQueueAdapter->aggregateAvailableSlot($create->event);
         }

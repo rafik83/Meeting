@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2015 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -50,10 +50,10 @@ interface OrderRepositoryInterface
     public function findNotCancelledAndNotInvoicedBySheet(Sheet $sheet);
 
     /**
-     * @param Event  $event
-     * @param array  $filters
-     * @param int    $page
-     * @param int    $limit
+     * @param Event $event
+     * @param array $filters
+     * @param int   $page
+     * @param int   $limit
      *
      * @return PaginatedResult
      */

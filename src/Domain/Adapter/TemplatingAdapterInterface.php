@@ -16,7 +16,7 @@ interface TemplatingAdapterInterface
      * Renders a template
      *
      * @param string $template
-     * @param array  $context The arguments
+     * @param array  $context  The arguments
      *
      * @return string
      */

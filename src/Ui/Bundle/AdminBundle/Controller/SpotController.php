@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2015 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -29,12 +29,12 @@ use Proximum\Vimeet\Application\Query\Spot\SpotUnavailabilityQuery;
 use Proximum\Vimeet\Application\ThirdParty\Comexposium\Webservice\Query\HasEventReferenceQuery;
 use Proximum\Vimeet\Application\View\Spot\Batch\DeleteBatchView;
 use Proximum\Vimeet\Application\View\Spot\SpotUnavailabilityView;
+use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Spot;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Spot\BatchCreateType;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Spot\BatchUnavailabilityType;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Spot\FilterSpotType;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Spot\SpotCreateType;
-use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Ui\Flash\TransMessage;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
@@ -113,7 +113,6 @@ class SpotController extends Controller
 
         if (!empty($selectedSpots)) {
             if ($deleteButton) {
-
                 $deleteBatch = new DeleteBatch($selectedSpots, $event);
 
                 /** @var DeleteBatchView $deleteBatchView */
@@ -125,7 +124,7 @@ class SpotController extends Controller
                         ['%spots%' => $deleteBatchView->getSpotsWithMeetings()]
                     ));
                 }
-                
+
                 if (!empty($deleteBatchView->spotsWithSheets)) {
                     $this->addFlash('error', new TransMessage(
                         'flash.admin.spot_batch.delete.failure.sheets',

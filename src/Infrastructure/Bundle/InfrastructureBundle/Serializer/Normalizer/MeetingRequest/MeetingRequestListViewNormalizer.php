@@ -53,7 +53,7 @@ class MeetingRequestListViewNormalizer implements NormalizerInterface
     /**
      * {@inheritdoc}
      */
-    public function normalize($object, $format = null, array $context = array())
+    public function normalize($object, $format = null, array $context = [])
     {
         /** @var MeetingRequestListView $meetingRequestListView */
         $meetingRequestListView = $object;
@@ -103,7 +103,7 @@ class MeetingRequestListViewNormalizer implements NormalizerInterface
     {
         $formattedDate = $dateFormatter->format($date);
 
-        return $formattedDate !== false ? $formattedDate : '';
+        return false !== $formattedDate ? $formattedDate : '';
     }
 
     /**
@@ -111,7 +111,7 @@ class MeetingRequestListViewNormalizer implements NormalizerInterface
      */
     public function supportsNormalization($data, $format = null)
     {
-        return $data instanceof MeetingRequestListView && $format === 'csv';
+        return $data instanceof MeetingRequestListView && 'csv' === $format;
     }
 
     /**
@@ -134,6 +134,6 @@ class MeetingRequestListViewNormalizer implements NormalizerInterface
      */
     private function convertCharset(?string $input): string
     {
-        return iconv(Charset::UTF_8, Charset::WINDOWS_1252 . "//TRANSLIT//IGNORE", $input);
+        return iconv(Charset::UTF_8, Charset::WINDOWS_1252 . '//TRANSLIT//IGNORE', $input);
     }
 }

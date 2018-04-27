@@ -27,7 +27,7 @@ class MeetingSolutionListQueryHandler
 
     /**
      * @param MeetingSolutionRepositoryInterface $meetingSolutionRepository
-     * @param SerializerAdapterInterface $serializer
+     * @param SerializerAdapterInterface         $serializer
      */
     public function __construct(
         MeetingSolutionRepositoryInterface $meetingSolutionRepository,

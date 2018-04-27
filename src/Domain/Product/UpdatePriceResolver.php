@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of the vimeet project.
+ * This file is part of the Proximum Vimeet project.
  *
  * Copyright (C) Proximum
  *
@@ -46,6 +46,6 @@ class UpdatePriceResolver
         $cartRows  = $this->cartRowRepository->findByProduct($product);
         $orderRows = $this->orderRowRepository->findByProduct($product);
 
-        return \count($cartRows) === 0 && \count($orderRows) === 0;
+        return 0 === \count($cartRows) && 0 === \count($orderRows);
     }
 }

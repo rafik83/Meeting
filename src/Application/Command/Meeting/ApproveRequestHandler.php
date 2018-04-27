@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2016 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -95,8 +95,9 @@ class ApproveRequestHandler
     /**
      * @param ApproveRequest $approveRequest
      *
-     * @return null|ApproveRequestResult
      * @throws IsNotAllowedToApproveMeetingRequestException
+     *
+     * @return null|ApproveRequestResult
      */
     public function handle(ApproveRequest $approveRequest): ?ApproveRequestResult
     {
@@ -148,13 +149,13 @@ class ApproveRequestHandler
                 $approveRequest->editor
             );
 
-            if ($validationRequired === false) {
+            if (false === $validationRequired) {
                 $meetingDdayView = $this->transformRequestIntoMeetingOnDday(
                     $approveRequest->request,
                     $approveRequest->locale
                 );
 
-                if ($meetingDdayView instanceOf MeetingDdayView) {
+                if ($meetingDdayView instanceof MeetingDdayView) {
                     return new ApproveRequestResult($meetingDdayView);
                 } else {
                     return new ApproveRequestResult(null, true);

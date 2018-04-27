@@ -17,6 +17,7 @@ class ArchiveUnArchiveHandler
 
     /** @var UnArchiveHandler */
     private $unArchiveHandler;
+
     /**
      * @param ArchiveHandler   $archiveHandler
      * @param UnArchiveHandler $unArchiveHandler

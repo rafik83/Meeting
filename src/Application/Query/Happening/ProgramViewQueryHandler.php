@@ -56,8 +56,9 @@ class ProgramViewQueryHandler
     /**
      * @param ProgramViewQuery $programViewQuery
      *
-     * @return ProgramView
      * @throws MissingEventDayConfigurationException
+     *
+     * @return ProgramView
      */
     public function handle(ProgramViewQuery $programViewQuery)
     {
@@ -69,7 +70,7 @@ class ProgramViewQueryHandler
 
         $masses = [];
 
-        if ($programViewQuery->category === null) {
+        if (null === $programViewQuery->category) {
             $masses = $this->massRepository->findByEvent($programViewQuery->event, $programViewQuery->locale);
         }
 
@@ -87,7 +88,7 @@ class ProgramViewQueryHandler
             );
         }
 
-        $categoryTitle = $programViewQuery->category !== null
+        $categoryTitle = null !== $programViewQuery->category
             ? $programViewQuery->category->getTitle($programViewQuery->locale)
             : null;
 

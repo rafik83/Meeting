@@ -55,7 +55,7 @@ class RecordView
      */
     public function isTrace(): bool
     {
-        return $this->type === self::TRACE;
+        return self::TRACE === $this->type;
     }
 
     /**
@@ -63,7 +63,7 @@ class RecordView
      */
     public function isComment(): bool
     {
-        return $this->type === self::COMMENT;
+        return self::COMMENT === $this->type;
     }
 
     /**

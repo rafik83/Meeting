@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2016 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -62,7 +62,7 @@ class BlockType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class'        => Template\Block::class,
-            'validation_groups' => ['block', 'Default']
+            'validation_groups' => ['block', 'Default'],
         ]);
         $resolver->setRequired(['block', 'locale', 'country']);
         $resolver->setAllowedTypes('locale', 'string');
@@ -99,7 +99,7 @@ class BlockType extends AbstractType
             'object'    => $object,
             'attr'      => [
                 'image-preview' => $object->hasTag(Tag::PARTICIPANT_AVATAR),
-            ]
+            ],
         ]);
     }
 

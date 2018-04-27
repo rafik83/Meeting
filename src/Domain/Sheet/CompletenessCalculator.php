@@ -1,9 +1,9 @@
 <?php
 
 /*
- * This file is part of the vimeet project.
+ * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2016 vimeet
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -57,7 +57,6 @@ class CompletenessCalculator
         SheetCompletenessRepositoryInterface $sheetCompletenessRepository,
         DelayedEventDispatcher $eventDispatcher
     ) {
-
         $this->templateDataFactory         = $templateDataFactory;
         $this->sheetRepository             = $sheetRepository;
         $this->sheetCompletenessRepository = $sheetCompletenessRepository;
@@ -93,7 +92,7 @@ class CompletenessCalculator
         $notificationCompleteness = [];
         $averageCompleteness      = 0;
         foreach ($locales as $locale) {
-            $localeCompleteness        = $total[$locale] !== 0 ? floor($completed[$locale] / $total[$locale] * 100) : 0;
+            $localeCompleteness        = 0 !== $total[$locale] ? floor($completed[$locale] / $total[$locale] * 100) : 0;
             $unitLocalizedCompleteness = new SheetCompleteness(
                 $sheet,
                 $locale,
@@ -103,7 +102,7 @@ class CompletenessCalculator
             $this->sheetCompletenessRepository->add($unitLocalizedCompleteness);
             $averageCompleteness += $localeCompleteness;
 
-            $notificationCompleteness[$locale] = (int) $localeCompleteness === 100;
+            $notificationCompleteness[$locale] = 100 === (int) $localeCompleteness;
         }
 
         $sheet->setCompleteness(intval(floor($averageCompleteness / count($locales))));
@@ -133,13 +132,13 @@ class CompletenessCalculator
         $countCompleted = 0;
         foreach ($templateData->getEditableSheetDataExceptedImageObjects() as $object) {
             if ($object->isEditable() && true === $object->getRequired()) {
-                $countTotal++;
+                ++$countTotal;
 
                 // necessary when data is equal to false (!empty(false) = false)
-                if ($object instanceof BooleanObject && $object->getContentValue() !== null) {
-                    $countCompleted++;
+                if ($object instanceof BooleanObject && null !== $object->getContentValue()) {
+                    ++$countCompleted;
                 } elseif (!empty($object->getContentValue())) {
-                    $countCompleted++;
+                    ++$countCompleted;
                 }
             }
         }
@@ -167,23 +166,23 @@ class CompletenessCalculator
                 if ($object->isEditable() && $object instanceof ContentObjectInterface) {
                     if ($object->isTranslatable()) {
                         foreach ($locales as $locale) {
-                            $total[$locale]++;
+                            ++$total[$locale];
                             $data = $object->getContentValueLocalize($locale);
 
                             // necessary when data is equal to false (!empty(false) = false)
-                            if ($object instanceof BooleanObject && $data !== null) {
-                                $completed[$locale]++;
+                            if ($object instanceof BooleanObject && null !== $data) {
+                                ++$completed[$locale];
                             } elseif (!empty($data)) {
-                                $completed[$locale]++;
+                                ++$completed[$locale];
                             }
                         }
                     } else {
                         $data = $object->getContentValue();
 
                         foreach ($locales as $locale) {
-                            $total[$locale]++;
+                            ++$total[$locale];
                             if (!empty($data)) {
-                                $completed[$locale]++;
+                                ++$completed[$locale];
                             }
                         }
                     }
@@ -191,17 +190,17 @@ class CompletenessCalculator
                     $count = count($object->getItems());
 
                     // In case of a required ItemCollection with no item
-                    if ($count === 0) {
+                    if (0 === $count) {
                         foreach ($locales as $locale) {
-                            $total[$locale]++;
+                            ++$total[$locale];
                         }
                     } else {
                         foreach ($locales as $locale) {
-                            $total[$locale]++;
+                            ++$total[$locale];
 
                             foreach ($object->getItems() as $item) {
                                 if (!empty($item->getTitleLocalize($locale))) {
-                                    $completed[$locale]++;
+                                    ++$completed[$locale];
 
                                     break;
                                 }

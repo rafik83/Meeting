@@ -47,7 +47,7 @@ class JobRepositoryAdapter implements JobRepositoryAdapterInterface
         $jobs = $this->getJobRepository()->findAllForRelatedEntity($event);
 
         foreach ($jobs as $job) {
-            if ($job->getCommand() === GenerateVersionsCommand::NAME && !$job->isCanceled()) {
+            if (GenerateVersionsCommand::NAME === $job->getCommand() && !$job->isCanceled()) {
                 return $job;
             }
         }

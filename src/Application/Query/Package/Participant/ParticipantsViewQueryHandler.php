@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2016 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -41,6 +41,7 @@ class ParticipantsViewQueryHandler
 
     /**
      * @param ParticipantsViewQuery $participantsViewQuery
+     *
      * @return ParticipantsView
      */
     public function handle(ParticipantsViewQuery $participantsViewQuery)

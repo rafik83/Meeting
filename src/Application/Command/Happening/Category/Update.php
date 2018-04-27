@@ -29,7 +29,7 @@ class Update extends AbstractCategory
         $this->leftColor  = $category->getLeftColor();
         $this->rightColor = $category->getRightColor();
 
-        /** @var CategoryTranslation $translation */
+        /* @var CategoryTranslation $translation */
         foreach ($category->getEvent()->getLocales() as $locale) {
             $this->translations[$locale] = [
                 'title' => $category->getTitle($locale),

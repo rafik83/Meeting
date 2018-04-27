@@ -12,11 +12,11 @@ namespace Proximum\Vimeet\Application\Query\Planning;
 
 use Proximum\Vimeet\Domain\Model\Event\Day;
 use Proximum\Vimeet\Domain\Model\HappeningParticipation;
-use Proximum\Vimeet\Domain\Model\User;
-use Proximum\Vimeet\Domain\Model\Unavailability\Mass;
-use Proximum\Vimeet\Domain\Model\Unavailability\MassAssignment;
 use Proximum\Vimeet\Domain\Model\Meeting;
 use Proximum\Vimeet\Domain\Model\Unavailability;
+use Proximum\Vimeet\Domain\Model\Unavailability\Mass;
+use Proximum\Vimeet\Domain\Model\Unavailability\MassAssignment;
+use Proximum\Vimeet\Domain\Model\User;
 
 class DayViewQuery
 {

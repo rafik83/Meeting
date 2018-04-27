@@ -79,7 +79,7 @@ class FeatureContext extends MinkContext implements KernelAwareContext, SnippetA
      */
     protected function evaluateMail($mail)
     {
-        return $mail === 'vimeet' ? $this->kernel->getContainer()->getParameter('mailer_sender') : $mail;
+        return 'vimeet' === $mail ? $this->kernel->getContainer()->getParameter('mailer_sender') : $mail;
     }
 
     /**
@@ -101,10 +101,10 @@ class FeatureContext extends MinkContext implements KernelAwareContext, SnippetA
      */
     public function theCacheIsClear()
     {
-        exec("bin/console cache:clear --env=test");
-        exec("bin/console doctrine:cache:clear-metadata --env=test");
-        exec("bin/console doctrine:cache:clear-query --env=test");
-        exec("bin/console doctrine:cache:clear-result --env=test");
+        exec('bin/console cache:clear --env=test');
+        exec('bin/console doctrine:cache:clear-metadata --env=test');
+        exec('bin/console doctrine:cache:clear-query --env=test');
+        exec('bin/console doctrine:cache:clear-result --env=test');
     }
 
     /**
@@ -112,21 +112,22 @@ class FeatureContext extends MinkContext implements KernelAwareContext, SnippetA
      */
     public function eslaticaIsPopulate()
     {
-        exec("bin/console fos:elastica:populate --env=test --quiet --no-interaction --no-debug");
+        exec('bin/console fos:elastica:populate --env=test --quiet --no-interaction --no-debug');
     }
 
     /**
      * @param $string
      *
-     * @return mixed
      * @throws \Exception
+     *
+     * @return mixed
      */
     public function getLinkFromA($string)
     {
         preg_match_all('/<a[^>]+href=([\'"])(.+?)\1[^>]*>/i', $string, $result);
 
         if (!isset($result[2][0])) {
-            throw new \Exception(sprintf("The link was not found in \"%s\"", $string));
+            throw new \Exception(sprintf('The link was not found in "%s"', $string));
         }
 
         return $result[2][0];
@@ -180,9 +181,9 @@ class FeatureContext extends MinkContext implements KernelAwareContext, SnippetA
 
                 $messageRecipients = [];
 
-                if ($recipient == 'to') {
+                if ('to' == $recipient) {
                     $messageRecipients = $message->getTo();
-                } elseif ($recipient == 'bcc') {
+                } elseif ('bcc' == $recipient) {
                     $messageRecipients = $message->getBcc();
                 }
 
@@ -202,7 +203,7 @@ class FeatureContext extends MinkContext implements KernelAwareContext, SnippetA
                     if ($messageId == $type) {
                         if ($sender != $senderEmail) {
                             throw new \Exception(
-                                sprintf("The \"%s\" was not sent from \"%s\"", $type, $senderEmail)
+                                sprintf('The "%s" was not sent from "%s"', $type, $senderEmail)
                             );
                         }
 
@@ -212,7 +213,7 @@ class FeatureContext extends MinkContext implements KernelAwareContext, SnippetA
             }
         }
 
-        throw new \Exception(sprintf("The \"%s\" was not sent", $type));
+        throw new \Exception(sprintf('The "%s" was not sent', $type));
     }
 
     /**
@@ -248,11 +249,10 @@ class FeatureContext extends MinkContext implements KernelAwareContext, SnippetA
                         }
                     }
                 }
-
             }
         }
 
-        throw new \Exception(sprintf("The \"%s\" mail does not contain it", $type));
+        throw new \Exception(sprintf('The "%s" mail does not contain it', $type));
     }
 
     /**
@@ -285,15 +285,15 @@ class FeatureContext extends MinkContext implements KernelAwareContext, SnippetA
 
                         if (substr($result, 0, strlen($link)) === $link) {
                             $this->visitPath($result);
+
                             return;
                         }
                     }
                 }
-
             }
         }
 
-        throw new \Exception(sprintf("The \"%s\" mail does not contain the link", $type));
+        throw new \Exception(sprintf('The "%s" mail does not contain the link', $type));
     }
 
     /**
@@ -340,8 +340,8 @@ class FeatureContext extends MinkContext implements KernelAwareContext, SnippetA
 
         $element = $page->findById($radio);
 
-        if ($element !== null) {
-            if ($element->getTagName() === 'input') {
+        if (null !== $element) {
+            if ('input' === $element->getTagName()) {
                 $this->fillField(
                     $element->getAttribute('name'),
                     true
@@ -363,10 +363,10 @@ class FeatureContext extends MinkContext implements KernelAwareContext, SnippetA
 
         $element = $page->findById($radio);
 
-        if ($element !== null) {
-            if ($element->getTagName() === 'input') {
+        if (null !== $element) {
+            if ('input' === $element->getTagName()) {
                 // Behat return 1 instead of true for the value of a radio
-                if ((bool) $element->getValue() !== true) {
+                if (true !== (bool) $element->getValue()) {
                     throw new \Exception('The radio button is not checked');
                 }
 
@@ -386,10 +386,10 @@ class FeatureContext extends MinkContext implements KernelAwareContext, SnippetA
 
         $element = $page->findById($radio);
 
-        if ($element !== null) {
-            if ($element->getTagName() === 'input') {
+        if (null !== $element) {
+            if ('input' === $element->getTagName()) {
                 // Behat return 1 instead of true for the value of a radio
-                if ((bool) $element->getValue() === true) {
+                if (true === (bool) $element->getValue()) {
                     throw new \Exception('The radio button is checked');
                 }
 
@@ -471,7 +471,6 @@ class FeatureContext extends MinkContext implements KernelAwareContext, SnippetA
 
                 return;
             }
-
         }
 
         throw new \Exception('Element not found');
@@ -493,8 +492,8 @@ class FeatureContext extends MinkContext implements KernelAwareContext, SnippetA
             foreach ($ths as $th) {
                 // calculate col num depending on colspan
                 $colspan = $th->getAttribute('colspan');
-                $cols += $colspan !== null ? $colspan : 1;
-                if (strpos($th->getText(), $column) !== false) {
+                $cols += null !== $colspan ? $colspan : 1;
+                if (false !== strpos($th->getText(), $column)) {
                     $numColumn = $cols;
                 }
             }
@@ -502,13 +501,13 @@ class FeatureContext extends MinkContext implements KernelAwareContext, SnippetA
             if (null !== $numColumn) {
                 $trs = $table->findAll('css', 'tbody tr');
                 foreach ($trs as $tr) {
-                    if (strpos($tr->getText(), $row) !== false) {
+                    if (false !== strpos($tr->getText(), $row)) {
                         $tds = $tr->findAll('css', 'td');
                         $cols = 0;
                         foreach ($tds as $td) {
                             // calculate col num depending on colspan
                             $colspan = $td->getAttribute('colspan');
-                            $cols += $colspan !== null ? $colspan : 1;
+                            $cols += null !== $colspan ? $colspan : 1;
 
                             if ($cols == $numColumn && false !== strpos($td->getText(), $something)) {
                                 return;
@@ -567,7 +566,7 @@ class FeatureContext extends MinkContext implements KernelAwareContext, SnippetA
         }
 
         $token = new UsernamePasswordToken($user, null, $providerKey, $user->getRoles());
-        $session->set('_security_'.$providerKey, serialize($token));
+        $session->set('_security_' . $providerKey, serialize($token));
         $session->save();
 
         $cookie = new Cookie($session->getName(), $session->getId());
@@ -594,7 +593,7 @@ class FeatureContext extends MinkContext implements KernelAwareContext, SnippetA
         $providerKey = 'admin';
 
         $token = new UsernamePasswordToken($user, null, $providerKey, $user->getRoles());
-        $session->set('_security_'.$providerKey, serialize($token));
+        $session->set('_security_' . $providerKey, serialize($token));
         $session->save();
 
         $cookie = new Cookie($session->getName(), $session->getId());

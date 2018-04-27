@@ -30,8 +30,9 @@ class UserEventPhoneQueryHandler
     /**
      * @param UserEventPhoneQuery $query
      *
-     * @return UserEventPhone
      * @throws UserEventPhoneNotFoundException
+     *
+     * @return UserEventPhone
      */
     public function handle(UserEventPhoneQuery $query)
     {

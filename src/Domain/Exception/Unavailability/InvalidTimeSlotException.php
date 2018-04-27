@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2017 Proximum Vimeet
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */

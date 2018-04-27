@@ -180,7 +180,7 @@ final class Tag
     {
         $genericTags = [];
 
-        for ($i = 1; $i <= self::GENERIC_TAGS_NUMBER; $i++) {
+        for ($i = 1; $i <= self::GENERIC_TAGS_NUMBER; ++$i) {
             $genericTags[] = 'sheet_generic_tag_' . $i;
         }
 
@@ -196,7 +196,7 @@ final class Tag
     {
         $genericSheetTemplateTags = [];
 
-        for ($i = 1; $i <= self::GENERIC_TAGS_NUMBER; $i++) {
+        for ($i = 1; $i <= self::GENERIC_TAGS_NUMBER; ++$i) {
             $genericSheetTemplateTags[] = 'sheet_template_generic_tag_' . $i;
         }
 

@@ -105,7 +105,7 @@ class MassAssignment implements TimeRangeInterface
     /**
      * Get enabled
      *
-     * @return boolean
+     * @return bool
      */
     public function isEnabled()
     {

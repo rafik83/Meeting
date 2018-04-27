@@ -1,9 +1,9 @@
 <?php
 
 /*
- * This file is part of the vimeet project.
+ * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2016 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -38,7 +38,6 @@ class StepCommandFactory
      * @param StepPlan                   $stepPlan
      * @param StepParticipantAndPlanning $stepParticipantAndPlanning
      * @param StepOption                 $stepOption
-     *
      */
     public function __construct(
         StepPlan $stepPlan,
@@ -55,8 +54,9 @@ class StepCommandFactory
      * @param Sheet  $sheet
      * @param int    $stepIndex
      *
-     * @return AbstractStep
      * @throws StepNotImplementedException
+     *
+     * @return AbstractStep
      */
     public function create($type, Sheet $sheet, $stepIndex)
     {

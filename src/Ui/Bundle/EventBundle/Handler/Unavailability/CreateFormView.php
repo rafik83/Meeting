@@ -40,7 +40,7 @@ class CreateFormView
      */
     public function hasError(): bool
     {
-        return $this->type === self::HANDLER_ERROR;
+        return self::HANDLER_ERROR === $this->type;
     }
 
     /**
@@ -48,7 +48,7 @@ class CreateFormView
      */
     public function isSuccess(): bool
     {
-        return $this->type === self::HANDLER_SUCCESS;
+        return self::HANDLER_SUCCESS === $this->type;
     }
 
     /**
@@ -56,6 +56,6 @@ class CreateFormView
      */
     public function isXmlHttpRequest(): bool
     {
-        return $this->type === self::XML_HTTP_REQUEST_RESPONSE;
+        return self::XML_HTTP_REQUEST_RESPONSE === $this->type;
     }
 }

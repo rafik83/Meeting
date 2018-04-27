@@ -45,7 +45,6 @@ class UpdateHandler
 
                     $this->searchFacetRepository->set($persistedSearchFacet);
                 }
-
             }
 
             if (false === $found) {

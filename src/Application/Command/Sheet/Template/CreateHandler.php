@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2016 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -29,7 +29,7 @@ class CreateHandler
      * CreateHandler constructor.
      *
      * @param SheetTemplateRepositoryInterface $templateRepository
-     * @param \DateTimeInterface          $dateTime
+     * @param \DateTimeInterface               $dateTime
      */
     public function __construct(SheetTemplateRepositoryInterface $templateRepository, \DateTimeInterface $dateTime)
     {

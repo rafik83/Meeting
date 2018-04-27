@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2015 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -68,7 +68,7 @@ class AppExtension extends \Twig_Extension
     public function getTests()
     {
         return [
-            new \Twig_SimpleTest('url', [$this, 'isUrl'])
+            new \Twig_SimpleTest('url', [$this, 'isUrl']),
         ];
     }
 

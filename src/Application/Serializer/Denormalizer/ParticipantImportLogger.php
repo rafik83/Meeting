@@ -1,9 +1,9 @@
 <?php
 
 /*
- * This file is part of the vimeet project.
+ * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2017 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -55,7 +55,7 @@ class ParticipantImportLogger
     private $translatorAdapter;
 
     /**
-     * @var Sheet[] $sheets
+     * @var Sheet[]
      */
     private $sheets = [];
 
@@ -108,7 +108,7 @@ class ParticipantImportLogger
     public function userImported(User $user)
     {
         $this->emails[] = mb_strtolower($user->getEmail());
-        $this->createdUsers++;
+        ++$this->createdUsers;
     }
 
     /**
@@ -117,12 +117,12 @@ class ParticipantImportLogger
     public function sheetImported(Sheet $sheet)
     {
         $this->sheets[] = $sheet;
-        $this->createdSheets++;
+        ++$this->createdSheets;
     }
 
     public function existingParticipations()
     {
-        $this->existingParticipations++;
+        ++$this->existingParticipations;
     }
 
     /**

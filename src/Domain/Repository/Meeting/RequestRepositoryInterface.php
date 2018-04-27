@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2015 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -192,12 +192,12 @@ interface RequestRepositoryInterface
     );
 
     /**
-     * @param Event       $event
-     * @param Sheet[]     $sheets
-     * @param Sheet[]     $sheetsMet
-     * @param string|null $state
-     * @param string|null $type
-     * @param User|string|null   $user
+     * @param Event            $event
+     * @param Sheet[]          $sheets
+     * @param Sheet[]          $sheetsMet
+     * @param string|null      $state
+     * @param string|null      $type
+     * @param User|string|null $user
      *
      * @return int
      */

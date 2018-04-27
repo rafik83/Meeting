@@ -1,9 +1,9 @@
 <?php
 
 /*
- * This file is part of the vimeet project.
+ * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2017 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -40,10 +40,10 @@ class ParticipantDenormalizerView
     /**
      * ParticipantDenormalizerView constructor.
      *
-     * @param int $existingParticipations
-     * @param int $fileParticipations
-     * @param int $createdSheets
-     * @param int $createdUsers
+     * @param int   $existingParticipations
+     * @param int   $fileParticipations
+     * @param int   $createdSheets
+     * @param int   $createdUsers
      * @param array $errors
      */
     public function __construct(
@@ -59,5 +59,4 @@ class ParticipantDenormalizerView
         $this->createdUsers           = $createdUsers;
         $this->errors                 = $errors;
     }
-
 }

@@ -1,9 +1,9 @@
 <?php
 
 /*
- * This file is part of the vimeet project.
+ * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2016 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -79,12 +79,12 @@ class BatchCatalogHandler
             if (isset($sheets[$id])) {
                 $sheet = $sheets[$id];
                 // If try to remove from catalog
-                if ($command->state === false) {
+                if (false === $command->state) {
                     if (isset($meetings[$id]) && $meetings[$id] > 0) {
                         $ignoredSheets[] = $sheet;
                         $this->excludeSheetFromBatch($command, $index);
                     }
-                } elseif ($command->state === true) {
+                } elseif (true === $command->state) {
                     if (!$sheet->isEnabled() || $sheet->isRefused()) {
                         $ignoredSheets[] = $sheet;
                         $this->excludeSheetFromBatch($command, $index);

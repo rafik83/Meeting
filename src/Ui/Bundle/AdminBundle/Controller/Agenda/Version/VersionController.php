@@ -47,7 +47,7 @@ class VersionController extends Controller
 
         return new JsonResponse([
             'answerType' => $view->state,
-            'diff' => $view->diff
+            'diff' => $view->diff,
         ]);
     }
 

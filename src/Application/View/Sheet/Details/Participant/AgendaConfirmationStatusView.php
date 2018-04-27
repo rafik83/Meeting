@@ -16,6 +16,7 @@ abstract class AgendaConfirmationStatusView
 
     /**
      * Not asked are considered as not validated
+     *
      * @var string
      */
     public $message = self::TRANS_KEY . 'not_concerned';

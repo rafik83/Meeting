@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2016 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -51,6 +51,7 @@ class Update
 
     /**
      * Update constructor.
+     *
      * @param Model\Event $event
      */
     public function __construct(Model\Event $event)

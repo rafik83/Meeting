@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2015 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -62,6 +62,7 @@ class Participant implements MailRecipientInterface
 
     /**
      * The participant is assigned to accepted request
+     *
      * @var bool
      */
     private $hasRequestAssigned = false;
@@ -132,6 +133,7 @@ class Participant implements MailRecipientInterface
      * Is owner.
      *
      * @deprecated
+     *
      * @return bool
      */
     public function isOwner()
@@ -208,7 +210,7 @@ class Participant implements MailRecipientInterface
     }
 
     /**
-     * @return boolean
+     * @return bool
      */
     public function isRegistrationComplete()
     {
@@ -216,7 +218,7 @@ class Participant implements MailRecipientInterface
     }
 
     /**
-     * @param boolean $registrationComplete
+     * @param bool $registrationComplete
      *
      * @return Participant
      */
@@ -248,7 +250,7 @@ class Participant implements MailRecipientInterface
     }
 
     /**
-     * @return boolean
+     * @return bool
      */
     public function isVisio()
     {
@@ -256,7 +258,7 @@ class Participant implements MailRecipientInterface
     }
 
     /**
-     * @param boolean $visio
+     * @param bool $visio
      */
     public function setVisio($visio)
     {

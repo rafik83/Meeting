@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2015 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -37,9 +37,9 @@ class SheetManager
     /**
      * SheetManager constructor.
      *
-     * @param TypeRepositoryInterface        $typeRepository
-     * @param SheetRepositoryInterface       $sheetRepository
-     * @param RequestRepositoryInterface     $requestRepository
+     * @param TypeRepositoryInterface    $typeRepository
+     * @param SheetRepositoryInterface   $sheetRepository
+     * @param RequestRepositoryInterface $requestRepository
      */
     public function __construct(
         TypeRepositoryInterface $typeRepository,
@@ -95,7 +95,7 @@ class SheetManager
 
             foreach ($requests as $request) {
                 if (($request->getToSheet() === $sheet || $request->getFromSheet() === $sheet)
-                    && ($request->getState() === Request::STATE_SENT || $request->getState() === Request::STATE_APPROVED)
+                    && (Request::STATE_SENT === $request->getState() || Request::STATE_APPROVED === $request->getState())
                 ) {
                     unset($allowedSheets[$givenSheetKey]);
                 }

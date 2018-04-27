@@ -133,9 +133,9 @@ class ParticipantProductWithAvailabilityTimeRangeChecker
      * @param User        $user
      * @param Participant $participant
      *
-     * @return AvailabilityTimeRange[]
-     *
      * @throws PackageNotPassableException
+     *
+     * @return AvailabilityTimeRange[]
      */
     private function getOtherAvailabilityTimeRangeBought(Event $event, User $user, Participant $participant): array
     {
@@ -143,7 +143,7 @@ class ParticipantProductWithAvailabilityTimeRangeChecker
 
         $participants = $this->participantRepository->getAllParticipantForUser($event, $user);
 
-        if (\count($participants) === 1) {
+        if (1 === \count($participants)) {
             return $availabilityTimeRangesBought;
         }
 
@@ -203,7 +203,6 @@ class ParticipantProductWithAvailabilityTimeRangeChecker
     ): array {
         foreach ($othersAvailabilityTimeRanges as $othersAvailabilityTimeRange) {
             if (!isset($timeRangeViews[$othersAvailabilityTimeRange->getId()])) {
-
                 $timeRangeViews[$othersAvailabilityTimeRange->getId()] = new TimeRangeView(
                     $othersAvailabilityTimeRange->getBegin(),
                     $othersAvailabilityTimeRange->getEnd()

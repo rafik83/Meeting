@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2017 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -14,12 +14,12 @@ use Proximum\Vimeet\Application\Exception\Planner\ParticipantNotFoundException;
 use Proximum\Vimeet\Application\Exception\Planner\SheetNotFoundException;
 use Proximum\Vimeet\Application\View\Planner\MeetingView;
 use Proximum\Vimeet\Application\View\Planner\ParticipantView;
-use Proximum\Vimeet\Application\View\Planner\SlotView;
 use Proximum\Vimeet\Application\View\Planner\SheetView;
+use Proximum\Vimeet\Application\View\Planner\SlotView;
 use Proximum\Vimeet\Application\View\Planner\SpotView;
 use Proximum\Vimeet\Domain\Model\Meeting;
-use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Meeting\Request;
+use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Repository\Meeting\RequestRepositoryInterface;
 
@@ -86,7 +86,7 @@ class MeetingViewQueryHandler
                 if (!$query->isSolutionFromScratch() && $request->hasMeeting()) {
                     $meeting = $request->getMeeting();
 
-                    if ($meeting !== null) {
+                    if (null !== $meeting) {
                         $meetingView->slot = $this->getSlotById($meeting->getSlot()->getId());
                         $meetingView->spot = $this->getSpotById($meeting->getSpot()->getId());
 
@@ -136,7 +136,7 @@ class MeetingViewQueryHandler
     {
         $participantsList = [];
 
-        if (!$query->isSolutionFromScratch() && $meeting !== null) {
+        if (!$query->isSolutionFromScratch() && null !== $meeting) {
             foreach ($meeting->getAllParticipants() as $participant) {
                 $participantsList[] = $this->getParticipantById($participant->getId());
             }
@@ -149,7 +149,7 @@ class MeetingViewQueryHandler
             } else {
                 // No preference on from
                 // If sheet has only one participant
-                if ($request->getFromSheet()->countParticipant() === 1) {
+                if (1 === $request->getFromSheet()->countParticipant()) {
                     /** @var Participant $participant */
                     foreach ($request->getFromSheet()->getParticipants()->toArray() as $participant) {
                         $participantsList[] = $this->getParticipantById($participant->getId());
@@ -167,7 +167,7 @@ class MeetingViewQueryHandler
             } else {
                 // not preference on to
                 // If sheet has only one participant
-                if ($request->getToSheet()->countParticipant() === 1) {
+                if (1 === $request->getToSheet()->countParticipant()) {
                     /** @var Participant $participant */
                     foreach ($request->getToSheet()->getParticipants()->toArray() as $participant) {
                         $participantsList[] = $this->getParticipantById($participant->getId());
@@ -261,9 +261,9 @@ class MeetingViewQueryHandler
     /**
      * @param int $id
      *
-     * @return SheetView
-     *
      * @throws SheetNotFoundException
+     *
+     * @return SheetView
      */
     private function getSheetById($id)
     {
@@ -277,9 +277,9 @@ class MeetingViewQueryHandler
     /**
      * @param int $id
      *
-     * @return ParticipantView
-     *
      * @throws ParticipantNotFoundException
+     *
+     * @return ParticipantView
      */
     private function getParticipantById($id)
     {
@@ -318,7 +318,7 @@ class MeetingViewQueryHandler
                 if (!isset($this->dispatch[$request->getFromSheet()->getId()]['request'])) {
                     $this->dispatch[$request->getFromSheet()->getId()]['request'] = 1;
                 } else {
-                    $this->dispatch[$request->getFromSheet()->getId()]['request']++;
+                    ++$this->dispatch[$request->getFromSheet()->getId()]['request'];
                 }
             }
 
@@ -326,7 +326,7 @@ class MeetingViewQueryHandler
                 if (!isset($this->dispatch[$request->getToSheet()->getId()]['request'])) {
                     $this->dispatch[$request->getToSheet()->getId()]['request'] = 1;
                 } else {
-                    $this->dispatch[$request->getToSheet()->getId()]['request']++;
+                    ++$this->dispatch[$request->getToSheet()->getId()]['request'];
                 }
             }
         }
@@ -357,7 +357,7 @@ class MeetingViewQueryHandler
 
             foreach ($this->dispatch[$sheet->id]['participant'] as $key => $participantInfo) {
                 // Avoid divided by 0
-                if ($sumPPU === 0) {
+                if (0 === $sumPPU) {
                     $this->dispatch[$sheet->id]['participant'][$key]['nrap']     = 0;
                     $this->dispatch[$sheet->id]['participant'][$key]['assigned'] = 0;
                 } else {
@@ -377,23 +377,23 @@ class MeetingViewQueryHandler
     /**
      * @param Sheet $sheet
      *
-     * @return ParticipantView
-     *
      * @throws ParticipantNotFoundException
+     *
+     * @return ParticipantView
      */
     private function getParticipantOfSheet(Sheet $sheet)
     {
-        $this->recursiveDepth++;
+        ++$this->recursiveDepth;
         $randomParticipantKey = array_rand($this->dispatch[$sheet->getId()]['participant']);
         $participantInfo      = $this->dispatch[$sheet->getId()]['participant'][$randomParticipantKey];
 
         // Avoid taking the participant with 0 nrap as >= can take it
-        if ($participantInfo['nrap'] !== 0
+        if (0 !== $participantInfo['nrap']
             && $participantInfo['nrap'] >= $participantInfo['assigned']
             || $this->recursiveDepth > 200
         ) {
             // Increment the number of meeting assigned to the participant
-            $this->dispatch[$sheet->getId()]['participant'][$randomParticipantKey]['assigned']++;
+            ++$this->dispatch[$sheet->getId()]['participant'][$randomParticipantKey]['assigned'];
 
             return $this->getParticipantById($randomParticipantKey);
         }

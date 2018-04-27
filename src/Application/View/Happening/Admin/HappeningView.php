@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2016 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -12,7 +12,6 @@ namespace Proximum\Vimeet\Application\View\Happening\Admin;
 
 class HappeningView
 {
-
     /** @var int */
     public $id;
 
@@ -90,6 +89,6 @@ class HappeningView
      */
     public function hasLimit()
     {
-        return $this->limit !== null;
+        return null !== $this->limit;
     }
 }

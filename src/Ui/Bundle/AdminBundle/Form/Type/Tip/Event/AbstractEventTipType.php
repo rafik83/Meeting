@@ -12,8 +12,8 @@ namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Tip\Event;
 
 use Proximum\Vimeet\Domain\Model\Admin;
 use Proximum\Vimeet\Domain\Model\Event;
-use Symfony\Component\Form\AbstractType;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\TypeChoiceType;
+use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
@@ -32,7 +32,7 @@ abstract class AbstractEventTipType extends AbstractType
     {
         $builder
             ->add('title', TextType::class, [
-                'required' => true
+                'required' => true,
             ])
             ->add('onMeetingManagement', CheckboxType::class, [
                 'required' => false,

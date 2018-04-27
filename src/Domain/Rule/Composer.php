@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2016 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -30,8 +30,9 @@ class Composer
     /**
      * @param array $rules
      *
-     * @return ComposedRule
      * @throws NoRuleException
+     *
+     * @return ComposedRule
      */
     public function compose(array $rules)
     {

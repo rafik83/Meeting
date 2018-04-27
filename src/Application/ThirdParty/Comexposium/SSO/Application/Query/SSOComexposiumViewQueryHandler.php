@@ -45,7 +45,7 @@ class SSOComexposiumViewQueryHandler
     {
         $ssoEnabled = $this->extraParameterRepository->findByEventAndType($query->event, Type::TYPE_COMEXPOSIUM_SSO_ENABLED);
 
-        if ($ssoEnabled === null) {
+        if (null === $ssoEnabled) {
             return null;
         }
 
@@ -53,7 +53,7 @@ class SSOComexposiumViewQueryHandler
         $sessionSalon = $this->extraParameterRepository->findByEventAndType($query->event, Type::TYPE_COMEXPOSIUM_SSO_SESSION_SALON);
         $application = $this->extraParameterRepository->findByEventAndType($query->event, Type::TYPE_COMEXPOSIUM_SSO_APPLICATION);
 
-        if ($salon === null || $sessionSalon === null || $application === null) {
+        if (null === $salon || null === $sessionSalon || null === $application) {
             return null;
         }
 

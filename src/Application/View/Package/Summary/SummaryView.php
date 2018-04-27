@@ -10,7 +10,6 @@
 
 namespace Proximum\Vimeet\Application\View\Package\Summary;
 
-
 use Proximum\Vimeet\Application\View\Package\Vat\VatListView;
 use Proximum\Vimeet\Domain\Package\Funnel\Funnel;
 
@@ -83,6 +82,6 @@ class SummaryView
      */
     public function isEmpty(): bool
     {
-        return \count($this->funnel->getCart()->getRows()) === 0;
+        return 0 === \count($this->funnel->getCart()->getRows());
     }
 }

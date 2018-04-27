@@ -17,7 +17,7 @@ class InvalidLocaleException extends ImportException
     /** @var string */
     private $invalidLocale;
 
-    public function __construct(string $invalidLocale, string $message = "", int $code = 0, Throwable $previous = null)
+    public function __construct(string $invalidLocale, string $message = '', int $code = 0, Throwable $previous = null)
     {
         $this->invalidLocale = $invalidLocale;
 

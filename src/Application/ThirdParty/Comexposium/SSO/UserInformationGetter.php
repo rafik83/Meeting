@@ -68,8 +68,9 @@ class UserInformationGetter
      * @param string $email
      * @param string $locale
      *
-     * @return null|UserInformationView
      * @throws \LogicException
+     *
+     * @return null|UserInformationView
      */
     public function handle(Event $event, string $email, string $locale): ?UserInformationView
     {
@@ -104,8 +105,9 @@ class UserInformationGetter
      * @param string $locale
      * @param bool   $retry
      *
-     * @return null|UserInformationView
      * @throws \LogicException
+     *
+     * @return null|UserInformationView
      */
     private function getUserInformation(
         Event $event,
@@ -124,8 +126,8 @@ class UserInformationGetter
                     'content-type' => 'application/json',
                     'Authorization' => sprintf('Bearer %s', $jwtToken),
                     'query' => [
-                        'appToken' => $ssoApplication
-                    ]
+                        'appToken' => $ssoApplication,
+                    ],
                 ]
             );
 
@@ -166,8 +168,9 @@ class UserInformationGetter
     /**
      * @param Event $event
      *
-     * @return null|string
      * @throws \LogicException
+     *
+     * @return null|string
      */
     private function getSavedJwtToken(Event $event): ?string
     {
@@ -186,8 +189,9 @@ class UserInformationGetter
     /**
      * @param Event $event
      *
-     * @return string
      * @throws \LogicException
+     *
+     * @return string
      */
     private function getAndSaveJwtTokenByApi(Event $event): string
     {

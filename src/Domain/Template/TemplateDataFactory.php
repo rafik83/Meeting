@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2016 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -263,7 +263,6 @@ class TemplateDataFactory
                 ) {
                     $templateObject->setContent($this->getFirstNotEmptyContent($templateObject));
                 }
-
             } catch (ObjectNotFoundException $exception) {
                 // Don't try to set data if object not found
             }
@@ -277,7 +276,7 @@ class TemplateDataFactory
      *
      * @return string|null
      */
-    private function getFirstNotEmptyContent(TemplateObject $templateObject):? string
+    private function getFirstNotEmptyContent(TemplateObject $templateObject): ? string
     {
         $translations = $templateObject->getTranslations();
 
@@ -305,8 +304,9 @@ class TemplateDataFactory
      * @param string $locale
      * @param string $fallback
      *
-     * @return array|Block
      * @throws \Exception
+     *
+     * @return array|Block
      */
     private function doCreate(array $config, $locale, $fallback)
     {
@@ -314,7 +314,7 @@ class TemplateDataFactory
             return $this->buildComponents($config, $locale, $fallback);
         }
 
-        if ($config['component'] === 'block') {
+        if ('block' === $config['component']) {
             return $this->buildBlock($config, $locale, $fallback);
         }
 
@@ -348,8 +348,9 @@ class TemplateDataFactory
      * @param string $locale
      * @param string $fallback
      *
-     * @return Block
      * @throws \Exception
+     *
+     * @return Block
      */
     private function buildBlock(array $config, $locale, $fallback)
     {
@@ -372,9 +373,9 @@ class TemplateDataFactory
      * @param string $locale
      * @param string $fallback
      *
-     * @return mixed
-     *
      * @throws NomenclatureNotFoundException
+     *
+     * @return mixed
      */
     private function buildObject(array $config, $locale, $fallback)
     {
@@ -382,7 +383,7 @@ class TemplateDataFactory
         $object = new $class($config['key'], $config['type'], $config['config'], $locale, $fallback);
 
         if ($object instanceof TemplateObject\Nomenclature) {
-            if ($object->getNomenclatureId() === '') {
+            if ('' === $object->getNomenclatureId()) {
                 throw new NomenclatureNotFoundException();
             }
 
@@ -397,9 +398,9 @@ class TemplateDataFactory
     /**
      * @param int $id
      *
-     * @return Nomenclature
-     *
      * @throws NomenclatureNotFoundException
+     *
+     * @return Nomenclature
      */
     private function getNomenclature($id)
     {

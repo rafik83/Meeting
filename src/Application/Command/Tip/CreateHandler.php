@@ -32,7 +32,7 @@ class CreateHandler
         $this->tipRepository = $tipRepository;
         $this->dateTime      = $dateTime;
     }
-    
+
     /**
      * @param Create $command
      */

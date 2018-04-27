@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2015 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -36,7 +36,7 @@ class AdminEventAccessVoter extends Voter
      */
     public function supports($attribute, $subject)
     {
-        return $attribute === 'PERMISSION_EVENT_ACCESS' && $subject instanceof Event;
+        return 'PERMISSION_EVENT_ACCESS' === $attribute && $subject instanceof Event;
     }
 
     /**

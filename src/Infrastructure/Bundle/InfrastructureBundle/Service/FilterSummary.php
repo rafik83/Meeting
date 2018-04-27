@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2016 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -57,7 +57,7 @@ class FilterSummary
             $field = $formView->children[$filter];
 
             // If field has nested form type inside of type BooleanFilterType
-            if ($field->vars['name'] === Constant::BOOLEAN_FILTER) {
+            if (Constant::BOOLEAN_FILTER === $field->vars['name']) {
                 foreach ($field->children as $childrenRow) {
                     try {
                         list($label, $value) = $this->handleFormRow($childrenRow, $locale);
@@ -83,8 +83,9 @@ class FilterSummary
      * @param FormView $field
      * @param string   $locale
      *
-     * @return array
      * @throws \Exception
+     *
+     * @return array
      */
     private function handleFormRow(FormView $field, $locale)
     {
@@ -97,7 +98,7 @@ class FilterSummary
 
         $value = $field->vars['value'];
 
-        if ($value === '') {
+        if ('' === $value) {
             throw new \InvalidArgumentException('Missing value');
         }
 
@@ -107,7 +108,7 @@ class FilterSummary
             foreach ($field->vars['choices'] as $choice) {
                 foreach ($values as $currentValue) {
                     if ($choice->value === $currentValue) {
-                        $value .= ($value !== '' ? ', ' : '') . $this->translator->trans($choice->label, [], null, $locale);
+                        $value .= ('' !== $value ? ', ' : '') . $this->translator->trans($choice->label, [], null, $locale);
                     }
                 }
             }

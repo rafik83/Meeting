@@ -1,5 +1,13 @@
 <?php
 
+/*
+ * This file is part of the Proximum Vimeet project.
+ *
+ * Copyright (C) Proximum
+ *
+ * @author Elao <contact@elao.com>
+ */
+
 namespace Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Migrations;
 
 use Doctrine\DBAL\Migrations\AbstractMigration;
@@ -20,7 +28,7 @@ class Version20171130095742 extends AbstractMigration implements ContainerAwareI
      */
     public function up(Schema $schema)
     {
-        $this->abortIf($this->connection->getDatabasePlatform()->getName() !== 'mysql', 'Migration can only be executed safely on \'mysql\'.');
+        $this->abortIf('mysql' !== $this->connection->getDatabasePlatform()->getName(), 'Migration can only be executed safely on \'mysql\'.');
 
         $this->addSql('ALTER TABLE tip ADD event_id INT DEFAULT NULL');
         $this->addSql('ALTER TABLE tip ADD CONSTRAINT FK_4883B84C71F7E88B FOREIGN KEY (event_id) REFERENCES event (id) ON DELETE CASCADE');
@@ -32,7 +40,7 @@ class Version20171130095742 extends AbstractMigration implements ContainerAwareI
      */
     public function down(Schema $schema)
     {
-        $this->abortIf($this->connection->getDatabasePlatform()->getName() !== 'mysql', 'Migration can only be executed safely on \'mysql\'.');
+        $this->abortIf('mysql' !== $this->connection->getDatabasePlatform()->getName(), 'Migration can only be executed safely on \'mysql\'.');
 
         $this->addSql('ALTER TABLE tip DROP FOREIGN KEY FK_4883B84C71F7E88B');
         $this->addSql('DROP INDEX IDX_4883B84C71F7E88B ON tip');
@@ -41,6 +49,7 @@ class Version20171130095742 extends AbstractMigration implements ContainerAwareI
 
     /**
      * Remove old tips with types assigned, to attached them the event and keep global tip without types
+     *
      * @param Schema $schema
      */
     public function postUp(Schema $schema)

@@ -44,9 +44,9 @@ class ListAction
     /**
      * @param Event $event
      *
-     * @return Response
-     *
      * @throws AccessDeniedException
+     *
+     * @return Response
      */
     public function __invoke(Event $event): Response
     {

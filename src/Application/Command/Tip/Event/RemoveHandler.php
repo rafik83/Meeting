@@ -13,7 +13,6 @@ namespace Proximum\Vimeet\Application\Command\Tip\Event;
 use Proximum\Vimeet\Application\Adapter\DelayedEventDispatcherInterface;
 use Proximum\Vimeet\Application\Event\Events;
 use Proximum\Vimeet\Application\Event\Tip\RemovedEvent;
-use Proximum\Vimeet\Application\Event\Tip\UnAssignedEvent;
 use Proximum\Vimeet\Application\Exception\Tip\TipNotAffectedOnEventException;
 use Proximum\Vimeet\Application\Exception\Tip\TipNotFoundException;
 use Proximum\Vimeet\Domain\Repository\TipRepositoryInterface;

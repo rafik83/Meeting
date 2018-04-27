@@ -44,9 +44,9 @@ class SummaryViewQueryHandler
     /**
      * @param SummaryViewQuery $summaryViewQuery
      *
-     * @return SummaryView
-     *
      * @throws MissingBillingInfoException
+     *
+     * @return SummaryView
      */
     public function handle(SummaryViewQuery $summaryViewQuery): SummaryView
     {

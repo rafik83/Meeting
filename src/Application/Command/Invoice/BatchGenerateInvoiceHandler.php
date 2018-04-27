@@ -72,7 +72,7 @@ class BatchGenerateInvoiceHandler
     {
         $sheets = $this->sheetRepository->getSheetsById($batchGenerateInvoice->sheetIds);
 
-        if (count($sheets) === 0) {
+        if (0 === count($sheets)) {
             return;
         }
 

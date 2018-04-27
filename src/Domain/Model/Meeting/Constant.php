@@ -1,9 +1,9 @@
 <?php
 
 /*
- * This file is part of the vimeet project.
+ * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2016 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -45,7 +45,7 @@ final class Constant
     {
         return in_array($filter, [
             self::FILTER_STATE_RECEIVE,
-            self::FILTER_STATE_SENT
+            self::FILTER_STATE_SENT,
         ]);
     }
 

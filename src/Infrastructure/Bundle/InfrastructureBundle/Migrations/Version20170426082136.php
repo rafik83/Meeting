@@ -1,5 +1,13 @@
 <?php
 
+/*
+ * This file is part of the Proximum Vimeet project.
+ *
+ * Copyright (C) Proximum
+ *
+ * @author Elao <contact@elao.com>
+ */
+
 namespace Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Migrations;
 
 use Doctrine\DBAL\Migrations\AbstractMigration;
@@ -32,10 +40,10 @@ class Version20170426082136 extends AbstractMigration
     public function postUp(Schema $schema)
     {
         $this->connection->executeQuery(
-            "UPDATE meeting_request
+            'UPDATE meeting_request
              SET has_message = 1
              WHERE meeting_request.id IN (SELECT DISTINCT m.request_id FROM meeting_message m)
-             "
+             '
         );
     }
 }

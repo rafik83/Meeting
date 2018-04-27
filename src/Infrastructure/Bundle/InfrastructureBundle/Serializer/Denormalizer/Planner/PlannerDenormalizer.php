@@ -3,15 +3,15 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2017 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
 
 namespace Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Serializer\Denormalizer\Planner;
 
-use Proximum\Vimeet\Application\View\Planner\Result\PlannerResult;
 use Proximum\Vimeet\Application\View\Planner\Result\MeetingResult;
+use Proximum\Vimeet\Application\View\Planner\Result\PlannerResult;
 use Proximum\Vimeet\Application\View\Planner\Result\SheetResult;
 use Proximum\Vimeet\Application\View\Planner\Result\SlotResult;
 use Proximum\Vimeet\Application\View\Planner\Result\SpotResult;
@@ -88,7 +88,7 @@ class PlannerDenormalizer implements DenormalizerAwareInterface, DenormalizerInt
      */
     public function supportsDenormalization($data, $type, $format = null)
     {
-        return $type === PlannerResult::class && $format === 'xml';
+        return PlannerResult::class === $type && 'xml' === $format;
     }
 
     private function createMeetings(array $data)
@@ -364,13 +364,13 @@ class PlannerDenormalizer implements DenormalizerAwareInterface, DenormalizerInt
             foreach ($meeting['sheetList']['Sheet'] as $sheet) {
                 $sheetResult = $this->handleSheet($sheet);
 
-                if ($loopIndex === 1) {
+                if (1 === $loopIndex) {
                     $meetingResult->sheetFrom = $sheetResult;
-                } elseif ($loopIndex === 2) {
+                } elseif (2 === $loopIndex) {
                     $meetingResult->sheetTo = $sheetResult;
                 }
 
-                $loopIndex++;
+                ++$loopIndex;
             }
         }
 
@@ -383,14 +383,14 @@ class PlannerDenormalizer implements DenormalizerAwareInterface, DenormalizerInt
                 foreach ($meeting['userList']['User'] as $user) {
                     $userResult = $this->handleUser($user);
 
-                    if ($userResult !== null) {
+                    if (null !== $userResult) {
                         $meetingResult->addUser($userResult);
                     }
                 }
             } else {
                 $userResult = $this->handleUser($meeting['userList']['User']);
 
-                if ($userResult !== null) {
+                if (null !== $userResult) {
                     $meetingResult->addUser($userResult);
                 }
             }
@@ -412,8 +412,8 @@ class PlannerDenormalizer implements DenormalizerAwareInterface, DenormalizerInt
             }
         }
 
-        $meetingResult->isBlockedSlot = isset($meeting['blockedSlot']) && $meeting['blockedSlot'] === 'true';
-        $meetingResult->isBlockedSpot = isset($meeting['blockedSpot']) && $meeting['blockedSpot'] === 'true';
+        $meetingResult->isBlockedSlot = isset($meeting['blockedSlot']) && 'true' === $meeting['blockedSlot'];
+        $meetingResult->isBlockedSpot = isset($meeting['blockedSpot']) && 'true' === $meeting['blockedSpot'];
 
         $this->meetingList[] = $meetingResult;
     }

@@ -143,8 +143,9 @@ class MeetingManager
      * @param Event  $event
      * @param string $spotReference
      *
-     * @return Meeting
      * @throws \Exception
+     *
+     * @return Meeting
      */
     public function createMeetingOnSpot(Event $event, $spotReference)
     {
@@ -170,8 +171,9 @@ class MeetingManager
      * @param Event $event
      * @param int   $slotId
      *
-     * @return Meeting
      * @throws \Exception
+     *
+     * @return Meeting
      */
     public function createMeetingOnSlot(Event $event, $slotId)
     {
@@ -193,8 +195,9 @@ class MeetingManager
      * @param int         $slotId
      * @param string      $spotReference
      *
-     * @return Meeting
      * @throws \Exception
+     *
+     * @return Meeting
      */
     public function createMeetingForParticipantOnGivenSlotAndSpot(Participant $participant, $slotId, $spotReference)
     {
@@ -223,15 +226,16 @@ class MeetingManager
      * @param string $otherSheetTitle
      * @param string $spotReference
      *
-     * @return Meeting
      * @throws \Exception
+     *
+     * @return Meeting
      */
     public function createMeetingForSheetsAndSpot(Event $event, $sheetTitle, $otherSheetTitle, $spotReference)
     {
         $sheet = $this->sheetRepository->getSheetByEventAndTitle($event, $sheetTitle);
         $otherSheet = $this->sheetRepository->getSheetByEventAndTitle($event, $otherSheetTitle);
 
-        if ($sheet === null || $otherSheet === null) {
+        if (null === $sheet || null === $otherSheet) {
             throw new \InvalidArgumentException('Missing sheet');
         }
 

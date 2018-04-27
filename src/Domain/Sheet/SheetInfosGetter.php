@@ -59,8 +59,9 @@ class SheetInfosGetter
      * @param User   $user
      * @param string $locale
      *
-     * @return array
      * @throws \Exception
+     *
+     * @return array
      */
     public function sheetInfos(
         Event $event,
@@ -69,9 +70,8 @@ class SheetInfosGetter
         User $user,
         string $locale
     ): array {
-
         if (!$this->accessChecker->checkAccess($sheet, $sheetToDisplay)) {
-            throw new AccessDeniedException("Access Denied");
+            throw new AccessDeniedException('Access Denied');
         }
 
         $nomenclatures     = $this->nomenclatureRepository->findByEvent($event);

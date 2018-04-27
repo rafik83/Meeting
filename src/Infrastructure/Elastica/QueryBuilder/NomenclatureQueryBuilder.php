@@ -1,9 +1,9 @@
 <?php
 
 /*
- * This file is part of the vimeet project.
+ * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2016 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -40,9 +40,9 @@ class NomenclatureQueryBuilder
     }
 
     /**
-     * @return NomenclatureQueryBuilder
-     *
      * @throws NomenclatureNotFoundException
+     *
+     * @return NomenclatureQueryBuilder
      */
     public function filterByNeed()
     {
@@ -64,9 +64,9 @@ class NomenclatureQueryBuilder
     }
 
     /**
-     * @return NomenclatureQueryBuilder
-     *
      * @throws NomenclatureNotFoundException
+     *
+     * @return NomenclatureQueryBuilder
      */
     public function filterBySupply()
     {

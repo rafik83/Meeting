@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2016 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -41,14 +41,14 @@ class AssignSpotHandler
     /**
      * @param AssignSpot $assignSpot
      *
-     * @return AssignSpotResult
-     *
      * @throws SpotNotActiveException
      * @throws SpotNotFoundException
+     *
+     * @return AssignSpotResult
      */
     public function handle(AssignSpot $assignSpot)
     {
-        if ($assignSpot->spotCode === null || $assignSpot->spotCode === '') {
+        if (null === $assignSpot->spotCode || '' === $assignSpot->spotCode) {
             $oldSpot = $assignSpot->sheet->getSpot();
 
             $assignSpot->sheet->removeSpot();
@@ -60,7 +60,7 @@ class AssignSpotHandler
             if ($oldSpot instanceof Spot) {
                 $oldSpot->removeSheet($assignSpot->sheet);
 
-                if ($oldSpot->countSheets() === 0) {
+                if (0 === $oldSpot->countSheets()) {
                     $oldSpot->setPriority(Spot::PRIORITY_MUTUALIZE);
                 }
 
@@ -83,8 +83,8 @@ class AssignSpotHandler
                 if ($oldSpot instanceof Spot) {
                     $oldSpot->removeSheet($assignSpot->sheet);
 
-                    if ($oldSpot->countSheets() === 0) {
-                       $oldSpot->setPriority(Spot::PRIORITY_MUTUALIZE);
+                    if (0 === $oldSpot->countSheets()) {
+                        $oldSpot->setPriority(Spot::PRIORITY_MUTUALIZE);
                     }
 
                     $this->spotRepository->set($oldSpot);

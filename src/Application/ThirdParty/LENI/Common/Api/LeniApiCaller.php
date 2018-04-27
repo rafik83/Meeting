@@ -1,9 +1,9 @@
 <?php
 
 /*
- * This file is part of the vimeet project.
+ * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) vimeet
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -53,7 +53,7 @@ class LeniApiCaller
             Type::TYPE_LENI_SAVE_ENDPOINT
         );
 
-        $isAuthorizedMode = $leniModeParameter !== null
+        $isAuthorizedMode = null !== $leniModeParameter
             && \in_array($leniModeParameter->getValue(), Type::ALLOWED_LENI_MODE_FOR_SAVE, true)
         ;
 
@@ -87,7 +87,7 @@ class LeniApiCaller
 
         $response = json_decode($jsonResponse->body, true);
 
-        if (!isset($response[LeniConstants::LENI_IS_VALID]) || $response[LeniConstants::LENI_IS_VALID] !== true) {
+        if (!isset($response[LeniConstants::LENI_IS_VALID]) || true !== $response[LeniConstants::LENI_IS_VALID]) {
             throw new NotValidApiCallException(sprintf(
                 "Headers: %s;\nRequest: %s;\nResponse: %s;",
                 json_encode($headers),
@@ -107,9 +107,9 @@ class LeniApiCaller
      * @param int   $start
      * @param int   $limit
      *
-     * @return array
-     *
      * @throws LeniApiServerException
+     *
+     * @return array
      */
     public function get(
         Event $event,
@@ -127,7 +127,7 @@ class LeniApiCaller
             Type::TYPE_LENI_GET_ENDPOINT
         );
 
-        $isAuthorizedMode = $leniModeParameter !== null
+        $isAuthorizedMode = null !== $leniModeParameter
             && \in_array($leniModeParameter->getValue(), Type::ALLOWED_LENI_MODE_FOR_GET, true)
         ;
 

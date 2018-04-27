@@ -20,29 +20,29 @@ class TransactionListViewQueryHandler
      * @var SerializerAdapter
      */
     private $serializer;
-    
+
     /**
      * @var LocalFileStorageAdapter
      */
     private $fileStorage;
-    
+
     /**
      * @var string
      */
     private $exportTransactionDirectory;
-    
+
     /**
      * @var \DateTimeInterface
      */
     private $dateTime;
-    
+
     /**
      * TransactionListViewQueryHandler constructor.
      *
-     * @param SerializerAdapter         $serializer
-     * @param LocalFileStorageAdapter   $fileStorageAdapter
-     * @param string                    $exportTransactionDir
-     * @param \DateTimeInterface        $dateTime
+     * @param SerializerAdapter       $serializer
+     * @param LocalFileStorageAdapter $fileStorageAdapter
+     * @param string                  $exportTransactionDir
+     * @param \DateTimeInterface      $dateTime
      */
     public function __construct(
         SerializerAdapter $serializer,
@@ -55,7 +55,7 @@ class TransactionListViewQueryHandler
         $this->exportTransactionDirectory = $exportTransactionDir;
         $this->dateTime                   = $dateTime;
     }
-    
+
     /**
      * @param TransactionListViewQuery $query
      *
@@ -69,10 +69,10 @@ class TransactionListViewQueryHandler
                 'csv_delimiter' => ';',
             ]
         );
-        
+
         return $this->createFile($data);
     }
-    
+
     /**
      * @param $data
      *
@@ -85,7 +85,7 @@ class TransactionListViewQueryHandler
             sprintf('transaction_%s.csv', $this->dateTime->getTimestamp()),
             $this->exportTransactionDirectory
         );
-        
+
         return $filePath;
     }
 }

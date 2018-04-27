@@ -1,9 +1,9 @@
 <?php
 
 /*
- * This file is part of the vimeet project.
+ * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2017 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -85,14 +85,14 @@ class SlotViewQueryHandler
 
             $slotAvailabilityView = $this->slotAvailability->getSlotAvailability($slot, $query->participant);
 
-            if ($slotAvailabilityView->type === SlotAvailability::HAPPENING_UNAVAILABILITY) {
+            if (SlotAvailability::HAPPENING_UNAVAILABILITY === $slotAvailabilityView->type) {
                 $slotViews[] = new HappeningUnavailabilitySlotView($slot, $slotAvailabilityView->type);
 
                 continue;
             }
 
-            if ($slotAvailabilityView->type === SlotAvailability::MEETING_UNAVAILABILITY
-                && $slotAvailabilityView->meeting !== null
+            if (SlotAvailability::MEETING_UNAVAILABILITY === $slotAvailabilityView->type
+                && null !== $slotAvailabilityView->meeting
             ) {
                 $sheetMet = $slotAvailabilityView->meeting->getSheetMet($query->sheet);
 
@@ -112,7 +112,7 @@ class SlotViewQueryHandler
                 continue;
             }
 
-            if ($slotAvailabilityView->type === SlotAvailability::MEETING_ON_OTHER_SHEET) {
+            if (SlotAvailability::MEETING_ON_OTHER_SHEET === $slotAvailabilityView->type) {
                 $slotViews[] = new MeetingOnOtherSheetView(
                     $slot,
                     $slotAvailabilityView->type,
@@ -123,14 +123,14 @@ class SlotViewQueryHandler
                 continue;
             }
 
-            if ($slotAvailabilityView->type === SlotAvailability::UNAVAILABILITY) {
+            if (SlotAvailability::UNAVAILABILITY === $slotAvailabilityView->type) {
                 $slotViews[] = new UnavailabilitySlotView($slot, $slotAvailabilityView->type);
 
                 continue;
             }
 
-            if ($slotAvailabilityView->type === SlotAvailability::MASS_UNAVAILABILITY) {
-                if ($slotAvailabilityView->massAssignment !== null) {
+            if (SlotAvailability::MASS_UNAVAILABILITY === $slotAvailabilityView->type) {
+                if (null !== $slotAvailabilityView->massAssignment) {
                     $slotViews[] = new MassAssignmentUnavailabilitySlotView(
                         $slot,
                         SlotAvailability::MASS_ASSIGNMENT_UNAVAILABILITY,

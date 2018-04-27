@@ -1,9 +1,9 @@
 <?php
 
 /*
- * This file is part of the Proximum Vimeet website.
+ * This file is part of the Proximum Vimeet project.
  *
- * Copyright © Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -212,7 +212,7 @@ class SheetIdsViewNormalizer extends AbstractNormalizer implements NormalizerInt
         if (!empty($notCancelledOrders)) {
             $order = $this->merger->merge($notCancelledOrders);
 
-            foreach($order->getPromotionCodes() as $orderPromotionCode) {
+            foreach ($order->getPromotionCodes() as $orderPromotionCode) {
                 $promotionCodes[] = $orderPromotionCode->getPromotionCode()->getCode();
             }
         }
@@ -339,7 +339,7 @@ class SheetIdsViewNormalizer extends AbstractNormalizer implements NormalizerInt
             $input = isset($rawData[$fieldKey]) ? $rawData[$fieldKey] : null;
 
             // Avoid set to null in field with same name
-            if ($input === null && isset($normalizedData[$fieldName])) {
+            if (null === $input && isset($normalizedData[$fieldName])) {
                 continue;
             }
 
@@ -352,7 +352,7 @@ class SheetIdsViewNormalizer extends AbstractNormalizer implements NormalizerInt
             $input = isset($rawData[$fieldKey]) ? $rawData[$fieldKey] : null;
 
             // Avoid set to null in field with same name
-            if ($input === null && isset($normalizedData[$fieldName])) {
+            if (null === $input && isset($normalizedData[$fieldName])) {
                 continue;
             }
 

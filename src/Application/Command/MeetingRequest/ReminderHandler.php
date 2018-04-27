@@ -122,7 +122,7 @@ class ReminderHandler
                     }
                 }
 
-                if ($sheet === null || $participant === null) {
+                if (null === $sheet || null === $participant) {
                     continue;
                 }
 

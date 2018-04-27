@@ -23,7 +23,7 @@ class SheetListViewNormalizer implements NormalizerAwareInterface, NormalizerInt
     /**
      * {@inheritdoc}
      */
-    public function normalize($object, $format = null, array $context = array())
+    public function normalize($object, $format = null, array $context = [])
     {
         /** @var SheetListView $sheetListView */
         $sheetListView = $object;
@@ -64,7 +64,7 @@ class SheetListViewNormalizer implements NormalizerAwareInterface, NormalizerInt
      */
     public function supportsNormalization($data, $format = null)
     {
-        return $format === 'csv' && $data instanceof SheetListView;
+        return 'csv' === $format && $data instanceof SheetListView;
     }
 
     /**
@@ -84,7 +84,7 @@ class SheetListViewNormalizer implements NormalizerAwareInterface, NormalizerInt
         }
 
         if ($inCharset !== $outCharset) {
-            return iconv($inCharset, $outCharset . "//TRANSLIT//IGNORE", $input);
+            return iconv($inCharset, $outCharset . '//TRANSLIT//IGNORE', $input);
         }
 
         return $input;

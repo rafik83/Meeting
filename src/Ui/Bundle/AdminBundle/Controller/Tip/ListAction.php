@@ -49,9 +49,9 @@ class ListAction
     /**
      * @param Request $request
      *
-     * @return Response
-     *
      * @throws AccessDeniedException
+     *
+     * @return Response
      */
     public function __invoke(Request $request): Response
     {
@@ -62,7 +62,7 @@ class ListAction
         $tipViewQuery = new TipViewQuery($request->query->get('page', 1));
         $tipListView = $this->commandBus->handle($tipViewQuery);
 
-        return $this->engine->renderResponse(self::TEMPLATE,[
+        return $this->engine->renderResponse(self::TEMPLATE, [
             'tipListView' => $tipListView,
         ]);
     }

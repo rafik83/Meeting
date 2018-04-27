@@ -10,9 +10,9 @@
 
 namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Group;
 
-use Proximum\Vimeet\Domain\SheetGroup\SheetGroupConstant;
 use Proximum\Vimeet\Domain\Model\Sheet\Group;
 use Proximum\Vimeet\Domain\Repository\Sheet\GroupRepositoryInterface;
+use Proximum\Vimeet\Domain\SheetGroup\SheetGroupConstant;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\OptionsResolver\Options;

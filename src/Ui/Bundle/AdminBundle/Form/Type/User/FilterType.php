@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2016 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -76,7 +76,7 @@ class FilterType extends AbstractType
     public static function getDefaultFilters()
     {
         return [
-            'participation' => FilterType::FILTER_WITH_SHEET
+            'participation' => self::FILTER_WITH_SHEET,
         ];
     }
 
@@ -87,7 +87,7 @@ class FilterType extends AbstractType
     {
         return [
             self::FILTER_WITH_SHEET,
-            self::FILTER_WITHOUT_SHEET
+            self::FILTER_WITHOUT_SHEET,
         ];
     }
 }

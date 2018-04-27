@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2017 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -52,7 +52,6 @@ class RequestSheetViewQueryHandler
         $participantViews = [];
 
         /** @var Participant $participant */
-
         foreach ($query->sheet->getParticipants() as $participant) {
             $participate = false;
 

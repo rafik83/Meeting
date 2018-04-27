@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2017 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -220,7 +220,7 @@ class Invoice
             '%s%s-%s',
             $this->getInvoicePrefix(),
             $this->getInvoiceYear(),
-            str_pad($this->getInvoiceIncrement(), 4, "0", STR_PAD_LEFT)
+            str_pad($this->getInvoiceIncrement(), 4, '0', STR_PAD_LEFT)
         );
     }
 

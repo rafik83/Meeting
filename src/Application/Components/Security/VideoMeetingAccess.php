@@ -1,9 +1,9 @@
 <?php
 
 /*
- * This file is part of the vimeet project.
+ * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2017 vimeet
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -33,8 +33,8 @@ class VideoMeetingAccess
      * VideoMeetingAccess constructor.
      *
      * @param \DateTimeInterface $dateTime
-     * @param bool $hasSecurity
-     * @param bool $isVideoConferenceEnabled
+     * @param bool               $hasSecurity
+     * @param bool               $isVideoConferenceEnabled
      */
     public function __construct(\DateTimeInterface $dateTime, bool $hasSecurity, bool $isVideoConferenceEnabled)
     {

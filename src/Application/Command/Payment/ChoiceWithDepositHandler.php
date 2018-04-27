@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2016 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -52,9 +52,10 @@ class ChoiceWithDepositHandler extends AbstractChoiceHandler
     /**
      * @param ChoiceWithDeposit $choice
      *
-     * @return Transaction
      * @throws DepositNotAvailableException
      * @throws MissingBillingInfoException
+     *
+     * @return Transaction
      */
     public function handle(ChoiceWithDeposit $choice)
     {

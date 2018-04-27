@@ -1,9 +1,9 @@
 <?php
 
 /*
- * This file is part of the vimeet project.
+ * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2017 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -49,8 +49,9 @@ class GroupNameResolver
      * @param User    $user
      * @param Sheet[] $sheets - Optional parameters to preload sheets
      *
-     * @return string
      * @throws SheetNotFoundException
+     *
+     * @return string
      */
     public function resolve(Event $event, User $user, array $sheets = [])
     {
@@ -85,10 +86,10 @@ class GroupNameResolver
     {
         $group = $this->groupRepository->getByUserAndEvent($user, $event);
 
-        if ($group !== null) {
+        if (null !== $group) {
             return $group->getTitle();
         }
-        
+
         return null;
     }
 }

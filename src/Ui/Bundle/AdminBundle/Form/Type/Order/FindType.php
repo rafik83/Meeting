@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2016 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -13,8 +13,8 @@ namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Order;
 use Proximum\Vimeet\Application\Command\Event\Find\Find;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
-use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class FindType extends AbstractType
@@ -34,7 +34,7 @@ class FindType extends AbstractType
                 'required' => true,
             ])
             ->add('numero', TextType::class, [
-                'required' => true
+                'required' => true,
             ]);
     }
 

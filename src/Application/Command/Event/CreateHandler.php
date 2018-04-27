@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2016 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -80,9 +80,10 @@ class CreateHandler
     /**
      * @param Create $create
      *
-     * @return Event
      * @throws DomainAlreadyUsedException
      * @throws GuidelineAssetBuildFailedException
+     *
+     * @return Event
      */
     public function handle(Create $create): Event
     {

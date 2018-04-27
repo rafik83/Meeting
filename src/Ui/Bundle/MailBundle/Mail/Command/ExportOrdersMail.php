@@ -1,9 +1,9 @@
 <?php
 
 /*
- * This file is part of the vimeet project.
+ * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) vimeet
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -37,12 +37,12 @@ class ExportOrdersMail extends AbstractMail
     public $fileId;
 
     /**
-     * @param Event      $event
-     * @param string     $sender
-     * @param string     $receiver
-     * @param string     $locale
-     * @param string     $fileHash
-     * @param int        $fileId
+     * @param Event  $event
+     * @param string $sender
+     * @param string $receiver
+     * @param string $locale
+     * @param string $fileHash
+     * @param int    $fileId
      */
     public function __construct(
         Event $event,

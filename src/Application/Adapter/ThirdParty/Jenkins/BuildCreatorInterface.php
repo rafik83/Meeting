@@ -18,8 +18,9 @@ interface BuildCreatorInterface
      * @param string $buildName
      * @param array  $arguments array of ['INPUT_NAME' => 'INPUT_VALUE']
      *
-     * @return string Output of the build creation
      * @throws BuildCreationFailedException
+     *
+     * @return string Output of the build creation
      */
     public function create(string $buildName, array $arguments = []): string;
 }

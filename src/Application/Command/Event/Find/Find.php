@@ -39,7 +39,7 @@ class Find
      */
     public function findOrder()
     {
-        return $this->type === self::FIND_ORDER;
+        return self::FIND_ORDER === $this->type;
     }
 
     /**
@@ -47,6 +47,6 @@ class Find
      */
     public function findInvoice()
     {
-        return $this->type === self::FIND_INVOICE;
+        return self::FIND_INVOICE === $this->type;
     }
 }

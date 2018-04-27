@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2016 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -39,7 +39,7 @@ class UserEvent
      * @param Event     $event
      * @param Type|null $type
      */
-    public function __construct(User $user, Event $event,Type $type = null)
+    public function __construct(User $user, Event $event, Type $type = null)
     {
         $this->user  = $user;
         $this->event = $event;
@@ -114,4 +114,3 @@ class UserEvent
         return $this;
     }
 }
-

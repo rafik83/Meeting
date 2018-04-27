@@ -13,12 +13,12 @@ namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Schedule;
 use Proximum\Vimeet\Application\Command\Event\Day\Update;
 use Proximum\Vimeet\Application\Exception\Slot\SlotOutOfDayException;
 use Proximum\Vimeet\Domain\Model\Event;
+use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Event\Day\UpdateType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Form\FormError;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Event\Day\UpdateType;
 
 class DayController extends Controller
 {

@@ -3,15 +3,15 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2015 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
 
 namespace Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Security\Http\Firewall;
 
-use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Security\Impersonate\Impersonate;
 use Proximum\Vimeet\Domain\Repository\EventRepositoryInterface;
+use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Security\Impersonate\Impersonate;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -183,10 +183,10 @@ class SwitchUserListener implements ListenerInterface
      *
      * @param Request $request A Request instance
      *
-     * @return TokenInterface|null The new TokenInterface if successfully switched, null otherwise
-     *
      * @throws \LogicException
      * @throws AccessDeniedException
+     *
+     * @return TokenInterface|null The new TokenInterface if successfully switched, null otherwise
      */
     private function attemptSwitchUser(Request $request)
     {

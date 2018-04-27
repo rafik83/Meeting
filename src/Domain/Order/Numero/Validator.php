@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2016 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -32,7 +32,7 @@ class Validator
 
         // Each element between the hyphen should contains numbers
         foreach ($numeroElements as $element) {
-            if (empty($element) || !preg_match("/^[0-9]+$/", $element)) {
+            if (empty($element) || !preg_match('/^[0-9]+$/', $element)) {
                 return false;
             }
         }

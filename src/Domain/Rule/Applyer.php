@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2016 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -58,7 +58,7 @@ class Applyer
         }
 
         foreach ($templateData->getObjects() as $object) {
-            if ($object->getType() === 'tag') {
+            if ('tag' === $object->getType()) {
                 if (null !== $tag = $object->getOption('tag')) {
                     if (!in_array($tag, $composedRule->tags, true)) {
                         $object->setOption('tag', null);

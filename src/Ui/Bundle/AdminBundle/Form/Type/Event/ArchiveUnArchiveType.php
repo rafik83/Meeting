@@ -31,13 +31,13 @@ class ArchiveUnArchiveType extends AbstractType
             $builder->add('unArchive', SubmitType::class, [
                 'attr' => [
                     'class' => 'btn btn-lg',
-                ]
+                ],
             ]);
         } else {
             $builder->add('archive', SubmitType::class, [
                 'attr' => [
                     'class' => 'btn btn-lg',
-                ]
+                ],
             ]);
         }
     }

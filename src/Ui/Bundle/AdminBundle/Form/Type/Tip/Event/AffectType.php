@@ -26,7 +26,7 @@ class AffectType extends AbstractType
         $builder
             ->add('tip', TipSelectType::class, [
                 'locale' => $options['locale'],
-                'attr'   => ['data-preview-tip' => true]
+                'attr'   => ['data-preview-tip' => true],
             ])
             ->add('types', TypeChoiceType::class, [
                 'event'    => $options['event'],

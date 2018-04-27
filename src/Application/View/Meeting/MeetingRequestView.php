@@ -1,9 +1,9 @@
 <?php
 
 /*
- * This file is part of the vimeet project.
+ * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2016 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -84,7 +84,7 @@ class MeetingRequestView
      * @param bool               $hasMessage
      * @param bool               $isSeenByCurrentUser
      * @param bool               $isPhoneValidationRequired
-     * @param string|null               $validatePhoneLink
+     * @param string|null        $validatePhoneLink
      */
     public function __construct(
         Sheet $sheet,

@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2016 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -11,10 +11,10 @@
 namespace Proximum\Vimeet\Application\Components\Sheet;
 
 use Proximum\Vimeet\Application\Exception\Sheet\SheetNotFoundException;
+use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
-use Proximum\Vimeet\Domain\Model\Event;
 
 class SheetGuesser
 {
@@ -36,10 +36,10 @@ class SheetGuesser
      * @param Event  $event
      * @param string $locale
      *
-     * @return Sheet
-     *
      * @throws SheetNotFoundException
      * @throws \Exception
+     *
+     * @return Sheet
      */
     public function getUserSheet(User $user, Event $event, $locale)
     {

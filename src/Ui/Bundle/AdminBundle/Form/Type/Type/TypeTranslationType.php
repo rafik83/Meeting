@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2015 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -25,7 +25,7 @@ class TypeTranslationType extends AbstractType
         $builder
             ->add('title', TextType::class)
             ->add('description', TextareaType::class, [
-                'required' => false
+                'required' => false,
             ])
         ;
     }

@@ -27,6 +27,7 @@ class MeetingSolutionRepository implements MeetingSolutionRepositoryInterface
     {
         $this->entityManager = $entityManager;
     }
+
     /**
      * @param $meetingSolution
      */

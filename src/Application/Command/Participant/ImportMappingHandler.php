@@ -1,9 +1,9 @@
 <?php
 
 /*
- * This file is part of the vimeet project.
+ * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2017 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -133,7 +133,7 @@ class ImportMappingHandler
     private function removeIgnoreFields(array $mappings)
     {
         return array_filter($mappings, function ($value) {
-            return $value != ParticipantImportTag::REGISTRATION_FIELD_IGNORE;
+            return ParticipantImportTag::REGISTRATION_FIELD_IGNORE != $value;
         });
     }
 }

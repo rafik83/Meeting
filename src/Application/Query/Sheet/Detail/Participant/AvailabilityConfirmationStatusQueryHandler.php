@@ -42,6 +42,6 @@ class AvailabilityConfirmationStatusQueryHandler
             $query->user
         );
 
-        return $extraData !== null ? new AvailabilityConfirmedView() : new AvailabilityNotConfirmedView();
+        return null !== $extraData ? new AvailabilityConfirmedView() : new AvailabilityNotConfirmedView();
     }
 }

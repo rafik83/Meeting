@@ -1,9 +1,9 @@
 <?php
 
 /*
- * This file is part of the vimeet project.
+ * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2017 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -66,8 +66,9 @@ class HappeningParticipantViewQueryHandler
     /**
      * @param HappeningParticipantViewQuery $query
      *
-     * @return HappeningParticipantListView
      * @throws EmptyHappeningParticipationException
+     *
+     * @return HappeningParticipantListView
      */
     public function handle(HappeningParticipantViewQuery $query)
     {
@@ -91,7 +92,7 @@ class HappeningParticipantViewQueryHandler
             }
         }
 
-        if (count($happeningParticipantViews) === 0) {
+        if (0 === count($happeningParticipantViews)) {
             throw new EmptyHappeningParticipationException();
         }
 
@@ -122,7 +123,7 @@ class HappeningParticipantViewQueryHandler
             $sheet = null;
         }
 
-        if ($sheet !== null) {
+        if (null !== $sheet) {
             $question = $this->questionRepository->findByHappeningAndSheet($happening, $sheet);
         }
 
@@ -134,7 +135,7 @@ class HappeningParticipantViewQueryHandler
             HappeningDateHelper::getHour($happening->getEnd(), $locale, $timezone),
             HappeningDateHelper::getDay($happening->getBegin(), $locale, $timezone),
             $happening->getTitle($locale),
-            $sheet !== null ? $sheet->getId() : '',
+            null !== $sheet ? $sheet->getId() : '',
             $user->getId(),
             null !== $question ? $question->getContent() : '',
             $user->getEmail(),

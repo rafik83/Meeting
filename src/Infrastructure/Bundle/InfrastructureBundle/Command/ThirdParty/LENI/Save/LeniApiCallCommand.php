@@ -10,9 +10,9 @@
 
 namespace Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\ThirdParty\LENI\Save;
 
+use Proximum\Vimeet\Application\ThirdParty\LENI\Exception\LeniException;
 use Proximum\Vimeet\Application\ThirdParty\LENI\Save\Command\LeniApiCall;
 use Proximum\Vimeet\Application\ThirdParty\LENI\Save\Command\LeniApiCallHandler;
-use Proximum\Vimeet\Application\ThirdParty\LENI\Exception\LeniException;
 use Proximum\Vimeet\Domain\Repository\User\Event\ExtraDataRepositoryInterface;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
@@ -31,7 +31,7 @@ class LeniApiCallCommand extends Command
     private $extraDataRepository;
 
     /**
-     * @param LeniApiCallHandler $leniApiCallHandler
+     * @param LeniApiCallHandler           $leniApiCallHandler
      * @param ExtraDataRepositoryInterface $extraDataRepository
      */
     public function __construct(
@@ -53,11 +53,11 @@ class LeniApiCallCommand extends Command
             ->setName(self::NAME)
             ->setDescription('Call the LENI API with the data of one user')
             ->addArgument(self::EXTRA_DATA_ID, InputArgument::REQUIRED, 'ExtraData id of a user');
-        ;
     }
 
     /**
      * {@inheritdoc}
+     *
      * @throws LeniException
      * @throws \LogicException
      */
