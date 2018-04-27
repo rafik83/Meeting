@@ -112,4 +112,14 @@ class UploadObject extends EditableObject implements UploadableObjectInterface
     {
         return $this->getOption('formats');
     }
+
+    public function isImageFormat(): bool
+    {
+        return \in_array($this->getExtension(), MimeType::IMAGE_EXTENSIONS, true);
+    }
+
+    public function isUploadAndHasPath(): bool
+    {
+        return $this->isUpload() && $this->getPath();
+    }
 }
