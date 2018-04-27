@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2017 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -42,7 +42,7 @@ class ExportController extends Controller
 
         $isEventOpened = $this->get('domain.key_dates.checker.event_open_access_checker')->allowedToAccess($event);
 
-        if ($mode === ExportJobCreator::MODE_AUTO && $isEventOpened) {
+        if (ExportJobCreator::MODE_AUTO === $mode && $isEventOpened) {
             throw $this->createAccessDeniedException('Planner is not authorized when event is opened');
         }
 
@@ -97,7 +97,6 @@ class ExportController extends Controller
         );
     }
 
-
     /**
      * @param Event  $event
      * @param string $hash
@@ -124,7 +123,7 @@ class ExportController extends Controller
 
         return new XmlFileResponse(
             file_get_contents($path),
-            sprintf("export_planner_%s_%s.xml", $event->getId(), date("Y_m_d_His"))
+            sprintf('export_planner_%s_%s.xml', $event->getId(), date('Y_m_d_His'))
         );
     }
 }

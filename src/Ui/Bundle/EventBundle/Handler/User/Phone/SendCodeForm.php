@@ -11,8 +11,6 @@
 namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Handler\User\Phone;
 
 use Proximum\Vimeet\Domain\Model\Event;
-use Proximum\Vimeet\Domain\Model\Participant;
-use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\User;
 use Symfony\Component\HttpFoundation\Request;
 

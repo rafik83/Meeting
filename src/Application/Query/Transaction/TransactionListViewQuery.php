@@ -18,12 +18,12 @@ class TransactionListViewQuery
      * @var TransactionView[]
      */
     public $transactionsView;
-    
+
     /**
      * @var string
      */
     public $adminLocale;
-    
+
     /**
      * TransactionListViewQuery constructor.
      *

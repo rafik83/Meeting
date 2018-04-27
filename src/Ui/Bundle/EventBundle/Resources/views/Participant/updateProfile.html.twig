@@ -19,6 +19,7 @@
                 <div class="inputs">
                     {% for child in form %}
                         {{ form_row(child) }}
+                        {% include '@Event/uploadedObjectPreview.html.twig' with {'child': child} only %}
                     {% endfor %}
 
                     <div class="validation">

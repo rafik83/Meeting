@@ -1,9 +1,9 @@
 <?php
 
 /*
- * This file is part of the vimeet project.
+ * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2017 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -91,7 +91,7 @@ class SendEmailingCommand extends Command
         $sheetIds        = explode(',', $input->getArgument('sheetIds'));
         $sheets          = $this->sheetRepository->findByIds($sheetIds);
         $messageId       = $input->getArgument('emailingId');
-        $sendEmailToTeam = $input->getArgument('sendEmailToTeam') === self::BOOL_YES ? true : false;
+        $sendEmailToTeam = self::BOOL_YES === $input->getArgument('sendEmailToTeam') ? true : false;
 
         if (null === $event) {
             throw new \InvalidArgumentException('Event not found.');

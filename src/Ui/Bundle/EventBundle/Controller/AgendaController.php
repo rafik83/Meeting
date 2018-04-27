@@ -25,8 +25,8 @@ use Proximum\Vimeet\Ui\Bundle\EventBundle\ParamConverter\EventDomain;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Security\SheetVoter;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\User\UserInterface;
 
@@ -127,13 +127,12 @@ class AgendaController extends Controller
                 )
             );
 
-            $sendCodeForm = $sendCodeView->form !== null ? $sendCodeView->form->createView() : null;
+            $sendCodeForm = null !== $sendCodeView->form ? $sendCodeView->form->createView() : null;
             $sendCodeViewTranslationViews = $sendCodeView->tipTranslationViews;
             $ignorePhoneConfirmationUrl = $this->generateUrl('event_agenda_ignore_phone_confirmation', [
                 'sheet'       => $sheet->getId(),
                 'participant' => $participant->getId(),
             ]);
-
         }
 
         return $this->render('EventBundle:Agenda:index.html.twig', [
@@ -169,7 +168,7 @@ class AgendaController extends Controller
 
         $participant = $sheet->getUserParticipant($user);
 
-        if ($participant === null) {
+        if (null === $participant) {
             return new JsonResponse(['message' => 'participant not found'], 404);
         }
 
@@ -199,7 +198,7 @@ class AgendaController extends Controller
             ->handle(new SheetsAvailableBySlotQuery($eventDomain->getEvent(), $sheet, $slot))
         ;
 
-        $message = $countAvailableSheets === 0
+        $message = 0 === $countAvailableSheets
             ? ''
             : $this->renderView(
                 'EventBundle:Agenda/AvailableSlot:availableSheetForSlot.html.twig',

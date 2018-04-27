@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2016 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -44,14 +44,14 @@ class DayView
     public $availableSlotViews;
 
     /**
-     * @param \DateTimeInterface $begin
-     * @param \DateTimeInterface $end
-     * @param int $scale
-     * @param HappeningView[] $happenings
-     * @param UnavailabilityView[] $unavailabilities
-     * @param MassUnavailabilityView[] $masses
-     * @param MeetingView[] $meetings
-     * @param array $availableSlotViews
+     * @param \DateTimeInterface                      $begin
+     * @param \DateTimeInterface                      $end
+     * @param int                                     $scale
+     * @param HappeningView[]                         $happenings
+     * @param UnavailabilityView[]                    $unavailabilities
+     * @param MassUnavailabilityView[]                $masses
+     * @param MeetingView[]                           $meetings
+     * @param array                                   $availableSlotViews
      * @param CancelAttendanceUnavailabilityView|null $cancelAttendanceUnavailabilityView
      */
     public function __construct(
@@ -110,6 +110,6 @@ class DayView
      */
     public function isSheetAttendingTheEvent(): bool
     {
-        return $this->cancelAttendanceUnavailabilityView === null;
+        return null === $this->cancelAttendanceUnavailabilityView;
     }
 }

@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2016 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -29,7 +29,7 @@ class Create extends Base
         $this->blocking     = true;
         $this->translations = [];
 
-        if ($day !== null) {
+        if (null !== $day) {
             $this->begin = $day->getStartTime();
             $this->end   = $day->getStartTime();
         }

@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2017 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -25,7 +25,7 @@ class ParticipantNormalizer implements NormalizerInterface
             '@id'                => $object->reference,
             'id'                 => $object->userId,
             'fullName'           => $object->fullName,
-            'unavailabilityList' => []
+            'unavailabilityList' => [],
         ];
 
         if (!empty($object->unavailabilityList)) {

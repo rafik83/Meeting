@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of the vimeet project.
+ * This file is part of the Proximum Vimeet project.
  *
  * Copyright (C) Proximum
  *
@@ -32,9 +32,9 @@ class WaitingController extends Controller
         $translator = $this->get('translator');
         $isLoginActivated = false;
 
-        if ($type === HomeDispatchAnonymousUser::TYPE_REGISTRATION_NOT_OPEN) {
+        if (HomeDispatchAnonymousUser::TYPE_REGISTRATION_NOT_OPEN === $type) {
             $message = $translator->trans('event.registration_not_open');
-        } elseif ($type === HomeDispatchAnonymousUser::TYPE_REGISTRATION_CLOSED) {
+        } elseif (HomeDispatchAnonymousUser::TYPE_REGISTRATION_CLOSED === $type) {
             $message = $translator->trans('event.registration_closed');
             $isLoginActivated = true;
         } else {

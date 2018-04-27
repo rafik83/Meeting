@@ -21,11 +21,11 @@ use Proximum\Vimeet\Application\Exception\Sheet\ParticipantAlreadyExistException
 use Proximum\Vimeet\Application\Query\Package\PackageViewQuery;
 use Proximum\Vimeet\Application\Query\Package\Participant\ParticipantProductViewQuery;
 use Proximum\Vimeet\Application\Query\Participant\CardListViewQuery;
+use Proximum\Vimeet\Domain\Event\ContactInfoGuesser;
 use Proximum\Vimeet\Domain\Model\PromotionCodeRow;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Package\Funnel\Step as FunnelStep;
-use Proximum\Vimeet\Domain\Event\ContactInfoGuesser;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Package\OptionsType;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Package\ParticipantAndPlanningType;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Package\PlansType;
@@ -125,7 +125,7 @@ class PackageController extends Controller
                 ]
             );
         }
-        
+
         $command = $this->get('components.step.step_command_factory')
             ->create($currentStep->type, $sheet, $currentStep->index);
 
@@ -155,12 +155,12 @@ class PackageController extends Controller
         $participants                 = [];
         $participantProductViews      = [];
 
-        if ($currentStep->type === FunnelStep::TYPE_PARTICIPANT_PLANNING) {
+        if (FunnelStep::TYPE_PARTICIPANT_PLANNING === $currentStep->type) {
             $participantProductViews = $this->get('tactician.commandbus.query')->handle(
                 new ParticipantProductViewQuery($sheet, $request->getLocale())
             );
 
-            list (
+            list(
                 $displayAddParticipantForm,
                 $displayRemoveParticipantForm,
                 $form_add,
@@ -303,8 +303,9 @@ class PackageController extends Controller
      * @param int          $step
      * @param string       $locale
      *
-     * @return FormInterface
      * @throws \InvalidArgumentException
+     *
+     * @return FormInterface
      */
     private function stepTypeAssociatedForm(
         string $type,

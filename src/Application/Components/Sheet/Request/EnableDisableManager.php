@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2017 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -45,7 +45,6 @@ class EnableDisableManager
         );
 
         foreach ($requests as $request) {
-
             /*
              * Check on meeting sheet in case of adding to catalog :
              * - If the sheet met isn't in catalog -> skip this request and do not enable request

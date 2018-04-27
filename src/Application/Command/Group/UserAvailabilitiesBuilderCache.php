@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2017 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -45,8 +45,8 @@ class UserAvailabilitiesBuilderCache
     }
 
     /**
-     * @param User  $user
-     * @param Event $event
+     * @param User            $user
+     * @param Event           $event
      * @param AgendaDayView[] $skeletonDayViews
      *
      * @return AgendaDayView[]
@@ -88,16 +88,16 @@ class UserAvailabilitiesBuilderCache
 
     /**
      * @param AgendaDayView[] $skeletonDayViews
-     * @param MeetingSlot[] $userSlots
+     * @param MeetingSlot[]   $userSlots
      *
      * @return AgendaDayView[]
      */
     private function setUserAvailabilities(array $skeletonDayViews, array $userSlots)
     {
         foreach ($userSlots as $userSlot) {
-            foreach($skeletonDayViews as $dayView) {
+            foreach ($skeletonDayViews as $dayView) {
                 foreach ($dayView->slotViews as $slot) {
-                    if ($slot->begin === $userSlot->getBegin())  {
+                    if ($slot->begin === $userSlot->getBegin()) {
                         $slot->available = true;
                     }
                 }

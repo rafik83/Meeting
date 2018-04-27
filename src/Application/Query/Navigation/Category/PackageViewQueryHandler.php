@@ -1,9 +1,9 @@
 <?php
 
 /*
- * This file is part of the vimeet project.
+ * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2016 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -47,7 +47,7 @@ class PackageViewQueryHandler
      */
     public function handle(PackageViewQuery $packageQuery)
     {
-        if ($packageQuery->sheet->getPackage() === null || !$packageQuery->sheet->getPackage()->isPassable()) {
+        if (null === $packageQuery->sheet->getPackage() || !$packageQuery->sheet->getPackage()->isPassable()) {
             return null;
         }
 
@@ -67,7 +67,7 @@ class PackageViewQueryHandler
                     $this->navigationBuilder->getRoute(
                         'event_order_summary_total',
                         [
-                            'sheet' => $packageQuery->sheet->getId()
+                            'sheet' => $packageQuery->sheet->getId(),
                         ]
                     )
                 );
@@ -84,7 +84,7 @@ class PackageViewQueryHandler
                     ]),
                     null,
                     null,
-                    ($step->completed || $step->index === 1)
+                    ($step->completed || 1 === $step->index)
                 );
             }
 

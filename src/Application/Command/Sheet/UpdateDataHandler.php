@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2015 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -65,7 +65,7 @@ class UpdateDataHandler
     public function handle(UpdateData $command)
     {
         if ($command->templateObject instanceof MediaCollection &&
-            count($command->templateObject->getMedias()) === 0
+            0 === count($command->templateObject->getMedias())
         ) {
             $this->removeDataHandler->handle(new RemoveData(
                 $command->templateData,

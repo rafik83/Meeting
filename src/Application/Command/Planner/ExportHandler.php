@@ -131,8 +131,9 @@ class ExportHandler
     /**
      * @param Export $export
      *
-     * @return null|string
      * @throws \InvalidArgumentException
+     *
+     * @return null|string
      */
     public function handle(Export $export): ?string
     {
@@ -229,8 +230,9 @@ class ExportHandler
     /**
      * @param int|null $plannerJobId
      *
-     * @return null|PlannerJob
      * @throws \InvalidArgumentException
+     *
+     * @return null|PlannerJob
      */
     private function getPlannerJob(?int $plannerJobId): ?PlannerJob
     {
@@ -310,8 +312,9 @@ class ExportHandler
     /**
      * @param File $file
      *
-     * @return null|string
      * @throws CallPlannerException
+     *
+     * @return null|string
      */
     private function callPlanner(File $file): ?string
     {
@@ -324,7 +327,7 @@ class ExportHandler
         $output = [];
         $result = '';
 
-        exec(str_replace('%filename%', $fileFullPath, $this->plannerCommand).' 2>&1', $output, $result);
+        exec(str_replace('%filename%', $fileFullPath, $this->plannerCommand) . ' 2>&1', $output, $result);
 
         if ($result > 0) {
             throw new CallPlannerException();

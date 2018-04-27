@@ -124,7 +124,7 @@ class PrepareLeniApiCallHandler
         $leniEventParameter = $this->extraParameterRepository->findByEventAndType($event, Type::TYPE_LENI_EVENT);
         $leniModeParameter = $this->extraParameterRepository->findByEventAndType($event, Type::TYPE_LENI_MODE);
 
-        $saveModeEnabled = $leniModeParameter !== null
+        $saveModeEnabled = null !== $leniModeParameter
             && \in_array(
                 $leniModeParameter->getValue(),
                 [

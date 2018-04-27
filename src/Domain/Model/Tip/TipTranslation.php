@@ -14,16 +14,16 @@ class TipTranslation
 {
     /** @var int */
     private $id;
-    
+
     /** @var Tip */
     private $tip;
-    
-    /** @var string  */
+
+    /** @var string */
     private $title;
-    
+
     /** @var string */
     private $locale;
-    
+
     /** @var string */
     private $content;
 
@@ -63,7 +63,7 @@ class TipTranslation
 
         return $this;
     }
-    
+
     /**
      * @return int
      */
@@ -71,7 +71,7 @@ class TipTranslation
     {
         return $this->id;
     }
-    
+
     /**
      * @return Tip
      */
@@ -91,7 +91,7 @@ class TipTranslation
 
         return $this;
     }
-    
+
     /**
      * @return string
      */
@@ -111,7 +111,7 @@ class TipTranslation
 
         return $this;
     }
-    
+
     /**
      * @return string
      */
@@ -131,7 +131,7 @@ class TipTranslation
 
         return $this;
     }
-    
+
     /**
      * @return string
      */

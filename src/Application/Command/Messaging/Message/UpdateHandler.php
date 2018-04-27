@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2016 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -42,7 +42,6 @@ class UpdateHandler
         $message = $command->getMessage();
 
         foreach ($command->translations as $locale => $translation) {
-
             $message->translate(
                 $translation['locale'],
                 $translation['subject'],

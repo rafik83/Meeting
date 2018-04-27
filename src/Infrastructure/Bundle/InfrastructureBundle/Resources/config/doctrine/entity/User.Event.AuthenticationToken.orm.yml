@@ -1,0 +1,28 @@
+Proximum\Vimeet\Domain\Model\User\Event\AuthenticationToken:
+    type:  entity
+    table: user_event_authentication_token
+    id:
+        id:
+            type: integer
+            generator:
+                strategy: AUTO
+    fields:
+        token:
+            type: string
+            unique: true
+        expiredAt:
+            type: datetime
+            nullable: true
+        createdAt:
+            type: datetime
+    manyToOne:
+        user:
+            targetEntity: Proximum\Vimeet\Domain\Model\User
+            joinColumn:
+                onDelete: CASCADE
+                nullable: false
+        event:
+            targetEntity: Proximum\Vimeet\Domain\Model\Event
+            joinColumn:
+                onDelete: CASCADE
+                nullable: false

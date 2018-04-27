@@ -74,9 +74,9 @@ class CreateAction
      * @param Request $request
      * @param Event   $event
      *
-     * @return RedirectResponse|Response
-     *
      * @throws AccessDeniedException
+     *
+     * @return RedirectResponse|Response
      */
     public function __invoke(Request $request, Event $event): Response
     {
@@ -86,7 +86,7 @@ class CreateAction
 
         $create = new Create($event);
         $form   = $this->formFactory->create(CategoryCreateType::class, $create, [
-            'submit' => true
+            'submit' => true,
         ]);
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {

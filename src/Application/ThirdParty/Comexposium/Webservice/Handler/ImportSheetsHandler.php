@@ -100,7 +100,7 @@ class ImportSheetsHandler
             return;
         }
 
-        $type = $this->typeRepository->getById((int)$typeIdExtraParameter->getValue());
+        $type = $this->typeRepository->getById((int) $typeIdExtraParameter->getValue());
 
         if (!$type instanceof Type || $type->getEvent()->getId() !== $event->getId()) {
             return;

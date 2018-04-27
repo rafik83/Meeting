@@ -1,5 +1,13 @@
 <?php
 
+/*
+ * This file is part of the Proximum Vimeet project.
+ *
+ * Copyright (C) Proximum
+ *
+ * @author Elao <contact@elao.com>
+ */
+
 namespace Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Migrations;
 
 use Doctrine\DBAL\Migrations\AbstractMigration;
@@ -12,7 +20,7 @@ class Version20161003125613 extends AbstractMigration
      */
     public function up(Schema $schema)
     {
-        $this->abortIf($this->connection->getDatabasePlatform()->getName() != 'mysql', 'Migration can only be executed safely on \'mysql\'.');
+        $this->abortIf('mysql' != $this->connection->getDatabasePlatform()->getName(), 'Migration can only be executed safely on \'mysql\'.');
 
         $this->addSql('CREATE TABLE admin_type (admin_id INT NOT NULL, type_id INT NOT NULL, INDEX IDX_ACC7D5C9642B8210 (admin_id), INDEX IDX_ACC7D5C9C54C8C93 (type_id), PRIMARY KEY(admin_id, type_id)) DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE = InnoDB');
         $this->addSql('CREATE TABLE boolean_template_filter (id INT AUTO_INCREMENT NOT NULL, event_id INT DEFAULT NULL, template_key VARCHAR(255) NOT NULL, `label` VARCHAR(255) NOT NULL, INDEX IDX_5F4E5D4971F7E88B (event_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE = InnoDB');
@@ -30,7 +38,7 @@ class Version20161003125613 extends AbstractMigration
      */
     public function down(Schema $schema)
     {
-        $this->abortIf($this->connection->getDatabasePlatform()->getName() != 'mysql', 'Migration can only be executed safely on \'mysql\'.');
+        $this->abortIf('mysql' != $this->connection->getDatabasePlatform()->getName(), 'Migration can only be executed safely on \'mysql\'.');
         $this->addSql('DROP TABLE admin_type');
         $this->addSql('DROP TABLE boolean_template_filter');
         $this->addSql('ALTER TABLE _order DROP cancelled');

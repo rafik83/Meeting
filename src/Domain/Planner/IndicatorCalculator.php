@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2017 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -50,10 +50,10 @@ class IndicatorCalculator
     private $slotAvailability;
 
     /**
-     * @param RequestRepositoryInterface        $requestRepository
-     * @param MeetingSlotRepository             $slotRepository
-     * @param PlanningQuantityGuesser           $planningQuantityGuesser
-     * @param SlotAvailability                  $slotAvailability
+     * @param RequestRepositoryInterface $requestRepository
+     * @param MeetingSlotRepository      $slotRepository
+     * @param PlanningQuantityGuesser    $planningQuantityGuesser
+     * @param SlotAvailability           $slotAvailability
      */
     public function __construct(
         RequestRepositoryInterface $requestRepository,
@@ -102,7 +102,7 @@ class IndicatorCalculator
                 'isToAttending'   => true,
             ]);
 
-        if ($this->slotsUsable === null) {
+        if (null === $this->slotsUsable) {
             $slotUsables = [];
 
             foreach ($this->slots as $slot) {
@@ -125,7 +125,7 @@ class IndicatorCalculator
                 }
 
                 if ($slotAvailability->isMassUnavaibility()) {
-                    $massUnavaibilitiesCount ++;
+                    ++$massUnavaibilitiesCount ;
                 }
             }
         }

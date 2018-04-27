@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2015 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -13,10 +13,10 @@ namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller;
 use Proximum\Vimeet\Application\Command\Happening\Speaker\Create;
 use Proximum\Vimeet\Application\Command\Happening\Speaker\Delete;
 use Proximum\Vimeet\Application\Command\Happening\Speaker\Update;
-use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Happening\Speaker\CreateSpeakerType;
-use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Happening\Speaker\UpdateSpeakerType;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Happening\Speaker;
+use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Happening\Speaker\CreateSpeakerType;
+use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Happening\Speaker\UpdateSpeakerType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;

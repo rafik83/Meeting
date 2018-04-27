@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2017 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -121,9 +121,9 @@ final class MarkdownFormatter
      * @param string $string
      * @param int    $head
      *
-     * @return string
-     *
      * @throws HeadingNotSupportedException
+     *
+     * @return string
      */
     public static function heading($string, $head)
     {

@@ -1,9 +1,9 @@
 <?php
 
 /*
- * This file is part of the vimeet project.
+ * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) vimeet
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -119,7 +119,7 @@ class LeniApiCallHandler
             EventExtraParameterType::TYPE_LENI_MODE
         );
 
-        if ($leniModeParameter === null
+        if (null === $leniModeParameter
             || !\in_array($leniModeParameter->getValue(), EventExtraParameterType::ALLOWED_LENI_MODE_FOR_GET, true)
         ) {
             return;
@@ -180,8 +180,9 @@ class LeniApiCallHandler
      * @param array       $customDataMapping
      * @param int         $start
      *
-     * @return null|string
      * @throws LeniApiServerException
+     *
+     * @return null|string
      */
     private function getBatchUserData(
         Event $event,
@@ -227,7 +228,7 @@ class LeniApiCallHandler
             $this->jobQueue->indexSheets(array_values($sheetIds));
         }
 
-        if (\count($rawUsersData) === self::BATCH_LENGTH) {
+        if (self::BATCH_LENGTH === \count($rawUsersData)) {
             unset($rawUsersData, $sheetIds);
 
             $newLastCreatedAt = $this->getBatchUserData(
@@ -299,7 +300,7 @@ class LeniApiCallHandler
         foreach ($typesMapping as $typeMapping) {
             if (\is_array($typeMapping)) {
                 foreach ($typeMapping as $fieldName => $value) {
-                    if ($fieldName !== LeniConstants::LENI_COL_CATEGORY) {
+                    if (LeniConstants::LENI_COL_CATEGORY !== $fieldName) {
                         continue;
                     }
 

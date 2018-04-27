@@ -48,7 +48,7 @@ class InvoiceViewQueryHandler
         $invoices = $this->invoiceRepository->findBySheet($invoiceViewQuery->sheet);
 
         foreach ($invoices as $invoice) {
-            $orderViews = array_map(function(Order $order) {
+            $orderViews = array_map(function (Order $order) {
                 return new OrderView($order->getId(), $order->getNumero());
             }, $invoice->getOrders());
 

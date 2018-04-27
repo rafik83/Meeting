@@ -1,0 +1,46 @@
+<?php
+
+/*
+ * This file is part of the Proximum Vimeet project.
+ *
+ * Copyright (C) Proximum
+ *
+ * @author Elao <contact@elao.com>
+ */
+
+namespace Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Validator\Constraint\Template\TemplateObject;
+
+use Proximum\Vimeet\Domain\Template\TemplateObject;
+use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Validator\Constraint\Template\TemplateObjectValidator;
+use Symfony\Component\Validator\Constraint;
+use Symfony\Component\Validator\Constraints\NotBlank;
+
+class UploadObjectValidator extends TemplateObjectValidator
+{
+    public function validate($value, Constraint $constraint): void
+    {
+        if ($value instanceof TemplateObject\UploadObject) {
+            $this->checkRequired($value, $constraint);
+        }
+    }
+
+    protected function checkRequired(TemplateObject $object, Constraint $constraint): void
+    {
+        if ($object instanceof TemplateObject\UploadObject &&
+            true === $object->getOption('required') &&
+            $object instanceof TemplateObject\ContentObjectInterface
+        ) {
+            $content = $object->getPath();
+
+            if ($content === null) {
+                $content = $object->getFile();
+            }
+
+            $this->context
+                ->getValidator()
+                ->inContext($this->context)
+                ->atPath($constraint->key)
+                ->validate($content, new NotBlank());
+        }
+    }
+}

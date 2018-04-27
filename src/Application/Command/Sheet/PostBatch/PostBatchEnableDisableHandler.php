@@ -1,9 +1,9 @@
 <?php
 
 /*
- * This file is part of the vimeet project.
+ * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2017 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -74,10 +74,10 @@ class PostBatchEnableDisableHandler
      */
     public function handle(PostBatchEnableDisable $command)
     {
-        $state = $command->state === BatchEnableDisableHandler::STATE_ENABLE;
+        $state = BatchEnableDisableHandler::STATE_ENABLE === $command->state;
 
         // remove sheet from catalog if sheet is disable
-        if ($command->state === BatchEnableDisableHandler::STATE_DISABLE) {
+        if (BatchEnableDisableHandler::STATE_DISABLE === $command->state) {
             $this->batchCatalogHandler->handle(new BatchCatalog(
                 $command->ids,
                 false,

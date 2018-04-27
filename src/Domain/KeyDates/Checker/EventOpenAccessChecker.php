@@ -1,9 +1,9 @@
 <?php
 
 /*
- * This file is part of the vimeet project.
+ * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2017 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -21,6 +21,6 @@ class EventOpenAccessChecker extends AccessChecker
      */
     public function allowedToAccess(Event $event)
     {
-        return $event->getOpenDate() !== null && $event->getOpenDate() <= $this->datetime;
+        return null !== $event->getOpenDate() && $event->getOpenDate() <= $this->datetime;
     }
 }

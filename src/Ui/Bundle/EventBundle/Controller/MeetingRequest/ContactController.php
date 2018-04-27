@@ -13,12 +13,12 @@ namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\MeetingRequest;
 use Proximum\Vimeet\Application\Query\Meeting\MeetingSheetViewQuery;
 use Proximum\Vimeet\Application\Serializer\Charset;
 use Proximum\Vimeet\Domain\Model\Sheet;
+use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\HttpFoundation\Response\CsvFileResponse;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Security\Voter\EventOpenAccessVoter;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\ParamConverter\EventDomain;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Security\SheetVoter;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
-use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\HttpFoundation\Response\CsvFileResponse;
 
 class ContactController extends Controller
 {
@@ -49,6 +49,6 @@ class ContactController extends Controller
             'csv_delimiter' => ';',
         ]);
 
-        return new CsvFileResponse($exportContent, "export_contacts_" . date("Y_m_d_His") . ".csv");
+        return new CsvFileResponse($exportContent, 'export_contacts_' . date('Y_m_d_His') . '.csv');
     }
 }

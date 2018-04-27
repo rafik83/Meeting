@@ -76,9 +76,9 @@ class UpdateAction
      * @param Event    $event
      * @param Category $category
      *
-     * @return RedirectResponse|Response
-     *
      * @throws AccessDeniedException
+     *
+     * @return RedirectResponse|Response
      */
     public function __invoke(Request $request, Event $event, Category $category): Response
     {

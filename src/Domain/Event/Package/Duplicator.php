@@ -10,9 +10,9 @@
 
 namespace Proximum\Vimeet\Domain\Event\Package;
 
-use Proximum\Vimeet\Domain\Package\Duplicator as PackageDuplicator;
 use Proximum\Vimeet\Domain\Event\DuplicatorDataStorage;
 use Proximum\Vimeet\Domain\Model\Event;
+use Proximum\Vimeet\Domain\Package\Duplicator as PackageDuplicator;
 use Proximum\Vimeet\Domain\Repository\PackageRepositoryInterface;
 
 class Duplicator
@@ -34,7 +34,7 @@ class Duplicator
     }
 
     /**
-     * @param Event $event
+     * @param Event                 $event
      * @param DuplicatorDataStorage $duplicatorDataStorage
      *
      * @return DuplicatorDataStorage

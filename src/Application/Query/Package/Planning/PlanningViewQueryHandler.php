@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2016 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -59,7 +59,7 @@ class PlanningViewQueryHandler
             $order        = $this->orderMerger->merge($planningViewQuery->sheet->getNotCancelledOrders());
             $selectedPlan = $order->getPlan();
         } else {
-            $selectedPlan = $cart->getPlanRow() !== null ? $cart->getPlanRow()->getProduct() : null;
+            $selectedPlan = null !== $cart->getPlanRow() ? $cart->getPlanRow()->getProduct() : null;
         }
 
         if ($selectedPlan) {

@@ -35,9 +35,9 @@ class OrderVatViewsByEventQueryHandler
     /**
      * @param OrderVatViewsByEventQuery $orderVatViewsByEventQuery
      *
-     * @return OrderVatView[]
-     *
      * @throws MissingBillingInfoException
+     *
+     * @return OrderVatView[]
      */
     public function handle(OrderVatViewsByEventQuery $orderVatViewsByEventQuery)
     {

@@ -1,9 +1,9 @@
 <?php
 
 /*
- * This file is part of the vimeet project.
+ * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2017 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -29,10 +29,10 @@ class CatalogOnlineDateSubstitution implements SubstituteInterface
 
         $catalogOnlineDate = $event->getConfiguration()->getCatalogOnlineDate();
 
-        if ($catalogOnlineDate !== null) {
+        if (null !== $catalogOnlineDate) {
             $formattedDate = $dateFormatter->format($catalogOnlineDate);
         }
 
-        return isset($formattedDate) && $formattedDate !== false ? $formattedDate : '';
+        return isset($formattedDate) && false !== $formattedDate ? $formattedDate : '';
     }
 }

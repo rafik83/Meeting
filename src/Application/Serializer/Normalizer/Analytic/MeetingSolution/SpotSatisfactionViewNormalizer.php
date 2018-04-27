@@ -18,7 +18,7 @@ class SpotSatisfactionViewNormalizer implements NormalizerInterface
     /**
      * {@inheritdoc}
      */
-    public function normalize($object, $format = null, array $context = array())
+    public function normalize($object, $format = null, array $context = [])
     {
         /** @var SpotSatisfactionView $spotSatisfactionView */
         $spotSatisfactionView = $object;
@@ -37,6 +37,6 @@ class SpotSatisfactionViewNormalizer implements NormalizerInterface
      */
     public function supportsNormalization($data, $format = null)
     {
-        return $format === 'json' && $data instanceof SpotSatisfactionView;
+        return 'json' === $format && $data instanceof SpotSatisfactionView;
     }
 }

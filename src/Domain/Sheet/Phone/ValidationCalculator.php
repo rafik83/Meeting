@@ -80,16 +80,16 @@ class ValidationCalculator
             $hasMeeting = $this->meetingRepository->hasMeetingForUserAndEvent($user, $event);
 
             if (true === $hasMeeting) {
-                $concerned++;
+                ++$concerned;
 
                 // If UserEventPhone is null (meaning not sent), the user is considered notConfirmed
                 if ($userPhone instanceof UserEventPhone && $userPhone->isValidated()) {
-                    $confirmed++;
+                    ++$confirmed;
 
                     continue;
                 }
 
-                $notConfirmed++;
+                ++$notConfirmed;
             }
         }
 

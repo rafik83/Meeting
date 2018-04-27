@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of the vimeet project.
+ * This file is part of the Proximum Vimeet project.
  *
  * Copyright (C) Proximum
  *
@@ -10,8 +10,8 @@
 
 namespace Proximum\Vimeet\Application\Query\Catalog\External;
 
-use Proximum\Vimeet\Domain\Repository\Catalog\External\SearchFacetRepositoryInterface;
 use Proximum\Vimeet\Domain\Model\Catalog\External\SearchFacet;
+use Proximum\Vimeet\Domain\Repository\Catalog\External\SearchFacetRepositoryInterface;
 
 class SearchFacetQueryHandler
 {

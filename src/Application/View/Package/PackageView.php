@@ -11,8 +11,8 @@
 namespace Proximum\Vimeet\Application\View\Package;
 
 use Proximum\Vimeet\Domain\Model\Sheet;
-use Proximum\Vimeet\Domain\Package\Funnel\Step;
 use Proximum\Vimeet\Domain\Package\Funnel\Funnel;
+use Proximum\Vimeet\Domain\Package\Funnel\Step;
 
 class PackageView
 {

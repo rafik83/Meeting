@@ -109,7 +109,7 @@ class UpdateAction
         return $this->engine->renderResponse(self::TEMPLATE, [
             'event' => $event,
             'form'  => $form->createView(),
-            'products' => $happening->getProducts()
+            'products' => $happening->getProducts(),
         ]);
     }
 }

@@ -14,13 +14,13 @@ class Create
 {
     /** @var string */
     public $title;
-    
+
     /** @var bool */
     public $onMeetingManagement;
-    
+
     /** @var bool */
     public $onCatalog;
-    
+
     /** @var bool */
     public $onPrintPlanning;
 
@@ -35,7 +35,7 @@ class Create
 
     /** @var bool */
     public $onConfirmationPhone;
-    
+
     /** @var array */
     public $translations;
 

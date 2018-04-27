@@ -1,9 +1,9 @@
 <?php
 
 /*
- * This file is part of the vimeet project.
+ * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2017 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -24,7 +24,7 @@ class VisioGuesser
     public function hasMeetingParticipantVisio(Meeting $meeting)
     {
         $participants = $meeting->getAllParticipants();
-        
+
         return $this->isParticipantVisio($participants);
     }
 
@@ -47,7 +47,7 @@ class VisioGuesser
      */
     public function isParticipantVisio(array $participants)
     {
-        foreach($participants as $participant) {
+        foreach ($participants as $participant) {
             if ($participant->isVisio()) {
                 return true;
             }

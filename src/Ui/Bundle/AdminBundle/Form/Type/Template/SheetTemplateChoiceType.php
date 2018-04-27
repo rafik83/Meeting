@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2016 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -63,6 +63,7 @@ class SheetTemplateChoiceType extends AbstractType
 
     /**
      * @param Options $options
+     *
      * @return array
      */
     private function getResults(Options $options)

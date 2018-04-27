@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2016 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -80,6 +80,6 @@ class TaggedInfoGuesser
         $taggedDatas = $templateData->getTaggedDatas($tag);
         $taggedData  = reset($taggedDatas);
 
-        return $taggedData !== null ? $taggedData : $default;
+        return null !== $taggedData ? $taggedData : $default;
     }
 }

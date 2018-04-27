@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2016 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -133,7 +133,7 @@ abstract class AbstractEventType extends AbstractType
                 'required' => false,
             ]);
 
-        if ($event !== null && $event->getConfiguration()->hasBackgroundImage()) {
+        if (null !== $event && $event->getConfiguration()->hasBackgroundImage()) {
             $builder->add('isBackgroundImageToRemove', CheckboxType::class, [
                 'required' => false,
             ]);
@@ -149,12 +149,12 @@ abstract class AbstractEventType extends AbstractType
         $isSuperAdmin = $this->authorizationChecker->isGranted('ROLE_SUPER_ADMIN');
 
         // Show when admin OR when create new Event
-        if ($isSuperAdmin === true || $this instanceof CreateType) {
+        if (true === $isSuperAdmin || $this instanceof CreateType) {
             $preferredChoices = [];
 
             if (!$isSuperAdmin) {
                 $defaultPrefix = $this->prefixRepository->getDefault();
-                $prefixes = $defaultPrefix !== null ? [$defaultPrefix] : [];
+                $prefixes = null !== $defaultPrefix ? [$defaultPrefix] : [];
                 $invoicePrefixOptions['help'] = 'form.event.children.invoicePrefix.help.label';
             } else {
                 $prefixes = $this->prefixRepository->getAll();
@@ -176,7 +176,7 @@ abstract class AbstractEventType extends AbstractType
 
             $invoicePrefixOptions = array_merge($invoicePrefixOptions, [
                 'disabled' => true,
-                'choices'  => $invoicePrefix !== null ? [$invoicePrefix] : [],
+                'choices'  => null !== $invoicePrefix ? [$invoicePrefix] : [],
                 'help'     => 'form.event.children.invoicePrefix.help.label',
             ]);
         }

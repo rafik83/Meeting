@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2016 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -32,7 +32,7 @@ class PromotionCodeType extends AbstractType
             ->add('code', TextType::class)
             ->add('validUntil', DateTimePickerType::class, [
                 'required'      => false,
-                'view_timezone' => $options['event']->getTimeZone()
+                'view_timezone' => $options['event']->getTimeZone(),
             ])
             ->add('stock', IntegerType::class, ['required' => false])
             ->add('translations', TranslationsType::class, [
@@ -47,7 +47,7 @@ class PromotionCodeType extends AbstractType
                     'event'          => $options['event'],
                     'label'          => false,
                     'error_bubbling' => false,
-                    'locale'         => $options['locale']
+                    'locale'         => $options['locale'],
                 ],
                 'allow_add'      => true,
                 'allow_delete'   => true,

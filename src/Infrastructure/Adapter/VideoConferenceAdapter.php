@@ -61,7 +61,7 @@ class VideoConferenceAdapter implements VideoConferenceAdapterInterface
      */
     public function generateAccessToken(Session $session, \DateTimeInterface $endDateTime, array $options = []): string
     {
-        if ($this->hasSecurity === true) {
+        if (true === $this->hasSecurity) {
             $sessionEndDate = new \DateTime($endDateTime->format('Y-m-d H:i:s.u'));
 
             if (false === $sessionEndDate->modify(self::DELAY_AFTER_END_TIME)) {

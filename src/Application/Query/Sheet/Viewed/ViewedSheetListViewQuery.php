@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of the vimeet project.
+ * This file is part of the Proximum Vimeet project.
  *
  * Copyright (C) Proximum
  *
@@ -24,7 +24,7 @@ class ViewedSheetListViewQuery
     /**
      * ViewedSheetListViewQuery constructor.
      *
-     * @param User  $user
+     * @param User    $user
      * @param Sheet[] $sheets
      */
     public function __construct(User $user, array $sheets)

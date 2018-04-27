@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2016 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -31,5 +31,6 @@ abstract class ParticipantDataValidator extends ConstraintValidator
         'telephone'     => TemplateObject\TelephoneConstraint::class,
         'text'          => TemplateObjectConstraint::class,
         'url'           => TemplateObject\UrlConstraint::class,
+        'upload'        => TemplateObject\UploadObjectConstraint::class,
     ];
 }

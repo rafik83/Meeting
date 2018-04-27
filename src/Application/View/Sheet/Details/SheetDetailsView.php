@@ -119,7 +119,7 @@ class SheetDetailsView
             return 'warning';
         }
 
-        if ($this->completeness === 100) {
+        if (100 === $this->completeness) {
             return 'success';
         }
 

@@ -54,7 +54,7 @@ class AddCommentHandler
      */
     public function handle(AddComment $addComment)
     {
-        if ($addComment->text !== null) {
+        if (null !== $addComment->text) {
             $this->commentRepository->add(
                 new Comment(
                     $addComment->sheet,

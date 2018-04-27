@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2017 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -32,7 +32,6 @@ class CreateType extends AbstractType
                 'required' => false,
             ])
             ->add('submit', SubmitType::class);
-        ;
     }
 
     /**
@@ -52,5 +51,4 @@ class CreateType extends AbstractType
     {
         return 'invoice_prefix_create';
     }
-
 }

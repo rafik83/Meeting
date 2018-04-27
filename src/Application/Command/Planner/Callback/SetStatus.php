@@ -9,6 +9,7 @@
  */
 
 namespace Proximum\Vimeet\Application\Command\Planner\Callback;
+
 use Proximum\Vimeet\Application\ThirdParty\Jenkins\AbstractSetStatus;
 
 /**

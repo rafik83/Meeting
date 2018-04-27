@@ -31,7 +31,7 @@ class CreateType extends AbstractType
                 'choices' => Type::TYPES,
                 'choice_label' => function ($key) {
                     return sprintf('%s.%s', self::TRANSLATION_TYPE, $key);
-                }
+                },
             ])
             ->add('name', TextType::class, [
                 'required' => true,

@@ -65,7 +65,7 @@ class ParticipantProductViewQueryHandler
         $productAlreadyBought = [];
 
         foreach ($productParticipants as $participantId => $productParticipant) {
-            if ($productParticipant === null) {
+            if (null === $productParticipant) {
                 continue;
             }
 

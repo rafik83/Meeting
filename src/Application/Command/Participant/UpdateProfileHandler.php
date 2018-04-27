@@ -3,51 +3,56 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2016 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
 
 namespace Proximum\Vimeet\Application\Command\Participant;
 
+use Proximum\Vimeet\Application\Command\Participant\Upload\UploadFile;
+use Proximum\Vimeet\Application\Command\Participant\Upload\UploadFileException;
+use Proximum\Vimeet\Application\Command\Participant\Upload\UploadFileHandler;
 use Proximum\Vimeet\Application\Components\Sheet\Template\Tag;
 use Proximum\Vimeet\Application\Event\Events;
 use Proximum\Vimeet\Application\Event\Sheet\SheetTitleCheckEvent;
 use Proximum\Vimeet\Application\Event\Sheet\SheetUpdatedEvent;
 use Proximum\Vimeet\Domain\Account\Synchronizer;
 use Proximum\Vimeet\Domain\Repository\ParticipantRepositoryInterface;
+use Proximum\Vimeet\Domain\Template\TemplateObject\UploadObject;
 use Proximum\Vimeet\Infrastructure\Adapter\DelayedEventDispatcher;
 
 class UpdateProfileHandler
 {
-    /**
-     * @var ParticipantRepositoryInterface
-     */
+    /** @var ParticipantRepositoryInterface */
     private $participantRepository;
 
-    /**
-     * @var Synchronizer
-     */
+    /** @var Synchronizer */
     private $accountSynchronizer;
 
-    /**
-     * @var DelayedEventDispatcher
-     */
+    /** @var DelayedEventDispatcher */
     private $eventDispatcher;
 
+    /** @var UploadFileHandler */
+    private $uploadFileHandler;
+
     /**
-     * @param ParticipantRepositoryInterface $participantRepository
-     * @param Synchronizer                   $accountSynchronizer
-     * @param DelayedEventDispatcher         $eventDispatcher
+     * @param ParticipantRepositoryInterface    $participantRepository
+     * @param Synchronizer                      $accountSynchronizer
+     * @param DelayedEventDispatcher            $eventDispatcher
+     * @param UploadFileHandler                 $uploadFileHandler
      */
     public function __construct(
         ParticipantRepositoryInterface $participantRepository,
         Synchronizer $accountSynchronizer,
-        DelayedEventDispatcher $eventDispatcher
-    ) {
+        DelayedEventDispatcher $eventDispatcher,
+        UploadFileHandler $uploadFileHandler
+    )
+    {
         $this->participantRepository = $participantRepository;
-        $this->accountSynchronizer   = $accountSynchronizer;
-        $this->eventDispatcher       = $eventDispatcher;
+        $this->accountSynchronizer = $accountSynchronizer;
+        $this->eventDispatcher = $eventDispatcher;
+        $this->uploadFileHandler = $uploadFileHandler;
     }
 
     /**
@@ -55,16 +60,28 @@ class UpdateProfileHandler
      */
     public function handle(UpdateProfile $updateProfile)
     {
-        $participant     = $updateProfile->participant;
+        $participant = $updateProfile->participant;
         $participantData = $updateProfile->participant->getData();
-        $templateData    = $updateProfile->templateData;
+        $templateData = $updateProfile->templateData;
 
         foreach ($updateProfile->data as $key => $value) {
-            if ($templateData->getObject($key)->hasTag(Tag::PARTICIPANT_DATA)) {
+            $templateObject = $templateData->getObject($key);
+
+            if ($templateObject instanceof UploadObject) {
+                try {
+                    $participantData = $this->uploadFileHandler
+                        ->handle(new UploadFile($templateObject, $participantData));
+                } catch (UploadFileException $exception) {
+                }
+
+                continue;
+            }
+
+            if ($templateObject->hasTag(Tag::PARTICIPANT_DATA)) {
                 $participantData = array_merge($participantData, [$key => $value]);
 
                 // Set the data on the TemplateData to use it with the accountSynchronizer
-                $templateData->getObject($key)->setData($value);
+                $templateObject->setData($value);
             }
         }
 

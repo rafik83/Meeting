@@ -3,16 +3,16 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2015 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
 
 namespace Proximum\Vimeet\Application\Command\Unavailability;
 
-use Proximum\Vimeet\Application\Exception\Unavailability\CanNotDeleteUnavailabilityException;
 use Proximum\Vimeet\Application\Event\Events;
 use Proximum\Vimeet\Application\Event\Unavailability\RemoveUnavailabilityEvent;
+use Proximum\Vimeet\Application\Exception\Unavailability\CanNotDeleteUnavailabilityException;
 use Proximum\Vimeet\Domain\Repository\UnavailabilityRepositoryInterface;
 use Proximum\Vimeet\Infrastructure\Adapter\DelayedEventDispatcher;
 

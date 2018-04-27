@@ -53,6 +53,6 @@ class EventDomainParamConverter implements ParamConverterInterface
      */
     public function supports(ParamConverter $configuration)
     {
-        return $configuration->getClass() === EventDomain::class;
+        return EventDomain::class === $configuration->getClass();
     }
 }

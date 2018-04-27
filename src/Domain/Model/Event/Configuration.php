@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2016 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -402,7 +402,7 @@ class Configuration
     }
 
     /**
-     * @return boolean
+     * @return bool
      */
     public function isMeetingRequestUpdateLocked()
     {
@@ -410,7 +410,7 @@ class Configuration
     }
 
     /**
-     * @param boolean $meetingRequestUpdateLocked
+     * @param bool $meetingRequestUpdateLocked
      */
     public function setMeetingRequestUpdateLocked($meetingRequestUpdateLocked)
     {
@@ -494,6 +494,6 @@ class Configuration
      */
     public function hasBackgroundImage(): bool
     {
-        return $this->backgroundImage !== null;
+        return null !== $this->backgroundImage;
     }
 }

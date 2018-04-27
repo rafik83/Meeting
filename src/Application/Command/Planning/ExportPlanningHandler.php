@@ -116,7 +116,7 @@ class ExportPlanningHandler
         /** @var Participant[] $participants */
         $participants = $this->participantRepository->getParticipantsBySheetIdsWithSheetAndTypeHydrated($exportPlanning->sheetIds);
 
-        if (\count($participants) === 0) {
+        if (0 === \count($participants)) {
             return;
         }
 
@@ -174,7 +174,6 @@ class ExportPlanningHandler
         $file = $this->createFile($print);
 
         $this->notifyCreationOfFile($event, $exportPlanning, $file);
-
     }
 
     /**
@@ -219,7 +218,7 @@ class ExportPlanningHandler
      */
     private function orderParticipant(Event $event, $orderBy, array &$participants): void
     {
-        if ($orderBy === PlanningOrderedBy::ORDER_BY_PARTICIPANT_LAST_NAME) {
+        if (PlanningOrderedBy::ORDER_BY_PARTICIPANT_LAST_NAME === $orderBy) {
             // Load cache for the participant last name to avoid error in the usort
             foreach ($participants as $participant) {
                 $this->participantInfoGuesserCache->guessParticipantLastName($participant, $event->getFallback());
@@ -231,7 +230,7 @@ class ExportPlanningHandler
 
                 return strcasecmp($left, $right);
             });
-        } elseif ($orderBy === PlanningOrderedBy::ORDER_BY_SHEET_TITLE) {
+        } elseif (PlanningOrderedBy::ORDER_BY_SHEET_TITLE === $orderBy) {
             // Load cache for the sheet title to avoid error in the usort
             foreach ($participants as $participant) {
                 $this->sheetInfoGuesserCache->guessSheetTitle($participant->getSheet(), $event->getFallback());
@@ -243,7 +242,7 @@ class ExportPlanningHandler
 
                 return strcasecmp($left, $right);
             });
-        } elseif ($orderBy === PlanningOrderedBy::ORDER_BY_SPOT_REFERENCE) {
+        } elseif (PlanningOrderedBy::ORDER_BY_SPOT_REFERENCE === $orderBy) {
             usort($participants, function (Participant $participantLeft, Participant $participantRight) use ($event) {
                 $spotLeftReference = '';
                 $spotRightReference = '';

@@ -48,8 +48,9 @@ class ConfirmAgendaHandler
     /**
      * @param ConfirmAgenda $command
      *
-     * @return string
      * @throws UserEventTokenUnexpectedTypeException
+     *
+     * @return string
      */
     public function handle(ConfirmAgenda $command)
     {

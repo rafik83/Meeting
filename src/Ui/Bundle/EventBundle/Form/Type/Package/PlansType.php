@@ -3,11 +3,10 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2016 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
-
 
 namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Package;
 
@@ -37,7 +36,6 @@ class PlansType extends AbstractType
                 'choices'     => $sheet->getPackage()->getPlans(),
                 'required'    => true,
             ]);
-        ;
     }
 
     /**

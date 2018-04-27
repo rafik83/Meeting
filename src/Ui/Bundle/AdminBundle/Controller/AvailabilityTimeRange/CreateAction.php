@@ -66,9 +66,9 @@ class CreateAction
      * @param Request $request
      * @param Event   $event
      *
-     * @return Response|RedirectResponse
-     *
      * @throws AccessDeniedException
+     *
+     * @return Response|RedirectResponse
      */
     public function __invoke(Request $request, Event $event): Response
     {

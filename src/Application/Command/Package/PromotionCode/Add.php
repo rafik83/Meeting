@@ -22,11 +22,10 @@ class Add implements Command
     public $promotionCode;
 
     /**
-     * @param Sheet  $sheet
+     * @param Sheet $sheet
      */
     public function __construct(Sheet $sheet)
     {
         $this->sheet = $sheet;
     }
-
 }

@@ -1,9 +1,9 @@
 <?php
 
 /*
- * This file is part of the vimeet project.
+ * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2017 vimeet
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -29,14 +29,14 @@ class LastEventParticipation
     }
 
     /**
-     * @param User $user
+     * @param User  $user
      * @param Event $currentEvent
      *
      * @return null|Participant
      */
     public function getLastEventParticipation(User $user, Event $currentEvent): ?Participant
     {
-        if (($lastEvent = $currentEvent->getDuplicatedFrom()) !== null) {
+        if (null !== ($lastEvent = $currentEvent->getDuplicatedFrom())) {
             $participants = $this->participantRepository->getParticipantsByUserForEvent($user->getId(), $lastEvent);
 
             if (!empty($participants)) {

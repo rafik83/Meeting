@@ -217,6 +217,12 @@ services:
             - '@vimeet_infrastructure.adapter.translator_adapter'
         tags:
             - { name: form.type }
+    form_type_sheet_data.file_data_type:
+        class: Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Sheet\Data\FileDataType
+        arguments:
+            - '@translator'
+        tags:
+            - { name: form.type }
     form_type_package.participant_and_planning_type:
         class: Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Package\ParticipantAndPlanningType
         arguments:

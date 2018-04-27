@@ -129,8 +129,6 @@ class OptionsValidator extends ConstraintValidator
     }
 
     /**
-     * Validate minimum and maximum quantity violation
-     *
      * @param int     $quantity
      * @param float   $quantityMax int or INF
      * @param Product $option

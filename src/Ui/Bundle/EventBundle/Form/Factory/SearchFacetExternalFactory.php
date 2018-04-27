@@ -1,9 +1,9 @@
 <?php
 
 /*
- * This file is part of the vimeet project.
+ * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2017 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -72,8 +72,9 @@ class SearchFacetExternalFactory
      * @param string $locale
      * @param array  $filters
      *
-     * @return FormInterface
      * @throws CatalogVisibilityNotFoundException
+     *
+     * @return FormInterface
      */
     public function create(Event $event, string $locale, array $filters): FormInterface
     {
@@ -96,8 +97,9 @@ class SearchFacetExternalFactory
      * @param array  $filters
      * @param array  $currentAggregations
      *
-     * @return FormInterface
      * @throws CatalogVisibilityNotFoundException
+     *
+     * @return FormInterface
      */
     public function createFiltered(
         Event $event,
@@ -136,15 +138,16 @@ class SearchFacetExternalFactory
      * @param Event  $event
      * @param string $locale
      *
-     * @return TypeView[]
      * @throws CatalogVisibilityNotFoundException
+     *
+     * @return TypeView[]
      */
     public function getTypeViews(Event $event, string $locale): array
     {
         if (!isset($this->typeViewsByEvent[$event->getId()])) {
             $catalogVisibility = $this->catalogVisibilityRepository->getByEvent($event);
 
-            if ($catalogVisibility === null) {
+            if (null === $catalogVisibility) {
                 throw new CatalogVisibilityNotFoundException();
             }
 
@@ -160,15 +163,16 @@ class SearchFacetExternalFactory
      * @param Event  $event
      * @param string $locale
      *
-     * @return CategoryView[]
      * @throws CatalogVisibilityNotFoundException
+     *
+     * @return CategoryView[]
      */
     public function getCategoryViews(Event $event, string $locale): array
     {
         if (!isset($this->categoryViewsByEvent[$event->getId()])) {
             $catalogVisibility = $this->catalogVisibilityRepository->getByEvent($event);
 
-            if ($catalogVisibility === null) {
+            if (null === $catalogVisibility) {
                 throw new CatalogVisibilityNotFoundException();
             }
 
@@ -184,14 +188,15 @@ class SearchFacetExternalFactory
      * @param Event  $event
      * @param string $locale
      *
-     * @return FilteredFieldsView
      * @throws CatalogVisibilityNotFoundException
+     *
+     * @return FilteredFieldsView
      */
     private function getInitialFieldsView(Event $event, string $locale): FilteredFieldsView
     {
         $catalogVisibility = $this->catalogVisibilityRepository->getByEvent($event);
 
-        if ($catalogVisibility === null) {
+        if (null === $catalogVisibility) {
             throw new CatalogVisibilityNotFoundException();
         }
 

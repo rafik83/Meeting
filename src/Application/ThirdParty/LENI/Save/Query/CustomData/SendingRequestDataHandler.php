@@ -52,7 +52,7 @@ class SendingRequestDataHandler
             EventExtraParameterType::TYPE_LENI_SENDING_REQUEST
         );
 
-        if ($sendingRequestExtraParameter === null) {
+        if (null === $sendingRequestExtraParameter) {
             return [];
         }
 

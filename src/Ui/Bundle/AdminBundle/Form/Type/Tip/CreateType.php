@@ -22,7 +22,7 @@ class CreateType extends TipType
             'data_class' => Create::class,
         ]);
     }
-    
+
     /** {@inheritdoc} */
     public function getBlockPrefix()
     {

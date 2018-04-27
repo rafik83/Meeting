@@ -1,9 +1,9 @@
 <?php
 
 /*
- * This file is part of the Proximum Vimeet website.
+ * This file is part of the Proximum Vimeet project.
  *
- * Copyright © Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -31,7 +31,7 @@ class SelectRecipientsHandler
     public function handle(SelectRecipients $command)
     {
         $campaign = $command->campaign;
-        foreach($command->recipients as $recipient) {
+        foreach ($command->recipients as $recipient) {
             $campaign->addRecipient($recipient);
         }
 

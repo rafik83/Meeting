@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2015 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -112,10 +112,10 @@ interface SheetRepositoryInterface
      * @param Event $event
      *
      * @return array of owner emails with the format:
-     *  [
-     *      0 => ['email' => 'email0@example.net'],
-     *      1 => ['email' => 'email1@example.net'],
-     *  ]
+     *               [
+     *               0 => ['email' => 'email0@example.net'],
+     *               1 => ['email' => 'email1@example.net'],
+     *               ]
      */
     public function getOwnerEmails(Event $event): array;
 
@@ -170,7 +170,7 @@ interface SheetRepositoryInterface
      *
      * @return null|ImportSheetView
      */
-    public function getSheetViewByEventAndId(Event $event, int $sheetId):? ImportSheetView;
+    public function getSheetViewByEventAndId(Event $event, int $sheetId): ? ImportSheetView;
 
     /**
      * Get only enabled sheet by user or user's participant
@@ -418,7 +418,7 @@ interface SheetRepositoryInterface
     public function getByTypes(array $types);
 
     /**
-     * @param Int[] $ids
+     * @param int[] $ids
      */
     public function batchUnAssignBySheetsId(array $ids);
 

@@ -52,7 +52,7 @@ class TokenChecker
                 ['email' => $mail]
             );
 
-            if ($response->statusCode !== 200) {
+            if (200 !== $response->statusCode) {
                 return false;
             }
 

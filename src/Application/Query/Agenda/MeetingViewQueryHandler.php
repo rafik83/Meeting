@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2017 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -36,8 +36,8 @@ class MeetingViewQueryHandler
 
     /**
      * @param MeetingParticipantViewQueryHandler $participantHandler
-     * @param RuleRepositoryInterface $ruleRepository
-     * @param VideoMeetingAccess $videoMeetingAccess
+     * @param RuleRepositoryInterface            $ruleRepository
+     * @param VideoMeetingAccess                 $videoMeetingAccess
      */
     public function __construct(
         MeetingParticipantViewQueryHandler $participantHandler,
@@ -52,8 +52,9 @@ class MeetingViewQueryHandler
     /**
      * @param MeetingViewQuery $query
      *
-     * @return MeetingView
      * @throws NoSheetForUserException
+     *
+     * @return MeetingView
      */
     public function handle(MeetingViewQuery $query)
     {

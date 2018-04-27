@@ -20,8 +20,8 @@ class SheetSatisfactionViewDenormalizer implements DenormalizerInterface
      */
     public function supportsDenormalization($data, $type, $format = null)
     {
-        return $type === SheetSatisfactionView::class
-            && $format === 'json'
+        return SheetSatisfactionView::class === $type
+            && 'json' === $format
             && isset($data['sheetId'])
             && isset($data['sheetTitle'])
             && isset($data['typeId'])
@@ -33,7 +33,7 @@ class SheetSatisfactionViewDenormalizer implements DenormalizerInterface
     /**
      * {@inheritdoc}
      */
-    public function denormalize($data, $class, $format = null, array $context = array())
+    public function denormalize($data, $class, $format = null, array $context = [])
     {
         return new SheetSatisfactionView(
             $data['sheetId'],

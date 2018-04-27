@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2016 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -30,8 +30,9 @@ class ParticipantAndPlanningGroupViewQueryHandler
     /**
      * @param ParticipantAndPlanningGroupViewQuery $participantAndPlanningGroupViewQuery
      *
-     * @return ParticipantAndPlanningGroupView
      * @throws \Exception
+     *
+     * @return ParticipantAndPlanningGroupView
      */
     public function handle(ParticipantAndPlanningGroupViewQuery $participantAndPlanningGroupViewQuery)
     {

@@ -10,8 +10,8 @@
 
 namespace Proximum\Vimeet\Application\Event\Tip\Event;
 
-use Proximum\Vimeet\Domain\Model\Tip\Tip;
 use Proximum\Vimeet\Domain\Model\Event as DomainEvent;
+use Proximum\Vimeet\Domain\Model\Tip\Tip;
 use Symfony\Component\EventDispatcher\Event;
 
 class CreatedEvent extends Event

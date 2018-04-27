@@ -1,9 +1,9 @@
 <?php
 
 /*
- * This file is part of the vimeet project.
+ * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) vimeet
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -43,6 +43,7 @@ class IgnoreConfirmationAction
      * @param Participant $participant
      *
      * @throws AccessDeniedException
+     *
      * @return JsonResponse
      */
     public function __invoke(Sheet $sheet, Participant $participant): JsonResponse

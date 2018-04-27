@@ -3,13 +3,14 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2017 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
 
 namespace Proximum\Vimeet\Application\Command\Invoice;
 
+use IntlDateFormatter;
 use Proximum\Vimeet\Application\Adapter\SerializerAdapterInterface;
 use Proximum\Vimeet\Application\Query\Invoice\BillingInfos\BillingInfosQuery;
 use Proximum\Vimeet\Application\Query\Invoice\BillingInfos\BillingInfosQueryHandler;
@@ -17,7 +18,6 @@ use Proximum\Vimeet\Domain\Repository\EventRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\Invoice\InvoiceRepositoryInterface;
 use Proximum\Vimeet\Domain\View\Invoice\ExportView;
 use Proximum\Vimeet\Domain\View\Normalizer\InvoicesNormalizerView;
-use IntlDateFormatter;
 
 class ExportHandler
 {
@@ -101,7 +101,7 @@ class ExportHandler
                     'invoice'                 => $invoice,
                     'locale'                  => $command->admin->getLocale(),
                     'dateFormatter'           => $dateFormatters[$invoice->getEvent()->getId()],
-                    'billingInfosViewOfSheet' => $billingInfosViewOfSheets[$invoice->getSheet()->getId()]
+                    'billingInfosViewOfSheet' => $billingInfosViewOfSheets[$invoice->getSheet()->getId()],
                 ]
             );
         }

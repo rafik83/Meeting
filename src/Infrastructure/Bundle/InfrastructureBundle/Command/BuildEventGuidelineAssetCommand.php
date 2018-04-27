@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2016 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -70,10 +70,10 @@ class BuildEventGuidelineAssetCommand extends Command
         $events  = [];
         $event   = null;
 
-        if ($eventId !== null) {
+        if (null !== $eventId) {
             $event = $this->eventRepository->getById($eventId);
 
-            if ($event === null) {
+            if (null === $event) {
                 $output->writeln(
                     sprintf(
                         'The event for the id %s was not found, the guideline assets will not be built',
@@ -106,7 +106,7 @@ class BuildEventGuidelineAssetCommand extends Command
 
     /**
      * @param OutputInterface $output
-     * @param Event $event
+     * @param Event           $event
      */
     private function buildAsset(OutputInterface $output, Event $event)
     {

@@ -61,8 +61,10 @@ catalog.sheet.result.total: '{0} No result|{1} 1 result|]1,Inf[ %total% results'
 catalog.title: Catalogue
 common.backToPackage: 'Back to package'
 common.backToSheet: 'Back to sheet'
+common.download: 'Download existent file'
 common.need_help: 'Need help'
 common.next: Next
+common.required_formats: '{1} Required format is : %format%|[1, Inf[Required formats are : %format%'
 common.update: Modify
 common.validate: Validate
 error.403.content: 'Your are not allowed to reach this content.'
@@ -154,6 +156,7 @@ happening.participate.detail: detail
 happening.participate.full: full
 happening.participate.noParticipantSelected: 'no participant selected'
 happening.participate.notEnoughtRemainingParticipations: '{0} no more available place|{1} one available place remaining|]1,Inf[ there are only %remaining% places available'
+happening.participate.participantMustHaveProductToParticipate: 'An option is required to participate in this event.'
 happening.participate.participantNotAvailable: 'At least one of the selected participants is not available'
 happening.participate.participantNotFound: 'participant not found'
 happening.participate.wrongInvitationCode: 'wrong invitation code'
@@ -209,7 +212,7 @@ navigation.category.catalog: Catalogue
 navigation.category.happening: 'Meeting administration'
 navigation.category.meeting: 'My meetings'
 navigation.category.member_space: 'Member area'
-navigation.category.package: 'Package of participation'
+navigation.category.package: 'Registration package'
 navigation.category.planning: 'Planning & Attendance'
 navigation.category.program: Program
 navigation.category.sheet: 'Presentation Sheet'
@@ -261,7 +264,7 @@ nomenclature.back_to_sheet: 'Back to sheet'
 nomenclature.select_all: 'Select all'
 nomenclature.select_none: none
 nomenclature.submit: Save
-notification.category.package.label: 'Package of participation'
+notification.category.package.label: 'Registration package'
 notification.category.sheet.label: 'Presentation sheet'
 notification.category.transaction.label: Invoicing
 notification.columns.category: Heading
@@ -272,7 +275,7 @@ notification.label.important: Important
 notification.label.required: Mandatory
 notification.link.label: See
 notification.list.title.label: Notifications
-notification.package.noOrder: 'You must chose a package of participation'
+notification.package.noOrder: 'You must chose a registration package'
 notification.sheet.completeTranslation: 'Complete your presentation sheet in %locale%'
 notification.transaction.paid: 'The payment of %amount% has been received'
 notification.transaction.pending: 'The payment of %amount% is pending'
@@ -359,18 +362,18 @@ package.summary.edit: 'Modify package'
 package.summary.empty: 'No product has been added'
 package.summary.option: Options
 package.summary.order-list: 'Order list'
-package.summary.pageTitle: 'Summary of your package of participation'
+package.summary.pageTitle: 'Summary of your registration package'
 package.summary.pay: 'Validate participation package'
 package.summary.promotion.button.label: Validate
 package.summary.promotion.label: 'Offers of discounts'
 package.summary.seeTermsOfSale: 'View general sales conditions'
 package.summary.title: Summary
-package.summary.total.title: 'Package of participation'
+package.summary.total.title: 'Registration package'
 package.summary.totalOfSummary: Total
 package.summary.totalPlusVat: 'Total to pay'
 package.summary.totalSubjetToVat: 'Total subjected to %vat%%'
 package.summary.totalVat: '+ %vat%% VAT'
-package.title: 'Package of participation'
+package.title: 'Registration package'
 package.vatMode.ati: 'incl. VAT'
 package.vatMode.et: 'excl. VAT'
 pro_forma.bankInfo.title: 'Bank details'

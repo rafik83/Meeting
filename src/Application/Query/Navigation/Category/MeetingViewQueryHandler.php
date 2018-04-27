@@ -1,9 +1,9 @@
 <?php
 
 /*
- * This file is part of the vimeet project.
+ * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2016 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -58,7 +58,7 @@ class MeetingViewQueryHandler
 
         $linksView = [];
 
-        if ($catalogOnlineDate === null) {
+        if (null === $catalogOnlineDate) {
             $linksView[] = new LinkView('navigation.links.incoming', null);
         } elseif ($catalogOnlineDate < $this->dateTime) {
             if (!$meetingViewQuery->sheet->isInCatalog()) {
@@ -69,7 +69,7 @@ class MeetingViewQueryHandler
                     'navigation.links.meetingRequest.proposal',
                     $this->navigationBuilder->getRoute('event_meeting_list_request', [
                         'sheet' => $meetingViewQuery->sheet->getId(),
-                        'state' => Meeting\Constant::FILTER_STATE_RECEIVE
+                        'state' => Meeting\Constant::FILTER_STATE_RECEIVE,
                     ]),
                     null,
                     null

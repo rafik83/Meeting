@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2015 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -21,8 +21,8 @@ use Symfony\Component\HttpFoundation\Response;
 class NotificationController extends Controller
 {
     /**
-     * @param EventDomain   $eventDomain
-     * @param Sheet         $sheet
+     * @param EventDomain $eventDomain
+     * @param Sheet       $sheet
      *
      * @return Response
      */

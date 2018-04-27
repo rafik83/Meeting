@@ -1,5 +1,13 @@
 <?php
 
+/*
+ * This file is part of the Proximum Vimeet project.
+ *
+ * Copyright (C) Proximum
+ *
+ * @author Elao <contact@elao.com>
+ */
+
 namespace Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Migrations;
 
 use Doctrine\DBAL\Migrations\AbstractMigration;
@@ -15,7 +23,7 @@ class Version20170103102252 extends AbstractMigration
      */
     public function up(Schema $schema)
     {
-        $this->abortIf($this->connection->getDatabasePlatform()->getName() != 'mysql', 'Migration can only be executed safely on \'mysql\'.');
+        $this->abortIf('mysql' != $this->connection->getDatabasePlatform()->getName(), 'Migration can only be executed safely on \'mysql\'.');
 
         $this->addSql('CREATE TABLE messaging_campaign_sheet (campaign_id INT NOT NULL, sheet_id INT NOT NULL, INDEX IDX_1C9B82FBF639F774 (campaign_id), INDEX IDX_1C9B82FB8B1206A5 (sheet_id), PRIMARY KEY(campaign_id, sheet_id)) DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE = InnoDB');
         $this->addSql('ALTER TABLE messaging_campaign_sheet ADD CONSTRAINT FK_1C9B82FBF639F774 FOREIGN KEY (campaign_id) REFERENCES messaging_campaign (id) ON DELETE CASCADE');
@@ -28,7 +36,7 @@ class Version20170103102252 extends AbstractMigration
      */
     public function down(Schema $schema)
     {
-        $this->abortIf($this->connection->getDatabasePlatform()->getName() != 'mysql', 'Migration can only be executed safely on \'mysql\'.');
+        $this->abortIf('mysql' != $this->connection->getDatabasePlatform()->getName(), 'Migration can only be executed safely on \'mysql\'.');
 
         $this->addSql('DROP TABLE messaging_campaign_sheet');
         $this->addSql('ALTER TABLE messaging_campaign DROP filters');

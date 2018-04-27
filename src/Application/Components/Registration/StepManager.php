@@ -1,9 +1,9 @@
 <?php
 
 /*
- * This file is part of the vimeet project.
+ * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2016 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -118,7 +118,7 @@ class StepManager
                 return $step;
             }
 
-            $step++;
+            ++$step;
         }
 
         return $registrationTemplate->getBlocksCount();
@@ -159,9 +159,9 @@ class StepManager
             'route'      => 'event_participant_step',
             'parameters' => [
                 'participant' => $participant->getId(),
-                'step'        => $nextStep !== null ?
+                'step'        => null !== $nextStep ?
                     $nextStep :
-                    $registrationTemplate->getBlocksCount()
+                    $registrationTemplate->getBlocksCount(),
             ],
         ];
     }

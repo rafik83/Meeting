@@ -36,8 +36,9 @@ class MappingGetter
      * @param Event  $event
      * @param string $eventExtraParameterType
      *
-     * @return array|null
      * @throws \InvalidArgumentException
+     *
+     * @return array|null
      */
     public function getMapping(Event $event, string $eventExtraParameterType): ?array
     {

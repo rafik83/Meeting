@@ -41,7 +41,7 @@ class SpotConfirmType extends AbstractType
                 [],
                 'forms',
                 $options['locale']
-            )
+            ),
         ]);
     }
 

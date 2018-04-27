@@ -1,9 +1,9 @@
 <?php
 
 /*
- * This file is part of the vimeet project.
+ * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2017 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -54,8 +54,9 @@ class MeetingSheetViewQueryHandler
     /**
      * @param MeetingSheetViewQuery $query
      *
-     * @return MeetingSheetListView
      * @throws SheetNotFoundException
+     *
+     * @return MeetingSheetListView
      */
     public function handle(MeetingSheetViewQuery $query)
     {

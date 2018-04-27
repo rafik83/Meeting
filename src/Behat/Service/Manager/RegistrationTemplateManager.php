@@ -52,8 +52,8 @@ class RegistrationTemplateManager
                                     'help'        => ['fr' => 'Ici le titre'],
                                     'length'      => 200,
                                     'required'    => true,
-                                    'tags'        => ["sheet_title", "sheet_data"],
-                                ]
+                                    'tags'        => ['sheet_title', 'sheet_data'],
+                                ],
                             ],
                         ],
                     ],

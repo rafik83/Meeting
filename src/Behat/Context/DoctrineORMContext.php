@@ -20,7 +20,7 @@ use Symfony\Component\HttpKernel\KernelInterface;
 class DoctrineORMContext implements Context, KernelAwareContext
 {
     const NotMappedTables = [
-        'jms_job_related_entities'
+        'jms_job_related_entities',
     ];
 
     /** @var KernelInterface */
@@ -41,7 +41,7 @@ class DoctrineORMContext implements Context, KernelAwareContext
      */
     public static function prepare(BeforeSuiteScope $scope)
     {
-        exec("bin/console doctrine:schema:update --force --env=test");
+        exec('bin/console doctrine:schema:update --force --env=test');
     }
 
     /**

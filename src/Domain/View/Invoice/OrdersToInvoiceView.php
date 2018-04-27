@@ -43,13 +43,13 @@ class OrdersToInvoiceView
 
     /**
      * @param array  $orders
-     * @param string $data InvoiceDataView serialized in json
+     * @param string $data          InvoiceDataView serialized in json
      * @param bool   $vatApplicable
      * @param string $vatMode
      * @param float  $vatRate
-     * @param int    $total amount in cents
-     * @param int    $vatAmount amount in cents
-     * @param int    $totalWithVat amount in cents
+     * @param int    $total         amount in cents
+     * @param int    $vatAmount     amount in cents
+     * @param int    $totalWithVat  amount in cents
      * @param string $currency
      */
     public function __construct(

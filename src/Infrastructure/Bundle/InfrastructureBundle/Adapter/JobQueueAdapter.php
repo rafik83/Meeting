@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2017 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -20,7 +20,6 @@ use Proximum\Vimeet\Domain\Model\PlannerJob;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\Template\RegistrationTemplate;
 use Proximum\Vimeet\Domain\Model\Template\SheetTemplate;
-use Proximum\Vimeet\Domain\Model\Type;
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\Aggregate\FullUnavailability\UsersFullUnavailabilityAggregateCommand;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\Aggregate\FullUnavailability\UsersFullUnavailabilityByEventAggregateCommand;
@@ -39,11 +38,11 @@ use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\Planner\E
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\Planner\ImportPlannerCommand;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\Planning\GeneratePlanningCommand;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\SendEmailingCommand;
-use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\Sheet\PrintPdfCommand;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\Sheet\Index\IndexInCatalogSheetsByEventCommand;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\Sheet\Index\IndexSheetsByRegistrationTemplateCommand;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\Sheet\Index\IndexSheetsBySheetTemplateCommand;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\Sheet\Index\IndexSheetsByTypesCommand;
+use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\Sheet\PrintPdfCommand;
 
 class JobQueueAdapter extends AbstractJobQueueAdapter implements JobQueueInterface
 {
@@ -90,7 +89,7 @@ class JobQueueAdapter extends AbstractJobQueueAdapter implements JobQueueInterfa
             sprintf('--eventId=%s', $event->getId()),
             sprintf('--emailToNotify=%s', $emailToNotify),
             sprintf('--locale=%s', $locale),
-            sprintf('--orderBy=%s', $orderBy)
+            sprintf('--orderBy=%s', $orderBy),
         ]);
 
         $this->setJob($job);
@@ -145,7 +144,7 @@ class JobQueueAdapter extends AbstractJobQueueAdapter implements JobQueueInterfa
                 true === $isModeAuto
                     ? ExportPlannerCommand::MODE_AUTO
                     : ExportPlannerCommand::MODE_MANUAL,
-                null !== $plannerJob ? $plannerJob->getId() : null
+                null !== $plannerJob ? $plannerJob->getId() : null,
             ]
         );
 
@@ -167,7 +166,7 @@ class JobQueueAdapter extends AbstractJobQueueAdapter implements JobQueueInterfa
             $event->getId(),
             $admin->getEmail(),
             $locale,
-            $plannerJob instanceof PlannerJob ? $plannerJob->getId() : null
+            $plannerJob instanceof PlannerJob ? $plannerJob->getId() : null,
         ]);
 
         $this->setJob($job);
@@ -231,7 +230,7 @@ class JobQueueAdapter extends AbstractJobQueueAdapter implements JobQueueInterfa
     {
         $job = new Job(UsersFullUnavailabilityByEventAggregateCommand::NAME, [
             $event->getId(),
-            $onlyInCatalog
+            $onlyInCatalog,
         ]);
         $this->setJob($job);
     }
@@ -246,7 +245,7 @@ class JobQueueAdapter extends AbstractJobQueueAdapter implements JobQueueInterfa
                 $event->getId(),
                 implode(',', array_map(function (User $user) {
                     return $user->getId();
-                }, $users))
+                }, $users)),
             ]);
             $this->setJob($job);
         }
@@ -267,7 +266,7 @@ class JobQueueAdapter extends AbstractJobQueueAdapter implements JobQueueInterfa
     public function aggregateAvailableSlot(Event $event)
     {
         $job = new Job(AvailableSlotCalculatorCommand::NAME, [
-            sprintf('--event=%s', $event->getId())
+            sprintf('--event=%s', $event->getId()),
         ]);
         $this->setJob($job);
     }
@@ -295,7 +294,7 @@ class JobQueueAdapter extends AbstractJobQueueAdapter implements JobQueueInterfa
     public function aggregatePhoneValidationStatus(Event $event)
     {
         $job = new Job(PhoneValidationStatusCalculatorCommand::NAME, [
-            sprintf('--event=%s', $event->getId())
+            sprintf('--event=%s', $event->getId()),
         ]);
 
         $this->setJob($job);
@@ -368,7 +367,7 @@ class JobQueueAdapter extends AbstractJobQueueAdapter implements JobQueueInterfa
      */
     public function scheduleVersionGeneration(Event $event, \DateTime $dateTime, Job $job = null)
     {
-        if ($job !== null) {
+        if (null !== $job) {
             $job->setExecuteAfter($dateTime);
 
             $this->updateJob($job);

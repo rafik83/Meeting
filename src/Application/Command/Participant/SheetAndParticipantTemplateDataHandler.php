@@ -22,8 +22,9 @@ class SheetAndParticipantTemplateDataHandler
      * @param TemplateData $registrationTemplateData
      * @param TemplateData $sheetTemplateData
      *
-     * @return SheetAndParticipantTemplateDataView
      * @throws \LogicException
+     *
+     * @return SheetAndParticipantTemplateDataView
      */
     public function handle(
         array &$dataIndexedByTag,
@@ -71,8 +72,9 @@ class SheetAndParticipantTemplateDataHandler
      * @param array        $dataIndexedByTag
      * @param TemplateData $registrationTemplateData
      *
-     * @return SheetAndParticipantTemplateDataView
      * @throws \LogicException
+     *
+     * @return SheetAndParticipantTemplateDataView
      */
     private function getSheetAndParticipantTemplateDataView(
         array &$dataIndexedByTag,

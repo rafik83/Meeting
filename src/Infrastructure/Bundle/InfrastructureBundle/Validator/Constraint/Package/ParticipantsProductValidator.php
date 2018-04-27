@@ -66,7 +66,7 @@ class ParticipantsProductValidator extends ConstraintValidator
                 $quantityIndexedByProductId[$product->getId()] = 0;
             }
 
-            $quantityIndexedByProductId[$product->getId()]++;
+            ++$quantityIndexedByProductId[$product->getId()];
 
             if ($product->getQuantityMax() < $quantityIndexedByProductId[$product->getId()]) {
                 $this

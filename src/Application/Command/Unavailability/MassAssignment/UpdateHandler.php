@@ -1,9 +1,9 @@
 <?php
 
 /*
- * This file is part of the vimeet project.
+ * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2017 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -64,7 +64,7 @@ class UpdateHandler
         );
 
         // if set to disable, only update enabled state
-        if ($update->enabled === false) {
+        if (false === $update->enabled) {
             $update->massAssignment->disable();
             $this->massAssignmentRepository->set($update->massAssignment);
 

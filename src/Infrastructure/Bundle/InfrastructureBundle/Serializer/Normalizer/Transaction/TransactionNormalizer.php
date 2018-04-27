@@ -21,7 +21,7 @@ class TransactionNormalizer extends AbstractNormalizer implements NormalizerInte
 {
     const TRANSLATION_PREFIX = 'admin.export.transaction.column.';
     const TRANSLATION_DOMAIN = 'messages';
-    
+
     /** @var array */
     private $timeFormatter = [];
 
@@ -37,23 +37,23 @@ class TransactionNormalizer extends AbstractNormalizer implements NormalizerInte
     {
         parent::__construct($translator);
     }
-    
+
     /**
      * {@inheritdoc}
      */
-    public function normalize($object, $format = null, array $context = array())
+    public function normalize($object, $format = null, array $context = [])
     {
         $this->toCharset = $context['charset'] ?? $this->toCharset;
 
         $data = [];
-        
+
         foreach ($object->transactionsView as $view) {
             $createdAt = $this->formatDate(
                 $view->transactionDate,
                 $view->event,
                 $object->adminLocale
             );
-            
+
             $data[] =  [
                 $this->convert($this->translate('sheet.id', $object->adminLocale)) => $this->convert($view->sheetId),
                 $this->convert($this->translate('event.id', $object->adminLocale)) => $this->convert($view->eventId),
@@ -81,7 +81,7 @@ class TransactionNormalizer extends AbstractNormalizer implements NormalizerInte
             $this->toCharset
         );
     }
-    
+
     /**
      * {@inheritdoc}
      */
@@ -89,7 +89,7 @@ class TransactionNormalizer extends AbstractNormalizer implements NormalizerInte
     {
         return $data instanceof TransactionListViewQuery;
     }
-    
+
     /**
      * @param string $key
      * @param string $locale
@@ -98,9 +98,9 @@ class TransactionNormalizer extends AbstractNormalizer implements NormalizerInte
      */
     private function translate($key, $locale)
     {
-        return $this->translator->trans(self::TRANSLATION_PREFIX.$key, [], self::TRANSLATION_DOMAIN, $locale);
+        return $this->translator->trans(self::TRANSLATION_PREFIX . $key, [], self::TRANSLATION_DOMAIN, $locale);
     }
-    
+
     /**
      * @param \DateTimeInterface $dateTime
      * @param Event              $event
@@ -118,7 +118,7 @@ class TransactionNormalizer extends AbstractNormalizer implements NormalizerInte
                 $event->getTimeZone()
             );
         }
-        
+
         return $this->timeFormatter[$event->getId()]->format($dateTime);
     }
 }

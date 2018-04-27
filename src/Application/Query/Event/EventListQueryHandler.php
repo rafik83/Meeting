@@ -53,7 +53,7 @@ class EventListQueryHandler
         $eventListView = [];
         $pastEventDate = clone $this->datetime->modify('-1 month');
 
-        if ($query->state === EventListQuery::STATE_ARCHIVED) {
+        if (EventListQuery::STATE_ARCHIVED === $query->state) {
             $events = $this->eventRepository->findArchivedByAdmin($query->admin);
         } else {
             $events = $this->eventRepository->getEventsWithDaysByAdmin($query->admin);
@@ -72,19 +72,19 @@ class EventListQueryHandler
                 }, $event->getDays())
             );
 
-            if ($query->state !== EventListQuery::STATE_ARCHIVED) {
+            if (EventListQuery::STATE_ARCHIVED !== $query->state) {
                 try {
                     $lastDay = $event->getLastDay();
 
-                    if ($lastDay->getDay() < $pastEventDate && $query->state === EventListQuery::STATE_CURRENT) {
+                    if ($lastDay->getDay() < $pastEventDate && EventListQuery::STATE_CURRENT === $query->state) {
                         continue;
                     }
 
-                    if ($lastDay->getDay() > $pastEventDate && $query->state === EventListQuery::STATE_PAST) {
+                    if ($lastDay->getDay() > $pastEventDate && EventListQuery::STATE_PAST === $query->state) {
                         continue;
                     }
                 } catch (DayNotDefinedException $exception) {
-                    if ($query->state === EventListQuery::STATE_PAST) {
+                    if (EventListQuery::STATE_PAST === $query->state) {
                         continue;
                     }
                 }

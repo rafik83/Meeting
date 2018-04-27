@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2015 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -150,7 +150,7 @@ class HappeningRepository implements HappeningRepositoryInterface
             ->setParameter('startDay', sprintf('%s 00:00:00', $date->format('Y-m-d')))
             ->setParameter('endDay', sprintf('%s 00:00:00', $date->modify('+1 day')->format('Y-m-d')));
 
-        if ($category !== null) {
+        if (null !== $category) {
             $queryBuilder
                 ->andWhere('happening.category = :category')
                 ->setParameter('category', $category);

@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2016 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -77,9 +77,9 @@ class Funnel
     /**
      * @param $index
      *
-     * @return null|Step
-     *
      * @throws \Exception
+     *
+     * @return null|Step
      */
     public function getStep($index)
     {
@@ -144,7 +144,7 @@ class Funnel
     public function getCurrentUncompletedStep()
     {
         $steps = array_filter($this->steps, function (Step $step) {
-            return $step->completed === false;
+            return false === $step->completed;
         });
 
         return reset($steps);

@@ -66,9 +66,9 @@ class ExportAction
      * @param Request $request
      * @param Event   $event
      *
-     * @return RedirectResponse|CsvFileResponse
-     *
      * @throws AccessDeniedException
+     *
+     * @return RedirectResponse|CsvFileResponse
      */
     public function __invoke(Request $request, Event $event)
     {
@@ -96,7 +96,7 @@ class ExportAction
 
         return new CsvFileResponse(
             $exportedContent,
-            "export_happening_participants_" . date("Y_m_d_His") . ".csv"
+            'export_happening_participants_' . date('Y_m_d_His') . '.csv'
         );
     }
 }

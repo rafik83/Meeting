@@ -36,8 +36,8 @@ class EventParticipationPreFiller
 
     /**
      * @param TemplateData $templateData
-     * @param Participant $participant
-     * @param string $locale
+     * @param Participant  $participant
+     * @param string       $locale
      *
      * @return TemplateData
      */
@@ -66,8 +66,8 @@ class EventParticipationPreFiller
 
     /**
      * @param ContentObjectInterface|TemplateObject $templateObject
-     * @param string $locale
-     * @param array $previousTaggedData
+     * @param string                                $locale
+     * @param array                                 $previousTaggedData
      */
     private function preFillByTags(
         ContentObjectInterface $templateObject,
@@ -77,7 +77,7 @@ class EventParticipationPreFiller
         $tags = $templateObject->getTags();
 
         foreach ($tags as $tag) {
-            if ($tag === Tag::SHEET_DATA || $tag === Tag::PARTICIPANT_DATA) {
+            if (Tag::SHEET_DATA === $tag || Tag::PARTICIPANT_DATA === $tag) {
                 continue;
             }
 
@@ -90,7 +90,7 @@ class EventParticipationPreFiller
 
     /**
      * @param TemplateObject $previousTemplateObject
-     * @param TemplateData $templateData
+     * @param TemplateData   $templateData
      */
     private function preFillByKey(TemplateObject $previousTemplateObject, TemplateData &$templateData)
     {

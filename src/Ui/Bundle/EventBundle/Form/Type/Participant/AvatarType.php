@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2016 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -38,9 +38,8 @@ class AvatarType extends AbstractType
             'object'    => $avatar,
             'attr'      => [
                 'image-preview' => $avatar->hasTag(Tag::PARTICIPANT_AVATAR),
-            ]
+            ],
         ]);
-
     }
 
     /**

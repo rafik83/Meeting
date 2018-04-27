@@ -22,7 +22,7 @@ class SpotFillingRateSlotViewDenormalizer implements DenormalizerAwareInterface,
     /**
      * {@inheritdoc}
      */
-    public function denormalize($data, $class, $format = null, array $context = array())
+    public function denormalize($data, $class, $format = null, array $context = [])
     {
         /** @var \DateTime $begin */
         $begin = $this->denormalizer->denormalize($data['begin'], \DateTime::class, $format);
@@ -38,8 +38,8 @@ class SpotFillingRateSlotViewDenormalizer implements DenormalizerAwareInterface,
      */
     public function supportsDenormalization($data, $type, $format = null)
     {
-        return $type === SpotFillingRateSlotView::class
-            && $format === 'json'
+        return SpotFillingRateSlotView::class === $type
+            && 'json' === $format
             && isset($data['begin'])
             && isset($data['end'])
             && isset($data['fillingRate'])

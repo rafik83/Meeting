@@ -87,8 +87,8 @@ class SSOAuthenticator extends AbstractGuardAuthenticator
     public function supports(Request $request)
     {
         return Route::EVENT_LOGIN_CHECK === $request->attributes->get('_route')
-            && $request->getMethod() === 'GET'
-            && (bool) $request->query->get('comexposium_sso') === true
+            && 'GET' === $request->getMethod()
+            && true === (bool) $request->query->get('comexposium_sso')
         ;
     }
 
@@ -188,6 +188,7 @@ class SSOAuthenticator extends AbstractGuardAuthenticator
 
     /**
      * {@inheritdoc}
+     *
      * @throws \InvalidArgumentException
      * @throws BadRequestHttpException
      */

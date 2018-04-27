@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2016 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -176,7 +176,7 @@ abstract class AbstractTemplate
      */
     public function addLocale($locale)
     {
-        if (!$this->hasLocale($locale) && $locale !== null) {
+        if (!$this->hasLocale($locale) && null !== $locale) {
             $this->locales[] = $locale;
             $this->fixValue([$locale]);
         }
@@ -285,11 +285,11 @@ abstract class AbstractTemplate
             return self::createComponents($config, $locale);
         }
 
-        if ($config['component'] === 'block') {
+        if ('block' === $config['component']) {
             return self::createBlock($config, $locale);
         }
 
-        if ($config['component'] === 'object') {
+        if ('object' === $config['component']) {
             return self::createObject($config, $locale, $keys);
         }
 
@@ -337,7 +337,7 @@ abstract class AbstractTemplate
     protected static function createObject($config, $locale, $keys)
     {
         foreach ($config['config'] as $key => $value) {
-            if (in_array($key, $keys) || $config['type'] === 'text' && $key === 'content') {
+            if (in_array($key, $keys) || 'text' === $config['type'] && 'content' === $key) {
                 $config['config'][$key] = array_merge([$locale => null], $config['config'][$key]);
             }
         }

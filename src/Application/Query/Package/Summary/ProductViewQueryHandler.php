@@ -18,8 +18,9 @@ class ProductViewQueryHandler
     /**
      * @param ProductViewQuery $productViewQuery
      *
-     * @return ProductView
      * @throws \Exception
+     *
+     * @return ProductView
      */
     public function handle(ProductViewQuery $productViewQuery)
     {

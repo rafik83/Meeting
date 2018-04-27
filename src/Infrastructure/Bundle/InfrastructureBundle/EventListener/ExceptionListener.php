@@ -1,8 +1,9 @@
 <?php
+
 /*
- * This file is part of the vimeet project.
+ * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) vimeet
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -57,7 +58,7 @@ class ExceptionListener
         $request   = $responseForExceptionEvent->getRequest();
         $exception = $responseForExceptionEvent->getException();
 
-        /**
+        /*
          * Symfony throw a redirect when User is not logged
          * and there is AuthenticationException or AccessDeniedException
          * See Symfony\Component\Security\Http\Firewall\ExceptionListener
@@ -68,7 +69,7 @@ class ExceptionListener
             return;
         }
 
-        /**
+        /*
          * Try to get the event matching the host.
          */
         try {
@@ -112,7 +113,7 @@ class ExceptionListener
 
     private function buildResponseFromHttpStatusCode(int $statusCode, Event $event = null, Request $request): Response
     {
-        if (null !== $event && $statusCode !== Response::HTTP_INTERNAL_SERVER_ERROR) {
+        if (null !== $event && Response::HTTP_INTERNAL_SERVER_ERROR !== $statusCode) {
             $request->setLocale($event->getAvailableLocale($request->getLocale()));
 
             return new Response(

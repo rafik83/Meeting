@@ -23,8 +23,8 @@ use Proximum\Vimeet\Application\View\Catalog\FilteredFieldsView;
 use Proximum\Vimeet\Application\View\Catalog\PositionView;
 use Proximum\Vimeet\Domain\Catalog\Catalog;
 use Proximum\Vimeet\Domain\Catalog\SearchFields;
-use Proximum\Vimeet\Domain\Model\Catalog\Internal\CatalogConstant;
 use Proximum\Vimeet\Domain\Exception\Sheet\AccessDeniedException;
+use Proximum\Vimeet\Domain\Model\Catalog\Internal\CatalogConstant;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\MeetingSlot;
 use Proximum\Vimeet\Domain\Model\PaginatedResult;
@@ -84,9 +84,9 @@ class CatalogController extends Controller
      * @param Sheet       $sheet
      * @param UserDomain  $userDomain
      *
-     * @return Response
-     *
      * @throws NotFoundHttpException
+     *
+     * @return Response
      */
     public function indexAction(Request $request, EventDomain $eventDomain, Sheet $sheet, UserDomain $userDomain)
     {
@@ -340,7 +340,6 @@ class CatalogController extends Controller
      * @param EventDomain   $eventDomain
      * @param Sheet         $sheet
      * @param int           $sheetToDisplay id of Sheet
-     *
      * @param UserInterface $user
      *
      * @return Response
@@ -387,7 +386,7 @@ class CatalogController extends Controller
         }
 
         try {
-            list ($nomenclatures, $participants, $taggedData) = $this
+            list($nomenclatures, $participants, $taggedData) = $this
                 ->get('template.sheet.sheet_info_getter')
                 ->sheetInfos(
                     $eventDomain->getEvent(),
@@ -438,10 +437,10 @@ class CatalogController extends Controller
         $isPhoneValidationRequired = $this->get('domain.user.phone.validation_required_checker')
             ->handle($sheet, $user, $locale);
 
-        if ($isPhoneValidationRequired === true) {
+        if (true === $isPhoneValidationRequired) {
             $participant = $sheet->getUserParticipant($user);
 
-            if ($participant !== null) {
+            if (null !== $participant) {
                 $phoneValidationLink = $this->generateUrl('event_user_phone_redirect_to_validation', [
                     'sheet'       => $sheet->getId(),
                     'participant' => $participant->getId(),
@@ -506,7 +505,6 @@ class CatalogController extends Controller
      * @param MeetingSlot|null           $specificSlot
      *
      * @return FormInterface
-     *
      */
     private function getSearchForm(
         array $filters,
@@ -529,7 +527,7 @@ class CatalogController extends Controller
             'event'                     => $event,
             'locale'                    => $locale,
             'filterByAvailableSlotIds'  => $filterAvailableSlotIds,
-            'filterBySpecificSlot'      => $specificSlot !== null,
+            'filterBySpecificSlot'      => null !== $specificSlot,
             'specificSlot'              => $specificSlot,
         ]);
     }

@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2016 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -59,7 +59,7 @@ class CardView
 
     /**
      * @param int    $id
-     * @param bool    $editable
+     * @param bool   $editable
      * @param string $firstname
      * @param string $lastname
      * @param string $position

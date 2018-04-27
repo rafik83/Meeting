@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2015 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -18,12 +18,12 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormView;
 use Symfony\Component\Intl\Intl;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use Symfony\Component\Form\Extension\Core\Type\TextType;
 
 abstract class HappeningType extends AbstractType
 {
@@ -45,7 +45,7 @@ abstract class HappeningType extends AbstractType
                 'display_date'  => false,
                 'view_timezone' => $event->getTimeZone(),
                 'attr'  => [
-                    'class' => 'datetimepicker-range-element'
+                    'class' => 'datetimepicker-range-element',
                 ],
             ])
             ->add('end', DateTimePickerType::class, [
@@ -53,7 +53,7 @@ abstract class HappeningType extends AbstractType
                 'display_date'  => false,
                 'view_timezone' => $event->getTimeZone(),
                 'attr'  => [
-                    'class' => 'datetimepicker-range-element'
+                    'class' => 'datetimepicker-range-element',
                 ],
             ])
             ->add('questionAllowed', ChoiceType::class, [
@@ -69,7 +69,7 @@ abstract class HappeningType extends AbstractType
                 'attr'     => [
                     'min' => 0,
                 ],
-                'help' => 'form.happening_create.children.limitParticipant.help'
+                'help' => 'form.happening_create.children.limitParticipant.help',
             ])
             ->add('types', TypeChoiceType::class, [
                 'event'    => $options['event'],

@@ -135,7 +135,7 @@ class CatalogExternalController extends Controller
             'typeViews'         => $typeViews,
             'categoryViews'     => $categoryViews,
             'message'           => $message,
-            'registrationUrl'   => $registrationUrl
+            'registrationUrl'   => $registrationUrl,
         ]);
     }
 

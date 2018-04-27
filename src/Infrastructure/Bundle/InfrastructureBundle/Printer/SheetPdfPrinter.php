@@ -10,9 +10,9 @@
 
 namespace Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Printer;
 
+use Proximum\Vimeet\Domain\Model\File;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\User;
-use Proximum\Vimeet\Domain\Model\File;
 use Symfony\Component\Process\Process;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Routing\RouterInterface;
@@ -62,10 +62,10 @@ class SheetPdfPrinter
     }
 
     /**
-     * @param User   $user   who want to print the pdf
-     * @param Sheet  $sheet  targetted sheet
+     * @param User   $user           who want to print the pdf
+     * @param Sheet  $sheet          targetted sheet
      * @param Sheet  $sheetToDisplay
-     * @param string $locale locale of the sheet
+     * @param string $locale         locale of the sheet
      *
      * @return string
      */

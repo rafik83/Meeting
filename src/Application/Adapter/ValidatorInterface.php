@@ -1,8 +1,9 @@
 <?php
+
 /*
- * This file is part of the vimeet project.
+ * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2017 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -14,7 +15,7 @@ interface ValidatorInterface
     const VALIDATOR_EMAIL_TYPE = 'validator_email_type';
 
     /**
-     * @param mixed $data
+     * @param mixed  $data
      * @param string $constraintType
      *
      * @return mixed

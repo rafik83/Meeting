@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2017 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -46,10 +46,10 @@ class UserDetailsViewQueryHandler
     /**
      * @param UserDetailsViewQuery $query
      *
-     * @return UserDetailsView
-     *
      * @throws SheetNotFoundException
      * @throws UserEventMissingException
+     *
+     * @return UserDetailsView
      */
     public function handle(UserDetailsViewQuery $query)
     {
@@ -72,7 +72,6 @@ class UserDetailsViewQueryHandler
         foreach ($sheets as $sheet) {
             $userSheetListView[] = new UserSheetView($sheet);
         }
-
 
         return new UserDetailsView($query->event, $query->user, $userSheetListView);
     }

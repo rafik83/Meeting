@@ -1,9 +1,9 @@
 <?php
 
 /*
- * This file is part of the vimeet project.
+ * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2017 vimeet
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -32,8 +32,8 @@ class PreFillUserDataView
 
     /**
      * @param TemplateData $templateData
-     * @param Event|null $event
-     * @param bool $participationDataPreFilled
+     * @param Event|null   $event
+     * @param bool         $participationDataPreFilled
      */
     public function __construct(
         TemplateData $templateData,

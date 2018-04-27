@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2016 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -38,6 +38,7 @@ class FunnelFactory
 
     /**
      * Create a funnel with its steps
+     *
      * @param Sheet  $sheet
      * @param string $locale
      *
@@ -93,6 +94,7 @@ class FunnelFactory
 
     /**
      * Get the next available index
+     *
      * @param Funnel $funnel
      *
      * @return int

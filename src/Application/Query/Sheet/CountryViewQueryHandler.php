@@ -51,8 +51,8 @@ class CountryViewQueryHandler
         }
 
         usort($countryViews, function (CountryView $one, CountryView $other) {
-                return strcasecmp($one->name, $other->name);
-            }
+            return strcasecmp($one->name, $other->name);
+        }
         );
 
         return $countryViews;

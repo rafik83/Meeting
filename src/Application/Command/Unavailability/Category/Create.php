@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2016 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -47,6 +47,5 @@ class Create
         $this->event      = $event;
         $this->leftColor  = $event->getConfiguration()->getLeftColor();
         $this->rightColor = $event->getConfiguration()->getRightColor();
-
     }
 }

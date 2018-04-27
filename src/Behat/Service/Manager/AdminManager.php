@@ -34,7 +34,7 @@ class AdminManager
      */
     public function create(string $email = null, string $role)
     {
-        if ($email === null) {
+        if (null === $email) {
             $email = sprintf('%s@example.net', uniqid());
         }
 

@@ -1,9 +1,9 @@
 <?php
 
 /*
- * This file is part of the vimeet project.
+ * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) vimeet
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -55,8 +55,9 @@ class Duplicator
     /**
      * @param WhoInterface $who
      *
-     * @return Type[]|Category[]
      * @throws \InvalidArgumentException
+     *
+     * @return Type[]|Category[]
      */
     private function getDataStorageByWho(WhoInterface $who): array
     {

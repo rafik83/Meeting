@@ -1,9 +1,9 @@
 <?php
 
 /*
- * This file is part of the vimeet project.
+ * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2016 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -25,8 +25,8 @@ class TypeChoiceType extends AbstractType
         $resolver->setDefaults([
             'class' => Type::class,
             'attr'  => [
-                'size' => '15'
-            ]
+                'size' => '15',
+            ],
         ]);
     }
 

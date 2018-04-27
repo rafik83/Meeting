@@ -1,0 +1,10 @@
+{% set uploadObject = child.vars.value %}
+{% if uploadObject.isUploadAndHasPath is defined and uploadObject.isUploadAndHasPath %}
+    <a href="{{ asset(uploadObject.data.path) }}" download>
+        {% if uploadObject.isImageFormat %}
+            <img class="center-block" src="{{ asset(uploadObject.data.path)|imagine_filter('upload_object') }}"/>
+        {% endif %}
+        <i class="glyphicon glyphicon-download"></i>
+        {{ 'common.download'|trans }}
+    </a>
+{% endif %}

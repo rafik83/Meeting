@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2015 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -24,7 +24,7 @@ class ExportType extends AbstractType
     {
         $builder
             ->add('charset', CharsetChoiceType::class, [
-                'label' => 'form.nomenclature_export_type.children.charset.label'
+                'label' => 'form.nomenclature_export_type.children.charset.label',
             ])
         ;
     }

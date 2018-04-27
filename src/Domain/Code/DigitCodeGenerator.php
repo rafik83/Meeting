@@ -25,7 +25,7 @@ class DigitCodeGenerator
 
         $code = '';
 
-        for ($i = 0; $i < $length; $i++) {
+        for ($i = 0; $i < $length; ++$i) {
             $code .= (string) mt_rand(0, 9);
         }
 
@@ -42,7 +42,7 @@ class DigitCodeGenerator
         $exclude = [];
         $codeLength = strlen($code);
 
-        for ($digit = 0; $digit <= 9; $digit++) {
+        for ($digit = 0; $digit <= 9; ++$digit) {
             $exclude[] = str_repeat((string) $digit, $codeLength);
         }
 

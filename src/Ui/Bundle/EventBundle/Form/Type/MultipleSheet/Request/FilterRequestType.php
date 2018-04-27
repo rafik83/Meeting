@@ -1,9 +1,9 @@
 <?php
 
 /*
- * This file is part of the vimeet project.
+ * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) vimeet
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -68,7 +68,7 @@ class FilterRequestType extends AbstractType
             ->add('state', ChoiceType::class, [
                 'required' => false,
                 'choices' => array_merge([
-                    Request::STATE_PLANNED
+                    Request::STATE_PLANNED,
                 ], Request::getAllStates()),
                 'choice_label' => function ($value) {
                     return 'form.multiple_sheet_request_filter_request_type.children.state.filter.' . $value;

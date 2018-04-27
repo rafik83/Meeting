@@ -25,7 +25,7 @@ class SpotImportPreviewQueryHandler
     {
         $this->spotImporter = $spotImporter;
     }
-    
+
     /**
      * @param SpotImportPreviewQuery $spotImportPreviewQuery
      *

@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2015 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -109,7 +109,7 @@ interface SpotRepositoryInterface
 
     /**
      * @param Meeting $meeting
-     * @param bool $visio
+     * @param bool    $visio
      *
      * @return Spot[]
      */
@@ -124,19 +124,19 @@ interface SpotRepositoryInterface
 
     /**
      * @param Meeting $meeting
-     * @param bool $visio
+     * @param bool    $visio
      *
      * @return bool
      */
     public function hasSpotsForMeeting(Meeting $meeting, $visio = false);
 
     /**
-     * @param MeetingSlot $slot
-     * @param int $participantsQuantity
+     * @param MeetingSlot  $slot
+     * @param int          $participantsQuantity
      * @param Meeting|null $exceptMeeting
-     * @param Sheet|null $fromSheet
-     * @param Sheet|null $toSheet
-     * @param bool $visio
+     * @param Sheet|null   $fromSheet
+     * @param Sheet|null   $toSheet
+     * @param bool         $visio
      *
      * @return \Proximum\Vimeet\Domain\Model\Spot[]
      */
@@ -150,12 +150,12 @@ interface SpotRepositoryInterface
     );
 
     /**
-     * @param MeetingSlot $slot
-     * @param int $participantsQuantity
+     * @param MeetingSlot  $slot
+     * @param int          $participantsQuantity
      * @param Meeting|null $exceptMeeting
-     * @param Sheet|null $fromSheet
-     * @param Sheet|null $toSheet
-     * @param bool $visio
+     * @param Sheet|null   $fromSheet
+     * @param Sheet|null   $toSheet
+     * @param bool         $visio
      *
      * @return bool
      */

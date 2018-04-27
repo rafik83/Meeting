@@ -10,13 +10,13 @@
 
 namespace Proximum\Vimeet\Application\Command\Event\Find;
 
-use Proximum\Vimeet\Application\Command\Order\Find as OrderFind;
-use Proximum\Vimeet\Application\Command\Order\FindHandler as OrderFindHandler;
 use Proximum\Vimeet\Application\Command\Invoice\Find as InvoiceFind;
 use Proximum\Vimeet\Application\Command\Invoice\FindHandler as InvoiceFindHandler;
-use Proximum\Vimeet\Application\Exception\Event\InvalidFindException;
 use Proximum\Vimeet\Application\Command\Invoice\FindResult as InvoiceFindResult;
+use Proximum\Vimeet\Application\Command\Order\Find as OrderFind;
+use Proximum\Vimeet\Application\Command\Order\FindHandler as OrderFindHandler;
 use Proximum\Vimeet\Application\Command\Order\FindResult as OrderFindResult;
+use Proximum\Vimeet\Application\Exception\Event\InvalidFindException;
 use Proximum\Vimeet\Application\Exception\Invoice\InvalidNumeroInvoiceException;
 use Proximum\Vimeet\Application\Exception\Invoice\InvoiceNotFoundException;
 use Proximum\Vimeet\Application\Exception\Invoice\IsNotAllowedToFindInvoiceException;
@@ -45,17 +45,15 @@ class FindHandler
     /**
      * @param Find $find
      *
-     * @return InvoiceFindResult|OrderFindResult
-     *
      * @throws InvalidFindException
-     *
      * @throws InvalidNumeroInvoiceException
      * @throws InvoiceNotFoundException
      * @throws IsNotAllowedToFindInvoiceException
-     *
      * @throws InvalidNumeroOrderException
      * @throws IsNotAllowedToFindOrderException
      * @throws OrderNotFoundException
+     *
+     * @return InvoiceFindResult|OrderFindResult
      */
     public function handle(Find $find)
     {

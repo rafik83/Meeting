@@ -1,9 +1,9 @@
 <?php
 
 /*
- * This file is part of the vimeet project.
+ * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2017 vimeet
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -37,10 +37,10 @@ class PreFillUserData
     public $locale;
 
     /**
-     * @param User $user
-     * @param Event $event
+     * @param User         $user
+     * @param Event        $event
      * @param TemplateData $templateData
-     * @param string $locale
+     * @param string       $locale
      */
     public function __construct(User $user, Event $event, TemplateData $templateData, string $locale)
     {

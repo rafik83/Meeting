@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2016 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -146,7 +146,6 @@ class MassAssignmentRepository implements MassAssignmentRepositoryInterface
             ->join('assignment.mass', 'mass', 'WITH', 'mass.event = :event')
             ->setParameter('event', $participant->getSheet()->getEvent())
             ->setParameter('user', $participant->getUser());
-        ;
 
         return $queryBuilder->getQuery()->getResult();
     }
@@ -211,7 +210,6 @@ class MassAssignmentRepository implements MassAssignmentRepositoryInterface
             ->join('assignment.mass', 'mass', 'WITH', 'mass.event = :event')
             ->setParameter('event', $event)
             ->setParameter('users', $users);
-        ;
 
         return $queryBuilder->getQuery()->getResult();
     }

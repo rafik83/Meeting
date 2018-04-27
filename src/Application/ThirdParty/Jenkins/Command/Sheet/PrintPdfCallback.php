@@ -67,9 +67,9 @@ class PrintPdfCallback extends AbstractSetStatus
 
         $this->input       = $data['build']['parameters']['INPUT'];
         $this->output      = $data['build']['parameters']['OUTPUT'];
-        $this->eventId     = (int)$data['build']['parameters']['EVENTID'];
+        $this->eventId     = (int) $data['build']['parameters']['EVENTID'];
         $this->email       = $data['build']['parameters']['EMAIL'];
         $this->locale      = $data['build']['parameters']['LOCALE'];
-        $this->inputFileId = (int)$data['build']['parameters']['INPUT_FILE_ID'];
+        $this->inputFileId = (int) $data['build']['parameters']['INPUT_FILE_ID'];
     }
 }

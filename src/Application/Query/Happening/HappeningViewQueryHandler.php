@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2016 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -27,8 +27,8 @@ class HappeningViewQueryHandler
     /**
      * HappeningViewQueryHandler constructor.
      *
-     * @param SpeakerViewQueryHandler      $speakerViewQueryHandler
-     * @param CategoryViewQueryHandler     $categoryViewQueryHandler
+     * @param SpeakerViewQueryHandler  $speakerViewQueryHandler
+     * @param CategoryViewQueryHandler $categoryViewQueryHandler
      */
     public function __construct(
         SpeakerViewQueryHandler $speakerViewQueryHandler,

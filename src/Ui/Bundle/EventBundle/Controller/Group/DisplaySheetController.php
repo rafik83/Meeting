@@ -115,7 +115,7 @@ class DisplaySheetController extends Controller
         $locale = $request->getLocale();
 
         try {
-            list ($nomenclatures, $participants, $taggedData) = $this
+            list($nomenclatures, $participants, $taggedData) = $this
                 ->get('template.sheet.sheet_info_getter')
                 ->sheetInfos(
                     $eventDomain->getEvent(),

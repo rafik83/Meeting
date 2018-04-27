@@ -63,7 +63,7 @@ class GeneratePlanningCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        if ($input->getOption('orderBy') === null
+        if (null === $input->getOption('orderBy')
             || null === $input->getOption('sheetIdsExtraData')
             || null === $input->getOption('emailToNotify')
             || null === $input->getOption('locale')

@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2017 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -47,7 +47,7 @@ class SerializerAdapter implements SerializerAdapterInterface
     /**
      * {@inheritdoc}
      */
-    public function normalize($data, $format = null, array $context = array())
+    public function normalize($data, $format = null, array $context = [])
     {
         return $this->serializer->normalize($data, $format, $context);
     }
@@ -55,7 +55,7 @@ class SerializerAdapter implements SerializerAdapterInterface
     /**
      * {@inheritdoc}
      */
-    public function denormalize($data, $type, $format = null, array $context = array())
+    public function denormalize($data, $type, $format = null, array $context = [])
     {
         return $this->serializer->denormalize($data, $type, $format, $context);
     }

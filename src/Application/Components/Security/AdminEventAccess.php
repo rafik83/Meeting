@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2015 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -24,7 +24,7 @@ class AdminEventAccess
     public function canAccess(Admin $admin, EventInterface $event)
     {
         if (!$admin->hasEvents()) {
-            return $admin->getRole() === Admin::ROLE_SUPER_ADMIN;
+            return Admin::ROLE_SUPER_ADMIN === $admin->getRole();
         }
 
         return $admin->hasEvent($event);

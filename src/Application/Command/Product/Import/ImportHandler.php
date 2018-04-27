@@ -10,8 +10,8 @@
 
 namespace Proximum\Vimeet\Application\Command\Product\Import;
 
-use Proximum\Vimeet\Domain\Product\Duplicator as ProductDuplicator;
 use Proximum\Vimeet\Domain\Package\Duplicator as PackageDuplicator;
+use Proximum\Vimeet\Domain\Product\Duplicator as ProductDuplicator;
 use Proximum\Vimeet\Domain\Repository\PackageRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\ProductRepositoryInterface;
 

@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2017 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -54,12 +54,14 @@ class MeetingView
 
     /**
      * Info if the slot was locked or not for the import
+     *
      * @var bool
      */
     public $isBlockedSlot;
 
     /**
      * Info if the spot was locked or not for the import
+     *
      * @var bool
      */
     public $isBlockedSpot;
@@ -86,16 +88,17 @@ class MeetingView
      */
     public function hasSlot()
     {
-        return $this->slot !== null;
+        return null !== $this->slot;
     }
 
     /**
-     * @return string
      * @throws NoSlotException
+     *
+     * @return string
      */
     public function getSlotReference()
     {
-        if ($this->slot === null) {
+        if (null === $this->slot) {
             throw new NoSlotException();
         }
 
@@ -103,12 +106,13 @@ class MeetingView
     }
 
     /**
-     * @return string
      * @throws NoSpotException
+     *
+     * @return string
      */
     public function getSpotReference()
     {
-        if ($this->spot === null) {
+        if (null === $this->spot) {
             throw new NoSpotException();
         }
 
@@ -120,7 +124,7 @@ class MeetingView
      */
     public function hasSpot()
     {
-        return $this->spot !== null;
+        return null !== $this->spot;
     }
 
     /**
@@ -128,16 +132,17 @@ class MeetingView
      */
     public function hasLockedSlot()
     {
-        return $this->lockedSlot !== null;
+        return null !== $this->lockedSlot;
     }
 
     /**
-     * @return string
      * @throws NoLockedSlotException
+     *
+     * @return string
      */
     public function getLockedSlotReference()
     {
-        if ($this->lockedSlot === null) {
+        if (null === $this->lockedSlot) {
             throw new NoLockedSlotException();
         }
 
@@ -149,16 +154,17 @@ class MeetingView
      */
     public function hasLockedSpot()
     {
-        return $this->lockedSpot !== null;
+        return null !== $this->lockedSpot;
     }
 
     /**
-     * @return string
      * @throws NoLockedSpotException
+     *
+     * @return string
      */
     public function getLockedSpotReference()
     {
-        if ($this->lockedSpot === null) {
+        if (null === $this->lockedSpot) {
             throw new NoLockedSpotException();
         }
 

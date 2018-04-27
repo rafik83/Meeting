@@ -108,7 +108,7 @@ class ProcessHandler
             if (!is_array($newReceivers) && !$newReceivers instanceof \Traversable) {
                 return;
             }
-            
+
             $placeHolders = [];
 
             foreach ($event->getLocales() as $locale) {

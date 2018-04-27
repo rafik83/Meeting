@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2016 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -37,7 +37,7 @@ class UserController extends Controller
 
         $locale = $event->getAvailableLocale($request->getLocale());
 
-        if ($request->query->get('participation') === null
+        if (null === $request->query->get('participation')
             || !in_array($request->query->get('participation'), FilterType::getAllFilters())
         ) {
             return $this->redirectToRoute('admin_users', array_merge(
@@ -101,7 +101,6 @@ class UserController extends Controller
                 ->get('query.user.user_details_view_query_handler')
                 ->handle(new UserDetailsViewQuery($user, $event))
             ;
-
         } catch (UserEventMissingException $userEventMissingException) {
             throw $this->createNotFoundException($userEventMissingException->getMessage());
         } catch (SheetNotFoundException $sheetNotFoundException) {

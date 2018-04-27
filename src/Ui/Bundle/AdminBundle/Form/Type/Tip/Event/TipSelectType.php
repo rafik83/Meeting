@@ -10,7 +10,6 @@
 
 namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Tip\Event;
 
-use Proximum\Vimeet\Application\View\Tip\Event\TipView;
 use Proximum\Vimeet\Domain\Model\Tip\Tip;
 use Proximum\Vimeet\Domain\Repository\TipRepositoryInterface;
 use Symfony\Component\Form\AbstractType;

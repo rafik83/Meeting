@@ -3,20 +3,20 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2017 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
 
 namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Invoice;
 
-use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\HttpFoundation\Response\CsvFileResponse;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Proximum\Vimeet\Application\Command\Invoice\Export;
+use Proximum\Vimeet\Application\Serializer\Charset;
+use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\HttpFoundation\Response\CsvFileResponse;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Invoice\ExportType;
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Proximum\Vimeet\Application\Serializer\Charset;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 class ExportController extends Controller
@@ -44,7 +44,7 @@ class ExportController extends Controller
                     'csv_delimiter' => ';',
                 ]);
 
-                return new CsvFileResponse($exportContent, "export_invoices_" . date("Y_m_d_His") . ".csv");
+                return new CsvFileResponse($exportContent, 'export_invoices_' . date('Y_m_d_His') . '.csv');
             } else {
                 $this->addFlash('error', 'flash.admin.invoice.export.failed');
             }

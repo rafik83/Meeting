@@ -70,9 +70,9 @@ class CreateAction
      * @param Request $request
      * @param Event   $event
      *
-     * @return RedirectResponse|Response
-     *
      * @throws AccessDeniedException
+     *
+     * @return RedirectResponse|Response
      */
     public function __invoke(Request $request, Event $event): Response
     {
@@ -87,7 +87,7 @@ class CreateAction
             'event'  => $event,
             'locale' => $event->getAvailableLocale($request->getLocale()),
             'submit' => true,
-            'happenings' => $happenings
+            'happenings' => $happenings,
         ]);
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {

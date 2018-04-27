@@ -26,9 +26,9 @@ class RemoveController extends Controller
      * @param Event   $event
      * @param Product $product
      *
-     * @return RedirectResponse
-     *
      * @throws NotFoundHttpException
+     *
+     * @return RedirectResponse
      */
     public function removeAction(Request $request, Event $event, Product $product): RedirectResponse
     {

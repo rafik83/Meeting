@@ -98,10 +98,10 @@ class ExportAction
      * @param Sheet       $sheet
      * @param UserDomain  $userDomain
      *
-     * @return CsvFileResponse
-     *
      * @throws AccessDeniedException
      * @throws NotFoundHttpException
+     *
+     * @return CsvFileResponse
      */
     public function __invoke(
         Request $request,
@@ -159,7 +159,7 @@ class ExportAction
             'event'                     => $event,
             'locale'                    => $locale,
             'filterByAvailableSlotIds'  => $filterAvailableSlotAndSpecificSlotChecker->filterAvailableSlot,
-            'filterBySpecificSlot'      => $filterAvailableSlotAndSpecificSlotChecker->specificSlot !== null,
+            'filterBySpecificSlot'      => null !== $filterAvailableSlotAndSpecificSlotChecker->specificSlot,
             'specificSlot'              => $filterAvailableSlotAndSpecificSlotChecker->specificSlot,
         ]);
 
@@ -189,7 +189,7 @@ class ExportAction
         $filters = array_merge(
             Catalog::DEFAULT_FILTERS,
             $filters,
-            [SearchFields::ORDER_BY => Constant::ORDER_BY_ALPHABETICAL,]
+            [SearchFields::ORDER_BY => Constant::ORDER_BY_ALPHABETICAL]
         );
 
         $sheetListView = $this->queryBus->handle(new SheetsViewQuery(

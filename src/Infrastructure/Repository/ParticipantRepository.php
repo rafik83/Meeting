@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2015 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -330,12 +330,12 @@ class ParticipantRepository implements ParticipantRepositoryInterface
             ->join('participant.user', 'user', 'WITH', 'participant IN (:participants)')
             ->setParameter('participants', $participants);
 
-        $unavailabilityConditions = "1 = 1";
+        $unavailabilityConditions = '1 = 1';
 
         if (false === $exceptAllUnavailabilities) {
             // Participant have not unavailability during this period
             $unavailabilityConditions =
-                "NOT EXISTS (
+                'NOT EXISTS (
                     SELECT u.id
                     FROM Entity:Unavailability u
                     WHERE
@@ -345,34 +345,34 @@ class ParticipantRepository implements ParticipantRepositoryInterface
                             OR u.end > :begin AND u.end <= :end
                             OR u.begin <= :begin AND u.end >= :end
                         )
-                )";
+                )';
         }
 
         $queryBuilder->andWhere(
             $queryBuilder->expr()->andX(
                 // Participant have not already a meeting during this period
-                "NOT EXISTS (
+                'NOT EXISTS (
                     SELECT m.id
                     FROM Entity:Meeting m
                     JOIN m.slot slot WITH slot.event = :eventId
                     LEFT JOIN m.fromParticipants fp
                     LEFT JOIN m.toParticipants tp
                     WHERE
-                        " . (null !== $exceptedMeeting ? 'm != :exceptedMeeting' : '1=1') . "
+                        ' . (null !== $exceptedMeeting ? 'm != :exceptedMeeting' : '1=1') . '
                         AND (fp.user = user OR tp.user = user)
                         AND (
                             slot.begin >= :begin AND slot.begin < :end
                             OR slot.end > :begin AND slot.end <= :end
                             OR slot.begin <= :begin AND slot.end >= :end
                         )
-                )",
+                )',
                 // Participant have not happening during this period
-                "NOT EXISTS (
+                'NOT EXISTS (
                     SELECT hp.id
                     FROM Entity:HappeningParticipation hp
                     JOIN hp.happening h WITH h.event = :eventId
                     WHERE
-                        " . (null !== $exceptedHappening ? 'h != :exceptedHappening' : '1=1') . "
+                        ' . (null !== $exceptedHappening ? 'h != :exceptedHappening' : '1=1') . '
                         AND hp.user = user
                         AND hp.disabled = false
                         AND (
@@ -380,7 +380,7 @@ class ParticipantRepository implements ParticipantRepositoryInterface
                             OR h.end > :begin AND h.end <= :end
                             OR h.begin <= :begin AND h.end >= :end
                         )
-                )",
+                )',
                 $unavailabilityConditions
             )
         );
@@ -507,7 +507,7 @@ class ParticipantRepository implements ParticipantRepositoryInterface
             ->join('sheet.event', 'event')
             ->where('sheet.event = :event')
             ->setParameter('event', $event)
-            ->andWhere('NOT EXISTS (SELECT m.id FROM '. MassAssignment::class . ' m WHERE m.user = user AND m.mass = :mass)')
+            ->andWhere('NOT EXISTS (SELECT m.id FROM ' . MassAssignment::class . ' m WHERE m.user = user AND m.mass = :mass)')
             ->setParameter('mass', $mass)
         ;
 
@@ -549,7 +549,7 @@ class ParticipantRepository implements ParticipantRepositoryInterface
      */
     public function countParticipantBySheet(Sheet $sheet)
     {
-            $queryBuilder = $this
+        $queryBuilder = $this
             ->entityManager
             ->createQueryBuilder()
             ->select('COUNT(participant)')

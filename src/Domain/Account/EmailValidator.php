@@ -1,8 +1,9 @@
 <?php
+
 /*
- * This file is part of the vimeet project.
+ * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2017 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -35,12 +36,12 @@ class EmailValidator
      */
     public function validate($data)
     {
-        if ($data === null) {
+        if (null === $data) {
             return false;
         }
 
         $violation = $this->validator->validate($data, ValidatorInterface::VALIDATOR_EMAIL_TYPE);
-        
-        return count($violation) === 0;
+
+        return 0 === count($violation);
     }
 }

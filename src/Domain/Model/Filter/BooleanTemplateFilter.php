@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2016 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -27,6 +27,7 @@ class BooleanTemplateFilter
     /**
      * Key is a reserved mysql word
      * Therefore, the variable is TemplateKey
+     *
      * @var string
      */
     private $templateKey;

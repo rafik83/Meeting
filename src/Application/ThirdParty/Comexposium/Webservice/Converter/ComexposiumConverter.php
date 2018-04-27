@@ -22,9 +22,11 @@ abstract class ComexposiumConverter
     protected function convertAlpha3ToAlpha2CodeCountry(string $countryAlpha3Code): ?string
     {
         try {
-            $country = (new ISO3166)->alpha3($countryAlpha3Code);
+            $country = (new ISO3166())->alpha3($countryAlpha3Code);
+
             return $country[ISO3166::KEY_ALPHA2];
-        } catch (\Exception $exception) {}
+        } catch (\Exception $exception) {
+        }
 
         return null;
     }
@@ -46,6 +48,6 @@ abstract class ComexposiumConverter
      */
     protected function convertLocale(string $language): string
     {
-        return $language === 'FRA' ? 'fr' : 'en';
+        return 'FRA' === $language ? 'fr' : 'en';
     }
 }

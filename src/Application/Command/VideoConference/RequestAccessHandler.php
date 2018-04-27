@@ -1,9 +1,9 @@
 <?php
 
 /*
- * This file is part of the vimeet project.
+ * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2017 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -26,7 +26,7 @@ class RequestAccessHandler
     private $videoConferenceAdapter;
 
     /**
-     * @param VideoConferenceAdapterInterface $videoConferenceAdapter
+     * @param VideoConferenceAdapterInterface    $videoConferenceAdapter
      * @param VideoConferenceRepositoryInterface $videoConferenceRepository
      */
     public function __construct(
@@ -39,6 +39,7 @@ class RequestAccessHandler
 
     /**
      * @param RequestAccess $requestAccess
+     *
      * @throws InvalidTokenGeneratorArgumentsException
      *
      * @return VideoConferenceView
@@ -47,10 +48,10 @@ class RequestAccessHandler
     {
         $videoConference = $this->videoConferenceRepository->findByMeeting($requestAccess->meeting);
 
-        if ($videoConference !== null) {
+        if (null !== $videoConference) {
             $videoConferenceToken = $videoConference->getTokenByUser($requestAccess->user);
 
-            if ($videoConferenceToken === null) {
+            if (null === $videoConferenceToken) {
                 $token = $this->videoConferenceAdapter->generateAccessToken(
                     $this->videoConferenceAdapter->getSession($videoConference->getSessionId()),
                     $requestAccess->meeting->getSlot()->getEnd()

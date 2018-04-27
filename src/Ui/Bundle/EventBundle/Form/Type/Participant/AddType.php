@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2016 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -81,7 +81,7 @@ class AddType extends AbstractType
                 ->add('product', ChoiceType::class, [
                     'required'    => true,
                     'choices'     => array_filter($products, function (ParticipantProductView $product = null) {
-                        if ($product === null) {
+                        if (null === $product) {
                             return false;
                         }
 

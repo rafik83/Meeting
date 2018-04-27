@@ -86,7 +86,6 @@ class Cart
                     }
                 }
             }
-
         } elseif (0 !== $quantity) {
             $cartRow = new CartRow($this->sheet, $product, $quantity);
 
@@ -123,7 +122,11 @@ class Cart
             return [];
         }
 
-        return $this->getPlanRow()->getProduct()->getIncludedAttributableOptionProducts();
+        return $this
+            ->getPlanRow()
+            ->getProduct()
+            ->getIncludedAttributableOptionProducts()
+        ;
     }
 
     /**
@@ -176,7 +179,7 @@ class Cart
      */
     public function getParticipantRows(): array
     {
-        return array_filter($this->getRows(), function(CartRow $cartRow) {
+        return array_filter($this->getRows(), function (CartRow $cartRow) {
             return $cartRow->getProduct()->isParticipant();
         });
     }
@@ -483,8 +486,7 @@ class Cart
     {
         $total = 0;
         foreach ($promotionCode->getPromotions() as $promotion) {
-            if (($cartRow = $this->getCartRowForProduct($promotion->getProduct())) !== null) {
-
+            if (null !== ($cartRow = $this->getCartRowForProduct($promotion->getProduct()))) {
                 // don't apply promo code on cart row negative quantity
                 if ($cartRow->getQuantity() < 0) {
                     continue;

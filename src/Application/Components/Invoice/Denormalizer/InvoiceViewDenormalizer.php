@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of the vimeet project.
+ * This file is part of the Proximum Vimeet project.
  *
  * Copyright (C) Proximum
  *
@@ -67,7 +67,7 @@ class InvoiceViewDenormalizer implements DenormalizerInterface, DenormalizerAwar
      */
     public function supportsDenormalization($data, $type, $format = null)
     {
-        return $type === InvoiceView::class
+        return InvoiceView::class === $type
             && isset($data['summaryView'])
             && isset($data['billingInfosView'])
             && isset($data['amountRemainToPay']);

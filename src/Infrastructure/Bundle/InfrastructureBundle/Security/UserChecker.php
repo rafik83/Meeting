@@ -1,9 +1,9 @@
 <?php
 
 /*
- * This file is part of the vimeet project.
+ * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2016 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -110,7 +110,7 @@ class UserChecker extends SymfonyUserChecker
             return;
         }
 
-        $disabledSheets = array_filter($sheets, function(Sheet $sheet) {
+        $disabledSheets = array_filter($sheets, function (Sheet $sheet) {
             return !$sheet->isEnabled();
         });
 

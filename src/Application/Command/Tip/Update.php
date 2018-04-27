@@ -16,16 +16,16 @@ class Update
 {
     /** @var Tip */
     public $tip;
-    
+
     /** @var string */
     public $title;
-    
+
     /** @var bool */
     public $onMeetingManagement;
-    
+
     /** @var bool */
     public $onCatalog;
-    
+
     /** @var bool */
     public $onPrintPlanning;
 
@@ -40,10 +40,10 @@ class Update
 
     /** @var bool */
     public $onConfirmationPhone;
-    
+
     /** @var array */
     public $translations;
-    
+
     /**
      * Update constructor.
      *
