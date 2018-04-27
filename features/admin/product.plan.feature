@@ -38,7 +38,7 @@ Feature: Handle Product
     And I go to this page "/fr/event/1/product"
     Then I should see "ProductTitre"
 
-  Scenario: I can update a product linked to an event
+  Scenario: I can update a plan
     Given the database is purged
     And the event "PWA Meetup" is created
     And there is a plan called "Formule Full" with a price of "100"

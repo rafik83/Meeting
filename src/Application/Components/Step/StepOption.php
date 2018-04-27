@@ -10,36 +10,42 @@
 
 namespace Proximum\Vimeet\Application\Components\Step;
 
+use Proximum\Vimeet\Application\Command\Package\Step\OptionRow;
 use Proximum\Vimeet\Application\Command\Package\Step\SelectOptions;
 use Proximum\Vimeet\Domain\Cart\CartManager;
 use Proximum\Vimeet\Domain\Model\CartRow;
 use Proximum\Vimeet\Domain\Model\Order;
+use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Product;
+use Proximum\Vimeet\Domain\Model\ProductAttributedToParticipant;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Order\Merger;
+use Proximum\Vimeet\Domain\Repository\ProductAttributedToParticipantRepositoryInterface;
 
 class StepOption
 {
-    /**
-     * @var Merger
-     */
+    /** @var Merger */
     private $orderMerger;
 
-    /**
-     * @var CartManager
-     */
+    /** @var CartManager */
     private $cartManager;
 
-    /**
-     * StepOption constructor.
-     *
-     * @param Merger      $orderMerger
-     * @param CartManager $cartManager
-     */
-    public function __construct(Merger $orderMerger, CartManager $cartManager)
-    {
+    /** @var \DateTimeInterface */
+    private $dateTime;
+
+    /** @var ProductAttributedToParticipantRepositoryInterface */
+    private $productAttributedToParticipantRepository;
+
+    public function __construct(
+        Merger $orderMerger,
+        CartManager $cartManager,
+        ProductAttributedToParticipantRepositoryInterface $productAttributedToParticipantRepository,
+        \DateTimeInterface $dateTime
+    ) {
         $this->orderMerger = $orderMerger;
         $this->cartManager = $cartManager;
+        $this->productAttributedToParticipantRepository = $productAttributedToParticipantRepository;
+        $this->dateTime = $dateTime;
     }
 
     /**
@@ -48,10 +54,20 @@ class StepOption
      *
      * @return SelectOptions
      */
-    public function build(Sheet $sheet, $stepIndex)
+    public function build(Sheet $sheet, int $stepIndex): SelectOptions
     {
-        $command     = new SelectOptions($sheet, $stepIndex);
-        $cart        = $this->cartManager->getCart($command->sheet, $command->currentStep);
+        $command = new SelectOptions($sheet, $stepIndex);
+        $command->options = $this->buildOptions($sheet, $stepIndex);
+
+        return $command;
+    }
+
+    /**
+     * @return OptionRow[] indexed by Product id
+     */
+    private function buildOptions(Sheet $sheet, int $stepIndex): array
+    {
+        $cart = $this->cartManager->getCart($sheet, $stepIndex);
         $orderMerged = null;
 
         if ($sheet->hasNotCancelledOrders()) {
@@ -59,64 +75,96 @@ class StepOption
         }
 
         /** @var CartRow[] $optionRows */
-        $cartRows = array_combine(
-            array_map(
-                function (CartRow $cartRow) {
-                    return $cartRow->getProduct()->getId();
-                },
-                $cart->getOptionsRow()->toArray()
-            ),
-            $cart->getOptionsRow()->toArray()
-        );
+        $cartRows = [];
 
-        $options          = [];
-        $availableOptions = $command->sheet->getPackage()->getAvailablesOptions(new \DateTime());
-
-        foreach ($availableOptions as $option) {
-            $options[$option->getId()] = $this->getOptionQuantity($option, $cartRows, $orderMerged);
+        foreach ($cart->getOptionsRowArray() as $optionRow) {
+            $cartRows[$optionRow->getProduct()->getId()] = $optionRow;
         }
 
-        $command->options = $options;
+        $options = [];
+        $availableOptions = $sheet->getPackage()->getAvailablesOptions($this->dateTime);
 
-        return $command;
+        foreach ($availableOptions as $option) {
+            $options[$option->getId()] = new OptionRow(
+                $this->getOptionQuantity($option, $cartRows, $orderMerged),
+                $this->getOptionParticipant($sheet, $option, $cartRows),
+                $option->isAttributable()
+            );
+        }
+
+        return $options;
     }
 
     /**
      * @param Product    $option
-     * @param array      $cartRows
+     * @param CartRow[]  $cartRows
      * @param null|Order $order
      *
      * @return int
      */
-    private function getOptionQuantity(Product $option, array $cartRows = [], Order $order = null)
+    private function getOptionQuantity(Product $option, array $cartRows = [], Order $order = null): int
     {
-        $cartQuantity = 0;
-        $cartRow      = $this->getCartRowFromOption($option, $cartRows);
+        $optionQuantity = 0;
+        $cartRow = $this->getCartRowFromOption($option, $cartRows);
 
         if (null !== $cartRow) {
-            $cartQuantity = $cartRow->getQuantity();
-        }
-        $optionQuantity = $cartQuantity;
-
-        if (isset($order) && $product = $order->getRowForProduct($option)) {
-            $orderQuantity  = $product->getQuantity();
-            $optionQuantity = $orderQuantity;
-
-            if (null !== $cartRow) {
-                $optionQuantity = $orderQuantity + $cartQuantity;
-            }
+            $optionQuantity = $cartRow->getQuantity();
         }
 
-        return $optionQuantity;
+        return $this->getQuantityFromOrder($order, $option) + $optionQuantity;
     }
 
     /**
-     * @param Product $option
-     * @param array   $cartRows
+     * @param Sheet     $sheet
+     * @param Product   $option
+     * @param CartRow[] $cartRows
+     *
+     * @return Participant[]
+     */
+    private function getOptionParticipant(Sheet $sheet, Product $option, array $cartRows = []): array
+    {
+        if (!$option->isAttributable()) {
+            return [];
+        }
+
+        $cartRow = $this->getCartRowFromOption($option, $cartRows);
+
+        if (null !== $cartRow) {
+            return $cartRow->getParticipants();
+        }
+
+        $productAttributedToParticipants = $this->productAttributedToParticipantRepository->findByProductAndParticipants(
+            $option,
+            $sheet->getParticipantsArray()
+        );
+
+        return array_map(function (ProductAttributedToParticipant $productAttributedToParticipant) {
+            return $productAttributedToParticipant->getParticipant();
+        }, $productAttributedToParticipants);
+    }
+
+    /**
+     * @param Order|null $order
+     * @param Product    $option
+     *
+     * @return int
+     */
+    private function getQuantityFromOrder(Order $order = null, Product $option): int
+    {
+        if (!$order instanceof Order || !$orderRow = $order->getRowForProduct($option)) {
+            return 0;
+        }
+
+        return $orderRow->getQuantity();
+    }
+
+    /**
+     * @param Product   $option
+     * @param CartRow[] $cartRows
      *
      * @return CartRow|null
      */
-    private function getCartRowFromOption(Product $option, array $cartRows)
+    private function getCartRowFromOption(Product $option, array $cartRows): ?CartRow
     {
         if (isset($cartRows[$option->getId()])) {
             return $cartRows[$option->getId()];

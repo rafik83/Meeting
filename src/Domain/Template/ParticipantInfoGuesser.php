@@ -34,12 +34,16 @@ class ParticipantInfoGuesser
 
     /**
      * @param Participant $participant
-     * @param string      $locale
+     * @param null|string $locale
      *
      * @return string
      */
-    public function guessParticipantCompleteName(Participant $participant, $locale)
+    public function guessParticipantCompleteName(Participant $participant, ?string $locale = null)
     {
+        if (null === $locale) {
+            $locale = $participant->getSheet()->getEvent()->getFallback();
+        }
+
         $infos = $this->guessParticipantInfos($participant, $locale);
 
         return (isset($infos[Tag::PARTICIPANT_FIRSTNAME]) ? $infos[Tag::PARTICIPANT_FIRSTNAME] : '')

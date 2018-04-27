@@ -33,7 +33,7 @@ Feature: Buy participant with from the funnel
     And I should see "Pass Jour 1"
     And I should see "Pass Jour 3"
     When I select "Pass Jour 1" from "participant_and_planning_1"
-    And I fill in "participant_and_planning[planningQuantity]" with "1"
+    And I fill in "participant_and_planning[planningQuantity][quantity]" with "1"
     Then I press "package.participant_planning.validate"
     And I should be on this page "/fr/sheet/1/package/step/3"
     And I press "package.product.validate"

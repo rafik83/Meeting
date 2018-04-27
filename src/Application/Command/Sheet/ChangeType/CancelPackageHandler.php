@@ -14,6 +14,7 @@ use Proximum\Vimeet\Domain\Cart\CartManager;
 use Proximum\Vimeet\Domain\Model\Order;
 use Proximum\Vimeet\Domain\Participant\ParticipantProductSetter;
 use Proximum\Vimeet\Domain\Repository\OrderRepositoryInterface;
+use Proximum\Vimeet\Domain\Repository\ProductAttributedToParticipantRepositoryInterface;
 
 class CancelPackageHandler
 {
@@ -26,14 +27,19 @@ class CancelPackageHandler
     /** @var ParticipantProductSetter */
     private $participantProductSetter;
 
+    /** @var ProductAttributedToParticipantRepositoryInterface */
+    private $productAttributedToParticipantRepository;
+
     public function __construct(
         OrderRepositoryInterface $orderRepository,
         CartManager $cartManager,
-        ParticipantProductSetter $participantProductSetter
+        ParticipantProductSetter $participantProductSetter,
+        ProductAttributedToParticipantRepositoryInterface $productAttributedToParticipantRepository
     ) {
         $this->orderRepository = $orderRepository;
         $this->cartManager = $cartManager;
         $this->participantProductSetter = $participantProductSetter;
+        $this->productAttributedToParticipantRepository = $productAttributedToParticipantRepository;
     }
 
     public function handle(CancelPackage $cancelPackage): void
@@ -55,5 +61,7 @@ class CancelPackageHandler
         foreach ($cancelPackage->sheet->getParticipantsArray() as $participant) {
             $this->participantProductSetter->setProductOnParticipant($participant, null);
         }
+
+        $this->productAttributedToParticipantRepository->removeForSheet($cancelPackage->sheet);
     }
 }

@@ -326,6 +326,10 @@ services:
         arguments:
             - '@doctrine.orm.entity_manager'
 
+    Proximum\Vimeet\Infrastructure\Repository\ProductAttributedToParticipant\ParticipantWithAttributedProductToRepository:
+        arguments:
+            - '@doctrine.orm.entity_manager'
+
     #
     # Handlers
     #
@@ -2589,6 +2593,8 @@ services:
         arguments:
             - '@order.merger'
             - '@cart_manager'
+            - '@Proximum\Vimeet\Infrastructure\Repository\ProductAttributedToParticipantRepository'
+            - '@datetime'
     components.step.step_participant:
         class: Proximum\Vimeet\Application\Components\Step\StepParticipantAndPlanning
         arguments:
@@ -2981,6 +2987,7 @@ services:
         arguments:
             - '@cart_manager'
             - '@order.merger'
+            - '@Proximum\Vimeet\Domain\ProductAttributedToParticipant\ParticipantWithAttributedProductGetter'
             - '@datetime'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Package\Option\OptionViewQuery }
@@ -4557,8 +4564,7 @@ services:
             - '@transformer.product.id_to_product_transformer'
             - '@datetime'
             - '%locale%'
-    package.planning.quantity_min_guesser:
-        class: Proximum\Vimeet\Domain\Package\Product\QuantityMinGuesser
+    Proximum\Vimeet\Domain\Package\Product\ConflictBetweenChoosenQuantityAndPreviouslyUsedPromotionCode:
         arguments:
             - '@order.merger'
     package.product.included_participant_guesser:
@@ -4592,7 +4598,9 @@ services:
             - '@repository.promotion_code_row_repository'
             - '@order.merger'
             - '@Proximum\Vimeet\Domain\Participant\ParticipantProductSetter'
+            - '@Proximum\Vimeet\Infrastructure\Repository\ProductAttributedToParticipantRepository'
             - '@vimeet_infrastructure.adapter.delayed_event_dispatcher'
+            - '@datetime'
     buyable_object_resolver:
         class: Proximum\Vimeet\Domain\Cart\BuyableObjectResolver
         arguments:
@@ -4609,6 +4617,7 @@ services:
             - '@repository.promotion_code_row_repository'
             - '@repository.promotion_code_repository'
             - '@Proximum\Vimeet\Domain\Participant\ParticipantProductSetter'
+            - '@Proximum\Vimeet\Domain\ProductAttributedToParticipant\ProductAttributedToParticipantSetter'
             - '@datetime'
 
     cart_cleaner:

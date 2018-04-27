@@ -29,7 +29,7 @@ use Proximum\Vimeet\Tests\Factory\EventFactory;
 
 class SelectPlanHandlerTest extends TestCase
 {
-    public function testHandle()
+    public function testHandle(): void
     {
         $event    = EventFactory::createEvent();
         $type     = new Type($event);
@@ -62,7 +62,7 @@ class SelectPlanHandlerTest extends TestCase
         $plansHandler->handle($plans);
     }
 
-    public function testHandleWithExistingCartRow()
+    public function testHandleWithExistingCartRow(): void
     {
         $event    = EventFactory::createEvent();
         $type     = new Type($event);
@@ -78,6 +78,7 @@ class SelectPlanHandlerTest extends TestCase
         // Mock
         $cartManager           = $this->prophesize(CartManager::class);
         $buyableObjectResolver = $this->prophesize(BuyableObjectResolver::class);
+        $cartManager->emptyProductAttributedToParticipant($actualCart)->shouldBeCalled();
         $cartManager->getCart($sheet, 1)->shouldBeCalled()->willReturn($actualCart);
         $cartManager->deleteCartStep($actualCart)->shouldBeCalled();
         $cartManager->save(Argument::that(function (Cart $cart) use ($expectedCart) {

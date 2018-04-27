@@ -61,7 +61,8 @@ class SelectParticipantAndPlanningHandler
         $cart = $this->cartManager->getCart($sheet, $selectParticipantAndPlanning->currentStep);
 
         $cart = $this->cartManager->updateParticipantsQuantity($cart, $selectParticipantAndPlanning->participantsProduct);
-        $this->handlePlanning($cart, $selectParticipantAndPlanning->planningQuantity);
+
+        $this->handlePlanning($cart, $selectParticipantAndPlanning->planningQuantity->getQuantity());
         $this->cartManager->save($cart);
 
         $packageStepDone = new StepDoneEvent($selectParticipantAndPlanning->sheet);

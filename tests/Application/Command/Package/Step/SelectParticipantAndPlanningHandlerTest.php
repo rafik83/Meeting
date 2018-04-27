@@ -11,6 +11,7 @@
 namespace Proximum\Vimeet\Tests\Application\Command\Package\Step;
 
 use PHPUnit\Framework\TestCase;
+use Proximum\Vimeet\Application\Command\Package\Step\OptionRow;
 use Proximum\Vimeet\Application\Command\Package\Step\SelectParticipantAndPlanning;
 use Proximum\Vimeet\Application\Command\Package\Step\SelectParticipantAndPlanningHandler;
 use Proximum\Vimeet\Application\Event\Events;
@@ -109,7 +110,7 @@ class SelectParticipantAndPlanningHandlerTest extends TestCase
         $eventDispatcher->dispatch(Events::PACKAGE_STEP_DONE, $packageStepDone)->shouldBeCalled();
 
         $command = new SelectParticipantAndPlanning($sheet->reveal(), 1);
-        $command->planningQuantity = 1;
+        $command->planningQuantity = new OptionRow(1);
         $command->participantsProduct[123] = $participantProduct;
 
         $handler = new SelectParticipantAndPlanningHandler(
@@ -213,7 +214,7 @@ class SelectParticipantAndPlanningHandlerTest extends TestCase
         $eventDispatcher->dispatch(Events::PACKAGE_STEP_DONE, $packageStepDone)->shouldBeCalled();
 
         $command = new SelectParticipantAndPlanning($sheet->reveal(), 1);
-        $command->planningQuantity = 0;
+        $command->planningQuantity = new OptionRow(0);
         // Participants 1 and 2 have $participantProduct1
         $command->participantsProduct[11] = $participantProduct1->reveal();
         $command->participantsProduct[22] = $participantProduct1->reveal();

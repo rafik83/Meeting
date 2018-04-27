@@ -12,6 +12,7 @@ namespace Proximum\Vimeet\Tests\Application\Components\Step;
 
 use PHPUnit\Framework\TestCase;
 use Prophecy\Prophecy\ObjectProphecy;
+use Proximum\Vimeet\Application\Command\Package\Step\OptionRow;
 use Proximum\Vimeet\Application\Command\Package\Step\SelectParticipantAndPlanning;
 use Proximum\Vimeet\Application\Components\Package\ProductByParticipantGetter;
 use Proximum\Vimeet\Application\Components\Step\StepParticipantAndPlanning;
@@ -98,7 +99,7 @@ class StepParticipantAndPlanningTest extends TestCase
 
         $expected = new SelectParticipantAndPlanning($this->sheet->reveal(), null);
         $expected->participantsProduct = $participantProducts;
-        $expected->planningQuantity = 3;
+        $expected->planningQuantity = new OptionRow(3);
 
         $this->assertEquals($expected, $result);
     }
@@ -154,7 +155,7 @@ class StepParticipantAndPlanningTest extends TestCase
 
         $expected = new SelectParticipantAndPlanning($this->sheet->reveal(), null);
         $expected->participantsProduct = $participantProducts;
-        $expected->planningQuantity = 2;
+        $expected->planningQuantity = new OptionRow(2);
 
         $this->assertEquals($expected, $result);
     }
@@ -207,7 +208,7 @@ class StepParticipantAndPlanningTest extends TestCase
 
         $expected = new SelectParticipantAndPlanning($this->sheet->reveal(), null);
         $expected->participantsProduct = $participantProducts;
-        $expected->planningQuantity = 1;
+        $expected->planningQuantity = new OptionRow(1);
 
         $this->assertEquals($expected, $result);
     }

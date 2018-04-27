@@ -30,6 +30,7 @@ use Proximum\Vimeet\Domain\Order\Merger;
 use Proximum\Vimeet\Domain\Participant\ParticipantProductSetter;
 use Proximum\Vimeet\Domain\Repository\CartRowRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\CartStepRepositoryInterface;
+use Proximum\Vimeet\Domain\Repository\ProductAttributedToParticipantRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\PromotionCodeRowRepositoryInterface;
 
 class CartManagerTest extends TestCase
@@ -52,6 +53,12 @@ class CartManagerTest extends TestCase
     /** @var ObjectProphecy */
     private $eventDispatcher;
 
+    /** @var ObjectProphecy */
+    private $productAttributedToParticipantRepository;
+
+    /** @var \DateTimeInterface */
+    private $dateTime;
+
     public function setUp()
     {
         $this->cartRowRepository = $this->prophesize(CartRowRepositoryInterface::class);
@@ -60,6 +67,8 @@ class CartManagerTest extends TestCase
         $this->orderMerger = $this->prophesize(Merger::class);
         $this->participantProductSetter = $this->prophesize(ParticipantProductSetter::class);
         $this->eventDispatcher = $this->prophesize(DelayedEventDispatcherInterface::class);
+        $this->productAttributedToParticipantRepository = $this->prophesize(ProductAttributedToParticipantRepositoryInterface::class);
+        $this->dateTime = new \DateTime();
     }
 
     public function testDeleteCartStep()
@@ -78,7 +87,9 @@ class CartManagerTest extends TestCase
             $this->promotionCodeRowRepository->reveal(),
             $this->orderMerger->reveal(),
             $this->participantProductSetter->reveal(),
-            $this->eventDispatcher->reveal()
+            $this->productAttributedToParticipantRepository->reveal(),
+            $this->eventDispatcher->reveal(),
+            $this->dateTime
         );
 
         $cartManager->deleteCartStep($cart->reveal());
@@ -102,7 +113,9 @@ class CartManagerTest extends TestCase
             $this->promotionCodeRowRepository->reveal(),
             $this->orderMerger->reveal(),
             $this->participantProductSetter->reveal(),
-            $this->eventDispatcher->reveal()
+            $this->productAttributedToParticipantRepository->reveal(),
+            $this->eventDispatcher->reveal(),
+            $this->dateTime
         );
 
         $result = $cartManager->getCart($sheet->reveal(), 3);
@@ -118,8 +131,10 @@ class CartManagerTest extends TestCase
         $participantProduct1->getId()->shouldBeCalled()->willReturn(111);
         $participantProduct1->getSerializedData()->willReturn('participantProduct1');
         $participantProduct1->isParticipant()->willReturn(true);
+        $participantProduct1->isAttributable()->willReturn(false);
         $participantProduct2 = $this->prophesize(Product::class);
         $participantProduct2->getId()->shouldBeCalled()->willReturn(222);
+        $participantProduct2->isAttributable()->willReturn(false);
 
         $participantProductIncluded = $this->prophesize(ProductIncluded::class);
         $participantProductIncluded->getIncluded()->shouldBeCalled()->willReturn($participantProduct2->reveal());
@@ -189,7 +204,9 @@ class CartManagerTest extends TestCase
             $this->promotionCodeRowRepository->reveal(),
             $this->orderMerger->reveal(),
             $this->participantProductSetter->reveal(),
-            $this->eventDispatcher->reveal()
+            $this->productAttributedToParticipantRepository->reveal(),
+            $this->eventDispatcher->reveal(),
+            $this->dateTime
         );
 
         $result = $cartManager->updateParticipantsQuantity($cart, $productByParticipantId);

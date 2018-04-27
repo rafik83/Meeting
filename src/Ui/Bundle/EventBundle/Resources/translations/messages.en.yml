@@ -303,6 +303,7 @@ order.transaction.paypal.description: '%eventId%-%sheetId% : Participation of %s
 order.transaction.state.cancelled: Cancelled
 order.transaction.state.paid: Paid
 order.transaction.state.pending: Pending
+package.funnel.error: 'An error has occured. Please check the form below.'
 package.funnel.payment: Payment
 package.funnel.summary: 'Summary & billing details'
 package.options.included: Included
@@ -342,6 +343,7 @@ package.product.quantity: Quantity
 package.product.quantityMax: 'Maximum quantity reached'
 package.product.quantityMaxInformation: 'Max: %quantityMax%'
 package.product.quantityMin: 'Maximum minimum reached'
+package.product.selectedParticipants: 'Selected participants:'
 package.product.selectOptions: 'Select your options'
 package.product.subjectedToValidationHelp: 'Subject to validation'
 package.product.total: Total

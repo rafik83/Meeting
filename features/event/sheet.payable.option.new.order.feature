@@ -30,7 +30,7 @@ Feature: Select payable option in sheet
     And I should see "Participants & plannings"
     When I press "package.participant_planning.validate"
     Then I should be on this page "/fr/sheet/1/package/step/3"
-    And the "options[6]" field should contain "1"
+    And the "options[6][quantity]" field should contain "1"
     When I press "package.product.validate"
     Then I should be on this page "/fr/sheet/1/billing-info"
     And I check the "gender.man" radio
@@ -86,7 +86,7 @@ Feature: Select payable option in sheet
     When I follow "package.summary.edit"
     Then I go to this page "/fr/sheet/1/package/step/2"
     And I should see "package.product.selectOptions"
-    And the "options[11]" field should contain "1"
+    And the "options[11][quantity]" field should contain "1"
 
   Scenario: I can pay my new payable option "Option E"
     Given I am logged with "user_asddays_1@proximum.com" on event "http://asddays-2016.vimeet.proximum"

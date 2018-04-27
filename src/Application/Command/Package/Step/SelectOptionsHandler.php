@@ -19,23 +19,16 @@ use Proximum\Vimeet\Infrastructure\Adapter\DelayedEventDispatcher;
 
 class SelectOptionsHandler
 {
-    /**
-     * @var CartManager
-     */
+    /** @var CartManager */
     private $cartManager;
-    /**
-     * @var \DateTimeInterface
-     */
+
+    /** @var \DateTimeInterface */
     private $now;
 
-    /**
-     * @var Merger
-     */
+    /** @var Merger */
     private $merger;
 
-    /**
-     * @var DelayedEventDispatcher
-     */
+    /** @var DelayedEventDispatcher */
     private $eventDispatcher;
 
     /**
@@ -50,47 +43,48 @@ class SelectOptionsHandler
         Merger $merger,
         DelayedEventDispatcher $eventDispatcher
     ) {
-        $this->cartManager     = $cartManager;
-        $this->now             = $now;
-        $this->merger          = $merger;
+        $this->cartManager = $cartManager;
+        $this->now = $now;
+        $this->merger = $merger;
         $this->eventDispatcher = $eventDispatcher;
     }
 
     /**
      * @param SelectOptions $selectOptions
      */
-    public function handle(SelectOptions $selectOptions)
+    public function handle(SelectOptions $selectOptions): void
     {
-        $sheet   = $selectOptions->sheet;
+        $sheet = $selectOptions->sheet;
         $package = $sheet->getPackage();
-        $cart    = $this->cartManager->getCart($sheet, $selectOptions->currentStep);
+        $cart = $this->cartManager->getCart($sheet, $selectOptions->currentStep);
 
-        $ids = array_map(
-            function (Product $product) {
-                return $product->getId();
-            },
-            $package->getAvailablesOptions($this->now)
-        );
+        /** @var Product[] $options */
+        $optionsById = [];
 
-        $options = array_combine($ids, $package->getAvailablesOptions($this->now));
+        foreach ($package->getAvailablesOptions($this->now) as $option) {
+            $optionsById[$option->getId()] = $option;
+        }
 
         $cart->clearOptions();
 
+        $orderMerged = null;
         if ($sheet->hasNotCancelledOrders()) {
             $orderMerged = $this->merger->merge($sheet->getNotCancelledOrders());
         }
 
-        foreach ($selectOptions->options as $id => $quantity) {
-            $orderQuantity = 0;
+        $attributableOptionsIncludedByProductId = $this->cartManager->getAttributableOptionsIncludedByProductId(
+            $cart,
+            $orderMerged
+        );
 
-            // handle new order
-            if (isset($orderMerged)) {
-                if ($product = $orderMerged->getRowByProductId($id)) {
-                    $orderQuantity = $product->getQuantity();
-                }
-            }
-
-            $cart->setProduct($options[$id], $quantity - $orderQuantity);
+        foreach ($selectOptions->options as $id => $optionRow) {
+            $this->cartManager->updateOptionsQuantity(
+                $cart,
+                $optionRow,
+                $optionsById[$id],
+                $orderMerged,
+                $attributableOptionsIncludedByProductId
+            );
         }
 
         $this->cartManager->save($cart);

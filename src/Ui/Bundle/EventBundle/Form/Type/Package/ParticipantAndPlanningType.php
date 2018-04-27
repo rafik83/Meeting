@@ -67,11 +67,14 @@ class ParticipantAndPlanningType extends AbstractType
             $maxErrorMessage = 'package.planning.quantityMax.forParticipation';
         }
 
-        $builder->add('planningQuantity', QuantityType::class, [
-            'label'      => false,
-            'max'        => $this->quantityMaxGuesser->getMaxPlanning($sheet),
+        $builder->add('planningQuantity', QuantityAndParticipantsType::class, [
+            'label' => false,
+            'max' => $this->quantityMaxGuesser->getMaxPlanning($sheet),
             'minMessage' => 'package.planning.quantityMin',
             'maxMessage' => $maxErrorMessage,
+            'sheet' => $options['sheet'],
+            'locale' => $options['locale'],
+            'isAttributable' => false,
         ]);
     }
 
