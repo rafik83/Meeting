@@ -65,6 +65,8 @@ common.need_help: 'Need help'
 common.next: Next
 common.update: Modify
 common.validate: Validate
+common.download: 'Download existent file'
+common.required_formats: '{1} Required format is : %format%|[1, Inf[Required formats are : %format%'
 error.403.content: 'Your are not allowed to reach this content.'
 error.403.title: 'Not allowed'
 error.404.content: 'This content is not available or not available any more.'

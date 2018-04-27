@@ -107,12 +107,14 @@ abstract class AbstractChild
         return $this->type;
     }
 
-    /**
-     * @return bool
-     */
-    public function isParticipant()
+    public function isParticipant(): bool
     {
-        return 'participant' === $this->type;
+        return self::TEMPLATE_OBJECT_TYPE_PARTICIPANT === $this->type;
+    }
+
+    public function isUpload(): bool
+    {
+        return self::TEMPLATE_OBJECT_TYPE_UPLOAD === $this->type;
     }
 
     /**

@@ -15,6 +15,7 @@ use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Sheet\Data\BooleanDataType;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Sheet\Data\CountryDataType;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Sheet\Data\EditableTextInputDataType;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Sheet\Data\EditableTextTranslationType;
+use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Sheet\Data\FileDataType;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Sheet\Data\NomenclatureDataType;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Sheet\Data\TelephoneDataType;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Sheet\Data\UrlDataType;
@@ -45,6 +46,8 @@ class CompanyType extends AbstractType
                 $this->addCountry($key, $builder, $object, $options['locale']);
             } elseif ($object instanceof Template\TemplateObject\BooleanObject) {
                 $this->addBoolean($key, $builder, $object, $options['locale']);
+            } elseif ($object instanceof Template\TemplateObject\UploadObject) {
+                $this->addFile($key, $builder, $object, $options['locale']);
             }
         }
     }
@@ -104,6 +107,21 @@ class CompanyType extends AbstractType
     {
         $builder->add($key, UrlDataType::class, [
             'label'  => false,
+            'locale' => $locale,
+            'object' => $object,
+        ]);
+    }
+
+    /**
+     * @param string                  $key
+     * @param FormBuilderInterface    $builder
+     * @param Template\TemplateObject $object
+     * @param string                  $locale
+     */
+    private function addFile(string $key, FormBuilderInterface $builder, Template\TemplateObject $object, string $locale): void
+    {
+        $builder->add($key, FileDataType::class, [
+            'showLabel' => true,
             'locale' => $locale,
             'object' => $object,
         ]);

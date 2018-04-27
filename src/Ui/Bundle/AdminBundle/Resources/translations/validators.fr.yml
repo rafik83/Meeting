@@ -24,6 +24,7 @@ validators.event.unArchive.notArchived: 'L''événement ne peut être désarchiv
 validators.event.update.invoicePrefix.disabled.label: 'Vous ne pouvez pas éditer le prefixe de facturation'
 validators.fallbackInLocales: 'La langue par défaut doit également être dans la liste des langues'
 validators.field.notValid.image: 'Le format de l''image n''est pas valide, les formats autorisés sont le jpeg, le png et le gif'
+validators.field.notValid.uploadObject: 'Format de fichier incorrect'
 validators.field.notValid.telephone: 'Le format du champ téléphone n''est pas correct le bon format et indicatif pays + numéro de téléphone sans espace ni autre signe. Exemple : +33146900000'
 validators.field.notValid.url: 'Le format du champ url n''est pas valide'
 validators.field.required: 'Ce champ est requis'

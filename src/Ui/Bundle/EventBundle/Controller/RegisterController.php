@@ -10,6 +10,8 @@
 
 namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Controller;
 
+use Proximum\Vimeet\Application\Command\Participant\Upload\UploadFile;
+use Proximum\Vimeet\Application\Command\Participant\Upload\UploadFileException;
 use Proximum\Vimeet\Application\Command\Register\ParticipantStep;
 use Proximum\Vimeet\Application\Command\Register\RegisterNewUser;
 use Proximum\Vimeet\Application\Command\User\Participate;
@@ -22,6 +24,7 @@ use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Template\TemplateData;
+use Proximum\Vimeet\Domain\Template\TemplateObject\UploadObject;
 use Proximum\Vimeet\Domain\View\TypeView;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Model\Email;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Common\EmailType;
@@ -367,25 +370,26 @@ class RegisterController extends Controller
     {
         $data = array_filter($data, function ($value) { return null !== $value; });
 
-        $imageObjects = $registrationTemplate->getImageObjects();
-        $fileStorage  = $this->get('adapter.local_file_storage');
+        $uploadedAndImageObjects = $registrationTemplate->getUploadAndImageObjects();
 
-        foreach ($imageObjects as $key => $object) {
+        foreach ($uploadedAndImageObjects as $key => $object) {
             if ($form->has($key) && null !== $form->get($key)->get('file')->getData()) {
                 $file = $form->get($key)->get('file')->getData();
 
                 if ($file instanceof UploadedFile) {
                     try {
-                        $data[$key]['image'] = $fileStorage->upload($file);
-                        $fileStorage->remove($object->getContentValue());
-                    } catch (\Exception $exception) {
-                        $form->get($key)->get('file')->addError(
-                            new FormError('account.profile.updateAvatar.error')
-                        );
+                        $data = $this->get('tactician.commandbus')->handle(new UploadFile($object, $data));
+                    } catch (UploadFileException $exception) {
+                        $form->get($key)->get('file')->addError(new FormError($exception->getMessage()));
                     }
                 } else {
                     $form->get($key)->get('file')->addError(
-                        new FormError('validators.field.notValid.image')
+                        new FormError(
+                            sprintf(
+                                'validators.field.notValid.%s',
+                                $object instanceof UploadObject ? 'uploadObject' : 'image'
+                            )
+                        )
                     );
                 }
             }

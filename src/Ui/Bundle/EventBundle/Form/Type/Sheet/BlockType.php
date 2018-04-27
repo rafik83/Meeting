@@ -15,6 +15,7 @@ use Proximum\Vimeet\Domain\Template;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Sheet\Data\BooleanDataType;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Sheet\Data\CountryDataType;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Sheet\Data\EditableTextInputDataType;
+use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Sheet\Data\FileDataType;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Sheet\Data\GenderDataType;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Sheet\Data\ImageDataType;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Sheet\Data\NomenclatureDataType;
@@ -41,6 +42,8 @@ class BlockType extends AbstractType
                 $this->addNomenclature($key, $builder, $object, $options['locale']);
             } elseif ($object instanceof Template\TemplateObject\Image) {
                 $this->addImage($key, $builder, $object, $options['locale']);
+            } elseif ($object instanceof Template\TemplateObject\UploadObject) {
+                $this->addFile($key, $builder, $object, $options['locale']);
             } elseif ($object instanceof Template\TemplateObject\Telephone) {
                 $this->addTelephone($key, $builder, $object, $options['locale'], $options['country']);
             } elseif ($object instanceof Template\TemplateObject\Country) {
@@ -100,6 +103,21 @@ class BlockType extends AbstractType
             'attr'      => [
                 'image-preview' => $object->hasTag(Tag::PARTICIPANT_AVATAR),
             ],
+        ]);
+    }
+
+    /**
+     * @param string                  $key
+     * @param FormBuilderInterface    $builder
+     * @param Template\TemplateObject $object
+     * @param string                  $locale
+     */
+    private function addFile(string $key, FormBuilderInterface $builder, Template\TemplateObject $object, string $locale): void
+    {
+        $builder->add($key, FileDataType::class, [
+            'showLabel' => true,
+            'locale' => $locale,
+            'object' => $object,
         ]);
     }
 

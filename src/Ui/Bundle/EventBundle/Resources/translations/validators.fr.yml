@@ -1,3 +1,4 @@
+account.profile.uploadedObject.error: 'Une erreur s''est produite lors du téléchargement de votre fichier'
 account.profile.updateAvatar.error: 'Une erreur s''est produite lors du téléchargement de votre photo'
 'Bad credentials.': 'Identifiants incorrects'
 login.error.sheetDisabled: 'Votre participation a été désactivée.'
