@@ -138,7 +138,7 @@ class ParticipantDenormalizer implements DenormalizerInterface
 
             $email = strtolower(StringHelper::trimSpacesAndNonBreakSpaces($row[$mappedMailCsvColumn]));
 
-            if ($this->emailValidator->validate($email) === false) {
+            if (false === $this->emailValidator->validate($email)) {
                 $this->importLogger->addError($key, new EmailError($email, true), $email, $context['locale']);
                 continue;
             }
@@ -187,7 +187,7 @@ class ParticipantDenormalizer implements DenormalizerInterface
      */
     public function supportsDenormalization($data, $type, $format = null)
     {
-        return $type === Participant::class && $format === self::FORMAT;
+        return Participant::class === $type && self::FORMAT === $format;
     }
 
     /**
@@ -228,9 +228,10 @@ class ParticipantDenormalizer implements DenormalizerInterface
      * @param TemplateData   $registrationTemplate
      * @param array          $context
      *
-     * @return array of sheetData, participantData and sheetTitle
      * @throws InvalidObjectContentException
      * @throws \Exception
+     *
+     * @return array of sheetData, participantData and sheetTitle
      */
     private function handleRow(
         array $row,
@@ -249,8 +250,8 @@ class ParticipantDenormalizer implements DenormalizerInterface
             $column = trim($column);
             $registrationObjectKey = $mappingGuesser->getMappedOutKey($key);
 
-            if ($registrationObjectKey === false
-                || $registrationObjectKey === ParticipantImportTag::REGISTRATION_FIELD_MAIL
+            if (false === $registrationObjectKey
+                || ParticipantImportTag::REGISTRATION_FIELD_MAIL === $registrationObjectKey
             ) {
                 continue;
             }

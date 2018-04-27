@@ -76,9 +76,9 @@ class UpdateAction
      * @param Package     $package
      * @param AdminDomain $adminDomain
      *
-     * @return RedirectResponse|Response
-     *
      * @throws AccessDeniedException
+     *
+     * @return RedirectResponse|Response
      */
     public function __invoke(Request $request, Package $package, AdminDomain $adminDomain): Response
     {

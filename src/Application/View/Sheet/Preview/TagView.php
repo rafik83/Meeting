@@ -38,6 +38,6 @@ class TagView
      */
     public function isLink()
     {
-        return $this->type === 'url';
+        return 'url' === $this->type;
     }
 }

@@ -21,7 +21,7 @@ class BatchPdf
     /** @var int */
     public $eventId;
 
-    /** @var Int[] */
+    /** @var int[] */
     public $sheetIds;
 
     /** @var string */

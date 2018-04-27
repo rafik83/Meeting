@@ -29,7 +29,7 @@ class InvoiceController extends Controller
      * @param Sheet       $sheet
      * @param Invoice     $invoice
      * @param string      $hash
-     * @param string      $format 'html'|'pdf'
+     * @param string      $format      'html'|'pdf'
      *
      * @return Response
      */

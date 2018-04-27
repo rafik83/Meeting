@@ -18,7 +18,7 @@ class UsersParticipantViewQuery
     public $group;
 
     /**
-     * @param Group  $group
+     * @param Group $group
      */
     public function __construct(Group $group)
     {

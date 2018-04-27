@@ -1,9 +1,9 @@
 <?php
 
 /*
- * This file is part of the vimeet project.
+ * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2017 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -47,7 +47,7 @@ class PackageSubmenuButtonViewQueryHandler
         $hasProductsInCart = $this->cartRowRepository->hasProducts($query->sheet);
 
         // Package button
-        if ($package !== null && $package->isPassable() === true) {
+        if (null !== $package && true === $package->isPassable()) {
             $route = 'event_package_redirect_depending_on_context';
 
             if ($query->sheet->hasNotCancelledOrders() && !$hasProductsInCart) {
@@ -59,7 +59,7 @@ class PackageSubmenuButtonViewQueryHandler
                 'navigation.category.package',
                 $this->navigationBuilder->getRoute($route, ['sheet' => $query->sheet->getId()]),
                 Route::isPackage($query->route),
-                $hasProductsInCart === true
+                true === $hasProductsInCart
             );
         }
 

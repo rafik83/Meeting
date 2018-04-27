@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2015 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -47,8 +47,8 @@ interface ProductRepositoryInterface
     public function countByEvent(Event $event);
 
     /**
-     * @param Event  $event
-     * @param array  $types
+     * @param Event $event
+     * @param array $types
      *
      * @return Product[]
      */

@@ -61,9 +61,9 @@ class UpdateAgendaConfirmationHandler
             UserEventTokenType::AGENDA_CONFIRMATION
         );
 
-        if ($command->status === Constant::AGENDA_CONFIRMED) {
+        if (Constant::AGENDA_CONFIRMED === $command->status) {
             $token->confirm($this->dateTime);
-        } elseif ($command->status === Constant::AGENDA_NOT_CONFIRMED) {
+        } elseif (Constant::AGENDA_NOT_CONFIRMED === $command->status) {
             $token->unConfirm();
         }
 

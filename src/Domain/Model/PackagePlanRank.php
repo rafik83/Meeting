@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2016 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -36,8 +36,8 @@ class PackagePlanRank
      * PackagePlanRank constructor.
      *
      * @param Package $package
-     * @param Product          $plan
-     * @param int              $rank
+     * @param Product $plan
+     * @param int     $rank
      */
     public function __construct(Package $package, Product $plan, $rank)
     {

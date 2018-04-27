@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2016 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -36,7 +36,7 @@ class AgendaController extends Controller
 
         return $this->render('AdminBundle:Agenda:index.html.twig', [
             'event'                        => $event,
-            'isMeetingRequestUpdateLocked' => $event->getConfiguration()->isMeetingRequestUpdateLocked()
+            'isMeetingRequestUpdateLocked' => $event->getConfiguration()->isMeetingRequestUpdateLocked(),
         ]);
     }
 

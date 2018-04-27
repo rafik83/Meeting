@@ -68,6 +68,6 @@ class CategoryTypeOrganizationAndPositionViewsResult
      */
     public function hasEmptyCategoryOrType(): bool
     {
-        return $this->type === self::EMPTY_CATEGORY_OR_TYPE;
+        return self::EMPTY_CATEGORY_OR_TYPE === $this->type;
     }
 }

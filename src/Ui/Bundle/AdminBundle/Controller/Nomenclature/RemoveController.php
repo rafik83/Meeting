@@ -29,11 +29,11 @@ class RemoveController extends Controller
         $this->isGranted('IS_AUTHENTICATED_REMEMBERED');
         $event = $nomenclature->getEvent();
 
-        if ($event === null && !$this->isGranted('ROLE_SUPER_ADMIN')) {
+        if (null === $event && !$this->isGranted('ROLE_SUPER_ADMIN')) {
             throw $this->createAccessDeniedException('The global nomenclature can only be delete by super admin');
         }
 
-        if ($event !== null && !$this->isGranted('ROLE_ALLOWED_TO_ORGANIZE')) {
+        if (null !== $event && !$this->isGranted('ROLE_ALLOWED_TO_ORGANIZE')) {
             throw $this->createAccessDeniedException('The nomenclature can only be delete by an organizer or a super admin');
         }
 
@@ -50,7 +50,7 @@ class RemoveController extends Controller
 
         if ($event instanceof Event) {
             return $this->redirectToRoute('admin_nomenclature_event', [
-                'event' => $event->getId()
+                'event' => $event->getId(),
             ]);
         }
 

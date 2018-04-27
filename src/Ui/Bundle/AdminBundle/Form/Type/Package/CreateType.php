@@ -31,7 +31,7 @@ class CreateType extends AbstractType
             ])
         ;
 
-        if ($options['selectEvent'] === true) {
+        if (true === $options['selectEvent']) {
             $builder
                 ->add('event', EventChoiceType::class, [
                     'required'         => true,

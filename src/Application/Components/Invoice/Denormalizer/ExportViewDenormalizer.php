@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of the vimeet project.
+ * This file is part of the Proximum Vimeet project.
  *
  * Copyright (C) Proximum
  *
@@ -10,10 +10,10 @@
 
 namespace Proximum\Vimeet\Application\Components\Invoice\Denormalizer;
 
+use IntlDateFormatter;
 use Proximum\Vimeet\Application\Command\Planning\SheetInfoGuesserCache;
 use Proximum\Vimeet\Application\Components\Sheet\SheetInfoGuesser;
 use Proximum\Vimeet\Application\View\Invoice\BillingInfosView;
-use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Invoice\Invoice;
 use Proximum\Vimeet\Domain\Money\AmountFormatter;
 use Proximum\Vimeet\Domain\Order\Balance;
@@ -21,7 +21,6 @@ use Proximum\Vimeet\Domain\View\Invoice\ExportView;
 use Symfony\Component\Serializer\Normalizer\DenormalizerAwareInterface;
 use Symfony\Component\Serializer\Normalizer\DenormalizerAwareTrait;
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
-use IntlDateFormatter;
 
 class ExportViewDenormalizer implements DenormalizerInterface, DenormalizerAwareInterface
 {
@@ -99,7 +98,7 @@ class ExportViewDenormalizer implements DenormalizerInterface, DenormalizerAware
      */
     public function supportsDenormalization($data, $type, $format = null)
     {
-        return $type === ExportView::class && isset($data['billingInfosView']);
+        return ExportView::class === $type && isset($data['billingInfosView']);
     }
 
     /**
@@ -112,6 +111,6 @@ class ExportViewDenormalizer implements DenormalizerInterface, DenormalizerAware
     {
         $dateFormatted = $dateFormatter->format($date);
 
-        return $dateFormatted !== false ? $dateFormatted : '';
+        return false !== $dateFormatted ? $dateFormatted : '';
     }
 }

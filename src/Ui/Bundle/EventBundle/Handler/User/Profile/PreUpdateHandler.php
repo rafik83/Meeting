@@ -1,9 +1,9 @@
 <?php
 
 /*
- * This file is part of the vimeet project.
+ * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2017 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -47,8 +47,9 @@ class PreUpdateHandler
     /**
      * @param PreUpdate $update
      *
-     * @return PreUpdateView
      * @throws \Exception
+     *
+     * @return PreUpdateView
      */
     public function handle(PreUpdate $update): PreUpdateView
     {
@@ -57,7 +58,7 @@ class PreUpdateHandler
 
         $mobileTemplateObject = $update->templateData->getObjectByTag(Tag::PARTICIPANT_MOBILE);
 
-        if (!$allowToAccess || $mobileTemplateObject === null) {
+        if (!$allowToAccess || null === $mobileTemplateObject) {
             return new PreUpdateView(null, self::MOBILE_VALIDATION_NOT_NEED);
         }
 
@@ -65,7 +66,7 @@ class PreUpdateHandler
 
         if (!isset($update->data[$mobileTemplateObject->getKey()]['telephone'])) {
             return new PreUpdateView(null, self::MOBILE_VALIDATION_NOT_NEED);
-        };
+        }
 
         $currentMobile = $update->data[$mobileTemplateObject->getKey()]['telephone'];
 

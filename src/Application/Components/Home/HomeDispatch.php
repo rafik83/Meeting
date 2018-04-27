@@ -11,11 +11,11 @@
 namespace Proximum\Vimeet\Application\Components\Home;
 
 use Proximum\Vimeet\Application\View\Home\HomeDispatchView;
+use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Repository\Sheet\GroupRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
-use Proximum\Vimeet\Domain\Model\Event;
 
 class HomeDispatch
 {

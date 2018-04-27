@@ -10,23 +10,23 @@
 
 namespace Proximum\Vimeet\Domain\Event;
 
-use Proximum\Vimeet\Domain\Model\Event;
-use Proximum\Vimeet\Domain\Event\Content\Duplicator as ContentDuplicator;
 use Proximum\Vimeet\Domain\Event\BillingConfiguration\Duplicator as BillingConfigurationDuplicator;
+use Proximum\Vimeet\Domain\Event\Catalog\External\CatalogVisibilityDuplicator as CatalogVisibilityDuplicator;
+use Proximum\Vimeet\Domain\Event\Catalog\External\SearchFacet\Duplicator as ExternalSearchFacetDuplicator;
+use Proximum\Vimeet\Domain\Event\Catalog\Internal\SearchFacet\Duplicator as InternalSearchFacetDuplicator;
+use Proximum\Vimeet\Domain\Event\Category\Duplicator as CategoryDuplicator;
+use Proximum\Vimeet\Domain\Event\Content\Duplicator as ContentDuplicator;
+use Proximum\Vimeet\Domain\Event\Message\Duplicator as MessageDuplicator;
+use Proximum\Vimeet\Domain\Event\Nomenclature\Duplicator as NomenclatureDuplicator;
+use Proximum\Vimeet\Domain\Event\Package\Duplicator as PackageDuplicator;
 use Proximum\Vimeet\Domain\Event\PracticalInfo\Duplicator as PracticalInfoDuplicator;
 use Proximum\Vimeet\Domain\Event\Product\Duplicator as ProductDuplicator;
-use Proximum\Vimeet\Domain\Event\Type\Duplicator as TypeDuplicator;
-use Proximum\Vimeet\Domain\Event\Package\Duplicator as PackageDuplicator;
-use Proximum\Vimeet\Domain\Event\Nomenclature\Duplicator as NomenclatureDuplicator;
 use Proximum\Vimeet\Domain\Event\RegistrationTemplate\Duplicator as RegistrationTemplateDuplicator;
-use Proximum\Vimeet\Domain\Event\SheetTemplate\Duplicator as SheetTemplateDuplicator;
-use Proximum\Vimeet\Domain\Event\Category\Duplicator as CategoryDuplicator;
 use Proximum\Vimeet\Domain\Event\Rule\Duplicator as RuleDuplicator;
+use Proximum\Vimeet\Domain\Event\SheetTemplate\Duplicator as SheetTemplateDuplicator;
 use Proximum\Vimeet\Domain\Event\Tip\Duplicator as TipDuplicator;
-use Proximum\Vimeet\Domain\Event\Message\Duplicator as MessageDuplicator;
-use Proximum\Vimeet\Domain\Event\Catalog\Internal\SearchFacet\Duplicator as InternalSearchFacetDuplicator;
-use Proximum\Vimeet\Domain\Event\Catalog\External\SearchFacet\Duplicator as ExternalSearchFacetDuplicator;
-use Proximum\Vimeet\Domain\Event\Catalog\External\CatalogVisibilityDuplicator as CatalogVisibilityDuplicator;
+use Proximum\Vimeet\Domain\Event\Type\Duplicator as TypeDuplicator;
+use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Event\Content;
 
 class Duplicator

@@ -46,7 +46,7 @@ class UpdateUsersSheets
     }
 
     /**
-     * @param int $userId
+     * @param int     $userId
      * @param Sheet[] $sheets
      */
     public function __set($userId, $sheets)

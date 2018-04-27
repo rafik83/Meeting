@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2016 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -56,17 +56,17 @@ class DayViewQuery
     public $isUserParticipantMultipleSheet;
 
     /**
-     * @param Day $day
-     * @param Sheet $currentSheet
-     * @param Event $event
-     * @param Participant $participant
-     * @param User $userViewing
-     * @param bool $isUserParticipantMultipleSheet
-     * @param string $locale
+     * @param Day                      $day
+     * @param Sheet                    $currentSheet
+     * @param Event                    $event
+     * @param Participant              $participant
+     * @param User                     $userViewing
+     * @param bool                     $isUserParticipantMultipleSheet
+     * @param string                   $locale
      * @param HappeningParticipation[] $happenings
-     * @param Unavailability[] $unavailabilities
-     * @param Mass[] $masses
-     * @param Meeting[] $meetings
+     * @param Unavailability[]         $unavailabilities
+     * @param Mass[]                   $masses
+     * @param Meeting[]                $meetings
      */
     public function __construct(
         Day $day,

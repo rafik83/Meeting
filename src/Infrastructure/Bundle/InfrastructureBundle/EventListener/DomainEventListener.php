@@ -59,7 +59,7 @@ class DomainEventListener extends AbstractRedirectToEventListener
     {
         // If the locale is not in event locales, redirect to the fallback locale
         if (!$event->hasLocale($locale)) {
-            if ($route === Route::DEFAULT_EVENT) {
+            if (Route::DEFAULT_EVENT === $route) {
                 $route = Route::EVENT;
             }
 
@@ -69,7 +69,7 @@ class DomainEventListener extends AbstractRedirectToEventListener
         }
 
         // If no locale in the url, redirect to the fallback locale
-        if ($route === 'default_event') {
+        if ('default_event' === $route) {
             $getResponseEvent->setResponse($this->createRedirectResponse($request, $event, 'event'));
 
             return;

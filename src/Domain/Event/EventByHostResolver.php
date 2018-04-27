@@ -33,11 +33,11 @@ class EventByHostResolver
      * @param string $host
      * @param string $locale
      *
-     * @return Event
-     *
      * @throws EventDoesNotHaveLocale
      * @throws EventNotFoundException
      * @throws EventNotVisibleException
+     *
+     * @return Event
      */
     public function resolveEventFromHostAndLocale(string $host, string $locale): Event
     {

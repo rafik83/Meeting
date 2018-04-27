@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of the vimeet project.
+ * This file is part of the Proximum Vimeet project.
  *
  * Copyright (C) Proximum
  *
@@ -30,7 +30,7 @@ class PreviewTipViewQueryHandler
 
     /**
      * @param PreviewTipViewQuery $query
-     * 
+     *
      * @return PreviewTipView
      */
     public function handle(PreviewTipViewQuery $query)

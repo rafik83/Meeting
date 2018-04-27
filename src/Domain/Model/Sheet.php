@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2015 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -248,7 +248,7 @@ class Sheet implements TraceableInterface
     }
 
     /**
-     * @return int|double
+     * @return int|float
      */
     public function getMaxParticipant()
     {
@@ -322,9 +322,9 @@ class Sheet implements TraceableInterface
     }
 
     /**
-     * @return Participant
-     *
      * @throws SheetException
+     *
+     * @return Participant
      */
     public function getFirstParticipant()
     {
@@ -339,6 +339,7 @@ class Sheet implements TraceableInterface
 
     /**
      * @deprecated use countParticipants()
+     *
      * @return int
      */
     public function countParticipant()
@@ -733,8 +734,7 @@ class Sheet implements TraceableInterface
      */
     public function isValidationPending()
     {
-        return $this->validationState === self::STATE_VALIDATION_PENDING;
-
+        return self::STATE_VALIDATION_PENDING === $this->validationState;
     }
 
     /**
@@ -742,7 +742,7 @@ class Sheet implements TraceableInterface
      */
     public function isValidationDraft()
     {
-        return $this->validationState === self::STATE_VALIDATION_DRAFT;
+        return self::STATE_VALIDATION_DRAFT === $this->validationState;
     }
 
     /**
@@ -1053,7 +1053,7 @@ class Sheet implements TraceableInterface
                 }
             }
 
-            if ($found === false) {
+            if (false === $found) {
                 $this->availableSlots->add($newAvailableSlot);
             }
         }
@@ -1069,7 +1069,7 @@ class Sheet implements TraceableInterface
                 }
             }
 
-            if ($found === false) {
+            if (false === $found) {
                 $this->availableSlots->remove($key);
             }
         }

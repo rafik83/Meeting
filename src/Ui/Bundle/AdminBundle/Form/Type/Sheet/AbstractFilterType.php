@@ -1,9 +1,9 @@
 <?php
 
 /*
- * This file is part of the vimeet project.
+ * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2017 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -110,7 +110,7 @@ abstract class AbstractFilterType extends AbstractType
             ->add('imported', ImportedChoiceType::class, [
                 'label'    => 'form.sheet_filter.children.imported.label',
                 'required' => false,
-                'expanded' => true
+                'expanded' => true,
             ])
             ->add('follower', FollowerChoiceType::class, [
                 'label'      => 'form.sheet_filter.children.follower.label',
@@ -126,7 +126,7 @@ abstract class AbstractFilterType extends AbstractType
                 'locale'     => $options['locale'],
                 'required'   => false,
                 'multiple'   => true,
-                'select2'    => true
+                'select2'    => true,
             ])
             ->add('reminderDate', ReminderDateChoiceType::class, [
                 'label'    => 'form.sheet_filter.children.reminderDate.label',
@@ -251,7 +251,7 @@ abstract class AbstractFilterType extends AbstractType
         if (!empty($booleanFilters)) {
             $builder->add(Constant::BOOLEAN_FILTER, BooleanFilterType::class, [
                 'booleanFilters' => $booleanFilters,
-                'label'          => false
+                'label'          => false,
             ]);
         }
     }

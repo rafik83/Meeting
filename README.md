@@ -71,6 +71,18 @@ Drop DB and generate migrations diff:
 
 ### Localization
 
+#### Create a Pull-Request on Github with updated translations
+
+Requirements: install [Hub](https://github.com/github/hub)
+
+Run:
+
+        $ make trans-pr
+
+#### Or synchronize manually translations:
+
+        ⇒ make trans-sync
+
 All translations are stored on https://openl10n.vimeet.events (check 1password for access).
 If not exists, create a `.openl10n.yml` on root from `.openl10n.yml.dist` and set the user password of openl10n app (see the password in 1password).
 

@@ -46,9 +46,10 @@ class HappeningParticipateAction
      * @param Happening   $happening
      * @param UserDomain  $userDomain
      *
-     * @return JsonResponse
      * @throws AccessDeniedException
      * @throws NotFoundHttpException
+     *
+     * @return JsonResponse
      */
     public function __invoke(
         Request $request,

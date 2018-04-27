@@ -1,9 +1,9 @@
 <?php
 
 /*
- * This file is part of the vimeet project.
+ * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2017 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -18,7 +18,7 @@ class SpotUnavailabilityView
     /**
      * Array of spotId => SpotUnavailability[]
      *
-     * @var array $unavailabilities
+     * @var array
      */
     private $spotUnavailabilities;
 
@@ -37,7 +37,7 @@ class SpotUnavailabilityView
      */
     public function isSameUnavailabilities()
     {
-        if (count($this->spotUnavailabilities) === 0) {
+        if (0 === count($this->spotUnavailabilities)) {
             return true;
         }
 
@@ -48,8 +48,9 @@ class SpotUnavailabilityView
         $i = 0;
         foreach ($this->spotUnavailabilities as $unavailabilities) {
             // prevent checking the first element because its the pattern
-            if ($i === 0) {
-                $i++; continue;
+            if (0 === $i) {
+                ++$i;
+                continue;
             }
 
             $unavailabilitiesIds = array_map(function (SpotUnavailability $unavailability) {
@@ -60,11 +61,11 @@ class SpotUnavailabilityView
             $diff = array_diff($unavailabilitiesIds, $pattern);
 
             // unavailabilities and pattern are different or unavailabilities are empty
-            if (count($diff) !== 0 || count($unavailabilitiesIds) === 0) {
+            if (0 !== count($diff) || 0 === count($unavailabilitiesIds)) {
                 return false;
             }
 
-            $i++;
+            ++$i;
         }
 
         return true;
@@ -77,7 +78,7 @@ class SpotUnavailabilityView
      */
     public function getMeetingSlots()
     {
-        if ($this->getUnavailabilities() === null) {
+        if (null === $this->getUnavailabilities()) {
             return [];
         }
 
@@ -94,7 +95,7 @@ class SpotUnavailabilityView
      */
     private function getUnavailabilities()
     {
-        if (count($this->spotUnavailabilities) === 0) {
+        if (0 === count($this->spotUnavailabilities)) {
             return null;
         }
 

@@ -124,7 +124,7 @@ class ProductByParticipantGetter
                         $productIndexedByParticipantId[$participant->getId()] = $participantProductsIndexedById[$productId];
 
                         // remove 1 from remaining quantity for this product
-                        $remainingQuantityIncludedIndexedByProductId[$productId]--;
+                        --$remainingQuantityIncludedIndexedByProductId[$productId];
                     }
                 }
             }

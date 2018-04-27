@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2015 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -63,6 +63,7 @@ class ChangeMailHandler
 
     /**
      * @param ChangeMail $changeMail
+     *
      * @throws EmailAlreadyExistsException
      * @throws EmptyFieldException
      * @throws SameEmailException
@@ -71,7 +72,7 @@ class ChangeMailHandler
     {
         $user = $changeMail->user;
 
-        if ($changeMail->mail === null) {
+        if (null === $changeMail->mail) {
             throw new EmptyFieldException();
         }
 

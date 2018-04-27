@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2015 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -135,7 +135,7 @@ class TransactionRepository implements TransactionRepositoryInterface
             ->setParameter('event', $event)
         ;
 
-       return $queryBuilder->getQuery()->getResult();
+        return $queryBuilder->getQuery()->getResult();
     }
 
     /**
@@ -178,7 +178,7 @@ class TransactionRepository implements TransactionRepositoryInterface
 
         return $queryBuilder->getQuery()->getResult();
     }
-    
+
     /**
      * {@inheritdoc}
      */
@@ -202,7 +202,7 @@ class TransactionRepository implements TransactionRepositoryInterface
                 'beginDate' => $beginDate,
                 'endDate' => $endDate,
             ]);
-        
+
         return $queryBuilder->getQuery()->getResult();
     }
 }

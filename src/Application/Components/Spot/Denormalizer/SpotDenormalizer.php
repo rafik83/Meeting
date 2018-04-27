@@ -53,7 +53,7 @@ class SpotDenormalizer implements DenormalizerInterface
     /**
      * {@inheritdoc}
      */
-    public function denormalize($data, $class, $format = null, array $context = array())
+    public function denormalize($data, $class, $format = null, array $context = [])
     {
         if (!$context['event'] instanceof Event) {
             throw new \InvalidArgumentException();
@@ -84,7 +84,7 @@ class SpotDenormalizer implements DenormalizerInterface
                     ),
                     $this->getSheetIdsToArrayFromString($row[self::KEY_SHEETS])
                 );
-            } catch(\Exception $exception) {
+            } catch (\Exception $exception) {
                 $import = new Import(null);
                 $import->addError($exception->getMessage());
             }
@@ -100,7 +100,7 @@ class SpotDenormalizer implements DenormalizerInterface
      */
     public function supportsDenormalization($data, $type, $format = null)
     {
-        return $format === 'csv' && $type === Import::class;
+        return 'csv' === $format && Import::class === $type;
     }
 
     /**

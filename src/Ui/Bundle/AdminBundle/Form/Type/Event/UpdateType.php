@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2015 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -35,7 +35,7 @@ class UpdateType extends AbstractEventType
                 'label'      => false,
             ])
             ->add('analyticsCode', TextType::class, [
-                'required' => false
+                'required' => false,
             ])
         ;
     }

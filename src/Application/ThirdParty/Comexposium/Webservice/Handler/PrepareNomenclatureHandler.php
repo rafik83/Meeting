@@ -33,8 +33,9 @@ class PrepareNomenclatureHandler
     /**
      * @param string $eventReference
      *
-     * @return NomenclatureView
      * @throws \SoapFault
+     *
+     * @return NomenclatureView
      */
     public function handle(string $eventReference): NomenclatureView
     {

@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2016 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -20,7 +20,6 @@ use Proximum\Vimeet\Domain\Payment\Mode;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\ParamConverter\EventDomain;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Security\SheetVoter;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -93,7 +92,7 @@ class OrderController extends Controller
             'event'     => $eventDomain->getEvent(),
             'pro_forma' => $view,
             'sheet'     => $sheet,
-            'order'     => $order
+            'order'     => $order,
         ]);
     }
 
@@ -111,7 +110,7 @@ class OrderController extends Controller
 
         $orders = $sheet->getNotCancelledOrders();
 
-        if (!$sheet->getPackage()->isPassable() || \count($orders) === 0) {
+        if (!$sheet->getPackage()->isPassable() || 0 === \count($orders)) {
             throw $this->createNotFoundException('This page is not accessible by this user');
         }
 

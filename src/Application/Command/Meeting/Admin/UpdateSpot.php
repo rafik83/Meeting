@@ -47,7 +47,7 @@ class UpdateSpot
     }
 
     /**
-     * @return boolean
+     * @return bool
      */
     public function isBlockedSlot()
     {
@@ -55,7 +55,7 @@ class UpdateSpot
     }
 
     /**
-     * @return boolean
+     * @return bool
      */
     public function isBlockedSpot()
     {

@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2017 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -34,7 +34,7 @@ class UnallocatedFormatter
     private $sheetRepository;
 
     /**
-     * @param TranslatorInterface          $translator
+     * @param TranslatorInterface        $translator
      * @param RequestRepositoryInterface $requestRepository
      * @param SheetRepositoryInterface   $sheetRepository
      */
@@ -60,7 +60,7 @@ class UnallocatedFormatter
     {
         $requests = $this->requestRepository->getUnassignedRequestsBySheetAndEvent($sheet, Request::STATE_APPROVED);
 
-        if (count($requests) === 0) {
+        if (0 === count($requests)) {
             return '';
         }
 
@@ -90,7 +90,7 @@ class UnallocatedFormatter
         $sheets = $this->sheetRepository->getSheetsByUserAndEvent($user, $event);
         $requests = $this->requestRepository->getUnallocatedRequestForSheets($sheets);
 
-        if (count($requests) === 0) {
+        if (0 === count($requests)) {
             return '';
         }
 

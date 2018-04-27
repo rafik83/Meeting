@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of the vimeet project.
+ * This file is part of the Proximum Vimeet project.
  *
  * Copyright (C) Proximum
  *
@@ -57,7 +57,7 @@ class OmzUserNormalizer extends AbstractNormalizer implements NormalizerInterfac
      *
      * @param OmzUserListView $object
      */
-    public function normalize($object, $format = null, array $context = array())
+    public function normalize($object, $format = null, array $context = [])
     {
         $normalizedUserRawData = [];
         $charset = isset($context['charset']) ? $context['charset'] : Charset::WINDOWS_1252;

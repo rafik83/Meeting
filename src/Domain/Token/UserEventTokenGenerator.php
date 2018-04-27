@@ -33,10 +33,10 @@ class UserEventTokenGenerator
     private $eventDispatcher;
 
     /**
-     * @param UserEventTokenRepositoryInterface  $userEventTokenRepository
-     * @param UniqidGenerator                    $uniqidGenerator
-     * @param EventDispatcherInterface           $eventDispatcher
-     * @param \DateTimeInterface                 $dateTime
+     * @param UserEventTokenRepositoryInterface $userEventTokenRepository
+     * @param UniqidGenerator                   $uniqidGenerator
+     * @param EventDispatcherInterface          $eventDispatcher
+     * @param \DateTimeInterface                $dateTime
      */
     public function __construct(
         UserEventTokenRepositoryInterface $userEventTokenRepository,
@@ -61,7 +61,7 @@ class UserEventTokenGenerator
     {
         $userEventToken = $this->userEventTokenRepository->findByEventAndUserAndType($event, $user, $type);
 
-        if ($userEventToken !== null) {
+        if (null !== $userEventToken) {
             return $userEventToken;
         }
 

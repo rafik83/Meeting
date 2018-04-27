@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2015 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -616,7 +616,7 @@ class Event implements EventInterface, TraceableInterface
      */
     public function isSvgLogo()
     {
-        return $this->logoExtension === 'svg';
+        return 'svg' === $this->logoExtension;
     }
 
     /**
@@ -667,9 +667,9 @@ class Event implements EventInterface, TraceableInterface
     }
 
     /**
-     * @return Event\Day
-     *
      * @throws DayNotDefinedException
+     *
+     * @return Event\Day
      */
     public function getFirstDay()
     {
@@ -683,9 +683,9 @@ class Event implements EventInterface, TraceableInterface
     }
 
     /**
-     * @return Event\Day
-     *
      * @throws DayNotDefinedException
+     *
+     * @return Event\Day
      */
     public function getLastDay()
     {
@@ -797,8 +797,9 @@ class Event implements EventInterface, TraceableInterface
     /**
      * @param \DateTimeInterface $datetime
      *
-     * @return bool
      * @throws DayNotDefinedException
+     *
+     * @return bool
      */
     public function isFinished(\DateTimeInterface $datetime): bool
     {

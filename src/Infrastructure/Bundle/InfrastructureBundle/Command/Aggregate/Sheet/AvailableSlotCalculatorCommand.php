@@ -88,7 +88,7 @@ class AvailableSlotCalculatorCommand extends Command
         $eventId = $input->getOption('event');
         $sheetId = $input->getOption('sheet');
 
-        if ($sheetId !== null) {
+        if (null !== $sheetId) {
             $sheet = $this->sheetRepository->getSheetById($sheetId);
 
             if ($sheet instanceof Sheet) {
@@ -103,10 +103,10 @@ class AvailableSlotCalculatorCommand extends Command
             return;
         }
 
-        if ($eventId !== null) {
+        if (null !== $eventId) {
             $event = $this->eventRepository->getById($eventId);
 
-            if ($event === null) {
+            if (null === $event) {
                 $output->writeln(sprintf('The event for the id %s was not found', $eventId));
 
                 return;

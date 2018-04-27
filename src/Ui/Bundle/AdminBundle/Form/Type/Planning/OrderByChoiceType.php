@@ -30,7 +30,7 @@ class OrderByChoiceType extends AbstractType
                 'choice_label'       => function ($label) {
                     return sprintf('form.admin_export_planning.children.orderBy.choice.%s', $label);
                 },
-                'translation_domain' => 'forms'
+                'translation_domain' => 'forms',
             ])
         ;
     }

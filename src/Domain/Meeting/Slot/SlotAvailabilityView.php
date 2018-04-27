@@ -1,9 +1,9 @@
 <?php
 
 /*
- * This file is part of the vimeet project.
+ * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2017 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -61,7 +61,7 @@ class SlotAvailabilityView
      */
     public function isAvailable()
     {
-        return $this->type === SlotAvailability::SLOT_AVAILABLE;
+        return SlotAvailability::SLOT_AVAILABLE === $this->type;
     }
 
     /**
@@ -69,7 +69,7 @@ class SlotAvailabilityView
      */
     public function isMeeting()
     {
-        return $this->type === SlotAvailability::MEETING_UNAVAILABILITY;
+        return SlotAvailability::MEETING_UNAVAILABILITY === $this->type;
     }
 
     /**
@@ -77,7 +77,7 @@ class SlotAvailabilityView
      */
     public function isMassUnavaibility()
     {
-        return $this->type === SlotAvailability::MASS_UNAVAILABILITY
-            || $this->type === SlotAvailability::MASS_ASSIGNMENT_UNAVAILABILITY;
+        return SlotAvailability::MASS_UNAVAILABILITY === $this->type
+            || SlotAvailability::MASS_ASSIGNMENT_UNAVAILABILITY === $this->type;
     }
 }

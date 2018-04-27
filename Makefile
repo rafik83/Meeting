@@ -176,6 +176,17 @@ trans-sync:
 	openl10n-cli push --locale=all
 	openl10n-cli pull --locale=all
 
+trans-pr:
+	read -p "Are you on master branch and you have Hub (github) installed (y/n)?" CONFIRM; \
+	if [ "$$CONFIRM" = "y" ]; then \
+	  vagrant ssh -- "cd /srv/app && make trans-sync"; \
+	  git checkout -b update-translations; \
+	  git add .; \
+	  git commit -m "Update translations"; \
+	  git push origin update-translations; \
+	  hub pull-request -m "Update translations"; \
+	fi
+
 ########
 # Test #
 ########

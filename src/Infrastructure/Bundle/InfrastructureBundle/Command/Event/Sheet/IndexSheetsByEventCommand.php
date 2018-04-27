@@ -38,8 +38,7 @@ class IndexSheetsByEventCommand extends Command
     public function __construct(
         EventRepositoryInterface $eventRepository,
         CommandBusInterface $commandBus
-    )
-    {
+    ) {
         parent::__construct(self::NAME);
 
         $this->eventRepository = $eventRepository;
@@ -73,7 +72,7 @@ class IndexSheetsByEventCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $event = $this->eventRepository->getById($input->getArgument('eventId'));
-        $reset = $input->getArgument('reset') === self::RESET;
+        $reset = self::RESET === $input->getArgument('reset');
 
         if (null === $event) {
             throw new \Exception('Event not found.');

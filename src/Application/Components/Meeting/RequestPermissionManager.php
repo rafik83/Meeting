@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2015 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -170,7 +170,7 @@ class RequestPermissionManager
      */
     public function isAllowedToSee(Request $request, Sheet $sheet)
     {
-        return ($request->isSender($sheet) || $request->isReceiver($sheet));
+        return $request->isSender($sheet) || $request->isReceiver($sheet);
     }
 
     /**

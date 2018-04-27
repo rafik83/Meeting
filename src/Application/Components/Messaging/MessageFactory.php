@@ -1,9 +1,9 @@
 <?php
 
 /*
- * This file is part of the vimeet project.
+ * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2017 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -34,9 +34,9 @@ class MessageFactory
     }
 
     /**
-     * @param Event   $event
-     * @param string  $messageId
-     * @param bool    $sendEmailToTeam
+     * @param Event  $event
+     * @param string $messageId
+     * @param bool   $sendEmailToTeam
      *
      * @return Message
      * @throw \InvalidArgumentException

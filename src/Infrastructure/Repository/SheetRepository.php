@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2015 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -279,7 +279,7 @@ class SheetRepository implements SheetRepositoryInterface
     /**
      * {@inheritdoc}
      */
-    public function getSheetViewByEventAndId(Event $event, int $sheetId):? ImportSheetView
+    public function getSheetViewByEventAndId(Event $event, int $sheetId): ? ImportSheetView
     {
         $queryBuilder = $this
             ->entityManager
@@ -482,9 +482,9 @@ class SheetRepository implements SheetRepositoryInterface
             ->setParameter('ids', $ids)
             ->orderBy('sheet.id');
 
-        if ($orderBy === Sheet\Constant::ORDER_BY_CREATED_AT) {
+        if (Sheet\Constant::ORDER_BY_CREATED_AT === $orderBy) {
             $queryBuilder->orderBy('sheet.createdAt', 'asc');
-        } elseif ($orderBy === Sheet\Constant::ORDER_BY_ALPHABETICAL) {
+        } elseif (Sheet\Constant::ORDER_BY_ALPHABETICAL === $orderBy) {
             $queryBuilder->orderBy('sheet.title', 'asc');
         }
 
@@ -558,15 +558,15 @@ class SheetRepository implements SheetRepositoryInterface
         $userCondition  = '1 = 1';
         $userJoinCondition = '';
 
-        if ($type !== null) {
-            if ($type === Request::TYPE_REQUEST) {
+        if (null !== $type) {
+            if (Request::TYPE_REQUEST === $type) {
                 $typeCondition = 'r.to = sheet AND r.from IN (:sheets)';
-            } elseif ($type === Request::TYPE_PROPOSITION) {
+            } elseif (Request::TYPE_PROPOSITION === $type) {
                 $typeCondition = 'r.from = sheet AND r.to IN (:sheets)';
             }
         }
 
-        if ($state !== null && in_array($state, Request::getAllStates())) {
+        if (null !== $state && in_array($state, Request::getAllStates())) {
             $stateCondition = sprintf("r.state = '%s'", $state);
         }
 
@@ -576,7 +576,7 @@ class SheetRepository implements SheetRepositoryInterface
         }
 
         // filter meeting request with fromParticipants or toParticipants empty
-        if ($user === FilterRequestView::NO_PREFERENCE) {
+        if (FilterRequestView::NO_PREFERENCE === $user) {
             $userJoinCondition = 'LEFT JOIN r.fromParticipants fp LEFT JOIN r.toParticipants tp';
             $typeCondition  =
                 '((r.from = sheet AND r.to IN (:sheets) AND tp.id IS NULL) 
@@ -609,7 +609,7 @@ class SheetRepository implements SheetRepositoryInterface
             $queryBuilder->setParameter('user', $user);
         }
 
-        if ($state === Request::STATE_PLANNED) {
+        if (Request::STATE_PLANNED === $state) {
             $queryBuilder
                 ->join(Request::class,
                     'request',
@@ -785,7 +785,7 @@ class SheetRepository implements SheetRepositoryInterface
             ->where('sheet.event = :event')
             ->setParameter('event', $event);
 
-        return (int)$queryBuilder->getQuery()->getSingleScalarResult();
+        return (int) $queryBuilder->getQuery()->getSingleScalarResult();
     }
 
     /**
@@ -938,7 +938,7 @@ class SheetRepository implements SheetRepositoryInterface
             ->setParameter('ids', $ids)
             ->setParameter('state', $state);
 
-        if ($state === true) {
+        if (true === $state) {
             $queryBuilder->set('sheet.inCatalogAt', ':date')
                 ->setParameter('date', new \DateTime());
         }
@@ -1118,7 +1118,7 @@ class SheetRepository implements SheetRepositoryInterface
             ->setParameter('event', $event)
             ->setMaxResults(1);
 
-        return $queryBuilder->getQuery()->getOneOrNullResult() !== null;
+        return null !== $queryBuilder->getQuery()->getOneOrNullResult();
     }
 
     /**
@@ -1145,7 +1145,7 @@ class SheetRepository implements SheetRepositoryInterface
             ->setParameter('event', $group->getEvent())
             ->setMaxResults(1);
 
-        return $queryBuilder->getQuery()->getOneOrNullResult() !== null;
+        return null !== $queryBuilder->getQuery()->getOneOrNullResult();
     }
 
     /**

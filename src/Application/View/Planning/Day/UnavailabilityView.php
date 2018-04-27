@@ -34,6 +34,6 @@ class UnavailabilityView extends AbstractTimeEntityView
      */
     public function hasMessage()
     {
-        return $this->message !== null;
+        return null !== $this->message;
     }
 }

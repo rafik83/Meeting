@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2016 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -36,7 +36,7 @@ class FullHappeningQueryHandler
 
         foreach ($query->programView->days as $day) {
             foreach ($day->happenings as $happening) {
-                if (!$happening->hasParticipations() && $happening->limitParticipant !== null) {
+                if (!$happening->hasParticipations() && null !== $happening->limitParticipant) {
                     if (isset($participationCount[$happening->getId()])
                         && $participationCount[$happening->getId()] >= $happening->limitParticipant
                     ) {

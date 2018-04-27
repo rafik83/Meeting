@@ -26,7 +26,7 @@ class CategoryNameResolver
     {
         $category = $this->resolveCategoryForPreloadSheets($sheets);
 
-        if ($category === null) {
+        if (null === $category) {
             return '';
         }
 

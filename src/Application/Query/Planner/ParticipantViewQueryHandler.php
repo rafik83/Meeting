@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2017 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -25,7 +25,7 @@ class ParticipantViewQueryHandler
     /** @var ParticipantRepositoryInterface */
     private $participantRepository;
 
-    /** @var MeetingSlotRepositoryInterface*/
+    /** @var MeetingSlotRepositoryInterface */
     private $slotRepository;
 
     /** @var SlotAvailability */
@@ -120,9 +120,9 @@ class ParticipantViewQueryHandler
     /**
      * @param MeetingSlot $slot
      *
-     * @return SlotView
-     *
      * @throws SlotNotFoundException
+     *
+     * @return SlotView
      */
     private function getSlotViewFromSlot(MeetingSlot $slot)
     {

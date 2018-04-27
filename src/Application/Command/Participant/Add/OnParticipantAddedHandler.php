@@ -11,11 +11,11 @@
 namespace Proximum\Vimeet\Application\Command\Participant\Add;
 
 use Proximum\Vimeet\Application\Adapter\CommandBusInterface;
+use Proximum\Vimeet\Application\Components\Token\User\ActivateAccountTokenGenerator;
 use Proximum\Vimeet\Application\Event\Events;
 use Proximum\Vimeet\Application\Event\Sheet\SheetAddParticipantEvent;
 use Proximum\Vimeet\Application\Event\User\ActivateAccountEvent;
 use Proximum\Vimeet\Application\Event\User\CompleteProfileEvent;
-use Proximum\Vimeet\Application\Components\Token\User\ActivateAccountTokenGenerator;
 use Proximum\Vimeet\Application\ThirdParty\Comexposium\SSO\Application\Command\Participant\OnParticipantAdded as ComexposiumOnParticipantAdded;
 use Proximum\Vimeet\Domain\Event\ExtraParameter\Type;
 use Proximum\Vimeet\Domain\Model\Event;
@@ -74,7 +74,7 @@ class OnParticipantAddedHandler
             // Check that an SSO is activated for the event
             $ssoEnabled = $this->extraParameterRepository->findByEventAndType($event, Type::TYPE_COMEXPOSIUM_SSO_ENABLED);
 
-            if ($ssoEnabled === null) {
+            if (null === $ssoEnabled) {
                 // If sso is not enabled, we send the event to warn the user
                 // send to the guest
                 if ($user->isActive()) {

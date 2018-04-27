@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2015 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -69,7 +69,7 @@ class WhoType extends AbstractType
                             : '';
                     }
 
-                    return (string)$choice;
+                    return (string) $choice;
                 };
             },
             'choice_value' => function ($choice) {

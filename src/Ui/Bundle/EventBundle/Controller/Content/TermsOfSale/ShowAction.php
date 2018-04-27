@@ -1,9 +1,9 @@
 <?php
 
 /*
- * This file is part of the vimeet project.
+ * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) vimeet
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -16,8 +16,8 @@ use Proximum\Vimeet\Application\Query\Content\TermsOfSaleViewQuery;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\ParamConverter\EventDomain;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Security\SheetVoter;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Templating\EngineInterface;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
@@ -52,8 +52,9 @@ class ShowAction
      * @param EventDomain $eventDomain
      * @param Sheet       $sheet
      *
-     * @return Response
      * @throws AccessDeniedException
+     *
+     * @return Response
      */
     public function __invoke(Request $request, EventDomain $eventDomain, Sheet $sheet): Response
     {
@@ -62,7 +63,7 @@ class ShowAction
             $sheet
         )) {
             throw new AccessDeniedException();
-        };
+        }
 
         $termsOfSaleView = $this->queryBus->handle(
             new TermsOfSaleViewQuery($eventDomain->getEvent(), $request->getLocale())

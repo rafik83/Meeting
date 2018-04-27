@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2016 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -28,7 +28,7 @@ class BillingConfigurationHandler
 
     /**
      * @param EventRepositoryInterface $eventRepository
-     * @param FileStorageInterface $fileStorage
+     * @param FileStorageInterface     $fileStorage
      */
     public function __construct(EventRepositoryInterface $eventRepository, FileStorageInterface $fileStorage)
     {

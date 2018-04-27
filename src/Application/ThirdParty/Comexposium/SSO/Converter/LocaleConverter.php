@@ -17,6 +17,6 @@ class LocaleConverter
 {
     public function formatLocale(string $locale): string
     {
-        return $locale === 'fr' ? 'fre-FR' : 'eng-GB';
+        return 'fr' === $locale ? 'fre-FR' : 'eng-GB';
     }
 }

@@ -72,14 +72,14 @@ class SheetController extends Controller
             ));
         }
 
-        if (!$this->isRequestContainFilters($request) && $savedFilters !== null) {
+        if (!$this->isRequestContainFilters($request) && null !== $savedFilters) {
             return $this->redirectToRoute('admin_sheet', array_merge(
                 ['event' => $event->getId(), 'page' => $selectedSheetsPage],
                 $savedFilters
             ));
         }
 
-        if ($request->query->get('reset') !== null) {
+        if (null !== $request->query->get('reset')) {
             $sheetFilter->clear($event);
 
             return $this->redirectToRoute('admin_sheet', ['event' => $event->getId()]);
@@ -349,7 +349,7 @@ class SheetController extends Controller
         try {
             /** @var ImportMappingView $importMappingView */
             $importMappingView = $this->get('tactician.commandbus.query')->handle($importMappingViewQuery);
-        } catch(\Exception $exception) {
+        } catch (\Exception $exception) {
             $this->addFlash('error', 'flash.admin.sheet.participant.import.error');
 
             return $this->redirectToRoute('admin_sheet_import', ['event' => $event->getId()]);
@@ -403,25 +403,25 @@ class SheetController extends Controller
     }
 
     /**
-     * @param Request           $request
-     * @param Event             $event
-     * @param Participant       $participant
+     * @param Request     $request
+     * @param Event       $event
+     * @param Participant $participant
      *
      * @return JsonResponse
      */
-    public function updateVisioAction(Request $request , Event $event, Participant $participant)
+    public function updateVisioAction(Request $request, Event $event, Participant $participant)
     {
         $this->checkAccess($event);
 
         $visioParam = $request->request->get('isVisio');
 
-        if ($visioParam !== 'true' && $visioParam !== 'false') {
+        if ('true' !== $visioParam && 'false' !== $visioParam) {
             return new JsonResponse([
-                'error' => $this->get('translator')->trans('admin.sheet.participant.invalid-parameters')
+                'error' => $this->get('translator')->trans('admin.sheet.participant.invalid-parameters'),
             ], 404);
         }
 
-        $isVisio = $visioParam !== 'true' ? false : true;
+        $isVisio = 'true' !== $visioParam ? false : true;
 
         if ($participant->getSheet()->getEvent() !== $event) {
             return new JsonResponse([
@@ -434,7 +434,7 @@ class SheetController extends Controller
         $this->get('tactician.commandbus')->handle($command);
 
         return new JsonResponse([
-            'message' => $this->get('translator')->trans('admin.sheet.participant_visio.success')
+            'message' => $this->get('translator')->trans('admin.sheet.participant_visio.success'),
         ], 200);
     }
 
@@ -481,7 +481,7 @@ class SheetController extends Controller
             return false;
         }
 
-        if (\count($request->query->all()) === 1 && !empty($request->query->get('page'))) {
+        if (1 === \count($request->query->all()) && !empty($request->query->get('page'))) {
             return false;
         }
 

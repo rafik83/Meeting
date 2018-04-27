@@ -1,9 +1,9 @@
 <?php
 
 /*
- * This file is part of the Proximum Vimeet website.
+ * This file is part of the Proximum Vimeet project.
  *
- * Copyright © Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -66,7 +66,7 @@ class CampaignFullView
      * @param string $name
      * @param string $value
      */
-    public function  addFilter($name, $value)
+    public function addFilter($name, $value)
     {
         $this->filters[$name] = $value;
     }
@@ -84,7 +84,7 @@ class CampaignFullView
      */
     public function getSheets()
     {
-        usort($this->sheets , function (SheetListView $a, SheetListView $b) {
+        usort($this->sheets, function (SheetListView $a, SheetListView $b) {
             return $a->name > $b->name;
         });
 

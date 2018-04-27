@@ -45,7 +45,7 @@ class AttendHandler
      */
     public function handle(Attend $attend)
     {
-        if ($attend->attend === false) {
+        if (false === $attend->attend) {
             $this->meetingRepository->removeMeetingOfSheet($attend->sheet);
 
             $this->happeningsEnableDisableManager->update(

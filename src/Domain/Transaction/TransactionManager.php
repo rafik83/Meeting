@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2016 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -29,8 +29,8 @@ class TransactionManager
     private $eventDispatcher;
 
     /**
-     * @param TransactionRepositoryInterface  $transactionRepository
-     * @param DelayedEventDispatcher          $eventDispatcher
+     * @param TransactionRepositoryInterface $transactionRepository
+     * @param DelayedEventDispatcher         $eventDispatcher
      */
     public function __construct(
         TransactionRepositoryInterface $transactionRepository,

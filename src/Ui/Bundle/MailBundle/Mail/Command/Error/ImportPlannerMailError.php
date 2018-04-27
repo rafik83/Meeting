@@ -1,9 +1,9 @@
 <?php
 
 /*
- * This file is part of the vimeet project.
+ * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2017 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -14,14 +14,13 @@ use Proximum\Vimeet\Application\Components\Mail\AbstractMail;
 
 class ImportPlannerMailError extends AbstractMail
 {
-
     /** @var string */
     protected $subject = 'mail.planner.import.subject.error';
 
     /** @var string */
     protected $template = 'MailBundle:Mail:Planner/error.html.twig';
 
-    /** @var string  */
+    /** @var string */
     protected $messageId = 'import_planner_error';
 
     /** @var int */

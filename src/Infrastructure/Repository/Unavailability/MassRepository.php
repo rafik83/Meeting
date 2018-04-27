@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2016 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -62,7 +62,7 @@ class MassRepository implements MassRepositoryInterface
             ->select('mass')
             ->from(Mass::class, 'mass');
 
-        if ($locale !== null) {
+        if (null !== $locale) {
             $queryBuilder
                 ->join('mass.translations', 'translation', 'WITH', 'translation.locale = :locale')
                 ->setParameter('locale', $locale);

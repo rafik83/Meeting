@@ -28,7 +28,7 @@ class Duplicator
     }
 
     /**
-     * @param Event     $event of the new product
+     * @param Event     $event        of the new product
      * @param Product[] $fromProducts
      *
      * @return Product[]

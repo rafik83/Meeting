@@ -37,9 +37,9 @@ class ProFormaQueryHandler
     /**
      * @param ProFormaQuery $proFormaQuery
      *
-     * @return ProFormaView
-     *
      * @throws MissingBillingInfoException
+     *
+     * @return ProFormaView
      */
     public function handle(ProFormaQuery $proFormaQuery)
     {

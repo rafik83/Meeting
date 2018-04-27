@@ -30,7 +30,7 @@ class MeetingRequestListViewQueryHandler
     /** @var ViewedSheetListViewQueryHandler */
     private $viewedSheetListViewQueryHandler;
 
-    /** @var MeetingPublishedAccessChecker*/
+    /** @var MeetingPublishedAccessChecker */
     private $meetingPublishedAccessChecker;
 
     /** @var MeetingRequestAccessChecker */

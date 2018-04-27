@@ -98,13 +98,10 @@ class OrdersExportViewQueryHandler
 
             if ($product->isPlan()) {
                 $plans[] = $productView;
-
             } elseif ($product->isParticipant()) {
                 $participants[] = $productView;
-
             } elseif ($product->isPlanning()) {
                 $plannings[] = $productView;
-
             } elseif ($product->isOption()) {
                 $options[] = $productView;
             }
@@ -132,7 +129,7 @@ class OrdersExportViewQueryHandler
             $orderViews[] = $orderView;
         }
 
-        for ($index = 1; $index <= $maxIndexOfCustomRow; $index++) {
+        for ($index = 1; $index <= $maxIndexOfCustomRow; ++$index) {
             $customRowViews[] = $this->customRowViewQueryHandler->handle(new CustomRowViewQuery($index, $query->adminLocale));
         }
 

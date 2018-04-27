@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2015 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -14,9 +14,9 @@ use Proximum\Vimeet\Application\Components\Sheet\Template\Tag;
 use Proximum\Vimeet\Application\Event\Events;
 use Proximum\Vimeet\Application\Event\Package\MustSelectPackageEvent;
 use Proximum\Vimeet\Application\Event\Sheet\SheetTitleCheckEvent;
+use Proximum\Vimeet\Application\Event\Sheet\SheetUpdatedEvent;
 use Proximum\Vimeet\Application\Event\User\RegistrationEvent;
 use Proximum\Vimeet\Application\Event\User\RegistrationStepEvent;
-use Proximum\Vimeet\Application\Event\Sheet\SheetUpdatedEvent;
 use Proximum\Vimeet\Domain\Account\Synchronizer;
 use Proximum\Vimeet\Domain\Event\LastEventParticipation;
 use Proximum\Vimeet\Domain\Model\Participant;
@@ -185,9 +185,9 @@ class ParticipateHandler
     private function getSanitizedSheetData(array $sheetData): array
     {
         foreach ($sheetData as $key => $datum) {
-            $sheetData[$key] = array_filter($datum, function($element) {
-                return $element !== AbstractChild::TEMPLATE_OBJECT_TYPE_IMAGE
-                       && $element !== AbstractChild::TEMPLATE_OBJECT_TYPE_MEDIA;
+            $sheetData[$key] = array_filter($datum, function ($element) {
+                return AbstractChild::TEMPLATE_OBJECT_TYPE_IMAGE !== $element
+                       && AbstractChild::TEMPLATE_OBJECT_TYPE_MEDIA !== $element;
             }, ARRAY_FILTER_USE_KEY);
         }
 

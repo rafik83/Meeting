@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2016 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -58,7 +58,7 @@ class HappeningParticipationQueryHandler
             if (isset($happenings[$participation->getHappening()->getId()])) {
                 $happenings[$participation->getHappening()->getId()]->setHasParticipation(true);
 
-                if ($participant !== null && $participation->getUser() === $participant->getUser()) {
+                if (null !== $participant && $participation->getUser() === $participant->getUser()) {
                     $happenings[$participation->getHappening()->getId()]->setCurrentUserParticipate(true);
                 }
             }

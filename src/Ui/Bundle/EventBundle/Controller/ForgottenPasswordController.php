@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2015 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -13,9 +13,9 @@ namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Controller;
 use Proximum\Vimeet\Application\Command\User\ForgottenPassword;
 use Proximum\Vimeet\Application\Command\User\NewPassword;
 use Proximum\Vimeet\Application\Exception\User\EmailDoesNotExistException;
+use Proximum\Vimeet\Domain\Model\User\ForgottenPasswordToken;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\User\ForgottenPasswordType;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\User\NewPasswordType;
-use Proximum\Vimeet\Domain\Model\User\ForgottenPasswordToken;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\ParamConverter\EventDomain;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -25,7 +25,7 @@ use Symfony\Component\HttpFoundation\Response;
 class ForgottenPasswordController extends Controller
 {
     /**
-     * @param Request   $request
+     * @param Request     $request
      * @param EventDomain $eventDomain
      *
      * @return RedirectResponse|Response
@@ -77,7 +77,7 @@ class ForgottenPasswordController extends Controller
 
     /**
      * @param Request                $request
-     * @param EventDomain              $eventDomain
+     * @param EventDomain            $eventDomain
      * @param ForgottenPasswordToken $forgottenPasswordToken
      *
      * @return RedirectResponse|Response
@@ -87,7 +87,7 @@ class ForgottenPasswordController extends Controller
         if ($forgottenPasswordToken->isExpired(new \DateTime())) {
             throw $this->createNotFoundException('The token expired.');
         }
-        
+
         $newPassword = new NewPassword($forgottenPasswordToken->getUser(), $eventDomain->getEvent());
         $form        = $this->createForm(NewPasswordType::class, $newPassword, [
             'action' => $this->generateUrl('event_create_new_password', [

@@ -36,7 +36,7 @@ class Duplicator
     }
 
     /**
-     * @param Event $event
+     * @param Event                 $event
      * @param DuplicatorDataStorage $duplicatorDataStorage
      *
      * @return DuplicatorDataStorage

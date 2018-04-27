@@ -311,7 +311,7 @@ class Happening implements TimeRangeInterface
      */
     public function isParticipantLimited()
     {
-        return $this->limitParticipant !== null;
+        return null !== $this->limitParticipant;
     }
 
     /**

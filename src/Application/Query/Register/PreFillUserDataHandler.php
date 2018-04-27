@@ -1,9 +1,9 @@
 <?php
 
 /*
- * This file is part of the vimeet project.
+ * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2017 vimeet
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -33,9 +33,9 @@ class PreFillUserDataHandler
     private $accountSynchronizer;
 
     /**
-     * @param LastEventParticipation $lastEventParticipation
+     * @param LastEventParticipation      $lastEventParticipation
      * @param EventParticipationPreFiller $eventParticipationPreFiller
-     * @param Synchronizer $accountSynchronizer
+     * @param Synchronizer                $accountSynchronizer
      */
     public function __construct(
         LastEventParticipation $lastEventParticipation,
@@ -56,7 +56,7 @@ class PreFillUserDataHandler
     {
         $lastParticipation = $this->lastEventParticipation->getLastEventParticipation($command->user, $command->event);
 
-        if ($lastParticipation !== null) {
+        if (null !== $lastParticipation) {
             $templateData = $this->eventParticipationPreFiller->preFillTemplate(
                 $command->templateData,
                 $lastParticipation,
@@ -72,7 +72,7 @@ class PreFillUserDataHandler
         return new PreFillUserDataView(
             $templateData,
             $lastParticipation ? $lastParticipation->getSheet()->getEvent() : null,
-            $lastParticipation !== null
+            null !== $lastParticipation
         );
     }
 }

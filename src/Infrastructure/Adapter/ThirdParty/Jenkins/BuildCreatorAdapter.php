@@ -73,7 +73,7 @@ class BuildCreatorAdapter implements BuildCreatorInterface
             ]
         );
 
-        $this->execAdapter->exec($command .' 2>&1', $output, $result);
+        $this->execAdapter->exec($command . ' 2>&1', $output, $result);
 
         if ($result > 0) {
             throw new BuildCreationFailedException();

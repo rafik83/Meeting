@@ -34,7 +34,7 @@ class UpdateHandler
         $paymentConditions = $command->type->getPaymentConditions();
 
         if ($paymentConditions instanceof PaymentConditions) {
-            if ($command->specificPaymentConditions === false) {
+            if (false === $command->specificPaymentConditions) {
                 $this->paymentConditionsRepository->remove($paymentConditions);
 
                 return;
@@ -53,7 +53,7 @@ class UpdateHandler
             return;
         }
 
-        if ($command->specificPaymentConditions === false) {
+        if (false === $command->specificPaymentConditions) {
             return;
         }
 

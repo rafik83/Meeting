@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2015 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -37,16 +37,16 @@ class ItemToSinglesTransformer extends AbstractTransformer
             return [];
         }
 
-        if ($depth === 1) {
+        if (1 === $depth) {
             return [
                 'first' => $item,
             ];
-        } elseif ($depth === 2) {
+        } elseif (2 === $depth) {
             return [
                 'first'  => $item->getParent(),
                 'second' => $item,
             ];
-        } elseif ($depth === 3) {
+        } elseif (3 === $depth) {
             return [
                 'first'  => $item->getParent()->getParent(),
                 'second' => $item->getParent(),

@@ -33,8 +33,9 @@ class WSSoapClient extends \SoapClient
      * @param array      $arguments
      * @param array|null $options
      *
-     * @return mixed
      * @throws \SoapFault
+     *
+     * @return mixed
      */
     public function call(string $function_name, array $arguments, ?array $options = null)
     {
@@ -52,9 +53,9 @@ class WSSoapClient extends \SoapClient
      * @param array|null $options
      * @param array|null $output_headers
      *
-     * @return mixed
-     *
      * @throws \SoapFault
+     *
+     * @return mixed
      */
     public function __soapCall(
         $function_name,

@@ -37,7 +37,7 @@ class AvailabilityTimeRangeContext implements Context
     {
         $event = $this->availabilityTimeRangeContextProxy->getStorage()->get('event');
 
-        if ($event === null) {
+        if (null === $event) {
             throw new \InvalidArgumentException('Missing event');
         }
 

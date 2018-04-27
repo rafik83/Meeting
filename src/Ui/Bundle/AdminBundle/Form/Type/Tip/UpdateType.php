@@ -22,7 +22,7 @@ class UpdateType extends TipType
             'data_class' => Update::class,
         ]);
     }
-    
+
     /** {@inheritdoc} */
     public function getBlockPrefix()
     {

@@ -1,9 +1,9 @@
 <?php
 
 /*
- * This file is part of the vimeet project.
+ * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2016 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -39,7 +39,7 @@ class AbstractOperatorType extends AbstractType
                 'expanded'    => true,
                 'multiple'    => true,
                 'placeholder' => '',
-                'choices'     => $options['events']
+                'choices'     => $options['events'],
             ])
         ;
     }

@@ -23,3 +23,7 @@ services:
     Proximum\Vimeet\Infrastructure\Repository\CartRowParticipantRepository:
         arguments:
             - '@doctrine.orm.entity_manager'
+
+    Proximum\Vimeet\Infrastructure\Repository\User\Event\AuthenticationTokenRepository:
+        arguments:
+            - '@doctrine.orm.entity_manager'

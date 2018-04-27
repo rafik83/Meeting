@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2016 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -208,8 +208,8 @@ class SheetSearchQueryBuilder
      */
     private function discardEmptyFilters(array &$filters)
     {
-        $filters = array_filter($filters, function($filter) {
-            return $filter !== "";
+        $filters = array_filter($filters, function ($filter) {
+            return '' !== $filter;
         });
     }
 
@@ -378,7 +378,6 @@ class SheetSearchQueryBuilder
 
         if ($filters['type'] instanceof Type) {
             $this->query->addMust((new Term())->setTerm('type', $filters['type']->getId()));
-
         } elseif (is_array($filters['type'])) {
             $filterByTypes = new BoolQuery();
 
@@ -391,7 +390,7 @@ class SheetSearchQueryBuilder
                     $typeId = (int) $type;
                 }
 
-                if ($typeId !== null) {
+                if (null !== $typeId) {
                     $filterByTypes->addShould((new Term())->setTerm('type', $typeId));
                 }
             }
@@ -422,8 +421,8 @@ class SheetSearchQueryBuilder
                 $id = (int) $category;
             }
 
-            if ($category !== null) {
-                $matchId->addShould((new Term)->setTerm('categories.id', $id));
+            if (null !== $category) {
+                $matchId->addShould((new Term())->setTerm('categories.id', $id));
             }
         }
 
@@ -438,7 +437,7 @@ class SheetSearchQueryBuilder
     {
         if (!isset($filters[SearchFields::FILTER_AVAILABLE_SLOT_IDS])
             || empty($filters[SearchFields::FILTER_AVAILABLE_SLOT_IDS])
-            || $filters[SearchFields::FILTER_AVAILABLE_SLOT_IDS] === CatalogConstant::AVAILABLE_SLOT_IDS_FILTER_EVERYONE
+            || CatalogConstant::AVAILABLE_SLOT_IDS_FILTER_EVERYONE === $filters[SearchFields::FILTER_AVAILABLE_SLOT_IDS]
         ) {
             return;
         }
@@ -451,16 +450,16 @@ class SheetSearchQueryBuilder
         $matchSlot = new BoolQuery();
 
         if (!empty($filters[SearchFields::FILTER_BY_SPECIFIC_SLOT])
-            && $filterAvailableSlotChoice === CatalogConstant::AVAILABLE_SLOT_IDS_FILTER_SLOT
+            && CatalogConstant::AVAILABLE_SLOT_IDS_FILTER_SLOT === $filterAvailableSlotChoice
         ) {
             $matchSlot->addShould(
-                (new Term)->setTerm('availableSlotIds.id', $filters[SearchFields::FILTER_BY_SPECIFIC_SLOT])
+                (new Term())->setTerm('availableSlotIds.id', $filters[SearchFields::FILTER_BY_SPECIFIC_SLOT])
             );
-        } elseif ($filterAvailableSlotChoice === CatalogConstant::AVAILABLE_SLOT_IDS_FILTER_AVAILABLE) {
+        } elseif (CatalogConstant::AVAILABLE_SLOT_IDS_FILTER_AVAILABLE === $filterAvailableSlotChoice) {
             /** @var AvailableSlotView $availableSlot */
             foreach ($this->availableSlots as $availableSlot) {
                 $matchSlot->addShould(
-                    (new Term)->setTerm('availableSlotIds.id', $availableSlot->id)
+                    (new Term())->setTerm('availableSlotIds.id', $availableSlot->id)
                 );
             }
         }
@@ -484,7 +483,7 @@ class SheetSearchQueryBuilder
         $followerQuery = new BoolQuery();
 
         foreach ($followers as $follower) {
-            if ($follower === FollowerConstant::UNASSIGNED_FOLLOWER) {
+            if (FollowerConstant::UNASSIGNED_FOLLOWER === $follower) {
                 $matchFollower = new Term();
                 $matchFollower->setTerm('followUp', 0);
                 $followerQuery->addShould($matchFollower);
@@ -507,9 +506,9 @@ class SheetSearchQueryBuilder
             return;
         }
 
-        if ($filters['predefined'] === Constant::CREATED_TODAY) {
+        if (Constant::CREATED_TODAY === $filters['predefined']) {
             $this->filterCreatedToday();
-        } elseif ($filters['predefined'] === Constant::CREATED_THIS_WEEK) {
+        } elseif (Constant::CREATED_THIS_WEEK === $filters['predefined']) {
             $this->filterCreatedThisWeek();
         }
     }
@@ -522,12 +521,12 @@ class SheetSearchQueryBuilder
     protected function filterByRegisteredAt(array &$filters)
     {
         if (isset($filters['registeredAt'])) {
-            if ($filters['registeredAt'] === Constant::CREATED_TODAY) {
+            if (Constant::CREATED_TODAY === $filters['registeredAt']) {
                 $this->filterCreatedToday();
 
                 return;
             }
-            if ($filters['registeredAt'] === Constant::CREATED_THIS_WEEK) {
+            if (Constant::CREATED_THIS_WEEK === $filters['registeredAt']) {
                 $this->filterCreatedThisWeek();
 
                 return;
@@ -594,7 +593,7 @@ class SheetSearchQueryBuilder
         foreach ($filters['organizationCategory'] as $organizationCategory) {
             if ($organizationCategory instanceof OrganizationCategoryView) {
                 $matchOrganizationCategory->addShould(
-                    (new Term)->setTerm('organizationCategory', $organizationCategory->key)
+                    (new Term())->setTerm('organizationCategory', $organizationCategory->key)
                 );
             }
         }
@@ -752,10 +751,10 @@ class SheetSearchQueryBuilder
         $boolQueryMustNot = new BoolQuery();
 
         foreach ($booleanFilters as $key => $isFiltered) {
-            if ($isFiltered === true) {
+            if (true === $isFiltered) {
                 $boolQueryMust->addMust((new Match())->setField('booleanFilter.key', $key));
                 $hasNestedMust = true;
-            } elseif ($isFiltered === false) {
+            } elseif (false === $isFiltered) {
                 $boolQueryMustNot->addMust((new Match())->setField('booleanFilter.key', $key));
                 $hasNestedMustNot = true;
             }
@@ -774,6 +773,7 @@ class SheetSearchQueryBuilder
 
     /**
      * Filter sheet with canceled attendance
+     *
      * @see Sheet::attend()
      *
      * @param array $filters
@@ -791,6 +791,7 @@ class SheetSearchQueryBuilder
 
     /**
      * Filter sheet with group
+     *
      * @see Sheet::hasGroup()
      *
      * @param array $filters
@@ -839,7 +840,7 @@ class SheetSearchQueryBuilder
         foreach ($filters['position'] as $position) {
             if ($position instanceof PositionView) {
                 $matchPosition->addShould(
-                    (new Term)->setTerm('participants.position', $position->getKey())
+                    (new Term())->setTerm('participants.position', $position->getKey())
                 );
             }
         }
@@ -932,7 +933,7 @@ class SheetSearchQueryBuilder
     {
         $positiveRange = new Range();
 
-        $parameters = $hasRemainingToPay === true ? ['gt' => 0] : ['lte' => 0];
+        $parameters = true === $hasRemainingToPay ? ['gt' => 0] : ['lte' => 0];
 
         $positiveRange->addField('remainingToPay', $parameters);
         $this->query->addMust($positiveRange);
@@ -959,26 +960,25 @@ class SheetSearchQueryBuilder
 
         $importedQuery = new BoolQuery();
 
-        if ($filters[Constant::FILTER_IMPORTED] === Constant::IMPORTED) {
+        if (Constant::IMPORTED === $filters[Constant::FILTER_IMPORTED]) {
             $importedQuery->addMust($this->isImported(true));
         }
 
-        if ($filters[Constant::FILTER_IMPORTED] === Constant::IMPORTED_WITH_CONNECTION) {
+        if (Constant::IMPORTED_WITH_CONNECTION === $filters[Constant::FILTER_IMPORTED]) {
             $importedQuery->addMust($this->isImported(true));
             $importedQuery->addMust($this->hasConnectionFilter());
         }
 
-        if ($filters[Constant::FILTER_IMPORTED] === Constant::IMPORTED_WITHOUT_CONNECTION) {
+        if (Constant::IMPORTED_WITHOUT_CONNECTION === $filters[Constant::FILTER_IMPORTED]) {
             $importedQuery->addMust($this->isImported(true));
             $importedQuery->addMustNot($this->hasConnectionFilter());
         }
 
-        if ($filters[Constant::FILTER_IMPORTED] === Constant::NOT_IMPORTED) {
+        if (Constant::NOT_IMPORTED === $filters[Constant::FILTER_IMPORTED]) {
             $importedQuery->addMust($this->isImported(false));
         }
 
         $this->query->addMust($importedQuery);
-
     }
 
     /**
@@ -1020,7 +1020,7 @@ class SheetSearchQueryBuilder
         }
 
         $this->query->addMust($orderStatusQuery);
-     }
+    }
 
     /**
      * @param string $agendaConfirmedStatus
@@ -1046,7 +1046,7 @@ class SheetSearchQueryBuilder
 
         foreach ($sheetsToExclude as $sheetToExclude) {
             $excludeSheets->addShould(
-                (new Term)->setTerm('id', $sheetToExclude->getId())
+                (new Term())->setTerm('id', $sheetToExclude->getId())
             );
         }
 

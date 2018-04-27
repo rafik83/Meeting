@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2015 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -18,7 +18,6 @@ use Proximum\Vimeet\Domain\Model\PlannerJob;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\Template\RegistrationTemplate;
 use Proximum\Vimeet\Domain\Model\Template\SheetTemplate;
-use Proximum\Vimeet\Domain\Model\Type;
 use Proximum\Vimeet\Domain\Model\User;
 
 interface JobQueueInterface
@@ -30,19 +29,19 @@ interface JobQueueInterface
 
     /**
      * @param Event  $event
-     * @param Int[]  $sheetIds
+     * @param int[]  $sheetIds
      * @param string $emailName
      * @param bool   $sendEmailToTeam
      */
     public function sendEmailing(Event $event, array $sheetIds, $emailName, $sendEmailToTeam = false);
 
     /**
-     * @param Event\ExtraData $extraData which contains the value of the sheetIds
+     * @param Event\ExtraData $extraData     which contains the value of the sheetIds
      * @param string          $orderBy
      * @param string          $emailToNotify
      * @param string          $locale
      */
-    public function printPlanning(Event\ExtraData $extraData, string $orderBy, $emailToNotify, $locale) :void;
+    public function printPlanning(Event\ExtraData $extraData, string $orderBy, $emailToNotify, $locale): void;
 
     /**
      * @param Event  $event
@@ -128,7 +127,7 @@ interface JobQueueInterface
     public function indexInCatalogSheetsByEvent(Event $event);
 
     /**
-     * @param Int[] $sheetIds
+     * @param int[] $sheetIds
      */
     public function indexSheets(array $sheetIds);
 
@@ -180,7 +179,7 @@ interface JobQueueInterface
 
     /**
      * Export the users' data for the OMZ
-     * 
+     *
      * @param Event $event
      * @param Admin $admin
      */

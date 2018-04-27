@@ -1,9 +1,9 @@
 <?php
 
 /*
- * This file is part of the vimeet project.
+ * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) vimeet
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -23,7 +23,7 @@ class SpotFillingRateViewDenormalizer implements DenormalizerAwareInterface, Den
     /**
      * {@inheritdoc}
      */
-    public function denormalize($data, $class, $format = null, array $context = array())
+    public function denormalize($data, $class, $format = null, array $context = [])
     {
         $spotFillingRateDayList = new SpotFillingRateDayListView();
 
@@ -41,6 +41,6 @@ class SpotFillingRateViewDenormalizer implements DenormalizerAwareInterface, Den
      */
     public function supportsDenormalization($data, $type, $format = null)
     {
-        return $type === SpotFillingRateDayListView::class && $format === 'json';
+        return SpotFillingRateDayListView::class === $type && 'json' === $format;
     }
 }

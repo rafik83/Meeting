@@ -28,7 +28,7 @@ class Import
     public $sheetViews;
 
     /**
-     * @param Spot $spot
+     * @param Spot  $spot
      * @param int[] $sheetIds
      */
     public function __construct(?Spot $spot, array $sheetIds = [])

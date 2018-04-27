@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2016 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -25,6 +25,6 @@ class SheetAcceptedCriteriaValidator implements CriteriaValidatorInterface
             return CriteriaValidatorInterface::ABSTAIN;
         }
 
-         return $sheet->isAccepted() ? CriteriaValidatorInterface::YES : CriteriaValidatorInterface::NO;
+        return $sheet->isAccepted() ? CriteriaValidatorInterface::YES : CriteriaValidatorInterface::NO;
     }
 }

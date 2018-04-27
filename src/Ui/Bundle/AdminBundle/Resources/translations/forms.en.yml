@@ -269,8 +269,12 @@ form.extra_parameter_create.children.type.choices.comexposium_sso_salon: 'Comexp
 form.extra_parameter_create.children.type.choices.comexposium_sso_session_salon: 'Comexposium event SSO Session'
 form.extra_parameter_create.children.type.choices.comexposium_visitor_type_id: 'Id of the type of participation Visitor concerned'
 form.extra_parameter_create.children.type.choices.leni_event: 'Event LENI code'
+form.extra_parameter_create.children.type.choices.leni_get_endpoint: 'LENI Get endpoint'
+form.extra_parameter_create.children.type.choices.leni_mode: 'LENI Mode (save, get ou both)'
 form.extra_parameter_create.children.type.choices.leni_participation_data_mapping: 'LENI fields mapping'
 form.extra_parameter_create.children.type.choices.leni_participation_types_mapping: 'LENI participation types mapping'
+form.extra_parameter_create.children.type.choices.leni_save_endpoint: 'LENI Save endpoint'
+form.extra_parameter_create.children.type.choices.leni_sending_request: 'LENI Paramètre SendingRequests'
 form.extra_parameter_create.children.type.choices.leni_user: 'User LENI code'
 form.extra_parameter_create.children.type.choices.vianeo_concerned_types_id: 'Vianeo : concerned types of participation Ids (separated by a comma)'
 form.extra_parameter_create.children.type.choices.vianeo_endpoint: 'Vianeo endpoint'
@@ -508,11 +512,13 @@ form.product_choice.group_by.type.option: Options
 form.product_choice.group_by.type.participant: Participants
 form.product_choice.group_by.type.plan: Formulas
 form.product_choice.group_by.type.planning: 'Package of meetings'
+form.product_create_option.children.attributable.label: 'Attributable to a participant(s)'
 form.product_create_option.children.availabilityCurrent.label: 'current stock'
 form.product_create_option.children.availabilityMax.label: 'max stock'
 form.product_create_option.children.buyableUntil.label: 'buyable until'
 form.product_create_option.children.deletableUntil.label: 'deletable until'
 form.product_create_option.children.file.label: Image
+form.product_create_option.children.happenings.label: 'Related sub-events'
 form.product_create_option.children.name.label: 'backoffice label of the product'
 form.product_create_option.children.quantityMax.label: 'max quantity'
 form.product_create_option.children.quantityMin.label: 'min quantity'
@@ -525,6 +531,7 @@ form.product_create_option.children.translations.prototype.children.title.label:
 form.product_create_option.children.unitPrice.label: 'Unit price (excl. tax)'
 form.product_create_option.children.updatable.label: 'deletable product'
 form.product_create_option.children.vat.label: VAT
+form.product_create_participant.children.availabilityTimeRanges.label: 'Related availability ranges'
 form.product_create_participant.children.name.label: 'backoffice label of the participant'
 form.product_create_participant.children.quantityMax.label: 'max quantity'
 form.product_create_participant.children.submit.label: Save
@@ -563,11 +570,13 @@ form.product_create_planning.children.translations.prototype.children.descriptio
 form.product_create_planning.children.translations.prototype.children.title.label: Title
 form.product_create_planning.children.unitPrice.label: 'Unit price (excl. tax)'
 form.product_create_planning.children.vat.label: VAT
+form.product_update_option.children.attributable.label: 'Attributable to a participant(s)'
 form.product_update_option.children.availabilityCurrent.label: 'current stock'
 form.product_update_option.children.availabilityMax.label: 'max stock'
 form.product_update_option.children.buyableUntil.label: 'buyable until'
 form.product_update_option.children.deletableUntil.label: 'deletable until'
 form.product_update_option.children.file.label: picture
+form.product_update_option.children.happenings.label: 'Related sub-events'
 form.product_update_option.children.name.label: 'backoffice label of the product'
 form.product_update_option.children.quantityMax.label: 'max quantity'
 form.product_update_option.children.quantityMin.label: 'min quantity'
@@ -580,6 +589,7 @@ form.product_update_option.children.translations.prototype.children.title.label:
 form.product_update_option.children.unitPrice.label: 'Unit price (excl. tax)'
 form.product_update_option.children.updatable.label: 'deletable product'
 form.product_update_option.children.vat.label: VAT
+form.product_update_participant.children.availabilityTimeRanges.label: 'Related availability ranges'
 form.product_update_participant.children.name.label: 'backoffice participant''s name'
 form.product_update_participant.children.quantityMax.label: 'max quantity'
 form.product_update_participant.children.submit.label: Save
@@ -691,6 +701,8 @@ form.sheet_batch.children.generateInvoice.label: 'generate invoice'
 form.sheet_batch.children.group.label: group
 form.sheet_batch.children.pending.label: Pending
 form.sheet_batch.children.printPdf.label: 'Print to PDF'
+form.sheet_batch.children.printPlanning.label: Print
+form.sheet_batch.children.printPlanningOrderBy.label: 'Export order'
 form.sheet_batch.children.refuse.label: refuse
 form.sheet_batch.children.removeCatalog.label: 'remove from the catalog'
 form.sheet_batch.children.validate.label: validate
@@ -732,6 +744,7 @@ form.sheet_filter.children.cart.yes.label: with
 form.sheet_filter.children.category.label: category
 form.sheet_filter.children.commercialStatus.label: 'commercial status'
 form.sheet_filter.children.completed.label: completeness
+form.sheet_filter.children.country.label: Country
 form.sheet_filter.children.creation_interval.label: Inscription
 form.sheet_filter.children.enabled.label: Participation
 form.sheet_filter.children.enabledState.all.label: all
@@ -916,7 +929,7 @@ form.transaction.children.transaction_mode.bank_check: Cheque
 form.transaction.children.transaction_mode.bank_transfer: Transfer
 form.transaction.children.transaction_mode.paypal: Paypal
 form.type_create.children.hidden.label: hidden
-form.type_create.children.package.label: 'Package of participation template'
+form.type_create.children.package.label: 'Registration package template'
 form.type_create.children.rank.label: rank
 form.type_create.children.registrationTemplate.label: 'registration template'
 form.type_create.children.sheetTemplate.label: 'presentation template'
@@ -950,7 +963,7 @@ form.type_template.registration.organizer: 'my registration templates'
 form.type_template.sheet.base: 'basic participation template'
 form.type_template.sheet.organizer: 'my participation templates'
 form.type_update.children.hidden.label: hidden
-form.type_update.children.package.label: 'Package of participation template'
+form.type_update.children.package.label: 'Registration package template'
 form.type_update.children.rank.label: rank
 form.type_update.children.registrationTemplate.label: 'registration template'
 form.type_update.children.sheetTemplate.label: 'sheet template'

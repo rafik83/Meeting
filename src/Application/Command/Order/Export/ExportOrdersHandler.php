@@ -94,7 +94,7 @@ class ExportOrdersHandler
     {
         $event = $this->eventRepository->getById($command->eventId);
 
-        if ($event === null) {
+        if (null === $event) {
             throw new InvalidArgumentForExportException(sprintf('Event %s not found', $command->eventId));
         }
 

@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2016 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -11,14 +11,14 @@
 namespace Proximum\Vimeet\Application\Nomenclature\Import;
 
 use Proximum\Vimeet\Application\Adapter\IntlInterface;
-use Proximum\Vimeet\Application\Nomenclature\Import\Exception\ImportException;
-use Proximum\Vimeet\Application\Nomenclature\Import\Exception\InvalidLocaleException;
-use Proximum\Vimeet\Application\Nomenclature\Import\Exception\LocalesMustCorrespondToThoseOfTheEventException;
-use Proximum\Vimeet\Application\Serializer\Charset;
 use Proximum\Vimeet\Application\Nomenclature\Id\IdGeneratorInterface;
 use Proximum\Vimeet\Application\Nomenclature\Import\Exception\DepthException;
 use Proximum\Vimeet\Application\Nomenclature\Import\Exception\FileNotFoundException;
+use Proximum\Vimeet\Application\Nomenclature\Import\Exception\ImportException;
+use Proximum\Vimeet\Application\Nomenclature\Import\Exception\InvalidLocaleException;
+use Proximum\Vimeet\Application\Nomenclature\Import\Exception\LocalesMustCorrespondToThoseOfTheEventException;
 use Proximum\Vimeet\Application\Nomenclature\Import\Exception\NoLocaleSpecifiedException;
+use Proximum\Vimeet\Application\Serializer\Charset;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Nomenclature;
 
@@ -63,7 +63,6 @@ class CsvImporter implements ImporterInterface
         }
 
         foreach (array_slice($csv, 1) as $row) {
-
             if (!is_array($row)) {
                 continue;
             }
@@ -73,15 +72,15 @@ class CsvImporter implements ImporterInterface
 
             $depths[$depth] = $id;
 
-            if ($depth === 1) {
+            if (1 === $depth) {
                 $values[$id] = $this->parseLabels($locales, $row, $depth);
-            } elseif ($depth === 2) {
+            } elseif (2 === $depth) {
                 if (!isset($depths[1])) {
                     throw new DepthException();
                 }
 
                 $values[$depths[1]]['children'][$id] = $this->parseLabels($locales, $row, $depth);
-            } elseif ($depth === 3) {
+            } elseif (3 === $depth) {
                 if (!isset($depths[1]) || !isset($depths[2])) {
                     throw new DepthException();
                 }
@@ -108,7 +107,7 @@ class CsvImporter implements ImporterInterface
 
         foreach (array_slice($row, 1) as $columns) {
             if (empty($columns)) {
-                $depth++;
+                ++$depth;
             } else {
                 return $depth;
             }
@@ -130,11 +129,11 @@ class CsvImporter implements ImporterInterface
     /**
      * @param array $csv
      *
-     * @return array
-     *
      * @throws ImportException
      * @throws InvalidLocaleException
      * @throws NoLocaleSpecifiedException
+     *
+     * @return array
      */
     private function parseLocales(array $csv): array
     {
@@ -214,8 +213,9 @@ class CsvImporter implements ImporterInterface
      * @param string $filename
      * @param string $charset
      *
-     * @return array
      * @throws FileNotFoundException
+     *
+     * @return array
      */
     private function parseFile($filename, $charset)
     {

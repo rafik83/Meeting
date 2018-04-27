@@ -40,7 +40,6 @@ class GenerateMeetingSolutionCommand extends Command
         $this->commandBus = $commandBus;
     }
 
-
     /**
      * {@inheritdoc}
      */
@@ -59,7 +58,7 @@ class GenerateMeetingSolutionCommand extends Command
     {
         $event = $this->eventRepository->getById($input->getArgument('eventId'));
 
-        if ($event === null) {
+        if (null === $event) {
             throw new \InvalidArgumentException(
                 sprintf('Event %s not found', $input->getArgument('eventId'))
             );

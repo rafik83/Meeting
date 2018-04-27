@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2015 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -16,7 +16,7 @@ use Proximum\Vimeet\Domain\Model\User;
 class ChangeMailTokenGenerator extends AbstractTokenGenerator
 {
     /**
-     * @param User  $user
+     * @param User   $user
      * @param string $mail
      *
      * @return ChangeMailToken

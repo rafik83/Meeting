@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of the vimeet project.
+ * This file is part of the Proximum Vimeet project.
  *
  * Copyright (C) Proximum
  *
@@ -38,7 +38,7 @@ class AdminTemplateAccessVoter extends Voter
      */
     public function supports($attribute, $subject)
     {
-        return $attribute === self::PERMISSION_TEMPLATE_EDIT && $subject instanceof AbstractTemplate;
+        return self::PERMISSION_TEMPLATE_EDIT === $attribute && $subject instanceof AbstractTemplate;
     }
 
     /**
@@ -60,6 +60,6 @@ class AdminTemplateAccessVoter extends Voter
             return $this->adminEventAccess->canAccess($user, $subject->getEvent());
         }
 
-        return $user->getRole() === Admin::ROLE_SUPER_ADMIN;
+        return Admin::ROLE_SUPER_ADMIN === $user->getRole();
     }
 }

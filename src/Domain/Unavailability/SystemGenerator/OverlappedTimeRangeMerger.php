@@ -26,7 +26,7 @@ class OverlappedTimeRangeMerger
         // Then another which begins at 14:00 and ends at 15:00
         // And another one which begins at 12:00 at ends at 14:30
         // Which would result in a two time range instead of one
-        usort($timeRanges, function(AbstractTimeRange $first, AbstractTimeRange $second) {
+        usort($timeRanges, function (AbstractTimeRange $first, AbstractTimeRange $second) {
             return $first->getBegin() > $second->getBegin();
         });
 

@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2015 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -95,6 +95,6 @@ class NotificationRepository implements NotificationRepositoryInterface
             ->setParameter('sheet', $sheet)
             ->setMaxResults(1);
 
-        return count($queryBuilder->getQuery()->getResult()) === 1;
+        return 1 === count($queryBuilder->getQuery()->getResult());
     }
 }

@@ -253,7 +253,7 @@ class FilteredFieldsQueryHandler
         foreach ($filteredFieldsQuery->organizationCategoryViews as $index => $organizationCategoryView) {
             // Show only filter which have result
             if (!isset($aggregationsIndexedByKey[$organizationCategoryView->key])
-                || $aggregationsIndexedByKey[$organizationCategoryView->key] === 0
+                || 0 === $aggregationsIndexedByKey[$organizationCategoryView->key]
             ) {
                 unset($filteredFieldsQuery->organizationCategoryViews[$index]);
             }
@@ -288,7 +288,7 @@ class FilteredFieldsQueryHandler
         foreach ($filteredFieldsQuery->positionViews as $index => $positionView) {
             // Show only filter which have result
             if (!isset($aggregationsIndexedByKey[$positionView->getKey()])
-                || $aggregationsIndexedByKey[$positionView->getKey()] === 0
+                || 0 === $aggregationsIndexedByKey[$positionView->getKey()]
             ) {
                 unset($filteredFieldsQuery->positionViews[$index]);
             }
@@ -297,9 +297,9 @@ class FilteredFieldsQueryHandler
 
     /**
      * @param array  $aggregations ElasticSearch aggregations
-     * @param string $fieldName ElasticSearch field name
-     * @param bool   $subField: is aggregations is organized in subfield: $aggregations['position']['position'] = [...]
-     *                          else: $aggregations['type'] = [...]
+     * @param string $fieldName    ElasticSearch field name
+     * @param bool   $subField:    is aggregations is organized in subfield: $aggregations['position']['position'] = [...]
+     *                             else: $aggregations['type'] = [...]
      *
      * @return array
      */

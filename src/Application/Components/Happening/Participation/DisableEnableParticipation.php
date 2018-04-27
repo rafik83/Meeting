@@ -123,7 +123,7 @@ class DisableEnableParticipation
             }
         }
 
-        if ($typeFound === false) {
+        if (false === $typeFound) {
             $participation->setDisabled(true);
         }
 

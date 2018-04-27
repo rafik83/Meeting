@@ -38,11 +38,11 @@ class OrdersToInvoice
     private $vatApplicable;
 
     /**
-     * @param OrderRepositoryInterface       $orderRepository
-     * @param Merger                         $orderMerger
-     * @param InvoiceDataQueryHandler        $invoiceDataQueryHandler
-     * @param VatApplicable                  $vatApplicable
-     * @param SerializerAdapterInterface     $serializerAdapter
+     * @param OrderRepositoryInterface   $orderRepository
+     * @param Merger                     $orderMerger
+     * @param InvoiceDataQueryHandler    $invoiceDataQueryHandler
+     * @param VatApplicable              $vatApplicable
+     * @param SerializerAdapterInterface $serializerAdapter
      */
     public function __construct(
         OrderRepositoryInterface $orderRepository,

@@ -31,7 +31,7 @@ class ExportController extends Controller
 
         return new CsvFileResponse(
             $this->get('serializer')->serialize($view, 'csv', ['csv_delimiter' => ';']),
-            sprintf('export_meeting_request_%s_%s.csv', $event->getId(), date("Y_m_d_His"))
+            sprintf('export_meeting_request_%s_%s.csv', $event->getId(), date('Y_m_d_His'))
         );
     }
 }

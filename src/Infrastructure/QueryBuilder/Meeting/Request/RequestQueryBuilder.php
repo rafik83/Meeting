@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2015 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -12,10 +12,9 @@ namespace Proximum\Vimeet\Infrastructure\QueryBuilder\Meeting\Request;
 
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\QueryBuilder;
-use Proximum\Vimeet\Application\View\Agenda\Slot\AvailableSlotView;
 use Proximum\Vimeet\Domain\Model\Event;
-use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\Meeting\Request;
+use Proximum\Vimeet\Domain\Model\Sheet;
 
 class RequestQueryBuilder extends QueryBuilder
 {
@@ -140,9 +139,9 @@ class RequestQueryBuilder extends QueryBuilder
      */
     public function isToAttending()
     {
-         $this->join('request.to', 'to', 'WITH', 'to.attend = true');
+        $this->join('request.to', 'to', 'WITH', 'to.attend = true');
 
-         return $this;
+        return $this;
     }
 
     /**

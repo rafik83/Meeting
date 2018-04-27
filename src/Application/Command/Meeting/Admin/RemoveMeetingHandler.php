@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2017 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -74,7 +74,7 @@ class RemoveMeetingHandler
             Events::MEETING_REMOVED,
             new MeetingRemovedEvent([
                 $query->meeting->getFromSheet(),
-                $query->meeting->getToSheet()
+                $query->meeting->getToSheet(),
             ])
         );
 

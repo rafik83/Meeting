@@ -15,11 +15,11 @@ use Proximum\Vimeet\Application\Components\Sheet\SheetInfoGuesser;
 use Proximum\Vimeet\Application\Components\Sheet\Template\Tag;
 use Proximum\Vimeet\Application\Components\User\UserInfoGuesser;
 use Proximum\Vimeet\Application\Exception\Sheet\SheetNotFoundException;
-use Proximum\Vimeet\Application\ThirdParty\LENI\Exception\TypeDoesNotMatchException;
-use Proximum\Vimeet\Application\ThirdParty\LENI\LeniConstants;
 use Proximum\Vimeet\Application\ThirdParty\LENI\Common\View\LeniPlanningDayView;
 use Proximum\Vimeet\Application\ThirdParty\LENI\Common\View\LeniPlanningView;
 use Proximum\Vimeet\Application\ThirdParty\LENI\Common\View\LeniUserView;
+use Proximum\Vimeet\Application\ThirdParty\LENI\Exception\TypeDoesNotMatchException;
+use Proximum\Vimeet\Application\ThirdParty\LENI\LeniConstants;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\User;
@@ -96,9 +96,10 @@ class LeniUserViewQueryHandler
     /**
      * @param LeniUserViewQuery $query
      *
-     * @return LeniUserView
      * @throws SheetNotFoundException
      * @throws TypeDoesNotMatchException
+     *
+     * @return LeniUserView
      */
     public function handle(LeniUserViewQuery $query): LeniUserView
     {
@@ -149,7 +150,7 @@ class LeniUserViewQueryHandler
             $firstSheet->isEnabled(),
             $this->groupNameResolver->resolve($query->event, $query->user, $sheets),
             $type->getId(),
-            $category !== null ? $category->getId() : null,
+            null !== $category ? $category->getId() : null,
             $query->user->getEmail(),
             $userInfo['gender'],
             $userInfo['firstName'],

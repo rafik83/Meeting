@@ -258,7 +258,7 @@ class Package
     }
 
     /**
-     * @return boolean
+     * @return bool
      */
     public function isPlansEnabled()
     {
@@ -266,7 +266,7 @@ class Package
     }
 
     /**
-     * @return boolean
+     * @return bool
      */
     public function isParticipantAndPlanningEnabled()
     {
@@ -274,7 +274,7 @@ class Package
     }
 
     /**
-     * @return boolean
+     * @return bool
      */
     public function isOptionsEnabled()
     {
@@ -283,6 +283,7 @@ class Package
 
     /**
      * Return true if the package has at least a step activated
+     *
      * @return bool
      */
     public function isPassable()
@@ -372,7 +373,6 @@ class Package
     {
         // Remove delete plans
         foreach ($this->planRanks as $planRank) {
-
             if (!in_array($planRank->getPlan(), $plans)) {
                 $this->planRanks->removeElement($planRank);
             } else {
@@ -444,7 +444,7 @@ class Package
 
         return $this;
     }
-    
+
     /**
      * @param string $locale
      *
@@ -511,10 +511,10 @@ class Package
 
     /**
      * @param array $groupLabels indexed by rank and containing array of labels indexed by locale
-     *              Example : [
-     *                  1 => ['fr' => 'French label 1', 'en' => 'English label 1'],
-     *                  2 => ['fr' => 'French label 2', 'en' => 'English label 2'],
-     *              ]
+     *                           Example : [
+     *                           1 => ['fr' => 'French label 1', 'en' => 'English label 1'],
+     *                           2 => ['fr' => 'French label 2', 'en' => 'English label 2'],
+     *                           ]
      *
      * @return Package
      */
@@ -535,11 +535,10 @@ class Package
 
     /**
      * @param array $groupOptions indexed by rank containing array of Products
-     *              Example : [
-     *                  1 => [Product(), Product(), ...]
-     *                  2 => [Product(), Product(), ...]
-     *              ]
-     *
+     *                            Example : [
+     *                            1 => [Product(), Product(), ...]
+     *                            2 => [Product(), Product(), ...]
+     *                            ]
      *
      * @return Package
      */

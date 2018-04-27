@@ -1,9 +1,9 @@
 <?php
 
 /*
- * This file is part of the vimeet project.
+ * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) vimeet
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -29,11 +29,11 @@ class AvailabilityTimeRangeManager
      * @param Event  $event
      * @param string $name
      * @param string $begin Date of begin in format '2017-10-10 10:00:00.000'
-     * @param string $end Date of end in format '2017-10-10 10:00:00.000'
-     *
-     * @return AvailabilityTimeRange
+     * @param string $end   Date of end in format '2017-10-10 10:00:00.000'
      *
      * @throws DayNotDefinedException
+     *
+     * @return AvailabilityTimeRange
      */
     public function create(Event $event, string $name, string $begin, string $end): AvailabilityTimeRange
     {

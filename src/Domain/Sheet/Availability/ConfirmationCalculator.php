@@ -47,16 +47,16 @@ class ConfirmationCalculator
             );
 
             if ($extraData instanceof ExtraData) {
-                $numberFound++;
+                ++$numberFound;
             }
 
             // Early return if the extraData returned is null and we already found one confirmed
-            if ($extraData === null && $numberFound > 0) {
+            if (null === $extraData && $numberFound > 0) {
                 return ConfirmationStatus::AT_LEAST_ONE_CONFIRMED;
             }
         }
 
-        if ($numberFound === 0) {
+        if (0 === $numberFound) {
             return ConfirmationStatus::NONE_CONFIRMED;
         }
 

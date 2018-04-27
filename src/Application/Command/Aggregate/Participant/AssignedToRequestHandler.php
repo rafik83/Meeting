@@ -40,8 +40,8 @@ class AssignedToRequestHandler
     {
         $participants = $this->participantRepository->findByEventAndInCatalog($assignedToRequest->event);
 
-         foreach ($participants as $participant) {
-             $this->participantAssignedAggregator->aggregateAssignation($participant);
-         }
+        foreach ($participants as $participant) {
+            $this->participantAssignedAggregator->aggregateAssignation($participant);
+        }
     }
 }

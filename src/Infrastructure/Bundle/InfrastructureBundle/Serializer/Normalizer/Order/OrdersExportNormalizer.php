@@ -51,7 +51,7 @@ class OrdersExportNormalizer implements NormalizerInterface, NormalizerAwareInte
      */
     public function supportsNormalization($data, $format = null)
     {
-        return $data instanceof OrdersExportView && $format === 'csv';
+        return $data instanceof OrdersExportView && 'csv' === $format;
     }
 
     /**
@@ -97,8 +97,8 @@ class OrdersExportNormalizer implements NormalizerInterface, NormalizerAwareInte
      */
     private function convertCharset($input)
     {
-        if ($this->charset !== Charset::UTF_8) {
-            return iconv(Charset::UTF_8, Charset::WINDOWS_1252 . "//TRANSLIT//IGNORE", $input);
+        if (Charset::UTF_8 !== $this->charset) {
+            return iconv(Charset::UTF_8, Charset::WINDOWS_1252 . '//TRANSLIT//IGNORE', $input);
         }
 
         return $input;

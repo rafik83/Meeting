@@ -3,15 +3,15 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2017 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
 
 namespace Proximum\Vimeet\Application\Query\Planner;
 
-use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Application\View\Planner\TypeView;
+use Proximum\Vimeet\Domain\Model\Event;
 
 class TypePriorityViewQuery
 {
@@ -26,7 +26,7 @@ class TypePriorityViewQuery
     public $types;
 
     /**
-     * @param Event     $event
+     * @param Event      $event
      * @param TypeView[] $types
      */
     public function __construct(Event $event, array $types)

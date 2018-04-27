@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2016 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -32,7 +32,7 @@ class TemplateObjectValidator extends ConstraintValidator
 
     /**
      * @param Template\TemplateObject $object
-     * @param Constraint      $constraint
+     * @param Constraint              $constraint
      */
     protected function checkRequired(Template\TemplateObject $object, Constraint $constraint)
     {
@@ -43,7 +43,7 @@ class TemplateObjectValidator extends ConstraintValidator
 
     /**
      * @param Template\TemplateObject $object
-     * @param Constraint      $constraint
+     * @param Constraint              $constraint
      */
     protected function checkMinLength(Template\TemplateObject $object, Constraint $constraint)
     {
@@ -54,7 +54,7 @@ class TemplateObjectValidator extends ConstraintValidator
 
     /**
      * @param Template\TemplateObject $object
-     * @param Constraint      $constraint
+     * @param Constraint              $constraint
      */
     protected function checkMaxLength(Template\TemplateObject $object, Constraint $constraint)
     {

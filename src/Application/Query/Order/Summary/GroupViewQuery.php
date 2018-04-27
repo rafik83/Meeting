@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2016 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -53,12 +53,12 @@ class GroupViewQuery
     public $step;
 
     /**
-     * @param Sheet            $sheet
-     * @param null|Step        $step
-     * @param Order            $order
-     * @param string           $locale
-     * @param string           $type
-     * @param int|null         $groupId
+     * @param Sheet        $sheet
+     * @param null|Step    $step
+     * @param Order        $order
+     * @param string       $locale
+     * @param string       $type
+     * @param int|null     $groupId
      * @param RowView|null $planView
      */
     public function __construct(

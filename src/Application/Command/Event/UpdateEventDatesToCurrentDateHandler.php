@@ -208,7 +208,7 @@ class UpdateEventDatesToCurrentDateHandler
         $dayNumber = 0;
         foreach ($dayDates as $day => $dates) {
             $formattedDayDates[$dayNumber] = $dayDates[$day];
-            $dayNumber++;
+            ++$dayNumber;
         }
 
         return $formattedDayDates;

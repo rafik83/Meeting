@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2017 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -18,8 +18,9 @@ class DayViewQueryHandler
     /**
      * @param DayViewQuery $query
      *
-     * @return Day[]
      * @throws DayNotConfiguredException
+     *
+     * @return Day[]
      */
     public function handle(DayViewQuery $query)
     {

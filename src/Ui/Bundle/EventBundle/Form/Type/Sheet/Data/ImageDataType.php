@@ -62,7 +62,7 @@ class ImageDataType extends AbstractType
         $image = $options['object'];
 
         $builder->add('file', FileType::class, [
-            'label'       => $options['showLabel'] === true ? $image->getLabel($options['locale']) : false,
+            'label'       => true === $options['showLabel'] ? $image->getLabel($options['locale']) : false,
             'required'    => $image->getOption('required'),
             'attr'        => [
                 'accept' => implode(', ', TemplateObject\Image::supportedMimeType()),

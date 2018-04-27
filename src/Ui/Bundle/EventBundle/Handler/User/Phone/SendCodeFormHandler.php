@@ -58,7 +58,7 @@ class SendCodeFormHandler
         $user    = $sendCodeForm->user;
         $event   = $sendCodeForm->event;
 
-        if ($sendCodeForm->ignorePhoneAlreadyValidated === false) {
+        if (false === $sendCodeForm->ignorePhoneAlreadyValidated) {
             $userEventPhoneValidated = $this->userEventPhoneRepository->findValidated($user, $event);
 
             if (null !== $userEventPhoneValidated) {

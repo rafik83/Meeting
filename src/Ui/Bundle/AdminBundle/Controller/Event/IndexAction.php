@@ -72,9 +72,9 @@ class IndexAction
     /**
      * @param Request $request
      *
-     * @return Response|RedirectResponse
-     *
      * @throws AccessDeniedException
+     *
+     * @return Response|RedirectResponse
      */
     public function __invoke(Request $request): Response
     {

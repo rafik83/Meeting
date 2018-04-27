@@ -12,7 +12,7 @@ namespace Proximum\Vimeet\Domain\Model\Messaging;
 
 class MessageTranslation
 {
-    /** @var integer */
+    /** @var int */
     private $id;
 
     /** @var string */
@@ -32,6 +32,7 @@ class MessageTranslation
 
     /**
      * MessageTranslation constructor.
+     *
      * @param string             $subject
      * @param string             $content
      * @param string             $locale

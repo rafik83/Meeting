@@ -40,7 +40,7 @@ class ProductContext implements Context
     ) {
         $event = $this->productContextProxy->getStorage()->get('event');
 
-        if ($event === null) {
+        if (null === $event) {
             throw new \InvalidArgumentException('Missing Event');
         }
 
@@ -64,7 +64,7 @@ class ProductContext implements Context
     ) {
         $event = $this->productContextProxy->getStorage()->get('event');
 
-        if ($event === null) {
+        if (null === $event) {
             throw new \InvalidArgumentException('Missing Event');
         }
 
@@ -86,7 +86,7 @@ class ProductContext implements Context
     {
         $event = $this->productContextProxy->getStorage()->get('event');
 
-        if ($event === null) {
+        if (null === $event) {
             throw new \InvalidArgumentException('Missing Event');
         }
 
@@ -105,11 +105,11 @@ class ProductContext implements Context
         $plan = $this->productContextProxy->getStorage()->get('plan');
         $productParticipant = $this->productContextProxy->getStorage()->get('productParticipant');
 
-        if ($plan === null) {
+        if (null === $plan) {
             throw new \InvalidArgumentException('Missing Plan');
         }
 
-        if ($productParticipant === null) {
+        if (null === $productParticipant) {
             throw new \InvalidArgumentException('Missing Product Participant');
         }
 

@@ -149,8 +149,9 @@ class SheetContext implements Context
     }
 
     /**
-     * @return Event
      * @throws \LogicException
+     *
+     * @return Event
      */
     private function getEvent()
     {

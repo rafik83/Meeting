@@ -99,5 +99,4 @@ class AvailabilityConfirmationEventSubscriber implements EventSubscriberInterfac
             $this->sheetRepository->set($sheet);
         }
     }
-
 }

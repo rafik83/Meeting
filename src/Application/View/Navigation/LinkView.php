@@ -1,9 +1,9 @@
 <?php
 
 /*
- * This file is part of the vimeet project.
+ * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2016 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -53,7 +53,7 @@ class LinkView
         $this->locale = $locale;
         $this->button = $button;
 
-        if ($link === null) {
+        if (null === $link) {
             $this->state = false;
         } else {
             $this->state = $state;

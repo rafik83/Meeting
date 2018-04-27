@@ -18,7 +18,7 @@ class SpotSatisfactionViewDenormalizer implements DenormalizerInterface
     /**
      * {@inheritdoc}
      */
-    public function denormalize($data, $class, $format = null, array $context = array())
+    public function denormalize($data, $class, $format = null, array $context = [])
     {
         return new SpotSatisfactionView(
             $data['spotId'],
@@ -34,8 +34,8 @@ class SpotSatisfactionViewDenormalizer implements DenormalizerInterface
      */
     public function supportsDenormalization($data, $type, $format = null)
     {
-        return $type === SpotSatisfactionView::class
-            && $format === 'json'
+        return SpotSatisfactionView::class === $type
+            && 'json' === $format
             && isset($data['spotId'])
             && isset($data['reference'])
             && isset($data['shared'])

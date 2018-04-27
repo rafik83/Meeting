@@ -23,7 +23,7 @@ class UpdateType extends AbstractEventTipType
         parent::configureOptions($resolver);
 
         $resolver->setDefaults([
-            'data_class' => Update::class
+            'data_class' => Update::class,
         ]);
     }
 

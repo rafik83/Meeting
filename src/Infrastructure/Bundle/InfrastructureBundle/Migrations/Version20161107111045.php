@@ -1,5 +1,13 @@
 <?php
 
+/*
+ * This file is part of the Proximum Vimeet project.
+ *
+ * Copyright (C) Proximum
+ *
+ * @author Elao <contact@elao.com>
+ */
+
 namespace Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Migrations;
 
 use Doctrine\DBAL\Migrations\AbstractMigration;
@@ -12,7 +20,7 @@ class Version20161107111045 extends AbstractMigration
      */
     public function up(Schema $schema)
     {
-        $this->abortIf($this->connection->getDatabasePlatform()->getName() != 'mysql', 'Migration can only be executed safely on \'mysql\'.');
+        $this->abortIf('mysql' != $this->connection->getDatabasePlatform()->getName(), 'Migration can only be executed safely on \'mysql\'.');
 
         $this->addSql('ALTER TABLE admin_activate_account_token DROP FOREIGN KEY FK_1B64B39B642B8210');
         $this->addSql('ALTER TABLE admin_activate_account_token ADD CONSTRAINT FK_1B64B39B642B8210 FOREIGN KEY (admin_id) REFERENCES admin (id) ON DELETE CASCADE');
@@ -178,7 +186,7 @@ class Version20161107111045 extends AbstractMigration
      */
     public function down(Schema $schema)
     {
-        $this->abortIf($this->connection->getDatabasePlatform()->getName() != 'mysql', 'Migration can only be executed safely on \'mysql\'.');
+        $this->abortIf('mysql' != $this->connection->getDatabasePlatform()->getName(), 'Migration can only be executed safely on \'mysql\'.');
 
         $this->addSql('ALTER TABLE _order DROP FOREIGN KEY FK_7F117F048B1206A5');
         $this->addSql('ALTER TABLE _order ADD CONSTRAINT FK_7F117F048B1206A5 FOREIGN KEY (sheet_id) REFERENCES sheet (id)');

@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of the vimeet project.
+ * This file is part of the Proximum Vimeet project.
  *
  * Copyright (C) Proximum
  *
@@ -11,8 +11,8 @@
 namespace Proximum\Vimeet\Application\Query\Tip;
 
 use Proximum\Vimeet\Application\Exception\Tip\NoTipAvailableException;
+use Proximum\Vimeet\Application\View\Tip\TipTranslationView;
 use Proximum\Vimeet\Domain\Repository\TipRepositoryInterface;
-use \Proximum\Vimeet\Application\View\Tip\TipTranslationView;
 
 class TipListViewQueryHandler
 {
@@ -32,9 +32,9 @@ class TipListViewQueryHandler
     /**
      * @param TipListViewQuery $query
      *
-     * @return TipTranslationView[]
-     *
      * @throws NoTipAvailableException
+     *
+     * @return TipTranslationView[]
      */
     public function handle(TipListViewQuery $query)
     {

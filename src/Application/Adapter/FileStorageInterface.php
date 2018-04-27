@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2015 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -28,7 +28,7 @@ interface FileStorageInterface
      * Create a file with the content given
      *
      * @param mixed       $content
-     * @param string      $filename with possible extension
+     * @param string      $filename      with possible extension
      * @param string|null $directoryPath
      *
      * @return string return the filePath with filename after the directory path

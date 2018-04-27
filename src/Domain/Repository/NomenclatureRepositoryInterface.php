@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2016 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -36,7 +36,7 @@ interface NomenclatureRepositoryInterface
 
     /**
      * @param Event $event
-     * @param array $ids array of int
+     * @param array $ids   array of int
      *
      * @return Nomenclature[]
      */

@@ -1,9 +1,9 @@
 <?php
 
 /*
- * This file is part of the vimeet project.
+ * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2017 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -44,10 +44,10 @@ class UserToGroupManagerChecker
      * @param Event $event
      * @param User  $user
      *
-     * @return bool
-     *
      * @throws UserAlreadyGroupManagerOnSameEventException
      * @throws UserAlreadyParticipantOrOwnerOnGroupOnSameEventException
+     *
+     * @return bool
      */
     public function isUserToGroupManagerAllowed(Event $event, User $user)
     {
@@ -74,9 +74,10 @@ class UserToGroupManagerChecker
      * @param User  $user
      * @param Group $group
      *
-     * @return bool
      * @throws UserAlreadyGroupManagerOnSameEventException
      * @throws UserAlreadyParticipantOrOwnerOnGroupOnSameEventException
+     *
+     * @return bool
      */
     public function isUserAllowedToManageGroupOnUpdate(User $user, Group $group): bool
     {
@@ -85,7 +86,6 @@ class UserToGroupManagerChecker
          * he is not allowed to manage new group
          */
         if (null !== $this->groupRepository->getByEventAndManager($group->getEvent(), $user)) {
-
             throw new UserAlreadyGroupManagerOnSameEventException($user->getEmail());
         }
 
@@ -94,8 +94,7 @@ class UserToGroupManagerChecker
          * on same event in different group or no group at all,
          * he is not allowed to manage a group
          */
-        if ($this->sheetRepository->hasSheetOutOfGroup($user, $group) === true) {
-
+        if (true === $this->sheetRepository->hasSheetOutOfGroup($user, $group)) {
             throw new UserAlreadyParticipantOrOwnerOnGroupOnSameEventException($user->getEmail());
         }
 

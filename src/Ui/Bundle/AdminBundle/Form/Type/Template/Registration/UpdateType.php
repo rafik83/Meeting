@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2016 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -26,7 +26,6 @@ class UpdateType extends AbstractType
         $builder
             ->add('title', TextType::class, ['required' => true])
             ->add('value', JsonArrayTextareaType::class, ['required' => true]);
-        ;
     }
 
     /**

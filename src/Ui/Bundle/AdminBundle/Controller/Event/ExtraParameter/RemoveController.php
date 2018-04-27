@@ -14,7 +14,6 @@ use Proximum\Vimeet\Application\Command\Event\ExtraParameter\Remove;
 use Proximum\Vimeet\Domain\Model\Event;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\RedirectResponse;
-use Symfony\Component\HttpFoundation\Request;
 
 class RemoveController extends Controller
 {

@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2015 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -61,7 +61,7 @@ abstract class AbstractMeetingRequestType extends AbstractType
                     'expanded'     => true,
                     'multiple'     => true,
                     'required'     => false,
-                    'choice_attr'  => function() {
+                    'choice_attr'  => function () {
                         return ['class' => 'request-checkbox-select-participant'];
                     },
                 ])

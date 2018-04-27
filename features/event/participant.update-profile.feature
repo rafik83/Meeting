@@ -31,6 +31,7 @@ Feature: Update participant profile
       | Téléphone portable | +0698765432 |
       | Téléphone fixe     | +0198765432 |
     And I check the "gender.man" radio
+    And I attach the file "dummy-image-test.jpg" to "profile[dd66008e][file]"
     And I press "common.validate"
     Then I should be on this page "/fr/account/sheet/1/participant/1"
     And I should see "Yeb YUPONT"
@@ -60,6 +61,7 @@ Feature: Update participant profile
       | Pays                            | FR                       |
       | company[97ed778d][item][first]  | category1                |
       | Décrivez votre activité         | Ceci est une description |
+    And I attach the file "dummy-image-test.jpg" to "company[dd66008e][file]"
     And I press "common.validate"
     Then I should be on this page "/fr/sheet/1"
     And I go to this page "/fr/account/sheet/1/participant/1"

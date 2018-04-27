@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2017 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -75,8 +75,9 @@ class MeetingNormalizer implements NormalizerInterface
     /**
      * @param mixed $value
      *
-     * @return string
      * @throws NotBooleanValueException
+     *
+     * @return string
      */
     private function getBooleanValue($value)
     {
@@ -84,6 +85,6 @@ class MeetingNormalizer implements NormalizerInterface
             throw new NotBooleanValueException();
         }
 
-        return $value === true ? 'true' : 'false';
+        return true === $value ? 'true' : 'false';
     }
 }

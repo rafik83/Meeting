@@ -55,6 +55,6 @@ class GroupView
      */
     public function isOption()
     {
-        return $this->type === self::TYPE_OPTION;
+        return self::TYPE_OPTION === $this->type;
     }
 }

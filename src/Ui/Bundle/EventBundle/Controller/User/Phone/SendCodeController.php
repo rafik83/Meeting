@@ -1,9 +1,9 @@
 <?php
 
 /*
- * This file is part of the vimeet project.
+ * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2017 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -47,7 +47,7 @@ class SendCodeController extends Controller
         }
 
         $sendCodeView = $this->get('handler.user.phone.send_code_form_handler')->handle(
-            new SendCodeForm($request, $user, $eventDomain->getEvent(), null,  $mobileNumber, true)
+            new SendCodeForm($request, $user, $eventDomain->getEvent(), null, $mobileNumber, true)
         );
 
         if ($sendCodeView->isSuccess()) {
@@ -59,7 +59,7 @@ class SendCodeController extends Controller
 
         return $this->render('EventBundle:SendCode:validateMobile.html.twig', [
             'event'               => $eventDomain->getEvent(),
-            'sendCodeForm'        => $sendCodeView->form !== null ? $sendCodeView->form->createView() : null,
+            'sendCodeForm'        => null !== $sendCodeView->form ? $sendCodeView->form->createView() : null,
             'tipTranslationViews' => $sendCodeView->tipTranslationViews,
         ]);
     }

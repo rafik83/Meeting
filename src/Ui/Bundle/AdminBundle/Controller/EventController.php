@@ -107,6 +107,7 @@ class EventController extends Controller
             try {
                 $this->get('tactician.commandbus')->handle($create);
                 $this->addFlash('success', 'flash.admin.event.create.success');
+
                 return $this->redirectToRoute('admin_event_list');
             } catch (GuidelineAssetBuildFailedException $ex) {
                 $this->addFlash('error', 'flash.admin.event.update.asset.failed');

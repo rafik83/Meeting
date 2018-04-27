@@ -79,7 +79,7 @@ class SheetVoter extends Voter
         // If the user is not on the sheet but is manager of the sheet's group
         $group = $sheet->getGroup();
 
-        if ($group !== null && $group->getManager() === $user) {
+        if (null !== $group && $group->getManager() === $user) {
             return true;
         }
 

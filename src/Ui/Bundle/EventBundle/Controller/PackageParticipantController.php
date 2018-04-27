@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2016 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -98,7 +98,7 @@ class PackageParticipantController extends Controller
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
         $this->denyAccessUnlessGranted(SheetVoter::EDIT, $sheet);
 
-        if ($sheet->countParticipants() === 1) {
+        if (1 === $sheet->countParticipants()) {
             throw $this->createNotFoundException('Impossible to remove participants from a sheet with one participant');
         }
 

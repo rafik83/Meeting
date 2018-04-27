@@ -1,9 +1,9 @@
 <?php
 
 /*
- * This file is part of the vimeet project.
+ * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2016 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -84,7 +84,7 @@ class NotificationView
      */
     public function hasPriorityLabel()
     {
-        return $this->priority !== Notification::PRIORITY_NONE;
+        return Notification::PRIORITY_NONE !== $this->priority;
     }
 
     /**
@@ -92,6 +92,6 @@ class NotificationView
      */
     public function isImportant()
     {
-        return $this->priority === Notification::PRIORITY_IMPORTANT;
+        return Notification::PRIORITY_IMPORTANT === $this->priority;
     }
 }

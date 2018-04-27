@@ -106,7 +106,7 @@ class UserEventToken
     }
 
     /**
-     * @return boolean
+     * @return bool
      */
     public function isConfirmed()
     {

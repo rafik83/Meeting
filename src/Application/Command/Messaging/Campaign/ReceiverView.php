@@ -31,7 +31,7 @@ final class ReceiverView
      * @param string $email
      * @param array  $replaces An array of format [placeholder => value]
      *                         to be used for mail rendering
-     * @param string $locale User locale
+     * @param string $locale   User locale
      */
     public function __construct($email, array $replaces, $locale)
     {
