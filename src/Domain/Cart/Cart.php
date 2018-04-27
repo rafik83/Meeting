@@ -123,7 +123,11 @@ class Cart
             return [];
         }
 
-        return $this->getPlanRow()->getProduct()->getIncludedAttributableOptionProducts();
+        return $this
+            ->getPlanRow()
+            ->getProduct()
+            ->getIncludedAttributableOptionProducts()
+        ;
     }
 
     /**
