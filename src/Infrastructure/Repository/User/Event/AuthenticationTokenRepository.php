@@ -10,12 +10,20 @@
 
 namespace Proximum\Vimeet\Infrastructure\Repository\User\Event;
 
+use Doctrine\ORM\EntityManager;
 use Proximum\Vimeet\Domain\Model\User\Event\AuthenticationToken;
 use Proximum\Vimeet\Domain\Repository\User\Event\AuthenticationTokenRepositoryInterface;
-use Proximum\Vimeet\Infrastructure\Repository\AbstractDoctrineRepository;
 
-class AuthenticationTokenRepository extends AbstractDoctrineRepository implements AuthenticationTokenRepositoryInterface
+class AuthenticationTokenRepository implements AuthenticationTokenRepositoryInterface
 {
+    /** @var EntityManager */
+    private $entityManager;
+
+    public function __construct(EntityManager $entityManager)
+    {
+        $this->entityManager = $entityManager;
+    }
+
     public function add(AuthenticationToken $authenticationToken): void
     {
         $this->entityManager->persist($authenticationToken);
