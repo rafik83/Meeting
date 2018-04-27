@@ -27,7 +27,7 @@ class AuthenticationToken
     /** @var string */
     private $token;
 
-    /** @var \DateTimeInterface */
+    /** @var null|\DateTimeInterface */
     private $expiredAt;
 
     /** @var \DateTimeInterface */
@@ -38,7 +38,7 @@ class AuthenticationToken
         Event $event,
         string $token,
         \DateTimeInterface $createdAt,
-        \DateTimeInterface $expiredAt = null
+        ?\DateTimeInterface $expiredAt = null
     ) {
         $this->user = $user;
         $this->event = $event;
@@ -72,7 +72,7 @@ class AuthenticationToken
         return $this->createdAt;
     }
 
-    public function getExpiredAt(): \DateTimeInterface
+    public function getExpiredAt(): ?\DateTimeInterface
     {
         return $this->expiredAt;
     }

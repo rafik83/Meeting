@@ -1,6 +1,6 @@
 Proximum\Vimeet\Domain\Model\User\Event\AuthenticationToken:
     type:  entity
-    table: authentication_token
+    table: user_event_authentication_token
     id:
         id:
             type: integer
