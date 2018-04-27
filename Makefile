@@ -235,6 +235,13 @@ deploy-capifony@preprod:
 deploy-capifony@prod:
 	cap prod deploy
 
+prod-iso-master:
+	git checkout master
+	git pull origin master
+	git branch -D prod
+	git checkout -b prod
+	git push origin prod
+
 ##########
 # Custom #
 ##########
