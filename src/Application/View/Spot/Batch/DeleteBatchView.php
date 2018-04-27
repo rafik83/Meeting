@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2016 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -16,18 +16,21 @@ class DeleteBatchView
 {
     /**
      * array of spot reference
+     *
      * @var array
      */
     public $deletedSpots = [];
 
     /**
      * array of spot reference
+     *
      * @var array
      */
     public $spotsWithMeetings = [];
 
     /**
      * array of spot reference
+     *
      * @var array
      */
     public $spotsWithSheets = [];

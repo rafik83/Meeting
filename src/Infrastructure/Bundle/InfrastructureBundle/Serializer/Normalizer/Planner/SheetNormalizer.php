@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2017 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -16,8 +16,8 @@ use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 class SheetNormalizer implements NormalizerInterface
 {
     /**
-    * {@inheritdoc}
-    */
+     * {@inheritdoc}
+     */
     public function normalize($object, $format = null, array $context = [])
     {
         return [

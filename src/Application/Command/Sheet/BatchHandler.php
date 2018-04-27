@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2015 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -116,7 +116,7 @@ class BatchHandler
      */
     public function handle(Batch $batch): BatchResult
     {
-        if ($batch->selectionType === Batch::SELECTION_TYPE_ALL) {
+        if (Batch::SELECTION_TYPE_ALL === $batch->selectionType) {
             $batch->ids = $this->sheetSearchAdapter->getSheetIds($batch->event, $batch->filters, $batch->locale);
         }
 
@@ -129,10 +129,10 @@ class BatchHandler
             ));
         }
 
-        if ($batch->assign && $batch->follower !== null) {
+        if ($batch->assign && null !== $batch->follower) {
             return $this->batchAssignHandler->handle(new BatchAssign(
                 $batch->ids,
-                $batch->follower !== FollowerConstant::UNASSIGNED_FOLLOWER ? $batch->follower : null
+                FollowerConstant::UNASSIGNED_FOLLOWER !== $batch->follower ? $batch->follower : null
             ));
         }
 
@@ -144,7 +144,7 @@ class BatchHandler
             return $this->batchRefuseHandler->handle(new BatchRefuse($batch->ids, $batch->admin));
         }
 
-        if($batch->pending) {
+        if ($batch->pending) {
             return $this->batchPendingHandler->handle(
                 new BatchPending($batch->ids, $batch->admin)
             );
@@ -192,7 +192,7 @@ class BatchHandler
             );
         }
 
-        if ($batch->printPlanning && $batch->printPlanningOrderBy !== null) {
+        if ($batch->printPlanning && null !== $batch->printPlanningOrderBy) {
             return $this->printPlanningHandler->handle(
                 new PrintPlanning(
                     $batch->event,
@@ -204,7 +204,7 @@ class BatchHandler
             );
         }
 
-        if ($batch->assignToGroup && $batch->group !== null) {
+        if ($batch->assignToGroup && null !== $batch->group) {
             return $this->batchAssignToGroupHandler->handle(
                 new BatchAssignToGroup(
                     $batch->ids,

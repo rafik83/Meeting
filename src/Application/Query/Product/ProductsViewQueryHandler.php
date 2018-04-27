@@ -61,7 +61,7 @@ class ProductsViewQueryHandler
                     return [
                         'quantity' => $includedProduct->getQuantity(),
                         'type' => $includedProduct->getIncluded()->getType(),
-                        'name' => $includedProduct->getIncluded()->getName()
+                        'name' => $includedProduct->getIncluded()->getName(),
                     ];
                 }, $product->getIncludedProducts()),
                 $bought,

@@ -1,9 +1,9 @@
 <?php
 
 /*
- * This file is part of the vimeet project.
+ * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2017 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -47,12 +47,12 @@ class CreateMessage
     /**
      * Create constructor.
      *
-     * @param Event   $event
-     * @param string  $name
-     * @param string  $subject
-     * @param string  $emailTemplate
-     * @param bool    $sendToEmailTeam
-     * @param bool    $sendEmailToBillingInfo
+     * @param Event  $event
+     * @param string $name
+     * @param string $subject
+     * @param string $emailTemplate
+     * @param bool   $sendToEmailTeam
+     * @param bool   $sendEmailToBillingInfo
      */
     public function __construct(
         Event $event,

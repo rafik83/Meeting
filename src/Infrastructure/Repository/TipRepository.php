@@ -145,7 +145,7 @@ class TipRepository implements TipRepositoryInterface
             ->setParameter('type', $type)
         ;
 
-        return $queryBuilder->getQuery()->getOneOrNullResult() !== null;
+        return null !== $queryBuilder->getQuery()->getOneOrNullResult();
     }
 
     /**
@@ -263,7 +263,6 @@ class TipRepository implements TipRepositoryInterface
 
         return null !== $queryBuilder->getQuery()->getOneOrNullResult();
     }
-
 
     /** {@inheritdoc} */
     public function getByEvent(Event $event): array

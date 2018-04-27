@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2016 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -26,7 +26,7 @@ class LoginType extends AbstractType
         $builder
             ->add('username', HiddenType::class)
             ->add('password', PasswordType::class, [
-                'placeholder' => 'form.login.children.password.placeholder'
+                'placeholder' => 'form.login.children.password.placeholder',
             ])
             ->add('rememberMe', CheckboxType::class, [
                 'required' => false,

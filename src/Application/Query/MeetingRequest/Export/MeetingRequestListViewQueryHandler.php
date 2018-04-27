@@ -47,10 +47,10 @@ class MeetingRequestListViewQueryHandler
 
         $requestViews = [];
 
-        if ($countRequest !== 0) {
+        if (0 !== $countRequest) {
             $pages = ceil($countRequest / self::QUERY_LIMIT);
 
-            for ($page = 1; $page <= $pages; $page++) {
+            for ($page = 1; $page <= $pages; ++$page) {
                 $requests = $this->requestRepository->findByEventWithHydratationOfElement(
                     $query->event,
                     $page,

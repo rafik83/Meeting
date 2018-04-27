@@ -3,15 +3,15 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2015 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
 
 namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller;
 
-use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\LoginType;
 use Proximum\Vimeet\Domain\Model\Admin;
+use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\LoginType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
@@ -37,7 +37,7 @@ class SecurityController extends Controller
             'action' => $this->generateUrl('admin_login_check'),
         ]);
 
-        $admins = $this->get('kernel')->getEnvironment() === 'dev' ?
+        $admins = 'dev' === $this->get('kernel')->getEnvironment() ?
             $this->get('repository.admin_repository')->all() :
             [];
 

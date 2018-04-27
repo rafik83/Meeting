@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2016 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -51,7 +51,7 @@ class QuantityMaxGuesser
         }
 
         $cart              = $this->cartManager->getCart($sheet);
-        $selectedPlan      = ($cart->getPlanRow() !== null) ? $cart->getPlanRow()->getProduct() : null;
+        $selectedPlan      = (null !== $cart->getPlanRow()) ? $cart->getPlanRow()->getProduct() : null;
         $countParticipants = $sheet->getParticipants()->count();
         $remainingQuantity = INF;
 

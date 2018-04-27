@@ -34,7 +34,7 @@ class ExtraData
 
     /**
      * @param Event              $event
-     * @param string             $name one of Proximum\Vimeet\Domain\Event\ExtraData\Type constant
+     * @param string             $name      one of Proximum\Vimeet\Domain\Event\ExtraData\Type constant
      * @param string|null        $value
      * @param \DateTimeInterface $createdAt
      */

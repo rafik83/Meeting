@@ -1,5 +1,13 @@
 <?php
 
+/*
+ * This file is part of the Proximum Vimeet project.
+ *
+ * Copyright (C) Proximum
+ *
+ * @author Elao <contact@elao.com>
+ */
+
 namespace Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Migrations;
 
 use Doctrine\DBAL\Migrations\AbstractMigration;
@@ -15,7 +23,7 @@ class Version20160718130808 extends AbstractMigration
      */
     public function up(Schema $schema)
     {
-        $this->abortIf($this->connection->getDatabasePlatform()->getName() != 'mysql', 'Migration can only be executed safely on \'mysql\'.');
+        $this->abortIf('mysql' != $this->connection->getDatabasePlatform()->getName(), 'Migration can only be executed safely on \'mysql\'.');
 
         $this->addSql('CREATE TABLE admin_activate_account_token (id INT AUTO_INCREMENT NOT NULL, admin_id INT DEFAULT NULL, token VARCHAR(255) NOT NULL, expire_date DATETIME NOT NULL, UNIQUE INDEX UNIQ_1B64B39B5F37A13B (token), UNIQUE INDEX UNIQ_1B64B39B642B8210 (admin_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE = InnoDB');
         $this->addSql('CREATE TABLE admin_forgotten_password_token (id INT AUTO_INCREMENT NOT NULL, admin_id INT DEFAULT NULL, token VARCHAR(255) NOT NULL, expire_date DATETIME NOT NULL, UNIQUE INDEX UNIQ_C460BF05F37A13B (token), UNIQUE INDEX UNIQ_C460BF0642B8210 (admin_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE = InnoDB');
@@ -202,7 +210,7 @@ class Version20160718130808 extends AbstractMigration
      */
     public function down(Schema $schema)
     {
-        $this->abortIf($this->connection->getDatabasePlatform()->getName() != 'mysql', 'Migration can only be executed safely on \'mysql\'.');
+        $this->abortIf('mysql' != $this->connection->getDatabasePlatform()->getName(), 'Migration can only be executed safely on \'mysql\'.');
 
         $this->addSql('ALTER TABLE admin_activate_account_token DROP FOREIGN KEY FK_1B64B39B642B8210');
         $this->addSql('ALTER TABLE admin_forgotten_password_token DROP FOREIGN KEY FK_C460BF0642B8210');

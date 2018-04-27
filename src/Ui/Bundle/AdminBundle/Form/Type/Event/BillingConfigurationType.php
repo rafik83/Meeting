@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2016 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -37,7 +37,7 @@ class BillingConfigurationType extends AbstractType
             ->add('invoiceLogo', FileType::class, [
                 'required' => false,
                 'attr'     => [
-                    'accept' => implode(', ', ["image/jpeg", "image/pjpeg", "image/png", "image/x-png", 'image/svg+xml']),
+                    'accept' => implode(', ', ['image/jpeg', 'image/pjpeg', 'image/png', 'image/x-png', 'image/svg+xml']),
                 ],
             ])
             ->add('legalInfo', TextType::class, [

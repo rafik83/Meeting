@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of the vimeet project.
+ * This file is part of the Proximum Vimeet project.
  *
  * Copyright (C) Proximum
  *
@@ -83,7 +83,7 @@ class SearchType extends AbstractType
                 ]);
         }
 
-        if ($options['filterAvailableSlot'] === true) {
+        if (true === $options['filterAvailableSlot']) {
             $everyone = Meeting\Constant::FILTER_AVAILABLE_SLOT_IDS_EVERYONE;
             $available = Meeting\Constant::FILTER_AVAILABLE_SLOT_IDS_AVAILABLE;
             $slotFilter = Meeting\Constant::FILTER_AVAILABLE_SLOT_IDS_SLOT;
@@ -132,7 +132,6 @@ class SearchType extends AbstractType
                     $locale
                 );
 
-
                 $filterAvailableChoices[$slotTranslation] = $slotFilter;
 
                 $builder->add('slot_id', HiddenType::class, [
@@ -145,7 +144,7 @@ class SearchType extends AbstractType
                     'choices'  => $filterAvailableChoices,
                     'expanded' => true,
                     'multiple' => false,
-                    'label'    => 'form.search.meeting.availableSlot.label'
+                    'label'    => 'form.search.meeting.availableSlot.label',
                 ])
             ;
         }

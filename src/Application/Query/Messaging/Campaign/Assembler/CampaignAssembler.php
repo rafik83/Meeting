@@ -1,9 +1,9 @@
 <?php
 
 /*
- * This file is part of the Proximum Vimeet website.
+ * This file is part of the Proximum Vimeet project.
  *
- * Copyright © Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -187,7 +187,7 @@ class CampaignAssembler
                         break;
                 }
 
-                $label .= ($label !== '' ? ', ' : '') . $currentValue;
+                $label .= ('' !== $label ? ', ' : '') . $currentValue;
             }
             $view->addFilter($filterName, $label);
         }

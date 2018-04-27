@@ -69,7 +69,7 @@ class ParticipantsResolver
             }
 
             $cardViews[] = $cardView;
-            $participantsShown++;
+            ++$participantsShown;
         }
 
         return new PreviewView($participantObject->getKey(), '', $participantObject->getType(), $cardViews);

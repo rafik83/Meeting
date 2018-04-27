@@ -91,6 +91,6 @@ class RequestView
      */
     public function isProposition()
     {
-        return $this->type === self::TYPE_PROPOSITION;
+        return self::TYPE_PROPOSITION === $this->type;
     }
 }

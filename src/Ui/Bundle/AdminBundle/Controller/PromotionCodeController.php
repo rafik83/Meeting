@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2015 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -26,7 +26,7 @@ use Symfony\Component\HttpFoundation\Response;
 class PromotionCodeController extends Controller
 {
     /**
-     * @param Event   $event
+     * @param Event $event
      *
      * @return RedirectResponse|Response
      */
@@ -61,7 +61,6 @@ class PromotionCodeController extends Controller
         ]);
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
-
             try {
                 $this->get('tactician.commandbus')->handle($create);
                 $this->addFlash('success', 'flash.promotion_code.create.success');

@@ -93,7 +93,7 @@ class SheetManager
      *
      * @return null|Sheet
      */
-    public function getSheetByEventAndTitle(Event $event, string $sheetTitle):? Sheet
+    public function getSheetByEventAndTitle(Event $event, string $sheetTitle): ? Sheet
     {
         return $this->sheetRepository->getSheetByEventAndTitle($event, $sheetTitle);
     }

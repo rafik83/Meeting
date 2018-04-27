@@ -25,8 +25,8 @@ class SpotFillingRateDayViewDenormalizer implements DenormalizerAwareInterface, 
      */
     public function supportsDenormalization($data, $type, $format = null)
     {
-        return $type === SpotFillingRateDayView::class
-            && $format === 'json'
+        return SpotFillingRateDayView::class === $type
+            && 'json' === $format
             && isset($data['day'])
             && isset($data['timeZone'])
             && isset($data['slotsFillingRate'])
@@ -36,7 +36,7 @@ class SpotFillingRateDayViewDenormalizer implements DenormalizerAwareInterface, 
     /**
      * {@inheritdoc}
      */
-    public function denormalize($data, $class, $format = null, array $context = array())
+    public function denormalize($data, $class, $format = null, array $context = [])
     {
         $spotFillingRateDay = new SpotFillingRateDayView(
             $this->denormalizer->denormalize($data['day'], \DateTime::class, $format),

@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2016 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -111,7 +111,7 @@ class SheetPreviewViewQueryHandler
         $participant = $catalogSheetPreviewViewQuery->viewer
             ->getUserParticipant($catalogSheetPreviewViewQuery->user);
 
-        if ($participant !== null) {
+        if (null !== $participant) {
             $validatePhoneLink = $this->router->generate('event_user_phone_redirect_to_validation', [
                 'sheet'       => $catalogSheetPreviewViewQuery->viewer->getId(),
                 'participant' => $participant->getId(),
@@ -133,7 +133,7 @@ class SheetPreviewViewQueryHandler
             $isMeetingRequestUpdateLocked,
             $catalogSheetPreviewViewQuery->isMeetingRequestClosed,
             $catalogSheetPreviewViewQuery->isAnsweringMeetingRequestClosed,
-            $meetingRequest !== null ? $meetingRequest->hasMessage() : false,
+            null !== $meetingRequest ? $meetingRequest->hasMessage() : false,
             $catalogSheetPreviewViewQuery->isSeenByCurrentUser,
             $catalogSheetPreviewViewQuery->isMobileValidationRequired,
             $validatePhoneLink ?? null

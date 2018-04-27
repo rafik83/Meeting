@@ -1,9 +1,9 @@
 <?php
 
 /*
- * This file is part of the vimeet project.
+ * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2017 vimeet
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -40,8 +40,9 @@ class AvailableSpots
      * @param int         $participantQuantity
      * @param bool        $isVisio
      *
-     * @return Spot
      * @throws NoSpotsAvailableForThisSlotAndMeetingException
+     *
+     * @return Spot
      */
     public function getBySlot(
         MeetingSlot $slot,

@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2015 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -13,8 +13,8 @@ namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Package;
 use Proximum\Vimeet\Application\Command\Package\Update;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Package\Model\OptionsType;
-use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Package\Model\PlansType;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Package\Model\ParticipantAndPlanningType;
+use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Package\Model\PlansType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;

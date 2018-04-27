@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2016 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -23,9 +23,9 @@ class Generator
     {
         return sprintf(
             '%s-%s-%s',
-            str_pad($order->getSheet()->getEvent()->getId(), 2, "0", STR_PAD_LEFT),
-            str_pad($order->getSheet()->getId(), 2, "0", STR_PAD_LEFT),
-            str_pad($order->getId(), 2, "0", STR_PAD_LEFT)
+            str_pad($order->getSheet()->getEvent()->getId(), 2, '0', STR_PAD_LEFT),
+            str_pad($order->getSheet()->getId(), 2, '0', STR_PAD_LEFT),
+            str_pad($order->getId(), 2, '0', STR_PAD_LEFT)
         );
     }
 }

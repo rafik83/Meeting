@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2015 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -31,7 +31,7 @@ class SpotCreateType extends AbstractType
                 'required' => true,
             ])
             ->add('size', NumberType::class, [
-                'required' => true
+                'required' => true,
             ])
             ->add('meetingCapacity', IntegerType::class, [
                 'required' => true,

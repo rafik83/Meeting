@@ -31,8 +31,8 @@ class ParticipantProductSetter
     {
         $previousProduct = $participant->getParticipantProduct();
 
-        $hasNewProduct = $previousProduct === null && $product !== null;
-        $removeProduct = $previousProduct !== null && $product === null;
+        $hasNewProduct = null === $previousProduct && null !== $product;
+        $removeProduct = null !== $previousProduct && null === $product;
         $newProductIsDifferent = $previousProduct instanceof Product
             && $product instanceof Product
             && $previousProduct->getId() !== $product->getId()

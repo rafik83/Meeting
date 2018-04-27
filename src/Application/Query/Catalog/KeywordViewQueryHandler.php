@@ -1,9 +1,9 @@
 <?php
 
 /*
- * This file is part of the vimeet project.
+ * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2016 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -69,7 +69,7 @@ class KeywordViewQueryHandler
             return mb_strtolower(mb_substr(ForeignChar::transliterateString($name), 0, $length));
         };
 
-        uasort($keywordViews, function(KeywordView $one, KeywordView $another) use ($filter, $sanitizeString) {
+        uasort($keywordViews, function (KeywordView $one, KeywordView $another) use ($filter, $sanitizeString) {
             $filterLenght = mb_strlen($filter);
             $oneCropped = $sanitizeString($one->name, $filterLenght);
             $anotherCropped = $sanitizeString($another->name, $filterLenght);

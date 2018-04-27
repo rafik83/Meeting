@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2016 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -79,9 +79,9 @@ class RemoveHandler
     /**
      * @param Remove $remove
      *
-     * @return RemoveResult
-     *
      * @throws CanNotRemoveAllParticipantsException
+     *
+     * @return RemoveResult
      */
     public function handle(Remove $remove): RemoveResult
     {

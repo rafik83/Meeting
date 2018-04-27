@@ -55,18 +55,18 @@ class BillingInfosView
     public $reference;
 
     /**
-     * @param string $gender from the sheet
-     * @param string $lastname from the sheet
+     * @param string $gender    from the sheet
+     * @param string $lastname  from the sheet
      * @param string $firstname from the sheet
-     * @param string $function from the sheet
-     * @param string $phone from the sheet
-     * @param string $mobile from the sheet
-     * @param string $email from the sheet
-     * @param string $company from the sheet
-     * @param string $street from the sheet
-     * @param string $zipcode from the sheet
-     * @param string $city from the sheet
-     * @param string $country from the invoice
+     * @param string $function  from the sheet
+     * @param string $phone     from the sheet
+     * @param string $mobile    from the sheet
+     * @param string $email     from the sheet
+     * @param string $company   from the sheet
+     * @param string $street    from the sheet
+     * @param string $zipcode   from the sheet
+     * @param string $city      from the sheet
+     * @param string $country   from the invoice
      * @param string $vatNumber from the invoice
      * @param string $reference from the sheet
      */

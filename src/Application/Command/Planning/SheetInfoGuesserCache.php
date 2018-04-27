@@ -10,7 +10,6 @@
 
 namespace Proximum\Vimeet\Application\Command\Planning;
 
-
 use Proximum\Vimeet\Application\Components\Sheet\SheetInfoGuesser;
 use Proximum\Vimeet\Domain\Model\Sheet;
 

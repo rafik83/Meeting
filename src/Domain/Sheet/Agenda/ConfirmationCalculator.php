@@ -74,12 +74,12 @@ class ConfirmationCalculator
             $hasMeeting = $this->meetingRepository->hasMeetingForUserAndEvent($user, $event);
 
             if (true === $hasMeeting) {
-                $concerned++;
+                ++$concerned;
 
                 if ($token->isConfirmed()) {
-                    $confirmed++;
+                    ++$confirmed;
                 } else {
-                    $notConfirmed++;
+                    ++$notConfirmed;
                 }
 
                 continue;
@@ -91,12 +91,12 @@ class ConfirmationCalculator
             ;
 
             if (true === $hasHappeningParticipation) {
-                $concerned++;
+                ++$concerned;
 
                 if ($token->isConfirmed()) {
-                    $confirmed++;
+                    ++$confirmed;
                 } else {
-                    $notConfirmed++;
+                    ++$notConfirmed;
                 }
             }
         }

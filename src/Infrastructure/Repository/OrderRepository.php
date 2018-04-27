@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2015 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -121,7 +121,6 @@ class OrderRepository implements OrderRepositoryInterface
 
         return $this->paginator->paginate($queryBuilder, $page, $limit, '_order', 'id');
     }
-
 
     /**
      * {@inheritdoc}
@@ -245,7 +244,7 @@ class OrderRepository implements OrderRepositoryInterface
 
         return $queryBuilder->getQuery()->getResult();
     }
-    
+
     /**
      * {@inheritdoc}
      */
@@ -260,7 +259,7 @@ class OrderRepository implements OrderRepositoryInterface
             ->andWhere('_order.invoice IS NOT NULL')
             ->setParameter('sheet', $sheet)
             ->setMaxResults(1);
-        
-        return ($queryBuilder->getQuery()->getOneOrNullResult() === null) ? false : true;
+
+        return (null === $queryBuilder->getQuery()->getOneOrNullResult()) ? false : true;
     }
 }

@@ -1,9 +1,9 @@
 <?php
 
 /*
- * This file is part of the vimeet project.
+ * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2017 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -35,7 +35,7 @@ class UnavailabilityBatch
     /**
      * UnavailabilityBatch constructor.
      *
-     * @param array $ids "Array of Spot ids"
+     * @param array $ids          "Array of Spot ids"
      * @param Event $event
      * @param array $meetingSlots
      */

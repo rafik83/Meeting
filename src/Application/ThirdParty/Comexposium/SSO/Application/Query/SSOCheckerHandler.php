@@ -50,12 +50,12 @@ class SSOCheckerHandler
     /**
      * @param SSOChecker $query
      *
-     * @return User
-     *
      * @throws UserNotFoundException
      * @throws UserNotOnEventException
      * @throws ComboEmailUserNotValidException
      * @throws CanNotCreateUserException
+     *
+     * @return User
      */
     public function handle(SSOChecker $query): User
     {
@@ -78,9 +78,10 @@ class SSOCheckerHandler
      * @param string $token
      * @param bool   $isExhibitor
      *
-     * @return User
      * @throws ComboEmailUserNotValidException
      * @throws UserNotOnEventException
+     *
+     * @return User
      */
     private function handleKnownUserLogin(Event $event, User $user, string $token, bool $isExhibitor): User
     {
@@ -107,9 +108,10 @@ class SSOCheckerHandler
      * @param string $token
      * @param string $locale
      *
-     * @return User
      * @throws CanNotCreateUserException
      * @throws ComboEmailUserNotValidException
+     *
+     * @return User
      */
     private function handleNotKnownVisitorLogin(Event $event, string $email, string $token, string $locale): User
     {

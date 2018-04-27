@@ -47,8 +47,9 @@ class VianeoGetSheetDataHandler
     /**
      * @param VianeoGetSheetData $vianeoGetSheetData
      *
-     * @return string payload in json
      * @throws VianeoSheetNotRegisteredException
+     *
+     * @return string payload in json
      */
     public function handle(VianeoGetSheetData $vianeoGetSheetData): string
     {

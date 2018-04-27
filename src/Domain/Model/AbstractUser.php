@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2016 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -149,8 +149,7 @@ abstract class AbstractUser implements UserInterface, EquatableInterface, \Seria
             $this->id,
             $this->email,
             $this->password,
-            $this->salt,
-        ) = unserialize($serialized);
+            $this->salt) = unserialize($serialized);
     }
 
     /**

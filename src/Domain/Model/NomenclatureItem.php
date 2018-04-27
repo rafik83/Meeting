@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2015 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -33,7 +33,7 @@ class NomenclatureItem
     private $parent;
 
     /**
-     * @var boolean
+     * @var bool
      */
     private $sort = true;
 
@@ -41,7 +41,7 @@ class NomenclatureItem
      * NomenclatureItem constructor.
      *
      * @param string             $key
-     * @param array              $label indexed by locale
+     * @param array              $label    indexed by locale
      * @param NomenclatureItem[] $children
      * @param bool               $sort
      */
@@ -146,7 +146,7 @@ class NomenclatureItem
      */
     public function any(array $keys)
     {
-        return !empty (array_filter($this->children, function (NomenclatureItem $child) use ($keys) {
+        return !empty(array_filter($this->children, function (NomenclatureItem $child) use ($keys) {
             return in_array($child->getKey(), $keys) || $child->any($keys);
         }));
     }

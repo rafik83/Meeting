@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of the vimeet project.
+ * This file is part of the Proximum Vimeet project.
  *
  * Copyright (C) Proximum
  *
@@ -18,7 +18,7 @@ class Remove
     public $tip;
 
     /**
-     * @param Tip   $tip
+     * @param Tip $tip
      */
     public function __construct(Tip $tip)
     {

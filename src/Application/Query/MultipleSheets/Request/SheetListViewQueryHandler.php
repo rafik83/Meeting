@@ -70,18 +70,18 @@ class SheetListViewQueryHandler
     /**
      * @param SheetListViewQuery $query
      *
-     * @return SheetListView
-     *
      * @throws NoResultException
+     *
+     * @return SheetListView
      */
     public function handle(SheetListViewQuery $query)
     {
         $multipleSheets = $query->sheets;
 
-        if ($query->filterRequestView->sheetConcerned !== null) {
+        if (null !== $query->filterRequestView->sheetConcerned) {
             $sheetConcerned = $query->filterRequestView->sheetConcerned;
             $multipleSheets = [
-                $sheetConcerned->getId() => $sheetConcerned
+                $sheetConcerned->getId() => $sheetConcerned,
             ];
         }
 
@@ -100,7 +100,7 @@ class SheetListViewQueryHandler
 
         $allSheetMet = null;
 
-        if ($query->filterRequestView->otherSheet === null) {
+        if (null === $query->filterRequestView->otherSheet) {
             // sheets met by the group sheets
             $sheets = $this->sheetRepository->getSheetsMetBySheetsPaginated(
                 $event,
@@ -133,8 +133,8 @@ class SheetListViewQueryHandler
             $allSheetMet = [$otherSheet];
         }
 
-        if ($sheets->total === 0 || $sheets->count() === 0) {
-            if ($query->page === 1) {
+        if (0 === $sheets->total || 0 === $sheets->count()) {
+            if (1 === $query->page) {
                 return new SheetListView(
                     [],
                     $query->page,
@@ -232,6 +232,7 @@ class SheetListViewQueryHandler
 
     /**
      * Add RequestView to SheetView
+     *
      * @param Request[]   $requests
      * @param Sheet[]     $multipleSheets
      * @param SheetView[] $sheetViews

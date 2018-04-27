@@ -1,9 +1,9 @@
 <?php
 
 /*
- * This file is part of the vimeet project.
+ * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2017 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -37,7 +37,7 @@ class ParticipantImportAccessVoter extends Voter
      */
     protected function supports($attribute, $subject)
     {
-        return $attribute === 'PERMISSION_PARTICIPANT_IMPORT_ACCESS';
+        return 'PERMISSION_PARTICIPANT_IMPORT_ACCESS' === $attribute;
     }
 
     /**
@@ -45,6 +45,6 @@ class ParticipantImportAccessVoter extends Voter
      */
     protected function voteOnAttribute($attribute, $subject, TokenInterface $token)
     {
-        return $this->session->get(ParticipantImportTag::PARTICIPANT_IMPORT_FILE) !== null;
+        return null !== $this->session->get(ParticipantImportTag::PARTICIPANT_IMPORT_FILE);
     }
 }

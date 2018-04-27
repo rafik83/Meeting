@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2016 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -74,7 +74,7 @@ class CreateType extends AbstractType
             ])
         ;
 
-        if ($options['isUserAloneParticipant'] !== true) {
+        if (true !== $options['isUserAloneParticipant']) {
             $builder
                 ->add('participants', ChoiceType::class, [
                     'choices'      => $sheet->getParticipants()->toArray(),
@@ -110,7 +110,7 @@ class CreateType extends AbstractType
                             'forms'
                         )
                     ),
-                ]
+                ],
             ])
         ;
     }

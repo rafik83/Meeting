@@ -18,67 +18,67 @@ class TransactionView
      * @var Event
      */
     public $event;
-    
+
     /**
      * @var int
      */
     public $sheetId;
-    
+
     /**
      * @var int
      */
     public $eventId;
-    
+
     /**
      * @var string
      */
     public $eventName;
-    
+
     /**
      * @var int
      */
     public $sheetOwnerId;
-    
+
     /**
      * @var string
      */
     public $companyName;
-    
+
     /**
      * @var \DateTimeInterface
      */
     public $transactionDate;
-    
+
     /**
      * @var int
      */
     public $transactionType;
-    
+
     /**
      * @var string
      */
     public $transactionReference;
-    
+
     /**
      * @var string|null
      */
     public $transactionGateway;
-    
+
     /**
      * @var float
      */
     public $transactionAmount;
-    
+
     /**
      * @var string
      */
     public $contactBillingInfoCountry;
-    
+
     /**
      * @var string
      */
     public $vatNumber;
-    
+
     /**
      * TransactionView constructor.
      *

@@ -73,7 +73,7 @@ class SubmitSheetMailEventSubscriber implements EventSubscriberInterface
         $sheetName = $event->getSheet()->getTitle();
         $participant = $event->getSheet()->getUserParticipant($event->getUser());
 
-        if ($participant === null) {
+        if (null === $participant) {
             $firstName = $event->getUser()->getAccount()->getFirstName();
             $lastName  = $event->getUser()->getAccount()->getLastName();
         } else {
@@ -81,7 +81,7 @@ class SubmitSheetMailEventSubscriber implements EventSubscriberInterface
             $lastName  = $this->participantInfoGuesser->guessParticipantLastName($participant, $locale);
         }
 
-        if ($follower !== null) {
+        if (null !== $follower) {
             $admins[] = $follower;
         } else {
             // notify all organizer allowed to manage this sheet

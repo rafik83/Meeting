@@ -10,8 +10,8 @@
 
 namespace Proximum\Vimeet\Application\Event\User\Availability;
 
-use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Model\Event as DomainEvent;
+use Proximum\Vimeet\Domain\Model\User;
 use Symfony\Component\EventDispatcher\Event;
 
 class ConfirmedEvent extends Event

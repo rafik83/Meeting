@@ -62,10 +62,10 @@ class SummaryTotalAction
      * @param EventDomain $eventDomain
      * @param Sheet       $sheet
      *
-     * @return Response
-     *
      * @throws AccessDeniedException
      * @throws NotFoundHttpException
+     *
+     * @return Response
      */
     public function __invoke(Request $request, EventDomain $eventDomain, Sheet $sheet): Response
     {
@@ -77,7 +77,7 @@ class SummaryTotalAction
 
         $orders = $sheet->getNotCancelledOrders();
 
-        if (!$sheet->getPackage()->isPassable() || \count($orders) === 0) {
+        if (!$sheet->getPackage()->isPassable() || 0 === \count($orders)) {
             throw new NotFoundHttpException('This page is not accessible by this user');
         }
 

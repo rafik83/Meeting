@@ -18,7 +18,7 @@ class SheetSatisfactionViewNormalizer implements NormalizerInterface
     /**
      * {@inheritdoc}
      */
-    public function normalize($object, $format = null, array $context = array())
+    public function normalize($object, $format = null, array $context = [])
     {
         /** @var SheetSatisfactionView $sheetSatisfactionView */
         $sheetSatisfactionView = $object;
@@ -28,7 +28,7 @@ class SheetSatisfactionViewNormalizer implements NormalizerInterface
             'sheetTitle' => $sheetSatisfactionView->title,
             'typeId' => $sheetSatisfactionView->typeId,
             'typeTitle' => $sheetSatisfactionView->typeTitle,
-            'satisfaction' => $sheetSatisfactionView->satisfaction
+            'satisfaction' => $sheetSatisfactionView->satisfaction,
         ];
     }
 
@@ -37,6 +37,6 @@ class SheetSatisfactionViewNormalizer implements NormalizerInterface
      */
     public function supportsNormalization($data, $format = null)
     {
-        return $format === 'json' && $data instanceof SheetSatisfactionView;
+        return 'json' === $format && $data instanceof SheetSatisfactionView;
     }
 }

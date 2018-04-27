@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2015 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -236,7 +236,7 @@ interface ParticipantRepositoryInterface
     public function findByGroup(Group $group);
 
     /**
-     * @param User $user
+     * @param User  $user
      * @param Event $currentEvent
      *
      * @return null|Participant
@@ -247,10 +247,10 @@ interface ParticipantRepositoryInterface
      * @param Event $event
      *
      * @return array of participant email with format
-     *  [
-     *      0 => ['email' => 'email0@example.net'],
-     *      1 => ['email' => 'email1@example.net'],
-     *  ]
+     *               [
+     *               0 => ['email' => 'email0@example.net'],
+     *               1 => ['email' => 'email1@example.net'],
+     *               ]
      */
     public function getParticipantEmailsForEvent(Event $event): array;
 }

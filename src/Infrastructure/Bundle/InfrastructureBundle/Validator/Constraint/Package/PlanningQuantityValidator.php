@@ -1,5 +1,13 @@
 <?php
 
+/*
+ * This file is part of the Proximum Vimeet project.
+ *
+ * Copyright (C) Proximum
+ *
+ * @author Elao <contact@elao.com>
+ */
+
 namespace Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Validator\Constraint\Package;
 
 use Proximum\Vimeet\Application\Command\Package\Step\SelectParticipantAndPlanning;
@@ -24,7 +32,7 @@ class PlanningQuantityValidator extends ConstraintValidator
      * @param QuantityMaxGuesser $quantityMaxGuesser
      * @param QuantityMinGuesser $quantityMinGuesser
      */
-    public function __construct(QuantityMaxGuesser $quantityMaxGuesser,  QuantityMinGuesser $quantityMinGuesser)
+    public function __construct(QuantityMaxGuesser $quantityMaxGuesser, QuantityMinGuesser $quantityMinGuesser)
     {
         $this->quantityMaxGuesser = $quantityMaxGuesser;
         $this->quantityMinGuesser = $quantityMinGuesser;

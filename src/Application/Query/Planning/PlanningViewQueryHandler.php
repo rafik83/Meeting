@@ -150,7 +150,7 @@ class PlanningViewQueryHandler
 
     /**
      * @param Event $event
-     * @param User $user
+     * @param User  $user
      */
     private function loadData(Event $event, User $user): void
     {

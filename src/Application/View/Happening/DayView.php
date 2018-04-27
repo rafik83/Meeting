@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2016 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -28,10 +28,10 @@ class DayView
     public $happenings;
 
     /**
-     * @param \DateTimeInterface $startTime
-     * @param \DateTimeInterface $endTime
-     * @param int                $scale
-     * @param HappeningView[]    $happeningView
+     * @param \DateTimeInterface            $startTime
+     * @param \DateTimeInterface            $endTime
+     * @param int                           $scale
+     * @param HappeningView[]               $happeningView
      * @param ProgramElementViewInterface[] $programElementViews
      */
     public function __construct(

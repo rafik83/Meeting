@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2015 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -57,7 +57,7 @@ class EventListView implements EventInterface
      * @param bool      $visible
      * @param DayView[] $days
      */
-    public function __construct($id, $title, $domain, array $locales, $fallback,  bool $visible, array $days = [])
+    public function __construct($id, $title, $domain, array $locales, $fallback, bool $visible, array $days = [])
     {
         $this->id       = $id;
         $this->title    = $title;

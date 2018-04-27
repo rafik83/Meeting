@@ -1,9 +1,9 @@
 <?php
 
 /*
- * This file is part of the vimeet project.
+ * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2017 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -86,7 +86,7 @@ class ImportMapping
      */
     public function isOnlyOneEmailMapping()
     {
-        if($this->isEmailInMappings()) {
+        if ($this->isEmailInMappings()) {
             $mappingsValuesCount = array_count_values($this->mappings);
 
             return $mappingsValuesCount[ParticipantImportTag::REGISTRATION_FIELD_MAIL] <= 1;

@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of the vimeet project.
+ * This file is part of the Proximum Vimeet project.
  *
  * Copyright (C) Proximum
  *
@@ -250,7 +250,7 @@ class ParticipantsSheetIdsViewNormalizer extends AbstractNormalizer implements N
             $fieldName = $this->convertCharset($fieldName, Charset::UTF_8, $charset);
 
             // Avoid set to null in field with same name
-            if ($input === null && isset($normalizedData[$fieldName])) {
+            if (null === $input && isset($normalizedData[$fieldName])) {
                 continue;
             }
 

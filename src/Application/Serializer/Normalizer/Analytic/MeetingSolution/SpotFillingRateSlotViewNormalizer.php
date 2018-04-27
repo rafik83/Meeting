@@ -39,6 +39,6 @@ class SpotFillingRateSlotViewNormalizer implements NormalizerInterface, Normaliz
      */
     public function supportsNormalization($data, $format = null)
     {
-        return $format === 'json' && $data instanceof SpotFillingRateSlotView;
+        return 'json' === $format && $data instanceof SpotFillingRateSlotView;
     }
 }

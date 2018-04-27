@@ -32,7 +32,6 @@ class ProductManager
      * @param string $title
      * @param float  $unitPrice
      * @param int    $quantity
-     *
      * @param float  $vat
      *
      * @return Product
@@ -59,7 +58,6 @@ class ProductManager
      * @param Event  $event
      * @param string $title
      * @param float  $unitPrice
-     *
      * @param float  $vat
      *
      * @return Product

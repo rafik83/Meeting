@@ -18,7 +18,7 @@ class BatchRefuse extends AbstractBatch
     public $admin;
 
     /**
-     * @param int[] $ids array of Sheets id
+     * @param int[] $ids   array of Sheets id
      * @param Admin $admin
      */
     public function __construct(array $ids, Admin $admin)

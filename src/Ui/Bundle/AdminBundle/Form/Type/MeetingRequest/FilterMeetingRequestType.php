@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2015 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -44,7 +44,7 @@ class FilterMeetingRequestType extends AbstractType
                     'meeting_request_filter.order_by.options.created_at_desc'       => RequestRepositoryInterface::ORDER_BY_CREATE_AT_DESC,
                     'meeting_request_filter.order_by.options.state_updated_at_asc'  => RequestRepositoryInterface::ORDER_BY_STATE_UPDATED_AT_ASC,
                     'meeting_request_filter.order_by.options.state_updated_at_desc' => RequestRepositoryInterface::ORDER_BY_STATE_UPDATED_AT_DESC,
-                ]
+                ],
             ])
         ;
     }

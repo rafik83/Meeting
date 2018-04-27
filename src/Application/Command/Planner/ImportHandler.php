@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2017 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -22,10 +22,10 @@ use Proximum\Vimeet\Application\View\Planner\Result\MeetingResult;
 use Proximum\Vimeet\Application\View\Planner\Result\PlannerResult;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Meeting;
-use Proximum\Vimeet\Domain\Model\Sheet;
-use Proximum\Vimeet\Domain\Model\MeetingSlot;
-use Proximum\Vimeet\Domain\Model\Spot;
 use Proximum\Vimeet\Domain\Model\Meeting\Request;
+use Proximum\Vimeet\Domain\Model\MeetingSlot;
+use Proximum\Vimeet\Domain\Model\Sheet;
+use Proximum\Vimeet\Domain\Model\Spot;
 use Proximum\Vimeet\Domain\Repository\Meeting\RequestRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\MeetingRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\MeetingSlotRepositoryInterface;
@@ -245,7 +245,7 @@ class ImportHandler
                 $toFlush = [];
             }
 
-            $index++;
+            ++$index;
         }
 
         $this->entityManagerAdapter->flush();
@@ -311,7 +311,7 @@ class ImportHandler
             $participantFrom = ParticipantFinder::getParticipantWithUserId($sheetFrom, $userResult->id);
             $participantTo   = ParticipantFinder::getParticipantWithUserId($sheetTo, $userResult->id);
 
-            if ((null === $participantFrom && $participantTo === null)) {
+            if ((null === $participantFrom && null === $participantTo)) {
                 return null; // Participant of the meeting not found
             }
 
@@ -346,7 +346,7 @@ class ImportHandler
     /**
      * Send a mail to current admin to notify him about successful planner import
      *
-     * @param Event $event
+     * @param Event  $event
      * @param Import $command
      */
     public function notifyAboutImportSuccess(Event $event, Import $command)

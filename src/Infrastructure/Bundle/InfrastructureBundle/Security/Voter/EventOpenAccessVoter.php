@@ -1,9 +1,9 @@
 <?php
 
 /*
- * This file is part of the vimeet project.
+ * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2017 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -40,7 +40,7 @@ class EventOpenAccessVoter extends Voter
      */
     protected function supports($attribute, $subject)
     {
-        return $attribute === self::PERMISSION_EVENT_OPEN_ACCESS && $subject instanceof Event;
+        return self::PERMISSION_EVENT_OPEN_ACCESS === $attribute && $subject instanceof Event;
     }
 
     /**

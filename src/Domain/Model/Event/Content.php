@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2016 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -103,6 +103,7 @@ class Content
     /**
      * @param string      $locale
      * @param string|null $fallback
+     *
      * @return string
      */
     public function getValue($locale, $fallback = null)

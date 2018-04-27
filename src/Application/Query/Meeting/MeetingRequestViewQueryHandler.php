@@ -1,9 +1,9 @@
 <?php
 
 /*
- * This file is part of the vimeet project.
+ * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2016 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -84,13 +84,13 @@ class MeetingRequestViewQueryHandler
 
         $participant = $query->sheet->getUserParticipant($query->user);
 
-        if ($participant !== null) {
+        if (null !== $participant) {
             $validatePhoneLink = $this->router->generate('event_user_phone_redirect_to_validation', [
                 'sheet'       => $query->sheet->getId(),
                 'participant' => $participant->getId(),
                 'redirectTo' => $this->router->generate('event_meeting_list_request', [
-                    'sheet' => $query->sheet->getId()
-                ])
+                    'sheet' => $query->sheet->getId(),
+                ]),
             ]);
         }
 
@@ -123,7 +123,7 @@ class MeetingRequestViewQueryHandler
      */
     private function getFilterState(MeetingRequestViewQuery $query)
     {
-        if ($query->meetingRequest->getState() === Request::STATE_SENT) {
+        if (Request::STATE_SENT === $query->meetingRequest->getState()) {
             if ($query->meetingRequest->getFromSheet() === $query->sheet) {
                 return Constant::FILTER_STATE_SENT;
             }

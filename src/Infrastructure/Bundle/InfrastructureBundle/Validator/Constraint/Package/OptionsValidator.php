@@ -1,9 +1,9 @@
 <?php
 
 /*
- * This file is part of the vimeet project.
+ * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2016 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -141,12 +141,12 @@ class OptionsValidator extends ConstraintValidator
     }
 
     /**
-     * @param Sheet  $sheet
-     * @param array  $options
-     * @param int    $id
-     * @param int    $quantity
-     * @param Cart   $cart
-     * @param Order  $order
+     * @param Sheet $sheet
+     * @param array $options
+     * @param int   $id
+     * @param int   $quantity
+     * @param Cart  $cart
+     * @param Order $order
      *
      * @return int|false
      */

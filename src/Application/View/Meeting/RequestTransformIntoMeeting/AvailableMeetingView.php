@@ -1,9 +1,9 @@
 <?php
 
 /*
- * This file is part of the vimeet project.
+ * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2017 vimeet
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -68,7 +68,6 @@ class AvailableMeetingView
     public $toParticipantIsPhoneValidated = false;
 
     /**
-     *
      * @param MeetingSlot   $slot
      * @param Sheet         $fromSheet
      * @param Sheet         $toSheet
@@ -104,8 +103,9 @@ class AvailableMeetingView
     }
 
     /**
-     * @return Participant
      * @throws \LogicException
+     *
+     * @return Participant
      */
     public function getFromParticipant()
     {
@@ -113,8 +113,9 @@ class AvailableMeetingView
     }
 
     /**
-     * @return Participant
      * @throws \LogicException
+     *
+     * @return Participant
      */
     public function getToParticipant()
     {
@@ -124,14 +125,15 @@ class AvailableMeetingView
     /**
      * @param array $participants
      *
-     * @return Participant
      * @throws \LogicException
+     *
+     * @return Participant
      */
     private function getParticipant(array $participants)
     {
         $participant = reset($participants);
 
-        if ($participant === false || count($participants) !== 1) {
+        if (false === $participant || 1 !== count($participants)) {
             throw new \LogicException('This method can be used only if only one participant');
         }
 

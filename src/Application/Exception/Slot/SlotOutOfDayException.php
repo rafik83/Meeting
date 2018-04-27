@@ -22,7 +22,7 @@ class SlotOutOfDayException extends SlotException
      */
     public function __construct(MeetingSlot $slot)
     {
-        parent::__construct("", 0, null);
+        parent::__construct('', 0, null);
 
         $this->slot = $slot;
     }

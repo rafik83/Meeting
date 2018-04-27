@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2015 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -11,8 +11,8 @@
 namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller;
 
 use Proximum\Vimeet\Application\Command\Admin\ActivateAccountPassword;
-use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Admin\ActivateAccountPasswordType;
 use Proximum\Vimeet\Domain\Model\Admin\ActivateAccountToken;
+use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Admin\ActivateAccountPasswordType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -50,7 +50,7 @@ class ActivateAccountController extends Controller
         }
 
         return $this->render('AdminBundle:ActivateAccount:password.html.twig', [
-            'form'      => $form->createView()
+            'form'      => $form->createView(),
         ]);
     }
 }

@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2017 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -18,7 +18,7 @@ use Symfony\Component\Validator\ConstraintValidator;
 class HoursOnSameDayValidator extends ConstraintValidator
 {
     /**
-     * @param Update      $update
+     * @param Update     $update
      * @param Constraint $constraint
      */
     public function validate($update, Constraint $constraint)

@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2016 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -30,7 +30,7 @@ class TranslationType extends AbstractType
                 'required' => true,
             ])
             ->add('paymentCondition', TextareaType::class, [
-                'required' => false
+                'required' => false,
             ])
             ->add('paymentFooter', TextareaType::class, [
                 'required'    => false,
@@ -46,5 +46,4 @@ class TranslationType extends AbstractType
     {
         return 'event_billing_configuration_translations';
     }
-
 }

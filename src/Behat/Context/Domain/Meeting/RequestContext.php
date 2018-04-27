@@ -1,9 +1,9 @@
 <?php
 
 /*
- * This file is part of the vimeet project.
+ * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2017 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -66,7 +66,7 @@ class RequestContext implements Context
         $fromSheet = $this->sheetContextProxy->getSheetManager()
             ->getSheetByEventAndTitle($event, $fromSheetTitle);
 
-        if ($fromSheet === null) {
+        if (null === $fromSheet) {
             $fromSheet = $this->sheetContextProxy->getSheetManager()
                 ->create($event, null, null, $fromSheetTitle);
         }
@@ -74,7 +74,7 @@ class RequestContext implements Context
         $toSheet = $this->sheetContextProxy->getSheetManager()
             ->getSheetByEventAndTitle($event, $toSheetTitle);
 
-        if ($toSheet === null) {
+        if (null === $toSheet) {
             $toSheet = $this->sheetContextProxy->getSheetManager()
                 ->create($event, null, null, $toSheetTitle);
         }

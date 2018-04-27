@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2016 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -160,16 +160,16 @@ class PaginatedSheetListViewQueryHandler
                 $lastName,
                 $sheet->getOwner()->getEmail()
             ),
-            $sheet->getFollower() !== null ? $sheet->getFollower()->getDisplayName() : '',
+            null !== $sheet->getFollower() ? $sheet->getFollower()->getDisplayName() : '',
             $sheet->getCommercialStatus(),
             $sheet->getReminderDate(),
             $sheet->getCreatedAt(),
             $sheet->getLastLoginAt(),
             $this->impersonate->getEncodedToken($admin, $sheet->getOwner()),
             $sheet->countParticipant(),
-            $sheet->getGroup() !== null,
-            $sheet->getGroup() !== null ? $sheet->getGroup()->getTitle() : null,
-            $sheet->getSpot() !== null ? $sheet->getSpot()->getReference() : null,
+            null !== $sheet->getGroup(),
+            null !== $sheet->getGroup() ? $sheet->getGroup()->getTitle() : null,
+            null !== $sheet->getSpot() ? $sheet->getSpot()->getReference() : null,
             $trace
         );
     }

@@ -39,8 +39,9 @@ class PaymentController extends Controller
      * @param Sheet       $sheet
      * @param UserDomain  $userDomain
      *
-     * @return Response
      * @throws \Proximum\Vimeet\Domain\Package\Exception\MissingBillingInfoException
+     *
+     * @return Response
      */
     public function paymentChoiceAction(
         Request $request,

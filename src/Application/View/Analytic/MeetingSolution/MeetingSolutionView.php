@@ -66,7 +66,7 @@ class MeetingSolutionView
         $this->spotFillingGraph = $spotFillingGraph;
         $this->createdAt = $createdAt;
 
-        if ($numberOfRequests === 0) {
+        if (0 === $numberOfRequests) {
             $numberOfRequests = 1;
         }
 

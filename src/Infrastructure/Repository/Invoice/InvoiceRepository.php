@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2017 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -110,7 +110,7 @@ class InvoiceRepository implements InvoiceRepositoryInterface
             ->setParameters([
                 'prefix'         => $prefix,
                 'invoice_prefix' => $prefix->getPrefix(),
-                'invoice_year'   => $year
+                'invoice_year'   => $year,
             ])
             ->setMaxResults(1)
         ;

@@ -50,6 +50,7 @@ class EventContext implements Context
 
     /**
      * @Given /^the catalog is open since "(?P<date>[^"]+)"$/
+     *
      * @param string $date
      */
     public function theCatalogIsOpen(string $date)
@@ -129,9 +130,9 @@ class EventContext implements Context
     }
 
     /**
-     * @return Event
-     *
      * @throws \InvalidArgumentException
+     *
+     * @return Event
      */
     private function getEvent()
     {

@@ -25,7 +25,7 @@ class CreateParticipantType extends AbstractCreateType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         parent::buildForm($builder, $options);
-        
+
         $builder
             ->add('translations', CollectionType::class, [
                 'entry_type' => TranslationsType::class,
@@ -62,7 +62,7 @@ class CreateParticipantType extends AbstractCreateType
         $resolver->setRequired([
             'event',
             'locale',
-            'availabilityTimeRanges'
+            'availabilityTimeRanges',
         ]);
 
         $resolver->setDefaults([

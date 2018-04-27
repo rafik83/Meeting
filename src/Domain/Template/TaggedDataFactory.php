@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of the vimeet project.
+ * This file is part of the Proximum Vimeet project.
  *
  * Copyright (C) Proximum
  *
@@ -53,7 +53,7 @@ class TaggedDataFactory
      *
      * @param Sheet  $sheet
      * @param string $locale
-     * @param array  $rules Current user rules
+     * @param array  $rules  Current user rules
      *
      * @see RuleRepositoryInterface::getBySeerTypeAndSeeableType
      *
@@ -72,7 +72,7 @@ class TaggedDataFactory
      *
      * @param Sheet  $sheet
      * @param string $locale
-     * @param array  $rules Current user rules
+     * @param array  $rules  Current user rules
      *
      * @see RuleRepositoryInterface::getBySeerTypeAndSeeableType
      *
@@ -105,7 +105,7 @@ class TaggedDataFactory
         foreach ($objects as $object) {
             $tags = $object->getTags();
 
-            if (\count($tags) === 0) {
+            if (0 === \count($tags)) {
                 continue;
             }
 

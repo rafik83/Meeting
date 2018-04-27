@@ -49,9 +49,9 @@ class Add
     public $needToSelectProduct;
 
     /**
-     * @param Sheet                   $sheet
-     * @param string                  $locale
-     * @param User                    $adder
+     * @param Sheet                    $sheet
+     * @param string                   $locale
+     * @param User                     $adder
      * @param ParticipantProductView[] $products
      */
     public function __construct(
@@ -66,7 +66,7 @@ class Add
         $this->adder  = $adder;
 
         $productSelected = null;
-        if (count($products) === 1) {
+        if (1 === count($products)) {
             $product = reset($products);
 
             if (false !== $product && $product->isBuyable) {

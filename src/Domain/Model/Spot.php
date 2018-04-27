@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2015 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -183,8 +183,9 @@ class Spot
      * @param string $property
      * @param int    $value
      *
-     * @return Spot
      * @throws PropertyNotSupportedException
+     *
+     * @return Spot
      */
     public function update($property, $value)
     {
@@ -292,6 +293,7 @@ class Spot
     {
         return $this->spotUnavailabilities->count() > 0;
     }
+
     /**
      * @return bool
      */

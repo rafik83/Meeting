@@ -112,7 +112,7 @@ class VianeoApiCallHandler
             [
                 '%endpoint%' => $vianeoEndpointParameter->getValue(),
                 '%jsonpayload%' => urlencode($jsonPayload),
-                '%lang%' => self::DEFAULT_LOCALE
+                '%lang%' => self::DEFAULT_LOCALE,
             ]
         );
 
@@ -126,7 +126,7 @@ class VianeoApiCallHandler
 
             $returnCode = (int) $response[self::VIANEO_RETURN_CODE];
 
-            if ($returnCode === 0) {
+            if (0 === $returnCode) {
                 $this->vianeoRegisterSheetHandler->handle(new VianeoRegisterSheet($sheet));
 
                 return;

@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2016 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -50,7 +50,7 @@ class GroupViewQueryHandler
         $products   = [];
         $customRows = [];
 
-        if ($groupViewQuery->type === Product::TYPE_OPTION) {
+        if (Product::TYPE_OPTION === $groupViewQuery->type) {
             $label = $order->getGroupLabel($groupViewQuery->groupId, $locale);
 
             foreach ($order->getProductRowsForGroupId($groupViewQuery->groupId) as $row) {

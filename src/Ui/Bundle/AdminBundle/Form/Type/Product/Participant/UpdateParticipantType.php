@@ -10,7 +10,6 @@
 
 namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Product\Participant;
 
-
 use Proximum\Vimeet\Application\Command\Product\Participant\UpdateParticipant;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Product\AbstractUpdateType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
@@ -63,7 +62,7 @@ class UpdateParticipantType extends AbstractUpdateType
         $resolver->setRequired([
             'event',
             'locale',
-            'availabilityTimeRanges'
+            'availabilityTimeRanges',
         ]);
         $resolver->setDefaults([
             'data_class' => UpdateParticipant::class,

@@ -32,7 +32,7 @@ class GroupView
      * @param SheetView[] $sheetViews
      * @param Day[]       $days
      */
-    public function __construct($id, $title,array $sheetViews, array $days)
+    public function __construct($id, $title, array $sheetViews, array $days)
     {
         $this->id         = $id;
         $this->title      = $title;

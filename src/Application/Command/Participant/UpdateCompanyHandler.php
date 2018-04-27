@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2016 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -96,7 +96,7 @@ class UpdateCompanyHandler
 
         $this->sheetRepository->set($sheet);
 
-        if ($participant !== null && $participant->getUser() === $updateCompany->user) {
+        if (null !== $participant && $participant->getUser() === $updateCompany->user) {
             $this->accountSynchronizer->set($templateData, $updateCompany->participant->getUser());
         }
 

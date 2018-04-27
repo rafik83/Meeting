@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of the vimeet project.
+ * This file is part of the Proximum Vimeet project.
  *
  * Copyright (C) Proximum
  *
@@ -21,7 +21,7 @@ class ExportPlannerMailError extends AbstractMail
     /** @var string */
     protected $template = 'MailBundle:Mail:Planner/error.html.twig';
 
-    /** @var string  */
+    /** @var string */
     protected $messageId = 'export_planner_error';
 
     /** @var Event */

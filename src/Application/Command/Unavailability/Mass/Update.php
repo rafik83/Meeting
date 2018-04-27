@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2016 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -36,7 +36,7 @@ class Update extends Base
             return ['from' => $timeSlot->getFrom(), 'to' => $timeSlot->getTo()];
         }, $mass->getTimeSlots());
 
-        foreach ($mass->getTranslations() as $locale => $translation){
+        foreach ($mass->getTranslations() as $locale => $translation) {
             $this->translations[$locale] = [
                 'title'       => $translation->getTitle(),
                 'description' => $translation->getDescription(),

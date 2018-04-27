@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2015 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -46,7 +46,7 @@ class FollowerChoiceType extends AbstractType
             'choices' => function (Options $options) {
                 $admins = $this->adminRepository->getFollowers($options['event']);
 
-                if ($options['unassigned'] === true) {
+                if (true === $options['unassigned']) {
                     return array_merge([FollowerConstant::UNASSIGNED_FOLLOWER], $admins);
                 } else {
                     return $admins;
@@ -62,7 +62,7 @@ class FollowerChoiceType extends AbstractType
             'choice_value' => function ($admin) {
                 if ($admin instanceof Admin) {
                     return $admin->getId();
-                } elseif ($admin === FollowerConstant::UNASSIGNED_FOLLOWER) {
+                } elseif (FollowerConstant::UNASSIGNED_FOLLOWER === $admin) {
                     return FollowerConstant::UNASSIGNED_FOLLOWER;
                 } else {
                     return null;

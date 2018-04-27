@@ -74,9 +74,9 @@ class UpdateAction
      * @param Request $request
      * @param Tip     $tip
      *
-     * @return Response|RedirectResponse
-     *
      * @throws AccessDeniedException
+     *
+     * @return Response|RedirectResponse
      */
     public function __invoke(Request $request, Tip $tip): Response
     {
@@ -97,7 +97,7 @@ class UpdateAction
         }
 
         return $this->engine->renderResponse(self::TEMPLATE, [
-            'form' => $form->createView()
+            'form' => $form->createView(),
         ]);
     }
 }

@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2015 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -44,7 +44,7 @@ class UrlDataType extends AbstractType
         $resolver->setRequired(['object', 'locale']);
         $resolver->setAllowedTypes('object', TemplateObject\Url::class);
         $resolver->setDefaults([
-            'data_class' => TemplateObject\Url::class
+            'data_class' => TemplateObject\Url::class,
         ]);
     }
 

@@ -19,19 +19,19 @@ class TransactionViewQuery
 {
     /** @var Transaction */
     public $transaction;
-    
+
     /** @var Sheet */
     public $sheet;
-    
+
     /** @var Payment */
     public $payment;
-    
+
     /** @var Event */
     public $event;
-    
+
     /** @var string */
     public $locale;
-    
+
     /**
      * TransactionViewQuery constructor.
      *

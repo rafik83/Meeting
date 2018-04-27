@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2016 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -63,6 +63,6 @@ class MessageMeetingRequestView
      */
     public function isLeft()
     {
-        return $this->side === self::LEFT;
+        return self::LEFT === $this->side;
     }
 }

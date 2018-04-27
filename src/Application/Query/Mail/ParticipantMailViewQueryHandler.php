@@ -1,9 +1,9 @@
 <?php
 
 /*
- * This file is part of the vimeet project.
+ * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2016 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -37,7 +37,6 @@ class ParticipantMailViewQueryHandler
         ParticipantRepositoryInterface $participantRepository,
         ParticipantInfoGuesser $participantInfoGuesser
     ) {
-
         $this->participantRepository  = $participantRepository;
         $this->participantInfoGuesser = $participantInfoGuesser;
     }
@@ -49,13 +48,13 @@ class ParticipantMailViewQueryHandler
      */
     public function handle(ParticipantMailViewQuery $query)
     {
-        if ($query->sheet === null) {
+        if (null === $query->sheet) {
             return $this->userInfoView($query->user);
         }
 
         $participant = $this->participantRepository->getParticipantForUserAndSheet($query->user, $query->sheet);
 
-        if ($participant === null) {
+        if (null === $participant) {
             return $this->userInfoView($query->user);
         }
 
@@ -72,8 +71,8 @@ class ParticipantMailViewQueryHandler
         $locale = $participant->getSheet()->getEvent()->getAvailableLocale($query->user->getLocale());
 
         return new ParticipantInfoView(
-            $firstname !== null ? $firstname : $query->user->getAccount()->getFirstName(),
-            $lastname !== null ? $lastname : $query->user->getAccount()->getLastName(),
+            null !== $firstname ? $firstname : $query->user->getAccount()->getFirstName(),
+            null !== $lastname ? $lastname : $query->user->getAccount()->getLastName(),
             $participant->getSheet()->getType()->getTitle($locale)
         );
     }

@@ -20,9 +20,9 @@ use Proximum\Vimeet\Domain\Template\TemplateObject\Gender;
 
 class RawRegistrationToRegistrationViewConverter extends ComexposiumConverter
 {
-    private CONST STATUS_WHITE_LIST = ['VALIDE', 'INSTANCE'];
+    private const STATUS_WHITE_LIST = ['VALIDE', 'INSTANCE'];
 
-    private CONST REGISTRATION_DESCRIPTION_FIELD = 'DESCRIPTION';
+    private const REGISTRATION_DESCRIPTION_FIELD = 'DESCRIPTION';
 
     private const GENDER_MAPPING = [
         '1' => Gender::WOMAN, // Mademoiselle

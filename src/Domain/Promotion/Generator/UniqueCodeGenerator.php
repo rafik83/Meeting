@@ -1,12 +1,12 @@
 <?php
 
 /*
-* This file is part of the Proximum Vimeet project.
-*
-* Copyright (C) 2016 Proximum
-*
-* @author Elao <contact@elao.com>
-*/
+ * This file is part of the Proximum Vimeet project.
+ *
+ * Copyright (C) Proximum
+ *
+ * @author Elao <contact@elao.com>
+ */
 
 namespace Proximum\Vimeet\Domain\Promotion\Generator;
 
@@ -48,7 +48,7 @@ class UniqueCodeGenerator implements CodeGeneratorInterface
 
         while ($this->checker->exists($event, $code)) {
             $code = substr($code, 0, $length) . $suffix++;
-        };
+        }
 
         return $code;
     }

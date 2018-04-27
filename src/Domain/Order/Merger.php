@@ -19,13 +19,13 @@ class Merger
     /**
      * @param Order[] $orders
      *
-     * @return Order
-     *
      * @throws OrderMergerException
+     *
+     * @return Order
      */
     public function merge(array $orders): Order
     {
-        if (\count($orders) === 0) {
+        if (0 === \count($orders)) {
             throw new OrderMergerException('There is no order to merge');
         }
 
@@ -36,7 +36,7 @@ class Merger
             throw new OrderMergerException('There is no order to merge');
         }
 
-        if (\count($orders) === 1) {
+        if (1 === \count($orders)) {
             return $firstOrder;
         }
 
@@ -54,7 +54,7 @@ class Merger
 
         // Remove products whose merged quantity return 0
         foreach ($orderMerged->getRows() as $row) {
-            if ($row->getQuantity() === 0 && null !== $row->getId()) {
+            if (0 === $row->getQuantity() && null !== $row->getId()) {
                 $orderMerged->removeRow($row);
             }
         }
@@ -65,9 +65,9 @@ class Merger
     /**
      * @param Sheet $sheet
      *
-     * @return null|Order
-     *
      * @throws OrderMergerException
+     *
+     * @return null|Order
      */
     public function getMergedOrders(Sheet $sheet): ?Order
     {

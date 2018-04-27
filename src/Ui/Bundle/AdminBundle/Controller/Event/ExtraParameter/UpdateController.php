@@ -26,9 +26,9 @@ class UpdateController extends Controller
      * @param Event          $event
      * @param ExtraParameter $extraParameter
      *
-     * @return Response
-     *
      * @throws NotFoundHttpException
+     *
+     * @return Response
      */
     public function updateAction(Request $request, Event $event, ExtraParameter $extraParameter): Response
     {

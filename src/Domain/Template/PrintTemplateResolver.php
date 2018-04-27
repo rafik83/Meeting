@@ -94,13 +94,13 @@ class PrintTemplateResolver
                 continue;
             }
 
-            if ($node['component'] === 'block' && isset($node['children']) && is_array($node['children'])) {
+            if ('block' === $node['component'] && isset($node['children']) && is_array($node['children'])) {
                 foreach ($node['children'] as $index => $children) {
                     $nodes[$key]['children'][$index] = $this->replaceObjects($children, $sheetTemplateDataObjects);
                 }
             }
 
-            if ($node['component'] === 'object') {
+            if ('object' === $node['component']) {
                 if (!array_key_exists($key, $sheetTemplateDataObjects)) {
                     unset($nodes[$key]);
                     continue;

@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of the vimeet project.
+ * This file is part of the Proximum Vimeet project.
  *
  * Copyright (C) Proximum
  *
@@ -37,7 +37,7 @@ class PromotionProductRowViewDenormalizer implements DenormalizerInterface, Deno
      */
     public function supportsDenormalization($data, $type, $format = null)
     {
-        return $type === PromotionProductRowView::class
+        return PromotionProductRowView::class === $type
             && isset($data['product'])
             && isset($data['promotionType'])
             && isset($data['discountValue'])

@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2017 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -14,12 +14,12 @@ use Proximum\Vimeet\Application\Adapter\TranslatorInterface;
 use Proximum\Vimeet\Application\Query\Planning\PlanningViewQuery;
 use Proximum\Vimeet\Application\Query\Planning\PlanningViewQueryHandler;
 use Proximum\Vimeet\Application\View\Planning\Day\AbstractTimeEntityView;
-use Proximum\Vimeet\Application\View\Planning\DayView;
+use Proximum\Vimeet\Application\View\Planning\day\AssignmentView;
 use Proximum\Vimeet\Application\View\Planning\day\HappeningParticipationView;
 use Proximum\Vimeet\Application\View\Planning\day\MassView;
-use Proximum\Vimeet\Application\View\Planning\day\AssignmentView;
 use Proximum\Vimeet\Application\View\Planning\day\MeetingView;
 use Proximum\Vimeet\Application\View\Planning\day\UnavailabilityView;
+use Proximum\Vimeet\Application\View\Planning\DayView;
 use Proximum\Vimeet\Application\View\Planning\PlanningView;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\User;
@@ -349,7 +349,7 @@ class ParticipantPlanningFormatter
      */
     private function sortChronologicalOrder(array $timeEntities)
     {
-        usort($timeEntities, function(AbstractTimeEntityView $first, AbstractTimeEntityView $second) {
+        usort($timeEntities, function (AbstractTimeEntityView $first, AbstractTimeEntityView $second) {
             return $first->begin > $second->begin;
         });
 

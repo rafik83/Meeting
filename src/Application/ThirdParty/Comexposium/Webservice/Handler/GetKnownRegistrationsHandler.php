@@ -39,8 +39,9 @@ class GetKnownRegistrationsHandler
     }
 
     /**
-     * @return array of registration data indexed by Sheet id
      * @throws EventHasNotComexposiumReferenceException
+     *
+     * @return array of registration data indexed by Sheet id
      */
     public function handle(Event $event, int $chunkSize = self::CHUNK_SIZE): array
     {

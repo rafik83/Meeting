@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of the Proximum vimeet project.
+ * This file is part of the Proximum Vimeet project.
  *
  * Copyright (C) Proximum
  *
@@ -66,22 +66,22 @@ class PlanningPrint
     public $spotReference;
 
     /**
-     * @param string $sheetTitle
-     * @param string $participantName
-     * @param string $planning
-     * @param string $participantLocale
-     * @param string $leftColor
-     * @param string $rightColor
-     * @param string $eventTitle
-     * @param string $eventDescription
-     * @param string $eventDomain
-     * @param string|null $spotReference
-     * @param string|null $eventLogo
-     * @param string|null $organiserWebsite
-     * @param string|null $contactFirstName
-     * @param string|null $contactLastName
-     * @param string|null $organiserPhone
-     * @param string|null $organiserEmail
+     * @param string               $sheetTitle
+     * @param string               $participantName
+     * @param string               $planning
+     * @param string               $participantLocale
+     * @param string               $leftColor
+     * @param string               $rightColor
+     * @param string               $eventTitle
+     * @param string               $eventDescription
+     * @param string               $eventDomain
+     * @param string|null          $spotReference
+     * @param string|null          $eventLogo
+     * @param string|null          $organiserWebsite
+     * @param string|null          $contactFirstName
+     * @param string|null          $contactLastName
+     * @param string|null          $organiserPhone
+     * @param string|null          $organiserEmail
      * @param TipTranslationView[] $tipTranslationViews
      */
     public function __construct(

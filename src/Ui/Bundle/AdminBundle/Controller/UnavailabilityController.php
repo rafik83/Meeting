@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2016 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -85,7 +85,7 @@ class UnavailabilityController extends Controller
         $days = $event->getDays();
         $day  = reset($days);
 
-        if ($day === false) {
+        if (false === $day) {
             $day = null;
         }
 
@@ -152,7 +152,7 @@ class UnavailabilityController extends Controller
      *
      * @return RedirectResponse
      */
-    public function deleteMassAction( Event $event, Mass $mass)
+    public function deleteMassAction(Event $event, Mass $mass)
     {
         $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
 

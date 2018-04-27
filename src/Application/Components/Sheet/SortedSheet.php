@@ -46,7 +46,7 @@ class SortedSheet
             return strcasecmp($sheetOne['title'], $sheetTwo['title']);
         });
 
-        $sheets = array_map(function($sheetWithTitle) {
+        $sheets = array_map(function ($sheetWithTitle) {
             return $sheetWithTitle['sheet'];
         }, $sheetsWithTitle);
 

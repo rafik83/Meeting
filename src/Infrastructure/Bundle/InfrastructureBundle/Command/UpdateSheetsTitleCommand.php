@@ -1,5 +1,13 @@
 <?php
 
+/*
+ * This file is part of the Proximum Vimeet project.
+ *
+ * Copyright (C) Proximum
+ *
+ * @author Elao <contact@elao.com>
+ */
+
 namespace Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command;
 
 use Doctrine\ORM\EntityManager;
@@ -65,7 +73,7 @@ class UpdateSheetsTitleCommand extends Command
 
         if (null !== $eventId) {
             $event = $this->eventRepository->getById($eventId);
-            if ($event !== null) {
+            if (null !== $event) {
                 $sheetsIterableResult = $this->entityManager->createQueryBuilder()
                     ->select('sheet')
                     ->from(Sheet::class, 'sheet')
@@ -91,7 +99,7 @@ class UpdateSheetsTitleCommand extends Command
             $sheetTitle         = $this->sheetInfoGuesserCache->guessSheetTitle($sheet);
             $sheetToBeUpdated[] = $sheet->setTitle($sheetTitle);
 
-            if (($i % $batchSize) === 0) {
+            if (0 === ($i % $batchSize)) {
                 $this->entityManager->flush($sheetToBeUpdated);
                 $this->entityManager->clear();
                 $sheetToBeUpdated = [];
@@ -103,5 +111,4 @@ class UpdateSheetsTitleCommand extends Command
 
         $progress->finish();
     }
-
 }

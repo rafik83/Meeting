@@ -87,7 +87,7 @@ class LeniConstants
     public const LENI_LEADER_EMAIL = 'ZL_LEADER_EMAIL';
     public const LENI_LEADER_LAST_NAME = 'ZL_LEADER_NOM';
     public const LENI_LEADER_FIRST_NAME = 'ZL_LEADER_PRENOM';
-  
+
     /**
      * Fields used in the GET Api
      */

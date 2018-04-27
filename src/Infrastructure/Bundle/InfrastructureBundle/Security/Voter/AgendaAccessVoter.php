@@ -1,9 +1,9 @@
 <?php
 
 /*
- * This file is part of the vimeet project.
+ * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2017 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -39,7 +39,7 @@ class AgendaAccessVoter extends Voter
      */
     protected function supports($attribute, $subject)
     {
-        return $attribute === self::PERMISSION && $subject instanceof Event;
+        return self::PERMISSION === $attribute && $subject instanceof Event;
     }
 
     /**

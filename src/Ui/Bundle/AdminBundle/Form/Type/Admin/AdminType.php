@@ -3,15 +3,15 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2016 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
 
 namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Admin;
 
-use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Event\EventChoiceType;
 use Proximum\Vimeet\Domain\Model\Admin;
+use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Event\EventChoiceType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
@@ -42,7 +42,7 @@ abstract class AdminType extends AbstractType
                 'choices'  => [
                     'form.create_admin.role.organizer'   => Admin::ROLE_ORGANIZER,
                     'form.create_admin.role.operator'    => Admin::ROLE_OPERATOR,
-                    'form.create_admin.role.super_admin' => Admin::ROLE_SUPER_ADMIN
+                    'form.create_admin.role.super_admin' => Admin::ROLE_SUPER_ADMIN,
                 ],
                 'required' => true,
             ])

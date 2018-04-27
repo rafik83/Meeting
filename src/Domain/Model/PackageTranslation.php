@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2016 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -46,10 +46,10 @@ class PackageTranslation
      * PackageTranslation constructor.
      *
      * @param Package $package
-     * @param string           $locale
-     * @param string           $plansLabel
-     * @param string           $participantAndPlanningLabel
-     * @param string           $optionsLabel
+     * @param string  $locale
+     * @param string  $plansLabel
+     * @param string  $participantAndPlanningLabel
+     * @param string  $optionsLabel
      */
     public function __construct(Package $package, $locale, $plansLabel, $participantAndPlanningLabel, $optionsLabel)
     {

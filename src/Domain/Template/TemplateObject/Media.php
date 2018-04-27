@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2016 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -140,6 +140,6 @@ class Media
      */
     public function isEmpty(): bool
     {
-        return $this->title === null || (\is_array($this->title) && \count(array_filter($this->title)) === 0);
+        return null === $this->title || (\is_array($this->title) && 0 === \count(array_filter($this->title)));
     }
 }

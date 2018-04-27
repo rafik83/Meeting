@@ -31,7 +31,6 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Security\Core\User\UserInterface;
 
 class UnavailabilityController extends Controller
 {
@@ -106,10 +105,10 @@ class UnavailabilityController extends Controller
     }
 
     /**
-     * @param Request       $request
-     * @param EventDomain   $eventDomain
-     * @param Sheet         $sheet
-     * @param UserDomain    $userDomain
+     * @param Request     $request
+     * @param EventDomain $eventDomain
+     * @param Sheet       $sheet
+     * @param UserDomain  $userDomain
      *
      * @return Response
      */
@@ -142,6 +141,7 @@ class UnavailabilityController extends Controller
 
         if ($createFormView->isSuccess()) {
             $this->addFlash('success', 'flash.unavailability.add.success');
+
             return  $this->redirectToRoute('event_availability_confirmation', [
                 'sheet' => $sheet->getId(),
             ]);
@@ -151,7 +151,7 @@ class UnavailabilityController extends Controller
         $form = $this->createForm(ConfirmationType::class, $availabilityConfirmation, [
             'action' => $this->generateUrl('event_availability_confirmation', [
                 'sheet' => $sheet->getId(),
-            ])
+            ]),
         ]);
 
         return $this->render('EventBundle:Availability:confirmation.html.twig', [

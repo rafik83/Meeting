@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2015 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -230,7 +230,7 @@ class SheetListView
      */
     public function hasCommercialStatus(): bool
     {
-        return $this->commercialStatus !== null;
+        return null !== $this->commercialStatus;
     }
 
     /**
@@ -238,7 +238,7 @@ class SheetListView
      */
     public function hasReminderDate(): bool
     {
-        return $this->reminderDate !== null;
+        return null !== $this->reminderDate;
     }
 
     /**
@@ -266,7 +266,7 @@ class SheetListView
             return 'warning';
         }
 
-        if ($this->completeness === 100) {
+        if (100 === $this->completeness) {
             return 'success';
         }
 
@@ -278,6 +278,6 @@ class SheetListView
      */
     public function hasTraceLabel()
     {
-        return ($this->state === Sheet::STATE_VALIDATED || $this->state === Sheet::STATE_ACCEPTED) && !empty($this->traceAction);
+        return (Sheet::STATE_VALIDATED === $this->state || Sheet::STATE_ACCEPTED === $this->state) && !empty($this->traceAction);
     }
 }

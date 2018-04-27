@@ -1,9 +1,9 @@
 <?php
 
 /*
- * This file is part of the vimeet project.
+ * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2016 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -51,7 +51,7 @@ class CatalogSubmenuViewQueryHandler
 
         $catalogOnlineDate = $query->event->getConfiguration()->getCatalogOnlineDate();
 
-        if ($catalogOnlineDate !== null && $catalogOnlineDate <= $this->datetime && $query->sheet->isInCatalog()) {
+        if (null !== $catalogOnlineDate && $catalogOnlineDate <= $this->datetime && $query->sheet->isInCatalog()) {
             $buttonViews[] = new SubmenuButtonView(
                 Category::CATALOG_ICON,
                 'navigation.category.catalog',

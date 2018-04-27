@@ -10,9 +10,9 @@
 
 namespace Proximum\Vimeet\Application\Event\Tip;
 
+use Proximum\Vimeet\Domain\Model\Event as EventModel;
 use Proximum\Vimeet\Domain\Model\Tip\Tip;
 use Symfony\Component\EventDispatcher\Event;
-use Proximum\Vimeet\Domain\Model\Event as EventModel;
 
 class AssignedEvent extends Event
 {

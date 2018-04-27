@@ -1,9 +1,9 @@
 <?php
 
 /*
- * This file is part of the vimeet project.
+ * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2017 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -92,24 +92,28 @@ class SlotAvailability
 
     /**
      * Array of happeningParticipation [participantId][1 => happeningParticipation, 2 => happeningParticipation]
+     *
      * @var array
      */
     private $happeningsSortByParticipant = [];
 
     /**
      * Array of meeting [participantId][1 => meeting, 2 => meeting]
+     *
      * @var array
      */
     private $meetingsSortByParticipant = [];
 
     /**
      * Array of unavailability [userId][1 => unavailability, 2 => unavailability]
+     *
      * @var array
      */
     private $unavailabilitySortByUser = [];
 
     /**
      * Array of mass assignment [UserId][1 => assignment, 2 => assignment]
+     *
      * @var array
      */
     private $massAssignmentSortByUser = [];
@@ -152,8 +156,7 @@ class SlotAvailability
         array $massUnavailability = [],
         array $massAssignments = [],
         array $meetingOtherSheets = []
-    )
-    {
+    ) {
         $this->happenings         = $happenings;
         $this->meetings           = $meetings;
         $this->unavailability     = $unavailability;
@@ -230,11 +233,11 @@ class SlotAvailability
     {
         $this->autoLoading($participant->getSheet()->getEvent());
 
-        if (($meeting = $this->hasMeeting($slot, $participant)) !== false) {
+        if (false !== ($meeting = $this->hasMeeting($slot, $participant))) {
             return new SlotAvailabilityView(self::MEETING_UNAVAILABILITY, $meeting);
         }
 
-        if (($otherSheet = $this->getMeetingOnOtherSheet($slot, $participant)) !== null) {
+        if (null !== ($otherSheet = $this->getMeetingOnOtherSheet($slot, $participant))) {
             return new SlotAvailabilityView(self::MEETING_ON_OTHER_SHEET, null, null, $otherSheet);
         }
 
@@ -246,7 +249,7 @@ class SlotAvailability
             return new SlotAvailabilityView(self::HAPPENING_UNAVAILABILITY);
         }
 
-        if (($assignment = $this->hasMassUnavailability($slot, $participant)) !== false) {
+        if (false !== ($assignment = $this->hasMassUnavailability($slot, $participant))) {
             // result can be true or MassAssignment, if true, change it to null to send it to the object
             if (!$assignment instanceof MassAssignment) {
                 $assignment = null;
@@ -278,29 +281,29 @@ class SlotAvailability
      */
     public function autoLoading(Event $event)
     {
-        if ($this->happenings === null) {
+        if (null === $this->happenings) {
             $this->happenings = $this->happeningParticipationRepository->getByEvent($event);
 
             $this->assignHappeningSortByParticipant($this->happenings);
         }
 
-        if ($this->meetings === null) {
+        if (null === $this->meetings) {
             $this->meetings = $this->meetingRepositoryInterface->getAllByEvent($event);
 
             $this->assignMeetingSortByParticipant($this->meetings);
         }
 
-        if ($this->unavailability === null) {
+        if (null === $this->unavailability) {
             $this->unavailability = $this->unavailabilityRepository->getByEvent($event);
 
             $this->assignUnavailabilitySortByUser($this->unavailability);
         }
 
-        if ($this->massUnavailability === null) {
+        if (null === $this->massUnavailability) {
             $this->massUnavailability = $this->massUnavailabilityRepository->findBlockingByEvent($event);
         }
 
-        if ($this->massAssignment === null) {
+        if (null === $this->massAssignment) {
             $this->massAssignment = $this->massAssignmentRepository->findByEvent($event);
 
             $this->assignMassAssignmentSortByUser($this->massAssignment);
@@ -380,12 +383,10 @@ class SlotAvailability
     /**
      * @param Participant $participant
      * @param Mass        $mass
-     *
-     * @return null
      */
     private function getDispatch(Participant $participant, Mass $mass)
     {
-        if ($this->massAssignment !== null) {
+        if (null !== $this->massAssignment) {
             if (!isset($this->massAssignmentSortByUser[$participant->getUser()->getId()])) {
                 return null;
             }
@@ -415,14 +416,14 @@ class SlotAvailability
             if ($mass->isDispatch()) {
                 $assignment = $this->getDispatch($participant, $mass);
 
-                if ($assignment !== null) {
+                if (null !== $assignment) {
                     $assignmentResult = $this->hasDispatchUnavailability($assignment, $slot);
 
-                    if ($assignmentResult === self::ASSIGNMENT_DISABLED) {
+                    if (self::ASSIGNMENT_DISABLED === $assignmentResult) {
                         return false;
                     }
 
-                    if ($assignmentResult === self::ASSIGNMENT_FOUND) {
+                    if (self::ASSIGNMENT_FOUND === $assignmentResult) {
                         return $assignment;
                     }
 
@@ -526,7 +527,7 @@ class SlotAvailability
             if ($meetingOtherSheet->getSlot()->getId() === $slot->getId()) {
                 $otherSheet = $meetingOtherSheet->getSheetByUser($participant->getUser());
 
-                if ($otherSheet !== null) {
+                if (null !== $otherSheet) {
                     return $otherSheet;
                 }
             }

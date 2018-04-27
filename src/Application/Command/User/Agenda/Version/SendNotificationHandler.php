@@ -89,7 +89,7 @@ class SendNotificationHandler
             $command->event,
             self::EVENT_AGENDA_ROUTE,
             ['sheet' => $command->sheet->getId(),
-             '_locale' => $command->event->getAvailableLocale($command->user->getLocale())]
+             '_locale' => $command->event->getAvailableLocale($command->user->getLocale()), ]
         );
 
         $message = $startingSentence . "\n" . $verbalizedDiff . "\n" . $agendaUrl;

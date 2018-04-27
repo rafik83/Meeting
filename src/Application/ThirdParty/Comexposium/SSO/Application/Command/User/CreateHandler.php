@@ -53,7 +53,7 @@ class CreateHandler
         $sessionSalon = $this->extraParameterRepository->findByEventAndType($command->event, Type::TYPE_COMEXPOSIUM_SSO_SESSION_SALON);
         $application = $this->extraParameterRepository->findByEventAndType($command->event, Type::TYPE_COMEXPOSIUM_SSO_APPLICATION);
 
-        if ($salon === null || $sessionSalon === null || $application === null) {
+        if (null === $salon || null === $sessionSalon || null === $application) {
             return self::RESPONSE_MISSING_PARAMETERS;
         }
 
@@ -80,7 +80,7 @@ class CreateHandler
         try {
             $response = $this->httpAdapter->post($this->comexposiumSsoCreateUserEndPoint, [], json_encode($payload));
 
-            if ($response->statusCode !== 200) {
+            if (200 !== $response->statusCode) {
                 return self::RESPONSE_ERROR;
             }
 

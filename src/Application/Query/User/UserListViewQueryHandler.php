@@ -1,9 +1,9 @@
 <?php
 
 /*
- * This file is part of the vimeet project.
+ * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2016 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -48,7 +48,7 @@ class UserListViewQueryHandler
 
         $userListViews = [];
 
-        foreach($paginatedResult->results as $result) {
+        foreach ($paginatedResult->results as $result) {
             $userListViews[] = new UserListView(
                 $result['id'],
                 $result['email'],

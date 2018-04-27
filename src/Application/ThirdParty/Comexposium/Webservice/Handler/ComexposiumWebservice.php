@@ -35,8 +35,9 @@ class ComexposiumWebservice
     }
 
     /**
-     * @return mixed
      * @throws \SoapFault
+     *
+     * @return mixed
      */
     public function getEvents()
     {
@@ -46,8 +47,9 @@ class ComexposiumWebservice
     }
 
     /**
-     * @return mixed
      * @throws \SoapFault
+     *
+     * @return mixed
      */
     public function getParameters()
     {
@@ -59,9 +61,10 @@ class ComexposiumWebservice
     /**
      * @param string $eventReference
      *
-     * @return string[] array of registration reference
      * @throws \DomainException
      * @throws \SoapFault
+     *
+     * @return string[] array of registration reference
      */
     public function getRegistrationsReference(string $eventReference): array
     {
@@ -92,8 +95,9 @@ class ComexposiumWebservice
     /**
      * @param string $eventReference
      *
-     * @return mixed
      * @throws \SoapFault
+     *
+     * @return mixed
      */
     public function getEventParameters(string $eventReference)
     {
@@ -112,8 +116,9 @@ class ComexposiumWebservice
     /**
      * @param string $eventReference
      *
-     * @return array
      * @throws \SoapFault
+     *
+     * @return array
      */
     public function getEventNomenclatures(string $eventReference): array
     {
@@ -126,9 +131,10 @@ class ComexposiumWebservice
      * @param string $eventReference
      * @param array  $registrationReferences
      *
-     * @return array of \stdClass
      * @throws \DomainException
      * @throws \SoapFault
+     *
+     * @return array of \stdClass
      */
     public function getRegistrations(string $eventReference, array $registrationReferences): array
     {

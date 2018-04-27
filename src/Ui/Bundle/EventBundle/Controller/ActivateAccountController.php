@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2015 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -13,8 +13,8 @@ namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Controller;
 use Proximum\Vimeet\Application\Command\User\ActivateAccount\ReSendActivateAccountToken;
 use Proximum\Vimeet\Application\Command\User\ActivateAccountPassword;
 use Proximum\Vimeet\Domain\Model\Participant;
-use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\User\ActivateAccountPasswordType;
 use Proximum\Vimeet\Domain\Model\User\ActivateAccountToken;
+use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\User\ActivateAccountPasswordType;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\ParamConverter\EventDomain;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -64,13 +64,13 @@ class ActivateAccountController extends Controller
 
             return $this->redirectToRoute('event_account_participant', [
                 'sheet'       => $sheet->getId(),
-                'participant' => $sheet->getUserParticipant($user)->getId()
+                'participant' => $sheet->getUserParticipant($user)->getId(),
             ]);
         }
 
         return $this->render('EventBundle:ActivateAccount:password.html.twig', [
             'event' => $eventDomain->getEvent(),
-            'form'  => $form->createView()
+            'form'  => $form->createView(),
         ]);
     }
 

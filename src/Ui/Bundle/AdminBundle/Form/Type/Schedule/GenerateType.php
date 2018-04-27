@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2016 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -29,7 +29,7 @@ class GenerateType extends AbstractType
                 'entry_type'    => RecipeType::class,
                 'entry_options' => [
                     'label' => false,
-                    'event' => $options['event']
+                    'event' => $options['event'],
                 ],
                 'allow_add'     => true,
                 'allow_delete'  => true,

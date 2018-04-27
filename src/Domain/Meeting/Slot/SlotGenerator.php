@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2016 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -26,7 +26,6 @@ class SlotGenerator
         $slots = [];
 
         foreach ($recipes as $recipe) {
-
             $interval = new \DateInterval(sprintf('PT%sM', $recipe->duration + $recipe->interval));
             $period   = new \DatePeriod($recipe->begin, $interval, $recipe->end);
 
@@ -36,7 +35,6 @@ class SlotGenerator
 
                 $slots[] = new MeetingSlot($event, $date, $end);
             }
-
         }
 
         return $slots;

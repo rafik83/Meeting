@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2015 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -190,7 +190,7 @@ class BillingInfo implements MailRecipientInterface
      */
     public function getCompleteName()
     {
-        return $this->firstname . ' ' .  $this->lastname;
+        return $this->firstname . ' ' . $this->lastname;
     }
 
     /**

@@ -1,9 +1,9 @@
 <?php
 
 /*
- * This file is part of the vimeet project.
+ * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2017 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -46,7 +46,6 @@ class CatalogVisibilityContext implements Context
             ->create($event);
 
         $this->catalogVisibilityContextProxy->getStorage()->set('catalogVisibility', $catalogVisibility);
-
     }
 
     /**
@@ -56,7 +55,7 @@ class CatalogVisibilityContext implements Context
     {
         $catalogVisibility = $this->catalogVisibilityContextProxy->getStorage()->get('catalogVisibility');
 
-        if ($catalogVisibility === null) {
+        if (null === $catalogVisibility) {
             throw new \InvalidArgumentException('Missing catalog visibility');
         }
 
@@ -67,13 +66,14 @@ class CatalogVisibilityContext implements Context
 
     /**
      * @Given /^the catalog visibility registration url is "(?P<registrationUrl>[^"]+)"$/
+     *
      * @param string $registrationUrl
      */
     public function setCatalogVisibilityRegistrationUrl(string $registrationUrl)
     {
         $catalogVisibility = $this->catalogVisibilityContextProxy->getStorage()->get('catalogVisibility');
 
-        if ($catalogVisibility === null) {
+        if (null === $catalogVisibility) {
             throw new \InvalidArgumentException('Missing catalog visibility');
         }
 

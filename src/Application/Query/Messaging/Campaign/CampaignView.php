@@ -62,8 +62,8 @@ class CampaignView
         $this->sentAt        = $sentAt;
         $this->hasMessage    = $hasMessage;
         $this->hasRecipients = $hasRecipients;
-        $this->sent          = (bool)$sentAt;
-        $this->processed     = (bool)$processedAt;
+        $this->sent          = (bool) $sentAt;
+        $this->processed     = (bool) $processedAt;
     }
 
     /**

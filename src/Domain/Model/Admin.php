@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2016 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -414,7 +414,7 @@ class Admin extends AbstractUser implements AdvancedUserInterface
     public function isEnabled()
     {
         if (!$this->hasEvents()) {
-            if ($this->getRole() === self::ROLE_SUPER_ADMIN) {
+            if (self::ROLE_SUPER_ADMIN === $this->getRole()) {
                 return true;
             } else {
                 return false;
@@ -467,7 +467,7 @@ class Admin extends AbstractUser implements AdvancedUserInterface
      */
     public function isPartner()
     {
-        return $this->role === self::ROLE_PARTNER;
+        return self::ROLE_PARTNER === $this->role;
     }
 
     /**
@@ -475,7 +475,7 @@ class Admin extends AbstractUser implements AdvancedUserInterface
      */
     public function isOrganizer()
     {
-        return $this->role === self::ROLE_ORGANIZER;
+        return self::ROLE_ORGANIZER === $this->role;
     }
 
     /**
@@ -483,7 +483,7 @@ class Admin extends AbstractUser implements AdvancedUserInterface
      */
     public function isOperator()
     {
-        return $this->role === self::ROLE_OPERATOR;
+        return self::ROLE_OPERATOR === $this->role;
     }
 
     /**
@@ -491,7 +491,7 @@ class Admin extends AbstractUser implements AdvancedUserInterface
      */
     public function isSuperAdmin()
     {
-        return $this->role === self::ROLE_SUPER_ADMIN;
+        return self::ROLE_SUPER_ADMIN === $this->role;
     }
 
     /**

@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2016 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -21,7 +21,7 @@ class EditableText extends EditableObject implements ContentObjectInterface, Sea
      */
     public function getContent($locale = null)
     {
-        $thisLocale = $locale === null ? $this->locale : $locale;
+        $thisLocale = null === $locale ? $this->locale : $locale;
 
         if ($this->isTranslatable()) {
             return isset($this->data['text'][$thisLocale]) ? $this->data['text'][$thisLocale] : null;
@@ -100,7 +100,7 @@ class EditableText extends EditableObject implements ContentObjectInterface, Sea
 
         $data = $this->getContent($locale);
 
-        return $data !== null
+        return null !== $data
             ? ($this->isTranslatable() && \is_array($data) && \array_key_exists('content', $data) ? $data['content'] : $data)
             : '';
     }
@@ -126,7 +126,7 @@ class EditableText extends EditableObject implements ContentObjectInterface, Sea
      */
     public function isTitle()
     {
-        return $this->getOption('type') === 'title';
+        return 'title' === $this->getOption('type');
     }
 
     /**
@@ -134,7 +134,7 @@ class EditableText extends EditableObject implements ContentObjectInterface, Sea
      */
     public function isTextarea()
     {
-        return $this->getOption('type') === 'textarea';
+        return 'textarea' === $this->getOption('type');
     }
 
     /**
@@ -297,6 +297,7 @@ class EditableText extends EditableObject implements ContentObjectInterface, Sea
      * @param array $translations "['fr' => ['content' => 'Contenu fr'], 'en' => ['content' => 'En content']]"
      *
      * @see EditableTextTranslationType
+     *
      * @throws \LogicException
      */
     public function setTranslationsInput(array $translations = [])
@@ -320,7 +321,6 @@ class EditableText extends EditableObject implements ContentObjectInterface, Sea
         foreach ($translations as $locale => $translation) {
             if (\is_array($translation) && array_key_exists('content', $translation)) {
                 $this->data['text'][$locale] = $translation['content'];
-
             } else {
                 $this->data['text'][$locale] = $translation;
             }

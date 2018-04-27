@@ -3,18 +3,18 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2017 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
 
 namespace Proximum\Vimeet\Application\Query\Planner;
 
-use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Application\View\Planner\ParticipantView;
 use Proximum\Vimeet\Application\View\Planner\SheetView;
 use Proximum\Vimeet\Application\View\Planner\SlotView;
 use Proximum\Vimeet\Application\View\Planner\SpotView;
+use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Planner\ExportSolutionType;
 
 class MeetingViewQuery
@@ -76,7 +76,7 @@ class MeetingViewQuery
      */
     public function isSolutionFromScratch()
     {
-        return $this->exportSolutionType === ExportSolutionType::SOLUTION_FROM_SCRATCH;
+        return ExportSolutionType::SOLUTION_FROM_SCRATCH === $this->exportSolutionType;
     }
 
     /**
@@ -84,6 +84,6 @@ class MeetingViewQuery
      */
     public function isSolutionLocked()
     {
-        return $this->exportSolutionType === ExportSolutiontype::SOLUTION_OPTIMIZE_LOCKED;
+        return ExportSolutiontype::SOLUTION_OPTIMIZE_LOCKED === $this->exportSolutionType;
     }
 }

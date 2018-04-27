@@ -35,8 +35,9 @@ class RequestTestAccessHandler
     /**
      * @param RequestTestAccess $requestTestAccess
      *
-     * @return VideoConferenceView
      * @throws InvalidTokenGeneratorArgumentsException
+     *
+     * @return VideoConferenceView
      */
     public function handle(RequestTestAccess $requestTestAccess): VideoConferenceView
     {

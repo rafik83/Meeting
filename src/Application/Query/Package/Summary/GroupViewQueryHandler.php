@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2016 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -55,7 +55,6 @@ class GroupViewQueryHandler
         }, array_filter($group->getOptions(), function (Product $product) use ($groupViewQuery) {
             return null !== $groupViewQuery->cart->getCartRowForProduct($product);
         }));
-
 
         $total = 0;
         foreach ($options as $option) {

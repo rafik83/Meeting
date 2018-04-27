@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2015 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -37,7 +37,7 @@ class CurrencyFormatter
     public function format($number, $currency = null, $locale = null)
     {
         foreach ($this->helper->getFilters() as $filter) {
-            if ($filter->getName() === 'localizedcurrency') {
+            if ('localizedcurrency' === $filter->getName()) {
                 $callbable = $filter->getCallable();
 
                 return $callbable($number, $currency, $locale);

@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2016 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -20,7 +20,7 @@ class CardListViewQueryHandler
     private $cardViewQueryHandler;
 
     /**
-     * @param CardViewQueryHandler   $cardViewQueryHandler
+     * @param CardViewQueryHandler $cardViewQueryHandler
      */
     public function __construct(CardViewQueryHandler $cardViewQueryHandler)
     {

@@ -51,11 +51,11 @@ class PackageContext implements Context
         $package = $this->packageContextProxy->getStorage()->get('package');
         $plan = $this->packageContextProxy->getStorage()->get('plan');
 
-        if ($package === null) {
+        if (null === $package) {
             throw new \InvalidArgumentException('Missing Package');
         }
 
-        if ($plan === null) {
+        if (null === $plan) {
             throw new \InvalidArgumentException('Missing Product Participant');
         }
 
@@ -70,11 +70,11 @@ class PackageContext implements Context
         $package = $this->packageContextProxy->getStorage()->get('package');
         $productParticipant = $this->packageContextProxy->getStorage()->get('productParticipant');
 
-        if ($package === null) {
+        if (null === $package) {
             throw new \InvalidArgumentException('Missing Package');
         }
 
-        if ($productParticipant === null) {
+        if (null === $productParticipant) {
             throw new \InvalidArgumentException('Missing Product Participant');
         }
 
@@ -89,11 +89,11 @@ class PackageContext implements Context
         $package = $this->packageContextProxy->getStorage()->get('package');
         $planning = $this->packageContextProxy->getStorage()->get('planning');
 
-        if ($package === null) {
+        if (null === $package) {
             throw new \InvalidArgumentException('Missing Package');
         }
 
-        if ($planning === null) {
+        if (null === $planning) {
             throw new \InvalidArgumentException('Missing Product Planning');
         }
 
