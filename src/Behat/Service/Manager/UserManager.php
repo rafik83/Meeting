@@ -34,7 +34,7 @@ class UserManager
      */
     public function create($email = null)
     {
-        if ($email === null) {
+        if (null === $email) {
             $email = sprintf('%s@example.net', uniqid());
         }
 

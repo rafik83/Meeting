@@ -37,8 +37,9 @@ class TipTranslationViewByUserQueryHandler
     /**
      * @param TipTranslationViewByUserQuery $tipTranslationViewByUserQuery
      *
-     * @return TipTranslationView[]
      * @throws SheetNotFoundException
+     *
+     * @return TipTranslationView[]
      */
     public function handle(TipTranslationViewByUserQuery $tipTranslationViewByUserQuery)
     {

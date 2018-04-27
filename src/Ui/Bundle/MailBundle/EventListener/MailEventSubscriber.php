@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2015 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -402,7 +402,7 @@ class MailEventSubscriber implements EventSubscriberInterface
             Events::TRANSACTION_CONFIRMED              => 'onTransactionConfirmed',
             Events::SHEET_CHANGED_TYPE                 => 'onSheetChangeType',
             Events::SHEET_GROUP_CREATED                => 'onSheetGroupCreated',
-            Events::SHEET_GROUP_UPDATED                => 'onSheetGroupUpdated'
+            Events::SHEET_GROUP_UPDATED                => 'onSheetGroupUpdated',
         ];
     }
 

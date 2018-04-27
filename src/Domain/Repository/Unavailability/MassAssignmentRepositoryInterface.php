@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2016 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -42,7 +42,7 @@ interface MassAssignmentRepositoryInterface
     /**
      * @param Event $event
      *
-     * @return  MassAssignment[]
+     * @return MassAssignment[]
      */
     public function findEnabledByEvent(Event $event);
 
@@ -67,7 +67,6 @@ interface MassAssignmentRepositoryInterface
 
     /**
      * @deprecated Prefer use findEnabledByUserAndEvent instead
-     *
      * @see findEnabledByUserAndEvent
      *
      * @param Participant $participant
@@ -86,7 +85,6 @@ interface MassAssignmentRepositoryInterface
 
     /**
      * @deprecated
-     *
      * @see findEnabledByEventAndUsers
      *
      * @param Participant[] $participants

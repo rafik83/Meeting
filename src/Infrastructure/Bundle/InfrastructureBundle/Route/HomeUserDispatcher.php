@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of the vimeet project.
+ * This file is part of the Proximum Vimeet project.
  *
  * Copyright (C) Proximum
  *
@@ -36,9 +36,9 @@ class HomeUserDispatcher
     /**
      * HomeUserDispatcher constructor.
      *
-     * @param Router $router
-     * @param HomeDispatch $homeDispatch
-     * @param HomeDispatchAnonymousUser $homeDispatchAnonynmousUser
+     * @param Router                      $router
+     * @param HomeDispatch                $homeDispatch
+     * @param HomeDispatchAnonymousUser   $homeDispatchAnonynmousUser
      * @param AuthorizationCheckerAdapter $authorizationChecker
      */
     public function __construct(
@@ -84,7 +84,7 @@ class HomeUserDispatcher
     {
         $homeDispatchView = $this->homeDispatch->handle($event, $user);
 
-        if ($homeDispatchView !== null) {
+        if (null !== $homeDispatchView) {
             if ($homeDispatchView->isGroup()) {
                 return new RedirectResponse($this->router->generate(
                     'event_sheet_group_index',
@@ -116,7 +116,7 @@ class HomeUserDispatcher
     {
         $homeDispatchView = $this->homeDispatchAnonymousUser->handle($event);
 
-        if ($homeDispatchView !== null) {
+        if (null !== $homeDispatchView) {
             if ($homeDispatchView->isRegistrationNotOpen() || $homeDispatchView->isRegistrationClosed()) {
                 return new RedirectResponse($this->router->generate('event_waiting_page'));
             }

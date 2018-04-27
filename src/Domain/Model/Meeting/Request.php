@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2015 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -547,8 +547,9 @@ class Request implements MessageSubjectInterface
     /**
      * @param User $user
      *
-     * @return Sheet
      * @throws NoSheetForUserException
+     *
+     * @return Sheet
      */
     public function getSheetOfUser(User $user)
     {
@@ -573,7 +574,7 @@ class Request implements MessageSubjectInterface
      */
     public function getParticipants(Sheet $sheet)
     {
-        if ($this->hasNoPreference($sheet) && $sheet->getParticipants()->count() === 1) {
+        if ($this->hasNoPreference($sheet) && 1 === $sheet->getParticipants()->count()) {
             return [$sheet->getParticipants()->first()];
         }
 
@@ -611,7 +612,7 @@ class Request implements MessageSubjectInterface
      */
     public function hasMeeting()
     {
-        return $this->getMeeting() !== null;
+        return null !== $this->getMeeting();
     }
 
     /**

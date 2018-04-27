@@ -1,9 +1,9 @@
 <?php
 
 /*
- * This file is part of the vimeet project.
+ * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2017 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -24,8 +24,8 @@ class GroupListViewQueryHandler
     /**
      * GroupListViewQueryHandler constructor.
      *
-     * @param AdminGroupViewQueryHandler    $groupViewQueryHandler
-     * @param GroupRepositoryInterface $groupRepository
+     * @param AdminGroupViewQueryHandler $groupViewQueryHandler
+     * @param GroupRepositoryInterface   $groupRepository
      */
     public function __construct(
         AdminGroupViewQueryHandler $groupViewQueryHandler,

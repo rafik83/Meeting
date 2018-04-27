@@ -81,7 +81,7 @@ class BillingInfoView
         $company = null,
         $street = null,
         $zipCode = null,
-        $city = null ,
+        $city = null,
         $country = null,
         $vatNumber = null,
         $reference = null

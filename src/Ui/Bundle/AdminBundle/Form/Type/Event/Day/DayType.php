@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2016 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -32,7 +32,7 @@ class DayType extends AbstractType
                 'display_date'  => false,
                 'view_timezone' => $event->getTimeZone(),
                 'attr'  => [
-                    'class' => 'datetimepicker-range-element'
+                    'class' => 'datetimepicker-range-element',
                 ],
             ])
             ->add('endTime', DateTimePickerType::class, [
@@ -40,7 +40,7 @@ class DayType extends AbstractType
                 'display_date'  => false,
                 'view_timezone' => $event->getTimeZone(),
                 'attr'  => [
-                    'class' => 'datetimepicker-range-element'
+                    'class' => 'datetimepicker-range-element',
                 ],
             ])
         ;

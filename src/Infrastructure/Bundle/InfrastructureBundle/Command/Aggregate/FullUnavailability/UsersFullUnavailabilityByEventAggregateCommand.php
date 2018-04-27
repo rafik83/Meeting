@@ -66,7 +66,7 @@ class UsersFullUnavailabilityByEventAggregateCommand extends Command
             throw new \Exception('Event not found.');
         }
 
-        $onlyCatalog = $input->getArgument('onlyCatalog') === 1;
+        $onlyCatalog = 1 === $input->getArgument('onlyCatalog');
 
         $this->fullUnavailabilityHandler->handle(new FullUnavailability($event, $onlyCatalog));
     }

@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2016 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -42,9 +42,9 @@ class RegisterController extends Controller
     /**
      * Register an account.
      *
-     * @param Request   $request
+     * @param Request     $request
      * @param EventDomain $eventDomain
-     * @param TypeView  $typeView
+     * @param TypeView    $typeView
      *
      * @return RedirectResponse|Response
      */
@@ -97,9 +97,9 @@ class RegisterController extends Controller
     /**
      * Register an account.
      *
-     * @param Request   $request
+     * @param Request     $request
      * @param EventDomain $eventDomain
-     * @param TypeView  $typeView
+     * @param TypeView    $typeView
      *
      * @return RedirectResponse|Response
      */
@@ -112,7 +112,7 @@ class RegisterController extends Controller
             $typeView
         );
 
-        if ($command->email === '' || $this->emailExists($command->email)) {
+        if ('' === $command->email || $this->emailExists($command->email)) {
             return $this->redirectToRoute('event_register', ['typeView' => $typeView->id]);
         }
 
@@ -144,9 +144,9 @@ class RegisterController extends Controller
     /**
      * Create a participation to an event.
      *
-     * @param Request   $request
+     * @param Request     $request
      * @param EventDomain $eventDomain
-     * @param TypeView  $typeView
+     * @param TypeView    $typeView
      *
      * @return RedirectResponse|Response
      */
@@ -215,7 +215,7 @@ class RegisterController extends Controller
             if ($nextStep) {
                 return $this->redirectToRoute('event_participant_step', [
                     'step' => $nextStep,
-                    'participant' => $participate->participant->getId()
+                    'participant' => $participate->participant->getId(),
                 ]);
             }
 
@@ -283,7 +283,7 @@ class RegisterController extends Controller
         $data = [
             'block' => $participantBlock,
             'locale' => $locale,
-            'country' => $eventDomain->getEvent()->getCountry()
+            'country' => $eventDomain->getEvent()->getCountry(),
         ];
 
         $form = $this->createForm(BlockType::class, $participantBlock, $data);
@@ -317,7 +317,7 @@ class RegisterController extends Controller
                 $this->container->get('session')->getFlashBag()->add('first_registration', true);
 
                 return $this->redirectToRoute('event_sheet_default', [
-                    'sheet' => $participant->getSheet()->getId()
+                    'sheet' => $participant->getSheet()->getId(),
                 ]);
             }
         }
@@ -371,7 +371,7 @@ class RegisterController extends Controller
         $fileStorage  = $this->get('adapter.local_file_storage');
 
         foreach ($imageObjects as $key => $object) {
-            if ($form->has($key) && $form->get($key)->get('file')->getData() !== null) {
+            if ($form->has($key) && null !== $form->get($key)->get('file')->getData()) {
                 $file = $form->get($key)->get('file')->getData();
 
                 if ($file instanceof UploadedFile) {
@@ -383,7 +383,6 @@ class RegisterController extends Controller
                             new FormError('account.profile.updateAvatar.error')
                         );
                     }
-
                 } else {
                     $form->get($key)->get('file')->addError(
                         new FormError('validators.field.notValid.image')
@@ -501,7 +500,7 @@ class RegisterController extends Controller
     /**
      * Deny access if the participant does not match the user and the event
      *
-     * @param EventDomain   $eventDomain
+     * @param EventDomain $eventDomain
      * @param Participant $participant
      */
     protected function denyAccessIfWrongParticipant(EventDomain $eventDomain, Participant $participant)

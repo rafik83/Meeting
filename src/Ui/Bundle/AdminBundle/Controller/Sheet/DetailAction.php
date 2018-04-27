@@ -130,8 +130,8 @@ class DetailAction
         $changeTypeForm = null;
 
         if ($this->typeRepository->countByEvent($event) > 1
-            && $this->invoiceRepository->isSheetInvoiced($sheet) === null
-            && $this->meetingRepository->countMeetingsOfSheet($sheet) === 0
+            && null === $this->invoiceRepository->isSheetInvoiced($sheet)
+            && 0 === $this->meetingRepository->countMeetingsOfSheet($sheet)
         ) {
             $changeType = new ChangeType($sheet, $sheet->getType(), $adminDomain->getAdmin(), $locale);
 
@@ -176,7 +176,7 @@ class DetailAction
             'sheetTypeTitle'     => $sheet->getType()->getTitle($locale),
             'details'            => $sheetDetailView,
             'addCommentForm'     => $addCommentForm->createView(),
-            'changeTypeForm'     => $changeTypeForm === null ? null : $changeTypeForm->createView(),
+            'changeTypeForm'     => null === $changeTypeForm ? null : $changeTypeForm->createView(),
             'impersonationToken' => $impersonationToken,
         ]);
     }

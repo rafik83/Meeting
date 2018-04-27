@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2016 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -14,7 +14,6 @@ use Elastica\Aggregation\Filter;
 use Elastica\Aggregation\Nested;
 use Elastica\Aggregation\Terms;
 use Elastica\Filter\Query as FilterQuery;
-use Elastica\Filter\Term;
 use Elastica\Query;
 use Elastica\Query\FunctionScore;
 use Elastica\Result;
@@ -144,7 +143,7 @@ class SheetSearchAdapter implements SheetSearchAdapterInterface
             $availableSlotIds,
             $sheetsToExclude
         );
-        $options = ["size" => 100000];
+        $options = ['size' => 100000];
 
         return $this->searchable->search($query, $options)->getResults();
     }
@@ -440,7 +439,7 @@ class SheetSearchAdapter implements SheetSearchAdapterInterface
         $query = new Query($builder->getQuery());
         $query->addSort(['sheetName' => 'asc']);
 
-        $options = ["size" => 100000];
+        $options = ['size' => 100000];
 
         return $this->searchable->search($query, $options)->getResults();
     }
@@ -481,9 +480,9 @@ class SheetSearchAdapter implements SheetSearchAdapterInterface
         );
         $query   = new Query($builder->getQuery());
 
-        if ($elasticField === self::ES_FIELD_POSITION) {
+        if (self::ES_FIELD_POSITION === $elasticField) {
             $query->addAggregation($this->getNestedAggregation($elasticField, self::ES_PATH_POSITION));
-        } elseif ($elasticField === self::ES_FIELD_CATEGORIES) {
+        } elseif (self::ES_FIELD_CATEGORIES === $elasticField) {
             $query->addAggregation($this->getNestedAggregation($elasticField, self::ES_PATH_CATEGORIES));
         } else {
             $query->addAggregation($this->getAggregation($elasticField));

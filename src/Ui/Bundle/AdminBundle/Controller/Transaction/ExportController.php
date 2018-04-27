@@ -42,7 +42,7 @@ class ExportController extends Controller
 
                     return new CsvFileResponse(
                         file_get_contents($this->getParameter('infrastructure.export_transactions_path') . $filePath),
-                        sprintf('export_transactions_%s.csv', date("Y_m_d_His"))
+                        sprintf('export_transactions_%s.csv', date('Y_m_d_His'))
                     );
                 } catch (EventsListEmptyException $exception) {
                     $this->addFlash('error', 'flash.admin.event.empty_list');

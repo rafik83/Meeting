@@ -82,9 +82,9 @@ class SheetViewQueryHandler
     /**
      * @param SheetViewQuery $query
      *
-     * @return SheetView
-     *
      * @throws \DomainException
+     *
+     * @return SheetView
      */
     public function handle(SheetViewQuery $query): SheetView
     {

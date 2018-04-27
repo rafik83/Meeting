@@ -1,9 +1,9 @@
 <?php
 
 /*
- * This file is part of the vimeet project.
+ * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) vimeet
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -23,7 +23,7 @@ class SpotSatisfactionListViewDenormalizer implements DenormalizerInterface, Den
     /**
      * {@inheritdoc}
      */
-    public function denormalize($data, $class, $format = null, array $context = array())
+    public function denormalize($data, $class, $format = null, array $context = [])
     {
         $spotSatisfactionlist = new SpotSatisfactionListView();
 
@@ -41,6 +41,6 @@ class SpotSatisfactionListViewDenormalizer implements DenormalizerInterface, Den
      */
     public function supportsDenormalization($data, $type, $format = null)
     {
-        return $type === SpotSatisfactionListView::class && $format === 'json';
+        return SpotSatisfactionListView::class === $type && 'json' === $format;
     }
 }

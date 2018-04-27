@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2016 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -32,9 +32,9 @@ class UpdateHandler
     private $eventDispatcher;
 
     /**
-     * @param AdminRepositoryInterface                $adminRepository
-     * @param ActivateAccountTokenGenerator           $activateAccountTokenGenerator
-     * @param EventDispatcherInterface                $eventDispatcher
+     * @param AdminRepositoryInterface      $adminRepository
+     * @param ActivateAccountTokenGenerator $activateAccountTokenGenerator
+     * @param EventDispatcherInterface      $eventDispatcher
      */
     public function __construct(
         AdminRepositoryInterface $adminRepository,
@@ -87,7 +87,7 @@ class UpdateHandler
     }
 
     /**
-     * @param Admin  $operator
+     * @param Admin $operator
      */
     private function sendActivationEvent(Admin $operator)
     {

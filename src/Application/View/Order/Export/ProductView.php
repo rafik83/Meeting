@@ -71,5 +71,4 @@ class ProductView
     {
         return sprintf('product%sTotal', $this->productId);
     }
-
 }

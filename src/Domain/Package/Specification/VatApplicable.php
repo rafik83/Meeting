@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2016 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -42,8 +42,9 @@ class VatApplicable
     /**
      * @param Sheet $sheet
      *
-     * @return bool
      * @throws MissingBillingInfoException
+     *
+     * @return bool
      */
     public function onSheet(Sheet $sheet)
     {
@@ -71,7 +72,7 @@ class VatApplicable
      */
     private function isApplicable($mode, $eventCountry, $billingCountry, $vatNumber)
     {
-        if ($mode === Event::VAT_MODE_ATI) {
+        if (Event::VAT_MODE_ATI === $mode) {
             return false;
         }
 

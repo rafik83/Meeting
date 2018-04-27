@@ -52,7 +52,7 @@ class Configure extends ConfigureSearchFacet
         $this->event                  = $event;
 
         foreach ($event->getLocales() as $locale) {
-            if (($catalogVisibilityTranslation = $catalogVisibility->getMessage($locale)) !== null) {
+            if (null !== ($catalogVisibilityTranslation = $catalogVisibility->getMessage($locale))) {
                 $this->messageTranslations[$locale]['title']   = $catalogVisibilityTranslation->getTitle();
                 $this->messageTranslations[$locale]['content'] = $catalogVisibilityTranslation->getContent();
             } else {

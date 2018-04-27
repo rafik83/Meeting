@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2016 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -35,7 +35,7 @@ class BillingController extends Controller
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
         $this->denyAccessUnlessGranted(SheetVoter::EDIT, $sheet);
 
-        $info    = $this->get('repository.billing_info_repository')->getBySheet($sheet) ? : new BillingInfo($sheet);
+        $info    = $this->get('repository.billing_info_repository')->getBySheet($sheet) ?: new BillingInfo($sheet);
         $country = $sheet->getEvent()->getCountry();
 
         if (null === $info->getId()) {

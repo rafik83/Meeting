@@ -1,9 +1,9 @@
 <?php
 
 /*
- * This file is part of the vimeet project.
+ * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2016 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -67,7 +67,7 @@ class NotificationEventSubscriber implements EventSubscriberInterface
         );
 
         foreach ($event->getNotificationCompleteness() as $completeState) {
-            if ($completeState !== true) {
+            if (true !== $completeState) {
                 $this->notificationRepository->add(new Notification(
                     $event->getSheet(),
                     NotificationConstant::TYPE_SHEET_TRANSLATION_COMPLETENESS
@@ -134,5 +134,4 @@ class NotificationEventSubscriber implements EventSubscriberInterface
             Events::TRANSACTION_REMOVED => 'onTransactionRemoved',
         ];
     }
-
 }

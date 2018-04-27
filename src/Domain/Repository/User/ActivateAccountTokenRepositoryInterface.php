@@ -3,15 +3,15 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2015 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
 
 namespace Proximum\Vimeet\Domain\Repository\User;
 
-use Proximum\Vimeet\Domain\Model\User\ActivateAccountToken;
 use Proximum\Vimeet\Domain\Model\User;
+use Proximum\Vimeet\Domain\Model\User\ActivateAccountToken;
 
 interface ActivateAccountTokenRepositoryInterface
 {

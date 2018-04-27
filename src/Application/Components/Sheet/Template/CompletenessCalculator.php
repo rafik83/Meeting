@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2016 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -46,16 +46,16 @@ class CompletenessCalculator
             }, []);
         }
 
-        if ($config['component'] === 'block') {
+        if ('block' === $config['component']) {
             return array_reduce($config['children'], function (array $carry, array $column) {
                 return array_merge($carry, $this->getTranslatables($column));
             }, []);
         }
 
-        if ($config['component'] === 'object') {
+        if ('object' === $config['component']) {
             return array_values(array_filter($config['config'], function ($value, $key) use ($config) {
                 return in_array($key, ['label', 'help', 'placeholder'])
-                    || $config['type'] === 'text' && $key === 'content';
+                    || 'text' === $config['type'] && 'content' === $key;
             }, ARRAY_FILTER_USE_BOTH));
         }
 
@@ -108,7 +108,7 @@ class CompletenessCalculator
     private function convertToPercent(array $counts, $max)
     {
         return array_map(function ($count) use ($max) {
-            return $max === 0 ? 100 : ($count / $max * 100);
+            return 0 === $max ? 100 : ($count / $max * 100);
         }, $counts);
     }
 }

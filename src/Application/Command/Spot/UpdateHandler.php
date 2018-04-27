@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2015 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -52,7 +52,7 @@ class UpdateHandler
         }
 
         if (
-            $update->property === 'reference' &&
+            'reference' === $update->property &&
             $update->value !== $spot->getReference() &&
             null !== $this->spotRepository->findByReference($update->event, $update->value)
         ) {

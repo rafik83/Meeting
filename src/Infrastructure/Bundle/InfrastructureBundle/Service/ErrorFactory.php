@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2016 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -49,7 +49,7 @@ class ErrorFactory
      */
     public function create($messageKey, $locale = null, $domain = 'validators', $parameters = [], $pluralization = null)
     {
-        if ($locale === null) {
+        if (null === $locale) {
             $locale = $this->requestStack->getMasterRequest()->getLocale();
         }
 

@@ -93,10 +93,10 @@ class ProfileType extends AbstractType
     }
 
     /**
-     * @param string               $key
-     * @param FormBuilderInterface $builder
-     * @param Template\TemplateObject      $object
-     * @param string               $locale
+     * @param string                  $key
+     * @param FormBuilderInterface    $builder
+     * @param Template\TemplateObject $object
+     * @param string                  $locale
      */
     private function addGender($key, FormBuilderInterface $builder, Template\TemplateObject $object, $locale)
     {
@@ -127,10 +127,10 @@ class ProfileType extends AbstractType
     }
 
     /**
-     * @param string                       $key
-     * @param FormBuilderInterface         $builder
+     * @param string                               $key
+     * @param FormBuilderInterface                 $builder
      * @param Template\TemplateObject\Nomenclature $object
-     * @param string                       $locale
+     * @param string                               $locale
      */
     private function addNomenclature($key, FormBuilderInterface $builder, Template\TemplateObject\Nomenclature $object, $locale)
     {
@@ -143,10 +143,10 @@ class ProfileType extends AbstractType
     }
 
     /**
-     * @param string               $key
-     * @param FormBuilderInterface $builder
-     * @param Template\TemplateObject\Url  $object
-     * @param string               $locale
+     * @param string                      $key
+     * @param FormBuilderInterface        $builder
+     * @param Template\TemplateObject\Url $object
+     * @param string                      $locale
      */
     private function addUrl($key, FormBuilderInterface $builder, Template\TemplateObject\Url $object, $locale)
     {
@@ -158,11 +158,11 @@ class ProfileType extends AbstractType
     }
 
     /**
-     * @param string               $key
-     * @param FormBuilderInterface $builder
-     * @param Template\TemplateObject      $object
-     * @param string               $locale
-     * @param string               $country
+     * @param string                  $key
+     * @param FormBuilderInterface    $builder
+     * @param Template\TemplateObject $object
+     * @param string                  $locale
+     * @param string                  $country
      */
     private function addTelephone($key, FormBuilderInterface $builder, Template\TemplateObject $object, $locale, $country)
     {
@@ -175,10 +175,10 @@ class ProfileType extends AbstractType
     }
 
     /**
-     * @param string               $key
-     * @param FormBuilderInterface $builder
-     * @param Template\TemplateObject      $object
-     * @param string               $locale
+     * @param string                  $key
+     * @param FormBuilderInterface    $builder
+     * @param Template\TemplateObject $object
+     * @param string                  $locale
      */
     private function addCountry($key, FormBuilderInterface $builder, Template\TemplateObject $object, $locale)
     {

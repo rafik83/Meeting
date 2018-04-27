@@ -1,9 +1,9 @@
 <?php
 
 /*
- * This file is part of the vimeet project.
+ * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2017 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -66,7 +66,7 @@ class BatchUnavailabilityType extends AbstractType
                 'expanded'     => true,
                 'multiple'     => true,
                 'choice_label' => function (MeetingSlot $meetingSlot) use ($dateFormatter, $timeFormatter) {
-                    if ($meetingSlot !== null) {
+                    if (null !== $meetingSlot) {
                         $label =
                             $this->getFormattedValue($dateFormatter, $meetingSlot->getBegin()) . ' ' .
                             $this->getFormattedValue($timeFormatter, $meetingSlot->getBegin()) . ' - ' .
@@ -90,7 +90,7 @@ class BatchUnavailabilityType extends AbstractType
     {
         $formattedValue = $formatter->format($dateTime);
 
-        return $formattedValue !== false ? $formattedValue : '';
+        return false !== $formattedValue ? $formattedValue : '';
     }
 
     /**

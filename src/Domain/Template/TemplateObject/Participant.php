@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2016 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -15,7 +15,7 @@ use Proximum\Vimeet\Domain\Template\TemplateObject;
 class Participant extends TemplateObject
 {
     /**
-     * @return int|double
+     * @return int|float
      */
     public function getNumberOfParticipantShown()
     {

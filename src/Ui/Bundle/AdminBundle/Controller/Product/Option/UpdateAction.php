@@ -90,7 +90,7 @@ class UpdateAction
             'submit'  => true,
             'product' => $product,
             'locale'  => $event->getAvailableLocale($request->getLocale()),
-            'happenings' => $happenings
+            'happenings' => $happenings,
         ]);
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {

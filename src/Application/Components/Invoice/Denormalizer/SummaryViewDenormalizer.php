@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of the vimeet project.
+ * This file is part of the Proximum Vimeet project.
  *
  * Copyright (C) Proximum
  *
@@ -39,7 +39,7 @@ class SummaryViewDenormalizer implements DenormalizerInterface, DenormalizerAwar
      */
     public function supportsDenormalization($data, $type, $format = null)
     {
-        return $type === SummaryView::class
+        return SummaryView::class === $type
             && isset($data['groups'])
             && isset($data['promotionCodes'])
             && isset($data['vatMode'])

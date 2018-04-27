@@ -30,7 +30,6 @@ class BillingInfoManager
 
     /**
      * @param Sheet  $sheet
-     *
      * @param string $country
      * @param string $vatNumber
      *

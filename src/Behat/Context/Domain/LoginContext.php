@@ -10,12 +10,10 @@
 
 namespace Proximum\Vimeet\Behat\Context\Domain;
 
-use Behat\MinkExtension\Context\MinkContext;
 use Behat\MinkExtension\Context\RawMinkContext;
 use Behat\Symfony2Extension\Context\KernelAwareContext;
 use Proximum\Vimeet\Behat\Context\Domain\Proxy\LoginContextProxyInterface;
 use Proximum\Vimeet\Domain\Model\Admin;
-use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\User;
 use Symfony\Component\BrowserKit\Cookie;
 use Symfony\Component\HttpKernel\KernelInterface;

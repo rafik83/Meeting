@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2015 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -26,16 +26,16 @@ class SpotUpdateType extends AbstractType
     {
         $builder
             ->add('reference', TextType::class, [
-                'required' => true
+                'required' => true,
             ])
             ->add('size', IntegerType::class, [
-                'required' => true
+                'required' => true,
             ])
             ->add('meetingCapacity', IntegerType::class, [
-                'required' => true
+                'required' => true,
             ])
             ->add('seatCapacity', IntegerType::class, [
-                'required' => true
+                'required' => true,
             ])
         ;
     }

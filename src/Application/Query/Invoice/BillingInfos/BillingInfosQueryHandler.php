@@ -30,8 +30,9 @@ class BillingInfosQueryHandler
     /**
      * @param BillingInfosQuery $billingInfosQuery
      *
-     * @return BillingInfosView
      * @throws MissingBillingInfoException
+     *
+     * @return BillingInfosView
      */
     public function handle(BillingInfosQuery $billingInfosQuery)
     {

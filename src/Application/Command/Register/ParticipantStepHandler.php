@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2016 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -61,7 +61,7 @@ class ParticipantStepHandler
      * @param SheetRepositoryInterface       $sheetRepository
      * @param ParticipantRepositoryInterface $participantRepository
      * @param Synchronizer                   $accountSynchronizer
-     * @param EventDispatcherInterface         $eventDispatcher
+     * @param EventDispatcherInterface       $eventDispatcher
      * @param ParticipantInfoGuesser         $participantInfoGuesser
      * @param UserRepositoryInterface        $userRepository
      */
@@ -146,8 +146,7 @@ class ParticipantStepHandler
     private function triggerEvent(ParticipantStep $participantStep)
     {
         // check if user are in last register funnel step
-        if ($participantStep->templateData->getNextBlockPosition($participantStep->step) === null) {
-
+        if (null === $participantStep->templateData->getNextBlockPosition($participantStep->step)) {
             $user = $participantStep->participant->getUser();
 
             if (!$user->isWelcomed()) {

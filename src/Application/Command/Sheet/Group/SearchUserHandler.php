@@ -1,9 +1,9 @@
 <?php
 
 /*
- * This file is part of the vimeet project.
+ * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2017 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -43,10 +43,10 @@ class SearchUserHandler
     /**
      * @param SearchUser $query
      *
-     * @return UserView
-     *
      * @throws UserNotAllowedToManageGroupException
      * @throws UserNotFoundForGivenEmailException
+     *
+     * @return UserView
      */
     public function handle(SearchUser $query)
     {
@@ -59,10 +59,8 @@ class SearchUserHandler
         try {
             $this->userToGroupManagerChecker->isUserToGroupManagerAllowed($query->event, $user);
         } catch (UserAlreadyGroupManagerOnSameEventException $exception) {
-
             throw new UserNotAllowedToManageGroupException($query->email);
         } catch (UserAlreadyParticipantOrOwnerOnGroupOnSameEventException $exception) {
-
             throw new UserNotAllowedToManageGroupException($query->email);
         }
 

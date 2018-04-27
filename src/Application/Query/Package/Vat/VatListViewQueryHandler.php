@@ -33,9 +33,9 @@ class VatListViewQueryHandler
     /**
      * @param VatListViewQuery $query
      *
-     * @return VatListView
-     *
      * @throws MissingBillingInfoException
+     *
+     * @return VatListView
      */
     public function handle(VatListViewQuery $query): VatListView
     {
@@ -47,14 +47,14 @@ class VatListViewQueryHandler
 
         if (true === $vatApplicable) {
             $planGroup = $query->groups->planGroup;
-            if ($planGroup !== null) {
+            if (null !== $planGroup) {
                 foreach ($planGroup->options as $option) {
                     $this->handleVatViews($vatViews, $option);
                 }
             }
 
             $participantAndPlanningGroup = $query->groups->participantAndPlanningGroup;
-            if ($participantAndPlanningGroup !== null) {
+            if (null !== $participantAndPlanningGroup) {
                 foreach ($participantAndPlanningGroup->options as $option) {
                     $this->handleVatViews($vatViews, $option);
                 }
@@ -67,7 +67,7 @@ class VatListViewQueryHandler
             }
 
             foreach ($query->promotionCodes->promotionCodes as $promotionCode) {
-                foreach($promotionCode->promotionProductRowViews as $promotionProductRowView) {
+                foreach ($promotionCode->promotionProductRowViews as $promotionProductRowView) {
                     $index = 'vat_' . (string) $promotionProductRowView->vatRate;
 
                     if (!isset($vatViews[$index])) {

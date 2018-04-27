@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of the vimeet project.
+ * This file is part of the Proximum Vimeet project.
  *
  * Copyright (C) Proximum
  *
@@ -43,6 +43,6 @@ class GroupsViewDenormalizer implements DenormalizerInterface, DenormalizerAware
      */
     public function supportsDenormalization($data, $type, $format = null)
     {
-        return $type === GroupsView::class && isset($data['groups']) && is_array($data['groups']);
+        return GroupsView::class === $type && isset($data['groups']) && is_array($data['groups']);
     }
 }

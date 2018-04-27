@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2015 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -30,11 +30,11 @@ class RegisterNewUserType extends AbstractType
                 'type'            => PasswordType::class,
                 'first_options'   => [
                     'label'       => false,
-                    'placeholder' => 'form.register.newUser.password.placeholder'
+                    'placeholder' => 'form.register.newUser.password.placeholder',
                 ],
                 'second_options'  => [
                     'label'       => false,
-                    'placeholder' => 'form.register.newUser.repeatedPassword.placeholder'
+                    'placeholder' => 'form.register.newUser.repeatedPassword.placeholder',
                 ],
                 'invalid_message' => 'validators.password.mismatch',
             ])
@@ -47,7 +47,7 @@ class RegisterNewUserType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-            'data_class' => RegisterNewUser::class
+            'data_class' => RegisterNewUser::class,
         ]);
     }
 }

@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2016 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -63,7 +63,7 @@ class PreviewView
      */
     public function isImage()
     {
-        return $this->type === AbstractChild::TEMPLATE_OBJECT_TYPE_IMAGE;
+        return AbstractChild::TEMPLATE_OBJECT_TYPE_IMAGE === $this->type;
     }
 
     /**
@@ -71,7 +71,7 @@ class PreviewView
      */
     public function isParticipant()
     {
-        return $this->type === AbstractChild::TEMPLATE_OBJECT_TYPE_PARTICIPANT;
+        return AbstractChild::TEMPLATE_OBJECT_TYPE_PARTICIPANT === $this->type;
     }
 
     /**
@@ -79,7 +79,7 @@ class PreviewView
      */
     public function isTag()
     {
-        return $this->type === AbstractChild::TEMPLATE_OBJECT_TYPE_TAG;
+        return AbstractChild::TEMPLATE_OBJECT_TYPE_TAG === $this->type;
     }
 
     /**
@@ -87,7 +87,7 @@ class PreviewView
      */
     public function isParticipantsPosition()
     {
-        return $this->type === CustomPreviewData::PARTICIPANTS_POSITION;
+        return CustomPreviewData::PARTICIPANTS_POSITION === $this->type;
     }
 
     /**
@@ -95,7 +95,7 @@ class PreviewView
      */
     public function isStrong()
     {
-        return $this->strong !== false;
+        return false !== $this->strong;
     }
 
     /**
@@ -103,7 +103,7 @@ class PreviewView
      */
     public function isPopulatedFromTagSheetOrganization(): bool
     {
-        return $this->populatedFromTag === Tag::SHEET_ORGANIZATION;
+        return Tag::SHEET_ORGANIZATION === $this->populatedFromTag;
     }
 
     /**

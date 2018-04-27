@@ -45,7 +45,6 @@ class SetSearchFacetHandler
 
                     $this->searchFacetRepository->set($persistedSearchFacet);
                 }
-
             }
 
             if (false === $found) {

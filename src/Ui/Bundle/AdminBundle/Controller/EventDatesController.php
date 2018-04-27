@@ -1,9 +1,9 @@
 <?php
 
 /*
- * This file is part of the vimeet project.
+ * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) vimeet
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -18,7 +18,7 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 class EventDatesController extends Controller
 {
     /**
-     * @param Event   $event
+     * @param Event $event
      *
      * @return RedirectResponse
      */

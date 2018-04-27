@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2015 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -12,10 +12,10 @@ namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller;
 
 use Proximum\Vimeet\Application\Command\Category\Create;
 use Proximum\Vimeet\Application\Command\Category\Update;
-use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Category\CategoryCreateType;
-use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Category\CategoryUpdateType;
 use Proximum\Vimeet\Domain\Model\Category;
 use Proximum\Vimeet\Domain\Model\Event;
+use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Category\CategoryCreateType;
+use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Category\CategoryUpdateType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\HttpFoundation\RedirectResponse;

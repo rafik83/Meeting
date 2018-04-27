@@ -28,5 +28,4 @@ abstract class AbstractCategory implements Command
 
     /** @var string */
     public $rightColor;
-
 }

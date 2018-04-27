@@ -62,6 +62,6 @@ abstract class ValidatorError
      */
     public function hasError()
     {
-        return $this->hasNoError === false;
+        return false === $this->hasNoError;
     }
 }

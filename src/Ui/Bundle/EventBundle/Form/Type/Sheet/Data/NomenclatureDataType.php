@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2015 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -12,6 +12,7 @@ namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Sheet\Data;
 
 use Proximum\Vimeet\Domain\Model\Nomenclature;
 use Proximum\Vimeet\Domain\Model\NomenclatureItem;
+use Proximum\Vimeet\Domain\Repository\NomenclatureRepositoryInterface;
 use Proximum\Vimeet\Domain\Template\TemplateObject;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Sheet\Data\Nomenclature\CheckboxesType;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Sheet\Data\Nomenclature\SinglesType;
@@ -19,7 +20,6 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use Proximum\Vimeet\Domain\Repository\NomenclatureRepositoryInterface;
 
 class NomenclatureDataType extends AbstractType
 {

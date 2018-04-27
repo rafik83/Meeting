@@ -1,16 +1,24 @@
 <?php
 
+/*
+ * This file is part of the Proximum Vimeet project.
+ *
+ * Copyright (C) Proximum
+ *
+ * @author Elao <contact@elao.com>
+ */
+
 namespace Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\DependencyInjection;
 
-use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\Config\FileLocator;
-use Symfony\Component\HttpKernel\DependencyInjection\Extension;
+use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Loader;
+use Symfony\Component\HttpKernel\DependencyInjection\Extension;
 
 /**
  * This is the class that loads and manages your bundle configuration.
  *
- * @link http://symfony.com/doc/current/cookbook/bundles/extension.html
+ * @see http://symfony.com/doc/current/cookbook/bundles/extension.html
  */
 class InfrastructureExtension extends Extension
 {
@@ -42,7 +50,7 @@ class InfrastructureExtension extends Extension
         $container->setParameter('infrastructure.import_spot_path', $config['import_spot_path']);
         $container->setParameter('infrastructure.package.default_labels', $config['package']['default_labels']);
 
-        $loader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
+        $loader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__ . '/../Resources/config'));
         $loader->load('services.yml');
         $loader->load('services_third_party_leni.yml');
         $loader->load('services_third_party_vianeo.yml');

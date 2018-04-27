@@ -73,7 +73,6 @@ class SlotManager
 
     /**
      * @param Event $event
-     *
      * @param int   $slotId
      *
      * @return null|MeetingSlot

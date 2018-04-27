@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2016 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -26,7 +26,7 @@ interface MassRepositoryInterface
     public function update(Mass $mass);
 
     /**
-     * @param Event  $event
+     * @param Event       $event
      * @param string|null $locale
      *
      * @return Mass[]
@@ -48,7 +48,7 @@ interface MassRepositoryInterface
     public function findBlockingByEvent(Event $event);
 
     /**
-     * @param Event  $event
+     * @param Event $event
      *
      * @return Mass[]
      */

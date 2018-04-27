@@ -225,7 +225,7 @@ class ConvertRegistrationViewToSheet
     }
 
     /**
-     * @param string      $reference Comexposium reference
+     * @param string      $reference   Comexposium reference
      * @param Sheet       $sheet
      * @param Participant $participant
      */

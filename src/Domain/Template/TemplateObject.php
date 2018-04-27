@@ -187,7 +187,7 @@ class TemplateObject extends AbstractChild
      */
     public function isTranslatable()
     {
-        return $this->getOption('translatable') === true;
+        return true === $this->getOption('translatable');
     }
 
     /**
@@ -340,10 +340,10 @@ class TemplateObject extends AbstractChild
      */
     public function hasOnlyTagUrl()
     {
-        if (count($this->getTags()) === 1) {
+        if (1 === count($this->getTags())) {
             $tag = $this->getTags()[0];
 
-            if ($tag["tag"] === Tag::SHEET_WEBSITE) {
+            if (Tag::SHEET_WEBSITE === $tag['tag']) {
                 return true;
             }
         }

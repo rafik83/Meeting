@@ -24,17 +24,17 @@ class FilterHandler
      * @var TransactionRepositoryInterface
      */
     private $transactionRepository;
-    
+
     /**
      * @var EventRepositoryInterface
      */
     private $eventRepository;
-    
+
     /**
      * @var TransactionViewQueryHandler
      */
     private $transactionViewQueryHandler;
-    
+
     /**
      * FindHandler constructor.
      *
@@ -51,22 +51,22 @@ class FilterHandler
         $this->eventRepository             = $eventRepository;
         $this->transactionViewQueryHandler = $transactionViewQueryHandler;
     }
-    
+
     /**
      * @param Filter $command
      *
-     * @return TransactionListViewQuery
-     *
      * @throws EventsListEmptyException
+     *
+     * @return TransactionListViewQuery
      */
     public function handle(Filter $command)
     {
         $events = $this->eventRepository->getEventsByAdmin($command->admin);
-        
+
         if (empty($events)) {
             throw new EventsListEmptyException();
         }
-        
+
         // Set time to encompass the entire day
         $beginDate = $command->beginDate->setTime(0, 0);
         $endDate   = $command->endDate->setTime(23, 59, 59);
@@ -83,7 +83,7 @@ class FilterHandler
 
         $transactionViews = [];
 
-        foreach ($transactions as $transaction ) {
+        foreach ($transactions as $transaction) {
             $transactionViews[] = $this->transactionViewQueryHandler->handle(
                 new TransactionViewQuery(
                     $transaction,
@@ -93,7 +93,7 @@ class FilterHandler
                 )
             );
         }
-        
+
         return new TransactionListViewQuery($transactionViews, $command->admin->getLocale());
     }
 }

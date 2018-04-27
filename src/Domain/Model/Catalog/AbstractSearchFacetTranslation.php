@@ -3,14 +3,12 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2016 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
 
 namespace Proximum\Vimeet\Domain\Model\Catalog;
-
-use Proximum\Vimeet\Domain\Model\TypeTranslation;
 
 class AbstractSearchFacetTranslation
 {
@@ -33,9 +31,9 @@ class AbstractSearchFacetTranslation
      * AbstractSearchFacetTranslation constructor.
      *
      * @param AbstractSearchFacet $searchFacet
-     * @param string|null $label
-     * @param string|null $placeholder
-     * @param string      $locale
+     * @param string|null         $label
+     * @param string|null         $placeholder
+     * @param string              $locale
      */
     public function __construct(AbstractSearchFacet $searchFacet, $label, $placeholder, $locale)
     {

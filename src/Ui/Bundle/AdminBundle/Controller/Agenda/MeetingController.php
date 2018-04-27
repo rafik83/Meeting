@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2016 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -14,8 +14,8 @@ use Proximum\Vimeet\Application\Command\Meeting\Admin\RemoveMeeting;
 use Proximum\Vimeet\Application\Command\Meeting\Admin\TransformRequestIntoMeeting;
 use Proximum\Vimeet\Application\Command\Meeting\Admin\UpdateSlot;
 use Proximum\Vimeet\Application\Command\Meeting\Admin\UpdateSpot;
-use Proximum\Vimeet\Application\Command\Unavailability\MassAssignment\Update;
 use Proximum\Vimeet\Application\Command\MeetingRequest\Admin\UpdateParticipants;
+use Proximum\Vimeet\Application\Command\Unavailability\MassAssignment\Update;
 use Proximum\Vimeet\Application\Exception\Meeting\BlockedSpotNotAvailableForThisMeetingAndSlotException;
 use Proximum\Vimeet\Application\Exception\Meeting\MeetingIsBlockedSlotException;
 use Proximum\Vimeet\Application\Exception\Meeting\MeetingIsBlockedSpotException;
@@ -150,7 +150,7 @@ class MeetingController extends Controller
 
         $slot = $this->get('vimeet_infrastructure.repository.meeting_slot_repository')->find(
             $event,
-            (int)$data->slotId
+            (int) $data->slotId
         );
 
         if (null === $slot) {
@@ -271,7 +271,7 @@ class MeetingController extends Controller
 
         return new JsonResponse([
             $meetingRequestListFrom,
-            $meetingRequestListTo
+            $meetingRequestListTo,
         ]);
     }
 
@@ -297,7 +297,7 @@ class MeetingController extends Controller
 
         $slot = $this->get('vimeet_infrastructure.repository.meeting_slot_repository')->find(
             $event,
-            (int)$data->slotId
+            (int) $data->slotId
         );
 
         if (null === $slot) {
@@ -411,13 +411,13 @@ class MeetingController extends Controller
 
         $form = $this->createForm(UpdateType::class, $update, [
             'method' => 'POST',
-            'event'  => $event
+            'event'  => $event,
         ]);
 
         $form->handleRequest($request)->submit([
             'begin'   => $request->request->get('begin'),
             'end'     => $request->request->get('end'),
-            'enabled' => $request->request->get('enabled') === 'true',
+            'enabled' => 'true' === $request->request->get('enabled'),
         ]);
 
         try {

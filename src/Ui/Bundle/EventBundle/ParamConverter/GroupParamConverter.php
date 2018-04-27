@@ -57,6 +57,6 @@ class GroupParamConverter implements ParamConverterInterface
      */
     public function supports(ParamConverter $configuration)
     {
-        return $configuration->getClass() === Group::class;
+        return Group::class === $configuration->getClass();
     }
 }

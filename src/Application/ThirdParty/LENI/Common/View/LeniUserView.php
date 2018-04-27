@@ -92,7 +92,7 @@ class LeniUserView
      * @param null|string      $leniId
      * @param bool             $paid
      * @param int|null         $participantProductId
-     * @param array            $customData indexed by LENI fieldName
+     * @param array            $customData           indexed by LENI fieldName
      */
     public function __construct(
         int $id,

@@ -61,7 +61,7 @@ class MailerAdapter implements MailerInterface
             $message->addTo($receiver);
         }
 
-        if ($mail->sendToEmailTeam() === true && $mail instanceof UserMail) {
+        if (true === $mail->sendToEmailTeam() && $mail instanceof UserMail) {
             $message->setBcc($mail->getEvent()->getEmailTeam());
         }
 

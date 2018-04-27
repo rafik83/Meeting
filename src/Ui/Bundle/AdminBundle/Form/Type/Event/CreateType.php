@@ -1,8 +1,9 @@
 <?php
-/**
- * This file is part of the proximum-vimeet.
+
+/*
+ * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2016 <client-name>
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */

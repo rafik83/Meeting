@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2015 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -43,7 +43,6 @@ class SheetParticipantController extends Controller
      * @param Sheet       $sheet
      * @param string      $locale
      * @param string      $key
-     *
      * @param UserDomain  $userDomain
      *
      * @return Response
@@ -164,7 +163,7 @@ class SheetParticipantController extends Controller
         }
 
         // If the form is not valid, render the sheet and force the popin with the participant form
-        list ($nomenclatures, $participants, $taggedData) = $this->get('sheet.infos_helper')->getInfos(
+        list($nomenclatures, $participants, $taggedData) = $this->get('sheet.infos_helper')->getInfos(
             $sheet,
             $userDomain->getUser(),
             $locale,
@@ -214,7 +213,7 @@ class SheetParticipantController extends Controller
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
         $this->denyAccessUnlessGranted(SheetVoter::EDIT, $sheet);
 
-        list ($form) = $this->removeParticipantData($sheet, $locale, $key);
+        list($form) = $this->removeParticipantData($sheet, $locale, $key);
 
         $templateData = $this->get('template.template_data_factory')->createFromSheet($sheet, $locale);
 
@@ -248,15 +247,16 @@ class SheetParticipantController extends Controller
      * @param string      $locale
      * @param string      $key
      *
-     * @return Response
      * @throws \Exception
+     *
+     * @return Response
      */
     public function handleRemoveParticipantAction(Request $request, EventDomain $eventDomain, Sheet $sheet, $locale, $key)
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
         $this->denyAccessUnlessGranted(SheetVoter::EDIT, $sheet);
 
-        list ($form, $remove) = $this->removeParticipantData($sheet, $locale, $key);
+        list($form, $remove) = $this->removeParticipantData($sheet, $locale, $key);
 
         // Handle the form, update the object and redirect to the sheet if valid
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
@@ -284,14 +284,13 @@ class SheetParticipantController extends Controller
                         )
                     );
                 }
-
             } catch (CanNotRemoveAllParticipantsException $exception) {
                 $form->addError(new FormError('validators.participant.canNotRemoveAllParticipants'));
             }
         }
 
         // If the form is not valid, render the sheet and force the popin with the remove participant form
-        list ($nomenclatures, $participants, $taggedData) = $this->get('sheet.infos_helper')->getInfos(
+        list($nomenclatures, $participants, $taggedData) = $this->get('sheet.infos_helper')->getInfos(
             $sheet,
             $this->getUser(),
             $locale,
@@ -327,15 +326,15 @@ class SheetParticipantController extends Controller
     }
 
     /**
-     * @param Sheet       $sheet
-     * @param string      $locale
-     * @param string      $key
+     * @param Sheet  $sheet
+     * @param string $locale
+     * @param string $key
      *
      * @return array
      */
     private function removeParticipantData(Sheet $sheet, $locale, $key)
     {
-        if ($sheet->countParticipants() === 1) {
+        if (1 === $sheet->countParticipants()) {
             throw $this->createNotFoundException('Impossible to remove participants from a sheet with one participant');
         }
 

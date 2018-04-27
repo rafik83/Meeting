@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2016 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -14,7 +14,6 @@ use Elastica\Document;
 use FOS\ElasticaBundle\Transformer\ModelToElasticaTransformerInterface;
 use Proximum\Vimeet\Application\Components\Sheet\SheetInfoGuesser;
 use Proximum\Vimeet\Application\Components\Sheet\Template\Tag;
-use Proximum\Vimeet\Domain\Catalog\SearchFields;
 use Proximum\Vimeet\Domain\Model\Admin;
 use Proximum\Vimeet\Domain\Model\Category;
 use Proximum\Vimeet\Domain\Model\Participant;
@@ -164,7 +163,7 @@ class SheetElasticTransformer implements ModelToElasticaTransformerInterface
 
         $countryCode = $this->getCountryCode($registrationTemplateData);
 
-        if ($countryCode === false) {
+        if (false === $countryCode) {
             $countryCode = null;
         }
 
@@ -215,9 +214,9 @@ class SheetElasticTransformer implements ModelToElasticaTransformerInterface
                 'hasInvoice'                   => $this->invoiceRepository->hasInvoice($sheet),
                 'attend'                       => $sheet->attend(),
                 'hasGroup'                     => $sheet->hasGroup(),
-                'hasSpot'                      => $sheet->getSpot() !== null,
+                'hasSpot'                      => null !== $sheet->getSpot(),
                 'availableSlotIds'             => $this->buildAvailableSlots($sheet),
-                'reminderDate'                 => null !== $sheet->getReminderDate() ? $sheet->getReminderDate()->format('c') : null
+                'reminderDate'                 => null !== $sheet->getReminderDate() ? $sheet->getReminderDate()->format('c') : null,
             ],
             $contentByLocale
         ));
@@ -270,7 +269,7 @@ class SheetElasticTransformer implements ModelToElasticaTransformerInterface
         $country     = [];
         $countryCode = $this->getCountryCode($templateData);
 
-        if ($countryCode !== false) {
+        if (false !== $countryCode) {
             $regionBundle = Intl::getRegionBundle();
 
             foreach ($locales as $key => $locale) {
@@ -307,13 +306,13 @@ class SheetElasticTransformer implements ModelToElasticaTransformerInterface
                             $keywords[$keywordIndex]['label']              = $item;
                             $keywords[$keywordIndex]['label_autocomplete'] = $item;
                             $keywords[$keywordIndex]['locale']             = $locale;
-                            $keywordIndex++;
+                            ++$keywordIndex;
                         }
                     } elseif (null !== $content && !empty($content)) {
                         $keywords[$keywordIndex]['label']              = $content;
                         $keywords[$keywordIndex]['label_autocomplete'] = $content;
                         $keywords[$keywordIndex]['locale']             = $locale;
-                        $keywordIndex++;
+                        ++$keywordIndex;
                     }
                 }
             }

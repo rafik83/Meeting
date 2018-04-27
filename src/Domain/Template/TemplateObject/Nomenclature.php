@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2016 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -203,7 +203,7 @@ class Nomenclature extends EditableObject implements ContentObjectInterface, Sea
      */
     public function getNomenclatureLabels($locale = null)
     {
-        return $this->nomenclature->getLabels($locale ? : $this->locale);
+        return $this->nomenclature->getLabels($locale ?: $this->locale);
     }
 
     /**
@@ -227,7 +227,7 @@ class Nomenclature extends EditableObject implements ContentObjectInterface, Sea
      */
     public function isSingles()
     {
-        return $this->getMode() === self::MODE_SINGLES;
+        return self::MODE_SINGLES === $this->getMode();
     }
 
     /**
@@ -235,7 +235,7 @@ class Nomenclature extends EditableObject implements ContentObjectInterface, Sea
      */
     public function isRadios()
     {
-        return $this->getMode() === self::MODE_RADIOS;
+        return self::MODE_RADIOS === $this->getMode();
     }
 
     /**
@@ -243,7 +243,7 @@ class Nomenclature extends EditableObject implements ContentObjectInterface, Sea
      */
     public function isCheckboxes()
     {
-        return $this->getMode() === self::MODE_CHECKBOXES;
+        return self::MODE_CHECKBOXES === $this->getMode();
     }
 
     /**
@@ -259,7 +259,7 @@ class Nomenclature extends EditableObject implements ContentObjectInterface, Sea
      */
     public function isNeed()
     {
-        return $this->getObjective() === self::OBJECTIVE_NEED;
+        return self::OBJECTIVE_NEED === $this->getObjective();
     }
 
     /**
@@ -267,7 +267,7 @@ class Nomenclature extends EditableObject implements ContentObjectInterface, Sea
      */
     public function isSupply()
     {
-        return $this->getObjective() === self::OBJECTIVE_SUPPLY;
+        return self::OBJECTIVE_SUPPLY === $this->getObjective();
     }
 
     /**
@@ -360,7 +360,7 @@ class Nomenclature extends EditableObject implements ContentObjectInterface, Sea
         }, $leaves);
 
         // Implode outer content (all item paths):
-        return implode(";", $leaves);
+        return implode(';', $leaves);
     }
 
     /**

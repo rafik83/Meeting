@@ -1,9 +1,9 @@
 <?php
 
 /*
- * This file is part of the vimeet project.
+ * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2017 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -14,7 +14,7 @@ use Proximum\Vimeet\Domain\Model\Participant;
 
 class UpdateVisio
 {
-    /** @var boolean */
+    /** @var bool */
     public $visio;
 
     /** @var Participant */
@@ -23,8 +23,8 @@ class UpdateVisio
     /**
      * VisioHandler constructor.
      *
-     * @param Participant   $participant
-     * @param boolean       $visio
+     * @param Participant $participant
+     * @param bool        $visio
      */
     public function __construct(
         Participant $participant,

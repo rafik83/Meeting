@@ -99,11 +99,11 @@ class Image extends EditableObject implements ContentObjectInterface
     public static function supportedMimeType()
     {
         return [
-            "image/gif",
-            "image/jpeg",
-            "image/pjpeg",
-            "image/png",
-            "image/x-png",
+            'image/gif',
+            'image/jpeg',
+            'image/pjpeg',
+            'image/png',
+            'image/x-png',
         ];
     }
 

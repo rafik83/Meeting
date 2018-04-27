@@ -61,7 +61,6 @@ class RawNomenclatureToNomenclatureViewConverter extends ComexposiumConverter
             );
         }
 
-
         return new NomenclatureItemView(
             $nomenclatureItem->reference,
             $nomenclatureItem->referenceNomenclatureManifestationParent ?? null,

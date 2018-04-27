@@ -1,9 +1,9 @@
 <?php
 
 /*
- * This file is part of the vimeet project.
+ * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2016 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -39,7 +39,7 @@ final class Category
     const PROGRAM       = 'navigation.category.program';
     const PROGRAM_ICON  = 'icon-PresFlash_2';
 
-    static public $categories = [
+    public static $categories = [
         self::MEMBER_SPACE,
         self::BILLING,
         self::SHEET,

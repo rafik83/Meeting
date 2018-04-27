@@ -51,15 +51,15 @@ class ArchiveController extends Controller
             try {
                 $result = $this->get('tactician.commandbus')->handle($archiveUnArchive);
 
-                if ($result !== null) {
-                    if ($result === ArchiveUnArchive::ARCHIVED) {
+                if (null !== $result) {
+                    if (ArchiveUnArchive::ARCHIVED === $result) {
                         $translatedMessage = $this
                             ->get('translator')
                             ->trans('flash.admin.event.archive.success', ['%domain%' => $event->getDomain()], 'flashes')
                         ;
 
                         $this->addFlash('success', $translatedMessage);
-                    } elseif ($result === ArchiveUnArchive::UN_ARCHIVED) {
+                    } elseif (ArchiveUnArchive::UN_ARCHIVED === $result) {
                         $this->addFlash('success', 'flash.admin.event.un_archive.success');
                     }
 

@@ -96,9 +96,9 @@ class GenerateHtml
      * @param Event  $event
      * @param string $locale
      *
-     * @return string
-     *
      * @throws \DomainException
+     *
+     * @return string
      */
     private function generateSheetHtml(Sheet $sheet, Event $event, string $locale): string
     {
@@ -107,11 +107,11 @@ class GenerateHtml
         $users        = $sheet->getUsers();
         $user         = reset($users);
 
-        if ($user === false) {
+        if (false === $user) {
             throw new \DomainException('A sheet can not have 0 user');
         }
 
-        list ($nomenclatures, $participants, $taggedData) = $this->sheetInfosHelper->getInfos(
+        list($nomenclatures, $participants, $taggedData) = $this->sheetInfosHelper->getInfos(
             $sheet,
             $user,
             $locale

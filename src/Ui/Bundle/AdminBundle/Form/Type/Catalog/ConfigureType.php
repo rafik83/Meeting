@@ -37,7 +37,7 @@ class ConfigureType extends AbstractType
             ->add('externalCatalogEnabled', CheckboxType::class, ['required' => false])
             ->add('registrationUrl', TextType::class, [
                 'required' => false,
-                'placeholder' => 'form.configure.children.registrationUrl.placeholder'
+                'placeholder' => 'form.configure.children.registrationUrl.placeholder',
             ])
             ->add('hasMessage', CheckboxType::class, ['required' => false])
             ->add('messageTranslations', CollectionType::class, [

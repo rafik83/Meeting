@@ -10,9 +10,9 @@
 
 namespace Proximum\Vimeet\Domain\Sheet;
 
+use Proximum\Vimeet\Application\Components\Sheet\Template;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Template\TemplateDataFactory;
-use Proximum\Vimeet\Application\Components\Sheet\Template;
 use Proximum\Vimeet\Domain\Template\TemplateObject\ContentObjectInterface;
 
 class SheetInfoSetter

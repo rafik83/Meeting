@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2016 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -59,7 +59,7 @@ class GroupsViewQueryHandler
         $participantAndPlanningGroupView = null;
         $groupsView = [];
 
-        if ($package->isPlansEnabled() ) {
+        if ($package->isPlansEnabled()) {
             $planGroupView = $this->planGroupViewQueryHandler->handle(
                 new PlanGroupViewQuery(
                     $groupsViewQuery->sheet,

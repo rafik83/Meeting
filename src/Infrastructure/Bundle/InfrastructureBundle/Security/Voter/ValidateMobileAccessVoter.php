@@ -1,9 +1,9 @@
 <?php
 
 /*
- * This file is part of the vimeet project.
+ * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2017 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -53,7 +53,7 @@ class ValidateMobileAccessVoter extends Voter
             return false;
         }
 
-        return $attribute === self::PERMISSION_NAME;
+        return self::PERMISSION_NAME === $attribute;
     }
 
     /**

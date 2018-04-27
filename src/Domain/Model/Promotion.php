@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2016 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -65,7 +65,7 @@ class Promotion
         $this->promotionCode = $promotionCode;
         $this->product       = $product;
         $this->type          = $type;
-        $this->value         = $type === self::TYPE_FREE ? null : $value;
+        $this->value         = self::TYPE_FREE === $type ? null : $value;
         $this->quantityMax   = $quantityMax;
     }
 
@@ -139,7 +139,7 @@ class Promotion
     public function update($type, $value, $quantityMax = null)
     {
         $this->type        = $type;
-        $this->value       = $type === self::TYPE_FREE ? null : $value;
+        $this->value       = self::TYPE_FREE === $type ? null : $value;
         $this->quantityMax = $quantityMax;
 
         return $this;
@@ -186,7 +186,7 @@ class Promotion
      */
     public function isPercentOff()
     {
-        return $this->type === self::TYPE_PERCENT_OFF;
+        return self::TYPE_PERCENT_OFF === $this->type;
     }
 
     /**
@@ -194,7 +194,7 @@ class Promotion
      */
     public function isValueOff()
     {
-        return $this->type === self::TYPE_VALUE_OFF;
+        return self::TYPE_VALUE_OFF === $this->type;
     }
 
     /**
@@ -204,7 +204,7 @@ class Promotion
      */
     public static function isTypeValueOff($type)
     {
-        return $type === self::TYPE_VALUE_OFF;
+        return self::TYPE_VALUE_OFF === $type;
     }
 
     /**
@@ -212,6 +212,6 @@ class Promotion
      */
     public function isFree()
     {
-        return $this->type === self::TYPE_FREE;
+        return self::TYPE_FREE === $this->type;
     }
 }

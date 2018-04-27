@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of the Proximumn Vimeet project.
+ * This file is part of the Proximum Vimeet project.
  *
  * Copyright (C) Proximum
  *
@@ -74,6 +74,7 @@ class Generator
 
         if (empty($availabilityTimeRanges)) {
             $this->dispatchSystemUnavailabilityGeneratedEvent($event, $user);
+
             return;
         }
 
@@ -82,6 +83,7 @@ class Generator
 
         if (empty($participants)) {
             $this->dispatchSystemUnavailabilityGeneratedEvent($event, $user);
+
             return;
         }
 
@@ -89,6 +91,7 @@ class Generator
 
         if (empty($products)) {
             $this->dispatchSystemUnavailabilityGeneratedEvent($event, $user);
+
             return;
         }
 
@@ -99,6 +102,7 @@ class Generator
 
         if (empty($timeRangesNotAccessible)) {
             $this->dispatchSystemUnavailabilityGeneratedEvent($event, $user);
+
             return;
         }
 

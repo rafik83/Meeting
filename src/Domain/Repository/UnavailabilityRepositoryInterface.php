@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2015 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -49,7 +49,6 @@ interface UnavailabilityRepositoryInterface
 
     /**
      * @deprecated Prefer use of findByUserAndEvent instead
-     *
      * @see findByUserAndEvent
      *
      * @param Participant $participant
@@ -80,8 +79,8 @@ interface UnavailabilityRepositoryInterface
     public function findByParticipants(array $participants);
 
     /**
-     * @param Event $event
-     * @param User[]  $users
+     * @param Event  $event
+     * @param User[] $users
      *
      * @return Unavailability[]
      */

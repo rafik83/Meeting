@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of the vimeet project.
+ * This file is part of the Proximum Vimeet project.
  *
  * Copyright (C) Proximum
  *
@@ -35,7 +35,7 @@ class TipView extends AbstractTipView
      */
     public function __construct($id, $title, $locale, array $types = [], array $pages = [])
     {
-        parent::__construct($id ,$title);
+        parent::__construct($id, $title);
 
         $this->locale = $locale;
         $this->types  = $types;

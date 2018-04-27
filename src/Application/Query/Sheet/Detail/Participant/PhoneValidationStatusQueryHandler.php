@@ -40,6 +40,6 @@ class PhoneValidationStatusQueryHandler
             $query->participant->getSheet()->getEvent()
         );
 
-        return $userEventPhone !== null ? new PhoneValidatedView() : new PhoneNotValidatedView();
+        return null !== $userEventPhone ? new PhoneValidatedView() : new PhoneNotValidatedView();
     }
 }

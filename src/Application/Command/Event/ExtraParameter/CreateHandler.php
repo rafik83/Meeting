@@ -24,7 +24,7 @@ class CreateHandler
 
     /**
      * @param ExtraParameterRepositoryInterface $extraParameterRepository
-     * @param \DateTimeInterface                 $dateTime
+     * @param \DateTimeInterface                $dateTime
      */
     public function __construct(
         ExtraParameterRepositoryInterface $extraParameterRepository,

@@ -1,5 +1,13 @@
 <?php
 
+/*
+ * This file is part of the Proximum Vimeet project.
+ *
+ * Copyright (C) Proximum
+ *
+ * @author Elao <contact@elao.com>
+ */
+
 namespace Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Migrations;
 
 use Doctrine\DBAL\Migrations\AbstractMigration;
@@ -15,7 +23,7 @@ class Version20170407144410 extends AbstractMigration
      */
     public function up(Schema $schema)
     {
-        $this->abortIf($this->connection->getDatabasePlatform()->getName() != 'mysql', 'Migration can only be executed safely on \'mysql\'.');
+        $this->abortIf('mysql' != $this->connection->getDatabasePlatform()->getName(), 'Migration can only be executed safely on \'mysql\'.');
 
         $this->addSql('CREATE TABLE sheet_group (id INT AUTO_INCREMENT NOT NULL, event_id INT NOT NULL, manager_id INT NOT NULL, title LONGTEXT NOT NULL, created_at DATETIME NOT NULL, INDEX IDX_E95566C71F7E88B (event_id), INDEX IDX_E95566C783E3463 (manager_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE = InnoDB');
         $this->addSql('ALTER TABLE sheet_group ADD CONSTRAINT FK_E95566C71F7E88B FOREIGN KEY (event_id) REFERENCES event (id) ON DELETE CASCADE');
@@ -31,7 +39,7 @@ class Version20170407144410 extends AbstractMigration
      */
     public function down(Schema $schema)
     {
-        $this->abortIf($this->connection->getDatabasePlatform()->getName() != 'mysql', 'Migration can only be executed safely on \'mysql\'.');
+        $this->abortIf('mysql' != $this->connection->getDatabasePlatform()->getName(), 'Migration can only be executed safely on \'mysql\'.');
 
         $this->addSql('ALTER TABLE sheet DROP FOREIGN KEY FK_873C91E2FE54D947');
         $this->addSql('DROP INDEX IDX_873C91E2FE54D947 ON sheet');

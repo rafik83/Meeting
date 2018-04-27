@@ -72,7 +72,7 @@ class OrderRowNormalizer implements NormalizerInterface
             $data[$customRowView->getQuantityColumnId($index)]  = $customRowView->quantity;
             $data[$customRowView->getTotalColumnId($index)]     = $customRowView->total;
 
-            $index++;
+            ++$index;
         }
 
         $output = [];
@@ -105,8 +105,8 @@ class OrderRowNormalizer implements NormalizerInterface
      */
     private function convertCharset($input)
     {
-        if ($this->charset !== Charset::UTF_8) {
-            return iconv(Charset::UTF_8, Charset::WINDOWS_1252 . "//TRANSLIT", $input);
+        if (Charset::UTF_8 !== $this->charset) {
+            return iconv(Charset::UTF_8, Charset::WINDOWS_1252 . '//TRANSLIT', $input);
         }
 
         return $input;
@@ -117,6 +117,6 @@ class OrderRowNormalizer implements NormalizerInterface
      */
     public function supportsNormalization($data, $format = null)
     {
-        return $data instanceof OrderView && $format === 'csv';
+        return $data instanceof OrderView && 'csv' === $format;
     }
 }

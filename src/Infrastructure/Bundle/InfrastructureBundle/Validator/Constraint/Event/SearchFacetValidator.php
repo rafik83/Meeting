@@ -1,9 +1,9 @@
 <?php
 
 /*
- * This file is part of the vimeet project.
+ * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2016 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -21,7 +21,7 @@ class SearchFacetValidator extends ConstraintValidator
      */
     public function validate($searchFacet, Constraint $constraint)
     {
-        if ($searchFacet instanceof SearchFacet && $searchFacet->isEnabled() === true) {
+        if ($searchFacet instanceof SearchFacet && true === $searchFacet->isEnabled()) {
             foreach ($searchFacet->getTranslations() as $translation) {
                 if (empty($translation->getLabel())) {
                     $this->context

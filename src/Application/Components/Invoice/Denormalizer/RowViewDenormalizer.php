@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of the vimeet project.
+ * This file is part of the Proximum Vimeet project.
  *
  * Copyright (C) Proximum
  *
@@ -63,7 +63,7 @@ class RowViewDenormalizer implements DenormalizerInterface, DenormalizerAwareInt
      */
     public function supportsDenormalization($data, $type, $format = null)
     {
-        return $type === RowView::class
+        return RowView::class === $type
             && isset($data['label'])
             && isset($data['quantity'])
             && isset($data['price'])

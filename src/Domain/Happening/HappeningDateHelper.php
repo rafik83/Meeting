@@ -1,9 +1,9 @@
 <?php
 
 /*
- * This file is part of the vimeet project.
+ * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2017 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -24,7 +24,7 @@ class HappeningDateHelper
     public static function getHour(\DateTimeInterface $datetime, $locale, $timeZone)
     {
         $dateFormatter = \IntlDateFormatter::create(
-            $locale ? : self::DEFAULT_LOCALE,
+            $locale ?: self::DEFAULT_LOCALE,
             \IntlDateFormatter::NONE,
             \IntlDateFormatter::SHORT,
             $timeZone

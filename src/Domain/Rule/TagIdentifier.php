@@ -1,9 +1,9 @@
 <?php
 
 /*
- * This file is part of the vimeet project.
+ * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2016 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -16,8 +16,8 @@ use Proximum\Vimeet\Domain\Model\Template\RegistrationTemplate;
 use Proximum\Vimeet\Domain\Model\Type;
 use Proximum\Vimeet\Domain\Model\WhoInterface;
 use Proximum\Vimeet\Domain\Rule\Exception\NotImplementedException;
-use Proximum\Vimeet\Domain\Template\TemplateObject;
 use Proximum\Vimeet\Domain\Template\TemplateDataFactory;
+use Proximum\Vimeet\Domain\Template\TemplateObject;
 
 class TagIdentifier
 {
@@ -37,9 +37,9 @@ class TagIdentifier
     /**
      * @param WhoInterface $who
      *
-     * @return array
-     *
      * @throws NotImplementedException
+     *
+     * @return array
      */
     public function identify(WhoInterface $who)
     {
@@ -48,7 +48,7 @@ class TagIdentifier
             $tags = [];
 
             /**
-             * @var Type $type
+             * @var Type
              */
             foreach ($who->getTypes() as $type) {
                 $template = $type->getRegistrationTemplate();
@@ -84,7 +84,7 @@ class TagIdentifier
         }
 
         return array_filter($tags, function ($tag) {
-            return $tag !== Tag::SHEET_DATA && $tag !== Tag::PARTICIPANT_DATA;
+            return Tag::SHEET_DATA !== $tag && Tag::PARTICIPANT_DATA !== $tag;
         });
     }
 }

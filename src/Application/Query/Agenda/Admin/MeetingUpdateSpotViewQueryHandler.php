@@ -1,9 +1,9 @@
 <?php
 
 /*
- * This file is part of the vimeet project.
+ * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2017 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -31,8 +31,8 @@ class MeetingUpdateSpotViewQueryHandler
 
     /**
      * @param SpotRepositoryInterface $spotRepository
-     * @param SheetInfoGuesser $sheetInfoGuesser
-     * @param TranslatorInterface $translator
+     * @param SheetInfoGuesser        $sheetInfoGuesser
+     * @param TranslatorInterface     $translator
      */
     public function __construct(
         SpotRepositoryInterface $spotRepository,
@@ -59,7 +59,6 @@ class MeetingUpdateSpotViewQueryHandler
             $meeting->isBlockedSlot(),
             $meeting->isBlockedSpot(),
             array_map(function (Spot $spot) use ($meeting) {
-
                 $label = $this->getSpotLabel($spot, $meeting);
 
                 return new SpotView(
@@ -88,8 +87,8 @@ class MeetingUpdateSpotViewQueryHandler
     }
 
     /**
-     * @param Spot      $spot
-     * @param Meeting   $meeting
+     * @param Spot    $spot
+     * @param Meeting $meeting
      *
      * @return string
      */

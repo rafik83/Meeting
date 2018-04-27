@@ -43,6 +43,6 @@ class SpotFillingRateDayViewNormalizer implements NormalizerAwareInterface, Norm
      */
     public function supportsNormalization($data, $format = null)
     {
-        return $format === 'json' && $data instanceof SpotFillingRateDayView;
+        return 'json' === $format && $data instanceof SpotFillingRateDayView;
     }
 }

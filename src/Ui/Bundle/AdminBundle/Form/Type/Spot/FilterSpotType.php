@@ -3,19 +3,19 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2015 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
 
 namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Spot;
 
-use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\NumberType;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
-use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -28,16 +28,16 @@ class FilterSpotType extends AbstractType
     {
         $builder
             ->add('reference', TextType::class, [
-                'label' => 'form.filter_spot_type.children.reference.label'
+                'label' => 'form.filter_spot_type.children.reference.label',
             ])
             ->add('meetingCapacity', IntegerType::class, [
-                'label' => 'form.filter_spot_type.children.meetingCapacity.label'
+                'label' => 'form.filter_spot_type.children.meetingCapacity.label',
             ])
             ->add('seatCapacity', IntegerType::class, [
-                'label' => 'form.filter_spot_type.children.seatCapacity.label'
+                'label' => 'form.filter_spot_type.children.seatCapacity.label',
             ])
             ->add('size', NumberType::class, [
-                'label' => 'form.filter_spot_type.children.size.label'
+                'label' => 'form.filter_spot_type.children.size.label',
             ])
             ->add('active', ChoiceType::class, [
                 'label'       => 'form.filter_spot_type.children.active.label',

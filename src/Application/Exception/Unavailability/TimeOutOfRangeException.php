@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2016 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -43,7 +43,7 @@ class TimeOutOfRangeException extends UnavailabilityException
      */
     public function isOutOfRangeAtEndOfDay()
     {
-        return $this->period === TimeOutOfRangeException::END;
+        return self::END === $this->period;
     }
 
     /**
@@ -51,6 +51,6 @@ class TimeOutOfRangeException extends UnavailabilityException
      */
     public function isOutOfRangeAtBeginOfDay()
     {
-        return $this->period === TimeOutOfRangeException::BEGIN;
+        return self::BEGIN === $this->period;
     }
 }

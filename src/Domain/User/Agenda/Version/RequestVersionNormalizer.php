@@ -17,9 +17,9 @@ class RequestVersionNormalizer
     /**
      * @param Request $request
      *
-     * @return array
-     *
      * @throws \InvalidArgumentException
+     *
+     * @return array
      */
     public function normalize(Request $request): array
     {

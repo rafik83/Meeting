@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2016 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -32,8 +32,9 @@ class Block extends AbstractChild
     /**
      * @param string $key
      *
-     * @return TemplateObject
      * @throws \Exception
+     *
+     * @return TemplateObject
      */
     public function __get($key)
     {
@@ -119,6 +120,7 @@ class Block extends AbstractChild
 
     /**
      * This function returns all the tags present on the block's children
+     *
      * @return array
      */
     public function getTags(): array
@@ -128,7 +130,7 @@ class Block extends AbstractChild
         foreach ($this->getObjects() as $child) {
             $tag = $child->getTag();
 
-            if ($tag !== null) {
+            if (null !== $tag) {
                 $tags[$tag] = $tag;
             }
 
@@ -203,7 +205,7 @@ class Block extends AbstractChild
     {
         foreach ($this->children as $columnKey => $column) {
             foreach ($column as $childKey => $child) {
-                if ($child instanceof Block) {
+                if ($child instanceof self) {
                     $child->removeObject($key);
                 } elseif ($childKey === $key) {
                     unset($this->children[$columnKey][$childKey]);
@@ -325,8 +327,9 @@ class Block extends AbstractChild
     /**
      * @param string $key
      *
-     * @return TemplateObject
      * @throws \Exception
+     *
+     * @return TemplateObject
      */
     public function getObject($key)
     {
@@ -342,8 +345,9 @@ class Block extends AbstractChild
     /**
      * @param string $key
      *
-     * @return bool
      * @throws \Exception
+     *
+     * @return bool
      */
     public function hasObject($key)
     {
@@ -408,7 +412,7 @@ class Block extends AbstractChild
 
         foreach ($this->children as $children) {
             foreach ($children as $block) {
-                if ($block instanceof Block) {
+                if ($block instanceof self) {
                     $tagged = array_merge($tagged, $block->getTaggedDatas($tag));
                 }
 
@@ -573,7 +577,7 @@ class Block extends AbstractChild
             }, $this->children),
         ];
 
-        return $this->type === 'root' ? $array['children'][0] : $array;
+        return 'root' === $this->type ? $array['children'][0] : $array;
     }
 
     /**
@@ -656,7 +660,7 @@ class Block extends AbstractChild
         foreach ($this->getObjects() as $object) {
             $tags = $object instanceof TemplateObject\EditableText && !empty($object->getTag()) ? [$object->getTag()] : $object->getTags();
 
-            if (count($tags) === 0) {
+            if (0 === count($tags)) {
                 continue;
             }
 

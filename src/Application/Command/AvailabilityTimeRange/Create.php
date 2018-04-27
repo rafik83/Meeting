@@ -57,6 +57,7 @@ class Create implements Command
                 return false;
             }
         }
+
         return false;
     }
 }

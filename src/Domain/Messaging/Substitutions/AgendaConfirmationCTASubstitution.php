@@ -81,7 +81,7 @@ class AgendaConfirmationCTASubstitution
             self::ROUTE_CTA_AGENDA_CONFIRMATION,
             [
                 '_locale' => $locale,
-                'token' => $userEventToken->getToken()
+                'token' => $userEventToken->getToken(),
             ]
         );
 

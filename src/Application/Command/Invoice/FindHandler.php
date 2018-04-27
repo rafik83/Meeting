@@ -34,10 +34,11 @@ class FindHandler
     /**
      * @param Find $find
      *
-     * @return FindResult
      * @throws InvalidNumeroInvoiceException
      * @throws InvoiceNotFoundException
      * @throws IsNotAllowedToFindInvoiceException
+     *
+     * @return FindResult
      */
     public function handle(Find $find)
     {

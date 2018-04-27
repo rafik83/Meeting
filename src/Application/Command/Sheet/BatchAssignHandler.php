@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2015 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -35,15 +35,16 @@ class BatchAssignHandler
     /**
      * @param BatchAssign $batchAssign
      *
-     * @return BatchResult
      * @throws SheetException
+     *
+     * @return BatchResult
      */
     public function handle(BatchAssign $batchAssign)
     {
         // Get sheets
         $sheets = $this->sheetRepository->getSheetsById($batchAssign->ids);
 
-        if ($batchAssign->admin !== null
+        if (null !== $batchAssign->admin
             && !$batchAssign->admin->isOrganizer() && !$batchAssign->admin->isOperator()
         ) {
             throw new SheetException('Follower must be an organizer or operator.');

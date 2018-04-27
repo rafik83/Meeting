@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2016 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -11,8 +11,8 @@
 namespace Proximum\Vimeet\Application\Query\Package;
 
 use Proximum\Vimeet\Domain\Model\Sheet;
-use Proximum\Vimeet\Domain\Package\Funnel\Step;
 use Proximum\Vimeet\Domain\Package\Funnel\Funnel;
+use Proximum\Vimeet\Domain\Package\Funnel\Step;
 
 class PackageViewQuery
 {

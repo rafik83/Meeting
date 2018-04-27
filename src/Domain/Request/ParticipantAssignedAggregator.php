@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of the Proximum vimeet project.
+ * This file is part of the Proximum Vimeet project.
  *
  * Copyright (C) Proximum
  *

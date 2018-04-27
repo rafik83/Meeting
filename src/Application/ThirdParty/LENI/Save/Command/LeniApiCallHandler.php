@@ -21,8 +21,8 @@ use Proximum\Vimeet\Application\ThirdParty\LENI\Save\Query\GetCustomData;
 use Proximum\Vimeet\Application\ThirdParty\LENI\Save\Query\GetCustomDataHandler;
 use Proximum\Vimeet\Domain\Model\User\Event\ExtraData;
 use Proximum\Vimeet\Domain\Repository\User\Event\ExtraDataRepositoryInterface;
-use Proximum\Vimeet\Domain\User\Event\ExtraData\Type as ExtraDataType;
 use Proximum\Vimeet\Domain\User\Event\ExtraData\Type;
+use Proximum\Vimeet\Domain\User\Event\ExtraData\Type as ExtraDataType;
 
 /**
  * LENI EXHIBIS Api call handler
@@ -226,7 +226,7 @@ class LeniApiCallHandler
 
         // Call has warnings
         if (isset($response[LeniConstants::LENI_FIELD_HAS_WARNING], $response[LeniConstants::LENI_FIELD_INFO])
-            && $response[LeniConstants::LENI_FIELD_HAS_WARNING] === true
+            && true === $response[LeniConstants::LENI_FIELD_HAS_WARNING]
         ) {
             throw new WarningApiCallException(
                 sprintf('Data : %s ; Response : %s', json_encode($data), json_encode($response))

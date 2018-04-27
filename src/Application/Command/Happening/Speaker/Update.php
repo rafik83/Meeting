@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2015 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -69,13 +69,12 @@ class Update
         $this->organization = $speaker->getOrganization();
 
         /**
-         * @var SpeakerTranslation $translation
+         * @var SpeakerTranslation
          */
         foreach ($speaker->getTranslations() as $translation) {
             $this->translations[$translation->getLocale()] = [
                 'position' => $translation->getPosition(),
             ];
         }
-
     }
 }

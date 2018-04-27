@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2015 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -100,7 +100,7 @@ class SheetController extends Controller
             );
         }
 
-        list ($nomenclatures, $participants, $taggedData) = $this->get('sheet.infos_helper')->getInfos(
+        list($nomenclatures, $participants, $taggedData) = $this->get('sheet.infos_helper')->getInfos(
             $sheet,
             $this->getUser(),
             $locale
@@ -211,7 +211,7 @@ class SheetController extends Controller
             $locale
         );
 
-        list ($nomenclatures, $participants, $taggedData) = $this->get('sheet.infos_helper')->getInfos(
+        list($nomenclatures, $participants, $taggedData) = $this->get('sheet.infos_helper')->getInfos(
             $sheetToDisplay,
             $user,
             $locale
@@ -280,7 +280,7 @@ class SheetController extends Controller
             'currency' => $eventDomain->getEvent()->getCurrency(),
             'vatMode'  => $eventDomain->getEvent()->getMode(),
             'label'    => $templateObjectView->label,
-            'templateObjectView' => $templateObjectView
+            'templateObjectView' => $templateObjectView,
         ]);
     }
 
@@ -399,7 +399,7 @@ class SheetController extends Controller
         }
 
         // If the form is not valid, render the sheet and force the popin with the object form
-        list ($nomenclatures, $participants, $taggedData) = $this->get('sheet.infos_helper')->getInfos(
+        list($nomenclatures, $participants, $taggedData) = $this->get('sheet.infos_helper')->getInfos(
             $sheet,
             $this->getUser(),
             $locale
@@ -413,7 +413,7 @@ class SheetController extends Controller
         );
         $tipTranslationViews = $this->get('tactician.commandbus.query')->handle($tipTranslationViewQuery);
 
-        $twig = $object->getType() === 'nomenclature'
+        $twig = 'nomenclature' === $object->getType()
             ? 'EventBundle:Sheet:nomenclatures.html.twig'
             : 'EventBundle:Sheet:sheet.html.twig';
 

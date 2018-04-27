@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2015 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -95,12 +95,13 @@ class ParticipateType extends AbstractType
                 );
         }
 
-        if ($happening->isPrivate() && $options['isUpdate'] === false) {
+        if ($happening->isPrivate() && false === $options['isUpdate']) {
             $builder->add('invitationCode', TextType::class, [
                 'required' => true,
             ]);
         }
     }
+
     /**
      * {@inheritdoc}
      */

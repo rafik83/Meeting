@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2015 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -12,10 +12,10 @@ namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller;
 
 use Proximum\Vimeet\Application\Command\Rule\SeeWhat;
 use Proximum\Vimeet\Application\Components\Sheet\Template\Tag;
-use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Event\WhoSeeWhoType;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Rule;
 use Proximum\Vimeet\Domain\Model\WhoInterface;
+use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Event\WhoSeeWhoType;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Rule\SeeWhatType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\RedirectResponse;

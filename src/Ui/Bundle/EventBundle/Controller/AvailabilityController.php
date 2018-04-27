@@ -52,12 +52,12 @@ class AvailabilityController extends Controller
 
             if ($this->hasFlash(AvailabilityConfirmationChecker::ORIGIN_MEETING_REQUEST_MANAGEMENT)) {
                 return $this->redirectToRoute('event_meeting_list_request', [
-                    'sheet' => $sheet->getId()
+                    'sheet' => $sheet->getId(),
                 ]);
             }
 
             return $this->redirectToRoute('event_catalog_index', [
-                'sheet' => $sheet->getId()
+                'sheet' => $sheet->getId(),
             ]);
         }
 

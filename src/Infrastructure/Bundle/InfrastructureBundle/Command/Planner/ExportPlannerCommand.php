@@ -1,9 +1,9 @@
 <?php
 
 /*
- * This file is part of the vimeet project.
+ * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2017 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -86,9 +86,9 @@ class ExportPlannerCommand extends Command
                 $input->getArgument('eventId'),
                 $input->getArgument('locale'),
                 $input->getArgument('admin_email'),
-                $input->getArgument('lockMeetingRequest') === self::LOCK_MEETING_REQUEST,
+                self::LOCK_MEETING_REQUEST === $input->getArgument('lockMeetingRequest'),
                 $input->getArgument('solutionType'),
-                $mode === self::MODE_AUTO,
+                self::MODE_AUTO === $mode,
                 $plannerJob
             )
         );

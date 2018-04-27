@@ -37,6 +37,6 @@ class UserAgendaVersionDiffView
      */
     public function hasNoPhone(): bool
     {
-        return $this->state === self::ANSWER_NO_PHONE;
+        return self::ANSWER_NO_PHONE === $this->state;
     }
 }

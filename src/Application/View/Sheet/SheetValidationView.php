@@ -1,9 +1,9 @@
 <?php
 
 /*
- * This file is part of the vimeet project.
+ * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2016 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -41,6 +41,6 @@ class SheetValidationView
      */
     public function isComplete()
     {
-        return $this->completeness === 100;
+        return 100 === $this->completeness;
     }
 }

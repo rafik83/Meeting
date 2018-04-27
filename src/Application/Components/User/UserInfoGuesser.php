@@ -72,19 +72,18 @@ class UserInfoGuesser
             'country'   => '',
         ];
 
-
         if (!empty($userSheets)) {
             $participant = null;
 
             foreach ($userSheets as $sheet) {
                 $participant = $sheet->getUserParticipant($user);
 
-                if ($participant !== null) {
+                if (null !== $participant) {
                     break;
                 }
             }
 
-            if ($participant !== null) {
+            if (null !== $participant) {
                 $participantInfo = $this->participantInfoGuesser->guessParticipantInfos($participant, $locale);
 
                 foreach (self::TAG_PARTICIPANT_CORRELATION as $tag => $arrayValue) {

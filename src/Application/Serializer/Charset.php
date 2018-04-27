@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2016 Proximum Vimeet
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -24,19 +24,20 @@ final class Charset
      * @param string      $outCharset
      * @param string|null $outFilename
      *
-     * @return null|string
      * @throws BadCharsetException
+     *
+     * @return null|string
      */
     public static function convert($inFilename, $inCharset, $outCharset, $outFilename = null)
     {
         if ($inCharset !== $outCharset) {
             try {
                 $input       = file_get_contents($inFilename);
-                $outFilename = $outFilename ? : sys_get_temp_dir() . DIRECTORY_SEPARATOR . 'charset-' . uniqid();
+                $outFilename = $outFilename ?: sys_get_temp_dir() . DIRECTORY_SEPARATOR . 'charset-' . uniqid();
                 try {
-                    $output = iconv($inCharset, $outCharset . "//TRANSLIT", $input);
+                    $output = iconv($inCharset, $outCharset . '//TRANSLIT', $input);
                 } catch (\ErrorException  $exception) {
-                    $output = iconv($inCharset, $outCharset . "//IGNORE", $input);
+                    $output = iconv($inCharset, $outCharset . '//IGNORE', $input);
                 }
 
                 file_put_contents($outFilename, $output);

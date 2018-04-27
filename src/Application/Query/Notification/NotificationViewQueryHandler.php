@@ -1,9 +1,9 @@
 <?php
 
 /*
- * This file is part of the vimeet project.
+ * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2016 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -72,7 +72,7 @@ class NotificationViewQueryHandler
 
         $this->addNotifications($sheetNotificationViews);
 
-        if ($query->sheet->getPackage() !== null && $query->sheet->getPackage()->isPassable()) {
+        if (null !== $query->sheet->getPackage() && $query->sheet->getPackage()->isPassable()) {
             $packageNotificationView = $this->packageNotificationViewQueryHandler->handle(
                 new PackageNotificationViewQuery($query->sheet)
             );

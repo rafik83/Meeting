@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of the vimeet project.
+ * This file is part of the Proximum Vimeet project.
  *
  * Copyright (C) Proximum
  *
@@ -69,7 +69,7 @@ class BatchEnableDisableHandler
     public function handle(BatchEnableDisable $batchEnableDisable): BatchResult
     {
         $sheets = $this->sheetRepository->getSheetsById($batchEnableDisable->ids);
-        $message = ($batchEnableDisable->state === true) ? 'enable.success' : 'disable.success';
+        $message = (true === $batchEnableDisable->state) ? 'enable.success' : 'disable.success';
         $processedSheets = [];
         $ignoredSheets = [];
         $ignoredSheetsMessage = '';
@@ -83,10 +83,10 @@ class BatchEnableDisableHandler
             if (isset($sheets[$id])) {
                 $sheet = $sheets[$id];
 
-                $disableSheetWithMeeting = $batchEnableDisable->state === false
+                $disableSheetWithMeeting = false === $batchEnableDisable->state
                     && isset($meetings[$id]) && $meetings[$id] > 0;
 
-                $enableRefusedSheet = $batchEnableDisable->state === true && $sheet->isRefused();
+                $enableRefusedSheet = true === $batchEnableDisable->state && $sheet->isRefused();
 
                 if ($disableSheetWithMeeting || $enableRefusedSheet) {
                     $ignoredSheets[] = $sheet;
@@ -115,7 +115,7 @@ class BatchEnableDisableHandler
         }
 
         if (count($ignoredSheets) > 0) {
-            $message = $batchEnableDisable->state === true ? 'enable.warning' : 'disable.warning';
+            $message = true === $batchEnableDisable->state ? 'enable.warning' : 'disable.warning';
             $locale  = $ignoredSheets[0]->getEvent()->getAvailableLocale($batchEnableDisable->admin->getLocale());
             // Format sheets title to display them in flash warning message
             $ignoredSheetsMessage = implode(', ',

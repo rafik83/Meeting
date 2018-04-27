@@ -3,16 +3,16 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2016 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
 
 namespace Proximum\Vimeet\Application\Command\Unavailability;
 
-use Proximum\Vimeet\Application\Exception\Unavailability\CanNotCreateUnavailabilityException;
 use Proximum\Vimeet\Application\Event\Events;
 use Proximum\Vimeet\Application\Event\Unavailability\AddUnavailabilityEvent;
+use Proximum\Vimeet\Application\Exception\Unavailability\CanNotCreateUnavailabilityException;
 use Proximum\Vimeet\Application\Exception\Unavailability\CanNotMergeUnavailabilityWithANotCreatedByUserUnavailabilityException;
 use Proximum\Vimeet\Application\Exception\Unavailability\NoParticipantSelectedException;
 use Proximum\Vimeet\Application\Exception\Unavailability\ParticipantsSelectedWithMeetingOrHappeningException;
@@ -119,8 +119,9 @@ class CreateHandler
      * @param \DateTimeInterface $end
      * @param null|string        $message
      *
-     * @return Unavailability
      * @throws CanNotMergeUnavailabilityWithANotCreatedByUserUnavailabilityException
+     *
+     * @return Unavailability
      */
     private function getUnavailabilityForParticipant(
         Participant $participant,

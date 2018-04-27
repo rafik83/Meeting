@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2015 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -123,7 +123,7 @@ class ParticipantController extends Controller
             $updateProfile = new UpdateProfile($profileTemplate, $participant, $locale, $data, $user);
             $this->get('tactician.commandbus')->handle($updateProfile);
 
-            if ($preUpdateView->preUpdateState === PreUpdateHandler::MOBILE_VALIDATION_NEEDED) {
+            if (PreUpdateHandler::MOBILE_VALIDATION_NEEDED === $preUpdateView->preUpdateState) {
                 return $this->redirectToRoute('event_user_phone_validate', [
                     'sheet'       => $sheet->getId(),
                     'participant' => $participant->getId(),

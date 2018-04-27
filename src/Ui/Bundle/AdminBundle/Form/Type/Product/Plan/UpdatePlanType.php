@@ -3,13 +3,12 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2016 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
 
 namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Product\Plan;
-
 
 use Proximum\Vimeet\Application\Command\Product\Plan\UpdatePlan;
 use Proximum\Vimeet\Domain\Model\Event;
@@ -36,13 +35,13 @@ class UpdatePlanType extends AbstractUpdateType
                 'required' => false,
                 'attr'     => [
                     'min' => 0,
-                ]
+                ],
             ])
             ->add('availabilityMax', IntegerType::class, [
                 'required' => false,
                 'attr'     => [
                     'min' => 0,
-                ]
+                ],
             ])
             ->add('file', FileType::class, [
                 'required' => false,

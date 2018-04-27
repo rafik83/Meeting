@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2015 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -279,11 +279,11 @@ class UserRepository implements UserRepositoryInterface
         }
 
         if (!empty($filter['types'])) {
-            if (empty($filter['participation']) || $filter['participation'] === FilterType::FILTER_WITH_SHEET) {
+            if (empty($filter['participation']) || FilterType::FILTER_WITH_SHEET === $filter['participation']) {
                 $queryBuilder
                     ->andWhere('sheet.type IN (:types) OR sheet.type IS NULL AND userEvent.type IN (:types)')
                     ->setParameter('types', $filter['types']);
-            } elseif ($filter['participation'] === FilterType::FILTER_WITHOUT_SHEET) {
+            } elseif (FilterType::FILTER_WITHOUT_SHEET === $filter['participation']) {
                 $queryBuilder
                     ->andWhere('userEvent.type IN (:types)')
                     ->setParameter('types', $filter['types']);
@@ -323,7 +323,7 @@ class UserRepository implements UserRepositoryInterface
             ->join('participant.sheet', 'sheet', 'WITH', 'sheet.event = :event')
             ->andWhere(
                 'NOT EXISTS (
-                    SELECT m.id FROM '. MassAssignment::class . ' m
+                    SELECT m.id FROM ' . MassAssignment::class . ' m
                     WHERE m.mass = :mass AND m.user = user
                 )'
             )

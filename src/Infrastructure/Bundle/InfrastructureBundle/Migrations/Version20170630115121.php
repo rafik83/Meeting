@@ -1,5 +1,13 @@
 <?php
 
+/*
+ * This file is part of the Proximum Vimeet project.
+ *
+ * Copyright (C) Proximum
+ *
+ * @author Elao <contact@elao.com>
+ */
+
 namespace Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Migrations;
 
 use Doctrine\DBAL\Migrations\AbstractMigration;
@@ -16,7 +24,7 @@ class Version20170630115121 extends AbstractMigration
      */
     public function up(Schema $schema)
     {
-        $this->abortIf($this->connection->getDatabasePlatform()->getName() != 'mysql', 'Migration can only be executed safely on \'mysql\'.');
+        $this->abortIf('mysql' != $this->connection->getDatabasePlatform()->getName(), 'Migration can only be executed safely on \'mysql\'.');
 
         $this->addSql('CREATE TABLE catalog_visibility (id INT AUTO_INCREMENT NOT NULL, event_id INT NOT NULL, UNIQUE INDEX catalog_visibility_event (event_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE = InnoDB');
         $this->addSql('CREATE TABLE catalog_visibility_types (catalog_visibility_id INT NOT NULL, type_id INT NOT NULL, INDEX IDX_EAB45ECACBF8E70D (catalog_visibility_id), INDEX IDX_EAB45ECAC54C8C93 (type_id), PRIMARY KEY(catalog_visibility_id, type_id)) DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE = InnoDB');
@@ -37,7 +45,7 @@ class Version20170630115121 extends AbstractMigration
      */
     public function down(Schema $schema)
     {
-        $this->abortIf($this->connection->getDatabasePlatform()->getName() != 'mysql', 'Migration can only be executed safely on \'mysql\'.');
+        $this->abortIf('mysql' != $this->connection->getDatabasePlatform()->getName(), 'Migration can only be executed safely on \'mysql\'.');
 
         $this->addSql('ALTER TABLE catalog_visibility_types DROP FOREIGN KEY FK_EAB45ECACBF8E70D');
         $this->addSql('ALTER TABLE catalog_visibility_categories DROP FOREIGN KEY FK_AA20C193CBF8E70D');

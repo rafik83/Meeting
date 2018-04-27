@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2017 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -11,8 +11,8 @@
 namespace Proximum\Vimeet\Application\Query\Planner;
 
 use Proximum\Vimeet\Application\View\Planner\SheetView;
-use Proximum\Vimeet\Application\View\Planner\SpotView;
 use Proximum\Vimeet\Application\View\Planner\SlotView;
+use Proximum\Vimeet\Application\View\Planner\SpotView;
 use Proximum\Vimeet\Domain\Repository\SpotRepositoryInterface;
 
 class SpotViewQueryHandler
@@ -58,7 +58,7 @@ class SpotViewQueryHandler
                 foreach ($spot->getSheets() as $sheet) {
                     $sheetView = $this->getSheetById($sheet->getId());
 
-                    if ($sheetView !== null) {
+                    if (null !== $sheetView) {
                         $sheetsList[] = $sheetView;
                     }
                 }
@@ -76,7 +76,7 @@ class SpotViewQueryHandler
             foreach ($unavailabilities as $unavailability) {
                 $slotView = $this->getSlotById($unavailability->getSlot()->getId());
 
-                if ($slotView !== null) {
+                if (null !== $slotView) {
                     $unavailabilityViews[] = $slotView;
                 }
             }

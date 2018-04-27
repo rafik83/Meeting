@@ -3,22 +3,22 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2016 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
 
 namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Billing;
 
+use Proximum\Vimeet\Application\Command\Billing\UpdateInfo;
 use Proximum\Vimeet\Domain\Template\TemplateObject\Gender;
+use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Library\TelephoneType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\CountryType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use Proximum\Vimeet\Application\Command\Billing\UpdateInfo;
-use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Library\TelephoneType;
 
 class UpdateInfoType extends AbstractType
 {
@@ -51,7 +51,7 @@ class UpdateInfoType extends AbstractType
             ->add('vatNumber', TextType::class, ['required' => false])
             ->add('reference', TextType::class, [
                 'required' => false,
-                'placeholder' => 'form.billing_info_update.children.reference.placeholder'
+                'placeholder' => 'form.billing_info_update.children.reference.placeholder',
             ])
         ;
     }

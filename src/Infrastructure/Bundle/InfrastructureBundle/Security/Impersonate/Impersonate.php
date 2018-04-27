@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2015 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -93,8 +93,9 @@ class Impersonate
      * @param string $provider
      * @param string $token
      *
-     * @return UserInterface
      * @throws \Exception
+     *
+     * @return UserInterface
      */
     private function getUserByProvider($provider, $token)
     {
@@ -102,9 +103,9 @@ class Impersonate
 
         $this->checkToken($decodedToken);
 
-        if ($provider === 'user') {
+        if ('user' === $provider) {
             return $this->userProvider->loadUserByUsername($decodedToken['to']);
-        } elseif ($provider === 'admin') {
+        } elseif ('admin' === $provider) {
             return $this->adminProvider->loadUserByUsername($decodedToken['from']);
         }
 
@@ -132,8 +133,9 @@ class Impersonate
     /**
      * @param string $token
      *
-     * @return array
      * @throws \Exception
+     *
+     * @return array
      */
     private function decodeToken($token)
     {

@@ -23,8 +23,8 @@ class BatchAcceptHandler
     private $batchJobQueue;
 
     /**
-     * @param SheetRepositoryInterface  $sheetRepository
-     * @param BatchJobQueueInterface    $batchJobQueue
+     * @param SheetRepositoryInterface $sheetRepository
+     * @param BatchJobQueueInterface   $batchJobQueue
      */
     public function __construct(
         SheetRepositoryInterface $sheetRepository,

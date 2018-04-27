@@ -78,9 +78,9 @@ class UpdateAction
      * @param Tip           $tip
      * @param UserInterface $admin
      *
-     * @return Response
-     *
      * @throws AccessDeniedException
+     *
+     * @return Response
      */
     public function __invoke(Request $request, Event $event, Tip $tip, UserInterface $admin): Response
     {
