@@ -120,7 +120,9 @@ admin.availabilityTimeRange.create.title: 'Create a range of availabilities'
 admin.availabilityTimeRange.list.column.begin: Start
 admin.availabilityTimeRange.list.column.end: End
 admin.availabilityTimeRange.list.column.name: 'Backoffice label'
+admin.availabilityTimeRange.list.column.products: 'Related products'
 admin.availabilityTimeRange.list.title: 'List of availability ranges'
+admin.availabilityTimeRange.view.noProductAssigned: 'No related product'
 admin.batch_actions.confirm: 'Confirm the action ?'
 admin.batch_actions.generateInvoice.confirm: 'Do you confirm the action of generating  invoices with the following formula : %prefix% ?'
 admin.batch_actions.plural: 'Batch actions on %count% items'
@@ -230,8 +232,12 @@ admin.extraParameter.type.comexposium_sso_salon: 'Comexposium SSO event'
 admin.extraParameter.type.comexposium_sso_session_salon: 'Comexposium SSO event session'
 admin.extraParameter.type.comexposium_visitor_type_id: 'Comexposium: concerned Visitor participation type id'
 admin.extraParameter.type.leni_event: 'LENI event code'
+admin.extraParameter.type.leni_get_endpoint: 'LENI Get endpoint'
+admin.extraParameter.type.leni_mode: 'LENI Mode'
 admin.extraParameter.type.leni_participation_data_mapping: 'LENI fields mapping'
 admin.extraParameter.type.leni_participation_types_mapping: 'LENI participation types mapping'
+admin.extraParameter.type.leni_save_endpoint: 'LENI Save endpoint'
+admin.extraParameter.type.leni_sending_request: 'LENI SendingRequests Parameter'
 admin.extraParameter.type.leni_user: 'LENI user code'
 admin.extraParameter.type.vianeo_concerned_types_id: 'Vianeo concerned types id'
 admin.extraParameter.type.vianeo_endpoint: 'Vianeo endpoint'
@@ -296,7 +302,6 @@ admin.happening.export.fields.question: Question
 admin.happening.export.fields.sheet_id: 'Sheet ID'
 admin.happening.export.fields.sheet_name: 'Sheet title'
 admin.happening.link: Conferences
-admin.happening.products.tooltip: 'Link to products'
 admin.happening.list.begin: Beginning
 admin.happening.list.category: Category
 admin.happening.list.end: End
@@ -308,6 +313,8 @@ admin.happening.list.speaker: speakers
 admin.happening.list.title: Title
 admin.happening.menu.link: Program
 admin.happening.private: Private
+admin.happening.products: 'This under-event is related to the following products'
+admin.happening.products.tooltip: 'Link to products'
 admin.happening.title: Conferences
 admin.happening.update: Modify
 admin.happening.updateTitle: 'Conference update'
@@ -616,7 +623,10 @@ admin.product.availabilityCurrentMax: 'Current/max availability'
 admin.product.bought: 'number of bought products'
 admin.product.buyableUntil: 'Buyable until'
 admin.product.deletableUntil: 'deletable until'
+admin.product.happenings.tooltip: 'Linked to under-events'
+admin.product.hasAvailabilityTimeRanges: 'Subject to availability ranges'
 admin.product.id: Id
+admin.product.isAttributable: 'Product attributable to participants'
 admin.product.link: 'Products catalogue'
 admin.product.name: Name
 admin.product.quantityMax: 'max quantity'
@@ -694,6 +704,8 @@ admin.sheet.attend.info.numberOfMeetings: 'there are no scheduled meetings on th
 admin.sheet.attend.title: 'update the sheet attend %sheetTitle%'
 admin.sheet.batch.allSelected.label: 'All the <strong>%sheets%</strong> sheets of the event are selected'
 admin.sheet.batch.cancelSelection.label: 'Cancel the whole selection'
+admin.sheet.batch.printPlanning: 'Printing schedule'
+admin.sheet.batch.printPlanningOrderBy: 'Order of export schedules'
 admin.sheet.batch.selection.label: 'The<strong>%sheets%</strong> sheets of this page are selected'
 admin.sheet.batch.selectionAll.label: 'Select the <strong>%allSheets%</strong> sheets corresponding to your filters'
 admin.sheet.category: Category
@@ -858,6 +870,7 @@ admin.spot.active.no: 'No'
 admin.spot.active.yes: 'Yes'
 admin.spot.batch_create.title: 'Add spots per batch'
 admin.spot.batch_unavailability.title: 'create spots unavailabilities'
+admin.spot.commexposium.export.title: 'Retrieve and export in .csv format Comexposium locations'
 admin.spot.configure_dates: 'key dates'
 admin.spot.createSpot.title: 'Add a spot'
 admin.spot.delete: Delete
@@ -1215,6 +1228,7 @@ form.sheet_filter.children.order.totalEqualZero.label: 'total equal to zero'
 form.sheet_filter.children.order.totalSuperiorZero.label: 'Total Superior to zero'
 gdr.user.agenda.version.modal.button.notify: 'notify by sms'
 gdr.user.agenda.version.modal.button.purge: 'hyde the difference whitout notifying'
+gdr.user.agenda.version.modal.fail_to_send_sms: 'Unable to send SMS, OVH service does not respond'
 gdr.user.agenda.version.modal.no_diff: 'there''s no modification in this person''s planning'
 gdr.user.agenda.version.modal.no_phone: 'The user has not accepted to receive notifications'
 gdr.user.agenda.version.modal.title: 'Notify the planning modifications'

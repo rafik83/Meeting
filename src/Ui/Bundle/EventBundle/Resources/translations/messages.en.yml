@@ -154,6 +154,7 @@ happening.participate.detail: detail
 happening.participate.full: full
 happening.participate.noParticipantSelected: 'no participant selected'
 happening.participate.notEnoughtRemainingParticipations: '{0} no more available place|{1} one available place remaining|]1,Inf[ there are only %remaining% places available'
+happening.participate.participantMustHaveProductToParticipate: 'An option is required to participate in this event.'
 happening.participate.participantNotAvailable: 'At least one of the selected participants is not available'
 happening.participate.participantNotFound: 'participant not found'
 happening.participate.wrongInvitationCode: 'wrong invitation code'
