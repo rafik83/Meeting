@@ -180,6 +180,7 @@ trans-pr:
 	read -p "Are you on master branch and you have Hub (github) installed (y/n)?" CONFIRM; \
 	if [ "$$CONFIRM" = "y" ]; then \
 	  vagrant ssh -- "cd /srv/app && make trans-sync"; \
+	  git branch -D update-translations; \
 	  git checkout -b update-translations; \
 	  git add .; \
 	  git commit -m "Update translations"; \
