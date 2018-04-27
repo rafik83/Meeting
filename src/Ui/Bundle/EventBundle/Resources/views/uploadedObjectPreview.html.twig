@@ -1,10 +1,10 @@
 {% set uploadObject = child.vars.value %}
 {% if uploadObject.data.path is defined and uploadObject.data.path is not empty and uploadObject.file is defined %}
     <a href="{{ asset(uploadObject.data.path) }}" download>
+        {% if uploadObject.data.extension in constant('Proximum\\Vimeet\\Domain\\MimeType\\MimeType::IMAGE_EXTENSIONS') %}
+            <img class="center-block" src="{{ asset(uploadObject.data.path)|imagine_filter('upload_object') }}"/>
+        {% endif %}
         <i class="glyphicon glyphicon-download"></i>
         {{ 'common.download'|trans }}
     </a>
-    {% if uploadObject.data.extension in constant('Proximum\\Vimeet\\Domain\\MimeType\\MimeType::IMAGE_EXTENSIONS') %}
-        <img class="center-block" src="{{ asset(uploadObject.data.path)|imagine_filter('upload_object') }}"/>
-    {% endif %}
 {% endif %}
