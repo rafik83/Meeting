@@ -1,6 +1,6 @@
 @event @package @product
-Feature: Buy participant with from the funnel
-  I need to be able to buy participants
+Feature: Select participants for attributable product
+  I need to be able to buy product with participants to select
 
   Scenario: I can buy a attributable product
     Given the database is purged
@@ -15,13 +15,13 @@ Feature: Buy participant with from the funnel
     And this plan includes this product participant 1 times
     And there is a planning called "Planning meetings" with a price of "39"
     And this product planning is assigned to this package
-    And there is a sheet for this type with the title "Proximum Group"
-    And the user "user1@example.net" is created
+    And there is a sheet for this type with the title "Star Fleet"
+    And the user "kirk@example.net" is created
     And there is a participant for this sheet and this user
-    And the user "user2@example.net" is created
+    And the user "spock@example.net" is created
     And there is a participant for this sheet and this user
-    And I am logged with "user@example.net" on event "http://super-event.vimeet.proximum"
-    When I go to this page "/fr/sheet"
+    When I am logged with "kirk@example.net" on event "http://super-event.vimeet.proximum"
+    And I go to this page "/fr/sheet"
     Then I should be on this page "/fr/sheet/1"
     When I go to this page "/fr/sheet/1/package/step/1"
     Then I should see "Formule premium"
@@ -31,7 +31,7 @@ Feature: Buy participant with from the funnel
     And I should see "Pass one day"
     When I select "Pass one day" from "participant_and_planning_1"
     And I select "Pass one day" from "participant_and_planning_2"
-    And I fill in "participant_and_planning[planningQuantity]" with "2"
+    And I fill in "participant_and_planning[planningQuantity][quantity]" with "2"
     And I press "package.participant_planning.validate"
     Then I should be on this page "/fr/sheet/1/package/step/3"
     When I press "package.product.validate"
@@ -59,32 +59,4 @@ Feature: Buy participant with from the funnel
     Then I should be on this page "/fr/sheet/1/package/payment"
     When I check the "form.payment_choice.children.paymentMode.bank_check" radio
     And I press "package.payment.pay.label"
-    And I press "package.payment.pay.label"
-    Then I should be on this page "/fr/sheet/1/package/payment"
-
-  Scenario: I can buy a participant "Pass Jour 3"
-    Given I am logged with "user@example.net" on event "http://super-event.vimeet.proximum"
-    And I go to this page "/fr/sheet/1/package/step/1"
-    Then I should see "package.participant.add"
-    And I follow "package.participant.add"
-    And I should see "Pass Jour 1"
-    And I should see "package.product.notAvailable"
-    And I should see "Pass Jour 3"
-    Then I fill in the following:
-      | email | user-2@example.net |
-    And I press "sheet.participant.sendInvite"
-    Then I should be on this page "/fr/sheet/1/package/step/1"
-    And I should see "validators.participant.mustSelectProduct"
-    Then I fill in the following:
-      | email | user-2@example.net |
-    And I select "0" from "add_participant[product]"
-    # Pass Jour 3
-    And I press "sheet.participant.sendInvite"
-    And I should be on this page "/fr/sheet/1/package/step/1"
-    Then I press "package.participant_planning.validate"
-    And I should be on this page "/fr/sheet/1/package/step/2"
-    And I press "package.product.validate"
-    Then I should be on this page "/fr/sheet/1/package/summary"
-    And I should see "Pass Jour 3"
-    And I should not see "Pass Jour 1"
-    And I should not see "Formule Jumbo"
+    Then I should be on this page "/fr/sheet/1/orders"
