@@ -44,7 +44,7 @@ AjaxAutocomplete.prototype.initSelect = function (callback) {
         delay: 250,
         minimumInputLength: this.element.getAttribute('data-minimum-input-length'),
         placeholder: this.parentInput.getAttribute('data-placeholder'),
-        tokenSeparators: [','],
+        tokenSeparators: ['|'],
         width: 'resolve',
         closeOnSelect: true,
         language: {
@@ -127,7 +127,7 @@ AjaxAutocomplete.prototype.updateParentInput = function () {
                 return tag.text;
             }
         }
-    ).join(',');
+    ).join('|');
 
     this.parentInput.value = tags.toString();
     var htmlEvent = document.createEvent('HTMLEvents');
@@ -141,7 +141,7 @@ AjaxAutocomplete.prototype.prefill = function () {
         return;
     }
 
-    var requestFilters = this.parentInput.value.split(',');
+    var requestFilters = this.parentInput.value.split('|');
 
     requestFilters.forEach(function (filter) {
         var option = '<option selected="selected" value="' + filter + '">' + filter + '</option>';

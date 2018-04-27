@@ -38,7 +38,6 @@ require('babel-polyfill');
 function init (target) {
     // always first one in order to avoid collision
     [].forEach.call(target.querySelectorAll('.select2'), function (element) {
-        console.log('select2', element);
         $(element).select2({
             language: {
                 noResults: function () {
