@@ -929,7 +929,7 @@ form.transaction.children.transaction_mode.bank_check: Cheque
 form.transaction.children.transaction_mode.bank_transfer: Transfer
 form.transaction.children.transaction_mode.paypal: Paypal
 form.type_create.children.hidden.label: hidden
-form.type_create.children.package.label: 'Package of participation template'
+form.type_create.children.package.label: 'Registration package template'
 form.type_create.children.rank.label: rank
 form.type_create.children.registrationTemplate.label: 'registration template'
 form.type_create.children.sheetTemplate.label: 'presentation template'
@@ -963,7 +963,7 @@ form.type_template.registration.organizer: 'my registration templates'
 form.type_template.sheet.base: 'basic participation template'
 form.type_template.sheet.organizer: 'my participation templates'
 form.type_update.children.hidden.label: hidden
-form.type_update.children.package.label: 'Package of participation template'
+form.type_update.children.package.label: 'Registration package template'
 form.type_update.children.rank.label: rank
 form.type_update.children.registrationTemplate.label: 'registration template'
 form.type_update.children.sheetTemplate.label: 'sheet template'
