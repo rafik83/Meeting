@@ -527,13 +527,13 @@ admin.package.duplicate: Duplicate
 admin.package.duplicate.title: 'Duplicate the package %title%'
 admin.package.import.link: 'Import packages and products catalogue'
 admin.package.import.title: 'Import packages and products catalogue of an event'
-admin.package.link: 'Package of participation template'
+admin.package.link: 'Registration package template'
 admin.package.steps.step1.label: packages
 admin.package.steps.step2.label: 'Participants and plannings'
 admin.package.steps.step3.label: options
 admin.package.table.column.event: Event
 admin.package.table.column.title: Title
-admin.package.title: 'Package of participation template'
+admin.package.title: 'Registration package template'
 admin.package.update: Modify
 admin.participant_import_mapping.title: 'Compliance between columns of the file and fields of the registration'
 admin.participant_import_result.created_sheets: 'Number of imported sheets'
