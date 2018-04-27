@@ -240,7 +240,7 @@ prod-iso-master:
 	git pull origin master
 	git branch -D prod
 	git checkout -b prod
-	git push origin prod
+	git push origin prod -f
 
 ##########
 # Custom #
