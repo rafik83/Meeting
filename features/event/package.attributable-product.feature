@@ -2,7 +2,7 @@
 Feature: Select participants for attributable product
   I need to be able to buy product with participants to select
 
-  Scenario: I can buy a attributable product
+  Scenario: I can buy an attributable product
     Given the database is purged
     And the event "Super Event" is created
     And there is a type in this event
@@ -15,6 +15,9 @@ Feature: Select participants for attributable product
     And this plan includes this product participant 1 times
     And there is a planning called "Planning meetings" with a price of "39"
     And this product planning is assigned to this package
+    And there is an attributable option called "Gala dinner" with a price of "139"
+    And there is an attributable option called "Conference pass" with a quantity max of "1" and a price of "50"
+    And these options are assigned to this package
     And there is a sheet for this type with the title "Star Fleet"
     And the user "kirk@example.net" is created
     And there is a participant for this sheet and this user
@@ -34,26 +37,26 @@ Feature: Select participants for attributable product
     And I fill in "participant_and_planning[planningQuantity][quantity]" with "2"
     And I press "package.participant_planning.validate"
     Then I should be on this page "/fr/sheet/1/package/step/3"
-    When I press "package.product.validate"
+    And I should see "Gala dinner"
+    And I should see "Conference pass"
+    # Gala dinner
+    When I select "0" from "options[4][participants][]"
+    And I additionally select "1" from "options[4][participants][]"
+    # Conference pass
+    When I select "0" from "options[5][participants][]"
+    And I additionally select "1" from "options[5][participants][]"
+    And I press "package.product.validate"
+    Then I should be on this page "/fr/sheet/1/package/step/3"
+    And I should see "form.options.selectParticipantsQuantityMax.label"
+    When I select "0" from "options[5][participants][]"
+    And I press "package.product.validate"
     Then I should be on this page "/fr/sheet/1/billing-info"
-    When I check the "gender.man" radio
-    And I fill in the following:
-      | form.billing_info_update.children.lastname.label  | Jean         |
-      | form.billing_info_update.children.firstname.label | Test         |
-      | form.billing_info_update.children.function.label  | DG           |
-      | form.billing_info_update.children.phone.label     | +33456789    |
-      | form.billing_info_update.children.mobile.label    | +33456789    |
-      | form.billing_info_update.children.email.label     | jean@test.fr |
-      | form.billing_info_update.children.company.label   | ELAO-TEST    |
-      | form.billing_info_update.children.street.label    | 10 Rue test  |
-      | form.billing_info_update.children.zipcode.label   | 75002        |
-      | form.billing_info_update.children.city.label      | PARIS        |
-      | form.billing_info_update.children.country.label   | FR           |
-      | form.billing_info_update.children.vatNumber.label | 123456789    |
+    When I fill my billing informations
     And I press "form.billing_info_update.children.submit.label"
     Then I should be on this page "/fr/sheet/1/package/summary"
     And I should see "Formule premium"
     And I should see "Pass one day"
+    And I should see "Gala dinner"
     When I check "form.package_summary_terms_of_sale.children.termsOfSale.label"
     And I press "package.summary.pay"
     Then I should be on this page "/fr/sheet/1/package/payment"
