@@ -1,9 +1,9 @@
 <?php
 
 /*
- * This file is part of the Proximum Vimeet website.
+ * This file is part of the Proximum Vimeet project.
  *
- * Copyright © Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -39,7 +39,7 @@ class CreateHandler
      */
     public function handle(Create $command)
     {
-        $filter   = function ($value) { return $value !== null && $value !== ''; };
+        $filter   = function ($value) { return null !== $value && '' !== $value; };
         $campaign = new Campaign($command->event, $command->name, array_filter($command->filters, $filter), new \DateTimeImmutable());
 
         foreach ($this->sheetRepository->getSheetsById($command->sheetIds) as $sheet) {

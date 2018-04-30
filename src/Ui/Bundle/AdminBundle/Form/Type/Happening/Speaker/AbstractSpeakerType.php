@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2015 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -31,7 +31,7 @@ abstract class AbstractSpeakerType extends AbstractType
             ->add('lastname', TextType::class, ['required' => true])
             ->add('translations', CollectionType::class, [
                 'entry_type' => SpeakerTranslationType::class,
-                'required'   => true
+                'required'   => true,
             ])
             ->add('organization', TextType::class, ['required' => true])
             ->add('logo', FileType::class, ['required' => false])

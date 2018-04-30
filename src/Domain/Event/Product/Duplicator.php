@@ -12,8 +12,8 @@ namespace Proximum\Vimeet\Domain\Event\Product;
 
 use Proximum\Vimeet\Domain\Event\DuplicatorDataStorage;
 use Proximum\Vimeet\Domain\Model\Event;
-use Proximum\Vimeet\Domain\Repository\ProductRepositoryInterface;
 use Proximum\Vimeet\Domain\Product\Duplicator as ProductDuplicator;
+use Proximum\Vimeet\Domain\Repository\ProductRepositoryInterface;
 
 class Duplicator
 {

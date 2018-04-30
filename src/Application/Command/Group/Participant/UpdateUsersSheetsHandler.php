@@ -74,9 +74,9 @@ class UpdateUsersSheetsHandler
     /**
      * @param UpdateUsersSheets $updateUsersSheets
      *
-     * @return UpdateUsersSheetsResultView[]
-     *
      * @throws \DomainException
+     *
+     * @return UpdateUsersSheetsResultView[]
      */
     public function handle(UpdateUsersSheets $updateUsersSheets)
     {

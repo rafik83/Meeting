@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2015 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -84,7 +84,6 @@ class FilteredQueryBuilder extends QueryBuilder
                 ->andWhere('spot.reference LIKE :reference')
                 ->setParameter('reference', '%' . $filter['reference'] . '%')
             ;
-
         }
     }
 

@@ -1,9 +1,9 @@
 <?php
 
 /*
- * This file is part of the vimeet project.
+ * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2017 vimeet
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -93,8 +93,9 @@ class TransformRequestIntoMeetingHandler
     /**
      * @param TransformRequestIntoMeeting $query
      *
-     * @return Meeting
      * @throws CannotBeTransformIntoMeetingOnDdayException
+     *
+     * @return Meeting
      */
     public function handle(TransformRequestIntoMeeting $query): Meeting
     {
@@ -151,7 +152,7 @@ class TransformRequestIntoMeetingHandler
 
         $availableMeetings = $this->buildAvailableMeetings($fromSheet, $toSheet);
 
-        if (count($availableMeetings) === 0) {
+        if (0 === count($availableMeetings)) {
             throw new CannotBeTransformIntoMeetingOnDdayException();
         }
 
@@ -407,15 +408,15 @@ class TransformRequestIntoMeetingHandler
             $fromSheetHasNoPreference,
             $toSheetHasNoPreference
         );
-
     }
 
     /**
      * @param Event                  $event
      * @param AvailableMeetingView[] $availableMeetings
      *
-     * @return AvailableMeetingView
      * @throws CannotBeTransformIntoMeetingOnDdayException
+     *
+     * @return AvailableMeetingView
      */
     private function getTransformableMeeting(Event $event, array $availableMeetings): AvailableMeetingView
     {

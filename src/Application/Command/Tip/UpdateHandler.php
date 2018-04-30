@@ -31,7 +31,7 @@ class UpdateHandler
         $this->tipRepository = $tipRepository;
         $this->dateTime = $dateTime;
     }
-    
+
     /**
      * @param Update $command
      */

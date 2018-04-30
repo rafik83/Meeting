@@ -1358,8 +1358,15 @@ services:
             - '@vimeet_infrastructure.repository.participant_repository'
             - '@account.synchronizer'
             - '@vimeet_infrastructure.adapter.delayed_event_dispatcher'
+            - '@command.participant.upload_file_handler'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Participant\UpdateProfile }
+    command.participant.upload_file_handler:
+        class: Proximum\Vimeet\Application\Command\Participant\Upload\UploadFileHandler
+        arguments:
+            - '@adapter.local_file_storage'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Participant\Upload\UploadFile }
     command.participant.update_avatar_handler:
         class: Proximum\Vimeet\Application\Command\Participant\UpdateAvatarHandler
         arguments:
@@ -1497,6 +1504,7 @@ services:
             - '@vimeet_infrastructure.repository.sheet_repository'
             - '@account.synchronizer'
             - '@vimeet_infrastructure.adapter.delayed_event_dispatcher'
+            - '@command.participant.upload_file_handler'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Participant\UpdateCompany }
     command.nomenclature.create_handler:

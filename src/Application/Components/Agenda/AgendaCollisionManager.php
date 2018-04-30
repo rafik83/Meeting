@@ -71,7 +71,7 @@ class AgendaCollisionManager
             $this->meetingViews,
             $this->happeningViews,
             $this->unavailabilityViews,
-            $this->massViews
+            $this->massViews,
         ];
     }
 
@@ -145,7 +145,7 @@ class AgendaCollisionManager
     }
 
     /**
-     * @param int $arrayKey
+     * @param int                      $arrayKey
      * @param AbstractTimeEntityView[] $array
      */
     private function removeArrayElement(int $arrayKey, array &$array)
@@ -173,11 +173,11 @@ class AgendaCollisionManager
      *
      * @return bool
      */
-    private function doesFirstFinishAfterSecondBeginAndFinishBeforeSecondEnd (
+    private function doesFirstFinishAfterSecondBeginAndFinishBeforeSecondEnd(
         AbstractTimeEntityView $firstTimeEntity,
         AbstractTimeEntityView $secondTimeEntity
     ): bool {
-       return $firstTimeEntity->getEnd() > $secondTimeEntity->getBegin()
+        return $firstTimeEntity->getEnd() > $secondTimeEntity->getBegin()
             && $firstTimeEntity->getEnd() <= $secondTimeEntity->getEnd();
     }
 
@@ -187,7 +187,7 @@ class AgendaCollisionManager
      *
      * @return bool
      */
-    private function doesFirstBeginBeforeAndFinishAfterSecond (
+    private function doesFirstBeginBeforeAndFinishAfterSecond(
         AbstractTimeEntityView $firstTimeEntity,
         AbstractTimeEntityView $secondTimeEntity
     ): bool {

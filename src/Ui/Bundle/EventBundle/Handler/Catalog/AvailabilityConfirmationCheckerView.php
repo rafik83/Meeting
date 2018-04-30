@@ -36,6 +36,6 @@ class AvailabilityConfirmationCheckerView
      */
     public function isAllowedToAccess(): bool
     {
-        return $this->type === self::ALLOWED_TO_ACCESS;
+        return self::ALLOWED_TO_ACCESS === $this->type;
     }
 }

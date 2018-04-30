@@ -1,9 +1,9 @@
 <?php
 
 /*
- * This file is part of the vimeet project.
+ * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2016 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -38,7 +38,7 @@ class AdminSheetAccessVoter extends Voter
      */
     protected function supports($attribute, $subject)
     {
-        return $attribute === 'PERMISSION_SHEET_ACCESS' && $subject instanceof Sheet;
+        return 'PERMISSION_SHEET_ACCESS' === $attribute && $subject instanceof Sheet;
     }
 
     /**

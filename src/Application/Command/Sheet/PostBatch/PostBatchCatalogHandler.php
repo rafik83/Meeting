@@ -1,9 +1,9 @@
 <?php
 
 /*
- * This file is part of the vimeet project.
+ * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2017 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -64,7 +64,7 @@ class PostBatchCatalogHandler
      */
     public function handle(PostBatchCatalog $command)
     {
-        $state = $command->state === BatchCatalogHandler::ADD_CATALOG;
+        $state = BatchCatalogHandler::ADD_CATALOG === $command->state;
 
         foreach ($command->sheets as $sheet) {
             // Disable/enable the requests

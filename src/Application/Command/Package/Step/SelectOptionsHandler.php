@@ -43,9 +43,9 @@ class SelectOptionsHandler
         Merger $merger,
         DelayedEventDispatcher $eventDispatcher
     ) {
-        $this->cartManager     = $cartManager;
-        $this->now             = $now;
-        $this->merger          = $merger;
+        $this->cartManager = $cartManager;
+        $this->now = $now;
+        $this->merger = $merger;
         $this->eventDispatcher = $eventDispatcher;
     }
 
@@ -54,9 +54,9 @@ class SelectOptionsHandler
      */
     public function handle(SelectOptions $selectOptions): void
     {
-        $sheet   = $selectOptions->sheet;
+        $sheet = $selectOptions->sheet;
         $package = $sheet->getPackage();
-        $cart    = $this->cartManager->getCart($sheet, $selectOptions->currentStep);
+        $cart = $this->cartManager->getCart($sheet, $selectOptions->currentStep);
 
         /** @var Product[] $options */
         $optionsById = [];
@@ -72,10 +72,19 @@ class SelectOptionsHandler
             $orderMerged = $this->merger->merge($sheet->getNotCancelledOrders());
         }
 
-        $attributableOptionsIncludedByProductId = $this->cartManager->getAttributableOptionsIncludedByProductId($cart, $orderMerged);
+        $attributableOptionsIncludedByProductId = $this->cartManager->getAttributableOptionsIncludedByProductId(
+            $cart,
+            $orderMerged
+        );
 
         foreach ($selectOptions->options as $id => $optionRow) {
-            $this->cartManager->updateOptionsQuantity($cart, $optionRow, $optionsById[$id], $orderMerged, $attributableOptionsIncludedByProductId);
+            $this->cartManager->updateOptionsQuantity(
+                $cart,
+                $optionRow,
+                $optionsById[$id],
+                $orderMerged,
+                $attributableOptionsIncludedByProductId
+            );
         }
 
         $this->cartManager->save($cart);

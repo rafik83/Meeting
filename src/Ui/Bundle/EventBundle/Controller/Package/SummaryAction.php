@@ -108,10 +108,10 @@ class SummaryAction
      * @param EventDomain $eventDomain
      * @param Sheet       $sheet
      *
-     * @return RedirectResponse|Response
-     *
      * @throws NotFoundHttpException
      * @throws AccessDeniedException
+     *
+     * @return RedirectResponse|Response
      */
     public function __invoke(Request $request, EventDomain $eventDomain, Sheet $sheet)
     {

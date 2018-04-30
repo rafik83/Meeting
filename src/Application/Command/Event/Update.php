@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2015 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -93,6 +93,6 @@ class Update extends AbstractEvent
         $eventBackgroundColor = $this->event->getConfiguration()->getBackgroundColor();
 
         return $this->backgroundColor !== $eventBackgroundColor
-            || ($this->backgroundImage !== null && $this->backgroundImage !== $eventBackgroundImage);
+            || (null !== $this->backgroundImage && $this->backgroundImage !== $eventBackgroundImage);
     }
 }

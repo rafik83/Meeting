@@ -15,7 +15,6 @@ use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Token\UserEventToken;
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Repository\Token\UserEventTokenRepositoryInterface;
-use Proximum\Vimeet\Domain\Token\UserEventTokenType;
 
 class UserEventTokenRepository implements UserEventTokenRepositoryInterface
 {

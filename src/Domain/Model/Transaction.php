@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2015 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -68,7 +68,7 @@ class Transaction
      * @var User|null
      */
     private $user;
-    
+
     /**
      * @var Payment|null
      */
@@ -85,7 +85,7 @@ class Transaction
      * @param Sheet              $sheet
      * @param float              $amount
      * @param \DateTimeInterface $date
-     * @param string             $mode one of Mode constants
+     * @param string             $mode      one of Mode constants
      * @param null|string        $reference
      * @param string             $state
      * @param string             $currency
@@ -225,7 +225,7 @@ class Transaction
     {
         return $this->currency;
     }
-    
+
     /**
      * @return null|Payment
      */
@@ -239,7 +239,7 @@ class Transaction
      */
     public function isPending()
     {
-        return $this->state === self::STATE_PENDING;
+        return self::STATE_PENDING === $this->state;
     }
 
     /**
@@ -247,7 +247,7 @@ class Transaction
      */
     public function isPaid()
     {
-        return $this->state === self::STATE_PAID;
+        return self::STATE_PAID === $this->state;
     }
 
     /**

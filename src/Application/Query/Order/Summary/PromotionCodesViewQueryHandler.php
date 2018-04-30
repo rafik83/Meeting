@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2016 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -40,7 +40,6 @@ class PromotionCodesViewQueryHandler
         $promotionCodesView = new PromotionCodesView();
 
         foreach ($order->getPromotionCodes() as $promotionCode) {
-            
             $promotionCodesView->addPromotionCode(
                 $this->promotionCodeViewQueryHandler->handle(
                     new PromotionCodeViewQuery(

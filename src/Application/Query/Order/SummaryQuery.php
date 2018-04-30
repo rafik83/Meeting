@@ -26,9 +26,9 @@ class SummaryQuery implements Query
     public $locale;
 
     /**
-     * @param Sheet   $sheet
-     * @param Order   $order
-     * @param string  $locale
+     * @param Sheet  $sheet
+     * @param Order  $order
+     * @param string $locale
      */
     public function __construct(Sheet $sheet, Order $order, $locale)
     {

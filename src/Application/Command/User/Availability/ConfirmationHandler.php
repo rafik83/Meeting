@@ -54,7 +54,7 @@ class ConfirmationHandler
             $command->user
         );
 
-        if ($availabilityConfirmation !== null) {
+        if (null !== $availabilityConfirmation) {
             return;
         }
 

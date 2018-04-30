@@ -1,9 +1,9 @@
 <?php
 
 /*
- * This file is part of the vimeet project.
+ * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2017 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -27,8 +27,8 @@ class TransformableRequest
         }
 
         // oneToOne meeting with no preference
-        if (($from->getParticipants()->count() === 1 && $request->hasNoPreference($from))
-            && ($to->getParticipants()->count() === 1 && $request->hasNoPreference($to))
+        if ((1 === $from->getParticipants()->count() && $request->hasNoPreference($from))
+            && (1 === $to->getParticipants()->count() && $request->hasNoPreference($to))
         ) {
             return true;
         }

@@ -110,12 +110,12 @@ class ImportController extends Controller
     {
         $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
 
-        $sample = "reference;size;meetingCapacity;seatCapacity;sheets;priority;active;visio
+        $sample = 'reference;size;meetingCapacity;seatCapacity;sheets;priority;active;visio
 A1;10;2;4;;1;1;0
 A2;4;3;10;;2;1;1
 A3;3;1;4;;2;0;0
 A4;20;2;4;1371;2;1;1
-A5;10;3;5;2114,7392;2;1;1";
+A5;10;3;5;2114,7392;2;1;1';
 
         return new CsvFileResponse($sample, 'spot-import-sample.csv');
     }

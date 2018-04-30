@@ -53,14 +53,15 @@ class PackageViewQueryHandler
     /**
      * @param PackageViewQuery $packageViewQuery
      *
-     * @return PackageView
      * @throws \Exception
+     *
+     * @return PackageView
      */
     public function handle(PackageViewQuery $packageViewQuery)
     {
         $canAddParticipant = false;
 
-        if ($packageViewQuery->currentStep->type === Step::TYPE_PLAN) {
+        if (Step::TYPE_PLAN === $packageViewQuery->currentStep->type) {
             $packageViewProducts = $this->plansViewQueryHandler->handle(
                 new PlansViewQuery(
                     $packageViewQuery->sheet->getEvent(),
@@ -68,7 +69,7 @@ class PackageViewQueryHandler
                     $packageViewQuery->locale
                 )
             );
-        } elseif ($packageViewQuery->currentStep->type === Step::TYPE_PARTICIPANT_PLANNING) {
+        } elseif (Step::TYPE_PARTICIPANT_PLANNING === $packageViewQuery->currentStep->type) {
             $packageViewProducts = $this->participantAndPlanningViewQueryHandler->handle(
                 new ParticipantAndPlanningViewQuery(
                     $packageViewQuery->sheet,

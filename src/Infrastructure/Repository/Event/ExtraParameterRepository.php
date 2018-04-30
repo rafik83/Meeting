@@ -70,7 +70,6 @@ class ExtraParameterRepository implements ExtraParameterRepositoryInterface
             ->setParameter('event', $event)
             ->setParameter('type', $type)
             ->setMaxResults(1);
-        ;
 
         return $queryBuilder->getQuery()->getOneOrNullResult();
     }

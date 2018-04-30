@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2016 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -30,9 +30,9 @@ class Options
     /**
      * Options constructor.
      *
-     * @param array     $labels
-     * @param bool      $enabled
-     * @param Group[]   $groups
+     * @param array   $labels
+     * @param bool    $enabled
+     * @param Group[] $groups
      */
     public function __construct(array $labels, $enabled, array $groups)
     {

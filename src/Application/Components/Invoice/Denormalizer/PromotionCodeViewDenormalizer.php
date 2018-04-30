@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of the vimeet project.
+ * This file is part of the Proximum Vimeet project.
  *
  * Copyright (C) Proximum
  *
@@ -50,7 +50,7 @@ class PromotionCodeViewDenormalizer implements DenormalizerInterface, Denormaliz
      */
     public function supportsDenormalization($data, $type, $format = null)
     {
-        return $type === PromotionCodeView::class
+        return PromotionCodeView::class === $type
             && isset($data['label'])
             && isset($data['description'])
             && isset($data['total'])

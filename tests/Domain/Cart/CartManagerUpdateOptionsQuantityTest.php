@@ -136,6 +136,40 @@ class CartManagerUpdateOptionsQuantityTest extends TestCase
         );
     }
 
+    public function testNotAttributableWithPreviousOrderedQuantity(): void
+    {
+        $this->cart->setProduct($this->product->reveal(), 1)->shouldBeCalled();
+        $this->product->isAttributable()->shouldBeCalled()->willReturn(false);
+        $this->product->getId()->shouldBeCalled()->willReturn(1337);
+
+        $row = $this->prophesize(Order\Row::class);
+        $row->getQuantity()->shouldBeCalled()->willReturn(1);
+
+        $order = $this->prophesize(Order::class);
+        $order->getRowByProductId(1337)->shouldBeCalled()->willReturn($row);
+
+        $cartManager = new CartManager(
+            $this->cartRowRepository->reveal(),
+            $this->cartStepRepository->reveal(),
+            $this->promotionCodeRowRepository->reveal(),
+            $this->orderMerger->reveal(),
+            $this->participantProductSetter->reveal(),
+            $this->productAttributedToParticipantRepository->reveal(),
+            $this->delayedEventDispatcher->reveal(),
+            $this->dateTime
+        );
+
+        $optionRow = new OptionRow(2, [], false);
+
+        $cartManager->updateOptionsQuantity(
+            $this->cart->reveal(),
+            $optionRow,
+            $this->product->reveal(),
+            $order->reveal(),
+            []
+        );
+    }
+
     public function testNotAttributable(): void
     {
         $this->cart->setProduct($this->product->reveal(), 0)->shouldBeCalled();

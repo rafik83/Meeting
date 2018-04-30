@@ -60,7 +60,6 @@ class MediaCollectionDataType extends AbstractType
     {
         /** @var MediaCollection $media */
         $media = $options['object'];
-
         $builder
             ->add('medias', CollectionType::class, [
                 'entry_type'    => MediaDataType::class,
@@ -68,7 +67,8 @@ class MediaCollectionDataType extends AbstractType
                     'label'       => false,
                     'collection'  => $options['data'],
                     'required'    => false,
-                    'placeholder' => $options['placeholder'],
+                    'linkPlaceholder' => $media->getLinkPlaceholder(),
+                    'titlePlaceholder' => $media->getTitlePlaceholder(),
                 ],
                 'allow_add'     => true,
                 'allow_delete'  => true,

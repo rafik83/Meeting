@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2015 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -202,7 +202,7 @@ class RequestRepository implements RequestRepositoryInterface
         // Condition
         $queryBuilder->receivedBy($sheet)->pending()->isEnabled();
 
-        if ($attending === true) {
+        if (true === $attending) {
             $queryBuilder->isFromAttending();
         }
 
@@ -446,7 +446,7 @@ class RequestRepository implements RequestRepositoryInterface
             if (!empty($filter['state'])) {
                 $filterState = $filter['state'];
 
-                if ($filterState === Request::STATE_PLANNED) {
+                if (Request::STATE_PLANNED === $filterState) {
                     $queryBuilder->filterPlanned();
                 } else {
                     $queryBuilder->filterByState($filterState);
@@ -458,7 +458,7 @@ class RequestRepository implements RequestRepositoryInterface
             }
         }
 
-        list ($results, $count) = $this->paginator->getResultsAndTotal($queryBuilder, $page, $limit, 'request', 'id');
+        list($results, $count) = $this->paginator->getResultsAndTotal($queryBuilder, $page, $limit, 'request', 'id');
 
         return new PaginatedResult(array_map(function (Request $request) {
             return new RequestView(
@@ -762,20 +762,20 @@ class RequestRepository implements RequestRepositoryInterface
         )';
         $stateCondition = '1 = 1';
 
-        if ($state !== null && in_array($state, Request::getAllStates())) {
+        if (null !== $state && in_array($state, Request::getAllStates())) {
             $stateCondition = sprintf("request.state = '%s'", $state);
         }
 
-        if ($type !== null) {
-            if ($type === Request::TYPE_REQUEST) {
+        if (null !== $type) {
+            if (Request::TYPE_REQUEST === $type) {
                 $typeCondition = '(fromSheet.id IN (:sheets) AND toSheet.id IN (:sheetsMet))';
-            } elseif ($type === Request::TYPE_PROPOSITION) {
+            } elseif (Request::TYPE_PROPOSITION === $type) {
                 $typeCondition = '(toSheet.id IN (:sheets) AND fromSheet.id IN (:sheetsMet))';
             }
         }
 
         // filter meeting request with fromParticipants or toParticipants empty
-        if ($user === FilterRequestView::NO_PREFERENCE) {
+        if (FilterRequestView::NO_PREFERENCE === $user) {
             $typeCondition = '(
                 (fromSheet.id IN (:sheets) AND toSheet.id IN (:sheetsMet)) AND fp.id IS NULL
                 OR
@@ -800,13 +800,13 @@ class RequestRepository implements RequestRepositoryInterface
             ;
         }
 
-        if ($user === FilterRequestView::NO_PREFERENCE) {
+        if (FilterRequestView::NO_PREFERENCE === $user) {
             $queryBuilder
                 ->leftJoin('request.fromParticipants', 'fp')
                 ->leftJoin('request.toParticipants', 'tp');
         }
 
-        if ($state === Request::STATE_PLANNED) {
+        if (Request::STATE_PLANNED === $state) {
             $queryBuilder->filterPlanned();
         }
 
@@ -831,13 +831,13 @@ class RequestRepository implements RequestRepositoryInterface
         }
 
         // Filter by state
-        if (!empty($filters['state']) && $filters['state'] != Meeting\Constant::FILTER_STATE_ALL) {
-            if ($filters['state'] === Meeting\Constant::FILTER_STATE_RECEIVE) {
+        if (!empty($filters['state']) && Meeting\Constant::FILTER_STATE_ALL != $filters['state']) {
+            if (Meeting\Constant::FILTER_STATE_RECEIVE === $filters['state']) {
                 $queryBuilder
                     ->andWhere('request.state = :state')
                     ->andWhere('request.to = :sheet')
                     ->setParameter('state', Meeting\Request::STATE_SENT);
-            } elseif ($filters['state'] === Meeting\Constant::FILTER_STATE_SENT) {
+            } elseif (Meeting\Constant::FILTER_STATE_SENT === $filters['state']) {
                 $queryBuilder
                     ->andWhere('request.from = :sheet')
                     ->andWhere('request.state = :state')
@@ -850,7 +850,7 @@ class RequestRepository implements RequestRepositoryInterface
         }
 
         // order by
-        if (empty($filters['orderBy']) || $filters['orderBy'] === Sheet\Constant::ORDER_BY_CREATED_AT) {
+        if (empty($filters['orderBy']) || Sheet\Constant::ORDER_BY_CREATED_AT === $filters['orderBy']) {
             $queryBuilder->orderBy('request.createdAt', 'DESC');
         }
 
@@ -879,9 +879,9 @@ class RequestRepository implements RequestRepositoryInterface
         }
 
         if (!empty($filters['availableSlot'])
-            && $filters['availableSlot'] !== Meeting\Constant::FILTER_AVAILABLE_SLOT_IDS_EVERYONE
-            && ($filters['availableSlot'] === Meeting\Constant::FILTER_AVAILABLE_SLOT_IDS_AVAILABLE
-                || ($filters['availableSlot'] === Meeting\Constant::FILTER_AVAILABLE_SLOT_IDS_SLOT
+            && Meeting\Constant::FILTER_AVAILABLE_SLOT_IDS_EVERYONE !== $filters['availableSlot']
+            && (Meeting\Constant::FILTER_AVAILABLE_SLOT_IDS_AVAILABLE === $filters['availableSlot']
+                || (Meeting\Constant::FILTER_AVAILABLE_SLOT_IDS_SLOT === $filters['availableSlot']
                     && !empty($filters['slot_id'])
                 )
             )

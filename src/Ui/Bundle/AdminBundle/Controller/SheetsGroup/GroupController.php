@@ -10,8 +10,8 @@
 
 namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\SheetsGroup;
 
-use Proximum\Vimeet\Application\Command\Sheet\Group\SearchUser;
 use Proximum\Vimeet\Application\Command\Sheet\Group\Create;
+use Proximum\Vimeet\Application\Command\Sheet\Group\SearchUser;
 use Proximum\Vimeet\Application\Command\Sheet\Group\Update;
 use Proximum\Vimeet\Application\Exception\Group\UserAlreadyGroupManagerOnSameEventException;
 use Proximum\Vimeet\Application\Exception\Group\UserAlreadyParticipantOrOwnerOnGroupOnSameEventException;
@@ -76,10 +76,10 @@ class GroupController extends Controller
      * @param Event   $event
      * @param User    $user
      *
-     * @return RedirectResponse|Response
-     *
      * @throws UserNotAllowedToManageGroupException
      * @throws AccessDeniedException
+     *
+     * @return RedirectResponse|Response
      */
     public function createAction(Request $request, Event $event, User $user)
     {
@@ -88,7 +88,7 @@ class GroupController extends Controller
 
         try {
             $this->get('user_to_group_manager_checker')->isUserToGroupManagerAllowed($event, $user);
-        } catch(UserAlreadyGroupManagerOnSameEventException $exception) {
+        } catch (UserAlreadyGroupManagerOnSameEventException $exception) {
             throw $this->createAccessDeniedException('User is not allowed to be manager');
         } catch (UserAlreadyParticipantOrOwnerOnGroupOnSameEventException $exception) {
             throw $this->createAccessDeniedException('User is not allowed to be manager');
@@ -130,7 +130,6 @@ class GroupController extends Controller
         $form = $this->createForm(UpdateType::class, $command);
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
-
             try {
                 $this->get('tactician.commandbus')->handle($command);
                 $this->addFlash('success', 'flash.admin.group.update.success');

@@ -1,9 +1,9 @@
 <?php
 
 /*
- * This file is part of the vimeet project.
+ * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2017 vimeet
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -78,7 +78,7 @@ class SMSNotifierEventSubscriber implements EventSubscriberInterface
                 $meeting->getEvent()
             );
 
-            if ($userEventPhone === null) {
+            if (null === $userEventPhone) {
                 continue;
             }
 
@@ -100,7 +100,7 @@ class SMSNotifierEventSubscriber implements EventSubscriberInterface
                 $meeting->getEvent()
             );
 
-            if ($userEventPhone === null) {
+            if (null === $userEventPhone) {
                 continue;
             }
 

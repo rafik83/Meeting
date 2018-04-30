@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2015 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -148,6 +148,7 @@ class HappeningParticipationRepository implements HappeningParticipationReposito
             ->setParameter('users', $users)
             ->setParameter('event', $event)
         ;
+
         return $queryBuilder->getQuery()->getResult();
     }
 

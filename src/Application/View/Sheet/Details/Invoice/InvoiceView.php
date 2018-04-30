@@ -39,7 +39,7 @@ class InvoiceView
     /**
      * @param int                $id
      * @param string             $number
-     * @param int                $total in cents
+     * @param int                $total        in cents
      * @param int                $totalWithVat in cents
      * @param string             $currency
      * @param \DateTimeInterface $createdAt

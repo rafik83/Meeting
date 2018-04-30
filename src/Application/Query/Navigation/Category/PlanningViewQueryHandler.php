@@ -126,7 +126,7 @@ class PlanningViewQueryHandler
             ->getConfiguration()
             ->getSchedulePublishDate();
 
-        if ($schedulePublishDate !== null) {
+        if (null !== $schedulePublishDate) {
             $schedulePublishDateFormatted = $this->getFormatter($locale)->format($schedulePublishDate);
 
             $agendaRoute = null;

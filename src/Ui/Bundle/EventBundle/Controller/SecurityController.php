@@ -72,7 +72,7 @@ class SecurityController extends Controller
             $form->get('email')->addError($error);
         }
 
-        $users = $this->get('kernel')->getEnvironment() === 'dev' ?
+        $users = 'dev' === $this->get('kernel')->getEnvironment() ?
             $this->get('vimeet_infrastructure.repository.user_repository')->all() :
             [];
 
@@ -196,7 +196,7 @@ class SecurityController extends Controller
     }
 
     /**
-     * @param Event $event
+     * @param Event      $event
      * @param null|Sheet $sheet
      *
      * @return Response
@@ -320,7 +320,7 @@ class SecurityController extends Controller
         return $this->render('EventBundle:Security:impersonatingSheetGroupManagerToSheetUser.html.twig', [
             'impersonateView'   => $userImpersonateView,
             'event'             => $event,
-            'sheetGroup'        => $sheetGroup
+            'sheetGroup'        => $sheetGroup,
         ]);
     }
 }

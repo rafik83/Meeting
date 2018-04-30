@@ -3,10 +3,10 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2015 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
-*/
+ */
 
 namespace Proximum\Vimeet\Application\Command\Spot;
 
@@ -41,11 +41,11 @@ class DeleteBatchHandler
 
         $deleteBatchView = new DeleteBatchView();
         $toDelete        = [];
-        
-        foreach($spots as $spot) {
-            if ($spot->hasSheets() !== false) {
+
+        foreach ($spots as $spot) {
+            if (false !== $spot->hasSheets()) {
                 $deleteBatchView->addSpotWithSheets($spot);
-            } else if ($this->spotRepository->hasMeeting($spot) !== false) {
+            } elseif (false !== $this->spotRepository->hasMeeting($spot)) {
                 $deleteBatchView->addSpotWithMeeting($spot);
             } else {
                 $deleteBatchView->addDeletedSpot($spot);

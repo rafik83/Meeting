@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2016 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -34,7 +34,7 @@ class NomenclatureValidator extends TemplateObjectValidator
     {
         if ($object instanceof TemplateObject\Nomenclature && true === $object->getOption('required')) {
             if ($object->isSingles()) {
-                if ($object->getNomenclatureModel() !== null) {
+                if (null !== $object->getNomenclatureModel()) {
                     $depth = $object->getNomenclatureModel()->getDepth();
                     $reference = [
                         1 => 'first',

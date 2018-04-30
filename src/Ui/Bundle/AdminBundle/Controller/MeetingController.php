@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2015 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -102,6 +102,7 @@ class MeetingController extends Controller
 
     /**
      * This action delete all the meetings
+     *
      * @param Event $event
      *
      * @return RedirectResponse
@@ -147,7 +148,7 @@ class MeetingController extends Controller
         $response    = new Response($exportContent);
         $disposition = $response->headers->makeDisposition(
             ResponseHeaderBag::DISPOSITION_ATTACHMENT,
-            "export_event_meetings_" . date("Y_m_d_His") . ".csv"
+            'export_event_meetings_' . date('Y_m_d_His') . '.csv'
         );
         $response->headers->set('Content-Disposition', $disposition);
         $response->headers->set('Content-Type', sprintf('text/csv; charset=%s', $charset));

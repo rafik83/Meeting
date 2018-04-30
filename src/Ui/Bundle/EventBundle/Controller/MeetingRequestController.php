@@ -27,10 +27,10 @@ use Proximum\Vimeet\Application\Query\Tip\TipTranslationViewQuery;
 use Proximum\Vimeet\Application\Query\Tip\TipTranslationViewQueryHandler;
 use Proximum\Vimeet\Application\Query\Type\MeetingTypeViewQuery;
 use Proximum\Vimeet\Application\View\Agenda\Slot\AvailableSlotView;
+use Proximum\Vimeet\Application\View\Meeting\ApproveRequestResult;
 use Proximum\Vimeet\Application\View\Meeting\MeetingRequestListView;
 use Proximum\Vimeet\Application\View\Meeting\Message\DiscussionMeetingRequestView;
 use Proximum\Vimeet\Application\View\Meeting\StateListsView;
-use Proximum\Vimeet\Application\View\Meeting\ApproveRequestResult;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Meeting\Constant;
 use Proximum\Vimeet\Domain\Model\Meeting\Request as MeetingRequest;
@@ -91,7 +91,6 @@ class MeetingRequestController extends Controller
             return $this->redirect($availabilityConfirmation->redirectRoute);
         }
 
-
         $locale = $request->getLocale();
 
         $typeViews = $this->get('tactician.commandbus.query')->handle(new MeetingTypeViewQuery(
@@ -119,10 +118,10 @@ class MeetingRequestController extends Controller
 
             $slotId = $request->query->get('slot_id');
 
-            if ($slotId !== null) {
+            if (null !== $slotId) {
                 $slot = $this->get('vimeet_infrastructure.repository.meeting_slot_repository')->findById((int) $slotId);
 
-                if ($slot !== null) {
+                if (null !== $slot) {
                     foreach ($availableSlots as $availableSlot) {
                         if ($availableSlot->id === $slot->getId()) {
                             $specificSlot = $slot;
@@ -233,7 +232,7 @@ class MeetingRequestController extends Controller
             return [];
         }
 
-        if ($specificSlot instanceof MeetingSlot && $filters['availableSlot'] === Constant::FILTER_AVAILABLE_SLOT_IDS_SLOT) {
+        if ($specificSlot instanceof MeetingSlot && Constant::FILTER_AVAILABLE_SLOT_IDS_SLOT === $filters['availableSlot']) {
             return [$specificSlot];
         }
 
@@ -247,7 +246,7 @@ class MeetingRequestController extends Controller
      */
     private function isFilterRequestPropositionActive($state)
     {
-        return $state === Constant::FILTER_STATE_APPROVED || $state === Constant::FILTER_STATE_REFUSED;
+        return Constant::FILTER_STATE_APPROVED === $state || Constant::FILTER_STATE_REFUSED === $state;
     }
 
     /**
@@ -309,7 +308,7 @@ class MeetingRequestController extends Controller
      *
      * @param Request       $request
      * @param EventDomain   $eventDomain
-     * @param Sheet         $sheet fromSheet
+     * @param Sheet         $sheet       fromSheet
      * @param int           $toSheet
      * @param UserInterface $user
      *
@@ -359,12 +358,11 @@ class MeetingRequestController extends Controller
                 $this->renderView('EventBundle:MeetingRequest\Button:pendingRequestButton.html.twig', [
                     'sheet'          => $sheet,
                     'meetingRequest' => $result->meetingRequest,
-                    'isPhoneValidationRequired' => false
+                    'isPhoneValidationRequired' => false,
                 ]),
                 $this->getParticipantsHtml($createRequest->participants, $request->getLocale())
             ));
         } elseif ($isSubmitted && !$form->isValid()) {
-
             return new JsonResponse($this->createJsonResponseData(
                 false,
                 false,
@@ -427,7 +425,7 @@ class MeetingRequestController extends Controller
             /** @var ApproveRequestResult $approveRequestResult */
             $approveRequestResult = $this->get('tactician.commandbus')->handle($approveRequest);
 
-            if ($approveRequestResult !== null) {
+            if (null !== $approveRequestResult) {
                 $flashMessageView = $this->renderView('EventBundle::MeetingRequest\Message\requestTransformedIntoMeeting.html.twig', [
                     'meetingDdayView' => $approveRequestResult->meetingView,
                     'error'           => $approveRequestResult->hasError,
@@ -436,7 +434,7 @@ class MeetingRequestController extends Controller
 
             return new JsonResponse($this->createJsonResponseData(
                 true,
-                $approveRequestResult === null || ($approveRequestResult !== null && $approveRequestResult->meetingView === null && !$approveRequestResult->hasError),
+                null === $approveRequestResult || (null !== $approveRequestResult && null === $approveRequestResult->meetingView && !$approveRequestResult->hasError),
                 $this->renderView('EventBundle:MeetingRequest\Button:approvedProposition.html.twig', [
                     'sheet'                        => $sheet,
                     'meetingRequest'               => $meetingRequest,
@@ -446,7 +444,7 @@ class MeetingRequestController extends Controller
                         ->getEvent()
                         ->getConfiguration()
                         ->isMeetingRequestUpdateLocked(),
-                    'isPhoneValidationRequired' => false
+                    'isPhoneValidationRequired' => false,
                 ]),
                 $this->getParticipantsHtml($approveRequest->participants, $request->getLocale()),
                 $flashMessageView ?? null
@@ -517,7 +515,7 @@ class MeetingRequestController extends Controller
                 $this->renderView('EventBundle:MeetingRequest\Button:refusedProposition.html.twig', [
                     'sheet'          => $sheet,
                     'meetingRequest' => $meetingRequest,
-                    'isPhoneValidationRequired' => false
+                    'isPhoneValidationRequired' => false,
                 ])
             ));
         } elseif ($isSubmitted && !$form->isValid()) {
@@ -594,7 +592,7 @@ class MeetingRequestController extends Controller
                         $this->renderView('EventBundle:MeetingRequest\Button:approveRefuseRequestButton.html.twig', [
                             'meetingRequest' => $meetingRequest,
                             'sheet'          => $meetingRequest->getToSheet(),
-                            'isPhoneValidationRequired' => false
+                            'isPhoneValidationRequired' => false,
                         ])
                     ));
                 } else {
@@ -632,13 +630,13 @@ class MeetingRequestController extends Controller
     private function createJsonResponseData($ok, $close, $html, $participantsHtml = '', $flashMessage = null)
     {
         $response = [
-            'status'           => $ok === true ? 'ok' : 'error',
+            'status'           => true === $ok ? 'ok' : 'error',
             'close'            => $close,
             'html'             => $html,
             'participantsHtml' => $participantsHtml,
         ];
 
-        if ($flashMessage !== null) {
+        if (null !== $flashMessage) {
             $response['flashMessage'] = $flashMessage;
         }
 
@@ -708,7 +706,7 @@ class MeetingRequestController extends Controller
                         $this->renderView('EventBundle:MeetingRequest/Button:createRequest.html.twig', [
                             'sheet'   => $sheet,
                             'toSheet' => $toSheet,
-                            'isPhoneValidationRequired' => false
+                            'isPhoneValidationRequired' => false,
                         ])
                     ));
                 } else {
@@ -755,7 +753,7 @@ class MeetingRequestController extends Controller
                     $this->renderView('EventBundle:MeetingRequest/Button:approveRefuseRequestButton.html.twig', [
                         'meetingRequest' => $meetingRequest,
                         'sheet'          => $sheet,
-                        'isPhoneValidationRequired' => false
+                        'isPhoneValidationRequired' => false,
                     ])
                 ));
             }
@@ -816,11 +814,11 @@ class MeetingRequestController extends Controller
             $unApprovedForm
         );
 
-        if ($cancelResponse !== null) {
+        if (null !== $cancelResponse) {
             return $cancelResponse;
         }
 
-        if ($unapprovedResponse !== null) {
+        if (null !== $unapprovedResponse) {
             return $unapprovedResponse;
         }
 
@@ -859,9 +857,7 @@ class MeetingRequestController extends Controller
                     ]),
                     $this->getParticipantsHtml($command->participants, $request->getLocale())
                 ));
-
             } elseif ($isSubmitted && !$form->isValid()) {
-
                 return new JsonResponse($this->createJsonResponseData(
                     false,
                     false,

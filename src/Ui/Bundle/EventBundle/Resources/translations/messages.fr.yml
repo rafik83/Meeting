@@ -61,8 +61,10 @@ catalog.sheet.result.total: '{0} Aucun résultat|{1} 1 résultat|]1,Inf[ %total%
 catalog.title: Catalogue
 common.backToPackage: 'Retour au forfait'
 common.backToSheet: 'Retour à la fiche'
+common.download: 'Télécharger le fichier existant'
 common.need_help: 'Besoin d''aide'
 common.next: Suivant
+common.required_formats: '{1} Le format requis est : %format%|[1, Inf[Les formats requis sont : %format%'
 common.update: Modifier
 common.validate: Valider
 error.403.content: 'Vous n''êtes pas autorisé à accéder à ce contenu.'

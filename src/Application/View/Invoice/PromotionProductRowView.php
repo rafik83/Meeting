@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of the vimeet project.
+ * This file is part of the Proximum Vimeet project.
  *
  * Copyright (C) Proximum
  *
@@ -47,7 +47,7 @@ class PromotionProductRowView
      */
     public function isPercentOff()
     {
-        return $this->promotionType === self::TYPE_PERCENT_OFF;
+        return self::TYPE_PERCENT_OFF === $this->promotionType;
     }
 
     /**
@@ -55,7 +55,7 @@ class PromotionProductRowView
      */
     public function isValueOff()
     {
-        return $this->promotionType === self::TYPE_VALUE_OFF;
+        return self::TYPE_VALUE_OFF === $this->promotionType;
     }
 
     /**
@@ -63,6 +63,6 @@ class PromotionProductRowView
      */
     public function isFree()
     {
-        return $this->promotionType === self::TYPE_FREE;
+        return self::TYPE_FREE === $this->promotionType;
     }
 }

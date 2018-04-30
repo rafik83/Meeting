@@ -1,9 +1,9 @@
 <?php
 
 /*
- * This file is part of the vimeet project.
+ * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2017 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -80,7 +80,7 @@ class ProcessHandler
 
             $email = $sheet->getOwner()->getEmail();
             $index = $email . $sheet->getId();
-            
+
             if ($process->message->isSendEmailToBillingInfo() && isset($billingInfos[$sheet->getId()])) {
                 $billingInfo      = $billingInfos[$sheet->getId()];
                 $billingInfoIndex = $billingInfo->getEmail() . $sheet->getId();

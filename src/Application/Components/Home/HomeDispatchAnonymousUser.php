@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of the vimeet project.
+ * This file is part of the Proximum Vimeet project.
  *
  * Copyright (C) Proximum
  *
@@ -44,7 +44,7 @@ class HomeDispatchAnonymousUser
         if (in_array($registrationAccessStatus, [self::TYPE_REGISTRATION_NOT_OPEN, self::TYPE_REGISTRATION_CLOSED])) {
             return new HomeDispatchAnonymousView($registrationAccessStatus);
         }
-        
+
         return null;
     }
 }

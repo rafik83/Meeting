@@ -1,9 +1,9 @@
 <?php
 
 /*
- * This file is part of the vimeet project.
+ * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) vimeet
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -28,7 +28,7 @@ class File
     private $createdAt;
 
     /**
-     * @param string $path
+     * @param string             $path
      * @param \DateTimeInterface $createdAt
      */
     public function __construct($path, \DateTimeInterface $createdAt)

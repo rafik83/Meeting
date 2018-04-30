@@ -10,9 +10,9 @@
 
 namespace Proximum\Vimeet\Application\Query\Agenda;
 
+use Proximum\Vimeet\Application\Components\Agenda\AgendaCollisionManager;
 use Proximum\Vimeet\Application\Query\Agenda\AvailableSheets\AvailableSlotsByParticipantAndDayQuery;
 use Proximum\Vimeet\Application\Query\Agenda\AvailableSheets\AvailableSlotsByParticipantAndDayQueryHandler;
-use Proximum\Vimeet\Application\Components\Agenda\AgendaCollisionManager;
 use Proximum\Vimeet\Application\View\Agenda\DayView;
 use Proximum\Vimeet\Domain\Time\TimeOverlap;
 
@@ -113,7 +113,7 @@ class DayViewQueryHandler
                         )
                     );
 
-                    if ($massView !== null) {
+                    if (null !== $massView) {
                         $masses[] = $massView;
                     }
                 }

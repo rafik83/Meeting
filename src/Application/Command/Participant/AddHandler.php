@@ -87,14 +87,15 @@ class AddHandler
     /**
      * @param Add $add
      *
-     * @return AddResult
      * @throws AlreadyLinkedToASheetOfThisEventException
      * @throws EmailCanNotBeNullException
      * @throws ParticipantAlreadyExistException
+     *
+     * @return AddResult
      */
     public function handle(Add $add): AddResult
     {
-        if ($add->email === null) {
+        if (null === $add->email) {
             throw new EmailCanNotBeNullException();
         }
 

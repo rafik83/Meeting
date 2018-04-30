@@ -98,7 +98,6 @@ class Preview
                     $locale,
                     $sheet->getEvent()->getLocales()
                 );
-
             } catch (ObjectNotFoundException $exception) {
                 continue;
             }
@@ -125,7 +124,7 @@ class Preview
                 $previewView->strong = true;
             }
 
-            if ($templateObject->getContentValue() === '' && !empty($templateObject->getTag())) {
+            if ('' === $templateObject->getContentValue() && !empty($templateObject->getTag())) {
                 // In EditableText there is only one tag therefore it is not useful to add a comma
                 foreach ($templateObject->getTaggedDataViews() as $taggedDataView) {
                     $previewView->content = $this->getTaggedDataViewContent($taggedDataView, $locale);
@@ -165,7 +164,7 @@ class Preview
         $hasEmptyImage = false;
 
         foreach ($previewObjects as $previewObject) {
-            if ($previewObject->isImage() && $previewObject->content === '') {
+            if ($previewObject->isImage() && '' === $previewObject->content) {
                 $hasEmptyImage = true;
                 break;
             }
@@ -190,7 +189,7 @@ class Preview
      */
     private function getTaggedDataViewContent(TaggedDataView $taggedDataView, $locale)
     {
-        if ($taggedDataView->type === AbstractChild::TEMPLATE_OBJECT_TYPE_BOOLEAN) {
+        if (AbstractChild::TEMPLATE_OBJECT_TYPE_BOOLEAN === $taggedDataView->type) {
             return $this->translator->trans(
                 sprintf('sheet.object.boolean.%s', $taggedDataView->content ? 'true' : 'false'),
                 [],

@@ -1,15 +1,14 @@
 <?php
 
 /*
- * This file is part of the vimeet project.
+ * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) vimeet
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
 
 namespace Proximum\Vimeet\Application\Serializer\Denormalizer\Analytic\MeetingSolution;
-
 
 use Proximum\Vimeet\Application\View\Analytic\MeetingSolution\Sheet\SheetSatisfactionListView;
 use Proximum\Vimeet\Application\View\Analytic\MeetingSolution\Sheet\SheetSatisfactionView;
@@ -24,7 +23,7 @@ class SheetSatisfactionListViewDenormalizer implements DenormalizerAwareInterfac
     /**
      * {@inheritdoc}
      */
-    public function denormalize($data, $class, $format = null, array $context = array())
+    public function denormalize($data, $class, $format = null, array $context = [])
     {
         $sheetSatisfactionlist = new SheetSatisfactionListView();
 
@@ -42,6 +41,6 @@ class SheetSatisfactionListViewDenormalizer implements DenormalizerAwareInterfac
      */
     public function supportsDenormalization($data, $type, $format = null)
     {
-        return $type === SheetSatisfactionListView::class && $format === 'json';
+        return SheetSatisfactionListView::class === $type && 'json' === $format;
     }
 }

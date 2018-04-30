@@ -1,9 +1,9 @@
 <?php
 
 /*
- * This file is part of the vimeet project.
+ * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2016 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -53,7 +53,7 @@ class SheetNotificationViewQueryHandler
         foreach ($locales as $locale) {
             $sheetCompleteness = $this->sheetCompletenessRepository->findCompleteness($query->sheet, $locale);
 
-            if ($sheetCompleteness !== null && $sheetCompleteness->getCompleteness() !== 100) {
+            if (null !== $sheetCompleteness && 100 !== $sheetCompleteness->getCompleteness()) {
                 $notificationViews[] = $this->completeTranslationViewQueryHandler->handle(
                     new CompleteTranslationViewQuery($query->sheet, $locale)
                 );

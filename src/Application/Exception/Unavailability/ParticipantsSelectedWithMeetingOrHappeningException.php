@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2016 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -14,6 +14,7 @@ class ParticipantsSelectedWithMeetingOrHappeningException extends Unavailability
 {
     /**
      * Array of participants name
+     *
      * @var array
      */
     public $participants;

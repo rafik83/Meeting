@@ -10,11 +10,11 @@
 
 namespace Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\EventListener\Happening;
 
+use Proximum\Vimeet\Application\Components\Happening\Participation\DisableEnableParticipation;
 use Proximum\Vimeet\Application\Components\Happening\Participation\UserParticipantAvailabilityReAggregator;
 use Proximum\Vimeet\Application\Event\Events;
 use Proximum\Vimeet\Application\Event\Happening\DatesUpdated;
 use Proximum\Vimeet\Application\Event\Happening\TypesUpdated;
-use Proximum\Vimeet\Application\Components\Happening\Participation\DisableEnableParticipation;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 class HappeningEventSubscriber implements EventSubscriberInterface

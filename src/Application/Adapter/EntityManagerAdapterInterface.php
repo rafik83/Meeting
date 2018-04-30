@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2017 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -26,16 +26,12 @@ interface EntityManagerAdapterInterface
      * the cascade-persist semantics + scheduled inserts/removals are synchronized.
      *
      * @param null|object|array $entity
-     *
-     * @return void
      */
     public function flush($entity = null);
 
     /**
      * Clears the EntityManager. All entities that are currently managed
      * by this EntityManager become detached.
-     *
-     * @return void
      */
     public function clear();
 
@@ -47,8 +43,6 @@ interface EntityManagerAdapterInterface
      * reference it.
      *
      * @param object $entity The entity to detach.
-     *
-     * @return void
      */
     public function detach($entity);
 }

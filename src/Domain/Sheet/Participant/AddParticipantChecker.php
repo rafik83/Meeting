@@ -17,15 +17,15 @@ class AddParticipantChecker
     /**
      * @param Sheet $sheet
      *
-     * @return bool
-     *
      * @throws \DomainException
+     *
+     * @return bool
      */
     public function canAddParticipant(Sheet $sheet): bool
     {
         $package = $sheet->getType()->getPackage();
 
-        if ($package === null) {
+        if (null === $package) {
             throw new \DomainException('The package should not be null');
         }
 
@@ -48,7 +48,7 @@ class AddParticipantChecker
         $quantity = 0;
 
         foreach ($participantProducts as $participantProduct) {
-            if ($participantProduct->getQuantityMax() === INF) {
+            if (INF === $participantProduct->getQuantityMax()) {
                 return true;
             }
 

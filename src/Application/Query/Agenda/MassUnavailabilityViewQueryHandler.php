@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2016 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -52,7 +52,7 @@ class MassUnavailabilityViewQueryHandler
             if ($this->meetingPublishedAccessChecker->allowedToAccess($query->event)) {
                 $assignment = $this->massAssignmentRepository->find($query->mass, $query->participant);
 
-                if ($assignment !== null) {
+                if (null !== $assignment) {
                     if (!$assignment->isEnabled()) {
                         return null;
                     }

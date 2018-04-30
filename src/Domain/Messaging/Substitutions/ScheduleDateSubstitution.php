@@ -1,9 +1,9 @@
 <?php
 
 /*
- * This file is part of the vimeet project.
+ * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2017 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -29,10 +29,10 @@ class ScheduleDateSubstitution implements SubstituteInterface
 
         $schedulePublishDate = $event->getConfiguration()->getSchedulePublishDate();
 
-        if ($schedulePublishDate !== null) {
+        if (null !== $schedulePublishDate) {
             $formattedDate = $dateFormatter->format($schedulePublishDate);
         }
 
-        return isset($formattedDate) && $formattedDate !== false ? $formattedDate : '';
+        return isset($formattedDate) && false !== $formattedDate ? $formattedDate : '';
     }
 }

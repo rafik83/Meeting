@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2016 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -45,7 +45,7 @@ class SheetValidator
         $this->sheetRepository = $sheetRepository;
         $this->eventDispatcher = $eventDispatcher;
         $this->validators      = [
-            new SheetAcceptedCriteriaValidator()
+            new SheetAcceptedCriteriaValidator(),
         ];
     }
 
@@ -62,10 +62,10 @@ class SheetValidator
             foreach ($this->validators as $validator) {
                 $result = $validator->isValid($sheet);
 
-                if ($result === CriteriaValidatorInterface::NO) {
+                if (CriteriaValidatorInterface::NO === $result) {
                     throw new NotValidException();
-                } elseif ($result === CriteriaValidatorInterface::YES) {
-                    $yesCount++;
+                } elseif (CriteriaValidatorInterface::YES === $result) {
+                    ++$yesCount;
                 }
             }
 

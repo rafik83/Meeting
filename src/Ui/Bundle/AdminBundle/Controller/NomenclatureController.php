@@ -20,11 +20,11 @@ use Proximum\Vimeet\Application\Command\Nomenclature\Import;
 use Proximum\Vimeet\Application\Command\Nomenclature\Update;
 use Proximum\Vimeet\Application\Nomenclature\Import\Exception\DepthException;
 use Proximum\Vimeet\Application\Nomenclature\Import\Exception\ImportException;
-use Proximum\Vimeet\Application\Query\Nomenclature\EventNomenclatureViewQuery;
-use Proximum\Vimeet\Application\Query\Nomenclature\GlobalNomenclatureViewQuery;
 use Proximum\Vimeet\Application\Nomenclature\Import\Exception\InvalidLocaleException;
 use Proximum\Vimeet\Application\Nomenclature\Import\Exception\LocalesMustCorrespondToThoseOfTheEventException;
 use Proximum\Vimeet\Application\Nomenclature\Import\Exception\NoLocaleSpecifiedException;
+use Proximum\Vimeet\Application\Query\Nomenclature\EventNomenclatureViewQuery;
+use Proximum\Vimeet\Application\Query\Nomenclature\GlobalNomenclatureViewQuery;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Nomenclature;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Data\Nomenclature\ExportData;
@@ -340,7 +340,7 @@ class NomenclatureController extends Controller
     private function createExportForm(ExportData $export)
     {
         return $this->get('form.factory')->createNamed('', ExportType::class, $export, [
-            'action' => $this->generateUrl('admin_nomenclature_export', ['nomenclature' => $export->nomenclature->getId()])
+            'action' => $this->generateUrl('admin_nomenclature_export', ['nomenclature' => $export->nomenclature->getId()]),
         ]);
     }
 

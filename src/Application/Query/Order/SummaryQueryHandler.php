@@ -12,8 +12,8 @@ namespace Proximum\Vimeet\Application\Query\Order;
 
 use Proximum\Vimeet\Application\Query\Order\OrderVat\OrderVatViewQuery;
 use Proximum\Vimeet\Application\Query\Order\OrderVat\OrderVatViewQueryHandler;
-use Proximum\Vimeet\Application\Query\Order\Summary\GroupsViewQueryHandler;
 use Proximum\Vimeet\Application\Query\Order\Summary\GroupsViewQuery;
+use Proximum\Vimeet\Application\Query\Order\Summary\GroupsViewQueryHandler;
 use Proximum\Vimeet\Application\Query\Order\Summary\PromotionCodesViewQuery;
 use Proximum\Vimeet\Application\Query\Order\Summary\PromotionCodesViewQueryHandler;
 use Proximum\Vimeet\Application\View\Order\SummaryView;
@@ -55,9 +55,9 @@ class SummaryQueryHandler
     /**
      * @param SummaryQuery $summaryQuery
      *
-     * @return SummaryView
-     *
      * @throws MissingBillingInfoException
+     *
+     * @return SummaryView
      */
     public function handle(SummaryQuery $summaryQuery): SummaryView
     {

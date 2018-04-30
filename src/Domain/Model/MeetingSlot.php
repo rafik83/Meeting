@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2015 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -35,7 +35,7 @@ class MeetingSlot implements TimeRangeInterface
     private $end;
 
     /**
-     * @var boolean
+     * @var bool
      */
     private $locked = false;
 
@@ -118,7 +118,7 @@ class MeetingSlot implements TimeRangeInterface
     /**
      * Get locked
      *
-     * @return boolean
+     * @return bool
      */
     public function isLocked()
     {

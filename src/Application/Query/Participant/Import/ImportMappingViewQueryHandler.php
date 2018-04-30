@@ -1,9 +1,9 @@
 <?php
 
 /*
- * This file is part of the vimeet project.
+ * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2017 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -52,8 +52,9 @@ class ImportMappingViewQueryHandler
     /**
      * @param ImportMappingViewQuery $query
      *
-     * @return ImportMappingView
      * @throws \Exception
+     *
+     * @return ImportMappingView
      */
     public function handle(ImportMappingViewQuery $query)
     {
@@ -82,7 +83,7 @@ class ImportMappingViewQueryHandler
             if ($object instanceof ContentObjectInterface) {
                 $label = $object->getLabel($query->locale);
 
-                if ($label !== null) {
+                if (null !== $label) {
                     $registrationHeaders[$object->getKey()] = $label;
                 }
             }

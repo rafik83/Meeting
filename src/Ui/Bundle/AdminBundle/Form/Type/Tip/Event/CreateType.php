@@ -23,7 +23,7 @@ class CreateType extends AbstractEventTipType
         parent::configureOptions($resolver);
 
         $resolver->setDefaults([
-            'data_class' => Create::class
+            'data_class' => Create::class,
         ]);
     }
 

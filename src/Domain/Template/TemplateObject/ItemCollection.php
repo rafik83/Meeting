@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2016 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -107,7 +107,7 @@ class ItemCollection extends TemplateObject implements SearchableObjectInterface
     {
         $default = $this->getDefault();
 
-        if ($default !== null) {
+        if (null !== $default) {
             $pad = $default - count($this->items);
             while ($pad-- > 0) {
                 $this->items[] = new Item($this, null);
@@ -184,9 +184,9 @@ class ItemCollection extends TemplateObject implements SearchableObjectInterface
     public function getExportableContent(array $taggedData = [], ?string $locale = null)
     {
         $exportableContents = array_map(function ($content) {
-            return str_replace(";", ",", $content);
+            return str_replace(';', ',', $content);
         }, $this->getSearchableContent());
 
-        return implode(";", $exportableContents);
+        return implode(';', $exportableContents);
     }
 }

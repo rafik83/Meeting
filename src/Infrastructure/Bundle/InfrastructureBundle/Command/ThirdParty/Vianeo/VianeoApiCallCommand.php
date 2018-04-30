@@ -49,7 +49,6 @@ class VianeoApiCallCommand extends Command
             ->setName(self::NAME)
             ->setDescription('Call the Vianeo API with the sheet data')
             ->addArgument(self::SHEET_ID, InputArgument::REQUIRED, 'Sheet id');
-        ;
     }
 
     /**

@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2016 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -52,7 +52,7 @@ class ImportHandler
     }
 
     /**
-     * @var Import $command
+     * @var Import
      *
      * @throws MissingKeysException
      */

@@ -30,7 +30,7 @@ class FindResult extends EventFindResult
     {
         $firstSheet = reset($sheets);
 
-        if ($firstSheet === false) {
+        if (false === $firstSheet) {
             throw new InvoiceNotFoundException();
         }
 
@@ -44,7 +44,7 @@ class FindResult extends EventFindResult
      */
     public function hasOnlyOneSheet()
     {
-        return count($this->sheets) === 1;
+        return 1 === count($this->sheets);
     }
 
     /**

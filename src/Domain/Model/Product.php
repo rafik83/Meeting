@@ -152,7 +152,7 @@ class Product
     /**
      * "Produit soumis à validation"
      *
-     * @var boolean
+     * @var bool
      */
     private $subjectedToValidation = false;
 
@@ -254,7 +254,7 @@ class Product
      */
     public function isPlan()
     {
-        return $this->type === self::TYPE_PLAN;
+        return self::TYPE_PLAN === $this->type;
     }
 
     /**
@@ -262,7 +262,7 @@ class Product
      */
     public function isOption()
     {
-        return $this->type === self::TYPE_OPTION;
+        return self::TYPE_OPTION === $this->type;
     }
 
     /**
@@ -270,7 +270,7 @@ class Product
      */
     public function isParticipant()
     {
-        return $this->type === self::TYPE_PARTICIPANT;
+        return self::TYPE_PARTICIPANT === $this->type;
     }
 
     /**
@@ -278,7 +278,7 @@ class Product
      */
     public function isPlanning()
     {
-        return $this->type === self::TYPE_PLANNING;
+        return self::TYPE_PLANNING === $this->type;
     }
 
     /**
@@ -448,7 +448,7 @@ class Product
     }
 
     /**
-     * @return boolean
+     * @return bool
      */
     public function isUpdatable()
     {
@@ -474,7 +474,7 @@ class Product
     /**
      * Get subjectedToValidation
      *
-     * @return boolean
+     * @return bool
      */
     public function isSubjectedToValidation()
     {
@@ -613,7 +613,7 @@ class Product
     }
 
     /**
-     * @return boolean|ProductIncluded
+     * @return bool|ProductIncluded
      *
      * @deprecated use Product::getIncludedParticipantProducts
      */
@@ -653,7 +653,7 @@ class Product
     }
 
     /**
-     * @return boolean|ProductIncluded
+     * @return bool|ProductIncluded
      */
     public function getIncludedPlanningProduct()
     {
@@ -746,7 +746,7 @@ class Product
     {
         return new self(
             $event,
-            Product::TYPE_PLAN,
+            self::TYPE_PLAN,
             $name,
             $image,
             $unitPrice,
@@ -797,7 +797,7 @@ class Product
     {
         return new self(
             $event,
-            Product::TYPE_PARTICIPANT,
+            self::TYPE_PARTICIPANT,
             $name,
             null,
             $unitPrice,
@@ -841,7 +841,7 @@ class Product
     {
         return new self(
             $event,
-            Product::TYPE_PLANNING,
+            self::TYPE_PLANNING,
             $name,
             null,
             $unitPrice,
@@ -906,7 +906,7 @@ class Product
     ) {
         return new self(
             $event,
-            Product::TYPE_OPTION,
+            self::TYPE_OPTION,
             $name,
             $image,
             $unitPrice,
@@ -1046,7 +1046,7 @@ class Product
      */
     public function isBuyable(\DateTimeInterface $now)
     {
-        return ($this->buyableUntil === null) || ($now < $this->buyableUntil);
+        return (null === $this->buyableUntil) || ($now < $this->buyableUntil);
     }
 
     /**
@@ -1056,7 +1056,7 @@ class Product
      */
     public function isDeletable(\DateTimeInterface $now)
     {
-        return ($this->deletableUntil === null) || ($now < $this->deletableUntil);
+        return (null === $this->deletableUntil) || ($now < $this->deletableUntil);
     }
 
     /**
@@ -1100,9 +1100,9 @@ class Product
      * @param bool                    $subjectedToValidation
      * @param \DateTimeInterface|null $buyableUntil
      *
-     * @return Product
-     *
      * @throws \InvalidArgumentException
+     *
+     * @return Product
      */
     public static function createProductFromType(
         string $type,
@@ -1119,7 +1119,7 @@ class Product
         bool $subjectedToValidation = false,
         \DateTimeInterface $buyableUntil = null
     ): Product {
-        if ($type === self::TYPE_OPTION) {
+        if (self::TYPE_OPTION === $type) {
             return self::createOption(
                 $event,
                 $name,
@@ -1134,9 +1134,9 @@ class Product
                 $subjectedToValidation,
                 $buyableUntil
             );
-        } elseif ($type === self::TYPE_PARTICIPANT) {
+        } elseif (self::TYPE_PARTICIPANT === $type) {
             return self::createParticipant($event, $name, $unitPrice, $vat, $quantityMax);
-        } elseif ($type === self::TYPE_PLAN) {
+        } elseif (self::TYPE_PLAN === $type) {
             return self::createPlan(
                 $event,
                 $name,
@@ -1146,7 +1146,7 @@ class Product
                 $availabilityCurrent,
                 $availabilityMax
             );
-        } elseif ($type === self::TYPE_PLANNING) {
+        } elseif (self::TYPE_PLANNING === $type) {
             return self::createPlanning($event, $name, $unitPrice, $vat, $quantityMax);
         }
 

@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2017 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -11,8 +11,8 @@
 namespace Proximum\Vimeet\Application\Query\Planner;
 
 use Proximum\Vimeet\Application\Exception\Planner\SlotNotConfiguredException;
-use Proximum\Vimeet\Application\View\Planner\SlotView;
 use Proximum\Vimeet\Application\View\Planner\Day;
+use Proximum\Vimeet\Application\View\Planner\SlotView;
 use Proximum\Vimeet\Domain\Model\MeetingSlot;
 use Proximum\Vimeet\Domain\Repository\MeetingSlotRepositoryInterface;
 
@@ -34,8 +34,9 @@ class SlotViewQueryHandler
     /**
      * @param SlotViewQuery $query
      *
-     * @return SlotView[]
      * @throws SlotNotConfiguredException
+     *
+     * @return SlotView[]
      */
     public function handle(SlotViewQuery $query)
     {
@@ -57,7 +58,7 @@ class SlotViewQueryHandler
                     $day
                 );
 
-                $index++;
+                ++$index;
             }
         }
 

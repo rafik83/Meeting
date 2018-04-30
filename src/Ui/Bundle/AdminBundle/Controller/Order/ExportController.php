@@ -73,7 +73,7 @@ class ExportController extends Controller
 
         return new CsvFileResponse(
             file_get_contents($path),
-            sprintf('export_event_orders_%s.csv', date("Y_m_d_His"))
+            sprintf('export_event_orders_%s.csv', date('Y_m_d_His'))
         );
     }
 }

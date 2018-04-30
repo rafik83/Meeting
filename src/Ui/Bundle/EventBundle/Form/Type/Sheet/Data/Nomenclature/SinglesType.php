@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2015 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -34,7 +34,7 @@ class SinglesType extends AbstractType
 
         $builder->addModelTransformer(new ItemToSinglesTransformer($nomenclature));
 
-        if ($nomenclature->getDepth() === 1) {
+        if (1 === $nomenclature->getDepth()) {
             $builder
                 ->add('first', SingleType::class, [
                     'choices'      => $nomenclature->getFirstLevel(),
@@ -44,7 +44,7 @@ class SinglesType extends AbstractType
                     'nomenclature' => $nomenclature,
                 ])
             ;
-        } elseif ($nomenclature->getDepth() === 2) {
+        } elseif (2 === $nomenclature->getDepth()) {
             $builder
                 ->add('first', SingleType::class, [
                     'choices'      => $nomenclature->getFirstLevel(),
@@ -63,7 +63,7 @@ class SinglesType extends AbstractType
                     },
                 ])
             ;
-        } elseif ($nomenclature->getDepth() === 3) {
+        } elseif (3 === $nomenclature->getDepth()) {
             $builder
                 ->add('first', SingleType::class, [
                     'choices'      => $nomenclature->getFirstLevel(),

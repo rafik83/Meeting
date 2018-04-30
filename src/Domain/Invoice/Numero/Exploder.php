@@ -21,9 +21,9 @@ class Exploder
      *
      * @param string $numero
      *
-     * @return InvoiceNumeroView
-     *
      * @throws CanNotExplodeNotValidNumeroInvoiceException
+     *
+     * @return InvoiceNumeroView
      */
     public static function explode($numero)
     {
@@ -32,7 +32,7 @@ class Exploder
         if (!empty($numeroElements) && count($numeroElements) > 1) {
             $lastElement = end($numeroElements);
 
-            if ($lastElement !== false && intval($lastElement) !== 0) {
+            if (false !== $lastElement && 0 !== intval($lastElement)) {
                 $increment = $lastElement;
 
                 // Remove last element of array
@@ -40,7 +40,7 @@ class Exploder
 
                 $newLastElement = end($numeroElements);
 
-                if ($newLastElement !== false) {
+                if (false !== $newLastElement) {
                     $numberOfCharInString = mb_strlen($newLastElement);
 
                     // As prefix could be nullable

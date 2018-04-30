@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2015 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -29,8 +29,8 @@ class MediaDataType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('title', TextType::class, ['placeholder' => $options['placeholder']])
-            ->add('url', UrlType::class, ['placeholder' => 'https://'])
+            ->add('title', TextType::class, ['placeholder' => $options['titlePlaceholder']])
+            ->add('url', UrlType::class, ['placeholder' => $options['linkPlaceholder']])
             ->add('type', ChoiceType::class, [
                 'expanded' => true,
                 'choices'  => [
@@ -48,7 +48,8 @@ class MediaDataType extends AbstractType
     {
         $resolver->setRequired(['collection']);
         $resolver->setDefaults([
-            'placeholder' => null,
+            'titlePlaceholder' => null,
+            'linkPlaceholder' => 'https://',
             'data_class'  => Media::class,
             'empty_data'  => function (Options $options) {
                 return function (FormInterface $form) use ($options) {

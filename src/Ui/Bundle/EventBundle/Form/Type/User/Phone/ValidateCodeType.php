@@ -30,7 +30,7 @@ class ValidateCodeType extends AbstractType
                 'attr' => [
                     'style'     => 'letter-spacing: 40px; font-size: 60px;',
                     'maxLength' => 4,
-                ]
+                ],
             ])
         ;
     }

@@ -65,10 +65,10 @@ class PhoneValidationStatusCalculatorCommand extends Command
     {
         $eventId = $input->getOption('event');
 
-        if ($eventId !== null) {
+        if (null !== $eventId) {
             $event = $this->eventRepository->getById($eventId);
 
-            if ($event === null) {
+            if (null === $event) {
                 $output->writeln(sprintf('The event for the id %s was not found', $eventId));
 
                 return;

@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2015 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -314,8 +314,9 @@ class Meeting implements MessageSubjectInterface
     /**
      * @param User $user
      *
-     * @return Sheet
      * @throws NoSheetForUserException
+     *
+     * @return Sheet
      */
     public function getSheetOfUser(User $user)
     {
@@ -361,7 +362,7 @@ class Meeting implements MessageSubjectInterface
     }
 
     /**
-     * @return boolean
+     * @return bool
      */
     public function isBlockedSpot()
     {
@@ -385,7 +386,7 @@ class Meeting implements MessageSubjectInterface
     }
 
     /**
-     * @return boolean
+     * @return bool
      */
     public function isBlockedSlot()
     {

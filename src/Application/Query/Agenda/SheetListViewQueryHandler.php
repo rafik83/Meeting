@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2016 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -94,7 +94,7 @@ class SheetListViewQueryHandler
 
         $countMeetings = [];
 
-        if ($sheetListViewQuery->lazyLoadIndicators === true) {
+        if (true === $sheetListViewQuery->lazyLoadIndicators) {
             $countMeetings = $this->meetingRepository->countMeetingsOfEvent($sheetListViewQuery->event);
         }
 
@@ -118,7 +118,6 @@ class SheetListViewQueryHandler
             $hasParticipantUnavailableWithMeetingRequest = false;
 
             foreach ($sheet->getParticipants() as $participant) {
-
                 $fullname = $this
                     ->participantInfoGuesser
                     ->guessParticipantCompleteName($participant, $sheetListViewQuery->locale);

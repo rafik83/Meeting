@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2015 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -56,11 +56,10 @@ interface HappeningParticipationRepositoryInterface
 
     /**
      * @deprecated
-     *
      * @see findByEventAndUsers
      *
      * @param Participant[] $participants
-     * @param Event $event
+     * @param Event         $event
      *
      * @return HappeningParticipation[]
      */
@@ -137,7 +136,7 @@ interface HappeningParticipationRepositoryInterface
 
     /**
      * @param Happening $happening
-     * @param User $user
+     * @param User      $user
      *
      * @return HappeningParticipation|null
      */

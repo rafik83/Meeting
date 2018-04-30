@@ -1,9 +1,9 @@
 <?php
 
 /*
- * This file is part of the Proximum Vimeet website.
+ * This file is part of the Proximum Vimeet project.
  *
- * Copyright © Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -51,15 +51,15 @@ class SubstitutionsProvider
     private $agendaConfirmationCTASubstitution;
 
     /**
-     * @param EventUrlGeneratorInterface        $eventUrlGenerator             Event URL generator used to substitute
-     *                                                                         event-related link placeholders
-     * @param ParticipantInfoGuesser            $participantInfoGuesser        Service used to retrieve a participant
-     *                                                                         complete name
-     * @param ActivateAccountTokenGenerator     $activateAccountTokenGenerator Service used to generate tokens for
-     *                                                                         inactive users who must activate their
-     *                                                                         account
-     * @param SheetPlanningViewQueryHandler     $sheetPlanningViewQueryHandler Service used to generate the sheet
-     *                                                                         planning in html format
+     * @param EventUrlGeneratorInterface        $eventUrlGenerator                 Event URL generator used to substitute
+     *                                                                             event-related link placeholders
+     * @param ParticipantInfoGuesser            $participantInfoGuesser            Service used to retrieve a participant
+     *                                                                             complete name
+     * @param ActivateAccountTokenGenerator     $activateAccountTokenGenerator     Service used to generate tokens for
+     *                                                                             inactive users who must activate their
+     *                                                                             account
+     * @param SheetPlanningViewQueryHandler     $sheetPlanningViewQueryHandler     Service used to generate the sheet
+     *                                                                             planning in html format
      * @param AgendaConfirmationCTASubstitution $agendaConfirmationCTASubstitution
      */
     public function __construct(
@@ -199,7 +199,7 @@ class SubstitutionsProvider
                     $recipient :
                     $sheet->getParticipantOwner();
 
-                if ($participant === null) {
+                if (null === $participant) {
                     return '';
                 }
 

@@ -64,9 +64,9 @@ class SpotImporter
      * @param File   $spotImportedFile
      * @param string $locale
      *
-     * @return Import[]
-     *
      * @throws InvalidImportHeaderFileFormatException
+     *
+     * @return Import[]
      */
     public function import(Event $event, File $spotImportedFile, string $locale): array
     {

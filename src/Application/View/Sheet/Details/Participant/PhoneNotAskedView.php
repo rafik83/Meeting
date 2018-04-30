@@ -14,6 +14,7 @@ class PhoneNotAskedView extends PhoneValidationStatusView
 {
     /**
      * Not asked are considered as not validated
+     *
      * @var string
      */
     public $message = self::TRANS_KEY . 'not_validated';

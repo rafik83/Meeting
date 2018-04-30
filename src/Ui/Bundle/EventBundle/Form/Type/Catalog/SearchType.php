@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2015 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -53,7 +53,7 @@ class SearchType extends AbstractSearchType
             ])
         ;
 
-        if ($options['filterByAvailableSlotIds'] === true) {
+        if (true === $options['filterByAvailableSlotIds']) {
             $everyone = CatalogConstant::AVAILABLE_SLOT_IDS_FILTER_EVERYONE;
             $available = CatalogConstant::AVAILABLE_SLOT_IDS_FILTER_AVAILABLE;
             $slotFilter = CatalogConstant::AVAILABLE_SLOT_IDS_FILTER_SLOT;
@@ -76,7 +76,7 @@ class SearchType extends AbstractSearchType
                 $availableTranslation => $available,
             ];
 
-            if ($options['filterBySpecificSlot'] === true && $options['specificSlot'] instanceof MeetingSlot) {
+            if (true === $options['filterBySpecificSlot'] && $options['specificSlot'] instanceof MeetingSlot) {
                 $dayFormatter = new \IntlDateFormatter(
                     $locale,
                     \IntlDateFormatter::SHORT,
@@ -114,7 +114,7 @@ class SearchType extends AbstractSearchType
                     'choices'  => $filterAvailableChoices,
                     'expanded' => true,
                     'multiple' => false,
-                    'label'    => 'form.search.availableSlot.label'
+                    'label'    => 'form.search.availableSlot.label',
                 ])
             ;
         }

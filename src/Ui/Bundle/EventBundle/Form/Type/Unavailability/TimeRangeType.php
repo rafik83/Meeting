@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2016 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -27,7 +27,6 @@ class TimeRangeType extends AbstractType
         $days  = $event->getDays();
 
         if (!empty($days)) {
-
             $begins = array_map(function (Event\Day $day) use ($event) {
                 $clone = $day->getStartTime();
                 $clone->setTimezone(new \DateTimeZone($event->getTimeZone()));
@@ -56,10 +55,10 @@ class TimeRangeType extends AbstractType
 
             $builder
                 ->add('begin', TimeType::class, [
-                    'hours' => $hours
+                    'hours' => $hours,
                 ])
                 ->add('end', TimeType::class, [
-                    'hours' => $hours
+                    'hours' => $hours,
                 ])
             ;
         }

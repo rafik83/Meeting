@@ -62,10 +62,10 @@ class FilterAvailableSlotAndSpecificSlotCheckerHandler
 
             $filterAvailableSlot = !empty($availableSlots);
 
-            if ($query->slotId !== null) {
+            if (null !== $query->slotId) {
                 $slot = $this->meetingSlotRepository->findById($query->slotId);
 
-                if ($slot !== null) {
+                if (null !== $slot) {
                     foreach ($availableSlots as $availableSlot) {
                         if ($availableSlot->id === $slot->getId()) {
                             $specificSlot = $slot;

@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2016 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -54,7 +54,7 @@ class PackageNotificationViewQueryHandler
 
         $notificationViews = [];
 
-        if ($packageNotification !== null) {
+        if (null !== $packageNotification) {
             $notificationViews[] = $this->noOrderNotificationViewQueryHandler->handle(
                 new NoOrderNotificationViewQuery($query->sheet)
             );

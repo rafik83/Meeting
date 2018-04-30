@@ -106,8 +106,6 @@ class CartManager
      * @param Product    $product
      * @param null|Order $order
      * @param array      $attributableOptionsIncludedByProductId
-     *
-     * @return Cart
      */
     public function updateOptionsQuantity(
         Cart $cart,
@@ -116,13 +114,14 @@ class CartManager
         ?Order $order,
         array $attributableOptionsIncludedByProductId = []
     ): void {
+        $orderQuantity = $this->getPreviousOrderedQuantity($order, $product);
+
         if (!$product->isAttributable()) {
-            $cart->setProduct($product, $optionRow->getQuantity());
+            $cart->setProduct($product, $optionRow->getQuantity() - $orderQuantity);
 
             return;
         }
 
-        $orderQuantity = 0;
         $includedQuantity = $attributableOptionsIncludedByProductId[$product->getId()] ?? 0;
         $optionRowParticipants = $optionRow->getParticipants();
         $optionRowParticipantsIndexedByParticipantId = [];
@@ -131,28 +130,19 @@ class CartManager
             $optionRowParticipantsIndexedByParticipantId[$participant->getId()] = $participant;
         }
 
-        // handle new order
-        if (null !== $order) {
-            $orderRow = $order->getRowByProductId($product->getId());
-
-            if (null !== $orderRow) {
-                $orderQuantity = $orderRow->getQuantity();
-            }
-        }
-
         $quantity = $optionRow->getQuantity();
 
         // Quantity not changed on first run
         // Or quantity reset to 0
-        if ($quantity === 0) {
+        if (0 === $quantity && 0 === $orderQuantity) {
             // No quantity selected, no previous order and no included quantity, nothing to do
-            if ($orderQuantity === 0 && $includedQuantity === 0) {
+            if ($includedQuantity === 0) {
                 return;
             }
 
             // No quantity selected but with included product, we need to check
             // if there is ProductAttributedToParticipant already created to remove them
-            if ($includedQuantity > 0 && $orderQuantity === 0) {
+            if ($includedQuantity > 0) {
                 $productAttributedToParticipants = $this->getProductAttributedToParticipants(
                     $cart->getSheet()->getParticipantsArray(),
                     $product
@@ -236,7 +226,7 @@ class CartManager
         if ($order !== null) {
             $cart->setProduct(
                 $product,
-                $quantity - $includedQuantity,
+                $quantity - $orderQuantity - $includedQuantity,
                 $optionRowParticipants
             );
 
@@ -327,6 +317,21 @@ class CartManager
         );
 
         return $cart;
+    }
+
+    private function getPreviousOrderedQuantity(?Order $order, Product $product): int
+    {
+        if (null === $order) {
+            return 0;
+        }
+
+        $orderRow = $order->getRowByProductId($product->getId());
+
+        if (null === $orderRow) {
+            return 0;
+        }
+
+        return $orderRow->getQuantity();
     }
 
     /**

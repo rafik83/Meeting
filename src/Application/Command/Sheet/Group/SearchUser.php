@@ -1,9 +1,9 @@
 <?php
 
 /*
- * This file is part of the vimeet project.
+ * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2017 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -23,7 +23,7 @@ class SearchUser
     /**
      * SearchUser constructor.
      *
-     * @param Event  $event
+     * @param Event $event
      */
     public function __construct(Event $event)
     {

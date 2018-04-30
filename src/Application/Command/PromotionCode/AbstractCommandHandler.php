@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2016 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -74,7 +74,7 @@ abstract class AbstractCommandHandler
                 $promotion['product'],
                 $promotion['type'],
                 $promotion['value'],
-                ($promotion['type'] === Promotion::TYPE_VALUE_OFF) ? 1 : $promotion['quantityMax']
+                (Promotion::TYPE_VALUE_OFF === $promotion['type']) ? 1 : $promotion['quantityMax']
             );
         }
 

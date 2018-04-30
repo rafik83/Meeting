@@ -27,7 +27,7 @@ class Export
     public $locale;
 
     /** @var string */
-    public  $emailToNotify;
+    public $emailToNotify;
 
     /** @var bool */
     public $isModeAuto;

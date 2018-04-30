@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2016 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -36,8 +36,8 @@ class AbstractCategoryTranslation
      * AbstractCategoryTranslation constructor.
      *
      * @param AbstractCategory $category
-     * @param string   $locale
-     * @param string   $title
+     * @param string           $locale
+     * @param string           $title
      */
     public function __construct(AbstractCategory $category, $locale, $title)
     {

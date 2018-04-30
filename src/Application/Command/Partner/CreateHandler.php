@@ -1,9 +1,9 @@
 <?php
 
 /*
- * This file is part of the vimeet project.
+ * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2016 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -26,10 +26,10 @@ class CreateHandler extends AbstractCreateHandler
     private $dateTime;
 
     /**
-     * @param AdminRepositoryInterface      $adminRepository
-     * @param PasswordEncoderInterface      $encoder
-     * @param SaltGeneratorInterface        $saltGenerator
-     * @param \DateTimeInterface            $dateTime
+     * @param AdminRepositoryInterface $adminRepository
+     * @param PasswordEncoderInterface $encoder
+     * @param SaltGeneratorInterface   $saltGenerator
+     * @param \DateTimeInterface       $dateTime
      */
     public function __construct(
         AdminRepositoryInterface $adminRepository,

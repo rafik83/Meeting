@@ -10,8 +10,8 @@
 
 namespace Proximum\Vimeet\Application\ThirdParty\LENI\Common\Normalizer;
 
-use Proximum\Vimeet\Application\ThirdParty\LENI\LeniConstants;
 use Proximum\Vimeet\Application\ThirdParty\LENI\Common\View\LeniUserView;
+use Proximum\Vimeet\Application\ThirdParty\LENI\LeniConstants;
 
 class LeniUserViewNormalizer
 {
@@ -43,10 +43,10 @@ class LeniUserViewNormalizer
         foreach ($userView->planning->days as $day) {
             $data[sprintf(LeniConstants::LENI_COL_DAY_FORMAT, $dayNumber)] = $day->planning;
 
-            $dayNumber++;
+            ++$dayNumber;
         }
 
-        if ($userView->leaderView !== null) {
+        if (null !== $userView->leaderView) {
             $data[LeniConstants::LENI_LEADER_ID] = $userView->leaderView->leniUserId;
             $data[LeniConstants::LENI_LEADER_SHEET_NAME] = mb_substr($userView->leaderView->sheetName, 0, LeniConstants::LONG_FIELD);
             $data[LeniConstants::LENI_LEADER_EMAIL] = mb_substr($userView->leaderView->email, 0, LeniConstants::LONG_FIELD);
@@ -64,7 +64,7 @@ class LeniUserViewNormalizer
             $data[LeniConstants::LENI_COL_USER_ID] = $userView->leniId;
         }
 
-        return array_filter($data, function($value) {
+        return array_filter($data, function ($value) {
             return null !== $value;
         });
     }

@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2017 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -42,6 +42,6 @@ class SheetViewQuery
      */
     public function isSolutionFromScratch()
     {
-        return $this->exportSolutionType === ExportSolutionType::SOLUTION_FROM_SCRATCH;
+        return ExportSolutionType::SOLUTION_FROM_SCRATCH === $this->exportSolutionType;
     }
 }

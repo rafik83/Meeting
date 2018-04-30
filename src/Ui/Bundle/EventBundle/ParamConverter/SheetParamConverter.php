@@ -65,6 +65,6 @@ class SheetParamConverter implements ParamConverterInterface
      */
     public function supports(ParamConverter $configuration)
     {
-        return $configuration->getClass() === Sheet::class;
+        return Sheet::class === $configuration->getClass();
     }
 }

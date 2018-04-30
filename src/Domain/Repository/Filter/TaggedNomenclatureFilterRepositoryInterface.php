@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2016 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -28,7 +28,7 @@ interface TaggedNomenclatureFilterRepositoryInterface
     /**
      * @param Event  $event
      * @param string $tag
-     * 
+     *
      * @return TaggedNomenclatureFilter|null
      */
     public function getByEventAndTag(Event $event, $tag);

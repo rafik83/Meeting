@@ -1,9 +1,9 @@
 <?php
 
 /*
- * This file is part of the vimeet project.
+ * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2017 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -15,9 +15,9 @@ use Proximum\Vimeet\Application\Query\Catalog\SearchFacet\SearchFacetQueryHandle
 use Proximum\Vimeet\Application\Query\Catalog\SearchFacet\SearchFacetViewQuery;
 use Proximum\Vimeet\Domain\Catalog\SearchFields;
 use Proximum\Vimeet\Domain\Model\Event;
+use Proximum\Vimeet\Domain\View\Catalog\CategoryView;
 use Proximum\Vimeet\Domain\View\Catalog\OrganizationCategoryView;
 use Proximum\Vimeet\Domain\View\Catalog\TypeView;
-use Proximum\Vimeet\Domain\View\Catalog\CategoryView;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
@@ -26,7 +26,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 abstract class AbstractSearchType extends AbstractType
 {
-    /** @var SearchFacetQueryHandlerInterface*/
+    /** @var SearchFacetQueryHandlerInterface */
     private $searchFacetViewQueryHandler;
 
     /** @var TranslatorInterface */
@@ -64,7 +64,7 @@ abstract class AbstractSearchType extends AbstractType
         /* show type search facet only if there is more than one filter
          * and if category search facet is disabled to avoid having both at the same time
          */
-        if ($hasTypeViews && $typeSearchFacet !== null) {
+        if ($hasTypeViews && null !== $typeSearchFacet) {
             $builder
                 ->add(
                     SearchFields::FILTER_TYPE,
@@ -88,7 +88,7 @@ abstract class AbstractSearchType extends AbstractType
         $categorySearchFacet = $searchFacetsView->getCategory();
 
         // show category search facet only if there is more than one filter
-        if ($hasCategoryViews && $categorySearchFacet !== null) {
+        if ($hasCategoryViews && null !== $categorySearchFacet) {
             $builder
                 ->add(
                     SearchFields::FILTER_CATEGORY,
@@ -108,21 +108,22 @@ abstract class AbstractSearchType extends AbstractType
                 );
         }
 
-        if (($organizationCategoryFacet = $searchFacetsView->getOrganizationCategory()) !== null) {
+        if (null !== ($organizationCategoryFacet = $searchFacetsView->getOrganizationCategory())) {
             $builder->add(SearchFields::FILTER_ORGANIZATION_CATEGORY, ChoiceType::class, [
                 'label'        => $organizationCategoryFacet->label,
                 'choices'      => $organizationCategoryViews,
                 'choice_value' => function (OrganizationCategoryView $organizationCategoryView = null) {
-                    if ($organizationCategoryView !== null) {
+                    if (null !== $organizationCategoryView) {
                         return $organizationCategoryView->key;
                     }
 
                     return null;
                 },
                 'choice_label' => function (OrganizationCategoryView $organizationCategoryView = null) {
-                    if ($organizationCategoryView !== null) {
+                    if (null !== $organizationCategoryView) {
                         return $organizationCategoryView->title;
                     }
+
                     return null;
                 },
                 'required'     => false,
@@ -135,7 +136,7 @@ abstract class AbstractSearchType extends AbstractType
             ]);
         }
 
-        if (($positionFacet = $searchFacetsView->getPosition()) !== null) {
+        if (null !== ($positionFacet = $searchFacetsView->getPosition())) {
             $builder->add(SearchFields::FILTER_POSITION, TagChoiceType::class, [
                 'label'   => $positionFacet->label,
                 'choices' => $positionViews,
@@ -147,7 +148,7 @@ abstract class AbstractSearchType extends AbstractType
             ]);
         }
 
-        if (($localizationFacet = $searchFacetsView->getLocalization()) !== null) {
+        if (null !== ($localizationFacet = $searchFacetsView->getLocalization())) {
             $builder->add(SearchFields::FILTER_LOCALIZATION, HiddenType::class, [
                 'label'    => $localizationFacet->label,
                 'required' => false,
@@ -157,7 +158,7 @@ abstract class AbstractSearchType extends AbstractType
             ]);
         }
 
-        if (($keywordFacet = $searchFacetsView->getKeywords()) !== null) {
+        if (null !== ($keywordFacet = $searchFacetsView->getKeywords())) {
             $builder->add(SearchFields::FILTER_CONTENT, HiddenType::class, [
                 'label' => $keywordFacet->label,
                 'attr'  => [

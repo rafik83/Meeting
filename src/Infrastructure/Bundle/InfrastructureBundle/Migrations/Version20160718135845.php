@@ -1,5 +1,13 @@
 <?php
 
+/*
+ * This file is part of the Proximum Vimeet project.
+ *
+ * Copyright (C) Proximum
+ *
+ * @author Elao <contact@elao.com>
+ */
+
 namespace Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Migrations;
 
 use Doctrine\DBAL\Migrations\AbstractMigration;
@@ -15,7 +23,7 @@ class Version20160718135845 extends AbstractMigration
      */
     public function up(Schema $schema)
     {
-        $this->abortIf($this->connection->getDatabasePlatform()->getName() != 'mysql', 'Migration can only be executed safely on \'mysql\'.');
+        $this->abortIf('mysql' != $this->connection->getDatabasePlatform()->getName(), 'Migration can only be executed safely on \'mysql\'.');
 
         $this->addSql("INSERT INTO nomenclature (id, event_id, original_id, title, depth, value, sort) VALUES(1, NULL, NULL, 'Compétences', 3, '{\"ad987cae\":{\"label\":{\"fr\":\"Aéronautiques\",\"en\":\"Aeronautical\"},\"children\":{\"ecc44d0d\":{\"label\":{\"fr\":\"Ingénierie & Bureau d\'études\",\"en\":\"Engineering and Engineering consulting firm\"},\"children\":{\"c93def9a\":{\"label\":{\"fr\":\"Modélisation et calculs\",\"en\":\"Modelling and calculations\"}},\"34eab90c\":{\"label\":{\"fr\":\"Expérimentation & réalisation de prototypes\",\"en\":\"Experiment and realization of prototypes\"}}}},\"32ef03cc\":{\"label\":{\"fr\":\"Informatique\",\"en\":\"Computing\"},\"children\":{\"cab0332d\":{\"label\":{\"fr\":\"Modélisation & simulation\",\"en\":\"Modelling and simulation\"}}}},\"2ec033da\":{\"label\":{\"fr\":\"Instrumentation Appareils de mesures scientifiques in-situ\",\"en\":\"Instrumentation in situ scientific Measuring devices\"},\"children\":{\"aaa34eb9\":{\"label\":{\"fr\":\"Appareils de mesures scientifiques in-situ\",\"en\":\"In situ scientific measuring devices\"}},\"bdec99a0\":{\"label\":{\"fr\":\"Prototypage\",\"en\":\"Prototypage\"}},\"b35ae9c7\":{\"label\":{\"fr\":\"Technologie laser\",\"en\":\"Laser technology\"}}}}}},\"dea09e034\":{\"label\":{\"fr\":\"Défenses\",\"en\":\"Defence\"},\"children\":{\"acc44d0d\":{\"label\":{\"fr\":\"Ingénierie & Bureau d\'études\",\"en\":\"Engineering and Engineering consulting firm\"},\"children\":{\"993def9a\":{\"label\":{\"fr\":\"Modélisation et calculs\",\"en\":\"Modelling and calculations\"}},\"e4eab90c\":{\"label\":{\"fr\":\"Expérimentation & réalisation de prototypes\",\"en\":\"Experiment and realization of prototypes\"}}}},\"42ef03cc\":{\"label\":{\"fr\":\"Informatique\",\"en\":\"Computing\"},\"children\":{\"dab0332d\":{\"label\":{\"fr\":\"Modélisation & simulation\",\"en\":\"Modelling and simulation\"}}}},\"5ec033da\":{\"label\":{\"fr\":\"Instrumentation Appareils de mesures scientifiques in-situ\",\"en\":\"Instrumentation in situ scientific Measuring devices\"},\"children\":{\"faa34eb9\":{\"label\":{\"fr\":\"Appareils de mesures scientifiques in-situ\",\"en\":\"In situ scientific measuring devices\"}},\"adec99a0\":{\"label\":{\"fr\":\"Prototypage\",\"en\":\"Prototypage\"}},\"a35ae9c7\":{\"label\":{\"fr\":\"Technologie laser\",\"en\":\"Laser technology\"}}}}}}}', 1)");
         $this->addSql("INSERT INTO nomenclature (id, event_id, original_id, title, depth, value, sort) VALUES(2, NULL, NULL, 'Offre et besoins', 1, '{\"ab93de01\":{\"label\":{\"fr\":\"Ingénierie & Bureau d\'études\",\"en\":\"Engineering and Engineering consulting firm\"}},\"ab93de02\":{\"label\":{\"fr\":\"Modélisation et calculs\",\"en\":\"Modelling and calculations\"}},\"ab93de03\":{\"label\":{\"fr\":\"Expérimentation & réalisation de prototypes\",\"en\":\"Experiment and realization of prototypes\"}},\"ab93de04\":{\"label\":{\"fr\":\"Informatique\",\"en\":\"Computing\"}},\"ab93de05\":{\"label\":{\"fr\":\"Modélisation & simulation\",\"en\":\"Modelling and simulation\"}},\"ab93de06\":{\"label\":{\"fr\":\"Instrumentation Appareils de mesures scientifiques in-situ\",\"en\":\"Instrumentation in situ scientific Measuring devices\"}},\"ab93de07\":{\"label\":{\"fr\":\"Prototypage\",\"en\":\"Prototypage\"}}}', 1)");
@@ -36,7 +44,7 @@ class Version20160718135845 extends AbstractMigration
      */
     public function down(Schema $schema)
     {
-        $this->abortIf($this->connection->getDatabasePlatform()->getName() != 'mysql', 'Migration can only be executed safely on \'mysql\'.');
+        $this->abortIf('mysql' != $this->connection->getDatabasePlatform()->getName(), 'Migration can only be executed safely on \'mysql\'.');
 
         $this->addSql('DELETE FROM nomenclature');
         $this->addSql('DELETE FROM template_registration');

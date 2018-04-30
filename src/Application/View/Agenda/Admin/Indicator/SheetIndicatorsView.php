@@ -101,7 +101,7 @@ class SheetIndicatorsView
         $this->usableSlots              = $usableSlots;
         $this->countPlacedMeetings      = $countPlacedMeetings;
         $this->countPendingPropositions = $countPendingPropositions;
-        $this->hasNotSentMeetingRequest = $this->countRequest === 0;
+        $this->hasNotSentMeetingRequest = 0 === $this->countRequest;
         $this->hasMeetingToApprove      = $this->countPendingPropositions > 0;
 
         $this->hasNotEnoughAvailableSlot       = $this->calculateHasNotEnoughAvailableSlot();
@@ -116,7 +116,7 @@ class SheetIndicatorsView
      */
     private function calculateHasNotEnoughAvailableSlot()
     {
-        if ($this->usableSlots === 0) {
+        if (0 === $this->usableSlots) {
             return true;
         }
 

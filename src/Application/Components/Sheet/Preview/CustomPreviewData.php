@@ -15,7 +15,7 @@ class CustomPreviewData
     const PARTICIPANTS_POSITION = 'custom_preview_data_participant_position';
 
     const ALL = [
-        self::PARTICIPANTS_POSITION
+        self::PARTICIPANTS_POSITION,
     ];
 
     /**

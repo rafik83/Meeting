@@ -10,10 +10,10 @@
 
 namespace Proximum\Vimeet\Application\Query\Type;
 
-use Proximum\Vimeet\Domain\Model\Type;
-use Proximum\Vimeet\Domain\Repository\TypeRepositoryInterface;
 use Proximum\Vimeet\Application\View\Type\TypeListsView;
 use Proximum\Vimeet\Application\View\Type\TypeListView;
+use Proximum\Vimeet\Domain\Model\Type;
+use Proximum\Vimeet\Domain\Repository\TypeRepositoryInterface;
 
 class TypeViewQueryHandler
 {

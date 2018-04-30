@@ -23,7 +23,7 @@ class IndexType extends AbstractType
     {
         $builder
             ->add('submit', SubmitType::class, [
-                'confirm' => 'admin.elasticsearch.index.confirm'
+                'confirm' => 'admin.elasticsearch.index.confirm',
             ])
         ;
     }

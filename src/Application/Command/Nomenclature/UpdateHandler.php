@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2016 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -30,7 +30,7 @@ class UpdateHandler
     }
 
     /**
-     * @var Update $command
+     * @var Update
      */
     public function handle(Update $command)
     {
@@ -40,4 +40,3 @@ class UpdateHandler
         $this->nomenclatureRepository->set($nomenclature);
     }
 }
-

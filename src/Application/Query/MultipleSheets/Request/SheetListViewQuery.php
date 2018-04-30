@@ -35,7 +35,7 @@ class SheetListViewQuery
 
     /**
      * @param User              $user
-     * @param Sheet[]           $sheets indexed by sheet id
+     * @param Sheet[]           $sheets            indexed by sheet id
      * @param string            $locale
      * @param int               $page
      * @param int               $limit

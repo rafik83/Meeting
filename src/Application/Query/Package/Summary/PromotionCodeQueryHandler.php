@@ -29,9 +29,8 @@ class PromotionCodeQueryHandler
 
         // foreach promotion code used
         foreach ($cart->getPromotionCodeRows() as $promotionCodeRow) {
-
             $promotionProductRowViews = [];
-            foreach($promotionCodeRow->getPromotionCode()->getPromotions() as $promotion) {
+            foreach ($promotionCodeRow->getPromotionCode()->getPromotions() as $promotion) {
                 $cartRow = $cart->getCartRowForProduct($promotion->getProduct());
 
                 // don't show row with negative quantity

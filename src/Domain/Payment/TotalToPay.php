@@ -53,7 +53,7 @@ class TotalToPay
 
         if ($vatApplicable) {
             foreach ($cart->getRows() as $row) {
-                if ($row->getProduct()->getVat() === 0) {
+                if (0 === $row->getProduct()->getVat()) {
                     continue;
                 }
 
@@ -65,7 +65,7 @@ class TotalToPay
                     $product = $promotion->getProduct();
                     $discount = $cart->getDiscountForProduct($promotionCodeRow->getPromotionCode(), $product);
 
-                    if ($discount === 0) {
+                    if (0 === $discount) {
                         continue;
                     }
 

@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2015 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -66,7 +66,7 @@ class LocalFileStorageAdapter implements FileStorageInterface
 
         $path = $this->getAnnualizedPath('uploads/');
 
-        $directory = ($directoryPath === null) ? $this->publicDir . $path : $directoryPath . $path;
+        $directory = (null === $directoryPath) ? $this->publicDir . $path : $directoryPath . $path;
         $extension = '.' . $file->getClientOriginalExtension();
         $prefix    = uniqid() . '_';
         $filename  = $prefix . Transliterator::urlize(basename($file->getClientOriginalName(), $extension)) . $extension;
@@ -81,7 +81,7 @@ class LocalFileStorageAdapter implements FileStorageInterface
      */
     public function create($content, $filename, $directoryPath = null)
     {
-        if ($directoryPath === null) {
+        if (null === $directoryPath) {
             $directoryPath = $this->publicDir;
         }
 
@@ -118,7 +118,7 @@ class LocalFileStorageAdapter implements FileStorageInterface
     public function remove($identifier, $fullPath = false)
     {
         if (!empty($identifier)) {
-            $filepath = ($fullPath === false) ? $this->publicDir . $identifier : $identifier;
+            $filepath = (false === $fullPath) ? $this->publicDir . $identifier : $identifier;
 
             if (file_exists($filepath) && is_file($filepath) && is_writable($filepath)) {
                 unlink($filepath);

@@ -1,9 +1,9 @@
 <?php
 
 /*
- * This file is part of the vimeet project.
+ * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2017 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -58,13 +58,13 @@ class FilterQueryBuilder extends QueryBuilder
      */
     public function order(string $order)
     {
-        if ($order === RequestRepositoryInterface::ORDER_BY_CREATE_AT_ASC) {
+        if (RequestRepositoryInterface::ORDER_BY_CREATE_AT_ASC === $order) {
             $this->orderBy('request.createdAt', 'ASC');
-        } elseif ($order === RequestRepositoryInterface::ORDER_BY_CREATE_AT_DESC) {
+        } elseif (RequestRepositoryInterface::ORDER_BY_CREATE_AT_DESC === $order) {
             $this->orderBy('request.createdAt', 'DESC');
-        } elseif ($order === RequestRepositoryInterface::ORDER_BY_STATE_UPDATED_AT_ASC) {
+        } elseif (RequestRepositoryInterface::ORDER_BY_STATE_UPDATED_AT_ASC === $order) {
             $this->orderBy('request.stateUpdatedAt', 'ASC');
-        } elseif ($order === RequestRepositoryInterface::ORDER_BY_STATE_UPDATED_AT_DESC) {
+        } elseif (RequestRepositoryInterface::ORDER_BY_STATE_UPDATED_AT_DESC === $order) {
             $this->orderBy('request.stateUpdatedAt', 'DESC');
         }
     }

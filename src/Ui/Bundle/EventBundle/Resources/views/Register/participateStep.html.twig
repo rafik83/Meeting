@@ -23,7 +23,6 @@
                 {{ form_errors(form) }}
 
                 <div class="inputs">
-
                     {% for child in form %}
                         {% if 'image-preview' in child.vars.attr and child.file is defined %}
                             {% set photo_explanation = true %}
@@ -36,6 +35,7 @@
                         {% else %}
                             {{ form_row(child) }}
                         {% endif %}
+                        {% include '@Event/uploadedObjectPreview.html.twig' with {'child': child} only %}
                     {% endfor %}
 
                     <div class="validation">

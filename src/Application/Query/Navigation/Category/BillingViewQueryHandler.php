@@ -1,9 +1,9 @@
 <?php
 
 /*
- * This file is part of the vimeet project.
+ * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2016 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -39,7 +39,7 @@ class BillingViewQueryHandler
      */
     public function handle(BillingViewQuery $billingQuery)
     {
-        if ($billingQuery->sheet->getPackage() === null || !$billingQuery->sheet->getPackage()->isPassable()) {
+        if (null === $billingQuery->sheet->getPackage() || !$billingQuery->sheet->getPackage()->isPassable()) {
             return null;
         }
 
@@ -47,7 +47,7 @@ class BillingViewQueryHandler
         $linksView[] = new LinkView(
             'navigation.links.billing.billing_info',
             $this->navigationBuilder->getRoute('event_billing_info_clear_flash', [
-                'sheet' => $billingQuery->sheet->getId()
+                'sheet' => $billingQuery->sheet->getId(),
             ])
         );
 

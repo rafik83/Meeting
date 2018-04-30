@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2016 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -28,7 +28,7 @@ class ProgramView
     public $categoryPicto;
 
     /**
-     * @param array       $days
+     * @param array $days
      * @param string|null categoryTitle
      * @param string|null $categoryPicto
      */
@@ -47,7 +47,7 @@ class ProgramView
      */
     public function hasCategory()
     {
-        return $this->categoryTitle !== null;
+        return null !== $this->categoryTitle;
     }
 
     /**
@@ -55,7 +55,7 @@ class ProgramView
      */
     public function getCategoryTitle()
     {
-        return $this->categoryTitle !== null ? $this->categoryTitle : '';
+        return null !== $this->categoryTitle ? $this->categoryTitle : '';
     }
 
     /**
@@ -63,7 +63,7 @@ class ProgramView
      */
     public function getCategoryPicto()
     {
-        return $this->categoryPicto !== null ? $this->categoryPicto : 'Conference';
+        return null !== $this->categoryPicto ? $this->categoryPicto : 'Conference';
     }
 
     /**

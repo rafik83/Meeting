@@ -83,7 +83,7 @@ class RemoveHandler
      * @throws ParticipantAttributedToProductCanNotBeRemovedException
      * @throws CanNotRemoveAllParticipantsException
      */
-    public function handle(Remove $remove)
+    public function handle(Remove $remove): void
     {
         if (\count($remove->participants) === $remove->sheet->countParticipants()) {
             throw new CanNotRemoveAllParticipantsException('All participants can not be selected to be remove');

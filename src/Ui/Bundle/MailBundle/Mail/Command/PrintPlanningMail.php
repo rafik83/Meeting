@@ -40,13 +40,13 @@ class PrintPlanningMail extends AbstractMail
     public $fileId;
 
     /**
-     * @param Event      $event
-     * @param string     $sender
-     * @param string     $receiver
-     * @param string     $locale
-     * @param string     $fileHash
-     * @param int        $fileId
-     * @param string     $orderBy
+     * @param Event  $event
+     * @param string $sender
+     * @param string $receiver
+     * @param string $locale
+     * @param string $fileHash
+     * @param int    $fileId
+     * @param string $orderBy
      */
     public function __construct(
         Event $event,

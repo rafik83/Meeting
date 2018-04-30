@@ -14,6 +14,7 @@ use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
 use Proximum\Vimeet\Application\Command\Participant\UpdateCompany;
 use Proximum\Vimeet\Application\Command\Participant\UpdateCompanyHandler;
+use Proximum\Vimeet\Application\Command\Participant\Upload\UploadFileHandler;
 use Proximum\Vimeet\Application\Event\Events;
 use Proximum\Vimeet\Application\Event\Sheet\SheetUpdatedEvent;
 use Proximum\Vimeet\Domain\Account\Synchronizer;
@@ -216,6 +217,7 @@ class UpdateCompanyHandlerTest extends TestCase
         $sheetRepository     = $this->prophesize(SheetRepositoryInterface::class);
         $accountSynchronizer = $this->prophesize(Synchronizer::class);
         $eventDispatcher     = $this->prophesize(DelayedEventDispatcher::class);
+        $uploadFileHandler   = $this->prophesize(UploadFileHandler::class);
 
         $expectedSheet = new Sheet($event, $type, [], $user, $now);
         $expectedSheet->setTitle('foo');
@@ -235,7 +237,8 @@ class UpdateCompanyHandlerTest extends TestCase
         $handler = new UpdateCompanyHandler(
             $sheetRepository->reveal(),
             $accountSynchronizer->reveal(),
-            $eventDispatcher->reveal()
+            $eventDispatcher->reveal(),
+            $uploadFileHandler->reveal()
         );
 
         $templateData  = new TemplateData('root', [], 'fr', 'fr');

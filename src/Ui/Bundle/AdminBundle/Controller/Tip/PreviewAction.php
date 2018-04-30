@@ -41,9 +41,9 @@ class PreviewAction
      * @param Tip    $tip
      * @param string $locale
      *
-     * @return JsonResponse
-     *
      * @throws AccessDeniedException
+     *
+     * @return JsonResponse
      */
     public function __invoke(Tip $tip, string $locale): JsonResponse
     {

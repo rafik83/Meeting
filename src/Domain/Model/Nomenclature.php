@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2015 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -189,7 +189,7 @@ class Nomenclature
         $children = $this->getChildren();
 
         if ($this->sort) {
-            Nomenclature::sort($children, $locale);
+            self::sort($children, $locale);
         }
 
         return $children;
@@ -275,15 +275,15 @@ class Nomenclature
     {
         $nomenclatureItems = [];
 
-        if ($this->depth === 1) {
+        if (1 === $this->depth) {
             $nomenclatureItems = $this->getFirstLevel();
         }
 
-        if ($this->depth === 2) {
+        if (2 === $this->depth) {
             $nomenclatureItems = $this->getSecondLevel();
         }
 
-        if ($this->depth === 3) {
+        if (3 === $this->depth) {
             $nomenclatureItems = $this->getThirdLevel();
         }
 
@@ -322,7 +322,6 @@ class Nomenclature
             }
 
             return $labels;
-
         } elseif (2 === $this->depth) {
             foreach ($this->getValue() as $item) {
                 if (!isset($item['children'])) {
@@ -335,7 +334,6 @@ class Nomenclature
             }
 
             return $labels;
-
         } elseif (1 === $this->depth) {
             $labels = array_map(function ($value) use ($locale) {
                 return isset($value['label'][$locale]) ? $value['label'][$locale] : '';
@@ -522,11 +520,11 @@ class Nomenclature
             $numberOfChildren = count($secondLevel->getChildrenSorted($locale));
 
             if ($elementToAssign['elements'][$currentColumn]['items'] > $numberByColumn) {
-                $currentColumn++;
+                ++$currentColumn;
             }
 
             $elementToAssign['elements'][$currentColumn]['items'] += $numberOfChildren;
-            $elementToAssign['elements'][$currentColumn]['secondLevels']++;
+            ++$elementToAssign['elements'][$currentColumn]['secondLevels'];
         }
 
         $elementToAssign['elements'][2]['secondLevels'] += $elementToAssign['elements'][1]['secondLevels'];

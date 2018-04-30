@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2016 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -52,7 +52,7 @@ class ParticipationCount
      *
      * @param Happening $happening
      *
-     * @return double|int
+     * @return float|int
      */
     public function getRemaining(Happening $happening)
     {
@@ -83,6 +83,6 @@ class ParticipationCount
             return false;
         }
 
-        return $this->getRemaining($happening) === 0;
+        return 0 === $this->getRemaining($happening);
     }
 }

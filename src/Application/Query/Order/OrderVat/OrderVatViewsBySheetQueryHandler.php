@@ -35,9 +35,9 @@ class OrderVatViewsBySheetQueryHandler
     /**
      * @param OrderVatViewsBySheetQuery $orderVatViewsBySheetQuery
      *
-     * @return OrderVatView[]
-     *
      * @throws MissingBillingInfoException
+     *
+     * @return OrderVatView[]
      */
     public function handle(OrderVatViewsBySheetQuery $orderVatViewsBySheetQuery)
     {

@@ -1,9 +1,9 @@
 <?php
 
 /*
- * This file is part of the vimeet project.
+ * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2016 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -45,11 +45,11 @@ class EventSender
      */
     public function generate(Event $event = null)
     {
-        if ($event === null) {
+        if (null === $event) {
             return $this->defaultSender;
         }
 
-        if (preg_match('/' . $this->applicationDomain . '/', $event->getDomain()) === 1) {
+        if (1 === preg_match('/' . $this->applicationDomain . '/', $event->getDomain())) {
             return self::MAIL . '@' . $event->getDomain();
         }
 

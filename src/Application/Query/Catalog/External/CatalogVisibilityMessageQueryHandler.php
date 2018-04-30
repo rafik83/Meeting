@@ -1,9 +1,9 @@
 <?php
 
 /*
- * This file is part of the vimeet project.
+ * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2017 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -39,13 +39,13 @@ class CatalogVisibilityMessageQueryHandler
     {
         $catalogVisibility = $this->catalogVisibilityRepository->getByEvent($query->event);
 
-        if ($catalogVisibility === null || $catalogVisibility->hasMessage() === false) {
+        if (null === $catalogVisibility || false === $catalogVisibility->hasMessage()) {
             return null;
         }
 
         $message = $catalogVisibility->getMessage($query->locale);
 
-        if ($message === null) {
+        if (null === $message) {
             return null;
         }
 

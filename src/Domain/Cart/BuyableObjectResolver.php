@@ -1,9 +1,9 @@
 <?php
 
 /*
- * This file is part of the vimeet project.
+ * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2016 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -131,7 +131,7 @@ class BuyableObjectResolver
     {
         $objects = $this->templateProductGuesser->getBuyableObjects($sheet);
 
-        foreach($objects as $object) {
+        foreach ($objects as $object) {
             $this->updateCart($sheet, $object);
         }
     }
@@ -144,7 +144,6 @@ class BuyableObjectResolver
     public function addPayableProduct(TemplateObject $object, Cart $cart, Order $orderMerged = null)
     {
         if ($product = $this->productTransformer->transform($object->getSelectedProduct())) {
-
             // handle product included
             if ($this->hasCartPlanIncludedProduct($cart, $product, $orderMerged)) {
                 return;
@@ -203,7 +202,7 @@ class BuyableObjectResolver
             $updatedQuantity = $cartRow->getQuantity() + self::PAYABLE_OPTION_QUANTITY;
         }
 
-        if ($updatedQuantity === 0) {
+        if (0 === $updatedQuantity) {
             $cart->removeRow($cartRow);
         }
 

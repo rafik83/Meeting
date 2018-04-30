@@ -1,9 +1,9 @@
 <?php
 
 /*
- * This file is part of the vimeet project.
+ * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) vimeet
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -29,7 +29,7 @@ class ParticipantAssignedToRequestAggregateCommand extends Command
     private $assignedToRequestHandler;
 
     /**
-     * @param EventRepositoryInterface  $eventRepository
+     * @param EventRepositoryInterface $eventRepository
      * @param AssignedToRequestHandler $assignedToRequestHandler
      */
     public function __construct(

@@ -44,7 +44,7 @@ class PrepareLeaderDataHandler
 
         $participantsSortedById = $command->sheet->getParticipantsArray();
         usort($participantsSortedById, function (Participant $participantA, Participant $participantB) {
-           return $participantA->getId()  > $participantB->getId();
+            return $participantA->getId()  > $participantB->getId();
         });
 
         $firstParticipant = reset($participantsSortedById);
@@ -59,7 +59,7 @@ class PrepareLeaderDataHandler
             $firstParticipant->getUser()
         );
 
-        if ($leniLeaderUserId === null) {
+        if (null === $leniLeaderUserId) {
             return null;
         }
 

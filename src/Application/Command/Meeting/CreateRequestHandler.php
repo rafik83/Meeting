@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2015 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -77,7 +77,7 @@ class CreateRequestHandler
             $createRequest->creator,
             $createRequest->event,
             false,
-            $createRequest->description !== null
+            null !== $createRequest->description
         );
 
         $this->requestRepository->add($request);

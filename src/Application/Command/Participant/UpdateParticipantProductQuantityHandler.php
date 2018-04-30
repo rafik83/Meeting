@@ -47,7 +47,7 @@ class UpdateParticipantProductQuantityHandler
     {
         $product = $this->productRepository->findById($command->productId);
 
-        if ($product === null) {
+        if (null === $product) {
             throw new \InvalidArgumentException('Product not found');
         }
 

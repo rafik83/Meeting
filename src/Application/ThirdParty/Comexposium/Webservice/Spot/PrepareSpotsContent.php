@@ -17,7 +17,7 @@ class PrepareSpotsContent
 
     /**
      * @param array $rawRegistrationDataIndexedBySheetId raw "inscription" data from Comexposium indexed by Sheet id
-     *     See http://webservices.comexposium-admin.com/catalogue-ws-v2/inscriptionclientws.wsdl
+     *                                                   See http://webservices.comexposium-admin.com/catalogue-ws-v2/inscriptionclientws.wsdl
      */
     public function __construct(array $rawRegistrationDataIndexedBySheetId)
     {

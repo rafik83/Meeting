@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2015 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -60,12 +60,12 @@ class PaginatedResult implements Countable, Iterator
         $this->page         = $page;
         $this->limit        = $limit;
         $this->total        = $total;
-        $this->pages        = (int)ceil($total / $limit);
+        $this->pages        = (int) ceil($total / $limit);
         $this->aggregations = $aggregations;
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function rewind()
     {
@@ -73,7 +73,7 @@ class PaginatedResult implements Countable, Iterator
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function current()
     {
@@ -81,7 +81,7 @@ class PaginatedResult implements Countable, Iterator
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function key()
     {
@@ -89,7 +89,7 @@ class PaginatedResult implements Countable, Iterator
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function next()
     {
@@ -97,15 +97,15 @@ class PaginatedResult implements Countable, Iterator
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function valid()
     {
-        return key($this->results) !== null;
+        return null !== key($this->results);
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function count()
     {

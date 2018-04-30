@@ -149,7 +149,7 @@ class ChangeTypeHandler
         $ordersUpdated = new MustSelectPackageEvent($changeType->sheet);
         $this->eventDispatcher->dispatch(Events::MUST_SELECT_PACKAGE, $ordersUpdated);
     }
-    
+
     /**
      * Throw exception if current sheet has at least one order invoiced
      * When user attempt to change sheet type
@@ -160,7 +160,7 @@ class ChangeTypeHandler
      */
     private function denyAccessIfAtLeastOneOrderIsInvoiced(Sheet $sheet): void
     {
-        if ($this->orderRepository->hasInvoice($sheet) === true) {
+        if (true === $this->orderRepository->hasInvoice($sheet)) {
             throw new InvoicedSheetException('Sheet type cannot be changed');
         }
     }

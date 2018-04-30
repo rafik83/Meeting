@@ -3,7 +3,7 @@
 /*
  * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) 2016 Proximum
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -107,7 +107,7 @@ class MediaCollection extends TemplateObject
     {
         $default = $this->getDefault();
 
-        if ($default !== null) {
+        if (null !== $default) {
             $pad = $default - count($this->medias);
             while ($pad-- > 0) {
                 $this->medias[] = new Media($this, null, null, null);
@@ -139,6 +139,16 @@ class MediaCollection extends TemplateObject
         return array_filter(array_values($this->medias), function (Media $media) {
             return !$media->isEmpty();
         });
+    }
+
+    public function getTitlePlaceholder(): ?string
+    {
+        return $this->getOption('titlePlaceholder', $this->locale);
+    }
+
+    public function getLinkPlaceholder(): ?string
+    {
+        return $this->getOption('linkPlaceholder', $this->locale);
     }
 
     /**

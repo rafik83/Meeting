@@ -76,9 +76,9 @@ class AffectAction
      * @param Event         $event
      * @param UserInterface $admin
      *
-     * @return Response
-     *
      * @throws AccessDeniedException
+     *
+     * @return Response
      */
     public function __invoke(Request $request, Event $event, UserInterface $admin): Response
     {
