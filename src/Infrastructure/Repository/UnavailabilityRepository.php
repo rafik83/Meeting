@@ -97,8 +97,6 @@ class UnavailabilityRepository implements UnavailabilityRepositoryInterface
             ->setParameter('createdBy', Unavailability::CREATED_BY_SYSTEM)
             ->getQuery()
             ->execute();
-
-        $this->entityManager->flush();
     }
 
     /**
