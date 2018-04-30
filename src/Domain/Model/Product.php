@@ -679,6 +679,7 @@ class Product
     {
         return $this->productIncluded->filter(function (ProductIncluded $productIncluded) {
             $included = $productIncluded->getIncluded();
+
             return $included->isOption() && $included->isAttributable();
         })->toArray();
     }

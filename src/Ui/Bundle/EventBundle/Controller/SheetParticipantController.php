@@ -208,9 +208,9 @@ class SheetParticipantController extends Controller
      * @param string      $locale
      * @param string      $key
      *
-     * @return Response
-     *
      * @throws NotFoundHttpException
+     *
+     * @return Response
      */
     public function removeParticipantAction(EventDomain $eventDomain, Sheet $sheet, $locale, $key): Response
     {
@@ -252,9 +252,9 @@ class SheetParticipantController extends Controller
      * @param string      $locale
      * @param string      $key
      *
-     * @return Response
-     *
      * @throws \Exception
+     *
+     * @return Response
      */
     public function handleRemoveParticipantAction(Request $request, EventDomain $eventDomain, Sheet $sheet, $locale, $key): Response
     {
@@ -372,9 +372,9 @@ class SheetParticipantController extends Controller
      * @param Template\TemplateData $templateData
      * @param string                $key
      *
-     * @return Template\TemplateObject
-     *
      * @throws NotFoundHttpException
+     *
+     * @return Template\TemplateObject
      */
     private function getParticipantObject(Template\TemplateData $templateData, $key): Template\TemplateObject
     {
