@@ -8,11 +8,12 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Proximum\Vimeet\Infrastructure\Security\Guard;
+namespace Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Security\Guard\User\Event;
 
 use Proximum\Vimeet\Application\Adapter\RouterInterface;
 use Proximum\Vimeet\Domain\Event\EventByHostResolver;
 use Proximum\Vimeet\Domain\Exception\Event\EventException;
+use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Repository\UserRepositoryInterface;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Route\Route;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -72,10 +73,9 @@ class TokenAuthenticator extends AbstractGuardAuthenticator
         }
 
         $token = $request->query->get('token');
-        $locale = $request->getLocale();
 
         try {
-            $event = $this->eventByHostResolver->resolveEventFromHostAndLocale($request->getHost(), $locale);
+            $event = $this->eventByHostResolver->resolveEventFromHost($request->getHost());
         } catch (EventException $exception) {
             throw new BadRequestHttpException('Missing host for "event".');
         }
@@ -83,11 +83,10 @@ class TokenAuthenticator extends AbstractGuardAuthenticator
         return [
             'token' => $token,
             'event' => $event,
-            'locale' => $locale,
         ];
     }
 
-    public function getUser($credentials, UserProviderInterface $userProvider)
+    public function getUser($credentials, UserProviderInterface $userProvider): ?User
     {
         return $this->userRepository->findByAuthenticationTokenAndEvent(
             $credentials['token'],
@@ -108,10 +107,16 @@ class TokenAuthenticator extends AbstractGuardAuthenticator
         return new RedirectResponse($this->router->generate('event_login'));
     }
 
-    public function onAuthenticationSuccess(Request $request, TokenInterface $token, $providerKey)
+    public function onAuthenticationSuccess(Request $request, TokenInterface $token, $providerKey): RedirectResponse
     {
-        dump($request, $token, $providerKey);die;
-        //return tr
+        /** @var User $user */
+        $user = $token->getUser();
+
+        if (null === $user->getPassword()) {
+            // todo: Redirect to a form to init the password
+        }
+
+        return new RedirectResponse($this->router->generate('event', ['_locale' => $user->getLocale()]));
     }
 
     public function supports(Request $request): bool

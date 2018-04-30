@@ -337,8 +337,7 @@ class UserRepository implements UserRepositoryInterface
 
     public function findByAuthenticationTokenAndEvent(string $token, Event $event, \DateTimeInterface $expiredAt): ?User
     {
-        return $this
-            ->entityManager
+        return $this->entityManager
             ->createQueryBuilder()
             ->select('user')
             ->from(User::class, 'user')
@@ -356,7 +355,8 @@ class UserRepository implements UserRepositoryInterface
                 'event' => $event,
                 'expiredAt' => $expiredAt,
             ])
+            ->setMaxResults(1)
             ->getQuery()
-            ->getResult();
+            ->getOneOrNullResult();
     }
 }

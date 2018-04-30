@@ -25,5 +25,5 @@ final class Route
     /**
      * User Event login
      */
-    public const USER_EVENT_AUTHENTICATION_TOKEN_LOGIN = 'user_event_authentication_token_login';
+    public const USER_EVENT_AUTHENTICATION_TOKEN_LOGIN = 'vimeet_event_authentication_token_login';
 }

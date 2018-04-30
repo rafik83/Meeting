@@ -6081,7 +6081,7 @@ services:
     #
     # Guard
     #
-    Proximum\Vimeet\Infrastructure\Security\Guard\TokenAuthenticator:
+    Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Security\Guard\User\Event\TokenAuthenticator:
         arguments:
             - '@Proximum\Vimeet\Domain\Event\EventByHostResolver'
             - '@vimeet_infrastructure.repository.user_repository'

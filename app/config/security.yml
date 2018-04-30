@@ -93,25 +93,15 @@ security:
                 lifetime: 2592000
                 path:     /
             guard:
+                entry_point: Proximum\Vimeet\Infrastructure\Security\Guard\ThirdParty\Comexposium\SSOAuthenticator
                 authenticators:
                     - Proximum\Vimeet\Infrastructure\Security\Guard\ThirdParty\Comexposium\SSOAuthenticator
+                    - Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Security\Guard\User\Event\TokenAuthenticator
             logout:
                 path: event_logout
                 target: event_logout_success
             switch_user:
                 parameter: _switchto
-
-        authentication_token:
-            anonymous: ~
-            provider: user_provider
-            logout_on_user_change: true
-            user_checker: security.app.user_checker
-            guard:
-                authenticators:
-                    - Proximum\Vimeet\Infrastructure\Security\Guard\TokenAuthenticator
-            logout:
-                path: event_logout
-                target: event_logout_success
 
     access_control:
         - { path: ^/(fr|en)/login, role: IS_AUTHENTICATED_ANONYMOUSLY, host: '%admin_domain%' }

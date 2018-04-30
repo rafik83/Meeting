@@ -56,6 +56,12 @@ default_event:
     methods: [GET]
 
 #
+# User event authentication token
+#
+vimeet_event_authentication_token_login:
+    path: /login
+
+#
 # Trailing slash redirect to home event
 #
 default_redirect:

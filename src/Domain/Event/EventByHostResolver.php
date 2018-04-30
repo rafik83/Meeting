@@ -57,4 +57,19 @@ class EventByHostResolver
 
         return $event;
     }
+
+    public function resolveEventFromHost(string $host): Event
+    {
+        $event = $this->eventRepository->getEventByDomain($host);
+
+        if (!$event instanceof Event) {
+            throw new EventNotFoundException('Event not found');
+        }
+
+        if (!$event->isVisible()) {
+            throw new EventNotVisibleException('Event not visible');
+        }
+
+        return $event;
+    }
 }
