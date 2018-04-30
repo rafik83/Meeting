@@ -16,5 +16,8 @@
     Given the database is purged
     And the event "Fondation PSG" is created
     And the user "neymar@example.net" is created
+    And there is a sheet
+    And there is a participant for this sheet and this user
     When I go to this page "http://super-event.vimeet.proximum/app_test.php/login?token=abc"
     Then I should be on this page "/fr/login"
+    And I should see "flash.authentication_token.invalid_link"

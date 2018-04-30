@@ -345,8 +345,8 @@ class UserRepository implements UserRepositoryInterface
                 AuthenticationToken::class,
                 'authenticationToken',
                 'WITH',
-                'authenticationToken.user = user
-                AND authenticationToken.token = :token
+                'authenticationToken.token = :token
+                AND authenticationToken.user = user
                 AND authenticationToken.event = :event
                 AND (authenticationToken.expiredAt IS NULL OR authenticationToken.expiredAt > :expiredAt)'
             )

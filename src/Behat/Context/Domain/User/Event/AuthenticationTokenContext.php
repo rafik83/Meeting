@@ -12,6 +12,8 @@ namespace Proximum\Vimeet\Behat\Context\Domain\User\Event;
 
 use Behat\Behat\Context\Context;
 use Proximum\Vimeet\Behat\Context\Domain\Proxy\User\Event\AuthenticationTokenContextProxyInterface;
+use Proximum\Vimeet\Domain\Model\Event;
+use Proximum\Vimeet\Domain\Model\User;
 
 class AuthenticationTokenContext implements Context
 {
@@ -31,11 +33,11 @@ class AuthenticationTokenContext implements Context
         $event = $this->authenticationTokenContextProxy->getStorage()->get('event');
         $user = $this->authenticationTokenContextProxy->getStorage()->get('user');
 
-        if (null === $event) {
+        if (!$event instanceof Event) {
             throw new \InvalidArgumentException('Missing Event');
         }
 
-        if (null === $user) {
+        if (!$user instanceof User) {
             throw new \InvalidArgumentException('Missing User');
         }
 
