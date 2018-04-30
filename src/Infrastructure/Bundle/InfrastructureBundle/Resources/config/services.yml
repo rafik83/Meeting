@@ -6077,3 +6077,14 @@ services:
         arguments:
             - '@Proximum\Vimeet\Infrastructure\Encryption\UserEventProtectedKeyGetterAdapter'
             - '@Proximum\Vimeet\Infrastructure\Encryption\UserEventProtectedKeyPasswordGetterAdapter'
+
+    #
+    # Guard
+    #
+    Proximum\Vimeet\Infrastructure\Security\Guard\TokenAuthenticator:
+        arguments:
+            - '@Proximum\Vimeet\Domain\Event\EventByHostResolver'
+            - '@vimeet_infrastructure.repository.user_repository'
+            - '@session.flash_bag'
+            - '@adapter.router'
+            - '@datetime'

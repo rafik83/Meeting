@@ -101,6 +101,18 @@ security:
             switch_user:
                 parameter: _switchto
 
+        authentication_token:
+            anonymous: ~
+            provider: user_provider
+            logout_on_user_change: true
+            user_checker: security.app.user_checker
+            guard:
+                authenticators:
+                    - Proximum\Vimeet\Infrastructure\Security\Guard\TokenAuthenticator
+            logout:
+                path: event_logout
+                target: event_logout_success
+
     access_control:
         - { path: ^/(fr|en)/login, role: IS_AUTHENTICATED_ANONYMOUSLY, host: '%admin_domain%' }
         - { path: ^/(fr|en)/forgot-password, role: IS_AUTHENTICATED_ANONYMOUSLY, host: '%admin_domain%' }
