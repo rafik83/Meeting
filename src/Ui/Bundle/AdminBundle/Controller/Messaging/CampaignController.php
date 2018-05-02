@@ -59,7 +59,12 @@ class CampaignController extends Controller
             'attr'  => ['class' => 'btn btn-default'],
         ]);
 
-        $filters        = $filterForm->handleRequest($request)->getData();
+        $filters        = [];
+        $filterForm->handleRequest($request);
+
+        if ($filterForm->isSubmitted() && $filterForm->isValid()) {
+            $filters = $filterForm->getData();
+        }
         $query          = new SheetListViewQuery($event, $filters, $locale);
         $sheets         = $this->get('tactician.commandbus.query')->handle($query);
         $filterFormView = $filterForm->createView();
