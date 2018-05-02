@@ -26,4 +26,9 @@ class UserFactory
         // p@ssw0rd
         return new User($email, '0D/UTZan1ZbStvnSEBj6flRGgQ59fyeSV9dnIT+5', 'q5sEATy5kfjoDYZqxBP7vNVJwqQ=', 'fr');
     }
+
+    public static function createWithEmptyPassword(string $email): User
+    {
+        return new User($email, '', '', 'fr');
+    }
 }

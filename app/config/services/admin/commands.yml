@@ -74,6 +74,14 @@ services:
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\User\Event\Token\UpdateAgendaConfirmation }
 
+    command.user.event.activate_account_token_by_user_sheet_guesser_handler:
+        class: Proximum\Vimeet\Application\Command\User\Event\ActivateAccountTokenByUserAndSheetGuesserHandler
+        arguments:
+            - '@components.token.user.activate_account_token_generator'
+            - '@sheet.sheet_guesser'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\User\Event\ActivateAccountTokenByUserAndSheetGuesser }
+
     #
     # User Phone Ignore Confirmation
     #

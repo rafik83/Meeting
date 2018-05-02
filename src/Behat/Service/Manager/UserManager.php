@@ -44,4 +44,12 @@ class UserManager
 
         return $user;
     }
+
+    public function createWithEmptyPassword(string $email): User
+    {
+        $user = UserFactory::createWithEmptyPassword($email);
+        $this->userRepository->add($user);
+
+        return $user;
+    }
 }

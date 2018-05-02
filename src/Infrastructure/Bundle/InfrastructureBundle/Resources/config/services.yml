@@ -6088,3 +6088,4 @@ services:
             - '@session.flash_bag'
             - '@adapter.router'
             - '@datetime'
+            - '@command.user.event.activate_account_token_by_user_sheet_guesser_handler'
