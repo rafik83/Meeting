@@ -72,8 +72,8 @@ class SheetSearchAdapter implements SheetSearchAdapterInterface
         array $availableSlotIds = [],
         array $sheetsToExclude = []
     ): Query {
-        $nomenclatureBoost = (isset($nomenclatureItems[Nomenclature::OBJECTIVE_NONE]))
-            ? count($nomenclatureItems[Nomenclature::OBJECTIVE_NONE])
+        $nomenclatureBoost = isset($nomenclatureItems[Nomenclature::OBJECTIVE_NONE])
+            ? \count($nomenclatureItems[Nomenclature::OBJECTIVE_NONE])
             : 1;
 
         $builder = new SheetSearchQueryBuilder(

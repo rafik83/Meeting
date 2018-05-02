@@ -46,7 +46,7 @@ use Symfony\Component\HttpFoundation\Response;
 
 class SheetController extends Controller
 {
-    const SHEETS_PER_PAGE = 100;
+    private const SHEETS_PER_PAGE = 100;
 
     /**
      * @param Request $request
