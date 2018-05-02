@@ -107,4 +107,25 @@ class PackageManager
 
         $this->packageRepository->set($package);
     }
+
+    /**
+     * @param Package   $package
+     * @param Product[] $options
+     */
+    public function setOptions(Package $package, array $options)
+    {
+        $package->setGroups(
+            [
+                $options,
+            ],
+            [
+                [
+                    'fr' => 'Groupe 1',
+                    'en' => 'Group 1',
+                ],
+            ]
+        );
+
+        $this->packageRepository->set($package);
+    }
 }

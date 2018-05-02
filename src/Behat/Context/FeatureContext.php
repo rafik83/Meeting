@@ -771,4 +771,24 @@ class FeatureContext extends MinkContext implements KernelAwareContext, SnippetA
             throw new \InvalidArgumentException('Element does not contain this text');
         }
     }
+
+    /**
+     * @Given I fill my billing informations
+     */
+    public function iFillMyBillingInformations()
+    {
+        $this->fillField('gender.man', 'man');
+        $this->fillField('form.billing_info_update.children.lastname.label', 'Jean');
+        $this->fillField('form.billing_info_update.children.firstname.label', 'DUPOND');
+        $this->fillField('form.billing_info_update.children.function.label', 'Director');
+        $this->fillField('form.billing_info_update.children.phone.label', '+33456789');
+        $this->fillField('form.billing_info_update.children.mobile.label', '+33456789');
+        $this->fillField('form.billing_info_update.children.email.label', 'jean.dupond@example.net');
+        $this->fillField('form.billing_info_update.children.company.label', 'DUPOND and Brothers');
+        $this->fillField('form.billing_info_update.children.street.label', '10 Bucarest street');
+        $this->fillField('form.billing_info_update.children.zipcode.label', '75002');
+        $this->fillField('form.billing_info_update.children.city.label', 'Paris');
+        $this->fillField('form.billing_info_update.children.country.label', 'FR');
+        $this->fillField('form.billing_info_update.children.vatNumber.label', '123456789');
+    }
 }
