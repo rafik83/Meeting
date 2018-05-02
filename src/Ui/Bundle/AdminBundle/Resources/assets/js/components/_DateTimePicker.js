@@ -5,8 +5,8 @@ var $      = require('jquery'),
 function DateTimePicker(element, customConfig)
 {
     var customConfig = customConfig || null;
-    this.element        = element;
-    this.parentZone     = null;
+    this.element     = element;
+    this.parentZone  = null;
 
     this.standardConfig = {
         sideBySide: true,
@@ -27,6 +27,21 @@ function DateTimePicker(element, customConfig)
 
     if (customConfig !== null) {
        this.standardConfig = Object.assign(this.standardConfig, customConfig);
+    }
+
+    var allowDates = this.element.getAttribute('data-allow-dates');
+    var allowHours = this.element.getAttribute('data-allow-hours');
+
+    // In case of allowDates or allowHours not set, change the format of the picker
+    if ((allowDates === null && allowHours !== null)
+        || (allowHours === null && allowDates !== null)
+    ) {
+        this.standardConfig = Object.assign(
+            this.standardConfig,
+            {
+                format: allowHours === null ? 'DD/MM/YYYY' : 'HH:mm'
+            }
+        );
     }
     
     $(element).datetimepicker(this.standardConfig);
