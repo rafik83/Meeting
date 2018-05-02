@@ -12,6 +12,7 @@ namespace Proximum\Vimeet\Application\Command\Participant\Upload;
 
 use Proximum\Vimeet\Application\Adapter\FileStorageInterface;
 use Proximum\Vimeet\Domain\Template\TemplateObject\Image;
+use Proximum\Vimeet\Domain\Template\TemplateObject\UploadObject;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 class UploadFileHandler
@@ -24,27 +25,34 @@ class UploadFileHandler
         $this->fileStorage = $fileStorage;
     }
 
+    /**
+     * @return array of registration or sheet data
+     * @throws UploadFileException
+     */
     public function handle(UploadFile $uploadFile): array
     {
         $object = $uploadFile->getObject();
+
         if (!$object->getFile() instanceof UploadedFile) {
             return $uploadFile->getData();
         }
 
         try {
-            // Remove previous file
-            $this->fileStorage->remove($object->getContentValue());
+            if ($object->getContentValue()) {
+                // Remove previous file
+                $this->fileStorage->remove($object->getContentValue());
+            }
 
             $path = $this->fileStorage->upload($object->getFile());
             $extension = $object->getFile()->getClientOriginalExtension();
 
-            $data = [
+            $objectData = [
                 'path'=> $path,
                 'extension' => $extension,
             ];
 
             if ($object instanceof Image) {
-                $data = [
+                $objectData = [
                     'image' => $path,
                 ];
             }
@@ -52,7 +60,7 @@ class UploadFileHandler
             return array_merge(
                 $uploadFile->getData(),
                 [
-                    $object->getKey() => $data,
+                    $object->getKey() => $objectData,
                 ]
             );
         } catch (\Exception $exception) {
@@ -60,7 +68,9 @@ class UploadFileHandler
                 sprintf(
                     'account.profile.%s.error',
                     $object instanceof UploadObject ? 'uploadedObject' : 'updateAvatar'
-                )
+                ),
+                $exception->getCode(),
+                $exception
             );
         }
     }

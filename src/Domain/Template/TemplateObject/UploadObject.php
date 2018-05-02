@@ -11,7 +11,6 @@
 namespace Proximum\Vimeet\Domain\Template\TemplateObject;
 
 use Proximum\Vimeet\Domain\MimeType\MimeType;
-use Proximum\Vimeet\Domain\Template\TemplateObject;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 class UploadObject extends EditableObject implements UploadableObjectInterface
