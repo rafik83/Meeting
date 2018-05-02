@@ -242,6 +242,8 @@ class SheetSearchQueryBuilder
             return;
         }
 
+        $search = str_replace('|', ' ', $filters[SearchFields::FILTER_CONTENT]);
+
         // Boost sheetname and content
         $fields = [
             sprintf('sheetName^%s', $this->initialBooster * self::BOOSTER_SHEET_NAME),
@@ -258,7 +260,7 @@ class SheetSearchQueryBuilder
             ->setMinimumShouldMatch(self::CONTENT_MINIMUM_SHOULD_MATCH . '%')
             ->setFields($fields)
             ->setType(MultiMatch::TYPE_CROSS_FIELDS)
-            ->setQuery(str_replace(',', ' ', $filters['content']))
+            ->setQuery($search)
         ;
 
         $this->query->addMust($multiMatch);
