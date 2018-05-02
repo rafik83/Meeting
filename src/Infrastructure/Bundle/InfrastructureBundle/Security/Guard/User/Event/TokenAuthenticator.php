@@ -112,10 +112,6 @@ class TokenAuthenticator extends AbstractGuardAuthenticator
         /** @var User $user */
         $user = $token->getUser();
 
-        if (null === $user->getPassword()) {
-            // todo: Redirect to a form to init the password
-        }
-
         return new RedirectResponse($this->router->generate('event', ['_locale' => $user->getLocale()]));
     }
 
