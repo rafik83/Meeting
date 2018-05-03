@@ -36,9 +36,10 @@ class ActivateAccountTokenByUserAndSheetGuesserHandler
     {
         /** @var User $user */
         $user = $activateAccountTokenByUserAndSheetGuesser->user;
+        $locale = $activateAccountTokenByUserAndSheetGuesser->event->getAvailableLocale($user->getLocale());
 
         $sheet = $this->sheetGuesser
-            ->getUserSheet($user, $activateAccountTokenByUserAndSheetGuesser->event, $user->getLocale());
+            ->getUserSheet($user, $activateAccountTokenByUserAndSheetGuesser->event, $locale);
 
         return $this->accountTokenGenerator->generate($user, $sheet);
     }
