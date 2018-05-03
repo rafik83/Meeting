@@ -2324,6 +2324,10 @@ services:
             - '%tokbox_api_key%'
             - '%feature_video_conference_date_security_enabled%'
 
+    Proximum\Vimeet\Infrastructure\Adapter\UserEventProtectedKeyPasswordGetterAdapter:
+        arguments:
+            - '%secret%'
+
     open_tok:
         class: OpenTok\OpenTok
         arguments:
