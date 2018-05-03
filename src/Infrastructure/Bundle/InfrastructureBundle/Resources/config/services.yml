@@ -2324,6 +2324,15 @@ services:
             - '%tokbox_api_key%'
             - '%feature_video_conference_date_security_enabled%'
 
+    Proximum\Vimeet\Infrastructure\Adapter\ProtectedKeyAdapter: ~
+
+    Proximum\Vimeet\Infrastructure\Adapter\UserEventProtectedKeyGetterAdapter:
+        arguments:
+            - '@repository.user.event.extra_data_repository'
+            - '@Proximum\Vimeet\Infrastructure\Adapter\ProtectedKeyAdapter'
+            - '@Proximum\Vimeet\Infrastructure\Adapter\UserEventProtectedKeyPasswordGetterAdapter'
+            - '@datetime'
+
     Proximum\Vimeet\Infrastructure\Adapter\UserEventProtectedKeyPasswordGetterAdapter:
         arguments:
             - '%secret%'
