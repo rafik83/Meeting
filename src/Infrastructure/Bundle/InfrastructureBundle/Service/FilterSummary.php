@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Service;
 
+use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Sheet\Constant;
 use Symfony\Component\Form\FormView;
 use Symfony\Component\Translation\TranslatorInterface as SymfonyTranslatorInterface;
@@ -21,6 +22,9 @@ class FilterSummary
      */
     private $translator;
 
+    /** @var \IntlDateFormatter|null */
+    private $dateFormatter;
+
     /**
      * @param SymfonyTranslatorInterface $translator
      */
@@ -30,13 +34,14 @@ class FilterSummary
     }
 
     /**
-     * @param FormView $formView
-     * @param array    $filters
-     * @param string   $locale
+     * @param FormView   $formView
+     * @param array      $filters
+     * @param string     $locale
+     * @param Event|null $event
      *
      * @return array
      */
-    public function getFilters(FormView $formView, array $filters, $locale)
+    public function getFilters(FormView $formView, array $filters, ?Event $event, $locale): array
     {
         $selectedFilters = [];
 
@@ -45,7 +50,7 @@ class FilterSummary
                 continue;
             }
 
-            if (is_array($value) && empty($value)) {
+            if (\is_array($value) && empty($value)) {
                 continue;
             }
 
@@ -60,7 +65,7 @@ class FilterSummary
             if (Constant::BOOLEAN_FILTER === $field->vars['name']) {
                 foreach ($field->children as $childrenRow) {
                     try {
-                        list($label, $value) = $this->handleFormRow($childrenRow, $locale);
+                        list($label, $value) = $this->handleFormRow($childrenRow, $event, $locale);
                         $selectedFilters[$label] = $value;
                     } catch (\Exception $exception) {
                         continue;
@@ -68,7 +73,13 @@ class FilterSummary
                 }
             } else {
                 try {
-                    list($label, $value) = $this->handleFormRow($field, $locale);
+                    list($label, $value) = $this->handleFormRow($field, $event, $locale);
+
+                    // In case of empty data, we do not show the selected filter in the summary
+                    if (empty($value)) {
+                        continue;
+                    }
+
                     $selectedFilters[$label] = $value;
                 } catch (\Exception $exception) {
                     continue;
@@ -80,14 +91,14 @@ class FilterSummary
     }
 
     /**
-     * @param FormView $field
-     * @param string   $locale
-     *
-     * @throws \Exception
+     * @param FormView   $field
+     * @param null|Event $event
+     * @param string     $locale
      *
      * @return array
+     * @throws \Exception
      */
-    private function handleFormRow(FormView $field, $locale)
+    private function handleFormRow(FormView $field, ?Event $event, $locale): array
     {
         $isCheckbox = isset($field->vars['checked']);
 
@@ -118,8 +129,69 @@ class FilterSummary
             $value = $this->translator->trans('boolean.yes');
         }
 
+        if ($value instanceof \DateTimeInterface) {
+            $this->initiateDateFormatter($event, $locale);
+
+            $value = $this->dateFormatter->format($value);
+        }
+
+        if (\is_array($value)) {
+            if ($this->hasNotNullValues($value)) {
+                $subLabels = [];
+                $subValues = [];
+
+                foreach ($field->children as $subField) {
+                    list($subLabel, $subValue) = $this->handleFormRow($subField, $event, $locale);
+
+                    $subLabels[] = $subLabel;
+                    $subValues[] = $subValue;
+                }
+
+                $values = [];
+
+                foreach ($subLabels as $key => $subLabel) {
+                    $values[] = sprintf('%s: %s', $subLabel, $subValues[$key]);
+                }
+
+               $value = implode(', ', $values);
+            } else {
+                $value = '';
+            }
+        }
+
         $label = $this->translator->trans($field->vars['label'], [], $field->vars['translation_domain'], $locale);
 
         return [$label, $value];
+    }
+
+    private function hasNotNullValues(array $values): bool
+    {
+        foreach ($values as $element) {
+            if ($element !== null) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    private function initiateDateFormatter(?Event $event, string $locale): void
+    {
+        if ($this->dateFormatter instanceof \IntlDateFormatter) {
+            return;
+        }
+
+        $timeZone = date_default_timezone_get();
+
+        if ($event instanceof Event) {
+            $timeZone = $event->getTimeZone();
+        }
+
+        $this->dateFormatter = \IntlDateFormatter::create(
+            $locale,
+            \IntlDateFormatter::SHORT,
+            \IntlDateFormatter::SHORT,
+            $timeZone
+        );
     }
 }

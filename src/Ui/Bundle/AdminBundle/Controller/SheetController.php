@@ -147,6 +147,7 @@ class SheetController extends Controller
             'filters_summary'  => $this->get('filter_summary')->getFilters(
                 $sheetFilterView,
                 $filters,
+                $event,
                 $request->getLocale()
             ),
             'batch_form'       => $batchForm->createView(),
