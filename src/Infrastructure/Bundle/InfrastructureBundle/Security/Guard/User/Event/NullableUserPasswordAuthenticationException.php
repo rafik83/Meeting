@@ -18,15 +18,15 @@ class NullableUserPasswordAuthenticationException extends AuthenticationExceptio
     /** @var ActivateAccountToken */
     private $activateAccountToken;
 
+    public function __construct(ActivateAccountToken $activateAccountToken)
+    {
+        parent::__construct();
+
+        $this->activateAccountToken = $activateAccountToken;
+    }
+
     public function getActivateAccountToken(): ActivateAccountToken
     {
         return $this->activateAccountToken;
-    }
-
-    public function setActivateAccountToken(ActivateAccountToken $activateAccountToken): self
-    {
-        $this->activateAccountToken = $activateAccountToken;
-
-        return $this;
     }
 }

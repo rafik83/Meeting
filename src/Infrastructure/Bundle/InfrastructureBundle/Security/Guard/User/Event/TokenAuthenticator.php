@@ -111,8 +111,7 @@ class TokenAuthenticator extends AbstractGuardAuthenticator
                     new ActivateAccountTokenByUserAndSheetGuesser($user, $credentials['event'])
                 );
 
-                throw (new NullableUserPasswordAuthenticationException())
-                    ->setActivateAccountToken($activateAccountToken);
+                throw new NullableUserPasswordAuthenticationException($activateAccountToken);
             } catch (SheetNotFoundException $sheetNotFoundException) {
                 throw new AuthenticationException('Sheet not found.');
             }
