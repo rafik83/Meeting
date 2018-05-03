@@ -12,7 +12,7 @@
     When I go to this page "http://super-event.vimeet.proximum/app_test.php/login?token=1337ABCD2018"
     Then I should be on this page "/fr/account/sheet/1/participant/1/profile"
 
-  Scenario: I try to access to my sheet with an authentication token without password
+  Scenario: I can access to my sheet with an authentication token without password
     Given the database is purged
     And the event "Fondation PSG" is created
     And the user "neymar@example.net" with empty password is created

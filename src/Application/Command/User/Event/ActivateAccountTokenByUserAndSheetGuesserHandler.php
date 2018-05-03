@@ -37,16 +37,9 @@ class ActivateAccountTokenByUserAndSheetGuesserHandler
         /** @var User $user */
         $user = $activateAccountTokenByUserAndSheetGuesser->user;
 
-        try {
-            $sheet = $this->sheetGuesser
-                ->getUserSheet($user, $activateAccountTokenByUserAndSheetGuesser->event, $user->getLocale());
+        $sheet = $this->sheetGuesser
+            ->getUserSheet($user, $activateAccountTokenByUserAndSheetGuesser->event, $user->getLocale());
 
-            return $this->accountTokenGenerator->generate($user, $sheet);
-        } catch (SheetNotFoundException $sheetNotFoundException) {
-            throw new SheetNotFoundException(
-                $sheetNotFoundException->getMessage(),
-                $sheetNotFoundException->getCode()
-            );
-        }
+        return $this->accountTokenGenerator->generate($user, $sheet);
     }
 }
