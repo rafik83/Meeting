@@ -8,7 +8,7 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Proximum\Vimeet\Infrastructure\Adapter;
+namespace Proximum\Vimeet\Infrastructure\Encryption;
 
 use Proximum\Vimeet\Application\Adapter\UserEventProtectedKeyPasswordGetterInterface;
 use Proximum\Vimeet\Domain\Model\Event;

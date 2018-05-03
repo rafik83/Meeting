@@ -8,7 +8,7 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Proximum\Vimeet\Tests\Infrastructure\Adapter;
+namespace Proximum\Vimeet\Tests\Infrastructure\Encryption;
 
 use Proximum\Vimeet\Application\Adapter\ProtectedKeyInterface;
 use Proximum\Vimeet\Application\Adapter\UserEventProtectedKeyPasswordGetterInterface;
@@ -16,7 +16,7 @@ use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Repository\User\Event\ExtraDataRepositoryInterface;
 use Proximum\Vimeet\Domain\User\Event\ExtraData\Type;
-use Proximum\Vimeet\Infrastructure\Adapter\UserEventProtectedKeyGetterAdapter;
+use Proximum\Vimeet\Infrastructure\Encryption\UserEventProtectedKeyGetterAdapter;
 use PHPUnit\Framework\TestCase;
 
 class UserEventProtectedKeyGetterAdapterTest extends TestCase

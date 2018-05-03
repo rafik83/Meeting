@@ -2324,19 +2324,6 @@ services:
             - '%tokbox_api_key%'
             - '%feature_video_conference_date_security_enabled%'
 
-    Proximum\Vimeet\Infrastructure\Adapter\ProtectedKeyAdapter: ~
-
-    Proximum\Vimeet\Infrastructure\Adapter\UserEventProtectedKeyGetterAdapter:
-        arguments:
-            - '@repository.user.event.extra_data_repository'
-            - '@Proximum\Vimeet\Infrastructure\Adapter\ProtectedKeyAdapter'
-            - '@Proximum\Vimeet\Infrastructure\Adapter\UserEventProtectedKeyPasswordGetterAdapter'
-            - '@datetime'
-
-    Proximum\Vimeet\Infrastructure\Adapter\UserEventProtectedKeyPasswordGetterAdapter:
-        arguments:
-            - '%secret%'
-
     open_tok:
         class: OpenTok\OpenTok
         arguments:
@@ -6058,3 +6045,32 @@ services:
         class: Proximum\Vimeet\Domain\Sheet\Availability\ConfirmationCalculator
         arguments:
             - '@repository.user.event.extra_data_repository'
+
+    #
+    # Encryption
+    #
+    Proximum\Vimeet\Infrastructure\Encryption\ProtectedKeyAdapter: ~
+
+    Proximum\Vimeet\Infrastructure\Encryption\UserEventProtectedKeyGetterAdapter:
+        arguments:
+            - '@repository.user.event.extra_data_repository'
+            - '@Proximum\Vimeet\Infrastructure\Encryption\ProtectedKeyAdapter'
+            - '@Proximum\Vimeet\Infrastructure\Encryption\UserEventProtectedKeyPasswordGetterAdapter'
+            - '@datetime'
+
+    Proximum\Vimeet\Infrastructure\Encryption\UserEventProtectedKeyPasswordGetterAdapter:
+        arguments:
+            - '%secret%'
+
+    Proximum\Vimeet\Infrastructure\Encryption\UserEventEncryptFileAdapter:
+        arguments:
+            - '@Proximum\Vimeet\Infrastructure\Encryption\UserEventKeyGetter'
+
+    Proximum\Vimeet\Infrastructure\Encryption\UserEventDecryptFileAdapter:
+        arguments:
+            - '@Proximum\Vimeet\Infrastructure\Encryption\UserEventKeyGetter'
+
+    Proximum\Vimeet\Infrastructure\Encryption\UserEventKeyGetter:
+        arguments:
+            - '@Proximum\Vimeet\Infrastructure\Encryption\UserEventProtectedKeyGetterAdapter'
+            - '@Proximum\Vimeet\Infrastructure\Encryption\UserEventProtectedKeyPasswordGetterAdapter'

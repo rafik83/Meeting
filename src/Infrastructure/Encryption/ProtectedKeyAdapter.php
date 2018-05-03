@@ -8,7 +8,7 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Proximum\Vimeet\Infrastructure\Adapter;
+namespace Proximum\Vimeet\Infrastructure\Encryption;
 
 use Defuse\Crypto\KeyProtectedByPassword;
 use Proximum\Vimeet\Application\Adapter\ProtectedKeyInterface;

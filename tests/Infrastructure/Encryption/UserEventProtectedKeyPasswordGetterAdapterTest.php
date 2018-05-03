@@ -8,12 +8,12 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Proximum\Vimeet\Tests\Infrastructure\Adapter;
+namespace Proximum\Vimeet\Tests\Infrastructure\Encryption;
 
 use PHPUnit\Framework\TestCase;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\User;
-use Proximum\Vimeet\Infrastructure\Adapter\UserEventProtectedKeyPasswordGetterAdapter;
+use Proximum\Vimeet\Infrastructure\Encryption\UserEventProtectedKeyPasswordGetterAdapter;
 
 class UserEventProtectedKeyPasswordGetterAdapterTest extends TestCase
 {
