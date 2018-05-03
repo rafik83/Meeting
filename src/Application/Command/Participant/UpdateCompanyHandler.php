@@ -69,8 +69,12 @@ class UpdateCompanyHandler
 
             if ($templateObject instanceof UploadObject) {
                 try {
-                    $companyData = $this->uploadFileHandler
-                        ->handle(new UploadFile($templateObject, $companyData));
+                    $companyData = $this
+                        ->uploadFileHandler
+                        ->handle(
+                            new UploadFile($sheet->getEvent(), $participant->getUser(), $templateObject, $companyData)
+                        )
+                    ;
                 } catch (UploadFileException $exception) {
                 }
 

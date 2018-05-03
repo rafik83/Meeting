@@ -11,6 +11,7 @@
 namespace Proximum\Vimeet\Application\Command\Participant\Upload;
 
 use Proximum\Vimeet\Application\Adapter\FileStorageInterface;
+use Proximum\Vimeet\Application\Adapter\UserEventEncryptFileInterface;
 use Proximum\Vimeet\Domain\Template\TemplateObject\Image;
 use Proximum\Vimeet\Domain\Template\TemplateObject\UploadObject;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
@@ -20,9 +21,13 @@ class UploadFileHandler
     /** @var FileStorageInterface */
     private $fileStorage;
 
-    public function __construct(FileStorageInterface $fileStorage)
+    /** @var UserEventEncryptFileInterface */
+    private $userEventEncryptFile;
+
+    public function __construct(FileStorageInterface $fileStorage, UserEventEncryptFileInterface $userEventEncryptFile)
     {
         $this->fileStorage = $fileStorage;
+        $this->userEventEncryptFile = $userEventEncryptFile;
     }
 
     /**
@@ -41,6 +46,17 @@ class UploadFileHandler
             if ($object->getContentValue()) {
                 // Remove previous file
                 $this->fileStorage->remove($object->getContentValue());
+            }
+
+            if ($object instanceof UploadObject && $object->isCrypted()) {
+                $filePath = $object->getFile()->getPathname();
+
+                $this->userEventEncryptFile->encryptFile(
+                    $uploadFile->getEvent(),
+                    $uploadFile->getUser(),
+                    $filePath,
+                    $filePath
+                );
             }
 
             $path = $this->fileStorage->upload($object->getFile());

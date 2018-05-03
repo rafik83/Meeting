@@ -1365,6 +1365,7 @@ services:
         class: Proximum\Vimeet\Application\Command\Participant\Upload\UploadFileHandler
         arguments:
             - '@adapter.local_file_storage'
+            - '@Proximum\Vimeet\Infrastructure\Encryption\UserEventEncryptFileAdapter'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Participant\Upload\UploadFile }
     command.participant.update_avatar_handler:
