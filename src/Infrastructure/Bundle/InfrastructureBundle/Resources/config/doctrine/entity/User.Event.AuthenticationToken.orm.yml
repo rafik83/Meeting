@@ -9,7 +9,6 @@ Proximum\Vimeet\Domain\Model\User\Event\AuthenticationToken:
     fields:
         token:
             type: string
-            unique: true
         expiredAt:
             type: datetime
             nullable: true
@@ -26,3 +25,8 @@ Proximum\Vimeet\Domain\Model\User\Event\AuthenticationToken:
             joinColumn:
                 onDelete: CASCADE
                 nullable: false
+    uniqueConstraints:
+        unique_authentication_token_event:
+            columns:
+                - token
+                - event_id
