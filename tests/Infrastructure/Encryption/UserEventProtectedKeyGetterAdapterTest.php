@@ -105,7 +105,7 @@ class UserEventProtectedKeyGetterAdapterTest extends TestCase
 
         $this
             ->userEventExtraDataRepository
-            ->set(
+            ->add(
                 new User\Event\ExtraData(
                     $this->user->reveal(),
                     $this->event->reveal(),

@@ -59,7 +59,7 @@ class UserEventProtectedKeyGetterAdapter implements UserEventProtectedKeyGetterI
         $password = $this->userEventProtectedKeyPasswordGetter->getProtectedKeyPasswordByEventAndUser($event, $user);
         $key = $this->protectedKey->getKeyProtectedByPassword($password);
 
-        $this->userEventExtraDataRepository->set(
+        $this->userEventExtraDataRepository->add(
             new User\Event\ExtraData($user, $event, Type::PROTECTED_KEY, $key, $this->dateTime)
         );
 
