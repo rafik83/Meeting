@@ -910,6 +910,7 @@ admin.spot.title: spots
 admin.spot.unavailability: 'add unavailabilities'
 admin.spot.visio.no: 'no'
 admin.spot.visio.yes: 'yes'
+admin.authentication_token.import.title: 'Import authentication tokens'
 admin.template_list.link: templates
 admin.template_list.organizer_link: 'my templates'
 admin.template.action.addLanguage: 'add a language'

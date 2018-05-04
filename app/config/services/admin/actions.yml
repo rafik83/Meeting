@@ -384,3 +384,22 @@ services:
             - '@adapter.router'
             - '@Proximum\Vimeet\Application\ThirdParty\Comexposium\Webservice\Spot\ScheduleExportHandler'
             - '@Proximum\Vimeet\Infrastructure\Adapter\QueryBus'
+
+    #
+    # Authentication token
+    #
+    Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\User\Event\AuthenticationToken\ImportAction:
+        arguments:
+            - '@templating.engine.twig'
+            - '@form.factory'
+            - '@adapter.authorization_checker'
+            - '@Proximum\Vimeet\Infrastructure\Adapter\CommandBus'
+            - '@adapter.router'
+
+    Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\User\Event\AuthenticationToken\ConfirmImportAction:
+        arguments:
+            - '@templating.engine.twig'
+            - '@form.factory'
+            - '@adapter.authorization_checker'
+            - '@Proximum\Vimeet\Infrastructure\Adapter\CommandBus'
+            - '@adapter.router'

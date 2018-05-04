@@ -197,6 +197,24 @@ admin_event_search_facets:
     defaults: { _controller: AdminBundle:SearchFacet:update }
 
 #
+# Authentication token
+#
+admin_user_event_authentication_token_import:
+    path: /event/{event}/sheet/authentication-token/import
+    requirements:
+        event: \d+
+    methods: [GET, POST]
+    defaults: { _controller: Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\User\Event\AuthenticationToken\ImportAction }
+
+admin_user_event_authentication_token_confirm_import:
+    path: /event/{event}/sheet/authentication-token/{importedFile}/confirm
+    requirements:
+        event: \d+
+        importedFile: \d+
+    methods: [GET, POST]
+    defaults: { _controller: Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\User\Event\AuthenticationToken\ConfirmImportAction }
+
+#
 # External Catalog
 #
 admin_event_external_catalog_configure:

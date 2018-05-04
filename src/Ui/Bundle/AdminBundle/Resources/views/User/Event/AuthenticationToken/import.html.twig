@@ -1,0 +1,9 @@
+{% extends 'AdminBundle:Common:form_layout.html.twig' %}
+
+{% block form_title 'admin.authentication_token.import.title'|trans %}
+
+{% block form_content %}
+    {{ form_row(form.file) }}
+{% endblock form_content %}
+
+{% block goback_link path('admin_sheet', {'event': event.id}) %}
