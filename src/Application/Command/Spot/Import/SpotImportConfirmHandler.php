@@ -52,7 +52,7 @@ class SpotImportConfirmHandler
             $command->locale
         );
 
-        $this->deleteSlotsByEvent($command->event);
+        $this->deleteSpotsByEvent($command->event);
 
         $sheetIds = [];
         $spots = [];
@@ -81,7 +81,7 @@ class SpotImportConfirmHandler
     /**
      * @param Event $event
      */
-    private function deleteSlotsByEvent(Event $event): void
+    private function deleteSpotsByEvent(Event $event): void
     {
         $existentSpots = $this->spotRepository->getAllByEvent($event);
 
