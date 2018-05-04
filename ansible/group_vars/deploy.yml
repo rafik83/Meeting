@@ -22,14 +22,6 @@ manala_deploy_strategy_git_repo:    git@github.com:proximum/vimeet.git
 manala_deploy_strategy_git_version: master
 
 ##########
-# Copied #
-##########
-
-manala_deploy_copied:
-  - vendor
-  - node_modules
-
-##########
 # Shared #
 ##########
 
