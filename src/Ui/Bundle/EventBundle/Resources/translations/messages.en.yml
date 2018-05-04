@@ -61,6 +61,7 @@ catalog.sheet.result.total: '{0} No result|{1} 1 result|]1,Inf[ %total% results'
 catalog.title: Catalogue
 common.backToPackage: 'Back to package'
 common.backToSheet: 'Back to sheet'
+common.cryptedUploadFileHelp: 'The file is encrypted and stored securely.'
 common.download: 'Download existent file'
 common.need_help: 'Need help'
 common.next: Next
