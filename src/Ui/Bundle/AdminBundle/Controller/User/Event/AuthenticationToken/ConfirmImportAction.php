@@ -12,8 +12,10 @@ namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\User\Event\Authentica
 
 use Proximum\Vimeet\Application\Adapter\AuthorizationCheckerAdapterInterface;
 use Proximum\Vimeet\Application\Adapter\CommandBusInterface;
+use Proximum\Vimeet\Application\Adapter\QueryBusInterface;
 use Proximum\Vimeet\Application\Adapter\RouterInterface;
 use Proximum\Vimeet\Application\Command\User\Event\AuthenticationTokenImport;
+use Proximum\Vimeet\Application\Query\User\Event\AuthenticationTokenImportPreviewQuery;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\File;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\User\Event\AuthenticationTokenType;
@@ -41,24 +43,37 @@ class ConfirmImportAction
     /** @var RouterInterface */
     private $router;
 
+    /** @var QueryBusInterface */
+    private $queryBus;
+
     public function __construct(
         EngineInterface $engine,
         FormFactoryInterface $formFactory,
         AuthorizationCheckerAdapterInterface $authorizationChecker,
         CommandBusInterface $commandBus,
-        RouterInterface $router
+        RouterInterface $router,
+        QueryBusInterface $queryBus
     ) {
         $this->engine = $engine;
         $this->formFactory = $formFactory;
         $this->authorizationChecker = $authorizationChecker;
         $this->commandBus = $commandBus;
         $this->router = $router;
+        $this->queryBus = $queryBus;
     }
 
-    public function __invoke(Request $request, Event $event, File $file): Response
+    public function __invoke(Request $request, Event $event, File $importedFile): Response
     {
         if (false === $this->authorizationChecker->isGranted('ROLE_SUPER_ADMIN')) {
             throw new AccessDeniedException('Access denied');
         }
+
+        $locale = $event->getAvailableLocale($request->getLocale());
+        $authenticationTokenImports = $this->queryBus->handle(new AuthenticationTokenImportPreviewQuery($event, $importedFile, $locale));
+
+        return $this->engine->renderResponse('@Admin/User/Event/AuthenticationToken/import.html.twig', [
+            'event' => $event,
+            'authenticationTokenImports' => $authenticationTokenImports,
+        ]);
     }
 }

@@ -625,6 +625,8 @@ services:
         arguments:
             - '@adapter.authorization_checker'
 
+    Proximum\Vimeet\Application\Components\User\Event\AuthenticationTokenImportParser: ~
+
     #
     # Validators
     #

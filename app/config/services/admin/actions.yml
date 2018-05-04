@@ -403,3 +403,4 @@ services:
             - '@adapter.authorization_checker'
             - '@Proximum\Vimeet\Infrastructure\Adapter\CommandBus'
             - '@adapter.router'
+            - '@Proximum\Vimeet\Infrastructure\Adapter\QueryBus'

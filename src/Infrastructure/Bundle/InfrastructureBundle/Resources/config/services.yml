@@ -4181,6 +4181,13 @@ services:
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Spot\Import\SpotImportPreviewQuery }
 
+    query.user.event.authentication_token_import_preview_query_handler:
+        class: Proximum\Vimeet\Application\Query\User\Event\AuthenticationTokenImportPreviewQueryHandler
+        arguments:
+            - '@Proximum\Vimeet\Application\Components\User\Event\AuthenticationTokenImportParser'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\User\Event\AuthenticationTokenImportPreviewQuery }
+
     query.transaction.view_query_handler:
         class: Proximum\Vimeet\Application\Query\Transaction\TransactionViewQueryHandler
         arguments:
