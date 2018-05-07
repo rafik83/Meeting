@@ -10,16 +10,22 @@
 
 namespace Proximum\Vimeet\Application\View\User\Event;
 
+use Proximum\Vimeet\Domain\Model\Event;
+
 class AuthenticationTokenImportView
 {
+    /** @var Event */
+    public $event;
+
     /** @var string */
     public $email;
 
     /** @var string */
     public $token;
 
-    public function __construct(string $email, string $token)
+    public function __construct(Event $event, string $email, string $token)
     {
+        $this->event = $event;
         $this->email = $email;
         $this->token = $token;
     }

@@ -5247,6 +5247,12 @@ services:
         arguments:
             - '@vimeet_infrastructure.adapter.translator_adapter'
 
+    Proximum\Vimeet\Application\Components\User\Event\Denormalizer\AuthenticationTokenDenormalizer:
+        tags:
+            - { name: serializer.normalizer }
+        arguments:
+            - '@vimeet_infrastructure.adapter.translator_adapter'
+
     #
     # Adapter
     #

@@ -30,8 +30,10 @@ class AuthenticationTokenImport
         return \count($this->errors) > 0;
     }
 
-    public function addError(string $error): void
+    public function addError(string $error): self
     {
         $this->errors[] = $error;
+
+        return $this;
     }
 }

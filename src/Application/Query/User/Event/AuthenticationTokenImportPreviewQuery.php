@@ -22,13 +22,9 @@ class AuthenticationTokenImportPreviewQuery implements Query
     /** @var File */
     public $importedFile;
 
-    /** @var string */
-    public $locale;
-
-    public function __construct(Event $event, File $importedFile, string $locale)
+    public function __construct(Event $event, File $importedFile)
     {
         $this->event = $event;
         $this->importedFile = $importedFile;
-        $this->locale = $locale;
     }
 }

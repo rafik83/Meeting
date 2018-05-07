@@ -68,11 +68,9 @@ class ConfirmImportAction
             throw new AccessDeniedException('Access denied');
         }
 
-        $locale = $event->getAvailableLocale($request->getLocale());
-        $authenticationTokenImports = $this->queryBus->handle(new AuthenticationTokenImportPreviewQuery($event, $importedFile, $locale));
+        $authenticationTokenImports = $this->queryBus->handle(new AuthenticationTokenImportPreviewQuery($event, $importedFile));
 
-        return $this->engine->renderResponse('@Admin/User/Event/AuthenticationToken/import.html.twig', [
-            'event' => $event,
+        return $this->engine->renderResponse('@Admin/User/Event/AuthenticationToken/importPreview.html.twig', [
             'authenticationTokenImports' => $authenticationTokenImports,
         ]);
     }

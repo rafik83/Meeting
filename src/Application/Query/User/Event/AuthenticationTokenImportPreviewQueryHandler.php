@@ -32,8 +32,7 @@ class AuthenticationTokenImportPreviewQueryHandler
     {
         return $this->authenticationTokenImportParser->parse(
             $authenticationTokenImportPreviewQuery->event,
-            $authenticationTokenImportPreviewQuery->importedFile,
-            $authenticationTokenImportPreviewQuery->locale
+            $authenticationTokenImportPreviewQuery->importedFile
         );
     }
 }

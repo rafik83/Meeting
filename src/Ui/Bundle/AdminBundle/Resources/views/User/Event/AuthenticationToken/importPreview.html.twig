@@ -1,0 +1,34 @@
+{% extends 'AdminBundle::base.html.twig' %}
+
+{% block title 'admin.authentication_token.import.preview'|trans %}
+
+{% block content %}
+    <h1 class="page-header">{{ 'admin.authentication_token.import.preview'|trans }}</h1>
+
+    <table class="table table-hover">
+        <thead>
+        <tr>
+            <th>{{ 'admin.authentication_token.import.column.email'|trans }}</th>
+            <th>{{ 'admin.authentication_token.import.column.token'|trans }}</th>
+            <th>{{ 'admin.spot.import.column.errors'|trans }}</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for authenticationTokenImport in authenticationTokenImports %}
+            <tr class="{% if authenticationTokenImport.errors is not empty %} danger {% endif %}">
+                <td class="text-center">{{ authenticationTokenImport.authenticationTokenImportView.email|default('') }}</td>
+                <td class="text-center">{{ authenticationTokenImport.authenticationTokenImportView.token|default('') }}</td>
+                <td>
+                    {% if authenticationTokenImport.errors %}
+                        <ul>
+                            {% for error in authenticationTokenImport.errors %}
+                                <li>{{ error }}</li>
+                            {% endfor %}
+                        </ul>
+                    {% endif %}
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}
