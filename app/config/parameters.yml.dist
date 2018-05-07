@@ -70,6 +70,8 @@ parameters:
     planner_command: 'curl -v -X POST http://optaplanner:8080/job/NameOfTheBuildYouShouldChangeIt/build --user vimeet:PasswordYouShouldChangeIt --data-urlencode json=''{"parameter": [{"name":"INPUT", "value":"%%filename%%"}]}'''
     planner_trusted_name: 'NameOfTheBuildYouShouldChangeIt'
 
+    shared_uploaded_files: '%kernel.project_dir%/var/shared_uploaded_files'
+
     jenkins_user: vimeet
     jenkins_password: PasswordYouShouldChangeIt
     jenkins_command: 'curl -v -X POST http://optaplanner:8080/job/%%buildName%%/build --user %%jenkinsUser%%:%%jenkinsPassword%% --data-urlencode json=''{"parameter": %%jenkinsParameters%%}'''
