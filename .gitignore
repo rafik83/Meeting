@@ -9,6 +9,7 @@
 /var/SymfonyRequirements.php
 /var/cache
 /var/logs
+/var/shared_uploaded_files
 /vendor/
 /bin/*
 /build/
