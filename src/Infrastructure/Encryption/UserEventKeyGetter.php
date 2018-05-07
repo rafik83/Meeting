@@ -41,8 +41,8 @@ class UserEventKeyGetter
             $user
         );
 
-        $key = KeyProtectedByPassword::loadFromAsciiSafeString($protectedKey);
+        $keyProtectedByPassword = KeyProtectedByPassword::loadFromAsciiSafeString($protectedKey);
 
-        return $key->unlockKey($protectedKeyPassword);
+        return $keyProtectedByPassword->unlockKey($protectedKeyPassword);
     }
 }

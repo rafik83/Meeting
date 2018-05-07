@@ -56,6 +56,7 @@ class Configuration implements ConfigurationInterface
                 ->scalarNode('print_sheet_path')->end()
                 ->scalarNode('import_spot_path')->end()
                 ->scalarNode('import_authentication_token_path')->end()
+                ->scalarNode('encrypted_files_path')->end()
                 ->arrayNode('package')
                     ->children()
                         ->arrayNode('default_labels')

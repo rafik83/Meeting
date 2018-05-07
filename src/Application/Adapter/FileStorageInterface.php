@@ -57,4 +57,6 @@ interface FileStorageInterface
      * @return string|null
      */
     public function getExtension(UploadedFile $file);
+
+    public function rename(string $fromName, string $toName): void;
 }

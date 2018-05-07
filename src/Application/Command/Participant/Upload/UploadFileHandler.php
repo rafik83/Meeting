@@ -12,6 +12,8 @@ namespace Proximum\Vimeet\Application\Command\Participant\Upload;
 
 use Proximum\Vimeet\Application\Adapter\FileStorageInterface;
 use Proximum\Vimeet\Application\Adapter\UserEventEncryptFileInterface;
+use Proximum\Vimeet\Domain\Model\Event;
+use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Template\TemplateObject\Image;
 use Proximum\Vimeet\Domain\Template\TemplateObject\UploadObject;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
@@ -24,10 +26,17 @@ class UploadFileHandler
     /** @var UserEventEncryptFileInterface */
     private $userEventEncryptFile;
 
-    public function __construct(FileStorageInterface $fileStorage, UserEventEncryptFileInterface $userEventEncryptFile)
-    {
+    /** @var string */
+    private $encryptedFilesPath;
+
+    public function __construct(
+        FileStorageInterface $fileStorage,
+        UserEventEncryptFileInterface $userEventEncryptFile,
+        string $encryptedFilesPath
+    ) {
         $this->fileStorage = $fileStorage;
         $this->userEventEncryptFile = $userEventEncryptFile;
+        $this->encryptedFilesPath = $encryptedFilesPath;
     }
 
     /**
@@ -37,34 +46,33 @@ class UploadFileHandler
     public function handle(UploadFile $uploadFile): array
     {
         $object = $uploadFile->getObject();
+        $file = $object->getFile();
 
-        if (!$object->getFile() instanceof UploadedFile) {
+        if (!$file instanceof UploadedFile) {
             return $uploadFile->getData();
         }
 
         try {
+            $isEncrypted = $object instanceof UploadObject && $object->isCrypted();
+
             if ($object->getContentValue()) {
                 // Remove previous file
-                $this->fileStorage->remove($object->getContentValue());
-            }
-
-            if ($object instanceof UploadObject && $object->isCrypted()) {
-                $filePath = $object->getFile()->getPathname();
-
-                $this->userEventEncryptFile->encryptFile(
-                    $uploadFile->getEvent(),
-                    $uploadFile->getUser(),
-                    $filePath,
-                    $filePath
+                $this->fileStorage->remove(
+                    ($isEncrypted ? $this->encryptedFilesPath : '') . $object->getContentValue(),
+                    $isEncrypted
                 );
             }
 
-            $path = $this->fileStorage->upload($object->getFile());
-            $extension = $object->getFile()->getClientOriginalExtension();
+            $clientOriginalExtension = $file->getClientOriginalExtension();
+            $path = $this->fileStorage->upload($file, $isEncrypted ? $this->encryptedFilesPath : null);
+
+            if ($isEncrypted) {
+                $this->encryptFile($uploadFile->getEvent(), $uploadFile->getUser(), $path);
+            }
 
             $objectData = [
                 'path'=> $path,
-                'extension' => $extension,
+                'extension' => $clientOriginalExtension,
             ];
 
             if ($object instanceof Image) {
@@ -89,5 +97,21 @@ class UploadFileHandler
                 $exception
             );
         }
+    }
+
+    private function encryptFile(Event $event, User $user, string $path): void
+    {
+        $initialFilename = $this->encryptedFilesPath . $path;
+        $encryptedFilename = $initialFilename . '_encrypted';
+
+        $this->userEventEncryptFile->encryptFile(
+            $event,
+            $user,
+            $initialFilename,
+            $encryptedFilename
+        );
+
+        $this->fileStorage->remove($initialFilename, true);
+        $this->fileStorage->rename($encryptedFilename, $initialFilename);
     }
 }
