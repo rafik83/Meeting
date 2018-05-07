@@ -12,6 +12,7 @@ namespace Proximum\Vimeet\Behat\Context\Domain\Package;
 
 use Behat\Behat\Context\Context;
 use Proximum\Vimeet\Behat\Context\Domain\Proxy\PackageContextProxyInterface;
+use Proximum\Vimeet\Domain\Model\Package;
 
 class PackageContext implements Context
 {
@@ -98,5 +99,25 @@ class PackageContext implements Context
         }
 
         $this->packageContextProxy->getPackageManager()->assignPlanning($package, $planning);
+    }
+
+    /**
+     * @Given /^these options are assigned to this package$/
+     */
+    public function theseOptionsAreAssignedToThisPackage()
+    {
+        $package = $this->packageContextProxy->getStorage()->get('package');
+
+        if (!$package instanceof Package) {
+            throw new \InvalidArgumentException('Missing Package');
+        }
+
+        $options = $this->packageContextProxy->getStorage()->get('options');
+
+        if (!\is_array($options)) {
+            throw new \InvalidArgumentException('Missing options');
+        }
+
+        $this->packageContextProxy->getPackageManager()->setOptions($package, $options);
     }
 }

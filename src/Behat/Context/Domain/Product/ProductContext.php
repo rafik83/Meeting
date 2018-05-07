@@ -12,6 +12,7 @@ namespace Proximum\Vimeet\Behat\Context\Domain\Product;
 
 use Behat\Behat\Context\Context;
 use Proximum\Vimeet\Behat\Context\Domain\Proxy\ProductContextProxyInterface;
+use Proximum\Vimeet\Domain\Model\Event;
 
 class ProductContext implements Context
 {
@@ -117,5 +118,62 @@ class ProductContext implements Context
             ->getProductManager()
             ->assignProductParticipantToPlan($plan, $productParticipant, $quantity)
         ;
+    }
+
+    /**
+     * @Given /^there is an option called "(?P<title>[^"]+)" with a price of "(?P<unitPrice>[^"]+)"$/
+     */
+    public function thereIsAnOptionWithAPrice(string $title, float $unitPrice)
+    {
+        $this->addOption($title, $unitPrice);
+    }
+
+    /**
+     * @Given /^there is an attributable option called "(?P<title>[^"]+)" with a price of "(?P<unitPrice>[^"]+)"$/
+     */
+    public function thereIsAnAttributableOptionWithAPrice(string $title, float $unitPrice)
+    {
+        $this->addOption($title, $unitPrice, true);
+    }
+
+    /**
+     * @Given /^there is an attributable option called "(?P<title>[^"]+)" with a quantity max of "(?P<quantityMax>[^"]+)" and a price of "(?P<unitPrice>[^"]+)"$/
+     */
+    public function thereIsAnAttributableOptionWithAPriceAndAQuantityMax(
+        string $title,
+        float $unitPrice,
+        int $quantityMax
+    ) {
+        $this->addOption($title, $unitPrice, true, $quantityMax);
+    }
+
+    private function addOption(string $title, $unitPrice, bool $isAttributable = false, $quantityMax = null)
+    {
+        $event = $this->productContextProxy->getStorage()->get('event');
+
+        if (!$event instanceof Event) {
+            throw new \InvalidArgumentException('Missing Event');
+        }
+
+        $options = $this->productContextProxy->getStorage()->get('options');
+
+        $options[] = $this->productContextProxy
+            ->getProductManager()
+            ->createOption(
+                $event,
+                $title,
+                $unitPrice,
+                20,
+                $quantityMax,
+                null,
+                null,
+                null,
+                false,
+                null,
+                $isAttributable
+            )
+        ;
+
+        $this->productContextProxy->getStorage()->set('options', $options);
     }
 }

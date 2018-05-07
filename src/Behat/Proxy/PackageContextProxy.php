@@ -22,10 +22,6 @@ class PackageContextProxy implements PackageContextProxyInterface
     /** @var PackageManager */
     private $packageManager;
 
-    /**
-     * @param StorageInterface $storage
-     * @param PackageManager   $packageManager
-     */
     public function __construct(StorageInterface $storage, PackageManager $packageManager)
     {
         $this->storage = $storage;
