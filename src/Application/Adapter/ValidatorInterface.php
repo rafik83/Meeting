@@ -12,7 +12,7 @@ namespace Proximum\Vimeet\Application\Adapter;
 
 interface ValidatorInterface
 {
-    const VALIDATOR_EMAIL_TYPE = 'validator_email_type';
+    public const VALIDATOR_EMAIL_TYPE = 'validator_email_type';
 
     /**
      * @param mixed  $data

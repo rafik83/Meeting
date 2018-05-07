@@ -15,22 +15,32 @@ use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\User\Event\AuthenticationTokenImport;
 use Proximum\Vimeet\Infrastructure\Adapter\TranslatorAdapter;
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
+use Symfony\Component\Validator\Constraints\Date;
+use Symfony\Component\Validator\Constraints\GreaterThan;
+use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 class AuthenticationTokenDenormalizer implements DenormalizerInterface
 {
     private const KEY_TOKEN = 'token';
     private const KEY_EMAIL = 'email';
+    private const KEY_EXPIRATION = 'expiration';
+
     private const ALLOWED_KEYS = [
         self::KEY_EMAIL,
         self::KEY_TOKEN,
+        self::KEY_EXPIRATION,
     ];
 
     /** @var TranslatorAdapter */
     private $translator;
 
-    public function __construct(TranslatorAdapter $translator)
+    /** @var ValidatorInterface */
+    private $validator;
+
+    public function __construct(TranslatorAdapter $translator, ValidatorInterface $validator)
     {
         $this->translator = $translator;
+        $this->validator = $validator;
     }
 
     public function denormalize($data, $class, $format = null, array $context = array()): iterable
@@ -49,11 +59,21 @@ class AuthenticationTokenDenormalizer implements DenormalizerInterface
                     );
                 }
 
+                if ($row[self::KEY_EXPIRATION]) {
+                    $dateValidations = $this->validator->validate($row[self::KEY_EXPIRATION], [new Date()]);
+                    if ($dateValidations->count() > 0) {
+                        throw new \Exception(
+                            $this->translator->trans('validators.authentication_token.csv.invalid_expiration_date', [], 'validators')
+                        );
+                    }
+                }
+
                 $authenticationTokenImport = new AuthenticationTokenImport(
                     new AuthenticationTokenImportView(
                         $context['event'],
                         $row[self::KEY_EMAIL],
-                        $row[self::KEY_TOKEN]
+                        $row[self::KEY_TOKEN],
+                        $row[self::KEY_EXPIRATION] ? new \DateTime($row[self::KEY_EXPIRATION]) : null
                     )
                 );
             } catch (\Exception $exception) {

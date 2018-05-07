@@ -23,10 +23,14 @@ class AuthenticationTokenImportView
     /** @var string */
     public $token;
 
-    public function __construct(Event $event, string $email, string $token)
+    /** @var null|\DateTimeInterface */
+    public $expirationDate;
+
+    public function __construct(Event $event, string $email, string $token, ?\DateTimeInterface $expirationDate = null)
     {
         $this->event = $event;
         $this->email = $email;
         $this->token = $token;
+        $this->expirationDate = $expirationDate;
     }
 }

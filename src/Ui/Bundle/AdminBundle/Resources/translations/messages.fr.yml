@@ -916,6 +916,7 @@ admin.spot.visio.yes: Oui
 admin.authentication_token.import.title: 'Importer des tokens d''authentification'
 admin.authentication_token.import.column.email: 'Email'
 admin.authentication_token.import.column.token: 'Token'
+admin.authentication_token.import.column.expiration: 'Date d''expiration (si vide, limitée à la durée de l''événement)'
 admin.authentication_token.import.preview: 'Aperçu de l''import des tokens d''authentification'
 admin.template_list.link: Templates
 admin.template_list.organizer_link: 'Mes Templates'

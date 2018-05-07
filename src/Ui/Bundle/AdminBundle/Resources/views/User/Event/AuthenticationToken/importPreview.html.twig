@@ -10,6 +10,7 @@
         <tr>
             <th>{{ 'admin.authentication_token.import.column.email'|trans }}</th>
             <th>{{ 'admin.authentication_token.import.column.token'|trans }}</th>
+            <th>{{ 'admin.authentication_token.import.column.expiration'|trans }}</th>
             <th>{{ 'admin.spot.import.column.errors'|trans }}</th>
         </tr>
         </thead>
@@ -18,6 +19,11 @@
             <tr class="{% if authenticationTokenImport.errors is not empty %} danger {% endif %}">
                 <td class="text-center">{{ authenticationTokenImport.authenticationTokenImportView.email|default('') }}</td>
                 <td class="text-center">{{ authenticationTokenImport.authenticationTokenImportView.token|default('') }}</td>
+                <td class="text-center">
+                    {% if authenticationTokenImport.authenticationTokenImportView.expirationDate %}
+                        {{ authenticationTokenImport.authenticationTokenImportView.expirationDate|date('Y-m-d') }}
+                    {% endif %}
+                </td>
                 <td>
                     {% if authenticationTokenImport.errors %}
                         <ul>

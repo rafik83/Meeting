@@ -913,6 +913,7 @@ admin.spot.visio.yes: 'yes'
 admin.authentication_token.import.title: 'Import authentication tokens'
 admin.authentication_token.import.column.email: 'Email'
 admin.authentication_token.import.column.token: 'Token'
+admin.authentication_token.import.column.expiration: 'Expiration date (if empty, limited to the event duration)'
 admin.authentication_token.import.preview: 'Authentication token preview'
 admin.template_list.link: templates
 admin.template_list.organizer_link: 'my templates'

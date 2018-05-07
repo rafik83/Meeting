@@ -214,6 +214,11 @@ admin_user_event_authentication_token_confirm_import:
     methods: [GET, POST]
     defaults: { _controller: Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\User\Event\AuthenticationToken\ConfirmImportAction }
 
+admin_user_event_authentication_token_sample_import:
+    path: /event/{event}/sheet/authentication-token/sample
+    methods: [GET]
+    defaults: { _controller: Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\User\Event\AuthenticationToken\SampleAction }
+
 #
 # External Catalog
 #

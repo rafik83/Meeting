@@ -64,7 +64,8 @@ class ConfirmImportAction
 
     public function __invoke(Request $request, Event $event, File $importedFile): Response
     {
-        if (false === $this->authorizationChecker->isGranted('ROLE_SUPER_ADMIN')) {
+        if (false === $this->authorizationChecker->isGranted('ROLE_ALLOWED_TO_ADMIN') ||
+            false === $this->authorizationChecker->isGranted('PERMISSION_EVENT_ACCESS', $event)) {
             throw new AccessDeniedException('Access denied');
         }
 

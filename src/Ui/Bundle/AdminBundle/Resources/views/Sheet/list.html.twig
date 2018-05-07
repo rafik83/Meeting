@@ -23,7 +23,20 @@
                 </ul>
             </div>
 
-            <a class="btn btn-default btn-sm pull-right" style="margin: 9px 10px 0 0;" href="{{ path('admin_sheet_import', {'event': event.id}) }}">{{ 'admin.sheet.import.button.label'|trans }}</a>
+            <div class="dropdown pull-right">
+                <button class="btn btn-default btn-sm dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                    {{ 'admin.sheet.import.button.label'|trans }}
+                    <span class="caret"></span>
+                </button>
+                <ul class="dropdown-menu dropdown-menu-right">
+                    <form action="{{ path('admin_sheet_import', {'event': event.id}) }}" method="GET">
+                        <li><button type="submit" class="btn">{{ 'admin.sheet.import.button.label'|trans }}</button></li>
+                    </form>
+                    <form action="{{ path('admin_user_event_authentication_token_import', { 'event': event.id }) }}" method="GET">
+                        <li><button type="submit" class="btn">{{ 'admin.authentication_token.import.title'|trans }}</button></li>
+                    </form>
+                </ul>
+            </div>
         {% endif %}
     </h1>
 
