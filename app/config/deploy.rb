@@ -41,7 +41,7 @@ set :shared_children, ["web/uploads", log_path, "web/css", "web/media", "var/sha
 # Assets
 set :dump_assetic_assets,        false
 set :normalize_asset_timestamps, false
-set :update_assets_version,      true
+set :update_assets_version,      false
 
 # Permissions
 set :use_sudo,            false
