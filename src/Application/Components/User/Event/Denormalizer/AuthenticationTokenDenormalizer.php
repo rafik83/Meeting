@@ -16,7 +16,6 @@ use Proximum\Vimeet\Domain\User\Event\AuthenticationTokenImport;
 use Proximum\Vimeet\Infrastructure\Adapter\TranslatorAdapter;
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 use Symfony\Component\Validator\Constraints\Date;
-use Symfony\Component\Validator\Constraints\GreaterThan;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 class AuthenticationTokenDenormalizer implements DenormalizerInterface

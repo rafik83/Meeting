@@ -96,7 +96,7 @@ class AuthenticationTokenImportParser
                 continue;
             }
 
-            if (false === $this->canEmailAccessToEvent($event, $authenticationTokenImportView->email)) {
+            if (false === $this->canUserAccessToEvent($event, $authenticationTokenImportView->email)) {
                 $authenticationTokenImport->addError(
                     $this->translator->trans('validators.authentication_token.csv.unknown_email', [], 'validators')
                 );
@@ -108,7 +108,7 @@ class AuthenticationTokenImportParser
         return $authenticationTokenImports;
     }
 
-    private function canEmailAccessToEvent(Event $event, string $importedEmail): bool
+    private function canUserAccessToEvent(Event $event, string $importedEmail): bool
     {
         $ownerEmails = $this->sheetRepository->getOwnerEmails($event);
         $participantEmails = $this->participantRepository->getParticipantEmailsForEvent($event);

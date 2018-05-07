@@ -14,10 +14,11 @@ use Proximum\Vimeet\Application\Adapter\AuthorizationCheckerAdapterInterface;
 use Proximum\Vimeet\Application\Adapter\CommandBusInterface;
 use Proximum\Vimeet\Application\Adapter\QueryBusInterface;
 use Proximum\Vimeet\Application\Adapter\RouterInterface;
-use Proximum\Vimeet\Application\Command\User\Event\AuthenticationTokenImport;
+use Proximum\Vimeet\Application\Command\User\Event\ConfirmAuthenticationTokenImport;
 use Proximum\Vimeet\Application\Query\User\Event\AuthenticationTokenImportPreviewQuery;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\File;
+use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\User\Event\AuthenticationTokenConfirmType;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\User\Event\AuthenticationTokenType;
 use Symfony\Bundle\FrameworkBundle\Templating\EngineInterface;
 use Symfony\Component\Form\FormFactoryInterface;
@@ -71,8 +72,21 @@ class ConfirmImportAction
 
         $authenticationTokenImports = $this->queryBus->handle(new AuthenticationTokenImportPreviewQuery($event, $importedFile));
 
+        $confirmAuthenticationToken = new ConfirmAuthenticationTokenImport($event, $importedFile);
+        $form = $this->formFactory->create(AuthenticationTokenConfirmType::class, $confirmAuthenticationToken, [
+            'locale' => $event->getAvailableLocale($request->getLocale()),
+        ]);
+
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $this->commandBus->handle($confirmAuthenticationToken);
+
+            return new RedirectResponse($this->router->generate('admin_sheet', ['event' => $event->getId()]));
+        }
+
         return $this->engine->renderResponse('@Admin/User/Event/AuthenticationToken/importPreview.html.twig', [
             'authenticationTokenImports' => $authenticationTokenImports,
+            'form' => $form->createView(),
         ]);
     }
 }

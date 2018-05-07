@@ -540,8 +540,7 @@ services:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Spot\Import\SpotImportConfirm }
 
 
-    command.user.event.authentication_token_import_handler:
-        class: Proximum\Vimeet\Application\Command\User\Event\AuthenticationTokenImportHandler
+    Proximum\Vimeet\Application\Command\User\Event\AuthenticationTokenImportHandler:
         arguments:
             - '@repository.file_repository'
             - '@adapter.local_file_storage'
@@ -549,6 +548,15 @@ services:
             - '@datetime'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\User\Event\AuthenticationTokenImport }
+
+    Proximum\Vimeet\Application\Command\User\Event\ConfirmAuthenticationTokenImportHandler:
+        arguments:
+            - '@Proximum\Vimeet\Application\Components\User\Event\AuthenticationTokenImportParser'
+            - '@Proximum\Vimeet\Infrastructure\Repository\User\Event\AuthenticationTokenRepository'
+            - '@vimeet_infrastructure.repository.user_repository'
+            - '@datetime'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\User\Event\ConfirmAuthenticationTokenImport }
 
     vimeet_infrastructure.vimeet.application.command.category.update_handler:
         class: Proximum\Vimeet\Application\Command\Category\UpdateHandler
