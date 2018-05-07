@@ -36,7 +36,7 @@ set :cache_path,      "var/cache"
 
 # Shared
 set :shared_files,    [app_config_path + "/" + app_config_file]
-set :shared_children, ["web/uploads", log_path, "web/css", "web/media"]
+set :shared_children, ["web/uploads", log_path, "web/css", "web/media", "var/shared_uploaded_files"]
 
 # Assets
 set :dump_assetic_assets,        false
@@ -49,7 +49,7 @@ set :permission_method,   :acl
 set :use_set_permissions, true
 set :group_writable,      true
 set :webserver_user,      "www-data"
-set :writable_dirs,       [log_path, cache_path, "web/uploads", "web/css", "web/media"]
+set :writable_dirs,       [log_path, cache_path, "web/uploads", "web/css", "web/media", "var/shared_uploaded_files"]
 
 # Database
 set :model_manager, "doctrine"
