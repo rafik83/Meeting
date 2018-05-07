@@ -1366,7 +1366,6 @@ services:
         arguments:
             - '@adapter.local_file_storage'
             - '@Proximum\Vimeet\Infrastructure\Encryption\UserEventEncryptFileAdapter'
-            - '@Proximum\Vimeet\Infrastructure\Encryption\UserEventDecryptFileAdapter'
             - '%infrastructure.encrypted_files_path%'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Participant\Upload\UploadFile }
