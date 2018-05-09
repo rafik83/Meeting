@@ -4599,8 +4599,8 @@ services:
             - '@order.merger'
             - '@Proximum\Vimeet\Domain\Participant\ParticipantProductSetter'
             - '@Proximum\Vimeet\Infrastructure\Repository\ProductAttributedToParticipantRepository'
+            - '@Proximum\Vimeet\Domain\ProductAttributedToParticipant\ProductAttributedToParticipantSetter'
             - '@vimeet_infrastructure.adapter.delayed_event_dispatcher'
-            - '@datetime'
     buyable_object_resolver:
         class: Proximum\Vimeet\Domain\Cart\BuyableObjectResolver
         arguments:

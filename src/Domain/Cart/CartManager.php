@@ -23,6 +23,7 @@ use Proximum\Vimeet\Domain\Model\ProductAttributedToParticipant;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Order\Merger;
 use Proximum\Vimeet\Domain\Participant\ParticipantProductSetter;
+use Proximum\Vimeet\Domain\ProductAttributedToParticipant\ProductAttributedToParticipantSetter;
 use Proximum\Vimeet\Domain\Repository\CartRowRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\CartStepRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\ProductAttributedToParticipantRepositoryInterface;
@@ -51,8 +52,8 @@ class CartManager
     /** @var ProductAttributedToParticipantRepositoryInterface */
     private $productAttributedToParticipantRepository;
 
-    /** @var \DateTimeInterface */
-    private $dateTime;
+    /** @var ProductAttributedToParticipantSetter */
+    private $productAttributedToParticipantSetter;
 
     /**
      * @param CartRowRepositoryInterface                        $cartRowRepository
@@ -61,8 +62,8 @@ class CartManager
      * @param Merger                                            $orderMerger
      * @param ParticipantProductSetter                          $participantProductSetter
      * @param ProductAttributedToParticipantRepositoryInterface $productAttributedToParticipantRepository
+     * @param ProductAttributedToParticipantSetter              $productAttributedToParticipantSetter
      * @param DelayedEventDispatcherInterface                   $delayedEventDispatcher
-     * @param \DateTimeInterface                                $dateTime
      */
     public function __construct(
         CartRowRepositoryInterface $cartRowRepository,
@@ -71,17 +72,17 @@ class CartManager
         Merger $orderMerger,
         ParticipantProductSetter $participantProductSetter,
         ProductAttributedToParticipantRepositoryInterface $productAttributedToParticipantRepository,
-        DelayedEventDispatcherInterface $delayedEventDispatcher,
-        \DateTimeInterface $dateTime
+        ProductAttributedToParticipantSetter $productAttributedToParticipantSetter,
+        DelayedEventDispatcherInterface $delayedEventDispatcher
     ) {
         $this->cartRowRepository = $cartRowRepository;
         $this->cartStepRepository = $cartStepRepository;
         $this->promotionCodeRowRepository = $promotionCodeRowRepository;
         $this->orderMerger = $orderMerger;
         $this->participantProductSetter = $participantProductSetter;
-        $this->delayedEventDispatcher = $delayedEventDispatcher;
         $this->productAttributedToParticipantRepository = $productAttributedToParticipantRepository;
-        $this->dateTime = $dateTime;
+        $this->productAttributedToParticipantSetter = $productAttributedToParticipantSetter;
+        $this->delayedEventDispatcher = $delayedEventDispatcher;
     }
 
     /**
@@ -269,12 +270,9 @@ class CartManager
         }
 
         $participantToProductAttributedToParticipantsToCreate = \array_slice($optionRowParticipants, 0, $includedQuantity);
+
         foreach ($participantToProductAttributedToParticipantsToCreate as $participant) {
-            $this->productAttributedToParticipantRepository->add(new ProductAttributedToParticipant(
-                $product,
-                $participant,
-                $this->dateTime
-            ));
+            $this->productAttributedToParticipantSetter->attributeProductToParticipant($product, $participant);
         }
 
         $cart->setProduct(
@@ -695,7 +693,6 @@ class CartManager
         array &$optionRowParticipantsIndexedByParticipantId
     ): void {
         $productAttributedToParticipantsToCreate = $this->getProductAttributedToParticipantToCreate(
-            $product,
             $productAttributedToParticipants,
             $optionRowParticipantsIndexedByParticipantId
         );
@@ -704,8 +701,8 @@ class CartManager
             $optionRowParticipantsIndexedByParticipantId
         );
 
-        foreach ($productAttributedToParticipantsToCreate as $productAttributedToParticipantToCreate) {
-            $this->productAttributedToParticipantRepository->add($productAttributedToParticipantToCreate);
+        foreach ($productAttributedToParticipantsToCreate as $participant) {
+            $this->productAttributedToParticipantSetter->attributeProductToParticipant($product, $participant);
         }
 
         if (!empty($productAttributedToParticipantsToRemove)) {
@@ -735,14 +732,12 @@ class CartManager
     }
 
     /**
-     * @param Product                          $product
      * @param ProductAttributedToParticipant[] $productAttributedToParticipants
      * @param Participant[]                    $optionRowParticipants
      *
-     * @return ProductAttributedToParticipant[]
+     * @return Participant[]
      */
     private function getProductAttributedToParticipantToCreate(
-        Product $product,
         array &$productAttributedToParticipants,
         array &$optionRowParticipants
     ): array {
@@ -756,11 +751,7 @@ class CartManager
 
             // Not set
             if (!isset($productAttributedToParticipants[$participant->getId()])) {
-                $productAttributedToParticipantsToCreate[$participant->getId()] = new ProductAttributedToParticipant(
-                    $product,
-                    $participant,
-                    $this->dateTime
-                );
+                $productAttributedToParticipantsToCreate[$participant->getId()] = $participant;
             }
         }
 
