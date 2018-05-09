@@ -34,7 +34,7 @@ class ChangePasswordController extends Controller
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
         $this->denyAccessUnlessGranted(SheetVoter::EDIT, $sheet);
-        $this->denyAccessUnlessGranted(EventVoter::CHANGE_PASSWORD, $eventDomain);
+        $this->denyAccessUnlessGranted(EventVoter::CHANGE_PASSWORD, $eventDomain->getEvent());
 
         $changePassword = new ChangePassword($this->getUser());
 

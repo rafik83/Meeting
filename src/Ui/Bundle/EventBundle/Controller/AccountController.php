@@ -41,7 +41,7 @@ class AccountController extends Controller
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
         $this->denyAccessUnlessGranted(SheetVoter::EDIT, $sheet);
-        $this->denyAccessUnlessGranted(EventVoter::CHANGE_EMAIL, $eventDomain);
+        $this->denyAccessUnlessGranted(EventVoter::CHANGE_EMAIL, $eventDomain->getEvent());
 
         $changeMail = new ChangeMail($user, $eventDomain->getEvent());
         $form       = $this->createForm(ChangeMailType::class, $changeMail, [
