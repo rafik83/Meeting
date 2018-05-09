@@ -20,7 +20,7 @@
                 <td class="text-center">{{ authenticationTokenImport.authenticationTokenImportView.email|default('') }}</td>
                 <td class="text-center">{{ authenticationTokenImport.authenticationTokenImportView.token|default('') }}</td>
                 <td class="text-center">
-                    {% if authenticationTokenImport.authenticationTokenImportView.expirationDate %}
+                    {% if authenticationTokenImport.authenticationTokenImportView.expirationDate|default(null) %}
                         {{ authenticationTokenImport.authenticationTokenImportView.expirationDate|date('Y-m-d') }}
                     {% endif %}
                 </td>
@@ -28,7 +28,7 @@
                     {% if authenticationTokenImport.errors %}
                         <ul>
                             {% for error in authenticationTokenImport.errors %}
-                                <li>{{ error }}</li>
+                                <li>{{ error|trans([], 'validators') }}</li>
                             {% endfor %}
                         </ul>
                     {% endif %}

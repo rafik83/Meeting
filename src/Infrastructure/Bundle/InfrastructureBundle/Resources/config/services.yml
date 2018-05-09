@@ -5259,7 +5259,6 @@ services:
         tags:
             - { name: serializer.normalizer }
         arguments:
-            - '@vimeet_infrastructure.adapter.translator_adapter'
             - '@validator'
 
     #

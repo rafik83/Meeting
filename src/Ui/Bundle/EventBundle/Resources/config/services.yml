@@ -628,10 +628,8 @@ services:
     Proximum\Vimeet\Application\Components\User\Event\AuthenticationTokenImportParser:
         arguments:
             - '@adapter.serializer_adapter'
-            - '@vimeet_infrastructure.repository.sheet_repository'
-            - '@vimeet_infrastructure.repository.participant_repository'
+            - '@vimeet_infrastructure.repository.user_repository'
             - '@adapter.validator_adapter'
-            - '@vimeet_infrastructure.adapter.translator_adapter'
             - '%infrastructure.import_authentication_token_path%'
 
     #

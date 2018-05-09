@@ -13,7 +13,6 @@ namespace Proximum\Vimeet\Application\Components\User\Event\Denormalizer;
 use Proximum\Vimeet\Application\View\User\Event\AuthenticationTokenImportView;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\User\Event\AuthenticationTokenImport;
-use Proximum\Vimeet\Infrastructure\Adapter\TranslatorAdapter;
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 use Symfony\Component\Validator\Constraints\Date;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
@@ -30,15 +29,11 @@ class AuthenticationTokenDenormalizer implements DenormalizerInterface
         self::KEY_EXPIRATION,
     ];
 
-    /** @var TranslatorAdapter */
-    private $translator;
-
     /** @var ValidatorInterface */
     private $validator;
 
-    public function __construct(TranslatorAdapter $translator, ValidatorInterface $validator)
+    public function __construct(ValidatorInterface $validator)
     {
-        $this->translator = $translator;
         $this->validator = $validator;
     }
 
@@ -60,17 +55,13 @@ class AuthenticationTokenDenormalizer implements DenormalizerInterface
 
             try {
                 if (false === $this->areKeysValid($row)) {
-                    throw new InvalidKeysException(
-                        $this->translator->trans('validators.authentication_token.csv.invalid_keys', [], 'validators')
-                    );
+                    throw new InvalidKeysException('validators.authentication_token.csv.invalid_keys');
                 }
 
                 if ($row[self::KEY_EXPIRATION]) {
                     $dateValidations = $this->validator->validate($row[self::KEY_EXPIRATION], [new Date()]);
                     if ($dateValidations->count() > 0) {
-                        throw new \Exception(
-                            $this->translator->trans('validators.authentication_token.csv.invalid_expiration_date', [], 'validators')
-                        );
+                        throw new \Exception('validators.authentication_token.csv.invalid_expiration_date');
                     }
                 }
 

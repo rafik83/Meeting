@@ -14,10 +14,8 @@ use Proximum\Vimeet\Application\Adapter\SerializerAdapterInterface;
 use Proximum\Vimeet\Application\Adapter\ValidatorInterface;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\File;
-use Proximum\Vimeet\Domain\Repository\ParticipantRepositoryInterface;
-use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
+use Proximum\Vimeet\Domain\Repository\UserRepositoryInterface;
 use Proximum\Vimeet\Domain\User\Event\AuthenticationTokenImport;
-use Proximum\Vimeet\Infrastructure\Adapter\TranslatorAdapter;
 use Proximum\Vimeet\Infrastructure\Adapter\ValidatorAdapter;
 use Symfony\Component\Validator\ConstraintViolationList;
 
@@ -26,34 +24,24 @@ class AuthenticationTokenImportParser
     /** @var SerializerAdapterInterface */
     private $serializer;
 
-    /** @var SheetRepositoryInterface */
-    private $sheetRepository;
-
-    /** @var ParticipantRepositoryInterface */
-    private $participantRepository;
+    /** @var UserRepositoryInterface */
+    private $userRepository;
 
     /** @var ValidatorAdapter */
     private $validator;
-
-    /** @var TranslatorAdapter */
-    private $translator;
 
     /** @var string */
     private $importDir;
 
     public function __construct(
         SerializerAdapterInterface $serializer,
-        SheetRepositoryInterface $sheetRepository,
-        ParticipantRepositoryInterface $participantRepository,
+        UserRepositoryInterface $userRepository,
         ValidatorAdapter $validator,
-        TranslatorAdapter $translator,
         string $importDir
     ) {
         $this->serializer = $serializer;
-        $this->sheetRepository = $sheetRepository;
-        $this->participantRepository = $participantRepository;
+        $this->userRepository = $userRepository;
         $this->validator = $validator;
-        $this->translator = $translator;
         $this->importDir = $importDir;
     }
 
@@ -81,44 +69,28 @@ class AuthenticationTokenImportParser
             $authenticationTokenImportView = $authenticationTokenImport->authenticationTokenImportView;
 
             if (isset($importedEmail[$authenticationTokenImportView->email])) {
-                $authenticationTokenImport->addError(
-                    $this->translator->trans('validators.authentication_token.csv.email_already_imported', [], 'validators')
-                );
+                $authenticationTokenImport->addError('validators.authentication_token.csv.email_already_imported');
+
+                continue;
             }
 
             /** @var ConstraintViolationList $emailValidations */
             $emailValidations = $this->validator->validate($authenticationTokenImportView->email, ValidatorInterface::VALIDATOR_EMAIL_TYPE);
             if ($emailValidations->count() > 0) {
-                foreach ($emailValidations as $validation) {
-                    $authenticationTokenImport->addError($validation->getMessage());
-                }
+                $authenticationTokenImport->addError('validators.authentication_token.csv.email.error');
 
                 continue;
             }
 
-            if (false === $this->canUserAccessToEvent($event, $authenticationTokenImportView->email)) {
-                $authenticationTokenImport->addError(
-                    $this->translator->trans('validators.authentication_token.csv.unknown_email', [], 'validators')
-                );
+            if (false === $this->userRepository->emailExists($authenticationTokenImportView->email)) {
+                $authenticationTokenImport->addError('validators.authentication_token.csv.unknown_email');
+
+                continue;
             }
 
             $importedEmail[$authenticationTokenImportView->email] = true;
         }
 
         return $authenticationTokenImports;
-    }
-
-    private function canUserAccessToEvent(Event $event, string $importedEmail): bool
-    {
-        $ownerEmails = $this->sheetRepository->getOwnerEmails($event);
-        $participantEmails = $this->participantRepository->getParticipantEmailsForEvent($event);
-
-        foreach (array_merge($ownerEmails, $participantEmails) as $email) {
-            if (strtolower($email['email']) === strtolower($importedEmail)) {
-                return true;
-            }
-        }
-
-        return false;
     }
 }
