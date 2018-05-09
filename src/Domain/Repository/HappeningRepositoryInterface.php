@@ -13,6 +13,7 @@ namespace Proximum\Vimeet\Domain\Repository;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Happening;
 use Proximum\Vimeet\Domain\Model\Happening\Speaker;
+use Proximum\Vimeet\Domain\Model\Product;
 use Proximum\Vimeet\Domain\Model\Type;
 
 interface HappeningRepositoryInterface
@@ -78,4 +79,9 @@ interface HappeningRepositoryInterface
      * @return Happening[]
      */
     public function findHappeningParticipant(Event $event);
+
+    /**
+     * @return Happening[]
+     */
+    public function findByProduct(Product $product): array;
 }
