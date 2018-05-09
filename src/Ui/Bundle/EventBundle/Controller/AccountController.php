@@ -18,6 +18,7 @@ use Proximum\Vimeet\Domain\Model\ChangeMailToken;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\User\ChangeMailType;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\ParamConverter\EventDomain;
+use Proximum\Vimeet\Ui\Bundle\EventBundle\Security\EventVoter;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Security\SheetVoter;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Form\FormError;
@@ -40,6 +41,7 @@ class AccountController extends Controller
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
         $this->denyAccessUnlessGranted(SheetVoter::EDIT, $sheet);
+        $this->denyAccessUnlessGranted(EventVoter::CHANGE_EMAIL, $eventDomain);
 
         $changeMail = new ChangeMail($user, $eventDomain->getEvent());
         $form       = $this->createForm(ChangeMailType::class, $changeMail, [

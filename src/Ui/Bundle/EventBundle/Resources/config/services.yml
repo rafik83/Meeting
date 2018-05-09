@@ -543,6 +543,11 @@ services:
             - { name: security.voter }
         public: false
 
+    Proximum\Vimeet\Ui\Bundle\EventBundle\Security\EventVoter:
+        tags:
+            - { name: security.voter }
+        public: false
+
     security.sheet.group_voter:
         class: Proximum\Vimeet\Ui\Bundle\EventBundle\Security\Sheet\GroupVoter
         tags:
