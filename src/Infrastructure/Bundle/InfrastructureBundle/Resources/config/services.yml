@@ -5103,6 +5103,12 @@ services:
             - '@Proximum\Vimeet\Infrastructure\Repository\ProductAttributedToParticipantRepository'
             - '@Proximum\Vimeet\Domain\Happening\PackageProductsNeededByHappening'
 
+    Proximum\Vimeet\Domain\Happening\ParticipateToHappeningsByProduct:
+        arguments:
+            - '@vimeet_infrastructure.repository.happening_repository'
+            - '@vimeet_infrastructure.repository.participant_repository'
+            - '@vimeet_infrastructure.vimeet.application.components.happening.participate_handler'
+
     #
     # Serializer: normalizers and encoders
     #
