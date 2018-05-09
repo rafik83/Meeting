@@ -34,6 +34,10 @@ class ActivateAccountTokenByUserAndSheetGuesserHandlerTest extends TestCase
             ->shouldBeCalled()
             ->willReturn('fr');
 
+        $event->getAvailableLocale('fr')
+            ->shouldBeCalled()
+            ->willReturn('fr');
+
         $activeAccountPassword = new ActivateAccountTokenByUserAndSheetGuesser($user->reveal(), $event->reveal());
 
         $sheetGuesser->getUserSheet($user->reveal(), $event->reveal(), 'fr')
