@@ -32,11 +32,11 @@ interface HappeningParticipationRepositoryInterface
     /**
      * @param User  $user
      * @param Event $event
-     * @param array $filters
+     * @param bool  $excludeDisabled
      *
      * @return HappeningParticipation[]
      */
-    public function findByUser(User $user, Event $event, array $filters = []);
+    public function findByUser(User $user, Event $event, bool $excludeDisabled): array;
 
     /**
      * @param User  $user

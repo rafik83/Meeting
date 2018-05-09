@@ -83,7 +83,7 @@ class AgendaViewQueryHandlerTest extends TestCase
         $sheetRepository->isUserParticipantMultipleSheetsInEvent($user, $event)->shouldBeCalled()->willReturn(true);
 
         $happeningParticipationRepository = $this->prophesize(HappeningParticipationRepositoryInterface::class);
-        $happeningParticipationRepository->findByUser($user, $event, ['disabled' => false])->shouldBeCalled()->willReturn([
+        $happeningParticipationRepository->findByUser($user, $event, true)->shouldBeCalled()->willReturn([
             $happeningParticipation,
         ]);
 
@@ -182,7 +182,7 @@ class AgendaViewQueryHandlerTest extends TestCase
 
         $happeningParticipationRepository = $this->prophesize(HappeningParticipationRepositoryInterface::class);
         $happeningParticipationRepository
-            ->findByUser($user2, $event, ['disabled' => false])
+            ->findByUser($user2, $event, true)
             ->shouldBeCalled()
             ->willReturn([
                 $happeningParticipation,

@@ -72,7 +72,7 @@ class PlanningViewQueryHandlerTest extends TestCase
 
         $happeningParticipationRepository = $this->prophesize(HappeningParticipationRepositoryInterface::class);
         $happeningParticipationRepository
-            ->findByUser($user->reveal(), $event)
+            ->findByUser($user->reveal(), $event, true)
             ->shouldBeCalled()
             ->willReturn([$happening->reveal()]);
 
