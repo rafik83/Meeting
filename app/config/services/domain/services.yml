@@ -4,6 +4,7 @@ services:
     #
     Proximum\Vimeet\Domain\ProductAttributedToParticipant\ProductAttributedToParticipantSetter:
         arguments:
+            - '@Proximum\Vimeet\Domain\Happening\ParticipateToHappeningsByProduct'
             - '@Proximum\Vimeet\Infrastructure\Repository\ProductAttributedToParticipantRepository'
             - '@datetime'
     Proximum\Vimeet\Domain\ProductAttributedToParticipant\ParticipantWithAttributedProductGetter:

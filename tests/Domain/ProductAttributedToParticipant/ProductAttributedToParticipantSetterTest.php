@@ -11,6 +11,7 @@
 namespace Proximum\Vimeet\Tests\Domain\ProductAttributedToParticipant;
 
 use PHPUnit\Framework\TestCase;
+use Proximum\Vimeet\Domain\Happening\ParticipateToHappeningsByProduct;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Product;
 use Proximum\Vimeet\Domain\Model\ProductAttributedToParticipant;
@@ -19,6 +20,7 @@ use Proximum\Vimeet\Domain\Repository\ProductAttributedToParticipantRepositoryIn
 
 class ProductAttributedToParticipantSetterTest extends TestCase
 {
+    private $participateToHappeningsByProduct;
     private $productAttributedToParticipantRepository;
     private $dateTime;
     private $productAttributedToParticipantSetter;
@@ -44,10 +46,14 @@ class ProductAttributedToParticipantSetterTest extends TestCase
             ProductAttributedToParticipantRepositoryInterface::class
         );
 
+        $this->participateToHappeningsByProduct = $this->prophesize(ParticipateToHappeningsByProduct::class);
+
         $this->dateTime = new \DateTime();
 
         $this->productAttributedToParticipantSetter = new ProductAttributedToParticipantSetter(
-            $this->productAttributedToParticipantRepository->reveal(), $this->dateTime
+            $this->participateToHappeningsByProduct->reveal(),
+            $this->productAttributedToParticipantRepository->reveal(),
+            $this->dateTime
         );
     }
 
@@ -63,6 +69,13 @@ class ProductAttributedToParticipantSetterTest extends TestCase
             )
             ->shouldBeCalled()
         ;
+
+        $this
+            ->participateToHappeningsByProduct
+            ->handle($this->product->reveal(), $this->participant1->reveal())
+            ->shouldBeCalled()
+        ;
+
         $this->productAttributedToParticipantSetter->attributeProductToParticipant(
             $this->product->reveal(),
             $this->participant1->reveal()
@@ -111,6 +124,13 @@ class ProductAttributedToParticipantSetterTest extends TestCase
             )
             ->shouldBeCalled()
         ;
+
+        $this
+            ->participateToHappeningsByProduct
+            ->handle($this->product->reveal(), $this->participant2->reveal())
+            ->shouldBeCalled()
+        ;
+
         $this->productAttributedToParticipantRepository->removeBatch()->shouldNotBeCalled();
 
         $this->productAttributedToParticipantSetter->attributeProductToParticipantsAndRemoveThoseNoLongerNeeded(
@@ -165,6 +185,12 @@ class ProductAttributedToParticipantSetterTest extends TestCase
                     $this->dateTime
                 )
             )
+            ->shouldBeCalled()
+        ;
+
+        $this
+            ->participateToHappeningsByProduct
+            ->handle($this->product->reveal(), $this->participant2->reveal())
             ->shouldBeCalled()
         ;
 
