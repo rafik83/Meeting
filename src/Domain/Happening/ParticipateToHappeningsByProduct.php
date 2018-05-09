@@ -27,15 +27,20 @@ class ParticipateToHappeningsByProduct
     /** @var ParticipantRepositoryInterface */
     private $participantRepository;
 
+    /** @var HappeningsNotOverlapped */
+    private $happeningsNotOverlapped;
+
     /** @var ParticipateHandler */
     private $participateHandler;
 
     public function __construct(
         HappeningRepositoryInterface $happeningRepository,
+        HappeningsNotOverlapped $happeningsNotOverlapped,
         ParticipantRepositoryInterface $participantRepository,
         ParticipateHandler $participateHandler
     ) {
         $this->happeningRepository = $happeningRepository;
+        $this->happeningsNotOverlapped = $happeningsNotOverlapped;
         $this->participantRepository = $participantRepository;
         $this->participateHandler = $participateHandler;
     }
@@ -43,8 +48,9 @@ class ParticipateToHappeningsByProduct
     public function handle(Product $product, Participant $participant): void
     {
         $happeningsByProduct = $this->happeningRepository->findByProduct($product);
+        $happeningsNotOverlapped = $this->happeningsNotOverlapped->getHappeningsNotOverlapped($happeningsByProduct);
 
-        foreach ($happeningsByProduct as $happening) {
+        foreach ($happeningsNotOverlapped as $happening) {
             $this->participateToHappening($participant, $happening);
         }
     }

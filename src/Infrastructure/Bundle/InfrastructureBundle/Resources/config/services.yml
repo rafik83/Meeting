@@ -5106,6 +5106,7 @@ services:
     Proximum\Vimeet\Domain\Happening\ParticipateToHappeningsByProduct:
         arguments:
             - '@vimeet_infrastructure.repository.happening_repository'
+            - '@Proximum\Vimeet\Domain\Happening\HappeningsNotOverlapped'
             - '@vimeet_infrastructure.repository.participant_repository'
             - '@vimeet_infrastructure.vimeet.application.components.happening.participate_handler'
 

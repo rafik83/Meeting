@@ -13,6 +13,7 @@ namespace Proximum\Vimeet\Tests\Domain\Happening;
 use PHPUnit\Framework\TestCase;
 use Proximum\Vimeet\Application\Command\Happening\Participate;
 use Proximum\Vimeet\Application\Command\Happening\ParticipateHandler;
+use Proximum\Vimeet\Domain\Happening\HappeningsNotOverlapped;
 use Proximum\Vimeet\Domain\Happening\ParticipateToHappeningsByProduct;
 use Proximum\Vimeet\Domain\Model\Happening;
 use Proximum\Vimeet\Domain\Model\Participant;
@@ -28,6 +29,8 @@ class ParticipateToHappeningsByProductTest extends TestCase
     {
         $happeningAlreadyParticipated = $this->prophesize(Happening::class);
         $happeningNotParticipated = $this->prophesize(Happening::class);
+        $happeningOverlapped1 = $this->prophesize(Happening::class);
+        $happeningOverlapped2 = $this->prophesize(Happening::class);
 
         $product = $this->prophesize(Product::class);
         $sheet = $this->prophesize(Sheet::class);
@@ -47,6 +50,8 @@ class ParticipateToHappeningsByProductTest extends TestCase
                 [
                     $happeningAlreadyParticipated->reveal(),
                     $happeningNotParticipated->reveal(),
+                    $happeningOverlapped1->reveal(),
+                    $happeningOverlapped2->reveal(),
                 ]
             )
         ;
@@ -66,6 +71,25 @@ class ParticipateToHappeningsByProductTest extends TestCase
             ->getParticipantsForHappening($sheet->reveal(), $happeningNotParticipated->reveal())
             ->shouldBeCalled()
             ->willReturn([$otherParticipant->reveal()])
+        ;
+
+        $happeningsNotOverlapped = $this->prophesize(HappeningsNotOverlapped::class);
+        $happeningsNotOverlapped
+            ->getHappeningsNotOverlapped(
+                [
+                    $happeningAlreadyParticipated->reveal(),
+                    $happeningNotParticipated->reveal(),
+                    $happeningOverlapped1->reveal(),
+                    $happeningOverlapped2->reveal(),
+                ]
+            )
+            ->shouldBeCalled()
+            ->willReturn(
+                [
+                    $happeningAlreadyParticipated->reveal(),
+                    $happeningNotParticipated->reveal(),
+                ]
+            )
         ;
 
         $participateHandler = $this->prophesize(ParticipateHandler::class);
@@ -90,6 +114,7 @@ class ParticipateToHappeningsByProductTest extends TestCase
 
         $participateToHappeningsByProduct = new ParticipateToHappeningsByProduct(
             $happeningRepository->reveal(),
+            $happeningsNotOverlapped->reveal(),
             $participantRepository->reveal(),
             $participateHandler->reveal()
         );
