@@ -178,7 +178,7 @@ class ParticipateHandler
             }
         }
 
-        if (true === $participate->happening->isQuestionAllowed()) {
+        if (true === $participate->happening->isQuestionAllowed() && $participate->updateQuestion) {
             // Remove previous question
             $this->questionRepository->removeQuestionFromUserForHappening(
                 $participate->createdBy,

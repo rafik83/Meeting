@@ -38,6 +38,9 @@ class Participate
     /** @var bool */
     public $isUpdate;
 
+    /** @var bool */
+    public $updateQuestion;
+
     /**
      * @param Happening   $happening
      * @param Sheet       $sheet
@@ -46,6 +49,7 @@ class Participate
      * @param null|string $question
      * @param null|string $invitationCode
      * @param bool        $isUpdate
+     * @param bool        $updateQuestion
      */
     public function __construct(
         Happening $happening,
@@ -54,7 +58,8 @@ class Participate
         array $participants,
         ?string $question = null,
         ?string $invitationCode = null,
-        bool $isUpdate = false
+        bool $isUpdate = false,
+        bool $updateQuestion = true
     ) {
         $this->happening      = $happening;
         $this->sheet          = $sheet;
@@ -63,5 +68,6 @@ class Participate
         $this->question       = $question;
         $this->invitationCode = $invitationCode;
         $this->isUpdate       = $isUpdate;
+        $this->updateQuestion = $updateQuestion;
     }
 }

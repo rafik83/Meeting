@@ -11,6 +11,7 @@
 namespace Proximum\Vimeet\Tests\Application\Command\Happening;
 
 use PHPUnit\Framework\TestCase;
+use Prophecy\Argument;
 use Proximum\Vimeet\Application\Command\Happening\Participate;
 use Proximum\Vimeet\Application\Command\Happening\ParticipateHandler;
 use Proximum\Vimeet\Application\Event\Events;
@@ -714,5 +715,71 @@ class ParticipateHandlerTest extends TestCase
         $participate->participants = [];
 
         $this->handler->handle($this->participate);
+    }
+
+    public function testParticipateWithNoQuestionUpdate()
+    {
+        $this->happening->setQuestionAllowed(true);
+
+        $this->participationCount->getRemaining($this->happening)->shouldBeCalled()->willReturn(10);
+        $this->participantRepository
+            ->getParticipantsForHappening($this->sheet, $this->happening)
+            ->shouldBeCalled()
+            ->willReturn([])
+        ;
+        $this->participantRepository
+            ->getAvailableParticipantsForHappening([$this->participant], $this->happening)
+            ->shouldBeCalled()
+            ->willReturn([$this->participant])
+        ;
+
+        $this
+            ->participateToHappeningWithProductToBuyChecker
+            ->canParticipate($this->participant, $this->happening)
+            ->shouldBeCalled()
+            ->willReturn(true)
+        ;
+
+        $this->happeningParticipationRepository
+            ->findByHappeningAndUser(
+                $this->happening,
+                $this->user
+            )
+            ->shouldBeCalled()
+            ->willReturn(null)
+        ;
+
+        $this
+            ->happeningParticipationRepository
+            ->add(
+                new HappeningParticipation($this->happening, $this->user)
+            )
+            ->shouldBeCalled()
+        ;
+
+        $this->questionRepository->removeQuestionFromUserForHappening($this->user, $this->happening)->shouldNotBeCalled();
+        $this->questionRepository->add(Argument::any())->shouldNotBeCalled();
+
+        $this
+            ->eventDispatcher
+            ->dispatch(
+                Events::HAPPENING_PARTICIPATED,
+                new ParticipateEvent($this->sheet, [$this->participant], $this->happening)
+            )
+            ->shouldBeCalled()
+        ;
+        $this
+            ->eventDispatcher
+            ->dispatch(
+                Events::HAPPENING_PARTICIPATE,
+                new ParticipateHappeningEvent($this->participant)
+            )
+            ->shouldBeCalled()
+        ;
+
+        $participate = $this->participate;
+        $participate->updateQuestion = false;
+
+        $this->handler->handle($participate);
     }
 }
