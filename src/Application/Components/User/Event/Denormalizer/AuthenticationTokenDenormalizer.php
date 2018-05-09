@@ -50,10 +50,17 @@ class AuthenticationTokenDenormalizer implements DenormalizerInterface
 
         $imports = [];
 
+        // If there is only one line on imported file, convert it to array
+        if (isset($data[self::KEY_EMAIL])) {
+            $data = [$data];
+        }
+
         foreach ($data as $key => $row) {
+            $row = $this->cleanRow($row);
+
             try {
                 if (false === $this->areKeysValid($row)) {
-                    throw new \Exception(
+                    throw new InvalidKeysException(
                         $this->translator->trans('validators.authentication_token.csv.invalid_keys', [], 'validators')
                     );
                 }
@@ -84,6 +91,13 @@ class AuthenticationTokenDenormalizer implements DenormalizerInterface
         }
 
         return $imports;
+    }
+
+    private function cleanRow(array $row): array
+    {
+        return array_filter($row, function ($index) {
+            return !empty($index);
+        }, ARRAY_FILTER_USE_KEY);
     }
 
     private function areKeysValid(array &$row): bool
