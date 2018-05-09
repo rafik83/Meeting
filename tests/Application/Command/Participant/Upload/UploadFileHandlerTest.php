@@ -63,7 +63,7 @@ class UploadFileHandlerTest extends TestCase
             ->shouldBeCalled()
         ;
         $fileStorage
-            ->rename('encrypted/path/my-directory/photo.jpg_encrypted', 'encrypted/path/my-directory/photo.jpg')
+            ->rename('encrypted/path/my-directory/photo.jpg_encrypted', 'encrypted/path/my-directory/photo.jpg', true)
             ->shouldBeCalled()
         ;
 

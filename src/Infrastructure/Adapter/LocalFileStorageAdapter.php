@@ -169,8 +169,8 @@ class LocalFileStorageAdapter implements FileStorageInterface
         return $filename;
     }
 
-    public function rename(string $fromName, string $toName): void
+    public function rename(string $origin, string $target, bool $overwrite = false): void
     {
-        rename($fromName, $toName);
+        $this->fileSystemAdapter->rename($origin, $target, $overwrite);
     }
 }

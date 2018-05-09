@@ -112,6 +112,6 @@ class UploadFileHandler
         );
 
         $this->fileStorage->remove($initialFilename, true);
-        $this->fileStorage->rename($encryptedFilename, $initialFilename);
+        $this->fileStorage->rename($encryptedFilename, $initialFilename, true);
     }
 }
