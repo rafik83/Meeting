@@ -225,7 +225,7 @@ class DisableEnableParticipationTest extends TestCase
         $happening2->getTypes()->willReturn([$type3->reveal()]);
 
         $this->participationRepository
-            ->findByUser($user->reveal(), $this->event->reveal(), [])
+            ->findByUser($user->reveal(), $this->event->reveal(), false)
             ->shouldBeCalled()
             ->willReturn([$participation1->reveal(), $participation2->reveal()])
         ;

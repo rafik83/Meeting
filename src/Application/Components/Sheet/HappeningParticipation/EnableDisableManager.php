@@ -55,7 +55,7 @@ class EnableDisableManager
 
             $happeningParticipations = $this
                 ->happeningParticipationRepository
-                ->findByUser($user, $event);
+                ->findByUser($user, $event, false);
 
             $isParticipantToEnabledSheet = $this->sheetRepository->isParticipantToEnabledSheet($user, $event);
 
