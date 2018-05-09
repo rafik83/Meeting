@@ -260,6 +260,8 @@ form.event_update.children.translations.prototype.children.description.label: 'E
 form.event_update.children.vat.label: TVA
 form.event_update.children.visible.label: Visible
 form.event_update.children.welcomeEnabled.label: 'Popup de bienvenue'
+form.event_update.children.disabledEmailChanging.label: 'Désactiver le changement d''email'
+form.event_update.children.disabledPasswordChanging.label: 'Désactiver le changement de mot de passe'
 form.event.children.invoicePrefix.help.label: 'Changer de préfixe ? Nous contacter'
 form.extra_parameter_create.children.name.label: Nom
 form.extra_parameter_create.children.submit.label: Enregistrer

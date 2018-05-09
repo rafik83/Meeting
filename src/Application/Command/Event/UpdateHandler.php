@@ -102,7 +102,9 @@ class UpdateHandler
             $update->emailTeam,
             $update->invoicePrefix,
             $update->visible,
-            $update->welcomeEnabled
+            $update->welcomeEnabled,
+            $update->disabledEmailChanging,
+            $update->disabledPasswordChanging
         );
         $event->getConfiguration()->setColors(
             $update->leftColor,
