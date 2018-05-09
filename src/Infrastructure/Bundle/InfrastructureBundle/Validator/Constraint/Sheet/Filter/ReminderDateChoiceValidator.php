@@ -15,6 +15,9 @@ use Symfony\Component\Validator\ConstraintValidator;
 
 class ReminderDateChoiceValidator extends ConstraintValidator
 {
+    private const BEGIN = 'begin';
+    private const END = 'end';
+
     /**
      * @param mixed      $value      The value that should be validated
      * @param Constraint $constraint The constraint for the validation
@@ -27,7 +30,7 @@ class ReminderDateChoiceValidator extends ConstraintValidator
 
     private function checkBothValueSet($value): void
     {
-        if (!array_key_exists('begin', $value) && !array_key_exists('end', $value)) {
+        if (!array_key_exists(self::BEGIN, $value) && !array_key_exists(self::END, $value)) {
             return;
         }
 
@@ -47,7 +50,7 @@ class ReminderDateChoiceValidator extends ConstraintValidator
 
     private function checkBeginBeforeEnd($value): void
     {
-        if (!array_key_exists('begin', $value) && !array_key_exists('end', $value)) {
+        if (!array_key_exists(self::BEGIN, $value) && !array_key_exists(self::END, $value)) {
             return;
         }
 

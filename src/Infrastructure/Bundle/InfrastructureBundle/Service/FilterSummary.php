@@ -36,8 +36,8 @@ class FilterSummary
     /**
      * @param FormView   $formView
      * @param array      $filters
-     * @param string     $locale
      * @param Event|null $event
+     * @param string     $locale
      *
      * @return array
      */

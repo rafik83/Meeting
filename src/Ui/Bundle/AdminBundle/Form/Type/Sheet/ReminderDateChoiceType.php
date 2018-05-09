@@ -23,16 +23,16 @@ class ReminderDateChoiceType extends AbstractType
             ->add('begin', DateTimePickerType::class, [
                 'label' => 'form.sheet.reminderDate.children.begin.label',
                 'display_hour' => false,
-                'format'       => 'd/m/Y',
-                'locale'       => $options['locale'],
-                'required'     => false,
+                'format' => 'd/m/Y',
+                'locale' => $options['locale'],
+                'required' => false,
             ])
             ->add('end', DateTimePickerType::class, [
                 'label' => 'form.sheet.reminderDate.children.end.label',
                 'display_hour' => false,
-                'format'       => 'd/m/Y',
-                'locale'       => $options['locale'],
-                'required'     => false,
+                'format' => 'd/m/Y',
+                'locale' => $options['locale'],
+                'required' => false,
             ])
         ;
     }
@@ -50,7 +50,7 @@ class ReminderDateChoiceType extends AbstractType
     /**
      * {@inheritdoc}
      */
-    public function getBlockPrefix()
+    public function getBlockPrefix(): string
     {
         return 'sheet_reminder_date_choice';
     }

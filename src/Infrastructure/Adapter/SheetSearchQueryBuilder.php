@@ -542,11 +542,11 @@ class SheetSearchQueryBuilder
     protected function filterByReminderDate(array &$filters): void
     {
         if (isset($filters['reminderDate']['begin'], $filters['reminderDate']['end'])
-        && $filters['reminderDate']['begin'] instanceof \DateTime
-        && $filters['reminderDate']['end'] instanceof \DateTime
+            && $filters['reminderDate']['begin'] instanceof \DateTime
+            && $filters['reminderDate']['end'] instanceof \DateTime
         ) {
             $rangePredefinedDateBegin = new Range();
-            $rangePredefinedDateEnd   = new Range();
+            $rangePredefinedDateEnd = new Range();
 
             $rangePredefinedDateBegin
                 ->addField('reminderDate', ['gte' => (clone $filters['reminderDate']['begin'])->setTime(0, 0, 0)->format('c')]);
