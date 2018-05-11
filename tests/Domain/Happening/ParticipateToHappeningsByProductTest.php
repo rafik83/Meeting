@@ -11,113 +11,237 @@
 namespace Proximum\Vimeet\Tests\Domain\Happening;
 
 use PHPUnit\Framework\TestCase;
-use Proximum\Vimeet\Application\Command\Happening\Participate;
-use Proximum\Vimeet\Application\Command\Happening\ParticipateHandler;
+use Proximum\Vimeet\Application\Command\Happening\UpdateParticipation;
+use Proximum\Vimeet\Application\Command\Happening\UpdateParticipationHandler;
 use Proximum\Vimeet\Domain\Happening\HappeningsNotOverlapped;
 use Proximum\Vimeet\Domain\Happening\ParticipateToHappeningsByProduct;
+use Proximum\Vimeet\Domain\Happening\ParticipateToHappeningWithProductToBuyChecker;
+use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Happening;
 use Proximum\Vimeet\Domain\Model\Participant;
-use Proximum\Vimeet\Domain\Model\Product;
 use Proximum\Vimeet\Domain\Model\Sheet;
-use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Repository\HappeningRepositoryInterface;
-use Proximum\Vimeet\Domain\Repository\ParticipantRepositoryInterface;
 
 class ParticipateToHappeningsByProductTest extends TestCase
 {
+    private $event;
+    private $sheet;
+    private $participant1;
+    private $participant2;
+    private $happening1;
+    private $happening2;
+    private $happening3;
+
+    private $happeningRepository;
+    private $happeningsNotOverlapped;
+    private $participateToHappeningWithProductToBuyChecker;
+    private $updateParticipationHandler;
+
+    private $participateToHappeningsByProduct;
+
+    public function setUp()
+    {
+        $this->happening1 = $this->prophesize(Happening::class);
+        $this->happening1->getId()->willReturn(901);
+
+        $this->happening2 = $this->prophesize(Happening::class);
+        $this->happening2->getId()->willReturn(902);
+
+        $this->happening3 = $this->prophesize(Happening::class);
+        $this->happening3->getId()->willReturn(903);
+
+        $this->event = $this->prophesize(Event::class);
+        $this->sheet = $this->prophesize(Sheet::class);
+        $this->sheet->getEvent()->willReturn($this->event->reveal());
+
+        $this->participant1 = $this->prophesize(Participant::class);
+        $this->participant1->getId()->willReturn(111);
+
+        $this->participant2 = $this->prophesize(Participant::class);
+        $this->participant2->getId()->willReturn(222);
+
+        $this->participant3 = $this->prophesize(Participant::class);
+        $this->participant3->getId()->willReturn(333);
+
+        $this->happeningRepository = $this->prophesize(HappeningRepositoryInterface::class);
+        $this->happeningsNotOverlapped = $this->prophesize(HappeningsNotOverlapped::class);
+        $this->participateToHappeningWithProductToBuyChecker = $this->prophesize(
+            ParticipateToHappeningWithProductToBuyChecker::class
+        );
+        $this->updateParticipationHandler = $this->prophesize(UpdateParticipationHandler::class);
+
+        $this->participateToHappeningsByProduct = new ParticipateToHappeningsByProduct(
+            $this->happeningRepository->reveal(),
+            $this->happeningsNotOverlapped->reveal(),
+            $this->participateToHappeningWithProductToBuyChecker->reveal(),
+            $this->updateParticipationHandler->reveal()
+        );
+
+    }
+
     public function testHandle()
     {
-        $happeningAlreadyParticipated = $this->prophesize(Happening::class);
-        $happeningNotParticipated = $this->prophesize(Happening::class);
-        $happeningOverlapped1 = $this->prophesize(Happening::class);
-        $happeningOverlapped2 = $this->prophesize(Happening::class);
+        $this->sheet->getParticipantsArray()->shouldBeCalled()->willReturn(
+            [
+                $this->participant1->reveal(),
+                $this->participant2->reveal(),
+                $this->participant3->reveal(),
+            ]
+        );
 
-        $product = $this->prophesize(Product::class);
-        $sheet = $this->prophesize(Sheet::class);
-        $user = $this->prophesize(User::class);
-
-        $participant = $this->prophesize(Participant::class);
-        $participant->getSheet()->willReturn($sheet->reveal());
-        $participant->getUser()->willReturn($user->reveal());
-
-        $otherParticipant = $this->prophesize(Participant::class);
-
-        $happeningRepository = $this->prophesize(HappeningRepositoryInterface::class);
-        $happeningRepository
-            ->findByProduct($product->reveal())
+        $this
+            ->happeningRepository
+            ->findWithProducts($this->event->reveal())
             ->shouldBeCalled()
             ->willReturn(
                 [
-                    $happeningAlreadyParticipated->reveal(),
-                    $happeningNotParticipated->reveal(),
-                    $happeningOverlapped1->reveal(),
-                    $happeningOverlapped2->reveal(),
+                    $this->happening1->reveal(),
+                    $this->happening2->reveal(),
+                    $this->happening3->reveal(),
                 ]
             )
         ;
 
-        $participantRepository = $this->prophesize(ParticipantRepositoryInterface::class);
-        $participantRepository
-            ->getParticipantsForHappening($sheet->reveal(), $happeningAlreadyParticipated->reveal())
-            ->shouldBeCalled()
-            ->willReturn(
-                [
-                    $otherParticipant->reveal(),
-                    $participant->reveal(),
-                ]
+        $this
+            ->participateToHappeningWithProductToBuyChecker
+            ->canParticipate(
+                $this->participant1->reveal(),
+                $this->happening1->reveal()
             )
-        ;
-        $participantRepository
-            ->getParticipantsForHappening($sheet->reveal(), $happeningNotParticipated->reveal())
             ->shouldBeCalled()
-            ->willReturn([$otherParticipant->reveal()])
+            ->willReturn(true)
         ;
 
-        $happeningsNotOverlapped = $this->prophesize(HappeningsNotOverlapped::class);
-        $happeningsNotOverlapped
-            ->getHappeningsNotOverlapped(
-                [
-                    $happeningAlreadyParticipated->reveal(),
-                    $happeningNotParticipated->reveal(),
-                    $happeningOverlapped1->reveal(),
-                    $happeningOverlapped2->reveal(),
-                ]
+        $this
+            ->participateToHappeningWithProductToBuyChecker
+            ->canParticipate(
+                $this->participant1->reveal(),
+                $this->happening2->reveal()
             )
             ->shouldBeCalled()
-            ->willReturn(
-                [
-                    $happeningAlreadyParticipated->reveal(),
-                    $happeningNotParticipated->reveal(),
-                ]
-            )
+            ->willReturn(true)
         ;
 
-        $participateHandler = $this->prophesize(ParticipateHandler::class);
-        $participateHandler
+        $this
+            ->participateToHappeningWithProductToBuyChecker
+            ->canParticipate(
+                $this->participant1->reveal(),
+                $this->happening3->reveal()
+            )
+            ->shouldBeCalled()
+            ->willReturn(false)
+        ;
+
+        $this
+            ->happeningsNotOverlapped
+            ->getHappeningsNotOverlapped([$this->happening1->reveal(), $this->happening2->reveal()])
+            ->shouldBeCalled()
+            ->willReturn([$this->happening2->reveal()])
+        ;
+
+        $this
+            ->participateToHappeningWithProductToBuyChecker
+            ->canParticipate(
+                $this->participant2->reveal(),
+                $this->happening1->reveal()
+            )
+            ->shouldBeCalled()
+            ->willReturn(false)
+        ;
+
+        $this
+            ->participateToHappeningWithProductToBuyChecker
+            ->canParticipate(
+                $this->participant2->reveal(),
+                $this->happening2->reveal()
+            )
+            ->shouldBeCalled()
+            ->willReturn(true)
+        ;
+
+        $this
+            ->participateToHappeningWithProductToBuyChecker
+            ->canParticipate(
+                $this->participant2->reveal(),
+                $this->happening3->reveal()
+            )
+            ->shouldBeCalled()
+            ->willReturn(true)
+        ;
+
+        $this
+            ->happeningsNotOverlapped
+            ->getHappeningsNotOverlapped([$this->happening2->reveal(), $this->happening3->reveal()])
+            ->shouldBeCalled()
+            ->willReturn([$this->happening2->reveal(), $this->happening3->reveal()])
+        ;
+
+        $this
+            ->participateToHappeningWithProductToBuyChecker
+            ->canParticipate(
+                $this->participant3->reveal(),
+                $this->happening1->reveal()
+            )
+            ->shouldBeCalled()
+            ->willReturn(true)
+        ;
+
+        $this
+            ->participateToHappeningWithProductToBuyChecker
+            ->canParticipate(
+                $this->participant3->reveal(),
+                $this->happening2->reveal()
+            )
+            ->shouldBeCalled()
+            ->willReturn(false)
+        ;
+
+        $this
+            ->participateToHappeningWithProductToBuyChecker
+            ->canParticipate(
+                $this->participant3->reveal(),
+                $this->happening3->reveal()
+            )
+            ->shouldBeCalled()
+            ->willReturn(true)
+        ;
+
+        $this
+            ->happeningsNotOverlapped
+            ->getHappeningsNotOverlapped([$this->happening1->reveal(), $this->happening3->reveal()])
+            ->shouldBeCalled()
+            ->willReturn([])
+        ;
+
+        $this
+            ->updateParticipationHandler
             ->handle(
-                new Participate(
-                    $happeningNotParticipated->reveal(),
-                    $sheet->reveal(),
-                    $user->reveal(),
+                new UpdateParticipation(
+                    $this->happening2->reveal(),
+                    $this->sheet->reveal(),
                     [
-                        $otherParticipant->reveal(),
-                        $participant->reveal(),
-                    ],
-                    null,
-                    null,
-                    false,
-                    false
+                        $this->participant1->reveal(),
+                        $this->participant2->reveal(),
+                    ]
                 )
             )
             ->shouldBeCalled()
         ;
 
-        $participateToHappeningsByProduct = new ParticipateToHappeningsByProduct(
-            $happeningRepository->reveal(),
-            $happeningsNotOverlapped->reveal(),
-            $participantRepository->reveal(),
-            $participateHandler->reveal()
-        );
-        $participateToHappeningsByProduct->handle($product->reveal(), $participant->reveal());
+        $this
+            ->updateParticipationHandler
+            ->handle(
+                new UpdateParticipation(
+                    $this->happening3->reveal(),
+                    $this->sheet->reveal(),
+                    [
+                        $this->participant2->reveal(),
+                    ]
+                )
+            )
+            ->shouldBeCalled()
+        ;
+
+        $this->participateToHappeningsByProduct->handle($this->sheet->reveal());
     }
 }

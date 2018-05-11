@@ -10,82 +10,148 @@
 
 namespace Proximum\Vimeet\Domain\Happening;
 
-use Proximum\Vimeet\Application\Command\Happening\Participate;
-use Proximum\Vimeet\Application\Command\Happening\ParticipateHandler;
-use Proximum\Vimeet\Application\Exception\Happening\HappeningException;
+use Proximum\Vimeet\Application\Command\Happening\UpdateParticipation;
+use Proximum\Vimeet\Application\Command\Happening\UpdateParticipationHandler;
 use Proximum\Vimeet\Domain\Model\Happening;
 use Proximum\Vimeet\Domain\Model\Participant;
-use Proximum\Vimeet\Domain\Model\Product;
+use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Repository\HappeningRepositoryInterface;
-use Proximum\Vimeet\Domain\Repository\ParticipantRepositoryInterface;
 
 class ParticipateToHappeningsByProduct
 {
     /** @var HappeningRepositoryInterface */
     private $happeningRepository;
 
-    /** @var ParticipantRepositoryInterface */
-    private $participantRepository;
-
     /** @var HappeningsNotOverlapped */
     private $happeningsNotOverlapped;
 
-    /** @var ParticipateHandler */
-    private $participateHandler;
+    /** @var ParticipateToHappeningWithProductToBuyChecker */
+    private $participateToHappeningWithProductToBuyChecker;
+
+    /** @var UpdateParticipationHandler */
+    private $updateParticipationHandler;
 
     public function __construct(
         HappeningRepositoryInterface $happeningRepository,
         HappeningsNotOverlapped $happeningsNotOverlapped,
-        ParticipantRepositoryInterface $participantRepository,
-        ParticipateHandler $participateHandler
+        ParticipateToHappeningWithProductToBuyChecker $participateToHappeningWithProductToBuyChecker,
+        UpdateParticipationHandler $updateParticipationHandler
     ) {
         $this->happeningRepository = $happeningRepository;
         $this->happeningsNotOverlapped = $happeningsNotOverlapped;
-        $this->participantRepository = $participantRepository;
-        $this->participateHandler = $participateHandler;
+        $this->participateToHappeningWithProductToBuyChecker = $participateToHappeningWithProductToBuyChecker;
+        $this->updateParticipationHandler = $updateParticipationHandler;
     }
 
-    public function handle(Product $product, Participant $participant): void
+    public function handle(Sheet $sheet): void
     {
-        $happeningsByProduct = $this->happeningRepository->findByProduct($product);
-        $happeningsNotOverlapped = $this->happeningsNotOverlapped->getHappeningsNotOverlapped($happeningsByProduct);
+        $sheetParticipants = $sheet->getParticipantsArray();
 
-        foreach ($happeningsNotOverlapped as $happening) {
-            $participants = $this->participateToHappening($participant, $happening);
-        }
-    }
+        $happeningsWithProducts = $this->happeningRepository->findWithProducts($sheet->getEvent());
 
-    private function participateToHappening(Participant $participant, Happening $happening): array
-    {
-        $participantsToHappening = $this->participantRepository->getParticipantsForHappening(
-            $participant->getSheet(),
-            $happening
+        $availableHappeningsByParticipantId = $this->getAvailableHappeningsByParticipant(
+            $happeningsWithProducts,
+            $sheetParticipants
         );
 
-        // User already participate to this Happening
-        if (\in_array($participant, $participantsToHappening, true)) {
-            return [];
+        $participantsByHappeningId = $this
+            ->getParticipantsByHappening($sheetParticipants, $availableHappeningsByParticipantId);
+
+        $happeningsById = $this->getHappeningsById($happeningsWithProducts);
+
+        foreach ($participantsByHappeningId as $happeningId => $participants) {
+            $this->updateParticipationHandler->handle(
+                new UpdateParticipation($happeningsById[$happeningId], $sheet, $participants)
+            );
         }
+    }
 
-        // Add the current participant to all participants to this happening
-        $participantsToHappening[] = $participant;
+    /**
+     * @param Happening[]   $happenings
+     * @param Participant[] $participants
+     *
+     * @return array
+     */
+    private function getAvailableHappeningsByParticipant(array $happenings, array $participants): array
+    {
+        $availableHappeningsByParticipantId = [];
 
-        try {
-            $this->participateHandler->handle(
-                new Participate(
-                    $happening,
-                    $participant->getSheet(),
-                    $participant->getUser(),
-                    $participantsToHappening,
-                    null,
-                    null,
-                    false
+        foreach ($participants as $participant) {
+            $availableHappenings = array_values(
+                array_filter(
+                    $happenings,
+                    function (Happening $happening) use ($participant) {
+                        return $this->participateToHappeningWithProductToBuyChecker->canParticipate(
+                            $participant,
+                            $happening
+                        );
+                    }
                 )
             );
 
-            return $participantsToHappening;
-        } catch (HappeningException $happeningException) {
-            return [];
+            $availableHappeningsByParticipantId[$participant->getId()] = $this
+                ->happeningsNotOverlapped
+                ->getHappeningsNotOverlapped($availableHappenings);
         }
+
+        return $availableHappeningsByParticipantId;
+    }
+
+    /**
+     * @param Participant[] $participants
+     * @param array         $availableHappeningsByParticipantId
+     *
+     * @return array
+     */
+    private function getParticipantsByHappening(array $participants, array $availableHappeningsByParticipantId): array
+    {
+        $participantsByHappening = [];
+
+        $participantsById = $this->getParticipantsById($participants);
+
+        foreach ($availableHappeningsByParticipantId as $participantId => $happenings) {
+            /** @var Happening[] $happenings */
+            foreach ($happenings as $happening) {
+                if (!isset($participantsByHappening[$happening->getId()])) {
+                    $participantsByHappening[$happening->getId()] = [];
+                }
+
+                $participantsByHappening[$happening->getId()][] = $participantsById[$participantId];
+            }
+        }
+
+        return $participantsByHappening;
+    }
+
+    /**
+     * @param Participant[] $participants
+     *
+     * @return Participant[]
+     */
+    private function getParticipantsById(array $participants): array
+    {
+        $participantsById = [];
+
+        foreach ($participants as $participant) {
+            $participantsById[$participant->getId()] = $participant;
+        }
+
+        return $participantsById;
+    }
+
+    /**
+     * @param Happening[] $happenings
+     *
+     * @return Happening[]
+     */
+    private function getHappeningsById(array $happenings): array
+    {
+        $happeningsById = [];
+
+        foreach ($happenings as $happening) {
+            $happeningsById[$happening->getId()] = $happening;
+        }
+
+        return $happeningsById;
     }
 }
