@@ -14,6 +14,7 @@ use Proximum\Vimeet\Application\Event\Events;
 use Proximum\Vimeet\Application\Event\Package\StepDoneEvent;
 use Proximum\Vimeet\Domain\Cart\BuyableObjectResolver;
 use Proximum\Vimeet\Domain\Cart\CartManager;
+use Proximum\Vimeet\Domain\Package\Funnel\Step;
 use Proximum\Vimeet\Infrastructure\Adapter\DelayedEventDispatcher;
 
 class SelectPlanHandler
@@ -74,7 +75,7 @@ class SelectPlanHandler
         $this->buyableObjectResolver->resolveTemplate($selectPlan->sheet);
         $this->buyableObjectResolver->resolvePlan($selectPlan->sheet, $selectPlan->plan);
 
-        $packageStepDone = new StepDoneEvent($selectPlan->sheet);
+        $packageStepDone = new StepDoneEvent($selectPlan->sheet, Step::TYPE_PLAN);
         $this->eventDispatcher->dispatch(Events::PACKAGE_STEP_DONE, $packageStepDone);
     }
 }

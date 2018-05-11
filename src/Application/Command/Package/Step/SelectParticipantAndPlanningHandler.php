@@ -16,6 +16,7 @@ use Proximum\Vimeet\Application\Exception\Package\PackageNotFoundException;
 use Proximum\Vimeet\Domain\Cart\Cart;
 use Proximum\Vimeet\Domain\Cart\CartManager;
 use Proximum\Vimeet\Domain\Order\Merger;
+use Proximum\Vimeet\Domain\Package\Funnel\Step;
 use Proximum\Vimeet\Infrastructure\Adapter\DelayedEventDispatcher;
 
 class SelectParticipantAndPlanningHandler
@@ -65,7 +66,7 @@ class SelectParticipantAndPlanningHandler
         $this->handlePlanning($cart, $selectParticipantAndPlanning->planningQuantity->getQuantity());
         $this->cartManager->save($cart);
 
-        $packageStepDone = new StepDoneEvent($selectParticipantAndPlanning->sheet);
+        $packageStepDone = new StepDoneEvent($selectParticipantAndPlanning->sheet, Step::TYPE_PARTICIPANT_PLANNING);
         $this->eventDispatcher->dispatch(Events::PACKAGE_STEP_DONE, $packageStepDone);
     }
 

@@ -15,6 +15,7 @@ use Proximum\Vimeet\Application\Event\Package\StepDoneEvent;
 use Proximum\Vimeet\Domain\Cart\CartManager;
 use Proximum\Vimeet\Domain\Model\Product;
 use Proximum\Vimeet\Domain\Order\Merger;
+use Proximum\Vimeet\Domain\Package\Funnel\Step;
 use Proximum\Vimeet\Infrastructure\Adapter\DelayedEventDispatcher;
 
 class SelectOptionsHandler
@@ -89,7 +90,7 @@ class SelectOptionsHandler
 
         $this->cartManager->save($cart);
 
-        $packageStepDone = new StepDoneEvent($selectOptions->sheet);
+        $packageStepDone = new StepDoneEvent($selectOptions->sheet, Step::TYPE_OPTIONS);
         $this->eventDispatcher->dispatch(Events::PACKAGE_STEP_DONE, $packageStepDone);
     }
 }
