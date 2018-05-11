@@ -51,11 +51,11 @@ class ParticipateToHappeningsByProduct
         $happeningsNotOverlapped = $this->happeningsNotOverlapped->getHappeningsNotOverlapped($happeningsByProduct);
 
         foreach ($happeningsNotOverlapped as $happening) {
-            $this->participateToHappening($participant, $happening);
+            $participants = $this->participateToHappening($participant, $happening);
         }
     }
 
-    private function participateToHappening(Participant $participant, Happening $happening): void
+    private function participateToHappening(Participant $participant, Happening $happening): array
     {
         $participantsToHappening = $this->participantRepository->getParticipantsForHappening(
             $participant->getSheet(),
@@ -64,7 +64,7 @@ class ParticipateToHappeningsByProduct
 
         // User already participate to this Happening
         if (\in_array($participant, $participantsToHappening, true)) {
-            return;
+            return [];
         }
 
         // Add the current participant to all participants to this happening
@@ -79,12 +79,13 @@ class ParticipateToHappeningsByProduct
                     $participantsToHappening,
                     null,
                     null,
-                    false,
                     false
                 )
             );
+
+            return $participantsToHappening;
         } catch (HappeningException $happeningException) {
-            // Nothing to do
+            return [];
         }
     }
 }
