@@ -36,12 +36,12 @@ class FilterSummary
     /**
      * @param FormView   $formView
      * @param array      $filters
-     * @param Event      $event
+     * @param null|Event $event
      * @param string     $locale
      *
      * @return array
      */
-    public function getFilters(FormView $formView, array $filters, Event $event, $locale): array
+    public function getFilters(FormView $formView, array $filters, ?Event $event, $locale): array
     {
         $selectedFilters = [];
 
