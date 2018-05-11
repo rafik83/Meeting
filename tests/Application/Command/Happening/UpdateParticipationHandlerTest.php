@@ -482,4 +482,83 @@ class UpdateParticipationHandlerTest extends TestCase
             )
         );
     }
+
+    public function testNotEnoughRemainingHappeningAvailabilityHandle()
+    {
+        $this->happening->isPrivate()->willReturn(false);
+
+        $this
+            ->participantRepository
+            ->getParticipantsForHappening(
+                $this->sheet->reveal(),
+                $this->happening->reveal()
+            )
+            ->shouldBeCalled()
+            ->willReturn([])
+        ;
+
+        $this
+            ->participantRepository
+            ->getAvailableParticipantsForHappening(
+                [
+                    $this->participant1->reveal(),
+                    $this->participant2->reveal(),
+                    $this->participant3->reveal(),
+                ],
+                $this->happening->reveal()
+            )
+            ->shouldBeCalled()
+            ->willReturn(
+                [
+                    $this->participant1->reveal(),
+                    $this->participant3->reveal(),
+                ]
+            )
+        ;
+
+        $this
+            ->participateToHappeningWithProductToBuyChecker
+            ->canParticipate($this->participant1->reveal(), $this->happening->reveal())
+            ->shouldBeCalled()
+            ->willReturn(true)
+        ;
+        $this
+            ->participateToHappeningWithProductToBuyChecker
+            ->canParticipate($this->participant3->reveal(), $this->happening->reveal())
+            ->shouldBeCalled()
+            ->willReturn(true)
+        ;
+
+        $this
+            ->participationCount
+            ->getRemaining($this->happening->reveal())
+            ->shouldBeCalled()
+            ->willReturn(1)
+        ;
+
+        $this
+            ->eventDispatcher
+            ->dispatch(
+                Events::HAPPENING_PARTICIPATED,
+                new ParticipateEvent(
+                    $this->sheet->reveal(),
+                    [],
+                    $this->happening->reveal()
+                )
+            )
+            ->shouldBeCalled()
+        ;
+
+        $this->updateParticipationHandler->handle(
+            new UpdateParticipation(
+                $this->happening->reveal(),
+                $this->sheet->reveal(),
+                [
+                    $this->participant1->reveal(),
+                    $this->participant2->reveal(),
+                    $this->participant3->reveal(),
+                ]
+            )
+        );
+    }
 }

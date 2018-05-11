@@ -72,7 +72,7 @@ class UpdateParticipationHandler
             $participate->happening
         );
 
-        $this->addParticipantsToHappening(
+        $participantsToHappening = $this->addParticipantsToHappening(
             $availableParticipants,
             $previousParticipants,
             $participate->happening
@@ -80,7 +80,7 @@ class UpdateParticipationHandler
 
         $this->eventDispatcher->dispatch(
             Events::HAPPENING_PARTICIPATED,
-            new ParticipateEvent($participate->sheet, $availableParticipants, $participate->happening)
+            new ParticipateEvent($participate->sheet, $participantsToHappening, $participate->happening)
         );
     }
 
@@ -88,20 +88,22 @@ class UpdateParticipationHandler
      * @param Participant[] $availableParticipants
      * @param Participant[] $previousParticipants
      * @param Happening     $happening
+     *
+     * @return Participant[]
      */
     private function addParticipantsToHappening(
         array $availableParticipants,
         array $previousParticipants,
         Happening $happening
-    ): void {
+    ): array {
         if ($happening->isPrivate() || 0 === \count($availableParticipants)) {
-            return;
+            return [];
         }
 
         $remainingParticipations = $this->participationCount->getRemaining($happening);
 
         if (\count($availableParticipants) - \count($previousParticipants) > $remainingParticipations) {
-            return;
+            return [];
         }
 
         // Add participants to happening
@@ -112,6 +114,8 @@ class UpdateParticipationHandler
 
             $this->addOrUpdateParticipation($happening, $participant);
         }
+
+        return $availableParticipants;
     }
 
     private function addOrUpdateParticipation(Happening $happening, Participant $participant): void
