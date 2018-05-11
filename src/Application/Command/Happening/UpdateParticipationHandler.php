@@ -54,33 +54,33 @@ class UpdateParticipationHandler
         $this->eventDispatcher = $eventDispatcher;
     }
 
-    public function handle(UpdateParticipation $participate): void
+    public function handle(UpdateParticipation $updateParticipation): void
     {
         $previousParticipants = $this->participantRepository->getParticipantsForHappening(
-            $participate->sheet,
-            $participate->happening
+            $updateParticipation->sheet,
+            $updateParticipation->happening
         );
 
         $availableParticipants = $this->getAvailableAndCanParticipateParticipantsForHappening(
-            $participate->participants,
-            $participate->happening
+            $updateParticipation->participants,
+            $updateParticipation->happening
         );
 
         $this->removeParticipantsFromHappening(
             $availableParticipants,
             $previousParticipants,
-            $participate->happening
+            $updateParticipation->happening
         );
 
         $participantsToHappening = $this->addParticipantsToHappening(
             $availableParticipants,
             $previousParticipants,
-            $participate->happening
+            $updateParticipation->happening
         );
 
         $this->eventDispatcher->dispatch(
             Events::HAPPENING_PARTICIPATED,
-            new ParticipateEvent($participate->sheet, $participantsToHappening, $participate->happening)
+            new ParticipateEvent($updateParticipation->sheet, $participantsToHappening, $updateParticipation->happening)
         );
     }
 
