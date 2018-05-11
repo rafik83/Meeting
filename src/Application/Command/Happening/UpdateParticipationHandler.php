@@ -1,0 +1,195 @@
+<?php
+
+/*
+ * This file is part of the Proximum Vimeet project.
+ *
+ * Copyright (C) Proximum
+ *
+ * @author Elao <contact@elao.com>
+ */
+
+namespace Proximum\Vimeet\Application\Command\Happening;
+
+use Proximum\Vimeet\Application\Adapter\DelayedEventDispatcherInterface;
+use Proximum\Vimeet\Application\Event\Events;
+use Proximum\Vimeet\Application\Event\Happening\ParticipateEvent;
+use Proximum\Vimeet\Application\Event\Happening\ParticipateHappeningEvent;
+use Proximum\Vimeet\Application\Event\Happening\UnParticipateHappeningEvent;
+use Proximum\Vimeet\Domain\Happening\ParticipateToHappeningWithProductToBuyChecker;
+use Proximum\Vimeet\Domain\Happening\ParticipationCount;
+use Proximum\Vimeet\Domain\Model\Happening;
+use Proximum\Vimeet\Domain\Model\HappeningParticipation;
+use Proximum\Vimeet\Domain\Model\Participant;
+use Proximum\Vimeet\Domain\Repository\HappeningParticipationRepositoryInterface;
+use Proximum\Vimeet\Domain\Repository\ParticipantRepositoryInterface;
+
+class UpdateParticipationHandler
+{
+    /** @var HappeningParticipationRepositoryInterface */
+    private $happeningParticipationRepository;
+
+    /** @var ParticipantRepositoryInterface */
+    private $participantRepository;
+
+    /** @var ParticipateToHappeningWithProductToBuyChecker */
+    private $participateToHappeningWithProductToBuyChecker;
+
+    /** @var ParticipationCount */
+    private $participationCount;
+
+    /** @var DelayedEventDispatcherInterface */
+    private $eventDispatcher;
+
+    public function __construct(
+        HappeningParticipationRepositoryInterface $happeningParticipationRepository,
+        ParticipantRepositoryInterface $participantRepository,
+        ParticipateToHappeningWithProductToBuyChecker $participateToHappeningWithProductToBuyChecker,
+        ParticipationCount $participationCount,
+        DelayedEventDispatcherInterface $eventDispatcher
+    ) {
+        $this->happeningParticipationRepository = $happeningParticipationRepository;
+        $this->participantRepository = $participantRepository;
+        $this->participateToHappeningWithProductToBuyChecker = $participateToHappeningWithProductToBuyChecker;
+        $this->participationCount = $participationCount;
+        $this->eventDispatcher = $eventDispatcher;
+    }
+
+    public function handle(UpdateParticipation $participate): void
+    {
+        $previousParticipants = $this->participantRepository->getParticipantsForHappening(
+            $participate->sheet,
+            $participate->happening
+        );
+
+        $availableParticipants = $this->getAvailableAndCanParticipateParticipantsForHappening(
+            $participate->participants,
+            $participate->happening
+        );
+
+        $this->removeParticipantsFromHappening(
+            $availableParticipants,
+            $previousParticipants,
+            $participate->happening
+        );
+
+        $this->addParticipantsToHappening(
+            $availableParticipants,
+            $previousParticipants,
+            $participate->happening
+        );
+
+        $this->eventDispatcher->dispatch(
+            Events::HAPPENING_PARTICIPATED,
+            new ParticipateEvent($participate->sheet, $availableParticipants, $participate->happening)
+        );
+    }
+
+    /**
+     * @param Participant[] $availableParticipants
+     * @param Participant[] $previousParticipants
+     * @param Happening     $happening
+     */
+    private function addParticipantsToHappening(
+        array $availableParticipants,
+        array $previousParticipants,
+        Happening $happening
+    ): void {
+        if ($happening->isPrivate() || 0 === \count($availableParticipants)) {
+            return;
+        }
+
+        $remainingParticipations = $this->participationCount->getRemaining($happening);
+
+        if (\count($availableParticipants) - \count($previousParticipants) > $remainingParticipations) {
+            return;
+        }
+
+        // Add participants to happening
+        foreach ($availableParticipants as $participant) {
+            if (true === \in_array($participant, $previousParticipants, true)) {
+                continue;
+            }
+
+            $this->addOrUpdateParticipation($happening, $participant);
+        }
+    }
+
+    private function addOrUpdateParticipation(Happening $happening, Participant $participant): void
+    {
+        $happeningParticipation = $this->happeningParticipationRepository->findByHappeningAndUser(
+            $happening,
+            $participant->getUser()
+        );
+
+        if ($happeningParticipation instanceof HappeningParticipation) {
+            $happeningParticipation->setDisabled(false);
+            $this->happeningParticipationRepository->update($happeningParticipation);
+        } else {
+            $this->happeningParticipationRepository->add(
+                new HappeningParticipation($happening, $participant->getUser())
+            );
+        }
+
+        $this->eventDispatcher->dispatch(
+            Events::HAPPENING_PARTICIPATE,
+            new ParticipateHappeningEvent($participant)
+        );
+    }
+
+    /**
+     * @param Participant[] $participants
+     * @param Participant[] $previousParticipants
+     * @param Happening     $happening
+     */
+    private function removeParticipantsFromHappening(
+        array $participants,
+        array $previousParticipants,
+        Happening $happening
+    ): void {
+        // Remove participants from happening
+        foreach ($previousParticipants as $participant) {
+            if (true === \in_array($participant, $participants, true)) {
+                continue;
+            }
+
+            $this->happeningParticipationRepository->removeUserForHappening(
+                $participant->getUser(),
+                $happening
+            );
+
+            $this->eventDispatcher->dispatch(
+                Events::HAPPENING_UN_PARTICIPATE,
+                new UnParticipateHappeningEvent($participant)
+            );
+        }
+    }
+
+    /**
+     * @param Participant[] $participants
+     * @param Happening     $happening
+     *
+     * @return array
+     */
+    private function getAvailableAndCanParticipateParticipantsForHappening(
+        array $participants,
+        Happening $happening
+    ): array {
+        if (0 === \count($participants)) {
+            return [];
+        }
+
+        $availableParticipants = $this->participantRepository->getAvailableParticipantsForHappening(
+            $participants,
+            $happening
+        );
+        $availableAndCanParticipateParticipants = [];
+
+        foreach ($availableParticipants as $participant) {
+            if ($this->participateToHappeningWithProductToBuyChecker->canParticipate($participant, $happening)) {
+                $availableAndCanParticipateParticipants[] = $participant;
+            }
+        }
+
+        return $availableAndCanParticipateParticipants;
+    }
+}
