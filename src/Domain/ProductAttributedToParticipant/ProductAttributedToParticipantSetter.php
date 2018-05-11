@@ -10,7 +10,6 @@
 
 namespace Proximum\Vimeet\Domain\ProductAttributedToParticipant;
 
-use Proximum\Vimeet\Domain\Happening\ParticipateToHappeningsByProduct;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Product;
 use Proximum\Vimeet\Domain\Model\ProductAttributedToParticipant;
@@ -18,9 +17,6 @@ use Proximum\Vimeet\Domain\Repository\ProductAttributedToParticipantRepositoryIn
 
 class ProductAttributedToParticipantSetter
 {
-    /** @var ParticipateToHappeningsByProduct */
-    private $participateToHappeningsByProduct;
-
     /** @var ProductAttributedToParticipantRepositoryInterface */
     private $productAttributedToParticipantRepository;
 
@@ -28,11 +24,9 @@ class ProductAttributedToParticipantSetter
     private $dateTime;
 
     public function __construct(
-        ParticipateToHappeningsByProduct $participateToHappeningsByProduct,
         ProductAttributedToParticipantRepositoryInterface $productAttributedToParticipantRepository,
         \DateTimeInterface $dateTime
     ) {
-        $this->participateToHappeningsByProduct = $participateToHappeningsByProduct;
         $this->productAttributedToParticipantRepository = $productAttributedToParticipantRepository;
         $this->dateTime = $dateTime;
     }
@@ -67,8 +61,6 @@ class ProductAttributedToParticipantSetter
         $this->productAttributedToParticipantRepository->add(
             new ProductAttributedToParticipant($product, $participant, $this->dateTime)
         );
-
-        $this->participateToHappeningsByProduct->handle($product, $participant);
     }
 
     /**

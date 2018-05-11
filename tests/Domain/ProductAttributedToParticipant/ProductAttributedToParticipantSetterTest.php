@@ -11,7 +11,6 @@
 namespace Proximum\Vimeet\Tests\Domain\ProductAttributedToParticipant;
 
 use PHPUnit\Framework\TestCase;
-use Proximum\Vimeet\Domain\Happening\ParticipateToHappeningsByProduct;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Product;
 use Proximum\Vimeet\Domain\Model\ProductAttributedToParticipant;
@@ -20,7 +19,6 @@ use Proximum\Vimeet\Domain\Repository\ProductAttributedToParticipantRepositoryIn
 
 class ProductAttributedToParticipantSetterTest extends TestCase
 {
-    private $participateToHappeningsByProduct;
     private $productAttributedToParticipantRepository;
     private $dateTime;
     private $productAttributedToParticipantSetter;
@@ -46,12 +44,9 @@ class ProductAttributedToParticipantSetterTest extends TestCase
             ProductAttributedToParticipantRepositoryInterface::class
         );
 
-        $this->participateToHappeningsByProduct = $this->prophesize(ParticipateToHappeningsByProduct::class);
-
         $this->dateTime = new \DateTime();
 
         $this->productAttributedToParticipantSetter = new ProductAttributedToParticipantSetter(
-            $this->participateToHappeningsByProduct->reveal(),
             $this->productAttributedToParticipantRepository->reveal(),
             $this->dateTime
         );
@@ -97,12 +92,6 @@ class ProductAttributedToParticipantSetterTest extends TestCase
                     $this->dateTime
                 )
             )
-            ->shouldBeCalled()
-        ;
-
-        $this
-            ->participateToHappeningsByProduct
-            ->handle($this->product->reveal(), $this->participant2->reveal())
             ->shouldBeCalled()
         ;
 
@@ -160,12 +149,6 @@ class ProductAttributedToParticipantSetterTest extends TestCase
                     $this->dateTime
                 )
             )
-            ->shouldBeCalled()
-        ;
-
-        $this
-            ->participateToHappeningsByProduct
-            ->handle($this->product->reveal(), $this->participant2->reveal())
             ->shouldBeCalled()
         ;
 
