@@ -83,5 +83,5 @@ interface HappeningRepositoryInterface
     /**
      * @return Happening[]
      */
-    public function findByProduct(Product $product): array;
+    public function findWithProducts(Event $event): array;
 }

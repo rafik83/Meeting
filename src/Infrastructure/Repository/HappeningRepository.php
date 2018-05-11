@@ -203,16 +203,17 @@ class HappeningRepository implements HappeningRepositoryInterface
     /**
      * {@inheritdoc}
      */
-    public function findByProduct(Product $product): array
+    public function findWithProducts(Event $event): array
     {
-        $queryBuilder = $this
+        return $this
             ->entityManager
             ->createQueryBuilder()
             ->select('happening')
             ->from(Happening::class, 'happening')
-            ->join('happening.products', 'product', 'WITH', 'product = :product')
-            ->setParameter('product', $product);
-
-        return $queryBuilder->getQuery()->getResult();
+            ->join('happening.products', 'product', 'WITH', 'happening.event = :event')
+            ->setParameter('event', $event)
+            ->getQuery()
+            ->getResult()
+        ;
     }
 }
