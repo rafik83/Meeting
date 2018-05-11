@@ -489,6 +489,18 @@ services:
         tags:
             - { name: kernel.event_subscriber }
 
+    Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\EventListener\Cart\CartEventSubscriber:
+        arguments:
+            - '@Proximum\Vimeet\Domain\Happening\ParticipateToHappeningsByProduct'
+        tags:
+            - { name: kernel.event_subscriber }
+
+    Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\EventListener\Order\OrderEventSubscriber:
+        arguments:
+            - '@Proximum\Vimeet\Domain\Happening\ParticipateToHappeningsByProduct'
+        tags:
+            - { name: kernel.event_subscriber }
+
     #
     # Twig extension
     #

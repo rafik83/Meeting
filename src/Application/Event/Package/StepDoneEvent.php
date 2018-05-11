@@ -41,4 +41,9 @@ class StepDoneEvent extends Event
     {
         return $this->step;
     }
+
+    public function isOptionsStep(): bool
+    {
+        return Step::TYPE_OPTIONS === $this->step;
+    }
 }
