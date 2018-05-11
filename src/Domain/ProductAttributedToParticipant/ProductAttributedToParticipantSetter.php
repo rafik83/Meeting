@@ -37,15 +37,6 @@ class ProductAttributedToParticipantSetter
         $this->dateTime = $dateTime;
     }
 
-    public function attributeProductToParticipant(Product $product, Participant $participant): void
-    {
-        $this->productAttributedToParticipantRepository->add(
-            new ProductAttributedToParticipant($product, $participant, $this->dateTime)
-        );
-
-        $this->participateToHappeningsByProduct->handle($product, $participant);
-    }
-
     /**
      * @param Product       $product
      * @param Participant[] $sheetParticipants
@@ -59,16 +50,25 @@ class ProductAttributedToParticipantSetter
         $productAttributedToParticipantsIndexedByParticipantId = $this
             ->getProductAttributedToParticipantsIndexedByParticipantId($product, $sheetParticipants);
 
+        $this->removeNoLongerNeededProductAttributedToParticipant(
+            $participantsWithAttributedProduct,
+            $productAttributedToParticipantsIndexedByParticipantId
+        );
+
         $this->addProductAttributedToParticipants(
             $product,
             $participantsWithAttributedProduct,
             $productAttributedToParticipantsIndexedByParticipantId
         );
+    }
 
-        $this->removeNoLongerNeededProductAttributedToParticipant(
-            $participantsWithAttributedProduct,
-            $productAttributedToParticipantsIndexedByParticipantId
+    private function attributeProductToParticipant(Product $product, Participant $participant): void
+    {
+        $this->productAttributedToParticipantRepository->add(
+            new ProductAttributedToParticipant($product, $participant, $this->dateTime)
         );
+
+        $this->participateToHappeningsByProduct->handle($product, $participant);
     }
 
     /**

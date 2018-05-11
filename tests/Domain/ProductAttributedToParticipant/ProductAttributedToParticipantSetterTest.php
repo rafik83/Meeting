@@ -57,31 +57,6 @@ class ProductAttributedToParticipantSetterTest extends TestCase
         );
     }
 
-    public function testAttributeProductToParticipant()
-    {
-        $this
-            ->productAttributedToParticipantRepository->add(
-                new ProductAttributedToParticipant(
-                    $this->product->reveal(),
-                    $this->participant1->reveal(),
-                    $this->dateTime
-                )
-            )
-            ->shouldBeCalled()
-        ;
-
-        $this
-            ->participateToHappeningsByProduct
-            ->handle($this->product->reveal(), $this->participant1->reveal())
-            ->shouldBeCalled()
-        ;
-
-        $this->productAttributedToParticipantSetter->attributeProductToParticipant(
-            $this->product->reveal(),
-            $this->participant1->reveal()
-        );
-    }
-
     public function testNoAddAndNoRemove()
     {
         $this

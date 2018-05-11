@@ -20,7 +20,6 @@ use Proximum\Vimeet\Domain\Cart\CartManager;
 use Proximum\Vimeet\Domain\Model\Order;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Product;
-use Proximum\Vimeet\Domain\Model\ProductAttributedToParticipant;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Order\Merger;
 use Proximum\Vimeet\Domain\Participant\ParticipantProductSetter;
@@ -80,6 +79,9 @@ class CartManagerUpdateOptionsQuantityTest extends TestCase
     /** @var array */
     private $participants;
 
+    /** @var ObjectProphecy */
+    private $cartManager;
+
     public function setUp()
     {
         $this->cartRowRepository = $this->prophesize(CartRowRepositoryInterface::class);
@@ -114,14 +116,8 @@ class CartManagerUpdateOptionsQuantityTest extends TestCase
         ];
 
         $this->sheet->getParticipantsArray()->willReturn($this->participants);
-    }
 
-    public function testNotAttributableWithQuantity(): void
-    {
-        $this->cart->setProduct($this->product->reveal(), 2)->shouldBeCalled();
-        $this->product->isAttributable()->shouldBeCalled()->willReturn(false);
-
-        $cartManager = new CartManager(
+        $this->cartManager = new CartManager(
             $this->cartRowRepository->reveal(),
             $this->cartStepRepository->reveal(),
             $this->promotionCodeRowRepository->reveal(),
@@ -131,10 +127,16 @@ class CartManagerUpdateOptionsQuantityTest extends TestCase
             $this->productAttributedToParticipantSetter->reveal(),
             $this->delayedEventDispatcher->reveal()
         );
+    }
+
+    public function testNotAttributableWithQuantity(): void
+    {
+        $this->cart->setProduct($this->product->reveal(), 2)->shouldBeCalled();
+        $this->product->isAttributable()->shouldBeCalled()->willReturn(false);
 
         $optionRow = new OptionRow(2, [], false);
 
-        $cartManager->updateOptionsQuantity(
+        $this->cartManager->updateOptionsQuantity(
             $this->cart->reveal(),
             $optionRow,
             $this->product->reveal(),
@@ -155,20 +157,9 @@ class CartManagerUpdateOptionsQuantityTest extends TestCase
         $order = $this->prophesize(Order::class);
         $order->getRowByProductId(1337)->shouldBeCalled()->willReturn($row);
 
-        $cartManager = new CartManager(
-            $this->cartRowRepository->reveal(),
-            $this->cartStepRepository->reveal(),
-            $this->promotionCodeRowRepository->reveal(),
-            $this->orderMerger->reveal(),
-            $this->participantProductSetter->reveal(),
-            $this->productAttributedToParticipantRepository->reveal(),
-            $this->productAttributedToParticipantSetter->reveal(),
-            $this->delayedEventDispatcher->reveal()
-        );
-
         $optionRow = new OptionRow(2, [], false);
 
-        $cartManager->updateOptionsQuantity(
+        $this->cartManager->updateOptionsQuantity(
             $this->cart->reveal(),
             $optionRow,
             $this->product->reveal(),
@@ -182,20 +173,9 @@ class CartManagerUpdateOptionsQuantityTest extends TestCase
         $this->cart->setProduct($this->product->reveal(), 0)->shouldBeCalled();
         $this->product->isAttributable()->shouldBeCalled()->willReturn(false);
 
-        $cartManager = new CartManager(
-            $this->cartRowRepository->reveal(),
-            $this->cartStepRepository->reveal(),
-            $this->promotionCodeRowRepository->reveal(),
-            $this->orderMerger->reveal(),
-            $this->participantProductSetter->reveal(),
-            $this->productAttributedToParticipantRepository->reveal(),
-            $this->productAttributedToParticipantSetter->reveal(),
-            $this->delayedEventDispatcher->reveal()
-        );
-
         $optionRow = new OptionRow(0, [], false);
 
-        $cartManager->updateOptionsQuantity(
+        $this->cartManager->updateOptionsQuantity(
             $this->cart->reveal(),
             $optionRow,
             $this->product->reveal(),
@@ -210,20 +190,9 @@ class CartManagerUpdateOptionsQuantityTest extends TestCase
         $this->product->isAttributable()->shouldBeCalled()->willReturn(true);
         $this->product->getId()->shouldBeCalled()->willReturn(12);
 
-        $cartManager = new CartManager(
-            $this->cartRowRepository->reveal(),
-            $this->cartStepRepository->reveal(),
-            $this->promotionCodeRowRepository->reveal(),
-            $this->orderMerger->reveal(),
-            $this->participantProductSetter->reveal(),
-            $this->productAttributedToParticipantRepository->reveal(),
-            $this->productAttributedToParticipantSetter->reveal(),
-            $this->delayedEventDispatcher->reveal()
-        );
-
         $optionRow = new OptionRow(0, [], true);
 
-        $cartManager->updateOptionsQuantity(
+        $this->cartManager->updateOptionsQuantity(
             $this->cart->reveal(),
             $optionRow,
             $this->product->reveal(),
@@ -238,33 +207,19 @@ class CartManagerUpdateOptionsQuantityTest extends TestCase
         $this->product->isAttributable()->shouldBeCalled()->willReturn(true);
         $this->product->getId()->shouldBeCalled()->willReturn(12);
 
-        $productAttributedToParticipant = $this->prophesize(ProductAttributedToParticipant::class);
-        $this->productAttributedToParticipantRepository
-            ->findByProductAndParticipants($this->product->reveal(), $this->participants)
-            ->shouldBeCalled()
-            ->willReturn([$productAttributedToParticipant->reveal()])
-        ;
-        $productAttributedToParticipant->getParticipant()->shouldBeCalled()->willReturn($this->participant1->reveal());
-
-        $this->productAttributedToParticipantRepository
-            ->removeBatch([91 => $productAttributedToParticipant->reveal()])
+        $this
+            ->productAttributedToParticipantSetter
+            ->attributeProductToParticipantsAndRemoveThoseNoLongerNeeded(
+                $this->product->reveal(),
+                $this->participants,
+                []
+            )
             ->shouldBeCalled()
         ;
-
-        $cartManager = new CartManager(
-            $this->cartRowRepository->reveal(),
-            $this->cartStepRepository->reveal(),
-            $this->promotionCodeRowRepository->reveal(),
-            $this->orderMerger->reveal(),
-            $this->participantProductSetter->reveal(),
-            $this->productAttributedToParticipantRepository->reveal(),
-            $this->productAttributedToParticipantSetter->reveal(),
-            $this->delayedEventDispatcher->reveal()
-        );
 
         $optionRow = new OptionRow(0, [], true);
 
-        $cartManager->updateOptionsQuantity(
+        $this->cartManager->updateOptionsQuantity(
             $this->cart->reveal(),
             $optionRow,
             $this->product->reveal(),
@@ -277,24 +232,6 @@ class CartManagerUpdateOptionsQuantityTest extends TestCase
     {
         $this->product->isAttributable()->shouldBeCalled()->willReturn(true);
         $this->product->getId()->shouldBeCalled()->willReturn(12);
-
-        $this
-            ->productAttributedToParticipantRepository
-            ->findByProductAndParticipants(Argument::any())
-            ->shouldNotBeCalled()
-        ;
-        $this->productAttributedToParticipantRepository->removeBatch(Argument::any())->shouldNotBeCalled();
-
-        $cartManager = new CartManager(
-            $this->cartRowRepository->reveal(),
-            $this->cartStepRepository->reveal(),
-            $this->promotionCodeRowRepository->reveal(),
-            $this->orderMerger->reveal(),
-            $this->participantProductSetter->reveal(),
-            $this->productAttributedToParticipantRepository->reveal(),
-            $this->productAttributedToParticipantSetter->reveal(),
-            $this->delayedEventDispatcher->reveal()
-        );
 
         $optionRow = new OptionRow(0, [], true);
         $order = $this->prophesize(Order::class);
@@ -311,7 +248,7 @@ class CartManagerUpdateOptionsQuantityTest extends TestCase
             ->shouldBeCalled()
         ;
 
-        $cartManager->updateOptionsQuantity(
+        $this->cartManager->updateOptionsQuantity(
             $this->cart->reveal(),
             $optionRow,
             $this->product->reveal(),
@@ -325,40 +262,15 @@ class CartManagerUpdateOptionsQuantityTest extends TestCase
         $this->product->isAttributable()->shouldBeCalled()->willReturn(true);
         $this->product->getId()->shouldBeCalled()->willReturn(12);
 
-        $productAttributedToParticipant = $this->prophesize(ProductAttributedToParticipant::class);
-        $this->productAttributedToParticipantRepository
-            ->findByProductAndParticipants($this->product->reveal(), $this->participants)
-            ->shouldBeCalled()
-            ->willReturn([$productAttributedToParticipant->reveal()])
-        ;
-        $productAttributedToParticipant->getParticipant()->shouldBeCalled()->willReturn($this->participant1->reveal());
-
-        $this->productAttributedToParticipantRepository
-            ->removeBatch([91 => $productAttributedToParticipant->reveal()])
-            ->shouldBeCalled()
-        ;
-
-        $this->productAttributedToParticipantRepository
-            ->add(Argument::any())
-            ->shouldNotBeCalled()
-        ;
-
         $this
             ->productAttributedToParticipantSetter
-            ->attributeProductToParticipant($this->product->reveal(), $this->participant2->reveal())
+            ->attributeProductToParticipantsAndRemoveThoseNoLongerNeeded(
+                $this->product->reveal(),
+                $this->participants,
+                [$this->participant2->reveal()]
+            )
             ->shouldBeCalled()
         ;
-
-        $cartManager = new CartManager(
-            $this->cartRowRepository->reveal(),
-            $this->cartStepRepository->reveal(),
-            $this->promotionCodeRowRepository->reveal(),
-            $this->orderMerger->reveal(),
-            $this->participantProductSetter->reveal(),
-            $this->productAttributedToParticipantRepository->reveal(),
-            $this->productAttributedToParticipantSetter->reveal(),
-            $this->delayedEventDispatcher->reveal()
-        );
 
         $optionRow = new OptionRow(1, [$this->participant2->reveal()], true);
         $order = $this->prophesize(Order::class);
@@ -368,7 +280,7 @@ class CartManagerUpdateOptionsQuantityTest extends TestCase
 
         $this->cart->setProduct(Argument::any())->shouldNotBeCalled();
 
-        $cartManager->updateOptionsQuantity(
+        $this->cartManager->updateOptionsQuantity(
             $this->cart->reveal(),
             $optionRow,
             $this->product->reveal(),
@@ -382,47 +294,22 @@ class CartManagerUpdateOptionsQuantityTest extends TestCase
         $this->product->isAttributable()->shouldBeCalled()->willReturn(true);
         $this->product->getId()->shouldBeCalled()->willReturn(12);
 
-        $productAttributedToParticipant = $this->prophesize(ProductAttributedToParticipant::class);
-        $this->productAttributedToParticipantRepository
-            ->findByProductAndParticipants($this->product->reveal(), $this->participants)
-            ->shouldBeCalled()
-            ->willReturn([$productAttributedToParticipant->reveal()])
-        ;
-        $productAttributedToParticipant->getParticipant()->shouldBeCalled()->willReturn($this->participant1->reveal());
-
-        $this->productAttributedToParticipantRepository
-            ->removeBatch([91 => $productAttributedToParticipant->reveal()])
-            ->shouldBeCalled()
-        ;
-
-        $this->productAttributedToParticipantRepository
-            ->add(Argument::any())
-            ->shouldNotBeCalled()
-        ;
-
         $this
             ->productAttributedToParticipantSetter
-            ->attributeProductToParticipant($this->product->reveal(), $this->participant2->reveal())
+            ->attributeProductToParticipantsAndRemoveThoseNoLongerNeeded(
+                $this->product->reveal(),
+                $this->participants,
+                [$this->participant2->reveal()]
+            )
             ->shouldBeCalled()
         ;
-
-        $cartManager = new CartManager(
-            $this->cartRowRepository->reveal(),
-            $this->cartStepRepository->reveal(),
-            $this->promotionCodeRowRepository->reveal(),
-            $this->orderMerger->reveal(),
-            $this->participantProductSetter->reveal(),
-            $this->productAttributedToParticipantRepository->reveal(),
-            $this->productAttributedToParticipantSetter->reveal(),
-            $this->delayedEventDispatcher->reveal()
-        );
 
         $optionRow = new OptionRow(1, [$this->participant2->reveal()], true);
         $order = $this->prophesize(Order::class);
         $order->getRowByProductId(12)->shouldBeCalled()->willReturn(null);
         $this->cart->setProduct(Argument::any())->shouldNotBeCalled();
 
-        $cartManager->updateOptionsQuantity(
+        $this->cartManager->updateOptionsQuantity(
             $this->cart->reveal(),
             $optionRow,
             $this->product->reveal(),
@@ -436,46 +323,18 @@ class CartManagerUpdateOptionsQuantityTest extends TestCase
         $this->product->isAttributable()->shouldBeCalled()->willReturn(true);
         $this->product->getId()->shouldBeCalled()->willReturn(12);
 
-        $productAttributedToParticipant = $this->prophesize(ProductAttributedToParticipant::class);
-        $this->productAttributedToParticipantRepository
-            ->findByProductAndParticipants($this->product->reveal(), $this->participants)
-            ->shouldBeCalled()
-            ->willReturn([$productAttributedToParticipant->reveal()])
-        ;
-        $productAttributedToParticipant->getParticipant()->shouldBeCalled()->willReturn($this->participant1->reveal());
-
-        $this->productAttributedToParticipantRepository
-            ->removeBatch([91 => $productAttributedToParticipant->reveal()])
-            ->shouldBeCalled()
-        ;
-
-        $this->productAttributedToParticipantRepository
-            ->add(Argument::any())
-            ->shouldNotBeCalled()
-        ;
-
         $this
             ->productAttributedToParticipantSetter
-            ->attributeProductToParticipant($this->product->reveal(), $this->participant2->reveal())
+            ->attributeProductToParticipantsAndRemoveThoseNoLongerNeeded(
+                $this->product->reveal(),
+                $this->participants,
+                [
+                    $this->participant2->reveal(),
+                    $this->participant3->reveal(),
+                ]
+            )
             ->shouldBeCalled()
         ;
-
-        $this
-            ->productAttributedToParticipantSetter
-            ->attributeProductToParticipant($this->product->reveal(), $this->participant3->reveal())
-            ->shouldBeCalled()
-        ;
-
-        $cartManager = new CartManager(
-            $this->cartRowRepository->reveal(),
-            $this->cartStepRepository->reveal(),
-            $this->promotionCodeRowRepository->reveal(),
-            $this->orderMerger->reveal(),
-            $this->participantProductSetter->reveal(),
-            $this->productAttributedToParticipantRepository->reveal(),
-            $this->productAttributedToParticipantSetter->reveal(),
-            $this->delayedEventDispatcher->reveal()
-        );
 
         $optionRow = new OptionRow(
             2,
@@ -492,7 +351,7 @@ class CartManagerUpdateOptionsQuantityTest extends TestCase
 
         $this->cart->setProduct(Argument::any())->shouldNotBeCalled();
 
-        $cartManager->updateOptionsQuantity(
+        $this->cartManager->updateOptionsQuantity(
             $this->cart->reveal(),
             $optionRow,
             $this->product->reveal(),
@@ -506,34 +365,18 @@ class CartManagerUpdateOptionsQuantityTest extends TestCase
         $this->product->isAttributable()->shouldBeCalled()->willReturn(true);
         $this->product->getId()->shouldBeCalled()->willReturn(12);
 
-        $productAttributedToParticipant1 = $this->prophesize(ProductAttributedToParticipant::class);
-        $productAttributedToParticipant2 = $this->prophesize(ProductAttributedToParticipant::class);
-        $this->productAttributedToParticipantRepository
-            ->findByProductAndParticipants($this->product->reveal(), $this->participants)
-            ->shouldBeCalled()
-            ->willReturn(
+        $this
+            ->productAttributedToParticipantSetter
+            ->attributeProductToParticipantsAndRemoveThoseNoLongerNeeded(
+                $this->product->reveal(),
+                $this->participants,
                 [
-                    $productAttributedToParticipant1->reveal(),
-                    $productAttributedToParticipant2->reveal(),
+                    $this->participant1->reveal(),
+                    $this->participant2->reveal(),
                 ]
             )
+            ->shouldBeCalled()
         ;
-        $productAttributedToParticipant1->getParticipant()->shouldBeCalled()->willReturn($this->participant1->reveal());
-        $productAttributedToParticipant2->getParticipant()->shouldBeCalled()->willReturn($this->participant2->reveal());
-
-        $this->productAttributedToParticipantRepository->removeBatch(Argument::any())->shouldNotBeCalled();
-        $this->productAttributedToParticipantRepository->add(Argument::any())->shouldNotBeCalled();
-
-        $cartManager = new CartManager(
-            $this->cartRowRepository->reveal(),
-            $this->cartStepRepository->reveal(),
-            $this->promotionCodeRowRepository->reveal(),
-            $this->orderMerger->reveal(),
-            $this->participantProductSetter->reveal(),
-            $this->productAttributedToParticipantRepository->reveal(),
-            $this->productAttributedToParticipantSetter->reveal(),
-            $this->delayedEventDispatcher->reveal()
-        );
 
         $optionRow = new OptionRow(
             2,
@@ -550,7 +393,7 @@ class CartManagerUpdateOptionsQuantityTest extends TestCase
 
         $this->cart->setProduct(Argument::any())->shouldNotBeCalled();
 
-        $cartManager->updateOptionsQuantity(
+        $this->cartManager->updateOptionsQuantity(
             $this->cart->reveal(),
             $optionRow,
             $this->product->reveal(),
@@ -565,23 +408,10 @@ class CartManagerUpdateOptionsQuantityTest extends TestCase
         $this->product->getId()->shouldBeCalled()->willReturn(12);
 
         $this
-            ->productAttributedToParticipantRepository
-            ->findByProductAndParticipants(Argument::any())
+            ->productAttributedToParticipantSetter
+            ->attributeProductToParticipantsAndRemoveThoseNoLongerNeeded(Argument::any())
             ->shouldNotBeCalled()
         ;
-        $this->productAttributedToParticipantRepository->removeBatch(Argument::any())->shouldNotBeCalled();
-        $this->productAttributedToParticipantRepository->add(Argument::any())->shouldNotBeCalled();
-
-        $cartManager = new CartManager(
-            $this->cartRowRepository->reveal(),
-            $this->cartStepRepository->reveal(),
-            $this->promotionCodeRowRepository->reveal(),
-            $this->orderMerger->reveal(),
-            $this->participantProductSetter->reveal(),
-            $this->productAttributedToParticipantRepository->reveal(),
-            $this->productAttributedToParticipantSetter->reveal(),
-            $this->delayedEventDispatcher->reveal()
-        );
 
         $optionRow = new OptionRow(
             2,
@@ -608,7 +438,7 @@ class CartManagerUpdateOptionsQuantityTest extends TestCase
             ->shouldBeCalled()
         ;
 
-        $cartManager->updateOptionsQuantity(
+        $this->cartManager->updateOptionsQuantity(
             $this->cart->reveal(),
             $optionRow,
             $this->product->reveal(),
@@ -623,23 +453,10 @@ class CartManagerUpdateOptionsQuantityTest extends TestCase
         $this->product->getId()->shouldBeCalled()->willReturn(12);
 
         $this
-            ->productAttributedToParticipantRepository
-            ->findByProductAndParticipants(Argument::any())
+            ->productAttributedToParticipantSetter
+            ->attributeProductToParticipantsAndRemoveThoseNoLongerNeeded(Argument::any())
             ->shouldNotBeCalled()
         ;
-        $this->productAttributedToParticipantRepository->removeBatch(Argument::any())->shouldNotBeCalled();
-        $this->productAttributedToParticipantRepository->add(Argument::any())->shouldNotBeCalled();
-
-        $cartManager = new CartManager(
-            $this->cartRowRepository->reveal(),
-            $this->cartStepRepository->reveal(),
-            $this->promotionCodeRowRepository->reveal(),
-            $this->orderMerger->reveal(),
-            $this->participantProductSetter->reveal(),
-            $this->productAttributedToParticipantRepository->reveal(),
-            $this->productAttributedToParticipantSetter->reveal(),
-            $this->delayedEventDispatcher->reveal()
-        );
 
         $optionRow = new OptionRow(
             3,
@@ -668,7 +485,7 @@ class CartManagerUpdateOptionsQuantityTest extends TestCase
             ->shouldBeCalled()
         ;
 
-        $cartManager->updateOptionsQuantity(
+        $this->cartManager->updateOptionsQuantity(
             $this->cart->reveal(),
             $optionRow,
             $this->product->reveal(),
@@ -682,49 +499,18 @@ class CartManagerUpdateOptionsQuantityTest extends TestCase
         $this->product->isAttributable()->shouldBeCalled()->willReturn(true);
         $this->product->getId()->shouldBeCalled()->willReturn(12);
 
-        $productAttributedToParticipant1 = $this->prophesize(ProductAttributedToParticipant::class);
-        $this->productAttributedToParticipantRepository
-            ->findByProductAndParticipants($this->product->reveal(), $this->participants)
-            ->shouldBeCalled()
-            ->willReturn([$productAttributedToParticipant1->reveal()])
-        ;
-        $productAttributedToParticipant1->getParticipant()->willReturn($this->participant1->reveal());
-        $this->productAttributedToParticipantRepository
-            ->removeBatch([91 => $productAttributedToParticipant1->reveal()])
-            ->shouldBeCalled()
-        ;
-        $this->productAttributedToParticipantSetter
-            ->attributeProductToParticipant(
+        $this
+            ->productAttributedToParticipantSetter
+            ->attributeProductToParticipantsAndRemoveThoseNoLongerNeeded(
                 $this->product->reveal(),
-                $this->participant1->reveal()
-            )
-            ->shouldNotBeCalled()
-        ;
-        $this->productAttributedToParticipantSetter
-            ->attributeProductToParticipant(
-                $this->product->reveal(),
-                $this->participant2->reveal()
+                $this->participants,
+                [
+                    $this->participant2->reveal(),
+                    $this->participant3->reveal(),
+                ]
             )
             ->shouldBeCalled()
         ;
-        $this->productAttributedToParticipantSetter
-            ->attributeProductToParticipant(
-                $this->product->reveal(),
-                $this->participant3->reveal()
-            )
-            ->shouldBeCalled()
-        ;
-
-        $cartManager = new CartManager(
-            $this->cartRowRepository->reveal(),
-            $this->cartStepRepository->reveal(),
-            $this->promotionCodeRowRepository->reveal(),
-            $this->orderMerger->reveal(),
-            $this->participantProductSetter->reveal(),
-            $this->productAttributedToParticipantRepository->reveal(),
-            $this->productAttributedToParticipantSetter->reveal(),
-            $this->delayedEventDispatcher->reveal()
-        );
 
         $optionRow = new OptionRow(
             2,
@@ -739,7 +525,7 @@ class CartManagerUpdateOptionsQuantityTest extends TestCase
 
         $this->cart->setProduct(Argument::any())->shouldNotBeCalled();
 
-        $cartManager->updateOptionsQuantity(
+        $this->cartManager->updateOptionsQuantity(
             $this->cart->reveal(),
             $optionRow,
             $this->product->reveal(),
@@ -753,31 +539,11 @@ class CartManagerUpdateOptionsQuantityTest extends TestCase
         $this->product->isAttributable()->shouldBeCalled()->willReturn(true);
         $this->product->getId()->shouldBeCalled()->willReturn(12);
 
-        $this->productAttributedToParticipantRepository->findByProductAndParticipants(Argument::any())
-            ->shouldNotBeCalled()
-        ;
-        $this->productAttributedToParticipantRepository
-            ->add(Argument::any())
-            ->shouldNotBeCalled()
-        ;
-        $this->productAttributedToParticipantRepository->removeBatch(Argument::any())->shouldNotBeCalled();
-
         $this
             ->productAttributedToParticipantSetter
-            ->attributeProductToParticipant(Argument::any())
+            ->attributeProductToParticipantsAndRemoveThoseNoLongerNeeded(Argument::any())
             ->shouldNotBeCalled()
         ;
-
-        $cartManager = new CartManager(
-            $this->cartRowRepository->reveal(),
-            $this->cartStepRepository->reveal(),
-            $this->promotionCodeRowRepository->reveal(),
-            $this->orderMerger->reveal(),
-            $this->participantProductSetter->reveal(),
-            $this->productAttributedToParticipantRepository->reveal(),
-            $this->productAttributedToParticipantSetter->reveal(),
-            $this->delayedEventDispatcher->reveal()
-        );
 
         $optionRow = new OptionRow(
             2,
@@ -799,7 +565,7 @@ class CartManagerUpdateOptionsQuantityTest extends TestCase
             ]
         );
 
-        $cartManager->updateOptionsQuantity(
+        $this->cartManager->updateOptionsQuantity(
             $this->cart->reveal(),
             $optionRow,
             $this->product->reveal(),
@@ -813,36 +579,6 @@ class CartManagerUpdateOptionsQuantityTest extends TestCase
         $this->product->isAttributable()->shouldBeCalled()->willReturn(true);
         $this->product->getId()->shouldBeCalled()->willReturn(12);
 
-        $productAttributedToParticipant = $this->prophesize(ProductAttributedToParticipant::class);
-        $productAttributedToParticipant->getParticipant()->willReturn($this->participant1->reveal());
-        $this->productAttributedToParticipantRepository
-            ->findByProductAndParticipants($this->product->reveal(), $this->participants)
-            ->shouldBeCalled()
-            ->willReturn([$productAttributedToParticipant])
-        ;
-        $this->productAttributedToParticipantRepository
-            ->add(Argument::any())
-            ->shouldNotBeCalled()
-        ;
-        $this->productAttributedToParticipantRepository->removeBatch(Argument::any())->shouldNotBeCalled();
-
-        $this
-            ->productAttributedToParticipantSetter
-            ->attributeProductToParticipant(Argument::any())
-            ->shouldNotBeCalled()
-        ;
-
-        $cartManager = new CartManager(
-            $this->cartRowRepository->reveal(),
-            $this->cartStepRepository->reveal(),
-            $this->promotionCodeRowRepository->reveal(),
-            $this->orderMerger->reveal(),
-            $this->participantProductSetter->reveal(),
-            $this->productAttributedToParticipantRepository->reveal(),
-            $this->productAttributedToParticipantSetter->reveal(),
-            $this->delayedEventDispatcher->reveal()
-        );
-
         $optionRow = new OptionRow(
             2,
             [
@@ -861,7 +597,7 @@ class CartManagerUpdateOptionsQuantityTest extends TestCase
             ]
         );
 
-        $cartManager->updateOptionsQuantity(
+        $this->cartManager->updateOptionsQuantity(
             $this->cart->reveal(),
             $optionRow,
             $this->product->reveal(),
@@ -875,52 +611,15 @@ class CartManagerUpdateOptionsQuantityTest extends TestCase
         $this->product->isAttributable()->shouldBeCalled()->willReturn(true);
         $this->product->getId()->shouldBeCalled()->willReturn(12);
 
-        $productAttributedToParticipant1 = $this->prophesize(ProductAttributedToParticipant::class);
-        $productAttributedToParticipant2 = $this->prophesize(ProductAttributedToParticipant::class);
-        $productAttributedToParticipant1->getParticipant()->willReturn($this->participant3->reveal());
-        $productAttributedToParticipant2->getParticipant()->willReturn($this->participant1->reveal());
-        $this->productAttributedToParticipantRepository
-            ->findByProductAndParticipants($this->product->reveal(), $this->participants)
-            ->shouldBeCalled()
-            ->willReturn(
-                [
-                    $productAttributedToParticipant1->reveal(),
-                    $productAttributedToParticipant2->reveal(),
-                ]
-            )
-        ;
-
-        $this->productAttributedToParticipantRepository
-            ->add(Argument::any())
-            ->shouldNotBeCalled()
-        ;
-
         $this
             ->productAttributedToParticipantSetter
-            ->attributeProductToParticipant($this->product->reveal(), $this->participant3->reveal())
-            ->shouldBeCalled()
-        ;
-
-        $this->productAttributedToParticipantRepository
-            ->removeBatch(
-                [
-                    93 => $productAttributedToParticipant1->reveal(),
-                    91 => $productAttributedToParticipant2->reveal(),
-                ]
+            ->attributeProductToParticipantsAndRemoveThoseNoLongerNeeded(
+                $this->product->reveal(),
+                $this->participants,
+                [$this->participant3->reveal()]
             )
             ->shouldBeCalled()
         ;
-
-        $cartManager = new CartManager(
-            $this->cartRowRepository->reveal(),
-            $this->cartStepRepository->reveal(),
-            $this->promotionCodeRowRepository->reveal(),
-            $this->orderMerger->reveal(),
-            $this->participantProductSetter->reveal(),
-            $this->productAttributedToParticipantRepository->reveal(),
-            $this->productAttributedToParticipantSetter->reveal(),
-            $this->delayedEventDispatcher->reveal()
-        );
 
         $optionRow = new OptionRow(
             2,
@@ -940,7 +639,7 @@ class CartManagerUpdateOptionsQuantityTest extends TestCase
             ]
         );
 
-        $cartManager->updateOptionsQuantity(
+        $this->cartManager->updateOptionsQuantity(
             $this->cart->reveal(),
             $optionRow,
             $this->product->reveal(),
@@ -954,39 +653,15 @@ class CartManagerUpdateOptionsQuantityTest extends TestCase
         $this->product->isAttributable()->shouldBeCalled()->willReturn(true);
         $this->product->getId()->shouldBeCalled()->willReturn(12);
 
-        $productAttributedToParticipant = $this->prophesize(ProductAttributedToParticipant::class);
-        $productAttributedToParticipant->getParticipant()->willReturn($this->participant2->reveal());
-        $this->productAttributedToParticipantRepository
-            ->findByProductAndParticipants($this->product->reveal(), $this->participants)
-            ->shouldBeCalled()
-            ->willReturn([$productAttributedToParticipant])
-        ;
-        $this->productAttributedToParticipantRepository
-            ->removeBatch([92 => $productAttributedToParticipant->reveal()])
-            ->shouldBeCalled()
-        ;
-
-        $this->productAttributedToParticipantRepository
-            ->add(Argument::any())
-            ->shouldNotBeCalled()
-        ;
-
         $this
             ->productAttributedToParticipantSetter
-            ->attributeProductToParticipant($this->product->reveal(), $this->participant3->reveal())
+            ->attributeProductToParticipantsAndRemoveThoseNoLongerNeeded(
+                $this->product->reveal(),
+                $this->participants,
+                [$this->participant3->reveal()]
+            )
             ->shouldBeCalled()
         ;
-
-        $cartManager = new CartManager(
-            $this->cartRowRepository->reveal(),
-            $this->cartStepRepository->reveal(),
-            $this->promotionCodeRowRepository->reveal(),
-            $this->orderMerger->reveal(),
-            $this->participantProductSetter->reveal(),
-            $this->productAttributedToParticipantRepository->reveal(),
-            $this->productAttributedToParticipantSetter->reveal(),
-            $this->delayedEventDispatcher->reveal()
-        );
 
         $optionRow = new OptionRow(
             2,
@@ -1006,7 +681,7 @@ class CartManagerUpdateOptionsQuantityTest extends TestCase
             ]
         );
 
-        $cartManager->updateOptionsQuantity(
+        $this->cartManager->updateOptionsQuantity(
             $this->cart->reveal(),
             $optionRow,
             $this->product->reveal(),
@@ -1020,37 +695,15 @@ class CartManagerUpdateOptionsQuantityTest extends TestCase
         $this->product->isAttributable()->shouldBeCalled()->willReturn(true);
         $this->product->getId()->shouldBeCalled()->willReturn(12);
 
-        $this->productAttributedToParticipantRepository
-            ->findByProductAndParticipants($this->product->reveal(), $this->participants)
-            ->shouldBeCalled()
-            ->willReturn([])
-        ;
-        $this->productAttributedToParticipantRepository
-            ->removeBatch(Argument::any())
-            ->shouldNotBeCalled()
-        ;
-
-        $this->productAttributedToParticipantRepository
-            ->add(Argument::any())
-            ->shouldNotBeCalled()
-        ;
-
         $this
             ->productAttributedToParticipantSetter
-            ->attributeProductToParticipant($this->product->reveal(), $this->participant3->reveal())
+            ->attributeProductToParticipantsAndRemoveThoseNoLongerNeeded(
+                $this->product->reveal(),
+                $this->participants,
+                [$this->participant3->reveal()]
+            )
             ->shouldBeCalled()
         ;
-
-        $cartManager = new CartManager(
-            $this->cartRowRepository->reveal(),
-            $this->cartStepRepository->reveal(),
-            $this->promotionCodeRowRepository->reveal(),
-            $this->orderMerger->reveal(),
-            $this->participantProductSetter->reveal(),
-            $this->productAttributedToParticipantRepository->reveal(),
-            $this->productAttributedToParticipantSetter->reveal(),
-            $this->delayedEventDispatcher->reveal()
-        );
 
         $optionRow = new OptionRow(
             2,
@@ -1070,7 +723,7 @@ class CartManagerUpdateOptionsQuantityTest extends TestCase
             ]
         );
 
-        $cartManager->updateOptionsQuantity(
+        $this->cartManager->updateOptionsQuantity(
             $this->cart->reveal(),
             $optionRow,
             $this->product->reveal(),
