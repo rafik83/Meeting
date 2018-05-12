@@ -185,6 +185,9 @@ class CartManager
         }
 
         $quantity = $optionRow->getQuantity();
+        $quantityToAddInCart = $quantity - $orderQuantity < 0
+            ? $quantity - $orderQuantity
+            : $quantity - $orderQuantity - $includedQuantity;
 
         // Quantity not changed on first run
         // Or quantity reset to 0
@@ -216,7 +219,7 @@ class CartManager
         if ($orderQuantity > 0) {
             $cart->setProduct(
                 $product,
-                $quantity - $orderQuantity - $includedQuantity,
+                $quantityToAddInCart,
                 $optionRowParticipants
             );
 
@@ -244,7 +247,7 @@ class CartManager
         if ($includedQuantity === 0) {
             $cart->setProduct(
                 $product,
-                $quantity,
+                $quantityToAddInCart,
                 $optionRowParticipants
             );
 
@@ -260,7 +263,7 @@ class CartManager
         if ($order !== null) {
             $cart->setProduct(
                 $product,
-                $quantity - $orderQuantity - $includedQuantity,
+                $quantityToAddInCart,
                 $optionRowParticipants
             );
 
@@ -286,7 +289,7 @@ class CartManager
 
         $cart->setProduct(
             $product,
-            $quantity - $includedQuantity,
+            $quantityToAddInCart,
             $optionRowParticipants
         );
     }

@@ -731,4 +731,28 @@ class CartManagerUpdateOptionsQuantityTest extends TestCase
             [12 => 1]
         );
     }
+
+    public function testNoQuantitySelectedAndIncludedAndPreviousOrderQuantity(): void
+    {
+        $this->product->isAttributable()->shouldBeCalled()->willReturn(true);
+        $this->product->getId()->shouldBeCalled()->willReturn(12);
+
+        $order = $this->prophesize(Order::class);
+        $row = $this->prophesize(Order\Row::class);
+
+        $order->getRowByProductId(12)->shouldBeCalled()->willReturn($row);
+        $row->getQuantity()->shouldBeCalled()->willReturn(1);
+
+        $this->cart->setProduct($this->product->reveal(), -1, []);
+
+        $optionRow = new OptionRow(0, [], true);
+
+        $this->cartManager->updateOptionsQuantity(
+            $this->cart->reveal(),
+            $optionRow,
+            $this->product->reveal(),
+            $order->reveal(),
+            [12 => 1]
+        );
+    }
 }
