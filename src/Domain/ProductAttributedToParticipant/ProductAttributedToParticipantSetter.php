@@ -17,6 +17,9 @@ use Proximum\Vimeet\Domain\Repository\ProductAttributedToParticipantRepositoryIn
 
 class ProductAttributedToParticipantSetter
 {
+    /** @var ParticipantWithAttributedProductUpdated */
+    private $participantWithAttributedProductUpdated;
+
     /** @var ProductAttributedToParticipantRepositoryInterface */
     private $productAttributedToParticipantRepository;
 
@@ -24,9 +27,11 @@ class ProductAttributedToParticipantSetter
     private $dateTime;
 
     public function __construct(
+        ParticipantWithAttributedProductUpdated $participantWithAttributedProductUpdated,
         ProductAttributedToParticipantRepositoryInterface $productAttributedToParticipantRepository,
         \DateTimeInterface $dateTime
     ) {
+        $this->participantWithAttributedProductUpdated = $participantWithAttributedProductUpdated;
         $this->productAttributedToParticipantRepository = $productAttributedToParticipantRepository;
         $this->dateTime = $dateTime;
     }
@@ -61,6 +66,8 @@ class ProductAttributedToParticipantSetter
         $this->productAttributedToParticipantRepository->add(
             new ProductAttributedToParticipant($product, $participant, $this->dateTime)
         );
+
+        $this->participantWithAttributedProductUpdated->add($participant);
     }
 
     /**
@@ -83,13 +90,14 @@ class ProductAttributedToParticipantSetter
     }
 
     /**
-     * @param Participant[] $participantsWithAttributedProduct
-     * @param array         $productAttributedToParticipantsIndexedByParticipantId
+     * @param Participant[]                    $participantsWithAttributedProduct
+     * @param ProductAttributedToParticipant[] $productAttributedToParticipantsIndexedByParticipantId
      */
     private function removeNoLongerNeededProductAttributedToParticipant(
         array &$participantsWithAttributedProduct,
         array &$productAttributedToParticipantsIndexedByParticipantId
     ): void {
+        /** @var ProductAttributedToParticipant[] $productAttributedToParticipantsToRemove */
         $productAttributedToParticipantsToRemove = [];
 
         foreach ($productAttributedToParticipantsIndexedByParticipantId as $participantId => $productAttributedToParticipant) {
@@ -100,6 +108,11 @@ class ProductAttributedToParticipantSetter
 
         if (!empty($productAttributedToParticipantsToRemove)) {
             $this->productAttributedToParticipantRepository->removeBatch($productAttributedToParticipantsToRemove);
+            foreach ($productAttributedToParticipantsToRemove as $productAttributedToParticipantToRemove) {
+                $this->participantWithAttributedProductUpdated->add(
+                    $productAttributedToParticipantToRemove->getParticipant()
+                );
+            }
         }
     }
 

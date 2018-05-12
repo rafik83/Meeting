@@ -15,6 +15,7 @@ use Proximum\Vimeet\Application\Command\Happening\UpdateParticipationHandler;
 use Proximum\Vimeet\Domain\Model\Happening;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Sheet;
+use Proximum\Vimeet\Domain\ProductAttributedToParticipant\ParticipantWithAttributedProductUpdated;
 use Proximum\Vimeet\Domain\Repository\HappeningRepositoryInterface;
 
 class ParticipateToHappeningsByProduct
@@ -25,6 +26,9 @@ class ParticipateToHappeningsByProduct
     /** @var HappeningsNotOverlapped */
     private $happeningsNotOverlapped;
 
+    /** @var ParticipantWithAttributedProductUpdated */
+    private $participantWithAttributedProductUpdated;
+
     /** @var ParticipateToHappeningWithProductToBuyChecker */
     private $participateToHappeningWithProductToBuyChecker;
 
@@ -34,11 +38,13 @@ class ParticipateToHappeningsByProduct
     public function __construct(
         HappeningRepositoryInterface $happeningRepository,
         HappeningsNotOverlapped $happeningsNotOverlapped,
+        ParticipantWithAttributedProductUpdated $participantWithAttributedProductUpdated,
         ParticipateToHappeningWithProductToBuyChecker $participateToHappeningWithProductToBuyChecker,
         UpdateParticipationHandler $updateParticipationHandler
     ) {
         $this->happeningRepository = $happeningRepository;
         $this->happeningsNotOverlapped = $happeningsNotOverlapped;
+        $this->participantWithAttributedProductUpdated = $participantWithAttributedProductUpdated;
         $this->participateToHappeningWithProductToBuyChecker = $participateToHappeningWithProductToBuyChecker;
         $this->updateParticipationHandler = $updateParticipationHandler;
     }
@@ -47,15 +53,23 @@ class ParticipateToHappeningsByProduct
     {
         $sheetParticipants = $sheet->getParticipantsArray();
 
+        $participantsWithAttributedProductUpdated = $this
+            ->participantWithAttributedProductUpdated
+            ->getFilteredByParticipants($sheetParticipants)
+        ;
+
         $happeningsWithProducts = $this->happeningRepository->findWithProducts($sheet->getEvent());
 
         $availableHappeningsByParticipantId = $this->getAvailableHappeningsByParticipant(
             $happeningsWithProducts,
-            $sheetParticipants
+            $participantsWithAttributedProductUpdated
         );
 
         $participantsByHappeningId = $this
-            ->getParticipantsByHappening($sheetParticipants, $availableHappeningsByParticipantId);
+            ->getParticipantsByHappening(
+                $participantsWithAttributedProductUpdated,
+                $availableHappeningsByParticipantId
+            );
 
         $happeningsById = $this->getHappeningsById($happeningsWithProducts);
 

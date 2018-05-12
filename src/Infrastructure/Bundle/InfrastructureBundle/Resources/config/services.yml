@@ -5118,6 +5118,7 @@ services:
         arguments:
             - '@vimeet_infrastructure.repository.happening_repository'
             - '@Proximum\Vimeet\Domain\Happening\HappeningsNotOverlapped'
+            - '@Proximum\Vimeet\Domain\ProductAttributedToParticipant\ParticipantWithAttributedProductUpdated'
             - '@Proximum\Vimeet\Domain\Happening\ParticipateToHappeningWithProductToBuyChecker'
             - '@Proximum\Vimeet\Application\Command\Happening\UpdateParticipationHandler'
 

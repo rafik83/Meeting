@@ -150,7 +150,6 @@ class UpdateParticipationHandler
         array $previousParticipants,
         Happening $happening
     ): void {
-        // Remove participants from happening
         foreach ($previousParticipants as $participant) {
             if (true === \in_array($participant, $participants, true)) {
                 continue;

@@ -4,12 +4,15 @@ services:
     #
     Proximum\Vimeet\Domain\ProductAttributedToParticipant\ProductAttributedToParticipantSetter:
         arguments:
+            - '@Proximum\Vimeet\Domain\ProductAttributedToParticipant\ParticipantWithAttributedProductUpdated'
             - '@Proximum\Vimeet\Infrastructure\Repository\ProductAttributedToParticipantRepository'
             - '@datetime'
     Proximum\Vimeet\Domain\ProductAttributedToParticipant\ParticipantWithAttributedProductGetter:
         arguments:
             - '@Proximum\Vimeet\Infrastructure\Repository\ProductAttributedToParticipant\ParticipantWithAttributedProductToRepository'
             - '@template.participant_info_guesser'
+
+    Proximum\Vimeet\Domain\ProductAttributedToParticipant\ParticipantWithAttributedProductUpdated: ~
 
     domain.product.duplicator:
         class: Proximum\Vimeet\Domain\Product\Duplicator
