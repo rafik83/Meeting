@@ -108,6 +108,7 @@ class ProductAttributedToParticipantSetter
 
         if (!empty($productAttributedToParticipantsToRemove)) {
             $this->productAttributedToParticipantRepository->removeBatch($productAttributedToParticipantsToRemove);
+
             foreach ($productAttributedToParticipantsToRemove as $productAttributedToParticipantToRemove) {
                 $this->participantWithAttributedProductUpdated->add(
                     $productAttributedToParticipantToRemove->getParticipant()
