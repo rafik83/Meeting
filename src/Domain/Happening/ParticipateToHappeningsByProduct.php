@@ -51,14 +51,18 @@ class ParticipateToHappeningsByProduct
 
     public function handle(Sheet $sheet): void
     {
+        $happeningsWithProducts = $this->happeningRepository->findWithProducts($sheet->getEvent());
+
+        if (empty($happeningsWithProducts)) {
+            return;
+        }
+
         $sheetParticipants = $sheet->getParticipantsArray();
 
         $participantsWithAttributedProductUpdated = $this
             ->participantWithAttributedProductUpdated
             ->getFilteredByParticipants($sheetParticipants)
         ;
-
-        $happeningsWithProducts = $this->happeningRepository->findWithProducts($sheet->getEvent());
 
         $availableHappeningsByParticipantId = $this->getAvailableHappeningsByParticipant(
             $happeningsWithProducts,
@@ -73,9 +77,9 @@ class ParticipateToHappeningsByProduct
 
         $happeningsById = $this->getHappeningsById($happeningsWithProducts);
 
-        foreach ($participantsByHappeningId as $happeningId => $participants) {
+        foreach ($happeningsById as $happeningId => $happening) {
             $this->updateParticipationHandler->handle(
-                new UpdateParticipation($happeningsById[$happeningId], $sheet, $participants)
+                new UpdateParticipation($happening, $sheet, $participantsByHappeningId[$happeningId] ?? [])
             );
         }
     }
