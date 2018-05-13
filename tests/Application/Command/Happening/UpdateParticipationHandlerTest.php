@@ -297,6 +297,38 @@ class UpdateParticipationHandlerTest extends TestCase
         ;
 
         $this
+            ->participantRepository
+            ->getAvailableParticipantsForHappening(
+                [
+                    $this->participant1->reveal(),
+                    $this->participant2->reveal(),
+                ],
+                $this->happening->reveal()
+            )
+            ->shouldBeCalled()
+            ->willReturn(
+                [
+                    $this->participant1->reveal(),
+                    $this->participant2->reveal(),
+                ]
+            )
+        ;
+
+        $this
+            ->participateToHappeningWithProductToBuyChecker
+            ->canParticipate($this->participant1->reveal(), $this->happening->reveal())
+            ->shouldBeCalled()
+            ->willReturn(false)
+        ;
+
+        $this
+            ->participateToHappeningWithProductToBuyChecker
+            ->canParticipate($this->participant2->reveal(), $this->happening->reveal())
+            ->shouldBeCalled()
+            ->willReturn(false)
+        ;
+
+        $this
             ->happeningParticipationRepository
             ->removeUserForHappening(
                 $this->user1->reveal(),
@@ -379,6 +411,7 @@ class UpdateParticipationHandlerTest extends TestCase
                 [
                     $this->participant1->reveal(),
                     $this->participant3->reveal(),
+                    $this->participant2->reveal(), // this order is important as participant 2 is added to participants list
                 ],
                 $this->happening->reveal()
             )
@@ -386,6 +419,7 @@ class UpdateParticipationHandlerTest extends TestCase
             ->willReturn(
                 [
                     $this->participant1->reveal(),
+                    $this->participant2->reveal(),
                     $this->participant3->reveal(),
                 ]
             )
@@ -396,6 +430,13 @@ class UpdateParticipationHandlerTest extends TestCase
             ->canParticipate($this->participant1->reveal(), $this->happening->reveal())
             ->shouldBeCalled()
             ->willReturn(true)
+        ;
+
+        $this
+            ->participateToHappeningWithProductToBuyChecker
+            ->canParticipate($this->participant2->reveal(), $this->happening->reveal())
+            ->shouldBeCalled()
+            ->willReturn(false)
         ;
 
         $this

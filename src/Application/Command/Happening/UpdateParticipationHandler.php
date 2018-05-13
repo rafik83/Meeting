@@ -56,13 +56,20 @@ class UpdateParticipationHandler
 
     public function handle(UpdateParticipation $updateParticipation): void
     {
+        $participants = $updateParticipation->participants;
         $previousParticipants = $this->participantRepository->getParticipantsForHappening(
             $updateParticipation->sheet,
             $updateParticipation->happening
         );
 
+        foreach ($previousParticipants as $previousParticipant) {
+            if (!\in_array($previousParticipant, $participants, true)) {
+                $participants[] = $previousParticipant;
+            }
+        }
+
         $availableParticipants = $this->getAvailableAndCanParticipateParticipantsForHappening(
-            $updateParticipation->participants,
+            $participants,
             $updateParticipation->happening
         );
 
@@ -185,6 +192,7 @@ class UpdateParticipationHandler
             $participants,
             $happening
         );
+
         $availableAndCanParticipateParticipants = [];
 
         foreach ($availableParticipants as $participant) {
