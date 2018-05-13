@@ -44,16 +44,26 @@ class HappeningsNotOverlappedTest extends TestCase
         $happening5->getEnd()->willReturn(new \DateTime('2018-05-10 10:05:00'));
 
         $happeningsNotOverlapped = new HappeningsNotOverlapped();
-        $results = $happeningsNotOverlapped->getHappeningsNotOverlapped(
+
+        $this->assertEquals(
             [
-                $happening1->reveal(),
                 $happening2->reveal(),
-                $happening3->reveal(),
-                $happening4->reveal(),
                 $happening5->reveal(),
-            ]
+            ],
+            $happeningsNotOverlapped->getHappeningsNotOverlapped(
+                [
+                    $happening1->reveal(),
+                    $happening2->reveal(),
+                    $happening3->reveal(),
+                    $happening4->reveal(),
+                    $happening5->reveal(),
+                ]
+            )
         );
 
-        $this->assertEquals([$happening2->reveal(), $happening5->reveal()], $results);
+        $this->assertEquals(
+            [],
+            $happeningsNotOverlapped->getHappeningsNotOverlapped([])
+        );
     }
 }
