@@ -32,6 +32,14 @@ class ParticipantWithAttributedProductUpdated
      */
     public function getFilteredByParticipants(array $participants): array
     {
-        return array_intersect($participants, $this->participantWithAttributedProductUpdated);
+        $filteredParticipants = [];
+
+        foreach ($participants as $participant) {
+            if (isset($this->participantWithAttributedProductUpdated[$participant->getId()])) {
+                $filteredParticipants[] = $participant;
+            }
+        }
+
+        return $filteredParticipants;
     }
 }
