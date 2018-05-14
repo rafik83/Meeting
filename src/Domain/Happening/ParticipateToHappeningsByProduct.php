@@ -162,7 +162,7 @@ class ParticipateToHappeningsByProduct
      * @param Sheet       $sheet
      * @param Happening[] $happeningsWithProducts
      *
-     * @return array
+     * @return Happening[] indexed by happening Id
      */
     private function getHappeningsWithProductsByIdFromPackage(Sheet $sheet, array $happeningsWithProducts): array
     {
