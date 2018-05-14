@@ -13,9 +13,7 @@ namespace Proximum\Vimeet\Tests\Application\Command\User\Event;
 use PHPUnit\Framework\TestCase;
 use Proximum\Vimeet\Application\Command\User\Event\ConfirmAuthenticationTokenImport;
 use Proximum\Vimeet\Application\Command\User\Event\ConfirmAuthenticationTokenImportHandler;
-use Proximum\Vimeet\Application\Components\User\Event\AuthenticationTokenImportParser;
 use Proximum\Vimeet\Application\View\User\Event\AuthenticationTokenImportView;
-use Proximum\Vimeet\Domain\Model\File;
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Model\User\Event\AuthenticationToken;
 use Proximum\Vimeet\Domain\Repository\User\Event\AuthenticationTokenRepositoryInterface;
@@ -28,8 +26,6 @@ class ConfirmAuthenticationTokenImportHandlerTest extends TestCase
     public function testHandle()
     {
         $event = EventFactory::createEvent();
-        $importedFile = $this->prophesize(File::class);
-        $authenticationTokenImportParser = $this->prophesize(AuthenticationTokenImportParser::class);
         $authenticationTokenRepository = $this->prophesize(AuthenticationTokenRepositoryInterface::class);
         $userRepository = $this->prophesize(UserRepositoryInterface::class);
         $datetime = $this->prophesize(\DateTime::class);
@@ -53,13 +49,6 @@ class ConfirmAuthenticationTokenImportHandlerTest extends TestCase
         );
         $authenticationTokenImport2->addError('validators.authentication_token.csv.email.error');
 
-        $authenticationTokenImportParser->parse($event, $importedFile->reveal())
-            ->shouldBeCalled()
-            ->willReturn([
-                $authenticationTokenImport1,
-                $authenticationTokenImport2
-            ]);
-
         $userRepository->findByEmail('38016@example.net')
             ->shouldBeCalled()
             ->willReturn($user->reveal());
@@ -80,11 +69,13 @@ class ConfirmAuthenticationTokenImportHandlerTest extends TestCase
         ->shouldBeCalled();
 
         $handler = new ConfirmAuthenticationTokenImportHandler(
-            $authenticationTokenImportParser->reveal(),
             $authenticationTokenRepository->reveal(),
             $userRepository->reveal(),
             $datetime->reveal()
         );
-        $handler->handle(new ConfirmAuthenticationTokenImport($event, $importedFile->reveal()));
+        $handler->handle(new ConfirmAuthenticationTokenImport([
+            $authenticationTokenImport1,
+            $authenticationTokenImport2
+        ]));
     }
 }
