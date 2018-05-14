@@ -203,7 +203,7 @@ class HappeningRepository implements HappeningRepositoryInterface
     /**
      * {@inheritdoc}
      */
-    public function findWithProducts(Event $event): array
+    public function findWithProductsAndType(Event $event, Type $type): array
     {
         return $this
             ->entityManager
@@ -211,7 +211,9 @@ class HappeningRepository implements HappeningRepositoryInterface
             ->select('happening')
             ->from(Happening::class, 'happening')
             ->join('happening.products', 'product', 'WITH', 'happening.event = :event')
+            ->join('happening.types', 'type', 'WITH', 'type = :type')
             ->setParameter('event', $event)
+            ->setParameter('type', $type)
             ->getQuery()
             ->getResult()
         ;

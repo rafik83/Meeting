@@ -19,13 +19,9 @@ use Proximum\Vimeet\Domain\Model\Happening;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\ProductAttributedToParticipant\ParticipantWithAttributedProductUpdated;
-use Proximum\Vimeet\Domain\Repository\HappeningRepositoryInterface;
 
 class ParticipateToHappeningsByProduct
 {
-    /** @var HappeningRepositoryInterface */
-    private $happeningRepository;
-
     /** @var HappeningsNotOverlapped */
     private $happeningsNotOverlapped;
 
@@ -37,31 +33,33 @@ class ParticipateToHappeningsByProduct
 
     /** @var UpdateParticipationHandler */
     private $updateParticipationHandler;
+    /** @var HappeningsWithProductsBySheetPackageGetter */
+    private $happeningsWithProductsBySheetPackageGetter;
 
     /** @var DelayedEventDispatcherInterface */
     private $delayedEventDispatcher;
 
     public function __construct(
-        HappeningRepositoryInterface $happeningRepository,
+        HappeningsWithProductsBySheetPackageGetter $happeningsWithProductsBySheetPackageGetter,
         HappeningsNotOverlapped $happeningsNotOverlapped,
         ParticipantWithAttributedProductUpdated $participantWithAttributedProductUpdated,
         ParticipateToHappeningWithProductToBuyChecker $participateToHappeningWithProductToBuyChecker,
         UpdateParticipationHandler $updateParticipationHandler,
         DelayedEventDispatcherInterface $delayedEventDispatcher
     ) {
-        $this->happeningRepository = $happeningRepository;
         $this->happeningsNotOverlapped = $happeningsNotOverlapped;
         $this->participantWithAttributedProductUpdated = $participantWithAttributedProductUpdated;
         $this->participateToHappeningWithProductToBuyChecker = $participateToHappeningWithProductToBuyChecker;
         $this->updateParticipationHandler = $updateParticipationHandler;
         $this->delayedEventDispatcher = $delayedEventDispatcher;
+        $this->happeningsWithProductsBySheetPackageGetter = $happeningsWithProductsBySheetPackageGetter;
     }
 
     public function handle(Sheet $sheet): void
     {
-        $happeningsWithProducts = $this->happeningRepository->findWithProducts($sheet->getEvent());
+        $concernedHappeningsWithProducts = $this->happeningsWithProductsBySheetPackageGetter->get($sheet);
 
-        if (empty($happeningsWithProducts)) {
+        if (empty($concernedHappeningsWithProducts)) {
             return;
         }
 
@@ -74,7 +72,7 @@ class ParticipateToHappeningsByProduct
         ;
 
         $availableHappeningsByParticipantId = $this->getAvailableHappeningsByParticipant(
-            $happeningsWithProducts,
+            $concernedHappeningsWithProducts,
             $participantsWithAttributedProductUpdated
         );
 
@@ -84,10 +82,8 @@ class ParticipateToHappeningsByProduct
                 $availableHappeningsByParticipantId
             );
 
-        $happeningsById = $this->getHappeningsById($happeningsWithProducts);
-
         $happeningParticipationViewByHappening = [];
-        foreach ($happeningsById as $happeningId => $happening) {
+        foreach ($concernedHappeningsWithProducts as $happeningId => $happening) {
             $happeningParticipationViewByHappening[] = $this->updateParticipationHandler->handle(
                 new UpdateParticipation($happening, $sheet, $participantsByHappeningId[$happeningId] ?? [])
             );
@@ -174,21 +170,5 @@ class ParticipateToHappeningsByProduct
         }
 
         return $participantsById;
-    }
-
-    /**
-     * @param Happening[] $happenings
-     *
-     * @return Happening[]
-     */
-    private function getHappeningsById(array $happenings): array
-    {
-        $happeningsById = [];
-
-        foreach ($happenings as $happening) {
-            $happeningsById[$happening->getId()] = $happening;
-        }
-
-        return $happeningsById;
     }
 }

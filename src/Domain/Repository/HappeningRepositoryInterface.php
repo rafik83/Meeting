@@ -81,7 +81,10 @@ interface HappeningRepositoryInterface
     public function findHappeningParticipant(Event $event);
 
     /**
+     * @param Event $event
+     * @param Type  $type
+     *
      * @return Happening[]
      */
-    public function findWithProducts(Event $event): array;
+    public function findWithProductsAndType(Event $event, Type $type): array;
 }

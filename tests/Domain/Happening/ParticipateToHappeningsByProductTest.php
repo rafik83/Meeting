@@ -16,6 +16,7 @@ use Proximum\Vimeet\Application\Adapter\DelayedEventDispatcherInterface;
 use Proximum\Vimeet\Application\Command\Happening\UpdateParticipation;
 use Proximum\Vimeet\Application\Command\Happening\UpdateParticipationHandler;
 use Proximum\Vimeet\Domain\Happening\HappeningsNotOverlapped;
+use Proximum\Vimeet\Domain\Happening\HappeningsWithProductsBySheetPackageGetter;
 use Proximum\Vimeet\Domain\Happening\ParticipateToHappeningsByProduct;
 use Proximum\Vimeet\Domain\Happening\ParticipateToHappeningWithProductToBuyChecker;
 use Proximum\Vimeet\Domain\Model\Event;
@@ -23,7 +24,6 @@ use Proximum\Vimeet\Domain\Model\Happening;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\ProductAttributedToParticipant\ParticipantWithAttributedProductUpdated;
-use Proximum\Vimeet\Domain\Repository\HappeningRepositoryInterface;
 
 class ParticipateToHappeningsByProductTest extends TestCase
 {
@@ -35,8 +35,9 @@ class ParticipateToHappeningsByProductTest extends TestCase
     private $happening1;
     private $happening2;
     private $happening3;
+    private $happening4;
 
-    private $happeningRepository;
+    private $happeningsWithProductsBySheetPackageGetter;
     private $happeningsNotOverlapped;
     private $participateToHappeningWithProductToBuyChecker;
     private $updateParticipationHandler;
@@ -55,6 +56,9 @@ class ParticipateToHappeningsByProductTest extends TestCase
         $this->happening3 = $this->prophesize(Happening::class);
         $this->happening3->getId()->willReturn(903);
 
+        $this->happening4 = $this->prophesize(Happening::class);
+        $this->happening4->getId()->willReturn(904);
+
         $this->event = $this->prophesize(Event::class);
         $this->sheet = $this->prophesize(Sheet::class);
         $this->sheet->getEvent()->willReturn($this->event->reveal());
@@ -71,7 +75,7 @@ class ParticipateToHappeningsByProductTest extends TestCase
         $this->participantWithAttributedProductUpdated = $this->prophesize(
             ParticipantWithAttributedProductUpdated::class
         );
-        $this->happeningRepository = $this->prophesize(HappeningRepositoryInterface::class);
+        $this->happeningsWithProductsBySheetPackageGetter = $this->prophesize(HappeningsWithProductsBySheetPackageGetter::class);
         $this->happeningsNotOverlapped = $this->prophesize(HappeningsNotOverlapped::class);
         $this->participateToHappeningWithProductToBuyChecker = $this->prophesize(
             ParticipateToHappeningWithProductToBuyChecker::class
@@ -80,7 +84,7 @@ class ParticipateToHappeningsByProductTest extends TestCase
         $delayedEventDispatcher = $this->prophesize(DelayedEventDispatcherInterface::class);
 
         $this->participateToHappeningsByProduct = new ParticipateToHappeningsByProduct(
-            $this->happeningRepository->reveal(),
+            $this->happeningsWithProductsBySheetPackageGetter->reveal(),
             $this->happeningsNotOverlapped->reveal(),
             $this->participantWithAttributedProductUpdated->reveal(),
             $this->participateToHappeningWithProductToBuyChecker->reveal(),
@@ -92,8 +96,8 @@ class ParticipateToHappeningsByProductTest extends TestCase
     public function testNoHappeningsWithProduct()
     {
         $this
-            ->happeningRepository
-            ->findWithProducts($this->event->reveal())
+            ->happeningsWithProductsBySheetPackageGetter
+            ->get($this->sheet->reveal())
             ->shouldBeCalled()
             ->willReturn([])
         ;
@@ -110,14 +114,14 @@ class ParticipateToHappeningsByProductTest extends TestCase
     public function testHandle()
     {
         $this
-            ->happeningRepository
-            ->findWithProducts($this->event->reveal())
+            ->happeningsWithProductsBySheetPackageGetter
+            ->get($this->sheet->reveal())
             ->shouldBeCalled()
             ->willReturn(
                 [
-                    $this->happening1->reveal(),
-                    $this->happening2->reveal(),
-                    $this->happening3->reveal(),
+                    901 => $this->happening1->reveal(),
+                    902 => $this->happening2->reveal(),
+                    903 => $this->happening3->reveal(),
                 ]
             )
         ;
@@ -303,12 +307,12 @@ class ParticipateToHappeningsByProductTest extends TestCase
     public function testWithFilteredParticipants()
     {
         $this
-            ->happeningRepository
-            ->findWithProducts($this->event->reveal())
+            ->happeningsWithProductsBySheetPackageGetter
+            ->get($this->sheet->reveal())
             ->shouldBeCalled()
             ->willReturn(
                 [
-                    $this->happening1->reveal(),
+                    901 => $this->happening1->reveal(),
                 ]
             )
         ;

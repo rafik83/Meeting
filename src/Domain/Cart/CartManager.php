@@ -167,6 +167,16 @@ class CartManager
         return $cart;
     }
 
+    private function getQuantityToAddInCart(int $quantity, int $orderQuantity, int $includedQuantity): int
+    {
+        if ($quantity - $orderQuantity < 0) {
+            // We must not take account of included quantity when $quantity - $orderQuantity is already negative.
+            return $quantity - $orderQuantity;
+        }
+
+        return $quantity - $orderQuantity - $includedQuantity;
+    }
+
     private function updateAttributableProductQuantity(
         Cart $cart,
         OptionRow $optionRow,
@@ -185,9 +195,7 @@ class CartManager
         }
 
         $quantity = $optionRow->getQuantity();
-        $quantityToAddInCart = $quantity - $orderQuantity < 0
-            ? $quantity - $orderQuantity
-            : $quantity - $orderQuantity - $includedQuantity;
+        $quantityToAddInCart = $this->getQuantityToAddInCart($quantity, $orderQuantity, $includedQuantity);
 
         // Quantity not changed on first run
         // Or quantity reset to 0
