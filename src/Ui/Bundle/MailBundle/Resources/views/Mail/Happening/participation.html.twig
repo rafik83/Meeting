@@ -4,17 +4,19 @@
     {% for happeningParticipationView in mail.happeningParticipationViews %}
         {% set locale = event.availableLocale(mail.locale) %}
 
-        {{ happeningParticipationView.happening.title(locale) }}
+        {{ happeningParticipationView.happening.title(locale) }}<br/>
         <ul>
             {% for addedParticipant in happeningParticipationView.addedParticipants %}
-                <li>{{ addedParticipant.fullName }}</li>
+                <li>
+                    {{ 'mail.happening.participation.register'|trans({'%name%': addedParticipant.fullName}, 'mail', mail.locale) }}
+                </li>
             {% endfor %}
 
             {% for removedParticipant in happeningParticipationView.removedParticipants %}
-                <li>{{ removedParticipant.fullName }}</li>
+                <li>
+                    {{ 'mail.happening.participation.unregister'|trans({'%name%': removedParticipant.fullName}, 'mail', mail.locale) }}
+                </li>
             {% endfor %}
         </ul>
-
     {% endfor %}
 {% endblock %}
-

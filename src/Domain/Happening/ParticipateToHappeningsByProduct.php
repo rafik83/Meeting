@@ -86,20 +86,20 @@ class ParticipateToHappeningsByProduct
 
         $happeningsById = $this->getHappeningsById($happeningsWithProducts);
 
-        $happeningParticipationViewByHappeningId = [];
+        $happeningParticipationViewByHappening = [];
         foreach ($happeningsById as $happeningId => $happening) {
-            $happeningParticipationViewByHappeningId[$happeningId][] = $this->updateParticipationHandler->handle(
+            $happeningParticipationViewByHappening[] = $this->updateParticipationHandler->handle(
                 new UpdateParticipation($happening, $sheet, $participantsByHappeningId[$happeningId] ?? [])
             );
         }
 
-        if (!$happeningParticipationViewByHappeningId) {
+        if (empty($happeningParticipationViewByHappening)) {
             return;
         }
 
         $this->delayedEventDispatcher->dispatch(
             Events::HAPPENING_PARTICIPATION_AUTOMATICALLY_UPDATED,
-            new HappeningParticipationAutomaticallyUpdatedEvent($happeningParticipationViewByHappeningId)
+            new HappeningParticipationAutomaticallyUpdatedEvent($happeningParticipationViewByHappening, $sheet)
         );
     }
 

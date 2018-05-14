@@ -54,26 +54,25 @@ class HappeningParticipationEventSubscriber implements EventSubscriberInterface
             return;
         }
 
-        $receivers = [];
+        $email = new HappeningParticipationAutomaticallyUpdatedMail(
+            $event->happeningParticipationViews,
+            $this->sender,
+            $event->sheet->getOwner()->getEmail(),
+            $request->getLocale()
+        );
+
         foreach ($event->happeningParticipationViews as $happeningParticipationView) {
             /** @var Participant $addedParticipant */
-            foreach ($addedParticipant as $happeningParticipationView->addedParticipants) {
-                $receivers[] = $addedParticipant->getEmail();
+            foreach ($happeningParticipationView->addedParticipants as $addedParticipant) {
+                $email->addReceiver($addedParticipant->getEmail());
             }
 
             /** @var Participant $removedParticipant */
-            foreach ($removedParticipant as $happeningParticipationView->addedParticipants) {
-                $receivers[] = $removedParticipant->getEmail();
+            foreach ($happeningParticipationView->removedParticipants as $removedParticipant) {
+                $email->addReceiver($removedParticipant->getEmail());
             }
         }
 
-        $this->mailer->send(
-            new HappeningParticipationAutomaticallyUpdatedMail(
-                $event->happeningParticipationViews,
-                $this->sender,
-                $receivers,
-                $request->getLocale()
-            )
-        );
+        $this->mailer->send($email);
     }
 }
