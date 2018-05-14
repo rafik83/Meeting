@@ -11,7 +11,6 @@
 namespace Proximum\Vimeet\Tests\Application\Command\Happening;
 
 use PHPUnit\Framework\TestCase;
-use Prophecy\Argument;
 use Proximum\Vimeet\Application\Command\Happening\Participate;
 use Proximum\Vimeet\Application\Command\Happening\ParticipateHandler;
 use Proximum\Vimeet\Application\Event\Events;
@@ -199,7 +198,7 @@ class ParticipateHandlerTest extends TestCase
             ->eventDispatcher
             ->dispatch(
                 Events::HAPPENING_UN_PARTICIPATE,
-                new UnParticipateHappeningEvent($this->participant)
+                new UnParticipateHappeningEvent($this->participant, $this->happening)
             )
             ->shouldBeCalled()
         ;
@@ -262,7 +261,7 @@ class ParticipateHandlerTest extends TestCase
             ->eventDispatcher
             ->dispatch(
                 Events::HAPPENING_PARTICIPATE,
-                new ParticipateHappeningEvent($this->participant)
+                new ParticipateHappeningEvent($this->participant, $this->happening)
             )
             ->shouldBeCalled()
         ;
@@ -428,12 +427,12 @@ class ParticipateHandlerTest extends TestCase
             ->eventDispatcher
             ->dispatch(
                 Events::HAPPENING_PARTICIPATE,
-                new ParticipateHappeningEvent($this->participant)
+                new ParticipateHappeningEvent($this->participant, $this->happening)
             )
             ->shouldBeCalled()
         ;
         $this->eventDispatcher
-            ->dispatch(Events::HAPPENING_PARTICIPATE, new ParticipateHappeningEvent($participant2))
+            ->dispatch(Events::HAPPENING_PARTICIPATE, new ParticipateHappeningEvent($participant2, $this->happening))
             ->shouldBeCalled()
         ;
 
@@ -513,12 +512,12 @@ class ParticipateHandlerTest extends TestCase
         $this->eventDispatcher
             ->dispatch(
                 Events::HAPPENING_UN_PARTICIPATE,
-                new UnParticipateHappeningEvent($this->participant)
+                new UnParticipateHappeningEvent($this->participant, $this->happening)
             )
             ->shouldBeCalled()
         ;
         $this->eventDispatcher
-            ->dispatch(Events::HAPPENING_PARTICIPATE, new ParticipateHappeningEvent($participant2))
+            ->dispatch(Events::HAPPENING_PARTICIPATE, new ParticipateHappeningEvent($participant2, $this->happening))
             ->shouldBeCalled()
         ;
 
@@ -582,7 +581,7 @@ class ParticipateHandlerTest extends TestCase
             ->eventDispatcher
             ->dispatch(
                 Events::HAPPENING_PARTICIPATE,
-                new ParticipateHappeningEvent($this->participant)
+                new ParticipateHappeningEvent($this->participant, $this->happening)
             )
             ->shouldBeCalled()
         ;
@@ -656,7 +655,7 @@ class ParticipateHandlerTest extends TestCase
             ->eventDispatcher
             ->dispatch(
                 Events::HAPPENING_PARTICIPATE,
-                new ParticipateHappeningEvent($this->participant)
+                new ParticipateHappeningEvent($this->participant, $this->happening)
             )
             ->shouldBeCalled()
         ;
@@ -706,7 +705,7 @@ class ParticipateHandlerTest extends TestCase
         $this->eventDispatcher
             ->dispatch(
                 Events::HAPPENING_UN_PARTICIPATE,
-                new UnParticipateHappeningEvent($this->participant)
+                new UnParticipateHappeningEvent($this->participant,  $this->happening)
             )
             ->shouldBeCalled()
         ;

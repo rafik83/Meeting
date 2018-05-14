@@ -158,7 +158,7 @@ class ParticipateHandler
 
                 $this->eventDispatcher->dispatch(
                     Events::HAPPENING_PARTICIPATE,
-                    new ParticipateHappeningEvent($participant)
+                    new ParticipateHappeningEvent($participant, $participate->happening)
                 );
             }
         }
@@ -173,7 +173,7 @@ class ParticipateHandler
 
                 $this->eventDispatcher->dispatch(
                     Events::HAPPENING_UN_PARTICIPATE,
-                    new UnParticipateHappeningEvent($participant)
+                    new UnParticipateHappeningEvent($participant, $participate->happening)
                 );
             }
         }
