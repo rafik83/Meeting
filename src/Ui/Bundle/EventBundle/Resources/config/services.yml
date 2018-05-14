@@ -491,7 +491,9 @@ services:
 
     Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\EventListener\Happening\HappeningParticipationEventSubscriber:
         arguments:
-            - '@session.flash_bag'
+            - '@adapter.mailer_adapter'
+            - '@request_stack'
+            - '%mailer_sender%'
         tags:
             - { name: kernel.event_subscriber }
 

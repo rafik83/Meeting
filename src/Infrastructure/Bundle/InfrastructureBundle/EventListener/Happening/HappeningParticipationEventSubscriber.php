@@ -10,64 +10,70 @@
 
 namespace Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\EventListener\Happening;
 
+use Proximum\Vimeet\Application\Adapter\MailerInterface;
 use Proximum\Vimeet\Application\Event\Events;
-use Proximum\Vimeet\Application\Event\Happening\ParticipateHappeningEvent;
-use Proximum\Vimeet\Application\Event\Happening\UnParticipateHappeningEvent;
+use Proximum\Vimeet\Application\Event\Happening\HappeningParticipationAutomaticallyUpdatedEvent;
+use Proximum\Vimeet\Domain\Model\Participant;
+use Proximum\Vimeet\Ui\Bundle\MailBundle\Mail\Happening\HappeningParticipationAutomaticallyUpdatedMail;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
-use Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\RequestStack;
 
-/**
- * @todo:
- * - Stack all participate and unparticipate events : store update by Happening?
- *        Happening1:
- *           - Michel is unregistered
- *           - Henry is registered
- *        Happening2:
- *           - Henry is unregistered
- * - Listen to Events::HAPPENING_PARTICIPATED in order to run $this->flashBag->add('success', $message) with one unique message
- */
 class HappeningParticipationEventSubscriber implements EventSubscriberInterface
 {
-    /** @var FlashBagInterface */
-    private $flashBag;
+    /** @var MailerInterface */
+    private $mailer;
 
-    public function __construct(FlashBagInterface $flashBag)
-    {
-        $this->flashBag = $flashBag;
+    /** @var RequestStack */
+    private $requestStack;
+
+    /** @var string */
+    private $sender;
+
+    public function __construct(
+        MailerInterface $mailer,
+        RequestStack $requestStack,
+        string $sender
+    ) {
+        $this->mailer = $mailer;
+        $this->requestStack = $requestStack;
+        $this->sender = $sender;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public static function getSubscribedEvents(): array
     {
         return [
-            Events::HAPPENING_PARTICIPATE => 'onParticipateToHappening',
-            Events::HAPPENING_UN_PARTICIPATE => 'onUnparticipateToHappening',
+            Events::HAPPENING_PARTICIPATION_AUTOMATICALLY_UPDATED => 'onParticipationAutomaticallyUpdated',
         ];
     }
 
-    public function onParticipateToHappening(ParticipateHappeningEvent $participateHappeningEvent): void
+    public function onParticipationAutomaticallyUpdated(HappeningParticipationAutomaticallyUpdatedEvent $event): void
     {
-        if (!$participateHappeningEvent->automaticallyThroughProductAttribution) {
+        $request = $this->requestStack->getCurrentRequest();
+        if (!$request instanceof Request) {
             return;
         }
 
-        $this->flashBag->add(
-            'success',
-            $participateHappeningEvent->participant->getFullname(). ' added to ' . $participateHappeningEvent->happening->getTitle('fr') // need to get the locale from the Request
-        );
-    }
+        $receivers = [];
+        foreach ($event->happeningParticipationViews as $happeningParticipationView) {
+            /** @var Participant $addedParticipant */
+            foreach ($addedParticipant as $happeningParticipationView->addedParticipants) {
+                $receivers[] = $addedParticipant->getEmail();
+            }
 
-    public function onUnparticipateToHappening(UnParticipateHappeningEvent $unParticipateHappeningEvent): void
-    {
-        if (!$unParticipateHappeningEvent->automaticallyThroughProductAttribution) {
-            return;
+            /** @var Participant $removedParticipant */
+            foreach ($removedParticipant as $happeningParticipationView->addedParticipants) {
+                $receivers[] = $removedParticipant->getEmail();
+            }
         }
 
-        $this->flashBag->add(
-            'success',
-            $unParticipateHappeningEvent->participant->getFullname() . ' removed from ' . $unParticipateHappeningEvent->happening->getTitle('fr') // need to get the locale from the Request
+        $this->mailer->send(
+            new HappeningParticipationAutomaticallyUpdatedMail(
+                $event->happeningParticipationViews,
+                $this->sender,
+                $receivers,
+                $request->getLocale()
+            )
         );
     }
 }

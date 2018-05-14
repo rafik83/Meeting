@@ -10,8 +10,11 @@
 
 namespace Proximum\Vimeet\Domain\Happening;
 
+use Proximum\Vimeet\Application\Adapter\DelayedEventDispatcherInterface;
 use Proximum\Vimeet\Application\Command\Happening\UpdateParticipation;
 use Proximum\Vimeet\Application\Command\Happening\UpdateParticipationHandler;
+use Proximum\Vimeet\Application\Event\Events;
+use Proximum\Vimeet\Application\Event\Happening\HappeningParticipationAutomaticallyUpdatedEvent;
 use Proximum\Vimeet\Domain\Model\Happening;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Sheet;
@@ -35,18 +38,23 @@ class ParticipateToHappeningsByProduct
     /** @var UpdateParticipationHandler */
     private $updateParticipationHandler;
 
+    /** @var DelayedEventDispatcherInterface */
+    private $delayedEventDispatcher;
+
     public function __construct(
         HappeningRepositoryInterface $happeningRepository,
         HappeningsNotOverlapped $happeningsNotOverlapped,
         ParticipantWithAttributedProductUpdated $participantWithAttributedProductUpdated,
         ParticipateToHappeningWithProductToBuyChecker $participateToHappeningWithProductToBuyChecker,
-        UpdateParticipationHandler $updateParticipationHandler
+        UpdateParticipationHandler $updateParticipationHandler,
+        DelayedEventDispatcherInterface $delayedEventDispatcher
     ) {
         $this->happeningRepository = $happeningRepository;
         $this->happeningsNotOverlapped = $happeningsNotOverlapped;
         $this->participantWithAttributedProductUpdated = $participantWithAttributedProductUpdated;
         $this->participateToHappeningWithProductToBuyChecker = $participateToHappeningWithProductToBuyChecker;
         $this->updateParticipationHandler = $updateParticipationHandler;
+        $this->delayedEventDispatcher = $delayedEventDispatcher;
     }
 
     public function handle(Sheet $sheet): void
@@ -78,11 +86,21 @@ class ParticipateToHappeningsByProduct
 
         $happeningsById = $this->getHappeningsById($happeningsWithProducts);
 
+        $happeningParticipationViewByHappeningId = [];
         foreach ($happeningsById as $happeningId => $happening) {
-            $this->updateParticipationHandler->handle(
+            $happeningParticipationViewByHappeningId[$happeningId][] = $this->updateParticipationHandler->handle(
                 new UpdateParticipation($happening, $sheet, $participantsByHappeningId[$happeningId] ?? [])
             );
         }
+
+        if (!$happeningParticipationViewByHappeningId) {
+            return;
+        }
+
+        $this->delayedEventDispatcher->dispatch(
+            Events::HAPPENING_PARTICIPATION_AUTOMATICALLY_UPDATED,
+            new HappeningParticipationAutomaticallyUpdatedEvent($happeningParticipationViewByHappeningId)
+        );
     }
 
     /**
