@@ -11,6 +11,7 @@
 namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\User\Event\AuthenticationToken;
 
 use Proximum\Vimeet\Application\Adapter\AuthorizationCheckerAdapterInterface;
+use Proximum\Vimeet\Application\Components\User\Event\Denormalizer\AuthenticationTokenDenormalizer;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\HttpFoundation\Response\CsvFileResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -33,7 +34,7 @@ class SampleAction
             throw new AccessDeniedException('Access denied');
         }
 
-        $sample = 'email;token;expiration
+        $sample = implode(AuthenticationTokenDenormalizer::ALLOWED_KEYS, ';').'
 aa@aa.fr;AABBCCDDEE;2020-01-01
 bb@bb.fr;FFGGHHIIKK;';
 

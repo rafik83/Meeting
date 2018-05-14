@@ -11,6 +11,7 @@
 namespace Proximum\Vimeet\Application\Components\User\Event\Denormalizer;
 
 use Proximum\Vimeet\Application\View\User\Event\AuthenticationTokenImportView;
+use Proximum\Vimeet\Domain\Helper\StringHelper;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\User\Event\AuthenticationTokenImport;
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
@@ -23,7 +24,7 @@ class AuthenticationTokenDenormalizer implements DenormalizerInterface
     private const KEY_EMAIL = 'email';
     private const KEY_EXPIRATION = 'expiration';
 
-    private const ALLOWED_KEYS = [
+    public const ALLOWED_KEYS = [
         self::KEY_EMAIL,
         self::KEY_TOKEN,
         self::KEY_EXPIRATION,
@@ -60,6 +61,7 @@ class AuthenticationTokenDenormalizer implements DenormalizerInterface
 
                 if ($row[self::KEY_EXPIRATION]) {
                     $dateValidations = $this->validator->validate($row[self::KEY_EXPIRATION], [new Date()]);
+
                     if ($dateValidations->count() > 0) {
                         throw new \Exception('validators.authentication_token.csv.invalid_expiration_date');
                     }
@@ -68,7 +70,7 @@ class AuthenticationTokenDenormalizer implements DenormalizerInterface
                 $authenticationTokenImport = new AuthenticationTokenImport(
                     new AuthenticationTokenImportView(
                         $context['event'],
-                        $row[self::KEY_EMAIL],
+                        strtolower(StringHelper::trimSpacesAndNonBreakSpaces($row[self::KEY_EMAIL])),
                         $row[self::KEY_TOKEN],
                         $row[self::KEY_EXPIRATION] ? new \DateTime($row[self::KEY_EXPIRATION]) : null
                     )

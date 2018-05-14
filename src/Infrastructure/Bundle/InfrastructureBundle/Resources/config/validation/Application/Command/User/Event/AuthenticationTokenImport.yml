@@ -1,0 +1,6 @@
+Proximum\Vimeet\Application\Command\User\Event\AuthenticationTokenImport:
+    properties:
+        file:
+            - NotNull: ~
+            - File:
+                mimeTypes: ['text/csv', 'text/plain', 'application/csv']
