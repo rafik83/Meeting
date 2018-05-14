@@ -12,6 +12,7 @@ namespace Proximum\Vimeet\Application\Command\Happening;
 
 use Proximum\Vimeet\Application\Adapter\DelayedEventDispatcherInterface;
 use Proximum\Vimeet\Application\Event\Events;
+use Proximum\Vimeet\Application\Event\Happening\HappeningParticipationAutomaticallyUpdatedEvent;
 use Proximum\Vimeet\Application\Event\Happening\ParticipateEvent;
 use Proximum\Vimeet\Application\Event\Happening\ParticipateHappeningEvent;
 use Proximum\Vimeet\Application\Event\Happening\UnParticipateHappeningEvent;
@@ -22,6 +23,7 @@ use Proximum\Vimeet\Domain\Model\HappeningParticipation;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Repository\HappeningParticipationRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\ParticipantRepositoryInterface;
+use Proximum\Vimeet\Domain\View\Happening\HappeningParticipationView;
 
 /**
  * Update Participants to Happening when product are attributed or removed to participant(s)
@@ -57,7 +59,7 @@ class UpdateParticipationHandler
         $this->eventDispatcher = $eventDispatcher;
     }
 
-    public function handle(UpdateParticipation $updateParticipation): void
+    public function handle(UpdateParticipation $updateParticipation): HappeningParticipationView
     {
         $participants = $updateParticipation->participants;
 
@@ -78,7 +80,7 @@ class UpdateParticipationHandler
             $updateParticipation->happening
         );
 
-        $this->removeParticipantsFromHappening(
+        $removedParticipants = $this->removeParticipantsFromHappening(
             $availableParticipants,
             $previousParticipants,
             $updateParticipation->happening
@@ -93,6 +95,12 @@ class UpdateParticipationHandler
         $this->eventDispatcher->dispatch(
             Events::HAPPENING_PARTICIPATED,
             new ParticipateEvent($updateParticipation->sheet, $participantsToHappening, $updateParticipation->happening)
+        );
+
+        return new HappeningParticipationView(
+            $updateParticipation->happening,
+            $participantsToHappening,
+            $removedParticipants
         );
     }
 
@@ -156,12 +164,16 @@ class UpdateParticipationHandler
      * @param Participant[] $participants
      * @param Participant[] $previousParticipants
      * @param Happening     $happening
+     *
+     * @return Participant[]
      */
     private function removeParticipantsFromHappening(
         array $participants,
         array $previousParticipants,
         Happening $happening
-    ): void {
+    ): array {
+        $removedParticipants = [];
+
         foreach ($previousParticipants as $participant) {
             if (true === \in_array($participant, $participants, true)) {
                 continue;
@@ -176,7 +188,11 @@ class UpdateParticipationHandler
                 Events::HAPPENING_UN_PARTICIPATE,
                 new UnParticipateHappeningEvent($participant, $happening, true)
             );
+
+            $removedParticipants[] = $participant;
         }
+
+        return $removedParticipants;
     }
 
     /**

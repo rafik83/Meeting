@@ -12,6 +12,7 @@ namespace Proximum\Vimeet\Tests\Domain\Happening;
 
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
+use Proximum\Vimeet\Application\Adapter\DelayedEventDispatcherInterface;
 use Proximum\Vimeet\Application\Command\Happening\UpdateParticipation;
 use Proximum\Vimeet\Application\Command\Happening\UpdateParticipationHandler;
 use Proximum\Vimeet\Domain\Happening\HappeningsNotOverlapped;
@@ -80,15 +81,16 @@ class ParticipateToHappeningsByProductTest extends TestCase
             ParticipateToHappeningWithProductToBuyChecker::class
         );
         $this->updateParticipationHandler = $this->prophesize(UpdateParticipationHandler::class);
+        $delayedEventDispatcher = $this->prophesize(DelayedEventDispatcherInterface::class);
 
         $this->participateToHappeningsByProduct = new ParticipateToHappeningsByProduct(
             $this->happeningsWithProductsBySheetPackageGetter->reveal(),
             $this->happeningsNotOverlapped->reveal(),
             $this->participantWithAttributedProductUpdated->reveal(),
             $this->participateToHappeningWithProductToBuyChecker->reveal(),
-            $this->updateParticipationHandler->reveal()
+            $this->updateParticipationHandler->reveal(),
+            $delayedEventDispatcher->reveal()
         );
-
     }
 
     public function testNoHappeningsWithProduct()
