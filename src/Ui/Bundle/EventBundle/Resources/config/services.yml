@@ -489,6 +489,12 @@ services:
         tags:
             - { name: kernel.event_subscriber }
 
+    Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\EventListener\Happening\HappeningParticipationEventSubscriber:
+        arguments:
+            - '@session.flash_bag'
+        tags:
+            - { name: kernel.event_subscriber }
+
     Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\EventListener\Cart\CartEventSubscriber:
         arguments:
             - '@Proximum\Vimeet\Domain\Happening\ParticipateToHappeningsByProduct'
