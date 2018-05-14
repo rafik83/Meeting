@@ -551,7 +551,6 @@ services:
 
     Proximum\Vimeet\Application\Command\User\Event\ConfirmAuthenticationTokenImportHandler:
         arguments:
-            - '@Proximum\Vimeet\Application\Components\User\Event\AuthenticationTokenImportParser'
             - '@Proximum\Vimeet\Infrastructure\Repository\User\Event\AuthenticationTokenRepository'
             - '@vimeet_infrastructure.repository.user_repository'
             - '@datetime'

@@ -11,20 +11,15 @@
 namespace Proximum\Vimeet\Application\Command\User\Event;
 
 use Proximum\Vimeet\Application\Command\Command;
-use Proximum\Vimeet\Domain\Model\Event;
-use Proximum\Vimeet\Domain\Model\File;
+use Proximum\Vimeet\Domain\User\Event\AuthenticationTokenImport;
 
 class ConfirmAuthenticationTokenImport implements Command
 {
-    /** @var Event */
-    public $event;
+    /** @var AuthenticationTokenImport[] */
+    public $authenticationTokenImports;
 
-    /** @var File */
-    public $importedFile;
-
-    public function __construct(Event $event, File $importedFile)
+    public function __construct(array $authenticationTokenImports)
     {
-        $this->event = $event;
-        $this->importedFile = $importedFile;
+        $this->authenticationTokenImports = $authenticationTokenImports;
     }
 }

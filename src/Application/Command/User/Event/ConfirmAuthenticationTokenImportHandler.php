@@ -10,7 +10,6 @@
 
 namespace Proximum\Vimeet\Application\Command\User\Event;
 
-use Proximum\Vimeet\Application\Components\User\Event\AuthenticationTokenImportParser;
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Model\User\Event\AuthenticationToken;
 use Proximum\Vimeet\Domain\Repository\User\Event\AuthenticationTokenRepositoryInterface;
@@ -19,9 +18,6 @@ use Proximum\Vimeet\Domain\User\Event\AuthenticationTokenImport;
 
 class ConfirmAuthenticationTokenImportHandler
 {
-    /** @var AuthenticationTokenImportParser */
-    private $authenticationTokenImportParser;
-
     /** @var AuthenticationTokenRepositoryInterface */
     private $authenticationTokenRepository;
 
@@ -32,12 +28,10 @@ class ConfirmAuthenticationTokenImportHandler
     private $datetime;
 
     public function __construct(
-        AuthenticationTokenImportParser $authenticationTokenImportParser,
         AuthenticationTokenRepositoryInterface $authenticationTokenRepository,
         UserRepositoryInterface $userRepository,
         \DateTimeInterface $datetime
     ) {
-        $this->authenticationTokenImportParser = $authenticationTokenImportParser;
         $this->authenticationTokenRepository = $authenticationTokenRepository;
         $this->userRepository = $userRepository;
         $this->datetime = $datetime;
@@ -45,10 +39,7 @@ class ConfirmAuthenticationTokenImportHandler
 
     public function handle(ConfirmAuthenticationTokenImport $confirmAuthenticationTokenImport): void
     {
-        $authenticationTokenImports = $this->authenticationTokenImportParser->parse(
-            $confirmAuthenticationTokenImport->event,
-            $confirmAuthenticationTokenImport->importedFile
-        );
+        $authenticationTokenImports = $confirmAuthenticationTokenImport->authenticationTokenImports;
 
         /** @var AuthenticationTokenImport $authenticationTokenImport */
         foreach ($authenticationTokenImports as $authenticationTokenImport) {

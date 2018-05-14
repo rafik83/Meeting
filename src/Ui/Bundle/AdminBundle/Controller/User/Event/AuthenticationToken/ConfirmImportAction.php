@@ -19,7 +19,6 @@ use Proximum\Vimeet\Application\Query\User\Event\AuthenticationTokenImportPrevie
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\File;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\User\Event\AuthenticationTokenConfirmType;
-use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\User\Event\AuthenticationTokenType;
 use Symfony\Bundle\FrameworkBundle\Templating\EngineInterface;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -70,9 +69,13 @@ class ConfirmImportAction
             throw new AccessDeniedException('Access denied');
         }
 
-        $authenticationTokenImports = $this->queryBus->handle(new AuthenticationTokenImportPreviewQuery($event, $importedFile));
+        try {
+            $authenticationTokenImports = $this->queryBus->handle(new AuthenticationTokenImportPreviewQuery($event, $importedFile));
+        } catch (\Exception $exception) {
+            return new RedirectResponse($this->router->generate('admin_sheet', ['event' => $event->getId()]));
+        }
 
-        $confirmAuthenticationToken = new ConfirmAuthenticationTokenImport($event, $importedFile);
+        $confirmAuthenticationToken = new ConfirmAuthenticationTokenImport($authenticationTokenImports);
         $form = $this->formFactory->create(AuthenticationTokenConfirmType::class, $confirmAuthenticationToken, [
             'locale' => $event->getAvailableLocale($request->getLocale()),
         ]);
