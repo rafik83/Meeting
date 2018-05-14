@@ -59,6 +59,7 @@ class ParticipateToHappeningsByProduct
 
         $sheetParticipants = $sheet->getParticipantsArray();
 
+        // Process only participants with attributed product updated (added or removed)
         $participantsWithAttributedProductUpdated = $this
             ->participantWithAttributedProductUpdated
             ->getFilteredByParticipants($sheetParticipants)

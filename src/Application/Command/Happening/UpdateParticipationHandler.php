@@ -23,6 +23,9 @@ use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Repository\HappeningParticipationRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\ParticipantRepositoryInterface;
 
+/**
+ * Update Participants to Happening when product are attributed or removed to participant(s)
+ */
 class UpdateParticipationHandler
 {
     /** @var HappeningParticipationRepositoryInterface */
@@ -57,11 +60,13 @@ class UpdateParticipationHandler
     public function handle(UpdateParticipation $updateParticipation): void
     {
         $participants = $updateParticipation->participants;
+
         $previousParticipants = $this->participantRepository->getParticipantsForHappening(
             $updateParticipation->sheet,
             $updateParticipation->happening
         );
 
+        // Add previous participants to participants list
         foreach ($previousParticipants as $previousParticipant) {
             if (!\in_array($previousParticipant, $participants, true)) {
                 $participants[] = $previousParticipant;
