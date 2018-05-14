@@ -1,8 +1,9 @@
 <?php
+
 /*
- * This file is part of the PhpStorm project.
+ * This file is part of the Proximum Vimeet project.
  *
- * Copyright (C) PhpStorm
+ * Copyright (C) Proximum
  *
  * @author Elao <contact@elao.com>
  */
@@ -12,6 +13,7 @@ namespace Proximum\Vimeet\Tests\Infrastructure\Bundle\InfrastructureBundle\Event
 use PHPUnit\Framework\TestCase;
 use Proximum\Vimeet\Application\Adapter\MailerInterface;
 use Proximum\Vimeet\Application\Event\Happening\HappeningParticipationAutomaticallyUpdatedEvent;
+use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Happening;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Sheet;
@@ -19,21 +21,20 @@ use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\View\Happening\HappeningParticipationView;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\EventListener\Happening\HappeningParticipationEventSubscriber;
 use Proximum\Vimeet\Ui\Bundle\MailBundle\Mail\Happening\HappeningParticipationAutomaticallyUpdatedMail;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\RequestStack;
 
 class HappeningParticipationEventSubscriberTest extends TestCase
 {
     public function testOnParticipationAutomaticallyUpdated(): void
     {
         $mailer = $this->prophesize(MailerInterface::class);
-        $request = $this->prophesize(Request::class);
-        $requestStack = $this->prophesize(RequestStack::class);
         $happening = $this->prophesize(Happening::class);
         $user = $this->prophesize(User::class);
+        $event = $this->prophesize(Event::class);
         $sheet = $this->prophesize(Sheet::class);
+        $sheet->getEvent()->shouldBeCalled()->willReturn($event->reveal());
         $sheet->getOwner()->shouldBeCalled()->willReturn($user->reveal());
         $user->getEmail()->shouldBeCalled()->willReturn('owner@mail.fr');
+        $user->getLocale()->shouldBeCalled()->willReturn('fr');
 
         $participant1 = $this->prophesize(Participant::class);
         $participant1->getEmail()->shouldBeCalled()->willReturn('aa@aa.fr');
@@ -42,11 +43,7 @@ class HappeningParticipationEventSubscriberTest extends TestCase
         $participant3 = $this->prophesize(Participant::class);
         $participant3->getEmail()->shouldBeCalled()->willReturn('cc@cc.fr');
 
-        $requestStack->getCurrentRequest()
-            ->shouldBeCalled()
-            ->willReturn($request->reveal());
-
-        $request->getLocale()
+        $event->getAvailableLocale('fr')
             ->shouldBeCalled()
             ->willReturn('fr');
 
@@ -82,7 +79,6 @@ class HappeningParticipationEventSubscriberTest extends TestCase
         $event = new HappeningParticipationAutomaticallyUpdatedEvent($happeningParticipationView, $sheet->reveal());
         $subscriber = new HappeningParticipationEventSubscriber(
             $mailer->reveal(),
-            $requestStack->reveal(),
             'sender@mail.fr'
         );
         $subscriber->onParticipationAutomaticallyUpdated($event);

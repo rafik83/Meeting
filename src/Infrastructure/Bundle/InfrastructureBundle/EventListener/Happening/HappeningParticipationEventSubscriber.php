@@ -16,27 +16,18 @@ use Proximum\Vimeet\Application\Event\Happening\HappeningParticipationAutomatica
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Ui\Bundle\MailBundle\Mail\Happening\HappeningParticipationAutomaticallyUpdatedMail;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\RequestStack;
 
 class HappeningParticipationEventSubscriber implements EventSubscriberInterface
 {
     /** @var MailerInterface */
     private $mailer;
 
-    /** @var RequestStack */
-    private $requestStack;
-
     /** @var string */
     private $sender;
 
-    public function __construct(
-        MailerInterface $mailer,
-        RequestStack $requestStack,
-        string $sender
-    ) {
+    public function __construct(MailerInterface $mailer, string $sender)
+    {
         $this->mailer = $mailer;
-        $this->requestStack = $requestStack;
         $this->sender = $sender;
     }
 
@@ -49,16 +40,15 @@ class HappeningParticipationEventSubscriber implements EventSubscriberInterface
 
     public function onParticipationAutomaticallyUpdated(HappeningParticipationAutomaticallyUpdatedEvent $event): void
     {
-        $request = $this->requestStack->getCurrentRequest();
-        if (!$request instanceof Request) {
-            return;
-        }
+        $locale = $event->sheet
+            ->getEvent()
+            ->getAvailableLocale($event->sheet->getOwner()->getLocale());
 
         $email = new HappeningParticipationAutomaticallyUpdatedMail(
             $event->happeningParticipationViews,
             $this->sender,
             $event->sheet->getOwner()->getEmail(),
-            $request->getLocale()
+            $locale
         );
 
         foreach ($event->happeningParticipationViews as $happeningParticipationView) {
