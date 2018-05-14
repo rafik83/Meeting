@@ -57,6 +57,8 @@ class ParticipateToHappeningsByProduct
             return;
         }
 
+        $concernedHappeningsWithProducts = $this->getHappeningsWithProductsByIdFromPackage($sheet, $happeningsWithProducts);
+
         $sheetParticipants = $sheet->getParticipantsArray();
 
         // Process only participants with attributed product updated (added or removed)
@@ -66,7 +68,7 @@ class ParticipateToHappeningsByProduct
         ;
 
         $availableHappeningsByParticipantId = $this->getAvailableHappeningsByParticipant(
-            $happeningsWithProducts,
+            $concernedHappeningsWithProducts,
             $participantsWithAttributedProductUpdated
         );
 
@@ -76,9 +78,7 @@ class ParticipateToHappeningsByProduct
                 $availableHappeningsByParticipantId
             );
 
-        $happeningsById = $this->getHappeningsById($happeningsWithProducts);
-
-        foreach ($happeningsById as $happeningId => $happening) {
+        foreach ($concernedHappeningsWithProducts as $happeningId => $happening) {
             $this->updateParticipationHandler->handle(
                 new UpdateParticipation($happening, $sheet, $participantsByHappeningId[$happeningId] ?? [])
             );
@@ -159,18 +159,27 @@ class ParticipateToHappeningsByProduct
     }
 
     /**
-     * @param Happening[] $happenings
+     * @param Sheet       $sheet
+     * @param Happening[] $happeningsWithProducts
      *
-     * @return Happening[]
+     * @return array
      */
-    private function getHappeningsById(array $happenings): array
+    private function getHappeningsWithProductsByIdFromPackage(Sheet $sheet, array $happeningsWithProducts): array
     {
-        $happeningsById = [];
+        $happeningsInPackage = [];
 
-        foreach ($happenings as $happening) {
-            $happeningsById[$happening->getId()] = $happening;
+        $attributableOptions = $sheet->getPackage()->getAttributableOptions();
+
+        foreach ($happeningsWithProducts as $happeningsWithProduct) {
+            foreach ($happeningsWithProduct->getProducts() as $product) {
+                if (isset($attributableOptions[$product->getId()])) {
+                    $happeningsInPackage[$happeningsWithProduct->getId()] = $happeningsWithProduct;
+
+                    break;
+                }
+            }
         }
 
-        return $happeningsById;
+        return $happeningsInPackage;
     }
 }
