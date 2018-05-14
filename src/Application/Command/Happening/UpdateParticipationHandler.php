@@ -12,7 +12,6 @@ namespace Proximum\Vimeet\Application\Command\Happening;
 
 use Proximum\Vimeet\Application\Adapter\DelayedEventDispatcherInterface;
 use Proximum\Vimeet\Application\Event\Events;
-use Proximum\Vimeet\Application\Event\Happening\HappeningParticipationAutomaticallyUpdatedEvent;
 use Proximum\Vimeet\Application\Event\Happening\ParticipateEvent;
 use Proximum\Vimeet\Application\Event\Happening\ParticipateHappeningEvent;
 use Proximum\Vimeet\Application\Event\Happening\UnParticipateHappeningEvent;
@@ -90,11 +89,6 @@ class UpdateParticipationHandler
             $availableParticipants,
             $previousParticipants,
             $updateParticipation->happening
-        );
-
-        $this->eventDispatcher->dispatch(
-            Events::HAPPENING_PARTICIPATED,
-            new ParticipateEvent($updateParticipation->sheet, $participantsToHappening, $updateParticipation->happening)
         );
 
         return new HappeningParticipationView(
