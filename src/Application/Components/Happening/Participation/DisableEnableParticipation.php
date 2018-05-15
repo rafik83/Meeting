@@ -81,7 +81,7 @@ class DisableEnableParticipation
     {
         $sheets = $this->sheetRepository->getSheetsByUserAndEvent($user, $event);
 
-        $participations = $this->participationRepository->findByUser($user, $event, []);
+        $participations = $this->participationRepository->findByUser($user, $event, false);
 
         $sheetsImpacted = [];
 
