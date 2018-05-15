@@ -14,9 +14,10 @@ use Proximum\Vimeet\Application\Command\Package\PromotionCode\Remove;
 use Proximum\Vimeet\Application\Command\Package\Step\AbstractStep;
 use Proximum\Vimeet\Application\Command\Participant\Add as AddParticipant;
 use Proximum\Vimeet\Application\Command\Participant\Remove as RemoveParticipant;
-use Proximum\Vimeet\Application\Command\Participant\RemoveResult;
 use Proximum\Vimeet\Application\Exception\Participant\AlreadyLinkedToASheetOfThisEventException;
 use Proximum\Vimeet\Application\Exception\Participant\CanNotRemoveAllParticipantsException;
+use Proximum\Vimeet\Application\Exception\Participant\Remove\ParticipantAttributedToProductCanNotBeRemovedException;
+use Proximum\Vimeet\Application\Exception\Participant\Remove\ParticipantWithMeetingCanNotBeRemovedException;
 use Proximum\Vimeet\Application\Exception\Sheet\ParticipantAlreadyExistException;
 use Proximum\Vimeet\Application\Query\Package\PackageViewQuery;
 use Proximum\Vimeet\Application\Query\Package\Participant\ParticipantProductViewQuery;
@@ -260,24 +261,38 @@ class PackageController extends Controller
         if ($form_remove->handleRequest($request)->isSubmitted()) {
             if ($form_remove->isValid()) {
                 try {
-                    /** @var RemoveResult $result */
-                    $result = $this->get('command.participant.remove_handler')->handle($removeParticipant);
+                    $this->get('command.participant.remove_handler')->handle($removeParticipant);
 
-                    if (!$result->hasParticipantWithMeeting()) {
-                        $redirect = true;
-                    } else {
-                        $form_remove->addError(
-                            new FormError(
-                                $this->get('translator')->transChoice(
-                                    'validators.participant.remove.hasMeeting',
-                                    $result->countParticipants(),
-                                    ['%participantName%' => $result->getParticipantsName(), '%contactInfo%' => ContactInfoGuesser::getContactInfos($sheet->getEvent())], 'validators'
-                                )
-                            )
-                        );
-                    }
+                    $redirect = true;
                 } catch (CanNotRemoveAllParticipantsException $exception) {
                     $form_remove->addError(new FormError('validators.participant.canNotRemoveAllParticipants'));
+                } catch (ParticipantAttributedToProductCanNotBeRemovedException $exception) {
+                    $form_remove->addError(
+                        new FormError(
+                            $this->get('translator')->transChoice(
+                                'validators.participant.remove.hasAttributedProduct',
+                                $exception->countParticipants(),
+                                [
+                                    '%participantName%' => $exception->getParticipantNames(),
+                                ],
+                                'validators'
+                            )
+                        )
+                    );
+                } catch (ParticipantWithMeetingCanNotBeRemovedException $exception) {
+                    $form_remove->addError(
+                        new FormError(
+                            $this->get('translator')->transChoice(
+                                'validators.participant.remove.hasMeeting',
+                                $exception->countParticipants(),
+                                [
+                                    '%participantName%' => $exception->getParticipantNames(),
+                                    '%contactInfo%'     => ContactInfoGuesser::getContactInfos($sheet->getEvent()),
+                                ],
+                                'validators'
+                            )
+                        )
+                    );
                 }
             }
 

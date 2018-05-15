@@ -42,4 +42,21 @@ class CartRowParticipantRepository implements CartRowParticipantRepositoryInterf
 
         return $queryBuilder->getQuery()->getOneOrNullResult();
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function findCartRowOnAttributableProductForParticipants(array $participants): array
+    {
+        $queryBuilder = $this->entityManager->createQueryBuilder()
+            ->select('cartRowParticipant')
+            ->from(CartRowParticipant::class, 'cartRowParticipant')
+            ->join('cartRowParticipant.participant', 'participant', 'WITH', 'participant.id IN (:participants)')
+            ->join('cartRowParticipant.cartRow', 'cartRow')
+            ->join('cartRow.product', 'product', 'WITH', 'product.attributable = true')
+            ->setParameter('participants', $participants)
+        ;
+
+        return $queryBuilder->getQuery()->getResult();
+    }
 }

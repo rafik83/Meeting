@@ -1438,6 +1438,7 @@ services:
             - '@vimeet_infrastructure.repository.meeting_repository'
             - '@template.participant_info_guesser'
             - '@components.step.step_participant'
+            - '@Proximum\Vimeet\Application\Components\Participant\Remove\ProductAttributedToParticipantConflictChecker'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Participant\Remove }
     command.promotion_code.create_handler:

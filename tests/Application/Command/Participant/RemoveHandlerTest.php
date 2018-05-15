@@ -12,15 +12,20 @@ namespace Proximum\Vimeet\Tests\Application\Command\Participant;
 
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
+use Prophecy\Prophecy\ObjectProphecy;
 use Proximum\Vimeet\Application\Command\Package\Step\SelectParticipantAndPlanning;
 use Proximum\Vimeet\Application\Command\Participant\Remove;
 use Proximum\Vimeet\Application\Command\Participant\RemoveHandler;
-use Proximum\Vimeet\Application\Command\Participant\RemoveResult;
+use Proximum\Vimeet\Application\Components\Participant\Remove\ConflictsView;
+use Proximum\Vimeet\Application\Components\Participant\Remove\ParticipantConflictView;
+use Proximum\Vimeet\Application\Components\Participant\Remove\ProductAttributedToParticipantConflictChecker;
 use Proximum\Vimeet\Application\Components\Step\StepParticipantAndPlanning;
 use Proximum\Vimeet\Application\Event\Events;
 use Proximum\Vimeet\Application\Event\Participant\ParticipantRemovedEvent;
 use Proximum\Vimeet\Application\Event\Sheet\SheetUpdatedEvent;
 use Proximum\Vimeet\Application\Exception\Participant\CanNotRemoveAllParticipantsException;
+use Proximum\Vimeet\Application\Exception\Participant\Remove\ParticipantAttributedToProductCanNotBeRemovedException;
+use Proximum\Vimeet\Application\Exception\Participant\Remove\ParticipantWithMeetingCanNotBeRemovedException;
 use Proximum\Vimeet\Domain\Cart\Cart;
 use Proximum\Vimeet\Domain\Cart\CartManager;
 use Proximum\Vimeet\Domain\Model\Participant;
@@ -36,7 +41,39 @@ use Proximum\Vimeet\Tests\Factory\EventFactory;
 
 class RemoveHandlerTest extends TestCase
 {
-    public function testHandle()
+    /** @var ObjectProphecy */
+    private $participantRepository;
+
+    /** @var ObjectProphecy */
+    private $cartManager;
+
+    /** @var ObjectProphecy */
+    private $eventDispatcher;
+
+    /** @var ObjectProphecy */
+    private $meetingRepository;
+
+    /** @var ObjectProphecy */
+    private $participantInfoGuesser;
+
+    /** @var ObjectProphecy */
+    private $stepParticipantAndPlanning;
+
+    /** @var ObjectProphecy */
+    private $productAttributedToParticipantConflictChecker;
+
+    public function setUp()
+    {
+        $this->participantRepository = $this->prophesize(ParticipantRepositoryInterface::class);
+        $this->cartManager = $this->prophesize(CartManager::class);
+        $this->eventDispatcher = $this->prophesize(DelayedEventDispatcher::class);
+        $this->meetingRepository = $this->prophesize(MeetingRepositoryInterface::class);
+        $this->participantInfoGuesser = $this->prophesize(ParticipantInfoGuesser::class);
+        $this->stepParticipantAndPlanning = $this->prophesize(StepParticipantAndPlanning::class);
+        $this->productAttributedToParticipantConflictChecker = $this->prophesize(ProductAttributedToParticipantConflictChecker::class);
+    }
+
+    public function testHandle(): void
     {
         // Required
         $locale = 'fr';
@@ -56,23 +93,14 @@ class RemoveHandlerTest extends TestCase
         $sheet->addParticipant($participant2->reveal());
 
         // Mock
-        $participantRepository = $this->prophesize(ParticipantRepositoryInterface::class);
-        $cartManager = $this->prophesize(CartManager::class);
-
-        $eventDispatcher = $this->prophesize(DelayedEventDispatcher::class);
         $sheetUpdatedEvent = new SheetUpdatedEvent($sheet);
-        $eventDispatcher->dispatch(Events::SHEET_UPDATED, $sheetUpdatedEvent)->shouldBeCalled();
-        $eventDispatcher
+        $this->eventDispatcher->dispatch(Events::SHEET_UPDATED, $sheetUpdatedEvent)->shouldBeCalled();
+        $this->eventDispatcher
             ->dispatch(Events::PARTICIPANT_REMOVED, new ParticipantRemovedEvent($sheet, [1999 => $user->reveal()]))
             ->shouldBeCalled()
         ;
-
-        $meetingRepository = $this->prophesize(MeetingRepositoryInterface::class);
-        $meetingRepository->hasScheduledMeetingByParticipant($participant1->reveal())->shouldBeCalled()->willReturn(false);
-        $participantInfoGuesser = $this->prophesize(ParticipantInfoGuesser::class);
-        $participantInfoGuesser->guessParticipantCompleteName($participant1->reveal(), $locale)->shouldNotBeCalled();
-
-        $stepParticipantAndPlanning = $this->prophesize(StepParticipantAndPlanning::class);
+        $this->meetingRepository->hasScheduledMeetingByParticipant($participant1->reveal())->shouldBeCalled()->willReturn(false);
+        $this->participantInfoGuesser->guessParticipantCompleteName($participant1->reveal(), $locale)->shouldNotBeCalled();
 
         // Expected
         $expectedSheet = new Sheet($event, $type, [], $owner, $date);
@@ -81,19 +109,23 @@ class RemoveHandlerTest extends TestCase
         $product = $this->prophesize(Product::class);
         $selectParticipantAndPlanning = new SelectParticipantAndPlanning($sheet);
         $selectParticipantAndPlanning->participantsProduct = [2059 => $product->reveal()];
-        $stepParticipantAndPlanning->build($sheet)->shouldBeCalled()->willReturn($selectParticipantAndPlanning);
+        $this->stepParticipantAndPlanning->build($sheet)->shouldBeCalled()->willReturn($selectParticipantAndPlanning);
 
         $cart = $this->prophesize(Cart::class);
-        $cartManager->getCart($sheet)->shouldBeCalled()->willReturn($cart->reveal());
-        $cartManager
-            ->updateParticipantsQuantity(
-                $cart->reveal(),
-                [2059 => $product->reveal()]
-            )
+        $this->cartManager->getCart($sheet)->shouldBeCalled()->willReturn($cart->reveal());
+        $products = [2059 => $product->reveal()];
+        $this->cartManager
+            ->updateParticipantsQuantity($cart->reveal(), $products)
             ->shouldBeCalled()
             ->willReturn($cart->reveal())
         ;
-        $cartManager->save($cart)->shouldBeCalled();
+        $this->cartManager->save($cart)->shouldBeCalled();
+
+        $this->productAttributedToParticipantConflictChecker
+            ->getParticipantsWithConflictOnProductAttributed([$participant1->reveal()], $locale)
+            ->shouldBeCalled()
+            ->willReturn(new ConflictsView())
+        ;
 
         // Command
         $remove = new Remove($sheet, $locale);
@@ -101,22 +133,23 @@ class RemoveHandlerTest extends TestCase
 
         // Handle
         $handler = new RemoveHandler(
-            $participantRepository->reveal(),
-            $cartManager->reveal(),
-            $eventDispatcher->reveal(),
-            $meetingRepository->reveal(),
-            $participantInfoGuesser->reveal(),
-            $stepParticipantAndPlanning->reveal()
+            $this->participantRepository->reveal(),
+            $this->cartManager->reveal(),
+            $this->eventDispatcher->reveal(),
+            $this->meetingRepository->reveal(),
+            $this->participantInfoGuesser->reveal(),
+            $this->stepParticipantAndPlanning->reveal(),
+            $this->productAttributedToParticipantConflictChecker->reveal()
         );
-        $result = $handler->handle($remove);
-        $expectedResult = new RemoveResult();
+        $handler->handle($remove);
 
         $this->assertEquals($expectedSheet->countParticipants(), $sheet->countParticipants());
-        $this->assertEquals($expectedResult, $result);
     }
 
-    public function testHandleWithMeeting()
+    public function testHandleWithMeeting(): void
     {
+        $this->expectException(ParticipantWithMeetingCanNotBeRemovedException::class);
+
         // Required
         $locale = 'fr';
         $event = EventFactory::createEvent();
@@ -129,25 +162,20 @@ class RemoveHandlerTest extends TestCase
         $participant1 = new Participant($sheet, $owner, [], true);
         $participant2 = new Participant($sheet, $user2, [], true);
         $participant3 = new Participant($sheet, $user3, [], true);
+        $this->setIdToParticipantMock($participant1, 11);
+        $this->setIdToParticipantMock($participant2, 12);
+        $this->setIdToParticipantMock($participant3, 13);
         $sheet->addParticipant($participant1);
         $sheet->addParticipant($participant2);
         $sheet->addParticipant($participant3);
 
         // Mock
-        $participantRepository = $this->prophesize(ParticipantRepositoryInterface::class);
-        $cartManager = $this->prophesize(CartManager::class);
+        $this->eventDispatcher->dispatch(Argument::any())->shouldNotBeCalled();
+        $this->eventDispatcher->dispatch(Argument::any())->shouldNotBeCalled();
 
-        $eventDispatcher   = $this->prophesize(DelayedEventDispatcher::class);
-        $eventDispatcher->dispatch(Argument::any())->shouldNotBeCalled();
-        $eventDispatcher->dispatch(Argument::any())->shouldNotBeCalled();
-
-        $meetingRepository      = $this->prophesize(MeetingRepositoryInterface::class);
-        $meetingRepository->hasScheduledMeetingByParticipant($participant1)->shouldBeCalled()->willReturn(true);
-        $meetingRepository->hasScheduledMeetingByParticipant($participant2)->shouldBeCalled()->willReturn(false);
-        $participantInfoGuesser = $this->prophesize(ParticipantInfoGuesser::class);
-        $participantInfoGuesser->guessParticipantCompleteName($participant1, $locale)->shouldBeCalled()->willReturn('jean paul');
-
-        $stepParticipantAndPlanning = $this->prophesize(StepParticipantAndPlanning::class);
+        $this->meetingRepository->hasScheduledMeetingByParticipant($participant1)->shouldBeCalled()->willReturn(true);
+        $this->meetingRepository->hasScheduledMeetingByParticipant($participant2)->shouldBeCalled()->willReturn(false);
+        $this->participantInfoGuesser->guessParticipantCompleteName($participant1, $locale)->shouldBeCalled()->willReturn('jean paul');
 
         // Expected
         $expectedSheet = new Sheet($event, $type, [], $owner, $date);
@@ -155,11 +183,16 @@ class RemoveHandlerTest extends TestCase
         $expectedSheet->addParticipant($participant2);
         $expectedSheet->addParticipant($participant3);
 
-        $stepParticipantAndPlanning->build(Argument::any())->shouldNotBeCalled();
+        $this->stepParticipantAndPlanning->build(Argument::any())->shouldNotBeCalled();
 
-        $cartManager->getCart($sheet)->shouldNotBeCalled();
-        $cartManager->updateParticipantsQuantity(Argument::any())->shouldNotBeCalled();
-        $cartManager->save(Argument::any())->shouldNotBeCalled();
+        $this->cartManager->getCart($sheet)->shouldNotBeCalled();
+        $this->cartManager->updateParticipantsQuantity(Argument::any())->shouldNotBeCalled();
+        $this->cartManager->save(Argument::any())->shouldNotBeCalled();
+
+        $this->productAttributedToParticipantConflictChecker
+            ->getParticipantsWithConflictOnProductAttributed(Argument::any())
+            ->shouldNotBeCalled()
+        ;
 
         // Command
         $remove = new Remove($sheet, $locale);
@@ -170,21 +203,101 @@ class RemoveHandlerTest extends TestCase
 
         // Handle
         $handler = new RemoveHandler(
-            $participantRepository->reveal(),
-            $cartManager->reveal(),
-            $eventDispatcher->reveal(),
-            $meetingRepository->reveal(),
-            $participantInfoGuesser->reveal(),
-            $stepParticipantAndPlanning->reveal()
+            $this->participantRepository->reveal(),
+            $this->cartManager->reveal(),
+            $this->eventDispatcher->reveal(),
+            $this->meetingRepository->reveal(),
+            $this->participantInfoGuesser->reveal(),
+            $this->stepParticipantAndPlanning->reveal(),
+            $this->productAttributedToParticipantConflictChecker->reveal()
         );
-        $result         = $handler->handle($remove);
-        $expectedResult = new RemoveResult(['jean paul']);
+        $handler->handle($remove);
 
         $this->assertEquals($expectedSheet->countParticipants(), $sheet->countParticipants());
-        $this->assertEquals($expectedResult, $result);
+
+
+        $exception = $this->getExpectedException();
+        $this->assertEquals([11 => 'jean paul'], $exception->getParticipantNames());
     }
 
-    public function testHandleException()
+    public function testHandleWithProductAttributedConflict(): void
+    {
+        $this->expectException(ParticipantAttributedToProductCanNotBeRemovedException::class);
+
+        // Required
+        $locale = 'fr';
+        $event = EventFactory::createEvent();
+        $type  = new Type($event);
+        $owner = new User('email@email.fr', 'password', 'salt', 'fr');
+        $user2 = new User('user@email.fr', 'password', 'salt', 'fr');
+        $user3 = new User('user3@email.fr', 'password', 'salt', 'fr');
+        $date  = new \DateTime();
+        $sheet = new Sheet($event, $type, [], $owner, $date);
+        $participant1 = new Participant($sheet, $owner, [], true);
+        $participant2 = new Participant($sheet, $user2, [], true);
+        $participant3 = new Participant($sheet, $user3, [], true);
+        $this->setIdToParticipantMock($participant1, 11);
+        $this->setIdToParticipantMock($participant2, 12);
+        $this->setIdToParticipantMock($participant3, 13);
+        $sheet->addParticipant($participant1);
+        $sheet->addParticipant($participant2);
+        $sheet->addParticipant($participant3);
+
+        // Mock
+        $this->eventDispatcher->dispatch(Argument::any())->shouldNotBeCalled();
+        $this->eventDispatcher->dispatch(Argument::any())->shouldNotBeCalled();
+
+        $this->meetingRepository->hasScheduledMeetingByParticipant($participant1)->shouldBeCalled()->willReturn(false);
+        $this->meetingRepository->hasScheduledMeetingByParticipant($participant2)->shouldBeCalled()->willReturn(false);
+        $this->participantInfoGuesser->guessParticipantCompleteName(Argument::any())->shouldNotBeCalled();
+
+        // Expected
+        $expectedSheet = new Sheet($event, $type, [], $owner, $date);
+        $expectedSheet->addParticipant($participant1);
+        $expectedSheet->addParticipant($participant2);
+        $expectedSheet->addParticipant($participant3);
+
+        $this->stepParticipantAndPlanning->build(Argument::any())->shouldNotBeCalled();
+
+        $this->cartManager->getCart($sheet)->shouldNotBeCalled();
+        $this->cartManager->updateParticipantsQuantity(Argument::any())->shouldNotBeCalled();
+        $this->cartManager->save(Argument::any())->shouldNotBeCalled();
+
+        $conflictView = new ConflictsView();
+        $conflictView->addConflict(new ParticipantConflictView(12, 'Jean Michel'));
+        $this->productAttributedToParticipantConflictChecker
+            ->getParticipantsWithConflictOnProductAttributed([$participant1, $participant2], $locale)
+            ->shouldBeCalled()
+            ->willReturn($conflictView)
+        ;
+
+        // Command
+        $remove = new Remove($sheet, $locale);
+        $remove->participants = [
+            $participant1,
+            $participant2,
+        ];
+
+        // Handle
+        $handler = new RemoveHandler(
+            $this->participantRepository->reveal(),
+            $this->cartManager->reveal(),
+            $this->eventDispatcher->reveal(),
+            $this->meetingRepository->reveal(),
+            $this->participantInfoGuesser->reveal(),
+            $this->stepParticipantAndPlanning->reveal(),
+            $this->productAttributedToParticipantConflictChecker->reveal()
+        );
+        $handler->handle($remove);
+
+        $this->assertEquals($expectedSheet->countParticipants(), $sheet->countParticipants());
+
+
+        $exception = $this->getExpectedException();
+        $this->assertEquals([12 => 'Jean Michel'], $exception->getParticipantNames());
+    }
+
+    public function testHandleException(): void
     {
         $this->expectException(CanNotRemoveAllParticipantsException::class);
 
@@ -201,16 +314,15 @@ class RemoveHandlerTest extends TestCase
         $sheet->addParticipant($participant2->reveal());
 
         // Mock
-        $participantRepository = $this->prophesize(ParticipantRepositoryInterface::class);
-        $cartManager = $this->prophesize(CartManager::class);
-        $eventDispatcher = $this->prophesize(DelayedEventDispatcher::class);
-        $eventDispatcher->dispatch(Argument::any())->shouldNotBeCalled();
+        $this->eventDispatcher->dispatch(Argument::any())->shouldNotBeCalled();
 
-        $meetingRepository = $this->prophesize(MeetingRepositoryInterface::class);
-        $meetingRepository->hasScheduledMeetingByParticipant($participant1->reveal())->shouldNotBeCalled();
-        $participantInfoGuesser = $this->prophesize(ParticipantInfoGuesser::class);
-        $participantInfoGuesser->guessParticipantCompleteName($participant1->reveal(), $locale)->shouldNotBeCalled();
-        $stepParticipantAndPlanning = $this->prophesize(StepParticipantAndPlanning::class);
+        $this->meetingRepository->hasScheduledMeetingByParticipant($participant1->reveal())->shouldNotBeCalled();
+        $this->participantInfoGuesser->guessParticipantCompleteName($participant1->reveal(), $locale)->shouldNotBeCalled();
+
+        $this->productAttributedToParticipantConflictChecker
+            ->getParticipantsWithConflictOnProductAttributed(Argument::any())
+            ->shouldNotBeCalled()
+        ;
 
         // Expected
         $expectedSheet = new Sheet($event, $type, [], $owner, $date);
@@ -226,15 +338,29 @@ class RemoveHandlerTest extends TestCase
 
         // Handle
         $handler = new RemoveHandler(
-            $participantRepository->reveal(),
-            $cartManager->reveal(),
-            $eventDispatcher->reveal(),
-            $meetingRepository->reveal(),
-            $participantInfoGuesser->reveal(),
-            $stepParticipantAndPlanning->reveal()
+            $this->participantRepository->reveal(),
+            $this->cartManager->reveal(),
+            $this->eventDispatcher->reveal(),
+            $this->meetingRepository->reveal(),
+            $this->participantInfoGuesser->reveal(),
+            $this->stepParticipantAndPlanning->reveal(),
+            $this->productAttributedToParticipantConflictChecker->reveal()
         );
         $handler->handle($remove);
 
         $this->assertEquals($expectedSheet, $sheet);
+    }
+
+    /**
+     * @param Participant $participant
+     * @param int         $id
+     */
+    private function setIdToParticipantMock(Participant $participant, $id): void
+    {
+        $reflection  = new \ReflectionClass(Participant::class);
+        $property = $reflection->getProperty('id');
+        $property->setAccessible(true);
+        $property->setValue($participant, $id);
+        $property->setAccessible(false);
     }
 }

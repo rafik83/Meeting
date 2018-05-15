@@ -70,7 +70,7 @@ class QuantityAndParticipantsType extends AbstractType
                             'data-max' => $options['max'],
                             'data-min-message' => $options['minMessage'],
                             'data-max-message' => $options['maxMessage'],
-                        ]
+                        ],
                     ]
                 );
         }
