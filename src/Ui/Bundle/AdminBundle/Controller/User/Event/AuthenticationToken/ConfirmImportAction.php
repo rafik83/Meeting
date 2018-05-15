@@ -90,6 +90,7 @@ class ConfirmImportAction
         return $this->engine->renderResponse('@Admin/User/Event/AuthenticationToken/importPreview.html.twig', [
             'authenticationTokenImports' => $authenticationTokenImports,
             'form' => $form->createView(),
+            'event' => $event,
         ]);
     }
 }
