@@ -45,7 +45,7 @@ class ParticipantWithAttributedProductGetter
         }
 
         $participantsWithAttributedProduct = $this->participantWithAttributedProductRepository
-            ->getParticipantsWithAttributedProduct(
+            ->getParticipantsWithAttributedProductForProduct(
                 $participants,
                 $product
             )

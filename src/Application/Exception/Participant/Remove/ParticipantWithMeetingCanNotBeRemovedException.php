@@ -1,0 +1,34 @@
+<?php
+
+/*
+ * This file is part of the Proximum Vimeet project.
+ *
+ * Copyright (C) Proximum
+ *
+ * @author Elao <contact@elao.com>
+ */
+
+namespace Proximum\Vimeet\Application\Exception\Participant\Remove;
+
+class ParticipantWithMeetingCanNotBeRemovedException extends RemoveException
+{
+    /** @var array of participant name */
+    private $participantNames;
+
+    public function __construct(array $participantNames)
+    {
+        parent::__construct();
+
+        $this->participantNames = $participantNames;
+    }
+
+    public function countParticipants(): int
+    {
+        return \count($this->participantNames);
+    }
+
+    public function getParticipantNames(): string
+    {
+        return implode(', ', $this->participantNames);
+    }
+}

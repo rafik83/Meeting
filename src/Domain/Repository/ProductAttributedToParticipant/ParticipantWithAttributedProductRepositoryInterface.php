@@ -17,9 +17,16 @@ interface ParticipantWithAttributedProductRepositoryInterface
 {
     /**
      * @param Participant[] $participants
+     *
+     * @return Participant[]
+     */
+    public function getParticipantsWithAttributedProduct(array $participants): array;
+
+    /**
+     * @param Participant[] $participants
      * @param Product       $product
      *
      * @return Participant[]
      */
-    public function getParticipantsWithAttributedProduct(array $participants, Product $product): array;
+    public function getParticipantsWithAttributedProductForProduct(array $participants, Product $product): array;
 }

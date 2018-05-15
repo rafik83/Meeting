@@ -35,6 +35,13 @@ interface ProductAttributedToParticipantRepositoryInterface
     public function removeForSheet(Sheet $sheet): void;
 
     /**
+     * @param Participant[] $participants
+     *
+     * @return ProductAttributedToParticipant[]
+     */
+    public function findByParticipants(array $participants): array;
+
+    /**
      * @param Participant $participant
      * @param Product[]   $products
      *

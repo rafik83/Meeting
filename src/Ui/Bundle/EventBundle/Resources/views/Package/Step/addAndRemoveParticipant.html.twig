@@ -7,7 +7,9 @@
 
                 {{ include('EventBundle:Participant:add.html.twig', { 'form': form_add, 'sheet': sheet, 'backRoute': 'backToPackage', 'participantProductView': participantProductView }) }}
             {% elseif form_remove is defined and displayRemoveParticipantForm %}
-                {{ include('EventBundle:Participant:removeFromPackage.html.twig', { 'form': form_remove, 'participants': participants, 'label': view.products.participantsView.title }) }}
+                {% set participantProductView = view.products.participantsView.participantProductViews|first %}
+
+                {{ include('EventBundle:Participant:removeFromPackage.html.twig', { 'form': form_remove, 'participants': participants, 'label': participantProductView.title }) }}
             {% endif %}
         </div>
     </div>

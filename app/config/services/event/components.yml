@@ -1,0 +1,6 @@
+services:
+    Proximum\Vimeet\Application\Components\Participant\Remove\ProductAttributedToParticipantConflictChecker:
+        arguments:
+            - '@Proximum\Vimeet\Infrastructure\Repository\ProductAttributedToParticipantRepository'
+            - '@Proximum\Vimeet\Infrastructure\Repository\CartRowParticipantRepository'
+            - '@template.participant_info_guesser'

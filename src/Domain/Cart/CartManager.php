@@ -252,7 +252,7 @@ class CartManager
         // No previous ordered quantity
         // no included quantity
         // we just set the quantity selected to the cartRow
-        if ($includedQuantity === 0) {
+        if (0 === $includedQuantity) {
             $cart->setProduct(
                 $product,
                 $quantityToAddInCart,
@@ -268,7 +268,7 @@ class CartManager
         // We do not modify anything
         // we will let the Cart Converter do it stuff
         // We just create the cartRow
-        if ($order !== null) {
+        if (null !== $order) {
             $cart->setProduct(
                 $product,
                 $quantityToAddInCart,
