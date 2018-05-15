@@ -16,6 +16,7 @@ use Proximum\Vimeet\Domain\Model\Sheet\Constant;
 use Proximum\Vimeet\Domain\Repository\CategoryRepositoryInterface;
 use Proximum\Vimeet\Domain\Sheet\CommercialStatus;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Service\BooleanFiltersBuilder;
+use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Validator\Constraint\Sheet\Filter\ReminderDateChoiceConstraint;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\CategoryChoiceType;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Messaging\Campaign\ImportedChoiceType;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\TypeChoiceType;
@@ -131,8 +132,9 @@ abstract class AbstractFilterType extends AbstractType
             ->add('reminderDate', ReminderDateChoiceType::class, [
                 'label'    => 'form.sheet_filter.children.reminderDate.label',
                 'required' => false,
-                'multiple' => true,
-                'expanded' => true,
+                'constraints' => [
+                    new ReminderDateChoiceConstraint(),
+                ],
             ])
             ->add('commercialStatus', CommercialStatusChoiceType::class, [
                 'required'     => false,

@@ -41,6 +41,8 @@ class FilterSheetTemplateOrganizerType extends AbstractType
      */
     public function configureOptions(OptionsResolver $resolver)
     {
-        $resolver->setRequired(['admin']);
+        $resolver
+            ->setRequired(['admin'])
+            ->setDefault('allow_extra_fields', true);
     }
 }

@@ -30,13 +30,11 @@ class UpdateType extends AbstractType
         $builder
             ->add('begin', DateTimePickerType::class, [
                 'format'        => 'd/m/Y H:i',
-                'display_date'  => false,
                 'required'      => true,
                 'view_timezone' => $event->getTimeZone(),
             ])
             ->add('end', DateTimePickerType::class, [
                 'format'        => 'd/m/Y H:i',
-                'display_date'  => false,
                 'required'      => true,
                 'view_timezone' => $event->getTimeZone(),
             ])
