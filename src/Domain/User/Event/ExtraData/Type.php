@@ -38,4 +38,9 @@ final class Type
 
     // User imported from Comexposium. Need to use the Comexposium SSO to login
     const IMPORTED_FROM_COMEXPOSIUM = 'imported_from_comexposium';
+
+    /**
+     * Protected key to encrypt / decrypt files for this user in the event
+     */
+    public const PROTECTED_KEY = 'protected_key';
 }

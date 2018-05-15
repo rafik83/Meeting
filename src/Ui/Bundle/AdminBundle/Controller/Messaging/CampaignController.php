@@ -49,25 +49,31 @@ class CampaignController extends Controller
         $locale = $event->getAvailableLocale($request->getLocale());
 
         $filterForm = $this->createForm(TargetFilterType::class, [], [
-            'event'           => $event,
-            'locale'          => $locale,
-            'user'            => $this->getUser(),
-            'method'          => 'get',
+            'event' => $event,
+            'locale' => $locale,
+            'user' => $this->getUser(),
+            'method' => 'get',
             'csrf_protection' => false,
         ])->add('submit', SubmitType::class, [
             'label' => 'form.sheet_comment.children.filter.label',
-            'attr'  => ['class' => 'btn btn-default'],
+            'attr' => ['class' => 'btn btn-default'],
         ]);
 
-        $filters        = $filterForm->handleRequest($request)->getData();
-        $query          = new SheetListViewQuery($event, $filters, $locale);
-        $sheets         = $this->get('tactician.commandbus.query')->handle($query);
+        $filters = [];
+        $filterForm->handleRequest($request);
+
+        if ($filterForm->isSubmitted() && $filterForm->isValid()) {
+            $filters = $filterForm->getData();
+        }
+
+        $query = new SheetListViewQuery($event, $filters, $locale);
+        $sheets = $this->get('tactician.commandbus.query')->handle($query);
         $filterFormView = $filterForm->createView();
 
         $createCampaignCommand = new Create($event, $request->get($filterForm->getName(), []));
-        $createCampaignForm    = $this->createForm(CreateCampaignType::class, $createCampaignCommand, [
+        $createCampaignForm = $this->createForm(CreateCampaignType::class, $createCampaignCommand, [
             'sheet_ids' => array_map(function (SheetListView $sheet) { return $sheet->id; }, $sheets),
-            'action'    => $this->generateUrl('admin_messaging_campaign_select_sheets', array_merge(['event' => $event->getId()], $request->query->all())),
+            'action' => $this->generateUrl('admin_messaging_campaign_select_sheets', array_merge(['event' => $event->getId()], $request->query->all())),
         ]);
 
         if ($createCampaignForm->handleRequest($request)->isSubmitted() && $createCampaignForm->isValid()) {
@@ -76,16 +82,16 @@ class CampaignController extends Controller
             $this->addFlash('success', 'flash.admin.messaging.campaign.create.success');
 
             return $this->redirectToRoute('admin_messaging_campaign_select_recipients', [
-                'event'    => $event->getId(),
+                'event' => $event->getId(),
                 'campaign' => $campaign->getId(),
             ]);
         }
 
         return $this->render('AdminBundle:Messaging\Campaign:select_sheets.html.twig', [
-            'event'                => $event,
-            'sheets'               => $sheets,
-            'filter_form'          => $filterFormView,
-            'filters_summary'      => $this->get('filter_summary')->getFilters($filterFormView, $filters, $locale),
+            'event' => $event,
+            'sheets' => $sheets,
+            'filter_form' => $filterFormView,
+            'filters_summary' => $this->get('filter_summary')->getFilters($filterFormView, $filters, $event, $locale),
             'create_campaign_form' => $createCampaignForm->createView(),
         ]);
     }

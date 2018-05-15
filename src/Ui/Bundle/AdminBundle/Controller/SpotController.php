@@ -89,7 +89,7 @@ class SpotController extends Controller
             'canExport'       => $canExport,
             'event'           => $event,
             'filter_form'     => $filterForm->createView(),
-            'filters_summary' => $this->get('filter_summary')->getFilters($filterFormView, $filters, $locale),
+            'filters_summary' => $this->get('filter_summary')->getFilters($filterFormView, $filters, $event, $locale),
             'filtered'        => $filterForm->isSubmitted() && $filterForm->isValid(),
             'update_url'      => $this->generateUrl('admin_spot_update', ['event' => $event->getId()]),
         ]);

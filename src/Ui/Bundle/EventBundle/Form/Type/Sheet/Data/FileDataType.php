@@ -31,22 +31,18 @@ class FileDataType extends AbstractType
 
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
-        /** @var TemplateObject\UploadObject $file */
-        $file = $options['object'];
+        /** @var TemplateObject\UploadObject $uploadObject */
+        $uploadObject = $options['object'];
 
-        $mimeTypes = MimeType::getMimeTypesByFormats($file->getOption('formats'));
+        $mimeTypes = MimeType::getMimeTypesByFormats($uploadObject->getOption('formats'));
         if (!$mimeTypes) {
             return;
         }
 
         $builder->add('file', FileType::class, [
-            'label' => $options['showLabel'] === true ? $file->getLabel($options['locale']) : false,
-            'required' => $file->getOption('required') && null === $file->getPath(),
-            'help' => $this->translator->transChoice(
-                'common.required_formats',
-                \count($file->getFormats()),
-                ['%format%' => implode(', ', $file->getFormats())]
-            ),
+            'label' => $options['showLabel'] === true ? $uploadObject->getLabel($options['locale']) : false,
+            'required' => $uploadObject->getOption('required') && null === $uploadObject->getPath(),
+            'help' => $this->getHelp($uploadObject),
             'attr' => [
                 'accept' => implode(', ', $mimeTypes),
             ],
@@ -74,5 +70,18 @@ class FileDataType extends AbstractType
     public function getBlockPrefix(): string
     {
         return 'sheet_file_data';
+    }
+
+    private function getHelp(TemplateObject\UploadObject $uploadObject): string
+    {
+        return sprintf(
+            '%s %s',
+            $uploadObject->isCrypted() ? $this->translator->trans('common.cryptedUploadFileHelp') : '',
+            $this->translator->transChoice(
+                'common.required_formats',
+                \count($uploadObject->getFormats()),
+                ['%format%' => implode(', ', $uploadObject->getFormats())]
+            )
+        );
     }
 }

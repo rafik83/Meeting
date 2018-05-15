@@ -260,6 +260,8 @@ form.event_update.children.translations.prototype.children.description.label: 'E
 form.event_update.children.vat.label: TVA
 form.event_update.children.visible.label: Visible
 form.event_update.children.welcomeEnabled.label: 'Popup de bienvenue'
+form.event_update.children.disabledEmailChanging.label: 'Changement d''email désactivé'
+form.event_update.children.disabledPasswordChanging.label: 'Changement de mot de passe désactivé'
 form.event.children.invoicePrefix.help.label: 'Changer de préfixe ? Nous contacter'
 form.extra_parameter_create.children.name.label: Nom
 form.extra_parameter_create.children.submit.label: Enregistrer
@@ -689,6 +691,8 @@ form.search_facet_update.children.submit.label: Enregistrer
 form.search_user_sheets_group.children.email.label: 'E-mail de l''utilisateur'
 form.search_user_sheets_group.children.submit.label: Suivant
 form.select_recipients.children.recipients.label: Destinataires
+form.sheet.reminderDate.children.begin.label: 'Début'
+form.sheet.reminderDate.children.end.label: 'Fin'
 form.sheet_attendance_choice.children.attend.choice.attend: Présent
 form.sheet_attendance_choice.children.attend.choice.cancel: Annuler
 form.sheet_attendance_choice.children.attend.label: 'Venue de la fiche'

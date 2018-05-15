@@ -57,4 +57,13 @@ interface FileStorageInterface
      * @return string|null
      */
     public function getExtension(UploadedFile $file);
+
+    /**
+     * Renames a file or a directory.
+     *
+     * @param string $origin    The origin filename or directory
+     * @param string $target    The new filename or directory
+     * @param bool   $overwrite Whether to overwrite the target if it already exists
+     */
+    public function rename(string $origin, string $target, bool $overwrite = false): void;
 }
