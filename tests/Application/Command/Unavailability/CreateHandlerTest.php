@@ -371,7 +371,9 @@ class CreateHandlerTest extends TestCase
             $event->getEmailTeam(),
             $prefix,
             $event->isVisible(),
-            $event->isWelcomeEnabled()
+            $event->isWelcomeEnabled(),
+            $event->isDisabledEmailChanging(),
+            $event->isDisabledPasswordChanging()
         );
         $user   = UserFactory::create();
         $sheet  = SheetFactory::create($event, $user);
@@ -424,7 +426,9 @@ class CreateHandlerTest extends TestCase
             $event->getEmailTeam(),
             $prefix,
             $event->isVisible(),
-            $event->isWelcomeEnabled()
+            $event->isWelcomeEnabled(),
+            $event->isDisabledEmailChanging(),
+            $event->isDisabledPasswordChanging()
         );
         $user   = UserFactory::create();
         $sheet  = SheetFactory::create($event, $user);
@@ -549,7 +553,9 @@ class CreateHandlerTest extends TestCase
             $event->getEmailTeam(),
             $prefix,
             $event->isVisible(),
-            $event->isWelcomeEnabled()
+            $event->isWelcomeEnabled(),
+            $event->isDisabledEmailChanging(),
+            $event->isDisabledPasswordChanging()
         );
         $user   = UserFactory::create();
         $sheet  = SheetFactory::create($event, $user);
@@ -602,7 +608,9 @@ class CreateHandlerTest extends TestCase
             $event->getEmailTeam(),
             $prefix,
             $event->isVisible(),
-            $event->isWelcomeEnabled()
+            $event->isWelcomeEnabled(),
+            $event->isDisabledEmailChanging(),
+            $event->isDisabledPasswordChanging()
         );
         $user   = UserFactory::create();
         $sheet  = SheetFactory::create($event, $user);

@@ -29,6 +29,12 @@ class Update extends AbstractEvent
      */
     public $analyticsCode = null;
 
+    /** @var bool */
+    public $disabledEmailChanging;
+
+    /** @var bool */
+    public $disabledPasswordChanging;
+
     /**
      * @param Model\Event $event
      */
@@ -55,6 +61,8 @@ class Update extends AbstractEvent
         $this->visible = $event->isVisible();
         $this->backgroundColor = $event->getConfiguration()->getBackgroundColor();
         $this->welcomeEnabled = $event->isWelcomeEnabled();
+        $this->disabledEmailChanging = $event->isDisabledEmailChanging();
+        $this->disabledPasswordChanging = $event->isDisabledPasswordChanging();
 
         foreach ($event->getTranslations() as $translation) {
             $this->translations[$translation->getLocale()] = [

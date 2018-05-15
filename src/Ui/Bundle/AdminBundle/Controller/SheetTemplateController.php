@@ -108,7 +108,12 @@ class SheetTemplateController extends Controller
         }
 
         $filterFormView = $filterForm->createView();
-        $filterSummary  = $this->get('filter_summary')->getFilters($filterFormView, $filters, $request->getLocale());
+        $filterSummary  = $this->get('filter_summary')->getFilters(
+            $filterFormView,
+            $filters,
+            null,
+            $request->getLocale()
+        );
 
         $events             = $this->get('vimeet_infrastructure.repository.event_repository')->getListByAdmin($this->getUser());
         $baseTemplates      = $this->get('repository.template.sheet_template_repository')->getBaseTemplates();

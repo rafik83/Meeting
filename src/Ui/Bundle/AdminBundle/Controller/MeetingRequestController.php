@@ -73,7 +73,7 @@ class MeetingRequestController extends Controller
             'event'            => $event,
             'meeting_requests' => $meetingRequests,
             'filter_form'      => $filterFormView,
-            'filters_summary'  => $this->get('filter_summary')->getFilters($filterFormView, $filters, $locale),
+            'filters_summary'  => $this->get('filter_summary')->getFilters($filterFormView, $filters, $event, $locale),
             'filtered'         => $filtered,
         ]);
     }

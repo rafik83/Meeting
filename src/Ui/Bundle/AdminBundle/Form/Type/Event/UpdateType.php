@@ -12,6 +12,7 @@ namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Event;
 
 use Proximum\Vimeet\Application\Command\Event\Update;
 use Proximum\Vimeet\Domain\Model\Event;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -37,6 +38,12 @@ class UpdateType extends AbstractEventType
             ->add('analyticsCode', TextType::class, [
                 'required' => false,
             ])
+            ->add('disabledEmailChanging', CheckboxType::class, [
+                'required' => false,
+            ])
+            ->add('disabledPasswordChanging', CheckboxType::class, [
+                'required' => false,
+            ]);
         ;
     }
 

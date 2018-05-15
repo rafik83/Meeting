@@ -14,7 +14,6 @@ final class Constant
 {
     const CREATED_TODAY        = 'created_today';
     const CREATED_THIS_WEEK    = 'created_this_week';
-    const TODAY_REMINDER_DATE  = 'today_reminder_date';
     const NO_ORDER             = 'no_order';
     const HAS_CART             = 'has_cart';
     const HAS_REMAINING_TO_PAY = 'hasRemainingToPay';

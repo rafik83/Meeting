@@ -49,8 +49,6 @@ class PaginatedSheetListViewQueryHandler
     private $typeRepository;
 
     /**
-     * PaginatedSheetListViewQueryHandler constructor.
-     *
      * @param SheetSearchAdapterInterface $sheetSearchAdapter
      * @param SheetInfoGuesser            $sheetInfoGuesser
      * @param ParticipantInfoGuesser      $participantInfoGuesser
@@ -82,7 +80,7 @@ class PaginatedSheetListViewQueryHandler
      *
      * @return PaginatedResult
      */
-    public function handle(PaginatedSheetListViewQuery $query)
+    public function handle(PaginatedSheetListViewQuery $query): PaginatedResult
     {
         if ($query->admin->hasAllowedTypes() && empty($query->filters['type'])) {
             $query->filters['type'] = $this->typeRepository->getAllowedTypesByEvent($query->admin, $query->event);

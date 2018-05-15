@@ -42,7 +42,6 @@ abstract class HappeningType extends AbstractType
             ])
             ->add('begin', DateTimePickerType::class, [
                 'format'        => 'd/m/Y H:i',
-                'display_date'  => false,
                 'view_timezone' => $event->getTimeZone(),
                 'attr'  => [
                     'class' => 'datetimepicker-range-element',
@@ -50,7 +49,6 @@ abstract class HappeningType extends AbstractType
             ])
             ->add('end', DateTimePickerType::class, [
                 'format'        => 'd/m/Y H:i',
-                'display_date'  => false,
                 'view_timezone' => $event->getTimeZone(),
                 'attr'  => [
                     'class' => 'datetimepicker-range-element',

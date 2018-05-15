@@ -67,6 +67,7 @@ class LocalFileStorageAdapter implements FileStorageInterface
         $path = $this->getAnnualizedPath('uploads/');
 
         $directory = (null === $directoryPath) ? $this->publicDir . $path : $directoryPath . $path;
+
         $extension = '.' . $file->getClientOriginalExtension();
         $prefix    = uniqid() . '_';
         $filename  = $prefix . Transliterator::urlize(basename($file->getClientOriginalName(), $extension)) . $extension;
@@ -166,5 +167,10 @@ class LocalFileStorageAdapter implements FileStorageInterface
         }
 
         return $filename;
+    }
+
+    public function rename(string $origin, string $target, bool $overwrite = false): void
+    {
+        $this->fileSystemAdapter->rename($origin, $target, $overwrite);
     }
 }
