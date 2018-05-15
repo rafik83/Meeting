@@ -28,6 +28,7 @@ use Proximum\Vimeet\Domain\Model\Product\ProductIncluded;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Order\Merger;
 use Proximum\Vimeet\Domain\Participant\ParticipantProductSetter;
+use Proximum\Vimeet\Domain\ProductAttributedToParticipant\ProductAttributedToParticipantSetter;
 use Proximum\Vimeet\Domain\Repository\CartRowRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\CartStepRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\ProductAttributedToParticipantRepositoryInterface;
@@ -56,8 +57,8 @@ class CartManagerTest extends TestCase
     /** @var ObjectProphecy */
     private $productAttributedToParticipantRepository;
 
-    /** @var \DateTimeInterface */
-    private $dateTime;
+    /** @var ObjectProphecy */
+    private $productAttributedToParticipantSetter;
 
     public function setUp()
     {
@@ -68,7 +69,7 @@ class CartManagerTest extends TestCase
         $this->participantProductSetter = $this->prophesize(ParticipantProductSetter::class);
         $this->eventDispatcher = $this->prophesize(DelayedEventDispatcherInterface::class);
         $this->productAttributedToParticipantRepository = $this->prophesize(ProductAttributedToParticipantRepositoryInterface::class);
-        $this->dateTime = new \DateTime();
+        $this->productAttributedToParticipantSetter = $this->prophesize(ProductAttributedToParticipantSetter::class);
     }
 
     public function testDeleteCartStep()
@@ -88,8 +89,8 @@ class CartManagerTest extends TestCase
             $this->orderMerger->reveal(),
             $this->participantProductSetter->reveal(),
             $this->productAttributedToParticipantRepository->reveal(),
-            $this->eventDispatcher->reveal(),
-            $this->dateTime
+            $this->productAttributedToParticipantSetter->reveal(),
+            $this->eventDispatcher->reveal()
         );
 
         $cartManager->deleteCartStep($cart->reveal());
@@ -114,8 +115,8 @@ class CartManagerTest extends TestCase
             $this->orderMerger->reveal(),
             $this->participantProductSetter->reveal(),
             $this->productAttributedToParticipantRepository->reveal(),
-            $this->eventDispatcher->reveal(),
-            $this->dateTime
+            $this->productAttributedToParticipantSetter->reveal(),
+            $this->eventDispatcher->reveal()
         );
 
         $result = $cartManager->getCart($sheet->reveal(), 3);
@@ -205,8 +206,8 @@ class CartManagerTest extends TestCase
             $this->orderMerger->reveal(),
             $this->participantProductSetter->reveal(),
             $this->productAttributedToParticipantRepository->reveal(),
-            $this->eventDispatcher->reveal(),
-            $this->dateTime
+            $this->productAttributedToParticipantSetter->reveal(),
+            $this->eventDispatcher->reveal()
         );
 
         $result = $cartManager->updateParticipantsQuantity($cart, $productByParticipantId);

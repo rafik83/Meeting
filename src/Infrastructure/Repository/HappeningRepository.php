@@ -14,6 +14,7 @@ use Doctrine\ORM\EntityManager;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Happening;
 use Proximum\Vimeet\Domain\Model\Happening\Speaker;
+use Proximum\Vimeet\Domain\Model\Product;
 use Proximum\Vimeet\Domain\Model\Type;
 use Proximum\Vimeet\Domain\Repository\HappeningRepositoryInterface;
 
@@ -197,5 +198,24 @@ class HappeningRepository implements HappeningRepositoryInterface
             ->setParameter('event', $event);
 
         return $queryBuilder->getQuery()->getResult();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function findWithProductsAndType(Event $event, Type $type): array
+    {
+        return $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('happening')
+            ->from(Happening::class, 'happening')
+            ->join('happening.products', 'product', 'WITH', 'happening.event = :event')
+            ->join('happening.types', 'type', 'WITH', 'type = :type')
+            ->setParameter('event', $event)
+            ->setParameter('type', $type)
+            ->getQuery()
+            ->getResult()
+        ;
     }
 }

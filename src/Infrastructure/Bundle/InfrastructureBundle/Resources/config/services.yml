@@ -809,6 +809,17 @@ services:
             - '@vimeet_infrastructure.adapter.delayed_event_dispatcher'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Happening\Update }
+
+    Proximum\Vimeet\Application\Command\Happening\UpdateParticipationHandler:
+        arguments:
+            - '@vimeet_infrastructure.repository.happening_participation_repository'
+            - '@vimeet_infrastructure.repository.participant_repository'
+            - '@Proximum\Vimeet\Domain\Happening\ParticipateToHappeningWithProductToBuyChecker'
+            - '@domain.happening.participation_count'
+            - '@vimeet_infrastructure.adapter.delayed_event_dispatcher'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Happening\UpdateParticipation }
+
     command.user.activate_account_password_handler:
         class: Proximum\Vimeet\Application\Command\User\ActivateAccountPasswordHandler
         arguments:
@@ -4602,8 +4613,8 @@ services:
             - '@order.merger'
             - '@Proximum\Vimeet\Domain\Participant\ParticipantProductSetter'
             - '@Proximum\Vimeet\Infrastructure\Repository\ProductAttributedToParticipantRepository'
+            - '@Proximum\Vimeet\Domain\ProductAttributedToParticipant\ProductAttributedToParticipantSetter'
             - '@vimeet_infrastructure.adapter.delayed_event_dispatcher'
-            - '@datetime'
     buyable_object_resolver:
         class: Proximum\Vimeet\Domain\Cart\BuyableObjectResolver
         arguments:
@@ -5105,6 +5116,21 @@ services:
         arguments:
             - '@Proximum\Vimeet\Infrastructure\Repository\ProductAttributedToParticipantRepository'
             - '@Proximum\Vimeet\Domain\Happening\PackageProductsNeededByHappening'
+
+    Proximum\Vimeet\Domain\Happening\HappeningsNotOverlapped: ~
+
+    Proximum\Vimeet\Domain\Happening\ParticipateToHappeningsByProduct:
+        arguments:
+            - '@Proximum\Vimeet\Domain\Happening\HappeningsWithProductsBySheetPackageGetter'
+            - '@Proximum\Vimeet\Domain\Happening\HappeningsNotOverlapped'
+            - '@Proximum\Vimeet\Domain\ProductAttributedToParticipant\ParticipantWithAttributedProductUpdated'
+            - '@Proximum\Vimeet\Domain\Happening\ParticipateToHappeningWithProductToBuyChecker'
+            - '@Proximum\Vimeet\Application\Command\Happening\UpdateParticipationHandler'
+            - '@vimeet_infrastructure.adapter.delayed_event_dispatcher'
+
+    Proximum\Vimeet\Domain\Happening\HappeningsWithProductsBySheetPackageGetter:
+        arguments:
+            - '@vimeet_infrastructure.repository.happening_repository'
 
     #
     # Serializer: normalizers and encoders

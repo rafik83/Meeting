@@ -32,8 +32,6 @@ interface ProductAttributedToParticipantRepositoryInterface
      */
     public function removeBatch(array $productAttributedToParticipants): void;
 
-    public function remove(ProductAttributedToParticipant $productAttributedToParticipant): void;
-
     public function removeForSheet(Sheet $sheet): void;
 
     /**

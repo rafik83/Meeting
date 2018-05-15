@@ -86,8 +86,9 @@ class SelectParticipantAndPlanningHandlerTest extends TestCase
         $cartManager = $this->prophesize(CartManager::class);
         $orderMerger = $this->prophesize(Merger::class);
         $cartManager->getCart($sheet->reveal(), 1)->shouldBeCalled()->willReturn($actualCart);
+        $productsByParticipantId = [123 => $participantProduct];
         $cartManager
-            ->updateParticipantsQuantity($actualCart, [123 => $participantProduct])
+            ->updateParticipantsQuantity($actualCart, $productsByParticipantId)
             ->shouldBeCalled()
             ->willReturn(new Cart(
                 $sheet->reveal(),
@@ -106,7 +107,7 @@ class SelectParticipantAndPlanningHandlerTest extends TestCase
         ;
 
         $eventDispatcher = $this->prophesize(DelayedEventDispatcher::class);
-        $packageStepDone = new StepDoneEvent($sheet->reveal());
+        $packageStepDone = new StepDoneEvent($sheet->reveal(), 'participant_planning');
         $eventDispatcher->dispatch(Events::PACKAGE_STEP_DONE, $packageStepDone)->shouldBeCalled();
 
         $command = new SelectParticipantAndPlanning($sheet->reveal(), 1);
@@ -195,22 +196,22 @@ class SelectParticipantAndPlanningHandlerTest extends TestCase
         $cartManager = $this->prophesize(CartManager::class);
         $orderMerger = $this->prophesize(Merger::class);
         $cartManager->getCart($sheet->reveal(), 1)->shouldBeCalled()->willReturn($actualCart);
+
+        $productsByParticipantId = [
+            11 => $participantProduct1->reveal(),
+            22 => $participantProduct1->reveal(),
+            33 => $participantProduct2->reveal(),
+        ];
+
         $cartManager
-            ->updateParticipantsQuantity(
-                $actualCart,
-                [
-                    11 => $participantProduct1->reveal(),
-                    22 => $participantProduct1->reveal(),
-                    33 => $participantProduct2->reveal(),
-                ]
-            )
+            ->updateParticipantsQuantity($actualCart, $productsByParticipantId)
             ->shouldBeCalled()
             ->willReturn($expectedCart)
         ;
         $cartManager->save($expectedCart)->shouldBeCalled();
 
         $eventDispatcher = $this->prophesize(DelayedEventDispatcher::class);
-        $packageStepDone = new StepDoneEvent($sheet->reveal());
+        $packageStepDone = new StepDoneEvent($sheet->reveal(), 'participant_planning');
         $eventDispatcher->dispatch(Events::PACKAGE_STEP_DONE, $packageStepDone)->shouldBeCalled();
 
         $command = new SelectParticipantAndPlanning($sheet->reveal(), 1);

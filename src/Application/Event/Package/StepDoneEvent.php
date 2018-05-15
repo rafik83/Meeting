@@ -11,28 +11,39 @@
 namespace Proximum\Vimeet\Application\Event\Package;
 
 use Proximum\Vimeet\Domain\Model\Sheet;
+use Proximum\Vimeet\Domain\Package\Funnel\Step;
 use Symfony\Component\EventDispatcher\Event;
 
 class StepDoneEvent extends Event
 {
-    /**
-     * @var Sheet
-     */
+    /** @var Sheet */
     private $sheet;
 
-    /**
-     * @param Sheet $sheet
-     */
-    public function __construct(Sheet $sheet)
+    /** @var string */
+    private $step;
+
+    public function __construct(Sheet $sheet, string $step)
     {
+        if (!\in_array($step, Step::TYPE_STEPS, true)) {
+            throw new \InvalidArgumentException('Given step is not valid');
+        }
+
         $this->sheet = $sheet;
+        $this->step = $step;
     }
 
-    /**
-     * @return Sheet
-     */
-    public function getSheet()
+    public function getSheet(): Sheet
     {
         return $this->sheet;
+    }
+
+    public function getStep(): string
+    {
+        return $this->step;
+    }
+
+    public function isOptionsStep(): bool
+    {
+        return Step::TYPE_OPTIONS === $this->step;
     }
 }

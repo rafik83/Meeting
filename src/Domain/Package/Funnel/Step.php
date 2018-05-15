@@ -12,9 +12,11 @@ namespace Proximum\Vimeet\Domain\Package\Funnel;
 
 class Step
 {
-    const TYPE_PLAN                 = 'plan';
-    const TYPE_PARTICIPANT_PLANNING = 'participant_planning';
-    const TYPE_OPTIONS              = 'options';
+    public const TYPE_PLAN = 'plan';
+    public const TYPE_PARTICIPANT_PLANNING = 'participant_planning';
+    public const TYPE_OPTIONS = 'options';
+
+    public const TYPE_STEPS = [self::TYPE_PLAN, self::TYPE_PARTICIPANT_PLANNING, self::TYPE_OPTIONS];
 
     /**
      * @var int

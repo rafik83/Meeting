@@ -65,15 +65,6 @@ class ProductAttributedToParticipantRepository implements ProductAttributedToPar
     /**
      * {@inheritdoc}
      */
-    public function remove(ProductAttributedToParticipant $productAttributedToParticipant): void
-    {
-        $this->entityManager->remove($productAttributedToParticipant);
-        $this->entityManager->flush($productAttributedToParticipant);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     public function removeForSheet(Sheet $sheet): void
     {
         $productAttributedToParticipants = $this->entityManager

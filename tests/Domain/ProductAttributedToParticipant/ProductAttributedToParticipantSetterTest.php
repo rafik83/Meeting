@@ -14,11 +14,13 @@ use PHPUnit\Framework\TestCase;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Product;
 use Proximum\Vimeet\Domain\Model\ProductAttributedToParticipant;
+use Proximum\Vimeet\Domain\ProductAttributedToParticipant\ParticipantWithAttributedProductUpdated;
 use Proximum\Vimeet\Domain\ProductAttributedToParticipant\ProductAttributedToParticipantSetter;
 use Proximum\Vimeet\Domain\Repository\ProductAttributedToParticipantRepositoryInterface;
 
 class ProductAttributedToParticipantSetterTest extends TestCase
 {
+    private $participantWithAttributedProductUpdated;
     private $productAttributedToParticipantRepository;
     private $dateTime;
     private $productAttributedToParticipantSetter;
@@ -37,6 +39,10 @@ class ProductAttributedToParticipantSetterTest extends TestCase
         $this->participant2 = $this->prophesize(Participant::class);
         $this->participant2->getId()->willReturn(2);
 
+        $this->participantWithAttributedProductUpdated = $this->prophesize(
+            ParticipantWithAttributedProductUpdated::class
+        );
+
         $this->productAttributedToParticipant1 = $this->prophesize(ProductAttributedToParticipant::class);
         $this->productAttributedToParticipant1->getParticipant()->willReturn($this->participant1->reveal());
 
@@ -47,25 +53,9 @@ class ProductAttributedToParticipantSetterTest extends TestCase
         $this->dateTime = new \DateTime();
 
         $this->productAttributedToParticipantSetter = new ProductAttributedToParticipantSetter(
-            $this->productAttributedToParticipantRepository->reveal(), $this->dateTime
-        );
-    }
-
-    public function testAttributeProductToParticipant()
-    {
-        $this
-            ->productAttributedToParticipantRepository->add(
-                new ProductAttributedToParticipant(
-                    $this->product->reveal(),
-                    $this->participant1->reveal(),
-                    $this->dateTime
-                )
-            )
-            ->shouldBeCalled()
-        ;
-        $this->productAttributedToParticipantSetter->attributeProductToParticipant(
-            $this->product->reveal(),
-            $this->participant1->reveal()
+            $this->participantWithAttributedProductUpdated->reveal(),
+            $this->productAttributedToParticipantRepository->reveal(),
+            $this->dateTime
         );
     }
 
@@ -111,6 +101,9 @@ class ProductAttributedToParticipantSetterTest extends TestCase
             )
             ->shouldBeCalled()
         ;
+
+        $this->participantWithAttributedProductUpdated->add($this->participant2->reveal())->shouldBeCalled();
+
         $this->productAttributedToParticipantRepository->removeBatch()->shouldNotBeCalled();
 
         $this->productAttributedToParticipantSetter->attributeProductToParticipantsAndRemoveThoseNoLongerNeeded(
@@ -122,6 +115,13 @@ class ProductAttributedToParticipantSetterTest extends TestCase
 
     public function testNoAddAndOneRemove()
     {
+        $this
+            ->productAttributedToParticipant1
+            ->getParticipant()
+            ->shouldBeCalled()
+            ->willReturn($this->participant1->reveal())
+        ;
+
         $this
             ->productAttributedToParticipantRepository
             ->findByProductAndParticipants($this->product->reveal(), [$this->participant1->reveal()])
@@ -136,6 +136,8 @@ class ProductAttributedToParticipantSetterTest extends TestCase
             ->shouldBeCalled()
         ;
 
+        $this->participantWithAttributedProductUpdated->add($this->participant1->reveal())->shouldBeCalled();
+
         $this->productAttributedToParticipantSetter->attributeProductToParticipantsAndRemoveThoseNoLongerNeeded(
             $this->product->reveal(),
             [$this->participant1->reveal()],
@@ -145,6 +147,13 @@ class ProductAttributedToParticipantSetterTest extends TestCase
 
     public function testAddAndRemove()
     {
+        $this
+            ->productAttributedToParticipant1
+            ->getParticipant()
+            ->shouldBeCalled()
+            ->willReturn($this->participant1->reveal())
+        ;
+
         $this
             ->productAttributedToParticipantRepository
             ->findByProductAndParticipants($this->product->reveal(),
@@ -168,11 +177,15 @@ class ProductAttributedToParticipantSetterTest extends TestCase
             ->shouldBeCalled()
         ;
 
+        $this->participantWithAttributedProductUpdated->add($this->participant2->reveal())->shouldBeCalled();
+
         $this
             ->productAttributedToParticipantRepository
             ->removeBatch([$this->productAttributedToParticipant1->reveal()])
             ->shouldBeCalled()
         ;
+
+        $this->participantWithAttributedProductUpdated->add($this->participant1->reveal())->shouldBeCalled();
 
         $this->productAttributedToParticipantSetter->attributeProductToParticipantsAndRemoveThoseNoLongerNeeded(
             $this->product->reveal(),

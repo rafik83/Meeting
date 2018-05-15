@@ -48,7 +48,7 @@ class SelectPlanHandlerTest extends TestCase
         $cartManager->save($expectedCart)->shouldBeCalled();
         $buyableObjectResolver = $this->prophesize(BuyableObjectResolver::class);
         $eventDispatcher = $this->prophesize(DelayedEventDispatcher::class);
-        $packageStepDone = new StepDoneEvent($sheet);
+        $packageStepDone = new StepDoneEvent($sheet, 'plan');
         $eventDispatcher->dispatch(Events::PACKAGE_STEP_DONE, $packageStepDone)->shouldBeCalled();
 
         $plans       = new SelectPlan($sheet, 1);
@@ -88,7 +88,7 @@ class SelectPlanHandlerTest extends TestCase
             return true;
         }))->shouldBeCalled();
         $eventDispatcher = $this->prophesize(DelayedEventDispatcher::class);
-        $packageStepDone = new StepDoneEvent($sheet);
+        $packageStepDone = new StepDoneEvent($sheet, 'plan');
         $eventDispatcher->dispatch(Events::PACKAGE_STEP_DONE, $packageStepDone)->shouldBeCalled();
 
         $plans       = new SelectPlan($sheet, 1);

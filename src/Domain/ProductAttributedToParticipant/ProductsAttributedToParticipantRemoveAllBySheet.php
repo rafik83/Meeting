@@ -1,0 +1,59 @@
+<?php
+
+/*
+ * This file is part of the Proximum Vimeet project.
+ *
+ * Copyright (C) Proximum
+ *
+ * @author Elao <contact@elao.com>
+ */
+
+namespace Proximum\Vimeet\Domain\ProductAttributedToParticipant;
+
+use Proximum\Vimeet\Domain\Model\Product;
+use Proximum\Vimeet\Domain\Model\Sheet;
+use Proximum\Vimeet\Domain\Repository\ProductAttributedToParticipantRepositoryInterface;
+
+class ProductsAttributedToParticipantRemoveAllBySheet
+{
+    /** @var ProductAttributedToParticipantRepositoryInterface */
+    private $productAttributedToParticipantRepository;
+
+    /** @var ProductAttributedToParticipantSetter */
+    private $productAttributedToParticipantSetter;
+
+    public function __construct(
+        ProductAttributedToParticipantRepositoryInterface $productAttributedToParticipantRepository,
+        ProductAttributedToParticipantSetter $productAttributedToParticipantSetter
+    ) {
+        $this->productAttributedToParticipantRepository = $productAttributedToParticipantRepository;
+        $this->productAttributedToParticipantSetter = $productAttributedToParticipantSetter;
+    }
+
+    public function handle(Sheet $sheet): void
+    {
+        $sheetParticipants = $sheet->getParticipantsArray();
+
+        $productsAttributedToParticipant = $this->productAttributedToParticipantRepository->findByParticipants(
+            $sheetParticipants
+        );
+
+        /** @var Product[] $productsAttributed */
+        $productsAttributed = [];
+
+        foreach ($productsAttributedToParticipant as $productAttributedToParticipant) {
+            $product = $productAttributedToParticipant->getProduct();
+            $productsAttributed[$product->getId()] = $product;
+        }
+
+        foreach ($productsAttributed as $product) {
+            $this->productAttributedToParticipantSetter->attributeProductToParticipantsAndRemoveThoseNoLongerNeeded(
+                $product,
+                $sheetParticipants,
+                [] // remove for all participants
+            );
+        }
+
+        $this->productAttributedToParticipantRepository->removeBatch($productsAttributedToParticipant);
+    }
+}

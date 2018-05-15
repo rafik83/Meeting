@@ -1,0 +1,22 @@
+{% extends 'MailBundle:Mail:base.html.twig' %}
+
+{% block body %}
+    {% for happeningParticipationView in mail.happeningParticipationViews %}
+        {% set locale = event.availableLocale(mail.locale) %}
+
+        {{ happeningParticipationView.happening.title(locale) }}<br/>
+        <ul>
+            {% for addedParticipant in happeningParticipationView.addedParticipants %}
+                <li>
+                    {{ 'mail.happening.participation.register'|trans({'%name%': addedParticipant.fullName}, 'mail', mail.locale) }}
+                </li>
+            {% endfor %}
+
+            {% for removedParticipant in happeningParticipationView.removedParticipants %}
+                <li>
+                    {{ 'mail.happening.participation.unregister'|trans({'%name%': removedParticipant.fullName}, 'mail', mail.locale) }}
+                </li>
+            {% endfor %}
+        </ul>
+    {% endfor %}
+{% endblock %}

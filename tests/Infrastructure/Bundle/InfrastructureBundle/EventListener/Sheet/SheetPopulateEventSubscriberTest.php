@@ -8,7 +8,7 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Proximum\Vimeet\tests\Infrastructure\Bundle\InfrastructureBundle\EventListener\Sheet;
+namespace Proximum\Vimeet\Tests\Infrastructure\Bundle\InfrastructureBundle\EventListener\Sheet;
 
 use PHPUnit\Framework\TestCase;
 use Proximum\Vimeet\Application\Adapter\SheetIndexerInterface;
@@ -26,6 +26,6 @@ class SheetPopulateEventSubscriberTest extends TestCase
         $sheetIndexerInterface->updateSheets([$sheet])->shouldBeCalled();
 
         $sheetPopulateEventSubscriber = new SheetPopulateEventSubscriber($sheetIndexerInterface->reveal());
-        $sheetPopulateEventSubscriber->onPackageStep(new StepDoneEvent($sheet));
+        $sheetPopulateEventSubscriber->onPackageStep(new StepDoneEvent($sheet, 'plan'));
     }
 }
