@@ -13,7 +13,7 @@ namespace Proximum\Vimeet\Domain\ProductAttributedToParticipant;
 use Proximum\Vimeet\Domain\Model\Participant;
 
 /**
- * Spool of participants which have a attributed product updated (added or removed)
+ * Spool of participants which have an attributed product updated (added or removed)
  */
 class ParticipantWithAttributedProductUpdated
 {

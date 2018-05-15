@@ -248,22 +248,6 @@ class UpdateParticipationHandlerTest extends TestCase
             ->shouldBeCalled()
         ;
 
-        $this
-            ->eventDispatcher
-            ->dispatch(
-                Events::HAPPENING_PARTICIPATED,
-                new ParticipateEvent(
-                    $this->sheet->reveal(),
-                    [
-                        $this->participant1->reveal(),
-                        $this->participant3->reveal(),
-                    ],
-                    $this->happening->reveal()
-                )
-            )
-            ->shouldBeCalled()
-        ;
-
         $this->updateParticipationHandler->handle(
             new UpdateParticipation(
                 $this->happening->reveal(),
@@ -360,19 +344,6 @@ class UpdateParticipationHandlerTest extends TestCase
             ->dispatch(
                 Events::HAPPENING_UN_PARTICIPATE,
                 new UnParticipateHappeningEvent($this->participant2->reveal(), $this->happening->reveal(), true)
-            )
-            ->shouldBeCalled()
-        ;
-
-        $this
-            ->eventDispatcher
-            ->dispatch(
-                Events::HAPPENING_PARTICIPATED,
-                new ParticipateEvent(
-                    $this->sheet->reveal(),
-                    [],
-                    $this->happening->reveal()
-                )
             )
             ->shouldBeCalled()
         ;
@@ -496,22 +467,6 @@ class UpdateParticipationHandlerTest extends TestCase
             ->shouldBeCalled()
         ;
 
-        $this
-            ->eventDispatcher
-            ->dispatch(
-                Events::HAPPENING_PARTICIPATED,
-                new ParticipateEvent(
-                    $this->sheet->reveal(),
-                    [
-                        $this->participant1->reveal(),
-                        $this->participant3->reveal()
-                    ],
-                    $this->happening->reveal()
-                )
-            )
-            ->shouldBeCalled()
-        ;
-
         $this->updateParticipationHandler->handle(
             new UpdateParticipation(
                 $this->happening->reveal(),
@@ -575,19 +530,6 @@ class UpdateParticipationHandlerTest extends TestCase
             ->getRemaining($this->happening->reveal())
             ->shouldBeCalled()
             ->willReturn(1)
-        ;
-
-        $this
-            ->eventDispatcher
-            ->dispatch(
-                Events::HAPPENING_PARTICIPATED,
-                new ParticipateEvent(
-                    $this->sheet->reveal(),
-                    [],
-                    $this->happening->reveal()
-                )
-            )
-            ->shouldBeCalled()
         ;
 
         $this->updateParticipationHandler->handle(
