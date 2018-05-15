@@ -45,6 +45,9 @@
     {% if form.isBackgroundImageToRemove is defined %}
         {{ form_row(form.isBackgroundImageToRemove, {widget_columns: 3}) }}
     {% endif %}
+    {{ form_row(form.welcomeEnabled) }}
+    {{ form_row(form.disabledEmailChanging) }}
+    {{ form_row(form.disabledPasswordChanging) }}
 {% endblock form_content %}
 
 {% block goback_link path('admin_event_list') %}

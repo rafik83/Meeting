@@ -121,6 +121,12 @@ class Event implements EventInterface, TraceableInterface
     /** @var bool */
     private $welcomeEnabled;
 
+    /** @var bool */
+    private $disabledEmailChanging;
+
+    /** @var bool */
+    private $disabledPasswordChanging;
+
     /**
      * @param string      $title
      * @param string      $fallback
@@ -137,6 +143,8 @@ class Event implements EventInterface, TraceableInterface
      * @param bool        $visible
      * @param null|Event  $duplicatedFrom
      * @param bool        $welcomeEnabled
+     * @param bool        $disabledEmailChanging
+     * @param bool        $disabledPasswordChanging
      */
     public function __construct(
         $title,
@@ -153,7 +161,9 @@ class Event implements EventInterface, TraceableInterface
         Prefix $invoicePrefix,
         bool $visible = true,
         Event $duplicatedFrom = null,
-        bool $welcomeEnabled = true
+        bool $welcomeEnabled = true,
+        bool $disabledEmailChanging = false,
+        bool $disabledPasswordChanging = false
     ) {
         $this->translations   = new ArrayCollection();
         $this->configuration  = new Configuration('', '', '');
@@ -177,6 +187,8 @@ class Event implements EventInterface, TraceableInterface
         $this->archived = false;
         $this->duplicatedFrom = $duplicatedFrom;
         $this->welcomeEnabled = $welcomeEnabled;
+        $this->disabledEmailChanging = $disabledEmailChanging;
+        $this->disabledPasswordChanging = $disabledPasswordChanging;
     }
 
     /**
@@ -446,6 +458,8 @@ class Event implements EventInterface, TraceableInterface
      * @param null|Prefix $invoicePrefix
      * @param bool        $visible
      * @param bool        $welcomeEnabled
+     * @param bool        $disabledEmailChanging
+     * @param bool        $disabledPasswordChanging
      */
     public function update(
         $title,
@@ -461,7 +475,9 @@ class Event implements EventInterface, TraceableInterface
         $emailTeam,
         Prefix $invoicePrefix,
         bool $visible,
-        bool $welcomeEnabled
+        bool $welcomeEnabled,
+        bool $disabledEmailChanging,
+        bool $disabledPasswordChanging
     ) {
         $this->title = $title;
         $this->locales = $locales;
@@ -477,6 +493,8 @@ class Event implements EventInterface, TraceableInterface
         $this->invoicePrefix = $invoicePrefix;
         $this->visible = $visible;
         $this->welcomeEnabled = $welcomeEnabled;
+        $this->disabledEmailChanging = $disabledEmailChanging;
+        $this->disabledPasswordChanging = $disabledPasswordChanging;
     }
 
     /**
@@ -792,6 +810,16 @@ class Event implements EventInterface, TraceableInterface
     public function isWelcomeEnabled(): bool
     {
         return $this->welcomeEnabled;
+    }
+
+    public function isDisabledEmailChanging(): bool
+    {
+        return $this->disabledEmailChanging;
+    }
+
+    public function isDisabledPasswordChanging(): bool
+    {
+        return $this->disabledPasswordChanging;
     }
 
     /**

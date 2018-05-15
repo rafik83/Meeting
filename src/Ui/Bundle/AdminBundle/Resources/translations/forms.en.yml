@@ -258,6 +258,8 @@ form.event_update.children.translations.prototype.children.description.label: 'p
 form.event_update.children.vat.label: 'VAT (%)'
 form.event_update.children.visible.label: Visible
 form.event_update.children.welcomeEnabled.label: 'welcoming popup'
+form.event_update.children.disabledEmailChanging.label: 'Disabled email changing'
+form.event_update.children.disabledPasswordChanging.label: 'Disabled password changing'
 form.event.children.invoicePrefix.help.label: 'To change prefix please contact us'
 form.extra_parameter_create.children.name.label: name
 form.extra_parameter_create.children.submit.label: register

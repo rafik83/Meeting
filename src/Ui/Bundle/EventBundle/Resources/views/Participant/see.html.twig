@@ -36,12 +36,16 @@
                 </div>
                 {% if participant.user == app.user %}
                 <ul>
-                    <li>
-                        <a href="{{ path('event_change_password', { sheet: sheet.id }) }}"><span class="icon-Verouiller_1"></span> {{ 'account.change_password.title'|trans }}</a>
-                    </li>
-                    <li>
-                        <a href="{{ path('event_account_change_mail', { sheet: sheet.id }) }}"><span class="icon-Message_1"></span> {{ 'account.update_email.title'|trans }}</a>
-                    </li>
+                    {% if not event.disabledPasswordChanging %}
+                        <li>
+                            <a href="{{ path('event_change_password', { sheet: sheet.id }) }}"><span class="icon-Verouiller_1"></span> {{ 'account.change_password.title'|trans }}</a>
+                        </li>
+                    {% endif %}
+                    {% if not event.disabledEmailChanging %}
+                        <li>
+                            <a href="{{ path('event_account_change_mail', { sheet: sheet.id }) }}"><span class="icon-Message_1"></span> {{ 'account.update_email.title'|trans }}</a>
+                        </li>
+                    {% endif %}
                 </ul>
                 {% endif %}
             </section>
