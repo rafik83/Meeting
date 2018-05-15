@@ -93,8 +93,10 @@ security:
                 lifetime: 2592000
                 path:     /
             guard:
+                entry_point: Proximum\Vimeet\Infrastructure\Security\Guard\ThirdParty\Comexposium\SSOAuthenticator
                 authenticators:
                     - Proximum\Vimeet\Infrastructure\Security\Guard\ThirdParty\Comexposium\SSOAuthenticator
+                    - Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Security\Guard\User\Event\TokenAuthenticator
             logout:
                 path: event_logout
                 target: event_logout_success

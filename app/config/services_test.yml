@@ -139,6 +139,11 @@ services:
         arguments:
              - '@repository.token.user_event_token_repository'
 
+    behat_manager.user.event.authentication_token_manager:
+        class: Proximum\Vimeet\Behat\Service\Manager\User\Event\AuthenticationTokenManager
+        arguments:
+             - '@Proximum\Vimeet\Infrastructure\Repository\User\Event\AuthenticationTokenRepository'
+
     behat_manager.admin_manager:
         class: Proximum\Vimeet\Behat\Service\Manager\AdminManager
         arguments:
@@ -327,6 +332,12 @@ services:
         arguments:
             - '@behat_storage'
             - '@behat_manager.token.user_event_token_manager'
+
+    behat_proxy.user.event.authentication_token_context:
+        class: Proximum\Vimeet\Behat\Proxy\User\Event\AuthenticationTokenContextProxy
+        arguments:
+            - '@behat_storage'
+            - '@behat_manager.user.event.authentication_token_manager'
 
     #
     # Adapter

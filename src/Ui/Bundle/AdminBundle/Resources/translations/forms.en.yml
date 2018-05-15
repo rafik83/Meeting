@@ -842,6 +842,9 @@ form.spot_import.children.charset.label: 'file encoding'
 form.spot_import.children.file.label: 'spots file'
 form.spot_import.children.submit.label: 'import spots'
 form.spot.import.confirm: 'The import of new spots will delete the previous spots on this event. do you want to import the spots ?'
+form.authentication_token.children.file.label: 'tokens file'
+form.authentication_token.children.submit.label: 'import tokens'
+form.authentication_token.import.confirm: 'Do you want to import authentication tokens ?'
 form.template_add_locale.children.locale.label: language
 form.template_add_locale.children.submit.label: validate
 form.template_registration_update.children.submit.label: Save

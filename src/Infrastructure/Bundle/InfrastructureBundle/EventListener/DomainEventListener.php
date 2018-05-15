@@ -28,6 +28,7 @@ class DomainEventListener extends AbstractRedirectToEventListener
         'payum_notify_do_unsafe',
         'payum_notify_do',
         'payum_authorize_do',
+        'vimeet_event_authentication_token_login',
         '_wdt',
         '_profiler',
         '_profiler_home',
@@ -81,6 +82,6 @@ class DomainEventListener extends AbstractRedirectToEventListener
      */
     protected function isIgnoredRoute($route)
     {
-        return in_array($route, self::$ignoredRoutes);
+        return \in_array($route, self::$ignoredRoutes, true);
     }
 }

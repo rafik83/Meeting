@@ -76,4 +76,10 @@ class AuthenticationToken
     {
         return $this->expiredAt;
     }
+
+    public function updateTokenAndExpiredAt(string $token, ?\DateTimeInterface $expiredAt): void
+    {
+        $this->token = $token;
+        $this->expiredAt = $expiredAt;
+    }
 }

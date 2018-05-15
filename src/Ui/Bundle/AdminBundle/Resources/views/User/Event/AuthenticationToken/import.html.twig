@@ -1,0 +1,16 @@
+{% extends 'AdminBundle:Common:form_layout.html.twig' %}
+
+{% block form_title 'admin.authentication_token.import.title'|trans %}
+
+{% block form_content %}
+    {{ form_row(form.file) }}
+    <div class="form-group">
+        <div class="col-lg-9 col-md-9 col-sm-9 col-lg-offset-3 col-md-offset-3 col-sm-offset-3">
+            <a href="{{ path('admin_user_event_authentication_token_sample_import', { event: event.id }) }}">
+                {{ 'admin.spot.import.sample'|trans }}
+            </a>
+        </div>
+    </div>
+{% endblock form_content %}
+
+{% block goback_link path('admin_sheet', {'event': event.id}) %}

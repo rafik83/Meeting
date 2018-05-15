@@ -848,6 +848,9 @@ form.spot_import.children.charset.label: 'Encodage du fichier'
 form.spot_import.children.file.label: 'Fichier des lieux'
 form.spot_import.children.submit.label: 'Importer les lieux'
 form.spot.import.confirm: 'L''import de nouveaux lieux supprimera les lieux existants sur cet événement. Voulez vous importer les lieux ?'
+form.authentication_token.import.confirm: 'Voulez-vous importer les tokens d''authentification ?'
+form.authentication_token.children.file.label: 'Fichier des tokens'
+form.authentication_token.children.submit.label: 'Importer des tokens'
 form.template_add_locale.children.locale.label: Langue
 form.template_add_locale.children.submit.label: Valider
 form.template_registration_update.children.submit.label: Enregistrer

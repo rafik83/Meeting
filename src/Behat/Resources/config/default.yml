@@ -62,6 +62,8 @@ default:
                     - '@behat_proxy.user_context'
                 - Proximum\Vimeet\Behat\Context\Domain\Token\UserEventTokenContext:
                     - '@behat_proxy.token.user_event_token_context'
+                - Proximum\Vimeet\Behat\Context\Domain\User\Event\AuthenticationTokenContext:
+                    - '@behat_proxy.user.event.authentication_token_context'
                 - Proximum\Vimeet\Behat\Context\Domain\Invoice\PrefixContext:
                     - '@behat_proxy.invoice.prefix_context'
                 - Proximum\Vimeet\Behat\Context\Domain\Event\ContentContext:

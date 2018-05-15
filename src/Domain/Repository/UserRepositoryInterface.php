@@ -109,4 +109,6 @@ interface UserRepositoryInterface
      * @return User[]
      */
     public function findByEventWithoutDispatch(Event $event, Mass $mass);
+
+    public function findByAuthenticationTokenAndEvent(string $token, Event $event, \DateTimeInterface $expiredAt): ?User;
 }

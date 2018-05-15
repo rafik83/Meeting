@@ -14,16 +14,39 @@
                     <span class="caret"></span>
                 </button>
                 <ul class="dropdown-menu dropdown-menu-right">
-                    <form action="{{ path('admin_sheet_export_sheet', { 'event': event.id }) }}" method="GET">
-                        <li><button type="submit" class="btn">{{ 'admin.sheet.export.sheet.button.label'|trans }}</button></li>
-                    </form>
-                    <form action="{{ path('admin_sheet_export_participant', { 'event': event.id }) }}" method="GET">
-                        <li><button type="submit" class="btn">{{ 'admin.sheet.export.participant.button.label'|trans }}</button></li>
-                    </form>
+                    <li>
+                        <a href="{{ path('admin_sheet_export_sheet', { 'event': event.id }) }}">
+                            {{ 'admin.sheet.export.sheet.button.label'|trans }}
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{ path('admin_sheet_export_participant', { 'event': event.id }) }}">
+                            {{ 'admin.sheet.export.participant.button.label'|trans }}
+                        </a>
+                    </li>
                 </ul>
             </div>
 
-            <a class="btn btn-default btn-sm pull-right" style="margin: 9px 10px 0 0;" href="{{ path('admin_sheet_import', {'event': event.id}) }}">{{ 'admin.sheet.import.button.label'|trans }}</a>
+            <div class="dropdown pull-right" style="margin: 0 10px;">
+                <button class="btn btn-default btn-sm dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                    {{ 'admin.sheet.import.button.label'|trans }}
+                    <span class="caret"></span>
+                </button>
+                <ul class="dropdown-menu dropdown-menu-right">
+                    <li>
+                        <a href="{{ path('admin_sheet_import', {'event': event.id}) }}">
+                            {{ 'admin.sheet.import.button.label'|trans }}
+                        </a>
+                    </li>
+                    {% if is_granted('PERMISSION_EVENT_ACCESS', event) %}
+                        <li>
+                            <a href="{{ path('admin_user_event_authentication_token_import', { 'event': event.id }) }}">
+                                {{ 'admin.authentication_token.import.title'|trans }}
+                            </a>
+                        </li>
+                    {% endif %}
+                </ul>
+            </div>
         {% endif %}
     </h1>
 

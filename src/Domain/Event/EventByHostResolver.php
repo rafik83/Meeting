@@ -43,18 +43,32 @@ class EventByHostResolver
     {
         $event = $this->eventRepository->getEventByDomain($host);
 
-        if (null === $event) {
-            throw new EventNotFoundException('Event not found');
-        }
-
-        if (!$event->isVisible()) {
-            throw new EventNotVisibleException('Event not visible');
-        }
+        $this->verifyIfEventExistAndIsVisible($event);
 
         if (!$event->hasLocale($locale)) {
             throw new EventDoesNotHaveLocale('Locale not found', $locale);
         }
 
         return $event;
+    }
+
+    public function resolveEventFromHost(string $host): Event
+    {
+        $event = $this->eventRepository->getEventByDomain($host);
+
+        $this->verifyIfEventExistAndIsVisible($event);
+
+        return $event;
+    }
+
+    private function verifyIfEventExistAndIsVisible(?Event $event): void
+    {
+        if (!$event instanceof Event) {
+            throw new EventNotFoundException('Event not found');
+        }
+
+        if (!$event->isVisible()) {
+            throw new EventNotVisibleException('Event not visible');
+        }
     }
 }

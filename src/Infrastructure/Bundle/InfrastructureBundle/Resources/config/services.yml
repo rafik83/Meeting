@@ -539,6 +539,24 @@ services:
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Spot\Import\SpotImportConfirm }
 
+
+    Proximum\Vimeet\Application\Command\User\Event\AuthenticationTokenImportHandler:
+        arguments:
+            - '@repository.file_repository'
+            - '@adapter.local_file_storage'
+            - '%infrastructure.import_authentication_token_path%'
+            - '@datetime'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\User\Event\AuthenticationTokenImport }
+
+    Proximum\Vimeet\Application\Command\User\Event\ConfirmAuthenticationTokenImportHandler:
+        arguments:
+            - '@Proximum\Vimeet\Infrastructure\Repository\User\Event\AuthenticationTokenRepository'
+            - '@vimeet_infrastructure.repository.user_repository'
+            - '@datetime'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\User\Event\ConfirmAuthenticationTokenImport }
+
     vimeet_infrastructure.vimeet.application.command.category.update_handler:
         class: Proximum\Vimeet\Application\Command\Category\UpdateHandler
         arguments:
@@ -4181,6 +4199,13 @@ services:
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Spot\Import\SpotImportPreviewQuery }
 
+    query.user.event.authentication_token_import_preview_query_handler:
+        class: Proximum\Vimeet\Application\Query\User\Event\AuthenticationTokenImportPreviewQueryHandler
+        arguments:
+            - '@Proximum\Vimeet\Application\Components\User\Event\AuthenticationTokenImportParser'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\User\Event\AuthenticationTokenImportPreviewQuery }
+
     query.transaction.view_query_handler:
         class: Proximum\Vimeet\Application\Query\Transaction\TransactionViewQueryHandler
         arguments:
@@ -5255,6 +5280,12 @@ services:
         arguments:
             - '@vimeet_infrastructure.adapter.translator_adapter'
 
+    Proximum\Vimeet\Application\Components\User\Event\Denormalizer\AuthenticationTokenDenormalizer:
+        tags:
+            - { name: serializer.normalizer }
+        arguments:
+            - '@validator'
+
     #
     # Adapter
     #
@@ -6103,3 +6134,15 @@ services:
         arguments:
             - '@Proximum\Vimeet\Infrastructure\Encryption\UserEventProtectedKeyGetterAdapter'
             - '@Proximum\Vimeet\Infrastructure\Encryption\UserEventProtectedKeyPasswordGetterAdapter'
+
+    #
+    # Guard
+    #
+    Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Security\Guard\User\Event\TokenAuthenticator:
+        arguments:
+            - '@Proximum\Vimeet\Domain\Event\EventByHostResolver'
+            - '@vimeet_infrastructure.repository.user_repository'
+            - '@session.flash_bag'
+            - '@adapter.router'
+            - '@datetime'
+            - '@Proximum\Vimeet\Application\Command\User\Event\ActivateAccountTokenByUserAndSheetGuesserHandler'

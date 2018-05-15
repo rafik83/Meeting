@@ -644,6 +644,13 @@ services:
         arguments:
             - '@adapter.authorization_checker'
 
+    Proximum\Vimeet\Application\Components\User\Event\AuthenticationTokenImportParser:
+        arguments:
+            - '@adapter.serializer_adapter'
+            - '@vimeet_infrastructure.repository.user_repository'
+            - '@adapter.validator_adapter'
+            - '%infrastructure.import_authentication_token_path%'
+
     #
     # Validators
     #

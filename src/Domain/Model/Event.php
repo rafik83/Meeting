@@ -352,7 +352,7 @@ class Event implements EventInterface, TraceableInterface
      */
     public function getAvailableLocale($locale)
     {
-        if (in_array($locale, $this->getLocales())) {
+        if (\in_array($locale, $this->getLocales(), true)) {
             return $locale;
         }
 

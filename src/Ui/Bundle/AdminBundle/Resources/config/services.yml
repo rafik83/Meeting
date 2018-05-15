@@ -144,6 +144,11 @@ services:
             - '@vimeet_infrastructure.adapter.translator_adapter'
         tags:
             - { name: form.type }
+    Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\User\Event\AuthenticationTokenConfirmType:
+        arguments:
+            - '@vimeet_infrastructure.adapter.translator_adapter'
+        tags:
+            - { name: 'form.type' }
 
     Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Product\AbstractCreateType:
         abstract: true

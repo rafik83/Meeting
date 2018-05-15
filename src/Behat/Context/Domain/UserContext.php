@@ -37,4 +37,16 @@ class UserContext implements Context
 
         $this->userContextProxy->getStorage()->set('user', $user);
     }
+
+    /**
+     * @Given /^the user "(?P<email>[^"]+)" with empty password is created$/
+     *
+     * @param string $email
+     */
+    public function createWithEmptyPassword(string $email): void
+    {
+        $user = $this->userContextProxy->getUserManager()->createWithEmptyPassword($email);
+
+        $this->userContextProxy->getStorage()->set('user', $user);
+    }
 }

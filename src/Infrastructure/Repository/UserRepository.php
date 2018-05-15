@@ -18,6 +18,7 @@ use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Unavailability\Mass;
 use Proximum\Vimeet\Domain\Model\Unavailability\MassAssignment;
 use Proximum\Vimeet\Domain\Model\User;
+use Proximum\Vimeet\Domain\Model\User\Event\AuthenticationToken;
 use Proximum\Vimeet\Domain\Model\UserEvent;
 use Proximum\Vimeet\Domain\Repository\UserRepositoryInterface;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\User\FilterType;
@@ -332,5 +333,30 @@ class UserRepository implements UserRepositoryInterface
         ;
 
         return $queryBuilder->getQuery()->getResult();
+    }
+
+    public function findByAuthenticationTokenAndEvent(string $token, Event $event, \DateTimeInterface $expiredAt): ?User
+    {
+        return $this->entityManager
+            ->createQueryBuilder()
+            ->select('user')
+            ->from(User::class, 'user')
+            ->join(
+                AuthenticationToken::class,
+                'authenticationToken',
+                'WITH',
+                'authenticationToken.token = :token
+                AND authenticationToken.user = user
+                AND authenticationToken.event = :event
+                AND (authenticationToken.expiredAt IS NULL OR authenticationToken.expiredAt > :expiredAt)'
+            )
+            ->setParameters([
+                'token' => $token,
+                'event' => $event,
+                'expiredAt' => $expiredAt,
+            ])
+            ->setMaxResults(1)
+            ->getQuery()
+            ->getOneOrNullResult();
     }
 }
