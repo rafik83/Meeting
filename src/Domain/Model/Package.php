@@ -258,6 +258,25 @@ class Package
     }
 
     /**
+     * @return Product[]
+     */
+    public function getAttributableOptions(): array
+    {
+        $attributableOptions = [];
+
+        /** @var PackageGroup $group */
+        foreach ($this->groups as $group) {
+            foreach ($group->getOptions() as $option) {
+                if ($option->isAttributable()) {
+                    $attributableOptions[$option->getId()] = $option;
+                }
+            }
+        }
+
+        return $attributableOptions;
+    }
+
+    /**
      * @return bool
      */
     public function isPlansEnabled()

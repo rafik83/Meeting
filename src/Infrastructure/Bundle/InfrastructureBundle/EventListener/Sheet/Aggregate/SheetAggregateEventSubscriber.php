@@ -11,6 +11,7 @@
 namespace Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\EventListener\Sheet\Aggregate;
 
 use Proximum\Vimeet\Application\Event\Events;
+use Proximum\Vimeet\Application\Event\Happening\HappeningParticipationAutomaticallyUpdatedEvent;
 use Proximum\Vimeet\Application\Event\Happening\ParticipateEvent;
 use Proximum\Vimeet\Application\Event\Mass\Assignment\AssignmentUpdatedEvent;
 use Proximum\Vimeet\Application\Event\Mass\Unavailability\DispatchedEvent;
@@ -55,7 +56,7 @@ class SheetAggregateEventSubscriber implements EventSubscriberInterface
     /**
      * @param ParticipateEvent $participateEvent
      */
-    public function onHappeningParticipation(ParticipateEvent $participateEvent)
+    public function onHappeningParticipation(ParticipateEvent $participateEvent): void
     {
         $sheets = $this->sheetRepository->getSheetsByUsersAndEvent(
             $participateEvent->getSheet()->getUsers(),
@@ -67,10 +68,22 @@ class SheetAggregateEventSubscriber implements EventSubscriberInterface
         }
     }
 
+    public function onHappeningParticipationAutomaticallyUpadted(HappeningParticipationAutomaticallyUpdatedEvent $event): void
+    {
+        $sheets = $this->sheetRepository->getSheetsByUsersAndEvent(
+            $event->sheet->getUsers(),
+            $event->sheet->getEvent()
+        );
+
+        foreach ($sheets as $sheet) {
+            $this->jobQueueAdapter->aggregateSheetAvailableSlot($sheet);
+        }
+    }
+
     /**
      * @param AssignmentUpdatedEvent $event
      */
-    public function onMassAssignmentChanged(AssignmentUpdatedEvent $event)
+    public function onMassAssignmentChanged(AssignmentUpdatedEvent $event): void
     {
         $this->availableSlotCalculator->calculateAvailableSlotForSheet($event->participant->getSheet());
     }
@@ -78,7 +91,7 @@ class SheetAggregateEventSubscriber implements EventSubscriberInterface
     /**
      * @param DispatchedEvent $dispatchedEvent
      */
-    public function onMassUnavailabilityDispatched(DispatchedEvent $dispatchedEvent)
+    public function onMassUnavailabilityDispatched(DispatchedEvent $dispatchedEvent): void
     {
         $this->jobQueueAdapter->aggregateAvailableSlot($dispatchedEvent->event);
     }
@@ -86,7 +99,7 @@ class SheetAggregateEventSubscriber implements EventSubscriberInterface
     /**
      * @param AbstractParticipateEvent $event
      */
-    public function onMeetingChanged(AbstractParticipateEvent $event)
+    public function onMeetingChanged(AbstractParticipateEvent $event): void
     {
         $this->availableSlotCalculator->calculateAvailableSlotForSheet($event->participant->getSheet());
     }
@@ -94,7 +107,7 @@ class SheetAggregateEventSubscriber implements EventSubscriberInterface
     /**
      * @param MeetingMovedEvent $meetingMovedEvent
      */
-    public function onMeetingMoved(MeetingMovedEvent $meetingMovedEvent)
+    public function onMeetingMoved(MeetingMovedEvent $meetingMovedEvent): void
     {
         foreach ($meetingMovedEvent->getSheets() as $sheet) {
             $this->availableSlotCalculator->calculateAvailableSlotForSheet($sheet);
@@ -104,7 +117,7 @@ class SheetAggregateEventSubscriber implements EventSubscriberInterface
     /**
      * @param ParticipantAddedEvent $participantAddedEvent
      */
-    public function onParticipantAdded(ParticipantAddedEvent $participantAddedEvent)
+    public function onParticipantAdded(ParticipantAddedEvent $participantAddedEvent): void
     {
         $this->availableSlotCalculator->calculateAvailableSlotForSheet($participantAddedEvent->participant->getSheet());
     }
@@ -112,7 +125,7 @@ class SheetAggregateEventSubscriber implements EventSubscriberInterface
     /**
      * @param ParticipantRemovedEvent $participantRemovedEvent
      */
-    public function onParticipantRemoved(ParticipantRemovedEvent $participantRemovedEvent)
+    public function onParticipantRemoved(ParticipantRemovedEvent $participantRemovedEvent): void
     {
         $this->availableSlotCalculator->calculateAvailableSlotForSheet($participantRemovedEvent->sheet);
     }
@@ -120,7 +133,7 @@ class SheetAggregateEventSubscriber implements EventSubscriberInterface
     /**
      * @param AbstractSlotEvent $abstractSlotEvent
      */
-    public function onSlotModification(AbstractSlotEvent $abstractSlotEvent)
+    public function onSlotModification(AbstractSlotEvent $abstractSlotEvent): void
     {
         $this->jobQueueAdapter->aggregateAvailableSlot($abstractSlotEvent->event);
     }
@@ -128,7 +141,7 @@ class SheetAggregateEventSubscriber implements EventSubscriberInterface
     /**
      * @param AbstractUnavailabilityEvent $event
      */
-    public function onUnavailabilityChanged(AbstractUnavailabilityEvent $event)
+    public function onUnavailabilityChanged(AbstractUnavailabilityEvent $event): void
     {
         $sheets = $this->sheetRepository->getSheetsByUserAndEvent($event->user, $event->event);
 
@@ -140,7 +153,7 @@ class SheetAggregateEventSubscriber implements EventSubscriberInterface
     /**
      * @param RegistrationEvent $registrationEvent
      */
-    public function onUserRegistration(RegistrationEvent $registrationEvent)
+    public function onUserRegistration(RegistrationEvent $registrationEvent): void
     {
         $sheets = $this->sheetRepository->getSheetsByUserAndEvent($registrationEvent->user, $registrationEvent->event);
 
@@ -152,23 +165,24 @@ class SheetAggregateEventSubscriber implements EventSubscriberInterface
     /**
      * {@inheritdoc
      */
-    public static function getSubscribedEvents()
+    public static function getSubscribedEvents(): array
     {
         return [
-            Events::HAPPENING_PARTICIPATED         => 'onHappeningParticipation',
+            Events::HAPPENING_PARTICIPATION_AUTOMATICALLY_UPDATED => 'onHappeningParticipationAutomaticallyUpadted',
+            Events::HAPPENING_PARTICIPATED => 'onHappeningParticipation',
             Events::MASS_UNAVAILABILITY_DISPATCHED => 'onMassUnavailabilityDispatched',
-            Events::SLOT_GENERATED                 => 'onSlotModification',
-            Events::SLOT_DELETED                   => 'onSlotModification',
-            Events::SLOT_TOGGLE_LOCKED             => 'onSlotModification',
-            Events::UNAVAILABILITY_ADDED           => 'onUnavailabilityChanged',
-            Events::UNAVAILABILITY_REMOVED         => 'onUnavailabilityChanged',
-            Events::MASS_ASSIGNMENT_UPDATED        => 'onMassAssignmentChanged',
-            Events::MEETING_PARTICIPATE            => 'onMeetingChanged',
-            Events::MEETING_MOVED                  => 'onMeetingMoved',
-            Events::MEETING_UN_PARTICIPATE         => 'onMeetingChanged',
-            Events::PARTICIPANT_ADDED              => 'onParticipantAdded',
-            Events::PARTICIPANT_REMOVED            => 'onParticipantRemoved',
-            Events::USER_REGISTRATION              => 'onUserRegistration',
+            Events::SLOT_GENERATED => 'onSlotModification',
+            Events::SLOT_DELETED => 'onSlotModification',
+            Events::SLOT_TOGGLE_LOCKED => 'onSlotModification',
+            Events::UNAVAILABILITY_ADDED => 'onUnavailabilityChanged',
+            Events::UNAVAILABILITY_REMOVED => 'onUnavailabilityChanged',
+            Events::MASS_ASSIGNMENT_UPDATED => 'onMassAssignmentChanged',
+            Events::MEETING_PARTICIPATE => 'onMeetingChanged',
+            Events::MEETING_MOVED => 'onMeetingMoved',
+            Events::MEETING_UN_PARTICIPATE => 'onMeetingChanged',
+            Events::PARTICIPANT_ADDED => 'onParticipantAdded',
+            Events::PARTICIPANT_REMOVED => 'onParticipantRemoved',
+            Events::USER_REGISTRATION => 'onUserRegistration',
         ];
     }
 }

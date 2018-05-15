@@ -5118,15 +5118,20 @@ services:
             - '@Proximum\Vimeet\Infrastructure\Repository\ProductAttributedToParticipantRepository'
             - '@Proximum\Vimeet\Domain\Happening\PackageProductsNeededByHappening'
 
+    Proximum\Vimeet\Domain\Happening\HappeningsNotOverlapped: ~
+
     Proximum\Vimeet\Domain\Happening\ParticipateToHappeningsByProduct:
         arguments:
-            - '@vimeet_infrastructure.repository.happening_repository'
+            - '@Proximum\Vimeet\Domain\Happening\HappeningsWithProductsBySheetPackageGetter'
             - '@Proximum\Vimeet\Domain\Happening\HappeningsNotOverlapped'
             - '@Proximum\Vimeet\Domain\ProductAttributedToParticipant\ParticipantWithAttributedProductUpdated'
             - '@Proximum\Vimeet\Domain\Happening\ParticipateToHappeningWithProductToBuyChecker'
             - '@Proximum\Vimeet\Application\Command\Happening\UpdateParticipationHandler'
+            - '@vimeet_infrastructure.adapter.delayed_event_dispatcher'
 
-    Proximum\Vimeet\Domain\Happening\HappeningsNotOverlapped: ~
+    Proximum\Vimeet\Domain\Happening\HappeningsWithProductsBySheetPackageGetter:
+        arguments:
+            - '@vimeet_infrastructure.repository.happening_repository'
 
     #
     # Serializer: normalizers and encoders

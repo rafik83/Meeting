@@ -12,6 +12,7 @@ namespace Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\EventListen
 
 use Proximum\Vimeet\Application\Adapter\SheetIndexerInterface;
 use Proximum\Vimeet\Application\Event\Events;
+use Proximum\Vimeet\Application\Event\Happening\HappeningParticipationAutomaticallyUpdatedEvent;
 use Proximum\Vimeet\Application\Event\Happening\ParticipateEvent;
 use Proximum\Vimeet\Application\Event\Meeting\MeetingCreatedEvent;
 use Proximum\Vimeet\Application\Event\Meeting\MeetingRemovedEvent;
@@ -61,6 +62,7 @@ class SheetPopulateEventSubscriber implements EventSubscriberInterface
             Events::TRANSACTION_CONFIRMED      => 'onTransactionConfirmed',
             Events::TRANSACTION_REMOVED        => 'onTransactionRemoved',
             Events::HAPPENING_PARTICIPATED     => 'onHappeningParticipated',
+            Events::HAPPENING_PARTICIPATION_AUTOMATICALLY_UPDATED => 'onHappeningParticipationAutomaticallyUpdated',
             Events::MEETING_REQUEST_CREATED    => 'onMeetingRequestCreated',
             Events::MEETING_REQUEST_CANCELED   => 'onMeetingRequestCanceled',
             Events::MEETING_REQUEST_REFUSED    => 'onMeetingRequestRefused',
@@ -77,7 +79,7 @@ class SheetPopulateEventSubscriber implements EventSubscriberInterface
     /**
      * @param StepDoneEvent $event
      */
-    public function onPackageStep(StepDoneEvent $event)
+    public function onPackageStep(StepDoneEvent $event): void
     {
         $this->updateSheetIndexation([$event->getSheet()]);
     }
@@ -85,7 +87,7 @@ class SheetPopulateEventSubscriber implements EventSubscriberInterface
     /**
      * @param OrderConfirmEvent $event
      */
-    public function onOrderConfirmed(OrderConfirmEvent $event)
+    public function onOrderConfirmed(OrderConfirmEvent $event): void
     {
         $this->updateSheetIndexation([$event->getOrder()->getSheet()]);
     }
@@ -93,7 +95,7 @@ class SheetPopulateEventSubscriber implements EventSubscriberInterface
     /**
      * @param OrderUpdatedEvent $event
      */
-    public function onOrderUpdated(OrderUpdatedEvent $event)
+    public function onOrderUpdated(OrderUpdatedEvent $event): void
     {
         $this->updateSheetIndexation([$event->getOrder()->getSheet()]);
     }
@@ -101,7 +103,7 @@ class SheetPopulateEventSubscriber implements EventSubscriberInterface
     /**
      * @param TransactionCreatedEvent $event
      */
-    public function onTransactionCreated(TransactionCreatedEvent $event)
+    public function onTransactionCreated(TransactionCreatedEvent $event): void
     {
         $this->updateSheetIndexation([$event->getTransaction()->getSheet()]);
     }
@@ -109,7 +111,7 @@ class SheetPopulateEventSubscriber implements EventSubscriberInterface
     /**
      * @param TransactionUpdatedEvent $event
      */
-    public function onTransactionUpdated(TransactionUpdatedEvent $event)
+    public function onTransactionUpdated(TransactionUpdatedEvent $event): void
     {
         $this->updateSheetIndexation([$event->getTransaction()->getSheet()]);
     }
@@ -117,7 +119,7 @@ class SheetPopulateEventSubscriber implements EventSubscriberInterface
     /**
      * @param TransactionConfirmedEvent $event
      */
-    public function onTransactionConfirmed(TransactionConfirmedEvent $event)
+    public function onTransactionConfirmed(TransactionConfirmedEvent $event): void
     {
         $this->updateSheetIndexation([$event->getTransaction()->getSheet()]);
     }
@@ -125,7 +127,7 @@ class SheetPopulateEventSubscriber implements EventSubscriberInterface
     /**
      * @param TransactionRemovedEvent $event
      */
-    public function onTransactionRemoved(TransactionRemovedEvent $event)
+    public function onTransactionRemoved(TransactionRemovedEvent $event): void
     {
         $this->updateSheetIndexation([$event->getTransaction()->getSheet()]);
     }
@@ -133,15 +135,20 @@ class SheetPopulateEventSubscriber implements EventSubscriberInterface
     /**
      * @param ParticipateEvent $event
      */
-    public function onHappeningParticipated(ParticipateEvent $event)
+    public function onHappeningParticipated(ParticipateEvent $event): void
     {
         $this->updateSheetIndexation([$event->getSheet()]);
+    }
+
+    public function onHappeningParticipationAutomaticallyUpdated(HappeningParticipationAutomaticallyUpdatedEvent $event): void
+    {
+        $this->updateSheetIndexation([$event->sheet]);
     }
 
     /**
      * @param MeetingRemovedEvent $event
      */
-    public function onMeetingRemoved(MeetingRemovedEvent $event)
+    public function onMeetingRemoved(MeetingRemovedEvent $event): void
     {
         $this->updateSheetIndexation($event->getSheets());
     }
@@ -149,7 +156,7 @@ class SheetPopulateEventSubscriber implements EventSubscriberInterface
     /**
      * @param CreateRequestEvent $event
      */
-    public function onMeetingRequestCreated(CreateRequestEvent $event)
+    public function onMeetingRequestCreated(CreateRequestEvent $event): void
     {
         $this->updateSheetsIndexationFromRequest($event->getRequest());
     }
@@ -157,7 +164,7 @@ class SheetPopulateEventSubscriber implements EventSubscriberInterface
     /**
      * @param CancelRequestEvent $event
      */
-    public function onMeetingRequestCanceled(CancelRequestEvent $event)
+    public function onMeetingRequestCanceled(CancelRequestEvent $event): void
     {
         $this->updateSheetsIndexationFromRequest($event->getRequest());
     }
@@ -165,7 +172,7 @@ class SheetPopulateEventSubscriber implements EventSubscriberInterface
     /**
      * @param RefusedRequestEvent $event
      */
-    public function onMeetingRequestRefused(RefusedRequestEvent $event)
+    public function onMeetingRequestRefused(RefusedRequestEvent $event): void
     {
         $this->updateSheetsIndexationFromRequest($event->getRequest());
     }
@@ -173,7 +180,7 @@ class SheetPopulateEventSubscriber implements EventSubscriberInterface
     /**
      * @param ApprovedRequestEvent $event
      */
-    public function onMeetingRequestApproved(ApprovedRequestEvent $event)
+    public function onMeetingRequestApproved(ApprovedRequestEvent $event): void
     {
         $this->updateSheetsIndexationFromRequest($event->getRequest());
     }
@@ -181,7 +188,7 @@ class SheetPopulateEventSubscriber implements EventSubscriberInterface
     /**
      * @param UnapprovedRequestEvent $event
      */
-    public function onMeetingRequestUnapproved(UnapprovedRequestEvent $event)
+    public function onMeetingRequestUnapproved(UnapprovedRequestEvent $event): void
     {
         $this->updateSheetsIndexationFromRequest($event->getRequest());
     }
@@ -189,7 +196,7 @@ class SheetPopulateEventSubscriber implements EventSubscriberInterface
     /**
      * @param UnRefusedRequestEvent $event
      */
-    public function onMeetingRequestUnrefused(UnRefusedRequestEvent $event)
+    public function onMeetingRequestUnrefused(UnRefusedRequestEvent $event): void
     {
         $this->updateSheetsIndexationFromRequest($event->getRequest());
     }
@@ -197,7 +204,7 @@ class SheetPopulateEventSubscriber implements EventSubscriberInterface
     /**
      * @param ParticipantImportedEvent $event
      */
-    public function onParticipantImported(ParticipantImportedEvent $event)
+    public function onParticipantImported(ParticipantImportedEvent $event): void
     {
         $this->updateSheetIndexation($event->getSheets());
     }
@@ -205,7 +212,7 @@ class SheetPopulateEventSubscriber implements EventSubscriberInterface
     /**
      * @param SheetInvoicedEvent $sheetInvoicedEvent
      */
-    public function onSheetInvoiced(SheetInvoicedEvent $sheetInvoicedEvent)
+    public function onSheetInvoiced(SheetInvoicedEvent $sheetInvoicedEvent): void
     {
         $this->updateSheetIndexation($sheetInvoicedEvent->getSheets());
     }
@@ -213,7 +220,7 @@ class SheetPopulateEventSubscriber implements EventSubscriberInterface
     /**
      * @param MeetingCreatedEvent $event
      */
-    public function onMeetingCreated(MeetingCreatedEvent $event)
+    public function onMeetingCreated(MeetingCreatedEvent $event): void
     {
         $this->updateSheetIndexation($event->getMeeting()->getSheets());
     }
@@ -223,7 +230,7 @@ class SheetPopulateEventSubscriber implements EventSubscriberInterface
      *
      * @param Request $request
      */
-    private function updateSheetsIndexationFromRequest(Request $request)
+    private function updateSheetsIndexationFromRequest(Request $request): void
     {
         $this->updateSheetIndexation(
             [
@@ -236,7 +243,7 @@ class SheetPopulateEventSubscriber implements EventSubscriberInterface
     /**
      * @param Sheet[] $sheets
      */
-    private function updateSheetIndexation(array $sheets)
+    private function updateSheetIndexation(array $sheets): void
     {
         $this->sheetIndexer->updateSheets($sheets);
     }
