@@ -51,4 +51,12 @@ class FileSystemAdapter implements FileSystemAdapterInterface
     {
         $this->fileSystem->remove($files);
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function rename(string $origin, string $target, bool $overwrite = false): void
+    {
+        $this->fileSystem->rename($origin, $target, $overwrite);
+    }
 }

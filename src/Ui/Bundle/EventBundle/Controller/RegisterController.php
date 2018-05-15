@@ -22,6 +22,7 @@ use Proximum\Vimeet\Application\View\Register\PreFillUserDataView;
 use Proximum\Vimeet\Domain\Helper\StringHelper;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Participant;
+use Proximum\Vimeet\Domain\Model\Type;
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Template\TemplateData;
 use Proximum\Vimeet\Domain\Template\TemplateObject\UploadObject;
@@ -31,6 +32,7 @@ use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Common\EmailType;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Register\RegisterNewUserType;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Sheet\BlockType;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\ParamConverter\EventDomain;
+use Proximum\Vimeet\Ui\Bundle\EventBundle\ValueResolver\UserDomain;
 use Proximum\Vimeet\Ui\Flash\TransMessage;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Form\FormError;
@@ -39,6 +41,7 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 class RegisterController extends Controller
 {
@@ -146,22 +149,20 @@ class RegisterController extends Controller
 
     /**
      * Create a participation to an event.
-     *
-     * @param Request     $request
-     * @param EventDomain $eventDomain
-     * @param TypeView    $typeView
-     *
-     * @return RedirectResponse|Response
      */
-    public function participateAction(Request $request, EventDomain $eventDomain, TypeView $typeView)
-    {
+    public function participateAction(
+        Request $request,
+        EventDomain $eventDomain,
+        TypeView $typeView,
+        UserDomain $userDomain
+    ): Response {
         $event = $eventDomain->getEvent();
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
-        $this->hasUserAlreadyCreatedParticipant($event, $this->getUser());
+        $this->hasUserAlreadyCreatedParticipant($event, $userDomain->getUser());
 
         $response = $this
             ->get('infrastructure.route.home_dispatch.home_user_dispatcher')
-            ->attemptDispatchUser($event, $this->getUser());
+            ->attemptDispatchUser($event, $userDomain->getUser());
 
         if ($response instanceof RedirectResponse) {
             return $response;
@@ -172,11 +173,18 @@ class RegisterController extends Controller
         $type = $this->get('vimeet_infrastructure.repository.type_repository')
             ->getById($typeView->id);
 
+        if (!$type instanceof Type) {
+            return $this->redirectToRoute('event');
+        }
+
+        $user = $userDomain->getUser();
+
+        if (!$user instanceof User) {
+            return $this->redirectToRoute('event');
+        }
+
         $registrationTemplate = $this->get('template.template_data_factory')
             ->createRegistrationFromType($type, $locale);
-
-        $user = $this->get('vimeet_infrastructure.repository.user_repository')
-            ->findByEmail($this->getUser()->getEmail());
 
         /** @var PreFillUserDataView $preFillUserDataView */
         $preFillUserDataView = $this->get('tactician.commandbus.query')->handle(
@@ -200,10 +208,10 @@ class RegisterController extends Controller
         ]);
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
-            $data = $this->handleData($registrationTemplate, $form, $participantBlock->getData());
+            $data = $this->handleData($event, $user, $registrationTemplate, $form, $participantBlock->getData());
 
             $participate = new Participate(
-                $this->getUser(),
+                $userDomain->getUser(),
                 $event,
                 $type,
                 $locale,
@@ -248,15 +256,21 @@ class RegisterController extends Controller
     /**
      * @param Request     $request
      * @param EventDomain $eventDomain
+     * @param UserDomain  $userDomain
      * @param Participant $participant
      * @param int         $step
      *
      * @return RedirectResponse|Response
      */
-    public function participantStepAction(Request $request, EventDomain $eventDomain, Participant $participant, $step)
-    {
+    public function participantStepAction(
+        Request $request,
+        EventDomain $eventDomain,
+        UserDomain $userDomain,
+        Participant $participant,
+        $step
+    ): Response {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
-        $this->denyAccessIfWrongParticipant($eventDomain, $participant);
+        $this->denyAccessIfWrongParticipant($eventDomain, $userDomain, $participant);
 
         $locale               = $request->getLocale();
         $registrationTemplate = $this->get('template.template_data_factory')
@@ -293,6 +307,8 @@ class RegisterController extends Controller
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
             $data = $this->handleData(
+                $eventDomain->getEvent(),
+                $userDomain->getUser(),
                 $registrationTemplate,
                 $form,
                 $participantBlock->getData()
@@ -360,14 +376,21 @@ class RegisterController extends Controller
     }
 
     /**
+     * @param Event         $event
+     * @param User          $user
      * @param TemplateData  $registrationTemplate
      * @param FormInterface $form
      * @param array         $data
      *
      * @return array
      */
-    private function handleData(TemplateData $registrationTemplate, FormInterface $form, array $data)
-    {
+    private function handleData(
+        Event $event,
+        User $user,
+        TemplateData $registrationTemplate,
+        FormInterface $form,
+        array $data
+    ) {
         $data = array_filter($data, function ($value) { return null !== $value; });
 
         $uploadedAndImageObjects = $registrationTemplate->getUploadAndImageObjects();
@@ -378,7 +401,9 @@ class RegisterController extends Controller
 
                 if ($file instanceof UploadedFile) {
                     try {
-                        $data = $this->get('tactician.commandbus')->handle(new UploadFile($object, $data));
+                        $data = $this->get('tactician.commandbus')->handle(
+                            new UploadFile($event, $user, $object, $data)
+                        );
                     } catch (UploadFileException $exception) {
                         $form->get($key)->get('file')->addError(new FormError($exception->getMessage()));
                     }
@@ -505,15 +530,22 @@ class RegisterController extends Controller
      * Deny access if the participant does not match the user and the event
      *
      * @param EventDomain $eventDomain
+     * @param UserDomain  $userDomain
      * @param Participant $participant
+     *
+     * @throws \LogicException
+     * @throws AccessDeniedException
      */
-    protected function denyAccessIfWrongParticipant(EventDomain $eventDomain, Participant $participant)
-    {
+    protected function denyAccessIfWrongParticipant(
+        EventDomain $eventDomain,
+        UserDomain $userDomain,
+        Participant $participant
+    ) {
         if ($participant->getSheet()->getEvent() !== $eventDomain->getEvent()) {
             throw $this->createAccessDeniedException('Participation does not exist');
         }
 
-        if ($participant->getUser() !== $this->getUser()) {
+        if ($participant->getUser() !== $userDomain->getUser()) {
             throw $this->createAccessDeniedException('The user does not match the particpant.');
         }
     }

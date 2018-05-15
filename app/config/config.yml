@@ -352,6 +352,7 @@ infrastructure:
     import_planner_path: '%kernel.project_dir%/web/uploads/import_planner'
     import_spot_path: '%kernel.project_dir%/web/uploads/import_spots/'
     import_authentication_token_path: '%shared_uploaded_files%/import_authentication_tokens/'
+    encrypted_files_path: '%shared_uploaded_files%/encrypted_files/'
     export_omz_path: '%kernel.project_dir%/web/uploads/export_omz'
     export_spot_path: '%kernel.project_dir%/web/uploads/export_spot'
     package:
