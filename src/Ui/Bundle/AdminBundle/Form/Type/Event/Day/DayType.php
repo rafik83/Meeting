@@ -29,7 +29,6 @@ class DayType extends AbstractType
         $builder
             ->add('startTime', DateTimePickerType::class, [
                 'format'        => 'd/m/Y H:i',
-                'display_date'  => false,
                 'view_timezone' => $event->getTimeZone(),
                 'attr'  => [
                     'class' => 'datetimepicker-range-element',
@@ -37,7 +36,6 @@ class DayType extends AbstractType
             ])
             ->add('endTime', DateTimePickerType::class, [
                 'format'        => 'd/m/Y H:i',
-                'display_date'  => false,
                 'view_timezone' => $event->getTimeZone(),
                 'attr'  => [
                     'class' => 'datetimepicker-range-element',

@@ -46,7 +46,7 @@ use Symfony\Component\HttpFoundation\Response;
 
 class SheetController extends Controller
 {
-    const SHEETS_PER_PAGE = 100;
+    private const SHEETS_PER_PAGE = 100;
 
     /**
      * @param Request $request
@@ -147,6 +147,7 @@ class SheetController extends Controller
             'filters_summary'  => $this->get('filter_summary')->getFilters(
                 $sheetFilterView,
                 $filters,
+                $event,
                 $request->getLocale()
             ),
             'batch_form'       => $batchForm->createView(),

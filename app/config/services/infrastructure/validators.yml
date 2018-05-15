@@ -1,0 +1,4 @@
+services:
+    Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Validator\Constraint\Sheet\Filter\ReminderDateChoiceValidator:
+        tags:
+            - { name: validator.constraint_validator }

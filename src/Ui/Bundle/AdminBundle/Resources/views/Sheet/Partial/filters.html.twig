@@ -7,7 +7,12 @@
                 </a>
             </h4>
         </div>
-        <div id="advancedFilters" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingOne">
+        <div id="advancedFilters"
+             class="panel-collapse collapse {% if not filter_form.vars.valid %}in{% endif %}"
+             role="tabpanel"
+             {% if not filter_form.vars.valid %}aria-expanded="true"{% endif %}
+             aria-labelledby="headingOne"
+        >
             <div class="panel-body">
                 <div class="col-md-12">
                     <div class="form-group pull-right">

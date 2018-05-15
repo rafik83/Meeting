@@ -11,7 +11,6 @@
 namespace Proximum\Vimeet\Domain\Template\TemplateObject;
 
 use Proximum\Vimeet\Domain\MimeType\MimeType;
-use Proximum\Vimeet\Domain\Template\TemplateObject;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 class UploadObject extends EditableObject implements UploadableObjectInterface
@@ -116,6 +115,11 @@ class UploadObject extends EditableObject implements UploadableObjectInterface
     public function isImageFormat(): bool
     {
         return \in_array($this->getExtension(), MimeType::IMAGE_EXTENSIONS, true);
+    }
+
+    public function isImageFormatAndNotCrypted(): bool
+    {
+        return $this->isImageFormat() && !$this->isCrypted();
     }
 
     public function isUploadAndHasPath(): bool

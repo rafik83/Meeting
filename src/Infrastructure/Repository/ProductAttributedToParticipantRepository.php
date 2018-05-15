@@ -79,6 +79,21 @@ class ProductAttributedToParticipantRepository implements ProductAttributedToPar
     /**
      * {@inheritdoc}
      */
+    public function findByParticipants(array $participants): array
+    {
+        $queryBuilder = $this->entityManager->createQueryBuilder()
+            ->select('productAttributedToParticipant')
+            ->from(ProductAttributedToParticipant::class, 'productAttributedToParticipant')
+            ->where('productAttributedToParticipant.participant IN (:participants)')
+            ->setParameter('participants', $participants)
+        ;
+
+        return $queryBuilder->getQuery()->getResult();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function participantHasAtLeastOneProduct(Participant $participant, array $products): bool
     {
         return null !== $this->entityManager->createQueryBuilder()

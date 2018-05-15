@@ -18,7 +18,7 @@ class SheetFilterType extends AbstractFilterType
     /**
      * @return array
      */
-    public static function getDefaultFilters()
+    public static function getDefaultFilters(): array
     {
         return [
             'enabled' => true,

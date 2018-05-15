@@ -537,18 +537,26 @@ class SheetSearchQueryBuilder
     }
 
     /**
-     * Handle the reminderDate filter ("Today's reminder date")
+     * Handle the reminderDate filter
      *
      * @param array $filters
      */
-    protected function filterByReminderDate(array &$filters)
+    protected function filterByReminderDate(array &$filters): void
     {
-        if (isset($filters['reminderDate'])) {
-            if (\in_array(Constant::TODAY_REMINDER_DATE, $filters['reminderDate'], true)) {
-                $this->filterTodayReminderDate();
+        if (isset($filters['reminderDate']['begin'], $filters['reminderDate']['end'])
+            && $filters['reminderDate']['begin'] instanceof \DateTime
+            && $filters['reminderDate']['end'] instanceof \DateTime
+        ) {
+            $rangePredefinedDateBegin = new Range();
+            $rangePredefinedDateEnd = new Range();
 
-                return;
-            }
+            $rangePredefinedDateBegin
+                ->addField('reminderDate', ['gte' => (clone $filters['reminderDate']['begin'])->setTime(0, 0, 0)->format('c')]);
+            $rangePredefinedDateEnd
+                ->addField('reminderDate', ['lte' => (clone $filters['reminderDate']['end'])->setTime(23, 59, 59)->format('c')]);
+
+            $this->query->addMust($rangePredefinedDateBegin);
+            $this->query->addMust($rangePredefinedDateEnd);
         }
     }
 
@@ -672,23 +680,6 @@ class SheetSearchQueryBuilder
             ->addField('createdAt', ['gte' => (new \DateTime())->setTime(0, 0, 0)->format('c')]);
         $rangePredefinedDateEnd
             ->addField('createdAt', ['lte' => (new \DateTime())->setTime(23, 59, 59)->format('c')]);
-
-        $this->query->addMust($rangePredefinedDateBegin);
-        $this->query->addMust($rangePredefinedDateEnd);
-    }
-
-    /**
-     * totay's reminder date filter
-     */
-    protected function filterTodayReminderDate()
-    {
-        $rangePredefinedDateBegin = new Range();
-        $rangePredefinedDateEnd   = new Range();
-
-        $rangePredefinedDateBegin
-            ->addField('reminderDate', ['gte' => (new \DateTime())->setTime(0, 0, 0)->format('c')]);
-        $rangePredefinedDateEnd
-            ->addField('reminderDate', ['lte' => (new \DateTime())->setTime(23, 59, 59)->format('c')]);
 
         $this->query->addMust($rangePredefinedDateBegin);
         $this->query->addMust($rangePredefinedDateEnd);

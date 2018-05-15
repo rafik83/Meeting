@@ -69,8 +69,17 @@ class UpdateProfileHandler
 
             if ($templateObject instanceof UploadObject) {
                 try {
-                    $participantData = $this->uploadFileHandler
-                        ->handle(new UploadFile($templateObject, $participantData));
+                    $participantData = $this
+                        ->uploadFileHandler
+                        ->handle(
+                            new UploadFile(
+                                $participant->getSheet()->getEvent(),
+                                $participant->getUser(),
+                                $templateObject,
+                                $participantData
+                            )
+                        )
+                    ;
                 } catch (UploadFileException $exception) {
                 }
 
