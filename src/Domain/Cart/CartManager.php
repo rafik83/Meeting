@@ -644,10 +644,4 @@ class CartManager
             $cart->removeRow($participantCartRow);
         }
     }
-
-    public function emptyProductAttributedToParticipant(Cart $cart): void
-    {
-        // @todo: call ProductAttributedToParticipantSetter::removeForSheet
-        $this->productAttributedToParticipantRepository->removeForSheet($cart->getSheet());
-    }
 }

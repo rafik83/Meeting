@@ -13,8 +13,8 @@ namespace Proximum\Vimeet\Application\Command\Sheet\ChangeType;
 use Proximum\Vimeet\Domain\Cart\CartManager;
 use Proximum\Vimeet\Domain\Model\Order;
 use Proximum\Vimeet\Domain\Participant\ParticipantProductSetter;
+use Proximum\Vimeet\Domain\ProductAttributedToParticipant\ProductsAttributedToParticipantRemoveAllBySheet;
 use Proximum\Vimeet\Domain\Repository\OrderRepositoryInterface;
-use Proximum\Vimeet\Domain\Repository\ProductAttributedToParticipantRepositoryInterface;
 
 class CancelPackageHandler
 {
@@ -27,19 +27,19 @@ class CancelPackageHandler
     /** @var ParticipantProductSetter */
     private $participantProductSetter;
 
-    /** @var ProductAttributedToParticipantRepositoryInterface */
-    private $productAttributedToParticipantRepository;
+    /** @var ProductsAttributedToParticipantRemoveAllBySheet */
+    private $productsAttributedToParticipantRemoveAllBySheet;
 
     public function __construct(
         OrderRepositoryInterface $orderRepository,
         CartManager $cartManager,
         ParticipantProductSetter $participantProductSetter,
-        ProductAttributedToParticipantRepositoryInterface $productAttributedToParticipantRepository
+        ProductsAttributedToParticipantRemoveAllBySheet $productsAttributedToParticipantRemoveAllBySheet
     ) {
         $this->orderRepository = $orderRepository;
         $this->cartManager = $cartManager;
         $this->participantProductSetter = $participantProductSetter;
-        $this->productAttributedToParticipantRepository = $productAttributedToParticipantRepository;
+        $this->productsAttributedToParticipantRemoveAllBySheet = $productsAttributedToParticipantRemoveAllBySheet;
     }
 
     public function handle(CancelPackage $cancelPackage): void
@@ -62,6 +62,6 @@ class CancelPackageHandler
             $this->participantProductSetter->setProductOnParticipant($participant, null);
         }
 
-        $this->productAttributedToParticipantRepository->removeForSheet($cancelPackage->sheet);
+        $this->productsAttributedToParticipantRemoveAllBySheet->handle($cancelPackage->sheet);
     }
 }

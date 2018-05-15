@@ -24,6 +24,7 @@ use Proximum\Vimeet\Domain\Model\Product;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\Type;
 use Proximum\Vimeet\Domain\Model\User;
+use Proximum\Vimeet\Domain\ProductAttributedToParticipant\ProductsAttributedToParticipantRemoveAllBySheet;
 use Proximum\Vimeet\Infrastructure\Adapter\DelayedEventDispatcher;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
 
@@ -51,13 +52,19 @@ class SelectPlanHandlerTest extends TestCase
         $packageStepDone = new StepDoneEvent($sheet, 'plan');
         $eventDispatcher->dispatch(Events::PACKAGE_STEP_DONE, $packageStepDone)->shouldBeCalled();
 
+        $productsAttributedToParticipantRemoveAllBySheet = $this->prophesize(
+            ProductsAttributedToParticipantRemoveAllBySheet::class
+        );
+        $productsAttributedToParticipantRemoveAllBySheet->handle($sheet)->shouldNotBeCalled();
+
         $plans       = new SelectPlan($sheet, 1);
         $plans->plan = $product;
 
         $plansHandler = new SelectPlanHandler(
             $cartManager->reveal(),
             $buyableObjectResolver->reveal(),
-            $eventDispatcher->reveal()
+            $eventDispatcher->reveal(),
+            $productsAttributedToParticipantRemoveAllBySheet->reveal()
         );
         $plansHandler->handle($plans);
     }
@@ -78,7 +85,6 @@ class SelectPlanHandlerTest extends TestCase
         // Mock
         $cartManager           = $this->prophesize(CartManager::class);
         $buyableObjectResolver = $this->prophesize(BuyableObjectResolver::class);
-        $cartManager->emptyProductAttributedToParticipant($actualCart)->shouldBeCalled();
         $cartManager->getCart($sheet, 1)->shouldBeCalled()->willReturn($actualCart);
         $cartManager->deleteCartStep($actualCart)->shouldBeCalled();
         $cartManager->save(Argument::that(function (Cart $cart) use ($expectedCart) {
@@ -91,13 +97,19 @@ class SelectPlanHandlerTest extends TestCase
         $packageStepDone = new StepDoneEvent($sheet, 'plan');
         $eventDispatcher->dispatch(Events::PACKAGE_STEP_DONE, $packageStepDone)->shouldBeCalled();
 
+        $productsAttributedToParticipantRemoveAllBySheet = $this->prophesize(
+            ProductsAttributedToParticipantRemoveAllBySheet::class
+        );
+        $productsAttributedToParticipantRemoveAllBySheet->handle($sheet)->shouldBeCalled();
+
         $plans       = new SelectPlan($sheet, 1);
         $plans->plan = $product2;
 
         $plansHandler = new SelectPlanHandler(
             $cartManager->reveal(),
             $buyableObjectResolver->reveal(),
-            $eventDispatcher->reveal()
+            $eventDispatcher->reveal(),
+            $productsAttributedToParticipantRemoveAllBySheet->reveal()
         );
         $plansHandler->handle($plans);
     }

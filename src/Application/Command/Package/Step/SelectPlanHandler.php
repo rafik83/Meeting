@@ -15,6 +15,7 @@ use Proximum\Vimeet\Application\Event\Package\StepDoneEvent;
 use Proximum\Vimeet\Domain\Cart\BuyableObjectResolver;
 use Proximum\Vimeet\Domain\Cart\CartManager;
 use Proximum\Vimeet\Domain\Package\Funnel\Step;
+use Proximum\Vimeet\Domain\ProductAttributedToParticipant\ProductsAttributedToParticipantRemoveAllBySheet;
 use Proximum\Vimeet\Infrastructure\Adapter\DelayedEventDispatcher;
 
 class SelectPlanHandler
@@ -34,21 +35,19 @@ class SelectPlanHandler
      */
     private $eventDispatcher;
 
-    /**
-     * SelectPlanHandler constructor.
-     *
-     * @param CartManager            $cartManager
-     * @param BuyableObjectResolver  $buyableObjectResolver
-     * @param DelayedEventDispatcher $eventDispatcher
-     */
+    /** @var ProductsAttributedToParticipantRemoveAllBySheet */
+    private $productsAttributedToParticipantRemoveAllBySheet;
+
     public function __construct(
         CartManager $cartManager,
         BuyableObjectResolver $buyableObjectResolver,
-        DelayedEventDispatcher $eventDispatcher
+        DelayedEventDispatcher $eventDispatcher,
+        ProductsAttributedToParticipantRemoveAllBySheet $productsAttributedToParticipantRemoveAllBySheet
     ) {
-        $this->cartManager           = $cartManager;
+        $this->cartManager = $cartManager;
         $this->buyableObjectResolver = $buyableObjectResolver;
-        $this->eventDispatcher       = $eventDispatcher;
+        $this->eventDispatcher = $eventDispatcher;
+        $this->productsAttributedToParticipantRemoveAllBySheet = $productsAttributedToParticipantRemoveAllBySheet;
     }
 
     /**
@@ -62,7 +61,7 @@ class SelectPlanHandler
 
         // previous plan different from new selected plan
         if (null !== $previousPlan && $previousPlan->getProduct() !== $selectPlan->plan) {
-            $this->cartManager->emptyProductAttributedToParticipant($cart);
+            $this->productsAttributedToParticipantRemoveAllBySheet->handle($selectPlan->sheet);
             $cart->clear();
         }
 
