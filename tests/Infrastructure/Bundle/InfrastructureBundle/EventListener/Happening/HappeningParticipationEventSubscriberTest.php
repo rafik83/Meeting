@@ -66,6 +66,7 @@ class HappeningParticipationEventSubscriberTest extends TestCase
 
         $mail = new HappeningParticipationAutomaticallyUpdatedMail(
             $happeningParticipationView,
+            $event->reveal(),
             'sender@mail.fr',
             'owner@mail.fr',
             'fr'

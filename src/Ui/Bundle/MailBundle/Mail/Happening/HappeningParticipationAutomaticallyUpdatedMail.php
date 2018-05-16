@@ -12,6 +12,7 @@ namespace Proximum\Vimeet\Ui\Bundle\MailBundle\Mail\Happening;
 
 use Proximum\Vimeet\Application\Components\Mail\AbstractMail;
 use Proximum\Vimeet\Application\Event\Events;
+use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\View\Happening\HappeningParticipationView;
 
 class HappeningParticipationAutomaticallyUpdatedMail extends AbstractMail
@@ -28,14 +29,19 @@ class HappeningParticipationAutomaticallyUpdatedMail extends AbstractMail
     /** @var HappeningParticipationView[] */
     public $happeningParticipationViews;
 
+    /** @var Event */
+    public $event;
+
     public function __construct(
         array $happeningParticipationViews,
+        Event $event,
         $sender,
         $receiver,
         $locale
     ) {
         parent::__construct($sender, $receiver, $locale);
 
+        $this->event = $event;
         $this->happeningParticipationViews = $happeningParticipationViews;
     }
 }

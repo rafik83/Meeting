@@ -19,6 +19,7 @@ use Proximum\Vimeet\Domain\Model\Happening;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\ProductAttributedToParticipant\ParticipantWithAttributedProductUpdated;
+use Proximum\Vimeet\Domain\View\Happening\HappeningParticipationView;
 
 class ParticipateToHappeningsByProduct
 {
@@ -93,9 +94,21 @@ class ParticipateToHappeningsByProduct
             return;
         }
 
+        $happeningParticipationViewByHappeningNotEmpty = array_filter(
+            $happeningParticipationViewByHappening,
+            function(HappeningParticipationView $happeningParticipationView) {
+                return !empty($happeningParticipationView->addedParticipants) ||
+                    !empty($happeningParticipationView->removedParticipants);
+            }
+        );
+
+        if (empty($happeningParticipationViewByHappeningNotEmpty)) {
+            return;
+        }
+
         $this->delayedEventDispatcher->dispatch(
             Events::HAPPENING_PARTICIPATION_AUTOMATICALLY_UPDATED,
-            new HappeningParticipationAutomaticallyUpdatedEvent($happeningParticipationViewByHappening, $sheet)
+            new HappeningParticipationAutomaticallyUpdatedEvent($happeningParticipationViewByHappeningNotEmpty, $sheet)
         );
     }
 

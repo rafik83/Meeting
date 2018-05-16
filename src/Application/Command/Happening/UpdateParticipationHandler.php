@@ -91,9 +91,16 @@ class UpdateParticipationHandler
             $updateParticipation->happening
         );
 
+        $newlyParticipantsAdded = [];
+        foreach ($participantsToHappening as $participant) {
+            if (!\in_array($participant, $previousParticipants, true)) {
+                $newlyParticipantsAdded[] = $participant;
+            }
+        }
+
         return new HappeningParticipationView(
             $updateParticipation->happening,
-            $participantsToHappening,
+            $newlyParticipantsAdded,
             $removedParticipants
         );
     }
