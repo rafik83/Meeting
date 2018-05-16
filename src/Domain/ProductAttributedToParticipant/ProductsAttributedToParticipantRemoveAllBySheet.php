@@ -10,12 +10,16 @@
 
 namespace Proximum\Vimeet\Domain\ProductAttributedToParticipant;
 
+use Proximum\Vimeet\Domain\Happening\ParticipateToHappeningsByProduct;
 use Proximum\Vimeet\Domain\Model\Product;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Repository\ProductAttributedToParticipantRepositoryInterface;
 
 class ProductsAttributedToParticipantRemoveAllBySheet
 {
+    /** @var ParticipateToHappeningsByProduct */
+    private $participateToHappeningsByProduct;
+
     /** @var ProductAttributedToParticipantRepositoryInterface */
     private $productAttributedToParticipantRepository;
 
@@ -23,9 +27,11 @@ class ProductsAttributedToParticipantRemoveAllBySheet
     private $productAttributedToParticipantSetter;
 
     public function __construct(
+        ParticipateToHappeningsByProduct $participateToHappeningsByProduct,
         ProductAttributedToParticipantRepositoryInterface $productAttributedToParticipantRepository,
         ProductAttributedToParticipantSetter $productAttributedToParticipantSetter
     ) {
+        $this->participateToHappeningsByProduct = $participateToHappeningsByProduct;
         $this->productAttributedToParticipantRepository = $productAttributedToParticipantRepository;
         $this->productAttributedToParticipantSetter = $productAttributedToParticipantSetter;
     }
@@ -55,5 +61,7 @@ class ProductsAttributedToParticipantRemoveAllBySheet
         }
 
         $this->productAttributedToParticipantRepository->removeBatch($productsAttributedToParticipant);
+
+        $this->participateToHappeningsByProduct->handle($sheet);
     }
 }

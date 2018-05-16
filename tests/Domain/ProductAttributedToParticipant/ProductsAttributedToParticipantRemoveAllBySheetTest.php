@@ -10,6 +10,7 @@
 
 namespace Proximum\Vimeet\Tests\Domain\ProductAttributedToParticipant;
 
+use Proximum\Vimeet\Domain\Happening\ParticipateToHappeningsByProduct;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Product;
 use Proximum\Vimeet\Domain\Model\ProductAttributedToParticipant;
@@ -64,7 +65,11 @@ class ProductsAttributedToParticipantRemoveAllBySheetTest extends TestCase
             ->shouldBeCalled()
         ;
 
+        $participateToHappeningsByProduct = $this->prophesize(ParticipateToHappeningsByProduct::class);
+        $participateToHappeningsByProduct->handle($sheet->reveal())->shouldBeCalled();
+
         $productsAttributedToParticipantRemoveAllBySheet = new ProductsAttributedToParticipantRemoveAllBySheet(
+            $participateToHappeningsByProduct->reveal(),
             $productAttributedToParticipantRepository->reveal(),
             $productAttributedToParticipantSetter->reveal()
         );

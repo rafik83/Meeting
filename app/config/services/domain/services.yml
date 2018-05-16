@@ -17,6 +17,7 @@ services:
 
     Proximum\Vimeet\Domain\ProductAttributedToParticipant\ProductsAttributedToParticipantRemoveAllBySheet:
         arguments:
+            - '@Proximum\Vimeet\Domain\Happening\ParticipateToHappeningsByProduct'
             - '@Proximum\Vimeet\Infrastructure\Repository\ProductAttributedToParticipantRepository'
             - '@Proximum\Vimeet\Domain\ProductAttributedToParticipant\ProductAttributedToParticipantSetter'
 
