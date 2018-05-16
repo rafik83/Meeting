@@ -58,7 +58,7 @@ class ProductAttributedToParticipantRepository implements ProductAttributedToPar
             $this->entityManager->remove($productAttributedToParticipant);
         }
 
-        $this->entityManager->flush($productAttributedToParticipants);
+        $this->entityManager->flush();
     }
 
     /**
