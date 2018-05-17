@@ -15,6 +15,7 @@ use Proximum\Vimeet\Application\Command\Participant\Upload\UploadFileException;
 use Proximum\Vimeet\Application\Command\Register\ParticipantStep;
 use Proximum\Vimeet\Application\Command\Register\RegisterNewUser;
 use Proximum\Vimeet\Application\Command\User\Participate;
+use Proximum\Vimeet\Application\Components\Sheet\Template\Tag;
 use Proximum\Vimeet\Application\Exception\User\EmailAlreadyExistsException;
 use Proximum\Vimeet\Application\Query\Participant\CardViewQuery;
 use Proximum\Vimeet\Application\Query\Register\PreFillUserData;
@@ -208,7 +209,14 @@ class RegisterController extends Controller
         ]);
 
         if ($form->handleRequest($request)->isSubmitted() && $form->isValid()) {
-            $data = $this->handleData($event, $user, $registrationTemplate, $form, $participantBlock->getData());
+            $data = $this->handleData(
+                $event,
+                $user,
+                $registrationTemplate,
+                $form,
+                $participantBlock->getData(),
+                $request->getLocale()
+            );
 
             $participate = new Participate(
                 $userDomain->getUser(),
@@ -311,7 +319,8 @@ class RegisterController extends Controller
                 $userDomain->getUser(),
                 $registrationTemplate,
                 $form,
-                $participantBlock->getData()
+                $participantBlock->getData(),
+                $request->getLocale()
             );
 
             if ($form->isValid()) {
@@ -375,21 +384,13 @@ class RegisterController extends Controller
         }
     }
 
-    /**
-     * @param Event         $event
-     * @param User          $user
-     * @param TemplateData  $registrationTemplate
-     * @param FormInterface $form
-     * @param array         $data
-     *
-     * @return array
-     */
     private function handleData(
         Event $event,
         User $user,
         TemplateData $registrationTemplate,
         FormInterface $form,
-        array $data
+        array $data,
+        string $locale
     ) {
         $data = array_filter($data, function ($value) { return null !== $value; });
 
@@ -399,10 +400,21 @@ class RegisterController extends Controller
             if ($form->has($key) && null !== $form->get($key)->get('file')->getData()) {
                 $file = $form->get($key)->get('file')->getData();
 
+                $owner = $user;
+
+                if ($object->hasTag(Tag::SHEET_DATA)) {
+                    try {
+                        $sheet = $this->get('sheet.sheet_guesser')->getUserSheet($this->getUser(), $event, $locale);
+                        $owner = $sheet->getOwner();
+                    } catch (\Exception $exception) {
+                        $owner = $user;
+                    }
+                }
+
                 if ($file instanceof UploadedFile) {
                     try {
                         $data = $this->get('tactician.commandbus')->handle(
-                            new UploadFile($event, $user, $object, $data)
+                            new UploadFile($event, $owner, $object, $data)
                         );
                     } catch (UploadFileException $exception) {
                         $form->get($key)->get('file')->addError(new FormError($exception->getMessage()));

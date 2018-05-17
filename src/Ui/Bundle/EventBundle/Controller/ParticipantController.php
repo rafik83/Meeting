@@ -140,6 +140,7 @@ class ParticipantController extends Controller
         return $this->render('EventBundle:Participant:updateProfile.html.twig', [
             'event' => $eventDomain->getEvent(),
             'sheet' => $sheet,
+            'participant' => $participant,
             'form'  => $form->createView(),
         ]);
     }

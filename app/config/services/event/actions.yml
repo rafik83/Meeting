@@ -32,3 +32,14 @@ services:
         arguments:
             - '@adapter.authorization_checker'
             - '@Proximum\Vimeet\Ui\Bundle\EventBundle\Handler\Happening\ParticipateHandler'
+
+    #
+    # Download file
+    #
+    Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\DownloadFileAction:
+        arguments:
+            - '@adapter.authorization_checker'
+            - '@template.template_data_factory'
+            - '@Proximum\Vimeet\Infrastructure\Encryption\UserEventDecryptFileAdapter'
+            - '%infrastructure.encrypted_files_path%'
+            - '%kernel.project_dir%/web'

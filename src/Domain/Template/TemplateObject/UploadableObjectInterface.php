@@ -16,4 +16,5 @@ interface UploadableObjectInterface extends ContentObjectInterface
 {
     public function getFile(): ?UploadedFile;
     public function setFile(?UploadedFile $file): void;
+    public function hasTag($tag);
 }

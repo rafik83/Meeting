@@ -1,7 +1,20 @@
 {% set uploadObject = child.vars.value %}
 {% if uploadObject.isUploadAndHasPath is defined and uploadObject.isUploadAndHasPath %}
+    {% set path = path('event_sheet_download_file', {
+        'sheet': sheet.id,
+        'objectKey': uploadObject.key
+    }) %}
+
+    {% if participant is defined and participant is not empty %}
+        {% set path = path('event_sheet_participant_download_file', {
+            'sheet': sheet.id,
+            'participant': participant.id,
+            'objectKey': uploadObject.key
+        }) %}
+    {% endif %}
+
     <div class="text-center">
-        <a href="{{ asset(uploadObject.data.path) }}" download>
+        <a href="{{ path }}">
             {% if uploadObject.isImageFormatAndNotCrypted %}
                 <img class="center-block" src="{{ asset(uploadObject.data.path)|imagine_filter('upload_object') }}"/>
             {% endif %}

@@ -328,7 +328,7 @@ class Block extends AbstractChild
     /**
      * @param string $key
      *
-     * @throws \Exception
+     * @throws ObjectNotFoundException
      *
      * @return TemplateObject
      */

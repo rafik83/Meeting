@@ -24,7 +24,7 @@
                             {% endfor %}
                         {% endif %}
                         {{ form_row(child) }}
-                        {% include '@Event/uploadedObjectPreview.html.twig' with {'child': child} only %}
+                        {% include '@Event/uploadedObjectPreview.html.twig' %}
                     {% endfor %}
 
                     <div class="validation">

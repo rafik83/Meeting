@@ -72,7 +72,7 @@ class UpdateCompanyHandler
                     $companyData = $this
                         ->uploadFileHandler
                         ->handle(
-                            new UploadFile($sheet->getEvent(), $participant->getUser(), $templateObject, $companyData)
+                            new UploadFile($sheet->getEvent(), $sheet->getOwner(), $templateObject, $companyData)
                         )
                     ;
                 } catch (UploadFileException $exception) {
