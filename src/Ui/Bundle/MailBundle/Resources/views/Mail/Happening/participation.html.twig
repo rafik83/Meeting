@@ -2,6 +2,7 @@
 
 {% block body %}
     {% set locale = mail.event.availableLocale(mail.locale) %}
+    <p>{{ 'mail.happening.participation.intro'|trans({}, 'mail', mail.locale) }}</p>
     {% for happeningParticipationView in mail.happeningParticipationViews %}
         {{ happeningParticipationView.happening.title(locale) }}<br/>
         <ul>
