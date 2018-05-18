@@ -51,6 +51,7 @@ final class Tag
     public const SHEET_WEBSITE               = 'sheet_website';
     public const SHEET_PHONE                 = 'sheet_phone';
     public const SHEET_DESCRIPTION           = 'sheet_description';
+    public const SHEET_LOGO                  = 'sheet_logo';
 
     // Setter
     public const PARTICIPANT_DATA = 'participant_data';
@@ -148,6 +149,7 @@ final class Tag
             self::SHEET_WEBSITE,
             self::SHEET_PHONE,
             self::SHEET_DESCRIPTION,
+            self::SHEET_LOGO,
         ];
     }
 
@@ -169,6 +171,7 @@ final class Tag
             self::SHEET_COUNTRY,
             self::SHEET_PHONE,
             self::SHEET_DESCRIPTION,
+            self::SHEET_LOGO,
             self::PARTICIPANT_POSITION,
         ];
     }

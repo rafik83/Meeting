@@ -94,7 +94,7 @@
                             {{ include('AdminBundle:Template/Object:editable-text.html.twig', { 'locale': locale, 'sheet_tags': sheet_tags }, false) }}
                             {{ include('AdminBundle:Template/Object:button-link.html.twig', { 'locale': locale }, false) }}
                             {{ include('AdminBundle:Template/Object:participant.html.twig', { 'locale': locale }, false) }}
-                            {{ include('AdminBundle:Template/Object:image.html.twig', { 'locale': locale,'products': products }, false) }}
+                            {{ include('AdminBundle:Template/Object:image.html.twig', { 'locale': locale,'products': products, 'sheet_tags': sheet_tags }, false) }}
                             {{ include('AdminBundle:Template/Object:tag.html.twig', { 'locale': locale, 'sheet_tags': sheet_tags }, false) }}
                             {{ include('AdminBundle:Template/Object:collection.html.twig', { 'locale': locale }, false) }}
                             {{ include('AdminBundle:Template/Object:nomenclature.html.twig', { 'locale': locale, 'nomenclatures': nomenclatures, 'sheet_tags': sheet_tags, 'sheet_template_tags': sheet_template_tags|default([]) }, false) }}

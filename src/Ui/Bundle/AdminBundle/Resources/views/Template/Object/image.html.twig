@@ -93,7 +93,23 @@
                                         'registrationTemplateTagView': registrationTemplateTagView,
                                     }, false) }}
                                 {% endif %}
+
+                                {% if sheet_tags is defined %}
+                                    <div class="form-group">
+                                        <label class="form-label" for="tags">
+                                            {{ 'template.sheet_template.tags'|trans }}
+                                        </label>
+                                        <select class="form-control select2-builder" name="tags" multiple="multiple">
+                                            {% for tag in sheet_tags|default([]) %}
+                                                <option value="{{ tag }}" {% if tag in config.tags %}selected="selected"{% endif %}>
+                                                    {{ ('template.tag.' ~ tag)|trans({}, 'templates') }}
+                                                </option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                {% endif %}
                             </div>
+
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-default" data-dismiss="modal">{{ 'template.action.close'|trans }}</button>
                                 <button type="button" class="btn btn-primary save-configuration">{{ 'template.action.save'|trans }}</button>
