@@ -92,9 +92,7 @@
                                         'config': config,
                                         'registrationTemplateTagView': registrationTemplateTagView,
                                     }, false) }}
-                                {% endif %}
-
-                                {% if sheet_tags is defined %}
+                                {% elseif sheet_tags is defined %}
                                     <div class="form-group">
                                         <label class="form-label" for="tags">
                                             {{ 'template.sheet_template.tags'|trans }}
