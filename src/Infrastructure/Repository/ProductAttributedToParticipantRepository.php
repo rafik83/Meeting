@@ -14,7 +14,6 @@ use Doctrine\ORM\EntityManager;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Product;
 use Proximum\Vimeet\Domain\Model\ProductAttributedToParticipant;
-use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Repository\ProductAttributedToParticipantRepositoryInterface;
 
 class ProductAttributedToParticipantRepository implements ProductAttributedToParticipantRepositoryInterface
@@ -59,25 +58,7 @@ class ProductAttributedToParticipantRepository implements ProductAttributedToPar
             $this->entityManager->remove($productAttributedToParticipant);
         }
 
-        $this->entityManager->flush($productAttributedToParticipants);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function removeForSheet(Sheet $sheet): void
-    {
-        $productAttributedToParticipants = $this->entityManager
-            ->createQueryBuilder()
-            ->select('productAttributedToParticipant')
-            ->from(ProductAttributedToParticipant::class, 'productAttributedToParticipant')
-            ->join('productAttributedToParticipant.participant', 'participant', 'WITH', 'participant.sheet = :sheet')
-            ->setParameter('sheet', $sheet)
-            ->getQuery()
-            ->getResult()
-        ;
-
-        $this->removeBatch($productAttributedToParticipants);
+        $this->entityManager->flush();
     }
 
     /**

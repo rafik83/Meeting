@@ -19,6 +19,7 @@ use Proximum\Vimeet\Domain\Model\Order;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Participant\ParticipantProductSetter;
+use Proximum\Vimeet\Domain\ProductAttributedToParticipant\ProductsAttributedToParticipantRemoveAllBySheet;
 use Proximum\Vimeet\Domain\Repository\OrderRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\ProductAttributedToParticipantRepositoryInterface;
 
@@ -37,7 +38,7 @@ class CancelPackageHandlerTest extends TestCase
     private $sheet;
 
     /** @var ObjectProphecy */
-    private $productAttributedToParticipantRepository;
+    private $productsAttributedToParticipantRemoveAllBySheet;
 
     public function setUp(): void
     {
@@ -45,7 +46,9 @@ class CancelPackageHandlerTest extends TestCase
         $this->orderRepository = $this->prophesize(OrderRepositoryInterface::class);
         $this->cartManager = $this->prophesize(CartManager::class);
         $this->participantProductSetter = $this->prophesize(ParticipantProductSetter::class);
-        $this->productAttributedToParticipantRepository = $this->prophesize(ProductAttributedToParticipantRepositoryInterface::class);
+        $this->productsAttributedToParticipantRemoveAllBySheet = $this->prophesize(
+            ProductsAttributedToParticipantRemoveAllBySheet::class
+        );
     }
 
     public function testWithoutOrder(): void
@@ -59,14 +62,15 @@ class CancelPackageHandlerTest extends TestCase
         $this->sheet->getParticipantsArray()->willReturn([$participant1->reveal(), $participant2->reveal()]);
         $this->participantProductSetter->setProductOnParticipant($participant1->reveal(), null)->shouldBeCalled();
         $this->participantProductSetter->setProductOnParticipant($participant2->reveal(), null)->shouldBeCalled();
-        $this->productAttributedToParticipantRepository->removeForSheet($this->sheet->reveal())->shouldBeCalled();
+
+        $this->productsAttributedToParticipantRemoveAllBySheet->handle($this->sheet->reveal())->shouldBeCalled();
 
         $command = new CancelPackage($this->sheet->reveal());
         $handler = new CancelPackageHandler(
             $this->orderRepository->reveal(),
             $this->cartManager->reveal(),
             $this->participantProductSetter->reveal(),
-            $this->productAttributedToParticipantRepository->reveal()
+            $this->productsAttributedToParticipantRemoveAllBySheet->reveal()
         );
         $handler->handle($command);
     }
@@ -86,14 +90,15 @@ class CancelPackageHandlerTest extends TestCase
         $this->sheet->getParticipantsArray()->willReturn([$participant1->reveal(), $participant2->reveal()]);
         $this->participantProductSetter->setProductOnParticipant($participant1->reveal(), null)->shouldBeCalled();
         $this->participantProductSetter->setProductOnParticipant($participant2->reveal(), null)->shouldBeCalled();
-        $this->productAttributedToParticipantRepository->removeForSheet($this->sheet->reveal())->shouldBeCalled();
+
+        $this->productsAttributedToParticipantRemoveAllBySheet->handle($this->sheet->reveal())->shouldBeCalled();
 
         $command = new CancelPackage($this->sheet->reveal());
         $handler = new CancelPackageHandler(
             $this->orderRepository->reveal(),
             $this->cartManager->reveal(),
             $this->participantProductSetter->reveal(),
-            $this->productAttributedToParticipantRepository->reveal()
+            $this->productsAttributedToParticipantRemoveAllBySheet->reveal()
         );
         $handler->handle($command);
     }

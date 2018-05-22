@@ -15,6 +15,12 @@ services:
 
     Proximum\Vimeet\Domain\ProductAttributedToParticipant\ParticipantWithAttributedProductUpdated: ~
 
+    Proximum\Vimeet\Domain\ProductAttributedToParticipant\ProductsAttributedToParticipantRemoveAllBySheet:
+        arguments:
+            - '@Proximum\Vimeet\Domain\Happening\ParticipateToHappeningsByProduct'
+            - '@Proximum\Vimeet\Infrastructure\Repository\ProductAttributedToParticipantRepository'
+            - '@Proximum\Vimeet\Domain\ProductAttributedToParticipant\ProductAttributedToParticipantSetter'
+
     domain.product.duplicator:
         class: Proximum\Vimeet\Domain\Product\Duplicator
         arguments:
