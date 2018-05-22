@@ -116,6 +116,11 @@ admin.agenda.tab.sheet.title.label: Fiches
 admin.agenda.tab.spot.title.label: Lieux
 admin.agenda.title: 'Gestion des rendez-vous'
 admin.agenda.usableSlots: 'Créneaux utilisables'
+admin.authentication_token.import.column.email: Email
+admin.authentication_token.import.column.expiration: 'Date d''expiration (si vide, limitée à la durée de l''événement)'
+admin.authentication_token.import.column.token: Token
+admin.authentication_token.import.preview: 'Aperçu de l''import des tokens d''authentification'
+admin.authentication_token.import.title: 'Importer des tokens d''authentification'
 admin.availabilityTimeRange.create.eventDaysInfo: 'Les jours de l''événement :'
 admin.availabilityTimeRange.create.title: 'Créer une plage de disponbilités'
 admin.availabilityTimeRange.list.column.begin: Début
@@ -913,11 +918,6 @@ admin.spot.title: Lieux
 admin.spot.unavailability: 'Ajouter des indisponibilités'
 admin.spot.visio.no: Non
 admin.spot.visio.yes: Oui
-admin.authentication_token.import.title: 'Importer des tokens d''authentification'
-admin.authentication_token.import.column.email: 'Email'
-admin.authentication_token.import.column.token: 'Token'
-admin.authentication_token.import.column.expiration: 'Date d''expiration (si vide, limitée à la durée de l''événement)'
-admin.authentication_token.import.preview: 'Aperçu de l''import des tokens d''authentification'
 admin.template_list.link: Templates
 admin.template_list.organizer_link: 'Mes Templates'
 admin.template.action.addLanguage: 'Ajouter une langue'

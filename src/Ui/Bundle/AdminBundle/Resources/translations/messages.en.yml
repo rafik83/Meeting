@@ -115,6 +115,11 @@ admin.agenda.tab.sheet.title.label: Profile
 admin.agenda.tab.spot.title.label: Spots
 admin.agenda.title: 'Meetings planner'
 admin.agenda.usableSlots: 'available slots'
+admin.authentication_token.import.column.email: Email
+admin.authentication_token.import.column.expiration: 'Expiration date (if empty, limited to the event duration)'
+admin.authentication_token.import.column.token: Token
+admin.authentication_token.import.preview: 'Authentication token preview'
+admin.authentication_token.import.title: 'Import authentication tokens'
 admin.availabilityTimeRange.create.eventDaysInfo: 'The days of the event:'
 admin.availabilityTimeRange.create.title: 'Create a range of availabilities'
 admin.availabilityTimeRange.list.column.begin: Start
@@ -910,11 +915,6 @@ admin.spot.title: spots
 admin.spot.unavailability: 'add unavailabilities'
 admin.spot.visio.no: 'no'
 admin.spot.visio.yes: 'yes'
-admin.authentication_token.import.title: 'Import authentication tokens'
-admin.authentication_token.import.column.email: 'Email'
-admin.authentication_token.import.column.token: 'Token'
-admin.authentication_token.import.column.expiration: 'Expiration date (if empty, limited to the event duration)'
-admin.authentication_token.import.preview: 'Authentication token preview'
 admin.template_list.link: templates
 admin.template_list.organizer_link: 'my templates'
 admin.template.action.addLanguage: 'add a language'

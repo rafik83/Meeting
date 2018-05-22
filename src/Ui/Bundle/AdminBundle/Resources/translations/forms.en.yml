@@ -53,6 +53,9 @@ form.admin.sheet.follower.un-assigned: unassigned
 form.archive_un_archive.children.archive.label: Archive
 form.archive_un_archive.children.unArchive.label: Unarchive
 form.archive_un_archive.confirm.submit.label: 'Do you confirm the action ?'
+form.authentication_token.children.file.label: 'tokens file'
+form.authentication_token.children.submit.label: 'import tokens'
+form.authentication_token.import.confirm: 'Do you want to import authentication tokens ?'
 form.availability_time_range_create.children.begin.label: 'Start of the range'
 form.availability_time_range_create.children.end.label: 'End of the range'
 form.availability_time_range_create.children.name.label: 'Backoffice name'
@@ -239,6 +242,8 @@ form.event_update.children.backgroundImage.label: 'background image'
 form.event_update.children.country.label: country
 form.event_update.children.currency.label: currency
 form.event_update.children.currency.placeholder: 'choose a currency for the event'
+form.event_update.children.disabledEmailChanging.label: 'Disabled email changing'
+form.event_update.children.disabledPasswordChanging.label: 'Disabled password changing'
 form.event_update.children.domain.label: 'domain (full label)'
 form.event_update.children.emailTeam.label: 'email of reception of the notifications (hidden copy)'
 form.event_update.children.fallback.label: 'language by default'
@@ -258,8 +263,6 @@ form.event_update.children.translations.prototype.children.description.label: 'p
 form.event_update.children.vat.label: 'VAT (%)'
 form.event_update.children.visible.label: Visible
 form.event_update.children.welcomeEnabled.label: 'welcoming popup'
-form.event_update.children.disabledEmailChanging.label: 'Disabled email changing'
-form.event_update.children.disabledPasswordChanging.label: 'Disabled password changing'
 form.event.children.invoicePrefix.help.label: 'To change prefix please contact us'
 form.extra_parameter_create.children.name.label: name
 form.extra_parameter_create.children.submit.label: register
@@ -842,9 +845,6 @@ form.spot_import.children.charset.label: 'file encoding'
 form.spot_import.children.file.label: 'spots file'
 form.spot_import.children.submit.label: 'import spots'
 form.spot.import.confirm: 'The import of new spots will delete the previous spots on this event. do you want to import the spots ?'
-form.authentication_token.children.file.label: 'tokens file'
-form.authentication_token.children.submit.label: 'import tokens'
-form.authentication_token.import.confirm: 'Do you want to import authentication tokens ?'
 form.template_add_locale.children.locale.label: language
 form.template_add_locale.children.submit.label: validate
 form.template_registration_update.children.submit.label: Save

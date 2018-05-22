@@ -27,11 +27,11 @@ mail.event.preregister.body: "%firstname% %lastname%, \n\nYour registration to %
 mail.event.preregister.end: ''
 mail.event.preregister.link: 'Your member area'
 mail.event.preregister.subject: 'You are pre-registered to %event%'
-mail.happening.participation.subject: ''
+mail.footer.contact: Contact
 mail.happening.participation.intro: ''
 mail.happening.participation.register: '%name% registered'
+mail.happening.participation.subject: ''
 mail.happening.participation.unregister: '%name% unregistered'
-mail.footer.contact: Contact
 mail.omz.export.intro: 'Hello, Here is the OMZ export for the event %eventTitle% :'
 mail.omz.export.link.click: 'Download the OMZ participant file'
 mail.omz.export.subject: 'OMZ export file'
