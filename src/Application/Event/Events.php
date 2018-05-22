@@ -103,4 +103,5 @@ final class Events
     public const TIP_EVENT_UPDATED = 'tip.event.updated';
     public const PARTICIPANT_PRODUCT_SET = 'participant.product.set';
     public const PARTICIPANT_CART_ROW_ADDED = 'participant.cart.row.added';
+    public const REMOVE_DECRYPTED_FILE = 'remove.decrypted.file';
 }
