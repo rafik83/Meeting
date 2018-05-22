@@ -1,9 +1,9 @@
 {% extends 'MailBundle:Mail:base.html.twig' %}
 
 {% block body %}
+    {% set locale = mail.event.availableLocale(mail.locale) %}
+    <p>{{ 'mail.happening.participation.intro'|trans({}, 'mail', mail.locale) }}</p>
     {% for happeningParticipationView in mail.happeningParticipationViews %}
-        {% set locale = event.availableLocale(mail.locale) %}
-
         {{ happeningParticipationView.happening.title(locale) }}<br/>
         <ul>
             {% for addedParticipant in happeningParticipationView.addedParticipants %}

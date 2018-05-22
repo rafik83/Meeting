@@ -46,6 +46,7 @@ class HappeningParticipationEventSubscriber implements EventSubscriberInterface
 
         $email = new HappeningParticipationAutomaticallyUpdatedMail(
             $event->happeningParticipationViews,
+            $event->sheet->getEvent(),
             $this->sender,
             $event->sheet->getOwner()->getEmail(),
             $locale
