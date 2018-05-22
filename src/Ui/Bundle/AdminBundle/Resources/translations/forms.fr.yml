@@ -53,6 +53,9 @@ form.admin.sheet.follower.un-assigned: 'Non assigné'
 form.archive_un_archive.children.archive.label: Archiver
 form.archive_un_archive.children.unArchive.label: Désarchiver
 form.archive_un_archive.confirm.submit.label: 'Êtes-vous sûr de vouloir réaliser cette action ?'
+form.authentication_token.children.file.label: 'Fichier des tokens'
+form.authentication_token.children.submit.label: 'Importer des tokens'
+form.authentication_token.import.confirm: 'Voulez-vous importer les tokens d''authentification ?'
 form.availability_time_range_create.children.begin.label: 'Début de la plage'
 form.availability_time_range_create.children.end.label: 'Fin de la plage'
 form.availability_time_range_create.children.name.label: 'Nom backoffice'
@@ -241,6 +244,8 @@ form.event_update.children.backgroundImage.label: 'Image de fond'
 form.event_update.children.country.label: Pays
 form.event_update.children.currency.label: Devise
 form.event_update.children.currency.placeholder: '-- Choisir une devise pour l''événement --'
+form.event_update.children.disabledEmailChanging.label: 'Changement d''email désactivé'
+form.event_update.children.disabledPasswordChanging.label: 'Changement de mot de passe désactivé'
 form.event_update.children.domain.label: 'Domaine (complet)'
 form.event_update.children.emailTeam.label: 'Email de réception des notifications en copie cachée'
 form.event_update.children.fallback.label: 'Langue par défaut'
@@ -260,8 +265,6 @@ form.event_update.children.translations.prototype.children.description.label: 'E
 form.event_update.children.vat.label: TVA
 form.event_update.children.visible.label: Visible
 form.event_update.children.welcomeEnabled.label: 'Popup de bienvenue'
-form.event_update.children.disabledEmailChanging.label: 'Changement d''email désactivé'
-form.event_update.children.disabledPasswordChanging.label: 'Changement de mot de passe désactivé'
 form.event.children.invoicePrefix.help.label: 'Changer de préfixe ? Nous contacter'
 form.extra_parameter_create.children.name.label: Nom
 form.extra_parameter_create.children.submit.label: Enregistrer
@@ -691,8 +694,6 @@ form.search_facet_update.children.submit.label: Enregistrer
 form.search_user_sheets_group.children.email.label: 'E-mail de l''utilisateur'
 form.search_user_sheets_group.children.submit.label: Suivant
 form.select_recipients.children.recipients.label: Destinataires
-form.sheet.reminderDate.children.begin.label: 'Début'
-form.sheet.reminderDate.children.end.label: 'Fin'
 form.sheet_attendance_choice.children.attend.choice.attend: Présent
 form.sheet_attendance_choice.children.attend.choice.cancel: Annuler
 form.sheet_attendance_choice.children.attend.label: 'Venue de la fiche'
@@ -817,6 +818,8 @@ form.sheet.messaging_campaign.create.name.label: 'Titre de campagne'
 form.sheet.messaging_campaign.create.submit.label: 'Terminer ma sélection'
 form.sheet.messaging_campaign.message.submit.label: Terminer
 form.sheet.messaging_campaign.recipients.submit.label: Valider
+form.sheet.reminderDate.children.begin.label: Début
+form.sheet.reminderDate.children.end.label: Fin
 form.sheet.sheetGroup.unAssignedGroup: 'Non assigné'
 form.spot_batch_create.children.active.label: Actif
 form.spot_batch_create.children.meetingCapacity.label: 'Capacité du nombre de RDV'
@@ -848,9 +851,6 @@ form.spot_import.children.charset.label: 'Encodage du fichier'
 form.spot_import.children.file.label: 'Fichier des lieux'
 form.spot_import.children.submit.label: 'Importer les lieux'
 form.spot.import.confirm: 'L''import de nouveaux lieux supprimera les lieux existants sur cet événement. Voulez vous importer les lieux ?'
-form.authentication_token.import.confirm: 'Voulez-vous importer les tokens d''authentification ?'
-form.authentication_token.children.file.label: 'Fichier des tokens'
-form.authentication_token.children.submit.label: 'Importer des tokens'
 form.template_add_locale.children.locale.label: Langue
 form.template_add_locale.children.submit.label: Valider
 form.template_registration_update.children.submit.label: Enregistrer

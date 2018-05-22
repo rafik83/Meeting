@@ -1,4 +1,5 @@
 account.profile.updateAvatar.error: 'An error occured during the loading of your photo0'
+account.profile.uploadedObject.error: 'An error occurred while uploading your file'
 'Bad credentials.': 'Bad credentials.'
 login.error.sheetDisabled: 'Your participation has been disabled.'
 package.participantsProduct.participantHasMeetingOrHappeningOnPreviousAvailabilityTimeRange: 'This participant is registered for meetings and/or conferences in time slots that will not be accessible to him if you change this product'
