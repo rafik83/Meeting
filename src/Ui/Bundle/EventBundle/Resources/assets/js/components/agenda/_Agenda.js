@@ -43,9 +43,7 @@ function Agenda(element) {
     }
 
     [].forEach.call(element.querySelectorAll('.meet.available'), function(slotAvailable) {
-        if ('true' === slotAvailable.getAttribute('data-is-close-meeting-request-date-valid')) {
-            AvailableSheetsForSlot(slotAvailable, slotAvailable.getAttribute('data-slot-id'));
-        }
+        AvailableSheetsForSlot(slotAvailable, slotAvailable.getAttribute('data-slot-id'));
     });
 
     this.resize.on('resized', this.onResize);

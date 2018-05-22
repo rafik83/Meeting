@@ -135,10 +135,6 @@ class AgendaController extends Controller
             ]);
         }
 
-        $isCloseMeetingRequestDateValid = $this
-            ->get('domain.key_dates.checker.meeting_request_access_checker')
-            ->allowedToAccess($eventDomain->getEvent());
-
         return $this->render('EventBundle:Agenda:index.html.twig', [
             'event' => $eventDomain->getEvent(),
             'agenda' => $agenda,
@@ -147,7 +143,6 @@ class AgendaController extends Controller
             'sendCodeForm' => $sendCodeForm,
             'sendCodeViewTranslationViews' => $sendCodeViewTranslationViews,
             'ignorePhoneConfirmationUrl' => $ignorePhoneConfirmationUrl,
-            'isCloseMeetingRequestDateValid' => $isCloseMeetingRequestDateValid,
         ]);
     }
 

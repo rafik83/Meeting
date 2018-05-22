@@ -3766,6 +3766,7 @@ services:
             - '@domain.event.day.dday_guesser'
             - '@vimeet_infrastructure.repository.meeting_slot_repository'
             - '@datetime'
+            - '@domain.key_dates.checker.meeting_request_access_checker'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Agenda\AvailableSheets\AvailableSlotsByParticipantAndDayQuery }
     query.agenda.available_sheets.available_slots_by_participant_query_handler:
