@@ -16,6 +16,7 @@ use Proximum\Vimeet\Application\Command\Sheet\Batch\PrintPlanningHandler;
 use Proximum\Vimeet\Domain\Admin\Follower\FollowerConstant;
 use Proximum\Vimeet\Domain\Model\Sheet\Constant;
 use Proximum\Vimeet\Domain\Model\Sheet\Group;
+use Proximum\Vimeet\Domain\Model\Type;
 
 class BatchHandler
 {
@@ -224,6 +225,10 @@ class BatchHandler
                     $batch->filters['orderBy'] ?? Constant::ORDER_BY_ALPHABETICAL
                 )
             );
+        }
+
+        if ($batch->duplicateToType instanceof Type) {
+            // todo : Handler to duplicate sheets.
         }
 
         return new BatchResult([], $batch->getMessage() . 'no_action');

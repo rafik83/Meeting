@@ -133,6 +133,8 @@ interface TypeRepositoryInterface
      */
     public function getAllowedTypesByEvent(Admin $admin, Event $event);
 
+    public function getAllowedTypesExcludedCurrentEventByAdmin(Admin $admin, Event $excludedEvent, \DateTimeInterface $datetime): iterable;
+
     /**
      * @param Event      $event
      * @param string     $locale

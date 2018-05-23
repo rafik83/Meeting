@@ -3448,12 +3448,12 @@ services:
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Event\EventListQuery }
 
-    Proximum\Vimeet\Application\Query\Event\GetFutureEventsOrEventsWithoutDaysByAdminQueryHandler:
+    Proximum\Vimeet\Application\Query\Type\GetAllowedTypesByAdminQueryHandler:
         arguments:
-            - '@vimeet_infrastructure.repository.event_repository'
+            - '@vimeet_infrastructure.repository.type_repository'
             - '@datetime'
         tags:
-            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Event\GetFutureEventsOrEventsWithoutDaysByAdminQuery }
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Type\GetAllowedTypesByAdminQuery }
 
     query.sheet.group.group_view_handler:
         class: Proximum\Vimeet\Application\Query\Sheet\Group\GroupViewQueryHandler

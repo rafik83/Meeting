@@ -18,7 +18,8 @@ var $ = require('jquery'),
     TipPreview = require('./components/_TipPreview'),
     ToggleVisibility = require('./components/_ToggleVisibility'),
     CommercialStatusSelect = require('./components/_CommercialStatusSelect'),
-    AttributableProductToggleHappening = require('./components/_AttributableProductToggleHappening')
+    AttributableProductToggleHappening = require('./components/_AttributableProductToggleHappening'),
+    DuplicationSheetsModal = require('./components/_DuplicationSheetsModal')
 ;
 
 require('bootstrap');
@@ -159,6 +160,10 @@ function init(target) {
 
     [].forEach.call(target.querySelectorAll('[data-attributable-product-toggle-happening]'), function (element) {
         new AttributableProductToggleHappening(element, target);
+    });
+
+    [].forEach.call(target.querySelectorAll('.duplication-sheet'), function (element) {
+        new DuplicationSheetsModal(element, target.querySelector('#duplication-sheet'));
     });
 }
 

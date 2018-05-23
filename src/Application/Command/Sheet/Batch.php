@@ -13,6 +13,7 @@ namespace Proximum\Vimeet\Application\Command\Sheet;
 use Proximum\Vimeet\Domain\Model\Admin;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Sheet\Group;
+use Proximum\Vimeet\Domain\Model\Type;
 use Proximum\Vimeet\Domain\Planning\PlanningOrderedBy;
 
 class Batch extends AbstractBatch
@@ -110,6 +111,9 @@ class Batch extends AbstractBatch
 
     /** @var bool */
     public $printPlanning;
+
+    /** @var Type */
+    public $duplicateToType;
 
     /**
      * @param Event  $event
