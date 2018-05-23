@@ -33,6 +33,6 @@ class RemoveDecryptedFileSubscriber implements EventSubscriberInterface
 
     public function removeDecryptedFile(RemoveDecryptedFileEvent $event): void
     {
-        $this->fileSystemAdapter->remove([$event->path]);
+        $this->fileSystemAdapter->remove($event->path);
     }
 }

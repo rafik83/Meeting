@@ -93,7 +93,7 @@ class DownloadFileAction
                 $this->userEventDecryptFile->decryptFile(
                     $sheet->getEvent(),
                     $user,
-                    $this->encryptedFilesPath.$uploadObject->getPath(),
+                    $this->encryptedFilesPath . $uploadObject->getPath(),
                     $downloadPath
                 );
 
