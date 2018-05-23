@@ -49,7 +49,7 @@ class DateTimeToStringTransformer implements DataTransformerInterface
      */
     public function transform($value)
     {
-        if (null === $value) {
+        if (!$value) {
             return;
         }
 
