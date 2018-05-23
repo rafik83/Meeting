@@ -101,5 +101,5 @@ interface EventRepositoryInterface
      */
     public function findByDay(\DateTimeInterface $dateTime): array;
 
-    public function findFutureEventsOrEventsWithoutDaysByAdmin(Admin $admin, Event $excludedEvent): iterable;
+    public function findFutureEventsOrEventsWithoutDaysByAdmin(Admin $admin, Event $excludedEvent, \DateTimeInterface $dateTime): iterable;
 }

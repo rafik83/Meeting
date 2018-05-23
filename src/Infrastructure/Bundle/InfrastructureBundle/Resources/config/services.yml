@@ -3448,11 +3448,12 @@ services:
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Event\EventListQuery }
 
-    Proximum\Vimeet\Application\Query\Event\GetEventsWhoseSheetsCanBeDuplicatedQueryHandler:
+    Proximum\Vimeet\Application\Query\Event\GetFutureEventsOrEventsWithoutDaysByAdminQueryHandler:
         arguments:
             - '@vimeet_infrastructure.repository.event_repository'
+            - '@datetime'
         tags:
-            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Event\GetEventsWhoseSheetsCanBeDuplicatedQuery }
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Event\GetFutureEventsOrEventsWithoutDaysByAdminQuery }
 
     query.sheet.group.group_view_handler:
         class: Proximum\Vimeet\Application\Query\Sheet\Group\GroupViewQueryHandler

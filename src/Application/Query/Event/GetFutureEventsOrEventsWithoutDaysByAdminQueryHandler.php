@@ -17,16 +17,21 @@ class GetFutureEventsOrEventsWithoutDaysByAdminQueryHandler
     /** @var EventRepositoryInterface $eventRepository */
     private $eventRepository;
 
-    public function __construct(EventRepositoryInterface $eventRepository)
+    /** @var \DateTimeInterface */
+    private $datetime;
+
+    public function __construct(EventRepositoryInterface $eventRepository, \DateTimeInterface $datetime)
     {
         $this->eventRepository = $eventRepository;
+        $this->datetime = $datetime;
     }
 
     public function handle(GetFutureEventsOrEventsWithoutDaysByAdminQuery $query): iterable
     {
         return $this->eventRepository->findFutureEventsOrEventsWithoutDaysByAdmin(
             $query->admin,
-            $query->excludedEvent
+            $query->excludedEvent,
+            $this->datetime
         );
     }
 }
