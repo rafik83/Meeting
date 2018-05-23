@@ -49,15 +49,15 @@ class CatalogExternalController extends Controller
                 new SearchFacetExternalViewQuery($event, $locale)
             );
 
-            $categoryViews = $this->get('form_factory.search_facet_external_factory')
-                ->getCategoryViews($event, $locale);
+            $categoryViews = $searchFacetsView->hasCategory()
+                ? $this->get('form_factory.search_facet_external_factory')->getCategoryViews($event, $locale)
+                : null;
 
-            $typeViews = null;
 
-            if ($searchFacetsView->hasType()) {
-                $typeViews = $this->get('form_factory.search_facet_external_factory')
-                    ->getTypeViews($event, $locale);
-            }
+            $typeViews = $searchFacetsView->hasType()
+                ? $this->get('form_factory.search_facet_external_factory')->getTypeViews($event, $locale)
+                : null
+            ;
 
             $filters[SearchFields::FILTER_TYPE] = $typeViews;
             $filters[SearchFields::FILTER_CATEGORY] = $categoryViews;
