@@ -274,4 +274,32 @@ class EventRepository implements EventRepositoryInterface
 
         return $queryBuilder->getQuery()->getResult();
     }
+
+    public function findFutureEventsOrEventsWithoutDaysByAdmin(Admin $admin, Event $excludedEvent): iterable
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('event')
+            ->from(Event::class, 'event')
+            ->where('event <> :event')
+            ->setParameter('event', $excludedEvent)
+            ->leftJoin(
+                'event.days',
+                'days',
+                'WITH',
+                'days.startTime > CURRENT_TIMESTAMP()'
+            )
+            ->orderBy('event.title', 'ASC');
+
+        if ($admin->hasEvents()) {
+            $queryBuilder
+                ->andWhere('event IN (:events)')
+                ->setParameter('events', $admin->getEvents());
+        }
+
+        return $queryBuilder
+            ->getQuery()
+            ->getResult();
+    }
 }

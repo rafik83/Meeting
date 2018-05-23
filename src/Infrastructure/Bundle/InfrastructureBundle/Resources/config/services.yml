@@ -3448,6 +3448,12 @@ services:
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Event\EventListQuery }
 
+    Proximum\Vimeet\Application\Query\Event\GetEventsWhoseSheetsCanBeDuplicatedQueryHandler:
+        arguments:
+            - '@vimeet_infrastructure.repository.event_repository'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Event\GetEventsWhoseSheetsCanBeDuplicatedQuery }
+
     query.sheet.group.group_view_handler:
         class: Proximum\Vimeet\Application\Query\Sheet\Group\GroupViewQueryHandler
         arguments:
