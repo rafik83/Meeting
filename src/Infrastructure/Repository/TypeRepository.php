@@ -327,8 +327,9 @@ class TypeRepository implements TypeRepositoryInterface
         $queryBuilder = $this
             ->entityManager
             ->createQueryBuilder()
-            ->select('type')
+            ->select('type, typeTranslation')
             ->from(Type::class, 'type', 'type.id')
+            ->join('type.translations', 'typeTranslation')
             ->join('type.event', 'event', 'WITH', 'event != :excludedEvent')
             ->leftJoin('event.days', 'days')
             ->where('days.id IS NULL OR days.startTime > :datetime')
