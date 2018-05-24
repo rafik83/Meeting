@@ -13,6 +13,7 @@ namespace Proximum\Vimeet\Application\Query\Product;
 use Proximum\Vimeet\Application\View\Product\ProductView;
 use Proximum\Vimeet\Domain\Model\Product;
 use Proximum\Vimeet\Domain\Product\RemoveAuthorizationChecker;
+use Proximum\Vimeet\Domain\Repository\Order\RowRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\ProductRepositoryInterface;
 
 class ProductsViewQueryHandler
@@ -23,16 +24,22 @@ class ProductsViewQueryHandler
     /** @var RemoveAuthorizationChecker */
     private $removeAuthorizationChecker;
 
+    /** @var RowRepositoryInterface */
+    private $rowRepository;
+
     /**
      * @param ProductRepositoryInterface $productRepository
+     * @param RowRepositoryInterface     $rowRepository
      * @param RemoveAuthorizationChecker $removeAuthorizationChecker
      */
     public function __construct(
         ProductRepositoryInterface $productRepository,
+        RowRepositoryInterface $rowRepository,
         RemoveAuthorizationChecker $removeAuthorizationChecker
     ) {
         $this->productRepository = $productRepository;
         $this->removeAuthorizationChecker = $removeAuthorizationChecker;
+        $this->rowRepository = $rowRepository;
     }
 
     /**
@@ -43,13 +50,11 @@ class ProductsViewQueryHandler
     public function handle(ProductsViewQuery $query): array
     {
         $productViews = [];
-        $products = $this->productRepository->countByEvent($query->event);
+        $products = $this->productRepository->findByEventOrderedByProductTypeAndProductname($query->event);
         $this->removeAuthorizationChecker->preloadForEvent($query->event);
 
-        foreach ($products as $boughtAndProduct) {
-            /** @var Product $product */
-            $product = $boughtAndProduct[0];
-            $bought = (int) $boughtAndProduct['bought'];
+        foreach ($products as $product) {
+            $bought = $this->rowRepository->boughtByProduct($product);
 
             $productViews[] = new ProductView(
                 $product->getId(),

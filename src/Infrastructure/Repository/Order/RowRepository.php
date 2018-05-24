@@ -62,4 +62,21 @@ class RowRepository implements RowRepositoryInterface
 
         return $queryBuilder->getQuery()->getResult();
     }
+
+    public function boughtByProduct(Product $product): int
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('sum(orderRow.quantity) as bought')
+            ->from(Row::class, 'orderRow')
+            ->join('orderRow.order', '_order', 'WITH', 'orderRow.product = :product AND _order.cancelled = false')
+            ->setParameter('product', $product)
+            ->setMaxResults(1)
+        ;
+
+        $result = $queryBuilder->getQuery()->getOneOrNullResult();
+
+        return (int) $result['bought'];
+    }
 }
