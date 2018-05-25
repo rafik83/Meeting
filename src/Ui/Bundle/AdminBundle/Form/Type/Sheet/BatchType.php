@@ -100,7 +100,9 @@ class BatchType extends AbstractType
                 'choices' => $options['types'],
                 'choice_label' => function ($type) use ($options) {
                     if ($type instanceof Type) {
-                        return $type->getTitle($options['locale']);
+                        $locale = $type->getEvent()->getAvailableLocale($options['locale']);
+
+                        return $type->getTitle($locale);
                     }
 
                     return null;

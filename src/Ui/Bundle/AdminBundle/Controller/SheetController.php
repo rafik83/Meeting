@@ -106,8 +106,6 @@ class SheetController extends Controller
             ));
         }
 
-        $locale = $event->getAvailableLocale($request->getLocale());
-
         // Pagination
         try {
             $query = new PaginatedSheetListViewQuery(
@@ -115,7 +113,7 @@ class SheetController extends Controller
                 $filters,
                 $selectedSheetsPage,
                 self::SHEETS_PER_PAGE, // number of sheets by page
-                $locale,
+                $event->getAvailableLocale($request->getLocale()),
                 $this->getUser()
             );
             /** @var PaginatedResult $sheets */
@@ -139,7 +137,7 @@ class SheetController extends Controller
             }),
             'event' => $event,
             'types' => $types,
-            'locale' => $locale,
+            'locale' => $request->getLocale(),
             'action' => $this->generateUrl(
                 'admin_sheet_batch',
                 [
