@@ -459,14 +459,21 @@ class SheetController extends Controller
     private function getTypesByEvent(array $types, string $requestLocale): array
     {
         $typesByEvent = [];
+        $i = 0;
 
         /** @var Type $type */
+
         foreach ($types as $type) {
             $event = $type->getEvent();
 
-            $typesByEvent[$event->getId()]['id'] = $event->getId();
-            $typesByEvent[$event->getId()]['title'] = $type->getEvent()->getTitle();
-            $typesByEvent[$event->getId()]['types'][] = [
+            // Start from 0 to keep sorting while parsing array in javascript
+            if (isset($typesByEvent[$i]['id']) && $event->getId() !== $typesByEvent[$i]['id']) {
+                $i++;
+            }
+
+            $typesByEvent[$i]['id'] = $event->getId();
+            $typesByEvent[$i]['title'] = $type->getEvent()->getTitle();
+            $typesByEvent[$i]['types'][] = [
                 'id' => $type->getId(),
                 'title' => $type->getTitle($event->getAvailableLocale($requestLocale))
             ];

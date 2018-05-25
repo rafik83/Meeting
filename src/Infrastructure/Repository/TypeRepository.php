@@ -337,7 +337,7 @@ class TypeRepository implements TypeRepositoryInterface
                 'excludedEvent' => $excludedEvent,
                 'datetime' => $datetime
             ])
-            ->orderBy('event.title', 'ASC');
+            ->orderBy('event.title, typeTranslation.title', 'ASC');
 
         if ($admin->hasEvents()) {
             $queryBuilder
