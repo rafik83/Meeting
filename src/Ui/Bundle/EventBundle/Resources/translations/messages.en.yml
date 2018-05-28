@@ -36,7 +36,7 @@ catalog.action.meeting.request.refuse: 'Received proposal'
 catalog.action.meeting.request.show.refuse: 'Refused request'
 catalog.complete_sheet: 'View sheet details'
 catalog.external.modal.content: 'To access the full profile, you need to register to the event.'
-catalog.external.modal.content.logged: 'The schedule of appointment will be available on the %catalogueOnlineDate%'
+catalog.external.modal.content.logged: 'The schedule of appointment will be available on the %catalogOnlineDate%'
 catalog.meeting_request.approve: Approve
 catalog.meeting_request.create: 'Request a meeting'
 catalog.meeting_request.pending: 'Pending request'
