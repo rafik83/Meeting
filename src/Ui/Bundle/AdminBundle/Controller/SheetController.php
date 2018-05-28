@@ -472,7 +472,7 @@ class SheetController extends Controller
             }
 
             $typesByEvent[$i]['id'] = $event->getId();
-            $typesByEvent[$i]['title'] = $type->getEvent()->getTitle();
+            $typesByEvent[$i]['title'] = $event->getTitle();
             $typesByEvent[$i]['types'][] = [
                 'id' => $type->getId(),
                 'title' => $type->getTitle($event->getAvailableLocale($requestLocale))
