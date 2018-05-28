@@ -149,12 +149,19 @@ class RegisterController extends Controller
 
     /**
      * Create a participation to an event.
+     *
+     * @param Request         $request
+     * @param EventDomain     $eventDomain
+     * @param TypeView        $typeView
+     * @param UserDomain|null $userDomain
+     *
+     * @return Response
      */
     public function participateAction(
         Request $request,
         EventDomain $eventDomain,
         TypeView $typeView,
-        UserDomain $userDomain
+        UserDomain $userDomain = null
     ): Response {
         $event = $eventDomain->getEvent();
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
@@ -254,18 +261,18 @@ class RegisterController extends Controller
     }
 
     /**
-     * @param Request     $request
-     * @param EventDomain $eventDomain
-     * @param UserDomain  $userDomain
-     * @param Participant $participant
-     * @param int         $step
+     * @param Request         $request
+     * @param EventDomain     $eventDomain
+     * @param UserDomain|null $userDomain
+     * @param Participant     $participant
+     * @param int             $step
      *
      * @return RedirectResponse|Response
      */
     public function participantStepAction(
         Request $request,
         EventDomain $eventDomain,
-        UserDomain $userDomain,
+        UserDomain $userDomain = null,
         Participant $participant,
         $step
     ): Response {
