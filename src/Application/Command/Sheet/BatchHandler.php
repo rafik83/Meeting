@@ -62,22 +62,9 @@ class BatchHandler
     /** @var PrintPlanningHandler */
     private $printPlanningHandler;
 
-    /**
-     * @param SheetSearchAdapterInterface    $sheetSearchAdapter
-     * @param BatchValidateHandler           $batchValidateHandler
-     * @param BatchAssignHandler             $batchAssignHandler
-     * @param BatchAcceptHandler             $batchAcceptHandler
-     * @param BatchRefuseHandler             $batchRefuseHandler
-     * @param BatchEnableDisableHandler      $batchEnableDisableHandler
-     * @param BatchCatalogHandler            $batchCatalogHandler
-     * @param BatchDraftHandler              $batchDraftHandler
-     * @param BatchValidationValidateHandler $batchValidationValidateHandler
-     * @param BatchGenerateInvoiceHandler    $batchGenerateInvoiceHandler
-     * @param BatchAssignToGroupHandler      $batchAssignToGroupHandler
-     * @param BatchPendingHandler            $batchPendingHandler
-     * @param BatchPdfJobCreatorHandler      $batchPdfJobCreatorHandler
-     * @param PrintPlanningHandler           $printPlanningHandler
-     */
+    /** @var BatchDuplicateSheetsHandler */
+    private $batchDuplicateSheetsHandler;
+
     public function __construct(
         SheetSearchAdapterInterface $sheetSearchAdapter,
         BatchValidateHandler $batchValidateHandler,
@@ -92,7 +79,8 @@ class BatchHandler
         BatchAssignToGroupHandler $batchAssignToGroupHandler,
         BatchPendingHandler $batchPendingHandler,
         BatchPdfJobCreatorHandler $batchPdfJobCreatorHandler,
-        PrintPlanningHandler $printPlanningHandler
+        PrintPlanningHandler $printPlanningHandler,
+        BatchDuplicateSheetsHandler $batchDuplicateSheetsHandler
     ) {
         $this->sheetSearchAdapter = $sheetSearchAdapter;
         $this->batchValidateHandler = $batchValidateHandler;
@@ -108,6 +96,7 @@ class BatchHandler
         $this->batchPendingHandler = $batchPendingHandler;
         $this->batchPdfJobCreatorHandler = $batchPdfJobCreatorHandler;
         $this->printPlanningHandler = $printPlanningHandler;
+        $this->batchDuplicateSheetsHandler = $batchDuplicateSheetsHandler;
     }
 
     /**
@@ -228,7 +217,13 @@ class BatchHandler
         }
 
         if ($batch->duplicateToType instanceof Type) {
-            // todo : Handler to duplicate sheets.
+            return $this->batchDuplicateSheetsHandler->handle(
+                new BatchDuplicateSheets(
+                    $batch->admin,
+                    $batch->duplicateToType,
+                    $batch->ids
+                )
+            );
         }
 
         return new BatchResult([], $batch->getMessage() . 'no_action');

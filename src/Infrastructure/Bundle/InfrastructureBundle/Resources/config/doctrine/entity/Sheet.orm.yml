@@ -88,9 +88,14 @@ Proximum\Vimeet\Domain\Model\Sheet:
             inversedBy: sheets
             joinColumn:
                 onDelete: SET NULL
+        duplicatedFrom:
+            targetEntity: Proximum\Vimeet\Domain\Model\Sheet
+            joinColumn:
+                onDelete: SET NULL
     oneToMany:
         participants:
             targetEntity: Proximum\Vimeet\Domain\Model\Participant
+            cascade: ['persist']
             mappedBy: sheet
         orders:
             targetEntity: Proximum\Vimeet\Domain\Model\Order

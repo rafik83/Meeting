@@ -348,4 +348,24 @@ class Participant implements MailRecipientInterface
 
         $this->participantProduct = $participantProduct;
     }
+
+    public static function duplicateFrom(Participant $participant, Sheet $sheet): Participant
+    {
+        $duplicatedParticipant = new Participant(
+            $sheet,
+            $participant->getUser(),
+            $participant->getData(),
+            $participant->isActive()
+        );
+
+        $duplicatedParticipant->setImported(true);
+        $duplicatedParticipant->setParticipantProduct($participant->getParticipantProduct());
+        $duplicatedParticipant->setVisio($participant->isVisio());
+        $duplicatedParticipant->setRegistrationStep($participant->getRegistrationStep());
+        $duplicatedParticipant->setRegistrationComplete($participant->isRegistrationComplete());
+        $duplicatedParticipant->setFullyUnavailable($participant->isFullyUnavailable());
+        $duplicatedParticipant->setHasRequestAssigned($participant->hasRequestAssigned());
+
+        return $duplicatedParticipant;
+    }
 }

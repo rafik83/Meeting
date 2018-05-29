@@ -190,6 +190,9 @@ class Sheet implements TraceableInterface
     /** @var null|DateTimeInterface */
     private $reminderDate;
 
+    /** @var Sheet|null */
+    private $duplicatedFrom;
+
     /**
      * Sheet constructor.
      *
@@ -881,7 +884,7 @@ class Sheet implements TraceableInterface
     /**
      * @param Spot $spot
      */
-    public function setSpot(Spot $spot)
+    public function setSpot(?Spot $spot)
     {
         $this->spot = $spot;
     }
@@ -950,7 +953,7 @@ class Sheet implements TraceableInterface
      *
      * @return $this
      */
-    public function setGroup(Group $group)
+    public function setGroup(?Group $group)
     {
         $this->group = $group;
 
@@ -1137,5 +1140,37 @@ class Sheet implements TraceableInterface
     public function setReminderDate($reminderDate): void
     {
         $this->reminderDate = $reminderDate;
+    }
+
+    public function getDuplicatedFrom(): ?Sheet
+    {
+        return $this->duplicatedFrom;
+    }
+
+    public static function duplicateSheetFrom(Sheet $sheet, Type $type, \DateTimeInterface $createdAt): Sheet
+    {
+        $duplicatedSheet = new Sheet(
+            $type->getEvent(),
+            $type,
+            $sheet->getData(),
+            $sheet->getOwner(),
+            $createdAt
+        );
+
+        $duplicatedSheet->setImported(true);
+        $duplicatedSheet->setReminderDate($sheet->getReminderDate());
+        $duplicatedSheet->setRegistrationData($sheet->getRegistrationData());
+        $duplicatedSheet->setAttendance($sheet->attend());
+        $duplicatedSheet->setAvailableSlots($sheet->getAvailableSlots());
+        $duplicatedSheet->setInCatalog($sheet->isInCatalog());
+        $duplicatedSheet->setGroup($sheet->getGroup());
+        $duplicatedSheet->setTitle($sheet->getTitle());
+        $duplicatedSheet->setSpot($sheet->getSpot());
+
+        foreach ($sheet->getParticipants() as $participant) {
+            $duplicatedSheet->addParticipant(Participant::duplicateFrom($participant, $duplicatedSheet));
+        }
+
+        return $duplicatedSheet;
     }
 }
