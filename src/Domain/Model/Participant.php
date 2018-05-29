@@ -359,12 +359,6 @@ class Participant implements MailRecipientInterface
         );
 
         $duplicatedParticipant->setImported(true);
-        $duplicatedParticipant->setParticipantProduct($participant->getParticipantProduct());
-        $duplicatedParticipant->setVisio($participant->isVisio());
-        $duplicatedParticipant->setRegistrationStep($participant->getRegistrationStep());
-        $duplicatedParticipant->setRegistrationComplete($participant->isRegistrationComplete());
-        $duplicatedParticipant->setFullyUnavailable($participant->isFullyUnavailable());
-        $duplicatedParticipant->setHasRequestAssigned($participant->hasRequestAssigned());
 
         return $duplicatedParticipant;
     }

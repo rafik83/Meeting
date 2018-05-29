@@ -997,6 +997,7 @@ services:
     Proximum\Vimeet\Application\Command\Sheet\SheetDuplicatorHandler:
         arguments:
             - '@vimeet_infrastructure.repository.sheet_repository'
+            - '@event_dispatcher'
             - '@datetime'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Sheet\SheetDuplicator }

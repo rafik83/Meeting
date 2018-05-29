@@ -29,7 +29,8 @@ class BatchDuplicateSheetsJobQueue extends AbstractJobQueueAdapter implements Ba
 
         $job = new Job(BatchDuplicateSheetsCommand::NAME, [
             $admin->getId(),
-            $options['typeId'] ?? null
+            $options['typeId'] ?? null,
+            $options['extraDataId'] ?? null,
         ]);
 
         $this->setJob($job);

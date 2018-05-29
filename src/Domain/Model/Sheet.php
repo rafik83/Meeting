@@ -884,7 +884,7 @@ class Sheet implements TraceableInterface
     /**
      * @param Spot $spot
      */
-    public function setSpot(?Spot $spot)
+    public function setSpot(Spot $spot)
     {
         $this->spot = $spot;
     }
@@ -953,7 +953,7 @@ class Sheet implements TraceableInterface
      *
      * @return $this
      */
-    public function setGroup(?Group $group)
+    public function setGroup(Group $group)
     {
         $this->group = $group;
 
@@ -1159,8 +1159,6 @@ class Sheet implements TraceableInterface
 
         $duplicatedSheet->setImported(true);
         $duplicatedSheet->setRegistrationData($sheet->getRegistrationData());
-        $duplicatedSheet->setAttendance($sheet->attend());
-        $duplicatedSheet->setGroup($sheet->getGroup());
         $duplicatedSheet->setTitle($sheet->getTitle());
 
         foreach ($sheet->getParticipants() as $participant) {

@@ -11,6 +11,7 @@
 namespace Proximum\Vimeet\Tests\Application\Command\Sheet;
 
 use PHPUnit\Framework\TestCase;
+use Prophecy\Argument;
 use Proximum\Vimeet\Application\Adapter\BatchJobQueueInterface;
 use Proximum\Vimeet\Application\Command\Sheet\BatchDuplicateSheets;
 use Proximum\Vimeet\Application\Command\Sheet\BatchDuplicateSheetsHandler;
@@ -43,14 +44,9 @@ class BatchDuplicateSheetsHandlerTest extends TestCase
             ->shouldBeCalled()
             ->willReturn([$sheet1->reveal(), $sheet2->reveal()]);
 
-        $extraDataRepository
-            ->getExtraDataForEvent($event, ExtraDataType::DUPLICATE_SHEET_IDS)
-            ->shouldBeCalled()
-            ->willReturn(null);
-
         $extraData = new ExtraData(
             $event,
-            ExtraDataType::DUPLICATE_SHEET_IDS,
+            ExtraDataType::ADMIN_SHEET_BATCH_IDS,
             '1, 2, 3, 4',
             $date
         );
@@ -58,7 +54,13 @@ class BatchDuplicateSheetsHandlerTest extends TestCase
         $extraDataRepository->add($extraData)
             ->shouldBeCalled();
 
-        $jobQueue->createJob([1, 2, 3, 4], $admin->reveal(), ['typeId' => 1])
+        $jobQueue->createJob(
+            [1, 2, 3, 4],
+            $admin->reveal(),
+            [
+                'typeId' => 1,
+                'extraDataId' => null,
+            ])
             ->shouldBeCalled();
 
         $handler = new BatchDuplicateSheetsHandler(

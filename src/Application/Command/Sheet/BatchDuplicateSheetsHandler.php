@@ -48,31 +48,21 @@ class BatchDuplicateSheetsHandler
         $sheets = $this->sheetRepository->getSheetsById($batchDuplicateSheets->ids);
 
         if (!empty($sheets)) {
-            $type = $batchDuplicateSheets->type;
-            $ids = implode(', ', $batchDuplicateSheets->ids);
+            $extraData = new ExtraData(
+                $batchDuplicateSheets->type->getEvent(),
+                Type::ADMIN_SHEET_BATCH_IDS,
+                implode(', ', $batchDuplicateSheets->ids),
+                $this->datetime
+            );
 
-            $extraData = $this->extraDataRepository
-                ->getExtraDataForEvent($type->getEvent(), ExtraDataType::DUPLICATE_SHEET_IDS);
-
-            if (!$extraData instanceof ExtraData) {
-                $this->extraDataRepository->add(
-                    new ExtraData(
-                        $type->getEvent(),
-                        Type::DUPLICATE_SHEET_IDS,
-                        $ids,
-                        $this->datetime
-                    )
-                );
-            } else {
-                $extraData->update($ids, $this->datetime);
-                $this->extraDataRepository->set($extraData);
-            }
+            $this->extraDataRepository->add($extraData);
 
             $this->jobQueue->createJob(
                 $batchDuplicateSheets->ids,
                 $batchDuplicateSheets->admin,
                 [
-                    'typeId' => $type->getId(),
+                    'typeId' => $batchDuplicateSheets->type->getId(),
+                    'extraDataId' => $extraData->getId(),
                 ]
             );
         }

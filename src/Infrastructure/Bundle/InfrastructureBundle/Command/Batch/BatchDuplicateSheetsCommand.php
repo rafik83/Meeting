@@ -15,7 +15,6 @@ use Proximum\Vimeet\Application\Command\Sheet\SheetDuplicatorHandler;
 use Proximum\Vimeet\Domain\Model\Admin;
 use Proximum\Vimeet\Domain\Model\Event\ExtraData;
 use Proximum\Vimeet\Domain\Model\Type;
-use Proximum\Vimeet\Domain\Event\ExtraData\Type as ExtraDataType;
 use Proximum\Vimeet\Domain\Repository\AdminRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\Event\ExtraDataRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
@@ -66,7 +65,8 @@ class BatchDuplicateSheetsCommand extends Command
             ->setName(self::NAME)
             ->setDescription('Batch duplicate sheets action')
             ->addArgument('adminId', InputArgument::REQUIRED, 'Admin id')
-            ->addArgument('typeId', InputArgument::REQUIRED, 'Type id');
+            ->addArgument('typeId', InputArgument::REQUIRED, 'Type id')
+            ->addArgument('extraDataId', InputArgument::REQUIRED, 'ExtraData id');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): void
@@ -83,8 +83,7 @@ class BatchDuplicateSheetsCommand extends Command
             throw new \InvalidArgumentException('Type not found.');
         }
 
-        $extraData = $this->extraDataRepository
-            ->getExtraDataForEvent($type->getEvent(), ExtraDataType::DUPLICATE_SHEET_IDS);
+        $extraData = $this->extraDataRepository->findById($input->getArgument('extraDataId'));
 
         if (!$extraData instanceof ExtraData) {
             throw new \InvalidArgumentException('Extra data not found.');
