@@ -1,13 +1,23 @@
 {% set uploadObject = child.vars.value %}
 {% if uploadObject.isUploadAndHasPath is defined and uploadObject.isUploadAndHasPath %}
-    {% set path = path('event_sheet_download_file', {
-        'sheet': sheet.id,
-        'objectKey': uploadObject.key
-    }) %}
+    {% set path = '' %}
+
+    {% if sheet is defined %}
+        {% set path = path('event_sheet_download_file', {
+            'sheet': sheet.id,
+            'objectKey': uploadObject.key
+        }) %}
+    {% endif %}
 
     {% if participant is defined and participant is not empty %}
+        {% if sheet is defined %}
+            {% set sheetId = sheet.id %}
+        {% else %}
+            {% set sheetId = participant.sheet.id %}
+        {% endif %}
+
         {% set path = path('event_sheet_participant_download_file', {
-            'sheet': sheet.id,
+            'sheet': sheetId,
             'participant': participant.id,
             'objectKey': uploadObject.key
         }) %}
