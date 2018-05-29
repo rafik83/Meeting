@@ -998,7 +998,9 @@ services:
         arguments:
             - '@vimeet_infrastructure.repository.sheet_repository'
             - '@event_dispatcher'
+            - '@adapter.mailer_adapter'
             - '@datetime'
+            - '%mailer_sender%'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Sheet\SheetDuplicator }
     command.sheet.sheet_viewed.add_handler:

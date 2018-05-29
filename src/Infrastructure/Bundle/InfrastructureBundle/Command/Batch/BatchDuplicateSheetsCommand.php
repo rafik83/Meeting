@@ -92,6 +92,8 @@ class BatchDuplicateSheetsCommand extends Command
         $sheetIds = explode(',', $extraData->getValue());
         $sheets = $this->sheetRepository->findByIds($sheetIds);
 
-        $this->sheetDuplicatorHandler->handle(new SheetDuplicator($sheets, $type));
+        $this->sheetDuplicatorHandler->handle(
+            new SheetDuplicator($sheets, $admin, $type)
+        );
     }
 }
