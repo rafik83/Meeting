@@ -10,8 +10,8 @@
 
 namespace Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\Batch;
 
-use Proximum\Vimeet\Application\Command\Sheet\PostBatch\PostBatchDuplicateSheets;
-use Proximum\Vimeet\Application\Command\Sheet\PostBatch\PostBatchDuplicateSheetsHandler;
+use Proximum\Vimeet\Application\Command\Sheet\SheetDuplicator;
+use Proximum\Vimeet\Application\Command\Sheet\SheetDuplicatorHandler;
 use Proximum\Vimeet\Domain\Model\Admin;
 use Proximum\Vimeet\Domain\Model\Event\ExtraData;
 use Proximum\Vimeet\Domain\Model\Type;
@@ -41,15 +41,15 @@ class BatchDuplicateSheetsCommand extends Command
     /** @var ExtraDataRepositoryInterface */
     private $extraDataRepository;
 
-    /** @var PostBatchDuplicateSheetsHandler */
-    private $postBatchDuplicateSheetsHandler;
+    /** @var SheetDuplicatorHandler */
+    private $sheetDuplicatorHandler;
 
     public function __construct(
         AdminRepositoryInterface $adminRepository,
         SheetRepositoryInterface $sheetRepository,
         TypeRepositoryInterface $typeRepository,
         ExtraDataRepositoryInterface $extraDataRepository,
-        PostBatchDuplicateSheetsHandler $postBatchDuplicateSheetsHandler
+        SheetDuplicatorHandler $sheetDuplicatorHandler
     ) {
         parent::__construct(self::NAME);
 
@@ -57,7 +57,7 @@ class BatchDuplicateSheetsCommand extends Command
         $this->sheetRepository = $sheetRepository;
         $this->typeRepository = $typeRepository;
         $this->extraDataRepository = $extraDataRepository;
-        $this->postBatchDuplicateSheetsHandler = $postBatchDuplicateSheetsHandler;
+        $this->sheetDuplicatorHandler = $sheetDuplicatorHandler;
     }
 
     protected function configure(): void
@@ -93,6 +93,6 @@ class BatchDuplicateSheetsCommand extends Command
         $sheetIds = explode(',', $extraData->getValue());
         $sheets = $this->sheetRepository->findByIds($sheetIds);
 
-        $this->postBatchDuplicateSheetsHandler->handle(new PostBatchDuplicateSheets($sheets, $type));
+        $this->sheetDuplicatorHandler->handle(new SheetDuplicator($sheets, $type));
     }
 }

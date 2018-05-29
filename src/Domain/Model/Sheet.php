@@ -1158,14 +1158,10 @@ class Sheet implements TraceableInterface
         );
 
         $duplicatedSheet->setImported(true);
-        $duplicatedSheet->setReminderDate($sheet->getReminderDate());
         $duplicatedSheet->setRegistrationData($sheet->getRegistrationData());
         $duplicatedSheet->setAttendance($sheet->attend());
-        $duplicatedSheet->setAvailableSlots($sheet->getAvailableSlots());
-        $duplicatedSheet->setInCatalog($sheet->isInCatalog());
         $duplicatedSheet->setGroup($sheet->getGroup());
         $duplicatedSheet->setTitle($sheet->getTitle());
-        $duplicatedSheet->setSpot($sheet->getSpot());
 
         foreach ($sheet->getParticipants() as $participant) {
             $duplicatedSheet->addParticipant(Participant::duplicateFrom($participant, $duplicatedSheet));

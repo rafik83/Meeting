@@ -8,12 +8,12 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Proximum\Vimeet\Application\Command\Sheet\PostBatch;
+namespace Proximum\Vimeet\Application\Command\Sheet;
 
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
 
-class PostBatchDuplicateSheetsHandler
+class SheetDuplicatorHandler
 {
     /** @var SheetRepositoryInterface */
     private $sheetRepository;
@@ -29,7 +29,7 @@ class PostBatchDuplicateSheetsHandler
         $this->datetime = $datetime;
     }
 
-    public function handle(PostBatchDuplicateSheets $command): void
+    public function handle(SheetDuplicator $command): void
     {
         foreach ($command->sheets as $sheet) {
             $this->sheetRepository->add(Sheet::duplicateSheetFrom($sheet, $command->type, $this->datetime));

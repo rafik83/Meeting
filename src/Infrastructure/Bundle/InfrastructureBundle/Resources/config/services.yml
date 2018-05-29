@@ -994,6 +994,12 @@ services:
             - '@vimeet_infrastructure.adapter.delayed_event_dispatcher'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Sheet\SubmitValidation }
+    Proximum\Vimeet\Application\Command\Sheet\SheetDuplicatorHandler:
+        arguments:
+            - '@vimeet_infrastructure.repository.sheet_repository'
+            - '@datetime'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Sheet\SheetDuplicator }
     command.sheet.sheet_viewed.add_handler:
         class: Proximum\Vimeet\Application\Command\Sheet\SheetViewed\AddHandler
         arguments:
@@ -2192,12 +2198,6 @@ services:
             - '@sheet.request.enable_disable_manager'
             - '@datetime'
             - '@adapter.sheet_indexer'
-
-    Proximum\Vimeet\Application\Command\Sheet\PostBatch\PostBatchDuplicateSheetsHandler:
-        arguments:
-            - '@vimeet_infrastructure.repository.sheet_repository'
-            - '@datetime'
-
     command.sheet.post_batch.post_batch_enable_disable_handler:
         class: Proximum\Vimeet\Application\Command\Sheet\PostBatch\PostBatchEnableDisableHandler
         arguments:
@@ -4536,7 +4536,7 @@ services:
             - '@vimeet_infrastructure.repository.sheet_repository'
             - '@vimeet_infrastructure.repository.type_repository'
             - '@Proximum\Vimeet\Infrastructure\Repository\Event\ExtraDataRepository'
-            - '@Proximum\Vimeet\Application\Command\Sheet\PostBatch\PostBatchDuplicateSheetsHandler'
+            - '@Proximum\Vimeet\Application\Command\Sheet\SheetDuplicatorHandler'
         tags:
             - { name: console.command }
 
