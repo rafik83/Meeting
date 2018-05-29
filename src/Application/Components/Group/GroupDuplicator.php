@@ -32,13 +32,13 @@ class GroupDuplicator
      * @param Event $event
      *
      * @return Group
+     *
+     * @throws CanNotDuplicateToTheSameEventException
      */
     public function duplicateToEvent(Group $group, Event $event): Group
     {
         try {
             $duplicatedGroup = $this->duplicateToEventHandler->handle(new DuplicateToEvent($group, $event));
-        } catch (CanNotDuplicateToTheSameEventException $exception) {
-            $duplicatedGroup = $group;
         } catch (GroupAlreadyDuplicatedInGivenEventException $exception) {
             $duplicatedGroup = $exception->duplicatedGroup;
         }

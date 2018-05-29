@@ -40,6 +40,8 @@ class GroupDuplicatorTest extends TestCase
 
     public function testDuplicateToEventWithSameEvent(): void
     {
+        $this->expectException(CanNotDuplicateToTheSameEventException::class);
+
         $exception = new CanNotDuplicateToTheSameEventException();
         $this->duplicateToEventHandler->handle(new DuplicateToEvent($this->group->reveal(), $this->event->reveal()))
             ->shouldBeCalled()
@@ -50,9 +52,7 @@ class GroupDuplicatorTest extends TestCase
             $this->duplicateToEventHandler->reveal()
         );
 
-        $result = $groupDuplicator->duplicateToEvent($this->group->reveal(), $this->event->reveal());
-
-        $this->assertEquals($this->group->reveal(), $result);
+        $groupDuplicator->duplicateToEvent($this->group->reveal(), $this->event->reveal());
     }
 
     public function testDuplicateToEventWithAlreadyDuplicatedGroup(): void
