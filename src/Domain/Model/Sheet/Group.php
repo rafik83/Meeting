@@ -39,19 +39,29 @@ class Group
     /** @var ArrayCollection of Sheet */
     private $sheets;
 
+    /** @var Group|null */
+    private $duplicatedFrom;
+
     /**
      * @param Event              $event
      * @param User               $manager
      * @param string             $title
      * @param \DateTimeInterface $createdAt
+     * @param Group|null         $duplicatedFrom
      */
-    public function __construct(Event $event, User $manager, $title, \DateTimeInterface $createdAt)
-    {
+    public function __construct(
+        Event $event,
+        User $manager,
+        $title,
+        \DateTimeInterface $createdAt,
+        Group $duplicatedFrom = null
+    ) {
         $this->event = $event;
         $this->manager = $manager;
         $this->title = $title;
         $this->createdAt = $createdAt;
         $this->sheets = new ArrayCollection();
+        $this->duplicatedFrom = $duplicatedFrom;
     }
 
     /**
@@ -73,7 +83,7 @@ class Group
     /**
      * @return User
      */
-    public function getManager()
+    public function getManager(): User
     {
         return $this->manager;
     }
@@ -81,7 +91,7 @@ class Group
     /**
      * @return string
      */
-    public function getTitle()
+    public function getTitle(): string
     {
         return $this->title;
     }
@@ -89,7 +99,7 @@ class Group
     /**
      * @return \DateTimeInterface
      */
-    public function getCreatedAt()
+    public function getCreatedAt(): \DateTimeInterface
     {
         return $this->createdAt;
     }
@@ -97,7 +107,7 @@ class Group
     /**
      * @return Sheet[]
      */
-    public function getSheets()
+    public function getSheets(): array
     {
         return $this->sheets->toArray();
     }
@@ -107,7 +117,7 @@ class Group
      *
      * @return Group
      */
-    public function setTitle($title)
+    public function setTitle($title): Group
     {
         $this->title = $title;
 
@@ -116,11 +126,17 @@ class Group
 
     /**
      * @param User $manager
-     *
-     * @return Group
      */
-    public function setManager(User $manager)
+    public function setManager(User $manager): void
     {
         $this->manager = $manager;
+    }
+
+    /**
+     * @return null|Group
+     */
+    public function getDuplicatedFrom(): ?Group
+    {
+        return $this->duplicatedFrom;
     }
 }

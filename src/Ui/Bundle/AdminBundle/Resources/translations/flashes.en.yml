@@ -160,7 +160,7 @@ flash.change_mail.success: 'Your new mail has been registered, you receive an em
 flash.change_password.success: 'Your password has been changed'
 flash.content.update_terms-of-sale.success: 'General sales conditions have been updated'
 flash.event.participation.success: 'Your presentation sheet has been saved'
-flash.event.register.already_known.login: 'You are already registered for this event, log with your email adress'
+flash.event.register.already_known.login: 'You are already registered for this event, log with your email address'
 flash.event.register.already_known.message: 'YOUR EMAIL IS ALREADY REGISTERED! you attended one of our events, you can retrieve your profile data and save valuable time!'
 flash.event.register.success: 'Your account has been created'
 flash.event.schedule.happening.participate.success: 'From now on you participate to this event.'
