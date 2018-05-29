@@ -11,6 +11,7 @@
 namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Sheet;
 
 use Proximum\Vimeet\Application\Command\Sheet\Batch;
+use Proximum\Vimeet\Domain\Model\Type;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Group\GroupChoiceType;
 use Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Planning\OrderByChoiceType;
 use Symfony\Component\Form\AbstractType;
@@ -27,9 +28,6 @@ class BatchType extends AbstractType
     /** @var AuthorizationCheckerInterface */
     private $authorizationChecker;
 
-    /**
-     * @param AuthorizationCheckerInterface $authorizationChecker
-     */
     public function __construct(AuthorizationCheckerInterface $authorizationChecker)
     {
         $this->authorizationChecker = $authorizationChecker;
@@ -96,6 +94,30 @@ class BatchType extends AbstractType
             ;
         }
 
+        if ($this->authorizationChecker->isGranted('ROLE_ALLOWED_TO_ADMIN') ||
+            $this->authorizationChecker->isGranted('ROLE_ALLOWED_TO_ORGANIZE')) {
+            $builder->add('duplicateToType', ChoiceType::class, [
+                'choices' => $options['types'],
+                'choice_label' => function ($type) use ($options) {
+                    if ($type instanceof Type) {
+                        $locale = $type->getEvent()->getAvailableLocale($options['locale']);
+
+                        return $type->getTitle($locale);
+                    }
+
+                    return null;
+                },
+                'choice_value' => function ($type) {
+                    if ($type instanceof Type) {
+                        return $type->getId();
+                    }
+
+                    return null;
+                },
+            ]);
+            $builder->add('duplicate', SubmitType::class);
+        }
+
         $builder
             ->add('validationStateDraft', SubmitType::class)
             ->add('validationStateValidate', SubmitType::class)
@@ -107,7 +129,7 @@ class BatchType extends AbstractType
      */
     public function configureOptions(OptionsResolver $resolver)
     {
-        $resolver->setRequired(['ids', 'event']);
+        $resolver->setRequired(['ids', 'event', 'types', 'locale']);
         $resolver->setAllowedTypes('ids', ['array']);
         $resolver->setDefaults(['data_class' => Batch::class]);
     }

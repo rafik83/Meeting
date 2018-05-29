@@ -100,6 +100,15 @@
                         </a>
                     </li>
 
+                    {% if batch_form.duplicateToType is defined %}
+                        <li role="separator" class="divider"></li>
+                        <li>
+                            <a href="#" class="duplication-sheet" data-types="{{ typesByEvent|json_encode }}" data-toggle="modal" data-target="#duplication-sheet">
+                                {{ 'admin.sheet.duplication'|trans }}
+                            </a>
+                        </li>
+                    {% endif %}
+
                     {% if batch_form.enable is defined or batch_form.disable is defined %}
                         <li role="separator" class="divider"></li>
                     {% endif %}
@@ -339,6 +348,38 @@
     </table>
 
     {{ include('AdminBundle:Paginator:paginate.html.twig', { 'paginator': sheets }) }}
+
+    {% if batch_form.duplicateToType is defined %}
+        <div class="modal fade" tabindex="-1" role="dialog" id="duplication-sheet">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                        <h4 class="modal-title">{{ 'admin.sheet.duplication'|trans }}</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div id="events-block" class="form-group">
+                            <label class="col-lg-3 col-md-3 col-sm-3 control-label required">
+                                {{ 'form.sheet_batch.children.events.label'|trans({}, 'forms') }}
+                            </label>
+                            <div class="col-lg-9 col-md-9 col-sm-9">
+                                <select class="form-control"></select>
+                            </div>
+                        </div>
+                        <div id="types-block">
+                            {{ form_row(batch_form.duplicateToType) }}
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">{{ 'admin.cancel'|trans }}</button>
+                        {{ form_row(batch_form.duplicate) }}
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% endif %}
 
     <div class="modal fade" tabindex="-1" role="dialog" id="commercial-follow-up">
         <div class="modal-dialog">

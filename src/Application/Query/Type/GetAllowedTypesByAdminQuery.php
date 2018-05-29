@@ -8,22 +8,23 @@
  * @author Elao <contact@elao.com>
  */
 
-namespace Proximum\Vimeet\Application\Query\Event;
+namespace Proximum\Vimeet\Application\Query\Type;
 
+use Proximum\Vimeet\Application\Query\Query;
 use Proximum\Vimeet\Domain\Model\Admin;
 use Proximum\Vimeet\Domain\Model\Event;
 
-class GetFutureEventsOrEventsWithoutDaysByAdminQuery
+class GetAllowedTypesByAdminQuery implements Query
 {
     /** @var Admin */
     public $admin;
 
     /** @var Event */
-    public $excludedEvent;
+    public $event;
 
-    public function __construct(Admin $admin, Event $excludedEvent)
+    public function __construct(Admin $admin, Event $event)
     {
         $this->admin = $admin;
-        $this->excludedEvent = $excludedEvent;
+        $this->event = $event;
     }
 }

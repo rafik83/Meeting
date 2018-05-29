@@ -20,6 +20,7 @@ use Proximum\Vimeet\Application\Command\Sheet\BatchResult;
 use Proximum\Vimeet\Application\Exception\Paginator\UnavailableCurrentPageException;
 use Proximum\Vimeet\Application\Exception\Spot\SpotNotActiveException;
 use Proximum\Vimeet\Application\Exception\Spot\SpotNotFoundException;
+use Proximum\Vimeet\Application\Query\Type\GetAllowedTypesByAdminQuery;
 use Proximum\Vimeet\Application\Query\Participant\Import\ImportMappingViewQuery;
 use Proximum\Vimeet\Application\Query\Sheet\PaginatedSheetListViewQuery;
 use Proximum\Vimeet\Application\View\Participant\ImportMappingView;
@@ -123,13 +124,20 @@ class SheetController extends Controller
             return $this->redirectToRoute('admin_sheet', ['event' => $event->getId()]);
         }
 
+        $types = $this->get('tactician.commandbus.query')->handle(new GetAllowedTypesByAdminQuery(
+            $adminDomain->getAdmin(),
+            $event
+        ));
+
         // Batch
-        $batch     = new Batch($event, $this->getUser(), $event->getAvailableLocale($request->getLocale()));
+        $batch = new Batch($event, $this->getUser(), $event->getAvailableLocale($request->getLocale()));
         $batchForm = $this->createForm(BatchType::class, $batch, [
-            'ids'    => $sheets->map(function (SheetListView $listView) {
+            'ids' => $sheets->map(function (SheetListView $listView) {
                 return $listView->id;
             }),
-            'event'  => $event,
+            'event' => $event,
+            'types' => $types,
+            'locale' => $request->getLocale(),
             'action' => $this->generateUrl(
                 'admin_sheet_batch',
                 [
@@ -143,6 +151,7 @@ class SheetController extends Controller
 
         return $this->render('AdminBundle:Sheet:list.html.twig', [
             'event'            => $event,
+            'typesByEvent'     => $this->getTypesByEvent($types, $request->getLocale()),
             'sheets'           => $sheets,
             'filters_summary'  => $this->get('filter_summary')->getFilters(
                 $sheetFilterView,
@@ -179,9 +188,17 @@ class SheetController extends Controller
             $event->getAvailableLocale($request->getLocale()),
             $filters
         );
+
+        $types = $this->get('tactician.commandbus.query')->handle(new GetAllowedTypesByAdminQuery(
+            $adminDomain->getAdmin(),
+            $event
+        ));
+
         $batchForm = $this->createForm(BatchType::class, $batch, [
             'ids'    => $this->get('vimeet_infrastructure.repository.sheet_repository')->getIdsByEvent($event),
             'event'  => $event,
+            'types'  => $types,
+            'locale' => $event->getAvailableLocale($request->getLocale()),
             'action' => $this->generateUrl('admin_sheet_batch', ['event' => $event->getId()]),
         ]);
 
@@ -437,6 +454,32 @@ class SheetController extends Controller
         return new JsonResponse([
             'message' => $this->get('translator')->trans('admin.sheet.participant_visio.success'),
         ], 200);
+    }
+
+    private function getTypesByEvent(array $types, string $requestLocale): array
+    {
+        $typesByEvent = [];
+        $i = 0;
+
+        /** @var Type $type */
+
+        foreach ($types as $type) {
+            $event = $type->getEvent();
+
+            // Start from 0 to keep sorting while parsing array in javascript
+            if (isset($typesByEvent[$i]['id']) && $event->getId() !== $typesByEvent[$i]['id']) {
+                $i++;
+            }
+
+            $typesByEvent[$i]['id'] = $event->getId();
+            $typesByEvent[$i]['title'] = $event->getTitle();
+            $typesByEvent[$i]['types'][] = [
+                'id' => $type->getId(),
+                'title' => $type->getTitle($event->getAvailableLocale($requestLocale))
+            ];
+        }
+
+        return $typesByEvent;
     }
 
     /**
