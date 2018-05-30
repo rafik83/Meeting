@@ -71,11 +71,11 @@ class SheetDuplicatorHandler
                 $group = $this->groupDuplicator->duplicateToEvent($sheet->getGroup(), $destinationEvent);
             }
 
-            $sheet = Sheet::duplicateSheetFrom($sheet, $group, $command->type, $this->datetime);
-            $this->sheetRepository->add($sheet);
-            $this->eventDispatcher->dispatch(Events::SHEET_UPDATED, new SheetUpdatedEvent($sheet));
+            $duplicatedSheet = Sheet::duplicateSheetFrom($sheet, $group, $command->type, $this->datetime);
+            $this->sheetRepository->add($duplicatedSheet);
+            $this->eventDispatcher->dispatch(Events::SHEET_UPDATED, new SheetUpdatedEvent($duplicatedSheet));
 
-            $importedSheets[] = $sheet;
+            $importedSheets[] = $duplicatedSheet;
         }
 
         if (empty($importedSheets)) {
