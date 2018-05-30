@@ -16,6 +16,7 @@ use Proximum\Vimeet\Application\Command\Sheet\Batch\PrintPlanningHandler;
 use Proximum\Vimeet\Domain\Admin\Follower\FollowerConstant;
 use Proximum\Vimeet\Domain\Model\Sheet\Constant;
 use Proximum\Vimeet\Domain\Model\Sheet\Group;
+use Proximum\Vimeet\Domain\Model\Type;
 
 class BatchHandler
 {
@@ -61,22 +62,9 @@ class BatchHandler
     /** @var PrintPlanningHandler */
     private $printPlanningHandler;
 
-    /**
-     * @param SheetSearchAdapterInterface    $sheetSearchAdapter
-     * @param BatchValidateHandler           $batchValidateHandler
-     * @param BatchAssignHandler             $batchAssignHandler
-     * @param BatchAcceptHandler             $batchAcceptHandler
-     * @param BatchRefuseHandler             $batchRefuseHandler
-     * @param BatchEnableDisableHandler      $batchEnableDisableHandler
-     * @param BatchCatalogHandler            $batchCatalogHandler
-     * @param BatchDraftHandler              $batchDraftHandler
-     * @param BatchValidationValidateHandler $batchValidationValidateHandler
-     * @param BatchGenerateInvoiceHandler    $batchGenerateInvoiceHandler
-     * @param BatchAssignToGroupHandler      $batchAssignToGroupHandler
-     * @param BatchPendingHandler            $batchPendingHandler
-     * @param BatchPdfJobCreatorHandler      $batchPdfJobCreatorHandler
-     * @param PrintPlanningHandler           $printPlanningHandler
-     */
+    /** @var BatchDuplicateSheetsHandler */
+    private $batchDuplicateSheetsHandler;
+
     public function __construct(
         SheetSearchAdapterInterface $sheetSearchAdapter,
         BatchValidateHandler $batchValidateHandler,
@@ -91,7 +79,8 @@ class BatchHandler
         BatchAssignToGroupHandler $batchAssignToGroupHandler,
         BatchPendingHandler $batchPendingHandler,
         BatchPdfJobCreatorHandler $batchPdfJobCreatorHandler,
-        PrintPlanningHandler $printPlanningHandler
+        PrintPlanningHandler $printPlanningHandler,
+        BatchDuplicateSheetsHandler $batchDuplicateSheetsHandler
     ) {
         $this->sheetSearchAdapter = $sheetSearchAdapter;
         $this->batchValidateHandler = $batchValidateHandler;
@@ -107,6 +96,7 @@ class BatchHandler
         $this->batchPendingHandler = $batchPendingHandler;
         $this->batchPdfJobCreatorHandler = $batchPdfJobCreatorHandler;
         $this->printPlanningHandler = $printPlanningHandler;
+        $this->batchDuplicateSheetsHandler = $batchDuplicateSheetsHandler;
     }
 
     /**
@@ -222,6 +212,17 @@ class BatchHandler
                     $batch->admin,
                     $batch->locale,
                     $batch->filters['orderBy'] ?? Constant::ORDER_BY_ALPHABETICAL
+                )
+            );
+        }
+
+        if ($batch->duplicateToType instanceof Type) {
+            return $this->batchDuplicateSheetsHandler->handle(
+                new BatchDuplicateSheets(
+                    $batch->event,
+                    $batch->admin,
+                    $batch->duplicateToType,
+                    $batch->ids
                 )
             );
         }

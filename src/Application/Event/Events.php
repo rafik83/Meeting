@@ -54,6 +54,7 @@ final class Events
     public const EVENT_PRE_REGISTERED = 'event.preregistered';
     public const EVENT_LOCALE_CHANGED = 'event.locale_changed';
     public const EVENT_KEY_DATES_UPDATED = 'event.key_dates.updated';
+    public const EVENT_SHEETS_DUPLICATED = 'event.sheets.updated';
     public const USER_REGISTRATION = 'user.registration'; // First step completed
     public const USER_REGISTERED = 'user.registered';
     public const USER_RESET_PASSWORD_CONFIRMED = 'user.reset_password.confirm';

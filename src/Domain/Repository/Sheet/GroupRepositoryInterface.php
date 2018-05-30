@@ -21,7 +21,7 @@ interface GroupRepositoryInterface
      *
      * @return null|Group
      */
-    public function getById($id);
+    public function getById($id): ?Group;
 
     /**
      * @param Event $event
@@ -29,14 +29,14 @@ interface GroupRepositoryInterface
      *
      * @return null|Group
      */
-    public function getByEventAndManager(Event $event, User $manager);
+    public function getByEventAndManager(Event $event, User $manager): ?Group;
 
     /**
      * @param Event $event
      *
      * @return Group[]
      */
-    public function getAllByEventOrderedByTitle(Event $event);
+    public function getAllByEventOrderedByTitle(Event $event): array;
 
     /**
      * @param Group $group
@@ -53,7 +53,7 @@ interface GroupRepositoryInterface
      *
      * @return Group[]
      */
-    public function getByEvent(Event $event);
+    public function getByEvent(Event $event): array;
 
     /**
      * @param User  $user
@@ -61,5 +61,13 @@ interface GroupRepositoryInterface
      *
      * @return Group|null
      */
-    public function getByUserAndEvent(User $user, Event $event);
+    public function getByUserAndEvent(User $user, Event $event): ?Group;
+
+    /**
+     * @param Group $originGroup
+     * @param Event $event
+     *
+     * @return null|Group
+     */
+    public function findDuplicatedGroupInEvent(Group $originGroup, Event $event): ?Group;
 }

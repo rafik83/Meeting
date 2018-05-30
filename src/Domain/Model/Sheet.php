@@ -190,6 +190,9 @@ class Sheet implements TraceableInterface
     /** @var null|DateTimeInterface */
     private $reminderDate;
 
+    /** @var Sheet|null */
+    private $duplicatedFrom;
+
     /**
      * Sheet constructor.
      *
@@ -1137,5 +1140,45 @@ class Sheet implements TraceableInterface
     public function setReminderDate($reminderDate): void
     {
         $this->reminderDate = $reminderDate;
+    }
+
+    public function getDuplicatedFrom(): ?Sheet
+    {
+        return $this->duplicatedFrom;
+    }
+
+    public function setDuplicatedFrom(Sheet $sheet): void
+    {
+        $this->duplicatedFrom = $sheet;
+    }
+
+    public static function duplicateSheetFrom(
+        Sheet $sheet,
+        ?Group $group,
+        Type $type,
+        \DateTimeInterface $createdAt
+    ): Sheet {
+        $duplicatedSheet = new Sheet(
+            $type->getEvent(),
+            $type,
+            $sheet->getData(),
+            $sheet->getOwner(),
+            $createdAt
+        );
+
+        if ($group instanceof Group) {
+            $duplicatedSheet->setGroup($group);
+        }
+
+        $duplicatedSheet->setImported(true);
+        $duplicatedSheet->setTitle($sheet->getTitle());
+        $duplicatedSheet->setRegistrationData($sheet->getRegistrationData());
+        $duplicatedSheet->setDuplicatedFrom($sheet);
+
+        foreach ($sheet->getParticipants() as $participant) {
+            $duplicatedSheet->addParticipant(Participant::duplicateFrom($participant, $duplicatedSheet));
+        }
+
+        return $duplicatedSheet;
     }
 }

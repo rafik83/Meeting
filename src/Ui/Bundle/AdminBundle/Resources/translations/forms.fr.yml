@@ -1076,3 +1076,6 @@ form.who_see_who.children.priority.label: 'Priorité de la règle'
 form.who_see_who.children.seeable.label: Voit
 form.who_see_who.children.seer.label: Qui
 form.who_see_who.children.submit.label: Ajouter
+form.sheet_batch.children.events.label: 'Evènement de destination'
+form.sheet_batch.children.duplicateToType.label: 'Type'
+form.sheet_batch.children.duplicate.label: 'Dupliquer'
