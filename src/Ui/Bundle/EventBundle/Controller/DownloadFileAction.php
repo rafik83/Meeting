@@ -15,17 +15,22 @@ use Proximum\Vimeet\Application\Adapter\DelayedEventDispatcherInterface;
 use Proximum\Vimeet\Application\Adapter\UserEventDecryptFileInterface;
 use Proximum\Vimeet\Application\Event\Events;
 use Proximum\Vimeet\Application\Event\RemoveDecryptedFileEvent;
+use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Participant;
+use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Template\Exception\ObjectNotFoundException;
 use Proximum\Vimeet\Domain\Template\TemplateData;
 use Proximum\Vimeet\Domain\Template\TemplateDataFactory;
 use Proximum\Vimeet\Domain\Template\TemplateObject\UploadObject;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Security\SheetVoter;
+use Symfony\Bundle\FrameworkBundle\Templating\EngineInterface;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
+use Symfony\Component\Serializer\Normalizer\DataUriNormalizer;
 
 class DownloadFileAction
 {
@@ -41,8 +46,14 @@ class DownloadFileAction
     /** @var DelayedEventDispatcherInterface */
     private $delayedEventDispatcher;
 
+    /** @var DataUriNormalizer */
+    private $dataUriNormalizer;
+
     /** @var string */
     private $encryptedFilesPath;
+
+    /** @var EngineInterface */
+    private $engine;
 
     /** @var string */
     private $webDir;
@@ -52,6 +63,8 @@ class DownloadFileAction
         TemplateDataFactory $templateDataFactory,
         UserEventDecryptFileInterface $userEventDecryptFile,
         DelayedEventDispatcherInterface $delayedEventDispatcher,
+        DataUriNormalizer $dataUriNormalizer,
+        EngineInterface $engine,
         string $encryptedFilesPath,
         string $webDir
     ) {
@@ -59,6 +72,8 @@ class DownloadFileAction
         $this->templateDataFactory = $templateDataFactory;
         $this->delayedEventDispatcher = $delayedEventDispatcher;
         $this->userEventDecryptFile = $userEventDecryptFile;
+        $this->dataUriNormalizer = $dataUriNormalizer;
+        $this->engine = $engine;
         $this->encryptedFilesPath = $encryptedFilesPath;
         $this->webDir = $webDir;
     }
@@ -67,8 +82,9 @@ class DownloadFileAction
         Request $request,
         Sheet $sheet,
         string $objectKey,
-        Participant $participant = null
-    ): BinaryFileResponse {
+        Participant $participant = null,
+        bool $preview = false
+    ): Response {
         if (false === $this->authorizationChecker->isGranted('IS_AUTHENTICATED_REMEMBERED') ||
             false === $this->authorizationChecker->isGranted(SheetVoter::EDIT, $sheet)) {
             throw new AccessDeniedException();
@@ -101,6 +117,12 @@ class DownloadFileAction
                     Events::REMOVE_DECRYPTED_FILE,
                     new RemoveDecryptedFileEvent($downloadPath)
                 );
+            }
+
+            if (true === $preview) {
+                return $this->engine->renderResponse('@Event/base64Image.html.twig', [
+                    'file' => $this->dataUriNormalizer->normalize(new \SplFileInfo($downloadPath)),
+                ]);
             }
 
             return (new BinaryFileResponse($downloadPath))

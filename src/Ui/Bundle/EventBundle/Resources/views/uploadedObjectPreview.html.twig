@@ -1,12 +1,14 @@
 {% set uploadObject = child.vars.value %}
 {% if uploadObject.isUploadAndHasPath is defined and uploadObject.isUploadAndHasPath %}
     {% set path = '' %}
+    {% set parameters = {} %}
 
     {% if sheet is defined %}
-        {% set path = path('event_sheet_download_file', {
+        {% set parameters = {
             'sheet': sheet.id,
             'objectKey': uploadObject.key
-        }) %}
+        } %}
+        {% set path = path('event_sheet_download_file', parameters) %}
     {% endif %}
 
     {% if participant is defined and participant is not empty %}
@@ -16,18 +18,23 @@
             {% set sheetId = participant.sheet.id %}
         {% endif %}
 
-        {% set path = path('event_sheet_participant_download_file', {
+        {% set parameters = {
             'sheet': sheetId,
             'participant': participant.id,
             'objectKey': uploadObject.key
-        }) %}
+        } %}
+        {% set path = path('event_sheet_participant_download_file', parameters) %}
     {% endif %}
 
     <div class="text-center">
-        <a href="{{ path }}">
-            {% if uploadObject.isImageFormatAndNotCrypted %}
-                <img class="center-block" src="{{ asset(uploadObject.data.path)|imagine_filter('upload_object') }}"/>
+        <a href="{{ path }}" download>
+            {% if uploadObject.isImageFormat %}
+                {{ render(controller(
+                    'Proximum\\Vimeet\\Ui\\Bundle\\EventBundle\\Controller\\DownloadFileAction',
+                    parameters|merge({'preview': true})
+                )) }}
             {% endif %}
+
             <i class="glyphicon glyphicon-download"></i>
             {{ 'common.download'|trans }}
         </a>

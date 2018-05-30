@@ -42,5 +42,7 @@ services:
             - '@template.template_data_factory'
             - '@Proximum\Vimeet\Infrastructure\Encryption\UserEventDecryptFileAdapter'
             - '@vimeet_infrastructure.adapter.delayed_event_dispatcher'
+            - '@serializer.normalizer.data_uri'
+            - '@templating.engine.twig'
             - '%infrastructure.encrypted_files_path%'
             - '%kernel.project_dir%/web'
