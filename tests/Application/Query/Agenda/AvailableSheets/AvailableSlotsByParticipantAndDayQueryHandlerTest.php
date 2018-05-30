@@ -15,6 +15,7 @@ use Proximum\Vimeet\Application\Query\Agenda\AvailableSheets\AvailableSlotsByPar
 use Proximum\Vimeet\Application\Query\Agenda\AvailableSheets\AvailableSlotsByParticipantAndDayQueryHandler;
 use Proximum\Vimeet\Application\View\Agenda\Slot\AvailableSlotView;
 use Proximum\Vimeet\Domain\Event\Day\DDayGuesser;
+use Proximum\Vimeet\Domain\KeyDates\Checker\MeetingRequestAccessChecker;
 use Proximum\Vimeet\Domain\Model\Event\Day;
 use Proximum\Vimeet\Domain\Repository\MeetingSlotRepositoryInterface;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
@@ -36,6 +37,10 @@ class AvailableSlotsByParticipantAndDayQueryHandlerTest extends TestCase
         $sheet = SheetFactory::create($event);
         $participant = ParticipantFactory::create($sheet);
 
+        $meetingRequestAccessChecker = $this->prophesize(MeetingRequestAccessChecker::class);
+        $meetingRequestAccessChecker->allowedToAccess($event)
+            ->shouldNotBeCalled();
+
         $meetingSlotRepository = $this->prophesize(MeetingSlotRepositoryInterface::class);
         $dDayGuesser = $this->prophesize(DDayGuesser::class);
 
@@ -43,7 +48,8 @@ class AvailableSlotsByParticipantAndDayQueryHandlerTest extends TestCase
         $handler = new AvailableSlotsByParticipantAndDayQueryHandler(
             $dDayGuesser->reveal(),
             $meetingSlotRepository->reveal(),
-            $currentTime
+            $currentTime,
+            $meetingRequestAccessChecker->reveal()
         );
 
         $meetingSlotRepository
@@ -82,6 +88,11 @@ class AvailableSlotsByParticipantAndDayQueryHandlerTest extends TestCase
         $sheet = SheetFactory::create($event);
         $participant = ParticipantFactory::create($sheet);
 
+        $meetingRequestAccessChecker = $this->prophesize(MeetingRequestAccessChecker::class);
+        $meetingRequestAccessChecker->allowedToAccess($event)
+            ->shouldBeCalled()
+            ->willReturn(true);
+
         $meetingSlotRepository = $this->prophesize(MeetingSlotRepositoryInterface::class);
         $dDayGuesser = $this->prophesize(DDayGuesser::class);
 
@@ -94,7 +105,8 @@ class AvailableSlotsByParticipantAndDayQueryHandlerTest extends TestCase
         $handler  = new AvailableSlotsByParticipantAndDayQueryHandler(
             $dDayGuesser->reveal(),
             $meetingSlotRepository->reveal(),
-            $currentTime
+            $currentTime,
+            $meetingRequestAccessChecker->reveal()
         );
 
         $meetingSlotRepository
@@ -125,6 +137,11 @@ class AvailableSlotsByParticipantAndDayQueryHandlerTest extends TestCase
         $event->setDays([new Day($event, $begin, $end)]);
         $day = $event->getFirstDay();
 
+        $meetingRequestAccessChecker = $this->prophesize(MeetingRequestAccessChecker::class);
+        $meetingRequestAccessChecker->allowedToAccess($event)
+            ->shouldBeCalled()
+            ->willReturn(true);
+
         $sheet       = SheetFactory::create($event);
         $participant = ParticipantFactory::create($sheet);
 
@@ -141,7 +158,8 @@ class AvailableSlotsByParticipantAndDayQueryHandlerTest extends TestCase
         $handler = new AvailableSlotsByParticipantAndDayQueryHandler(
             $dDayGuesser->reveal(),
             $meetingSlotRepository->reveal(),
-            $currentTime
+            $currentTime,
+            $meetingRequestAccessChecker->reveal()
         );
 
         $meetingSlotRepository

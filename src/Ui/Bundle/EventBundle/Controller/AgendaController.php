@@ -136,13 +136,13 @@ class AgendaController extends Controller
         }
 
         return $this->render('EventBundle:Agenda:index.html.twig', [
-            'event'                        => $eventDomain->getEvent(),
-            'agenda'                       => $agenda,
-            'sheet'                        => $sheet,
-            'tipTranslationViews'          => $tipTranslationViews,
-            'sendCodeForm'                 => $sendCodeForm,
+            'event' => $eventDomain->getEvent(),
+            'agenda' => $agenda,
+            'sheet' => $sheet,
+            'tipTranslationViews' => $tipTranslationViews,
+            'sendCodeForm' => $sendCodeForm,
             'sendCodeViewTranslationViews' => $sendCodeViewTranslationViews,
-            'ignorePhoneConfirmationUrl'   => $ignorePhoneConfirmationUrl,
+            'ignorePhoneConfirmationUrl' => $ignorePhoneConfirmationUrl,
         ]);
     }
 
