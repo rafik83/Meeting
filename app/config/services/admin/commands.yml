@@ -210,3 +210,13 @@ services:
             - '@Proximum\Vimeet\Application\Command\OMZ\NotifyHandler'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\OMZ\Export }
+
+    #
+    # Group
+    #
+    Proximum\Vimeet\Application\Command\Group\DuplicateToEventHandler:
+        arguments:
+            - '@repository.sheet.group_repository'
+            - '@datetime'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Group\DuplicateToEvent }

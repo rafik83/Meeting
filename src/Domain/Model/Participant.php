@@ -348,4 +348,18 @@ class Participant implements MailRecipientInterface
 
         $this->participantProduct = $participantProduct;
     }
+
+    public static function duplicateFrom(Participant $participant, Sheet $sheet): Participant
+    {
+        $duplicatedParticipant = new Participant(
+            $sheet,
+            $participant->getUser(),
+            $participant->getData(),
+            $participant->isActive()
+        );
+
+        $duplicatedParticipant->setImported(true);
+
+        return $duplicatedParticipant;
+    }
 }

@@ -461,4 +461,6 @@ interface SheetRepositoryInterface
      * @return Sheet[]
      */
     public function getByTypesAndWithoutGivenExtraData(array $types, string $extraDataName): array;
+
+    public function hasSheetBeenDuplicatedByEvent(Sheet $sheet, Event $event): bool;
 }

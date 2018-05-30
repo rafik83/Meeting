@@ -22,6 +22,12 @@ Proximum\Vimeet\Domain\Model\Sheet\Group:
             joinColumn:
                 nullable: false
                 onDelete: CASCADE
+        duplicatedFrom:
+            targetEntity: Proximum\Vimeet\Domain\Model\Sheet\Group
+            joinColumn:
+                nullable: true
+                unique: true
+                onDelete: SET NULL
     oneToMany:
         sheets:
             targetEntity: Proximum\Vimeet\Domain\Model\Sheet

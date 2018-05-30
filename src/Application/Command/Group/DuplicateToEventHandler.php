@@ -1,0 +1,66 @@
+<?php
+
+/*
+ * This file is part of the Proximum Vimeet project.
+ *
+ * Copyright (C) Proximum
+ *
+ * @author Elao <contact@elao.com>
+ */
+
+namespace Proximum\Vimeet\Application\Command\Group;
+
+use Proximum\Vimeet\Domain\Exception\Group\Duplicate\CanNotDuplicateToTheSameEventException;
+use Proximum\Vimeet\Domain\Exception\Group\Duplicate\GroupAlreadyDuplicatedInGivenEventException;
+use Proximum\Vimeet\Domain\Model\Sheet\Group;
+use Proximum\Vimeet\Domain\Repository\Sheet\GroupRepositoryInterface;
+
+class DuplicateToEventHandler
+{
+    /** @var GroupRepositoryInterface */
+    private $groupRepository;
+
+    /** @var \DateTimeInterface */
+    private $dateTime;
+
+    public function __construct(
+        GroupRepositoryInterface $groupRepository,
+        \DateTimeInterface $dateTime
+    ) {
+        $this->groupRepository = $groupRepository;
+        $this->dateTime = $dateTime;
+    }
+
+    /**
+     * @param DuplicateToEvent $duplicateToEvent
+     *
+     * @return Group
+     *
+     * @throws CanNotDuplicateToTheSameEventException
+     * @throws GroupAlreadyDuplicatedInGivenEventException
+     */
+    public function handle(DuplicateToEvent $duplicateToEvent): Group
+    {
+        if ($duplicateToEvent->group->getEvent() === $duplicateToEvent->toEvent) {
+            throw new CanNotDuplicateToTheSameEventException('The given toEvent is the same as the event of the given Group');
+        }
+
+        $duplicatedGroup = $this->groupRepository->findDuplicatedGroupInEvent($duplicateToEvent->group, $duplicateToEvent->toEvent);
+        if ($duplicatedGroup instanceof Group) {
+            throw new GroupAlreadyDuplicatedInGivenEventException($duplicatedGroup);
+        }
+
+        $originGroup = $duplicateToEvent->group;
+        $group = new Group(
+            $duplicateToEvent->toEvent,
+            $originGroup->getManager(),
+            $originGroup->getTitle(),
+            $this->dateTime,
+            $originGroup
+        );
+
+        $this->groupRepository->add($group);
+
+        return $group;
+    }
+}

@@ -27,6 +27,7 @@ mail.event.preregister.body: "%firstname% %lastname%,\n\nVotre demande d'inscrip
 mail.event.preregister.end: ''
 mail.event.preregister.link: 'Votre profil participant'
 mail.event.preregister.subject: 'Vous êtes pré-enregistré à %event%'
+mail.event.sheets_duplicated.subject: 'Fiches dupliquées de "%eventOrigin%" vers "%event%"'
 mail.footer.contact: Contact
 mail.happening.participation.intro: 'Liste des participants mis à jour automatiquement par événement'
 mail.happening.participation.register: '%name% inscrit'

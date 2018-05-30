@@ -36,7 +36,7 @@ class GroupRepository implements GroupRepositoryInterface
      *
      * @return null|Group
      */
-    public function getById($id)
+    public function getById($id): ?Group
     {
         return $this
             ->entityManager
@@ -53,7 +53,7 @@ class GroupRepository implements GroupRepositoryInterface
     /**
      * {@inheritdoc}
      */
-    public function getByEventAndManager(Event $event, User $manager)
+    public function getByEventAndManager(Event $event, User $manager): ?Group
     {
         return $this
             ->entityManager
@@ -71,7 +71,7 @@ class GroupRepository implements GroupRepositoryInterface
     /**
      * {@inheritdoc}
      */
-    public function getAllByEventOrderedByTitle(Event $event)
+    public function getAllByEventOrderedByTitle(Event $event): array
     {
         return $this->entityManager
             ->createQueryBuilder()
@@ -87,7 +87,7 @@ class GroupRepository implements GroupRepositoryInterface
     /**
      * {@inheritdoc}
      */
-    public function getByEvent(Event $event)
+    public function getByEvent(Event $event): array
     {
         $queryBuilder = $this
             ->entityManager
@@ -103,7 +103,7 @@ class GroupRepository implements GroupRepositoryInterface
     /**
      * {@inheritdoc}
      */
-    public function add(Group $group)
+    public function add(Group $group): void
     {
         $this->entityManager->persist($group);
         $this->entityManager->flush($group);
@@ -112,7 +112,7 @@ class GroupRepository implements GroupRepositoryInterface
     /**
      * @param Group $group
      */
-    public function set(Group $group)
+    public function set(Group $group): void
     {
         $this->entityManager->flush($group);
     }
@@ -120,7 +120,7 @@ class GroupRepository implements GroupRepositoryInterface
     /**
      * {@inheritdoc}
      */
-    public function getByUserAndEvent(User $user, Event $event)
+    public function getByUserAndEvent(User $user, Event $event): ?Group
     {
         $queryBuilder = $this
             ->entityManager
@@ -132,6 +132,23 @@ class GroupRepository implements GroupRepositoryInterface
             ->setParameters([
                 'event' => $event,
                 'user'  => $user,
+            ])
+            ->setMaxResults(1);
+
+        return $queryBuilder->getQuery()->getOneOrNullResult();
+    }
+
+    public function findDuplicatedGroupInEvent(Group $originGroup, Event $event): ?Group
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('sheetsGroup')
+            ->from(Group::class, 'sheetsGroup')
+            ->where('sheetsGroup.event = :event AND sheetsGroup.duplicatedFrom = :originGroup')
+            ->setParameters([
+                'event' => $event,
+                'originGroup' => $originGroup,
             ])
             ->setMaxResults(1);
 

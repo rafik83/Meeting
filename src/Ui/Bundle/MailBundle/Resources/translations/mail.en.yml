@@ -27,6 +27,7 @@ mail.event.preregister.body: "%firstname% %lastname%, \n\nYour registration to %
 mail.event.preregister.end: ''
 mail.event.preregister.link: 'Your member area'
 mail.event.preregister.subject: 'You are pre-registered to %event%'
+mail.event.sheets_duplicated.subject: 'Sheets duplicated from "%eventOrigin%" to "%event%"'
 mail.footer.contact: Contact
 mail.happening.participation.intro: ''
 mail.happening.participation.register: '%name% registered'

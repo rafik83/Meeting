@@ -946,8 +946,15 @@ services:
             - '@vimeet_infrastructure.application.components.sheet.sheet_info_guesser'
             - '@adapter_batch_job_queue.batch_enable_disable_job_queue'
 
+    Proximum\Vimeet\Application\Command\Sheet\BatchDuplicateSheetsHandler:
+        arguments:
+            - '@vimeet_infrastructure.repository.sheet_repository'
+            - '@Proximum\Vimeet\Infrastructure\Repository\Event\ExtraDataRepository'
+            - '@Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Adapter\BatchJobQueue\BatchDuplicateSheetsJobQueue'
+            - '@datetime'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Sheet\BatchEnableDisable }
+
     command.sheet.batch_catalog_handler:
         class: Proximum\Vimeet\Application\Command\Sheet\BatchCatalogHandler
         arguments:
@@ -987,6 +994,16 @@ services:
             - '@vimeet_infrastructure.adapter.delayed_event_dispatcher'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Sheet\SubmitValidation }
+    Proximum\Vimeet\Application\Command\Sheet\SheetDuplicatorHandler:
+        arguments:
+            - '@vimeet_infrastructure.repository.sheet_repository'
+            - '@event_dispatcher'
+            - '@Proximum\Vimeet\Application\Components\Group\GroupDuplicator'
+            - '@adapter.mailer_adapter'
+            - '@datetime'
+            - '%mailer_sender%'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Sheet\SheetDuplicator }
     command.sheet.sheet_viewed.add_handler:
         class: Proximum\Vimeet\Application\Command\Sheet\SheetViewed\AddHandler
         arguments:
@@ -1086,6 +1103,7 @@ services:
             - '@command.sheet.batch_pending_handler'
             - '@command.sheet.batch_pdf_job_creator_handler'
             - '@Proximum\Vimeet\Application\Command\Sheet\Batch\PrintPlanningHandler'
+            - '@Proximum\Vimeet\Application\Command\Sheet\BatchDuplicateSheetsHandler'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Sheet\Batch }
 
@@ -2286,6 +2304,9 @@ services:
             - '@doctrine.orm.entity_manager'
     adapter_batch_job_queue.batch_validate_job_queue:
         class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Adapter\BatchJobQueue\BatchValidateJobQueue
+        arguments:
+            - '@doctrine.orm.entity_manager'
+    Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Adapter\BatchJobQueue\BatchDuplicateSheetsJobQueue:
         arguments:
             - '@doctrine.orm.entity_manager'
     adapter_batch_job_queue.batch_catalog_job_queue:
@@ -4510,6 +4531,17 @@ services:
             - '@repository.admin_repository'
             - '@vimeet_infrastructure.repository.sheet_repository'
             - '@command.sheet.post_batch.post_batch_enable_disable_handler'
+        tags:
+            - { name: console.command }
+
+    Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\Batch\BatchDuplicateSheetsCommand:
+        arguments:
+            - '@vimeet_infrastructure.repository.event_repository'
+            - '@repository.admin_repository'
+            - '@vimeet_infrastructure.repository.sheet_repository'
+            - '@vimeet_infrastructure.repository.type_repository'
+            - '@Proximum\Vimeet\Infrastructure\Repository\Event\ExtraDataRepository'
+            - '@Proximum\Vimeet\Application\Command\Sheet\SheetDuplicatorHandler'
         tags:
             - { name: console.command }
 
