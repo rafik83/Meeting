@@ -12,10 +12,16 @@ services:
             - '@adapter.serializer_adapter'
             - '%infrastructure.import_spot_path%'
 
-
     #
     # Group
     #
     Proximum\Vimeet\Application\Components\Group\GroupDuplicator:
         arguments:
             - '@Proximum\Vimeet\Application\Command\Group\DuplicateToEventHandler'
+
+    #
+    # Template Data
+    #
+    Proximum\Vimeet\Application\Components\TemplateData\TemplateDataFileDuplicator:
+        arguments:
+            - '@adapter.local_file_storage'
