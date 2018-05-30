@@ -4580,6 +4580,12 @@ services:
         tags:
             - { name: console.command }
 
+    Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\Session\DeleteExpiredSessionsCommand:
+        arguments:
+            - '@session.handler.pdo'
+        tags:
+            - { name: console.command }
+
     #
     # Funnel
     #
