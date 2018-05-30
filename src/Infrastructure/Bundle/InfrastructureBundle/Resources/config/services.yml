@@ -4536,6 +4536,7 @@ services:
 
     Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\Batch\BatchDuplicateSheetsCommand:
         arguments:
+            - '@vimeet_infrastructure.repository.event_repository'
             - '@repository.admin_repository'
             - '@vimeet_infrastructure.repository.sheet_repository'
             - '@vimeet_infrastructure.repository.type_repository'

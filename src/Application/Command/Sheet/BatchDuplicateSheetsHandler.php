@@ -13,7 +13,6 @@ namespace Proximum\Vimeet\Application\Command\Sheet;
 use Proximum\Vimeet\Application\Adapter\BatchJobQueueInterface;
 use Proximum\Vimeet\Domain\Event\ExtraData\Type;
 use Proximum\Vimeet\Domain\Model\Event\ExtraData;
-use Proximum\Vimeet\Domain\Event\ExtraData\Type as ExtraDataType;
 use Proximum\Vimeet\Domain\Repository\Event\ExtraDataRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
 
@@ -63,6 +62,7 @@ class BatchDuplicateSheetsHandler
                 [
                     'typeId' => $batchDuplicateSheets->type->getId(),
                     'extraDataId' => $extraData->getId(),
+                    'originalEventId' => $batchDuplicateSheets->originalEvent->getId(),
                 ]
             );
         }

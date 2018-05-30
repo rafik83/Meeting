@@ -57,34 +57,36 @@ class SheetDuplicatorHandler
 
     public function handle(SheetDuplicator $command): void
     {
-        $importedSheets = 0;
+        $importedSheets = [];
+        $destinationEvent = $command->type->getEvent();
 
         foreach ($command->sheets as $sheet) {
-            if (true === $this->sheetRepository->hasSheetBeenDuplicated($sheet)) {
+            if (true === $this->sheetRepository->hasSheetBeenDuplicatedByEvent($sheet, $destinationEvent)) {
                 continue;
             }
 
             $group = null;
 
             if ($sheet->getGroup() instanceof Sheet\Group) {
-                $group = $this->groupDuplicator->duplicateToEvent($sheet->getGroup(), $command->type->getEvent());
+                $group = $this->groupDuplicator->duplicateToEvent($sheet->getGroup(), $destinationEvent);
             }
 
             $sheet = Sheet::duplicateSheetFrom($sheet, $group, $command->type, $this->datetime);
             $this->sheetRepository->add($sheet);
             $this->eventDispatcher->dispatch(Events::SHEET_UPDATED, new SheetUpdatedEvent($sheet));
 
-            $importedSheets++;
+            $importedSheets[] = $sheet;
         }
 
-        if (0 === $importedSheets) {
+        if (empty($importedSheets)) {
             return;
         }
 
         $this->mailer->send(
             new SheetsDuplicatedMail(
+                $destinationEvent,
+                $command->originEvent,
                 $importedSheets,
-                $command->type->getEvent(),
                 $this->sender,
                 $command->admin->getEmail(),
                 $command->admin->getLocale()

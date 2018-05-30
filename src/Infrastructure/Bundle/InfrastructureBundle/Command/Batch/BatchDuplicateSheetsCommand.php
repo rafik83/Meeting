@@ -13,10 +13,12 @@ namespace Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\Bat
 use Proximum\Vimeet\Application\Command\Sheet\SheetDuplicator;
 use Proximum\Vimeet\Application\Command\Sheet\SheetDuplicatorHandler;
 use Proximum\Vimeet\Domain\Model\Admin;
+use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Event\ExtraData;
 use Proximum\Vimeet\Domain\Model\Type;
 use Proximum\Vimeet\Domain\Repository\AdminRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\Event\ExtraDataRepositoryInterface;
+use Proximum\Vimeet\Domain\Repository\EventRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\TypeRepositoryInterface;
 use Symfony\Component\Console\Command\Command;
@@ -27,6 +29,9 @@ use Symfony\Component\Console\Output\OutputInterface;
 class BatchDuplicateSheetsCommand extends Command
 {
     public const NAME = 'vimeet:sheets:duplicate';
+
+    /** @var EventRepositoryInterface */
+    private $eventRepository;
 
     /** @var AdminRepositoryInterface */
     private $adminRepository;
@@ -44,6 +49,7 @@ class BatchDuplicateSheetsCommand extends Command
     private $sheetDuplicatorHandler;
 
     public function __construct(
+        EventRepositoryInterface $eventRepository,
         AdminRepositoryInterface $adminRepository,
         SheetRepositoryInterface $sheetRepository,
         TypeRepositoryInterface $typeRepository,
@@ -52,6 +58,7 @@ class BatchDuplicateSheetsCommand extends Command
     ) {
         parent::__construct(self::NAME);
 
+        $this->eventRepository = $eventRepository;
         $this->adminRepository = $adminRepository;
         $this->sheetRepository = $sheetRepository;
         $this->typeRepository = $typeRepository;
@@ -66,7 +73,8 @@ class BatchDuplicateSheetsCommand extends Command
             ->setDescription('Batch duplicate sheets action')
             ->addArgument('adminId', InputArgument::REQUIRED, 'Admin id')
             ->addArgument('typeId', InputArgument::REQUIRED, 'Type id')
-            ->addArgument('extraDataId', InputArgument::REQUIRED, 'ExtraData id');
+            ->addArgument('extraDataId', InputArgument::REQUIRED, 'ExtraData id')
+            ->addArgument('originalEventId', InputArgument::REQUIRED, 'Original event id');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): void
@@ -89,11 +97,17 @@ class BatchDuplicateSheetsCommand extends Command
             throw new \InvalidArgumentException('Extra data not found.');
         }
 
+        $originalEvent = $this->eventRepository->getById($input->getArgument('originalEventId'));
+
+        if (!$originalEvent instanceof Event) {
+            throw new \InvalidArgumentException('Event not found.');
+        }
+
         $sheetIds = explode(',', $extraData->getValue());
         $sheets = $this->sheetRepository->findByIds($sheetIds);
 
         $this->sheetDuplicatorHandler->handle(
-            new SheetDuplicator($sheets, $admin, $type)
+            new SheetDuplicator($originalEvent, $sheets, $admin, $type)
         );
     }
 }

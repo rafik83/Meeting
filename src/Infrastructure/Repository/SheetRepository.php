@@ -1205,7 +1205,7 @@ class SheetRepository implements SheetRepositoryInterface
         return $queryBuilder->getQuery()->getResult();
     }
 
-    public function hasSheetBeenDuplicated(Sheet $sheet): bool
+    public function hasSheetBeenDuplicatedByEvent(Sheet $sheet, Event $event): bool
     {
         return (
             $this->entityManager
@@ -1213,7 +1213,11 @@ class SheetRepository implements SheetRepositoryInterface
                 ->select('count(sheet.id)')
                 ->from(Sheet::class, 'sheet')
                 ->where('sheet.duplicatedFrom = :sheet')
-                ->setParameter('sheet', $sheet)
+                ->andWhere('sheet.event = :event')
+                ->setParameters([
+                    'sheet' => $sheet,
+                    'event' => $event,
+                ])
                 ->getQuery()
                 ->getSingleScalarResult()
             ) > 0;

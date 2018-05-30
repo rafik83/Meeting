@@ -46,6 +46,7 @@ class SheetDuplicatorHandlerTest extends TestCase
             ->shouldBeCalled()
             ->willReturn('fr');
 
+        $originalEvent = $this->prophesize(Event::class);
         $event = $this->prophesize(Event::class);
         $type = $this->prophesize(Type::class);
         $type->getEvent()
@@ -68,11 +69,11 @@ class SheetDuplicatorHandlerTest extends TestCase
         $sheet2->getGroup()->willReturn(null);
         $sheet2->getParticipants()->willReturn([$participant]);
 
-        $sheetRepository->hasSheetBeenDuplicated($sheet1->reveal())
+        $sheetRepository->hasSheetBeenDuplicatedByEvent($sheet1->reveal(), $event->reveal())
             ->shouldBeCalled()
             ->willReturn(true);
 
-        $sheetRepository->hasSheetBeenDuplicated($sheet2->reveal())
+        $sheetRepository->hasSheetBeenDuplicatedByEvent($sheet2->reveal(), $event->reveal())
             ->shouldBeCalled()
             ->willReturn(false);
 
@@ -106,8 +107,9 @@ class SheetDuplicatorHandlerTest extends TestCase
 
         $mailer->send(
             new SheetsDuplicatedMail(
-                1,
-                $event->reveal(),
+                $expectedSheet->getEvent(),
+                $originalEvent->reveal(),
+                [$expectedSheet],
                 'sender@mail.fr',
                 'admin@mail.fr',
                 'fr'
@@ -125,6 +127,7 @@ class SheetDuplicatorHandlerTest extends TestCase
 
         $handler->handle(
             new SheetDuplicator(
+                $originalEvent->reveal(),
                 [
                     $sheet1->reveal(),
                     $sheet2->reveal(),

@@ -17,6 +17,7 @@ use Proximum\Vimeet\Application\Command\Sheet\BatchDuplicateSheets;
 use Proximum\Vimeet\Application\Command\Sheet\BatchDuplicateSheetsHandler;
 use Proximum\Vimeet\Domain\Event\ExtraData\Type as ExtraDataType;
 use Proximum\Vimeet\Domain\Model\Admin;
+use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Event\ExtraData;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\Type;
@@ -34,6 +35,7 @@ class BatchDuplicateSheetsHandlerTest extends TestCase
         $sheet1 = $this->prophesize(Sheet::class);
         $sheet2 = $this->prophesize(Sheet::class);
         $admin = $this->prophesize(Admin::class);
+        $originalEvent = $this->prophesize(Event::class);
         $event = EventFactory::createEvent();
         $type = $this->prophesize(Type::class);
         $type->getId()->willReturn(1);
@@ -60,6 +62,7 @@ class BatchDuplicateSheetsHandlerTest extends TestCase
             [
                 'typeId' => 1,
                 'extraDataId' => null,
+                'originalEventId' => null,
             ])
             ->shouldBeCalled();
 
@@ -69,6 +72,13 @@ class BatchDuplicateSheetsHandlerTest extends TestCase
             $jobQueue->reveal(),
             $date
         );
-        $handler->handle(new BatchDuplicateSheets($admin->reveal(), $type->reveal(), [1, 2, 3, 4]));
+        $handler->handle(
+            new BatchDuplicateSheets(
+                $originalEvent->reveal(),
+                $admin->reveal(),
+                $type->reveal(),
+                [1, 2, 3, 4]
+            )
+        );
     }
 }

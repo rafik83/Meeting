@@ -13,6 +13,7 @@ namespace Proximum\Vimeet\Ui\Bundle\MailBundle\Mail\Sheet;
 use Proximum\Vimeet\Application\Components\Mail\AbstractMail;
 use Proximum\Vimeet\Application\Event\Events;
 use Proximum\Vimeet\Domain\Model\Event;
+use Proximum\Vimeet\Domain\Model\Sheet;
 
 class SheetsDuplicatedMail extends AbstractMail
 {
@@ -25,15 +26,19 @@ class SheetsDuplicatedMail extends AbstractMail
     /** @var string */
     protected $messageId = Events::EVENT_SHEETS_DUPLICATED;
 
-    /** @var int */
-    public $numberOfSheetsDuplicated;
-
     /** @var Event */
     public $event;
 
+    /** @var Event */
+    public $originEvent;
+
+    /** @var Sheet[] */
+    public $importedSheets;
+
     public function __construct(
-        int $numberOfSheetsDuplicated,
         Event $event,
+        Event $originEvent,
+        array $importedSheets,
         $sender,
         $receiver,
         $locale
@@ -41,6 +46,15 @@ class SheetsDuplicatedMail extends AbstractMail
         parent::__construct($sender, $receiver, $locale);
 
         $this->event = $event;
-        $this->numberOfSheetsDuplicated = $numberOfSheetsDuplicated;
+        $this->originEvent = $originEvent;
+        $this->importedSheets = $importedSheets;
+    }
+
+    public function getSubjectParameters(): array
+    {
+        return [
+            '%event%' => $this->event->getTitle(),
+            '%eventOrigin%' => $this->originEvent->getTitle(),
+        ];
     }
 }
