@@ -25,3 +25,8 @@ services:
     Proximum\Vimeet\Application\Components\TemplateData\TemplateDataFileDuplicator:
         arguments:
             - '@adapter.local_file_storage'
+
+    Proximum\Vimeet\Application\Components\TemplateData\TemplateDataDuplicator:
+        arguments:
+            - '@template.template_data_factory'
+            - '@Proximum\Vimeet\Application\Components\TemplateData\TemplateDataFileDuplicator'
