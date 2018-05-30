@@ -998,6 +998,7 @@ services:
         arguments:
             - '@vimeet_infrastructure.repository.sheet_repository'
             - '@event_dispatcher'
+            - '@Proximum\Vimeet\Application\Components\Group\GroupDuplicator'
             - '@adapter.mailer_adapter'
             - '@datetime'
             - '%mailer_sender%'

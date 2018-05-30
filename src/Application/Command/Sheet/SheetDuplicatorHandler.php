@@ -11,6 +11,7 @@
 namespace Proximum\Vimeet\Application\Command\Sheet;
 
 use Proximum\Vimeet\Application\Adapter\MailerInterface;
+use Proximum\Vimeet\Application\Components\Group\GroupDuplicator;
 use Proximum\Vimeet\Application\Event\Events;
 use Proximum\Vimeet\Application\Event\Sheet\SheetUpdatedEvent;
 use Proximum\Vimeet\Ui\Bundle\MailBundle\Mail\Sheet\SheetsDuplicatedMail;
@@ -26,6 +27,9 @@ class SheetDuplicatorHandler
     /** @var EventDispatcherInterface */
     private $eventDispatcher;
 
+    /** @var GroupDuplicator */
+    private $groupDuplicator;
+
     /** @var MailerInterface */
     private $mailer;
 
@@ -38,12 +42,14 @@ class SheetDuplicatorHandler
     public function __construct(
         SheetRepositoryInterface $sheetRepository,
         EventDispatcherInterface $eventDispatcher,
+        GroupDuplicator $groupDuplicator,
         MailerInterface $mailer,
         \DateTimeInterface $datetime,
         string $sender
     ) {
         $this->sheetRepository = $sheetRepository;
         $this->eventDispatcher = $eventDispatcher;
+        $this->groupDuplicator = $groupDuplicator;
         $this->datetime = $datetime;
         $this->mailer = $mailer;
         $this->sender = $sender;
@@ -51,16 +57,33 @@ class SheetDuplicatorHandler
 
     public function handle(SheetDuplicator $command): void
     {
-        foreach ($command->sheets as $sheet) {
-            $sheet = Sheet::duplicateSheetFrom($sheet, $command->type, $this->datetime);
+        $importedSheets = 0;
 
+        foreach ($command->sheets as $sheet) {
+            if (true === $this->sheetRepository->hasSheetBeenDuplicated($sheet)) {
+                continue;
+            }
+
+            $group = null;
+
+            if ($sheet->getGroup() instanceof Sheet\Group) {
+                $group = $this->groupDuplicator->duplicateToEvent($sheet->getGroup(), $command->type->getEvent());
+            }
+
+            $sheet = Sheet::duplicateSheetFrom($sheet, $group, $command->type, $this->datetime);
             $this->sheetRepository->add($sheet);
             $this->eventDispatcher->dispatch(Events::SHEET_UPDATED, new SheetUpdatedEvent($sheet));
+
+            $importedSheets++;
+        }
+
+        if (0 === $importedSheets) {
+            return;
         }
 
         $this->mailer->send(
             new SheetsDuplicatedMail(
-                $command->sheets,
+                $importedSheets,
                 $command->type->getEvent(),
                 $this->sender,
                 $command->admin->getEmail(),

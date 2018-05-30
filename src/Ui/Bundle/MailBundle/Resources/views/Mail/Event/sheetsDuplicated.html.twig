@@ -1,10 +1,5 @@
 {% extends 'MailBundle:Mail:base.html.twig' %}
 
 {% block body %}
-    <p>{{ 'mail.event.sheets_duplicated.intro'|trans({}, 'mail', mail.locale) }}</p>
-    <ul>
-        {% for sheet in mail.sheets %}
-            <li>{{ sheet.title }}</li>
-        {% endfor %}
-    </ul>
+    <p>{{ 'mail.event.sheets_duplicated.intro'|transchoice(mail.numberOfSheetsDuplicated, {'%count%': mail.numberOfSheetsDuplicated}, 'mail', mail.locale) }}</p>
 {% endblock %}

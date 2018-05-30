@@ -1147,8 +1147,17 @@ class Sheet implements TraceableInterface
         return $this->duplicatedFrom;
     }
 
-    public static function duplicateSheetFrom(Sheet $sheet, Type $type, \DateTimeInterface $createdAt): Sheet
+    public function setDuplicatedFrom(Sheet $sheet): void
     {
+        $this->duplicatedFrom = $sheet;
+    }
+
+    public static function duplicateSheetFrom(
+        Sheet $sheet,
+        ?Group $group,
+        Type $type,
+        \DateTimeInterface $createdAt
+    ): Sheet {
         $duplicatedSheet = new Sheet(
             $type->getEvent(),
             $type,
@@ -1157,9 +1166,14 @@ class Sheet implements TraceableInterface
             $createdAt
         );
 
+        if ($group instanceof Group) {
+            $duplicatedSheet->setGroup($group);
+        }
+
         $duplicatedSheet->setImported(true);
-        $duplicatedSheet->setRegistrationData($sheet->getRegistrationData());
         $duplicatedSheet->setTitle($sheet->getTitle());
+        $duplicatedSheet->setRegistrationData($sheet->getRegistrationData());
+        $duplicatedSheet->setDuplicatedFrom($sheet);
 
         foreach ($sheet->getParticipants() as $participant) {
             $duplicatedSheet->addParticipant(Participant::duplicateFrom($participant, $duplicatedSheet));
