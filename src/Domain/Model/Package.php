@@ -134,7 +134,7 @@ class Package
     /**
      * @return Product[]
      */
-    public function getAvailablePlans()
+    public function getAvailablePlans(): array
     {
         return array_filter(
             $this->getPlans(),
