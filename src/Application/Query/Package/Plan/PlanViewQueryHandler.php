@@ -40,6 +40,7 @@ class PlanViewQueryHandler
             $planViewQuery->product->getId(),
             $planViewQuery->product->getTitle($planViewQuery->locale),
             $planViewQuery->product->getUnitPrice(),
+            $planViewQuery->product->isOutOfStock(),
             $planViewQuery->product->getHeading($planViewQuery->locale),
             $planViewQuery->product->getDescription($planViewQuery->locale),
             $planViewQuery->product->getImage(),

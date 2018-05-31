@@ -132,6 +132,19 @@ class Package
     }
 
     /**
+     * @return Product[]
+     */
+    public function getAvailablePlans()
+    {
+        return array_filter(
+            $this->getPlans(),
+            function (Product $product) {
+                return !$product->isOutOfStock();
+            }
+        );
+    }
+
+    /**
      * Get ordered participant products
      *
      * @return Product[]

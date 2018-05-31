@@ -33,7 +33,7 @@ class PlansType extends AbstractType
                 'multiple'    => false,
                 'label'       => false,
                 'choice_name' => 'id',
-                'choices'     => $sheet->getPackage()->getPlans(),
+                'choices'     => $sheet->getPackage()->getAvailablePlans(),
                 'required'    => true,
             ]);
     }

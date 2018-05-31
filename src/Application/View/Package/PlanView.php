@@ -12,76 +12,52 @@ namespace Proximum\Vimeet\Application\View\Package;
 
 class PlanView
 {
-    /**
-     * @var int
-     */
+    /** @var int */
     public $id;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     public $title;
 
-    /**
-     * @var float
-     */
+    /** @var float */
     public $price;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     public $heading;
 
-    /**
-     * @var string
-     */
+    /** @var null|string */
     public $description;
 
-    /**
-     * @var string
-     */
+    /** @var null|string */
     public $image;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     public $vatMode;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     public $currency;
 
-    /**
-     * @var FeatureView[]
-     */
+    /** @var FeatureView[] */
     public $features;
 
-    /**
-     * @param int           $id
-     * @param string        $title
-     * @param float         $price
-     * @param string        $heading
-     * @param string        $description
-     * @param string        $image
-     * @param string        $vatMode
-     * @param string        $currency
-     * @param FeatureView[] $features
-     */
+    /** @var bool */
+    public $isOutOfStock;
+
     public function __construct(
-        $id,
-        $title,
-        $price,
-        $heading,
-        $description,
-        $image,
-        $vatMode,
-        $currency,
+        int $id,
+        string $title,
+        float $price,
+        bool $isOutOfStock,
+        string $heading,
+        ?string $description,
+        ?string $image,
+        string $vatMode,
+        string $currency,
         array $features
     ) {
         $this->id          = $id;
         $this->title       = $title;
         $this->price       = $price;
+        $this->isOutOfStock = $isOutOfStock;
         $this->heading     = $heading;
         $this->description = $description;
         $this->image       = $image;
