@@ -374,7 +374,7 @@
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-default" data-dismiss="modal">{{ 'admin.cancel'|trans }}</button>
-                        {{ form_row(batch_form.duplicate) }}
+                        {{ form_row(batch_form.duplicate, {'attr': {'data-confirm': 'form.sheet_batch.children.duplicate.confirm.label'|trans({}, 'forms')}}) }}
                     </div>
                 </div>
             </div>

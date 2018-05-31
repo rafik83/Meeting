@@ -999,6 +999,7 @@ services:
             - '@vimeet_infrastructure.repository.sheet_repository'
             - '@event_dispatcher'
             - '@Proximum\Vimeet\Application\Components\Group\GroupDuplicator'
+            - '@Proximum\Vimeet\Application\Components\TemplateData\TemplateDataDuplicator'
             - '@adapter.mailer_adapter'
             - '@datetime'
             - '%mailer_sender%'

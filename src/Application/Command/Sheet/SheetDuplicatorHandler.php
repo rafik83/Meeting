@@ -12,6 +12,7 @@ namespace Proximum\Vimeet\Application\Command\Sheet;
 
 use Proximum\Vimeet\Application\Adapter\MailerInterface;
 use Proximum\Vimeet\Application\Components\Group\GroupDuplicator;
+use Proximum\Vimeet\Application\Components\TemplateData\TemplateDataDuplicator;
 use Proximum\Vimeet\Application\Event\Events;
 use Proximum\Vimeet\Application\Event\Sheet\SheetUpdatedEvent;
 use Proximum\Vimeet\Ui\Bundle\MailBundle\Mail\Sheet\SheetsDuplicatedMail;
@@ -39,10 +40,14 @@ class SheetDuplicatorHandler
     /** @var string */
     private $sender;
 
+    /** @var TemplateDataDuplicator */
+    private $templateDataDuplicator;
+
     public function __construct(
         SheetRepositoryInterface $sheetRepository,
         EventDispatcherInterface $eventDispatcher,
         GroupDuplicator $groupDuplicator,
+        TemplateDataDuplicator $templateDataDuplicator,
         MailerInterface $mailer,
         \DateTimeInterface $datetime,
         string $sender
@@ -53,6 +58,7 @@ class SheetDuplicatorHandler
         $this->datetime = $datetime;
         $this->mailer = $mailer;
         $this->sender = $sender;
+        $this->templateDataDuplicator = $templateDataDuplicator;
     }
 
     public function handle(SheetDuplicator $command): void
@@ -72,6 +78,9 @@ class SheetDuplicatorHandler
             }
 
             $duplicatedSheet = Sheet::duplicateSheetFrom($sheet, $group, $command->type, $this->datetime);
+
+            $this->templateDataDuplicator->duplicateData($duplicatedSheet);
+
             $this->sheetRepository->add($duplicatedSheet);
             $this->eventDispatcher->dispatch(Events::SHEET_UPDATED, new SheetUpdatedEvent($duplicatedSheet));
 

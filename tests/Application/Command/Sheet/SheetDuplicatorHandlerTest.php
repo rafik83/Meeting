@@ -11,10 +11,12 @@
 namespace Proximum\Vimeet\Tests\Application\Command\Sheet;
 
 use PHPUnit\Framework\TestCase;
+use Prophecy\Argument;
 use Proximum\Vimeet\Application\Adapter\MailerInterface;
 use Proximum\Vimeet\Application\Command\Sheet\SheetDuplicator;
 use Proximum\Vimeet\Application\Command\Sheet\SheetDuplicatorHandler;
 use Proximum\Vimeet\Application\Components\Group\GroupDuplicator;
+use Proximum\Vimeet\Application\Components\TemplateData\TemplateDataDuplicator;
 use Proximum\Vimeet\Application\Event\Events;
 use Proximum\Vimeet\Application\Event\Sheet\SheetUpdatedEvent;
 use Proximum\Vimeet\Domain\Model\Admin;
@@ -34,6 +36,7 @@ class SheetDuplicatorHandlerTest extends TestCase
         $sheetRepository = $this->prophesize(SheetRepositoryInterface::class);
         $eventDispatcher = $this->prophesize(EventDispatcherInterface::class);
         $groupDuplicator = $this->prophesize(GroupDuplicator::class);
+        $templateDateDuplicator = $this->prophesize(TemplateDataDuplicator::class);
         $mailer = $this->prophesize(MailerInterface::class);
         $date = new \DateTime();
 
@@ -99,6 +102,11 @@ class SheetDuplicatorHandlerTest extends TestCase
         $expectedSheet->setDuplicatedFrom($sheet2->reveal());
         $expectedSheet->addParticipant($expectedParticipant);
 
+        $templateDateDuplicator
+            ->duplicateData($expectedSheet)
+            ->shouldBeCalled()
+        ;
+
         $eventDispatcher->dispatch(Events::SHEET_UPDATED, new SheetUpdatedEvent($expectedSheet))
             ->shouldBeCalled();
 
@@ -120,6 +128,7 @@ class SheetDuplicatorHandlerTest extends TestCase
             $sheetRepository->reveal(),
             $eventDispatcher->reveal(),
             $groupDuplicator->reveal(),
+            $templateDateDuplicator->reveal(),
             $mailer->reveal(),
             $date,
             'sender@mail.fr'
