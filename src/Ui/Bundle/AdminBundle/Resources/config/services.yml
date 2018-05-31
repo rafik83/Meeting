@@ -394,3 +394,9 @@ services:
             - '@Proximum\Vimeet\Infrastructure\Adapter\CommandBus'
         tags:
             - { name: kernel.event_subscriber }
+
+    Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\EventListener\RemoveDecryptedFileSubscriber:
+        arguments:
+            - '@adapter.file_system_adapter'
+        tags:
+            - { name: kernel.event_subscriber }

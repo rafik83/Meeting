@@ -273,6 +273,27 @@ event_sheet_internal_print:
     methods:  [GET]
     defaults: { _controller: EventBundle:Sheet:print }
 
+
+#
+# Download file
+#
+event_sheet_download_file:
+    path: /sheet/{sheet}/file/{objectKey}
+    requirements:
+        sheet: \d+
+        templateObject: \d+
+    methods:  [GET]
+    defaults: { _controller: Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\DownloadFileAction }
+
+event_sheet_participant_download_file:
+    path: /sheet/{sheet}/participant/{participant}/file/{objectKey}
+    requirements:
+        sheet: \d+
+        participant: \d+
+        templateObject: \d+
+    methods:  [GET]
+    defaults: { _controller: Proximum\Vimeet\Ui\Bundle\EventBundle\Controller\DownloadFileAction }
+
 #
 # Sheets group
 #
