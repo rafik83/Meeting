@@ -48,4 +48,18 @@ class PackageTest extends TestCase
 
         $this->assertEquals($groups, $package->getGroups());
     }
+
+    public function testGetAvailablePlans()
+    {
+        $event = EventFactory::createEvent();
+        $dateTime = new \DateTime();
+        $package = new Package($event, 'My event', $dateTime);
+
+        $plan1 = Product::createPlan($event, 'Plan 1', null, 100, 20, 1, 10); // available
+        $plan2 = Product::createPlan($event, 'Plan 2', null, 99, 20, 0, 10); // out of stock
+        $plan3 = Product::createPlan($event, 'Plan 3', null, 199, 20, 0, 0); // no stock, so available
+        $package->setPlans([$plan1, $plan2, $plan3]);
+
+        $this->assertSame([$plan1, $plan3], $package->getAvailablePlans());
+    }
 }

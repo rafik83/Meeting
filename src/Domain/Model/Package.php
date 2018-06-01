@@ -136,11 +136,13 @@ class Package
      */
     public function getAvailablePlans(): array
     {
-        return array_filter(
-            $this->getPlans(),
-            function (Product $product) {
-                return !$product->isOutOfStock();
-            }
+        return array_values(
+            array_filter(
+                $this->getPlans(),
+                function (Product $product) {
+                    return !$product->isOutOfStock();
+                }
+            )
         );
     }
 
