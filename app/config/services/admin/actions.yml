@@ -27,6 +27,26 @@ services:
             - '@session.flash_bag'
             - '@adapter.router'
 
+    Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Type\CreateAction:
+        arguments:
+            - '@adapter.authorization_checker'
+            - '@form.factory'
+            - '@session.flash_bag'
+            - '@adapter.router'
+            - '@Proximum\Vimeet\Infrastructure\Adapter\CommandBus'
+            - '@vimeet_infrastructure.adapter.translator_adapter'
+            - '@templating'
+
+    Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Type\UpdateAction:
+        arguments:
+            - '@adapter.authorization_checker'
+            - '@form.factory'
+            - '@session.flash_bag'
+            - '@adapter.router'
+            - '@Proximum\Vimeet\Infrastructure\Adapter\CommandBus'
+            - '@vimeet_infrastructure.adapter.translator_adapter'
+            - '@templating'
+
     #
     # Event
     #

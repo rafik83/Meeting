@@ -36,8 +36,9 @@ class RegistrationTemplateChoiceType extends AbstractType
      */
     public function configureOptions(OptionsResolver $resolver)
     {
-        $resolver->setDefaults([
-            'events'           => [],
+        $resolver
+            ->setRequired('event')
+            ->setDefaults([
             'choices'          => function (Options $options) {
                 return $this->getResults($options);
             },
@@ -47,7 +48,7 @@ class RegistrationTemplateChoiceType extends AbstractType
             },
             'repositoryMethodOrganizer' => function (Options $options) {
                 return function (RegistrationTemplateRepositoryInterface $templateRepository) use ($options) {
-                    return $templateRepository->getTemplateForGivenEvents($options['events']);
+                    return $templateRepository->getTemplateForGivenEvent($options['event']);
                 };
             },
         ]);
@@ -66,7 +67,7 @@ class RegistrationTemplateChoiceType extends AbstractType
      *
      * @return array
      */
-    private function getResults(Options $options)
+    private function getResults(Options $options): array
     {
         $baseTemplates      = $options['repositoryMethod']($this->templateRepository);
         $organizerTemplates = $options['repositoryMethodOrganizer']($this->templateRepository);

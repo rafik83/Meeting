@@ -10,61 +10,42 @@
 
 namespace Proximum\Vimeet\Application\Command\Type;
 
+use Proximum\Vimeet\Application\Command\Command;
 use Proximum\Vimeet\Domain\Model\Package;
 use Proximum\Vimeet\Domain\Model\Template\RegistrationTemplate;
 use Proximum\Vimeet\Domain\Model\Template\SheetTemplate;
 use Proximum\Vimeet\Domain\Model\Type;
 
-class Update
+class Update implements Command
 {
-    /**
-     * @var Type
-     */
+    /** @var Type */
     public $type;
 
-    /**
-     * @var array
-     */
+    /** @var array */
     public $translations = [];
 
-    /**
-     * @var array
-     */
+    /** @var array */
     public $validationCriteria = [];
 
-    /**
-     * @var int
-     */
+    /** @var int */
     public $rank;
 
-    /**
-     * @var SheetTemplate
-     */
+    /** @var SheetTemplate */
     public $sheetTemplate;
 
-    /**
-     * @var Package
-     */
+    /** @var Package */
     public $package;
 
-    /**
-     * @var RegistrationTemplate
-     */
+    /** @var RegistrationTemplate */
     public $registrationTemplate;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     public $locale;
 
-    /**
-     * @var bool
-     */
+    /** @var bool */
     public $hidden;
 
     /**
-     * Update constructor.
-     *
      * @param Type   $type
      * @param string $locale
      */
@@ -79,10 +60,10 @@ class Update
         $this->validationCriteria['sheetAccepted'] = $type->getValidationCriteria()->isSheetAccepted();
         $this->hidden                              = $type->isHidden();
 
-        foreach ($type->getEvent()->getLocales() as $locale) {
-            $this->translations[$locale] = [
-                'title'       => $type->getTitle($locale),
-                'description' => $type->getDescription($locale),
+        foreach ($type->getEvent()->getLocales() as $eventLocale) {
+            $this->translations[$eventLocale] = [
+                'title'       => $type->getTitle($eventLocale),
+                'description' => $type->getDescription($eventLocale),
             ];
         }
     }
