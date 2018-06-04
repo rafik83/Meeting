@@ -17,6 +17,7 @@ use Proximum\Vimeet\Domain\Template\Exception\RegistrationTemplateObjectMustHave
 use Proximum\Vimeet\Domain\Template\Registration\RegistrationTemplateValidator;
 use Proximum\Vimeet\Domain\Template\TemplateData;
 use Proximum\Vimeet\Domain\Template\TemplateObject;
+use Symfony\Component\HttpFoundation\Response;
 
 class RegistrationTemplateValidatorTranslated
 {
@@ -52,7 +53,7 @@ class RegistrationTemplateValidatorTranslated
                     ['%objectsLabel%' => implode(', ', $objectsLabel)],
                     'templates'
                 ),
-                422
+                Response::HTTP_UNPROCESSABLE_ENTITY
             );
         } catch (RegistrationTemplateNomenclatureCheckboxesMustBeOfDepthOneException $exception) {
             $objectsLabel = $this->getObjectsLabel($exception->templateObjects);
@@ -63,7 +64,7 @@ class RegistrationTemplateValidatorTranslated
                     ['%objectsLabel%' => implode(', ', $objectsLabel)],
                     'templates'
                 ),
-                422
+                Response::HTTP_UNPROCESSABLE_ENTITY
             );
         }
     }
