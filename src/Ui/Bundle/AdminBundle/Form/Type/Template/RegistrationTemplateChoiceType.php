@@ -46,7 +46,7 @@ class RegistrationTemplateChoiceType extends AbstractType
             'repositoryMethod' => function (RegistrationTemplateRepositoryInterface $templateRepository) {
                 return $templateRepository->getBaseTemplates();
             },
-            'repositoryMethodOrganizer' => function (Options $options) {
+            'repositoryMethodEvent' => function (Options $options) {
                 return function (RegistrationTemplateRepositoryInterface $templateRepository) use ($options) {
                     return $templateRepository->getTemplateForGivenEvent($options['event']);
                 };
@@ -69,8 +69,8 @@ class RegistrationTemplateChoiceType extends AbstractType
      */
     private function getResults(Options $options): array
     {
-        $baseTemplates      = $options['repositoryMethod']($this->templateRepository);
-        $organizerTemplates = $options['repositoryMethodOrganizer']($this->templateRepository);
+        $baseTemplates  = $options['repositoryMethod']($this->templateRepository);
+        $eventTemplates = $options['repositoryMethodEvent']($this->templateRepository);
 
         $templates = [];
 
@@ -78,8 +78,8 @@ class RegistrationTemplateChoiceType extends AbstractType
             $templates['form.type_template.registration.base'] = $baseTemplates;
         }
 
-        if (!empty($organizerTemplates)) {
-            $templates['form.type_template.registration.organizer'] = $organizerTemplates;
+        if (!empty($eventTemplates)) {
+            $templates['form.type_template.registration.event'] = $eventTemplates;
         }
 
         return $templates;

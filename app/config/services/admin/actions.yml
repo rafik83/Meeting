@@ -96,6 +96,14 @@ services:
             - '@adapter.authorization_checker'
             - '@tactician.commandbus'
 
+    Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\RegistrationTemplate\DuplicateAction:
+        arguments:
+            - '@adapter.authorization_checker'
+            - '@form.factory'
+            - '@adapter.router'
+            - '@Proximum\Vimeet\Infrastructure\Adapter\CommandBus'
+            - '@templating'
+
     #
     # Content
     #

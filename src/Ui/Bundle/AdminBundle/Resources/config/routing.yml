@@ -975,6 +975,13 @@ admin_template_registration_add_locale:
     requirements:
         template: \d+
 
+admin_template_registration_duplicate:
+    path: /template/registration/{template}/duplicate
+    defaults: { _controller: Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\RegistrationTemplate\DuplicateAction }
+    methods: [GET, POST]
+    requirements:
+        template: \d+
+
 #
 # Package
 #

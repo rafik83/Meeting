@@ -54,21 +54,18 @@ class TypeUpdateType extends AbstractType
                     'required'    => true,
                     'expanded'    => false,
                     'multiple'    => false,
-                    'placeholder' => '',
                 ])
                 ->add('registrationTemplate', RegistrationTemplateChoiceType::class, [
                     'event'       => $options['event'],
                     'required'    => true,
                     'expanded'    => false,
                     'multiple'    => false,
-                    'placeholder' => '',
                 ])
                 ->add('package', PackageChoiceType::class, [
                     'currentEvent' => $options['event'],
                     'required'     => true,
                     'expanded'     => false,
                     'multiple'     => false,
-                    'placeholder'  => '',
                 ])
             ;
         }

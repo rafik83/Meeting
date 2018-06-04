@@ -220,3 +220,12 @@ services:
             - '@datetime'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Group\DuplicateToEvent }
+
+    #
+    # RegistrationTemplate
+    #
+    Proximum\Vimeet\Application\Command\Template\Registration\DuplicateHandler:
+        arguments:
+            - '@template.registration.registration_template_cloner'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Template\Registration\Duplicate }
