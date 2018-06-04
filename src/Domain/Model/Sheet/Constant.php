@@ -18,6 +18,7 @@ final class Constant
     const HAS_CART             = 'has_cart';
     const HAS_REMAINING_TO_PAY = 'hasRemainingToPay';
     const BOOLEAN_FILTER       = 'boolean_filters';
+    const FILLED_FILTER        = 'filled_filters';
 
     const ORDER_BY_ALPHABETICAL          = 'alphabetical';
     const ORDER_BY_COMPLETENESS          = 'completeness';

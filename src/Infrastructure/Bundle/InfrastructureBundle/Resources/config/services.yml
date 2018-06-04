@@ -249,6 +249,9 @@ services:
         class: Proximum\Vimeet\Infrastructure\Repository\Filter\BooleanTemplateFilterRepository
         arguments:
             - '@doctrine.orm.entity_manager'
+    Proximum\Vimeet\Infrastructure\Repository\Filter\FilledTemplateFilterRepository:
+        arguments:
+            - '@doctrine.orm.entity_manager'
     repository.filter.tagged_nomenclature_filter_repository:
         class: Proximum\Vimeet\Infrastructure\Repository\Filter\TaggedNomenclatureFilterRepository
         arguments:
@@ -2813,6 +2816,9 @@ services:
         class: Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Service\BooleanFiltersBuilder
         arguments:
             - '@repository.filter.boolean_template_filter_repository'
+    Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Service\FilledFiltersBuilder:
+        arguments:
+            - '@Proximum\Vimeet\Infrastructure\Repository\Filter\FilledTemplateFilterRepository'
 
     #
     # Guesser

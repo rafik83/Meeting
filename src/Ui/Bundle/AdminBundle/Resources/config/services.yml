@@ -291,6 +291,7 @@ services:
         arguments:
             - '@vimeet_infrastructure.repository.category_repository'
             - '@infrastructure.service.boolean_filters_builder'
+            - '@Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Service\FilledFiltersBuilder'
 
     form_type_sheet.sheet_filter_type:
         class: Proximum\Vimeet\Ui\Bundle\AdminBundle\Form\Type\Sheet\SheetFilterType
@@ -356,6 +357,7 @@ services:
         arguments:
             - '@repository.template.registration_template_repository'
             - '@repository.filter.boolean_template_filter_repository'
+            - '@Proximum\Vimeet\Infrastructure\Repository\Filter\FilledTemplateFilterRepository'
             - '@repository.filter.tagged_nomenclature_filter_repository'
             - '@template.template_data_factory'
         tags:

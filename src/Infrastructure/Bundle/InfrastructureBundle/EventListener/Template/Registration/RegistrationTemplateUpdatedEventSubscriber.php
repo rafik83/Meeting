@@ -15,54 +15,48 @@ use Proximum\Vimeet\Application\Event\Events;
 use Proximum\Vimeet\Application\Event\Template\Registration\RegistrationTemplateUpdatedEvent;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Filter\BooleanTemplateFilter;
+use Proximum\Vimeet\Domain\Model\Filter\FilledTemplateFilter;
 use Proximum\Vimeet\Domain\Model\Filter\TaggedNomenclatureFilter;
 use Proximum\Vimeet\Domain\Repository\Filter\BooleanTemplateFilterRepositoryInterface;
+use Proximum\Vimeet\Domain\Repository\Filter\FilledTemplateFilterRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\Filter\TaggedNomenclatureFilterRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\Template\RegistrationTemplateRepositoryInterface;
 use Proximum\Vimeet\Domain\Template\TemplateBooleanFilterIdentifier;
 use Proximum\Vimeet\Domain\Template\TemplateData;
 use Proximum\Vimeet\Domain\Template\TemplateDataFactory;
+use Proximum\Vimeet\Domain\Template\TemplateFilledFilter;
 use Proximum\Vimeet\Domain\Template\TemplateObject\Nomenclature;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 class RegistrationTemplateUpdatedEventSubscriber implements EventSubscriberInterface
 {
-    /**
-     * @var RegistrationTemplateRepositoryInterface
-     */
+    /** @var RegistrationTemplateRepositoryInterface */
     private $registrationTemplateRepository;
 
-    /**
-     * @var BooleanTemplateFilterRepositoryInterface
-     */
+    /** @var BooleanTemplateFilterRepositoryInterface */
     private $booleanTemplateFilterRepository;
 
-    /**
-     * @var TaggedNomenclatureFilterRepositoryInterface
-     */
+    /** @var FilledTemplateFilterRepositoryInterface */
+    private $filledTemplateFilterRepository;
+
+    /** @var TaggedNomenclatureFilterRepositoryInterface */
     private $taggedNomenclatureFilterRepository;
 
-    /**
-     * @var TemplateDataFactory
-     */
+    /** @var TemplateDataFactory */
     private $templateDataFactory;
 
-    /**
-     * @param RegistrationTemplateRepositoryInterface     $registrationTemplateRepository
-     * @param BooleanTemplateFilterRepositoryInterface    $booleanTemplateFilterRepository
-     * @param TaggedNomenclatureFilterRepositoryInterface $taggedNomenclatureFilterRepository
-     * @param TemplateDataFactory                         $templateDataFactory
-     */
     public function __construct(
         RegistrationTemplateRepositoryInterface $registrationTemplateRepository,
         BooleanTemplateFilterRepositoryInterface $booleanTemplateFilterRepository,
+        FilledTemplateFilterRepositoryInterface $filledTemplateFilterRepository,
         TaggedNomenclatureFilterRepositoryInterface $taggedNomenclatureFilterRepository,
         TemplateDataFactory $templateDataFactory
     ) {
-        $this->registrationTemplateRepository     = $registrationTemplateRepository;
-        $this->booleanTemplateFilterRepository    = $booleanTemplateFilterRepository;
+        $this->registrationTemplateRepository = $registrationTemplateRepository;
+        $this->booleanTemplateFilterRepository = $booleanTemplateFilterRepository;
+        $this->filledTemplateFilterRepository  = $filledTemplateFilterRepository;
         $this->taggedNomenclatureFilterRepository = $taggedNomenclatureFilterRepository;
-        $this->templateDataFactory                = $templateDataFactory;
+        $this->templateDataFactory = $templateDataFactory;
     }
 
     /**
@@ -78,6 +72,7 @@ class RegistrationTemplateUpdatedEventSubscriber implements EventSubscriberInter
         }
 
         $this->generateBooleanFilter($event->getEvent(), $templatesData);
+        $this->generateFilledFilter($event->getEvent(), $templatesData);
 
         $this->taggedNomenclatureFilterRepository->deleteForEvent($event->getEvent());
 
@@ -109,6 +104,26 @@ class RegistrationTemplateUpdatedEventSubscriber implements EventSubscriberInter
 
                 $this->booleanTemplateFilterRepository->add($booleanFilter);
                 $filtersAdded[$booleanFilter->getTemplateKey()] = true;
+            }
+        }
+    }
+
+    private function generateFilledFilter(Event $event, array &$templatesData): void
+    {
+        $this->filledTemplateFilterRepository->deleteForEvent($event);
+        $filters = TemplateFilledFilter::getFilledFilters($templatesData);
+        $filtersAdded = [];
+
+        foreach ($filters as $filter) {
+            if (!isset($filtersAdded[$filter['key']])) {
+                $filledFilter = new FilledTemplateFilter(
+                    $event,
+                    $filter['key'],
+                    $filter['value']
+                );
+
+                $this->filledTemplateFilterRepository->add($filledFilter);
+                $filtersAdded[$filledFilter->getTemplateKey()] = true;
             }
         }
     }
