@@ -198,6 +198,7 @@ admin.event.template.link: Templates
 admin.event.template.package: 'Forfait de participation'
 admin.event.template.registration: Inscription
 admin.event.template.registration.duplicate.form.title: 'Dupliquer le template "%templateTitle%"'
+admin.event.template.registration.create.form.title: 'Créer un template d''inscription'
 admin.event.template.sheet: Présentation
 admin.event.template.sheet.duplicate.form.title: 'Dupliquer le template "%templateTitle%"'
 admin.event.title: Titre
@@ -944,6 +945,7 @@ admin.template.registration.table.column.action: Action
 admin.template.registration.table.column.createdAt: 'Créé le'
 admin.template.registration.table.column.eventType: Événement/Type(s)
 admin.template.registration.table.column.title: Titre
+admin.template.registration.table.content.create: 'Créer un template d''inscription'
 admin.template.registration.table.content.duplicate: 'Dupliquer'
 admin.template.registration.table.content.edit: Modifier
 admin.template.registration.table.content.editJson: 'Modifier JSON'

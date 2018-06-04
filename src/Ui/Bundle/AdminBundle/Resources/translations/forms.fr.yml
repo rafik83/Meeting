@@ -665,8 +665,10 @@ form.promotion_code_update.children.submit.label: Enregistrer
 form.promotion_code_update.children.title.label: Titre
 form.promotion_code_update.children.validUntil.label: 'Valide jusqu''au'
 form.registration_template_duplicate.children.event.label: 'Événement de destination du nouveau template'
-form.registration_template_duplicate.children.title.label: 'Titre du nouveau template'
 form.registration_template_duplicate.children.submit.label: 'Dupliquer'
+form.registration_template_duplicate.children.title.label: 'Titre du nouveau template'
+form.registration_template_create.children.submit.label: 'Créer'
+form.registration_template_create.children.title.label: 'Titre du nouveau template'
 form.register.children.email.label: E-mail
 form.register.children.password.children.first.label: 'Mot de passe'
 form.register.children.password.children.second.label: 'Ressaisir le mot de passe'

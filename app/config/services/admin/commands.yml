@@ -229,3 +229,10 @@ services:
             - '@template.registration.registration_template_cloner'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Template\Registration\Duplicate }
+
+    Proximum\Vimeet\Application\Command\Template\Registration\CreateHandler:
+        arguments:
+            - '@repository.template.registration_template_repository'
+            - '@datetime'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Template\Registration\Create }

@@ -3,7 +3,18 @@
 {% block title 'admin.template.registration.link'|trans %}
 
 {% block content %}
-    <h1 class="page-header">{{ 'admin.template.registration.title'|trans }}</h1>
+    <h1 class="page-header">
+        {{ 'admin.template.registration.title'|trans }}
+        <div class="pull-right">
+            <a href="{{ path('admin_template_registration_create', {'event': event.id}) }}"
+               class="btn btn-primary"
+               data-toggle="modal"
+               data-target="#duplicate-modal"
+            >
+                {{ 'admin.template.registration.table.content.create'|trans }}
+            </a>
+        </div>
+    </h1>
 
     <table class="table">
         <thead>

@@ -982,6 +982,13 @@ admin_template_registration_duplicate:
     requirements:
         template: \d+
 
+admin_template_registration_create:
+    path: /event/{event}/template/registration/create
+    defaults: { _controller: Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\RegistrationTemplate\CreateAction }
+    methods: [GET, POST]
+    requirements:
+        event: \d+
+
 #
 # Package
 #

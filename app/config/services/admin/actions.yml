@@ -104,6 +104,14 @@ services:
             - '@Proximum\Vimeet\Infrastructure\Adapter\CommandBus'
             - '@templating'
 
+    Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\RegistrationTemplate\CreateAction:
+        arguments:
+            - '@adapter.authorization_checker'
+            - '@form.factory'
+            - '@Proximum\Vimeet\Infrastructure\Adapter\CommandBus'
+            - '@adapter.router'
+            - '@templating'
+
     #
     # Content
     #
