@@ -9,6 +9,7 @@
         <thead>
         <tr>
             <th>{{ 'admin.template.registration.table.column.title'|trans }}</th>
+            <th>{{ 'admin.template.registration.table.column.eventType'|trans }}</th>
             <th>{{ 'admin.template.registration.table.column.createdAt'|trans }}</th>
             <th class="text-right">{{ 'admin.template.registration.table.column.action'|trans }}</th>
         </tr>
@@ -17,6 +18,16 @@
         {% for template in templates %}
             <tr>
                 <td>{{ template.title }}</td>
+                <td>
+                    {{ template.event.title }}
+                    {% if template.types is not null %}
+                        <ul>
+                            {% for type in template.types %}
+                                <li>{{ type.getTitle(type.event.getAvailableLocale(app.request.locale)) }}</li>
+                            {% endfor %}
+                        </ul>
+                    {% endif %}
+                </td>
                 <td>{{ template.createdAt|localizeddate('medium', 'short', app.request.locale) }}</td>
                 <td class="text-right">
                     <div class="btn-group">
