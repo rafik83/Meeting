@@ -136,7 +136,7 @@ class SheetElasticTransformer implements ModelToElasticaTransformerInterface
         $registrationTemplateData = $this->templateDataFactory->createRegistrationFromSheet($sheet, $locale);
         $filtersValue             = TemplateBooleanFilterIdentifier::getBooleanFilterValues($registrationTemplateData);
         $organizationCategory     = $registrationTemplateData->getTaggedContentValue(Tag::SHEET_ORGANIZATION_CATEGORY);
-        $filledFilterValues       = TemplateFilledFilter::getFilledFilterValues($registrationTemplateData);
+        $filledFilterValues       = TemplateFilledFilter::getFilledFilterValues($registrationTemplateData, $sheet);
 
         $content         = [];
         $contentByLocale = [];

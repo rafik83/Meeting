@@ -684,10 +684,11 @@ class SheetSearchQueryBuilder
             }
 
             foreach ($values as $filter) {
-                $subBoolQuery = new BoolQuery();
-                $boolQuery->addMust((new Term())->setTerm('filledFilter.key', $key));
-                $boolQuery->addMust((new Term())->setTerm('filledFilter.status', $filter));
-                $subBoolQuery->addShould($boolQuery);
+                $subBoolQuery = (new BoolQuery())
+                    ->addMust((new Term())->setTerm('filledFilter.key', $key))
+                    ->addMust((new Term())->setTerm('filledFilter.status', $filter));
+
+                $boolQuery->addShould($subBoolQuery);
             }
         }
 

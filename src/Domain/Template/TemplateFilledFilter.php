@@ -18,7 +18,7 @@ use Proximum\Vimeet\Domain\Template\TemplateObject\UploadObject;
 
 class TemplateFilledFilter
 {
-    public static function getFilledFilterValues(TemplateData $templateData): array
+    public static function getFilledFilterValues(TemplateData $templateData, Sheet $sheet): array
     {
         $filters = [];
 
@@ -31,11 +31,6 @@ class TemplateFilledFilter
                         'status' => null === $object->getPath() ? FilledFilter::NOT_FILLED : FilledFilter::FILLED,
                     ];
                 } elseif ($object->hasTag(Tag::PARTICIPANT_DATA)) {
-                    $sheet = $object->getSheet();
-                    if (!$sheet instanceof Sheet) {
-                        continue;
-                    }
-
                     $participants = $sheet->getParticipants();
                     $numberOfFilledParticipant = 0;
 

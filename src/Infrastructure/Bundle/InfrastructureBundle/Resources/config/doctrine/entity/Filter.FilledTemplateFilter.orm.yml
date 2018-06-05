@@ -16,3 +16,4 @@ Proximum\Vimeet\Domain\Model\Filter\FilledTemplateFilter:
             targetEntity: Proximum\Vimeet\Domain\Model\Event
             joinColumn:
                 onDelete: CASCADE
+                nullable: false

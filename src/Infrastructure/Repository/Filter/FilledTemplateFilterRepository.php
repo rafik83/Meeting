@@ -25,7 +25,7 @@ class FilledTemplateFilterRepository implements FilledTemplateFilterRepositoryIn
         $this->entityManager = $entityManager;
     }
 
-    public function getByEvent(Event $event): ?array
+    public function getByEvent(Event $event): array
     {
         $queryBuilder = $this
             ->entityManager

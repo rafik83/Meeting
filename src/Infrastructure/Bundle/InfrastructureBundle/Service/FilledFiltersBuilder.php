@@ -19,8 +19,8 @@ class FilledFiltersBuilder
     /** @var FilledTemplateFilterRepositoryInterface */
     private $filledTemplateFilterRepository;
 
-    public function __construct(FilledTemplateFilterRepositoryInterface $filledTemplateFilterRepository
-    ) {
+    public function __construct(FilledTemplateFilterRepositoryInterface $filledTemplateFilterRepository)
+    {
         $this->filledTemplateFilterRepository = $filledTemplateFilterRepository;
     }
 

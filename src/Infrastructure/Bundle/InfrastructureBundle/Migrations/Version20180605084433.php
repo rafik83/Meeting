@@ -6,9 +6,9 @@ use Doctrine\DBAL\Migrations\AbstractMigration;
 use Doctrine\DBAL\Schema\Schema;
 
 /**
- * Add filled_template_filter table
+ * Auto-generated Migration: Please modify to your needs!
  */
-class Version20180604135836 extends AbstractMigration
+class Version20180605084433 extends AbstractMigration
 {
     /**
      * @param Schema $schema
@@ -18,7 +18,7 @@ class Version20180604135836 extends AbstractMigration
         // this up() migration is auto-generated, please modify it to your needs
         $this->abortIf($this->connection->getDatabasePlatform()->getName() !== 'mysql', 'Migration can only be executed safely on \'mysql\'.');
 
-        $this->addSql('CREATE TABLE filled_template_filter (id INT AUTO_INCREMENT NOT NULL, event_id INT DEFAULT NULL, template_key VARCHAR(255) NOT NULL, `label` VARCHAR(255) NOT NULL, INDEX IDX_D0EFDC2871F7E88B (event_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE = InnoDB');
+        $this->addSql('CREATE TABLE filled_template_filter (id INT AUTO_INCREMENT NOT NULL, event_id INT NOT NULL, template_key VARCHAR(255) NOT NULL, `label` VARCHAR(255) NOT NULL, INDEX IDX_D0EFDC2871F7E88B (event_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE = InnoDB');
         $this->addSql('ALTER TABLE filled_template_filter ADD CONSTRAINT FK_D0EFDC2871F7E88B FOREIGN KEY (event_id) REFERENCES event (id) ON DELETE CASCADE');
     }
 
