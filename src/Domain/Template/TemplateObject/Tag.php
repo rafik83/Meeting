@@ -11,7 +11,6 @@
 namespace Proximum\Vimeet\Domain\Template\TemplateObject;
 
 use Proximum\Vimeet\Domain\Template\TemplateObject;
-use Proximum\Vimeet\Domain\View\Template\TaggedDataView;
 
 class Tag extends TemplateObject implements SearchableObjectInterface
 {
@@ -20,11 +19,6 @@ class Tag extends TemplateObject implements SearchableObjectInterface
      */
     public function getSearchableContent()
     {
-        return array_map(
-            function (TaggedDataView $taggedDataView) {
-                return $taggedDataView->content;
-            },
-            $this->taggedDataViews
-        );
+        return $this->getTaggedDataContent();
     }
 }

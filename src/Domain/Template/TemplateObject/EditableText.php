@@ -11,7 +11,6 @@
 namespace Proximum\Vimeet\Domain\Template\TemplateObject;
 
 use Proximum\Vimeet\Domain\Template\TranslatableInterface;
-use Proximum\Vimeet\Domain\View\Template\TaggedDataView;
 
 class EditableText extends EditableObject implements ContentObjectInterface, SearchableObjectInterface, ExportableObjectInterface, TranslatableInterface
 {
@@ -211,16 +210,7 @@ class EditableText extends EditableObject implements ContentObjectInterface, Sea
      */
     public function getSearchableContent()
     {
-        return $this->getContentValue()
-            ?: implode(
-                ' ',
-                array_map(
-                    function (TaggedDataView $taggedDataView) {
-                        return $taggedDataView->content;
-                    },
-                    $this->getTaggedDataViews()
-                )
-            );
+        return $this->getContentValue() ?: $this->getTaggedDataContent();
     }
 
     /**
