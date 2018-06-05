@@ -54,7 +54,11 @@ class NomenclatureDataType extends AbstractType
         } elseif ($options['object']->isRadios()) {
             $this->addRadios($nomenclature, $builder, $options, $options['object']);
         } elseif ($options['object']->isCheckboxes()) {
-            $this->addCheckboxes($nomenclature, $builder, $options, $options['object']);
+            if (true === $options['selectMultiple']) {
+                $this->addSingles($nomenclature, $builder, $options, $options['object']);
+            } else {
+                $this->addCheckboxes($nomenclature, $builder, $options, $options['object']);
+            }
         } else {
             throw new \Exception('Not implemented yet.');
         }
@@ -68,6 +72,7 @@ class NomenclatureDataType extends AbstractType
         $resolver->setRequired(['locale', 'object', 'placeholder']);
         $resolver->setDefaults(
             [
+                'selectMultiple' => false,
                 'data_class'  => TemplateObject\Nomenclature::class,
                 'placeholder' => null,
                 'help'        => null,
@@ -94,7 +99,7 @@ class NomenclatureDataType extends AbstractType
         FormBuilderInterface $form,
         array $options,
         TemplateObject\Nomenclature $object
-    ) {
+    ): void {
         $form->add(
             'item',
             ChoiceType::class,
@@ -123,7 +128,7 @@ class NomenclatureDataType extends AbstractType
         FormBuilderInterface $form,
         array $options,
         TemplateObject\Nomenclature $object
-    ) {
+    ): void {
         $form->add(
             'items',
             CheckboxesType::class,
@@ -147,9 +152,11 @@ class NomenclatureDataType extends AbstractType
         FormBuilderInterface $form,
         array $options,
         TemplateObject\Nomenclature $object
-    ) {
+    ): void {
+        $key = $object->isMultiple() ? 'items' : 'item';
+
         $form->add(
-            'item',
+            $key,
             SinglesType::class,
             [
                 'nomenclature' => $nomenclature,
@@ -157,6 +164,7 @@ class NomenclatureDataType extends AbstractType
                 'placeholder'  => $options['placeholder'],
                 'label'        => $object->getOption('label', $options['locale']),
                 'required'     => $object->getOption('required'),
+                'multiple'     => $object->isMultiple(),
             ]
         );
     }

@@ -121,8 +121,7 @@ class TaggedDataFactory
                 }
 
                 if ($object instanceof TemplateObject\Nomenclature) {
-                    // This only works for single nomenclature on registration template
-                    $value = $object->getNomenclatureLabel();
+                    $value = implode(', ', $object->getNomenclatureLabelOfItems());
                 } else {
                     $value = $object->getContentValueLocalize();
                 }
@@ -199,7 +198,7 @@ class TaggedDataFactory
      * @param string         $tag
      * @param TaggedDataView $taggedDataView
      */
-    private function addTaggedDataView(Sheet $sheet, $tag, $taggedDataView)
+    private function addTaggedDataView(Sheet $sheet, $tag, $taggedDataView): void
     {
         if (!isset($this->taggedDataViews[$sheet->getId()][$tag])) {
             $this->taggedDataViews[$sheet->getId()][$tag] = $taggedDataView;
