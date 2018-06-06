@@ -31,7 +31,7 @@ class TemplateFilledFilter
                         'status' => null === $object->getPath() ? FilledFilter::NOT_FILLED : FilledFilter::FILLED,
                     ];
                 } elseif ($object->hasTag(Tag::PARTICIPANT_DATA)) {
-                    $participants = $sheet->getParticipants();
+                    $participants = $sheet->getParticipantsArray();
                     $numberOfFilledParticipant = 0;
 
                     /** @var Participant $participant */
@@ -43,7 +43,7 @@ class TemplateFilledFilter
 
                     if (0 === $numberOfFilledParticipant) {
                         $status = FilledFilter::NOT_FILLED;
-                    } elseif ($participants->count() === $numberOfFilledParticipant) {
+                    } elseif (\count($participants) === $numberOfFilledParticipant) {
                         $status = FilledFilter::FILLED;
                     } else {
                         $status = FilledFilter::PARTLY_FILLED;
