@@ -718,7 +718,6 @@ admin.sheet.change.type.hasMeeting: 'the sheet has scheduled meetings and its ty
 admin.sheet.change.type.link: Change
 admin.sheet.change.type.title: 'Change the type of participation'
 admin.sheet.commercialFollowUp: 'Assign the commercial follow up'
-admin.sheet.duplication: 'Duplicate sheets'
 admin.sheet.commercialStatus: 'Commercial status'
 admin.sheet.created_this_week: 'registered this week'
 admin.sheet.created_today: 'Registered today'
@@ -787,6 +786,7 @@ admin.sheet.details.remainingToPay: 'Remaining to pay'
 admin.sheet.details.title: 'presentation sheet'
 admin.sheet.details.transactions: Transactions
 admin.sheet.disable: disable
+admin.sheet.duplication: 'Duplicate sheets'
 admin.sheet.enable: enable
 admin.sheet.exit_impersonation: 'Log out from the user''s account'
 admin.sheet.export.button.label: Export
