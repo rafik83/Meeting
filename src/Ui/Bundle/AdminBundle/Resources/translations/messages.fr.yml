@@ -784,6 +784,8 @@ admin.sheet.details.participant.phoneValidationStatus.title: 'Validation télép
 admin.sheet.details.participant.phoneValidationStatus.validated: Validé
 admin.sheet.details.participant.title: Participant
 admin.sheet.details.participant.tooltip.not_concerned: 'Cet utilisateur n''est pas concerné car il/elle n''a pas de RDVs ou ne participe pas à un sous-événement'
+admin.sheet.details.participant.upload.filled: 'Renseigné'
+admin.sheet.details.participant.upload.notFilled: 'Non renseigné'
 admin.sheet.details.participant.visio: Visio
 admin.sheet.details.participants: Participants
 admin.sheet.details.remainingToPay: 'Solde restant dû'
