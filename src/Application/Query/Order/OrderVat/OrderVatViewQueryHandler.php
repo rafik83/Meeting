@@ -31,11 +31,7 @@ class OrderVatViewQueryHandler
     }
 
     /**
-     * @param OrderVatViewQuery $orderVatViewQuery
-     *
      * @throws MissingBillingInfoException
-     *
-     * @return OrderVatView
      */
     public function handle(OrderVatViewQuery $orderVatViewQuery): OrderVatView
     {

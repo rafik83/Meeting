@@ -10,6 +10,8 @@
 
 namespace Proximum\Vimeet\Application\View\Package\Vat;
 
+use Proximum\Vimeet\Domain\Money\AmountFormatter;
+
 class VatView
 {
     /** @var float */
@@ -48,6 +50,6 @@ class VatView
     public function addToTotal(float $price): void
     {
         $this->total += $price;
-        $this->totalVat = (\round($this->total) * $this->vatRate) / 100;
+        $this->totalVat = AmountFormatter::calculateRateAmount($this->total, $this->vatRate);
     }
 }

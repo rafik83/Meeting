@@ -58,37 +58,21 @@ class OrderVatView
     /** @var VatListView */
     public $vatListView;
 
-    /**
-     * @param string             $numero
-     * @param int                $orderId
-     * @param int                $sheetId
-     * @param bool               $isVatApplicable
-     * @param float              $vatRate
-     * @param string             $vatMode
-     * @param string             $currency
-     * @param bool               $isCancelled
-     * @param int                $totalWithoutVat amount in cents
-     * @param int                $vatAmount       amount in cents
-     * @param int                $totalWithVat    amount in cents
-     * @param VatListView        $vatListView
-     * @param \DateTimeInterface $createdAt
-     * @param Invoice|null       $invoice
-     */
     public function __construct(
-        $numero,
-        $orderId,
-        $sheetId,
-        $isVatApplicable,
-        $vatRate,
-        $vatMode,
-        $currency,
-        $isCancelled,
-        $totalWithoutVat,
-        $vatAmount,
-        $totalWithVat,
+        string $numero,
+        int $orderId,
+        int $sheetId,
+        bool $isVatApplicable,
+        float $vatRate,
+        string $vatMode,
+        string $currency,
+        bool $isCancelled,
+        int $totalWithoutVat,
+        int $vatAmount,
+        int $totalWithVat,
         VatListView $vatListView,
         \DateTimeInterface $createdAt,
-        Invoice $invoice = null
+        ?Invoice $invoice = null
     ) {
         $this->numero          = $numero;
         $this->orderId         = $orderId;

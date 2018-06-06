@@ -3211,6 +3211,7 @@ services:
             - '@query.billing_infos.billing_infos_query_handler'
             - '@query.order.summary_query_handler'
             - '@order.balance'
+            - '@query.order.order_vat_view_query_handler'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Invoice\InvoiceDataQuery }
     query.billing_infos.billing_infos_query_handler:
@@ -4812,7 +4813,6 @@ services:
             - '@vimeet_infrastructure.repository.order_repository'
             - '@order.merger'
             - '@query.invoice.invoice_data_query_handler'
-            - '@package.specification.vat_applicable'
             - '@adapter.serializer_adapter'
 
     order.summary_view_normalizer:
