@@ -11,6 +11,7 @@
 namespace Proximum\Vimeet\Application\Command\User;
 
 use Proximum\Vimeet\Application\Components\Sheet\Template\Tag;
+use Proximum\Vimeet\Application\Components\TemplateData\TemplateDataFileDuplicator;
 use Proximum\Vimeet\Application\Event\Events;
 use Proximum\Vimeet\Application\Event\Package\MustSelectPackageEvent;
 use Proximum\Vimeet\Application\Event\Sheet\SheetTitleCheckEvent;
@@ -24,55 +25,39 @@ use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Repository\ParticipantRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
 use Proximum\Vimeet\Domain\Template\AbstractChild;
+use Proximum\Vimeet\Domain\Template\TemplateDataFactory;
 use Proximum\Vimeet\Domain\UserEvent\TypeResolver;
 use Proximum\Vimeet\Infrastructure\Adapter\DelayedEventDispatcher;
 
 class ParticipateHandler
 {
-    /**
-     * @var SheetRepositoryInterface
-     */
+    /** @var SheetRepositoryInterface */
     private $sheetRepository;
 
-    /**
-     * @var ParticipantRepositoryInterface
-     */
+    /** @var ParticipantRepositoryInterface */
     private $participantRepository;
 
-    /**
-     * @var Synchronizer
-     */
+    /** @var Synchronizer */
     private $accountSynchronizer;
 
-    /**
-     * @var \DateTimeInterface
-     */
+    /** @var \DateTimeInterface */
     private $dateTime;
 
-    /**
-     * @var TypeResolver
-     */
+    /** @var TypeResolver */
     private $typeResolver;
 
-    /**
-     * @var DelayedEventDispatcher
-     */
+    /** @var DelayedEventDispatcher*/
     private $eventDispatcher;
 
-    /**
-     * @var LastEventParticipation
-     */
+    /**@var LastEventParticipation */
     private $lastEventParticipation;
 
-    /**
-     * @param SheetRepositoryInterface       $sheetRepository
-     * @param ParticipantRepositoryInterface $participantRepository
-     * @param TypeResolver                   $typeResolver
-     * @param Synchronizer                   $accountSynchronizer
-     * @param DelayedEventDispatcher         $eventDispatcher
-     * @param \DateTimeInterface             $dateTime
-     * @param LastEventParticipation         $lastEventParticipation
-     */
+    /** @var TemplateDataFactory */
+    private $templateDataFactory;
+
+    /** @var TemplateDataFileDuplicator */
+    private $templateDataFileDuplicator;
+
     public function __construct(
         SheetRepositoryInterface $sheetRepository,
         ParticipantRepositoryInterface $participantRepository,
@@ -80,7 +65,9 @@ class ParticipateHandler
         Synchronizer $accountSynchronizer,
         DelayedEventDispatcher $eventDispatcher,
         \DateTimeInterface $dateTime,
-        LastEventParticipation $lastEventParticipation
+        LastEventParticipation $lastEventParticipation,
+        TemplateDataFactory $templateDataFactory,
+        TemplateDataFileDuplicator $templateDataFileDuplicator
     ) {
         $this->sheetRepository       = $sheetRepository;
         $this->participantRepository = $participantRepository;
@@ -90,6 +77,8 @@ class ParticipateHandler
         $this->typeResolver          = $typeResolver;
         $this->eventDispatcher       = $eventDispatcher;
         $this->lastEventParticipation = $lastEventParticipation;
+        $this->templateDataFactory = $templateDataFactory;
+        $this->templateDataFileDuplicator = $templateDataFileDuplicator;
     }
 
     /**
@@ -107,7 +96,7 @@ class ParticipateHandler
         // Prefill sheet data from last user participation
         if (null !== $lastUserParticipation) {
             $sheet->setData(
-                $this->getSanitizedSheetData($lastUserParticipation->getSheet()->getData())
+                $this->getSanitizedSheetDataAndDuplicateSheetLogo($lastUserParticipation->getSheet())
             );
         }
 
@@ -176,21 +165,18 @@ class ParticipateHandler
     }
 
     /**
-     * This method filter image and media objects from last sheet participation of previous event
+     * This method filter media objects from last sheet participation and duplicate logo of previous event
      *
-     * @param array $sheetData
+     * @param Sheet $sheet
      *
      * @return array
      */
-    private function getSanitizedSheetData(array $sheetData): array
+    private function getSanitizedSheetDataAndDuplicateSheetLogo(Sheet $sheet): array
     {
-        foreach ($sheetData as $key => $datum) {
-            $sheetData[$key] = array_filter($datum, function ($element) {
-                return AbstractChild::TEMPLATE_OBJECT_TYPE_IMAGE !== $element
-                       && AbstractChild::TEMPLATE_OBJECT_TYPE_MEDIA !== $element;
-            }, ARRAY_FILTER_USE_KEY);
-        }
+        $templateData = $this->templateDataFileDuplicator->handle(
+            $this->templateDataFactory->createFromSheet($sheet, null)
+        );
 
-        return $sheetData;
+        return $templateData->sanitizedDataWithoutType(AbstractChild::TEMPLATE_OBJECT_TYPE_MEDIA);
     }
 }

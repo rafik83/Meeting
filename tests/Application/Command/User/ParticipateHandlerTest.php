@@ -14,6 +14,7 @@ use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
 use Proximum\Vimeet\Application\Command\User\Participate;
 use Proximum\Vimeet\Application\Command\User\ParticipateHandler;
+use Proximum\Vimeet\Application\Components\TemplateData\TemplateDataFileDuplicator;
 use Proximum\Vimeet\Application\Event\Events;
 use Proximum\Vimeet\Application\Event\Package\MustSelectPackageEvent;
 use Proximum\Vimeet\Application\Event\Sheet\SheetTitleCheckEvent;
@@ -29,8 +30,10 @@ use Proximum\Vimeet\Domain\Model\Type;
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Repository\ParticipantRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
+use Proximum\Vimeet\Domain\Template\AbstractChild;
 use Proximum\Vimeet\Domain\Template\Block;
 use Proximum\Vimeet\Domain\Template\TemplateData;
+use Proximum\Vimeet\Domain\Template\TemplateDataFactory;
 use Proximum\Vimeet\Domain\Template\TemplateObject;
 use Proximum\Vimeet\Domain\UserEvent\TypeResolver;
 use Proximum\Vimeet\Infrastructure\Adapter\DelayedEventDispatcher;
@@ -202,6 +205,22 @@ class ParticipateHandlerTest extends TestCase
         $typeResolver = $this->prophesize(TypeResolver::class);
         $typeResolver->resolve($user, $event, $type)->shouldBeCalled();
 
+        $templateData = $this->prophesize(TemplateData::class);
+        $templateData->sanitizedDataWithoutType(AbstractChild::TEMPLATE_OBJECT_TYPE_MEDIA)
+            ->willReturn([['user data']]);
+        $templateDataFactory = $this->prophesize(TemplateDataFactory::class);
+        $templateFileDuplicator = $this->prophesize(TemplateDataFileDuplicator::class);
+
+        $templateDataFactory
+            ->createFromSheet($expectedSheetWithParticipant, null)
+            ->shouldBeCalled()
+            ->willReturn($templateData->reveal());
+
+        $templateFileDuplicator
+            ->handle($templateData->reveal())
+            ->shouldBeCalled()
+            ->willReturn($templateData->reveal());
+
         $sheetRepository->add(Argument::that(
             function (Sheet $sheet) use ($expectedSheetWithParticipant) {
                 return $sheet->getData() === $expectedSheetWithParticipant->getData()
@@ -222,7 +241,9 @@ class ParticipateHandlerTest extends TestCase
             $accountSynchronizer->reveal(),
             $eventDispatcher->reveal(),
             $now,
-            $lastEventParticipation->reveal()
+            $lastEventParticipation->reveal(),
+            $templateDataFactory->reveal(),
+            $templateFileDuplicator->reveal()
         );
 
         $templateData = new TemplateData('root', [], 'fr', 'fr');
