@@ -80,7 +80,7 @@ event.activateAccount.expired.title: 'Your invitation has expired'
 event.activateAccount.resendToken.explanation: 'A new invitation has been sent to you by email. You can click on the included link to activate your account'
 event.activateAccount.resendToken.title: 'A new invitation has been sent'
 event.content.title: 'Terms of sale'
-event.happening.invitationCode.label: 'The event acces is subjected to invitation. Thank you for entering your invitation code.'
+event.happening.invitationCode.label: 'The event access is subjected to invitation. Thank you for entering your invitation code.'
 event.happening.productsNeededByHappening.label: 'Please select an option in your package in order to access to this event'
 event.happening.productsNeededByHappening.order: 'Modify my package'
 event.info.close: Close
