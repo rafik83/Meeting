@@ -17,11 +17,12 @@ use Proximum\Vimeet\Application\View\Product\ProductView;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Product;
 use Proximum\Vimeet\Domain\Product\RemoveAuthorizationChecker;
+use Proximum\Vimeet\Domain\Repository\Order\RowRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\ProductRepositoryInterface;
 
 class ProductsViewQueryHandlerTest extends TestCase
 {
-    public function testHandle()
+    public function testHandle(): void
     {
         $event = $this->prophesize(Event::class);
         $product1 = $this->prophesize(Product::class);
@@ -85,22 +86,42 @@ class ProductsViewQueryHandlerTest extends TestCase
 
         $productRepository = $this->prophesize(ProductRepositoryInterface::class);
         $removeAuthorizationChecker = $this->prophesize(RemoveAuthorizationChecker::class);
+        $rowRepository = $this->prophesize(RowRepositoryInterface::class);
 
         $productRepository
-            ->countByEvent($event->reveal())
+            ->findByEventOrderedByProductTypeAndProductname($event->reveal())
             ->shouldBeCalled()
             ->willReturn([
-                [0 => $product1->reveal(), 'bought' => 4],
-                [0 => $product2->reveal(), 'bought' => 9],
-                [0 => $product3->reveal(), 'bought' => null],
+                $product1->reveal(),
+                $product2->reveal(),
+                $product3->reveal(),
             ])
+        ;
+        $rowRepository
+            ->boughtByProduct($product1->reveal())
+            ->shouldBeCalled()
+            ->willReturn(4)
+        ;
+        $rowRepository
+            ->boughtByProduct($product2->reveal())
+            ->shouldBeCalled()
+            ->willReturn(9)
+        ;
+        $rowRepository
+            ->boughtByProduct($product3->reveal())
+            ->shouldBeCalled()
+            ->willReturn(0)
         ;
         $removeAuthorizationChecker->preloadForEvent($event->reveal())->shouldBeCalled();
         $removeAuthorizationChecker->canBeRemoved($product1->reveal())->shouldBeCalled()->willReturn(true);
         $removeAuthorizationChecker->canBeRemoved($product2->reveal())->shouldBeCalled()->willReturn(false);
         $removeAuthorizationChecker->canBeRemoved($product3->reveal())->shouldBeCalled()->willReturn(true);
 
-        $handler = new ProductsViewQueryHandler($productRepository->reveal(), $removeAuthorizationChecker->reveal());
+        $handler = new ProductsViewQueryHandler(
+            $productRepository->reveal(),
+            $rowRepository->reveal(),
+            $removeAuthorizationChecker->reveal()
+        );
         $result = $handler->handle(new ProductsViewQuery($event->reveal()));
 
         $expected = [

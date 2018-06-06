@@ -71,6 +71,23 @@ class ProductRepository implements ProductRepositoryInterface
     /**
      * {@inheritdoc}
      */
+    public function findByEventOrderedByProductTypeAndProductname(Event $event): array
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('product')
+            ->from(Product::class, 'product')
+            ->where('product.event = :event')
+            ->setParameter('event', $event)
+            ->orderBy('product.type, product.name');
+
+        return $queryBuilder->getQuery()->getResult();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function countByEvent(Event $event)
     {
         $queryBuilder = $this

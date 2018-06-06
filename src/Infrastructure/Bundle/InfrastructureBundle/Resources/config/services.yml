@@ -3680,6 +3680,7 @@ services:
         class: Proximum\Vimeet\Application\Query\Product\ProductsViewQueryHandler
         arguments:
             - '@vimeet_infrastructure.repository.product_repository'
+            - '@vimeet_infrastructure.repository.order_row_repository'
             - '@domain.product.remove_authorization_checker'
         tags:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\Product\ProductsViewQuery }

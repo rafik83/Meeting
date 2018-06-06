@@ -37,6 +37,13 @@ interface ProductRepositoryInterface
      *
      * @return Product[]
      */
+    public function findByEventOrderedByProductTypeAndProductname(Event $event): array;
+
+    /**
+     * @param Event $event
+     *
+     * @return Product[]
+     */
     public function findOptionsByEvent(Event $event);
 
     /**

@@ -29,7 +29,14 @@ interface RowRepositoryInterface
     /**
      * @param Product $product
      *
-     * @return Order[]
+     * @return Order\Row[]
      */
     public function findByProduct(Product $product);
+
+    /**
+     * @param Product $product
+     *
+     * @return int
+     */
+    public function boughtByProduct(Product $product): int;
 }
