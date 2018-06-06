@@ -196,11 +196,11 @@ class CompanyType extends AbstractType
         $locale
     ): void {
         $builder->add($key, NomenclatureDataType::class, [
-            'label'          => false,
-            'locale'         => $locale,
-            'object'         => $object,
-            'placeholder'    => $object->getOption('label')[$locale],
-            'selectMultiple' => true,
+            'label'                                   => false,
+            'locale'                                  => $locale,
+            'object'                                  => $object,
+            'placeholder'                             => $object->getOption('label')[$locale],
+            'onMultipleUseSinglesInsteadOfCheckboxes' => true,
         ]);
     }
 }

@@ -263,7 +263,7 @@ class Nomenclature extends EditableObject implements ContentObjectInterface, Sea
      */
     public function isCheckboxes(): bool
     {
-        return self::MODE_CHECKBOXES === $this->getMode();
+        return $this->isMultiple();
     }
 
     /**

@@ -53,8 +53,8 @@ class NomenclatureDataType extends AbstractType
             $this->addSingles($nomenclature, $builder, $options, $options['object']);
         } elseif ($options['object']->isRadios()) {
             $this->addRadios($nomenclature, $builder, $options, $options['object']);
-        } elseif ($options['object']->isCheckboxes()) {
-            if (true === $options['selectMultiple']) {
+        } elseif ($options['object']->isMultiple()) {
+            if (true === $options['onMultipleUseSinglesInsteadOfCheckboxes']) {
                 $this->addSingles($nomenclature, $builder, $options, $options['object']);
             } else {
                 $this->addCheckboxes($nomenclature, $builder, $options, $options['object']);
@@ -72,10 +72,10 @@ class NomenclatureDataType extends AbstractType
         $resolver->setRequired(['locale', 'object', 'placeholder']);
         $resolver->setDefaults(
             [
-                'selectMultiple' => false,
-                'data_class'  => TemplateObject\Nomenclature::class,
-                'placeholder' => null,
-                'help'        => null,
+                'onMultipleUseSinglesInsteadOfCheckboxes' => false,
+                'data_class'                              => TemplateObject\Nomenclature::class,
+                'placeholder'                             => null,
+                'help'                                    => null,
             ]
         );
     }
