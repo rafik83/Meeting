@@ -12,137 +12,87 @@ namespace Proximum\Vimeet\Application\View\Order;
 
 class RowView
 {
-    /**
-     * @var int
-     */
+    /** @var int */
     public $id;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     public $label;
 
-    /**
-     * @var int
-     */
+    /** @var int */
     public $quantity;
 
-    /**
-     * @var float
-     */
+    /** @var float */
     public $price;
 
-    /**
-     * @var float
-     */
+    /** @var float */
     public $total;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     public $vatMode;
 
-    /**
-     * @var string
-     */
+    /** @var float */
+    public $vatRate;
+
+    /** @var string */
     public $currency;
 
-    /**
-     * @var IncludedProductView[]
-     */
+    /** @var IncludedProductView[] */
     public $includedProducts = [];
 
-    /**
-     * @var null|\DateTimeInterface
-     */
+    /** @var null|\DateTimeInterface */
     public $buyableUntil;
 
-    /**
-     * @var null|\DateTimeInterface
-     */
+    /** @var null|\DateTimeInterface */
     public $deletableUntil;
 
-    /**
-     * @var bool
-     */
+    /** @var bool */
     public $isBuyable;
 
-    /**
-     * @var bool
-     */
+    /** @var bool */
     public $isDeletable;
 
-    /***
-     * @var null|CustomRowView[]
-     */
+    /** @var null|CustomRowView[] */
     public $customRows = [];
 
-    /**
-     * @var int
-     */
+    /** @var int */
     public $productId;
 
-    /**
-     * @param int                     $id
-     * @param int                     $productId
-     * @param string                  $label
-     * @param float                   $price
-     * @param int                     $quantity
-     * @param string                  $vatMode
-     * @param string                  $currency
-     * @param null|\DateTimeInterface $buyableUntil
-     * @param null|\DateTimeInterface $deletableUntil
-     * @param bool                    $isBuyable
-     * @param bool                    $isDeletable
-     */
     public function __construct(
-        $id,
-        $productId,
-        $label,
-        $price,
-        $quantity,
-        $vatMode,
-        $currency,
+        int $id,
+        int $productId,
+        string $label,
+        float $price,
+        int $quantity,
+        string $vatMode,
+        float $vatRate,
+        string $currency,
         \DateTimeInterface $buyableUntil = null,
         \DateTimeInterface $deletableUntil = null,
-        $isBuyable,
-        $isDeletable
+        bool $isBuyable,
+        bool $isDeletable
     ) {
-        $this->id             = $id;
-        $this->label          = $label;
-        $this->price          = $price;
-        $this->quantity       = $quantity;
-        $this->total          = $price * $quantity;
-        $this->vatMode        = $vatMode;
-        $this->currency       = $currency;
-        $this->buyableUntil   = $buyableUntil;
+        $this->id = $id;
+        $this->label = $label;
+        $this->price = $price;
+        $this->quantity = $quantity;
+        $this->total = $price * $quantity;
+        $this->vatMode = $vatMode;
+        $this->vatRate = $vatRate;
+        $this->currency = $currency;
+        $this->buyableUntil = $buyableUntil;
         $this->deletableUntil = $deletableUntil;
-        $this->isBuyable      = $isBuyable;
-        $this->isDeletable    = $isDeletable;
-        $this->productId      = $productId;
+        $this->isBuyable = $isBuyable;
+        $this->isDeletable = $isDeletable;
+        $this->productId = $productId;
     }
 
-    /**
-     * @param IncludedProductView $productView
-     */
     public function addIncludedProduct(IncludedProductView $productView)
     {
         $this->includedProducts[] = $productView;
     }
 
-    /**
-     * @param CustomRowView $customRowView
-     */
     public function addCustomRow(CustomRowView $customRowView)
     {
         $this->customRows[] = $customRowView;
-    }
-
-    /**
-     * @return float
-     */
-    public function getTotal()
-    {
-        return $this->total;
     }
 }

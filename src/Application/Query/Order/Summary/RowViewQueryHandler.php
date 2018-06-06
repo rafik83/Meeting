@@ -60,6 +60,7 @@ class RowViewQueryHandler
             $rowViewQuery->row->getPrice(),
             $rowViewQuery->row->getQuantity(),
             $rowViewQuery->order->getVatMode(),
+            $rowViewQuery->row->getVatRate(),
             $rowViewQuery->order->getCurrency(),
             $rowViewQuery->row->getProduct()->getBuyableUntil(),
             $rowViewQuery->row->getProduct()->getDeletableUntil(),
