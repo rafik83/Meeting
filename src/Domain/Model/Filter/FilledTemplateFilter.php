@@ -28,9 +28,9 @@ class FilledTemplateFilter
 
     public function __construct(Event $event, string $templateKey, string $label)
     {
-        $this->event       = $event;
+        $this->event = $event;
         $this->templateKey = $templateKey;
-        $this->label       = $label;
+        $this->label = $label;
     }
 
     public function getId(): int

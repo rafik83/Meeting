@@ -14,11 +14,10 @@ use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
 use Proximum\Vimeet\Application\Command\Participant\UpdateProfile;
 use Proximum\Vimeet\Application\Command\Participant\UpdateProfileHandler;
-use Proximum\Vimeet\Application\Command\Participant\Upload\UploadFile;
 use Proximum\Vimeet\Application\Command\Participant\Upload\UploadFileHandler;
 use Proximum\Vimeet\Application\Event\Events;
+use Proximum\Vimeet\Application\Event\Participant\ParticipantUpdatedEvent;
 use Proximum\Vimeet\Application\Event\Sheet\SheetTitleCheckEvent;
-use Proximum\Vimeet\Application\Event\Sheet\SheetUpdatedEvent;
 use Proximum\Vimeet\Domain\Account\Synchronizer;
 use Proximum\Vimeet\Domain\Model\Participant;
 use Proximum\Vimeet\Domain\Model\Sheet;
@@ -31,7 +30,6 @@ use Proximum\Vimeet\Domain\Template\TemplateData;
 use Proximum\Vimeet\Domain\Template\TemplateObject;
 use Proximum\Vimeet\Infrastructure\Adapter\DelayedEventDispatcher;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
-use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 class UpdateProfileHandlerTest extends TestCase
 {
@@ -244,8 +242,8 @@ class UpdateProfileHandlerTest extends TestCase
 
         $participantRepository->set($expectedParticipant)->shouldBeCalled();
 
-        $eventDispatcher->dispatch(Events::SHEET_UPDATED, Argument::that(
-            function (SheetUpdatedEvent $sheetUpdatedEvent) {
+        $eventDispatcher->dispatch(Events::PARTICIPANT_UPDATED, Argument::that(
+            function (ParticipantUpdatedEvent $participantUpdatedEvent) {
                 return true;
             }
         ))->shouldBeCalled();
@@ -512,8 +510,8 @@ class UpdateProfileHandlerTest extends TestCase
 
         $participantRepository->set($expectedParticipant)->shouldBeCalled();
 
-        $eventDispatcher->dispatch(Events::SHEET_UPDATED, Argument::that(
-            function (SheetUpdatedEvent $sheetUpdatedEvent) {
+        $eventDispatcher->dispatch(Events::PARTICIPANT_UPDATED, Argument::that(
+            function (ParticipantUpdatedEvent $participantUpdatedEvent) {
                 return true;
             }
         ))->shouldBeCalled();
