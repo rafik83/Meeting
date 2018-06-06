@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "c5791352d0108df1e0c88e12b3ffff72",
+    "content-hash": "abf8a4c4c2df592a2ab3b21030ddbbdb",
     "packages": [
         {
             "name": "behat/behat",
@@ -739,16 +739,16 @@
         },
         {
             "name": "doctrine/dbal",
-            "version": "v2.6.3",
+            "version": "v2.7.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/doctrine/dbal.git",
-                "reference": "e3eed9b1facbb0ced3a0995244843a189e7d1b13"
+                "reference": "11037b4352c008373561dc6fc836834eed80c3b5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/doctrine/dbal/zipball/e3eed9b1facbb0ced3a0995244843a189e7d1b13",
-                "reference": "e3eed9b1facbb0ced3a0995244843a189e7d1b13",
+                "url": "https://api.github.com/repos/doctrine/dbal/zipball/11037b4352c008373561dc6fc836834eed80c3b5",
+                "reference": "11037b4352c008373561dc6fc836834eed80c3b5",
                 "shasum": ""
             },
             "require": {
@@ -757,9 +757,11 @@
                 "php": "^7.1"
             },
             "require-dev": {
-                "phpunit/phpunit": "^5.4.6",
+                "doctrine/coding-standard": "^4.0",
+                "phpunit/phpunit": "^7.0",
                 "phpunit/phpunit-mock-objects": "!=3.2.4,!=3.2.5",
-                "symfony/console": "2.*||^3.0"
+                "symfony/console": "^2.0.5||^3.0",
+                "symfony/phpunit-bridge": "^3.4.5|^4.0.5"
             },
             "suggest": {
                 "symfony/console": "For helpful console commands such as SQL execution and import of files."
@@ -770,7 +772,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "2.6.x-dev"
+                    "dev-master": "2.7.x-dev"
                 }
             },
             "autoload": {
@@ -808,7 +810,7 @@
                 "persistence",
                 "queryobject"
             ],
-            "time": "2017-11-19T13:38:54+00:00"
+            "time": "2018-04-07T18:44:18+00:00"
         },
         {
             "name": "doctrine/doctrine-bundle",
@@ -1654,19 +1656,20 @@
         },
         {
             "name": "erusev/parsedown",
-            "version": "1.7.0",
+            "version": "1.7.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/erusev/parsedown.git",
-                "reference": "6678d59be48c4be64eaca6ce70bea48a09488cc2"
+                "reference": "92e9c27ba0e74b8b028b111d1b6f956a15c01fc1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/erusev/parsedown/zipball/6678d59be48c4be64eaca6ce70bea48a09488cc2",
-                "reference": "6678d59be48c4be64eaca6ce70bea48a09488cc2",
+                "url": "https://api.github.com/repos/erusev/parsedown/zipball/92e9c27ba0e74b8b028b111d1b6f956a15c01fc1",
+                "reference": "92e9c27ba0e74b8b028b111d1b6f956a15c01fc1",
                 "shasum": ""
             },
             "require": {
+                "ext-mbstring": "*",
                 "php": ">=5.3.0"
             },
             "require-dev": {
@@ -1695,7 +1698,7 @@
                 "markdown",
                 "parser"
             ],
-            "time": "2018-02-28T11:41:37+00:00"
+            "time": "2018-03-08T01:11:30+00:00"
         },
         {
             "name": "fig/link-util",
@@ -2978,21 +2981,22 @@
         },
         {
             "name": "league/tactician-bundle",
-            "version": "v1.1.2",
+            "version": "v1.1.5",
             "source": {
                 "type": "git",
                 "url": "https://github.com/thephpleague/tactician-bundle.git",
-                "reference": "c319482382ade005987a20908893a17024ac5d64"
+                "reference": "bf10a37e27e4306bb9de5d909dba36226aa8e3c4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/thephpleague/tactician-bundle/zipball/c319482382ade005987a20908893a17024ac5d64",
-                "reference": "c319482382ade005987a20908893a17024ac5d64",
+                "url": "https://api.github.com/repos/thephpleague/tactician-bundle/zipball/bf10a37e27e4306bb9de5d909dba36226aa8e3c4",
+                "reference": "bf10a37e27e4306bb9de5d909dba36226aa8e3c4",
                 "shasum": ""
             },
             "require": {
                 "league/tactician": "^1.0",
                 "league/tactician-container": "^2.0",
+                "league/tactician-logger": "^0.10.0",
                 "php": ">=7.0",
                 "symfony/config": "^2.8|^3.3|^4.0",
                 "symfony/dependency-injection": "^2.8|^3.3|^4.0",
@@ -3000,7 +3004,7 @@
                 "symfony/yaml": "^2.8|^3.3|^4.0"
             },
             "require-dev": {
-                "league/tactician-doctrine": "^1.1",
+                "league/tactician-doctrine": "^1.1.1",
                 "matthiasnoback/symfony-config-test": "^3.0",
                 "matthiasnoback/symfony-dependency-injection-test": "^2.1",
                 "mockery/mockery": "~1.0",
@@ -3056,7 +3060,7 @@
                 "symfony",
                 "tactician"
             ],
-            "time": "2017-12-08T11:06:49+00:00"
+            "time": "2018-04-25T07:12:11+00:00"
         },
         {
             "name": "league/tactician-container",
@@ -3111,16 +3115,16 @@
         },
         {
             "name": "league/tactician-doctrine",
-            "version": "v1.1",
+            "version": "v1.1.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/thephpleague/tactician-doctrine.git",
-                "reference": "f5a214a110d07dabdd05ee7fb3a155af2d1c0e6c"
+                "reference": "c554dfc464e56aa7057fa4625376f9406e5656f6"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/thephpleague/tactician-doctrine/zipball/f5a214a110d07dabdd05ee7fb3a155af2d1c0e6c",
-                "reference": "f5a214a110d07dabdd05ee7fb3a155af2d1c0e6c",
+                "url": "https://api.github.com/repos/thephpleague/tactician-doctrine/zipball/c554dfc464e56aa7057fa4625376f9406e5656f6",
+                "reference": "c554dfc464e56aa7057fa4625376f9406e5656f6",
                 "shasum": ""
             },
             "require": {
@@ -3160,7 +3164,55 @@
                 "tactician",
                 "transactions"
             ],
-            "time": "2017-01-05T09:49:53+00:00"
+            "time": "2018-04-13T10:03:47+00:00"
+        },
+        {
+            "name": "league/tactician-logger",
+            "version": "v0.10.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/thephpleague/tactician-logger.git",
+                "reference": "3ff9ee04e4cbec100af827f829ed4c7ff7c08442"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/thephpleague/tactician-logger/zipball/3ff9ee04e4cbec100af827f829ed4c7ff7c08442",
+                "reference": "3ff9ee04e4cbec100af827f829ed4c7ff7c08442",
+                "shasum": ""
+            },
+            "require": {
+                "league/tactician": "^1.0",
+                "php": ">=5.5.0",
+                "psr/log": "~1.0"
+            },
+            "require-dev": {
+                "mockery/mockery": "^0.9",
+                "phpunit/phpunit": "4.*",
+                "squizlabs/php_codesniffer": "~2.3"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "League\\Tactician\\Logger\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Ross Tuck"
+                }
+            ],
+            "description": "Adds PSR-3 logging support to the Tactician command bus",
+            "homepage": "https://github.com/thephpleague/tactician-logger",
+            "keywords": [
+                "log",
+                "logging",
+                "tactician"
+            ],
+            "time": "2016-08-23T05:50:38+00:00"
         },
         {
             "name": "league/uri",
