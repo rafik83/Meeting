@@ -43,6 +43,7 @@ template.participant.title: 'Les participants'
 template.placeholder.title: Placeholder
 template.products.title: 'Produits liés'
 template.registration.atLeastOneDataFieldMustBeChecked: 'Au moins un des champs Type d''information doit être coché'
+template.registration.uploadFormatRequired: 'Au moins un format d''upload doit être sélectionné'
 template.registration.dataType: 'Type d''information'
 template.registration.optional: Optionnel
 template.registration.participantData: 'Information de participant'

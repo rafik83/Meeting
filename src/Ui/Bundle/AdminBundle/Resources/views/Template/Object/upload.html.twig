@@ -13,7 +13,12 @@
     }
 }|merge(config|default({})) %}
 
-<div class="object" data-object="upload" data-uid="{{ uid|default('__UID__') }}" data-config="{{ config|json_encode }}">
+<div
+    class="object"
+    data-object="upload"
+    data-uid="{{ uid|default('__UID__') }}" data-config="{{ config|json_encode }}"
+    data-upload-format-required-message="{{ 'template.registration.uploadFormatRequired'|trans }}"
+>
     <ul class="block-buttons list-inline">
         <li class="object-title">{{ 'template.object.upload'|trans }}</li>
         <li>
