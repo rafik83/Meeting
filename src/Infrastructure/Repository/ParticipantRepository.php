@@ -475,7 +475,7 @@ class ParticipantRepository implements ParticipantRepositoryInterface
     /**
      * {@inheritdoc}
      */
-    public function getByEventAndSheetIds(Event $event, array $sheetIds, $locale)
+    public function getByEventAndSheetIds(Event $event, array $sheetIds, $locale): array
     {
         $queryBuilder = $this
             ->entityManager

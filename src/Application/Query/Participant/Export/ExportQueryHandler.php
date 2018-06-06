@@ -38,7 +38,7 @@ class ExportQueryHandler
      *
      * @return string
      */
-    public function handle(ExportQuery $exportQuery)
+    public function handle(ExportQuery $exportQuery): string
     {
         $participantsSheetIdsView = $this->sheetSearchAdapter->getParticipantsSheetIdsView(
             $exportQuery->event,

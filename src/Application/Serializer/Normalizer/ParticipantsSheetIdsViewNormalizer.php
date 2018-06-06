@@ -46,14 +46,10 @@ class ParticipantsSheetIdsViewNormalizer extends AbstractNormalizer implements N
         self::COL_HAPPENING_SUBSCRIBER,
     ];
 
-    /**
-     * @var string
-     */
+    /** @var string */
     protected $normalizerType = 'participant';
 
-    /**
-     * @var ParticipantRepositoryInterface
-     */
+    /** @var ParticipantRepositoryInterface */
     private $participantRepository;
 
     /**
@@ -63,40 +59,28 @@ class ParticipantsSheetIdsViewNormalizer extends AbstractNormalizer implements N
      */
     private $registrationFields;
 
-    /**
-     * @var SheetInfoGuesser
-     */
-    private $sheetInfoGuesser;
-
-    /**
-     * @var HappeningParticipationRepositoryInterface
-     */
+    /** @var HappeningParticipationRepositoryInterface */
     private $happeningParticipationRepository;
 
-    /**
-     * @var TemplateDataFactory
-     */
+    /** @var TemplateDataFactory */
     private $templateDataFactory;
 
     /**
      * @param TranslatorInterface                       $translator
      * @param TemplateDataFactory                       $templateDataFactory
      * @param ParticipantRepositoryInterface            $participantRepository
-     * @param SheetInfoGuesser                          $sheetInfoGuesser
      * @param HappeningParticipationRepositoryInterface $happeningParticipationRepository
      */
     public function __construct(
         TranslatorInterface $translator,
         TemplateDataFactory $templateDataFactory,
         ParticipantRepositoryInterface $participantRepository,
-        SheetInfoGuesser $sheetInfoGuesser,
         HappeningParticipationRepositoryInterface $happeningParticipationRepository
     ) {
         parent::__construct($translator);
 
         $this->participantRepository            = $participantRepository;
         $this->registrationFields               = [];
-        $this->sheetInfoGuesser                 = $sheetInfoGuesser;
         $this->happeningParticipationRepository = $happeningParticipationRepository;
         $this->templateDataFactory              = $templateDataFactory;
     }
@@ -168,7 +152,7 @@ class ParticipantsSheetIdsViewNormalizer extends AbstractNormalizer implements N
         $rawData = [
             self::COL_SHEET_ID               => $sheet->getId(),
             self::COL_PARTICIPANT_TYPE       => $sheet->getType()->getTitle($availableLocale),
-            self::COL_SHEET_NAME             => $this->sheetInfoGuesser->guessSheetTitle($sheet, $availableLocale),
+            self::COL_SHEET_NAME             => $sheet->getTitle(),
             self::COL_SHEET_ENABLE           => $this->normalizeBoolean($sheet->isEnabled()),
             self::COL_USER_ID                => $participant->getUser()->getId(),
             self::COL_PARTICIPANT_ID         => $participant->getId(),
@@ -189,7 +173,7 @@ class ParticipantsSheetIdsViewNormalizer extends AbstractNormalizer implements N
      * @param string      $availableLocale
      * @param string      $fallbackLocale
      */
-    private function addRegistrationRawData(&$rawData, Participant $participant, $availableLocale, $fallbackLocale)
+    private function addRegistrationRawData(&$rawData, Participant $participant, $availableLocale, $fallbackLocale): void
     {
         $registrationTemplateData = $this
             ->templateDataFactory
@@ -222,7 +206,7 @@ class ParticipantsSheetIdsViewNormalizer extends AbstractNormalizer implements N
      *
      * @return array
      */
-    private function normalizeParticipantRawData($rawData, $charset = Charset::WINDOWS_1252)
+    private function normalizeParticipantRawData($rawData, $charset = Charset::WINDOWS_1252): array
     {
         $normalizedData = [];
 
@@ -265,7 +249,7 @@ class ParticipantsSheetIdsViewNormalizer extends AbstractNormalizer implements N
      *
      * @return string
      */
-    private function getHappeningSubscriberData(Participant $participant)
+    private function getHappeningSubscriberData(Participant $participant): string
     {
         $transKeyHappeningSubscriber = 'admin.participant.export.happening.subscriber.';
 

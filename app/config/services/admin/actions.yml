@@ -408,3 +408,12 @@ services:
     Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\User\Event\AuthenticationToken\SampleAction:
         arguments:
             - '@adapter.authorization_checker'
+
+    #
+    # Participant
+    #
+    Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Participant\ExportAction:
+        arguments:
+            - '@adapter.authorization_checker'
+            - '@Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Filter\SheetFilterSubmittedDataGetter'
+            - '@query.participant.export_handler'

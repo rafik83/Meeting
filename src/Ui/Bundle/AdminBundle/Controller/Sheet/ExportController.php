@@ -10,7 +10,6 @@
 
 namespace Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Sheet;
 
-use Proximum\Vimeet\Application\Query\Participant;
 use Proximum\Vimeet\Application\Query\Sheet;
 use Proximum\Vimeet\Domain\Model\Admin;
 use Proximum\Vimeet\Domain\Model\Event;
@@ -30,9 +29,9 @@ class ExportController extends Controller
      * @param Request     $request
      * @param Event       $event
      *
-     * @return Response
+     * @return CsvFileResponse
      */
-    public function exportSheetAction(AdminDomain $adminDomain, Request $request, Event $event)
+    public function exportSheetAction(AdminDomain $adminDomain, Request $request, Event $event): CsvFileResponse
     {
         // Only super admin & organizers are allowed to export sheets:
         $this->denyAccessUnlessGranted('ROLE_ALLOWED_TO_ORGANIZE');
@@ -48,37 +47,6 @@ class ExportController extends Controller
         return new CsvFileResponse(
             $this->get('query.sheet.export_handler')->handle($exportQuery),
             sprintf('export_event_sheets_%s.csv', date('Y_m_d_His')),
-            Response::HTTP_OK,
-            [],
-            $exportQuery->charset
-        );
-    }
-
-    /**
-     * CSV export of participant's filtered sheets. Requires super admin or organizer role.
-     *
-     * @param AdminDomain $adminDomain
-     * @param Request     $request
-     * @param Event       $event
-     *
-     * @return Response
-     */
-    public function exportParticipantAction(AdminDomain $adminDomain, Request $request, Event $event)
-    {
-        // Only super admin & organizers are allowed to export participants:
-        $this->denyAccessUnlessGranted('ROLE_ALLOWED_TO_ORGANIZE');
-        $this->denyAccessUnlessGranted('PERMISSION_EVENT_ACCESS', $event);
-
-        $locale = $event->getAvailableLocale($request->getLocale());
-        $exportQuery = new Participant\Export\ExportQuery(
-            $event,
-            $this->getFilters($event, $adminDomain->getAdmin(), $locale),
-            $locale
-        );
-
-        return new CsvFileResponse(
-            $this->get('query.participant.export_handler')->handle($exportQuery),
-            sprintf('export_event_participants_%s.csv', date('Y_m_d_His')),
             Response::HTTP_OK,
             [],
             $exportQuery->charset

@@ -731,7 +731,7 @@ admin_sheet_export_participant:
     requirements:
         event: \d+
     methods: [GET]
-    defaults: { _controller: AdminBundle:Sheet/Export:exportParticipant }
+    defaults: { _controller: Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Participant\ExportAction }
 admin_sheet_import:
     path: /event/{event}/sheet/import
     requirements:

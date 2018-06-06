@@ -5233,7 +5233,6 @@ services:
             - '@vimeet_infrastructure.adapter.translator_adapter'
             - '@template.template_data_factory'
             - '@vimeet_infrastructure.repository.participant_repository'
-            - '@vimeet_infrastructure.application.components.sheet.sheet_info_guesser'
             - '@vimeet_infrastructure.repository.happening_participation_repository'
         tags:
             - { name: serializer.normalizer }
