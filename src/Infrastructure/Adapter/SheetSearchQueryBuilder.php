@@ -674,6 +674,7 @@ class SheetSearchQueryBuilder
 
     protected function filterByFilledFilter(array $filledFilters): void
     {
+        $numberOfFilterApplied = 0;
         $boolQuery = new BoolQuery();
         $nestedQuery = new Nested();
         $nestedQuery->setPath('filledFilter');
@@ -690,10 +691,14 @@ class SheetSearchQueryBuilder
 
                 $boolQuery->addShould($subBoolQuery);
             }
+
+            $numberOfFilterApplied++;
         }
 
-        $nestedQuery->setQuery($boolQuery);
-        $this->query->addMust($nestedQuery);
+        if (0 < $numberOfFilterApplied) {
+            $nestedQuery->setQuery($boolQuery);
+            $this->query->addMust($nestedQuery);
+        }
     }
 
     /**
