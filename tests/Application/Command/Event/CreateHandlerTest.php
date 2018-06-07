@@ -51,6 +51,8 @@ class CreateHandlerTest extends TestCase
         $create                = new Create($user);
         $create->title         = 'barfoo';
         $create->locales       = ['fr', 'en'];
+        $create->mode          = 'et';
+        $create->vat           = 20;
         $create->fallback      = 'en';
         $create->currency      = 'USD';
         $create->leftColor     = '#FFFFFF';
@@ -172,6 +174,8 @@ class CreateHandlerTest extends TestCase
         $create                = new Create($user);
         $create->title         = 'barfoo';
         $create->locales       = ['fr', 'en'];
+        $create->mode          = 'et';
+        $create->vat           = 20;
         $create->fallback      = 'en';
         $create->currency      = 'USD';
         $create->leftColor     = '#FFFFFF';
@@ -291,6 +295,7 @@ class CreateHandlerTest extends TestCase
         $create                = new Create($user);
         $create->title         = 'barfoo';
         $create->locales       = ['fr', 'en'];
+        $create->mode          = 'et';
         $create->fallback      = 'en';
         $create->currency      = 'USD';
         $create->leftColor     = '#FFFFFF';

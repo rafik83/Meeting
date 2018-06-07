@@ -41,16 +41,16 @@ class InvoiceView
     /** @var string */
     public $eventDefaultLocale;
 
-    /** @var string */
+    /** @var null|string */
     public $eventBillingAddress;
 
-    /** @var string */
+    /** @var null|string */
     public $eventBankInfo;
 
-    /** @var string */
+    /** @var null|string */
     public $eventPaymentCondition;
 
-    /** @var string */
+    /** @var null|string */
     public $eventPaymentFooter;
 
     /** @var SummaryView */
@@ -91,10 +91,10 @@ class InvoiceView
         \DateTimeInterface $createdAt,
         string $eventDefaultLocale,
         string $eventTimeZone,
-        string $eventBillingAddress,
-        string $eventBankInfo,
-        string $eventPaymentCondition,
-        string $eventPaymentFooter,
+        ?string $eventBillingAddress,
+        ?string $eventBankInfo,
+        ?string $eventPaymentCondition,
+        ?string $eventPaymentFooter,
         SummaryView $summaryView,
         BillingInfosView $billingInfosView,
         ?VatListView $vatListView,
