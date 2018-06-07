@@ -17,6 +17,7 @@
             <tr>
                 <th colspan="2">{{ 'admin.order_edit.columns.product'|trans }}</th>
                 <th class="text-right">{{ 'admin.order_edit.columns.unitPrice'|trans }}</th>
+                <th class="text-right">{{ 'admin.order_edit.columns.vatRate'|trans }}</th>
                 <th class="text-right">{{ 'admin.order_edit.columns.quantity'|trans }}</th>
                 <th class="text-right">{{ 'admin.order_edit.columns.total'|trans }}</th>
                 <th>&nbsp;</th>
@@ -26,7 +27,7 @@
 
             {% for group in order_view.groups.groups %}
                 <tr class="active">
-                    <th colspan="5">{{ group.label }}</th>
+                    <th colspan="6">{{ group.label }}</th>
                     <td class="text-right">
                         {% if group.groupId %}
                             <a href="{{ path('admin_sheet_order_add_row_to_group', { 'event': event.id, 'order': order.id, 'group': group.groupId }) }}"><i class="glyphicon glyphicon-plus"></i></a>
@@ -39,12 +40,14 @@
                         <td>&nbsp;</td>
                         <td>{{ product.label }}</td>
                         <td class="text-right">{{ product.price|localizedcurrency(product.currency) }}</td>
+                        <td class="text-right">{{ product.vatRate }}%</td>
                         <td class="text-right">{{ product.quantity }}</td>
                         <td class="text-right">{{ product.total|localizedcurrency(product.currency) }}</td>
                         <td class="text-right">
                             <a href="{{ path('admin_sheet_order_add_row_to_product', { 'event': event.id, 'order': order.id, 'row': product.id }) }}"><i class="glyphicon glyphicon-plus"></i></a>
                         </td>
                     </tr>
+
                     {% if product.includedProducts is not empty %}
                         <tr>
                             <td>&nbsp;</td>
@@ -57,6 +60,7 @@
                             <td>&nbsp;</td>
                             <td>&gt; {{ included.label }}</td>
                             <td class="text-right">{{ included.price|localizedcurrency(included.currency) }}</td>
+                            <td></td>
                             <td class="text-right">{{ included.quantity }}</td>
                             <td class="text-right">{{ included.total|localizedcurrency(included.currency) }}</td>
                             <td></td>
@@ -68,6 +72,7 @@
                             <td>&nbsp;</td>
                             <td>{{ customRow.label }}</td>
                             <td class="text-right">{{ customRow.price|localizedcurrency(customRow.currency) }}</td>
+                            <td class="text-right">{{ customRow.vatRate }}%</td>
                             <td class="text-right">{{ customRow.quantity }}</td>
                             <td class="text-right">{{ customRow.total|localizedcurrency(customRow.currency) }}</td>
                             <td class="text-right">
@@ -83,6 +88,7 @@
                             <td>&nbsp;</td>
                             <td>{{ customRow.label }}</td>
                             <td class="text-right">{{ customRow.price|localizedcurrency(customRow.currency) }}</td>
+                            <td class="text-right">{{ customRow.vatRate }}%</td>
                             <td class="text-right">{{ customRow.quantity }}</td>
                             <td class="text-right">{{ customRow.total|localizedcurrency(customRow.currency) }}</td>
                             <td class="text-right">
@@ -102,8 +108,12 @@
             {% for promotionCode in order_view.promotionCodes.promotionCodes %}
                 <tr>
                     <td>&nbsp;</td>
-                    <td class="text-left">{{ promotionCode.label }}</td>
-                    <td class="text-left">{{ promotionCode.description }}</td>
+                    <td class="text-left">
+                        {{ promotionCode.label }}<br>
+                        {{ promotionCode.description }}
+                    </td>
+                    <td></td>
+                    <td></td>
                     <td class="text-right">{{ promotionCode.quantity }}</td>
                     <td class="text-right">{{ promotionCode.total|localizedcurrency(promotionCode.currency) }}</td>
                     <td></td>
@@ -112,7 +122,7 @@
 
 
             <tr class="info">
-                <th colspan="2"></th>
+                <th colspan="3"></th>
                 <th colspan="2">{{ 'admin.order_edit.total.withoutVAT'|trans }}</th>
                 <th class="text-right">{{ order_view.totalWithoutVat|format_amount|localizedcurrency(order_view.currency) }}</th>
                 <th></th>
@@ -121,13 +131,13 @@
             {% if order_view.vatApplicable %}
                 {% for vatView in order_view.vatListView.vatViews %}
                     <tr>
-                        <th colspan="2"></th>
+                        <th colspan="3"></th>
                         <th colspan="2">{{ 'admin.order_edit.totalByVAT'|trans({'%vat%': vatView.vatRate}) }}</th>
                         <th class="text-right">{{ vatView.total|format_amount|localizedcurrency(order_view.currency) }}</th>
                         <th></th>
                     </tr>
                     <tr>
-                        <th colspan="2"></th>
+                        <th colspan="3"></th>
                         <th colspan="1">{{ 'admin.order_edit.VAT'|trans }}</th>
                         <th colspan="1">{{ vatView.vatRate }}%</th>
                         <th class="text-right">{{ vatView.totalVat|format_amount|localizedcurrency(order_view.currency) }}</th>
@@ -135,7 +145,7 @@
                     </tr>
                 {% endfor %}
                 <tr>
-                    <th colspan="2"></th>
+                    <th colspan="3"></th>
                     <th colspan="2">{{ 'admin.order_edit.total.withVAT'|trans }}</th>
                     <th class="text-right">{{ order_view.totalWithVat|format_amount|localizedcurrency(order_view.currency) }}</th>
                     <th></th>

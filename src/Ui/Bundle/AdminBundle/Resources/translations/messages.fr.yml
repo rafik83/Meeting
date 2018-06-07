@@ -501,6 +501,7 @@ admin.order_edit.columns.product: Produit
 admin.order_edit.columns.quantity: Quantité
 admin.order_edit.columns.total: Total
 admin.order_edit.columns.unitPrice: 'Prix unitaire'
+admin.order_edit.columns.vatRate: 'Taux TVA'
 admin.order_edit.command_name: 'N°%id% de %sheetName%'
 admin.order_edit.edit_custom_row: ''
 admin.order_edit.includedProduct: Inclus
