@@ -20,6 +20,7 @@ use Proximum\Vimeet\Application\Components\Invoice\Denormalizer\PromotionCodeVie
 use Proximum\Vimeet\Application\Components\Invoice\Denormalizer\PromotionProductRowViewDenormalizer;
 use Proximum\Vimeet\Application\Components\Invoice\Denormalizer\RowViewDenormalizer;
 use Proximum\Vimeet\Application\Components\Invoice\Denormalizer\SummaryViewDenormalizer;
+use Proximum\Vimeet\Application\Components\Invoice\Denormalizer\VatListViewDenormalizer;
 use Proximum\Vimeet\Application\View\Invoice\BillingInfosView;
 use Proximum\Vimeet\Application\View\Invoice\CustomRowView;
 use Proximum\Vimeet\Application\View\Invoice\GroupsView;
@@ -31,6 +32,8 @@ use Proximum\Vimeet\Application\View\Invoice\PromotionCodeView;
 use Proximum\Vimeet\Application\View\Invoice\PromotionProductRowView;
 use Proximum\Vimeet\Application\View\Invoice\RowView;
 use Proximum\Vimeet\Application\View\Invoice\SummaryView;
+use Proximum\Vimeet\Application\View\Invoice\Vat\VatListView;
+use Proximum\Vimeet\Application\View\Invoice\Vat\VatView;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Invoice\Invoice;
 use Proximum\Vimeet\Domain\Model\Invoice\Prefix;
@@ -281,6 +284,210 @@ class InvoiceViewDenormalizerTest extends TestCase
             ),
             null,
             17760
+        );
+
+        $this->assertEquals($expectedInvoiceView, $invoiceView);
+    }
+
+    public function testDenormalizeInvoiceViewWithVatListView()
+    {
+        $event  = EventFactory::createEvent('My Event', 'fr');
+        $sheet  = SheetFactory::create();
+        $prefix = new Prefix('Vimeet', 'Vi');
+        $date   = new \DateTime('2016-12-25 08:00:00');
+
+        /**
+         * This json data must not changes because it is an extract of real invoice data
+         */
+        $data = '{"summaryView":{"groups":{"groups":[{"groupId":null,"label":"Full entry ticket","type":"plan","products":[{"label":"Full entry ticket","quantity":1,"price":35000,"total":35000,"productId":1668,"vatRate":25,"customRows":[],"includedProducts":[]}],"customRows":[]},{"groupId":null,"label":"Participant 2 days with dinner","type":"participant","products":[{"label":"Participant 2 days with dinner","quantity":1,"price":9900,"total":9900,"productId":1662,"vatRate":25,"customRows":[],"includedProducts":[]}],"customRows":[]},{"groupId":null,"label":"A business meetings planning is aleady included in your registration package","type":"planning","products":[{"label":"A business meetings planning is aleady included in your registration package","quantity":1,"price":0,"total":0,"productId":1512,"vatRate":20,"customRows":[],"includedProducts":[]}],"customRows":[]},{"groupId":272,"label":"Options","type":"option","products":[{"label":"CHAIR","quantity":1,"price":1900,"total":1900,"productId":1745,"vatRate":5.5,"customRows":[{"label":"Remise exceptionnelle","quantity":1,"price":-230,"total":-230}],"includedProducts":[]}],"customRows":[]}]},"promotionCodes":{"promotionCodes":[]},"vatMode":"et","currency":"EUR"},"billingInfosView":{"gender":"man","lastname":"Philipse","firstname":"Esther","function":"CEO","phone":"+31615012306","mobile":"+31615012306","email":"email-70900@example.net","company":"AERspire","vatNumber":null,"street":"Tesla 1","zipcode":"6422 RG","city":"Heerlen","country":"NL","reference":null},"vatListView":{"vatAmount":11273,"total":46570,"totalWithVat":57843,"vatApplicable":true,"vatMode":"et","vatViews":{"vat_25":{"vatRate":25,"vatMode":"et","total":44670,"totalVat":11168},"vat_20":{"vatRate":20,"vatMode":"et","total":0,"totalVat":0},"vat_5.5":{"vatRate":5.5,"vatMode":"et","total":1900,"totalVat":105}}},"amountRemainToPay":57843}';
+
+        $invoice = new Invoice(
+            $event,
+            $sheet,
+            $prefix,
+            'Vi',
+            2016,
+            7,
+            true,
+            Event::VAT_MODE_ET,
+            25,
+            339300,
+            407160,
+            67860,
+            'EUR',
+            $data,
+            $date
+        );
+
+        $billingInfosViewOfSheet = new BillingInfosView(
+            'man',
+            'DUPOND',
+            'Laurent',
+            'Directeur',
+            '+33122334455',
+            '+33611223344',
+            'my-email@example.net',
+            'My company',
+            '10 rue Saint Marc',
+            '75002',
+            'Paris',
+            'EN',
+            'My vat changed number',
+            'My reference'
+        );
+
+        $serializer = new Serializer(
+            [
+                new InvoiceViewDenormalizer(),
+                new SummaryViewDenormalizer(),
+                new BillingInfosViewDenormalizer(),
+                new GroupsViewDenormalizer(),
+                new GroupViewDenormalizer(),
+                new RowViewDenormalizer(),
+                new PromotionCodesViewDenormalizer(),
+                new PromotionCodeViewDenormalizer(),
+                new PromotionProductRowViewDenormalizer(),
+                new VatListViewDenormalizer(),
+                new ObjectNormalizer(),
+            ],
+            [
+                new JsonEncoder(),
+            ]
+        );
+
+        $invoiceView = $serializer->deserialize(
+            $invoice->getData(),
+            InvoiceView::class,
+            'json',
+            [
+                'invoice'                 => $invoice,
+                'billingInfosViewOfSheet' => $billingInfosViewOfSheet,
+            ]
+        );
+
+        /**
+         * This InvoiceView should never changed because it is the representation of Invoice data
+         */
+        $expectedInvoiceView = new InvoiceView(
+            'Vi2016-0007',
+            true,
+            'et',
+            25,
+            339300,
+            407160,
+            67860,
+            'EUR',
+            'My Event',
+            null,
+            $date,
+            'fr',
+            $event->getTimeZone(),
+            '',
+            '',
+            '',
+            '',
+            new SummaryView(
+                new GroupsView(
+                    [
+                        new GroupView(
+                            'Full entry ticket',
+                            'plan',
+                            null,
+                            [
+                                new RowView(
+                                    'Full entry ticket',
+                                    1,
+                                    35000,
+                                    35000,
+                                    1668
+                                ),
+                            ],
+                            []
+                        ),
+                        new GroupView(
+                            'Participant 2 days with dinner',
+                            'participant',
+                            null,
+                            [
+                                new RowView(
+                                    'Participant 2 days with dinner',
+                                    1,
+                                    9900,
+                                    9900,
+                                    1662
+                                ),
+                            ]
+                        ),
+                        new GroupView(
+                            'A business meetings planning is aleady included in your registration package',
+                            'planning',
+                            null,
+                            [
+                                new RowView(
+                                    'A business meetings planning is aleady included in your registration package',
+                                    1,
+                                    0,
+                                    0,
+                                    1512
+                                ),
+                            ]
+                        ),
+                        new GroupView(
+                            'Options',
+                            'option',
+                            272,
+                            [
+                                new RowView(
+                                    'CHAIR',
+                                    1,
+                                    1900,
+                                    1900,
+                                    1745,
+                                    [
+                                        new CustomRowView(
+                                            'Remise exceptionnelle',
+                                            -230,
+                                            1,
+                                            -230
+                                        ),
+                                    ]
+                                ),
+                            ]
+                        ),
+                    ]
+                ),
+                new PromotionCodesView([]),
+                'et',
+                'EUR'
+            ),
+            new BillingInfosView(
+                'man',
+                'DUPOND',
+                'Laurent',
+                'Directeur',
+                '+33122334455',
+                '+33611223344',
+                'my-email@example.net',
+                'My company',
+                '10 rue Saint Marc',
+                '75002',
+                'Paris',
+                'NL',
+                null,
+                'My reference'
+            ),
+            new VatListView(
+                46570,
+                57843,
+                true,
+                'et',
+                [
+                    new VatView(25, 'et', 44670, 11168),
+                    new VatView(20, 'et', 0, 0),
+                    new VatView(5.5, 'et', 1900, 105),
+                ]
+            ),
+            57843
         );
 
         $this->assertEquals($expectedInvoiceView, $invoiceView);
