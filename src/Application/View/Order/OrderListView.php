@@ -12,99 +12,67 @@ namespace Proximum\Vimeet\Application\View\Order;
 
 class OrderListView
 {
-    /**
-     * @var int
-     */
+    /** @var int */
     public $id;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     public $numero;
 
-    /**
-     * @var int
-     */
+    /** @var int */
     public $sheetId;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     public $sheetTitle;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     public $sheetType;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     public $follower;
 
-    /**
-     * @var \DateTimeInterface
-     */
+    /** @var \DateTimeInterface */
     public $createdAt;
 
-    /**
-     * Amount without VAT
-     *
-     * @var float
-     */
+    /** @var float */
     public $totalWithoutVat;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     public $vatMode;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     public $currency;
 
-    /**
-     * @var bool
-     */
+    /** @var bool */
     public $isInvoiced;
 
-    /**
-     * @param int                $id
-     * @param string             $numero
-     * @param int                $sheetId
-     * @param string             $sheetTitle
-     * @param string             $sheetType
-     * @param string             $follower
-     * @param \DateTimeInterface $createdAt
-     * @param float              $totalWithoutVat Amount without VAT
-     * @param string             $vatMode
-     * @param string             $currency
-     * @param bool               $isInvoiced
-     */
+    /** @var bool */
+    public $isCancelled;
+
     public function __construct(
-        $id,
-        $numero,
-        $sheetId,
-        $sheetTitle,
-        $sheetType,
-        $follower,
+        int $id,
+        string $numero,
+        int $sheetId,
+        string $sheetTitle,
+        string $sheetType,
+        string $follower,
         \DateTimeInterface $createdAt,
-        $totalWithoutVat,
-        $vatMode,
-        $currency,
-        $isInvoiced
+        float $totalWithoutVat,
+        string $vatMode,
+        string $currency,
+        bool $isInvoiced,
+        bool $isCancelled
     ) {
-        $this->id              = $id;
-        $this->numero          = $numero;
-        $this->sheetId         = $sheetId;
-        $this->sheetTitle      = $sheetTitle;
-        $this->sheetType       = $sheetType;
-        $this->follower        = $follower;
-        $this->createdAt       = $createdAt;
+        $this->id = $id;
+        $this->numero = $numero;
+        $this->sheetId = $sheetId;
+        $this->sheetTitle = $sheetTitle;
+        $this->sheetType = $sheetType;
+        $this->follower = $follower;
+        $this->createdAt = $createdAt;
         $this->totalWithoutVat = $totalWithoutVat;
-        $this->vatMode         = $vatMode;
-        $this->currency        = $currency;
-        $this->isInvoiced      = $isInvoiced;
+        $this->vatMode = $vatMode;
+        $this->currency = $currency;
+        $this->isInvoiced = $isInvoiced;
+        $this->isCancelled = $isCancelled;
     }
 }

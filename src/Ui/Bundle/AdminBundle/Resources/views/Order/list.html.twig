@@ -62,8 +62,16 @@
                     {{ order.totalWithoutVat|localizedcurrency(order.currency) }}
                 </td>
                 <td class="text-right">
-                    {% if order.isInvoiced == false %}
+                    {% if not order.isInvoiced and not order.isCancelled %}
                         <a class="btn btn-default btn-sm" href="{{ path('admin_sheet_order_edit', { 'event': event.id, 'order': order.id }) }}">{{ 'admin.order_edit.link'|trans }}</a>
+                    {% endif %}
+
+                    {% if order.isInvoiced %}
+                        <span class="label label-success">{{ 'admin.order.invoiced'|trans }}</span>
+                    {% endif %}
+
+                    {% if order.isCancelled %}
+                        <span class="label label-danger">{{ 'admin.order.cancelled'|trans }}</span>
                     {% endif %}
                 </td>
             </tr>

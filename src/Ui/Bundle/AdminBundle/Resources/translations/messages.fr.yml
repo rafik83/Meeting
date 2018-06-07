@@ -520,6 +520,7 @@ admin.order.edit: 'Modification commande:'
 admin.order.export.button.label: 'Exporter les commandes'
 admin.order.follower: 'Suivi commercial'
 admin.order.id: Id
+admin.order.invoiced: 'Facturé'
 admin.order.invoiceNumber: 'Facture N°'
 admin.order.link: Commandes
 admin.order.sheet: Fiche
