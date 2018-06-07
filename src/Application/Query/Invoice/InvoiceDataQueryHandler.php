@@ -56,7 +56,7 @@ class InvoiceDataQueryHandler
                 new SummaryQuery($invoiceDataQuery->sheet, $invoiceDataQuery->order, $invoiceDataQuery->locale)
             ),
             $this->billingInfosQueryHandler->handle(new BillingInfosQuery($invoiceDataQuery->sheet)),
-            $this->orderVatViewQueryHandler->handle(new OrderVatViewQuery($invoiceDataQuery->order)),
+            $this->orderVatViewQueryHandler->handle(new OrderVatViewQuery($invoiceDataQuery->order))->vatListView,
             $this->balance->getRemainingToPay($invoiceDataQuery->sheet)
         );
     }

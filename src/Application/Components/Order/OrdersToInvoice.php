@@ -77,12 +77,12 @@ class OrdersToInvoice
         return new OrdersToInvoiceView(
             $orders,
             $data,
-            $invoiceDataView->orderVatView->isVatApplicable,
+            $invoiceDataView->vatListView->vatApplicable,
             $event->getMode(),
             $event->getVat(),
-            $invoiceDataView->orderVatView->totalWithoutVat,
-            $invoiceDataView->orderVatView->vatAmount,
-            $invoiceDataView->orderVatView->totalWithVat,
+            $invoiceDataView->vatListView->total,
+            $invoiceDataView->vatListView->getVatAmount(),
+            $invoiceDataView->vatListView->totalWithVat,
             $orderMerged->getCurrency()
         );
     }

@@ -20,23 +20,23 @@ class VatView
     /** @var string */
     public $vatMode;
 
-    /** @var float */
+    /** @var int in cents */
     public $total;
 
-    /** @var float the value of the vat */
+    /** @var int the value of the VAT in cents */
     public $totalVat;
 
     /**
      * @param float  $vatRate
      * @param string $vatMode
-     * @param float  $total
-     * @param float  $totalVat
+     * @param int    $total in cents
+     * @param int    $totalVat in cents
      */
     public function __construct(
         float $vatRate,
         string $vatMode,
-        float $total,
-        float $totalVat
+        int $total,
+        int $totalVat
     ) {
         $this->vatRate = $vatRate;
         $this->vatMode = $vatMode;
@@ -45,9 +45,9 @@ class VatView
     }
 
     /**
-     * @param float $price
+     * @param int $price in cents
      */
-    public function addToTotal(float $price): void
+    public function addToTotal(int $price): void
     {
         $this->total += $price;
         $this->totalVat = AmountFormatter::calculateRateAmount($this->total, $this->vatRate);

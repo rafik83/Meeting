@@ -42,12 +42,13 @@ class OrderVatViewQueryHandler
         $vatAmount = 0;
 
         $vatViews = [];
+
         if (true === $isVatApplicable) {
             foreach ($order->getRows() as $row) {
                 $this->addToVatViews(
                     $vatViews,
                     $row->getVatRate(),
-                    $row->getPrice() * $row->getQuantity(),
+                    AmountFormatter::decimalToCentsAmount($row->getPrice()) * $row->getQuantity(),
                     $order->getVatMode()
                 );
             }
@@ -56,7 +57,7 @@ class OrderVatViewQueryHandler
                 $this->addToVatViews(
                     $vatViews,
                     $promotionCodeRow->getVatRate(),
-                    $promotionCodeRow->getPrice(),
+                    AmountFormatter::decimalToCentsAmount($promotionCodeRow->getPrice()),
                     $order->getVatMode()
                 );
             }
@@ -97,16 +98,17 @@ class OrderVatViewQueryHandler
     /**
      * @param array  $vatViews
      * @param float  $vatRate
-     * @param float  $price
+     * @param int    $price in cents
      * @param string $vatMode
      */
-    private function addToVatViews(array &$vatViews, float $vatRate, float $price, string $vatMode): void
+    private function addToVatViews(array &$vatViews, float $vatRate, int $price, string $vatMode): void
     {
         $index = 'vat_' . $vatRate;
+
         if (!isset($vatViews[$index])) {
             $vatViews[$index] = new VatView($vatRate, $vatMode, 0, 0);
         }
 
-        $vatViews[$index]->addToTotal(AmountFormatter::decimalToCentsAmount($price));
+        $vatViews[$index]->addToTotal($price);
     }
 }

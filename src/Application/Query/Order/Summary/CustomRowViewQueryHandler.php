@@ -29,7 +29,8 @@ class CustomRowViewQueryHandler
             $customRowViewQuery->row->getPrice(),
             $customRowViewQuery->row->getQuantity(),
             $customRowViewQuery->row->getOrder()->getCurrency(),
-            $customRowViewQuery->row->getOrder()->getVatMode()
+            $customRowViewQuery->row->getOrder()->getVatMode(),
+            $customRowViewQuery->row->getVatRate()
         );
     }
 }

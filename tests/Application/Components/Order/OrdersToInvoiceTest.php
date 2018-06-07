@@ -27,7 +27,6 @@ use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Order\Merger;
 use Proximum\Vimeet\Domain\Repository\OrderRepositoryInterface;
 use Proximum\Vimeet\Domain\View\Invoice\OrdersToInvoiceView;
-use Proximum\Vimeet\Domain\View\OrderVatView;
 use Proximum\Vimeet\Tests\Factory\EventFactory;
 
 class OrdersToInvoiceTest extends TestCase
@@ -85,26 +84,11 @@ class OrdersToInvoiceTest extends TestCase
 
         $billingInfosView = $this->prophesize(BillingInfosView::class);
         $summaryView = $this->prophesize(SummaryView::class);
-        $vatListView = $this->prophesize(VatListView::class);
+        $vatListView = new VatListView(10000, 12000, true, 'et', []);
         $invoiceDataView = new InvoiceDataView(
             $summaryView->reveal(),
             $billingInfosView->reveal(),
-            new OrderVatView(
-                'numero',
-                1337,
-                643,
-                true,
-                20,
-                'et',
-                'EUR',
-                false,
-                10000,
-                2000,
-                12000,
-                $vatListView->reveal(),
-                new \DateTime(),
-                null
-            ),
+            $vatListView,
             1200
         );
 
