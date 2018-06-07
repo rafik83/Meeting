@@ -19,10 +19,23 @@
             </tr>
 
         {% if invoiceView.vatApplicable %}
-            <tr>
-                <td colspan="3" class="text-right"><strong>{{ 'invoice.summary.vatRate'|trans({'%vatRate%': invoiceView.vatRate}, "invoices", invoiceView.eventDefaultLocale) }}</strong></td>
-                <td class="text-right">{{ invoiceView.vatAmount|format_amount|localizedcurrency(invoiceView.currency, invoiceView.eventDefaultLocale) }}</td>
-            </tr>
+            {% if invoiceView.vatListView is not null %}
+                {% for vatView in invoiceView.vatListView.vatViews %}
+                    <tr>
+                        <td colspan="3" class="text-right"><strong>{{ 'invoice.summary.totalByVat'|trans({'%vatRate%': vatView.vatRate}, 'invoices', invoiceView.eventDefaultLocale) }}</strong></td>
+                        <td class="text-right">{{ vatView.total|format_amount|localizedcurrency(invoiceView.currency) }} {{ ('package.vatMode.' ~ vatView.vatMode)|trans }}</td>
+                    </tr>
+                    <tr>
+                        <td colspan="3" class="text-right"><strong>{{ 'invoice.summary.vatRate'|trans({'%vatRate%': vatView.vatRate}, 'invoices', invoiceView.eventDefaultLocale) }}</strong></td>
+                        <td class="text-right">{{ vatView.totalVat|format_amount|localizedcurrency(invoiceView.currency) }}</td>
+                    </tr>
+                {% endfor %}
+            {% else %}
+                <tr>
+                    <td colspan="3" class="text-right"><strong>{{ 'invoice.summary.vatRate'|trans({'%vatRate%': invoiceView.vatRate}, "invoices", invoiceView.eventDefaultLocale) }}</strong></td>
+                    <td class="text-right">{{ invoiceView.vatAmount|format_amount|localizedcurrency(invoiceView.currency, invoiceView.eventDefaultLocale) }}</td>
+                </tr>
+            {% endif %}
 
             <tr>
                 <td colspan="3" class="text-right"><strong>{{ 'invoice.summary.totalIncludeTaxes'|trans({}, "invoices", invoiceView.eventDefaultLocale) }}</strong></td>

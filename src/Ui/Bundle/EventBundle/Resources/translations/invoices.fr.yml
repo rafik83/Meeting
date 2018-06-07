@@ -13,6 +13,7 @@ invoice.summary.product.included: 'Inclus :'
 invoice.summary.promotionCode.free: Offert
 invoice.summary.promotionCode.title: 'Offres de réductions'
 invoice.summary.remainToPay: 'Solde restant dû'
+invoice.summary.totalByVat: 'Total assujetti à %vatRate%%'
 invoice.summary.totalExcludeTaxes: 'Total HT'
 invoice.summary.totalIncludeTaxes: 'Total TTC'
 invoice.summary.vatRate: 'TVA applicable %vatRate%%'
