@@ -105,6 +105,7 @@ Proximum\Vimeet\Domain\Model\User:
         salt: "600f1943340f930f8dd8a22c6f8876ae71415ed5"
         password: "+Ht6FUfCoS8Q063evTVxDS0yerY=" # password
         locale: "fr"
+        account: '@account_proximum_user_admin'
     proximum_user_test:
         __construct: false
         email: "test_proximum@proximum.com"

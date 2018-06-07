@@ -12,6 +12,13 @@ namespace Proximum\Vimeet\Domain\Template\TemplateObject;
 
 use Proximum\Vimeet\Domain\Template\TemplateObject;
 
-class Tag extends TemplateObject
+class Tag extends TemplateObject implements SearchableObjectInterface
 {
+    /**
+     * @return array|string
+     */
+    public function getSearchableContent()
+    {
+        return $this->getTaggedDataContent();
+    }
 }

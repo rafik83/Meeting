@@ -210,7 +210,7 @@ class EditableText extends EditableObject implements ContentObjectInterface, Sea
      */
     public function getSearchableContent()
     {
-        return $this->getContentValue();
+        return $this->getContentValue() ?: $this->getTaggedDataContent();
     }
 
     /**
