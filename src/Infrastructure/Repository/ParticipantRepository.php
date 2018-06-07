@@ -475,7 +475,25 @@ class ParticipantRepository implements ParticipantRepositoryInterface
     /**
      * {@inheritdoc}
      */
-    public function getByEventAndSheetIds(Event $event, array $sheetIds, $locale): array
+    public function getByEventAndSheetIds(Event $event, array $sheetIds): array
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('participant')
+            ->from(Participant::class, 'participant')
+            ->join('participant.sheet', 'sheet', 'WITH', 'sheet.id IN (:sheetIds) AND sheet.event = :event')
+            ->setParameter('sheetIds', $sheetIds)
+            ->setParameter('event', $event)
+        ;
+
+        return $queryBuilder->getQuery()->getResult();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getByEventAndSheetIdsAndLocale(Event $event, array $sheetIds, $locale): array
     {
         $queryBuilder = $this
             ->entityManager

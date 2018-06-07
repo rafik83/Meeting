@@ -60,3 +60,15 @@ services:
             - '@vimeet_infrastructure.adapter.translator_adapter'
         tags:
             - { name: serializer.normalizer }
+
+    Proximum\Vimeet\Application\Serializer\Normalizer\Participant\Export\ParticipantListViewNormalizer:
+        arguments:
+            - '@vimeet_infrastructure.adapter.translator_adapter'
+        tags:
+            - { name: serializer.normalizer }
+
+    Proximum\Vimeet\Application\Query\Participant\Export\ExportQueryHandler:
+        arguments:
+            - '@vimeet_infrastructure.repository.participant_repository'
+            - '@Proximum\Vimeet\Application\Query\Participant\Export\ParticipantViewQueryHandler'
+            - '@template.template_data_factory'

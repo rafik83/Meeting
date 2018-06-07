@@ -43,6 +43,9 @@ mail.orderConfirm.body: "Bonjour,\n\nVotre commande numéro %orderNumero% en dat
 mail.orderConfirm.end: 'Cordialement,'
 mail.orderConfirm.linkToProForma: 'Voir la facture pro-forma'
 mail.orderConfirm.subject: 'Votre commande a été enregistrée'
+mail.participant.export.intro: "Bonjour,\n\n Voici l'export des participants que vous avez demandé pour l'événement %eventTitle% :\n"
+mail.participant.export.link.click: 'Télécharger le fichier participant'
+mail.participant.export.subject: 'Fichier d''export des participants'
 mail.participant.profile.link: 'Votre profil participant'
 mail.planner.export.error: "Bonjour, \n\n Une erreur s'est produite durant le traitement de l'export des planifications \n\n"
 mail.planner.export.intro: "Bonjour,\n\n Voici l'export des planifications pour l'événement %eventTitle% :\n"

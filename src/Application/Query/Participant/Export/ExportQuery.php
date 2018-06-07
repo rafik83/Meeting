@@ -10,7 +10,6 @@
 
 namespace Proximum\Vimeet\Application\Query\Participant\Export;
 
-use Proximum\Vimeet\Application\Serializer\Charset;
 use Proximum\Vimeet\Domain\Model\Event;
 
 class ExportQuery
@@ -18,26 +17,21 @@ class ExportQuery
     /** @var Event */
     public $event;
 
-    /** @var array */
-    public $filters;
+    /** @var int[] */
+    public $participantIds;
 
     /** @var string */
     public $locale;
 
-    /** @var string */
-    public $charset;
-
     /**
      * @param Event  $event
-     * @param array  $filters
+     * @param array  $participantIds
      * @param string $locale
-     * @param string $charset
      */
-    public function __construct(Event $event, array $filters, $locale, $charset = Charset::WINDOWS_1252)
+    public function __construct(Event $event, array $participantIds, $locale)
     {
-        $this->event   = $event;
-        $this->filters = $filters;
-        $this->locale  = $locale;
-        $this->charset = $charset;
+        $this->event = $event;
+        $this->participantIds = $participantIds;
+        $this->locale = $locale;
     }
 }

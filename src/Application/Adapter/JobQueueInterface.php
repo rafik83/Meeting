@@ -190,4 +190,12 @@ interface JobQueueInterface
      * It does reset ES
      */
     public function indexEventFromScratch(): void;
+
+    /**
+     * @param Event           $event
+     * @param Admin           $admin
+     * @param string          $locale
+     * @param Event\ExtraData $extraData
+     */
+    public function exportParticipantsForEvent(Event $event, Admin $admin, string $locale, Event\ExtraData $extraData): void;
 }

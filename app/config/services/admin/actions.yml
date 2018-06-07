@@ -415,5 +415,13 @@ services:
     Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Participant\ExportAction:
         arguments:
             - '@adapter.authorization_checker'
+            - '@adapter.file_system_adapter'
+            - '%infrastructure.export_participant_path%'
+
+    Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Participant\PrepareExportAction:
+        arguments:
+            - '@adapter.authorization_checker'
             - '@Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Filter\SheetFilterSubmittedDataGetter'
-            - '@query.participant.export_handler'
+            - '@Proximum\Vimeet\Infrastructure\Adapter\CommandBus'
+            - '@adapter.router'
+            - '@session.flash_bag'

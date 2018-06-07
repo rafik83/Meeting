@@ -94,3 +94,12 @@ services:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Query\AvailabilityTimeRange\ListViewQuery }
 
     Proximum\Vimeet\Application\Query\AvailabilityTimeRange\AvailabilityTimeRangeViewQueryHandler: ~
+
+    #
+    # Participant Export
+    #
+    Proximum\Vimeet\Application\Query\Participant\Export\ParticipantViewQueryHandler:
+        arguments:
+            - '@vimeet_infrastructure.repository.happening_participation_repository'
+            - '@template.template_data_factory'
+            - '@vimeet_infrastructure.adapter.translator_adapter'

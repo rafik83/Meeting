@@ -54,6 +54,8 @@ flash.admin.order.export.success: 'L''export des commandes a été planifié, vo
 flash.admin.order.remove_row.success: 'La ligne a été supprimée'
 flash.admin.order.update_row.success: 'La ligne a été mise à jour'
 flash.admin.package.create.success: 'La formule a bien été créée'
+flash.admin.participant.export.error.noParticipantToExport: 'Aucun participant à exporter'
+flash.admin.participant.export.planned: 'L''export des participants sélectionnés est planifié, vous receverez un email avec le fichier d''export'
 flash.admin.partner.create.success: 'Le nouveau partenaire a bien été créé'
 flash.admin.partner.update.success: 'Le partenaire a bien été édité avec succès'
 flash.admin.planner.export.callPlannerError: 'Impossible d''appeler le Planner'

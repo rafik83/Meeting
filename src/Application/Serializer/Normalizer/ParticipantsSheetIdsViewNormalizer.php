@@ -11,7 +11,6 @@
 namespace Proximum\Vimeet\Application\Serializer\Normalizer;
 
 use Proximum\Vimeet\Application\Adapter\TranslatorInterface;
-use Proximum\Vimeet\Application\Components\Sheet\SheetInfoGuesser;
 use Proximum\Vimeet\Application\Serializer\Charset;
 use Proximum\Vimeet\Application\View\Participant\ParticipantsSheetIdsView;
 use Proximum\Vimeet\Domain\Model\Participant;
@@ -100,7 +99,7 @@ class ParticipantsSheetIdsViewNormalizer extends AbstractNormalizer implements N
         $locale                   = $context['locale'];
         $charset                  = $context['charset'];
 
-        $participants = $this->participantRepository->getByEventAndSheetIds(
+        $participants = $this->participantRepository->getByEventAndSheetIdsAndLocale(
             $event,
             $participantsSheetIdsView->sheetIds,
             $locale

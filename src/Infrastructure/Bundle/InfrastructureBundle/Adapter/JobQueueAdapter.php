@@ -34,6 +34,7 @@ use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\GenerateI
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\IndexSheetsCommand;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\OMZ\ExportUserCommand;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\Order\ExportOrderCommand;
+use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\Participant\Export\ExportParticipantCommand;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\Planner\ExportPlannerCommand;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\Planner\ImportPlannerCommand;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\Planning\GeneratePlanningCommand;
@@ -70,6 +71,25 @@ class JobQueueAdapter extends AbstractJobQueueAdapter implements JobQueueInterfa
                 sprintf('--locale=%s', $locale),
             ]
         );
+
+        $this->setJob($job);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function exportParticipantsForEvent(
+        Event $event,
+        Admin $admin,
+        string $locale,
+        Event\ExtraData $extraData
+    ): void {
+        $job = new Job(ExportParticipantCommand::NAME, [
+            sprintf('--eventId=%s', $event->getId()),
+            sprintf('--extraDataWithParticipantIds=%s', $extraData->getId()),
+            sprintf('--adminId=%s', $admin->getId()),
+            sprintf('--locale=%s', $locale),
+        ]);
 
         $this->setJob($job);
     }

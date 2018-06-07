@@ -19,3 +19,12 @@ services:
             - '@Proximum\Vimeet\Infrastructure\Adapter\CommandBus'
         tags:
             - { name: console.command }
+
+    Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Command\Participant\Export\ExportParticipantCommand:
+        arguments:
+            - '@Proximum\Vimeet\Application\Command\Participant\Export\ExportHandler'
+            - '@vimeet_infrastructure.repository.event_repository'
+            - '@Proximum\Vimeet\Infrastructure\Repository\Event\ExtraDataRepository'
+            - '@repository.admin_repository'
+        tags:
+            - { name: console.command }
