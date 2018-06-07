@@ -5818,6 +5818,10 @@ services:
         tags:
             - { name: serializer.normalizer }
 
+    Proximum\Vimeet\Application\Components\Invoice\Denormalizer\VatListViewDenormalizer:
+        tags:
+            - { name: serializer.normalizer }
+
     components.invoice.invoice_url_view_query_handler:
         class: Proximum\Vimeet\Application\Components\Invoice\InvoiceUrlViewQueryHandler
         arguments:
