@@ -72,8 +72,6 @@
                                                         })|html }}
                                                     </span>
                                                 </li>
-                                            {% endfor %}
-                                            {% for vatView in view.vatListView.vatViews %}
                                                 <li class="col-md-12">
                                                     {{ 'package.summary.totalVat'|trans({'%vat%': vatView.vatRate }) }}
                                                     <span>
