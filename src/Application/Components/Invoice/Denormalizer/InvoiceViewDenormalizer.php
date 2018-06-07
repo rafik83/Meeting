@@ -13,6 +13,7 @@ namespace Proximum\Vimeet\Application\Components\Invoice\Denormalizer;
 use Proximum\Vimeet\Application\View\Invoice\BillingInfosView;
 use Proximum\Vimeet\Application\View\Invoice\InvoiceView;
 use Proximum\Vimeet\Application\View\Invoice\SummaryView;
+use Proximum\Vimeet\Application\View\Invoice\Vat\VatListView;
 use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Invoice\Invoice;
 use Symfony\Component\Serializer\Normalizer\DenormalizerAwareInterface;
@@ -58,6 +59,9 @@ class InvoiceViewDenormalizer implements DenormalizerInterface, DenormalizerAwar
             $event->getPaymentFooter($eventDefaultLocale),
             $this->denormalizer->denormalize($data['summaryView'], SummaryView::class, $format, $context),
             $this->denormalizer->denormalize($data['billingInfosView'], BillingInfosView::class, $format, $context),
+            isset($data['vatListView'])
+                ? $this->denormalizer->denormalize($data['vatListView'], VatListView::class, $format, $context)
+                : null,
             $data['amountRemainToPay']
         );
     }

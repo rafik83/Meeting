@@ -279,6 +279,7 @@ class InvoiceViewDenormalizerTest extends TestCase
                 'My vat number',
                 'My reference'
             ),
+            null,
             17760
         );
 

@@ -10,6 +10,8 @@
 
 namespace Proximum\Vimeet\Application\View\Invoice;
 
+use Proximum\Vimeet\Application\View\Invoice\Vat\VatListView;
+
 class InvoiceView
 {
     /** @var string */
@@ -57,6 +59,9 @@ class InvoiceView
     /** @var BillingInfosView */
     public $billingInfosView;
 
+    /** @var VatListView */
+    public $vatListView;
+
     /** @var int in cents */
     public $amountRemainToPay;
 
@@ -72,69 +77,49 @@ class InvoiceView
     /** @var string */
     public $eventTimeZone;
 
-    /**
-     * @param string             $invoiceNumber
-     * @param bool               $vatApplicable
-     * @param string             $vatMode
-     * @param float              $vatRate
-     * @param int                $total
-     * @param int                $totalWithVat
-     * @param int                $vatAmount
-     * @param string             $currency
-     * @param string             $eventTitle
-     * @param string             $invoiceLogo
-     * @param \DateTimeInterface $createdAt
-     * @param string             $eventDefaultLocale
-     * @param string             $eventTimeZone
-     * @param string             $eventBillingAddress
-     * @param string             $eventBankInfo
-     * @param string             $eventPaymentCondition
-     * @param string             $eventPaymentFooter
-     * @param SummaryView        $summaryView
-     * @param BillingInfosView   $billingInfosView
-     * @param int                $amountRemainToPay
-     */
     public function __construct(
-        $invoiceNumber,
-        $vatApplicable,
-        $vatMode,
-        $vatRate,
-        $total,
-        $totalWithVat,
-        $vatAmount,
-        $currency,
-        $eventTitle,
-        $invoiceLogo,
+        string $invoiceNumber,
+        bool $vatApplicable,
+        string $vatMode,
+        float $vatRate,
+        int $total,
+        int $totalWithVat,
+        int $vatAmount,
+        string $currency,
+        string $eventTitle,
+        ?string $invoiceLogo,
         \DateTimeInterface $createdAt,
-        $eventDefaultLocale,
-        $eventTimeZone,
-        $eventBillingAddress,
-        $eventBankInfo,
-        $eventPaymentCondition,
-        $eventPaymentFooter,
+        string $eventDefaultLocale,
+        string $eventTimeZone,
+        string $eventBillingAddress,
+        string $eventBankInfo,
+        string $eventPaymentCondition,
+        string $eventPaymentFooter,
         SummaryView $summaryView,
         BillingInfosView $billingInfosView,
-        $amountRemainToPay
+        ?VatListView $vatListView,
+        int $amountRemainToPay
     ) {
-        $this->invoiceNumber         = $invoiceNumber;
-        $this->vatApplicable         = $vatApplicable;
-        $this->vatMode               = $vatMode;
-        $this->vatRate               = $vatRate;
-        $this->total                 = $total;
-        $this->totalWithVat          = $totalWithVat;
-        $this->vatAmount             = $vatAmount;
-        $this->currency              = $currency;
-        $this->eventTitle            = $eventTitle;
-        $this->invoiceLogo           = $invoiceLogo;
-        $this->createdAt             = $createdAt;
-        $this->eventDefaultLocale    = $eventDefaultLocale;
-        $this->eventTimeZone         = $eventTimeZone;
-        $this->eventBillingAddress   = $eventBillingAddress;
-        $this->eventBankInfo         = $eventBankInfo;
+        $this->invoiceNumber = $invoiceNumber;
+        $this->vatApplicable = $vatApplicable;
+        $this->vatMode = $vatMode;
+        $this->vatRate = $vatRate;
+        $this->total = $total;
+        $this->totalWithVat = $totalWithVat;
+        $this->vatAmount = $vatAmount;
+        $this->currency = $currency;
+        $this->eventTitle = $eventTitle;
+        $this->invoiceLogo = $invoiceLogo;
+        $this->createdAt = $createdAt;
+        $this->eventDefaultLocale = $eventDefaultLocale;
+        $this->eventTimeZone = $eventTimeZone;
+        $this->eventBillingAddress = $eventBillingAddress;
+        $this->eventBankInfo = $eventBankInfo;
         $this->eventPaymentCondition = $eventPaymentCondition;
-        $this->eventPaymentFooter    = $eventPaymentFooter;
-        $this->summaryView           = $summaryView;
-        $this->billingInfosView      = $billingInfosView;
-        $this->amountRemainToPay     = $amountRemainToPay;
+        $this->eventPaymentFooter = $eventPaymentFooter;
+        $this->summaryView = $summaryView;
+        $this->billingInfosView = $billingInfosView;
+        $this->vatListView = $vatListView;
+        $this->amountRemainToPay = $amountRemainToPay;
     }
 }
