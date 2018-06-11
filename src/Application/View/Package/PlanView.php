@@ -42,7 +42,7 @@ class PlanView
     /** @var bool */
     public $isOutOfStock;
 
-    /** @var string */
+    /** @var null|string */
     public $addon;
 
     public function __construct(
