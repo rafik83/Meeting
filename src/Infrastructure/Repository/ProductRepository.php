@@ -225,6 +225,30 @@ class ProductRepository implements ProductRepositoryInterface
     }
 
     /**
+     * {@inheritdoc}
+     */
+    public function findParticipantAndAttributableByEvent($event): array
+    {
+        $queryBuilder = $this
+            ->entityManager
+            ->createQueryBuilder()
+            ->select('product')
+            ->from(Product::class, 'product')
+            ->where('product.event = :event')
+            ->andWhere('(
+                product.type = :typeParticipant
+                OR (product.type = :typeOption AND product.attributable = TRUE)
+            )')
+            ->setParameter('event', $event)
+            ->setParameter('typeParticipant', Product::TYPE_PARTICIPANT)
+            ->setParameter('typeOption', Product::TYPE_OPTION)
+            ->orderBy('product.type', 'DESC')
+        ;
+
+        return $queryBuilder->getQuery()->getResult();
+    }
+
+    /**
      * @param QueryBuilder $queryBuilder
      */
     private function addRemovableCondition(QueryBuilder $queryBuilder)

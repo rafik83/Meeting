@@ -72,3 +72,4 @@ services:
             - '@vimeet_infrastructure.repository.participant_repository'
             - '@Proximum\Vimeet\Application\Query\Participant\Export\ParticipantViewQueryHandler'
             - '@template.template_data_factory'
+            - '@vimeet_infrastructure.repository.product_repository'

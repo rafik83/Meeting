@@ -102,4 +102,6 @@ services:
         arguments:
             - '@vimeet_infrastructure.repository.happening_participation_repository'
             - '@template.template_data_factory'
+            - '@Proximum\Vimeet\Domain\Sheet\HasRemainingToPay'
             - '@vimeet_infrastructure.adapter.translator_adapter'
+            - '@Proximum\Vimeet\Infrastructure\Repository\ProductAttributedToParticipantRepository'

@@ -11,8 +11,10 @@
 namespace Proximum\Vimeet\Application\Query\Participant\Export;
 
 use Proximum\Vimeet\Application\View\Participant\Export\ParticipantListView;
+use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Type;
 use Proximum\Vimeet\Domain\Repository\ParticipantRepositoryInterface;
+use Proximum\Vimeet\Domain\Repository\ProductRepositoryInterface;
 use Proximum\Vimeet\Domain\Template\TemplateDataFactory;
 use Proximum\Vimeet\Domain\Template\TemplateObject\ExportableObjectInterface;
 
@@ -27,14 +29,19 @@ class ExportQueryHandler
     /** @var TemplateDataFactory */
     private $templateDataFactory;
 
+    /** @var ProductRepositoryInterface */
+    private $productRepository;
+
     public function __construct(
         ParticipantRepositoryInterface $participantRepository,
         ParticipantViewQueryHandler $participantViewQueryHandler,
-        TemplateDataFactory $templateDataFactory
+        TemplateDataFactory $templateDataFactory,
+        ProductRepositoryInterface $productRepository
     ) {
         $this->participantRepository = $participantRepository;
         $this->participantViewQueryHandler = $participantViewQueryHandler;
         $this->templateDataFactory = $templateDataFactory;
+        $this->productRepository = $productRepository;
     }
 
     /**
@@ -46,13 +53,15 @@ class ExportQueryHandler
     {
         $participants = $this->participantRepository->findByIds($exportQuery->participantIds);
 
-        $prepareColumns = [];
+        $registrationColumns = [];
         $typesHandled = [];
         $participantViews= [];
 
+        $productColumns = $this->prepareProductColumns($exportQuery->event);
+
         foreach ($participants as $participant) {
             if (!isset($typesHandled[$participant->getSheet()->getType()->getId()])) {
-                $this->prepareRegistrationColumns($prepareColumns, $participant->getSheet()->getType(), $exportQuery->locale);
+                $this->prepareRegistrationColumns($registrationColumns, $participant->getSheet()->getType(), $exportQuery->locale);
 
                 $typesHandled[$participant->getSheet()->getType()->getId()] = true;
             }
@@ -65,11 +74,12 @@ class ExportQueryHandler
         return new ParticipantListView(
             $exportQuery->locale,
             $participantViews,
-            $prepareColumns
+            $registrationColumns,
+            $productColumns
         );
     }
 
-    private function prepareRegistrationColumns(array &$prepareColumns, Type $type, string $locale): void
+    private function prepareRegistrationColumns(array &$registrationColumns, Type $type, string $locale): void
     {
         $template = $this->templateDataFactory->createRegistrationFromType($type, $locale);
 
@@ -77,13 +87,31 @@ class ExportQueryHandler
             if ($registrationObject instanceof ExportableObjectInterface) {
                 $key = $registrationObject->getKey();
 
-                if (!isset($prepareColumns[$key])) {
-                    $prepareColumns[$key] =  $registrationObject->getExportableFieldname(
+                if (!isset($registrationColumns[$key])) {
+                    $registrationColumns[$key] =  $registrationObject->getExportableFieldname(
                         $locale,
                         $locale
                     );
                 }
             }
         }
+    }
+
+    private function prepareProductColumns(Event $event): array
+    {
+        $columns = [];
+
+        $products = $this->productRepository->findParticipantAndAttributableByEvent($event);
+
+        foreach ($products as $product) {
+            $key = $product->isParticipant()
+                ? sprintf('participant_%s', $product->getId())
+                : sprintf('option_%s', $product->getId())
+            ;
+
+            $columns[$key] = $product->getName();
+        }
+
+        return $columns;
     }
 }

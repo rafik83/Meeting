@@ -21,18 +21,24 @@ class ParticipantListView
     /** @var array of key => label of the registration fields */
     public $registrationColumns;
 
+    /** @var string[] */
+    public $productColumns;
+
     /**
      * @param string            $locale
      * @param ParticipantView[] $participantViews
      * @param array             $registrationColumns
+     * @param string[]          $productColumns
      */
     public function __construct(
         string $locale,
         array $participantViews,
-        array $registrationColumns
+        array $registrationColumns,
+        array $productColumns
     ) {
         $this->participantViews = $participantViews;
         $this->registrationColumns = $registrationColumns;
         $this->locale = $locale;
+        $this->productColumns = $productColumns;
     }
 }

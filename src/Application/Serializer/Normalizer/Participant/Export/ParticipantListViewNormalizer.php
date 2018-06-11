@@ -27,6 +27,7 @@ class ParticipantListViewNormalizer implements NormalizerInterface
     public const COL_PARTICIPANT_EMAIL      = 'participant_email';
     public const COL_PARTICIPANT_CREATED_AT = 'participant_created_at';
     public const COL_HAPPENING_SUBSCRIBER   = 'happening_subscriber';
+    public const COL_PARTICIPATION_PAID     = 'participation_paid';
     public const TRANSLATION_KEY = 'admin.participant.export.fields.';
 
     public const COMMON_COL = [
@@ -39,6 +40,7 @@ class ParticipantListViewNormalizer implements NormalizerInterface
         self::COL_PARTICIPANT_EMAIL,
         self::COL_PARTICIPANT_CREATED_AT,
         self::COL_HAPPENING_SUBSCRIBER,
+        self::COL_PARTICIPATION_PAID,
     ];
     /** @var TranslatorInterface */
     private $translator;
@@ -62,9 +64,16 @@ class ParticipantListViewNormalizer implements NormalizerInterface
         foreach (self::COMMON_COL as $col) {
             $firstLine[$col] = $this->convertCharset(
                 $this->translator->trans(
-                    sprintf('%s%s', self::TRANSLATION_KEY, $col), [], null, $participantListView->locale
+                    sprintf('%s%s', self::TRANSLATION_KEY, $col),
+                    [],
+                    null,
+                    $participantListView->locale
                 )
             );
+        }
+
+        foreach ($participantListView->productColumns as $key => $productColumn) {
+            $firstLine[$key] = $this->convertCharset($productColumn);
         }
 
         foreach ($participantListView->registrationColumns as $key => $registrationColumn) {
@@ -106,22 +115,69 @@ class ParticipantListViewNormalizer implements NormalizerInterface
     {
         $data = [
             self::COL_SHEET_ID => $participantView->sheetId,
-            self::COL_PARTICIPANT_TYPE => $participantView->typeTitle,
-            self::COL_SHEET_NAME => $participantView->sheetTitle,
-            self::COL_SHEET_ENABLE => $this->translator->trans(
-                sprintf('admin.participant.export.%s', $participantView->sheetEnabled ? 'yes' : 'no')
-            ),
+            self::COL_PARTICIPANT_TYPE => $this->convertCharset($participantView->typeTitle),
+            self::COL_SHEET_NAME => $this->convertCharset($participantView->sheetTitle),
+            self::COL_SHEET_ENABLE => $this->convertCharset($this->translator->trans(
+                sprintf('admin.participant.export.%s', $participantView->sheetEnabled ? 'yes' : 'no'),
+                [],
+                null,
+                $participantListView->locale
+            )),
             self::COL_USER_ID => $participantView->userId,
             self::COL_PARTICIPANT_ID => $participantView->participantId,
             self::COL_PARTICIPANT_EMAIL => $participantView->email,
             self::COL_PARTICIPANT_CREATED_AT => $participantView->createdAt,
-            self::COL_HAPPENING_SUBSCRIBER => $this->translator->trans(
-                sprintf('admin.participant.export.%s', $participantView->hasHappeningParticipation ? 'yes' : 'no')
+            self::COL_HAPPENING_SUBSCRIBER => $this->convertCharset(
+                $this->translator->trans(
+                    sprintf('admin.participant.export.%s', $participantView->hasHappeningParticipation ? 'yes' : 'no'),
+                    [],
+                    null,
+                    $participantListView->locale
+                )
             ),
+            self::COL_PARTICIPATION_PAID => $this->convertCharset(
+                $this->translator->trans(
+                    sprintf(
+                        '%s%s.%s',
+                        self::TRANSLATION_KEY,
+                        self::COL_PARTICIPATION_PAID,
+                        $participantView->hasPaidParticipation ? 'paid' : 'not_paid'
+                    ),
+                    [],
+                    null,
+                    $participantListView->locale
+                )
+            ),
+
         ];
 
         foreach ($participantListView->registrationColumns as $key => $registrationColumn) {
             $data[$key] = $participantView->registrationData[$key] ?? '';
+        }
+
+        foreach ($participantListView->productColumns as $productKey => $productColumn) {
+            $data[$productKey] = $this->convertCharset(
+                $this->translator->trans(
+                    sprintf(
+                        'admin.participant.export.%s',
+                        isset($participantView->attributableProducts[$productKey]) ? 'yes' : 'no'
+                    ),
+                    [],
+                    null,
+                    $participantListView->locale
+                )
+            );
+        }
+
+        if (null !== $participantView->participantProduct) {
+            $data[sprintf('participant_%s', $participantView->participantProduct)] = $this->convertCharset(
+                $this->translator->trans(
+                    'admin.participant.export.yes',
+                    [],
+                    null,
+                    $participantListView->locale
+                )
+            );
         }
 
         return $data;

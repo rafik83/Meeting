@@ -39,8 +39,17 @@ class ParticipantView
     /** @var bool */
     public $hasHappeningParticipation;
 
+    /** @var bool */
+    public $hasPaidParticipation;
+
     /** @var array of key => exportableContent */
     public $registrationData;
+
+    /** @var null|int */
+    public $participantProduct;
+
+    /** @var int[] of product id => product id */
+    public $attributableProducts;
 
     public function __construct(
         int $sheetId,
@@ -52,6 +61,9 @@ class ParticipantView
         string $email,
         string $createdAt,
         bool $hasHappeningParticipation,
+        bool $hasPaidParticipation,
+        ?int $participantProduct,
+        array $attributableProducts,
         array $registrationData
     ) {
         $this->sheetId = $sheetId;
@@ -63,6 +75,9 @@ class ParticipantView
         $this->email = $email;
         $this->createdAt = $createdAt;
         $this->hasHappeningParticipation = $hasHappeningParticipation;
+        $this->hasPaidParticipation = $hasPaidParticipation;
+        $this->participantProduct = $participantProduct;
+        $this->attributableProducts = $attributableProducts;
         $this->registrationData = $registrationData;
     }
 }

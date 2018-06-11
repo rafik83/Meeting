@@ -62,6 +62,23 @@ class ProductAttributedToParticipantRepository implements ProductAttributedToPar
     }
 
     /**
+     * @param Participant $participant
+     *
+     * @return ProductAttributedToParticipant[]
+     */
+    public function findByParticipant(Participant $participant): array
+    {
+        $queryBuilder = $this->entityManager->createQueryBuilder()
+            ->select('productAttributedToParticipant')
+            ->from(ProductAttributedToParticipant::class, 'productAttributedToParticipant')
+            ->where('productAttributedToParticipant.participant = :participant')
+            ->setParameter('participant', $participant)
+        ;
+
+        return $queryBuilder->getQuery()->getResult();
+    }
+
+    /**
      * {@inheritdoc}
      */
     public function findByParticipants(array $participants): array
