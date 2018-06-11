@@ -13,7 +13,7 @@ namespace Proximum\Vimeet\Domain\Sheet;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Order\Balance;
 
-final class HasRemainingToPay
+class HasRemainingToPay
 {
     /** @var Balance */
     private $balance;
