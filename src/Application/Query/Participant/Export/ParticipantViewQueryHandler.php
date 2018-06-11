@@ -88,7 +88,7 @@ class ParticipantViewQueryHandler
                 $query->participant->getUser(),
                 $query->event
             ),
-            $this->hasRemainingToPay->isSatisfiedBy($query->participant->getSheet()),
+            !$this->hasRemainingToPay->isSatisfiedBy($query->participant->getSheet()),
             $participantProductId,
             $attributableProducts,
             $registrationData
@@ -130,8 +130,13 @@ class ParticipantViewQueryHandler
                     $fieldContent = $this->translator->trans(sprintf('gender.%s', $fieldContent), [], null, $locale);
                 }
 
-                if ($registrationObject instanceof BooleanObject && !empty($fieldContent)) {
-                    $fieldContent = $this->translator->trans(sprintf('boolean.%s', $fieldContent), [], null, $locale);
+                if ($registrationObject instanceof BooleanObject) {
+                    $fieldContent = $this->translator->trans(
+                        sprintf('boolean.%s', $fieldContent ? 'yes' : 'no'),
+                        [],
+                        null,
+                        $locale
+                    );
                 }
 
                 $registrationData[$registrationObject->getKey()] = $fieldContent;
