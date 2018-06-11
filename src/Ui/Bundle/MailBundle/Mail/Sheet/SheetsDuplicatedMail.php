@@ -35,10 +35,28 @@ class SheetsDuplicatedMail extends AbstractMail
     /** @var Sheet[] */
     public $importedSheets;
 
+    /** @var string[] array of emails */
+    public $userAlreadyGroupManagerOnSameEvent;
+
+    /** @var string[] array of emails */
+    public $userAlreadyParticipantOrOwnerOnGroupOnSameEvent;
+
+    /**
+     * @param Event    $event
+     * @param Event    $originEvent
+     * @param array    $importedSheets
+     * @param string[] $userAlreadyGroupManagerOnSameEvent array of emails
+     * @param string[] $userAlreadyParticipantOrOwnerOnGroupOnSameEvent array of emails
+     * @param string   $sender
+     * @param string   $receiver
+     * @param string   $locale
+     */
     public function __construct(
         Event $event,
         Event $originEvent,
         array $importedSheets,
+        array $userAlreadyGroupManagerOnSameEvent,
+        array $userAlreadyParticipantOrOwnerOnGroupOnSameEvent,
         $sender,
         $receiver,
         $locale
@@ -48,6 +66,8 @@ class SheetsDuplicatedMail extends AbstractMail
         $this->event = $event;
         $this->originEvent = $originEvent;
         $this->importedSheets = $importedSheets;
+        $this->userAlreadyGroupManagerOnSameEvent = $userAlreadyGroupManagerOnSameEvent;
+        $this->userAlreadyParticipantOrOwnerOnGroupOnSameEvent = $userAlreadyParticipantOrOwnerOnGroupOnSameEvent;
     }
 
     public function getSubjectParameters(): array
