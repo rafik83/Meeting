@@ -75,9 +75,7 @@ class LeniUserViewQueryHandlerTest extends TestCase
         $hasRemainingToPay = $this->prophesize(HasRemainingToPay::class);
         $prepareLeaderDatahandler = $this->prophesize(PrepareLeaderDataHandler::class);
 
-        $hasRemainingToPay->isSatisfiedBy($sheet1->reveal())->shouldBeCalled()->willReturn(true);
-
-        $package = $this->prophesize(Package::class);
+        $hasRemainingToPay->isSatisfiedBy($sheet1->reveal())->shouldBeCalled()->willReturn(false);
 
         $sheetInfoGuesser->guessSheetInfos($sheet1->reveal())->shouldBeCalled()->willReturn(['sheet_country' => 'FR']);
 
@@ -227,7 +225,7 @@ class LeniUserViewQueryHandlerTest extends TestCase
         $hasRemainingToPay = $this->prophesize(HasRemainingToPay::class);
         $prepareLeaderDatahandler = $this->prophesize(PrepareLeaderDataHandler::class);
 
-        $hasRemainingToPay->isSatisfiedBy($sheet1->reveal())->shouldBeCalled()->willReturn(false);
+        $hasRemainingToPay->isSatisfiedBy($sheet1->reveal())->shouldBeCalled()->willReturn(true);
 
         $sheetInfoGuesser->guessSheetInfos($sheet1->reveal())->shouldNotBeCalled();
 
@@ -385,7 +383,7 @@ class LeniUserViewQueryHandlerTest extends TestCase
         $hasRemainingToPay = $this->prophesize(HasRemainingToPay::class);
         $prepareLeaderDatahandler = $this->prophesize(PrepareLeaderDataHandler::class);
 
-        $hasRemainingToPay->isSatisfiedBy($sheet1->reveal())->shouldBeCalled()->willReturn(false);
+        $hasRemainingToPay->isSatisfiedBy($sheet1->reveal())->shouldBeCalled()->willReturn(true);
 
         $sheetInfoGuesser->guessSheetInfos($sheet1->reveal())->shouldNotBeCalled();
 

@@ -227,7 +227,7 @@ class LeniUserViewQueryHandler
      */
     private function isPaid(Sheet $sheet): bool
     {
-        return $this->hasRemainingToPay->isSatisfiedBy($sheet);
+        return !$this->hasRemainingToPay->isSatisfiedBy($sheet);
     }
 
     /**

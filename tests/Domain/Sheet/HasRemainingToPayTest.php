@@ -48,7 +48,7 @@ class HasRemainingToPayTest extends TestCase
 
         $result = $hasRemainingToPay->isSatisfiedBy($this->sheet->reveal());
 
-        $this->assertTrue($result);
+        $this->assertFalse($result);
     }
 
     public function testIsSatisfiedByWithoutOrder(): void
@@ -65,7 +65,7 @@ class HasRemainingToPayTest extends TestCase
 
         $result = $hasRemainingToPay->isSatisfiedBy($this->sheet->reveal());
 
-        $this->assertFalse($result);
+        $this->assertTrue($result);
     }
 
     public function testIsSatisfiedByWithRemainingToPay(): void
@@ -83,7 +83,7 @@ class HasRemainingToPayTest extends TestCase
 
         $result = $hasRemainingToPay->isSatisfiedBy($this->sheet->reveal());
 
-        $this->assertFalse($result);
+        $this->assertTrue($result);
     }
 
     public function testIsSatisfiedByWithoutRemainingToPay(): void
@@ -100,6 +100,6 @@ class HasRemainingToPayTest extends TestCase
 
         $result = $hasRemainingToPay->isSatisfiedBy($this->sheet->reveal());
 
-        $this->assertTrue($result);
+        $this->assertFalse($result);
     }
 }

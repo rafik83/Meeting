@@ -26,13 +26,13 @@ class HasRemainingToPay
     public function isSatisfiedBy(Sheet $sheet): bool
     {
         if (!$sheet->getPackage()->isPassable()) {
-            return true;
-        }
-
-        if (!$sheet->hasNotCancelledOrders()) {
             return false;
         }
 
-        return 0 === $this->balance->getRemainingToPay($sheet);
+        if (!$sheet->hasNotCancelledOrders()) {
+            return true;
+        }
+
+        return 0 !== $this->balance->getRemainingToPay($sheet);
     }
 }
