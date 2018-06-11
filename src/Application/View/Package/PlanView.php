@@ -42,6 +42,9 @@ class PlanView
     /** @var bool */
     public $isOutOfStock;
 
+    /** @var string */
+    public $addon;
+
     public function __construct(
         int $id,
         string $title,
@@ -52,17 +55,19 @@ class PlanView
         ?string $image,
         string $vatMode,
         string $currency,
-        array $features
+        array $features,
+        ?string $addon
     ) {
-        $this->id          = $id;
-        $this->title       = $title;
-        $this->price       = $price;
+        $this->id = $id;
+        $this->title = $title;
+        $this->price = $price;
         $this->isOutOfStock = $isOutOfStock;
-        $this->heading     = $heading;
+        $this->heading = $heading;
         $this->description = $description;
-        $this->image       = $image;
-        $this->vatMode     = $vatMode;
-        $this->currency    = $currency;
-        $this->features    = $features;
+        $this->image = $image;
+        $this->vatMode = $vatMode;
+        $this->currency = $currency;
+        $this->features = $features;
+        $this->addon = $addon;
     }
 }

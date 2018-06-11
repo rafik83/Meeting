@@ -51,7 +51,8 @@ class PlanViewQueryHandler
                     $planViewQuery->product,
                     $planViewQuery->locale
                 )
-            )->features
+            )->features,
+            $planViewQuery->product->getAddon($planViewQuery->locale)
         );
     }
 }

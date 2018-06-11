@@ -29,6 +29,7 @@
                             </div>
                             <div class="col-sm-10 product">
                                 <h2>{{ plan.title }}</h2>
+                                <p class="product-addon">{{ plan.addon }}</p>
                                 <span class="product-price">{{ plan.price }} <sup>{{ plan.currency|currency_symbol(app.request.locale) }} {{ ('package.vatMode.' ~ plan.vatMode)|trans }}</sup></span>
 
                                 {% if plan.isOutOfStock %}
