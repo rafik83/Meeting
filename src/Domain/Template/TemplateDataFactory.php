@@ -87,8 +87,8 @@ class TemplateDataFactory
     }
 
     /**
-     * @param Sheet  $sheet
-     * @param string $locale
+     * @param Sheet       $sheet
+     * @param null|string $locale
      *
      * @return TemplateData
      */
@@ -239,12 +239,12 @@ class TemplateDataFactory
     /**
      * @param array  $template
      * @param array  $data
-     * @param string $locale
+     * @param null|string $locale
      * @param string $fallback
      *
      * @return TemplateData
      */
-    public function create(array $template, array $data = [], $locale = null, $fallback = null)
+    public function create(array $template, array $data = [], ?string $locale = null, $fallback = null)
     {
         $templateData = new TemplateData('root', [], $locale, $fallback);
 
