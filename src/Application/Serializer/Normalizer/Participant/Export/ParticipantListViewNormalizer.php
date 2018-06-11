@@ -18,16 +18,16 @@ use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 
 class ParticipantListViewNormalizer implements NormalizerInterface
 {
-    public const COL_SHEET_ID               = 'sheet_id';
-    public const COL_SHEET_NAME             = 'sheet_name';
-    public const COL_SHEET_ENABLE           = 'sheet_enable';
-    public const COL_PARTICIPANT_TYPE       = 'participant_type';
-    public const COL_USER_ID                = 'user_id';
-    public const COL_PARTICIPANT_ID         = 'participant_id';
-    public const COL_PARTICIPANT_EMAIL      = 'participant_email';
+    public const COL_SHEET_ID = 'sheet_id';
+    public const COL_SHEET_NAME = 'sheet_name';
+    public const COL_SHEET_ENABLE = 'sheet_enable';
+    public const COL_PARTICIPANT_TYPE = 'participant_type';
+    public const COL_USER_ID = 'user_id';
+    public const COL_PARTICIPANT_ID = 'participant_id';
+    public const COL_PARTICIPANT_EMAIL = 'participant_email';
     public const COL_PARTICIPANT_CREATED_AT = 'participant_created_at';
-    public const COL_HAPPENING_SUBSCRIBER   = 'happening_subscriber';
-    public const COL_PARTICIPATION_PAID     = 'participation_paid';
+    public const COL_HAPPENING_SUBSCRIBER = 'happening_subscriber';
+    public const COL_PARTICIPATION_PAID = 'participation_paid';
     public const TRANSLATION_KEY = 'admin.participant.export.fields.';
 
     public const COMMON_COL = [
@@ -42,6 +42,7 @@ class ParticipantListViewNormalizer implements NormalizerInterface
         self::COL_HAPPENING_SUBSCRIBER,
         self::COL_PARTICIPATION_PAID,
     ];
+
     /** @var TranslatorInterface */
     private $translator;
 
