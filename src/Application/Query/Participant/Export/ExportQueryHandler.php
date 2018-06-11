@@ -61,7 +61,12 @@ class ExportQueryHandler
 
         foreach ($participants as $participant) {
             if (!isset($typesHandled[$participant->getSheet()->getType()->getId()])) {
-                $this->prepareRegistrationColumns($registrationColumns, $participant->getSheet()->getType(), $exportQuery->locale);
+                $this->prepareRegistrationColumns(
+                    $registrationColumns,
+                    $participant->getSheet()->getType(),
+                    $exportQuery->locale,
+                    $exportQuery->event->getFallback()
+                );
 
                 $typesHandled[$participant->getSheet()->getType()->getId()] = true;
             }
@@ -79,8 +84,12 @@ class ExportQueryHandler
         );
     }
 
-    private function prepareRegistrationColumns(array &$registrationColumns, Type $type, string $locale): void
-    {
+    private function prepareRegistrationColumns(
+        array &$registrationColumns,
+        Type $type,
+        string $locale,
+        string $fallback
+    ): void {
         $template = $this->templateDataFactory->createRegistrationFromType($type, $locale);
 
         foreach ($template->getProfileObjects() as $registrationObject) {
@@ -90,7 +99,7 @@ class ExportQueryHandler
                 if (!isset($registrationColumns[$key])) {
                     $registrationColumns[$key] =  $registrationObject->getExportableFieldname(
                         $locale,
-                        $locale
+                        $fallback
                     );
                 }
             }
