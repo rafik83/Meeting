@@ -40,6 +40,7 @@ use Proximum\Vimeet\Domain\Repository\User\Event\ExtraDataRepositoryInterface;
 use Proximum\Vimeet\Domain\Service\Category\CategoryNameResolver;
 use Proximum\Vimeet\Domain\Service\SheetsGroup\GroupNameResolver;
 use Proximum\Vimeet\Domain\Service\Type\TypeNameResolver;
+use Proximum\Vimeet\Domain\Sheet\HasRemainingToPay;
 
 class LeniUserViewQueryHandlerTest extends TestCase
 {
@@ -71,15 +72,12 @@ class LeniUserViewQueryHandlerTest extends TestCase
         $groupNameResolver = $this->prophesize(GroupNameResolver::class);
         $categoryNameResolver = $this->prophesize(CategoryNameResolver::class);
         $sheetInfoGuesser = $this->prophesize(SheetInfoGuesser::class);
-        $balance = $this->prophesize(Balance::class);
+        $hasRemainingToPay = $this->prophesize(HasRemainingToPay::class);
         $prepareLeaderDatahandler = $this->prophesize(PrepareLeaderDataHandler::class);
 
-        $balance->getRemainingToPay($sheet1->reveal())->shouldBeCalled()->willReturn(0);
+        $hasRemainingToPay->isSatisfiedBy($sheet1->reveal())->shouldBeCalled()->willReturn(true);
 
         $package = $this->prophesize(Package::class);
-        $sheet1->getPackage()->shouldBeCalled()->willReturn($package->reveal());
-        $package->isPassable()->shouldBeCalled()->willReturn(true);
-        $sheet1->hasNotCancelledOrders()->shouldBeCalled()->willReturn(true);
 
         $sheetInfoGuesser->guessSheetInfos($sheet1->reveal())->shouldBeCalled()->willReturn(['sheet_country' => 'FR']);
 
@@ -163,7 +161,7 @@ class LeniUserViewQueryHandlerTest extends TestCase
             $categoryNameResolver->reveal(),
             $groupNameResolver->reveal(),
             $sheetRepository->reveal(),
-            $balance->reveal(),
+            $hasRemainingToPay->reveal(),
             $prepareLeaderDatahandler->reveal(),
             $extraDataRepository->reveal(),
             $leniUserCustomDataQueryHandler->reveal()
@@ -226,15 +224,10 @@ class LeniUserViewQueryHandlerTest extends TestCase
         $groupNameResolver = $this->prophesize(GroupNameResolver::class);
         $categoryNameResolver = $this->prophesize(CategoryNameResolver::class);
         $sheetInfoGuesser = $this->prophesize(SheetInfoGuesser::class);
-        $balance = $this->prophesize(Balance::class);
+        $hasRemainingToPay = $this->prophesize(HasRemainingToPay::class);
         $prepareLeaderDatahandler = $this->prophesize(PrepareLeaderDataHandler::class);
 
-        $balance->getRemainingToPay($sheet1->reveal())->shouldBeCalled()->willReturn(999);
-
-        $package = $this->prophesize(Package::class);
-        $sheet1->getPackage()->shouldBeCalled()->willReturn($package->reveal());
-        $package->isPassable()->shouldBeCalled()->willReturn(true);
-        $sheet1->hasNotCancelledOrders()->shouldBeCalled()->willReturn(true);
+        $hasRemainingToPay->isSatisfiedBy($sheet1->reveal())->shouldBeCalled()->willReturn(false);
 
         $sheetInfoGuesser->guessSheetInfos($sheet1->reveal())->shouldNotBeCalled();
 
@@ -317,7 +310,7 @@ class LeniUserViewQueryHandlerTest extends TestCase
             $categoryNameResolver->reveal(),
             $groupNameResolver->reveal(),
             $sheetRepository->reveal(),
-            $balance->reveal(),
+            $hasRemainingToPay->reveal(),
             $prepareLeaderDatahandler->reveal(),
             $extraDataRepository->reveal(),
             $leniUserCustomDataQueryHandler->reveal()
@@ -389,15 +382,10 @@ class LeniUserViewQueryHandlerTest extends TestCase
         $groupNameResolver = $this->prophesize(GroupNameResolver::class);
         $categoryNameResolver = $this->prophesize(CategoryNameResolver::class);
         $sheetInfoGuesser = $this->prophesize(SheetInfoGuesser::class);
-        $balance = $this->prophesize(Balance::class);
+        $hasRemainingToPay = $this->prophesize(HasRemainingToPay::class);
         $prepareLeaderDatahandler = $this->prophesize(PrepareLeaderDataHandler::class);
 
-        $balance->getRemainingToPay($sheet1->reveal())->shouldBeCalled()->willReturn(999);
-
-        $package = $this->prophesize(Package::class);
-        $sheet1->getPackage()->shouldBeCalled()->willReturn($package->reveal());
-        $package->isPassable()->shouldBeCalled()->willReturn(true);
-        $sheet1->hasNotCancelledOrders()->shouldBeCalled()->willReturn(true);
+        $hasRemainingToPay->isSatisfiedBy($sheet1->reveal())->shouldBeCalled()->willReturn(false);
 
         $sheetInfoGuesser->guessSheetInfos($sheet1->reveal())->shouldNotBeCalled();
 
@@ -482,7 +470,7 @@ class LeniUserViewQueryHandlerTest extends TestCase
             $categoryNameResolver->reveal(),
             $groupNameResolver->reveal(),
             $sheetRepository->reveal(),
-            $balance->reveal(),
+            $hasRemainingToPay->reveal(),
             $prepareLeaderDatahandler->reveal(),
             $extraDataRepository->reveal(),
             $leniUserCustomDataQueryHandler->reveal()

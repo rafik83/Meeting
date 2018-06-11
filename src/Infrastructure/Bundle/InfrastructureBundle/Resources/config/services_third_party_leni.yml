@@ -133,7 +133,7 @@ services:
             - '@domain.service.category.category_name_resolver'
             - '@domain.service.sheets_group.group_name_resolver'
             - '@vimeet_infrastructure.repository.sheet_repository'
-            - '@order.balance'
+            - '@Proximum\Vimeet\Domain\Sheet\HasRemainingToPay'
             - '@Proximum\Vimeet\Application\ThirdParty\LENI\Common\Query\PrepareLeaderDataHandler'
             - '@repository.user.event.extra_data_repository'
             - '@Proximum\Vimeet\Application\ThirdParty\LENI\Common\Query\LeniUserCustomDataQueryHandler'
