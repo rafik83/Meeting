@@ -170,8 +170,8 @@ class ParticipantListViewNormalizer implements NormalizerInterface
             );
         }
 
-        if (null !== $participantView->participantProduct) {
-            $data[sprintf('participant_%s', $participantView->participantProduct)] = $this->convertCharset(
+        if (null !== $participantView->participantProductId) {
+            $data[sprintf('participant_%s', $participantView->participantProductId)] = $this->convertCharset(
                 $this->translator->trans(
                     'admin.participant.export.yes',
                     [],

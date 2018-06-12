@@ -46,7 +46,7 @@ class ParticipantView
     public $registrationData;
 
     /** @var null|int */
-    public $participantProduct;
+    public $participantProductId;
 
     /** @var int[] of product id => product id */
     public $attributableProducts;
@@ -62,7 +62,7 @@ class ParticipantView
         string $createdAt,
         bool $hasHappeningParticipation,
         bool $hasPaidParticipation,
-        ?int $participantProduct,
+        ?int $participantProductId,
         array $attributableProducts,
         array $registrationData
     ) {
@@ -76,7 +76,7 @@ class ParticipantView
         $this->createdAt = $createdAt;
         $this->hasHappeningParticipation = $hasHappeningParticipation;
         $this->hasPaidParticipation = $hasPaidParticipation;
-        $this->participantProduct = $participantProduct;
+        $this->participantProductId = $participantProductId;
         $this->attributableProducts = $attributableProducts;
         $this->registrationData = $registrationData;
     }

@@ -120,7 +120,7 @@ class ParticipantViewQueryHandler
     private function getRegistrationData(Participant $participant, string $locale): array
     {
         $registrationData = [];
-        $template         = $this->templateDataFactory->createRegistrationFromParticipant($participant, $locale);
+        $template = $this->templateDataFactory->createRegistrationFromParticipant($participant, $locale);
 
         foreach ($template->getProfileObjects() as $registrationObject) {
             if ($registrationObject instanceof ExportableObjectInterface) {
