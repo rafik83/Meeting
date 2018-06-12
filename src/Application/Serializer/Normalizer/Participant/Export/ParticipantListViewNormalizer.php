@@ -93,9 +93,9 @@ class ParticipantListViewNormalizer implements NormalizerInterface
     /**
      * @param mixed $input
      *
-     * @return string
+     * @return mixed|string
      */
-    private function convertCharset($input): string
+    private function convertCharset($input)
     {
         if (!$input || !\is_string($input)) {
             return $input;

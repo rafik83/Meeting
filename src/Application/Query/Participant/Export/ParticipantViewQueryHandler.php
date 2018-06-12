@@ -124,7 +124,7 @@ class ParticipantViewQueryHandler
 
         foreach ($template->getProfileObjects() as $registrationObject) {
             if ($registrationObject instanceof ExportableObjectInterface) {
-                $fieldContent = $registrationObject->getExportableContent();
+                $fieldContent = $registrationObject->getExportableContent([], $locale);
 
                 if ($registrationObject instanceof Gender && !empty($fieldContent)) {
                     $fieldContent = $this->translator->trans(sprintf('gender.%s', $fieldContent), [], null, $locale);
