@@ -135,6 +135,10 @@ class Preview
 
             $previewView->populatedFromTag = $templateObject->getTag();
 
+            if ($templateObject instanceof TemplateObject\Image) {
+                $previewView->canDisplayImage = $templateObject->canDisplayImage();
+            }
+
             return $previewView;
         }
 

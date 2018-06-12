@@ -1,6 +1,6 @@
 {% for object in preview %}
     {% if object.isImage %}
-        {% if object.content is not empty %}
+        {% if object.content is not empty and object.canDisplayImage %}
             <div class="image-placeholder">
                 <img src="{{ object.content|imagine_filter('event_sheet_image') }}"/>
             </div>
