@@ -19,7 +19,7 @@ class OrderVatView
     /** @var string */
     public $numero;
 
-    /** @var int */
+    /** @var null|int */
     public $orderId;
 
     /** @var int */
@@ -60,7 +60,7 @@ class OrderVatView
 
     public function __construct(
         string $numero,
-        int $orderId,
+        ?int $orderId,
         int $sheetId,
         bool $isVatApplicable,
         float $vatRate,
