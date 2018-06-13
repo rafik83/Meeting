@@ -98,7 +98,7 @@ class Image extends EditableObject implements UploadableObjectInterface
 
     public function canDisplayImage(): bool
     {
-        if ($this->getSelectedProduct()) {
+        if (!$this->getProducts()) {
             return true;
         }
 
