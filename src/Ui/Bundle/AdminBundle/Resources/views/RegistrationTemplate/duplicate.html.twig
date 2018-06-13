@@ -1,0 +1,19 @@
+{{ form_start(form) }}
+    {{ form_errors(form) }}
+<div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+    <h4 class="modal-title">{{ 'admin.event.template.registration.duplicate.form.title'|trans({'%templateTitle%': template.title}) }}</h4>
+</div>
+<div class="modal-body">
+    {{ form_row(form.title) }}
+    {{ form_errors(form.title) }}
+    {% if form.event is defined %}
+        {{ form_row(form.event) }}
+        {{ form_errors(form.event) }}
+    {% endif %}
+</div>
+<div class="modal-footer">
+    <button type="button" class="btn btn-default" data-dismiss="modal">{{ 'admin.common.close'|trans }}</button>
+    {{ form_widget(form.submit) }}
+</div>
+{{ form_end(form) }}

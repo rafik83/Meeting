@@ -36,8 +36,9 @@ class RegistrationTemplateChoiceType extends AbstractType
      */
     public function configureOptions(OptionsResolver $resolver)
     {
-        $resolver->setDefaults([
-            'events'           => [],
+        $resolver
+            ->setRequired('event')
+            ->setDefaults([
             'choices'          => function (Options $options) {
                 return $this->getResults($options);
             },
@@ -45,9 +46,9 @@ class RegistrationTemplateChoiceType extends AbstractType
             'repositoryMethod' => function (RegistrationTemplateRepositoryInterface $templateRepository) {
                 return $templateRepository->getBaseTemplates();
             },
-            'repositoryMethodOrganizer' => function (Options $options) {
+            'repositoryMethodEvent' => function (Options $options) {
                 return function (RegistrationTemplateRepositoryInterface $templateRepository) use ($options) {
-                    return $templateRepository->getTemplateForGivenEvents($options['events']);
+                    return $templateRepository->getTemplateForGivenEvent($options['event']);
                 };
             },
         ]);
@@ -66,10 +67,10 @@ class RegistrationTemplateChoiceType extends AbstractType
      *
      * @return array
      */
-    private function getResults(Options $options)
+    private function getResults(Options $options): array
     {
-        $baseTemplates      = $options['repositoryMethod']($this->templateRepository);
-        $organizerTemplates = $options['repositoryMethodOrganizer']($this->templateRepository);
+        $baseTemplates  = $options['repositoryMethod']($this->templateRepository);
+        $eventTemplates = $options['repositoryMethodEvent']($this->templateRepository);
 
         $templates = [];
 
@@ -77,8 +78,8 @@ class RegistrationTemplateChoiceType extends AbstractType
             $templates['form.type_template.registration.base'] = $baseTemplates;
         }
 
-        if (!empty($organizerTemplates)) {
-            $templates['form.type_template.registration.organizer'] = $organizerTemplates;
+        if (!empty($eventTemplates)) {
+            $templates['form.type_template.registration.event'] = $eventTemplates;
         }
 
         return $templates;

@@ -3,7 +3,18 @@
 {% block title 'admin.template.registration.link'|trans %}
 
 {% block content %}
-    <h1 class="page-header">{{ 'admin.template.registration.title'|trans }}</h1>
+    <h1 class="page-header">
+        {{ 'admin.template.registration.title'|trans }}
+        <div class="pull-right">
+            <a href="{{ path('admin_template_registration_create', {'event': event.id}) }}"
+               class="btn btn-primary"
+               data-toggle="modal"
+               data-target="#duplicate-modal"
+            >
+                {{ 'admin.template.registration.table.content.create'|trans }}
+            </a>
+        </div>
+    </h1>
 
     <table class="table">
         <thead>
@@ -43,6 +54,15 @@
                                     {{ 'admin.template.registration.table.content.editJson'|trans }}
                                 </a>
                             </li>
+                            <li>
+                                <a href="{{ path('admin_template_registration_duplicate', { 'template': template.id }) }}"
+                                   class="btn-sm"
+                                   data-toggle="modal"
+                                   data-target="#duplicate-modal"
+                                >
+                                    {{ 'admin.template.registration.table.content.duplicate'|trans }}
+                                </a>
+                            </li>
                         </ul>
                     </div>
                 </td>
@@ -50,5 +70,13 @@
         {% endfor %}
         </tbody>
     </table>
+
+    <div class="modal fade clear-on-hidden-modal" id="duplicate-modal" tabindex="-1" role="dialog"
+         data-placeholder="{{ '<div class="modal-body text-center"><i class="glyphicon glyphicon-refresh spin text-xl"></i></div>'|e }}">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+            </div>
+        </div>
+    </div>
 
 {% endblock %}
