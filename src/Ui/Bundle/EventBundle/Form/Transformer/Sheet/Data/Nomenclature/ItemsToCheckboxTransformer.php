@@ -24,8 +24,8 @@ class ItemsToCheckboxTransformer extends AbstractTransformer
             return $value;
         }
 
-        if (!is_array($value)) {
-            throw new TransformationFailedException(sprintf('"array" expected, "%s" given', gettype($value)));
+        if (!\is_array($value)) {
+            throw new TransformationFailedException(sprintf('"array" expected, "%s" given', \gettype($value)));
         }
 
         $items = $this->nomenclature->getLastLevel();
@@ -44,8 +44,8 @@ class ItemsToCheckboxTransformer extends AbstractTransformer
             return $value;
         }
 
-        if (!is_array($value)) {
-            throw new TransformationFailedException(sprintf('"array" expected, "%s" given', gettype($value)));
+        if (!\is_array($value)) {
+            throw new TransformationFailedException(sprintf('"array" expected, "%s" given', \gettype($value)));
         }
 
         return array_map(function (NomenclatureItem $item) {

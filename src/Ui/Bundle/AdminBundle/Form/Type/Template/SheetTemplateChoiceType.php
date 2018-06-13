@@ -36,8 +36,9 @@ class SheetTemplateChoiceType extends AbstractType
      */
     public function configureOptions(OptionsResolver $resolver)
     {
-        $resolver->setDefaults([
-            'events'           => [],
+        $resolver
+            ->setRequired('event')
+            ->setDefaults([
             'choices'          => function (Options $options) {
                 return $this->getResults($options);
             },
@@ -45,9 +46,9 @@ class SheetTemplateChoiceType extends AbstractType
             'repositoryMethod' => function (SheetTemplateRepositoryInterface $templateRepository) {
                 return $templateRepository->getBaseTemplates();
             },
-            'repositoryMethodOrganizer' => function (Options $options) {
+            'repositoryMethodEvent' => function (Options $options) {
                 return function (SheetTemplateRepositoryInterface $templateRepository) use ($options) {
-                    return $templateRepository->getTemplateForGivenEvents($options['events']);
+                    return $templateRepository->getTemplateForGivenEvent($options['event']);
                 };
             },
         ]);
@@ -66,10 +67,10 @@ class SheetTemplateChoiceType extends AbstractType
      *
      * @return array
      */
-    private function getResults(Options $options)
+    private function getResults(Options $options): array
     {
-        $baseTemplates      = $options['repositoryMethod']($this->templateRepository);
-        $organizerTemplates = $options['repositoryMethodOrganizer']($this->templateRepository);
+        $baseTemplates = $options['repositoryMethod']($this->templateRepository);
+        $eventTemplates = $options['repositoryMethodEvent']($this->templateRepository);
 
         $templates = [];
 
@@ -77,8 +78,8 @@ class SheetTemplateChoiceType extends AbstractType
             $templates['form.type_template.sheet.base'] = $baseTemplates;
         }
 
-        if (!empty($organizerTemplates)) {
-            $templates['form.type_template.sheet.organizer'] = $organizerTemplates;
+        if (!empty($eventTemplates)) {
+            $templates['form.type_template.sheet.event'] = $eventTemplates;
         }
 
         return $templates;

@@ -12,9 +12,11 @@ namespace Proximum\Vimeet\Application\Components\Registration;
 
 use Proximum\Vimeet\Application\Adapter\TranslatorInterface;
 use Proximum\Vimeet\Domain\Template\Exception\RegistrationTemplateException;
+use Proximum\Vimeet\Domain\Template\Exception\RegistrationTemplateNomenclatureCheckboxesMustBeOfDepthOneException;
 use Proximum\Vimeet\Domain\Template\Exception\RegistrationTemplateObjectMustHaveAtLeastOneSetterTagException;
 use Proximum\Vimeet\Domain\Template\Registration\RegistrationTemplateValidator;
 use Proximum\Vimeet\Domain\Template\TemplateData;
+use Proximum\Vimeet\Domain\Template\TemplateObject;
 
 class RegistrationTemplateValidatorTranslated
 {
@@ -42,11 +44,7 @@ class RegistrationTemplateValidatorTranslated
         try {
             $this->registrationTemplateValidator->validate($templateData);
         } catch (RegistrationTemplateObjectMustHaveAtLeastOneSetterTagException $exception) {
-            $objectsLabel = [];
-
-            foreach ($exception->templateObjects as $templateObject) {
-                $objectsLabel[] = $templateObject->getDefaultLabel();
-            }
+            $objectsLabel = $this->getObjectsLabel($exception->templateObjects);
 
             throw new RegistrationTemplateException(
                 $this->translator->trans(
@@ -56,6 +54,33 @@ class RegistrationTemplateValidatorTranslated
                 ),
                 422
             );
+        } catch (RegistrationTemplateNomenclatureCheckboxesMustBeOfDepthOneException $exception) {
+            $objectsLabel = $this->getObjectsLabel($exception->templateObjects);
+
+            throw new RegistrationTemplateException(
+                $this->translator->trans(
+                    'template.registration.nomenclatureCheckboxesMustBeOfDepthOne',
+                    ['%objectsLabel%' => implode(', ', $objectsLabel)],
+                    'templates'
+                ),
+                422
+            );
         }
+    }
+
+    /**
+     * @param TemplateObject[] $templateObjects
+     *
+     * @return string[]
+     */
+    private function getObjectsLabel(array $templateObjects): array
+    {
+        $objectsLabel = [];
+
+        foreach ($templateObjects as $templateObject) {
+            $objectsLabel[] = $templateObject->getDefaultLabel();
+        }
+
+        return $objectsLabel;
     }
 }

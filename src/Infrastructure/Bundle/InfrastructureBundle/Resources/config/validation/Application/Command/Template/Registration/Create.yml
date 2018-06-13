@@ -1,0 +1,4 @@
+Proximum\Vimeet\Application\Command\Template\Registration\Create:
+    properties:
+        title:
+            - NotBlank: ~

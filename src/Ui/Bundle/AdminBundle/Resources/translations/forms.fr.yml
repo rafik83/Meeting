@@ -664,6 +664,11 @@ form.promotion_code_update.children.stock.label: Stock
 form.promotion_code_update.children.submit.label: Enregistrer
 form.promotion_code_update.children.title.label: Titre
 form.promotion_code_update.children.validUntil.label: 'Valide jusqu''au'
+form.registration_template_duplicate.children.event.label: 'Événement de destination du nouveau template'
+form.registration_template_duplicate.children.submit.label: 'Dupliquer'
+form.registration_template_duplicate.children.title.label: 'Titre du nouveau template'
+form.registration_template_create.children.submit.label: 'Créer'
+form.registration_template_create.children.title.label: 'Titre du nouveau template'
 form.register.children.email.label: E-mail
 form.register.children.password.children.first.label: 'Mot de passe'
 form.register.children.password.children.second.label: 'Ressaisir le mot de passe'
@@ -974,9 +979,9 @@ form.type_template_field_update.children.private.label: Privé
 form.type_template_field_update.children.required.label: Obligatoire
 form.type_template_field_update.children.submit.label: Enregistrer
 form.type_template.registration.base: 'Template d''Inscription de base'
-form.type_template.registration.organizer: 'Mes templates d''Inscription'
+form.type_template.registration.event: 'Templates de l''événement'
 form.type_template.sheet.base: 'Template de Participation de base'
-form.type_template.sheet.organizer: 'Mes templates de Participation'
+form.type_template.sheet.event: 'Templates de l''événément'
 form.type_update.children.hidden.label: Caché
 form.type_update.children.package.label: 'Template de forfait de participation'
 form.type_update.children.rank.label: Position

@@ -335,6 +335,16 @@ class TemplateObject extends AbstractChild
         return $this->taggedDataViews;
     }
 
+    protected function getTaggedDataContent(): array
+    {
+        return array_map(
+            function (TaggedDataView $taggedDataView) {
+                return $taggedDataView->content;
+            },
+            $this->getTaggedDataViews()
+        );
+    }
+
     /**
      * @return bool
      */

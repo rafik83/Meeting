@@ -26,6 +26,7 @@ use Proximum\Vimeet\Domain\Repository\Invoice\InvoiceRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\Meeting\RequestRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\MeetingRepositoryInterface;
 use Proximum\Vimeet\Domain\Template\ParticipantInfoGuesser;
+use Proximum\Vimeet\Domain\Template\TaggedDataFactory;
 use Proximum\Vimeet\Domain\Template\TemplateBooleanFilterIdentifier;
 use Proximum\Vimeet\Domain\Template\TemplateData;
 use Proximum\Vimeet\Domain\Template\TemplateDataFactory;
@@ -65,17 +66,9 @@ class SheetElasticTransformer implements ModelToElasticaTransformerInterface
     /** @var InvoiceRepositoryInterface */
     private $invoiceRepository;
 
-    /**
-     * @param SheetInfoGuesser                          $sheetInfoGuesser
-     * @param ParticipantInfoGuesser                    $participantInfoGuesser
-     * @param CartRowRepositoryInterface                $cartRowRepository
-     * @param HappeningParticipationRepositoryInterface $happeningParticipationRepository
-     * @param RequestRepositoryInterface                $meetingRequestRepository
-     * @param TemplateDataFactory                       $templateDataFactory
-     * @param Balance                                   $orderBalance
-     * @param MeetingRepositoryInterface                $meetingRepository
-     * @param InvoiceRepositoryInterface                $invoiceRepository
-     */
+    /** @var TaggedDataFactory */
+    private $taggedDataFactory;
+
     public function __construct(
         SheetInfoGuesser $sheetInfoGuesser,
         ParticipantInfoGuesser $participantInfoGuesser,
@@ -83,19 +76,21 @@ class SheetElasticTransformer implements ModelToElasticaTransformerInterface
         HappeningParticipationRepositoryInterface $happeningParticipationRepository,
         RequestRepositoryInterface $meetingRequestRepository,
         TemplateDataFactory $templateDataFactory,
+        TaggedDataFactory $taggedDataFactory,
         Balance $orderBalance,
         MeetingRepositoryInterface $meetingRepository,
         InvoiceRepositoryInterface $invoiceRepository
     ) {
-        $this->sheetInfoGuesser       = $sheetInfoGuesser;
+        $this->sheetInfoGuesser = $sheetInfoGuesser;
         $this->participantInfoGuesser = $participantInfoGuesser;
-        $this->cartRowRepository      = $cartRowRepository;
-        $this->templateDataFactory    = $templateDataFactory;
-        $this->orderBalance           = $orderBalance;
-        $this->meetingRepository      = $meetingRepository;
-        $this->invoiceRepository      = $invoiceRepository;
+        $this->cartRowRepository = $cartRowRepository;
+        $this->templateDataFactory = $templateDataFactory;
+        $this->taggedDataFactory = $taggedDataFactory;
+        $this->orderBalance = $orderBalance;
+        $this->meetingRepository = $meetingRepository;
+        $this->invoiceRepository = $invoiceRepository;
         $this->happeningParticipationRepository = $happeningParticipationRepository;
-        $this->meetingRequestRepository         = $meetingRequestRepository;
+        $this->meetingRequestRepository = $meetingRequestRepository;
     }
 
     /**
@@ -106,57 +101,42 @@ class SheetElasticTransformer implements ModelToElasticaTransformerInterface
      */
     public function transform($sheet, array $fields)
     {
-        $locale = $sheet->getEvent()->getFallback();
+        $fallbackLocale = $sheet->getEvent()->getFallback();
 
-        $participants = [];
+        $participants = $this->buildParticipants($sheet, $fallbackLocale);
 
-        if (null !== $sheet->getParticipants()) {
-            $participants = $this->buildParticipants($sheet, $locale);
-
-            if ($sheet->hasUserParticipant($sheet->getOwner())) {
-                $participants[] = [
-                    'email'    => $sheet->getOwner()->getEmail(),
-                    'lastname' => $sheet->getOwner()->getAccount()->getLastName(),
-                ];
-            }
+        if (!$sheet->hasUserParticipant($sheet->getOwner())) {
+            $participants[] = [
+                'email'    => $sheet->getOwner()->getEmail(),
+                'lastname' => $sheet->getOwner()->getAccount()->getLastName(),
+            ];
         }
 
-        try {
-            $owner      = $sheet->getOwner()->getId();
-            $ownerEmail = $sheet->getOwner()->getEmail();
-        } catch (\RuntimeException $e) {
-            $owner      = null;
-            $ownerEmail = null;
-        }
+        $owner      = $sheet->getOwner()->getId();
+        $ownerEmail = $sheet->getOwner()->getEmail();
 
         $categories = $this->buildCategories($sheet);
 
-        $hasCart                  = count($this->cartRowRepository->findBySheet($sheet)) > 0;
-        $registrationTemplateData = $this->templateDataFactory->createRegistrationFromSheet($sheet, $locale);
+        $hasCart                  = \count($this->cartRowRepository->findBySheet($sheet)) > 0;
+        $registrationTemplateData = $this->templateDataFactory->createRegistrationFromSheet($sheet, $fallbackLocale);
         $filtersValue             = TemplateBooleanFilterIdentifier::getBooleanFilterValues($registrationTemplateData);
         $organizationCategory     = $registrationTemplateData->getTaggedContentValue(Tag::SHEET_ORGANIZATION_CATEGORY);
 
         $content         = [];
         $contentByLocale = [];
 
-        $fallbackLocale    = $sheet->getEvent()->getFallback();
         $fallbackData      = $this->templateDataFactory->createFromSheet($sheet, $fallbackLocale);
         $nomenclatureItems = $this->buildNomenclatureItems($fallbackData);
 
         foreach ($sheet->getEvent()->getLocales() as $locale) {
-            if ($locale !== $fallbackLocale) {
-                $data = $this->templateDataFactory->createFromSheet($sheet, $locale);
-            } else {
-                $data = $fallbackData;
-            }
-
-            $localeContent = $this->getSearchableContent($data->getObjects());
+            $templateData = $this->taggedDataFactory->buildTaggedDataView($sheet, $locale);
+            $localeContent = $this->getSearchableContent($templateData->getObjects());
 
             // Add locale content in same field
             $content[] = $localeContent;
 
             // if locale field exists in ES, add it
-            if (in_array($locale, AvailableLocales::getAvailableLocalesForContent())) {
+            if (\in_array($locale, AvailableLocales::getAvailableLocalesForContent(), true)) {
                 $contentByLocale[sprintf('content_%s', $locale)] = $localeContent;
             }
         }
@@ -170,7 +150,7 @@ class SheetElasticTransformer implements ModelToElasticaTransformerInterface
         return new Document($sheet->getId(), array_merge(
             [
                 'id'                      => $sheet->getId(),
-                'sheetName'               => $this->sheetInfoGuesser->guessSheetTitle($sheet, $locale),
+                'sheetName'               => $this->sheetInfoGuesser->guessSheetTitle($sheet, $fallbackLocale),
                 'state'                   => $sheet->getState(),
                 'validationState'         => $sheet->getValidationState(),
                 'agendaConfirmedStatus'          => $sheet->getAgendaConfirmedStatus(),
@@ -183,7 +163,7 @@ class SheetElasticTransformer implements ModelToElasticaTransformerInterface
                 'categories'              => $categories,
                 'followUp'                => $sheet->getFollower() instanceof Admin ? $sheet->getFollower()->getId() : null,
                 'commercialStatus'        => $sheet->getCommercialStatus(),
-                'participantNumber'       => count($sheet->getParticipants()),
+                'participantNumber'       => $sheet->countParticipants(),
                 'participants'            => $participants,
                 'event'                   => $sheet->getEvent()->getId(),
                 'owner'                   => $owner,
@@ -383,7 +363,7 @@ class SheetElasticTransformer implements ModelToElasticaTransformerInterface
                     ),
                 ];
             },
-            $sheet->getParticipants()->toArray()
+            $sheet->getParticipantsArray()
         );
 
         return $participants;

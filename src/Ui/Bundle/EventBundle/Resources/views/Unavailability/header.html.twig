@@ -6,19 +6,31 @@
                 unavailability.begin|date('H:i', unavailability.timeZone)
                 ~ ' - '
                 ~ unavailability.end|date('H:i', unavailability.timeZone)
-                ~ ' - '
-                ~ 'unavailability.title'|trans
             }}
 
-            {% if unavailability.hasMessage %}
-                {{ ' - ' ~ unavailability.message }}
+            {% if unavailability.isDeletableByUser %}
+                {{ ' - ' ~ 'unavailability.title'|trans }}
+
+                {% if unavailability.hasMessage %}
+                    {{ ' - ' ~ unavailability.message }}
+                {% endif %}
+            {% endif %}
+
+            {% if not unavailability.isDeletableByUser %}
+                {{ ' - ' ~ 'unavailability.createdBySystem.explaination.title'|trans }}
             {% endif %}
         </p>
+        {% if not unavailability.isDeletableByUser %}
+            <a href="{{ path('event_package_redirect_depending_on_context', {'sheet': sheetId}) }}" class="pull-right text-center link-white">
+                <i class="icon icon-Panier_2 happeningParticipateIcon"></i><br>
+                <span>{{ 'unavailability.createdBySystem.buy.title'|trans }}</span>
+            </a>
+        {% endif %}
 
         {% if participantId is defined and unavailability.isDeletableByUser %}
             <form action="{{ path('event_unavailability_remove', { 'unavailability': unavailability.id, 'participant': participantId, 'sheet': sheetId }) }}" method="POST" class="pull-right" data-confirm="{{ 'agenda.unavailability.confirmRemove'|trans }}">
                 <input type="hidden" name="_method" value="DELETE">
-                <button name="cancelUnavailability" type="submit" class="btn btn-primary btn-sm btn-inactive">
+                <button name="cancelUnavailability" type="submit" class="btn btn-primary btn-sm btn-inactive" title="{{ 'unavailability.action.remove.title'|trans }}">
                     <i class="icon-Fermer_1"></i>
                 </button>
             </form>

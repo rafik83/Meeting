@@ -1,0 +1,6 @@
+Proximum\Vimeet\Application\Command\Template\Registration\Duplicate:
+    properties:
+        title:
+            - NotBlank: ~
+        event:
+            - NotNull: ~

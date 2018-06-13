@@ -28,16 +28,14 @@ function NomenclatureObject(element, locale, builderType)
 
 NomenclatureObject.prototype.fill = function ()
 {
-  if (this.builderType === 'registration') {
-      this.form.set('mode', 'singles');
-  } else {
+  if (this.builderType !== 'registration') {
     this.form.set('style', this.config.style);
-    this.form.set('mode', this.config.mode);
     this.form.set('objective', this.config.objective);
     this.form.set('help', this.config.help[this.locale]);
   }
 
   this.form.set('label', this.config.label[this.locale]);
+  this.form.set('mode', this.config.mode);
   this.form.set('nomenclature', this.config.nomenclature);
   this.form.set('required', this.config.required);
   this.form.set('tags', this.config.tags);
@@ -51,16 +49,14 @@ NomenclatureObject.prototype.save = function ()
       return false;
   }
 
-  if (this.builderType === 'registration') {
-    this.config.mode = 'singles';
-  } else {
+  if (this.builderType !== 'registration') {
     this.config.style = this.form.get('style');
     this.config.help[this.locale]  = this.form.get('help');
-    this.config.mode = this.form.get('mode');
     this.config.objective = this.form.get('objective');
   }
 
   this.config.label[this.locale] = this.form.get('label');
+  this.config.mode               = this.form.get('mode');
   this.config.nomenclature       = this.form.get('nomenclature');
   this.config.required           = this.form.get('required');
   this.config.tags               = this.form.get('tags');

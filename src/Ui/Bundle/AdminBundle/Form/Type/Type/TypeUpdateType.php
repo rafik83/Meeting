@@ -35,8 +35,6 @@ class TypeUpdateType extends AbstractType
     private $sheetRepository;
 
     /**
-     * TypeUpdateType constructor.
-     *
      * @param SheetRepositoryInterface $sheetRepository
      */
     public function __construct(SheetRepositoryInterface $sheetRepository)
@@ -52,25 +50,22 @@ class TypeUpdateType extends AbstractType
         if (false === $this->sheetRepository->isThereAtLeastOneByType($options['type'])) {
             $builder
                 ->add('sheetTemplate', SheetTemplateChoiceType::class, [
-                    'events'      => $options['events'],
+                    'event'       => $options['event'],
                     'required'    => true,
                     'expanded'    => false,
                     'multiple'    => false,
-                    'placeholder' => '',
                 ])
                 ->add('registrationTemplate', RegistrationTemplateChoiceType::class, [
-                    'events'      => $options['events'],
+                    'event'       => $options['event'],
                     'required'    => true,
                     'expanded'    => false,
                     'multiple'    => false,
-                    'placeholder' => '',
                 ])
                 ->add('package', PackageChoiceType::class, [
-                    'currentEvent' => $options['currentEvent'],
+                    'currentEvent' => $options['event'],
                     'required'     => true,
                     'expanded'     => false,
                     'multiple'     => false,
-                    'placeholder'  => '',
                 ])
             ;
         }
@@ -102,8 +97,8 @@ class TypeUpdateType extends AbstractType
             'csrf_token_id' => 'type_update',
         ]);
 
-        $resolver->setRequired(['events', 'currentEvent', 'type']);
-        $resolver->setAllowedTypes('currentEvent', Event::class);
+        $resolver->setRequired(['event', 'type']);
+        $resolver->setAllowedTypes('event', Event::class);
         $resolver->setAllowedTypes('type', Type::class);
     }
 

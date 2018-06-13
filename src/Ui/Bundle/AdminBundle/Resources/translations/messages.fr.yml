@@ -197,7 +197,10 @@ admin.event.sheet.index.title: 'Ré-indexer les fiches de l''événement'
 admin.event.template.link: Templates
 admin.event.template.package: 'Forfait de participation'
 admin.event.template.registration: Inscription
+admin.event.template.registration.duplicate.form.title: 'Dupliquer le template "%templateTitle%"'
+admin.event.template.registration.create.form.title: 'Créer un template d''inscription'
 admin.event.template.sheet: Présentation
+admin.event.template.sheet.duplicate.form.title: 'Dupliquer le template "%templateTitle%"'
 admin.event.title: Titre
 admin.event.trace.participant_imported: 'Participants importés le %at% par %by%'
 admin.event.unArchive.title: 'Désarchiver l''événement %eventTitle%'
@@ -786,6 +789,8 @@ admin.sheet.details.participant.phoneValidationStatus.title: 'Validation télép
 admin.sheet.details.participant.phoneValidationStatus.validated: Validé
 admin.sheet.details.participant.title: Participant
 admin.sheet.details.participant.tooltip.not_concerned: 'Cet utilisateur n''est pas concerné car il/elle n''a pas de RDVs ou ne participe pas à un sous-événement'
+admin.sheet.details.participant.upload.filled: 'Renseigné'
+admin.sheet.details.participant.upload.notFilled: 'Non renseigné'
 admin.sheet.details.participant.visio: Visio
 admin.sheet.details.participants: Participants
 admin.sheet.details.remainingToPay: 'Solde restant dû'
@@ -945,6 +950,8 @@ admin.template.registration.table.column.action: Action
 admin.template.registration.table.column.createdAt: 'Créé le'
 admin.template.registration.table.column.eventType: Événement/Type(s)
 admin.template.registration.table.column.title: Titre
+admin.template.registration.table.content.create: 'Créer un template d''inscription'
+admin.template.registration.table.content.duplicate: 'Dupliquer'
 admin.template.registration.table.content.edit: Modifier
 admin.template.registration.table.content.editJson: 'Modifier JSON'
 admin.template.registration.title: 'Templates d''Inscription'

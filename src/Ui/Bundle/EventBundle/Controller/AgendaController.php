@@ -23,6 +23,7 @@ use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Security\Voter\Ag
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Handler\User\Phone\SendCodeForm;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\ParamConverter\EventDomain;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Security\SheetVoter;
+use Proximum\Vimeet\Ui\Bundle\EventBundle\ValueResolver\UserDomain;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -33,17 +34,20 @@ use Symfony\Component\Security\Core\User\UserInterface;
 class AgendaController extends Controller
 {
     /**
-     * @param EventDomain   $eventDomain
-     * @param Sheet         $sheet
-     * @param UserInterface $user
+     * @param EventDomain $eventDomain
+     * @param Sheet       $sheet
+     * @param UserDomain  $userDomain
      *
      * @return RedirectResponse
      */
-    public function indexAction(EventDomain $eventDomain, Sheet $sheet, UserInterface $user)
-    {
+    public function indexAction(
+        EventDomain $eventDomain,
+        Sheet $sheet,
+        UserDomain $userDomain
+    ): RedirectResponse {
         $this->checkAccess($eventDomain, $sheet);
 
-        $participant = $sheet->getUserParticipant($user);
+        $participant = $sheet->getUserParticipant($userDomain->getUser());
 
         if (null !== $participant) {
             return $this->redirectToRoute(
@@ -63,7 +67,7 @@ class AgendaController extends Controller
      * @param Request       $request
      * @param Participant   $participant
      * @param Sheet         $sheet
-     * @param UserInterface $user
+     * @param UserDomain    $userDomain
      *
      * @return Response
      */
@@ -72,7 +76,7 @@ class AgendaController extends Controller
         Request $request,
         Participant $participant,
         Sheet $sheet,
-        UserInterface $user
+        UserDomain $userDomain
     ): Response {
         $this->checkAccess($eventDomain, $sheet);
 
@@ -86,7 +90,7 @@ class AgendaController extends Controller
             $sheet,
             $participant,
             $request->getLocale(),
-            $user
+            $userDomain->getUser()
         ));
 
         $tipTranslationViewQuery = new TipTranslationViewQuery(
@@ -100,8 +104,8 @@ class AgendaController extends Controller
         $ignorePhoneConfirmationUrl = null;
         $sendCodeViewTranslationViews = null;
 
-        if ($agenda->isPhoneValidationRequired && $participant->getUser() === $user) {
-            $mobileNumber = $request->query->get('mobile', $user->getMobile());
+        if ($agenda->isPhoneValidationRequired && $participant->getUser() === $userDomain->getUser()) {
+            $mobileNumber = $request->query->get('mobile', $userDomain->getUser()->getMobile());
             $actionRoute = $this->generateUrl(
                 'event_user_phone_validate',
                 [
@@ -120,7 +124,7 @@ class AgendaController extends Controller
             $sendCodeView = $this->get('handler.user.phone.send_code_form_handler')->handle(
                 new SendCodeForm(
                     $request,
-                    $user,
+                    $userDomain->getUser(),
                     $eventDomain->getEvent(),
                     $actionRoute,
                     $mobileNumber

@@ -34,21 +34,21 @@ class TypeCreateType extends AbstractType
     {
         $builder
             ->add('sheetTemplate', SheetTemplateChoiceType::class, [
-                'events'      => $options['events'],
+                'event'       => $options['event'],
                 'required'    => true,
                 'expanded'    => false,
                 'multiple'    => false,
                 'placeholder' => '',
             ])
             ->add('registrationTemplate', RegistrationTemplateChoiceType::class, [
-                'events'      => $options['events'],
+                'event'       => $options['event'],
                 'required'    => true,
                 'expanded'    => false,
                 'multiple'    => false,
                 'placeholder' => '',
             ])
             ->add('package', PackageChoiceType::class, [
-                'currentEvent' => $options['currentEvent'],
+                'currentEvent' => $options['event'],
                 'required'     => true,
                 'expanded'     => false,
                 'multiple'     => false,
@@ -75,8 +75,8 @@ class TypeCreateType extends AbstractType
      */
     public function configureOptions(OptionsResolver $resolver)
     {
-        $resolver->setRequired(['events', 'currentEvent']);
-        $resolver->setAllowedTypes('currentEvent', Model\Event::class);
+        $resolver->setRequired(['event']);
+        $resolver->setAllowedTypes('event', Model\Event::class);
         $resolver->setDefaults([
             'data_class'    => Create::class,
             'csrf_token_id' => 'type_create',

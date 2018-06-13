@@ -4347,6 +4347,7 @@ services:
             - '@vimeet_infrastructure.repository.happening_participation_repository'
             - '@vimeet_infrastructure.repository.meeting.request_repository'
             - '@template.template_data_factory'
+            - '@template.tagged_data_factory'
             - '@order.balance'
             - '@vimeet_infrastructure.repository.meeting_repository'
             - '@repository.invoice.invoice_repository'

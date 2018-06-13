@@ -377,8 +377,8 @@ import-prod-db@vm:
 	make post-import-db@vm
 
 post-import-db@vm:
-	bin/console doctrine:query:sql "UPDATE user SET email = CONCAT(id, '@example.net')"
-	bin/console doctrine:query:sql "UPDATE billing_info SET email = CONCAT(id, '-billinginfo@example.net')"
+	bin/console doctrine:query:sql "UPDATE user SET email = CONCAT('user-', id, '@example.net')"
+	bin/console doctrine:query:sql "UPDATE billing_info SET email = CONCAT('billinginfo-', id, '-@example.net')"
 	bin/console doctrine:query:sql "UPDATE event SET email_team = CONCAT(id, '-emailteam@example.net')"
 	bin/console doctrine:query:sql "UPDATE user_event_phone SET phone = 'undefined'"
 	bin/console doctrine:migrations:migrate

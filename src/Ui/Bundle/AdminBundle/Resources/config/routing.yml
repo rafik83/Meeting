@@ -279,7 +279,7 @@ admin_type_create:
     requirements:
         event: \d+
     methods: [GET, POST]
-    defaults: { _controller: AdminBundle:Type:create }
+    defaults: { _controller: Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Type\CreateAction }
 
 admin_type_update:
     path: /event/{event}/type/{type}/update
@@ -287,7 +287,7 @@ admin_type_update:
         event: \d+
         type: \d+
     methods: [GET, POST]
-    defaults: { _controller: AdminBundle:Type:update }
+    defaults: { _controller: Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Type\UpdateAction }
 
 admin_type_remove:
     path:  /event/{event}/type/{type}/remove
@@ -982,6 +982,20 @@ admin_template_registration_add_locale:
     methods: [POST]
     requirements:
         template: \d+
+
+admin_template_registration_duplicate:
+    path: /template/registration/{template}/duplicate
+    defaults: { _controller: Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\RegistrationTemplate\DuplicateAction }
+    methods: [GET, POST]
+    requirements:
+        template: \d+
+
+admin_template_registration_create:
+    path: /event/{event}/template/registration/create
+    defaults: { _controller: Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\RegistrationTemplate\CreateAction }
+    methods: [GET, POST]
+    requirements:
+        event: \d+
 
 #
 # Package
