@@ -93,4 +93,11 @@ interface ProductRepositoryInterface
      * @return bool
      */
     public function isProductRemovable(Product $product): bool;
+
+    /**
+     * @param Event $event
+     *
+     * @return Product[]
+     */
+    public function findParticipantAndAttributableByEvent($event): array;
 }

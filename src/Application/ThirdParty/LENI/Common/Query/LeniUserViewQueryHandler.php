@@ -24,12 +24,12 @@ use Proximum\Vimeet\Domain\Model\Event;
 use Proximum\Vimeet\Domain\Model\Sheet;
 use Proximum\Vimeet\Domain\Model\User;
 use Proximum\Vimeet\Domain\Model\User\Event\ExtraData;
-use Proximum\Vimeet\Domain\Order\Balance;
 use Proximum\Vimeet\Domain\Repository\SheetRepositoryInterface;
 use Proximum\Vimeet\Domain\Repository\User\Event\ExtraDataRepositoryInterface;
 use Proximum\Vimeet\Domain\Service\Category\CategoryNameResolver;
 use Proximum\Vimeet\Domain\Service\SheetsGroup\GroupNameResolver;
 use Proximum\Vimeet\Domain\Service\Type\TypeNameResolver;
+use Proximum\Vimeet\Domain\Sheet\HasRemainingToPay;
 use Proximum\Vimeet\Domain\User\Event\ExtraData\Type;
 
 class LeniUserViewQueryHandler
@@ -55,8 +55,8 @@ class LeniUserViewQueryHandler
     /** @var SheetInfoGuesser */
     private $sheetInfoGuesser;
 
-    /** @var Balance */
-    private $balance;
+    /** @var HasRemainingToPay */
+    private $hasRemainingToPay;
 
     /** @var PrepareLeaderDataHandler */
     private $prepareLeaderDataHandler;
@@ -75,7 +75,7 @@ class LeniUserViewQueryHandler
         CategoryNameResolver $categoryNameResolver,
         GroupNameResolver $groupNameResolver,
         SheetRepositoryInterface $sheetRepository,
-        Balance $balance,
+        HasRemainingToPay $hasRemainingToPay,
         PrepareLeaderDataHandler $prepareLeaderDataHandler,
         ExtraDataRepositoryInterface $extraDataRepository,
         LeniUserCustomDataQueryHandler $leniUserCustomDataQueryHandler
@@ -87,7 +87,7 @@ class LeniUserViewQueryHandler
         $this->categoryNameResolver = $categoryNameResolver;
         $this->groupNameResolver = $groupNameResolver;
         $this->sheetRepository = $sheetRepository;
-        $this->balance = $balance;
+        $this->hasRemainingToPay = $hasRemainingToPay;
         $this->prepareLeaderDataHandler = $prepareLeaderDataHandler;
         $this->extraDataRepository = $extraDataRepository;
         $this->leniUserCustomDataQueryHandler = $leniUserCustomDataQueryHandler;
@@ -227,15 +227,7 @@ class LeniUserViewQueryHandler
      */
     private function isPaid(Sheet $sheet): bool
     {
-        if (!$sheet->getPackage()->isPassable()) {
-            return true;
-        }
-
-        if (!$sheet->hasNotCancelledOrders()) {
-            return false;
-        }
-
-        return 0 === $this->balance->getRemainingToPay($sheet);
+        return !$this->hasRemainingToPay->isSatisfiedBy($sheet);
     }
 
     /**

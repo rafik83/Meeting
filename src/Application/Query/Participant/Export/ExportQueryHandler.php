@@ -10,47 +10,117 @@
 
 namespace Proximum\Vimeet\Application\Query\Participant\Export;
 
-use Proximum\Vimeet\Application\Adapter\SerializerAdapterInterface;
-use Proximum\Vimeet\Application\Adapter\SheetSearchAdapterInterface;
+use Proximum\Vimeet\Application\View\Participant\Export\ParticipantListView;
+use Proximum\Vimeet\Domain\Model\Event;
+use Proximum\Vimeet\Domain\Model\Type;
+use Proximum\Vimeet\Domain\Repository\ParticipantRepositoryInterface;
+use Proximum\Vimeet\Domain\Repository\ProductRepositoryInterface;
+use Proximum\Vimeet\Domain\Template\TemplateDataFactory;
+use Proximum\Vimeet\Domain\Template\TemplateObject\ExportableObjectInterface;
 
 class ExportQueryHandler
 {
-    /** @var SerializerAdapterInterface */
-    private $serializerAdapter;
+    /** @var ParticipantRepositoryInterface */
+    private $participantRepository;
 
-    /** @var SheetSearchAdapterInterface */
-    private $sheetSearchAdapter;
+    /** @var ParticipantViewQueryHandler */
+    private $participantViewQueryHandler;
 
-    /**
-     * @param SerializerAdapterInterface  $serializerAdapter
-     * @param SheetSearchAdapterInterface $sheetSearchAdapter
-     */
+    /** @var TemplateDataFactory */
+    private $templateDataFactory;
+
+    /** @var ProductRepositoryInterface */
+    private $productRepository;
+
     public function __construct(
-        SerializerAdapterInterface $serializerAdapter,
-        SheetSearchAdapterInterface $sheetSearchAdapter
+        ParticipantRepositoryInterface $participantRepository,
+        ParticipantViewQueryHandler $participantViewQueryHandler,
+        TemplateDataFactory $templateDataFactory,
+        ProductRepositoryInterface $productRepository
     ) {
-        $this->serializerAdapter  = $serializerAdapter;
-        $this->sheetSearchAdapter = $sheetSearchAdapter;
+        $this->participantRepository = $participantRepository;
+        $this->participantViewQueryHandler = $participantViewQueryHandler;
+        $this->templateDataFactory = $templateDataFactory;
+        $this->productRepository = $productRepository;
     }
 
     /**
      * @param ExportQuery $exportQuery
      *
-     * @return string
+     * @return ParticipantListView
      */
-    public function handle(ExportQuery $exportQuery)
+    public function handle(ExportQuery $exportQuery): ParticipantListView
     {
-        $participantsSheetIdsView = $this->sheetSearchAdapter->getParticipantsSheetIdsView(
-            $exportQuery->event,
-            $exportQuery->filters,
-            $exportQuery->locale
-        );
+        $participants = $this->participantRepository->findByIds($exportQuery->participantIds);
 
-        return $this->serializerAdapter->serialize($participantsSheetIdsView, 'csv', [
-            'locale'        => $exportQuery->locale,
-            'charset'       => $exportQuery->charset,
-            'event'         => $exportQuery->event,
-            'csv_delimiter' => ';',
-        ]);
+        $registrationColumns = [];
+        $typesHandled = [];
+        $participantViews= [];
+
+        $productColumns = $this->prepareProductColumns($exportQuery->event);
+
+        foreach ($participants as $participant) {
+            if (!isset($typesHandled[$participant->getSheet()->getType()->getId()])) {
+                $this->prepareRegistrationColumns(
+                    $registrationColumns,
+                    $participant->getSheet()->getType(),
+                    $exportQuery->locale,
+                    $exportQuery->event->getFallback()
+                );
+
+                $typesHandled[$participant->getSheet()->getType()->getId()] = true;
+            }
+
+            $participantViews[] = $this->participantViewQueryHandler->handle(
+                new ParticipantViewQuery($exportQuery->event, $participant, $exportQuery->locale)
+            );
+        }
+
+        return new ParticipantListView(
+            $exportQuery->locale,
+            $participantViews,
+            $registrationColumns,
+            $productColumns
+        );
+    }
+
+    private function prepareRegistrationColumns(
+        array &$registrationColumns,
+        Type $type,
+        string $locale,
+        string $fallback
+    ): void {
+        $template = $this->templateDataFactory->createRegistrationFromType($type, $locale);
+
+        foreach ($template->getProfileObjects() as $registrationObject) {
+            if ($registrationObject instanceof ExportableObjectInterface) {
+                $key = $registrationObject->getKey();
+
+                if (!isset($registrationColumns[$key])) {
+                    $registrationColumns[$key] =  $registrationObject->getExportableFieldname(
+                        $locale,
+                        $fallback
+                    );
+                }
+            }
+        }
+    }
+
+    private function prepareProductColumns(Event $event): array
+    {
+        $columns = [];
+
+        $products = $this->productRepository->findParticipantAndAttributableByEvent($event);
+
+        foreach ($products as $product) {
+            $key = $product->isParticipant()
+                ? sprintf('participant_%s', $product->getId())
+                : sprintf('option_%s', $product->getId())
+            ;
+
+            $columns[$key] = $product->getName();
+        }
+
+        return $columns;
     }
 }

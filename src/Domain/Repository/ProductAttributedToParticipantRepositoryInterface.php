@@ -32,6 +32,13 @@ interface ProductAttributedToParticipantRepositoryInterface
     public function removeBatch(array $productAttributedToParticipants): void;
 
     /**
+     * @param Participant $participant
+     *
+     * @return ProductAttributedToParticipant[]
+     */
+    public function findByParticipant(Participant $participant): array;
+
+    /**
      * @param Participant[] $participants
      *
      * @return ProductAttributedToParticipant[]

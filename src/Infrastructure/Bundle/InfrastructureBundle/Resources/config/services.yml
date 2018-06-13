@@ -3456,12 +3456,6 @@ services:
             - '@adapter.serializer_adapter'
             - '@adapter.sheet_search_adapter'
 
-    query.participant.export_handler:
-        class: Proximum\Vimeet\Application\Query\Participant\Export\ExportQueryHandler
-        arguments:
-            - '@adapter.serializer_adapter'
-            - '@adapter.sheet_search_adapter'
-
     query.event.event_list_query_handler:
         class: Proximum\Vimeet\Application\Query\Event\EventListQueryHandler
         arguments:
@@ -5234,7 +5228,6 @@ services:
             - '@vimeet_infrastructure.adapter.translator_adapter'
             - '@template.template_data_factory'
             - '@vimeet_infrastructure.repository.participant_repository'
-            - '@vimeet_infrastructure.application.components.sheet.sheet_info_guesser'
             - '@vimeet_infrastructure.repository.happening_participation_repository'
         tags:
             - { name: serializer.normalizer }

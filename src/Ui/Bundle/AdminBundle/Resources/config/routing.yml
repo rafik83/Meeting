@@ -726,12 +726,20 @@ admin_sheet_export_sheet:
         event: \d+
     methods: [GET]
     defaults: { _controller: AdminBundle:Sheet/Export:exportSheet }
-admin_sheet_export_participant:
-    path: /event/{event}/sheet/export/participant
+
+admin_participant_prepare_export:
+    path: /event/{event}/sheet/export/participant/prepare
     requirements:
         event: \d+
     methods: [GET]
-    defaults: { _controller: AdminBundle:Sheet/Export:exportParticipant }
+    defaults: { _controller: Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Participant\PrepareExportAction }
+admin_participant_export:
+    path: /event/{event}/export/participant/{hash}z{file}
+    requirements:
+        event: \d+
+        file: \d+
+    methods: [GET]
+    defaults: { _controller: Proximum\Vimeet\Ui\Bundle\AdminBundle\Controller\Participant\ExportAction }
 admin_sheet_import:
     path: /event/{event}/sheet/import
     requirements:

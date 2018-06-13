@@ -53,6 +53,7 @@ class Configuration implements ConfigurationInterface
                 ->scalarNode('import_planner_path')->end()
                 ->scalarNode('export_omz_path')->end()
                 ->scalarNode('export_spot_path')->end()
+                ->scalarNode('export_participant_path')->end()
                 ->scalarNode('print_sheet_path')->end()
                 ->scalarNode('import_spot_path')->end()
                 ->scalarNode('import_authentication_token_path')->end()

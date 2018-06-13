@@ -222,6 +222,30 @@ services:
             - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Group\DuplicateToEvent }
 
     #
+    # Participant
+    #
+    Proximum\Vimeet\Application\Command\Participant\Export\PrepareExportHandler:
+        arguments:
+            - '@adapter.sheet_search_adapter'
+            - '@vimeet_infrastructure.repository.participant_repository'
+            - '@Proximum\Vimeet\Infrastructure\Repository\Event\ExtraDataRepository'
+            - '@adapter.job_queue_adapter'
+            - '@datetime'
+        tags:
+            - { name: tactician.handler, command: Proximum\Vimeet\Application\Command\Participant\Export\PrepareExport }
+
+    Proximum\Vimeet\Application\Command\Participant\Export\ExportHandler:
+        arguments:
+            - '@Proximum\Vimeet\Application\Query\Participant\Export\ExportQueryHandler'
+            - '@adapter.serializer_adapter'
+            - '@repository.file_repository'
+            - '@adapter.local_file_storage'
+            - '@adapter.mailer_adapter'
+            - '%infrastructure.export_participant_path%'
+            - '%mailer_sender%'
+            - '@datetime'
+
+    #
     # RegistrationTemplate
     #
     Proximum\Vimeet\Application\Command\Template\Registration\DuplicateHandler:

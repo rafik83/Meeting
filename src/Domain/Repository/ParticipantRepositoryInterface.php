@@ -50,11 +50,19 @@ interface ParticipantRepositoryInterface
     /**
      * @param Event  $event
      * @param int[]  $sheetIds
+     *
+     * @return Participant[]
+     */
+    public function getByEventAndSheetIds(Event $event, array $sheetIds): array;
+
+    /**
+     * @param Event  $event
+     * @param int[]  $sheetIds
      * @param string $locale
      *
      * @return Participant[]
      */
-    public function getByEventAndSheetIds(Event $event, array $sheetIds, $locale);
+    public function getByEventAndSheetIdsAndLocale(Event $event, array $sheetIds, $locale): array;
 
     /**
      * @param Event $event
