@@ -329,7 +329,7 @@ class Sheet implements TraceableInterface
      *
      * @return Participant
      */
-    public function getFirstParticipant()
+    public function getFirstParticipant(): Participant
     {
         $firstParticipant = $this->getParticipants()->first();
 
@@ -345,7 +345,7 @@ class Sheet implements TraceableInterface
      *
      * @return int
      */
-    public function countParticipant()
+    public function countParticipant(): int
     {
         return $this->participants->count();
     }
