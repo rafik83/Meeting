@@ -24,6 +24,7 @@ function UploadObject(element, locale, builderType)
         this.templateTaggableObject = new TemplateTaggableObject(element);
     }
 
+    this.uploadFormatRequiredMessage = this.element.getAttribute('data-upload-format-required-message');
     this.filterActive = this.element.querySelector('input[name="filter[active]"');
     this.filterLabel = this.element.querySelector('[data-upload-filter-label]');
     this.filterActive.onchange = this.handleFilterActiveChanged.bind(this);
@@ -46,6 +47,12 @@ UploadObject.prototype.fill = function ()
 
 UploadObject.prototype.save = function ()
 {
+    if (0 === this.form.get('formats').length) {
+        alert(this.uploadFormatRequiredMessage);
+
+        return false;
+    }
+
     if (this.templateTaggableObject && !this.templateTaggableObject.save()) {
         return false;
     }

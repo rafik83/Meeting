@@ -394,6 +394,7 @@ services:
     Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\EventListener\Participant\ParticipantEventSubscriber:
         arguments:
             - '@Proximum\Vimeet\Infrastructure\Adapter\CommandBus'
+            - '@adapter.sheet_indexer'
         tags:
             - { name: kernel.event_subscriber }
 

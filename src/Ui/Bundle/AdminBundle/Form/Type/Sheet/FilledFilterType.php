@@ -20,9 +20,9 @@ class FilledFilterType extends AbstractType
     {
         $filledFilters = $options['filledFilters'];
 
-        foreach ($filledFilters as $key => $customFilters) {
+        foreach ($filledFilters as $key => $filterLabel) {
             $builder->add($key, FilledFilterChoiceType::class, [
-                'label' => $customFilters,
+                'label' => $filterLabel,
                 'multiple' => true,
                 'expanded' => true,
                 'required' => false,
