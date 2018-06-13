@@ -1,1 +1,7 @@
-{# Not related to this PR #}
+<b>{{ object.getDefaultLabel }}:</b>
+{% if object.contentValue is empty %}
+    <span class="label label-danger">{{ 'admin.sheet.details.participant.upload.notFilled'|trans }}</span>
+{% else %}
+    <span class="label label-success">{{ 'admin.sheet.details.participant.upload.filled'|trans }}</span>
+{% endif %}
+<br>
