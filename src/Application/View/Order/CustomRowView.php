@@ -13,7 +13,7 @@ namespace Proximum\Vimeet\Application\View\Order;
 class CustomRowView
 {
     /**
-     * @var int
+     * @var null|int
      */
     public $id;
 
@@ -47,7 +47,7 @@ class CustomRowView
     public $currency;
 
     public function __construct(
-        int $id,
+        ?int $id,
         string $label,
         float $price,
         int $quantity,
