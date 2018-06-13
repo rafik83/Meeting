@@ -18,6 +18,7 @@ use Proximum\Vimeet\Domain\Template\Exception\RegistrationTemplateException;
 use Proximum\Vimeet\Infrastructure\Bundle\InfrastructureBundle\Security\Voter\AdminTemplateAccessVoter;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
@@ -57,7 +58,10 @@ class SaveAction
         try {
             $this->commandBus->handle(new Save($registrationTemplate, $config));
         } catch (RegistrationTemplateException $registrationTemplateException) {
-            return new JsonResponse(['error' => $registrationTemplateException->getMessage()], 422);
+            return new JsonResponse(
+                ['error' => $registrationTemplateException->getMessage()],
+                Response::HTTP_UNPROCESSABLE_ENTITY
+            );
         }
 
         return new JsonResponse($config);
