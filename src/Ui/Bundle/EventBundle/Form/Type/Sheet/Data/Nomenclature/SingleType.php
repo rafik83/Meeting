@@ -30,7 +30,7 @@ class SingleType extends AbstractType
             'placeholder' => function (Options $options) {
                 return implode(', ', array_map(function (NomenclatureItem $item) use ($options) {
                     return $item->getLabel($options['locale']);
-                }, array_slice($options['choices'], 0, 3)));
+                }, \array_slice($options['choices'], 0, 3)));
             },
             'translation_domain' => false,
             'choice_translation_domain' => false,

@@ -58,7 +58,7 @@ class Nomenclature extends EditableObject implements ContentObjectInterface, Sea
     }
 
     /**
-     * @return string
+     * @return string|null
      */
     public function getItem()
     {
@@ -94,7 +94,7 @@ class Nomenclature extends EditableObject implements ContentObjectInterface, Sea
      */
     public function getContentLabel()
     {
-        return $this->getNomenclatureLabel();
+        return implode(', ', $this->getNomenclatureLabelOfItems());
     }
 
     /**
@@ -197,6 +197,8 @@ class Nomenclature extends EditableObject implements ContentObjectInterface, Sea
     }
 
     /**
+     * Get the labels of all the items
+     *
      * @param null $locale
      *
      * @return array|null
@@ -207,11 +209,27 @@ class Nomenclature extends EditableObject implements ContentObjectInterface, Sea
     }
 
     /**
+     * @deprecated use getNomenclatureLabelOfItems with implode
+     *
      * @return null|string
      */
     public function getNomenclatureLabel()
     {
         return $this->getLabelForKey($this->getItem());
+    }
+
+    /**
+     * @return string[]
+     */
+    public function getNomenclatureLabelOfItems(): array
+    {
+        $labels = [];
+
+        foreach ($this->getItems() as $item) {
+            $labels[] = $this->getLabelForKey($item);
+        }
+
+        return $labels;
     }
 
     /**
@@ -239,9 +257,19 @@ class Nomenclature extends EditableObject implements ContentObjectInterface, Sea
     }
 
     /**
+     * @deprecated see isMultiple
+     *
      * @return bool
      */
-    public function isCheckboxes()
+    public function isCheckboxes(): bool
+    {
+        return $this->isMultiple();
+    }
+
+    /**
+     * @return bool
+     */
+    public function isMultiple(): bool
     {
         return self::MODE_CHECKBOXES === $this->getMode();
     }
@@ -342,7 +370,7 @@ class Nomenclature extends EditableObject implements ContentObjectInterface, Sea
         foreach ($this->getItems() as $item) {
             $currentItemLabels = $this->getLabelsByItem($nomenclatureLabels, $item);
             $allItemPaths[] = $currentItemLabels;
-            $currentItemLabelCount = count($currentItemLabels);
+            $currentItemLabelCount = \count($currentItemLabels);
             // Update $maxDepth if current item's depth is greater than current $maxDepth:
             if ($currentItemLabelCount > $maxDepth) {
                 $maxDepth = $currentItemLabelCount;
@@ -351,7 +379,7 @@ class Nomenclature extends EditableObject implements ContentObjectInterface, Sea
 
         // Filter items to keep only lowest-level ones (items with the max depth):
         $leaves = array_filter($allItemPaths, function ($item) use ($maxDepth) {
-            return count($item) === $maxDepth;
+            return \count($item) === $maxDepth;
         });
 
         // Implode inner content (each item's path):

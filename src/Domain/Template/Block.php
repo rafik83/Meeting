@@ -420,7 +420,7 @@ class Block extends AbstractChild
                 if ($block instanceof TemplateObject) {
                     if ($block->hasTag($tag) && $block instanceof TemplateObject\ContentObjectInterface) {
                         if ($block instanceof TemplateObject\Nomenclature) {
-                            $tagged[] = $block->getNomenclatureLabel();
+                            $tagged[] = implode(', ', $block->getNomenclatureLabelOfItems());
                         } else {
                             $tagged[] = $block->getContentValueLocalize();
                         }
@@ -446,7 +446,7 @@ class Block extends AbstractChild
                 }
 
                 if ($object instanceof TemplateObject\Nomenclature) {
-                    $tagged[$tag][] = $object->getNomenclatureLabel();
+                    $tagged[$tag][] = implode(', ', $object->getNomenclatureLabelOfItems());
                 } else {
                     $tagged[$tag][] = $object->getContentValue();
                 }
@@ -604,7 +604,7 @@ class Block extends AbstractChild
     /**
      * Clear objects data
      */
-    public function clear()
+    public function clear(): void
     {
         array_map(function (TemplateObject $object) {
             $object->setData([]);
@@ -634,7 +634,7 @@ class Block extends AbstractChild
      *
      * @return Block
      */
-    public function setTaggedDataIfEmpty(array $data)
+    public function setTaggedDataIfEmpty(array $data): Block
     {
         foreach ($this->getObjects() as $object) {
             foreach ($data as $tag => $value) {
@@ -655,20 +655,23 @@ class Block extends AbstractChild
      *
      * @return Block
      */
-    public function setTaggedDataViews(array $taggedDataViews)
+    public function setTaggedDataViews(array $taggedDataViews): Block
     {
         /** @var TemplateObject $object */
         foreach ($this->getObjects() as $object) {
-            $tags = $object instanceof TemplateObject\EditableText && !empty($object->getTag()) ? [$object->getTag()] : $object->getTags();
+            $tags = $object instanceof TemplateObject\EditableText && !empty($object->getTag())
+                ? [$object->getTag()]
+                : $object->getTags()
+            ;
 
-            if (0 === count($tags)) {
+            if (0 === \count($tags)) {
                 continue;
             }
 
             foreach ($tags as $tagData) {
                 $tag = isset($tagData['tag']) ? $tagData['tag'] : $tagData;
 
-                if (in_array($tag, Tag::getSetters())) {
+                if (\in_array($tag, Tag::getSetters(), true)) {
                     continue;
                 }
 

@@ -24,7 +24,7 @@ class ItemToSinglesTransformer extends AbstractTransformer
             return $value;
         }
 
-        if (!is_string($value)) {
+        if (!\is_string($value)) {
             // A string is expected, therefore it is cast to string
             $value = (string) $value;
         }
@@ -71,7 +71,7 @@ class ItemToSinglesTransformer extends AbstractTransformer
         }
 
         if (!$item instanceof NomenclatureItem) {
-            throw new TransformationFailedException(sprintf('"%s" expected, "%s" given', NomenclatureItem::class, gettype($value)));
+            throw new TransformationFailedException(sprintf('"%s" expected, "%s" given', NomenclatureItem::class, \gettype($value)));
         }
 
         return $item->getKey();

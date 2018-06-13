@@ -177,10 +177,11 @@ class BlockType extends AbstractType
     private function addNomenclature($key, FormBuilderInterface $builder, Template\TemplateObject\Nomenclature $object, $locale)
     {
         $builder->add($key, NomenclatureDataType::class, [
-            'label'       => false,
-            'locale'      => $locale,
-            'object'      => $object,
-            'placeholder' => $object->getOption('label')[$locale],
+            'label'                                   => false,
+            'locale'                                  => $locale,
+            'object'                                  => $object,
+            'placeholder'                             => $object->getOption('label')[$locale],
+            'onMultipleUseSinglesInsteadOfCheckboxes' => true,
         ]);
     }
 

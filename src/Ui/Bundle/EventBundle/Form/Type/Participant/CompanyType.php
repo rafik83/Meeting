@@ -28,7 +28,7 @@ class CompanyType extends AbstractType
     /**
      * {@inheritdoc}
      */
-    public function buildForm(FormBuilderInterface $builder, array $options)
+    public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         /** @var Template\TemplateData $template */
         $template = $options['template'];
@@ -55,7 +55,7 @@ class CompanyType extends AbstractType
     /**
      * {@inheritdoc}
      */
-    public function configureOptions(OptionsResolver $resolver)
+    public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
             'data_class'        => Template\TemplateData::class,
@@ -81,7 +81,7 @@ class CompanyType extends AbstractType
         Template\TemplateObject $object,
         $locale,
         $locales
-    ) {
+    ): void {
         if ($object->isTranslatable()) {
             $builder->add($key, EditableTextTranslationType::class, [
                 'locales' => $locales,
@@ -103,7 +103,7 @@ class CompanyType extends AbstractType
      * @param Template\TemplateObject\Url $object
      * @param string                      $locale
      */
-    private function addUrl($key, FormBuilderInterface $builder, Template\TemplateObject\Url $object, $locale)
+    private function addUrl($key, FormBuilderInterface $builder, Template\TemplateObject\Url $object, $locale): void
     {
         $builder->add($key, UrlDataType::class, [
             'label'  => false,
@@ -138,7 +138,7 @@ class CompanyType extends AbstractType
         FormBuilderInterface $builder,
         Template\TemplateObject $object,
         $locale
-    ) {
+    ): void {
         $builder->add($key, BooleanDataType::class, [
             'object' => $object,
             'locale' => $locale,
@@ -159,7 +159,7 @@ class CompanyType extends AbstractType
         Template\TemplateObject $object,
         $locale,
         $country
-    ) {
+    ): void {
         $builder->add($key, TelephoneDataType::class, [
             'label'   => false,
             'locale'  => $locale,
@@ -174,7 +174,7 @@ class CompanyType extends AbstractType
      * @param Template\TemplateObject $object
      * @param string                  $locale
      */
-    private function addCountry($key, FormBuilderInterface $builder, Template\TemplateObject $object, $locale)
+    private function addCountry($key, FormBuilderInterface $builder, Template\TemplateObject $object, $locale): void
     {
         $builder->add($key, CountryDataType::class, [
             'label'  => false,
@@ -194,12 +194,13 @@ class CompanyType extends AbstractType
         FormBuilderInterface $builder,
         Template\TemplateObject\Nomenclature $object,
         $locale
-    ) {
+    ): void {
         $builder->add($key, NomenclatureDataType::class, [
-            'label'       => false,
-            'locale'      => $locale,
-            'object'      => $object,
-            'placeholder' => $object->getOption('label')[$locale],
+            'label'                                   => false,
+            'locale'                                  => $locale,
+            'object'                                  => $object,
+            'placeholder'                             => $object->getOption('label')[$locale],
+            'onMultipleUseSinglesInsteadOfCheckboxes' => true,
         ]);
     }
 }

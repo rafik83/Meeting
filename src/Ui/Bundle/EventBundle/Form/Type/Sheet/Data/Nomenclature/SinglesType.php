@@ -12,6 +12,7 @@ namespace Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Type\Sheet\Data\Nomenclatur
 
 use Proximum\Vimeet\Domain\Model\Nomenclature;
 use Proximum\Vimeet\Domain\Model\NomenclatureItem;
+use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Transformer\Sheet\Data\Nomenclature\ItemToSinglesMultipleTransformer;
 use Proximum\Vimeet\Ui\Bundle\EventBundle\Form\Transformer\Sheet\Data\Nomenclature\ItemToSinglesTransformer;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -29,10 +30,14 @@ class SinglesType extends AbstractType
         $nomenclature = $options['nomenclature'];
 
         if (!$nomenclature instanceof Nomenclature) {
-            throw new \Exception(sprintf('"%s" expected, "%s" given.', Nomenclature::class, gettype($nomenclature)));
+            throw new \Exception(sprintf('"%s" expected, "%s" given.', Nomenclature::class, \gettype($nomenclature)));
         }
 
-        $builder->addModelTransformer(new ItemToSinglesTransformer($nomenclature));
+        if (false === $options['multiple'] || $nomenclature->getDepth() > 1) {
+            $builder->addModelTransformer(new ItemToSinglesTransformer($nomenclature));
+        } else {
+            $builder->addModelTransformer(new ItemToSinglesMultipleTransformer($nomenclature));
+        }
 
         if (1 === $nomenclature->getDepth()) {
             $builder
@@ -42,6 +47,7 @@ class SinglesType extends AbstractType
                     'label'        => false,
                     'placeholder'  => $options['placeholder'],
                     'nomenclature' => $nomenclature,
+                    'multiple'     => $options['multiple'],
                 ])
             ;
         } elseif (2 === $nomenclature->getDepth()) {
@@ -102,6 +108,9 @@ class SinglesType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setRequired(['locale', 'nomenclature', 'placeholder']);
+        $resolver->setDefaults([
+            'multiple' => false,
+        ]);
     }
 
     /**
