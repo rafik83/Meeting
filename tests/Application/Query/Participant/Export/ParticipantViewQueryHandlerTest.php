@@ -169,9 +169,9 @@ class ParticipantViewQueryHandlerTest extends TestCase
         $boolean->getKey()->willReturn('AZERTY1');
         $gender->getKey()->willReturn('AZERTY2');
         $text->getKey()->willReturn('AZERTY3');
-        $boolean->getExportableContent()->willReturn(true);
-        $gender->getExportableContent()->willReturn('woman');
-        $text->getExportableContent()->willReturn('this is a test');
+        $boolean->getExportableContent([], 'fr')->willReturn(true);
+        $gender->getExportableContent([], 'fr')->willReturn('woman');
+        $text->getExportableContent([], 'fr')->willReturn('this is a test');
 
         $this->translator
             ->trans('gender.woman', [], null, 'fr')
