@@ -504,6 +504,7 @@ admin.order_edit.columns.product: Produit
 admin.order_edit.columns.quantity: Quantité
 admin.order_edit.columns.total: Total
 admin.order_edit.columns.unitPrice: 'Prix unitaire'
+admin.order_edit.columns.vatRate: 'Taux TVA'
 admin.order_edit.command_name: 'N°%id% de %sheetName%'
 admin.order_edit.edit_custom_row: ''
 admin.order_edit.includedProduct: Inclus
@@ -522,6 +523,7 @@ admin.order.edit: 'Modification commande:'
 admin.order.export.button.label: 'Exporter les commandes'
 admin.order.follower: 'Suivi commercial'
 admin.order.id: Id
+admin.order.invoiced: 'Facturé'
 admin.order.invoiceNumber: 'Facture N°'
 admin.order.link: Commandes
 admin.order.sheet: Fiche

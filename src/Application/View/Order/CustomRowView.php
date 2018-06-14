@@ -13,7 +13,7 @@ namespace Proximum\Vimeet\Application\View\Order;
 class CustomRowView
 {
     /**
-     * @var int
+     * @var null|int
      */
     public $id;
 
@@ -37,38 +37,31 @@ class CustomRowView
      */
     public $total;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     public $vatMode;
 
-    /**
-     * @var string
-     */
+    /** @var float */
+    public $vatRate;
+
+    /** @var string */
     public $currency;
 
-    /**
-     * @param int    $id
-     * @param string $label
-     * @param float  $price
-     * @param int    $quantity
-     * @param string $currency
-     * @param string $vatMode
-     */
     public function __construct(
-        $id,
-        $label,
-        $price,
-        $quantity,
-        $currency,
-        $vatMode
+        ?int $id,
+        string $label,
+        float $price,
+        int $quantity,
+        string $currency,
+        string $vatMode,
+        float $vatRate
     ) {
-        $this->id       = $id;
-        $this->label    = $label;
-        $this->price    = $price;
+        $this->id = $id;
+        $this->label = $label;
+        $this->price = $price;
         $this->quantity = $quantity;
-        $this->total    = $price * $quantity;
+        $this->total = $price * $quantity;
         $this->currency = $currency;
-        $this->vatMode  = $vatMode;
+        $this->vatMode = $vatMode;
+        $this->vatRate = $vatRate;
     }
 }

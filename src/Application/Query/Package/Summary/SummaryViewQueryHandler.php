@@ -13,6 +13,7 @@ namespace Proximum\Vimeet\Application\Query\Package\Summary;
 use Proximum\Vimeet\Application\Query\Package\Vat\VatListViewQuery;
 use Proximum\Vimeet\Application\Query\Package\Vat\VatListViewQueryHandler;
 use Proximum\Vimeet\Application\View\Package\Summary\SummaryView;
+use Proximum\Vimeet\Domain\Money\AmountFormatter;
 use Proximum\Vimeet\Domain\Package\Exception\MissingBillingInfoException;
 
 class SummaryViewQueryHandler
@@ -62,8 +63,6 @@ class SummaryViewQueryHandler
             $summaryViewQuery->locale
         ));
 
-        $total = $groups->getTotal() + $promoCodes->getTotal();
-
         $vatListView = $this->vatListViewQueryHandler->handle(
             new VatListViewQuery($summaryViewQuery->sheet, $groups, $promoCodes)
         );
@@ -73,7 +72,7 @@ class SummaryViewQueryHandler
             $groups,
             $promoCodes,
             $summaryViewQuery->sheet->getEvent()->getMode(),
-            $total,
+            $vatListView->total,
             $vatListView->totalWithVat,
             $summaryViewQuery->sheet->getEvent()->getCurrency(),
             $vatListView->vatApplicable,

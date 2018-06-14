@@ -19,8 +19,6 @@
                 <td><strong>{{ 'summary.totalByVat'|trans({'%vatRate%': vatView.vatRate}) }}</strong></td>
                 <td class="text-center">{{ vatView.total|format_amount|localizedcurrency(summary.currency) }} {{ ('package.vatMode.' ~ vatView.vatMode)|trans }}</td>
             </tr>
-        {% endfor %}
-        {% for vatView in summary.vatListView.vatViews %}
             <tr>
                 <td colspan="2"></td>
                 <td><strong>{{ 'summary.vatRate'|trans({'%vatRate%': vatView.vatRate }) }}</strong></td>

@@ -13,6 +13,7 @@ namespace Proximum\Vimeet\Application\Query\Package\Vat;
 use Proximum\Vimeet\Application\View\Package\Summary\ProductView;
 use Proximum\Vimeet\Application\View\Package\Vat\VatListView;
 use Proximum\Vimeet\Application\View\Package\Vat\VatView;
+use Proximum\Vimeet\Domain\Money\AmountFormatter;
 use Proximum\Vimeet\Domain\Package\Exception\MissingBillingInfoException;
 use Proximum\Vimeet\Domain\Package\Specification\VatApplicable;
 
@@ -41,7 +42,7 @@ class VatListViewQueryHandler
     {
         $vatApplicable = $this->vatApplicable->onSheet($query->sheet);
 
-        $total = $query->groups->getTotal() + $query->promotionCodes->getTotal();
+        $total = AmountFormatter::decimalToCentsAmount($query->groups->getTotal() + $query->promotionCodes->getTotal());
         $totalWithVat = $total;
         $vatViews = [];
 
@@ -77,7 +78,7 @@ class VatListViewQueryHandler
                     /** @var VatView $vatView */
                     $vatView = $vatViews[$index];
                     $discount = $promotionProductRowView->totalDiscount;
-                    $vatView->addToTotal($discount);
+                    $vatView->addToTotal(AmountFormatter::decimalToCentsAmount($discount));
                 }
             }
         }
@@ -112,6 +113,6 @@ class VatListViewQueryHandler
         /** @var VatView $vatView */
         $vatView = $vatViews[$index];
 
-        $vatView->addToTotal($productView->total);
+        $vatView->addToTotal(AmountFormatter::decimalToCentsAmount($productView->total));
     }
 }

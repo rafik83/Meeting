@@ -14,9 +14,8 @@ use Proximum\Vimeet\Application\Adapter\SerializerAdapterInterface;
 use Proximum\Vimeet\Application\Query\Invoice\InvoiceDataQuery;
 use Proximum\Vimeet\Application\Query\Invoice\InvoiceDataQueryHandler;
 use Proximum\Vimeet\Domain\Model\Sheet;
-use Proximum\Vimeet\Domain\Money\AmountFormatter;
 use Proximum\Vimeet\Domain\Order\Merger;
-use Proximum\Vimeet\Domain\Package\Specification\VatApplicable;
+use Proximum\Vimeet\Domain\Package\Exception\MissingBillingInfoException;
 use Proximum\Vimeet\Domain\Repository\OrderRepositoryInterface;
 use Proximum\Vimeet\Domain\View\Invoice\OrdersToInvoiceView;
 
@@ -34,36 +33,22 @@ class OrdersToInvoice
     /** @var SerializerAdapterInterface */
     private $serializerAdapter;
 
-    /** @var VatApplicable */
-    private $vatApplicable;
-
-    /**
-     * @param OrderRepositoryInterface   $orderRepository
-     * @param Merger                     $orderMerger
-     * @param InvoiceDataQueryHandler    $invoiceDataQueryHandler
-     * @param VatApplicable              $vatApplicable
-     * @param SerializerAdapterInterface $serializerAdapter
-     */
     public function __construct(
         OrderRepositoryInterface $orderRepository,
         Merger $orderMerger,
         InvoiceDataQueryHandler $invoiceDataQueryHandler,
-        VatApplicable $vatApplicable,
         SerializerAdapterInterface $serializerAdapter
     ) {
-        $this->orderRepository          = $orderRepository;
-        $this->orderMerger              = $orderMerger;
-        $this->invoiceDataQueryHandler  = $invoiceDataQueryHandler;
-        $this->serializerAdapter        = $serializerAdapter;
-        $this->vatApplicable            = $vatApplicable;
+        $this->orderRepository = $orderRepository;
+        $this->orderMerger = $orderMerger;
+        $this->invoiceDataQueryHandler = $invoiceDataQueryHandler;
+        $this->serializerAdapter = $serializerAdapter;
     }
 
     /**
-     * @param Sheet $sheet
-     *
-     * @return null|OrdersToInvoiceView
+     * @throws MissingBillingInfoException
      */
-    public function getOrdersToInvoiceViewForSheet(Sheet $sheet)
+    public function getOrdersToInvoiceViewForSheet(Sheet $sheet): ?OrdersToInvoiceView
     {
         $orders = $this->orderRepository->findNotCancelledAndNotInvoicedBySheet($sheet);
 
@@ -77,17 +62,7 @@ class OrdersToInvoice
             return null;
         }
 
-        $vatToPay = 0;
-        $isVatApplicable = $this->vatApplicable->onSheet($sheet);
-
-        $total = AmountFormatter::decimalToCentsAmount($orderMerged->getTotalWithoutVat());
-        $vatRate = $sheet->getEvent()->getVat();
-
-        if (true === $isVatApplicable) {
-            $vatToPay = AmountFormatter::calculateRateAmount($total, $vatRate);
-        }
-
-        $view = $this->invoiceDataQueryHandler->handle(
+        $invoiceDataView = $this->invoiceDataQueryHandler->handle(
             new InvoiceDataQuery(
                 $orderMerged->getSheet(),
                 $orderMerged,
@@ -95,19 +70,19 @@ class OrdersToInvoice
             )
         );
 
-        $data = $this->serializerAdapter->serialize($view, 'json');
+        $data = $this->serializerAdapter->serialize($invoiceDataView, 'json');
 
         $event = $sheet->getEvent();
 
         return new OrdersToInvoiceView(
             $orders,
             $data,
-            $isVatApplicable,
+            $invoiceDataView->vatListView->vatApplicable,
             $event->getMode(),
             $event->getVat(),
-            $total,
-            $vatToPay,
-            $total + $vatToPay,
+            $invoiceDataView->vatListView->total,
+            $invoiceDataView->vatListView->getVatAmount(),
+            $invoiceDataView->vatListView->totalWithVat,
             $orderMerged->getCurrency()
         );
     }

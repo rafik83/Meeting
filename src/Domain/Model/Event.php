@@ -37,13 +37,13 @@ class Event implements EventInterface, TraceableInterface
     /** @var string */
     private $title;
 
-    /** @var string */
+    /** @var null|string */
     private $logo;
 
-    /** @var string */
+    /** @var null|string */
     private $invoiceLogo;
 
-    /** @var string */
+    /** @var null|string */
     private $invoiceLogoExtension;
 
     /** @var string */
@@ -58,16 +58,16 @@ class Event implements EventInterface, TraceableInterface
     /** @var string */
     private $fallback;
 
-    /** @var string */
+    /** @var null|string */
     private $organiserName;
 
     /** @var Address */
     private $paymentAddress;
 
-    /** @var string */
+    /** @var null|string */
     private $organiserEmail;
 
-    /** @var string */
+    /** @var null|string */
     private $legalInformation;
 
     /** @var string 'ati'|'et' ; See VAT_MODE_ATI and VAT_MODE_ET const */
@@ -76,7 +76,7 @@ class Event implements EventInterface, TraceableInterface
     /** @var float */
     private $vat;
 
-    /** @var string */
+    /** @var null|string */
     private $elementToJoinWithInvoice;
 
     /** @var Configuration */
@@ -91,10 +91,10 @@ class Event implements EventInterface, TraceableInterface
     /** @var string ISO 4217 3-letter currency code */
     private $currency;
 
-    /** @var string */
+    /** @var null|string */
     private $logoExtension;
 
-    /** @var string|null */
+    /** @var null|string */
     private $emailTeam;
 
     /** @var ArrayCollection */
@@ -127,40 +127,21 @@ class Event implements EventInterface, TraceableInterface
     /** @var bool */
     private $disabledPasswordChanging;
 
-    /**
-     * @param string      $title
-     * @param string      $fallback
-     * @param array       $locales
-     * @param string      $mode
-     * @param float       $vat
-     * @param string      $country
-     * @param string      $currency
-     * @param string      $timeZone
-     * @param string      $domain
-     * @param string      $organiserName
-     * @param string|null $emailTeam
-     * @param Prefix      $invoicePrefix
-     * @param bool        $visible
-     * @param null|Event  $duplicatedFrom
-     * @param bool        $welcomeEnabled
-     * @param bool        $disabledEmailChanging
-     * @param bool        $disabledPasswordChanging
-     */
     public function __construct(
-        $title,
-        $fallback,
+        string $title,
+        string $fallback,
         array $locales,
-        $mode,
-        $vat,
-        $country,
-        $currency,
-        $timeZone,
-        $domain,
-        $organiserName,
-        $emailTeam,
+        string $mode,
+        float $vat,
+        string $country,
+        string $currency,
+        string $timeZone,
+        string $domain,
+        ?string $organiserName,
+        ?string $emailTeam,
         Prefix $invoicePrefix,
         bool $visible = true,
-        Event $duplicatedFrom = null,
+        ?Event $duplicatedFrom = null,
         bool $welcomeEnabled = true,
         bool $disabledEmailChanging = false,
         bool $disabledPasswordChanging = false

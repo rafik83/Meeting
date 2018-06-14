@@ -27,12 +27,20 @@ class EventFactory
      * @return Event
      */
     public static function createEvent(
-        $eventTitle = null,
-        $fallbackLocale = self::FALLBACK_LOCALE_DEFAULT,
+        ?string $eventTitle = null,
+        ?string $fallbackLocale = null,
         array $locales = ['fr', 'en'],
-        $vatMode = Event::VAT_MODE_ET,
+        ?string $vatMode = null,
         Event $duplicatedFrom = null
     ) {
+        if (null === $vatMode) {
+            $vatMode = Event::VAT_MODE_ET;
+        }
+
+        if (null === $fallbackLocale) {
+            $fallbackLocale = self::FALLBACK_LOCALE_DEFAULT;
+        }
+
         $prefix = self::createInvoicePrefix();
 
         return new Event(

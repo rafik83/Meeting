@@ -24,10 +24,10 @@ class SummaryView
     /** @var string */
     public $vatMode;
 
-    /** @var float */
+    /** @var int in cents */
     public $total;
 
-    /** @var float */
+    /** @var int in cents */
     public $totalPlusVat;
 
     /** @var string */
@@ -42,26 +42,15 @@ class SummaryView
     /** @var VatListView */
     public $vatListView;
 
-    /**
-     * @param Funnel             $funnel
-     * @param GroupsView         $groupsView
-     * @param PromotionCodesView $promotionCodesView
-     * @param string             $vatMode
-     * @param float              $total
-     * @param float              $totalPlusVat
-     * @param string             $currency
-     * @param bool               $mustPayVat
-     * @param VatListView        $vatListView
-     */
     public function __construct(
         Funnel $funnel,
         GroupsView $groupsView,
         PromotionCodesView $promotionCodesView,
-        $vatMode,
-        float $total,
-        float $totalPlusVat,
-        $currency,
-        $mustPayVat,
+        string $vatMode,
+        int $total,
+        int $totalPlusVat,
+        string $currency,
+        bool $mustPayVat,
         VatListView $vatListView
     ) {
         $this->funnel = $funnel;

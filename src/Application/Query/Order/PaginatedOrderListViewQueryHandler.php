@@ -65,7 +65,8 @@ class PaginatedOrderListViewQueryHandler
                     $order->getTotalWithoutVat(),
                     $order->getVatMode(),
                     $order->getCurrency(),
-                    $order->hasInvoice()
+                    $order->hasInvoice(),
+                    $order->isCancelled()
                 );
             },
             $orders->results

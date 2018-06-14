@@ -21,7 +21,7 @@ class AmountFormatter
      *
      * @return int
      */
-    public static function decimalToCentsAmount($amount)
+    public static function decimalToCentsAmount(float $amount): int
     {
         // (int) always rounds the number down, it is fixed by round() method
         return (int) round(100 * $amount);
@@ -32,7 +32,7 @@ class AmountFormatter
      *
      * @return float|int
      */
-    public static function centsToDecimalAmount($amount)
+    public static function centsToDecimalAmount(int $amount): float
     {
         return $amount / 100;
     }
@@ -43,7 +43,7 @@ class AmountFormatter
      *
      * @return int
      */
-    public static function calculateRateAmount($amount, $rate)
+    public static function calculateRateAmount(int $amount, float $rate): int
     {
         return (int) round($amount * $rate / 100);
     }

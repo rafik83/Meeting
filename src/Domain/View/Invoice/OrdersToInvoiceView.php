@@ -54,24 +54,24 @@ class OrdersToInvoiceView
      */
     public function __construct(
         array $orders,
-        $data,
-        $vatApplicable,
-        $vatMode,
-        $vatRate,
-        $total,
-        $vatAmount,
-        $totalWithVat,
-        $currency
+        string $data,
+        bool $vatApplicable,
+        string $vatMode,
+        float $vatRate,
+        int $total,
+        int $vatAmount,
+        int $totalWithVat,
+        string $currency
     ) {
-        $this->orders        = $orders;
-        $this->data          = $data;
+        $this->orders = $orders;
+        $this->data = $data;
         $this->vatApplicable = $vatApplicable;
-        $this->total         = $total;
-        $this->vatAmount     = $vatAmount;
-        $this->totalWithVat  = $totalWithVat;
-        $this->currency      = $currency;
-        $this->vatMode       = $vatMode;
-        $this->vatRate       = $vatRate;
+        $this->total = $total;
+        $this->vatAmount = $vatAmount;
+        $this->totalWithVat = $totalWithVat;
+        $this->currency = $currency;
+        $this->vatMode = $vatMode;
+        $this->vatRate = $vatRate;
     }
 
     /**
